@@ -1649,7 +1649,7 @@ get_pixbuf_from_gicon (GIcon      *icon,
   icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme,
 					      icon,
 					      icon_size,
-					      0);
+					      GTK_ICON_LOOKUP_USE_BUILTIN);
 
   if (!icon_info)
     return NULL;
@@ -1671,8 +1671,15 @@ get_icon_for_special_directory (GFile *file)
 
   if (g_file_equal (file, special_file))
     {
+      const char *names[] = { 
+        "user-desktop", 
+        "gnome-fs-desktop", 
+        "folder", 
+        "gtk-directory",
+        NULL 
+      };
       g_object_unref (special_file);
-      return g_themed_icon_new ("gnome-fs-desktop");
+      return g_themed_icon_new_from_names (names, -1);
     }
 
   g_object_unref (special_file);
@@ -1681,8 +1688,15 @@ get_icon_for_special_directory (GFile *file)
 
   if (g_file_equal (file, special_file))
     {
+      const char *names[] = { 
+        "user-home", 
+        "gnome-fs-home", 
+        "folder", 
+        "gtk-directory",
+        NULL 
+      };
       g_object_unref (special_file);
-      return g_themed_icon_new ("gnome-fs-home");
+      return g_themed_icon_new_from_names (names, -1);
     }
 
   g_object_unref (special_file);
@@ -1698,11 +1712,17 @@ gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
 {
   GIcon *icon = NULL;
   GdkPixbuf *pixbuf;
+  const char *harddisk_icons[] = { 
+    "drive-harddisk", 
+    "gnome-dev-harddisk", 
+    "gtk-harddisk",
+    NULL
+  };
 
   DEBUG ("volume_get_icon_name");
 
   if (IS_ROOT_VOLUME (volume))
-    icon = g_themed_icon_new ("gnome-dev-harddisk");
+    icon = g_themed_icon_new_from_names (harddisk_icons, -1);
   else if (G_IS_DRIVE (volume))
     icon = g_drive_get_icon (G_DRIVE (volume));
   else if (G_IS_VOLUME (volume))

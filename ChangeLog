@@ -1,5 +1,11 @@
 2008-06-10  Christian Persch  <chpe@gnome.org>
 
+	* gtk/gtkfilesystem.c (get_icon_for_special_directory):
+	(gtk_file_system_volume_render_icon): Add standard icon names,
+	and also fall back to builtin gtk stock icons.
+
+2008-06-10  Christian Persch  <chpe@gnome.org>
+
 	* gtk/gtktreeview.c: (destroy_info), (set_destination_row),
 	(gtk_tree_view_maybe_begin_dragging_row),
 	(gtk_tree_view_set_reorderable),
