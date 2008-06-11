@@ -1,4 +1,12 @@
-2008-06-10  Christian Persch  <chpe@gnome.org>
+2008-06-10  Matthias Clasen <mclasen@redhat.com>
+
+	Bug 536765 – GtkComboBox should set COMBO type hint for its menu
+
+	* gtk/gtkoptionmenu.c:
+	* gtk/gtkcombobox.c: Set the window type hint on popups.
+	Patch by Danny Baumann
+
+2008-06-10  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkfilesystem.c (get_icon_for_special_directory):
 	(gtk_file_system_volume_render_icon): Add standard icon names,

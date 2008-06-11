@@ -894,6 +894,10 @@ gtk_option_menu_position (GtkMenu  *menu,
   active = gtk_menu_get_active (GTK_MENU (option_menu->menu));
   gdk_window_get_origin (widget->window, &menu_xpos, &menu_ypos);
 
+  /* set combo box type hint for menu popup */
+  gtk_window_set_type_hint (GTK_MENU (option_menu->menu)->toplevel,
+			    GDK_WINDOW_TYPE_HINT_COMBO);
+
   menu_xpos += widget->allocation.x;
   menu_ypos += widget->allocation.y + widget->allocation.height / 2 - 2;
 
