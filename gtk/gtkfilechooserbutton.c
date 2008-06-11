@@ -1823,7 +1823,7 @@ model_add_volumes (GtkFileChooserButton *button,
     }
 }
 
-extern gchar * _gtk_file_chooser_label_for_file (const gchar *uri);
+extern gchar * _gtk_file_chooser_label_for_file (GFile *file);
 
 static void
 model_add_bookmarks (GtkFileChooserButton *button,

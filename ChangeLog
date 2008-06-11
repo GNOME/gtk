@@ -1,3 +1,8 @@
+2008-06-11  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkfilechooserbutton.c: fix local prototype of
+	_gtk_file_chooser_label_for_file() (takes a GFile, not const gchar*).
+
 2008-06-10  Matthias Clasen <mclasen@redhat.com>
 
 	Bug 536765 – GtkComboBox should set COMBO type hint for its menu
