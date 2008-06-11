@@ -184,33 +184,6 @@ _gdk_monitor_init (void)
 
 }
 
-/*
- * Dynamic version of ProcessIdToSessionId() form Terminal Service.
- * It is only returning something else than 0 when running under
- * Terminal Service, available since NT4 SP4 and not for win9x
- */
-static guint
-get_session_id (void)
-{
-  typedef BOOL (WINAPI *t_ProcessIdToSessionId) (DWORD, DWORD*);
-  static t_ProcessIdToSessionId p_ProcessIdToSessionId = NULL;
-  static HMODULE kernel32 = NULL;
-  DWORD id = 0;
-
-  if (kernel32 == NULL)
-    {
-      kernel32 = GetModuleHandle ("kernel32.dll");
-
-      g_assert (kernel32 != NULL);
-
-      p_ProcessIdToSessionId = (t_ProcessIdToSessionId) GetProcAddress (kernel32, "ProcessIdToSessionId");
-   }
-  if (p_ProcessIdToSessionId)
-      p_ProcessIdToSessionId (GetCurrentProcessId (), &id); /* got it (or not ;) */
-
-  return id;
-}
-
 GdkDisplay *
 gdk_display_open (const gchar *display_name)
 {
@@ -265,6 +238,7 @@ gdk_display_get_name (GdkDisplay *display)
   HWINSTA hwinsta = GetProcessWindowStation ();
   char *window_station_name;
   DWORD n;
+  DWORD session_id;
   char *display_name;
   static const char *display_name_cache = NULL;
 
@@ -301,8 +275,12 @@ gdk_display_get_name (GdkDisplay *display)
 	window_station_name = "WinSta0";
     }
 
-  display_name = g_strdup_printf ("%d\\%s\\%s",
-				  get_session_id (), window_station_name,
+  if (!ProcessIdToSessionId (GetCurrentProcessId (), &session_id))
+    session_id = 0;
+
+  display_name = g_strdup_printf ("%ld\\%s\\%s",
+				  session_id,
+				  window_station_name,
 				  desktop_name);
 
   GDK_NOTE (MISC, g_print ("gdk_display_get_name: %s\n", display_name));

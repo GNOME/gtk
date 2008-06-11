@@ -1,3 +1,9 @@
+2008-06-11  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdisplay-win32.c (gdk_display_get_name): As we don't
+	support Win9x anyway, we can use ProcessIdToSessionId()
+	unconditionally.
+
 2008-06-11  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkfilechooserbutton.c: fix local prototype of
