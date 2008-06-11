@@ -36,6 +36,8 @@ Without those packages make distcheck will *not* pass.
     * forgotten source files
     * new symbols missing from .symbols files
     * symbols that are exported by should be private (static or _-prefixed)
+    * symbols that cause PLT entries. This is usually caused by using
+      function without including the header
 
  5) If this is a devel release, make sure that the docs for new symbols
     are in good shape. Look at the -unused.txt files and add stuff found
