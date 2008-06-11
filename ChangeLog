@@ -1,3 +1,24 @@
+2008-06-11  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 503071 – Application direction changes to right to left even if
+	theres no translation
+
+	* configure.in: Bump glib requirement.
+
+	* gtk/gtkaccellabel.c
+	(_gtk_accel_label_class_get_accelerator_label):
+	* gtk/gtkactiongroup.c (dgettext_swapped):
+	* gtk/gtkbuilder.c (gtk_builder_class_init):
+	* gtk/gtkbuilderparser.c (_dpgettext),
+	(_gtk_builder_parser_translate):
+	* gtk/gtkfilechooserdefault.c (list_size_data_func):
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_append_menuitems):
+	* gtk/gtkintl.h:
+	* gtk/gtkmain.c (setlocale_initialization),
+	(do_pre_parse_initialization), (gettext_initialization):
+	* gtk/gtkstock.c (gtk_stock_lookup), (sgettext_swapped):
+	Use g_dgettext() and g_dngettext().
+
 2008-06-11  Matthias Clasen <mclasen@redhat.com>
 
 	* docs/RELEASE-HOWTO: Updates

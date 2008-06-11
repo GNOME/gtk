@@ -1278,9 +1278,9 @@ static gchar *
 dgettext_swapped (const gchar *msgid, 
 		  const gchar *domainname)
 {
-  /* Pass through dgettext if and only if msgid is nonempty. */
+  /* Pass through g_dgettext if and only if msgid is nonempty. */
   if (msgid && *msgid) 
-    return dgettext (domainname, msgid); 
+    return (gchar*) g_dgettext (domainname, msgid); 
   else
     return (gchar*) msgid;
 }
@@ -1288,9 +1288,9 @@ dgettext_swapped (const gchar *msgid,
 /**
  * gtk_action_group_set_translation_domain:
  * @action_group: a #GtkActionGroup
- * @domain: the translation domain to use for dgettext() calls
+ * @domain: the translation domain to use for g_dgettext() calls
  * 
- * Sets the translation domain and uses dgettext() for translating the 
+ * Sets the translation domain and uses g_dgettext() for translating the 
  * @label and @tooltip of #GtkActionEntry<!-- -->s added by 
  * gtk_action_group_add_actions().
  *

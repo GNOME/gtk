@@ -527,22 +527,13 @@ enum_locale_proc (LPTSTR locale)
 #endif
 
 static void
-do_pre_parse_initialization (int    *argc,
-			     char ***argv)
+setlocale_initialization (void)
 {
-  const gchar *env_string;
-  
-#if	0
-  g_set_error_handler (gtk_error);
-  g_set_warning_handler (gtk_warning);
-  g_set_message_handler (gtk_message);
-  g_set_print_handler (gtk_print);
-#endif
+  static gboolean initialized = FALSE;
 
-  if (pre_initialized)
+  if (initialized)
     return;
-
-  pre_initialized = TRUE;
+  initialized = TRUE;
 
   if (do_setlocale)
     {
@@ -607,6 +598,25 @@ do_pre_parse_initialization (int    *argc,
 	g_warning ("Locale not supported by C library.\n\tUsing the fallback 'C' locale.");
 #endif
     }
+}
+
+static void
+do_pre_parse_initialization (int    *argc,
+			     char ***argv)
+{
+  const gchar *env_string;
+  
+#if	0
+  g_set_error_handler (gtk_error);
+  g_set_warning_handler (gtk_warning);
+  g_set_message_handler (gtk_message);
+  g_set_print_handler (gtk_print);
+#endif
+
+  if (pre_initialized)
+    return;
+
+  pre_initialized = TRUE;
 
   gdk_pre_parse_libgtk_only ();
   gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
@@ -630,6 +640,8 @@ do_pre_parse_initialization (int    *argc,
 static void
 gettext_initialization (void)
 {
+  setlocale_initialization ();
+
 #ifdef ENABLE_NLS
   bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
   bindtextdomain (GETTEXT_PACKAGE "-properties", GTK_LOCALEDIR);

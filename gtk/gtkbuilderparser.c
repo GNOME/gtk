@@ -827,9 +827,9 @@ start_element (GMarkupParseContext *context,
  * GNU gettext uses '\004' to separate context and msgid in .mo files.
  */
 static const char *
-dpgettext (const char *domain,
-           const char *msgctxt,
-           const char *msgid)
+_dpgettext (const char *domain,
+            const char *msgctxt,
+            const char *msgid)
 {
   size_t msgctxt_len = strlen (msgctxt) + 1;
   size_t msgid_len = strlen (msgid) + 1;
@@ -842,13 +842,13 @@ dpgettext (const char *domain,
   msg_ctxt_id[msgctxt_len - 1] = '\004';
   memcpy (msg_ctxt_id + msgctxt_len, msgid, msgid_len);
 
-  translation = dgettext (domain, msg_ctxt_id);
+  translation = g_dgettext (domain, msg_ctxt_id);
 
   if (translation == msg_ctxt_id) 
     {
       /* try the old way of doing message contexts, too */
       msg_ctxt_id[msgctxt_len - 1] = '|';
-      translation = dgettext (domain, msg_ctxt_id);
+      translation = g_dgettext (domain, msg_ctxt_id);
   
       if (translation == msg_ctxt_id)
         return msgid;
@@ -865,9 +865,9 @@ _gtk_builder_parser_translate (const gchar *domain,
   const char *s;
 
   if (context)
-    s = dpgettext (domain, context, text);
+    s = _dpgettext (domain, context, text);
   else
-    s = dgettext (domain, text);
+    s = g_dgettext (domain, text);
 
   return g_strdup (s);
 }

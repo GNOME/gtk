@@ -86,7 +86,7 @@ gtk_builder_class_init (GtkBuilderClass *klass)
   * The translation domain used when translating property values that
   * have been marked as translatable in interface descriptions.
   * If the translation domain is %NULL, #GtkBuilder uses gettext(),
-  * otherwise dgettext().
+  * otherwise g_dgettext().
   *
   * Since: 2.12
   */
