@@ -31,10 +31,6 @@
 
 #include <locale.h>
 
-#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
-#include <libintl.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

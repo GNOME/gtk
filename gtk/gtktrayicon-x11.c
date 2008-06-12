@@ -24,7 +24,6 @@
 
 #include <config.h>
 #include <string.h>
-#include <libintl.h>
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
