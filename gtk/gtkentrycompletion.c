@@ -1383,8 +1383,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
 
-  items = MIN (matches, 15);
-
   gtk_tree_view_column_cell_get_size (completion->priv->column, NULL,
                                       NULL, NULL, NULL, &height);
 
@@ -1396,15 +1394,22 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   
   gtk_widget_realize (completion->priv->tree_view);
 
-  if (items <= 0)
-    gtk_widget_hide (completion->priv->scrolled_window);
-  else
-    gtk_widget_show (completion->priv->scrolled_window);
-
   screen = gtk_widget_get_screen (GTK_WIDGET (completion->priv->entry));
   monitor_num = gdk_screen_get_monitor_at_window (screen, 
 						  GTK_WIDGET (completion->priv->entry)->window);
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+  
+
+  if (y > monitor.height / 2)
+    items = MIN (matches, (monitor.y + y) / height);
+  else
+    items = MIN (matches, (monitor.height - y) / height - 1);
+
+  if (items <= 0)
+    gtk_widget_hide (completion->priv->scrolled_window);
+  else
+    gtk_widget_show (completion->priv->scrolled_window);
 
   if (completion->priv->popup_set_width)
     width = MIN (completion->priv->entry->allocation.width, monitor.width) - 2 * x_border;
