@@ -414,6 +414,7 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
   GtkCupsRequest *request;
   GtkPrintSettings *settings;
   const gchar *title;
+  char  printer_absolute_uri[HTTP_MAX_URI];
 
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s\n", G_STRFUNC));   
@@ -428,9 +429,27 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
 				  NULL,
 				  cups_printer->device_uri);
 
+#if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 2) || CUPS_VERSION_MAJOR > 1
+  httpAssembleURIf (HTTP_URI_CODING_ALL,
+                    printer_absolute_uri,
+                    sizeof (printer_absolute_uri),
+                    "ipp",
+                    NULL,
+                    "localhost",
+                    ippPort (),
+                    "/printers/%s",
+                    gtk_printer_get_name (gtk_print_job_get_printer (job)));
+#else
+  g_snprintf (printer_absolute_uri,
+              sizeof (printer_absolute_uri),
+              "ipp://localhost:%d/printers/%s",
+              ippPort (),
+              gtk_printer_get_name (gtk_print_job_get_printer (job)));
+#endif
+
   gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, 
                                    IPP_TAG_URI, "printer-uri",
-                                   NULL, cups_printer->printer_uri);
+                                   NULL, printer_absolute_uri);
 
   title = gtk_print_job_get_title (job);
   if (title)
