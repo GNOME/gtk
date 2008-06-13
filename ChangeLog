@@ -1,5 +1,12 @@
 2008-06-12  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 519092 – Add accessibility support to GtkVolumeButton
+
+	* gtk/gtkvolumebutton.c: Set accessibility descriptions.
+	Patch by Jonh Wendell
+
+2008-06-12  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 517706 – Connecting GtkButton with "use-stock" == FALSE to a
 	GtkAction has problems
 	Patch by Peter Johanson
