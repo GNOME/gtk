@@ -262,7 +262,7 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
 
 	if (transform > 0 ) {
 		gchar str[5];
-		snprintf (str, sizeof (str), "%d", transform);
+		g_snprintf (str, sizeof (str), "%d", transform);
 		gdk_pixbuf_set_option (pixbuf, "orientation", str);
 	}
 

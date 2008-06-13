@@ -13,13 +13,22 @@ GDK_PIXBUF_VER = 2.0
 
 # -DINCLUDE_gdiplus _replaces_ -DINCLUDE_bmp -DINCLUDE_gif -DINCLUDE_ico -DINCLUDE_jpeg  -DINCLUDE_tiff
 # but not yet -DINCLUDE_png 
+##USEGDIP=1
 # to get _working_ include modules we need respective defines ...
-BUILT_IN_FORMATS = -DINCLUDE_gdiplus -DINCLUDE_png \
+BUILT_IN_FORMATS = \
+!IFDEF USEGDIP
+	-DINCLUDE_gdiplus \
+!ELSE
+	-DINCLUDE_bmp -DINCLUDE_gif -DINCLUDE_ico -DINCLUDE_jpeg  -DINCLUDE_tiff \
+!ENDIF
+	-DINCLUDE_png \
 	-DINCLUDE_xpm -DINCLUDE_wbmp \
 	-DINCLUDE_pnm -DINCLUDE_ras
 
 PKG_CFLAGS = -FImsvc_recommended_pragmas.h \
-# 	$(JPEG_CFLAGS) $(TIFF_CFLAGS) \
+!IFNDEF USEGDIP
+ 	$(JPEG_CFLAGS) $(TIFF_CFLAGS) \
+!ENDIF
 	-I. -I.. $(GLIB_CFLAGS) \
 	$(BUILT_IN_FORMATS) \
 	$(PNG_CFLAGS) $(INTL_CFLAGS) \
@@ -30,7 +39,9 @@ PKG_CFLAGS = -FImsvc_recommended_pragmas.h \
 #	-DUSE_GMODULE -DPIXBUF_LIBDIR=\".\"
 
 PKG_LINK = $(GLIB_LIBS) \
-#	$(TIFF_LIBS) $(JPEG_LIBS) \
+!IFNDEF USEGDIP
+	$(TIFF_LIBS) $(JPEG_LIBS) \
+!ENDIF
 	$(PNG_LIBS) $(INTL_LIBS) \
 	pixops\pixops.lib \
  
@@ -70,7 +81,11 @@ OBJECTS = \
 	io-pnm.obj \
 	io-ras.obj \
 	io-xpm.obj \
+!IFDEF USEGDIP
 	$(OBJECTS_NATIVE)
+!ELSE
+	$(OBJECTS_NON_NATIVE)
+!ENDIF
 
 gdk_pixbuf_headers = 	\
 	gdk-pixbuf.h	\

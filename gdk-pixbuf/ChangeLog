@@ -1,3 +1,9 @@
+2008-06-13  Hans Breuer  <hans@breuer.org>
+
+	* makefile.msc : updated to allow simple switch between gdiplus- and
+	former fileformat backends
+	* io-tiff.c : use g_snprintf
+
 2008-06-13  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 531960 – crash in eog-image.c:1154: (priv->image != NULL)
