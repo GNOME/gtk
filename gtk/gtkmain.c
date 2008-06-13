@@ -819,7 +819,7 @@ gtk_init_with_args (int            *argc,
   gboolean retval;
 
   if (gtk_initialized)
-    return TRUE;
+    return gdk_display_open_default_libgtk_only () != NULL;
 
   gettext_initialization ();
 

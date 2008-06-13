@@ -1,5 +1,14 @@
 2008-06-12  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 537985 – gtk_init_with_args() doesn't open a display after
+	gtk_parse_args()
+
+	* gtk/gtkmain.c (gtk_init_with_args): Open the default display
+	even when gtk_parse_args() has already been called.
+	Patch by Mathias Hasselmann
+
+2008-06-12  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 524222 – GtkToolbar with mix of buttons with and without 
 	icons looks "bad"
 
