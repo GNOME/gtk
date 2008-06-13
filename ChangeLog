@@ -1,5 +1,10 @@
 2008-06-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesystem.c: Avoid PLT entries by including
+	gtkalias.h
+
+2008-06-13  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserbutton.c:
 	* gtk/gtkfilechooserdefault.c:
 	* gtk/gtkfilechooserentry.c:
