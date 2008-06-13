@@ -25,7 +25,7 @@
 #ifndef __GTK_FILE_CHOOSER_WIDGET_H__
 #define __GTK_FILE_CHOOSER_WIDGET_H__
 
-#include "gtkfilechooser.h"
+#include <gtk/gtkfilechooser.h>
 #include <gtk/gtkvbox.h>
 
 G_BEGIN_DECLS

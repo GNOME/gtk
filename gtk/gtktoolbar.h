@@ -40,8 +40,7 @@
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtktooltips.h>
-
-#include "gtktoolitem.h"
+#include <gtk/gtktoolitem.h>
 
 #ifndef GTK_DISABLE_DEPRECATED
 

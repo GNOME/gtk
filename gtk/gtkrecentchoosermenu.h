@@ -26,7 +26,7 @@
 #define __GTK_RECENT_CHOOSER_MENU_H__
 
 #include <gtk/gtkmenu.h>
-#include "gtkrecentchooser.h"
+#include <gtk/gtkrecentchooser.h>
 
 G_BEGIN_DECLS
 

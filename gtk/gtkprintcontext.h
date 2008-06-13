@@ -27,8 +27,8 @@
 
 #include <glib-object.h>
 #include <pango/pango.h>
-#include "gtkenums.h"
-#include "gtkpagesetup.h"
+#include <gtk/gtkenums.h>
+#include <gtk/gtkpagesetup.h>
 
 G_BEGIN_DECLS
 

@@ -26,8 +26,8 @@
 #define __GTK_PAGE_SETUP_H__
 
 #include <glib-object.h>
-#include "gtkenums.h"
-#include "gtkpapersize.h"
+#include <gtk/gtkenums.h>
+#include <gtk/gtkpapersize.h>
 
 G_BEGIN_DECLS
 

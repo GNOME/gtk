@@ -26,7 +26,7 @@
 #define __GTK_RECENT_CHOOSER_DIALOG_H__
 
 #include <gtk/gtkdialog.h>
-#include "gtkrecentchooser.h"
+#include <gtk/gtkrecentchooser.h>
 
 G_BEGIN_DECLS
 

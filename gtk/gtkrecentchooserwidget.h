@@ -25,7 +25,7 @@
 #ifndef __GTK_RECENT_CHOOSER_WIDGET_H__
 #define __GTK_RECENT_CHOOSER_WIDGET_H__
 
-#include "gtkrecentchooser.h"
+#include <gtk/gtkrecentchooser.h>
 #include <gtk/gtkvbox.h>
 
 G_BEGIN_DECLS

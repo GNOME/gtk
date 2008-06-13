@@ -26,7 +26,7 @@
 #ifndef __GTK_SEPARATOR_TOOL_ITEM_H__
 #define __GTK_SEPARATOR_TOOL_ITEM_H__
 
-#include "gtktoolitem.h"
+#include <gtk/gtktoolitem.h>
 
 G_BEGIN_DECLS
 

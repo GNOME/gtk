@@ -27,7 +27,7 @@
 #ifndef __GTK_TOOL_BUTTON_H__
 #define __GTK_TOOL_BUTTON_H__
 
-#include "gtktoolitem.h"
+#include <gtk/gtktoolitem.h>
 
 G_BEGIN_DECLS
 

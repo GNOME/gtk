@@ -26,7 +26,7 @@
 #define __GTK_FILE_CHOOSER_DIALOG_H__
 
 #include <gtk/gtkdialog.h>
-#include "gtkfilechooser.h"
+#include <gtk/gtkfilechooser.h>
 
 G_BEGIN_DECLS
 

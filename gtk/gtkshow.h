@@ -27,8 +27,7 @@
 #ifndef __GTK_SHOW_H__
 #define __GTK_SHOW_H__
 
-#include <glib.h>
-#include "gdk/gdk.h"
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 

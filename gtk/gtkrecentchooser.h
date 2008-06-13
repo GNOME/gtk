@@ -27,9 +27,8 @@
 #define __GTK_RECENT_CHOOSER_H__
 
 #include <gtk/gtkwidget.h>
-
-#include "gtkrecentmanager.h"
-#include "gtkrecentfilter.h"
+#include <gtk/gtkrecentmanager.h>
+#include <gtk/gtkrecentfilter.h>
 
 G_BEGIN_DECLS
 

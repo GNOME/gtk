@@ -27,7 +27,7 @@
 #ifndef __GTK_RADIO_TOOL_BUTTON_H__
 #define __GTK_RADIO_TOOL_BUTTON_H__
 
-#include "gtktoggletoolbutton.h"
+#include <gtk/gtktoggletoolbutton.h>
 
 G_BEGIN_DECLS
 

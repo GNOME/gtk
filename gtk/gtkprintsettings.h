@@ -26,7 +26,7 @@
 #define __GTK_PRINT_SETTINGS_H__
 
 #include <glib-object.h>
-#include "gtkpapersize.h"
+#include <gtk/gtkpapersize.h>
 
 G_BEGIN_DECLS
 

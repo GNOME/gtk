@@ -1,5 +1,31 @@
 2008-06-13  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkcellrendereraccel.h
+	* gtk/gtkfilechooser.h
+	* gtk/gtkfilechooserdialog.h
+	* gtk/gtkfilechooserwidget.h
+	* gtk/gtkmenutoolbutton.h
+	* gtk/gtkpagesetup.h
+	* gtk/gtkpapersize.h
+	* gtk/gtkprintcontext.h
+	* gtk/gtkprintoperation.h
+	* gtk/gtkprintoperationpreview.h
+	* gtk/gtkprintsettings.h
+	* gtk/gtkradiotoolbutton.h
+	* gtk/gtkrecentchooser.h
+	* gtk/gtkrecentchooserdialog.h
+	* gtk/gtkrecentchoosermenu.h
+	* gtk/gtkrecentchooserwidget.h
+	* gtk/gtkseparatortoolitem.h
+	* gtk/gtkshow.h
+	* gtk/gtktoggletoolbutton.h
+	* gtk/gtktoolbar.h
+	* gtk/gtktoolbutton.h
+	* gtk/gtktooltip.h: #include <gtk/gtkfoo.h> instead of
+	"gtk/gtkfoo.h" or even just "gtkfoo.h" in public headers.
+
+2008-06-13  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktexttagtable.h: remove double inclusion of
 	<gtk/gtktexttag.h>.
 

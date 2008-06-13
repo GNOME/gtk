@@ -27,8 +27,7 @@
 
 #include <glib-object.h>
 #include <cairo.h>
-
-#include "gtkprintcontext.h"
+#include <gtk/gtkprintcontext.h>
 
 G_BEGIN_DECLS
 

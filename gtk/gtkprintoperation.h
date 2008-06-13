@@ -27,13 +27,13 @@
 
 #include <glib-object.h>
 #include <cairo.h>
-#include "gtkmain.h"
-#include "gtkenums.h"
-#include "gtkwindow.h"
-#include "gtkpagesetup.h"
-#include "gtkprintsettings.h"
-#include "gtkprintcontext.h"
-#include "gtkprintoperationpreview.h"
+#include <gtk/gtkmain.h>
+#include <gtk/gtkenums.h>
+#include <gtk/gtkwindow.h>
+#include <gtk/gtkpagesetup.h>
+#include <gtk/gtkprintsettings.h>
+#include <gtk/gtkprintcontext.h>
+#include <gtk/gtkprintoperationpreview.h>
 
 G_BEGIN_DECLS
 
