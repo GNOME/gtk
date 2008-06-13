@@ -682,10 +682,10 @@ _gtk_file_system_model_new (GtkFileSystem     *file_system,
 
   model->roots = NULL;
 
-  cancellable = gtk_file_system_get_folder (file_system, root_file,
-					    attributes,
-					    got_root_folder_cb,
-					    g_object_ref (model));
+  cancellable = _gtk_file_system_get_folder (file_system, root_file,
+					     attributes,
+					     got_root_folder_cb,
+					     g_object_ref (model));
   if (!cancellable)
     {
       /* In this case got_root_folder_cb() will never be called, so we
@@ -1056,10 +1056,10 @@ ref_path_cb (GCancellable *cancellable,
         {
 	  GCancellable *cancellable;
 
-          cancellable = gtk_file_system_get_folder (info->model->file_system,
-						    info->files->data,
-						    info->model->attributes,
-						    ref_path_cb, data);
+          cancellable = _gtk_file_system_get_folder (info->model->file_system,
+						     info->files->data,
+						     info->model->attributes,
+						     ref_path_cb, data);
 	  info->model->pending_cancellables =
 	    g_slist_append (info->model->pending_cancellables, cancellable);
         }
@@ -1187,10 +1187,10 @@ _gtk_file_system_model_path_do (GtkFileSystemModel        *model,
         {
 	  GCancellable *cancellable;
 
-          cancellable = gtk_file_system_get_folder (model->file_system,
-						    files->data,
-						    model->attributes,
-						    ref_path_cb, info);
+          cancellable = _gtk_file_system_get_folder (model->file_system,
+						     files->data,
+						     model->attributes,
+						     ref_path_cb, info);
 	  model->pending_cancellables = g_slist_append (model->pending_cancellables, cancellable);
         }
     }
@@ -1300,8 +1300,8 @@ file_model_node_get_info (GtkFileSystemModel *model,
 	}
       else if (node->parent || model->root_folder)
 	{
-	  node->info = gtk_folder_get_info ((node->parent != NULL) ? node->parent->folder : model->root_folder,
-					    node->file);
+	  node->info = _gtk_folder_get_info ((node->parent != NULL) ? node->parent->folder : model->root_folder,
+					     node->file);
 	}
       else
 	g_assert_not_reached ();
@@ -1565,11 +1565,11 @@ file_model_node_get_children (GtkFileSystemModel *model,
 	  data->node = node;
 
 	  cancellable =
-	    gtk_file_system_get_folder (model->file_system,
-				        node->file,
-					model->attributes,
-				        get_children_get_folder_cb,
-				        data);
+	    _gtk_file_system_get_folder (model->file_system,
+				         node->file,
+				 	 model->attributes,
+				         get_children_get_folder_cb,
+				         data);
 
 	  model->pending_cancellables = g_slist_append (model->pending_cancellables, cancellable);
 	  node->load_pending = TRUE;

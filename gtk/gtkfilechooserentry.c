@@ -435,7 +435,7 @@ maybe_append_separator_to_file (GtkFileChooserEntry *chooser_entry,
     {
       GFileInfo *info;
 
-      info = gtk_folder_get_info (chooser_entry->current_folder, file);
+      info = _gtk_folder_get_info (chooser_entry->current_folder, file);
 
       if (info)
 	{
@@ -494,12 +494,12 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 
   text_up_to_cursor = gtk_editable_get_chars (editable, 0, gtk_editable_get_position (editable));
 
-  parsed = gtk_file_system_parse (chooser_entry->file_system,
-				  chooser_entry->base_folder,
-				  text_up_to_cursor,
-				  &parsed_folder_file,
-				  &parsed_file_part,
-				  error);
+  parsed = _gtk_file_system_parse (chooser_entry->file_system,
+				   chooser_entry->base_folder,
+				   text_up_to_cursor,
+				   &parsed_folder_file,
+				   &parsed_file_part,
+				   error);
 
   g_free (text_up_to_cursor);
 
@@ -1045,7 +1045,7 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
   CommonPrefixResult result;
 
   g_assert (chooser_entry->current_folder != NULL);
-  g_assert (gtk_folder_is_finished_loading (chooser_entry->current_folder));
+  g_assert (_gtk_folder_is_finished_loading (chooser_entry->current_folder));
 
   /* FIXME: see what Emacs does in case there is no common prefix, or there is more than one match:
    *
@@ -1109,7 +1109,7 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
     }
 
   if (chooser_entry->current_folder
-      && gtk_folder_is_finished_loading (chooser_entry->current_folder))
+      && _gtk_folder_is_finished_loading (chooser_entry->current_folder))
     {
       explicitly_complete (chooser_entry);
     }
@@ -1215,7 +1215,7 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 
   discard_completion_store (chooser_entry);
 
-  files = gtk_folder_list_children (chooser_entry->current_folder);
+  files = _gtk_folder_list_children (chooser_entry->current_folder);
 
   chooser_entry->completion_store = gtk_list_store_new (N_COLUMNS,
 							G_TYPE_STRING,
@@ -1228,7 +1228,7 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 
       file = tmp_list->data;
 
-      info = gtk_folder_get_info (chooser_entry->current_folder, file);
+      info = _gtk_folder_get_info (chooser_entry->current_folder, file);
 
       if (info)
 	{
@@ -1349,7 +1349,7 @@ load_directory_get_folder_callback (GCancellable  *cancellable,
 
   discard_completion_store (chooser_entry);
 
-  if (gtk_folder_is_finished_loading (chooser_entry->current_folder))
+  if (_gtk_folder_is_finished_loading (chooser_entry->current_folder))
     finish_folder_load (chooser_entry);
   else
     g_signal_connect (chooser_entry->current_folder, "finished-loading",
@@ -1371,11 +1371,11 @@ start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
   g_assert (chooser_entry->load_folder_cancellable == NULL);
 
   chooser_entry->load_folder_cancellable =
-    gtk_file_system_get_folder (chooser_entry->file_system,
-			        chooser_entry->current_folder_file,
-				"standard::name,standard::display-name,standard::type",
-			        load_directory_get_folder_callback,
-			        g_object_ref (chooser_entry));
+    _gtk_file_system_get_folder (chooser_entry->file_system,
+			         chooser_entry->current_folder_file,
+			 	"standard::name,standard::display-name,standard::type",
+			         load_directory_get_folder_callback,
+			         g_object_ref (chooser_entry));
 }
 
 static void
@@ -1454,9 +1454,9 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   
   if (!chooser_entry->file_system ||
       !chooser_entry->base_folder ||
-      !gtk_file_system_parse (chooser_entry->file_system,
-			      chooser_entry->base_folder, text,
-			      &folder_file, &file_part, NULL)) /* NULL-GError */
+      !_gtk_file_system_parse (chooser_entry->file_system,
+			       chooser_entry->base_folder, text,
+			       &folder_file, &file_part, NULL)) /* NULL-GError */
     {
       folder_file = (chooser_entry->base_folder) ? g_object_ref (chooser_entry->base_folder) : NULL;
       file_part = g_strdup ("");
@@ -1489,7 +1489,7 @@ static void
 autocomplete (GtkFileChooserEntry *chooser_entry)
 {
   g_assert (chooser_entry->current_folder != NULL);
-  g_assert (gtk_folder_is_finished_loading (chooser_entry->current_folder));
+  g_assert (_gtk_folder_is_finished_loading (chooser_entry->current_folder));
   g_assert (gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == GTK_ENTRY (chooser_entry)->text_length);
 
   append_common_prefix (chooser_entry, TRUE, FALSE);
@@ -1508,7 +1508,7 @@ start_autocompletion (GtkFileChooserEntry *chooser_entry)
       return;
     }
 
-  if (gtk_folder_is_finished_loading (chooser_entry->current_folder))
+  if (_gtk_folder_is_finished_loading (chooser_entry->current_folder))
     autocomplete (chooser_entry);
   else
     chooser_entry->load_complete_action = LOAD_COMPLETE_AUTOCOMPLETE;
@@ -1795,7 +1795,7 @@ _gtk_file_chooser_entry_get_is_folder (GtkFileChooserEntry *chooser_entry,
     {
       GFileInfo *file_info;
 
-      file_info = gtk_folder_get_info (chooser_entry->current_folder, file);
+      file_info = _gtk_folder_get_info (chooser_entry->current_folder, file);
 
       if (file_info)
         {

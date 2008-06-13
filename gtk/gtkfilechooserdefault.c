@@ -868,7 +868,7 @@ shortcuts_free_row_data (GtkFileChooserDefault *impl,
       GtkFileSystemVolume *volume;
 
       volume = col_data;
-      gtk_file_system_volume_free (volume);
+      _gtk_file_system_volume_free (volume);
     }
   else
     {
@@ -1297,7 +1297,7 @@ shortcuts_reload_icons_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->impl), data->impl->icon_size);
+  pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (data->impl), data->impl->icon_size);
 
   path = gtk_tree_row_reference_get_path (data->row_ref);
   gtk_tree_model_get_iter (GTK_TREE_MODEL (data->impl->shortcuts_model), &iter, path);
@@ -1357,8 +1357,8 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 	      GtkFileSystemVolume *volume;
 
 	      volume = data;
-	      pixbuf = gtk_file_system_volume_render_icon (volume, GTK_WIDGET (impl),
-							   impl->icon_size, NULL);
+	      pixbuf = _gtk_file_system_volume_render_icon (volume, GTK_WIDGET (impl),
+						 	    impl->icon_size, NULL);
 	    }
 	  else if (shortcut_type == SHORTCUT_TYPE_FILE)
             {
@@ -1377,10 +1377,10 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 	          info->row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (impl->shortcuts_model), tree_path);
 	          gtk_tree_path_free (tree_path);
 
-	          cancellable = gtk_file_system_get_info (impl->file_system, file,
-							  "standard::icon",
-							  shortcuts_reload_icons_get_info_cb,
-							  info);
+	          cancellable = _gtk_file_system_get_info (impl->file_system, file,
+							   "standard::icon",
+							   shortcuts_reload_icons_get_info_cb,
+							   info);
 	          impl->reload_icon_cancellables = g_slist_append (impl->reload_icon_cancellables, cancellable);
 	        }
               else
@@ -1598,8 +1598,8 @@ get_file_info_finished (GCancellable *cancellable,
   
   if (!request->label_copy)
     request->label_copy = g_strdup (g_file_info_get_display_name (info));
-  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (request->impl),
-				      request->impl->icon_size);
+  pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (request->impl),
+				       request->impl->icon_size);
 
   gtk_list_store_set (request->impl->shortcuts_model, &iter,
 		      SHORTCUTS_COL_PIXBUF, pixbuf,
@@ -1726,9 +1726,9 @@ shortcuts_insert_file (GtkFileChooserDefault *impl,
   if (shortcut_type == SHORTCUT_TYPE_VOLUME)
     {
       data = volume;
-      label_copy = gtk_file_system_volume_get_display_name (volume);
-      pixbuf = gtk_file_system_volume_render_icon (volume, GTK_WIDGET (impl),
-						   impl->icon_size, NULL);
+      label_copy = _gtk_file_system_volume_get_display_name (volume);
+      pixbuf = _gtk_file_system_volume_render_icon (volume, GTK_WIDGET (impl),
+				 		    impl->icon_size, NULL);
     }
   else if (shortcut_type == SHORTCUT_TYPE_FILE)
     {
@@ -1757,9 +1757,9 @@ shortcuts_insert_file (GtkFileChooserDefault *impl,
           request->row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (impl->shortcuts_model), p);
           gtk_tree_path_free (p);
 
-          cancellable = gtk_file_system_get_info (request->impl->file_system, request->file,
-						  "standard::is-hidden,standard::display-name,standard::icon",
-						  get_file_info_finished, request);
+          cancellable = _gtk_file_system_get_info (request->impl->file_system, request->file,
+						   "standard::is-hidden,standard::display-name,standard::icon",
+						   get_file_info_finished, request);
 
           gtk_list_store_set (impl->shortcuts_model, &iter,
 			      SHORTCUTS_COL_DATA, g_object_ref (file),
@@ -1974,7 +1974,7 @@ shortcuts_append_bookmarks (GtkFileChooserDefault *impl,
       if (shortcut_find_position (impl, file) != -1)
         continue;
 
-      label = gtk_file_system_get_bookmark_label (impl->file_system, file);
+      label = _gtk_file_system_get_bookmark_label (impl->file_system, file);
 
       shortcuts_insert_file (impl, start_row + num_inserted, SHORTCUT_TYPE_FILE, NULL, file, label, TRUE, SHORTCUTS_BOOKMARKS);
       num_inserted++;
@@ -2073,7 +2073,7 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
   shortcuts_remove_rows (impl, start_row, impl->num_volumes);
   impl->num_volumes = 0;
 
-  list = gtk_file_system_list_volumes (impl->file_system);
+  list = _gtk_file_system_list_volumes (impl->file_system);
 
   n = 0;
 
@@ -2085,11 +2085,11 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
 
       if (impl->local_only)
 	{
-	  if (gtk_file_system_volume_is_mounted (volume))
+	  if (_gtk_file_system_volume_is_mounted (volume))
 	    {
 	      GFile *base_file;
 
-	      base_file = gtk_file_system_volume_get_root (volume);
+	      base_file = _gtk_file_system_volume_get_root (volume);
 	      if (base_file != NULL && !g_file_is_native (base_file))
 		continue;
 	    }
@@ -2191,7 +2191,7 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
   impl->num_bookmarks = 0;
   shortcuts_insert_separator (impl, SHORTCUTS_BOOKMARKS_SEPARATOR);
 
-  bookmarks = gtk_file_system_list_bookmarks (impl->file_system);
+  bookmarks = _gtk_file_system_list_bookmarks (impl->file_system);
   shortcuts_append_bookmarks (impl, bookmarks);
   g_slist_free (bookmarks);
 
@@ -2261,9 +2261,9 @@ shortcuts_add_current_folder (GtkFileChooserDefault *impl)
 
       pos = shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER);
 
-      volume = gtk_file_system_get_volume_for_file (impl->file_system, impl->current_folder);
+      volume = _gtk_file_system_get_volume_for_file (impl->file_system, impl->current_folder);
       if (volume)
-	base_file = gtk_file_system_volume_get_root (volume);
+	base_file = _gtk_file_system_volume_get_root (volume);
       else
 	base_file = NULL;
 
@@ -2571,7 +2571,7 @@ shortcut_find_position (GtkFileChooserDefault *impl,
 	      gboolean exists;
 
 	      volume = col_data;
-	      base_file = gtk_file_system_volume_get_root (volume);
+	      base_file = _gtk_file_system_volume_get_root (volume);
 
 	      exists = base_file && g_file_equal (file, base_file);
 
@@ -2616,7 +2616,7 @@ shortcuts_add_bookmark_from_file (GtkFileChooserDefault *impl,
     return FALSE;
 
   error = NULL;
-  if (!gtk_file_system_insert_bookmark (impl->file_system, file, pos, &error))
+  if (!_gtk_file_system_insert_bookmark (impl->file_system, file, pos, &error))
     {
       error_adding_bookmark_dialog (impl, file, error);
       return FALSE;
@@ -2738,7 +2738,7 @@ remove_selected_bookmarks (GtkFileChooserDefault *impl)
   file = col_data;
 
   error = NULL;
-  if (!gtk_file_system_remove_bookmark (impl->file_system, file, &error))
+  if (!_gtk_file_system_remove_bookmark (impl->file_system, file, &error))
     error_removing_bookmark_dialog (impl, file, error);
 }
 
@@ -3490,10 +3490,10 @@ shortcuts_reorder (GtkFileChooserDefault *impl,
     goto out;
 
   error = NULL;
-  if (gtk_file_system_remove_bookmark (impl->file_system, file, &error))
+  if (_gtk_file_system_remove_bookmark (impl->file_system, file, &error))
     {
       shortcuts_add_bookmark_from_file (impl, file, new_position);
-      gtk_file_system_set_bookmark_label (impl->file_system, file, name);
+      _gtk_file_system_set_bookmark_label (impl->file_system, file, name);
     }
   else
     error_adding_bookmark_dialog (impl, file, error);
@@ -3841,7 +3841,7 @@ shortcuts_edited (GtkCellRenderer       *cell,
 		      -1);
   gtk_tree_path_free (path);
   
-  gtk_file_system_set_bookmark_label (impl->file_system, shortcut, new_text);
+  _gtk_file_system_set_bookmark_label (impl->file_system, shortcut, new_text);
 }
 
 static void
@@ -4228,10 +4228,10 @@ file_list_drag_data_received_cb (GtkWidget          *widget,
 	g_cancellable_cancel (impl->file_list_drag_data_received_cancellable);
 
       impl->file_list_drag_data_received_cancellable =
-	gtk_file_system_get_info (impl->file_system, file,
-				  "standard::type",
-				  file_list_drag_data_received_get_info_cb,
-				  data);
+	_gtk_file_system_get_info (impl->file_system, file,
+				   "standard::type",
+				   file_list_drag_data_received_get_info_cb,
+				   data);
     }
 
   g_signal_stop_emission_by_name (widget, "drag_data_received");
@@ -5368,7 +5368,7 @@ set_file_system_backend (GtkFileChooserDefault *impl)
 {
   profile_start ("start for backend", "default");
 
-  impl->file_system = gtk_file_system_new ();
+  impl->file_system = _gtk_file_system_new ();
 
   g_signal_connect (impl->file_system, "volumes-changed",
 		    G_CALLBACK (volumes_bookmarks_changed_cb), impl);
@@ -6413,7 +6413,7 @@ show_and_select_files_finished_loading (GtkFolder *folder,
 
       file = l->data;
 
-      info = gtk_folder_get_info (folder, file);
+      info = _gtk_folder_get_info (folder, file);
       if (info)
 	{
 	  if (!have_hidden)
@@ -6476,7 +6476,7 @@ show_and_select_files_get_folder_cb (GCancellable *cancellable,
 
   g_object_unref (cancellable);
 
-  if (gtk_folder_is_finished_loading (folder))
+  if (_gtk_folder_is_finished_loading (folder))
     show_and_select_files_finished_loading (folder, user_data);
   else
     g_signal_connect (folder, "finished-loading",
@@ -6519,9 +6519,9 @@ show_and_select_files (GtkFileChooserDefault *impl,
     g_cancellable_cancel (impl->show_and_select_files_cancellable);
 
   impl->show_and_select_files_cancellable =
-    gtk_file_system_get_folder (impl->file_system, parent_file,
-				"standard::is-hidden,standard::type,standard::name",
-			        show_and_select_files_get_folder_cb, info);
+    _gtk_file_system_get_folder (impl->file_system, parent_file,
+ 				 "standard::is-hidden,standard::type,standard::name",
+			         show_and_select_files_get_folder_cb, info);
 
   profile_end ("end", NULL);
   return TRUE;
@@ -6882,10 +6882,10 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
 	  impl->reload_state = RELOAD_HAS_FOLDER;
 
 	  impl->update_current_folder_cancellable =
-	    gtk_file_system_get_info (impl->file_system, data->file,
-				      "standard::type",
-				      update_current_folder_get_info_cb,
-				      data);
+	    _gtk_file_system_get_info (impl->file_system, data->file,
+				       "standard::type",
+				       update_current_folder_get_info_cb,
+				       data);
 
 	  set_busy_cursor (impl, TRUE);
 
@@ -7018,10 +7018,10 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
   impl->reload_state = RELOAD_HAS_FOLDER;
 
   impl->update_current_folder_cancellable =
-    gtk_file_system_get_info (impl->file_system, file,
-			      "standard::type",
-			      update_current_folder_get_info_cb,
-			      data);
+    _gtk_file_system_get_info (impl->file_system, file,
+			       "standard::type",
+			       update_current_folder_get_info_cb,
+			       data);
 
   set_busy_cursor (impl, TRUE);
 
@@ -7647,9 +7647,9 @@ gtk_file_chooser_default_add_shortcut_folder (GtkFileChooser  *chooser,
   data->impl = g_object_ref (impl);
   data->file = g_object_ref (file);
 
-  cancellable = gtk_file_system_get_info (impl->file_system, file,
-					  "standard::type",
-					  add_shortcut_get_info_cb, data);
+  cancellable = _gtk_file_system_get_info (impl->file_system, file,
+					   "standard::type",
+					   add_shortcut_get_info_cb, data);
 
   if (!cancellable)
     return FALSE;
@@ -8069,10 +8069,10 @@ should_respond_after_confirm_overwrite (GtkFileChooserDefault *impl,
 	  g_cancellable_cancel (impl->should_respond_get_info_cancellable);
 
 	impl->should_respond_get_info_cancellable =
-	  gtk_file_system_get_info (impl->file_system, parent_file,
-				    "standard::display-name",
-				    confirmation_confirm_get_info_cb,
-				    data);
+	  _gtk_file_system_get_info (impl->file_system, parent_file,
+				     "standard::display-name",
+				     confirmation_confirm_get_info_cb,
+				     data);
 	set_busy_cursor (data->impl, TRUE);
 	return FALSE;
       }
@@ -8215,11 +8215,11 @@ file_exists_get_info_cb (GCancellable *cancellable,
 	g_cancellable_cancel (data->impl->should_respond_get_info_cancellable);
 
       data->impl->should_respond_get_info_cancellable =
-	gtk_file_system_get_info (data->impl->file_system,
-				  data->parent_file,
-				  "standard::type",
-				  save_entry_get_info_cb,
-				  data);
+	_gtk_file_system_get_info (data->impl->file_system,
+				   data->parent_file,
+				   "standard::type",
+				   save_entry_get_info_cb,
+				   data);
       set_busy_cursor (data->impl, TRUE);
     }
 
@@ -8425,10 +8425,10 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	    g_cancellable_cancel (impl->file_exists_get_info_cancellable);
 
 	  impl->file_exists_get_info_cancellable =
-	    gtk_file_system_get_info (impl->file_system, file,
-				      "standard::type",
-				      file_exists_get_info_cb,
-				      data);
+	    _gtk_file_system_get_info (impl->file_system, file,
+				       "standard::type",
+				       file_exists_get_info_cb,
+				       data);
 
 	  set_busy_cursor (impl, TRUE);
 	  retval = FALSE;
@@ -8604,8 +8604,8 @@ search_hit_get_info_cb (GCancellable *cancellable,
   display_name = g_strdup (g_file_info_get_display_name (info));
   mime_type = g_strdup (g_file_info_get_content_type (info));
   is_folder = (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY);
-  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (request->impl),
-				      request->impl->icon_size);
+  pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (request->impl),
+				       request->impl->icon_size);
 
   gtk_list_store_set (request->impl->search_model, &iter,
                       SEARCH_MODEL_COL_PIXBUF, pixbuf,
@@ -8676,11 +8676,11 @@ search_add_hit (GtkFileChooserDefault *impl,
   request->row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (impl->search_model), p);
   gtk_tree_path_free (p);
 
-  cancellable = gtk_file_system_get_info (impl->file_system, file,
-					  "standard::type,standard::icon,"
-					  "standard::content-type,standard::display-name",
-					  search_hit_get_info_cb,
-					  request);
+  cancellable = _gtk_file_system_get_info (impl->file_system, file,
+					   "standard::type,standard::icon,"
+					   "standard::content-type,standard::display-name",
+					   search_hit_get_info_cb,
+					   request);
 
   gtk_list_store_set (impl->search_model, &iter,
                       SEARCH_MODEL_COL_FILE, file,
@@ -9768,10 +9768,10 @@ recent_idle_load (gpointer data)
   request->row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (impl->recent_model), p);
   gtk_tree_path_free (p);
 
-  cancellable = gtk_file_system_get_info (impl->file_system, file,
-					  "standard::type",
-					  recent_item_get_info_cb,
-					  request);
+  cancellable = _gtk_file_system_get_info (impl->file_system, file,
+					   "standard::type",
+					   recent_item_get_info_cb,
+					   request);
 
   gtk_list_store_set (impl->recent_model, &iter,
                       RECENT_MODEL_COL_FILE, file,
@@ -10116,7 +10116,7 @@ shortcuts_activate_volume_mount_cb (GCancellable        *cancellable,
         {
           char *msg, *name;
 
-	  name = gtk_file_system_volume_get_display_name (volume);
+	  name = _gtk_file_system_volume_get_display_name (volume);
           msg = g_strdup_printf (_("Could not mount %s"), name);
 
           error_message (impl, msg, error->message);
@@ -10128,7 +10128,7 @@ shortcuts_activate_volume_mount_cb (GCancellable        *cancellable,
       goto out;
     }
 
-  file = gtk_file_system_volume_get_root (volume);
+  file = _gtk_file_system_volume_get_root (volume);
   if (file != NULL)
     {
       change_folder_and_display_error (impl, file, FALSE);
@@ -10167,18 +10167,18 @@ shortcuts_activate_volume (GtkFileChooserDefault *impl,
    */
   g_object_ref (impl);
 
-  if (!gtk_file_system_volume_is_mounted (volume))
+  if (!_gtk_file_system_volume_is_mounted (volume))
     {
       set_busy_cursor (impl, TRUE);
 
       impl->shortcuts_activate_iter_cancellable =
-        gtk_file_system_mount_volume (impl->file_system, volume, NULL,
-				      shortcuts_activate_volume_mount_cb,
-				      g_object_ref (impl));
+        _gtk_file_system_mount_volume (impl->file_system, volume, NULL,
+				       shortcuts_activate_volume_mount_cb,
+				       g_object_ref (impl));
     }
   else
     {
-      file = gtk_file_system_volume_get_root (volume);
+      file = _gtk_file_system_volume_get_root (volume);
       if (file != NULL)
         {
           change_folder_and_display_error (impl, file, FALSE);
@@ -10248,9 +10248,9 @@ shortcuts_activate_mount_enclosing_volume (GCancellable        *cancellable,
     }
 
   data->impl->shortcuts_activate_iter_cancellable =
-    gtk_file_system_get_info (data->impl->file_system, data->file,
-			      "standard::type",
-			      shortcuts_activate_get_info_cb, data);
+    _gtk_file_system_get_info (data->impl->file_system, data->file,
+			       "standard::type",
+			       shortcuts_activate_get_info_cb, data);
 }
 
 static void
@@ -10289,13 +10289,13 @@ shortcuts_activate_iter (GtkFileChooserDefault *impl,
       struct ShortcutsActivateData *data;
       GtkFileSystemVolume *volume;
 
-      volume = gtk_file_system_get_volume_for_file (impl->file_system, col_data);
+      volume = _gtk_file_system_get_volume_for_file (impl->file_system, col_data);
 
       data = g_new0 (struct ShortcutsActivateData, 1);
       data->impl = g_object_ref (impl);
       data->file = g_object_ref (col_data);
 
-      if (!volume || !gtk_file_system_volume_is_mounted (volume))
+      if (!volume || !_gtk_file_system_volume_is_mounted (volume))
 	{
 	  GMountOperation *mount_operation;
 	  GtkWidget *toplevel;
@@ -10305,17 +10305,17 @@ shortcuts_activate_iter (GtkFileChooserDefault *impl,
 	  mount_operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
 
 	  impl->shortcuts_activate_iter_cancellable =
-	    gtk_file_system_mount_enclosing_volume (impl->file_system, col_data,
-						    mount_operation,
-						    shortcuts_activate_mount_enclosing_volume,
-						    data);
+	    _gtk_file_system_mount_enclosing_volume (impl->file_system, col_data,
+						     mount_operation,
+						     shortcuts_activate_mount_enclosing_volume,
+						     data);
 	}
       else
 	{
 	  impl->shortcuts_activate_iter_cancellable =
-	    gtk_file_system_get_info (impl->file_system, data->file,
-				      "standard::type",
-				      shortcuts_activate_get_info_cb, data);
+	    _gtk_file_system_get_info (impl->file_system, data->file,
+	 			       "standard::type",
+				       shortcuts_activate_get_info_cb, data);
 	}
     }
   else if (shortcut_type == SHORTCUT_TYPE_SEARCH)
@@ -10665,7 +10665,7 @@ list_icon_data_func (GtkTreeViewColumn *tree_column,
             if (info)
               {
                 /* FIXME: NULL GError */
-		pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (impl), impl->icon_size);
+		pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (impl), impl->icon_size);
 	      }
           }
         else

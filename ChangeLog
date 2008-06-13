@@ -1,5 +1,16 @@
 2008-06-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c:
+	* gtk/gtkfilechooserdefault.c:
+	* gtk/gtkfilechooserentry.c:
+	* gtk/gtkfilesystem.c:
+	* gtk/gtkfilesystem.h:
+	* gtk/gtkfilesystemmodel.c:
+	* gtk/gtkpathbar.c: Really make GtkFileSystem private
+	by _-prefixing all functions.
+
+2008-06-13  Matthias Clasen  <mclasen@redhat.com>
+
 	* docs/RELEASE-HOWTO: Updates
 	* INSTALL.in: Bump version
 

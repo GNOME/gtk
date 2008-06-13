@@ -717,11 +717,11 @@ gtk_file_chooser_button_constructor (GType                  type,
 
   model_add_special (button);
 
-  list = gtk_file_system_list_volumes (priv->fs);
+  list = _gtk_file_system_list_volumes (priv->fs);
   model_add_volumes (button, list);
   g_slist_free (list);
 
-  list = gtk_file_system_list_bookmarks (priv->fs);
+  list = _gtk_file_system_list_bookmarks (priv->fs);
   model_add_bookmarks (button, list);
   g_slist_foreach (list, (GFunc) g_object_unref, NULL);
   g_slist_free (list);
@@ -1043,9 +1043,9 @@ dnd_select_folder_get_info_cb (GCancellable *cancellable,
   data->file = g_file_new_for_uri (data->uris[data->i]);
 
   data->button->priv->dnd_select_folder_cancellable =
-    gtk_file_system_get_info (data->file_system, data->file,
-			      "standard::type",
-			      dnd_select_folder_get_info_cb, user_data);
+    _gtk_file_system_get_info (data->file_system, data->file,
+			       "standard::type",
+			       dnd_select_folder_get_info_cb, user_data);
 
   g_object_unref (cancellable);
 }
@@ -1100,9 +1100,9 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 	  g_cancellable_cancel (priv->dnd_select_folder_cancellable);
 
 	priv->dnd_select_folder_cancellable =
-	  gtk_file_system_get_info (priv->fs, info->file,
-				    "standard::type",
-				    dnd_select_folder_get_info_cb, info);
+	  _gtk_file_system_get_info (priv->fs, info->file,
+				     "standard::type",
+				     dnd_select_folder_get_info_cb, info);
       }
       break;
 
@@ -1229,7 +1229,7 @@ change_icon_theme_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
+  pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
 
   if (pixbuf)
     {
@@ -1329,10 +1329,10 @@ change_icon_theme (GtkFileChooserButton *button)
 		  gtk_tree_path_free (path);
 
 		  cancellable =
-		    gtk_file_system_get_info (priv->fs, data,
-					      "standard::icon",
-					      change_icon_theme_get_info_cb,
-					      info);
+		    _gtk_file_system_get_info (priv->fs, data,
+					       "standard::icon",
+					       change_icon_theme_get_info_cb,
+					       info);
 		  button->priv->change_icon_theme_cancellables =
 		    g_slist_append (button->priv->change_icon_theme_cancellables, cancellable);
 		  pixbuf = NULL;
@@ -1352,10 +1352,10 @@ change_icon_theme (GtkFileChooserButton *button)
 	  break;
 	case ROW_TYPE_VOLUME:
 	  if (data)
-	    pixbuf = gtk_file_system_volume_render_icon (data,
-							 GTK_WIDGET (button),
-							 priv->icon_size,
-							 NULL);
+	    pixbuf = _gtk_file_system_volume_render_icon (data,
+							  GTK_WIDGET (button),
+							  priv->icon_size,
+							  NULL);
 	  else
 	    pixbuf = gtk_icon_theme_load_icon (theme, FALLBACK_ICON_NAME,
 					       priv->icon_size, 0, NULL);
@@ -1469,7 +1469,7 @@ set_info_get_info_cb (GCancellable *cancellable,
     /* There was an error, leave the fallback name in there */
     goto out;
 
-  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
+  pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
 
   if (!data->label)
     data->label = g_strdup (g_file_info_get_display_name (info));
@@ -1505,15 +1505,15 @@ set_info_for_file_at_iter (GtkFileChooserButton *button,
 
   data = g_new0 (struct SetDisplayNameData, 1);
   data->button = g_object_ref (button);
-  data->label = gtk_file_system_get_bookmark_label (button->priv->fs, file);
+  data->label = _gtk_file_system_get_bookmark_label (button->priv->fs, file);
 
   tree_path = gtk_tree_model_get_path (button->priv->model, iter);
   data->row_ref = gtk_tree_row_reference_new (button->priv->model, tree_path);
   gtk_tree_path_free (tree_path);
 
-  cancellable = gtk_file_system_get_info (button->priv->fs, file,
-					  "standard::type,standard::icon,standard::display-name",
-					  set_info_get_info_cb, data);
+  cancellable = _gtk_file_system_get_info (button->priv->fs, file,
+					   "standard::type,standard::icon,standard::display-name",
+					   set_info_get_info_cb, data);
 
   gtk_list_store_set (GTK_LIST_STORE (button->priv->model), iter,
 		      CANCELLABLE_COLUMN, cancellable,
@@ -1600,7 +1600,7 @@ model_free_row_data (GtkFileChooserButton *button,
       g_object_unref (data);
       break;
     case ROW_TYPE_VOLUME:
-      gtk_file_system_volume_free (data);
+      _gtk_file_system_volume_free (data);
       break;
     default:
       break;
@@ -1646,7 +1646,7 @@ model_add_special_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
+  pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
 
   if (pixbuf)
     {
@@ -1705,9 +1705,9 @@ model_add_special (GtkFileChooserButton *button)
 						  tree_path);
       gtk_tree_path_free (tree_path);
 
-      cancellable = gtk_file_system_get_info (button->priv->fs, file,
-					      "standard::icon,standard::display-name",
-					      model_add_special_get_info_cb, info);
+      cancellable = _gtk_file_system_get_info (button->priv->fs, file,
+					       "standard::icon,standard::display-name",
+					       model_add_special_get_info_cb, info);
 
       gtk_list_store_set (store, &iter,
 			  ICON_COLUMN, NULL,
@@ -1740,9 +1740,9 @@ model_add_special (GtkFileChooserButton *button)
 						  tree_path);
       gtk_tree_path_free (tree_path);
 
-      cancellable = gtk_file_system_get_info (button->priv->fs, file,
-					      "standard::icon,standard::display-name",
-					      model_add_special_get_info_cb, info);
+      cancellable = _gtk_file_system_get_info (button->priv->fs, file,
+					       "standard::icon,standard::display-name",
+					       model_add_special_get_info_cb, info);
 
       gtk_list_store_set (store, &iter,
 			  TYPE_COLUMN, ROW_TYPE_SPECIAL,
@@ -1786,24 +1786,24 @@ model_add_volumes (GtkFileChooserButton *button,
 
       if (local_only)
 	{
-	  if (gtk_file_system_volume_is_mounted (volume))
+	  if (_gtk_file_system_volume_is_mounted (volume))
 	    {
 	      GFile *base_file;
 
-	      base_file = gtk_file_system_volume_get_root (volume);
+	      base_file = _gtk_file_system_volume_get_root (volume);
 	      if (base_file != NULL && !g_file_is_native (base_file))
 		{
-		  gtk_file_system_volume_free (volume);
+		  _gtk_file_system_volume_free (volume);
 		  continue;
 		}
 	    }
 	}
 
-      pixbuf = gtk_file_system_volume_render_icon (volume,
-						   GTK_WIDGET (button),
-						   button->priv->icon_size,
-						   NULL);
-      display_name = gtk_file_system_volume_get_display_name (volume);
+      pixbuf = _gtk_file_system_volume_render_icon (volume,
+						    GTK_WIDGET (button),
+						    button->priv->icon_size,
+						    NULL);
+      display_name = _gtk_file_system_volume_get_display_name (volume);
 
       gtk_list_store_insert (store, &iter, pos);
       gtk_list_store_set (store, &iter,
@@ -1874,7 +1874,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
 	   * If we switch to a better bookmarks file format (XBEL), we
 	   * should use mime info to get a better icon.
 	   */
-	  label = gtk_file_system_get_bookmark_label (button->priv->fs, file);
+	  label = _gtk_file_system_get_bookmark_label (button->priv->fs, file);
 	  if (!label)
 	    label = _gtk_file_chooser_label_for_file (file);
 
@@ -1977,7 +1977,7 @@ model_update_current_folder (GtkFileChooserButton *button,
        * If we switch to a better bookmarks file format (XBEL), we
        * should use mime info to get a better icon.
        */
-      label = gtk_file_system_get_bookmark_label (button->priv->fs, file);
+      label = _gtk_file_system_get_bookmark_label (button->priv->fs, file);
       if (!label)
 	label = _gtk_file_chooser_label_for_file (file);
 
@@ -2115,11 +2115,11 @@ filter_model_visible_func (GtkTreeModel *model,
 	retval = TRUE;
 	if (local_only)
 	  {
-	    if (gtk_file_system_volume_is_mounted (data))
+	    if (_gtk_file_system_volume_is_mounted (data))
 	      {
 		GFile *base_file;
 
-		base_file = gtk_file_system_volume_get_root (data);
+		base_file = _gtk_file_system_volume_get_root (data);
 
 		if (base_file)
 		  {
@@ -2216,7 +2216,7 @@ update_combo_box (GtkFileChooserButton *button)
 	  {
 	    GFile *base_file;
 
-	    base_file = gtk_file_system_volume_get_root (data);
+	    base_file = _gtk_file_system_volume_get_root (data);
             if (base_file)
               {
 	        row_found = (files &&
@@ -2288,7 +2288,7 @@ update_label_get_info_cb (GCancellable *cancellable,
 
   gtk_label_set_text (GTK_LABEL (priv->label), g_file_info_get_display_name (info));
 
-  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (priv->image), priv->icon_size);
+  pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (priv->image), priv->icon_size);
 
   if (!pixbuf)
     pixbuf = gtk_icon_theme_load_icon (get_icon_theme (GTK_WIDGET (priv->image)),
@@ -2323,25 +2323,25 @@ update_label_and_image (GtkFileChooserButton *button)
 
       file = files->data;
 
-      volume = gtk_file_system_get_volume_for_file (priv->fs, file);
+      volume = _gtk_file_system_get_volume_for_file (priv->fs, file);
       if (volume)
 	{
 	  GFile *base_file;
 
-	  base_file = gtk_file_system_volume_get_root (volume);
+	  base_file = _gtk_file_system_volume_get_root (volume);
 	  if (base_file && g_file_equal (base_file, file))
 	    {
-	      label_text = gtk_file_system_volume_get_display_name (volume);
-	      pixbuf = gtk_file_system_volume_render_icon (volume,
-							   GTK_WIDGET (button),
-							   priv->icon_size,
-							   NULL);
+	      label_text = _gtk_file_system_volume_get_display_name (volume);
+	      pixbuf = _gtk_file_system_volume_render_icon (volume,
+							    GTK_WIDGET (button),
+							    priv->icon_size,
+							    NULL);
 	    }
 
 	  if (base_file)
 	    g_object_unref (base_file);
 
-	  gtk_file_system_volume_free (volume);
+	  _gtk_file_system_volume_free (volume);
 
 	  if (label_text)
 	    goto out;
@@ -2356,16 +2356,16 @@ update_label_and_image (GtkFileChooserButton *button)
       if (g_file_is_native (file))
 	{
 	  priv->update_button_cancellable =
-	    gtk_file_system_get_info (priv->fs, file,
-				      "standard::icon,standard::display-name",
-				      update_label_get_info_cb,
-				      g_object_ref (button));
+	    _gtk_file_system_get_info (priv->fs, file,
+				       "standard::icon,standard::display-name",
+				       update_label_get_info_cb,
+				       g_object_ref (button));
 	}
       else
 	{
 	  GdkPixbuf *pixbuf;
 
-	  label_text = gtk_file_system_get_bookmark_label (button->priv->fs, file);
+	  label_text = _gtk_file_system_get_bookmark_label (button->priv->fs, file);
 	  
 	  pixbuf = gtk_icon_theme_load_icon (get_icon_theme (GTK_WIDGET (priv->image)), 
 					     "gnome-fs-regular",
@@ -2410,7 +2410,7 @@ fs_volumes_changed_cb (GtkFileSystem *fs,
 
   priv->n_volumes = 0;
 
-  volumes = gtk_file_system_list_volumes (fs);
+  volumes = _gtk_file_system_list_volumes (fs);
   model_add_volumes (user_data, volumes);
   g_slist_free (volumes);
 
@@ -2428,7 +2428,7 @@ fs_bookmarks_changed_cb (GtkFileSystem *fs,
   GtkFileChooserButtonPrivate *priv = button->priv;
   GSList *bookmarks;
 
-  bookmarks = gtk_file_system_list_bookmarks (fs);
+  bookmarks = _gtk_file_system_list_bookmarks (fs);
   model_remove_rows (user_data,
 		     model_get_type_position (user_data,
 					      ROW_TYPE_BOOKMARK_SEPARATOR),
@@ -2535,7 +2535,7 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 	    GFile *base_file;
 
 	    gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (priv->dialog));
-	    base_file = gtk_file_system_volume_get_root (data);
+	    base_file = _gtk_file_system_volume_get_root (data);
 	    if (base_file)
 	      {
 		_gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (priv->dialog),

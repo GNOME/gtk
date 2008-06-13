@@ -120,27 +120,27 @@ struct GtkFileSystemBookmark
   gchar *label;
 };
 
-G_DEFINE_TYPE (GtkFileSystem, gtk_file_system, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GtkFileSystem, _gtk_file_system, G_TYPE_OBJECT)
 
-G_DEFINE_TYPE (GtkFolder, gtk_folder, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GtkFolder, _gtk_folder, G_TYPE_OBJECT)
 
 
-static void _gtk_folder_set_finished_loading (GtkFolder *folder,
-					      gboolean   finished_loading);
-static void _gtk_folder_add_file             (GtkFolder *folder,
-					      GFile     *file,
-					      GFileInfo *info);
+static void gtk_folder_set_finished_loading (GtkFolder *folder,
+					     gboolean   finished_loading);
+static void gtk_folder_add_file             (GtkFolder *folder,
+					     GFile     *file,
+					     GFileInfo *info);
 
 
 GQuark
-gtk_file_system_error_quark (void)
+_gtk_file_system_error_quark (void)
 {
   return g_quark_from_static_string ("gtk-file-system-error-quark");
 }
 
 /* GtkFileSystemBookmark methods */
 void
-gtk_file_system_bookmark_free (GtkFileSystemBookmark *bookmark)
+_gtk_file_system_bookmark_free (GtkFileSystemBookmark *bookmark)
 {
   g_object_unref (bookmark->file);
   g_free (bookmark->label);
@@ -185,7 +185,7 @@ gtk_file_system_dispose (GObject *object)
       priv->volume_monitor = NULL;
     }
 
-  G_OBJECT_CLASS (gtk_file_system_parent_class)->dispose (object);
+  G_OBJECT_CLASS (_gtk_file_system_parent_class)->dispose (object);
 }
 
 static void
@@ -202,15 +202,15 @@ gtk_file_system_finalize (GObject *object)
 
   if (priv->bookmarks)
     {
-      g_slist_foreach (priv->bookmarks, (GFunc) gtk_file_system_bookmark_free, NULL);
+      g_slist_foreach (priv->bookmarks, (GFunc) _gtk_file_system_bookmark_free, NULL);
       g_slist_free (priv->bookmarks);
     }
 
-  G_OBJECT_CLASS (gtk_file_system_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_file_system_parent_class)->finalize (object);
 }
 
 static void
-gtk_file_system_class_init (GtkFileSystemClass *class)
+_gtk_file_system_class_init (GtkFileSystemClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
@@ -347,7 +347,7 @@ bookmarks_file_changed (GFileMonitor      *monitor,
     case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
     case G_FILE_MONITOR_EVENT_CREATED:
     case G_FILE_MONITOR_EVENT_DELETED:
-      g_slist_foreach (priv->bookmarks, (GFunc) gtk_file_system_bookmark_free, NULL);
+      g_slist_foreach (priv->bookmarks, (GFunc) _gtk_file_system_bookmark_free, NULL);
       g_slist_free (priv->bookmarks);
 
       priv->bookmarks = read_bookmarks (file);
@@ -490,7 +490,7 @@ get_volumes_list (GtkFileSystem *file_system)
 }
 
 static void
-gtk_file_system_init (GtkFileSystem *file_system)
+_gtk_file_system_init (GtkFileSystem *file_system)
 {
   GtkFileSystemPrivate *priv;
   GFile *bookmarks_file;
@@ -539,13 +539,13 @@ gtk_file_system_init (GtkFileSystem *file_system)
 
 /* GtkFileSystem public methods */
 GtkFileSystem *
-gtk_file_system_new (void)
+_gtk_file_system_new (void)
 {
   return g_object_new (GTK_TYPE_FILE_SYSTEM, NULL);
 }
 
 GSList *
-gtk_file_system_list_volumes (GtkFileSystem *file_system)
+_gtk_file_system_list_volumes (GtkFileSystem *file_system)
 {
   GtkFileSystemPrivate *priv;
   GSList *list;
@@ -566,7 +566,7 @@ gtk_file_system_list_volumes (GtkFileSystem *file_system)
 }
 
 GSList *
-gtk_file_system_list_bookmarks (GtkFileSystem *file_system)
+_gtk_file_system_list_bookmarks (GtkFileSystem *file_system)
 {
   GtkFileSystemPrivate *priv;
   GSList *bookmarks, *files = NULL;
@@ -590,12 +590,12 @@ gtk_file_system_list_bookmarks (GtkFileSystem *file_system)
 }
 
 gboolean
-gtk_file_system_parse (GtkFileSystem     *file_system,
-		       GFile             *base_file,
-		       const gchar       *str,
-		       GFile            **folder,
-		       gchar            **file_part,
-		       GError           **error)
+_gtk_file_system_parse (GtkFileSystem     *file_system,
+		        GFile             *base_file,
+		        const gchar       *str,
+		        GFile            **folder,
+		        gchar            **file_part,
+		        GError           **error)
 {
   GFile *file;
   gboolean result = FALSE;
@@ -713,11 +713,11 @@ enumerate_children_callback (GObject      *source_object,
 }
 
 GCancellable *
-gtk_file_system_get_folder (GtkFileSystem                  *file_system,
-			    GFile                          *file,
-			    const gchar                    *attributes,
-			    GtkFileSystemGetFolderCallback  callback,
-			    gpointer                        data)
+_gtk_file_system_get_folder (GtkFileSystem                  *file_system,
+			     GFile                          *file,
+			     const gchar                    *attributes,
+			     GtkFileSystemGetFolderCallback  callback,
+			     gpointer                        data)
 {
   GCancellable *cancellable;
   AsyncFuncData *async_data;
@@ -780,11 +780,11 @@ query_info_callback (GObject      *source_object,
 }
 
 GCancellable *
-gtk_file_system_get_info (GtkFileSystem                *file_system,
-			  GFile                        *file,
-			  const gchar                  *attributes,
-			  GtkFileSystemGetInfoCallback  callback,
-			  gpointer                      data)
+_gtk_file_system_get_info (GtkFileSystem                *file_system,
+			   GFile                        *file,
+			   const gchar                  *attributes,
+			   GtkFileSystemGetInfoCallback  callback,
+			   gpointer                      data)
 {
   GCancellable *cancellable;
   AsyncFuncData *async_data;
@@ -856,11 +856,11 @@ volume_mount_cb (GObject      *source_object,
 }
 
 GCancellable *
-gtk_file_system_mount_volume (GtkFileSystem                    *file_system,
-			      GtkFileSystemVolume              *volume,
-			      GMountOperation                  *mount_operation,
-			      GtkFileSystemVolumeMountCallback  callback,
-			      gpointer                          data)
+_gtk_file_system_mount_volume (GtkFileSystem                    *file_system,
+			       GtkFileSystemVolume              *volume,
+			       GMountOperation                  *mount_operation,
+			       GtkFileSystemVolumeMountCallback  callback,
+			       gpointer                          data)
 {
   GCancellable *cancellable;
   AsyncFuncData *async_data;
@@ -909,7 +909,7 @@ enclosing_volume_mount_cb (GObject      *source_object,
 
   async_data = (AsyncFuncData *) user_data;
   g_file_mount_enclosing_volume_finish (G_FILE (source_object), result, &error);
-  volume = gtk_file_system_get_volume_for_file (async_data->file_system, G_FILE (source_object));
+  volume = _gtk_file_system_get_volume_for_file (async_data->file_system, G_FILE (source_object));
 
   gdk_threads_enter ();
   ((GtkFileSystemVolumeMountCallback) async_data->callback) (async_data->cancellable, volume,
@@ -921,11 +921,11 @@ enclosing_volume_mount_cb (GObject      *source_object,
 }
 
 GCancellable *
-gtk_file_system_mount_enclosing_volume (GtkFileSystem                     *file_system,
-					GFile                             *file,
-					GMountOperation                   *mount_operation,
-					GtkFileSystemVolumeMountCallback   callback,
-					gpointer                           data)
+_gtk_file_system_mount_enclosing_volume (GtkFileSystem                     *file_system,
+					 GFile                             *file,
+					 GMountOperation                   *mount_operation,
+					 GtkFileSystemVolumeMountCallback   callback,
+					 gpointer                           data)
 {
   GCancellable *cancellable;
   AsyncFuncData *async_data;
@@ -955,10 +955,10 @@ gtk_file_system_mount_enclosing_volume (GtkFileSystem                     *file_
 }
 
 gboolean
-gtk_file_system_insert_bookmark (GtkFileSystem  *file_system,
-				 GFile          *file,
-				 gint            position,
-				 GError        **error)
+_gtk_file_system_insert_bookmark (GtkFileSystem  *file_system,
+				  GFile          *file,
+				  gint            position,
+				  GError        **error)
 {
   GtkFileSystemPrivate *priv;
   GSList *bookmarks;
@@ -1012,9 +1012,9 @@ gtk_file_system_insert_bookmark (GtkFileSystem  *file_system,
 }
 
 gboolean
-gtk_file_system_remove_bookmark (GtkFileSystem  *file_system,
-				 GFile          *file,
-				 GError        **error)
+_gtk_file_system_remove_bookmark (GtkFileSystem  *file_system,
+				  GFile          *file,
+				  GError        **error)
 {
   GtkFileSystemPrivate *priv;
   GtkFileSystemBookmark *bookmark;
@@ -1037,7 +1037,7 @@ gtk_file_system_remove_bookmark (GtkFileSystem  *file_system,
 	{
 	  result = TRUE;
 	  priv->bookmarks = g_slist_remove_link (priv->bookmarks, bookmarks);
-	  gtk_file_system_bookmark_free (bookmark);
+	  _gtk_file_system_bookmark_free (bookmark);
 	  g_slist_free_1 (bookmarks);
 	  break;
 	}
@@ -1070,8 +1070,8 @@ gtk_file_system_remove_bookmark (GtkFileSystem  *file_system,
 }
 
 gchar *
-gtk_file_system_get_bookmark_label (GtkFileSystem *file_system,
-				    GFile         *file)
+_gtk_file_system_get_bookmark_label (GtkFileSystem *file_system,
+				     GFile         *file)
 {
   GtkFileSystemPrivate *priv;
   GSList *bookmarks;
@@ -1100,9 +1100,9 @@ gtk_file_system_get_bookmark_label (GtkFileSystem *file_system,
 }
 
 void
-gtk_file_system_set_bookmark_label (GtkFileSystem *file_system,
-				    GFile         *file,
-				    const gchar   *label)
+_gtk_file_system_set_bookmark_label (GtkFileSystem *file_system,
+				     GFile         *file,
+				     const gchar   *label)
 {
   GtkFileSystemPrivate *priv;
   gboolean changed = FALSE;
@@ -1139,8 +1139,8 @@ gtk_file_system_set_bookmark_label (GtkFileSystem *file_system,
 }
 
 GtkFileSystemVolume *
-gtk_file_system_get_volume_for_file (GtkFileSystem *file_system,
-				     GFile         *file)
+_gtk_file_system_get_volume_for_file (GtkFileSystem *file_system,
+				      GFile         *file)
 {
   GtkFileSystemPrivate *priv;
   GMount *mount;
@@ -1231,7 +1231,7 @@ query_created_file_info_callback (GObject      *source_object,
     }
 
   folder = GTK_FOLDER (user_data);
-  _gtk_folder_add_file (folder, file, info);
+  gtk_folder_add_file (folder, file, info);
 
   files = g_slist_prepend (NULL, file);
   g_signal_emit (folder, folder_signals[FILES_ADDED], 0, files);
@@ -1314,7 +1314,7 @@ enumerator_files_callback (GObject      *source_object,
 				     G_PRIORITY_DEFAULT,
 				     NULL, NULL, NULL);
 
-      _gtk_folder_set_finished_loading (folder, TRUE);
+      gtk_folder_set_finished_loading (folder, TRUE);
       return;
     }
 
@@ -1331,7 +1331,7 @@ enumerator_files_callback (GObject      *source_object,
 
       info = f->data;
       child_file = g_file_get_child (priv->folder_file, g_file_info_get_name (info));
-      _gtk_folder_add_file (folder, child_file, info);
+      gtk_folder_add_file (folder, child_file, info);
       files = g_slist_prepend (files, child_file);
     }
 
@@ -1391,11 +1391,11 @@ gtk_folder_finalize (GObject *object)
   g_object_unref (priv->cancellable);
   g_free (priv->attributes);
 
-  G_OBJECT_CLASS (gtk_folder_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_folder_parent_class)->finalize (object);
 }
 
 static void
-gtk_folder_class_init (GtkFolderClass *class)
+_gtk_folder_class_init (GtkFolderClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
@@ -1470,7 +1470,7 @@ gtk_folder_class_init (GtkFolderClass *class)
 }
 
 static void
-gtk_folder_init (GtkFolder *folder)
+_gtk_folder_init (GtkFolder *folder)
 {
   GtkFolderPrivate *priv;
 
@@ -1484,8 +1484,8 @@ gtk_folder_init (GtkFolder *folder)
 }
 
 static void
-_gtk_folder_set_finished_loading (GtkFolder *folder,
-				  gboolean   finished_loading)
+gtk_folder_set_finished_loading (GtkFolder *folder,
+				 gboolean   finished_loading)
 {
   GtkFolderPrivate *priv;
 
@@ -1498,9 +1498,9 @@ _gtk_folder_set_finished_loading (GtkFolder *folder,
 }
 
 static void
-_gtk_folder_add_file (GtkFolder *folder,
-		      GFile     *file,
-		      GFileInfo *info)
+gtk_folder_add_file (GtkFolder *folder,
+		     GFile     *file,
+		     GFileInfo *info)
 {
   GtkFolderPrivate *priv;
 
@@ -1512,7 +1512,7 @@ _gtk_folder_add_file (GtkFolder *folder,
 }
 
 GSList *
-gtk_folder_list_children (GtkFolder *folder)
+_gtk_folder_list_children (GtkFolder *folder)
 {
   GtkFolderPrivate *priv;
   GList *files, *elem;
@@ -1531,8 +1531,8 @@ gtk_folder_list_children (GtkFolder *folder)
 }
 
 GFileInfo *
-gtk_folder_get_info (GtkFolder  *folder,
-		     GFile      *file)
+_gtk_folder_get_info (GtkFolder  *folder,
+		      GFile      *file)
 {
   GtkFolderPrivate *priv;
   GFileInfo *info;
@@ -1547,7 +1547,7 @@ gtk_folder_get_info (GtkFolder  *folder,
 }
 
 gboolean
-gtk_folder_is_finished_loading (GtkFolder *folder)
+_gtk_folder_is_finished_loading (GtkFolder *folder)
 {
   GtkFolderPrivate *priv;
 
@@ -1558,7 +1558,7 @@ gtk_folder_is_finished_loading (GtkFolder *folder)
 
 /* GtkFileSystemVolume public methods */
 gchar *
-gtk_file_system_volume_get_display_name (GtkFileSystemVolume *volume)
+_gtk_file_system_volume_get_display_name (GtkFileSystemVolume *volume)
 {
   DEBUG ("volume_get_display_name");
 
@@ -1575,7 +1575,7 @@ gtk_file_system_volume_get_display_name (GtkFileSystemVolume *volume)
 }
 
 gboolean
-gtk_file_system_volume_is_mounted (GtkFileSystemVolume *volume)
+_gtk_file_system_volume_is_mounted (GtkFileSystemVolume *volume)
 {
   gboolean mounted;
 
@@ -1605,7 +1605,7 @@ gtk_file_system_volume_is_mounted (GtkFileSystemVolume *volume)
 }
 
 GFile *
-gtk_file_system_volume_get_root (GtkFileSystemVolume *volume)
+_gtk_file_system_volume_get_root (GtkFileSystemVolume *volume)
 {
   GFile *file = NULL;
 
@@ -1679,7 +1679,7 @@ get_icon_for_special_directory (GFile *file)
         NULL 
       };
       g_object_unref (special_file);
-      return g_themed_icon_new_from_names (names, -1);
+      return g_themed_icon_new_from_names ((char **)names, -1);
     }
 
   g_object_unref (special_file);
@@ -1696,7 +1696,7 @@ get_icon_for_special_directory (GFile *file)
         NULL 
       };
       g_object_unref (special_file);
-      return g_themed_icon_new_from_names (names, -1);
+      return g_themed_icon_new_from_names ((char **)names, -1);
     }
 
   g_object_unref (special_file);
@@ -1705,10 +1705,10 @@ get_icon_for_special_directory (GFile *file)
 }
 
 GdkPixbuf *
-gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
-				    GtkWidget            *widget,
-				    gint                  icon_size,
-				    GError              **error)
+_gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
+				     GtkWidget            *widget,
+				     gint                  icon_size,
+				     GError              **error)
 {
   GIcon *icon = NULL;
   GdkPixbuf *pixbuf;
@@ -1722,7 +1722,7 @@ gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
   DEBUG ("volume_get_icon_name");
 
   if (IS_ROOT_VOLUME (volume))
-    icon = g_themed_icon_new_from_names (harddisk_icons, -1);
+    icon = g_themed_icon_new_from_names ((char **)harddisk_icons, -1);
   else if (G_IS_DRIVE (volume))
     icon = g_drive_get_icon (G_DRIVE (volume));
   else if (G_IS_VOLUME (volume))
@@ -1751,7 +1751,7 @@ gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
 }
 
 void
-gtk_file_system_volume_free (GtkFileSystemVolume *volume)
+_gtk_file_system_volume_free (GtkFileSystemVolume *volume)
 {
   /* Root volume doesn't need to be freed */
   if (IS_ROOT_VOLUME (volume))
@@ -1765,13 +1765,13 @@ gtk_file_system_volume_free (GtkFileSystemVolume *volume)
 
 /* GFileInfo helper functions */
 GdkPixbuf *
-gtk_file_info_render_icon (GFileInfo *info,
+_gtk_file_info_render_icon (GFileInfo *info,
 			   GtkWidget *widget,
 			   gint       icon_size)
 {
   GIcon *icon;
   GdkPixbuf *pixbuf = NULL;
-  gchar *thumbnail_path;
+  const gchar *thumbnail_path;
 
   thumbnail_path = g_file_info_get_attribute_byte_string (info, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
 

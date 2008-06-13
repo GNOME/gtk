@@ -1202,8 +1202,8 @@ set_button_image_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  pixbuf = gtk_file_info_render_icon (info, GTK_WIDGET (data->path_bar),
-				      data->path_bar->icon_size);
+  pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (data->path_bar),
+			 	       data->path_bar->icon_size);
   gtk_image_set_from_pixbuf (GTK_IMAGE (data->button_data->image), pixbuf);
 
   switch (data->button_data->type)
@@ -1248,15 +1248,15 @@ set_button_image (GtkPathBar *path_bar,
 	  break;
 	}
 
-      volume = gtk_file_system_get_volume_for_file (path_bar->file_system, path_bar->root_file);
+      volume = _gtk_file_system_get_volume_for_file (path_bar->file_system, path_bar->root_file);
       if (volume == NULL)
 	return;
 
-      path_bar->root_icon = gtk_file_system_volume_render_icon (volume,
-								GTK_WIDGET (path_bar),
-								path_bar->icon_size,
-								NULL);
-      gtk_file_system_volume_free (volume);
+      path_bar->root_icon = _gtk_file_system_volume_render_icon (volume,
+								 GTK_WIDGET (path_bar),
+								 path_bar->icon_size,
+								 NULL);
+      _gtk_file_system_volume_free (volume);
 
       gtk_image_set_from_pixbuf (GTK_IMAGE (button_data->image), path_bar->root_icon);
       break;
@@ -1276,11 +1276,11 @@ set_button_image (GtkPathBar *path_bar,
 	g_cancellable_cancel (button_data->cancellable);
 
       button_data->cancellable =
-        gtk_file_system_get_info (path_bar->file_system,
-				  path_bar->home_file,
-				  "standard::icon",
-				  set_button_image_get_info_cb,
-				  data);
+        _gtk_file_system_get_info (path_bar->file_system,
+				   path_bar->home_file,
+				   "standard::icon",
+				   set_button_image_get_info_cb,
+				   data);
       break;
 
     case DESKTOP_BUTTON:
@@ -1298,11 +1298,11 @@ set_button_image (GtkPathBar *path_bar,
 	g_cancellable_cancel (button_data->cancellable);
 
       button_data->cancellable =
-        gtk_file_system_get_info (path_bar->file_system,
-				  path_bar->desktop_file,
-				  "standard::icon",
-				  set_button_image_get_info_cb,
-				  data);
+        _gtk_file_system_get_info (path_bar->file_system,
+				   path_bar->desktop_file,
+				   "standard::icon",
+				   set_button_image_get_info_cb,
+				   data);
       break;
     default:
       break;
@@ -1681,11 +1681,11 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
   file_info->parent_file = g_file_get_parent (file_info->file);
 
   file_info->path_bar->get_info_cancellable =
-    gtk_file_system_get_info (file_info->path_bar->file_system,
-			      file_info->file,
-			      "standard::display-name,standard::is-hidden",
-			      gtk_path_bar_get_info_callback,
-			      file_info);
+    _gtk_file_system_get_info (file_info->path_bar->file_system,
+			       file_info->file,
+			       "standard::display-name,standard::is-hidden",
+			       gtk_path_bar_get_info_callback,
+			       file_info);
 }
 
 gboolean
@@ -1719,11 +1719,11 @@ _gtk_path_bar_set_file (GtkPathBar         *path_bar,
     g_cancellable_cancel (path_bar->get_info_cancellable);
 
   path_bar->get_info_cancellable =
-    gtk_file_system_get_info (path_bar->file_system,
-			      info->file,
-			      "standard::display-name,standard::is-hidden",
-			      gtk_path_bar_get_info_callback,
-			      info);
+    _gtk_file_system_get_info (path_bar->file_system,
+			       info->file,
+			       "standard::display-name,standard::is-hidden",
+			       gtk_path_bar_get_info_callback,
+			       info);
 
   return TRUE;
 }
