@@ -48,9 +48,12 @@ Without those packages make distcheck will *not* pass.
 
  6) If this is a devel release, make sure that the docs for new symbols
     are in good shape. Look at the -unused.txt files and add stuff found
-    there to the corresponding -sections.txt file. Make sure that all
-    new symbols have proper Since: tags, and that there is an index
-    in the main -docs.sgml for the next stable version.
+    there to the corresponding -sections.txt file. Look at the 
+    -undocumented.txt files and see if there is anything in there that
+    should be documented. If it is, this may be due to typos in the doc
+    comments in the source. Make sure that all new symbols have proper 
+    Since: tags, and that there is an index in the main -docs.sgml for 
+    the next stable version. 
 
  7) Add === Released 2.x.y === at the top of all ChangeLog files
 
