@@ -1,5 +1,9 @@
 2008-06-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkwindow.c: Fix doc typos
+
+2008-06-13  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilesystem.c: Avoid PLT entries by including
 	gtkalias.h
 

@@ -3510,12 +3510,12 @@ apply_redirect_to_children (GdkWindowObject *private, GdkWindowRedirect *redirec
  * gdk_window_redirect_to_drawable:
  * @window: a #GdkWindow
  * @drawable: a #GdkDrawable
- * src_x: x position in @window
- * src_y: y position in @window
- * dest_x: x position in @drawable
- * dest_y: y position in @drawable
- * width: width of redirection
- * height: height of redirection
+ * @src_x: x position in @window
+ * @src_y: y position in @window
+ * @dest_x: x position in @drawable
+ * @dest_y: y position in @drawable
+ * @width: width of redirection
+ * @height: height of redirection
  *
  * Redirects drawing into @windows so that drawing to the
  * window in the rectangle specified by @src_x, @src_y,
