@@ -1,3 +1,13 @@
+2008-05-23  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkprintoperation.c : check surface status after ceating a pdf.
+	Avoids crashing when the target can not be written, bug #537685
+
+	* gdk/win32/gdkdisplay-win32.c : runtime linking of ProcessIdToSessionId
+
+	* gtk/gtkfilesystem.c : variadic macros are not supported with c89 and
+	it was not needed here anyway.
+
 2008-06-13 Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_draw_frame): Fix frame size allocation.

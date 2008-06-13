@@ -29,9 +29,9 @@
 
 /* #define DEBUG_MODE */
 #ifdef DEBUG_MODE
-#define DEBUG(x...) g_debug (x);
+#define DEBUG(x) g_debug (x);
 #else
-#define DEBUG(x...)
+#define DEBUG(x)
 #endif
 
 #define GTK_FILE_SYSTEM_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_FILE_SYSTEM, GtkFileSystemPrivate))
