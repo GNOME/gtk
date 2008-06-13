@@ -1,5 +1,10 @@
 2008-06-13  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkaction.c (gtk_action_set_short_label): change type of
+	local "image" variable from GtkImage to GtkWidget to fix warning.
+
+2008-06-13  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkcombobox.c (gtk_combo_box_menu_position): cast menu's
 	toplevel to GtkWindow when passing to gtk_window_set_type_hint().
 

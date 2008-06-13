@@ -1385,19 +1385,20 @@ gtk_action_set_short_label (GtkAction	*action,
       proxy = (GtkWidget *)p->data;
 
       if (GTK_IS_TOOL_BUTTON (proxy))
-	gtk_tool_button_set_label (GTK_TOOL_BUTTON (proxy), 
+	gtk_tool_button_set_label (GTK_TOOL_BUTTON (proxy),
 				   action->private_data->short_label);
       else if (GTK_IS_BUTTON (proxy) &&
 	       !gtk_button_get_use_stock (GTK_BUTTON (proxy)))
 	{
-	  GtkImage *image;
+	  GtkWidget *image;
+
 	  child = GTK_BIN (proxy)->child;
 
 	  image = gtk_button_get_image (GTK_BUTTON (proxy));
-	  
+
 	  if (GTK_IS_IMAGE (image) ||
 	      child == NULL || GTK_IS_LABEL (child))
-	    gtk_button_set_label (GTK_BUTTON (proxy), 
+	    gtk_button_set_label (GTK_BUTTON (proxy),
 				  action->private_data->short_label);
 	}
     }
