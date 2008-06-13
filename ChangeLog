@@ -1,5 +1,10 @@
 2008-06-13  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_position): cast menu's
+	toplevel to GtkWindow when passing to gtk_window_set_type_hint().
+
+2008-06-13  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkuimanager.c (start_element_handler): silently skip
 	unknown attributes instead of bailing out with an error in order
 	to be compatible with possible future attribute names.

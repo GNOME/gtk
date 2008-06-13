@@ -1576,8 +1576,8 @@ gtk_combo_box_menu_position (GtkMenu  *menu,
       gtk_combo_box_menu_position_over (menu, x, y, push_in, user_data);
     }
 
-  gtk_window_set_type_hint (GTK_MENU (priv->popup_widget)->toplevel,
-			    GDK_WINDOW_TYPE_HINT_COMBO);
+  gtk_window_set_type_hint (GTK_WINDOW (GTK_MENU (priv->popup_widget)->toplevel),
+                            GDK_WINDOW_TYPE_HINT_COMBO);
 }
 
 static void
