@@ -1,3 +1,48 @@
+Overview of Changes from GTK+ 2.13.2 to 2.13.3
+==============================================
+
+ * Support runtime font configuration changes
+ 
+ * Use GIO for mime information
+
+ * Use GIO directly for the file chooser, do not load filesystem
+   implementation modules. This change causes some regressions on Win32, 
+   which will be addressed by improved Win32 support in GIO.
+
+ * GTK+ no longer uses translations when the application is not
+   translated to the current locale
+ 
+ * Bugs fixed: 
+ 520874 Should use gio directly
+ 536185 monitor font configuration
+ 536757 openoffice.org menus are placed at wrong position
+ 536990 updateiconcache.c: 'close ()' is redundant 
+ 535608 do not string-copy accel paths in the menu code
+ 488119 critical warnings from gtk_tree_view_get_visible_range
+ 536730 memory corruption in gtktreeview
+ 131920 gtkNotebook sends incorrect switch_page value
+ 526987 GtkCellRendererCombo should allow model to be NULL
+ 536765 GtkComboBox should set COMBO type hint for its menu
+ 503071 Application direction changes to right to left even if...
+ 517706 Connecting GtkButton with "use-stock" == FALSE to a...
+ 519092 Add accessibility support to GtkVolumeButton
+ 524222 GtkToolbar with mix of buttons with and without icons...
+ 537985 gtk_init_with_args() doesn't open a display after...
+ 531960 crash in eog-image.c:1154: (priv->image != NULL)
+ 408154 Change GtkEntryCompletion max-items to style property...
+ 506853 gtk_tree_view_enable_model_drag_[source|dest] problem
+ 536430 Libs and Cflags paths in gail-uninstalled.pc.in are out o...
+ 537685 print to file crashes when the target can not be written 
+
+* Updated translations:
+ Arabic (ar)
+ Czech (cs)
+ Estonian (et)
+ Hebrew (he)
+ Norwegian bokmål (nb)
+ Thai (th)
+
+
 Overview of Changes from GTK+ 2.13.1 to 2.13.2
 ==============================================
 
