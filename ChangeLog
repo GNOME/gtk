@@ -1,5 +1,14 @@
 2008-06-12  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 524222 – GtkToolbar with mix of buttons with and without 
+	icons looks "bad"
+
+	* gtk/gtktoolbutton.c (gtk_tool_button_construct_contents):
+	Improve appearance of "both vertical" mode toolbuttons.
+	Patch by Peter Johanson
+
+2008-06-12  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 519092 – Add accessibility support to GtkVolumeButton
 
 	* gtk/gtkvolumebutton.c: Set accessibility descriptions.

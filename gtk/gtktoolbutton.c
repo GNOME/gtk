@@ -433,7 +433,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
       box = gtk_vbox_new (FALSE, icon_spacing);
       if (icon)
 	gtk_box_pack_start (GTK_BOX (box), icon, TRUE, TRUE, 0);
-      gtk_box_pack_start (GTK_BOX (box), label, FALSE, TRUE, 0);
+      gtk_box_pack_end (GTK_BOX (box), label, FALSE, TRUE, 0);
       gtk_container_add (GTK_CONTAINER (button->priv->button), box);
       break;
 
