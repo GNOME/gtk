@@ -727,6 +727,22 @@ gtk_accel_group_from_accel_closure (GClosure *closure)
   return NULL;
 }
 
+/**
+ * gtk_accel_group_activate:
+ * @accel_group:   a #GtkAccelGroup
+ * @accel_quark:   the quark for the accelerator name
+ * @acceleratable: the #GObject, usually a #GtkWindow, on which
+ *                 to activate the accelerator.
+ * @accel_key:     accelerator keyval from a key event
+ * @accel_mods:    keyboard state mask from a key event
+ * @returns:       %TRUE if the accelerator was handled, %FALSE otherwise
+ * 
+ * Finds the first accelerator in @accel_group 
+ * that matches @accel_key and @accel_mods, and
+ * activates it.
+ *
+ * Returns: %TRUE if an accelerator was activated and handled this keypress
+ */
 gboolean
 gtk_accel_group_activate (GtkAccelGroup   *accel_group,
                           GQuark	   accel_quark,
@@ -757,8 +773,8 @@ gtk_accel_group_activate (GtkAccelGroup   *accel_group,
  * Finds the first accelerator in any #GtkAccelGroup attached
  * to @object that matches @accel_key and @accel_mods, and
  * activates that accelerator.
- * If an accelerator was activated and handled this keypress, %TRUE
- * is returned.
+ *
+ * Returns: %TRUE if an accelerator was activated and handled this keypress
  */
 gboolean
 gtk_accel_groups_activate (GObject	  *object,

@@ -1,5 +1,7 @@
 2008-06-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaccelgroup.c: Add some docs
+
 	* gdk/gdkwindow.c: Fix doc typos
 
 2008-06-13  Matthias Clasen  <mclasen@redhat.com>
