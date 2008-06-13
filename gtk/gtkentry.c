@@ -47,6 +47,7 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
+#include "gtkspinbutton.h"
 #include "gtkstock.h"
 #include "gtktextutil.h"
 #include "gtkwindow.h"
@@ -1558,16 +1559,22 @@ gtk_entry_draw_frame (GtkWidget    *widget,
                       GdkRectangle *area)
 {
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
-  gint x, y, width, height;
-  gint xborder, yborder;
-  
-  get_text_area_size (GTK_ENTRY (widget), &x, &y, &width, &height);
-  _gtk_entry_get_borders (GTK_ENTRY (widget), &xborder, &yborder);
+  gint x = 0, y = 0, width, height;
 
-  x -= xborder;
-  y -= yborder;
-  width += xborder * 2;
-  height += yborder * 2;
+  gdk_drawable_get_size (widget->window, &width, &height);
+
+  /* Fix a problem with some themes which assume that entry->text_area's
+   * width equals widget->window's width */
+  if (GTK_IS_SPIN_BUTTON (widget))
+    {
+      gint xborder, yborder;
+
+      get_text_area_size (GTK_ENTRY (widget), &x, NULL, &width, NULL);
+      _gtk_entry_get_borders (GTK_ENTRY (widget), &xborder, &yborder);
+
+      x -= xborder;
+      width += xborder * 2;
+    }
 
   if (GTK_WIDGET_HAS_FOCUS (widget) && !priv->interior_focus)
     {

@@ -1,3 +1,8 @@
+2008-06-13 Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_draw_frame): Fix frame size allocation.
+	Patch by Jan Arne Peterson
+
 2008-06-12  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 537985 – gtk_init_with_args() doesn't open a display after
