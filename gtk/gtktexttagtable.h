@@ -35,8 +35,6 @@
 
 G_BEGIN_DECLS
 
-#include <gtk/gtktexttag.h>
-
 typedef void (* GtkTextTagTableForeach) (GtkTextTag *tag, gpointer data);
 
 #define GTK_TYPE_TEXT_TAG_TABLE            (gtk_text_tag_table_get_type ())
