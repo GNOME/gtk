@@ -1235,20 +1235,9 @@ start_element_handler (GMarkupParseContext *context,
 	{
 	  expand = !strcmp (attribute_values[i], "true");
 	}
-      else
-	{
-	  gint line_number, char_number;
-	  
-	  g_markup_parse_context_get_position (context,
-					       &line_number, &char_number);
-	  g_set_error (error,
-		       G_MARKUP_ERROR,
-		       G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE,
-		       _("Unknown attribute '%s' on line %d char %d"),
-		       attribute_names[i],
-		       line_number, char_number);
-	  return;
-	}
+      /*  else silently skip unknown attributes to be compatible with
+       *  future additional attributes.
+       */
     }
 
   /* Work out a name for this node.  Either the name attribute, or
