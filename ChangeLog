@@ -1,4 +1,9 @@
-2008-06-13 Matthias Clasen  <mclasen@redhat.com>
+2008-06-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* docs/RELEASE-HOWTO: Updates
+	* INSTALL.in: Bump version
+
+2008-06-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates
 
