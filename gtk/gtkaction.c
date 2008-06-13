@@ -817,7 +817,12 @@ connect_proxy (GtkAction     *action,
 	}
       else 
 	{
-	  if (GTK_BIN (proxy)->child == NULL || 
+	  GtkWidget *image;
+
+	  image = gtk_button_get_image (GTK_BUTTON (proxy));
+
+	  if (GTK_IS_IMAGE (image) ||
+	      GTK_BIN (proxy)->child == NULL || 
 	      GTK_IS_LABEL (GTK_BIN (proxy)->child))
 	    {
 	      /* synchronise the label */
@@ -826,6 +831,12 @@ connect_proxy (GtkAction     *action,
 			    "use-underline", TRUE,
 			    NULL);
 	    }
+
+	  if (GTK_IS_IMAGE (image) &&
+	      (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_EMPTY ||
+	       gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME))
+	    gtk_image_set_from_icon_name (GTK_IMAGE (image),
+					  action->private_data->icon_name, GTK_ICON_SIZE_MENU);
 	}
       /* we leave the button alone if there is a custom child */
       g_signal_connect_object (proxy, "clicked",
@@ -1379,9 +1390,13 @@ gtk_action_set_short_label (GtkAction	*action,
       else if (GTK_IS_BUTTON (proxy) &&
 	       !gtk_button_get_use_stock (GTK_BUTTON (proxy)))
 	{
+	  GtkImage *image;
 	  child = GTK_BIN (proxy)->child;
+
+	  image = gtk_button_get_image (GTK_BUTTON (proxy));
 	  
-	  if (child == NULL || GTK_IS_LABEL (child))
+	  if (GTK_IS_IMAGE (image) ||
+	      child == NULL || GTK_IS_LABEL (child))
 	    gtk_button_set_label (GTK_BUTTON (proxy), 
 				  action->private_data->short_label);
 	}

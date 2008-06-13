@@ -1,3 +1,16 @@
+2008-06-12  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 517706 – Connecting GtkButton with "use-stock" == FALSE to a
+	GtkAction has problems
+	Patch by Peter Johanson
+
+	* gtk/gtkaction.c (connect_proxy): Set the image of a button
+	proxy to the "icon-name" property.
+
+	(gtk_action_set_short_label):  If the "image" property is set 
+	on the button proxy, also tries to set the "label" property on 
+	the GtkButton.
+
 2008-06-12  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmain.c
