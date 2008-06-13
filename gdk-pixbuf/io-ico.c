@@ -199,10 +199,33 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 	guchar *BIH; /* The DIB for the used icon */
  	guchar *Ptr;
  	gint I;
+	guint16 imgtype; /* 1 = icon, 2 = cursor */
  
  	/* Step 1: The ICO header */
 
-	State->cursor = ((Data[3] << 8) + Data[2] == 2) ? TRUE : FALSE;
+	/* First word should be 0 according to specs */
+	if (((Data[1] << 8) + Data[0]) != 0) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("Invalid header in icon"));
+		return;
+
+	}
+
+	imgtype = (Data[3] << 8) + Data[2];
+
+	State->cursor = (imgtype == 2) ? TRUE : FALSE;
+
+	/* If it is not a cursor make sure it is actually an icon */
+	if (!State->cursor && imgtype != 1) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("Invalid header in icon"));
+		return;
+	}
+
 
  	IconCount = (Data[5] << 8) + (Data[4]);
 	
