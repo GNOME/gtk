@@ -1,7 +1,9 @@
 2008-06-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version
+
 	* === Released 2.13.3 ===
-	
+
 2008-06-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaccelgroup.c: Add some docs
