@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-03 18:52-0400\n"
+"POT-Creation-Date: 2008-06-13 18:23-0400\n"
 "PO-Revision-Date: 2006-08-15 19:52+0200\n"
 "Last-Translator: Nickolay V. Shmyrev <nshmyrev@yandex.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -254,68 +254,68 @@ msgstr "Виджет управления быстрой клавиши"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Виджет который отвечает за изменение быстрой клавиши"
 
-#: gtk/gtkaction.c:202 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:119
+#: gtk/gtkaction.c:199 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:119
 #: gtk/gtktextmark.c:89
 msgid "Name"
 msgstr "Наименование"
 
-#: gtk/gtkaction.c:203
+#: gtk/gtkaction.c:200
 msgid "A unique name for the action."
 msgstr "Уникальное имя для действия."
 
-#: gtk/gtkaction.c:218 gtk/gtkbutton.c:199 gtk/gtkexpander.c:195
+#: gtk/gtkaction.c:215 gtk/gtkbutton.c:199 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:316 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "Метка"
 
-#: gtk/gtkaction.c:219
+#: gtk/gtkaction.c:216
 msgid "The label used for menu items and buttons that activate this action."
 msgstr ""
 "Метка, используемая для элементов меню и кнопок, инициирующих данное "
 "действие."
 
-#: gtk/gtkaction.c:226
+#: gtk/gtkaction.c:223
 msgid "Short label"
 msgstr "Краткая метка"
 
-#: gtk/gtkaction.c:227
+#: gtk/gtkaction.c:224
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr ""
 "Краткая метка, которая может быть использована для кнопок панели "
 "инструментов."
 
-#: gtk/gtkaction.c:233
+#: gtk/gtkaction.c:230
 msgid "Tooltip"
 msgstr "Подсказка"
 
-#: gtk/gtkaction.c:234
+#: gtk/gtkaction.c:231
 msgid "A tooltip for this action."
 msgstr "Подсказка для этого действия."
 
-#: gtk/gtkaction.c:240
+#: gtk/gtkaction.c:237
 msgid "Stock Icon"
 msgstr "Встроенный значок"
 
-#: gtk/gtkaction.c:241
+#: gtk/gtkaction.c:238
 msgid "The stock icon displayed in widgets representing this action."
 msgstr ""
 "Встроенный значок, отображаемый в виджетах, представляющих это действие."
 
-#: gtk/gtkaction.c:258 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:230
+#: gtk/gtkaction.c:255 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:230
 #: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:208 gtk/gtkwindow.c:592
 msgid "Icon Name"
 msgstr "Имя значка"
 
-#: gtk/gtkaction.c:259 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:231
+#: gtk/gtkaction.c:256 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:231
 #: gtk/gtkstatusicon.c:209
 msgid "The name of the icon from the icon theme"
 msgstr "Имя значка из темы значков"
 
-#: gtk/gtkaction.c:265 gtk/gtktoolitem.c:153
+#: gtk/gtkaction.c:262 gtk/gtktoolitem.c:153
 msgid "Visible when horizontal"
 msgstr "Видим при горизонтальном расположении"
 
-#: gtk/gtkaction.c:266 gtk/gtktoolitem.c:154
+#: gtk/gtkaction.c:263 gtk/gtktoolitem.c:154
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -323,11 +323,11 @@ msgstr ""
 "Будет ли элемент панели инструментов видим при горизонтальном расположении "
 "панели инструментов."
 
-#: gtk/gtkaction.c:281
+#: gtk/gtkaction.c:278
 msgid "Visible when overflown"
 msgstr "Видим при переполнении"
 
-#: gtk/gtkaction.c:282
+#: gtk/gtkaction.c:279
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
@@ -335,11 +335,11 @@ msgstr ""
 "Если установлено, то прокси элементов меню для этого действия будут "
 "перекрывать меню на панели инструментов"
 
-#: gtk/gtkaction.c:289 gtk/gtktoolitem.c:160
+#: gtk/gtkaction.c:286 gtk/gtktoolitem.c:160
 msgid "Visible when vertical"
 msgstr "Видим при вертикальном расположении"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:161
+#: gtk/gtkaction.c:287 gtk/gtktoolitem.c:161
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -347,11 +347,11 @@ msgstr ""
 "Будет ли элемент панели инструментов видим при вертикально расположении "
 "панели инструментов."
 
-#: gtk/gtkaction.c:297 gtk/gtktoolitem.c:167
+#: gtk/gtkaction.c:294 gtk/gtktoolitem.c:167
 msgid "Is important"
 msgstr "Важное"
 
-#: gtk/gtkaction.c:298
+#: gtk/gtkaction.c:295
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -360,39 +360,39 @@ msgstr ""
 "элементов панели для этого действия будут показывать текст в режиме "
 "GTK_TOOLBAR_BOTH_HORIZ."
 
-#: gtk/gtkaction.c:306
+#: gtk/gtkaction.c:303
 msgid "Hide if empty"
 msgstr "Скрывать, если пусто"
 
-#: gtk/gtkaction.c:307
+#: gtk/gtkaction.c:304
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 "Если установлено, то пустые прокси элементов меню для этого действия будут "
 "скрыты."
 
-#: gtk/gtkaction.c:313 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:192
+#: gtk/gtkaction.c:310 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:192
 #: gtk/gtkwidget.c:520
 msgid "Sensitive"
 msgstr "Чувствительный"
 
-#: gtk/gtkaction.c:314
+#: gtk/gtkaction.c:311
 msgid "Whether the action is enabled."
 msgstr "Включено ли действие "
 
-#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:251
+#: gtk/gtkaction.c:317 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:251
 #: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:513
 msgid "Visible"
 msgstr "Видимый"
 
-#: gtk/gtkaction.c:321
+#: gtk/gtkaction.c:318
 msgid "Whether the action is visible."
 msgstr "Видимо ли действие"
 
-#: gtk/gtkaction.c:327
+#: gtk/gtkaction.c:324
 msgid "Action Group"
 msgstr "Группа действия"
 
-#: gtk/gtkaction.c:328
+#: gtk/gtkaction.c:325
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
@@ -559,7 +559,7 @@ msgstr "Тень стрелки"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Внешний вид тени, отбрасываемой стрелкой"
 
-#: gtk/gtkarrow.c:88 gtk/gtkmenuitem.c:247
+#: gtk/gtkarrow.c:88 gtk/gtkmenuitem.c:245
 msgid "Arrow Scaling"
 msgstr "Растяжение стрелки"
 
@@ -827,11 +827,11 @@ msgstr ""
 "Если установлено, метка будет использована для выбора из встроенных кнопок "
 "вместо отображения"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:787 gtk/gtkfilechooserbutton.c:398
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:787 gtk/gtkfilechooserbutton.c:394
 msgid "Focus on click"
 msgstr "Захватывать фокус по щелчку"
 
-#: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:399
+#: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:395
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Захватывает ли кнопка фокус ввода при щелчке мышью по ней"
 
@@ -918,7 +918,7 @@ msgid ""
 msgstr ""
 "Влияют ли свойства child_displacement_x/_y также и на прямоугольник фокуса"
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:536 gtk/gtkentry.c:898
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:537 gtk/gtkentry.c:899
 msgid "Inner Border"
 msgstr "Внутреннее окаймление"
 
@@ -1169,27 +1169,27 @@ msgstr "Режим быстрой клавиши"
 msgid "The type of accelerators"
 msgstr "Тип быстрых клавиш"
 
-#: gtk/gtkcellrenderercombo.c:97
+#: gtk/gtkcellrenderercombo.c:107
 msgid "Model"
 msgstr "Модель"
 
-#: gtk/gtkcellrenderercombo.c:98
+#: gtk/gtkcellrenderercombo.c:108
 msgid "The model containing the possible values for the combo box"
 msgstr "Модель, содержащая возможные параметры выпадающего списка"
 
-#: gtk/gtkcellrenderercombo.c:120 gtk/gtkcomboboxentry.c:106
+#: gtk/gtkcellrenderercombo.c:130 gtk/gtkcomboboxentry.c:106
 msgid "Text Column"
 msgstr "Столбец текста"
 
-#: gtk/gtkcellrenderercombo.c:121 gtk/gtkcomboboxentry.c:107
+#: gtk/gtkcellrenderercombo.c:131 gtk/gtkcomboboxentry.c:107
 msgid "A column in the data source model to get the strings from"
 msgstr "Столбец в модели источника данных, откуда берутся строки"
 
-#: gtk/gtkcellrenderercombo.c:138
+#: gtk/gtkcellrenderercombo.c:148
 msgid "Has Entry"
 msgstr "Имеет запись"
 
-#: gtk/gtkcellrenderercombo.c:139
+#: gtk/gtkcellrenderercombo.c:149
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
 msgstr ""
 "Если не установлено, не позволять вводить строки, отличные от выбранных"
@@ -1226,7 +1226,7 @@ msgstr "Идентификатор (ID) встроенного значка"
 msgid "The stock ID of the stock icon to render"
 msgstr "Идентификатор (ID) встроенного значка для отрисовки"
 
-#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:250
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:245
 #: gtk/gtkstatusicon.c:225
 msgid "Size"
 msgstr "Размер"
@@ -1256,7 +1256,7 @@ msgid "Value of the progress bar"
 msgstr "Значение индикатора хода процесса"
 
 #: gtk/gtkcellrendererprogress.c:146 gtk/gtkcellrenderertext.c:195
-#: gtk/gtkentry.c:579 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:188
+#: gtk/gtkentry.c:580 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:188
 #: gtk/gtktextbuffer.c:197
 msgid "Text"
 msgstr "Текст"
@@ -1299,7 +1299,7 @@ msgstr "Вертикальное выравнивание от 0 (вверх) д
 
 #: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:731
 #: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:283 gtk/gtktoolbar.c:494
-#: gtk/gtktrayicon-x11.c:96
+#: gtk/gtktrayicon-x11.c:95
 msgid "Orientation"
 msgstr "Ориентация"
 
@@ -1392,7 +1392,7 @@ msgstr "Цвет текста"
 msgid "Foreground color as a GdkColor"
 msgstr "Цвет текста в формате GdkColor"
 
-#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:503 gtk/gtktexttag.c:251
+#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:504 gtk/gtktexttag.c:251
 #: gtk/gtktextview.c:570
 msgid "Editable"
 msgstr "Редактируемый"
@@ -1516,7 +1516,7 @@ msgstr ""
 "Желаемое место эллиптизации строки, если механизму отображения строки в "
 "ячейке не хватает места для отображения всей строки."
 
-#: gtk/gtkcellrenderertext.c:431 gtk/gtkfilechooserbutton.c:426
+#: gtk/gtkcellrenderertext.c:431 gtk/gtkfilechooserbutton.c:422
 #: gtk/gtklabel.c:468
 msgid "Width In Characters"
 msgstr "Ширина в символах"
@@ -1775,7 +1775,7 @@ msgstr "Использовать прозрачность"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Давать ли цвету значение прозрачности"
 
-#: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:412
+#: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:408
 #: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:264
 msgid "Title"
 msgstr "Заголовок"
@@ -1920,7 +1920,7 @@ msgstr "Добавлять отделённые меню"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Имеют ли выпадающие элементы линию разрыва"
 
-#: gtk/gtkcombobox.c:779 gtk/gtkentry.c:528
+#: gtk/gtkcombobox.c:779 gtk/gtkentry.c:529
 msgid "Has Frame"
 msgstr "Имеет рамку"
 
@@ -1932,7 +1932,7 @@ msgstr "Имеет ли выпадающее меню рамку вокруг д
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Перехватывает ли выпадающее меню фокус при щелчке мышью"
 
-#: gtk/gtkcombobox.c:803 gtk/gtkmenu.c:491
+#: gtk/gtkcombobox.c:803 gtk/gtkmenu.c:489
 msgid "Tearoff Title"
 msgstr "Заголовок отделённого меню"
 
@@ -1968,7 +1968,7 @@ msgstr "Размер стрелки"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Минимальный размер стрелки выпадающего списка"
 
-#: gtk/gtkcombobox.c:861 gtk/gtkentry.c:628 gtk/gtkhandlebox.c:176
+#: gtk/gtkcombobox.c:861 gtk/gtkentry.c:629 gtk/gtkhandlebox.c:176
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:632
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2076,41 +2076,41 @@ msgstr "Граница области действий"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Ширина отступа вокруг кнопки снизу в диалоге"
 
-#: gtk/gtkentry.c:483 gtk/gtklabel.c:411
+#: gtk/gtkentry.c:484 gtk/gtklabel.c:411
 msgid "Cursor Position"
 msgstr "Позиция курсора"
 
-#: gtk/gtkentry.c:484 gtk/gtklabel.c:412
+#: gtk/gtkentry.c:485 gtk/gtklabel.c:412
 msgid "The current position of the insertion cursor in chars"
 msgstr "Текущая позиция точки вставки (insertion cursor) в символах"
 
-#: gtk/gtkentry.c:493 gtk/gtklabel.c:421
+#: gtk/gtkentry.c:494 gtk/gtklabel.c:421
 msgid "Selection Bound"
 msgstr "Граница выделения"
 
-#: gtk/gtkentry.c:494 gtk/gtklabel.c:422
+#: gtk/gtkentry.c:495 gtk/gtklabel.c:422
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Положение противоположного конца выделения от курсора в символах"
 
-#: gtk/gtkentry.c:504
+#: gtk/gtkentry.c:505
 msgid "Whether the entry contents can be edited"
 msgstr "Может ли содержимое поля ввода быть изменено"
 
-#: gtk/gtkentry.c:511
+#: gtk/gtkentry.c:512
 msgid "Maximum length"
 msgstr "Максимальная длина"
 
-#: gtk/gtkentry.c:512
+#: gtk/gtkentry.c:513
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "Максимальное число символов для этого поля ввода.  \"0\" -- без ограничений"
 
-#: gtk/gtkentry.c:520
+#: gtk/gtkentry.c:521
 msgid "Visibility"
 msgstr "Видимость"
 
-#: gtk/gtkentry.c:521
+#: gtk/gtkentry.c:522
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2118,31 +2118,31 @@ msgstr ""
 "Если не установлено, то приводит к отображению \"невидимого символа\" вместо "
 "самого текста (режим ввода пароля)"
 
-#: gtk/gtkentry.c:529
+#: gtk/gtkentry.c:530
 msgid "FALSE removes outside bevel from entry"
 msgstr "Если не установлено, то удаляет из элемента внешнюю рамку"
 
-#: gtk/gtkentry.c:537
+#: gtk/gtkentry.c:538
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 "Отступ между текстом и рамкой. Переопределяет свойство стиля inner-border"
 
-#: gtk/gtkentry.c:544
+#: gtk/gtkentry.c:545
 msgid "Invisible character"
 msgstr "Невидимый символ"
 
-#: gtk/gtkentry.c:545
+#: gtk/gtkentry.c:546
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Символ, используемый для сокрытия содержимого поля ввода (в \"режиме пароля"
 "\")"
 
-#: gtk/gtkentry.c:552
+#: gtk/gtkentry.c:553
 msgid "Activates default"
 msgstr "Активизирует действие по умолчанию"
 
-#: gtk/gtkentry.c:553
+#: gtk/gtkentry.c:554
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2150,33 +2150,33 @@ msgstr ""
 "Активизировать ли действие по умолчанию (например, кнопку, используемую по "
 "умолчанию в диалоге), если нажата клавиша \"Ввод\"."
 
-#: gtk/gtkentry.c:559
+#: gtk/gtkentry.c:560
 msgid "Width in chars"
 msgstr "Ширина в символах"
 
-#: gtk/gtkentry.c:560
+#: gtk/gtkentry.c:561
 msgid "Number of characters to leave space for in the entry"
 msgstr "Число символов, для которых оставлено место в поле ввода"
 
-#: gtk/gtkentry.c:569
+#: gtk/gtkentry.c:570
 msgid "Scroll offset"
 msgstr "Смещение при прокрутке"
 
-#: gtk/gtkentry.c:570
+#: gtk/gtkentry.c:571
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Количество пикселей поля ввода, вышедших за левую границу экрана при "
 "прокрутке"
 
-#: gtk/gtkentry.c:580
+#: gtk/gtkentry.c:581
 msgid "The contents of the entry"
 msgstr "Содержимое поля ввода"
 
-#: gtk/gtkentry.c:595 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:596 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "Выравнивание по X"
 
-#: gtk/gtkentry.c:596 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:597 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -2184,38 +2184,38 @@ msgstr ""
 "Горизонтальное выравнивание от 0 (влево) до 1 (вправо). Инвертируется для "
 "формата RTL."
 
-#: gtk/gtkentry.c:612
+#: gtk/gtkentry.c:613
 msgid "Truncate multiline"
 msgstr "Обрезать многострочный текст"
 
-#: gtk/gtkentry.c:613
+#: gtk/gtkentry.c:614
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Обрезать ли вставленный многострочный текст до одной строки."
 
-#: gtk/gtkentry.c:629
+#: gtk/gtkentry.c:630
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 "Какой вид тени рисовать вокруг поля ввода когда установлено свойство has-"
 "frame"
 
-#: gtk/gtkentry.c:899
+#: gtk/gtkentry.c:900
 msgid "Border between text and frame."
 msgstr "Отступ между текстом и рамкой."
 
-#: gtk/gtkentry.c:904 gtk/gtklabel.c:644
+#: gtk/gtkentry.c:905 gtk/gtklabel.c:644
 msgid "Select on focus"
 msgstr "Выделять при фокусировании"
 
-#: gtk/gtkentry.c:905
+#: gtk/gtkentry.c:906
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Будет ли содержимое поля ввода выделяться когда поле ввода получает фокус"
 
-#: gtk/gtkentry.c:919
+#: gtk/gtkentry.c:920
 msgid "Password Hint Timeout"
 msgstr "Задержка подсказки в пароле"
 
-#: gtk/gtkentry.c:920
+#: gtk/gtkentry.c:921
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Как долго показывать последний введённый символ в элементах ввода пароля"
@@ -2355,92 +2355,92 @@ msgstr "Размер расширяющей стрелки"
 msgid "Spacing around expander arrow"
 msgstr "Интервал вокруг стрелки-расширителя"
 
-#: gtk/gtkfilechooser.c:197
+#: gtk/gtkfilechooser.c:196
 msgid "Action"
 msgstr "Действие"
 
-#: gtk/gtkfilechooser.c:198
+#: gtk/gtkfilechooser.c:197
 msgid "The type of operation that the file selector is performing"
 msgstr "Тип операции, производимой диалогом выбора файлов"
 
-#: gtk/gtkfilechooser.c:204
+#: gtk/gtkfilechooser.c:203
 msgid "File System Backend"
 msgstr "Движок файловой системы"
 
-#: gtk/gtkfilechooser.c:205
+#: gtk/gtkfilechooser.c:204
 msgid "Name of file system backend to use"
 msgstr "Наименование используемого движка файловой системы"
 
-#: gtk/gtkfilechooser.c:210 gtk/gtkrecentchooser.c:252
+#: gtk/gtkfilechooser.c:209 gtk/gtkrecentchooser.c:252
 msgid "Filter"
 msgstr "Фильтр"
 
-#: gtk/gtkfilechooser.c:211
+#: gtk/gtkfilechooser.c:210
 msgid "The current filter for selecting which files are displayed"
 msgstr "Текущий фильтр для выбора отображаемых файлов"
 
-#: gtk/gtkfilechooser.c:216
+#: gtk/gtkfilechooser.c:215
 msgid "Local Only"
 msgstr "Только локальные"
 
-#: gtk/gtkfilechooser.c:217
+#: gtk/gtkfilechooser.c:216
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr "Будут ли выбранные файлы только локальными"
 
-#: gtk/gtkfilechooser.c:222
+#: gtk/gtkfilechooser.c:221
 msgid "Preview widget"
 msgstr "Виджет образца"
 
-#: gtk/gtkfilechooser.c:223
+#: gtk/gtkfilechooser.c:222
 msgid "Application supplied widget for custom previews."
 msgstr "Поддерживаемый приложением виджет для отображения образцов файлов."
 
-#: gtk/gtkfilechooser.c:228
+#: gtk/gtkfilechooser.c:227
 msgid "Preview Widget Active"
 msgstr "Виджет образца активен"
 
-#: gtk/gtkfilechooser.c:229
+#: gtk/gtkfilechooser.c:228
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr "Показывается ли поддерживаемый приложением виджет образца."
 
-#: gtk/gtkfilechooser.c:234
+#: gtk/gtkfilechooser.c:233
 msgid "Use Preview Label"
 msgstr "Использовать метку для образца"
 
-#: gtk/gtkfilechooser.c:235
+#: gtk/gtkfilechooser.c:234
 msgid "Whether to display a stock label with the name of the previewed file."
 msgstr "Использовать ли встроенную метку с именем показываемого файла."
 
-#: gtk/gtkfilechooser.c:240
+#: gtk/gtkfilechooser.c:239
 msgid "Extra widget"
 msgstr "Дополнительный виджет"
 
-#: gtk/gtkfilechooser.c:241
+#: gtk/gtkfilechooser.c:240
 msgid "Application supplied widget for extra options."
 msgstr "Поддерживаемый приложением виджет для дополнительных опций."
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:191
+#: gtk/gtkfilechooser.c:245 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:191
 msgid "Select Multiple"
 msgstr "Выделять несколько"
 
-#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:540
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:540
 msgid "Whether to allow multiple files to be selected"
 msgstr "Допускать ли выделение нескольких файлов"
 
-#: gtk/gtkfilechooser.c:253
+#: gtk/gtkfilechooser.c:252
 msgid "Show Hidden"
 msgstr "Показывать скрытые"
 
-#: gtk/gtkfilechooser.c:254
+#: gtk/gtkfilechooser.c:253
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Показываются ли скрытые файлы и папки"
 
-#: gtk/gtkfilechooser.c:269
+#: gtk/gtkfilechooser.c:268
 msgid "Do overwrite confirmation"
 msgstr "Подтверждение перезаписи"
 
-#: gtk/gtkfilechooser.c:270
+#: gtk/gtkfilechooser.c:269
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
@@ -2448,23 +2448,23 @@ msgstr ""
 "Спрашивать ли о перезаписи существующих файлов в режиме сохранения диалога "
 "выбора файлов."
 
-#: gtk/gtkfilechooserbutton.c:381
+#: gtk/gtkfilechooserbutton.c:377
 msgid "Dialog"
 msgstr "Диалог"
 
-#: gtk/gtkfilechooserbutton.c:382
+#: gtk/gtkfilechooserbutton.c:378
 msgid "The file chooser dialog to use."
 msgstr "Используемый диалог выбора файлов."
 
-#: gtk/gtkfilechooserbutton.c:413
+#: gtk/gtkfilechooserbutton.c:409
 msgid "The title of the file chooser dialog."
 msgstr "Заголовок диалога выбора файлов."
 
-#: gtk/gtkfilechooserbutton.c:427
+#: gtk/gtkfilechooserbutton.c:423
 msgid "The desired width of the button widget, in characters."
 msgstr "Желаемая ширина виджета кнопки, в символах."
 
-#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:219
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:214
 #: gtk/gtkstatusicon.c:192
 msgid "Filename"
 msgstr "Имя файла"
@@ -2480,14 +2480,6 @@ msgstr "Показать файловые операции"
 #: gtk/gtkfilesel.c:533
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Показываются ли кнопки для создания/обработки файлов"
-
-#: gtk/gtkfilesystem.c:382
-msgid "Cancelled"
-msgstr "Отменено"
-
-#: gtk/gtkfilesystem.c:383
-msgid "Whether or not the operation has been successfully cancelled"
-msgstr "Может ли операция успешно завершиться"
 
 #: gtk/gtkfixed.c:90 gtk/gtklayout.c:578
 msgid "X position"
@@ -3009,7 +3001,7 @@ msgstr "Ширина макета"
 msgid "The height of the layout"
 msgstr "Высота макета"
 
-#: gtk/gtkmenu.c:492
+#: gtk/gtkmenu.c:490
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -3017,118 +3009,118 @@ msgstr ""
 "Заголовок, который диспетчер окон будет отображать для этого меню после его "
 "отделения"
 
-#: gtk/gtkmenu.c:506
+#: gtk/gtkmenu.c:504
 msgid "Tearoff State"
 msgstr "Состояние линии разрыва"
 
-#: gtk/gtkmenu.c:507
+#: gtk/gtkmenu.c:505
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Булево значение, которое показывает, является ли меню \"отрывным\""
 
-#: gtk/gtkmenu.c:513
+#: gtk/gtkmenu.c:511
 msgid "Vertical Padding"
 msgstr "Вертикальное дополнение"
 
-#: gtk/gtkmenu.c:514
+#: gtk/gtkmenu.c:512
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Дополнительное пространство, добавляемое к меню сверху и снизу"
 
-#: gtk/gtkmenu.c:522
+#: gtk/gtkmenu.c:520
 msgid "Horizontal Padding"
 msgstr "Горизонтальные дополнение"
 
-#: gtk/gtkmenu.c:523
+#: gtk/gtkmenu.c:521
 msgid "Extra space at the left and right edges of the menu"
 msgstr "Дополнительное пространство, добавляемое к меню справа и слева"
 
-#: gtk/gtkmenu.c:531
+#: gtk/gtkmenu.c:529
 msgid "Vertical Offset"
 msgstr "Вертикальный отступ"
 
-#: gtk/gtkmenu.c:532
+#: gtk/gtkmenu.c:530
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 "Когда меню является подменю, оно располагается со смещением по вертикали"
 
-#: gtk/gtkmenu.c:540
+#: gtk/gtkmenu.c:538
 msgid "Horizontal Offset"
 msgstr "Горизонтальный отступ"
 
-#: gtk/gtkmenu.c:541
+#: gtk/gtkmenu.c:539
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 "Когда меню является подменю, оно располагается со смещением по горизонтали"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:547
 msgid "Double Arrows"
 msgstr "Двойные стрелки"
 
-#: gtk/gtkmenu.c:550
+#: gtk/gtkmenu.c:548
 msgid "When scrolling, always show both arrows."
 msgstr "При прокрутке показывать обе стрелки."
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:556
 msgid "Left Attach"
 msgstr "Прибавление слева"
 
-#: gtk/gtkmenu.c:559 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:557 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "Число столбцов, прибавляемых к левой стороне дочернего элемента"
 
-#: gtk/gtkmenu.c:566
+#: gtk/gtkmenu.c:564
 msgid "Right Attach"
 msgstr "Прибавление справа"
 
-#: gtk/gtkmenu.c:567
+#: gtk/gtkmenu.c:565
 msgid "The column number to attach the right side of the child to"
 msgstr "Число столбцов, прибавляемых к правой стороне дочернего элемента"
 
-#: gtk/gtkmenu.c:574
+#: gtk/gtkmenu.c:572
 msgid "Top Attach"
 msgstr "Прибавление сверху"
 
-#: gtk/gtkmenu.c:575
+#: gtk/gtkmenu.c:573
 msgid "The row number to attach the top of the child to"
 msgstr "Число строк, прибавляемых к верхней стороне дочернего элемента"
 
-#: gtk/gtkmenu.c:582
+#: gtk/gtkmenu.c:580
 msgid "Bottom Attach"
 msgstr "Прибавление снизу"
 
-#: gtk/gtkmenu.c:583 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:581 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "Число строк, прибавляемых к нижней стороне дочернего элемента"
 
-#: gtk/gtkmenu.c:670
+#: gtk/gtkmenu.c:668
 msgid "Can change accelerators"
 msgstr "Можно изменять комбинации клавиш"
 
-#: gtk/gtkmenu.c:671
+#: gtk/gtkmenu.c:669
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Можно ли изменить быструю клавишу меню при нажатии клавиши на элементе меню"
 
-#: gtk/gtkmenu.c:676
+#: gtk/gtkmenu.c:674
 msgid "Delay before submenus appear"
 msgstr "Задержка перед появлением подменю"
 
-#: gtk/gtkmenu.c:677
+#: gtk/gtkmenu.c:675
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Минимальное время, которое указатель мыши должен находиться над пунктом "
 "меню, чтобы было отображено подменю"
 
-#: gtk/gtkmenu.c:684
+#: gtk/gtkmenu.c:682
 msgid "Delay before hiding a submenu"
 msgstr "Задержка перед сокрытием подменю"
 
-#: gtk/gtkmenu.c:685
+#: gtk/gtkmenu.c:683
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3172,17 +3164,17 @@ msgstr "Задержка перед появлением \"выпадающег�
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Задержка перед появлением подменю у основного меню"
 
-#: gtk/gtkmenuitem.c:204
+#: gtk/gtkmenuitem.c:202
 msgid "Submenu"
 msgstr "Подменю"
 
-#: gtk/gtkmenuitem.c:205
+#: gtk/gtkmenuitem.c:203
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 "Подменю, присоединённое к этому пункту меню, или NULL, если таковое "
 "отсутствует"
 
-#: gtk/gtkmenuitem.c:248
+#: gtk/gtkmenuitem.c:246
 #, fuzzy
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "Пространство, занимаемое стрелкой"
@@ -4214,7 +4206,7 @@ msgstr ""
 "Ограничивать ли доступные для выделения ресурсы только локальными файлами со "
 "схемой file:"
 
-#: gtk/gtkrecentchooser.c:222 gtk/gtkrecentmanager.c:234
+#: gtk/gtkrecentchooser.c:222 gtk/gtkrecentmanager.c:229
 msgid "Limit"
 msgstr "Максимум"
 
@@ -4234,18 +4226,18 @@ msgstr "Порядок сортировки отображаемых элеме�
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Текущий фильтр для выбора отображаемых элементов"
 
-#: gtk/gtkrecentmanager.c:220
+#: gtk/gtkrecentmanager.c:215
 msgid "The full path to the file to be used to store and read the list"
 msgstr "Полный путь к файлу, используемому для загрузки и сохранения списка"
 
-#: gtk/gtkrecentmanager.c:235
+#: gtk/gtkrecentmanager.c:230
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 "Максимальное число элементов, возвращаемых функцией "
 "gtk_recent_manager_get_items()"
 
-#: gtk/gtkrecentmanager.c:251
+#: gtk/gtkrecentmanager.c:246
 msgid "The size of the recently used resources list"
 msgstr "Размер списка недавно использовавшихся ресурсов"
 
@@ -4468,11 +4460,11 @@ msgstr "Рисовать"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Будут ли разделители нарисованы или будут пустыми"
 
-#: gtk/gtksettings.c:206
+#: gtk/gtksettings.c:211
 msgid "Double Click Time"
 msgstr "Интервал двойного щелчка"
 
-#: gtk/gtksettings.c:207
+#: gtk/gtksettings.c:212
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -4480,11 +4472,11 @@ msgstr ""
 "Максимальное время между двумя щелчками, при котором они считаются двойным "
 "щелчком (в миллисекундах)"
 
-#: gtk/gtksettings.c:214
+#: gtk/gtksettings.c:219
 msgid "Double Click Distance"
 msgstr "Расстояние двойного щелчка"
 
-#: gtk/gtksettings.c:215
+#: gtk/gtksettings.c:220
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -4492,35 +4484,35 @@ msgstr ""
 "Максимальное расстояние между двумя щелчками, при котором они считаются "
 "двойным щелчком (в пикселях)"
 
-#: gtk/gtksettings.c:231
+#: gtk/gtksettings.c:236
 msgid "Cursor Blink"
 msgstr "Мигающий курсор"
 
-#: gtk/gtksettings.c:232
+#: gtk/gtksettings.c:237
 msgid "Whether the cursor should blink"
 msgstr "Мигает ли курсор"
 
-#: gtk/gtksettings.c:239
+#: gtk/gtksettings.c:244
 msgid "Cursor Blink Time"
 msgstr "Частота мигания курсора"
 
-#: gtk/gtksettings.c:240
+#: gtk/gtksettings.c:245
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "Длина цикла мигания курсора в миллисекундах"
 
-#: gtk/gtksettings.c:259
+#: gtk/gtksettings.c:264
 msgid "Cursor Blink Timeout"
 msgstr "Задержка мигания курсора"
 
-#: gtk/gtksettings.c:260
+#: gtk/gtksettings.c:265
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "Время, после которого курсор перестаёт мигать, в секундах"
 
-#: gtk/gtksettings.c:267
+#: gtk/gtksettings.c:272
 msgid "Split Cursor"
 msgstr "Разделить курсор"
 
-#: gtk/gtksettings.c:268
+#: gtk/gtksettings.c:273
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -4528,153 +4520,153 @@ msgstr ""
 "Будут ли отображаться два курсора для смешанного справа-налево и слева-"
 "направо текста"
 
-#: gtk/gtksettings.c:275
+#: gtk/gtksettings.c:280
 msgid "Theme Name"
 msgstr "Название темы"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:281
 msgid "Name of theme RC file to load"
 msgstr "Название файла RC тему для загрузки"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:289
 msgid "Icon Theme Name"
 msgstr "Имя темы значков"
 
-#: gtk/gtksettings.c:285
+#: gtk/gtksettings.c:290
 msgid "Name of icon theme to use"
 msgstr "Имя используемой темы значков"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:298
 msgid "Fallback Icon Theme Name"
 msgstr "Тема значков для отката"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:299
 msgid "Name of a icon theme to fall back to"
 msgstr "Имя темы значков для отката"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:307
 msgid "Key Theme Name"
 msgstr "Имя ключевой темы"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:308
 msgid "Name of key theme RC file to load"
 msgstr "Имя RC-файла с ключевой темой, который нужно загрузить"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:316
 msgid "Menu bar accelerator"
 msgstr "Клавиша вызова строки меню"
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:317
 msgid "Keybinding to activate the menu bar"
 msgstr "Клавиша предназначенная для вызова строки меню"
 
-#: gtk/gtksettings.c:320
+#: gtk/gtksettings.c:325
 msgid "Drag threshold"
 msgstr "Порог перетаскивания"
 
-#: gtk/gtksettings.c:321
+#: gtk/gtksettings.c:326
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 "Число точек растра, на которое может сместиться курсор до перетаскивания"
 
-#: gtk/gtksettings.c:329
+#: gtk/gtksettings.c:334
 msgid "Font Name"
 msgstr "Наименование шрифта"
 
-#: gtk/gtksettings.c:330
+#: gtk/gtksettings.c:335
 msgid "Name of default font to use"
 msgstr "Наименование исходного шрифта"
 
-#: gtk/gtksettings.c:338
+#: gtk/gtksettings.c:343
 msgid "Icon Sizes"
 msgstr "Размеры значков"
 
-#: gtk/gtksettings.c:339
+#: gtk/gtksettings.c:344
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Список размеров значков (gtk-menu=16,16;gtk-button=20,20..."
 
-#: gtk/gtksettings.c:347
+#: gtk/gtksettings.c:352
 msgid "GTK Modules"
 msgstr "Модули GTK"
 
-#: gtk/gtksettings.c:348
+#: gtk/gtksettings.c:353
 msgid "List of currently active GTK modules"
 msgstr "Список доступных модулей GTK"
 
-#: gtk/gtksettings.c:357
+#: gtk/gtksettings.c:362
 msgid "Xft Antialias"
 msgstr "Сглаживание через Xft"
 
-#: gtk/gtksettings.c:358
+#: gtk/gtksettings.c:363
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Сглаживать ли шрифты через Xft; 0=нет, 1=да, -1=исходное значение"
 
-#: gtk/gtksettings.c:367
+#: gtk/gtksettings.c:372
 msgid "Xft Hinting"
 msgstr "Хинтовать через Xft"
 
-#: gtk/gtksettings.c:368
+#: gtk/gtksettings.c:373
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Хинтовать ли шрифты через Xft; 0=нет, 1=да, -1=исходное значение"
 
-#: gtk/gtksettings.c:377
+#: gtk/gtksettings.c:382
 msgid "Xft Hint Style"
 msgstr "Стиль хинтования"
 
-#: gtk/gtksettings.c:378
+#: gtk/gtksettings.c:383
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "Какой уровень хинтования использовать; никакого (hintnone), слабый "
 "(hintslight), средний (hintmedium) или полный (hintfull)"
 
-#: gtk/gtksettings.c:387
+#: gtk/gtksettings.c:392
 msgid "Xft RGBA"
 msgstr "Субпиксельное сглаживание"
 
-#: gtk/gtksettings.c:388
+#: gtk/gtksettings.c:393
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr ""
 "Тип субпиксельного сглаживания; отсутствует (none), rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:397
+#: gtk/gtksettings.c:402
 msgid "Xft DPI"
 msgstr "Разрешение"
 
-#: gtk/gtksettings.c:398
+#: gtk/gtksettings.c:403
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Разрешение, в 1024 * точек/дюйм. -1 для значения по умолчанию."
 
-#: gtk/gtksettings.c:407
+#: gtk/gtksettings.c:412
 msgid "Cursor theme name"
 msgstr "Имя темы значков"
 
-#: gtk/gtksettings.c:408
+#: gtk/gtksettings.c:413
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr ""
 "Имя используемой темы курсоров, NULL для использования темы по умолчанию"
 
-#: gtk/gtksettings.c:416
+#: gtk/gtksettings.c:421
 msgid "Cursor theme size"
 msgstr "Размер темы курсоров"
 
-#: gtk/gtksettings.c:417
+#: gtk/gtksettings.c:422
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "Размер курсоров или 0 для размера по умолчанию"
 
-#: gtk/gtksettings.c:427
+#: gtk/gtksettings.c:432
 msgid "Alternative button order"
 msgstr "Альтернативный порядок кнопок"
 
-#: gtk/gtksettings.c:428
+#: gtk/gtksettings.c:433
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Используется ли альтернативный порядок кнопок в диалогах"
 
-#: gtk/gtksettings.c:445
+#: gtk/gtksettings.c:450
 msgid "Alternative sort indicator direction"
 msgstr "Альтернативный индикатор способа упорядочивания"
 
-#: gtk/gtksettings.c:446
+#: gtk/gtksettings.c:451
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
@@ -4682,11 +4674,11 @@ msgstr ""
 "Инвертировать ли по сравнению с умолчанием направление индикатора способа "
 "упорядочивания в списках или деревьях (вниз будет означать возрастание)"
 
-#: gtk/gtksettings.c:454
+#: gtk/gtksettings.c:459
 msgid "Show the 'Input Methods' menu"
 msgstr "Показывать меню 'Методы ввода'"
 
-#: gtk/gtksettings.c:455
+#: gtk/gtksettings.c:460
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
@@ -4694,11 +4686,11 @@ msgstr ""
 "Должно ли контекстное меню полей ввода и текстовых полей содержать подменю "
 "для изменения методов ввода"
 
-#: gtk/gtksettings.c:463
+#: gtk/gtksettings.c:468
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "Показывать меню 'Вставить символ Unicode'"
 
-#: gtk/gtksettings.c:464
+#: gtk/gtksettings.c:469
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
@@ -4706,185 +4698,193 @@ msgstr ""
 "Должно ли контекстное меню полей ввода и текстовых полей содержать подменю "
 "для вставки управляющих символов"
 
-#: gtk/gtksettings.c:472
+#: gtk/gtksettings.c:477
 msgid "Start timeout"
 msgstr "Первоначальная задержка"
 
-#: gtk/gtksettings.c:473
+#: gtk/gtksettings.c:478
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "Время первоначальной задержки при нажатии кнопки"
 
-#: gtk/gtksettings.c:482
+#: gtk/gtksettings.c:487
 msgid "Repeat timeout"
 msgstr "Задержка повтора"
 
-#: gtk/gtksettings.c:483
+#: gtk/gtksettings.c:488
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "Время задержки повтора, когда кнопка нажата"
 
-#: gtk/gtksettings.c:492
+#: gtk/gtksettings.c:497
 msgid "Expand timeout"
 msgstr "Задержка расширения"
 
-#: gtk/gtksettings.c:493
+#: gtk/gtksettings.c:498
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr "Задержка расширения, когда окно занимает новую область"
 
-#: gtk/gtksettings.c:528
+#: gtk/gtksettings.c:533
 msgid "Color scheme"
 msgstr "Цветовая схема"
 
-#: gtk/gtksettings.c:529
+#: gtk/gtksettings.c:534
 msgid "A palette of named colors for use in themes"
 msgstr "Палитра именованных цветов для использования в темах"
 
-#: gtk/gtksettings.c:538
+#: gtk/gtksettings.c:543
 msgid "Enable Animations"
 msgstr "Включить анимацию"
 
-#: gtk/gtksettings.c:539
+#: gtk/gtksettings.c:544
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Включить ли повсюду анимацию."
 
-#: gtk/gtksettings.c:557
+#: gtk/gtksettings.c:562
 msgid "Enable Touchscreen Mode"
 msgstr "Включить режим прямого доступа к экрану"
 
-#: gtk/gtksettings.c:558
+#: gtk/gtksettings.c:563
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
 "Когда установлено, события уведомления о перемещении не доставляются для "
 "элементов этого экрана"
 
-#: gtk/gtksettings.c:575
+#: gtk/gtksettings.c:580
 msgid "Tooltip timeout"
 msgstr "Задержка подсказки"
 
-#: gtk/gtksettings.c:576
+#: gtk/gtksettings.c:581
 msgid "Timeout before tooltip is shown"
 msgstr "Первоначальная задержка всплывающей подсказки"
 
-#: gtk/gtksettings.c:601
+#: gtk/gtksettings.c:606
 msgid "Tooltip browse timeout"
 msgstr "Задержка просмотра"
 
-#: gtk/gtksettings.c:602
+#: gtk/gtksettings.c:607
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr ""
 "Задержка после того, как подсказка показана перед включением режима обзора"
 
-#: gtk/gtksettings.c:623
+#: gtk/gtksettings.c:628
 msgid "Tooltip browse mode timeout"
 msgstr "Задержка режима обзора"
 
-#: gtk/gtksettings.c:624
+#: gtk/gtksettings.c:629
 msgid "Timeout after which browse mode is disabled"
 msgstr "Задержка, после которой режим обзора будет отключён"
 
-#: gtk/gtksettings.c:643
+#: gtk/gtksettings.c:648
 msgid "Keynav Cursor Only"
 msgstr "Перемещение только с помощью стрелок"
 
-#: gtk/gtksettings.c:644
+#: gtk/gtksettings.c:649
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr ""
 "Если установлено, перемещение между окнами будет доступно только с помощью "
 "стрелок"
 
-#: gtk/gtksettings.c:661
+#: gtk/gtksettings.c:666
 msgid "Keynav Wrap Around"
 msgstr "Перемещение зациклено"
 
-#: gtk/gtksettings.c:662
+#: gtk/gtksettings.c:667
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "Зацикливать ли перемещение курсора при управлении с клавиатуры"
 
-#: gtk/gtksettings.c:682
+#: gtk/gtksettings.c:687
 msgid "Error Bell"
 msgstr "Сигнал об ошибке"
 
-#: gtk/gtksettings.c:683
+#: gtk/gtksettings.c:688
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
 "Если установлено, ошибки перемещения с помощью клавиатуры и другие ошибки "
 "будут порождать звуковой сигнал"
 
-#: gtk/gtksettings.c:700
+#: gtk/gtksettings.c:705
 msgid "Color Hash"
 msgstr "Набор цветов"
 
-#: gtk/gtksettings.c:701
+#: gtk/gtksettings.c:706
 msgid "A hash table representation of the color scheme."
 msgstr "Набор, представляющий цветовую схему."
 
-#: gtk/gtksettings.c:709
+#: gtk/gtksettings.c:714
 msgid "Default file chooser backend"
 msgstr "Исходный движок для диалога выбора файлов"
 
-#: gtk/gtksettings.c:710
+#: gtk/gtksettings.c:715
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Наименование исходного движка виджета GtkFileChooser"
 
-#: gtk/gtksettings.c:727
+#: gtk/gtksettings.c:732
 msgid "Default print backend"
 msgstr "Система печати по умолчанию"
 
-#: gtk/gtksettings.c:728
+#: gtk/gtksettings.c:733
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Список систем GtkPrintBackend для использования по умолчанию"
 
-#: gtk/gtksettings.c:751
+#: gtk/gtksettings.c:756
 msgid "Default command to run when displaying a print preview"
 msgstr ""
 "Команда по умолчанию для отображения окна предварительного просмотра печати"
 
-#: gtk/gtksettings.c:752
+#: gtk/gtksettings.c:757
 msgid "Command to run when displaying a print preview"
 msgstr "Команда для запуска окна предварительного просмотра печати"
 
-#: gtk/gtksettings.c:768
+#: gtk/gtksettings.c:773
 msgid "Enable Mnemonics"
 msgstr "Включить подсказки"
 
-#: gtk/gtksettings.c:769
+#: gtk/gtksettings.c:774
 msgid "Whether labels should have mnemonics"
 msgstr "Имеют ли метки подсказки для активации"
 
-#: gtk/gtksettings.c:785
+#: gtk/gtksettings.c:790
 msgid "Enable Accelerators"
 msgstr "Включить комбинации клавиш"
 
-#: gtk/gtksettings.c:786
+#: gtk/gtksettings.c:791
 msgid "Whether menu items should have accelerators"
 msgstr "Имеют ли элементы меню комбинации клавиш для запуска"
 
-#: gtk/gtksettings.c:803
+#: gtk/gtksettings.c:808
 msgid "Recent Files Limit"
 msgstr "Предел количества недавних документов"
 
-#: gtk/gtksettings.c:804
+#: gtk/gtksettings.c:809
 msgid "Number of recently used files"
 msgstr "Число недавно использовавшихся файлов"
 
-#: gtk/gtksettings.c:818
+#: gtk/gtksettings.c:823
 #, fuzzy
 msgid "Default IM module"
 msgstr "Ширина по умолчанию"
 
-#: gtk/gtksettings.c:819
+#: gtk/gtksettings.c:824
 #, fuzzy
 msgid "Which IM module should be used by default"
 msgstr "Используется ли палитра"
 
-#: gtk/gtksettings.c:837
+#: gtk/gtksettings.c:842
 #, fuzzy
 msgid "Recent Files Max Age"
 msgstr "Предел количества недавних документов"
 
-#: gtk/gtksettings.c:838
+#: gtk/gtksettings.c:843
 #, fuzzy
 msgid "Maximum age of recently used files, in days"
 msgstr "Число недавно использовавшихся файлов"
+
+#: gtk/gtksettings.c:852
+msgid "Fontconfig configuration timestamp"
+msgstr ""
+
+#: gtk/gtksettings.c:853
+msgid "Timestamp of current fontconfig configuration"
+msgstr ""
 
 #: gtk/gtksizegroup.c:293
 msgid "Mode"
@@ -5002,7 +5002,7 @@ msgstr "Отображается ли значок состояния"
 msgid "Whether or not the status icon is embedded"
 msgstr "Встроен ли значок состояния в панель уведомлений"
 
-#: gtk/gtkstatusicon.c:284 gtk/gtktrayicon-x11.c:97
+#: gtk/gtkstatusicon.c:284 gtk/gtktrayicon-x11.c:96
 msgid "The orientation of the tray"
 msgstr "Ориентация панели уведомлений"
 
@@ -6678,3 +6678,9 @@ msgstr "Стиль строки состояния метода ввода"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Как рисовать строку состояния метода ввода"
+
+#~ msgid "Cancelled"
+#~ msgstr "Отменено"
+
+#~ msgid "Whether or not the operation has been successfully cancelled"
+#~ msgstr "Может ли операция успешно завершиться"

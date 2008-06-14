@@ -1,5 +1,9 @@
 2008-06-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.13.3 ===
+
+2008-06-13  Matthias Clasen  <mclasen@redhat.com>
+
 	* POTFILES.in: Remove files that don't exist anymore.
 
 2008-06-11  Djihed Afifi <djihed@gmail.com> 

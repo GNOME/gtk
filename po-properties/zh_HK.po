@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-03 18:52-0400\n"
+"POT-Creation-Date: 2008-06-13 18:23-0400\n"
 "PO-Revision-Date: 2006-04-17 19:14+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <community@linuxhall.org>\n"
@@ -244,93 +244,93 @@ msgstr "捷徑鍵視窗元件"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "監視該視窗元件的捷徑鍵變化"
 
-#: gtk/gtkaction.c:202 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:119
+#: gtk/gtkaction.c:199 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:119
 #: gtk/gtktextmark.c:89
 msgid "Name"
 msgstr "名稱"
 
-#: gtk/gtkaction.c:203
+#: gtk/gtkaction.c:200
 msgid "A unique name for the action."
 msgstr "這個指令的特定名稱。"
 
-#: gtk/gtkaction.c:218 gtk/gtkbutton.c:199 gtk/gtkexpander.c:195
+#: gtk/gtkaction.c:215 gtk/gtkbutton.c:199 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:316 gtk/gtktoolbutton.c:180
 msgid "Label"
 msgstr "標籤"
 
-#: gtk/gtkaction.c:219
+#: gtk/gtkaction.c:216
 msgid "The label used for menu items and buttons that activate this action."
 msgstr "啟動此指令的選單項目與按鈕所使用的標籤。"
 
-#: gtk/gtkaction.c:226
+#: gtk/gtkaction.c:223
 msgid "Short label"
 msgstr "短標籤"
 
-#: gtk/gtkaction.c:227
+#: gtk/gtkaction.c:224
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr "可以在工具列按鈕上使用的的袖珍標籤。"
 
-#: gtk/gtkaction.c:233
+#: gtk/gtkaction.c:230
 msgid "Tooltip"
 msgstr "工具提示"
 
-#: gtk/gtkaction.c:234
+#: gtk/gtkaction.c:231
 msgid "A tooltip for this action."
 msgstr "本指令的工具提示。"
 
-#: gtk/gtkaction.c:240
+#: gtk/gtkaction.c:237
 msgid "Stock Icon"
 msgstr "內置圖示"
 
-#: gtk/gtkaction.c:241
+#: gtk/gtkaction.c:238
 msgid "The stock icon displayed in widgets representing this action."
 msgstr "在視窗元件中代表此動作的內置圖示"
 
-#: gtk/gtkaction.c:258 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:230
+#: gtk/gtkaction.c:255 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:230
 #: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:208 gtk/gtkwindow.c:592
 msgid "Icon Name"
 msgstr "圖示名稱"
 
-#: gtk/gtkaction.c:259 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:231
+#: gtk/gtkaction.c:256 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:231
 #: gtk/gtkstatusicon.c:209
 msgid "The name of the icon from the icon theme"
 msgstr "圖示主題的圖示名稱"
 
-#: gtk/gtkaction.c:265 gtk/gtktoolitem.c:153
+#: gtk/gtkaction.c:262 gtk/gtktoolitem.c:153
 msgid "Visible when horizontal"
 msgstr "水平顯示時為可見"
 
-#: gtk/gtkaction.c:266 gtk/gtktoolitem.c:154
+#: gtk/gtkaction.c:263 gtk/gtktoolitem.c:154
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
 msgstr "當工具列呈水平顯示時工具列項目是否可見。"
 
-#: gtk/gtkaction.c:281
+#: gtk/gtkaction.c:278
 msgid "Visible when overflown"
 msgstr "overflow 時為可見"
 
-#: gtk/gtkaction.c:282
+#: gtk/gtkaction.c:279
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
 msgstr "當為 TRUE 時，此指令的工具選項代理會被顯示在工具列 overflow 選單。"
 
-#: gtk/gtkaction.c:289 gtk/gtktoolitem.c:160
+#: gtk/gtkaction.c:286 gtk/gtktoolitem.c:160
 msgid "Visible when vertical"
 msgstr "垂直顯示時為可見"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:161
+#: gtk/gtkaction.c:287 gtk/gtktoolitem.c:161
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr "當工具列呈垂直顯示時工具列項目是否為可見。"
 
-#: gtk/gtkaction.c:297 gtk/gtktoolitem.c:167
+#: gtk/gtkaction.c:294 gtk/gtktoolitem.c:167
 msgid "Is important"
 msgstr "重要的"
 
-#: gtk/gtkaction.c:298
+#: gtk/gtkaction.c:295
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -338,37 +338,37 @@ msgstr ""
 "是否該指令被視為重要指令。當設為 TRUE 時，代理此指令的工具列項目會依"
 "GTK_TOOLBAR_BOTH_HORIZ 模式顯示對應文字。"
 
-#: gtk/gtkaction.c:306
+#: gtk/gtkaction.c:303
 msgid "Hide if empty"
 msgstr "空置時隱藏"
 
-#: gtk/gtkaction.c:307
+#: gtk/gtkaction.c:304
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "當為 TRUE 時，代理此指令的空選單會被隱藏。"
 
-#: gtk/gtkaction.c:313 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:192
+#: gtk/gtkaction.c:310 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:192
 #: gtk/gtkwidget.c:520
 msgid "Sensitive"
 msgstr "有反應"
 
-#: gtk/gtkaction.c:314
+#: gtk/gtkaction.c:311
 msgid "Whether the action is enabled."
 msgstr "本指令是否有效。"
 
-#: gtk/gtkaction.c:320 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:251
+#: gtk/gtkaction.c:317 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:251
 #: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:513
 msgid "Visible"
 msgstr "可見的"
 
-#: gtk/gtkaction.c:321
+#: gtk/gtkaction.c:318
 msgid "Whether the action is visible."
 msgstr "本指令是否為可見。"
 
-#: gtk/gtkaction.c:327
+#: gtk/gtkaction.c:324
 msgid "Action Group"
 msgstr "指令集"
 
-#: gtk/gtkaction.c:328
+#: gtk/gtkaction.c:325
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
@@ -527,7 +527,7 @@ msgstr "箭頭陰影"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "箭頭周圍出現的陰影"
 
-#: gtk/gtkarrow.c:88 gtk/gtkmenuitem.c:247
+#: gtk/gtkarrow.c:88 gtk/gtkmenuitem.c:245
 #, fuzzy
 msgid "Arrow Scaling"
 msgstr "行的間隔"
@@ -791,11 +791,11 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "若設置，該標籤內容用來指定內置圖示而不會被顯示"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:787 gtk/gtkfilechooserbutton.c:398
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:787 gtk/gtkfilechooserbutton.c:394
 msgid "Focus on click"
 msgstr "點選時聚焦"
 
-#: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:399
+#: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:395
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "當該按鈕被滑鼠點選時是否自動取得焦點"
 
@@ -879,7 +879,7 @@ msgid ""
 "rectangle"
 msgstr "child_displacement_x/_y 屬性是否也影響焦點方塊"
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:536 gtk/gtkentry.c:898
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:537 gtk/gtkentry.c:899
 #, fuzzy
 msgid "Inner Border"
 msgstr "顯示邊框"
@@ -1139,27 +1139,27 @@ msgstr "捷徑鍵視窗元件"
 msgid "The type of accelerators"
 msgstr "訊息的類型"
 
-#: gtk/gtkcellrenderercombo.c:97
+#: gtk/gtkcellrenderercombo.c:107
 msgid "Model"
 msgstr "模型"
 
-#: gtk/gtkcellrenderercombo.c:98
+#: gtk/gtkcellrenderercombo.c:108
 msgid "The model containing the possible values for the combo box"
 msgstr "該組合方塊的模型（包含可能的數值）"
 
-#: gtk/gtkcellrenderercombo.c:120 gtk/gtkcomboboxentry.c:106
+#: gtk/gtkcellrenderercombo.c:130 gtk/gtkcomboboxentry.c:106
 msgid "Text Column"
 msgstr "文字格位"
 
-#: gtk/gtkcellrenderercombo.c:121 gtk/gtkcomboboxentry.c:107
+#: gtk/gtkcellrenderercombo.c:131 gtk/gtkcomboboxentry.c:107
 msgid "A column in the data source model to get the strings from"
 msgstr "從資料來源模型取得字串資料的欄位"
 
-#: gtk/gtkcellrenderercombo.c:138
+#: gtk/gtkcellrenderercombo.c:148
 msgid "Has Entry"
 msgstr "具有欄位"
 
-#: gtk/gtkcellrenderercombo.c:139
+#: gtk/gtkcellrenderercombo.c:149
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
 msgstr "如果為 FALSE，將不允許輸入選定字串以外的字"
 
@@ -1195,7 +1195,7 @@ msgstr "內置圖示代碼"
 msgid "The stock ID of the stock icon to render"
 msgstr "準備顯示的內置圖示的代碼"
 
-#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:250
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:245
 #: gtk/gtkstatusicon.c:225
 msgid "Size"
 msgstr "大小"
@@ -1225,7 +1225,7 @@ msgid "Value of the progress bar"
 msgstr "進度列中所顯示的數值"
 
 #: gtk/gtkcellrendererprogress.c:146 gtk/gtkcellrenderertext.c:195
-#: gtk/gtkentry.c:579 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:188
+#: gtk/gtkentry.c:580 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:188
 #: gtk/gtktextbuffer.c:197
 msgid "Text"
 msgstr "文字"
@@ -1267,7 +1267,7 @@ msgstr "垂直對齊方式，從 0（頂）到 1（底）"
 
 #: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:731
 #: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:283 gtk/gtktoolbar.c:494
-#: gtk/gtktrayicon-x11.c:96
+#: gtk/gtktrayicon-x11.c:95
 msgid "Orientation"
 msgstr "方向"
 
@@ -1362,7 +1362,7 @@ msgstr "前景顏色"
 msgid "Foreground color as a GdkColor"
 msgstr "以 GdkColor 方式表達的前景顏色"
 
-#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:503 gtk/gtktexttag.c:251
+#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:504 gtk/gtktexttag.c:251
 #: gtk/gtktextview.c:570
 msgid "Editable"
 msgstr "可編輯的"
@@ -1482,7 +1482,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr "如果格位顯示區沒有足夠的空間顯示整個字串時，用來簡化該字串的空間"
 
-#: gtk/gtkcellrenderertext.c:431 gtk/gtkfilechooserbutton.c:426
+#: gtk/gtkcellrenderertext.c:431 gtk/gtkfilechooserbutton.c:422
 #: gtk/gtklabel.c:468
 msgid "Width In Characters"
 msgstr "按鈕寬度"
@@ -1745,7 +1745,7 @@ msgstr "使用透明度"
 msgid "Whether or not to give the color an alpha value"
 msgstr "是否顏色包含有透明度的值"
 
-#: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:412
+#: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:408
 #: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:264
 msgid "Title"
 msgstr "標題"
@@ -1887,7 +1887,7 @@ msgstr "在選單上加上可卸下標記"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "下拉選單是否應有分離選單項目"
 
-#: gtk/gtkcombobox.c:779 gtk/gtkentry.c:528
+#: gtk/gtkcombobox.c:779 gtk/gtkentry.c:529
 msgid "Has Frame"
 msgstr "有框架"
 
@@ -1899,7 +1899,7 @@ msgstr "組合方塊是否在子元件周圍繪出框架"
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "當該組合方塊被滑鼠點選時是否自動取得焦點"
 
-#: gtk/gtkcombobox.c:803 gtk/gtkmenu.c:491
+#: gtk/gtkcombobox.c:803 gtk/gtkmenu.c:489
 msgid "Tearoff Title"
 msgstr "卸下標題"
 
@@ -1938,7 +1938,7 @@ msgstr "箭頭方向"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "該組合方塊的模型"
 
-#: gtk/gtkcombobox.c:861 gtk/gtkentry.c:628 gtk/gtkhandlebox.c:176
+#: gtk/gtkcombobox.c:861 gtk/gtkentry.c:629 gtk/gtkhandlebox.c:176
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:632
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2045,133 +2045,133 @@ msgstr "動作區域邊緣"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "對話框按鈕下方按鈕區域的邊緣寬度"
 
-#: gtk/gtkentry.c:483 gtk/gtklabel.c:411
+#: gtk/gtkentry.c:484 gtk/gtklabel.c:411
 msgid "Cursor Position"
 msgstr "游標位置"
 
-#: gtk/gtkentry.c:484 gtk/gtklabel.c:412
+#: gtk/gtkentry.c:485 gtk/gtklabel.c:412
 msgid "The current position of the insertion cursor in chars"
 msgstr "游標目前的位置，以字元計。"
 
-#: gtk/gtkentry.c:493 gtk/gtklabel.c:421
+#: gtk/gtkentry.c:494 gtk/gtklabel.c:421
 msgid "Selection Bound"
 msgstr "選取邊界"
 
-#: gtk/gtkentry.c:494 gtk/gtklabel.c:422
+#: gtk/gtkentry.c:495 gtk/gtklabel.c:422
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "所選取的部份中，游標到另一端位置的距離（字元為單位）"
 
-#: gtk/gtkentry.c:504
+#: gtk/gtkentry.c:505
 msgid "Whether the entry contents can be edited"
 msgstr "可否編輯欄位的內容"
 
-#: gtk/gtkentry.c:511
+#: gtk/gtkentry.c:512
 msgid "Maximum length"
 msgstr "最大長度"
 
-#: gtk/gtkentry.c:512
+#: gtk/gtkentry.c:513
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "本欄位的最大長度，0 表示不設上限"
 
-#: gtk/gtkentry.c:520
+#: gtk/gtkentry.c:521
 msgid "Visibility"
 msgstr "可見狀態"
 
-#: gtk/gtkentry.c:521
+#: gtk/gtkentry.c:522
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr "FALSE 表示顯示「隱形字元」而非實際文字（密碼模式）"
 
-#: gtk/gtkentry.c:529
+#: gtk/gtkentry.c:530
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE 可將外部裝飾"
 
-#: gtk/gtkentry.c:537
+#: gtk/gtkentry.c:538
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 
-#: gtk/gtkentry.c:544
+#: gtk/gtkentry.c:545
 msgid "Invisible character"
 msgstr "隱形字元"
 
-#: gtk/gtkentry.c:545
+#: gtk/gtkentry.c:546
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "用來遮蓋輸入內容的字元（在「密碼模式」裏）"
 
-#: gtk/gtkentry.c:552
+#: gtk/gtkentry.c:553
 msgid "Activates default"
 msgstr "啟動預設元件"
 
-#: gtk/gtkentry.c:553
+#: gtk/gtkentry.c:554
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr "當Enter鍵按下時，是否啟動預設視窗元件（例如對話框的按鈕）"
 
-#: gtk/gtkentry.c:559
+#: gtk/gtkentry.c:560
 msgid "Width in chars"
 msgstr "預留寬度"
 
-#: gtk/gtkentry.c:560
+#: gtk/gtkentry.c:561
 msgid "Number of characters to leave space for in the entry"
 msgstr "輸入元件中預留的空白長度（單位為字元）"
 
-#: gtk/gtkentry.c:569
+#: gtk/gtkentry.c:570
 msgid "Scroll offset"
 msgstr "捲動偏移"
 
-#: gtk/gtkentry.c:570
+#: gtk/gtkentry.c:571
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "輸入元件相對於螢幕向左捲動偏移的程度（單位為像素）"
 
-#: gtk/gtkentry.c:580
+#: gtk/gtkentry.c:581
 msgid "The contents of the entry"
 msgstr "輸入的內容"
 
-#: gtk/gtkentry.c:595 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:596 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "水平對齊"
 
-#: gtk/gtkentry.c:596 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:597 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr "水平方向對齊，0 為左，1 為右。相反即為右至左 (RTL) 排列。"
 
-#: gtk/gtkentry.c:612
+#: gtk/gtkentry.c:613
 #, fuzzy
 msgid "Truncate multiline"
 msgstr "選取多個項目"
 
-#: gtk/gtkentry.c:613
+#: gtk/gtkentry.c:614
 #, fuzzy
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "可否允許同時選取多個檔案"
 
-#: gtk/gtkentry.c:629
+#: gtk/gtkentry.c:630
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
-#: gtk/gtkentry.c:899
+#: gtk/gtkentry.c:900
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:904 gtk/gtklabel.c:644
+#: gtk/gtkentry.c:905 gtk/gtklabel.c:644
 msgid "Select on focus"
 msgstr "聚焦時選取"
 
-#: gtk/gtkentry.c:905
+#: gtk/gtkentry.c:906
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "當輸入元件取得焦點時，其內容是否呈現被選取狀態"
 
-#: gtk/gtkentry.c:919
+#: gtk/gtkentry.c:920
 msgid "Password Hint Timeout"
 msgstr ""
 
-#: gtk/gtkentry.c:920
+#: gtk/gtkentry.c:921
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 
@@ -2305,92 +2305,92 @@ msgstr "可擴展元件的箭頭大小"
 msgid "Spacing around expander arrow"
 msgstr "可擴展元件的箭頭四周間隔"
 
-#: gtk/gtkfilechooser.c:197
+#: gtk/gtkfilechooser.c:196
 msgid "Action"
 msgstr "指令"
 
-#: gtk/gtkfilechooser.c:198
+#: gtk/gtkfilechooser.c:197
 msgid "The type of operation that the file selector is performing"
 msgstr "檔案選擇元件要執行的指令種類"
 
-#: gtk/gtkfilechooser.c:204
+#: gtk/gtkfilechooser.c:203
 msgid "File System Backend"
 msgstr "後端檔案系統"
 
-#: gtk/gtkfilechooser.c:205
+#: gtk/gtkfilechooser.c:204
 msgid "Name of file system backend to use"
 msgstr "預設使用的後端檔案系統"
 
-#: gtk/gtkfilechooser.c:210 gtk/gtkrecentchooser.c:252
+#: gtk/gtkfilechooser.c:209 gtk/gtkrecentchooser.c:252
 msgid "Filter"
 msgstr "過濾器"
 
-#: gtk/gtkfilechooser.c:211
+#: gtk/gtkfilechooser.c:210
 msgid "The current filter for selecting which files are displayed"
 msgstr "用來選擇顯示何種檔案的過濾器"
 
-#: gtk/gtkfilechooser.c:216
+#: gtk/gtkfilechooser.c:215
 msgid "Local Only"
 msgstr "限定本地端"
 
-#: gtk/gtkfilechooser.c:217
+#: gtk/gtkfilechooser.c:216
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr "是否選擇的檔案應該限定於本地端 file: URLs"
 
-#: gtk/gtkfilechooser.c:222
+#: gtk/gtkfilechooser.c:221
 msgid "Preview widget"
 msgstr "預覽視窗元件"
 
-#: gtk/gtkfilechooser.c:223
+#: gtk/gtkfilechooser.c:222
 msgid "Application supplied widget for custom previews."
 msgstr "應用程式提供的視窗元件，用來自訂預覽。"
 
-#: gtk/gtkfilechooser.c:228
+#: gtk/gtkfilechooser.c:227
 msgid "Preview Widget Active"
 msgstr "啟動預覽視窗元件"
 
-#: gtk/gtkfilechooser.c:229
+#: gtk/gtkfilechooser.c:228
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr "用來自訂預覽的應用程式端視窗元件是否應該被顯示。"
 
-#: gtk/gtkfilechooser.c:234
+#: gtk/gtkfilechooser.c:233
 msgid "Use Preview Label"
 msgstr "使用預覽文字"
 
-#: gtk/gtkfilechooser.c:235
+#: gtk/gtkfilechooser.c:234
 msgid "Whether to display a stock label with the name of the previewed file."
 msgstr "是否與預覽的檔案名稱一起顯示內置圖示文字。"
 
-#: gtk/gtkfilechooser.c:240
+#: gtk/gtkfilechooser.c:239
 msgid "Extra widget"
 msgstr "額外視窗元件"
 
-#: gtk/gtkfilechooser.c:241
+#: gtk/gtkfilechooser.c:240
 msgid "Application supplied widget for extra options."
 msgstr "有額外功能的應用程式端視窗元件。"
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:191
+#: gtk/gtkfilechooser.c:245 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:191
 msgid "Select Multiple"
 msgstr "選取多個項目"
 
-#: gtk/gtkfilechooser.c:247 gtk/gtkfilesel.c:540
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:540
 msgid "Whether to allow multiple files to be selected"
 msgstr "可否允許同時選取多個檔案"
 
-#: gtk/gtkfilechooser.c:253
+#: gtk/gtkfilechooser.c:252
 msgid "Show Hidden"
 msgstr "顯示隱藏檔"
 
-#: gtk/gtkfilechooser.c:254
+#: gtk/gtkfilechooser.c:253
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "是否顯示隱藏的檔案和目錄"
 
-#: gtk/gtkfilechooser.c:269
+#: gtk/gtkfilechooser.c:268
 msgid "Do overwrite confirmation"
 msgstr "覆寫時作出確認"
 
-#: gtk/gtkfilechooser.c:270
+#: gtk/gtkfilechooser.c:269
 #, fuzzy
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
@@ -2399,23 +2399,23 @@ msgstr ""
 "在 GTK_FILE_CHOOSER_ACTION_SAVE 的檔案選擇程式會否當使用者選取的檔案已經存在"
 "時出現一個覆寫確認對話方塊。"
 
-#: gtk/gtkfilechooserbutton.c:381
+#: gtk/gtkfilechooserbutton.c:377
 msgid "Dialog"
 msgstr "對話框"
 
-#: gtk/gtkfilechooserbutton.c:382
+#: gtk/gtkfilechooserbutton.c:378
 msgid "The file chooser dialog to use."
 msgstr "準備選用的檔案選擇對話框類型。"
 
-#: gtk/gtkfilechooserbutton.c:413
+#: gtk/gtkfilechooserbutton.c:409
 msgid "The title of the file chooser dialog."
 msgstr "檔案選擇對話框的標題。"
 
-#: gtk/gtkfilechooserbutton.c:427
+#: gtk/gtkfilechooserbutton.c:423
 msgid "The desired width of the button widget, in characters."
 msgstr "按鈕元件所需的寬度，以字元計。"
 
-#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:219
+#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:214
 #: gtk/gtkstatusicon.c:192
 msgid "Filename"
 msgstr "檔案名稱"
@@ -2431,14 +2431,6 @@ msgstr "顯示檔案操作按鈕"
 #: gtk/gtkfilesel.c:533
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "是否顯示新增/修改檔案的功能按鈕"
-
-#: gtk/gtkfilesystem.c:382
-msgid "Cancelled"
-msgstr ""
-
-#: gtk/gtkfilesystem.c:383
-msgid "Whether or not the operation has been successfully cancelled"
-msgstr ""
 
 #: gtk/gtkfixed.c:90 gtk/gtklayout.c:578
 msgid "X position"
@@ -2946,122 +2938,122 @@ msgstr "佈置元件寬度"
 msgid "The height of the layout"
 msgstr "佈置元件高度"
 
-#: gtk/gtkmenu.c:492
+#: gtk/gtkmenu.c:490
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "當此選單卸下之後視窗管理員指定的視窗標題"
 
-#: gtk/gtkmenu.c:506
+#: gtk/gtkmenu.c:504
 msgid "Tearoff State"
 msgstr "分離狀態"
 
-#: gtk/gtkmenu.c:507
+#: gtk/gtkmenu.c:505
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "指出該選單是否分離的邏輯值"
 
-#: gtk/gtkmenu.c:513
+#: gtk/gtkmenu.c:511
 msgid "Vertical Padding"
 msgstr "垂直填充"
 
-#: gtk/gtkmenu.c:514
+#: gtk/gtkmenu.c:512
 msgid "Extra space at the top and bottom of the menu"
 msgstr "選單上下的額外空間"
 
-#: gtk/gtkmenu.c:522
+#: gtk/gtkmenu.c:520
 #, fuzzy
 msgid "Horizontal Padding"
 msgstr "水平留邊"
 
-#: gtk/gtkmenu.c:523
+#: gtk/gtkmenu.c:521
 #, fuzzy
 msgid "Extra space at the left and right edges of the menu"
 msgstr "選單上下的額外空間"
 
-#: gtk/gtkmenu.c:531
+#: gtk/gtkmenu.c:529
 msgid "Vertical Offset"
 msgstr "垂直偏移"
 
-#: gtk/gtkmenu.c:532
+#: gtk/gtkmenu.c:530
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "當此選單為子選單，將其一此設定值垂直偏移放置"
 
-#: gtk/gtkmenu.c:540
+#: gtk/gtkmenu.c:538
 msgid "Horizontal Offset"
 msgstr "水平偏移"
 
-#: gtk/gtkmenu.c:541
+#: gtk/gtkmenu.c:539
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "當此選單為子選單，將其一此設定值水平偏移放置"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:547
 #, fuzzy
 msgid "Double Arrows"
 msgstr "顯示箭頭"
 
-#: gtk/gtkmenu.c:550
+#: gtk/gtkmenu.c:548
 msgid "When scrolling, always show both arrows."
 msgstr ""
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:556
 msgid "Left Attach"
 msgstr "左側附加"
 
-#: gtk/gtkmenu.c:559 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:557 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "子選單的左側附加於給定的縱列數上"
 
-#: gtk/gtkmenu.c:566
+#: gtk/gtkmenu.c:564
 msgid "Right Attach"
 msgstr "右側附加"
 
-#: gtk/gtkmenu.c:567
+#: gtk/gtkmenu.c:565
 msgid "The column number to attach the right side of the child to"
 msgstr "子選單的右側附加於給定的縱列數上"
 
-#: gtk/gtkmenu.c:574
+#: gtk/gtkmenu.c:572
 msgid "Top Attach"
 msgstr "頂端附加"
 
-#: gtk/gtkmenu.c:575
+#: gtk/gtkmenu.c:573
 msgid "The row number to attach the top of the child to"
 msgstr "子選單的頂端附加於給定的橫列數上"
 
-#: gtk/gtkmenu.c:582
+#: gtk/gtkmenu.c:580
 msgid "Bottom Attach"
 msgstr "底部附加"
 
-#: gtk/gtkmenu.c:583 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:581 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "子選單的底部附加於給定的橫列數上"
 
-#: gtk/gtkmenu.c:670
+#: gtk/gtkmenu.c:668
 msgid "Can change accelerators"
 msgstr "可更改捷徑鍵"
 
-#: gtk/gtkmenu.c:671
+#: gtk/gtkmenu.c:669
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "是否可在選單項目上按鍵來更改快捷鍵"
 
-#: gtk/gtkmenu.c:676
+#: gtk/gtkmenu.c:674
 msgid "Delay before submenus appear"
 msgstr "顯示子選單前的延遲時間"
 
-#: gtk/gtkmenu.c:677
+#: gtk/gtkmenu.c:675
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "在選單項目上顯示子選單所需的游標停滯最小時間"
 
-#: gtk/gtkmenu.c:684
+#: gtk/gtkmenu.c:682
 msgid "Delay before hiding a submenu"
 msgstr "隱藏子選單前的延遲時間"
 
-#: gtk/gtkmenu.c:685
+#: gtk/gtkmenu.c:683
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3103,15 +3095,15 @@ msgstr "下拉選單出現前的延遲時間"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "選單列的子選單出現前的延遲時間"
 
-#: gtk/gtkmenuitem.c:204
+#: gtk/gtkmenuitem.c:202
 msgid "Submenu"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:205
+#: gtk/gtkmenuitem.c:203
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:248
+#: gtk/gtkmenuitem.c:246
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr ""
 
@@ -4149,7 +4141,7 @@ msgstr "限定本地端"
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr "是否選擇的檔案應該限定於本地端 file: URLs"
 
-#: gtk/gtkrecentchooser.c:222 gtk/gtkrecentmanager.c:234
+#: gtk/gtkrecentchooser.c:222 gtk/gtkrecentmanager.c:229
 msgid "Limit"
 msgstr ""
 
@@ -4173,16 +4165,16 @@ msgstr "是否顯示按鈕的開關部份"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "用來選擇顯示何種檔案的過濾器"
 
-#: gtk/gtkrecentmanager.c:220
+#: gtk/gtkrecentmanager.c:215
 msgid "The full path to the file to be used to store and read the list"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:235
+#: gtk/gtkrecentmanager.c:230
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:251
+#: gtk/gtkrecentmanager.c:246
 msgid "The size of the recently used resources list"
 msgstr ""
 
@@ -4404,419 +4396,427 @@ msgstr "繪製"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "分隔線應否被繪製，或為留白"
 
-#: gtk/gtksettings.c:206
+#: gtk/gtksettings.c:211
 msgid "Double Click Time"
 msgstr "雙擊時間"
 
-#: gtk/gtksettings.c:207
+#: gtk/gtksettings.c:212
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr "代表雙擊的兩下按鍵之間可接受的最長時間（亳秒），如果再長則不作雙擊處理"
 
-#: gtk/gtksettings.c:214
+#: gtk/gtksettings.c:219
 msgid "Double Click Distance"
 msgstr "雙擊間距"
 
-#: gtk/gtksettings.c:215
+#: gtk/gtksettings.c:220
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr ""
 "代表雙擊的兩下按鍵之間可接受的最長距離（像素），如果再長則不視作雙擊處理"
 
-#: gtk/gtksettings.c:231
+#: gtk/gtksettings.c:236
 msgid "Cursor Blink"
 msgstr "閃爍游標"
 
-#: gtk/gtksettings.c:232
+#: gtk/gtksettings.c:237
 msgid "Whether the cursor should blink"
 msgstr "游標應否閃爍"
 
-#: gtk/gtksettings.c:239
+#: gtk/gtksettings.c:244
 msgid "Cursor Blink Time"
 msgstr "游標閃爍時間"
 
-#: gtk/gtksettings.c:240
+#: gtk/gtksettings.c:245
 #, fuzzy
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "游標每次閃爍的時間間隔（毫秒）"
 
-#: gtk/gtksettings.c:259
+#: gtk/gtksettings.c:264
 #, fuzzy
 msgid "Cursor Blink Timeout"
 msgstr "游標閃爍時間"
 
-#: gtk/gtksettings.c:260
+#: gtk/gtksettings.c:265
 #, fuzzy
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "游標每次閃爍的時間間隔（毫秒）"
 
-#: gtk/gtksettings.c:267
+#: gtk/gtksettings.c:272
 msgid "Split Cursor"
 msgstr "分開游標"
 
-#: gtk/gtksettings.c:268
+#: gtk/gtksettings.c:273
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr "當左至右和右至左的文字混合出現時應否分別顯示游標"
 
-#: gtk/gtksettings.c:275
+#: gtk/gtksettings.c:280
 msgid "Theme Name"
 msgstr "佈景名稱"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:281
 msgid "Name of theme RC file to load"
 msgstr "準備載入的佈景主題檔案名稱"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:289
 msgid "Icon Theme Name"
 msgstr "圖示佈景名稱"
 
-#: gtk/gtksettings.c:285
+#: gtk/gtksettings.c:290
 msgid "Name of icon theme to use"
 msgstr "使用的圖示佈景名稱"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:298
 msgid "Fallback Icon Theme Name"
 msgstr "後備圖示佈景名稱"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:299
 msgid "Name of a icon theme to fall back to"
 msgstr "用作後備的圖示佈景名稱"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:307
 msgid "Key Theme Name"
 msgstr "主題名稱"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:308
 msgid "Name of key theme RC file to load"
 msgstr "要載入的主題 RC 檔案名稱"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:316
 msgid "Menu bar accelerator"
 msgstr "選單列捷徑鍵"
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:317
 msgid "Keybinding to activate the menu bar"
 msgstr "啟用選單列所用的按鍵結合"
 
-#: gtk/gtksettings.c:320
+#: gtk/gtksettings.c:325
 msgid "Drag threshold"
 msgstr "拖曳距離界限"
 
-#: gtk/gtksettings.c:321
+#: gtk/gtksettings.c:326
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "未作為拖曳之前，鼠標應移動的距離，以像素表示"
 
-#: gtk/gtksettings.c:329
+#: gtk/gtksettings.c:334
 msgid "Font Name"
 msgstr "字型名稱"
 
-#: gtk/gtksettings.c:330
+#: gtk/gtksettings.c:335
 msgid "Name of default font to use"
 msgstr "預設使用的字型名稱"
 
-#: gtk/gtksettings.c:338
+#: gtk/gtksettings.c:343
 msgid "Icon Sizes"
 msgstr "圖示大小"
 
-#: gtk/gtksettings.c:339
+#: gtk/gtksettings.c:344
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "圖示大小清單 (gtk-menu=16,16:gtk-button=20,20..."
 
-#: gtk/gtksettings.c:347
+#: gtk/gtksettings.c:352
 msgid "GTK Modules"
 msgstr "GTK 模組"
 
-#: gtk/gtksettings.c:348
+#: gtk/gtksettings.c:353
 msgid "List of currently active GTK modules"
 msgstr "目前正在使用的 GTK 模組的清單"
 
-#: gtk/gtksettings.c:357
+#: gtk/gtksettings.c:362
 msgid "Xft Antialias"
 msgstr "Xft 平滑化"
 
-#: gtk/gtksettings.c:358
+#: gtk/gtksettings.c:363
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "是否以平滑化方式顯示 Xft 字型; 0=否, 1=是, -1=預設值"
 
-#: gtk/gtksettings.c:367
+#: gtk/gtksettings.c:372
 msgid "Xft Hinting"
 msgstr "Xft Hinting"
 
-#: gtk/gtksettings.c:368
+#: gtk/gtksettings.c:373
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "是否 hint Xft 字型; 0=否, 1=是, -1=預設值"
 
-#: gtk/gtksettings.c:377
+#: gtk/gtksettings.c:382
 msgid "Xft Hint Style"
 msgstr "Xft Hint 樣式"
 
-#: gtk/gtksettings.c:378
+#: gtk/gtksettings.c:383
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr "hinting 的使用程度；無、輕微、中等、完全"
 
-#: gtk/gtksettings.c:387
+#: gtk/gtksettings.c:392
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: gtk/gtksettings.c:388
+#: gtk/gtksettings.c:393
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "像素平滑化的方式; 無, rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:397
+#: gtk/gtksettings.c:402
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: gtk/gtksettings.c:398
+#: gtk/gtksettings.c:403
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Xft 的解析度, 單位為 1024 * 點數/英吋。-1為使用預設值"
 
-#: gtk/gtksettings.c:407
+#: gtk/gtksettings.c:412
 msgid "Cursor theme name"
 msgstr "游標佈景名稱"
 
-#: gtk/gtksettings.c:408
+#: gtk/gtksettings.c:413
 #, fuzzy
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr "使用的游標佈景名稱"
 
-#: gtk/gtksettings.c:416
+#: gtk/gtksettings.c:421
 msgid "Cursor theme size"
 msgstr "游標佈景大小"
 
-#: gtk/gtksettings.c:417
+#: gtk/gtksettings.c:422
 #, fuzzy
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "游標的大小"
 
-#: gtk/gtksettings.c:427
+#: gtk/gtksettings.c:432
 msgid "Alternative button order"
 msgstr "替換按鈕順序"
 
-#: gtk/gtksettings.c:428
+#: gtk/gtksettings.c:433
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "對話框內的按鈕應該使用另一種排列方式"
 
-#: gtk/gtksettings.c:445
+#: gtk/gtksettings.c:450
 #, fuzzy
 msgid "Alternative sort indicator direction"
 msgstr "替換按鈕順序"
 
-#: gtk/gtksettings.c:446
+#: gtk/gtksettings.c:451
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
 msgstr ""
 
-#: gtk/gtksettings.c:454
+#: gtk/gtksettings.c:459
 msgid "Show the 'Input Methods' menu"
 msgstr ""
 
-#: gtk/gtksettings.c:455
+#: gtk/gtksettings.c:460
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
 msgstr ""
 
-#: gtk/gtksettings.c:463
+#: gtk/gtksettings.c:468
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr ""
 
-#: gtk/gtksettings.c:464
+#: gtk/gtksettings.c:469
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
 msgstr ""
 
-#: gtk/gtksettings.c:472
+#: gtk/gtksettings.c:477
 msgid "Start timeout"
 msgstr ""
 
-#: gtk/gtksettings.c:473
+#: gtk/gtksettings.c:478
 msgid "Starting value for timeouts, when button is pressed"
 msgstr ""
 
-#: gtk/gtksettings.c:482
+#: gtk/gtksettings.c:487
 msgid "Repeat timeout"
 msgstr ""
 
-#: gtk/gtksettings.c:483
+#: gtk/gtksettings.c:488
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr ""
 
-#: gtk/gtksettings.c:492
+#: gtk/gtksettings.c:497
 #, fuzzy
 msgid "Expand timeout"
 msgstr "擴展鍵大小"
 
-#: gtk/gtksettings.c:493
+#: gtk/gtksettings.c:498
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr ""
 
-#: gtk/gtksettings.c:528
+#: gtk/gtksettings.c:533
 #, fuzzy
 msgid "Color scheme"
 msgstr "色彩空間"
 
-#: gtk/gtksettings.c:529
+#: gtk/gtksettings.c:534
 #, fuzzy
 msgid "A palette of named colors for use in themes"
 msgstr "圖示主題的圖示名稱"
 
-#: gtk/gtksettings.c:538
+#: gtk/gtksettings.c:543
 #, fuzzy
 msgid "Enable Animations"
 msgstr "動畫"
 
-#: gtk/gtksettings.c:539
+#: gtk/gtksettings.c:544
 msgid "Whether to enable toolkit-wide animations."
 msgstr ""
 
-#: gtk/gtksettings.c:557
+#: gtk/gtksettings.c:562
 msgid "Enable Touchscreen Mode"
 msgstr ""
 
-#: gtk/gtksettings.c:558
+#: gtk/gtksettings.c:563
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
 
-#: gtk/gtksettings.c:575
+#: gtk/gtksettings.c:580
 #, fuzzy
 msgid "Tooltip timeout"
 msgstr "工具提示"
 
-#: gtk/gtksettings.c:576
+#: gtk/gtksettings.c:581
 msgid "Timeout before tooltip is shown"
 msgstr ""
 
-#: gtk/gtksettings.c:601
+#: gtk/gtksettings.c:606
 msgid "Tooltip browse timeout"
 msgstr ""
 
-#: gtk/gtksettings.c:602
+#: gtk/gtksettings.c:607
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr ""
 
-#: gtk/gtksettings.c:623
+#: gtk/gtksettings.c:628
 msgid "Tooltip browse mode timeout"
 msgstr ""
 
-#: gtk/gtksettings.c:624
+#: gtk/gtksettings.c:629
 #, fuzzy
 msgid "Timeout after which browse mode is disabled"
 msgstr "用來顯示的緩衝區"
 
-#: gtk/gtksettings.c:643
+#: gtk/gtksettings.c:648
 msgid "Keynav Cursor Only"
 msgstr ""
 
-#: gtk/gtksettings.c:644
+#: gtk/gtksettings.c:649
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr ""
 
-#: gtk/gtksettings.c:661
+#: gtk/gtksettings.c:666
 msgid "Keynav Wrap Around"
 msgstr ""
 
-#: gtk/gtksettings.c:662
+#: gtk/gtksettings.c:667
 #, fuzzy
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "是否在視窗元件內部顯示焦點線"
 
-#: gtk/gtksettings.c:682
+#: gtk/gtksettings.c:687
 msgid "Error Bell"
 msgstr ""
 
-#: gtk/gtksettings.c:683
+#: gtk/gtksettings.c:688
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
 
-#: gtk/gtksettings.c:700
+#: gtk/gtksettings.c:705
 #, fuzzy
 msgid "Color Hash"
 msgstr "色彩空間"
 
-#: gtk/gtksettings.c:701
+#: gtk/gtksettings.c:706
 msgid "A hash table representation of the color scheme."
 msgstr ""
 
-#: gtk/gtksettings.c:709
+#: gtk/gtksettings.c:714
 msgid "Default file chooser backend"
 msgstr "預設檔案選擇元件後端"
 
-#: gtk/gtksettings.c:710
+#: gtk/gtksettings.c:715
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "預設使用的 GtkFileChooser 後端名稱"
 
-#: gtk/gtksettings.c:727
+#: gtk/gtksettings.c:732
 #, fuzzy
 msgid "Default print backend"
 msgstr "預設檔案選擇元件後端"
 
-#: gtk/gtksettings.c:728
+#: gtk/gtksettings.c:733
 #, fuzzy
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "預設使用的 GtkFileChooser 後端名稱"
 
-#: gtk/gtksettings.c:751
+#: gtk/gtksettings.c:756
 msgid "Default command to run when displaying a print preview"
 msgstr ""
 
-#: gtk/gtksettings.c:752
+#: gtk/gtksettings.c:757
 msgid "Command to run when displaying a print preview"
 msgstr ""
 
-#: gtk/gtksettings.c:768
+#: gtk/gtksettings.c:773
 #, fuzzy
 msgid "Enable Mnemonics"
 msgstr "動畫"
 
-#: gtk/gtksettings.c:769
+#: gtk/gtksettings.c:774
 #, fuzzy
 msgid "Whether labels should have mnemonics"
 msgstr "標籤的尺寸應否統一"
 
-#: gtk/gtksettings.c:785
+#: gtk/gtksettings.c:790
 #, fuzzy
 msgid "Enable Accelerators"
 msgstr "可更改捷徑鍵"
 
-#: gtk/gtksettings.c:786
+#: gtk/gtksettings.c:791
 #, fuzzy
 msgid "Whether menu items should have accelerators"
 msgstr "是否在選單上加上可卸下標記的選單項目"
 
-#: gtk/gtksettings.c:803
+#: gtk/gtksettings.c:808
 msgid "Recent Files Limit"
 msgstr ""
 
-#: gtk/gtksettings.c:804
+#: gtk/gtksettings.c:809
 #, fuzzy
 msgid "Number of recently used files"
 msgstr "欄位數目"
 
-#: gtk/gtksettings.c:818
+#: gtk/gtksettings.c:823
 #, fuzzy
 msgid "Default IM module"
 msgstr "預設寬度"
 
-#: gtk/gtksettings.c:819
+#: gtk/gtksettings.c:824
 #, fuzzy
 msgid "Which IM module should be used by default"
 msgstr "應否使用色盤"
 
-#: gtk/gtksettings.c:837
+#: gtk/gtksettings.c:842
 msgid "Recent Files Max Age"
 msgstr ""
 
-#: gtk/gtksettings.c:838
+#: gtk/gtksettings.c:843
 #, fuzzy
 msgid "Maximum age of recently used files, in days"
 msgstr "欄位數目"
+
+#: gtk/gtksettings.c:852
+msgid "Fontconfig configuration timestamp"
+msgstr ""
+
+#: gtk/gtksettings.c:853
+msgid "Timestamp of current fontconfig configuration"
+msgstr ""
 
 #: gtk/gtksizegroup.c:293
 msgid "Mode"
@@ -4930,7 +4930,7 @@ msgstr "本指令是否為可見。"
 msgid "Whether or not the status icon is embedded"
 msgstr "本指令是否為可見。"
 
-#: gtk/gtkstatusicon.c:284 gtk/gtktrayicon-x11.c:97
+#: gtk/gtkstatusicon.c:284 gtk/gtktrayicon-x11.c:96
 #, fuzzy
 msgid "The orientation of the tray"
 msgstr "工具列的方向"
