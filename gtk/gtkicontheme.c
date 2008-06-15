@@ -3314,7 +3314,7 @@ _gtk_icon_theme_check_reload (GdkDisplay *display)
  * Looks up an icon and returns a structure containing
  * information such as the filename of the icon. 
  * The icon can then be rendered into a pixbuf using
- * gtk_icon_info_load_icon() or gtk_icon_info_load_at_size().
+ * gtk_icon_info_load_icon().
  *
  * Return value: a #GtkIconInfo structure containing 
  *     information about the icon, or %NULL if the icon 
