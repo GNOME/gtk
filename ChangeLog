@@ -1,3 +1,13 @@
+2008-06-14  Cody Russell  <bratsche@gnome.org>
+
+	Merge from trunk:
+
+	* gdk/win32/gdkselection-win32.c (gdk_win32_selection_add_targets):
+
+	Initialize hwnd to NULL.  This fixes OpenClipboard() failure and,
+	according to MSDN docs, associates the open clipboard with the
+	current task.  (#378158, reported by Andreas Köhler)
+
 2008-06-12  Matthias Clasen  <mclasen@redhat.com>
 
 	RH bug 248245 and 449379: cups client printing from gnome
