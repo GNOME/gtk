@@ -6982,6 +6982,8 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
 
   profile_start ("start", NULL);
 
+  g_object_ref (file);
+
   switch (impl->operation_mode)
     {
     case OPERATION_MODE_SEARCH:
@@ -7001,6 +7003,7 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
 		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
 		   _("Cannot change to folder because it is not local"));
 
+      g_object_unref (file);
       profile_end ("end - not local", NULL);
       return FALSE;
     }
@@ -7024,6 +7027,7 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
 			       data);
 
   set_busy_cursor (impl, TRUE);
+  g_object_unref (file);
 
   profile_end ("end", NULL);
   return TRUE;

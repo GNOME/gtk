@@ -1,3 +1,18 @@
+2008-06-15  Carlos Garnacho  <carlos@imendio.com>
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_get_filename): Return full 
+	path here as expected, not just the basename.
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_update_current_folder): Ensure that we keep
+	a reference to file, since it can be destroyed when switching back to
+	browse mode.
+
+	* gtk/gtkfilesystem.c (get_icon_for_special_directory): Removed, home
+	and desktop directories are dealt by the filechooser as normal files,
+	not volumes, so the icon for these is handled directly by GIO.
+	(_gtk_file_system_volume_render_icon): Update caller.
+
 2008-06-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellrendererpixbuf.c: Add a gicon property.

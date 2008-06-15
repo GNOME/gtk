@@ -1662,50 +1662,6 @@ get_pixbuf_from_gicon (GIcon      *icon,
   return pixbuf;
 }
 
-static GIcon *
-get_icon_for_special_directory (GFile *file)
-{
-  const gchar *special_dir;
-  GFile *special_file;
-
-  special_dir = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
-  special_file = g_file_new_for_path (special_dir);
-
-  if (g_file_equal (file, special_file))
-    {
-      const char *names[] = { 
-        "user-desktop", 
-        "gnome-fs-desktop", 
-        "folder", 
-        "gtk-directory",
-        NULL 
-      };
-      g_object_unref (special_file);
-      return g_themed_icon_new_from_names ((char **)names, -1);
-    }
-
-  g_object_unref (special_file);
-  special_dir = g_get_home_dir ();
-  special_file = g_file_new_for_path (special_dir);
-
-  if (g_file_equal (file, special_file))
-    {
-      const char *names[] = { 
-        "user-home", 
-        "gnome-fs-home", 
-        "folder", 
-        "gtk-directory",
-        NULL 
-      };
-      g_object_unref (special_file);
-      return g_themed_icon_new_from_names ((char **)names, -1);
-    }
-
-  g_object_unref (special_file);
-
-  return NULL;
-}
-
 GdkPixbuf *
 _gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
 				     GtkWidget            *widget,
@@ -1724,23 +1680,13 @@ _gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
   DEBUG ("volume_get_icon_name");
 
   if (IS_ROOT_VOLUME (volume))
-    icon = g_themed_icon_new_from_names ((char **)harddisk_icons, -1);
+    icon = g_themed_icon_new_from_names ((char **) harddisk_icons, -1);
   else if (G_IS_DRIVE (volume))
     icon = g_drive_get_icon (G_DRIVE (volume));
   else if (G_IS_VOLUME (volume))
     icon = g_volume_get_icon (G_VOLUME (volume));
   else if (G_IS_MOUNT (volume))
-    {
-      GMount *mount = G_MOUNT (volume);
-      GFile *file;
-
-      file = g_mount_get_root (mount);
-      icon = get_icon_for_special_directory (file);
-      g_object_unref (file);
-
-      if (!icon)
-	icon = g_mount_get_icon (mount);
-    }
+    icon = g_mount_get_icon (G_MOUNT (volume));
 
   if (!icon)
     return NULL;

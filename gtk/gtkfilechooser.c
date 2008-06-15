@@ -454,7 +454,7 @@ gtk_file_chooser_get_filename (GtkFileChooser *chooser)
 
   if (file)
     {
-      result = g_file_get_basename (file);
+      result = g_file_get_path (file);
       g_object_unref (file);
     }
 
