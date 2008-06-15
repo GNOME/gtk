@@ -1,3 +1,7 @@
+2008-06-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcellrendererpixbuf.c: Add a gicon property.
+
 2008-06-14  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkselection-win32.c (gdk_win32_selection_add_targets):
