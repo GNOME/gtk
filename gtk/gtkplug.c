@@ -294,16 +294,16 @@ void
 _gtk_plug_send_delete_event (GtkWidget *widget)
 {
   GdkEvent *event = gdk_event_new (GDK_DELETE);
-  
+
   event->any.window = g_object_ref (widget->window);
   event->any.send_event = FALSE;
 
-  gtk_widget_ref (widget);
-  
+  g_object_ref (widget);
+
   if (!gtk_widget_event (widget, event))
     gtk_widget_destroy (widget);
-  
-  gtk_widget_unref (widget);
+
+  g_object_unref (widget);
 
   gdk_event_free (event);
 }
