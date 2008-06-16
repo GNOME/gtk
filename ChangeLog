@@ -1,3 +1,10 @@
+2008-06-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/stock-icons/24/audio-volume*: Add icons used by GtkVolumeButton
+	to the builtin icon theme, to avoid showing broken images when
+	there is no icon theme around.  The new icons are thanks to
+	Lapo Calamandrei.
+
 2008-06-16  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkfilechooserprivate.h: remove GtkTooltips member from the

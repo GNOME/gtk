@@ -1040,6 +1040,10 @@ STOCK_ICONS = \
 	stock-icons/20/gtk-no.png     			\
 	stock-icons/20/gtk-ok.png     			\
 	stock-icons/20/gtk-yes.png    			\
+	stock-icons/24/audio-volume-high.png		\
+	stock-icons/24/audio-volume-low.png		\
+	stock-icons/24/audio-volume-medium.png		\
+	stock-icons/24/audio-volume-muted.png		\
 	stock-icons/24/document-open-recent.png		\
 	stock-icons/24/gtk-about.png  			\
 	stock-icons/24/gtk-add.png    			\
