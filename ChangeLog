@@ -29,7 +29,7 @@
 	Bug 536990 - updateiconcache.c: 'close ()' is redundant
 
 	* gtk/updateiconcache.c (build_cache): Drop redundant close()
-	calls. fclose() on a fdopen()ed strema closes the underlying file
+	calls. fclose() on a fdopen()ed stream closes the underlying file
 	descriptor.
 
 2008-06-06  Matthias Clasen  <mclasen@redhat.com>
