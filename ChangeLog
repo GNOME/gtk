@@ -1,3 +1,12 @@
+2008-06-16  Carlos Garnacho  <carlos@imendio.com>
+
+	Bug 538519 – GtkCellRendererPixbuf doesn't allow unsetting the icon
+	anymore
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_set_property):
+	Allow again setting any of the properties to render an image back to
+	NULL.
+
 2008-06-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkimage.c: When pixel-size is specified, use

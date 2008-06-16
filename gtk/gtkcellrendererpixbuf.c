@@ -332,11 +332,8 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
   switch (param_id)
     {
     case PROP_PIXBUF:
-      if (g_value_get_object (value))
-        {
-          unset_image_properties (cellpixbuf); 
-          cellpixbuf->pixbuf = (GdkPixbuf *) g_value_dup_object (value);
-        }
+      unset_image_properties (cellpixbuf);
+      cellpixbuf->pixbuf = (GdkPixbuf *) g_value_dup_object (value);
       break;
     case PROP_PIXBUF_EXPANDER_OPEN:
       if (cellpixbuf->pixbuf_expander_open)
@@ -349,11 +346,8 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       cellpixbuf->pixbuf_expander_closed = (GdkPixbuf*) g_value_dup_object (value);
       break;
     case PROP_STOCK_ID:
-      if (g_value_get_string (value))
-        {
-          unset_image_properties (cellpixbuf);
-          priv->stock_id = g_value_dup_string (value);
-        }
+      unset_image_properties (cellpixbuf);
+      priv->stock_id = g_value_dup_string (value);
       break;
     case PROP_STOCK_SIZE:
       priv->stock_size = g_value_get_uint (value);
@@ -363,21 +357,15 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       priv->stock_detail = g_value_dup_string (value);
       break;
     case PROP_ICON_NAME:
-      if (g_value_get_string (value))
-        {
-          unset_image_properties (cellpixbuf);
-          priv->icon_name = g_value_dup_string (value);
-        }
+      unset_image_properties (cellpixbuf);
+      priv->icon_name = g_value_dup_string (value);
       break;
     case PROP_FOLLOW_STATE:
       priv->follow_state = g_value_get_boolean (value);
       break;
     case PROP_GICON:
-      if (g_value_get_object (value))
-        {
-          unset_image_properties (cellpixbuf); 
-          priv->gicon = (GIcon *) g_value_dup_object (value);
-        }
+      unset_image_properties (cellpixbuf);
+      priv->gicon = (GIcon *) g_value_dup_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
