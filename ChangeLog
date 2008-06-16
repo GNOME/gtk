@@ -1,3 +1,8 @@
+2008-06-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimage.c: When pixel-size is specified, use
+	GTK_ICON_LOOKUP_FORCE_SIZE when loading themed icons.
+
 2008-06-15  Carlos Garnacho  <carlos@imendio.com>
 
 	* gtk/gtkfilechooser.c (gtk_file_chooser_get_filename): Return full 
