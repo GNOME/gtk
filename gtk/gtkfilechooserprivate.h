@@ -28,7 +28,6 @@
 #include "gtkrecentmanager.h"
 #include "gtksearchengine.h"
 #include "gtkquery.h"
-#include "gtktooltips.h"
 #include "gtktreemodelsort.h"
 #include "gtktreestore.h"
 #include "gtktreeview.h"
@@ -252,8 +251,6 @@ struct _GtkFileChooserDefault
 
   GtkFileFilter *current_filter;
   GSList *filters;
-
-  GtkTooltips *tooltips;
 
   int num_volumes;
   int num_shortcuts;

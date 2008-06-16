@@ -832,9 +832,6 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
 
   gtk_box_set_spacing (GTK_BOX (impl), 12);
 
-  impl->tooltips = gtk_tooltips_new ();
-  g_object_ref_sink (impl->tooltips);
-
   set_file_system_backend (impl);
 
   profile_end ("end", NULL);
@@ -1002,8 +999,6 @@ gtk_file_chooser_default_finalize (GObject *object)
   g_free (impl->preview_display_name);
 
   g_free (impl->edited_new_text);
-
-  g_object_unref (impl->tooltips);
 
   G_OBJECT_CLASS (_gtk_file_chooser_default_parent_class)->finalize (object);
 }
@@ -2503,7 +2498,7 @@ filter_create (GtkFileChooserDefault *impl)
 		    G_CALLBACK (filter_combo_changed), impl);
 
   gtk_widget_set_tooltip_text (impl->filter_combo,
-			  _("Select which types of files are shown"));
+                               _("Select which types of files are shown"));
 
   return impl->filter_combo;
 }
@@ -4000,7 +3995,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 						  G_CALLBACK (add_bookmark_button_clicked_cb));
   gtk_box_pack_start (GTK_BOX (hbox), impl->browse_shortcuts_add_button, TRUE, TRUE, 0);
   gtk_widget_set_tooltip_text (impl->browse_shortcuts_add_button,
-                        _("Add the selected folder to the Bookmarks"));
+                               _("Add the selected folder to the Bookmarks"));
 
   /* Remove bookmark button */
 
@@ -4012,7 +4007,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 						     G_CALLBACK (remove_bookmark_button_clicked_cb));
   gtk_box_pack_start (GTK_BOX (hbox), impl->browse_shortcuts_remove_button, TRUE, TRUE, 0);
   gtk_widget_set_tooltip_text (impl->browse_shortcuts_remove_button,
-                        _("Remove the selected bookmark"));
+                               _("Remove the selected bookmark"));
 
   return vbox;
 }
