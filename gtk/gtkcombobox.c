@@ -39,7 +39,6 @@
 #include "gtkvseparator.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
-#include "gtkmarshal.h"
 
 #include <gdk/gdkkeysyms.h>
 
@@ -588,7 +587,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                              G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                              G_CALLBACK (gtk_combo_box_real_popdown),
                              NULL, NULL,
-                             gtk_marshal_BOOLEAN__VOID,
+                             _gtk_marshal_BOOLEAN__VOID,
                              G_TYPE_BOOLEAN, 0);
 
   /* key bindings */
