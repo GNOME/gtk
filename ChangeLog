@@ -1,3 +1,13 @@
+2008-06-16  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkcellrendereraccel.h
+	* gtk/gtkiconview.h
+	* gtk/gtkobject.h: use G_TYPE macros instead of the old GTK_CHECK
+	macros for type checking.
+
+	(gtk_object_get_type): change prototype to return GType instead of
+	GtkType.
+
 2008-06-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/Makefile.am: Make folder, user-home and user-desktop links 
