@@ -1905,9 +1905,9 @@ settings_update_font_options (GtkSettings *settings)
 {
   gint hinting;
   gchar *hint_style_str;
-  cairo_hint_style_t hint_style = CAIRO_HINT_STYLE_DEFAULT;
+  cairo_hint_style_t hint_style = CAIRO_HINT_STYLE_NONE;
   gint antialias;
-  cairo_antialias_t antialias_mode = CAIRO_ANTIALIAS_DEFAULT;
+  cairo_antialias_t antialias_mode = CAIRO_ANTIALIAS_GRAY;
   gchar *rgba_str;
   cairo_subpixel_order_t subpixel_order = CAIRO_SUBPIXEL_ORDER_DEFAULT;
   cairo_font_options_t *options;
@@ -1920,6 +1920,8 @@ settings_update_font_options (GtkSettings *settings)
 		NULL);
 
   options = cairo_font_options_create ();
+
+  cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_ON);
   
   if (hinting >= 0 && !hinting)
     {

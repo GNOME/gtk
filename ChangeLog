@@ -1,3 +1,11 @@
+2008-06-16  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 538182 – pango_cairo_context_update_layout is not noop after
+	gtk_widget_create_pango_layout
+
+	* gtk/gtksettings.c (settings_update_font_options): Make sure all
+	font option fields are set to non-DEFAULT values.
+
 2008-06-16  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkfontsel.c
