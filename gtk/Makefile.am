@@ -1158,6 +1158,9 @@ GENERATED_ICONS = \
 	stock-icons/16/gtk-media-previous-rtl.png     	\
 	stock-icons/16/gtk-media-rewind-rtl.png       	\
 	stock-icons/16/gtk-save.png			\
+	stock-icons/16/folder.png			\
+	stock-icons/16/user-home.png			\
+	stock-icons/16/user-desktop.png			\
 	stock-icons/24/gtk-go-back-rtl.png    		\
 	stock-icons/24/gtk-go-forward-rtl.png 		\
 	stock-icons/24/gtk-goto-first-rtl.png 		\
@@ -1166,7 +1169,10 @@ GENERATED_ICONS = \
 	stock-icons/24/gtk-media-next-rtl.png 		\
 	stock-icons/24/gtk-media-previous-rtl.png     	\
 	stock-icons/24/gtk-media-rewind-rtl.png       	\
-	stock-icons/24/gtk-save.png
+	stock-icons/24/gtk-save.png			\
+	stock-icons/24/folder.png			\
+	stock-icons/24/user-home.png			\
+	stock-icons/24/user-desktop.png	
 
 # need to copy the icons so that we can replace the generated ones with
 # symlinks, even in the readonly srcdir case
@@ -1199,8 +1205,14 @@ stamp-icons: $(STOCK_ICONS)
 	   && $(RM) gtk-media-rewind-rtl.png				\
 	   && $(LN_S) gtk-media-forward-ltr.png gtk-media-rewind-rtl.png\
 	   && $(RM) gtk-save.png					\
-	   && $(LN_S) gtk-floppy.png gtk-save.png)			\
-	done								\
+	   && $(LN_S) gtk-floppy.png gtk-save.png			\
+	   && $(RM) folder.png						\
+	   && $(LN_S) gtk-directory.png folder.png			\
+	   && $(RM) user-home.png					\
+	   && $(LN_S) gtk-directory.png user-home.png			\
+	   && $(RM) user-desktop.png					\
+	   && $(LN_S) gtk-directory.png user-desktop.png		\
+	) done								\
 	&& touch stamp-icons
 
 if CROSS_COMPILING
