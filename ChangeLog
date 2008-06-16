@@ -1,5 +1,13 @@
 2008-06-16  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkfontsel.c
+	* gtk/gtkrc.c
+	* gtk/gtkstyle.c
+	* gtk/gtkwidget.c: use g_object_unref() instead of the deprecated
+	gtk_rc_style_unref().
+
+2008-06-16  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkcombobox.c (gtk_combo_box_class_init): use
 	_gtk_marshal_BOOLEAN__VOID instead of the deprecated
 	gtk_marshal_BOOLEAN__VOID.

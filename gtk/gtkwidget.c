@@ -5713,7 +5713,7 @@ gtk_widget_modify_style (GtkWidget      *widget,
   g_object_set_qdata_full (G_OBJECT (widget),
 			   quark_rc_style,
 			   gtk_rc_style_copy (style),
-			   (GDestroyNotify) gtk_rc_style_unref);
+			   (GDestroyNotify) g_object_unref);
 
   /* note that "style" may be invalid here if it was the old
    * modifier style and the only reference was our own.
@@ -5759,7 +5759,7 @@ gtk_widget_get_modifier_style (GtkWidget      *widget)
       g_object_set_qdata_full (G_OBJECT (widget),
 			       quark_rc_style,
 			       rc_style,
-			       (GDestroyNotify) gtk_rc_style_unref);
+			       (GDestroyNotify) g_object_unref);
     }
 
   return rc_style;

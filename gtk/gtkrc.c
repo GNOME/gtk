@@ -1559,7 +1559,7 @@ gtk_rc_clear_hash_node (gpointer key,
 			gpointer data, 
 			gpointer user_data)
 {
-  gtk_rc_style_unref (data);
+  g_object_unref (data);
 }
 
 static void
@@ -2453,7 +2453,7 @@ gtk_rc_init_style (GtkRcContext *context,
 	  }
 
       style = gtk_rc_style_to_style (context, proto_style);
-      gtk_rc_style_unref (proto_style);
+      g_object_unref (proto_style);
 
       g_hash_table_insert (realized_style_ht, rc_styles, style);
     }
@@ -3235,7 +3235,7 @@ gtk_rc_parse_style (GtkRcContext *context,
 
  err:
   if (rc_style != orig_style)
-    gtk_rc_style_unref (rc_style);
+    g_object_unref (rc_style);
 
   if (orig_style)
     g_object_unref (orig_style);

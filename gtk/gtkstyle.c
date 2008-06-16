@@ -617,10 +617,10 @@ gtk_style_finalize (GObject *object)
 
   if (style->private_font_desc)
     pango_font_description_free (style->private_font_desc);
-  
+
   if (style->rc_style)
-    gtk_rc_style_unref (style->rc_style);
-  
+    g_object_unref (style->rc_style);
+
   G_OBJECT_CLASS (gtk_style_parent_class)->finalize (object);
 }
 
