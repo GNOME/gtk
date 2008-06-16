@@ -1,3 +1,12 @@
+2008-06-16  Tor Lillqvist  <tml@novell.com>
+
+	Bug 538362 - Get Win32 icons back in the file chooser
+
+	* gtk/gtkicontheme.c (choose_icon): Check if the icon name is a
+	reference to an icon resource in a DLL or .EXE as in the
+	Registry. In that case, extract the icon and convert to a
+	GdkPixbuf. Patch by Hans Breuer.
+
 2008-06-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/stock-icons/24/audio-volume*: Add icons used by GtkVolumeButton

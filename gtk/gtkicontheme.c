@@ -33,6 +33,9 @@
 #ifndef S_ISDIR
 #define S_ISDIR(mode) ((mode)&_S_IFDIR)
 #endif
+#define WIN32_MEAN_AND_LEAN
+#include <windows.h>
+#include "win32/gdkwin32.h"
 #endif /* G_OS_WIN32 */
 
 #include "gtkicontheme.h"
@@ -1277,6 +1280,32 @@ choose_icon (GtkIconTheme       *icon_theme,
       if (unthemed_icon)
         break;
     }
+#ifdef G_OS_WIN32
+  /* Still not found an icon, check if reference to a Win32 resource */
+  if (!unthemed_icon)
+    {
+      gchar **resources;
+      HICON hIcon = NULL;
+      
+      resources = g_strsplit (icon_names[0], ",", 0);
+      if (resources[0])
+	{
+	  wchar_t *wfile = g_utf8_to_utf16 (resources[0], -1, NULL, NULL, NULL);
+	  ExtractIconExW (wfile, resources[1] ? atoi (resources[1]) : 0, &hIcon, NULL, 1);
+	  g_free (wfile);
+	}
+      
+      if (hIcon)
+	{
+	  icon_info = icon_info_new ();
+	  icon_info->cache_pixbuf = gdk_win32_icon_to_pixbuf_libgtk_only (hIcon);
+	  DestroyIcon (hIcon);
+          icon_info->dir_type = ICON_THEME_DIR_UNTHEMED;
+          icon_info->dir_size = size;
+	}
+      g_strfreev (resources);
+    }
+#endif
 
   if (unthemed_icon)
     {
@@ -1327,6 +1356,7 @@ choose_icon (GtkIconTheme       *icon_theme,
 	      found = g_file_test (default_theme_path, G_FILE_TEST_IS_REGULAR);
 	      g_free (default_theme_path);
 	    }
+
 	  if (!found)
 	    {
 	      g_warning (_("Could not find the icon '%s'. The '%s' theme\n"
