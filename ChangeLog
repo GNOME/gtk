@@ -1,5 +1,11 @@
 2008-06-16  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkbindings.c (_gtk_binding_entry_add_signall): use
+	gtk_binding_entry_clear() instead of gtk_binding_entry_add()
+	(the former is deprecated and #defined to gtk_binding_entry_clear)
+
+2008-06-16  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkprintoperation-unix.c: don't include the deprecated (and
 	unused) "gtkmarshal.h".
 

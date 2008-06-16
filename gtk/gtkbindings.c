@@ -864,7 +864,7 @@ _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
   entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
   if (!entry)
     {
-      gtk_binding_entry_add (binding_set, keyval, modifiers);
+      gtk_binding_entry_clear (binding_set, keyval, modifiers);
       entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
     }
   signal_p = &entry->signals;
