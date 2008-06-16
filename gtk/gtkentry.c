@@ -1894,14 +1894,6 @@ _gtk_entry_get_selected_text (GtkEntry *entry)
   return text;
 }
 
-static void
-drag_begin_cb (GtkWidget      *widget,
-               GdkDragContext *context,
-               gpointer        data)
-{
-  g_signal_handlers_disconnect_by_func (widget, drag_begin_cb, NULL);
-}
-
 static gint
 gtk_entry_motion_notify (GtkWidget      *widget,
 			 GdkEventMotion *event)
