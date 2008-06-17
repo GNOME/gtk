@@ -1,5 +1,5 @@
 /* Copyright (C) 2006 Openismus GmbH
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -16,19 +16,19 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GTK_IM_CONTEXT_MULTIPRESS_H
-#define __GTK_IM_CONTEXT_MULTIPRESS_H
+#ifndef __GTK_IM_CONTEXT_MULTIPRESS_H__
+#define __GTK_IM_CONTEXT_MULTIPRESS_H__
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_IM_CONTEXT_MULTIPRESS              (gtk_im_context_multipress_get_type())
-#define gtk_im_context_multipress(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipress))
-#define gtk_im_context_multipress_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipressClass))
-#define GTK_IS_IM_CONTEXT_MULTIPRESS(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS))
-#define GTK_IS_IM_CONTEXT_MULTIPRESS_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IM_CONTEXT_MULTIPRESS))
-#define gtk_im_context_multipress_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipressClass))
+#define GTK_TYPE_IM_CONTEXT_MULTIPRESS            (gtk_im_context_multipress_get_type ())
+#define gtk_im_context_multipress(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipress))
+#define gtk_im_context_multipress_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipressClass))
+#define GTK_IS_IM_CONTEXT_MULTIPRESS(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS))
+#define GTK_IS_IM_CONTEXT_MULTIPRESS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IM_CONTEXT_MULTIPRESS))
+#define gtk_im_context_multipress_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipressClass))
 
 
 typedef struct _KeySequence KeySequence;
@@ -81,5 +81,4 @@ GtkIMContext *gtk_im_context_multipress_new (void);
 
 G_END_DECLS
 
-
-#endif /* __GTK_IM_CONTEXT_MULTIPRESS_H */
+#endif /* __GTK_IM_CONTEXT_MULTIPRESS_H__ */

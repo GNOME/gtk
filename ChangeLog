@@ -1,5 +1,12 @@
 2008-06-17  Michael Natterer  <mitch@imendio.com>
 
+	* modules/input/gtkimcontextmultipress.h
+	* modules/input/gtkimcontextthai.h
+	* modules/input/gtkimcontextxim.h: use G_TYPE instead of GTK_CHECK
+	type checking macros.
+
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktypeutils.h: really move the GtkType typedef to an
 	undeprecated section.
 
