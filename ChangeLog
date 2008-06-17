@@ -1,3 +1,8 @@
+2008-06-18  Carlos Garnacho  <carlos@imendio.com>
+
+	* gtk/gtkfilesystem.[ch]: Remove GtkFileSystemError, use
+	GtkFileChooserError instead. (#538378, patch by Matthias Clasen)
+
 2008-06-17  Michael Natterer  <mitch@imendio.com>
 
 	* examples/gtkdial/gtkdial.[ch]: undeprecate.

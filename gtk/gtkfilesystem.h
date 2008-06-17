@@ -41,23 +41,6 @@ G_BEGIN_DECLS
 #define GTK_IS_FOLDER_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_FOLDER))
 #define GTK_FOLDER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_FOLDER, GtkFolderClass))
 
-/* GError enumeration for GtkFileSystem
- */
-
-#define GTK_FILE_SYSTEM_ERROR (_gtk_file_system_error_quark ())
-
-typedef enum
-{
-  GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-  GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
-  GTK_FILE_SYSTEM_ERROR_INVALID_URI,
-  GTK_FILE_SYSTEM_ERROR_BAD_FILENAME,
-  GTK_FILE_SYSTEM_ERROR_FAILED,
-  GTK_FILE_SYSTEM_ERROR_ALREADY_EXISTS
-} GtkFileSystemError;
-
-GQuark     _gtk_file_system_error_quark      (void);
-
 typedef struct GtkFileSystemClass GtkFileSystemClass;
 typedef struct GtkFileSystem GtkFileSystem;
 typedef struct GtkFolderClass GtkFolderClass;

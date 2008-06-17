@@ -134,12 +134,6 @@ static void gtk_folder_add_file             (GtkFolder *folder,
 					     GFileInfo *info);
 
 
-GQuark
-_gtk_file_system_error_quark (void)
-{
-  return g_quark_from_static_string ("gtk-file-system-error-quark");
-}
-
 /* GtkFileSystemBookmark methods */
 void
 _gtk_file_system_bookmark_free (GtkFileSystemBookmark *bookmark)
@@ -641,8 +635,8 @@ _gtk_file_system_parse (GtkFileSystem     *file_system,
       if (!parent_file)
 	{
 	  g_set_error (error,
-		       GTK_FILE_SYSTEM_ERROR,
-		       GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
+		       GTK_FILE_CHOOSER_ERROR,
+		       GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
 		       "Could not get parent file");
 	  *folder = NULL;
 	  *file_part = NULL;
@@ -989,8 +983,8 @@ _gtk_file_system_insert_bookmark (GtkFileSystem  *file_system,
       gchar *uri = g_file_get_uri (file);
 
       g_set_error (error,
-		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_ALREADY_EXISTS,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS,
 		   "%s already exists in the bookmarks list",
 		   uri);
 
@@ -1052,8 +1046,8 @@ _gtk_file_system_remove_bookmark (GtkFileSystem  *file_system,
       gchar *uri = g_file_get_uri (file);
 
       g_set_error (error,
-		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
 		   "%s does not exist in the bookmarks list",
 		   uri);
 
