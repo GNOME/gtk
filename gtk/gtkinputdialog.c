@@ -28,13 +28,17 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-
 #include <config.h>
+
 #include <stdlib.h>
+
 #include "gdk/gdkkeysyms.h"
+
+#undef GTK_DISABLE_DEPRECATED /* GtkOptionMenu */
+
 #include "gtkinputdialog.h"
 #include "gtkbutton.h"
 #include "gtkentry.h"
@@ -45,13 +49,11 @@
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtknotebook.h"
+#include "gtkoptionmenu.h"
 #include "gtkscrolledwindow.h"
 #include "gtkstock.h"
 #include "gtktable.h"
 #include "gtkvbox.h"
-
-#undef GTK_DISABLE_DEPRECATED
-#include "gtkoptionmenu.h"
 
 #include "gtkintl.h"
 #include "gtkalias.h"

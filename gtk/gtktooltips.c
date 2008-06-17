@@ -25,9 +25,12 @@
  */
 
 #include <config.h>
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
+#undef GTK_DISABLE_DEPRECATED
 
 #include "gtklabel.h"
 #include "gtkmain.h"

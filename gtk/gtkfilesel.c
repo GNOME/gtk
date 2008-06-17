@@ -53,6 +53,9 @@
 #endif /* G_PLATFORM_WIN32 */
 
 #include "gdk/gdkkeysyms.h"
+
+#undef GTK_DISABLE_DEPRECATED /* GtkOptionMenu */
+
 #include "gtkbutton.h"
 #include "gtkcellrenderertext.h"
 #include "gtkentry.h"
@@ -75,8 +78,6 @@
 #include "gtkmessagedialog.h"
 #include "gtkdnd.h"
 #include "gtkeventbox.h"
-
-#undef GTK_DISABLE_DEPRECATED
 #include "gtkoptionmenu.h"
 
 #define WANT_HPANED 1

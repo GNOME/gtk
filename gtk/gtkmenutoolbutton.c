@@ -20,8 +20,10 @@
  */
 
 #include <config.h>
+
+#undef GTK_DISABLE_DEPRECATED /* GtkTooltips */
+
 #include "gtkmenutoolbutton.h"
-#include "gtkintl.h"
 #include "gtktogglebutton.h"
 #include "gtkarrow.h"
 #include "gtkhbox.h"
@@ -29,6 +31,7 @@
 #include "gtkmenu.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 

@@ -25,16 +25,17 @@
  */
 
 #include <config.h>
-#include "gtkintl.h"
-#include "gtkmenu.h"
-#include "gtkmenuitem.h"
-#include "gtkmarshalers.h"
+
 #include "gdk/gdkkeysyms.h"
 
 #undef GTK_DISABLE_DEPRECATED
-#include "gtkoptionmenu.h"
 
+#include "gtkmenu.h"
+#include "gtkmenuitem.h"
+#include "gtkmarshalers.h"
+#include "gtkoptionmenu.h"
 #include "gtkprivate.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #define CHILD_LEFT_SPACING        4

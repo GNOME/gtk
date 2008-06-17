@@ -1,3 +1,15 @@
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkfilesel.c
+	* gtk/gtkinputdialog.c
+	* gtk/gtkmenutoolbutton.c
+	* gtk/gtkoptionmenu.c
+	* gtk/gtktoolitem.c
+	* gtk/gtktooltips.c: add or move around
+	#undef GTK_DISABLE_DEPRECATED so it's possible to build without
+	deprecated stuff again (with the minor glitch that it doesn't
+	link ;) but at least it's a tool to keep the code clean).
+
 2008-06-17  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentmanager.c:
