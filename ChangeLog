@@ -1,5 +1,9 @@
 2008-06-17  Michael Natterer  <mitch@imendio.com>
 
+	* examples/gtkdial/gtkdial.[ch]: undeprecate.
+
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkobject.c: remove bogus extern declaration of non-existing
 	function gtk_object_init_type().
 
