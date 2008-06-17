@@ -26,20 +26,27 @@
  */
 
 #include <config.h>
+
+#include <stdio.h>
 #include <string.h>
+
+#include <gdk/gdkkeysyms.h>
+
+#undef GTK_DISABLE_DEPRECATED
+
 #include "gtknotebook.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtklabel.h"
-#include <gdk/gdkkeysyms.h>
-#include <stdio.h>
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gtkdnd.h"
 #include "gtkbuildable.h"
+
+#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 #define SCROLL_DELAY_FACTOR   5

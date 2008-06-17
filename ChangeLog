@@ -1,5 +1,11 @@
 2008-06-17  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/gtknotebook.c: Need to do the GTK_DISABLE_DEPRECATED
+	#undef/#define dance here, too, because
+	gtk_notebook_set_group_id() is deprecated but used here before it
+	is defined, and gcc complains about conflicting type from the
+	implicit int declaration when it sees the actual void definition.
+
 	* modules/input/gtkimcontextime.h: Don't use the deprecated GTK_*
 	GtkType macros.
 
