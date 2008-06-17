@@ -40,6 +40,8 @@
 #include "gtkdnd.h"
 #include "gtkintl.h"
 #include <gdk/gdkkeysyms.h>
+
+#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 #define PM_SIZE                    8

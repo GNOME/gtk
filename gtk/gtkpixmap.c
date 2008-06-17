@@ -35,6 +35,8 @@
 #include "gtkcontainer.h"
 #include "gtkpixmap.h"
 #include "gtkintl.h"
+
+#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 

@@ -33,6 +33,8 @@
 #include <config.h>
 #include <string.h>
 
+#include <gdk/gdkkeysyms.h>
+
 #include "gtkarrow.h"
 #include "gtklabel.h"
 #include "gtklist.h"
@@ -43,11 +45,12 @@
 #include "gtkscrolledwindow.h"
 #include "gtkmain.h"
 #include "gtkwindow.h"
-#include "gdk/gdkkeysyms.h"
 #include "gtkcombo.h"
 #include "gtkframe.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+
+#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 static const gchar gtk_combo_string_key[] = "gtk-combo-string-value";

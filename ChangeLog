@@ -1,3 +1,22 @@
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/Makefile.am: build with GTK_DISABLE_DEPRECATED.
+
+	* gtk/gtkclist.c
+	* gtk/gtkcombo.c
+	* gtk/gtkctree.c
+	* gtk/gtklist.c
+	* gtk/gtklistitem.c
+	* gtk/gtkoldeditable.c
+	* gtk/gtkpixmap.c
+	* gtk/gtktext.c
+	* gtk/gtktipsquery.c
+	* gtk/gtktree.c
+	* gtk/gtktreeitem.c: whenever we #undef GTK_DISABLE_DEPRECATED and
+	actually use deprecated symbols (not just types or macros),
+	#define it again before #include "gtkalias.h" so the symbols match
+	and the beast links.
+
 2008-06-17  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/tests/recentmanager.c: more tests for GtkRecentManager.

@@ -25,13 +25,16 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#undef GDK_DISABLE_DEPRECATED
-#undef GTK_DISABLE_DEPRECATED
-
 #include <config.h>
 
 #include <stdlib.h>
 #include <string.h>
+
+#undef GDK_DISABLE_DEPRECATED
+
+#include <gdk/gdkkeysyms.h>
+
+#undef GTK_DISABLE_DEPRECATED
 
 #include "gtkmain.h"
 #include "gtkobject.h"
@@ -41,7 +44,8 @@
 #include "gtkdnd.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
-#include <gdk/gdkkeysyms.h>
+
+#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 /* length of button_actions array */

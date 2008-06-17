@@ -27,6 +27,7 @@
 #undef GTK_DISABLE_DEPRECATED
 
 #include <config.h>
+
 #include "gtklabel.h"
 #include "gtkeventbox.h"
 #include "gtkpixmap.h"
@@ -37,6 +38,8 @@
 #include "gtktree.h"
 #include "gtktreeitem.h"
 #include "gtkintl.h"
+
+#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 #include "tree_plus.xpm"

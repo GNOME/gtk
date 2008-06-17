@@ -36,6 +36,8 @@
 #include "gtktree.h"
 #include "gtktreeitem.h"
 #include "gtkintl.h"
+
+#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 enum {

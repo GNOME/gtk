@@ -24,9 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
+
+#include <gdk/gdkkeysyms.h>
+
 #undef GTK_DISABLE_DEPRECATED
 
-#include <config.h>
 #include "gtkbindings.h"
 #include "gtklabel.h"
 #include "gtklistitem.h"
@@ -34,7 +37,8 @@
 #include "gtkmarshalers.h"
 #include "gtksignal.h"
 #include "gtkintl.h"
-#include <gdk/gdkkeysyms.h>
+
+#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 

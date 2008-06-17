@@ -37,6 +37,8 @@
 #include "gtkselection.h"
 #include "gtksignal.h"
 #include "gtkintl.h"
+
+#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 #define MIN_EDITABLE_WIDTH  150
