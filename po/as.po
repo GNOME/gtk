@@ -1261,7 +1261,7 @@ msgstr "অপৰিচালিত টেগ: '%s'"
 #.
 #: gtk/gtkcalendar.c:670
 msgid "calendar:MY"
-msgstr "পঞ্জিকা:MY"
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -1269,7 +1269,7 @@ msgstr "পঞ্জিকা:MY"
 #.
 #: gtk/gtkcalendar.c:708
 msgid "calendar:week_start:0"
-msgstr "পঞ্জিকা:সপ্তাহ আৰম্ভ(_s):0"
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text.
