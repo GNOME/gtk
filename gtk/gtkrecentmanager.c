@@ -1007,9 +1007,9 @@ gtk_recent_manager_remove_item (GtkRecentManager  *manager,
       priv->recent_items = g_bookmark_file_new ();
       priv->size = 0;
 
-      g_set_error (error, G_BOOKMARK_FILE_ERROR,
-		   G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND,
-		   _("No bookmark found for URI '%s'"),
+      g_set_error (error, GTK_RECENT_MANAGER_ERROR,
+		   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
+		   _("Unable to find an item with URI '%s'"),
 		   uri);
 
       return FALSE;
@@ -1018,7 +1018,12 @@ gtk_recent_manager_remove_item (GtkRecentManager  *manager,
   g_bookmark_file_remove_item (priv->recent_items, uri, &remove_error);
   if (remove_error)
     {
-      g_propagate_error (error, remove_error);
+      g_error_free (error);
+
+      g_set_error (error, GTK_RECENT_MANAGER_ERROR,
+		   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
+		   _("Unable to find an item with URI '%s'"),
+		   uri);
       
       return FALSE;
     }
@@ -1214,6 +1219,15 @@ gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
   
   priv = recent_manager->priv;
 
+  if (!priv->recent_items)
+    {
+      g_set_error (error, GTK_RECENT_MANAGER_ERROR,
+      		   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
+      		   _("Unable to find an item with URI '%s'"),
+      		   uri);
+      return FALSE;
+    }
+
   if (!g_bookmark_file_has_item (priv->recent_items, uri))
     {
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
@@ -1229,7 +1243,12 @@ gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
                                    &move_error);
   if (move_error)
     {
-      g_propagate_error (error, move_error);
+      g_error_free (move_error);
+
+      g_set_error (error, GTK_RECENT_MANAGER_ERROR,
+      		   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
+      		   _("Unable to find an item with URI '%s'"),
+      		   uri);
       return FALSE;
     }
   

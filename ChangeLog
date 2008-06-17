@@ -1,3 +1,10 @@
+2008-06-17  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentmanager.c:
+	(gtk_recent_manager_remove_item),
+	(gtk_recent_manager_move_item): Increase the consistency of the
+	errors returned by GtkRecentManager. (Paolo Borelli)
+
 2008-06-17  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/tests/recentmanager.c: add some unit tests for GtkRecentManager.
