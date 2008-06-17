@@ -3086,8 +3086,10 @@ gtk_recent_chooser_set_limit
 gtk_recent_chooser_get_limit
 gtk_recent_chooser_set_show_tips
 gtk_recent_chooser_get_show_tips
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_recent_chooser_set_show_numbers
 gtk_recent_chooser_get_show_numbers
+#endif
 gtk_recent_chooser_set_sort_type
 gtk_recent_chooser_get_sort_type
 gtk_recent_chooser_set_sort_func
@@ -4690,13 +4692,14 @@ gtk_widget_queue_clear_area
 gtk_widget_set
 gtk_widget_set_uposition
 gtk_widget_set_usize
+gtk_widget_ref
+gtk_widget_unref
 #endif
 gtk_widget_queue_draw
 gtk_widget_queue_draw_area
 gtk_widget_queue_resize
 gtk_widget_queue_resize_no_redraw
 gtk_widget_realize
-gtk_widget_ref
 gtk_widget_region_intersect
 gtk_widget_remove_accelerator
 gtk_widget_remove_mnemonic_label
@@ -4746,7 +4749,6 @@ gtk_widget_trigger_tooltip_query
 gtk_widget_unmap
 gtk_widget_unparent
 gtk_widget_unrealize
-gtk_widget_unref
 #endif
 #endif
 

@@ -1,3 +1,8 @@
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtk.symbols: move some deprecated symbols into
+	#ifndef GTK_DISABLE_DEPRECATED.
+
 2008-06-17  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c:
