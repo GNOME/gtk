@@ -22,6 +22,7 @@
 #include <gtk/gtk.h>
 
 const gchar *uri = "file:///tmp/testrecentchooser.txt";
+const gchar *uri2 = "file:///tmp/testrecentchooser2.txt";
 
 static void
 recent_manager_get_default (void)
@@ -110,6 +111,67 @@ recent_manager_has_item (void)
 }
 
 static void
+recent_manager_move_item (void)
+{
+  GtkRecentManager *manager;
+  gboolean res;
+  GError *error;
+
+  manager = gtk_recent_manager_get_default ();
+
+  error = NULL;
+  res = gtk_recent_manager_move_item (manager,
+                                      "file:///tmp/testrecentdoesnotexist.txt",
+                                      uri2,
+                                      &error);
+  g_assert (res == FALSE);
+  g_assert (error != NULL);
+  g_assert (error->domain == GTK_RECENT_MANAGER_ERROR);
+  g_assert (error->code == GTK_RECENT_MANAGER_ERROR_NOT_FOUND);
+  g_error_free (error);
+
+  error = NULL;
+  res = gtk_recent_manager_move_item (manager, uri, uri2, &error);
+  g_assert (res == TRUE);
+  g_assert (error == NULL);
+
+  res = gtk_recent_manager_has_item (manager, uri);
+  g_assert (res == FALSE);
+
+  res = gtk_recent_manager_has_item (manager, uri2);
+  g_assert (res == TRUE);
+}
+
+static void
+recent_manager_lookup_item (void)
+{
+  GtkRecentManager *manager;
+  GtkRecentInfo *info;
+  GError *error;
+
+  manager = gtk_recent_manager_get_default ();
+
+  error = NULL;
+  info = gtk_recent_manager_lookup_item (manager,
+                                         "file:///tmp/testrecentdoesnotexist.txt",
+                                         &error);
+  g_assert (info == NULL);
+  g_assert (error != NULL);
+  g_assert (error->domain == GTK_RECENT_MANAGER_ERROR);
+  g_assert (error->code == GTK_RECENT_MANAGER_ERROR_NOT_FOUND);
+  g_error_free (error);
+
+  error = NULL;
+  info = gtk_recent_manager_lookup_item (manager, uri2, &error);
+  g_assert (info != NULL);
+  g_assert (error == NULL);
+
+  g_assert (gtk_recent_info_has_application (info, "testrecentchooser"));
+
+  gtk_recent_info_unref (info);
+}
+
+static void
 recent_manager_remove_item (void)
 {
   GtkRecentManager *manager;
@@ -130,12 +192,40 @@ recent_manager_remove_item (void)
 
   /* remove an item that's actually there */
   error = NULL;
-  res = gtk_recent_manager_remove_item (manager, uri, &error);
+  res = gtk_recent_manager_remove_item (manager, uri2, &error);
   g_assert (res == TRUE);
   g_assert (error == NULL);
 
-  res = gtk_recent_manager_has_item (manager, uri);
+  res = gtk_recent_manager_has_item (manager, uri2);
   g_assert (res == FALSE);
+}
+
+static void
+recent_manager_purge (void)
+{
+  GtkRecentManager *manager;
+  GtkRecentData *recent_data;
+  gint n;
+  GError *error;
+
+  manager = gtk_recent_manager_get_default ();
+
+  /* purge, add 1, purge again and check that 1 item has been purged */
+  error = NULL;
+  n = gtk_recent_manager_purge_items (manager, &error);
+  g_assert (error == NULL);
+
+  recent_data = g_slice_new0 (GtkRecentData);
+  recent_data->mime_type = "text/plain";
+  recent_data->app_name = "testrecentchooser";
+  recent_data->app_exec = "testrecentchooser %u";
+  gtk_recent_manager_add_full (manager, uri, recent_data);
+  g_slice_free (GtkRecentData, recent_data);
+
+  error = NULL;
+  n = gtk_recent_manager_purge_items (manager, &error);
+  g_assert (error == NULL);
+  g_assert (n == 1);
 }
 
 int
@@ -150,8 +240,14 @@ main (int    argc,
                    recent_manager_add);
   g_test_add_func ("/recent-manager/has-item",
                    recent_manager_has_item);
+  g_test_add_func ("/recent-manager/move-item",
+                   recent_manager_move_item);
+  g_test_add_func ("/recent-manager/lookup-item",
+                   recent_manager_lookup_item);
   g_test_add_func ("/recent-manager/remove-item",
                    recent_manager_remove_item);
+  g_test_add_func ("/recent-manager/purge",
+                   recent_manager_purge);
 
   return g_test_run ();
 }
