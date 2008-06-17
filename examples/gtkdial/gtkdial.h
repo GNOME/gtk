@@ -74,7 +74,7 @@ struct _GtkDialClass
 
 
 GtkWidget*     gtk_dial_new                    (GtkAdjustment *adjustment);
-GtkType        gtk_dial_get_type               (void);
+GType          gtk_dial_get_type               (void);
 GtkAdjustment* gtk_dial_get_adjustment         (GtkDial      *dial);
 void           gtk_dial_set_update_policy      (GtkDial      *dial,
 						GtkUpdateType  policy);

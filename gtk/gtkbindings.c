@@ -911,7 +911,7 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
       arg = g_slice_new0 (GtkBindingArg);
       slist = g_slist_prepend (slist, arg);
 
-      arg->arg_type = va_arg (args, GtkType);
+      arg->arg_type = va_arg (args, GType);
       switch (G_TYPE_FUNDAMENTAL (arg->arg_type))
 	{
 	case G_TYPE_CHAR:

@@ -1,3 +1,10 @@
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkbindings.c (gtk_binding_entry_add_signal):
+	* gtk/gtktoolbutton.c (gtk_tool_button_get_type): 
+	* examples/gtkdial/gtkdial.h (gtk_dial_get_type): 
+	s/GtkType/GType/
+
 2008-06-17  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtknotebook.c: Need to do the GTK_DISABLE_DEPRECATED
