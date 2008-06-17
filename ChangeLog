@@ -1,5 +1,10 @@
 2008-06-17  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkoptionmenu.c (gtk_option_menu_position): cast menu's
+	toplevel to GtkWindow when passing to gtk_window_set_type_hint().
+
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktestutils.c: #undef GTK_DISABLE_DEPRECATED, clean up
 	includes a bit.
 
