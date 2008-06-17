@@ -79,8 +79,6 @@ typedef GType GtkFundamentalType;
 #define	GTK_FUNDAMENTAL_TYPE	G_TYPE_FUNDAMENTAL
 #define GTK_STRUCT_OFFSET	G_STRUCT_OFFSET
 
-#endif /* GTK_DISABLE_DEPRECATED */
-
 /* glib macro wrappers (compatibility) */
 #define	GTK_CHECK_CAST		G_TYPE_CHECK_INSTANCE_CAST
 #define	GTK_CHECK_CLASS_CAST	G_TYPE_CHECK_CLASS_CAST
@@ -89,10 +87,6 @@ typedef GType GtkFundamentalType;
 #define	GTK_CHECK_CLASS_TYPE	G_TYPE_CHECK_CLASS_TYPE
 
 /* glib type wrappers (compatibility) */
-
-typedef GType			GtkType;
-
-#ifndef GTK_DISABLE_DEPRECATED
 
 typedef GTypeInstance		GtkTypeObject;
 typedef GTypeClass		GtkTypeClass;
@@ -141,6 +135,11 @@ typedef GSignalCMarshaller          GtkSignalMarshaller;
 #endif
 
 #if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
+
+/* glib type wrappers (compatibility) */
+
+typedef GType GtkType;
+
 /* Used by gtk_container_foreach_unmarshal () */
 
 /* GtkArg, used to hold differently typed values */

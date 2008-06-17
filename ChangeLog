@@ -1,5 +1,11 @@
 2008-06-17  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtktypeutils.h: deprecate GTK_CHECK_CAST,	GTK_CHECK_CLASS_CAST,
+	GTK_CHECK_GET_CLASS, GTK_CHECK_TYPE and GTK_CHECK_CLASS_TYPE.
+	Move the GtkType typedef to an undeprecated section.
+
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkprogress.h: use G_TYPE macros for type checking instead
 	of GTK_CHECK ones because it's the parent class of an undeprecated
 	class and the GTK_CHECK stuff will soon be deprecated.
