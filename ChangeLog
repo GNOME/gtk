@@ -1,3 +1,9 @@
+2008-06-17  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentmanager.c:
+	(gtk_recent_manager_remove_item): Consistently use the same
+	error when removing a URI from an empty GtkRecentManager.
+
 2008-06-17  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkfilechooserdefault.c: remove static integer variables

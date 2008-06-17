@@ -1007,9 +1007,9 @@ gtk_recent_manager_remove_item (GtkRecentManager  *manager,
       priv->recent_items = g_bookmark_file_new ();
       priv->size = 0;
 
-      g_set_error (error, GTK_RECENT_MANAGER_ERROR,
-		   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
-		   _("Unable to find an item with URI '%s'"),
+      g_set_error (error, G_BOOKMARK_FILE_ERROR,
+		   G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND,
+		   _("No bookmark found for URI '%s'"),
 		   uri);
 
       return FALSE;
