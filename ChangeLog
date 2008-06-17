@@ -1,5 +1,10 @@
 2008-06-17  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkobject.c: remove bogus extern declaration of non-existing
+	function gtk_object_init_type().
+
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkbindings.c (gtk_binding_entry_add_signal):
 	* gtk/gtktoolbutton.c (gtk_tool_button_get_type): 
 	* examples/gtkdial/gtkdial.h (gtk_dial_get_type): 

@@ -45,7 +45,6 @@ enum {
 };
 
 
-extern void	  gtk_object_init_type           (void);	/* for gtktypeutils.h */
 static void       gtk_object_base_class_init     (GtkObjectClass *class);
 static void       gtk_object_base_class_finalize (GtkObjectClass *class);
 static void       gtk_object_class_init          (GtkObjectClass *klass);
