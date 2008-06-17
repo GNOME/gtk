@@ -1,5 +1,11 @@
 2008-06-17  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkprogress.h: use G_TYPE macros for type checking instead
+	of GTK_CHECK ones because it's the parent class of an undeprecated
+	class and the GTK_CHECK stuff will soon be deprecated.
+
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkfilesel.c
 	* gtk/gtkinputdialog.c
 	* gtk/gtkmenutoolbutton.c
