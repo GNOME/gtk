@@ -1018,7 +1018,7 @@ gtk_recent_manager_remove_item (GtkRecentManager  *manager,
   g_bookmark_file_remove_item (priv->recent_items, uri, &remove_error);
   if (remove_error)
     {
-      g_error_free (error);
+      g_error_free (remove_error);
 
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
 		   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
