@@ -1,5 +1,11 @@
 2008-06-17  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkfilechooserdefault.c: remove static integer variables
+	which hold the number of members in GtkTargetEntry arrays and use
+	G_N_ELEMENTS() directly instead.
+
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtk.symbols: move some deprecated symbols into
 	#ifndef GTK_DISABLE_DEPRECATED.
 

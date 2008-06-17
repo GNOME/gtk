@@ -234,36 +234,26 @@ static const GtkTargetEntry shortcuts_source_targets[] = {
   { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW }
 };
 
-static const int num_shortcuts_source_targets = G_N_ELEMENTS (shortcuts_source_targets); 
-
 /* Target types for dropping into the shortcuts list */
 static const GtkTargetEntry shortcuts_dest_targets[] = {
   { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW },
   { "text/uri-list", 0, TEXT_URI_LIST }
 };
 
-static const int num_shortcuts_dest_targets = G_N_ELEMENTS (shortcuts_dest_targets); 
-
 /* Target types for DnD from the file list */
 static const GtkTargetEntry file_list_source_targets[] = {
   { "text/uri-list", 0, TEXT_URI_LIST }
 };
-
-static const int num_file_list_source_targets = G_N_ELEMENTS (file_list_source_targets); 
 
 /* Target types for dropping into the file list */
 static const GtkTargetEntry file_list_dest_targets[] = {
   { "text/uri-list", GTK_TARGET_OTHER_WIDGET, TEXT_URI_LIST }
 };
 
-static const int num_file_list_dest_targets = G_N_ELEMENTS (file_list_dest_targets); 
-
 /* Target types for dragging from the recent files list */
 static const GtkTargetEntry recent_list_source_targets[] = {
   { "text/uri-list", 0, TEXT_URI_LIST }
 };
-
-static const int num_recent_list_source_targets = G_N_ELEMENTS (recent_list_source_targets);
 
 static gboolean
 search_is_possible (GtkFileChooserDefault *impl)
@@ -3884,13 +3874,13 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view),
 					  GDK_BUTTON1_MASK,
 					  shortcuts_source_targets,
-					  num_shortcuts_source_targets,
+					  G_N_ELEMENTS (shortcuts_source_targets),
 					  GDK_ACTION_MOVE);
 
   gtk_drag_dest_set (impl->browse_shortcuts_tree_view,
 		     GTK_DEST_DEFAULT_ALL,
 		     shortcuts_dest_targets,
-		     num_shortcuts_dest_targets,
+		     G_N_ELEMENTS (shortcuts_dest_targets),
 		     GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view));
@@ -4539,7 +4529,7 @@ create_file_list (GtkFileChooserDefault *impl)
   gtk_drag_dest_set (impl->browse_files_tree_view,
                      GTK_DEST_DEFAULT_ALL,
                      file_list_dest_targets,
-                     num_file_list_dest_targets,
+                     G_N_ELEMENTS (file_list_dest_targets),
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
   
   g_signal_connect (impl->browse_files_tree_view, "row_activated",
@@ -4569,7 +4559,7 @@ create_file_list (GtkFileChooserDefault *impl)
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (impl->browse_files_tree_view),
 					  GDK_BUTTON1_MASK,
 					  file_list_source_targets,
-					  num_file_list_source_targets,
+					  G_N_ELEMENTS (file_list_source_targets),
 					  GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
   g_signal_connect (selection, "changed",
