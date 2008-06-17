@@ -1,5 +1,10 @@
 2008-06-17  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtktypeutils.h: really move the GtkType typedef to an
+	undeprecated section.
+
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktypeutils.h: deprecate GTK_CHECK_CAST,	GTK_CHECK_CLASS_CAST,
 	GTK_CHECK_GET_CLASS, GTK_CHECK_TYPE and GTK_CHECK_CLASS_TYPE.
 	Move the GtkType typedef to an undeprecated section.

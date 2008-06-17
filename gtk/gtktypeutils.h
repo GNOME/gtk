@@ -95,6 +95,8 @@ typedef GInstanceInitFunc	GtkObjectInitFunc;
 
 #endif /* GTK_DISABLE_DEPRECATED */
 
+typedef GType                   GtkType;
+
 G_END_DECLS
 
 /* Builtin Types
@@ -135,10 +137,6 @@ typedef GSignalCMarshaller          GtkSignalMarshaller;
 #endif
 
 #if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-
-/* glib type wrappers (compatibility) */
-
-typedef GType GtkType;
 
 /* Used by gtk_container_foreach_unmarshal () */
 
