@@ -1,3 +1,11 @@
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktestutils.c: #undef GTK_DISABLE_DEPRECATED, clean up
+	includes a bit.
+
+	* gtk/gtkuimanager.c: #include "gtkwindow.h", it was only pulled
+	in via deprecated headers.
+
 2008-06-16  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 508751 – gnome-terminal crashed with SIGSEGV after keypress

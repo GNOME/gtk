@@ -20,8 +20,10 @@
 
 /* need to get the prototypes of all get_type functions */
 #define GTK_ENABLE_BROKEN
+#undef GTK_DISABLE_DEPRECATED
 
-#include "gtktestutils.h"
+#include <config.h>
+
 #include <gtk/gtk.h>
 #include "gtkalias.h"
 

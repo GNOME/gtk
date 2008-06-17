@@ -43,6 +43,7 @@
 #include "gtktearoffmenuitem.h"
 #include "gtktoolbar.h"
 #include "gtkuimanager.h"
+#include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
