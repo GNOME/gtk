@@ -138,15 +138,16 @@ libgailinclude_HEADERS =		\
 	$(gail_public_h_sources)
 
 libgail_la_CPPFLAGS = \
-	-I$(top_srcdir)		\
+	-I$(top_srcdir)			\
 	-I$(top_srcdir)/modules/other	\
-	-I$(top_srcdir)/gdk	\
-	-I$(top_builddir)/gdk	\
-	-I$(top_srcdir)/gtk	\
-	-I$(top_builddir)/gtk	\
-	-DGTK_VERSION=\"$(GTK_VERSION)\"	\
+	-I$(top_srcdir)/gdk		\
+	-I$(top_builddir)/gdk		\
+	-I$(top_srcdir)/gtk		\
+	-I$(top_builddir)/gtk		\
+	-DGTK_VERSION=\"$(GTK_VERSION)\"\
+	-DGDK_DISABLE_DEPRECATED	\
 	$(AM_CPPFLAGS)
-	
+
 libgail_la_CFLAGS = \
 	$(GTK_DEP_CFLAGS)	\
 	$(GTK_DEBUG_FLAGS)	\

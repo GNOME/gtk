@@ -1,3 +1,10 @@
+2008-06-17  Michael Natterer  <mitch@imendio.com>
+
+	* gail.c
+	* gailtoplevel.c: s/gtk_type_class/g_type_class_ref/
+
+	* Makefile.am: add GDK_DISABLE_DEPRECATED to CPPFLAGS.
+
 2008-06-10  Li Yuan  <li.yuan@sun.com>
 
 	* gailtextview.c: (gail_text_view_set_caret_offset):
