@@ -484,7 +484,6 @@ static void     search_get_valid_child_iter  (GtkFileChooserDefault *impl,
                                               GtkTreeIter           *child_iter,
                                               GtkTreeIter           *iter);
 
-static void     recent_manager_update        (GtkFileChooserDefault *impl);
 static void     recent_stop_loading          (GtkFileChooserDefault *impl);
 static void     recent_clear_model           (GtkFileChooserDefault *impl,
                                               gboolean               remove_from_treeview);
@@ -829,6 +828,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->pending_select_files = NULL;
   impl->location_mode = LOCATION_MODE_PATH_BAR;
   impl->operation_mode = OPERATION_MODE_BROWSE;
+  impl->recent_manager = gtk_recent_manager_get_default ();
 
   gtk_box_set_spacing (GTK_BOX (impl), 12);
 
@@ -5236,9 +5236,6 @@ gtk_file_chooser_default_constructor (GType                  type,
 
   gtk_widget_push_composite_child ();
 
-  /* Recent files manager */
-  recent_manager_update (impl);
-
   /* Shortcuts model */
   shortcuts_model_create (impl);
 
@@ -5842,24 +5839,6 @@ check_icon_theme (GtkFileChooserDefault *impl)
 }
 
 static void
-recent_manager_update (GtkFileChooserDefault *impl)
-{
-  GtkRecentManager *manager;
-
-  profile_start ("start", NULL);
-
-  if (gtk_widget_has_screen (GTK_WIDGET (impl)))
-    manager = gtk_recent_manager_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
-  else
-    manager = gtk_recent_manager_get_default ();
-
-  if (impl->recent_manager != manager)
-    impl->recent_manager = manager;
-
-  profile_end ("end", NULL);
-}
-
-static void
 gtk_file_chooser_default_style_set (GtkWidget *widget,
 				    GtkStyle  *previous_style)
 {
@@ -5899,7 +5878,6 @@ gtk_file_chooser_default_screen_changed (GtkWidget *widget,
 
   remove_settings_signal (impl, previous_screen);
   check_icon_theme (impl);
-  recent_manager_update (impl);
 
   g_signal_emit_by_name (widget, "default-size-changed");
 
@@ -9803,9 +9781,6 @@ recent_start_loading (GtkFileChooserDefault *impl)
   recent_clear_model (impl, TRUE);
   recent_setup_model (impl);
   set_busy_cursor (impl, TRUE);
-
-  if (!impl->recent_manager)
-    recent_manager_update (impl);
 
   g_assert (impl->load_recent_id == 0);
 

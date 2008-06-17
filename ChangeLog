@@ -1,3 +1,14 @@
+2008-06-17  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c:
+	(gtk_file_chooser_default_init),
+	(gtk_file_chooser_default_constructor),
+	(gtk_file_chooser_default_screen_changed),
+	(recent_start_loading): Remove the GtkRecentManager screen
+	dance, as it has been deprecated since 2.12. Now we get the
+	GtkRecentManager singleton whewn we create the FileChooserDefault
+	instance. (Michael Natterer)
+
 2008-06-17  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_position): cast menu's
