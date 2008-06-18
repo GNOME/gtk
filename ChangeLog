@@ -1,3 +1,21 @@
+2008-06-18  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktypeutils.[ch]: deprecate gtk_type_class().
+
+	* gtk/gtk.symbols: changed accordingly.
+
+	* gtk/gtksettings.c (gtk_settings_install_property)
+	(gtk_settings_install_property_parser): get rid of using
+	gtk_type_class() by keeping a static reference to GtkSettingsClass
+	around in both functions and passing that pointer on to
+	settings_install_property_parser().
+
+	* tests/testgtk.c: use g_type_class_ref()/unref() instead of
+	gtk_type_class().
+
+	* gtk/gtkobject.c: #undef GTK_DISABLE_DEPRECATED around including
+	gtktypeutils.h.
+
 2008-06-17  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkstyle.c: Add deprecated version

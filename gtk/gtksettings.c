@@ -1280,23 +1280,33 @@ _gtk_rc_property_parser_from_type (GType type)
 void
 gtk_settings_install_property (GParamSpec *pspec)
 {
+  static GtkSettingsClass *klass = NULL;
+
   GtkRcPropertyParser parser;
 
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
+  if (! klass)
+    klass = g_type_class_ref (GTK_TYPE_SETTINGS);
+
   parser = _gtk_rc_property_parser_from_type (G_PARAM_SPEC_VALUE_TYPE (pspec));
 
-  settings_install_property_parser (gtk_type_class (GTK_TYPE_SETTINGS), pspec, parser);
+  settings_install_property_parser (klass, pspec, parser);
 }
 
 void
 gtk_settings_install_property_parser (GParamSpec          *pspec,
 				      GtkRcPropertyParser  parser)
 {
+  static GtkSettingsClass *klass = NULL;
+
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
   g_return_if_fail (parser != NULL);
-  
-  settings_install_property_parser (gtk_type_class (GTK_TYPE_SETTINGS), pspec, parser);
+
+  if (! klass)
+    klass = g_type_class_ref (GTK_TYPE_SETTINGS);
+
+  settings_install_property_parser (klass, pspec, parser);
 }
 
 static void

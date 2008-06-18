@@ -25,13 +25,19 @@
  */
 
 #include <config.h>
+
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
+
+#undef GTK_DISABLE_DEPRECATED
+
 #include "gtkobject.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
+
+#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 

@@ -60,6 +60,18 @@ gtk_type_unique (GtkType            parent_type,
   return g_type_register_static (parent_type, gtkinfo->type_name, &tinfo, 0);
 }
 
+/**
+ * gtk_type_class
+ * @type: a #GtkType.
+ *
+ * Returns a pointer pointing to the class of @type or %NULL if there
+ * was any trouble identifying @type.  Initializes the class if
+ * necessary.
+ *
+ * Returns: pointer to the class.
+ *
+ * Deprecated: 2.14: Use g_type_class_peek() or g_type_class_ref() instead.
+ **/
 gpointer
 gtk_type_class (GtkType type)
 {

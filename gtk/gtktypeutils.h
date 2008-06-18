@@ -235,15 +235,10 @@ struct _GtkTypeInfo
   GtkClassInitFunc	 base_class_init_func;
 };
 
-#endif /* GTK_DISABLE_DEPRECATED */
-
-gpointer	gtk_type_class	(GtkType	 type);
-
-#ifndef GTK_DISABLE_DEPRECATED
-
-GtkType		gtk_type_unique	(GtkType	   parent_type,
-				 const GtkTypeInfo *gtkinfo);
-gpointer	gtk_type_new	(GtkType	 type);
+GtkType         gtk_type_unique (GtkType            parent_type,
+                                 const GtkTypeInfo *gtkinfo);
+gpointer        gtk_type_class  (GtkType            type);
+gpointer        gtk_type_new    (GtkType            type);
 
 /* --- compatibility defines --- */
 #define	gtk_type_name(type)		 g_type_name (type)
