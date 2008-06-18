@@ -1,5 +1,25 @@
 2008-06-18  Michael Natterer  <mitch@imendio.com>
 
+	* tests/Makefile.am
+	* tests/autotestfilechooser.c
+	* tests/buildertest.c
+	* tests/defaultvaluetest.c
+	* tests/floatingtest.c
+	* tests/objecttests.c
+	* tests/pixbuf-init.c
+	* tests/textbuffertest.c: remove unit tests here...
+
+	* gtk/tests/Makefile.am
+	* gtk/tests/builder.c
+	* gtk/tests/defaultvalue.c
+	* gtk/tests/filechooser.c
+	* gtk/tests/floating.c
+	* gtk/tests/object.c
+	* gtk/tests/pixbuf-init.c
+	* gtk/tests/textbuffer.c: ...and add them here.
+
+2008-06-18  Michael Natterer  <mitch@imendio.com>
+
 	* gdk/gdk.h: deprecate GdkDestroyNotify.
 
 	* gdk/gdkevents.c
