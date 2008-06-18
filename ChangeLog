@@ -2,6 +2,18 @@
 
 	Merged from trunk:
 
+	http://bugzilla.gnome.org/show_bug.cgi?id=538784 - Don't change
+	the filename in the name entry in CREATE_FOLDER mode when changing
+	folders, so that you can enter a new subfolder name, double-click on a
+	folder to change to it, and close the dialog.
+
+	* gtk/gtkfilechooserdefault.c (update_chooser_entry): Don't change
+	the filename in the entry in CREATE_FOLDER mode, either.
+
+2008-06-18  Olle Bergkvist <olle.bergkvist@yahoo.se>
+
+	Merged from trunk:
+
 	http://bugzilla.gnome.org/show_bug.cgi?id=419737#c59 - The file
 	chooser clears the filename entry in SAVE/CREATE_FOLDER modes when
 	it shouldn't.
