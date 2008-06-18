@@ -66,7 +66,7 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 void          gtk_stock_set_translate_func (const gchar      *domain,
 					    GtkTranslateFunc  func,
 					    gpointer          data,
-					    GtkDestroyNotify  notify);
+					    GDestroyNotify    notify);
 
 /* Stock IDs (not all are stock items; some are images only) */
 #define GTK_STOCK_DIALOG_AUTHENTICATION \

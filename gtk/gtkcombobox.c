@@ -123,7 +123,7 @@ struct _GtkComboBoxPrivate
 
   GtkTreeViewRowSeparatorFunc row_separator_func;
   gpointer                    row_separator_data;
-  GtkDestroyNotify            row_separator_destroy;
+  GDestroyNotify              row_separator_destroy;
 
   gchar *tearoff_title;
 };
@@ -5640,7 +5640,7 @@ void
 gtk_combo_box_set_row_separator_func (GtkComboBox                 *combo_box,
 				      GtkTreeViewRowSeparatorFunc  func,
 				      gpointer                     data,
-				      GtkDestroyNotify             destroy)
+				      GDestroyNotify               destroy)
 {
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 

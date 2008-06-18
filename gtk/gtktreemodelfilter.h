@@ -75,13 +75,13 @@ GtkTreeModel *gtk_tree_model_filter_new                        (GtkTreeModel    
 void          gtk_tree_model_filter_set_visible_func           (GtkTreeModelFilter           *filter,
                                                                 GtkTreeModelFilterVisibleFunc func,
                                                                 gpointer                      data,
-                                                                GtkDestroyNotify              destroy);
+                                                                GDestroyNotify                destroy);
 void          gtk_tree_model_filter_set_modify_func            (GtkTreeModelFilter           *filter,
                                                                 gint                          n_columns,
                                                                 GType                        *types,
                                                                 GtkTreeModelFilterModifyFunc  func,
                                                                 gpointer                      data,
-                                                                GtkDestroyNotify              destroy);
+                                                                GDestroyNotify                destroy);
 void          gtk_tree_model_filter_set_visible_column         (GtkTreeModelFilter           *filter,
                                                                 gint                          column);
 

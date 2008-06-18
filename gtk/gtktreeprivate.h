@@ -159,14 +159,14 @@ struct _GtkTreeViewPrivate
 
   GtkTreeViewColumnDropFunc column_drop_func;
   gpointer column_drop_func_data;
-  GtkDestroyNotify column_drop_func_data_destroy;
+  GDestroyNotify column_drop_func_data_destroy;
   GList *column_drag_info;
   GtkTreeViewColumnReorder *cur_reorder;
 
   /* ATK Hack */
   GtkTreeDestroyCountFunc destroy_count_func;
   gpointer destroy_count_data;
-  GtkDestroyNotify destroy_count_destroy;
+  GDestroyNotify destroy_count_destroy;
 
   /* Scroll timeout (e.g. during dnd) */
   guint scroll_timeout;
@@ -245,7 +245,7 @@ struct _GtkTreeViewPrivate
   GtkTreeViewSearchPositionFunc search_position_func;
   GtkTreeViewSearchEqualFunc search_equal_func;
   gpointer search_user_data;
-  GtkDestroyNotify search_destroy;
+  GDestroyNotify search_destroy;
   gpointer search_position_user_data;
   GDestroyNotify search_position_destroy;
   GtkWidget *search_window;
@@ -257,7 +257,7 @@ struct _GtkTreeViewPrivate
 
   GtkTreeViewRowSeparatorFunc row_separator_func;
   gpointer row_separator_data;
-  GtkDestroyNotify row_separator_destroy;
+  GDestroyNotify row_separator_destroy;
 
   gint level_indentation;
 

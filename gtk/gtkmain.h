@@ -167,7 +167,7 @@ guint	   gtk_quit_add_full	   (guint	       main_level,
 				    GtkFunction	       function,
 				    GtkCallbackMarshal marshal,
 				    gpointer	       data,
-				    GtkDestroyNotify   destroy);
+				    GDestroyNotify     destroy);
 void	   gtk_quit_remove	   (guint	       quit_handler_id);
 void	   gtk_quit_remove_by_data (gpointer	       data);
 #ifndef GTK_DISABLE_DEPRECATED
@@ -178,7 +178,7 @@ guint	   gtk_timeout_add_full	   (guint32	       interval,
 				    GtkFunction	       function,
 				    GtkCallbackMarshal marshal,
 				    gpointer	       data,
-				    GtkDestroyNotify   destroy);
+				    GDestroyNotify     destroy);
 void	   gtk_timeout_remove	   (guint	       timeout_handler_id);
 
 guint	   gtk_idle_add		   (GtkFunction	       function,
@@ -190,7 +190,7 @@ guint	   gtk_idle_add_full	   (gint	       priority,
 				    GtkFunction	       function,
 				    GtkCallbackMarshal marshal,
 				    gpointer	       data,
-				    GtkDestroyNotify   destroy);
+				    GDestroyNotify     destroy);
 void	   gtk_idle_remove	   (guint	       idle_handler_id);
 void	   gtk_idle_remove_by_data (gpointer	       data);
 guint	   gtk_input_add_full	   (gint	       source,
@@ -198,7 +198,7 @@ guint	   gtk_input_add_full	   (gint	       source,
 				    GdkInputFunction   function,
 				    GtkCallbackMarshal marshal,
 				    gpointer	       data,
-				    GtkDestroyNotify   destroy);
+				    GDestroyNotify     destroy);
 void	   gtk_input_remove	   (guint	       input_handler_id);
 #endif /* GTK_DISABLE_DEPRECATED */
 

@@ -58,7 +58,7 @@ struct _GtkTreeModelSort
   /* default sort */
   GtkTreeIterCompareFunc default_sort_func;
   gpointer default_sort_data;
-  GtkDestroyNotify default_sort_destroy;
+  GDestroyNotify default_sort_destroy;
 
   /* signal ids */
   guint changed_id;

@@ -57,7 +57,7 @@ struct _GtkListStore
   gint length;
   GtkTreeIterCompareFunc default_sort_func;
   gpointer default_sort_data;
-  GtkDestroyNotify default_sort_destroy;
+  GDestroyNotify default_sort_destroy;
   guint columns_dirty : 1;
 };
 

@@ -483,7 +483,7 @@ _gtk_tree_data_list_header_free (GList *list)
 
       if (header->destroy)
 	{
-	  GtkDestroyNotify d = header->destroy;
+	  GDestroyNotify d = header->destroy;
 
 	  header->destroy = NULL;
 	  d (header->data);
@@ -515,7 +515,7 @@ _gtk_tree_data_list_set_header (GList                  *header_list,
 				gint                    sort_column_id,
 				GtkTreeIterCompareFunc  func,
 				gpointer                data,
-				GtkDestroyNotify        destroy)
+				GDestroyNotify          destroy)
 {
   GList *list = header_list;
   GtkTreeDataSortHeader *header = NULL;
@@ -543,7 +543,7 @@ _gtk_tree_data_list_set_header (GList                  *header_list,
 
   if (header->destroy)
     {
-      GtkDestroyNotify d = header->destroy;
+      GDestroyNotify d = header->destroy;
       
       header->destroy = NULL;
       d (header->data);

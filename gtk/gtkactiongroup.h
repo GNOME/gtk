@@ -161,7 +161,7 @@ void            gtk_action_group_add_radio_actions_full  (GtkActionGroup        
 void            gtk_action_group_set_translate_func      (GtkActionGroup             *action_group,
 							  GtkTranslateFunc            func,
 							  gpointer                    data,
-							  GtkDestroyNotify            notify);
+							  GDestroyNotify              notify);
 void            gtk_action_group_set_translation_domain  (GtkActionGroup             *action_group,
 							  const gchar                *domain);
 G_CONST_RETURN gchar *gtk_action_group_translate_string  (GtkActionGroup             *action_group,

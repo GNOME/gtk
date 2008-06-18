@@ -77,7 +77,7 @@ gtk_tree_selection_finalize (GObject *object)
 
   if (selection->destroy)
     {
-      GtkDestroyNotify d = selection->destroy;
+      GDestroyNotify d = selection->destroy;
 
       selection->destroy = NULL;
       d (selection->user_data);
@@ -256,14 +256,14 @@ void
 gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
 					GtkTreeSelectionFunc  func,
 					gpointer              data,
-					GtkDestroyNotify      destroy)
+					GDestroyNotify        destroy)
 {
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (func != NULL);
 
   if (selection->destroy)
     {
-      GtkDestroyNotify d = selection->destroy;
+      GDestroyNotify d = selection->destroy;
 
       selection->destroy = NULL;
       d (selection->user_data);

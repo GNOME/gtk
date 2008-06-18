@@ -1,5 +1,26 @@
 2008-06-18  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtktypeutils.h: deprecate GtkDestroyNotify.
+
+	* gtk/gtkactiongroup.[ch]
+	* gtk/gtkcombobox.[ch]
+	* gtk/gtkcontainer.[ch]
+	* gtk/gtkliststore.[ch]
+	* gtk/gtkmain.[ch]
+	* gtk/gtkmenu.c
+	* gtk/gtkstock.[ch]
+	* gtk/gtktreedatalist.[ch]
+	* gtk/gtktreemodelfilter.[ch]
+	* gtk/gtktreemodelsort.[ch]
+	* gtk/gtktreeprivate.h
+	* gtk/gtktreeselection.[ch]
+	* gtk/gtktreesortable.[ch]
+	* gtk/gtktreestore.[ch]
+	* gtk/gtktreeview.[ch]
+	* gtk/gtktreeviewcolumn.[ch]: s/GtkDestroyNotify/GDestroyNotify/g.
+
+2008-06-18  Michael Natterer  <mitch@imendio.com>
+
 	* tests/testgtk.c: some more undeprecation.
 
 2008-06-18  Michael Natterer  <mitch@imendio.com>

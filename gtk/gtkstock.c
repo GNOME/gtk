@@ -47,7 +47,7 @@ struct _GtkStockTranslateFunc
 {
   GtkTranslateFunc func;
   gpointer data;
-  GtkDestroyNotify notify;
+  GDestroyNotify notify;
 };
 
 static void
@@ -410,7 +410,7 @@ static const GtkStockItem builtin_items [] =
  * @domain: the translation domain for which @func shall be used
  * @func: a #GtkTranslateFunc 
  * @data: data to pass to @func
- * @notify: a #GtkDestroyNotify that is called when @data is 
+ * @notify: a #GDestroyNotify that is called when @data is
  *   no longer needed
  *
  * Sets a function to be used for translating the @label of 
@@ -426,7 +426,7 @@ void
 gtk_stock_set_translate_func (const gchar      *domain,
 			      GtkTranslateFunc  func,
 			      gpointer          data,
-			      GtkDestroyNotify  notify)
+			      GDestroyNotify    notify)
 {
   GtkStockTranslateFunc *translate;
   gchar *domainname;

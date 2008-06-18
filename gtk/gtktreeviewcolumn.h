@@ -148,7 +148,7 @@ void                    gtk_tree_view_column_set_cell_data_func  (GtkTreeViewCol
 								  GtkCellRenderer         *cell_renderer,
 								  GtkTreeCellDataFunc      func,
 								  gpointer                 func_data,
-								  GtkDestroyNotify         destroy);
+								  GDestroyNotify           destroy);
 void                    gtk_tree_view_column_clear_attributes    (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell_renderer);
 void                    gtk_tree_view_column_set_spacing         (GtkTreeViewColumn       *tree_column,

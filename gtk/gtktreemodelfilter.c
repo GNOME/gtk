@@ -91,13 +91,13 @@ struct _GtkTreeModelFilterPrivate
 
   GtkTreeModelFilterVisibleFunc visible_func;
   gpointer visible_data;
-  GtkDestroyNotify visible_destroy;
+  GDestroyNotify visible_destroy;
 
   gint modify_n_columns;
   GType *modify_types;
   GtkTreeModelFilterModifyFunc modify_func;
   gpointer modify_data;
-  GtkDestroyNotify modify_destroy;
+  GDestroyNotify modify_destroy;
 
   gint visible_column;
 
@@ -2890,7 +2890,7 @@ void
 gtk_tree_model_filter_set_visible_func (GtkTreeModelFilter            *filter,
                                         GtkTreeModelFilterVisibleFunc  func,
                                         gpointer                       data,
-                                        GtkDestroyNotify               destroy)
+                                        GDestroyNotify                 destroy)
 {
   g_return_if_fail (GTK_IS_TREE_MODEL_FILTER (filter));
   g_return_if_fail (func != NULL);
@@ -2898,7 +2898,7 @@ gtk_tree_model_filter_set_visible_func (GtkTreeModelFilter            *filter,
 
   if (filter->priv->visible_func)
     {
-      GtkDestroyNotify d = filter->priv->visible_destroy;
+      GDestroyNotify d = filter->priv->visible_destroy;
 
       filter->priv->visible_destroy = NULL;
       d (filter->priv->visible_data);
@@ -2936,7 +2936,7 @@ gtk_tree_model_filter_set_modify_func (GtkTreeModelFilter           *filter,
                                        GType                        *types,
                                        GtkTreeModelFilterModifyFunc  func,
                                        gpointer                      data,
-                                       GtkDestroyNotify              destroy)
+                                       GDestroyNotify                destroy)
 {
   g_return_if_fail (GTK_IS_TREE_MODEL_FILTER (filter));
   g_return_if_fail (func != NULL);
@@ -2944,7 +2944,7 @@ gtk_tree_model_filter_set_modify_func (GtkTreeModelFilter           *filter,
 
   if (filter->priv->modify_destroy)
     {
-      GtkDestroyNotify d = filter->priv->modify_destroy;
+      GDestroyNotify d = filter->priv->modify_destroy;
 
       filter->priv->modify_destroy = NULL;
       d (filter->priv->modify_data);

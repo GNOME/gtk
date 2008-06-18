@@ -201,11 +201,11 @@ static void         gtk_tree_model_sort_set_sort_func         (GtkTreeSortable  
 							       gint                    sort_column_id,
 							       GtkTreeIterCompareFunc  func,
 							       gpointer                data,
-							       GtkDestroyNotify        destroy);
+							       GDestroyNotify          destroy);
 static void         gtk_tree_model_sort_set_default_sort_func (GtkTreeSortable        *sortable,
 							       GtkTreeIterCompareFunc  func,
 							       gpointer                data,
-							       GtkDestroyNotify        destroy);
+							       GDestroyNotify          destroy);
 static gboolean     gtk_tree_model_sort_has_default_sort_func (GtkTreeSortable     *sortable);
 
 /* Private functions (sort funcs, level handling and other utils) */
@@ -1356,7 +1356,7 @@ gtk_tree_model_sort_set_sort_func (GtkTreeSortable        *sortable,
 				   gint                    sort_column_id,
 				   GtkTreeIterCompareFunc  func,
 				   gpointer                data,
-				   GtkDestroyNotify        destroy)
+				   GDestroyNotify          destroy)
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) sortable;
 
@@ -1372,13 +1372,13 @@ static void
 gtk_tree_model_sort_set_default_sort_func (GtkTreeSortable        *sortable,
 					   GtkTreeIterCompareFunc  func,
 					   gpointer                data,
-					   GtkDestroyNotify        destroy)
+					   GDestroyNotify          destroy)
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *)sortable;
 
   if (tree_model_sort->default_sort_destroy)
     {
-      GtkDestroyNotify d = tree_model_sort->default_sort_destroy;
+      GDestroyNotify d = tree_model_sort->default_sort_destroy;
 
       tree_model_sort->default_sort_destroy = NULL;
       d (tree_model_sort->default_sort_data);
@@ -2398,7 +2398,7 @@ gtk_tree_model_sort_reset_default_sort_func (GtkTreeModelSort *tree_model_sort)
 
   if (tree_model_sort->default_sort_destroy)
     {
-      GtkDestroyNotify d = tree_model_sort->default_sort_destroy;
+      GDestroyNotify d = tree_model_sort->default_sort_destroy;
 
       tree_model_sort->default_sort_destroy = NULL;
       d (tree_model_sort->default_sort_data);

@@ -110,11 +110,11 @@ static void     gtk_tree_store_set_sort_func           (GtkTreeSortable        *
 							gint                    sort_column_id,
 							GtkTreeIterCompareFunc  func,
 							gpointer                data,
-							GtkDestroyNotify        destroy);
+							GDestroyNotify          destroy);
 static void     gtk_tree_store_set_default_sort_func   (GtkTreeSortable        *sortable,
 							GtkTreeIterCompareFunc  func,
 							gpointer                data,
-							GtkDestroyNotify        destroy);
+							GDestroyNotify          destroy);
 static gboolean gtk_tree_store_has_default_sort_func   (GtkTreeSortable        *sortable);
 
 
@@ -431,7 +431,7 @@ gtk_tree_store_finalize (GObject *object)
 
   if (tree_store->default_sort_destroy)
     {
-      GtkDestroyNotify d = tree_store->default_sort_destroy;
+      GDestroyNotify d = tree_store->default_sort_destroy;
 
       tree_store->default_sort_destroy = NULL;
       d (tree_store->default_sort_data);
@@ -3139,7 +3139,7 @@ gtk_tree_store_set_sort_func (GtkTreeSortable        *sortable,
 			      gint                    sort_column_id,
 			      GtkTreeIterCompareFunc  func,
 			      gpointer                data,
-			      GtkDestroyNotify        destroy)
+			      GDestroyNotify          destroy)
 {
   GtkTreeStore *tree_store = (GtkTreeStore *) sortable;
 
@@ -3155,13 +3155,13 @@ static void
 gtk_tree_store_set_default_sort_func (GtkTreeSortable        *sortable,
 				      GtkTreeIterCompareFunc  func,
 				      gpointer                data,
-				      GtkDestroyNotify        destroy)
+				      GDestroyNotify          destroy)
 {
   GtkTreeStore *tree_store = (GtkTreeStore *) sortable;
 
   if (tree_store->default_sort_destroy)
     {
-      GtkDestroyNotify d = tree_store->default_sort_destroy;
+      GDestroyNotify d = tree_store->default_sort_destroy;
 
       tree_store->default_sort_destroy = NULL;
       d (tree_store->default_sort_data);

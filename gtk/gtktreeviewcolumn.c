@@ -67,7 +67,7 @@ struct _GtkTreeViewColumnCellInfo
   GSList *attributes;
   GtkTreeCellDataFunc func;
   gpointer func_data;
-  GtkDestroyNotify destroy;
+  GDestroyNotify destroy;
   gint requested_width;
   gint real_width;
   guint expand : 1;
@@ -391,7 +391,7 @@ gtk_tree_view_column_finalize (GObject *object)
 
       if (info->destroy)
 	{
-	  GtkDestroyNotify d = info->destroy;
+	  GDestroyNotify d = info->destroy;
 
 	  info->destroy = NULL;
 	  d (info->func_data);
@@ -1663,7 +1663,7 @@ gtk_tree_view_column_set_cell_data_func (GtkTreeViewColumn   *tree_column,
 					 GtkCellRenderer     *cell_renderer,
 					 GtkTreeCellDataFunc  func,
 					 gpointer             func_data,
-					 GtkDestroyNotify     destroy)
+					 GDestroyNotify       destroy)
 {
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (tree_column),
                                       cell_renderer,

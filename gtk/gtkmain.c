@@ -127,14 +127,14 @@ struct _GtkQuitFunction
   GtkCallbackMarshal marshal;
   GtkFunction function;
   gpointer data;
-  GtkDestroyNotify destroy;
+  GDestroyNotify destroy;
 };
 
 struct _GtkClosure
 {
   GtkCallbackMarshal marshal;
   gpointer data;
-  GtkDestroyNotify destroy;
+  GDestroyNotify destroy;
 };
 
 struct _GtkKeySnooperData
@@ -1867,7 +1867,7 @@ gtk_quit_add_full (guint		main_level,
 		   GtkFunction		function,
 		   GtkCallbackMarshal	marshal,
 		   gpointer		data,
-		   GtkDestroyNotify	destroy)
+		   GDestroyNotify	destroy)
 {
   static guint quit_id = 1;
   GtkQuitFunction *quitf;
@@ -1985,7 +1985,7 @@ gtk_timeout_add_full (guint32		 interval,
 		      GtkFunction	 function,
 		      GtkCallbackMarshal marshal,
 		      gpointer		 data,
-		      GtkDestroyNotify	 destroy)
+		      GDestroyNotify	 destroy)
 {
   if (marshal)
     {
@@ -2024,7 +2024,7 @@ gtk_idle_add_full (gint			priority,
 		   GtkFunction		function,
 		   GtkCallbackMarshal	marshal,
 		   gpointer		data,
-		   GtkDestroyNotify	destroy)
+		   GDestroyNotify	destroy)
 {
   if (marshal)
     {
@@ -2078,7 +2078,7 @@ gtk_input_add_full (gint		source,
 		    GdkInputFunction	function,
 		    GtkCallbackMarshal	marshal,
 		    gpointer		data,
-		    GtkDestroyNotify	destroy)
+		    GDestroyNotify	destroy)
 {
   if (marshal)
     {

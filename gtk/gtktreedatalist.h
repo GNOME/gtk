@@ -47,7 +47,7 @@ typedef struct _GtkTreeDataSortHeader
   gint sort_column_id;
   GtkTreeIterCompareFunc func;
   gpointer data;
-  GtkDestroyNotify destroy;
+  GDestroyNotify destroy;
 } GtkTreeDataSortHeader;
 
 GtkTreeDataList *_gtk_tree_data_list_alloc          (void);
@@ -77,6 +77,6 @@ GList                 *_gtk_tree_data_list_set_header  (GList                  *
 							gint                    sort_column_id,
 							GtkTreeIterCompareFunc  func,
 							gpointer                data,
-							GtkDestroyNotify        destroy);
+							GDestroyNotify          destroy);
 
 #endif /* __GTK_TREE_DATA_LIST_H__ */

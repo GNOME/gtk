@@ -1512,7 +1512,7 @@ gtk_container_foreach_full (GtkContainer       *container,
 			    GtkCallback         callback,
 			    GtkCallbackMarshal  marshal,
 			    gpointer            callback_data,
-			    GtkDestroyNotify    notify)
+			    GDestroyNotify      notify)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
 

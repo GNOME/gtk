@@ -1033,8 +1033,9 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
     {
       list = g_list_prepend (list, menu);
     }
-  g_object_set_data_full (G_OBJECT (attach_widget), I_(ATTACHED_MENUS), list, (GtkDestroyNotify) g_list_free);
-  
+  g_object_set_data_full (G_OBJECT (attach_widget), I_(ATTACHED_MENUS), list,
+                          (GDestroyNotify) g_list_free);
+
   if (GTK_WIDGET_STATE (menu) != GTK_STATE_NORMAL)
     gtk_widget_set_state (GTK_WIDGET (menu), GTK_STATE_NORMAL);
   
@@ -1086,7 +1087,8 @@ gtk_menu_detach (GtkMenu *menu)
   list = g_object_steal_data (G_OBJECT (data->attach_widget), ATTACHED_MENUS);
   list = g_list_remove (list, menu);
   if (list)
-    g_object_set_data_full (G_OBJECT (data->attach_widget), I_(ATTACHED_MENUS), list, (GtkDestroyNotify) g_list_free);
+    g_object_set_data_full (G_OBJECT (data->attach_widget), I_(ATTACHED_MENUS), list,
+                            (GDestroyNotify) g_list_free);
   else
     g_object_set_data (G_OBJECT (data->attach_widget), I_(ATTACHED_MENUS), NULL);
   

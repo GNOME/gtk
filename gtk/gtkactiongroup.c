@@ -56,7 +56,7 @@ struct _GtkActionGroupPrivate
 
   GtkTranslateFunc translate_func;
   gpointer         translate_data;
-  GtkDestroyNotify translate_notify;   
+  GDestroyNotify   translate_notify;
 };
 
 enum 
@@ -1247,9 +1247,9 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup            *action_group
  * @action_group: a #GtkActionGroup
  * @func: a #GtkTranslateFunc
  * @data: data to be passed to @func and @notify
- * @notify: a #GtkDestroyNotify function to be called when @action_group is 
+ * @notify: a #GDestroyNotify function to be called when @action_group is
  *   destroyed and when the translation function is changed again
- * 
+ *
  * Sets a function to be used for translating the @label and @tooltip of 
  * #GtkActionGroupEntry<!-- -->s added by gtk_action_group_add_actions().
  *
@@ -1262,7 +1262,7 @@ void
 gtk_action_group_set_translate_func (GtkActionGroup   *action_group,
 				     GtkTranslateFunc  func,
 				     gpointer          data,
-				     GtkDestroyNotify  notify)
+				     GDestroyNotify    notify)
 {
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
   

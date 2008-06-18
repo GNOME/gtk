@@ -68,11 +68,11 @@ struct _GtkTreeSortableIface
 				      gint                    sort_column_id,
 				      GtkTreeIterCompareFunc  func,
 				      gpointer                data,
-				      GtkDestroyNotify        destroy);
+				      GDestroyNotify          destroy);
   void     (* set_default_sort_func) (GtkTreeSortable        *sortable,
 				      GtkTreeIterCompareFunc  func,
 				      gpointer                data,
-				      GtkDestroyNotify        destroy);
+				      GDestroyNotify          destroy);
   gboolean (* has_default_sort_func) (GtkTreeSortable        *sortable);
 };
 
@@ -90,14 +90,13 @@ void     gtk_tree_sortable_set_sort_func         (GtkTreeSortable        *sortab
 						  gint                    sort_column_id,
 						  GtkTreeIterCompareFunc  sort_func,
 						  gpointer                user_data,
-						  GtkDestroyNotify        destroy);
+						  GDestroyNotify          destroy);
 void     gtk_tree_sortable_set_default_sort_func (GtkTreeSortable        *sortable,
 						  GtkTreeIterCompareFunc  sort_func,
 						  gpointer                user_data,
-						  GtkDestroyNotify        destroy);
+						  GDestroyNotify          destroy);
 gboolean gtk_tree_sortable_has_default_sort_func (GtkTreeSortable        *sortable);
-						  
-						  
+
 G_END_DECLS
 
 #endif /* __GTK_TREE_SORTABLE_H__ */
