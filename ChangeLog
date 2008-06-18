@@ -1,3 +1,17 @@
+2008-06-18  Olle Bergkvist <olle.bergkvist@yahoo.se>
+
+	Merged from trunk:
+
+	http://bugzilla.gnome.org/show_bug.cgi?id=419737#c59 - The file
+	chooser clears the filename entry in SAVE/CREATE_FOLDER modes when
+	it shouldn't.
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_activate_iter): Don't
+	clear the entry for CREATE_FOLDER either; this needs the same
+	behavior as SAVE mode.
+	(update_chooser_entry): Only clear the entry in OPEN/SELECT_FOLDER
+	modes.
+
 2008-06-16  Matthias Clasen  <mclasen@redhat.com>
 
 	Merge from trunk:
