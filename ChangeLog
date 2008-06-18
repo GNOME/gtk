@@ -1,5 +1,10 @@
 2008-06-17  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkstyle.c: Add deprecated version
+	and change the deprecation markup used by ref/unref 
+
+2008-06-17  Johan Dahlin  <jdahlin@async.com.br>
+
 	* gtk/gtkwidget.c: 
 	Add deprecated versions and fixup markup.
 

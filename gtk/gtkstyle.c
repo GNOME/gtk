@@ -812,7 +812,7 @@ gtk_style_detach (GtkStyle *style)
  * @style: a #GtkStyle.
  * @returns: @style.
  *
- * Deprecated equivalent of g_object_ref().
+ * Deprecated: 2.0: use g_object_ref() instead.
  **/
 GtkStyle*
 gtk_style_ref (GtkStyle *style)
@@ -824,7 +824,7 @@ gtk_style_ref (GtkStyle *style)
  * gtk_style_unref:
  * @style: a #GtkStyle.
  *
- * Deprecated equivalent of g_object_unref().
+ * Deprecated: 2.0: use g_object_unref() instead.
  **/
 void
 gtk_style_unref (GtkStyle *style)
@@ -924,7 +924,7 @@ gtk_style_lookup_color (GtkStyle   *style,
  * Draws a horizontal line from (@x1, @y) to (@x2, @y) in @window
  * using the given style and state.
  * 
- * Deprecated: Use gtk_paint_hline() instead.
+ * Deprecated: 2.0: Use gtk_paint_hline() instead.
  **/
 void
 gtk_draw_hline (GtkStyle     *style,
@@ -953,7 +953,7 @@ gtk_draw_hline (GtkStyle     *style,
  * Draws a vertical line from (@x, @y1_) to (@x, @y2_) in @window
  * using the given style and state.
  * 
- * Deprecated: Use gtk_paint_vline() instead.
+ * Deprecated: 2.0: Use gtk_paint_vline() instead.
  **/
 void
 gtk_draw_vline (GtkStyle     *style,
@@ -983,7 +983,7 @@ gtk_draw_vline (GtkStyle     *style,
  * Draws a shadow around the given rectangle in @window 
  * using the given style and state and shadow type.
  * 
- * Deprecated: Use gtk_paint_shadow() instead.
+ * Deprecated: 2.0: Use gtk_paint_shadow() instead.
  */
 void
 gtk_draw_shadow (GtkStyle      *style,
@@ -1013,7 +1013,7 @@ gtk_draw_shadow (GtkStyle      *style,
  * 
  * Draws a polygon on @window with the given parameters.
  *
- * Deprecated: Use gtk_paint_polygon() instead.
+ * Deprecated: 2.0: Use gtk_paint_polygon() instead.
  */ 
 void
 gtk_draw_polygon (GtkStyle      *style,
@@ -1046,7 +1046,7 @@ gtk_draw_polygon (GtkStyle      *style,
  * Draws an arrow in the given rectangle on @window using the given 
  * parameters. @arrow_type determines the direction of the arrow.
  *
- * Deprecated: Use gtk_paint_arrow() instead.
+ * Deprecated: 2.0: Use gtk_paint_arrow() instead.
  */
 void
 gtk_draw_arrow (GtkStyle      *style,
@@ -1080,7 +1080,7 @@ gtk_draw_arrow (GtkStyle      *style,
  * Draws a diamond in the given rectangle on @window using the given
  * parameters.
  *
- * Deprecated: Use gtk_paint_diamond() instead.
+ * Deprecated: 2.0: Use gtk_paint_diamond() instead.
  */
 void
 gtk_draw_diamond (GtkStyle      *style,
@@ -1109,7 +1109,7 @@ gtk_draw_diamond (GtkStyle      *style,
  * 
  * Draws a text string on @window with the given parameters.
  *
- * Deprecated: Use gtk_paint_layout() instead.
+ * Deprecated: 2.0: Use gtk_paint_layout() instead.
  */
 void
 gtk_draw_string (GtkStyle      *style,
@@ -1138,7 +1138,7 @@ gtk_draw_string (GtkStyle      *style,
  * 
  * Draws a box on @window with the given parameters.
  *
- * Deprecated: Use gtk_paint_box() instead.
+ * Deprecated: 2.0: Use gtk_paint_box() instead.
  */
 void
 gtk_draw_box (GtkStyle      *style,
@@ -1169,7 +1169,7 @@ gtk_draw_box (GtkStyle      *style,
  * 
  * Draws a flat box on @window with the given parameters.
  *
- * Deprecated: Use gtk_paint_flat_box() instead.
+ * Deprecated: 2.0: Use gtk_paint_flat_box() instead.
  */
 void
 gtk_draw_flat_box (GtkStyle      *style,
@@ -1201,7 +1201,7 @@ gtk_draw_flat_box (GtkStyle      *style,
  * Draws a check button indicator in the given rectangle on @window with 
  * the given parameters.
  *
- * Deprecated: Use gtk_paint_check() instead.
+ * Deprecated: 2.0: Use gtk_paint_check() instead.
  */
 void
 gtk_draw_check (GtkStyle      *style,
@@ -1233,7 +1233,7 @@ gtk_draw_check (GtkStyle      *style,
  * Draws a radio button indicator in the given rectangle on @window with 
  * the given parameters.
  *
- * Deprecated: Use gtk_paint_option() instead.
+ * Deprecated: 2.0: Use gtk_paint_option() instead.
  */
 void
 gtk_draw_option (GtkStyle      *style,
@@ -1265,7 +1265,7 @@ gtk_draw_option (GtkStyle      *style,
  * Draws an option menu tab (i.e. the up and down pointing arrows)
  * in the given rectangle on @window using the given parameters.
  * 
- * Deprecated: Use gtk_paint_tab() instead.
+ * Deprecated: 2.0: Use gtk_paint_tab() instead.
  */ 
 void
 gtk_draw_tab (GtkStyle      *style,
@@ -1301,7 +1301,7 @@ gtk_draw_tab (GtkStyle      *style,
  * using the given style and state and shadow type, leaving a 
  * gap in one side.
  * 
- * Deprecated: Use gtk_paint_shadow_gap() instead.
+ * Deprecated: 2.0: Use gtk_paint_shadow_gap() instead.
 */
 void
 gtk_draw_shadow_gap (GtkStyle       *style,
@@ -1339,7 +1339,7 @@ gtk_draw_shadow_gap (GtkStyle       *style,
  * Draws a box in @window using the given style and state and shadow type, 
  * leaving a gap in one side.
  * 
- * Deprecated: Use gtk_paint_box_gap() instead.
+ * Deprecated: 2.0: Use gtk_paint_box_gap() instead.
  */
 void
 gtk_draw_box_gap (GtkStyle       *style,
@@ -1374,7 +1374,7 @@ gtk_draw_box_gap (GtkStyle       *style,
  * 
  * Draws an extension, i.e. a notebook tab.
  *
- * Deprecated: Use gtk_paint_extension() instead.
+ * Deprecated: 2.0: Use gtk_paint_extension() instead.
  **/
 void
 gtk_draw_extension (GtkStyle       *style,
@@ -1405,7 +1405,7 @@ gtk_draw_extension (GtkStyle       *style,
  * Draws a focus indicator around the given rectangle on @window using the
  * given style.
  * 
- * Deprecated: Use gtk_paint_focus() instead.
+ * Deprecated: 2.0: Use gtk_paint_focus() instead.
  */
 void
 gtk_draw_focus (GtkStyle      *style,
@@ -1452,7 +1452,7 @@ gtk_draw_slider (GtkStyle      *style,
  * 
  * Draws a handle as used in #GtkHandleBox and #GtkPaned.
  * 
- * Deprecated: Use gtk_paint_handle() instead.
+ * Deprecated: 2.0: Use gtk_paint_handle() instead.
  **/
 void 
 gtk_draw_handle (GtkStyle      *style,
@@ -1482,7 +1482,7 @@ gtk_draw_handle (GtkStyle      *style,
  * 
  * Draws an expander as used in #GtkTreeView.
  * 
- * Deprecated: Use gtk_paint_expander() instead.
+ * Deprecated: 2.0: Use gtk_paint_expander() instead.
  **/
 void
 gtk_draw_expander (GtkStyle        *style,
@@ -1531,7 +1531,7 @@ gtk_draw_layout (GtkStyle        *style,
  * Draws a resize grip in the given rectangle on @window using the given
  * parameters. 
  * 
- * Deprecated: Use gtk_paint_resize_grip() instead.
+ * Deprecated: 2.0: Use gtk_paint_resize_grip() instead.
  */
 void
 gtk_draw_resize_grip (GtkStyle     *style,
@@ -5836,7 +5836,7 @@ gtk_paint_diamond (GtkStyle           *style,
  * 
  * Draws a text string on @window with the given parameters.
  *
- * Deprecated: Use gtk_paint_layout() instead.
+ * Deprecated: 2.0: Use gtk_paint_layout() instead.
  */
 void
 gtk_paint_string (GtkStyle           *style,
