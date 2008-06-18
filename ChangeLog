@@ -1,3 +1,9 @@
+2008-06-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/Makefile.am: Add some more aliases for standard
+	icon names to the builtin icon theme: drive-harddisk,
+	folder, folder-remote, text-x-generic.
+
 2008-06-18  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkcalendar.c: set the maximum of the "year" property to
