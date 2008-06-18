@@ -126,7 +126,7 @@ gail_pixmap_get_image_size (AtkImage       *obj,
   pixmap = GTK_PIXMAP (widget);
 
   if (pixmap->pixmap)
-    gdk_window_get_size (pixmap->pixmap, width, height);
+    gdk_drawable_get_size (pixmap->pixmap, width, height);
 }
 
 static gboolean 
