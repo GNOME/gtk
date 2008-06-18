@@ -2771,7 +2771,7 @@ gtk_widget_new (GType        type,
  * 
  * Precursor of g_object_set().
  *
- * Deprecated: Use g_object_set() instead.
+ * Deprecated: 2.0: Use g_object_set() instead.
  **/
 void
 gtk_widget_set (GtkWidget   *widget,
@@ -3521,7 +3521,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
  * gtk_widget_queue_draw_area() would not. Now both functions ensure
  * the background will be redrawn.
  * 
- * Deprecated: Use gtk_widget_queue_draw_area() instead.
+ * Deprecated: 2.2: Use gtk_widget_queue_draw_area() instead.
  **/
 void	   
 gtk_widget_queue_clear_area (GtkWidget *widget,
@@ -3541,7 +3541,7 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
  * 
  * This function does the same as gtk_widget_queue_draw().
  *
- * Deprecated: Use gtk_widget_queue_draw() instead.
+ * Deprecated: 2.2: Use gtk_widget_queue_draw() instead.
  **/
 void	   
 gtk_widget_queue_clear (GtkWidget *widget)
@@ -7026,7 +7026,7 @@ gtk_widget_set_usize_internal (GtkWidget *widget,
  * basically impossible to hardcode a size that will always be
  * correct.
  * 
- * Deprecated: Use gtk_widget_set_size_request() instead.
+ * Deprecated: 2.2: Use gtk_widget_set_size_request() instead.
  **/
 void
 gtk_widget_set_usize (GtkWidget *widget,
@@ -8289,7 +8289,7 @@ gtk_widget_reset_shapes (GtkWidget *widget)
  * 
  * Return value: the widget that was referenced
  *
- * Deprecated:2.12: Use g_object_ref() instead.
+ * Deprecated: 2.12: Use g_object_ref() instead.
  **/
 GtkWidget*
 gtk_widget_ref (GtkWidget *widget)
@@ -8305,7 +8305,7 @@ gtk_widget_ref (GtkWidget *widget)
  *
  * Inverse of gtk_widget_ref(). Equivalent to g_object_unref().
  * 
- * Deprecated:2.12: Use g_object_unref() instead.
+ * Deprecated: 2.12: Use g_object_unref() instead.
  **/
 void
 gtk_widget_unref (GtkWidget *widget)

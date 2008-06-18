@@ -1,5 +1,10 @@
 2008-06-17  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkwidget.c: 
+	Add deprecated versions and fixup markup.
+
+2008-06-17  Johan Dahlin  <jdahlin@async.com.br>
+
 	* gtk/gtkaboutdialog.c:
 	* gtk/gtkbutton.c (gtk_button_class_init):
 	Don't markup deprecated in italics.
