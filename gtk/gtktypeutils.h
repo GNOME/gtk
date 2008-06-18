@@ -88,14 +88,13 @@ typedef GType GtkFundamentalType;
 
 /* glib type wrappers (compatibility) */
 
-typedef GTypeInstance		GtkTypeObject;
-typedef GTypeClass		GtkTypeClass;
-typedef GBaseInitFunc		GtkClassInitFunc;
-typedef GInstanceInitFunc	GtkObjectInitFunc;
+typedef GType                   GtkType;
+typedef GTypeInstance           GtkTypeObject;
+typedef GTypeClass              GtkTypeClass;
+typedef GBaseInitFunc           GtkClassInitFunc;
+typedef GInstanceInitFunc       GtkObjectInitFunc;
 
 #endif /* GTK_DISABLE_DEPRECATED */
-
-typedef GType                   GtkType;
 
 G_END_DECLS
 
@@ -121,7 +120,12 @@ typedef void (*GtkCallbackMarshal)  (GtkObject    *object,
 				     gpointer      data,
 				     guint         n_args,
 				     GtkArg       *args);
+
+#ifndef GTK_DISABLE_DEPRECATED
+
 typedef void (*GtkSignalFunc)       (void);
+
+#endif /* GTK_DISABLE_DEPRECATED */
 
 /* This used to be defined in gtkitemfactory.h, but moved over here after
  * the complete deprecation of that header
@@ -129,12 +133,14 @@ typedef void (*GtkSignalFunc)       (void);
 typedef gchar * (*GtkTranslateFunc) (const gchar  *path,
 				     gpointer      func_data);
 
-#define GTK_SIGNAL_FUNC(f)	    ((GtkSignalFunc) (f))
-
 #ifndef GTK_DISABLE_DEPRECATED
-typedef struct _GtkTypeInfo 	     GtkTypeInfo;
+
+#define GTK_SIGNAL_FUNC(f)	    G_CALLBACK(f)
+
+typedef struct _GtkTypeInfo         GtkTypeInfo;
 typedef GSignalCMarshaller          GtkSignalMarshaller;
-#endif
+
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 
@@ -143,7 +149,7 @@ typedef GSignalCMarshaller          GtkSignalMarshaller;
 /* GtkArg, used to hold differently typed values */
 struct _GtkArg
 {
-  GtkType type;
+  GType type;
   gchar *name;
 
   /* this union only defines the required storage types for
@@ -169,7 +175,7 @@ struct _GtkArg
 
     /* structured values */
     struct {
-      GtkSignalFunc f;
+      GCallback f;
       gpointer d;
     } signal_data;
   } d;

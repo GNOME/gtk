@@ -1,5 +1,12 @@
 2008-06-18  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtktypeutils.h: deprecate GtkType, GtkSignalFunc and
+	GTK_SIGNAL_FUNC().
+
+	(struct GtkArg): s/GtkType/GType/ and s/GtkSignalFunc/GCallback/
+
+2008-06-18  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktypeutils.[ch]: deprecate gtk_type_class().
 
 	* gtk/gtk.symbols: changed accordingly.
