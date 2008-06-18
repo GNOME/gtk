@@ -1664,17 +1664,11 @@ _gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
 {
   GIcon *icon = NULL;
   GdkPixbuf *pixbuf;
-  const char *harddisk_icons[] = { 
-    "drive-harddisk", 
-    "gnome-dev-harddisk", 
-    "gtk-harddisk",
-    NULL
-  };
 
   DEBUG ("volume_get_icon_name");
 
   if (IS_ROOT_VOLUME (volume))
-    icon = g_themed_icon_new_from_names ((char **) harddisk_icons, -1);
+    icon = g_themed_icon_new ("drive-harddisk");
   else if (G_IS_DRIVE (volume))
     icon = g_drive_get_icon (G_DRIVE (volume));
   else if (G_IS_VOLUME (volume))

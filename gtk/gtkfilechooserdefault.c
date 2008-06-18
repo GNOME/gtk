@@ -1378,7 +1378,7 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 	           * should use mime info to get a better icon.
 	           */
 	          icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
-	          pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-share", 
+	          pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder-remote", 
 						     impl->icon_size, 0, NULL);
 	        }
             }
@@ -1771,7 +1771,7 @@ shortcuts_insert_file (GtkFileChooserDefault *impl,
            * should use mime info to get a better icon.
            */
           icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
-          pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-share", 
+          pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder-remote", 
 					     impl->icon_size, 0, NULL);
         }
     }

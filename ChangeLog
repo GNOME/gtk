@@ -1,5 +1,14 @@
 2008-06-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesystem.c (_gtk_file_system_volume_render_icon):
+	* gtk/gtkfilechooserbutton.c (change_icon_theme):
+	(model_add_bookmarks):
+	(model_update_current_folder):
+	* gtk/gtkfilechooserdefault.c (shortcuts_insert_file):
+	(shortcuts_reload_icons): Use standard icon names.
+
+2008-06-18  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/Makefile.am: Add some more aliases for standard
 	icon names to the builtin icon theme: drive-harddisk,
 	folder, folder-remote, text-x-generic.

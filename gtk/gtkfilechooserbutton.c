@@ -1343,7 +1343,7 @@ change_icon_theme (GtkFileChooserButton *button)
 		 * If we switch to a better bookmarks file format (XBEL), we
 		 * should use mime info to get a better icon.
 		 */
-		pixbuf = gtk_icon_theme_load_icon (theme, "gnome-fs-share",
+		pixbuf = gtk_icon_theme_load_icon (theme, "folder-remote",
 						   priv->icon_size, 0, NULL);
 	    }
 	  else
@@ -1879,7 +1879,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
 	    label = _gtk_file_chooser_label_for_file (file);
 
 	  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
-	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-share", 
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder-remote", 
 					     button->priv->icon_size, 0, NULL);
 
 	  gtk_list_store_insert (store, &iter, pos);
@@ -1984,10 +1984,10 @@ model_update_current_folder (GtkFileChooserButton *button,
       icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
 
       if (g_file_is_native (file))
-	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-directory", 
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder", 
 					     button->priv->icon_size, 0, NULL);
       else
-	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "gnome-fs-share", 
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder-remote", 
 					     button->priv->icon_size, 0, NULL);
 
       gtk_list_store_set (store, &iter,
@@ -2368,7 +2368,7 @@ update_label_and_image (GtkFileChooserButton *button)
 	  label_text = _gtk_file_system_get_bookmark_label (button->priv->fs, file);
 	  
 	  pixbuf = gtk_icon_theme_load_icon (get_icon_theme (GTK_WIDGET (priv->image)), 
-					     "gnome-fs-regular",
+					     "text-x-generic",
 					     priv->icon_size, 0, NULL);
 	  
 	  gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), pixbuf);
