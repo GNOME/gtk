@@ -1,5 +1,9 @@
 2008-06-18  Michael Natterer  <mitch@imendio.com>
 
+	* tests/testgtk.c: some more undeprecation.
+
+2008-06-18  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktypeutils.h: deprecate GtkType, GtkSignalFunc and
 	GTK_SIGNAL_FUNC().
 

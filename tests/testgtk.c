@@ -6811,7 +6811,7 @@ clist_warning_test (GtkWidget *button,
     }
 
   gtk_widget_destroy (child);
-  gtk_widget_unref (child);
+  g_object_unref (child);
 }
 
 static void
@@ -7037,7 +7037,7 @@ create_clist (GtkWidget *widget)
 	    }
 	}
 
-      gtk_style_unref (style);
+      g_object_unref (style);
       
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, TRUE, 0);
@@ -7587,7 +7587,7 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
 	  break;
 	}
       gtk_ctree_node_set_row_data_full (ctree, sibling, style,
-					(GtkDestroyNotify) gtk_style_unref);
+					(GDestroyNotify) g_object_unref);
 
       if (ctree->line_style == GTK_CTREE_LINES_TABBED)
 	gtk_ctree_node_set_row_style (ctree, sibling, style);
@@ -7638,7 +7638,7 @@ void rebuild_tree (GtkWidget *widget, GtkCTree *ctree)
   style->base[GTK_STATE_NORMAL].green = 45000;
   style->base[GTK_STATE_NORMAL].blue  = 55000;
   gtk_ctree_node_set_row_data_full (ctree, parent, style,
-				    (GtkDestroyNotify) gtk_style_unref);
+				    (GDestroyNotify) g_object_unref);
 
   if (ctree->line_style == GTK_CTREE_LINES_TABBED)
     gtk_ctree_node_set_row_style (ctree, parent, style);
