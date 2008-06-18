@@ -1,5 +1,13 @@
 2008-06-18  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkcalendar.c: set the maximum of the "year" property to
+	G_MAXINT >> 8 instead of G_MAXINT to fix overflows in internal
+	calculations which in turn caused writing beyond the boundaries of
+	the calendar->day_month[] and day[] arrays which in turn caused a
+	SEGV. This limits the lifetime of GTK+ to the year 8,388,608 ;)
+
+2008-06-18  Michael Natterer  <mitch@imendio.com>
+
 	* tests/Makefile.am
 	* tests/autotestfilechooser.c
 	* tests/buildertest.c

@@ -441,7 +441,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                    g_param_spec_int ("year",
 						     P_("Year"),
 						     P_("The selected year"),
-						     0, G_MAXINT, 0,
+						     0, G_MAXINT >> 8, 0,
 						     GTK_PARAM_READWRITE));
 
   /**
