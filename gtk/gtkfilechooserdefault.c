@@ -6749,7 +6749,8 @@ update_chooser_entry (GtkFileChooserDefault *impl)
 
  maybe_clear_entry:
 
-  if (impl->browse_files_last_selected_name)
+  if ((impl->action == GTK_FILE_CHOOSER_ACTION_OPEN || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+      && impl->browse_files_last_selected_name)
     {
       const char *entry_text;
       int len;
@@ -10224,7 +10225,9 @@ shortcuts_activate_iter (GtkFileChooserDefault *impl,
   gpointer col_data;
   ShortcutType shortcut_type;
 
-  if (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY && impl->action != GTK_FILE_CHOOSER_ACTION_SAVE)
+  if (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY
+      && !(impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
     _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), "");
 
   gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), iter,
