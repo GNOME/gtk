@@ -6714,13 +6714,14 @@ update_chooser_entry (GtkFileChooserDefault *impl)
             g_strdup (g_file_info_get_display_name (info));
 
           if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-              impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+              impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
+	      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
 	    {
 	      /* We don't want the name to change when clicking on a folder... */
 	      change_entry = (g_file_info_get_file_type (info) != G_FILE_TYPE_DIRECTORY);
 	    }
           else
-	    change_entry = TRUE;                                /* ... unless we are in one of the folder modes */
+	    change_entry = TRUE; /* ... unless we are in SELECT_FOLDER mode */
 
           if (change_entry)
             {
