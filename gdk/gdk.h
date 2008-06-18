@@ -102,7 +102,7 @@ gint gdk_input_add_full	  (gint		     source,
 			   GdkInputCondition condition,
 			   GdkInputFunction  function,
 			   gpointer	     data,
-			   GdkDestroyNotify  destroy);
+			   GDestroyNotify    destroy);
 #endif /* !GDK_DISABLE_DEPRECATED || GTK_COMPILATION */
 #ifndef GDK_DISABLE_DEPRECATED
 gint gdk_input_add	  (gint		     source,

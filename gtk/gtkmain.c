@@ -2093,7 +2093,7 @@ gtk_input_add_full (gint		source,
 				 condition,
 				 (GdkInputFunction) gtk_invoke_input,
 				 closure,
-				 (GdkDestroyNotify) gtk_destroy_closure);
+				 (GDestroyNotify) gtk_destroy_closure);
     }
   else
     return gdk_input_add_full (source, condition, function, data, destroy);

@@ -72,7 +72,7 @@ struct _GdkIOClosure
 {
   GdkInputFunction function;
   GdkInputCondition condition;
-  GdkDestroyNotify notify;
+  GDestroyNotify notify;
   gpointer data;
 };
 

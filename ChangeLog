@@ -1,5 +1,14 @@
 2008-06-18  Michael Natterer  <mitch@imendio.com>
 
+	* gdk/gdk.h: deprecate GdkDestroyNotify.
+
+	* gdk/gdkevents.c
+	* gdk/gdktypes.h
+	* gdk/x11/gdkevents-x11.c
+	* gtk/gtkmain.c: s/GdkDestroyNotify/GDestroyNotify/g.
+
+2008-06-18  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktypeutils.h: deprecate GtkDestroyNotify.
 
 	* gtk/gtkactiongroup.[ch]

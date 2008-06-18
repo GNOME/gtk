@@ -37,7 +37,7 @@ struct _GdkIOClosure
 {
   GdkInputFunction function;
   GdkInputCondition condition;
-  GdkDestroyNotify notify;
+  GDestroyNotify notify;
   gpointer data;
 };
 
@@ -1020,7 +1020,7 @@ gdk_input_add_full (gint	      source,
 		    GdkInputCondition condition,
 		    GdkInputFunction  function,
 		    gpointer	      data,
-		    GdkDestroyNotify  destroy)
+		    GDestroyNotify    destroy)
 {
   guint result;
   GdkIOClosure *closure = g_new (GdkIOClosure, 1);

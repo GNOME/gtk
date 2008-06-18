@@ -179,7 +179,11 @@ typedef void (*GdkInputFunction) (gpointer	    data,
 				  gint		    source,
 				  GdkInputCondition condition);
 
+#ifndef GDK_DISABLE_DEPRECATED
+
 typedef void (*GdkDestroyNotify) (gpointer data);
+
+#endif /* GDK_DISABLE_DEPRECATED */
 
 struct _GdkPoint
 {
