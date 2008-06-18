@@ -700,7 +700,7 @@ gtk_about_dialog_get_property (GObject    *object,
  *
  * Since: 2.6
  *
- * @Deprecated: 2.12: Use gtk_about_dialog_get_program_name() instead.
+ * Deprecated: 2.12: Use gtk_about_dialog_get_program_name() instead.
  **/
 G_CONST_RETURN gchar *
 gtk_about_dialog_get_name (GtkAboutDialog *about)
@@ -765,7 +765,7 @@ update_name_version (GtkAboutDialog *about)
  * 
  * Since: 2.6
  *
- * @Deprecated: 2.12: Use gtk_about_dialog_set_program_name() instead.
+ * Deprecated: 2.12: Use gtk_about_dialog_set_program_name() instead.
  **/
 void
 gtk_about_dialog_set_name (GtkAboutDialog *about, 
