@@ -1,5 +1,9 @@
 2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkhsv.c (paint_ring, paint_triangle):
+	Cast buf to unsigned char to avoid two compiler
+	warnings.
+
 	* gtk/gtkclist.c:
 	* gtk/gtkstyle.c (gtk_style_finalize):
 	Do not ignore the return value of g_slist_remove.

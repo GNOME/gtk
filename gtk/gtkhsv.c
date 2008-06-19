@@ -952,7 +952,7 @@ paint_ring (GtkHSV      *hsv,
 	}
     }
 
-  source = cairo_image_surface_create_for_data ((char *)buf,
+  source = cairo_image_surface_create_for_data ((unsigned char *)buf,
 						CAIRO_FORMAT_RGB24,
 						width, height, stride);
 
@@ -1164,7 +1164,7 @@ paint_triangle (GtkHSV      *hsv,
       }
     }
 
-  source = cairo_image_surface_create_for_data ((char *)buf,
+  source = cairo_image_surface_create_for_data ((unsigned char *)buf,
 						CAIRO_FORMAT_RGB24,
 						width, height, stride);
   
