@@ -1565,7 +1565,7 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
           if (postfix)
             {
               new_path = g_strconcat (prefix, "/", postfix, NULL);
-              path = menu_item->accel_path = g_intern_string (new_path);
+              path = menu_item->accel_path = (char*)g_intern_string (new_path);
               g_free (new_path);
             }
 	}
@@ -1606,7 +1606,6 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
 			      const gchar *accel_path)
 {
   GtkWidget *widget;
-  gchar *old_accel_path;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
   g_return_if_fail (accel_path == NULL ||
@@ -1615,7 +1614,7 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
   widget = GTK_WIDGET (menu_item);
 
   /* store new path */
-  menu_item->accel_path = g_intern_string (accel_path);
+  menu_item->accel_path = (char*)g_intern_string (accel_path);
 
   /* forget accelerators associated with old path */
   gtk_widget_set_accel_path (widget, NULL, NULL);
