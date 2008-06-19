@@ -15088,7 +15088,7 @@ gtk_tree_view_set_grid_lines (GtkTreeView           *tree_view,
 	  !priv->grid_line_gc)
 	{
 	  gint line_width;
-	  guint8 *dash_list;
+	  gint8 *dash_list;
 
 	  gtk_widget_style_get (widget,
 				"grid-line-width", &line_width,
@@ -15174,7 +15174,7 @@ gtk_tree_view_set_enable_tree_lines (GtkTreeView *tree_view,
       if (enabled && !priv->tree_line_gc)
 	{
 	  gint line_width;
-	  guint8 *dash_list;
+	  gint8 *dash_list;
 	  gtk_widget_style_get (widget,
 				"tree-line-width", &line_width,
 				"tree-line-pattern", (gchar *)&dash_list,

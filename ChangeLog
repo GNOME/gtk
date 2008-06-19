@@ -1,5 +1,11 @@
 2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtktreeview.c (gtk_tree_view_set_grid_lines),
+	(gtk_tree_view_set_enable_tree_lines):
+	gdk_gc_set_dashes expects a list of gint8, not guint8.
+
+2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
+
 	* gtk/gtkmenu.c (gtk_menu_set_accel_path):
 	Remove an unused variable and cast to gchar to avoid a compiler
 	warning.
