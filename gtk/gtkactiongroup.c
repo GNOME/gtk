@@ -341,9 +341,9 @@ gtk_action_group_buildable_get_name (GtkBuildable *buildable)
 }
 
 typedef struct {
-  GObject *child;
-  guint    key;
-  guint    modifiers;
+  GObject         *child;
+  guint            key;
+  GdkModifierType  modifiers;
 } AcceleratorParserData;
 
 static void
@@ -356,7 +356,7 @@ accelerator_start_element (GMarkupParseContext *context,
 {
   gint i;
   guint key = 0;
-  gint modifiers = 0;
+  GdkModifierType modifiers = 0;
   AcceleratorParserData *parser_data = (AcceleratorParserData*)user_data;
 
   if (strcmp (element_name, "accelerator") != 0)
@@ -382,7 +382,7 @@ accelerator_start_element (GMarkupParseContext *context,
       return;
     }
   parser_data->key = key;
-  parser_data->modifiers = (guint)modifiers;
+  parser_data->modifiers = modifiers;
 }
 
 static const GMarkupParser accelerator_parser =

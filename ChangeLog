@@ -1,3 +1,8 @@
+2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkactiongroup.c: Use GdkModifierType instedd of guint,
+	to avoid a gcc warning.
+
 2008-06-18  Olle Bergkvist <olle.bergkvist@yahoo.se>
 
 	http://bugzilla.gnome.org/show_bug.cgi?id=538784 - Don't change
