@@ -37,8 +37,6 @@ static void gtk_cell_renderer_pixbuf_set_property  (GObject                    *
 static void gtk_cell_renderer_pixbuf_finalize   (GObject                    *object);
 static void gtk_cell_renderer_pixbuf_create_stock_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
 							  GtkWidget             *widget);
-static void gtk_cell_renderer_pixbuf_create_named_icon_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
-							       GtkWidget             *widget);
 static void gtk_cell_renderer_pixbuf_get_size   (GtkCellRenderer            *cell,
 						 GtkWidget                  *widget,
 						 GdkRectangle               *rectangle,

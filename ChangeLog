@@ -1,5 +1,7 @@
 2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkcellrendererpixbuf.c: Remove an unused prototype.
+
 	* gtk/gtklabel.c (gtk_label_set_text_with_mnemonic): Remove
 	an unused variable.
 
