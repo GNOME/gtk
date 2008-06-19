@@ -1,5 +1,7 @@
 2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkprintbackend.c: Fix a typo in a comment
+
 	* gtk/gtkhsv.c (paint_ring, paint_triangle):
 	Cast buf to unsigned char to avoid two compiler
 	warnings.

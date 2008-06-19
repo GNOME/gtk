@@ -126,7 +126,7 @@ gtk_print_backend_module_load (GTypeModule *module)
   pb_module->exit = exitp;
   pb_module->create = createp;
 
-  /* call the filesystems's init function to let it */
+  /* call the printbackend's init function to let it */
   /* setup anything it needs to set up. */
   pb_module->init (module);
 
