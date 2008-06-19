@@ -3041,8 +3041,6 @@ void
 gtk_label_set_text_with_mnemonic (GtkLabel    *label,
 				  const gchar *str)
 {
-  guint last_keyval;
-  
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
 

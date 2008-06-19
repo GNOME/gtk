@@ -1,5 +1,8 @@
 2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtklabel.c (gtk_label_set_text_with_mnemonic): Remove
+	an unused variable.
+
 	* gtk/gtkactiongroup.c: Use GdkModifierType instedd of guint,
 	to avoid a gcc warning.
 
