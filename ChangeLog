@@ -1,3 +1,9 @@
+2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkmenu.c (gtk_menu_set_accel_path):
+	Remove an unused variable and cast to gchar to avoid a compiler
+	warning.
+
 2008-06-19  Christian Persch  <chpe@gnome.org>
 
 	* docs/reference/gtk/gtk-sections.txt:
@@ -51,7 +57,7 @@
 	* gtk/gtkctree.c (gtk_ctree_new_with_titles):
 	* gtk/gtkitemfactory.c (gtk_item_factory_construct),
 	(gtk_item_factory_create_item):
-	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state):
+	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state)
 	* gtk/gtkprogressbar.c (gtk_progress_bar_new),
 	(gtk_progress_bar_new_with_adjustment):
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_new):

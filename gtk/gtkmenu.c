@@ -1645,13 +1645,12 @@ void
 gtk_menu_set_accel_path (GtkMenu     *menu,
 			 const gchar *accel_path)
 {
-  gchar *old_accel_path;
-
   g_return_if_fail (GTK_IS_MENU (menu));
   if (accel_path)
     g_return_if_fail (accel_path[0] == '<' && strchr (accel_path, '/')); /* simplistic check */
 
-  menu->accel_path = g_intern_string (accel_path);
+  /* FIXME: accel_path should be defined as const gchar* */
+  menu->accel_path = (gchar*)g_intern_string (accel_path);
   if (menu->accel_path)
     _gtk_menu_refresh_accel_paths (menu, FALSE);
 }
