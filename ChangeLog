@@ -1,5 +1,10 @@
 2008-06-19  Christian Persch  <chpe@gnome.org>
 
+        * gtk/gtkfilechooserdefault.c: Use gtk_drag_*_add_*_targets instead of
+	hardcoded target tables. Bug #516092.
+
+2008-06-19  Christian Persch  <chpe@gnome.org>
+
 	* gdk-pixbuf/gdk-pixbuf-io.c:
 	* gdk-pixbuf/gdk-pixdata.c:
 	* gdk-pixbuf/io-ani.c:

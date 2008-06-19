@@ -226,33 +226,6 @@ enum {
 /* Identifiers for target types */
 enum {
   GTK_TREE_MODEL_ROW,
-  TEXT_URI_LIST
-};
-
-/* Target types for dragging from the shortcuts list */
-static const GtkTargetEntry shortcuts_source_targets[] = {
-  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW }
-};
-
-/* Target types for dropping into the shortcuts list */
-static const GtkTargetEntry shortcuts_dest_targets[] = {
-  { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW },
-  { "text/uri-list", 0, TEXT_URI_LIST }
-};
-
-/* Target types for DnD from the file list */
-static const GtkTargetEntry file_list_source_targets[] = {
-  { "text/uri-list", 0, TEXT_URI_LIST }
-};
-
-/* Target types for dropping into the file list */
-static const GtkTargetEntry file_list_dest_targets[] = {
-  { "text/uri-list", GTK_TARGET_OTHER_WIDGET, TEXT_URI_LIST }
-};
-
-/* Target types for dragging from the recent files list */
-static const GtkTargetEntry recent_list_source_targets[] = {
-  { "text/uri-list", 0, TEXT_URI_LIST }
 };
 
 static gboolean
@@ -3402,13 +3375,15 @@ shortcuts_drag_drop_cb (GtkWidget             *widget,
 /* Parses a "text/uri-list" string and inserts its URIs as bookmarks */
 static void
 shortcuts_drop_uris (GtkFileChooserDefault *impl,
-		     const char            *data,
+		     GtkSelectionData      *selection_data,
 		     int                    position)
 {
   gchar **uris;
   gint i;
 
-  uris = g_uri_list_extract_uris (data);
+  uris = gtk_selection_data_get_uris (selection_data);
+  if (!uris)
+    return;
 
   for (i = 0; uris[i]; i++)
     {
@@ -3523,8 +3498,8 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   g_assert (position >= bookmarks_index);
   position -= bookmarks_index;
 
-  if (selection_data->target == gdk_atom_intern_static_string ("text/uri-list"))
-    shortcuts_drop_uris (impl, (const char *) selection_data->data, position);
+  if (gtk_targets_include_uri (&selection_data->target, 1))
+    shortcuts_drop_uris (impl, selection_data, position);
   else if (selection_data->target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
     shortcuts_reorder (impl, position);
 
@@ -3845,6 +3820,11 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
 
+  /* Target types for dragging a row to/from the shortcuts list */
+  const GtkTargetEntry tree_model_row_targets[] = {
+    { "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW }
+  };
+
   /* Scrolled window */
 
   swin = gtk_scrolled_window_new (NULL, NULL);
@@ -3873,15 +3853,16 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view),
 					  GDK_BUTTON1_MASK,
-					  shortcuts_source_targets,
-					  G_N_ELEMENTS (shortcuts_source_targets),
+					  tree_model_row_targets,
+					  G_N_ELEMENTS (tree_model_row_targets),
 					  GDK_ACTION_MOVE);
 
   gtk_drag_dest_set (impl->browse_shortcuts_tree_view,
 		     GTK_DEST_DEFAULT_ALL,
-		     shortcuts_dest_targets,
-		     G_N_ELEMENTS (shortcuts_dest_targets),
+		     tree_model_row_targets,
+		     G_N_ELEMENTS (tree_model_row_targets),
 		     GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_drag_dest_add_uri_targets (impl->browse_shortcuts_tree_view);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
@@ -4195,9 +4176,13 @@ file_list_drag_data_received_cb (GtkWidget          *widget,
   impl = GTK_FILE_CHOOSER_DEFAULT (data);
   chooser = GTK_FILE_CHOOSER (data);
   
+  /* Allow only drags from other widgets; see bug #533891. */
+  if (gtk_drag_get_source_widget (context) == widget)
+    return;
+
   /* Parse the text/uri-list string, navigate to the first one */
-  uris = g_uri_list_extract_uris ((const char *) selection_data->data);
-  if (uris[0]) 
+  uris = gtk_selection_data_get_uris (selection_data);
+  if (uris && uris[0])
     {
       struct FileListDragData *data;
 
@@ -4507,7 +4492,6 @@ create_file_list (GtkFileChooserDefault *impl)
   GtkCellRenderer *renderer;
 
   /* Scrolled window */
-
   swin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
@@ -4528,9 +4512,9 @@ create_file_list (GtkFileChooserDefault *impl)
 
   gtk_drag_dest_set (impl->browse_files_tree_view,
                      GTK_DEST_DEFAULT_ALL,
-                     file_list_dest_targets,
-                     G_N_ELEMENTS (file_list_dest_targets),
+                     NULL, 0,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_drag_dest_add_uri_targets (impl->browse_files_tree_view);
   
   g_signal_connect (impl->browse_files_tree_view, "row_activated",
 		    G_CALLBACK (list_row_activated), impl);
@@ -4558,9 +4542,9 @@ create_file_list (GtkFileChooserDefault *impl)
 					  impl, NULL);
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (impl->browse_files_tree_view),
 					  GDK_BUTTON1_MASK,
-					  file_list_source_targets,
-					  G_N_ELEMENTS (file_list_source_targets),
+					  NULL, 0,
 					  GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_drag_source_add_uri_targets (impl->browse_files_tree_view);
 
   g_signal_connect (selection, "changed",
 		    G_CALLBACK (list_selection_changed), impl);
