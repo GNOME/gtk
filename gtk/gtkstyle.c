@@ -590,7 +590,7 @@ gtk_style_finalize (GObject *object)
   if (style->styles)
     {
       if (style->styles->data != style)
-        g_slist_remove (style->styles, style);
+        style->styles = g_slist_remove (style->styles, style);
       else
         {
           GSList *tmp_list = style->styles->next;

@@ -2826,7 +2826,7 @@ real_remove_row (GtkCList *clist,
     clist->row_list = g_list_next (list);
   if (clist->row_list_end == list)
     clist->row_list_end = g_list_previous (list);
-  g_list_remove (list, clist_row);
+  list = g_list_remove (list, clist_row);
 
   if (row < ROW_FROM_YPIXEL (clist, 0))
     clist->voffset += clist->row_height + CELL_SPACING;

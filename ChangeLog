@@ -1,5 +1,12 @@
 2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkclist.c:
+	* gtk/gtkstyle.c (gtk_style_finalize):
+	Do not ignore the return value of g_slist_remove.
+	gtkstyle.c changes rubberstamped by Owen.
+
+2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
+
 	* gtk/gtktreeview.c (gtk_tree_view_set_grid_lines),
 	(gtk_tree_view_set_enable_tree_lines):
 	gdk_gc_set_dashes expects a list of gint8, not guint8.
