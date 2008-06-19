@@ -221,7 +221,7 @@ gtk_viewport_new (GtkAdjustment *hadjustment,
 {
   GtkWidget *viewport;
 
-  viewport = gtk_widget_new (GTK_TYPE_VIEWPORT,
+  viewport = g_object_new (GTK_TYPE_VIEWPORT,
 			     "hadjustment", hadjustment,
 			     "vadjustment", vadjustment,
 			     NULL);

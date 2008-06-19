@@ -1814,7 +1814,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	    {
 	      GtkWidget *toplevel;
 
-	      menu->tearoff_window = gtk_widget_new (GTK_TYPE_WINDOW,
+	      menu->tearoff_window = g_object_new (GTK_TYPE_WINDOW,
 						     "type", GTK_WINDOW_TOPLEVEL,
 						     "screen", gtk_widget_get_screen (menu->toplevel),
 						     "app-paintable", TRUE,

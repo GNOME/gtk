@@ -1,5 +1,26 @@
 2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
 
+	* demos/testpixbuf.c (new_testrgb_window):
+	* gtk/gtkctree.c (gtk_ctree_new_with_titles):
+	* gtk/gtkitemfactory.c (gtk_item_factory_construct),
+	(gtk_item_factory_create_item):
+	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state):
+	* gtk/gtkprogressbar.c (gtk_progress_bar_new),
+	(gtk_progress_bar_new_with_adjustment):
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_new):
+	* gtk/gtktext.c (gtk_text_new):
+	* gtk/gtkviewport.c (gtk_viewport_new):
+	* tests/simple.c (main):
+	* tests/testgtk.c (create_statusbar), (create_get_image),
+	(create_saved_position), (create_tooltips), (create_cursors),
+	(create_display_screen), (create_progress_bar), (create_idle_test):
+	* tests/testmultidisplay.c (make_selection_dialog), (main):
+	* tests/testmultiscreen.c (main):
+	* tests/testrgb.c (new_testrgb_window):
+	Use g_object_new instead of gtk_widget_new
+
+2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
+
 	* gtk/gtkcellrendererpixbuf.c: Remove an unused prototype.
 
 	* gtk/gtklabel.c (gtk_label_set_text_with_mnemonic): Remove

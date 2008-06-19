@@ -37,7 +37,7 @@ main (int argc, char *argv[])
   /*  gdk_progclass = g_strdup ("XTerm"); */
   gtk_init (&argc, &argv);
   
-  window = g_object_connect (gtk_widget_new (gtk_window_get_type (),
+  window = g_object_connect (g_object_new (gtk_window_get_type (),
 					     "user_data", NULL,
 					     "type", GTK_WINDOW_TOPLEVEL,
 					     "title", "hello world",
@@ -47,7 +47,7 @@ main (int argc, char *argv[])
 					     NULL),
 			     "signal::destroy", gtk_main_quit, NULL,
 			     NULL);
-  button = g_object_connect (gtk_widget_new (gtk_button_get_type (),
+  button = g_object_connect (g_object_new (gtk_button_get_type (),
 					     "GtkButton::label", "hello world",
 					     "GtkWidget::parent", window,
 					     "GtkWidget::visible", TRUE,

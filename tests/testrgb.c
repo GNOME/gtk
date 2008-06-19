@@ -280,7 +280,7 @@ new_testrgb_window (void)
   GtkWidget *button;
   GtkWidget *drawing_area;
 
-  window = gtk_widget_new (gtk_window_get_type (),
+  window = g_object_new (gtk_window_get_type (),
 			   "GtkObject::user_data", NULL,
 			   "GtkWindow::type", GTK_WINDOW_TOPLEVEL,
 			   "GtkWindow::title", "testrgb",

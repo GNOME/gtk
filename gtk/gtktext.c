@@ -710,7 +710,7 @@ gtk_text_new (GtkAdjustment *hadj,
   if (vadj)
     g_return_val_if_fail (GTK_IS_ADJUSTMENT (vadj), NULL);
 
-  text = gtk_widget_new (GTK_TYPE_TEXT,
+  text = g_object_new (GTK_TYPE_TEXT,
 			 "hadjustment", hadj,
 			 "vadjustment", vadj,
 			 NULL);

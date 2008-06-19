@@ -407,7 +407,7 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
     ifactory->accel_group = gtk_accel_group_new ();
 
   ifactory->path = g_strdup (path);
-  ifactory->widget = g_object_connect (gtk_widget_new (container_type, NULL),
+  ifactory->widget = g_object_connect (g_object_new (container_type, NULL),
 				       "signal::destroy", gtk_widget_destroyed, &ifactory->widget,
 				       NULL);
   g_object_ref_sink (ifactory);
@@ -1035,7 +1035,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 
   accelerator = entry->accelerator;
   
-  widget = gtk_widget_new (type,
+  widget = g_object_new (type,
 			   "visible", TRUE,
 			   "sensitive", (type_id != quark_type_separator_item &&
 					 type_id != quark_type_title),
@@ -1088,7 +1088,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
     {
       GtkWidget *label;
       
-      label = gtk_widget_new (GTK_TYPE_ACCEL_LABEL,
+      label = g_object_new (GTK_TYPE_ACCEL_LABEL,
 			      "visible", TRUE,
 			      "parent", widget,
 			      "accel-widget", widget,
@@ -1111,7 +1111,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 	gtk_menu_item_set_right_justified (GTK_MENU_ITEM (widget), TRUE);
       
       parent = widget;
-      widget = gtk_widget_new (GTK_TYPE_MENU, NULL);
+      widget = g_object_new (GTK_TYPE_MENU, NULL);
       p = g_strconcat (ifactory->path, path, NULL);
       gtk_menu_set_accel_path (GTK_MENU (widget), p);
       g_free (p);

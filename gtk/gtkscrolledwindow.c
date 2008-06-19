@@ -389,7 +389,7 @@ gtk_scrolled_window_new (GtkAdjustment *hadjustment,
   if (vadjustment)
     g_return_val_if_fail (GTK_IS_ADJUSTMENT (vadjustment), NULL);
 
-  scrolled_window = gtk_widget_new (GTK_TYPE_SCROLLED_WINDOW,
+  scrolled_window = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
 				    "hadjustment", hadjustment,
 				    "vadjustment", vadjustment,
 				    NULL);

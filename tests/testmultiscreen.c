@@ -111,7 +111,7 @@ main (int argc, char *argv[])
       
       screen_list[i] = gdk_display_get_screen (dpy, i);
 
-      window[i] = gtk_widget_new (GTK_TYPE_WINDOW,
+      window[i] = g_object_new (GTK_TYPE_WINDOW,
 				  "screen", screen_list[i],
 				  "user_data", NULL,
 				  "type", GTK_WINDOW_TOPLEVEL,
@@ -126,7 +126,7 @@ main (int argc, char *argv[])
       vbox[i] = gtk_vbox_new (TRUE, 0);
       gtk_container_add (GTK_CONTAINER (window[i]), vbox[i]);
 
-      button = gtk_widget_new (GTK_TYPE_BUTTON,
+      button = g_object_new (GTK_TYPE_BUTTON,
 			       "label", label,
 			       "parent", vbox[i],
 			       "visible", TRUE, NULL,
@@ -139,7 +139,7 @@ main (int argc, char *argv[])
       
       gtk_container_add (GTK_CONTAINER (vbox[i]), images[i]);
 
-      button = gtk_widget_new (GTK_TYPE_BUTTON,
+      button = g_object_new (GTK_TYPE_BUTTON,
 			       "label", "Hide Icon",
 			       "parent", vbox[i],
 			       "visible", TRUE, NULL,
@@ -155,7 +155,7 @@ main (int argc, char *argv[])
   moving_vbox = gtk_vbox_new (TRUE, 0);
   
   gtk_container_add (GTK_CONTAINER (moving_window), moving_vbox);
-  moving_button = gtk_widget_new (GTK_TYPE_BUTTON,
+  moving_button = g_object_new (GTK_TYPE_BUTTON,
 				  "label", "Move to Next Screen",
 				  "visible", TRUE,
 				  NULL);

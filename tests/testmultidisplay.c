@@ -65,7 +65,7 @@ make_selection_dialog (GdkScreen * screen,
   if (!screen)
     screen = gdk_screen_get_default ();
 
-  window = gtk_widget_new (GTK_TYPE_DIALOG,
+  window = g_object_new (GTK_TYPE_DIALOG,
 			   "screen", screen,
 			   "user_data", NULL,
 			   "type", GTK_WINDOW_TOPLEVEL,
@@ -75,7 +75,7 @@ make_selection_dialog (GdkScreen * screen,
 		    G_CALLBACK (gtk_main_quit), NULL);
 
 
-  vbox = gtk_widget_new (GTK_TYPE_VBOX,
+  vbox = g_object_new (GTK_TYPE_VBOX,
 			 "border_width", 5,
 			 NULL);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, FALSE, FALSE, 0);
@@ -161,11 +161,11 @@ main (int argc, char *argv[])
   
   gtk_widget_destroy (dialog);
 
-  entry = gtk_widget_new (GTK_TYPE_ENTRY,
+  entry = g_object_new (GTK_TYPE_ENTRY,
 			  "activates_default", TRUE,
 			  "visible", TRUE,
 			  NULL);
-  entry2 = gtk_widget_new (GTK_TYPE_ENTRY,
+  entry2 = g_object_new (GTK_TYPE_ENTRY,
 			   "activates_default", TRUE,
 			   "visible", TRUE,
 			   NULL);

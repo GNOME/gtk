@@ -383,7 +383,7 @@ new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
 	w = gdk_pixbuf_get_width (pixbuf);
 	h = gdk_pixbuf_get_height (pixbuf);
 
-	window = gtk_widget_new (gtk_window_get_type (),
+	window = g_object_new (gtk_window_get_type (),
 				 "GtkObject::user_data", NULL,
 				 "GtkWindow::type", GTK_WINDOW_TOPLEVEL,
 				 "GtkWindow::title", title ? title : "testrgb",

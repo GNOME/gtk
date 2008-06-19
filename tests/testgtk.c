@@ -1739,7 +1739,7 @@ create_statusbar (GtkWidget *widget)
 			G_CALLBACK (statusbar_popped),
 			NULL);
 
-      button = gtk_widget_new (gtk_button_get_type (),
+      button = g_object_new (gtk_button_get_type (),
 			       "label", "push something",
 			       "visible", TRUE,
 			       "parent", box2,
@@ -1748,7 +1748,7 @@ create_statusbar (GtkWidget *widget)
 			"signal::clicked", statusbar_push, statusbar,
 			NULL);
 
-      button = g_object_connect (gtk_widget_new (gtk_button_get_type (),
+      button = g_object_connect (g_object_new (gtk_button_get_type (),
 						 "label", "pop",
 						 "visible", TRUE,
 						 "parent", box2,
@@ -1756,7 +1756,7 @@ create_statusbar (GtkWidget *widget)
 				 "signal_after::clicked", statusbar_pop, statusbar,
 				 NULL);
 
-      button = g_object_connect (gtk_widget_new (gtk_button_get_type (),
+      button = g_object_connect (g_object_new (gtk_button_get_type (),
 						 "label", "steal #4",
 						 "visible", TRUE,
 						 "parent", box2,
@@ -1764,7 +1764,7 @@ create_statusbar (GtkWidget *widget)
 				 "signal_after::clicked", statusbar_steal, statusbar,
 				 NULL);
 
-      button = g_object_connect (gtk_widget_new (gtk_button_get_type (),
+      button = g_object_connect (g_object_new (gtk_button_get_type (),
 						 "label", "test contexts",
 						 "visible", TRUE,
 						 "parent", box2,
@@ -1772,7 +1772,7 @@ create_statusbar (GtkWidget *widget)
 				 "swapped_signal_after::clicked", statusbar_contexts, statusbar,
 				 NULL);
 
-      button = g_object_connect (gtk_widget_new (gtk_button_get_type (),
+      button = g_object_connect (g_object_new (gtk_button_get_type (),
 						 "label", "push something long",
 						 "visible", TRUE,
 						 "parent", box2,
@@ -2847,7 +2847,7 @@ create_get_image (GtkWidget *widget)
 
       vbox = gtk_vbox_new (FALSE, 3);
 
-      snap = gtk_widget_new (GTK_TYPE_IMAGE, NULL);
+      snap = g_object_new (GTK_TYPE_IMAGE, NULL);
 
       gid->snap = snap;
 
@@ -3656,7 +3656,7 @@ create_saved_position (GtkWidget *widget)
       GtkWidget *label;
       GtkWidget *any;
 
-      window = g_object_connect (gtk_widget_new (GTK_TYPE_WINDOW,
+      window = g_object_connect (g_object_new (GTK_TYPE_WINDOW,
 						 "type", GTK_WINDOW_TOPLEVEL,
 						 "title", "Saved Position",
 						 NULL),
@@ -3678,13 +3678,13 @@ create_saved_position (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
       vbox =
-	gtk_widget_new (gtk_vbox_get_type (),
+	g_object_new (gtk_vbox_get_type (),
 			"GtkBox::homogeneous", FALSE,
 			"GtkBox::spacing", 5,
 			"GtkContainer::border_width", 10,
 			"GtkWidget::parent", main_vbox,
 			"GtkWidget::visible", TRUE,
-			"child", g_object_connect (gtk_widget_new (GTK_TYPE_TOGGLE_BUTTON,
+			"child", g_object_connect (g_object_new (GTK_TYPE_TOGGLE_BUTTON,
 								   "label", "Stop Events",
 								   "active", FALSE,
 								   "visible", TRUE,
@@ -3718,7 +3718,7 @@ create_saved_position (GtkWidget *widget)
       g_object_set_data (G_OBJECT (window), "y", y_label);
 
       any =
-	gtk_widget_new (gtk_hseparator_get_type (),
+	g_object_new (gtk_hseparator_get_type (),
 			"GtkWidget::visible", TRUE,
 			NULL);
       gtk_box_pack_start (GTK_BOX (main_vbox), any, FALSE, TRUE, 0);
@@ -3874,7 +3874,7 @@ create_tooltips (GtkWidget *widget)
   if (!window)
     {
       window =
-	gtk_widget_new (gtk_window_get_type (),
+	g_object_new (gtk_window_get_type (),
 			"GtkWindow::type", GTK_WINDOW_TOPLEVEL,
 			"GtkContainer::border_width", 0,
 			"GtkWindow::title", "Tooltips",
@@ -3926,7 +3926,7 @@ create_tooltips (GtkWidget *widget)
 			    "Hi msw! ;)");
 
       box3 =
-	gtk_widget_new (gtk_vbox_get_type (),
+	g_object_new (gtk_vbox_get_type (),
 			"homogeneous", FALSE,
 			"spacing", 5,
 			"border_width", 5,
@@ -3936,7 +3936,7 @@ create_tooltips (GtkWidget *widget)
       tips_query = gtk_tips_query_new ();
 
       button =
-	gtk_widget_new (gtk_button_get_type (),
+	g_object_new (gtk_button_get_type (),
 			"label", "[?]",
 			"visible", TRUE,
 			"parent", box3,
@@ -3960,7 +3960,7 @@ create_tooltips (GtkWidget *widget)
 		    "caller", button,
 		    NULL);
       
-      frame = gtk_widget_new (gtk_frame_get_type (),
+      frame = g_object_new (gtk_frame_get_type (),
 			      "label", "ToolTips Inspector",
 			      "label_xalign", (double) 0.5,
 			      "border_width", 0,
@@ -6169,7 +6169,7 @@ create_cursors (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
       vbox =
-	gtk_widget_new (gtk_vbox_get_type (),
+	g_object_new (gtk_vbox_get_type (),
 			"GtkBox::homogeneous", FALSE,
 			"GtkBox::spacing", 5,
 			"GtkContainer::border_width", 10,
@@ -6216,7 +6216,7 @@ create_cursors (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (hbox), spinner, TRUE, TRUE, 0);
 
       frame =
-	gtk_widget_new (gtk_frame_get_type (),
+	g_object_new (gtk_frame_get_type (),
 			"GtkFrame::shadow", GTK_SHADOW_ETCHED_IN,
 			"GtkFrame::label_xalign", 0.5,
 			"GtkFrame::label", "Cursor Area",
@@ -6243,7 +6243,7 @@ create_cursors (GtkWidget *widget)
 			G_CALLBACK (set_cursor),
 			darea);
 
-      label = gtk_widget_new (GTK_TYPE_LABEL,
+      label = g_object_new (GTK_TYPE_LABEL,
 			      "visible", TRUE,
 			      "label", "XXX",
 			      "parent", vbox,
@@ -6254,7 +6254,7 @@ create_cursors (GtkWidget *widget)
       g_object_set_data (G_OBJECT (spinner), "user_data", label);
 
       any =
-	gtk_widget_new (gtk_hseparator_get_type (),
+	g_object_new (gtk_hseparator_get_type (),
 			"GtkWidget::visible", TRUE,
 			NULL);
       gtk_box_pack_start (GTK_BOX (main_vbox), any, FALSE, TRUE, 0);
@@ -8661,7 +8661,7 @@ create_display_screen (GtkWidget *widget)
   
   GdkDisplay *display = gdk_screen_get_display (screen);
 
-  window = gtk_widget_new (gtk_window_get_type (),
+  window = g_object_new (gtk_window_get_type (),
 			   "screen", screen,
 			   "user_data", NULL,
 			   "type", GTK_WINDOW_TOPLEVEL,
@@ -11716,7 +11716,7 @@ create_progress_bar (GtkWidget *widget)
       g_signal_connect (adj, "value_changed",
 			G_CALLBACK (progress_value_changed), pdata);
 
-      pdata->pbar = gtk_widget_new (GTK_TYPE_PROGRESS_BAR,
+      pdata->pbar = g_object_new (GTK_TYPE_PROGRESS_BAR,
 				    "adjustment", adj,
 				    "ellipsize", PANGO_ELLIPSIZE_MIDDLE,
 				    NULL);
@@ -13072,9 +13072,9 @@ create_idle_test (GtkWidget *widget)
       gtk_widget_show (label);
       
       container =
-	gtk_widget_new (GTK_TYPE_HBOX,
+	g_object_new (GTK_TYPE_HBOX,
 			"visible", TRUE,
-			/* "GtkContainer::child", gtk_widget_new (GTK_TYPE_HBOX,
+			/* "GtkContainer::child", g_object_new (GTK_TYPE_HBOX,
 			 * "GtkWidget::visible", TRUE,
 			 */
 			 "child", label,
@@ -13084,19 +13084,19 @@ create_idle_test (GtkWidget *widget)
 			  container, TRUE, TRUE, 0);
 
       frame =
-	gtk_widget_new (GTK_TYPE_FRAME,
+	g_object_new (GTK_TYPE_FRAME,
 			"border_width", 5,
 			"label", "Label Container",
 			"visible", TRUE,
 			"parent", GTK_DIALOG (window)->vbox,
 			NULL);
       box =
-	gtk_widget_new (GTK_TYPE_VBOX,
+	g_object_new (GTK_TYPE_VBOX,
 			"visible", TRUE,
 			"parent", frame,
 			NULL);
       button =
-	g_object_connect (gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
+	g_object_connect (g_object_new (GTK_TYPE_RADIO_BUTTON,
 					  "label", "Resize-Parent",
 					  "user_data", (void*)GTK_RESIZE_PARENT,
 					  "visible", TRUE,
@@ -13104,7 +13104,7 @@ create_idle_test (GtkWidget *widget)
 					  NULL),
 			  "signal::clicked", toggle_idle_container, container,
 			  NULL);
-      button = gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
+      button = g_object_new (GTK_TYPE_RADIO_BUTTON,
 			       "label", "Resize-Queue",
 			       "user_data", (void*)GTK_RESIZE_QUEUE,
 			       "group", button,
@@ -13114,7 +13114,7 @@ create_idle_test (GtkWidget *widget)
       g_object_connect (button,
 			"signal::clicked", toggle_idle_container, container,
 			NULL);
-      button2 = gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
+      button2 = g_object_new (GTK_TYPE_RADIO_BUTTON,
 				"label", "Resize-Immediate",
 				"user_data", (void*)GTK_RESIZE_IMMEDIATE,
 				NULL);
