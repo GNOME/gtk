@@ -795,10 +795,10 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
 		g_free (display_name);
 	}
         else
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-                             _("Unrecognized image file format"));
+                g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+                                     _("Unrecognized image file format"));
 
 
 	return NULL;
@@ -1675,10 +1675,10 @@ save_to_callback_with_tmp_file (GdkPixbufModule   *image_module,
 
 	buf = g_try_malloc (TMP_FILE_BUF_SIZE);
 	if (buf == NULL) {
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			     _("Insufficient memory to save image to callback"));
+		g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Insufficient memory to save image to callback"));
 		goto end;
 	}
 
@@ -1688,10 +1688,10 @@ save_to_callback_with_tmp_file (GdkPixbufModule   *image_module,
 	f = fdopen (fd, "wb+");
 	if (f == NULL) {
 		gint save_errno = errno;
-		g_set_error (error,
-			     G_FILE_ERROR,
-			     g_file_error_from_errno (save_errno),
-			     _("Failed to open temporary file"));
+		g_set_error_literal (error,
+                                     G_FILE_ERROR,
+                                     g_file_error_from_errno (save_errno),
+                                     _("Failed to open temporary file"));
 		goto end;
 	}
 
@@ -1714,10 +1714,10 @@ save_to_callback_with_tmp_file (GdkPixbufModule   *image_module,
 	}
 	if (ferror (f)) {
 		gint save_errno = errno;
-		g_set_error (error,
-			     G_FILE_ERROR,
-			     g_file_error_from_errno (save_errno),
-			     _("Failed to read from temporary file"));
+		g_set_error_literal (error,
+                                     G_FILE_ERROR,
+                                     g_file_error_from_errno (save_errno),
+                                     _("Failed to read from temporary file"));
 		goto end;
 	}
 	retval = TRUE;
@@ -2194,10 +2194,10 @@ save_to_buffer_callback (const gchar *data,
 		new_max = MAX (sdata->max*2, sdata->len + count);
 		new_buffer = g_try_realloc (sdata->buffer, new_max);
 		if (!new_buffer) {
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				     _("Insufficient memory to save image into a buffer"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                             _("Insufficient memory to save image into a buffer"));
 			return FALSE;
 		}
 		sdata->buffer = new_buffer;
@@ -2245,10 +2245,10 @@ gdk_pixbuf_save_to_bufferv     (GdkPixbuf  *pixbuf,
 	sdata.max = initial_max;
 	sdata.len = 0;
 	if (!sdata.buffer) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			     _("Insufficient memory to save image into a buffer"));
+                g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Insufficient memory to save image into a buffer"));
 		return FALSE;
 	}
 
@@ -2292,9 +2292,9 @@ save_to_stream (const gchar  *buffer,
                                    		 &my_error);
 		if (written < 0) {
 			if (!my_error) {
-                        	g_set_error (error,
-                                     	     G_IO_ERROR, 0,
-                                     	     _("Error writing to image stream"));
+                        	g_set_error_literal (error,
+                                                     G_IO_ERROR, 0,
+                                                     _("Error writing to image stream"));
                 	}
                 	else {
                         	g_propagate_error (error, my_error);

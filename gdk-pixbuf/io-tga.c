@@ -149,9 +149,9 @@ static IOBuffer *io_buffer_new(GError **err)
 	IOBuffer *buffer;
 	buffer = g_try_malloc(sizeof(IOBuffer));
 	if (!buffer) {
-		g_set_error(err, GDK_PIXBUF_ERROR,
-			    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Cannot allocate memory for IOBuffer struct"));
+		g_set_error_literal(err, GDK_PIXBUF_ERROR,
+                                    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                    _("Cannot allocate memory for IOBuffer struct"));
 		return NULL;
 	}
 	buffer->data = NULL;
@@ -168,9 +168,9 @@ static IOBuffer *io_buffer_append(IOBuffer *buffer,
 	if (!buffer->data) {
 		buffer->data = g_try_malloc(len);
 		if (!buffer->data) {
-			g_set_error(err, GDK_PIXBUF_ERROR,
-				    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				    _("Cannot allocate memory for IOBuffer data"));
+			g_set_error_literal(err, GDK_PIXBUF_ERROR,
+                                            GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                            _("Cannot allocate memory for IOBuffer data"));
 			g_free(buffer);
 			return NULL;
 		}
@@ -179,9 +179,9 @@ static IOBuffer *io_buffer_append(IOBuffer *buffer,
 	} else {
 		guchar *tmp = g_try_realloc (buffer->data, buffer->size + len);
 		if (!tmp) {
-			g_set_error(err, GDK_PIXBUF_ERROR,
-				    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				    _("Cannot realloc IOBuffer data"));
+			g_set_error_literal(err, GDK_PIXBUF_ERROR,
+                                            GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                            _("Cannot realloc IOBuffer data"));
 			g_free(buffer);
 			return NULL;
 		}
@@ -209,9 +209,9 @@ static IOBuffer *io_buffer_free_segment(IOBuffer *buffer,
 		new_size = buffer->size - count;
 		new_buf = g_try_malloc(new_size);
 		if (!new_buf) {
-			g_set_error(err, GDK_PIXBUF_ERROR,
-				    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				    _("Cannot allocate temporary IOBuffer data"));
+			g_set_error_literal(err, GDK_PIXBUF_ERROR,
+                                            GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                            _("Cannot allocate temporary IOBuffer data"));
 			g_free(buffer->data);
 			g_free(buffer);
 			return NULL;
@@ -343,8 +343,8 @@ static gboolean fill_in_context(TGAContext *ctx, GError **err)
 	ctx->pbuf = get_contiguous_pixbuf (w, h, alpha);
 
 	if (!ctx->pbuf) {
-		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Cannot allocate new pixbuf"));
+		g_set_error_literal(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                    _("Cannot allocate new pixbuf"));
 		return FALSE;
 	}
 
@@ -683,15 +683,15 @@ static gboolean try_colormap(TGAContext *ctx, GError **err)
 
 	ctx->cmap = g_try_malloc(sizeof(TGAColormap));
 	if (!ctx->cmap) {
-		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Cannot allocate colormap structure"));
+		g_set_error_literal(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                    _("Cannot allocate colormap structure"));
 		return FALSE;
 	}
 	ctx->cmap->size = LE16(ctx->hdr->cmap_n_colors);
 	ctx->cmap->cols = g_try_malloc(sizeof(TGAColor) * ctx->cmap->size);
 	if (!ctx->cmap->cols) {
-		g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Cannot allocate colormap entries"));
+		g_set_error_literal(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                    _("Cannot allocate colormap entries"));
 		return FALSE;
 	}
 
@@ -711,9 +711,9 @@ static gboolean try_colormap(TGAContext *ctx, GError **err)
 			if (ctx->hdr->cmap_bpp == 32)
 				ctx->cmap->cols[n].a = *p++;
 		} else {
-			g_set_error(err, GDK_PIXBUF_ERROR, 
-				    GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				    _("Unexpected bitdepth for colormap entries"));
+			g_set_error_literal(err, GDK_PIXBUF_ERROR, 
+                                            GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                            _("Unexpected bitdepth for colormap entries"));
 			return FALSE;
 		}
 	}
@@ -729,9 +729,9 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 		if (ctx->in->size >= sizeof(TGAHeader)) {
 			ctx->hdr = g_try_malloc(sizeof(TGAHeader));
 			if (!ctx->hdr) {
-				g_set_error(err, GDK_PIXBUF_ERROR,
-					    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-					    _("Cannot allocate TGA header memory"));
+				g_set_error_literal(err, GDK_PIXBUF_ERROR,
+                                                    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                                    _("Cannot allocate TGA header memory"));
 				return FALSE;
 			}
 			g_memmove(ctx->hdr, ctx->in->data, sizeof(TGAHeader));
@@ -762,24 +762,24 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 				return FALSE;
 			if (LE16(ctx->hdr->width) == 0 || 
 			    LE16(ctx->hdr->height) == 0) {
-				g_set_error(err, GDK_PIXBUF_ERROR,
-					    GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-					    _("TGA image has invalid dimensions"));
+				g_set_error_literal(err, GDK_PIXBUF_ERROR,
+                                                    GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                                    _("TGA image has invalid dimensions"));
 				return FALSE;
 			}
 			if ((ctx->hdr->flags & TGA_INTERLEAVE_MASK) != TGA_INTERLEAVE_NONE) {
-				g_set_error(err, GDK_PIXBUF_ERROR, 
-					    GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-					    _("TGA image type not supported"));
+				g_set_error_literal(err, GDK_PIXBUF_ERROR, 
+                                                    GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+                                                    _("TGA image type not supported"));
 				return FALSE;
 			}
 			switch (ctx->hdr->type) {
 			    case TGA_TYPE_PSEUDOCOLOR:
 			    case TGA_TYPE_RLE_PSEUDOCOLOR:
 				    if (ctx->hdr->bpp != 8) {
-					    g_set_error(err, GDK_PIXBUF_ERROR, 
-							GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-							_("TGA image type not supported"));
+					    g_set_error_literal(err, GDK_PIXBUF_ERROR, 
+                                                                GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+                                                                _("TGA image type not supported"));
 					    return FALSE;
 				    }
 				    break;
@@ -787,9 +787,9 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 			    case TGA_TYPE_RLE_TRUECOLOR:
 				    if (ctx->hdr->bpp != 24 &&
 					ctx->hdr->bpp != 32) {
-					    g_set_error(err, GDK_PIXBUF_ERROR, 
-							GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-							_("TGA image type not supported"));
+					    g_set_error_literal(err, GDK_PIXBUF_ERROR, 
+                                                                GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+                                                                _("TGA image type not supported"));
 					    return FALSE;
 				    }			      
 				    break;
@@ -797,16 +797,16 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 			    case TGA_TYPE_RLE_GRAYSCALE:
 				    if (ctx->hdr->bpp != 8 &&
 					ctx->hdr->bpp != 16) {
-					    g_set_error(err, GDK_PIXBUF_ERROR, 
-							GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-							_("TGA image type not supported"));
+					    g_set_error_literal(err, GDK_PIXBUF_ERROR, 
+                                                                GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+                                                                _("TGA image type not supported"));
 					    return FALSE;
 				    }
 				    break;
 			    default:
-				    g_set_error(err, GDK_PIXBUF_ERROR, 
-						GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-						_("TGA image type not supported"));
+				    g_set_error_literal(err, GDK_PIXBUF_ERROR, 
+                                                        GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+                                                        _("TGA image type not supported"));
 				    return FALSE;    
 			}
 			if (!fill_in_context(ctx, err))
@@ -851,9 +851,9 @@ static gpointer gdk_pixbuf__tga_begin_load(GdkPixbufModuleSizeFunc f0,
 
 	ctx = g_try_malloc(sizeof(TGAContext));
 	if (!ctx) {
-		g_set_error(err, GDK_PIXBUF_ERROR, 
-			    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Cannot allocate memory for TGA context struct"));
+		g_set_error_literal(err, GDK_PIXBUF_ERROR, 
+                                    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                    _("Cannot allocate memory for TGA context struct"));
 		return NULL;
 	}
 
@@ -917,8 +917,8 @@ static gboolean gdk_pixbuf__tga_load_increment(gpointer data,
 	} else {
 		while (ctx->in->size >= ctx->rowstride) {
 			if (ctx->completed_lines >= ctx->pbuf->height) {
-				g_set_error(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_FAILED,
-					    _("Excess data in file"));
+				g_set_error_literal(err, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_FAILED,
+                                                    _("Excess data in file"));
 				return FALSE;
 			}
 			if (!parse_data_for_row(ctx, err))

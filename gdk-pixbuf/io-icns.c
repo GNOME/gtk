@@ -357,9 +357,9 @@ icns_image_load (FILE *f, GError ** error)
   g_byte_array_free (data, TRUE);
 
   if (!pixbuf)
-    g_set_error (error, GDK_PIXBUF_ERROR,
-		 GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-		 _("Could not decode ICNS file"));
+    g_set_error_literal (error, GDK_PIXBUF_ERROR,
+                         GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                         _("Could not decode ICNS file"));
 
   return pixbuf;
 }

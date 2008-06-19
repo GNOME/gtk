@@ -2977,10 +2977,10 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
       if (icon_info->load_error)
         g_propagate_error (error, icon_info->load_error);
       else
-        g_set_error (error,  
-                     GTK_ICON_THEME_ERROR,  
-                     GTK_ICON_THEME_NOT_FOUND,
-                     _("Failed to load icon"));
+        g_set_error_literal (error,  
+                             GTK_ICON_THEME_ERROR,  
+                             GTK_ICON_THEME_NOT_FOUND,
+                             _("Failed to load icon"));
  
       return NULL;
     }

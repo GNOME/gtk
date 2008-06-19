@@ -523,10 +523,10 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
                  * crappy JPEG library
                  */
                 if (error && *error == NULL) {
-                        g_set_error (error,
-                                     GDK_PIXBUF_ERROR,
-                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                                     _("Insufficient memory to load image, try exiting some applications to free memory"));
+                        g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                             _("Insufficient memory to load image, try exiting some applications to free memory"));
                 }
                 
 		return NULL;
@@ -662,10 +662,10 @@ gdk_pixbuf__jpeg_image_begin_load (GdkPixbufModuleSizeFunc size_func,
 
 	context->cinfo.src = (struct jpeg_source_mgr *) g_try_malloc (sizeof (my_source_mgr));
 	if (!context->cinfo.src) {
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			     _("Couldn't allocate memory for loading JPEG file"));
+		g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Couldn't allocate memory for loading JPEG file"));
 		return NULL;
 	}
 	memset (context->cinfo.src, 0, sizeof (my_source_mgr));
@@ -914,10 +914,10 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 			if (context->size_func) {
 				(* context->size_func) (&width, &height, context->user_data);
 				if (width == 0 || height == 0) {
-					g_set_error (error,
-						     GDK_PIXBUF_ERROR,
-						     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-						     _("Transformed JPEG has zero width or height."));
+					g_set_error_literal (error,
+                                                             GDK_PIXBUF_ERROR,
+                                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                                             _("Transformed JPEG has zero width or height."));
 					return FALSE;
 				}
 			}
@@ -938,10 +938,10 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 							  cinfo->output_height);
 
 			if (context->pixbuf == NULL) {
-                                g_set_error (error,
-                                             GDK_PIXBUF_ERROR,
-                                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                                             _("Couldn't allocate memory for loading JPEG file"));
+                                g_set_error_literal (error,
+                                                     GDK_PIXBUF_ERROR,
+                                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                                     _("Couldn't allocate memory for loading JPEG file"));
                                 return FALSE;
 			}
 		
@@ -1058,10 +1058,10 @@ to_callback_do_write (j_compress_ptr cinfo, gsize length)
 		 * which it should have.
 		 */
 		if (errmgr->error && *errmgr->error == NULL) {
-			g_set_error (errmgr->error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     "write function failed");
+			g_set_error_literal (errmgr->error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             "write function failed");
 		}
 		siglongjmp (errmgr->setjmp_buffer, 1);
 		g_assert_not_reached ();
@@ -1171,19 +1171,19 @@ real_save_jpeg (GdkPixbuf          *pixbuf,
 	*/
        buf = g_try_malloc (w * 3 * sizeof (guchar));
        if (!buf) {
-	       g_set_error (error,
-			    GDK_PIXBUF_ERROR,
-			    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Couldn't allocate memory for loading JPEG file"));
+	       g_set_error_literal (error,
+                                    GDK_PIXBUF_ERROR,
+                                    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                    _("Couldn't allocate memory for loading JPEG file"));
 	       return FALSE;
        }
        if (to_callback) {
 	       to_callback_destmgr.buffer = g_try_malloc (TO_FUNCTION_BUF_SIZE);
 	       if (!to_callback_destmgr.buffer) {
-		       g_set_error (error,
-				    GDK_PIXBUF_ERROR,
-				    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				    _("Couldn't allocate memory for loading JPEG file"));
+		       g_set_error_literal (error,
+                                            GDK_PIXBUF_ERROR,
+                                            GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                            _("Couldn't allocate memory for loading JPEG file"));
 		       return FALSE;
 	       }
        }

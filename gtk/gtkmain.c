@@ -734,7 +734,7 @@ post_parse_hook (GOptionContext *context,
 	  g_set_error (error, 
 		       G_OPTION_ERROR, 
 		       G_OPTION_ERROR_FAILED,
-		       "cannot open display: %s",
+		       _("Cannot open display: %s"),
 		       display_name ? display_name : "" );
 	  
 	  return FALSE;

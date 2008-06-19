@@ -1,3 +1,37 @@
+2008-06-19  Christian Persch  <chpe@gnome.org>
+
+	* gdk-pixbuf/gdk-pixbuf-io.c:
+	* gdk-pixbuf/gdk-pixdata.c:
+	* gdk-pixbuf/io-ani.c:
+	* gdk-pixbuf/io-bmp.c:
+	* gdk-pixbuf/io-gdip-utils.c:
+	* gdk-pixbuf/io-gif.c:
+	* gdk-pixbuf/io-icns.c:
+	* gdk-pixbuf/io-ico.c:
+	* gdk-pixbuf/io-jasper.c:
+	* gdk-pixbuf/io-jpeg.c:
+	* gdk-pixbuf/io-pcx.c:
+	* gdk-pixbuf/io-png.c:
+	* gdk-pixbuf/io-pnm.c:
+	* gdk-pixbuf/io-ras.c:
+	* gdk-pixbuf/io-tga.c:
+	* gdk-pixbuf/io-tiff.c:
+	* gdk-pixbuf/io-wbmp.c:
+	* gdk-pixbuf/io-xbm.c:
+	* gdk-pixbuf/io-xpm.c:
+	* gtk/gtkfilechooserdefault.c:
+	* gtk/gtkfilesystemmodel.c:
+	* gtk/gtkiconfactory.c:
+	* gtk/gtkicontheme.c:
+	* gtk/gtkmain.c:
+	* gtk/gtkpagesetup.c:
+	* gtk/gtkpapersize.c:
+	* gtk/gtkprintoperation-win32.c:
+	* gtk/gtktextbufferserialize.c:
+	* tests/testfilechooser.c: Use g_set_error_literal where appropriate. Bug #538640.
+
+	* configure.in: Update glib requirement to 2.17.3.
+
 2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
 
 	* demos/testpixbuf.c (new_testrgb_window):

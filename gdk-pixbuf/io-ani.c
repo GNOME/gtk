@@ -238,10 +238,10 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 		{
 			if (context->pos >= context->NumFrames) 
 			{
-				g_set_error (error,
-					     GDK_PIXBUF_ERROR,
-					     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-					     _("Unexpected icon chunk in animation"));
+				g_set_error_literal (error,
+                                                     GDK_PIXBUF_ERROR,
+                                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                                     _("Unexpected icon chunk in animation"));
 				return FALSE; 
 			}
 
@@ -331,10 +331,10 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 #endif
 		if (!context->Flags & 0x2) 
 		{
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("Unsupported animation type"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("Unsupported animation type"));
 			return FALSE; 
 		}
 		if (context->NumFrames == 0 || 
@@ -342,20 +342,20 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 		    context->NumSteps == 0 || 
 		    context->NumSteps >= 1024) 
 		{
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("Invalid header in animation"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("Invalid header in animation"));
 			return FALSE;
 		}
       
 		context->animation = g_object_new (GDK_TYPE_PIXBUF_ANI_ANIM, NULL);        
 		if (!context->animation) 
 		{
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				     _("Not enough memory to load animation"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                             _("Not enough memory to load animation"));
 			return FALSE;
 		}
 
@@ -374,10 +374,10 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 		    !context->animation->delay || 
 		    !context->animation->sequence) 
 		{
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				     _("Not enough memory to load animation"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                             _("Not enough memory to load animation"));
 			return FALSE;
 		}
 
@@ -392,18 +392,18 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 	{
 		if (context->chunk_size != 4 * context->NumSteps) 
 		{
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("Malformed chunk in animation"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("Malformed chunk in animation"));
 			return FALSE; 
 		}
 		if (!context->animation) 
 		{
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("Invalid header in animation"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("Invalid header in animation"));
 			return FALSE;
 		}
 
@@ -418,18 +418,18 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 	{
 		if (context->chunk_size != 4 * context->NumSteps) 
 		{
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("Malformed chunk in animation"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("Malformed chunk in animation"));
 			return FALSE; 
 		}
 		if (!context->animation) 
 		{
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("Invalid header in animation"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("Invalid header in animation"));
 			return FALSE;
 		}
 		for (i = 0; i < context->NumSteps; i++) 
@@ -437,10 +437,10 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 			context->animation->sequence[i] = read_int32 (context);
 			if (context->animation->sequence[i] >= context->NumFrames) 
 			{
-				g_set_error (error,
-					     GDK_PIXBUF_ERROR,
-					     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-					     _("Malformed chunk in animation"));
+				g_set_error_literal (error,
+                                                     GDK_PIXBUF_ERROR,
+                                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                                     _("Malformed chunk in animation"));
 				return FALSE; 
 			}
 		}
@@ -449,19 +449,19 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 	{
 		if (!context->animation) 
 		{
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("Invalid header in animation"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("Invalid header in animation"));
 			return FALSE;
 		}
 		context->title = g_try_malloc (context->chunk_size + 1);
 		if (!context->title) 
 		{
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				     _("Not enough memory to load animation"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                             _("Not enough memory to load animation"));
 			return FALSE;
 		}
 		context->title[context->chunk_size] = 0;
@@ -476,19 +476,19 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 	{
 		if (!context->animation) 
 		{
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("Invalid header in animation"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("Invalid header in animation"));
 			return FALSE;
 		}
 		context->author = g_try_malloc (context->chunk_size + 1);
 		if (!context->author) 
 		{
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				     _("Not enough memory to load animation"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                             _("Not enough memory to load animation"));
 			return FALSE;
 		}
 		context->author[context->chunk_size] = 0;
@@ -536,10 +536,10 @@ gdk_pixbuf__ani_image_load_increment (gpointer data,
                         tmp = g_try_realloc (context->buffer, context->buffer_size);
                         if (!tmp) 
 			{
-				g_set_error (error,
-					     GDK_PIXBUF_ERROR,
-					     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-					     _("Not enough memory to load animation"));
+				g_set_error_literal (error,
+                                                     GDK_PIXBUF_ERROR,
+                                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                                     _("Not enough memory to load animation"));
 				return FALSE;
 			}
                         context->byte = context->buffer = tmp;
@@ -563,10 +563,10 @@ gdk_pixbuf__ani_image_load_increment (gpointer data,
 		    context->data_size == 0 || 
 		    chunk_id != TAG_ACON) 
 		{
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("Invalid header in animation"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("Invalid header in animation"));
 			return FALSE; 
 		}
 	}
@@ -608,10 +608,10 @@ gdk_pixbuf__ani_image_begin_load (GdkPixbufModuleSizeFunc size_func,
         if (!context->buffer) 
 	{
 		context_free (context);
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			     _("Not enough memory to load animation"));
+		g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Not enough memory to load animation"));
 		return NULL;
 	}
         

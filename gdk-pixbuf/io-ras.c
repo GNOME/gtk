@@ -120,10 +120,10 @@ static gboolean RAS2State(struct rasterfile *RAS,
 	if ((gint)State->Header.width <= 0 ||
 	    (gint)State->Header.height <= 0 || 
 	    State->Header.maplength > 768) {
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-			     _("RAS image has bogus header data")); 
+		g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("RAS image has bogus header data"));
 		return FALSE;
 	}
 
@@ -142,18 +142,18 @@ static gboolean RAS2State(struct rasterfile *RAS,
 			State->LineWidth++;
 	}
 	else {
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-			     _("RAS image has unknown type")); 
+		g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("RAS image has unknown type"));
 		return FALSE;
 	}
 
 	if (State->Header.type > 2 || State->Header.maptype > 1) {
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-			     _("unsupported RAS image variation")); 
+		g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("unsupported RAS image variation"));
 		return FALSE;
 	}
 
@@ -165,10 +165,10 @@ static gboolean RAS2State(struct rasterfile *RAS,
 		State->LineBuf = g_try_malloc (State->LineWidth);
 
 		if (!State->LineBuf) {
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				     _("Not enough memory to load RAS image")); 
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                             _("Not enough memory to load RAS image"));
 			return FALSE;
 		}
 	}
@@ -194,10 +194,10 @@ static gboolean RAS2State(struct rasterfile *RAS,
 							(gint) State->Header.height);
 		
                 if (!State->pixbuf) {
-                        g_set_error (error,
-                                     GDK_PIXBUF_ERROR,
-                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                                     _("Not enough memory to load RAS image"));
+                        g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                             _("Not enough memory to load RAS image"));
                         return FALSE;
                 }
 

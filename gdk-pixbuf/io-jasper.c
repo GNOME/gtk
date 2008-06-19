@@ -71,7 +71,8 @@ jasper_image_begin_load (GdkPixbufModuleSizeFunc size_func,
 
 	stream = jas_stream_memopen (NULL, -1);
 	if (!stream) {
-		g_set_error (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory for stream"));
+		g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Couldn't allocate memory for stream"));
 		return NULL;
 	}
 
@@ -100,7 +101,8 @@ jasper_image_try_load (struct jasper_context *context, GError **error)
 
 	raw_image = jas_image_decode (context->stream, -1, 0);
 	if (!raw_image) {
-		g_set_error (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_CORRUPT_IMAGE, _("Couldn't decode image"));
+		g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("Couldn't decode image"));
 		return FALSE;
 	}
 
@@ -115,10 +117,10 @@ jasper_image_try_load (struct jasper_context *context, GError **error)
 
 			if (width == 0 || height == 0) {
 				jas_image_destroy(raw_image);
-				g_set_error (error,
-					     GDK_PIXBUF_ERROR,
-					     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-					     _("Transformed JPEG2000 has zero width or height"));
+				g_set_error_literal (error,
+                                                     GDK_PIXBUF_ERROR,
+                                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                                     _("Transformed JPEG2000 has zero width or height"));
 				return FALSE;
 			}
 		}
@@ -131,7 +133,8 @@ jasper_image_try_load (struct jasper_context *context, GError **error)
 	if ((num_components != 3 && num_components != 4 && num_components != 1) ||
 	    (colourspace_family != JAS_CLRSPC_FAM_RGB  && colourspace_family != JAS_CLRSPC_FAM_GRAY)) {
 	    	jas_image_destroy (raw_image);
-		g_set_error (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_UNKNOWN_TYPE, _("Image type currently not supported"));
+		g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+                                     _("Image type currently not supported"));
 		return FALSE;
 	}
 
@@ -142,14 +145,16 @@ jasper_image_try_load (struct jasper_context *context, GError **error)
 		profile = jas_cmprof_createfromclrspc (JAS_CLRSPC_SRGB);
 		if (!profile) {
 			jas_image_destroy (raw_image);
-			g_set_error (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory for color profile"));
+			g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                             _("Couldn't allocate memory for color profile"));
 			return FALSE;
 		}
 
 		image = jas_image_chclrspc (raw_image, profile, JAS_CMXFORM_INTENT_PER);
 		if (!image) {
 			jas_image_destroy (raw_image);
-			g_set_error (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory for color profile"));
+			g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                             _("Couldn't allocate memory for color profile"));
 			return FALSE;
 		}
 	} else {
@@ -171,10 +176,10 @@ jasper_image_try_load (struct jasper_context *context, GError **error)
 
 		data = g_try_malloc0 (context->width * context->height * bits_per_sample / 8);
 		if (data == NULL) {
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-				     _("Insufficient memory to open JPEG 2000 file"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                             _("Insufficient memory to open JPEG 2000 file"));
 			return FALSE;
 		}
 		context->pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
@@ -255,7 +260,8 @@ jasper_image_load_increment (gpointer data, const guchar *buf, guint size, GErro
 	struct jasper_context *context = (struct jasper_context *) data;
 
 	if (jas_stream_write (context->stream, buf, size) < 0) {
-		g_set_error (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory to buffer image data"));
+		g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Couldn't allocate memory to buffer image data"));
 		return FALSE;
 	}
 

@@ -184,7 +184,7 @@ gdk_pixbuf__pcx_begin_load(GdkPixbufModuleSizeFunc size_func,
 	context->header = g_try_malloc(sizeof(struct pcx_header));
 	if(!context->header) {
 		g_free(context);
-		g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory for header"));
+		g_set_error_literal(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory for header"));
 		return NULL;
 	}
 
@@ -199,7 +199,7 @@ gdk_pixbuf__pcx_begin_load(GdkPixbufModuleSizeFunc size_func,
 	if(!context->buf) {
 		g_free(context->header);
 		g_free(context);
-		g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory for context buffer"));
+		g_set_error_literal(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory for context buffer"));
 		return NULL;
 	}
 	context->buf_size = 512;
@@ -557,7 +557,7 @@ gdk_pixbuf__pcx_load_increment(gpointer data, const guchar *buf, guint size,
 	/* if context's buf isn't large enough to hold its current data plus the passed buf, increase its size */
 	if(context->buf_pos + size > context->buf_size) {
 		if(!pcx_resize_context_buf(context, sizeof(guchar) * (context->buf_pos + size))) {
-			g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory for context buffer"));
+			g_set_error_literal(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory for context buffer"));
 			return FALSE;
 		}
 	}
@@ -598,7 +598,7 @@ gdk_pixbuf__pcx_load_increment(gpointer data, const guchar *buf, guint size,
 			width = context->width;
 			height = context->height;
 			if(width <= 0 || height <= 0) {
-				g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_CORRUPT_IMAGE, _("Image has invalid width and/or height"));
+				g_set_error_literal(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_CORRUPT_IMAGE, _("Image has invalid width and/or height"));
 				return FALSE;
 			}
 			if (context->size_func)
@@ -610,7 +610,7 @@ gdk_pixbuf__pcx_load_increment(gpointer data, const guchar *buf, guint size,
 
 			switch(context->bpp) {
 				default:
-					g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_UNKNOWN_TYPE, _("Image has unsupported bpp"));
+					g_set_error_literal(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_UNKNOWN_TYPE, _("Image has unsupported bpp"));
 					return FALSE;
 					break;
 				case 1:
@@ -639,7 +639,7 @@ gdk_pixbuf__pcx_load_increment(gpointer data, const guchar *buf, guint size,
 
 			context->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, context->width, context->height);
 			if(!context->pixbuf) {
-				g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't create new pixbuf"));
+				g_set_error_literal(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't create new pixbuf"));
 				return FALSE;
 			}
 			context->data = gdk_pixbuf_get_pixels(context->pixbuf);
@@ -647,14 +647,14 @@ gdk_pixbuf__pcx_load_increment(gpointer data, const guchar *buf, guint size,
 
 			context->line = g_try_malloc(sizeof(guchar) * context->bytesperline * context->num_planes);
 			if(!context->line) {
-				g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory for line data"));
+				g_set_error_literal(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory for line data"));
 				return FALSE;
 			}
 
 			if(context->bpp == 8) {
 				context->p_data = g_try_malloc(sizeof(guchar) * context->width * context->height);
 				if(!context->p_data) {
-					g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory for paletted data"));
+					g_set_error_literal(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't allocate memory for paletted data"));
 					return FALSE;
 				}
 			}
@@ -671,7 +671,7 @@ gdk_pixbuf__pcx_load_increment(gpointer data, const guchar *buf, guint size,
 	if(context->current_task == PCX_TASK_LOAD_DATA) {
 		switch(context->bpp) {
 			default:
-				g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_UNKNOWN_TYPE, _("Image has unsupported bpp"));
+				g_set_error_literal(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_UNKNOWN_TYPE, _("Image has unsupported bpp"));
 				retval = FALSE;
 				break;
 			case 1:
@@ -701,14 +701,14 @@ gdk_pixbuf__pcx_stop_load(gpointer data, GError **error)
 	struct pcx_context *context = (struct pcx_context *)data;
 
 	if(context->current_line != context->height) {
-		g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_FAILED, _("Didn't get all lines of PCX image"));
+		g_set_error_literal(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_FAILED, _("Didn't get all lines of PCX image"));
 		free_pcx_context(context, FALSE);
 		return FALSE;
 	}
 
 	if(context->current_task == PCX_TASK_LOAD_PALETTE) {
 		if(!pcx_load_palette_8(context)) {
-			g_set_error(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_FAILED, _("No palette found at end of PCX data"));
+			g_set_error_literal(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_FAILED, _("No palette found at end of PCX data"));
 			free_pcx_context(context, FALSE);
 			return FALSE;
 		}

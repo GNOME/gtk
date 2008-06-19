@@ -244,10 +244,10 @@ pnm_read_next_value (PnmIOBuffer *inbuf, gint max_length, guint *value, GError *
 	/* get the value */
 	result = strtol (buf, &endptr, 10);
 	if (*endptr != '\0' || result < 0 || result > G_MAXUINT) {
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-			     _("PNM loader expected to find an integer, but didn't"));
+		g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("PNM loader expected to find an integer, but didn't"));
 		return PNM_FATAL_ERR;
 	}
 	*value = result;
@@ -276,10 +276,10 @@ pnm_read_header (PnmLoaderContext *context)
 			return PNM_SUSPEND;
 		
 		if (*inbuf->byte != 'P') {
-			g_set_error (context->error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("PNM file has an incorrect initial byte"));
+			g_set_error_literal (context->error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("PNM file has an incorrect initial byte"));
 			return PNM_FATAL_ERR;
 		}
 		
@@ -306,10 +306,10 @@ pnm_read_header (PnmLoaderContext *context)
 			context->type = PNM_FORMAT_PPM_RAW;
 			break;
 		default:
-			g_set_error (context->error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("PNM file is not in a recognized PNM subformat"));
+			g_set_error_literal (context->error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("PNM file is not in a recognized PNM subformat"));
 			return PNM_FATAL_ERR;
 		}
 		
@@ -331,10 +331,10 @@ pnm_read_header (PnmLoaderContext *context)
 			return retval;
 		
 		if (!width) {
-			g_set_error (context->error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("PNM file has an image width of 0"));
+			g_set_error_literal (context->error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("PNM file has an image width of 0"));
 			return PNM_FATAL_ERR;
 		}
 		
@@ -352,10 +352,10 @@ pnm_read_header (PnmLoaderContext *context)
 			return retval;
 		
 		if (!height) {
-			g_set_error (context->error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("PNM file has an image height of 0"));
+			g_set_error_literal (context->error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("PNM file has an image height of 0"));
 			return PNM_FATAL_ERR;
 		}
 		
@@ -375,18 +375,18 @@ pnm_read_header (PnmLoaderContext *context)
 				return retval;
 			
 			if (context->maxval == 0) {
-				g_set_error (context->error,
-					     GDK_PIXBUF_ERROR,
-					     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
- 					     _("Maximum color value in PNM file is 0"));
+				g_set_error_literal (context->error,
+                                                     GDK_PIXBUF_ERROR,
+                                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                                     _("Maximum color value in PNM file is 0"));
 				return PNM_FATAL_ERR;
 			}
 
 			if (context->maxval > 65535) {
-				g_set_error (context->error,
-					     GDK_PIXBUF_ERROR,
-					     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
- 					     _("Maximum color value in PNM file is too large"));
+				g_set_error_literal (context->error,
+                                                     GDK_PIXBUF_ERROR,
+                                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                                     _("Maximum color value in PNM file is too large"));
 				return PNM_FATAL_ERR;
 			}
 
@@ -423,10 +423,10 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 		numpix = inbuf->nbytes / 3;
 		break;
 	default:
-		g_set_error (context->error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-			     _("Raw PNM image type is invalid"));
+		g_set_error_literal (context->error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("Raw PNM image type is invalid"));
 		return PNM_FATAL_ERR;
 	}
 	if(context->maxval>255) 
@@ -453,10 +453,10 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 		offset = context->output_col * 3;
 		break;
 	default:
-		g_set_error (context->error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-			     _("Raw PNM image type is invalid"));
+		g_set_error_literal (context->error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("Raw PNM image type is invalid"));
 		return PNM_FATAL_ERR;
 	}
 	if(context->maxval>255) 
@@ -498,10 +498,10 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 		}
 		break;
 	default:
-		g_set_error (context->error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-			     _("Raw PNM image type is invalid"));
+		g_set_error_literal (context->error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("Raw PNM image type is invalid"));
 		return PNM_FATAL_ERR;
 	}
 	
@@ -648,10 +648,10 @@ pnm_read_scanline (PnmLoaderContext *context)
 			return retval;
 		break;
 	default:
-		g_set_error (context->error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-			     _("PNM image loader does not support this PNM subformat"));
+		g_set_error_literal (context->error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+                                     _("PNM image loader does not support this PNM subformat"));
 
 		return PNM_FATAL_ERR;
 	}
@@ -703,10 +703,10 @@ gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
 			/* we ran out of data? */
 			if (context.pixbuf)
 				g_object_unref (context.pixbuf);
-			g_set_error (error,
-				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-				     _("Premature end-of-file encountered"));
+			g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("Premature end-of-file encountered"));
 			return NULL;
 		}
 		
@@ -735,10 +735,10 @@ gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
 				/* raw formats require exactly one whitespace */
 				if (!g_ascii_isspace(*(inbuf->byte))) 
 					{
-						g_set_error (error,
-							     GDK_PIXBUF_ERROR,
-							     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-							     _("Raw PNM formats require exactly one whitespace before sample data"));
+						g_set_error_literal (error,
+                                                                     GDK_PIXBUF_ERROR,
+                                                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                                                     _("Raw PNM formats require exactly one whitespace before sample data"));
 						return NULL;
 					}
 				inbuf->nbytes--;
@@ -762,10 +762,10 @@ gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
 			
 			if (!context.pixbuf) {
 				/* Failed to allocate memory */
-				g_set_error (error,
-					     GDK_PIXBUF_ERROR,
-					     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-					     _("Cannot allocate memory for loading PNM image"));
+				g_set_error_literal (error,
+                                                     GDK_PIXBUF_ERROR,
+                                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                                     _("Cannot allocate memory for loading PNM image"));
 				return NULL;
 			}
 
@@ -813,9 +813,9 @@ gdk_pixbuf__pnm_image_begin_load (GdkPixbufModuleSizeFunc size_func,
 	
 	context = g_try_malloc (sizeof (PnmLoaderContext));
 	if (!context) {
-		g_set_error(error, GDK_PIXBUF_ERROR, 
-			    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-			    _("Insufficient memory to load PNM context struct"));
+		g_set_error_literal (error, GDK_PIXBUF_ERROR, 
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Insufficient memory to load PNM context struct"));
 		return NULL;
 	}
 	memset (context, 0, sizeof (PnmLoaderContext));
@@ -863,10 +863,10 @@ gdk_pixbuf__pnm_image_stop_load (gpointer data,
 	   pnm allows to put multiple images in a file
 	*/
 	if (context->inbuf.nbytes > 0) {
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-			     _("Unexpected end of PNM image data"));
+		g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("Unexpected end of PNM image data"));
 		retval = FALSE;
 	}
 #endif
@@ -962,10 +962,10 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data,
 				/* raw formats require exactly one whitespace */
 				if (!g_ascii_isspace(*(inbuf->byte)))
 					{
-						g_set_error (error,
-							     GDK_PIXBUF_ERROR,
-							     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-							     _("Raw PNM formats require exactly one whitespace before sample data"));
+						g_set_error_literal (error,
+                                                                     GDK_PIXBUF_ERROR,
+                                                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                                                     _("Raw PNM formats require exactly one whitespace before sample data"));
 						return FALSE;
 					}
 				inbuf->nbytes--;
@@ -991,10 +991,10 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data,
 							  context->height);
 			
 			if (context->pixbuf == NULL) {
-				g_set_error (error,
-					     GDK_PIXBUF_ERROR,
-					     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-					     _("Insufficient memory to load PNM file"));
+				g_set_error_literal (error,
+                                                     GDK_PIXBUF_ERROR,
+                                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                                     _("Insufficient memory to load PNM file"));
 				return FALSE;
 			}
 			

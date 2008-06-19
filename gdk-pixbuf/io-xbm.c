@@ -289,20 +289,20 @@ gdk_pixbuf__xbm_image_load_real (FILE     *f,
 	GdkPixbuf *pixbuf;
 
 	if (!read_bitmap_file_data (f, &w, &h, &data, &x_hot, &y_hot)) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("Invalid XBM file"));
+                g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("Invalid XBM file"));
 		return NULL;
 	}
 
 	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, w, h);
 
         if (pixbuf == NULL) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                             _("Insufficient memory to load XBM image file"));
+                g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Insufficient memory to load XBM image file"));
                 return NULL;
         }
         
@@ -447,10 +447,10 @@ gdk_pixbuf__xbm_image_load_increment (gpointer       data,
 	if (fwrite (buf, sizeof (guchar), size, context->file) != size) {
 		gint save_errno = errno;
 		context->all_okay = FALSE;
-                g_set_error (error,
-                             G_FILE_ERROR,
-                             g_file_error_from_errno (save_errno),
-                             _("Failed to write to temporary file when loading XBM image"));
+                g_set_error_literal (error,
+                                     G_FILE_ERROR,
+                                     g_file_error_from_errno (save_errno),
+                                     _("Failed to write to temporary file when loading XBM image"));
 		return FALSE;
 	}
 

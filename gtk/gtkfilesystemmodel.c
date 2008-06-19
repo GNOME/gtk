@@ -694,10 +694,10 @@ _gtk_file_system_model_new (GtkFileSystem     *file_system,
       g_object_unref (model);
       g_object_unref (model);
 
-      g_set_error (error,
-		   GTK_FILE_CHOOSER_ERROR,
-		   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-		   _("Could not obtain root folder"));
+      g_set_error_literal (error,
+                           GTK_FILE_CHOOSER_ERROR,
+                           GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
+                           _("Could not obtain root folder"));
 
       return NULL;
     }

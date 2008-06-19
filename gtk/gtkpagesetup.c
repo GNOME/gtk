@@ -591,10 +591,10 @@ gtk_page_setup_load_key_file (GtkPageSetup *setup,
 
   if (!g_key_file_has_group (key_file, group_name))
     {
-      g_set_error (error,
-		   GTK_PRINT_ERROR,
-		   GTK_PRINT_ERROR_INVALID_FILE,
-		   _("Not a valid page setup file"));
+      g_set_error_literal (error,
+                           GTK_PRINT_ERROR,
+                           GTK_PRINT_ERROR_INVALID_FILE,
+                           _("Not a valid page setup file"));
       goto out;
     }
 

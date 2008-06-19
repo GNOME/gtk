@@ -462,52 +462,52 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 
 	buffer = (*get_buf) (op_header, handle);
 	if (!buffer) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("No XPM header found"));
+                g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("No XPM header found"));
 		return NULL;
 	}
 	items = sscanf (buffer, "%d %d %d %d %d %d", &w, &h, &n_col, &cpp, &x_hot, &y_hot);
 
 	if (items != 4 && items != 6) {
-		g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("Invalid XPM header"));
+		g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("Invalid XPM header"));
 		return NULL;
 	}
 
 	if (w <= 0) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("XPM file has image width <= 0"));
+                g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("XPM file has image width <= 0"));
 		return NULL;
 
 	}
 	if (h <= 0) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("XPM file has image height <= 0"));
+                g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("XPM file has image height <= 0"));
 		return NULL;
 
 	}
 	if (cpp <= 0 || cpp >= 32) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("XPM has invalid number of chars per pixel"));
+                g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("XPM has invalid number of chars per pixel"));
 		return NULL;
 	}
 	if (n_col <= 0 || 
 	    n_col >= G_MAXINT / (cpp + 1) || 
 	    n_col >= G_MAXINT / sizeof (XPMColor)) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("XPM file has invalid number of colors"));
+                g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("XPM file has invalid number of colors"));
 		return NULL;
 	}
 
@@ -516,19 +516,19 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 
 	name_buf = g_try_malloc (n_col * (cpp + 1));
 	if (!name_buf) {
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                             _("Cannot allocate memory for loading XPM image"));
+		g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Cannot allocate memory for loading XPM image"));
 		g_hash_table_destroy (color_hash);
 		return NULL;
 	}
 	colors = (XPMColor *) g_try_malloc (sizeof (XPMColor) * n_col);
 	if (!colors) {
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                             _("Cannot allocate memory for loading XPM image"));
+		g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Cannot allocate memory for loading XPM image"));
 		g_hash_table_destroy (color_hash);
 		g_free (name_buf);
 		return NULL;
@@ -539,10 +539,10 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 
 		buffer = (*get_buf) (op_cmap, handle);
 		if (!buffer) {
-                        g_set_error (error,
-                                     GDK_PIXBUF_ERROR,
-                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                                     _("Cannot read XPM colormap"));
+                        g_set_error_literal (error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                             _("Cannot read XPM colormap"));
 			g_hash_table_destroy (color_hash);
 			g_free (name_buf);
 			g_free (colors);
@@ -577,10 +577,10 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 	pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, is_trans, 8, w, h);
 
 	if (!pixbuf) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                             _("Cannot allocate memory for loading XPM image"));
+                g_set_error_literal (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Cannot allocate memory for loading XPM image"));
 		g_hash_table_destroy (color_hash);
 		g_free (colors);
 		g_free (name_buf);
@@ -771,10 +771,10 @@ gdk_pixbuf__xpm_image_load_increment (gpointer data,
        if (fwrite (buf, sizeof (guchar), size, context->file) != size) {
 	       gint save_errno = errno;
                context->all_okay = FALSE;
-               g_set_error (error,
-                            G_FILE_ERROR,
-                            g_file_error_from_errno (save_errno),
-                            _("Failed to write to temporary file when loading XPM image"));
+               g_set_error_literal (error,
+                                    G_FILE_ERROR,
+                                    g_file_error_from_errno (save_errno),
+                                    _("Failed to write to temporary file when loading XPM image"));
                return FALSE;
        }
 

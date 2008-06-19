@@ -819,10 +819,10 @@ gtk_paper_size_new_from_key_file (GKeyFile    *key_file,
     group_name = freeme = g_key_file_get_start_group (key_file);
   if (!group_name || !g_key_file_has_group (key_file, group_name))
     {
-      g_set_error (error,
-		   GTK_PRINT_ERROR,
-		   GTK_PRINT_ERROR_INVALID_FILE,
-		   _("Not a valid page setup file"));
+      g_set_error_literal (error,
+                           GTK_PRINT_ERROR,
+                           GTK_PRINT_ERROR_INVALID_FILE,
+                           _("Not a valid page setup file"));
       retval = FALSE;
       goto out;
     }
@@ -859,10 +859,10 @@ gtk_paper_size_new_from_key_file (GKeyFile    *key_file,
 					    width, height, GTK_UNIT_MM);
   else
     {
-      g_set_error (error,
-		   GTK_PRINT_ERROR,
-		   GTK_PRINT_ERROR_INVALID_FILE,
-		   _("Not a valid page setup file"));
+      g_set_error_literal (error,
+                           GTK_PRINT_ERROR,
+                           GTK_PRINT_ERROR_INVALID_FILE,
+                           _("Not a valid page setup file"));
       retval = FALSE;
       goto out;
     }

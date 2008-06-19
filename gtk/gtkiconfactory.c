@@ -2857,7 +2857,7 @@ icon_source_start_element (GMarkupParseContext *context,
     tmp = g_strdup_printf ("%s:%d:%d %s", "input",
 			   line_number, char_number, error_msg);
 #if 0
-    g_set_error (error,
+    g_set_error_literal (error,
 		 GTK_BUILDER_ERROR,
 		 error_domain,
 		 tmp);

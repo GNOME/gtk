@@ -6963,10 +6963,10 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
 
   if (impl->local_only && !g_file_is_native (file))
     {
-      g_set_error (error,
-		   GTK_FILE_CHOOSER_ERROR,
-		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-		   _("Cannot change to folder because it is not local"));
+      g_set_error_literal (error,
+                           GTK_FILE_CHOOSER_ERROR,
+                           GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
+                           _("Cannot change to folder because it is not local"));
 
       g_object_unref (file);
       profile_end ("end - not local", NULL);

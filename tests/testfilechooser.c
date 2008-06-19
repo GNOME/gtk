@@ -199,11 +199,13 @@ my_new_from_file_at_size (const char *filename,
         g_return_val_if_fail (width > 0 && height > 0, NULL);
 
 	if (stat (filename, &st) != 0) {
+                int errsv = errno;
+
 		g_set_error (error,
 			     G_FILE_ERROR,
-			     g_file_error_from_errno (errno),
+			     g_file_error_from_errno (errsv),
 			     _("Could not get information for file '%s': %s"),
-			     filename, g_strerror (errno));
+			     filename, g_strerror (errsv));
 		return NULL;
 	}
 
@@ -212,11 +214,13 @@ my_new_from_file_at_size (const char *filename,
 
 	f = fopen (filename, "rb");
 	if (!f) {
+                int errsv = errno;
+
                 g_set_error (error,
                              G_FILE_ERROR,
-                             g_file_error_from_errno (errno),
+                             g_file_error_from_errno (errsv),
                              _("Failed to open file '%s': %s"),
-                             filename, g_strerror (errno));
+                             filename, g_strerror (errsv));
 		return NULL;
         }
 

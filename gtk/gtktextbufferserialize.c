@@ -1773,10 +1773,10 @@ read_headers (const gchar *start,
   g_list_foreach (headers, (GFunc) g_free, NULL);
   g_list_free (headers);
 
-  g_set_error (error,
-	       G_MARKUP_ERROR,
-	       G_MARKUP_ERROR_PARSE,
-	       _("Serialized data is malformed"));
+  g_set_error_literal (error,
+                       G_MARKUP_ERROR,
+                       G_MARKUP_ERROR_PARSE,
+                       _("Serialized data is malformed"));
 
   return NULL;
 }
@@ -1851,10 +1851,10 @@ _gtk_text_buffer_deserialize_rich_text (GtkTextBuffer *register_buffer,
   header = headers->data;
   if (!header_is (header, "GTKTEXTBUFFERCONTENTS-0001"))
     {
-      g_set_error (error,
-		   G_MARKUP_ERROR,
-		   G_MARKUP_ERROR_PARSE,
-		   _("Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"));
+      g_set_error_literal (error,
+                           G_MARKUP_ERROR,
+                           G_MARKUP_ERROR_PARSE,
+                           _("Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"));
 
       retval = FALSE;
       goto out;

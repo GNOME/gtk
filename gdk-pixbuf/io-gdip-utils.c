@@ -107,7 +107,7 @@ gdip_set_error_from_gpstatus (GError **error, gint code, GpStatus status)
     default:
       msg = "Unknown error";
     }
-  g_set_error (error, GDK_PIXBUF_ERROR, code, msg);
+  g_set_error_literal (error, GDK_PIXBUF_ERROR, code, msg);
 }
 
 static gboolean
@@ -733,7 +733,7 @@ stop_load (GpBitmap *bitmap, GdipContext *context, GError **error)
         g_object_unref (G_OBJECT (animation));
 
       destroy_gdipcontext (context);
-      g_set_error (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't create pixbuf"));
+      g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't create pixbuf"));
       return FALSE;
     }
     
@@ -795,7 +795,7 @@ gdk_pixbuf__gdip_image_stop_load (gpointer data, GError **error)
 
   if (!bitmap) {
     destroy_gdipcontext (context);
-    g_set_error (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_CORRUPT_IMAGE, _("Couldn't load bitmap"));
+    g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_CORRUPT_IMAGE, _("Couldn't load bitmap"));
     return FALSE;
   }
 
@@ -818,7 +818,7 @@ gdk_pixbuf__gdip_image_stop_vector_load (gpointer data, GError **error)
   metafile = gdip_buffer_to_image ((gchar *)image_buffer->data, image_buffer->len, error);
   if (!metafile) {
     destroy_gdipcontext (context);
-    g_set_error (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_CORRUPT_IMAGE, _("Couldn't load metafile"));
+    g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_CORRUPT_IMAGE, _("Couldn't load metafile"));
     return FALSE;
   }
 
@@ -977,14 +977,14 @@ gdip_save_pixbuf (GdkPixbuf *pixbuf,
   gboolean success;
 
   if (!GetEncoderClsid (format, &clsid)) {
-    g_set_error (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_FAILED, _("Unsupported image format for GDI+"));
+    g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_FAILED, _("Unsupported image format for GDI+"));
     return FALSE;
   }
   
   image = gdip_pixbuf_to_bitmap (pixbuf);
 
   if (image == NULL) {
-    g_set_error (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_FAILED, _("Couldn't save"));
+    g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_FAILED, _("Couldn't save"));
     return FALSE;
   }
   
