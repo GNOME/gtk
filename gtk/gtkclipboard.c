@@ -50,6 +50,7 @@ typedef struct _RequestContentsInfo RequestContentsInfo;
 typedef struct _RequestTextInfo RequestTextInfo;
 typedef struct _RequestRichTextInfo RequestRichTextInfo;
 typedef struct _RequestImageInfo RequestImageInfo;
+typedef struct _RequestURIInfo RequestURIInfo;
 typedef struct _RequestTargetsInfo RequestTargetsInfo;
 
 struct _GtkClipboard 
@@ -111,6 +112,12 @@ struct _RequestRichTextInfo
 struct _RequestImageInfo
 {
   GtkClipboardImageReceivedFunc callback;
+  gpointer user_data;
+};
+
+struct _RequestURIInfo
+{
+  GtkClipboardURIReceivedFunc callback;
   gpointer user_data;
 };
 
@@ -1140,6 +1147,58 @@ gtk_clipboard_request_image (GtkClipboard                  *clipboard,
 }
 
 static void 
+request_uris_received_func (GtkClipboard     *clipboard,
+			    GtkSelectionData *selection_data,
+			    gpointer          data)
+{
+  RequestURIInfo *info = data;
+  gchar **uris;
+
+  uris = gtk_selection_data_get_uris (selection_data);
+  info->callback (clipboard, uris, info->user_data);
+  g_strfreev (uris);
+
+  g_slice_free (RequestURIInfo, info);
+}
+
+/**
+ * gtk_clipboard_request_uris:
+ * @clipboard: a #GtkClipboard
+ * @callback:  a function to call when the URIs are received,
+ *             or the retrieval fails. (It will always be called
+ *             one way or the other.)
+ * @user_data: user data to pass to @callback.
+ * 
+ * Requests the contents of the clipboard as URIs. When the URIs are
+ * later received @callback will be called.
+ *
+ * The @uris parameter to @callback will contain the resulting array of
+ * URIs if the request succeeded, or %NULL if it failed. This could happen
+ * for various reasons, in particular if the clipboard was empty or if the
+ * contents of the clipboard could not be converted into URI form.
+ *
+ * Since: 2.14
+ **/
+void 
+gtk_clipboard_request_uris (GtkClipboard                *clipboard,
+			    GtkClipboardURIReceivedFunc  callback,
+			    gpointer                     user_data)
+{
+  RequestURIInfo *info;
+  
+  g_return_if_fail (clipboard != NULL);
+  g_return_if_fail (callback != NULL);
+  
+  info = g_slice_new (RequestURIInfo);
+  info->callback = callback;
+  info->user_data = user_data;
+
+  gtk_clipboard_request_contents (clipboard, gdk_atom_intern_static_string ("text/uri-list"),
+				  request_uris_received_func,
+				  info);
+}
+
+static void 
 request_targets_received_func (GtkClipboard     *clipboard,
 			       GtkSelectionData *selection_data,
 			       gpointer          data)
@@ -1443,6 +1502,60 @@ gtk_clipboard_wait_for_image (GtkClipboard *clipboard)
   return results.data;
 }
 
+static void 
+clipboard_uris_received_func (GtkClipboard *clipboard,
+			      gchar       **uris,
+			      gpointer      data)
+{
+  WaitResults *results = data;
+
+  results->data = g_strdupv (uris);
+  g_main_loop_quit (results->loop);
+}
+
+/**
+ * gtk_clipboard_wait_for_uris:
+ * @clipboard: a #GtkClipboard
+ * 
+ * Requests the contents of the clipboard as URIs. This function waits
+ * for the data to be received using the main loop, so events,
+ * timeouts, etc, may be dispatched during the wait.
+ * 
+ * Return value: a newly-allocated %NULL-terminated array of strings which must
+ *               be freed with g_strfreev(), or %NULL if
+ *               retrieving the selection data failed. (This 
+ *               could happen for various reasons, in particular 
+ *               if the clipboard was empty or if the contents of 
+ *               the clipboard could not be converted into URI form.)
+ *
+ * Since: 2.14
+ **/
+gchar **
+gtk_clipboard_wait_for_uris (GtkClipboard *clipboard)
+{
+  WaitResults results;
+
+  g_return_val_if_fail (clipboard != NULL, NULL);
+  
+  results.data = NULL;
+  results.loop = g_main_loop_new (NULL, TRUE);
+
+  gtk_clipboard_request_uris (clipboard,
+			      clipboard_uris_received_func,
+			      &results);
+
+  if (g_main_loop_is_running (results.loop))
+    {
+      GDK_THREADS_LEAVE ();
+      g_main_loop_run (results.loop);
+      GDK_THREADS_ENTER ();
+    }
+
+  g_main_loop_unref (results.loop);
+
+  return results.data;
+}
+
 /**
  * gtk_clipboard_get_display:
  * @clipboard: a #GtkClipboard
@@ -1561,6 +1674,41 @@ gtk_clipboard_wait_is_image_available (GtkClipboard *clipboard)
   if (data)
     {
       result = gtk_selection_data_targets_include_image (data, FALSE);
+      gtk_selection_data_free (data);
+    }
+
+  return result;
+}
+
+/**
+ * gtk_clipboard_wait_is_uris_available:
+ * @clipboard: a #GtkClipboard
+ * 
+ * Test to see if there is a list of URIs available to be pasted
+ * This is done by requesting the TARGETS atom and checking
+ * if it contains the URI targets. This function
+ * waits for the data to be received using the main loop, so events, 
+ * timeouts, etc, may be dispatched during the wait.
+ *
+ * This function is a little faster than calling
+ * gtk_clipboard_wait_for_uris() since it doesn't need to retrieve
+ * the actual URI data.
+ * 
+ * Return value: %TRUE is there is an URI list available, %FALSE otherwise.
+ *
+ * Since: 2.14
+ **/
+gboolean
+gtk_clipboard_wait_is_uris_available (GtkClipboard *clipboard)
+{
+  GtkSelectionData *data;
+  gboolean result = FALSE;
+
+  data = gtk_clipboard_wait_for_contents (clipboard, 
+					  gdk_atom_intern_static_string ("TARGETS"));
+  if (data)
+    {
+      result = gtk_selection_data_targets_include_uri (data);
       gtk_selection_data_free (data);
     }
 

@@ -48,6 +48,9 @@ typedef void (* GtkClipboardRichTextReceivedFunc) (GtkClipboard     *clipboard,
 typedef void (* GtkClipboardImageReceivedFunc)    (GtkClipboard     *clipboard,
 						   GdkPixbuf        *pixbuf,
 						   gpointer          data);
+typedef void (* GtkClipboardURIReceivedFunc)      (GtkClipboard     *clipboard,
+						   gchar           **uris,
+						   gpointer          data);
 typedef void (* GtkClipboardTargetsReceivedFunc)  (GtkClipboard     *clipboard,
 					           GdkAtom          *atoms,
 						   gint              n_atoms,
@@ -109,6 +112,9 @@ void gtk_clipboard_request_rich_text (GtkClipboard                     *clipboar
 void gtk_clipboard_request_image     (GtkClipboard                     *clipboard,
                                       GtkClipboardImageReceivedFunc     callback,
                                       gpointer                          user_data);
+void gtk_clipboard_request_uris      (GtkClipboard                     *clipboard,
+                                      GtkClipboardURIReceivedFunc       callback,
+                                      gpointer                          user_data);
 void gtk_clipboard_request_targets   (GtkClipboard                     *clipboard,
                                       GtkClipboardTargetsReceivedFunc   callback,
                                       gpointer                          user_data);
@@ -121,6 +127,7 @@ guint8 *          gtk_clipboard_wait_for_rich_text (GtkClipboard  *clipboard,
                                                     GdkAtom       *format,
                                                     gsize         *length);
 GdkPixbuf *       gtk_clipboard_wait_for_image     (GtkClipboard  *clipboard);
+gchar **          gtk_clipboard_wait_for_uris      (GtkClipboard  *clipboard);
 gboolean          gtk_clipboard_wait_for_targets   (GtkClipboard  *clipboard,
                                                     GdkAtom      **targets,
                                                     gint          *n_targets);
@@ -129,6 +136,7 @@ gboolean gtk_clipboard_wait_is_text_available      (GtkClipboard  *clipboard);
 gboolean gtk_clipboard_wait_is_rich_text_available (GtkClipboard  *clipboard,
                                                     GtkTextBuffer *buffer);
 gboolean gtk_clipboard_wait_is_image_available     (GtkClipboard  *clipboard);
+gboolean gtk_clipboard_wait_is_uris_available      (GtkClipboard  *clipboard);
 gboolean gtk_clipboard_wait_is_target_available    (GtkClipboard  *clipboard,
                                                     GdkAtom        target);
 

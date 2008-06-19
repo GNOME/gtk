@@ -1,5 +1,13 @@
 2008-06-19  Christian Persch  <chpe@gnome.org>
 
+	* docs/reference/gtk/gtk-sections.txt:
+	* gtk/gtk.symbols:
+	* gtk/gtkclipboard.c:
+	* gtk/gtkclipboard.h: Add clipboard convenience functions  for URI 
+	targets. Bug #537639.
+
+2008-06-19  Christian Persch  <chpe@gnome.org>
+
         * gtk/gtkfilechooserdefault.c: Use gtk_drag_*_add_*_targets instead of
 	hardcoded target tables. Bug #516092.
 
