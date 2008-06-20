@@ -46,7 +46,7 @@ struct _GtkRecentChooserMenu
   /*< private >*/
   GtkMenu parent_instance;
 
-  GtkRecentChooserMenuPrivate *priv;
+  GtkRecentChooserMenuPrivate *GSEAL (priv);
 };
 
 struct _GtkRecentChooserMenuClass
