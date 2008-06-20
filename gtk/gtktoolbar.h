@@ -115,8 +115,8 @@ struct _GtkToolbar
   guint            _gtk_reserved1;
   guint            _gtk_reserved2;
 
-  guint            GSEAL (style_set) : 1;
-  guint            GSEAL (icon_size_set) : 1;
+  guint            GSEAL (style_set : 1);
+  guint            GSEAL (icon_size_set : 1);
 };
 
 struct _GtkToolbarClass
