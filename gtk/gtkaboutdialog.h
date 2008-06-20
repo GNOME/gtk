@@ -48,7 +48,7 @@ struct _GtkAboutDialog
   GtkDialog parent_instance;
 
   /*< private >*/
-  gpointer private_data;
+  gpointer GSEAL (private_data);
 };
 
 struct _GtkAboutDialogClass 
