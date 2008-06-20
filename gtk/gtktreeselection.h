@@ -54,11 +54,11 @@ struct _GtkTreeSelection
 
   /*< private >*/
 
-  GtkTreeView *tree_view;
-  GtkSelectionMode type;
-  GtkTreeSelectionFunc user_func;
-  gpointer user_data;
-  GDestroyNotify destroy;
+  GtkTreeView *GSEAL (tree_view);
+  GtkSelectionMode GSEAL (type);
+  GtkTreeSelectionFunc GSEAL (user_func);
+  gpointer GSEAL (user_data);
+  GtkDestroyNotify GSEAL (destroy);
 };
 
 struct _GtkTreeSelectionClass
