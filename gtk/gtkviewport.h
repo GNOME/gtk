@@ -55,11 +55,11 @@ struct _GtkViewport
 {
   GtkBin bin;
 
-  GtkShadowType shadow_type;
-  GdkWindow *view_window;
-  GdkWindow *bin_window;
-  GtkAdjustment *hadjustment;
-  GtkAdjustment *vadjustment;
+  GtkShadowType GSEAL (shadow_type);
+  GdkWindow *GSEAL (view_window);
+  GdkWindow *GSEAL (bin_window);
+  GtkAdjustment *GSEAL (hadjustment);
+  GtkAdjustment *GSEAL (vadjustment);
 };
 
 struct _GtkViewportClass
