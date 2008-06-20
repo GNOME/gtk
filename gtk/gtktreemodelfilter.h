@@ -25,6 +25,7 @@
 #ifndef __GTK_TREE_MODEL_FILTER_H__
 #define __GTK_TREE_MODEL_FILTER_H__
 
+#include <gdk/gdkconfig.h>
 #include <gtk/gtktreemodel.h>
 
 G_BEGIN_DECLS
@@ -54,7 +55,7 @@ struct _GtkTreeModelFilter
   GObject parent;
 
   /*< private >*/
-  GtkTreeModelFilterPrivate *priv;
+  GtkTreeModelFilterPrivate *GSEAL (priv);
 };
 
 struct _GtkTreeModelFilterClass
