@@ -51,18 +51,18 @@ struct _GtkStatusbar
 {
   GtkHBox parent_widget;
 
-  GtkWidget *frame;
-  GtkWidget *label;
+  GtkWidget *GSEAL (frame);
+  GtkWidget *GSEAL (label);
 
-  GSList *messages;
-  GSList *keys;
+  GSList *GSEAL (messages);
+  GSList *GSEAL (keys);
 
-  guint seq_context_id;
-  guint seq_message_id;
+  guint GSEAL (seq_context_id);
+  guint GSEAL (seq_message_id);
 
-  GdkWindow *grip_window;
+  GdkWindow *GSEAL (grip_window);
 
-  guint has_resize_grip : 1;
+  guint GSEAL (has_resize_grip : 1);
 };
 
 struct _GtkStatusbarClass
