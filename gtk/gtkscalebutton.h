@@ -63,7 +63,7 @@ struct _GtkScaleButton
   GtkWidget *GSEAL(minus_button);
 
   /*< private >*/
-  GtkScaleButtonPrivate *priv;
+  GtkScaleButtonPrivate *GSEAL (priv);
 };
 
 struct _GtkScaleButtonClass
