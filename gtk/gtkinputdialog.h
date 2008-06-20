@@ -63,18 +63,18 @@ struct _GtkInputDialog
 {
   GtkDialog dialog;
 
-  GtkWidget *axis_list;
-  GtkWidget *axis_listbox;
-  GtkWidget *mode_optionmenu;
+  GtkWidget *GSEAL (axis_list);
+  GtkWidget *GSEAL (axis_listbox);
+  GtkWidget *GSEAL (mode_optionmenu);
 
-  GtkWidget *close_button;
-  GtkWidget *save_button;
+  GtkWidget *GSEAL (close_button);
+  GtkWidget *GSEAL (save_button);
 
-  GtkWidget *axis_items[GDK_AXIS_LAST];
-  GdkDevice *current_device;
+  GtkWidget *GSEAL (axis_items[GDK_AXIS_LAST]);
+  GdkDevice *GSEAL (current_device);
 
-  GtkWidget *keys_list;
-  GtkWidget *keys_listbox;
+  GtkWidget *GSEAL (keys_list);
+  GtkWidget *GSEAL (keys_listbox);
 };
 
 struct _GtkInputDialogClass
