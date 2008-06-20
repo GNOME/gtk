@@ -52,7 +52,7 @@ struct _GtkRadioMenuItem
 {
   GtkCheckMenuItem check_menu_item;
 
-  GSList *group;
+  GSList *GSEAL (group);
 };
 
 struct _GtkRadioMenuItemClass
