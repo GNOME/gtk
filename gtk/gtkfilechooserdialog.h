@@ -45,7 +45,7 @@ struct _GtkFileChooserDialog
 {
   GtkDialog parent_instance;
 
-  GtkFileChooserDialogPrivate *priv;
+  GtkFileChooserDialogPrivate *GSEAL (priv);
 };
 
 struct _GtkFileChooserDialogClass
