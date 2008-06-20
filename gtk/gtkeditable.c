@@ -64,7 +64,7 @@ gtk_editable_base_init (gpointer g_class)
 
   if (! initialized)
     {
-      g_signal_new (I_("insert_text"),
+      g_signal_new (I_("insert-text"),
 		    GTK_TYPE_EDITABLE,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkEditableClass, insert_text),
@@ -74,7 +74,7 @@ gtk_editable_base_init (gpointer g_class)
 		    G_TYPE_STRING,
 		    G_TYPE_INT,
 		    G_TYPE_POINTER);
-      g_signal_new (I_("delete_text"),
+      g_signal_new (I_("delete-text"),
 		    GTK_TYPE_EDITABLE,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkEditableClass, delete_text),
@@ -95,6 +95,16 @@ gtk_editable_base_init (gpointer g_class)
     }
 }
 
+/**
+ * gtk_editable_insert_text:
+ * @editable: a #GtkEditable
+ * @new_text: the text to append
+ * @new_text_length: the text to append
+ * @position: position text will be inserted at
+ *
+ * Appends @new_text_length characters of @text to the contents of the widget,
+ * at position @position. Note that this position is in characters, not in bytes.
+ **/
 void
 gtk_editable_insert_text (GtkEditable *editable,
 			  const gchar *new_text,
@@ -110,6 +120,15 @@ gtk_editable_insert_text (GtkEditable *editable,
   GTK_EDITABLE_GET_CLASS (editable)->do_insert_text (editable, new_text, new_text_length, position);
 }
 
+/**
+ * gtk_editable_delete_text:
+ * @editable: a #GtkEditable
+ * @start_pos: start position
+ * @end_pos: end position
+ *
+ * Deletes the content of the editable between @start_pos and @end_pos.
+ * Note that positions are specified in characters, not bytes.
+ **/
 void
 gtk_editable_delete_text (GtkEditable *editable,
 			  gint         start_pos,
@@ -120,6 +139,19 @@ gtk_editable_delete_text (GtkEditable *editable,
   GTK_EDITABLE_GET_CLASS (editable)->do_delete_text (editable, start_pos, end_pos);
 }
 
+/**
+ * gtk_editable_get_chars:
+ * @editable: a #GtkEditable
+ * @start: start of text
+ * @end: end of text
+ *
+ * Retreives the content of the editable between @start and @end.
+ * Note that positions are specified in characters, not bytes.
+ *
+ * Return value: a pointer to the contents of the widget as a
+ *      string. This string is allocated by the #GtkEditable
+ *      implementation and should be freed by the caller.
+ **/
 gchar *    
 gtk_editable_get_chars (GtkEditable *editable,
 			gint         start,
@@ -130,6 +162,18 @@ gtk_editable_get_chars (GtkEditable *editable,
   return GTK_EDITABLE_GET_CLASS (editable)->get_chars (editable, start, end);
 }
 
+/**
+ * gtk_editable_set_position:
+ * @editable: a #GtkEditable
+ * @position:  the position of the cursor. The cursor is displayed
+ *    before the character with the given (base 0) index in the editable. 
+ *    The value must be less than or equal to the number of characters 
+ *    in the editable. A value of -1 indicates that the position should
+ *    be set after the last character of the editable. Note that this 
+ *    position is in characters, not in bytes.
+ *
+ * Sets the cursor position in the editable to the given value.
+ **/
 void
 gtk_editable_set_position (GtkEditable      *editable,
 			   gint              position)
@@ -139,14 +183,38 @@ gtk_editable_set_position (GtkEditable      *editable,
   GTK_EDITABLE_GET_CLASS (editable)->set_position (editable, position);
 }
 
+/**
+ * gtk_editable_get_position:
+ * @editable: a #GtkEditable
+ *
+ * Retrieves the current position of the cursor relative to the start
+ * of the content of the editable. Note that this position is in characters,
+ * not in bytes.
+ *
+ * Return value: the cursor position
+ **/
 gint
-gtk_editable_get_position (GtkEditable      *editable)
+gtk_editable_get_position (GtkEditable *editable)
 {
   g_return_val_if_fail (GTK_IS_EDITABLE (editable), 0);
 
   return GTK_EDITABLE_GET_CLASS (editable)->get_position (editable);
 }
 
+/**
+ * gtk_editable_get_selection_bounds:
+ * @editable: a #GtkEditable
+ * @start_pos: beginning of selection
+ * @end_pos: end of selection
+ *
+ * Retrieves the selection bound of the editable. @start_pos will be filled
+ * with the start of the selection and @end_pos with end. If no text was selected
+ * both will be identical and %FALSE will be returned. Note that positions are
+ * specified in characters, not bytes.
+ *
+ * Return value: %TRUE if an area is selected, %FALSE otherwise
+ *
+ **/
 gboolean
 gtk_editable_get_selection_bounds (GtkEditable *editable,
 				   gint        *start_pos,
@@ -167,6 +235,13 @@ gtk_editable_get_selection_bounds (GtkEditable *editable,
   return result;
 }
 
+/**
+ * gtk_editable_delete_selection:
+ * @editable: a #GtkEditable
+ *
+ * Deletes the currently selected text of the editable.
+ * This call will not do anything if there is no selected text.
+ **/
 void
 gtk_editable_delete_selection (GtkEditable *editable)
 {
@@ -178,6 +253,16 @@ gtk_editable_delete_selection (GtkEditable *editable)
     gtk_editable_delete_text (editable, start, end);
 }
 
+/**
+ * gtk_editable_select_region:
+ * @editable: a #GtkEditable
+ * @start: start of region
+ * @end: end of region
+ *
+ * Selects the text between @start and @end. Both @start and @end are
+ * relative to the start of the content. Note that positions are specified
+ * in characters, not bytes.
+ **/
 void
 gtk_editable_select_region (GtkEditable *editable,
 			    gint         start,
@@ -188,30 +273,61 @@ gtk_editable_select_region (GtkEditable *editable,
   GTK_EDITABLE_GET_CLASS (editable)->set_selection_bounds (editable,  start, end);
 }
 
+/**
+ * gtk_editable_cut_clipboard:
+ * @editable: a #GtkEditable
+ *
+ * Removes the contents of the currently selected content in the editable and
+ * puts it on the clipboard.
+ **/
 void
 gtk_editable_cut_clipboard (GtkEditable *editable)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   
-  g_signal_emit_by_name (editable, "cut_clipboard");
+  g_signal_emit_by_name (editable, "cut-clipboard");
 }
 
+/**
+ * gtk_editable_copy_clipboard:
+ * @editable: a #GtkEditable
+ *
+ * Copies the contents of the currently selected content in the editable and
+ * puts it on the clipboard.
+ **/
 void
 gtk_editable_copy_clipboard (GtkEditable *editable)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   
-  g_signal_emit_by_name (editable, "copy_clipboard");
+  g_signal_emit_by_name (editable, "copy-clipboard");
 }
 
+/**
+ * gtk_editable_paste_clipboard:
+ * @editable: a #GtkEditable
+ *
+ * Pastes the content of the clipboard to the current position of the
+ * cursor in the editable.
+ **/
 void
 gtk_editable_paste_clipboard (GtkEditable *editable)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   
-  g_signal_emit_by_name (editable, "paste_clipboard");
+  g_signal_emit_by_name (editable, "paste-clipboard");
 }
 
+/**
+ * gtk_editable_set_editable:
+ * @editable: a #GtkEditable
+ * @is_editable: %TRUE if the user is allowed to edit the text
+ *   in the widget
+ *
+ * Determines if the user can edit the text in the editable
+ * widget or not. 
+ *
+ **/
 void
 gtk_editable_set_editable (GtkEditable    *editable,
 			   gboolean        is_editable)

@@ -1,5 +1,7 @@
 2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkeditable.c: Document and use - instead of _ in signal names.
+
 	* gtk/gtkbutton.c:
 	* gtk/gtkcolorsel.c:
 	* gtk/gtkentry.c:
