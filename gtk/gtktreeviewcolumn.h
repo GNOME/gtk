@@ -64,51 +64,51 @@ struct _GtkTreeViewColumn
 {
   GtkObject parent;
 
-  GtkWidget *tree_view;
-  GtkWidget *button;
-  GtkWidget *child;
-  GtkWidget *arrow;
-  GtkWidget *alignment;
-  GdkWindow *window;
-  GtkCellEditable *editable_widget;
-  gfloat xalign;
-  guint property_changed_signal;
-  gint spacing;
+  GtkWidget *GSEAL (tree_view);
+  GtkWidget *GSEAL (button);
+  GtkWidget *GSEAL (child);
+  GtkWidget *GSEAL (arrow);
+  GtkWidget *GSEAL (alignment);
+  GdkWindow *GSEAL (window);
+  GtkCellEditable *GSEAL (editable_widget);
+  gfloat GSEAL (xalign);
+  guint GSEAL (property_changed_signal);
+  gint GSEAL (spacing);
 
   /* Sizing fields */
   /* see gtk+/doc/tree-column-sizing.txt for more information on them */
-  GtkTreeViewColumnSizing column_type;
-  gint requested_width;
-  gint button_request;
-  gint resized_width;
-  gint width;
-  gint fixed_width;
-  gint min_width;
-  gint max_width;
+  GtkTreeViewColumnSizing GSEAL (column_type);
+  gint GSEAL (requested_width);
+  gint GSEAL (button_request);
+  gint GSEAL (resized_width);
+  gint GSEAL (width);
+  gint GSEAL (fixed_width);
+  gint GSEAL (min_width);
+  gint GSEAL (max_width);
 
   /* dragging columns */
-  gint drag_x;
-  gint drag_y;
+  gint GSEAL (drag_x);
+  gint GSEAL (drag_y);
 
-  gchar *title;
-  GList *cell_list;
+  gchar *GSEAL (title);
+  GList *GSEAL (cell_list);
 
   /* Sorting */
-  guint sort_clicked_signal;
-  guint sort_column_changed_signal;
-  gint sort_column_id;
-  GtkSortType sort_order;
+  guint GSEAL (sort_clicked_signal);
+  guint GSEAL (sort_column_changed_signal);
+  gint GSEAL (sort_column_id);
+  GtkSortType GSEAL (sort_order);
 
   /* Flags */
-  guint visible             : 1;
-  guint resizable           : 1;
-  guint clickable           : 1;
-  guint dirty               : 1;
-  guint show_sort_indicator : 1;
-  guint maybe_reordered     : 1;
-  guint reorderable         : 1;
-  guint use_resized_width   : 1;
-  guint expand              : 1;
+  guint GSEAL (visible             : 1);
+  guint GSEAL (resizable           : 1);
+  guint GSEAL (clickable           : 1);
+  guint GSEAL (dirty               : 1);
+  guint GSEAL (show_sort_indicator : 1);
+  guint GSEAL (maybe_reordered     : 1);
+  guint GSEAL (reorderable         : 1);
+  guint GSEAL (use_resized_width   : 1);
+  guint GSEAL (expand              : 1);
 };
 
 struct _GtkTreeViewColumnClass
