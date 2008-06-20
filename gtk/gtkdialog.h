@@ -101,8 +101,8 @@ struct _GtkDialog
   GtkWindow window;
 
   /*< public >*/
-  GtkWidget *vbox;
-  GtkWidget *action_area;
+  GtkWidget *GSEAL (vbox);
+  GtkWidget *GSEAL (action_area);
 
   /*< private >*/
   GtkWidget *separator;
