@@ -7457,7 +7457,7 @@ gtk_window_group_remove_window (GtkWindowGroup *window_group,
 }
 
 /**
- * gtk_window_group_get_windows:
+ * gtk_window_group_list_windows:
  * @window_group: a #GtkWindowGroup
  *
  * Returns a list of the #GtkWindows that belong to @window_group.
@@ -7467,7 +7467,7 @@ gtk_window_group_remove_window (GtkWindowGroup *window_group,
  * Since: GSEAL-branch
  **/
 GList *
-gtk_window_group_get_windows (GtkWindowGroup *window_group)
+gtk_window_group_list_windows (GtkWindowGroup *window_group)
 {
   GList *toplevels, *toplevel, *group_windows;
 

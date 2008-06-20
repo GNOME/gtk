@@ -1,3 +1,9 @@
+2008-06-20  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkwindow.[ch]
+	* gtk/gtk.symbols: rename gtk_window_group_get_windows() to
+	gtk_window_group_list_windows().
+
 2008-06-20 12:35:20 +0200 Tim Janik
 
 	* Fixed wrongly resolved merge conflicts.
