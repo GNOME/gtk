@@ -45,7 +45,7 @@ struct _GtkFileChooserWidget
 {
   GtkVBox parent_instance;
 
-  GtkFileChooserWidgetPrivate *priv;
+  GtkFileChooserWidgetPrivate *GSEAL (priv);
 };
 
 struct _GtkFileChooserWidgetClass
