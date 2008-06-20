@@ -24,6 +24,7 @@
 #ifndef __GTK_TREE_STORE_H__
 #define __GTK_TREE_STORE_H__
 
+#include <gdk/gdkconfig.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreesortable.h>
 #include <stdarg.h>
@@ -46,18 +47,18 @@ struct _GtkTreeStore
 {
   GObject parent;
 
-  gint stamp;
-  gpointer root;
-  gpointer last;
-  gint n_columns;
-  gint sort_column_id;
-  GList *sort_list;
-  GtkSortType order;
-  GType *column_headers;
-  GtkTreeIterCompareFunc default_sort_func;
-  gpointer default_sort_data;
-  GDestroyNotify default_sort_destroy;
-  guint columns_dirty : 1;
+  gint GSEAL (stamp);
+  gpointer GSEAL (root);
+  gpointer GSEAL (last);
+  gint GSEAL (n_columns);
+  gint GSEAL (sort_column_id);
+  GList *GSEAL (sort_list);
+  GtkSortType GSEAL (order);
+  GType *GSEAL (column_headers);
+  GtkTreeIterCompareFunc GSEAL (default_sort_func);
+  gpointer GSEAL (default_sort_data);
+  GtkDestroyNotify GSEAL (default_sort_destroy);
+  guint GSEAL (columns_dirty : 1);
 };
 
 struct _GtkTreeStoreClass
