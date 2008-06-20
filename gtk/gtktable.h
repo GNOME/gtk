@@ -55,14 +55,14 @@ struct _GtkTable
 {
   GtkContainer container;
 
-  GList *children;
-  GtkTableRowCol *rows;
-  GtkTableRowCol *cols;
-  guint16 nrows;
-  guint16 ncols;
-  guint16 column_spacing;
-  guint16 row_spacing;
-  guint homogeneous : 1;
+  GList *GSEAL (children);
+  GtkTableRowCol *GSEAL (rows);
+  GtkTableRowCol *GSEAL (cols);
+  guint16 GSEAL (nrows);
+  guint16 GSEAL (ncols);
+  guint16 GSEAL (column_spacing);
+  guint16 GSEAL (row_spacing);
+  guint GSEAL (homogeneous : 1);
 };
 
 struct _GtkTableClass
