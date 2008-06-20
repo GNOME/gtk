@@ -646,7 +646,7 @@ gdk_directfb_window_new (GdkWindow              *parent,
 }
 
 GdkWindow *
-gdk_window_new (GdkWindow     *parent,
+_gdk_window_new (GdkWindow     *parent,
                 GdkWindowAttr *attributes,
                 gint           attributes_mask)
 {
@@ -1511,7 +1511,7 @@ gdk_window_move_resize (GdkWindow *window,
 }
 
 void
-gdk_window_reparent (GdkWindow *window,
+_gdk_window_reparent (GdkWindow *window,
                      GdkWindow *new_parent,
                      gint       x,
                      gint       y)

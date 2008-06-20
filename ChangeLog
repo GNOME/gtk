@@ -1,3 +1,11 @@
+2008-06-20  Cody Russell  <cody@jhu.edu>
+
+	* gdk/directfb/gdkwindow-directfb.c:
+
+	Rename gdk_window_new -> _gdk_window_new and
+	gdk_window_reparent -> _gdk_window_reparent to fix
+	the build.  (#539095, Sebastien Bacher)
+
 2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkmenuitem.c: remove an unused variable and cast
