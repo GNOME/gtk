@@ -56,9 +56,9 @@ struct _GtkBox
   GtkContainer container;
 
   /*< public >*/
-  GList *children;
-  gint16 spacing;
-  guint homogeneous : 1;
+  GList *GSEAL (children);
+  gint16 GSEAL (spacing);
+  guint GSEAL (homogeneous : 1);
 };
 
 struct _GtkBoxClass
