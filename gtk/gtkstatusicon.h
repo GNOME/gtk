@@ -48,7 +48,7 @@ struct _GtkStatusIcon
 {
   GObject               parent_instance;
 
-  GtkStatusIconPrivate *priv;
+  GtkStatusIconPrivate *GSEAL (priv);
 };
 
 struct _GtkStatusIconClass
