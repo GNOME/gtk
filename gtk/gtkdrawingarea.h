@@ -53,7 +53,7 @@ struct _GtkDrawingArea
 {
   GtkWidget widget;
 
-  gpointer draw_data;
+  gpointer GSEAL (draw_data);
 };
 
 struct _GtkDrawingAreaClass
