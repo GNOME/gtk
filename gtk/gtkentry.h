@@ -58,10 +58,10 @@ struct _GtkEntry
 
   gchar       *GSEAL (text);
 
-  guint        GSEAL (editable) : 1;
-  guint        GSEAL (visible)  : 1;
-  guint        GSEAL (overwrite_mode) : 1;
-  guint        GSEAL (in_drag) : 1;	            /* FIXME: Should be private?
+  guint        GSEAL (editable : 1);
+  guint        GSEAL (visible  : 1);
+  guint        GSEAL (overwrite_mode : 1);
+  guint        GSEAL (in_drag : 1);	            /* FIXME: Should be private?
                                                        Dragging within the selection */
 
   guint16      GSEAL (text_length);	            /* length in use, in chars */
@@ -77,19 +77,19 @@ struct _GtkEntry
 
   PangoLayout  *GSEAL (cached_layout);
 
-  guint         GSEAL (cache_includes_preedit) : 1;
-  guint         GSEAL (need_im_reset)          : 1;
-  guint         GSEAL (has_frame)              : 1;
-  guint         GSEAL (activates_default)      : 1;
-  guint         GSEAL (cursor_visible)         : 1;
-  guint         GSEAL (in_click)               : 1; /* Flag so we don't select all when clicking in entry to focus in */
-  guint         GSEAL (is_cell_renderer)       : 1;
-  guint         GSEAL (editing_canceled)       : 1; /* Only used by GtkCellRendererText */ 
-  guint         GSEAL (mouse_cursor_obscured)  : 1;
-  guint         GSEAL (select_words)           : 1;
-  guint         GSEAL (select_lines)           : 1;
-  guint         GSEAL (resolved_dir)           : 4; /* PangoDirection */
-  guint         GSEAL (truncate_multiline)     : 1;
+  guint         GSEAL (cache_includes_preedit : 1);
+  guint         GSEAL (need_im_reset          : 1);
+  guint         GSEAL (has_frame              : 1);
+  guint         GSEAL (activates_default      : 1);
+  guint         GSEAL (cursor_visible         : 1);
+  guint         GSEAL (in_click               : 1); /* Flag so we don't select all when clicking in entry to focus in */
+  guint         GSEAL (is_cell_renderer       : 1);
+  guint         GSEAL (editing_canceled       : 1); /* Only used by GtkCellRendererText */ 
+  guint         GSEAL (mouse_cursor_obscured  : 1);
+  guint         GSEAL (select_words           : 1);
+  guint         GSEAL (select_lines           : 1);
+  guint         GSEAL (resolved_dir           : 4); /* PangoDirection */
+  guint         GSEAL (truncate_multiline     : 1);
 
   guint         GSEAL (button);
   guint         GSEAL (blink_timeout);
