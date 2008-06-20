@@ -1239,7 +1239,9 @@ gtk_entry_get_invisible_char
 gtk_entry_get_layout
 gtk_entry_get_layout_offsets
 gtk_entry_get_max_length
+gtk_entry_get_overwrite_mode
 gtk_entry_get_text
+gtk_entry_get_text_length
 gtk_entry_get_type G_GNUC_CONST
 gtk_entry_get_visibility
 gtk_entry_get_width_chars
@@ -1260,6 +1262,7 @@ gtk_entry_set_has_frame
 gtk_entry_set_inner_border
 gtk_entry_set_invisible_char
 gtk_entry_set_max_length
+gtk_entry_set_overwrite_mode
 gtk_entry_set_text
 gtk_entry_set_visibility
 gtk_entry_set_width_chars
