@@ -1485,11 +1485,11 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
  *
  * Returns the action area of @dialog.
  *
- * Returns: a #GtkHButtonBox.
+ * Returns: the action area.
  *
  * Since: GSEAL-branch
  **/
-GtkHButtonBox *
+GtkWidget *
 gtk_dialog_get_action_area (GtkDialog *dialog)
 {
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);

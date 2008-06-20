@@ -1,5 +1,10 @@
 2008-06-20  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkdialog.c (gtk_dialog_get_action_area): change return
+	value from GtkHButtonBox to GtkWidget.
+
+2008-06-20  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkhandlebox.h (struct _GtkHandleBox): deuglify formatting
 	of sealed fields.
 
