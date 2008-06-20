@@ -55,13 +55,13 @@ struct _GtkAccelLabel
 {
   GtkLabel label;
 
-  guint	         gtk_reserved;
-  guint	         accel_padding;
-  GtkWidget     *accel_widget;
-  GClosure	*accel_closure;
-  GtkAccelGroup *accel_group;
-  gchar         *accel_string;
-  guint16        accel_string_width;
+  guint		 GSEAL (gtk_reserved);
+  guint		 GSEAL (accel_padding);      /* should be style property? */
+  GtkWidget	*GSEAL (accel_widget);       /* done*/
+  GClosure	*GSEAL (accel_closure);      /* has set function */
+  GtkAccelGroup	*GSEAL (accel_group);        /* set by set_accel_closure() */
+  gchar		*GSEAL (accel_string);       /* has set function */
+  guint16	 GSEAL (accel_string_width); /* seems to be private */
 };
 
 struct _GtkAccelLabelClass
