@@ -54,11 +54,11 @@ struct _GtkButton
 {
   GtkBin bin;
 
-  GdkWindow *event_window;
+  GdkWindow *GSEAL (event_window);
 
-  gchar *label_text;
+  gchar *GSEAL (label_text);
 
-  guint activate_timeout;
+  guint GSEAL (activate_timeout);
 
   guint GSEAL (constructed : 1);
   guint GSEAL (in_button : 1);
