@@ -67,18 +67,18 @@ struct _GtkProgressBar
 {
   GtkProgress progress;
 
-  GtkProgressBarStyle GSEAL(bar_style);
-  GtkProgressBarOrientation GSEAL(orientation);
+  GtkProgressBarStyle       GSEAL (bar_style);
+  GtkProgressBarOrientation GSEAL (orientation);
 
-  guint GSEAL(blocks);
-  gint  GSEAL(in_block);
+  guint GSEAL (blocks);
+  gint  GSEAL (in_block);
 
-  gint  GSEAL(activity_pos);
-  guint GSEAL(activity_step);
-  guint GSEAL(activity_blocks);
+  gint  GSEAL (activity_pos);
+  guint GSEAL (activity_step);
+  guint GSEAL (activity_blocks);
 
-  gdouble GSEAL(pulse_fraction);
-  
+  gdouble GSEAL (pulse_fraction);
+
   guint GSEAL (activity_dir) : 1;
   guint GSEAL (ellipsize) : 3;
   guint GSEAL (dirty) : 1;

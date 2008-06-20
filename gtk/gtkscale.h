@@ -53,7 +53,7 @@ struct _GtkScale
 {
   GtkRange range;
 
-  gint GSEAL(digits);
+  gint  GSEAL (digits);
   guint GSEAL (draw_value) : 1;
   guint GSEAL (value_pos) : 2;
 };

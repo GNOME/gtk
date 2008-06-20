@@ -54,10 +54,10 @@ struct _GtkAlignment
 {
   GtkBin bin;
 
-  gfloat GSEAL(xalign);
-  gfloat GSEAL(yalign);
-  gfloat GSEAL(xscale);
-  gfloat GSEAL(yscale);
+  gfloat GSEAL (xalign);
+  gfloat GSEAL (yalign);
+  gfloat GSEAL (xscale);
+  gfloat GSEAL (yscale);
 };
 
 struct _GtkAlignmentClass

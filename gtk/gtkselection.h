@@ -58,12 +58,12 @@ typedef struct _GtkTargetEntry   GtkTargetEntry;
 
 struct _GtkSelectionData
 {
-  GdkAtom	GSEAL (selection);
-  GdkAtom	GSEAL (target);
-  GdkAtom	GSEAL (type);
-  gint		GSEAL (format);
+  GdkAtom       GSEAL (selection);
+  GdkAtom       GSEAL (target);
+  GdkAtom       GSEAL (type);
+  gint          GSEAL (format);
   guchar       *GSEAL (data);
-  gint		GSEAL (length);
+  gint          GSEAL (length);
   GdkDisplay   *GSEAL (display);
 };
 

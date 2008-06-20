@@ -86,7 +86,8 @@ struct _GtkRange
   /* Area of entire stepper + trough assembly in widget->window coords */
   GdkRectangle GSEAL (range_rect);
   /* Slider range along the long dimension, in widget->window coords */
-  gint GSEAL (slider_start), GSEAL (slider_end);
+  gint GSEAL (slider_start);
+  gint GSEAL (slider_end);
 
   /* Round off value to this many digits, -1 for no rounding */
   gint GSEAL (round_digits);

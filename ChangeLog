@@ -1,3 +1,19 @@
+2008-06-20  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkaccellabel.h
+	* gtk/gtkactiongroup.h
+	* gtk/gtkalignment.h
+	* gtk/gtkarrow.h
+	* gtk/gtkaspectframe.h
+	* gtk/gtkbin.h
+	* gtk/gtkhandlebox.h
+	* gtk/gtkprogressbar.h
+	* gtk/gtkrange.h
+	* gtk/gtkscale.h
+	* gtk/gtkscalebutton.h
+	* gtk/gtkselection.h: fix some formatting and spacing uglyness
+	that got merged from the GSEAL branch.
+
 2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtk.symbols:
