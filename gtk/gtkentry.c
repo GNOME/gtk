@@ -4473,9 +4473,7 @@ gtk_entry_set_text (GtkEntry    *entry,
  *
  * Appends the given text to the contents of the widget.
  *
- * Deprecated: gtk_entry_append_text() is deprecated and should not
- *   be used in newly-written code. Use gtk_editable_insert_text()
- *   instead.
+ * Deprecated: 2.0: Use gtk_editable_insert_text() instead.
  */
 void
 gtk_entry_append_text (GtkEntry *entry,
@@ -4497,9 +4495,7 @@ gtk_entry_append_text (GtkEntry *entry,
  *
  * Prepends the given text to the contents of the widget.
  *
- * Deprecated: gtk_entry_prepend_text() is deprecated and should not
- *    be used in newly-written code. Use gtk_editable_insert_text()
- *    instead.
+ * Deprecated: 2.0: Use gtk_editable_insert_text() instead.
  */
 void
 gtk_entry_prepend_text (GtkEntry *entry,
@@ -4526,7 +4522,7 @@ gtk_entry_prepend_text (GtkEntry *entry,
  *
  * Sets the cursor position in an entry to the given value. 
  *
- * Deprecated: Use gtk_editable_set_position() instead.
+ * Deprecated: 2.0: Use gtk_editable_set_position() instead.
  */
 void
 gtk_entry_set_position (GtkEntry *entry,
@@ -4661,7 +4657,7 @@ gtk_entry_get_invisible_char (GtkEntry *entry)
  * Determines if the user can edit the text in the editable
  * widget or not. 
  *
- * Deprecated: Use gtk_editable_set_editable() instead.
+ * Deprecated: 2.0: Use gtk_editable_set_editable() instead.
  */
 void
 gtk_entry_set_editable (GtkEntry *entry,
@@ -4745,7 +4741,7 @@ gtk_entry_get_text (GtkEntry *entry)
  * selected will be those characters from @start_pos to the end of 
  * the text. 
  *
- * Deprecated: Use gtk_editable_select_region() instead.
+ * Deprecated: 2.0: Use gtk_editable_select_region() instead.
  */
 void       
 gtk_entry_select_region  (GtkEntry       *entry,

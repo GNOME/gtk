@@ -309,7 +309,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    *
    * Emitted when the button is pressed.
    * 
-   * Deprecated: Use the #GtkWidget::button-press-event signal.
+   * Deprecated: 2.8: Use the #GtkWidget::button-press-event signal.
    */ 
   button_signals[PRESSED] =
     g_signal_new (I_("pressed"),
@@ -326,7 +326,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    *
    * Emitted when the button is released.
    * 
-   * Deprecated: Use the #GtkWidget::button-release-event signal.
+   * Deprecated: 2.8: Use the #GtkWidget::button-release-event signal.
    */ 
   button_signals[RELEASED] =
     g_signal_new (I_("released"),
@@ -358,7 +358,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    *
    * Emitted when the pointer enters the button.
    * 
-   * Deprecated: Use the #GtkWidget::enter-notify-event signal.
+   * Deprecated: 2.8: Use the #GtkWidget::enter-notify-event signal.
    */ 
   button_signals[ENTER] =
     g_signal_new (I_("enter"),
@@ -375,7 +375,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    *
    * Emitted when the pointer leaves the button.
    * 
-   * Deprecated: Use the #GtkWidget::leave-notify-event signal.
+   * Deprecated: 2.8: Use the #GtkWidget::leave-notify-event signal.
    */ 
   button_signals[LEAVE] =
     g_signal_new (I_("leave"),

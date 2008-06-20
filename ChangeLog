@@ -1,3 +1,13 @@
+2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkbutton.c:
+	* gtk/gtkcolorsel.c:
+	* gtk/gtkentry.c:
+	* gtk/gtkitemfactory.c:
+	* gtk/gtknotebook.c:
+	Fix up deprecated markup syntax. Add version numbers and
+	a message on the remaning ones.
+
 2008-06-20  Mikael Hallendal  <micke@imendio.com>
 
 	* tests/testthreads.c: Use g_signal_connect instead of

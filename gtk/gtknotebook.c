@@ -7339,7 +7339,7 @@ gtk_notebook_set_window_creation_hook (GtkNotebookWindowCreationFunc  func,
  * not be able to exchange tabs with any other notebook.
  * 
  * Since: 2.10
- * Deprecated:2.12: use gtk_notebook_set_group() instead.
+ * Deprecated: 2.12: use gtk_notebook_set_group() instead.
  */
 void
 gtk_notebook_set_group_id (GtkNotebook *notebook,
@@ -7393,7 +7393,7 @@ gtk_notebook_set_group (GtkNotebook *notebook,
  * Return Value: the group identificator, or -1 if none is set.
  *
  * Since: 2.10
- * Deprecated:2.12: use gtk_notebook_get_group() instead.
+ * Deprecated: 2.12: use gtk_notebook_get_group() instead.
  */
 gint
 gtk_notebook_get_group_id (GtkNotebook *notebook)

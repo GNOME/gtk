@@ -2451,7 +2451,7 @@ gtk_color_selection_set_current_alpha (GtkColorSelection *colorsel,
  * Sets the current color to be @color.  The first time this is called, it will
  * also set the original color to be @color too.
  *
- * Deprecated: Use gtk_color_selection_set_current_color() instead.
+ * Deprecated: 2.0: Use gtk_color_selection_set_current_color() instead.
  **/
 void
 gtk_color_selection_set_color (GtkColorSelection    *colorsel,
@@ -2826,7 +2826,7 @@ gtk_color_selection_palette_to_string (const GdkColor *colors,
  *
  * Return value: the previous change palette hook (that was replaced).
  *
- * Deprecated: This function is deprecated in favor of 
+ * Deprecated: 2.4: This function is deprecated in favor of 
  * gtk_color_selection_set_change_palette_with_screen_hook(), and does
  * not work in multihead environments.
  * 
