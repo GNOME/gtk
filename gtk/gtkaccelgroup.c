@@ -61,12 +61,9 @@ static guint		 default_accel_mod_mask = (GDK_SHIFT_MASK |
 
 
 enum {
-	PROP_0,
-	PROP_LOCK_COUNT,
-	PROP_MODIFIER_MASK,
-        PROP_ACCELERATABLES,
-        PROP_N_ACCELS,
-        PROP_PRIV_ACCELS
+  PROP_0,
+  PROP_IS_LOCKED,
+  PROP_MODIFIER_MASK,
 };
 
 G_DEFINE_TYPE (GtkAccelGroup, gtk_accel_group, G_TYPE_OBJECT)
@@ -85,14 +82,12 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
   class->accel_changed = NULL;
 
   g_object_class_install_property (object_class,
-                                   PROP_LOCK_COUNT,
-                                   g_param_spec_uint ("lock-count",
-                                                      "Lock Count",
-                                                      "Total locks on this accel group",
-                                                      0,
-                                                      G_MAXUINT,
-                                                      0,
-                                                      G_PARAM_READABLE));
+                                   PROP_IS_LOCKED,
+                                   g_param_spec_boolean ("is-locked",
+                                                         "Is locked",
+                                                         "Is the accel group locked",
+                                                         FALSE,
+                                                         G_PARAM_READABLE));
   g_object_class_install_property (object_class,
                                    PROP_MODIFIER_MASK,
                                    g_param_spec_enum ("modifier-mask",
@@ -101,28 +96,6 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
                                                       gdk_modifier_type_get_type (),
                                                       0,
                                                       G_PARAM_READABLE));
-  g_object_class_install_property (object_class,
-                                   PROP_ACCELERATABLES,
-                                   g_param_spec_pointer ("acceleratables",
-                                                         "Acceleratables",
-                                                         "Acceleratables",
-                                                         G_PARAM_READABLE));
-  g_object_class_install_property (object_class,
-                                   PROP_N_ACCELS,
-                                   g_param_spec_uint ("n-accels",
-                                                      "N Accels",
-                                                      "Number of acceleraters",
-                                                      0,
-                                                      G_MAXUINT,
-                                                      0,
-                                                      G_PARAM_READABLE));
-  g_object_class_install_property (object_class,
-                                   PROP_PRIV_ACCELS,
-                                   g_param_spec_pointer ("priv-accels",
-                                                         "Priv Accels",
-                                                         "Private Acceleraters",
-                                                         G_PARAM_READABLE));
-  
 
   /**
    * GtkAccelGroup::accel-activate:
@@ -207,20 +180,11 @@ gtk_accel_group_get_property (GObject    *object,
   GtkAccelGroup *accel_group = GTK_ACCEL_GROUP (object);
 
   switch (param_id) {
-  case PROP_LOCK_COUNT:
-    g_value_set_uint (value, accel_group->lock_count);
+  case PROP_IS_LOCKED:
+    g_value_set_boolean (value, accel_group->lock_count > 0);
     break;
   case PROP_MODIFIER_MASK:
     g_value_set_enum (value, accel_group->modifier_mask);
-    break;
-  case PROP_ACCELERATABLES:
-    g_value_set_pointer (value, accel_group->acceleratables);
-    break;
-  case PROP_N_ACCELS:
-    g_value_set_uint (value, accel_group->n_accels);
-    break;
-  case PROP_PRIV_ACCELS:
-    g_value_set_pointer (value, accel_group->priv_accels);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -250,44 +214,36 @@ gtk_accel_group_new (void)
   return g_object_new (GTK_TYPE_ACCEL_GROUP, NULL);
 }
 
-guint          
-gtk_accel_group_get_lock_count (GtkAccelGroup *accel_group)
+/**
+ * gtk_accel_group_get_is_locked:
+ * @accel_group: a #GtkAccelGroup
+ * @returns: %TRUE if there are 1 or more locks on the @accel_group,
+ * %FALSE otherwise. 
+ *
+ * Locks are added and removed using gtk_accel_group_lock() and
+ * gtk_accel_group_unlock(). 
+ *
+ */
+gboolean          
+gtk_accel_group_get_is_locked (GtkAccelGroup *accel_group)
 {
-  g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), 0);
+  g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), FALSE);
 
-  return accel_group->lock_count;
+  return accel_group->lock_count > 0;
 }
 
+/**
+ * gtk_accel_group_get_modifier_mask:
+ * @accel_group: a #GtkAccelGroup
+ * @returns: #GdkModifierType representing the mask for this
+ * @accel_group. For example, #GDK_CONTROL_MASK, #GDK_SHIFT_MASK, etc. 
+ */
 GdkModifierType
 gtk_accel_group_get_modifier_mask (GtkAccelGroup *accel_group)
 {
   g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), 0);
 
   return accel_group->modifier_mask;
-}
-
-GSList *
-gtk_accel_group_get_acceleratables (GtkAccelGroup *accel_group)
-{
-  g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), NULL);
-
-  return accel_group->acceleratables;
-}
-
-guint
-gtk_accel_group_get_n_accels (GtkAccelGroup *accel_group)
-{
-  g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), 0);
-
-  return accel_group->n_accels;
-}
-
-GtkAccelGroupEntry *
-gtk_accel_group_get_priv_accels (GtkAccelGroup *accel_group)
-{
-  g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), NULL);
-
-  return accel_group->priv_accels;
 }
 
 static void
