@@ -57,9 +57,9 @@ struct _GtkContainer
 {
   GtkWidget widget;
 
-  GtkWidget *focus_child;
+  GtkWidget *GSEAL (focus_child);
 
-  guint border_width : 16;
+  guint GSEAL (border_width : 16);
 
   /*< private >*/
   guint need_resize : 1;
