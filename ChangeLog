@@ -1,3 +1,9 @@
+2008-06-20  Martyn Russell  <martyn@imendio.com>
+
+	* gtk/gtkaccelgroup.c: Don't call g_object_notify() with
+	properties that don't exist. Also, make sure we notify for
+	the "is-locked" property.
+
 2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtklayout.c (enum): Remove left-over unused property enum.

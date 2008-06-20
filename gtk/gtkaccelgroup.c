@@ -266,7 +266,6 @@ accel_group_weak_ref_detach (GSList  *free_list,
       accel_group = slist->data;
       accel_group->acceleratables = g_slist_remove (accel_group->acceleratables, stale_object);
       g_object_unref (accel_group);
-      g_object_notify (G_OBJECT (accel_group), "acceleratables");
     }
   g_slist_free (free_list);
   g_object_set_qdata (stale_object, quark_acceleratable_groups, NULL);
@@ -294,7 +293,6 @@ _gtk_accel_group_attach (GtkAccelGroup *accel_group,
   g_object_weak_ref (object,
 		     (GWeakNotify) accel_group_weak_ref_detach,
 		     slist);
-  g_object_notify (G_OBJECT (accel_group), "acceleratables");
 }
 
 void
@@ -318,7 +316,6 @@ _gtk_accel_group_detach (GtkAccelGroup *accel_group,
     g_object_weak_ref (object,
 		       (GWeakNotify) accel_group_weak_ref_detach,
 		       slist);
-  g_object_notify (G_OBJECT (accel_group), "acceleratables");
   g_object_unref (accel_group);
 }
 
@@ -395,7 +392,10 @@ gtk_accel_group_lock (GtkAccelGroup *accel_group)
   
   accel_group->lock_count += 1;
 
-  g_object_notify (G_OBJECT (accel_group), "lock-count");
+  if (accel_group->lock_count == 1) {
+    /* State change from unlocked to locked */
+    g_object_notify (accel_group, "is-locked");
+  }
 }
 
 /**
@@ -412,7 +412,10 @@ gtk_accel_group_unlock (GtkAccelGroup *accel_group)
 
   accel_group->lock_count -= 1;
 
-  g_object_notify (G_OBJECT (accel_group), "lock-count");
+  if (accel_group->lock_count < 1) {
+    /* State change from locked to unlocked */
+    g_object_notify (accel_group, "is-locked");
+  }
 }
 
 static void
@@ -465,7 +468,6 @@ quick_accel_add (GtkAccelGroup  *accel_group,
   accel_group->priv_accels[pos].closure = g_closure_ref (closure);
   accel_group->priv_accels[pos].accel_path_quark = path_quark;
   g_closure_sink (closure);
-  g_object_notify (G_OBJECT (accel_group), "priv-accels");
   
   /* handle closure invalidation and reverse lookups */
   g_closure_add_invalidate_notifier (closure, accel_group, accel_closure_invalidate);
