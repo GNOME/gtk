@@ -1513,6 +1513,25 @@ gtk_window_set_default (GtkWindow *window,
     }
 }
 
+/**
+ * gtk_window_get_default:
+ * @window: a #GtkWindow
+ *
+ * Returns the default widget for @window. See gtk_window_set_default()
+ * for more details.
+ *
+ * Returns: the default widget, or %NULL if there is none.
+ *
+ * Since: GSEAL-branch
+ **/
+GtkWidget *
+gtk_window_get_default (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+
+  return window->default_widget;
+}
+
 void
 gtk_window_set_policy (GtkWindow *window,
 		       gboolean   allow_shrink,
