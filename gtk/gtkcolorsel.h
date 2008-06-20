@@ -60,7 +60,7 @@ struct _GtkColorSelection
   GtkVBox parent_instance;
 
   /* < private_data > */
-  gpointer private_data;
+  gpointer GSEAL (private_data);
 };
 
 struct _GtkColorSelectionClass
