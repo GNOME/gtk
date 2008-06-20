@@ -45,15 +45,15 @@ struct _GtkSizeGroup
   GObject parent_instance;
 
   /* <private> */
-  GSList *widgets;
+  GSList *GSEAL (widgets);
 
-  guint8 mode;
+  guint8 GSEAL (mode);
 
-  guint have_width : 1;
-  guint have_height : 1;
-  guint ignore_hidden : 1;
+  guint GSEAL (have_width : 1);
+  guint GSEAL (have_height : 1);
+  guint GSEAL (ignore_hidden : 1);
 
-  GtkRequisition requisition;
+  GtkRequisition GSEAL (requisition);
 };
 
 struct _GtkSizeGroupClass
