@@ -69,54 +69,54 @@ struct _GtkTextView
 {
   GtkContainer parent_instance;
 
-  struct _GtkTextLayout *layout;
-  GtkTextBuffer *buffer;
+  struct _GtkTextLayout *GSEAL (layout);
+  GtkTextBuffer *GSEAL (buffer);
 
-  guint selection_drag_handler;
-  guint scroll_timeout;
+  guint GSEAL (selection_drag_handler);
+  guint GSEAL (scroll_timeout);
 
   /* Default style settings */
-  gint pixels_above_lines;
-  gint pixels_below_lines;
-  gint pixels_inside_wrap;
-  GtkWrapMode wrap_mode;
-  GtkJustification justify;
-  gint left_margin;
-  gint right_margin;
-  gint indent;
-  PangoTabArray *tabs;
-  guint editable : 1;
+  gint GSEAL (pixels_above_lines);
+  gint GSEAL (pixels_below_lines);
+  gint GSEAL (pixels_inside_wrap);
+  GtkWrapMode GSEAL (wrap_mode);
+  GtkJustification GSEAL (justify);
+  gint GSEAL (left_margin);
+  gint GSEAL (right_margin);
+  gint GSEAL (indent);
+  PangoTabArray *GSEAL (tabs);
+  guint GSEAL (editable : 1);
 
-  guint overwrite_mode : 1;
-  guint cursor_visible : 1;
+  guint GSEAL (overwrite_mode : 1);
+  guint GSEAL (cursor_visible : 1);
 
-  /* if we have reset the IM since the last character entered */
-  guint  need_im_reset : 1;
+  /* if we have reset the IM since the last character entered */  
+  guint GSEAL (need_im_reset : 1);
 
-  guint accepts_tab : 1;
+  guint GSEAL (accepts_tab : 1);
 
-  guint width_changed : 1;
+  guint GSEAL (width_changed : 1);
 
   /* debug flag - means that we've validated onscreen since the
    * last "invalidate" signal from the layout
    */
-  guint onscreen_validated : 1;
+  guint GSEAL (onscreen_validated : 1);
 
-  guint mouse_cursor_obscured : 1;
+  guint GSEAL (mouse_cursor_obscured : 1);
 
-  GtkTextWindow *text_window;
-  GtkTextWindow *left_window;
-  GtkTextWindow *right_window;
-  GtkTextWindow *top_window;
-  GtkTextWindow *bottom_window;
+  GtkTextWindow *GSEAL (text_window);
+  GtkTextWindow *GSEAL (left_window);
+  GtkTextWindow *GSEAL (right_window);
+  GtkTextWindow *GSEAL (top_window);
+  GtkTextWindow *GSEAL (bottom_window);
 
-  GtkAdjustment *hadjustment;
-  GtkAdjustment *vadjustment;
+  GtkAdjustment *GSEAL (hadjustment);
+  GtkAdjustment *GSEAL (vadjustment);
 
-  gint xoffset;                 /* Offsets between widget coordinates and buffer coordinates */
-  gint yoffset;
-  gint width;                   /* Width and height of the buffer */
-  gint height;
+  gint GSEAL (xoffset);         /* Offsets between widget coordinates and buffer coordinates */
+  gint GSEAL (yoffset);
+  gint GSEAL (width);           /* Width and height of the buffer */
+  gint GSEAL (height);
 
   /* The virtual cursor position is normally the same as the
    * actual (strong) cursor position, except in two circumstances:
@@ -127,29 +127,29 @@ struct _GtkTextView
    * In case a), virtual_cursor_x is preserved, but not virtual_cursor_y
    * In case b), both virtual_cursor_x and virtual_cursor_y are preserved.
    */
-  gint virtual_cursor_x;           /* -1 means use actual cursor position */
-  gint virtual_cursor_y;           /* -1 means use actual cursor position */
+  gint GSEAL (virtual_cursor_x);   /* -1 means use actual cursor position */
+  gint GSEAL (virtual_cursor_y);   /* -1 means use actual cursor position */
 
-  GtkTextMark *first_para_mark;    /* Mark at the beginning of the first onscreen paragraph */
-  gint first_para_pixels;          /* Offset of top of screen in the first onscreen paragraph */
+  GtkTextMark *GSEAL (first_para_mark); /* Mark at the beginning of the first onscreen paragraph */
+  gint GSEAL (first_para_pixels);       /* Offset of top of screen in the first onscreen paragraph */
 
-  GtkTextMark *dnd_mark;
-  guint blink_timeout;
+  GtkTextMark *GSEAL (dnd_mark);
+  guint GSEAL (blink_timeout);
 
-  guint first_validate_idle;            /* Idle to revalidate onscreen portion, runs before resize */
-  guint incremental_validate_idle;      /* Idle to revalidate offscreen portions, runs after redraw */
+  guint GSEAL (first_validate_idle);        /* Idle to revalidate onscreen portion, runs before resize */
+  guint GSEAL (incremental_validate_idle);  /* Idle to revalidate offscreen portions, runs after redraw */
 
-  GtkIMContext *im_context;
-  GtkWidget *popup_menu;
+  GtkIMContext *GSEAL (im_context);
+  GtkWidget *GSEAL (popup_menu);
 
-  gint drag_start_x;
-  gint drag_start_y;
+  gint GSEAL (drag_start_x);
+  gint GSEAL (drag_start_y);
 
-  GSList *children;
+  GSList *GSEAL (children);
 
-  GtkTextPendingScroll *pending_scroll;
+  GtkTextPendingScroll *GSEAL (pending_scroll);
 
-  gint pending_place_cursor_button;
+  gint GSEAL (pending_place_cursor_button);
 };
 
 struct _GtkTextViewClass
