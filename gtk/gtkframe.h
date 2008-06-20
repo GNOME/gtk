@@ -54,12 +54,12 @@ struct _GtkFrame
 {
   GtkBin bin;
 
-  GtkWidget *GSEAL(label_widget);
-  gint16 GSEAL(shadow_type);
-  gfloat GSEAL(label_xalign);
-  gfloat GSEAL(label_yalign);
+  GtkWidget *GSEAL (label_widget);
+  gint16 GSEAL (shadow_type);
+  gfloat GSEAL (label_xalign);
+  gfloat GSEAL (label_yalign);
 
-  GtkAllocation child_allocation;
+  GtkAllocation GSEAL (child_allocation);
 };
 
 struct _GtkFrameClass
