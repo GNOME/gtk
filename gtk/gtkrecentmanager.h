@@ -87,7 +87,7 @@ struct _GtkRecentManager
   /*< private >*/
   GObject parent_instance;
 
-  GtkRecentManagerPrivate *priv;
+  GtkRecentManagerPrivate *GSEAL (priv);
 };
 
 struct _GtkRecentManagerClass
