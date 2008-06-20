@@ -121,8 +121,13 @@ enum {
 
 enum {
   PROP_0,
+  PROP_ACTIVE,
+  PROP_ACCEL_GROUP,
+  PROP_ACCEL_PATH,
+  PROP_ATTACH_WIDGET,
   PROP_TEAROFF_STATE,
-  PROP_TEAROFF_TITLE
+  PROP_TEAROFF_TITLE,
+  PROP_MONITOR
 };
 
 enum {
@@ -482,7 +487,67 @@ gtk_menu_class_init (GtkMenuClass *class)
 			     _gtk_marshal_VOID__ENUM,
 			     G_TYPE_NONE, 1,
 			     GTK_TYPE_SCROLL_TYPE);
-  
+
+  /**
+   * GtkMenu:active:
+   *
+   * The currently selected menu item.
+   *
+   * Since: GSEAL-branch
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACTIVE,
+                                   g_param_spec_uint ("active",
+				                      P_("Active"),
+						      P_("The currently selected menu item"),
+						      0, G_MAXUINT, 0,
+						      GTK_PARAM_READWRITE));
+
+  /**
+   * GtkMenu:accel-group:
+   *
+   * The accel group holding accelerators for the menu.
+   *
+   * Since: GSEAL-branch
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACCEL_GROUP,
+                                   g_param_spec_object ("accel-group",
+				                        P_("Accel Group"),
+						        P_("The accel group holding accelerators for the menu"),
+						        GTK_TYPE_ACCEL_GROUP,
+						        GTK_PARAM_READWRITE));
+
+  /**
+   * GtkMenu:accel-path:
+   *
+   * An accel path used to conveniently construct accel paths of child items.
+   *
+   * Since: GSEAL-branch
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACCEL_PATH,
+                                   g_param_spec_string ("accel-path",
+				                        P_("Accel Path"),
+						        P_("An accel path used to conveniently construct accel paths of child items"),
+						        NULL,
+						        GTK_PARAM_READWRITE));
+
+  /**
+   * GtkMenu:attach-widget:
+   *
+   * The widget the menu is attached to.
+   *
+   * Since: GSEAL-branch
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACCEL_PATH,
+                                   g_param_spec_string ("attach-widget",
+				                        P_("Attach Widget"),
+						        P_("The widget the menu is attached to"),
+						        NULL,
+						        GTK_PARAM_READWRITE));
+
   g_object_class_install_property (gobject_class,
                                    PROP_TEAROFF_TITLE,
                                    g_param_spec_string ("tearoff-title",
@@ -505,6 +570,21 @@ gtk_menu_class_init (GtkMenuClass *class)
 							 P_("A boolean that indicates whether the menu is torn-off"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
+
+  /**
+   * GtkMenu:monitor:
+   *
+   * The monitor the menu will be popped up on.
+   *
+   * Since: GSEAL-branch
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_MONITOR,
+                                   g_param_spec_int ("monitor",
+				                     P_("Monitor"),
+						     P_("The monitor the menu will be popped up on"),
+						     -1, G_MAXINT, -1,
+						     GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("vertical-padding",
@@ -702,12 +782,27 @@ gtk_menu_set_property (GObject      *object,
   
   switch (prop_id)
     {
+    case PROP_ACTIVE:
+      gtk_menu_set_active (menu, g_value_get_uint (value));
+      break;
+    case PROP_ACCEL_GROUP:
+      gtk_menu_set_accel_group (menu, g_value_get_object (value));
+      break;
+    case PROP_ACCEL_PATH:
+      gtk_menu_set_accel_path (menu, g_value_get_string (value));
+      break;
+    case PROP_ATTACH_WIDGET:
+      gtk_menu_attach (menu, g_value_get_object (value), 0, 0, 0, 0);
+      break;
     case PROP_TEAROFF_STATE:
       gtk_menu_set_tearoff_state (menu, g_value_get_boolean (value));
       break;
     case PROP_TEAROFF_TITLE:
       gtk_menu_set_title (menu, g_value_get_string (value));
-      break;	  
+      break;
+    case PROP_MONITOR:
+      gtk_menu_set_monitor (menu, g_value_get_int (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -726,11 +821,26 @@ gtk_menu_get_property (GObject     *object,
   
   switch (prop_id)
     {
+    case PROP_ACTIVE:
+      g_value_set_boolean (value, gtk_menu_get_active (menu));
+      break;
+    case PROP_ACCEL_GROUP:
+      g_value_set_object (value, gtk_menu_get_accel_group (menu));
+      break;
+    case PROP_ACCEL_PATH:
+      g_value_set_string (value, gtk_menu_get_accel_path (menu));
+      break;
+    case PROP_ATTACH_WIDGET:
+      g_value_set_object (value, gtk_menu_get_attach_widget (menu));
+      break;
     case PROP_TEAROFF_STATE:
       g_value_set_boolean (value, gtk_menu_get_tearoff_state (menu));
       break;
     case PROP_TEAROFF_TITLE:
       g_value_set_string (value, gtk_menu_get_title (menu));
+      break;
+    case PROP_MONITOR:
+      g_value_set_int (value, gtk_menu_get_monitor (menu));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1653,6 +1763,22 @@ gtk_menu_set_accel_path (GtkMenu     *menu,
   menu->accel_path = (gchar*)g_intern_string (accel_path);
   if (menu->accel_path)
     _gtk_menu_refresh_accel_paths (menu, FALSE);
+}
+
+/**
+ * gtk_menu_get_accel_path
+ * @menu:       a valid #GtkMenu
+ *
+ * Retrieves the accelerator path set on the menu.
+ *
+ * Since:  GSEAL-branch
+ */
+const gchar*
+gtk_menu_get_accel_path (GtkMenu     *menu)
+{
+  g_return_if_fail (GTK_IS_MENU (menu));
+
+  return menu->accel_path;
 }
 
 typedef struct {
@@ -4917,6 +5043,28 @@ gtk_menu_set_monitor (GtkMenu *menu,
   priv = gtk_menu_get_private (menu);
   
   priv->monitor_num = monitor_num;
+}
+
+/**
+ * gtk_menu_get_monitor:
+ * @menu: a #GtkMenu
+ *
+ * Retrieves the number of the monitor on which to show the menu.
+ *
+ * Since: GSEAL-branch
+ *
+ * Returns: the number of the monitor on which the menu should
+ *    be popped up or -1
+ **/
+gint
+gtk_menu_get_monitor (GtkMenu *menu)
+{
+  GtkMenuPrivate *priv;
+  g_return_if_fail (GTK_IS_MENU (menu));
+
+  priv = gtk_menu_get_private (menu);
+  
+  return priv->monitor_num;
 }
 
 /**
