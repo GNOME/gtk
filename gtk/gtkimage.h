@@ -122,7 +122,7 @@ struct _GtkImage
 {
   GtkMisc misc;
 
-  GtkImageType storage_type;
+  GtkImageType GSEAL (storage_type);
   
   union
   {
@@ -134,13 +134,13 @@ struct _GtkImage
     GtkImageAnimationData anim;
     GtkImageIconNameData name;
     GtkImageGIconData gicon;
-  } data;
+  } GSEAL (data);
 
   /* Only used with GTK_IMAGE_PIXMAP, GTK_IMAGE_IMAGE */
-  GdkBitmap *mask;
+  GdkBitmap *GSEAL (mask);
 
   /* Only used with GTK_IMAGE_STOCK, GTK_IMAGE_ICON_SET, GTK_IMAGE_ICON_NAME */
-  GtkIconSize icon_size;
+  GtkIconSize GSEAL (icon_size);
 };
 
 struct _GtkImageClass
