@@ -105,7 +105,7 @@ struct _GtkDialog
   GtkWidget *GSEAL (action_area);
 
   /*< private >*/
-  GtkWidget *separator;
+  GtkWidget *GSEAL (separator);
 };
 
 struct _GtkDialogClass
