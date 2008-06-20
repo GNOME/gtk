@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD.hu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-19 12:48+0000\n"
-"PO-Revision-Date: 2008-06-21 00:30+0200\n"
+"PO-Revision-Date: 2008-06-21 01:26+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
@@ -1376,7 +1376,7 @@ msgstr "Tiltva"
 #.
 #: ../gtk/gtkcellrendereraccel.c:368 ../gtk/gtkcellrendereraccel.c:580
 msgid "New accelerator..."
-msgstr "Új gyorsbillentyű..."
+msgstr "Új gyorsbillentyű…"
 
 #. do not translate the part before the |
 #: ../gtk/gtkcellrendererprogress.c:362 ../gtk/gtkcellrendererprogress.c:449
@@ -1522,11 +1522,11 @@ msgstr "Szín kiválasztása"
 
 #: ../gtk/gtkentry.c:5276 ../gtk/gtktextview.c:7668
 msgid "Input _Methods"
-msgstr "Beviteli _módok"
+msgstr "Beviteli mó_dok"
 
 #: ../gtk/gtkentry.c:5290 ../gtk/gtktextview.c:7682
 msgid "_Insert Unicode Control Character"
-msgstr "Unicode vezérlőkarakter _beszúrása"
+msgstr "_Unicode vezérlőkarakter beszúrása"
 
 #: ../gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
@@ -1542,7 +1542,7 @@ msgstr "(Nincs)"
 
 #: ../gtk/gtkfilechooserbutton.c:2030
 msgid "Other..."
-msgstr "Egyéb..."
+msgstr "Egyéb…"
 
 #: ../gtk/gtkfilechooserdefault.c:1073
 msgid "Could not retrieve information about the file"
@@ -1623,7 +1623,7 @@ msgstr "Eltávolítás"
 
 #: ../gtk/gtkfilechooserdefault.c:3728
 msgid "Rename..."
-msgstr "Átnevezés..."
+msgstr "Átnevezés…"
 
 #. Accessible object name for the file chooser's shortcuts pane
 #: ../gtk/gtkfilechooserdefault.c:3870
@@ -1661,7 +1661,7 @@ msgstr "Hozzá_adás a könyvjelzőkhöz"
 
 #: ../gtk/gtkfilechooserdefault.c:4280
 msgid "Show _Hidden Files"
-msgstr "Re_jtett fájlok megjelenítése"
+msgstr "_Rejtett fájlok megjelenítése"
 
 #: ../gtk/gtkfilechooserdefault.c:4524 ../gtk/gtkfilesel.c:730
 msgid "Files"
@@ -1695,7 +1695,7 @@ msgstr "Írjon be egy fájlnevet"
 #. Create Folder
 #: ../gtk/gtkfilechooserdefault.c:5181
 msgid "Create Fo_lder"
-msgstr "Mappa _létrehozása"
+msgstr "M_appa létrehozása"
 
 #: ../gtk/gtkfilechooserdefault.c:5191
 msgid "_Location:"
@@ -1815,7 +1815,7 @@ msgstr "Teljes, de nem egyedi"
 
 #: ../gtk/gtkfilechooserentry.c:1120
 msgid "Completing..."
-msgstr "Kiegészítés..."
+msgstr "Kiegészítés…"
 
 #: ../gtk/gtkfilechoosersettings.c:262 ../gtk/gtkfilesel.c:1349
 #: ../gtk/gtkfilesel.c:1358
@@ -1857,7 +1857,7 @@ msgstr "Új _mappa"
 
 #: ../gtk/gtkfilesel.c:1031
 msgid "De_lete File"
-msgstr "Fáj_l törlése"
+msgstr "Fájl _törlése"
 
 #: ../gtk/gtkfilesel.c:1042
 msgid "_Rename File"
@@ -2219,7 +2219,7 @@ msgstr "_Tartomány:"
 
 #: ../gtk/gtkmountoperation.c:575
 msgid "_Password:"
-msgstr "_Jelszó:"
+msgstr "J_elszó:"
 
 #: ../gtk/gtkmountoperation.c:590
 msgid "_Forget password immediately"
@@ -2227,11 +2227,11 @@ msgstr "Jelszó a_zonnali elfelejtése"
 
 #: ../gtk/gtkmountoperation.c:598
 msgid "_Remember password until you logout"
-msgstr "Jelszó meg_jegyzése kijelentkezésig"
+msgstr "Jelszó megjegyzése _kijelentkezésig"
 
 #: ../gtk/gtkmountoperation.c:606
 msgid "_Remember forever"
-msgstr "Meg_jegyzés örökre"
+msgstr "_Megjegyzés örökre"
 
 #: ../gtk/gtknotebook.c:835
 msgid "Arrow spacing"
@@ -2294,7 +2294,7 @@ msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:964
 msgid "Manage Custom Sizes..."
-msgstr "Egyéni méretek kezelése..."
+msgstr "Egyéni méretek kezelése…"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1012
 msgid "_Format for:"
@@ -2314,7 +2314,7 @@ msgstr "Oldalbeállítás"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1448
 msgid "Margins from Printer..."
-msgstr "Margók a nyomtatótól..."
+msgstr "Margók a nyomtatótól…"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1608
 #, c-format
@@ -2351,7 +2351,7 @@ msgstr "_Bal:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:2003
 msgid "_Right:"
-msgstr "_Jobb:"
+msgstr "J_obb:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:2044
 msgid "Paper Margins"
@@ -2525,7 +2525,7 @@ msgstr "Min_den oldal"
 
 #: ../gtk/gtkprintunixdialog.c:1715
 msgid "C_urrent Page"
-msgstr "_Jelenlegi oldal"
+msgstr "J_elenlegi oldal"
 
 #: ../gtk/gtkprintunixdialog.c:1724
 msgid "Pag_es:"
@@ -2724,7 +2724,7 @@ msgstr "Nem törölhető a lista"
 
 #: ../gtk/gtkrecentchooserdefault.c:1740
 msgid "Copy _Location"
-msgstr "He_ly másolása"
+msgstr "Hely más_olása"
 
 #: ../gtk/gtkrecentchooserdefault.c:1753
 msgid "_Remove From List"
@@ -2826,7 +2826,7 @@ msgstr "_Alkalmaz"
 
 #: ../gtk/gtkstock.c:299
 msgid "_Bold"
-msgstr "_Félkövér"
+msgstr "Félkö_vér"
 
 #: ../gtk/gtkstock.c:300
 msgid "_Cancel"
@@ -2994,7 +2994,7 @@ msgstr "_Balra"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:350
 msgid "Justify|_Right"
-msgstr "_Jobbra"
+msgstr "J_obbra"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:353
@@ -3014,7 +3014,7 @@ msgstr "_Szünet"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:359
 msgid "Media|_Play"
-msgstr "Le_játszás"
+msgstr "L_ejátszás"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:361
@@ -3082,7 +3082,7 @@ msgstr "_Beillesztés"
 
 #: ../gtk/gtkstock.c:379
 msgid "_Preferences"
-msgstr "_Beállítások"
+msgstr "B_eállítások"
 
 #: ../gtk/gtkstock.c:380
 msgid "_Print"
@@ -3090,7 +3090,7 @@ msgstr "_Nyomtatás"
 
 #: ../gtk/gtkstock.c:381
 msgid "Print Pre_view"
-msgstr "Nyomtatási _kép"
+msgstr "Nyomtatási ké_p"
 
 #: ../gtk/gtkstock.c:382
 msgid "_Properties"
@@ -3122,7 +3122,7 @@ msgstr "Men_tés másként"
 
 #: ../gtk/gtkstock.c:390
 msgid "Select _All"
-msgstr "_Mindent kijelöl"
+msgstr "Mind_ent kijelöl"
 
 #: ../gtk/gtkstock.c:391
 msgid "_Color"
@@ -3174,7 +3174,7 @@ msgstr "_Normál méret"
 
 #: ../gtk/gtkstock.c:403
 msgid "Best _Fit"
-msgstr "Legjobb _illeszkedés"
+msgstr "Legjobb illesz_kedés"
 
 #: ../gtk/gtkstock.c:404
 msgid "Zoom _In"
@@ -3304,11 +3304,11 @@ msgstr "LRM _Balról-jobbra jel"
 
 #: ../gtk/gtktextutil.c:61
 msgid "RLM _Right-to-left mark"
-msgstr "RLM _Jobbról-balra jel"
+msgstr "RLM J_obbról-balra jel"
 
 #: ../gtk/gtktextutil.c:62
 msgid "LRE Left-to-right _embedding"
-msgstr "LRE Balról-jobbra _beágyazás"
+msgstr "LRE Balról-jobbra beá_gyazás"
 
 #: ../gtk/gtktextutil.c:63
 msgid "RLE Right-to-left e_mbedding"
@@ -3320,7 +3320,7 @@ msgstr "LRO Balról-jobbra _felülbírálás"
 
 #: ../gtk/gtktextutil.c:65
 msgid "RLO Right-to-left o_verride"
-msgstr "RLO Jobbról-balra fe_lülbírálás"
+msgstr "RLO Jobbról-balra f_elülbírálás"
 
 #: ../gtk/gtktextutil.c:66
 msgid "PDF _Pop directional formatting"
@@ -3328,7 +3328,7 @@ msgstr "PDF Irányformázás _visszakapása"
 
 #: ../gtk/gtktextutil.c:67
 msgid "ZWS _Zero width space"
-msgstr "ZWS _Null szélességű szóköz"
+msgstr "ZWS N_ull szélességű szóköz"
 
 #: ../gtk/gtktextutil.c:68
 msgid "ZWJ Zero width _joiner"
