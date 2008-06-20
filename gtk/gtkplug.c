@@ -71,6 +71,7 @@ typedef struct
 enum {
   PROP_0,
   PROP_EMBEDDED,
+  PROP_SOCKET_WINDOW
 };
 
 enum {
@@ -94,6 +95,9 @@ gtk_plug_get_property (GObject    *object,
     {
     case PROP_EMBEDDED:
       g_value_set_boolean (value, plug->socket_window != NULL);
+      break;
+    case PROP_SOCKET_WINDOW:
+      g_value_set_object (value, plug->socket_window);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -147,6 +151,21 @@ gtk_plug_class_init (GtkPlugClass *class)
 							 P_("Whether or not the plug is embedded"),
 							 FALSE,
 							 GTK_PARAM_READABLE));
+
+  /**
+   * GtkPlug:socket-window:
+   *
+   * The window of the socket the plug is embedded in.
+   *
+   * Since: GSEAL-branch
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_SOCKET_WINDOW,
+				   g_param_spec_object ("socket window",
+							P_("Socket Window"),
+							P_("The window of the socket the plug is embedded in"),
+							GDK_TYPE_WINDOW,
+							GTK_PARAM_READABLE));
 
   /**
    * GtkPlug::embedded:
@@ -249,7 +268,7 @@ gtk_plug_get_id (GtkPlug *plug)
  * @plug: a #GtkPlug
  *
  * Determines whether the plug is embedded in a socket.
- * 
+ *
  * Return value: %TRUE if the plug is embedded in a socket
  **/
 gboolean
@@ -258,6 +277,22 @@ gtk_plug_get_embedded (GtkPlug *plug)
   g_return_val_if_fail (GTK_IS_PLUG (plug), NULL);
 
   return plug->socket_window != NULL;
+}
+
+/**
+ * gtk_plug_get_socket_window:
+ * @plug: a #GtkPlug
+ *
+ * Retrieves the socket the plug is embedded in.
+ *
+ * Return value: the window of the socket, or %NULL
+ **/
+GdkWindow *
+gtk_plug_get_socket_window (GtkPlug *plug)
+{
+  g_return_val_if_fail (GTK_IS_PLUG (plug), NULL);
+
+  return plug->socket_window;
 }
 
 /**

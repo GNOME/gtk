@@ -2502,6 +2502,7 @@ gtk_plug_construct
 gtk_plug_construct_for_display
 gtk_plug_get_id
 gtk_plug_get_embedded
+gtk_plug_get_socket_window
 gtk_plug_get_type G_GNUC_CONST
 gtk_plug_new
 gtk_plug_new_for_display

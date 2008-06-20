@@ -94,6 +94,8 @@ GdkNativeWindow gtk_plug_get_id (GtkPlug         *plug);
 
 gboolean  gtk_plug_get_embedded (GtkPlug         *plug);
 
+GdkWindow *gtk_plug_get_socket_window (GtkPlug   *plug);
+
 void _gtk_plug_add_to_socket      (GtkPlug   *plug,
 				   GtkSocket *socket_);
 void _gtk_plug_remove_from_socket (GtkPlug   *plug,
