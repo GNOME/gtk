@@ -40,8 +40,8 @@ all :	\
 # Test programs:
 #
 TESTAPPS = \
-	autotestfilechooser autotestfilesystem \
-	buildertest floatingtest \
+#	autotestfilechooser autotestfilesystem \
+	buildertest floatingtest objecttests \
 	testaccel testactions testassistant \
 	testbbox \
 	testcairo testcalendar testcellrenderertext testcombo testcombochange \
@@ -101,8 +101,8 @@ EXTRA_OBJETCS = testsocket_common.obj
 EXTRA_OBJETCS = testsocket_common.obj
 !ENDIF
 
-$(TESTAPP).exe : ../gtk/gtk-win32-$(GTK_VER).lib $(TESTAPP).obj $(EXTRA_OBJETCS)
-	$(CC) $(CFLAGS) $(TESTAPP).obj $(EXTRA_OBJETCS) $(GTK_LIBS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) \
+$(TESTAPP).exe : ../gtk/gtk-win32-$(GTK_VER).lib $(TESTAPP).obj $(EXTRA_OBJETCS) pixbuf-init.obj 
+	$(CC) $(CFLAGS) $(TESTAPP).obj $(EXTRA_OBJETCS) pixbuf-init.obj $(GTK_LIBS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) \
 	$(PANGO_LIBS) $(GLIB_LIBS) $(CAIRO_LIBS) $(EXTRA_LIBS) $(LDFLAGS)
 
 $(TESTAPP).obj : $(TESTAPP).c

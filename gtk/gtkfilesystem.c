@@ -555,8 +555,10 @@ _gtk_file_system_list_volumes (GtkFileSystem *file_system)
 
   list = g_slist_copy (priv->volumes);
 
+#ifndef G_OS_WIN32
   /* Prepend root volume */
   list = g_slist_prepend (list, (gpointer) root_volume_token);
+#endif
 
   return list;
 }

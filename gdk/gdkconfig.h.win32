@@ -10,6 +10,14 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#ifndef GSEAL
+/* introduce GSEAL() here for all of Gdk and Gtk+ without the need to modify GLib */
+#  ifdef GSEAL_ENABLE
+#    define GSEAL(ident)      _g_sealed__ ## ident
+#  else
+#    define GSEAL(ident)      ident
+#  endif
+#endif /* !GSEAL */
 
 #define GDK_WINDOWING_WIN32
 

@@ -1,3 +1,15 @@
+2008-06-20  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkmenuitem.c gtk/gtkmessagedialog.c gtk/gtkplug.c : must return
+	a value of the appropriate type with g_return_val_if_fail
+	
+	* gdk/gdkconfig.h.win32 : add the GSEAL definition here as well
+
+	* gtk/gtkfilesystem.c : don't add the "File System" on win32
+
+	* tests/makefile.msc : remove broken autotestfile(system|chooser) 
+	from build
+
 2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkeditable.c: Document and use - instead of _ in signal names.

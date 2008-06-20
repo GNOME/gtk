@@ -1694,7 +1694,7 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
 G_CONST_RETURN gchar *
 gtk_menu_item_get_accel_path (GtkMenuItem *menu_item)
 {
-  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
+  g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), NULL);
 
   return menu_item->accel_path;
 }

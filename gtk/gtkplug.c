@@ -276,7 +276,7 @@ gtk_plug_get_id (GtkPlug *plug)
 gboolean
 gtk_plug_get_embedded (GtkPlug *plug)
 {
-  g_return_val_if_fail (GTK_IS_PLUG (plug), NULL);
+  g_return_val_if_fail (GTK_IS_PLUG (plug), FALSE);
 
   return plug->socket_window != NULL;
 }

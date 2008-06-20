@@ -654,7 +654,7 @@ gtk_message_dialog_set_image (GtkMessageDialog *dialog,
 GtkWidget *
 gtk_message_dialog_get_image (GtkMessageDialog *dialog)
 {
-  g_return_if_fail (GTK_IS_MESSAGE_DIALOG (dialog));
+  g_return_val_if_fail (GTK_IS_MESSAGE_DIALOG (dialog), NULL);
 
   return dialog->image;
 }
