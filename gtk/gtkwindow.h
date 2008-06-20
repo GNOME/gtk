@@ -394,6 +394,8 @@ void             gtk_window_group_add_window    (GtkWindowGroup     *window_grou
 						 GtkWindow          *window);
 void             gtk_window_group_remove_window (GtkWindowGroup     *window_group,
 					         GtkWindow          *window);
+GList *          gtk_window_group_get_windows   (GtkWindowGroup     *window_group);
+
 
 /* --- internal functions --- */
 void            _gtk_window_internal_set_focus (GtkWindow *window,
