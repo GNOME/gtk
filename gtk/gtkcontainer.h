@@ -153,6 +153,8 @@ void   gtk_container_set_reallocate_redraws (GtkContainer    *container,
 					     gboolean         needs_redraws);
 void   gtk_container_set_focus_child	   (GtkContainer     *container,
 					    GtkWidget	     *child);
+GtkWidget *
+       gtk_container_get_focus_child	   (GtkContainer     *container);
 void   gtk_container_set_focus_vadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
 GtkAdjustment *gtk_container_get_focus_vadjustment (GtkContainer *container);
