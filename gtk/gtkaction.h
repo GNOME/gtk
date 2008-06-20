@@ -57,7 +57,7 @@ struct _GtkAction
 
   /*< private >*/
 
-  GtkActionPrivate *private_data;
+  GtkActionPrivate *GSEAL (private_data);
 };
 
 struct _GtkActionClass
