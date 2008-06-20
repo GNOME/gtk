@@ -1,3 +1,9 @@
+2008-06-20  Martyn Russell  <martyn@imendio.com>
+
+	* gtk/gtkaccelgroup.c: Fix warnings from calling
+	g_object_notify() on a GtkAccelGroup without casting to a
+	GObject.
+
 2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkcolorsel.c: Modernize and order things as most

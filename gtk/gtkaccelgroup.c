@@ -394,7 +394,7 @@ gtk_accel_group_lock (GtkAccelGroup *accel_group)
 
   if (accel_group->lock_count == 1) {
     /* State change from unlocked to locked */
-    g_object_notify (accel_group, "is-locked");
+    g_object_notify (G_OBJECT (accel_group), "is-locked");
   }
 }
 
@@ -414,7 +414,7 @@ gtk_accel_group_unlock (GtkAccelGroup *accel_group)
 
   if (accel_group->lock_count < 1) {
     /* State change from locked to unlocked */
-    g_object_notify (accel_group, "is-locked");
+    g_object_notify (G_OBJECT (accel_group), "is-locked");
   }
 }
 
