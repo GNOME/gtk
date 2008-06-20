@@ -53,7 +53,7 @@ struct _GtkBin
 {
   GtkContainer container;
 
-  GtkWidget *child;
+  GtkWidget * GSEAL(child);
 };
 
 struct _GtkBinClass
