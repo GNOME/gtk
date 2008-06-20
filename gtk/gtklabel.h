@@ -56,30 +56,30 @@ struct _GtkLabel
   GtkMisc misc;
 
   /*< private >*/
-  gchar  *label;
-  guint   jtype            : 2;
-  guint   wrap             : 1;
-  guint   use_underline    : 1;
-  guint   use_markup       : 1;
-  guint   ellipsize        : 3;
-  guint   single_line_mode : 1;
-  guint   have_transform   : 1;
-  guint   in_click         : 1;
-  guint   wrap_mode        : 3;
-  guint   pattern_set      : 1;
+  gchar  *GSEAL (label);
+  guint   GSEAL (jtype)            : 2;
+  guint   GSEAL (wrap)             : 1;
+  guint   GSEAL (use_underline)    : 1;
+  guint   GSEAL (use_markup)       : 1;
+  guint   GSEAL (ellipsize)        : 3;
+  guint   GSEAL (single_line_mode) : 1;
+  guint   GSEAL (have_transform)   : 1;
+  guint   GSEAL (in_click)         : 1;
+  guint   GSEAL (wrap_mode)        : 3;
+  guint   GSEAL (pattern_set)      : 1;
 
-  guint   mnemonic_keyval;
+  guint   GSEAL (mnemonic_keyval);
 
-  gchar  *text;
-  PangoAttrList *attrs;
-  PangoAttrList *effective_attrs;
+  gchar  *GSEAL (text);
+  PangoAttrList *GSEAL (attrs);
+  PangoAttrList *GSEAL (effective_attrs);
 
-  PangoLayout *layout;
+  PangoLayout *GSEAL (layout);
 
-  GtkWidget *mnemonic_widget;
-  GtkWindow *mnemonic_window;
+  GtkWidget *GSEAL (mnemonic_widget);
+  GtkWindow *GSEAL (mnemonic_window);
 
-  GtkLabelSelectionInfo *select_info;
+  GtkLabelSelectionInfo *GSEAL (select_info);
 };
 
 struct _GtkLabelClass
