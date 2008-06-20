@@ -54,7 +54,7 @@ struct _GtkFixed
 {
   GtkContainer container;
 
-  GList *children;
+  GList *GSEAL (children);
 };
 
 struct _GtkFixedClass
