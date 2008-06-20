@@ -52,20 +52,20 @@ struct _GtkPrintJob
 {
   GObject parent_instance;
 
-  GtkPrintJobPrivate *priv;
+  GtkPrintJobPrivate *GSEAL (priv);
 
   /* Settings the client has to implement:
    * (These are read-only, set at initialization)
    */
-  GtkPrintPages print_pages;
-  GtkPageRange *page_ranges;
-  gint num_page_ranges;
-  GtkPageSet page_set;
-  gint num_copies;
-  gdouble scale;
-  guint rotate_to_orientation : 1;
-  guint collate               : 1;
-  guint reverse               : 1;
+  GtkPrintPages GSEAL (print_pages);
+  GtkPageRange *GSEAL (page_ranges);
+  gint GSEAL (num_page_ranges);
+  GtkPageSet GSEAL (page_set);
+  gint GSEAL (num_copies);
+  gdouble GSEAL (scale);
+  guint GSEAL (rotate_to_orientation : 1);
+  guint GSEAL (collate               : 1);
+  guint GSEAL (reverse               : 1);
 };
 
 struct _GtkPrintJobClass
