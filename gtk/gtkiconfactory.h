@@ -51,7 +51,7 @@ struct _GtkIconFactory
 {
   GObject parent_instance;
 
-  GHashTable *icons;
+  GHashTable *GSEAL (icons);
 };
 
 struct _GtkIconFactoryClass
