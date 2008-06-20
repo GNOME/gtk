@@ -58,13 +58,13 @@ typedef struct _GtkTargetEntry   GtkTargetEntry;
 
 struct _GtkSelectionData
 {
-  GdkAtom	selection;
-  GdkAtom	target;
-  GdkAtom	type;
-  gint		format;
-  guchar       *data;
-  gint		length;
-  GdkDisplay   *display;
+  GdkAtom	GSEAL (selection);
+  GdkAtom	GSEAL (target);
+  GdkAtom	GSEAL (type);
+  gint		GSEAL (format);
+  guchar       *GSEAL (data);
+  gint		GSEAL (length);
+  GdkDisplay   *GSEAL (display);
 };
 
 struct _GtkTargetEntry {
@@ -148,6 +148,22 @@ gboolean gtk_selection_convert       (GtkWidget            *widget,
 				      GdkAtom               selection,
 				      GdkAtom               target,
 				      guint32               time_);
+void gtk_selection_data_set_target (GtkSelectionData     *selection_data,
+				    GdkAtom              target);
+GdkAtom gtk_selection_data_get_target (GtkSelectionData  *selection_data);
+void gtk_selection_data_set_data_type (GtkSelectionData     *selection_data,
+				       GdkAtom              target);
+GdkAtom gtk_selection_data_get_data_type (GtkSelectionData  *selection_data);
+void gtk_selection_data_set_format (GtkSelectionData     *selection_data,
+				    gint		  format);
+gint gtk_selection_data_get_format (GtkSelectionData  *selection_data);
+void gtk_selection_data_set_data (GtkSelectionData     *selection_data,
+				  const guchar	       *data);
+const guchar *gtk_selection_data_get_data (GtkSelectionData  *selection_data);
+void gtk_selection_data_set_length (GtkSelectionData     *selection_data,
+				    gint		  length);
+gint gtk_selection_data_get_length (GtkSelectionData  *selection_data);
+GdkDisplay gtk_selection_data_get_display (GtkSelectionData  *selection_data);
 void     gtk_selection_data_set      (GtkSelectionData     *selection_data,
 				      GdkAtom               type,
 				      gint                  format,
