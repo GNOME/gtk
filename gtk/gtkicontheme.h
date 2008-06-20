@@ -49,7 +49,7 @@ struct _GtkIconTheme
   /*< private >*/
   GObject parent_instance;
 
-  GtkIconThemePrivate *priv;
+  GtkIconThemePrivate *GSEAL (priv);
 };
 
 struct _GtkIconThemeClass
