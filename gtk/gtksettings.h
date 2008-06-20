@@ -48,11 +48,11 @@ struct _GtkSettings
 {
   GObject parent_instance;
 
-  GData  *queued_settings;	/* of type GtkSettingsValue* */
-  GtkSettingsPropertyValue *property_values;
+  GData  *GSEAL (queued_settings);	/* of type GtkSettingsValue* */
+  GtkSettingsPropertyValue *GSEAL (property_values);
 
-  GtkRcContext *rc_context;
-  GdkScreen    *screen;
+  GtkRcContext *GSEAL (rc_context);
+  GdkScreen    *GSEAL (screen);
 };
 
 struct _GtkSettingsClass
