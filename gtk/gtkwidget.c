@@ -677,8 +677,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget:window:
    *
-   * The widget's window or its parent window if it does not have a
-   * window (as indicated by the GTK_NO_WINDOW flag).
+   * The widget's window if it is realized, %NULL otherwise.
    *
    * Since: GSEAL-branch
    */
@@ -686,7 +685,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 				   PROP_WINDOW,
 				   g_param_spec_object ("window",
  							P_("Window"),
-							P_("The widget's window or its parent window"),
+							P_("The widget's window if it is realized"),
 							GDK_TYPE_WINDOW,
 							GTK_PARAM_READABLE));
 
@@ -9890,30 +9889,27 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
 /**
  * gtk_widget_get_allocation:
  * @widget: a #GtkWidget
- * @allocation: a #GtkAllocation
  *
- * Fills @allocation with the widget's allocation as provided by its parent.
+ * Retrieves the widget's allocation.
+ *
+ * Return value: widget's allocation
  *
  * Since: GSEAL-branch
  */
-void
-gtk_widget_get_allocation (GtkWidget     *widget,
-                           GtkAllocation *allocation)
+GtkAllocation
+gtk_widget_get_allocation (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (allocation != NULL);
+  GtkAllocation allocation;
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), allocation);
 
-  allocation->x = widget->allocation.x;
-  allocation->y = widget->allocation.y;
-  allocation->width = widget->allocation.width;
-  allocation->height = widget->allocation.height;
+  return widget->allocation;
 }
 
 /**
  * gtk_widget_get_window:
  * @widget: a #GtkWidget
  *
- * Returns the widget's window or the parent window.
+ * Returns the widget's window if it is realized, %NULL otherwise
  *
  * Return value: @widget's window.
  *
