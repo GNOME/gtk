@@ -87,6 +87,8 @@ void             gtk_tree_selection_set_select_function (GtkTreeSelection       
 gpointer         gtk_tree_selection_get_user_data       (GtkTreeSelection            *selection);
 GtkTreeView*     gtk_tree_selection_get_tree_view       (GtkTreeSelection            *selection);
 
+GtkTreeSelectionFunc gtk_tree_selection_get_select_function (GtkTreeSelection        *selection);
+
 /* Only meaningful if GTK_SELECTION_SINGLE or GTK_SELECTION_BROWSE is set */
 /* Use selected_foreach or get_selected_rows for GTK_SELECTION_MULTIPLE */
 gboolean         gtk_tree_selection_get_selected        (GtkTreeSelection            *selection,

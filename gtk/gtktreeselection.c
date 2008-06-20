@@ -275,6 +275,24 @@ gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
 }
 
 /**
+ * gtk_tree_selection_get_select_function:
+ * @selection: A #GtkTreeSelection.
+ *
+ * Returns the current selection function.
+ *
+ * Return value: The function.
+ *
+ * Since: GSEAL-branch
+ **/
+GtkTreeSelectionFunc
+gtk_tree_selection_get_select_function (GtkTreeSelection *selection)
+{
+  g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), NULL);
+
+  return selection->user_func;
+}
+
+/**
  * gtk_tree_selection_get_user_data:
  * @selection: A #GtkTreeSelection.
  *
