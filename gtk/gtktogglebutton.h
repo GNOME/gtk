@@ -52,9 +52,9 @@ struct _GtkToggleButton
 {
   GtkButton button;
 
-  guint active : 1;
-  guint draw_indicator : 1;
-  guint inconsistent : 1;
+  guint GSEAL (active : 1);
+  guint GSEAL (draw_indicator : 1);
+  guint GSEAL (inconsistent : 1);
 };
 
 struct _GtkToggleButtonClass
