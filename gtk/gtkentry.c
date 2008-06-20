@@ -133,7 +133,9 @@ enum {
   PROP_TEXT,
   PROP_XALIGN,
   PROP_TRUNCATE_MULTILINE,
-  PROP_SHADOW_TYPE
+  PROP_SHADOW_TYPE,
+  PROP_OVERWRITE_MODE,
+  PROP_TEXT_LENGTH
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -632,6 +634,37 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                       GTK_SHADOW_IN,
                                                       GTK_PARAM_READWRITE));
 
+  /**
+   * GtkEntry:overwrite-mode:
+   *
+   * If text is overwritten when typing in the #GtkEntry.
+   *
+   * Since: 2.14
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_OVERWRITE_MODE,
+                                   g_param_spec_boolean ("overwrite-mode",
+                                                         P_("Overwrite mode"),
+                                                         P_("Whether new text overwrites existing text"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+  /**
+   * GtkEntry:text-length:
+   *
+   * The length of the text in the #GtkEntry.
+   *
+   * Since: 2.14
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEXT_LENGTH,
+                                   g_param_spec_uint ("text-length",
+                                                      P_("Text length"),
+                                                      P_("Length of the text currently in the entry"),
+                                                      0, 
+                                                      G_MAXUINT16,
+                                                      0,
+                                                      GTK_PARAM_READABLE));
+
   signals[POPULATE_POPUP] =
     g_signal_new (I_("populate_popup"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -1026,6 +1059,10 @@ gtk_entry_set_property (GObject         *object,
       priv->shadow_type = g_value_get_enum (value);
       break;
 
+    case PROP_OVERWRITE_MODE:
+      gtk_entry_set_overwrite_mode (entry, g_value_get_boolean (value));
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -1089,6 +1126,12 @@ gtk_entry_get_property (GObject         *object,
       break;
     case PROP_SHADOW_TYPE:
       g_value_set_enum (value, priv->shadow_type);
+      break;
+    case PROP_OVERWRITE_MODE:
+      g_value_set_boolean (value, entry->overwrite_mode);
+      break;
+    case PROP_TEXT_LENGTH:
+      g_value_set_boolean (value, entry->text_length);
       break;
 
     default:
@@ -4630,6 +4673,43 @@ gtk_entry_set_editable (GtkEntry *entry,
 }
 
 /**
+ * gtk_entry_set_overwrite_mode:
+ * @entry: a #GtkEntry
+ * @setting: new value
+ * 
+ * Sets whether the text is overwritten when typing in the #GtkEntry.
+ **/
+void
+gtk_entry_set_overwrite_mode (GtkEntry *entry,
+                              gboolean  setting)
+{
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  
+  if (entry->overwrite_mode == setting) 
+    return;
+  
+  gtk_entry_toggle_overwrite (entry);
+
+  g_object_notify (G_OBJECT (entry), "overwrite-mode");
+}
+
+/**
+ * gtk_entry_get_overwrite_mode:
+ * @entry: a #GtkEntry
+ * 
+ * Gets the value set by gtk_entry_set_overwrite_mode().
+ * 
+ * Return value: whether the text is overwritten when typing.
+ **/
+gboolean
+gtk_entry_get_overwrite_mode (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
+
+  return entry->overwrite_mode;
+}
+
+/**
  * gtk_entry_get_text:
  * @entry: a #GtkEntry
  *
@@ -4713,6 +4793,24 @@ gtk_entry_get_max_length (GtkEntry *entry)
   g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
 
   return entry->text_max_length;
+}
+
+/**
+ * gtk_entry_get_text_length:
+ * @entry: a #GtkEntry
+ *
+ * Retrieves the current length of the text in
+ * @entry. 
+ *
+ * Return value: the current number of characters
+ *               in #GtkEntry, or 0 if there are none.
+ **/
+guint16
+gtk_entry_get_text_length (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
+
+  return entry->text_length;
 }
 
 /**
