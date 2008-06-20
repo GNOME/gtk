@@ -96,27 +96,27 @@ struct _GtkToolbar
   GtkContainer container;
 
   /*< public >*/
-  gint             num_children;
-  GList           *children;
-  GtkOrientation   orientation;
-  GtkToolbarStyle  style;
-  GtkIconSize      icon_size;
+  gint             GSEAL (num_children);
+  GList           *GSEAL (children);
+  GtkOrientation   GSEAL (orientation);
+  GtkToolbarStyle  GSEAL (style);
+  GtkIconSize      GSEAL (icon_size);
 
 #ifndef GTK_DISABLE_DEPRECATED
-  GtkTooltips     *tooltips;
+  GtkTooltips     *GSEAL (tooltips);
 #else
-  gpointer         _tooltips;
+  gpointer         GSEAL (_tooltips);
 #endif
 
   /*< private >*/
-  gint             button_maxw;		/* maximum width of homogeneous children */
-  gint             button_maxh;		/* maximum height of homogeneous children */
+  gint             GSEAL (button_maxw);		/* maximum width of homogeneous children */
+  gint             GSEAL (button_maxh);		/* maximum height of homogeneous children */
 
   guint            _gtk_reserved1;
   guint            _gtk_reserved2;
 
-  guint            style_set : 1;
-  guint            icon_size_set : 1;
+  guint            GSEAL (style_set) : 1;
+  guint            GSEAL (icon_size_set) : 1;
 };
 
 struct _GtkToolbarClass
