@@ -56,7 +56,7 @@ struct _GtkRadioAction
 
   /*< private >*/
 
-  GtkRadioActionPrivate *private_data;
+  GtkRadioActionPrivate *GSEAL (private_data);
 };
 
 struct _GtkRadioActionClass
