@@ -43,12 +43,12 @@ struct _GtkCellRendererCombo
 {
   GtkCellRendererText parent;
 
-  GtkTreeModel *model;
-  gint          text_column;
-  gboolean      has_entry;
+  GtkTreeModel *GSEAL (model);
+  gint          GSEAL (text_column);
+  gboolean      GSEAL (has_entry);
 
   /*< private >*/
-  guint         focus_out_id;
+  guint         GSEAL (focus_out_id);
 };
 
 struct _GtkCellRendererComboClass
