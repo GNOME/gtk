@@ -245,6 +245,22 @@ gtk_plug_get_id (GtkPlug *plug)
 }
 
 /**
+ * gtk_plug_get_embedded:
+ * @plug: a #GtkPlug
+ *
+ * Determines whether the plug is embedded in a socket.
+ * 
+ * Return value: %TRUE if the plug is embedded in a socket
+ **/
+gboolean
+gtk_plug_get_embedded (GtkPlug *plug)
+{
+  g_return_val_if_fail (GTK_IS_PLUG (plug), NULL);
+
+  return plug->socket_window != NULL;
+}
+
+/**
  * _gtk_plug_add_to_socket:
  * @plug: a #GtkPlug
  * @socket_: a #GtkSocket

@@ -54,12 +54,12 @@ struct _GtkPlug
 {
   GtkWindow window;
 
-  GdkWindow *socket_window;
-  GtkWidget *modality_window;
-  GtkWindowGroup *modality_group;
-  GHashTable *grabbed_keys;
+  GdkWindow *GSEAL (socket_window);
+  GtkWidget *GSEAL (modality_window);
+  GtkWindowGroup *GSEAL (modality_group);
+  GHashTable *GSEAL (grabbed_keys);
 
-  guint same_app : 1;
+  guint GSEAL (same_app : 1);
 };
 
 struct _GtkPlugClass
@@ -91,6 +91,8 @@ GtkWidget* gtk_plug_new_for_display       (GdkDisplay      *display,
 					   GdkNativeWindow  socket_id);
 
 GdkNativeWindow gtk_plug_get_id (GtkPlug         *plug);
+
+gboolean  gtk_plug_get_embedded (GtkPlug         *plug);
 
 void _gtk_plug_add_to_socket      (GtkPlug   *plug,
 				   GtkSocket *socket_);
