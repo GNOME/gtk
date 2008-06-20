@@ -1479,6 +1479,16 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
   g_slice_free (ActionWidgetsSubParserData, parser_data);
 }
 
+/**
+ * gtk_dialog_get_action_area:
+ * @dialog: a #GtkDialog
+ *
+ * Returns the action area of @dialog.
+ *
+ * Returns: a #GtkHButtonBox.
+ *
+ * Since: GSEAL-branch
+ **/
 GtkHButtonBox *
 gtk_dialog_get_action_area (GtkDialog *dialog)
 {
@@ -1487,6 +1497,19 @@ gtk_dialog_get_action_area (GtkDialog *dialog)
   return dialog->action_area;
 }
 
+/**
+ * gtk_dialog_pack_start:
+ * @dialog: a #GtkDialog
+ * @widget: #GtkWidget to be added to @dialog.
+ * @expand: %TRUE if @widget should take all extra space.
+ * @fill: %TRUE if all space given should be used by @widget
+ * @padding: extra pixels to put between @widget and its neighbors
+ *
+ * This function similar to gtk_box_pack_start() packs @widget
+ * with reference to the start of @dialog.
+ *
+ * Since: GSEAL-branch
+ **/
 void
 gtk_dialog_pack_start (GtkDialog *dialog,
 		       GtkWidget *widget,
@@ -1501,6 +1524,19 @@ gtk_dialog_pack_start (GtkDialog *dialog,
 		      widget, expand, fill, padding);
 }
 
+/**
+ * gtk_dialog_pack_end:
+ * @dialog: a #GtkDialog
+ * @widget: #GtkWidget to be added to @dialog.
+ * @expand: %TRUE if @widget should take all extra space.
+ * @fill: %TRUE if all space given should be used by @widget
+ * @padding: extra pixels to put between @widget and its neighbors
+ *
+ * This function similar to gtk_box_pack_end() packs @widget
+ * with reference to the end of @dialog.
+ *
+ * Since: GSEAL-branch
+ **/
 void
 gtk_dialog_pack_end (GtkDialog *dialog,
 		     GtkWidget *widget,
