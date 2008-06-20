@@ -77,26 +77,26 @@ struct _GtkSpinButton
 {
   GtkEntry entry;
 
-  GtkAdjustment *adjustment;
+  GtkAdjustment *GSEAL (adjustment);
 
-  GdkWindow *panel;
+  GdkWindow *GSEAL (panel);
 
-  guint32 timer;
+  guint32 GSEAL (timer);
 
-  gdouble climb_rate;
-  gdouble timer_step;
+  gdouble GSEAL (climb_rate);
+  gdouble GSEAL (timer_step);
 
-  GtkSpinButtonUpdatePolicy update_policy;
+  GtkSpinButtonUpdatePolicy GSEAL (update_policy);
 
-  guint in_child : 2;
-  guint click_child : 2; /* valid: GTK_ARROW_UP=0, GTK_ARROW_DOWN=1 or 2=NONE/BOTH */
-  guint button : 2;
-  guint need_timer : 1;
-  guint timer_calls : 3;
-  guint digits : 10;
-  guint numeric : 1;
-  guint wrap : 1;
-  guint snap_to_ticks : 1;
+  guint GSEAL (in_child : 2);
+  guint GSEAL (click_child : 2); /* valid: GTK_ARROW_UP=0, GTK_ARROW_DOWN=1 or 2=NONE/BOTH */
+  guint GSEAL (button : 2);
+  guint GSEAL (need_timer : 1);
+  guint GSEAL (timer_calls : 3);
+  guint GSEAL (digits : 10);
+  guint GSEAL (numeric : 1);
+  guint GSEAL (wrap : 1);
+  guint GSEAL (snap_to_ticks : 1);
 };
 
 struct _GtkSpinButtonClass
