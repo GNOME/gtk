@@ -54,8 +54,8 @@ struct _GtkArrow
 {
   GtkMisc misc;
 
-  gint16 arrow_type;
-  gint16 shadow_type;
+  gint16 GSEAL(arrow_type);
+  gint16 GSEAL(shadow_type);
 };
 
 struct _GtkArrowClass
