@@ -1118,8 +1118,9 @@ gtk_selection_convert (GtkWidget *widget,
  *
  * Since: GSEAL-branch
  **/
-void gtk_selection_data_set_target (GtkSelectionData     *selection_data,
-				    GdkAtom              target)
+void
+gtk_selection_data_set_target (GtkSelectionData *selection_data,
+			       GdkAtom           target)
 {
   g_return_if_fail (selection_data != NULL);
 
@@ -1134,7 +1135,8 @@ void gtk_selection_data_set_target (GtkSelectionData     *selection_data,
  *
  * Since: GSEAL-branch
  **/
-GdkAtom gtk_selection_data_get_target (GtkSelectionData     *selection_data)
+GdkAtom
+gtk_selection_data_get_target (GtkSelectionData *selection_data)
 {
   g_return_val_if_fail (selection_data != NULL, 0);
 
@@ -1150,8 +1152,9 @@ GdkAtom gtk_selection_data_get_target (GtkSelectionData     *selection_data)
  *
  * Since: GSEAL-branch
  **/
-void gtk_selection_data_set_data_type (GtkSelectionData     *selection_data,
-				       GdkAtom              data_type)
+void
+gtk_selection_data_set_data_type (GtkSelectionData *selection_data,
+				  GdkAtom           data_type)
 {
   g_return_if_fail (selection_data != NULL);
 
@@ -1166,7 +1169,8 @@ void gtk_selection_data_set_data_type (GtkSelectionData     *selection_data,
  *
  * Since: GSEAL-branch
  **/
-GdkAtom gtk_selection_data_get_data_type (GtkSelectionData     *selection_data)
+GdkAtom
+gtk_selection_data_get_data_type (GtkSelectionData *selection_data)
 {
   g_return_val_if_fail (selection_data != NULL, 0);
 
@@ -1182,8 +1186,9 @@ GdkAtom gtk_selection_data_get_data_type (GtkSelectionData     *selection_data)
  *
  * Since: GSEAL-branch
  **/
-void gtk_selection_data_set_format (GtkSelectionData     *selection_data,
-				    gint                 format)
+void
+gtk_selection_data_set_format (GtkSelectionData *selection_data,
+			       gint              format)
 {
   g_return_if_fail (selection_data != NULL);
 
@@ -1198,7 +1203,8 @@ void gtk_selection_data_set_format (GtkSelectionData     *selection_data,
  *
  * Since: GSEAL-branch
  **/
-gint gtk_selection_data_get_format (GtkSelectionData     *selection_data)
+gint
+gtk_selection_data_get_format (GtkSelectionData *selection_data)
 {
   g_return_val_if_fail (selection_data != NULL, 0);
 
@@ -1214,8 +1220,9 @@ gint gtk_selection_data_get_format (GtkSelectionData     *selection_data)
  *
  * Since: GSEAL-branch
  **/
-void gtk_selection_data_set_data (GtkSelectionData     *selection_data,
-				  const guchar         *data)
+void
+gtk_selection_data_set_data (GtkSelectionData *selection_data,
+			     const guchar     *data)
 {
   g_return_if_fail (selection_data != NULL);
 
@@ -1231,7 +1238,8 @@ void gtk_selection_data_set_data (GtkSelectionData     *selection_data,
  *
  * Since: GSEAL-branch
  **/
-const guchar* gtk_selection_data_get_data (GtkSelectionData     *selection_data)
+const guchar*
+gtk_selection_data_get_data (GtkSelectionData *selection_data)
 {
   g_return_val_if_fail (selection_data != NULL, NULL);
 
@@ -1247,8 +1255,9 @@ const guchar* gtk_selection_data_get_data (GtkSelectionData     *selection_data)
  *
  * Since: GSEAL-branch
  **/
-void gtk_selection_data_set_length (GtkSelectionData     *selection_data,
-				    gint                 length)
+void
+gtk_selection_data_set_length (GtkSelectionData *selection_data,
+			       gint             length)
 {
   g_return_if_fail (selection_data != NULL);
 
@@ -1263,11 +1272,28 @@ void gtk_selection_data_set_length (GtkSelectionData     *selection_data,
  *
  * Since: GSEAL-branch
  **/
-gint gtk_selection_data_get_length (GtkSelectionData     *selection_data)
+gint
+gtk_selection_data_get_length (GtkSelectionData *selection_data)
 {
   g_return_val_if_fail (selection_data != NULL, 0);
 
   return selection_data->length;
+}
+
+/**
+ * gtk_selection_data_get_display:
+ * @selection_data: a pointer to a #GtkSelectionData structure.
+ *
+ * Retrieves the display of the selection.
+ *
+ * Since: GSEAL-branch
+ **/
+GdkDisplay *
+gtk_selection_data_get_display (GtkSelectionData *selection_data)
+{
+  g_return_val_if_fail (selection_data != NULL, NULL);
+
+  return selection_data->display;
 }
 
 /**

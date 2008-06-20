@@ -163,7 +163,7 @@ const guchar *gtk_selection_data_get_data (GtkSelectionData  *selection_data);
 void gtk_selection_data_set_length (GtkSelectionData     *selection_data,
 				    gint		  length);
 gint gtk_selection_data_get_length (GtkSelectionData  *selection_data);
-GdkDisplay gtk_selection_data_get_display (GtkSelectionData  *selection_data);
+GdkDisplay *gtk_selection_data_get_display (GtkSelectionData  *selection_data);
 void     gtk_selection_data_set      (GtkSelectionData     *selection_data,
 				      GdkAtom               type,
 				      gint                  format,
