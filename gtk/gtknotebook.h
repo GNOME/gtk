@@ -59,37 +59,37 @@ typedef struct _GtkNotebookPage   GtkNotebookPage;
 struct _GtkNotebook
 {
   GtkContainer container;
+  
+  GtkNotebookPage *GSEAL (cur_page);
+  GList *GSEAL (children);
+  GList *GSEAL (first_tab);		/* The first tab visible (for scrolling notebooks) */
+  GList *GSEAL (focus_tab);
+  
+  GtkWidget *GSEAL (menu);
+  GdkWindow *GSEAL (event_window);
+  
+  guint32 GSEAL (timer);
+  
+  guint16 GSEAL (tab_hborder);
+  guint16 GSEAL (tab_vborder);
+  
+  guint GSEAL (show_tabs          : 1);
+  guint GSEAL (homogeneous        : 1);
+  guint GSEAL (show_border        : 1);
+  guint GSEAL (tab_pos            : 2);
+  guint GSEAL (scrollable         : 1);
+  guint GSEAL (in_child           : 3);
+  guint GSEAL (click_child        : 3);
+  guint GSEAL (button             : 2);
+  guint GSEAL (need_timer         : 1);
+  guint GSEAL (child_has_focus    : 1);
+  guint GSEAL (have_visible_child : 1);
+  guint GSEAL (focus_out          : 1);	/* Flag used by ::move-focus-out implementation */
 
-  GtkNotebookPage *cur_page;
-  GList *children;
-  GList *first_tab;		/* The first tab visible (for scrolling notebooks) */
-  GList *focus_tab;
-
-  GtkWidget *menu;
-  GdkWindow *event_window;
-
-  guint32 timer;
-
-  guint16 tab_hborder;
-  guint16 tab_vborder;
-
-  guint show_tabs          : 1;
-  guint homogeneous        : 1;
-  guint show_border        : 1;
-  guint tab_pos            : 2;
-  guint scrollable         : 1;
-  guint in_child           : 3;
-  guint click_child        : 3;
-  guint button             : 2;
-  guint need_timer         : 1;
-  guint child_has_focus    : 1;
-  guint have_visible_child : 1;
-  guint focus_out          : 1;	/* Flag used by ::move-focus-out implementation */
-
-  guint has_before_previous : 1;
-  guint has_before_next     : 1;
-  guint has_after_previous  : 1;
-  guint has_after_next      : 1;
+  guint GSEAL (has_before_previous : 1);
+  guint GSEAL (has_before_next     : 1);
+  guint GSEAL (has_after_previous  : 1);
+  guint GSEAL (has_after_next      : 1);
 };
 
 struct _GtkNotebookClass
