@@ -77,6 +77,11 @@ static void gtk_dialog_map               (GtkWidget        *widget);
 
 static void gtk_dialog_close             (GtkDialog        *dialog);
 
+static void gtk_dialog_add               (GtkContainer     *container,
+					  GtkWidget        *widget);
+static void gtk_dialog_remove            (GtkContainer     *container,
+					  GtkWidget        *widget);
+
 static ResponseData* get_response_data   (GtkWidget        *widget,
 					  gboolean          create);
 static void gtk_dialog_buildable_interface_init     (GtkBuildableIface *iface);
@@ -118,13 +123,18 @@ gtk_dialog_class_init (GtkDialogClass *class)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
+  GtkContainerClass *container_class;
   GtkBindingSet *binding_set;
   
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
+  container_class = GTK_CONTAINER_CLASS (class);
   
   gobject_class->set_property = gtk_dialog_set_property;
   gobject_class->get_property = gtk_dialog_get_property;
+
+  container_class->add = gtk_dialog_add;
+  container_class->remove = gtk_dialog_remove;
   
   widget_class->map = gtk_dialog_map;
   widget_class->style_set = gtk_dialog_style_set;
@@ -348,6 +358,28 @@ gtk_dialog_get_property (GObject     *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+gtk_dialog_add (GtkContainer *container,
+		GtkWidget    *widget)
+{
+  GtkDialog *dialog;
+
+  dialog = GTK_DIALOG (container);
+
+  gtk_box_pack_start (GTK_BOX (dialog->vbox), widget, FALSE, FALSE, 0);
+}
+
+static void
+gtk_dialog_remove (GtkContainer *container,
+		   GtkWidget    *widget)
+{
+  GtkDialog *dialog;
+
+  dialog = GTK_DIALOG (container);
+
+  gtk_container_remove (GTK_CONTAINER (dialog->vbox), widget);
 }
 
 static gint
@@ -1443,6 +1475,42 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
     }
   g_slist_free (parser_data->items);
   g_slice_free (ActionWidgetsSubParserData, parser_data);
+}
+
+GtkHButtonBox *
+gtk_dialog_get_action_area (GtkDialog *dialog)
+{
+  g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
+
+  return dialog->action_area;
+}
+
+void
+gtk_dialog_pack_start (GtkDialog *dialog,
+		       GtkWidget *widget,
+		       gboolean   expand,
+		       gboolean   fill,
+		       guint      padding)
+{
+  g_return_if_fail (GTK_IS_DIALOG (dialog));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_box_pack_start (GTK_BOX (dialog->vbox),
+		      widget, expand, fill, padding);
+}
+
+void
+gtk_dialog_pack_end (GtkDialog *dialog,
+		     GtkWidget *widget,
+		     gboolean   expand,
+		     gboolean   fill,
+		     guint      padding)
+{
+  g_return_if_fail (GTK_IS_DIALOG (dialog));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_box_pack_end (GTK_BOX (dialog->vbox),
+		    widget, expand, fill, padding);
 }
 
 #define __GTK_DIALOG_C__
