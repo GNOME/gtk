@@ -153,7 +153,8 @@ enum {
   PROP_NO_SHOW_ALL,
   PROP_HAS_TOOLTIP,
   PROP_TOOLTIP_MARKUP,
-  PROP_TOOLTIP_TEXT
+  PROP_TOOLTIP_TEXT,
+  PROP_WINDOW
 };
 
 typedef	struct	_GtkStateData	 GtkStateData;
@@ -672,6 +673,22 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							P_("The contents of the tooltip for this widget"),
 							NULL,
 							GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWidget:window:
+   *
+   * The widget's window or its parent window if it does not have a
+   * window (as indicated by the GTK_NO_WINDOW flag).
+   *
+   * Since: GSEAL-branch
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_WINDOW,
+				   g_param_spec_object ("window",
+ 							P_("Window"),
+							P_("The widget's window or its parent window"),
+							GDK_TYPE_WINDOW,
+							GTK_PARAM_READABLE));
 
   widget_signals[SHOW] =
     g_signal_new (I_("show"),
@@ -2584,6 +2601,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_TOOLTIP_MARKUP:
       g_value_set_string (value, g_object_get_qdata (object, quark_tooltip_markup));
+      break;
+    case PROP_WINDOW:
+      g_value_set_object (value, gtk_widget_get_window (widget));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -9865,6 +9885,42 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
   g_object_get (G_OBJECT (widget), "has-tooltip", &has_tooltip, NULL);
 
   return has_tooltip;
+}
+
+/**
+ * gtk_widget_get_allocation:
+ * @widget: a #GtkWidget
+ *
+ * Returns the widget's allocation as provided by its parent.
+ *
+ * Return value: current allocation of @widget.
+ *
+ * Since: GSEAL-branch
+ */
+GtkAllocation
+gtk_widget_get_allocation (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return widget->allocation;
+}
+
+/**
+ * gtk_widget_get_window:
+ * @widget: a #GtkWidget
+ *
+ * Returns the widget's window or the parent window.
+ *
+ * Return value: @widget's window.
+ *
+ * Since: GSEAL-branch
+ */
+GdkWindow*
+gtk_widget_get_window (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return widget->window;
 }
 
 #define __GTK_WIDGET_C__

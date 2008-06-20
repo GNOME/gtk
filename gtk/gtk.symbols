@@ -4778,6 +4778,9 @@ gtk_widget_trigger_tooltip_query
 gtk_widget_unmap
 gtk_widget_unparent
 gtk_widget_unrealize
+gtk_widget_unref
+gtk_widget_get_allocation
+gtk_widget_get_window
 #endif
 #endif
 

@@ -178,12 +178,12 @@ struct _GtkWidget
    * state and saved_state go. we therefore don't waste any new
    * space on this.
    */
-  guint16 private_flags;
+  guint16 GSEAL (private_flags);
   
   /* The state of the widget. There are actually only
    *  5 widget states (defined in "gtkenums.h").
    */
-  guint8 state;
+  guint8 GSEAL (state);
   
   /* The saved state of the widget. When a widget's state
    *  is changed to GTK_STATE_INSENSITIVE via
@@ -191,7 +191,7 @@ struct _GtkWidget
    *  the old state is kept around in this field. The state
    *  will be restored once the widget gets sensitive again.
    */
-  guint8 saved_state;
+  guint8 GSEAL (saved_state);
   
   /* The widget's name. If the widget does not have a name
    *  (the name is NULL), then its name (as returned by
@@ -199,7 +199,7 @@ struct _GtkWidget
    * Among other things, the widget name is used to determine
    *  the style to use for a widget.
    */
-  gchar *name;
+  gchar *GSEAL (name);
   
   /*< public >*/
 
@@ -208,25 +208,25 @@ struct _GtkWidget
    *  along with graphics contexts used to draw with and
    *  the font to use for text.
    */
-  GtkStyle *style;
+  GtkStyle *GSEAL (style);
   
   /* The widget's desired size.
    */
-  GtkRequisition requisition;
+  GtkRequisition GSEAL (requisition);
   
   /* The widget's allocated size.
    */
-  GtkAllocation allocation;
+  GtkAllocation GSEAL (allocation);
   
   /* The widget's window or its parent window if it does
    *  not have a window. (Which will be indicated by the
    *  GTK_NO_WINDOW flag being set).
    */
-  GdkWindow *window;
+  GdkWindow *GSEAL (window);
   
   /* The widget's parent.
    */
-  GtkWidget *parent;
+  GtkWidget *GSEAL (parent);
 };
 
 struct _GtkWidgetClass
@@ -572,6 +572,8 @@ void                  gtk_widget_set_parent_window      (GtkWidget    *widget,
 void                  gtk_widget_set_child_visible      (GtkWidget    *widget,
 							 gboolean      is_visible);
 gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
+GtkAllocation         gtk_widget_get_allocation         (GtkWidget    *widget);
+GdkWindow*            gtk_widget_get_window             (GtkWidget    *widget);
 
 GtkWidget *gtk_widget_get_parent          (GtkWidget           *widget);
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
