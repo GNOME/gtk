@@ -52,7 +52,7 @@ struct _GtkCellRendererProgress
   GtkCellRenderer parent_instance;
 
   /*< private >*/
-  GtkCellRendererProgressPrivate *priv;
+  GtkCellRendererProgressPrivate *GSEAL (priv);
 };
 
 struct _GtkCellRendererProgressClass
