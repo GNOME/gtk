@@ -1,5 +1,7 @@
 2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtklayout.c (enum): Remove left-over unused property enum.
+
 	* gtk/gtk.symbols:
 	* gtk/gtkscalebutton.c (gtk_scale_button_get_plus_button),
 	(gtk_scale_button_get_minus_button):

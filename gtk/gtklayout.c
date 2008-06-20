@@ -47,7 +47,6 @@ struct _GtkLayoutChild {
 
 enum {
    PROP_0,
-   PROP_BIN_WINDOW,
    PROP_HADJUSTMENT,
    PROP_VADJUSTMENT,
    PROP_WIDTH,
