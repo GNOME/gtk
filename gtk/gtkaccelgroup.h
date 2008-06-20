@@ -73,10 +73,11 @@ typedef gboolean (*GtkAccelGroupFindFunc) (GtkAccelKey    *key,
 struct _GtkAccelGroup
 {
   GObject             parent;
-  guint	              GSEAL (lock_count);
+
+  guint               GSEAL (lock_count);
   GdkModifierType     GSEAL (modifier_mask);
   GSList             *GSEAL (acceleratables);
-  guint		      GSEAL (n_accels);
+  guint	              GSEAL (n_accels);
   GtkAccelGroupEntry *GSEAL (priv_accels);
 };
 

@@ -88,12 +88,13 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
                                                          "Is the accel group locked",
                                                          FALSE,
                                                          G_PARAM_READABLE));
+
   g_object_class_install_property (object_class,
                                    PROP_MODIFIER_MASK,
                                    g_param_spec_enum ("modifier-mask",
                                                       "Modifier Mask",
                                                       "Modifier Mask",
-                                                      gdk_modifier_type_get_type (),
+                                                      GDK_TYPE_MODIFIER_TYPE,
                                                       0,
                                                       G_PARAM_READABLE));
 
@@ -179,17 +180,18 @@ gtk_accel_group_get_property (GObject    *object,
 {
   GtkAccelGroup *accel_group = GTK_ACCEL_GROUP (object);
 
-  switch (param_id) {
-  case PROP_IS_LOCKED:
-    g_value_set_boolean (value, accel_group->lock_count > 0);
-    break;
-  case PROP_MODIFIER_MASK:
-    g_value_set_enum (value, accel_group->modifier_mask);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-    break;
-  };
+  switch (param_id)
+    {
+    case PROP_IS_LOCKED:
+      g_value_set_boolean (value, accel_group->lock_count > 0);
+      break;
+    case PROP_MODIFIER_MASK:
+      g_value_set_enum (value, accel_group->modifier_mask);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -217,14 +219,14 @@ gtk_accel_group_new (void)
 /**
  * gtk_accel_group_get_is_locked:
  * @accel_group: a #GtkAccelGroup
+ *
  * @returns: %TRUE if there are 1 or more locks on the @accel_group,
- * %FALSE otherwise. 
+ * %FALSE otherwise.
  *
  * Locks are added and removed using gtk_accel_group_lock() and
- * gtk_accel_group_unlock(). 
- *
+ * gtk_accel_group_unlock().
  */
-gboolean          
+gboolean
 gtk_accel_group_get_is_locked (GtkAccelGroup *accel_group)
 {
   g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), FALSE);
@@ -235,8 +237,9 @@ gtk_accel_group_get_is_locked (GtkAccelGroup *accel_group)
 /**
  * gtk_accel_group_get_modifier_mask:
  * @accel_group: a #GtkAccelGroup
+ *
  * @returns: #GdkModifierType representing the mask for this
- * @accel_group. For example, #GDK_CONTROL_MASK, #GDK_SHIFT_MASK, etc. 
+ * @accel_group. For example, #GDK_CONTROL_MASK, #GDK_SHIFT_MASK, etc.
  */
 GdkModifierType
 gtk_accel_group_get_modifier_mask (GtkAccelGroup *accel_group)
