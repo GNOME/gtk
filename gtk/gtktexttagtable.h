@@ -50,11 +50,11 @@ struct _GtkTextTagTable
 {
   GObject parent_instance;
 
-  GHashTable *hash;
-  GSList *anonymous;
-  gint anon_count;
+  GHashTable *GSEAL (hash);
+  GSList *GSEAL (anonymous);
+  gint GSEAL (anon_count);
 
-  GSList *buffers;
+  GSList *GSEAL (buffers);
 };
 
 struct _GtkTextTagTableClass
