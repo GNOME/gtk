@@ -57,63 +57,63 @@ struct _GtkWindow
 {
   GtkBin bin;
 
-  gchar *title;
-  gchar *wmclass_name;
-  gchar *wmclass_class;
-  gchar *wm_role;
+  gchar *GSEAL (title);
+  gchar *GSEAL (wmclass_name);
+  gchar *GSEAL (wmclass_class);
+  gchar *GSEAL (wm_role);
 
-  GtkWidget *focus_widget;
-  GtkWidget *default_widget;
-  GtkWindow *transient_parent;
-  GtkWindowGeometryInfo *geometry_info;
-  GdkWindow *frame;
-  GtkWindowGroup *group;
+  GtkWidget *GSEAL (focus_widget);
+  GtkWidget *GSEAL (default_widget);
+  GtkWindow *GSEAL (transient_parent);
+  GtkWindowGeometryInfo *GSEAL (geometry_info);
+  GdkWindow *GSEAL (frame);
+  GtkWindowGroup *GSEAL (group);
 
-  guint16 configure_request_count;
-  guint allow_shrink : 1;
-  guint allow_grow : 1;
-  guint configure_notify_received : 1;
+  guint16 GSEAL (configure_request_count);
+  guint GSEAL (allow_shrink : 1);
+  guint GSEAL (allow_grow : 1);
+  guint GSEAL (configure_notify_received : 1);
   /* The following flags are initially TRUE (before a window is mapped).
    * They cause us to compute a configure request that involves
    * default-only parameters. Once mapped, we set them to FALSE.
    * Then we set them to TRUE again on unmap (for position)
    * and on unrealize (for size).
    */
-  guint need_default_position : 1;
-  guint need_default_size : 1;
-  guint position : 3;
-  guint type : 4; /* GtkWindowType */ 
-  guint has_user_ref_count : 1;
-  guint has_focus : 1;
+  guint GSEAL (need_default_position : 1);
+  guint GSEAL (need_default_size : 1);
+  guint GSEAL (position : 3);
+  guint GSEAL (type : 4); /* GtkWindowType */ 
+  guint GSEAL (has_user_ref_count : 1);
+  guint GSEAL (has_focus : 1);
 
-  guint modal : 1;
-  guint destroy_with_parent : 1;
+  guint GSEAL (modal : 1);
+  guint GSEAL (destroy_with_parent : 1);
   
-  guint has_frame : 1;
+  guint GSEAL (has_frame : 1);
 
   /* gtk_window_iconify() called before realization */
-  guint iconify_initially : 1;
-  guint stick_initially : 1;
-  guint maximize_initially : 1;
-  guint decorated : 1;
+  guint GSEAL (iconify_initially : 1);
+  guint GSEAL (stick_initially : 1);
+  guint GSEAL (maximize_initially : 1);
+  guint GSEAL (decorated : 1);
   
-  guint type_hint : 3; /* GdkWindowTypeHint if the hint is one of the original eight. If not, then
-			* it contains GDK_WINDOW_TYPE_HINT_NORMAL
-			*/
-  guint gravity : 5; /* GdkGravity */
+  guint GSEAL (type_hint : 3); /* GdkWindowTypeHint if the hint is one of the original eight. If not, then
+				* it contains GDK_WINDOW_TYPE_HINT_NORMAL
+				*/
+  guint GSEAL (gravity : 5); /* GdkGravity */
 
-  guint is_active : 1;
-  guint has_toplevel_focus : 1;
+  guint GSEAL (is_active : 1);
+  guint GSEAL (has_toplevel_focus : 1);
   
-  guint frame_left;
-  guint frame_top;
-  guint frame_right;
-  guint frame_bottom;
+  guint GSEAL (frame_left);
+  guint GSEAL (frame_top);
+  guint GSEAL (frame_right);
+  guint GSEAL (frame_bottom);
 
-  guint keys_changed_handler;
+  guint GSEAL (keys_changed_handler);
   
-  GdkModifierType mnemonic_modifier;
-  GdkScreen      *screen;
+  GdkModifierType GSEAL (mnemonic_modifier);
+  GdkScreen      *GSEAL (screen);
 };
 
 struct _GtkWindowClass
