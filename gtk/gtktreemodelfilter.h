@@ -25,7 +25,7 @@
 #ifndef __GTK_TREE_MODEL_FILTER_H__
 #define __GTK_TREE_MODEL_FILTER_H__
 
-#include <gdk/gdkconfig.h>
+#include <gdkconfig.h>
 #include <gtk/gtktreemodel.h>
 
 G_BEGIN_DECLS

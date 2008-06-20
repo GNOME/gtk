@@ -1,3 +1,16 @@
+2008-06-20  Kjartan Maraas  <kmaraas@gnome.org>
+
+	reviewed by: <Carlos Garnacho <garnacho@gnome.org>
+
+	* gtk/gtkbuilder.h:
+	* gtk/gtkliststore.h:
+	* gtk/gtkobject.h:
+	* gtk/gtktextchild.h:
+	* gtk/gtktreemodelfilter.h:
+	* gtk/gtktreemodelsort.h:
+	* gtk/gtktreestore.h:
+	#include <gdkconfig.h> not <gdk/gdkconfig.h>
+
 2008-06-20  Martyn Russell  <martyn@imendio.com>
 
 	* gtk/gtkaccelgroup.c: Fix warnings from calling

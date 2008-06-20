@@ -32,7 +32,7 @@
 #define __GTK_OBJECT_H__
 
 
-#include <gdk/gdkconfig.h>
+#include <gdkconfig.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtktypeutils.h>
 #include <gtk/gtkdebug.h>

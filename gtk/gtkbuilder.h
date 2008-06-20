@@ -25,7 +25,7 @@
 #ifndef __GTK_BUILDER_H__
 #define __GTK_BUILDER_H__
 
-#include <gdk/gdkconfig.h>
+#include <gdkconfig.h>
 #include <glib-object.h>
 
 G_BEGIN_DECLS
