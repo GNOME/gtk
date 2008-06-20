@@ -157,7 +157,7 @@ struct _GtkWindowGroup
 {
   GObject parent_instance;
 
-  GSList *grabs;
+  GSList *GSEAL (grabs);
 };
 
 struct _GtkWindowGroupClass
