@@ -1,3 +1,9 @@
+2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkwidget.c (gtk_widget_get_allocation): Remove unused variable
+	and check if the widget is a GtkWidget subclass, not the uninitialized
+	allocation.
+
 2008-06-20  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkaccellabel.h
