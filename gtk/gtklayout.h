@@ -54,25 +54,25 @@ typedef struct _GtkLayoutClass   GtkLayoutClass;
 
 struct _GtkLayout
 {
-  GtkContainer container;
+  GtkContainer GSEAL (container);
 
-  GList *children;
+  GList *GSEAL (children);
 
-  guint width;
-  guint height;
+  guint GSEAL (width);
+  guint GSEAL (height);
 
-  GtkAdjustment *hadjustment;
-  GtkAdjustment *vadjustment;
+  GtkAdjustment *GSEAL (hadjustment);
+  GtkAdjustment *GSEAL (vadjustment);
 
   /*< public >*/
-  GdkWindow *bin_window;
+  GdkWindow *GSEAL (bin_window);
 
   /*< private >*/
-  GdkVisibilityState visibility;
-  gint scroll_x;
-  gint scroll_y;
+  GdkVisibilityState GSEAL (visibility);
+  gint GSEAL (scroll_x);
+  gint GSEAL (scroll_y);
 
-  guint freeze_count;
+  guint GSEAL (freeze_count);
 };
 
 struct _GtkLayoutClass
@@ -93,6 +93,7 @@ struct _GtkLayoutClass
 GType          gtk_layout_get_type        (void) G_GNUC_CONST;
 GtkWidget*     gtk_layout_new             (GtkAdjustment *hadjustment,
 				           GtkAdjustment *vadjustment);
+GdkWindow*     gtk_layout_get_bin_window  (GtkLayout     *layout);
 void           gtk_layout_put             (GtkLayout     *layout,
 		                           GtkWidget     *child_widget,
 		                           gint           x,

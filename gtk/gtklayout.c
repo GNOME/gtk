@@ -47,6 +47,7 @@ struct _GtkLayoutChild {
 
 enum {
    PROP_0,
+   PROP_BIN_WINDOW,
    PROP_HADJUSTMENT,
    PROP_VADJUSTMENT,
    PROP_WIDTH,
@@ -140,6 +141,22 @@ gtk_layout_new (GtkAdjustment *hadjustment,
 			 NULL);
 
   return GTK_WIDGET (layout);
+}
+
+/**
+ * gtk_layout_get_bin_window:
+ * @layout: a #GtkLayout
+ * 
+ * Retrieve the bin window of the layout used for drawing operations.
+ * 
+ * Return value: a #GdkWindow
+ **/
+GdkWindow*
+gtk_layout_get_bin_window (GtkLayout     *layout)
+{
+  g_return_val_if_fail (GTK_IS_LAYOUT (layout), NULL);
+
+  return layout->bin_window;
 }
 
 /**

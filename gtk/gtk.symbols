@@ -2028,6 +2028,7 @@ gtk_label_set_width_chars
 
 #if IN_HEADER(__GTK_LAYOUT_H__)
 #if IN_FILE(__GTK_LAYOUT_C__)
+gtk_layout_get_bin_window
 gtk_layout_get_hadjustment
 gtk_layout_get_size
 gtk_layout_get_type G_GNUC_CONST
