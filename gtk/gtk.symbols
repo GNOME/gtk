@@ -2272,6 +2272,7 @@ gtk_menu_set_title
 #if IN_FILE(__GTK_MENU_ITEM_C__)
 gtk_menu_item_activate
 gtk_menu_item_deselect
+gtk_menu_item_get_accel_path
 gtk_menu_item_get_right_justified
 gtk_menu_item_get_submenu
 gtk_menu_item_get_type G_GNUC_CONST

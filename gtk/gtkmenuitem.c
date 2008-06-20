@@ -52,7 +52,9 @@ enum {
 
 enum {
   PROP_0,
-  PROP_SUBMENU
+  PROP_RIGHT_JUSTIFIED,
+  PROP_SUBMENU,
+  PROP_ACCEL_PATH
 };
 
 
@@ -190,6 +192,21 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 		  G_TYPE_INT);
 
   /**
+   * GtkMenuItem:right-justified:
+   *
+   * Sets whether the menu item appears justified at the right side of a menu bar.
+   *
+   * Since: GSEAL-branch
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_RIGHT_JUSTIFIED,
+                                   g_param_spec_boolean ("right-justified",
+                                                         P_("Right Justified"),
+                                                         P_("Sets whether the menu item appears justified at the right side of a menu bar"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
+  /**
    * GtkMenuItem:submenu:
    *
    * The submenu attached to the menu item, or NULL if it has none.
@@ -202,6 +219,23 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                                         P_("Submenu"),
                                                         P_("The submenu attached to the menu item, or NULL if it has none"),
                                                         GTK_TYPE_MENU,
+                                                        GTK_PARAM_READWRITE));
+
+  /**
+   * GtkMenuItem:accel-path:
+   *
+   * Sets the accelerator path of the menu item, through which runtime
+   * changes of the menu item's accelerator caused by the user can be
+   * identified and saved to persistant storage.
+   *
+   * Since: GSEAL-branch
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACCEL_PATH,
+                                   g_param_spec_string ("accel-path",
+                                                        P_("Accel Path"),
+                                                        P_("Sets the accelerator path of the menu item"),
+                                                        NULL,
                                                         GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property_parser (widget_class,
@@ -329,8 +363,14 @@ gtk_menu_item_set_property (GObject      *object,
   
   switch (prop_id)
     {
+    case PROP_RIGHT_JUSTIFIED:
+      gtk_menu_item_set_right_justified (menu_item, g_value_get_boolean (value));
+      break;
     case PROP_SUBMENU:
       gtk_menu_item_set_submenu (menu_item, g_value_get_object (value));
+      break;
+    case PROP_ACCEL_PATH:
+      gtk_menu_item_set_accel_path (menu_item, g_value_get_string (value));
       break;
 
     default:
@@ -349,8 +389,14 @@ gtk_menu_item_get_property (GObject    *object,
   
   switch (prop_id)
     {
+    case PROP_RIGHT_JUSTIFIED:
+      g_value_set_boolean (value, gtk_menu_item_get_right_justified (menu_item));
+      break;
     case PROP_SUBMENU:
       g_value_set_object (value, gtk_menu_item_get_submenu (menu_item));
+      break;
+    case PROP_ACCEL_PATH:
+      g_value_set_string (value, gtk_menu_item_get_accel_path (menu_item));
       break;
 
     default:
@@ -1630,6 +1676,29 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
 					   menu->accel_group,
 					   FALSE);
     }
+}
+
+/**
+ * gtk_menu_item_get_accel_path
+ * @menu_item:  a valid #GtkMenuItem
+ *
+ * Set the accelerator path on @menu_item, through which runtime changes of the
+ * menu item's accelerator caused by the user can be identified and saved to
+ * persistant storage (see gtk_accel_map_save() on this).
+ * To setup a default accelerator for this menu item, call
+ * gtk_accel_map_add_entry() with the same @accel_path.
+ * See also gtk_accel_map_add_entry() on the specifics of accelerator paths,
+ * and gtk_menu_set_accel_path() for a more convenient variant of this function.
+ *
+ * Returns: the accelerator path corresponding to this menu item's
+ *              functionality, or %NULL if not set
+ */
+G_CONST_RETURN gchar *
+gtk_menu_item_get_accel_path (GtkMenuItem *menu_item)
+{
+  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
+
+  return menu_item->accel_path;
 }
 
 static void

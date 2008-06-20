@@ -52,21 +52,21 @@ typedef struct _GtkMenuItemClass  GtkMenuItemClass;
 struct _GtkMenuItem
 {
   GtkItem item;
-  
-  GtkWidget *submenu;
-  GdkWindow *event_window;
-  
-  guint16 toggle_size;
-  guint16 accelerator_width;
-  gchar  *accel_path;
-  
-  guint show_submenu_indicator : 1;
-  guint submenu_placement : 1;
-  guint submenu_direction : 1;
-  guint right_justify: 1;
-  guint timer_from_keypress : 1;
-  guint from_menubar : 1;
-  guint timer;
+
+  GtkWidget *GSEAL (submenu);
+  GdkWindow *GSEAL (event_window);
+
+  guint16 GSEAL (toggle_size);
+  guint16 GSEAL (accelerator_width);
+  gchar  *GSEAL (accel_path);
+
+  guint GSEAL (show_submenu_indicator : 1);
+  guint GSEAL (submenu_placement : 1);
+  guint GSEAL (submenu_direction : 1);
+  guint GSEAL (right_justify: 1);
+  guint GSEAL (timer_from_keypress : 1);
+  guint GSEAL (from_menubar : 1);
+  guint GSEAL (timer);
 };
 
 struct _GtkMenuItemClass
@@ -115,6 +115,7 @@ void       gtk_menu_item_set_right_justified  (GtkMenuItem         *menu_item,
 gboolean   gtk_menu_item_get_right_justified  (GtkMenuItem         *menu_item);
 void	   gtk_menu_item_set_accel_path	      (GtkMenuItem	   *menu_item,
 					       const gchar	   *accel_path);
+G_CONST_RETURN gchar* gtk_menu_item_get_accel_path (GtkMenuItem    *menu_item);
 
 /* private */
 void	  _gtk_menu_item_refresh_accel_path   (GtkMenuItem	   *menu_item,
