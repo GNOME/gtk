@@ -53,11 +53,11 @@ struct _GtkMisc
 {
   GtkWidget widget;
   
-  gfloat xalign;
-  gfloat yalign;
+  gfloat GSEAL (xalign);
+  gfloat GSEAL (yalign);
   
-  guint16 xpad;
-  guint16 ypad;
+  guint16 GSEAL (xpad);
+  guint16 GSEAL (ypad);
 };
 
 struct _GtkMiscClass
