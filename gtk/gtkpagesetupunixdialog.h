@@ -44,7 +44,7 @@ struct _GtkPageSetupUnixDialog
 {
   GtkDialog parent_instance;
 
-  GtkPageSetupUnixDialogPrivate *priv;
+  GtkPageSetupUnixDialogPrivate *GSEAL (priv);
 };
 
 struct _GtkPageSetupUnixDialogClass
