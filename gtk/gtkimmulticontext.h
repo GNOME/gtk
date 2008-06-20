@@ -45,11 +45,11 @@ struct _GtkIMMulticontext
 {
   GtkIMContext object;
 
-  GtkIMContext *slave;
+  GtkIMContext *GSEAL (slave);
 
-  GtkIMMulticontextPrivate *priv;
+  GtkIMMulticontextPrivate *GSEAL (priv);
 
-  gchar *context_id;
+  gchar *GSEAL (context_id);
 };
 
 struct _GtkIMMulticontextClass
