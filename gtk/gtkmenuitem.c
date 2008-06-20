@@ -1682,13 +1682,9 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
  * gtk_menu_item_get_accel_path
  * @menu_item:  a valid #GtkMenuItem
  *
- * Set the accelerator path on @menu_item, through which runtime changes of the
- * menu item's accelerator caused by the user can be identified and saved to
- * persistant storage (see gtk_accel_map_save() on this).
- * To setup a default accelerator for this menu item, call
- * gtk_accel_map_add_entry() with the same @accel_path.
- * See also gtk_accel_map_add_entry() on the specifics of accelerator paths,
- * and gtk_menu_set_accel_path() for a more convenient variant of this function.
+ * Retrieve the accelerator path that was previously set on @menu_item.
+ *
+ * See gtk_menu_item_set_accel_path() for details.
  *
  * Returns: the accelerator path corresponding to this menu item's
  *              functionality, or %NULL if not set
