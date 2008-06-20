@@ -1,3 +1,11 @@
+2008-06-20  Mikael Hallendal  <micke@imendio.com>
+
+	* tests/testthreads.c: Use g_signal_connect instead of
+	gtk_signal_connect.
+
+	* demos/testgtk/main.c: switched to use GSignal instead of GtkSignal.
+	While the code is not built, people may still look at it.
+
 2008-06-20  Kjartan Maraas  <kmaraas@gnome.org>
 
 	reviewed by: <Carlos Garnacho <garnacho@gnome.org>

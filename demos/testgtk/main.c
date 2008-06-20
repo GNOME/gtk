@@ -227,8 +227,7 @@ button_press_event_cb (GtkTreeView    *tree_view,
 	  gtk_tree_path_free (path);
 	}
 
-      gtk_signal_emit_stop_by_name (GTK_OBJECT (tree_view),
-				    "button_press_event");
+      g_signal_stop_emission_by_name (tree_view, "button-press-event");
       return TRUE;
     }
   
@@ -329,8 +328,8 @@ create_tree (void)
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
 			       GTK_TREE_VIEW_COLUMN (column));
 
-  gtk_signal_connect (GTK_OBJECT (selection), "selection_changed", selection_cb, model);
-  gtk_signal_connect (GTK_OBJECT (tree_view), "button_press_event", GTK_SIGNAL_FUNC (button_press_event_cb), model);
+  g_signal_connect (selection, "selection-changed", selection_cb, model);
+  g_signal_connect (tree_view, "button-press-event", G_CALLBACK (button_press_event_cb), model);
 
   return tree_view;
 }
@@ -347,8 +346,8 @@ main (int argc, char **argv)
   gtk_init (&argc, &argv);
   
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+  g_signal_connect (window, "destroy",
+                    G_CALLBACK (gtk_main_quit), NULL);
 
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), hbox);

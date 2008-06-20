@@ -69,8 +69,8 @@ counter (void *data)
 
   vbox = gtk_vbox_new (FALSE, 0);
 
-  gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-		      GTK_SIGNAL_FUNC (delete_cb), &flag);
+  g_signal_connect (window, "delete-event",
+                    G_CALLBACK (delete_cb), &flag);
 
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
@@ -78,8 +78,8 @@ counter (void *data)
   gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Close");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (close_cb), &flag);
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (close_cb), &flag);
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   gtk_widget_show_all (window);
