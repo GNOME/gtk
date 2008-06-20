@@ -198,49 +198,9 @@ gtk_color_selection_dialog_new (const gchar *title)
 GtkWidget*
 gtk_color_selection_dialog_get_color_selection (GtkColorSelectionDialog *colorsel)
 {
+  g_return_val_if_fail (GTK_IS_COLOR_SELECTION (colorsel), NULL);
+
   return colorsel->colorsel;
-}
-
-/**
- * gtk_color_selection_dialog_get_ok_button:
- * @colorsel: a #GtkColorSelectionDialog
- *
- * Retrieves the OK button of the dialog.
- *
- * Since:  GSEAL-branch
- **/
-GtkWidget*
-gtk_color_selection_dialog_get_ok_button       (GtkColorSelectionDialog *colorsel)
-{
-  return colorsel->ok_button;
-}
-
-/**
- * gtk_color_selection_dialog_get_cancel_button:
- * @colorsel: a #GtkColorSelectionDialog
- *
- * Retrieves the cancel button of the dialog.
- *
- * Since:  GSEAL-branch
- **/
-GtkWidget*
-gtk_color_selection_dialog_get_cancel_button   (GtkColorSelectionDialog *colorsel)
-{
-  return colorsel->cancel_button;
-}
-
-/**
- * gtk_color_selection_dialog_get_help_button:
- * @colorsel: a #GtkColorSelectionDialog
- *
- * Retrieves the help button of the dialog.
- *
- * Since:  GSEAL-branch
- **/
-GtkWidget*
-gtk_color_selection_dialog_get_help_button     (GtkColorSelectionDialog *colorsel)
-{
-  return colorsel->help_button;
 }
 
 static void

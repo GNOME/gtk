@@ -830,10 +830,7 @@ gtk_color_selection_set_previous_color
 #if IN_FILE(__GTK_COLOR_SELECTION_DIALOG_C__)
 gtk_color_selection_dialog_get_type G_GNUC_CONST
 gtk_color_selection_dialog_new
-gtk_color_selection_dialog_get_cancel_button
 gtk_color_selection_dialog_get_color_selection
-gtk_color_selection_dialog_get_help_button
-gtk_color_selection_dialog_get_ok_button
 #endif
 #endif
 

@@ -75,9 +75,6 @@ struct _GtkColorSelectionDialogClass
 GType      gtk_color_selection_dialog_get_type            (void) G_GNUC_CONST;
 GtkWidget* gtk_color_selection_dialog_new                 (const gchar *title);
 GtkWidget* gtk_color_selection_dialog_get_color_selection (GtkColorSelectionDialog *colorsel);
-GtkWidget* gtk_color_selection_dialog_get_ok_button       (GtkColorSelectionDialog *colorsel);
-GtkWidget* gtk_color_selection_dialog_get_cancel_button   (GtkColorSelectionDialog *colorsel);
-GtkWidget* gtk_color_selection_dialog_get_help_button     (GtkColorSelectionDialog *colorsel);
 
 
 G_END_DECLS
