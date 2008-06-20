@@ -61,22 +61,22 @@ struct _GtkCellRenderer
 {
   GtkObject parent;
 
-  gfloat xalign;
-  gfloat yalign;
+  gfloat GSEAL (xalign);
+  gfloat GSEAL (yalign);
 
-  gint width;
-  gint height;
+  gint GSEAL (width);
+  gint GSEAL (height);
 
-  guint16 xpad;
-  guint16 ypad;
+  guint16 GSEAL (xpad);
+  guint16 GSEAL (ypad);
 
-  guint mode : 2;
-  guint visible : 1;
-  guint is_expander : 1;
-  guint is_expanded : 1;
-  guint cell_background_set : 1;
-  guint sensitive : 1;
-  guint editing : 1;
+  guint GSEAL (mode : 2);
+  guint GSEAL (visible : 1);
+  guint GSEAL (is_expander : 1);
+  guint GSEAL (is_expanded : 1);
+  guint GSEAL (cell_background_set : 1);
+  guint GSEAL (sensitive : 1);
+  guint GSEAL (editing : 1);
 };
 
 struct _GtkCellRendererClass
