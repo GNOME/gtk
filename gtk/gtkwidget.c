@@ -9890,19 +9890,23 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
 /**
  * gtk_widget_get_allocation:
  * @widget: a #GtkWidget
+ * @allocation: a #GtkAllocation
  *
- * Returns the widget's allocation as provided by its parent.
- *
- * Return value: current allocation of @widget.
+ * Fills @allocation with the widget's allocation as provided by its parent.
  *
  * Since: GSEAL-branch
  */
-GtkAllocation
-gtk_widget_get_allocation (GtkWidget *widget)
+void
+gtk_widget_get_allocation (GtkWidget     *widget,
+                           GtkAllocation *allocation)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (allocation != NULL);
 
-  return widget->allocation;
+  allocation->x = widget->allocation.x;
+  allocation->y = widget->allocation.y;
+  allocation->width = widget->allocation.width;
+  allocation->height = widget->allocation.height;
 }
 
 /**
