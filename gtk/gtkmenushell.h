@@ -52,20 +52,20 @@ typedef struct _GtkMenuShellClass  GtkMenuShellClass;
 struct _GtkMenuShell
 {
   GtkContainer container;
-  
-  GList *children;
-  GtkWidget *active_menu_item;
-  GtkWidget *parent_menu_shell;
-  
-  guint button;
-  guint32 activate_time;
 
-  guint active : 1;
-  guint have_grab : 1;
-  guint have_xgrab : 1;
-  guint ignore_leave : 1;	/* unused */
-  guint menu_flag : 1;		/* unused */
-  guint ignore_enter : 1;
+  GList *GSEAL (children);
+  GtkWidget *GSEAL (active_menu_item);
+  GtkWidget *GSEAL (parent_menu_shell);
+
+  guint GSEAL (button);
+  guint32 GSEAL (activate_time);
+
+  guint GSEAL (active : 1);
+  guint GSEAL (have_grab : 1);
+  guint GSEAL (have_xgrab : 1);
+  guint GSEAL (unused1);
+  guint GSEAL (unused2);
+  guint GSEAL (ignore_enter : 1);
 };
 
 struct _GtkMenuShellClass
