@@ -293,16 +293,19 @@ remove_action (GtkAction *action)
 static void
 gtk_action_group_init (GtkActionGroup *self)
 {
-  self->private_data = GTK_ACTION_GROUP_GET_PRIVATE (self);
-  self->private_data->name = NULL;
-  self->private_data->sensitive = TRUE;
-  self->private_data->visible = TRUE;
-  self->private_data->actions = g_hash_table_new_full (g_str_hash, g_str_equal,
-						       NULL,
-						       (GDestroyNotify) remove_action);
-  self->private_data->translate_func = NULL;
-  self->private_data->translate_data = NULL;
-  self->private_data->translate_notify = NULL;
+  GtkActionGroupPrivate *private;
+
+  private = GTK_ACTION_GROUP_GET_PRIVATE (self);
+
+  private->name = NULL;
+  private->sensitive = TRUE;
+  private->visible = TRUE;
+  private->actions = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                            NULL,
+                                            (GDestroyNotify) remove_action);
+  private->translate_func = NULL;
+  private->translate_data = NULL;
+  private->translate_notify = NULL;
 }
 
 static void
@@ -330,14 +333,17 @@ gtk_action_group_buildable_set_name (GtkBuildable *buildable,
 				     const gchar  *name)
 {
   GtkActionGroup *self = GTK_ACTION_GROUP (buildable);
-  self->private_data->name = g_strdup (name);
+  GtkActionGroupPrivate *private = GTK_ACTION_GROUP_GET_PRIVATE (self);
+
+  private->name = g_strdup (name);
 }
 
 static const gchar *
 gtk_action_group_buildable_get_name (GtkBuildable *buildable)
 {
   GtkActionGroup *self = GTK_ACTION_GROUP (buildable);
-  return self->private_data->name;
+  GtkActionGroupPrivate *private = GTK_ACTION_GROUP_GET_PRIVATE (self);
+  return private->name;
 }
 
 typedef struct {
@@ -424,15 +430,17 @@ gtk_action_group_buildable_custom_tag_end (GtkBuildable *buildable,
   if (strcmp (tagname, "accelerator") == 0)
     {
       GtkActionGroup *action_group;
+      GtkActionGroupPrivate *private;
       GtkAction *action;
       gchar *accel_path;
       
       data = (AcceleratorParserData*)user_data;
       action_group = GTK_ACTION_GROUP (buildable);
+      private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
       action = GTK_ACTION (child);
 	
       accel_path = g_strconcat ("<Actions>/",
-				action_group->private_data->name, "/",
+				private->name, "/",
 				gtk_action_get_name (action), NULL);
 
       if (gtk_accel_map_lookup_entry (accel_path, NULL))
@@ -463,9 +471,11 @@ GtkActionGroup *
 gtk_action_group_new (const gchar *name)
 {
   GtkActionGroup *self;
+  GtkActionGroupPrivate *private;
 
   self = g_object_new (GTK_TYPE_ACTION_GROUP, NULL);
-  self->private_data->name = g_strdup (name);
+  private = GTK_ACTION_GROUP_GET_PRIVATE (self);
+  private->name = g_strdup (name);
 
   return self;
 }
@@ -474,17 +484,19 @@ static void
 gtk_action_group_finalize (GObject *object)
 {
   GtkActionGroup *self;
+  GtkActionGroupPrivate *private;
 
   self = GTK_ACTION_GROUP (object);
+  private = GTK_ACTION_GROUP_GET_PRIVATE (self);
 
-  g_free (self->private_data->name);
-  self->private_data->name = NULL;
+  g_free (private->name);
+  private->name = NULL;
 
-  g_hash_table_destroy (self->private_data->actions);
-  self->private_data->actions = NULL;
+  g_hash_table_destroy (private->actions);
+  private->actions = NULL;
 
-  if (self->private_data->translate_notify)
-    self->private_data->translate_notify (self->private_data->translate_data);
+  if (private->translate_notify)
+    private->translate_notify (private->translate_data);
 
   if (parent_class->finalize)
     (* parent_class->finalize) (object);
@@ -497,15 +509,17 @@ gtk_action_group_set_property (GObject         *object,
 			       GParamSpec      *pspec)
 {
   GtkActionGroup *self;
+  GtkActionGroupPrivate *private;
   gchar *tmp;
   
   self = GTK_ACTION_GROUP (object);
+  private = GTK_ACTION_GROUP_GET_PRIVATE (self);
 
   switch (prop_id)
     {
     case PROP_NAME:
-      tmp = self->private_data->name;
-      self->private_data->name = g_value_dup_string (value);
+      tmp = private->name;
+      private->name = g_value_dup_string (value);
       g_free (tmp);
       break;
     case PROP_SENSITIVE:
@@ -527,19 +541,21 @@ gtk_action_group_get_property (GObject    *object,
 			       GParamSpec *pspec)
 {
   GtkActionGroup *self;
+  GtkActionGroupPrivate *private;
   
   self = GTK_ACTION_GROUP (object);
+  private = GTK_ACTION_GROUP_GET_PRIVATE (self);
 
   switch (prop_id)
     {
     case PROP_NAME:
-      g_value_set_string (value, self->private_data->name);
+      g_value_set_string (value, private->name);
       break;
     case PROP_SENSITIVE:
-      g_value_set_boolean (value, self->private_data->sensitive);
+      g_value_set_boolean (value, private->sensitive);
       break;
     case PROP_VISIBLE:
-      g_value_set_boolean (value, self->private_data->visible);
+      g_value_set_boolean (value, private->visible);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -551,7 +567,11 @@ static GtkAction *
 gtk_action_group_real_get_action (GtkActionGroup *self,
 				  const gchar    *action_name)
 {
-  return g_hash_table_lookup (self->private_data->actions, action_name);
+  GtkActionGroupPrivate *private;
+
+  private = GTK_ACTION_GROUP_GET_PRIVATE (self);
+
+  return g_hash_table_lookup (private->actions, action_name);
 }
 
 /**
@@ -567,9 +587,13 @@ gtk_action_group_real_get_action (GtkActionGroup *self,
 G_CONST_RETURN gchar *
 gtk_action_group_get_name (GtkActionGroup *action_group)
 {
+  GtkActionGroupPrivate *private;
+
   g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), NULL);
 
-  return action_group->private_data->name;
+  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+
+  return private->name;
 }
 
 /**
@@ -588,9 +612,13 @@ gtk_action_group_get_name (GtkActionGroup *action_group)
 gboolean
 gtk_action_group_get_sensitive (GtkActionGroup *action_group)
 {
+  GtkActionGroupPrivate *private;
+
   g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), FALSE);
 
-  return action_group->private_data->sensitive;
+  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+
+  return private->sensitive;
 }
 
 static void
@@ -616,14 +644,17 @@ void
 gtk_action_group_set_sensitive (GtkActionGroup *action_group, 
 				gboolean        sensitive)
 {
+  GtkActionGroupPrivate *private;
+
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
+  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
   sensitive = sensitive != FALSE;
 
-  if (action_group->private_data->sensitive != sensitive)
+  if (private->sensitive != sensitive)
     {
-      action_group->private_data->sensitive = sensitive;
-      g_hash_table_foreach (action_group->private_data->actions, 
+      private->sensitive = sensitive;
+      g_hash_table_foreach (private->actions, 
 			    (GHFunc) cb_set_action_sensitivity, NULL);
 
       g_object_notify (G_OBJECT (action_group), "sensitive");
@@ -646,9 +677,13 @@ gtk_action_group_set_sensitive (GtkActionGroup *action_group,
 gboolean
 gtk_action_group_get_visible (GtkActionGroup *action_group)
 {
+  GtkActionGroupPrivate *private;
+
   g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), FALSE);
 
-  return action_group->private_data->visible;
+  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+
+  return private->visible;
 }
 
 static void
@@ -674,14 +709,17 @@ void
 gtk_action_group_set_visible (GtkActionGroup *action_group, 
 			      gboolean        visible)
 {
+  GtkActionGroupPrivate *private;
+
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
+  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
   visible = visible != FALSE;
 
-  if (action_group->private_data->visible != visible)
+  if (private->visible != visible)
     {
-      action_group->private_data->visible = visible;
-      g_hash_table_foreach (action_group->private_data->actions, 
+      private->visible = visible;
+      g_hash_table_foreach (private->actions, 
 			    (GHFunc) cb_set_action_visiblity, NULL);
 
       g_object_notify (G_OBJECT (action_group), "visible");
@@ -716,9 +754,13 @@ check_unique_action (GtkActionGroup *action_group,
 {
   if (gtk_action_group_get_action (action_group, action_name) != NULL)
     {
+      GtkActionGroupPrivate *private;
+
+      private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+
       g_warning ("Refusing to add non-unique action '%s' to action group '%s'",
 	 	 action_name,
-		 action_group->private_data->name);
+		 private->name);
       return FALSE;
     }
 
@@ -743,6 +785,7 @@ void
 gtk_action_group_add_action (GtkActionGroup *action_group,
 			     GtkAction      *action)
 {
+  GtkActionGroupPrivate *private;
   const gchar *name;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
@@ -754,7 +797,9 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
   if (!check_unique_action (action_group, name))
     return;
 
-  g_hash_table_insert (action_group->private_data->actions, 
+  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+
+  g_hash_table_insert (private->actions, 
 		       (gpointer) name,
                        g_object_ref (action));
   g_object_set (action, I_("action-group"), action_group, NULL);
@@ -783,6 +828,7 @@ gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
 					GtkAction      *action,
 					const gchar    *accelerator)
 {
+  GtkActionGroupPrivate *private;
   gchar *accel_path;
   guint  accel_key = 0;
   GdkModifierType accel_mods;
@@ -792,8 +838,9 @@ gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
   if (!check_unique_action (action_group, name))
     return;
 
+  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
   accel_path = g_strconcat ("<Actions>/",
-			    action_group->private_data->name, "/", name, NULL);
+			    private->name, "/", name, NULL);
 
   if (accelerator)
     {
@@ -845,6 +892,7 @@ void
 gtk_action_group_remove_action (GtkActionGroup *action_group,
 				GtkAction      *action)
 {
+  GtkActionGroupPrivate *private;
   const gchar *name;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
@@ -853,7 +901,9 @@ gtk_action_group_remove_action (GtkActionGroup *action_group,
   name = gtk_action_get_name (action);
   g_return_if_fail (name != NULL);
 
-  g_hash_table_remove (action_group->private_data->actions, name);
+  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+
+  g_hash_table_remove (private->actions, name);
 }
 
 static void
@@ -879,10 +929,14 @@ add_single_action (gpointer key,
 GList *
 gtk_action_group_list_actions (GtkActionGroup *action_group)
 {
+  GtkActionGroupPrivate *private;
   GList *actions = NULL;
+
   g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), NULL);
+
+  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
   
-  g_hash_table_foreach (action_group->private_data->actions, add_single_action, &actions);
+  g_hash_table_foreach (private->actions, add_single_action, &actions);
 
   return g_list_reverse (actions);
 }
@@ -1264,14 +1318,18 @@ gtk_action_group_set_translate_func (GtkActionGroup   *action_group,
 				     gpointer          data,
 				     GDestroyNotify    notify)
 {
+  GtkActionGroupPrivate *private;
+
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
   
-  if (action_group->private_data->translate_notify)
-    action_group->private_data->translate_notify (action_group->private_data->translate_data);
+  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+
+  if (private->translate_notify)
+    private->translate_notify (private->translate_data);
       
-  action_group->private_data->translate_func = func;
-  action_group->private_data->translate_data = data;
-  action_group->private_data->translate_notify = notify;
+  private->translate_func = func;
+  private->translate_data = data;
+  private->translate_notify = notify;
 }
 
 static gchar *
@@ -1328,6 +1386,7 @@ G_CONST_RETURN gchar *
 gtk_action_group_translate_string (GtkActionGroup *action_group,
 				   const gchar    *string)
 {
+  GtkActionGroupPrivate *private;
   GtkTranslateFunc translate_func;
   gpointer translate_data;
   
@@ -1336,8 +1395,10 @@ gtk_action_group_translate_string (GtkActionGroup *action_group,
   if (string == NULL)
     return NULL;
 
-  translate_func = action_group->private_data->translate_func;
-  translate_data = action_group->private_data->translate_data;
+  private = GTK_ACTION_GROUP_GET_PRIVATE (action_group);
+
+  translate_func = private->translate_func;
+  translate_data = private->translate_data;
   
   if (translate_func)
     return translate_func (string, translate_data);
