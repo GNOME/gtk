@@ -679,7 +679,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    * The widget's window if it is realized, %NULL otherwise.
    *
-   * Since: GSEAL-branch
+   * Since: 2.14
    */
   g_object_class_install_property (gobject_class,
 				   PROP_WINDOW,
@@ -9894,7 +9894,7 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
  *
  * Return value: widget's allocation
  *
- * Since: GSEAL-branch
+ * Since: 2.14
  */
 GtkAllocation
 gtk_widget_get_allocation (GtkWidget *widget)
@@ -9913,7 +9913,7 @@ gtk_widget_get_allocation (GtkWidget *widget)
  *
  * Return value: @widget's window.
  *
- * Since: GSEAL-branch
+ * Since: 2.14
  */
 GdkWindow*
 gtk_widget_get_window (GtkWidget *widget)

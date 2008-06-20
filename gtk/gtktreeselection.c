@@ -282,7 +282,7 @@ gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
  *
  * Return value: The function.
  *
- * Since: GSEAL-branch
+ * Since: 2.14
  **/
 GtkTreeSelectionFunc
 gtk_tree_selection_get_select_function (GtkTreeSelection *selection)

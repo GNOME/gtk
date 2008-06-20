@@ -1129,7 +1129,9 @@ gtk_font_selection_get_font_internal (GtkFontSelection *fontsel)
  * This returns the #GtkEntry that allows the user to manually enter
  * the font family they want to use.
  * 
- * Return value: A #GtkWidget. 
+ * Return value: A #GtkWidget.
+ *
+ * Since: 2.14
  **/
 GtkWidget *
 gtk_font_selection_get_family_entry (GtkFontSelection *fontsel)
@@ -1147,6 +1149,8 @@ gtk_font_selection_get_family_entry (GtkFontSelection *fontsel)
  * example, 'Sans', 'Serif', etc.
  * 
  * Return value: A #GtkWidget. 
+ *
+ * Since: 2.14
  **/
 GtkWidget *
 gtk_font_selection_get_family_list (GtkFontSelection *fontsel)
@@ -1164,6 +1168,8 @@ gtk_font_selection_get_family_list (GtkFontSelection *fontsel)
  * configuration of the font style.
  * 
  * Return value: A #GtkWidget. 
+ *
+ * Since: 2.14
  **/
 GtkWidget *
 gtk_font_selection_get_face_entry (GtkFontSelection *fontsel)
@@ -1181,6 +1187,8 @@ gtk_font_selection_get_face_entry (GtkFontSelection *fontsel)
  * the selected font. For example, 'Regular', 'Bold', etc.
  * 
  * Return value: A #GtkWidget. 
+ *
+ * Since: 2.14
  **/
 GtkWidget *
 gtk_font_selection_get_face_list (GtkFontSelection *fontsel)
@@ -1198,6 +1206,8 @@ gtk_font_selection_get_face_list (GtkFontSelection *fontsel)
  * number manually instead of selecting it from the list of font sizes. 
  * 
  * Return value: A #GtkWidget. 
+ *
+ * Since: 2.14
  **/
 GtkWidget *
 gtk_font_selection_get_size_entry (GtkFontSelection *fontsel)
@@ -1214,6 +1224,8 @@ gtk_font_selection_get_size_entry (GtkFontSelection *fontsel)
  * This returns the #GtkTreeeView used to list font sizes. 
  * 
  * Return value: A #GtkWidget. 
+ *
+ * Since: 2.14
  **/
 GtkWidget *
 gtk_font_selection_get_size_list (GtkFontSelection *fontsel)
@@ -1230,6 +1242,8 @@ gtk_font_selection_get_size_list (GtkFontSelection *fontsel)
  * This returns the #GtkEntry used to display the font as a preview.
  *
  * Return value: A #GtkWidget. 
+ *
+ * Since: 2.14
  **/
 GtkWidget *
 gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel)
@@ -1245,6 +1259,8 @@ gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel)
  * 
  * Return value: A #PangoFontFamily representing the selected font
  * family. Font families are a collection of font faces.
+ *
+ * Since: 2.14
  **/
 PangoFontFamily *
 gtk_font_selection_get_family (GtkFontSelection *fontsel)
@@ -1260,6 +1276,8 @@ gtk_font_selection_get_family (GtkFontSelection *fontsel)
  * 
  * Return value: A #PangoFontFace representing the selected font group
  * details (i.e. family, slant, weight, width, etc).   
+ *
+ * Since: 2.14
  **/
 PangoFontFace *
 gtk_font_selection_get_face (GtkFontSelection *fontsel)
@@ -1275,6 +1293,8 @@ gtk_font_selection_get_face (GtkFontSelection *fontsel)
  * 
  * Return value: A #gint representing the font size selected, or -1
  * if not.
+ *
+ * Since: 2.14
  **/
 gint
 gtk_font_selection_get_size (GtkFontSelection *fontsel)
@@ -1583,6 +1603,8 @@ gtk_font_selection_dialog_new (const gchar *title)
  * @fsd: a #GtkFontSelectionDialog
  *
  * Return value: the #GtkWidget used in the dialog for the 'OK' button.
+ *
+ * Since: 2.14
  */
 GtkWidget *
 gtk_font_selection_dialog_get_ok_button (GtkFontSelectionDialog *fsd)
@@ -1597,6 +1619,8 @@ gtk_font_selection_dialog_get_ok_button (GtkFontSelectionDialog *fsd)
  * @fsd: a #GtkFontSelectionDialog
  *
  * Return value: the #GtkWidget used in the dialog for the 'Apply' button.
+ *
+ * Since: 2.14
  */
 GtkWidget *
 gtk_font_selection_dialog_get_apply_button (GtkFontSelectionDialog *fsd)

@@ -870,7 +870,7 @@ gtk_handle_box_get_snap_edge (GtkHandleBox *handle_box)
  *
  * Return value: %TRUE if the child is currently detached, otherwise %FALSE
  *
- * Since:  GSEAL-branch
+ * Since: 2.14
  **/
 gboolean
 gtk_handle_box_get_child_detached (GtkHandleBox *handle_box)

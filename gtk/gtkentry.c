@@ -639,7 +639,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * If text is overwritten when typing in the #GtkEntry.
    *
-   * Since: GSEAL-branch
+   * Since: 2.14
    */
   g_object_class_install_property (gobject_class,
                                    PROP_OVERWRITE_MODE,
@@ -653,7 +653,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * The length of the text in the #GtkEntry.
    *
-   * Since: GSEAL-branch
+   * Since: 2.14
    */
   g_object_class_install_property (gobject_class,
                                    PROP_TEXT_LENGTH,
@@ -4679,7 +4679,7 @@ gtk_entry_set_editable (GtkEntry *entry,
  * 
  * Sets whether the text is overwritten when typing in the #GtkEntry.
  *
- * Since: GSEAL-branch
+ * Since: 2.14
  **/
 void
 gtk_entry_set_overwrite_mode (GtkEntry *entry,
@@ -4703,7 +4703,7 @@ gtk_entry_set_overwrite_mode (GtkEntry *entry,
  * 
  * Return value: whether the text is overwritten when typing.
  *
- * Since: GSEAL-branch
+ * Since: 2.14
  **/
 gboolean
 gtk_entry_get_overwrite_mode (GtkEntry *entry)
@@ -4809,7 +4809,7 @@ gtk_entry_get_max_length (GtkEntry *entry)
  * Return value: the current number of characters
  *               in #GtkEntry, or 0 if there are none.
  *
- * Since: GSEAL-branch
+ * Since: 2.14
  **/
 guint16
 gtk_entry_get_text_length (GtkEntry *entry)

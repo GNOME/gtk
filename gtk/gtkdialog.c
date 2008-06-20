@@ -1487,7 +1487,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
  *
  * Returns: the action area.
  *
- * Since: GSEAL-branch
+ * Since: 2.14
  **/
 GtkWidget *
 gtk_dialog_get_action_area (GtkDialog *dialog)
@@ -1508,7 +1508,7 @@ gtk_dialog_get_action_area (GtkDialog *dialog)
  * This function similar to gtk_box_pack_start() packs @widget
  * with reference to the start of @dialog.
  *
- * Since: GSEAL-branch
+ * Since: 2.14
  **/
 void
 gtk_dialog_pack_start (GtkDialog *dialog,
@@ -1535,7 +1535,7 @@ gtk_dialog_pack_start (GtkDialog *dialog,
  * This function similar to gtk_box_pack_end() packs @widget
  * with reference to the end of @dialog.
  *
- * Since: GSEAL-branch
+ * Since: 2.14
  **/
 void
 gtk_dialog_pack_end (GtkDialog *dialog,

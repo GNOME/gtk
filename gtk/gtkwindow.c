@@ -1522,7 +1522,7 @@ gtk_window_set_default (GtkWindow *window,
  *
  * Returns: the default widget, or %NULL if there is none.
  *
- * Since: GSEAL-branch
+ * Since: 2.14
  **/
 GtkWidget *
 gtk_window_get_default (GtkWindow *window)
@@ -7464,7 +7464,7 @@ gtk_window_group_remove_window (GtkWindowGroup *window_group,
  *
  * Returns: A newly-allocated list of windows inside the group.
  *
- * Since: GSEAL-branch
+ * Since: 2.14
  **/
 GList *
 gtk_window_group_list_windows (GtkWindowGroup *window_group)

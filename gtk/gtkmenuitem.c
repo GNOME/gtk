@@ -196,7 +196,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
    *
    * Sets whether the menu item appears justified at the right side of a menu bar.
    *
-   * Since: GSEAL-branch
+   * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_RIGHT_JUSTIFIED,
@@ -228,7 +228,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
    * changes of the menu item's accelerator caused by the user can be
    * identified and saved to persistant storage.
    *
-   * Since: GSEAL-branch
+   * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_ACCEL_PATH,
@@ -1688,6 +1688,8 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
  *
  * Returns: the accelerator path corresponding to this menu item's
  *              functionality, or %NULL if not set
+ *
+ * Since: 2.14
  */
 G_CONST_RETURN gchar *
 gtk_menu_item_get_accel_path (GtkMenuItem *menu_item)

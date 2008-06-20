@@ -309,7 +309,7 @@ gtk_socket_get_id (GtkSocket *socket)
  *
  * Return value: the window of the plug if available, or %NULL
  *
- * Since:  GSEAL-branch
+ * Since:  2.14
  **/
 GdkWindow*
 gtk_socket_get_plug_window (GtkSocket *socket)

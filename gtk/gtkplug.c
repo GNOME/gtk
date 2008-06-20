@@ -157,7 +157,7 @@ gtk_plug_class_init (GtkPlugClass *class)
    *
    * The window of the socket the plug is embedded in.
    *
-   * Since: GSEAL-branch
+   * Since: 2.14
    */
   g_object_class_install_property (gobject_class,
 				   PROP_SOCKET_WINDOW,
@@ -270,6 +270,8 @@ gtk_plug_get_id (GtkPlug *plug)
  * Determines whether the plug is embedded in a socket.
  *
  * Return value: %TRUE if the plug is embedded in a socket
+ *
+ * Since: 2.14
  **/
 gboolean
 gtk_plug_get_embedded (GtkPlug *plug)
@@ -286,6 +288,8 @@ gtk_plug_get_embedded (GtkPlug *plug)
  * Retrieves the socket the plug is embedded in.
  *
  * Return value: the window of the socket, or %NULL
+ *
+ * Since: 2.14
  **/
 GdkWindow *
 gtk_plug_get_socket_window (GtkPlug *plug)

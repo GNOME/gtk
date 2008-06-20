@@ -225,6 +225,8 @@ gtk_accel_group_new (void)
  *
  * Locks are added and removed using gtk_accel_group_lock() and
  * gtk_accel_group_unlock().
+ *
+ * Since: 2.14
  */
 gboolean
 gtk_accel_group_get_is_locked (GtkAccelGroup *accel_group)
@@ -240,6 +242,8 @@ gtk_accel_group_get_is_locked (GtkAccelGroup *accel_group)
  *
  * @returns: #GdkModifierType representing the mask for this
  * @accel_group. For example, #GDK_CONTROL_MASK, #GDK_SHIFT_MASK, etc.
+ *
+ * Since: 2.14
  */
 GdkModifierType
 gtk_accel_group_get_modifier_mask (GtkAccelGroup *accel_group)

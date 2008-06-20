@@ -1568,7 +1568,7 @@ gtk_container_set_focus_child (GtkContainer *container,
  * Returns: The child widget which has the focus
  *          inside @container, or %NULL if none is set.
  *
- * Since: GSEAL-branch
+ * Since: 2.14
  **/
 GtkWidget *
 gtk_container_get_focus_child (GtkContainer *container)

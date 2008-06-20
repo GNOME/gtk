@@ -493,7 +493,7 @@ gtk_menu_class_init (GtkMenuClass *class)
    *
    * The currently selected menu item.
    *
-   * Since: GSEAL-branch
+   * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVE,
@@ -508,7 +508,7 @@ gtk_menu_class_init (GtkMenuClass *class)
    *
    * The accel group holding accelerators for the menu.
    *
-   * Since: GSEAL-branch
+   * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_ACCEL_GROUP,
@@ -523,7 +523,7 @@ gtk_menu_class_init (GtkMenuClass *class)
    *
    * An accel path used to conveniently construct accel paths of child items.
    *
-   * Since: GSEAL-branch
+   * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_ACCEL_PATH,
@@ -538,7 +538,7 @@ gtk_menu_class_init (GtkMenuClass *class)
    *
    * The widget the menu is attached to.
    *
-   * Since: GSEAL-branch
+   * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_ACCEL_PATH,
@@ -576,7 +576,7 @@ gtk_menu_class_init (GtkMenuClass *class)
    *
    * The monitor the menu will be popped up on.
    *
-   * Since: GSEAL-branch
+   * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_MONITOR,
@@ -1767,11 +1767,11 @@ gtk_menu_set_accel_path (GtkMenu     *menu,
 
 /**
  * gtk_menu_get_accel_path
- * @menu:       a valid #GtkMenu
+ * @menu: a valid #GtkMenu
  *
  * Retrieves the accelerator path set on the menu.
  *
- * Since:  GSEAL-branch
+ * Since: 2.14
  */
 const gchar*
 gtk_menu_get_accel_path (GtkMenu     *menu)
@@ -5051,10 +5051,10 @@ gtk_menu_set_monitor (GtkMenu *menu,
  *
  * Retrieves the number of the monitor on which to show the menu.
  *
- * Since: GSEAL-branch
- *
  * Returns: the number of the monitor on which the menu should
  *    be popped up or -1
+ *
+ * Since: 2.14
  **/
 gint
 gtk_menu_get_monitor (GtkMenu *menu)
