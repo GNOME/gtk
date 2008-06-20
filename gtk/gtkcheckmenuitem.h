@@ -53,10 +53,10 @@ struct _GtkCheckMenuItem
 {
   GtkMenuItem menu_item;
 
-  guint active : 1;
-  guint always_show_toggle : 1;
-  guint inconsistent : 1;
-  guint draw_as_radio : 1;
+  guint GSEAL (active : 1);
+  guint GSEAL (always_show_toggle : 1);
+  guint GSEAL (inconsistent : 1);
+  guint GSEAL (draw_as_radio : 1);
 };
 
 struct _GtkCheckMenuItemClass
