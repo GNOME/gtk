@@ -48,7 +48,7 @@ struct _GtkRecentChooserDialog
   /*< private >*/
   GtkDialog parent_instance;
 
-  GtkRecentChooserDialogPrivate *priv;
+  GtkRecentChooserDialogPrivate *GSEAL (priv);
 };
 
 struct _GtkRecentChooserDialogClass
