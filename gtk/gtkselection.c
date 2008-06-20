@@ -1110,24 +1110,6 @@ gtk_selection_convert (GtkWidget *widget,
 }
 
 /**
- * gtk_selection_data_set_target:
- * @selection_data: a pointer to a #GtkSelectionData structure.
- * @target: target of the selection
- *
- * Sets the target of the selection.
- *
- * Since: GSEAL-branch
- **/
-void
-gtk_selection_data_set_target (GtkSelectionData *selection_data,
-			       GdkAtom           target)
-{
-  g_return_if_fail (selection_data != NULL);
-
-  selection_data->target = target;
-}
-
-/**
  * gtk_selection_data_get_target:
  * @selection_data: a pointer to a #GtkSelectionData structure.
  *
@@ -1141,24 +1123,6 @@ gtk_selection_data_get_target (GtkSelectionData *selection_data)
   g_return_val_if_fail (selection_data != NULL, 0);
 
   return selection_data->target;
-}
-
-/**
- * gtk_selection_data_set_data_type:
- * @selection_data: a pointer to a #GtkSelectionData structure.
- * @data_type: data type of the selection
- *
- * Sets the data type of the selection.
- *
- * Since: GSEAL-branch
- **/
-void
-gtk_selection_data_set_data_type (GtkSelectionData *selection_data,
-				  GdkAtom           data_type)
-{
-  g_return_if_fail (selection_data != NULL);
-
-  selection_data->type = data_type;
 }
 
 /**
@@ -1178,24 +1142,6 @@ gtk_selection_data_get_data_type (GtkSelectionData *selection_data)
 }
 
 /**
- * gtk_selection_data_set_format:
- * @selection_data: a pointer to a #GtkSelectionData structure.
- * @format: format of the selection
- *
- * Sets the format of the selection.
- *
- * Since: GSEAL-branch
- **/
-void
-gtk_selection_data_set_format (GtkSelectionData *selection_data,
-			       gint              format)
-{
-  g_return_if_fail (selection_data != NULL);
-
-  selection_data->format = format;
-}
-
-/**
  * gtk_selection_data_get_format:
  * @selection_data: a pointer to a #GtkSelectionData structure.
  *
@@ -1212,72 +1158,26 @@ gtk_selection_data_get_format (GtkSelectionData *selection_data)
 }
 
 /**
- * gtk_selection_data_set_data:
- * @selection_data: a pointer to a #GtkSelectionData structure.
- * @data: data of the selection
- *
- * Sets the raw data of the selection.
- *
- * Since: GSEAL-branch
- **/
-void
-gtk_selection_data_set_data (GtkSelectionData *selection_data,
-			     const guchar     *data)
-{
-  g_return_if_fail (selection_data != NULL);
-
-  g_free (selection_data->data);
-  selection_data->data = (guchar*) g_strdup (data);
-}
-
-/**
  * gtk_selection_data_get_data:
  * @selection_data: a pointer to a #GtkSelectionData structure.
+ * @length: an integer to be filled in, or %NULL
  *
  * Retrieves the raw data of the selection.
+ *
+ * If @length is not %NULL it is filled with the length of data.
  *
  * Since: GSEAL-branch
  **/
 const guchar*
-gtk_selection_data_get_data (GtkSelectionData *selection_data)
+gtk_selection_data_get_data (GtkSelectionData *selection_data,
+                             guint	      *length)
 {
   g_return_val_if_fail (selection_data != NULL, NULL);
 
+  if (length)
+      *length = selection_data->length;
+
   return selection_data->data;
-}
-
-/**
- * gtk_selection_data_set_target:
- * @selection_data: a pointer to a #GtkSelectionData structure.
- * @length: length of the selection
- *
- * Sets the length of the selection.
- *
- * Since: GSEAL-branch
- **/
-void
-gtk_selection_data_set_length (GtkSelectionData *selection_data,
-			       gint             length)
-{
-  g_return_if_fail (selection_data != NULL);
-
-  selection_data->length = length;
-}
-
-/**
- * gtk_selection_data_get_length:
- * @selection_data: a pointer to a #GtkSelectionData structure.
- *
- * Retrieves the length of the selection.
- *
- * Since: GSEAL-branch
- **/
-gint
-gtk_selection_data_get_length (GtkSelectionData *selection_data)
-{
-  g_return_val_if_fail (selection_data != NULL, 0);
-
-  return selection_data->length;
 }
 
 /**
