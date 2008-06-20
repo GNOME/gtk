@@ -1,3 +1,761 @@
+2008-06-20 12:35:20 +0200 Tim Janik
+
+	* Fixed wrongly resolved merge conflicts.
+
+2008-06-19 19:01:41 +0200 Carlos Garnacho
+
+	Add gtk_window_group_get_windows().
+
+	* gtk/gtk.symbols:
+	* gtk/gtkwindow.[ch] (gtk_window_group_get_windows): New function.
+
+2008-06-19 18:39:47 +0200 Carlos Garnacho
+
+	Document gtk_dialog_get_action_area(), gtk_dialog_pack_start() and gtk_dialog_pack_end()
+
+	* gtk/gtkdialog.c: Add missing documentation for new fucntions.
+
+2008-06-19 18:38:35 +0200 Carlos Garnacho
+
+	Document gtk_container_get_focus_child().
+
+	* gtk/gtkcontainer.c: Add documentation for gtk_container_get_focus_child().
+
+2008-06-19 13:50:06 +0200 Christian Dywan
+
+	Add gtk_plug_get_socket_window
+
+2008-06-19 13:11:52 +0200 Christian Dywan
+
+	Remove superflous gtkselection accessors and merge _get_data
+
+2008-06-13 15:56:51 +0200 Christian Dywan
+
+	Implement gtk_selection_get_display, style fixes
+
+2008-06-13 15:45:00 +0200 Christian Dywan
+
+	Fix indentation of a comment.
+
+2008-06-13 15:10:08 +0200 Christian Dywan
+
+	Change docs and signature of gtk_widget_get_allocation
+
+2008-06-13 14:22:17 +0200 Christian Dywan
+
+	Remove unneeded GtkColorSelectionDialog accessors
+
+2008-06-13 12:57:54 +0200 Christian Dywan
+
+	Fix documentaion of gtk_menu_item_get_accel_path
+
+2008-06-11 13:49:34 +0200 Christian Dywan
+
+	Fix gtk_widget_get_allocation
+
+2008-06-07 15:37:18 +0200 Carlos Garnacho
+
+	Switch to "guint GSEAL (foo) : width;" when packing fields in guints.
+
+	* gtk/gtkbox.h:
+	* gtk/gtkbutton.h:
+	* gtk/gtkcellrenderer.h:
+	* gtk/gtkcellrenderertext.h:
+	* gtk/gtkcheckmenuitem.h:
+	* gtk/gtkcontainer.h:
+	* gtk/gtkentry.h:
+	* gtk/gtkhandlebox.h:
+	* gtk/gtkimcontextsimple.h:
+	* gtk/gtklabel.h:
+	* gtk/gtkliststore.h:
+	* gtk/gtkmenu.h:
+	* gtk/gtkmenuitem.h:
+	* gtk/gtkmenushell.h:
+	* gtk/gtknotebook.h:
+	* gtk/gtkpaned.h:
+	* gtk/gtkplug.h:
+	* gtk/gtkprintjob.h:
+	* gtk/gtkprogressbar.h:
+	* gtk/gtkrange.h:
+	* gtk/gtkscale.h:
+	* gtk/gtkscrolledwindow.h:
+	* gtk/gtksizegroup.h:
+	* gtk/gtksocket.h:
+	* gtk/gtkspinbutton.h:
+	* gtk/gtkstatusbar.h:
+	* gtk/gtktable.h:
+	* gtk/gtktearoffmenuitem.h:
+	* gtk/gtktextbuffer.h:
+	* gtk/gtktextview.h:
+	* gtk/gtktogglebutton.h:
+	* gtk/gtktoolbar.h:
+	* gtk/gtktreestore.h:
+	* gtk/gtktreeviewcolumn.h:
+	* gtk/gtkwindow.h: Do not specify width inside GSEAL() when packing fields in guints.
+
+2008-06-06 19:02:17 +0200 Christian Dywan
+
+	Seal GtkWidget
+
+2008-06-06 17:58:21 +0200 Christian Dywan
+
+	Seal GtkSelectionData
+
+2008-06-06 17:57:23 +0200 Christian Dywan
+
+	Fix GtkDialog, don't add vbox via gtk_container_add.
+
+2008-06-06 13:39:34 +0200 Kristian Rietveld
+
+	Make GtkCellRenderer::editing read-only.  (Catched by Matthias)
+
+2008-06-03 09:11:50 +0200 Kristian Rietveld
+
+	Seal GtkTextView.
+
+2008-05-30 16:48:12 +0100 Martyn Russell
+
+	Seal GtkFontSelection & GtkFontSelectionDialog
+
+2008-05-29 10:35:29 +0200 Kristian Rietveld
+
+	Seal GtkTearoffMenuItem.
+
+	(the torn_off field is for internal state keeping, you can retrieve
+	the value from the parent menu's tearoff_state).
+
+2008-05-27 18:34:12 +0200 Christian Dywan
+
+	Seal GtkObject
+
+2008-05-27 18:17:44 +0200 Christian Dywan
+
+	Seal GtkRange
+
+2008-05-27 15:10:02 +0200 Christian Dywan
+
+	Seal GtkPlug
+
+2008-05-27 14:17:45 +0200 Christian Dywan
+
+	Seal GtkMenuItem
+
+2008-05-27 14:04:31 +0200 Christian Dywan
+
+	Seal GtkMenuShell
+
+2008-05-27 12:40:08 +0200 Christian Dywan
+
+	Seal GtkInputDialog
+
+2008-05-27 12:39:49 +0200 Christian Dywan
+
+	Seal GtkIMMultiContext
+
+2008-05-27 12:39:17 +0200 Christian Dywan
+
+	Seal GtkIMContextSimple
+
+2008-05-27 12:14:53 +0200 Christian Dywan
+
+	Seal GtkImage
+
+2008-05-27 11:14:21 +0200 Christian Dywan
+
+	Seal GtkSocket
+
+2008-05-27 10:54:20 +0200 Christian Dywan
+
+	Fix the build by including gdkconfig.h in gtkprinter.h.
+
+2008-05-27 10:38:02 +0200 Christian Dywan
+
+	Seal GtkGammaCurve
+
+2008-05-27 10:20:56 +0200 Christian Dywan
+
+	Seal GtkHandleBox
+
+2008-05-26 17:58:19 +0200 Kristian Rietveld
+
+	Seal GtkInvisible.
+
+2008-05-26 17:54:56 +0200 Kristian Rietveld
+
+	Seal GtkPrintJob.
+
+2008-05-26 17:48:23 +0200 Kristian Rietveld
+
+	Seal GtkTextBuffer.
+
+2008-05-26 17:39:38 +0200 Kristian Rietveld
+
+	Seal GtkSpinButton.
+
+2008-05-26 17:31:06 +0200 Kristian Rietveld
+
+	Seal GtkTable.
+
+2008-05-26 17:27:22 +0200 Kristian Rietveld
+
+	Seal GtkRuler.
+
+2008-05-26 17:07:43 +0200 Kristian Rietveld
+
+	Seal GtkStatusBar.
+
+2008-05-26 17:07:37 +0200 Kristian Rietveld
+
+	Seal GtkTextMark.
+
+2008-05-26 16:39:27 +0200 Kristian Rietveld
+
+	Seal GtkTextTagTable.
+
+2008-05-26 16:34:13 +0200 Kristian Rietveld
+
+	Seal GtkViewPort.
+
+2008-05-26 17:08:19 +0200 Christian Dywan
+
+	Seal GtkSettings.h
+
+2008-05-26 16:40:05 +0200 Christian Dywan
+
+	Seal GtkMenu
+
+2008-05-26 16:37:54 +0200 Christian Dywan
+
+	Seal GtkLayout
+
+2008-05-26 14:09:32 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkToggleToolButton.
+
+2008-05-26 14:04:51 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkUIManager.
+
+2008-05-26 14:01:32 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkToolItem.
+
+2008-05-26 14:01:12 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkToolButton.
+
+2008-05-26 14:00:24 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkToggleAction.
+
+2008-05-26 13:58:01 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkStatusIcon.
+
+2008-05-26 13:57:33 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkSeparatorToolItem.
+
+2008-05-26 13:56:33 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkScaleButton.
+
+2008-05-26 13:55:57 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkRecentManager.
+
+2008-05-26 13:55:25 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkRecentChooserWidget.
+
+2008-05-26 13:54:39 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkRecentChooserMenu.
+
+2008-05-26 13:54:15 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkRecentChooserDialog.
+
+2008-05-26 13:52:40 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkRecentAction.
+
+2008-05-26 13:51:47 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkRadioAction.
+
+2008-05-26 13:50:49 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkPrintUnixDialog.
+
+2008-05-26 13:50:08 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkPrintOperation.
+
+2008-05-26 13:49:41 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkPrinter.
+
+2008-05-26 13:48:49 +0200 Kristian Rietveld
+
+	Seal priv pointer in  GtkPageSetupUnixDialog.
+
+2008-05-26 13:47:39 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkMenuToolButton.
+
+2008-05-26 13:47:29 +0200 Kristian Rietveld
+
+	Add gdkconfig.h include to GtkBuilder for GSEAL macro.
+
+2008-05-26 13:23:45 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkLinkButton.
+
+2008-05-26 13:22:25 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkIconView.
+
+2008-05-26 13:22:04 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkIconTheme.
+
+2008-05-26 13:13:49 +0200 Kristian Rietveld
+
+	Seal child_allocation field in GtkFrame.
+
+2008-05-26 13:10:17 +0200 Kristian Rietveld
+
+	Sealed priv pointer in GtkFontButton.
+
+2008-05-26 13:07:14 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkFileChooserButton.
+
+2008-05-26 13:06:43 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkExpander.
+
+2008-05-26 13:03:24 +0200 Kristian Rietveld
+
+	Sealed remaining (private) fields in GtkContainer.
+
+2008-05-26 13:02:26 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkComboBoxEntry.
+
+2008-05-26 13:01:40 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkComboBox.
+
+2008-05-26 13:00:59 +0200 Kristian Rietveld
+
+	Seal private_data pointer in GtkColorSel.
+
+2008-05-26 12:57:50 +0200 Kristian Rietveld
+
+	Seal 3 remaining fields in GtkButton.
+
+2008-05-26 12:55:24 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkBuilder.
+
+2008-05-26 12:52:44 +0200 Kristian Rietveld
+
+	Seal center_allocation field in GtkAspectFrame.
+
+2008-05-26 12:48:18 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkAction.
+
+2008-05-26 12:46:11 +0200 Kristian Rietveld
+
+	Seal priv pointer in GtkAboutDialog.
+
+2008-05-26 12:41:46 +0200 Kristian Rietveld
+
+	Seal GtkSizeGroup.
+
+2008-05-26 12:39:54 +0200 Kristian Rietveld
+
+	Seal GtkPaned.
+
+2008-05-26 11:59:35 +0200 Kristian Rietveld
+
+	Set the Since: values in the API docs to GSEAL-branch for the newly added accessors/properties.
+
+2008-05-26 11:52:20 +0200 Kristian Rietveld
+
+	Add new GtkColorSelectionDialog accessors to gtk.symbols.
+
+2008-05-26 11:41:47 +0200 Kristian Rietveld
+
+	gtklabel.h: include bit-size of fields inside GSEAL parens.
+
+2008-05-26 11:40:07 +0200 Kristian Rietveld
+
+	gtktoolbar.h: include bit-size of fields inside GSEAL parens.
+
+2008-05-26 11:39:35 +0200 Kristian Rietveld
+
+	gtkentry.h: include bit-size of fields inside GSEAL parens.
+
+2008-05-26 11:34:14 +0200 Kristian Rietveld
+
+	Add new accessors for GtkEntry to gtk.symbols.
+
+2008-05-26 11:23:56 +0200 Kristian Rietveld
+
+	Also seal GtkWindowGroup in gtkwindow.h
+
+2008-05-26 10:48:48 +0200 Kristian Rietveld
+
+	Fix the build by including gdkconfig.h in gtktextchild.h.
+
+2008-05-23 18:48:56 +0200 Christian Dywan
+
+	Seal GtkLabel
+
+2008-05-23 18:28:39 +0200 Christian Dywan
+
+	Seal GtkToolbar
+
+2008-05-23 18:28:07 +0200 Christian Dywan
+
+	Seal GtkColorSelectionDialog
+
+2008-05-23 18:03:44 +0200 Carlos Garnacho
+
+	Seal GtkTextChildAnchor.
+
+	* gtk/gtktextchild.h: Sealed private member.
+
+2008-05-23 17:42:01 +0200 Carlos Garnacho
+
+	Seal GtkWindow.
+
+	* gtk/gtkwindow.h: Seal all fields.
+
+2008-05-23 17:40:09 +0200 Carlos Garnacho
+
+	Add gtk_window_get_default()
+
+	* gtk/gtkwindow.[ch]: Add gtk_window_get_default().
+	* gtk/gtk.symbols: same here.
+
+2008-05-09 15:41:57 +0100 Martyn Russell
+
+	Seal GtkAccelGroup - fixed some issues with the initial attempt thanks to comments from Tim
+
+2008-05-02 16:31:40 +0200 Martyn Russell
+
+	Seal GtkEntry
+
+2008-05-02 16:30:09 +0200 Martyn Russell
+
+	Seal GtkContainer - fixed Carlos' missing gtk_container_get_focus_child() header declaration
+
+2008-04-27 18:49:50 +0200 Kristian Rietveld
+
+	Seal GtkToggleButton.
+
+	* gtk/gtktogglebutton.h: Seal all member fields.
+
+2008-04-27 18:41:46 +0200 Kristian Rietveld
+
+	Seal GtkTreeViewColumn.
+
+	* gtk/gtktreeviewcolumn.h: Seal all public member fields.  The button field is
+	still troublesome.  We are probably going to need an accessor for this and
+	deprecated it immediately in GTK+ 3.0.  Accessors for requested_width and
+	resized_width can be useful, but I really consider them to be private and
+	of not much use to applications.
+
+2008-04-27 18:23:23 +0200 Kristian Rietveld
+
+	Seal GtkRadioMenuItem.
+
+	* gtk/gtkradiomenuitem.h: Seal member field.
+
+2008-04-27 18:21:29 +0200 Kristian Rietveld
+
+	Seal GtkRadioButton.
+
+	* gtk/gtkradiobutton.h: seal member field.
+
+2008-04-27 18:11:41 +0200 Kristian Rietveld
+
+	Seal GtkTreeSelection.
+
+	* gtk/gtktreeselection.h: Seal all member fields.
+
+2008-04-27 18:09:46 +0200 Kristian Rietveld
+
+	Add gtk_tree_selection_get_select_function().
+
+	* gtk/gtktreeselection.[ch] (gtk_tree_selection_get_select_function): new
+	function.
+	* gtk/gtk.symbols: add new function.
+
+2008-04-27 16:05:02 +0200 Kristian Rietveld
+
+	Seal GtkScrolledWindow.
+
+	* gtk/gtkscrolledwindow.h: Seal all object member fields.
+
+2008-04-27 15:56:33 +0200 Kristian Rietveld
+
+	Seal GtkCellRenderer.
+
+	* gtk/gtkcellrenderer.h: seal all member fields.  All member fields are
+	already accessible via GObject properties.
+
+2008-04-27 15:56:01 +0200 Kristian Rietveld
+
+	Add "editing" GObject property to GtkCellRenderer.
+
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_class_init),
+	(gtk_cell_renderer_get_property),
+	(gtk_cell_renderer_set_property): add the property and hook
+	it up.
+
+2008-04-27 15:42:08 +0200 Kristian Rietveld
+
+	Seal GtkCellRendererText.
+
+	* gtk/gtkcellrenderertext.h: seal all member fields (all of them were already
+	marked as private).
+
+2008-04-27 15:40:47 +0200 Kristian Rietveld
+
+	Seal GtkCellRendererCombo.
+
+	* gtk/gtkcellrenderercombo.h: seal all member fields.  The members fields
+	that were not marked as private are already accessible via GObject properties.
+
+2008-04-27 15:39:41 +0200 Kristian Rietveld
+
+	Seal GtkCellRendererAccel.
+
+	* gtk/gtkcellrendereraccel.h: seal all member fields that were already
+	marked as private.
+
+2008-04-18 16:55:44 +0200 Kristian Rietveld
+
+	Seal GtkTreeView
+
+	* gtk/gtktreeview.h: seal private pointer.
+
+2008-04-18 16:52:54 +0200 Kristian Rietveld
+
+	Seal GtkTreeModelFilter
+
+	* gtk/gtktreemodelfilter.h: include gdkconfig.h for GSEAL, seal private
+	pointer.
+
+2008-04-18 16:50:55 +0200 Kristian Rietveld
+
+	Seal GtkTreeModelSort
+
+	* gtk/gtktreemodelsort.h: include gdkconfig.h to get GSEAL defined, seal
+	all public member fields.
+
+2008-04-18 16:42:28 +0200 Kristian Rietveld
+
+	Seal GtkTreeStore
+
+	* gtk/gtktreestore.h: include gdkconfig.h to get GSEAL defined, seal
+	public member fields.
+
+2008-04-18 16:37:43 +0200 Kristian Rietveld
+
+	Seal GtkListStore
+
+	* gtk/gtkliststore.h: include gdkconfig.h to get GSEAL defined; seal
+	public member fields.
+
+2008-04-18 18:26:31 +0200 Carlos Garnacho
+
+	* gtk/gtkcontainer.c (gtk_container_get_focus_child): add accessor.
+
+2008-04-18 18:25:22 +0200 Carlos Garnacho
+
+	* gtk/gtkcontainer.h: seal members.
+
+2008-04-11 17:28:54 +0200 Carlos Garnacho
+
+	* gtk/gtkmisc.h: seal members.
+
+2008-04-11 17:28:05 +0200 Carlos Garnacho
+
+	*gtk/gtkfixed.h: seal members.
+
+2008-04-11 16:04:23 +0200 Michael Natterer
+
+	* gtk/gtkcellrendererpixbuf.h: seal all members.
+
+2008-04-11 16:01:19 +0200 Michael Natterer
+
+	* gtk/gtkcellrendererprogress.h: seal private member.
+
+2008-04-11 15:43:22 +0200 Michael Natterer
+
+	* gtk/gtkcellrenderertoggle.h: seal all members.
+
+2008-04-04 18:50:05 +0200 Carlos Garnacho
+
+	* gtk/gtkfilechooserwidget.h: Seal the private member.
+
+2008-04-04 18:46:47 +0200 Carlos Garnacho
+
+	gtk/gtkfilechooserdialog.h: seal the private member.
+
+2008-04-04 18:42:17 +0200 Carlos Garnacho
+
+	* gtk/gtkentrycompletion.h: Seal private member.
+
+2008-04-04 18:36:35 +0200 Carlos Garnacho
+
+	* gtk/gtkcellview.h: Seal the private member.
+
+2008-04-04 18:28:00 +0200 Carlos Garnacho
+
+	* gtk/gtkcolorbutton.h: seal private member.
+
+2008-04-04 18:27:26 +0200 Carlos Garnacho
+
+	* gtk/gtkcheckmenuitem.h: seal public struct members.
+
+2008-04-04 18:25:25 +0200 Carlos Garnacho
+
+	* gtk/gtkcalendar.h: seal public struct members.
+
+2008-04-04 18:24:15 +0200 Carlos Garnacho
+
+	* gtk/gtkdialog.h: Also seal variables marked as private.
+
+2008-04-04 17:35:48 +0200 Michael Natterer
+
+	* gtk/gtkimagemenuitem.h: seal private member.
+
+2008-04-04 17:28:56 +0200 Michael Natterer
+
+	* gtk/gtkiconfactory.h: seal private member.
+
+2008-03-28 16:56:53 +0000 Martyn Russell
+
+	Seal GtkActionGroup
+
+	* gtk/gtkactiongroup.[ch]: Use GSEAL macro on ->private_data public
+	  member and clean up .c file to reflect this.
+
+2008-03-28 15:00:09 +0100 Sven Herzberg
+
+	Seal GtkAccelLabel
+
+	gtk/gtkaccellabel.h: deprecate direct field access to GtkAccelLabel fields
+
+2008-03-28 16:38:00 +0100 Michael Natterer
+
+	* gtk/gtkdrawingarea.h: seal instance struct member.
+
+2008-03-28 16:23:32 +0100 Christian Dywan
+
+	Seal GtkScaleButton public fields
+
+	* gtk/gtkscalebutton.h: Deprecate direct access through GSEAL().
+
+2008-03-28 16:07:50 +0100 Christian Dywan
+
+	Seal GtkScale public fields
+
+	* gtk/gtkscale.h: Deprecate direct access through GSEAL().
+
+2008-03-14 20:45:34 +0100 Christian Dywan
+
+	Seal GtkProgressBar public fields
+
+
+2008-03-14 20:32:12 +0100 Christian Dywan
+
+	Seal GtkFrame public vars
+
+2008-03-14 18:57:35 +0100 Carlos Garnacho
+
+	Deprecate direct access to public variables in GtkButton.
+
+	* gtk/gtkbutton.h: Deprecate direct access through GSEAL().
+
+2008-03-14 18:56:23 +0100 Carlos Garnacho
+
+	Deprecate direct access to public variables in GtkButtonBox.
+
+	* gtk/gtkbbox.h: Deprecate direct access through GSEAL().
+
+2008-03-14 18:54:35 +0100 Carlos Garnacho
+
+	Deprecate direct access to public variables in GtkBox.
+
+	* gtk/gtkbox.h: Deprecate direct access through GSEAL().
+
+2008-03-09 11:50:41 +0100 Carlos Garnacho
+
+	Seal GtkMessageDialog public vars
+
+2008-03-09 11:38:00 +0100 Carlos Garnacho
+
+	Seal GtkDialog public vars
+
+2008-03-09 11:32:05 +0100 Carlos Garnacho
+
+	Add accessors for GtkDialog public vars, also implement GtkContainer::add/remove
+
+2008-03-09 11:31:46 +0100 Carlos Garnacho
+
+	Seal GtkAssistant public fields
+
+2008-03-09 11:31:30 +0100 Carlos Garnacho
+
+	Seal GtkNotebook public fields
+
+2008-03-07 20:29:47 +0100 Mikael Hallendal
+
+	Deprecate direct access to child in GtkBin.
+
+	* gtk/gtkbin.h: Deprecate direct access to child by GSEAL.
+
+2008-03-07 18:25:59 +0000 Martyn Russell
+
+	Sealed GtkAccelGroup and added
+
+	* gtk/gtkaccelgroup.[ch]: Added GObject properties for lock_count,
+	  modifier_mask, acceleratables, n_accels and priv_accels. Added seal
+	  macro for public struct members which should be private.
+
+2008-03-07 18:54:22 +0100 Mikael Hallendal
+
+	Deprecate xalign, yalign, ratio and obey_child direct access in GtkAspectFrame.
+
+	* gtk/gtkaspectframe.h: Deprecate public object fields by GSEAL.
+
+2008-03-07 18:48:29 +0100 Mikael Hallendal
+
+	Deprecate arrow_type and shadow_type direct access in GtkArrow.
+
+	* gtk/gtkarrow.h: Deprecate public object fields by GSEAL.
+
+2008-03-07 18:35:12 +0100 Mikael Hallendal
+
+	Added GSEAL to GtkAlignment.
+
+	* gtk/gtkalignment.h: Seal the object data with GSEAL.
+
+2008-03-07 15:24:27 +0100 Tim Janik
+
+	Introduce GSEAL() macro.
+
+	* configure.in: define GSEAL() when generating gdkconfig.h
+
 2008-06-20  Michael Natterer  <mitch@imendio.com>
 
 	Bug 538395 – gtk_combo_box_append_text() on non-compliant model
