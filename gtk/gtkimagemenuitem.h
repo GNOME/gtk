@@ -53,7 +53,7 @@ struct _GtkImageMenuItem
   GtkMenuItem menu_item;
 
   /*< private >*/
-  GtkWidget *image;
+  GtkWidget *GSEAL (image);
 };
 
 struct _GtkImageMenuItemClass
