@@ -60,12 +60,12 @@ struct _GtkMenuShell
   guint GSEAL (button);
   guint32 GSEAL (activate_time);
 
-  guint GSEAL (active : 1);
-  guint GSEAL (have_grab : 1);
-  guint GSEAL (have_xgrab : 1);
+  guint GSEAL (active) : 1;
+  guint GSEAL (have_grab) : 1;
+  guint GSEAL (have_xgrab) : 1;
   guint GSEAL (unused1);
   guint GSEAL (unused2);
-  guint GSEAL (ignore_enter : 1);
+  guint GSEAL (ignore_enter) : 1;
 };
 
 struct _GtkMenuShellClass

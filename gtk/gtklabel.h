@@ -57,16 +57,16 @@ struct _GtkLabel
 
   /*< private >*/
   gchar  *GSEAL (label);
-  guint   GSEAL (jtype            : 2);
-  guint   GSEAL (wrap             : 1);
-  guint   GSEAL (use_underline    : 1);
-  guint   GSEAL (use_markup       : 1);
-  guint   GSEAL (ellipsize        : 3);
-  guint   GSEAL (single_line_mode : 1);
-  guint   GSEAL (have_transform   : 1);
-  guint   GSEAL (in_click         : 1);
-  guint   GSEAL (wrap_mode        : 3);
-  guint   GSEAL (pattern_set      : 1);
+  guint   GSEAL (jtype)            : 2;
+  guint   GSEAL (wrap)             : 1;
+  guint   GSEAL (use_underline)    : 1;
+  guint   GSEAL (use_markup)       : 1;
+  guint   GSEAL (ellipsize)        : 3;
+  guint   GSEAL (single_line_mode) : 1;
+  guint   GSEAL (have_transform)   : 1;
+  guint   GSEAL (in_click)         : 1;
+  guint   GSEAL (wrap_mode)        : 3;
+  guint   GSEAL (pattern_set)      : 1;
 
   guint   GSEAL (mnemonic_keyval);
 

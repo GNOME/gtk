@@ -79,9 +79,9 @@ struct _GtkProgressBar
 
   gdouble GSEAL(pulse_fraction);
   
-  guint GSEAL(activity_dir : 1);
-  guint GSEAL(ellipsize : 3);
-  guint GSEAL(dirty : 1);
+  guint GSEAL (activity_dir) : 1;
+  guint GSEAL (ellipsize) : 3;
+  guint GSEAL (dirty) : 1;
 };
 
 struct _GtkProgressBarClass

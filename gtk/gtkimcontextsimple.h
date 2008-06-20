@@ -53,8 +53,8 @@ struct _GtkIMContextSimple
   gunichar GSEAL (tentative_match);
   gint GSEAL (tentative_match_len);
 
-  guint GSEAL (in_hex_sequence : 1);
-  guint GSEAL (modifiers_dropped : 1);
+  guint GSEAL (in_hex_sequence) : 1;
+  guint GSEAL (modifiers_dropped) : 1;
 };
 
 struct _GtkIMContextSimpleClass

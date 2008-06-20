@@ -100,15 +100,15 @@ struct _GtkTreeViewColumn
   GtkSortType GSEAL (sort_order);
 
   /* Flags */
-  guint GSEAL (visible             : 1);
-  guint GSEAL (resizable           : 1);
-  guint GSEAL (clickable           : 1);
-  guint GSEAL (dirty               : 1);
-  guint GSEAL (show_sort_indicator : 1);
-  guint GSEAL (maybe_reordered     : 1);
-  guint GSEAL (reorderable         : 1);
-  guint GSEAL (use_resized_width   : 1);
-  guint GSEAL (expand              : 1);
+  guint GSEAL (visible)             : 1;
+  guint GSEAL (resizable)           : 1;
+  guint GSEAL (clickable)           : 1;
+  guint GSEAL (dirty)               : 1;
+  guint GSEAL (show_sort_indicator) : 1;
+  guint GSEAL (maybe_reordered)     : 1;
+  guint GSEAL (reorderable)         : 1;
+  guint GSEAL (use_resized_width)   : 1;
+  guint GSEAL (expand)              : 1;
 };
 
 struct _GtkTreeViewColumnClass

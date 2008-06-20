@@ -60,15 +60,15 @@ struct _GtkButton
 
   guint GSEAL (activate_timeout);
 
-  guint GSEAL (constructed : 1);
-  guint GSEAL (in_button : 1);
-  guint GSEAL (button_down : 1);
-  guint GSEAL (relief : 2);
-  guint GSEAL (use_underline : 1);
-  guint GSEAL (use_stock : 1);
-  guint GSEAL (depressed : 1);
-  guint GSEAL (depress_on_activate : 1);
-  guint GSEAL (focus_on_click : 1);
+  guint GSEAL (constructed) : 1;
+  guint GSEAL (in_button) : 1;
+  guint GSEAL (button_down) : 1;
+  guint GSEAL (relief) : 2;
+  guint GSEAL (use_underline) : 1;
+  guint GSEAL (use_stock) : 1;
+  guint GSEAL (depressed) : 1;
+  guint GSEAL (depress_on_activate) : 1;
+  guint GSEAL (focus_on_click) : 1;
 };
 
 struct _GtkButtonClass

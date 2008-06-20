@@ -49,9 +49,9 @@ struct _GtkSizeGroup
 
   guint8 GSEAL (mode);
 
-  guint GSEAL (have_width : 1);
-  guint GSEAL (have_height : 1);
-  guint GSEAL (ignore_hidden : 1);
+  guint GSEAL (have_width) : 1;
+  guint GSEAL (have_height) : 1;
+  guint GSEAL (ignore_hidden) : 1;
 
   GtkRequisition GSEAL (requisition);
 };

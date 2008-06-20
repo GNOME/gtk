@@ -52,7 +52,7 @@ struct _GtkTearoffMenuItem
 {
   GtkMenuItem menu_item;
 
-  guint GSEAL (torn_off : 1);
+  guint GSEAL (torn_off) : 1;
 };
 
 struct _GtkTearoffMenuItemClass

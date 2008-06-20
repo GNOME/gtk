@@ -85,24 +85,24 @@ struct _GtkTextView
   gint GSEAL (right_margin);
   gint GSEAL (indent);
   PangoTabArray *GSEAL (tabs);
-  guint GSEAL (editable : 1);
+  guint GSEAL (editable) : 1;
 
-  guint GSEAL (overwrite_mode : 1);
-  guint GSEAL (cursor_visible : 1);
+  guint GSEAL (overwrite_mode) : 1;
+  guint GSEAL (cursor_visible) : 1;
 
   /* if we have reset the IM since the last character entered */  
-  guint GSEAL (need_im_reset : 1);
+  guint GSEAL (need_im_reset) : 1;
 
-  guint GSEAL (accepts_tab : 1);
+  guint GSEAL (accepts_tab) : 1;
 
-  guint GSEAL (width_changed : 1);
+  guint GSEAL (width_changed) : 1;
 
   /* debug flag - means that we've validated onscreen since the
    * last "invalidate" signal from the layout
    */
-  guint GSEAL (onscreen_validated : 1);
+  guint GSEAL (onscreen_validated) : 1;
 
-  guint GSEAL (mouse_cursor_obscured : 1);
+  guint GSEAL (mouse_cursor_obscured) : 1;
 
   GtkTextWindow *GSEAL (text_window);
   GtkTextWindow *GSEAL (left_window);

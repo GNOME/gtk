@@ -59,23 +59,23 @@ struct _GtkCellRendererText
   gint GSEAL (rise);
   gint GSEAL (fixed_height_rows);
 
-  guint GSEAL (strikethrough : 1);
+  guint GSEAL (strikethrough) : 1;
 
-  guint GSEAL (editable  : 1);
+  guint GSEAL (editable)  : 1;
 
-  guint GSEAL (scale_set : 1);
+  guint GSEAL (scale_set) : 1;
 
-  guint GSEAL (foreground_set : 1);
-  guint GSEAL (background_set : 1);
+  guint GSEAL (foreground_set) : 1;
+  guint GSEAL (background_set) : 1;
 
-  guint GSEAL (underline_set : 1);
+  guint GSEAL (underline_set) : 1;
 
-  guint GSEAL (rise_set : 1);
+  guint GSEAL (rise_set) : 1;
 
-  guint GSEAL (strikethrough_set : 1);
+  guint GSEAL (strikethrough_set) : 1;
 
-  guint GSEAL (editable_set : 1);
-  guint GSEAL (calc_fixed_height : 1);
+  guint GSEAL (editable_set) : 1;
+  guint GSEAL (calc_fixed_height) : 1;
 };
 
 struct _GtkCellRendererTextClass

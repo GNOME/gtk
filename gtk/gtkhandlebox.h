@@ -61,11 +61,11 @@ struct _GtkHandleBox
   GdkWindow      *GSEAL (bin_window);	/* parent window for children */
   GdkWindow      *GSEAL (float_window);
   GtkShadowType   GSEAL (shadow_type);
-  guint		  GSEAL (handle_position : 2);
-  guint		  GSEAL (float_window_mapped : 1);
-  guint		  GSEAL (child_detached : 1);
-  guint		  GSEAL (in_drag : 1);
-  guint		  GSEAL (shrink_on_detach : 1);
+  guint		  GSEAL (handle_position) : 2;
+  guint		  GSEAL (float_window_mapped) : 1;
+  guint		  GSEAL (child_detached) : 1;
+  guint		  GSEAL (in_drag) : 1;
+  guint		  GSEAL (shrink_on_detach) : 1;
 
   signed int      GSEAL (snap_edge : 3); /* -1 == unset */
   

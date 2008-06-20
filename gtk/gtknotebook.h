@@ -73,23 +73,23 @@ struct _GtkNotebook
   guint16 GSEAL (tab_hborder);
   guint16 GSEAL (tab_vborder);
   
-  guint GSEAL (show_tabs          : 1);
-  guint GSEAL (homogeneous        : 1);
-  guint GSEAL (show_border        : 1);
-  guint GSEAL (tab_pos            : 2);
-  guint GSEAL (scrollable         : 1);
-  guint GSEAL (in_child           : 3);
-  guint GSEAL (click_child        : 3);
-  guint GSEAL (button             : 2);
-  guint GSEAL (need_timer         : 1);
-  guint GSEAL (child_has_focus    : 1);
-  guint GSEAL (have_visible_child : 1);
-  guint GSEAL (focus_out          : 1);	/* Flag used by ::move-focus-out implementation */
+  guint GSEAL (show_tabs)          : 1;
+  guint GSEAL (homogeneous)        : 1;
+  guint GSEAL (show_border)        : 1;
+  guint GSEAL (tab_pos)            : 2;
+  guint GSEAL (scrollable)         : 1;
+  guint GSEAL (in_child)           : 3;
+  guint GSEAL (click_child)        : 3;
+  guint GSEAL (button)             : 2;
+  guint GSEAL (need_timer)         : 1;
+  guint GSEAL (child_has_focus)    : 1;
+  guint GSEAL (have_visible_child) : 1;
+  guint GSEAL (focus_out)          : 1;	/* Flag used by ::move-focus-out implementation */
 
-  guint GSEAL (has_before_previous : 1);
-  guint GSEAL (has_before_next     : 1);
-  guint GSEAL (has_after_previous  : 1);
-  guint GSEAL (has_after_next      : 1);
+  guint GSEAL (has_before_previous) : 1;
+  guint GSEAL (has_before_next)     : 1;
+  guint GSEAL (has_after_previous)  : 1;
+  guint GSEAL (has_after_next)      : 1;
 };
 
 struct _GtkNotebookClass

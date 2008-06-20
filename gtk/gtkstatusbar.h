@@ -62,7 +62,7 @@ struct _GtkStatusbar
 
   GdkWindow *GSEAL (grip_window);
 
-  guint GSEAL (has_resize_grip : 1);
+  guint GSEAL (has_resize_grip) : 1;
 };
 
 struct _GtkStatusbarClass

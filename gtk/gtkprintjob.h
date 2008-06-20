@@ -63,9 +63,9 @@ struct _GtkPrintJob
   GtkPageSet GSEAL (page_set);
   gint GSEAL (num_copies);
   gdouble GSEAL (scale);
-  guint GSEAL (rotate_to_orientation : 1);
-  guint GSEAL (collate               : 1);
-  guint GSEAL (reverse               : 1);
+  guint GSEAL (rotate_to_orientation) : 1;
+  guint GSEAL (collate)               : 1;
+  guint GSEAL (reverse)               : 1;
 };
 
 struct _GtkPrintJobClass

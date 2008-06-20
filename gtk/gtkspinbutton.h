@@ -88,15 +88,15 @@ struct _GtkSpinButton
 
   GtkSpinButtonUpdatePolicy GSEAL (update_policy);
 
-  guint GSEAL (in_child : 2);
-  guint GSEAL (click_child : 2); /* valid: GTK_ARROW_UP=0, GTK_ARROW_DOWN=1 or 2=NONE/BOTH */
-  guint GSEAL (button : 2);
-  guint GSEAL (need_timer : 1);
-  guint GSEAL (timer_calls : 3);
-  guint GSEAL (digits : 10);
-  guint GSEAL (numeric : 1);
-  guint GSEAL (wrap : 1);
-  guint GSEAL (snap_to_ticks : 1);
+  guint GSEAL (in_child) : 2;
+  guint GSEAL (click_child) : 2; /* valid: GTK_ARROW_UP=0, GTK_ARROW_DOWN=1 or 2=NONE/BOTH */
+  guint GSEAL (button) : 2;
+  guint GSEAL (need_timer) : 1;
+  guint GSEAL (timer_calls) : 3;
+  guint GSEAL (digits) : 10;
+  guint GSEAL (numeric) : 1;
+  guint GSEAL (wrap) : 1;
+  guint GSEAL (snap_to_ticks) : 1;
 };
 
 struct _GtkSpinButtonClass

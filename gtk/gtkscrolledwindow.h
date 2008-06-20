@@ -62,12 +62,12 @@ struct _GtkScrolledWindow
   GtkWidget *GSEAL (vscrollbar);
 
   /*< private >*/
-  guint GSEAL (hscrollbar_policy      : 2);
-  guint GSEAL (vscrollbar_policy      : 2);
-  guint GSEAL (hscrollbar_visible     : 1);
-  guint GSEAL (vscrollbar_visible     : 1);
-  guint GSEAL (window_placement       : 2);
-  guint GSEAL (focus_out              : 1);	/* Flag used by ::move-focus-out implementation */
+  guint GSEAL (hscrollbar_policy)      : 2;
+  guint GSEAL (vscrollbar_policy)      : 2;
+  guint GSEAL (hscrollbar_visible)     : 1;
+  guint GSEAL (vscrollbar_visible)     : 1;
+  guint GSEAL (window_placement)       : 2;
+  guint GSEAL (focus_out)              : 1;	/* Flag used by ::move-focus-out implementation */
 
   guint16 GSEAL (shadow_type);
 };

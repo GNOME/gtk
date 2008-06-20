@@ -96,19 +96,19 @@ struct _GtkMenu
   GdkRegion *GSEAL (navigation_region);
   guint GSEAL (navigation_timeout);
 
-  guint GSEAL (needs_destruction_ref_count : 1);
-  guint GSEAL (torn_off : 1);
+  guint GSEAL (needs_destruction_ref_count) : 1;
+  guint GSEAL (torn_off) : 1;
   /* The tearoff is active when it is torn off and the not-torn-off
    * menu is not popped up.
    */
-  guint GSEAL (tearoff_active : 1);
+  guint GSEAL (tearoff_active) : 1;
 
-  guint GSEAL (scroll_fast : 1);
+  guint GSEAL (scroll_fast) : 1;
 
-  guint GSEAL (upper_arrow_visible : 1);
-  guint GSEAL (lower_arrow_visible : 1);
-  guint GSEAL (upper_arrow_prelight : 1);
-  guint GSEAL (lower_arrow_prelight : 1);
+  guint GSEAL (upper_arrow_visible) : 1;
+  guint GSEAL (lower_arrow_visible) : 1;
+  guint GSEAL (upper_arrow_prelight) : 1;
+  guint GSEAL (lower_arrow_prelight) : 1;
 };
 
 struct _GtkMenuClass

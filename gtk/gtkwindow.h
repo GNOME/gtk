@@ -70,40 +70,40 @@ struct _GtkWindow
   GtkWindowGroup *GSEAL (group);
 
   guint16 GSEAL (configure_request_count);
-  guint GSEAL (allow_shrink : 1);
-  guint GSEAL (allow_grow : 1);
-  guint GSEAL (configure_notify_received : 1);
+  guint GSEAL (allow_shrink) : 1;
+  guint GSEAL (allow_grow) : 1;
+  guint GSEAL (configure_notify_received) : 1;
   /* The following flags are initially TRUE (before a window is mapped).
    * They cause us to compute a configure request that involves
    * default-only parameters. Once mapped, we set them to FALSE.
    * Then we set them to TRUE again on unmap (for position)
    * and on unrealize (for size).
    */
-  guint GSEAL (need_default_position : 1);
-  guint GSEAL (need_default_size : 1);
-  guint GSEAL (position : 3);
-  guint GSEAL (type : 4); /* GtkWindowType */ 
-  guint GSEAL (has_user_ref_count : 1);
-  guint GSEAL (has_focus : 1);
+  guint GSEAL (need_default_position) : 1;
+  guint GSEAL (need_default_size) : 1;
+  guint GSEAL (position) : 3;
+  guint GSEAL (type) : 4; /* GtkWindowType */ 
+  guint GSEAL (has_user_ref_count) : 1;
+  guint GSEAL (has_focus) : 1;
 
-  guint GSEAL (modal : 1);
-  guint GSEAL (destroy_with_parent : 1);
+  guint GSEAL (modal) : 1;
+  guint GSEAL (destroy_with_parent) : 1;
   
-  guint GSEAL (has_frame : 1);
+  guint GSEAL (has_frame) : 1;
 
   /* gtk_window_iconify() called before realization */
-  guint GSEAL (iconify_initially : 1);
-  guint GSEAL (stick_initially : 1);
-  guint GSEAL (maximize_initially : 1);
-  guint GSEAL (decorated : 1);
+  guint GSEAL (iconify_initially) : 1;
+  guint GSEAL (stick_initially) : 1;
+  guint GSEAL (maximize_initially) : 1;
+  guint GSEAL (decorated) : 1;
   
-  guint GSEAL (type_hint : 3); /* GdkWindowTypeHint if the hint is one of the original eight. If not, then
+  guint GSEAL (type_hint) : 3; /* GdkWindowTypeHint if the hint is one of the original eight. If not, then
 				* it contains GDK_WINDOW_TYPE_HINT_NORMAL
 				*/
-  guint GSEAL (gravity : 5); /* GdkGravity */
+  guint GSEAL (gravity) : 5; /* GdkGravity */
 
-  guint GSEAL (is_active : 1);
-  guint GSEAL (has_toplevel_focus : 1);
+  guint GSEAL (is_active) : 1;
+  guint GSEAL (has_toplevel_focus) : 1;
   
   guint GSEAL (frame_left);
   guint GSEAL (frame_top);

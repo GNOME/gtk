@@ -62,7 +62,7 @@ struct _GtkTable
   guint16 GSEAL (ncols);
   guint16 GSEAL (column_spacing);
   guint16 GSEAL (row_spacing);
-  guint GSEAL (homogeneous : 1);
+  guint GSEAL (homogeneous) : 1;
 };
 
 struct _GtkTableClass

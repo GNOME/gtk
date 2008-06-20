@@ -67,15 +67,15 @@ struct _GtkPaned
   gint GSEAL (min_position);
   gint GSEAL (max_position);
 
-  guint GSEAL (position_set : 1);
-  guint GSEAL (in_drag : 1);
-  guint GSEAL (child1_shrink : 1);
-  guint GSEAL (child1_resize : 1);
-  guint GSEAL (child2_shrink : 1);
-  guint GSEAL (child2_resize : 1);
-  guint GSEAL (orientation : 1);
-  guint GSEAL (in_recursion : 1);
-  guint GSEAL (handle_prelit : 1);
+  guint GSEAL (position_set) : 1;
+  guint GSEAL (in_drag) : 1;
+  guint GSEAL (child1_shrink) : 1;
+  guint GSEAL (child1_resize) : 1;
+  guint GSEAL (child2_shrink) : 1;
+  guint GSEAL (child2_resize) : 1;
+  guint GSEAL (orientation) : 1;
+  guint GSEAL (in_recursion) : 1;
+  guint GSEAL (handle_prelit) : 1;
 
   GtkWidget *GSEAL (last_child1_focus);
   GtkWidget *GSEAL (last_child2_focus);

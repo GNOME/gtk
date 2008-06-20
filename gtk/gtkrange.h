@@ -60,24 +60,24 @@ struct _GtkRange
 
   GtkAdjustment *GSEAL (adjustment);
   GtkUpdateType GSEAL (update_policy);
-  guint GSEAL (inverted : 1);
+  guint GSEAL (inverted) : 1;
 
   /*< protected >*/
 
-  guint GSEAL (flippable : 1);
+  guint GSEAL (flippable) : 1;
 
   /* Steppers are: < > ---- < >
    *               a b      c d
    */
 
-  guint GSEAL (has_stepper_a : 1);
-  guint GSEAL (has_stepper_b : 1);
-  guint GSEAL (has_stepper_c : 1);
-  guint GSEAL (has_stepper_d : 1);
+  guint GSEAL (has_stepper_a) : 1;
+  guint GSEAL (has_stepper_b) : 1;
+  guint GSEAL (has_stepper_c) : 1;
+  guint GSEAL (has_stepper_d) : 1;
 
-  guint GSEAL (need_recalc : 1);
+  guint GSEAL (need_recalc) : 1;
 
-  guint GSEAL (slider_size_fixed : 1);
+  guint GSEAL (slider_size_fixed) : 1;
 
   gint GSEAL (min_slider_size);
 
@@ -92,8 +92,8 @@ struct _GtkRange
   gint GSEAL (round_digits);
 
   /*< private >*/
-  guint GSEAL (trough_click_forward : 1);  /* trough click was on the forward side of slider */
-  guint GSEAL (update_pending : 1);        /* need to emit value_changed */
+  guint GSEAL (trough_click_forward) : 1;  /* trough click was on the forward side of slider */
+  guint GSEAL (update_pending) : 1;        /* need to emit value_changed */
   GtkRangeLayout *GSEAL (layout);
   GtkRangeStepTimer *GSEAL (timer);
   gint GSEAL (slide_initial_slider_position);

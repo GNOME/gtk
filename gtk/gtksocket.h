@@ -58,12 +58,12 @@ struct _GtkSocket
   GtkWidget *GSEAL (plug_widget);
 
   gshort GSEAL (xembed_version); /* -1 == not xembed */
-  guint GSEAL (same_app : 1);
-  guint GSEAL (focus_in : 1);
-  guint GSEAL (have_size : 1);
-  guint GSEAL (need_map : 1);
-  guint GSEAL (is_mapped : 1);
-  guint GSEAL (active : 1);
+  guint GSEAL (same_app) : 1;
+  guint GSEAL (focus_in) : 1;
+  guint GSEAL (have_size) : 1;
+  guint GSEAL (need_map) : 1;
+  guint GSEAL (is_mapped) : 1;
+  guint GSEAL (active) : 1;
 
   GtkAccelGroup *GSEAL (accel_group);
   GtkWidget *GSEAL (toplevel);

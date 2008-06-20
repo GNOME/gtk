@@ -70,13 +70,13 @@ struct _GtkCellRenderer
   guint16 GSEAL (xpad);
   guint16 GSEAL (ypad);
 
-  guint GSEAL (mode : 2);
-  guint GSEAL (visible : 1);
-  guint GSEAL (is_expander : 1);
-  guint GSEAL (is_expanded : 1);
-  guint GSEAL (cell_background_set : 1);
-  guint GSEAL (sensitive : 1);
-  guint GSEAL (editing : 1);
+  guint GSEAL (mode) : 2;
+  guint GSEAL (visible) : 1;
+  guint GSEAL (is_expander) : 1;
+  guint GSEAL (is_expanded) : 1;
+  guint GSEAL (cell_background_set) : 1;
+  guint GSEAL (sensitive) : 1;
+  guint GSEAL (editing) : 1;
 };
 
 struct _GtkCellRendererClass

@@ -59,7 +59,7 @@ struct _GtkPlug
   GtkWindowGroup *GSEAL (modality_group);
   GHashTable *GSEAL (grabbed_keys);
 
-  guint GSEAL (same_app : 1);
+  guint GSEAL (same_app) : 1;
 };
 
 struct _GtkPlugClass

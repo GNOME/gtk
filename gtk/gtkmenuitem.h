@@ -60,12 +60,12 @@ struct _GtkMenuItem
   guint16 GSEAL (accelerator_width);
   gchar  *GSEAL (accel_path);
 
-  guint GSEAL (show_submenu_indicator : 1);
-  guint GSEAL (submenu_placement : 1);
-  guint GSEAL (submenu_direction : 1);
-  guint GSEAL (right_justify: 1);
-  guint GSEAL (timer_from_keypress : 1);
-  guint GSEAL (from_menubar : 1);
+  guint GSEAL (show_submenu_indicator) : 1;
+  guint GSEAL (submenu_placement) : 1;
+  guint GSEAL (submenu_direction) : 1;
+  guint GSEAL (right_justify): 1;
+  guint GSEAL (timer_from_keypress) : 1;
+  guint GSEAL (from_menubar) : 1;
   guint GSEAL (timer);
 };
 

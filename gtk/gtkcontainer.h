@@ -59,13 +59,13 @@ struct _GtkContainer
 
   GtkWidget *GSEAL (focus_child);
 
-  guint GSEAL (border_width : 16);
+  guint GSEAL (border_width) : 16;
 
   /*< private >*/
-  guint GSEAL (need_resize : 1);
-  guint GSEAL (resize_mode : 2);
-  guint GSEAL (reallocate_redraws : 1);
-  guint GSEAL (has_focus_chain : 1);
+  guint GSEAL (need_resize) : 1;
+  guint GSEAL (resize_mode) : 2;
+  guint GSEAL (reallocate_redraws) : 1;
+  guint GSEAL (has_focus_chain) : 1;
 };
 
 struct _GtkContainerClass

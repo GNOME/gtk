@@ -86,9 +86,9 @@ struct _GtkTextBuffer
   guint GSEAL (user_action_count);
 
   /* Whether the buffer has been modified since last save */
-  guint GSEAL (modified : 1);
+  guint GSEAL (modified) : 1;
 
-  guint GSEAL (has_selection : 1);
+  guint GSEAL (has_selection) : 1;
 };
 
 struct _GtkTextBufferClass
