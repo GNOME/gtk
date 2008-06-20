@@ -1,5 +1,7 @@
 2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtk.symbols: Add all newly added accessors so abicheck.sh passes
+
 	* gtk/gtkwidget.c (gtk_widget_get_allocation): Remove unused variable
 	and check if the widget is a GtkWidget subclass, not the uninitialized
 	allocation.
