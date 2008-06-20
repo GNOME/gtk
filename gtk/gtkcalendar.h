@@ -106,32 +106,32 @@ struct _GtkCalendar
 {
   GtkWidget widget;
   
-  GtkStyle  *header_style;
-  GtkStyle  *label_style;
+  GtkStyle  *GSEAL (header_style);
+  GtkStyle  *GSEAL (label_style);
   
-  gint month;
-  gint year;
-  gint selected_day;
+  gint GSEAL (month);
+  gint GSEAL (year);
+  gint GSEAL (selected_day);
   
-  gint day_month[6][7];
-  gint day[6][7];
+  gint GSEAL (day_month[6][7]);
+  gint GSEAL (day[6][7]);
   
-  gint num_marked_dates;
-  gint marked_date[31];
-  GtkCalendarDisplayOptions  display_flags;
-  GdkColor marked_date_color[31];
+  gint GSEAL (num_marked_dates);
+  gint GSEAL (marked_date[31]);
+  GtkCalendarDisplayOptions  GSEAL (display_flags);
+  GdkColor GSEAL (marked_date_color[31]);
   
-  GdkGC *gc;			/* unused */
-  GdkGC *xor_gc;		/* unused */
+  GdkGC *GSEAL (gc);			/* unused */
+  GdkGC *GSEAL (xor_gc);		/* unused */
 
-  gint focus_row;
-  gint focus_col;
+  gint GSEAL (focus_row);
+  gint GSEAL (focus_col);
 
-  gint highlight_row;
-  gint highlight_col;
+  gint GSEAL (highlight_row);
+  gint GSEAL (highlight_col);
   
-  GtkCalendarPrivate *priv;
-  gchar grow_space [32];
+  GtkCalendarPrivate *GSEAL (priv);
+  gchar GSEAL (grow_space [32]);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
