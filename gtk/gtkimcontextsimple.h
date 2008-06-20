@@ -47,14 +47,14 @@ struct _GtkIMContextSimple
 {
   GtkIMContext object;
 
-  GSList *tables;
+  GSList *GSEAL (tables);
 
-  guint compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
-  gunichar tentative_match;
-  gint tentative_match_len;
+  guint GSEAL (compose_buffer[GTK_MAX_COMPOSE_LEN + 1]);
+  gunichar GSEAL (tentative_match);
+  gint GSEAL (tentative_match_len);
 
-  guint in_hex_sequence : 1;
-  guint modifiers_dropped : 1;
+  guint GSEAL (in_hex_sequence : 1);
+  guint GSEAL (modifiers_dropped : 1);
 };
 
 struct _GtkIMContextSimpleClass
