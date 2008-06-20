@@ -24,6 +24,7 @@
 #ifndef __GTK_TREE_MODEL_SORT_H__
 #define __GTK_TREE_MODEL_SORT_H__
 
+#include <gdk/gdkconfig.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreesortable.h>
 
@@ -44,28 +45,28 @@ struct _GtkTreeModelSort
   GObject parent;
 
   /* < private > */
-  gpointer root;
-  gint stamp;
-  guint child_flags;
-  GtkTreeModel *child_model;
-  gint zero_ref_count;
+  gpointer GSEAL (root);
+  gint GSEAL (stamp);
+  guint GSEAL (child_flags);
+  GtkTreeModel *GSEAL (child_model);
+  gint GSEAL (zero_ref_count);
 
   /* sort information */
-  GList *sort_list;
-  gint sort_column_id;
-  GtkSortType order;
+  GList *GSEAL (sort_list);
+  gint GSEAL (sort_column_id);
+  GtkSortType GSEAL (order);
 
   /* default sort */
-  GtkTreeIterCompareFunc default_sort_func;
-  gpointer default_sort_data;
-  GDestroyNotify default_sort_destroy;
+  GtkTreeIterCompareFunc GSEAL (default_sort_func);
+  gpointer GSEAL (default_sort_data);
+  GtkDestroyNotify GSEAL (default_sort_destroy);
 
   /* signal ids */
-  guint changed_id;
-  guint inserted_id;
-  guint has_child_toggled_id;
-  guint deleted_id;
-  guint reordered_id;
+  guint GSEAL (changed_id);
+  guint GSEAL (inserted_id);
+  guint GSEAL (has_child_toggled_id);
+  guint GSEAL (deleted_id);
+  guint GSEAL (reordered_id);
 };
 
 struct _GtkTreeModelSortClass
