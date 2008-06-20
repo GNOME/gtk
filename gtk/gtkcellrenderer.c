@@ -294,7 +294,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							 P_("Editing"),
 							 P_("Whether the cell renderer is currently in editing mode"),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READABLE));
 
 
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
