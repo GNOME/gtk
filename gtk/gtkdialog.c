@@ -268,8 +268,10 @@ gtk_dialog_init (GtkDialog *dialog)
                     NULL);
   
   dialog->vbox = gtk_vbox_new (FALSE, 0);
-  
-  gtk_container_add (GTK_CONTAINER (dialog), dialog->vbox);
+
+  /* gtk_container_add () from superclass */
+  GTK_CONTAINER_CLASS (gtk_dialog_parent_class)->add (GTK_CONTAINER (dialog),
+						      dialog->vbox);
   gtk_widget_show (dialog->vbox);
 
   dialog->action_area = gtk_hbutton_box_new ();
