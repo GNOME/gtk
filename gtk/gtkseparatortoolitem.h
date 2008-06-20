@@ -46,7 +46,7 @@ struct _GtkSeparatorToolItem
   GtkToolItem parent;
 
   /*< private >*/
-  GtkSeparatorToolItemPrivate *priv;
+  GtkSeparatorToolItemPrivate *GSEAL (priv);
 };
 
 struct _GtkSeparatorToolItemClass
