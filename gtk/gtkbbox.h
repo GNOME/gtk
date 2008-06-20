@@ -52,11 +52,11 @@ typedef struct _GtkButtonBoxClass  GtkButtonBoxClass;
 struct _GtkButtonBox
 {
   GtkBox box;
-  gint child_min_width;
-  gint child_min_height;
-  gint child_ipad_x;
-  gint child_ipad_y;
-  GtkButtonBoxStyle layout_style;
+  gint GSEAL (child_min_width);
+  gint GSEAL (child_min_height);
+  gint GSEAL (child_ipad_x);
+  gint GSEAL (child_ipad_y);
+  GtkButtonBoxStyle GSEAL (layout_style);
 };
 
 struct _GtkButtonBoxClass
