@@ -39,9 +39,13 @@
 
 
 /* --- prototypes --- */
-static void gtk_accel_group_finalize	(GObject		*object);
-static void accel_closure_invalidate    (gpointer  data,
-                                         GClosure *closure);
+static void gtk_accel_group_finalize     (GObject    *object);
+static void gtk_accel_group_get_property (GObject    *object,
+                                          guint       param_id,
+                                          GValue     *value,
+                                          GParamSpec *pspec);
+static void accel_closure_invalidate     (gpointer    data,
+                                          GClosure   *closure);
 
 
 /* --- variables --- */
@@ -56,6 +60,15 @@ static guint		 default_accel_mod_mask = (GDK_SHIFT_MASK |
 						   GDK_META_MASK);
 
 
+enum {
+	PROP_0,
+	PROP_LOCK_COUNT,
+	PROP_MODIFIER_MASK,
+        PROP_ACCELERATABLES,
+        PROP_N_ACCELS,
+        PROP_PRIV_ACCELS
+};
+
 G_DEFINE_TYPE (GtkAccelGroup, gtk_accel_group, G_TYPE_OBJECT)
 
 /* --- functions --- */
@@ -67,8 +80,49 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
   quark_acceleratable_groups = g_quark_from_static_string ("gtk-acceleratable-accel-groups");
 
   object_class->finalize = gtk_accel_group_finalize;
+  object_class->get_property = gtk_accel_group_get_property;
 
   class->accel_changed = NULL;
+
+  g_object_class_install_property (object_class,
+                                   PROP_LOCK_COUNT,
+                                   g_param_spec_uint ("lock-count",
+                                                      "Lock Count",
+                                                      "Total locks on this accel group",
+                                                      0,
+                                                      G_MAXUINT,
+                                                      0,
+                                                      G_PARAM_READABLE));
+  g_object_class_install_property (object_class,
+                                   PROP_MODIFIER_MASK,
+                                   g_param_spec_enum ("modifier-mask",
+                                                      "Modifier Mask",
+                                                      "Modifier Mask",
+                                                      gdk_modifier_type_get_type (),
+                                                      0,
+                                                      G_PARAM_READABLE));
+  g_object_class_install_property (object_class,
+                                   PROP_ACCELERATABLES,
+                                   g_param_spec_pointer ("acceleratables",
+                                                         "Acceleratables",
+                                                         "Acceleratables",
+                                                         G_PARAM_READABLE));
+  g_object_class_install_property (object_class,
+                                   PROP_N_ACCELS,
+                                   g_param_spec_uint ("n-accels",
+                                                      "N Accels",
+                                                      "Number of acceleraters",
+                                                      0,
+                                                      G_MAXUINT,
+                                                      0,
+                                                      G_PARAM_READABLE));
+  g_object_class_install_property (object_class,
+                                   PROP_PRIV_ACCELS,
+                                   g_param_spec_pointer ("priv-accels",
+                                                         "Priv Accels",
+                                                         "Private Acceleraters",
+                                                         G_PARAM_READABLE));
+  
 
   /**
    * GtkAccelGroup::accel-activate:
@@ -145,6 +199,36 @@ gtk_accel_group_finalize (GObject *object)
 }
 
 static void
+gtk_accel_group_get_property (GObject    *object,
+                              guint       param_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
+{
+  GtkAccelGroup *accel_group = GTK_ACCEL_GROUP (object);
+
+  switch (param_id) {
+  case PROP_LOCK_COUNT:
+    g_value_set_uint (value, accel_group->lock_count);
+    break;
+  case PROP_MODIFIER_MASK:
+    g_value_set_enum (value, accel_group->modifier_mask);
+    break;
+  case PROP_ACCELERATABLES:
+    g_value_set_pointer (value, accel_group->acceleratables);
+    break;
+  case PROP_N_ACCELS:
+    g_value_set_uint (value, accel_group->n_accels);
+    break;
+  case PROP_PRIV_ACCELS:
+    g_value_set_pointer (value, accel_group->priv_accels);
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+    break;
+  };
+}
+
+static void
 gtk_accel_group_init (GtkAccelGroup *accel_group)
 {
   accel_group->lock_count = 0;
@@ -166,6 +250,46 @@ gtk_accel_group_new (void)
   return g_object_new (GTK_TYPE_ACCEL_GROUP, NULL);
 }
 
+guint          
+gtk_accel_group_get_lock_count (GtkAccelGroup *accel_group)
+{
+  g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), 0);
+
+  return accel_group->lock_count;
+}
+
+GdkModifierType
+gtk_accel_group_get_modifier_mask (GtkAccelGroup *accel_group)
+{
+  g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), 0);
+
+  return accel_group->modifier_mask;
+}
+
+GSList *
+gtk_accel_group_get_acceleratables (GtkAccelGroup *accel_group)
+{
+  g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), NULL);
+
+  return accel_group->acceleratables;
+}
+
+guint
+gtk_accel_group_get_n_accels (GtkAccelGroup *accel_group)
+{
+  g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), 0);
+
+  return accel_group->n_accels;
+}
+
+GtkAccelGroupEntry *
+gtk_accel_group_get_priv_accels (GtkAccelGroup *accel_group)
+{
+  g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), NULL);
+
+  return accel_group->priv_accels;
+}
+
 static void
 accel_group_weak_ref_detach (GSList  *free_list,
 			     GObject *stale_object)
@@ -179,6 +303,7 @@ accel_group_weak_ref_detach (GSList  *free_list,
       accel_group = slist->data;
       accel_group->acceleratables = g_slist_remove (accel_group->acceleratables, stale_object);
       g_object_unref (accel_group);
+      g_object_notify (G_OBJECT (accel_group), "acceleratables");
     }
   g_slist_free (free_list);
   g_object_set_qdata (stale_object, quark_acceleratable_groups, NULL);
@@ -206,6 +331,7 @@ _gtk_accel_group_attach (GtkAccelGroup *accel_group,
   g_object_weak_ref (object,
 		     (GWeakNotify) accel_group_weak_ref_detach,
 		     slist);
+  g_object_notify (G_OBJECT (accel_group), "acceleratables");
 }
 
 void
@@ -229,6 +355,7 @@ _gtk_accel_group_detach (GtkAccelGroup *accel_group,
     g_object_weak_ref (object,
 		       (GWeakNotify) accel_group_weak_ref_detach,
 		       slist);
+  g_object_notify (G_OBJECT (accel_group), "acceleratables");
   g_object_unref (accel_group);
 }
 
@@ -304,6 +431,8 @@ gtk_accel_group_lock (GtkAccelGroup *accel_group)
   g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
   
   accel_group->lock_count += 1;
+
+  g_object_notify (G_OBJECT (accel_group), "lock-count");
 }
 
 /**
@@ -319,6 +448,8 @@ gtk_accel_group_unlock (GtkAccelGroup *accel_group)
   g_return_if_fail (accel_group->lock_count > 0);
 
   accel_group->lock_count -= 1;
+
+  g_object_notify (G_OBJECT (accel_group), "lock-count");
 }
 
 static void
@@ -371,6 +502,7 @@ quick_accel_add (GtkAccelGroup  *accel_group,
   accel_group->priv_accels[pos].closure = g_closure_ref (closure);
   accel_group->priv_accels[pos].accel_path_quark = path_quark;
   g_closure_sink (closure);
+  g_object_notify (G_OBJECT (accel_group), "priv-accels");
   
   /* handle closure invalidation and reverse lookups */
   g_closure_add_invalidate_notifier (closure, accel_group, accel_closure_invalidate);
