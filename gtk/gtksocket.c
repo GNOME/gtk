@@ -300,6 +300,25 @@ gtk_socket_get_id (GtkSocket *socket)
   return _gtk_socket_windowing_get_id (socket);
 }
 
+/**
+ * gtk_socket_get_plug_window:
+ * @socket_: a #GtkSocket.
+ *
+ * Retrieves the window of the plug. Use this to check if the plug has
+ * been created inside of the socket.
+ *
+ * Return value: the window of the plug if available, or %NULL
+ *
+ * Since:  GSEAL-branch
+ **/
+GdkWindow*
+gtk_socket_get_plug_window (GtkSocket *socket)
+{
+  g_return_val_if_fail (GTK_IS_SOCKET (socket), NULL);
+
+  return socket->plug_window;
+}
+
 static void
 gtk_socket_realize (GtkWidget *widget)
 {

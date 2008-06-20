@@ -49,24 +49,24 @@ struct _GtkSocket
 {
   GtkContainer container;
 
-  guint16 request_width;
-  guint16 request_height;
-  guint16 current_width;
-  guint16 current_height;
+  guint16 GSEAL (request_width);
+  guint16 GSEAL (request_height);
+  guint16 GSEAL (current_width);
+  guint16 GSEAL (current_height);
 
-  GdkWindow *plug_window;
-  GtkWidget *plug_widget;
+  GdkWindow *GSEAL (plug_window);
+  GtkWidget *GSEAL (plug_widget);
 
-  gshort xembed_version;	/* -1 == not xembed */
-  guint same_app : 1;
-  guint focus_in : 1;
-  guint have_size : 1;
-  guint need_map : 1;
-  guint is_mapped : 1;
-  guint active : 1;
+  gshort GSEAL (xembed_version); /* -1 == not xembed */
+  guint GSEAL (same_app : 1);
+  guint GSEAL (focus_in : 1);
+  guint GSEAL (have_size : 1);
+  guint GSEAL (need_map : 1);
+  guint GSEAL (is_mapped : 1);
+  guint GSEAL (active : 1);
 
-  GtkAccelGroup *accel_group;
-  GtkWidget *toplevel;
+  GtkAccelGroup *GSEAL (accel_group);
+  GtkWidget *GSEAL (toplevel);
 };
 
 struct _GtkSocketClass
@@ -90,6 +90,7 @@ GtkWidget*     gtk_socket_new      (void);
 void            gtk_socket_add_id (GtkSocket       *socket_,
 				   GdkNativeWindow  window_id);
 GdkNativeWindow gtk_socket_get_id (GtkSocket       *socket_);
+GdkWindow*      gtk_socket_get_plug_window (GtkSocket       *socket_);
 
 #ifndef GTK_DISABLE_DEPRECATED
 void           gtk_socket_steal    (GtkSocket      *socket_,

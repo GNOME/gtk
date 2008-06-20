@@ -3450,6 +3450,7 @@ gtk_show_uri
 #if IN_FILE(__GTK_SOCKET_C__)
 gtk_socket_add_id
 gtk_socket_get_id
+gtk_socket_get_plug_window
 gtk_socket_get_type G_GNUC_CONST
 gtk_socket_new
 #ifndef GTK_DISABLE_DEPRECATED
