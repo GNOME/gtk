@@ -95,6 +95,8 @@ void		gtk_scale_button_set_value	(GtkScaleButton *button,
 GtkAdjustment*	gtk_scale_button_get_adjustment	(GtkScaleButton *button);
 void		gtk_scale_button_set_adjustment	(GtkScaleButton *button,
 						 GtkAdjustment  *adjustment);
+GtkWidget*	gtk_scale_button_get_plus_button (GtkScaleButton *button);
+GtkWidget*	gtk_scale_button_get_minus_button (GtkScaleButton *button);
 
 G_END_DECLS
 

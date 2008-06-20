@@ -1321,5 +1321,41 @@ gtk_scale_button_scale_value_changed (GtkRange *range)
   g_object_notify (G_OBJECT (button), "value");
 }
  
+/**
+ * gtk_scale_button_get_plus_button:
+ * @button: a #GtkScaleButton
+ *
+ * Retrieves the scale buttons plus button widget
+ *
+ * Return value: the plus button widget
+ *
+ * Since: 2.14
+ */
+GtkWidget*
+gtk_scale_button_get_plus_button (GtkScaleButton *button)
+{
+  g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), button);
+
+  return button->plus_button;
+}
+
+/**
+ * gtk_scale_button_get_minus_button:
+ * @button: a #GtkScaleButton
+ *
+ * Retrieves the scale buttons minus button widget
+ *
+ * Return value: the minus button widget
+ *
+ * Since: 2.14
+ */
+GtkWidget*
+gtk_scale_button_get_minus_button (GtkScaleButton *button)
+{
+  g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), button);
+
+  return button->minus_button;
+}
+
 #define __GTK_SCALE_BUTTON_C__
 #include "gtkaliasdef.c"
