@@ -53,7 +53,7 @@ struct _GtkRadioButton
 {
   GtkCheckButton check_button;
 
-  GSList *group;
+  GSList *GSEAL (group);
 };
 
 struct _GtkRadioButtonClass
