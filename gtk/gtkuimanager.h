@@ -62,7 +62,7 @@ struct _GtkUIManager {
 
   /*< private >*/
 
-  GtkUIManagerPrivate *private_data;
+  GtkUIManagerPrivate *GSEAL (private_data);
 };
 
 struct _GtkUIManagerClass {
