@@ -70,8 +70,8 @@ struct _GtkMessageDialog
   
   GtkDialog parent_instance;
   
-  GtkWidget *image;
-  GtkWidget *label;
+  GtkWidget *GSEAL (image);
+  GtkWidget *GSEAL (label);
 };
 
 struct _GtkMessageDialogClass
