@@ -45,9 +45,9 @@ struct _GtkCellRendererToggle
   GtkCellRenderer parent;
 
   /*< private >*/
-  guint active : 1;
-  guint activatable : 1;
-  guint radio : 1;
+  guint GSEAL (active) : 1;
+  guint GSEAL (activatable) : 1;
+  guint GSEAL (radio) : 1;
 };
 
 struct _GtkCellRendererToggleClass
