@@ -1584,6 +1584,7 @@ gtk_gc_release
 gtk_handle_box_get_handle_position
 gtk_handle_box_get_shadow_type
 gtk_handle_box_get_snap_edge
+gtk_handle_box_get_child_detached
 gtk_handle_box_get_type G_GNUC_CONST
 gtk_handle_box_new
 gtk_handle_box_set_handle_position

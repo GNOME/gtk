@@ -50,7 +50,8 @@ enum {
   PROP_SHADOW_TYPE,
   PROP_HANDLE_POSITION,
   PROP_SNAP_EDGE,
-  PROP_SNAP_EDGE_SET
+  PROP_SNAP_EDGE_SET,
+  PROP_CHILD_DETACHED
 };
 
 #define DRAG_HANDLE_SIZE 10
@@ -205,6 +206,14 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 							 FALSE,
 							 GTK_PARAM_READWRITE));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_CHILD_DETACHED,
+                                   g_param_spec_boolean ("child-detached",
+							 P_("Child Detached"),
+							 P_("A boolean value indicating whether the handlebox's child is attached or detached."),
+							 FALSE,
+							 GTK_PARAM_READABLE));
+
   object_class->destroy = gtk_handle_box_destroy;
 
   widget_class->map = gtk_handle_box_map;
@@ -322,6 +331,9 @@ gtk_handle_box_get_property (GObject         *object,
       break;
     case PROP_SNAP_EDGE_SET:
       g_value_set_boolean (value, handle_box->snap_edge != -1);
+      break;
+    case PROP_CHILD_DETACHED:
+      g_value_set_boolean (value, handle_box->child_detached);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -848,6 +860,24 @@ gtk_handle_box_get_snap_edge (GtkHandleBox *handle_box)
   g_return_val_if_fail (GTK_IS_HANDLE_BOX (handle_box), (GtkPositionType)-1);
 
   return handle_box->snap_edge;
+}
+
+/**
+ * gtk_handle_box_get_child_detached:
+ * @handle_box: a #GtkHandleBox
+ *
+ * Whether the handlebox's child is currently detached.
+ *
+ * Return value: %TRUE if the child is currently detached, otherwise %FALSE
+ *
+ * Since:  GSEAL-branch
+ **/
+gboolean
+gtk_handle_box_get_child_detached (GtkHandleBox *handle_box)
+{
+  g_return_val_if_fail (GTK_IS_HANDLE_BOX (handle_box), FALSE);
+
+  return handle_box->child_detached;
 }
 
 static void
