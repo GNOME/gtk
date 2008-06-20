@@ -1,5 +1,7 @@
 2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gtk/gtkscalebutton.c: Fix gtk-doc syntax, add missing trailing colon.
+
 	* gtk/gtk.symbols: Add all newly added accessors so abicheck.sh passes
 
 	* gtk/gtkwidget.c (gtk_widget_get_allocation): Remove unused variable

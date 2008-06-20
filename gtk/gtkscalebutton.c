@@ -488,7 +488,7 @@ gtk_scale_button_dispose (GObject *object)
 }
 
 /**
- * gtk_scale_button_new
+ * gtk_scale_button_new:
  * @size: a stock icon size
  * @min: the minimum value of the scale (usually 0)
  * @max: the maximum value of the scale (usually 100)
@@ -526,7 +526,7 @@ gtk_scale_button_new (GtkIconSize   size,
 }
 
 /**
- * gtk_scale_button_get_value
+ * gtk_scale_button_get_value:
  * @button: a #GtkScaleButton
  *
  * Gets the current value of the scale button.
@@ -548,7 +548,7 @@ gtk_scale_button_get_value (GtkScaleButton * button)
 }
 
 /**
- * gtk_scale_button_set_value
+ * gtk_scale_button_set_value:
  * @button: a #GtkScaleButton
  * @value: new value of the scale button
  *
@@ -573,7 +573,7 @@ gtk_scale_button_set_value (GtkScaleButton *button,
 }
 
 /**
- * gtk_scale_button_set_icons
+ * gtk_scale_button_set_icons:
  * @button: a #GtkScaleButton
  * @icons: a %NULL-terminated array of icon names
  *
@@ -626,7 +626,7 @@ gtk_scale_button_get_adjustment	(GtkScaleButton *button)
 }
 
 /**
- * gtk_scale_button_set_adjustment
+ * gtk_scale_button_set_adjustment:
  * @button: a #GtkScaleButton
  * @adjustment: a #GtkAdjustment
  *
@@ -1321,6 +1321,5 @@ gtk_scale_button_scale_value_changed (GtkRange *range)
   g_object_notify (G_OBJECT (button), "value");
 }
  
-
 #define __GTK_SCALE_BUTTON_C__
 #include "gtkaliasdef.c"
