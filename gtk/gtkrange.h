@@ -58,48 +58,48 @@ struct _GtkRange
 {
   GtkWidget widget;
 
-  GtkAdjustment *adjustment;
-  GtkUpdateType update_policy;
-  guint inverted : 1;
+  GtkAdjustment *GSEAL (adjustment);
+  GtkUpdateType GSEAL (update_policy);
+  guint GSEAL (inverted : 1);
 
   /*< protected >*/
 
-  guint flippable : 1;
+  guint GSEAL (flippable : 1);
 
   /* Steppers are: < > ---- < >
    *               a b      c d
    */
 
-  guint has_stepper_a : 1;
-  guint has_stepper_b : 1;
-  guint has_stepper_c : 1;
-  guint has_stepper_d : 1;
+  guint GSEAL (has_stepper_a : 1);
+  guint GSEAL (has_stepper_b : 1);
+  guint GSEAL (has_stepper_c : 1);
+  guint GSEAL (has_stepper_d : 1);
 
-  guint need_recalc : 1;
+  guint GSEAL (need_recalc : 1);
 
-  guint slider_size_fixed : 1;
+  guint GSEAL (slider_size_fixed : 1);
 
-  gint min_slider_size;
+  gint GSEAL (min_slider_size);
 
-  GtkOrientation orientation;
+  GtkOrientation GSEAL (orientation);
 
   /* Area of entire stepper + trough assembly in widget->window coords */
-  GdkRectangle range_rect;
+  GdkRectangle GSEAL (range_rect);
   /* Slider range along the long dimension, in widget->window coords */
-  gint slider_start, slider_end;
+  gint GSEAL (slider_start), GSEAL (slider_end);
 
   /* Round off value to this many digits, -1 for no rounding */
-  gint round_digits;
+  gint GSEAL (round_digits);
 
   /*< private >*/
-  guint trough_click_forward : 1;  /* trough click was on the forward side of slider */
-  guint update_pending : 1;        /* need to emit value_changed */
-  GtkRangeLayout *layout;
-  GtkRangeStepTimer *timer;
-  gint slide_initial_slider_position;
-  gint slide_initial_coordinate;
-  guint update_timeout_id;
-  GdkWindow *event_window;
+  guint GSEAL (trough_click_forward : 1);  /* trough click was on the forward side of slider */
+  guint GSEAL (update_pending : 1);        /* need to emit value_changed */
+  GtkRangeLayout *GSEAL (layout);
+  GtkRangeStepTimer *GSEAL (timer);
+  gint GSEAL (slide_initial_slider_position);
+  gint GSEAL (slide_initial_coordinate);
+  guint GSEAL (update_timeout_id);
+  GdkWindow *GSEAL (event_window);
 };
 
 struct _GtkRangeClass
