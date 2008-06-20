@@ -56,7 +56,7 @@ struct _GtkToggleAction
 
   /*< private >*/
 
-  GtkToggleActionPrivate *private_data;
+  GtkToggleActionPrivate *GSEAL (private_data);
 };
 
 struct _GtkToggleActionClass
