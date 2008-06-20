@@ -53,10 +53,10 @@ struct _GtkColorSelectionDialog
 {
   GtkDialog parent_instance;
 
-  GtkWidget *colorsel;
-  GtkWidget *ok_button;
-  GtkWidget *cancel_button;
-  GtkWidget *help_button;
+  GtkWidget *GSEAL (colorsel);
+  GtkWidget *GSEAL (ok_button);
+  GtkWidget *GSEAL (cancel_button);
+  GtkWidget *GSEAL (help_button);
 };
 
 struct _GtkColorSelectionDialogClass
@@ -72,8 +72,12 @@ struct _GtkColorSelectionDialogClass
 
 
 /* ColorSelectionDialog */
-GType      gtk_color_selection_dialog_get_type (void) G_GNUC_CONST;
-GtkWidget* gtk_color_selection_dialog_new      (const gchar *title);
+GType      gtk_color_selection_dialog_get_type            (void) G_GNUC_CONST;
+GtkWidget* gtk_color_selection_dialog_new                 (const gchar *title);
+GtkWidget* gtk_color_selection_dialog_get_color_selection (GtkColorSelectionDialog *colorsel);
+GtkWidget* gtk_color_selection_dialog_get_ok_button       (GtkColorSelectionDialog *colorsel);
+GtkWidget* gtk_color_selection_dialog_get_cancel_button   (GtkColorSelectionDialog *colorsel);
+GtkWidget* gtk_color_selection_dialog_get_help_button     (GtkColorSelectionDialog *colorsel);
 
 
 G_END_DECLS

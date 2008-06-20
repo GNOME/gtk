@@ -35,6 +35,14 @@
 #include "gtkbuildable.h"
 #include "gtkalias.h"
 
+enum {
+  PROP_0,
+  PROP_COLOR_SELECTION,
+  PROP_OK_BUTTON,
+  PROP_CANCEL_BUTTON,
+  PROP_HELP_BUTTON
+};
+
 
 /***************************/
 /* GtkColorSelectionDialog */
@@ -53,8 +61,69 @@ G_DEFINE_TYPE_WITH_CODE (GtkColorSelectionDialog, gtk_color_selection_dialog,
 static GtkBuildableIface *parent_buildable_iface;
 
 static void
+gtk_color_selection_dialog_get_property (GObject         *object,
+					 guint            prop_id,
+					 GValue          *value,
+					 GParamSpec      *pspec)
+{
+  GtkColorSelectionDialog *colorsel;
+
+  colorsel = GTK_COLOR_SELECTION_DIALOG (object);
+
+  switch (prop_id)
+    {
+    case PROP_COLOR_SELECTION:
+      g_value_set_object (value, colorsel->colorsel);
+      break;
+    case PROP_OK_BUTTON:
+      g_value_set_object (value, colorsel->ok_button);
+      break;
+    case PROP_CANCEL_BUTTON:
+      g_value_set_object (value, colorsel->cancel_button);
+      break;
+    case PROP_HELP_BUTTON:
+      g_value_set_object (value, colorsel->help_button);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass)
 {
+  GObjectClass   *gobject_class = G_OBJECT_CLASS (klass);
+  gobject_class->get_property = gtk_color_selection_dialog_get_property;
+
+  g_object_class_install_property (gobject_class,
+				   PROP_COLOR_SELECTION,
+				   g_param_spec_object ("color-selection",
+						     P_("Color Selection"),
+						     P_("The color selection embedded in the dialog."),
+						     GTK_TYPE_WIDGET,
+						     G_PARAM_READABLE));
+  g_object_class_install_property (gobject_class,
+				   PROP_OK_BUTTON,
+				   g_param_spec_object ("ok-button",
+						     P_("OK Button"),
+						     P_("The OK button of the dialog."),
+						     GTK_TYPE_WIDGET,
+						     G_PARAM_READABLE));
+  g_object_class_install_property (gobject_class,
+				   PROP_CANCEL_BUTTON,
+				   g_param_spec_object ("cancel-button",
+						     P_("Cancel Button"),
+						     P_("The cancel button of the dialog."),
+						     GTK_TYPE_WIDGET,
+						     G_PARAM_READABLE));
+  g_object_class_install_property (gobject_class,
+				   PROP_HELP_BUTTON,
+				   g_param_spec_object ("help-button",
+						     P_("Help Button"),
+						     P_("The help button of the dialog."),
+						     GTK_TYPE_WIDGET,
+						     G_PARAM_READABLE));
 }
 
 static void
@@ -116,6 +185,62 @@ gtk_color_selection_dialog_new (const gchar *title)
   gtk_window_set_resizable (GTK_WINDOW (colorseldiag), FALSE);
   
   return GTK_WIDGET (colorseldiag);
+}
+
+/**
+ * gtk_color_selection_dialog_get_color_selection:
+ * @colorsel: a #GtkColorSelectionDialog
+ *
+ * Retrieves the #GtkColorSelection widget embedded in the dialog.
+ *
+ * Since:  GSEAL-branch
+ **/
+GtkWidget*
+gtk_color_selection_dialog_get_color_selection (GtkColorSelectionDialog *colorsel)
+{
+  return colorsel->colorsel;
+}
+
+/**
+ * gtk_color_selection_dialog_get_ok_button:
+ * @colorsel: a #GtkColorSelectionDialog
+ *
+ * Retrieves the OK button of the dialog.
+ *
+ * Since:  GSEAL-branch
+ **/
+GtkWidget*
+gtk_color_selection_dialog_get_ok_button       (GtkColorSelectionDialog *colorsel)
+{
+  return colorsel->ok_button;
+}
+
+/**
+ * gtk_color_selection_dialog_get_cancel_button:
+ * @colorsel: a #GtkColorSelectionDialog
+ *
+ * Retrieves the cancel button of the dialog.
+ *
+ * Since:  GSEAL-branch
+ **/
+GtkWidget*
+gtk_color_selection_dialog_get_cancel_button   (GtkColorSelectionDialog *colorsel)
+{
+  return colorsel->cancel_button;
+}
+
+/**
+ * gtk_color_selection_dialog_get_help_button:
+ * @colorsel: a #GtkColorSelectionDialog
+ *
+ * Retrieves the help button of the dialog.
+ *
+ * Since:  GSEAL-branch
+ **/
+GtkWidget*
+gtk_color_selection_dialog_get_help_button     (GtkColorSelectionDialog *colorsel)
+{
+  return colorsel->help_button;
 }
 
 static void
