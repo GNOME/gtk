@@ -644,6 +644,22 @@ gtk_message_dialog_set_image (GtkMessageDialog *dialog,
 }
 
 /**
+ * gtk_message_dialog_get_image:
+ * @dialog: a #GtkMessageDialog
+ *
+ * Return value: the dialog's image
+ *
+ * Since: 2.14
+ **/
+GtkWidget *
+gtk_message_dialog_get_image (GtkMessageDialog *dialog)
+{
+  g_return_if_fail (GTK_IS_MESSAGE_DIALOG (dialog));
+
+  return dialog->image;
+}
+
+/**
  * gtk_message_dialog_set_markup:
  * @message_dialog: a #GtkMessageDialog
  * @str: markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>)

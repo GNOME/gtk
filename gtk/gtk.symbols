@@ -2329,6 +2329,7 @@ gtk_message_dialog_new G_GNUC_PRINTF(5,6)
 gtk_message_dialog_new_with_markup G_GNUC_PRINTF(5,6)
 gtk_message_dialog_set_markup
 gtk_message_dialog_set_image
+gtk_message_dialog_get_image
 #endif
 #endif
 

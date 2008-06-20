@@ -104,6 +104,8 @@ GtkWidget* gtk_message_dialog_new_with_markup   (GtkWindow      *parent,
 void       gtk_message_dialog_set_image    (GtkMessageDialog *dialog,
 					    GtkWidget        *image);
 
+GtkWidget * gtk_message_dialog_get_image   (GtkMessageDialog *dialog);
+
 void       gtk_message_dialog_set_markup  (GtkMessageDialog *message_dialog,
                                            const gchar      *str);
 

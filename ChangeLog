@@ -1,3 +1,10 @@
+2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_get_image):
+	* gtk/gtkmessagedialog.h:
+	Add missing accessor for sealed field GtkMessageDialog->image.
+
 2008-06-20  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkprinter.h: the GSEAL branch added two includes for no
