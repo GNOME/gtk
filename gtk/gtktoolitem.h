@@ -49,7 +49,7 @@ struct _GtkToolItem
   GtkBin parent;
 
   /*< private >*/
-  GtkToolItemPrivate *priv;
+  GtkToolItemPrivate *GSEAL (priv);
 };
 
 struct _GtkToolItemClass
