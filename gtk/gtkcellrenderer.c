@@ -61,7 +61,8 @@ enum {
   PROP_IS_EXPANDED,
   PROP_CELL_BACKGROUND,
   PROP_CELL_BACKGROUND_GDK,
-  PROP_CELL_BACKGROUND_SET
+  PROP_CELL_BACKGROUND_SET,
+  PROP_EDITING
 };
 
 /* Signal IDs */
@@ -287,6 +288,14 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						       GDK_TYPE_COLOR,
 						       GTK_PARAM_READWRITE));
 
+  g_object_class_install_property (object_class,
+				   PROP_EDITING,
+				   g_param_spec_boolean ("editing",
+							 P_("Editing"),
+							 P_("Whether the cell renderer is currently in editing mode"),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
+
 
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
 
@@ -316,6 +325,9 @@ gtk_cell_renderer_get_property (GObject     *object,
       break;
     case PROP_SENSITIVE:
       g_value_set_boolean (value, cell->sensitive);
+      break;
+    case PROP_EDITING:
+      g_value_set_boolean (value, cell->editing);
       break;
     case PROP_XALIGN:
       g_value_set_float (value, cell->xalign);
@@ -381,6 +393,9 @@ gtk_cell_renderer_set_property (GObject      *object,
       break;
     case PROP_SENSITIVE:
       cell->sensitive = g_value_get_boolean (value);
+      break;
+    case PROP_EDITING:
+      cell->editing = g_value_get_boolean (value);
       break;
     case PROP_XALIGN:
       cell->xalign = g_value_get_float (value);
