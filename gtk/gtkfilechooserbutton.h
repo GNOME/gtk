@@ -46,7 +46,7 @@ struct _GtkFileChooserButton
   /*< private >*/
   GtkHBox parent;
 
-  GtkFileChooserButtonPrivate *priv;
+  GtkFileChooserButtonPrivate *GSEAL (priv);
 };
 
 struct _GtkFileChooserButtonClass
