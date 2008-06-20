@@ -1,3 +1,16 @@
+2008-06-20  Michael Natterer  <mitch@imendio.com>
+
+	Bug 538395 – gtk_combo_box_append_text() on non-compliant model
+	segfaults
+
+	* gtk/gtkcombobox.c (gtk_combo_box_append_text)
+	(gtk_combo_box_insert_text)
+	(gtk_combo_box_prepend_text)
+	(gtk_combo_box_remove_text)
+	(gtk_combo_box_real_get_active_text): apply patch from Christian
+	Dywan which adds the needed g_return_if_fail() to prevent the
+	crashes.
+
 2008-06-20  Cody Russell  <cody@jhu.edu>
 
 	* gdk/directfb/gdkwindow-directfb.c:

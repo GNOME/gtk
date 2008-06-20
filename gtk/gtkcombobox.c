@@ -5023,6 +5023,8 @@ gtk_combo_box_append_text (GtkComboBox *combo_box,
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   g_return_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model));
+  g_return_if_fail (gtk_tree_model_get_column_type (combo_box->priv->model, 0)
+		    == G_TYPE_STRING);
   g_return_if_fail (text != NULL);
 
   store = GTK_LIST_STORE (combo_box->priv->model);
@@ -5054,6 +5056,8 @@ gtk_combo_box_insert_text (GtkComboBox *combo_box,
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   g_return_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model));
   g_return_if_fail (position >= 0);
+  g_return_if_fail (gtk_tree_model_get_column_type (combo_box->priv->model, 0)
+		    == G_TYPE_STRING);
   g_return_if_fail (text != NULL);
 
   store = GTK_LIST_STORE (combo_box->priv->model);
@@ -5082,6 +5086,8 @@ gtk_combo_box_prepend_text (GtkComboBox *combo_box,
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   g_return_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model));
+  g_return_if_fail (gtk_tree_model_get_column_type (combo_box->priv->model, 0)
+		    == G_TYPE_STRING);
   g_return_if_fail (text != NULL);
 
   store = GTK_LIST_STORE (combo_box->priv->model);
@@ -5109,6 +5115,8 @@ gtk_combo_box_remove_text (GtkComboBox *combo_box,
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   g_return_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model));
+  g_return_if_fail (gtk_tree_model_get_column_type (combo_box->priv->model, 0)
+		    == G_TYPE_STRING);
   g_return_if_fail (position >= 0);
 
   store = GTK_LIST_STORE (combo_box->priv->model);
@@ -5153,6 +5161,8 @@ gtk_combo_box_real_get_active_text (GtkComboBox *combo_box)
   gchar *text = NULL;
 
   g_return_val_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model), NULL);
+  g_return_val_if_fail (gtk_tree_model_get_column_type (combo_box->priv->model, 0)
+                        == G_TYPE_STRING, NULL);
 
   if (gtk_combo_box_get_active_iter (combo_box, &iter))
     gtk_tree_model_get (combo_box->priv->model, &iter, 
