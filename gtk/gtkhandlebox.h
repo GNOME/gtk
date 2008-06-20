@@ -68,13 +68,14 @@ struct _GtkHandleBox
   guint		  GSEAL (shrink_on_detach) : 1;
 
   signed int      GSEAL (snap_edge : 3); /* -1 == unset */
-  
+
   /* Variables used during a drag
    */
-  gint GSEAL (deskoff_x), GSEAL (deskoff_y); /* Offset between root relative coordinates
-					      * and deskrelative coordinates */
-  GtkAllocation   GSEAL (attach_allocation);
-  GtkAllocation   GSEAL (float_allocation);
+  gint GSEAL (deskoff_x);   /* Offset between root relative coordinates */
+  gint GSEAL (deskoff_y);   /* and deskrelative coordinates             */
+
+  GtkAllocation GSEAL (attach_allocation);
+  GtkAllocation GSEAL (float_allocation);
 };
 
 struct _GtkHandleBoxClass
