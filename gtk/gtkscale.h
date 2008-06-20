@@ -53,9 +53,9 @@ struct _GtkScale
 {
   GtkRange range;
 
-  gint digits;
-  guint draw_value : 1;
-  guint value_pos : 2;
+  gint GSEAL(digits);
+  guint GSEAL(draw_value : 1);
+  guint GSEAL(value_pos : 2);
 };
 
 struct _GtkScaleClass
