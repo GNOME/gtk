@@ -63,13 +63,13 @@ struct _GtkGammaCurve
 {
   GtkVBox vbox;
 
-  GtkWidget *table;
-  GtkWidget *curve;
-  GtkWidget *button[5];	/* spline, linear, free, gamma, reset */
+  GtkWidget *GSEAL (table);
+  GtkWidget *GSEAL (curve);
+  GtkWidget *GSEAL (button[5]);	/* spline, linear, free, gamma, reset */
 
-  gfloat gamma;
-  GtkWidget *gamma_dialog;
-  GtkWidget *gamma_text;
+  gfloat GSEAL (gamma);
+  GtkWidget *GSEAL (gamma_dialog);
+  GtkWidget *GSEAL (gamma_text);
 };
 
 struct _GtkGammaCurveClass
