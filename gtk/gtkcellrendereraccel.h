@@ -51,14 +51,14 @@ struct _GtkCellRendererAccel
   GtkCellRendererText parent;
 
   /*< private >*/
-  guint accel_key;
-  GdkModifierType accel_mods;
-  guint keycode;
-  GtkCellRendererAccelMode accel_mode;
+  guint GSEAL (accel_key);
+  GdkModifierType GSEAL (accel_mods);
+  guint GSEAL (keycode);
+  GtkCellRendererAccelMode GSEAL (accel_mode);
 
-  GtkWidget *edit_widget;
-  GtkWidget *grab_widget;
-  GtkWidget *sizing_label;
+  GtkWidget *GSEAL (edit_widget);
+  GtkWidget *GSEAL (grab_widget);
+  GtkWidget *GSEAL (sizing_label);
 };
 
 struct _GtkCellRendererAccelClass
