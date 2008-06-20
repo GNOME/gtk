@@ -72,7 +72,7 @@ struct _GtkHandleBox
   /* Variables used during a drag
    */
   gint GSEAL (deskoff_x), GSEAL (deskoff_y); /* Offset between root relative coordinates
-			      * and deskrelative coordinates */
+					      * and deskrelative coordinates */
   GtkAllocation   GSEAL (attach_allocation);
   GtkAllocation   GSEAL (float_allocation);
 };
