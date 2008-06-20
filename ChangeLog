@@ -1,3 +1,10 @@
+2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkcolorsel.c: Modernize and order things as most
+	other objects. Defines at the top, class init before init
+	before gobject methods before object method before widget
+	methods. No changes to the logic done.
+
 2008-06-20  Martyn Russell  <martyn@imendio.com>
 
 	* gtk/gtkaccelgroup.c: Don't call g_object_notify() with
