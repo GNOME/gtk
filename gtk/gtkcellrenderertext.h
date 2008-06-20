@@ -46,36 +46,36 @@ struct _GtkCellRendererText
   GtkCellRenderer parent;
 
   /*< private >*/
-  gchar *text;
-  PangoFontDescription *font;
-  gdouble font_scale;
-  PangoColor foreground;
-  PangoColor background;
+  gchar *GSEAL (text);
+  PangoFontDescription *GSEAL (font);
+  gdouble GSEAL (font_scale);
+  PangoColor GSEAL (foreground);
+  PangoColor GSEAL (background);
 
-  PangoAttrList *extra_attrs;
+  PangoAttrList *GSEAL (extra_attrs);
 
-  PangoUnderline underline_style;
+  PangoUnderline GSEAL (underline_style);
 
-  gint rise;
-  gint fixed_height_rows;
+  gint GSEAL (rise);
+  gint GSEAL (fixed_height_rows);
 
-  guint strikethrough : 1;
+  guint GSEAL (strikethrough : 1);
 
-  guint editable  : 1;
+  guint GSEAL (editable  : 1);
 
-  guint scale_set : 1;
+  guint GSEAL (scale_set : 1);
 
-  guint foreground_set : 1;
-  guint background_set : 1;
+  guint GSEAL (foreground_set : 1);
+  guint GSEAL (background_set : 1);
 
-  guint underline_set : 1;
+  guint GSEAL (underline_set : 1);
 
-  guint rise_set : 1;
+  guint GSEAL (rise_set : 1);
 
-  guint strikethrough_set : 1;
+  guint GSEAL (strikethrough_set : 1);
 
-  guint editable_set : 1;
-  guint calc_fixed_height : 1;
+  guint GSEAL (editable_set : 1);
+  guint GSEAL (calc_fixed_height : 1);
 };
 
 struct _GtkCellRendererTextClass
