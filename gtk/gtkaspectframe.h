@@ -57,7 +57,7 @@ struct _GtkAspectFrame
   gfloat GSEAL(ratio);
   gboolean GSEAL(obey_child);
 
-  GtkAllocation center_allocation;
+  GtkAllocation GSEAL (center_allocation);
 };
 
 struct _GtkAspectFrameClass
