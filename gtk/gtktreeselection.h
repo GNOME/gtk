@@ -58,7 +58,7 @@ struct _GtkTreeSelection
   GtkSelectionMode GSEAL (type);
   GtkTreeSelectionFunc GSEAL (user_func);
   gpointer GSEAL (user_data);
-  GtkDestroyNotify GSEAL (destroy);
+  GDestroyNotify GSEAL (destroy);
 };
 
 struct _GtkTreeSelectionClass

@@ -58,7 +58,7 @@ struct _GtkListStore
   gint GSEAL (length);
   GtkTreeIterCompareFunc GSEAL (default_sort_func);
   gpointer GSEAL (default_sort_data);
-  GtkDestroyNotify GSEAL (default_sort_destroy);
+  GDestroyNotify GSEAL (default_sort_destroy);
   guint GSEAL (columns_dirty) : 1;
 };
 

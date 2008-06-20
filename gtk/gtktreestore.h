@@ -57,7 +57,7 @@ struct _GtkTreeStore
   GType *GSEAL (column_headers);
   GtkTreeIterCompareFunc GSEAL (default_sort_func);
   gpointer GSEAL (default_sort_data);
-  GtkDestroyNotify GSEAL (default_sort_destroy);
+  GDestroyNotify GSEAL (default_sort_destroy);
   guint GSEAL (columns_dirty) : 1;
 };
 
