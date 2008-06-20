@@ -72,7 +72,7 @@ struct _GtkTextMark
 {
   GObject parent_instance;
 
-  gpointer segment;
+  gpointer GSEAL (segment);
 };
 
 struct _GtkTextMarkClass
