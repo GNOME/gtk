@@ -67,20 +67,21 @@ struct _GtkRuler
 {
   GtkWidget widget;
 
-  GdkPixmap *backing_store;
-  GdkGC *non_gr_exp_gc;		/* unused */
-  GtkRulerMetric *metric;
-  gint xsrc, ysrc;
-  gint slider_size;
+  GdkPixmap *GSEAL (backing_store);
+  GdkGC *GSEAL (non_gr_exp_gc);		/* unused */
+  GtkRulerMetric *GSEAL (metric);
+  gint GSEAL (xsrc);
+  gint GSEAL (ysrc);
+  gint GSEAL (slider_size);
 
   /* The upper limit of the ruler (in points) */
-  gdouble lower;
+  gdouble GSEAL (lower);
   /* The lower limit of the ruler */
-  gdouble upper;
+  gdouble GSEAL (upper);
   /* The position of the mark on the ruler */
-  gdouble position;
+  gdouble GSEAL (position);
   /* The maximum size of the ruler */
-  gdouble max_size;
+  gdouble GSEAL (max_size);
 };
 
 struct _GtkRulerClass
