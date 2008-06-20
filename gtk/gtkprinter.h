@@ -24,8 +24,6 @@
 #ifndef __GTK_PRINTER_H__
 #define __GTK_PRINTER_H__
 
-#include <gdk/gdkconfig.h>
-#include <glib-object.h>
 #include <cairo.h>
 #include <gtk/gtk.h>
 

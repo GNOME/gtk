@@ -1,3 +1,8 @@
+2008-06-20  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkprinter.h: the GSEAL branch added two includes for no
+	reason.
+
 2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkaccelgroup.c:
