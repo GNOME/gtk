@@ -24,6 +24,7 @@
 #ifndef __GTK_LIST_STORE_H__
 #define __GTK_LIST_STORE_H__
 
+#include <gdk/gdkconfig.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreesortable.h>
 
@@ -46,19 +47,19 @@ struct _GtkListStore
   GObject parent;
 
   /*< private >*/
-  gint stamp;
-  gpointer seq;		/* head of the list */
-  gpointer _gtk_reserved1;
-  GList *sort_list;
-  gint n_columns;
-  gint sort_column_id;
-  GtkSortType order;
-  GType *column_headers;
-  gint length;
-  GtkTreeIterCompareFunc default_sort_func;
-  gpointer default_sort_data;
-  GDestroyNotify default_sort_destroy;
-  guint columns_dirty : 1;
+  gint GSEAL (stamp);
+  gpointer GSEAL (seq);		/* head of the list */
+  gpointer GSEAL (_gtk_reserved1);
+  GList *GSEAL (sort_list);
+  gint GSEAL (n_columns);
+  gint GSEAL (sort_column_id);
+  GtkSortType GSEAL (order);
+  GType *GSEAL (column_headers);
+  gint GSEAL (length);
+  GtkTreeIterCompareFunc GSEAL (default_sort_func);
+  gpointer GSEAL (default_sort_data);
+  GtkDestroyNotify GSEAL (default_sort_destroy);
+  guint GSEAL (columns_dirty : 1);
 };
 
 struct _GtkListStoreClass
