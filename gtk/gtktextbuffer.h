@@ -75,20 +75,20 @@ struct _GtkTextBuffer
 {
   GObject parent_instance;
 
-  GtkTextTagTable *tag_table;
-  GtkTextBTree *btree;
+  GtkTextTagTable *GSEAL (tag_table);
+  GtkTextBTree *GSEAL (btree);
 
-  GSList *clipboard_contents_buffers;
-  GSList *selection_clipboards;
+  GSList *GSEAL (clipboard_contents_buffers);
+  GSList *GSEAL (selection_clipboards);
 
-  GtkTextLogAttrCache *log_attr_cache;
+  GtkTextLogAttrCache *GSEAL (log_attr_cache);
 
-  guint user_action_count;
+  guint GSEAL (user_action_count);
 
   /* Whether the buffer has been modified since last save */
-  guint modified : 1;
+  guint GSEAL (modified : 1);
 
-  guint has_selection : 1;
+  guint GSEAL (has_selection : 1);
 };
 
 struct _GtkTextBufferClass
