@@ -1,24 +1,24 @@
 /* gdkapplaunchcontext.h - Gtk+ implementation for GAppLaunchContext
-
-   Copyright (C) 2007 Red Hat, Inc.
-
-   The Gnome Library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   The Gnome Library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public
-   License along with the Gnome Library; see the file COPYING.LIB.  If not,
-   write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-
-   Author: Alexander Larsson <alexl@redhat.com>
-*/
+ *
+ * Copyright (C) 2007 Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ *
+ * Author: Alexander Larsson <alexl@redhat.com>
+ */
 
 #if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
@@ -27,9 +27,8 @@
 #ifndef __GDK_APP_LAUNCH_CONTEXT_H__
 #define __GDK_APP_LAUNCH_CONTEXT_H__
 
-#include <glib.h>
 #include <gio/gio.h>
-#include <gdk/gdkdisplay.h>
+#include <gdk/gdkscreen.h>
 
 G_BEGIN_DECLS
 
@@ -46,17 +45,17 @@ typedef struct GdkAppLaunchContextPrivate     GdkAppLaunchContextPrivate;
 
 struct GdkAppLaunchContext
 {
-	GAppLaunchContext parent_instance;
-	
-	GdkAppLaunchContextPrivate *priv;
+  GAppLaunchContext parent_instance;
+
+  GdkAppLaunchContextPrivate *priv;
 };
 
-struct GdkAppLaunchContextClass 
+struct GdkAppLaunchContextClass
 {
-	GAppLaunchContextClass parent_class;
+  GAppLaunchContextClass parent_class;
 };
 
-GType gdk_app_launch_context_get_type (void);
+GType                gdk_app_launch_context_get_type      (void);
 
 GdkAppLaunchContext *gdk_app_launch_context_new           (void);
 void                 gdk_app_launch_context_set_display   (GdkAppLaunchContext *context,
@@ -75,5 +74,3 @@ void                 gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *
 G_END_DECLS
 
 #endif /* __GDK_APP_LAUNCH_CONTEXT_H__ */
-
-

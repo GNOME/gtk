@@ -1,3 +1,9 @@
+2008-06-21  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/gdkapplaunchcontext.h: remove redundant include, fix
+	indentation, replace header by a GDK copyright header (don't say
+	"The Gnome Library"), remove trailing whitespace.
+
 2008-06-21  Hans Breuer  <hans@breuer.org>
 
 	* gtk/gtkprintoperation-win32.c(1713) : fix 'function' : incompatible 
