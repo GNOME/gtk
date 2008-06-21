@@ -844,7 +844,7 @@ static void
 dialog_to_print_settings (GtkPrintOperation *op,
 			  LPPRINTDLGEXW printdlgex)
 {
-  int i;
+  guint i;
   GtkPrintSettings *settings;
 
   settings = gtk_print_settings_new ();
@@ -1710,7 +1710,7 @@ _gtk_print_operation_platform_backend_preview_end_page (GtkPrintOperation *op,
 {
   HDC dc;
 
-  cairo_surface_show_page (cr);
+  cairo_surface_show_page (surface);
 
   /* TODO: Enhanced metafiles don't support multiple pages.
    */

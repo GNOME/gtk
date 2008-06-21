@@ -1,3 +1,17 @@
+2008-06-21  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkprintoperation-win32.c(1713) : fix 'function' : incompatible 
+	types - from 'struct _cairo *' to 'struct _cairo_surface *' by
+	passing the surface to cairo_surface_show_page(), not the context
+	* gtk/gtkprintoperation-win32.c(866) : get rid of warning C4018: 
+	'<' : signed/unsigned mismatch by using guint for the loop
+
+	* gtk/gtkmenu.c(gtk_menu_get_property) : property 'menu::active' is 
+	an uint, gtk_menu_get_active() returns the widget pointer. Convert
+	the latter to the former by calculating the index in menu::children
+	Also fix some occurences of g_return_if_fail() where 
+	g_return_val_if_fail() was meant
+
 2008-06-21  Björn Lindqvist  <bjourne@gmail.com>
 
 	Bug 539363 – Segfault when creating GtkPlugs

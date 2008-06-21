@@ -822,7 +822,7 @@ gtk_menu_get_property (GObject     *object,
   switch (prop_id)
     {
     case PROP_ACTIVE:
-      g_value_set_boolean (value, gtk_menu_get_active (menu));
+      g_value_set_uint (value, g_list_index (GTK_MENU_SHELL (menu)->children, gtk_menu_get_active (menu)));
       break;
     case PROP_ACCEL_GROUP:
       g_value_set_object (value, gtk_menu_get_accel_group (menu));
@@ -1776,7 +1776,7 @@ gtk_menu_set_accel_path (GtkMenu     *menu,
 const gchar*
 gtk_menu_get_accel_path (GtkMenu     *menu)
 {
-  g_return_if_fail (GTK_IS_MENU (menu));
+  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
 
   return menu->accel_path;
 }
@@ -5060,7 +5060,7 @@ gint
 gtk_menu_get_monitor (GtkMenu *menu)
 {
   GtkMenuPrivate *priv;
-  g_return_if_fail (GTK_IS_MENU (menu));
+  g_return_val_if_fail (GTK_IS_MENU (menu), -1);
 
   priv = gtk_menu_get_private (menu);
   
