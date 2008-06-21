@@ -63,8 +63,8 @@ struct _GtkMenuShell
   guint GSEAL (active) : 1;
   guint GSEAL (have_grab) : 1;
   guint GSEAL (have_xgrab) : 1;
-  guint GSEAL (unused1);
-  guint GSEAL (unused2);
+  guint GSEAL (ignore_leave) : 1; /* unused */
+  guint GSEAL (menu_flag) : 1;    /* unused */
   guint GSEAL (ignore_enter) : 1;
 };
 

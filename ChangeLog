@@ -1,3 +1,10 @@
+2008-06-21  Carlos Garnacho  <carlos@imendio.com>
+
+	Bug 539466 – GtkMenuShell API/ABI break in trunk.
+
+	* gtk/gtkmenushell.h: Fix API/ABI break, two guint fields had
+	different name and packing width.
+
 2008-06-21  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkiconcachevalidator.c (check_pixel_data): Cast to guint8* to avoid
