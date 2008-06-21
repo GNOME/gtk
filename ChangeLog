@@ -1,3 +1,8 @@
+2008-06-20  Jody Goldberg <jody@gnome.org>
+
+	* gtk/gtkprintoperation-win32.c (gtk_print_run_page_setup_dialog) : 
+	  Fix life cycle to avoid crash. [#536966]
+
 2008-06-20  Hans Breuer  <hans@breuer.org>
 
 	* gtk/gtkmenuitem.c gtk/gtkmessagedialog.c gtk/gtkplug.c : must return

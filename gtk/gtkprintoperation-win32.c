@@ -1867,9 +1867,6 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
 	devmode_to_settings (settings, pagesetupdlg->hDevMode);
     }
   
-  if (free_settings)
-    g_object_unref (settings);
-
   if (res)
     {
       gtk_page_setup_set_orientation (page_setup, 
@@ -1906,6 +1903,9 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
 					unit);
     }
   
+  if (free_settings)
+    g_object_unref (settings);
+
   return page_setup;
 }
 
