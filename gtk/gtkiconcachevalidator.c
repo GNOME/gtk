@@ -166,7 +166,7 @@ check_pixel_data (CacheInfo *info,
       GdkPixdata data; 
  
       check ("pixel data", gdk_pixdata_deserialize (&data, length,
-                                                    info->cache + offset + 8, 
+                                                    (const guint8*)info->cache + offset + 8, 
                                                     NULL));
     }
 	

@@ -1,3 +1,8 @@
+2008-06-21  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkiconcachevalidator.c (check_pixel_data): Cast to guint8* to avoid
+	a compiler warning.
+
 2008-06-21  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/gdkapplaunchcontext.h: remove redundant include, fix
