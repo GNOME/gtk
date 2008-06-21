@@ -1,3 +1,10 @@
+2008-06-21  Björn Lindqvist  <bjourne@gmail.com>
+
+	Bug 539363 – Segfault when creating GtkPlugs
+
+	* gtk/gtkplug.c (gtk_plug_class_init): Spaces not allowed in
+	property names. "socket window" => "socket-window"
+
 2008-06-20  Jody Goldberg <jody@gnome.org>
 
 	* gtk/gtkprintoperation-win32.c (gtk_print_run_page_setup_dialog) : 

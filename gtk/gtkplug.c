@@ -161,7 +161,7 @@ gtk_plug_class_init (GtkPlugClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_SOCKET_WINDOW,
-				   g_param_spec_object ("socket window",
+				   g_param_spec_object ("socket-window",
 							P_("Socket Window"),
 							P_("The window of the socket the plug is embedded in"),
 							GDK_TYPE_WINDOW,
