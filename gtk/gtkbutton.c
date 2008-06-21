@@ -447,8 +447,8 @@ gtk_button_class_init (GtkButtonClass *klass)
 					   g_param_spec_boolean ("displace-focus",
 								 P_("Displace focus"),
 								 P_("Whether the child_displacement_x/_y properties should also affect the focus rectangle"),
-						       FALSE,
-						       GTK_PARAM_READABLE));
+								 FALSE,
+								 GTK_PARAM_READABLE));
 
   /**
    * GtkButton:inner-border:
@@ -479,8 +479,14 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     G_MAXINT,
 							     2,
 							     GTK_PARAM_READABLE));
-  
 
+  /**
+   * GtkButton::gtk-button-images:
+   * 
+   * If stock icon in buttons should be shown at all.
+   * 
+   * Since: 2.4
+   */
   gtk_settings_install_property (g_param_spec_boolean ("gtk-button-images",
 						       P_("Show button images"),
 						       P_("Whether stock icons should be shown in buttons"),
