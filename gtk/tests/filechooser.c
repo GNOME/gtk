@@ -33,7 +33,7 @@
 #undef GTK_DISABLE_DEPRECATED
 #define SLEEP_DURATION  100
 
-#include <config.h>
+#include "config.h"
 #include <string.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>

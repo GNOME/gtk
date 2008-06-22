@@ -29,7 +29,7 @@
 #define LINE_ATTRIBUTES (GDK_GC_LINE_WIDTH|GDK_GC_LINE_STYLE| \
 			 GDK_GC_CAP_STYLE|GDK_GC_JOIN_STYLE)
 
-#include <config.h>
+#include "config.h"
 #include <string.h>
 
 #include "gdkgc.h"

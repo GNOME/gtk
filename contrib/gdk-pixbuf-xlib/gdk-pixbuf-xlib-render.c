@@ -22,7 +22,7 @@
 
 /* Trivially ported to Xlib(RGB) by John Harper. */
 
-#include <config.h>
+#include "config.h"
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-xlib-private.h"
 

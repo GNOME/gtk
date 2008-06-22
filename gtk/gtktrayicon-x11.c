@@ -22,7 +22,7 @@
  * http://www.freedesktop.org/wiki/Standards/systemtray-spec
  */
 
-#include <config.h>
+#include "config.h"
 #include <string.h>
 
 #include "gtkintl.h"

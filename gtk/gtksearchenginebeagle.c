@@ -20,7 +20,7 @@
  * Based on nautilus-search-engine-beagle.c
  */
 
-#include <config.h>
+#include "config.h"
 #include <gmodule.h>
 #include "gtksearchenginebeagle.h"
 

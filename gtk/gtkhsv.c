@@ -22,7 +22,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
+#include "config.h"
 #include <math.h>
 #include <string.h>
 #include "gtkhsv.h"

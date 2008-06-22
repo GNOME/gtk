@@ -20,7 +20,7 @@
  *   Mathias Hasselmann
  */
 
-#include <config.h>
+#include "config.h"
 #include "gtktoolshell.h"
 #include "gtkwidget.h"
 #include "gtkintl.h"

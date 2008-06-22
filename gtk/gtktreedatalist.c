@@ -20,7 +20,7 @@
  * do not use it.
  */
 
-#include <config.h>
+#include "config.h"
 #include "gtktreedatalist.h"
 #include "gtkalias.h"
 #include <string.h>

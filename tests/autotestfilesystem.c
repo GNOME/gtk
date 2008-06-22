@@ -23,7 +23,7 @@
 
 #define GTK_FILE_SYSTEM_ENABLE_UNSUPPORTED
 
-#include <config.h>
+#include "config.h"
 #include <string.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

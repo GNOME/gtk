@@ -18,7 +18,7 @@
  */
 
 
-#include <config.h>
+#include "config.h"
 #include "gtkcelleditable.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"

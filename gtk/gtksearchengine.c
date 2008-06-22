@@ -20,7 +20,7 @@
  * Based on nautilus-search-engine.c
  */
 
-#include <config.h>
+#include "config.h"
 #include "gtksearchengine.h"
 #include "gtksearchenginebeagle.h"
 #include "gtksearchenginesimple.h"

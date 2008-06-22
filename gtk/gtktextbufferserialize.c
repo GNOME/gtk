@@ -23,7 +23,7 @@
  * parts that deal with the format errors
  */
 
-#include <config.h>
+#include "config.h"
 
 #include <stdio.h>
 #include <string.h>

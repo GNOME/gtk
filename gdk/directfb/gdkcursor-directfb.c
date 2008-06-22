@@ -29,7 +29,7 @@
  * Written by Denis Oliver Kropp <dok@convergence.de> and
  *            Sven Neumann <sven@convergence.de>
  */
-#include <config.h>
+#include "config.h"
 #include "gdk.h"
 
 #include "gdkdirectfb.h"

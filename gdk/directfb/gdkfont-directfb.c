@@ -32,7 +32,7 @@
 
 #undef GDK_DISABLE_DEPRECATED
 
-#include <config.h>
+#include "config.h"
 #include "gdk.h"
 
 #include <string.h>

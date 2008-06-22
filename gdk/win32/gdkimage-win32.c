@@ -25,7 +25,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include <config.h>
+#include "config.h"
 #include "gdkimage.h"
 #include "gdkpixmap.h"
 #include "gdkscreen.h" /* gdk_screen_get_default() */

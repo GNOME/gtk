@@ -26,7 +26,7 @@
 
 #undef GDK_DISABLE_DEPRECATED
 
-#include <config.h>
+#include "config.h"
 #include <X11/Xlib.h>
 #include <X11/Xos.h>
 #include <locale.h>

@@ -49,7 +49,7 @@
  *  prior written authorization.
  */
 
-#include <config.h>
+#include "config.h"
 
 #include <Carbon/Carbon.h>
 #include <AppKit/NSEvent.h>

@@ -20,7 +20,7 @@
  *
  */
 
-#include <config.h>
+#include "config.h"
 #include <string.h>
 
 #import <Cocoa/Cocoa.h>

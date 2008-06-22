@@ -1,3 +1,10 @@
+2008-06-21  Johan Dahlin  <jdahlin@async.com.br>
+
+    * *.[ch]: Include "config.h" instead of <config.h>
+	Command used:
+	find -name \*.[ch]|xargs perl -p -i -e 's/^#include <config.h>/#include "config.h"/g'
+	Rubberstamped by Mitch and Tim
+
 2008-06-21  Carlos Garnacho  <carlos@imendio.com>
 
 	Bug 539466 – GtkMenuShell API/ABI break in trunk.

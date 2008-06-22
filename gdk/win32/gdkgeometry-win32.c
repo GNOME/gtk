@@ -38,7 +38,7 @@
  * so that big window emulation finally works.
  */
 
-#include <config.h>
+#include "config.h"
 #include "gdk.h"		/* For gdk_rectangle_intersect */
 #include "gdkregion.h"
 #include "gdkregion-generic.h"

@@ -20,7 +20,7 @@
  * Global clipboard abstraction. 
  */
 
-#include <config.h>
+#include "config.h"
 #include <string.h>
 
 #include "gtkclipboard.h"

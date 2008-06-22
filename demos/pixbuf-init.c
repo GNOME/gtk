@@ -1,4 +1,4 @@
-#include <config.h>
+#include "config.h"
 #include <glib.h>
 
 #include <sys/stat.h>

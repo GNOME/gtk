@@ -22,7 +22,7 @@
 #define GTK_ENABLE_BROKEN
 #undef GTK_DISABLE_DEPRECATED
 
-#include <config.h>
+#include "config.h"
 
 #include <gtk/gtk.h>
 #include "gtkalias.h"

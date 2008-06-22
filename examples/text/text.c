@@ -1,6 +1,6 @@
 
 #define GTK_ENABLE_BROKEN
-#include <config.h>
+#include "config.h"
 #include <stdio.h>
 #include <gtk/gtk.h>
 

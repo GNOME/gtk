@@ -20,7 +20,7 @@
  *          Carlos Garnacho Parro  <carlosg@gnome.org>
  */
 
-#include <config.h>
+#include "config.h"
 #include <gdk/gdkkeysyms.h>
 #include "gtkintl.h"
 #include "gtkprivate.h"

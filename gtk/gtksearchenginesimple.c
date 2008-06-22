@@ -20,7 +20,7 @@
  * Based on nautilus-search-engine-simple.c
  */
 
-#include <config.h>
+#include "config.h"
 
 /* these must be defined even when HAVE_GNU_FTW is not defined
  * because (really) old versions of GNU libc have ftw.h but do

@@ -31,7 +31,7 @@
  * - Error handling was designed to be very paranoid.
  */
 
-#include <config.h>
+#include "config.h"
 #include <stdio.h>
 #include <string.h>
 

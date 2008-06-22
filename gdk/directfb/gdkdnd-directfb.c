@@ -30,7 +30,7 @@
  *            Sven Neumann <sven@convergence.de>
  */
 
-#include <config.h>
+#include "config.h"
 #include "gdk.h"
 #include "gdkdirectfb.h"
 #include "gdkprivate-directfb.h"

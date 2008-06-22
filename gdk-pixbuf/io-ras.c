@@ -31,7 +31,7 @@ Known bugs:
 
 */
 
-#include <config.h>
+#include "config.h"
 #include <stdio.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

@@ -75,7 +75,7 @@
  */
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
-#include <config.h>
+#include "config.h"
 #include "gtktextdisplay.h"
 #include "gtkintl.h"
 #include "gtkalias.h"

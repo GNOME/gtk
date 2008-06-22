@@ -18,7 +18,7 @@
  */
 
 #undef GTK_DISABLE_DEPRECATED
-#include <config.h>
+#include "config.h"
 #include <gtk/gtk.h>
 
 static GtkActionGroup *action_group = NULL;

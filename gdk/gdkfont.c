@@ -26,7 +26,7 @@
 
 #undef GDK_DISABLE_DEPRECATED
 
-#include <config.h>
+#include "config.h"
 #include "gdkdisplay.h"
 #include "gdkfont.h"
 #include "gdkinternals.h"

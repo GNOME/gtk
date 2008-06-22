@@ -21,7 +21,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
+#include "config.h"
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-alias.h"
 #include <string.h>

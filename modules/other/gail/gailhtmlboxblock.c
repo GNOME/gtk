@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
+#include "config.h"
 
 #include <libgtkhtml/gtkhtml.h>
 #include "gailhtmlboxblock.h"

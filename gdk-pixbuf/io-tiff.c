@@ -27,7 +27,7 @@
 
 /* Following code (almost) blatantly ripped from Imlib */
 
-#include <config.h>
+#include "config.h"
 #include <stdlib.h>
 #include <string.h>
 #ifdef HAVE_UNISTD_H

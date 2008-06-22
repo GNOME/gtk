@@ -29,7 +29,7 @@ Known bugs:
         * Since this is based off the libgd implementation, no extended headers implemented (not required for a WAP client)
 */
 
-#include <config.h>
+#include "config.h"
 #include <stdio.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

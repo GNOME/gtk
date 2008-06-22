@@ -32,7 +32,7 @@
 
 #include "gdkinternals.h"
 
-#include <config.h>
+#include "config.h"
 
 #define GDK_TYPE_GC_QUARTZ              (_gdk_gc_quartz_get_type ())
 #define GDK_GC_QUARTZ(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_QUARTZ, GdkGCQuartz))

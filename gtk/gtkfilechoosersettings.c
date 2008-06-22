@@ -29,7 +29,7 @@
  * - Do we want lockdown?
  */
 
-#include <config.h>
+#include "config.h"
 #include <errno.h>
 #include <string.h>
 #include <glib.h>

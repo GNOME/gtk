@@ -22,7 +22,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
+#include "config.h"
 #include <errno.h>
 #include "gdk-pixbuf-private.h"
 #include "io-gif-animation.h"

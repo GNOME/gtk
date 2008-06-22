@@ -20,7 +20,7 @@
    Author: Matthias Clasen <mclasen@redhat.com>
 */
 
-#include <config.h>
+#include "config.h"
 
 #include "gdkapplaunchcontext.h"
 

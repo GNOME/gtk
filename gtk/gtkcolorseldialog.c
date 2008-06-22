@@ -23,7 +23,7 @@
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
-#include <config.h>
+#include "config.h"
 #include <string.h>
 #include <glib.h>
 #include "gtkcolorseldialog.h"

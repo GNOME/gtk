@@ -26,7 +26,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <config.h>
+#include "config.h"
 #include "gtkbutton.h"
 #include "gtkdialog.h"
 #include "gtkhbbox.h"

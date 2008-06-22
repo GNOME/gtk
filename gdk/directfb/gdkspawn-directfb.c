@@ -19,7 +19,7 @@
  * Authors: Mark McLoughlin <mark@skynet.ie>
  */
 
-#include <config.h>
+#include "config.h"
 #include <glib.h>
 #include "gdk.h"
 #include "gdkspawn.h"

@@ -20,7 +20,7 @@
 
 #undef GTK_DISABLE_DEPRECATED
 
-#include <config.h>
+#include "config.h"
 #include <gtk/gtk.h>
 #if defined (GDK_WINDOWING_X11)
 #include "x11/gdkx.h"

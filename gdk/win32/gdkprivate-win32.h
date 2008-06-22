@@ -41,7 +41,7 @@
 
 #include "gdkinternals.h"
 
-#include <config.h>
+#include "config.h"
 
 /* Make up for some minor w32api or MSVC6 header lossage */
 

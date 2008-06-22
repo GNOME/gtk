@@ -20,7 +20,7 @@
 
 /* By Tor Lillqvist <tml@novell.com> 2005 */
 
-#include <config.h>
+#include "config.h"
 
 #include "win32/gdkwin32.h"
 

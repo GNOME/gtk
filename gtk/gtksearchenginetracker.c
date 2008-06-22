@@ -20,7 +20,7 @@
  * Based on nautilus-search-engine-tracker.c
  */
 
-#include <config.h>
+#include "config.h"
 #include <gmodule.h>
 #include "gtksearchenginetracker.h"
 #if 0

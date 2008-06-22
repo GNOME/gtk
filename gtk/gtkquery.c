@@ -20,7 +20,7 @@
  * Based on nautilus-query.c
  */
 
-#include <config.h>
+#include "config.h"
 #include <string.h>
 
 #include "gtkquery.h"
