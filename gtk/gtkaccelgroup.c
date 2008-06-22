@@ -91,12 +91,12 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
 
   g_object_class_install_property (object_class,
                                    PROP_MODIFIER_MASK,
-                                   g_param_spec_enum ("modifier-mask",
-                                                      "Modifier Mask",
-                                                      "Modifier Mask",
-                                                      GDK_TYPE_MODIFIER_TYPE,
-                                                      0,
-                                                      G_PARAM_READABLE));
+                                   g_param_spec_flags ("modifier-mask",
+                                                       "Modifier Mask",
+                                                       "Modifier Mask",
+                                                       GDK_TYPE_MODIFIER_TYPE,
+                                                       0,
+                                                       G_PARAM_READABLE));
 
   /**
    * GtkAccelGroup::accel-activate:
