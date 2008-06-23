@@ -1,5 +1,9 @@
 2008-06-23  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkinvisible.h: formatting.
+
+2008-06-23  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkaction.h
 	* gtk/gtkbuildable.h
 	* gtk/gtkbuilderprivate.h

@@ -49,7 +49,8 @@ typedef struct _GtkInvisibleClass  GtkInvisibleClass;
 struct _GtkInvisible
 {
   GtkWidget widget;
-  gboolean GSEAL (has_user_ref_count);
+
+  gboolean   GSEAL (has_user_ref_count);
   GdkScreen *GSEAL (screen);
 };
 
@@ -67,7 +68,7 @@ struct _GtkInvisibleClass
 GType gtk_invisible_get_type (void) G_GNUC_CONST;
 
 GtkWidget* gtk_invisible_new            (void);
-GtkWidget* gtk_invisible_new_for_screen (GdkScreen *screen);
+GtkWidget* gtk_invisible_new_for_screen (GdkScreen    *screen);
 void	   gtk_invisible_set_screen	(GtkInvisible *invisible,
 					 GdkScreen    *screen);
 GdkScreen* gtk_invisible_get_screen	(GtkInvisible *invisible);
