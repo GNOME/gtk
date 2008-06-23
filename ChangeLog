@@ -1,3 +1,11 @@
+2008-06-23  Kristian Rietveld  <kris@imendio.com>
+
+	* gdk/gdkenumtypes.h.template:
+	* gdk-pixbuf/gdk-pixbuf-enum-types.h.template:
+	* gtk/gtktypebuiltins.h.template:
+	* perf/typebuiltins.h.template: do not hard code the prefix of the
+	enum, use @ENUMPREFIX@ instead (you need an up to date glib for this).
+
 2008-06-23  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmountoperation.h
