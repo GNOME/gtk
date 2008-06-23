@@ -24,9 +24,7 @@
 #ifndef __GTK_TREE_SELECTION_H__
 #define __GTK_TREE_SELECTION_H__
 
-#include <glib-object.h>
 #include <gtk/gtktreeview.h>
-
 
 G_BEGIN_DECLS
 
@@ -123,6 +121,5 @@ void             gtk_tree_selection_unselect_range      (GtkTreeSelection       
 
 
 G_END_DECLS
-
 
 #endif /* __GTK_TREE_SELECTION_H__ */

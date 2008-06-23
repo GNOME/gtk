@@ -25,7 +25,6 @@
 #ifndef __GTK_PRINT_OPERATION_PREVIEW_H__
 #define __GTK_PRINT_OPERATION_PREVIEW_H__
 
-#include <glib-object.h>
 #include <cairo.h>
 #include <gtk/gtkprintcontext.h>
 

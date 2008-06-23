@@ -25,7 +25,6 @@
 #ifndef __GTK_PRINT_CONTEXT_H__
 #define __GTK_PRINT_CONTEXT_H__
 
-#include <glib-object.h>
 #include <pango/pango.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkpagesetup.h>

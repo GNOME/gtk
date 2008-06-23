@@ -1,3 +1,33 @@
+2008-06-23  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkaction.h
+	* gtk/gtkbuildable.h
+	* gtk/gtkbuilderprivate.h
+	* gtk/gtkcelllayout.h
+	* gtk/gtkentrycompletion.h
+	* gtk/gtkfilechoosersettings.h
+	* gtk/gtkfilesystem.h
+	* gtk/gtkfilesystemmodel.h
+	* gtk/gtkicontheme.h
+	* gtk/gtklinkbutton.h
+	* gtk/gtkpagesetup.h
+	* gtk/gtkpapersize.h
+	* gtk/gtkprintcontext.h
+	* gtk/gtkprintoperation.h
+	* gtk/gtkprintoperationpreview.h
+	* gtk/gtkprintsettings.h
+	* gtk/gtkrecentchooserprivate.h
+	* gtk/gtkrecentmanager.h
+	* gtk/gtksearchengine.h
+	* gtk/gtktexttag.h
+	* gtk/gtktreeselection.h
+	* gtk/gtktreeviewcolumn.h
+	* gtk/gtkuimanager.h: remove redundant inclusion of <glib.h> and
+	<glib-object.h>. There is no point in relying on them being pulled
+	in by other headers in some places and placing them explicitly in
+	other places, so choose the "as little includes as possible"
+	approach and get rid of them.
+
 2008-06-23  Kristian Rietveld  <kris@imendio.com>
 
 	* gdk/gdkenumtypes.h.template:

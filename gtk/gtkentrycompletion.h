@@ -24,8 +24,6 @@
 #ifndef __GTK_ENTRY_COMPLETION_H__
 #define __GTK_ENTRY_COMPLETION_H__
 
-#include <glib-object.h>
-
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtkliststore.h>
 #include <gtk/gtktreeviewcolumn.h>

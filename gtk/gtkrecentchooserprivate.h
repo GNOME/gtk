@@ -19,11 +19,9 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef __GTK_RECENT_CHOOSER_PRIVATE_H__
 #define __GTK_RECENT_CHOOSER_PRIVATE_H__
-
-#include <glib-object.h>
 
 #include "gtkrecentmanager.h"
 #include "gtkrecentchooser.h"
@@ -40,5 +38,5 @@ void              _gtk_recent_chooser_item_activated     (GtkRecentChooser  *cho
 void              _gtk_recent_chooser_selection_changed  (GtkRecentChooser  *chooser);
 
 G_END_DECLS
- 
+
 #endif /* ! __GTK_RECENT_CHOOSER_PRIVATE_H__ */

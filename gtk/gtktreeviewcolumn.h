@@ -24,7 +24,6 @@
 #ifndef __GTK_TREE_VIEW_COLUMN_H__
 #define __GTK_TREE_VIEW_COLUMN_H__
 
-#include <glib-object.h>
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreesortable.h>

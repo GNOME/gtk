@@ -25,7 +25,6 @@
 #ifndef __GTK_PAPER_SIZE_H__
 #define __GTK_PAPER_SIZE_H__
 
-#include <glib-object.h>
 #include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS

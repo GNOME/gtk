@@ -24,8 +24,6 @@
 #ifndef __GTK_CELL_LAYOUT_H__
 #define __GTK_CELL_LAYOUT_H__
 
-#include <glib-object.h>
-
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkbuildable.h>

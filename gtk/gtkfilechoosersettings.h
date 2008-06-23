@@ -23,7 +23,6 @@
 #ifndef __GTK_FILE_CHOOSER_SETTINGS_H__
 #define __GTK_FILE_CHOOSER_SETTINGS_H__
 
-#include <glib-object.h>
 #include "gtkfilechooserprivate.h"
 
 G_BEGIN_DECLS

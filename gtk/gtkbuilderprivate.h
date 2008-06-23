@@ -21,7 +21,6 @@
 #ifndef __GTK_BUILDER_PRIVATE_H__
 #define __GTK_BUILDER_PRIVATE_H__
 
-#include <glib-object.h>
 #include "gtkbuilder.h"
 
 typedef struct {

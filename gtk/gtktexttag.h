@@ -54,7 +54,6 @@
 #ifndef __GTK_TEXT_TAG_H__
 #define __GTK_TEXT_TAG_H__
 
-#include <glib-object.h>
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
 

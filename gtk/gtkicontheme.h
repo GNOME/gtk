@@ -24,7 +24,6 @@
 #ifndef __GTK_ICON_THEME_H__
 #define __GTK_ICON_THEME_H__
 
-#include <glib-object.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdk.h>
 

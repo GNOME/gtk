@@ -21,7 +21,6 @@
 #ifndef __GTK_FILE_SYSTEM_MODEL_H__
 #define __GTK_FILE_SYSTEM_MODEL_H__
 
-#include <glib-object.h>
 #include "gtkfilesystem.h"
 #include <gtk/gtktreemodel.h>
 

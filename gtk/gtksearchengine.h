@@ -23,7 +23,6 @@
 #ifndef __GTK_SEARCH_ENGINE_H__
 #define __GTK_SEARCH_ENGINE_H__
 
-#include <glib-object.h>
 #include "gtkquery.h"
 
 G_BEGIN_DECLS

@@ -25,7 +25,6 @@
 #ifndef __GTK_RECENT_MANAGER_H__
 #define __GTK_RECENT_MANAGER_H__
 
-#include <glib-object.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdk.h>
 #include <time.h>
