@@ -31,11 +31,6 @@
 #ifndef __GTK_MOUNT_OPERATION_H__
 #define __GTK_MOUNT_OPERATION_H__
 
-#include <glib.h>
-#include <gio/gio.h>
-#include <gdk/gdk.h>
-#include <gtk/gtkwindow.h>
-
 G_BEGIN_DECLS
 
 #define GTK_TYPE_MOUNT_OPERATION         (gtk_mount_operation_get_type ())
@@ -81,4 +76,3 @@ GdkScreen       *gtk_mount_operation_get_screen (GtkMountOperation *op);
 G_END_DECLS
 
 #endif /* __GTK_MOUNT_OPERATION_H__ */
-

@@ -27,8 +27,6 @@
 #ifndef __GTK_SHOW_H__
 #define __GTK_SHOW_H__
 
-#include <gdk/gdk.h>
-
 G_BEGIN_DECLS
 
 gboolean gtk_show_uri  (GdkScreen   *screen,

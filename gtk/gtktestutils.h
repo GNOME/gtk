@@ -25,9 +25,6 @@
 #ifndef __GTK_TEST_UTILS_H__
 #define __GTK_TEST_UTILS_H__
 
-#include <gtk/gtkwidget.h>
-#include <gtk/gtkspinbutton.h>
-
 G_BEGIN_DECLS
 
 /* --- Gtk+ Test Utility API --- */

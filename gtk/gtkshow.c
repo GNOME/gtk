@@ -22,8 +22,7 @@
 
 #include "config.h"
 
-#include <glib.h>
-#include <gio/gio.h>
+#include <gdk/gdk.h>
 
 #include "gtkshow.h"
 

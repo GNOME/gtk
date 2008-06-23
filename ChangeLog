@@ -1,3 +1,10 @@
+2008-06-23  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmountoperation.h
+	* gtk/gtktestutils.h
+	* gtk/gtkshow.[ch]: remove as many includes as possible from these
+	new files. They can't be included individually, so nothing can break.
+
 2008-06-22  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkaccelgroup.c: use g_param_spec_flags(), not enum() when
