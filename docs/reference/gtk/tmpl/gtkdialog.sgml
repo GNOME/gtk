@@ -30,9 +30,8 @@ buttons.
 
 <para>
 If 'dialog' is a newly created dialog, the two primary areas of the window 
-can be accessed as <literal>GTK_DIALOG(dialog)->vbox</literal> and 
-<literal>GTK_DIALOG(dialog)->action_area</literal>,
-as can be seen from the example, below.
+can be accessed through gtk_dialog_get_content_area() and
+gtk_dialog_get_action_area(), as can be seen from the example, below.
 </para>
 
 <para>
@@ -74,7 +73,7 @@ dialog contents manually if you had more than a simple message in the dialog.
 
 void quick_message (gchar *message) {
 
-   GtkWidget *dialog, *label;
+   GtkWidget *dialog, *label, *content_area;
    
    /* Create the widgets */
    
@@ -84,6 +83,7 @@ void quick_message (gchar *message) {
                                          GTK_STOCK_OK,
                                          GTK_RESPONSE_NONE,
                                          NULL);
+   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
    label = gtk_label_new (message);
    
    /* Ensure that the dialog box is destroyed when the user responds. */
@@ -95,8 +95,7 @@ void quick_message (gchar *message) {
 
    /* Add the label, and show everything we've added to the dialog. */
 
-   gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox),
-                      label);
+   gtk_container_add (GTK_CONTAINER (content_area), label);
    gtk_widget_show_all (dialog);
 }
 

@@ -171,17 +171,8 @@ void gtk_dialog_response           (GtkDialog *dialog,
 /* Returns response_id */
 gint gtk_dialog_run                (GtkDialog *dialog);
 
-GtkWidget * gtk_dialog_get_action_area (GtkDialog *dialog);
-void        gtk_dialog_pack_start      (GtkDialog *dialog,
-                                        GtkWidget *widget,
-                                        gboolean   expand,
-                                        gboolean   fill,
-                                        guint      padding);
-void        gtk_dialog_pack_end        (GtkDialog *dialog,
-                                        GtkWidget *widget,
-                                        gboolean   expand,
-                                        gboolean   fill,
-                                        guint      padding);
+GtkWidget * gtk_dialog_get_action_area  (GtkDialog *dialog);
+GtkWidget * gtk_dialog_get_content_area (GtkDialog *dialog);
 
 /* For private use only */
 void _gtk_dialog_set_ignore_separator (GtkDialog *dialog,

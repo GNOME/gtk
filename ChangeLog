@@ -1,3 +1,17 @@
+2008-06-24  Carlos Garnacho  <carlos@imendio.com>
+
+	* gtk/gtkdialog.[ch]: Remove container implementation, which isn't
+	thought for handling non-direct children. Fixes #539732.
+	(gtk_dialog_pack_start) (gtk_dialog_pack_end): Removed as well, it
+	doesn't provide enough control to API users (removing, reordering...),
+	this is better handled through:
+	(gtk_dialog_get_content_area): New function which just returns
+	dialog->vbox.
+	* gtk/gtk.symbols: Modify accordingly.
+	* docs/reference/gtk/tmpl/gtkdialog.sgml: Update docs to recommend
+	using gtk_dialog_get_[action|content]_area() instead of accessing
+	dialog struct members directly.
+
 2008-06-24  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkassistant.h
