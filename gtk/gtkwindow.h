@@ -31,12 +31,10 @@
 #ifndef __GTK_WINDOW_H__
 #define __GTK_WINDOW_H__
 
-
 #include <gdk/gdk.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkbin.h>
 #include <gtk/gtkenums.h>
-#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 

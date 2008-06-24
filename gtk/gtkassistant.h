@@ -30,7 +30,6 @@
 #ifndef __GTK_ASSISTANT_H__
 #define __GTK_ASSISTANT_H__
 
-#include <gtk/gtkwidget.h>
 #include <gtk/gtkwindow.h>
 
 G_BEGIN_DECLS

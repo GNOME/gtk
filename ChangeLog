@@ -1,5 +1,18 @@
 2008-06-24  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkassistant.h
+	* gtk/gtkcellrenderer.h
+	* gtk/gtkfilechooserentry.h
+	* gtk/gtkprivate.h
+	* gtk/gtktooltip.h
+	* gtk/gtktreeview.h
+	* gtk/gtkwindow.h: no need to include gtkwidget.h or gtkobject.h
+	if there is any other widget included, they all have to include
+	their respective parent classes (the is-a relation works for
+	includes too).
+
+2008-06-24  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktextutil.h: remove includes from this internal header.
 
 	* gtk/gtktextutil.c: include gtktextbuffer.h before gtktextutil.h.

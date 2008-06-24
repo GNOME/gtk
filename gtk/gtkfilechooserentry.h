@@ -23,7 +23,6 @@
 
 #include "gtkfilesystem.h"
 #include "gtkfilechooser.h"
-#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 

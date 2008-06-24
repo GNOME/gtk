@@ -24,8 +24,6 @@
 #ifndef __GTK_CELL_RENDERER_H__
 #define __GTK_CELL_RENDERER_H__
 
-#include <gtk/gtkobject.h>
-#include <gtk/gtkwidget.h>
 #include <gtk/gtkcelleditable.h>
 
 G_BEGIN_DECLS

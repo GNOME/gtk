@@ -24,13 +24,11 @@
 #ifndef __GTK_TREE_VIEW_H__
 #define __GTK_TREE_VIEW_H__
 
-#include <gtk/gtkwidget.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkdnd.h>
 #include <gtk/gtkentry.h>
-
 
 G_BEGIN_DECLS
 

@@ -26,7 +26,6 @@
 #ifndef __GTK_TOOLTIP_H__
 #define __GTK_TOOLTIP_H__
 
-#include <gtk/gtkwidget.h>
 #include <gtk/gtkwindow.h>
 
 G_BEGIN_DECLS
