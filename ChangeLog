@@ -1,3 +1,8 @@
+2008-06-24  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkdialog.c (gtk_dialog_init): also revert change in how
+	the dialog's vbox was added (bug #539732).
+
 2008-06-24  Carlos Garnacho  <carlos@imendio.com>
 
 	* gtk/gtkdialog.[ch]: Remove container implementation, which isn't

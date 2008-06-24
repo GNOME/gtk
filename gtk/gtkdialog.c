@@ -256,18 +256,16 @@ gtk_dialog_init (GtkDialog *dialog)
                     "delete_event",
                     G_CALLBACK (gtk_dialog_delete_event_handler),
                     NULL);
-  
+
   dialog->vbox = gtk_vbox_new (FALSE, 0);
 
-  /* gtk_container_add () from superclass */
-  GTK_CONTAINER_CLASS (gtk_dialog_parent_class)->add (GTK_CONTAINER (dialog),
-						      dialog->vbox);
+  gtk_container_add (GTK_CONTAINER (dialog), dialog->vbox);
   gtk_widget_show (dialog->vbox);
 
   dialog->action_area = gtk_hbutton_box_new ();
 
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog->action_area),
-                             GTK_BUTTONBOX_END);  
+                             GTK_BUTTONBOX_END);
 
   gtk_box_pack_end (GTK_BOX (dialog->vbox), dialog->action_area,
                     FALSE, TRUE, 0);
