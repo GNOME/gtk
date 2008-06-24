@@ -25,8 +25,9 @@
  */
 
 #include "config.h"
-#include "gtktextutil.h"
+
 #include "gtktextview.h"
+#include "gtktextutil.h"
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 

@@ -1,3 +1,9 @@
+2008-06-24  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktextutil.h: remove includes from this internal header.
+
+	* gtk/gtktextutil.c: include gtktextbuffer.h before gtktextutil.h.
+
 2008-06-23  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkinvisible.h: formatting.
