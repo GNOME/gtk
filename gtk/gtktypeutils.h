@@ -120,13 +120,6 @@ typedef void (*GtkCallbackMarshal)  (GtkObject    *object,
 				     guint         n_args,
 				     GtkArg       *args);
 
-#ifndef GTK_DISABLE_DEPRECATED
-
-typedef void (*GtkDestroyNotify)    (gpointer      data);
-typedef void (*GtkSignalFunc)       (void);
-
-#endif /* GTK_DISABLE_DEPRECATED */
-
 /* This used to be defined in gtkitemfactory.h, but moved over here after
  * the complete deprecation of that header
  */
@@ -134,6 +127,9 @@ typedef gchar * (*GtkTranslateFunc) (const gchar  *path,
 				     gpointer      func_data);
 
 #ifndef GTK_DISABLE_DEPRECATED
+
+typedef void (*GtkDestroyNotify)    (gpointer      data);
+typedef void (*GtkSignalFunc)       (void);
 
 #define GTK_SIGNAL_FUNC(f)	    G_CALLBACK(f)
 
@@ -241,6 +237,7 @@ struct _GtkTypeInfo
   GtkClassInitFunc	 base_class_init_func;
 };
 
+void            gtk_type_init   (GTypeDebugFlags    debug_flags);
 GtkType         gtk_type_unique (GtkType            parent_type,
                                  const GtkTypeInfo *gtkinfo);
 gpointer        gtk_type_class  (GtkType            type);
@@ -265,11 +262,6 @@ GtkFlagValue*	gtk_type_flags_find_value	(GtkType	 flags_type,
 						 const gchar	*value_name);
 
 #endif /* GTK_DISABLE_DEPRECATED */
-
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-/* deprecated, use g_type_init() instead */
-void		gtk_type_init	(GTypeDebugFlags debug_flags);
-#endif /* !GTK_DISABLE_DEPRECATED || GTK_COMPILATION */
 
 G_END_DECLS
 

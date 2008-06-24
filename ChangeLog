@@ -1,5 +1,15 @@
 2008-06-24  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtktypeutils.h: deprecate gtk_type_init() unconditionally
+	(also for GTK_COMPILATION). Move some deprecated typedefs around
+	to reduce the mess with zillions of deprecated sections.
+
+	* gtk/gtkmain.c (do_post_parse_initialization): replace the call
+	to gtk_type_init() by g_type_init() and gtk_object_get_type() even
+	though the latter is probably completely pointless.
+
+2008-06-24  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkdialog.c (gtk_dialog_init): also revert change in how
 	the dialog's vbox was added (bug #539732).
 
