@@ -211,13 +211,6 @@
 
 	* gtk/gtklayout.c (enum): Remove left-over unused property enum.
 
-	* gtk/gtk.symbols:
-	* gtk/gtkscalebutton.c (gtk_scale_button_get_plus_button),
-	(gtk_scale_button_get_minus_button):
-	* gtk/gtkscalebutton.h:
-	Add missing accessor for sealed fields GtkScaleButton->plus_button and
-	minus_button.
-
 2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkscalebutton.c: Fix gtk-doc syntax, add missing trailing colon.

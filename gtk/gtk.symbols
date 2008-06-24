@@ -3309,8 +3309,6 @@ gtk_scale_button_set_icons
 gtk_scale_button_set_value
 gtk_scale_button_get_adjustment
 gtk_scale_button_set_adjustment
-gtk_scale_button_get_minus_button
-gtk_scale_button_get_plus_button
 #endif
 #endif
 
