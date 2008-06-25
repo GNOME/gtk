@@ -1,3 +1,12 @@
+2008-06-25  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktypeutils.h: there is no reason to include
+	<gtk/gtktypebuiltins.h> in the middle of the file, move it to top,
+	replacing the <glib-object.h> include. Also move the remaining few
+	non-deprecated things to the top and move some deprecated things
+	around to clean up the mess with too many deprecated sections even
+	more.
+
 2008-06-24  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktypeutils.h: deprecate gtk_type_init() unconditionally
