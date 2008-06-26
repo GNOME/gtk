@@ -1,3 +1,8 @@
+2008-06-26  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktextutil.c (_gtk_text_util_append_special_char_menuitems):
+	allocate the GtkTextUtilCallbackInfo structs with GSlice.
+
 2008-06-25  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktypeutils.h: there is no reason to include

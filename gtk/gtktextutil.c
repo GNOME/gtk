@@ -70,6 +70,26 @@ static const GtkUnicodeMenuEntry bidi_menu_entries[] = {
   { N_("ZWNJ Zero width _non-joiner"), 0x200C }
 };
 
+static GtkTextUtilCallbackInfo *
+callback_info_new (GtkTextUtilCharChosenFunc  func,
+                   gpointer                   data)
+{
+  GtkTextUtilCallbackInfo *info;
+
+  info = g_slice_new (GtkTextUtilCallbackInfo);
+
+  info->func = func;
+  info->data = data;
+
+  return info;
+}
+
+static void
+callback_info_free (GtkTextUtilCallbackInfo *info)
+{
+  g_slice_free (GtkTextUtilCallbackInfo, info);
+}
+
 static void
 activate_cb (GtkWidget *menu_item,
              gpointer   data)
@@ -106,25 +126,22 @@ _gtk_text_util_append_special_char_menuitems (GtkMenuShell              *menushe
                                               gpointer                   data)
 {
   int i;
-  
+
   for (i = 0; i < G_N_ELEMENTS (bidi_menu_entries); i++)
     {
       GtkWidget *menuitem;
       GtkTextUtilCallbackInfo *info;
 
-      /* wasteful to have a bunch of copies, but simplifies mem management */
-      info = g_new (GtkTextUtilCallbackInfo, 1);
-      info->func = func;
-      info->data = data;
-      
+      info = callback_info_new (func, data);
+
       menuitem = gtk_menu_item_new_with_mnemonic (_(bidi_menu_entries[i].label));
       g_object_set_data (G_OBJECT (menuitem), I_("gtk-unicode-menu-entry"),
                          (gpointer)&bidi_menu_entries[i]);
-      
+
       g_signal_connect_data (menuitem, "activate",
                              G_CALLBACK (activate_cb),
-                             info, (GClosureNotify) g_free, 0);
-      
+                             info, (GClosureNotify) callback_info_free, 0);
+
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (menushell, menuitem);
     }
