@@ -1,5 +1,13 @@
 2008-06-26  Richard Hult  <richard@imendio.com>
 
+	* gtk/gtkclipboard-quartz.c: (gtk_clipboard_wait_for_contents):
+	* gtk/gtkquartz.c:
+	(_gtk_quartz_get_selection_data_from_pasteboard),
+	(_gtk_quartz_set_selection_data_for_pasteboard): Patch from
+	Christian Dywan to clean up selection data setting.
+
+2008-06-26  Richard Hult  <richard@imendio.com>
+
 	* gtk/gtkdnd-quartz.c (gtk_drag_begin_internal): Don't use
 	deprecated function gtk_widget_ref, replace with g_object_ref.
 

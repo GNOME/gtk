@@ -168,10 +168,9 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
 	{
           const char *utf8_string = [s UTF8String];
 
-          selection_data->type = target;
-	  selection_data->format = 8;
-	  selection_data->length = strlen (utf8_string);
-	  selection_data->data = (guchar*) g_strdup (utf8_string);
+          gtk_selection_data_set (selection_data,
+                                  target, 8,
+                                  (guchar *)utf8_string, strlen (utf8_string));
 	}
     }
   else if (target == gdk_atom_intern_static_string ("application/x-color"))
@@ -243,12 +242,9 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
 
       if (data)
 	{
-	  selection_data->type = target;
-	  selection_data->format = 8;
-	  selection_data->length = [data length];
-	  selection_data->data = g_malloc (selection_data->length + 1);
-	  selection_data->data[selection_data->length] = '\0';
-	  memcpy(selection_data->data, [data bytes], selection_data->length);
+	  gtk_selection_data_set (selection_data,
+                                  target, 8,
+                                  [data bytes], [data length]);
 	}
     }
 
@@ -256,21 +252,30 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
 }
 
 void
-_gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
+_gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
 					       GtkSelectionData *selection_data)
 {
   NSString *type;
-  gchar *target = gdk_atom_name (selection_data->target);
+  gchar *target;
+  GdkDisplay *display;
+  gint format;
+  const guchar *data;
+  guint length;
+
+  target = gdk_atom_name (gtk_selection_data_get_target (selection_data));
+  display = gtk_selection_data_get_display (selection_data);
+  format = gtk_selection_data_get_format (selection_data);
+  data = gtk_selection_data_get_data (selection_data, &length);
 
   type = target_to_pasteboard_type (target);
   g_free (target);
 
   if ([type isEqualTo:NSStringPboardType]) 
-    [pasteboard setString:[NSString stringWithUTF8String:(const char *)selection_data->data]
+    [pasteboard setString:[NSString stringWithUTF8String:(const char *)data]
                   forType:type];
   else if ([type isEqualTo:NSColorPboardType])
     {
-      guint16 *color = (guint16 *)selection_data->data;
+      guint16 *color = (guint16 *)data;
       float red, green, blue, alpha;
       NSColor *nscolor;
 
@@ -278,7 +283,7 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
       green = (float)color[1] / 0xffff;
       blue  = (float)color[2] / 0xffff;
       alpha = (float)color[3] / 0xffff;
-      
+
       nscolor = [NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha];
       [nscolor writeToPasteboard:pasteboard];
     }
@@ -287,11 +292,11 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
       gchar **list = NULL;
       int count;
 
-      count = gdk_text_property_to_utf8_list_for_display (selection_data->display,
+      count = gdk_text_property_to_utf8_list_for_display (display,
                                                           gdk_atom_intern_static_string ("UTF8_STRING"),
-                                                          selection_data->format,
-                                                          selection_data->data,
-                                                          selection_data->length,
+                                                          format,
+                                                          data,
+                                                          length,
                                                           &list);
 
       if (count > 0)
@@ -310,8 +315,8 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
       g_strfreev (list);
     }
   else
-    [pasteboard setData:[NSData dataWithBytesNoCopy:selection_data->data
-	    	                             length:selection_data->length
+    [pasteboard setData:[NSData dataWithBytesNoCopy:data
+	    	                             length:length
 			               freeWhenDone:NO]
                 forType:type];
 }

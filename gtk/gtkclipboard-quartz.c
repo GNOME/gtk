@@ -872,31 +872,29 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
   if (target == gdk_atom_intern_static_string ("TARGETS")) 
     {
       NSArray *types = [clipboard->pasteboard types];
-      int i, count;
+      int i, length;
       GList *atom_list, *l;
       GdkAtom *atoms;
 
-      count = [types count];
-      atom_list = _gtk_quartz_pasteboard_types_to_atom_list (types);
+      length = [types count] * sizeof (GdkAtom);
       
       selection_data = g_slice_new (GtkSelectionData);
       selection_data->selection = clipboard->selection;
       selection_data->target = target;
-      selection_data->type = GDK_SELECTION_TYPE_ATOM;
-      selection_data->format = 32;
-      selection_data->length = count * sizeof (GdkAtom);
 
-      atoms = g_malloc (selection_data->length + 1);
-      
+      atoms = g_malloc (length);
+
+      atom_list = _gtk_quartz_pasteboard_types_to_atom_list (types);
       for (l = atom_list, i = 0; l ; l = l->next, i++)
 	atoms[i] = GDK_POINTER_TO_ATOM (l->data);
+      g_list_free (atom_list);
 
-      selection_data->data = (guchar *)atoms;
-      selection_data->data[selection_data->length] = '\0';
+      gtk_selection_data_set (selection_data,
+                              GDK_SELECTION_TYPE_ATOM, 32,
+                              (guchar *)atoms, length);
 
       [pool release];
 
-      g_list_free (atom_list);
       return selection_data;
     }
 
@@ -905,6 +903,7 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
 								   clipboard->selection);
 
   [pool release];
+
   return selection_data;
 }
 
