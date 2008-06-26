@@ -1,3 +1,8 @@
+2008-06-26  Richard Hult  <richard@imendio.com>
+
+	* gtk/gtkdnd-quartz.c (gtk_drag_begin_internal): Don't use
+	deprecated function gtk_widget_ref, replace with g_object_ref.
+
 2008-06-26  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkfilesystem.c: #include "config.h"

@@ -1052,7 +1052,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 
   info = gtk_drag_get_source_info (context, TRUE);
   
-  info->widget = gtk_widget_ref (widget);
+  info->widget = g_object_ref (widget);
   info->target_list = target_list;
   gtk_target_list_ref (target_list);
 
