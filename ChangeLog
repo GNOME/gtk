@@ -1,3 +1,7 @@
+2008-06-26  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkfilesystem.c: #include "config.h"
+
 2008-06-26  Carlos Garnacho  <carlos@imendio.com>
 
 	* gtk/gtkfilechooserdefault.c

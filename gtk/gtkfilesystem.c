@@ -20,9 +20,12 @@
  * Authors: Carlos Garnacho <carlos@imendio.com>
  */
 
+#include "config.h"
+
+#include <string.h>
+
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <string.h>
 
 #include "gtkfilesystem.h"
 #include "gtkprivate.h"
