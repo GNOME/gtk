@@ -1,3 +1,12 @@
+2008-06-26  Carlos Garnacho  <carlos@imendio.com>
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_get_current_folder): current_folder can be
+	NULL here, do not try to reference it (Bug #540235)
+	(gtk_file_chooser_default_get_files): Deal better with
+	gtk_file_chooser_default_get_current_folder() being able to return
+	NULL.
+
 2008-06-26  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktextutil.c (_gtk_text_util_append_special_char_menuitems):

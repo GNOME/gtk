@@ -7006,7 +7006,10 @@ gtk_file_chooser_default_get_current_folder (GtkFileChooser *chooser)
       return file;
     }
 
-  return g_object_ref (impl->current_folder);
+  if (impl->current_folder)
+    return g_object_ref (impl->current_folder);
+
+  return NULL;
 }
 
 static void
@@ -7389,7 +7392,12 @@ gtk_file_chooser_default_get_files (GtkFileChooser *chooser)
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER &&
       info.result == NULL)
     {
-      info.result = g_slist_prepend (info.result, _gtk_file_chooser_get_current_folder_file (chooser));
+      GFile *current_folder;
+
+      current_folder = _gtk_file_chooser_get_current_folder_file (chooser);
+
+      if (current_folder)
+        info.result = g_slist_prepend (info.result, current_folder);
     }
 
   return g_slist_reverse (info.result);
