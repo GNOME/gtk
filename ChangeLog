@@ -1,3 +1,10 @@
+2008-06-26  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkscalebutton.c
+	* gtk/gtkvolumebutton.c: remove redundant init() and class_init()
+	prototypes, remove redundant includes, remove a little trailing
+	whitespace.
+
 2008-06-26  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkclipboard-quartz.c: (gtk_clipboard_wait_for_contents):

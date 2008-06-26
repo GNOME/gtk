@@ -30,7 +30,7 @@
  * Modified by the GTK+ Team and others 2007.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -40,11 +40,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk/gdkkeysyms.h>
+
 #include "gtkmain.h"
 #include "gtkintl.h"
-#include "gtkrange.h"
 #include "gtkbindings.h"
-#include "gtkscale.h"
 #include "gtkvscale.h"
 #include "gtkframe.h"
 #include "gtkvbox.h"
@@ -52,9 +53,6 @@
 #include "gtkmarshalers.h"
 #include "gtkstock.h"
 #include "gtkprivate.h"
-
-#include <gdk-pixbuf/gdk-pixbuf.h>
-#include <gdk/gdkkeysyms.h>
 #include "gtkscalebutton.h"
 
 #include "gtkalias.h"
@@ -74,7 +72,7 @@ enum
 enum
 {
   PROP_0,
-  
+
   PROP_VALUE,
   PROP_SIZE,
   PROP_ADJUSTMENT,
@@ -90,18 +88,16 @@ struct _GtkScaleButtonPrivate
   GtkWidget *image;
 
   GtkIconSize size;
-  
+
   guint click_id;
   gint click_timeout;
   guint timeout : 1;
   gdouble direction;
   guint32 pop_time;
-  
+
   gchar **icon_list;
 };
 
-static void	gtk_scale_button_class_init	(GtkScaleButtonClass *klass);
-static void	gtk_scale_button_init		(GtkScaleButton      *button);
 static void	gtk_scale_button_dispose	(GObject             *object);
 static void     gtk_scale_button_finalize       (GObject             *object);
 static void	gtk_scale_button_set_property	(GObject             *object,
@@ -169,7 +165,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   gobject_class->dispose = gtk_scale_button_dispose;
   gobject_class->set_property = gtk_scale_button_set_property;
   gobject_class->get_property = gtk_scale_button_get_property;
-  
+
   widget_class->button_press_event = gtk_scale_button_press;
   widget_class->key_release_event = gtk_scale_button_key_release;
   widget_class->scroll_event = gtk_scale_button_scroll;
@@ -205,20 +201,20 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   /**
    * GtkScaleButton:icons:
    *
-   * The names of the icons to be used by the scale button. 
-   * The first item in the array will be used in the button 
-   * when the current value is the lowest value, the second 
-   * item for the highest value. All the subsequent icons will 
-   * be used for all the other values, spread evenly over the 
+   * The names of the icons to be used by the scale button.
+   * The first item in the array will be used in the button
+   * when the current value is the lowest value, the second
+   * item for the highest value. All the subsequent icons will
+   * be used for all the other values, spread evenly over the
    * range of values.
    *
-   * If there's only one icon name in the @icons array, it will 
-   * be used for all the values. If only two icon names are in 
-   * the @icons array, the first one will be used for the bottom 
+   * If there's only one icon name in the @icons array, it will
+   * be used for all the values. If only two icon names are in
+   * the @icons array, the first one will be used for the bottom
    * 50% of the scale, and the second one for the top 50%.
    *
-   * It is recommended to use at least 3 icons so that the 
-   * #GtkScaleButton reflects the current value of the scale 
+   * It is recommended to use at least 3 icons so that the
+   * #GtkScaleButton reflects the current value of the scale
    * better for the users.
    *
    * Since: 2.12
@@ -249,13 +245,13 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__DOUBLE,
 		  G_TYPE_NONE, 1, G_TYPE_DOUBLE);
-  
+
   /**
    * GtkScaleButton::popup:
    * @button: the object which received the signal
    *
-   * The ::popup signal is a 
-   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * The ::popup signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
    * which gets emitted to popup the scale widget.
    *
    * The default bindings for this signal are Space, Enter and Return.
@@ -275,8 +271,8 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * GtkScaleButton::popdown:
    * @button: the object which received the signal
    *
-   * The ::popdown signal is a 
-   * <link linkend="keybinding-signals">keybinding signal</link> 
+   * The ::popdown signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
    * which gets emitted to popdown the scale widget.
    *
    * The default binding for this signal is Escape.
@@ -410,7 +406,7 @@ gtk_scale_button_set_property (GObject       *object,
       gtk_scale_button_set_adjustment (button, g_value_get_object (value));
       break;
     case PROP_ICONS:
-      gtk_scale_button_set_icons (button, 
+      gtk_scale_button_set_icons (button,
                                   (const gchar **)g_value_get_boxed (value));
       break;
     default:
@@ -419,7 +415,7 @@ gtk_scale_button_set_property (GObject       *object,
     }
 }
 
-static void 
+static void
 gtk_scale_button_get_property (GObject     *object,
 			       guint        prop_id,
 			       GValue      *value,
@@ -456,13 +452,13 @@ gtk_scale_button_finalize (GObject *object)
 {
   GtkScaleButton *button = GTK_SCALE_BUTTON (object);
   GtkScaleButtonPrivate *priv = button->priv;
-  
+
   if (priv->icon_list)
     {
       g_strfreev (priv->icon_list);
       priv->icon_list = NULL;
     }
-  
+
   G_OBJECT_CLASS (gtk_scale_button_parent_class)->finalize (object);
 }
 
@@ -515,8 +511,8 @@ gtk_scale_button_new (GtkIconSize   size,
   GtkObject *adj;
 
   adj = gtk_adjustment_new (min, min, max, step, 10 * step, 0);
-  
-  button = g_object_new (GTK_TYPE_SCALE_BUTTON, 
+
+  button = g_object_new (GTK_TYPE_SCALE_BUTTON,
                          "adjustment", adj,
                          "icons", icons,
                          "size", size,
@@ -552,9 +548,9 @@ gtk_scale_button_get_value (GtkScaleButton * button)
  * @button: a #GtkScaleButton
  * @value: new value of the scale button
  *
- * Sets the current value of the scale; if the value is outside 
- * the minimum or maximum range values, it will be clamped to fit 
- * inside them. The scale button emits the #GtkScaleButton::value-changed 
+ * Sets the current value of the scale; if the value is outside
+ * the minimum or maximum range values, it will be clamped to fit
+ * inside them. The scale button emits the #GtkScaleButton::value-changed
  * signal if the value changes.
  *
  * Since: 2.12
@@ -577,7 +573,7 @@ gtk_scale_button_set_value (GtkScaleButton *button,
  * @button: a #GtkScaleButton
  * @icons: a %NULL-terminated array of icon names
  *
- * Sets the icons to be used by the scale button. 
+ * Sets the icons to be used by the scale button.
  * For details, see the #GtkScaleButton:icons property.
  *
  * Since: 2.12
@@ -630,7 +626,7 @@ gtk_scale_button_get_adjustment	(GtkScaleButton *button)
  * @button: a #GtkScaleButton
  * @adjustment: a #GtkAdjustment
  *
- * Sets the #GtkAdjustment to be used as a model 
+ * Sets the #GtkAdjustment to be used as a model
  * for the #GtkScaleButton's scale.
  * See gtk_range_set_adjustment() for details.
  *
@@ -1128,12 +1124,10 @@ typedef struct _GtkScaleButtonScale {
   GtkScaleButton *button;
 } GtkScaleButtonScale;
 
-static GType	gtk_scale_button_scale_get_type	  (void);
-static void	gtk_scale_button_scale_class_init (GtkScaleButtonScaleClass *klass);
-static gboolean	gtk_scale_button_scale_press	  (GtkWidget                *widget,
-						   GdkEventButton           *event);
-static gboolean gtk_scale_button_scale_release	  (GtkWidget                *widget,
-						   GdkEventButton           *event);
+static gboolean gtk_scale_button_scale_press   (GtkWidget      *widget,
+                                                GdkEventButton *event);
+static gboolean gtk_scale_button_scale_release (GtkWidget      *widget,
+                                                GdkEventButton *event);
 
 G_DEFINE_TYPE (GtkScaleButtonScale, gtk_scale_button_scale, GTK_TYPE_VSCALE)
 
@@ -1249,7 +1243,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
 				priv->size);
       return;
     }
- 
+
   num_icons = g_strv_length (priv->icon_list);
 
   /* The 1-icon special case */
@@ -1320,6 +1314,6 @@ gtk_scale_button_scale_value_changed (GtkRange *range)
   g_signal_emit (button, signals[VALUE_CHANGED], 0, value);
   g_object_notify (G_OBJECT (button), "value");
 }
- 
+
 #define __GTK_SCALE_BUTTON_C__
 #include "gtkaliasdef.c"

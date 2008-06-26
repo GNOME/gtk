@@ -24,12 +24,10 @@
  * Modified by the GTK+ Team and others 2007.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
-
-#include <atk/atk.h>
 
 #include "gtkvolumebutton.h"
 #include "gtkstock.h"
@@ -45,17 +43,15 @@ struct _GtkVolumeButton
   GtkScaleButton  parent;
 };
 
-static void	gtk_volume_button_class_init	(GtkVolumeButtonClass *klass);
-static void	gtk_volume_button_init		(GtkVolumeButton      *button);
-static gboolean	cb_query_tooltip                (GtkWidget            *button,
-						 gint                  x,
-						 gint                  y,
-						 gboolean              keyboard_mode,
-						 GtkTooltip           *tooltip,
-						 gpointer              user_data);
-static void	cb_value_changed		(GtkVolumeButton      *button,
-						 gdouble               value,
-						 gpointer              user_data);
+static gboolean	cb_query_tooltip (GtkWidget       *button,
+                                  gint             x,
+                                  gint             y,
+                                  gboolean         keyboard_mode,
+                                  GtkTooltip      *tooltip,
+                                  gpointer         user_data);
+static void	cb_value_changed (GtkVolumeButton *button,
+                                  gdouble          value,
+                                  gpointer         user_data);
 
 G_DEFINE_TYPE (GtkVolumeButton, gtk_volume_button, GTK_TYPE_SCALE_BUTTON)
 
@@ -186,7 +182,6 @@ cb_value_changed (GtkVolumeButton *button, gdouble value, gpointer user_data)
 {
   gtk_widget_trigger_tooltip_query (GTK_WIDGET (button));
 }
-
 
 #define __GTK_VOLUME_BUTTON_C__
 #include "gtkaliasdef.c"
