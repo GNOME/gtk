@@ -169,6 +169,9 @@ void            _gdk_x11_window_tmp_reset_bg  (GdkWindow *window,
 
 
 GdkCursor      *_gdk_x11_window_get_cursor    (GdkWindow *window);
+void            _gdk_x11_window_get_offsets   (GdkWindow *window,
+                                               gint      *x_offset,
+                                               gint      *y_offset);
 
 G_END_DECLS
 

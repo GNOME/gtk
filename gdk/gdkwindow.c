@@ -27,6 +27,7 @@
 
 #include "config.h"
 #include "gdkwindow.h"
+#include "gdkwindowimpl.h"
 #include "gdkinternals.h"
 #include "gdk.h"		/* For gdk_rectangle_union() */
 #include "gdkpixmap.h"
@@ -280,8 +281,6 @@ gdk_window_init (GdkWindowObject *window)
   window->window_type = GDK_WINDOW_CHILD;
 
   window->state = GDK_WINDOW_STATE_WITHDRAWN;
-  
-  window->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
 }
 
 static void
@@ -403,6 +402,7 @@ gdk_window_reparent (GdkWindow *window,
 		     gint       y)
 {
   GdkWindowObject *private;
+  gboolean show;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
@@ -423,7 +423,7 @@ gdk_window_reparent (GdkWindow *window,
       private->redirect = NULL;
     }
   
-  _gdk_window_reparent (window, new_parent, x, y);
+  show = GDK_WINDOW_IMPL_GET_IFACE (private->impl)->reparent (window, new_parent, x, y);
 
   /* Inherit parent redirect if we don't have our own */
   if (private->parent && private->redirect == NULL)
@@ -431,6 +431,9 @@ gdk_window_reparent (GdkWindow *window,
       private->redirect = private->parent->redirect;
       apply_redirect_to_children (private, private->redirect);
     }
+
+  if (show)
+    gdk_window_show (window);
 }
 
 static void
@@ -572,6 +575,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	  /* If we own the redirect, free it */
 	  if (private->redirect && private->redirect->redirected == private)
 	    gdk_window_redirect_free (private->redirect);
+
 	  private->redirect = NULL;
 	}
       break;
@@ -1205,7 +1209,7 @@ gdk_window_end_paint (GdkWindow *window)
 
   tmp_gc = _gdk_drawable_get_scratch_gc (window, FALSE);
 
-  _gdk_windowing_window_get_offsets (window, &x_offset, &y_offset);
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_offsets (window, &x_offset, &y_offset);
 
   gdk_gc_set_clip_region (tmp_gc, paint->region);
   gdk_gc_set_clip_origin (tmp_gc, - x_offset, - y_offset);
@@ -1309,7 +1313,7 @@ gdk_window_get_offsets (GdkWindow *window,
       *y_offset = paint->y_offset;
     }
   else
-    _gdk_windowing_window_get_offsets (window, x_offset, y_offset);
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_offsets (window, x_offset, y_offset);
 }
 
 /**
@@ -1423,7 +1427,7 @@ gdk_window_draw_rectangle (GdkDrawable *drawable,
     {
       GdkWindowPaint *paint = private->paint_stack->data;
       gdk_draw_rectangle (paint->pixmap, gc, filled,
-			  x - x_offset, y - y_offset, width, height);
+                          x - x_offset, y - y_offset, width, height);
     }
   else
     gdk_draw_rectangle (private->impl, gc, filled,
@@ -1580,9 +1584,9 @@ gdk_window_get_composite_drawable (GdkDrawable *drawable,
   GdkGC *tmp_gc;
   gboolean overlap_buffer;
 
-  _gdk_windowing_window_get_offsets (drawable,
-				     composite_x_offset,
-				     composite_y_offset);
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_offsets (GDK_WINDOW (drawable),
+                                                          composite_x_offset,
+                                                          composite_y_offset);
   
   if ((GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
       || private->paint_stack == NULL)
@@ -2188,15 +2192,18 @@ gdk_window_clear_area (GdkWindow *window,
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
-  
+
   if (private->paint_stack)
     gdk_window_clear_backing_rect (window, x, y, width, height);
   else
     {
       if (private->redirect)
 	gdk_window_clear_backing_rect_redirect (window, x, y, width, height);
-	
-      _gdk_windowing_window_clear_area (window, x, y, width, height);
+
+      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->clear_area (window,
+                                                             x, y,
+                                                             width, height,
+                                                             FALSE);
     }
 }
 
@@ -2232,8 +2239,11 @@ gdk_window_clear_area_e (GdkWindow *window,
 
   if (private->redirect)
     gdk_window_clear_backing_rect_redirect (window, x, y, width, height);
-  
-  _gdk_windowing_window_clear_area_e (window, x, y, width, height);
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->clear_area (window,
+                                                         x, y,
+                                                         width, height,
+                                                         TRUE);
 }
 
 static void
@@ -2444,6 +2454,7 @@ gdk_window_copy_to_image (GdkDrawable     *drawable,
 			  gint             width,
 			  gint             height)
 {
+  GdkWindowObject *private = (GdkWindowObject *) drawable;
   gint x_offset, y_offset;
   
   g_return_val_if_fail (GDK_IS_WINDOW (drawable), NULL);
@@ -2455,9 +2466,10 @@ gdk_window_copy_to_image (GdkDrawable     *drawable,
    * we can ignore the paint stack.
    */
   
-  _gdk_windowing_window_get_offsets (drawable, &x_offset, &y_offset);
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_offsets (drawable,
+                                                          &x_offset, &y_offset);
   
-  return gdk_drawable_copy_to_image (((GdkWindowObject*)drawable)->impl,
+  return gdk_drawable_copy_to_image (private->impl,
 				     image,
 				     src_x - x_offset,
 				     src_y - y_offset,
@@ -3383,6 +3395,740 @@ gdk_window_foreign_new (GdkNativeWindow anid)
 }
 
 /**
+ * gdk_window_show_unraised:
+ * @window: a #GdkWindow
+ *
+ * Shows a #GdkWindow onscreen, but does not modify its stacking
+ * order. In contrast, gdk_window_show() will raise the window
+ * to the top of the window stack.
+ *
+ * On the X11 platform, in Xlib terms, this function calls
+ * XMapWindow() (it also updates some internal GDK state, which means
+ * that you can't really use XMapWindow() directly on a GDK window).
+ */
+void
+gdk_window_show_unraised (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+  if (private->destroyed)
+    return;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show (window, FALSE);
+}
+
+static inline void
+gdk_window_raise_internal (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowObject *parent = private->parent;
+
+  if (parent)
+    {
+      parent->children = g_list_remove (parent->children, window);
+      parent->children = g_list_prepend (parent->children, window);
+    }
+}
+
+/**
+ * gdk_window_raise:
+ * @window: a #GdkWindow
+ *
+ * Raises @window to the top of the Z-order (stacking order), so that
+ * other windows with the same parent window appear below @window.
+ * This is true whether or not the windows are visible.
+ *
+ * If @window is a toplevel, the window manager may choose to deny the
+ * request to move the window in the Z-order, gdk_window_raise() only
+ * requests the restack, does not guarantee it.
+ */
+void
+gdk_window_raise (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+  if (private->destroyed)
+    return;
+
+  /* Keep children in (reverse) stacking order */
+  gdk_window_raise_internal (window);
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->raise (window);
+}
+
+static void
+gdk_window_lower_internal (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowObject *parent = private->parent;
+
+  if (parent)
+    {
+      parent->children = g_list_remove (parent->children, window);
+      parent->children = g_list_append (parent->children, window);
+    }
+}
+
+/**
+ * gdk_window_lower:
+ * @window: a #GdkWindow
+ *
+ * Lowers @window to the bottom of the Z-order (stacking order), so that
+ * other windows with the same parent window appear above @window.
+ * This is true whether or not the other windows are visible.
+ *
+ * If @window is a toplevel, the window manager may choose to deny the
+ * request to move the window in the Z-order, gdk_window_lower() only
+ * requests the restack, does not guarantee it.
+ *
+ * Note that gdk_window_show() raises the window again, so don't call this
+ * function before gdk_window_show(). (Try gdk_window_show_unraised().)
+ */
+void
+gdk_window_lower (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+  if (private->destroyed)
+    return;
+
+  /* Keep children in (reverse) stacking order */
+  gdk_window_lower_internal (window);
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->lower (window);
+}
+
+/**
+ * gdk_window_show:
+ * @window: a #GdkWindow
+ *
+ * Like gdk_window_show_unraised(), but also raises the window to the
+ * top of the window stack (moves the window to the front of the
+ * Z-order).
+ *
+ * This function maps a window so it's visible onscreen. Its opposite
+ * is gdk_window_hide().
+ *
+ * When implementing a #GtkWidget, you should call this function on the widget's
+ * #GdkWindow as part of the "map" method.
+ */
+void
+gdk_window_show (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+  if (private->destroyed)
+    return;
+
+  /* Keep children in (reverse) stacking order */
+  gdk_window_raise_internal (window);
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show (window, TRUE);
+}
+
+/**
+ * gdk_window_hide:
+ * @window: a #GdkWindow
+ *
+ * For toplevel windows, withdraws them, so they will no longer be
+ * known to the window manager; for all windows, unmaps them, so
+ * they won't be displayed. Normally done automatically as
+ * part of gtk_widget_hide().
+ */
+void
+gdk_window_hide (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+  if (private->destroyed)
+    return;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->hide (window);
+}
+
+/**
+ * gdk_window_withdraw:
+ * @window: a toplevel #GdkWindow
+ *
+ * Withdraws a window (unmaps it and asks the window manager to forget about it).
+ * This function is not really useful as gdk_window_hide() automatically
+ * withdraws toplevel windows before hiding them.
+ **/
+void
+gdk_window_withdraw (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+  if (private->destroyed)
+    return;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->withdraw (window);
+}
+
+/**
+ * gdk_window_set_events:
+ * @window: a #GdkWindow
+ * @event_mask: event mask for @window
+ *
+ * The event mask for a window determines which events will be reported
+ * for that window. For example, an event mask including #GDK_BUTTON_PRESS_MASK
+ * means the window should report button press events. The event mask
+ * is the bitwise OR of values from the #GdkEventMask enumeration.
+ **/
+void
+gdk_window_set_events (GdkWindow       *window,
+		       GdkEventMask     event_mask)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+  if (private->destroyed)
+    return;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_events (window, event_mask);
+}
+
+/**
+ * gdk_window_get_events:
+ * @window: a #GdkWindow
+ *
+ * Gets the event mask for @window. See gdk_window_set_events().
+ *
+ * Return value: event mask for @window
+ **/
+GdkEventMask
+gdk_window_get_events (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+
+  private = (GdkWindowObject *) window;
+  if (private->destroyed)
+    return 0;
+
+  return GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_events (window);
+}
+
+/**
+ * gdk_window_move:
+ * @window: a #GdkWindow
+ * @x: X coordinate relative to window's parent
+ * @y: Y coordinate relative to window's parent
+ *
+ * Repositions a window relative to its parent window.
+ * For toplevel windows, window managers may ignore or modify the move;
+ * you should probably use gtk_window_move() on a #GtkWindow widget
+ * anyway, instead of using GDK functions. For child windows,
+ * the move will reliably succeed.
+ *
+ * If you're also planning to resize the window, use gdk_window_move_resize()
+ * to both move and resize simultaneously, for a nicer visual effect.
+ **/
+void
+gdk_window_move (GdkWindow *window,
+		 gint       x,
+		 gint       y)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+  if (private->destroyed)
+    return;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->move_resize (window, TRUE, x, y, -1, -1);
+}
+
+/**
+ * gdk_window_resize:
+ * @window: a #GdkWindow
+ * @width: new width of the window
+ * @height: new height of the window
+ *
+ * Resizes @window; for toplevel windows, asks the window manager to resize
+ * the window. The window manager may not allow the resize. When using GTK+,
+ * use gtk_window_resize() instead of this low-level GDK function.
+ *
+ * Windows may not be resized below 1x1.
+ *
+ * If you're also planning to move the window, use gdk_window_move_resize()
+ * to both move and resize simultaneously, for a nicer visual effect.
+ **/
+void
+gdk_window_resize (GdkWindow *window,
+		   gint       width,
+		   gint       height)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+  if (private->destroyed)
+    return;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->move_resize (window, FALSE, 0, 0, width, height);
+}
+
+
+/**
+ * gdk_window_move_resize:
+ * @window: a #GdkWindow
+ * @x: new X position relative to window's parent
+ * @y: new Y position relative to window's parent
+ * @width: new width
+ * @height: new height
+ *
+ * Equivalent to calling gdk_window_move() and gdk_window_resize(),
+ * except that both operations are performed at once, avoiding strange
+ * visual effects. (i.e. the user may be able to see the window first
+ * move, then resize, if you don't use gdk_window_move_resize().)
+ **/
+void
+gdk_window_move_resize (GdkWindow *window,
+			gint       x,
+			gint       y,
+			gint       width,
+			gint       height)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+  if (private->destroyed)
+    return;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->move_resize (window, TRUE, x, y, width, height);
+}
+
+
+/**
+ * gdk_window_scroll:
+ * @window: a #GdkWindow
+ * @dx: Amount to scroll in the X direction
+ * @dy: Amount to scroll in the Y direction
+ *
+ * Scroll the contents of @window, both pixels and children, by the
+ * given amount. @window itself does not move. Portions of the window
+ * that the scroll operation brings in from offscreen areas are
+ * invalidated. The invalidated region may be bigger than what would
+ * strictly be necessary.
+ *
+ * For X11, a minimum area will be invalidated if the window has no
+ * subwindows, or if the edges of the window's parent do not extend
+ * beyond the edges of the window. In other cases, a multi-step process
+ * is used to scroll the window which may produce temporary visual
+ * artifacts and unnecessary invalidations.
+ **/
+void
+gdk_window_scroll (GdkWindow *window,
+		   gint       dx,
+		   gint       dy)
+{
+  GdkWindowObject *private = (GdkWindowObject *) window;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (dx == 0 && dy == 0)
+    return;
+
+  if (private->destroyed)
+    return;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->scroll (window, dx, dy);
+}
+
+/**
+ * gdk_window_move_region:
+ * @window: a #GdkWindow
+ * @region: The #GdkRegion to move
+ * @dx: Amount to move in the X direction
+ * @dy: Amount to move in the Y direction
+ *
+ * Move the part of @window indicated by @region by @dy pixels in the Y
+ * direction and @dx pixels in the X direction. The portions of @region
+ * that not covered by the new position of @region are invalidated.
+ *
+ * Child windows are not moved.
+ *
+ * Since: 2.8
+ */
+void
+gdk_window_move_region (GdkWindow       *window,
+			const GdkRegion *region,
+			gint             dx,
+			gint             dy)
+{
+  GdkWindowObject *private = (GdkWindowObject *) window;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (region != NULL);
+
+  if (dx == 0 && dy == 0)
+    return;
+
+  if (private->destroyed)
+    return;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->move_region (window, region, dx, dy);
+}
+
+/**
+ * gdk_window_set_background:
+ * @window: a #GdkWindow
+ * @color: an allocated #GdkColor
+ *
+ * Sets the background color of @window. (However, when using GTK+,
+ * set the background of a widget with gtk_widget_modify_bg() - if
+ * you're an application - or gtk_style_set_background() - if you're
+ * implementing a custom widget.)
+ *
+ * The @color must be allocated; gdk_rgb_find_color() is the best way
+ * to allocate a color.
+ *
+ * See also gdk_window_set_back_pixmap().
+ */
+void
+gdk_window_set_background (GdkWindow      *window,
+			   const GdkColor *color)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_background (window, color);
+}
+
+/**
+ * gdk_window_set_back_pixmap:
+ * @window: a #GdkWindow
+ * @pixmap: a #GdkPixmap, or %NULL
+ * @parent_relative: whether the tiling origin is at the origin of
+ *   @window's parent
+ *
+ * Sets the background pixmap of @window. May also be used to set a
+ * background of "None" on @window, by setting a background pixmap
+ * of %NULL.
+ *
+ * A background pixmap will be tiled, positioning the first tile at
+ * the origin of @window, or if @parent_relative is %TRUE, the tiling
+ * will be done based on the origin of the parent window (useful to
+ * align tiles in a parent with tiles in a child).
+ *
+ * A background pixmap of %NULL means that the window will have no
+ * background.  A window with no background will never have its
+ * background filled by the windowing system, instead the window will
+ * contain whatever pixels were already in the corresponding area of
+ * the display.
+ *
+ * The windowing system will normally fill a window with its background
+ * when the window is obscured then exposed, and when you call
+ * gdk_window_clear().
+ */
+void
+gdk_window_set_back_pixmap (GdkWindow *window,
+			    GdkPixmap *pixmap,
+			    gboolean   parent_relative)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (pixmap == NULL || !parent_relative);
+  g_return_if_fail (pixmap == NULL || gdk_drawable_get_depth (window) == gdk_drawable_get_depth (pixmap));
+
+  private = (GdkWindowObject *) window;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_back_pixmap (window, pixmap, parent_relative);
+}
+
+/**
+ * gdk_window_set_cursor:
+ * @window: a #GdkWindow
+ * @cursor: a cursor
+ *
+ * Sets the mouse pointer for a #GdkWindow. Use gdk_cursor_new() or
+ * gdk_cursor_new_from_pixmap() to create the cursor.
+ * To make the cursor invisible, use gdk_cursor_new_from_pixmap() to create
+ * a cursor with no pixels in it. Passing %NULL for the @cursor argument
+ * to gdk_window_set_cursor() means that @window will use the cursor of
+ * its parent window. Most windows should use this default.
+ */
+void
+gdk_window_set_cursor (GdkWindow *window,
+		       GdkCursor *cursor)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_cursor (window, cursor);
+}
+
+/**
+ * gdk_window_get_geometry:
+ * @window: a #GdkWindow
+ * @x: return location for X coordinate of window (relative to its parent)
+ * @y: return location for Y coordinate of window (relative to its parent)
+ * @width: return location for width of window
+ * @height: return location for height of window
+ * @depth: return location for bit depth of window
+ *
+ * Any of the return location arguments to this function may be %NULL,
+ * if you aren't interested in getting the value of that field.
+ *
+ * The X and Y coordinates returned are relative to the parent window
+ * of @window, which for toplevels usually means relative to the
+ * window decorations (titlebar, etc.) rather than relative to the
+ * root window (screen-size background window).
+ *
+ * On the X11 platform, the geometry is obtained from the X server,
+ * so reflects the latest position of @window; this may be out-of-sync
+ * with the position of @window delivered in the most-recently-processed
+ * #GdkEventConfigure. gdk_window_get_position() in contrast gets the
+ * position from the most recent configure event.
+ *
+ * <note>
+ * If @window is not a toplevel, it is <emphasis>much</emphasis> better
+ * to call gdk_window_get_position() and gdk_drawable_get_size() instead,
+ * because it avoids the roundtrip to the X server and because
+ * gdk_drawable_get_size() supports the full 32-bit coordinate space,
+ * whereas gdk_window_get_geometry() is restricted to the 16-bit
+ * coordinates of X11.
+ *</note>
+ **/
+void
+gdk_window_get_geometry (GdkWindow *window,
+			 gint      *x,
+			 gint      *y,
+			 gint      *width,
+			 gint      *height,
+			 gint      *depth)
+{
+  GdkWindowObject *private;
+
+  if (!window)
+    {
+      GDK_NOTE (MULTIHEAD,
+		g_message ("gdk_window_get_geometry(): Window needs "
+                           "to be non-NULL to be multi head safe"));
+      window = gdk_screen_get_root_window ((gdk_screen_get_default ()));
+    }
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+
+  if (!GDK_WINDOW_DESTROYED (window))
+    {
+      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_geometry (window, x, y,
+							       width, height,
+                                                               depth);
+    }
+}
+
+/**
+ * gdk_window_get_origin:
+ * @window: a #GdkWindow
+ * @x: return location for X coordinate
+ * @y: return location for Y coordinate
+ *
+ * Obtains the position of a window in root window coordinates.
+ * (Compare with gdk_window_get_position() and
+ * gdk_window_get_geometry() which return the position of a window
+ * relative to its parent window.)
+ *
+ * Return value: not meaningful, ignore
+ */
+gint
+gdk_window_get_origin (GdkWindow *window,
+		       gint      *x,
+		       gint      *y)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+
+  private = (GdkWindowObject *) window;
+
+  return GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_origin (window, x, y);
+}
+
+/**
+ * gdk_window_shape_combine_mask:
+ * @window: a #GdkWindow
+ * @mask: shape mask
+ * @x: X position of shape mask with respect to @window
+ * @y: Y position of shape mask with respect to @window
+ *
+ * Applies a shape mask to @window. Pixels in @window corresponding to
+ * set bits in the @mask will be visible; pixels in @window
+ * corresponding to unset bits in the @mask will be transparent. This
+ * gives a non-rectangular window.
+ *
+ * If @mask is %NULL, the shape mask will be unset, and the @x/@y
+ * parameters are not used.
+ *
+ * On the X11 platform, this uses an X server extension which is
+ * widely available on most common platforms, but not available on
+ * very old X servers, and occasionally the implementation will be
+ * buggy. On servers without the shape extension, this function
+ * will do nothing.
+ *
+ * This function works on both toplevel and child windows.
+ */
+void
+gdk_window_shape_combine_mask (GdkWindow *window,
+			       GdkBitmap *mask,
+			       gint       x,
+                               gint       y)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_mask (window, mask, x, y);
+}
+
+/**
+ * gdk_window_shape_combine_region:
+ * @window: a #GdkWindow
+ * @shape_region: region of window to be non-transparent
+ * @offset_x: X position of @shape_region in @window coordinates
+ * @offset_y: Y position of @shape_region in @window coordinates
+ *
+ * Makes pixels in @window outside @shape_region be transparent,
+ * so that the window may be nonrectangular. See also
+ * gdk_window_shape_combine_mask() to use a bitmap as the mask.
+ *
+ * If @shape_region is %NULL, the shape will be unset, so the whole
+ * window will be opaque again. @offset_x and @offset_y are ignored
+ * if @shape_region is %NULL.
+ *
+ * On the X11 platform, this uses an X server extension which is
+ * widely available on most common platforms, but not available on
+ * very old X servers, and occasionally the implementation will be
+ * buggy. On servers without the shape extension, this function
+ * will do nothing.
+ *
+ * This function works on both toplevel and child windows.
+ */
+void
+gdk_window_shape_combine_region (GdkWindow       *window,
+                                 const GdkRegion *shape_region,
+                                 gint             offset_x,
+                                 gint             offset_y)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_region (window, shape_region, offset_x, offset_y);
+}
+
+/**
+ * gdk_window_set_child_shapes:
+ * @window: a #GdkWindow
+ *
+ * Sets the shape mask of @window to the union of shape masks
+ * for all children of @window, ignoring the shape mask of @window
+ * itself. Contrast with gdk_window_merge_child_shapes() which includes
+ * the shape mask of @window in the masks to be merged.
+ **/
+void
+gdk_window_set_child_shapes (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_child_shapes (window);
+}
+
+/**
+ * gdk_window_merge_child_shapes:
+ * @window: a #GdkWindow
+ *
+ * Merges the shape masks for any child windows into the
+ * shape mask for @window. i.e. the union of all masks
+ * for @window and its children will become the new mask
+ * for @window. See gdk_window_shape_combine_mask().
+ *
+ * This function is distinct from gdk_window_set_child_shapes()
+ * because it includes @window's shape mask in the set of shapes to
+ * be merged.
+ */
+void
+gdk_window_merge_child_shapes (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->merge_child_shapes (window);
+}
+
+
+/**
+ * gdk_window_set_static_gravities:
+ * @window: a #GdkWindow
+ * @use_static: %TRUE to turn on static gravity
+ *
+ * Set the bit gravity of the given window to static, and flag it so
+ * all children get static subwindow gravity. This is used if you are
+ * implementing scary features that involve deep knowledge of the
+ * windowing system. Don't worry about it unless you have to.
+ *
+ * Return value: %TRUE if the server supports static gravity
+ */
+gboolean
+gdk_window_set_static_gravities (GdkWindow *window,
+				 gboolean   use_static)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+  private = (GdkWindowObject *) window;
+
+  return GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_static_gravities (window, use_static);
+}
+
+/**
  * gdk_window_set_composited:
  * @window: a #GdkWindow
  * @composited: %TRUE to set the window as composited
@@ -3647,9 +4393,9 @@ _gdk_window_calculate_full_clip_region (GdkWindow *window,
 	  
 	  if (!GDK_WINDOW_IS_MAPPED (child) || child_private->input_only)
 	    continue;
-	  
-	  window_get_size_rectangle (child, &visible_rect);
-	  
+
+          window_get_size_rectangle (child, &visible_rect);
+
 	  /* Convert rect to "window" coords */
 	  visible_rect.x += child_private->x - x_offset;
 	  visible_rect.y += child_private->y - y_offset;

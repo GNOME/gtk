@@ -240,11 +240,14 @@ void _gdk_gc_update_context (GdkGC          *gc,
  * Interfaces used by windowing code *
  *************************************/
 
-void       _gdk_window_destroy           (GdkWindow   *window,
-					  gboolean     foreign_destroy);
-void       _gdk_window_clear_update_area (GdkWindow   *window);
+GdkWindow *_gdk_window_new               (GdkWindow     *window,
+                                          GdkWindowAttr *attributes,
+                                          gint           attributes_mask);
+void       _gdk_window_destroy           (GdkWindow     *window,
+					  gboolean       foreign_destroy);
+void       _gdk_window_clear_update_area (GdkWindow     *window);
 
-void       _gdk_screen_close             (GdkScreen   *screen);
+void       _gdk_screen_close             (GdkScreen     *screen);
 
 const char *_gdk_get_sm_client_id (void);
 
@@ -283,16 +286,6 @@ gchar *_gdk_windowing_substitute_screen_number (const gchar *display_name,
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
 						 gint       *x_offset,
 						 gint       *y_offset);
-void     _gdk_windowing_window_clear_area       (GdkWindow  *window,
-						 gint        x,
-						 gint        y,
-						 gint        width,
-						 gint        height);
-void     _gdk_windowing_window_clear_area_e     (GdkWindow  *window,
-						 gint        x,
-						 gint        y,
-						 gint        width,
-						 gint        height);
 
 void       _gdk_windowing_get_pointer        (GdkDisplay       *display,
 					      GdkScreen       **screen,

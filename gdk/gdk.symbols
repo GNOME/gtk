@@ -647,6 +647,29 @@ gdk_window_impl_x11_get_type G_GNUC_CONST
 #if IN_FILE(__GDK_WINDOW_C__)
 gdk_get_default_root_window
 gdk_window_new
+gdk_window_show_unraised
+gdk_window_show
+gdk_window_hide
+gdk_window_withdraw
+gdk_window_get_events
+gdk_window_set_events
+gdk_window_raise
+gdk_window_lower
+gdk_window_move
+gdk_window_resize
+gdk_window_move_resize
+gdk_window_scroll
+gdk_window_move_region
+gdk_window_set_background
+gdk_window_set_back_pixmap
+gdk_window_set_cursor
+gdk_window_get_geometry
+gdk_window_get_origin
+gdk_window_shape_combine_mask
+gdk_window_shape_combine_region
+gdk_window_set_child_shapes
+gdk_window_merge_child_shapes
+gdk_window_set_static_gravities
 gdk_window_reparent
 gdk_window_add_filter
 gdk_window_at_pointer
@@ -699,27 +722,11 @@ gdk_window_register_dnd
 #endif
 
 #if IN_HEADER(__GDK_WINDOW_H__)
-#if IN_FILE(__GDK_GEOMETRY_X11_C__)
-gdk_window_scroll
-gdk_window_move_region
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WINDOW_H__)
 #if IN_FILE(__GDK_WINDOW_X11_C__)
 gdk_window_foreign_new_for_display
+gdk_window_focus
 gdk_window_lookup
 gdk_window_lookup_for_display
-gdk_window_show_unraised
-gdk_window_show
-gdk_window_hide
-gdk_window_withdraw
-gdk_window_move
-gdk_window_resize
-gdk_window_move_resize
-gdk_window_raise
-gdk_window_lower
-gdk_window_focus
 #ifndef GDK_DISABLE_DEPRECATED
 gdk_window_set_hints
 gdk_window_get_deskrelative_origin
@@ -735,17 +742,8 @@ gdk_window_set_title
 gdk_window_set_role
 gdk_window_set_startup_id
 gdk_window_set_transient_for
-gdk_window_set_background
-gdk_window_set_back_pixmap
-gdk_window_set_cursor
-gdk_window_get_geometry
-gdk_window_get_origin
 gdk_window_get_root_origin
 gdk_window_get_frame_extents
-gdk_window_get_events
-gdk_window_set_events
-gdk_window_shape_combine_mask
-gdk_window_shape_combine_region
 gdk_window_input_shape_combine_mask
 gdk_window_input_shape_combine_region
 gdk_window_set_override_redirect
@@ -771,11 +769,8 @@ gdk_window_set_group
 gdk_window_get_decorations
 gdk_window_set_decorations
 gdk_window_set_functions
-gdk_window_set_child_shapes
-gdk_window_merge_child_shapes
 gdk_window_set_child_input_shapes
 gdk_window_merge_child_input_shapes
-gdk_window_set_static_gravities
 gdk_window_begin_move_drag
 gdk_window_begin_resize_drag
 gdk_window_enable_synchronized_configure

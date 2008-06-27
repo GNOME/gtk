@@ -1,3 +1,27 @@
+2008-06-27  Emmanuele Bassi  <ebassi@gnome.org>
+
+	Abstract some GdkWindow API into an interface that the backends
+	must implement. (based on a patch by Alex Larsson)
+
+	* gdk/Makefile.am: Add gdkwindowimpl.[ch]
+
+	* gdk/gdk.symbols: Move symbols around.
+
+	* gdk/gdkinternals.h:
+	* gdk/gdkwindowimpl.[ch]: Move some of the GdkWindow API we require
+	from the backends to a GInterface that the backends should implement
+	instead.
+
+	* gdk/gdkwindow.c: Provide some of the GdkWindow public API as a
+	wrapper call around the GdkWindowImpl interface vtable.
+
+	* gdk/x11/gdkevents-x11.c:
+	* gdk/x11/gdkgeometry-x11.c:
+	* gdk/x11/gdkprivate-x11.h:
+	* gdk/x11/gdkwindow-x11.c:
+	* gdk/x11/gdkwindow-x11.h: Update the X11 backend to implement
+	the GdkWindowImpl interface.
+
 2008-06-27  Martyn Russell  <martyn@imendio.com>
 
 	Bug 540318 - Invalid URL

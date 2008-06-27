@@ -1043,7 +1043,7 @@ gdk_event_translate (GdkDisplay *display,
 
   if (window)
     {
-      _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
+      _gdk_x11_window_get_offsets (window, &xoffset, &yoffset);
     }
   else
     {

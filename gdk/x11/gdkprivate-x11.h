@@ -128,6 +128,14 @@ void _gdk_window_process_expose    (GdkWindow     *window,
                                     gulong         serial,
                                     GdkRectangle  *area);
 
+void _gdk_x11_window_scroll        (GdkWindow       *window,
+                                    gint             dx,
+                                    gint             dy);
+void _gdk_x11_window_move_region   (GdkWindow       *window,
+                                    const GdkRegion *region,
+                                    gint             dx,
+                                    gint             dy);
+
 void     _gdk_selection_window_destroyed   (GdkWindow            *window);
 gboolean _gdk_selection_filter_clear_event (XSelectionClearEvent *event);
 

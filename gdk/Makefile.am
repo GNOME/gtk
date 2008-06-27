@@ -98,6 +98,8 @@ gdk_built_public_sources =			\
 	gdkenumtypes.h
 
 gdk_built_private_headers =			\
+	gdkprivate.h				\
+	gdkwindowimpl.h				\
 	gdkalias.h
 
 gdk_c_sources =                 \
@@ -133,7 +135,8 @@ gdk_c_sources =                 \
 	gdkscreen.c		\
 	gdkselection.c		\
 	gdkvisual.c		\
-	gdkwindow.c
+	gdkwindow.c		\
+	gdkwindowimpl.c
 
 gdk_built_sources =				\
 	gdkaliasdef.c				\

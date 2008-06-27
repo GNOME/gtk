@@ -192,9 +192,9 @@ static void gdk_window_clip_changed       (GdkWindow          *window,
 					   GdkRectangle       *new_clip);
 
 void
-_gdk_windowing_window_get_offsets (GdkWindow *window,
-				   gint      *x_offset,
-				   gint      *y_offset)
+_gdk_x11_window_get_offsets (GdkWindow *window,
+                             gint      *x_offset,
+                             gint      *y_offset)
 {
   GdkWindowImplX11 *impl =
     GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
@@ -395,25 +395,10 @@ gdk_window_guffaw_scroll (GdkWindow    *window,
   g_list_foreach (obj->children, (GFunc) gdk_window_postmove, &parent_pos);
 }
 
-/**
- * gdk_window_scroll:
- * @window: a #GdkWindow
- * @dx: Amount to scroll in the X direction
- * @dy: Amount to scroll in the Y direction
- * 
- * Scroll the contents of @window, both pixels and children, by the given
- * amount. @window itself does not move.  Portions of the window that the scroll
- * operation brings in from offscreen areas are invalidated. The invalidated
- * region may be bigger than what would strictly be necessary.  (For X11, a
- * minimum area will be invalidated if the window has no subwindows, or if the
- * edges of the window's parent do not extend beyond the edges of the window. In
- * other cases, a multi-step process is used to scroll the window which may
- * produce temporary visual artifacts and unnecessary invalidations.)
- **/
 void
-gdk_window_scroll (GdkWindow *window,
-		   gint       dx,
-		   gint       dy)
+_gdk_x11_window_scroll (GdkWindow *window,
+                        gint       dx,
+                        gint       dy)
 {
   gboolean can_guffaw_scroll = FALSE;
   GdkRegion *invalidate_region;
@@ -421,17 +406,9 @@ gdk_window_scroll (GdkWindow *window,
   GdkWindowObject *obj;
   GdkRectangle src_rect, dest_rect;
   
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-  
   obj = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_X11 (obj->impl);  
 
-  if (dx == 0 && dy == 0)
-    return;
-  
   /* Move the current invalid region */
   if (obj->update_area)
     gdk_region_offset (obj->update_area, dx, dy);
@@ -483,26 +460,11 @@ gdk_window_scroll (GdkWindow *window,
     gdk_window_guffaw_scroll (window, dx, dy);
 }
 
-/**
- * gdk_window_move_region:
- * @window: a #GdkWindow
- * @region: The #GdkRegion to move
- * @dx: Amount to move in the X direction
- * @dy: Amount to move in the Y direction
- * 
- * Move the part of @window indicated by @region by @dy pixels in the Y 
- * direction and @dx pixels in the X direction. The portions of @region 
- * that not covered by the new position of @region are invalidated.
- * 
- * Child windows are not moved.
- * 
- * Since: 2.8
- **/
 void
-gdk_window_move_region (GdkWindow       *window,
-			const GdkRegion *region,
-			gint             dx,
-			gint             dy)
+_gdk_x11_window_move_region (GdkWindow       *window,
+                             const GdkRegion *region,
+                             gint             dx,
+                             gint             dy)
 {
   GdkWindowImplX11 *impl;
   GdkWindowObject *private;
@@ -514,17 +476,8 @@ gdk_window_move_region (GdkWindow       *window,
   GdkRectangle dest_extents;
   GdkGC *gc;
   
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (region != NULL);
-  
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-  
   private = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_X11 (private->impl);  
-
-  if (dx == 0 && dy == 0)
-    return;
 
   window_clip = gdk_region_rectangle (&impl->position_info.clip_rect);
 
