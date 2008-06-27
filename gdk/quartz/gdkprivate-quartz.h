@@ -187,4 +187,13 @@ gboolean     _gdk_quartz_keys_is_modifier (guint      keycode);
 /* Drawable */
 void        _gdk_quartz_drawable_finish (GdkDrawable *drawable);
 
+/* Geometry */
+void        _gdk_quartz_window_scroll      (GdkWindow       *window,
+                                            gint             dx,
+                                            gint             dy);
+void        _gdk_quartz_window_move_region (GdkWindow       *window,
+                                            const GdkRegion *region,
+                                            gint             dx,
+                                            gint             dy);
+
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

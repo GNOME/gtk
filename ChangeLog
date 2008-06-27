@@ -1,3 +1,10 @@
+2008-06-27  Kristian Rietveld  <kris@imendio.com>
+
+	* gdk/quartz/gdkgeometry-quartz.c:
+	* gdk/quartz/gdkwindow-quartz.c:
+	* gdk/quartz/gdkprivate-quartz.h: adapt to use GdkWindowImpl
+	interface.
+
 2008-06-27  Carlos Garnacho  <carlos@imendio.com>
 
 	* gtk/gtkrecentmanager.c (get_icon_for_mime_type): Fix two potential

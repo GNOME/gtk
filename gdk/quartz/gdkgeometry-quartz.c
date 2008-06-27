@@ -23,9 +23,9 @@
 #include "gdkprivate-quartz.h"
 
 void
-gdk_window_scroll (GdkWindow *window,
-                   gint       dx,
-                   gint       dy)
+_gdk_quartz_window_scroll (GdkWindow *window,
+                           gint       dx,
+                           gint       dy)
 {
   NSRect visible_nsrect;
   GdkRectangle visible_rect, scrolled_rect;
@@ -35,8 +35,6 @@ gdk_window_scroll (GdkWindow *window,
   GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   GList *list;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
 
   /* Move the current invalid region */
   if (private->update_area)
@@ -83,10 +81,10 @@ gdk_window_scroll (GdkWindow *window,
 }
 
 void
-gdk_window_move_region (GdkWindow       *window,
-                        const GdkRegion *region,
-                        gint             dx,
-                        gint             dy)
+_gdk_quartz_window_move_region (GdkWindow       *window,
+                                const GdkRegion *region,
+                                gint             dx,
+                                gint             dy)
 {
   /* FIXME: Implement */
 }
