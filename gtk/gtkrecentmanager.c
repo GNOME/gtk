@@ -1889,15 +1889,22 @@ get_icon_for_mime_type (const char *mime_type,
   icon_theme = gtk_icon_theme_get_default ();
 
   content_type = g_content_type_from_mime_type (mime_type);
+
+  if (!content_type)
+    return NULL;
+
   icon = g_content_type_get_icon (content_type);
   info = gtk_icon_theme_lookup_by_gicon (icon_theme, 
                                          icon, 
                                          pixel_size, 
                                          GTK_ICON_LOOKUP_USE_BUILTIN);
-  pixbuf = gtk_icon_info_load_icon (info, NULL);
-
   g_free (content_type);
   g_object_unref (icon);
+
+  if (!info)
+    return NULL;
+
+  pixbuf = gtk_icon_info_load_icon (info, NULL);
   gtk_icon_info_free (info);
 
   return pixbuf;
