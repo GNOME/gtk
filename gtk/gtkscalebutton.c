@@ -345,6 +345,7 @@ gtk_scale_button_init (GtkScaleButton *button)
 
   /* window */
   priv->dock = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_widget_set_name (priv->dock, "gtk-scalebutton-popup-window");
   g_signal_connect (priv->dock, "button-press-event",
 		    G_CALLBACK (cb_dock_button_press), button);
   g_signal_connect (priv->dock, "key-release-event",

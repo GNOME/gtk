@@ -1,3 +1,11 @@
+2008-06-27  Michael Natterer  <mitch@imendio.com>
+
+	Bug 442042 – GtkScaleButton is too limited
+
+	* gtk/gtkscalebutton.c (gtk_scale_button_init): set the name
+	"gtk-scalebutton-popup-window" on the popup window so it is
+	properly themeable.
+
 2008-06-27  Kristian Rietveld  <kris@imendio.com>
 
 	* gdk/quartz/gdkgeometry-quartz.c:
