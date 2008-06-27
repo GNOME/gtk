@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-21 04:13+0000\n"
-"PO-Revision-Date: 2008-06-21 18:12+0200\n"
+"POT-Creation-Date: 2008-06-27 09:34+0000\n"
+"PO-Revision-Date: 2008-06-27 23:27+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -416,7 +416,7 @@ msgid "Whether the action group is visible."
 msgstr "Indica si el grupo de acción es visible."
 
 #: ../gtk/gtkadjustment.c:91 ../gtk/gtkcellrendererprogress.c:128
-#: ../gtk/gtkscalebutton.c:181 ../gtk/gtkspinbutton.c:273
+#: ../gtk/gtkscalebutton.c:196 ../gtk/gtkspinbutton.c:273
 msgid "Value"
 msgstr "Valor"
 
@@ -924,11 +924,11 @@ msgstr "Espaciado de imagen"
 msgid "Spacing in pixels between the image and label"
 msgstr "Espaciado en píxeles entre la imagen y la etiqueta"
 
-#: ../gtk/gtkbutton.c:485
+#: ../gtk/gtkbutton.c:491
 msgid "Show button images"
 msgstr "Mostrar imágenes en los botones"
 
-#: ../gtk/gtkbutton.c:486
+#: ../gtk/gtkbutton.c:492
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Indica si deben mostrarse o no los iconos de inventario en los botones"
 
@@ -1302,8 +1302,9 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "La alineación vertical del texto, desde 0 (superior) a 1 (inferior)."
 
 #: ../gtk/gtkcellrendererprogress.c:221 ../gtk/gtkiconview.c:731
-#: ../gtk/gtkprogressbar.c:130 ../gtk/gtkstatusicon.c:283
-#: ../gtk/gtktoolbar.c:494 ../gtk/gtktrayicon-x11.c:95
+#: ../gtk/gtkprogressbar.c:130 ../gtk/gtkscalebutton.c:186
+#: ../gtk/gtkstatusicon.c:283 ../gtk/gtktoolbar.c:494
+#: ../gtk/gtktrayicon-x11.c:95
 msgid "Orientation"
 msgstr "Orientación"
 
@@ -1312,7 +1313,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientación y dirección del crecimiento de la barra de progreso"
 
 #: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:122
-#: ../gtk/gtkrange.c:346 ../gtk/gtkscalebutton.c:200
+#: ../gtk/gtkrange.c:346 ../gtk/gtkscalebutton.c:215
 #: ../gtk/gtkspinbutton.c:212
 msgid "Adjustment"
 msgstr "Ajuste"
@@ -2093,35 +2094,35 @@ msgstr "Y máximo"
 msgid "Maximum possible value for Y"
 msgstr "Máximo valor posible para Y"
 
-#: ../gtk/gtkdialog.c:154
+#: ../gtk/gtkdialog.c:144
 msgid "Has separator"
 msgstr "Tiene separador"
 
-#: ../gtk/gtkdialog.c:155
+#: ../gtk/gtkdialog.c:145
 msgid "The dialog has a separator bar above its buttons"
 msgstr "El diálogo tiene una barra separadora sobre sus botones"
 
-#: ../gtk/gtkdialog.c:200
+#: ../gtk/gtkdialog.c:190
 msgid "Content area border"
 msgstr "Borde del área de contenidos"
 
-#: ../gtk/gtkdialog.c:201
+#: ../gtk/gtkdialog.c:191
 msgid "Width of border around the main dialog area"
 msgstr "Anchura del borde alrededor del área principal del diálogo"
 
-#: ../gtk/gtkdialog.c:208
+#: ../gtk/gtkdialog.c:198
 msgid "Button spacing"
 msgstr "Espaciado de los botones"
 
-#: ../gtk/gtkdialog.c:209
+#: ../gtk/gtkdialog.c:199
 msgid "Spacing between buttons"
 msgstr "Espaciado entre los botones"
 
-#: ../gtk/gtkdialog.c:217
+#: ../gtk/gtkdialog.c:207
 msgid "Action area border"
 msgstr "Borde del área de acción"
 
-#: ../gtk/gtkdialog.c:218
+#: ../gtk/gtkdialog.c:208
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 "Anchura del borde alrededor del área del botón en la parte inferior del "
@@ -2709,7 +2710,9 @@ msgstr "Hijo desacoplado"
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
-msgstr "Una variable booleana indicando si el hijo del manejador de la caja está acoplado o desacoplado."
+msgstr ""
+"Una variable booleana indicando si el hijo del manejador de la caja está "
+"acoplado o desacoplado."
 
 #: ../gtk/gtkiconview.c:550
 msgid "Selection mode"
@@ -2876,7 +2879,7 @@ msgstr "Conjunto de iconos"
 msgid "Icon set to display"
 msgstr "Conjunto de iconos para mostrar"
 
-#: ../gtk/gtkimage.c:188 ../gtk/gtkscalebutton.c:191 ../gtk/gtktoolbar.c:549
+#: ../gtk/gtkimage.c:188 ../gtk/gtkscalebutton.c:206 ../gtk/gtktoolbar.c:549
 msgid "Icon size"
 msgstr "Tamaño del icono"
 
@@ -3082,7 +3085,9 @@ msgstr "Ruta del acelerador"
 
 #: ../gtk/gtkmenu.c:532
 msgid "An accel path used to conveniently construct accel paths of child items"
-msgstr "Una ruta de acelerador usada para construir convenientemente rutas de aceleración de elementos hijo"
+msgstr ""
+"Una ruta de acelerador usada para construir convenientemente rutas de "
+"aceleración de elementos hijo"
 
 #: ../gtk/gtkmenu.c:546
 msgid "Attach Widget"
@@ -3272,7 +3277,9 @@ msgstr "Justificado a la derecha"
 
 #: ../gtk/gtkmenuitem.c:205
 msgid "Sets whether the menu item appears justified at the right side of a menu bar"
-msgstr "Establece si el elemento del menú aparece justificado en la parte derecha de una barra de menú"
+msgstr ""
+"Establece si el elemento del menú aparece justificado en la parte derecha de "
+"una barra de menú"
 
 #: ../gtk/gtkmenuitem.c:219
 msgid "Submenu"
@@ -4419,25 +4426,29 @@ msgstr "Espaciado del valor"
 msgid "Space between value text and the slider/trough area"
 msgstr "Espacio entre el texto del valor y el área del deslizador/carril"
 
-#: ../gtk/gtkscalebutton.c:182
+#: ../gtk/gtkscalebutton.c:187
+msgid "The orientation of the scale"
+msgstr "La orientación de la escala"
+
+#: ../gtk/gtkscalebutton.c:197
 msgid "The value of the scale"
 msgstr "El valor de la escala"
 
-#: ../gtk/gtkscalebutton.c:192
+#: ../gtk/gtkscalebutton.c:207
 msgid "The icon size"
 msgstr "El tamaño del icono"
 
-#: ../gtk/gtkscalebutton.c:201
+#: ../gtk/gtkscalebutton.c:216
 msgid "The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
 "El GtkAdjustment que contiene el valor actual de este objeto de botón de "
 "escala"
 
-#: ../gtk/gtkscalebutton.c:229
+#: ../gtk/gtkscalebutton.c:244
 msgid "Icons"
 msgstr "Iconos"
 
-#: ../gtk/gtkscalebutton.c:230
+#: ../gtk/gtkscalebutton.c:245
 msgid "List of icon names"
 msgstr "Lista de nombres de iconos"
 
