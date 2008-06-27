@@ -1,3 +1,10 @@
+2008-06-27  Martyn Russell  <martyn@imendio.com>
+
+	Bug 540318 - Invalid URL
+	
+	* gtk/gtkcontainer.c: (gtk_container_add): Fixed the FAQ location
+	in the warning produced here.
+
 2008-06-27  Michael Natterer  <mitch@imendio.com>
 
 	Bug 442042 – GtkScaleButton is too limited
