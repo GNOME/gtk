@@ -1,3 +1,13 @@
+2008-06-27  Michael Natterer  <mitch@imendio.com>
+
+	Bug 442042 – GtkScaleButton is too limited
+
+	* gtk/gtkscalebutton.c: add "orientation" property. Make sure the
+	stuff that is part of the public API continues to be created in
+	init() to stay compatible. Move creating of the popup scale to
+	constructor(). Add an internal HScale class. Changed popup
+	positioning for horizontal scales accordingly.
+
 2008-06-26  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkscalebutton.c
