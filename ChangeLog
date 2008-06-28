@@ -1,3 +1,9 @@
+2008-06-27  Mikael Hallendal  <micke@imendio.com>
+
+	* gtk/gtkbox.c (gtk_box_pack, gtk_box_pack_start, gtk_box_pack_end):
+	Factored out gtk_box_pack from gtk_box_pack_start and use it from both
+	pack_start and pack_end in order to reduce the code duplication.
+
 2008-06-27  Michael Natterer  <mitch@imendio.com>
 
 	Bug 442042 – GtkScaleButton is too limited

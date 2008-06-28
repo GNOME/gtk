@@ -329,6 +329,43 @@ gtk_box_get_child_property (GtkContainer *container,
     }
 }
 
+static void
+gtk_box_pack (GtkBox      *box,
+              GtkWidget   *child,
+              gboolean     expand,
+              gboolean     fill,
+              guint        padding,
+              GtkPackType  pack_type)
+{
+  GtkBoxChild *child_info;
+
+  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (child->parent == NULL);
+
+  child_info = g_new (GtkBoxChild, 1);
+  child_info->widget = child;
+  child_info->padding = padding;
+  child_info->expand = expand ? TRUE : FALSE;
+  child_info->fill = fill ? TRUE : FALSE;
+  child_info->pack = pack_type;
+  child_info->is_secondary = FALSE;
+
+  box->children = g_list_append (box->children, child_info);
+
+  gtk_widget_freeze_child_notify (child);
+
+  gtk_widget_set_parent (child, GTK_WIDGET (box));
+  
+  gtk_widget_child_notify (child, "expand");
+  gtk_widget_child_notify (child, "fill");
+  gtk_widget_child_notify (child, "padding");
+  gtk_widget_child_notify (child, "pack-type");
+  gtk_widget_child_notify (child, "position");
+  gtk_widget_thaw_child_notify (child);
+             
+}
+
 /**
  * gtk_box_pack_start:
  * @box: a #GtkBox
@@ -358,32 +395,7 @@ gtk_box_pack_start (GtkBox    *box,
 		    gboolean   fill,
 		    guint      padding)
 {
-  GtkBoxChild *child_info;
-
-  g_return_if_fail (GTK_IS_BOX (box));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (child->parent == NULL);
-
-  child_info = g_new (GtkBoxChild, 1);
-  child_info->widget = child;
-  child_info->padding = padding;
-  child_info->expand = expand ? TRUE : FALSE;
-  child_info->fill = fill ? TRUE : FALSE;
-  child_info->pack = GTK_PACK_START;
-  child_info->is_secondary = FALSE;
-
-  box->children = g_list_append (box->children, child_info);
-
-  gtk_widget_freeze_child_notify (child);
-
-  gtk_widget_set_parent (child, GTK_WIDGET (box));
-  
-  gtk_widget_child_notify (child, "expand");
-  gtk_widget_child_notify (child, "fill");
-  gtk_widget_child_notify (child, "padding");
-  gtk_widget_child_notify (child, "pack-type");
-  gtk_widget_child_notify (child, "position");
-  gtk_widget_thaw_child_notify (child);
+  gtk_box_pack (box, child, expand, fill, padding, GTK_PACK_START);
 }
 
 /**
@@ -415,32 +427,7 @@ gtk_box_pack_end (GtkBox    *box,
 		  gboolean   fill,
 		  guint      padding)
 {
-  GtkBoxChild *child_info;
-
-  g_return_if_fail (GTK_IS_BOX (box));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (child->parent == NULL);
-
-  child_info = g_new (GtkBoxChild, 1);
-  child_info->widget = child;
-  child_info->padding = padding;
-  child_info->expand = expand ? TRUE : FALSE;
-  child_info->fill = fill ? TRUE : FALSE;
-  child_info->pack = GTK_PACK_END;
-  child_info->is_secondary = FALSE;
-
-  box->children = g_list_append (box->children, child_info);
-
-  gtk_widget_freeze_child_notify (child);
-
-  gtk_widget_set_parent (child, GTK_WIDGET (box));
-
-  gtk_widget_child_notify (child, "expand");
-  gtk_widget_child_notify (child, "fill");
-  gtk_widget_child_notify (child, "padding");
-  gtk_widget_child_notify (child, "pack-type");
-  gtk_widget_child_notify (child, "position");
-  gtk_widget_thaw_child_notify (child);
+  gtk_box_pack (box, child, expand, fill, padding, GTK_PACK_END);
 }
 
 /**
