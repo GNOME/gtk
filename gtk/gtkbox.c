@@ -363,7 +363,6 @@ gtk_box_pack (GtkBox      *box,
   gtk_widget_child_notify (child, "pack-type");
   gtk_widget_child_notify (child, "position");
   gtk_widget_thaw_child_notify (child);
-             
 }
 
 /**
