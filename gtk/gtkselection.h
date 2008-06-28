@@ -31,8 +31,6 @@
 #ifndef __GTK_SELECTION_H__
 #define __GTK_SELECTION_H__
 
-
-#include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtktextiter.h>
@@ -148,12 +146,14 @@ gboolean gtk_selection_convert       (GtkWidget            *widget,
 				      GdkAtom               selection,
 				      GdkAtom               target,
 				      guint32               time_);
-GdkAtom gtk_selection_data_get_target (GtkSelectionData  *selection_data);
-GdkAtom gtk_selection_data_get_data_type (GtkSelectionData  *selection_data);
-gint gtk_selection_data_get_format (GtkSelectionData  *selection_data);
-const guchar *gtk_selection_data_get_data (GtkSelectionData *selection_data,
-					   guint	    *length);
-GdkDisplay *gtk_selection_data_get_display (GtkSelectionData  *selection_data);
+
+GdkAtom       gtk_selection_data_get_target    (GtkSelectionData *selection_data);
+GdkAtom       gtk_selection_data_get_data_type (GtkSelectionData *selection_data);
+gint          gtk_selection_data_get_format    (GtkSelectionData *selection_data);
+const guchar *gtk_selection_data_get_data      (GtkSelectionData *selection_data,
+                                                guint	         *length);
+GdkDisplay   *gtk_selection_data_get_display   (GtkSelectionData *selection_data);
+
 void     gtk_selection_data_set      (GtkSelectionData     *selection_data,
 				      GdkAtom               type,
 				      gint                  format,

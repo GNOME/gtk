@@ -1,3 +1,8 @@
+2008-06-28  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkselection.h: properly indent the newly added
+	GtkSelectionData accessors. Some newlines can't hurt either.
+
 2008-06-27  Mikael Hallendal  <micke@imendio.com>
 
 	* gtk/gtkbox.c (gtk_box_pack): Removed accidental empty row.
