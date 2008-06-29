@@ -3941,7 +3941,9 @@ gtk_label_get_layout_offsets (GtkLabel *label,
                               gint     *y)
 {
   g_return_if_fail (GTK_IS_LABEL (label));
-  
+
+  gtk_label_ensure_layout (label);
+
   get_layout_location (label, x, y);
 }
 

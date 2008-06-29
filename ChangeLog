@@ -1,3 +1,10 @@
+2008-06-29  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 530255 – GtkAboutDialog cuts off comments label
+	Followup patch from  Jan Arne Petersen
+
+	* gtk/gtklabel.c (gtk_label_get_layout_offsets): Ensure layout.
+
 2008-06-28  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkselection.h: properly indent the newly added
