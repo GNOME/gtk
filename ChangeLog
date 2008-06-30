@@ -1,3 +1,10 @@
+2008-06-30  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 540310 – Avoid unnecessary repaints when resizing GtkWindow
+
+	* gtk/gtkwindow.c: Avoid unnecessary redraws when resizing.
+	Patch by Owen Taylor
+
 2008-06-29  Behdad Esfahbod  <behdad@gnome.org>
 
 	Bug 530255 – GtkAboutDialog cuts off comments label
