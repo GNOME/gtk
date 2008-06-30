@@ -68,17 +68,17 @@ gdk_public_h_sources =				\
 	gdkcolor.h				\
 	gdkcursor.h				\
 	gdkdisplay.h				\
+	gdkdisplaymanager.h			\
 	gdkdnd.h				\
 	gdkdrawable.h				\
 	gdkevents.h				\
 	gdkfont.h				\
 	gdkgc.h					\
-	gdkkeysyms.h				\
 	gdki18n.h				\
 	gdkimage.h				\
 	gdkinput.h				\
 	gdkkeys.h				\
-	gdkdisplaymanager.h			\
+	gdkkeysyms.h				\
 	gdkpango.h				\
 	gdkpixbuf.h				\
 	gdkpixmap.h				\
@@ -110,28 +110,28 @@ gdk_c_sources =                 \
 	gdkcolor.c		\
 	gdkcursor.c		\
 	gdkdisplay.c		\
+	gdkdisplaymanager.c	\
 	gdkdnd.c		\
 	gdkdraw.c		\
 	gdkevents.c     	\
 	gdkfont.c		\
 	gdkgc.c			\
 	gdkglobals.c		\
-	gdkkeys.c		\
-	gdkkeyuni.c		\
 	gdkimage.c		\
 	gdkinternals.h  	\
 	gdkintl.h		\
-	gdkdisplaymanager.c	\
+	gdkkeys.c		\
+	gdkkeyuni.c		\
 	gdkpango.c		\
 	gdkpixbuf-drawable.c	\
 	gdkpixbuf-render.c	\
 	gdkpixmap.c		\
 	gdkpoly-generic.h	\
 	gdkpolyreg-generic.c	\
-	gdkrgb.c		\
 	gdkrectangle.c		\
 	gdkregion-generic.c	\
 	gdkregion-generic.h	\
+	gdkrgb.c		\
 	gdkscreen.c		\
 	gdkselection.c		\
 	gdkvisual.c		\
