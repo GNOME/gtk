@@ -1,5 +1,20 @@
 2008-06-30  Michael Natterer  <mitch@imendio.com>
 
+	Some unrelated cleanups found while reviewing
+	the offscreen window patch:
+
+	* gdk/gdkwindow.c: add missing Since: 2.14 to the redirection
+	functions, fix some function header indentation, update
+	documentation of redirect_to_drawable().
+
+	* gdk/x11/gdkwindow-x11.c
+	* gdk/x11/gdkpixmap-x11.c: fix function header
+	formatting/indentation.
+
+	* gtk/gtkwidget.c: use I_() on "damage_event".
+
+2008-06-30  Michael Natterer  <mitch@imendio.com>
+
 	* gdk/gdkinternals.h: remove duplicate declaration of
 	_gdk_window_new().
 

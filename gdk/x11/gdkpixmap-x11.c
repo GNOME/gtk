@@ -57,8 +57,8 @@ typedef struct
 } _GdkPixmapInfo;
 
 static void gdk_pixmap_impl_x11_get_size   (GdkDrawable        *drawable,
-                                        gint               *width,
-                                        gint               *height);
+                                            gint               *width,
+                                            gint               *height);
 
 static void gdk_pixmap_impl_x11_dispose    (GObject            *object);
 static void gdk_pixmap_impl_x11_finalize   (GObject            *object);

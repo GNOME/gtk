@@ -4190,7 +4190,8 @@ gdk_window_set_composited (GdkWindow *window,
 
 
 static void
-remove_redirect_from_children (GdkWindowObject *private, GdkWindowRedirect *redirect)
+remove_redirect_from_children (GdkWindowObject   *private,
+                               GdkWindowRedirect *redirect)
 {
   GList *l;
   GdkWindowObject *child;
@@ -4214,12 +4215,14 @@ remove_redirect_from_children (GdkWindowObject *private, GdkWindowRedirect *redi
  *
  * Removes and active redirection started by
  * gdk_window_redirect_to_drawable().
+ *
+ * Since: 2.14
  **/
 void
 gdk_window_remove_redirection (GdkWindow *window)
 {
   GdkWindowObject *private;
-  
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   private = (GdkWindowObject *) window;
@@ -4234,7 +4237,8 @@ gdk_window_remove_redirection (GdkWindow *window)
 }
 
 static void
-apply_redirect_to_children (GdkWindowObject *private, GdkWindowRedirect *redirect)
+apply_redirect_to_children (GdkWindowObject   *private,
+                            GdkWindowRedirect *redirect)
 {
   GList *l;
   GdkWindowObject *child;
@@ -4268,8 +4272,9 @@ apply_redirect_to_children (GdkWindowObject *private, GdkWindowRedirect *redirec
  * @width and @height is also drawn into @drawable at
  * @dest_x, @dest_y.
  *
- * Only drawing between gdk_window_begin_paint_region() and
- * gdk_window_end_paint() is redirected.
+ * Only drawing between gdk_window_begin_paint_region() or
+ * gdk_window_begin_paint_rect() and gdk_window_end_paint() is
+ * redirected.
  *
  * Redirection is active until gdk_window_remove_redirection()
  * is called.
@@ -4277,13 +4282,18 @@ apply_redirect_to_children (GdkWindowObject *private, GdkWindowRedirect *redirec
  * This function should not be used on windows created by
  * gdk_window_new_offscreen(), as that is implemented using
  * redirection.
+ *
+ * Since: 2.14.
  **/
 void
-gdk_window_redirect_to_drawable (GdkWindow *window,
+gdk_window_redirect_to_drawable (GdkWindow   *window,
 				 GdkDrawable *drawable,
-				 gint src_x, gint src_y,
-				 gint dest_x, gint dest_y,
-				 gint width, gint height)
+				 gint         src_x,
+                                 gint         src_y,
+				 gint         dest_x,
+                                 gint         dest_y,
+				 gint         width,
+                                 gint         height)
 {
   GdkWindowObject *private;
   
@@ -4512,7 +4522,9 @@ setup_redirect_clip (GdkWindow         *window,
 }
 
 static void
-reset_redirect_clip (GdkWindow *offscreen, GdkGC *gc, GdkWindowClipData *data)
+reset_redirect_clip (GdkWindow         *offscreen,
+                     GdkGC             *gc,
+                     GdkWindowClipData *data)
 {
   /* offset back */
   gdk_gc_offset (gc, data->x_offset, data->y_offset);

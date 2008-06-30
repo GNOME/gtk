@@ -2025,9 +2025,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * Since: 2.14
    */
   widget_signals[DAMAGE_EVENT] =
-    g_signal_new ("damage_event",
+    g_signal_new (I_("damage_event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_LAST, 0,
+		  G_SIGNAL_RUN_LAST,
+                  0,
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,

@@ -3781,12 +3781,13 @@ do_shape_combine_region (GdkWindow       *window,
     }
 #endif /* HAVE_SHAPE_EXT */
 }
+
 static void
 gdk_window_x11_shape_combine_region (GdkWindow       *window,
                                      const GdkRegion *shape_region,
                                      gint             offset_x,
                                      gint             offset_y)
-{ 
+{
   do_shape_combine_region (window, shape_region, offset_x, offset_y, ShapeBounding);
 }
 
@@ -4558,7 +4559,8 @@ gdk_window_unfullscreen (GdkWindow *window)
  * Since: 2.4
  **/
 void
-gdk_window_set_keep_above (GdkWindow *window, gboolean setting)
+gdk_window_set_keep_above (GdkWindow *window,
+                           gboolean   setting)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -5285,7 +5287,8 @@ gdk_window_merge_child_input_shapes (GdkWindow *window)
 
 
 static void
-gdk_window_set_static_bit_gravity (GdkWindow *window, gboolean on)
+gdk_window_set_static_bit_gravity (GdkWindow *window,
+                                   gboolean   on)
 {
   XSetWindowAttributes xattributes;
   GdkWindowObject *private;
@@ -5306,7 +5309,8 @@ gdk_window_set_static_bit_gravity (GdkWindow *window, gboolean on)
 }
 
 static void
-gdk_window_set_static_win_gravity (GdkWindow *window, gboolean on)
+gdk_window_set_static_win_gravity (GdkWindow *window,
+                                   gboolean   on)
 {
   XSetWindowAttributes xattributes;
   
