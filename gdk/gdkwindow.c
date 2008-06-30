@@ -1,4 +1,4 @@
-/* GDK - The GIMP Drawing Kit
+/* GDK - The GTK+ Drawing Kit
  * Copyright (C) 1995-2007 Peter Mattis, Spencer Kimball,
  * Josh MacDonald, Ryan Lortie
  *

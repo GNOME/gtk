@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * gtkfilechooserutils.h: Private utility functions useful for
  *                        implementing a GtkFileChooser interface
  * Copyright (C) 2003, Red Hat, Inc.

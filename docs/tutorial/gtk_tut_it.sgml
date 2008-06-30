@@ -13,9 +13,9 @@ Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
 <sect>Introduzione
 <!-- ***************************************************************** -->
 <p>
-GTK (GIMP Toolkit) &egrave; stato orginariamente sviluppato come toolkit per
+GTK (GTK+ Toolkit) &egrave; stato orginariamente sviluppato come toolkit per
 il programma GIMP (General Image Manipulation Program). GTK &egrave; costruito
-sulla base del kit di disegno di GIMP, il GDK (GIMP Drawing Kit) il quale
+sulla base del kit di disegno di GIMP, il GDK (GTK+ Drawing Kit) il quale
 &egrave; costruito a sua volta attorno alle funzioni della Xlib. E' chiamato
 ``toolkit di GIMP'' perch&eacute; era inizialmente scritto per sviluppare GIMP,
 ma ora viene utilizzato nello sviluppo di molti progetti software ``free''. 
@@ -8283,7 +8283,7 @@ Una parte del nostro widget potrebbe essere simile
 al widget Tictactoe. In primo luogo, abbiamo il file header:
 
 <tscreen><verb>
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or

@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * gtkrecentchooserdialog.c: Recent files selector dialog
  * Copyright (C) 2006 Emmanuele Bassi
  * 

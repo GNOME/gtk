@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * Themes added by The Rasterman <raster@redhat.com>

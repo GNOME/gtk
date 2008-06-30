@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * gtktextlayout.h
  *
  * Copyright (c) 1992-1994 The Regents of the University of California.

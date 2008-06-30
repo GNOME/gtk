@@ -1,4 +1,4 @@
-/* GTK - The GIMP Tool Kit
+/* GTK - The GTK+ Toolkit
  * Copyright (C) 2007, 2008 GNOME Foundation
  *
  * This library is free software; you can redistribute it and/or

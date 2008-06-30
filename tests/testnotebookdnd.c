@@ -1,6 +1,6 @@
 /* -*- Mode: C; c-file-style: "gnu"; tab-width: 8 -*- */
 /* 
- * GTK - The GIMP Toolkit
+ * GTK - The GTK+ Toolkit
  * Copyright (C) 2006  Carlos Garnacho Parro <carlosg@gnome.org>
  *
  * All rights reserved.

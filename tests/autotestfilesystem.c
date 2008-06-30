@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * autotestfilesystem.c: Automated tests for GtkFileSystem implementations
  * Copyright (C) 2005, Novell, Inc.
  *

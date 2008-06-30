@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * gtkprintoperation.h: Print Operation
  * Copyright (C) 2006, Red Hat, Inc.
  *

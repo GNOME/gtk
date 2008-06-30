@@ -21,7 +21,7 @@ The X libraries originally written for the GIMP, which are now used by
 several other programs as well.
 
 %package devel
-Summary:	GIMP Toolkit and GIMP Drawing Kit
+Summary:	GTK+ Toolkit and GTK+ Drawing Kit
 Group:		X11/Libraries
 Requires:	%{name} = %{version}
 

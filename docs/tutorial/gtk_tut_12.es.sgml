@@ -32,7 +32,7 @@ Toolkit) en C
 <sect>Introducción
 <!-- ***************************************************************** -->
 <p>
-GTK (GIMP Toolkit) es una biblioteca para crear interfaces gráficas
+GTK (GTK+ Toolkit) es una biblioteca para crear interfaces gráficas
 de usuario. Su licencia es la LGPL, así que mediante GTK podrá
 desarrollar programas con licencias abiertas, gratuitas, libres, y
 hasta licencias comerciales no libres sin mayores problemas.
@@ -41,7 +41,7 @@ Se llama el GIMP toolkit porque fue escrito para el desarrollo del
 General Image Manipulation Program (GIMP), pero ahora GTK se utiliza
 en un gran número de proyectos de programación, incluyendo el
 proyecto GNU Network Object Model Environment (GNOME). GTK está
-construido encima de GDK (GIMP Drawing Kit) que básicamente es un
+construido encima de GDK (GTK+ Drawing Kit) que básicamente es un
 recubrimiento de las funciones de bajo nivel que deben haber para
 acceder al sistema de ventanas sobre el que se programe (Xlib en el
 caso de X windows). Los principales autores de GTK son:
@@ -12829,7 +12829,7 @@ Nuestro <em/widget/ tiene un aspecto algo parecido al del <em/widget/
 Tictactoe. Primero, tenemos un fichero de cabecera:
 
 <tscreen><verb>
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -15836,7 +15836,7 @@ texto anterior y que no se ha incluido al completo en otro lugar.
 <tscreen><verb>
 /* principio del ejemplo tictactoe tictactoe.h */
 
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -15907,7 +15907,7 @@ void	       tictactoe_clear           (Tictactoe *ttt);
 <tscreen><verb>
 /* principio del ejemplo tictactoe tictactoe.c */
 
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -16127,7 +16127,7 @@ main (int argc, char *argv[])
 <tscreen><verb>
 /* principio del ejmplo gtkdial gtkdial.h */
 
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -16227,7 +16227,7 @@ void           gtk_dial_set_adjustment         (GtkDial      *dial,
 <tscreen><verb>
 /* principio del ejemplo gtkdial gtkdial.c */
 
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -16826,7 +16826,7 @@ gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
 <tscreen><verb>
 /* principio del ejemplo scribble-simple scribble-simple.c */
 
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or

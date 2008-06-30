@@ -28,7 +28,7 @@ EOF
 copyright_gdk ()
 {
   cat << EOF
-/* GDK - The GIMP Drawing Kit
+/* GDK - The GTK+ Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ EOF
 copyright_gtk ()
 {
   cat << EOF
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or

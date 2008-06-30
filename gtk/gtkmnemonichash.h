@@ -1,6 +1,6 @@
 /* gtkmnemonichash.h: Sets of mnemonics with cycling
  *
- * GTK - The GIMP Toolkit
+ * GTK - The GTK+ Toolkit
  * Copyright (C) 2002, Red Hat Inc.
  *
  * This library is free software; you can redistribute it and/or

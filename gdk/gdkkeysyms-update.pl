@@ -48,7 +48,7 @@ die "Could not open file keysymdef.h: $!\n" unless open(IN_KEYSYMDEF, "<:utf8", 
 die "Could not open file gdkkeysyms.h: $!\n" unless open(OUT_GDKKEYSYMS, ">:utf8", "gdkkeysyms.h");
 
 print OUT_GDKKEYSYMS<<EOF;
-/* GDK - The GIMP Drawing Kit
+/* GDK - The GTK+ Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 2005, 2006, 2007 GNOME Foundation
  *

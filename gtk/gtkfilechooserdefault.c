@@ -1,5 +1,5 @@
 /* -*- Mode: C; c-file-style: "gnu"; tab-width: 8 -*- */
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * gtkfilechooserdefault.c: Default implementation of GtkFileChooser
  * Copyright (C) 2003, Red Hat, Inc.
  *

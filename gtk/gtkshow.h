@@ -1,5 +1,5 @@
 /*
- * GTK - The GIMP Toolkit
+ * GTK - The GTK+ Toolkit
  * Copyright (C) 2008  Jaap Haitsma <jaap@haitsma.org>
  *
  * All rights reserved.

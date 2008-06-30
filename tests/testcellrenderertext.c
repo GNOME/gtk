@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * testcellrenderertext.c: Tests for the various properties of GtkCellRendererText
  * Copyright (C) 2005, Novell, Inc.
  *

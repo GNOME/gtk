@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * gtkprinteroption.h: printer option
  * Copyright (C) 2006, Red Hat, Inc.
  *

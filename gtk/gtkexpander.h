@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  *
  * Copyright (C) 2003 Sun Microsystems, Inc.
  *

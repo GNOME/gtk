@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * gtkprintbackendpdf.h: Default implementation of GtkPrintBackend 
  * for printing to a file
  * Copyright (C) 2003, Red Hat, Inc.

@@ -1,4 +1,4 @@
-/* GDK - The GIMP Drawing Kit
+/* GDK - The GTK+ Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 2005, 2006, 2007, 2008 GNOME Foundation
  *

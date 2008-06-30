@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * gtkfilesystemmodel.c: GtkTreeModel wrapping a GtkFileSystem
  * Copyright (C) 2003, Red Hat, Inc.
  *

@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * autotestfilechooser.c: Automated unit tests for the GtkFileChooser widget
  * Copyright (C) 2005, Novell, Inc.
  *

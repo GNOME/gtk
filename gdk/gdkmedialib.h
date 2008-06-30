@@ -1,4 +1,4 @@
-/* GDK - The GIMP Drawing Kit
+/* GDK - The GTK+ Drawing Kit
  * Copyright (C) 2001-2007 Sun Microsystems, Inc.  All rights reserved.
  * (Brian Cameron, Dmitriy Demin, James Cheng, Padraig O'Briain)
  *

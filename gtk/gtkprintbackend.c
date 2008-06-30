@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * gtkprintbackend.h: Abstract printer backend interfaces
  * Copyright (C) 2003, Red Hat, Inc.
  *

@@ -2,7 +2,7 @@
 
 set -e
 
-install-info --quiet --description="The GIMP Toolkit." \
+install-info --quiet --description="The GTK+ Toolkit." \
  --section "The GIMP" "The GIMP" /usr/info/gtk.info.gz
 
 install-info --quiet --description="The GIMP Drawing Kit." \

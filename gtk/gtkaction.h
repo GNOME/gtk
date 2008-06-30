@@ -1,5 +1,5 @@
 /*
- * GTK - The GIMP Toolkit
+ * GTK - The GTK+ Toolkit
  * Copyright (C) 1998, 1999 Red Hat, Inc.
  * All rights reserved.
  *

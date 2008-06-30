@@ -1,5 +1,5 @@
 /* 
- * GTK - The GIMP Toolkit
+ * GTK - The GTK+ Toolkit
  * Copyright (C) 1998 David Abilleira Freijeiro <odaf@nexo.es>
  * All rights reserved.
  *

@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * gtkxembed.c: Utilities for the XEMBED protocol
  * Copyright (C) 2003, Red Hat, Inc.
  *

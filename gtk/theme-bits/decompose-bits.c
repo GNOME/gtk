@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * Copyright (C) 2002, Owen Taylor
  *
  * This library is free software; you can redistribute it and/or

@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/* GTK - The GTK+ Toolkit
  * Recent chooser action for GtkUIManager
  *
  * Copyright (C) 2007, Emmanuele Bassi
