@@ -49,6 +49,7 @@
 #include "gtkhscale.h"
 #include "gtkvscale.h"
 #include "gtkframe.h"
+#include "gtkhbox.h"
 #include "gtkvbox.h"
 #include "gtkwindow.h"
 #include "gtkmarshalers.h"
@@ -151,10 +152,7 @@ static void gtk_scale_button_update_icon	(GtkScaleButton      *button);
 static void gtk_scale_button_scale_value_changed(GtkRange            *range);
 
 /* see below for scale definitions */
-static GtkWidget *gtk_scale_button_scale_new    (GtkScaleButton      *button,
-                                                 gdouble              min,
-                                                 gdouble              max,
-                                                 gdouble              step);
+static GtkWidget *gtk_scale_button_scale_box_new(GtkScaleButton      *button);
 
 static guint signals[LAST_SIGNAL] = { 0, };
 
@@ -180,6 +178,13 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   widget_class->scroll_event = gtk_scale_button_scroll;
   widget_class->screen_changed = gtk_scale_button_screen_changed;
 
+  /**
+   * GtkScaleButton:orientation:
+   *
+   * The orientation of the #GtkScaleButton's popup window.
+   *
+   * Since: 2.14
+   **/
   g_object_class_install_property (gobject_class,
 				   PROP_ORIENTATION,
 				   g_param_spec_enum ("orientation",
@@ -187,8 +192,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                                       P_("The orientation of the scale"),
                                                       GTK_TYPE_ORIENTATION,
                                                       GTK_ORIENTATION_VERTICAL,
-                                                      GTK_PARAM_READWRITE |
-                                                      G_PARAM_CONSTRUCT_ONLY));
+                                                      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
 				   PROP_VALUE,
@@ -334,6 +338,7 @@ gtk_scale_button_init (GtkScaleButton *button)
   priv->timeout = FALSE;
   priv->click_id = 0;
   priv->click_timeout = CLICK_TIMEOUT;
+  priv->orientation = GTK_ORIENTATION_VERTICAL;
 
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
   gtk_button_set_focus_on_click (GTK_BUTTON (button), FALSE);
@@ -396,31 +401,10 @@ gtk_scale_button_constructor (GType                  type,
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
   gtk_container_add (GTK_CONTAINER (priv->dock), frame);
-  box = gtk_vbox_new (FALSE, 0);
+
+  /* box with scale and +/- buttons */
+  box = gtk_scale_button_scale_box_new (button);
   gtk_container_add (GTK_CONTAINER (frame), box);
-
-  /* + */
-  gtk_box_pack_start (GTK_BOX (box), button->plus_button, TRUE, FALSE, 0);
-
-  /* scale */
-  priv->scale = gtk_scale_button_scale_new (button, 0., 100., 2.);
-  if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-    {
-      gtk_widget_set_size_request (priv->scale, -1, SCALE_SIZE);
-      gtk_range_set_inverted (GTK_RANGE (priv->scale), TRUE);
-    }
-  else
-    {
-      gtk_widget_set_size_request (priv->scale, SCALE_SIZE, -1);
-    }
-
-  gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
-  gtk_box_pack_start (GTK_BOX (box), priv->scale, TRUE, FALSE, 0);
-  g_signal_connect (priv->scale, "grab-notify",
-		    G_CALLBACK (cb_scale_grab_notify), button);
-
-  /* - */
-  gtk_box_pack_start (GTK_BOX (box), button->minus_button, TRUE, FALSE, 0);
 
   /* set button text and size */
   priv->size = GTK_ICON_SIZE_SMALL_TOOLBAR;
@@ -435,14 +419,12 @@ gtk_scale_button_set_property (GObject       *object,
 			       const GValue  *value,
 			       GParamSpec    *pspec)
 {
-  GtkScaleButton *button;
-
-  button = GTK_SCALE_BUTTON (object);
+  GtkScaleButton *button = GTK_SCALE_BUTTON (object);
 
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      button->priv->orientation = g_value_get_enum (value);
+      gtk_scale_button_set_orientation (button, g_value_get_enum (value));
       break;
     case PROP_VALUE:
       gtk_scale_button_set_value (button, g_value_get_double (value));
@@ -477,11 +459,8 @@ gtk_scale_button_get_property (GObject     *object,
 			       GValue      *value,
 			       GParamSpec  *pspec)
 {
-  GtkScaleButton *button;
-  GtkScaleButtonPrivate *priv;
-
-  button = GTK_SCALE_BUTTON (object);
-  priv = button->priv;
+  GtkScaleButton *button = GTK_SCALE_BUTTON (object);
+  GtkScaleButtonPrivate *priv = button->priv;
 
   switch (prop_id)
     {
@@ -707,6 +686,76 @@ gtk_scale_button_set_adjustment	(GtkScaleButton *button,
     gtk_range_set_adjustment (GTK_RANGE (button->priv->scale), adjustment);
 
   g_object_notify (G_OBJECT (button), "adjustment");
+}
+
+/**
+ * gtk_scale_button_get_orientation:
+ * @button: a #GtkScaleButton
+ *
+ * Gets the orientation of the #GtkScaleButton's popup window.
+ *
+ * Returns: the #GtkScaleButton's orientation.
+ *
+ * Since: 2.14
+ **/
+GtkOrientation
+gtk_scale_button_get_orientation (GtkScaleButton *button)
+{
+  g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), GTK_ORIENTATION_VERTICAL);
+
+  return button->priv->orientation;
+}
+
+/**
+ * gtk_scale_button_set_orientation:
+ * @button: a #GtkScaleButton
+ * @orientation: the new orientation
+ *
+ * Sets the orientation of the #GtkScaleButton's popup window.
+ *
+ * Since: 2.14
+ **/
+void
+gtk_scale_button_set_orientation (GtkScaleButton *button,
+                                  GtkOrientation  orientation)
+{
+  GtkScaleButtonPrivate *priv;
+
+  g_return_if_fail (GTK_IS_SCALE_BUTTON (button));
+
+  priv = button->priv;
+
+  if (orientation != priv->orientation)
+    {
+      priv->orientation = orientation;
+
+      if (priv->scale)
+        {
+          GtkWidget *box = priv->scale->parent;
+          GtkWidget *frame = box->parent;
+
+          g_object_ref (button->plus_button);
+          g_object_ref (button->minus_button);
+
+          gtk_container_remove (GTK_CONTAINER (box), button->plus_button);
+          gtk_container_remove (GTK_CONTAINER (box), button->minus_button);
+          gtk_container_remove (GTK_CONTAINER (box), priv->scale);
+          gtk_container_remove (GTK_CONTAINER (frame), box);
+
+          box = gtk_scale_button_scale_box_new (button);
+          gtk_container_add (GTK_CONTAINER (frame), box);
+
+          /* FIXME: without this, the popup window appears as a square
+           * after changing the orientation
+           */
+          gtk_window_resize (GTK_WINDOW (priv->dock), 1, 1);
+
+          g_object_unref (button->plus_button);
+          g_object_unref (button->minus_button);
+        }
+
+      g_object_notify (G_OBJECT (button), "orientation");
+    }
 }
 
 /*
@@ -1283,25 +1332,54 @@ gtk_scale_button_hscale_init (GtkScaleButtonHScale *scale)
 }
 
 static GtkWidget *
-gtk_scale_button_scale_new (GtkScaleButton *button,
-                            gdouble         min,
-                            gdouble         max,
-                            gdouble         step)
+gtk_scale_button_scale_box_new (GtkScaleButton *button)
 {
   GtkScaleButtonPrivate *priv = button->priv;
   GtkScaleButtonVScale *scale;
+  GtkWidget *box;
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-    scale = g_object_new (GTK_TYPE_SCALE_BUTTON_VSCALE, NULL);
-  else
-    scale = g_object_new (GTK_TYPE_SCALE_BUTTON_HSCALE, NULL);
+    {
+      box = gtk_vbox_new (FALSE, 0);
 
+      scale = g_object_new (GTK_TYPE_SCALE_BUTTON_VSCALE, NULL);
+      priv->scale = GTK_WIDGET (scale);
+
+      gtk_widget_set_size_request (priv->scale, -1, SCALE_SIZE);
+      gtk_range_set_inverted (GTK_RANGE (priv->scale), TRUE);
+
+      gtk_box_pack_start (GTK_BOX (box), button->plus_button, TRUE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (box), priv->scale, TRUE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (box), button->minus_button, TRUE, FALSE, 0);
+    }
+  else
+    {
+      box = gtk_hbox_new (FALSE, 0);
+
+      scale = g_object_new (GTK_TYPE_SCALE_BUTTON_HSCALE, NULL);
+      priv->scale = GTK_WIDGET (scale);
+
+      gtk_widget_set_size_request (priv->scale, SCALE_SIZE, -1);
+
+      gtk_box_pack_start (GTK_BOX (box), button->minus_button, TRUE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (box), priv->scale, TRUE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (box), button->plus_button, TRUE, FALSE, 0);
+    }
+
+  gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
   gtk_range_set_adjustment (GTK_RANGE (scale),
                             GTK_ADJUSTMENT (priv->adjustment));
-
   scale->button = button;
 
-  return GTK_WIDGET (scale);
+  g_signal_connect (priv->scale, "grab-notify",
+                    G_CALLBACK (cb_scale_grab_notify), button);
+
+  /* FIXME: without this, the popup window appears as a square
+   * after changing the orientation
+   */
+  gtk_window_resize (GTK_WINDOW (priv->dock), 1, 1);
+
+  return box;
 }
 
 static gboolean
