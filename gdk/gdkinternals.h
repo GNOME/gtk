@@ -305,9 +305,6 @@ GdkWindow* _gdk_windowing_window_at_pointer  (GdkDisplay       *display,
 gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
 					gint        depth);
 
-GdkWindow* _gdk_window_new                        (GdkWindow     *parent,
-						   GdkWindowAttr *attributes,
-						   gint           attributes_mask);
 void       _gdk_window_reparent                   (GdkWindow     *window,
 						   GdkWindow     *new_parent,
 						   gint           x,

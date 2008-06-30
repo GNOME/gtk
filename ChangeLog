@@ -1,5 +1,10 @@
 2008-06-30  Michael Natterer  <mitch@imendio.com>
 
+	* gdk/gdkinternals.h: remove duplicate declaration of
+	_gdk_window_new().
+
+2008-06-30  Michael Natterer  <mitch@imendio.com>
+
 	* gdk/Makefile.am: reorder source lists alphabetically.
 
 2008-06-30  Matthias Clasen  <mclasen@redhat.com>
