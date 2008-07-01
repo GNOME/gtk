@@ -1,3 +1,10 @@
+2008-07-01  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/gtkprintoperation.c: check surface status after ceating a pdf.
+	Avoids crashing when the target can not be written, bug #537685
+
 2008-06-18  Olle Bergkvist <olle.bergkvist@yahoo.se>
 
 	Merged from trunk:

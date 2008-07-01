@@ -1839,6 +1839,17 @@ run_pdf (GtkPrintOperation  *op,
   
   surface = cairo_pdf_surface_create (priv->export_filename,
 				      width, height);
+  if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
+    {
+      g_set_error (&priv->error,
+                   GTK_PRINT_ERROR,
+                   GTK_PRINT_ERROR_GENERAL,
+                   cairo_status_to_string (cairo_surface_status (surface)));
+      *do_print = FALSE;
+      return GTK_PRINT_OPERATION_RESULT_ERROR;
+    }
+
+  /* this would crash on a nil surface */
   cairo_surface_set_fallback_resolution (surface, 300, 300);
 
   priv->platform_data = surface;
