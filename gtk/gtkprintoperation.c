@@ -491,6 +491,12 @@ gtk_print_operation_preview_handler (GtkPrintOperation        *op,
 								  &dpi_x, &dpi_y,
 								  &pop->filename);
 
+  if (pop->surface == NULL)
+    {
+      g_free (pop);
+      return FALSE;
+    }
+
   cr = cairo_create (pop->surface);
   gtk_print_context_set_cairo_context (op->priv->print_context, cr,
 				       dpi_x, dpi_y);
@@ -2271,13 +2277,38 @@ print_pages (GtkPrintOperation       *op,
 			     priv->print_context,
 			     parent,
 			     &handled);
-      
-      if (!handled ||
-	  gtk_print_context_get_cairo_context (priv->print_context) == NULL) 
-	{
-	  /* Programmer error */
-	  g_error ("You must set a cairo context on the print context");
-	}
+
+      if (!handled)
+        {
+          GtkMessageDialog *error_dialog;
+
+          error_dialog = gtk_message_dialog_new (parent,
+                                                 GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                 GTK_MESSAGE_ERROR,
+                                                 GTK_BUTTONS_OK,
+                                                 _("Error creating print preview"));
+
+          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (error_dialog),
+                                                    _("The most probable reason is that a temporary file could not be created."));
+
+          if (parent->group)
+            gtk_window_group_add_window (parent->group, GTK_WINDOW (error_dialog));
+
+          g_signal_connect (error_dialog, "response", 
+                            G_CALLBACK (gtk_widget_destroy), NULL);
+
+          gtk_widget_show (error_dialog);
+          
+          print_pages_idle_done (data);
+          
+          return;
+        }
+
+      if (gtk_print_context_get_cairo_context (priv->print_context) == NULL)
+        {
+          /* Programmer error */
+          g_error ("You must set a cairo context on the print context");
+        }
       
       priv->start_page = preview_start_page;
       priv->end_page = preview_end_page;

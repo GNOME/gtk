@@ -667,6 +667,13 @@ _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation 
   
   filename = g_build_filename (g_get_tmp_dir (), "previewXXXXXX.pdf", NULL);
   fd = g_mkstemp (filename);
+
+  if (fd < 0)
+    {
+      g_free (filename);
+      return NULL;
+    }
+
   *target = filename;
   
   paper_size = gtk_page_setup_get_paper_size (page_setup);
@@ -674,7 +681,7 @@ _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation 
   h = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
     
   *dpi_x = *dpi_y = 72;
-  surface = cairo_pdf_surface_create_for_stream (write_preview, GINT_TO_POINTER(fd), w, h);
+  surface = cairo_pdf_surface_create_for_stream (write_preview, GINT_TO_POINTER (fd), w, h);
  
   cairo_surface_set_user_data (surface, &key, GINT_TO_POINTER (fd), close_preview);
 

@@ -1,3 +1,20 @@
+2008-07-01  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 434535 – printoperation's create_surface doesn't check temp file
+	creation for success
+
+	Patch by Marek Kasik:
+
+	* gtk/gtkprintoperation-unix.c
+	(_gtk_print_operation_platform_backend_create_preview_surface): 
+	Handle failure to create temp file by returning NULL.
+
+	* gtk/gtkprintoperation.c (gtk_print_operation_preview_handler):
+	Return FALSE if surface creation fails.
+
+	(print_pages): If the preiew signal is not handled, show an
+	error dialog.
+
 2008-07-01  Michael Natterer  <mitch@imendio.com>
 
 	Bug 442042 – GtkScaleButton is too limited
