@@ -112,7 +112,10 @@ enum {
   PROP_RECENT_FILES_LIMIT,
   PROP_IM_MODULE,
   PROP_RECENT_FILES_MAX_AGE,
-  PROP_FONTCONFIG_TIMESTAMP
+  PROP_FONTCONFIG_TIMESTAMP,
+  PROP_SOUND_THEME_NAME,
+  PROP_ENABLE_INPUT_FEEDBACK_SOUNDS,
+  PROP_ENABLE_EVENT_SOUNDS
 };
 
 
@@ -857,6 +860,71 @@ gtk_settings_class_init (GtkSettingsClass *class)
   
   g_assert (result == PROP_FONTCONFIG_TIMESTAMP);
   
+  /**
+   * GtkSettings:gtk-sound-theme-name:
+   *
+   * The XDG sound theme to use for event sounds.
+   *
+   * See the <ulink url="http://www.freedesktop.org/wiki/Specifications/sound-theme-spec">Sound Theme spec</ulink> 
+   * for more information on event sounds and sound themes.
+   *
+   * GTK+ itself does not support event sounds, you have to use a loadable 
+   * module like the one that comes with libcanberra.
+   *
+   * Since: 2.14
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-sound-theme-name",
+                                                                  P_("Sound Theme Name"),
+                                                                  P_("XDG sound theme name"),
+                                                                  "freedesktop",
+                                                                  GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_SOUND_THEME_NAME);
+
+  /**
+   * GtkSettings:gtk-enable-input-feedback-sounds:
+   *
+   * Whether to play event sounds as feedback to user input.
+   *
+   * See the <ulink url="http://www.freedesktop.org/wiki/Specifications/sound-theme-spec">Sound Theme spec</ulink> 
+   * for more information on event sounds and sound themes.
+   *
+   * GTK+ itself does not support event sounds, you have to use a loadable 
+   * module like the one that comes with libcanberra.
+   *
+   * Since: 2.14
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-enable-input-feedback-sounds",
+								   P_("Aureal Input Feedback"),
+								   P_("Whether to play event sounds as feedback to user input"),
+								   TRUE,
+								   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ENABLE_INPUT_FEEDBACK_SOUNDS);
+
+  /**
+   * GtkSettings:gtk-enable-event-sounds:
+   *
+   * Whether to play any event sounds at all.
+   *
+   * See the <ulink url="http://www.freedesktop.org/wiki/Specifications/sound-theme-spec">Sound Theme spec</ulink> 
+   * for more information on event sounds and sound themes.
+   *
+   * GTK+ itself does not support event sounds, you have to use a loadable 
+   * module like the one that comes with libcanberra.
+   *
+   * Since: 2.14
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-enable-event-sounds",
+								   P_("Enable Event Sounds"),
+								   P_("Whether to play any event sounds at all"),
+								   TRUE,
+								   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ENABLE_EVENT_SOUNDS);
 }
 
 static void

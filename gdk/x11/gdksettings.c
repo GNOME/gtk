@@ -70,7 +70,10 @@ static const char gdk_settings_names[] =
   "Gtk/EnableMnemonics\0"     "gtk-enable-mnemonics\0"
   "Gtk/ScrolledWindowPlacement\0" "gtk-scrolled-window-placement\0"
   "Gtk/IMModule\0"            "gtk-im-module\0"
-  "Fontconfig/Timestamp\0"    "gtk-fontconfig-timestamp\0";
+  "Fontconfig/Timestamp\0"    "gtk-fontconfig-timestamp\0"
+  "Net/SoundThemeName\0"      "gtk-sound-theme-name\0"
+  "Net/EnableInputFeedbackSounds\0" "gtk-enable-input-feedback-sounds\0"
+  "Net/EnableEventSounds\0"  "gtk-enable-event-sounds\0";
 
 
 static const struct
@@ -118,5 +121,8 @@ static const struct
   { 1361, 1381 },
   { 1402, 1430 },
   { 1460, 1473 },
-  { 1487, 1508 }
+  { 1487, 1508 },
+  { 1533, 1552 },
+  { 1573, 1603 },
+  { 1636, 1658 }
 };

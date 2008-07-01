@@ -1,5 +1,13 @@
 2008-07-01  Matthias Clasen  <mclasen@redhat.com>
 
+	539790 – [PATCH] Please add three new settings to GtkSettings
+
+	* gdk/x11/gdksettings.c: 
+	* gtk/gtksettings.c: Add event sound settings.
+	Patch by Lennart Pöttering.
+
+2008-07-01  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 434535 – printoperation's create_surface doesn't check temp file
 	creation for success
 
