@@ -1,3 +1,7 @@
+2008-07-01  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkscalebutton.h: forgot to commit the header, fixed now.
+
 2008-07-01  Matthias Clasen  <mclasen@redhat.com>
 
 	539790 – [PATCH] Please add three new settings to GtkSettings
