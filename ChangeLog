@@ -1,5 +1,9 @@
 2008-07-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2008-07-01  Matthias Clasen  <mclasen@redhat.com>
+
 	Merged from trunk:
 
 	* gtk/gtkprintoperation-win32.c (gtk_print_run_page_setup_dialog) :

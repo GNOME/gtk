@@ -1,3 +1,30 @@
+Overview of Changes from GTK+ 2.12.10 to 2.12.11
+================================================
+
+* Bugs fixed:
+ 536757 regression: openoffice.org menus are placed at wrong
+        position since 2.12.10
+ 536990 updateiconcache.c: 'close ()' is redundant
+ 508751 gnome-terminal crashed with SIGSEGV after keypress
+ 419737 The file chooser clears the filename entry in SAVE/CREATE_FOLDER 
+        modes when it shouldn't.
+ 538784 Don't change the filename in the name entry in CREATE_FOLDER mode 
+        when changing folders
+ 536966 Paper selector crashes
+ 352738 gtk_tree_view_column_set_sort_indicator() fails to show a...
+ 378158 gdk_win32_selection_add_targets uses uninitialized hwnd v...
+ 537685 print to file crashes when the target can not be written 
+
+* Updated translations:
+ Assamese (as)
+ Catalan (ca)
+ French (fr)
+ Hungarian (hu)
+ Brazilian Portugese (pt_BR)
+ Swedish (sv)
+ Vietnamese (vi)
+
+
 Overview of Changes from GTK+ 2.12.9 to 2.12.10
 ===============================================
 
