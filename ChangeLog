@@ -2,6 +2,13 @@
 
 	Merged from trunk:
 
+	* gtk/gtkprintoperation-win32.c (gtk_print_run_page_setup_dialog) :
+	Fix life cycle to avoid crash. [#536966, Jody Goldberg]
+
+2008-07-01  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtkprintoperation.c: check surface status after ceating a pdf.
 	Avoids crashing when the target can not be written, bug #537685
 
