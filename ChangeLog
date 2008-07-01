@@ -1,3 +1,11 @@
+2008-07-01  Richard Hult  <richard@imendio.com>
+
+	Some aftermath from the window impl cleanups:
+
+	* gdk/quartz/gdkwindow-quartz.c:
+	(gdk_window_merge_child_input_shapes): Rename and export again.
+	(gdk_window_quartz_get_offsets): Make static.
+
 2008-07-01  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkscalebutton.h: forgot to commit the header, fixed now.

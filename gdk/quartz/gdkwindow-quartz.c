@@ -2342,8 +2342,8 @@ gdk_window_quartz_merge_child_shapes (GdkWindow *window)
   /* FIXME: Implement */
 }
 
-static void 
-gdk_window_quartz_merge_child_input_shapes (GdkWindow *window)
+void 
+gdk_window_merge_child_input_shapes (GdkWindow *window)
 {
   /* FIXME: Implement */
 }
@@ -2772,7 +2772,7 @@ gdk_window_set_functions (GdkWindow    *window,
   /* FIXME: Implement */
 }
 
-void
+static void
 gdk_window_quartz_get_offsets (GdkWindow  *window,
                                gint       *x_offset,
                                gint       *y_offset)
