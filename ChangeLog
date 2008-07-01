@@ -45,14 +45,6 @@
 
 	* gtk/gtk.symbols: add gtk_scale_button_get/set_orientation.
 
-2008-06-30  Cody Russell  <bratsche@gnome.org>
-
-	* Practically everything changed.
-
-	Change all references of GIMP Toolkit (and variations of it)
-	to GTK+ Toolkit, showing no mercy at all to our beloved
-	ancestry. (#540529)
-
 2008-06-30  Michael Natterer  <mitch@imendio.com>
 
 	Some unrelated cleanups found while reviewing
