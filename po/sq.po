@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-2-12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-03 17:51-0400\n"
+"POT-Creation-Date: 2008-07-01 11:07-0400\n"
 "PO-Revision-Date: 2008-03-20 11:49+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -624,7 +624,7 @@ msgstr "Hotspot i kursorit jashtë figurës"
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Intensitet i pasuportuar për file ICO: %d"
 
-#: gdk-pixbuf/io-ico.c:1223
+#: gdk-pixbuf/io-ico.c:1224
 msgid "The ICO image format"
 msgstr "Formati i figurës ICO"
 
@@ -1787,43 +1787,43 @@ msgstr "Ruaj tek _kartela:"
 msgid "Create in _folder:"
 msgstr "Krijoje tek _kartela:"
 
-#: gtk/gtkfilechooserdefault.c:7114
+#: gtk/gtkfilechooserdefault.c:7116
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "I pamundur kalimi tek kartela pasi nuk është lokale"
 
-#: gtk/gtkfilechooserdefault.c:7730 gtk/gtkfilechooserdefault.c:7751
+#: gtk/gtkfilechooserdefault.c:7732 gtk/gtkfilechooserdefault.c:7753
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Shtegu %s ekziston rregullisht"
 
-#: gtk/gtkfilechooserdefault.c:7841
+#: gtk/gtkfilechooserdefault.c:7843
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Shtegu %s nuk ekziston"
 
-#: gtk/gtkfilechooserdefault.c:8096 gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:8098 gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Një file i quajtur \"%s\" ekziston.  Dëshiron t'a zëvendësosh?"
 
-#: gtk/gtkfilechooserdefault.c:8099 gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:8101 gtk/gtkprintunixdialog.c:360
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "File ekziston në \"%s\".  Zëvendësimi do të mbishkruaj përmbajtjen e tij."
 
-#: gtk/gtkfilechooserdefault.c:8104 gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:8106 gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "_Zëvendëso"
 
-#: gtk/gtkfilechooserdefault.c:8907
+#: gtk/gtkfilechooserdefault.c:8909
 msgid "Could not start the search process"
 msgstr "E pamundur nisja e proçesit të kërkimit"
 
 # (pofilter) doublespacing: checks for bad double-spaces by comparing to original
-#: gtk/gtkfilechooserdefault.c:8908
+#: gtk/gtkfilechooserdefault.c:8910
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1831,26 +1831,26 @@ msgstr ""
 "Programi nuk mundi të krijojë një lidhje me daemon e indeksimit. Sigurohu që "
 "është duke funksionuar."
 
-#: gtk/gtkfilechooserdefault.c:8922
+#: gtk/gtkfilechooserdefault.c:8924
 msgid "Could not send the search request"
 msgstr "I pamundur dërgimi i kërkesës së kërkimit"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9350
+#: gtk/gtkfilechooserdefault.c:9352
 msgid "_Search:"
 msgstr "_Kërko:"
 
-#: gtk/gtkfilechooserdefault.c:10303
+#: gtk/gtkfilechooserdefault.c:10305
 #, c-format
 msgid "Could not mount %s"
 msgstr "I pamundur montimi i %s"
 
-#: gtk/gtkfilechooserdefault.c:10907
+#: gtk/gtkfilechooserdefault.c:10911
 msgid "Type name of new folder"
 msgstr "Shkruaj emrin e kartelës së re"
 
 # (pofilter) unchanged: please translate
-#: gtk/gtkfilechooserdefault.c:10955
+#: gtk/gtkfilechooserdefault.c:10959
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1858,33 +1858,33 @@ msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
 # (pofilter) unchanged: please translate
-#: gtk/gtkfilechooserdefault.c:10957
+#: gtk/gtkfilechooserdefault.c:10961
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
 # (pofilter) unchanged: please translate
-#: gtk/gtkfilechooserdefault.c:10959
+#: gtk/gtkfilechooserdefault.c:10963
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
 # (pofilter) unchanged: please translate
-#: gtk/gtkfilechooserdefault.c:10961
+#: gtk/gtkfilechooserdefault.c:10965
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11062 gtk/gtkfilechooserdefault.c:11084
-#: gtk/gtkfilechooserdefault.c:11155
+#: gtk/gtkfilechooserdefault.c:11066 gtk/gtkfilechooserdefault.c:11088
+#: gtk/gtkfilechooserdefault.c:11159
 msgid "Unknown"
 msgstr "Nuk njihet"
 
-#: gtk/gtkfilechooserdefault.c:11102
+#: gtk/gtkfilechooserdefault.c:11106
 msgid "Today at %H:%M"
 msgstr "Sot në orën %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11104
+#: gtk/gtkfilechooserdefault.c:11108
 msgid "Yesterday at %H:%M"
 msgstr "Dje në orën %H:%M"
 
@@ -2537,17 +2537,17 @@ msgstr "U përfundua"
 msgid "print operation status|Finished with error"
 msgstr "Përfundoi me gabim"
 
-#: gtk/gtkprintoperation.c:1985
+#: gtk/gtkprintoperation.c:1996
 #, c-format
 msgid "Preparing %d"
 msgstr "Duke përgatitur %d"
 
-#: gtk/gtkprintoperation.c:1987 gtk/gtkprintoperation.c:2241
+#: gtk/gtkprintoperation.c:1998 gtk/gtkprintoperation.c:2252
 #, c-format
 msgid "Preparing"
 msgstr "Duke përgatitur"
 
-#: gtk/gtkprintoperation.c:1990
+#: gtk/gtkprintoperation.c:2001
 #, c-format
 msgid "Printing %d"
 msgstr "Duke printuar %d"
@@ -4532,71 +4532,71 @@ msgstr "E pamundur hapja e file '%s': %s"
 msgid "Failed to write cache file: %s\n"
 msgstr "I pamundur shkrimi i file të cache: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1497
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Cache e gjeneruar është e pavlefshme.\n"
 
-#: gtk/updateiconcache.c:1513
+#: gtk/updateiconcache.c:1511
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "I pamundur riemërtimi i %s në %s: %s, prandaj %s do të hiqet.\n"
 
-#: gtk/updateiconcache.c:1525
+#: gtk/updateiconcache.c:1523
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "I pamundur riemërtimi i %s në %s: %s\n"
 
-#: gtk/updateiconcache.c:1532
+#: gtk/updateiconcache.c:1530
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "I pamundur rikthimi i emrit %s në %s: %s.\n"
 
-#: gtk/updateiconcache.c:1558
+#: gtk/updateiconcache.c:1556
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "File cache u krijua me sukses.\n"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1595
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Mbishkruaj cache ekzistuese, edhe po të jetë më e re"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1596
 msgid "Don't check for the existence of index.theme"
 msgstr "Mos kontrollo për ekzistimin e index.theme"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1597
 msgid "Don't include image data in the cache"
 msgstr "Mos përfshi të dhënat e figurës në cache"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1598
 msgid "Output a C header file"
 msgstr "Gjenero një header file C"
 
-#: gtk/updateiconcache.c:1601
+#: gtk/updateiconcache.c:1599
 msgid "Turn off verbose output"
 msgstr "Çaktivo output e hollësishëm"
 
-#: gtk/updateiconcache.c:1602
+#: gtk/updateiconcache.c:1600
 msgid "Validate existing icon cache"
 msgstr "Vleftëso cache ekzistuese të ikonave"
 
-#: gtk/updateiconcache.c:1665
+#: gtk/updateiconcache.c:1663
 #, c-format
 msgid "File not found: %s\n"
 msgstr "File nuk u gjet: %s\n"
 
-#: gtk/updateiconcache.c:1671
+#: gtk/updateiconcache.c:1669
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Cache e pavlefshme ikone: %s\n"
 
-#: gtk/updateiconcache.c:1684
+#: gtk/updateiconcache.c:1682
 #, c-format
 msgid "No theme index file."
 msgstr ""
 
-#: gtk/updateiconcache.c:1688
+#: gtk/updateiconcache.c:1686
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4666,87 +4666,87 @@ msgstr "Vietnameze (VIQR)"
 msgid "X Input Method"
 msgstr "Metodë Futjeje për X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1697
+#: modules/printbackends/cups/gtkprintbackendcups.c:1716
 msgid "Two Sided"
 msgstr "Para-mbrapa"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1698
+#: modules/printbackends/cups/gtkprintbackendcups.c:1717
 msgid "Paper Type"
 msgstr "Lloji i letrës"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1699
+#: modules/printbackends/cups/gtkprintbackendcups.c:1718
 msgid "Paper Source"
 msgstr "Burimi i letrës"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1700
+#: modules/printbackends/cups/gtkprintbackendcups.c:1719
 msgid "Output Tray"
 msgstr "Sirtari i daljes"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1709
+#: modules/printbackends/cups/gtkprintbackendcups.c:1728
 msgid "One Sided"
 msgstr "Faqe njëshe"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1710
-#: modules/printbackends/cups/gtkprintbackendcups.c:1711
-#: modules/printbackends/cups/gtkprintbackendcups.c:1715
+#: modules/printbackends/cups/gtkprintbackendcups.c:1729
+#: modules/printbackends/cups/gtkprintbackendcups.c:1730
+#: modules/printbackends/cups/gtkprintbackendcups.c:1734
 msgid "Auto Select"
 msgstr "Zgjedhje automatike"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1712
-#: modules/printbackends/cups/gtkprintbackendcups.c:1713
-#: modules/printbackends/cups/gtkprintbackendcups.c:1714
-#: modules/printbackends/cups/gtkprintbackendcups.c:2184
+#: modules/printbackends/cups/gtkprintbackendcups.c:1731
+#: modules/printbackends/cups/gtkprintbackendcups.c:1732
+#: modules/printbackends/cups/gtkprintbackendcups.c:1733
+#: modules/printbackends/cups/gtkprintbackendcups.c:2203
 msgid "Printer Default"
 msgstr "Rregullimet e prezgjedhura të printuesit"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Urgent"
 msgstr "Urgjente"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "High"
 msgstr "E lartë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Medium"
 msgstr "Mesatare"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Low"
 msgstr "E ulët"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "None"
 msgstr "Asnjë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Classified"
 msgstr "Klasifikimi"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Confidential"
 msgstr "Në konfidencë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Secret"
 msgstr "Sekrete"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Standard"
 msgstr "Standart"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Top Secret"
 msgstr "Top sekret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Unclassified"
 msgstr "Pa klasifikim"
 
 # (pofilter) variables: do not translate: %s, %s
 # (pofilter) isfuzzy: Check if the unit has been marked fuzzy.
 # (pofilter) printf: checks whether printf format strings match
-#: modules/printbackends/cups/gtkprintbackendcups.c:2473
+#: modules/printbackends/cups/gtkprintbackendcups.c:2492
 #, c-format
 msgid "Custom %sx%s"
 msgstr "E personalizuar %sx%s"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-03 17:51-0400\n"
+"POT-Creation-Date: 2008-07-01 11:07-0400\n"
 "PO-Revision-Date: 2007-09-17 21:50+0200\n"
 "Last-Translator: Robert Millan <rmh@aybabtu.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -580,7 +580,7 @@ msgstr "Lloc calent del cursor fora de la imatge"
 msgid "Unsupported depth for ICO file: %d"
 msgstr "No se suporta la profunditat per al fitxer ICO: %d"
 
-#: gdk-pixbuf/io-ico.c:1223
+#: gdk-pixbuf/io-ico.c:1224
 msgid "The ICO image format"
 msgstr "El format d'imatge ICO"
 
@@ -1716,42 +1716,42 @@ msgstr "De_sa en la carpeta:"
 msgid "Create in _folder:"
 msgstr "Crea en la _carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:7114
+#: gtk/gtkfilechooserdefault.c:7116
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "No es pot canviar a la carpeta perquè no és local"
 
-#: gtk/gtkfilechooserdefault.c:7730 gtk/gtkfilechooserdefault.c:7751
+#: gtk/gtkfilechooserdefault.c:7732 gtk/gtkfilechooserdefault.c:7753
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La drecera %s ja existix"
 
-#: gtk/gtkfilechooserdefault.c:7841
+#: gtk/gtkfilechooserdefault.c:7843
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La drecera %s no existix"
 
-#: gtk/gtkfilechooserdefault.c:8096 gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:8098 gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ja existix un fitxer amb el nom «%s». Voleu reemplaçar-ho?"
 
-#: gtk/gtkfilechooserdefault.c:8099 gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:8101 gtk/gtkprintunixdialog.c:360
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "El fitxer ja existix a «%s». Si ho reemplaceu sobreescriureu el seu contingut."
 
-#: gtk/gtkfilechooserdefault.c:8104 gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:8106 gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "_Reemplaça"
 
-#: gtk/gtkfilechooserdefault.c:8907
+#: gtk/gtkfilechooserdefault.c:8909
 msgid "Could not start the search process"
 msgstr "No s'ha pogut iniciar el procés de cerca"
 
-#: gtk/gtkfilechooserdefault.c:8908
+#: gtk/gtkfilechooserdefault.c:8910
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1759,56 +1759,56 @@ msgstr ""
 "El programa no ha pogut crear cap connexió al dimoni d'indexació. Assegureu-"
 "vos que s'està executant."
 
-#: gtk/gtkfilechooserdefault.c:8922
+#: gtk/gtkfilechooserdefault.c:8924
 msgid "Could not send the search request"
 msgstr "No s'ha pogut enviar la sol·licitud de cerca"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9350
+#: gtk/gtkfilechooserdefault.c:9352
 msgid "_Search:"
 msgstr "_Cerca:"
 
-#: gtk/gtkfilechooserdefault.c:10303
+#: gtk/gtkfilechooserdefault.c:10305
 #, c-format
 msgid "Could not mount %s"
 msgstr "No s'ha pogut muntar %s"
 
-#: gtk/gtkfilechooserdefault.c:10907
+#: gtk/gtkfilechooserdefault.c:10911
 msgid "Type name of new folder"
 msgstr "Nom del tipus de la nova carpeta"
 
-#: gtk/gtkfilechooserdefault.c:10955
+#: gtk/gtkfilechooserdefault.c:10959
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octets"
 
-#: gtk/gtkfilechooserdefault.c:10957
+#: gtk/gtkfilechooserdefault.c:10961
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10959
+#: gtk/gtkfilechooserdefault.c:10963
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10961
+#: gtk/gtkfilechooserdefault.c:10965
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11062 gtk/gtkfilechooserdefault.c:11084
-#: gtk/gtkfilechooserdefault.c:11155
+#: gtk/gtkfilechooserdefault.c:11066 gtk/gtkfilechooserdefault.c:11088
+#: gtk/gtkfilechooserdefault.c:11159
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/gtkfilechooserdefault.c:11102
+#: gtk/gtkfilechooserdefault.c:11106
 msgid "Today at %H:%M"
 msgstr "Avui a les %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11104
+#: gtk/gtkfilechooserdefault.c:11108
 msgid "Yesterday at %H:%M"
 msgstr "Ahir a les %H:%M"
 
@@ -2446,17 +2446,17 @@ msgstr "Finalitzat"
 msgid "print operation status|Finished with error"
 msgstr "Finalitzat amb error"
 
-#: gtk/gtkprintoperation.c:1985
+#: gtk/gtkprintoperation.c:1996
 #, c-format
 msgid "Preparing %d"
 msgstr "S'està preparant %d"
 
-#: gtk/gtkprintoperation.c:1987 gtk/gtkprintoperation.c:2241
+#: gtk/gtkprintoperation.c:1998 gtk/gtkprintoperation.c:2252
 #, c-format
 msgid "Preparing"
 msgstr "S'està preparant"
 
-#: gtk/gtkprintoperation.c:1990
+#: gtk/gtkprintoperation.c:2001
 #, c-format
 msgid "Printing %d"
 msgstr "S'està imprimint %d"
@@ -4286,71 +4286,71 @@ msgstr "No s'ha pogut obrir el fitxer «%s»: «%s»"
 msgid "Failed to write cache file: %s\n"
 msgstr "No s'ha pogut escriure el fitxer de memòria cau: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1497
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "La memòria cau generada no era vàlida.\n"
 
-#: gtk/updateiconcache.c:1513
+#: gtk/updateiconcache.c:1511
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "No s'ha pogut canviar el nom de %s a %s: %s, se suprimirà %s.\n"
 
-#: gtk/updateiconcache.c:1525
+#: gtk/updateiconcache.c:1523
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "No s'ha pogut canviar el nom de %s a %s: %s\n"
 
-#: gtk/updateiconcache.c:1532
+#: gtk/updateiconcache.c:1530
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "No s'ha pogut tornar a anomenar %s a %s: %s.\n"
 
-#: gtk/updateiconcache.c:1558
+#: gtk/updateiconcache.c:1556
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "S'ha creat el fitxer de memòria cau amb èxit.\n"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1595
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Sobreescriu una memòria cau existent, encara que estigui al dia"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1596
 msgid "Don't check for the existence of index.theme"
 msgstr "No comprovis l'existència de index.theme"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1597
 msgid "Don't include image data in the cache"
 msgstr "No incloguis dades d'imatges a la memòria cau"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1598
 msgid "Output a C header file"
 msgstr "Produix un fitxer de capçalera C"
 
-#: gtk/updateiconcache.c:1601
+#: gtk/updateiconcache.c:1599
 msgid "Turn off verbose output"
 msgstr "Desactiva l'eixida detallada"
 
-#: gtk/updateiconcache.c:1602
+#: gtk/updateiconcache.c:1600
 msgid "Validate existing icon cache"
 msgstr "Valida la memòria cau d'icones existent"
 
-#: gtk/updateiconcache.c:1665
+#: gtk/updateiconcache.c:1663
 #, c-format
 msgid "File not found: %s\n"
 msgstr "No s'ha trobat el fitxer: %s\n"
 
-#: gtk/updateiconcache.c:1671
+#: gtk/updateiconcache.c:1669
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "No és una memòria cau d'icones vàlida: %s\n"
 
-#: gtk/updateiconcache.c:1684
+#: gtk/updateiconcache.c:1682
 #, c-format
 msgid "No theme index file."
 msgstr ""
 
-#: gtk/updateiconcache.c:1688
+#: gtk/updateiconcache.c:1686
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4416,84 +4416,84 @@ msgstr "Vietnamita (VIQR)"
 msgid "X Input Method"
 msgstr "Mètode d'entrada d'X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1697
+#: modules/printbackends/cups/gtkprintbackendcups.c:1716
 msgid "Two Sided"
 msgstr "Doble cara"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1698
+#: modules/printbackends/cups/gtkprintbackendcups.c:1717
 msgid "Paper Type"
 msgstr "Tipus de paper"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1699
+#: modules/printbackends/cups/gtkprintbackendcups.c:1718
 msgid "Paper Source"
 msgstr "Font del paper"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1700
+#: modules/printbackends/cups/gtkprintbackendcups.c:1719
 msgid "Output Tray"
 msgstr "Safata d'eixida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1709
+#: modules/printbackends/cups/gtkprintbackendcups.c:1728
 msgid "One Sided"
 msgstr "Una cara"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1710
-#: modules/printbackends/cups/gtkprintbackendcups.c:1711
-#: modules/printbackends/cups/gtkprintbackendcups.c:1715
+#: modules/printbackends/cups/gtkprintbackendcups.c:1729
+#: modules/printbackends/cups/gtkprintbackendcups.c:1730
+#: modules/printbackends/cups/gtkprintbackendcups.c:1734
 msgid "Auto Select"
 msgstr "Selecció automàtica"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1712
-#: modules/printbackends/cups/gtkprintbackendcups.c:1713
-#: modules/printbackends/cups/gtkprintbackendcups.c:1714
-#: modules/printbackends/cups/gtkprintbackendcups.c:2184
+#: modules/printbackends/cups/gtkprintbackendcups.c:1731
+#: modules/printbackends/cups/gtkprintbackendcups.c:1732
+#: modules/printbackends/cups/gtkprintbackendcups.c:1733
+#: modules/printbackends/cups/gtkprintbackendcups.c:2203
 msgid "Printer Default"
 msgstr "Predeterminat de la impressora"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Urgent"
 msgstr "Urgent"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "High"
 msgstr "Alta"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Medium"
 msgstr "Mitjana"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Low"
 msgstr "Baixa"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "None"
 msgstr "Cap"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Classified"
 msgstr "Classificat"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Confidential"
 msgstr "Confidencial"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Secret"
 msgstr "Secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Standard"
 msgstr "Estàndard"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Top Secret"
 msgstr "Alt secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Unclassified"
 msgstr "Desclassificat"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2473
+#: modules/printbackends/cups/gtkprintbackendcups.c:2492
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "Personalitzat %.2fx%.2f"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-03 17:51-0400\n"
+"POT-Creation-Date: 2008-07-01 11:07-0400\n"
 "PO-Revision-Date: 2008-02-26 20:04+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@ulrik.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -578,7 +578,7 @@ msgstr "Peikarpunktet utanfor biletet"
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Djupna til biletet er for djup for ei ICO-fil: %d"
 
-#: gdk-pixbuf/io-ico.c:1223
+#: gdk-pixbuf/io-ico.c:1224
 msgid "The ICO image format"
 msgstr "ICO-bileteformatet"
 
@@ -1715,41 +1715,41 @@ msgstr "Lagra i _mappe:"
 msgid "Create in _folder:"
 msgstr "Lag i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:7114
+#: gtk/gtkfilechooserdefault.c:7116
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan ikkje gå til mappa. Ho er ikkje lokal"
 
-#: gtk/gtkfilechooserdefault.c:7730 gtk/gtkfilechooserdefault.c:7751
+#: gtk/gtkfilechooserdefault.c:7732 gtk/gtkfilechooserdefault.c:7753
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "snarvegen %s finst frå før"
 
-#: gtk/gtkfilechooserdefault.c:7841
+#: gtk/gtkfilechooserdefault.c:7843
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Snarvegen %s finst ikkje"
 
-#: gtk/gtkfilechooserdefault.c:8096 gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:8098 gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ei fil med namnet «%s» finst frå før. Vil du byta henne ut?"
 
-#: gtk/gtkfilechooserdefault.c:8099 gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:8101 gtk/gtkprintunixdialog.c:360
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Fila finst frå før i «%s». Å byta henne ut vil skriva over innhaldet."
 
-#: gtk/gtkfilechooserdefault.c:8104 gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:8106 gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "_Byt ut"
 
-#: gtk/gtkfilechooserdefault.c:8907
+#: gtk/gtkfilechooserdefault.c:8909
 msgid "Could not start the search process"
 msgstr "Klarte ikkje starta søkjeprosessen"
 
-#: gtk/gtkfilechooserdefault.c:8908
+#: gtk/gtkfilechooserdefault.c:8910
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1757,56 +1757,56 @@ msgstr ""
 "Programmet klarte ikkje å kopla til indekseringsnissen. Kontroller at han "
 "køyrer."
 
-#: gtk/gtkfilechooserdefault.c:8922
+#: gtk/gtkfilechooserdefault.c:8924
 msgid "Could not send the search request"
 msgstr "Klarte ikkje å senda søkjeførespurnad"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9350
+#: gtk/gtkfilechooserdefault.c:9352
 msgid "_Search:"
 msgstr "_Søk:"
 
-#: gtk/gtkfilechooserdefault.c:10303
+#: gtk/gtkfilechooserdefault.c:10305
 #, c-format
 msgid "Could not mount %s"
 msgstr "Klarte ikkje å montera %s"
 
-#: gtk/gtkfilechooserdefault.c:10907
+#: gtk/gtkfilechooserdefault.c:10911
 msgid "Type name of new folder"
 msgstr "Skriv namnet på den nye mappa"
 
-#: gtk/gtkfilechooserdefault.c:10955
+#: gtk/gtkfilechooserdefault.c:10959
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:10957
+#: gtk/gtkfilechooserdefault.c:10961
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KiB"
 
-#: gtk/gtkfilechooserdefault.c:10959
+#: gtk/gtkfilechooserdefault.c:10963
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MiB"
 
-#: gtk/gtkfilechooserdefault.c:10961
+#: gtk/gtkfilechooserdefault.c:10965
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GiB"
 
-#: gtk/gtkfilechooserdefault.c:11062 gtk/gtkfilechooserdefault.c:11084
-#: gtk/gtkfilechooserdefault.c:11155
+#: gtk/gtkfilechooserdefault.c:11066 gtk/gtkfilechooserdefault.c:11088
+#: gtk/gtkfilechooserdefault.c:11159
 msgid "Unknown"
 msgstr "Ukjend"
 
-#: gtk/gtkfilechooserdefault.c:11102
+#: gtk/gtkfilechooserdefault.c:11106
 msgid "Today at %H:%M"
 msgstr "I dag %H.%M"
 
-#: gtk/gtkfilechooserdefault.c:11104
+#: gtk/gtkfilechooserdefault.c:11108
 msgid "Yesterday at %H:%M"
 msgstr "I går %H.%M"
 
@@ -2435,17 +2435,17 @@ msgstr "Ferdig"
 msgid "print operation status|Finished with error"
 msgstr "Ferdig, men med feil"
 
-#: gtk/gtkprintoperation.c:1985
+#: gtk/gtkprintoperation.c:1996
 #, c-format
 msgid "Preparing %d"
 msgstr "Gjer klar %d"
 
-#: gtk/gtkprintoperation.c:1987 gtk/gtkprintoperation.c:2241
+#: gtk/gtkprintoperation.c:1998 gtk/gtkprintoperation.c:2252
 #, c-format
 msgid "Preparing"
 msgstr "Gjer klar"
 
-#: gtk/gtkprintoperation.c:1990
+#: gtk/gtkprintoperation.c:2001
 #, c-format
 msgid "Printing %d"
 msgstr "Skriv ut %d"
@@ -4258,71 +4258,71 @@ msgstr "Klarte ikkje å opna fila «%s»: %s"
 msgid "Failed to write cache file: %s\n"
 msgstr "Klarte ikkje å skriva bufferfil: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1497
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Det genererte bufferet var ugyldig.\n"
 
-#: gtk/updateiconcache.c:1513
+#: gtk/updateiconcache.c:1511
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Klarte ikkje å endra namnet på %s til %s: %s, fjernar %s.\n"
 
-#: gtk/updateiconcache.c:1525
+#: gtk/updateiconcache.c:1523
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Klarte ikkje å endra namnet på %s til %s: %s\n"
 
-#: gtk/updateiconcache.c:1532
+#: gtk/updateiconcache.c:1530
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Klarte ikkje å endra namnet på %s tilbake til %s: %s.\n"
 
-#: gtk/updateiconcache.c:1558
+#: gtk/updateiconcache.c:1556
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Bufferfila oppretta.\n"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1595
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Skriv over det lagra bufferet, sjølv om det er oppdatert"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1596
 msgid "Don't check for the existence of index.theme"
 msgstr "Ikkje sjå etter om index.theme finst"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1597
 msgid "Don't include image data in the cache"
 msgstr "Ikkje ta med biletedata i bufferet"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1598
 msgid "Output a C header file"
 msgstr "Lag ei C-topptekstfil"
 
-#: gtk/updateiconcache.c:1601
+#: gtk/updateiconcache.c:1599
 msgid "Turn off verbose output"
 msgstr "Slå av ordrik utskrift"
 
-#: gtk/updateiconcache.c:1602
+#: gtk/updateiconcache.c:1600
 msgid "Validate existing icon cache"
 msgstr "Kontroller ikonbufferet"
 
-#: gtk/updateiconcache.c:1665
+#: gtk/updateiconcache.c:1663
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Fann ikkje fila: %s\n"
 
-#: gtk/updateiconcache.c:1671
+#: gtk/updateiconcache.c:1669
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Ikkje eit gyldig ikonbuffer: %s\n"
 
-#: gtk/updateiconcache.c:1684
+#: gtk/updateiconcache.c:1682
 #, c-format
 msgid "No theme index file."
 msgstr ""
 
-#: gtk/updateiconcache.c:1688
+#: gtk/updateiconcache.c:1686
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4387,84 +4387,84 @@ msgstr "Vietnamesisk (VIQR)"
 msgid "X Input Method"
 msgstr "X-inndatametode"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1697
+#: modules/printbackends/cups/gtkprintbackendcups.c:1716
 msgid "Two Sided"
 msgstr "Dobbeltsidig"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1698
+#: modules/printbackends/cups/gtkprintbackendcups.c:1717
 msgid "Paper Type"
 msgstr "Papirtype"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1699
+#: modules/printbackends/cups/gtkprintbackendcups.c:1718
 msgid "Paper Source"
 msgstr "Papirkjelde"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1700
+#: modules/printbackends/cups/gtkprintbackendcups.c:1719
 msgid "Output Tray"
 msgstr "Utskuff"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1709
+#: modules/printbackends/cups/gtkprintbackendcups.c:1728
 msgid "One Sided"
 msgstr "Enkeltsidig"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1710
-#: modules/printbackends/cups/gtkprintbackendcups.c:1711
-#: modules/printbackends/cups/gtkprintbackendcups.c:1715
+#: modules/printbackends/cups/gtkprintbackendcups.c:1729
+#: modules/printbackends/cups/gtkprintbackendcups.c:1730
+#: modules/printbackends/cups/gtkprintbackendcups.c:1734
 msgid "Auto Select"
 msgstr "Vel automatisk"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1712
-#: modules/printbackends/cups/gtkprintbackendcups.c:1713
-#: modules/printbackends/cups/gtkprintbackendcups.c:1714
-#: modules/printbackends/cups/gtkprintbackendcups.c:2184
+#: modules/printbackends/cups/gtkprintbackendcups.c:1731
+#: modules/printbackends/cups/gtkprintbackendcups.c:1732
+#: modules/printbackends/cups/gtkprintbackendcups.c:1733
+#: modules/printbackends/cups/gtkprintbackendcups.c:2203
 msgid "Printer Default"
 msgstr "Standard for skrivar"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Urgent"
 msgstr "Hastar"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "High"
 msgstr "Høg"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Medium"
 msgstr "Middels"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Low"
 msgstr "Låg"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "None"
 msgstr "Ingen"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Classified"
 msgstr "Begrensa"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Confidential"
 msgstr "Konfidensiell"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Secret"
 msgstr "Hemmeleg"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Standard"
 msgstr "Standard"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Top Secret"
 msgstr "Topphemmeleg"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Unclassified"
 msgstr "Ikkje begrensa"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2473
+#: modules/printbackends/cups/gtkprintbackendcups.c:2492
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "Sjølvvald %.2fx%.2f"

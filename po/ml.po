@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-03 17:51-0400\n"
+"POT-Creation-Date: 2008-07-01 11:07-0400\n"
 "PO-Revision-Date: 2007-09-10 15:09+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com>\n"
 "Language-Team: Malayalam\n"
@@ -575,7 +575,7 @@ msgstr ""
 msgid "Unsupported depth for ICO file: %d"
 msgstr ""
 
-#: gdk-pixbuf/io-ico.c:1223
+#: gdk-pixbuf/io-ico.c:1224
 msgid "The ICO image format"
 msgstr "ICO ഇമേജ് രീതി"
 
@@ -1679,42 +1679,42 @@ msgstr "ഫോള്‍ഡറില്‍ സൂക്ഷിക്കുക (_f)
 msgid "Create in _folder:"
 msgstr "ഫോള്‍ഡറില്‍ ഉണ്ടാക്കുക (_f):"
 
-#: gtk/gtkfilechooserdefault.c:7114
+#: gtk/gtkfilechooserdefault.c:7116
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "ലോക്കല്‍ ആയതിനാല്‍ ഫോള്‍ഡറിലേക്ക് മാറ്റുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:7730 gtk/gtkfilechooserdefault.c:7751
+#: gtk/gtkfilechooserdefault.c:7732 gtk/gtkfilechooserdefault.c:7753
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s എന്ന കുറുക്ക് വഴി നിലവിലുണ്ട്"
 
-#: gtk/gtkfilechooserdefault.c:7841
+#: gtk/gtkfilechooserdefault.c:7843
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s എന്ന കുറുക്ക് വഴി നിലവിലില്ല"
 
-#: gtk/gtkfilechooserdefault.c:8096 gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:8098 gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" എന്ന പേരില്‍ ഒരു ഫയല്‍ നിലവിലുണ്ട്.  നിങ്ങള്‍ക്ക് അത് മാറ്റി എഴുതണമോ?"
 
-#: gtk/gtkfilechooserdefault.c:8099 gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:8101 gtk/gtkprintunixdialog.c:360
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\"-ല്‍ ഒരു ഫയല്‍ ഉണ്ട്.  അതിന്റെ സ്ഥാനത്ത് ഇത് സൂക്ഷിച്ചാല്‍ ഉള്ളടക്കം മാറ്റി എഴുതപ്പെടുന്നു."
 
-#: gtk/gtkfilechooserdefault.c:8104 gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:8106 gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "മാറ്റി വേറെ സൂക്ഷിക്കുക (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8907
+#: gtk/gtkfilechooserdefault.c:8909
 msgid "Could not start the search process"
 msgstr "തിരച്ചില്‍ പ്റക്റിയ ആരംഭിക്കുവാനായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:8908
+#: gtk/gtkfilechooserdefault.c:8910
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1722,56 +1722,56 @@ msgstr ""
 "indexer ഡെമണിലേക്ക് ഒരു കണക്ഷന്‍ ഉണ്ടാക്കുവാന്‍ പ്റോഗ്റാമിന് സാധ്യമായില്ല.  അത് പ്റവറ്‍ത്തിക്കുന്നു "
 "എന്നുറപ്പാക്കുക."
 
-#: gtk/gtkfilechooserdefault.c:8922
+#: gtk/gtkfilechooserdefault.c:8924
 msgid "Could not send the search request"
 msgstr "തിരച്ചിലിനുള്ള ആവശ്യം അയയ്ക്കുവാന്‍ സാധ്യമായില്ല"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9350
+#: gtk/gtkfilechooserdefault.c:9352
 msgid "_Search:"
 msgstr "തിരയുക (_S):"
 
-#: gtk/gtkfilechooserdefault.c:10303
+#: gtk/gtkfilechooserdefault.c:10305
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s മൌണ്ട് ചെയ്യുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:10907
+#: gtk/gtkfilechooserdefault.c:10911
 msgid "Type name of new folder"
 msgstr "പുതിയ ഫോള്‍ഡറിന്റെ പേര് ടൈപ്പ് ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:10955
+#: gtk/gtkfilechooserdefault.c:10959
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d ബൈറ്റ്"
 msgstr[1] "%d ബൈറ്റുകള്‍"
 
-#: gtk/gtkfilechooserdefault.c:10957
+#: gtk/gtkfilechooserdefault.c:10961
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10959
+#: gtk/gtkfilechooserdefault.c:10963
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10961
+#: gtk/gtkfilechooserdefault.c:10965
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11062 gtk/gtkfilechooserdefault.c:11084
-#: gtk/gtkfilechooserdefault.c:11155
+#: gtk/gtkfilechooserdefault.c:11066 gtk/gtkfilechooserdefault.c:11088
+#: gtk/gtkfilechooserdefault.c:11159
 msgid "Unknown"
 msgstr "അപരിചിതം"
 
-#: gtk/gtkfilechooserdefault.c:11102
+#: gtk/gtkfilechooserdefault.c:11106
 msgid "Today at %H:%M"
 msgstr "ഇന്ന് %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11104
+#: gtk/gtkfilechooserdefault.c:11108
 msgid "Yesterday at %H:%M"
 msgstr "ഇന്നലെ %H:%M"
 
@@ -2396,17 +2396,17 @@ msgstr "പൂറ്‍ത്തിയായിരിക്കുന്നു"
 msgid "print operation status|Finished with error"
 msgstr "പിശകോടെ പൂറ്‍ത്തിയാക്കിയിരിക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:1985
+#: gtk/gtkprintoperation.c:1996
 #, c-format
 msgid "Preparing %d"
 msgstr "%d തയ്യാറാക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:1987 gtk/gtkprintoperation.c:2241
+#: gtk/gtkprintoperation.c:1998 gtk/gtkprintoperation.c:2252
 #, c-format
 msgid "Preparing"
 msgstr "തയ്യാറാക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:1990
+#: gtk/gtkprintoperation.c:2001
 #, c-format
 msgid "Printing %d"
 msgstr "%d പ്റിന്റ് ചെയ്യുന്നു"
@@ -4217,71 +4217,71 @@ msgstr "'%s' എന്ന ഫയല്‍ തുറക്കുന്നില�
 msgid "Failed to write cache file: %s\n"
 msgstr "കാഷ് ഫയല്‍ എഴുതുന്നതില്‍ പരാജയം: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1497
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "ഉണ്ടാക്കപ്പെട്ട കാഷ് ശരിയല്ല.\n"
 
-#: gtk/updateiconcache.c:1513
+#: gtk/updateiconcache.c:1511
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s-ന്റെ പേര് %s ആയി മാറ്റുവാന്‍ സാധ്യമായില്ല: %s, അതിനാല്‍ %s മാറ്റുന്നു\n"
 
-#: gtk/updateiconcache.c:1525
+#: gtk/updateiconcache.c:1523
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s-ന്റെ പേര് %s ആയി മാറ്റുവാന്‍ സാധ്യമായില്ല: %s\n"
 
-#: gtk/updateiconcache.c:1532
+#: gtk/updateiconcache.c:1530
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s-ന്റെ പേര് %s എന്ന് തിരികെ മാറ്റുവാന്‍ സാധ്യമായില്ല: %s.\n"
 
-#: gtk/updateiconcache.c:1558
+#: gtk/updateiconcache.c:1556
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "കാഷ് ഫയല്‍ വിജയകരമായി ഉണ്ടാക്കിയിരിക്കുന്നു.\n"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1595
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "ഏറ്റവും പുതിയതാണ് എങ്കിലും നിലവിലുള്ള കാഷ് മാറ്റി എഴുതുന്നു"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1596
 msgid "Don't check for the existence of index.theme"
 msgstr "index.theme നിലവിലുണ്ടോ എന്ന് നോക്കേണ്ടതില്ല"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1597
 msgid "Don't include image data in the cache"
 msgstr "കാഷില്‍ ഇമേജിനുള്ള ഫയല്‍ ഉള്‍പ്പെടുത്തേണ്ട"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1598
 msgid "Output a C header file"
 msgstr "ഒരു C ഹെഡറ്‍ ഫയല്‍ ഔട്ട്പുട്ട് ആക്കുക"
 
-#: gtk/updateiconcache.c:1601
+#: gtk/updateiconcache.c:1599
 msgid "Turn off verbose output"
 msgstr "വെറ്‍ബോസ് ഔട്ട്പുട്ട് വേണ്ടെന്ന് വയ്ക്കുക"
 
-#: gtk/updateiconcache.c:1602
+#: gtk/updateiconcache.c:1600
 msgid "Validate existing icon cache"
 msgstr "നിലവിലുള്ള ഐക്കണ്‍ കാഷ് പരിശോധിക്കുന്നു"
 
-#: gtk/updateiconcache.c:1665
+#: gtk/updateiconcache.c:1663
 #, c-format
 msgid "File not found: %s\n"
 msgstr "ഫയല്‍ ലഭ്യമല്ല: %s\n"
 
-#: gtk/updateiconcache.c:1671
+#: gtk/updateiconcache.c:1669
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "ശരിയായ ഐക്കണ്‍ കാഷ് അല്ല: %s\n"
 
-#: gtk/updateiconcache.c:1684
+#: gtk/updateiconcache.c:1682
 #, c-format
 msgid "No theme index file."
 msgstr ""
 
-#: gtk/updateiconcache.c:1688
+#: gtk/updateiconcache.c:1686
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4345,84 +4345,84 @@ msgstr "വിയറ്റ്നാമീസ് (VIQR)"
 msgid "X Input Method"
 msgstr "X ഇന്‍പുട്ട് രീതി"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1697
+#: modules/printbackends/cups/gtkprintbackendcups.c:1716
 msgid "Two Sided"
 msgstr "ഇരുവശവുമുള്ള"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1698
+#: modules/printbackends/cups/gtkprintbackendcups.c:1717
 msgid "Paper Type"
 msgstr "ഏത് തരം പേപ്പറ്‍"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1699
+#: modules/printbackends/cups/gtkprintbackendcups.c:1718
 msgid "Paper Source"
 msgstr "പേപ്പറിന്റെ ഉറവിടം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1700
+#: modules/printbackends/cups/gtkprintbackendcups.c:1719
 msgid "Output Tray"
 msgstr "ഔട്ട്പുട്ട് ട്രേ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1709
+#: modules/printbackends/cups/gtkprintbackendcups.c:1728
 msgid "One Sided"
 msgstr "ഒരു വശം മാത്റം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1710
-#: modules/printbackends/cups/gtkprintbackendcups.c:1711
-#: modules/printbackends/cups/gtkprintbackendcups.c:1715
+#: modules/printbackends/cups/gtkprintbackendcups.c:1729
+#: modules/printbackends/cups/gtkprintbackendcups.c:1730
+#: modules/printbackends/cups/gtkprintbackendcups.c:1734
 msgid "Auto Select"
 msgstr "സ്വയം തിരഞ്ഞെടുക്കുക"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1712
-#: modules/printbackends/cups/gtkprintbackendcups.c:1713
-#: modules/printbackends/cups/gtkprintbackendcups.c:1714
-#: modules/printbackends/cups/gtkprintbackendcups.c:2184
+#: modules/printbackends/cups/gtkprintbackendcups.c:1731
+#: modules/printbackends/cups/gtkprintbackendcups.c:1732
+#: modules/printbackends/cups/gtkprintbackendcups.c:1733
+#: modules/printbackends/cups/gtkprintbackendcups.c:2203
 msgid "Printer Default"
 msgstr "സ്വതവേസുള്ള പ്റിന്ററ്‍"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Urgent"
 msgstr "അത്യാവശ്യമായ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "High"
 msgstr "കൂടിയ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Medium"
 msgstr "ഇടത്തരം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Low"
 msgstr "കുറഞ്ഞ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "None"
 msgstr "ഒന്നുമില്ല"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Classified"
 msgstr "വേറ്‍തിരിച്ച"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Confidential"
 msgstr "വളരെ രഹസ്യമായ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Secret"
 msgstr "രഹസ്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Standard"
 msgstr "നിലവാരമുള്ള"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Top Secret"
 msgstr "പരമ രഹസ്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Unclassified"
 msgstr "വേറ്‍തിരിച്ചിട്ടില്ലാത്ത"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2473
+#: modules/printbackends/cups/gtkprintbackendcups.c:2492
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "കസ്റ്റം %.2fx%.2f"

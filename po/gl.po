@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-03 17:51-0400\n"
+"POT-Creation-Date: 2008-07-01 11:07-0400\n"
 "PO-Revision-Date: 2008-03-12 10:52+0100\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
@@ -587,7 +587,7 @@ msgstr "Punto quente do cursor fora da imaxe"
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Profundidade non soportada para o ficheiro ICO: %d"
 
-#: gdk-pixbuf/io-ico.c:1223
+#: gdk-pixbuf/io-ico.c:1224
 msgid "The ICO image format"
 msgstr "O formato de imaxe ICO"
 
@@ -1725,42 +1725,42 @@ msgstr "Gardar no _cartafol:"
 msgid "Create in _folder:"
 msgstr "Crear en _cartafol:"
 
-#: gtk/gtkfilechooserdefault.c:7114
+#: gtk/gtkfilechooserdefault.c:7116
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "Non se puido cambiar ao cartafol porque non é local"
 
-#: gtk/gtkfilechooserdefault.c:7730 gtk/gtkfilechooserdefault.c:7751
+#: gtk/gtkfilechooserdefault.c:7732 gtk/gtkfilechooserdefault.c:7753
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "O atallo %s xa existe"
 
-#: gtk/gtkfilechooserdefault.c:7841
+#: gtk/gtkfilechooserdefault.c:7843
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "O atallo %s non existe"
 
-#: gtk/gtkfilechooserdefault.c:8096 gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:8098 gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Xa existe un ficheiro chamado \"%s\". Quere reemprazalo?"
 
-#: gtk/gtkfilechooserdefault.c:8099 gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:8101 gtk/gtkprintunixdialog.c:360
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "O ficheiro xa existe en \"%s\". Se o reempraza sobreescribirá seu contido."
 
-#: gtk/gtkfilechooserdefault.c:8104 gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:8106 gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "_Reemprazar"
 
-#: gtk/gtkfilechooserdefault.c:8907
+#: gtk/gtkfilechooserdefault.c:8909
 msgid "Could not start the search process"
 msgstr "Non se puido iniciar o proceso de busca"
 
-#: gtk/gtkfilechooserdefault.c:8908
+#: gtk/gtkfilechooserdefault.c:8910
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1768,56 +1768,56 @@ msgstr ""
 "O programa non puido crear unha conexión co daemon de índices.  Asegúrese de "
 "que está en execución."
 
-#: gtk/gtkfilechooserdefault.c:8922
+#: gtk/gtkfilechooserdefault.c:8924
 msgid "Could not send the search request"
 msgstr "Non se puido enviar a solicitude de busca"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9350
+#: gtk/gtkfilechooserdefault.c:9352
 msgid "_Search:"
 msgstr "_Buscar:"
 
-#: gtk/gtkfilechooserdefault.c:10303
+#: gtk/gtkfilechooserdefault.c:10305
 #, c-format
 msgid "Could not mount %s"
 msgstr "Non se puido montar %s"
 
-#: gtk/gtkfilechooserdefault.c:10907
+#: gtk/gtkfilechooserdefault.c:10911
 msgid "Type name of new folder"
 msgstr "Nome do tipo do catafol novo"
 
-#: gtk/gtkfilechooserdefault.c:10955
+#: gtk/gtkfilechooserdefault.c:10959
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:10957
+#: gtk/gtkfilechooserdefault.c:10961
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10959
+#: gtk/gtkfilechooserdefault.c:10963
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10961
+#: gtk/gtkfilechooserdefault.c:10965
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11062 gtk/gtkfilechooserdefault.c:11084
-#: gtk/gtkfilechooserdefault.c:11155
+#: gtk/gtkfilechooserdefault.c:11066 gtk/gtkfilechooserdefault.c:11088
+#: gtk/gtkfilechooserdefault.c:11159
 msgid "Unknown"
 msgstr "Descoñecido"
 
-#: gtk/gtkfilechooserdefault.c:11102
+#: gtk/gtkfilechooserdefault.c:11106
 msgid "Today at %H:%M"
 msgstr "Hoxe ás %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11104
+#: gtk/gtkfilechooserdefault.c:11108
 msgid "Yesterday at %H:%M"
 msgstr "Onte ás %H:%M"
 
@@ -2450,17 +2450,17 @@ msgstr "Rematado"
 msgid "print operation status|Finished with error"
 msgstr "Rematado con erro"
 
-#: gtk/gtkprintoperation.c:1985
+#: gtk/gtkprintoperation.c:1996
 #, c-format
 msgid "Preparing %d"
 msgstr "Preparando %d"
 
-#: gtk/gtkprintoperation.c:1987 gtk/gtkprintoperation.c:2241
+#: gtk/gtkprintoperation.c:1998 gtk/gtkprintoperation.c:2252
 #, c-format
 msgid "Preparing"
 msgstr "Preparando"
 
-#: gtk/gtkprintoperation.c:1990
+#: gtk/gtkprintoperation.c:2001
 #, c-format
 msgid "Printing %d"
 msgstr "Imprimindo %d"
@@ -4277,71 +4277,71 @@ msgstr "Non se puido abrir o ficheiro '%s': %s"
 msgid "Failed to write cache file: %s\n"
 msgstr "Fallou ao escribir o ficheiro de caché: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1497
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "A caché xerada non é válida.\n"
 
-#: gtk/updateiconcache.c:1513
+#: gtk/updateiconcache.c:1511
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Non se puido renomear %s a %s: %s, por conseguinte elimínase %s.\n"
 
-#: gtk/updateiconcache.c:1525
+#: gtk/updateiconcache.c:1523
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Non se puido renomear %s a %s: %s\n"
 
-#: gtk/updateiconcache.c:1532
+#: gtk/updateiconcache.c:1530
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Non se puido renomear %s de novo a %s: %s.\n"
 
-#: gtk/updateiconcache.c:1558
+#: gtk/updateiconcache.c:1556
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Ficheiro de caché creado satisfactoriamente.\n"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1595
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Substituír unha caché existente, incluso se está actualizada"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1596
 msgid "Don't check for the existence of index.theme"
 msgstr "Non comprobar a existencia de index.theme"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1597
 msgid "Don't include image data in the cache"
 msgstr "Non incluír os datos da imaxe na caché"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1598
 msgid "Output a C header file"
 msgstr "Sacar un ficheiro de cabeceira C"
 
-#: gtk/updateiconcache.c:1601
+#: gtk/updateiconcache.c:1599
 msgid "Turn off verbose output"
 msgstr "Desactivar a saída detallada"
 
-#: gtk/updateiconcache.c:1602
+#: gtk/updateiconcache.c:1600
 msgid "Validate existing icon cache"
 msgstr "Validar a caché de iconas existente"
 
-#: gtk/updateiconcache.c:1665
+#: gtk/updateiconcache.c:1663
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Ficheiro non encontrado: %s\n"
 
-#: gtk/updateiconcache.c:1671
+#: gtk/updateiconcache.c:1669
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Non é unha caché de iconas válida: %s\n"
 
-#: gtk/updateiconcache.c:1684
+#: gtk/updateiconcache.c:1682
 #, c-format
 msgid "No theme index file."
 msgstr ""
 
-#: gtk/updateiconcache.c:1688
+#: gtk/updateiconcache.c:1686
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4406,84 +4406,84 @@ msgstr "Vietnamita (VIQR)"
 msgid "X Input Method"
 msgstr "Método da entrada X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1697
+#: modules/printbackends/cups/gtkprintbackendcups.c:1716
 msgid "Two Sided"
 msgstr "Dúas caras"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1698
+#: modules/printbackends/cups/gtkprintbackendcups.c:1717
 msgid "Paper Type"
 msgstr "Tipo de papel"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1699
+#: modules/printbackends/cups/gtkprintbackendcups.c:1718
 msgid "Paper Source"
 msgstr "Fonte do papel"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1700
+#: modules/printbackends/cups/gtkprintbackendcups.c:1719
 msgid "Output Tray"
 msgstr "Bandexa de saída"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1709
+#: modules/printbackends/cups/gtkprintbackendcups.c:1728
 msgid "One Sided"
 msgstr "Unha cara"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1710
-#: modules/printbackends/cups/gtkprintbackendcups.c:1711
-#: modules/printbackends/cups/gtkprintbackendcups.c:1715
+#: modules/printbackends/cups/gtkprintbackendcups.c:1729
+#: modules/printbackends/cups/gtkprintbackendcups.c:1730
+#: modules/printbackends/cups/gtkprintbackendcups.c:1734
 msgid "Auto Select"
 msgstr "Selección automática"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1712
-#: modules/printbackends/cups/gtkprintbackendcups.c:1713
-#: modules/printbackends/cups/gtkprintbackendcups.c:1714
-#: modules/printbackends/cups/gtkprintbackendcups.c:2184
+#: modules/printbackends/cups/gtkprintbackendcups.c:1731
+#: modules/printbackends/cups/gtkprintbackendcups.c:1732
+#: modules/printbackends/cups/gtkprintbackendcups.c:1733
+#: modules/printbackends/cups/gtkprintbackendcups.c:2203
 msgid "Printer Default"
 msgstr "Impresora predeterminada"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Urgent"
 msgstr "Urxente"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "High"
 msgstr "Alto"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Medium"
 msgstr "Medio"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Low"
 msgstr "Baixo"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "None"
 msgstr "Ningún"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Classified"
 msgstr "Clasificado"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Confidential"
 msgstr "Confidencial"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Secret"
 msgstr "Secreto"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Standard"
 msgstr "Estándar"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Top Secret"
 msgstr "Alto secreto"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Unclassified"
 msgstr "Sen clasificar"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2473
+#: modules/printbackends/cups/gtkprintbackendcups.c:2492
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Personalizado %sx%s"

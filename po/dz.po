@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-03 17:51-0400\n"
+"POT-Creation-Date: 2008-07-01 11:07-0400\n"
 "PO-Revision-Date: 2006-08-09 10:30+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -580,7 +580,7 @@ msgstr "འོད་རྟགས་འཁྱམས་གནས་ གཟུག�
 msgid "Unsupported depth for ICO file: %d"
 msgstr "ཨའི་སི་ཨོ་ ཡིག་སྣོད་ %d གི་དོན་ལུ རྒྱབ་སྐྱོར་མེད་པའི་གཏིང་ཚད།"
 
-#: gdk-pixbuf/io-ico.c:1223
+#: gdk-pixbuf/io-ico.c:1224
 msgid "The ICO image format"
 msgstr "ཨའི་སི་ཨོ་ གཟུགས་བརྙན་གྱི་རྩ་སྒྲིག"
 
@@ -1711,27 +1711,27 @@ msgstr "སྣོད་འཛིན་ནང༌སྲུངས།(_f)"
 msgid "Create in _folder:"
 msgstr "སྣོད་འཛིན་ནང་གསར་བསྐྲུན་འབད།(_f)"
 
-#: gtk/gtkfilechooserdefault.c:7114
+#: gtk/gtkfilechooserdefault.c:7116
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "ཉེ་གནས་མེནམ་ལས་ སྣོད་འཛིན་ལུ་ བསྒྱུར་བཅོས་འབད་མི་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:7730 gtk/gtkfilechooserdefault.c:7751
+#: gtk/gtkfilechooserdefault.c:7732 gtk/gtkfilechooserdefault.c:7753
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "མགྱོགས་ཐབས་ %s ཧེ་མ་ལས་ར་འདུག"
 
-#: gtk/gtkfilechooserdefault.c:7841
+#: gtk/gtkfilechooserdefault.c:7843
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "མགྱོགས་ཐབས་ %s མིན་འདུག"
 
-#: gtk/gtkfilechooserdefault.c:8096 gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:8098 gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "ཡིག་སྣོད་མིང་\"%s\" འབད་མི་ཅིག་ ཧེ་མ་ལས་ར་འདུག དེ་གི་ཚབ་བཙུགས་ནི་ཨིན་ན?"
 
-#: gtk/gtkfilechooserdefault.c:8099 gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:8101 gtk/gtkprintunixdialog.c:360
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1739,72 +1739,72 @@ msgstr ""
 "\"%s\" ནང་ལུ་ ཡིག་སྣོད་དེ་ ཧེ་མ་ལས་ར་འདུག དེ་གི་ཚབ་བཙུགས་པ་ཅིན་ དེ་ནང་ཡོད་པའི་ནང་དོན་ཚུ་ ཚབ་"
 "སྲུང་འབད་འོང་།"
 
-#: gtk/gtkfilechooserdefault.c:8104 gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:8106 gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "ཚབ་བཙུགས།(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8907
+#: gtk/gtkfilechooserdefault.c:8909
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "གཞན་སྲུང་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:8908
+#: gtk/gtkfilechooserdefault.c:8910
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8922
+#: gtk/gtkfilechooserdefault.c:8924
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "གཞན་སྲུང་མ་ཚུགས།"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9350
+#: gtk/gtkfilechooserdefault.c:9352
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10303
+#: gtk/gtkfilechooserdefault.c:10305
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s སྦྱར་བརྩེགས་འབད་མ་ཚུགས། "
 
-#: gtk/gtkfilechooserdefault.c:10907
+#: gtk/gtkfilechooserdefault.c:10911
 msgid "Type name of new folder"
 msgstr "སྣོད་འཛིན་གསར་པའི་མིང་ ཡིག་དཔར་རྐྱབས།"
 
-#: gtk/gtkfilechooserdefault.c:10955
+#: gtk/gtkfilechooserdefault.c:10959
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "བ་ཡིཊི་%d།"
 msgstr[1] "བ་ཡིཊསི་%d།"
 
-#: gtk/gtkfilechooserdefault.c:10957
+#: gtk/gtkfilechooserdefault.c:10961
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f ཀེ་བི།"
 
-#: gtk/gtkfilechooserdefault.c:10959
+#: gtk/gtkfilechooserdefault.c:10963
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f ཨེམ་བི།"
 
-#: gtk/gtkfilechooserdefault.c:10961
+#: gtk/gtkfilechooserdefault.c:10965
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f  ཇི་བི།"
 
-#: gtk/gtkfilechooserdefault.c:11062 gtk/gtkfilechooserdefault.c:11084
-#: gtk/gtkfilechooserdefault.c:11155
+#: gtk/gtkfilechooserdefault.c:11066 gtk/gtkfilechooserdefault.c:11088
+#: gtk/gtkfilechooserdefault.c:11159
 msgid "Unknown"
 msgstr "མ་ཤེསཔ།"
 
-#: gtk/gtkfilechooserdefault.c:11102
+#: gtk/gtkfilechooserdefault.c:11106
 msgid "Today at %H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11104
+#: gtk/gtkfilechooserdefault.c:11108
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "ཁ་རྩང༌།"
@@ -2431,17 +2431,17 @@ msgstr "རྫོགས་སོ།"
 msgid "print operation status|Finished with error"
 msgstr "འཛོལ་བ་དང་བཅས་རྫོགས་སོ།"
 
-#: gtk/gtkprintoperation.c:1985
+#: gtk/gtkprintoperation.c:1996
 #, c-format
 msgid "Preparing %d"
 msgstr "%dགྲ་སྒྲིག་འབད་དོ།"
 
-#: gtk/gtkprintoperation.c:1987 gtk/gtkprintoperation.c:2241
+#: gtk/gtkprintoperation.c:1998 gtk/gtkprintoperation.c:2252
 #, c-format
 msgid "Preparing"
 msgstr "གྲ་སྒྲིག་འབད་དོ།"
 
-#: gtk/gtkprintoperation.c:1990
+#: gtk/gtkprintoperation.c:2001
 #, c-format
 msgid "Printing %d"
 msgstr "%dདཔར་བསྐྲུད་འབད་དོ།"
@@ -4257,72 +4257,72 @@ msgstr "ཡིག་སྣོད་ '%s': %s ཁ་ཕྱེ་མ་ཚུག�
 msgid "Failed to write cache file: %s\n"
 msgstr "འདྲ་མཛོད་ཡིག་སྣོད་:%s འབྲི་མ་ཚུགས།\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1497
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1513
+#: gtk/updateiconcache.c:1511
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%sལས་%s: %s,ལུ་བསྐྱར་མིང་བཏགས་མ་ཚུགསཔ་ལས་%sརྩ་བསྐྲད་གཏང་དོ།\n"
 
-#: gtk/updateiconcache.c:1525
+#: gtk/updateiconcache.c:1523
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s ལས་ %s: %s ལུ་ བསྐྱར་མིང་བཏགས་མ་ཚུགས།\n"
 
-#: gtk/updateiconcache.c:1532
+#: gtk/updateiconcache.c:1530
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s དེ་ ལོག་སྟེ་ %s: %s ལུ་ བསྐྱར་མིང་བཏགས་མ་ཚུགས།\n"
 
-#: gtk/updateiconcache.c:1558
+#: gtk/updateiconcache.c:1556
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "འདྲ་མཛོད་ཡིག་སྣོད་ མཐར་འཁྱོལ་སྦེ་ གསར་བསྐྲུན་འབད་ཡི།\n"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1595
 #, fuzzy
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "དུས་མཐུན་ཡོད་དེ་འབད་རུང་ ད་ལྟོའི་འདྲ་མཛོད་ཅིག་ལུ་ ཚབ་སྲུང་འབད།"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1596
 msgid "Don't check for the existence of index.theme"
 msgstr "ཟུར་ཐོའི་བརྗོད་དོན་ཡོད་མེད་ཀྱི་དོན་ལུ་ ཞིབ་དཔྱད་མ་འབད།"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1597
 msgid "Don't include image data in the cache"
 msgstr "འདྲ་མཛོད་ནང་ལུ་ གཟུགས་བརྙན་གྱི་གནས་སྡུད་ གྲངས་སུ་མ་བཙུགས།"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1598
 msgid "Output a C header file"
 msgstr "སི་མགོ་ཡིག་གི་ཡིག་སྣོད་ཅིག་ ཨའུཊི་པུཊི་འབད།"
 
-#: gtk/updateiconcache.c:1601
+#: gtk/updateiconcache.c:1599
 msgid "Turn off verbose output"
 msgstr "ཚིག་མང་ཨའུཊི་པུཊི་ ཨོཕ་རྐྱབས།"
 
-#: gtk/updateiconcache.c:1602
+#: gtk/updateiconcache.c:1600
 msgid "Validate existing icon cache"
 msgstr ""
 
-#: gtk/updateiconcache.c:1665
+#: gtk/updateiconcache.c:1663
 #, fuzzy, c-format
 msgid "File not found: %s\n"
 msgstr "%s སྦྱར་བརྩེགས་འབད་མ་ཚུགས། "
 
-#: gtk/updateiconcache.c:1671
+#: gtk/updateiconcache.c:1669
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1684
+#: gtk/updateiconcache.c:1682
 #, c-format
 msgid "No theme index file."
 msgstr ""
 
-#: gtk/updateiconcache.c:1688
+#: gtk/updateiconcache.c:1686
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4387,84 +4387,84 @@ msgstr "བེཊི་ན་མིསི། (ཝི་ཨའི་ཀིའུ�
 msgid "X Input Method"
 msgstr "ཨེགསི་ ཨིན་པུཊི་གི་ ཐབས་ཤེས།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1697
+#: modules/printbackends/cups/gtkprintbackendcups.c:1716
 msgid "Two Sided"
 msgstr "ཕྱོགས་གཉིས་ལྡན།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1698
+#: modules/printbackends/cups/gtkprintbackendcups.c:1717
 msgid "Paper Type"
 msgstr "ཤོག་ཀུའི་དབྱེ་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1699
+#: modules/printbackends/cups/gtkprintbackendcups.c:1718
 msgid "Paper Source"
 msgstr "ཤོག་ཀུ་འབྱུང་ས།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1700
+#: modules/printbackends/cups/gtkprintbackendcups.c:1719
 msgid "Output Tray"
 msgstr "ཨའུཊི་པུཊི་ཤོག་སྣོད།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1709
+#: modules/printbackends/cups/gtkprintbackendcups.c:1728
 msgid "One Sided"
 msgstr "ཕྱོགས་གཅིགམ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1710
-#: modules/printbackends/cups/gtkprintbackendcups.c:1711
-#: modules/printbackends/cups/gtkprintbackendcups.c:1715
+#: modules/printbackends/cups/gtkprintbackendcups.c:1729
+#: modules/printbackends/cups/gtkprintbackendcups.c:1730
+#: modules/printbackends/cups/gtkprintbackendcups.c:1734
 msgid "Auto Select"
 msgstr "རང་བཞིན་སེལ་འཐུ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1712
-#: modules/printbackends/cups/gtkprintbackendcups.c:1713
-#: modules/printbackends/cups/gtkprintbackendcups.c:1714
-#: modules/printbackends/cups/gtkprintbackendcups.c:2184
+#: modules/printbackends/cups/gtkprintbackendcups.c:1731
+#: modules/printbackends/cups/gtkprintbackendcups.c:1732
+#: modules/printbackends/cups/gtkprintbackendcups.c:1733
+#: modules/printbackends/cups/gtkprintbackendcups.c:2203
 msgid "Printer Default"
 msgstr "དཔར་འཕྲུལ་སྔོན་སྒྲིག"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Urgent"
 msgstr "འཕྲལ་མཁོ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "High"
 msgstr "མཐོ་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Medium"
 msgstr "བར་མ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2378
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "Low"
 msgstr "དམའ་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "None"
 msgstr "ཅི་མེད།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Classified"
 msgstr "དབྱེ་བ་བཟོ་ཡོདཔ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Confidential"
 msgstr "གསང་བྱ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Secret"
 msgstr "གསང་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Standard"
 msgstr "ཚད་ལྡན།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Top Secret"
 msgstr "ཧ་ཅང་གསང་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2380
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Unclassified"
 msgstr "དབྱེ་བ་མ་བཟོཝ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2473
+#: modules/printbackends/cups/gtkprintbackendcups.c:2492
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "སྲོལ་སྒྲིག་གི་ཚད།"
