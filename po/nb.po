@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.13.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-24 20:46+0200\n"
-"PO-Revision-Date: 2008-06-24 21:02+0200\n"
+"POT-Creation-Date: 2008-07-01 09:15+0200\n"
+"PO-Revision-Date: 2008-07-01 09:16+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -1704,22 +1704,22 @@ msgstr "Opprett i _mappe:"
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan ikke gå til mappen fordi den ikke er lokal."
 
-#: ../gtk/gtkfilechooserdefault.c:7570 ../gtk/gtkfilechooserdefault.c:7591
+#: ../gtk/gtkfilechooserdefault.c:7578 ../gtk/gtkfilechooserdefault.c:7599
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Snarvei %s eksisterer allerede"
 
-#: ../gtk/gtkfilechooserdefault.c:7681
+#: ../gtk/gtkfilechooserdefault.c:7689
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Snarvei %s eksisterer ikke"
 
-#: ../gtk/gtkfilechooserdefault.c:7924 ../gtk/gtkprintunixdialog.c:356
+#: ../gtk/gtkfilechooserdefault.c:7932 ../gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "En fil med navn «%s» eksisterer allerede. Vil du erstatte den?"
 
-#: ../gtk/gtkfilechooserdefault.c:7927 ../gtk/gtkprintunixdialog.c:360
+#: ../gtk/gtkfilechooserdefault.c:7935 ../gtk/gtkprintunixdialog.c:360
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1727,15 +1727,15 @@ msgstr ""
 "Filen eksisterer allerede i «%s». Hvis du erstatter denne vil du overskrive "
 "innholdet."
 
-#: ../gtk/gtkfilechooserdefault.c:7932 ../gtk/gtkprintunixdialog.c:367
+#: ../gtk/gtkfilechooserdefault.c:7940 ../gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "E_rstatt"
 
-#: ../gtk/gtkfilechooserdefault.c:8693
+#: ../gtk/gtkfilechooserdefault.c:8701
 msgid "Could not start the search process"
 msgstr "Kunne ikke starte søkeprosessen"
 
-#: ../gtk/gtkfilechooserdefault.c:8694
+#: ../gtk/gtkfilechooserdefault.c:8702
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1743,49 +1743,49 @@ msgstr ""
 "Programmet kunne ikke opprette en tilkobling til indekseringstjenesten. "
 "Sjekk at denne kjører."
 
-#: ../gtk/gtkfilechooserdefault.c:8708
+#: ../gtk/gtkfilechooserdefault.c:8716
 msgid "Could not send the search request"
 msgstr "Kunne ikke sende søkeforespørselen"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9123
+#: ../gtk/gtkfilechooserdefault.c:9131
 msgid "_Search:"
 msgstr "_Søk:"
 
-#: ../gtk/gtkfilechooserdefault.c:10070
+#: ../gtk/gtkfilechooserdefault.c:10078
 #, c-format
 msgid "Could not mount %s"
 msgstr "Kunne ikke montere %s"
 
-#: ../gtk/gtkfilechooserdefault.c:10724
+#: ../gtk/gtkfilechooserdefault.c:10732
 msgid "Type name of new folder"
 msgstr "Skriv inn navn på ny mappe"
 
-#: ../gtk/gtkfilechooserdefault.c:10774
+#: ../gtk/gtkfilechooserdefault.c:10782
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: ../gtk/gtkfilechooserdefault.c:10776
+#: ../gtk/gtkfilechooserdefault.c:10784
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:10778
+#: ../gtk/gtkfilechooserdefault.c:10786
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:10881 ../gtk/gtkfilechooserdefault.c:10903
-#: ../gtk/gtkfilechooserdefault.c:10974
+#: ../gtk/gtkfilechooserdefault.c:10889 ../gtk/gtkfilechooserdefault.c:10911
+#: ../gtk/gtkfilechooserdefault.c:10982
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: ../gtk/gtkfilechooserdefault.c:10921
+#: ../gtk/gtkfilechooserdefault.c:10929
 msgid "%H:%M"
 msgstr "%H.%M"
 
-#: ../gtk/gtkfilechooserdefault.c:10923
+#: ../gtk/gtkfilechooserdefault.c:10931
 msgid "Yesterday at %H:%M"
 msgstr "I går kl. %H.%M"
 
@@ -1950,7 +1950,7 @@ msgstr "Kunne ikke konvertere filnavnet"
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: ../gtk/gtkfilesystem.c:48
+#: ../gtk/gtkfilesystem.c:51
 msgid "File System"
 msgstr "Filsystem"
 
@@ -2177,16 +2177,16 @@ msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:737
+#: ../gtk/gtkmain.c:740
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan ikke åpne skjerm: %s"
 
-#: ../gtk/gtkmain.c:774
+#: ../gtk/gtkmain.c:777
 msgid "GTK+ Options"
 msgstr "Alternativer for GTK+"
 
-#: ../gtk/gtkmain.c:774
+#: ../gtk/gtkmain.c:777
 msgid "Show GTK+ Options"
 msgstr "Vis alternativer for GTK+"
 
@@ -2380,63 +2380,71 @@ msgid "%s job #%d"
 msgstr "%s jobb #%d"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1498
+#: ../gtk/gtkprintoperation.c:1504
 msgid "print operation status|Initial state"
 msgstr "Starttilstand"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1500
+#: ../gtk/gtkprintoperation.c:1506
 msgid "print operation status|Preparing to print"
 msgstr "Forbereder utskrift"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1502
+#: ../gtk/gtkprintoperation.c:1508
 msgid "print operation status|Generating data"
 msgstr "Genererer data"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1504
+#: ../gtk/gtkprintoperation.c:1510
 msgid "print operation status|Sending data"
 msgstr "Sender data"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1506
+#: ../gtk/gtkprintoperation.c:1512
 msgid "print operation status|Waiting"
 msgstr "Venter"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1508
+#: ../gtk/gtkprintoperation.c:1514
 msgid "print operation status|Blocking on issue"
 msgstr "Blokkert"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1510
+#: ../gtk/gtkprintoperation.c:1516
 msgid "print operation status|Printing"
 msgstr "Skriver ut"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1512
+#: ../gtk/gtkprintoperation.c:1518
 msgid "print operation status|Finished"
 msgstr "Fullført"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1514
+#: ../gtk/gtkprintoperation.c:1520
 msgid "print operation status|Finished with error"
 msgstr "Fullført med feil"
 
-#: ../gtk/gtkprintoperation.c:1997
+#: ../gtk/gtkprintoperation.c:2003
 #, c-format
 msgid "Preparing %d"
 msgstr "Forbereder %d"
 
-#: ../gtk/gtkprintoperation.c:1999 ../gtk/gtkprintoperation.c:2253
+#: ../gtk/gtkprintoperation.c:2005 ../gtk/gtkprintoperation.c:2259
 msgid "Preparing"
 msgstr "Forbereder"
 
-#: ../gtk/gtkprintoperation.c:2002
+#: ../gtk/gtkprintoperation.c:2008
 #, c-format
 msgid "Printing %d"
 msgstr "Skriver ut %d"
+
+#: ../gtk/gtkprintoperation.c:2289
+msgid "Error creating print preview"
+msgstr "Feil under oppretting av forhåndsvisning for utskrift"
+
+#: ../gtk/gtkprintoperation.c:2292
+msgid "The most probable reason is that a temporary file could not be created."
+msgstr "Den mest sannsynlige årsaken er at en midlertidig fil ikke kunne lages."
 
 #: ../gtk/gtkprintoperation-unix.c:242
 msgid "Error launching preview"
@@ -3292,43 +3300,43 @@ msgstr ""
 "Serialiserte data er feilutformet.Første del er ikke GTKTEXTBUFFERCONTENTS-"
 "0001"
 
-#: ../gtk/gtktextutil.c:60
+#: ../gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
 msgstr "VHM _Venstre-til-høyre-merke"
 
-#: ../gtk/gtktextutil.c:61
+#: ../gtk/gtktextutil.c:62
 msgid "RLM _Right-to-left mark"
 msgstr "HVM _Høyre-til-venstre-merke"
 
-#: ../gtk/gtktextutil.c:62
+#: ../gtk/gtktextutil.c:63
 msgid "LRE Left-to-right _embedding"
 msgstr "VHI V_enstre-til-høyre-innbygging"
 
-#: ../gtk/gtktextutil.c:63
+#: ../gtk/gtktextutil.c:64
 msgid "RLE Right-to-left e_mbedding"
 msgstr "HVE Høyre-til-venstre-in_nbygging"
 
-#: ../gtk/gtktextutil.c:64
+#: ../gtk/gtktextutil.c:65
 msgid "LRO Left-to-right _override"
 msgstr "VHO Venstre-til-høyre-_overstyring"
 
-#: ../gtk/gtktextutil.c:65
+#: ../gtk/gtktextutil.c:66
 msgid "RLO Right-to-left o_verride"
 msgstr "HVO Høyre-til-venstre-o_verstyring"
 
-#: ../gtk/gtktextutil.c:66
+#: ../gtk/gtktextutil.c:67
 msgid "PDF _Pop directional formatting"
 msgstr "PDF _Pop directional formatting"
 
-#: ../gtk/gtktextutil.c:67
+#: ../gtk/gtktextutil.c:68
 msgid "ZWS _Zero width space"
 msgstr "NBO _Nullbreddeområde"
 
-#: ../gtk/gtktextutil.c:68
+#: ../gtk/gtktextutil.c:69
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWJ Zero width _joiner"
 
-#: ../gtk/gtktextutil.c:69
+#: ../gtk/gtktextutil.c:70
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Zero width _non-joiner"
 
@@ -3355,39 +3363,39 @@ msgstr "Uventet tegndata på linje %d tegn %d"
 msgid "Empty"
 msgstr "Tom"
 
-#: ../gtk/gtkvolumebutton.c:81
+#: ../gtk/gtkvolumebutton.c:77
 msgid "Volume"
 msgstr "Volum"
 
-#: ../gtk/gtkvolumebutton.c:83
+#: ../gtk/gtkvolumebutton.c:79
 msgid "Turns volume down or up"
 msgstr "Tar volumet ned eller opp"
 
-#: ../gtk/gtkvolumebutton.c:86
+#: ../gtk/gtkvolumebutton.c:82
 msgid "Adjusts the volume"
 msgstr "Justerer volumet"
 
-#: ../gtk/gtkvolumebutton.c:89 ../gtk/gtkvolumebutton.c:92
+#: ../gtk/gtkvolumebutton.c:85 ../gtk/gtkvolumebutton.c:88
 msgid "Volume Down"
 msgstr "Volum ned"
 
-#: ../gtk/gtkvolumebutton.c:91
+#: ../gtk/gtkvolumebutton.c:87
 msgid "Decreases the volume"
 msgstr "Senker volumet"
 
-#: ../gtk/gtkvolumebutton.c:95 ../gtk/gtkvolumebutton.c:98
+#: ../gtk/gtkvolumebutton.c:91 ../gtk/gtkvolumebutton.c:94
 msgid "Volume Up"
 msgstr "Volum opp"
 
-#: ../gtk/gtkvolumebutton.c:97
+#: ../gtk/gtkvolumebutton.c:93
 msgid "Increases the volume"
 msgstr "Hever volumet"
 
-#: ../gtk/gtkvolumebutton.c:155
+#: ../gtk/gtkvolumebutton.c:151
 msgid "Muted"
 msgstr "Dempet"
 
-#: ../gtk/gtkvolumebutton.c:159
+#: ../gtk/gtkvolumebutton.c:155
 msgid "Full Volume"
 msgstr "Fullt volum"
 
@@ -3398,7 +3406,7 @@ msgstr "Fullt volum"
 #. * Do not translate and do not include the "volume percentage|"
 #. * part in the translation!
 #.
-#: ../gtk/gtkvolumebutton.c:174
+#: ../gtk/gtkvolumebutton.c:170
 #, c-format
 msgid "volume percentage|%d %%"
 msgstr "%d %%"
@@ -4585,4 +4593,3 @@ msgstr "Skriv ut til testskriver"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Kunne ikke hente informasjon for fil «%s»: %s"
-
