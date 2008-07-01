@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkprinteroption.c: Handling possible settings for a specific printer setting
  * Copyright (C) 2006, Red Hat, Inc.
  *

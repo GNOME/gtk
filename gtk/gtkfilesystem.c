@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkfilesystem.c: Filesystem abstraction functions.
  * Copyright (C) 2003, Red Hat, Inc.
  * Copyright (C) 2007-2008 Carlos Garnacho

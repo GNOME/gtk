@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtksizegroup.h:
  * Copyright (C) 2000 Red Hat Software
  *

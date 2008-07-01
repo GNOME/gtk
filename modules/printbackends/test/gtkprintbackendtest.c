@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkprintbackendpdf.c: Test implementation of GtkPrintBackend 
  * for printing to a test
  * Copyright (C) 2007, Red Hat, Inc.

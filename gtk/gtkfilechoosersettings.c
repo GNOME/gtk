@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkfilechoosersettings.c: Internal settings for the GtkFileChooser widget
  * Copyright (C) 2006, Novell, Inc.
  *

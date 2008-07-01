@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkrecentchooserdefault.c
  * Copyright (C) 2005-2006, Emmanuele Bassi
  * 

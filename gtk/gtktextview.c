@@ -1,5 +1,5 @@
 /* -*- Mode: C; c-file-style: "gnu"; tab-width: 8 -*- */
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtktextview.c Copyright (C) 2000 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or

@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkrecentchooserwidget.c: embeddable recently used resources chooser widget
  * Copyright (C) 2006 Emmanuele Bassi
  * 

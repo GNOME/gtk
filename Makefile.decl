@@ -1,4 +1,4 @@
-# GTK+ - The GTK+ Toolkit
+# GTK+ - The GIMP Toolkit
 
 GTESTER        = gtester		# in $PATH for non-GLIB packages
 GTESTER_REPORT = gtester-report		# in $PATH for non-GLIB packages

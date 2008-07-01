@@ -5,7 +5,7 @@ includedir=@includedir@
 target=@gdktarget@
 
 Name: GDK
-Description: GTK+ Drawing Kit (${target} target)
+Description: GIMP Drawing Kit (${target} target)
 Version: @VERSION@
 Requires: gdk-pixbuf-2.0 @GDK_PACKAGES@
 Libs: -L${libdir} -lgdk-${target}-@GTK_API_VERSION@ @GDK_EXTRA_LIBS@

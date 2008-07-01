@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkfilechooser.h: Abstract interface for file selector GUIs
  * Copyright (C) 2003, Red Hat, Inc.
  *

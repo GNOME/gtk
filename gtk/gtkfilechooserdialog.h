@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkfilechooserdialog.h: File selector dialog
  * Copyright (C) 2003, Red Hat, Inc.
  *

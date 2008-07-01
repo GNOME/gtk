@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkprintoperationpreview.c: Abstract print preview interface
  * Copyright (C) 2006, Red Hat, Inc.
  *

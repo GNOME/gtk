@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtktextlayout.c - calculate the layout of the text
  *
  * Copyright (c) 1992-1994 The Regents of the University of California.

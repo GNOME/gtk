@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * Copyright (C) 1998 David Abilleira Freijeiro <odaf@nexo.es>
  * All rights reserved
  * Based on gnome-color-picker by Federico Mena <federico@nuclecu.unam.mx>

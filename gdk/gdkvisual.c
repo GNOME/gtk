@@ -1,4 +1,4 @@
-/* GDK - The GTK+ Drawing Kit
+/* GDK - The GIMP Drawing Kit
  * gdkvisual.c
  * 
  * Copyright 2001 Sun Microsystems Inc. 

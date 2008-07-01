@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkprintoperation-win32.c: Print Operation Details for Win32
  * Copyright (C) 2006, Red Hat, Inc.
  *

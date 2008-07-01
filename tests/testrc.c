@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
 
    Copyright (C) 2006 Red Hat, Inc.
    Author: Matthias Clasen <mclasen@redhat.com>

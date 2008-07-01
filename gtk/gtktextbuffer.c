@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtktextbuffer.c Copyright (C) 2000 Red Hat, Inc.
  *                 Copyright (C) 2004 Nokia Corporation
  *

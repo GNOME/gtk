@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gdkasync.h: Utility functions using the Xlib asynchronous interfaces
  * Copyright (C) 2003, Red Hat, Inc.
  *

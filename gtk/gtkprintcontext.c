@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkprintcontext.c: Print Context
  * Copyright (C) 2006, Red Hat, Inc.
  *

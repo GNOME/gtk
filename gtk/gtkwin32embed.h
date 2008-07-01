@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkwin32embed.h: Utilities for Win32 embedding
  * Copyright (C) 2005, Novell, Inc.
  *

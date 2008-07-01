@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * Copyright (C) 2005 Ronald S. Bultje
  * Copyright (C) 2006, 2007 Christian Persch
  * Copyright (C) 2006 Jan Arne Petersen

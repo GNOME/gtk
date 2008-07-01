@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkprintbackendlpr.c: LPR implementation of GtkPrintBackend 
  * for printing to lpr 
  * Copyright (C) 2006, 2007 Red Hat, Inc.

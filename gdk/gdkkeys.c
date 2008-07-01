@@ -1,4 +1,4 @@
-/* GDK - The GTK+ Drawing Kit
+/* GDK - The GIMP Drawing Kit
  * Copyright (C) 2000 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or

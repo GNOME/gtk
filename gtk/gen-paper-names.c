@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * Copyright (C) 2006 Matthias Clasen
  *
  * This library is free software; you can redistribute it and/or

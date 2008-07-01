@@ -150,9 +150,8 @@ better than Motif.  It contains common and complex widgets, such as
 file selection, and color selection widgets.</para>
 
 <para>GTK+ was initially developed as a widget set for the GIMP (GNU Image
-Manipulation Program), and in fact GTK originally stood for 'The GIMP Toolkit'.
-It has grown extensively since then, and is today used by a large number
-of applications, and is the toolkit used by the
+Manipulation Program). It has grown extensively since then, and is today
+used by a large number of applications, and is the toolkit used by the
 <ulink url="http://www.gnome.org/">GNOME</ulink> desktop project.</para>
 
 <para>GTK+ is free software and part of the GNU Project. However, the
@@ -199,7 +198,7 @@ interfaces.</para>
 <sect1>
 <title>Does the G in GTK+, GDK and GLib stand for? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>GTK+ == The GTK+ Toolkit</para>
+<para>GTK+ == The GIMP Toolkit</para>
 <para>GDK == GTK+ Drawing Kit</para>
 <para>GLib == G Library</para>
 

@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkrecentmanager.c: a manager for the recently used resources
  *
  * Copyright (C) 2006 Emmanuele Bassi

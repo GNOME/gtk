@@ -14,7 +14,7 @@ VS_VERSION_INFO VERSIONINFO
       BLOCK "040904B0"
       BEGIN
 	VALUE "CompanyName", "The GTK developer community"
-	VALUE "FileDescription", "GTK+ Toolkit"
+	VALUE "FileDescription", "GIMP Toolkit"
 	VALUE "FileVersion", "@GTK_VERSION@.0"
 	VALUE "InternalName", "libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@"
 	VALUE "LegalCopyright", "Copyright (C) 1999 The Free Software Foundation. Modified by the GTK+ Team and others 1999-2005."

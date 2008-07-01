@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * Copyright (C) 2001 CodeFactory AB
  * Copyright (C) 2001, 2002 Anders Carlsson
  * Copyright (C) 2003, 2004 Matthias Clasen <mclasen@redhat.com>

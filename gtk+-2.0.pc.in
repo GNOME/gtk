@@ -8,7 +8,7 @@ gtk_binary_version=@GTK_BINARY_VERSION@
 gtk_host=@host@
 
 Name: GTK+
-Description: GTK+ Toolkit (${target} target)
+Description: GIMP Tool Kit (${target} target)
 Version: @VERSION@
 Requires: gdk-${target}-2.0 @GTK_PACKAGES@
 Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_EXTRA_LIBS@

@@ -8,9 +8,9 @@
    
 <sect>Introduction
 <p>
-GTK (GTK+ Toolkit) a été d'abord développé pour être une boîte à
+GTK (GIMP Toolkit) a été d'abord développé pour être une boîte à
 outils pour GIMP (General Image Manipulation Program).  GTK est
-construit sur GDK (GTK+ Drawing Kit) qui est, avant tout, une
+construit sur GDK (GIMP Drawing Kit) qui est, avant tout, une
 encapsulation des fonctions Xlib. On l'appelle « GIMP toolkit » car il
 fut créé pour développer GIMP, mais il est désormais utilisé dans
 plusieurs projets de logiciels libres. Les auteurs sont&nbsp;:
@@ -6860,7 +6860,7 @@ Un petite partie de notre widget devrait ressembler au widget Tictactoe. Nous
 avons d'abord le fichier en-tête&nbsp;:
 
 <tscreen><verb>
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or

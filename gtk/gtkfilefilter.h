@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkfilefilter.h: Filters for selecting a file subset
  * Copyright (C) 2003, Red Hat, Inc.
  *

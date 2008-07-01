@@ -1,4 +1,4 @@
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * gtkfilechooserdefault.h: Default implementation of GtkFileChooser
  * Copyright (C) 2003, Red Hat, Inc.
  *

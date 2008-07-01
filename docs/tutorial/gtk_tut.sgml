@@ -13,7 +13,7 @@ Ian Main <tt><htmlurl url="mailto:imain@gtk.org"
 			      name="&lt;imain@gtk.org&gt;"></tt>
 <date>February 23rd, 2000
 <abstract>
-This is a tutorial on how to use GTK (the GTK+ Toolkit) through its C
+This is a tutorial on how to use GTK (the GIMP Toolkit) through its C
 interface.
 </abstract>
 
@@ -27,7 +27,7 @@ interface.
 <sect>Introduction
 <!-- ***************************************************************** -->
 <p>
-GTK (GTK+ Toolkit) is a library for creating graphical user
+GTK (GIMP Toolkit) is a library for creating graphical user
 interfaces. It is licensed using the LGPL license, so you can develop
 open software, free software, or even commercial non-free software
 using GTK without having to spend anything for licenses or royalties.
@@ -36,7 +36,7 @@ It's called the GIMP toolkit because it was originally written for
 developing the GNU Image Manipulation Program (GIMP), but GTK has
 now been used in a large number of software projects, including the
 GNU Network Object Model Environment (GNOME) project. GTK is built on
-top of GDK (GTK+ Drawing Kit) which is basically a wrapper around the
+top of GDK (GIMP Drawing Kit) which is basically a wrapper around the
 low-level functions for accessing the underlying windowing functions
 (Xlib in the case of the X windows system). The primary authors of GTK
 are:
@@ -13385,7 +13385,7 @@ Quite a bit of our widget should look pretty familiar from the
 Tictactoe widget. First, we have a header file:
 
 <tscreen><verb>
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -16248,7 +16248,7 @@ which are not included in complete form elsewhere.
 <tscreen><verb>
 /* example-start tictactoe tictactoe.h */
 
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -16319,7 +16319,7 @@ void	       tictactoe_clear           (Tictactoe *ttt);
 <tscreen><verb>
 /* example-start tictactoe tictactoe.c */
 
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -16541,7 +16541,7 @@ int main( int   argc,
 <tscreen><verb>
 /* example-start gtkdial gtkdial.h */
 
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -16640,7 +16640,7 @@ void           gtk_dial_set_adjustment         (GtkDial      *dial,
 <tscreen><verb>
 /* example-start gtkdial gtkdial.c */
 
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -17377,7 +17377,7 @@ int main( int   argc,
 <tscreen><verb>
 /* example-start scribble-simple scribble-simple.c */
 
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -17563,7 +17563,7 @@ int main( int   argc,
 <tscreen><verb>
 /* example-start scribble-xinput scribble-xinput.c */
 
-/* GTK - The GTK+ Toolkit
+/* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
