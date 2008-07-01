@@ -1,3 +1,13 @@
+2008-07-01  Cody Russell  <bratsche@gnome.org>
+
+	Merged from trunk:
+
+        Bug 539164 – Windows' System Menu blocks main loop
+
+        * gdk/win32/gdkevents-win32.c:	Use a modal timer proc in between
+	receiving WM_ENTERMENULOOP and	WM_EXITMENULOOP	and pump	the
+	GLib mainloop from there.
+
 2008-07-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
