@@ -1210,6 +1210,7 @@ MODULE_ENTRY (ico, fill_info) (GdkPixbufFormat *info)
 	static gchar * mime_types[] = {
 		"image/x-icon",
 		"image/x-ico",
+		"image/x-win-bitmap",
 		NULL
 	};
 	static gchar * extensions[] = {
