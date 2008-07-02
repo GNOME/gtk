@@ -1138,13 +1138,13 @@ show_window_internal (GdkWindow *window,
     SetActiveWindow (old_active_window);
 }
 
-void
+static void
 gdk_win32_window_show (GdkWindow *window, gboolean raise)
 {
   show_window_internal (window, raise, FALSE);
 }
 
-void
+static void
 gdk_win32_window_hide (GdkWindow *window)
 {
   GdkWindowObject *private;
@@ -1179,7 +1179,7 @@ gdk_win32_window_hide (GdkWindow *window)
     }
 }
 
-void
+static void
 gdk_win32_window_withdraw (GdkWindow *window)
 {
   GdkWindowObject *private;
@@ -1195,7 +1195,7 @@ gdk_win32_window_withdraw (GdkWindow *window)
   gdk_window_hide (window);	/* ??? */
 }
 
-void
+static void
 gdk_win32_window_move_resize (GdkWindow *window,
 			      gboolean   with_move,
 			      gint       x,
@@ -1480,13 +1480,13 @@ erase_background (GdkWindow *window,
     }
 }
 
-void
-_gdk_win32_window_clear_area (GdkWindow *window,
-			      gint       x,
-			      gint       y,
-			      gint       width,
-			      gint       height,
-			      gboolean   send_expose)
+static void
+gdk_win32_window_clear_area (GdkWindow *window,
+			     gint       x,
+			     gint       y,
+			     gint       width,
+			     gint       height,
+			     gboolean   send_expose)
 {
   GdkWindowImplWin32 *impl;
 
@@ -1532,7 +1532,7 @@ _gdk_win32_window_clear_area (GdkWindow *window,
     }
 }
 
-void
+static void
 gdk_win32_window_raise (GdkWindow *window)
 {
   if (!GDK_WINDOW_DESTROYED (window))
@@ -1553,7 +1553,7 @@ gdk_win32_window_raise (GdkWindow *window)
     }
 }
 
-void
+static void
 gdk_win32_window_lower (GdkWindow *window)
 {
   if (!GDK_WINDOW_DESTROYED (window))
@@ -1959,7 +1959,7 @@ _gdk_modal_current ()
     }
 }
 
-void
+static void
 gdk_win32_window_set_background (GdkWindow      *window,
 				 const GdkColor *color)
 {
@@ -1980,7 +1980,7 @@ gdk_win32_window_set_background (GdkWindow      *window,
     }
 }
 
-void
+static void
 gdk_win32_window_set_back_pixmap (GdkWindow *window,
 				  GdkPixmap *pixmap,
 				  gint       parent_relative)
@@ -2017,7 +2017,7 @@ gdk_win32_window_set_back_pixmap (GdkWindow *window,
     }
 }
 
-void
+static void
 gdk_win32_window_set_cursor (GdkWindow *window,
 			     GdkCursor *cursor)
 {
@@ -2123,7 +2123,7 @@ gdk_win32_window_set_cursor (GdkWindow *window,
     }
 }
 
-void
+static void
 gdk_win32_window_get_geometry (GdkWindow *window,
 			       gint      *x,
 			       gint      *y,
@@ -2187,7 +2187,7 @@ gdk_win32_window_get_geometry (GdkWindow *window,
     }
 }
 
-gint
+static gint
 gdk_win32_window_get_origin (GdkWindow *window,
 			     gint      *x,
 			     gint      *y)
@@ -2434,7 +2434,7 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
   return window;
 }
 
-GdkEventMask  
+static GdkEventMask  
 gdk_win32_window_get_events (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window))
@@ -2443,7 +2443,7 @@ gdk_win32_window_get_events (GdkWindow *window)
   return GDK_WINDOW_OBJECT (window)->event_mask;
 }
 
-void          
+static void          
 gdk_win32_window_set_events (GdkWindow   *window,
 		       GdkEventMask event_mask)
 {
@@ -2478,7 +2478,7 @@ do_shape_combine_region (GdkWindow *window,
   SetWindowRgn (GDK_WINDOW_HWND (window), hrgn, TRUE);
 }
 
-void
+static void
 gdk_win32_window_shape_combine_mask (GdkWindow *window,
 				     GdkBitmap *mask,
 				     gint x, gint y)
@@ -2999,7 +2999,7 @@ gdk_propagate_shapes (HANDLE   win,
      DeleteObject (region);
 }
 
-void
+static void
 gdk_win32_window_set_child_shapes (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window))
@@ -3008,7 +3008,7 @@ gdk_win32_window_set_child_shapes (GdkWindow *window)
   gdk_propagate_shapes (GDK_WINDOW_HWND (window), FALSE);
 }
 
-void
+static void
 gdk_win32_window_merge_child_shapes (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window))
@@ -3037,7 +3037,7 @@ gdk_window_merge_child_input_shapes (GdkWindow *window)
    */
 }
 
-gboolean 
+static gboolean 
 gdk_win32_window_set_static_gravities (GdkWindow *window,
 				 gboolean   use_static)
 {
@@ -3526,7 +3526,7 @@ gdk_window_get_type_hint (GdkWindow *window)
   return GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->type_hint;
 }
 
-void
+static void
 gdk_win32_window_shape_combine_region (GdkWindow       *window,
 				       const GdkRegion *shape_region,
 				       gint             offset_x,
@@ -3652,7 +3652,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->withdraw = gdk_win32_window_withdraw;
   iface->set_events = gdk_win32_window_set_events;
   iface->get_events = gdk_win32_window_get_events;
-  iface->clear_area = _gdk_win32_window_clear_area;
+  iface->clear_area = gdk_win32_window_clear_area;
   iface->raise = gdk_win32_window_raise;
   iface->lower = gdk_win32_window_lower;
   iface->move_resize = gdk_win32_window_move_resize;

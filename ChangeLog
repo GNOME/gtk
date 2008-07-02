@@ -1,3 +1,10 @@
+2008-07-02  Cody Russell  <bratsche@gnome.org>
+
+	Bug 541249 – [Win32] Fix some internal static methods
+
+	* gdk/gdkwindow-win32.c: Make the interface implementation methods
+	static.
+
 2008-07-02  Michael Natterer  <mitch@imendio.com>
 
 	Bug 537591 – Don't hardcode minimum width of menuitems
