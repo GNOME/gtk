@@ -1,5 +1,10 @@
 2008-07-02  Kristian Rietveld  <kris@imendio.com>
 
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_class_init):
+	Since s/2.16/2.14/ for the new gicon property.
+
+2008-07-02  Kristian Rietveld  <kris@imendio.com>
+
 	Bug 455268 - Add gtk-enable-tooltips GtkSetting
 
 	* gtk/gtk.symbols:

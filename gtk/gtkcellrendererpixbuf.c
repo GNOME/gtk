@@ -197,7 +197,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
    * If the icon theme is changed, the image will be updated
    * automatically.
    *
-   * Since: 2.16
+   * Since: 2.14
    */
   g_object_class_install_property (object_class,
                                    PROP_GICON,
