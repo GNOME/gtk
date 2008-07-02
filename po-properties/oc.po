@@ -9,13 +9,13 @@ msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-06-13 18:23-0400\n"
-"PO-Revision-Date: 2007-12-27 13:38+0100\n"
+"PO-Revision-Date: 2008-07-02 16:59+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan <ubuntu-l10n-oci@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);"
 
 #: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
@@ -3136,14 +3136,12 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkmountoperation.c:160
-#, fuzzy
 msgid "Parent"
-msgstr "Urgent"
+msgstr "Parent"
 
 #: gtk/gtkmountoperation.c:161
-#, fuzzy
 msgid "The parent window"
-msgstr "Lo tipe de la fenèstra"
+msgstr "La fenèstra parent"
 
 #: gtk/gtkmountoperation.c:168
 msgid "Is Showing"
