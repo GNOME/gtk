@@ -209,6 +209,20 @@ void _gdk_window_move_resize_child (GdkWindow *window,
 				    gint       y,
 				    gint       width,
 				    gint       height);
+
+/* GdkWindowImpl methods */
+void _gdk_win32_window_scroll (GdkWindow *window,
+			       gint       dx,
+			       gint       dy);
+void _gdk_win32_window_move_region (GdkWindow       *window,
+				    const GdkRegion *region,
+				    gint             dx,
+				    gint             dy);
+void _gdk_win32_windowing_window_get_offsets (GdkWindow *window,
+					      gint      *x_offset,
+					      gint      *y_offset);
+
+
 void _gdk_window_process_expose    (GdkWindow *window,
                                     GdkRegion *invalidate_region);
 

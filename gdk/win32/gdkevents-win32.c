@@ -1366,7 +1366,7 @@ synthesize_enter_or_leave_event (GdkWindow    	*window,
   event->crossing.window = window;
   event->crossing.subwindow = NULL;
   event->crossing.time = _gdk_win32_get_next_tick (msg->time);
-  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
+  _gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
   event->crossing.x = x + xoffset;
   event->crossing.y = y + yoffset;
   event->crossing.x_root = msg->pt.x + _gdk_offset_x;
@@ -2012,7 +2012,7 @@ handle_wm_paint (MSG        *msg,
 
   update_region = _gdk_win32_hrgn_to_region (hrgn);
 
-  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
+  _gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
   gdk_region_offset (update_region, xoffset, yoffset);
   
   _gdk_window_process_expose (window, update_region);
@@ -2063,7 +2063,7 @@ generate_button_event (GdkEventType type,
     translate_mouse_coords (orig_window, window, msg);
   event->button.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
   event->button.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
-  _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
+  _gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
   event->button.x += xoffset;
   event->button.y += yoffset;
   event->button.x_root = msg->pt.x + _gdk_offset_x;
@@ -2633,7 +2633,7 @@ gdk_event_translate (MSG  *msg,
       event->motion.time = _gdk_win32_get_next_tick (msg->time);
       event->motion.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
       event->motion.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
-      _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
+      _gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->motion.x += xoffset;
       event->motion.y += yoffset;
       event->motion.x_root = current_root_x;
@@ -2724,7 +2724,7 @@ gdk_event_translate (MSG  *msg,
       event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
 	GDK_SCROLL_UP : GDK_SCROLL_DOWN;
       event->scroll.time = _gdk_win32_get_next_tick (msg->time);
-      _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
+      _gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->scroll.x = (gint16) point.x + xoffset;
       event->scroll.y = (gint16) point.y + yoffset;
       event->scroll.x_root = (gint16) GET_X_LPARAM (msg->lParam) + _gdk_offset_x;

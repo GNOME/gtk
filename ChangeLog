@@ -1,3 +1,13 @@
+2008-07-02  Cody Russell  <bratsche@gnome.org>
+
+	Bug 541162 – [Win32] Update for the new GdkWindowImpl stuff
+
+	* gdk/win32/gdkprivate-win32.h:
+	* gdk/win32/gdkgeometry-win32.c:
+	* gdk/win32/gdkevents-win32.c:
+	* gdk/win32/gdkwindow-win32.c: Update Win32 backend according to
+	the newly refactored GdkWindow code.
+	
 2008-07-01  Cody Russell  <bratsche@gnome.org>
 
 	Bug 539164 – Windows' System Menu blocks main loop

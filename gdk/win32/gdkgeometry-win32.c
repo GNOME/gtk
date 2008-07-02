@@ -75,9 +75,9 @@ static void gdk_window_post_scroll        (GdkWindow          *window,
 			                   GdkRegion          *new_clip_region);
 
 void
-_gdk_windowing_window_get_offsets (GdkWindow *window,
-				   gint      *x_offset,
-				   gint      *y_offset)
+_gdk_win32_windowing_window_get_offsets (GdkWindow *window,
+					 gint      *x_offset,
+					 gint      *y_offset)
 {
   GdkWindowImplWin32 *impl =
     GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
@@ -101,9 +101,9 @@ _gdk_window_init_position (GdkWindow *window)
 }
 
 void
-gdk_window_scroll (GdkWindow *window,
-		   gint       dx,
-		   gint       dy)
+_gdk_win32_window_scroll (GdkWindow *window,
+			  gint       dx,
+			  gint       dy)
 {
   GdkRegion *invalidate_region;
   GdkWindowImplWin32 *impl;
@@ -111,11 +111,6 @@ gdk_window_scroll (GdkWindow *window,
   GList *tmp_list;
   GdkWindowParentPos parent_pos;
   HRGN native_invalidate_region;
-  
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
   
   GDK_NOTE (EVENTS, g_print ("gdk_window_scroll: %p %d,%d\n",
 			     GDK_WINDOW_HWND (window), dx, dy));
@@ -172,10 +167,10 @@ gdk_window_scroll (GdkWindow *window,
 }
 
 void
-gdk_window_move_region (GdkWindow       *window,
-                        const GdkRegion *region,
-                        gint             dx,
-                        gint             dy)
+_gdk_win32_window_move_region (GdkWindow       *window,
+			       const GdkRegion *region,
+			       gint             dx,
+			       gint             dy)
 {
   GdkRegion *invalidate_region;
   GdkWindowImplWin32 *impl;
@@ -184,11 +179,6 @@ gdk_window_move_region (GdkWindow       *window,
   HRGN hrgn;
   RECT clipRect, destRect;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-  
   obj = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);  
 
