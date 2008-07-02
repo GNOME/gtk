@@ -280,6 +280,20 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                                                P_("Amount of space used up by arrow, relative to the menu item's font size"),
                                                                0.0, 2.0, 0.8,
                                                                GTK_PARAM_READABLE));
+
+  /**
+   * GtkMenuItem:width-chars:
+   *
+   * The minimum desired width of the menu item in characters.
+   *
+   * Since: 2.14
+   **/
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("width-chars",
+                                                             P_("Width in Characters"),
+                                                             P_("The minimum desired width of the menu item in characters"),
+                                                             0, G_MAXINT, 12,
+                                                             GTK_PARAM_READABLE));
 }
 
 static void
@@ -597,19 +611,21 @@ get_minimum_width (GtkWidget *widget)
 {
   PangoContext *context;
   PangoFontMetrics *metrics;
-  gint height;
+  gint width;
+  gint width_chars;
 
   context = gtk_widget_get_pango_context (widget);
   metrics = pango_context_get_metrics (context,
 				       widget->style->font_desc,
 				       pango_context_get_language (context));
 
-  height = pango_font_metrics_get_ascent (metrics) +
-      pango_font_metrics_get_descent (metrics);
-  
+  width = pango_font_metrics_get_approximate_char_width (metrics);
+
   pango_font_metrics_unref (metrics);
 
-  return PANGO_PIXELS (7 * height);
+  gtk_widget_style_get (widget, "width-chars", &width_chars, NULL);
+
+  return PANGO_PIXELS (width_chars * width);
 }
 
 static void

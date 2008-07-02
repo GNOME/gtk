@@ -1,5 +1,14 @@
 2008-07-02  Michael Natterer  <mitch@imendio.com>
 
+	Bug 537591 – Don't hardcode minimum width of menuitems
+
+	* gtk/gtkmenuitem.c: applied patch from Christian Dywan which
+	introduces a "width-chars" style property which replaces the
+	hardcoded minimum width of menuitems with submenu. Patch
+	extracted from Maemo-GTK+.
+
+2008-07-02  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkfilechooserdefault.c: remove some of the million includes.
 
 2008-07-02  Kristian Rietveld  <kris@imendio.com>
