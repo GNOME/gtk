@@ -1,3 +1,10 @@
+2008-07-02  Li Yuan  <li.yuan@sun.com>
+
+	* gailoptionmenu.c: (gail_option_menu_real_initialize),
+	(gail_option_menu_changed):
+	Bug #541167. Emit "object:property-change:accessible-name" when
+	GailOptionMenui's name changes.
+
 2008-06-18  Michael Natterer  <mitch@imendio.com>
 
 	* gailimage.c (gail_image_get_image_size)

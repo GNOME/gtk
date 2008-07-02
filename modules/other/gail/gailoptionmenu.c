@@ -53,6 +53,7 @@ static G_CONST_RETURN gchar* gail_option_menu_action_get_name  (AtkAction       
 static gboolean              gail_option_menu_set_description  (AtkAction       *action,
                                                                 gint            i,
                                                                 const gchar     *desc);
+static void                  gail_option_menu_changed          (GtkOptionMenu   *option_menu);
 
 G_DEFINE_TYPE_WITH_CODE (GailOptionMenu, gail_option_menu, GAIL_TYPE_BUTTON,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
@@ -82,7 +83,14 @@ static void
 gail_option_menu_real_initialize (AtkObject *obj,
                                   gpointer  data)
 {
+  GtkOptionMenu *option_menu;
+
   ATK_OBJECT_CLASS (gail_option_menu_parent_class)->initialize (obj, data);
+
+  option_menu = GTK_OPTION_MENU (data);
+
+  g_signal_connect (option_menu, "changed",
+                    G_CALLBACK (gail_option_menu_changed), NULL);
 
   obj->role = ATK_ROLE_COMBO_BOX;
 }
@@ -332,3 +340,13 @@ gail_option_menu_set_description (AtkAction      *action,
   else
     return FALSE;
 }
+
+static void
+gail_option_menu_changed (GtkOptionMenu   *option_menu)
+{
+  GailOptionMenu *gail_option_menu;
+
+  gail_option_menu = GAIL_OPTION_MENU (gtk_widget_get_accessible (GTK_WIDGET (option_menu)));
+  g_object_notify (G_OBJECT (gail_option_menu), "accessible-name");
+}
+
