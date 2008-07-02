@@ -1305,7 +1305,7 @@ gdk_window_get_offsets (GdkWindow *window,
 			gint      *y_offset)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  
+
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
@@ -2233,7 +2233,7 @@ gdk_window_clear_area_e (GdkWindow *window,
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
-  
+
   if (private->paint_stack)
     gdk_window_clear_backing_rect (window, x, y, width, height);
 

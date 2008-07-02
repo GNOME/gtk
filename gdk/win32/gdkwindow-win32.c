@@ -1196,30 +1196,131 @@ gdk_win32_window_withdraw (GdkWindow *window)
 }
 
 static void
-gdk_win32_window_move_resize (GdkWindow *window,
-			      gboolean   with_move,
-			      gint       x,
-			      gint       y,
-			      gint       width,
-			      gint       height)
+gdk_win32_window_move (GdkWindow *window,
+		       gint x, gint y)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplWin32 *impl;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  GDK_NOTE (MISC, g_print ("gdk_window_move: %p: %+d%+d\n",
+                           GDK_WINDOW_HWND (window), x, y));
+
+  impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
+
+  if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
+    return;
+
+  /* Don't check GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD.
+   * Foreign windows (another app's windows) might be children of our
+   * windows! Especially in the case of gtkplug/socket.
+   */
+  if (GetAncestor (GDK_WINDOW_HWND (window), GA_PARENT) != GetDesktopWindow ())
+    {
+      _gdk_window_move_resize_child (window, x, y, impl->width, impl->height);
+    }
+  else
+    {
+      RECT outer_rect;
+
+      get_outer_rect (window, impl->width, impl->height, &outer_rect);
+
+      adjust_for_gravity_hints (impl, &outer_rect, &x, &y);
+
+      GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,0,0,"
+                               "NOACTIVATE|NOSIZE|NOZORDER)\n",
+                               GDK_WINDOW_HWND (window),
+                               x - _gdk_offset_x, y - _gdk_offset_y));
+
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+                               x - _gdk_offset_x, y - _gdk_offset_y, 0, 0,
+                               SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
+    }
+}
+
+static void
+gdk_win32_window_resize (GdkWindow *window,
+			 gint width, gint height)
 {
   GdkWindowObject *private = (GdkWindowObject*) window;
   GdkWindowImplWin32 *impl;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
 
   if (width < 1)
     width = 1;
   if (height < 1)
     height = 1;
-  
+
+  GDK_NOTE (MISC, g_print ("gdk_window_resize: %p: %dx%d\n",
+                           GDK_WINDOW_HWND (window), width, height));
+
+  impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
+
+  if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
+    return;
+
+  if (GetAncestor (GDK_WINDOW_HWND (window), GA_PARENT) != GetDesktopWindow ())
+    {
+      _gdk_window_move_resize_child (window, private->x, private->y, width, height);
+    }
+  else
+    {
+      RECT outer_rect;
+
+      get_outer_rect (window, width, height, &outer_rect);
+
+      GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,0,0,%ld,%ld,"
+                               "NOACTIVATE|NOMOVE|NOZORDER)\n",
+                               GDK_WINDOW_HWND (window),
+                               outer_rect.right - outer_rect.left,
+                               outer_rect.bottom - outer_rect.top));
+
+      API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
+                               0, 0,
+                               outer_rect.right - outer_rect.left,
+                               outer_rect.bottom - outer_rect.top,
+                               SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER));
+      private->resize_count += 1;
+    }
+}
+
+static void
+gdk_win32_window_move_resize_internal (GdkWindow *window,
+				       gint       x,
+				       gint       y,
+				       gint       width,
+				       gint       height)
+{
+  GdkWindowObject *private = (GdkWindowObject*) window;
+  GdkWindowImplWin32 *impl;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (width < 1)
+    width = 1;
+  if (height < 1)
+    height = 1;
+
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
 
   if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
     return;
 
   GDK_NOTE (MISC, g_print ("gdk_window_move_resize: %p: %dx%d@%+d%+d\n",
-			   GDK_WINDOW_HWND (window),
-			   width, height, x, y));
-  
+                           GDK_WINDOW_HWND (window),
+                           width, height, x, y));
+
   if (GetAncestor (GDK_WINDOW_HWND (window), GA_PARENT) != GetDesktopWindow ())
     {
       _gdk_window_move_resize_child (window, x, y, width, height);
@@ -1233,23 +1334,42 @@ gdk_win32_window_move_resize (GdkWindow *window,
       adjust_for_gravity_hints (impl, &outer_rect, &x, &y);
 
       GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,%ld,%ld,"
-			       "NOACTIVATE|NOZORDER)\n",
-			       GDK_WINDOW_HWND (window),
-			       x - _gdk_offset_x, y - _gdk_offset_y,
-			       outer_rect.right - outer_rect.left,
-			       outer_rect.bottom - outer_rect.top));
-
-      UINT uflags = SWP_NOACTIVATE | SWP_NOZORDER;
-      if (with_move == FALSE)
-	  uflags |= SWP_NOMOVE;
-      if (width == -1 || height == -1)
-	  uflags |= SWP_NOSIZE;
+                               "NOACTIVATE|NOZORDER)\n",
+                               GDK_WINDOW_HWND (window),
+                               x - _gdk_offset_x, y - _gdk_offset_y,
+                               outer_rect.right - outer_rect.left,
+                               outer_rect.bottom - outer_rect.top));
 
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
-			       x - _gdk_offset_x, y - _gdk_offset_y,
-			       outer_rect.right - outer_rect.left,
-			       outer_rect.bottom - outer_rect.top,
-			       uflags));
+                               x - _gdk_offset_x, y - _gdk_offset_y,
+                               outer_rect.right - outer_rect.left,
+                               outer_rect.bottom - outer_rect.top,
+                               SWP_NOACTIVATE | SWP_NOZORDER));
+    }
+}
+
+static void
+gdk_win32_window_move_resize (GdkWindow *window,
+			      gboolean   with_move,
+			      gint       x,
+			      gint       y,
+			      gint       width,
+			      gint       height)
+{
+  if (with_move && (width < 0 && height < 0))
+    {
+      gdk_win32_window_move (window, x, y);
+    }
+  else
+    {
+      if (with_move)
+	{
+	  gdk_win32_window_move_resize_internal (window, x, y, width, height);
+	}
+      else
+	{
+	  gdk_win32_window_resize (window, width, height);
+	}
     }
 }
 
@@ -3439,9 +3559,14 @@ gdk_window_set_modal_hint (GdkWindow *window,
 #else
 
   if (modal)
-    _gdk_push_modal_window (window);
+    {
+      _gdk_push_modal_window (window);
+      gdk_window_raise (window);
+    }
   else
-    _gdk_remove_modal_window (window);
+    {
+      _gdk_remove_modal_window (window);
+    }
 
 #endif
 }

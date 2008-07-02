@@ -366,7 +366,6 @@ update_keymap (void)
 	  for (shift = 0; shift < 4; shift++)
 	    {
 	      guint *ksymp = keysym_tab + vk*4 + shift;
-	      guchar chars[2];
 	      
 	      set_shift_vks (key_state, shift);
 

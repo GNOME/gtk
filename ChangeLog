@@ -1,5 +1,16 @@
 2008-07-02  Cody Russell  <bratsche@gnome.org>
 
+	Bug 541305 – [Win32] Scrolling was broken after GdkWindow refactoring
+
+	* gdk/win32/gdkwindow-win32.c: Reverted some logic so that scrolling
+	works again.
+
+	* gdk/win32/gdkgeometry-win32.c: Removed some more unnecessary checks.
+	* gdk/win32/gdkkeys-win32.c: Removed unused variable to fix compile-time
+	warnings.
+
+2008-07-02  Cody Russell  <bratsche@gnome.org>
+
 	Bug 541249 – [Win32] Fix some internal static methods
 
 	* gdk/gdkwindow-win32.c: Make the interface implementation methods

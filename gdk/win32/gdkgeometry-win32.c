@@ -91,7 +91,7 @@ _gdk_window_init_position (GdkWindow *window)
 {
   GdkWindowParentPos parent_pos;
   GdkWindowImplWin32 *impl;
-  
+
   g_return_if_fail (GDK_IS_WINDOW (window));
   
   impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
@@ -111,16 +111,13 @@ _gdk_win32_window_scroll (GdkWindow *window,
   GList *tmp_list;
   GdkWindowParentPos parent_pos;
   HRGN native_invalidate_region;
-  
+
   GDK_NOTE (EVENTS, g_print ("gdk_window_scroll: %p %d,%d\n",
 			     GDK_WINDOW_HWND (window), dx, dy));
 
   obj = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);  
 
-  if (dx == 0 && dy == 0)
-    return;
-  
   /* Move the current invalid region */
   if (obj->update_area)
     gdk_region_offset (obj->update_area, dx, dy);
@@ -182,9 +179,6 @@ _gdk_win32_window_move_region (GdkWindow       *window,
   obj = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);  
 
-  if (dx == 0 && dy == 0)
-    return;
-  
   /* Move the current invalid region */
   if (obj->update_area)
     gdk_region_offset (obj->update_area, dx, dy);
@@ -270,7 +264,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
 
   dx = x - obj->x;
   dy = y - obj->y;
-  
+
   is_move = dx != 0 || dy != 0;
   is_resize = impl->width != width || impl->height != height;
 
