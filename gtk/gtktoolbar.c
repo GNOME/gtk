@@ -2933,6 +2933,9 @@ gtk_toolbar_unset_style (GtkToolbar *toolbar)
  * @enable: set to %FALSE to disable the tooltips, or %TRUE to enable them.
  * 
  * Sets if the tooltips of a toolbar should be active or not.
+ *
+ * Deprecated: 2.14: The toolkit-wide #GtkSettings:gtk-enable-tooltips property
+ * is now used instead.
  **/
 void
 gtk_toolbar_set_tooltips (GtkToolbar *toolbar,
@@ -2956,6 +2959,9 @@ gtk_toolbar_set_tooltips (GtkToolbar *toolbar,
  * gtk_toolbar_set_tooltips().
  *
  * Return value: %TRUE if tooltips are enabled
+ *
+ * Deprecated: 2.14: The toolkit-wide #GtkSettings:gtk-enable-tooltips property
+ * is now used instead.
  **/
 gboolean
 gtk_toolbar_get_tooltips (GtkToolbar *toolbar)

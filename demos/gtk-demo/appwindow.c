@@ -509,7 +509,6 @@ do_appwindow (GtkWidget *do_widget)
                         0,                         0);
 
       bar = gtk_ui_manager_get_widget (merge, "/ToolBar");
-      gtk_toolbar_set_tooltips (GTK_TOOLBAR (bar), TRUE);
       gtk_widget_show (bar);
       gtk_table_attach (GTK_TABLE (table),
 			bar, 

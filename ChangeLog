@@ -1,3 +1,18 @@
+2008-07-02  Kristian Rietveld  <kris@imendio.com>
+
+	Bug 455268 - Add gtk-enable-tooltips GtkSetting
+
+	* gtk/gtk.symbols:
+	* gtk/gtktoolbar.[ch] (gtk_toolbar_[gs]et_tooltips): deprecated.
+
+	* gtk/gtksettings.c: introduce gtk-enable-tooltips XSetting.
+
+	* gtk/gtktooltip.c (_gtk_tooltip_handle_event): take the newly
+	introduced XSetting into account.
+
+	* demos/gtk-demo/appwindow.c: don't use the now deprecated
+	gtk_toolbar_set_tooltips().
+
 2008-07-02  Cody Russell  <bratsche@gnome.org>
 
 	Bug 541162 – [Win32] Update for the new GdkWindowImpl stuff

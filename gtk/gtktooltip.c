@@ -1201,24 +1201,35 @@ _gtk_tooltip_hide (GtkWidget *widget)
     gtk_tooltip_hide_tooltip (tooltip);
 }
 
+static gboolean
+tooltips_enabled (GdkWindow *window)
+{
+  gboolean enabled;
+  gboolean touchscreen;
+  GdkScreen *screen;
+  GtkSettings *settings;
+
+  screen = gdk_drawable_get_screen (window);
+  settings = gtk_settings_get_for_screen (screen);
+
+  g_object_get (settings,
+		"gtk-touchscreen-mode", &touchscreen,
+		"gtk-enable-tooltips", &enabled,
+		NULL);
+
+  return (!touchscreen && enabled);
+}
+
 void
 _gtk_tooltip_handle_event (GdkEvent *event)
 {
   gint x, y;
   gboolean return_value = FALSE;
-  gboolean touchscreen;
   GtkWidget *has_tooltip_widget = NULL;
-  GdkScreen *screen;
   GdkDisplay *display;
   GtkTooltip *current_tooltip;
-  GtkSettings *settings;
 
-  /* Disable tooltips in touchscreen mode */
-  screen = gdk_drawable_get_screen (event->any.window);
-  settings = gtk_settings_get_for_screen (screen);
-  g_object_get (settings, "gtk-touchscreen-mode", &touchscreen, NULL);
-
-  if (touchscreen)
+  if (!tooltips_enabled (event->any.window))
     return;
 
   /* Returns coordinates relative to has_tooltip_widget's allocation. */

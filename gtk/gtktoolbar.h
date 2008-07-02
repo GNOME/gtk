@@ -155,9 +155,11 @@ void            gtk_toolbar_set_show_arrow          (GtkToolbar      *toolbar,
 GtkOrientation  gtk_toolbar_get_orientation         (GtkToolbar      *toolbar);
 void            gtk_toolbar_set_orientation         (GtkToolbar      *toolbar,
 						     GtkOrientation   orientation);
+#ifndef GTK_DISABLE_DEPRECATED
 gboolean        gtk_toolbar_get_tooltips            (GtkToolbar      *toolbar);
 void            gtk_toolbar_set_tooltips            (GtkToolbar      *toolbar,
 						     gboolean         enable);
+#endif /* GTK_DISABLE_DEPRECATED */
 GtkToolbarStyle gtk_toolbar_get_style               (GtkToolbar      *toolbar);
 void            gtk_toolbar_set_style               (GtkToolbar      *toolbar,
 						     GtkToolbarStyle  style);

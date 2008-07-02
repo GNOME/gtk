@@ -115,7 +115,8 @@ enum {
   PROP_FONTCONFIG_TIMESTAMP,
   PROP_SOUND_THEME_NAME,
   PROP_ENABLE_INPUT_FEEDBACK_SOUNDS,
-  PROP_ENABLE_EVENT_SOUNDS
+  PROP_ENABLE_EVENT_SOUNDS,
+  PROP_ENABLE_TOOLTIPS
 };
 
 
@@ -859,7 +860,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 					     NULL);
   
   g_assert (result == PROP_FONTCONFIG_TIMESTAMP);
-  
+
   /**
    * GtkSettings:gtk-sound-theme-name:
    *
@@ -925,6 +926,22 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								   GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ENABLE_EVENT_SOUNDS);
+
+  /**
+   * GtkSettings:gtk-enable-tooltips:
+   *
+   * Whether tooltips should be shown on widgets.
+   *
+   * Since: 2.14
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-enable-tooltips",
+                                                                   P_("Enable Tooltips"),
+                                                                   P_("Whether tooltips should be shown on widgets"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ENABLE_TOOLTIPS);
 }
 
 static void
