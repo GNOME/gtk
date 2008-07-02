@@ -1,3 +1,7 @@
+2008-07-02  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkfilechooserdefault.c: remove some of the million includes.
+
 2008-07-02  Kristian Rietveld  <kris@imendio.com>
 
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_class_init):

@@ -20,10 +20,10 @@
  */
 
 #include "config.h"
+
 #include "gdk/gdkkeysyms.h"
 #include "gtkalignment.h"
 #include "gtkbindings.h"
-#include "gtkbutton.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrenderertext.h"
@@ -31,7 +31,6 @@
 #include "gtkclipboard.h"
 #include "gtkcombobox.h"
 #include "gtkentry.h"
-#include "gtkeventbox.h"
 #include "gtkexpander.h"
 #include "gtkfilechooserprivate.h"
 #include "gtkfilechooserdefault.h"
@@ -49,10 +48,8 @@
 #include "gtkicontheme.h"
 #include "gtkimage.h"
 #include "gtkimagemenuitem.h"
-#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
-#include "gtkmenuitem.h"
 #include "gtkmessagedialog.h"
 #include "gtkmountoperation.h"
 #include "gtkpathbar.h"
@@ -69,8 +66,8 @@
 #include "gtktreednd.h"
 #include "gtktreeprivate.h"
 #include "gtktreeselection.h"
-#include "gtktypebuiltins.h"
 #include "gtkvbox.h"
+#include "gtkintl.h"
 
 #include "gtkalias.h"
 
