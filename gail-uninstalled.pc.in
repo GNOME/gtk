@@ -7,5 +7,5 @@ Name: Gail
 Description: GNOME Accessibility Implementation Library
 Version: @VERSION@
 Requires: atk gtk+-2.0 
-Libs: ${pc_top_builddir}/${pcfiledir}/modules/other/gail/libgail.la
+Libs: ${pc_top_builddir}/${pcfiledir}/modules/other/gail/libgail.la ${pc_top_builddir}/${pcfiledir}/modules/other/gail/libgail-util/libgailutil.la
 Cflags: -I${pc_top_builddir}/${pcfiledir}/modules/other/gail

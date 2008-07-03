@@ -1,3 +1,8 @@
+2008-07-03  Li Yuan  <li.yuan@sun.com>
+
+	* gail-uninstalled.pc.in:
+	Bug #536430. Add libgailutil.la into gail-uninstalled.pc.in.
+
 2008-07-03  Cody Russell  <bratsche@gnome.org>
 
 	Bug 540529 – Remove all GIMP references
