@@ -3,7 +3,8 @@
 	Bug 535498 – Printing demo broken
 
 	* demos/gtk-demo/printing.c: Use monospace as font name, 
-	not mono. Patch by Yevgen Muntyan.
+	not mono. Also use the right advance when moving from line to line.
+	Patch by Yevgen Muntyan.
 
 2008-07-03  Matthias Clasen  <mclasen@redhat.com>
 

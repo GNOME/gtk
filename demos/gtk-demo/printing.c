@@ -123,7 +123,7 @@ draw_page (GtkPrintOperation *operation,
     {
       pango_layout_set_text (layout, data->lines[line], -1);
       pango_cairo_show_layout (cr, layout);
-      cairo_rel_move_to (cr, 0, text_height);
+      cairo_rel_move_to (cr, 0, data->font_size);
       line++;
     }
 
