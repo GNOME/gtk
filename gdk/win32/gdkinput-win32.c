@@ -63,6 +63,7 @@ static GdkEventMask x_grab_mask;
 static gboolean x_grab_owner_events;
 
 typedef UINT (WINAPI *t_WTInfoA) (UINT a, UINT b, LPVOID c);
+typedef UINT (WINAPI *t_WTInfoW) (UINT a, UINT b, LPVOID c);
 typedef BOOL (WINAPI *t_WTEnable) (HCTX a, BOOL b);
 typedef HCTX (WINAPI *t_WTOpenA) (HWND a, LPLOGCONTEXTA b, BOOL c);
 typedef BOOL (WINAPI *t_WTOverlap) (HCTX a, BOOL b);
@@ -70,6 +71,7 @@ typedef BOOL (WINAPI *t_WTPacket) (HCTX a, UINT b, LPVOID c);
 typedef int (WINAPI *t_WTQueueSizeSet) (HCTX a, int b);
 
 static t_WTInfoA p_WTInfoA;
+static t_WTInfoW p_WTInfoW;
 static t_WTEnable p_WTEnable;
 static t_WTOpenA p_WTOpenA;
 static t_WTOverlap p_WTOverlap;
@@ -334,7 +336,8 @@ _gdk_input_wintab_init_check (void)
   AXIS axis_x, axis_y, axis_npressure, axis_or[3];
   int i, k;
   int devix, cursorix;
-  char devname[100], csrname[100];
+  wchar_t devname[100], csrname[100];
+  gchar *devname_utf8, *csrname_utf8;
   BOOL defcontext_done;
   HMODULE wintab32;
 
@@ -352,6 +355,8 @@ _gdk_input_wintab_init_check (void)
     return;
 
   if ((p_WTInfoA = (t_WTInfoA) GetProcAddress (wintab32, "WTInfoA")) == NULL)
+    return;
+  if ((p_WTInfoW = (t_WTInfoW) GetProcAddress (wintab32, "WTInfoW")) == NULL)
     return;
   if ((p_WTEnable = (t_WTEnable) GetProcAddress (wintab32, "WTEnable")) == NULL)
     return;
@@ -395,13 +400,17 @@ _gdk_input_wintab_init_check (void)
     {
       LOGCONTEXT lc;
       
-      /* We open the Wintab device (hmm, what if there are several?) as a
-       * system pointing device, i.e. it controls the normal Windows
+      /* We open the Wintab device (hmm, what if there are several, or
+       * can there even be several, probably not?) as a system
+       * pointing device, i.e. it controls the normal Windows
        * cursor. This seems much more natural.
        */
 
-      (*p_WTInfoA) (WTI_DEVICES + devix, DVC_NAME, devname);
-      
+      (*p_WTInfoW) (WTI_DEVICES + devix, DVC_NAME, devname);
+      devname_utf8 = g_utf16_to_utf8 (devname, -1, NULL, NULL, NULL);
+#ifdef DEBUG_WINTAB
+      GDK_NOTE (INPUT, (g_print("Device %d: %s\n", devix, devname_utf8)));
+#endif
       (*p_WTInfoA) (WTI_DEVICES + devix, DVC_NCSRTYPES, &ncsrtypes);
       (*p_WTInfoA) (WTI_DEVICES + devix, DVC_FIRSTCSR, &firstcsr);
       (*p_WTInfoA) (WTI_DEVICES + devix, DVC_HARDWARE, &hardware);
@@ -484,7 +493,7 @@ _gdk_input_wintab_init_check (void)
       for (cursorix = firstcsr; cursorix < firstcsr + ncsrtypes; cursorix++)
 	{
 #ifdef DEBUG_WINTAB
-	      GDK_NOTE (INPUT, (g_print("Cursor %d:\n", cursorix), print_cursor (cursorix)));
+	  GDK_NOTE (INPUT, (g_print("Cursor %d:\n", cursorix), print_cursor (cursorix)));
 #endif
 	  active = FALSE;
 	  (*p_WTInfoA) (WTI_CURSORS + cursorix, CSR_ACTIVE, &active);
@@ -500,12 +509,14 @@ _gdk_input_wintab_init_check (void)
 	   * at least for Wacom, skip cursors with physid zero.
 	   */
 	  (*p_WTInfoA) (WTI_CURSORS + cursorix, CSR_PHYSID, &physid);
-	  if (strcmp (devname, "WACOM Tablet") == 0 && physid == 0)
+	  if (wcscmp (devname, L"WACOM Tablet") == 0 && physid == 0)
 	    continue;
 
 	  gdkdev = g_object_new (GDK_TYPE_DEVICE, NULL);
-	  (*p_WTInfoA) (WTI_CURSORS + cursorix, CSR_NAME, csrname);
-	  gdkdev->info.name = g_strconcat (devname, " ", csrname, NULL);
+	  (*p_WTInfoW) (WTI_CURSORS + cursorix, CSR_NAME, csrname);
+	  csrname_utf8 = g_utf16_to_utf8 (csrname, -1, NULL, NULL, NULL);
+	  gdkdev->info.name = g_strconcat (devname_utf8, " ", csrname_utf8, NULL);
+	  g_free (csrname_utf8);
 	  gdkdev->info.source = GDK_SOURCE_PEN;
 	  gdkdev->info.mode = GDK_MODE_SCREEN;
 	  gdkdev->info.has_cursor = TRUE;
@@ -602,6 +613,7 @@ _gdk_input_wintab_init_check (void)
 	  _gdk_input_devices = g_list_append (_gdk_input_devices,
 					      gdkdev);
 	}
+      g_free (devname_utf8);
     }
 }
 
