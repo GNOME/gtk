@@ -1,3 +1,10 @@
+2008-07-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 540612 – mem leak in filechooser
+
+	* gtk/gtkfilesystem.c (get_volumes_list): Fix a memory leak.
+	Patch by Christian Persch.
+
 2008-07-04  Tor Lillqvist  <tml@novell.com>
 
 	Bug 540861 - invalid UTF-8 in input device name
