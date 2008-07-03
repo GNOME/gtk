@@ -1,3 +1,8 @@
+2008-07-03  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkscalebutton.c: remove "_from_bindings" suffix from the
+	names of binding signal implementations.
+
 2008-07-03  Li Yuan  <li.yuan@sun.com>
 
 	* gail-uninstalled.pc.in:

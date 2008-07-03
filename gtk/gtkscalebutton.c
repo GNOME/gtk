@@ -125,8 +125,8 @@ static gboolean	gtk_scale_button_press		(GtkWidget           *widget,
 						 GdkEventButton      *event);
 static gboolean gtk_scale_button_key_release	(GtkWidget           *widget,
     						 GdkEventKey         *event);
-static void gtk_scale_button_popup_from_bindings (GtkWidget *widget);
-static void gtk_scale_button_popdown_from_bindings (GtkWidget *widget);
+static void     gtk_scale_button_popup          (GtkWidget           *widget);
+static void     gtk_scale_button_popdown        (GtkWidget           *widget);
 static gboolean cb_dock_button_press		(GtkWidget           *widget,
 						 GdkEventButton      *event,
 						 gpointer             user_data);
@@ -285,7 +285,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
     _gtk_binding_signal_new (I_("popup"),
 			     G_OBJECT_CLASS_TYPE (klass),
 			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			     G_CALLBACK (gtk_scale_button_popup_from_bindings),
+			     G_CALLBACK (gtk_scale_button_popup),
 			     NULL, NULL,
 			     g_cclosure_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
@@ -306,7 +306,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
     _gtk_binding_signal_new (I_("popdown"),
 			     G_OBJECT_CLASS_TYPE (klass),
 			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			     G_CALLBACK (gtk_scale_button_popdown_from_bindings),
+			     G_CALLBACK (gtk_scale_button_popdown),
 			     NULL, NULL,
 			     g_cclosure_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
@@ -1000,7 +1000,7 @@ gtk_scale_button_press (GtkWidget      *widget,
 }
 
 static void
-gtk_scale_button_popup_from_bindings (GtkWidget *widget)
+gtk_scale_button_popup (GtkWidget *widget)
 {
   GdkEvent *ev;
 
@@ -1210,7 +1210,7 @@ cb_dock_button_press (GtkWidget      *widget,
 }
 
 static void
-gtk_scale_button_popdown_from_bindings (GtkWidget *widget)
+gtk_scale_button_popdown (GtkWidget *widget)
 {
   GtkScaleButton *button;
   GtkScaleButtonPrivate *priv;
@@ -1237,7 +1237,7 @@ cb_dock_key_release (GtkWidget   *widget,
 {
   if (event->keyval == GDK_Escape)
     {
-      gtk_scale_button_popdown_from_bindings (GTK_WIDGET (user_data));
+      gtk_scale_button_popdown (GTK_WIDGET (user_data));
       return TRUE;
     }
 
