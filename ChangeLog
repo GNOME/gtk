@@ -1,12 +1,19 @@
+2008-07-04  Tor Lillqvist  <tml@novell.com>
+
+	Bug 540861 - invalid UTF-8 in input device name
+
+	* gdk/win32/gdkinput-win32.c: Fetch the device and cursor names in
+	Unicode, and convert to UTF-8 for the GdkDevice's name field.
+
 2008-07-01  Cody Russell  <bratsche@gnome.org>
 
 	Merged from trunk:
 
         Bug 539164 – Windows' System Menu blocks main loop
 
-        * gdk/win32/gdkevents-win32.c:	Use a modal timer proc in between
-	receiving WM_ENTERMENULOOP and	WM_EXITMENULOOP	and pump	the
-	GLib mainloop from there.
+        * gdk/win32/gdkevents-win32.c: Use a modal timer proc in between
+	receiving WM_ENTERMENULOOP and WM_EXITMENULOOP and pump the GLib
+	mainloop from there.
 
 2008-07-01  Matthias Clasen  <mclasen@redhat.com>
 
