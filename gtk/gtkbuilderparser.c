@@ -713,6 +713,7 @@ parse_custom (GMarkupParseContext *context,
       ObjectInfo* object_info = (ObjectInfo*)parent_info;
       if (!object_info->object)
 	{
+	  object_info->properties = g_slist_reverse (object_info->properties);
 	  object_info->object = _gtk_builder_construct (data->builder,
 							object_info,
 							error);

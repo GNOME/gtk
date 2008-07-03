@@ -1,4 +1,11 @@
 2008-07-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 540915 – GtkBuilder sets properties in reverse order
+
+	* gtk/gtkbuilderparser.c (parse_custom): Set properties in the order 
+	in which they are specified in the xml file.  
+
+2008-07-03  Matthias Clasen  <mclasen@redhat.com>
 	
 	Bug 539944 – Add GtkScaleButton API so struct fields can be marked as
 	private
