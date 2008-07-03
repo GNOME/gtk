@@ -3147,6 +3147,7 @@ gtk_scale_button_set_icons
 gtk_scale_button_set_value
 gtk_scale_button_get_adjustment
 gtk_scale_button_get_value
+gtk_scale_button_get_popup
 <SUBSECTION Standard>
 GTK_SCALE_BUTTON
 GTK_IS_SCALE_BUTTON

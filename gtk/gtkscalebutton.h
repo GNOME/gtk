@@ -98,6 +98,7 @@ void             gtk_scale_button_set_adjustment  (GtkScaleButton  *button,
 GtkOrientation   gtk_scale_button_get_orientation (GtkScaleButton  *button);
 void             gtk_scale_button_set_orientation (GtkScaleButton  *button,
                                                    GtkOrientation   orientation);
+GtkWidget *      gtk_scale_button_get_popup      (GtkScaleButton *button);
 
 G_END_DECLS
 

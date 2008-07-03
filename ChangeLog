@@ -1,4 +1,13 @@
 2008-07-03  Matthias Clasen  <mclasen@redhat.com>
+	
+	Bug 539944 – Add GtkScaleButton API so struct fields can be marked as
+	private
+
+	* gtk/gtk.symbols:
+	* gtk/gtkscalebutton.[hc] (gtk_scale_button_get_popup): Add an
+	accessor for the popup. Patch by Christian Dywan
+
+2008-07-03  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 535498 – Printing demo broken
 

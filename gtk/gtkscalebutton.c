@@ -758,6 +758,22 @@ gtk_scale_button_set_orientation (GtkScaleButton *button,
     }
 }
 
+/**
+ * gtk_scale_button_get_popup:
+ * @button: a #GtkScaleButton
+ *
+ * Retrieves the popup of the #GtkScaleButton.
+ *
+ * Since: 2.14
+ */
+GtkWidget*
+gtk_scale_button_get_popup (GtkScaleButton *button)
+{
+  g_return_if_fail (GTK_IS_SCALE_BUTTON (button));
+
+  return button->priv->dock;
+}
+
 /*
  * button callbacks.
  */
