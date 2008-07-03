@@ -1,3 +1,14 @@
+2008-07-03  Cody Russell  <bratsche@gnome.org>
+
+	Bug 540529 – Remove all GIMP references
+
+	* gtk+-2.0.pc.in:
+	* gdk-2.0.pc.in:
+	* gtk+-unix-print-2.0.pc.in:
+	* gtk+-2.0-uninstalled.pc.in:
+	* gdk-2.0-uninstalled.pc.in: Changed GIMP Toolkit to say
+	GTK+ Graphical UI Library in the pkg-config files.
+
 2008-07-02  Cody Russell  <bratsche@gnome.org>
 
 	Bug 541305 – [Win32] Scrolling was broken after GdkWindow refactoring
