@@ -1,5 +1,12 @@
 2008-07-03  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 535498 – Printing demo broken
+
+	* demos/gtk-demo/printing.c: Use monospace as font name, 
+	not mono. Patch by Yevgen Muntyan.
+
+2008-07-03  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 538547 – Update doc-shooter in gtk documentation
 
 	* docs/tools/Makefile.am:

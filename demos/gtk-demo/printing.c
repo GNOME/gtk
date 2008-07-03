@@ -112,7 +112,7 @@ draw_page (GtkPrintOperation *operation,
   
   layout = gtk_print_context_create_pango_layout (context);
   
-  desc = pango_font_description_from_string ("mono");
+  desc = pango_font_description_from_string ("monospace");
   pango_font_description_set_size (desc, data->font_size * PANGO_SCALE);
   pango_layout_set_font_description (layout, desc);
   pango_font_description_free (desc);
