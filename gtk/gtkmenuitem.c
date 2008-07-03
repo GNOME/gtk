@@ -1141,6 +1141,7 @@ gtk_menu_item_real_popup_submenu (GtkWidget *widget,
   if (GTK_WIDGET_IS_SENSITIVE (menu_item->submenu))
     {
       gboolean take_focus;
+      GtkMenuPositionFunc menu_position_func;
 
       take_focus = gtk_menu_shell_get_take_focus (GTK_MENU_SHELL (widget->parent));
       gtk_menu_shell_set_take_focus (GTK_MENU_SHELL (menu_item->submenu),
@@ -1162,10 +1163,21 @@ gtk_menu_item_real_popup_submenu (GtkWidget *widget,
                              "gtk-menu-exact-popup-time", NULL);
         }
 
+      /* gtk_menu_item_position_menu positions the submenu from the
+       * menuitems position. If the menuitem doesn't have a window,
+       * that doesn't work. In that case we use the default
+       * positioning function instead which places the submenu at the
+       * mouse cursor.
+       */
+      if (widget->window)
+        menu_position_func = gtk_menu_item_position_menu;
+      else
+        menu_position_func = NULL;
+
       gtk_menu_popup (GTK_MENU (menu_item->submenu),
                       widget->parent,
                       widget,
-                      gtk_menu_item_position_menu,
+                      menu_position_func,
                       menu_item,
                       GTK_MENU_SHELL (widget->parent)->button,
                       0);

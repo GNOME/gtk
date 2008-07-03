@@ -1,5 +1,13 @@
 2008-07-03  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 540618 – gtk_menu_shell_select_first prints warning on GtkMenubar
+	constructed using GtkUIManager
+
+	* gtk/gtkmenuitem.c: Fall back to the default positioning when
+	the menuitem is not realized. Patch by Björn Lindqvist.
+
+2008-07-03  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 540612 – mem leak in filechooser
 
 	* gtk/gtkfilesystem.c (get_volumes_list): Fix a memory leak.
