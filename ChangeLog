@@ -85,7 +85,7 @@
 
 	* gdk/x11/gdksettings.c: 
 	* gtk/gtksettings.c: Add event sound settings.
-	Patch by Lennart Pöttering.
+	Patch by Lennart Poettering.
 
 2008-07-01  Matthias Clasen  <mclasen@redhat.com>
 
