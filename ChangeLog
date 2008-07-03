@@ -1,3 +1,14 @@
+2008-07-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 538547 – Update doc-shooter in gtk documentation
+
+	* docs/tools/Makefile.am:
+	* docs/tools/folder.png:
+	* docs/tools/gnome.png: New images
+
+	* docs/tools/widgets.c: Use the new images.
+	Patch by Baptiste Mille-Mathias.
+
 2008-07-03  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkscalebutton.c: remove "_from_bindings" suffix from the
