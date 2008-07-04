@@ -1268,6 +1268,12 @@ gdk_app_launch_context_set_icon_name
 #endif
 #endif
 
+#if IN_HEADER(__GDK_WINDOW_IMPL_H__)
+#if IN_FILE(__GDK_WINDOW_IMPL_C__)
+gdk_window_impl_get_type G_GNUC_CONST
+#endif
+#endif
+
 #ifdef INCLUDE_VARIABLES
 gdk_threads_mutex
 gdk_threads_lock
