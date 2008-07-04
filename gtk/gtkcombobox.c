@@ -4089,7 +4089,7 @@ gtk_combo_box_cell_layout_pack_start (GtkCellLayout   *layout,
 
   g_object_ref_sink (cell);
 
-  info = g_new0 (ComboCellInfo, 1);
+  info = g_slice_new0 (ComboCellInfo);
   info->cell = cell;
   info->expand = expand;
   info->pack = GTK_PACK_START;
@@ -4143,7 +4143,7 @@ gtk_combo_box_cell_layout_pack_end (GtkCellLayout   *layout,
 
   g_object_ref_sink (cell);
 
-  info = g_new0 (ComboCellInfo, 1);
+  info = g_slice_new0 (ComboCellInfo);
   info->cell = cell;
   info->expand = expand;
   info->pack = GTK_PACK_END;
@@ -4213,11 +4213,11 @@ gtk_combo_box_cell_layout_clear (GtkCellLayout *layout)
 
   for (i = priv->cells; i; i = i->next)
     {
-     ComboCellInfo *info = (ComboCellInfo *)i->data;
+      ComboCellInfo *info = (ComboCellInfo *)i->data;
 
       gtk_combo_box_cell_layout_clear_attributes (layout, info->cell);
       g_object_unref (info->cell);
-      g_free (info);
+      g_slice_free (ComboCellInfo, info);
       i->data = NULL;
     }
   g_slist_free (priv->cells);
@@ -5343,7 +5343,7 @@ gtk_combo_box_finalize (GObject *object)
       g_slist_free (info->attributes);
 
       g_object_unref (info->cell);
-      g_free (info);
+      g_slice_free (ComboCellInfo, info);
     }
    g_slist_free (combo_box->priv->cells);
 

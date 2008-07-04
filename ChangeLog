@@ -1,5 +1,9 @@
 2008-07-04  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkcombobox.c: allocate ComboCellInfo with GSlice.
+
+2008-07-04  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkprintoperation.c (print_pages): change "error_dialog"
 	variable to GtkWidget fo fix two warnings.
 
