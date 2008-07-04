@@ -759,6 +759,38 @@ gtk_scale_button_set_orientation (GtkScaleButton *button,
 }
 
 /**
+ * gtk_scale_button_get_plus_button:
+ * @button: a #GtkScaleButton
+ *
+ * Retrieves the plus button of the #GtkScaleButton.
+ *
+ * Since: 2.14
+ */
+GtkWidget *
+gtk_scale_button_get_plus_button (GtkScaleButton *button)
+{
+  g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), NULL);
+
+  return button->plus_button;
+}
+
+/**
+ * gtk_scale_button_get_minus_button:
+ * @button: a #GtkScaleButton
+ *
+ * Retrieves the minus button of the #GtkScaleButton.
+ *
+ * Since: 2.14
+ */
+GtkWidget *
+gtk_scale_button_get_minus_button (GtkScaleButton *button)
+{
+  g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), NULL);
+
+  return button->minus_button;
+}
+
+/**
  * gtk_scale_button_get_popup:
  * @button: a #GtkScaleButton
  *
@@ -766,7 +798,7 @@ gtk_scale_button_set_orientation (GtkScaleButton *button,
  *
  * Since: 2.14
  */
-GtkWidget*
+GtkWidget *
 gtk_scale_button_get_popup (GtkScaleButton *button)
 {
   g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), NULL);

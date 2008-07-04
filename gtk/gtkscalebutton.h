@@ -81,24 +81,26 @@ struct _GtkScaleButtonClass
   void (*_gtk_reserved4) (void);
 };
 
-GType            gtk_scale_button_get_type        (void) G_GNUC_CONST;
-GtkWidget *      gtk_scale_button_new             (GtkIconSize      size,
-                                                   gdouble          min,
-                                                   gdouble          max,
-                                                   gdouble          step,
-                                                   const gchar    **icons);
-void             gtk_scale_button_set_icons       (GtkScaleButton  *button,
-                                                   const gchar    **icons);
-gdouble          gtk_scale_button_get_value       (GtkScaleButton  *button);
-void             gtk_scale_button_set_value       (GtkScaleButton  *button,
-                                                   gdouble          value);
-GtkAdjustment *  gtk_scale_button_get_adjustment  (GtkScaleButton  *button);
-void             gtk_scale_button_set_adjustment  (GtkScaleButton  *button,
-                                                   GtkAdjustment   *adjustment);
-GtkOrientation   gtk_scale_button_get_orientation (GtkScaleButton  *button);
-void             gtk_scale_button_set_orientation (GtkScaleButton  *button,
-                                                   GtkOrientation   orientation);
-GtkWidget *      gtk_scale_button_get_popup      (GtkScaleButton *button);
+GType            gtk_scale_button_get_type         (void) G_GNUC_CONST;
+GtkWidget *      gtk_scale_button_new              (GtkIconSize      size,
+                                                    gdouble          min,
+                                                    gdouble          max,
+                                                    gdouble          step,
+                                                    const gchar    **icons);
+void             gtk_scale_button_set_icons        (GtkScaleButton  *button,
+                                                    const gchar    **icons);
+gdouble          gtk_scale_button_get_value        (GtkScaleButton  *button);
+void             gtk_scale_button_set_value        (GtkScaleButton  *button,
+                                                    gdouble          value);
+GtkAdjustment *  gtk_scale_button_get_adjustment   (GtkScaleButton  *button);
+void             gtk_scale_button_set_adjustment   (GtkScaleButton  *button,
+                                                    GtkAdjustment   *adjustment);
+GtkOrientation   gtk_scale_button_get_orientation  (GtkScaleButton  *button);
+void             gtk_scale_button_set_orientation  (GtkScaleButton  *button,
+                                                    GtkOrientation   orientation);
+GtkWidget *      gtk_scale_button_get_plus_button  (GtkScaleButton  *button);
+GtkWidget *      gtk_scale_button_get_minus_button (GtkScaleButton  *button);
+GtkWidget *      gtk_scale_button_get_popup        (GtkScaleButton  *button);
 
 G_END_DECLS
 

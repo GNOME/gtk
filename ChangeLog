@@ -1,3 +1,12 @@
+2008-07-04  Michael Natterer  <mitch@imendio.com>
+
+	Bug 539944 – Add GtkScaleButton API so struct fields can be marked
+	as private
+
+	* gtk/gtk.symbols
+	* gtk/gtkscalebutton.[ch]: add gtk_scale_button_get_plus_button()
+	and _get_minus_button(). Patch by Christian Dywan.
+
 2008-07-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkscalebutton.c:
