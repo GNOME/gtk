@@ -1,5 +1,6 @@
 2008-07-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkscalebutton.c:
 	* gdk/gdk.symbols: 
 	* gdk/gdkwindowimpl.c: Fix make check.
 

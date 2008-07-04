@@ -769,7 +769,7 @@ gtk_scale_button_set_orientation (GtkScaleButton *button,
 GtkWidget*
 gtk_scale_button_get_popup (GtkScaleButton *button)
 {
-  g_return_if_fail (GTK_IS_SCALE_BUTTON (button));
+  g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), NULL);
 
   return button->priv->dock;
 }
@@ -1280,7 +1280,7 @@ cb_scale_grab_notify (GtkWidget *widget,
  * Scale stuff.
  */
 
-#define GTK_TYPE_SCALE_BUTTON_VSCALE    (gtk_scale_button_vscale_get_type ())
+#define GTK_TYPE_SCALE_BUTTON_VSCALE    (_gtk_scale_button_vscale_get_type ())
 #define GTK_SCALE_BUTTON_VSCALE(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SCALE_BUTTON_VSCALE, GtkScaleButtonVScale))
 #define GTK_IS_SCALE_BUTTON_VSCALE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SCALE_BUTTON_VSCALE))
 
@@ -1293,7 +1293,7 @@ typedef struct _GtkScaleButtonVScaleClass {
   GtkVScaleClass parent_class;
 } GtkScaleButtonVScaleClass;
 
-#define GTK_TYPE_SCALE_BUTTON_HSCALE    (gtk_scale_button_hscale_get_type ())
+#define GTK_TYPE_SCALE_BUTTON_HSCALE    (_gtk_scale_button_hscale_get_type ())
 #define GTK_SCALE_BUTTON_HSCALE(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SCALE_BUTTON_HSCALE, GtkScaleButtonHScale))
 #define GTK_IS_SCALE_BUTTON_HSCALE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SCALE_BUTTON_HSCALE))
 
@@ -1311,12 +1311,12 @@ static gboolean	gtk_scale_button_scale_press   (GtkWidget      *widget,
 static gboolean gtk_scale_button_scale_release (GtkWidget      *widget,
                                                 GdkEventButton *event);
 
-G_DEFINE_TYPE (GtkScaleButtonVScale, gtk_scale_button_vscale, GTK_TYPE_VSCALE)
+G_DEFINE_TYPE (GtkScaleButtonVScale, _gtk_scale_button_vscale, GTK_TYPE_VSCALE)
 
-G_DEFINE_TYPE (GtkScaleButtonHScale, gtk_scale_button_hscale, GTK_TYPE_HSCALE)
+G_DEFINE_TYPE (GtkScaleButtonHScale, _gtk_scale_button_hscale, GTK_TYPE_HSCALE)
 
 static void
-gtk_scale_button_vscale_class_init (GtkScaleButtonVScaleClass *klass)
+_gtk_scale_button_vscale_class_init (GtkScaleButtonVScaleClass *klass)
 {
   GtkWidgetClass *gtkwidget_class = GTK_WIDGET_CLASS (klass);
   GtkRangeClass *gtkrange_class = GTK_RANGE_CLASS (klass);
@@ -1327,7 +1327,7 @@ gtk_scale_button_vscale_class_init (GtkScaleButtonVScaleClass *klass)
 }
 
 static void
-gtk_scale_button_hscale_class_init (GtkScaleButtonHScaleClass *klass)
+_gtk_scale_button_hscale_class_init (GtkScaleButtonHScaleClass *klass)
 {
   GtkWidgetClass *gtkwidget_class = GTK_WIDGET_CLASS (klass);
   GtkRangeClass *gtkrange_class = GTK_RANGE_CLASS (klass);
@@ -1338,12 +1338,12 @@ gtk_scale_button_hscale_class_init (GtkScaleButtonHScaleClass *klass)
 }
 
 static void
-gtk_scale_button_vscale_init (GtkScaleButtonVScale *scale)
+_gtk_scale_button_vscale_init (GtkScaleButtonVScale *scale)
 {
 }
 
 static void
-gtk_scale_button_hscale_init (GtkScaleButtonHScale *scale)
+_gtk_scale_button_hscale_init (GtkScaleButtonHScale *scale)
 {
 }
 
@@ -1408,12 +1408,12 @@ gtk_scale_button_scale_press (GtkWidget      *widget,
   if (GTK_IS_SCALE_BUTTON_VSCALE (widget))
     {
       priv = GTK_SCALE_BUTTON_VSCALE (widget)->button->priv;
-      widget_class = GTK_WIDGET_CLASS (gtk_scale_button_vscale_parent_class);
+      widget_class = GTK_WIDGET_CLASS (_gtk_scale_button_vscale_parent_class);
     }
   else
     {
       priv = GTK_SCALE_BUTTON_HSCALE (widget)->button->priv;
-      widget_class = GTK_WIDGET_CLASS (gtk_scale_button_hscale_parent_class);
+      widget_class = GTK_WIDGET_CLASS (_gtk_scale_button_hscale_parent_class);
     }
 
   /* the scale will grab input; if we have input grabbed, all goes
@@ -1434,12 +1434,12 @@ gtk_scale_button_scale_release (GtkWidget      *widget,
   if (GTK_IS_SCALE_BUTTON_VSCALE (widget))
     {
       button = GTK_SCALE_BUTTON_VSCALE (widget)->button;
-      widget_class = GTK_WIDGET_CLASS (gtk_scale_button_vscale_parent_class);
+      widget_class = GTK_WIDGET_CLASS (_gtk_scale_button_vscale_parent_class);
     }
   else
     {
       button = GTK_SCALE_BUTTON_HSCALE (widget)->button;
-      widget_class = GTK_WIDGET_CLASS (gtk_scale_button_hscale_parent_class);
+      widget_class = GTK_WIDGET_CLASS (_gtk_scale_button_hscale_parent_class);
     }
 
   if (button->priv->timeout)
