@@ -1,3 +1,7 @@
+2008-07-04  Matthias Clasen  <mclasen@redhat.com>\
+
+	* gtk/gtkmenu.c: Debork the attach-widget property.
+
 2008-07-04  Michael Natterer  <mitch@imendio.com>
 
 	Fix make check:

@@ -536,16 +536,18 @@ gtk_menu_class_init (GtkMenuClass *class)
   /**
    * GtkMenu:attach-widget:
    *
-   * The widget the menu is attached to.
+   * The widget the menu is attached to. Setting this property attaches
+   * the menu without a #GtkMenuDetachFunc. If you need to use a detacher,
+   * use gtk_menu_attach_to_widget() directly.
    *
    * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
-                                   PROP_ACCEL_PATH,
-                                   g_param_spec_string ("attach-widget",
+                                   PROP_ATTACH_WIDGET,
+                                   g_param_spec_object ("attach-widget",
 				                        P_("Attach Widget"),
 						        P_("The widget the menu is attached to"),
-						        NULL,
+						        GTK_TYPE_WIDGET,
 						        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
@@ -792,7 +794,7 @@ gtk_menu_set_property (GObject      *object,
       gtk_menu_set_accel_path (menu, g_value_get_string (value));
       break;
     case PROP_ATTACH_WIDGET:
-      gtk_menu_attach (menu, g_value_get_object (value), 0, 0, 0, 0);
+      gtk_menu_attach_to_widget (menu, g_value_get_object (value), NULL);
       break;
     case PROP_TEAROFF_STATE:
       gtk_menu_set_tearoff_state (menu, g_value_get_boolean (value));
