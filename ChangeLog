@@ -1,5 +1,10 @@
 2008-07-04  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkentry.c (_gtk_entry_reset_im_context): set need_im_reset
+	to FALSE instead of 0.
+
+2008-07-04  Michael Natterer  <mitch@imendio.com>
+
 	Allocate with GSlice:
 
 	* gtk/gtkassistant.c: GtkAssistantPage

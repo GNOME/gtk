@@ -3788,7 +3788,7 @@ _gtk_entry_reset_im_context (GtkEntry *entry)
 {
   if (entry->need_im_reset)
     {
-      entry->need_im_reset = 0;
+      entry->need_im_reset = FALSE;
       gtk_im_context_reset (entry->im_context);
     }
 }
