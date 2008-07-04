@@ -15,6 +15,7 @@
 	* gtk/gtkoldeditable.c
 	* gtk/gtkpixmap.c
 	* gtk/gtktext.c
+	* gtk/gtktipsquery.c
 	* gtk/gtktree.c
 	* gtk/gtktreeitem.c: don't #define it again before including
 	gtkalias.h after it has been #undef'ed before.
