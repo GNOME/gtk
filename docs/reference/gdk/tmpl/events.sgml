@@ -92,7 +92,8 @@ for the possible window states
   was added in 2.6
 @GDK_GRAB_BROKEN: a pointer or keyboard grab was broken. This event type
   was added in 2.8.
-@GDK_DAMAGE: 
+@GDK_DAMAGE: the content of the window has been changed. This event type
+  was added in 2.14.
 
 <!-- ##### ENUM GdkEventMask ##### -->
 <para>

@@ -1,3 +1,8 @@
+2008-07-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/tmpl/events.sgml:
+	* gdk/tmpl/gdktesting.sgml: Additions
+
 2008-07-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/images/iconview.png: Update

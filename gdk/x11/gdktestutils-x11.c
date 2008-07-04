@@ -58,12 +58,14 @@ gdk_test_render_sync (GdkWindow *window)
  * If (@x,@y) are > (-1,-1), it will warp the mouse pointer to
  * the given (@x,@y) corrdinates within @window and simulate a
  * key press or release event.
+ *
  * When the mouse pointer is warped to the target location, use
  * of this function outside of test programs that run in their
  * own virtual windowing system (e.g. Xvfb) is not recommended.
  * If (@x,@y) are passed as (-1,-1), the mouse pointer will not
  * be warped and @window origin will be used as mouse pointer
  * location for the event.
+ *
  * Also, gtk_test_simulate_key() is a fairly low level function,
  * for most testing purposes, gtk_test_widget_send_key() is the
  * right function to call which will generate a key press event
@@ -162,6 +164,7 @@ gdk_test_simulate_key (GdkWindow      *window,
  * location, use of this function outside of test programs that
  * run in their own virtual windowing system (e.g. Xvfb) is not
  * recommended.
+ *
  * Also, gtk_test_simulate_button() is a fairly low level function,
  * for most testing purposes, gtk_test_widget_click() is the right
  * function to call which will generate a button press event followed
