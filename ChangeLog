@@ -1,5 +1,7 @@
 2008-07-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c: Fix the property getter for text-length property.
+
 	* gtk/gtkaccelgroup.c: Fix default value for modifier-mask property.
 
 2008-07-04  Matthias Clasen  <mclasen@redhat.com>

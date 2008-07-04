@@ -1131,7 +1131,7 @@ gtk_entry_get_property (GObject         *object,
       g_value_set_boolean (value, entry->overwrite_mode);
       break;
     case PROP_TEXT_LENGTH:
-      g_value_set_boolean (value, entry->text_length);
+      g_value_set_uint (value, entry->text_length);
       break;
 
     default:
