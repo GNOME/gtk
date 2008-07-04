@@ -794,7 +794,17 @@ gtk_menu_set_property (GObject      *object,
       gtk_menu_set_accel_path (menu, g_value_get_string (value));
       break;
     case PROP_ATTACH_WIDGET:
-      gtk_menu_attach_to_widget (menu, g_value_get_object (value), NULL);
+      {
+        GtkWidget *widget;
+
+        widget = gtk_menu_get_attach_widget (menu);
+        if (widget)
+          gtk_menu_detach (menu);
+
+        widget = (GtkWidget*) g_value_get_object (value); 
+        if (widget)
+          gtk_menu_attach_to_widget (menu, widget, NULL);
+      }
       break;
     case PROP_TEAROFF_STATE:
       gtk_menu_set_tearoff_state (menu, g_value_get_boolean (value));
