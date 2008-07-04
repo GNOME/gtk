@@ -4044,7 +4044,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
 
   gtk_widget_freeze_child_notify (child);
 
-  page = g_new0 (GtkNotebookPage, 1);
+  page = g_slice_new0 (GtkNotebookPage);
   page->child = child;
 
   nchildren = g_list_length (notebook->children);
@@ -4387,7 +4387,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
       page->last_focus_child = NULL;
     }
   
-  g_free (page);
+  g_slice_free (GtkNotebookPage, page);
 
   gtk_notebook_update_labels (notebook);
   if (need_resize)

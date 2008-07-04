@@ -113,7 +113,7 @@ filter_rule_free (FilterRule *rule)
       g_assert_not_reached ();
     }
 
-  g_free (rule);
+  g_slice_free (FilterRule, rule);
 }
 
 static void
@@ -222,7 +222,7 @@ gtk_file_filter_add_mime_type (GtkFileFilter *filter,
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
   g_return_if_fail (mime_type != NULL);
 
-  rule = g_new (FilterRule, 1);
+  rule = g_slice_new (FilterRule);
   rule->type = FILTER_RULE_MIME_TYPE;
   rule->needed = GTK_FILE_FILTER_MIME_TYPE;
   rule->u.mime_type = g_strdup (mime_type);
@@ -248,7 +248,7 @@ gtk_file_filter_add_pattern (GtkFileFilter *filter,
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
   g_return_if_fail (pattern != NULL);
 
-  rule = g_new (FilterRule, 1);
+  rule = g_slice_new (FilterRule);
   rule->type = FILTER_RULE_PATTERN;
   rule->needed = GTK_FILE_FILTER_DISPLAY_NAME;
   rule->u.pattern = g_strdup (pattern);
@@ -272,7 +272,7 @@ gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
   
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
 
-  rule = g_new (FilterRule, 1);
+  rule = g_slice_new (FilterRule);
   rule->type = FILTER_RULE_PIXBUF_FORMATS;
   rule->needed = GTK_FILE_FILTER_MIME_TYPE;
   rule->u.pixbuf_formats = gdk_pixbuf_get_formats ();
@@ -310,7 +310,7 @@ gtk_file_filter_add_custom (GtkFileFilter         *filter,
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
   g_return_if_fail (func != NULL);
 
-  rule = g_new (FilterRule, 1);
+  rule = g_slice_new (FilterRule);
   rule->type = FILTER_RULE_CUSTOM;
   rule->needed = needed;
   rule->u.custom.func = func;

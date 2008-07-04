@@ -589,7 +589,7 @@ gtk_cell_view_cell_layout_pack_start (GtkCellLayout   *layout,
 
   g_object_ref_sink (renderer);
 
-  info = g_new0 (GtkCellViewCellInfo, 1);
+  info = g_slice_new0 (GtkCellViewCellInfo);
   info->cell = renderer;
   info->expand = expand ? TRUE : FALSE;
   info->pack = GTK_PACK_START;
@@ -609,7 +609,7 @@ gtk_cell_view_cell_layout_pack_end (GtkCellLayout   *layout,
 
   g_object_ref_sink (renderer);
 
-  info = g_new0 (GtkCellViewCellInfo, 1);
+  info = g_slice_new0 (GtkCellViewCellInfo);
   info->cell = renderer;
   info->expand = expand ? TRUE : FALSE;
   info->pack = GTK_PACK_END;
@@ -646,7 +646,7 @@ gtk_cell_view_cell_layout_clear (GtkCellLayout *layout)
 
       gtk_cell_view_cell_layout_clear_attributes (layout, info->cell);
       g_object_unref (info->cell);
-      g_free (info);
+      g_slice_free (GtkCellViewCellInfo, info);
       cellview->priv->cell_list = g_list_delete_link (cellview->priv->cell_list, 
 						      cellview->priv->cell_list);
     }

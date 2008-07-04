@@ -892,7 +892,7 @@ remove_page (GtkAssistant *assistant,
     g_object_unref (page_info->sidebar_image);
 
   gtk_widget_destroy (page_info->title);
-  g_free (page_info);
+  g_slice_free (GtkAssistantPage, page_info);
   g_list_free_1 (element);
 }
 
@@ -1650,7 +1650,7 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
 
   priv = assistant->priv;
 
-  page_info = g_new0 (GtkAssistantPage, 1);
+  page_info = g_slice_new0 (GtkAssistantPage);
   page_info->page  = page;
   page_info->title = gtk_label_new (NULL);
 

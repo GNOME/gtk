@@ -2500,7 +2500,7 @@ gtk_entry_password_hint_free (GtkEntryPasswordHint *password_hint)
   if (password_hint->password_hint_timeout_id)
     g_source_remove (password_hint->password_hint_timeout_id);
 
-  g_free (password_hint);
+  g_slice_free (GtkEntryPasswordHint, password_hint);
 }
 
 /* Default signal handlers
@@ -2598,7 +2598,7 @@ gtk_entry_real_insert_text (GtkEditable *editable,
 
           if (!password_hint)
             {
-              password_hint = g_new0 (GtkEntryPasswordHint, 1);
+              password_hint = g_slice_new0 (GtkEntryPasswordHint);
               g_object_set_qdata_full (G_OBJECT (entry), quark_password_hint,
                                        password_hint,
                                        (GDestroyNotify) gtk_entry_password_hint_free);
@@ -5420,14 +5420,14 @@ popup_targets_received (GtkClipboard     *clipboard,
     }
 
   g_object_unref (entry);
-  g_free (info);
+  g_slice_free (PopupInfo, info);
 }
 			
 static void
 gtk_entry_do_popup (GtkEntry       *entry,
                     GdkEventButton *event)
 {
-  PopupInfo *info = g_new (PopupInfo, 1);
+  PopupInfo *info = g_slice_new (PopupInfo);
 
   /* In order to know what entries we should make sensitive, we
    * ask for the current targets of the clipboard, and when

@@ -1,5 +1,15 @@
 2008-07-04  Michael Natterer  <mitch@imendio.com>
 
+	Allocate with GSlice:
+
+	* gtk/gtkassistant.c: GtkAssistantPage
+	* gtk/gtkcellview.c: GtkCellViewCellInfo
+	* gtk/gtkentry.c: GtkEntryPasswordHint, PopupInfo
+	* gtk/gtkfilefilter.c: FilterRule
+	* gtk/gtknotebook.c: GtkNotebookPage
+
+2008-07-04  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkcombobox.c: allocate ComboCellInfo with GSlice.
 
 2008-07-04  Michael Natterer  <mitch@imendio.com>
