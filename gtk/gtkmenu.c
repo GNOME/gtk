@@ -491,17 +491,18 @@ gtk_menu_class_init (GtkMenuClass *class)
   /**
    * GtkMenu:active:
    *
-   * The currently selected menu item.
+   * The index of the currently selected menu item, or -1 if no
+   * menu item is selected.
    *
    * Since: 2.14
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVE,
-                                   g_param_spec_uint ("active",
-				                      P_("Active"),
-						      P_("The currently selected menu item"),
-						      0, G_MAXUINT, 0,
-						      GTK_PARAM_READWRITE));
+                                   g_param_spec_int ("active",
+				                     P_("Active"),
+						     P_("The currently selected menu item"),
+						     -1, G_MAXINT, -1,
+						     GTK_PARAM_READWRITE));
 
   /**
    * GtkMenu:accel-group:
@@ -785,7 +786,7 @@ gtk_menu_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ACTIVE:
-      gtk_menu_set_active (menu, g_value_get_uint (value));
+      gtk_menu_set_active (menu, g_value_get_int (value));
       break;
     case PROP_ACCEL_GROUP:
       gtk_menu_set_accel_group (menu, g_value_get_object (value));
@@ -834,7 +835,7 @@ gtk_menu_get_property (GObject     *object,
   switch (prop_id)
     {
     case PROP_ACTIVE:
-      g_value_set_uint (value, g_list_index (GTK_MENU_SHELL (menu)->children, gtk_menu_get_active (menu)));
+      g_value_set_int (value, g_list_index (GTK_MENU_SHELL (menu)->children, gtk_menu_get_active (menu)));
       break;
     case PROP_ACCEL_GROUP:
       g_value_set_object (value, gtk_menu_get_accel_group (menu));
@@ -1024,6 +1025,7 @@ gtk_menu_init (GtkMenu *menu)
   priv->lower_arrow_state = GTK_STATE_NORMAL;
 
   priv->have_layout = FALSE;
+  priv->monitor_num = -1;
 }
 
 static void
@@ -5064,7 +5066,7 @@ gtk_menu_set_monitor (GtkMenu *menu,
  * Retrieves the number of the monitor on which to show the menu.
  *
  * Returns: the number of the monitor on which the menu should
- *    be popped up or -1
+ *    be popped up or -1, if no monitor has been set
  *
  * Since: 2.14
  **/

@@ -161,6 +161,13 @@ test_type (gconstpointer data)
 	  strcmp (pspec->name, "current-color") == 0)
 	continue;
 
+      if (g_type_is_a (type, GTK_TYPE_COLOR_SELECTION_DIALOG) &&
+	  (strcmp (pspec->name, "color-selection") == 0 ||
+	   strcmp (pspec->name, "ok-button") == 0 ||
+	   strcmp (pspec->name, "help-button") == 0 ||
+	   strcmp (pspec->name, "cancel-button") == 0))
+	continue;
+
       /* Gets set to the cwd */
       if (g_type_is_a (type, GTK_TYPE_FILE_SELECTION) &&
 	  strcmp (pspec->name, "filename") == 0)
@@ -216,10 +223,12 @@ test_type (gconstpointer data)
           (strcmp (pspec->name, "color-hash") == 0 ||
 	   strcmp (pspec->name, "gtk-cursor-theme-name") == 0 ||
 	   strcmp (pspec->name, "gtk-cursor-theme-size") == 0 ||
+	   strcmp (pspec->name, "gtk-dnd-drag-threshold") == 0 ||
 	   strcmp (pspec->name, "gtk-double-click-time") == 0 ||
+	   strcmp (pspec->name, "gtk-fallback-icon-theme") == 0 ||
 	   strcmp (pspec->name, "gtk-file-chooser-backend") == 0 ||
 	   strcmp (pspec->name, "gtk-icon-theme-name") == 0 ||
-	   strcmp (pspec->name, "gtk-fallback-icon-theme") == 0 ||
+	   strcmp (pspec->name, "gtk-im-module") == 0 ||
 	   strcmp (pspec->name, "gtk-key-theme-name") == 0 ||
 	   strcmp (pspec->name, "gtk-theme-name") == 0))
         continue;
@@ -273,6 +282,10 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "style") == 0))
 	continue;
 
+      if (g_test_verbose ())
+      g_print ("Property %s.%s\n", 
+	     g_type_name (pspec->owner_type),
+	     pspec->name);
       g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
       g_object_get_property (instance, pspec->name, &value);
       check_property ("Property", pspec, &value);
