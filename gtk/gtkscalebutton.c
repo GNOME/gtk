@@ -796,6 +796,8 @@ gtk_scale_button_get_minus_button (GtkScaleButton *button)
  *
  * Retrieves the popup of the #GtkScaleButton.
  *
+ * Returns: the popup of the #GtkScaleButton
+ *
  * Since: 2.14
  */
 GtkWidget *

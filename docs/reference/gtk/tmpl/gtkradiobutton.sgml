@@ -128,10 +128,8 @@ Creates a new #GtkRadioButton, adding it to the same group as @radio_group_membe
 As with gtk_radio_button_new(), a widget should be packed into the radio button.
 </para>
 
-@radio_group_member: 
+@radio_group_member: an existing #GtkRadioButton.
 @Returns: a new radio button.
-<!-- # Unused Parameters # -->
-@group: an existing #GtkRadioButton.
 
 
 <!-- ##### FUNCTION gtk_radio_button_new_with_label ##### -->

@@ -4582,6 +4582,7 @@ gtk_icon_view_new_with_model (GtkTreeModel *model)
 
 /**
  * gtk_icon_view_convert_widget_to_bin_window_coords:
+ * @icon_view: a #GtkIconView 
  * @wx: X coordinate relative to the widget
  * @wy: Y coordinate relative to the widget
  * @bx: return location for bin_window X coordinate
@@ -4897,7 +4898,6 @@ gtk_icon_view_set_tooltip_query_cb (GtkWidget  *widget,
 /**
  * gtk_icon_view_set_tooltip_column:
  * @icon_view: a #GtkIconView
- * 
  * @column: an integer, which is a valid column number for @icon_view's model
  *
  * If you only plan to have simple (text-only) tooltips on full items, you

@@ -1710,6 +1710,8 @@ gtk_font_selection_dialog_get_font (GtkFontSelectionDialog *fsd)
  * @fsd: a #GtkFontSelectionDialog
  * @fontname: a pointer to a string
  *
+ * Sets the currently selected font. 
+ * 
  * Return value: %TRUE if the font selected in @fsd is now the
  * @fontname specified. %FALSE otherwise. 
  */
