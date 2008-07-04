@@ -1,4 +1,8 @@
-2008-07-04  Matthias Clasen  <mclasen@redhat.com>\
+2008-07-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaccelgroup.c: Fix default value for modifier-mask property.
+
+2008-07-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmenu.c: Debork the attach-widget property.
 

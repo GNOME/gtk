@@ -95,7 +95,7 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
                                                        "Modifier Mask",
                                                        "Modifier Mask",
                                                        GDK_TYPE_MODIFIER_TYPE,
-                                                       0,
+                                                       default_accel_mod_mask,
                                                        G_PARAM_READABLE));
 
   /**
@@ -186,7 +186,7 @@ gtk_accel_group_get_property (GObject    *object,
       g_value_set_boolean (value, accel_group->lock_count > 0);
       break;
     case PROP_MODIFIER_MASK:
-      g_value_set_enum (value, accel_group->modifier_mask);
+      g_value_set_flags (value, accel_group->modifier_mask);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
