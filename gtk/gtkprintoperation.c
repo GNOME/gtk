@@ -2280,7 +2280,7 @@ print_pages (GtkPrintOperation       *op,
 
       if (!handled)
         {
-          GtkMessageDialog *error_dialog;
+          GtkWidget *error_dialog;
 
           error_dialog = gtk_message_dialog_new (parent,
                                                  GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -2294,13 +2294,13 @@ print_pages (GtkPrintOperation       *op,
           if (parent->group)
             gtk_window_group_add_window (parent->group, GTK_WINDOW (error_dialog));
 
-          g_signal_connect (error_dialog, "response", 
+          g_signal_connect (error_dialog, "response",
                             G_CALLBACK (gtk_widget_destroy), NULL);
 
           gtk_widget_show (error_dialog);
-          
+
           print_pages_idle_done (data);
-          
+
           return;
         }
 

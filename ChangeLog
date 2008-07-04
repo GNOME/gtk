@@ -1,5 +1,10 @@
 2008-07-04  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkprintoperation.c (print_pages): change "error_dialog"
+	variable to GtkWidget fo fix two warnings.
+
+2008-07-04  Michael Natterer  <mitch@imendio.com>
+
 	Bug 539944 – Add GtkScaleButton API so struct fields can be marked
 	as private
 
