@@ -37,7 +37,6 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 
-#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 

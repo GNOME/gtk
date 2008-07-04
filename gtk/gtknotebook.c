@@ -46,7 +46,6 @@
 #include "gtkdnd.h"
 #include "gtkbuildable.h"
 
-#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 #define SCROLL_DELAY_FACTOR   5

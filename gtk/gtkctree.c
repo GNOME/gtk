@@ -29,7 +29,6 @@
  */
 
 #undef GDK_DISABLE_DEPRECATED
-#undef GTK_DISABLE_DEPRECATED
 
 #include "config.h"
 #include <stdlib.h>
@@ -41,7 +40,6 @@
 #include "gtkintl.h"
 #include <gdk/gdkkeysyms.h>
 
-#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 #define PM_SIZE                    8

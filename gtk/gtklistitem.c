@@ -28,8 +28,6 @@
 
 #include <gdk/gdkkeysyms.h>
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include "gtkbindings.h"
 #include "gtklabel.h"
 #include "gtklistitem.h"
@@ -38,7 +36,6 @@
 #include "gtksignal.h"
 #include "gtkintl.h"
 
-#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 

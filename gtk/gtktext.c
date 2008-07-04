@@ -48,7 +48,6 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 
@@ -797,13 +796,13 @@ gtk_text_set_adjustments (GtkText       *text,
   if (text->hadj && (text->hadj != hadj))
     {
       gtk_signal_disconnect_by_data (GTK_OBJECT (text->hadj), text);
-      gtk_object_unref (GTK_OBJECT (text->hadj));
+      g_object_unref (text->hadj);
     }
   
   if (text->vadj && (text->vadj != vadj))
     {
       gtk_signal_disconnect_by_data (GTK_OBJECT (text->vadj), text);
-      gtk_object_unref (GTK_OBJECT (text->vadj));
+      g_object_unref (text->vadj);
     }
   
   g_object_freeze_notify (G_OBJECT (text));
@@ -1175,13 +1174,13 @@ gtk_text_destroy (GtkObject *object)
   if (text->hadj)
     {
       gtk_signal_disconnect_by_data (GTK_OBJECT (text->hadj), text);
-      gtk_object_unref (GTK_OBJECT (text->hadj));
+      g_object_unref (text->hadj);
       text->hadj = NULL;
     }
   if (text->vadj)
     {
       gtk_signal_disconnect_by_data (GTK_OBJECT (text->vadj), text);
-      gtk_object_unref (GTK_OBJECT (text->vadj));
+      g_object_unref (text->vadj);
       text->vadj = NULL;
     }
 

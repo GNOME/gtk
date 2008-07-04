@@ -28,7 +28,6 @@
  */
 
 #undef GDK_DISABLE_DEPRECATED
-#undef GTK_DISABLE_DEPRECATED
 
 #include "config.h"
 #include <math.h>
@@ -36,7 +35,6 @@
 #include "gtkpixmap.h"
 #include "gtkintl.h"
 
-#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 

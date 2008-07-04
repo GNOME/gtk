@@ -50,7 +50,6 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 static const gchar gtk_combo_string_key[] = "gtk-combo-string-value";

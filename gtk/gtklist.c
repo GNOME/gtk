@@ -24,8 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include "config.h"
 #include <string.h> /* memset */
 
@@ -37,7 +35,6 @@
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 
-#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 enum {
@@ -872,7 +869,7 @@ gtk_list_set_focus_child (GtkContainer *container,
       if (container->focus_child)
 	{
 	  list->last_focus_child = container->focus_child;
-	  gtk_widget_unref (container->focus_child);
+	  g_object_unref (container->focus_child);
 	}
       container->focus_child = child;
       if (container->focus_child)
@@ -1184,7 +1181,7 @@ gtk_list_clear_items (GtkList *list,
       if (widget == list->last_focus_child)
 	list->last_focus_child = NULL;
 
-      gtk_widget_unref (widget);
+      g_object_unref (widget);
     }
 
   g_list_free (start_list);
@@ -1320,7 +1317,7 @@ gtk_list_remove_items_internal (GtkList	 *list,
       if (widget == list->last_focus_child)
 	list->last_focus_child = NULL;
 
-      gtk_widget_unref (widget);
+      g_object_unref (widget);
     }
   
   if (new_focus_child && new_focus_child != old_focus_child)
@@ -2505,7 +2502,7 @@ gtk_list_signal_item_deselect (GtkListItem *list_item,
     {
       list->selection = g_list_remove_link (list->selection, node);
       g_list_free_1 (node);
-      gtk_widget_unref (GTK_WIDGET (list_item));
+      g_object_unref (list_item);
       gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
     }
 }

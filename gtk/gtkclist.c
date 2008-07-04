@@ -34,8 +34,6 @@
 
 #include <gdk/gdkkeysyms.h>
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include "gtkmain.h"
 #include "gtkobject.h"
 #include "gtkctree.h"
@@ -45,7 +43,6 @@
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 
-#define GTK_DISABLE_DEPRECATED
 #include "gtkalias.h"
 
 /* length of button_actions array */
@@ -1162,7 +1159,7 @@ gtk_clist_set_hadjustment (GtkCList      *clist,
   if (clist->hadjustment)
     {
       gtk_signal_disconnect_by_data (GTK_OBJECT (clist->hadjustment), clist);
-      gtk_object_unref (GTK_OBJECT (clist->hadjustment));
+      g_object_unref (clist->hadjustment);
     }
 
   clist->hadjustment = adjustment;
@@ -1209,7 +1206,7 @@ gtk_clist_set_vadjustment (GtkCList      *clist,
   if (clist->vadjustment)
     {
       gtk_signal_disconnect_by_data (GTK_OBJECT (clist->vadjustment), clist);
-      gtk_object_unref (GTK_OBJECT (clist->vadjustment));
+      g_object_unref (clist->vadjustment);
     }
 
   clist->vadjustment = adjustment;
@@ -2598,7 +2595,7 @@ cell_size_request (GtkCList       *clist,
       requisition->width = logical_rect.width;
       requisition->height = logical_rect.height;
       
-      g_object_unref (G_OBJECT (layout));
+      g_object_unref (layout);
     }
   else
     {
@@ -4384,13 +4381,13 @@ gtk_clist_destroy (GtkObject *object)
   if (clist->hadjustment)
     {
       gtk_signal_disconnect_by_data (GTK_OBJECT (clist->hadjustment), clist);
-      gtk_object_unref (GTK_OBJECT (clist->hadjustment));
+      g_object_unref (clist->hadjustment);
       clist->hadjustment = NULL;
     }
   if (clist->vadjustment)
     {
       gtk_signal_disconnect_by_data (GTK_OBJECT (clist->vadjustment), clist);
-      gtk_object_unref (GTK_OBJECT (clist->vadjustment));
+      g_object_unref (clist->vadjustment);
       clist->vadjustment = NULL;
     }
 
@@ -5852,7 +5849,7 @@ draw_row (GtkCList     *clist,
 			       offset,
 			       row_rectangle.y + row_center_offset + clist_row->cell[i].vertical,
 			       layout);
-              g_object_unref (G_OBJECT (layout));
+              g_object_unref (layout);
 	      gdk_gc_set_clip_rectangle (fg_gc, NULL);
 	    }
 	  break;
