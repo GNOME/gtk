@@ -1,5 +1,6 @@
 2008-07-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkevents.c:
 	* gdk/x11/gdktestutils-x11.c: Small doc fixes
 
 2008-07-04  Matthias Clasen  <mclasen@redhat.com>

@@ -1259,7 +1259,7 @@ gdk_event_get_type (void)
  * Obtains a desktop-wide setting, such as the double-click time,
  * for the default screen. See gdk_screen_get_setting().
  *
- * Returns : %TRUE if the setting existed and a value was stored
+ * Returns: %TRUE if the setting existed and a value was stored
  *   in @value, %FALSE otherwise.
  **/
 gboolean
