@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-13 18:22-0400\n"
+"POT-Creation-Date: 2008-07-05 15:47-0400\n"
 "PO-Revision-Date: 2007-02-26 02:54+0200\n"
 "Last-Translator: Antono Vasiljev <antono.vasiljev@gmail.com>\n"
 "Language-Team: Eo-tradukado <http://eo-tradukado.tuxfamily.org>\n"
@@ -231,7 +231,7 @@ msgid "keyboard label|Delete"
 msgstr "Forigu"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:912
-#: gdk-pixbuf/gdk-pixbuf-io.c:1168 tests/testfilechooser.c:218
+#: gdk-pixbuf/gdk-pixbuf-io.c:1168 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Malsukcesis malfermi la dosieron \"%s\": %s"
@@ -242,7 +242,7 @@ msgid "Image file '%s' contains no data"
 msgstr "Bilda dosiero \"%s\" enhavas neniun datumon"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:961
-#: gdk-pixbuf/gdk-pixbuf-io.c:1220 tests/testfilechooser.c:263
+#: gdk-pixbuf/gdk-pixbuf-io.c:1220 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -283,7 +283,6 @@ msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Ne povis rekoni la bildan dosierformaton por dosiero \"%s\""
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:801
-#, c-format
 msgid "Unrecognized image file format"
 msgstr "Nerekonata bilda dosierformato"
 
@@ -304,17 +303,14 @@ msgstr ""
 "Ĉi tiu konstruo de gdk-pixbuf ne subtenas konservadon de la bildformato: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1681
-#, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "Nesufiĉa memoro por konservi bildon al revokato"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1694
-#, c-format
 msgid "Failed to open temporary file"
 msgstr "Malsukcesis malfermi dumtempan dosieron"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1720
-#, c-format
 msgid "Failed to read from temporary file"
 msgstr "Malsukcesis legi dumtempan dosieron"
 
@@ -333,12 +329,11 @@ msgstr ""
 "konservitaj: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2200 gdk-pixbuf/gdk-pixbuf-io.c:2251
-#, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nesufiĉa memoro por konservi bildon en bufron"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2297
-#, fuzzy, c-format
+#, fuzzy
 msgid "Error writing to image stream"
 msgstr "Eraro dum skribado de la bilda dosiero: %s"
 
@@ -357,17 +352,14 @@ msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Alkrementa ŝargado de bildtipo \"%s\" ne estas subtenata"
 
 #: gdk-pixbuf/gdk-pixdata.c:147
-#, c-format
 msgid "Image header corrupt"
 msgstr "Bildkapo difektita"
 
 #: gdk-pixbuf/gdk-pixdata.c:152
-#, c-format
 msgid "Image format unknown"
 msgstr "Bilda formato nekonata"
 
 #: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
-#, c-format
 msgid "Image pixel data corrupt"
 msgstr "Bilderaj datumoj de bildo difektitaj"
 
@@ -379,29 +371,24 @@ msgstr[0] "malsukcesis krei bildbufron de %u bajto"
 msgstr[1] "malsukcesis krei bildbufron de %u bajtoj"
 
 #: gdk-pixbuf/io-ani.c:244
-#, c-format
 msgid "Unexpected icon chunk in animation"
 msgstr "Neatendita piktograma bloko en animacio"
 
 #: gdk-pixbuf/io-ani.c:337
-#, c-format
 msgid "Unsupported animation type"
 msgstr "Nesubtenata animacia tipo"
 
 #: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
 #: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-#, c-format
 msgid "Invalid header in animation"
 msgstr "Nevalida kapo en animacio"
 
 #: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
 #: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-#, c-format
 msgid "Not enough memory to load animation"
 msgstr "Ne sufiĉa memoro por ŝargi animacion"
 
 #: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-#, c-format
 msgid "Malformed chunk in animation"
 msgstr "Misformita bloko en animacio"
 
@@ -411,37 +398,30 @@ msgstr "La ANI-bildformato"
 
 #: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
 #: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-#, c-format
 msgid "BMP image has bogus header data"
 msgstr "BMP-bildo havas falsajn kapdatumojn"
 
 #: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-#, c-format
 msgid "Not enough memory to load bitmap image"
 msgstr "Ne sufiĉa memoro por ŝargi rastruman bildon"
 
 #: gdk-pixbuf/io-bmp.c:319
-#, c-format
 msgid "BMP image has unsupported header size"
 msgstr "BMP-bildo havas nesubtenatan kapgrandon"
 
 #: gdk-pixbuf/io-bmp.c:357
-#, c-format
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Supremalsuprenaj BMP-bildoj ne kunpremeblas"
 
 #: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-#, c-format
 msgid "Premature end-of-file encountered"
 msgstr "Renkontis tro fruan dosierfinon"
 
 #: gdk-pixbuf/io-bmp.c:1329
-#, c-format
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Ne povis krei memoron por konservi BMP-dosieron"
 
 #: gdk-pixbuf/io-bmp.c:1370
-#, c-format
 msgid "Couldn't write to BMP file"
 msgstr "Ne eblis skribi en BMP-dosiero"
 
@@ -455,7 +435,6 @@ msgid "Failure reading GIF: %s"
 msgstr "Malsukceso dum legado de GIF: %s"
 
 #: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477 gdk-pixbuf/io-gif.c:1638
-#, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "Al GIF-dosiero kelkaj datumoj mankis (ĉu ĝi eble estis iel hakita?)"
 
@@ -465,43 +444,35 @@ msgid "Internal error in the GIF loader (%s)"
 msgstr "Interna eraro en la GIF-ŝargilo (%s)"
 
 #: gdk-pixbuf/io-gif.c:579
-#, c-format
 msgid "Stack overflow"
 msgstr "Staktroo"
 
 #: gdk-pixbuf/io-gif.c:639
-#, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "GIF-bilda ŝargilo ne povas kompreni ĉi tiun bildon."
 
 #: gdk-pixbuf/io-gif.c:668
-#, c-format
 msgid "Bad code encountered"
 msgstr "Renkontis malbonan kodon"
 
 #: gdk-pixbuf/io-gif.c:678
-#, c-format
 msgid "Circular table entry in GIF file"
 msgstr "Cikla tabelelemento en GIF-dosiero"
 
 #: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464 gdk-pixbuf/io-gif.c:1511
 #: gdk-pixbuf/io-gif.c:1626
-#, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "Ne sufiĉa memoro por ŝargi GIF-dosieron"
 
 #: gdk-pixbuf/io-gif.c:956
-#, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Ne sufiĉa memoro por sintezi kadron en GIF-dosiero"
 
 #: gdk-pixbuf/io-gif.c:1128
-#, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF-bildo estas difektita (nekorekta LZW-kunpremo)"
 
 #: gdk-pixbuf/io-gif.c:1178
-#, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "Dosiero ŝajnas ne estis GIF-dosiero"
 
@@ -511,7 +482,6 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "Versio %s de la GIF-dosierformato ne estas subtenata"
 
 #: gdk-pixbuf/io-gif.c:1299
-#, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -520,7 +490,6 @@ msgstr ""
 "kolormapon."
 
 #: gdk-pixbuf/io-gif.c:1533
-#, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-bildo estis hakita aŭ nekompleta"
 
@@ -530,48 +499,39 @@ msgstr "La GIF-bildformato"
 
 #: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
 #: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-#, c-format
 msgid "Invalid header in icon"
 msgstr "Nevalida kapo en ikono"
 
 #: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
 #: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-#, c-format
 msgid "Not enough memory to load icon"
 msgstr "Sen sufiĉa memoro por ŝargi ikonon"
 
 #: gdk-pixbuf/io-ico.c:322
-#, c-format
 msgid "Icon has zero width"
 msgstr "Ikono havas nulan larĝon"
 
 #: gdk-pixbuf/io-ico.c:332
-#, c-format
 msgid "Icon has zero height"
 msgstr "Ikono havas nulan alton"
 
 #: gdk-pixbuf/io-ico.c:384
-#, c-format
 msgid "Compressed icons are not supported"
 msgstr "Densigitaj ikonoj ne estas subtenataj"
 
 #: gdk-pixbuf/io-ico.c:417
-#, c-format
 msgid "Unsupported icon type"
 msgstr "Nesubtenata ikona tipo"
 
 #: gdk-pixbuf/io-ico.c:511
-#, c-format
 msgid "Not enough memory to load ICO file"
 msgstr "Sen sufiĉa memoro por ŝargi ICO-dosieron"
 
 #: gdk-pixbuf/io-ico.c:976
-#, c-format
 msgid "Image too large to be saved as ICO"
 msgstr "Bildo tro granda por esti konservata kiel ICO"
 
 #: gdk-pixbuf/io-ico.c:987
-#, c-format
 msgid "Cursor hotspot outside image"
 msgstr "Kursora aktivpunkto ekster bildo"
 
@@ -580,7 +540,7 @@ msgstr "Kursora aktivpunkto ekster bildo"
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Nesubtenata profundo por ICO-dosiero: %d"
 
-#: gdk-pixbuf/io-ico.c:1244 gdk-pixbuf/io-gdip-ico.c:59
+#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
 msgid "The ICO image format"
 msgstr "La ICO-bildformato"
 
@@ -590,7 +550,7 @@ msgid "Error reading ICNS image: %s"
 msgstr "Fatala eraro dum legado de PNG-bilddosiero: %s"
 
 #: gdk-pixbuf/io-icns.c:362
-#, fuzzy, c-format
+#, fuzzy
 msgid "Could not decode ICNS file"
 msgstr "Ne eblis elekti dosieron"
 
@@ -599,42 +559,42 @@ msgstr "Ne eblis elekti dosieron"
 msgid "The ICNS image format"
 msgstr "La ICO-bildformato"
 
-#: gdk-pixbuf/io-jasper.c:74
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:75
+#, fuzzy
 msgid "Couldn't allocate memory for stream"
 msgstr "Ne povis krei memoron por kapo"
 
-#: gdk-pixbuf/io-jasper.c:103
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:105
+#, fuzzy
 msgid "Couldn't decode image"
 msgstr "Ne eblis konverti dosiernomon"
 
-#: gdk-pixbuf/io-jasper.c:121
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:123
+#, fuzzy
 msgid "Transformed JPEG2000 has zero width or height"
 msgstr "Transformita JPEG havas nulan larĝon aŭ alton."
 
-#: gdk-pixbuf/io-jasper.c:134
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:137
+#, fuzzy
 msgid "Image type currently not supported"
 msgstr "Bildotipo \"%s\" ne estas subtenata"
 
-#: gdk-pixbuf/io-jasper.c:145 gdk-pixbuf/io-jasper.c:152
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
+#, fuzzy
 msgid "Couldn't allocate memory for color profile"
 msgstr "Ne povis krei memoron por ŝargi JPEG-dosieron"
 
-#: gdk-pixbuf/io-jasper.c:177
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:182
+#, fuzzy
 msgid "Insufficient memory to open JPEG 2000 file"
 msgstr "Sen sufiĉa memoro por malfermi dosieron TIFF"
 
-#: gdk-pixbuf/io-jasper.c:258
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:264
+#, fuzzy
 msgid "Couldn't allocate memory to buffer image data"
 msgstr "Ne povis krei memoron por liniaj datumoj"
 
-#: gdk-pixbuf/io-jasper.c:302
+#: gdk-pixbuf/io-jasper.c:308
 #, fuzzy
 msgid "The JPEG 2000 image format"
 msgstr "La JPEG-bildformato"
@@ -645,7 +605,6 @@ msgid "Error interpreting JPEG image file (%s)"
 msgstr "Eraro interpretante JPEG-bilddosieron (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:529
-#, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -660,12 +619,10 @@ msgstr "Nesubtenata JPEG kolorspaco (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
-#, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Ne povis krei memoron por ŝargi JPEG-dosieron"
 
 #: gdk-pixbuf/io-jpeg.c:920
-#, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr "Transformita JPEG havas nulan larĝon aŭ alton."
 
@@ -691,22 +648,18 @@ msgid "The JPEG image format"
 msgstr "La JPEG-bildformato"
 
 #: gdk-pixbuf/io-pcx.c:187
-#, c-format
 msgid "Couldn't allocate memory for header"
 msgstr "Ne povis krei memoron por kapo"
 
 #: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-#, c-format
 msgid "Couldn't allocate memory for context buffer"
 msgstr "Ne povis krei memoron por kunteksta bufro"
 
 #: gdk-pixbuf/io-pcx.c:601
-#, c-format
 msgid "Image has invalid width and/or height"
 msgstr "Bildo havas nevalidan larĝon kaj/aǔ alton"
 
 #: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-#, c-format
 msgid "Image has unsupported bpp"
 msgstr "Bildo havas nesubtentajn bilderbitojn"
 
@@ -716,27 +669,22 @@ msgid "Image has unsupported number of %d-bit planes"
 msgstr "Bildo havas nesubtenatan nombron de %d-bitaj planoj"
 
 #: gdk-pixbuf/io-pcx.c:642
-#, c-format
 msgid "Couldn't create new pixbuf"
 msgstr "Ne kreeblis nova bilderbufro"
 
 #: gdk-pixbuf/io-pcx.c:650
-#, c-format
 msgid "Couldn't allocate memory for line data"
 msgstr "Ne povis krei memoron por liniaj datumoj"
 
 #: gdk-pixbuf/io-pcx.c:657
-#, c-format
 msgid "Couldn't allocate memory for paletted data"
 msgstr "Ne povis krei memoron por paletrajn datumojn"
 
 #: gdk-pixbuf/io-pcx.c:704
-#, c-format
 msgid "Didn't get all lines of PCX image"
 msgstr "Ne ricevis ĉiujn liniojn de PCX-bildo"
 
 #: gdk-pixbuf/io-pcx.c:711
-#, c-format
 msgid "No palette found at end of PCX data"
 msgstr "Neniu paletro trovita je fino de PCX-datumoj"
 
@@ -745,27 +693,22 @@ msgid "The PCX image format"
 msgstr "La bilda formato PCX"
 
 #: gdk-pixbuf/io-png.c:55
-#, c-format
 msgid "Bits per channel of PNG image is invalid."
 msgstr "Bitoj per kanalo de PNG-bildo estas nevalidaj."
 
 #: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
-#, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "Transformita PNG havas nulan larĝon aŭ alton."
 
 #: gdk-pixbuf/io-png.c:144
-#, c-format
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr "Bitoj por kanalo de transformita PNG ne estas 8."
 
 #: gdk-pixbuf/io-png.c:153
-#, c-format
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "Transformita PNG ne RVB aŭ RVBA."
 
 #: gdk-pixbuf/io-png.c:162
-#, c-format
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
 "Transformita PNG havas nesubtenatan nombron de kanaloj, devas esti 3 aŭ 4."
@@ -776,7 +719,6 @@ msgid "Fatal error in PNG image file: %s"
 msgstr "Fatala eraro en PNG-bilddosiero: %s"
 
 #: gdk-pixbuf/io-png.c:310
-#, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "Nesufiĉa memoro por ŝargi PNG-dosieron"
 
@@ -790,7 +732,6 @@ msgstr ""
 "aplikaĵojn por redukti memoruzon"
 
 #: gdk-pixbuf/io-png.c:684
-#, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "Fatala eraro dum legado de PNG-bilddosiero"
 
@@ -800,13 +741,11 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Fatala eraro dum legado de PNG-bilddosiero: %s"
 
 #: gdk-pixbuf/io-png.c:825
-#, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Ŝlosiloj por PNG-tekstblokoj havu minimume 1 kaj maksimume 79 signojn."
 
 #: gdk-pixbuf/io-png.c:833
-#, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Ŝlosiloj por PNG-tekstblokoj estu Askiaj signoj."
 
@@ -839,73 +778,59 @@ msgid "The PNG image format"
 msgstr "La bilda formato PNG"
 
 #: gdk-pixbuf/io-pnm.c:250
-#, c-format
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "PNM-ŝargilo supozis trovi entjeron, tamen ne trovis"
 
 #: gdk-pixbuf/io-pnm.c:282
-#, c-format
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM-dosiero havas nekorektan komencan bajton"
 
 #: gdk-pixbuf/io-pnm.c:312
-#, c-format
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "PNM-dosiero ne estas en rekonata PNM-subformato"
 
 #: gdk-pixbuf/io-pnm.c:337
-#, c-format
 msgid "PNM file has an image width of 0"
 msgstr "PNM-dosiero havas bildlarĝon de 0"
 
 #: gdk-pixbuf/io-pnm.c:358
-#, c-format
 msgid "PNM file has an image height of 0"
 msgstr "PNM-dosiero havas bildalton de 0"
 
 #: gdk-pixbuf/io-pnm.c:381
-#, c-format
 msgid "Maximum color value in PNM file is 0"
 msgstr "Maksimuma kolora valoro en PNM-dosiero estas 0"
 
 #: gdk-pixbuf/io-pnm.c:389
-#, c-format
 msgid "Maximum color value in PNM file is too large"
 msgstr "Maksimuma kolora valoro en PNM-dosiero estas tro granda"
 
 #: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-#, c-format
 msgid "Raw PNM image type is invalid"
 msgstr "Kruda PNM-bildtipo estas nevalida"
 
 #: gdk-pixbuf/io-pnm.c:654
-#, c-format
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM-bildŝargilo ne subtenas ĉi tiun PNM-subformaton"
 
 #: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-#, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 "Krudaj PNM-formatoj bezonas ekzakte unu spaceto antaŭ ekzemplaj datumoj"
 
 #: gdk-pixbuf/io-pnm.c:768
-#, c-format
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Ne povas krei memoron por ŝargi PNM-bildon"
 
 #: gdk-pixbuf/io-pnm.c:818
-#, c-format
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Nesufiĉa memoro por ŝargi PNM-kuntekstan strukturon"
 
 #: gdk-pixbuf/io-pnm.c:869
-#, c-format
 msgid "Unexpected end of PNM image data"
 msgstr "Neatendita fino de PNM-bilddatumoj"
 
 #: gdk-pixbuf/io-pnm.c:997
-#, c-format
 msgid "Insufficient memory to load PNM file"
 msgstr "Nesufiĉa memoro por ŝargi PNM-dosiero"
 
@@ -914,22 +839,18 @@ msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "La PNM/PBM/PGM/PPM-bildformata familio"
 
 #: gdk-pixbuf/io-ras.c:126
-#, c-format
 msgid "RAS image has bogus header data"
 msgstr "RAS-bildo havas falsajn kapdatumojn"
 
 #: gdk-pixbuf/io-ras.c:148
-#, c-format
 msgid "RAS image has unknown type"
 msgstr "RAS-bildo havas nekonatan tipon"
 
 #: gdk-pixbuf/io-ras.c:156
-#, c-format
 msgid "unsupported RAS image variation"
 msgstr "nesubtenata RAS-bilda vario"
 
 #: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-#, c-format
 msgid "Not enough memory to load RAS image"
 msgstr "Nesufiĉa memoro por ŝargi RAS-bildon"
 
@@ -938,68 +859,55 @@ msgid "The Sun raster image format"
 msgstr "La Suna rastruma bildformato"
 
 #: gdk-pixbuf/io-tga.c:154
-#, c-format
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Ne povas krei memoron por IOBuffer-strukturo"
 
 #: gdk-pixbuf/io-tga.c:173
-#, c-format
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Ne povas krei memoron pro IOBuffer-datumojn"
 
 #: gdk-pixbuf/io-tga.c:184
-#, c-format
 msgid "Cannot realloc IOBuffer data"
 msgstr "No povas rekrei IOBuffer-datumojn"
 
 #: gdk-pixbuf/io-tga.c:214
-#, c-format
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Ne povas krei dumtempajn IOBuffer-datumojn"
 
 #: gdk-pixbuf/io-tga.c:347
-#, c-format
 msgid "Cannot allocate new pixbuf"
 msgstr "Ne povas krei novan bilderbufron"
 
 #: gdk-pixbuf/io-tga.c:687
-#, c-format
 msgid "Cannot allocate colormap structure"
 msgstr "Ne povas krei kolormapan strukturon"
 
 #: gdk-pixbuf/io-tga.c:694
-#, c-format
 msgid "Cannot allocate colormap entries"
 msgstr "Ne povas krei kolormapajn elementojn"
 
 #: gdk-pixbuf/io-tga.c:716
-#, c-format
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Neatendita bitprofundo por kolormapaj elementoj"
 
 #: gdk-pixbuf/io-tga.c:734
-#, c-format
 msgid "Cannot allocate TGA header memory"
 msgstr "Ne povas krei TGA-kapan memoron"
 
 #: gdk-pixbuf/io-tga.c:767
-#, c-format
 msgid "TGA image has invalid dimensions"
 msgstr "TGA-bildo havas nevalidajn dimensiojn"
 
 #: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
 #: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
-#, c-format
 msgid "TGA image type not supported"
 msgstr "TGA-bildtipo ne subtenata"
 
 #: gdk-pixbuf/io-tga.c:856
-#, c-format
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Ne povas krei memoron por TGA-kunteksta strukturo"
 
 #: gdk-pixbuf/io-tga.c:921
-#, c-format
 msgid "Excess data in file"
 msgstr "Troaj datumoj en dosiero"
 
@@ -1016,17 +924,14 @@ msgid "Could not get image height (bad TIFF file)"
 msgstr "Ne povis akiri bildalton (malbona TIFF-dosiero)"
 
 #: gdk-pixbuf/io-tiff.c:175
-#, c-format
 msgid "Width or height of TIFF image is zero"
 msgstr "Larĝo aŭ alto de bildo TIFF estas nul"
 
 #: gdk-pixbuf/io-tiff.c:184 gdk-pixbuf/io-tiff.c:193
-#, c-format
 msgid "Dimensions of TIFF image too large"
 msgstr "Dimensioj de bildo TIFF tro grandaj"
 
 #: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
-#, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "Sen sufiĉa memoro por malfermi dosieron TIFF"
 
@@ -1055,7 +960,6 @@ msgid "Failed to write TIFF data"
 msgstr "Malsukcesis skribi TIFF-datumojn"
 
 #: gdk-pixbuf/io-tiff.c:760
-#, c-format
 msgid "Couldn't write to TIFF file"
 msgstr "Ne eblis skribi en TIFF-dosiero"
 
@@ -1064,22 +968,18 @@ msgid "The TIFF image format"
 msgstr "La bilda formato TIFF"
 
 #: gdk-pixbuf/io-wbmp.c:246
-#, c-format
 msgid "Image has zero width"
 msgstr "Bildo havas larĝo nul"
 
 #: gdk-pixbuf/io-wbmp.c:264
-#, c-format
 msgid "Image has zero height"
 msgstr "Bildo havas alto nul"
 
 #: gdk-pixbuf/io-wbmp.c:275
-#, c-format
 msgid "Not enough memory to load image"
 msgstr "Sen sufiĉa memoro por ŝargi bildon"
 
 #: gdk-pixbuf/io-wbmp.c:334
-#, c-format
 msgid "Couldn't save the rest"
 msgstr "Ne povis esti konservita la ceteron"
 
@@ -1088,17 +988,14 @@ msgid "The WBMP image format"
 msgstr "La bilda formato WBMP"
 
 #: gdk-pixbuf/io-xbm.c:295
-#, c-format
 msgid "Invalid XBM file"
 msgstr "Nevalida XBM-a dosiero"
 
 #: gdk-pixbuf/io-xbm.c:305
-#, c-format
 msgid "Insufficient memory to load XBM image file"
 msgstr "Sen sufiĉa memoro por ŝargi XBM-an bildan dosieron"
 
 #: gdk-pixbuf/io-xbm.c:453
-#, c-format
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Malsukcesa skribo en dumtempa dosiero dun ŝargado de XBM-a bildo"
 
@@ -1107,47 +1004,38 @@ msgid "The XBM image format"
 msgstr "La bilda formato XBM"
 
 #: gdk-pixbuf/io-xpm.c:468
-#, c-format
 msgid "No XPM header found"
 msgstr "Neniu XPM-kapo trovita"
 
 #: gdk-pixbuf/io-xpm.c:477
-#, c-format
 msgid "Invalid XPM header"
 msgstr "Nevalida XPM-kapo"
 
 #: gdk-pixbuf/io-xpm.c:485
-#, c-format
 msgid "XPM file has image width <= 0"
 msgstr "XMP-dosiero havas bildlarĝon <= 0"
 
 #: gdk-pixbuf/io-xpm.c:493
-#, c-format
 msgid "XPM file has image height <= 0"
 msgstr "XMP-dosiero havas bildalton <= 0"
 
 #: gdk-pixbuf/io-xpm.c:501
-#, c-format
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM havas nevalidan nombron de bajtoj per bildero"
 
 #: gdk-pixbuf/io-xpm.c:510
-#, c-format
 msgid "XPM file has invalid number of colors"
 msgstr "XMP-dosiero havas nevalidan nombron de koloroj"
 
 #: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-#, c-format
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Ne povas krei memoron por ŝargi XPM-bildon"
 
 #: gdk-pixbuf/io-xpm.c:545
-#, c-format
 msgid "Cannot read XPM colormap"
 msgstr "Ne povas legi XPM-kolormapon"
 
 #: gdk-pixbuf/io-xpm.c:777
-#, c-format
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Malsukcesis skribi al dumtempa dosiero dum ŝargado de XPM-bildo"
 
@@ -1182,27 +1070,27 @@ msgid "Could not read from stream: %s"
 msgstr "Eraro dum renomado de \"%s\" al \"%s\": %s\n"
 
 #: gdk-pixbuf/io-gdip-utils.c:736
-#, fuzzy, c-format
+#, fuzzy
 msgid "Couldn't create pixbuf"
 msgstr "Ne kreeblis nova bilderbufro"
 
 #: gdk-pixbuf/io-gdip-utils.c:798
-#, fuzzy, c-format
+#, fuzzy
 msgid "Couldn't load bitmap"
 msgstr "Ne eblis konverti dosiernomon"
 
 #: gdk-pixbuf/io-gdip-utils.c:821
-#, fuzzy, c-format
+#, fuzzy
 msgid "Couldn't load metafile"
 msgstr "Ne eblis konverti dosiernomon"
 
 #: gdk-pixbuf/io-gdip-utils.c:980
-#, fuzzy, c-format
+#, fuzzy
 msgid "Unsupported image format for GDI+"
 msgstr "nesubtenata RAS-bilda vario"
 
 #: gdk-pixbuf/io-gdip-utils.c:987
-#, fuzzy, c-format
+#, fuzzy
 msgid "Couldn't save"
 msgstr "Ne povis esti konservita la ceteron"
 
@@ -1384,12 +1272,12 @@ msgstr "Deklivo"
 msgid "Invalid type function: `%s'"
 msgstr "Nevalida Dosiernomo: %s"
 
-#: gtk/gtkbuilderparser.c:788
+#: gtk/gtkbuilderparser.c:789
 #, fuzzy, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Nevalida Dosiernomo: %s"
 
-#: gtk/gtkbuilderparser.c:822
+#: gtk/gtkbuilderparser.c:823
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr ""
@@ -1504,7 +1392,99 @@ msgstr "Elektu koloron"
 msgid "Received invalid color data\n"
 msgstr "Ricevis nevalidajn kolordatumojn\n"
 
-#: gtk/gtkcolorsel.c:550
+#: gtk/gtkcolorsel.c:354
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Elektu la koloron kiun vi volas el la ekstera ringo. Elektu la malhelecon aŭ "
+"helecon de tiu koloro uzante la internan triangulon."
+
+#: gtk/gtkcolorsel.c:378
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"Alklaku la gutigilon, poste alklaku koloron ie ajn en la ekrano por elekti "
+"tiun koloron."
+
+#: gtk/gtkcolorsel.c:387
+msgid "_Hue:"
+msgstr "Nuanco:"
+
+#: gtk/gtkcolorsel.c:388
+msgid "Position on the color wheel."
+msgstr "Pozicio en la kolora rado."
+
+#: gtk/gtkcolorsel.c:390
+msgid "_Saturation:"
+msgstr "Saturo:"
+
+#: gtk/gtkcolorsel.c:391
+msgid "\"Deepness\" of the color."
+msgstr "\"Profundeco\" de la koloro."
+
+#: gtk/gtkcolorsel.c:392
+msgid "_Value:"
+msgstr "Valoro:"
+
+#: gtk/gtkcolorsel.c:393
+msgid "Brightness of the color."
+msgstr "Brileco de la koloro."
+
+#: gtk/gtkcolorsel.c:394
+msgid "_Red:"
+msgstr "Ruĝa:"
+
+#: gtk/gtkcolorsel.c:395
+msgid "Amount of red light in the color."
+msgstr "Kvanto de ruĝa lumo en la koloro."
+
+#: gtk/gtkcolorsel.c:396
+msgid "_Green:"
+msgstr "Verda:"
+
+#: gtk/gtkcolorsel.c:397
+msgid "Amount of green light in the color."
+msgstr "Kvanto de verda lumo en la koloro."
+
+#: gtk/gtkcolorsel.c:398
+msgid "_Blue:"
+msgstr "Blua:"
+
+#: gtk/gtkcolorsel.c:399
+msgid "Amount of blue light in the color."
+msgstr "Kvanto de blua lumo en la koloro."
+
+#: gtk/gtkcolorsel.c:402
+msgid "Op_acity:"
+msgstr "Netravidebleco:"
+
+#: gtk/gtkcolorsel.c:409 gtk/gtkcolorsel.c:419
+msgid "Transparency of the color."
+msgstr "Travidebleco de la koloro."
+
+#: gtk/gtkcolorsel.c:426
+msgid "Color _name:"
+msgstr "_Nomo de la koloro:"
+
+#: gtk/gtkcolorsel.c:440
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"Vi povas entajpi HTML-a deksesuma kolora valoro, aŭ simple kolornomo kiel "
+"'oranĝa'."
+
+#: gtk/gtkcolorsel.c:470
+msgid "_Palette:"
+msgstr "Paletro"
+
+#: gtk/gtkcolorsel.c:499
+msgid "Color Wheel"
+msgstr "Kolora Rado"
+
+#: gtk/gtkcolorsel.c:980
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1514,7 +1494,7 @@ msgstr ""
 "povas ŝovi ĉi tiun koloron al paletra elemento, aŭ elekti ĉi tiun koloron "
 "kiel aktualan per ŝovado de ĝi al la alia kolora ekzemplo apudflanke."
 
-#: gtk/gtkcolorsel.c:554
+#: gtk/gtkcolorsel.c:984
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1522,11 +1502,11 @@ msgstr ""
 "La koloro kiun vi elektis. Vi povas ŝovi ĉi tiun koloron al paletra elemento "
 "por konservi ĝin por estonta uzo."
 
-#: gtk/gtkcolorsel.c:942
+#: gtk/gtkcolorsel.c:1369
 msgid "_Save color here"
 msgstr "Kon_servu koloron ĉi tie"
 
-#: gtk/gtkcolorsel.c:1147
+#: gtk/gtkcolorsel.c:1574
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1535,107 +1515,15 @@ msgstr ""
 "ĉi tiun elementon, ŝovu koloran ekzemplon ĉi tien aŭ dekstre-klaku ĝin kaj "
 "elektu \"Konservu koloron ĉi tie\"."
 
-#: gtk/gtkcolorsel.c:1921
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
-"Elektu la koloron kiun vi volas el la ekstera ringo. Elektu la malhelecon aŭ "
-"helecon de tiu koloro uzante la internan triangulon."
-
-#: gtk/gtkcolorsel.c:1945
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
-msgstr ""
-"Alklaku la gutigilon, poste alklaku koloron ie ajn en la ekrano por elekti "
-"tiun koloron."
-
-#: gtk/gtkcolorsel.c:1954
-msgid "_Hue:"
-msgstr "Nuanco:"
-
-#: gtk/gtkcolorsel.c:1955
-msgid "Position on the color wheel."
-msgstr "Pozicio en la kolora rado."
-
-#: gtk/gtkcolorsel.c:1957
-msgid "_Saturation:"
-msgstr "Saturo:"
-
-#: gtk/gtkcolorsel.c:1958
-msgid "\"Deepness\" of the color."
-msgstr "\"Profundeco\" de la koloro."
-
-#: gtk/gtkcolorsel.c:1959
-msgid "_Value:"
-msgstr "Valoro:"
-
-#: gtk/gtkcolorsel.c:1960
-msgid "Brightness of the color."
-msgstr "Brileco de la koloro."
-
-#: gtk/gtkcolorsel.c:1961
-msgid "_Red:"
-msgstr "Ruĝa:"
-
-#: gtk/gtkcolorsel.c:1962
-msgid "Amount of red light in the color."
-msgstr "Kvanto de ruĝa lumo en la koloro."
-
-#: gtk/gtkcolorsel.c:1963
-msgid "_Green:"
-msgstr "Verda:"
-
-#: gtk/gtkcolorsel.c:1964
-msgid "Amount of green light in the color."
-msgstr "Kvanto de verda lumo en la koloro."
-
-#: gtk/gtkcolorsel.c:1965
-msgid "_Blue:"
-msgstr "Blua:"
-
-#: gtk/gtkcolorsel.c:1966
-msgid "Amount of blue light in the color."
-msgstr "Kvanto de blua lumo en la koloro."
-
-#: gtk/gtkcolorsel.c:1969
-msgid "Op_acity:"
-msgstr "Netravidebleco:"
-
-#: gtk/gtkcolorsel.c:1976 gtk/gtkcolorsel.c:1986
-msgid "Transparency of the color."
-msgstr "Travidebleco de la koloro."
-
-#: gtk/gtkcolorsel.c:1993
-msgid "Color _name:"
-msgstr "_Nomo de la koloro:"
-
-#: gtk/gtkcolorsel.c:2007
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"Vi povas entajpi HTML-a deksesuma kolora valoro, aŭ simple kolornomo kiel "
-"'oranĝa'."
-
-#: gtk/gtkcolorsel.c:2037
-msgid "_Palette:"
-msgstr "Paletro"
-
-#: gtk/gtkcolorsel.c:2066
-msgid "Color Wheel"
-msgstr "Kolora Rado"
-
-#: gtk/gtkcolorseldialog.c:101
+#: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
 msgstr "Elekto de koloro"
 
-#: gtk/gtkentry.c:5284 gtk/gtktextview.c:7668
+#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7668
 msgid "Input _Methods"
 msgstr "Enigaj Metodoj"
 
-#: gtk/gtkentry.c:5298 gtk/gtktextview.c:7682
+#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7682
 msgid "_Insert Unicode Control Character"
 msgstr "Enmetu un_ikodan stirsignon"
 
@@ -1643,7 +1531,7 @@ msgstr "Enmetu un_ikodan stirsignon"
 msgid "Select A File"
 msgstr "Elektu Dosieron"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1939
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1894
 msgid "Desktop"
 msgstr "Labortablo"
 
@@ -1655,23 +1543,23 @@ msgstr "(Neniu)"
 msgid "Other..."
 msgstr "Alia..."
 
-#: gtk/gtkfilechooserdefault.c:1088
+#: gtk/gtkfilechooserdefault.c:1043
 msgid "Could not retrieve information about the file"
 msgstr "Ne povis akiri informojn pri la dosiero"
 
-#: gtk/gtkfilechooserdefault.c:1099
+#: gtk/gtkfilechooserdefault.c:1054
 msgid "Could not add a bookmark"
 msgstr "Ne eblis aldoni legosignon"
 
-#: gtk/gtkfilechooserdefault.c:1110
+#: gtk/gtkfilechooserdefault.c:1065
 msgid "Could not remove bookmark"
 msgstr "Ne eblis forigi legosignon"
 
-#: gtk/gtkfilechooserdefault.c:1121
+#: gtk/gtkfilechooserdefault.c:1076
 msgid "The folder could not be created"
 msgstr "La dosierujo ne povis esti kreita"
 
-#: gtk/gtkfilechooserdefault.c:1134
+#: gtk/gtkfilechooserdefault.c:1089
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1679,11 +1567,11 @@ msgstr ""
 "La dosierujo ne povis estis kreita, ĉar dosiero kun sama nomo jam ekzistas. "
 "Provu uzante malsaman nomon por la dosierujo, aŭ renomu antaŭe la dosieron."
 
-#: gtk/gtkfilechooserdefault.c:1145
+#: gtk/gtkfilechooserdefault.c:1100
 msgid "Invalid file name"
 msgstr "Nevalida dosiernomo"
 
-#: gtk/gtkfilechooserdefault.c:1155
+#: gtk/gtkfilechooserdefault.c:1110
 msgid "The folder contents could not be displayed"
 msgstr "La enhavo de la dosierujo ne povis esti vidigita"
 
@@ -1691,221 +1579,220 @@ msgstr "La enhavo de la dosierujo ne povis esti vidigita"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1697
+#: gtk/gtkfilechooserdefault.c:1652
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s ĉe %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1867
+#: gtk/gtkfilechooserdefault.c:1822
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1891
+#: gtk/gtkfilechooserdefault.c:1846
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2506
+#: gtk/gtkfilechooserdefault.c:2461
 msgid "Select which types of files are shown"
 msgstr "Elekti kiajn dosierajn tipojn estos montrataj"
 
-#: gtk/gtkfilechooserdefault.c:2935
+#: gtk/gtkfilechooserdefault.c:2890
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Aldoni la dosierujon \"%s\" al legosignoj"
 
-#: gtk/gtkfilechooserdefault.c:2976
+#: gtk/gtkfilechooserdefault.c:2931
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Aldoni la aktualan dosierujon al legosignoj"
 
-#: gtk/gtkfilechooserdefault.c:2978
+#: gtk/gtkfilechooserdefault.c:2933
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Aldoni la elektitan dosierujon al legosignoj"
 
-#: gtk/gtkfilechooserdefault.c:3018
+#: gtk/gtkfilechooserdefault.c:2973
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Forigi la legosignon \"%s\""
 
-#: gtk/gtkfilechooserdefault.c:3734
+#: gtk/gtkfilechooserdefault.c:3691
 msgid "Remove"
 msgstr "Forigi"
 
-#: gtk/gtkfilechooserdefault.c:3743
+#: gtk/gtkfilechooserdefault.c:3700
 msgid "Rename..."
 msgstr "Renomi..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3885
+#: gtk/gtkfilechooserdefault.c:3847
 msgid "Places"
 msgstr "Lokoj"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3941
+#: gtk/gtkfilechooserdefault.c:3904
 msgid "_Places"
 msgstr "_Lokoj"
 
-#: gtk/gtkfilechooserdefault.c:3996 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3959 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "_Aldoni"
 
-#: gtk/gtkfilechooserdefault.c:4003
+#: gtk/gtkfilechooserdefault.c:3966
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Aldoni la elektitan dosierujon al Legosignoj"
 
-#: gtk/gtkfilechooserdefault.c:4008 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:3971 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "Fo_rigi"
 
-#: gtk/gtkfilechooserdefault.c:4015
+#: gtk/gtkfilechooserdefault.c:3978
 msgid "Remove the selected bookmark"
 msgstr "Forigi la elektitan legosignon"
 
-#: gtk/gtkfilechooserdefault.c:4112
+#: gtk/gtkfilechooserdefault.c:4075
 msgid "Could not select file"
 msgstr "Ne eblis elekti dosieron"
 
-#: gtk/gtkfilechooserdefault.c:4281
+#: gtk/gtkfilechooserdefault.c:4248
 msgid "_Add to Bookmarks"
 msgstr "Aldoni al Legosignoj"
 
-#: gtk/gtkfilechooserdefault.c:4295
+#: gtk/gtkfilechooserdefault.c:4262
 msgid "Show _Hidden Files"
 msgstr "Montri Kaŝitajn Dosierojn"
 
-#: gtk/gtkfilechooserdefault.c:4539 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4505 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Dosieroj"
 
-#: gtk/gtkfilechooserdefault.c:4588
+#: gtk/gtkfilechooserdefault.c:4554
 msgid "Name"
 msgstr "Nomo"
 
-#: gtk/gtkfilechooserdefault.c:4613
+#: gtk/gtkfilechooserdefault.c:4579
 msgid "Size"
 msgstr "Grando"
 
-#: gtk/gtkfilechooserdefault.c:4627
+#: gtk/gtkfilechooserdefault.c:4593
 msgid "Modified"
 msgstr "Modifita"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4847 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4813 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "Nomo:"
 
-#: gtk/gtkfilechooserdefault.c:4889
+#: gtk/gtkfilechooserdefault.c:4855
 msgid "_Browse for other folders"
 msgstr "Foliumi aliajn dosierujojn"
 
-#: gtk/gtkfilechooserdefault.c:5159
+#: gtk/gtkfilechooserdefault.c:5125
 msgid "Type a file name"
 msgstr "Tajpu dosiernomon"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5196
+#: gtk/gtkfilechooserdefault.c:5162
 msgid "Create Fo_lder"
 msgstr "Krei Dosierujon"
 
-#: gtk/gtkfilechooserdefault.c:5206
+#: gtk/gtkfilechooserdefault.c:5172
 msgid "_Location:"
 msgstr "Loko:"
 
-#: gtk/gtkfilechooserdefault.c:5398
+#: gtk/gtkfilechooserdefault.c:5361
 msgid "Save in _folder:"
 msgstr "Konservi en dosierujo:"
 
-#: gtk/gtkfilechooserdefault.c:5400
+#: gtk/gtkfilechooserdefault.c:5363
 msgid "Create in _folder:"
 msgstr "Krei en dosierujo:"
 
-#: gtk/gtkfilechooserdefault.c:7002
-#, c-format
+#: gtk/gtkfilechooserdefault.c:6957
 msgid "Cannot change to folder because it is not local"
 msgstr "Ne eblis ŝanĝi al dosiero ĉar ĝi ne estas loka"
 
-#: gtk/gtkfilechooserdefault.c:7617 gtk/gtkfilechooserdefault.c:7638
+#: gtk/gtkfilechooserdefault.c:7582 gtk/gtkfilechooserdefault.c:7603
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Fulmoklavo %s jam ekzistas"
 
-#: gtk/gtkfilechooserdefault.c:7728
+#: gtk/gtkfilechooserdefault.c:7693
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Fulmoklavo %s ne ekzistas"
 
-#: gtk/gtkfilechooserdefault.c:7971 gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:7936 gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Dosiero nomita \"%s\" jam ekzistas. Ĉu vi volas anstataŭigi ĝin?"
 
-#: gtk/gtkfilechooserdefault.c:7974 gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:7939 gtk/gtkprintunixdialog.c:360
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "La dosiero jam ekzistas en \"%s\". Anstataŭigi ĝin ŝanĝos ĝian enhavon."
 
-#: gtk/gtkfilechooserdefault.c:7979 gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:7944 gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "Anstataŭigi"
 
-#: gtk/gtkfilechooserdefault.c:8740
+#: gtk/gtkfilechooserdefault.c:8705
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Ne povis esti konservita la ceteron"
 
-#: gtk/gtkfilechooserdefault.c:8741
+#: gtk/gtkfilechooserdefault.c:8706
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8755
+#: gtk/gtkfilechooserdefault.c:8720
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Ne povis esti konservita la ceteron"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9170
+#: gtk/gtkfilechooserdefault.c:9135
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10120
+#: gtk/gtkfilechooserdefault.c:10082
 #, c-format
 msgid "Could not mount %s"
 msgstr "Ne povis surmeti de %s"
 
-#: gtk/gtkfilechooserdefault.c:10772
+#: gtk/gtkfilechooserdefault.c:10736
 msgid "Type name of new folder"
 msgstr "Entajpu nomon de nova dosierujo"
 
-#: gtk/gtkfilechooserdefault.c:10822
+#: gtk/gtkfilechooserdefault.c:10786
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10824
+#: gtk/gtkfilechooserdefault.c:10788
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10826
+#: gtk/gtkfilechooserdefault.c:10790
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10929 gtk/gtkfilechooserdefault.c:10951
-#: gtk/gtkfilechooserdefault.c:11022
+#: gtk/gtkfilechooserdefault.c:10893 gtk/gtkfilechooserdefault.c:10915
+#: gtk/gtkfilechooserdefault.c:10986
 msgid "Unknown"
 msgstr "Nekonata"
 
-#: gtk/gtkfilechooserdefault.c:10969
+#: gtk/gtkfilechooserdefault.c:10933
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10971
+#: gtk/gtkfilechooserdefault.c:10935
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Hieraŭ"
@@ -1932,30 +1819,30 @@ msgstr ""
 msgid "Completing..."
 msgstr ""
 
-#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1348
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1349
+#: gtk/gtkfilesel.c:1358
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Eraro dum kreado de dosierujo \"%s\": %s"
 
-#: gtk/gtkfilesel.c:693
+#: gtk/gtkfilesel.c:694
 msgid "Folders"
 msgstr "Dosierujoj"
 
-#: gtk/gtkfilesel.c:697
+#: gtk/gtkfilesel.c:698
 msgid "Fol_ders"
 msgstr "Dosierujoj"
 
-#: gtk/gtkfilesel.c:733
+#: gtk/gtkfilesel.c:734
 msgid "_Files"
 msgstr "Dosieroj"
 
-#: gtk/gtkfilesel.c:820 gtk/gtkfilesel.c:2147
+#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2148
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Dosierujo nelegebla: %s"
 
-#: gtk/gtkfilesel.c:904
+#: gtk/gtkfilesel.c:905
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1966,89 +1853,89 @@ msgstr ""
 "havebla al ĉi tiu programo.\n"
 "Ĉu vi certas ke vi volas elekti ĝin?"
 
-#: gtk/gtkfilesel.c:1019
+#: gtk/gtkfilesel.c:1020
 msgid "_New Folder"
 msgstr "Nova Dosierujo"
 
-#: gtk/gtkfilesel.c:1030
+#: gtk/gtkfilesel.c:1031
 msgid "De_lete File"
 msgstr "Forigi Dosieron"
 
-#: gtk/gtkfilesel.c:1041
+#: gtk/gtkfilesel.c:1042
 msgid "_Rename File"
 msgstr "Renomi Dosieron"
 
-#: gtk/gtkfilesel.c:1346
+#: gtk/gtkfilesel.c:1347
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "La dosieruja nomo \"%s\" enhavas simbolojn nepermesatajn en dosiernomoj"
 
-#: gtk/gtkfilesel.c:1391
+#: gtk/gtkfilesel.c:1392
 msgid "New Folder"
 msgstr "Nova Dosierujo"
 
-#: gtk/gtkfilesel.c:1406
+#: gtk/gtkfilesel.c:1407
 msgid "_Folder name:"
 msgstr "Dosieruja nomo:"
 
-#: gtk/gtkfilesel.c:1430
+#: gtk/gtkfilesel.c:1431
 msgid "C_reate"
 msgstr "Krei"
 
-#: gtk/gtkfilesel.c:1473 gtk/gtkfilesel.c:1580 gtk/gtkfilesel.c:1593
+#: gtk/gtkfilesel.c:1474 gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1594
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "La dosiernomo \"%s\" enhavas simbolojn nepermesatajn en dosiernomoj"
 
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1486
+#: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1487
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "Eraro dum forigo de dosiero \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1529
+#: gtk/gtkfilesel.c:1530
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "Ĉu vere forigi dosieron \"%s\"?"
 
-#: gtk/gtkfilesel.c:1534
+#: gtk/gtkfilesel.c:1535
 msgid "Delete File"
 msgstr "Forigi Dosieron"
 
-#: gtk/gtkfilesel.c:1582
+#: gtk/gtkfilesel.c:1583
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr "Eraro dum renomado de dosiero al \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1596
 #, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr "Eraro dum renomado de dosiero \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1604
+#: gtk/gtkfilesel.c:1605
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Eraro dum renomado de \"%s\" kiel \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1651
+#: gtk/gtkfilesel.c:1652
 msgid "Rename File"
 msgstr "Renomi Dosieron"
 
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1667
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Renomi dosieron \"%s\" kiel:"
 
-#: gtk/gtkfilesel.c:1695
+#: gtk/gtkfilesel.c:1696
 msgid "_Rename"
 msgstr "Renomi"
 
-#: gtk/gtkfilesel.c:2127
+#: gtk/gtkfilesel.c:2128
 msgid "_Selection: "
 msgstr "Elektaĵo: "
 
-#: gtk/gtkfilesel.c:3047
+#: gtk/gtkfilesel.c:3048
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -2057,15 +1944,15 @@ msgstr ""
 "La dosiernomo \"%s\" ne estis konvertebla al UTF-8. (klopodu agordi la media "
 "variablo G_FILE_NAME_ENCODING): %s"
 
-#: gtk/gtkfilesel.c:3050
+#: gtk/gtkfilesel.c:3051
 msgid "Invalid UTF-8"
 msgstr "Nevalida UTF-8"
 
-#: gtk/gtkfilesel.c:3924
+#: gtk/gtkfilesel.c:3925
 msgid "Name too long"
 msgstr "Nomo tro longa"
 
-#: gtk/gtkfilesel.c:3926
+#: gtk/gtkfilesel.c:3927
 msgid "Couldn't convert filename"
 msgstr "Ne eblis konverti dosiernomon"
 
@@ -2074,12 +1961,11 @@ msgstr "Ne eblis konverti dosiernomon"
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: gtk/gtkfilesystem.c:48
+#: gtk/gtkfilesystem.c:51
 msgid "File System"
 msgstr "Dosiersistemo"
 
 #: gtk/gtkfilesystemmodel.c:700
-#, c-format
 msgid "Could not obtain root folder"
 msgstr "Ne povis ricevi la radikan dosierujon"
 
@@ -2123,7 +2009,7 @@ msgstr "Grando:"
 msgid "_Preview:"
 msgstr "As_pekto:"
 
-#: gtk/gtkfontsel.c:1362
+#: gtk/gtkfontsel.c:1571
 msgid "Font Selection"
 msgstr "Tipara elekto"
 
@@ -2143,7 +2029,7 @@ msgstr "Gama valoro"
 msgid "Error loading icon: %s"
 msgstr "Eraro dum ŝargado de piktogramo: %s"
 
-#: gtk/gtkicontheme.c:1332
+#: gtk/gtkicontheme.c:1362
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2156,13 +2042,13 @@ msgstr ""
 "Vi povas ricevi kopion de:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1512
+#: gtk/gtkicontheme.c:1542
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Piktogramo \"%s\" ne ĉeestas en etoso"
 
-#: gtk/gtkicontheme.c:2953
-#, fuzzy, c-format
+#: gtk/gtkicontheme.c:2983
+#, fuzzy
 msgid "Failed to load icon"
 msgstr "Malsukcesis ŝargi TIFF-bildon"
 
@@ -2175,82 +2061,82 @@ msgstr "Grando"
 msgid "input method menu|System"
 msgstr ""
 
-#: gtk/gtkinputdialog.c:190
+#: gtk/gtkinputdialog.c:192
 msgid "Input"
 msgstr "Enigo"
 
-#: gtk/gtkinputdialog.c:205
+#: gtk/gtkinputdialog.c:207
 msgid "No extended input devices"
 msgstr "Neniuj etenditaj enigaj disponaĵoj"
 
-#: gtk/gtkinputdialog.c:218
+#: gtk/gtkinputdialog.c:220
 msgid "_Device:"
 msgstr "Aparato:"
 
-#: gtk/gtkinputdialog.c:235
+#: gtk/gtkinputdialog.c:237
 msgid "Disabled"
 msgstr "Malŝaltita"
 
-#: gtk/gtkinputdialog.c:242
+#: gtk/gtkinputdialog.c:244
 msgid "Screen"
 msgstr "Ekrano"
 
-#: gtk/gtkinputdialog.c:249
+#: gtk/gtkinputdialog.c:251
 msgid "Window"
 msgstr "Fenestro"
 
-#: gtk/gtkinputdialog.c:256
+#: gtk/gtkinputdialog.c:258
 msgid "_Mode:"
 msgstr "Reĝimo: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:277
+#: gtk/gtkinputdialog.c:279
 msgid "Axes"
 msgstr "Aksoj"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:295
+#: gtk/gtkinputdialog.c:297
 msgid "Keys"
 msgstr "Klavoj"
 
-#: gtk/gtkinputdialog.c:522
+#: gtk/gtkinputdialog.c:524
 msgid "_X:"
 msgstr "_X:"
 
-#: gtk/gtkinputdialog.c:523
+#: gtk/gtkinputdialog.c:525
 msgid "_Y:"
 msgstr "_Y:"
 
-#: gtk/gtkinputdialog.c:524
+#: gtk/gtkinputdialog.c:526
 msgid "_Pressure:"
 msgstr "_Premo:"
 
-#: gtk/gtkinputdialog.c:525
+#: gtk/gtkinputdialog.c:527
 msgid "X _tilt:"
 msgstr "X-klino:"
 
-#: gtk/gtkinputdialog.c:526
+#: gtk/gtkinputdialog.c:528
 msgid "Y t_ilt:"
 msgstr "Y-klino:"
 
-#: gtk/gtkinputdialog.c:527
+#: gtk/gtkinputdialog.c:529
 msgid "_Wheel:"
 msgstr "Rado"
 
-#: gtk/gtkinputdialog.c:579
+#: gtk/gtkinputdialog.c:581
 msgid "none"
 msgstr "neniu"
 
-#: gtk/gtkinputdialog.c:616 gtk/gtkinputdialog.c:652
+#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
 msgid "(disabled)"
 msgstr "(malŝaltita)"
 
-#: gtk/gtkinputdialog.c:645
+#: gtk/gtkinputdialog.c:647
 msgid "(unknown)"
 msgstr "(nekonata)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:749
+#: gtk/gtkinputdialog.c:751
 msgid "Cl_ear"
 msgstr "Vakigi"
 
@@ -2304,11 +2190,16 @@ msgstr "GTK+ cimo-flagoj por malmarki"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:774
+#: gtk/gtkmain.c:740
+#, c-format
+msgid "Cannot open display: %s"
+msgstr ""
+
+#: gtk/gtkmain.c:777
 msgid "GTK+ Options"
 msgstr "Agordoj de GTK+"
 
-#: gtk/gtkmain.c:774
+#: gtk/gtkmain.c:777
 msgid "Show GTK+ Options"
 msgstr "Montru agordojn de GTK+"
 
@@ -2352,21 +2243,20 @@ msgstr ""
 msgid "_Remember forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:828
+#: gtk/gtknotebook.c:834
 msgid "Arrow spacing"
 msgstr "Spaco inter sagetoj"
 
-#: gtk/gtknotebook.c:829
+#: gtk/gtknotebook.c:835
 msgid "Scroll arrow spacing"
 msgstr "Spaco inter rulsagetoj"
 
-#: gtk/gtknotebook.c:4406 gtk/gtknotebook.c:6912
+#: gtk/gtknotebook.c:4412 gtk/gtknotebook.c:6918
 #, c-format
 msgid "Page %u"
 msgstr "Paĝo %u"
 
 #: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
-#, c-format
 msgid "Not a valid page setup file"
 msgstr ""
 
@@ -2507,76 +2397,86 @@ msgid "%s job #%d"
 msgstr ""
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1498
+#: gtk/gtkprintoperation.c:1504
 msgid "print operation status|Initial state"
 msgstr "Komenca stato"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1500
+#: gtk/gtkprintoperation.c:1506
 msgid "print operation status|Preparing to print"
 msgstr "Preparas por printado"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1502
+#: gtk/gtkprintoperation.c:1508
 msgid "print operation status|Generating data"
 msgstr "Kreas datumojn"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1504
+#: gtk/gtkprintoperation.c:1510
 msgid "print operation status|Sending data"
 msgstr "Sendas datumojn"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1506
+#: gtk/gtkprintoperation.c:1512
 msgid "print operation status|Waiting"
 msgstr "Atendas"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1508
+#: gtk/gtkprintoperation.c:1514
 msgid "print operation status|Blocking on issue"
 msgstr "Blokiĝas pro speciala evento"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1510
+#: gtk/gtkprintoperation.c:1516
 msgid "print operation status|Printing"
 msgstr "Printadas"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1512
+#: gtk/gtkprintoperation.c:1518
 msgid "print operation status|Finished"
 msgstr "Finita"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1514
+#: gtk/gtkprintoperation.c:1520
 msgid "print operation status|Finished with error"
 msgstr "Finita kun eraro"
 
-#: gtk/gtkprintoperation.c:1997
+#: gtk/gtkprintoperation.c:2003
 #, c-format
 msgid "Preparing %d"
 msgstr "Preparas %d"
 
-#: gtk/gtkprintoperation.c:1999 gtk/gtkprintoperation.c:2253
+#: gtk/gtkprintoperation.c:2005 gtk/gtkprintoperation.c:2259
 #, c-format
 msgid "Preparing"
 msgstr "Preparadas"
 
-#: gtk/gtkprintoperation.c:2002
+#: gtk/gtkprintoperation.c:2008
 #, c-format
 msgid "Printing %d"
 msgstr "Printas %d"
 
-#: gtk/gtkprintoperation-unix.c:243
+#: gtk/gtkprintoperation.c:2289
+#, fuzzy, c-format
+msgid "Error creating print preview"
+msgstr "Eraro dum lanĉo de antaŭvidilo"
+
+#: gtk/gtkprintoperation.c:2292
+#, c-format
+msgid "The most probable reason is that a temporary file could not be created."
+msgstr ""
+
+#: gtk/gtkprintoperation-unix.c:242
 #, c-format
 msgid "Error launching preview"
 msgstr "Eraro dum lanĉo de antaŭvidilo"
 
-#: gtk/gtkprintoperation-unix.c:281
+#: gtk/gtkprintoperation-unix.c:280
 #, c-format
 msgid "Error printing"
 msgstr "Eraro dum printado"
 
-#: gtk/gtkprintoperation-unix.c:382 gtk/gtkprintoperation-win32.c:1399
+#: gtk/gtkprintoperation-unix.c:381 gtk/gtkprintoperation-win32.c:1399
 msgid "Application"
 msgstr "Aplikaĵo"
 
@@ -2602,32 +2502,26 @@ msgstr "Difinita grando"
 
 #: gtk/gtkprintoperation-win32.c:1489 gtk/gtkprintoperation-win32.c:1512
 #: gtk/gtkprintoperation-win32.c:1560
-#, c-format
 msgid "Not enough free memory"
 msgstr "Ne sufiĉas da libera memoro"
 
 #: gtk/gtkprintoperation-win32.c:1565
-#, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Ne valida argumento por PrintDlgEx"
 
 #: gtk/gtkprintoperation-win32.c:1570
-#, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Ne valida montrilo al PrinDlgEx"
 
 #: gtk/gtkprintoperation-win32.c:1575
-#, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Malvalida traktilo por PrintDlgEx"
 
 #: gtk/gtkprintoperation-win32.c:1580
-#, c-format
 msgid "Unspecified error"
 msgstr "Nekonata eraro"
 
 #: gtk/gtkprintoperation-win32.c:1632
-#, c-format
 msgid "Error from StartDoc"
 msgstr "Eraro el StartDoc"
 
@@ -2918,8 +2812,10 @@ msgstr ""
 msgid "recent menu label|%d. %s"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1158
-#: gtk/gtkrecentmanager.c:1168 gtk/gtkrecentmanager.c:1221
+#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1025
+#: gtk/gtkrecentmanager.c:1163 gtk/gtkrecentmanager.c:1173
+#: gtk/gtkrecentmanager.c:1226 gtk/gtkrecentmanager.c:1235
+#: gtk/gtkrecentmanager.c:1250
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Ne eblas trovi elementon kun URI \"%s\""
@@ -3421,53 +3317,51 @@ msgid "A <text> element can't occur before a <tags> element"
 msgstr ""
 
 #: gtk/gtktextbufferserialize.c:1779
-#, c-format
 msgid "Serialized data is malformed"
 msgstr ""
 
 #: gtk/gtktextbufferserialize.c:1857
-#, c-format
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 
-#: gtk/gtktextutil.c:60
+#: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
 msgstr "MDM _Maldekste-dekstrena marko"
 
-#: gtk/gtktextutil.c:61
+#: gtk/gtktextutil.c:62
 msgid "RLM _Right-to-left mark"
 msgstr "DMM _Dekstre-maldekstrena marko"
 
-#: gtk/gtktextutil.c:62
+#: gtk/gtktextutil.c:63
 msgid "LRE Left-to-right _embedding"
 msgstr "LRE Maldekstre-dekstrena _enprofundigo"
 
-#: gtk/gtktextutil.c:63
+#: gtk/gtktextutil.c:64
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE Dekstre-maldekstrena en_profundigo"
 
-#: gtk/gtktextutil.c:64
+#: gtk/gtktextutil.c:65
 msgid "LRO Left-to-right _override"
 msgstr "LRO Maldekstre-dekstrena"
 
-#: gtk/gtktextutil.c:65
+#: gtk/gtktextutil.c:66
 msgid "RLO Right-to-left o_verride"
 msgstr "RLO Dekstre-maldekstrena _superrego"
 
-#: gtk/gtktextutil.c:66
+#: gtk/gtktextutil.c:67
 msgid "PDF _Pop directional formatting"
 msgstr "PDF _Puldirekta formatado"
 
-#: gtk/gtktextutil.c:67
+#: gtk/gtktextutil.c:68
 msgid "ZWS _Zero width space"
 msgstr "ZWS _Nullarĝa spaco"
 
-#: gtk/gtktextutil.c:68
+#: gtk/gtktextutil.c:69
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWJ Nullarĝa _kunigilo"
 
-#: gtk/gtktextutil.c:69
+#: gtk/gtktextutil.c:70
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Nullarĝa _nekunigilo"
 
@@ -3476,58 +3370,58 @@ msgstr "ZWNJ Nullarĝa _nekunigilo"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Neeblas trovi etosan maŝinon en module_path: \"%s\","
 
-#: gtk/gtktipsquery.c:187
+#: gtk/gtktipsquery.c:188
 msgid "--- No Tip ---"
 msgstr "--- Neniu Konsileto ---"
 
-#: gtk/gtkuimanager.c:1453
+#: gtk/gtkuimanager.c:1454
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Neatendita komenca marko \"%s\" sur linio %d signo %d"
 
-#: gtk/gtkuimanager.c:1543
+#: gtk/gtkuimanager.c:1544
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Neatenditaj signaj datumoj sur linio %d signo %d"
 
-#: gtk/gtkuimanager.c:2366
+#: gtk/gtkuimanager.c:2367
 msgid "Empty"
 msgstr "Malplena"
 
-#: gtk/gtkvolumebutton.c:81
+#: gtk/gtkvolumebutton.c:77
 #, fuzzy
 msgid "Volume"
 msgstr "Valoro:"
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:79
 msgid "Turns volume down or up"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:86
+#: gtk/gtkvolumebutton.c:82
 msgid "Adjusts the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:89 gtk/gtkvolumebutton.c:92
+#: gtk/gtkvolumebutton.c:85 gtk/gtkvolumebutton.c:88
 msgid "Volume Down"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:91
+#: gtk/gtkvolumebutton.c:87
 msgid "Decreases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:95 gtk/gtkvolumebutton.c:98
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Up"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:97
+#: gtk/gtkvolumebutton.c:93
 msgid "Increases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:155
+#: gtk/gtkvolumebutton.c:151
 msgid "Muted"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:159
+#: gtk/gtkvolumebutton.c:155
 msgid "Full Volume"
 msgstr ""
 
@@ -3538,7 +3432,7 @@ msgstr ""
 #. * Do not translate and do not include the "volume percentage|"
 #. * part in the translation!
 #.
-#: gtk/gtkvolumebutton.c:174
+#: gtk/gtkvolumebutton.c:170
 #, c-format
 msgid "volume percentage|%d %%"
 msgstr ""
@@ -4720,7 +4614,7 @@ msgstr "eligo.%s"
 msgid "Print to Test Printer"
 msgstr "Printu en dosieron"
 
-#: tests/testfilechooser.c:205
+#: tests/testfilechooser.c:207
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Ne povis ricevi informojn pri dosiero \"%s\": %s"

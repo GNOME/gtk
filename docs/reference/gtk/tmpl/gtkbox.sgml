@@ -108,13 +108,6 @@ following fields.  (These fields should be considered read-only.
 They should never be set by an application.)
 </para>
 
-@children: a list of children belonging the GtkBox.  
-  The data is a list of structures of type #GtkBoxChild-struct.
-@spacing: the number of pixels to put between children of the GtkBox, 
-  zero by default. Use gtk_box_set_spacing() to set this field.
-@homogeneous: a flag that if %TRUE forces all children to get equal 
-  space in the GtkBox; %FALSE by default. Use gtk_box_set_homogeneous() 
-  to set this field.
 
 <!-- ##### ARG GtkBox:homogeneous ##### -->
 <para>

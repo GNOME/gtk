@@ -77,14 +77,6 @@ internal child "accessible" of a <structname>GtkWidget</structname>.
 
 </para>
 
-@style: The style for the widget. The style contains the colors the widget should be 
- drawn in for each state along with graphics contexts used to draw with and the font 
- to use for text.
-@requisition: The widget's desired size.
-@allocation: The widget's allocated size.
-@window: The widget's window or its parent window if it does not have a window. (Which 
- will be indicated by the #GTK_NO_WINDOW flag being set).
-@parent: 
 
 <!-- ##### SIGNAL GtkWidget::accel-closures-changed ##### -->
 <para>
@@ -786,6 +778,11 @@ internal child "accessible" of a <structname>GtkWidget</structname>.
 
 </para>
 
+<!-- ##### ARG GtkWidget:window ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWidget:cursor-aspect-ratio ##### -->
 <para>
 
@@ -1199,13 +1196,6 @@ widget by its parent. It is a subregion of its parents allocation. See
 
 </para>
 
-@selection: 
-@target: 
-@type: 
-@format: 
-@data: 
-@length: 
-@display: 
 
 <!-- ##### STRUCT GtkWidgetAuxInfo ##### -->
 <para>

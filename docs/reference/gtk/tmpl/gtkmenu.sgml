@@ -94,6 +94,31 @@ should be accessed using the functions below.
 @menu: the object which received the signal.
 @arg1: 
 
+<!-- ##### ARG GtkMenu:accel-group ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:accel-path ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:attach-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:monitor ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkMenu:tearoff-state ##### -->
 <para>
 

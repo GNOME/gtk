@@ -76,8 +76,6 @@ There are no public fields in the #GtkScrolledWindow struct; it should
 only be accessed using the functions below.
 </para>
 
-@hscrollbar: 
-@vscrollbar: 
 
 <!-- ##### SIGNAL GtkScrolledWindow::move-focus-out ##### -->
 <para>

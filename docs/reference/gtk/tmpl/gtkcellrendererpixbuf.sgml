@@ -44,6 +44,11 @@ property is set to a pixbuf, it renders that one.
 
 </para>
 
+<!-- ##### ARG GtkCellRendererPixbuf:gicon ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRendererPixbuf:icon-name ##### -->
 <para>
 

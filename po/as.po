@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-13 18:22-0400\n"
+"POT-Creation-Date: 2008-07-05 15:47-0400\n"
 "PO-Revision-Date: 2008-02-14 11:52+0530\n"
 "Last-Translator: Amitakhya Phukan <amitakhya@svn.gnome.org>\n"
 "Language-Team: Assamese\n"
@@ -233,7 +233,7 @@ msgid "keyboard label|Delete"
 msgstr "Delete"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:912
-#: gdk-pixbuf/gdk-pixbuf-io.c:1168 tests/testfilechooser.c:218
+#: gdk-pixbuf/gdk-pixbuf-io.c:1168 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "'%s' নথিপত্ৰ খুলিব নোৱাৰিলো: %s"
@@ -244,7 +244,7 @@ msgid "Image file '%s' contains no data"
 msgstr "প্ৰতিমুৰ্তিৰ নথিপত্ৰ '%s' ত কোনো তথ্য নাই"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:961
-#: gdk-pixbuf/gdk-pixbuf-io.c:1220 tests/testfilechooser.c:263
+#: gdk-pixbuf/gdk-pixbuf-io.c:1220 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -284,7 +284,6 @@ msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "'%s' নথিপত্ৰৰ বাবে প্ৰতিমুৰ্তি নথিপত্ৰৰ আকৃতি চিনিব নোৱাৰিলো"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:801
-#, c-format
 msgid "Unrecognized image file format"
 msgstr "অচিনাক্ত প্ৰতিমুৰ্তি নথিপত্ৰৰ আকৃতি"
 
@@ -304,17 +303,14 @@ msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "gdk-pixbuf ৰ এই নিৰ্মাণে প্ৰতিমুৰ্তিৰ আকৃতি ৰক্ষা কৰাৰ সমৰ্থন নিদিয়ে: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1681
-#, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "পুনৰাহ্বানৰ বাবে প্ৰতিমুৰ্তি ৰক্ষা কৰিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1694
-#, c-format
 msgid "Failed to open temporary file"
 msgstr "অস্থায়ী নথিপত্ৰ খোলাত অক্ষম"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1720
-#, c-format
 msgid "Failed to read from temporary file"
 msgstr "অস্থায়ী নথিপত্ৰৰ পৰা পঢ়াত অক্ষম"
 
@@ -331,12 +327,11 @@ msgid ""
 msgstr "প্ৰতিমুৰ্তি লিখোঁতে '%s' বন্ধ কৰাত অক্ষম, সকলো তথ্য ৰক্ষা কৰা ন'হ'বও পাৰে: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2200 gdk-pixbuf/gdk-pixbuf-io.c:2251
-#, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "উপশমকত প্ৰতিমুৰ্তি ৰক্ষা কৰিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2297
-#, fuzzy, c-format
+#, fuzzy
 msgid "Error writing to image stream"
 msgstr "প্ৰতিমুৰ্তি নথিপত্ৰলৈ লিখোঁতে ভুল: %s"
 
@@ -355,17 +350,14 @@ msgid "Incremental loading of image type '%s' is not supported"
 msgstr "প্ৰতিমুৰ্তিৰ ধৰণ '%s' ৰ ক্ৰমবৰ্দ্ধিত ভাবে তুলি লোৱা সমৰ্থিত নহয়"
 
 #: gdk-pixbuf/gdk-pixdata.c:147
-#, c-format
 msgid "Image header corrupt"
 msgstr "প্ৰতিমূৰ্তিৰ হেডাৰ দূষিত"
 
 #: gdk-pixbuf/gdk-pixdata.c:152
-#, c-format
 msgid "Image format unknown"
 msgstr "প্ৰতিমূৰ্তি আকৃতি অজ্ঞাত"
 
 #: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
-#, c-format
 msgid "Image pixel data corrupt"
 msgstr "প্ৰতিমূৰ্তিৰ পিক্সেল তথ্য দূষিত"
 
@@ -377,29 +369,24 @@ msgstr[0] "%u বাইটৰ প্ৰতিমুৰ্তিৰ উপশম�
 msgstr[1] "%u বাইটসমূহৰ প্ৰতিমুৰ্তিৰ উপশমক বিতৰণ কৰিব নোৱাৰিলো"
 
 #: gdk-pixbuf/io-ani.c:244
-#, c-format
 msgid "Unexpected icon chunk in animation"
 msgstr "সঞ্জীবনত অপ্ৰত্যাশিত প্ৰতিকৃতিৰ খণ্ড"
 
 #: gdk-pixbuf/io-ani.c:337
-#, c-format
 msgid "Unsupported animation type"
 msgstr "অসমৰ্থিত সঞ্জীবনৰ ধৰণ"
 
 #: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
 #: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-#, c-format
 msgid "Invalid header in animation"
 msgstr "সঞ্জীবনত অবৈধ হেডাৰ"
 
 #: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
 #: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-#, c-format
 msgid "Not enough memory to load animation"
 msgstr "সঞ্জীবন তুলি ল'ব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
 #: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-#, c-format
 msgid "Malformed chunk in animation"
 msgstr "সঞ্জীবনত বিকৃত খণ্ড"
 
@@ -409,37 +396,30 @@ msgstr "ANI প্ৰতিমুৰ্তিৰ আকৃতি"
 
 #: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
 #: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-#, c-format
 msgid "BMP image has bogus header data"
 msgstr "BMP প্ৰতিমুৰ্তিত কৃত্ৰিম হেডাৰ তথ্য"
 
 #: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-#, c-format
 msgid "Not enough memory to load bitmap image"
 msgstr "bitmap প্ৰতিমুৰ্তি তুলি ল'ব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
 #: gdk-pixbuf/io-bmp.c:319
-#, c-format
 msgid "BMP image has unsupported header size"
 msgstr "BMP প্ৰতিমুৰ্তিত অসমৰ্থিত হেডাৰৰ আয়তন আছে"
 
 #: gdk-pixbuf/io-bmp.c:357
-#, c-format
 msgid "Topdown BMP images cannot be compressed"
 msgstr "ট'পডাউন BMP প্ৰতিমুৰ্তি সঞ্চাপন কৰিব নোৱাৰি"
 
 #: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-#, c-format
 msgid "Premature end-of-file encountered"
 msgstr "অকলাপক্ক নথিপত্ৰৰ অন্ত পোৱা গ'ল"
 
 #: gdk-pixbuf/io-bmp.c:1329
-#, c-format
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "BMP নথিপত্ৰ ৰক্ষা কৰিব'লৈ স্মৃতিশক্তি বিতৰণ কৰিব নোৱাৰি"
 
 #: gdk-pixbuf/io-bmp.c:1370
-#, c-format
 msgid "Couldn't write to BMP file"
 msgstr "BMP নথিপত্ৰলৈ লিখিব পৰা ন'গ'ল"
 
@@ -453,7 +433,6 @@ msgid "Failure reading GIF: %s"
 msgstr "GIF পঢ়োঁতে বিফল: %s"
 
 #: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477 gdk-pixbuf/io-gif.c:1638
-#, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF নথিপত্ৰত কিছুমান তথ্য সন্ধানহীন (সম্ভৱতঃ ছেদন কৰা হৈছিল কোনোৰকমে ?)"
 
@@ -463,43 +442,35 @@ msgid "Internal error in the GIF loader (%s)"
 msgstr "GIF তুলি লোৱাত ভিতৰুৱা ভুল (%s)"
 
 #: gdk-pixbuf/io-gif.c:579
-#, c-format
 msgid "Stack overflow"
 msgstr "দ'মৰ উপচি পৰিছে"
 
 #: gdk-pixbuf/io-gif.c:639
-#, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "GIF প্ৰতিমুৰ্তি তুলি লোৱাই এই প্ৰতিমুৰ্তি বুজি পোৱা নাই ।"
 
 #: gdk-pixbuf/io-gif.c:668
-#, c-format
 msgid "Bad code encountered"
 msgstr "বেয়া ক'ড পোৱা গৈছে"
 
 #: gdk-pixbuf/io-gif.c:678
-#, c-format
 msgid "Circular table entry in GIF file"
 msgstr "GIF নথিপত্ৰত বৃত্তাকাৰ তালিকা প্ৰৱেশ"
 
 #: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464 gdk-pixbuf/io-gif.c:1511
 #: gdk-pixbuf/io-gif.c:1626
-#, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "GIF নথিপত্ৰ তুলিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
 #: gdk-pixbuf/io-gif.c:956
-#, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "GIF নথিপত্ৰত বৃতি সংযুক্ত কৰিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
 #: gdk-pixbuf/io-gif.c:1128
-#, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF প্ৰতিমূৰ্তি দূষিত (ভুল LZW সঞ্চাপন)"
 
 #: gdk-pixbuf/io-gif.c:1178
-#, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "নথিপত্ৰখন GIF নথিপত্ৰ নহয় যেন লাগে"
 
@@ -509,7 +480,6 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF নথিপত্ৰৰ আকৃতিৰ %s সংস্কৰণ অসমৰ্থিত"
 
 #: gdk-pixbuf/io-gif.c:1299
-#, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -518,7 +488,6 @@ msgstr ""
 "নাই ।"
 
 #: gdk-pixbuf/io-gif.c:1533
-#, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF প্ৰতিমূৰ্তি ছেদিত বা অসম্পূৰ্ণ ।"
 
@@ -528,48 +497,39 @@ msgstr "GIF প্ৰতিমুৰ্তিৰ আকৃতি"
 
 #: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
 #: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-#, c-format
 msgid "Invalid header in icon"
 msgstr "প্ৰতিকৃতিৰ অবৈধ হেডাৰ"
 
 #: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
 #: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-#, c-format
 msgid "Not enough memory to load icon"
 msgstr "প্ৰতিকৃতিৰ তুলিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
 #: gdk-pixbuf/io-ico.c:322
-#, c-format
 msgid "Icon has zero width"
 msgstr "প্ৰতিকৃতিৰ শুণ্য বহল"
 
 #: gdk-pixbuf/io-ico.c:332
-#, c-format
 msgid "Icon has zero height"
 msgstr "প্ৰতিকৃতিৰ শুণ্য উচ্চতা"
 
 #: gdk-pixbuf/io-ico.c:384
-#, c-format
 msgid "Compressed icons are not supported"
 msgstr "সঞ্চাপিত প্ৰতিকৃতি অসমৰ্থিত"
 
 #: gdk-pixbuf/io-ico.c:417
-#, c-format
 msgid "Unsupported icon type"
 msgstr "অসমৰ্থিত প্ৰতিকৃতিৰ ধৰণ"
 
 #: gdk-pixbuf/io-ico.c:511
-#, c-format
 msgid "Not enough memory to load ICO file"
 msgstr "ICO নথিপত্ৰ তুলিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
 #: gdk-pixbuf/io-ico.c:976
-#, c-format
 msgid "Image too large to be saved as ICO"
 msgstr "প্ৰতিমূৰ্তি ICO হিচাপে ৰক্ষা কৰিব'লৈ বৰ ডাঙৰ"
 
 #: gdk-pixbuf/io-ico.c:987
-#, c-format
 msgid "Cursor hotspot outside image"
 msgstr "প্ৰতিমুৰ্তিৰ বাহিৰত কাৰ্ছ'ৰৰ হৎস্পৎ"
 
@@ -578,7 +538,7 @@ msgstr "প্ৰতিমুৰ্তিৰ বাহিৰত কাৰ্ছ'
 msgid "Unsupported depth for ICO file: %d"
 msgstr "ICO নথিপত্ৰৰ বাবে অসমৰ্থিত গাঢ়তা: %d"
 
-#: gdk-pixbuf/io-ico.c:1244 gdk-pixbuf/io-gdip-ico.c:59
+#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
 msgid "The ICO image format"
 msgstr "ICO প্ৰতিমুৰ্তিৰ আকৃতি"
 
@@ -588,7 +548,7 @@ msgid "Error reading ICNS image: %s"
 msgstr "PNG প্ৰতিমুৰ্তিৰ নথিপত্ৰ পঢ়োঁতে ভয়াবহ ভুল: %s"
 
 #: gdk-pixbuf/io-icns.c:362
-#, fuzzy, c-format
+#, fuzzy
 msgid "Could not decode ICNS file"
 msgstr "নথিপত্ৰ নিৰ্ব্বাচন কৰিব নোৱাৰি"
 
@@ -597,42 +557,42 @@ msgstr "নথিপত্ৰ নিৰ্ব্বাচন কৰিব নো
 msgid "The ICNS image format"
 msgstr "ICO প্ৰতিমুৰ্তিৰ আকৃতি"
 
-#: gdk-pixbuf/io-jasper.c:74
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:75
+#, fuzzy
 msgid "Couldn't allocate memory for stream"
 msgstr "হেডাৰৰ বাবে স্মৃতিশক্তি বিতৰণ কৰিব নোৱাৰিলো"
 
-#: gdk-pixbuf/io-jasper.c:103
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:105
+#, fuzzy
 msgid "Couldn't decode image"
 msgstr "নথিপত্ৰৰ নামৰ ৰূপান্তৰ কৰিব পৰা ন'গ'ল"
 
-#: gdk-pixbuf/io-jasper.c:121
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:123
+#, fuzzy
 msgid "Transformed JPEG2000 has zero width or height"
 msgstr "পৰিবৰ্ত্তিত JPEG ৰ শুণ্য বহল বা উচ্চতা ।"
 
-#: gdk-pixbuf/io-jasper.c:134
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:137
+#, fuzzy
 msgid "Image type currently not supported"
 msgstr "প্ৰতিমুৰ্তিৰ ধৰণ '%s' অসমৰ্থিত"
 
-#: gdk-pixbuf/io-jasper.c:145 gdk-pixbuf/io-jasper.c:152
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
+#, fuzzy
 msgid "Couldn't allocate memory for color profile"
 msgstr "JPEG নথিপত্ৰ তুলিব'লৈ স্মৃতিশক্তি বিতৰণ কৰিব নোৱাৰিলো"
 
-#: gdk-pixbuf/io-jasper.c:177
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:182
+#, fuzzy
 msgid "Insufficient memory to open JPEG 2000 file"
 msgstr "TIFF নথিপত্ৰ খুলিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
-#: gdk-pixbuf/io-jasper.c:258
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:264
+#, fuzzy
 msgid "Couldn't allocate memory to buffer image data"
 msgstr "শাৰীৰ তথ্যৰ বাবে স্মৃতিশক্তি বিতৰণ কৰিব পৰা ন'গ'ল"
 
-#: gdk-pixbuf/io-jasper.c:302
+#: gdk-pixbuf/io-jasper.c:308
 #, fuzzy
 msgid "The JPEG 2000 image format"
 msgstr "JPEG প্ৰতিমুৰ্তিৰ আকৃতি"
@@ -643,7 +603,6 @@ msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG প্ৰতিমুৰ্তি নথিপত্ৰ (%s) ব্যাখ্যা কৰোঁতে ভুল"
 
 #: gdk-pixbuf/io-jpeg.c:529
-#, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -658,12 +617,10 @@ msgstr "অসমৰ্থিত JPEG ৰঙৰ স্থান (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
-#, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG নথিপত্ৰ তুলিব'লৈ স্মৃতিশক্তি বিতৰণ কৰিব নোৱাৰিলো"
 
 #: gdk-pixbuf/io-jpeg.c:920
-#, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr "পৰিবৰ্ত্তিত JPEG ৰ শুণ্য বহল বা উচ্চতা ।"
 
@@ -686,22 +643,18 @@ msgid "The JPEG image format"
 msgstr "JPEG প্ৰতিমুৰ্তিৰ আকৃতি"
 
 #: gdk-pixbuf/io-pcx.c:187
-#, c-format
 msgid "Couldn't allocate memory for header"
 msgstr "হেডাৰৰ বাবে স্মৃতিশক্তি বিতৰণ কৰিব নোৱাৰিলো"
 
 #: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-#, c-format
 msgid "Couldn't allocate memory for context buffer"
 msgstr "সন্দৰ্ভৰ উপশমকলৈ স্মৃতিশক্তি বিতৰণ কৰিব নোৱাৰিলো"
 
 #: gdk-pixbuf/io-pcx.c:601
-#, c-format
 msgid "Image has invalid width and/or height"
 msgstr "প্ৰতিমূৰ্তিৰ অবৈধ ভাবে বহল আৰু/বা উচ্চতা"
 
 #: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-#, c-format
 msgid "Image has unsupported bpp"
 msgstr "প্ৰতিমূৰ্তিত অসমৰ্থিত bpp আছে"
 
@@ -711,27 +664,22 @@ msgid "Image has unsupported number of %d-bit planes"
 msgstr "প্ৰতিমূৰ্তিত %d-বিট প্লেনৰ অসমৰ্থিত সংখ্যা আছে"
 
 #: gdk-pixbuf/io-pcx.c:642
-#, c-format
 msgid "Couldn't create new pixbuf"
 msgstr "নতুন pixbuf সৃষ্টি কৰিব পৰা ন'গ'ল"
 
 #: gdk-pixbuf/io-pcx.c:650
-#, c-format
 msgid "Couldn't allocate memory for line data"
 msgstr "শাৰীৰ তথ্যৰ বাবে স্মৃতিশক্তি বিতৰণ কৰিব পৰা ন'গ'ল"
 
 #: gdk-pixbuf/io-pcx.c:657
-#, c-format
 msgid "Couldn't allocate memory for paletted data"
 msgstr "ৰঞ্জন ফলকৰ তথ্যৰ বাবে স্মৃতিশক্তি বিতৰণ কৰিব পৰা ন'গ'ল"
 
 #: gdk-pixbuf/io-pcx.c:704
-#, c-format
 msgid "Didn't get all lines of PCX image"
 msgstr "PCX প্ৰতিমুৰ্তিৰ সকলো শাৰী পোৱা ন'গ'ল"
 
 #: gdk-pixbuf/io-pcx.c:711
-#, c-format
 msgid "No palette found at end of PCX data"
 msgstr "PCX তথ্যৰ অন্তত কোনো ৰঞ্জন ফলক পোৱা ন'গ'ল"
 
@@ -740,27 +688,22 @@ msgid "The PCX image format"
 msgstr "PCX প্ৰতিমুৰ্তিৰ আকৃতি"
 
 #: gdk-pixbuf/io-png.c:55
-#, c-format
 msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG ৰ প্ৰতিটো প্ৰণালীৰ বিট অবৈধ ।"
 
 #: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
-#, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "পৰিবৰ্ত্তিত PNG ৰ শুণ্য বহল বা উচ্চতা ।"
 
 #: gdk-pixbuf/io-png.c:144
-#, c-format
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr "পৰিবৰ্ত্তিত PNG ৰ প্ৰতিটো প্ৰণালীৰ বিট ৮ নহয় ।"
 
 #: gdk-pixbuf/io-png.c:153
-#, c-format
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "পৰিবৰ্ত্তিত PNG RGB বা RGBA নহয় ।"
 
 #: gdk-pixbuf/io-png.c:162
-#, c-format
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr "পৰিবৰ্ত্তিত PNG ত অসমৰ্থিত প্ৰণালীৰ সংখ্যা আছে, ৩ বা ৪ হ'ব লাগিব ।"
 
@@ -770,7 +713,6 @@ msgid "Fatal error in PNG image file: %s"
 msgstr "PNG প্ৰতিমুৰ্তিৰ নথিপত্ৰত ভয়াবহ ভুল: %s"
 
 #: gdk-pixbuf/io-png.c:310
-#, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG নথিপত্ৰ তুলিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
@@ -784,7 +726,6 @@ msgstr ""
 "অনুপ্ৰয়োগৰ পৰা প্ৰস্থান কৰিব'লৈ চেষ্টা কৰক স্মৃতিশক্তিৰ ব্যৱহাৰ কম কৰিব'লৈ"
 
 #: gdk-pixbuf/io-png.c:684
-#, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "PNG প্ৰতিমুৰ্তিৰ নথিপত্ৰ পঢ়োঁতে ভয়াবহ ভুল"
 
@@ -794,13 +735,11 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG প্ৰতিমুৰ্তিৰ নথিপত্ৰ পঢ়োঁতে ভয়াবহ ভুল: %s"
 
 #: gdk-pixbuf/io-png.c:825
-#, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG লিপি খণ্ডৰ চাবিত অতি কমেও ১টা আৰু অতি বেচি ৭৯টা আখৰ হ'ব লাগিব ।"
 
 #: gdk-pixbuf/io-png.c:833
-#, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG লিপি খণ্ডৰ চাবি ASCII আখৰ হ'ব লাগিব ।"
 
@@ -830,72 +769,58 @@ msgid "The PNG image format"
 msgstr "PNG প্ৰতিমুৰ্তিৰ আকৃতি"
 
 #: gdk-pixbuf/io-pnm.c:250
-#, c-format
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "PNM তোলকে পূৰ্ণ সংখ্যা আশা কৰিছিল, কিন্তু নাপালে"
 
 #: gdk-pixbuf/io-pnm.c:282
-#, c-format
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM নথিপত্ৰত ভুল আৰম্ভনিৰ বাইট"
 
 #: gdk-pixbuf/io-pnm.c:312
-#, c-format
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "PNM নথিপত্ৰ স্বীকৃতি পোৱা PNM উপআকৃতিৰ নহয়"
 
 #: gdk-pixbuf/io-pnm.c:337
-#, c-format
 msgid "PNM file has an image width of 0"
 msgstr "PNM নথিপত্ৰত প্ৰতিমুৰ্তিৰ বহল ০"
 
 #: gdk-pixbuf/io-pnm.c:358
-#, c-format
 msgid "PNM file has an image height of 0"
 msgstr "PNM নথিপত্ৰত প্ৰতিমুৰ্তিৰ উচ্চতা ০"
 
 #: gdk-pixbuf/io-pnm.c:381
-#, c-format
 msgid "Maximum color value in PNM file is 0"
 msgstr "PNM নথিপত্ৰত সৰ্বোচ্চ ৰঙৰ মান ০"
 
 #: gdk-pixbuf/io-pnm.c:389
-#, c-format
 msgid "Maximum color value in PNM file is too large"
 msgstr "PNM নথিপত্ৰত সৰ্বোচ্চ ৰঙৰ মান বৰ ডাঙৰ"
 
 #: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-#, c-format
 msgid "Raw PNM image type is invalid"
 msgstr "কেঁচা PNM আকৃতিৰ ধৰণ অবৈধ"
 
 #: gdk-pixbuf/io-pnm.c:654
-#, c-format
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM প্ৰতিমুৰ্তি তুলি লোৱাই এই PNM উপআকৃতি সমৰ্থন নকৰে"
 
 #: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-#, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "কেঁচা PNM আকৃতিক চানেকি তথ্যৰ আগত সঠিকভাবে এটা ৰিক্তস্থানৰ প্ৰয়োজন"
 
 #: gdk-pixbuf/io-pnm.c:768
-#, c-format
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "PNM প্ৰতিমুৰ্তি তুলিব'লৈ স্মৃতিশক্তি বিতৰণ কৰিব নোৱাৰি"
 
 #: gdk-pixbuf/io-pnm.c:818
-#, c-format
 msgid "Insufficient memory to load PNM context struct"
 msgstr "PNM সন্দৰ্ভৰ গঠনৰ বাবে অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
 #: gdk-pixbuf/io-pnm.c:869
-#, c-format
 msgid "Unexpected end of PNM image data"
 msgstr "PNM প্ৰতিমুৰ্তি তথ্যৰ অপ্ৰত্যাশিত অন্ত"
 
 #: gdk-pixbuf/io-pnm.c:997
-#, c-format
 msgid "Insufficient memory to load PNM file"
 msgstr "PNM নথিপত্ৰ তুলিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
@@ -904,22 +829,18 @@ msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "PNM/PBM/PGM/PPM প্ৰতিমুৰ্তি আকৃতিৰ পৰিবাৰ"
 
 #: gdk-pixbuf/io-ras.c:126
-#, c-format
 msgid "RAS image has bogus header data"
 msgstr "RAS প্ৰতিমুৰ্তিত কৃত্ৰিম হেডাৰ তথ্য"
 
 #: gdk-pixbuf/io-ras.c:148
-#, c-format
 msgid "RAS image has unknown type"
 msgstr "RAS প্ৰতিমুৰ্তিত অজ্ঞাত ধৰণ"
 
 #: gdk-pixbuf/io-ras.c:156
-#, c-format
 msgid "unsupported RAS image variation"
 msgstr "অসমৰ্থিত RAS প্ৰতিমুৰ্তিৰ পৰিবৰ্তন"
 
 #: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-#, c-format
 msgid "Not enough memory to load RAS image"
 msgstr "RAS প্ৰতিমুৰ্তি তুলিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
@@ -928,68 +849,55 @@ msgid "The Sun raster image format"
 msgstr "Sun raster প্ৰতিমুৰ্তিৰ আকৃতি"
 
 #: gdk-pixbuf/io-tga.c:154
-#, c-format
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "IOBuffer গঠনৰ বাবে স্মৃতিশক্তি বিতৰণ কৰিব নোৱাৰি"
 
 #: gdk-pixbuf/io-tga.c:173
-#, c-format
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "IOBuffer তথ্যৰ বাবে স্মৃতিশক্তি বিতৰণ কৰিব নোৱাৰি"
 
 #: gdk-pixbuf/io-tga.c:184
-#, c-format
 msgid "Cannot realloc IOBuffer data"
 msgstr "IOBuffer তথ্য পুনঃ বিতৰণ কৰিব নোৱাৰি"
 
 #: gdk-pixbuf/io-tga.c:214
-#, c-format
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "অস্থায়ী IOBuffer তথ্য বিতৰণ কৰিব নোৱাৰি"
 
 #: gdk-pixbuf/io-tga.c:347
-#, c-format
 msgid "Cannot allocate new pixbuf"
 msgstr "নতুন pixbuf বিতৰণ কৰিব নোৱাৰি"
 
 #: gdk-pixbuf/io-tga.c:687
-#, c-format
 msgid "Cannot allocate colormap structure"
 msgstr "ৰঙৰনক্সা গঠন বিতৰণ কৰিব নোৱাৰি"
 
 #: gdk-pixbuf/io-tga.c:694
-#, c-format
 msgid "Cannot allocate colormap entries"
 msgstr "ৰঙৰনক্সা প্ৰৱেশ বিতৰণ কৰিব নোৱাৰি"
 
 #: gdk-pixbuf/io-tga.c:716
-#, c-format
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "ৰঙৰনক্সা প্ৰৱেশৰ বাবে অপ্ৰত্যাশিত bitdepth"
 
 #: gdk-pixbuf/io-tga.c:734
-#, c-format
 msgid "Cannot allocate TGA header memory"
 msgstr "TGA হেডাৰ স্মৃতিশক্তি বিতৰণ কৰিব নোৱাৰি"
 
 #: gdk-pixbuf/io-tga.c:767
-#, c-format
 msgid "TGA image has invalid dimensions"
 msgstr "TGA প্ৰতিমুৰ্তিৰ অবৈধ আয়তন"
 
 #: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
 #: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
-#, c-format
 msgid "TGA image type not supported"
 msgstr "TGA প্ৰতিমুৰ্তিৰ ধৰণ সমৰ্থিত নহয়"
 
 #: gdk-pixbuf/io-tga.c:856
-#, c-format
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "TGA সন্দৰ্ভৰ গঠনৰ বাবে স্মৃতিশক্তি বিতৰণ কৰিব নোৱাৰি"
 
 #: gdk-pixbuf/io-tga.c:921
-#, c-format
 msgid "Excess data in file"
 msgstr "নথিপত্ৰত অতিৰিক্ত তথ্য"
 
@@ -1006,17 +914,14 @@ msgid "Could not get image height (bad TIFF file)"
 msgstr "প্ৰতিমুৰ্তিৰ উচ্চতা নাপালো (বেয়া TIFF নথিপত্ৰ)"
 
 #: gdk-pixbuf/io-tiff.c:175
-#, c-format
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF প্ৰতিমুৰ্তিৰ বহল বা উচ্চতা শুণ্য"
 
 #: gdk-pixbuf/io-tiff.c:184 gdk-pixbuf/io-tiff.c:193
-#, c-format
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF প্ৰতিমুৰ্তিৰ আয়তন বৰ ডাঙৰ"
 
 #: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
-#, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "TIFF নথিপত্ৰ খুলিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
@@ -1045,7 +950,6 @@ msgid "Failed to write TIFF data"
 msgstr "TIFF তথ্য লিখাত বিফল"
 
 #: gdk-pixbuf/io-tiff.c:760
-#, c-format
 msgid "Couldn't write to TIFF file"
 msgstr "TIFF নথিপত্ৰলৈ লিখিব পৰা ন'গ'ল"
 
@@ -1054,22 +958,18 @@ msgid "The TIFF image format"
 msgstr "TIFF প্ৰতিমুৰ্তিৰ আকৃতি"
 
 #: gdk-pixbuf/io-wbmp.c:246
-#, c-format
 msgid "Image has zero width"
 msgstr "প্ৰতিমূৰ্তিৰ বহল শুণ্য"
 
 #: gdk-pixbuf/io-wbmp.c:264
-#, c-format
 msgid "Image has zero height"
 msgstr "প্ৰতিমূৰ্তি উচ্চতা শুণ্য"
 
 #: gdk-pixbuf/io-wbmp.c:275
-#, c-format
 msgid "Not enough memory to load image"
 msgstr "প্ৰতিমুৰ্তি তুলিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
 #: gdk-pixbuf/io-wbmp.c:334
-#, c-format
 msgid "Couldn't save the rest"
 msgstr "অৱশিষ্ট ৰক্ষা কৰিব নোৱাৰিলো"
 
@@ -1078,17 +978,14 @@ msgid "The WBMP image format"
 msgstr "WBMP প্ৰতিমুৰ্তিৰ আকৃতি"
 
 #: gdk-pixbuf/io-xbm.c:295
-#, c-format
 msgid "Invalid XBM file"
 msgstr "অবৈধ XBM নথিপত্ৰ"
 
 #: gdk-pixbuf/io-xbm.c:305
-#, c-format
 msgid "Insufficient memory to load XBM image file"
 msgstr "XBM প্ৰতিমুৰ্তিৰ নথিপত্ৰ তুলিব'লৈ অপৰ্য্যাপ্ত স্মৃতিশক্তি"
 
 #: gdk-pixbuf/io-xbm.c:453
-#, c-format
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "XBM প্ৰতিমুৰ্তি তোলোতে অস্থায়ী নথিপত্ৰলৈ লিখিব'লৈ অক্ষম"
 
@@ -1097,47 +994,38 @@ msgid "The XBM image format"
 msgstr "XBM প্ৰতিমুৰ্তিৰ আকৃতি"
 
 #: gdk-pixbuf/io-xpm.c:468
-#, c-format
 msgid "No XPM header found"
 msgstr "কোনো XPM হেডাৰ পোৱা ন'গ'ল"
 
 #: gdk-pixbuf/io-xpm.c:477
-#, c-format
 msgid "Invalid XPM header"
 msgstr "অবৈধ XPM হেডাৰ"
 
 #: gdk-pixbuf/io-xpm.c:485
-#, c-format
 msgid "XPM file has image width <= 0"
 msgstr "XPM নথিপত্ৰত প্ৰতিমুৰ্তিৰ বহল <= 0"
 
 #: gdk-pixbuf/io-xpm.c:493
-#, c-format
 msgid "XPM file has image height <= 0"
 msgstr "XPM নথিপত্ৰত প্ৰতিমুৰ্তিৰ উচ্চতা <= 0"
 
 #: gdk-pixbuf/io-xpm.c:501
-#, c-format
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM ত অবৈধ ভাবে প্ৰতিটো পিক্সেলত আখৰৰ সংখ্যা আছে"
 
 #: gdk-pixbuf/io-xpm.c:510
-#, c-format
 msgid "XPM file has invalid number of colors"
 msgstr "XPM নথিপত্ৰত অবৈধ ৰঙৰ সংখ্যা আছে"
 
 #: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-#, c-format
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "XPM প্ৰতিমুৰ্তি তিলি ল'বলৈ স্মৃতিশক্তি বিতৰণ কৰিব নোৱাৰি"
 
 #: gdk-pixbuf/io-xpm.c:545
-#, c-format
 msgid "Cannot read XPM colormap"
 msgstr "XPM ৰঙৰনক্সা পঢ়া ন'গ'ল"
 
 #: gdk-pixbuf/io-xpm.c:777
-#, c-format
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "XPM প্ৰতিমুৰ্তি তোলোতে অস্থায়ী নথিপত্ৰলৈ লিখিব'লৈ অক্ষম"
 
@@ -1172,27 +1060,27 @@ msgid "Could not read from stream: %s"
 msgstr "%s ক %s লৈ পুনঃ নামকৰণ কৰিব পৰা ন'গ'ল: %s\n"
 
 #: gdk-pixbuf/io-gdip-utils.c:736
-#, fuzzy, c-format
+#, fuzzy
 msgid "Couldn't create pixbuf"
 msgstr "নতুন pixbuf সৃষ্টি কৰিব পৰা ন'গ'ল"
 
 #: gdk-pixbuf/io-gdip-utils.c:798
-#, fuzzy, c-format
+#, fuzzy
 msgid "Couldn't load bitmap"
 msgstr "নথিপত্ৰৰ নামৰ ৰূপান্তৰ কৰিব পৰা ন'গ'ল"
 
 #: gdk-pixbuf/io-gdip-utils.c:821
-#, fuzzy, c-format
+#, fuzzy
 msgid "Couldn't load metafile"
 msgstr "নথিপত্ৰৰ নামৰ ৰূপান্তৰ কৰিব পৰা ন'গ'ল"
 
 #: gdk-pixbuf/io-gdip-utils.c:980
-#, fuzzy, c-format
+#, fuzzy
 msgid "Unsupported image format for GDI+"
 msgstr "অসমৰ্থিত RAS প্ৰতিমুৰ্তিৰ পৰিবৰ্তন"
 
 #: gdk-pixbuf/io-gdip-utils.c:987
-#, fuzzy, c-format
+#, fuzzy
 msgid "Couldn't save"
 msgstr "অৱশিষ্ট ৰক্ষা কৰিব নোৱাৰিলো"
 
@@ -1374,12 +1262,12 @@ msgstr "Backslash"
 msgid "Invalid type function: `%s'"
 msgstr "অবৈধ টাইপ আপেক্ষক: %s"
 
-#: gtk/gtkbuilderparser.c:788
+#: gtk/gtkbuilderparser.c:789
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "অবৈধ ৰূট পদাৰ্থ: %s"
 
-#: gtk/gtkbuilderparser.c:822
+#: gtk/gtkbuilderparser.c:823
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "অপৰিচালিত টেগ: '%s'"
@@ -1494,7 +1382,99 @@ msgstr "এটা ৰং নিৰ্ব্বাচন কৰক"
 msgid "Received invalid color data\n"
 msgstr "অবৈধ ৰঙৰ তথ্য গ্ৰহণ কৰা হ'ল\n"
 
-#: gtk/gtkcolorsel.c:550
+#: gtk/gtkcolorsel.c:354
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"বাহিৰৰ চক্ৰৰ পৰা আপুনি বিচৰা ৰং নিৰ্ব্বাচন কৰক । ভিতৰৰ ত্ৰিভূজৰ পৰা ৰঙৰ আন্ধাৰ বা "
+"উজ্জ্বলতা নিৰ্ব্বাচন কৰক ।"
+
+#: gtk/gtkcolorsel.c:378
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"আই-ড্ৰপাৰ টিপক, তাৰ পিছত আপোনাৰ পৰ্দ্দাত যিকোনো এটা ৰং টিপক সেই ৰংটো নিৰ্ব্বাচন "
+"কৰিব'লৈ ।"
+
+#: gtk/gtkcolorsel.c:387
+msgid "_Hue:"
+msgstr "বৰ্ণৰ অনুক্ৰম (_H):"
+
+#: gtk/gtkcolorsel.c:388
+msgid "Position on the color wheel."
+msgstr "ৰঙৰ চকাৰ স্থান ।"
+
+#: gtk/gtkcolorsel.c:390
+msgid "_Saturation:"
+msgstr "সংতৃপ্তি (_S):"
+
+#: gtk/gtkcolorsel.c:391
+msgid "\"Deepness\" of the color."
+msgstr "ৰঙৰ \"গাঢ়তা\" ।"
+
+#: gtk/gtkcolorsel.c:392
+msgid "_Value:"
+msgstr "মান (_V):"
+
+#: gtk/gtkcolorsel.c:393
+msgid "Brightness of the color."
+msgstr "ৰঙৰ উজ্জ্বলতা ।"
+
+#: gtk/gtkcolorsel.c:394
+msgid "_Red:"
+msgstr "ৰঙা (_R):"
+
+#: gtk/gtkcolorsel.c:395
+msgid "Amount of red light in the color."
+msgstr "ৰঙত ৰঙা পোহৰৰ পৰিমাণ ।"
+
+#: gtk/gtkcolorsel.c:396
+msgid "_Green:"
+msgstr "সেউজীয়া (_G):"
+
+#: gtk/gtkcolorsel.c:397
+msgid "Amount of green light in the color."
+msgstr "ৰঙত সেউজীয়া পোহৰৰ পৰিমাণ ।"
+
+#: gtk/gtkcolorsel.c:398
+msgid "_Blue:"
+msgstr "নীলা (_B):"
+
+#: gtk/gtkcolorsel.c:399
+msgid "Amount of blue light in the color."
+msgstr "ৰঙত নীলা পোহৰৰ পৰিমাণ ।"
+
+#: gtk/gtkcolorsel.c:402
+msgid "Op_acity:"
+msgstr "অস্বচ্ছতা (_a):"
+
+#: gtk/gtkcolorsel.c:409 gtk/gtkcolorsel.c:419
+msgid "Transparency of the color."
+msgstr "ৰঙৰ স্বচ্ছতা ।"
+
+#: gtk/gtkcolorsel.c:426
+msgid "Color _name:"
+msgstr "ৰঙৰ নাম(_n):"
+
+#: gtk/gtkcolorsel.c:440
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"আপুনি এটা HTML-স্ৰজন-প্ৰণালীৰ হেক্সাডেচিমেল ৰঙৰ মান দিব পাৰে, বা সাধাৰণ ভাবে এটা "
+"ৰঙৰ নাম যেনে 'সমথিৰা' এই প্ৰবেশত ।"
+
+#: gtk/gtkcolorsel.c:470
+msgid "_Palette:"
+msgstr "ৰঞ্জন ফলক (_P):"
+
+#: gtk/gtkcolorsel.c:499
+msgid "Color Wheel"
+msgstr "ৰঙৰ চকা"
+
+#: gtk/gtkcolorsel.c:980
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1504,7 +1484,7 @@ msgstr ""
 "ৰঞ্জন ফলকৰ প্ৰৱেশলৈ টানি নিব পাৰে, বা এই ৰং বৰ্ত্তমান হিচাপে নিৰ্ব্বাচন কৰক ইয়াক "
 "কাষৰ বেলেগ এটা ৰঞ্জন ফলকলৈ টানি লৈ ।"
 
-#: gtk/gtkcolorsel.c:554
+#: gtk/gtkcolorsel.c:984
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1512,11 +1492,11 @@ msgstr ""
 "আপুনি নিৰ্ব্বাচন কৰা ৰং । আপুনি এই ৰং এটা ৰঞ্জন ফলকৰ প্ৰৱেশলৈ টানি নিব পাৰে "
 "ভৱিষ্যতে ব্যৱহাৰ কৰিবলৈ ৰক্ষা কৰাৰ কাৰণে ।"
 
-#: gtk/gtkcolorsel.c:942
+#: gtk/gtkcolorsel.c:1369
 msgid "_Save color here"
 msgstr "ইয়াত ৰং ৰক্ষা কৰক (_S)"
 
-#: gtk/gtkcolorsel.c:1147
+#: gtk/gtkcolorsel.c:1574
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1525,107 +1505,15 @@ msgstr ""
 "প্ৰতিৰূপ ইয়ালৈ টানি আনক বা তাত সোঁ বুটাম টিপক আৰু \"ইয়াত ৰং ৰক্ষা কৰক\" নিৰ্ব্বাচন "
 "কৰক ।"
 
-#: gtk/gtkcolorsel.c:1921
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
-"বাহিৰৰ চক্ৰৰ পৰা আপুনি বিচৰা ৰং নিৰ্ব্বাচন কৰক । ভিতৰৰ ত্ৰিভূজৰ পৰা ৰঙৰ আন্ধাৰ বা "
-"উজ্জ্বলতা নিৰ্ব্বাচন কৰক ।"
-
-#: gtk/gtkcolorsel.c:1945
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
-msgstr ""
-"আই-ড্ৰপাৰ টিপক, তাৰ পিছত আপোনাৰ পৰ্দ্দাত যিকোনো এটা ৰং টিপক সেই ৰংটো নিৰ্ব্বাচন "
-"কৰিব'লৈ ।"
-
-#: gtk/gtkcolorsel.c:1954
-msgid "_Hue:"
-msgstr "বৰ্ণৰ অনুক্ৰম (_H):"
-
-#: gtk/gtkcolorsel.c:1955
-msgid "Position on the color wheel."
-msgstr "ৰঙৰ চকাৰ স্থান ।"
-
-#: gtk/gtkcolorsel.c:1957
-msgid "_Saturation:"
-msgstr "সংতৃপ্তি (_S):"
-
-#: gtk/gtkcolorsel.c:1958
-msgid "\"Deepness\" of the color."
-msgstr "ৰঙৰ \"গাঢ়তা\" ।"
-
-#: gtk/gtkcolorsel.c:1959
-msgid "_Value:"
-msgstr "মান (_V):"
-
-#: gtk/gtkcolorsel.c:1960
-msgid "Brightness of the color."
-msgstr "ৰঙৰ উজ্জ্বলতা ।"
-
-#: gtk/gtkcolorsel.c:1961
-msgid "_Red:"
-msgstr "ৰঙা (_R):"
-
-#: gtk/gtkcolorsel.c:1962
-msgid "Amount of red light in the color."
-msgstr "ৰঙত ৰঙা পোহৰৰ পৰিমাণ ।"
-
-#: gtk/gtkcolorsel.c:1963
-msgid "_Green:"
-msgstr "সেউজীয়া (_G):"
-
-#: gtk/gtkcolorsel.c:1964
-msgid "Amount of green light in the color."
-msgstr "ৰঙত সেউজীয়া পোহৰৰ পৰিমাণ ।"
-
-#: gtk/gtkcolorsel.c:1965
-msgid "_Blue:"
-msgstr "নীলা (_B):"
-
-#: gtk/gtkcolorsel.c:1966
-msgid "Amount of blue light in the color."
-msgstr "ৰঙত নীলা পোহৰৰ পৰিমাণ ।"
-
-#: gtk/gtkcolorsel.c:1969
-msgid "Op_acity:"
-msgstr "অস্বচ্ছতা (_a):"
-
-#: gtk/gtkcolorsel.c:1976 gtk/gtkcolorsel.c:1986
-msgid "Transparency of the color."
-msgstr "ৰঙৰ স্বচ্ছতা ।"
-
-#: gtk/gtkcolorsel.c:1993
-msgid "Color _name:"
-msgstr "ৰঙৰ নাম(_n):"
-
-#: gtk/gtkcolorsel.c:2007
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"আপুনি এটা HTML-স্ৰজন-প্ৰণালীৰ হেক্সাডেচিমেল ৰঙৰ মান দিব পাৰে, বা সাধাৰণ ভাবে এটা "
-"ৰঙৰ নাম যেনে 'সমথিৰা' এই প্ৰবেশত ।"
-
-#: gtk/gtkcolorsel.c:2037
-msgid "_Palette:"
-msgstr "ৰঞ্জন ফলক (_P):"
-
-#: gtk/gtkcolorsel.c:2066
-msgid "Color Wheel"
-msgstr "ৰঙৰ চকা"
-
-#: gtk/gtkcolorseldialog.c:101
+#: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
 msgstr "ৰঙৰ নিৰ্ব্বাচন"
 
-#: gtk/gtkentry.c:5284 gtk/gtktextview.c:7668
+#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7668
 msgid "Input _Methods"
 msgstr "নিবেশ পদ্ধতি (_M)"
 
-#: gtk/gtkentry.c:5298 gtk/gtktextview.c:7682
+#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7682
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode নিয়ন্ত্ৰণ আকৰ ভৰাওক (_I)"
 
@@ -1633,7 +1521,7 @@ msgstr "Unicode নিয়ন্ত্ৰণ আকৰ ভৰাওক (_I)"
 msgid "Select A File"
 msgstr "নথিপত্ৰ এখন নিৰ্ব্বাচন কৰক"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1939
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1894
 msgid "Desktop"
 msgstr "ডেষ্কট'প"
 
@@ -1645,23 +1533,23 @@ msgstr "(একো নাই)"
 msgid "Other..."
 msgstr "অন্য..."
 
-#: gtk/gtkfilechooserdefault.c:1088
+#: gtk/gtkfilechooserdefault.c:1043
 msgid "Could not retrieve information about the file"
 msgstr "নথিপত্ৰৰ বাবে তথ্য উদ্ধাৰ কৰিব পৰা ন'গ'ল"
 
-#: gtk/gtkfilechooserdefault.c:1099
+#: gtk/gtkfilechooserdefault.c:1054
 msgid "Could not add a bookmark"
 msgstr "পত্ৰচিহ্ন যোগ কৰিব পৰা ন'গ'ল"
 
-#: gtk/gtkfilechooserdefault.c:1110
+#: gtk/gtkfilechooserdefault.c:1065
 msgid "Could not remove bookmark"
 msgstr "পত্ৰচিহ্ন আঁতৰাব পৰা ন'গ'ল"
 
-#: gtk/gtkfilechooserdefault.c:1121
+#: gtk/gtkfilechooserdefault.c:1076
 msgid "The folder could not be created"
 msgstr "ফোল্ডাৰ সৃষ্টি কৰিব পৰা ন'গ'ল"
 
-#: gtk/gtkfilechooserdefault.c:1134
+#: gtk/gtkfilechooserdefault.c:1089
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1670,11 +1558,11 @@ msgstr ""
 "বাবে বেলেগ এটা নাম ব্যৱহাৰ কৰিব'লৈ চেষ্টা কৰক বা নথিপত্ৰখন প্ৰথমে পুনঃ নামকৰণ কৰক "
 "।"
 
-#: gtk/gtkfilechooserdefault.c:1145
+#: gtk/gtkfilechooserdefault.c:1100
 msgid "Invalid file name"
 msgstr "অবৈধ নথিপত্ৰৰ নাম"
 
-#: gtk/gtkfilechooserdefault.c:1155
+#: gtk/gtkfilechooserdefault.c:1110
 msgid "The folder contents could not be displayed"
 msgstr "ফোল্ডাৰৰ বিষয়বস্তু প্ৰদৰ্শন কৰিব পৰা ন'গ'ল"
 
@@ -1682,170 +1570,169 @@ msgstr "ফোল্ডাৰৰ বিষয়বস্তু প্ৰদৰ্�
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1697
+#: gtk/gtkfilechooserdefault.c:1652
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s %2$s ত"
 
-#: gtk/gtkfilechooserdefault.c:1867
+#: gtk/gtkfilechooserdefault.c:1822
 msgid "Search"
 msgstr "বিচাৰক"
 
-#: gtk/gtkfilechooserdefault.c:1891
+#: gtk/gtkfilechooserdefault.c:1846
 msgid "Recently Used"
 msgstr "অলপতে ব্যৱহাৰ কৰা"
 
-#: gtk/gtkfilechooserdefault.c:2506
+#: gtk/gtkfilechooserdefault.c:2461
 msgid "Select which types of files are shown"
 msgstr "কেনে ধৰণৰ নথিপত্ৰ প্ৰদৰ্শন কৰা হ'ব নিৰ্ব্বাচিত কৰক"
 
-#: gtk/gtkfilechooserdefault.c:2935
+#: gtk/gtkfilechooserdefault.c:2890
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' ফোল্ডাৰ পত্ৰচিহ্নলৈ যোগ কৰক"
 
-#: gtk/gtkfilechooserdefault.c:2976
+#: gtk/gtkfilechooserdefault.c:2931
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "বৰ্ত্তমানৰ ফোল্ডাৰ পত্ৰচিহ্নলৈ যোগ কৰক"
 
-#: gtk/gtkfilechooserdefault.c:2978
+#: gtk/gtkfilechooserdefault.c:2933
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "নিৰ্ব্বাচিত ফোল্ডাৰসমূহ পত্ৰচিহ্নলৈ যোগ কৰক"
 
-#: gtk/gtkfilechooserdefault.c:3018
+#: gtk/gtkfilechooserdefault.c:2973
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' পত্ৰচিহ্ন আঁতৰাই দিয়ক"
 
-#: gtk/gtkfilechooserdefault.c:3734
+#: gtk/gtkfilechooserdefault.c:3691
 msgid "Remove"
 msgstr "আঁতৰাই দিয়ক"
 
-#: gtk/gtkfilechooserdefault.c:3743
+#: gtk/gtkfilechooserdefault.c:3700
 msgid "Rename..."
 msgstr "পুনঃ নামকৰণ..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3885
+#: gtk/gtkfilechooserdefault.c:3847
 msgid "Places"
 msgstr "স্থান"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3941
+#: gtk/gtkfilechooserdefault.c:3904
 msgid "_Places"
 msgstr "স্থান (_P)"
 
-#: gtk/gtkfilechooserdefault.c:3996 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3959 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "যোগ কৰক(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4003
+#: gtk/gtkfilechooserdefault.c:3966
 msgid "Add the selected folder to the Bookmarks"
 msgstr "নিৰ্ব্বাচিত ফোল্ডাৰ পত্ৰচিহ্নলৈ যোগ কৰক"
 
-#: gtk/gtkfilechooserdefault.c:4008 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:3971 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "আঁতৰাওক (_R)"
 
-#: gtk/gtkfilechooserdefault.c:4015
+#: gtk/gtkfilechooserdefault.c:3978
 msgid "Remove the selected bookmark"
 msgstr "নিৰ্ব্বাচিত পত্ৰচিহ্ন আঁতৰাই দিয়ক"
 
-#: gtk/gtkfilechooserdefault.c:4112
+#: gtk/gtkfilechooserdefault.c:4075
 msgid "Could not select file"
 msgstr "নথিপত্ৰ নিৰ্ব্বাচন কৰিব নোৱাৰি"
 
-#: gtk/gtkfilechooserdefault.c:4281
+#: gtk/gtkfilechooserdefault.c:4248
 msgid "_Add to Bookmarks"
 msgstr "পত্ৰচিহ্নলৈ যোগ কৰক (_A)"
 
-#: gtk/gtkfilechooserdefault.c:4295
+#: gtk/gtkfilechooserdefault.c:4262
 msgid "Show _Hidden Files"
 msgstr "গুপ্ত নথিপত্ৰ দেখুৱাওক (_H)"
 
-#: gtk/gtkfilechooserdefault.c:4539 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4505 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "নথিপত্ৰসমূহ"
 
-#: gtk/gtkfilechooserdefault.c:4588
+#: gtk/gtkfilechooserdefault.c:4554
 msgid "Name"
 msgstr "নাম"
 
-#: gtk/gtkfilechooserdefault.c:4613
+#: gtk/gtkfilechooserdefault.c:4579
 msgid "Size"
 msgstr "আয়তন"
 
-#: gtk/gtkfilechooserdefault.c:4627
+#: gtk/gtkfilechooserdefault.c:4593
 msgid "Modified"
 msgstr "সলনি কৰা হ'ল"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4847 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4813 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "নাম (_N):"
 
-#: gtk/gtkfilechooserdefault.c:4889
+#: gtk/gtkfilechooserdefault.c:4855
 msgid "_Browse for other folders"
 msgstr "অন্য ফোল্ডাৰৰ বাবে চৰক (_B)"
 
-#: gtk/gtkfilechooserdefault.c:5159
+#: gtk/gtkfilechooserdefault.c:5125
 msgid "Type a file name"
 msgstr "নথিপত্ৰৰ নাম এটা লিখক"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5196
+#: gtk/gtkfilechooserdefault.c:5162
 msgid "Create Fo_lder"
 msgstr "ফোল্ডাৰ সৃষ্টি কৰক (_l)"
 
-#: gtk/gtkfilechooserdefault.c:5206
+#: gtk/gtkfilechooserdefault.c:5172
 msgid "_Location:"
 msgstr "স্থান (_L):"
 
-#: gtk/gtkfilechooserdefault.c:5398
+#: gtk/gtkfilechooserdefault.c:5361
 msgid "Save in _folder:"
 msgstr "ফোল্ডাৰত ৰক্ষা কৰক (_f):"
 
-#: gtk/gtkfilechooserdefault.c:5400
+#: gtk/gtkfilechooserdefault.c:5363
 msgid "Create in _folder:"
 msgstr "ফোল্ডাৰত সৃষ্টি কৰক (_f):"
 
-#: gtk/gtkfilechooserdefault.c:7002
-#, c-format
+#: gtk/gtkfilechooserdefault.c:6957
 msgid "Cannot change to folder because it is not local"
 msgstr "ফোল্ডাৰলৈ সলনি কৰিব নোৱাৰি কাৰণ সেইটো স্থানিক নহয়"
 
-#: gtk/gtkfilechooserdefault.c:7617 gtk/gtkfilechooserdefault.c:7638
+#: gtk/gtkfilechooserdefault.c:7582 gtk/gtkfilechooserdefault.c:7603
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "হ্ৰস্বপথ %s ইতিমধ্যে আছে"
 
-#: gtk/gtkfilechooserdefault.c:7728
+#: gtk/gtkfilechooserdefault.c:7693
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "হ্ৰস্বপথ %s নাই"
 
-#: gtk/gtkfilechooserdefault.c:7971 gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:7936 gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "নথিপত্ৰৰ নাম \"%s\" ইতিমধ্যে আছে । আপুনি প্ৰতিস্থাপন কৰিব খোজে নেকি ?"
 
-#: gtk/gtkfilechooserdefault.c:7974 gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:7939 gtk/gtkprintunixdialog.c:360
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "নথিপত্ৰ ইতিমধ্যে \"%s\" ত আছে । প্ৰতিস্থাপন কৰিলে বিষয়বস্তু পুনঃ লিখা যাব ।"
 
-#: gtk/gtkfilechooserdefault.c:7979 gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:7944 gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "প্ৰতিস্থাপন কৰক (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8740
+#: gtk/gtkfilechooserdefault.c:8705
 msgid "Could not start the search process"
 msgstr "বিচৰা প্ৰক্ৰিয়া আৰম্ভ কৰিব পৰা ন'গ'ল"
 
-#: gtk/gtkfilechooserdefault.c:8741
+#: gtk/gtkfilechooserdefault.c:8706
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1853,49 +1740,49 @@ msgstr ""
 "indexer ডেমনলৈ অনুপ্ৰয়োগে সংযোগ সৃষ্টি কৰিব নোৱাৰিলে । সেইটো চলি থকাটো নিশ্চিত "
 "কৰক ।"
 
-#: gtk/gtkfilechooserdefault.c:8755
+#: gtk/gtkfilechooserdefault.c:8720
 msgid "Could not send the search request"
 msgstr "বিচৰাৰ অনুৰোধ পঠিয়াব নোৱাৰিলো"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9170
+#: gtk/gtkfilechooserdefault.c:9135
 msgid "_Search:"
 msgstr "বিচাৰক (_S):"
 
-#: gtk/gtkfilechooserdefault.c:10120
+#: gtk/gtkfilechooserdefault.c:10082
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s তুলি ল'ব পৰা ন'গ'ল"
 
-#: gtk/gtkfilechooserdefault.c:10772
+#: gtk/gtkfilechooserdefault.c:10736
 msgid "Type name of new folder"
 msgstr "নতুন ফোল্ডাৰৰ নাম লিখক"
 
-#: gtk/gtkfilechooserdefault.c:10822
+#: gtk/gtkfilechooserdefault.c:10786
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10824
+#: gtk/gtkfilechooserdefault.c:10788
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10826
+#: gtk/gtkfilechooserdefault.c:10790
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10929 gtk/gtkfilechooserdefault.c:10951
-#: gtk/gtkfilechooserdefault.c:11022
+#: gtk/gtkfilechooserdefault.c:10893 gtk/gtkfilechooserdefault.c:10915
+#: gtk/gtkfilechooserdefault.c:10986
 msgid "Unknown"
 msgstr "অজ্ঞাত"
 
-#: gtk/gtkfilechooserdefault.c:10969
+#: gtk/gtkfilechooserdefault.c:10933
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10971
+#: gtk/gtkfilechooserdefault.c:10935
 msgid "Yesterday at %H:%M"
 msgstr "যোৱাকালি %H:%M ত"
 
@@ -1921,30 +1808,30 @@ msgstr ""
 msgid "Completing..."
 msgstr ""
 
-#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1348
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1349
+#: gtk/gtkfilesel.c:1358
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "'%s' পঞ্জিকা সৃষ্টি কৰোঁতে ভুল: %s"
 
-#: gtk/gtkfilesel.c:693
+#: gtk/gtkfilesel.c:694
 msgid "Folders"
 msgstr "ফোল্ডাৰসমূহ"
 
-#: gtk/gtkfilesel.c:697
+#: gtk/gtkfilesel.c:698
 msgid "Fol_ders"
 msgstr "ফোল্ডাৰসমূহ (_d)"
 
-#: gtk/gtkfilesel.c:733
+#: gtk/gtkfilesel.c:734
 msgid "_Files"
 msgstr "নথিপত্ৰসমূহ (_F)"
 
-#: gtk/gtkfilesel.c:820 gtk/gtkfilesel.c:2147
+#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2148
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "ফোল্ডাৰ পঢ়িব পৰা নাযাই: %s"
 
-#: gtk/gtkfilesel.c:904
+#: gtk/gtkfilesel.c:905
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1955,88 +1842,88 @@ msgstr ""
 "পাৰে ।\n"
 "আপুনি সেইটো নিৰ্ব্বাচন কৰিব'লৈ নিশ্চিত নে ?"
 
-#: gtk/gtkfilesel.c:1019
+#: gtk/gtkfilesel.c:1020
 msgid "_New Folder"
 msgstr "নতুন ফোল্ডাৰ (_N)"
 
-#: gtk/gtkfilesel.c:1030
+#: gtk/gtkfilesel.c:1031
 msgid "De_lete File"
 msgstr "নথিপত্ৰ আঁতৰাওক (_l)"
 
-#: gtk/gtkfilesel.c:1041
+#: gtk/gtkfilesel.c:1042
 msgid "_Rename File"
 msgstr "নথিপত্ৰ পুনঃনামকৰণ কৰক (_R)"
 
-#: gtk/gtkfilesel.c:1346
+#: gtk/gtkfilesel.c:1347
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ফোল্ডাৰৰ নাম \"%s\" ত এনে চিহ্ন আছে যিবোৰৰ নথিপত্ৰৰ নামত অনুমতি নাই"
 
-#: gtk/gtkfilesel.c:1391
+#: gtk/gtkfilesel.c:1392
 msgid "New Folder"
 msgstr "নতুন ফোল্ডাৰ"
 
-#: gtk/gtkfilesel.c:1406
+#: gtk/gtkfilesel.c:1407
 msgid "_Folder name:"
 msgstr "ফোল্ডাৰৰ নাম (_F):"
 
-#: gtk/gtkfilesel.c:1430
+#: gtk/gtkfilesel.c:1431
 msgid "C_reate"
 msgstr "সৃষ্টি কৰক (_r)"
 
-#: gtk/gtkfilesel.c:1473 gtk/gtkfilesel.c:1580 gtk/gtkfilesel.c:1593
+#: gtk/gtkfilesel.c:1474 gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1594
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "নথিপত্ৰৰ নাম \"%s\" ত এনে চিহ্ন আছে যিবোৰৰ নথিপত্ৰৰ নামত অনুমতি নাই"
 
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1486
+#: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1487
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "'%s' নথিপত্ৰ আঁতৰাওঁতে ভুল: %s"
 
-#: gtk/gtkfilesel.c:1529
+#: gtk/gtkfilesel.c:1530
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "সঁচাকৈ নথিপত্ৰ \"%s\" আঁতৰাওঁ ?"
 
-#: gtk/gtkfilesel.c:1534
+#: gtk/gtkfilesel.c:1535
 msgid "Delete File"
 msgstr "নথিপত্ৰ গুচাওক"
 
-#: gtk/gtkfilesel.c:1582
+#: gtk/gtkfilesel.c:1583
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr "\"%s\" লৈ নথিপত্ৰ পুনঃনামকৰণ কৰোঁতে ভুল: %s"
 
-#: gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1596
 #, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr "\"%s\" নথিপত্ৰ পুনঃনামকৰণ কৰোঁতে ভুল: %s"
 
-#: gtk/gtkfilesel.c:1604
+#: gtk/gtkfilesel.c:1605
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "\"%s\" নথিপত্ৰ \"%s\" লৈ পুনঃনামকৰণ কৰোঁতে ভুল: %s"
 
-#: gtk/gtkfilesel.c:1651
+#: gtk/gtkfilesel.c:1652
 msgid "Rename File"
 msgstr "নথিপত্ৰ পুনঃনামকৰণ কৰণ কৰক"
 
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1667
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "নথিপত্ৰ  \"%s\" ক পুনঃনামকৰণ কৰক:"
 
-#: gtk/gtkfilesel.c:1695
+#: gtk/gtkfilesel.c:1696
 msgid "_Rename"
 msgstr "পুনঃনামকৰণ (_R)"
 
-#: gtk/gtkfilesel.c:2127
+#: gtk/gtkfilesel.c:2128
 msgid "_Selection: "
 msgstr "নিৰ্ব্বাচন (_S): "
 
-#: gtk/gtkfilesel.c:3047
+#: gtk/gtkfilesel.c:3048
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -2045,15 +1932,15 @@ msgstr ""
 "নথিপত্ৰৰ নাম \"%s\" UTF-8 লৈ ৰূপান্তৰ কৰিব পৰা ন'গ'ল । (পৰিবেশ মান "
 "G_FILENAME_ENCODING প্ৰতিস্থাপন কৰা চেষ্টা কৰক): %s"
 
-#: gtk/gtkfilesel.c:3050
+#: gtk/gtkfilesel.c:3051
 msgid "Invalid UTF-8"
 msgstr "অবৈধ UTF-8"
 
-#: gtk/gtkfilesel.c:3924
+#: gtk/gtkfilesel.c:3925
 msgid "Name too long"
 msgstr "নাম বৰ দীঘল"
 
-#: gtk/gtkfilesel.c:3926
+#: gtk/gtkfilesel.c:3927
 msgid "Couldn't convert filename"
 msgstr "নথিপত্ৰৰ নামৰ ৰূপান্তৰ কৰিব পৰা ন'গ'ল"
 
@@ -2062,12 +1949,11 @@ msgstr "নথিপত্ৰৰ নামৰ ৰূপান্তৰ কৰি
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: gtk/gtkfilesystem.c:48
+#: gtk/gtkfilesystem.c:51
 msgid "File System"
 msgstr "নথিপত্ৰৰপ্ৰণালী"
 
 #: gtk/gtkfilesystemmodel.c:700
-#, c-format
 msgid "Could not obtain root folder"
 msgstr "ৰূটৰ ফোল্ডাৰ পোৱা ন'গ'ল"
 
@@ -2111,7 +1997,7 @@ msgstr "আয়তন (_z):"
 msgid "_Preview:"
 msgstr "পূব‌-দৃশ্য (_P):"
 
-#: gtk/gtkfontsel.c:1362
+#: gtk/gtkfontsel.c:1571
 msgid "Font Selection"
 msgstr "আখৰৰ নিৰ্ব্বাচন"
 
@@ -2131,7 +2017,7 @@ msgstr "Gamma ৰ মান (_G)"
 msgid "Error loading icon: %s"
 msgstr "প্ৰতিকৃতি তোলোঁতে ভুল: %sল"
 
-#: gtk/gtkicontheme.c:1332
+#: gtk/gtkicontheme.c:1362
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2144,13 +2030,12 @@ msgstr ""
 "আপুনি এটা পৰতিলিপি পাব পাৰে:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1512
+#: gtk/gtkicontheme.c:1542
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "'%s'প্ৰতিমুৰ্তি আলোকচিত্ৰত নাই"
 
-#: gtk/gtkicontheme.c:2953
-#, c-format
+#: gtk/gtkicontheme.c:2983
 msgid "Failed to load icon"
 msgstr "আইকণ তোলাত বিফল"
 
@@ -2163,82 +2048,82 @@ msgstr "আয়তন"
 msgid "input method menu|System"
 msgstr ""
 
-#: gtk/gtkinputdialog.c:190
+#: gtk/gtkinputdialog.c:192
 msgid "Input"
 msgstr "নিবেশ"
 
-#: gtk/gtkinputdialog.c:205
+#: gtk/gtkinputdialog.c:207
 msgid "No extended input devices"
 msgstr "সম্প্ৰসাৰিত নিবেশ যন্ত্ৰ নাই"
 
-#: gtk/gtkinputdialog.c:218
+#: gtk/gtkinputdialog.c:220
 msgid "_Device:"
 msgstr "যন্ত্ৰ (_D):"
 
-#: gtk/gtkinputdialog.c:235
+#: gtk/gtkinputdialog.c:237
 msgid "Disabled"
 msgstr "নিষ্কৰীয়"
 
-#: gtk/gtkinputdialog.c:242
+#: gtk/gtkinputdialog.c:244
 msgid "Screen"
 msgstr "পৰ্দ্দা"
 
-#: gtk/gtkinputdialog.c:249
+#: gtk/gtkinputdialog.c:251
 msgid "Window"
 msgstr "সংযোগ পথ"
 
-#: gtk/gtkinputdialog.c:256
+#: gtk/gtkinputdialog.c:258
 msgid "_Mode:"
 msgstr "ধৰণ (_M):"
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:277
+#: gtk/gtkinputdialog.c:279
 msgid "Axes"
 msgstr "অক্ষ"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:295
+#: gtk/gtkinputdialog.c:297
 msgid "Keys"
 msgstr "চাবি"
 
-#: gtk/gtkinputdialog.c:522
+#: gtk/gtkinputdialog.c:524
 msgid "_X:"
 msgstr "_X:"
 
-#: gtk/gtkinputdialog.c:523
+#: gtk/gtkinputdialog.c:525
 msgid "_Y:"
 msgstr "_Y:"
 
-#: gtk/gtkinputdialog.c:524
+#: gtk/gtkinputdialog.c:526
 msgid "_Pressure:"
 msgstr "হেঁচা (_P):"
 
-#: gtk/gtkinputdialog.c:525
+#: gtk/gtkinputdialog.c:527
 msgid "X _tilt:"
 msgstr "X ঢলা (_t):"
 
-#: gtk/gtkinputdialog.c:526
+#: gtk/gtkinputdialog.c:528
 msgid "Y t_ilt:"
 msgstr "Y ঢলা(_i):"
 
-#: gtk/gtkinputdialog.c:527
+#: gtk/gtkinputdialog.c:529
 msgid "_Wheel:"
 msgstr "চকা (_W):"
 
-#: gtk/gtkinputdialog.c:579
+#: gtk/gtkinputdialog.c:581
 msgid "none"
 msgstr "একো নাই"
 
-#: gtk/gtkinputdialog.c:616 gtk/gtkinputdialog.c:652
+#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
 msgid "(disabled)"
 msgstr "(নিষ্ক্ৰীয়)"
 
-#: gtk/gtkinputdialog.c:645
+#: gtk/gtkinputdialog.c:647
 msgid "(unknown)"
 msgstr "(অজ্ঞাত)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:749
+#: gtk/gtkinputdialog.c:751
 msgid "Cl_ear"
 msgstr "পৰিষ্কাৰ (_e)"
 
@@ -2292,11 +2177,16 @@ msgstr "GTK+ ডিবাগৰ পতাকা কৰ্মৰত নকৰি�
 msgid "default:LTR"
 msgstr "অবিকল্পিত:LTR"
 
-#: gtk/gtkmain.c:774
+#: gtk/gtkmain.c:740
+#, c-format
+msgid "Cannot open display: %s"
+msgstr ""
+
+#: gtk/gtkmain.c:777
 msgid "GTK+ Options"
 msgstr "GTK+ বিকল্প"
 
-#: gtk/gtkmain.c:774
+#: gtk/gtkmain.c:777
 msgid "Show GTK+ Options"
 msgstr "GTK+ বিকল্প দেখুৱাওক"
 
@@ -2340,21 +2230,20 @@ msgstr ""
 msgid "_Remember forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:828
+#: gtk/gtknotebook.c:834
 msgid "Arrow spacing"
 msgstr "কাঁড়চিহ্নৰ ৰিক্তস্থান"
 
-#: gtk/gtknotebook.c:829
+#: gtk/gtknotebook.c:835
 msgid "Scroll arrow spacing"
 msgstr "কাঁড়চিহ্নৰ ৰিক্তস্থান চাওক"
 
-#: gtk/gtknotebook.c:4406 gtk/gtknotebook.c:6912
+#: gtk/gtknotebook.c:4412 gtk/gtknotebook.c:6918
 #, c-format
 msgid "Page %u"
 msgstr "পৃষ্ঠা %u"
 
 #: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
-#, c-format
 msgid "Not a valid page setup file"
 msgstr "বৈধ পৃষ্ঠা প্ৰতিষ্ঠাৰ নথিপত্ৰ নহয়"
 
@@ -2494,76 +2383,86 @@ msgid "%s job #%d"
 msgstr "%s কাৰ্য্য #%d"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1498
+#: gtk/gtkprintoperation.c:1504
 msgid "print operation status|Initial state"
 msgstr "আৰম্ভনিৰ অৱস্থা"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1500
+#: gtk/gtkprintoperation.c:1506
 msgid "print operation status|Preparing to print"
 msgstr "মুদ্ৰণৰ বাবে প্ৰস্তুত কৰা হৈছে"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1502
+#: gtk/gtkprintoperation.c:1508
 msgid "print operation status|Generating data"
 msgstr "তথ্যৰ উৎপাদন কৰা হৈছে"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1504
+#: gtk/gtkprintoperation.c:1510
 msgid "print operation status|Sending data"
 msgstr "তথ্য পঠিওৱা হৈছে"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1506
+#: gtk/gtkprintoperation.c:1512
 msgid "print operation status|Waiting"
 msgstr "অপেক্ষা কৰা হৈছৈ"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1508
+#: gtk/gtkprintoperation.c:1514
 msgid "print operation status|Blocking on issue"
 msgstr "আপত্তিৰ বাবে অৱৰোধ কৰা হৈছৈ"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1510
+#: gtk/gtkprintoperation.c:1516
 msgid "print operation status|Printing"
 msgstr "মুদ্ৰণ কৰা হ'ল"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1512
+#: gtk/gtkprintoperation.c:1518
 msgid "print operation status|Finished"
 msgstr "অন্ত হ'ল"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1514
+#: gtk/gtkprintoperation.c:1520
 msgid "print operation status|Finished with error"
 msgstr "ভুলেৰে সম্পন্ন কৰা হ'ল"
 
-#: gtk/gtkprintoperation.c:1997
+#: gtk/gtkprintoperation.c:2003
 #, c-format
 msgid "Preparing %d"
 msgstr "%d প্ৰস্তুত কৰা হৈছে"
 
-#: gtk/gtkprintoperation.c:1999 gtk/gtkprintoperation.c:2253
+#: gtk/gtkprintoperation.c:2005 gtk/gtkprintoperation.c:2259
 #, c-format
 msgid "Preparing"
 msgstr "প্ৰস্তুত কৰা হৈছে"
 
-#: gtk/gtkprintoperation.c:2002
+#: gtk/gtkprintoperation.c:2008
 #, c-format
 msgid "Printing %d"
 msgstr "%d মুদ্ৰণ কৰা হৈছে"
 
-#: gtk/gtkprintoperation-unix.c:243
+#: gtk/gtkprintoperation.c:2289
+#, fuzzy, c-format
+msgid "Error creating print preview"
+msgstr "পূৰ্ব-প্ৰদৰ্শন নিক্ষিপ্ত কৰোঁতে ভুলল"
+
+#: gtk/gtkprintoperation.c:2292
+#, c-format
+msgid "The most probable reason is that a temporary file could not be created."
+msgstr ""
+
+#: gtk/gtkprintoperation-unix.c:242
 #, c-format
 msgid "Error launching preview"
 msgstr "পূৰ্ব-প্ৰদৰ্শন নিক্ষিপ্ত কৰোঁতে ভুলল"
 
-#: gtk/gtkprintoperation-unix.c:281
+#: gtk/gtkprintoperation-unix.c:280
 #, c-format
 msgid "Error printing"
 msgstr "মুদ্ৰণত ভুল"
 
-#: gtk/gtkprintoperation-unix.c:382 gtk/gtkprintoperation-win32.c:1399
+#: gtk/gtkprintoperation-unix.c:381 gtk/gtkprintoperation-win32.c:1399
 msgid "Application"
 msgstr "অনুপ্ৰয়োগ"
 
@@ -2589,32 +2488,26 @@ msgstr "পছন্দৰ আয়তন"
 
 #: gtk/gtkprintoperation-win32.c:1489 gtk/gtkprintoperation-win32.c:1512
 #: gtk/gtkprintoperation-win32.c:1560
-#, c-format
 msgid "Not enough free memory"
 msgstr "পৰ্য্যাপ্ত ৰিক্ত স্মৃতিশক্তি নাই"
 
 #: gtk/gtkprintoperation-win32.c:1565
-#, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx লৈ অবৈধ তৰ্ক"
 
 #: gtk/gtkprintoperation-win32.c:1570
-#, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgEx লৈ অবৈধ প'ইন্টাৰ"
 
 #: gtk/gtkprintoperation-win32.c:1575
-#, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx লৈ অবৈধ নিয়ন্ত্ৰক"
 
 #: gtk/gtkprintoperation-win32.c:1580
-#, c-format
 msgid "Unspecified error"
 msgstr "অনিৰ্ধাৰিত ভুল"
 
 #: gtk/gtkprintoperation-win32.c:1632
-#, c-format
 msgid "Error from StartDoc"
 msgstr "StartDoc ৰ পৰা ভুল"
 
@@ -2907,8 +2800,10 @@ msgstr "_%d. %s"
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1158
-#: gtk/gtkrecentmanager.c:1168 gtk/gtkrecentmanager.c:1221
+#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1025
+#: gtk/gtkrecentmanager.c:1163 gtk/gtkrecentmanager.c:1173
+#: gtk/gtkrecentmanager.c:1226 gtk/gtkrecentmanager.c:1235
+#: gtk/gtkrecentmanager.c:1250
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' ৰ সৈতে কোনো বস্তু পোৱা ন'গ'ল"
@@ -3408,53 +3303,51 @@ msgid "A <text> element can't occur before a <tags> element"
 msgstr "এটা<text> পদাৰ্থ কোনো এটা <tags> পদাৰ্থৰ আগত আহিব নোৱাৰে"
 
 #: gtk/gtktextbufferserialize.c:1779
-#, c-format
 msgid "Serialized data is malformed"
 msgstr "ধাৰাবাহিক তথ্য বিকৃত"
 
 #: gtk/gtktextbufferserialize.c:1857
-#, c-format
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "ধাৰাবাহিক তথ্য বিকৃত । প্ৰথম খণ্ড GTKTEXTBUFFERCONTENTS-0001 নহয়"
 
-#: gtk/gtktextutil.c:60
+#: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
 msgstr "LRM বাওঁ-ফালৰ-পৰা-সোঁ-ফাললৈ চিহ্ন (_L)"
 
-#: gtk/gtktextutil.c:61
+#: gtk/gtktextutil.c:62
 msgid "RLM _Right-to-left mark"
 msgstr "RLM সোঁ-ফালৰ-পৰা-বাওঁ ফাললৈ চিহ্ন (_R)"
 
-#: gtk/gtktextutil.c:62
+#: gtk/gtktextutil.c:63
 msgid "LRE Left-to-right _embedding"
 msgstr "LRE বাওঁ-ফালৰ-পৰা-সোঁ-ফালে প্ৰোথিত কৰা (_e)"
 
-#: gtk/gtktextutil.c:63
+#: gtk/gtktextutil.c:64
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE সোঁ-ফালৰ-পৰা-বাওঁ ফালে প্ৰোথিত কৰা (_m)"
 
-#: gtk/gtktextutil.c:64
+#: gtk/gtktextutil.c:65
 msgid "LRO Left-to-right _override"
 msgstr "LRO বাওঁ-ফালৰ-পৰা-সোঁ-ফালে গৰকি যাওক (_o)"
 
-#: gtk/gtktextutil.c:65
+#: gtk/gtktextutil.c:66
 msgid "RLO Right-to-left o_verride"
 msgstr "RLO সোঁ-ফালৰ-পৰা-বাওঁ ফালে গৰকি যাওক (_v)"
 
-#: gtk/gtktextutil.c:66
+#: gtk/gtktextutil.c:67
 msgid "PDF _Pop directional formatting"
 msgstr "PDF প'প দিশত আকৃতি দিয়া (_P)"
 
-#: gtk/gtktextutil.c:67
+#: gtk/gtktextutil.c:68
 msgid "ZWS _Zero width space"
 msgstr "ZWS শুন্য বহলৰ স্থান (_Z)"
 
-#: gtk/gtktextutil.c:68
+#: gtk/gtktextutil.c:69
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWJ শুন্য বহলৰ সংযোজক (_j)"
 
-#: gtk/gtktextutil.c:69
+#: gtk/gtktextutil.c:70
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ শুন্য বহলৰ অসংযোগক (_n)"
 
@@ -3463,57 +3356,57 @@ msgstr "ZWNJ শুন্য বহলৰ অসংযোগক (_n)"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "আলোকচিত্ৰৰ কল module_path ত সন্ধান কৰিব পৰা ন'গ'ল: \"%s\","
 
-#: gtk/gtktipsquery.c:187
+#: gtk/gtktipsquery.c:188
 msgid "--- No Tip ---"
 msgstr "--- কোনো সঙ্কেত নাই ---"
 
-#: gtk/gtkuimanager.c:1453
+#: gtk/gtkuimanager.c:1454
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "অপ্ৰত্যাশিত '%s' আৰম্ভনিৰ চিহ্ন %d শাৰীৰ %d আখৰত"
 
-#: gtk/gtkuimanager.c:1543
+#: gtk/gtkuimanager.c:1544
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "%d শাৰীৰ %d আখৰত অপ্ৰত্যাশিত আখৰ"
 
-#: gtk/gtkuimanager.c:2366
+#: gtk/gtkuimanager.c:2367
 msgid "Empty"
 msgstr "ৰিক্ত"
 
-#: gtk/gtkvolumebutton.c:81
+#: gtk/gtkvolumebutton.c:77
 msgid "Volume"
 msgstr "আয়তন (_V):"
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:79
 msgid "Turns volume down or up"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:86
+#: gtk/gtkvolumebutton.c:82
 msgid "Adjusts the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:89 gtk/gtkvolumebutton.c:92
+#: gtk/gtkvolumebutton.c:85 gtk/gtkvolumebutton.c:88
 msgid "Volume Down"
 msgstr "ধ্বনি কমাওক"
 
-#: gtk/gtkvolumebutton.c:91
+#: gtk/gtkvolumebutton.c:87
 msgid "Decreases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:95 gtk/gtkvolumebutton.c:98
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Up"
 msgstr "ধ্বনি বঢ়াওক"
 
-#: gtk/gtkvolumebutton.c:97
+#: gtk/gtkvolumebutton.c:93
 msgid "Increases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:155
+#: gtk/gtkvolumebutton.c:151
 msgid "Muted"
 msgstr "শব্দ বন্ধ কৰক"
 
-#: gtk/gtkvolumebutton.c:159
+#: gtk/gtkvolumebutton.c:155
 msgid "Full Volume"
 msgstr "সম্পূৰ্ণ ধ্বনি"
 
@@ -3524,7 +3417,7 @@ msgstr "সম্পূৰ্ণ ধ্বনি"
 #. * Do not translate and do not include the "volume percentage|"
 #. * part in the translation!
 #.
-#: gtk/gtkvolumebutton.c:174
+#: gtk/gtkvolumebutton.c:170
 #, c-format
 msgid "volume percentage|%d %%"
 msgstr "%d %%"
@@ -4708,7 +4601,7 @@ msgstr "test-output.%s"
 msgid "Print to Test Printer"
 msgstr "পৰীক্ষণ মূদ্ৰকলৈ মূদ্ৰণ কৰক"
 
-#: tests/testfilechooser.c:205
+#: tests/testfilechooser.c:207
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' নথিপত্ৰৰ বাবে তথ্য পোৱা ন'গ'ল: %s"

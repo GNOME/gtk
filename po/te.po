@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-13 18:22-0400\n"
+"POT-Creation-Date: 2008-07-05 15:47-0400\n"
 "PO-Revision-Date: 2008-03-07 12:13+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Swecha Telugu Localisation Team <localisation@swecha.org>\n"
@@ -233,7 +233,7 @@ msgid "keyboard label|Delete"
 msgstr "Delete"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:912
-#: gdk-pixbuf/gdk-pixbuf-io.c:1168 tests/testfilechooser.c:218
+#: gdk-pixbuf/gdk-pixbuf-io.c:1168 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "'%s': దస్త్రమును తెరచుటలో విఫలమైంది %s"
@@ -244,7 +244,7 @@ msgid "Image file '%s' contains no data"
 msgstr "'%s' ప్రతిబింబ దస్త్రంలో ఏ దత్తాంశమూ లేదు"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:961
-#: gdk-pixbuf/gdk-pixbuf-io.c:1220 tests/testfilechooser.c:263
+#: gdk-pixbuf/gdk-pixbuf-io.c:1220 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -284,7 +284,6 @@ msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "'%sదస్త్రం ప్రతిబింబ రూప లావణ్యాన్ని గుర్తించ లేకపోయింది.'"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:801
-#, c-format
 msgid "Unrecognized image file format"
 msgstr "గుర్తింపలేని ప్రతిబింబ దస్త్ర రూపలావణ్యం"
 
@@ -304,17 +303,14 @@ msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "%s నిర్మాణం ప్రతిబింబ రూప లావణాన్ని దాచడానికి సహకరించటంలేదు."
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1681
-#, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "ప్రతిబింబాన్ని వెనక్కు రప్పించి దాచుటకు జ్ఞాపక శక్తి చాలదు."
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1694
-#, c-format
 msgid "Failed to open temporary file"
 msgstr "తాత్కాలిక దస్త్రమును తెరచుటలో విఫలమైంది."
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1720
-#, c-format
 msgid "Failed to read from temporary file"
 msgstr "తాత్కాలిక దస్త్రము నుండి చదువుట విఫలమంది."
 
@@ -332,12 +328,11 @@ msgstr ""
 " '%s' ప్రతిబింబాన్ని రాస్తున్నప్పుడు  %sను మూయుటలో విఫలమైంది. దత్తాంశమంతా దాచిపెట్టబడి వుండకపోవచ్చు."
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2200 gdk-pixbuf/gdk-pixbuf-io.c:2251
-#, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "ప్రతిబింబాన్ని వాటికయందు దాచుటకు శక్తి చాలదు"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2297
-#, fuzzy, c-format
+#, fuzzy
 msgid "Error writing to image stream"
 msgstr "%s ప్రతిబింబ దస్ర్తాన్ని రాయుటలో దోషం"
 
@@ -356,17 +351,14 @@ msgid "Incremental loading of image type '%s' is not supported"
 msgstr "'%s' రకం ప్రతిబింబాన్ని ఆరోహణలో నింపుటకు సహకారం లేదు."
 
 #: gdk-pixbuf/gdk-pixdata.c:147
-#, c-format
 msgid "Image header corrupt"
 msgstr "ప్రతిబింబ శీర్షిక చెడిపోయింది."
 
 #: gdk-pixbuf/gdk-pixdata.c:152
-#, c-format
 msgid "Image format unknown"
 msgstr "ప్రతిబింబ రూపలావణ్యాలు అపరిచితం"
 
 #: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
-#, c-format
 msgid "Image pixel data corrupt"
 msgstr "ప్రతిబింబ పిక్సెల్ దత్తాం శం చెడిపోయింది."
 
@@ -378,29 +370,24 @@ msgstr[0] " %u byte యొక్క ప్రతిబింబ వాటిక�
 msgstr[1] " %u bytes యొక్క ప్రతిబింబ వాటికకు స్థాన నిర్దేకం చేయుట విఫలమైంది."
 
 #: gdk-pixbuf/io-ani.c:244
-#, c-format
 msgid "Unexpected icon chunk in animation"
 msgstr "సచేతనంలో ఊహించని ప్రతిమా ఖండం"
 
 #: gdk-pixbuf/io-ani.c:337
-#, c-format
 msgid "Unsupported animation type"
 msgstr "సహకారం లేని సచేతన రకం"
 
 #: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
 #: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-#, c-format
 msgid "Invalid header in animation"
 msgstr "సచేతనంలో చెల్లుబాటుకాని శీర్షిక"
 
 #: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
 #: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-#, c-format
 msgid "Not enough memory to load animation"
 msgstr "సచేతనాన్ని నింపుటకు సరిపడే జ్ఞాపక శక్తి లేదు"
 
 #: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-#, c-format
 msgid "Malformed chunk in animation"
 msgstr "సచేతనంలో వికృత ఖండం"
 
@@ -410,37 +397,30 @@ msgstr "ANI ప్రతిబింబ రూపలావణ్యం"
 
 #: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
 #: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-#, c-format
 msgid "BMP image has bogus header data"
 msgstr "BMP ప్రతిబింబం నకిలీ శీర్షిక దత్తాంశాన్ని కలిగివుంది."
 
 #: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-#, c-format
 msgid "Not enough memory to load bitmap image"
 msgstr "బిట్_మ్యాప్ ప్రతిబింబాన్ని నింపుటకు సరిపడే జ్ఞాపక శక్తి లేదు."
 
 #: gdk-pixbuf/io-bmp.c:319
-#, c-format
 msgid "BMP image has unsupported header size"
 msgstr "సహకారంలేని BMP ప్రతిబింబ శీర్షిక పరిమాణం"
 
 #: gdk-pixbuf/io-bmp.c:357
-#, c-format
 msgid "Topdown BMP images cannot be compressed"
 msgstr "టాప్‌డౌన్ BMP చిత్రాలు కుచింపబడవు"
 
 #: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-#, c-format
 msgid "Premature end-of-file encountered"
 msgstr "పరిపక్వం చెందని దత్తాంశ అంతం కనిపెట్టబడింది"
 
 #: gdk-pixbuf/io-bmp.c:1329
-#, c-format
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "BMP దస్త్రాన్ని దాచటానికి మెమొరీని సమకూర్చలేదు"
 
 #: gdk-pixbuf/io-bmp.c:1370
-#, c-format
 msgid "Couldn't write to BMP file"
 msgstr "BMP దస్త్రమునకు వ్రయలేము"
 
@@ -454,7 +434,6 @@ msgid "Failure reading GIF: %s"
 msgstr "GIF చదువుటలో విఫలమైంది.: %s"
 
 #: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477 gdk-pixbuf/io-gif.c:1638
-#, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "GIF దస్త్రము కొంత దత్తాంశాన్ని కోల్పోయింది.  (బహుశా దాని చివరి భాగం  ఎలాగో కత్తిరించబడి వుంటుంది?)"
@@ -465,43 +444,35 @@ msgid "Internal error in the GIF loader (%s)"
 msgstr "GIF నింపుదారులో     అంతర్గత దోషం(%s) "
 
 #: gdk-pixbuf/io-gif.c:579
-#, c-format
 msgid "Stack overflow"
 msgstr "దొంతర పొంగిపొరలు"
 
 #: gdk-pixbuf/io-gif.c:639
-#, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "ఈ ప్రతిబింబాన్ని GIF ప్రతిబింబనింపుదారు అర్థంచేసుకోలేదు."
 
 #: gdk-pixbuf/io-gif.c:668
-#, c-format
 msgid "Bad code encountered"
 msgstr "తప్పడు సంకేతం కనిపెట్టబడింది"
 
 #: gdk-pixbuf/io-gif.c:678
-#, c-format
 msgid "Circular table entry in GIF file"
 msgstr "GIF దస్త్రంలో వృత్త పట్టీ "
 
 #: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464 gdk-pixbuf/io-gif.c:1511
 #: gdk-pixbuf/io-gif.c:1626
-#, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "GIF దస్త్రంను నింపుటకు సరిపడా జ్ఞాపకశక్తి లేదు "
 
 #: gdk-pixbuf/io-gif.c:956
-#, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "GIF దస్త్రమునందు ఒక ఫ్రేము ను మిళితం చేయుటకు సరిపోవు మెమోరీ లేదు"
 
 #: gdk-pixbuf/io-gif.c:1128
-#, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF ప్రతిబింబం చడిపోయింది. (తప్పడు  LZW కుదింపు)"
 
 #: gdk-pixbuf/io-gif.c:1178
-#, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "ఈ దస్త్రం GIF దస్త్రంలా కనిపించుటలేదు"
 
@@ -511,7 +482,6 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF దస్త్ర రూప లావణ్యం%s వివరణానికి సహకరించుటలేదు"
 
 #: gdk-pixbuf/io-gif.c:1299
-#, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -519,7 +489,6 @@ msgstr ""
 "GIF ప్రతిబింబానికి ప్రాపంచిక వర్ణసంధానం లేదుమరియు ఫలకములోపల దానికి స్థానిక వర్ణసంధానం కూడా లేదు."
 
 #: gdk-pixbuf/io-gif.c:1533
-#, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF ప్రతిబింబం కత్తిరింపబడింది లేదా అసంపూర్ణం"
 
@@ -529,48 +498,39 @@ msgstr "GIF ప్రతిబింబం ఉపలావణ్యం"
 
 #: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
 #: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-#, c-format
 msgid "Invalid header in icon"
 msgstr "ప్రతిమలో చెల్లని శీర్షిక"
 
 #: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
 #: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-#, c-format
 msgid "Not enough memory to load icon"
 msgstr "ప్రతిమను నింపుటకు కావలసిన జ్ఞాపకశక్తి లేదు"
 
 #: gdk-pixbuf/io-ico.c:322
-#, c-format
 msgid "Icon has zero width"
 msgstr "ప్రతిమవెడల్పుసున్నా"
 
 #: gdk-pixbuf/io-ico.c:332
-#, c-format
 msgid "Icon has zero height"
 msgstr "ప్రతిమ ఎత్తు సున్నా"
 
 #: gdk-pixbuf/io-ico.c:384
-#, c-format
 msgid "Compressed icons are not supported"
 msgstr "కుదింపబడిన ప్రతిమలకు సహకారంలేదు"
 
 #: gdk-pixbuf/io-ico.c:417
-#, c-format
 msgid "Unsupported icon type"
 msgstr "ఈ రకం ప్రతిమకు సహకారం లేదు"
 
 #: gdk-pixbuf/io-ico.c:511
-#, c-format
 msgid "Not enough memory to load ICO file"
 msgstr "ICO దస్త్రం నింపుటకు కావలసిన జ్ఞాపకశక్తి లేదు"
 
 #: gdk-pixbuf/io-ico.c:976
-#, c-format
 msgid "Image too large to be saved as ICO"
 msgstr "ICO దస్త్రంగా దాచుటకు పెద్దదైపోతుంది"
 
 #: gdk-pixbuf/io-ico.c:987
-#, c-format
 msgid "Cursor hotspot outside image"
 msgstr "ప్రతిబింబం వెలుపలిములుకు సంచరించు స్థలం"
 
@@ -579,7 +539,7 @@ msgstr "ప్రతిబింబం వెలుపలిములుకు �
 msgid "Unsupported depth for ICO file: %d"
 msgstr "ICO దస్త్ర లోతునకు సహకారం లేదుక: %d"
 
-#: gdk-pixbuf/io-ico.c:1244 gdk-pixbuf/io-gdip-ico.c:59
+#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
 msgid "The ICO image format"
 msgstr "ICO ప్రతిబింబ రూపలావణ్యం"
 
@@ -589,7 +549,7 @@ msgid "Error reading ICNS image: %s"
 msgstr "PNG ప్రతిబింబ దస్త్రం %s ను చదువుటలో అనివార్య దోషం"
 
 #: gdk-pixbuf/io-icns.c:362
-#, fuzzy, c-format
+#, fuzzy
 msgid "Could not decode ICNS file"
 msgstr "దస్త్రాన్ని ఎంచుకొనలేక పోయింది"
 
@@ -598,42 +558,42 @@ msgstr "దస్త్రాన్ని ఎంచుకొనలేక పో�
 msgid "The ICNS image format"
 msgstr "ICO ప్రతిబింబ రూపలావణ్యం"
 
-#: gdk-pixbuf/io-jasper.c:74
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:75
+#, fuzzy
 msgid "Couldn't allocate memory for stream"
 msgstr "శీర్షికకు జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము."
 
-#: gdk-pixbuf/io-jasper.c:103
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:105
+#, fuzzy
 msgid "Couldn't decode image"
 msgstr "దస్త్రనామము మార్చలేము"
 
-#: gdk-pixbuf/io-jasper.c:121
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:123
+#, fuzzy
 msgid "Transformed JPEG2000 has zero width or height"
 msgstr "మార్పుకు లోనైన JPEG పొడువు లేదా వెడల్పులు శూన్యం."
 
-#: gdk-pixbuf/io-jasper.c:134
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:137
+#, fuzzy
 msgid "Image type currently not supported"
 msgstr "'%s' ప్రతిబింబ రకానికి  సహకరించలేము."
 
-#: gdk-pixbuf/io-jasper.c:145 gdk-pixbuf/io-jasper.c:152
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
+#, fuzzy
 msgid "Couldn't allocate memory for color profile"
 msgstr "JPEG దస్త్రంను నింపుటకుస్థాననిర్దేశకం చేయలేము."
 
-#: gdk-pixbuf/io-jasper.c:177
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:182
+#, fuzzy
 msgid "Insufficient memory to open JPEG 2000 file"
 msgstr "TIFF దస్త్రం తెరుచుటకు జ్ఞాపకశక్తి చాలదు"
 
-#: gdk-pixbuf/io-jasper.c:258
-#, fuzzy, c-format
+#: gdk-pixbuf/io-jasper.c:264
+#, fuzzy
 msgid "Couldn't allocate memory to buffer image data"
 msgstr "వరుస దత్తాంశానికి జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము"
 
-#: gdk-pixbuf/io-jasper.c:302
+#: gdk-pixbuf/io-jasper.c:308
 #, fuzzy
 msgid "The JPEG 2000 image format"
 msgstr "JPEG ప్రతిబింబరూప లావణ్యం"
@@ -644,7 +604,6 @@ msgid "Error interpreting JPEG image file (%s)"
 msgstr " JPEG ప్రతిబింబ విశ్లేషణలో దోషం(%s)"
 
 #: gdk-pixbuf/io-jpeg.c:529
-#, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -657,12 +616,10 @@ msgstr " సహకారం లేనిJPEG వర్ణప్రదేశం  
 
 #: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
-#, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG దస్త్రంను నింపుటకుస్థాననిర్దేశకం చేయలేము."
 
 #: gdk-pixbuf/io-jpeg.c:920
-#, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr "మార్పుకు లోనైన JPEG పొడువు లేదా వెడల్పులు శూన్యం."
 
@@ -684,22 +641,18 @@ msgid "The JPEG image format"
 msgstr "JPEG ప్రతిబింబరూప లావణ్యం"
 
 #: gdk-pixbuf/io-pcx.c:187
-#, c-format
 msgid "Couldn't allocate memory for header"
 msgstr "శీర్షికకు జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము."
 
 #: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-#, c-format
 msgid "Couldn't allocate memory for context buffer"
 msgstr "ప్రకరణవాటికకు జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము."
 
 #: gdk-pixbuf/io-pcx.c:601
-#, c-format
 msgid "Image has invalid width and/or height"
 msgstr "ప్రతిబింబం చెల్లని ఎత్తు  లేదా / మరియు వెడల్పులను కలిగివుంది"
 
 #: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-#, c-format
 msgid "Image has unsupported bpp"
 msgstr "ప్రతిబింబం సహకారంలేని bpp కలిగివుంది."
 
@@ -709,27 +662,22 @@ msgid "Image has unsupported number of %d-bit planes"
 msgstr "ప్రతిబింబం సహకారంలేని   %d బిట్తలాలసంఖ్యను కలిగివుంది."
 
 #: gdk-pixbuf/io-pcx.c:642
-#, c-format
 msgid "Couldn't create new pixbuf"
 msgstr "కొత్త  pixbufను సృష్టించలేము"
 
 #: gdk-pixbuf/io-pcx.c:650
-#, c-format
 msgid "Couldn't allocate memory for line data"
 msgstr "వరుస దత్తాంశానికి జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము"
 
 #: gdk-pixbuf/io-pcx.c:657
-#, c-format
 msgid "Couldn't allocate memory for paletted data"
 msgstr "పాలెటెడ్ డాటాకు మెమోరీని సమకూర్చలేము"
 
 #: gdk-pixbuf/io-pcx.c:704
-#, c-format
 msgid "Didn't get all lines of PCX image"
 msgstr "PCX ప్రతిబింబం యెఉక్క అన్ని వరుసలను తీసుకురాలేదు."
 
 #: gdk-pixbuf/io-pcx.c:711
-#, c-format
 msgid "No palette found at end of PCX data"
 msgstr "PCX దత్తాంశం చివరలో వర్ణపలకం కనిపించలేదు"
 
@@ -738,27 +686,22 @@ msgid "The PCX image format"
 msgstr "PCX ప్రతిబింబ రూపలావణ్యం"
 
 #: gdk-pixbuf/io-png.c:55
-#, c-format
 msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG ప్రతిబింబ ప్రసారమార్గబిట్ చెల్లవు."
 
 #: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
-#, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "మార్పుకు లోనైన PNG పొడువు వెడల్పులు ౯శూన్యం."
 
 #: gdk-pixbuf/io-png.c:144
-#, c-format
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr "మార్పుకు లోనైన  PNG ప్రసార మార్గ  Bits సంఖ్య 8కాదు."
 
 #: gdk-pixbuf/io-png.c:153
-#, c-format
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "మార్పునకు లోనైన PNG RGB లేదా RGBA కాదు."
 
 #: gdk-pixbuf/io-png.c:162
-#, c-format
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr "మార్పునకు లోనైన PNG మద్దతుకానన్ని చానల్సును కలిగిఉంది, 3 లేదా 4౪"
 
@@ -768,7 +711,6 @@ msgid "Fatal error in PNG image file: %s"
 msgstr "PNG ప్రతిబింబదస్త్రం  లో అనివార్య దోషం %s"
 
 #: gdk-pixbuf/io-png.c:310
-#, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG దస్త్రంను నింపుటకు జ్ఞాపకశక్తి చాలదు. "
 
@@ -782,7 +724,6 @@ msgstr ""
 "తొలగించును"
 
 #: gdk-pixbuf/io-png.c:684
-#, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "PNG ప్రతిబింబ దస్ర్తాన్ని చదువుటలో అనివార్యదోషం"
 
@@ -792,14 +733,12 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ప్రతిబింబ దస్త్రం %s ను చదువుటలో అనివార్య దోషం"
 
 #: gdk-pixbuf/io-png.c:825
-#, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "PNG పాఠ్య ఖండాలకొరకు మీటలు అతి తక్కువగా ఒకఅక్షరాన్ని అతి ఎక్కువగా 79అక్షరములను కలిగివుండవలెను"
 
 #: gdk-pixbuf/io-png.c:833
-#, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG పాఠ్య ఖండాల కొరకు మీటలు ASCII అక్షరములై౯ వుండవలెను."
 
@@ -827,72 +766,58 @@ msgid "The PNG image format"
 msgstr "PNG ప్రతిబింబ రూపలావణ్యం"
 
 #: gdk-pixbuf/io-pnm.c:250
-#, c-format
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "PNM నింపుదారు పూర్ణాంకం వస్తుందని ౯ఊహించింది కాని అది రాలేదు"
 
 #: gdk-pixbuf/io-pnm.c:282
-#, c-format
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM దస్త్రం లో మెఉదటి బైట్ తప్పుగా వుంది"
 
 #: gdk-pixbuf/io-pnm.c:312
-#, c-format
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "PNM దస్త్రం గుర్తింపుపొందిన  PNM ఉపరూపలావణ్యం ౯కాదు"
 
 #: gdk-pixbuf/io-pnm.c:337
-#, c-format
 msgid "PNM file has an image width of 0"
 msgstr "PNM దస్త్రం లో ప్రతిబింబ వెడల్పు 0"
 
 #: gdk-pixbuf/io-pnm.c:358
-#, c-format
 msgid "PNM file has an image height of 0"
 msgstr "PNM దస్త్రంలో ప్రతిబింబ పొడవు  0"
 
 #: gdk-pixbuf/io-pnm.c:381
-#, c-format
 msgid "Maximum color value in PNM file is 0"
 msgstr "PNM దస్త్రంలో అత్యధిక వర్ణసంఖ్య 0"
 
 #: gdk-pixbuf/io-pnm.c:389
-#, c-format
 msgid "Maximum color value in PNM file is too large"
 msgstr "PNM దస్త్రంలో అత్యధిక వర్ణసంఖ్య చాలా ఎక్కువగా వుంది "
 
 #: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-#, c-format
 msgid "Raw PNM image type is invalid"
 msgstr "అపక్వ PNM ప్రతిబింబ రకం చెల్లదు "
 
 #: gdk-pixbuf/io-pnm.c:654
-#, c-format
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM ప్రతిబింబ నింపుదారు ఈ రకం PNM ఉపరూప లావణ్యాన్ని సహకరించుటలేదు"
 
 #: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-#, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "అపక్వ PNM రూపలావణ్యాలు ఉదాహరణదత్తాంశానికి ముందు  ఖచ్ఛితంగా ఒక ఖాళీ ప్రదేశం వుండవలెను "
 
 #: gdk-pixbuf/io-pnm.c:768
-#, c-format
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "PNM ప్రతిబింబం నింపుటకు జ్ఞాపకశక్తి ని స్థాననిర్దేశకం చేయలేము"
 
 #: gdk-pixbuf/io-pnm.c:818
-#, c-format
 msgid "Insufficient memory to load PNM context struct"
 msgstr "PNM  context structను నింపుటకు జ్ఞాపకశక్తి చాలదు  "
 
 #: gdk-pixbuf/io-pnm.c:869
-#, c-format
 msgid "Unexpected end of PNM image data"
 msgstr "PNM ప్రతిబింబ దత్తాంశంలో ఊహించని అంతం "
 
 #: gdk-pixbuf/io-pnm.c:997
-#, c-format
 msgid "Insufficient memory to load PNM file"
 msgstr "PNM దస్ర్తాన్ని నింపుటకు జ్ఞాపకశక్తి చాలదు "
 
@@ -901,22 +826,18 @@ msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "PNM/PBM/PGM/PPM ప్రతిబింబ రూప లావణ్య  కుటుంబం"
 
 #: gdk-pixbuf/io-ras.c:126
-#, c-format
 msgid "RAS image has bogus header data"
 msgstr "RAS  ప్రతిబింబ శీర్షిక దత్తాంశం నకిలీది"
 
 #: gdk-pixbuf/io-ras.c:148
-#, c-format
 msgid "RAS image has unknown type"
 msgstr "RAS ప్రతిబింబ రకం అపరిచితం"
 
 #: gdk-pixbuf/io-ras.c:156
-#, c-format
 msgid "unsupported RAS image variation"
 msgstr "RAS ప్రతిబింబ మార్పిడికి సహకారంలేదు "
 
 #: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-#, c-format
 msgid "Not enough memory to load RAS image"
 msgstr "RAS  ప్రతిబింబాన్ని నింపుటకు సరిపడా జ్ఞాపకశక్తి లేదు"
 
@@ -925,68 +846,55 @@ msgid "The Sun raster image format"
 msgstr "సన్ రాస్టర్ ప్రతిబింబరూపలావణ్యం"
 
 #: gdk-pixbuf/io-tga.c:154
-#, c-format
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "IOBuffer structకు జ్ఞాపకశక్తిని స్థానాన్ని నిర్దేశించలేము"
 
 #: gdk-pixbuf/io-tga.c:173
-#, c-format
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "IOBuffer దత్తాంశానికి జ్ఞాపకశక్తినిస్థానాన్ని నిర్దేశించలేము"
 
 #: gdk-pixbuf/io-tga.c:184
-#, c-format
 msgid "Cannot realloc IOBuffer data"
 msgstr "IOBuffer దత్తాంశానికి మరల స్థానాన్ని నిర్దేశించలేము."
 
 #: gdk-pixbuf/io-tga.c:214
-#, c-format
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "IOBuffer దత్తాంశానికి తాత్కాలికంగా జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము."
 
 #: gdk-pixbuf/io-tga.c:347
-#, c-format
 msgid "Cannot allocate new pixbuf"
 msgstr "కొత్తpixbuf కు స్థాన నిర్దేశకం చేయలేము"
 
 #: gdk-pixbuf/io-tga.c:687
-#, c-format
 msgid "Cannot allocate colormap structure"
 msgstr "వర్ణమాపక నిర్మాణానికి స్థాననిర్దేశకం చేయలేము౅౅౅౅"
 
 #: gdk-pixbuf/io-tga.c:694
-#, c-format
 msgid "Cannot allocate colormap entries"
 msgstr "వర్ణమాపక ప్రవేశకాలకు స్థాననిర్దేశకం చేయలేము"
 
 #: gdk-pixbuf/io-tga.c:716
-#, c-format
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "వర్ణమాపక ప్రవేశకాలలో ఊహించని  బిట్ లోతు"
 
 #: gdk-pixbuf/io-tga.c:734
-#, c-format
 msgid "Cannot allocate TGA header memory"
 msgstr "TGA శీర్షిక అగ్ర జ్ఞాపకశక్తిని స్థాననిర్దేశకం చేయలేము"
 
 #: gdk-pixbuf/io-tga.c:767
-#, c-format
 msgid "TGA image has invalid dimensions"
 msgstr "TGA ప్రతిబింబం కొలతలు చెల్లవు"
 
 #: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
 #: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
-#, c-format
 msgid "TGA image type not supported"
 msgstr "TGA ప్రతిబింబ రకానికి సహకారం లేదు"
 
 #: gdk-pixbuf/io-tga.c:856
-#, c-format
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Cannot allocate memory for TGA context structకు స్థాన నిర్దేశకం చేయులేము"
 
 #: gdk-pixbuf/io-tga.c:921
-#, c-format
 msgid "Excess data in file"
 msgstr "దస్త్రములలోమిగిలిపోయిన దత్తాంశం"
 
@@ -1003,17 +911,14 @@ msgid "Could not get image height (bad TIFF file)"
 msgstr "ప్రతిబింబ పొడవును గుర్తించలేకపోయాము (దోషపూరిత TIFF దస్త్రం)"
 
 #: gdk-pixbuf/io-tiff.c:175
-#, c-format
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF ప్రతిబింబం ౦0అయిన పొడవును వెడల్పు ను కలిగి వుంది"
 
 #: gdk-pixbuf/io-tiff.c:184 gdk-pixbuf/io-tiff.c:193
-#, c-format
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFFకొలతలు పెద్దవిగా వున్నవి"
 
 #: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
-#, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "TIFF దస్త్రం తెరుచుటకు జ్ఞాపకశక్తి చాలదు"
 
@@ -1042,7 +947,6 @@ msgid "Failed to write TIFF data"
 msgstr "TIFF డాటాకు వ్రాయుటలో దోషం"
 
 #: gdk-pixbuf/io-tiff.c:760
-#, c-format
 msgid "Couldn't write to TIFF file"
 msgstr "TIFF దస్త్రముకు వ్రాయలేకపోయింది"
 
@@ -1051,22 +955,18 @@ msgid "The TIFF image format"
 msgstr "TIFF ప్రతిబింబ రూపలావణ్యం"
 
 #: gdk-pixbuf/io-wbmp.c:246
-#, c-format
 msgid "Image has zero width"
 msgstr "ప్రతిబింబ వెడల్పు 0"
 
 #: gdk-pixbuf/io-wbmp.c:264
-#, c-format
 msgid "Image has zero height"
 msgstr "ప్రతిబింబ పొడవు 0"
 
 #: gdk-pixbuf/io-wbmp.c:275
-#, c-format
 msgid "Not enough memory to load image"
 msgstr "ప్రతిబింబాన్ని నింపుటకు తగిన జ్ఞాపకశక్తి లేదు"
 
 #: gdk-pixbuf/io-wbmp.c:334
-#, c-format
 msgid "Couldn't save the rest"
 msgstr "మిగిలిన వాటిని దాచలేము"
 
@@ -1075,17 +975,14 @@ msgid "The WBMP image format"
 msgstr "WBMP ప్రతిరూప లావణ్యం"
 
 #: gdk-pixbuf/io-xbm.c:295
-#, c-format
 msgid "Invalid XBM file"
 msgstr "XBM దస్త్రం చెల్లదు"
 
 #: gdk-pixbuf/io-xbm.c:305
-#, c-format
 msgid "Insufficient memory to load XBM image file"
 msgstr "XBM  ప్రతిబింబ దస్ర్తాన్ని నింపుటకు జ్ఞాపకశక్తి చాలదు"
 
 #: gdk-pixbuf/io-xbm.c:453
-#, c-format
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "XBM ప్రతిబింబాన్ని నింపునపుడు తాత్కాలిక దస్త్రంనకు రాయుట విఫలమైంది "
 
@@ -1094,47 +991,38 @@ msgid "The XBM image format"
 msgstr "XBM ప్రతిబింబ రూపలావణ్యం"
 
 #: gdk-pixbuf/io-xpm.c:468
-#, c-format
 msgid "No XPM header found"
 msgstr "ఏXPM శీర్షికా కనుగొనబడలేదు "
 
 #: gdk-pixbuf/io-xpm.c:477
-#, c-format
 msgid "Invalid XPM header"
 msgstr "చెల్లని XPM హెడర్"
 
 #: gdk-pixbuf/io-xpm.c:485
-#, c-format
 msgid "XPM file has image width <= 0"
 msgstr "XPM దస్త్ర ప్రతిబింబ  వెడల్పు  <= 0"
 
 #: gdk-pixbuf/io-xpm.c:493
-#, c-format
 msgid "XPM file has image height <= 0"
 msgstr "XPM దస్త్ర ప్రతిబింబ పొడవు  <= 0"
 
 #: gdk-pixbuf/io-xpm.c:501
-#, c-format
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM లో pixel కు అక్షరముల సంఖ్య చెల్లదు"
 
 #: gdk-pixbuf/io-xpm.c:510
-#, c-format
 msgid "XPM file has invalid number of colors"
 msgstr "XPM దస్త్రం లో వర్ణముల సంఖ్య చెల్లదు"
 
 #: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-#, c-format
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "XPM ప్రతిబింబాన్ని నింపుటకు జ్ఞాపకశక్తి ని స్థాననిర్దేశకం చేయలేము"
 
 #: gdk-pixbuf/io-xpm.c:545
-#, c-format
 msgid "Cannot read XPM colormap"
 msgstr "XPM వర్ణమాపాన్ని చదవలేము"
 
 #: gdk-pixbuf/io-xpm.c:777
-#, c-format
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "XPM ప్రతిబింబాన్ని నింపునపుడు తాత్కాలిక దస్త్రంనకు రాయుట విఫలమైంది"
 
@@ -1169,27 +1057,27 @@ msgid "Could not read from stream: %s"
 msgstr "%s ను %s కు పునఃనామకణ చేయలేము: %s\n"
 
 #: gdk-pixbuf/io-gdip-utils.c:736
-#, fuzzy, c-format
+#, fuzzy
 msgid "Couldn't create pixbuf"
 msgstr "కొత్త  pixbufను సృష్టించలేము"
 
 #: gdk-pixbuf/io-gdip-utils.c:798
-#, fuzzy, c-format
+#, fuzzy
 msgid "Couldn't load bitmap"
 msgstr "దస్త్రనామము మార్చలేము"
 
 #: gdk-pixbuf/io-gdip-utils.c:821
-#, fuzzy, c-format
+#, fuzzy
 msgid "Couldn't load metafile"
 msgstr "దస్త్రనామము మార్చలేము"
 
 #: gdk-pixbuf/io-gdip-utils.c:980
-#, fuzzy, c-format
+#, fuzzy
 msgid "Unsupported image format for GDI+"
 msgstr "RAS ప్రతిబింబ మార్పిడికి సహకారంలేదు "
 
 #: gdk-pixbuf/io-gdip-utils.c:987
-#, fuzzy, c-format
+#, fuzzy
 msgid "Couldn't save"
 msgstr "మిగిలిన వాటిని దాచలేము"
 
@@ -1371,12 +1259,12 @@ msgstr "Backslash"
 msgid "Invalid type function: `%s'"
 msgstr "చెల్లనటువంటి ఫంక్షన్: `%s'"
 
-#: gtk/gtkbuilderparser.c:788
+#: gtk/gtkbuilderparser.c:789
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "సరికాని రూట్ మూలకం: '%s'"
 
-#: gtk/gtkbuilderparser.c:822
+#: gtk/gtkbuilderparser.c:823
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "సంభాలించని టాగ్: '%s'"
@@ -1491,7 +1379,97 @@ msgstr "ఒక వర్ణమును ఎంచుకో"
 msgid "Received invalid color data\n"
 msgstr "చెల్లని వర్ణ దత్తాంశం అందుకోబడింది\n"
 
-#: gtk/gtkcolorsel.c:550
+#: gtk/gtkcolorsel.c:354
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"బాహ్యవృత్తం నుండి మీకు కావాల్సిన వర్ణమును ఎన్నుకొనుము. అంతఃత్రిభుజాన్ని ఉపయోగించి, దానిని చీకటి "
+"చేయుటకుగాని, ప్రకాశింపచేయుటకుగాని ఎన్నుకొనుము."
+
+#: gtk/gtkcolorsel.c:378
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr "ఐడ్రాపర్ను నొక్కి తెరపై ఎక్కడైనా ఒక వర్ణంపై ఆ వర్ణమును ఎంచుకొనుటకు నొక్కుము "
+
+#: gtk/gtkcolorsel.c:387
+msgid "_Hue:"
+msgstr "లేతఛాయ(_H):"
+
+#: gtk/gtkcolorsel.c:388
+msgid "Position on the color wheel."
+msgstr "వర్ణచట్రముపై స్థానము."
+
+#: gtk/gtkcolorsel.c:390
+msgid "_Saturation:"
+msgstr "చిక్కని(_S):"
+
+#: gtk/gtkcolorsel.c:391
+msgid "\"Deepness\" of the color."
+msgstr "వర్ణముయొక్క\"ఘాడత\" "
+
+#: gtk/gtkcolorsel.c:392
+msgid "_Value:"
+msgstr "విలువ(_V):"
+
+#: gtk/gtkcolorsel.c:393
+msgid "Brightness of the color."
+msgstr "వర్ణం యొక్క కాంతి."
+
+#: gtk/gtkcolorsel.c:394
+msgid "_Red:"
+msgstr "ఎరుపు(_R):"
+
+#: gtk/gtkcolorsel.c:395
+msgid "Amount of red light in the color."
+msgstr "వర్ణంలోని  ఎరుపు కాంతి ."
+
+#: gtk/gtkcolorsel.c:396
+msgid "_Green:"
+msgstr "పచ్చ(_G):"
+
+#: gtk/gtkcolorsel.c:397
+msgid "Amount of green light in the color."
+msgstr "వర్ణములోని పచ్చని కాంతి."
+
+#: gtk/gtkcolorsel.c:398
+msgid "_Blue:"
+msgstr "నీలం(_B):"
+
+#: gtk/gtkcolorsel.c:399
+msgid "Amount of blue light in the color."
+msgstr "వర్ణములోని నీలం కాంతి."
+
+#: gtk/gtkcolorsel.c:402
+msgid "Op_acity:"
+msgstr "ప్రకాశత(_a):"
+
+#: gtk/gtkcolorsel.c:409 gtk/gtkcolorsel.c:419
+msgid "Transparency of the color."
+msgstr "వర్ణముయొక్క పారదర్శకత."
+
+#: gtk/gtkcolorsel.c:426
+msgid "Color _name:"
+msgstr "వర్ణనామము(_n):"
+
+#: gtk/gtkcolorsel.c:440
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"మీరు   HTMLశైలి ద్విసంఖ్యామాన వర్ణ విలువను కాని లేదా సాధారణంగా నారింజ వర్ణములాంటి వర్ణనామమునుకాని నమోదు "
+"చేయుము"
+
+#: gtk/gtkcolorsel.c:470
+msgid "_Palette:"
+msgstr "వర్ణపలకం(_P):"
+
+#: gtk/gtkcolorsel.c:499
+msgid "Color Wheel"
+msgstr "వర్ణచట్రం"
+
+#: gtk/gtkcolorsel.c:980
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1500,18 +1478,18 @@ msgstr ""
 "ఇప్పుడు ఎన్నుకుంటున్న వర్ణంతో సరిపోల్చుటకొరకు మునుపు ఎన్నుకున్న వర్ణము. ఈ వర్ణమును ఒక  "
 "వర్ణపలకం నమోదుగా  లాగగలరు. లేదా ఈ వర్ణమును పక్కన వున్న వర్ణ నమూనాపైకి లాగుట ద్వారా ఎన్నుకోగలరు."
 
-#: gtk/gtkcolorsel.c:554
+#: gtk/gtkcolorsel.c:984
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
 "మీరు ఎన్నుకున్న వర్ణము. దీనిని మీరు పలకం నమోదు మీదకు లాగుట ద్వారా భవిష్యత్లో వాడుటకు దాచుకోగలరు."
 
-#: gtk/gtkcolorsel.c:942
+#: gtk/gtkcolorsel.c:1369
 msgid "_Save color here"
 msgstr "ఇక్కడ వర్ణమును దాచుము(_S)"
 
-#: gtk/gtkcolorsel.c:1147
+#: gtk/gtkcolorsel.c:1574
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1519,105 +1497,15 @@ msgstr ""
 "వర్ణపలక నమోదును ప్రస్తుత వర్ణముగా చేయుట కొరకు నొక్కుము. ఈ నమోదును మార్చుటకు వర్ణ నమూనాను "
 "ఇచ్చటకు లాగుము. లేదా కుడిమీట నొక్కి \"ఇక్కడ వర్ణము ను దాచుము\"ను ఎన్నుకొనుము.\""
 
-#: gtk/gtkcolorsel.c:1921
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
-"బాహ్యవృత్తం నుండి మీకు కావాల్సిన వర్ణమును ఎన్నుకొనుము. అంతఃత్రిభుజాన్ని ఉపయోగించి, దానిని చీకటి "
-"చేయుటకుగాని, ప్రకాశింపచేయుటకుగాని ఎన్నుకొనుము."
-
-#: gtk/gtkcolorsel.c:1945
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
-msgstr "ఐడ్రాపర్ను నొక్కి తెరపై ఎక్కడైనా ఒక వర్ణంపై ఆ వర్ణమును ఎంచుకొనుటకు నొక్కుము "
-
-#: gtk/gtkcolorsel.c:1954
-msgid "_Hue:"
-msgstr "లేతఛాయ(_H):"
-
-#: gtk/gtkcolorsel.c:1955
-msgid "Position on the color wheel."
-msgstr "వర్ణచట్రముపై స్థానము."
-
-#: gtk/gtkcolorsel.c:1957
-msgid "_Saturation:"
-msgstr "చిక్కని(_S):"
-
-#: gtk/gtkcolorsel.c:1958
-msgid "\"Deepness\" of the color."
-msgstr "వర్ణముయొక్క\"ఘాడత\" "
-
-#: gtk/gtkcolorsel.c:1959
-msgid "_Value:"
-msgstr "విలువ(_V):"
-
-#: gtk/gtkcolorsel.c:1960
-msgid "Brightness of the color."
-msgstr "వర్ణం యొక్క కాంతి."
-
-#: gtk/gtkcolorsel.c:1961
-msgid "_Red:"
-msgstr "ఎరుపు(_R):"
-
-#: gtk/gtkcolorsel.c:1962
-msgid "Amount of red light in the color."
-msgstr "వర్ణంలోని  ఎరుపు కాంతి ."
-
-#: gtk/gtkcolorsel.c:1963
-msgid "_Green:"
-msgstr "పచ్చ(_G):"
-
-#: gtk/gtkcolorsel.c:1964
-msgid "Amount of green light in the color."
-msgstr "వర్ణములోని పచ్చని కాంతి."
-
-#: gtk/gtkcolorsel.c:1965
-msgid "_Blue:"
-msgstr "నీలం(_B):"
-
-#: gtk/gtkcolorsel.c:1966
-msgid "Amount of blue light in the color."
-msgstr "వర్ణములోని నీలం కాంతి."
-
-#: gtk/gtkcolorsel.c:1969
-msgid "Op_acity:"
-msgstr "ప్రకాశత(_a):"
-
-#: gtk/gtkcolorsel.c:1976 gtk/gtkcolorsel.c:1986
-msgid "Transparency of the color."
-msgstr "వర్ణముయొక్క పారదర్శకత."
-
-#: gtk/gtkcolorsel.c:1993
-msgid "Color _name:"
-msgstr "వర్ణనామము(_n):"
-
-#: gtk/gtkcolorsel.c:2007
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"మీరు   HTMLశైలి ద్విసంఖ్యామాన వర్ణ విలువను కాని లేదా సాధారణంగా నారింజ వర్ణములాంటి వర్ణనామమునుకాని నమోదు "
-"చేయుము"
-
-#: gtk/gtkcolorsel.c:2037
-msgid "_Palette:"
-msgstr "వర్ణపలకం(_P):"
-
-#: gtk/gtkcolorsel.c:2066
-msgid "Color Wheel"
-msgstr "వర్ణచట్రం"
-
-#: gtk/gtkcolorseldialog.c:101
+#: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
 msgstr "వర్ణెంపిక"
 
-#: gtk/gtkentry.c:5284 gtk/gtktextview.c:7668
+#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7668
 msgid "Input _Methods"
 msgstr "ఎగుబడి విధానములు(_M)"
 
-#: gtk/gtkentry.c:5298 gtk/gtktextview.c:7682
+#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7682
 msgid "_Insert Unicode Control Character"
 msgstr "యునికోడ్ నియంత్రణ అక్షరాన్ని ప్రవేశపెట్టుము(_I)"
 
@@ -1625,7 +1513,7 @@ msgstr "యునికోడ్ నియంత్రణ అక్షరాన�
 msgid "Select A File"
 msgstr "దస్త్రమును ఎన్నుకో"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1939
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1894
 msgid "Desktop"
 msgstr "రంగస్థలం"
 
@@ -1637,23 +1525,23 @@ msgstr "(ఏమీలేదు)"
 msgid "Other..."
 msgstr "ఇతరములు"
 
-#: gtk/gtkfilechooserdefault.c:1088
+#: gtk/gtkfilechooserdefault.c:1043
 msgid "Could not retrieve information about the file"
 msgstr "దస్త్రమును గురించి సమాచారాన్ని సేకరించలేకపోయాము"
 
-#: gtk/gtkfilechooserdefault.c:1099
+#: gtk/gtkfilechooserdefault.c:1054
 msgid "Could not add a bookmark"
 msgstr "బుక్‌మార్కు ను కలుపలేకపోయాము"
 
-#: gtk/gtkfilechooserdefault.c:1110
+#: gtk/gtkfilechooserdefault.c:1065
 msgid "Could not remove bookmark"
 msgstr "బుక్‌మార్కును తొలగించలేకపోయాము"
 
-#: gtk/gtkfilechooserdefault.c:1121
+#: gtk/gtkfilechooserdefault.c:1076
 msgid "The folder could not be created"
 msgstr "సంచయం సృష్టించబడలేదు"
 
-#: gtk/gtkfilechooserdefault.c:1134
+#: gtk/gtkfilechooserdefault.c:1089
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1661,11 +1549,11 @@ msgstr ""
 "సంచయం సృష్టించబడలేదు, ఒక దస్త్రముగా ఇప్పటికే అదే నామముతో ఉంది.  సంచయానికి కొత్త నామము తో "
 "ప్రయత్నించుము, లేదా దస్త్రమును పునఃనామకరణ చేయుము."
 
-#: gtk/gtkfilechooserdefault.c:1145
+#: gtk/gtkfilechooserdefault.c:1100
 msgid "Invalid file name"
 msgstr "చేల్లని దస్త్రనామము"
 
-#: gtk/gtkfilechooserdefault.c:1155
+#: gtk/gtkfilechooserdefault.c:1110
 msgid "The folder contents could not be displayed"
 msgstr "సంచయం విషయాలు ప్రదర్శించబడలేవు"
 
@@ -1673,219 +1561,218 @@ msgstr "సంచయం విషయాలు ప్రదర్శించబ�
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1697
+#: gtk/gtkfilechooserdefault.c:1652
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%2$s పైన %1$s"
 
-#: gtk/gtkfilechooserdefault.c:1867
+#: gtk/gtkfilechooserdefault.c:1822
 msgid "Search"
 msgstr "శోధించు"
 
-#: gtk/gtkfilechooserdefault.c:1891
+#: gtk/gtkfilechooserdefault.c:1846
 msgid "Recently Used"
 msgstr "ఇటీవల ఉపయోగించిన"
 
-#: gtk/gtkfilechooserdefault.c:2506
+#: gtk/gtkfilechooserdefault.c:2461
 msgid "Select which types of files are shown"
 msgstr "ఏ రకం దస్ర్తాలను చూపించాలో ఎన్నుకొనుము"
 
-#: gtk/gtkfilechooserdefault.c:2935
+#: gtk/gtkfilechooserdefault.c:2890
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr " '%s' సంచిని గుర్తించులకు జతచేయలేకపోయాము."
 
-#: gtk/gtkfilechooserdefault.c:2976
+#: gtk/gtkfilechooserdefault.c:2931
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "ప్రస్తుత సంచిని గుర్తించులకు జతచేయుము"
 
-#: gtk/gtkfilechooserdefault.c:2978
+#: gtk/gtkfilechooserdefault.c:2933
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "ఎన్నుకొన్న సంచులను గుర్తించులకు జతచేయుము"
 
-#: gtk/gtkfilechooserdefault.c:3018
+#: gtk/gtkfilechooserdefault.c:2973
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr " '%sగుర్తించును తొలగించుము'"
 
-#: gtk/gtkfilechooserdefault.c:3734
+#: gtk/gtkfilechooserdefault.c:3691
 msgid "Remove"
 msgstr "తొలగించు"
 
-#: gtk/gtkfilechooserdefault.c:3743
+#: gtk/gtkfilechooserdefault.c:3700
 msgid "Rename..."
 msgstr "పునఃనామకరణం..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3885
+#: gtk/gtkfilechooserdefault.c:3847
 msgid "Places"
 msgstr "స్థానములు"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3941
+#: gtk/gtkfilechooserdefault.c:3904
 msgid "_Places"
 msgstr "స్థానములు(_P)"
 
-#: gtk/gtkfilechooserdefault.c:3996 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3959 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "జతచేయు(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4003
+#: gtk/gtkfilechooserdefault.c:3966
 msgid "Add the selected folder to the Bookmarks"
 msgstr "ఎన్నుకొన్న సంచయము ను బుక్‌మార్కులకు జతచేయుము"
 
-#: gtk/gtkfilechooserdefault.c:4008 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:3971 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "తొలగించు(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4015
+#: gtk/gtkfilechooserdefault.c:3978
 msgid "Remove the selected bookmark"
 msgstr "ఎన్నుకున్న గుర్తించును తొలగించు"
 
-#: gtk/gtkfilechooserdefault.c:4112
+#: gtk/gtkfilechooserdefault.c:4075
 msgid "Could not select file"
 msgstr "దస్త్రాన్ని ఎంచుకొనలేక పోయింది"
 
-#: gtk/gtkfilechooserdefault.c:4281
+#: gtk/gtkfilechooserdefault.c:4248
 msgid "_Add to Bookmarks"
 msgstr "బుక్‌మార్కులను కలుపుము(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4295
+#: gtk/gtkfilechooserdefault.c:4262
 msgid "Show _Hidden Files"
 msgstr "అదృశ్యదస్ర్తాలను చూపుము(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4539 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4505 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "దస్త్రములు"
 
-#: gtk/gtkfilechooserdefault.c:4588
+#: gtk/gtkfilechooserdefault.c:4554
 msgid "Name"
 msgstr "నామము:"
 
-#: gtk/gtkfilechooserdefault.c:4613
+#: gtk/gtkfilechooserdefault.c:4579
 msgid "Size"
 msgstr "పరిమాణము"
 
-#: gtk/gtkfilechooserdefault.c:4627
+#: gtk/gtkfilechooserdefault.c:4593
 msgid "Modified"
 msgstr "మార్చబడిన"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4847 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4813 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "నామము(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4889
+#: gtk/gtkfilechooserdefault.c:4855
 msgid "_Browse for other folders"
 msgstr "ఇతర సంచులకై అన్వేషించు(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5159
+#: gtk/gtkfilechooserdefault.c:5125
 msgid "Type a file name"
 msgstr "దస్త్రనామము ను టైపుచేయుము"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5196
+#: gtk/gtkfilechooserdefault.c:5162
 msgid "Create Fo_lder"
 msgstr "సంచినిసృష్టించు(_l)"
 
-#: gtk/gtkfilechooserdefault.c:5206
+#: gtk/gtkfilechooserdefault.c:5172
 msgid "_Location:"
 msgstr "స్థానము(_L):"
 
-#: gtk/gtkfilechooserdefault.c:5398
+#: gtk/gtkfilechooserdefault.c:5361
 msgid "Save in _folder:"
 msgstr "సంచిలో దాచు(_f):"
 
-#: gtk/gtkfilechooserdefault.c:5400
+#: gtk/gtkfilechooserdefault.c:5363
 msgid "Create in _folder:"
 msgstr "సంచిలో సృష్టించు(_f):"
 
-#: gtk/gtkfilechooserdefault.c:7002
-#, c-format
+#: gtk/gtkfilechooserdefault.c:6957
 msgid "Cannot change to folder because it is not local"
 msgstr "సంచిన మార్చలేము. ఎందుకంటే ఇది స్థానికం కాదు"
 
-#: gtk/gtkfilechooserdefault.c:7617 gtk/gtkfilechooserdefault.c:7638
+#: gtk/gtkfilechooserdefault.c:7582 gtk/gtkfilechooserdefault.c:7603
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "లఘువు %s ఇప్పటికే ఉంది"
 
-#: gtk/gtkfilechooserdefault.c:7728
+#: gtk/gtkfilechooserdefault.c:7693
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "లఘువు %s లేదు"
 
-#: gtk/gtkfilechooserdefault.c:7971 gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:7936 gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "దస్త్రనామము \"%s\" ఇప్పటికే ఉంది.  మీరు పునఃస్థాపిద్దామని అనుకుంటున్నారా?"
 
-#: gtk/gtkfilechooserdefault.c:7974 gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:7939 gtk/gtkprintunixdialog.c:360
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "దస్త్రము ఇప్పటికే \"%s\" లో ఉంది.  దానిని పునఃస్థాపించుట వలన దాని విషయాలు తిరిగివ్రాయబడతాయి."
 
-#: gtk/gtkfilechooserdefault.c:7979 gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:7944 gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "పునఃస్థాపన(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8740
+#: gtk/gtkfilechooserdefault.c:8705
 msgid "Could not start the search process"
 msgstr "శోధన ప్రోసెస్ ను ప్రారంభించలేకపోయింది"
 
-#: gtk/gtkfilechooserdefault.c:8741
+#: gtk/gtkfilechooserdefault.c:8706
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 "ఇండెక్సర్ డెమోన్ కు ప్రోగ్రాము అనుసంధానంను సృష్టించలేకపోయింది.  దయచేసి అది నడుచు నట్లు చూడండి."
 
-#: gtk/gtkfilechooserdefault.c:8755
+#: gtk/gtkfilechooserdefault.c:8720
 msgid "Could not send the search request"
 msgstr "శోధన అభ్యర్దనను పంపలేకపోయింది"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9170
+#: gtk/gtkfilechooserdefault.c:9135
 msgid "_Search:"
 msgstr "శోధన(_S):"
 
-#: gtk/gtkfilechooserdefault.c:10120
+#: gtk/gtkfilechooserdefault.c:10082
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s ను మౌంట్ చేయలేకపోయింది"
 
-#: gtk/gtkfilechooserdefault.c:10772
+#: gtk/gtkfilechooserdefault.c:10736
 msgid "Type name of new folder"
 msgstr "కొత్త సంచి నామమును  టైప్ చేయుము"
 
-#: gtk/gtkfilechooserdefault.c:10822
+#: gtk/gtkfilechooserdefault.c:10786
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10824
+#: gtk/gtkfilechooserdefault.c:10788
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10826
+#: gtk/gtkfilechooserdefault.c:10790
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10929 gtk/gtkfilechooserdefault.c:10951
-#: gtk/gtkfilechooserdefault.c:11022
+#: gtk/gtkfilechooserdefault.c:10893 gtk/gtkfilechooserdefault.c:10915
+#: gtk/gtkfilechooserdefault.c:10986
 msgid "Unknown"
 msgstr "అపరిచిత"
 
-#: gtk/gtkfilechooserdefault.c:10969
+#: gtk/gtkfilechooserdefault.c:10933
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10971
+#: gtk/gtkfilechooserdefault.c:10935
 msgid "Yesterday at %H:%M"
 msgstr "నిన్న %H:%M వద్ద"
 
@@ -1911,30 +1798,30 @@ msgstr ""
 msgid "Completing..."
 msgstr ""
 
-#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1348
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1349
+#: gtk/gtkfilesel.c:1358
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "సంచయం '%s' ను సృష్టించుటలో దోష: %s"
 
-#: gtk/gtkfilesel.c:693
+#: gtk/gtkfilesel.c:694
 msgid "Folders"
 msgstr "సంచులు"
 
-#: gtk/gtkfilesel.c:697
+#: gtk/gtkfilesel.c:698
 msgid "Fol_ders"
 msgstr "సంచులు(_d)"
 
-#: gtk/gtkfilesel.c:733
+#: gtk/gtkfilesel.c:734
 msgid "_Files"
 msgstr "దస్త్రములు(_F)"
 
-#: gtk/gtkfilesel.c:820 gtk/gtkfilesel.c:2147
+#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2148
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "సంచి: %s చదువుటకు వీలుగా లేదు."
 
-#: gtk/gtkfilesel.c:904
+#: gtk/gtkfilesel.c:905
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1944,90 +1831,90 @@ msgstr ""
 "The file \"%s\" దస్త్రము ఇంకొక యంత్రములో  నివసించుచున్నది. అది ఈ కార్యక్రమము కొరకు "
 "అందుబాటులో వుండకపోవచ్చు.మీరు దాన్ని ఎన్నుకోవాలనుకుంటున్నారా? (%sఅనెడి) "
 
-#: gtk/gtkfilesel.c:1019
+#: gtk/gtkfilesel.c:1020
 msgid "_New Folder"
 msgstr "కొత్త సంచి(_N)"
 
-#: gtk/gtkfilesel.c:1030
+#: gtk/gtkfilesel.c:1031
 msgid "De_lete File"
 msgstr "దస్త్రమును తొలగించు(_l)"
 
-#: gtk/gtkfilesel.c:1041
+#: gtk/gtkfilesel.c:1042
 msgid "_Rename File"
 msgstr "దస్త్రమునకు పునఃనామకారణంచేయు(_R)"
 
-#: gtk/gtkfilesel.c:1346
+#: gtk/gtkfilesel.c:1347
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr " \"%s\" అను పేరుగల సంచి  దస్త్రనామములో అనుమతింపబడని చిహ్నాలను కలిగివున్నది."
 
-#: gtk/gtkfilesel.c:1391
+#: gtk/gtkfilesel.c:1392
 msgid "New Folder"
 msgstr "కొత్త సంచి"
 
-#: gtk/gtkfilesel.c:1406
+#: gtk/gtkfilesel.c:1407
 msgid "_Folder name:"
 msgstr "కొత్త సంచి(_F):"
 
-#: gtk/gtkfilesel.c:1430
+#: gtk/gtkfilesel.c:1431
 msgid "C_reate"
 msgstr "సృస్టించు(_r)"
 
-#: gtk/gtkfilesel.c:1473 gtk/gtkfilesel.c:1580 gtk/gtkfilesel.c:1593
+#: gtk/gtkfilesel.c:1474 gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1594
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ఈ దస్త్రముపేరులొని చిహ్నాలు కొన్ని చెల్లవు: %s"
 
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1486
+#: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1487
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "దస్త్రము '%s' ను తొలగించుటలో దోషం: %s"
 
-#: gtk/gtkfilesel.c:1529
+#: gtk/gtkfilesel.c:1530
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr " \"%s\"దస్త్రమునునినజంగా  తొలగించాలా?"
 
-#: gtk/gtkfilesel.c:1534
+#: gtk/gtkfilesel.c:1535
 msgid "Delete File"
 msgstr "దస్త్రమునుతొలగించు"
 
-#: gtk/gtkfilesel.c:1582
+#: gtk/gtkfilesel.c:1583
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr "దస్త్రాన్ని \"%s\" కు ఉంచుటలో దోషం: %s"
 
-#: gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1596
 #, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr "దస్త్రాన్ని \"%s\" కు ఉంచుటలో దోషం: %s"
 
-#: gtk/gtkfilesel.c:1604
+#: gtk/gtkfilesel.c:1605
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr ""
 "\"%s\"పునఃనామకరిణించుటలో దోషం: %s\n"
 ": %s"
 
-#: gtk/gtkfilesel.c:1651
+#: gtk/gtkfilesel.c:1652
 msgid "Rename File"
 msgstr "దస్త్రం పునఃనామకరిణించు"
 
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1667
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr " \"%s\"ను పునఃనామకరిణించు to:"
 
-#: gtk/gtkfilesel.c:1695
+#: gtk/gtkfilesel.c:1696
 msgid "_Rename"
 msgstr "పునఃనామకరణం(_R)"
 
-#: gtk/gtkfilesel.c:2127
+#: gtk/gtkfilesel.c:2128
 msgid "_Selection: "
 msgstr "ఎంపిక(_S): "
 
-#: gtk/gtkfilesel.c:3047
+#: gtk/gtkfilesel.c:3048
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -2036,15 +1923,15 @@ msgstr ""
 "దస్త్రనామం \"%s\"నుUTF-8 మార్చలేము    environment variable G_FILENAME_ENCODING):"
 "అమర్చి చూడండి  %s"
 
-#: gtk/gtkfilesel.c:3050
+#: gtk/gtkfilesel.c:3051
 msgid "Invalid UTF-8"
 msgstr "చెల్లని  UTF-8"
 
-#: gtk/gtkfilesel.c:3924
+#: gtk/gtkfilesel.c:3925
 msgid "Name too long"
 msgstr "చాలా పొడవైన నామము"
 
-#: gtk/gtkfilesel.c:3926
+#: gtk/gtkfilesel.c:3927
 msgid "Couldn't convert filename"
 msgstr "దస్త్రనామము మార్చలేము"
 
@@ -2053,12 +1940,11 @@ msgstr "దస్త్రనామము మార్చలేము"
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: gtk/gtkfilesystem.c:48
+#: gtk/gtkfilesystem.c:51
 msgid "File System"
 msgstr "దస్త్ర వ్యవస్థ"
 
 #: gtk/gtkfilesystemmodel.c:700
-#, c-format
 msgid "Could not obtain root folder"
 msgstr "రూట్ సంచయాన్ని పొందలేకపోయాము"
 
@@ -2102,7 +1988,7 @@ msgstr "పరిమాణం(_z):"
 msgid "_Preview:"
 msgstr "ఉపదర్శనం(_P):"
 
-#: gtk/gtkfontsel.c:1362
+#: gtk/gtkfontsel.c:1571
 msgid "Font Selection"
 msgstr "అక్షరశైలి ఎంపిక"
 
@@ -2122,7 +2008,7 @@ msgstr "గామా విలువ(_G)"
 msgid "Error loading icon: %s"
 msgstr "n: ప్రతిమలు నింపుటలో దోషం%s"
 
-#: gtk/gtkicontheme.c:1332
+#: gtk/gtkicontheme.c:1362
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2133,13 +2019,12 @@ msgstr ""
 "'%s' ప్రతిమను కనుగొనలేకపోయాము. '%s' వైవిద్యాంశం కూడా దొరకలేదు.బహుశా మీకు దాన్ని ప్రతిష్టాపించుకోవాలి."
 "మీరు దాన్ని   '%s' నుంచి నకలు తీసుకొనవచ్చు."
 
-#: gtk/gtkicontheme.c:1512
+#: gtk/gtkicontheme.c:1542
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "ప్రతిమ '%s' వైద్యాంశంలో లేదు"
 
-#: gtk/gtkicontheme.c:2953
-#, c-format
+#: gtk/gtkicontheme.c:2983
 msgid "Failed to load icon"
 msgstr "ప్రతిమను లోడు చేయుటలో వైఫల్యం"
 
@@ -2152,82 +2037,82 @@ msgstr "పరిమాణము"
 msgid "input method menu|System"
 msgstr ""
 
-#: gtk/gtkinputdialog.c:190
+#: gtk/gtkinputdialog.c:192
 msgid "Input"
 msgstr "ఎగుబడి"
 
-#: gtk/gtkinputdialog.c:205
+#: gtk/gtkinputdialog.c:207
 msgid "No extended input devices"
 msgstr "కొనసాగింపబడిన ఎగుబడి  పరికరములు లేవు"
 
-#: gtk/gtkinputdialog.c:218
+#: gtk/gtkinputdialog.c:220
 msgid "_Device:"
 msgstr "పరికరము(_D):"
 
-#: gtk/gtkinputdialog.c:235
+#: gtk/gtkinputdialog.c:237
 msgid "Disabled"
 msgstr "నిరుపయోగింపబడు"
 
-#: gtk/gtkinputdialog.c:242
+#: gtk/gtkinputdialog.c:244
 msgid "Screen"
 msgstr "తెర"
 
-#: gtk/gtkinputdialog.c:249
+#: gtk/gtkinputdialog.c:251
 msgid "Window"
 msgstr "గవాక్షం"
 
-#: gtk/gtkinputdialog.c:256
+#: gtk/gtkinputdialog.c:258
 msgid "_Mode:"
 msgstr "రీతి(_M):"
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:277
+#: gtk/gtkinputdialog.c:279
 msgid "Axes"
 msgstr "అక్షము"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:295
+#: gtk/gtkinputdialog.c:297
 msgid "Keys"
 msgstr "కీస్"
 
-#: gtk/gtkinputdialog.c:522
+#: gtk/gtkinputdialog.c:524
 msgid "_X:"
 msgstr "_X:"
 
-#: gtk/gtkinputdialog.c:523
+#: gtk/gtkinputdialog.c:525
 msgid "_Y:"
 msgstr "_Y:"
 
-#: gtk/gtkinputdialog.c:524
+#: gtk/gtkinputdialog.c:526
 msgid "_Pressure:"
 msgstr "వత్తిడి(_P):"
 
-#: gtk/gtkinputdialog.c:525
+#: gtk/gtkinputdialog.c:527
 msgid "X _tilt:"
 msgstr "X వాలు(_t):"
 
-#: gtk/gtkinputdialog.c:526
+#: gtk/gtkinputdialog.c:528
 msgid "Y t_ilt:"
 msgstr "Y వాలు(_i):"
 
-#: gtk/gtkinputdialog.c:527
+#: gtk/gtkinputdialog.c:529
 msgid "_Wheel:"
 msgstr "చక్రం(_W):"
 
-#: gtk/gtkinputdialog.c:579
+#: gtk/gtkinputdialog.c:581
 msgid "none"
 msgstr "శూన్యం"
 
-#: gtk/gtkinputdialog.c:616 gtk/gtkinputdialog.c:652
+#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
 msgid "(disabled)"
 msgstr "(నిరుపయోగం)"
 
-#: gtk/gtkinputdialog.c:645
+#: gtk/gtkinputdialog.c:647
 msgid "(unknown)"
 msgstr "(అపరిచిత)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:749
+#: gtk/gtkinputdialog.c:751
 msgid "Cl_ear"
 msgstr "శుభ్రం(_e)"
 
@@ -2281,11 +2166,16 @@ msgstr "GTK+ లోప నిర్మూలనా ఫ్లాగ్స్న�
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:774
+#: gtk/gtkmain.c:740
+#, c-format
+msgid "Cannot open display: %s"
+msgstr ""
+
+#: gtk/gtkmain.c:777
 msgid "GTK+ Options"
 msgstr "GTK+ ఇచ్ఛాపూర్వకాలు"
 
-#: gtk/gtkmain.c:774
+#: gtk/gtkmain.c:777
 msgid "Show GTK+ Options"
 msgstr " GTK+ ఇచ్ఛాపూర్వకాలను చూపుము"
 
@@ -2329,21 +2219,20 @@ msgstr ""
 msgid "_Remember forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:828
+#: gtk/gtknotebook.c:834
 msgid "Arrow spacing"
 msgstr "ఏరో స్పేసింగ్"
 
-#: gtk/gtknotebook.c:829
+#: gtk/gtknotebook.c:835
 msgid "Scroll arrow spacing"
 msgstr "ఏరో స్పేసింగ్ ను స్క్రాల్ చేయుము"
 
-#: gtk/gtknotebook.c:4406 gtk/gtknotebook.c:6912
+#: gtk/gtknotebook.c:4412 gtk/gtknotebook.c:6918
 #, c-format
 msgid "Page %u"
 msgstr "పుట %u"
 
 #: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
-#, c-format
 msgid "Not a valid page setup file"
 msgstr "సరియైన పుట అమరిక కాదు"
 
@@ -2483,76 +2372,86 @@ msgid "%s job #%d"
 msgstr "%s జాబ్ #%d"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1498
+#: gtk/gtkprintoperation.c:1504
 msgid "print operation status|Initial state"
 msgstr "ముద్రణా అపరేషన్ స్థితి|ప్రారంభ స్థితి"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1500
+#: gtk/gtkprintoperation.c:1506
 msgid "print operation status|Preparing to print"
 msgstr "ముద్రణా అపరేషన్ స్థితి|ముద్రించుటకు సిద్దమౌతోంది"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1502
+#: gtk/gtkprintoperation.c:1508
 msgid "print operation status|Generating data"
 msgstr "ముద్రణా అపరేషన్ స్థితి|డాటాను కూడబరుస్తోంది"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1504
+#: gtk/gtkprintoperation.c:1510
 msgid "print operation status|Sending data"
 msgstr "ముద్రణా అపరేషన్ స్థితి|డాటాను పంపుతోంది"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1506
+#: gtk/gtkprintoperation.c:1512
 msgid "print operation status|Waiting"
 msgstr "ముద్రణా అపరేషన్ స్థితి|నిరీక్షిస్తోంది"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1508
+#: gtk/gtkprintoperation.c:1514
 msgid "print operation status|Blocking on issue"
 msgstr "ముద్రణా అపరేషన్ స్థితి|విషయమై ఆగి ఉంది"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1510
+#: gtk/gtkprintoperation.c:1516
 msgid "print operation status|Printing"
 msgstr "ముద్రణా అపరేషన్ స్థితి|ముద్రిస్తోంది"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1512
+#: gtk/gtkprintoperation.c:1518
 msgid "print operation status|Finished"
 msgstr "ముద్రణా అపరేషన్ స్థితి|ముగిసినది"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1514
+#: gtk/gtkprintoperation.c:1520
 msgid "print operation status|Finished with error"
 msgstr "ముద్రణా అపరేషన్ స్థితి|దోషం తో ముగిసినది"
 
-#: gtk/gtkprintoperation.c:1997
+#: gtk/gtkprintoperation.c:2003
 #, c-format
 msgid "Preparing %d"
 msgstr "సిద్దమౌతోంది %d"
 
-#: gtk/gtkprintoperation.c:1999 gtk/gtkprintoperation.c:2253
+#: gtk/gtkprintoperation.c:2005 gtk/gtkprintoperation.c:2259
 #, c-format
 msgid "Preparing"
 msgstr "సిద్దమౌతోంది"
 
-#: gtk/gtkprintoperation.c:2002
+#: gtk/gtkprintoperation.c:2008
 #, c-format
 msgid "Printing %d"
 msgstr "ముద్రణ %d"
 
-#: gtk/gtkprintoperation-unix.c:243
+#: gtk/gtkprintoperation.c:2289
+#, fuzzy, c-format
+msgid "Error creating print preview"
+msgstr "ఉపదర్శనం దించుటలో దోషం"
+
+#: gtk/gtkprintoperation.c:2292
+#, c-format
+msgid "The most probable reason is that a temporary file could not be created."
+msgstr ""
+
+#: gtk/gtkprintoperation-unix.c:242
 #, c-format
 msgid "Error launching preview"
 msgstr "ఉపదర్శనం దించుటలో దోషం"
 
-#: gtk/gtkprintoperation-unix.c:281
+#: gtk/gtkprintoperation-unix.c:280
 #, c-format
 msgid "Error printing"
 msgstr "ముద్రించుటలో దోషం"
 
-#: gtk/gtkprintoperation-unix.c:382 gtk/gtkprintoperation-win32.c:1399
+#: gtk/gtkprintoperation-unix.c:381 gtk/gtkprintoperation-win32.c:1399
 msgid "Application"
 msgstr "అప్లికేషన్"
 
@@ -2578,32 +2477,26 @@ msgstr "ములుచుకొనిన పరిమాణం"
 
 #: gtk/gtkprintoperation-win32.c:1489 gtk/gtkprintoperation-win32.c:1512
 #: gtk/gtkprintoperation-win32.c:1560
-#, c-format
 msgid "Not enough free memory"
 msgstr "సరిపోవునంత ఖాళీ మెమొరీ లేదు"
 
 #: gtk/gtkprintoperation-win32.c:1565
-#, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgex కు చెల్లని ఆర్గ్యుమెంట్"
 
 #: gtk/gtkprintoperation-win32.c:1570
-#, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgex కు చెల్లని సూచిక"
 
 #: gtk/gtkprintoperation-win32.c:1575
-#, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgex కు చెల్లని సంభాలన"
 
 #: gtk/gtkprintoperation-win32.c:1580
-#, c-format
 msgid "Unspecified error"
 msgstr "తెలుపబడని దోషం"
 
 #: gtk/gtkprintoperation-win32.c:1632
-#, c-format
 msgid "Error from StartDoc"
 msgstr "StartDoc నుండి దోషం"
 
@@ -2896,8 +2789,10 @@ msgstr "ఇటీవలి మెనూ నామము|_%d. %s"
 msgid "recent menu label|%d. %s"
 msgstr "ఇటీవలి మెనూ నామము|%d. %s"
 
-#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1158
-#: gtk/gtkrecentmanager.c:1168 gtk/gtkrecentmanager.c:1221
+#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1025
+#: gtk/gtkrecentmanager.c:1163 gtk/gtkrecentmanager.c:1173
+#: gtk/gtkrecentmanager.c:1226 gtk/gtkrecentmanager.c:1235
+#: gtk/gtkrecentmanager.c:1250
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' తో ఒక అంశమును కనుగొనలేకపోయింది"
@@ -3397,53 +3292,51 @@ msgid "A <text> element can't occur before a <tags> element"
 msgstr "<text> మూలకం అనునది <tags> మూలకం కు ముందు అవసరపడదు"
 
 #: gtk/gtktextbufferserialize.c:1779
-#, c-format
 msgid "Serialized data is malformed"
 msgstr "క్రమపరిచిన డాటా తప్పైనది"
 
 #: gtk/gtktextbufferserialize.c:1857
-#, c-format
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "క్రమపరిచిన డాటా తప్పైనది. మొదటి విభాగం GTKTEXTBUFFERCONTENTS-0001 కాదు"
 
-#: gtk/gtktextutil.c:60
+#: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
 msgstr "LRM ఎడమ-నుండి-కుడి గర్తు(_L)"
 
-#: gtk/gtktextutil.c:61
+#: gtk/gtktextutil.c:62
 msgid "RLM _Right-to-left mark"
 msgstr "RLM కుడి-నుండి-ఎడమ గుర్తు(_R)"
 
-#: gtk/gtktextutil.c:62
+#: gtk/gtktextutil.c:63
 msgid "LRE Left-to-right _embedding"
 msgstr "LRE ఎడమ-నుండి-కుడి ఎంబెడింగ్(_e)"
 
-#: gtk/gtktextutil.c:63
+#: gtk/gtktextutil.c:64
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE కుడి-నుండి-ఎడమ ఎంబడింగ్(_m)"
 
-#: gtk/gtktextutil.c:64
+#: gtk/gtktextutil.c:65
 msgid "LRO Left-to-right _override"
 msgstr "LRO ఎడమ-నుండి-కుడి ఒవర్‌రైడ్(_o)"
 
-#: gtk/gtktextutil.c:65
+#: gtk/gtktextutil.c:66
 msgid "RLO Right-to-left o_verride"
 msgstr "RLO కుడి-నుండి-ఎడమ ఒవర్‌రైడ్(_v)"
 
-#: gtk/gtktextutil.c:66
+#: gtk/gtktextutil.c:67
 msgid "PDF _Pop directional formatting"
 msgstr "PDF నిర్దేశపూరిత రూపీకరణను చూపుము(_P)"
 
-#: gtk/gtktextutil.c:67
+#: gtk/gtktextutil.c:68
 msgid "ZWS _Zero width space"
 msgstr "ZWS సున్నా వెడల్పుగల ఖాళీ(_Z)"
 
-#: gtk/gtktextutil.c:68
+#: gtk/gtktextutil.c:69
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWJ సున్నా వెడల్పు కలుపునది(_j)"
 
-#: gtk/gtktextutil.c:69
+#: gtk/gtktextutil.c:70
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ సున్నా వెడల్పు కలుపనిది(_n)"
 
@@ -3452,57 +3345,57 @@ msgstr "ZWNJ సున్నా వెడల్పు కలుపనిది(_
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "థీమ్ ఇంజన్ ను మాడ్యూల్ పాత్ నందు గుర్తించలేము: \"%s\""
 
-#: gtk/gtktipsquery.c:187
+#: gtk/gtktipsquery.c:188
 msgid "--- No Tip ---"
 msgstr "--- ఏ చిట్కాలేదు ---"
 
-#: gtk/gtkuimanager.c:1453
+#: gtk/gtkuimanager.c:1454
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "అనుకోని ప్రారంభ టాగ్ '%s' వరుస %d అక్షరం %d పైన"
 
-#: gtk/gtkuimanager.c:1543
+#: gtk/gtkuimanager.c:1544
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "అనుకోని అక్షర డాటా వరుస %d అక్షరం %d పైన"
 
-#: gtk/gtkuimanager.c:2366
+#: gtk/gtkuimanager.c:2367
 msgid "Empty"
 msgstr "ఖాళీ"
 
-#: gtk/gtkvolumebutton.c:81
+#: gtk/gtkvolumebutton.c:77
 msgid "Volume"
 msgstr "వాల్యూమ్"
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:79
 msgid "Turns volume down or up"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:86
+#: gtk/gtkvolumebutton.c:82
 msgid "Adjusts the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:89 gtk/gtkvolumebutton.c:92
+#: gtk/gtkvolumebutton.c:85 gtk/gtkvolumebutton.c:88
 msgid "Volume Down"
 msgstr "వాల్యూమ్ తగ్గింపు"
 
-#: gtk/gtkvolumebutton.c:91
+#: gtk/gtkvolumebutton.c:87
 msgid "Decreases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:95 gtk/gtkvolumebutton.c:98
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Up"
 msgstr "వాల్యూమ్ పెంపు"
 
-#: gtk/gtkvolumebutton.c:97
+#: gtk/gtkvolumebutton.c:93
 msgid "Increases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:155
+#: gtk/gtkvolumebutton.c:151
 msgid "Muted"
 msgstr "నిశ్శబ్దం"
 
-#: gtk/gtkvolumebutton.c:159
+#: gtk/gtkvolumebutton.c:155
 msgid "Full Volume"
 msgstr "పూర్తి వాల్యూమ్"
 
@@ -3513,7 +3406,7 @@ msgstr "పూర్తి వాల్యూమ్"
 #. * Do not translate and do not include the "volume percentage|"
 #. * part in the translation!
 #.
-#: gtk/gtkvolumebutton.c:174
+#: gtk/gtkvolumebutton.c:170
 #, c-format
 msgid "volume percentage|%d %%"
 msgstr "%d %%"
@@ -4696,7 +4589,7 @@ msgstr "పరిశీలించిన-అవుట్‌పుట్.%s"
 msgid "Print to Test Printer"
 msgstr "పరిశీలనా ముద్రణాయంత్రం కు ముద్రించు"
 
-#: tests/testfilechooser.c:205
+#: tests/testfilechooser.c:207
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "దస్త్రము '%s' కొరకు సమాచారం ను పొందలేకపోయింది: %s"

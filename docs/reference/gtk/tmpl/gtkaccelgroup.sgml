@@ -61,6 +61,16 @@ An object representing and maintaining a group of accelerators.
 @arg2: 
 @arg3: 
 
+<!-- ##### ARG GtkAccelGroup:is-locked ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAccelGroup:modifier-mask ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_accel_group_new ##### -->
 <para>
 

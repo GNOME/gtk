@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-19 12:48+0000\n"
+"POT-Creation-Date: 2008-07-05 15:47-0400\n"
 "PO-Revision-Date: 2008-06-21 01:26+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
@@ -21,56 +21,56 @@ msgstr ""
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../gdk/directfb/gdkdisplay-directfb.c:55
+#: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
 msgstr "directfb paraméter"
 
-#: ../gdk/directfb/gdkdisplay-directfb.c:55
+#: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "sdl|system"
 msgstr "rendszer"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:126
+#: gdk/gdk.c:126
 msgid "Program class as used by the window manager"
 msgstr "A program osztálya, ahogy az ablakkezelő használja"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:127
+#: gdk/gdk.c:127
 msgid "CLASS"
 msgstr "OSZTÁLY"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:129
+#: gdk/gdk.c:129
 msgid "Program name as used by the window manager"
 msgstr "A programnév, ahogy az ablakkezelő használja"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:130
+#: gdk/gdk.c:130
 msgid "NAME"
 msgstr "NÉV"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:132
+#: gdk/gdk.c:132
 msgid "X display to use"
 msgstr "Használandó X-megjelenítő"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:133
+#: gdk/gdk.c:133
 msgid "DISPLAY"
 msgstr "MEGJELENÍTŐ"
 
 #. Description of --screen=SCREEN in --help output
-#: ../gdk/gdk.c:135
+#: gdk/gdk.c:135
 msgid "X screen to use"
 msgstr "Használandó X-képernyő"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: ../gdk/gdk.c:136
+#: gdk/gdk.c:136
 msgid "SCREEN"
 msgstr "KÉPERNYŐ"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:139
+#: gdk/gdk.c:139
 msgid "Gdk debugging flags to set"
 msgstr "Beállítandó Gdk debug jelzőbitek"
 
@@ -78,183 +78,184 @@ msgstr "Beállítandó Gdk debug jelzőbitek"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:140 ../gdk/gdk.c:143 ../gtk/gtkmain.c:428 ../gtk/gtkmain.c:431
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:428 gtk/gtkmain.c:431
 msgid "FLAGS"
 msgstr "JELZŐK"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:142
+#: gdk/gdk.c:142
 msgid "Gdk debugging flags to unset"
 msgstr "Kikapcsolandó Gdk debug jelzőbitek"
 
-#: ../gdk/keyname-table.h:3940
+#: gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
 msgstr "BackSpace"
 
-#: ../gdk/keyname-table.h:3941
+#: gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
 msgstr "Tab"
 
-#: ../gdk/keyname-table.h:3942
+#: gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
 msgstr "Enter"
 
-#: ../gdk/keyname-table.h:3943
+#: gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
 msgstr "Pause"
 
-#: ../gdk/keyname-table.h:3944
+#: gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
 msgstr "Scroll_Lock"
 
-#: ../gdk/keyname-table.h:3945
+#: gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
 msgstr "Sys_Req"
 
-#: ../gdk/keyname-table.h:3946
+#: gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
 msgstr "Escape"
 
-#: ../gdk/keyname-table.h:3947
+#: gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
 msgstr "Multi_billentyű"
 
-#: ../gdk/keyname-table.h:3948
+#: gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
 msgstr "Home"
 
-#: ../gdk/keyname-table.h:3949
+#: gdk/keyname-table.h:3949
 msgid "keyboard label|Left"
 msgstr "Balra"
 
-#: ../gdk/keyname-table.h:3950
+#: gdk/keyname-table.h:3950
 msgid "keyboard label|Up"
 msgstr "Fel"
 
-#: ../gdk/keyname-table.h:3951
+#: gdk/keyname-table.h:3951
 msgid "keyboard label|Right"
 msgstr "Jobbra"
 
-#: ../gdk/keyname-table.h:3952
+#: gdk/keyname-table.h:3952
 msgid "keyboard label|Down"
 msgstr "Le"
 
-#: ../gdk/keyname-table.h:3953
+#: gdk/keyname-table.h:3953
 msgid "keyboard label|Page_Up"
 msgstr "Page_Up"
 
-#: ../gdk/keyname-table.h:3954
+#: gdk/keyname-table.h:3954
 msgid "keyboard label|Page_Down"
 msgstr "Page_Down"
 
-#: ../gdk/keyname-table.h:3955
+#: gdk/keyname-table.h:3955
 msgid "keyboard label|End"
 msgstr "End"
 
-#: ../gdk/keyname-table.h:3956
+#: gdk/keyname-table.h:3956
 msgid "keyboard label|Begin"
 msgstr "Begin"
 
-#: ../gdk/keyname-table.h:3957
+#: gdk/keyname-table.h:3957
 msgid "keyboard label|Print"
 msgstr "Print"
 
-#: ../gdk/keyname-table.h:3958
+#: gdk/keyname-table.h:3958
 msgid "keyboard label|Insert"
 msgstr "Insert"
 
-#: ../gdk/keyname-table.h:3959
+#: gdk/keyname-table.h:3959
 msgid "keyboard label|Num_Lock"
 msgstr "Num_Lock"
 
-#: ../gdk/keyname-table.h:3960
+#: gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Space"
 msgstr "KP_Szóköz"
 
-#: ../gdk/keyname-table.h:3961
+#: gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Tab"
 msgstr "KP_Tab"
 
-#: ../gdk/keyname-table.h:3962
+#: gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Enter"
 msgstr "KP_Enter"
 
-#: ../gdk/keyname-table.h:3963
+#: gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Home"
 msgstr "KP_Home"
 
-#: ../gdk/keyname-table.h:3964
+#: gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Left"
 msgstr "KP_Balra"
 
-#: ../gdk/keyname-table.h:3965
+#: gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Up"
 msgstr "KP_Fel"
 
-#: ../gdk/keyname-table.h:3966
+#: gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Right"
 msgstr "KP_Jobbra"
 
-#: ../gdk/keyname-table.h:3967
+#: gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Down"
 msgstr "KP_Le"
 
-#: ../gdk/keyname-table.h:3968
+#: gdk/keyname-table.h:3968
 msgid "keyboard label|KP_Page_Up"
 msgstr "KP_Page_Up"
 
-#: ../gdk/keyname-table.h:3969
+#: gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Prior"
 msgstr "KP_Prior"
 
-#: ../gdk/keyname-table.h:3970
+#: gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Page_Down"
 msgstr "KP_Page_Down"
 
-#: ../gdk/keyname-table.h:3971
+#: gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Next"
 msgstr "KP_Next"
 
-#: ../gdk/keyname-table.h:3972
+#: gdk/keyname-table.h:3972
 msgid "keyboard label|KP_End"
 msgstr "KP_End"
 
-#: ../gdk/keyname-table.h:3973
+#: gdk/keyname-table.h:3973
 msgid "keyboard label|KP_Begin"
 msgstr "KP_Begin"
 
-#: ../gdk/keyname-table.h:3974
+#: gdk/keyname-table.h:3974
 msgid "keyboard label|KP_Insert"
 msgstr "KP_Insert"
 
-#: ../gdk/keyname-table.h:3975
+#: gdk/keyname-table.h:3975
 msgid "keyboard label|KP_Delete"
 msgstr "KP_Delete"
 
-#: ../gdk/keyname-table.h:3976
+#: gdk/keyname-table.h:3976
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:912
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1168 ../tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:912
+#: gdk-pixbuf/gdk-pixbuf-io.c:1168 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Nem sikerült megnyitni a(z) „%s” fájlt: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146 ../gdk-pixbuf/gdk-pixbuf-io.c:924
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:924
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "A(z) „%s” képfájl nem tartalmaz adatokat"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:961
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1220 ../tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:961
+#: gdk-pixbuf/gdk-pixbuf-io.c:1220 tests/testfilechooser.c:267
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Nem sikerült betölteni a(z) „%s” képet: ok ismeretlen, valószínűleg sérült a "
 "képfájl"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:221
+#: gdk-pixbuf/gdk-pixbuf-animation.c:221
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
@@ -263,12 +264,12 @@ msgstr ""
 "Nem sikerült betölteni a(z) „%s” animációt: ok ismeretlen, valószínűleg "
 "sérült az animációfájl"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:564
+#: gdk-pixbuf/gdk-pixbuf-io.c:564
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Nem lehet betölteni a képbetöltő modult: %s: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:579
+#: gdk-pixbuf/gdk-pixbuf-io.c:579
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -277,55 +278,55 @@ msgstr ""
 "A(z) %s képbetöltő-modul nem exportálja a megfelelő felületet, talán egy "
 "másik GTK verzióból van?"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:724 ../gdk-pixbuf/gdk-pixbuf-io.c:753
+#: gdk-pixbuf/gdk-pixbuf-io.c:724 gdk-pixbuf/gdk-pixbuf-io.c:753
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "A(z) „%s” képtípus nem támogatott"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:793
+#: gdk-pixbuf/gdk-pixbuf-io.c:793
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Nem lehet azonosítani a(z) „%s” képfájl formátumát"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:801
+#: gdk-pixbuf/gdk-pixbuf-io.c:801
 msgid "Unrecognized image file format"
 msgstr "Azonosíthatatlan képfájl formátum"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:970
+#: gdk-pixbuf/gdk-pixbuf-io.c:970
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Nem sikerült betölteni a(z) „%s” képet: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1601 ../gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1601 gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Hiba képfájlba íráskor: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1647 ../gdk-pixbuf/gdk-pixbuf-io.c:1778
+#: gdk-pixbuf/gdk-pixbuf-io.c:1647 gdk-pixbuf/gdk-pixbuf-io.c:1778
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "A gdk-pixbuf ezen változatába nincs befordítva a(z) %s képformátumba való "
 "mentés támogatása"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1681
+#: gdk-pixbuf/gdk-pixbuf-io.c:1681
 msgid "Insufficient memory to save image to callback"
 msgstr "Nincs elég memória a kép visszahíváshoz mentéséhez"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1694
+#: gdk-pixbuf/gdk-pixbuf-io.c:1694
 msgid "Failed to open temporary file"
 msgstr "Nem sikerült megnyitni az átmeneti fájlt"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1720
+#: gdk-pixbuf/gdk-pixbuf-io.c:1720
 msgid "Failed to read from temporary file"
 msgstr "Nem sikerült olvasni az átmeneti fájlból"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1955
+#: gdk-pixbuf/gdk-pixbuf-io.c:1955
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "„%s” megnyitása írásra sikertelen: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1980
+#: gdk-pixbuf/gdk-pixbuf-io.c:1980
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -334,15 +335,15 @@ msgstr ""
 "A(z) „%s” nem zárható le a kép írása közben, lehet, hogy nem sikerült minden "
 "adatot elmenteni: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2200 ../gdk-pixbuf/gdk-pixbuf-io.c:2251
+#: gdk-pixbuf/gdk-pixbuf-io.c:2200 gdk-pixbuf/gdk-pixbuf-io.c:2251
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nincs elég memória a kép pufferbe mentéséhez"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2297
+#: gdk-pixbuf/gdk-pixbuf-io.c:2297
 msgid "Error writing to image stream"
 msgstr "Hiba képfolyamba íráskor"
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
@@ -351,147 +352,142 @@ msgstr ""
 "Belső hiba: A(z) %s képbetöltő modul nem tudott befejezni egy műveletet, de "
 "nem adta meg a hiba okát"
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:373
+#: gdk-pixbuf/gdk-pixbuf-loader.c:373
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "A(z) %s típusú képek növekményes betöltése nem támogatott"
 
-#: ../gdk-pixbuf/gdk-pixdata.c:147
+#: gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
 msgstr "Hibás képfejléc"
 
-#: ../gdk-pixbuf/gdk-pixdata.c:152
+#: gdk-pixbuf/gdk-pixdata.c:152
 msgid "Image format unknown"
 msgstr "Ismeretlen képformátum"
 
-#: ../gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:487
+#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
 msgid "Image pixel data corrupt"
 msgstr "A kép képpontadata sérült"
 
-#: ../gdk-pixbuf/gdk-pixdata.c:431
+#: gdk-pixbuf/gdk-pixdata.c:431
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "nem sikerült %u bájt méretű képpuffert lefoglalni"
 msgstr[1] "nem sikerült %u bájt méretű képpuffert lefoglalni"
 
-#: ../gdk-pixbuf/io-ani.c:244
+#: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
 msgstr "Váratlan ikondarab az animációban"
 
-#: ../gdk-pixbuf/io-ani.c:337
+#: gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
 msgstr "Nem támogatott animációtípus"
 
-#: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:406
-#: ../gdk-pixbuf/io-ani.c:432 ../gdk-pixbuf/io-ani.c:455
-#: ../gdk-pixbuf/io-ani.c:482 ../gdk-pixbuf/io-ani.c:569
+#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
+#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
 msgid "Invalid header in animation"
 msgstr "Érvénytelen fejléc az animációban"
 
-#: ../gdk-pixbuf/io-ani.c:358 ../gdk-pixbuf/io-ani.c:380
-#: ../gdk-pixbuf/io-ani.c:464 ../gdk-pixbuf/io-ani.c:491
-#: ../gdk-pixbuf/io-ani.c:542 ../gdk-pixbuf/io-ani.c:614
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
+#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
 msgid "Not enough memory to load animation"
 msgstr "Nincs elég memória az animáció betöltéséhez"
 
-#: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:424
-#: ../gdk-pixbuf/io-ani.c:443
+#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
 msgid "Malformed chunk in animation"
 msgstr "Hibás részlet az animációban"
 
-#: ../gdk-pixbuf/io-ani.c:711
+#: gdk-pixbuf/io-ani.c:711
 msgid "The ANI image format"
 msgstr "ANI képformátum"
 
-#: ../gdk-pixbuf/io-bmp.c:230 ../gdk-pixbuf/io-bmp.c:267
-#: ../gdk-pixbuf/io-bmp.c:338 ../gdk-pixbuf/io-bmp.c:370
-#: ../gdk-pixbuf/io-bmp.c:393 ../gdk-pixbuf/io-bmp.c:496
+#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
+#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
 msgid "BMP image has bogus header data"
 msgstr "A BMP-kép fejlécadata hibás"
 
-#: ../gdk-pixbuf/io-bmp.c:241 ../gdk-pixbuf/io-bmp.c:433
+#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
 msgid "Not enough memory to load bitmap image"
 msgstr "Nincs elég memória a kép betöltéséhez"
 
-#: ../gdk-pixbuf/io-bmp.c:319
+#: gdk-pixbuf/io-bmp.c:319
 msgid "BMP image has unsupported header size"
 msgstr "A BMP-kép fejlécmérete nem támogatott"
 
-#: ../gdk-pixbuf/io-bmp.c:357
+#: gdk-pixbuf/io-bmp.c:357
 msgid "Topdown BMP images cannot be compressed"
 msgstr "A fentről-lefelé BMP képek nem tömöríthetőek"
 
-#: ../gdk-pixbuf/io-bmp.c:717 ../gdk-pixbuf/io-pnm.c:709
+#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
 msgid "Premature end-of-file encountered"
 msgstr "A fájl végét túl korán értem el"
 
-#: ../gdk-pixbuf/io-bmp.c:1329
+#: gdk-pixbuf/io-bmp.c:1329
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Nem lehet memóriát foglalni a BMP fájl mentéséhez"
 
-#: ../gdk-pixbuf/io-bmp.c:1370
+#: gdk-pixbuf/io-bmp.c:1370
 msgid "Couldn't write to BMP file"
 msgstr "Nem sikerült írni a BMP fájlba"
 
-#: ../gdk-pixbuf/io-bmp.c:1423 ../gdk-pixbuf/io-gdip-bmp.c:82
+#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
 msgid "The BMP image format"
 msgstr "BMP képformátum"
 
-#: ../gdk-pixbuf/io-gif.c:222
+#: gdk-pixbuf/io-gif.c:222
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "Hiba a GIF olvasásánál: %s"
 
-#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1477
-#: ../gdk-pixbuf/io-gif.c:1638
+#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477 gdk-pixbuf/io-gif.c:1638
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "A GIF fájl egyes adatai hiányoznak (lehet, hogy csonkolódott a fájl?)"
 
-#: ../gdk-pixbuf/io-gif.c:505
+#: gdk-pixbuf/io-gif.c:505
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Belső hiba a GIF betöltőben (%s)"
 
-#: ../gdk-pixbuf/io-gif.c:579
+#: gdk-pixbuf/io-gif.c:579
 msgid "Stack overflow"
 msgstr "Veremtúlcsordulás"
 
-#: ../gdk-pixbuf/io-gif.c:639
+#: gdk-pixbuf/io-gif.c:639
 msgid "GIF image loader cannot understand this image."
 msgstr "A GIF-képbetöltő nem tudja értelmezni ezt a képet."
 
-#: ../gdk-pixbuf/io-gif.c:668
+#: gdk-pixbuf/io-gif.c:668
 msgid "Bad code encountered"
 msgstr "Hibás kód érkezett"
 
-#: ../gdk-pixbuf/io-gif.c:678
+#: gdk-pixbuf/io-gif.c:678
 msgid "Circular table entry in GIF file"
 msgstr "Körkörös táblázat bejegyzés a GIF fájlban"
 
-#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1464
-#: ../gdk-pixbuf/io-gif.c:1511 ../gdk-pixbuf/io-gif.c:1626
+#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464 gdk-pixbuf/io-gif.c:1511
+#: gdk-pixbuf/io-gif.c:1626
 msgid "Not enough memory to load GIF file"
 msgstr "Nincs elég memória a GIF-fájl betöltéséhez"
 
-#: ../gdk-pixbuf/io-gif.c:956
+#: gdk-pixbuf/io-gif.c:956
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Nincs elég memória a keretnek a GIF-fájlban való kiegészítéséhez"
 
-#: ../gdk-pixbuf/io-gif.c:1128
+#: gdk-pixbuf/io-gif.c:1128
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "A GIF-kép hibás (helytelen LZW-tömörítés)"
 
-#: ../gdk-pixbuf/io-gif.c:1178
+#: gdk-pixbuf/io-gif.c:1178
 msgid "File does not appear to be a GIF file"
 msgstr "A fájl nem tűnik GIF formátumúnak"
 
-#: ../gdk-pixbuf/io-gif.c:1190
+#: gdk-pixbuf/io-gif.c:1190
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "A %s verziójú GIF formátum nincs támogatva"
 
-#: ../gdk-pixbuf/io-gif.c:1299
+#: gdk-pixbuf/io-gif.c:1299
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -499,114 +495,112 @@ msgstr ""
 "A GIF képnek nincs globális színtérképe, és a benne lévő keretnek sincs "
 "lokális színtérképe."
 
-#: ../gdk-pixbuf/io-gif.c:1533
+#: gdk-pixbuf/io-gif.c:1533
 msgid "GIF image was truncated or incomplete."
 msgstr "A GIF-kép csonkolódott vagy nem teljes."
 
-#: ../gdk-pixbuf/io-gif.c:1689 ../gdk-pixbuf/io-gdip-gif.c:80
+#: gdk-pixbuf/io-gif.c:1689 gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "GIF képformátum"
 
-#: ../gdk-pixbuf/io-ico.c:211 ../gdk-pixbuf/io-ico.c:225
-#: ../gdk-pixbuf/io-ico.c:277 ../gdk-pixbuf/io-ico.c:290
-#: ../gdk-pixbuf/io-ico.c:359
+#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
+#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
 msgid "Invalid header in icon"
 msgstr "Érvénytelen fejléc az ikonban"
 
-#: ../gdk-pixbuf/io-ico.c:240 ../gdk-pixbuf/io-ico.c:300
-#: ../gdk-pixbuf/io-ico.c:369 ../gdk-pixbuf/io-ico.c:432
-#: ../gdk-pixbuf/io-ico.c:462
+#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
+#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
 msgid "Not enough memory to load icon"
 msgstr "Nincs elég memória az ikon betöltéséhez"
 
-#: ../gdk-pixbuf/io-ico.c:322
+#: gdk-pixbuf/io-ico.c:322
 msgid "Icon has zero width"
 msgstr "Az ikon szélessége nulla"
 
-#: ../gdk-pixbuf/io-ico.c:332
+#: gdk-pixbuf/io-ico.c:332
 msgid "Icon has zero height"
 msgstr "Az ikon magassága nulla"
 
-#: ../gdk-pixbuf/io-ico.c:384
+#: gdk-pixbuf/io-ico.c:384
 msgid "Compressed icons are not supported"
 msgstr "Tömörített ikonok nincsenek támogatva"
 
-#: ../gdk-pixbuf/io-ico.c:417
+#: gdk-pixbuf/io-ico.c:417
 msgid "Unsupported icon type"
 msgstr "Nem támogatott ikontípus"
 
-#: ../gdk-pixbuf/io-ico.c:511
+#: gdk-pixbuf/io-ico.c:511
 msgid "Not enough memory to load ICO file"
 msgstr "Nincs elég memória az ICO-fájl betöltéséhez"
 
-#: ../gdk-pixbuf/io-ico.c:976
+#: gdk-pixbuf/io-ico.c:976
 msgid "Image too large to be saved as ICO"
 msgstr "A kép túl nagy ICO formátumba mentéshez"
 
-#: ../gdk-pixbuf/io-ico.c:987
+#: gdk-pixbuf/io-ico.c:987
 msgid "Cursor hotspot outside image"
 msgstr "A kurzor aktív pontja a képen kívül helyezkedik el"
 
-#: ../gdk-pixbuf/io-ico.c:1010
+#: gdk-pixbuf/io-ico.c:1010
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Nem támogatott mélység ICO-fájlnál: %d"
 
-#: ../gdk-pixbuf/io-ico.c:1245 ../gdk-pixbuf/io-gdip-ico.c:59
+#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
 msgid "The ICO image format"
 msgstr "ICO képformátum"
 
-#: ../gdk-pixbuf/io-icns.c:345
+#: gdk-pixbuf/io-icns.c:345
 #, c-format
 msgid "Error reading ICNS image: %s"
 msgstr "Hiba az ICNS képfájl olvasásakor: %s"
 
-#: ../gdk-pixbuf/io-icns.c:362
+#: gdk-pixbuf/io-icns.c:362
 msgid "Could not decode ICNS file"
 msgstr "Nem sikerült visszafejteni az ICNS fájlt"
 
-#: ../gdk-pixbuf/io-icns.c:395
+#: gdk-pixbuf/io-icns.c:395
 msgid "The ICNS image format"
 msgstr "ICNS képformátum"
 
-#: ../gdk-pixbuf/io-jasper.c:75
+#: gdk-pixbuf/io-jasper.c:75
 msgid "Couldn't allocate memory for stream"
 msgstr "Nem sikerült memóriát kiosztani az adatfolyamhoz"
 
-#: ../gdk-pixbuf/io-jasper.c:105
+#: gdk-pixbuf/io-jasper.c:105
 msgid "Couldn't decode image"
 msgstr "Nem sikerült visszafejteni a képet"
 
-#: ../gdk-pixbuf/io-jasper.c:123
+#: gdk-pixbuf/io-jasper.c:123
 msgid "Transformed JPEG2000 has zero width or height"
 msgstr "Az átalakított JPEG2000 szélessége vagy magassága nulla"
 
-#: ../gdk-pixbuf/io-jasper.c:137
+#: gdk-pixbuf/io-jasper.c:137
 msgid "Image type currently not supported"
 msgstr "A képtípus nem támogatott"
 
-#: ../gdk-pixbuf/io-jasper.c:149 ../gdk-pixbuf/io-jasper.c:157
+#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
 msgid "Couldn't allocate memory for color profile"
 msgstr "Nem lehet memóriát foglalni a színprofilhoz"
 
-#: ../gdk-pixbuf/io-jasper.c:182
+#: gdk-pixbuf/io-jasper.c:182
 msgid "Insufficient memory to open JPEG 2000 file"
 msgstr "Nincs elég memória a JPEG 2000 fájl megnyitásához"
 
-#: ../gdk-pixbuf/io-jasper.c:264
+#: gdk-pixbuf/io-jasper.c:264
 msgid "Couldn't allocate memory to buffer image data"
 msgstr "Nem lehet memóriát foglalni a képadatok számára"
 
-#: ../gdk-pixbuf/io-jasper.c:308
+#: gdk-pixbuf/io-jasper.c:308
 msgid "The JPEG 2000 image format"
 msgstr "JPEG 2000 képformátum"
 
-#: ../gdk-pixbuf/io-jpeg.c:117
+#: gdk-pixbuf/io-jpeg.c:117
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Hiba a JPEG képfájl értelmezésekor (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:529
+#: gdk-pixbuf/io-jpeg.c:529
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -614,21 +608,21 @@ msgstr ""
 "Nincs elég memória a kép betöltéséhez, memória felszabadításához próbáljon "
 "meg kilépni néhány alkalmazásból"
 
-#: ../gdk-pixbuf/io-jpeg.c:570 ../gdk-pixbuf/io-jpeg.c:776
+#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Nem támogatott JPEG-színtér (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:668 ../gdk-pixbuf/io-jpeg.c:944
-#: ../gdk-pixbuf/io-jpeg.c:1177 ../gdk-pixbuf/io-jpeg.c:1186
+#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nem lehet memóriát kiosztani a JPEG fájl betöltéséhez"
 
-#: ../gdk-pixbuf/io-jpeg.c:920
+#: gdk-pixbuf/io-jpeg.c:920
 msgid "Transformed JPEG has zero width or height."
 msgstr "Az átalakított JPEG szélessége vagy magassága nulla."
 
-#: ../gdk-pixbuf/io-jpeg.c:1133 ../gdk-pixbuf/io-gdip-jpeg.c:53
+#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -637,94 +631,95 @@ msgstr ""
 "A JPEG-minőség értékének 0 és 100 között kell lennie, a(z) „%s” értéket nem "
 "lehet feldolgozni."
 
-#: ../gdk-pixbuf/io-jpeg.c:1148 ../gdk-pixbuf/io-gdip-jpeg.c:68
+#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "A JPEG-minőség értékének 0 és 100 között kell lennie, a(z) „%d” érték nem "
 "megengedett."
 
-#: ../gdk-pixbuf/io-jpeg.c:1309 ../gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "JPEG képformátum"
 
-#: ../gdk-pixbuf/io-pcx.c:187
+#: gdk-pixbuf/io-pcx.c:187
 msgid "Couldn't allocate memory for header"
 msgstr "Nem lehet memóriát kiosztani a fejléchez"
 
-#: ../gdk-pixbuf/io-pcx.c:202 ../gdk-pixbuf/io-pcx.c:560
+#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
 msgid "Couldn't allocate memory for context buffer"
 msgstr "Nem lehet memóriát foglalni a kontextus-puffer számára"
 
-#: ../gdk-pixbuf/io-pcx.c:601
+#: gdk-pixbuf/io-pcx.c:601
 msgid "Image has invalid width and/or height"
 msgstr "A kép szélessége és/vagy magassága érvénytelen"
 
-#: ../gdk-pixbuf/io-pcx.c:613 ../gdk-pixbuf/io-pcx.c:674
+#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
 msgid "Image has unsupported bpp"
 msgstr "A kép képpontonkénti bitjeinek száma nem támogatott"
 
-#: ../gdk-pixbuf/io-pcx.c:618 ../gdk-pixbuf/io-pcx.c:626
+#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr "Nem támogatott számú %d bites színsík van a képben"
 
-#: ../gdk-pixbuf/io-pcx.c:642
+#: gdk-pixbuf/io-pcx.c:642
 msgid "Couldn't create new pixbuf"
 msgstr "Nem lehet létrehozni új képpuffert"
 
-#: ../gdk-pixbuf/io-pcx.c:650
+#: gdk-pixbuf/io-pcx.c:650
 msgid "Couldn't allocate memory for line data"
 msgstr "Nem lehet memóriát foglalni a vonaladatok számára"
 
-#: ../gdk-pixbuf/io-pcx.c:657
+#: gdk-pixbuf/io-pcx.c:657
 msgid "Couldn't allocate memory for paletted data"
 msgstr "Nem lehet memóriát foglalni a palettaadatok számára"
 
-#: ../gdk-pixbuf/io-pcx.c:704
+#: gdk-pixbuf/io-pcx.c:704
 msgid "Didn't get all lines of PCX image"
 msgstr "Nem található a PCX-kép minden sora"
 
-#: ../gdk-pixbuf/io-pcx.c:711
+#: gdk-pixbuf/io-pcx.c:711
 msgid "No palette found at end of PCX data"
 msgstr "Nem található paletta a PCX-adat végén"
 
-#: ../gdk-pixbuf/io-pcx.c:756
+#: gdk-pixbuf/io-pcx.c:756
 msgid "The PCX image format"
 msgstr "PCX képformátum"
 
-#: ../gdk-pixbuf/io-png.c:55
+#: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
 msgstr "A PNG-kép csatornánkénti bitjeinek száma érvénytelen."
 
-#: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
 msgid "Transformed PNG has zero width or height."
 msgstr "Az átalakított PNG szélessége vagy magassága nulla."
 
-#: ../gdk-pixbuf/io-png.c:144
+#: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr "Az átalakított PNG csatornánkénti bitjeinek száma nem 8."
 
-#: ../gdk-pixbuf/io-png.c:153
+#: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "Az átalakított PNG nem RGB vagy RGBA módú."
 
-#: ../gdk-pixbuf/io-png.c:162
+#: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
 "Az átalakított PNG csatornánkénti bitjeinek száma nem támogatott, 3-nak vagy "
 "4-nek kell lennie."
 
-#: ../gdk-pixbuf/io-png.c:183
+#: gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
 msgstr "Végzetes hiba a PNG képfájlban: %s"
 
-#: ../gdk-pixbuf/io-png.c:310
+#: gdk-pixbuf/io-png.c:310
 msgid "Insufficient memory to load PNG file"
 msgstr "Nincs elég memória a PNG fájl betöltéséhez"
 
-#: ../gdk-pixbuf/io-png.c:633
+#: gdk-pixbuf/io-png.c:633
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -733,26 +728,27 @@ msgstr ""
 "Nincs elég memória egy %ld x %ld méretű kép betöltéséhez, próbáljon meg "
 "kilépni néhány alkalmazásból a memóriahasználat csökkentéséhez"
 
-#: ../gdk-pixbuf/io-png.c:684
+#: gdk-pixbuf/io-png.c:684
 msgid "Fatal error reading PNG image file"
 msgstr "Végzetes hiba a PNG képfájl olvasásakor"
 
-#: ../gdk-pixbuf/io-png.c:733
+#: gdk-pixbuf/io-png.c:733
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Végzetes hiba a PNG képfájl olvasásakor: %s"
 
-#: ../gdk-pixbuf/io-png.c:825
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#: gdk-pixbuf/io-png.c:825
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "A PNG szöveges darabok kulcsainak legalább 1 és legfeljebb 79 karakterből "
 "kell állniuk."
 
-#: ../gdk-pixbuf/io-png.c:833
+#: gdk-pixbuf/io-png.c:833
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "A PNG szöveges darabok kulcsainak ASCII karaktereknek kell lenniük."
 
-#: ../gdk-pixbuf/io-png.c:846 ../gdk-pixbuf/io-gdip-png.c:56
+#: gdk-pixbuf/io-png.c:846 gdk-pixbuf/io-gdip-png.c:56
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -761,7 +757,7 @@ msgstr ""
 "A PNG-tömörítés értékének 0 és 9 között kell lennie, a(z) „%s” értéket nem "
 "lehet feldolgozni."
 
-#: ../gdk-pixbuf/io-png.c:858 ../gdk-pixbuf/io-gdip-png.c:68
+#: gdk-pixbuf/io-png.c:858 gdk-pixbuf/io-gdip-png.c:68
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -770,427 +766,423 @@ msgstr ""
 "A PNG-tömörítés értékének 0 és 9 között kell lennie, a(z) „%d” érték nem "
 "engedélyezett."
 
-#: ../gdk-pixbuf/io-png.c:896
+#: gdk-pixbuf/io-png.c:896
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "%s PNG szöveges darab értéke nem konvertálható ISO-8859-1 kódolásúra."
 
-#: ../gdk-pixbuf/io-png.c:1045 ../gdk-pixbuf/io-gdip-png.c:133
+#: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "PNG képformátum"
 
-#: ../gdk-pixbuf/io-pnm.c:250
+#: gdk-pixbuf/io-pnm.c:250
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "A PNM-betöltő egy egészet várt, de nem talált"
 
-#: ../gdk-pixbuf/io-pnm.c:282
+#: gdk-pixbuf/io-pnm.c:282
 msgid "PNM file has an incorrect initial byte"
 msgstr "A PNM-fájl kezdő bájtja helytelen"
 
-#: ../gdk-pixbuf/io-pnm.c:312
+#: gdk-pixbuf/io-pnm.c:312
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "A PNM-fájl nincs felismert PNM-alformátumban"
 
-#: ../gdk-pixbuf/io-pnm.c:337
+#: gdk-pixbuf/io-pnm.c:337
 msgid "PNM file has an image width of 0"
 msgstr "A PNM-fájl képszélessége 0"
 
-#: ../gdk-pixbuf/io-pnm.c:358
+#: gdk-pixbuf/io-pnm.c:358
 msgid "PNM file has an image height of 0"
 msgstr "A PNM-fájl képmagassága 0"
 
-#: ../gdk-pixbuf/io-pnm.c:381
+#: gdk-pixbuf/io-pnm.c:381
 msgid "Maximum color value in PNM file is 0"
 msgstr "A PNM-fájlban a maximális színérték 0"
 
-#: ../gdk-pixbuf/io-pnm.c:389
+#: gdk-pixbuf/io-pnm.c:389
 msgid "Maximum color value in PNM file is too large"
 msgstr "A PNM-fájlban a maximális színérték túl nagy"
 
-#: ../gdk-pixbuf/io-pnm.c:429 ../gdk-pixbuf/io-pnm.c:459
-#: ../gdk-pixbuf/io-pnm.c:504
+#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
 msgid "Raw PNM image type is invalid"
 msgstr "A nyers PNM-képtípus érvénytelen"
 
-#: ../gdk-pixbuf/io-pnm.c:654
+#: gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "A PNM-képbetöltő nem támogatja ezt a PNM-alformátumot"
 
-#: ../gdk-pixbuf/io-pnm.c:741 ../gdk-pixbuf/io-pnm.c:968
+#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 "A nyers PNM-formátumok pontosan egy üreshely-karaktert igényelnek a "
 "mintaadatok előtt"
 
-#: ../gdk-pixbuf/io-pnm.c:768
+#: gdk-pixbuf/io-pnm.c:768
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Nem lehet memóriát kiosztani a PNM-kép betöltéséhez"
 
-#: ../gdk-pixbuf/io-pnm.c:818
+#: gdk-pixbuf/io-pnm.c:818
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Nincs elég memória a PNM kontextus struktúrának"
 
-#: ../gdk-pixbuf/io-pnm.c:869
+#: gdk-pixbuf/io-pnm.c:869
 msgid "Unexpected end of PNM image data"
 msgstr "A PNM-képadatnak váratlanul vége"
 
-#: ../gdk-pixbuf/io-pnm.c:997
+#: gdk-pixbuf/io-pnm.c:997
 msgid "Insufficient memory to load PNM file"
 msgstr "Nincs elég memória a PNM fájl betöltéséhez"
 
-#: ../gdk-pixbuf/io-pnm.c:1081
+#: gdk-pixbuf/io-pnm.c:1081
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "A PNM/PBM/PGM/PPM képformátum család"
 
-#: ../gdk-pixbuf/io-ras.c:126
+#: gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
 msgstr "A RAS-kép fejlécadata hibás"
 
-#: ../gdk-pixbuf/io-ras.c:148
+#: gdk-pixbuf/io-ras.c:148
 msgid "RAS image has unknown type"
 msgstr "A RAS-kép típusa ismeretlen"
 
-#: ../gdk-pixbuf/io-ras.c:156
+#: gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
 msgstr "nem támogatott RAS-képváltozat"
 
-#: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
+#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
 msgstr "Nincs elég memória a RAS-kép betöltéséhez"
 
-#: ../gdk-pixbuf/io-ras.c:545
+#: gdk-pixbuf/io-ras.c:545
 msgid "The Sun raster image format"
 msgstr "Sun raster képformátum"
 
-#: ../gdk-pixbuf/io-tga.c:154
+#: gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Nem lehet memóriát kiosztani az IOBuffer-struktúrához"
 
-#: ../gdk-pixbuf/io-tga.c:173
+#: gdk-pixbuf/io-tga.c:173
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Nem lehet memóriát kiosztani az IOBuffer-adathoz"
 
-#: ../gdk-pixbuf/io-tga.c:184
+#: gdk-pixbuf/io-tga.c:184
 msgid "Cannot realloc IOBuffer data"
 msgstr "Nem lehet újra kiosztani az IOBuffer-adatot"
 
-#: ../gdk-pixbuf/io-tga.c:214
+#: gdk-pixbuf/io-tga.c:214
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Nem lehet kiosztani az átmeneti IOBuffer-adatot"
 
-#: ../gdk-pixbuf/io-tga.c:347
+#: gdk-pixbuf/io-tga.c:347
 msgid "Cannot allocate new pixbuf"
 msgstr "Nem lehet lefoglalni új képpuffert"
 
-#: ../gdk-pixbuf/io-tga.c:687
+#: gdk-pixbuf/io-tga.c:687
 msgid "Cannot allocate colormap structure"
 msgstr "Nem lehet kiosztani színtérkép struktúrát"
 
-#: ../gdk-pixbuf/io-tga.c:694
+#: gdk-pixbuf/io-tga.c:694
 msgid "Cannot allocate colormap entries"
 msgstr "Nem lehet kiosztani színtérkép bejegyzéseket"
 
-#: ../gdk-pixbuf/io-tga.c:716
+#: gdk-pixbuf/io-tga.c:716
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Váratlan bitmélység a színtérkép-bejegyzésekhez"
 
-#: ../gdk-pixbuf/io-tga.c:734
+#: gdk-pixbuf/io-tga.c:734
 msgid "Cannot allocate TGA header memory"
 msgstr "Nem lehet kiosztani TGA-fejlécmemóriát"
 
-#: ../gdk-pixbuf/io-tga.c:767
+#: gdk-pixbuf/io-tga.c:767
 msgid "TGA image has invalid dimensions"
 msgstr "A TGA-kép mérete érvénytelen"
 
-#: ../gdk-pixbuf/io-tga.c:773 ../gdk-pixbuf/io-tga.c:782
-#: ../gdk-pixbuf/io-tga.c:792 ../gdk-pixbuf/io-tga.c:802
-#: ../gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
+#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
 msgid "TGA image type not supported"
 msgstr "A TGA képformátum nem támogatott"
 
-#: ../gdk-pixbuf/io-tga.c:856
+#: gdk-pixbuf/io-tga.c:856
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Nem lehet memóriát lefoglalni a TGA kontextus struktúrának"
 
-#: ../gdk-pixbuf/io-tga.c:921
+#: gdk-pixbuf/io-tga.c:921
 msgid "Excess data in file"
 msgstr "Többletadat a fájlban"
 
-#: ../gdk-pixbuf/io-tga.c:1000
+#: gdk-pixbuf/io-tga.c:1000
 msgid "The Targa image format"
 msgstr "Targa képformátum"
 
-#: ../gdk-pixbuf/io-tiff.c:160
+#: gdk-pixbuf/io-tiff.c:160
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Nem lehet megszerezni a kép szélességét (hibás TIFF fájl)"
 
-#: ../gdk-pixbuf/io-tiff.c:167
+#: gdk-pixbuf/io-tiff.c:167
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Nem lehet megszerezni a kép magasságát (hibás TIFF fájl)"
 
-#: ../gdk-pixbuf/io-tiff.c:175
+#: gdk-pixbuf/io-tiff.c:175
 msgid "Width or height of TIFF image is zero"
 msgstr "A TIFF-kép szélessége vagy magassága nulla"
 
-#: ../gdk-pixbuf/io-tiff.c:184 ../gdk-pixbuf/io-tiff.c:193
+#: gdk-pixbuf/io-tiff.c:184 gdk-pixbuf/io-tiff.c:193
 msgid "Dimensions of TIFF image too large"
 msgstr "A TGA-kép mérete túl nagy"
 
-#: ../gdk-pixbuf/io-tiff.c:217 ../gdk-pixbuf/io-tiff.c:229
-#: ../gdk-pixbuf/io-tiff.c:541
+#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
 msgid "Insufficient memory to open TIFF file"
 msgstr "Nincs elég memória a TIFF fájl megnyitásához"
 
-#: ../gdk-pixbuf/io-tiff.c:275
+#: gdk-pixbuf/io-tiff.c:275
 msgid "Failed to load RGB data from TIFF file"
 msgstr "RGB-adat betöltése a TIFF-fájlból sikertelen"
 
-#: ../gdk-pixbuf/io-tiff.c:331
+#: gdk-pixbuf/io-tiff.c:331
 msgid "Failed to open TIFF image"
 msgstr "Nem sikerült megnyitni a TIFF képet"
 
-#: ../gdk-pixbuf/io-tiff.c:343 ../gdk-pixbuf/io-tiff.c:722
+#: gdk-pixbuf/io-tiff.c:343 gdk-pixbuf/io-tiff.c:722
 msgid "TIFFClose operation failed"
 msgstr "A TIFFClose művelet sikertelen"
 
-#: ../gdk-pixbuf/io-tiff.c:473 ../gdk-pixbuf/io-tiff.c:486
+#: gdk-pixbuf/io-tiff.c:473 gdk-pixbuf/io-tiff.c:486
 msgid "Failed to load TIFF image"
 msgstr "Nem sikerült betölteni a TIFF képet"
 
-#: ../gdk-pixbuf/io-tiff.c:670
+#: gdk-pixbuf/io-tiff.c:670
 msgid "Failed to save TIFF image"
 msgstr "Nem sikerült menteni a TIFF képet"
 
-#: ../gdk-pixbuf/io-tiff.c:708
+#: gdk-pixbuf/io-tiff.c:708
 msgid "Failed to write TIFF data"
 msgstr "Nem sikerült kiírni a TIFF adatokat"
 
-#: ../gdk-pixbuf/io-tiff.c:760
+#: gdk-pixbuf/io-tiff.c:760
 msgid "Couldn't write to TIFF file"
 msgstr "Nem sikerült írni a TIFF fájlba"
 
-#: ../gdk-pixbuf/io-tiff.c:814
+#: gdk-pixbuf/io-tiff.c:814
 msgid "The TIFF image format"
 msgstr "TIFF képformátum"
 
-#: ../gdk-pixbuf/io-wbmp.c:246
+#: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
 msgstr "A kép szélessége nulla"
 
-#: ../gdk-pixbuf/io-wbmp.c:264
+#: gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
 msgstr "A kép magassága nulla"
 
-#: ../gdk-pixbuf/io-wbmp.c:275
+#: gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
 msgstr "Nincs elég memória a kép betöltéséhez"
 
-#: ../gdk-pixbuf/io-wbmp.c:334
+#: gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
 msgstr "Nem lehet menteni a többit"
 
-#: ../gdk-pixbuf/io-wbmp.c:375
+#: gdk-pixbuf/io-wbmp.c:375
 msgid "The WBMP image format"
 msgstr "WBMP képformátum"
 
-#: ../gdk-pixbuf/io-xbm.c:295
+#: gdk-pixbuf/io-xbm.c:295
 msgid "Invalid XBM file"
 msgstr "Érvénytelen XBM-fájl"
 
-#: ../gdk-pixbuf/io-xbm.c:305
+#: gdk-pixbuf/io-xbm.c:305
 msgid "Insufficient memory to load XBM image file"
 msgstr "Nincs elég memória az XBM képfájl betöltéséhez"
 
-#: ../gdk-pixbuf/io-xbm.c:453
+#: gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Átmeneti fájlba írás az XBM-kép betöltésekor sikertelen"
 
-#: ../gdk-pixbuf/io-xbm.c:492
+#: gdk-pixbuf/io-xbm.c:492
 msgid "The XBM image format"
 msgstr "XBM képformátum"
 
-#: ../gdk-pixbuf/io-xpm.c:468
+#: gdk-pixbuf/io-xpm.c:468
 msgid "No XPM header found"
 msgstr "Nem található az XPM-fejléc"
 
-#: ../gdk-pixbuf/io-xpm.c:477
+#: gdk-pixbuf/io-xpm.c:477
 msgid "Invalid XPM header"
 msgstr "Érvénytelen XPM-fejléc"
 
-#: ../gdk-pixbuf/io-xpm.c:485
+#: gdk-pixbuf/io-xpm.c:485
 msgid "XPM file has image width <= 0"
 msgstr "Az XPM-fájl képszélessége <= 0"
 
-#: ../gdk-pixbuf/io-xpm.c:493
+#: gdk-pixbuf/io-xpm.c:493
 msgid "XPM file has image height <= 0"
 msgstr "Az XPM-fájl képmagassága <= 0"
 
-#: ../gdk-pixbuf/io-xpm.c:501
+#: gdk-pixbuf/io-xpm.c:501
 msgid "XPM has invalid number of chars per pixel"
 msgstr "Az XPM-fájl képpontonkénti karaktereinek száma érvénytelen"
 
-#: ../gdk-pixbuf/io-xpm.c:510
+#: gdk-pixbuf/io-xpm.c:510
 msgid "XPM file has invalid number of colors"
 msgstr "Az XPM-fájl színeinek száma érvénytelen"
 
-#: ../gdk-pixbuf/io-xpm.c:522 ../gdk-pixbuf/io-xpm.c:531
-#: ../gdk-pixbuf/io-xpm.c:583
+#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Nem lehet memóriát kiosztani az XPM-kép betöltéséhez"
 
-#: ../gdk-pixbuf/io-xpm.c:545
+#: gdk-pixbuf/io-xpm.c:545
 msgid "Cannot read XPM colormap"
 msgstr "Nem lehet olvasni az XPM-színtérképet"
 
-#: ../gdk-pixbuf/io-xpm.c:777
+#: gdk-pixbuf/io-xpm.c:777
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Átmeneti fájlba írás az XPM-kép betöltésekor sikertelen"
 
-#: ../gdk-pixbuf/io-xpm.c:816
+#: gdk-pixbuf/io-xpm.c:816
 msgid "The XPM image format"
 msgstr "XPM képformátum"
 
-#: ../gdk-pixbuf/io-gdip-emf.c:59
+#: gdk-pixbuf/io-gdip-emf.c:59
 msgid "The EMF image format"
 msgstr "EMF képformátum"
 
-#: ../gdk-pixbuf/io-gdip-utils.c:212
+#: gdk-pixbuf/io-gdip-utils.c:212
 #, c-format
 msgid "Could not allocate memory: %s"
 msgstr "Nem lehet memóriát foglalni: %s"
 
-#: ../gdk-pixbuf/io-gdip-utils.c:237 ../gdk-pixbuf/io-gdip-utils.c:350
-#: ../gdk-pixbuf/io-gdip-utils.c:383
+#: gdk-pixbuf/io-gdip-utils.c:237 gdk-pixbuf/io-gdip-utils.c:350
+#: gdk-pixbuf/io-gdip-utils.c:383
 #, c-format
 msgid "Could not create stream: %s"
 msgstr "Nem hozható létre adatfolyam: %s"
 
-#: ../gdk-pixbuf/io-gdip-utils.c:251
+#: gdk-pixbuf/io-gdip-utils.c:251
 #, c-format
 msgid "Could not seek stream: %s"
 msgstr "Nem lehet pozicionálni az adatfolyamban: %s"
 
-#: ../gdk-pixbuf/io-gdip-utils.c:263
+#: gdk-pixbuf/io-gdip-utils.c:263
 #, c-format
 msgid "Could not read from stream: %s"
 msgstr "Nem lehet olvasni az adatfolyamból: %s"
 
-#: ../gdk-pixbuf/io-gdip-utils.c:736
+#: gdk-pixbuf/io-gdip-utils.c:736
 msgid "Couldn't create pixbuf"
 msgstr "Nem lehet létrehozni képpuffert"
 
-#: ../gdk-pixbuf/io-gdip-utils.c:798
+#: gdk-pixbuf/io-gdip-utils.c:798
 msgid "Couldn't load bitmap"
 msgstr "Nem lehet betölteni a bitképet"
 
-#: ../gdk-pixbuf/io-gdip-utils.c:821
+#: gdk-pixbuf/io-gdip-utils.c:821
 msgid "Couldn't load metafile"
 msgstr "Nem lehet betölteni a metafájlt"
 
-#: ../gdk-pixbuf/io-gdip-utils.c:980
+#: gdk-pixbuf/io-gdip-utils.c:980
 msgid "Unsupported image format for GDI+"
 msgstr "Nem támogatott képformátum a GDI+-hoz"
 
-#: ../gdk-pixbuf/io-gdip-utils.c:987
+#: gdk-pixbuf/io-gdip-utils.c:987
 msgid "Couldn't save"
 msgstr "Nem lehet menteni"
 
-#: ../gdk-pixbuf/io-gdip-wmf.c:58
+#: gdk-pixbuf/io-gdip-wmf.c:58
 msgid "The WMF image format"
 msgstr "WMF képformátum"
 
 #. Description of --sync in --help output
-#: ../gdk/win32/gdkmain-win32.c:54
+#: gdk/win32/gdkmain-win32.c:54
 msgid "Don't batch GDI requests"
 msgstr "Ne kötegelje a GDI kéréseket"
 
 #. Description of --no-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:56
+#: gdk/win32/gdkmain-win32.c:56
 msgid "Don't use the Wintab API for tablet support"
 msgstr "Ne használja a Wintab API-t a tablet támogatáshoz"
 
 #. Description of --ignore-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:58
+#: gdk/win32/gdkmain-win32.c:58
 msgid "Same as --no-wintab"
 msgstr "Ugyanaz mint --no-wintab"
 
 #. Description of --use-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:60
+#: gdk/win32/gdkmain-win32.c:60
 msgid "Do use the Wintab API [default]"
 msgstr "Ne használja a Wintab API-t [alapértelmezett]"
 
 #. Description of --max-colors=COLORS in --help output
-#: ../gdk/win32/gdkmain-win32.c:62
+#: gdk/win32/gdkmain-win32.c:62
 msgid "Size of the palette in 8 bit mode"
 msgstr "A paletta mérete 8 bites módban"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: ../gdk/win32/gdkmain-win32.c:63
+#: gdk/win32/gdkmain-win32.c:63
 msgid "COLORS"
 msgstr "COLORS"
 
 #. Description of --sync in --help output
-#: ../gdk/x11/gdkmain-x11.c:92
+#: gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
 msgstr "Legyenek szinkron X-hívások"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:303
+#: gdk/x11/gdkapplaunchcontext-x11.c:303
 #, c-format
 msgid "Starting %s"
 msgstr "%s indítása"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:305
+#: gdk/x11/gdkapplaunchcontext-x11.c:305
 #, c-format
 msgid "Opening %s"
 msgstr "%s megnyitása"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:308
+#: gdk/x11/gdkapplaunchcontext-x11.c:308
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "%d elem megnyitása"
 msgstr[1] "%d elem megnyitása"
 
-#: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2106
+#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2106
 msgid "License"
 msgstr "Licenc"
 
-#: ../gtk/gtkaboutdialog.c:265
+#: gtk/gtkaboutdialog.c:265
 msgid "The license of the program"
 msgstr "A program licence"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:500
 msgid "C_redits"
 msgstr "_Köszönet"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:513
+#: gtk/gtkaboutdialog.c:513
 msgid "_License"
 msgstr "_Licenc"
 
-#: ../gtk/gtkaboutdialog.c:742
+#: gtk/gtkaboutdialog.c:742
 #, c-format
 msgid "About %s"
 msgstr "%s névjegye"
 
-#: ../gtk/gtkaboutdialog.c:2030
+#: gtk/gtkaboutdialog.c:2030
 msgid "Credits"
 msgstr "Köszönet"
 
-#: ../gtk/gtkaboutdialog.c:2059
+#: gtk/gtkaboutdialog.c:2059
 msgid "Written by"
 msgstr "Írta"
 
-#: ../gtk/gtkaboutdialog.c:2062
+#: gtk/gtkaboutdialog.c:2062
 msgid "Documented by"
 msgstr "Dokumentáció"
 
-#: ../gtk/gtkaboutdialog.c:2074
+#: gtk/gtkaboutdialog.c:2074
 msgid "Translated by"
 msgstr "Fordította"
 
-#: ../gtk/gtkaboutdialog.c:2078
+#: gtk/gtkaboutdialog.c:2078
 msgid "Artwork by"
 msgstr "Grafika"
 
@@ -1201,7 +1193,7 @@ msgstr "Grafika"
 #. *
 #. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: ../gtk/gtkaccellabel.c:93
+#: gtk/gtkaccellabel.c:93
 msgid "keyboard label|Shift"
 msgstr "Shift"
 
@@ -1212,7 +1204,7 @@ msgstr "Shift"
 #. *
 #. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: ../gtk/gtkaccellabel.c:101
+#: gtk/gtkaccellabel.c:101
 msgid "keyboard label|Ctrl"
 msgstr "Ctrl"
 
@@ -1223,7 +1215,7 @@ msgstr "Ctrl"
 #. *
 #. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: ../gtk/gtkaccellabel.c:109
+#: gtk/gtkaccellabel.c:109
 msgid "keyboard label|Alt"
 msgstr "Alt"
 
@@ -1233,7 +1225,7 @@ msgstr "Alt"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: ../gtk/gtkaccellabel.c:679
+#: gtk/gtkaccellabel.c:679
 msgid "keyboard label|Super"
 msgstr "Super"
 
@@ -1243,7 +1235,7 @@ msgstr "Super"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: ../gtk/gtkaccellabel.c:693
+#: gtk/gtkaccellabel.c:693
 msgid "keyboard label|Hyper"
 msgstr "Hyper"
 
@@ -1253,31 +1245,31 @@ msgstr "Hyper"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: ../gtk/gtkaccellabel.c:708
+#: gtk/gtkaccellabel.c:708
 msgid "keyboard label|Meta"
 msgstr "Meta"
 
 #. do not translate the part before the |
-#: ../gtk/gtkaccellabel.c:726
+#: gtk/gtkaccellabel.c:726
 msgid "keyboard label|Space"
 msgstr "Szóköz"
 
 #. do not translate the part before the |
-#: ../gtk/gtkaccellabel.c:730
+#: gtk/gtkaccellabel.c:730
 msgid "keyboard label|Backslash"
 msgstr "Fordított törtvonal"
 
-#: ../gtk/gtkbuilderparser.c:325
+#: gtk/gtkbuilderparser.c:325
 #, c-format
 msgid "Invalid type function: `%s'"
 msgstr "Érvénytelen típusfüggvény: „%s”"
 
-#: ../gtk/gtkbuilderparser.c:788
+#: gtk/gtkbuilderparser.c:789
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Érvénytelen gyökérelem: „%s”"
 
-#: ../gtk/gtkbuilderparser.c:822
+#: gtk/gtkbuilderparser.c:823
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Kezeletlen címke: „%s”"
@@ -1291,7 +1283,7 @@ msgstr "Kezeletlen címke: „%s”"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: ../gtk/gtkcalendar.c:760
+#: gtk/gtkcalendar.c:760
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -1299,7 +1291,7 @@ msgstr "calendar:YM"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:798
+#: gtk/gtkcalendar.c:798
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1311,7 +1303,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1798
+#: gtk/gtkcalendar.c:1798
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1326,7 +1318,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1829 ../gtk/gtkcalendar.c:2490
+#: gtk/gtkcalendar.c:1829 gtk/gtkcalendar.c:2490
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1342,7 +1334,7 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1861 ../gtk/gtkcalendar.c:2352
+#: gtk/gtkcalendar.c:1861 gtk/gtkcalendar.c:2352
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1358,7 +1350,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2142
+#: gtk/gtkcalendar.c:2142
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1366,7 +1358,7 @@ msgstr "%Y"
 #. * a disabled accelerator key combination. Only include
 #. * the text after the | in the translation.
 #.
-#: ../gtk/gtkcellrendereraccel.c:235
+#: gtk/gtkcellrendereraccel.c:235
 msgid "Accelerator|Disabled"
 msgstr "Tiltva"
 
@@ -1374,25 +1366,117 @@ msgstr "Tiltva"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:368 ../gtk/gtkcellrendereraccel.c:580
+#: gtk/gtkcellrendereraccel.c:368 gtk/gtkcellrendereraccel.c:580
 msgid "New accelerator..."
 msgstr "Új gyorsbillentyű…"
 
 #. do not translate the part before the |
-#: ../gtk/gtkcellrendererprogress.c:362 ../gtk/gtkcellrendererprogress.c:449
+#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
 #, c-format
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:559
+#: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
 msgstr "Szín kiválasztása"
 
-#: ../gtk/gtkcolorbutton.c:448
+#: gtk/gtkcolorbutton.c:448
 msgid "Received invalid color data\n"
 msgstr "Érvénytelen színadat érkezett\n"
 
-#: ../gtk/gtkcolorsel.c:550
+#: gtk/gtkcolorsel.c:354
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Válassza ki a kívánt színt a külső gyűrűről. Válassza ki ezen szín a "
+"sötétségét vagy világosságát a belső háromszög használatával."
+
+#: gtk/gtkcolorsel.c:378
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"Kattintson a pipettára, majd a képernyő bármely pontjára az ott lévő szín "
+"kiválasztásához."
+
+#: gtk/gtkcolorsel.c:387
+msgid "_Hue:"
+msgstr "Á_rnyalat:"
+
+#: gtk/gtkcolorsel.c:388
+msgid "Position on the color wheel."
+msgstr "A színkerék pozíciója."
+
+#: gtk/gtkcolorsel.c:390
+msgid "_Saturation:"
+msgstr "Telített_ség:"
+
+#: gtk/gtkcolorsel.c:391
+msgid "\"Deepness\" of the color."
+msgstr "A szín telítettsége."
+
+#: gtk/gtkcolorsel.c:392
+msgid "_Value:"
+msgstr "É_rték:"
+
+#: gtk/gtkcolorsel.c:393
+msgid "Brightness of the color."
+msgstr "A szín fényessége."
+
+#: gtk/gtkcolorsel.c:394
+msgid "_Red:"
+msgstr "_Vörös:"
+
+#: gtk/gtkcolorsel.c:395
+msgid "Amount of red light in the color."
+msgstr "A vörös fény mennyisége a színben."
+
+#: gtk/gtkcolorsel.c:396
+msgid "_Green:"
+msgstr "_Zöld:"
+
+#: gtk/gtkcolorsel.c:397
+msgid "Amount of green light in the color."
+msgstr "A zöld fény mennyisége a színben."
+
+#: gtk/gtkcolorsel.c:398
+msgid "_Blue:"
+msgstr "_Kék:"
+
+#: gtk/gtkcolorsel.c:399
+msgid "Amount of blue light in the color."
+msgstr "A kék fény mennyisége a színben."
+
+#: gtk/gtkcolorsel.c:402
+msgid "Op_acity:"
+msgstr "Á_tlátszatlanság:"
+
+#: gtk/gtkcolorsel.c:409 gtk/gtkcolorsel.c:419
+msgid "Transparency of the color."
+msgstr "A szín átlátszósága."
+
+#: gtk/gtkcolorsel.c:426
+msgid "Color _name:"
+msgstr "Szín _neve:"
+
+#: gtk/gtkcolorsel.c:440
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"Beírhat ide egy HTML-stílusú hexadecimális színértéket, vagy egyszerűen egy "
+"színnevet, például „orange”."
+
+#: gtk/gtkcolorsel.c:470
+msgid "_Palette:"
+msgstr "_Paletta:"
+
+#: gtk/gtkcolorsel.c:499
+msgid "Color Wheel"
+msgstr "Színkerék"
+
+#: gtk/gtkcolorsel.c:980
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1402,7 +1486,7 @@ msgstr ""
 "Áthúzhatja ezt a színt egy palettabejegyzéshez, vagy kiválaszthatja mint "
 "jelenlegit a mellette lévő mezőbe húzással."
 
-#: ../gtk/gtkcolorsel.c:554
+#: gtk/gtkcolorsel.c:984
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1410,11 +1494,11 @@ msgstr ""
 "Az ön által kiválasztott szín. Ezt a színt egy palettabejegyzésbe áthúzva "
 "elmentheti későbbi felhasználásra."
 
-#: ../gtk/gtkcolorsel.c:942
+#: gtk/gtkcolorsel.c:1369
 msgid "_Save color here"
 msgstr "_Szín mentése ide"
 
-#: ../gtk/gtkcolorsel.c:1147
+#: gtk/gtkcolorsel.c:1574
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1424,143 +1508,51 @@ msgstr ""
 "színmezőből vagy a jobb gombos menüben kattintson a „Szín mentése ide” "
 "pontra."
 
-#: ../gtk/gtkcolorsel.c:1921
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
-"Válassza ki a kívánt színt a külső gyűrűről. Válassza ki ezen szín a "
-"sötétségét vagy világosságát a belső háromszög használatával."
-
-#: ../gtk/gtkcolorsel.c:1945
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
-msgstr ""
-"Kattintson a pipettára, majd a képernyő bármely pontjára az ott lévő szín "
-"kiválasztásához."
-
-#: ../gtk/gtkcolorsel.c:1954
-msgid "_Hue:"
-msgstr "Á_rnyalat:"
-
-#: ../gtk/gtkcolorsel.c:1955
-msgid "Position on the color wheel."
-msgstr "A színkerék pozíciója."
-
-#: ../gtk/gtkcolorsel.c:1957
-msgid "_Saturation:"
-msgstr "Telített_ség:"
-
-#: ../gtk/gtkcolorsel.c:1958
-msgid "\"Deepness\" of the color."
-msgstr "A szín telítettsége."
-
-#: ../gtk/gtkcolorsel.c:1959
-msgid "_Value:"
-msgstr "É_rték:"
-
-#: ../gtk/gtkcolorsel.c:1960
-msgid "Brightness of the color."
-msgstr "A szín fényessége."
-
-#: ../gtk/gtkcolorsel.c:1961
-msgid "_Red:"
-msgstr "_Vörös:"
-
-#: ../gtk/gtkcolorsel.c:1962
-msgid "Amount of red light in the color."
-msgstr "A vörös fény mennyisége a színben."
-
-#: ../gtk/gtkcolorsel.c:1963
-msgid "_Green:"
-msgstr "_Zöld:"
-
-#: ../gtk/gtkcolorsel.c:1964
-msgid "Amount of green light in the color."
-msgstr "A zöld fény mennyisége a színben."
-
-#: ../gtk/gtkcolorsel.c:1965
-msgid "_Blue:"
-msgstr "_Kék:"
-
-#: ../gtk/gtkcolorsel.c:1966
-msgid "Amount of blue light in the color."
-msgstr "A kék fény mennyisége a színben."
-
-#: ../gtk/gtkcolorsel.c:1969
-msgid "Op_acity:"
-msgstr "Á_tlátszatlanság:"
-
-#: ../gtk/gtkcolorsel.c:1976 ../gtk/gtkcolorsel.c:1986
-msgid "Transparency of the color."
-msgstr "A szín átlátszósága."
-
-#: ../gtk/gtkcolorsel.c:1993
-msgid "Color _name:"
-msgstr "Szín _neve:"
-
-#: ../gtk/gtkcolorsel.c:2007
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"Beírhat ide egy HTML-stílusú hexadecimális színértéket, vagy egyszerűen egy "
-"színnevet, például „orange”."
-
-#: ../gtk/gtkcolorsel.c:2037
-msgid "_Palette:"
-msgstr "_Paletta:"
-
-#: ../gtk/gtkcolorsel.c:2066
-msgid "Color Wheel"
-msgstr "Színkerék"
-
-#: ../gtk/gtkcolorseldialog.c:101
+#: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
 msgstr "Szín kiválasztása"
 
-#: ../gtk/gtkentry.c:5276 ../gtk/gtktextview.c:7668
+#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7668
 msgid "Input _Methods"
 msgstr "Beviteli mó_dok"
 
-#: ../gtk/gtkentry.c:5290 ../gtk/gtktextview.c:7682
+#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7682
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode vezérlőkarakter beszúrása"
 
-#: ../gtk/gtkfilechooserbutton.c:64
+#: gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
 msgstr "Válasszon ki egy fájlt"
 
-#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1924
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1894
 msgid "Desktop"
 msgstr "Munkaasztal"
 
-#: ../gtk/gtkfilechooserbutton.c:66
+#: gtk/gtkfilechooserbutton.c:66
 msgid "(None)"
 msgstr "(Nincs)"
 
-#: ../gtk/gtkfilechooserbutton.c:2030
+#: gtk/gtkfilechooserbutton.c:2030
 msgid "Other..."
 msgstr "Egyéb…"
 
-#: ../gtk/gtkfilechooserdefault.c:1073
+#: gtk/gtkfilechooserdefault.c:1043
 msgid "Could not retrieve information about the file"
 msgstr "Nem érhető el információ a fájlról"
 
-#: ../gtk/gtkfilechooserdefault.c:1084
+#: gtk/gtkfilechooserdefault.c:1054
 msgid "Could not add a bookmark"
 msgstr "Nem adható hozzá könyvjelző"
 
-#: ../gtk/gtkfilechooserdefault.c:1095
+#: gtk/gtkfilechooserdefault.c:1065
 msgid "Could not remove bookmark"
 msgstr "Nem lehet eltávolítani a könyvjelzőt"
 
-#: ../gtk/gtkfilechooserdefault.c:1106
+#: gtk/gtkfilechooserdefault.c:1076
 msgid "The folder could not be created"
 msgstr "A mappa nem hozható létre"
 
-#: ../gtk/gtkfilechooserdefault.c:1119
+#: gtk/gtkfilechooserdefault.c:1089
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1568,11 +1560,11 @@ msgstr ""
 "A mappát nem lehet létrehozni, mivel már létezik egy fájl ugyanezen a néven. "
 "Próbáljon más nevet adni a mappának vagy nevezze át a fájlt."
 
-#: ../gtk/gtkfilechooserdefault.c:1130
+#: gtk/gtkfilechooserdefault.c:1100
 msgid "Invalid file name"
 msgstr "Érvénytelen fájlnév"
 
-#: ../gtk/gtkfilechooserdefault.c:1140
+#: gtk/gtkfilechooserdefault.c:1110
 msgid "The folder contents could not be displayed"
 msgstr "A mappa tartalma nem jeleníthető meg"
 
@@ -1580,170 +1572,171 @@ msgstr "A mappa tartalma nem jeleníthető meg"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1682
+#: gtk/gtkfilechooserdefault.c:1652
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s ezen: %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1852
+#: gtk/gtkfilechooserdefault.c:1822
 msgid "Search"
 msgstr "Keresés"
 
-#: ../gtk/gtkfilechooserdefault.c:1876
+#: gtk/gtkfilechooserdefault.c:1846
 msgid "Recently Used"
 msgstr "Nemrég használt"
 
-#: ../gtk/gtkfilechooserdefault.c:2491
+#: gtk/gtkfilechooserdefault.c:2461
 msgid "Select which types of files are shown"
 msgstr "Válassza ki, hogy milyen típusú fájlok jelenjenek meg"
 
-#: ../gtk/gtkfilechooserdefault.c:2920
+#: gtk/gtkfilechooserdefault.c:2890
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "A(z) „%s” mappa hozzáadása a könyvjelzőkhöz"
 
-#: ../gtk/gtkfilechooserdefault.c:2961
+#: gtk/gtkfilechooserdefault.c:2931
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "A jelenlegi mappa hozzáadása a könyvjelzőkhöz"
 
-#: ../gtk/gtkfilechooserdefault.c:2963
+#: gtk/gtkfilechooserdefault.c:2933
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "A kijelölt mappák hozzáadása a könyvjelzőkhöz"
 
-#: ../gtk/gtkfilechooserdefault.c:3003
+#: gtk/gtkfilechooserdefault.c:2973
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "A(z) „%s” könyvjelző eltávolítása"
 
-#: ../gtk/gtkfilechooserdefault.c:3719
+#: gtk/gtkfilechooserdefault.c:3691
 msgid "Remove"
 msgstr "Eltávolítás"
 
-#: ../gtk/gtkfilechooserdefault.c:3728
+#: gtk/gtkfilechooserdefault.c:3700
 msgid "Rename..."
 msgstr "Átnevezés…"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3870
+#: gtk/gtkfilechooserdefault.c:3847
 msgid "Places"
 msgstr "Helyek"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3926
+#: gtk/gtkfilechooserdefault.c:3904
 msgid "_Places"
 msgstr "_Helyek"
 
-#: ../gtk/gtkfilechooserdefault.c:3981 ../gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3959 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "Hozzá_adás"
 
-#: ../gtk/gtkfilechooserdefault.c:3988
+#: gtk/gtkfilechooserdefault.c:3966
 msgid "Add the selected folder to the Bookmarks"
 msgstr "A kijelölt mappa hozzáadása a könyvjelzőkhöz"
 
-#: ../gtk/gtkfilechooserdefault.c:3993 ../gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:3971 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "_Eltávolítás"
 
-#: ../gtk/gtkfilechooserdefault.c:4000
+#: gtk/gtkfilechooserdefault.c:3978
 msgid "Remove the selected bookmark"
 msgstr "A kijelölt könyvjelző eltávolítása"
 
-#: ../gtk/gtkfilechooserdefault.c:4097
+#: gtk/gtkfilechooserdefault.c:4075
 msgid "Could not select file"
 msgstr "Nem sikerült kijelölni a fájlt"
 
-#: ../gtk/gtkfilechooserdefault.c:4266
+#: gtk/gtkfilechooserdefault.c:4248
 msgid "_Add to Bookmarks"
 msgstr "Hozzá_adás a könyvjelzőkhöz"
 
-#: ../gtk/gtkfilechooserdefault.c:4280
+#: gtk/gtkfilechooserdefault.c:4262
 msgid "Show _Hidden Files"
 msgstr "_Rejtett fájlok megjelenítése"
 
-#: ../gtk/gtkfilechooserdefault.c:4524 ../gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4505 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Fájlok"
 
-#: ../gtk/gtkfilechooserdefault.c:4573
+#: gtk/gtkfilechooserdefault.c:4554
 msgid "Name"
 msgstr "Név"
 
-#: ../gtk/gtkfilechooserdefault.c:4598
+#: gtk/gtkfilechooserdefault.c:4579
 msgid "Size"
 msgstr "Méret"
 
-#: ../gtk/gtkfilechooserdefault.c:4612
+#: gtk/gtkfilechooserdefault.c:4593
 msgid "Modified"
 msgstr "Módosítva"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4832 ../gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4813 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Név:"
 
-#: ../gtk/gtkfilechooserdefault.c:4874
+#: gtk/gtkfilechooserdefault.c:4855
 msgid "_Browse for other folders"
 msgstr "Egyéb mappák _böngészése"
 
-#: ../gtk/gtkfilechooserdefault.c:5144
+#: gtk/gtkfilechooserdefault.c:5125
 msgid "Type a file name"
 msgstr "Írjon be egy fájlnevet"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5181
+#: gtk/gtkfilechooserdefault.c:5162
 msgid "Create Fo_lder"
 msgstr "M_appa létrehozása"
 
-#: ../gtk/gtkfilechooserdefault.c:5191
+#: gtk/gtkfilechooserdefault.c:5172
 msgid "_Location:"
 msgstr "Hel_y:"
 
-#: ../gtk/gtkfilechooserdefault.c:5380
+#: gtk/gtkfilechooserdefault.c:5361
 msgid "Save in _folder:"
 msgstr "Mentés _mappába:"
 
-#: ../gtk/gtkfilechooserdefault.c:5382
+#: gtk/gtkfilechooserdefault.c:5363
 msgid "Create in _folder:"
 msgstr "Létrehozás _mappában:"
 
-#: ../gtk/gtkfilechooserdefault.c:6969
+#: gtk/gtkfilechooserdefault.c:6957
 msgid "Cannot change to folder because it is not local"
 msgstr "Nem lehet megváltoztatni a mappát, mert az nem helyi"
 
-#: ../gtk/gtkfilechooserdefault.c:7586 ../gtk/gtkfilechooserdefault.c:7607
+#: gtk/gtkfilechooserdefault.c:7582 gtk/gtkfilechooserdefault.c:7603
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Már létezik %s gyorsbillentyű"
 
-#: ../gtk/gtkfilechooserdefault.c:7697
+#: gtk/gtkfilechooserdefault.c:7693
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s gyorsbillentyű nem létezik"
 
-#: ../gtk/gtkfilechooserdefault.c:7940 ../gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:7936 gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "A(z) „%s” nevű fájl már létezik. Le akarja cserélni?"
 
-#: ../gtk/gtkfilechooserdefault.c:7943 ../gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:7939 gtk/gtkprintunixdialog.c:360
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "A fájl már létezik a(z) „%s” helyen. Lecserélésével a tartalma felül lesz "
 "írva."
 
-#: ../gtk/gtkfilechooserdefault.c:7948 ../gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:7944 gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "_Csere"
 
-#: ../gtk/gtkfilechooserdefault.c:8709
+#: gtk/gtkfilechooserdefault.c:8705
 msgid "Could not start the search process"
 msgstr "Nem lehet elindítani a keresési folyamatot"
 
-#: ../gtk/gtkfilechooserdefault.c:8710
+#: gtk/gtkfilechooserdefault.c:8706
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1751,96 +1744,96 @@ msgstr ""
 "A program nem volt képes kapcsolatot létrehozni az indexelő démonhoz. "
 "Győződjön meg róla, hogy az fut."
 
-#: ../gtk/gtkfilechooserdefault.c:8724
+#: gtk/gtkfilechooserdefault.c:8720
 msgid "Could not send the search request"
 msgstr "Nem lehet elküldeni a keresési kérést"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9139
+#: gtk/gtkfilechooserdefault.c:9135
 msgid "_Search:"
 msgstr "_Keresés:"
 
-#: ../gtk/gtkfilechooserdefault.c:10086
+#: gtk/gtkfilechooserdefault.c:10082
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s nem csatolható"
 
-#: ../gtk/gtkfilechooserdefault.c:10740
+#: gtk/gtkfilechooserdefault.c:10736
 msgid "Type name of new folder"
 msgstr "Adja meg az új mappa nevét"
 
-#: ../gtk/gtkfilechooserdefault.c:10790
+#: gtk/gtkfilechooserdefault.c:10786
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: ../gtk/gtkfilechooserdefault.c:10792
+#: gtk/gtkfilechooserdefault.c:10788
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:10794
+#: gtk/gtkfilechooserdefault.c:10790
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:10897 ../gtk/gtkfilechooserdefault.c:10919
-#: ../gtk/gtkfilechooserdefault.c:10990
+#: gtk/gtkfilechooserdefault.c:10893 gtk/gtkfilechooserdefault.c:10915
+#: gtk/gtkfilechooserdefault.c:10986
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: ../gtk/gtkfilechooserdefault.c:10937
+#: gtk/gtkfilechooserdefault.c:10933
 msgid "%H:%M"
 msgstr "%k.%M"
 
-#: ../gtk/gtkfilechooserdefault.c:10939
+#: gtk/gtkfilechooserdefault.c:10935
 msgid "Yesterday at %H:%M"
 msgstr "Tegnap %k.%M"
 
-#: ../gtk/gtkfilechooserentry.c:659 ../gtk/gtkfilechooserentry.c:1105
+#: gtk/gtkfilechooserentry.c:659 gtk/gtkfilechooserentry.c:1105
 msgid "Invalid path"
 msgstr "Érvénytelen útvonal"
 
-#: ../gtk/gtkfilechooserentry.c:1067
+#: gtk/gtkfilechooserentry.c:1067
 msgid "No match"
 msgstr "Nincs találat"
 
-#: ../gtk/gtkfilechooserentry.c:1075
+#: gtk/gtkfilechooserentry.c:1075
 msgid "Sole completion"
 msgstr "Egyszerű kiegészítés"
 
-#: ../gtk/gtkfilechooserentry.c:1087
+#: gtk/gtkfilechooserentry.c:1087
 msgid "Complete, but not unique"
 msgstr "Teljes, de nem egyedi"
 
-#: ../gtk/gtkfilechooserentry.c:1120
+#: gtk/gtkfilechooserentry.c:1120
 msgid "Completing..."
 msgstr "Kiegészítés…"
 
-#: ../gtk/gtkfilechoosersettings.c:262 ../gtk/gtkfilesel.c:1349
-#: ../gtk/gtkfilesel.c:1358
+#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1349
+#: gtk/gtkfilesel.c:1358
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Hiba a(z) „%s” mappa létrehozásakor: %s"
 
-#: ../gtk/gtkfilesel.c:694
+#: gtk/gtkfilesel.c:694
 msgid "Folders"
 msgstr "Mappák"
 
-#: ../gtk/gtkfilesel.c:698
+#: gtk/gtkfilesel.c:698
 msgid "Fol_ders"
 msgstr "_Mappák"
 
-#: ../gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:734
 msgid "_Files"
 msgstr "_Fájlok"
 
-#: ../gtk/gtkfilesel.c:821 ../gtk/gtkfilesel.c:2148
+#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2148
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Olvashatatlan könyvtár: %s"
 
-#: ../gtk/gtkfilesel.c:905
+#: gtk/gtkfilesel.c:905
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1851,87 +1844,90 @@ msgstr ""
 "ezen program számára.\n"
 "Valóban ki akarja választani?"
 
-#: ../gtk/gtkfilesel.c:1020
+#: gtk/gtkfilesel.c:1020
 msgid "_New Folder"
 msgstr "Új _mappa"
 
-#: ../gtk/gtkfilesel.c:1031
+#: gtk/gtkfilesel.c:1031
 msgid "De_lete File"
 msgstr "Fájl _törlése"
 
-#: ../gtk/gtkfilesel.c:1042
+#: gtk/gtkfilesel.c:1042
 msgid "_Rename File"
 msgstr "Fájl át_nevezése"
 
-#: ../gtk/gtkfilesel.c:1347
+#: gtk/gtkfilesel.c:1347
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "A(z) „%s” mappanév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"A(z) „%s” mappanév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
-#: ../gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1392
 msgid "New Folder"
 msgstr "Új mappa"
 
-#: ../gtk/gtkfilesel.c:1407
+#: gtk/gtkfilesel.c:1407
 msgid "_Folder name:"
 msgstr "_Mappa neve:"
 
-#: ../gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1431
 msgid "C_reate"
 msgstr "Lét_rehozás"
 
-#: ../gtk/gtkfilesel.c:1474 ../gtk/gtkfilesel.c:1581 ../gtk/gtkfilesel.c:1594
+#: gtk/gtkfilesel.c:1474 gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1594
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "A(z) „%s” fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgstr ""
+"A(z) „%s” fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
-#: ../gtk/gtkfilesel.c:1477 ../gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1487
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "Hiba a(z) „%s” fájl törlése közben: %s"
 
-#: ../gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1530
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "Biztos törli a(z) „%s” fájlt?"
 
-#: ../gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1535
 msgid "Delete File"
 msgstr "Fájl törlése"
 
-#: ../gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1583
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr "Hiba a fájl átnevezése közben erre: „%s” : %s"
 
-#: ../gtk/gtkfilesel.c:1596
+#: gtk/gtkfilesel.c:1596
 #, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr "Hiba „%s” fájl átnevezése közben: %s"
 
-#: ../gtk/gtkfilesel.c:1605
+#: gtk/gtkfilesel.c:1605
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Hiba „%s” fájl erre: „%s” való átnevezése közben: %s"
 
-#: ../gtk/gtkfilesel.c:1652
+#: gtk/gtkfilesel.c:1652
 msgid "Rename File"
 msgstr "Fájl átnevezése"
 
-#: ../gtk/gtkfilesel.c:1667
+#: gtk/gtkfilesel.c:1667
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "„%s” fájl átnevezése:"
 
-#: ../gtk/gtkfilesel.c:1696
+#: gtk/gtkfilesel.c:1696
 msgid "_Rename"
 msgstr "Á_tnevezés"
 
-#: ../gtk/gtkfilesel.c:2128
+#: gtk/gtkfilesel.c:2128
 msgid "_Selection: "
 msgstr "_Kijelölés: "
 
-#: ../gtk/gtkfilesel.c:3048
+#: gtk/gtkfilesel.c:3048
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1940,15 +1936,15 @@ msgstr ""
 "A(z) „%s” fájlnevet nem lehet UTF-8-ra konvertálni. (próbálja meg beállítani "
 "a G_FILENAME_ENCODING környezeti változót): %s"
 
-#: ../gtk/gtkfilesel.c:3051
+#: gtk/gtkfilesel.c:3051
 msgid "Invalid UTF-8"
 msgstr "Érvénytelen UTF-8"
 
-#: ../gtk/gtkfilesel.c:3925
+#: gtk/gtkfilesel.c:3925
 msgid "Name too long"
 msgstr "Túl hosszú a név"
 
-#: ../gtk/gtkfilesel.c:3927
+#: gtk/gtkfilesel.c:3927
 msgid "Couldn't convert filename"
 msgstr "Nem lehet konvertálni a fájlnevet"
 
@@ -1957,75 +1953,75 @@ msgstr "Nem lehet konvertálni a fájlnevet"
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: ../gtk/gtkfilesystem.c:48
+#: gtk/gtkfilesystem.c:51
 msgid "File System"
 msgstr "Fájlrendszer"
 
-#: ../gtk/gtkfilesystemmodel.c:700
+#: gtk/gtkfilesystemmodel.c:700
 msgid "Could not obtain root folder"
 msgstr "Nem kérhető le a gyökérmappa"
 
-#: ../gtk/gtkfilesystemmodel.c:1299
+#: gtk/gtkfilesystemmodel.c:1299
 msgid "(Empty)"
 msgstr "(Üres)"
 
-#: ../gtk/gtkfontbutton.c:144 ../gtk/gtkfontbutton.c:266
+#: gtk/gtkfontbutton.c:144 gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
 msgstr "Betűkészlet kiválasztása"
 
 #. Initialize fields
-#: ../gtk/gtkfontbutton.c:260
+#: gtk/gtkfontbutton.c:260
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:780
+#: gtk/gtkfontbutton.c:780
 msgid "Font"
 msgstr "Betűkészlet"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: ../gtk/gtkfontsel.c:75
+#: gtk/gtkfontsel.c:75
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "árvíztűrő tükörfúrógép ÁRVÍZTŰRŐ TÜKÖRFÚRÓGÉP"
 
-#: ../gtk/gtkfontsel.c:328
+#: gtk/gtkfontsel.c:328
 msgid "_Family:"
 msgstr "_Család:"
 
-#: ../gtk/gtkfontsel.c:334
+#: gtk/gtkfontsel.c:334
 msgid "_Style:"
 msgstr "_Stílus:"
 
-#: ../gtk/gtkfontsel.c:340
+#: gtk/gtkfontsel.c:340
 msgid "Si_ze:"
 msgstr "_Méret:"
 
 #. create the text entry widget
-#: ../gtk/gtkfontsel.c:517
+#: gtk/gtkfontsel.c:517
 msgid "_Preview:"
 msgstr "_Előnézet:"
 
-#: ../gtk/gtkfontsel.c:1362
+#: gtk/gtkfontsel.c:1571
 msgid "Font Selection"
 msgstr "Betűkészlet-választó"
 
-#: ../gtk/gtkgamma.c:408
+#: gtk/gtkgamma.c:408
 msgid "Gamma"
 msgstr "Gamma"
 
-#: ../gtk/gtkgamma.c:418
+#: gtk/gtkgamma.c:418
 msgid "_Gamma value"
 msgstr "_Gamma érték"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1402
+#: gtk/gtkiconfactory.c:1402
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Hiba az ikon betöltésekor: %s"
 
-#: ../gtk/gtkicontheme.c:1362
+#: gtk/gtkicontheme.c:1362
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2038,140 +2034,140 @@ msgstr ""
 "Beszerezhet egy másolatot a következő helyről:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1542
+#: gtk/gtkicontheme.c:1542
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "„%s” ikon nincs a témában"
 
-#: ../gtk/gtkicontheme.c:2983
+#: gtk/gtkicontheme.c:2983
 msgid "Failed to load icon"
 msgstr "Nem sikerült betölteni az ikont"
 
-#: ../gtk/gtkimmodule.c:515
+#: gtk/gtkimmodule.c:515
 msgid "Simple"
 msgstr "Egyszerű"
 
-#: ../gtk/gtkimmulticontext.c:542
+#: gtk/gtkimmulticontext.c:542
 msgid "input method menu|System"
 msgstr "Rendszer"
 
-#: ../gtk/gtkinputdialog.c:192
+#: gtk/gtkinputdialog.c:192
 msgid "Input"
 msgstr "Bevitel"
 
-#: ../gtk/gtkinputdialog.c:207
+#: gtk/gtkinputdialog.c:207
 msgid "No extended input devices"
 msgstr "Nincs kiterjesztett beviteli eszköz"
 
-#: ../gtk/gtkinputdialog.c:220
+#: gtk/gtkinputdialog.c:220
 msgid "_Device:"
 msgstr "_Eszköz:"
 
-#: ../gtk/gtkinputdialog.c:237
+#: gtk/gtkinputdialog.c:237
 msgid "Disabled"
 msgstr "Tiltva"
 
-#: ../gtk/gtkinputdialog.c:244
+#: gtk/gtkinputdialog.c:244
 msgid "Screen"
 msgstr "Képernyő"
 
-#: ../gtk/gtkinputdialog.c:251
+#: gtk/gtkinputdialog.c:251
 msgid "Window"
 msgstr "Ablak"
 
-#: ../gtk/gtkinputdialog.c:258
+#: gtk/gtkinputdialog.c:258
 msgid "_Mode:"
 msgstr "_Mód:"
 
 #. The axis listbox
-#: ../gtk/gtkinputdialog.c:279
+#: gtk/gtkinputdialog.c:279
 msgid "Axes"
 msgstr "Tengelyek"
 
 #. Keys listbox
-#: ../gtk/gtkinputdialog.c:297
+#: gtk/gtkinputdialog.c:297
 msgid "Keys"
 msgstr "Billentyűk"
 
-#: ../gtk/gtkinputdialog.c:524
+#: gtk/gtkinputdialog.c:524
 msgid "_X:"
 msgstr "_X:"
 
-#: ../gtk/gtkinputdialog.c:525
+#: gtk/gtkinputdialog.c:525
 msgid "_Y:"
 msgstr "_Y:"
 
-#: ../gtk/gtkinputdialog.c:526
+#: gtk/gtkinputdialog.c:526
 msgid "_Pressure:"
 msgstr "_Nyomás:"
 
-#: ../gtk/gtkinputdialog.c:527
+#: gtk/gtkinputdialog.c:527
 msgid "X _tilt:"
 msgstr "X _döntés:"
 
-#: ../gtk/gtkinputdialog.c:528
+#: gtk/gtkinputdialog.c:528
 msgid "Y t_ilt:"
 msgstr "Y dö_ntés:"
 
-#: ../gtk/gtkinputdialog.c:529
+#: gtk/gtkinputdialog.c:529
 msgid "_Wheel:"
 msgstr "_Görgő:"
 
-#: ../gtk/gtkinputdialog.c:581
+#: gtk/gtkinputdialog.c:581
 msgid "none"
 msgstr "nincs"
 
-#: ../gtk/gtkinputdialog.c:618 ../gtk/gtkinputdialog.c:654
+#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
 msgid "(disabled)"
 msgstr "(tiltva)"
 
-#: ../gtk/gtkinputdialog.c:647
+#: gtk/gtkinputdialog.c:647
 msgid "(unknown)"
 msgstr "(ismeretlen)"
 
 #. and clear button
-#: ../gtk/gtkinputdialog.c:751
+#: gtk/gtkinputdialog.c:751
 msgid "Cl_ear"
 msgstr "_Törlés"
 
-#: ../gtk/gtklinkbutton.c:144
+#: gtk/gtklinkbutton.c:144
 msgid "URI"
 msgstr "URI"
 
-#: ../gtk/gtklinkbutton.c:145
+#: gtk/gtklinkbutton.c:145
 msgid "The URI bound to this button"
 msgstr "A gombhoz kötött URI cím"
 
-#: ../gtk/gtklinkbutton.c:402
+#: gtk/gtklinkbutton.c:402
 msgid "Copy URL"
 msgstr "URL másolása"
 
-#: ../gtk/gtklinkbutton.c:542
+#: gtk/gtklinkbutton.c:542
 msgid "Invalid URI"
 msgstr "Érvénytelen URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:421
+#: gtk/gtkmain.c:421
 msgid "Load additional GTK+ modules"
 msgstr "További GTK+ modulok betöltése"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:422
+#: gtk/gtkmain.c:422
 msgid "MODULES"
 msgstr "MODULOK"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:424
+#: gtk/gtkmain.c:424
 msgid "Make all warnings fatal"
 msgstr "Minden figyelmeztetés végzetes legyen"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:427
+#: gtk/gtkmain.c:427
 msgid "GTK+ debugging flags to set"
 msgstr "Beállítandó Gtk+ debug jelzőbitek"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:430
+#: gtk/gtkmain.c:430
 msgid "GTK+ debugging flags to unset"
 msgstr "Kikapcsolandó Gtk+ jelzőbitek"
 
@@ -2180,74 +2176,73 @@ msgstr "Kikapcsolandó Gtk+ jelzőbitek"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:678
+#: gtk/gtkmain.c:678
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:737
+#: gtk/gtkmain.c:740
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nem nyitható meg a megjelenítő: %s"
 
-#: ../gtk/gtkmain.c:774
+#: gtk/gtkmain.c:777
 msgid "GTK+ Options"
 msgstr "GTK+ beállításai"
 
-#: ../gtk/gtkmain.c:774
+#: gtk/gtkmain.c:777
 msgid "Show GTK+ Options"
 msgstr "GTK+ beállítások megjelenítése"
 
-#: ../gtk/gtkmountoperation.c:476
+#: gtk/gtkmountoperation.c:476
 msgid "Co_nnect"
 msgstr "Kap_csolódás"
 
-#: ../gtk/gtkmountoperation.c:520
+#: gtk/gtkmountoperation.c:520
 msgid "Connect _anonymously"
 msgstr "Kapcsolódás _névtelenül"
 
-#: ../gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:529
 msgid "Connect as u_ser:"
 msgstr "Kapcsolódás _felhasználóként:"
 
-#: ../gtk/gtkmountoperation.c:566
+#: gtk/gtkmountoperation.c:566
 msgid "_Username:"
 msgstr "_Felhasználónév:"
 
-#: ../gtk/gtkmountoperation.c:570
+#: gtk/gtkmountoperation.c:570
 msgid "_Domain:"
 msgstr "_Tartomány:"
 
-#: ../gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:575
 msgid "_Password:"
 msgstr "J_elszó:"
 
-#: ../gtk/gtkmountoperation.c:590
+#: gtk/gtkmountoperation.c:590
 msgid "_Forget password immediately"
 msgstr "Jelszó a_zonnali elfelejtése"
 
-#: ../gtk/gtkmountoperation.c:598
+#: gtk/gtkmountoperation.c:598
 msgid "_Remember password until you logout"
 msgstr "Jelszó megjegyzése _kijelentkezésig"
 
-#: ../gtk/gtkmountoperation.c:606
+#: gtk/gtkmountoperation.c:606
 msgid "_Remember forever"
 msgstr "_Megjegyzés örökre"
 
-#: ../gtk/gtknotebook.c:835
+#: gtk/gtknotebook.c:834
 msgid "Arrow spacing"
 msgstr "Nyíl kitöltés"
 
-#: ../gtk/gtknotebook.c:836
+#: gtk/gtknotebook.c:835
 msgid "Scroll arrow spacing"
 msgstr "Görgetőnyíl kitöltése"
 
-#: ../gtk/gtknotebook.c:4413 ../gtk/gtknotebook.c:6919
+#: gtk/gtknotebook.c:4412 gtk/gtknotebook.c:6918
 #, c-format
 msgid "Page %u"
 msgstr "%u. oldal"
 
-#: ../gtk/gtkpagesetup.c:597 ../gtk/gtkpapersize.c:825
-#: ../gtk/gtkpapersize.c:865
+#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
 msgid "Not a valid page setup file"
 msgstr "Nem érvényes oldalbeállítási fájl"
 
@@ -2257,11 +2252,11 @@ msgstr "Nem érvényes oldalbeállítási fájl"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: ../gtk/gtkpagesetupunixdialog.c:152
+#: gtk/gtkpagesetupunixdialog.c:152
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkpagesetupunixdialog.c:308
+#: gtk/gtkpagesetupunixdialog.c:308
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
@@ -2269,15 +2264,15 @@ msgstr ""
 "<b>Tetszőleges nyomtató</b>\n"
 "Hordozható dokumentumokhoz"
 
-#: ../gtk/gtkpagesetupunixdialog.c:894 ../gtk/gtkpagesetupunixdialog.c:1403
+#: gtk/gtkpagesetupunixdialog.c:894 gtk/gtkpagesetupunixdialog.c:1403
 msgid "mm"
 msgstr "mm"
 
-#: ../gtk/gtkpagesetupunixdialog.c:896 ../gtk/gtkpagesetupunixdialog.c:1401
+#: gtk/gtkpagesetupunixdialog.c:896 gtk/gtkpagesetupunixdialog.c:1401
 msgid "inch"
 msgstr "hüvelyk"
 
-#: ../gtk/gtkpagesetupunixdialog.c:915
+#: gtk/gtkpagesetupunixdialog.c:915
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2292,88 +2287,88 @@ msgstr ""
 " Felső: %s %s\n"
 " Alsó: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:964
+#: gtk/gtkpagesetupunixdialog.c:964
 msgid "Manage Custom Sizes..."
 msgstr "Egyéni méretek kezelése…"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1012
+#: gtk/gtkpagesetupunixdialog.c:1012
 msgid "_Format for:"
 msgstr "_Formátum ehhez:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1034
+#: gtk/gtkpagesetupunixdialog.c:1034
 msgid "_Paper size:"
 msgstr "_Papírméret:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1065
+#: gtk/gtkpagesetupunixdialog.c:1065
 msgid "_Orientation:"
 msgstr "_Tájolás:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1129 ../gtk/gtkprintunixdialog.c:2343
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2343
 msgid "Page Setup"
 msgstr "Oldalbeállítás"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1448
+#: gtk/gtkpagesetupunixdialog.c:1448
 msgid "Margins from Printer..."
 msgstr "Margók a nyomtatótól…"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1608
+#: gtk/gtkpagesetupunixdialog.c:1608
 #, c-format
 msgid "Custom Size %d"
 msgstr "Egyéni méret %d"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1837
+#: gtk/gtkpagesetupunixdialog.c:1837
 msgid "Manage Custom Sizes"
 msgstr "Egyéni méretek kezelése"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1933
+#: gtk/gtkpagesetupunixdialog.c:1933
 msgid "_Width:"
 msgstr "_Szélesség:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1945
+#: gtk/gtkpagesetupunixdialog.c:1945
 msgid "_Height:"
 msgstr "_Magasság:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1957
+#: gtk/gtkpagesetupunixdialog.c:1957
 msgid "Paper Size"
 msgstr "Papírméret"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1967
+#: gtk/gtkpagesetupunixdialog.c:1967
 msgid "_Top:"
 msgstr "_Fent:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1979
+#: gtk/gtkpagesetupunixdialog.c:1979
 msgid "_Bottom:"
 msgstr "_Lent:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1991
+#: gtk/gtkpagesetupunixdialog.c:1991
 msgid "_Left:"
 msgstr "_Bal:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:2003
+#: gtk/gtkpagesetupunixdialog.c:2003
 msgid "_Right:"
 msgstr "J_obb:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:2044
+#: gtk/gtkpagesetupunixdialog.c:2044
 msgid "Paper Margins"
 msgstr "Papírmargók"
 
-#: ../gtk/gtkpathbar.c:151
+#: gtk/gtkpathbar.c:151
 msgid "Up Path"
 msgstr "Vissza az útvonalon"
 
-#: ../gtk/gtkpathbar.c:153
+#: gtk/gtkpathbar.c:153
 msgid "Down Path"
 msgstr "Előre az útvonalon"
 
-#: ../gtk/gtkpathbar.c:1464
+#: gtk/gtkpathbar.c:1464
 msgid "File System Root"
 msgstr "Fájlrendszer gyökere"
 
-#: ../gtk/gtkprinteroptionwidget.c:685
+#: gtk/gtkprinteroptionwidget.c:685
 msgid "Not available"
 msgstr "Nem érhető el"
 
-#: ../gtk/gtkprinteroptionwidget.c:798
+#: gtk/gtkprinteroptionwidget.c:798
 msgid "_Save in folder:"
 msgstr "Mentés _mappába:"
 
@@ -2381,157 +2376,170 @@ msgstr "Mentés _mappába:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: ../gtk/gtkprintoperation.c:173
+#: gtk/gtkprintoperation.c:173
 #, c-format
 msgid "%s job #%d"
 msgstr "%s %d. feladata"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1498
+#: gtk/gtkprintoperation.c:1504
 msgid "print operation status|Initial state"
 msgstr "Kezdeti állapot"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1500
+#: gtk/gtkprintoperation.c:1506
 msgid "print operation status|Preparing to print"
 msgstr "Nyomtatás előkészítése"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1502
+#: gtk/gtkprintoperation.c:1508
 msgid "print operation status|Generating data"
 msgstr "Adatok előállítása"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1504
+#: gtk/gtkprintoperation.c:1510
 msgid "print operation status|Sending data"
 msgstr "Adatok küldése"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1506
+#: gtk/gtkprintoperation.c:1512
 msgid "print operation status|Waiting"
 msgstr "Várakozás"
 
 # fixme: jó ez így?
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1508
+#: gtk/gtkprintoperation.c:1514
 msgid "print operation status|Blocking on issue"
 msgstr "Blokkolás probléma miatt"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1510
+#: gtk/gtkprintoperation.c:1516
 msgid "print operation status|Printing"
 msgstr "Nyomtatás"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1512
+#: gtk/gtkprintoperation.c:1518
 msgid "print operation status|Finished"
 msgstr "Befejeződött"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1514
+#: gtk/gtkprintoperation.c:1520
 msgid "print operation status|Finished with error"
 msgstr "Hibával fejeződött be"
 
-#: ../gtk/gtkprintoperation.c:1997
+#: gtk/gtkprintoperation.c:2003
 #, c-format
 msgid "Preparing %d"
 msgstr "%d előkészítése"
 
-#: ../gtk/gtkprintoperation.c:1999 ../gtk/gtkprintoperation.c:2253
+#: gtk/gtkprintoperation.c:2005 gtk/gtkprintoperation.c:2259
+#, c-format
 msgid "Preparing"
 msgstr "Előkészítés"
 
-#: ../gtk/gtkprintoperation.c:2002
+#: gtk/gtkprintoperation.c:2008
 #, c-format
 msgid "Printing %d"
 msgstr "%d nyomtatása"
 
-#: ../gtk/gtkprintoperation-unix.c:242
+#: gtk/gtkprintoperation.c:2289
+#, fuzzy, c-format
+msgid "Error creating print preview"
+msgstr "Hiba az előnézet indításakor"
+
+#: gtk/gtkprintoperation.c:2292
+#, c-format
+msgid "The most probable reason is that a temporary file could not be created."
+msgstr ""
+
+#: gtk/gtkprintoperation-unix.c:242
+#, c-format
 msgid "Error launching preview"
 msgstr "Hiba az előnézet indításakor"
 
-#: ../gtk/gtkprintoperation-unix.c:280
+#: gtk/gtkprintoperation-unix.c:280
+#, c-format
 msgid "Error printing"
 msgstr "Nyomtatási hiba"
 
-#: ../gtk/gtkprintoperation-unix.c:381 ../gtk/gtkprintoperation-win32.c:1399
+#: gtk/gtkprintoperation-unix.c:381 gtk/gtkprintoperation-win32.c:1399
 msgid "Application"
 msgstr "Alkalmazás"
 
-#: ../gtk/gtkprintoperation-win32.c:568
+#: gtk/gtkprintoperation-win32.c:568
 msgid "Printer offline"
 msgstr "A nyomtató nem érhető el"
 
-#: ../gtk/gtkprintoperation-win32.c:570
+#: gtk/gtkprintoperation-win32.c:570
 msgid "Out of paper"
 msgstr "Kifogyott a papír"
 
-#: ../gtk/gtkprintoperation-win32.c:572
+#: gtk/gtkprintoperation-win32.c:572
 msgid "Paused"
 msgstr "Szüneteltetve"
 
-#: ../gtk/gtkprintoperation-win32.c:574
+#: gtk/gtkprintoperation-win32.c:574
 msgid "Need user intervention"
 msgstr "Felhasználói beavatkozás szükséges"
 
-#: ../gtk/gtkprintoperation-win32.c:674
+#: gtk/gtkprintoperation-win32.c:674
 msgid "Custom size"
 msgstr "Egyéni méret"
 
-#: ../gtk/gtkprintoperation-win32.c:1489 ../gtk/gtkprintoperation-win32.c:1512
-#: ../gtk/gtkprintoperation-win32.c:1560
+#: gtk/gtkprintoperation-win32.c:1489 gtk/gtkprintoperation-win32.c:1512
+#: gtk/gtkprintoperation-win32.c:1560
 msgid "Not enough free memory"
 msgstr "Nincs elég szabad memória"
 
-#: ../gtk/gtkprintoperation-win32.c:1565
+#: gtk/gtkprintoperation-win32.c:1565
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Érvénytelen paraméter a PrintDlgEx-re"
 
-#: ../gtk/gtkprintoperation-win32.c:1570
+#: gtk/gtkprintoperation-win32.c:1570
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Érvénytelen mutató a PrintDlgEx-re"
 
-#: ../gtk/gtkprintoperation-win32.c:1575
+#: gtk/gtkprintoperation-win32.c:1575
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Érvénytelen kezelő a PrintDlgEx-re"
 
-#: ../gtk/gtkprintoperation-win32.c:1580
+#: gtk/gtkprintoperation-win32.c:1580
 msgid "Unspecified error"
 msgstr "Meghatározatlan hiba"
 
-#: ../gtk/gtkprintoperation-win32.c:1632
+#: gtk/gtkprintoperation-win32.c:1632
 msgid "Error from StartDoc"
 msgstr "Hiba a StartDoc elemtől"
 
-#: ../gtk/gtkprintunixdialog.c:1665
+#: gtk/gtkprintunixdialog.c:1665
 msgid "Printer"
 msgstr "Nyomtató"
 
-#: ../gtk/gtkprintunixdialog.c:1673
+#: gtk/gtkprintunixdialog.c:1673
 msgid "Location"
 msgstr "Hely"
 
-#: ../gtk/gtkprintunixdialog.c:1682
+#: gtk/gtkprintunixdialog.c:1682
 msgid "Status"
 msgstr "Állapot"
 
-#: ../gtk/gtkprintunixdialog.c:1704
+#: gtk/gtkprintunixdialog.c:1704
 msgid "Range"
 msgstr "Tartomány"
 
-#: ../gtk/gtkprintunixdialog.c:1708
+#: gtk/gtkprintunixdialog.c:1708
 msgid "_All Pages"
 msgstr "Min_den oldal"
 
-#: ../gtk/gtkprintunixdialog.c:1715
+#: gtk/gtkprintunixdialog.c:1715
 msgid "C_urrent Page"
 msgstr "J_elenlegi oldal"
 
-#: ../gtk/gtkprintunixdialog.c:1724
+#: gtk/gtkprintunixdialog.c:1724
 msgid "Pag_es:"
 msgstr "_Oldalak:"
 
-#: ../gtk/gtkprintunixdialog.c:1725
+#: gtk/gtkprintunixdialog.c:1725
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2539,202 +2547,202 @@ msgstr ""
 "Adjon meg oldaltartományokat,\n"
 "például 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:1744
+#: gtk/gtkprintunixdialog.c:1744
 msgid "Copies"
 msgstr "Példányszám"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1749
+#: gtk/gtkprintunixdialog.c:1749
 msgid "Copie_s:"
 msgstr "Pél_dányszám:"
 
-#: ../gtk/gtkprintunixdialog.c:1767
+#: gtk/gtkprintunixdialog.c:1767
 msgid "C_ollate"
 msgstr "_Szétválogatás"
 
-#: ../gtk/gtkprintunixdialog.c:1775
+#: gtk/gtkprintunixdialog.c:1775
 msgid "_Reverse"
 msgstr "_Fordított"
 
-#: ../gtk/gtkprintunixdialog.c:1795
+#: gtk/gtkprintunixdialog.c:1795
 msgid "General"
 msgstr "Általános"
 
-#: ../gtk/gtkprintunixdialog.c:2198
+#: gtk/gtkprintunixdialog.c:2198
 msgid "Layout"
 msgstr "Elrendezés"
 
-#: ../gtk/gtkprintunixdialog.c:2202
+#: gtk/gtkprintunixdialog.c:2202
 msgid "Pages per _side:"
 msgstr "_Lapok oldalanként:"
 
-#: ../gtk/gtkprintunixdialog.c:2218
+#: gtk/gtkprintunixdialog.c:2218
 msgid "T_wo-sided:"
 msgstr "_Kétoldalas:"
 
-#: ../gtk/gtkprintunixdialog.c:2233
+#: gtk/gtkprintunixdialog.c:2233
 msgid "_Only print:"
 msgstr "_Nyomtatandó:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2248
+#: gtk/gtkprintunixdialog.c:2248
 msgid "All sheets"
 msgstr "Minden oldal"
 
-#: ../gtk/gtkprintunixdialog.c:2249
+#: gtk/gtkprintunixdialog.c:2249
 msgid "Even sheets"
 msgstr "Páros oldalak"
 
-#: ../gtk/gtkprintunixdialog.c:2250
+#: gtk/gtkprintunixdialog.c:2250
 msgid "Odd sheets"
 msgstr "Páratlan oldalak"
 
-#: ../gtk/gtkprintunixdialog.c:2253
+#: gtk/gtkprintunixdialog.c:2253
 msgid "Sc_ale:"
 msgstr "_Méretezés:"
 
-#: ../gtk/gtkprintunixdialog.c:2280
+#: gtk/gtkprintunixdialog.c:2280
 msgid "Paper"
 msgstr "Papír"
 
-#: ../gtk/gtkprintunixdialog.c:2284
+#: gtk/gtkprintunixdialog.c:2284
 msgid "Paper _type:"
 msgstr "Papír _típusa:"
 
-#: ../gtk/gtkprintunixdialog.c:2299
+#: gtk/gtkprintunixdialog.c:2299
 msgid "Paper _source:"
 msgstr "_Papírforrás:"
 
-#: ../gtk/gtkprintunixdialog.c:2314
+#: gtk/gtkprintunixdialog.c:2314
 msgid "Output t_ray:"
 msgstr "Kimeneti tál_ca:"
 
-#: ../gtk/gtkprintunixdialog.c:2366
+#: gtk/gtkprintunixdialog.c:2366
 msgid "Job Details"
 msgstr "Feladat részletei"
 
-#: ../gtk/gtkprintunixdialog.c:2372
+#: gtk/gtkprintunixdialog.c:2372
 msgid "Pri_ority:"
 msgstr "_Prioritás:"
 
-#: ../gtk/gtkprintunixdialog.c:2387
+#: gtk/gtkprintunixdialog.c:2387
 msgid "_Billing info:"
 msgstr "_Fizetési információk:"
 
-#: ../gtk/gtkprintunixdialog.c:2405
+#: gtk/gtkprintunixdialog.c:2405
 msgid "Print Document"
 msgstr "Dokumentum nyomtatása"
 
-#: ../gtk/gtkprintunixdialog.c:2411
+#: gtk/gtkprintunixdialog.c:2411
 msgid "_Now"
 msgstr "_Azonnal"
 
-#: ../gtk/gtkprintunixdialog.c:2418
+#: gtk/gtkprintunixdialog.c:2418
 msgid "A_t:"
 msgstr "_Ekkor:"
 
-#: ../gtk/gtkprintunixdialog.c:2433
+#: gtk/gtkprintunixdialog.c:2433
 msgid "On _hold"
 msgstr "_Várakoztatás"
 
-#: ../gtk/gtkprintunixdialog.c:2452
+#: gtk/gtkprintunixdialog.c:2452
 msgid "Add Cover Page"
 msgstr "Borítóoldal hozzáadása"
 
-#: ../gtk/gtkprintunixdialog.c:2458
+#: gtk/gtkprintunixdialog.c:2458
 msgid "Be_fore:"
 msgstr "_Elé:"
 
-#: ../gtk/gtkprintunixdialog.c:2473
+#: gtk/gtkprintunixdialog.c:2473
 msgid "_After:"
 msgstr "_Mögé:"
 
-#: ../gtk/gtkprintunixdialog.c:2488
+#: gtk/gtkprintunixdialog.c:2488
 msgid "Job"
 msgstr "Feladat"
 
-#: ../gtk/gtkprintunixdialog.c:2554
+#: gtk/gtkprintunixdialog.c:2554
 msgid "Advanced"
 msgstr "Haladó"
 
-#: ../gtk/gtkprintunixdialog.c:2589
+#: gtk/gtkprintunixdialog.c:2589
 msgid "Image Quality"
 msgstr "Képminőség"
 
-#: ../gtk/gtkprintunixdialog.c:2592
+#: gtk/gtkprintunixdialog.c:2592
 msgid "Color"
 msgstr "Szín"
 
-#: ../gtk/gtkprintunixdialog.c:2595
+#: gtk/gtkprintunixdialog.c:2595
 msgid "Finishing"
 msgstr "Befejezés"
 
-#: ../gtk/gtkprintunixdialog.c:2605
+#: gtk/gtkprintunixdialog.c:2605
 msgid "Some of the settings in the dialog conflict"
 msgstr "A párbeszédablak egyes beállításai ütköznek"
 
-#: ../gtk/gtkprintunixdialog.c:2628
+#: gtk/gtkprintunixdialog.c:2628
 msgid "Print"
 msgstr "Nyomtatás"
 
-#: ../gtk/gtkradiotoolbutton.c:65
+#: gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Csoport"
 
-#: ../gtk/gtkradiotoolbutton.c:66
+#: gtk/gtkradiotoolbutton.c:66
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Az a rádiógomb-csoport, amelyhez ez a rádiógomb tartozik."
 
-#: ../gtk/gtkrc.c:2872
+#: gtk/gtkrc.c:2872
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Include-fájl nem található: „%s”"
 
-#: ../gtk/gtkrc.c:3500 ../gtk/gtkrc.c:3503
+#: gtk/gtkrc.c:3500 gtk/gtkrc.c:3503
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "A kép nem található a következő pixmap_path útvonalon: „%s”"
 
-#: ../gtk/gtkrecentaction.c:155 ../gtk/gtkrecentaction.c:163
-#: ../gtk/gtkrecentchoosermenu.c:551 ../gtk/gtkrecentchoosermenu.c:559
+#: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
+#: gtk/gtkrecentchoosermenu.c:551 gtk/gtkrecentchoosermenu.c:559
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Ez a függvény nincs megvalósítva a(z) „%s” osztály felületi elemeihez"
 
-#: ../gtk/gtkrecentchooserdefault.c:454
+#: gtk/gtkrecentchooserdefault.c:454
 msgid "Select which type of documents are shown"
 msgstr "Válassza ki a megjelenítendő dokumentumok típusát"
 
-#: ../gtk/gtkrecentchooserdefault.c:1096 ../gtk/gtkrecentchooserdefault.c:1133
+#: gtk/gtkrecentchooserdefault.c:1096 gtk/gtkrecentchooserdefault.c:1133
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Nem található elem a következő URI címhez: „%s”"
 
-#: ../gtk/gtkrecentchooserdefault.c:1260
+#: gtk/gtkrecentchooserdefault.c:1260
 msgid "Untitled filter"
 msgstr "Névtelen szűrő"
 
-#: ../gtk/gtkrecentchooserdefault.c:1613
+#: gtk/gtkrecentchooserdefault.c:1613
 msgid "Could not remove item"
 msgstr "Nem távolítható el az elem"
 
-#: ../gtk/gtkrecentchooserdefault.c:1656
+#: gtk/gtkrecentchooserdefault.c:1656
 msgid "Could not clear list"
 msgstr "Nem törölhető a lista"
 
-#: ../gtk/gtkrecentchooserdefault.c:1740
+#: gtk/gtkrecentchooserdefault.c:1740
 msgid "Copy _Location"
 msgstr "Hely más_olása"
 
-#: ../gtk/gtkrecentchooserdefault.c:1753
+#: gtk/gtkrecentchooserdefault.c:1753
 msgid "_Remove From List"
 msgstr "_Törlés a listából"
 
-#: ../gtk/gtkrecentchooserdefault.c:1762
+#: gtk/gtkrecentchooserdefault.c:1762
 msgid "_Clear List"
 msgstr "_Lista törlése"
 
-#: ../gtk/gtkrecentchooserdefault.c:1776
+#: gtk/gtkrecentchooserdefault.c:1776
 msgid "Show _Private Resources"
 msgstr "Sze_mélyes erőforrások megjelenítése"
 
@@ -2748,21 +2756,21 @@ msgstr "Sze_mélyes erőforrások megjelenítése"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:317
+#: gtk/gtkrecentchoosermenu.c:317
 msgid "No items found"
 msgstr "Nem találhatók elemek"
 
-#: ../gtk/gtkrecentchoosermenu.c:471 ../gtk/gtkrecentchoosermenu.c:527
+#: gtk/gtkrecentchoosermenu.c:471 gtk/gtkrecentchoosermenu.c:527
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Nem található nemrég használt erőforrás a következő URI címmel: „%s”"
 
-#: ../gtk/gtkrecentchoosermenu.c:738
+#: gtk/gtkrecentchoosermenu.c:738
 #, c-format
 msgid "Open '%s'"
 msgstr "„%s” megnyitása"
 
-#: ../gtk/gtkrecentchoosermenu.c:768
+#: gtk/gtkrecentchoosermenu.c:768
 msgid "Unknown item"
 msgstr "Ismeretlen elem"
 
@@ -2773,7 +2781,7 @@ msgstr "Ismeretlen elem"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:781
+#: gtk/gtkrecentchoosermenu.c:781
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr "_%d. %s"
@@ -2783,617 +2791,622 @@ msgstr "_%d. %s"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:788
+#: gtk/gtkrecentchoosermenu.c:788
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1012 ../gtk/gtkrecentmanager.c:1025
-#: ../gtk/gtkrecentmanager.c:1163 ../gtk/gtkrecentmanager.c:1173
-#: ../gtk/gtkrecentmanager.c:1226 ../gtk/gtkrecentmanager.c:1235
-#: ../gtk/gtkrecentmanager.c:1250
+#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1025
+#: gtk/gtkrecentmanager.c:1163 gtk/gtkrecentmanager.c:1173
+#: gtk/gtkrecentmanager.c:1226 gtk/gtkrecentmanager.c:1235
+#: gtk/gtkrecentmanager.c:1250
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Nem található a következő URI című elem: „%s”"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: ../gtk/gtkstock.c:288
+#: gtk/gtkstock.c:288
 msgid "Information"
 msgstr "Információ"
 
-#: ../gtk/gtkstock.c:289
+#: gtk/gtkstock.c:289
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-#: ../gtk/gtkstock.c:290
+#: gtk/gtkstock.c:290
 msgid "Error"
 msgstr "Hiba"
 
-#: ../gtk/gtkstock.c:291
+#: gtk/gtkstock.c:291
 msgid "Question"
 msgstr "Kérdés"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: ../gtk/gtkstock.c:296
+#: gtk/gtkstock.c:296
 msgid "_About"
 msgstr "_Névjegy"
 
-#: ../gtk/gtkstock.c:298
+#: gtk/gtkstock.c:298
 msgid "_Apply"
 msgstr "_Alkalmaz"
 
-#: ../gtk/gtkstock.c:299
+#: gtk/gtkstock.c:299
 msgid "_Bold"
 msgstr "Félkö_vér"
 
-#: ../gtk/gtkstock.c:300
+#: gtk/gtkstock.c:300
 msgid "_Cancel"
 msgstr "Mé_gsem"
 
-#: ../gtk/gtkstock.c:301
+#: gtk/gtkstock.c:301
 msgid "_CD-Rom"
 msgstr "_CD-ROM"
 
-#: ../gtk/gtkstock.c:302
+#: gtk/gtkstock.c:302
 msgid "_Clear"
 msgstr "_Törlés"
 
-#: ../gtk/gtkstock.c:303
+#: gtk/gtkstock.c:303
 msgid "_Close"
 msgstr "_Bezárás"
 
-#: ../gtk/gtkstock.c:304
+#: gtk/gtkstock.c:304
 msgid "C_onnect"
 msgstr "Kapcs_olódás"
 
-#: ../gtk/gtkstock.c:305
+#: gtk/gtkstock.c:305
 msgid "_Convert"
 msgstr "_Konvertálás"
 
-#: ../gtk/gtkstock.c:306
+#: gtk/gtkstock.c:306
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: ../gtk/gtkstock.c:307
+#: gtk/gtkstock.c:307
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: ../gtk/gtkstock.c:308
+#: gtk/gtkstock.c:308
 msgid "_Delete"
 msgstr "_Törlés"
 
-#: ../gtk/gtkstock.c:309
+#: gtk/gtkstock.c:309
 msgid "_Discard"
 msgstr "El_dobás"
 
-#: ../gtk/gtkstock.c:310
+#: gtk/gtkstock.c:310
 msgid "_Disconnect"
 msgstr "_Bontás"
 
-#: ../gtk/gtkstock.c:311
+#: gtk/gtkstock.c:311
 msgid "_Execute"
 msgstr "_Végrehajtás"
 
-#: ../gtk/gtkstock.c:312
+#: gtk/gtkstock.c:312
 msgid "_Edit"
 msgstr "S_zerkesztés"
 
-#: ../gtk/gtkstock.c:313
+#: gtk/gtkstock.c:313
 msgid "_Find"
 msgstr "_Keresés"
 
-#: ../gtk/gtkstock.c:314
+#: gtk/gtkstock.c:314
 msgid "Find and _Replace"
 msgstr "Keresés és _csere"
 
-#: ../gtk/gtkstock.c:315
+#: gtk/gtkstock.c:315
 msgid "_Floppy"
 msgstr "_Floppy"
 
-#: ../gtk/gtkstock.c:316
+#: gtk/gtkstock.c:316
 msgid "_Fullscreen"
 msgstr "_Teljes képernyő"
 
-#: ../gtk/gtkstock.c:317
+#: gtk/gtkstock.c:317
 msgid "_Leave Fullscreen"
 msgstr "T_eljes képernyő elhagyása"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:319
+#: gtk/gtkstock.c:319
 msgid "Navigation|_Bottom"
 msgstr "_Alsó"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:321
+#: gtk/gtkstock.c:321
 msgid "Navigation|_First"
 msgstr "El_ső"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:323
+#: gtk/gtkstock.c:323
 msgid "Navigation|_Last"
 msgstr "_Utolsó"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:325
+#: gtk/gtkstock.c:325
 msgid "Navigation|_Top"
 msgstr "F_első"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:327
+#: gtk/gtkstock.c:327
 msgid "Navigation|_Back"
 msgstr "_Vissza"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:329
+#: gtk/gtkstock.c:329
 msgid "Navigation|_Down"
 msgstr "_Le"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:331
+#: gtk/gtkstock.c:331
 msgid "Navigation|_Forward"
 msgstr "Elő_re"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:333
+#: gtk/gtkstock.c:333
 msgid "Navigation|_Up"
 msgstr "_Fel"
 
-#: ../gtk/gtkstock.c:334
+#: gtk/gtkstock.c:334
 msgid "_Harddisk"
 msgstr "_Merevlemez"
 
-#: ../gtk/gtkstock.c:335
+#: gtk/gtkstock.c:335
 msgid "_Help"
 msgstr "_Súgó"
 
-#: ../gtk/gtkstock.c:336
+#: gtk/gtkstock.c:336
 msgid "_Home"
 msgstr "Saját _mappa"
 
-#: ../gtk/gtkstock.c:337
+#: gtk/gtkstock.c:337
 msgid "Increase Indent"
 msgstr "Behúzás növelése"
 
-#: ../gtk/gtkstock.c:338
+#: gtk/gtkstock.c:338
 msgid "Decrease Indent"
 msgstr "Behúzás csökkentése"
 
-#: ../gtk/gtkstock.c:339
+#: gtk/gtkstock.c:339
 msgid "_Index"
 msgstr "_Index"
 
-#: ../gtk/gtkstock.c:340
+#: gtk/gtkstock.c:340
 msgid "_Information"
 msgstr "_Információ"
 
-#: ../gtk/gtkstock.c:341
+#: gtk/gtkstock.c:341
 msgid "_Italic"
 msgstr "_Dőlt"
 
-#: ../gtk/gtkstock.c:342
+#: gtk/gtkstock.c:342
 msgid "_Jump to"
 msgstr "_Ugrás"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:344
+#: gtk/gtkstock.c:344
 msgid "Justify|_Center"
 msgstr "Közé_pre"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:346
+#: gtk/gtkstock.c:346
 msgid "Justify|_Fill"
 msgstr "_Kitöltés"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:348
+#: gtk/gtkstock.c:348
 msgid "Justify|_Left"
 msgstr "_Balra"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:350
+#: gtk/gtkstock.c:350
 msgid "Justify|_Right"
 msgstr "J_obbra"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:353
+#: gtk/gtkstock.c:353
 msgid "Media|_Forward"
 msgstr "Elő_re"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:355
+#: gtk/gtkstock.c:355
 msgid "Media|_Next"
 msgstr "_Következő"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:357
+#: gtk/gtkstock.c:357
 msgid "Media|P_ause"
 msgstr "_Szünet"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:359
+#: gtk/gtkstock.c:359
 msgid "Media|_Play"
 msgstr "L_ejátszás"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:361
+#: gtk/gtkstock.c:361
 msgid "Media|Pre_vious"
 msgstr "_Előző"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:363
+#: gtk/gtkstock.c:363
 msgid "Media|_Record"
 msgstr "_Felvétel"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:365
+#: gtk/gtkstock.c:365
 msgid "Media|R_ewind"
 msgstr "_Vissza"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:367
+#: gtk/gtkstock.c:367
 msgid "Media|_Stop"
 msgstr "_Leállítás"
 
-#: ../gtk/gtkstock.c:368
+#: gtk/gtkstock.c:368
 msgid "_Network"
 msgstr "_Hálózat"
 
-#: ../gtk/gtkstock.c:369
+#: gtk/gtkstock.c:369
 msgid "_New"
 msgstr "Ú_j"
 
-#: ../gtk/gtkstock.c:370
+#: gtk/gtkstock.c:370
 msgid "_No"
 msgstr "_Nem"
 
-#: ../gtk/gtkstock.c:371
+#: gtk/gtkstock.c:371
 msgid "_OK"
 msgstr "_OK"
 
-#: ../gtk/gtkstock.c:372
+#: gtk/gtkstock.c:372
 msgid "_Open"
 msgstr "_Megnyitás"
 
-#: ../gtk/gtkstock.c:373
+#: gtk/gtkstock.c:373
 msgid "Landscape"
 msgstr "Fekvő"
 
-#: ../gtk/gtkstock.c:374
+#: gtk/gtkstock.c:374
 msgid "Portrait"
 msgstr "Álló"
 
-#: ../gtk/gtkstock.c:375
+#: gtk/gtkstock.c:375
 msgid "Reverse landscape"
 msgstr "Fordított fekvő"
 
-#: ../gtk/gtkstock.c:376
+#: gtk/gtkstock.c:376
 msgid "Reverse portrait"
 msgstr "Fordított álló"
 
-#: ../gtk/gtkstock.c:377
+#: gtk/gtkstock.c:377
 msgid "Page Set_up"
 msgstr "_Oldalbeállítás"
 
-#: ../gtk/gtkstock.c:378
+#: gtk/gtkstock.c:378
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: ../gtk/gtkstock.c:379
+#: gtk/gtkstock.c:379
 msgid "_Preferences"
 msgstr "B_eállítások"
 
-#: ../gtk/gtkstock.c:380
+#: gtk/gtkstock.c:380
 msgid "_Print"
 msgstr "_Nyomtatás"
 
-#: ../gtk/gtkstock.c:381
+#: gtk/gtkstock.c:381
 msgid "Print Pre_view"
 msgstr "Nyomtatási ké_p"
 
-#: ../gtk/gtkstock.c:382
+#: gtk/gtkstock.c:382
 msgid "_Properties"
 msgstr "_Tulajdonságok"
 
-#: ../gtk/gtkstock.c:383
+#: gtk/gtkstock.c:383
 msgid "_Quit"
 msgstr "_Kilépés"
 
-#: ../gtk/gtkstock.c:384
+#: gtk/gtkstock.c:384
 msgid "_Redo"
 msgstr "Új_ra"
 
-#: ../gtk/gtkstock.c:385
+#: gtk/gtkstock.c:385
 msgid "_Refresh"
 msgstr "_Frissítés"
 
-#: ../gtk/gtkstock.c:387
+#: gtk/gtkstock.c:387
 msgid "_Revert"
 msgstr "_Visszaállítás"
 
-#: ../gtk/gtkstock.c:388
+#: gtk/gtkstock.c:388
 msgid "_Save"
 msgstr "M_entés"
 
-#: ../gtk/gtkstock.c:389
+#: gtk/gtkstock.c:389
 msgid "Save _As"
 msgstr "Men_tés másként"
 
-#: ../gtk/gtkstock.c:390
+#: gtk/gtkstock.c:390
 msgid "Select _All"
 msgstr "Mind_ent kijelöl"
 
-#: ../gtk/gtkstock.c:391
+#: gtk/gtkstock.c:391
 msgid "_Color"
 msgstr "_Szín"
 
-#: ../gtk/gtkstock.c:392
+#: gtk/gtkstock.c:392
 msgid "_Font"
 msgstr "_Betűkészlet"
 
-#: ../gtk/gtkstock.c:393
+#: gtk/gtkstock.c:393
 msgid "_Ascending"
 msgstr "_Növekvő"
 
-#: ../gtk/gtkstock.c:394
+#: gtk/gtkstock.c:394
 msgid "_Descending"
 msgstr "_Csökkenő"
 
-#: ../gtk/gtkstock.c:395
+#: gtk/gtkstock.c:395
 msgid "_Spell Check"
 msgstr "_Helyesírás-ellenőrzés"
 
-#: ../gtk/gtkstock.c:396
+#: gtk/gtkstock.c:396
 msgid "_Stop"
 msgstr "_Leállítás"
 
-#: ../gtk/gtkstock.c:397
+#: gtk/gtkstock.c:397
 msgid "_Strikethrough"
 msgstr "Át_húzás"
 
-#: ../gtk/gtkstock.c:398
+#: gtk/gtkstock.c:398
 msgid "_Undelete"
 msgstr "_Visszaállítás"
 
-#: ../gtk/gtkstock.c:399
+#: gtk/gtkstock.c:399
 msgid "_Underline"
 msgstr "_Aláhúzás"
 
-#: ../gtk/gtkstock.c:400
+#: gtk/gtkstock.c:400
 msgid "_Undo"
 msgstr "_Visszavonás"
 
-#: ../gtk/gtkstock.c:401
+#: gtk/gtkstock.c:401
 msgid "_Yes"
 msgstr "_Igen"
 
-#: ../gtk/gtkstock.c:402
+#: gtk/gtkstock.c:402
 msgid "_Normal Size"
 msgstr "_Normál méret"
 
-#: ../gtk/gtkstock.c:403
+#: gtk/gtkstock.c:403
 msgid "Best _Fit"
 msgstr "Legjobb illesz_kedés"
 
-#: ../gtk/gtkstock.c:404
+#: gtk/gtkstock.c:404
 msgid "Zoom _In"
 msgstr "_Nagyítás"
 
-#: ../gtk/gtkstock.c:405
+#: gtk/gtkstock.c:405
 msgid "Zoom _Out"
 msgstr "_Kicsinyítés"
 
-#: ../gtk/gtktextbufferrichtext.c:651
+#: gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr "Ismeretlen hiba a(z) %s visszafejtésére tett kísérlet során"
 
-#: ../gtk/gtktextbufferrichtext.c:710
+#: gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "Nem található visszafejtési függvény a(z) %s formátumhoz"
 
-#: ../gtk/gtktextbufferserialize.c:796 ../gtk/gtktextbufferserialize.c:822
+#: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "A(z) <%s> elemben mind az „azonosító”, mind a „név” megtalálható"
 
-#: ../gtk/gtktextbufferserialize.c:806 ../gtk/gtktextbufferserialize.c:832
+#: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "A(z) „%s” attribútum kétszer fordult elő a(z) <%s> elemen"
 
-#: ../gtk/gtktextbufferserialize.c:846
+#: gtk/gtktextbufferserialize.c:846
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
 msgstr "A(z) <%s> elem a(z) „%s” érvénytelen azonosítóval rendelkezik"
 
-#: ../gtk/gtktextbufferserialize.c:856
+#: gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "A(z) <%s> elem nem rendelkezik sem „név” sem „azonosító” attribútummal"
 
-#: ../gtk/gtktextbufferserialize.c:943
+#: gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr "A(z) „%s” attribútum kétszer lett megismételve ugyanazon a(z) <%s> elemen"
+msgstr ""
+"A(z) „%s” attribútum kétszer lett megismételve ugyanazon a(z) <%s> elemen"
 
-#: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
+#: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr "A(z) „%s” attribútum <%s> elemen érvénytelen ebben a szövegkörnyezetben"
+msgstr ""
+"A(z) „%s” attribútum <%s> elemen érvénytelen ebben a szövegkörnyezetben"
 
-#: ../gtk/gtktextbufferserialize.c:1022
+#: gtk/gtktextbufferserialize.c:1022
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "A(z) „%s” címke nincs meghatározva."
 
-#: ../gtk/gtktextbufferserialize.c:1034
+#: gtk/gtktextbufferserialize.c:1034
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Névtelen címke található és nem hozhatók létre címkék."
 
-#: ../gtk/gtktextbufferserialize.c:1045
+#: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "A(z) „%s” címke nem létezik a pufferben és nem hozhatók létre címkék."
 
-#: ../gtk/gtktextbufferserialize.c:1144 ../gtk/gtktextbufferserialize.c:1219
-#: ../gtk/gtktextbufferserialize.c:1320 ../gtk/gtktextbufferserialize.c:1394
+#: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
+#: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "A(z) <%s> elem nem engedélyezett <%s> alatt"
 
-#: ../gtk/gtktextbufferserialize.c:1175
+#: gtk/gtktextbufferserialize.c:1175
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "A(z) „%s” nem érvényes attribútumtípus"
 
-#: ../gtk/gtktextbufferserialize.c:1183
+#: gtk/gtktextbufferserialize.c:1183
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "A(z) „%s” nem érvényes attribútumnév"
 
-#: ../gtk/gtktextbufferserialize.c:1193
+#: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "„%s” nem alakítható „%s” típusú értékké „%s” attribútumhoz"
 
-#: ../gtk/gtktextbufferserialize.c:1202
+#: gtk/gtktextbufferserialize.c:1202
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "„%s” nem érvényes érték a(z) „%s” attribútumhoz"
 
-#: ../gtk/gtktextbufferserialize.c:1285
+#: gtk/gtktextbufferserialize.c:1285
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "A(z) „%s” címke már meg van határozva"
 
-#: ../gtk/gtktextbufferserialize.c:1296
+#: gtk/gtktextbufferserialize.c:1296
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "A(z) „%s” címke prioritása („%s”) érvénytelen"
 
-#: ../gtk/gtktextbufferserialize.c:1349
+#: gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr "A szöveg legkülső elemének <%s> helyett text_view_markup> elemnek kell lennie"
+msgstr ""
+"A szöveg legkülső elemének <%s> helyett text_view_markup> elemnek kell lennie"
 
-#: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
+#: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "már meg van határozva egy <%s> elem"
 
-#: ../gtk/gtktextbufferserialize.c:1380
+#: gtk/gtktextbufferserialize.c:1380
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "<text> elem nem fordulhat elő <tags> elem előtt"
 
-#: ../gtk/gtktextbufferserialize.c:1779
+#: gtk/gtktextbufferserialize.c:1779
 msgid "Serialized data is malformed"
 msgstr "A sorba fejtett adatok rosszul formázottak"
 
-#: ../gtk/gtktextbufferserialize.c:1857
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+#: gtk/gtktextbufferserialize.c:1857
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "A sorba fejtett adatok rosszul formázottak. Az első szakasz nem "
 "GTKTEXTBUFFERCONTENTS-0001"
 
-#: ../gtk/gtktextutil.c:60
+#: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
 msgstr "LRM _Balról-jobbra jel"
 
-#: ../gtk/gtktextutil.c:61
+#: gtk/gtktextutil.c:62
 msgid "RLM _Right-to-left mark"
 msgstr "RLM J_obbról-balra jel"
 
-#: ../gtk/gtktextutil.c:62
+#: gtk/gtktextutil.c:63
 msgid "LRE Left-to-right _embedding"
 msgstr "LRE Balról-jobbra beá_gyazás"
 
-#: ../gtk/gtktextutil.c:63
+#: gtk/gtktextutil.c:64
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE Jobbról-balra b_eágyazás"
 
-#: ../gtk/gtktextutil.c:64
+#: gtk/gtktextutil.c:65
 msgid "LRO Left-to-right _override"
 msgstr "LRO Balról-jobbra _felülbírálás"
 
-#: ../gtk/gtktextutil.c:65
+#: gtk/gtktextutil.c:66
 msgid "RLO Right-to-left o_verride"
 msgstr "RLO Jobbról-balra f_elülbírálás"
 
-#: ../gtk/gtktextutil.c:66
+#: gtk/gtktextutil.c:67
 msgid "PDF _Pop directional formatting"
 msgstr "PDF Irányformázás _visszakapása"
 
-#: ../gtk/gtktextutil.c:67
+#: gtk/gtktextutil.c:68
 msgid "ZWS _Zero width space"
 msgstr "ZWS N_ull szélességű szóköz"
 
-#: ../gtk/gtktextutil.c:68
+#: gtk/gtktextutil.c:69
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWJ Null szélességű ö_sszekötő"
 
-#: ../gtk/gtktextutil.c:69
+#: gtk/gtktextutil.c:70
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Null szélességű _nem-összekötő"
 
-#: ../gtk/gtkthemes.c:71
+#: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Nem található a témamotor a következő modul útvonalon: „%s”,"
 
-#: ../gtk/gtktipsquery.c:189
+#: gtk/gtktipsquery.c:188
 msgid "--- No Tip ---"
 msgstr "-- Nincs segédszöveg --"
 
-#: ../gtk/gtkuimanager.c:1454
+#: gtk/gtkuimanager.c:1454
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Váratlan kezdőcímke: „%s” a(z) %d. sor %d. karakterénél"
 
-#: ../gtk/gtkuimanager.c:1544
+#: gtk/gtkuimanager.c:1544
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Váratlan karakteradat a(z) %d. sor %d. karakterénél"
 
-#: ../gtk/gtkuimanager.c:2367
+#: gtk/gtkuimanager.c:2367
 msgid "Empty"
 msgstr "Üres"
 
-#: ../gtk/gtkvolumebutton.c:81
+#: gtk/gtkvolumebutton.c:77
 msgid "Volume"
 msgstr "Hangerő"
 
-#: ../gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:79
 msgid "Turns volume down or up"
 msgstr "Csökkenti vagy növeli a hangerőt"
 
-#: ../gtk/gtkvolumebutton.c:86
+#: gtk/gtkvolumebutton.c:82
 msgid "Adjusts the volume"
 msgstr "Módosítja a hangerőt"
 
-#: ../gtk/gtkvolumebutton.c:89 ../gtk/gtkvolumebutton.c:92
+#: gtk/gtkvolumebutton.c:85 gtk/gtkvolumebutton.c:88
 msgid "Volume Down"
 msgstr "Hangerő le"
 
-#: ../gtk/gtkvolumebutton.c:91
+#: gtk/gtkvolumebutton.c:87
 msgid "Decreases the volume"
 msgstr "Csökkenti a hangerőt"
 
-#: ../gtk/gtkvolumebutton.c:95 ../gtk/gtkvolumebutton.c:98
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Up"
 msgstr "Hangerő fel"
 
-#: ../gtk/gtkvolumebutton.c:97
+#: gtk/gtkvolumebutton.c:93
 msgid "Increases the volume"
 msgstr "Növeli a hangerőt"
 
-#: ../gtk/gtkvolumebutton.c:155
+#: gtk/gtkvolumebutton.c:151
 msgid "Muted"
 msgstr "Némítva"
 
-#: ../gtk/gtkvolumebutton.c:159
+#: gtk/gtkvolumebutton.c:155
 msgid "Full Volume"
 msgstr "Teljes hangerő"
 
@@ -3404,928 +3417,929 @@ msgstr "Teljes hangerő"
 #. * Do not translate and do not include the "volume percentage|"
 #. * part in the translation!
 #.
-#: ../gtk/gtkvolumebutton.c:174
+#: gtk/gtkvolumebutton.c:170
 #, c-format
 msgid "volume percentage|%d %%"
 msgstr "%d %%"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:5
+#: gtk/paper_names_offsets.c:5
 msgid "paper size|asme_f"
 msgstr "asme_f"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:7
+#: gtk/paper_names_offsets.c:7
 msgid "paper size|A0x2"
 msgstr "A0x2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:9
+#: gtk/paper_names_offsets.c:9
 msgid "paper size|A0"
 msgstr "A0"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:11
+#: gtk/paper_names_offsets.c:11
 msgid "paper size|A0x3"
 msgstr "A0x3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:13
+#: gtk/paper_names_offsets.c:13
 msgid "paper size|A1"
 msgstr "A1"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:15
+#: gtk/paper_names_offsets.c:15
 msgid "paper size|A10"
 msgstr "A10"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:17
+#: gtk/paper_names_offsets.c:17
 msgid "paper size|A1x3"
 msgstr "A1x3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:19
+#: gtk/paper_names_offsets.c:19
 msgid "paper size|A1x4"
 msgstr "A1x4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:21
+#: gtk/paper_names_offsets.c:21
 msgid "paper size|A2"
 msgstr "A2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:23
+#: gtk/paper_names_offsets.c:23
 msgid "paper size|A2x3"
 msgstr "A2x3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:25
+#: gtk/paper_names_offsets.c:25
 msgid "paper size|A2x4"
 msgstr "A2x4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:27
+#: gtk/paper_names_offsets.c:27
 msgid "paper size|A2x5"
 msgstr "A2x5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:29
+#: gtk/paper_names_offsets.c:29
 msgid "paper size|A3"
 msgstr "A3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:31
+#: gtk/paper_names_offsets.c:31
 msgid "paper size|A3 Extra"
 msgstr "A3 Extra"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:33
+#: gtk/paper_names_offsets.c:33
 msgid "paper size|A3x3"
 msgstr "A3x3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:35
+#: gtk/paper_names_offsets.c:35
 msgid "paper size|A3x4"
 msgstr "A3x4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:37
+#: gtk/paper_names_offsets.c:37
 msgid "paper size|A3x5"
 msgstr "A3x5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:39
+#: gtk/paper_names_offsets.c:39
 msgid "paper size|A3x6"
 msgstr "A3x6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:41
+#: gtk/paper_names_offsets.c:41
 msgid "paper size|A3x7"
 msgstr "A3x7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:43
+#: gtk/paper_names_offsets.c:43
 msgid "paper size|A4"
 msgstr "A4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:45
+#: gtk/paper_names_offsets.c:45
 msgid "paper size|A4 Extra"
 msgstr "A4 Extra"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:47
+#: gtk/paper_names_offsets.c:47
 msgid "paper size|A4 Tab"
 msgstr "A4 Tab"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:49
+#: gtk/paper_names_offsets.c:49
 msgid "paper size|A4x3"
 msgstr "A4x3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:51
+#: gtk/paper_names_offsets.c:51
 msgid "paper size|A4x4"
 msgstr "A4x4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:53
+#: gtk/paper_names_offsets.c:53
 msgid "paper size|A4x5"
 msgstr "A4x5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:55
+#: gtk/paper_names_offsets.c:55
 msgid "paper size|A4x6"
 msgstr "A4x6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:57
+#: gtk/paper_names_offsets.c:57
 msgid "paper size|A4x7"
 msgstr "A4x7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:59
+#: gtk/paper_names_offsets.c:59
 msgid "paper size|A4x8"
 msgstr "A4x8"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:61
+#: gtk/paper_names_offsets.c:61
 msgid "paper size|A4x9"
 msgstr "A4x9"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:63
+#: gtk/paper_names_offsets.c:63
 msgid "paper size|A5"
 msgstr "A5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:65
+#: gtk/paper_names_offsets.c:65
 msgid "paper size|A5 Extra"
 msgstr "A5 Extra"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:67
+#: gtk/paper_names_offsets.c:67
 msgid "paper size|A6"
 msgstr "A6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:69
+#: gtk/paper_names_offsets.c:69
 msgid "paper size|A7"
 msgstr "A7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:71
+#: gtk/paper_names_offsets.c:71
 msgid "paper size|A8"
 msgstr "A8"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:73
+#: gtk/paper_names_offsets.c:73
 msgid "paper size|A9"
 msgstr "A9"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:75
+#: gtk/paper_names_offsets.c:75
 msgid "paper size|B0"
 msgstr "B0"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:77
+#: gtk/paper_names_offsets.c:77
 msgid "paper size|B1"
 msgstr "B1"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:79
+#: gtk/paper_names_offsets.c:79
 msgid "paper size|B10"
 msgstr "B10"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:81
+#: gtk/paper_names_offsets.c:81
 msgid "paper size|B2"
 msgstr "B2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:83
+#: gtk/paper_names_offsets.c:83
 msgid "paper size|B3"
 msgstr "B3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:85
+#: gtk/paper_names_offsets.c:85
 msgid "paper size|B4"
 msgstr "B4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:87
+#: gtk/paper_names_offsets.c:87
 msgid "paper size|B5"
 msgstr "B5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:89
+#: gtk/paper_names_offsets.c:89
 msgid "paper size|B5 Extra"
 msgstr "B5 Extra"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:91
+#: gtk/paper_names_offsets.c:91
 msgid "paper size|B6"
 msgstr "B6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:93
+#: gtk/paper_names_offsets.c:93
 msgid "paper size|B6/C4"
 msgstr "B6/C4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:95
+#: gtk/paper_names_offsets.c:95
 msgid "paper size|B7"
 msgstr "B7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:97
+#: gtk/paper_names_offsets.c:97
 msgid "paper size|B8"
 msgstr "B8"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:99
+#: gtk/paper_names_offsets.c:99
 msgid "paper size|B9"
 msgstr "B9"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:101
+#: gtk/paper_names_offsets.c:101
 msgid "paper size|C0"
 msgstr "C0"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:103
+#: gtk/paper_names_offsets.c:103
 msgid "paper size|C1"
 msgstr "C1"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:105
+#: gtk/paper_names_offsets.c:105
 msgid "paper size|C10"
 msgstr "C10"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:107
+#: gtk/paper_names_offsets.c:107
 msgid "paper size|C2"
 msgstr "C2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:109
+#: gtk/paper_names_offsets.c:109
 msgid "paper size|C3"
 msgstr "C3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:111
+#: gtk/paper_names_offsets.c:111
 msgid "paper size|C4"
 msgstr "C4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:113
+#: gtk/paper_names_offsets.c:113
 msgid "paper size|C5"
 msgstr "C5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:115
+#: gtk/paper_names_offsets.c:115
 msgid "paper size|C6"
 msgstr "C6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:117
+#: gtk/paper_names_offsets.c:117
 msgid "paper size|C6/C5"
 msgstr "C6/C5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:119
+#: gtk/paper_names_offsets.c:119
 msgid "paper size|C7"
 msgstr "C7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:121
+#: gtk/paper_names_offsets.c:121
 msgid "paper size|C7/C6"
 msgstr "C7/C6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:123
+#: gtk/paper_names_offsets.c:123
 msgid "paper size|C8"
 msgstr "C8"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:125
+#: gtk/paper_names_offsets.c:125
 msgid "paper size|C9"
 msgstr "C9"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:127
+#: gtk/paper_names_offsets.c:127
 msgid "paper size|DL Envelope"
 msgstr "DL boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:129
+#: gtk/paper_names_offsets.c:129
 msgid "paper size|RA0"
 msgstr "RA0"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:131
+#: gtk/paper_names_offsets.c:131
 msgid "paper size|RA1"
 msgstr "RA1"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:133
+#: gtk/paper_names_offsets.c:133
 msgid "paper size|RA2"
 msgstr "RA2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:135
+#: gtk/paper_names_offsets.c:135
 msgid "paper size|SRA0"
 msgstr "SRA0"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:137
+#: gtk/paper_names_offsets.c:137
 msgid "paper size|SRA1"
 msgstr "SRA1"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:139
+#: gtk/paper_names_offsets.c:139
 msgid "paper size|SRA2"
 msgstr "SRA2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:141
+#: gtk/paper_names_offsets.c:141
 msgid "paper size|JB0"
 msgstr "JB0"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:143
+#: gtk/paper_names_offsets.c:143
 msgid "paper size|JB1"
 msgstr "JB1"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:145
+#: gtk/paper_names_offsets.c:145
 msgid "paper size|JB10"
 msgstr "JB10"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:147
+#: gtk/paper_names_offsets.c:147
 msgid "paper size|JB2"
 msgstr "JB2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:149
+#: gtk/paper_names_offsets.c:149
 msgid "paper size|JB3"
 msgstr "JB3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:151
+#: gtk/paper_names_offsets.c:151
 msgid "paper size|JB4"
 msgstr "JB4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:153
+#: gtk/paper_names_offsets.c:153
 msgid "paper size|JB5"
 msgstr "JB5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:155
+#: gtk/paper_names_offsets.c:155
 msgid "paper size|JB6"
 msgstr "JB6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:157
+#: gtk/paper_names_offsets.c:157
 msgid "paper size|JB7"
 msgstr "JB7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:159
+#: gtk/paper_names_offsets.c:159
 msgid "paper size|JB8"
 msgstr "JB8"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:161
+#: gtk/paper_names_offsets.c:161
 msgid "paper size|JB9"
 msgstr "JB9"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:163
+#: gtk/paper_names_offsets.c:163
 msgid "paper size|jis exec"
 msgstr "jis exec"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:165
+#: gtk/paper_names_offsets.c:165
 msgid "paper size|Choukei 2 Envelope"
 msgstr "Choukei 2 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:167
+#: gtk/paper_names_offsets.c:167
 msgid "paper size|Choukei 3 Envelope"
 msgstr "Choukei 3 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:169
+#: gtk/paper_names_offsets.c:169
 msgid "paper size|Choukei 4 Envelope"
 msgstr "Choukei 4 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:171
+#: gtk/paper_names_offsets.c:171
 msgid "paper size|hagaki (postcard)"
 msgstr "hagaki (levelezőlap)"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:173
+#: gtk/paper_names_offsets.c:173
 msgid "paper size|kahu Envelope"
 msgstr "kahu boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:175
+#: gtk/paper_names_offsets.c:175
 msgid "paper size|kaku2 Envelope"
 msgstr "kaku2 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:177
+#: gtk/paper_names_offsets.c:177
 msgid "paper size|oufuku (reply postcard)"
 msgstr "oufuku (válasz levelezőlap)"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:179
+#: gtk/paper_names_offsets.c:179
 msgid "paper size|you4 Envelope"
 msgstr "you4 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:181
+#: gtk/paper_names_offsets.c:181
 msgid "paper size|10x11"
 msgstr "10x11"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:183
+#: gtk/paper_names_offsets.c:183
 msgid "paper size|10x13"
 msgstr "10x13"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:185
+#: gtk/paper_names_offsets.c:185
 msgid "paper size|10x14"
 msgstr "10x14"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:187 ../gtk/paper_names_offsets.c:189
+#: gtk/paper_names_offsets.c:187 gtk/paper_names_offsets.c:189
 msgid "paper size|10x15"
 msgstr "10x15"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:191
+#: gtk/paper_names_offsets.c:191
 msgid "paper size|11x12"
 msgstr "11x12"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:193
+#: gtk/paper_names_offsets.c:193
 msgid "paper size|11x15"
 msgstr "11x15"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:195
+#: gtk/paper_names_offsets.c:195
 msgid "paper size|12x19"
 msgstr "12x19"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:197
+#: gtk/paper_names_offsets.c:197
 msgid "paper size|5x7"
 msgstr "5x7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:199
+#: gtk/paper_names_offsets.c:199
 msgid "paper size|6x9 Envelope"
 msgstr "6x9 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:201
+#: gtk/paper_names_offsets.c:201
 msgid "paper size|7x9 Envelope"
 msgstr "7x9 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:203
+#: gtk/paper_names_offsets.c:203
 msgid "paper size|9x11 Envelope"
 msgstr "9x11 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:205
+#: gtk/paper_names_offsets.c:205
 msgid "paper size|a2 Envelope"
 msgstr "a2 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:207
+#: gtk/paper_names_offsets.c:207
 msgid "paper size|Arch A"
 msgstr "Arch A"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:209
+#: gtk/paper_names_offsets.c:209
 msgid "paper size|Arch B"
 msgstr "Arch B"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:211
+#: gtk/paper_names_offsets.c:211
 msgid "paper size|Arch C"
 msgstr "Arch C"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:213
+#: gtk/paper_names_offsets.c:213
 msgid "paper size|Arch D"
 msgstr "Arch D"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:215
+#: gtk/paper_names_offsets.c:215
 msgid "paper size|Arch E"
 msgstr "Arch E"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:217
+#: gtk/paper_names_offsets.c:217
 msgid "paper size|b-plus"
 msgstr "b-plus"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:219
+#: gtk/paper_names_offsets.c:219
 msgid "paper size|c"
 msgstr "c"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:221
+#: gtk/paper_names_offsets.c:221
 msgid "paper size|c5 Envelope"
 msgstr "c5 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:223
+#: gtk/paper_names_offsets.c:223
 msgid "paper size|d"
 msgstr "d"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:225
+#: gtk/paper_names_offsets.c:225
 msgid "paper size|e"
 msgstr "e"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:227
+#: gtk/paper_names_offsets.c:227
 msgid "paper size|edp"
 msgstr "edp"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:229
+#: gtk/paper_names_offsets.c:229
 msgid "paper size|European edp"
 msgstr "Európai edp"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:231
+#: gtk/paper_names_offsets.c:231
 msgid "paper size|Executive"
 msgstr "Executive"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:233
+#: gtk/paper_names_offsets.c:233
 msgid "paper size|f"
 msgstr "f"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:235
+#: gtk/paper_names_offsets.c:235
 msgid "paper size|FanFold European"
 msgstr "Európai FanFold"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:237
+#: gtk/paper_names_offsets.c:237
 msgid "paper size|FanFold US"
 msgstr "US FanFold"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:239
+#: gtk/paper_names_offsets.c:239
 msgid "paper size|FanFold German Legal"
 msgstr "FanFold German Legal"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:241
+#: gtk/paper_names_offsets.c:241
 msgid "paper size|Government Legal"
 msgstr "Government Legal"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:243
+#: gtk/paper_names_offsets.c:243
 msgid "paper size|Government Letter"
 msgstr "Government Letter"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:245
+#: gtk/paper_names_offsets.c:245
 msgid "paper size|Index 3x5"
 msgstr "Index 3x5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:247
+#: gtk/paper_names_offsets.c:247
 msgid "paper size|Index 4x6 (postcard)"
 msgstr "Index 4x6 (levelezőlap)"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:249
+#: gtk/paper_names_offsets.c:249
 msgid "paper size|Index 4x6 ext"
 msgstr "Index 4x6 ext"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:251
+#: gtk/paper_names_offsets.c:251
 msgid "paper size|Index 5x8"
 msgstr "Index 5x8"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:253
+#: gtk/paper_names_offsets.c:253
 msgid "paper size|Invoice"
 msgstr "Invoice"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:255
+#: gtk/paper_names_offsets.c:255
 msgid "paper size|Tabloid"
 msgstr "Tabloid"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:257
+#: gtk/paper_names_offsets.c:257
 msgid "paper size|US Legal"
 msgstr "US Legal"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:259
+#: gtk/paper_names_offsets.c:259
 msgid "paper size|US Legal Extra"
 msgstr "US Legal Extra"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:261
+#: gtk/paper_names_offsets.c:261
 msgid "paper size|US Letter"
 msgstr "US Letter"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:263
+#: gtk/paper_names_offsets.c:263
 msgid "paper size|US Letter Extra"
 msgstr "US Letter Extra"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:265
+#: gtk/paper_names_offsets.c:265
 msgid "paper size|US Letter Plus"
 msgstr "US Letter Plus"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:267
+#: gtk/paper_names_offsets.c:267
 msgid "paper size|Monarch Envelope"
 msgstr "Monarch boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:269
+#: gtk/paper_names_offsets.c:269
 msgid "paper size|#10 Envelope"
 msgstr "#10 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:271
+#: gtk/paper_names_offsets.c:271
 msgid "paper size|#11 Envelope"
 msgstr "#11 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:273
+#: gtk/paper_names_offsets.c:273
 msgid "paper size|#12 Envelope"
 msgstr "#12 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:275
+#: gtk/paper_names_offsets.c:275
 msgid "paper size|#14 Envelope"
 msgstr "#14 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:277
+#: gtk/paper_names_offsets.c:277
 msgid "paper size|#9 Envelope"
 msgstr "#9 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:279
+#: gtk/paper_names_offsets.c:279
 msgid "paper size|Personal Envelope"
 msgstr "Személyes boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:281
+#: gtk/paper_names_offsets.c:281
 msgid "paper size|Quarto"
 msgstr "Quarto"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:283
+#: gtk/paper_names_offsets.c:283
 msgid "paper size|Super A"
 msgstr "Super A"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:285
+#: gtk/paper_names_offsets.c:285
 msgid "paper size|Super B"
 msgstr "Super B"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:287
+#: gtk/paper_names_offsets.c:287
 msgid "paper size|Wide Format"
 msgstr "Széles formátum"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:289
+#: gtk/paper_names_offsets.c:289
 msgid "paper size|Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:291
+#: gtk/paper_names_offsets.c:291
 msgid "paper size|Folio"
 msgstr "Folio"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:293
+#: gtk/paper_names_offsets.c:293
 msgid "paper size|Folio sp"
 msgstr "Folio sp"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:295
+#: gtk/paper_names_offsets.c:295
 msgid "paper size|Invite Envelope"
 msgstr "Meghívó boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:297
+#: gtk/paper_names_offsets.c:297
 msgid "paper size|Italian Envelope"
 msgstr "Olasz boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:299
+#: gtk/paper_names_offsets.c:299
 msgid "paper size|juuro-ku-kai"
 msgstr "juuro-ku-kai"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:301
+#: gtk/paper_names_offsets.c:301
 msgid "paper size|pa-kai"
 msgstr "pa-kai"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:303
+#: gtk/paper_names_offsets.c:303
 msgid "paper size|Postfix Envelope"
 msgstr "Postfix boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:305
+#: gtk/paper_names_offsets.c:305
 msgid "paper size|Small Photo"
 msgstr "Kis fénykép"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:307
+#: gtk/paper_names_offsets.c:307
 msgid "paper size|prc1 Envelope"
 msgstr "prc1 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:309
+#: gtk/paper_names_offsets.c:309
 msgid "paper size|prc10 Envelope"
 msgstr "prc10 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:311
+#: gtk/paper_names_offsets.c:311
 msgid "paper size|prc 16k"
 msgstr "prc 16k"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:313
+#: gtk/paper_names_offsets.c:313
 msgid "paper size|prc2 Envelope"
 msgstr "prc2 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:315
+#: gtk/paper_names_offsets.c:315
 msgid "paper size|prc3 Envelope"
 msgstr "prc3 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:317
+#: gtk/paper_names_offsets.c:317
 msgid "paper size|prc 32k"
 msgstr "prc 32k"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:319
+#: gtk/paper_names_offsets.c:319
 msgid "paper size|prc4 Envelope"
 msgstr "prc4 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:321
+#: gtk/paper_names_offsets.c:321
 msgid "paper size|prc5 Envelope"
 msgstr "prc5 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:323
+#: gtk/paper_names_offsets.c:323
 msgid "paper size|prc6 Envelope"
 msgstr "prc6 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:325
+#: gtk/paper_names_offsets.c:325
 msgid "paper size|prc7 Envelope"
 msgstr "prc7 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:327
+#: gtk/paper_names_offsets.c:327
 msgid "paper size|prc8 Envelope"
 msgstr "prc8 boríték"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:329
+#: gtk/paper_names_offsets.c:329
 msgid "paper size|ROC 16k"
 msgstr "ROC 16k"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:331
+#: gtk/paper_names_offsets.c:331
 msgid "paper size|ROC 8k"
 msgstr "ROC 8k"
 
-#: ../gtk/updateiconcache.c:492 ../gtk/updateiconcache.c:552
+#: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr "eltérő idata található a szimbolikusan linkelt „%s” és „%s” elemekhez\n"
+msgstr ""
+"eltérő idata található a szimbolikusan linkelt „%s” és „%s” elemekhez\n"
 
-#: ../gtk/updateiconcache.c:1374
+#: gtk/updateiconcache.c:1374
 #, c-format
 msgid "Failed to write header\n"
 msgstr "A fejléc írása meghiúsult\n"
 
-#: ../gtk/updateiconcache.c:1380
+#: gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "A hash tábla írása meghiúsult\n"
 
-#: ../gtk/updateiconcache.c:1386
+#: gtk/updateiconcache.c:1386
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "A mappaindex írása meghiúsult\n"
 
-#: ../gtk/updateiconcache.c:1394
+#: gtk/updateiconcache.c:1394
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "A fejléc újraírása meghiúsult\n"
 
-#: ../gtk/updateiconcache.c:1454
+#: gtk/updateiconcache.c:1454
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "A fájl (%s) megnyitása meghiúsult: %s\n"
 
-#: ../gtk/updateiconcache.c:1462
+#: gtk/updateiconcache.c:1462
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "A gyorsítótárfájl írása meghiúsult: „%s”\n"
 
-#: ../gtk/updateiconcache.c:1497
+#: gtk/updateiconcache.c:1497
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Az előállított gyorsítótár érvénytelen volt.\n"
 
-#: ../gtk/updateiconcache.c:1511
+#: gtk/updateiconcache.c:1511
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
 "%s nem nevezhető át a következőre: %s: %s, ezért a(z) %s eltávolításra "
 "kerül.\n"
 
-#: ../gtk/updateiconcache.c:1523
+#: gtk/updateiconcache.c:1523
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s nem nevezhető át (erre: %s): %s\n"
 
-#: ../gtk/updateiconcache.c:1530
+#: gtk/updateiconcache.c:1530
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s nem nevezhető át (erre: %s): %s.\n"
 
-#: ../gtk/updateiconcache.c:1556
+#: gtk/updateiconcache.c:1556
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "A gyorsítótárfájl sikeresen létrejött.\n"
 
-#: ../gtk/updateiconcache.c:1595
+#: gtk/updateiconcache.c:1595
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Meglévő gyorsítótár felülírása, még ha naprakész is"
 
-#: ../gtk/updateiconcache.c:1596
+#: gtk/updateiconcache.c:1596
 msgid "Don't check for the existence of index.theme"
 msgstr "Ne ellenőrizze az index.theme meglétét"
 
-#: ../gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1597
 msgid "Don't include image data in the cache"
 msgstr "Ne vegye fel a képadatokat a gyorsítótárba"
 
-#: ../gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1598
 msgid "Output a C header file"
 msgstr "C fejlécfájl kiírása"
 
-#: ../gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1599
 msgid "Turn off verbose output"
 msgstr "Bőbeszédű kimenet kikapcsolása"
 
-#: ../gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1600
 msgid "Validate existing icon cache"
 msgstr "Meglévő ikongyorsítótár ellenőrzése"
 
-#: ../gtk/updateiconcache.c:1663
+#: gtk/updateiconcache.c:1663
 #, c-format
 msgid "File not found: %s\n"
 msgstr "A fájl nem található: %s\n"
 
-#: ../gtk/updateiconcache.c:1669
+#: gtk/updateiconcache.c:1669
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Nem egy érvényes ikongyorsítótár: %s\n"
 
-#: ../gtk/updateiconcache.c:1682
+#: gtk/updateiconcache.c:1682
 #, c-format
 msgid "No theme index file."
 msgstr "Nincs témaindexfájl."
 
-#: ../gtk/updateiconcache.c:1686
+#: gtk/updateiconcache.c:1686
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4336,262 +4350,261 @@ msgstr ""
 "ignore-theme-index kapcsolót.\n"
 
 #. ID
-#: ../modules/input/imam-et.c:454
+#: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
 msgstr "Amhara (EZ+)"
 
 #. ID
-#: ../modules/input/imcedilla.c:92
+#: modules/input/imcedilla.c:92
 msgid "Cedilla"
 msgstr "Cedilla"
 
 #. ID
-#: ../modules/input/imcyrillic-translit.c:217
+#: modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
 msgstr "Cirill (Transliterált)"
 
 #. ID
-#: ../modules/input/iminuktitut.c:127
+#: modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
 msgstr "Inuktitut (Transliterált)"
 
 #. ID
-#: ../modules/input/imipa.c:145
+#: modules/input/imipa.c:145
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
-#: ../modules/input/immultipress.c:31
+#: modules/input/immultipress.c:31
 msgid "Multipress"
 msgstr "Többbillentyűs"
 
 #. ID
-#: ../modules/input/imthai.c:35
+#: modules/input/imthai.c:35
 msgid "Thai-Lao"
 msgstr "Thai-Lao"
 
 #. ID
-#: ../modules/input/imti-er.c:453
+#: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "Eritreai tigrigna (EZ+)"
 
 #. ID
-#: ../modules/input/imti-et.c:453
+#: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "Etióp tigrigna (EZ+)"
 
 #. ID
-#: ../modules/input/imviqr.c:244
+#: modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
 msgstr "Vietnami (VIQR)"
 
 #. ID
-#: ../modules/input/imxim.c:28
+#: modules/input/imxim.c:28
 msgid "X Input Method"
 msgstr "X beviteli mód"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1082
+#: modules/printbackends/cups/gtkprintbackendcups.c:1082
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "A nyomtatóban („%s”) kevés a festék."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1083
+#: modules/printbackends/cups/gtkprintbackendcups.c:1083
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "A nyomtatóból („%s”) kifogyott a festék."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1084
+#: modules/printbackends/cups/gtkprintbackendcups.c:1084
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "A nyomtatóban („%s”) kevés az előhívó."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1085
+#: modules/printbackends/cups/gtkprintbackendcups.c:1085
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "A nyomtatóból („%s”) kifogyott az előhívó."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1086
+#: modules/printbackends/cups/gtkprintbackendcups.c:1086
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "A nyomtatóban („%s”) legalább egy szín festéke kevés."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1087
+#: modules/printbackends/cups/gtkprintbackendcups.c:1087
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "A nyomtatóból („%s”) legalább egy szín festéke kifogyott."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1088
+#: modules/printbackends/cups/gtkprintbackendcups.c:1088
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "A nyomtató („%s”) fedele nyitva van."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1089
+#: modules/printbackends/cups/gtkprintbackendcups.c:1089
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "A nyomtató („%s”) ajtaja nyitva van."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1090
+#: modules/printbackends/cups/gtkprintbackendcups.c:1090
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "A nyomtatóban („%s”) kevés a papír."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1091
+#: modules/printbackends/cups/gtkprintbackendcups.c:1091
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "A nyomtatóból („%s”) kifogyott a papír."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1092
+#: modules/printbackends/cups/gtkprintbackendcups.c:1092
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "A nyomtató („%s”) nem érhető el."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1093
+#: modules/printbackends/cups/gtkprintbackendcups.c:1093
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "Lehet, hogy a nyomtató („%s”) nincs csatlakoztatva."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1094
+#: modules/printbackends/cups/gtkprintbackendcups.c:1094
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "A nyomtató („%s”) problémát észlelt."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1864
+#: modules/printbackends/cups/gtkprintbackendcups.c:1864
 msgid "Two Sided"
 msgstr "Kétoldalas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1865
+#: modules/printbackends/cups/gtkprintbackendcups.c:1865
 msgid "Paper Type"
 msgstr "Papírtípus"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1866
+#: modules/printbackends/cups/gtkprintbackendcups.c:1866
 msgid "Paper Source"
 msgstr "Papírforrás"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1867
+#: modules/printbackends/cups/gtkprintbackendcups.c:1867
 msgid "Output Tray"
 msgstr "Kimeneti tálca"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1876
+#: modules/printbackends/cups/gtkprintbackendcups.c:1876
 msgid "One Sided"
 msgstr "Egyoldalas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1877
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1878
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1882
+#: modules/printbackends/cups/gtkprintbackendcups.c:1877
+#: modules/printbackends/cups/gtkprintbackendcups.c:1878
+#: modules/printbackends/cups/gtkprintbackendcups.c:1882
 msgid "Auto Select"
 msgstr "Automatikus kiválasztás"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1879
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1880
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1881
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2351
+#: modules/printbackends/cups/gtkprintbackendcups.c:1879
+#: modules/printbackends/cups/gtkprintbackendcups.c:1880
+#: modules/printbackends/cups/gtkprintbackendcups.c:1881
+#: modules/printbackends/cups/gtkprintbackendcups.c:2351
 msgid "Printer Default"
 msgstr "Nyomtató alapértelmezése"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2545
+#: modules/printbackends/cups/gtkprintbackendcups.c:2545
 msgid "Urgent"
 msgstr "Sürgős"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2545
+#: modules/printbackends/cups/gtkprintbackendcups.c:2545
 msgid "High"
 msgstr "Magas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2545
+#: modules/printbackends/cups/gtkprintbackendcups.c:2545
 msgid "Medium"
 msgstr "Közepes"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2545
+#: modules/printbackends/cups/gtkprintbackendcups.c:2545
 msgid "Low"
 msgstr "Alacsony"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2547
 msgid "None"
 msgstr "Nincs"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2547
 msgid "Classified"
 msgstr "Nem nyilvános"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2547
 msgid "Confidential"
 msgstr "Bizalmas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2547
 msgid "Secret"
 msgstr "Titkos"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2547
 msgid "Standard"
 msgstr "Szabványos"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2547
 msgid "Top Secret"
 msgstr "Szigorúan titkos"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2547
 msgid "Unclassified"
 msgstr "Nyilvános"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2640
+#: modules/printbackends/cups/gtkprintbackendcups.c:2640
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Egyéni %sx%s"
 
 #. default filename used for print-to-file
-#: ../modules/printbackends/file/gtkprintbackendfile.c:235
+#: modules/printbackends/file/gtkprintbackendfile.c:235
 #, c-format
 msgid "output.%s"
 msgstr "kimenet.%s"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:464
+#: modules/printbackends/file/gtkprintbackendfile.c:464
 msgid "Print to File"
 msgstr "Nyomtatás fájlba"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+#: modules/printbackends/file/gtkprintbackendfile.c:541
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+#: modules/printbackends/file/gtkprintbackendfile.c:541
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:553
-#: ../modules/printbackends/test/gtkprintbackendtest.c:501
+#: modules/printbackends/file/gtkprintbackendfile.c:553
+#: modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "_Oldalak laponként:"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:599
+#: modules/printbackends/file/gtkprintbackendfile.c:599
 msgid "File"
 msgstr "Fájl"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:608
+#: modules/printbackends/file/gtkprintbackendfile.c:608
 msgid "_Output format"
 msgstr "_Kimeneti formátum"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:398
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:398
 msgid "Print to LPR"
 msgstr "Nyomtatás LPR-re"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:424
 msgid "Pages Per Sheet"
 msgstr "Oldalak laponként"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:431
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:431
 msgid "Command Line"
 msgstr "Parancssor"
 
 #. default filename used for print-to-test
-#: ../modules/printbackends/test/gtkprintbackendtest.c:235
+#: modules/printbackends/test/gtkprintbackendtest.c:235
 #, c-format
 msgid "test-output.%s"
 msgstr "tesztkimenet.%s"
 
-#: ../modules/printbackends/test/gtkprintbackendtest.c:465
+#: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Nyomtatás tesztnyomtatóra"
 
-#: ../tests/testfilechooser.c:207
+#: tests/testfilechooser.c:207
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nem lehet információt szerezni a(z) „%s” fájlról: %s"
-

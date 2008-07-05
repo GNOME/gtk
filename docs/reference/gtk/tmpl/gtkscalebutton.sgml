@@ -58,6 +58,11 @@ is tailored for this use case.
 
 </para>
 
+<!-- ##### ARG GtkScaleButton:orientation ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkScaleButton:size ##### -->
 <para>
 
@@ -118,6 +123,15 @@ is tailored for this use case.
 
 
 <!-- ##### FUNCTION gtk_scale_button_get_value ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_scale_button_get_popup ##### -->
 <para>
 
 </para>

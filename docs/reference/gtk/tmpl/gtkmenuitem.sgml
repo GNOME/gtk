@@ -73,6 +73,16 @@ submenu. For normal applications, the relevant signal is "activate".
 @menuitem: the object which received the signal.
 @arg1: 
 
+<!-- ##### ARG GtkMenuItem:accel-path ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenuItem:right-justified ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkMenuItem:submenu ##### -->
 <para>
 
@@ -99,6 +109,11 @@ submenu. For normal applications, the relevant signal is "activate".
 </para>
 
 <!-- ##### ARG GtkMenuItem:toggle-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenuItem:width-chars ##### -->
 <para>
 
 </para>

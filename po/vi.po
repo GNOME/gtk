@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.13.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-13 18:22-0400\n"
+"POT-Creation-Date: 2008-07-05 15:47-0400\n"
 "PO-Revision-Date: 2008-06-01 22:30+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -234,7 +234,7 @@ msgid "keyboard label|Delete"
 msgstr "Delete"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:912
-#: gdk-pixbuf/gdk-pixbuf-io.c:1168 tests/testfilechooser.c:218
+#: gdk-pixbuf/gdk-pixbuf-io.c:1168 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Lỗi mở tập tin « %s »': %s"
@@ -245,7 +245,7 @@ msgid "Image file '%s' contains no data"
 msgstr "Tập tin ảnh « %s » không chứa dữ liệu nào"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:961
-#: gdk-pixbuf/gdk-pixbuf-io.c:1220 tests/testfilechooser.c:263
+#: gdk-pixbuf/gdk-pixbuf-io.c:1220 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -285,7 +285,6 @@ msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Không thể nhận ra dạng thức tập tin ảnh cho tập tin « %s »"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:801
-#, c-format
 msgid "Unrecognized image file format"
 msgstr "Không nhận ra dạng thức tập tin ảnh"
 
@@ -305,17 +304,14 @@ msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Bản xây dụng gdk-pixbuf này không hỗ trợ lưu dạng thức ảnh: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1681
-#, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "Không đủ bộ nhớ để lưu tập tin ảnh vào khả năng gọi lại"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1694
-#, c-format
 msgid "Failed to open temporary file"
 msgstr "Lỗi mở tập tin tạm"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1720
-#, c-format
 msgid "Failed to read from temporary file"
 msgstr "Lỗi đọc từ tập tin tạm"
 
@@ -332,12 +328,10 @@ msgid ""
 msgstr "Lỗi đóng « %s » khi đang ghi ảnh, mọi dữ liệu có lẽ không được lưu: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2200 gdk-pixbuf/gdk-pixbuf-io.c:2251
-#, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Không đủ bộ nhớ để lưu ảnh vào bộ đệm"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2297
-#, c-format
 msgid "Error writing to image stream"
 msgstr "Gặp lỗi khi ghi vào luồng ảnh"
 
@@ -356,17 +350,14 @@ msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Không hỗ trợ tải từ từ kiểu ảnh « %s »"
 
 #: gdk-pixbuf/gdk-pixdata.c:147
-#, c-format
 msgid "Image header corrupt"
 msgstr "Phần đầu của ảnh bị hỏng"
 
 #: gdk-pixbuf/gdk-pixdata.c:152
-#, c-format
 msgid "Image format unknown"
 msgstr "Không biết dạng thức ảnh"
 
 #: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
-#, c-format
 msgid "Image pixel data corrupt"
 msgstr "Dữ liệu điểm ảnh của ảnh bị hỏng"
 
@@ -377,29 +368,24 @@ msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "lỗi cấp phát bộ đệm ảnh có kích thước %u byte"
 
 #: gdk-pixbuf/io-ani.c:244
-#, c-format
 msgid "Unexpected icon chunk in animation"
 msgstr "Gặp đoạn biểu tượng bất thường trong hoạt cảnh"
 
 #: gdk-pixbuf/io-ani.c:337
-#, c-format
 msgid "Unsupported animation type"
 msgstr "Không hỗ trợ kiểu hoạt cảnh"
 
 #: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
 #: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
-#, c-format
 msgid "Invalid header in animation"
 msgstr "Phần đầu không hợp lệ trong hoạt cảnh"
 
 #: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
 #: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
-#, c-format
 msgid "Not enough memory to load animation"
 msgstr "Không đủ bộ nhớ để tải hoạt cảnh"
 
 #: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
-#, c-format
 msgid "Malformed chunk in animation"
 msgstr "Đoạn dạng sai trong hoạt cảnh"
 
@@ -409,37 +395,30 @@ msgstr "Dạng thức ảnh ANI"
 
 #: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
 #: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
-#, c-format
 msgid "BMP image has bogus header data"
 msgstr "Ảnh BMP có dữ liệu phần đầu giả"
 
 #: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
-#, c-format
 msgid "Not enough memory to load bitmap image"
 msgstr "Không đủ bộ nhớ để tải ảnh mảng"
 
 #: gdk-pixbuf/io-bmp.c:319
-#, c-format
 msgid "BMP image has unsupported header size"
 msgstr "Ảnh BMP có kích thước phần đầu không được hỗ trợ"
 
 #: gdk-pixbuf/io-bmp.c:357
-#, c-format
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Không thể nén ảnh BMP kiểu đầu xuống"
 
 #: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
-#, c-format
 msgid "Premature end-of-file encountered"
 msgstr "Gặp kết thúc tập tin quá sớm"
 
 #: gdk-pixbuf/io-bmp.c:1329
-#, c-format
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Không thể cấp phát bộ nhớ để lưu tập tin BMP"
 
 #: gdk-pixbuf/io-bmp.c:1370
-#, c-format
 msgid "Couldn't write to BMP file"
 msgstr "Không thể ghi vào tập tin BMP"
 
@@ -453,7 +432,6 @@ msgid "Failure reading GIF: %s"
 msgstr "Lỗi đọc tập tin dạng GIF: %s"
 
 #: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477 gdk-pixbuf/io-gif.c:1638
-#, c-format
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "Tập tin GIF thiếu một vài dữ liệu (có lẽ tập tin đã bị cắt bớt bằng cách "
@@ -465,43 +443,35 @@ msgid "Internal error in the GIF loader (%s)"
 msgstr "Lỗi nội bộ trong bộ tải tập tin dạng GIF (%s)"
 
 #: gdk-pixbuf/io-gif.c:579
-#, c-format
 msgid "Stack overflow"
 msgstr "Tràn đống"
 
 #: gdk-pixbuf/io-gif.c:639
-#, c-format
 msgid "GIF image loader cannot understand this image."
 msgstr "Bộ tải tập tin GIF không thể hiểu ảnh này."
 
 #: gdk-pixbuf/io-gif.c:668
-#, c-format
 msgid "Bad code encountered"
 msgstr "Phát hiện mã sai"
 
 #: gdk-pixbuf/io-gif.c:678
-#, c-format
 msgid "Circular table entry in GIF file"
 msgstr "Mục nhập bảng kiểu tròn trong tập tin GIF"
 
 #: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464 gdk-pixbuf/io-gif.c:1511
 #: gdk-pixbuf/io-gif.c:1626
-#, c-format
 msgid "Not enough memory to load GIF file"
 msgstr "Không đủ bộ nhớ để tải tập tin dạng GIF"
 
 #: gdk-pixbuf/io-gif.c:956
-#, c-format
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Không đủ bộ nhớ để tạo một khung trong tập tin dạng GIF"
 
 #: gdk-pixbuf/io-gif.c:1128
-#, c-format
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Tập tin GIF bị hỏng (dữ liệu nén LZW sai)"
 
 #: gdk-pixbuf/io-gif.c:1178
-#, c-format
 msgid "File does not appear to be a GIF file"
 msgstr "Tập tin này có vẻ không phải là tập tin dạng GIF"
 
@@ -511,7 +481,6 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "Không hỗ trợ phiên bản %s của dạng thức tập tin GIF"
 
 #: gdk-pixbuf/io-gif.c:1299
-#, c-format
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -520,7 +489,6 @@ msgstr ""
 "màu cục bộ."
 
 #: gdk-pixbuf/io-gif.c:1533
-#, c-format
 msgid "GIF image was truncated or incomplete."
 msgstr "Ảnh GIF bị cắt bớt hoặc không hoàn chỉnh."
 
@@ -530,48 +498,39 @@ msgstr "Dạng thức ảnh GIF"
 
 #: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
 #: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
-#, c-format
 msgid "Invalid header in icon"
 msgstr "Phần đầu không hợp lệ trong biểu tượng"
 
 #: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
 #: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
-#, c-format
 msgid "Not enough memory to load icon"
 msgstr "Không đủ bộ nhớ để tải biểu tượng"
 
 #: gdk-pixbuf/io-ico.c:322
-#, c-format
 msgid "Icon has zero width"
 msgstr "Biểu tượng có bề rộng bằng không"
 
 #: gdk-pixbuf/io-ico.c:332
-#, c-format
 msgid "Icon has zero height"
 msgstr "Biểu tượng có bề cao bằng không"
 
 #: gdk-pixbuf/io-ico.c:384
-#, c-format
 msgid "Compressed icons are not supported"
 msgstr "Không hỗ trợ biểu tượng đã nén"
 
 #: gdk-pixbuf/io-ico.c:417
-#, c-format
 msgid "Unsupported icon type"
 msgstr "Không hỗ trợ kiểu biểu tượng này"
 
 #: gdk-pixbuf/io-ico.c:511
-#, c-format
 msgid "Not enough memory to load ICO file"
 msgstr "Không đủ bộ nhớ để tải tập tin ICO"
 
 #: gdk-pixbuf/io-ico.c:976
-#, c-format
 msgid "Image too large to be saved as ICO"
 msgstr "Ảnh quá lớn để lưu dạng ICO"
 
 #: gdk-pixbuf/io-ico.c:987
-#, c-format
 msgid "Cursor hotspot outside image"
 msgstr "Điểm nóng con trỏ nằm ngoài ảnh"
 
@@ -580,7 +539,7 @@ msgstr "Điểm nóng con trỏ nằm ngoài ảnh"
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Hỗ trợ độ sâu này cho tập tin ICO: %d"
 
-#: gdk-pixbuf/io-ico.c:1244 gdk-pixbuf/io-gdip-ico.c:59
+#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
 msgid "The ICO image format"
 msgstr "Dạng thức ảnh ICO"
 
@@ -590,7 +549,6 @@ msgid "Error reading ICNS image: %s"
 msgstr "Lỗi đọc ảnh ICNS: %s"
 
 #: gdk-pixbuf/io-icns.c:362
-#, c-format
 msgid "Could not decode ICNS file"
 msgstr "Không thể giải mã tập tin ICNS"
 
@@ -598,42 +556,35 @@ msgstr "Không thể giải mã tập tin ICNS"
 msgid "The ICNS image format"
 msgstr "Dạng thức ảnh ICNS"
 
-#: gdk-pixbuf/io-jasper.c:74
-#, c-format
+#: gdk-pixbuf/io-jasper.c:75
 msgid "Couldn't allocate memory for stream"
 msgstr "Không thể cấp phát bộ nhớ cho luồng"
 
-#: gdk-pixbuf/io-jasper.c:103
-#, c-format
+#: gdk-pixbuf/io-jasper.c:105
 msgid "Couldn't decode image"
 msgstr "Không thể giải mã ảnh"
 
-#: gdk-pixbuf/io-jasper.c:121
-#, c-format
+#: gdk-pixbuf/io-jasper.c:123
 msgid "Transformed JPEG2000 has zero width or height"
 msgstr "Ảnh JPEG2000 đã được chuyển đổi có chiều rộng/cao bằng không"
 
-#: gdk-pixbuf/io-jasper.c:134
-#, c-format
+#: gdk-pixbuf/io-jasper.c:137
 msgid "Image type currently not supported"
 msgstr "Loại ảnh hiện thời không hỗ trợ"
 
-#: gdk-pixbuf/io-jasper.c:145 gdk-pixbuf/io-jasper.c:152
-#, c-format
+#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
 msgid "Couldn't allocate memory for color profile"
 msgstr "Không thể cấp phát bộ nhớ cho hồ sơ màu"
 
-#: gdk-pixbuf/io-jasper.c:177
-#, c-format
+#: gdk-pixbuf/io-jasper.c:182
 msgid "Insufficient memory to open JPEG 2000 file"
 msgstr "Không đủ bộ nhớ để mở tập tin JPEG 2000"
 
-#: gdk-pixbuf/io-jasper.c:258
-#, c-format
+#: gdk-pixbuf/io-jasper.c:264
 msgid "Couldn't allocate memory to buffer image data"
 msgstr "Không thể cấp phát bộ nhớ cho dữ liệu ảnh"
 
-#: gdk-pixbuf/io-jasper.c:302
+#: gdk-pixbuf/io-jasper.c:308
 msgid "The JPEG 2000 image format"
 msgstr "Dạng thức ảnh JPEG 2000"
 
@@ -643,7 +594,6 @@ msgid "Error interpreting JPEG image file (%s)"
 msgstr "Gặp lỗi khi thông dịch tập tin ảnh JPEG (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:529
-#, c-format
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -658,12 +608,10 @@ msgstr "Không hỗ trợ vùng màu JPEG (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
-#, c-format
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Không thể cấp phát bộ nhớ để tải tập tin JPEG"
 
 #: gdk-pixbuf/io-jpeg.c:920
-#, c-format
 msgid "Transformed JPEG has zero width or height."
 msgstr "Ảnh JPEG đã được chuyển đổi có chiều rộng/cao bằng không."
 
@@ -689,22 +637,18 @@ msgid "The JPEG image format"
 msgstr "Dạng thức ảnh JPEG"
 
 #: gdk-pixbuf/io-pcx.c:187
-#, c-format
 msgid "Couldn't allocate memory for header"
 msgstr "Không thể cấp phát bộ nhớ cho phần đầu"
 
 #: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
-#, c-format
 msgid "Couldn't allocate memory for context buffer"
 msgstr "Không thể cấp phát bộ nhớ cho bộ đệm ngữ cảnh"
 
 #: gdk-pixbuf/io-pcx.c:601
-#, c-format
 msgid "Image has invalid width and/or height"
 msgstr "Ảnh có độ cao/rộng không hợp lệ"
 
 #: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
-#, c-format
 msgid "Image has unsupported bpp"
 msgstr "Không hỗ trợ bpp trong ảnh này"
 
@@ -714,27 +658,22 @@ msgid "Image has unsupported number of %d-bit planes"
 msgstr "Không hỗ trợ số mặt phẳng %d-bit trong ảnh này"
 
 #: gdk-pixbuf/io-pcx.c:642
-#, c-format
 msgid "Couldn't create new pixbuf"
 msgstr "Không thể tạo bộ đệm điểm ảnh mới"
 
 #: gdk-pixbuf/io-pcx.c:650
-#, c-format
 msgid "Couldn't allocate memory for line data"
 msgstr "Không thể cấp phát bộ nhớ cho dữ liệu dòng"
 
 #: gdk-pixbuf/io-pcx.c:657
-#, c-format
 msgid "Couldn't allocate memory for paletted data"
 msgstr "Không thể cấp phát bộ nhớ cho dữ liệu trong bảng chọn"
 
 #: gdk-pixbuf/io-pcx.c:704
-#, c-format
 msgid "Didn't get all lines of PCX image"
 msgstr "Chưa lấy mọi dòng của ảnh dạng PCX"
 
 #: gdk-pixbuf/io-pcx.c:711
-#, c-format
 msgid "No palette found at end of PCX data"
 msgstr "Không tìm thấy bảng chọn ở cuối dữ liệu PCX"
 
@@ -743,27 +682,22 @@ msgid "The PCX image format"
 msgstr "Dạng thức ảnh PCX"
 
 #: gdk-pixbuf/io-png.c:55
-#, c-format
 msgid "Bits per channel of PNG image is invalid."
 msgstr "Số bit trên một kênh của ảnh PNG không là hợp lệ."
 
 #: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
-#, c-format
 msgid "Transformed PNG has zero width or height."
 msgstr "Ảnh PNG đã được chuyển đổi có chiều rộng/cao bằng không."
 
 #: gdk-pixbuf/io-png.c:144
-#, c-format
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr "Số bit trên một kênh của ảnh PNG được chuyển đổi không bằng 8."
 
 #: gdk-pixbuf/io-png.c:153
-#, c-format
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "Ảnh PNG được chuyển đổi không phải là RGB cũng như RGBA."
 
 #: gdk-pixbuf/io-png.c:162
-#, c-format
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
 "Ảnh PNG được chuyển đổi có số kênh không được hỗ trợ (phải bằng 3 hoặc 4)."
@@ -774,7 +708,6 @@ msgid "Fatal error in PNG image file: %s"
 msgstr "Lỗi nghiêm trọng trong tập tin ảnh PNG: %s"
 
 #: gdk-pixbuf/io-png.c:310
-#, c-format
 msgid "Insufficient memory to load PNG file"
 msgstr "Không đủ bộ nhớ để tải tập tin PNG"
 
@@ -788,7 +721,6 @@ msgstr ""
 "vài ứng dụng để giảm số lượng bộ nhớ được dùng"
 
 #: gdk-pixbuf/io-png.c:684
-#, c-format
 msgid "Fatal error reading PNG image file"
 msgstr "Lỗi nghiêm trong khi đọc tập tin ảnh PNG"
 
@@ -798,13 +730,11 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Lỗi nghiêm trọng khi đọc tập tin ảnh PNG: %s"
 
 #: gdk-pixbuf/io-png.c:825
-#, c-format
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Các khóa cho các đoạn PNG text phải có độ dài từ 1 đến 79 ký tự."
 
 #: gdk-pixbuf/io-png.c:833
-#, c-format
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Các khóa cho các đoạn PNG text phải là ký tự ASCII."
 
@@ -837,73 +767,59 @@ msgid "The PNG image format"
 msgstr "Dạng thức ảnh PNG"
 
 #: gdk-pixbuf/io-pnm.c:250
-#, c-format
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "Bộ tải ảnh PNM ngờ tìm một số nguyên, nhưng không tìm thấy"
 
 #: gdk-pixbuf/io-pnm.c:282
-#, c-format
 msgid "PNM file has an incorrect initial byte"
 msgstr "Tập tin PNM có byte khởi đầu không đúng"
 
 #: gdk-pixbuf/io-pnm.c:312
-#, c-format
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "Tập tin PNM không phải là dạng thức con PNM được công nhận"
 
 #: gdk-pixbuf/io-pnm.c:337
-#, c-format
 msgid "PNM file has an image width of 0"
 msgstr "Tập tin PNM chứa ảnh có chiều rộng bằng không"
 
 #: gdk-pixbuf/io-pnm.c:358
-#, c-format
 msgid "PNM file has an image height of 0"
 msgstr "Tập tin PNM chứa ảnh có chiều cao bằng không"
 
 #: gdk-pixbuf/io-pnm.c:381
-#, c-format
 msgid "Maximum color value in PNM file is 0"
 msgstr "Giá trị màu tối đa trong tập tin PNM bằng không"
 
 #: gdk-pixbuf/io-pnm.c:389
-#, c-format
 msgid "Maximum color value in PNM file is too large"
 msgstr "Giá trị màu tối đa trong tập tin PNM quá lớn"
 
 #: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
-#, c-format
 msgid "Raw PNM image type is invalid"
 msgstr "Kiểu ảnh PNM thô không hợp lệ"
 
 #: gdk-pixbuf/io-pnm.c:654
-#, c-format
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "Bộ tải ảnh PNM không hỗ trợ dạng thức con này của PNM"
 
 #: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
-#, c-format
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 "Dạng thức ảnh PNM thô cần một và chỉ một khoảng trắng trước dữ liệu mẫu"
 
 #: gdk-pixbuf/io-pnm.c:768
-#, c-format
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Không thể cấp phát bộ nhớ để tải ảnh PNM"
 
 #: gdk-pixbuf/io-pnm.c:818
-#, c-format
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Không đủ bộ nhớ để tải cấu trúc ngữ cảnh PNM"
 
 #: gdk-pixbuf/io-pnm.c:869
-#, c-format
 msgid "Unexpected end of PNM image data"
 msgstr "Gặp kết thúc bất ngờ trong dữ liệu ảnh PNM"
 
 #: gdk-pixbuf/io-pnm.c:997
-#, c-format
 msgid "Insufficient memory to load PNM file"
 msgstr "Không đủ bộ nhớ để tải tập tin PNM"
 
@@ -912,22 +828,18 @@ msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "Họ dạng thức ảnh PNM/PBM/PGM/PPM"
 
 #: gdk-pixbuf/io-ras.c:126
-#, c-format
 msgid "RAS image has bogus header data"
 msgstr "Ảnh RAS có dữ liệu phần đầu giả"
 
 #: gdk-pixbuf/io-ras.c:148
-#, c-format
 msgid "RAS image has unknown type"
 msgstr "Không biết kiểu dạng thức ảnh RAS"
 
 #: gdk-pixbuf/io-ras.c:156
-#, c-format
 msgid "unsupported RAS image variation"
 msgstr "Không hỗ trợ biến dạng ảnh RAS"
 
 #: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
-#, c-format
 msgid "Not enough memory to load RAS image"
 msgstr "Không đủ bộ nhớ để tải ảnh RAS"
 
@@ -936,68 +848,55 @@ msgid "The Sun raster image format"
 msgstr "Dạng thức ảnh raster Sun"
 
 #: gdk-pixbuf/io-tga.c:154
-#, c-format
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Không thể cấp phát bộ nhớ cho cấu trúc bộ đệm nhập/xuất (IOBuffer)"
 
 #: gdk-pixbuf/io-tga.c:173
-#, c-format
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Không thể cấp phát bộ nhớ cho dữ liệu bộ đệm nhập/xuất (IOBuffer)"
 
 #: gdk-pixbuf/io-tga.c:184
-#, c-format
 msgid "Cannot realloc IOBuffer data"
 msgstr "Không thể tái cấp phát bộ nhớ cho dữ liệu bộ đệm nhập/xuất (IOBuffer)"
 
 #: gdk-pixbuf/io-tga.c:214
-#, c-format
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Không thể cấp phát dữ liệu IOBuffer tạm thời"
 
 #: gdk-pixbuf/io-tga.c:347
-#, c-format
 msgid "Cannot allocate new pixbuf"
 msgstr "Không thể cấp phát bộ đệm điểm ảnh mới"
 
 #: gdk-pixbuf/io-tga.c:687
-#, c-format
 msgid "Cannot allocate colormap structure"
 msgstr "Không thể cấp phát cấu trúc bản đồ màu sắc"
 
 #: gdk-pixbuf/io-tga.c:694
-#, c-format
 msgid "Cannot allocate colormap entries"
 msgstr "Không thể cấp phát các mục của bản đồ màu sắc"
 
 #: gdk-pixbuf/io-tga.c:716
-#, c-format
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Các mục bản đồ màu sắc có độ sâu bit bất ngờ"
 
 #: gdk-pixbuf/io-tga.c:734
-#, c-format
 msgid "Cannot allocate TGA header memory"
 msgstr "Không thể cấp phát bộ nhớ cho phần đầu TGA"
 
 #: gdk-pixbuf/io-tga.c:767
-#, c-format
 msgid "TGA image has invalid dimensions"
 msgstr "Ảnh TGA có kích thước không hợp lệ"
 
 #: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
 #: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
-#, c-format
 msgid "TGA image type not supported"
 msgstr "Không hỗ trợ kiểu ảnh TGA"
 
 #: gdk-pixbuf/io-tga.c:856
-#, c-format
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Không thể cấp phát bộ nhớ cho cấu trúc ngữ cảnh TGA"
 
 #: gdk-pixbuf/io-tga.c:921
-#, c-format
 msgid "Excess data in file"
 msgstr "Dữ liệu thừa trong tập tin"
 
@@ -1014,17 +913,14 @@ msgid "Could not get image height (bad TIFF file)"
 msgstr "Không thể lấy chiều cao ảnh (tập tin TIFF sai)"
 
 #: gdk-pixbuf/io-tiff.c:175
-#, c-format
 msgid "Width or height of TIFF image is zero"
 msgstr "Chiều rộng hoặc chiều cao của ảnh TIFF bằng không"
 
 #: gdk-pixbuf/io-tiff.c:184 gdk-pixbuf/io-tiff.c:193
-#, c-format
 msgid "Dimensions of TIFF image too large"
 msgstr "Kích thước ảnh TIFF quá lớn"
 
 #: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
-#, c-format
 msgid "Insufficient memory to open TIFF file"
 msgstr "Không đủ bộ nhớ để mở tập tin TIFF"
 
@@ -1053,7 +949,6 @@ msgid "Failed to write TIFF data"
 msgstr "Lỗi ghi dữ liệu TIFF"
 
 #: gdk-pixbuf/io-tiff.c:760
-#, c-format
 msgid "Couldn't write to TIFF file"
 msgstr "Không thể ghi vào tập tin TIFF"
 
@@ -1062,22 +957,18 @@ msgid "The TIFF image format"
 msgstr "Dạng thức ảnh TIFF"
 
 #: gdk-pixbuf/io-wbmp.c:246
-#, c-format
 msgid "Image has zero width"
 msgstr "Ảnh có chiều rộng bằng không"
 
 #: gdk-pixbuf/io-wbmp.c:264
-#, c-format
 msgid "Image has zero height"
 msgstr "Ảnh có chiều cao bằng không"
 
 #: gdk-pixbuf/io-wbmp.c:275
-#, c-format
 msgid "Not enough memory to load image"
 msgstr "Không đủ bộ nhớ để tải ảnh"
 
 #: gdk-pixbuf/io-wbmp.c:334
-#, c-format
 msgid "Couldn't save the rest"
 msgstr "Không thể lưu phần còn lại"
 
@@ -1086,17 +977,14 @@ msgid "The WBMP image format"
 msgstr "Dạng thức ảnh WBMP"
 
 #: gdk-pixbuf/io-xbm.c:295
-#, c-format
 msgid "Invalid XBM file"
 msgstr "Tập tin XBM không hợp lệ"
 
 #: gdk-pixbuf/io-xbm.c:305
-#, c-format
 msgid "Insufficient memory to load XBM image file"
 msgstr "Không đủ bộ nhớ để tải tập tin ảnh XBM"
 
 #: gdk-pixbuf/io-xbm.c:453
-#, c-format
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Lỗi ghi vào tập tin tạm khi tải ảnh XBM"
 
@@ -1105,47 +993,38 @@ msgid "The XBM image format"
 msgstr "Dạng thức ảnh XBM"
 
 #: gdk-pixbuf/io-xpm.c:468
-#, c-format
 msgid "No XPM header found"
 msgstr "Không tìm thấy phần đầu XPM"
 
 #: gdk-pixbuf/io-xpm.c:477
-#, c-format
 msgid "Invalid XPM header"
 msgstr "Phần đầu XBM không hợp lệ"
 
 #: gdk-pixbuf/io-xpm.c:485
-#, c-format
 msgid "XPM file has image width <= 0"
 msgstr "Tập tin XPM có chiều rộng ≤ 0"
 
 #: gdk-pixbuf/io-xpm.c:493
-#, c-format
 msgid "XPM file has image height <= 0"
 msgstr "Tập tin XPM có chiều cao ≤ 0"
 
 #: gdk-pixbuf/io-xpm.c:501
-#, c-format
 msgid "XPM has invalid number of chars per pixel"
 msgstr "Số ký tự trên một điểm ảnh trong XPM không hợp lệ"
 
 #: gdk-pixbuf/io-xpm.c:510
-#, c-format
 msgid "XPM file has invalid number of colors"
 msgstr "Số lượng màu trong tập tin XPM không hợp lệ"
 
 #: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
-#, c-format
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Không thể cấp phát bộ nhớ để tải ảnh XPM"
 
 #: gdk-pixbuf/io-xpm.c:545
-#, c-format
 msgid "Cannot read XPM colormap"
 msgstr "Không thể đọc bảng màu XPM"
 
 #: gdk-pixbuf/io-xpm.c:777
-#, c-format
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Lỗi ghi vào tập tin tạm khi tải ảnh XPM"
 
@@ -1179,27 +1058,22 @@ msgid "Could not read from stream: %s"
 msgstr "Không thể đọc từ luồng: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:736
-#, c-format
 msgid "Couldn't create pixbuf"
 msgstr "Không thể tạo bộ đệm điểm ảnh"
 
 #: gdk-pixbuf/io-gdip-utils.c:798
-#, c-format
 msgid "Couldn't load bitmap"
 msgstr "Không thể nạp ảnh mảng"
 
 #: gdk-pixbuf/io-gdip-utils.c:821
-#, c-format
 msgid "Couldn't load metafile"
 msgstr "Không thể nạp siêu tập tin"
 
 #: gdk-pixbuf/io-gdip-utils.c:980
-#, c-format
 msgid "Unsupported image format for GDI+"
 msgstr "Định dạng ảnh không được hỗ trợ đối với GDI+"
 
 #: gdk-pixbuf/io-gdip-utils.c:987
-#, c-format
 msgid "Couldn't save"
 msgstr "Không thể lưu"
 
@@ -1379,12 +1253,12 @@ msgstr "Xuyệc ngược"
 msgid "Invalid type function: `%s'"
 msgstr "Hàm kiểu không hợp lệ: « %s »"
 
-#: gtk/gtkbuilderparser.c:788
+#: gtk/gtkbuilderparser.c:789
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Yếu tố gốc không hợp lệ: « %s »"
 
-#: gtk/gtkbuilderparser.c:822
+#: gtk/gtkbuilderparser.c:823
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Thẻ không được quản lý: « %s »"
@@ -1499,7 +1373,99 @@ msgstr "Chọn màu"
 msgid "Received invalid color data\n"
 msgstr "Mới nhận dữ liệu màu không hợp lệ\n"
 
-#: gtk/gtkcolorsel.c:550
+#: gtk/gtkcolorsel.c:354
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Chọn màu bạn muốn từ vòng màu bên ngoài. Chọn độ đậm nhạt của màu từ tam "
+"giác màu bên trong."
+
+#: gtk/gtkcolorsel.c:378
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"Nhấn vào ống nhỏ giọt, sau đó nhấn vào một màu trên khắp màn hình bạn để "
+"chọn màu đó."
+
+#: gtk/gtkcolorsel.c:387
+msgid "_Hue:"
+msgstr "_Sắc độ :"
+
+#: gtk/gtkcolorsel.c:388
+msgid "Position on the color wheel."
+msgstr "Vị trí trên vòng màu."
+
+#: gtk/gtkcolorsel.c:390
+msgid "_Saturation:"
+msgstr "Độ _bão hòa:"
+
+#: gtk/gtkcolorsel.c:391
+msgid "\"Deepness\" of the color."
+msgstr "« Độ sâu » của màu."
+
+#: gtk/gtkcolorsel.c:392
+msgid "_Value:"
+msgstr "_Giá trị:"
+
+#: gtk/gtkcolorsel.c:393
+msgid "Brightness of the color."
+msgstr "Độ sáng của màu."
+
+#: gtk/gtkcolorsel.c:394
+msgid "_Red:"
+msgstr "Mà_u đỏ :"
+
+#: gtk/gtkcolorsel.c:395
+msgid "Amount of red light in the color."
+msgstr "Lượng sắc đỏ trong màu."
+
+#: gtk/gtkcolorsel.c:396
+msgid "_Green:"
+msgstr "Xanh _lá:"
+
+#: gtk/gtkcolorsel.c:397
+msgid "Amount of green light in the color."
+msgstr "Lượng sắc xanh lá cây trong màu."
+
+#: gtk/gtkcolorsel.c:398
+msgid "_Blue:"
+msgstr "Xanh _dương:"
+
+#: gtk/gtkcolorsel.c:399
+msgid "Amount of blue light in the color."
+msgstr "Lượng sắc xanh nước biển trong màu."
+
+#: gtk/gtkcolorsel.c:402
+msgid "Op_acity:"
+msgstr "Độ đụ_c:"
+
+#: gtk/gtkcolorsel.c:409 gtk/gtkcolorsel.c:419
+msgid "Transparency of the color."
+msgstr "Độ trong suốt của màu."
+
+#: gtk/gtkcolorsel.c:426
+msgid "Color _name:"
+msgstr "Tê_n màu :"
+
+#: gtk/gtkcolorsel.c:440
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"Bạn có thể nhập một giá trị thập lục phân theo kiểu HTML, hoặc đơn giản là "
+"nhập tên màu như « orange » (cam) vào ô này."
+
+#: gtk/gtkcolorsel.c:470
+msgid "_Palette:"
+msgstr "_Bảng chọn:"
+
+#: gtk/gtkcolorsel.c:499
+msgid "Color Wheel"
+msgstr "Vòng màu"
+
+#: gtk/gtkcolorsel.c:980
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1509,7 +1475,7 @@ msgstr ""
 "trường nhập bảng chọn, hoặc chọn màu này như là màu hiện thời bằng cách kéo "
 "nó vào dải màu bên cạnh khác."
 
-#: gtk/gtkcolorsel.c:554
+#: gtk/gtkcolorsel.c:984
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1517,11 +1483,11 @@ msgstr ""
 "Màu bạn chọn. Bạn có thể kéo màu này vào trường nhập bảng chọn để lưu nó để "
 "sử dụng sau này."
 
-#: gtk/gtkcolorsel.c:942
+#: gtk/gtkcolorsel.c:1369
 msgid "_Save color here"
 msgstr "_Lưu màu vào đây"
 
-#: gtk/gtkcolorsel.c:1147
+#: gtk/gtkcolorsel.c:1574
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1530,107 +1496,15 @@ msgstr ""
 "nhập này, kéo 1 dải màu vào đây hoặc nhấn-phải vào nó rồi chọn « Lưu màu vào "
 "đây »."
 
-#: gtk/gtkcolorsel.c:1921
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
-"Chọn màu bạn muốn từ vòng màu bên ngoài. Chọn độ đậm nhạt của màu từ tam "
-"giác màu bên trong."
-
-#: gtk/gtkcolorsel.c:1945
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
-msgstr ""
-"Nhấn vào ống nhỏ giọt, sau đó nhấn vào một màu trên khắp màn hình bạn để "
-"chọn màu đó."
-
-#: gtk/gtkcolorsel.c:1954
-msgid "_Hue:"
-msgstr "_Sắc độ :"
-
-#: gtk/gtkcolorsel.c:1955
-msgid "Position on the color wheel."
-msgstr "Vị trí trên vòng màu."
-
-#: gtk/gtkcolorsel.c:1957
-msgid "_Saturation:"
-msgstr "Độ _bão hòa:"
-
-#: gtk/gtkcolorsel.c:1958
-msgid "\"Deepness\" of the color."
-msgstr "« Độ sâu » của màu."
-
-#: gtk/gtkcolorsel.c:1959
-msgid "_Value:"
-msgstr "_Giá trị:"
-
-#: gtk/gtkcolorsel.c:1960
-msgid "Brightness of the color."
-msgstr "Độ sáng của màu."
-
-#: gtk/gtkcolorsel.c:1961
-msgid "_Red:"
-msgstr "Mà_u đỏ :"
-
-#: gtk/gtkcolorsel.c:1962
-msgid "Amount of red light in the color."
-msgstr "Lượng sắc đỏ trong màu."
-
-#: gtk/gtkcolorsel.c:1963
-msgid "_Green:"
-msgstr "Xanh _lá:"
-
-#: gtk/gtkcolorsel.c:1964
-msgid "Amount of green light in the color."
-msgstr "Lượng sắc xanh lá cây trong màu."
-
-#: gtk/gtkcolorsel.c:1965
-msgid "_Blue:"
-msgstr "Xanh _dương:"
-
-#: gtk/gtkcolorsel.c:1966
-msgid "Amount of blue light in the color."
-msgstr "Lượng sắc xanh nước biển trong màu."
-
-#: gtk/gtkcolorsel.c:1969
-msgid "Op_acity:"
-msgstr "Độ đụ_c:"
-
-#: gtk/gtkcolorsel.c:1976 gtk/gtkcolorsel.c:1986
-msgid "Transparency of the color."
-msgstr "Độ trong suốt của màu."
-
-#: gtk/gtkcolorsel.c:1993
-msgid "Color _name:"
-msgstr "Tê_n màu :"
-
-#: gtk/gtkcolorsel.c:2007
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"Bạn có thể nhập một giá trị thập lục phân theo kiểu HTML, hoặc đơn giản là "
-"nhập tên màu như « orange » (cam) vào ô này."
-
-#: gtk/gtkcolorsel.c:2037
-msgid "_Palette:"
-msgstr "_Bảng chọn:"
-
-#: gtk/gtkcolorsel.c:2066
-msgid "Color Wheel"
-msgstr "Vòng màu"
-
-#: gtk/gtkcolorseldialog.c:101
+#: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
 msgstr "Chọn màu"
 
-#: gtk/gtkentry.c:5284 gtk/gtktextview.c:7668
+#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7668
 msgid "Input _Methods"
 msgstr "_Phương pháp nhập"
 
-#: gtk/gtkentry.c:5298 gtk/gtktextview.c:7682
+#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7682
 msgid "_Insert Unicode Control Character"
 msgstr "Chèn ký tự đ_iều khiển Unicode"
 
@@ -1638,7 +1512,7 @@ msgstr "Chèn ký tự đ_iều khiển Unicode"
 msgid "Select A File"
 msgstr "Chọn tập tin"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1939
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1894
 msgid "Desktop"
 msgstr "Màn hình nền"
 
@@ -1650,23 +1524,23 @@ msgstr "(Không có)"
 msgid "Other..."
 msgstr "Khác..."
 
-#: gtk/gtkfilechooserdefault.c:1088
+#: gtk/gtkfilechooserdefault.c:1043
 msgid "Could not retrieve information about the file"
 msgstr "Không thể lấy thông tin về tập tin này"
 
-#: gtk/gtkfilechooserdefault.c:1099
+#: gtk/gtkfilechooserdefault.c:1054
 msgid "Could not add a bookmark"
 msgstr "Không thể thêm đánh dấu"
 
-#: gtk/gtkfilechooserdefault.c:1110
+#: gtk/gtkfilechooserdefault.c:1065
 msgid "Could not remove bookmark"
 msgstr "Không thể gỡ bỏ đánh dấu"
 
-#: gtk/gtkfilechooserdefault.c:1121
+#: gtk/gtkfilechooserdefault.c:1076
 msgid "The folder could not be created"
 msgstr "Không thể tạo thư mục đó"
 
-#: gtk/gtkfilechooserdefault.c:1134
+#: gtk/gtkfilechooserdefault.c:1089
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1674,11 +1548,11 @@ msgstr ""
 "Không thể tạo thư mục, vì đã có tập tin tên đó. Bạn hãy thử chọn tên khác "
 "cho thư mục, hoặc thay đổi tên tập tin trước tiên."
 
-#: gtk/gtkfilechooserdefault.c:1145
+#: gtk/gtkfilechooserdefault.c:1100
 msgid "Invalid file name"
 msgstr "Tên tập tin không hợp lệ"
 
-#: gtk/gtkfilechooserdefault.c:1155
+#: gtk/gtkfilechooserdefault.c:1110
 msgid "The folder contents could not be displayed"
 msgstr "Không thể hiển thị nội dung của thư mục đó"
 
@@ -1686,172 +1560,171 @@ msgstr "Không thể hiển thị nội dung của thư mục đó"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1697
+#: gtk/gtkfilechooserdefault.c:1652
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s trên %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1867
+#: gtk/gtkfilechooserdefault.c:1822
 msgid "Search"
 msgstr "Tìm kiếm"
 
-#: gtk/gtkfilechooserdefault.c:1891
+#: gtk/gtkfilechooserdefault.c:1846
 msgid "Recently Used"
 msgstr "Vừa dùng"
 
-#: gtk/gtkfilechooserdefault.c:2506
+#: gtk/gtkfilechooserdefault.c:2461
 msgid "Select which types of files are shown"
 msgstr "Chọn hiển thị những kiểu tập tin nào"
 
-#: gtk/gtkfilechooserdefault.c:2935
+#: gtk/gtkfilechooserdefault.c:2890
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Thêm thư mục « %s » vào Đánh dấu"
 
-#: gtk/gtkfilechooserdefault.c:2976
+#: gtk/gtkfilechooserdefault.c:2931
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Thêm thư mục hiện thời vào Đánh dấu"
 
-#: gtk/gtkfilechooserdefault.c:2978
+#: gtk/gtkfilechooserdefault.c:2933
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Thêm các thư mục được chọn vào Đánh dấu"
 
-#: gtk/gtkfilechooserdefault.c:3018
+#: gtk/gtkfilechooserdefault.c:2973
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Gỡ bỏ Đánh dấu « %s »"
 
-#: gtk/gtkfilechooserdefault.c:3734
+#: gtk/gtkfilechooserdefault.c:3691
 msgid "Remove"
 msgstr "Gỡ bỏ"
 
-#: gtk/gtkfilechooserdefault.c:3743
+#: gtk/gtkfilechooserdefault.c:3700
 msgid "Rename..."
 msgstr "Đổi tên..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3885
+#: gtk/gtkfilechooserdefault.c:3847
 msgid "Places"
 msgstr "Nơi"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3941
+#: gtk/gtkfilechooserdefault.c:3904
 msgid "_Places"
 msgstr "_Nơi"
 
-#: gtk/gtkfilechooserdefault.c:3996 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3959 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "Thê_m"
 
-#: gtk/gtkfilechooserdefault.c:4003
+#: gtk/gtkfilechooserdefault.c:3966
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Thêm thư mục được chọn vào Đánh dấu"
 
-#: gtk/gtkfilechooserdefault.c:4008 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:3971 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "_Bỏ"
 
-#: gtk/gtkfilechooserdefault.c:4015
+#: gtk/gtkfilechooserdefault.c:3978
 msgid "Remove the selected bookmark"
 msgstr "Gỡ bỏ đánh dấu được chọn"
 
-#: gtk/gtkfilechooserdefault.c:4112
+#: gtk/gtkfilechooserdefault.c:4075
 msgid "Could not select file"
 msgstr "Không thể chọn tập tin đó"
 
-#: gtk/gtkfilechooserdefault.c:4281
+#: gtk/gtkfilechooserdefault.c:4248
 msgid "_Add to Bookmarks"
 msgstr "Thê_m vào Đánh dấu"
 
-#: gtk/gtkfilechooserdefault.c:4295
+#: gtk/gtkfilechooserdefault.c:4262
 msgid "Show _Hidden Files"
 msgstr "_Hiện tập tin ẩn"
 
-#: gtk/gtkfilechooserdefault.c:4539 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4505 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Tập tin"
 
-#: gtk/gtkfilechooserdefault.c:4588
+#: gtk/gtkfilechooserdefault.c:4554
 msgid "Name"
 msgstr "Tên"
 
-#: gtk/gtkfilechooserdefault.c:4613
+#: gtk/gtkfilechooserdefault.c:4579
 msgid "Size"
 msgstr "Cỡ"
 
-#: gtk/gtkfilechooserdefault.c:4627
+#: gtk/gtkfilechooserdefault.c:4593
 msgid "Modified"
 msgstr "Lúc thay đổi"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4847 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4813 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "Tê_n:"
 
-#: gtk/gtkfilechooserdefault.c:4889
+#: gtk/gtkfilechooserdefault.c:4855
 msgid "_Browse for other folders"
 msgstr "_Duyệt tìm thư mục khác"
 
-#: gtk/gtkfilechooserdefault.c:5159
+#: gtk/gtkfilechooserdefault.c:5125
 msgid "Type a file name"
 msgstr "Gõ tên tập tin"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5196
+#: gtk/gtkfilechooserdefault.c:5162
 msgid "Create Fo_lder"
 msgstr "Tạo thư _mục"
 
-#: gtk/gtkfilechooserdefault.c:5206
+#: gtk/gtkfilechooserdefault.c:5172
 msgid "_Location:"
 msgstr "Đị_a chỉ:"
 
-#: gtk/gtkfilechooserdefault.c:5398
+#: gtk/gtkfilechooserdefault.c:5361
 msgid "Save in _folder:"
 msgstr "Lưu tr_ong thư mục:"
 
-#: gtk/gtkfilechooserdefault.c:5400
+#: gtk/gtkfilechooserdefault.c:5363
 msgid "Create in _folder:"
 msgstr "Tạo tr_ong thư mục:"
 
-#: gtk/gtkfilechooserdefault.c:7002
-#, c-format
+#: gtk/gtkfilechooserdefault.c:6957
 msgid "Cannot change to folder because it is not local"
 msgstr ""
 "Không thể chuyển đổi sang thư mục đó vì nó không phải là thư mục cục bộ."
 
-#: gtk/gtkfilechooserdefault.c:7617 gtk/gtkfilechooserdefault.c:7638
+#: gtk/gtkfilechooserdefault.c:7582 gtk/gtkfilechooserdefault.c:7603
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Phím tắt %s đã có"
 
-#: gtk/gtkfilechooserdefault.c:7728
+#: gtk/gtkfilechooserdefault.c:7693
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Không có phím tắt %s"
 
-#: gtk/gtkfilechooserdefault.c:7971 gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:7936 gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Tập tin tên « %s » đã có. Bạn có muốn thay thế nó không?"
 
-#: gtk/gtkfilechooserdefault.c:7974 gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:7939 gtk/gtkprintunixdialog.c:360
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Tập tin đó đã có trong « %s ». Việc thay thế nó sẽ ghi đè lên nội dung nó."
 
-#: gtk/gtkfilechooserdefault.c:7979 gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:7944 gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "Tha_y thế"
 
-#: gtk/gtkfilechooserdefault.c:8740
+#: gtk/gtkfilechooserdefault.c:8705
 msgid "Could not start the search process"
 msgstr "Không thể khởi chạy tiến trình tìm kiếm"
 
-#: gtk/gtkfilechooserdefault.c:8741
+#: gtk/gtkfilechooserdefault.c:8706
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1859,49 +1732,49 @@ msgstr ""
 "Chương trình không thể tạo một kết nối tới trình nền chỉ mục. Hãy kiểm tra "
 "xem nó đang chạy."
 
-#: gtk/gtkfilechooserdefault.c:8755
+#: gtk/gtkfilechooserdefault.c:8720
 msgid "Could not send the search request"
 msgstr "Không thể gửi yêu cầu tìm kiếm"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9170
+#: gtk/gtkfilechooserdefault.c:9135
 msgid "_Search:"
 msgstr "Tìm _kiếm:"
 
-#: gtk/gtkfilechooserdefault.c:10120
+#: gtk/gtkfilechooserdefault.c:10082
 #, c-format
 msgid "Could not mount %s"
 msgstr "Không thể gắn kết %s"
 
-#: gtk/gtkfilechooserdefault.c:10772
+#: gtk/gtkfilechooserdefault.c:10736
 msgid "Type name of new folder"
 msgstr "Hãy gõ tên cho thư mục mới"
 
-#: gtk/gtkfilechooserdefault.c:10822
+#: gtk/gtkfilechooserdefault.c:10786
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10824
+#: gtk/gtkfilechooserdefault.c:10788
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10826
+#: gtk/gtkfilechooserdefault.c:10790
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10929 gtk/gtkfilechooserdefault.c:10951
-#: gtk/gtkfilechooserdefault.c:11022
+#: gtk/gtkfilechooserdefault.c:10893 gtk/gtkfilechooserdefault.c:10915
+#: gtk/gtkfilechooserdefault.c:10986
 msgid "Unknown"
 msgstr "Không rõ"
 
-#: gtk/gtkfilechooserdefault.c:10969
+#: gtk/gtkfilechooserdefault.c:10933
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:10971
+#: gtk/gtkfilechooserdefault.c:10935
 msgid "Yesterday at %H:%M"
 msgstr "Hôm qua vào %H:%M"
 
@@ -1925,30 +1798,30 @@ msgstr "Hoàn tất mà không duy nhất"
 msgid "Completing..."
 msgstr "Đang hoàn thành..."
 
-#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1348
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1349
+#: gtk/gtkfilesel.c:1358
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Gặp lỗi khi tạo thư mục « %s »: %s"
 
-#: gtk/gtkfilesel.c:693
+#: gtk/gtkfilesel.c:694
 msgid "Folders"
 msgstr "Thư mục"
 
-#: gtk/gtkfilesel.c:697
+#: gtk/gtkfilesel.c:698
 msgid "Fol_ders"
 msgstr "Thư _mục"
 
-#: gtk/gtkfilesel.c:733
+#: gtk/gtkfilesel.c:734
 msgid "_Files"
 msgstr "_Tập tin"
 
-#: gtk/gtkfilesel.c:820 gtk/gtkfilesel.c:2147
+#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2148
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Không thể đọc thư mục: %s"
 
-#: gtk/gtkfilesel.c:904
+#: gtk/gtkfilesel.c:905
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1959,88 +1832,88 @@ msgstr ""
 "được.\n"
 "Bạn có chắc muốn chọn tập tin này không?"
 
-#: gtk/gtkfilesel.c:1019
+#: gtk/gtkfilesel.c:1020
 msgid "_New Folder"
 msgstr "_Thư mục mới"
 
-#: gtk/gtkfilesel.c:1030
+#: gtk/gtkfilesel.c:1031
 msgid "De_lete File"
 msgstr "_Xóa bỏ tập tin"
 
-#: gtk/gtkfilesel.c:1041
+#: gtk/gtkfilesel.c:1042
 msgid "_Rename File"
 msgstr "Th_ay tên tập tin"
 
-#: gtk/gtkfilesel.c:1346
+#: gtk/gtkfilesel.c:1347
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Tên thư mục « %s » chứa một số ký tự không cho phép"
 
-#: gtk/gtkfilesel.c:1391
+#: gtk/gtkfilesel.c:1392
 msgid "New Folder"
 msgstr "Thư mục mới"
 
-#: gtk/gtkfilesel.c:1406
+#: gtk/gtkfilesel.c:1407
 msgid "_Folder name:"
 msgstr "Tên thư _mục:"
 
-#: gtk/gtkfilesel.c:1430
+#: gtk/gtkfilesel.c:1431
 msgid "C_reate"
 msgstr "_Tạo"
 
-#: gtk/gtkfilesel.c:1473 gtk/gtkfilesel.c:1580 gtk/gtkfilesel.c:1593
+#: gtk/gtkfilesel.c:1474 gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1594
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Tên tập tin « %s » chứa một số ký tự không cho phép trong tên tập tin"
 
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1486
+#: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1487
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "Gặp lỗi khi xoá bỏ tập tin « %s »: %s"
 
-#: gtk/gtkfilesel.c:1529
+#: gtk/gtkfilesel.c:1530
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "Bạn thật sự muốn xóa bỏ tập tin « %s » chứ ?"
 
-#: gtk/gtkfilesel.c:1534
+#: gtk/gtkfilesel.c:1535
 msgid "Delete File"
 msgstr "Xóa tập tin"
 
-#: gtk/gtkfilesel.c:1582
+#: gtk/gtkfilesel.c:1583
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr "Gặp lỗi khi thay đổi tên của tập tin thành « %s »: %s"
 
-#: gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1596
 #, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr "Gặp lỗi khi thay đổi tên của tập tin « %s »: %s"
 
-#: gtk/gtkfilesel.c:1604
+#: gtk/gtkfilesel.c:1605
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Gặp lỗi khi đổi tên tập tin « %s » thành « %s »: %s"
 
-#: gtk/gtkfilesel.c:1651
+#: gtk/gtkfilesel.c:1652
 msgid "Rename File"
 msgstr "Đổi tên tập tin"
 
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1667
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Đổi tên tập tin « %s » thành:"
 
-#: gtk/gtkfilesel.c:1695
+#: gtk/gtkfilesel.c:1696
 msgid "_Rename"
 msgstr "Th_ay tên"
 
-#: gtk/gtkfilesel.c:2127
+#: gtk/gtkfilesel.c:2128
 msgid "_Selection: "
 msgstr "_Vùng chọn: "
 
-#: gtk/gtkfilesel.c:3047
+#: gtk/gtkfilesel.c:3048
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -2049,15 +1922,15 @@ msgstr ""
 "Tên tập tin « %s » không thể được chuyển đổi sang dạng thức UTF-8 (hãy thử "
 "đặt biến môi trường « G_BROKEN_FILENAMES » [G tên tập tin bị hỏng]): %s"
 
-#: gtk/gtkfilesel.c:3050
+#: gtk/gtkfilesel.c:3051
 msgid "Invalid UTF-8"
 msgstr "UTF-8 không hợp lệ"
 
-#: gtk/gtkfilesel.c:3924
+#: gtk/gtkfilesel.c:3925
 msgid "Name too long"
 msgstr "Tên quá dài"
 
-#: gtk/gtkfilesel.c:3926
+#: gtk/gtkfilesel.c:3927
 msgid "Couldn't convert filename"
 msgstr "Không thể chuyển đổi tên tập tin"
 
@@ -2066,12 +1939,11 @@ msgstr "Không thể chuyển đổi tên tập tin"
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: gtk/gtkfilesystem.c:48
+#: gtk/gtkfilesystem.c:51
 msgid "File System"
 msgstr "Hệ tập tin"
 
 #: gtk/gtkfilesystemmodel.c:700
-#, c-format
 msgid "Could not obtain root folder"
 msgstr "Không thể giành thư mục gốc"
 
@@ -2115,7 +1987,7 @@ msgstr "_Cỡ :"
 msgid "_Preview:"
 msgstr "_Xem thử :"
 
-#: gtk/gtkfontsel.c:1362
+#: gtk/gtkfontsel.c:1571
 msgid "Font Selection"
 msgstr "Chọn phông"
 
@@ -2135,7 +2007,7 @@ msgstr "Giá trị _Gamma"
 msgid "Error loading icon: %s"
 msgstr "Gặp lỗi khi tải biểu tượng: %s"
 
-#: gtk/gtkicontheme.c:1332
+#: gtk/gtkicontheme.c:1362
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2148,13 +2020,12 @@ msgstr ""
 "Bạn có thể lấy một bản sao từ:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1512
+#: gtk/gtkicontheme.c:1542
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Biểu tượng « %s » không có trong sắc thái"
 
-#: gtk/gtkicontheme.c:2953
-#, c-format
+#: gtk/gtkicontheme.c:2983
 msgid "Failed to load icon"
 msgstr "Lỗi nạp biểu tượng"
 
@@ -2166,82 +2037,82 @@ msgstr "Đơn giản"
 msgid "input method menu|System"
 msgstr "Hệ thống"
 
-#: gtk/gtkinputdialog.c:190
+#: gtk/gtkinputdialog.c:192
 msgid "Input"
 msgstr "Nhập"
 
-#: gtk/gtkinputdialog.c:205
+#: gtk/gtkinputdialog.c:207
 msgid "No extended input devices"
 msgstr "Không có thiết bị gõ mở rộng nào"
 
-#: gtk/gtkinputdialog.c:218
+#: gtk/gtkinputdialog.c:220
 msgid "_Device:"
 msgstr "Thiết _bị:"
 
-#: gtk/gtkinputdialog.c:235
+#: gtk/gtkinputdialog.c:237
 msgid "Disabled"
 msgstr "Bị tắt"
 
-#: gtk/gtkinputdialog.c:242
+#: gtk/gtkinputdialog.c:244
 msgid "Screen"
 msgstr "Màn hình"
 
-#: gtk/gtkinputdialog.c:249
+#: gtk/gtkinputdialog.c:251
 msgid "Window"
 msgstr "Cửa sổ"
 
-#: gtk/gtkinputdialog.c:256
+#: gtk/gtkinputdialog.c:258
 msgid "_Mode:"
 msgstr "_Chế độ :"
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:277
+#: gtk/gtkinputdialog.c:279
 msgid "Axes"
 msgstr "Trục"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:295
+#: gtk/gtkinputdialog.c:297
 msgid "Keys"
 msgstr "Phím"
 
-#: gtk/gtkinputdialog.c:522
+#: gtk/gtkinputdialog.c:524
 msgid "_X:"
 msgstr "_X:"
 
-#: gtk/gtkinputdialog.c:523
+#: gtk/gtkinputdialog.c:525
 msgid "_Y:"
 msgstr "_Y:"
 
-#: gtk/gtkinputdialog.c:524
+#: gtk/gtkinputdialog.c:526
 msgid "_Pressure:"
 msgstr "Á_p lực:"
 
-#: gtk/gtkinputdialog.c:525
+#: gtk/gtkinputdialog.c:527
 msgid "X _tilt:"
 msgstr "Ngh_iêng X:"
 
-#: gtk/gtkinputdialog.c:526
+#: gtk/gtkinputdialog.c:528
 msgid "Y t_ilt:"
 msgstr "Ng_hiêng Y:"
 
-#: gtk/gtkinputdialog.c:527
+#: gtk/gtkinputdialog.c:529
 msgid "_Wheel:"
 msgstr "Bánh _xe:"
 
-#: gtk/gtkinputdialog.c:579
+#: gtk/gtkinputdialog.c:581
 msgid "none"
 msgstr "không có"
 
-#: gtk/gtkinputdialog.c:616 gtk/gtkinputdialog.c:652
+#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
 msgid "(disabled)"
 msgstr "(bị tắt)"
 
-#: gtk/gtkinputdialog.c:645
+#: gtk/gtkinputdialog.c:647
 msgid "(unknown)"
 msgstr "(không rõ)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:749
+#: gtk/gtkinputdialog.c:751
 msgid "Cl_ear"
 msgstr "_Dọn"
 
@@ -2295,11 +2166,16 @@ msgstr "Các cờ gỡ lỗi GTK+ cần bỏ đặt"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:774
+#: gtk/gtkmain.c:740
+#, c-format
+msgid "Cannot open display: %s"
+msgstr ""
+
+#: gtk/gtkmain.c:777
 msgid "GTK+ Options"
 msgstr "Tùy chọn GTK+"
 
-#: gtk/gtkmain.c:774
+#: gtk/gtkmain.c:777
 msgid "Show GTK+ Options"
 msgstr "Hiện tùy chọn GTK+"
 
@@ -2339,21 +2215,20 @@ msgstr "_Nhớ mật khẩu đến khi bạn đăng xuất"
 msgid "_Remember forever"
 msgstr "_Nhớ vô hạn "
 
-#: gtk/gtknotebook.c:828
+#: gtk/gtknotebook.c:834
 msgid "Arrow spacing"
 msgstr "Cách mũi tên"
 
-#: gtk/gtknotebook.c:829
+#: gtk/gtknotebook.c:835
 msgid "Scroll arrow spacing"
 msgstr "Khoảng cách mũi tên cuộn"
 
-#: gtk/gtknotebook.c:4406 gtk/gtknotebook.c:6912
+#: gtk/gtknotebook.c:4412 gtk/gtknotebook.c:6918
 #, c-format
 msgid "Page %u"
 msgstr "Trang %u"
 
 #: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
-#, c-format
 msgid "Not a valid page setup file"
 msgstr "Không phải một tập tin thiết lập trang hợp lệ"
 
@@ -2493,76 +2368,86 @@ msgid "%s job #%d"
 msgstr "%s công việc #%d"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1498
+#: gtk/gtkprintoperation.c:1504
 msgid "print operation status|Initial state"
 msgstr "Tình trạng đầu tiên"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1500
+#: gtk/gtkprintoperation.c:1506
 msgid "print operation status|Preparing to print"
 msgstr "Đang chuẩn bị in..."
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1502
+#: gtk/gtkprintoperation.c:1508
 msgid "print operation status|Generating data"
 msgstr "Đang tạo ra dữ liệu..."
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1504
+#: gtk/gtkprintoperation.c:1510
 msgid "print operation status|Sending data"
 msgstr "Đang gởi dữ liệu..."
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1506
+#: gtk/gtkprintoperation.c:1512
 msgid "print operation status|Waiting"
 msgstr "Đang đợi..."
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1508
+#: gtk/gtkprintoperation.c:1514
 msgid "print operation status|Blocking on issue"
 msgstr "Bị chặn nơi đi ra"
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1510
+#: gtk/gtkprintoperation.c:1516
 msgid "print operation status|Printing"
 msgstr "Đang in..."
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1512
+#: gtk/gtkprintoperation.c:1518
 msgid "print operation status|Finished"
 msgstr "Xong."
 
 #. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1514
+#: gtk/gtkprintoperation.c:1520
 msgid "print operation status|Finished with error"
 msgstr "Kết thúc với lỗi"
 
-#: gtk/gtkprintoperation.c:1997
+#: gtk/gtkprintoperation.c:2003
 #, c-format
 msgid "Preparing %d"
 msgstr "Đang chuẩn bị %d..."
 
-#: gtk/gtkprintoperation.c:1999 gtk/gtkprintoperation.c:2253
+#: gtk/gtkprintoperation.c:2005 gtk/gtkprintoperation.c:2259
 #, c-format
 msgid "Preparing"
 msgstr "Đang chuẩn bị..."
 
-#: gtk/gtkprintoperation.c:2002
+#: gtk/gtkprintoperation.c:2008
 #, c-format
 msgid "Printing %d"
 msgstr "Đang in %d..."
 
-#: gtk/gtkprintoperation-unix.c:243
+#: gtk/gtkprintoperation.c:2289
+#, fuzzy, c-format
+msgid "Error creating print preview"
+msgstr "Gặp lỗi khi khởi chạy ô xem thử"
+
+#: gtk/gtkprintoperation.c:2292
+#, c-format
+msgid "The most probable reason is that a temporary file could not be created."
+msgstr ""
+
+#: gtk/gtkprintoperation-unix.c:242
 #, c-format
 msgid "Error launching preview"
 msgstr "Gặp lỗi khi khởi chạy ô xem thử"
 
-#: gtk/gtkprintoperation-unix.c:281
+#: gtk/gtkprintoperation-unix.c:280
 #, c-format
 msgid "Error printing"
 msgstr "Lỗi in"
 
-#: gtk/gtkprintoperation-unix.c:382 gtk/gtkprintoperation-win32.c:1399
+#: gtk/gtkprintoperation-unix.c:381 gtk/gtkprintoperation-win32.c:1399
 msgid "Application"
 msgstr "Ứng dụng"
 
@@ -2588,32 +2473,26 @@ msgstr "Cỡ riêng"
 
 #: gtk/gtkprintoperation-win32.c:1489 gtk/gtkprintoperation-win32.c:1512
 #: gtk/gtkprintoperation-win32.c:1560
-#, c-format
 msgid "Not enough free memory"
 msgstr "Không có đủ bộ nhớ còn rảnh"
 
 #: gtk/gtkprintoperation-win32.c:1565
-#, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Đối số không hợp lệ tới PrintDlgEx"
 
 #: gtk/gtkprintoperation-win32.c:1570
-#, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Con trỏ không hợp lệ tới PrintDlgEx"
 
 #: gtk/gtkprintoperation-win32.c:1575
-#, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Bộ thao tác không hợp lệ tới PrintDlgEx"
 
 #: gtk/gtkprintoperation-win32.c:1580
-#, c-format
 msgid "Unspecified error"
 msgstr "Lỗi chưa xác định"
 
 #: gtk/gtkprintoperation-win32.c:1632
-#, c-format
 msgid "Error from StartDoc"
 msgstr "Lỗi từ StartDoc (đầu tài liệu)"
 
@@ -2902,8 +2781,10 @@ msgstr "_%d. %s"
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1158
-#: gtk/gtkrecentmanager.c:1168 gtk/gtkrecentmanager.c:1221
+#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1025
+#: gtk/gtkrecentmanager.c:1163 gtk/gtkrecentmanager.c:1173
+#: gtk/gtkrecentmanager.c:1226 gtk/gtkrecentmanager.c:1235
+#: gtk/gtkrecentmanager.c:1250
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Không thể tìm thấy mục có URI « %s »"
@@ -3407,55 +3288,53 @@ msgstr ""
 "Không cho phép yếu tố <text> (văn bản) nằm trước yếu tố <tags> (các thẻ)"
 
 #: gtk/gtktextbufferserialize.c:1779
-#, c-format
 msgid "Serialized data is malformed"
 msgstr "Dữ liệu đã xếp thứ tự có dạng sai"
 
 #: gtk/gtktextbufferserialize.c:1857
-#, c-format
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Dữ liệu đã xếp thứ tự có dạng sai. Phần thứ nhất không phải là « "
 "GTKTEXTBUFFERCONTENTS-0001 »"
 
-#: gtk/gtktextutil.c:60
+#: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
 msgstr "_LRM dấu trái-sang-phải"
 
-#: gtk/gtktextutil.c:61
+#: gtk/gtktextutil.c:62
 msgid "RLM _Right-to-left mark"
 msgstr "_RLM dấu phải-sang-trái"
 
-#: gtk/gtktextutil.c:62
+#: gtk/gtktextutil.c:63
 msgid "LRE Left-to-right _embedding"
 msgstr "LR_E nhúng trái-sang-phải"
 
-#: gtk/gtktextutil.c:63
+#: gtk/gtktextutil.c:64
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE _nhúng phải-sang-trái"
 
-#: gtk/gtktextutil.c:64
+#: gtk/gtktextutil.c:65
 msgid "LRO Left-to-right _override"
 msgstr "LR_O đè trái-sang-phải"
 
-#: gtk/gtktextutil.c:65
+#: gtk/gtktextutil.c:66
 msgid "RLO Right-to-left o_verride"
 msgstr "RLO đè phải-s_ang-trái"
 
-#: gtk/gtktextutil.c:66
+#: gtk/gtktextutil.c:67
 msgid "PDF _Pop directional formatting"
 msgstr "_PDF dạng thức định hướng Pop"
 
-#: gtk/gtktextutil.c:67
+#: gtk/gtktextutil.c:68
 msgid "ZWS _Zero width space"
 msgstr "_ZWS Dấu cách có độ dài bằng không"
 
-#: gtk/gtktextutil.c:68
+#: gtk/gtktextutil.c:69
 msgid "ZWJ Zero width _joiner"
 msgstr "ZW_J Bộ nối kết có độ dài bằng không"
 
-#: gtk/gtktextutil.c:69
+#: gtk/gtktextutil.c:70
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZW_NJ Bộ không nối kết có độ dài bằng không"
 
@@ -3466,57 +3345,57 @@ msgstr ""
 "Không thể định vị cơ chế sắc thái tại « module_path » (đường dẫn mô-đun): « %s "
 "»,"
 
-#: gtk/gtktipsquery.c:187
+#: gtk/gtktipsquery.c:188
 msgid "--- No Tip ---"
 msgstr "--- Không có mẹo ---"
 
-#: gtk/gtkuimanager.c:1453
+#: gtk/gtkuimanager.c:1454
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Gặp thẻ đầu bất ngờ « %s » trên dòng %d ký tự %d"
 
-#: gtk/gtkuimanager.c:1543
+#: gtk/gtkuimanager.c:1544
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Gặp dữ liệu ký tự bất ngờ trên dòng %d ký tự %d"
 
-#: gtk/gtkuimanager.c:2366
+#: gtk/gtkuimanager.c:2367
 msgid "Empty"
 msgstr "Rỗng"
 
-#: gtk/gtkvolumebutton.c:81
+#: gtk/gtkvolumebutton.c:77
 msgid "Volume"
 msgstr "Âm lượng"
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:79
 msgid "Turns volume down or up"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:86
+#: gtk/gtkvolumebutton.c:82
 msgid "Adjusts the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:89 gtk/gtkvolumebutton.c:92
+#: gtk/gtkvolumebutton.c:85 gtk/gtkvolumebutton.c:88
 msgid "Volume Down"
 msgstr "Giảm âm lượng"
 
-#: gtk/gtkvolumebutton.c:91
+#: gtk/gtkvolumebutton.c:87
 msgid "Decreases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:95 gtk/gtkvolumebutton.c:98
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Up"
 msgstr "Tăng âm lượng"
 
-#: gtk/gtkvolumebutton.c:97
+#: gtk/gtkvolumebutton.c:93
 msgid "Increases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:155
+#: gtk/gtkvolumebutton.c:151
 msgid "Muted"
 msgstr "Câm"
 
-#: gtk/gtkvolumebutton.c:159
+#: gtk/gtkvolumebutton.c:155
 msgid "Full Volume"
 msgstr "Âm lượng đầy"
 
@@ -3527,7 +3406,7 @@ msgstr "Âm lượng đầy"
 #. * Do not translate and do not include the "volume percentage|"
 #. * part in the translation!
 #.
-#: gtk/gtkvolumebutton.c:174
+#: gtk/gtkvolumebutton.c:170
 #, c-format
 msgid "volume percentage|%d %%"
 msgstr "volume percentage|%d %%"
@@ -4715,7 +4594,7 @@ msgstr "tinra.%s"
 msgid "Print to Test Printer"
 msgstr "In vào máy in thử ra"
 
-#: tests/testfilechooser.c:205
+#: tests/testfilechooser.c:207
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Không thể lấy thông tin cho tập tin « %s »: %s"

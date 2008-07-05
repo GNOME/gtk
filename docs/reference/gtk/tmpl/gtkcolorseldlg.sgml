@@ -74,6 +74,26 @@ Connect a handler for the clicked event.
 </para>
 
 
+<!-- ##### ARG GtkColorSelectionDialog:cancel-button ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkColorSelectionDialog:color-selection ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkColorSelectionDialog:help-button ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkColorSelectionDialog:ok-button ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_color_selection_dialog_new ##### -->
 <para>
 Creates a new #GtkColorSelectionDialog.

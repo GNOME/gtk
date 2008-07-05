@@ -112,6 +112,11 @@ it cannot be individually modified.
 
 </para>
 
+<!-- ##### ARG GtkCellRenderer:editing ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRenderer:height ##### -->
 <para>
 

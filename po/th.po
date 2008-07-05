@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-04 16:39+0700\n"
+"POT-Creation-Date: 2008-07-05 15:47-0400\n"
 "PO-Revision-Date: 2008-07-04 16:54+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -369,20 +369,17 @@ msgstr "พบชิ้นไอคอนเกินมาในภาพเค
 msgid "Unsupported animation type"
 msgstr "ไม่รู้จักชนิดของภาพเคลื่อนไหว"
 
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406
-#: gdk-pixbuf/io-ani.c:432 gdk-pixbuf/io-ani.c:455
-#: gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
+#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
+#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
 msgid "Invalid header in animation"
 msgstr "ข้อมูลส่วนหัวของภาพเคลื่อนไหวเสีย"
 
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380
-#: gdk-pixbuf/io-ani.c:464 gdk-pixbuf/io-ani.c:491
-#: gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
+#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
 msgid "Not enough memory to load animation"
 msgstr "หน่วยความจำไม่พอที่จะอ่านภาพเคลื่อนไหว"
 
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424
-#: gdk-pixbuf/io-ani.c:443
+#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
 msgid "Malformed chunk in animation"
 msgstr "ส่วนของภาพเคลื่อนไหวเสีย"
 
@@ -390,9 +387,8 @@ msgstr "ส่วนของภาพเคลื่อนไหวเสีย
 msgid "The ANI image format"
 msgstr "แฟ้มรูปชนิด ANI"
 
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267
-#: gdk-pixbuf/io-bmp.c:338 gdk-pixbuf/io-bmp.c:370
-#: gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
+#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
+#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
 msgid "BMP image has bogus header data"
 msgstr "รูป BMP นี้มีข้อมูลส่วนหัวที่ใช้ไม่ได้"
 
@@ -429,8 +425,7 @@ msgstr "แฟ้มรูปชนิด BMP"
 msgid "Failure reading GIF: %s"
 msgstr "อ่านรูป GIF ไม่สำเร็จ: %s"
 
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477
-#: gdk-pixbuf/io-gif.c:1638
+#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477 gdk-pixbuf/io-gif.c:1638
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "แฟ้ม GIF นี้ขาดข้อมูลบางส่วน (อาจจะคัดลอกแฟ้มมาไม่ครบแฟ้ม)"
 
@@ -455,8 +450,8 @@ msgstr "พบโค้ดเสีย"
 msgid "Circular table entry in GIF file"
 msgstr "ตารางในแฟ้ม GIF มีรายการที่อ้างวกหลับมาถึงตัวเอง"
 
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464
-#: gdk-pixbuf/io-gif.c:1511 gdk-pixbuf/io-gif.c:1626
+#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464 gdk-pixbuf/io-gif.c:1511
+#: gdk-pixbuf/io-gif.c:1626
 msgid "Not enough memory to load GIF file"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูป GIF"
 
@@ -491,15 +486,13 @@ msgstr "แฟ้ม GIF ไม่สมบูรณ์"
 msgid "The GIF image format"
 msgstr "แฟ้มรูปชนิด GIF"
 
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225
-#: gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:290
-#: gdk-pixbuf/io-ico.c:359
+#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
+#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
 msgid "Invalid header in icon"
 msgstr "ข้อมูลส่วนหัวของไอคอนเสีย"
 
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300
-#: gdk-pixbuf/io-ico.c:369 gdk-pixbuf/io-ico.c:432
-#: gdk-pixbuf/io-ico.c:462
+#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
+#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
 msgid "Not enough memory to load icon"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูปไอคอน"
 
@@ -601,8 +594,8 @@ msgstr "หน่วยความจำไม่พอสำหรับอ่
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ไม่รองรับห้วงสีนี้สำหรับ JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944
-#: gdk-pixbuf/io-jpeg.c:1177 gdk-pixbuf/io-jpeg.c:1186
+#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป JPEG นี้"
 
@@ -779,8 +772,7 @@ msgstr "แฟ้ม PNM มีค่าจำนวนสีมากสุด�
 msgid "Maximum color value in PNM file is too large"
 msgstr "แฟ้ม PNM มีค่าจำนวนสีมากสุดที่ใหญ่เกินไป"
 
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459
-#: gdk-pixbuf/io-pnm.c:504
+#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
 msgid "Raw PNM image type is invalid"
 msgstr "รูป Raw PNM เสีย"
 
@@ -873,9 +865,8 @@ msgstr "หน่วยความจำไม่พอสำหรับข้
 msgid "TGA image has invalid dimensions"
 msgstr "รูป TGA มีขนาดกว้างยาวที่ไม่ถูกต้อง"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782
-#: gdk-pixbuf/io-tga.c:792 gdk-pixbuf/io-tga.c:802
-#: gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
+#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
 msgid "TGA image type not supported"
 msgstr "ไม่รองรับรูปชนิด TGA"
 
@@ -907,8 +898,7 @@ msgstr "ความกว้างหรือสูงของรูปชน
 msgid "Dimensions of TIFF image too large"
 msgstr "รูป TIFF มีขนาดกว้างยาวที่ใหญ่เกินไป"
 
-#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229
-#: gdk-pixbuf/io-tiff.c:541
+#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
 msgid "Insufficient memory to open TIFF file"
 msgstr "หน่วยความจำไม่พอจะเปิดแฟ้ม TIFF"
 
@@ -1004,8 +994,7 @@ msgstr "แฟ้ม XPM ตั้งค่าไบต์ต่อพิกเ�
 msgid "XPM file has invalid number of colors"
 msgstr "แฟ้ม XPM ตั้งค่าจำนวนสีที่ใช้ไม่ได้"
 
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531
-#: gdk-pixbuf/io-xpm.c:583
+#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป XPM"
 
@@ -2188,21 +2177,20 @@ msgstr "_จำรหัสผ่านไว้จนกว่าจะออ�
 msgid "_Remember forever"
 msgstr "จำรหัสผ่านไว้_ตลอดไป"
 
-#: gtk/gtknotebook.c:835
+#: gtk/gtknotebook.c:834
 msgid "Arrow spacing"
 msgstr "ช่องไฟของลูกศร"
 
-#: gtk/gtknotebook.c:836
+#: gtk/gtknotebook.c:835
 msgid "Scroll arrow spacing"
 msgstr "ช่องไฟของลูกศรสำหรับเลื่อน"
 
-#: gtk/gtknotebook.c:4413 gtk/gtknotebook.c:6919
+#: gtk/gtknotebook.c:4412 gtk/gtknotebook.c:6918
 #, c-format
 msgid "Page %u"
 msgstr "หน้า %u"
 
-#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825
-#: gtk/gtkpapersize.c:865
+#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
 msgid "Not a valid page setup file"
 msgstr "ไม่ใช่แฟ้มค่าตั้งหน้ากระดาษที่ใช้การได้"
 
@@ -2392,6 +2380,7 @@ msgid "Preparing %d"
 msgstr "กำลังเตรียมพิมพ์ %d"
 
 #: gtk/gtkprintoperation.c:2005 gtk/gtkprintoperation.c:2259
+#, c-format
 msgid "Preparing"
 msgstr "กำลังเตรียมพิมพ์"
 
@@ -2401,18 +2390,22 @@ msgid "Printing %d"
 msgstr "กำลังพิมพ์ %d"
 
 #: gtk/gtkprintoperation.c:2289
+#, c-format
 msgid "Error creating print preview"
 msgstr "เกิดข้อผิดพลาดขณะสร้างตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation.c:2292
+#, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "สาเหตุที่น่าจะเป็นไปได้มากที่สุด คือไม่สามารถสร้างแฟ้มชั่วคราวได้"
 
 #: gtk/gtkprintoperation-unix.c:242
+#, c-format
 msgid "Error launching preview"
 msgstr "เกิดข้อผิดพลาดขณะเรียกแสดงตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation-unix.c:280
+#, c-format
 msgid "Error printing"
 msgstr "เกิดข้อผิดพลาดขณะพิมพ์"
 
@@ -3308,7 +3301,7 @@ msgstr "ZWNJ Zero width _non-joiner"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "ไม่พบเครื่องจัดการชุดตกแต่งใน module_path: \"%s\""
 
-#: gtk/gtktipsquery.c:189
+#: gtk/gtktipsquery.c:188
 msgid "--- No Tip ---"
 msgstr "--- ไม่มีข้อแนะนำ ---"
 

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-13 18:23-0400\n"
+"POT-Creation-Date: 2008-07-05 15:47-0400\n"
 "PO-Revision-Date: 2007-09-15 13:17+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -52,7 +52,7 @@ msgstr "ビット数/サンプル"
 msgid "The number of bits per sample"
 msgstr "サンプル辺りのビット数です"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:614 gtk/gtktreeviewcolumn.c:207
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:207
 msgid "Width"
 msgstr "幅"
 
@@ -60,7 +60,7 @@ msgstr "幅"
 msgid "The number of columns of the pixbuf"
 msgstr "Pixbuf の桁の幅です"
 
-#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:623
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:641
 msgid "Height"
 msgstr "高さ"
 
@@ -294,21 +294,21 @@ msgstr "ストック・アイコン"
 msgid "The stock icon displayed in widgets representing this action."
 msgstr "このアクションを示すウィジェットに表示するストック・アイコンです"
 
-#: gtk/gtkaction.c:255 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:230
+#: gtk/gtkaction.c:255 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
 #: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:208 gtk/gtkwindow.c:592
 msgid "Icon Name"
 msgstr "アイコン名"
 
-#: gtk/gtkaction.c:256 gtk/gtkcellrendererpixbuf.c:173 gtk/gtkimage.c:231
+#: gtk/gtkaction.c:256 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:231
 #: gtk/gtkstatusicon.c:209
 msgid "The name of the icon from the icon theme"
 msgstr "アイコン・テーマから取得したアイコンの名前です"
 
-#: gtk/gtkaction.c:262 gtk/gtktoolitem.c:153
+#: gtk/gtkaction.c:262 gtk/gtktoolitem.c:156
 msgid "Visible when horizontal"
 msgstr "横向きなら表示する"
 
-#: gtk/gtkaction.c:263 gtk/gtktoolitem.c:154
+#: gtk/gtkaction.c:263 gtk/gtktoolitem.c:157
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -326,17 +326,17 @@ msgstr ""
 "TRUE にすると、このアクションのツールアイテムのプロキシをツールバーの中に描画"
 "します"
 
-#: gtk/gtkaction.c:286 gtk/gtktoolitem.c:160
+#: gtk/gtkaction.c:286 gtk/gtktoolitem.c:163
 msgid "Visible when vertical"
 msgstr "縦向きなら表示する"
 
-#: gtk/gtkaction.c:287 gtk/gtktoolitem.c:161
+#: gtk/gtkaction.c:287 gtk/gtktoolitem.c:164
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr "縦向きのツールバーで項目を表示するかどうかです"
 
-#: gtk/gtkaction.c:294 gtk/gtktoolitem.c:167
+#: gtk/gtkaction.c:294 gtk/gtktoolitem.c:170
 msgid "Is important"
 msgstr "重要か"
 
@@ -357,8 +357,8 @@ msgstr "空なら隠す"
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "TRUE にすると、このアクションの空のメニュー・プロキシを隠します"
 
-#: gtk/gtkaction.c:310 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:192
-#: gtk/gtkwidget.c:520
+#: gtk/gtkaction.c:310 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
+#: gtk/gtkwidget.c:521
 msgid "Sensitive"
 msgstr "感応可否"
 
@@ -367,7 +367,7 @@ msgid "Whether the action is enabled."
 msgstr "ウィジェットが有効かどうかです"
 
 #: gtk/gtkaction.c:317 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:251
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:513
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:514
 msgid "Visible"
 msgstr "可視性"
 
@@ -399,7 +399,7 @@ msgid "Whether the action group is visible."
 msgstr "アクション・グループが表示されるかどうかです"
 
 #: gtk/gtkadjustment.c:91 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:181 gtk/gtkspinbutton.c:273
+#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:273
 msgid "Value"
 msgstr "値"
 
@@ -541,7 +541,7 @@ msgstr "矢印の影"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "矢印を囲む影の外観です"
 
-#: gtk/gtkarrow.c:88 gtk/gtkmenuitem.c:245
+#: gtk/gtkarrow.c:88 gtk/gtkmenuitem.c:279
 msgid "Arrow Scaling"
 msgstr "矢印の大きさ"
 
@@ -702,7 +702,7 @@ msgstr "間隔"
 msgid "The amount of space between children"
 msgstr "子ウィジェットと子ウィジェットの間に入れる空白の大きさを指定します"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:638 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:644 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:582
 msgid "Homogeneous"
 msgstr "均等に配置する"
@@ -748,7 +748,7 @@ msgstr ""
 msgid "Pack type"
 msgstr "パックの種類"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:705
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:711
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -756,12 +756,12 @@ msgstr ""
 "親ウィジェットの開始または終了に追従して子ウィジェットがパックされるかどうか "
 "(GtkPackType で指定する)"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:683 gtk/gtkpaned.c:218
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:689 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "位置"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:684
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:690
 msgid "The index of the child in the parent"
 msgstr "親ウィジェットの中にある子ウィジェットのインデックスです"
 
@@ -805,7 +805,7 @@ msgstr ""
 "セットすると、ラベルはそれ自身が表示されるのではなく、ストック・アイテムから"
 "選択するための文字列として使用する"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:787 gtk/gtkfilechooserbutton.c:394
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:786 gtk/gtkfilechooserbutton.c:394
 msgid "Focus on click"
 msgstr "クリックでフォーカスを当てる"
 
@@ -892,7 +892,7 @@ msgid ""
 msgstr ""
 "プロパティ child_displacement_x/_y もフォーカスの範囲に影響するかどうかです"
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:537 gtk/gtkentry.c:899
+#: gtk/gtkbutton.c:462 gtk/gtkentry.c:539 gtk/gtkentry.c:932
 msgid "Inner Border"
 msgstr "内側の境界線"
 
@@ -908,11 +908,11 @@ msgstr "画像の間隔"
 msgid "Spacing in pixels between the image and label"
 msgstr "画像とラベルとの間に置く間隔 (ピクセル単位) です"
 
-#: gtk/gtkbutton.c:485
+#: gtk/gtkbutton.c:491
 msgid "Show button images"
 msgstr "ボタンの画像の表示"
 
-#: gtk/gtkbutton.c:486
+#: gtk/gtkbutton.c:492
 msgid "Whether stock icons should be shown in buttons"
 msgstr "ボタンの中にストック・アイコンを表示するかどうかです"
 
@@ -1003,111 +1003,121 @@ msgstr "ダイアログの表示"
 msgid "If TRUE, details are shown"
 msgstr "TRUE にすると、曜日を表示します"
 
-#: gtk/gtkcellrenderer.c:176
+#: gtk/gtkcellrenderer.c:177
 msgid "mode"
 msgstr "モード"
 
-#: gtk/gtkcellrenderer.c:177
+#: gtk/gtkcellrenderer.c:178
 msgid "Editable mode of the CellRenderer"
 msgstr "CellRenderer の編集可能なモード"
 
-#: gtk/gtkcellrenderer.c:185
+#: gtk/gtkcellrenderer.c:186
 msgid "visible"
 msgstr "可視"
 
-#: gtk/gtkcellrenderer.c:186
+#: gtk/gtkcellrenderer.c:187
 msgid "Display the cell"
 msgstr "セルの表示"
 
-#: gtk/gtkcellrenderer.c:193
+#: gtk/gtkcellrenderer.c:194
 msgid "Display the cell sensitive"
 msgstr "セル・センシティブの表示"
 
-#: gtk/gtkcellrenderer.c:200
+#: gtk/gtkcellrenderer.c:201
 msgid "xalign"
 msgstr "xalign"
 
-#: gtk/gtkcellrenderer.c:201
+#: gtk/gtkcellrenderer.c:202
 msgid "The x-align"
 msgstr "X 方向の位置合わせ"
 
-#: gtk/gtkcellrenderer.c:210
+#: gtk/gtkcellrenderer.c:211
 msgid "yalign"
 msgstr "yalign"
 
-#: gtk/gtkcellrenderer.c:211
+#: gtk/gtkcellrenderer.c:212
 msgid "The y-align"
 msgstr "Y 方向の位置合わせ"
 
-#: gtk/gtkcellrenderer.c:220
+#: gtk/gtkcellrenderer.c:221
 msgid "xpad"
 msgstr "xpad"
 
-#: gtk/gtkcellrenderer.c:221
+#: gtk/gtkcellrenderer.c:222
 msgid "The xpad"
 msgstr "X 方向のパディング"
 
-#: gtk/gtkcellrenderer.c:230
+#: gtk/gtkcellrenderer.c:231
 msgid "ypad"
 msgstr "ypad"
 
-#: gtk/gtkcellrenderer.c:231
+#: gtk/gtkcellrenderer.c:232
 msgid "The ypad"
 msgstr "Y 方向のパディング"
 
-#: gtk/gtkcellrenderer.c:240
+#: gtk/gtkcellrenderer.c:241
 msgid "width"
 msgstr "幅"
 
-#: gtk/gtkcellrenderer.c:241
+#: gtk/gtkcellrenderer.c:242
 msgid "The fixed width"
 msgstr "サイズ固定の幅"
 
-#: gtk/gtkcellrenderer.c:250
+#: gtk/gtkcellrenderer.c:251
 msgid "height"
 msgstr "高さ"
 
-#: gtk/gtkcellrenderer.c:251
+#: gtk/gtkcellrenderer.c:252
 msgid "The fixed height"
 msgstr "サイズ固定の高さ"
 
-#: gtk/gtkcellrenderer.c:260
+#: gtk/gtkcellrenderer.c:261
 msgid "Is Expander"
 msgstr "展張可能か"
 
-#: gtk/gtkcellrenderer.c:261
+#: gtk/gtkcellrenderer.c:262
 msgid "Row has children"
 msgstr "行に子ウィジェットがある"
 
-#: gtk/gtkcellrenderer.c:269
+#: gtk/gtkcellrenderer.c:270
 msgid "Is Expanded"
 msgstr "展張されているか"
 
-#: gtk/gtkcellrenderer.c:270
+#: gtk/gtkcellrenderer.c:271
 msgid "Row is an expander row, and is expanded"
 msgstr "展張可能な行で、かつ展張されている"
 
-#: gtk/gtkcellrenderer.c:277
+#: gtk/gtkcellrenderer.c:278
 msgid "Cell background color name"
 msgstr "セルの背景色の名前"
 
-#: gtk/gtkcellrenderer.c:278
+#: gtk/gtkcellrenderer.c:279
 msgid "Cell background color as a string"
 msgstr "セルの背景色の文字表現"
 
-#: gtk/gtkcellrenderer.c:285
+#: gtk/gtkcellrenderer.c:286
 msgid "Cell background color"
 msgstr "セルの背景色"
 
-#: gtk/gtkcellrenderer.c:286
+#: gtk/gtkcellrenderer.c:287
 msgid "Cell background color as a GdkColor"
 msgstr "セルの背景色を示す GdkColor 形式の文字列です"
 
 #: gtk/gtkcellrenderer.c:294
+#, fuzzy
+msgid "Editing"
+msgstr "サイズ変更"
+
+#: gtk/gtkcellrenderer.c:295
+#, fuzzy
+msgid "Whether the cell renderer is currently in editing mode"
+msgstr "ラベルが単一行モードにあるかどうかです"
+
+#: gtk/gtkcellrenderer.c:303
 msgid "Cell background set"
 msgstr "セルの背景色設定"
 
-#: gtk/gtkcellrenderer.c:295
+#: gtk/gtkcellrenderer.c:304
 msgid "Whether this tag affects the cell background color"
 msgstr "このタグがセルの背景色に影響を与えるかどうかです"
 
@@ -1167,69 +1177,78 @@ msgstr "エントリを持つ"
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
 msgstr "FALSE にすると、文字列を選択する以外に、文字列の入力ができなくなります"
 
-#: gtk/gtkcellrendererpixbuf.c:112
+#: gtk/gtkcellrendererpixbuf.c:111
 msgid "Pixbuf Object"
 msgstr "Pixbuf オブジェクト"
 
-#: gtk/gtkcellrendererpixbuf.c:113
+#: gtk/gtkcellrendererpixbuf.c:112
 msgid "The pixbuf to render"
 msgstr "描画する Pixbuf"
 
-#: gtk/gtkcellrendererpixbuf.c:120
+#: gtk/gtkcellrendererpixbuf.c:119
 msgid "Pixbuf Expander Open"
 msgstr "Pixbuf 展張オープン"
 
-#: gtk/gtkcellrendererpixbuf.c:121
+#: gtk/gtkcellrendererpixbuf.c:120
 msgid "Pixbuf for open expander"
 msgstr "オープン展張の Pixbuf"
 
-#: gtk/gtkcellrendererpixbuf.c:128
+#: gtk/gtkcellrendererpixbuf.c:127
 msgid "Pixbuf Expander Closed"
 msgstr "Pixbuf 展張クローズ"
 
-#: gtk/gtkcellrendererpixbuf.c:129
+#: gtk/gtkcellrendererpixbuf.c:128
 msgid "Pixbuf for closed expander"
 msgstr "クローズ展張の Pixbuf"
 
-#: gtk/gtkcellrendererpixbuf.c:136 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:200
+#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:200
 msgid "Stock ID"
 msgstr "ストック ID"
 
-#: gtk/gtkcellrendererpixbuf.c:137
+#: gtk/gtkcellrendererpixbuf.c:136
 msgid "The stock ID of the stock icon to render"
 msgstr "描画するストック・アイコンのストック ID"
 
-#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkrecentmanager.c:245
+#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
 #: gtk/gtkstatusicon.c:225
 msgid "Size"
 msgstr "サイズ"
 
-#: gtk/gtkcellrendererpixbuf.c:145
+#: gtk/gtkcellrendererpixbuf.c:144
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
 msgstr "描画したアイコンのサイズを示す GtkIconSize の値です"
 
-#: gtk/gtkcellrendererpixbuf.c:154
+#: gtk/gtkcellrendererpixbuf.c:153
 msgid "Detail"
 msgstr "詳細"
 
-#: gtk/gtkcellrendererpixbuf.c:155
+#: gtk/gtkcellrendererpixbuf.c:154
 msgid "Render detail to pass to the theme engine"
 msgstr "テーマ・エンジンに引き渡す詳細な描画情報"
 
-#: gtk/gtkcellrendererpixbuf.c:188
+#: gtk/gtkcellrendererpixbuf.c:187
 msgid "Follow State"
 msgstr "状態に合わせる"
 
-#: gtk/gtkcellrendererpixbuf.c:189
+#: gtk/gtkcellrendererpixbuf.c:188
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "描画した pixbuf を状態に応じて色づけを行うかどうかです"
+
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:576
+msgid "Icon"
+msgstr "アイコン"
+
+#: gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:248
+#, fuzzy
+msgid "The GIcon being displayed"
+msgstr "表示するアイコン・セット"
 
 #: gtk/gtkcellrendererprogress.c:129
 msgid "Value of the progress bar"
 msgstr "プログレス・バーの値"
 
 #: gtk/gtkcellrendererprogress.c:146 gtk/gtkcellrenderertext.c:195
-#: gtk/gtkentry.c:580 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:188
+#: gtk/gtkentry.c:582 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:182
 #: gtk/gtktextbuffer.c:197
 msgid "Text"
 msgstr "ラベル"
@@ -1271,17 +1290,17 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "ラベルの縦方向の位置で 0 (上) から 1 (下) で指定します"
 
 #: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:731
-#: gtk/gtkprogressbar.c:130 gtk/gtkstatusicon.c:283 gtk/gtktoolbar.c:494
-#: gtk/gtktrayicon-x11.c:95
+#: gtk/gtkprogressbar.c:124 gtk/gtkscalebutton.c:191 gtk/gtkstatusicon.c:283
+#: gtk/gtktoolbar.c:494 gtk/gtktrayicon-x11.c:95
 msgid "Orientation"
 msgstr "向き"
 
-#: gtk/gtkcellrendererprogress.c:222 gtk/gtkprogressbar.c:131
+#: gtk/gtkcellrendererprogress.c:222 gtk/gtkprogressbar.c:125
 msgid "Orientation and growth direction of the progress bar"
 msgstr "プログレス・バーが延びていく方向です"
 
-#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:122 gtk/gtkrange.c:346
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:212
+#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:116 gtk/gtkrange.c:346
+#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:212
 msgid "Adjustment"
 msgstr "アジャストメント"
 
@@ -1365,7 +1384,7 @@ msgstr "前景色"
 msgid "Foreground color as a GdkColor"
 msgstr "前景色を示す GdkColor 形式の文字列です"
 
-#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:504 gtk/gtktexttag.c:251
+#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:506 gtk/gtktexttag.c:251
 #: gtk/gtktextview.c:570
 msgid "Editable"
 msgstr "編集可能"
@@ -1475,7 +1494,7 @@ msgstr ""
 "報をヒントとして利用することができます。もしこのパラメータの意味を理解してい"
 "ない場合、これを必要とすることはないでしょう。"
 
-#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:448 gtk/gtkprogressbar.c:210
+#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:448 gtk/gtkprogressbar.c:204
 msgid "Ellipsize"
 msgstr "省略記号で置き換える"
 
@@ -1508,7 +1527,7 @@ msgstr ""
 "セル・レンダラが文字列全体を表示できるだけの充分な領域を持たない場合に文字列"
 "を複数行に分割する際の数です"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:676
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:675
 msgid "Wrap width"
 msgstr "折り返し幅"
 
@@ -1701,11 +1720,11 @@ msgstr "CellView モデル"
 msgid "The model for cell view"
 msgstr "セル表示に使用するモデルです"
 
-#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:167
+#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:168
 msgid "Indicator Size"
 msgstr "表示サイズ"
 
-#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:245 gtk/gtkoptionmenu.c:173
+#: gtk/gtkcheckbutton.c:77 gtk/gtkexpander.c:245 gtk/gtkoptionmenu.c:174
 msgid "Indicator Spacing"
 msgstr "表示部の間隔"
 
@@ -1713,7 +1732,7 @@ msgstr "表示部の間隔"
 msgid "Spacing around check or radio indicator"
 msgstr "チェック・ボタンまたはラジオ・ボタンの表示部の間隔"
 
-#: gtk/gtkcheckmenuitem.c:87 gtk/gtktoggleaction.c:118
+#: gtk/gtkcheckmenuitem.c:87 gtk/gtkmenu.c:502 gtk/gtktoggleaction.c:118
 #: gtk/gtktogglebutton.c:102 gtk/gtktoggletoolbutton.c:101
 msgid "Active"
 msgstr "有効"
@@ -1755,7 +1774,7 @@ msgstr "タイトル"
 msgid "The title of the color selection dialog"
 msgstr "色選択ダイアログのタイトル"
 
-#: gtk/gtkcolorbutton.c:201 gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorbutton.c:201 gtk/gtkcolorsel.c:293
 msgid "Current Color"
 msgstr "現在の色"
 
@@ -1763,7 +1782,7 @@ msgstr "現在の色"
 msgid "The selected color"
 msgstr "選択した色"
 
-#: gtk/gtkcolorbutton.c:216 gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorbutton.c:216 gtk/gtkcolorsel.c:300
 msgid "Current Alpha"
 msgstr "現在のアルファ値"
 
@@ -1771,177 +1790,216 @@ msgstr "現在のアルファ値"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "選択した色の透明度 (0 :完全透明、65535: 完全不透明)"
 
-#: gtk/gtkcolorsel.c:1844
+#: gtk/gtkcolorsel.c:279
 msgid "Has Opacity Control"
 msgstr "不透明コントロールあり"
 
-#: gtk/gtkcolorsel.c:1845
+#: gtk/gtkcolorsel.c:280
 msgid "Whether the color selector should allow setting opacity"
 msgstr "色セレクタで不透明の属性を設定できるかどうかです"
 
-#: gtk/gtkcolorsel.c:1851
+#: gtk/gtkcolorsel.c:286
 msgid "Has palette"
 msgstr "パレットあり"
 
-#: gtk/gtkcolorsel.c:1852
+#: gtk/gtkcolorsel.c:287
 msgid "Whether a palette should be used"
 msgstr "パレットを使用するかどうかです"
 
-#: gtk/gtkcolorsel.c:1859
+#: gtk/gtkcolorsel.c:294
 msgid "The current color"
 msgstr "現在使用する色"
 
-#: gtk/gtkcolorsel.c:1866
+#: gtk/gtkcolorsel.c:301
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "現在使用する色の透明度 (0 :完全透明、65535: 完全不透明)"
 
-#: gtk/gtkcolorsel.c:1880
+#: gtk/gtkcolorsel.c:315
 msgid "Custom palette"
 msgstr "カスタム・パレット"
 
-#: gtk/gtkcolorsel.c:1881
+#: gtk/gtkcolorsel.c:316
 msgid "Palette to use in the color selector"
 msgstr "色選択で使用するパレット"
 
-#: gtk/gtkcombo.c:143
+#: gtk/gtkcolorseldialog.c:102
+#, fuzzy
+msgid "Color Selection"
+msgstr "ホバーのセレクタ"
+
+#: gtk/gtkcolorseldialog.c:103
+#, fuzzy
+msgid "The color selection embedded in the dialog."
+msgstr "色選択ダイアログのタイトル"
+
+#: gtk/gtkcolorseldialog.c:109
+msgid "OK Button"
+msgstr ""
+
+#: gtk/gtkcolorseldialog.c:110
+#, fuzzy
+msgid "The OK button of the dialog."
+msgstr "メッセージ・ダイアログに表示するボタンです"
+
+#: gtk/gtkcolorseldialog.c:116
+#, fuzzy
+msgid "Cancel Button"
+msgstr "メッセージのボタン"
+
+#: gtk/gtkcolorseldialog.c:117
+#, fuzzy
+msgid "The cancel button of the dialog."
+msgstr "ダイアログの一時的な親ウィジェットです"
+
+#: gtk/gtkcolorseldialog.c:123
+#, fuzzy
+msgid "Help Button"
+msgstr "メッセージのボタン"
+
+#: gtk/gtkcolorseldialog.c:124
+#, fuzzy
+msgid "The help button of the dialog."
+msgstr "メッセージ・ダイアログに表示するボタンです"
+
+#: gtk/gtkcombo.c:145
 msgid "Enable arrow keys"
 msgstr "矢印キーを有効に"
 
-#: gtk/gtkcombo.c:144
+#: gtk/gtkcombo.c:146
 msgid "Whether the arrow keys move through the list of items"
 msgstr "アイテムの一覧をずっと矢印キーが移動するかどうかです"
 
-#: gtk/gtkcombo.c:150
+#: gtk/gtkcombo.c:152
 msgid "Always enable arrows"
 msgstr "矢印を常に有効に"
 
-#: gtk/gtkcombo.c:151
+#: gtk/gtkcombo.c:153
 msgid "Obsolete property, ignored"
 msgstr "破棄されたプロパティ (無視します)"
 
-#: gtk/gtkcombo.c:157
+#: gtk/gtkcombo.c:159
 msgid "Case sensitive"
 msgstr "大/小文字の区別"
 
-#: gtk/gtkcombo.c:158
+#: gtk/gtkcombo.c:160
 msgid "Whether list item matching is case sensitive"
 msgstr "リストのアイテムが大小文字に一致するかどうかです"
 
-#: gtk/gtkcombo.c:165
+#: gtk/gtkcombo.c:167
 msgid "Allow empty"
 msgstr "全て空"
 
-#: gtk/gtkcombo.c:166
+#: gtk/gtkcombo.c:168
 msgid "Whether an empty value may be entered in this field"
 msgstr "このフィールドに空の値を入力することができるかどうかです"
 
-#: gtk/gtkcombo.c:173
+#: gtk/gtkcombo.c:175
 msgid "Value in list"
 msgstr "リストの値"
 
-#: gtk/gtkcombo.c:174
+#: gtk/gtkcombo.c:176
 msgid "Whether entered values must already be present in the list"
 msgstr "入力した値がリストの中に既に存在しているかどうかです"
 
-#: gtk/gtkcombobox.c:659
+#: gtk/gtkcombobox.c:658
 msgid "ComboBox model"
 msgstr "ComboBox モデル"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:659
 msgid "The model for the combo box"
 msgstr "コンボ・ボックスに使用するモデル"
 
-#: gtk/gtkcombobox.c:677
+#: gtk/gtkcombobox.c:676
 msgid "Wrap width for laying out the items in a grid"
 msgstr "グリッドに項目をレイアウトするための折り返し幅"
 
-#: gtk/gtkcombobox.c:699
+#: gtk/gtkcombobox.c:698
 msgid "Row span column"
 msgstr "行間隔を持つ列"
 
-#: gtk/gtkcombobox.c:700
+#: gtk/gtkcombobox.c:699
 msgid "TreeModel column containing the row span values"
 msgstr "行の間隔の値を保持している TreeModel の列"
 
-#: gtk/gtkcombobox.c:721
+#: gtk/gtkcombobox.c:720
 msgid "Column span column"
 msgstr "列間隔を持つ列"
 
-#: gtk/gtkcombobox.c:722
+#: gtk/gtkcombobox.c:721
 msgid "TreeModel column containing the column span values"
 msgstr "列の間隔の値を保持している TreeModel の列"
 
-#: gtk/gtkcombobox.c:743
+#: gtk/gtkcombobox.c:742
 msgid "Active item"
 msgstr "有効な項目"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:743
 msgid "The item which is currently active"
 msgstr "現在アクティブな項目"
 
-#: gtk/gtkcombobox.c:763 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:762 gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
 msgstr "ティアオフをメニューに追加"
 
-#: gtk/gtkcombobox.c:764
+#: gtk/gtkcombobox.c:763
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "ドロップダウンがティアオフ・メニューのアイテムを持つかどうかです"
 
-#: gtk/gtkcombobox.c:779 gtk/gtkentry.c:529
+#: gtk/gtkcombobox.c:778 gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "フレーム有り"
 
-#: gtk/gtkcombobox.c:780
+#: gtk/gtkcombobox.c:779
 msgid "Whether the combo box draws a frame around the child"
 msgstr "コンボ・ボックスの子の周囲にフレームを描画するかどうかです"
 
-#: gtk/gtkcombobox.c:788
+#: gtk/gtkcombobox.c:787
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "マウスでクリックした時にコンボ・ボックスにフォーカスを当てるかどうかです"
 
-#: gtk/gtkcombobox.c:803 gtk/gtkmenu.c:489
+#: gtk/gtkcombobox.c:802 gtk/gtkmenu.c:557
 msgid "Tearoff Title"
 msgstr "ティアオフ・タイトル"
 
-#: gtk/gtkcombobox.c:804
+#: gtk/gtkcombobox.c:803
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr ""
 "ポップアップを無効にした時にウィンドウ・マネージャが表示するタイトルです"
 
-#: gtk/gtkcombobox.c:821
+#: gtk/gtkcombobox.c:820
 msgid "Popup shown"
 msgstr "ポップアップの表示"
 
-#: gtk/gtkcombobox.c:822
+#: gtk/gtkcombobox.c:821
 msgid "Whether the combo's dropdown is shown"
 msgstr "コンボのドロップダウンを表示するかどうかです"
 
-#: gtk/gtkcombobox.c:828
+#: gtk/gtkcombobox.c:827
 msgid "Appears as list"
 msgstr "リスト表示"
 
-#: gtk/gtkcombobox.c:829
+#: gtk/gtkcombobox.c:828
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "ドロップダウンをメニュー型式ではなくリスト型式で表示するかどうかです"
 
-#: gtk/gtkcombobox.c:845
+#: gtk/gtkcombobox.c:844
 msgid "Arrow Size"
 msgstr "矢印の大きさ"
 
-#: gtk/gtkcombobox.c:846
+#: gtk/gtkcombobox.c:845
 msgid "The minimum size of the arrow in the combo box"
 msgstr "コンボ・ボックスで使用する矢印の大きさ (最小値) です"
 
-#: gtk/gtkcombobox.c:861 gtk/gtkentry.c:629 gtk/gtkhandlebox.c:176
+#: gtk/gtkcombobox.c:860 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:632
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "影の種類"
 
-#: gtk/gtkcombobox.c:862
+#: gtk/gtkcombobox.c:861
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "コンボ・ボックスの周囲に描画する影の種類です"
 
@@ -2041,40 +2099,40 @@ msgstr "アクション・エリアの枠"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "ダイアログの下のボタンエリアの周りの枠の幅を指定します"
 
-#: gtk/gtkentry.c:484 gtk/gtklabel.c:411
+#: gtk/gtkentry.c:486 gtk/gtklabel.c:411
 msgid "Cursor Position"
 msgstr "カーソル位置"
 
-#: gtk/gtkentry.c:485 gtk/gtklabel.c:412
+#: gtk/gtkentry.c:487 gtk/gtklabel.c:412
 msgid "The current position of the insertion cursor in chars"
 msgstr "挿入カーソルの現在位置を指定します (文字単位)"
 
-#: gtk/gtkentry.c:494 gtk/gtklabel.c:421
+#: gtk/gtkentry.c:496 gtk/gtklabel.c:421
 msgid "Selection Bound"
 msgstr "選択制限範囲"
 
-#: gtk/gtkentry.c:495 gtk/gtklabel.c:422
+#: gtk/gtkentry.c:497 gtk/gtklabel.c:422
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "カーソルから反対側にある選択範囲の終端位置を指定します (文字単位)"
 
-#: gtk/gtkentry.c:505
+#: gtk/gtkentry.c:507
 msgid "Whether the entry contents can be edited"
 msgstr "エントリの内容を変更できるかどうかです"
 
-#: gtk/gtkentry.c:512
+#: gtk/gtkentry.c:514
 msgid "Maximum length"
 msgstr "最大サイズ"
 
-#: gtk/gtkentry.c:513
+#: gtk/gtkentry.c:515
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "このエントリに入力できる文字数の最大値を指定します (0: 最大値なし)"
 
-#: gtk/gtkentry.c:521
+#: gtk/gtkentry.c:523
 msgid "Visibility"
 msgstr "可視性"
 
-#: gtk/gtkentry.c:522
+#: gtk/gtkentry.c:524
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2082,32 +2140,32 @@ msgstr ""
 "FALSE にすると、実際のテキストの代わりに \"隠し文字\" を表示します (例: \"パ"
 "スワード入力モード\")"
 
-#: gtk/gtkentry.c:530
+#: gtk/gtkentry.c:532
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE にすると、エントリから外側のベベルを削除します"
 
-#: gtk/gtkentry.c:538
+#: gtk/gtkentry.c:540
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 "テキストからフレームまでの境界線で、inner-border スタイルのプロパティでオー"
 "バーライドされます"
 
-#: gtk/gtkentry.c:545
+#: gtk/gtkentry.c:547
 msgid "Invisible character"
 msgstr "隠し文字"
 
-#: gtk/gtkentry.c:546
+#: gtk/gtkentry.c:548
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "エントリの内容を隠す際に使用する文字を指定します (例: \"パスワード入力モード"
 "\")"
 
-#: gtk/gtkentry.c:553
+#: gtk/gtkentry.c:555
 msgid "Activates default"
 msgstr "デフォルトにする"
 
-#: gtk/gtkentry.c:554
+#: gtk/gtkentry.c:556
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2115,66 +2173,84 @@ msgstr ""
 "[RETURN] キーが押下された際に、デフォルトのウィジェットを利用可能にするかどう"
 "かを指定します (例: ダイアログのデフォルト・ボタン)"
 
-#: gtk/gtkentry.c:560
+#: gtk/gtkentry.c:562
 msgid "Width in chars"
 msgstr "幅 (文字単位)"
 
-#: gtk/gtkentry.c:561
+#: gtk/gtkentry.c:563
 msgid "Number of characters to leave space for in the entry"
 msgstr "エントリで空白のままにしておく文字数を指定します"
 
-#: gtk/gtkentry.c:570
+#: gtk/gtkentry.c:572
 msgid "Scroll offset"
 msgstr "スクロールのオフセット値"
 
-#: gtk/gtkentry.c:571
+#: gtk/gtkentry.c:573
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "スクロールしないエントリの画面左からのピクセル数を指定します"
 
-#: gtk/gtkentry.c:581
+#: gtk/gtkentry.c:583
 msgid "The contents of the entry"
 msgstr "エントリの内容"
 
-#: gtk/gtkentry.c:596 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:598 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "Ｘ方向の配置"
 
-#: gtk/gtkentry.c:597 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:599 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
 "水平方向の配置で 0 (左) から 1 (右) へ配置します (RTL: Right To Left の逆)"
 
-#: gtk/gtkentry.c:613
+#: gtk/gtkentry.c:615
 msgid "Truncate multiline"
 msgstr "複数行の切りつめ"
 
-#: gtk/gtkentry.c:614
+#: gtk/gtkentry.c:616
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "複数行のエントリを単一のエントリにまとめるかどうかです"
 
-#: gtk/gtkentry.c:630
+#: gtk/gtkentry.c:632
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "\"フレーム有り\" を有効にした時にエントリの周囲に描画する影の種類です"
 
-#: gtk/gtkentry.c:900
+#: gtk/gtkentry.c:647 gtk/gtktextview.c:650
+msgid "Overwrite mode"
+msgstr "上書きモード"
+
+#: gtk/gtkentry.c:648
+#, fuzzy
+msgid "Whether new text overwrites existing text"
+msgstr "入力されたテキストが既にある内容を上書きするかどうかです"
+
+#: gtk/gtkentry.c:661
+#, fuzzy
+msgid "Text length"
+msgstr "ラベルの位置 (Ｘ方向)"
+
+#: gtk/gtkentry.c:662
+msgid "Length of the text currently in the entry"
+msgstr ""
+
+#: gtk/gtkentry.c:933
 msgid "Border between text and frame."
 msgstr "テキストとフレームとの間にある境界線です"
 
-#: gtk/gtkentry.c:905 gtk/gtklabel.c:644
+#: gtk/gtkentry.c:938 gtk/gtklabel.c:644
 msgid "Select on focus"
 msgstr "フォーカス部の選択"
 
-#: gtk/gtkentry.c:906
+#: gtk/gtkentry.c:939
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "エントリにフォーカスが当たった際にその内容を選択するかどうかです"
 
-#: gtk/gtkentry.c:920
+#: gtk/gtkentry.c:953
 msgid "Password Hint Timeout"
 msgstr "パスワード・ヒントのタイムアウト"
 
-#: gtk/gtkentry.c:921
+#: gtk/gtkentry.c:954
 msgid "How long to show the last input character in hidden entries"
 msgstr "隠しエントリで最後に入力した文字を表示しておく時間です"
 
@@ -2381,11 +2457,11 @@ msgstr "追加ウィジェット"
 msgid "Application supplied widget for extra options."
 msgstr "アプリケーションで追加オプション用のウィジェットを提供します"
 
-#: gtk/gtkfilechooser.c:245 gtk/gtkfilesel.c:539 gtk/gtkrecentchooser.c:191
+#: gtk/gtkfilechooser.c:245 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:191
 msgid "Select Multiple"
 msgstr "複数ファイルの選択"
 
-#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:540
+#: gtk/gtkfilechooser.c:246 gtk/gtkfilesel.c:541
 msgid "Whether to allow multiple files to be selected"
 msgstr "複数のファイルを選択できるようにするかどうかです"
 
@@ -2425,36 +2501,36 @@ msgstr "フォント選択ダイアログのタイトル"
 msgid "The desired width of the button widget, in characters."
 msgstr "ボタン・ウィジェットの幅 (文字単位)"
 
-#: gtk/gtkfilesel.c:525 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:214
+#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:214
 #: gtk/gtkstatusicon.c:192
 msgid "Filename"
 msgstr "ファイル名"
 
-#: gtk/gtkfilesel.c:526
+#: gtk/gtkfilesel.c:527
 msgid "The currently selected filename"
 msgstr "現在選択されているファイル名"
 
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:533
 msgid "Show file operations"
 msgstr "ファイル操作の表示"
 
-#: gtk/gtkfilesel.c:533
+#: gtk/gtkfilesel.c:534
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "ファイルの作成やファイル操作のボタンを表示するかどうかです"
 
-#: gtk/gtkfixed.c:90 gtk/gtklayout.c:578
+#: gtk/gtkfixed.c:90 gtk/gtklayout.c:596
 msgid "X position"
 msgstr "X 位置"
 
-#: gtk/gtkfixed.c:91 gtk/gtklayout.c:579
+#: gtk/gtkfixed.c:91 gtk/gtklayout.c:597
 msgid "X position of child widget"
 msgstr "子ウィジェットの X 位置"
 
-#: gtk/gtkfixed.c:100 gtk/gtklayout.c:588
+#: gtk/gtkfixed.c:100 gtk/gtklayout.c:606
 msgid "Y position"
 msgstr "Y 位置"
 
-#: gtk/gtkfixed.c:101 gtk/gtklayout.c:589
+#: gtk/gtkfixed.c:101 gtk/gtklayout.c:607
 msgid "Y position of child widget"
 msgstr "子ウィジェットの Y 位置"
 
@@ -2543,7 +2619,7 @@ msgstr "ラベルの Y 方向位置"
 msgid "The vertical alignment of the label"
 msgstr "ラベルの垂直方向の配置"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:169
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
 msgid "Deprecated property, use shadow_type instead"
 msgstr "破棄されたプロパティ (代わりに shadow_type を使用)"
 
@@ -2559,23 +2635,23 @@ msgstr "フレームの境界線の外観"
 msgid "A widget to display in place of the usual frame label"
 msgstr "通常のフレーム付きラベルとして表示するウィジェット"
 
-#: gtk/gtkhandlebox.c:177
+#: gtk/gtkhandlebox.c:178
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "コンテナの周囲に表示する影の外観"
 
-#: gtk/gtkhandlebox.c:185
+#: gtk/gtkhandlebox.c:186
 msgid "Handle position"
 msgstr "取っ手の位置"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:187
 msgid "Position of the handle relative to the child widget"
 msgstr "子ウィジェットに対する取っ手の位置"
 
-#: gtk/gtkhandlebox.c:194
+#: gtk/gtkhandlebox.c:195
 msgid "Snap edge"
 msgstr "スナップ・エッジ"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:196
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -2583,17 +2659,27 @@ msgstr ""
 "ハンドルボックスを格納するためのドッキング位置を配置するハンドルボックスの側"
 "面"
 
-#: gtk/gtkhandlebox.c:203
+#: gtk/gtkhandlebox.c:204
 msgid "Snap edge set"
 msgstr "スナップ・エッジの設定"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:205
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr ""
 "snap_edge プロパティの値を使用するか、handle_position から継承した値を使用す"
 "るかどうかです"
+
+#: gtk/gtkhandlebox.c:212
+msgid "Child Detached"
+msgstr ""
+
+#: gtk/gtkhandlebox.c:213
+msgid ""
+"A boolean value indicating whether the handlebox's child is attached or "
+"detached."
+msgstr ""
 
 #: gtk/gtkiconview.c:550
 msgid "Selection mode"
@@ -2760,7 +2846,7 @@ msgstr "アイコン・セット"
 msgid "Icon set to display"
 msgstr "表示するアイコン・セット"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:191 gtk/gtktoolbar.c:549
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:549
 msgid "Icon size"
 msgstr "アイコンのサイズ"
 
@@ -2785,15 +2871,6 @@ msgstr "アニメーション"
 #: gtk/gtkimage.c:215
 msgid "GdkPixbufAnimation to display"
 msgstr "表示する GdkPixbufAnimation"
-
-#: gtk/gtkimage.c:247 gtk/gtkwindow.c:576
-msgid "Icon"
-msgstr "アイコン"
-
-#: gtk/gtkimage.c:248
-#, fuzzy
-msgid "The GIcon being displayed"
-msgstr "表示するアイコン・セット"
 
 #: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:216
 msgid "Storage type"
@@ -2926,31 +3003,64 @@ msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr ""
 "選択可能なラベルにフォーカスが当たった場合、その内容を選択するかどうかです"
 
-#: gtk/gtklayout.c:598 gtk/gtkviewport.c:106
+#: gtk/gtklayout.c:616 gtk/gtkviewport.c:106
 msgid "Horizontal adjustment"
 msgstr "水平方向の配置調整"
 
-#: gtk/gtklayout.c:599 gtk/gtkscrolledwindow.c:221
+#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:221
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "水平方向の位置に対する GtkAdjustment です"
 
-#: gtk/gtklayout.c:606 gtk/gtkviewport.c:114
+#: gtk/gtklayout.c:624 gtk/gtkviewport.c:114
 msgid "Vertical adjustment"
 msgstr "垂直方向の配置調整"
 
-#: gtk/gtklayout.c:607 gtk/gtkscrolledwindow.c:228
+#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:228
 msgid "The GtkAdjustment for the vertical position"
 msgstr "垂直方向の位置に対する GtkAdjustment です"
 
-#: gtk/gtklayout.c:615
+#: gtk/gtklayout.c:633
 msgid "The width of the layout"
 msgstr "レイアウトの幅"
 
-#: gtk/gtklayout.c:624
+#: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "レイアウトの高さ"
 
-#: gtk/gtkmenu.c:490
+#: gtk/gtkmenu.c:503
+#, fuzzy
+msgid "The currently selected menu item"
+msgstr "現在選択されているファイル名"
+
+#: gtk/gtkmenu.c:517
+#, fuzzy
+msgid "Accel Group"
+msgstr "アクション・グループ"
+
+#: gtk/gtkmenu.c:518
+#, fuzzy
+msgid "The accel group holding accelerators for the menu"
+msgstr "このラベルのニーモニック・アクセラレータ・キー"
+
+#: gtk/gtkmenu.c:532 gtk/gtkmenuitem.c:236
+msgid "Accel Path"
+msgstr ""
+
+#: gtk/gtkmenu.c:533
+msgid "An accel path used to conveniently construct accel paths of child items"
+msgstr ""
+
+#: gtk/gtkmenu.c:549
+#, fuzzy
+msgid "Attach Widget"
+msgstr "追加ウィジェット"
+
+#: gtk/gtkmenu.c:550
+#, fuzzy
+msgid "The widget the menu is attached to"
+msgstr "メニュー・アイテムがチェックされているかどうかです"
+
+#: gtk/gtkmenu.c:558
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2958,115 +3068,124 @@ msgstr ""
 "このメニューが取り外された際にウィンドウ・マネージャが表示することが可能なタ"
 "イトル"
 
-#: gtk/gtkmenu.c:504
+#: gtk/gtkmenu.c:572
 msgid "Tearoff State"
 msgstr "ティアオフの状態"
 
-#: gtk/gtkmenu.c:505
+#: gtk/gtkmenu.c:573
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "メニューを取り外すせるかどうかを示す論理値"
 
-#: gtk/gtkmenu.c:511
+#: gtk/gtkmenu.c:587
+#, fuzzy
+msgid "Monitor"
+msgstr "月"
+
+#: gtk/gtkmenu.c:588
+msgid "The monitor the menu will be popped up on"
+msgstr ""
+
+#: gtk/gtkmenu.c:594
 msgid "Vertical Padding"
 msgstr "垂直パディング"
 
-#: gtk/gtkmenu.c:512
+#: gtk/gtkmenu.c:595
 msgid "Extra space at the top and bottom of the menu"
 msgstr "メニューの上端と下端に追加する余白"
 
-#: gtk/gtkmenu.c:520
+#: gtk/gtkmenu.c:603
 msgid "Horizontal Padding"
 msgstr "水平パディング"
 
-#: gtk/gtkmenu.c:521
+#: gtk/gtkmenu.c:604
 msgid "Extra space at the left and right edges of the menu"
 msgstr "メニューの左右に追加する余白です"
 
-#: gtk/gtkmenu.c:529
+#: gtk/gtkmenu.c:612
 msgid "Vertical Offset"
 msgstr "垂直オフセット"
 
-#: gtk/gtkmenu.c:530
+#: gtk/gtkmenu.c:613
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "メニューがサブメニューの場合、この値だけ垂直にオフセットを設定する"
 
-#: gtk/gtkmenu.c:538
+#: gtk/gtkmenu.c:621
 msgid "Horizontal Offset"
 msgstr "水平オフセット"
 
-#: gtk/gtkmenu.c:539
+#: gtk/gtkmenu.c:622
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "メニューがサブメニューの場合、この値だけ水平にオフセットを設定する"
 
-#: gtk/gtkmenu.c:547
+#: gtk/gtkmenu.c:630
 msgid "Double Arrows"
 msgstr "二つ矢印"
 
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:631
 msgid "When scrolling, always show both arrows."
 msgstr "スクロールする時に、常に二つの矢印を表示します"
 
-#: gtk/gtkmenu.c:556
+#: gtk/gtkmenu.c:639
 msgid "Left Attach"
 msgstr "左アタッチ"
 
-#: gtk/gtkmenu.c:557 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:640 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "子ウィジェットの左側にアタッチする列番号"
 
-#: gtk/gtkmenu.c:564
+#: gtk/gtkmenu.c:647
 msgid "Right Attach"
 msgstr "右アタッチ"
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:648
 msgid "The column number to attach the right side of the child to"
 msgstr "子ウィジェットの右側にアタッチする列番号"
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:655
 msgid "Top Attach"
 msgstr "上アタッチ"
 
-#: gtk/gtkmenu.c:573
+#: gtk/gtkmenu.c:656
 msgid "The row number to attach the top of the child to"
 msgstr "子ウィジェットの上側にアタッチする列番号"
 
-#: gtk/gtkmenu.c:580
+#: gtk/gtkmenu.c:663
 msgid "Bottom Attach"
 msgstr "下アタッチ"
 
-#: gtk/gtkmenu.c:581 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:664 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "子ウィジェットの下側にアタッチする列番号"
 
-#: gtk/gtkmenu.c:668
+#: gtk/gtkmenu.c:751
 msgid "Can change accelerators"
 msgstr "アクセラレータの変更可能"
 
-#: gtk/gtkmenu.c:669
+#: gtk/gtkmenu.c:752
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "メニュー・アイテムの上でキーを押下することでメニューのアクセラレータを変更で"
 "きるかどうかです"
 
-#: gtk/gtkmenu.c:674
+#: gtk/gtkmenu.c:757
 msgid "Delay before submenus appear"
 msgstr "サブメニューを表示する際の遅延時間"
 
-#: gtk/gtkmenu.c:675
+#: gtk/gtkmenu.c:758
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "サブメニューを表示する前にメニュー・アイテムを表示しておく最小時間"
 
-#: gtk/gtkmenu.c:682
+#: gtk/gtkmenu.c:765
 msgid "Delay before hiding a submenu"
 msgstr "サブメニューを隠す際の遅延時間"
 
-#: gtk/gtkmenu.c:683
+#: gtk/gtkmenu.c:766
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3110,18 +3229,41 @@ msgstr "メニューをドロップ・ダウン表示する際の遅延時間"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "メニューバーのサブメニューが表示される際の遅延時間"
 
-#: gtk/gtkmenuitem.c:202
+#: gtk/gtkmenuitem.c:204
+msgid "Right Justified"
+msgstr ""
+
+#: gtk/gtkmenuitem.c:205
+msgid ""
+"Sets whether the menu item appears justified at the right side of a menu bar"
+msgstr ""
+
+#: gtk/gtkmenuitem.c:219
 msgid "Submenu"
 msgstr "サブメニュー"
 
-#: gtk/gtkmenuitem.c:203
+#: gtk/gtkmenuitem.c:220
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "メニュー項目に取り付けるサブメニューです (取り付けない場合は NULL)"
 
-#: gtk/gtkmenuitem.c:246
+#: gtk/gtkmenuitem.c:237
+msgid "Sets the accelerator path of the menu item"
+msgstr ""
+
+#: gtk/gtkmenuitem.c:280
 #, fuzzy
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "矢印が占有する大きさです"
+
+#: gtk/gtkmenuitem.c:293
+#, fuzzy
+msgid "Width in Characters"
+msgstr "ボタンの幅"
+
+#: gtk/gtkmenuitem.c:294
+#, fuzzy
+msgid "The minimum desired width of the menu item in characters"
+msgstr "ラベルの幅 (文字単位)"
 
 #: gtk/gtkmenushell.c:368
 msgid "Take Focus"
@@ -3131,11 +3273,11 @@ msgstr "フォーカスの受け取り"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "メニューでキーボードのフォーカスを受け取ることか可能かどうかです"
 
-#: gtk/gtkmenutoolbutton.c:229 gtk/gtkoptionmenu.c:160
+#: gtk/gtkmenutoolbutton.c:232 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "メニュー"
 
-#: gtk/gtkmenutoolbutton.c:230
+#: gtk/gtkmenutoolbutton.c:233
 msgid "The dropdown menu"
 msgstr "ドロップダウン式のメニューです"
 
@@ -3256,75 +3398,75 @@ msgstr ""
 msgid "The screen where this window will be displayed."
 msgstr "このウィンドウを表示する画面"
 
-#: gtk/gtknotebook.c:566
+#: gtk/gtknotebook.c:572
 msgid "Page"
 msgstr "ページ"
 
-#: gtk/gtknotebook.c:567
+#: gtk/gtknotebook.c:573
 msgid "The index of the current page"
 msgstr "現在ページのインデックス"
 
-#: gtk/gtknotebook.c:575
+#: gtk/gtknotebook.c:581
 msgid "Tab Position"
 msgstr "タブ位置"
 
-#: gtk/gtknotebook.c:576
+#: gtk/gtknotebook.c:582
 msgid "Which side of the notebook holds the tabs"
 msgstr "ノートブック・タブをどちら側に配置するか"
 
-#: gtk/gtknotebook.c:583
+#: gtk/gtknotebook.c:589
 msgid "Tab Border"
 msgstr "タブの境界線"
 
-#: gtk/gtknotebook.c:584
+#: gtk/gtknotebook.c:590
 msgid "Width of the border around the tab labels"
 msgstr "タブのラベルの周囲に配置する境界線の幅"
 
-#: gtk/gtknotebook.c:592
+#: gtk/gtknotebook.c:598
 msgid "Horizontal Tab Border"
 msgstr "水平タブの境界線"
 
-#: gtk/gtknotebook.c:593
+#: gtk/gtknotebook.c:599
 msgid "Width of the horizontal border of tab labels"
 msgstr "タブのラベルの水平方向の境界線の幅"
 
-#: gtk/gtknotebook.c:601
+#: gtk/gtknotebook.c:607
 msgid "Vertical Tab Border"
 msgstr "垂直タブの境界線"
 
-#: gtk/gtknotebook.c:602
+#: gtk/gtknotebook.c:608
 msgid "Width of the vertical border of tab labels"
 msgstr "タブのラベルの垂直方向の境界線の幅"
 
-#: gtk/gtknotebook.c:610
+#: gtk/gtknotebook.c:616
 msgid "Show Tabs"
 msgstr "タブの表示"
 
-#: gtk/gtknotebook.c:611
+#: gtk/gtknotebook.c:617
 msgid "Whether tabs should be shown or not"
 msgstr "タブを表示するかどうかです"
 
-#: gtk/gtknotebook.c:617
+#: gtk/gtknotebook.c:623
 msgid "Show Border"
 msgstr "境界線の表示"
 
-#: gtk/gtknotebook.c:618
+#: gtk/gtknotebook.c:624
 msgid "Whether the border should be shown or not"
 msgstr "境界線を表示するかどうかです"
 
-#: gtk/gtknotebook.c:624
+#: gtk/gtknotebook.c:630
 msgid "Scrollable"
 msgstr "スクロール可能"
 
-#: gtk/gtknotebook.c:625
+#: gtk/gtknotebook.c:631
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "TRUE にすると、たくさんのタブがある場合にスクロール用の矢印を表示する"
 
-#: gtk/gtknotebook.c:631
+#: gtk/gtknotebook.c:637
 msgid "Enable Popup"
 msgstr "ポップアップ可能"
 
-#: gtk/gtknotebook.c:632
+#: gtk/gtknotebook.c:638
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3332,146 +3474,146 @@ msgstr ""
 "TRUE にすると、ノートブックの上でマウスの右ボタンを押下するとジャンプできる"
 "ページのメニューがポップアップする"
 
-#: gtk/gtknotebook.c:639
+#: gtk/gtknotebook.c:645
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "タブのサイズを均等にするかどうかです"
 
-#: gtk/gtknotebook.c:645
+#: gtk/gtknotebook.c:651
 msgid "Group ID"
 msgstr "グループ ID"
 
-#: gtk/gtknotebook.c:646
+#: gtk/gtknotebook.c:652
 msgid "Group ID for tabs drag and drop"
 msgstr "タブのドラッグ＆ドロップに対するグループ ID です"
 
-#: gtk/gtknotebook.c:662 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342
 msgid "Group"
 msgstr "グループ"
 
-#: gtk/gtknotebook.c:663
+#: gtk/gtknotebook.c:669
 msgid "Group for tabs drag and drop"
 msgstr "タブのドラッグ＆ドロップに対するグループです"
 
-#: gtk/gtknotebook.c:669
+#: gtk/gtknotebook.c:675
 msgid "Tab label"
 msgstr "タブのラベル"
 
-#: gtk/gtknotebook.c:670
+#: gtk/gtknotebook.c:676
 msgid "The string displayed on the child's tab label"
 msgstr "子のタブにあるラベルに表示する文字列"
 
-#: gtk/gtknotebook.c:676
+#: gtk/gtknotebook.c:682
 msgid "Menu label"
 msgstr "メニューのラベル"
 
-#: gtk/gtknotebook.c:677
+#: gtk/gtknotebook.c:683
 msgid "The string displayed in the child's menu entry"
 msgstr "子のメニュー・エントリに表示する文字列"
 
-#: gtk/gtknotebook.c:690
+#: gtk/gtknotebook.c:696
 msgid "Tab expand"
 msgstr "タブの展張"
 
-#: gtk/gtknotebook.c:691
+#: gtk/gtknotebook.c:697
 msgid "Whether to expand the child's tab or not"
 msgstr "子のタブを展張するかどうかです"
 
-#: gtk/gtknotebook.c:697
+#: gtk/gtknotebook.c:703
 msgid "Tab fill"
 msgstr "タブの埋め込み"
 
-#: gtk/gtknotebook.c:698
+#: gtk/gtknotebook.c:704
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "子のタブを確保した領域一杯に埋めるかどうかです"
 
-#: gtk/gtknotebook.c:704
+#: gtk/gtknotebook.c:710
 msgid "Tab pack type"
 msgstr "タブのパックの種類"
 
-#: gtk/gtknotebook.c:711
+#: gtk/gtknotebook.c:717
 msgid "Tab reorderable"
 msgstr "タブの並べ替え"
 
-#: gtk/gtknotebook.c:712
+#: gtk/gtknotebook.c:718
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "タブの並べ替えを可能にするかどうかです"
 
-#: gtk/gtknotebook.c:718
+#: gtk/gtknotebook.c:724
 msgid "Tab detachable"
 msgstr "タブの切り離し"
 
-#: gtk/gtknotebook.c:719
+#: gtk/gtknotebook.c:725
 msgid "Whether the tab is detachable"
 msgstr "タブを切り離し可能にするかどうかです"
 
-#: gtk/gtknotebook.c:734 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:740 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "二番目の後ろ向きのステッパ"
 
-#: gtk/gtknotebook.c:735
+#: gtk/gtknotebook.c:741
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "タブ領域と反対の端に二番目の後ろ向き矢印ボタンを表示する"
 
-#: gtk/gtknotebook.c:750 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:756 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "二番目の前向きステッパ"
 
-#: gtk/gtknotebook.c:751
+#: gtk/gtknotebook.c:757
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "タブ領域と反対の端に二番目の前向き矢印ボタンを表示する"
 
-#: gtk/gtknotebook.c:765 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:771 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "後ろ向きのステッパ"
 
-#: gtk/gtknotebook.c:766 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:772 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "標準的な後方矢印ボタンを表示する"
 
-#: gtk/gtknotebook.c:780 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:786 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "前向きのステッパ"
 
-#: gtk/gtknotebook.c:781 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:787 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "標準的な前方矢印ボタンを表示する"
 
-#: gtk/gtknotebook.c:795
+#: gtk/gtknotebook.c:801
 msgid "Tab overlap"
 msgstr "タブのオーバーラップ"
 
-#: gtk/gtknotebook.c:796
+#: gtk/gtknotebook.c:802
 msgid "Size of tab overlap area"
 msgstr "タブが重なる部分の大きさです"
 
-#: gtk/gtknotebook.c:811
+#: gtk/gtknotebook.c:817
 msgid "Tab curvature"
 msgstr "タブの曲がり具合"
 
-#: gtk/gtknotebook.c:812
+#: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "タブにつける曲線の大きさです"
 
-#: gtk/gtkobject.c:366
+#: gtk/gtkobject.c:370
 msgid "User Data"
 msgstr "ユーザ・データ"
 
-#: gtk/gtkobject.c:367
+#: gtk/gtkobject.c:371
 msgid "Anonymous User Data Pointer"
 msgstr "匿名のユーザ・データを指すポインタです"
 
-#: gtk/gtkoptionmenu.c:161
+#: gtk/gtkoptionmenu.c:162
 msgid "The menu of options"
 msgstr "オプション・メニュー"
 
-#: gtk/gtkoptionmenu.c:168
+#: gtk/gtkoptionmenu.c:169
 msgid "Size of dropdown indicator"
 msgstr "ドロップダウン表示する表示部の大きさ"
 
-#: gtk/gtkoptionmenu.c:174
+#: gtk/gtkoptionmenu.c:175
 msgid "Spacing around indicator"
 msgstr "表示部の枠の間隔"
 
@@ -3530,12 +3672,21 @@ msgstr "縮小"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "TRUE にすると、子は要求されたサイズよりも小さくすることができる"
 
-#: gtk/gtkplug.c:146 gtk/gtkstatusicon.c:267
+#: gtk/gtkplug.c:150 gtk/gtkstatusicon.c:267
 msgid "Embedded"
 msgstr "埋め込み"
 
-#: gtk/gtkplug.c:147
+#: gtk/gtkplug.c:151
 msgid "Whether or not the plug is embedded"
+msgstr "プラグを埋め込むかどうかです"
+
+#: gtk/gtkplug.c:165
+msgid "Socket Window"
+msgstr ""
+
+#: gtk/gtkplug.c:166
+#, fuzzy
+msgid "The window of the socket the plug is embedded in"
 msgstr "プラグを埋め込むかどうかです"
 
 #: gtk/gtkpreview.c:104
@@ -3639,7 +3790,7 @@ msgstr "プリンタの設定です"
 msgid "Page Setup"
 msgstr "ページの設定"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1006
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1012
 msgid "Track Print Status"
 msgstr "印刷状態の追跡"
 
@@ -3651,51 +3802,51 @@ msgstr ""
 "印刷データをプリンタまたはプリンタ・サーバに送信した後に、status-changed シグ"
 "ナルを送信し続ける場合は TRUE です"
 
-#: gtk/gtkprintoperation.c:878
+#: gtk/gtkprintoperation.c:884
 msgid "Default Page Setup"
 msgstr "デフォルトのページ設定です"
 
-#: gtk/gtkprintoperation.c:879
+#: gtk/gtkprintoperation.c:885
 msgid "The GtkPageSetup used by default"
 msgstr "デフォルトで使用する GtkPageSetup オブジェクトです"
 
-#: gtk/gtkprintoperation.c:897 gtk/gtkprintunixdialog.c:264
+#: gtk/gtkprintoperation.c:903 gtk/gtkprintunixdialog.c:264
 msgid "Print Settings"
 msgstr "印刷の設定"
 
-#: gtk/gtkprintoperation.c:898 gtk/gtkprintunixdialog.c:265
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:265
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "ダイアログを初期化する際に使用する GtkPrintSettings オブジェクトです"
 
-#: gtk/gtkprintoperation.c:916
+#: gtk/gtkprintoperation.c:922
 msgid "Job Name"
 msgstr "ジョブの名前"
 
-#: gtk/gtkprintoperation.c:917
+#: gtk/gtkprintoperation.c:923
 msgid "A string used for identifying the print job."
 msgstr "印刷ジョブを識別する際に使用する文字列です"
 
-#: gtk/gtkprintoperation.c:941
+#: gtk/gtkprintoperation.c:947
 msgid "Number of Pages"
 msgstr "ページ数"
 
-#: gtk/gtkprintoperation.c:942
+#: gtk/gtkprintoperation.c:948
 msgid "The number of pages in the document."
 msgstr "ドキュメントのページ数です"
 
-#: gtk/gtkprintoperation.c:963 gtk/gtkprintunixdialog.c:254
+#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:254
 msgid "Current Page"
 msgstr "現在のページ"
 
-#: gtk/gtkprintoperation.c:964 gtk/gtkprintunixdialog.c:255
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:255
 msgid "The current page in the document"
 msgstr "現在のページ"
 
-#: gtk/gtkprintoperation.c:985
+#: gtk/gtkprintoperation.c:991
 msgid "Use full page"
 msgstr "ページ全体の使用"
 
-#: gtk/gtkprintoperation.c:986
+#: gtk/gtkprintoperation.c:992
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -3703,7 +3854,7 @@ msgstr ""
 "コンテキストの原点を画像として表示した領域の隅ではなく実際のページの隅にする"
 "場合は TRUE です"
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1013
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3711,55 +3862,55 @@ msgstr ""
 "印刷するデータをプリンタまたはプリンタ・サーバに送信した後に、その印刷ジョブ"
 "の状態を報告し続ける場合は TRUE です"
 
-#: gtk/gtkprintoperation.c:1024
+#: gtk/gtkprintoperation.c:1030
 msgid "Unit"
 msgstr "単位"
 
-#: gtk/gtkprintoperation.c:1025
+#: gtk/gtkprintoperation.c:1031
 msgid "The unit in which distances can be measured in the context"
 msgstr "コンテキスト内の長さを測定する際に使用する単位です"
 
-#: gtk/gtkprintoperation.c:1042
+#: gtk/gtkprintoperation.c:1048
 msgid "Show Dialog"
 msgstr "ダイアログの表示"
 
-#: gtk/gtkprintoperation.c:1043
+#: gtk/gtkprintoperation.c:1049
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "印刷中にプログレス・ダイアログを表示する場合は TRUE です"
 
-#: gtk/gtkprintoperation.c:1066
+#: gtk/gtkprintoperation.c:1072
 msgid "Allow Async"
 msgstr "非同期の実行の許可"
 
-#: gtk/gtkprintoperation.c:1067
+#: gtk/gtkprintoperation.c:1073
 msgid "TRUE if print process may run asynchronous."
 msgstr "印刷プロセスを非同期に実行する場合は TRUE です"
 
-#: gtk/gtkprintoperation.c:1090 gtk/gtkprintoperation.c:1091
+#: gtk/gtkprintoperation.c:1096 gtk/gtkprintoperation.c:1097
 msgid "Export filename"
 msgstr "ファイル名のエキスポート"
 
-#: gtk/gtkprintoperation.c:1105
+#: gtk/gtkprintoperation.c:1111
 msgid "Status"
 msgstr "状態"
 
-#: gtk/gtkprintoperation.c:1106
+#: gtk/gtkprintoperation.c:1112
 msgid "The status of the print operation"
 msgstr "印刷操作の状態"
 
-#: gtk/gtkprintoperation.c:1126
+#: gtk/gtkprintoperation.c:1132
 msgid "Status String"
 msgstr "状態を表す文字列"
 
-#: gtk/gtkprintoperation.c:1127
+#: gtk/gtkprintoperation.c:1133
 msgid "A human-readable description of the status"
 msgstr "プリンタを状態を表す説明です"
 
-#: gtk/gtkprintoperation.c:1145
+#: gtk/gtkprintoperation.c:1151
 msgid "Custom tab label"
 msgstr "カスタム・タブのラベル"
 
-#: gtk/gtkprintoperation.c:1146
+#: gtk/gtkprintoperation.c:1152
 msgid "Label for the tab containing custom widgets."
 msgstr "カスタム・ウィジェットに含まれるタブのラベルです"
 
@@ -3797,67 +3948,67 @@ msgstr "文字列の表示"
 msgid "Whether the progress is shown as text."
 msgstr "進捗状況を文字列で表示するかどうかです"
 
-#: gtk/gtkprogressbar.c:123
+#: gtk/gtkprogressbar.c:117
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "プログレス・バーに接続する GtkAdjustment (破棄)"
 
-#: gtk/gtkprogressbar.c:139
+#: gtk/gtkprogressbar.c:133
 msgid "Bar style"
 msgstr "バーのスタイル"
 
-#: gtk/gtkprogressbar.c:140
+#: gtk/gtkprogressbar.c:134
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
 msgstr "百分率 (%) モードにおけるバーの外観 (破棄)"
 
-#: gtk/gtkprogressbar.c:148
+#: gtk/gtkprogressbar.c:142
 msgid "Activity Step"
 msgstr "動作ステップ"
 
-#: gtk/gtkprogressbar.c:149
+#: gtk/gtkprogressbar.c:143
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr "動作モードで繰り返し使用する増分値 (破棄)"
 
-#: gtk/gtkprogressbar.c:156
+#: gtk/gtkprogressbar.c:150
 msgid "Activity Blocks"
 msgstr "動作ブロック数"
 
-#: gtk/gtkprogressbar.c:157
+#: gtk/gtkprogressbar.c:151
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
 msgstr "動作モードでプログレス・バーの領域に一致するブロックの数 (破棄)"
 
-#: gtk/gtkprogressbar.c:164
+#: gtk/gtkprogressbar.c:158
 msgid "Discrete Blocks"
 msgstr "減少時のブロック数"
 
-#: gtk/gtkprogressbar.c:165
+#: gtk/gtkprogressbar.c:159
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
 msgstr "プログレス・バーで減っていくブロックの数 (減少モードで表示される)"
 
-#: gtk/gtkprogressbar.c:172
+#: gtk/gtkprogressbar.c:166
 msgid "Fraction"
 msgstr "端数"
 
-#: gtk/gtkprogressbar.c:173
+#: gtk/gtkprogressbar.c:167
 msgid "The fraction of total work that has been completed"
 msgstr "完了した合計処理の端数"
 
-#: gtk/gtkprogressbar.c:180
+#: gtk/gtkprogressbar.c:174
 msgid "Pulse Step"
 msgstr "パルス・ステップ"
 
-#: gtk/gtkprogressbar.c:181
+#: gtk/gtkprogressbar.c:175
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr "パルスが発行されたらブロックを伸縮して移動するための進捗の合計の端数"
 
-#: gtk/gtkprogressbar.c:189
+#: gtk/gtkprogressbar.c:183
 msgid "Text to be displayed in the progress bar"
 msgstr "プログレス・バーに表示する文字列"
 
-#: gtk/gtkprogressbar.c:211
+#: gtk/gtkprogressbar.c:205
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
@@ -3865,11 +4016,11 @@ msgstr ""
 "プログレス・バーで文字列を全て表示しきれない場合に文字列を省略記号で置き換え"
 "る位置です"
 
-#: gtk/gtkprogressbar.c:218
+#: gtk/gtkprogressbar.c:212
 msgid "XSpacing"
 msgstr "余白"
 
-#: gtk/gtkprogressbar.c:219
+#: gtk/gtkprogressbar.c:213
 msgid "Extra spacing applied to the width of a progress bar."
 msgstr "プログレス・バーの幅に付加する余白の大きさです"
 
@@ -4220,24 +4371,29 @@ msgstr "値の間隔"
 msgid "Space between value text and the slider/trough area"
 msgstr "値を示すテキストとスライダ/トロフ領域との間隔"
 
-#: gtk/gtkscalebutton.c:182
+#: gtk/gtkscalebutton.c:192
+#, fuzzy
+msgid "The orientation of the scale"
+msgstr "トレイの向き"
+
+#: gtk/gtkscalebutton.c:201
 msgid "The value of the scale"
 msgstr "スケールの値です"
 
-#: gtk/gtkscalebutton.c:192
+#: gtk/gtkscalebutton.c:211
 msgid "The icon size"
 msgstr "アイコンの大きさです"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:220
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "スケール・ボタンの現在値を格納する GtkAdjustment です"
 
-#: gtk/gtkscalebutton.c:229
+#: gtk/gtkscalebutton.c:248
 msgid "Icons"
 msgstr "アイコン"
 
-#: gtk/gtkscalebutton.c:230
+#: gtk/gtkscalebutton.c:249
 msgid "List of icon names"
 msgstr "アイコン名の並び"
 
@@ -4267,11 +4423,11 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "スクロールバーと反対位置の終端に二番目の前方矢印ボタンを表示する"
 
-#: gtk/gtkscrolledwindow.c:220 gtk/gtktext.c:540 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:220 gtk/gtktext.c:545 gtk/gtktreeview.c:578
 msgid "Horizontal Adjustment"
 msgstr "水平方向の調整"
 
-#: gtk/gtkscrolledwindow.c:227 gtk/gtktext.c:548 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:227 gtk/gtktext.c:553 gtk/gtktreeview.c:586
 msgid "Vertical Adjustment"
 msgstr "垂直方向の調整"
 
@@ -4361,22 +4517,22 @@ msgstr "描画"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "セパレータを描画するか、空白にするかを指定します"
 
-#: gtk/gtksettings.c:211
+#: gtk/gtksettings.c:215
 msgid "Double Click Time"
 msgstr "ダブル・クリックの時間"
 
-#: gtk/gtksettings.c:212
+#: gtk/gtksettings.c:216
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr ""
 "ダブル・クリックとして認識するために二回クリックする間の最大時間 (ミリ秒)"
 
-#: gtk/gtksettings.c:219
+#: gtk/gtksettings.c:223
 msgid "Double Click Distance"
 msgstr "ダブル・クリックの距離"
 
-#: gtk/gtksettings.c:220
+#: gtk/gtksettings.c:224
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -4384,35 +4540,35 @@ msgstr ""
 "ダブル・クリックとして認識するために二回クリックする間の最大距離 (ピクセル単"
 "位) です"
 
-#: gtk/gtksettings.c:236
+#: gtk/gtksettings.c:240
 msgid "Cursor Blink"
 msgstr "カーソルの点滅"
 
-#: gtk/gtksettings.c:237
+#: gtk/gtksettings.c:241
 msgid "Whether the cursor should blink"
 msgstr "カーソルを点滅させるかどうかです"
 
-#: gtk/gtksettings.c:244
+#: gtk/gtksettings.c:248
 msgid "Cursor Blink Time"
 msgstr "カーソルの点滅間隔"
 
-#: gtk/gtksettings.c:245
+#: gtk/gtksettings.c:249
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "カーソルが点滅する際の周期 (ミリ秒) です"
 
-#: gtk/gtksettings.c:264
+#: gtk/gtksettings.c:268
 msgid "Cursor Blink Timeout"
 msgstr "カーソル点滅のタイムアウト"
 
-#: gtk/gtksettings.c:265
+#: gtk/gtksettings.c:269
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "カーソルの点滅を停止する際の周期 (ミリ秒) です"
 
-#: gtk/gtksettings.c:272
+#: gtk/gtksettings.c:276
 msgid "Split Cursor"
 msgstr "カーソルの分離"
 
-#: gtk/gtksettings.c:273
+#: gtk/gtksettings.c:277
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -4420,153 +4576,153 @@ msgstr ""
 "左→右方向と右→左方向へ記述する混成テキストに対して二つのカーソルを表示するか"
 "どかです"
 
-#: gtk/gtksettings.c:280
+#: gtk/gtksettings.c:284
 msgid "Theme Name"
 msgstr "テーマ名"
 
-#: gtk/gtksettings.c:281
+#: gtk/gtksettings.c:285
 msgid "Name of theme RC file to load"
 msgstr "読み込むテーマのリソース・ファイルの名前です"
 
-#: gtk/gtksettings.c:289
+#: gtk/gtksettings.c:293
 msgid "Icon Theme Name"
 msgstr "アイコン・テーマの名前"
 
-#: gtk/gtksettings.c:290
+#: gtk/gtksettings.c:294
 msgid "Name of icon theme to use"
 msgstr "使用するアイコン・テーマの名前です"
 
-#: gtk/gtksettings.c:298
+#: gtk/gtksettings.c:302
 msgid "Fallback Icon Theme Name"
 msgstr "以前のアイコン・テーマの名前"
 
-#: gtk/gtksettings.c:299
+#: gtk/gtksettings.c:303
 msgid "Name of a icon theme to fall back to"
 msgstr "変更する前のアイコン・テーマの名前です"
 
-#: gtk/gtksettings.c:307
+#: gtk/gtksettings.c:311
 msgid "Key Theme Name"
 msgstr "キーのテーマ名"
 
-#: gtk/gtksettings.c:308
+#: gtk/gtksettings.c:312
 msgid "Name of key theme RC file to load"
 msgstr "読み込むキー・テーマのリソース・ファイルの名前"
 
-#: gtk/gtksettings.c:316
+#: gtk/gtksettings.c:320
 msgid "Menu bar accelerator"
 msgstr "メニューバーのアクセラレータ"
 
-#: gtk/gtksettings.c:317
+#: gtk/gtksettings.c:321
 msgid "Keybinding to activate the menu bar"
 msgstr "メニューバーを有効にするキーバインディング"
 
-#: gtk/gtksettings.c:325
+#: gtk/gtksettings.c:329
 msgid "Drag threshold"
 msgstr "ドラッグ時のしきい値"
 
-#: gtk/gtksettings.c:326
+#: gtk/gtksettings.c:330
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "ドラッグを開始するまでのカーソル移動量 (ピクセル単位)"
 
-#: gtk/gtksettings.c:334
+#: gtk/gtksettings.c:338
 msgid "Font Name"
 msgstr "フォント名"
 
-#: gtk/gtksettings.c:335
+#: gtk/gtksettings.c:339
 msgid "Name of default font to use"
 msgstr "使用するデフォルトのフォント名"
 
-#: gtk/gtksettings.c:343
+#: gtk/gtksettings.c:347
 msgid "Icon Sizes"
 msgstr "アイコンのサイズ"
 
-#: gtk/gtksettings.c:344
+#: gtk/gtksettings.c:348
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "アイコンの大きさを示す並び (gtk-menu=16,16;gtk-button=20,20...)"
 
-#: gtk/gtksettings.c:352
+#: gtk/gtksettings.c:356
 msgid "GTK Modules"
 msgstr "GTK のモジュール"
 
-#: gtk/gtksettings.c:353
+#: gtk/gtksettings.c:357
 msgid "List of currently active GTK modules"
 msgstr "現在、利用可能な GTK モジュールの一覧です"
 
-#: gtk/gtksettings.c:362
+#: gtk/gtksettings.c:366
 msgid "Xft Antialias"
 msgstr "Xft アンチエイリアス"
 
-#: gtk/gtksettings.c:363
+#: gtk/gtksettings.c:367
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Xft フォントをアンチエイリアス表示するかどうかです; 0=しない、1=する、-1=デ"
 "フォルト"
 
-#: gtk/gtksettings.c:372
+#: gtk/gtksettings.c:376
 msgid "Xft Hinting"
 msgstr "Xft ヒンティング"
 
-#: gtk/gtksettings.c:373
+#: gtk/gtksettings.c:377
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Xft フォントをヒンティングするかどうかです; 0=しない、1=する、-1=デフォルト"
 
-#: gtk/gtksettings.c:382
+#: gtk/gtksettings.c:386
 msgid "Xft Hint Style"
 msgstr "Xft ヒント・スタイル"
 
-#: gtk/gtksettings.c:383
+#: gtk/gtksettings.c:387
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr "使用するヒンティングの角度です; なし、細く、中ぐらい、完全"
 
-#: gtk/gtksettings.c:392
+#: gtk/gtksettings.c:396
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: gtk/gtksettings.c:393
+#: gtk/gtksettings.c:397
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "サブピクセルのアンチエイリアス化の種類です; なし、rgb、bgr、vrgb、vbgr"
 
-#: gtk/gtksettings.c:402
+#: gtk/gtksettings.c:406
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: gtk/gtksettings.c:403
+#: gtk/gtksettings.c:407
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Xft の解像度 (1024 x ドット/インチ) です; -1=デフォルト値"
 
-#: gtk/gtksettings.c:412
+#: gtk/gtksettings.c:416
 msgid "Cursor theme name"
 msgstr "カーソル・テーマの名前"
 
-#: gtk/gtksettings.c:413
+#: gtk/gtksettings.c:417
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr ""
 "使用するカーソル・テーマの名前、またはデフォルトのテーマを使う場合は NULL で"
 "す"
 
-#: gtk/gtksettings.c:421
+#: gtk/gtksettings.c:425
 msgid "Cursor theme size"
 msgstr "カーソルのサイズ"
 
-#: gtk/gtksettings.c:422
+#: gtk/gtksettings.c:426
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "使用するカーソルの大きさで、デフォルトの場合は 0です"
 
-#: gtk/gtksettings.c:432
+#: gtk/gtksettings.c:436
 msgid "Alternative button order"
 msgstr "ボタンの並び"
 
-#: gtk/gtksettings.c:433
+#: gtk/gtksettings.c:437
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "ダイアログにあるボタンの並びを別のものにするか"
 
-#: gtk/gtksettings.c:450
+#: gtk/gtksettings.c:454
 msgid "Alternative sort indicator direction"
 msgstr "並び替えを表す方向"
 
-#: gtk/gtksettings.c:451
+#: gtk/gtksettings.c:455
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
@@ -4574,11 +4730,11 @@ msgstr ""
 "リストやツリーで並び替えを行う向きをデフォルトとは逆向きにするかどうかです "
 "(down は昇順を表します)"
 
-#: gtk/gtksettings.c:459
+#: gtk/gtksettings.c:463
 msgid "Show the 'Input Methods' menu"
 msgstr "'入力メソッド' メニューの表示"
 
-#: gtk/gtksettings.c:460
+#: gtk/gtksettings.c:464
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
@@ -4586,11 +4742,11 @@ msgstr ""
 "エントリやテキスト・ビューで入力メソッドを変更するためのコンテキスト・メ"
 "ニューを表示するかどうかです"
 
-#: gtk/gtksettings.c:468
+#: gtk/gtksettings.c:472
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "'Unicode 制御文字の挿入' メニューの表示"
 
-#: gtk/gtksettings.c:469
+#: gtk/gtksettings.c:473
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
@@ -4598,188 +4754,227 @@ msgstr ""
 "エントリやテキスト・ビューで制御文字を挿入するためのコンテキスト・メニューを"
 "表示するかどうかです"
 
-#: gtk/gtksettings.c:477
+#: gtk/gtksettings.c:481
 msgid "Start timeout"
 msgstr "開始のタイムアウト"
 
-#: gtk/gtksettings.c:478
+#: gtk/gtksettings.c:482
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "ボタンをクリックしてからタイムアウトを計算する際の開始値"
 
-#: gtk/gtksettings.c:487
+#: gtk/gtksettings.c:491
 msgid "Repeat timeout"
 msgstr "繰り返しのタイムアウト"
 
-#: gtk/gtksettings.c:488
+#: gtk/gtksettings.c:492
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "ボタンをクリックしてからタイムアウトを計算する際の繰り返しの値"
 
-#: gtk/gtksettings.c:497
+#: gtk/gtksettings.c:501
 msgid "Expand timeout"
 msgstr "展張のタイムアウト"
 
-#: gtk/gtksettings.c:498
+#: gtk/gtksettings.c:502
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr "ボタンをクリックしてからタイムアウトを計算する際の展張るの値"
 
-#: gtk/gtksettings.c:533
+#: gtk/gtksettings.c:537
 msgid "Color scheme"
 msgstr "色のスキーム"
 
-#: gtk/gtksettings.c:534
+#: gtk/gtksettings.c:538
 msgid "A palette of named colors for use in themes"
 msgstr "テーマで使用する色名のパレットです"
 
-#: gtk/gtksettings.c:543
+#: gtk/gtksettings.c:547
 msgid "Enable Animations"
 msgstr "アニメーション"
 
-#: gtk/gtksettings.c:544
+#: gtk/gtksettings.c:548
 msgid "Whether to enable toolkit-wide animations."
 msgstr "ツールキット規模のアニメーションを有効にするかどうかです"
 
-#: gtk/gtksettings.c:562
+#: gtk/gtksettings.c:566
 msgid "Enable Touchscreen Mode"
 msgstr "タッチスクリーン・モード"
 
-#: gtk/gtksettings.c:563
+#: gtk/gtksettings.c:567
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr "TRUE にすると、この画面上には移動通知のイベントが配送されなくなります"
 
-#: gtk/gtksettings.c:580
+#: gtk/gtksettings.c:584
 msgid "Tooltip timeout"
 msgstr "ツールチップのタイムアウト"
 
-#: gtk/gtksettings.c:581
+#: gtk/gtksettings.c:585
 msgid "Timeout before tooltip is shown"
 msgstr "ツールチップを表示するまでの遅延時間です"
 
-#: gtk/gtksettings.c:606
+#: gtk/gtksettings.c:610
 msgid "Tooltip browse timeout"
 msgstr "ツールチップのタイムアウト (参照モード有効)"
 
-#: gtk/gtksettings.c:607
+#: gtk/gtksettings.c:611
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr ""
 "参照モードが有効になっている時にツールチップを表示するまでの遅延時間です"
 
-#: gtk/gtksettings.c:628
+#: gtk/gtksettings.c:632
 msgid "Tooltip browse mode timeout"
 msgstr "ツールチップのタイムアウト (参照モード無効)"
 
-#: gtk/gtksettings.c:629
+#: gtk/gtksettings.c:633
 msgid "Timeout after which browse mode is disabled"
 msgstr ""
 "参照モードが無効になっている時にツールチップを表示するまでの遅延時間です"
 
-#: gtk/gtksettings.c:648
+#: gtk/gtksettings.c:652
 msgid "Keynav Cursor Only"
 msgstr "カーソル・キーのみ"
 
-#: gtk/gtksettings.c:649
+#: gtk/gtksettings.c:653
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr "カーソル・キーでのみフォーカス移動を可能にするかどうかです"
 
-#: gtk/gtksettings.c:666
+#: gtk/gtksettings.c:670
 msgid "Keynav Wrap Around"
 msgstr "ウィジェットの強調表示"
 
-#: gtk/gtksettings.c:667
+#: gtk/gtksettings.c:671
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "キーボードでフォーカスを与えたウィジェットを強調表示するかどうかです"
 
-#: gtk/gtksettings.c:687
+#: gtk/gtksettings.c:691
 msgid "Error Bell"
 msgstr "ビープ音"
 
-#: gtk/gtksettings.c:688
+#: gtk/gtksettings.c:692
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
 "キーボードによるフォーカス移動やエラーの類をビープ音で知らせるかどうかです"
 
-#: gtk/gtksettings.c:705
+#: gtk/gtksettings.c:709
 msgid "Color Hash"
 msgstr "色のハッシュ"
 
-#: gtk/gtksettings.c:706
+#: gtk/gtksettings.c:710
 msgid "A hash table representation of the color scheme."
 msgstr "色のスキームを表現するハッシュ・テーブルです"
 
-#: gtk/gtksettings.c:714
+#: gtk/gtksettings.c:718
 msgid "Default file chooser backend"
 msgstr "デフォルトのファイル選択バックエンド"
 
-#: gtk/gtksettings.c:715
+#: gtk/gtksettings.c:719
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "デフォルトで使用する GtkFileChooser バックエンドの名前です"
 
-#: gtk/gtksettings.c:732
+#: gtk/gtksettings.c:736
 msgid "Default print backend"
 msgstr "デフォルトの印刷バックエンド"
 
-#: gtk/gtksettings.c:733
+#: gtk/gtksettings.c:737
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "デフォルトで使用する GtkPrintBackend オブジェクトのリストです"
 
-#: gtk/gtksettings.c:756
+#: gtk/gtksettings.c:760
 msgid "Default command to run when displaying a print preview"
 msgstr "印刷プレビューを表示する際に使用するデフォルトのコマンドです"
 
-#: gtk/gtksettings.c:757
+#: gtk/gtksettings.c:761
 msgid "Command to run when displaying a print preview"
 msgstr "印刷プレビューで使用するコマンド"
 
-#: gtk/gtksettings.c:773
+#: gtk/gtksettings.c:777
 msgid "Enable Mnemonics"
 msgstr "ニーモニック"
 
-#: gtk/gtksettings.c:774
+#: gtk/gtksettings.c:778
 msgid "Whether labels should have mnemonics"
 msgstr "ラベルにニーモニックを持たせるかどうかです"
 
-#: gtk/gtksettings.c:790
+#: gtk/gtksettings.c:794
 msgid "Enable Accelerators"
 msgstr "アクセラレータ"
 
-#: gtk/gtksettings.c:791
+#: gtk/gtksettings.c:795
 msgid "Whether menu items should have accelerators"
 msgstr "メニュー項目にアクセラレータを持たせるかどうかです"
 
-#: gtk/gtksettings.c:808
+#: gtk/gtksettings.c:812
 msgid "Recent Files Limit"
 msgstr "最近開いたファイルの制限"
 
-#: gtk/gtksettings.c:809
+#: gtk/gtksettings.c:813
 msgid "Number of recently used files"
 msgstr "最近開いたファイルの一覧に表示する数"
 
-#: gtk/gtksettings.c:823
+#: gtk/gtksettings.c:827
 #, fuzzy
 msgid "Default IM module"
 msgstr "デフォルトの幅"
 
-#: gtk/gtksettings.c:824
+#: gtk/gtksettings.c:828
 #, fuzzy
 msgid "Which IM module should be used by default"
 msgstr "パレットを使用するかどうかです"
 
-#: gtk/gtksettings.c:842
+#: gtk/gtksettings.c:846
 #, fuzzy
 msgid "Recent Files Max Age"
 msgstr "最近開いたファイルの制限"
 
-#: gtk/gtksettings.c:843
+#: gtk/gtksettings.c:847
 #, fuzzy
 msgid "Maximum age of recently used files, in days"
 msgstr "最近開いたファイルの一覧に表示する数"
 
-#: gtk/gtksettings.c:852
+#: gtk/gtksettings.c:856
 msgid "Fontconfig configuration timestamp"
 msgstr ""
 
-#: gtk/gtksettings.c:853
+#: gtk/gtksettings.c:857
 msgid "Timestamp of current fontconfig configuration"
 msgstr ""
+
+#: gtk/gtksettings.c:879
+#, fuzzy
+msgid "Sound Theme Name"
+msgstr "アイコン・テーマの名前"
+
+#: gtk/gtksettings.c:880
+#, fuzzy
+msgid "XDG sound theme name"
+msgstr "カーソル・テーマの名前"
+
+#: gtk/gtksettings.c:901
+msgid "Aureal Input Feedback"
+msgstr ""
+
+#: gtk/gtksettings.c:902
+#, fuzzy
+msgid "Whether to play event sounds as feedback to user input"
+msgstr "ウィジェットは入力に応答するかどうかです"
+
+#: gtk/gtksettings.c:923
+#, fuzzy
+msgid "Enable Event Sounds"
+msgstr "アニメーション"
+
+#: gtk/gtksettings.c:924
+#, fuzzy
+msgid "Whether to play any event sounds at all"
+msgstr "\"矛盾した\" 状態を表示するかどうかです"
+
+#: gtk/gtksettings.c:939
+#, fuzzy
+msgid "Enable Tooltips"
+msgstr "ツールチップ"
+
+#: gtk/gtksettings.c:940
+#, fuzzy
+msgid "Whether tooltips should be shown on widgets"
+msgstr "タブを表示するかどうかです"
 
 #: gtk/gtksizegroup.c:293
 msgid "Mode"
@@ -4996,27 +5191,27 @@ msgid ""
 msgstr ""
 "子ウィジェットとその隣接する上下との間に置く追加スペース (ピクセル単位)"
 
-#: gtk/gtktext.c:541
+#: gtk/gtktext.c:546
 msgid "Horizontal adjustment for the text widget"
 msgstr "テキスト・ウィジェットの水平方向のアジャストメント"
 
-#: gtk/gtktext.c:549
+#: gtk/gtktext.c:554
 msgid "Vertical adjustment for the text widget"
 msgstr "テキスト・ウィジェットの垂直方向のアジャストメント"
 
-#: gtk/gtktext.c:556
+#: gtk/gtktext.c:561
 msgid "Line Wrap"
 msgstr "行ラップ"
 
-#: gtk/gtktext.c:557
+#: gtk/gtktext.c:562
 msgid "Whether lines are wrapped at widget edges"
 msgstr "ウィジェットの端で行をラッピングするかどうかです"
 
-#: gtk/gtktext.c:564
+#: gtk/gtktext.c:569
 msgid "Word Wrap"
 msgstr "単語ラップ"
 
-#: gtk/gtktext.c:565
+#: gtk/gtktext.c:570
 msgid "Whether words are wrapped at widget edges"
 msgstr "ウィジェットの端で単語をラッピングするかどうかです"
 
@@ -5432,10 +5627,6 @@ msgstr "バッファ"
 msgid "The buffer which is displayed"
 msgstr "表示されるバッファ"
 
-#: gtk/gtktextview.c:650
-msgid "Overwrite mode"
-msgstr "上書きモード"
-
 #: gtk/gtktextview.c:651
 msgid "Whether entered text overwrites existing contents"
 msgstr "入力されたテキストが既にある内容を上書きするかどうかです"
@@ -5643,7 +5834,7 @@ msgstr "アイコンの間隔"
 msgid "Spacing in pixels between the icon and label"
 msgstr "アイコンとラベルの間に挿入する間隔 (ピクセル単位) です"
 
-#: gtk/gtktoolitem.c:168
+#: gtk/gtktoolitem.c:171
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -5983,15 +6174,15 @@ msgstr "ソートの順番"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "ソート表示器で描画するソートする方向"
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:222
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "ティアオフ・メニュー項目をメニューに追加するかどうかです"
 
-#: gtk/gtkuimanager.c:228
+#: gtk/gtkuimanager.c:229
 msgid "Merged UI definition"
 msgstr "統合された UI 定義"
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:230
 msgid "An XML string describing the merged UI"
 msgstr "統合された UI を記述する XML 文字列"
 
@@ -6011,221 +6202,230 @@ msgstr "このビューポートの垂直方向の位置を決定する GtkAdjus
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "表示するビューポートの周囲に影付きのボックスを配置するかどうかです"
 
-#: gtk/gtkwidget.c:480
+#: gtk/gtkwidget.c:481
 msgid "Widget name"
 msgstr "ウィジェット名"
 
-#: gtk/gtkwidget.c:481
+#: gtk/gtkwidget.c:482
 msgid "The name of the widget"
 msgstr "ウィジェットの名前を指定します"
 
-#: gtk/gtkwidget.c:487
+#: gtk/gtkwidget.c:488
 msgid "Parent widget"
 msgstr "親ウィジェット"
 
-#: gtk/gtkwidget.c:488
+#: gtk/gtkwidget.c:489
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "このウィジェットの親です (コンテナ・ウィジェットにして下さい)"
 
-#: gtk/gtkwidget.c:495
+#: gtk/gtkwidget.c:496
 msgid "Width request"
 msgstr "要求する幅"
 
-#: gtk/gtkwidget.c:496
+#: gtk/gtkwidget.c:497
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr "ウィジェットの要求する幅に上書きするか、通常の要求を使用する場合は -1"
 
-#: gtk/gtkwidget.c:504
+#: gtk/gtkwidget.c:505
 msgid "Height request"
 msgstr "要求する高さ"
 
-#: gtk/gtkwidget.c:505
+#: gtk/gtkwidget.c:506
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr ""
 "ウィジェットの要求する高さに上書きするか、通常の要求を使用する場合は -1"
 
-#: gtk/gtkwidget.c:514
+#: gtk/gtkwidget.c:515
 msgid "Whether the widget is visible"
 msgstr "ウィジェットが表示可能かどうかです"
 
-#: gtk/gtkwidget.c:521
+#: gtk/gtkwidget.c:522
 msgid "Whether the widget responds to input"
 msgstr "ウィジェットは入力に応答するかどうかです"
 
-#: gtk/gtkwidget.c:527
+#: gtk/gtkwidget.c:528
 msgid "Application paintable"
 msgstr "アプリケーション表示可否"
 
-#: gtk/gtkwidget.c:528
+#: gtk/gtkwidget.c:529
 msgid "Whether the application will paint directly on the widget"
 msgstr "アプリケーションはウィジェット状で直接描画するかどうかです"
 
-#: gtk/gtkwidget.c:534
+#: gtk/gtkwidget.c:535
 msgid "Can focus"
 msgstr "フォーカス可否"
 
-#: gtk/gtkwidget.c:535
+#: gtk/gtkwidget.c:536
 msgid "Whether the widget can accept the input focus"
 msgstr "ウィジェットは入力フォーカスを受け付けるかどうかです"
 
-#: gtk/gtkwidget.c:541
+#: gtk/gtkwidget.c:542
 msgid "Has focus"
 msgstr "フォーカスあり"
 
-#: gtk/gtkwidget.c:542
+#: gtk/gtkwidget.c:543
 msgid "Whether the widget has the input focus"
 msgstr "ウィジェットは入力のフォーカスをもてるかどうかです"
 
-#: gtk/gtkwidget.c:548
+#: gtk/gtkwidget.c:549
 msgid "Is focus"
 msgstr "フォーカス化あり"
 
-#: gtk/gtkwidget.c:549
+#: gtk/gtkwidget.c:550
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr ""
 "ウィジェットがトップレベルの内側でフォーカス・ウィジェットであるかどうかです"
 
-#: gtk/gtkwidget.c:555
+#: gtk/gtkwidget.c:556
 msgid "Can default"
 msgstr "デフォルト可否"
 
-#: gtk/gtkwidget.c:556
+#: gtk/gtkwidget.c:557
 msgid "Whether the widget can be the default widget"
 msgstr "ウィジェットがデフォルトのウィジェットになれるかどうかです"
 
-#: gtk/gtkwidget.c:562
+#: gtk/gtkwidget.c:563
 msgid "Has default"
 msgstr "デフォルトあり"
 
-#: gtk/gtkwidget.c:563
+#: gtk/gtkwidget.c:564
 msgid "Whether the widget is the default widget"
 msgstr "ウィジェットはデフォルトのウィジェットかどうかです"
 
-#: gtk/gtkwidget.c:569
+#: gtk/gtkwidget.c:570
 msgid "Receives default"
 msgstr "デフォルトの受信"
 
-#: gtk/gtkwidget.c:570
+#: gtk/gtkwidget.c:571
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "TRUE にすると、ウィジェットにフォーカスが当たるとデフォルトの動作を受信する"
 
-#: gtk/gtkwidget.c:576
+#: gtk/gtkwidget.c:577
 msgid "Composite child"
 msgstr "コンポジットの子ウィジェット"
 
-#: gtk/gtkwidget.c:577
+#: gtk/gtkwidget.c:578
 msgid "Whether the widget is part of a composite widget"
 msgstr "ウィジェットがコンポジット・ウィジェットの一部であるかどうかです"
 
-#: gtk/gtkwidget.c:583
+#: gtk/gtkwidget.c:584
 msgid "Style"
 msgstr "スタイル"
 
-#: gtk/gtkwidget.c:584
+#: gtk/gtkwidget.c:585
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "ウィジェットのスタイルで、どのように見えるかという情報 (色など) を含む"
 
-#: gtk/gtkwidget.c:590
+#: gtk/gtkwidget.c:591
 msgid "Events"
 msgstr "イベント"
 
-#: gtk/gtkwidget.c:591
+#: gtk/gtkwidget.c:592
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "このウィジェットがどの種類の GdkEvent を受信するかを決定するイベント・マスク"
 "です"
 
-#: gtk/gtkwidget.c:598
+#: gtk/gtkwidget.c:599
 msgid "Extension events"
 msgstr "拡張イベント"
 
-#: gtk/gtkwidget.c:599
+#: gtk/gtkwidget.c:600
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "このウィジェットがどの種類の拡張イベントを受信するかを決定するマスクです"
 
-#: gtk/gtkwidget.c:606
+#: gtk/gtkwidget.c:607
 msgid "No show all"
 msgstr "何も表示しない"
 
-#: gtk/gtkwidget.c:607
+#: gtk/gtkwidget.c:608
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "gtk_widget_show_all() がこのウィジェットに影響すべきでないかどうかです"
 
-#: gtk/gtkwidget.c:629
+#: gtk/gtkwidget.c:630
 msgid "Has tooltip"
 msgstr "ツールチップ有り"
 
-#: gtk/gtkwidget.c:630
+#: gtk/gtkwidget.c:631
 msgid "Whether this widget has a tooltip"
 msgstr "このウィジェットでツールチップを表示するかどうかです"
 
-#: gtk/gtkwidget.c:650
+#: gtk/gtkwidget.c:651
 msgid "Tooltip Text"
 msgstr "ツールチップの内容"
 
-#: gtk/gtkwidget.c:651 gtk/gtkwidget.c:672
+#: gtk/gtkwidget.c:652 gtk/gtkwidget.c:673
 msgid "The contents of the tooltip for this widget"
 msgstr "このウィジェットのツールチップとして表示する内容です"
 
-#: gtk/gtkwidget.c:671
+#: gtk/gtkwidget.c:672
 msgid "Tooltip markup"
 msgstr "ツールチップのマークアップ"
 
-#: gtk/gtkwidget.c:2189
+#: gtk/gtkwidget.c:687
+#, fuzzy
+msgid "Window"
+msgstr "ウィンドウの種別"
+
+#: gtk/gtkwidget.c:688
+msgid "The widget's window if it is realized"
+msgstr ""
+
+#: gtk/gtkwidget.c:2206
 msgid "Interior Focus"
 msgstr "インテリア・フォーカス"
 
-#: gtk/gtkwidget.c:2190
+#: gtk/gtkwidget.c:2207
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr ""
 "フォーカスが当たったことを示す矩形の内側のウィジェットを描画するかどうかです"
 
-#: gtk/gtkwidget.c:2196
+#: gtk/gtkwidget.c:2213
 msgid "Focus linewidth"
 msgstr "フォーカス線の幅"
 
-#: gtk/gtkwidget.c:2197
+#: gtk/gtkwidget.c:2214
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "フォーカスが当たったことを示す表示線の幅 (ピクセル単位)"
 
-#: gtk/gtkwidget.c:2203
+#: gtk/gtkwidget.c:2220
 msgid "Focus line dash pattern"
 msgstr "フォーカス線のダッシュ・パターン"
 
-#: gtk/gtkwidget.c:2204
+#: gtk/gtkwidget.c:2221
 msgid "Dash pattern used to draw the focus indicator"
 msgstr ""
 "フォーカスが当たったことを示す矩形の描画に使用するダッシュ (-) のパターン"
 
-#: gtk/gtkwidget.c:2209
+#: gtk/gtkwidget.c:2226
 msgid "Focus padding"
 msgstr "フォーカスのパディング"
 
-#: gtk/gtkwidget.c:2210
+#: gtk/gtkwidget.c:2227
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "フォーカスが当たった表示部と 'box' ウィジェット間の幅 (ピクセル単位)"
 
-#: gtk/gtkwidget.c:2215
+#: gtk/gtkwidget.c:2232
 msgid "Cursor color"
 msgstr "カーソルの色"
 
-#: gtk/gtkwidget.c:2216
+#: gtk/gtkwidget.c:2233
 msgid "Color with which to draw insertion cursor"
 msgstr "挿入カーソルを描画する色"
 
-#: gtk/gtkwidget.c:2221
+#: gtk/gtkwidget.c:2238
 msgid "Secondary cursor color"
 msgstr "二番目のカーソルの色"
 
-#: gtk/gtkwidget.c:2222
+#: gtk/gtkwidget.c:2239
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6233,78 +6433,78 @@ msgstr ""
 "右→左と左→右文字列トが混在しているに使用する二番目のリ挿入カーソルを描画すか"
 "どうかです"
 
-#: gtk/gtkwidget.c:2227
+#: gtk/gtkwidget.c:2244
 msgid "Cursor line aspect ratio"
 msgstr "カーソル行のアスペクト比"
 
-#: gtk/gtkwidget.c:2228
+#: gtk/gtkwidget.c:2245
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "挿入カーソルを描画する際に使用するアスペクト比です"
 
-#: gtk/gtkwidget.c:2242
+#: gtk/gtkwidget.c:2259
 msgid "Draw Border"
 msgstr "境界線の描画"
 
-#: gtk/gtkwidget.c:2243
+#: gtk/gtkwidget.c:2260
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "描画するウィジェットの外側に配置する領域の大きさです"
 
-#: gtk/gtkwidget.c:2256
+#: gtk/gtkwidget.c:2273
 msgid "Unvisited Link Color"
 msgstr "未訪問リンクの色"
 
-#: gtk/gtkwidget.c:2257
+#: gtk/gtkwidget.c:2274
 msgid "Color of unvisited links"
 msgstr "未だ訪問していないリンクの色です"
 
-#: gtk/gtkwidget.c:2270
+#: gtk/gtkwidget.c:2287
 msgid "Visited Link Color"
 msgstr "訪問したリンクの色"
 
-#: gtk/gtkwidget.c:2271
+#: gtk/gtkwidget.c:2288
 msgid "Color of visited links"
 msgstr "訪問したリンクの色です"
 
-#: gtk/gtkwidget.c:2285
+#: gtk/gtkwidget.c:2302
 msgid "Wide Separators"
 msgstr "幅の広いセパレータ"
 
-#: gtk/gtkwidget.c:2286
+#: gtk/gtkwidget.c:2303
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 "セパレータが設定可能な幅を持ち、単なる線ではなく矩形も描画できるかどうかです"
 
-#: gtk/gtkwidget.c:2300
+#: gtk/gtkwidget.c:2317
 msgid "Separator Width"
 msgstr "セパレータの幅"
 
-#: gtk/gtkwidget.c:2301
+#: gtk/gtkwidget.c:2318
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "wide-separators が TRUE の場合のセパレータの幅です"
 
-#: gtk/gtkwidget.c:2315
+#: gtk/gtkwidget.c:2332
 msgid "Separator Height"
 msgstr "セパレータの高さ"
 
-#: gtk/gtkwidget.c:2316
+#: gtk/gtkwidget.c:2333
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "\"wide-separators\" が TRUE の場合のセパレータの高さです"
 
-#: gtk/gtkwidget.c:2330
+#: gtk/gtkwidget.c:2347
 msgid "Horizontal Scroll Arrow Length"
 msgstr "水平スクロールバーの矢印の長さ"
 
-#: gtk/gtkwidget.c:2331
+#: gtk/gtkwidget.c:2348
 msgid "The length of horizontal scroll arrows"
 msgstr "水平スクロールバーに付ける矢印の長さです"
 
-#: gtk/gtkwidget.c:2345
+#: gtk/gtkwidget.c:2362
 msgid "Vertical Scroll Arrow Length"
 msgstr "垂直スクロールバーの矢印の長さ"
 
-#: gtk/gtkwidget.c:2346
+#: gtk/gtkwidget.c:2363
 msgid "The length of vertical scroll arrows"
 msgstr "垂直スクロールバーに付ける矢印の長さです"
 

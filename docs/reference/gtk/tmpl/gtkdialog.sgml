@@ -177,8 +177,6 @@ dividing #GtkHSeparator in the dialog. It is treated exactly the same
 as any other #GtkHButtonBox.
 </para>
 
-@vbox: 
-@action_area: 
 
 <!-- ##### SIGNAL GtkDialog::close ##### -->
 <para>

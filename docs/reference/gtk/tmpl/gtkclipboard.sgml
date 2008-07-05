@@ -342,6 +342,16 @@ will not be used again.
 @user_data: 
 
 
+<!-- ##### FUNCTION gtk_clipboard_request_uris ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@callback: 
+@user_data: 
+
+
 <!-- ##### FUNCTION gtk_clipboard_wait_for_contents ##### -->
 <para>
 
@@ -382,6 +392,15 @@ will not be used again.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_clipboard_wait_for_uris ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_clipboard_wait_is_text_available ##### -->
 <para>
 
@@ -407,6 +426,15 @@ will not be used again.
 
 @clipboard: 
 @buffer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clipboard_wait_is_uris_available ##### -->
+<para>
+
+</para>
+
+@clipboard: 
 @Returns: 
 
 

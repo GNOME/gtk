@@ -56,6 +56,11 @@ on all platforms supported by GTK+.
 
 </para>
 
+<!-- ##### ARG GtkPlug:socket-window ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_plug_construct ##### -->
 <para>
 </para>

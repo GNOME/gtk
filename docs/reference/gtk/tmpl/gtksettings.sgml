@@ -108,7 +108,22 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-enable-event-sounds ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-enable-input-feedback-sounds ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-enable-mnemonics ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-enable-tooltips ##### -->
 <para>
 
 </para>
@@ -244,6 +259,11 @@ Sharing settings between applications
 </para>
 
 <!-- ##### ARG GtkSettings:gtk-show-unicode-menu ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkSettings:gtk-sound-theme-name ##### -->
 <para>
 
 </para>

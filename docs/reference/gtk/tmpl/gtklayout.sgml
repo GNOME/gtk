@@ -35,7 +35,6 @@ area.
 
 </para>
 
-@bin_window: 
 
 <!-- ##### SIGNAL GtkLayout::set-scroll-adjustments ##### -->
 <para>

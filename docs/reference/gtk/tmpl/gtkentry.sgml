@@ -146,6 +146,11 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+<!-- ##### ARG GtkEntry:overwrite-mode ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:scroll-offset ##### -->
 <para>
 
@@ -162,6 +167,11 @@ The #GtkEntry-struct struct contains only private data.
 </para>
 
 <!-- ##### ARG GtkEntry:text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:text-length ##### -->
 <para>
 
 </para>

@@ -102,6 +102,11 @@ handlebox are detached from the main window.
          (this argument provides no extra information
           and is here only for backwards-compatibility)
 
+<!-- ##### ARG GtkHandleBox:child-detached ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkHandleBox:handle-position ##### -->
 <para>
 
