@@ -1,9 +1,9 @@
 Overview of Changes from GTK+ 2.13.3 to 2.13.4
 ==============================================
 
-* Merge the GSEAL branch
+* Merge the GSEAL branch (see http://live.gnome.org/GTK+/3.0/Tasks)
 
-* GtkScaleButton has an orientation property
+* GtkScaleButton has an orientation property 
 
 * Bugs fixed:
  538519 GtkCellRendererPixbuf doesn't allow unsetting the icon anymore
