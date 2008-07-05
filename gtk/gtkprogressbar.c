@@ -24,15 +24,9 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#if HAVE_CONFIG_H
-#  include <config.h>
-#  if STDC_HEADERS
-#    include <string.h>
-#    include <stdio.h>
-#  endif
-#else
-#  include <stdio.h>
-#endif
+#include "config.h"
+
+#include <string.h>
 
 #include "gtkprogressbar.h"
 #include "gtkprivate.h"

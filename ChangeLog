@@ -1,3 +1,8 @@
+2008-07-05  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkprogressbar.c: remove #if HAVE_CONFIG_H and clean up
+	other include weirdness in this file.
+
 2008-07-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates
