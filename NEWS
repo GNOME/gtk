@@ -1,3 +1,65 @@
+Overview of Changes from GTK+ 2.13.3 to 2.13.4
+==============================================
+
+* Merge the GSEAL branch
+
+* GtkScaleButton has an orientation property
+
+* Bugs fixed:
+ 538519 GtkCellRendererPixbuf doesn't allow unsetting the icon anymore
+ 538362 Get Win32 icons back in the file chooser
+ 538182 pango_cairo_context_update_layout is not noop after...
+ 508751 gnome-terminal crashed with SIGSEGV after keypress
+ 419737 The file chooser clears the filename entry in SAVE/CREATE_FOLDER...
+ 538784 Don't change the filename in the name entry in CREATE_FOLDER...
+ 538395 gtk_combo_box_append_text() on non-compliant model segfaults
+ 539363 Segfault when creating GtkPlugs
+ 539466 GtkMenuShell API/ABI break in trunk
+ 442042 GtkScaleButton is too limited
+ 540318 Invalid URL
+ 530255 GtkAboutDialog cuts off comments label
+ 540310 Avoid unnecessary repaints when resizing GtkWindow
+ 434535 printoperation's create_surface doesn't check temp file...
+ 539790 [PATCH] Please add three new settings to GtkSettings
+ 539164 Windows' System Menu blocks main loop
+ 541162 [Win32] Update for the new GdkWindowImpl stuff
+ 455268 Add gtk-enable-tooltips GtkSetting
+ 537591 Don't hardcode minimum width of menuitems
+ 541249 [Win32] Fix some internal static methods
+ 541305 [Win32] Scrolling was broken after GdkWindow refactoring
+ 540529 Remove all GIMP references
+ 538547 Update doc-shooter in gtk documentation
+ 535498 Printing demo broken
+ 539944 Add GtkScaleButton API so struct fields can be marked...
+ 540915 GtkBuilder sets properties in reverse order
+ 538863 Fixes assertion on entering empty folder
+ 540861 invalid UTF-8 in input device name
+ 540612 mem leak in filechooser
+ 540618 gtk_menu_shell_select_first prints warning on GtkMenubar...
+ 539944 Add GtkScaleButton API so struct fields can be marked...
+ 536966 Paper selector crashes
+ 378158 gdk_win32_selection_add_targets uses uninitialized hwnd v...
+ 516092 use gtk_drag_*_add_*_targets instead of hardcoded target ...
+ 536430 Libs and Cflags paths in gail-uninstalled.pc.in are out o...
+ 538378 GtkFileSystemError should be public
+ 539095 directfb functions need to be renamed due to the offscree...
+ 539470 Fix critical warnings when the GIcon can't be found for a...
+ 539732 Warnings on destruction of GtkDialog.
+ 540235 Getting the current folder fails
+ 537639 complete the gtk_clipboard_request/wait_for/is_available_... 
+
+* Updated translations:
+ Catalan (ca)
+ Spanish (es)
+ Estonian (et)
+ Hungarian (hu)
+ Korean (ko)
+ Norwegian bokmål (nb)
+ Occitan (oc)
+ Swedish (sv)
+ Thai (th)
+
+ 
 Overview of Changes from GTK+ 2.13.2 to 2.13.3
 ==============================================
 

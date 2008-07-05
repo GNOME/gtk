@@ -1,3 +1,7 @@
+2008-07-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2008-07-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c:
