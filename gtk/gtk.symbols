@@ -1150,7 +1150,6 @@ gtk_draw_flat_box
 gtk_draw_focus
 gtk_draw_handle
 gtk_draw_hline
-gtk_draw_insertion_cursor
 gtk_draw_layout
 gtk_draw_option
 gtk_draw_polygon
@@ -1201,6 +1200,7 @@ gtk_style_lookup_color
 gtk_style_new
 gtk_style_render_icon
 gtk_style_set_background
+gtk_draw_insertion_cursor
 #endif
 #endif
 

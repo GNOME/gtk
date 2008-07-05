@@ -1,5 +1,10 @@
 2008-07-05  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtk.symbols: move gtk_draw_insertion_cursor() out of the
+	deprecated section because it isn't deprecated.
+
+2008-07-05  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkprogressbar.c: remove #if HAVE_CONFIG_H and clean up
 	other include weirdness in this file.
 
