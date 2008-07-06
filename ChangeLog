@@ -1,5 +1,13 @@
 2008-07-06  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 541645 – gtkfilechooserdefault segfaults when bookmark does not
+	contain ://
+
+	* gtk/gtkfilechooserdefault.c (_gtk_file_chooser_label_for_file):
+	Be more robust. Reported by  Jelte van der Hoek
+
+2008-07-06  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 540917 – deprecate pack_start_defaults()
 
 	* gtk/gtk.symbols:
