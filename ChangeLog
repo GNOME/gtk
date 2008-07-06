@@ -1,5 +1,12 @@
 2008-07-06  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 531129 – gtk_style_copy() does not include a return value or 
+	description
+
+	* gtk/gtkstyle.c: Document gtk_style_copy.
+
+2008-07-06  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 541540 – Dead link to pkg-config site in GTK+ online FAQ
 	Bug 513580 – Broken link in GTK+ FAQ
 

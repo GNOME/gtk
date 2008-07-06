@@ -625,6 +625,14 @@ gtk_style_finalize (GObject *object)
 }
 
 
+/**
+ * gtk_style_copy:
+ * @style: a #GtkStyle
+ *
+ * Creates a copy of the passed in #GtkStyle object.
+ *
+ * Returns: a copy of @style
+ */
 GtkStyle*
 gtk_style_copy (GtkStyle *style)
 {
