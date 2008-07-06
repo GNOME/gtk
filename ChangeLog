@@ -1,3 +1,11 @@
+2008-07-06  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 540917 – deprecate pack_start_defaults()
+
+	* gtk/gtk.symbols:
+	* gtk/gtkbox.[hc]: Deprecated gtk_box_pack_{start,end}_defaults.
+	Proposed by Owen Taylor
+
 2008-07-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version

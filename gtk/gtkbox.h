@@ -88,10 +88,12 @@ void	   gtk_box_pack_end	       (GtkBox	     *box,
 					gboolean      expand,
 					gboolean      fill,
 					guint	      padding);
+#ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_box_pack_start_defaults (GtkBox	     *box,
 					GtkWidget    *widget);
 void	   gtk_box_pack_end_defaults   (GtkBox	     *box,
 					GtkWidget    *widget);
+#endif
 void	   gtk_box_set_homogeneous     (GtkBox	     *box,
 					gboolean      homogeneous);
 gboolean   gtk_box_get_homogeneous     (GtkBox	     *box);

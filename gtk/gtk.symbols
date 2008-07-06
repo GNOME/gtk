@@ -412,9 +412,11 @@ gtk_box_get_homogeneous
 gtk_box_get_spacing
 gtk_box_get_type G_GNUC_CONST
 gtk_box_pack_end
-gtk_box_pack_end_defaults
 gtk_box_pack_start
+#ifndef GTK_DISABLE_DEPRECATED
+gtk_box_pack_end_defaults
 gtk_box_pack_start_defaults
+#endif
 gtk_box_query_child_packing
 gtk_box_reorder_child
 gtk_box_set_child_packing

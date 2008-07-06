@@ -441,6 +441,8 @@ gtk_box_pack_end (GtkBox    *box,
  * Parameters for how to pack the child @widget, #GtkBox:expand, 
  * #GtkBox:fill and #GtkBox:padding, are given their default
  * values, %TRUE, %TRUE, and 0, respectively.
+ *
+ * Deprecated: 2.14: Use gtk_box_pack_start()
  */
 void
 gtk_box_pack_start_defaults (GtkBox    *box,
@@ -461,6 +463,8 @@ gtk_box_pack_start_defaults (GtkBox    *box,
  * Parameters for how to pack the child @widget, #GtkBox:expand, 
  * #GtkBox:fill and #GtkBox:padding, are given their default
  * values, %TRUE, %TRUE, and 0, respectively.
+ *
+ * Deprecated: 2.14: Use gtk_box_pack_end()
  */
 void
 gtk_box_pack_end_defaults (GtkBox    *box,
