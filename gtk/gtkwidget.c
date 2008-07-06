@@ -7564,11 +7564,12 @@ gtk_widget_set_composite_name (GtkWidget   *widget,
 /**
  * gtk_widget_get_composite_name:
  * @widget: a #GtkWidget
- * @returns: the composite name of @widget, or %NULL if @widget is not
- *   a composite child. The string should not be freed when it is no 
- *   longer needed.
  *
  * Obtains the composite name of a widget. 
+ *
+ * Returns: the composite name of @widget, or %NULL if @widget is not
+ *   a composite child. The string should be freed when it is no 
+ *   longer needed.
  **/
 gchar*
 gtk_widget_get_composite_name (GtkWidget *widget)
