@@ -1,5 +1,11 @@
 2008-07-06  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 528822 ¿ typo in GtkCombo docs
+
+	* gtk/tmpl/gtkcombo.sgml: Fix a typo. Pointed out by Kevin Ryde.
+
+2008-07-06  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 488019 - Mention bind_textdomain_codeset in gettext related FAQ
 
 	* gtk/question_index.sgml: Mention bind_textdomain_codeset()

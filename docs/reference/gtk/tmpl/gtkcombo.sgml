@@ -88,7 +88,7 @@ items.</title>
 
 <!-- ##### STRUCT GtkCombo ##### -->
 <para>
-The #GtkFixedChild-struct struct contains the following fields.
+The #GtkCombo-struct struct contains the following fields.
 (These fields should be considered read-only. They should never be set by
 an application.)
 </para>
