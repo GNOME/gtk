@@ -50,6 +50,7 @@ static void gtk_combo_box_entry_add              (GtkContainer          *contain
 						  GtkWidget             *child);
 static void gtk_combo_box_entry_remove           (GtkContainer          *container,
 						  GtkWidget             *child);
+static GType gtk_combo_box_entry_child_type      (GtkContainer          *container);
 
 static gchar *gtk_combo_box_entry_get_active_text (GtkComboBox *combo_box);
 static void gtk_combo_box_entry_active_changed   (GtkComboBox           *combo_box,
@@ -96,6 +97,7 @@ gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)
   container_class = (GtkContainerClass *)klass;
   container_class->add = gtk_combo_box_entry_add;
   container_class->remove = gtk_combo_box_entry_remove;
+  container_class->child_type = gtk_combo_box_entry_child_type;
 
   combo_class = (GtkComboBoxClass *)klass;
   combo_class->get_active_text = gtk_combo_box_entry_get_active_text;
@@ -235,6 +237,16 @@ gtk_combo_box_entry_remove (GtkContainer *container,
 
   GTK_CONTAINER_CLASS (gtk_combo_box_entry_parent_class)->remove (container, child);
 }
+
+static GType
+gtk_combo_box_entry_child_type (GtkContainer *container)
+{
+  if (!GTK_BIN (container)->child)
+    return GTK_TYPE_ENTRY;
+  else
+    return G_TYPE_NONE;
+}
+
 
 static void
 gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,

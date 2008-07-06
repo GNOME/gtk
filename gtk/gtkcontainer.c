@@ -819,7 +819,6 @@ gtk_container_add_with_properties (GtkContainer *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->parent == NULL);
-  g_return_if_fail (widget->parent == container);
 
   g_object_ref (container);
   g_object_ref (widget);

@@ -1,3 +1,8 @@
+2008-07-07  Christian Dywan  <christian@imendio.com>
+
+	* gtk/gtkcontainer.c (gtk_container_add_with_properties): Remove
+	erroneously added g_return_if_fail (bug #541811).
+
 2008-07-06  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 343663 – source-buffer highlighting highlights "char" in
