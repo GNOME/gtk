@@ -1711,8 +1711,9 @@ gtk_calendar_query_tooltip (GtkWidget  *widget,
       col = calendar_column_from_x (calendar, x - x0);
       row = calendar_row_from_y (calendar, y - y0);
 
-      if (0 != (priv->detail_overflow[row] & (1 << col)) ||
-          0 == (calendar->display_flags & GTK_CALENDAR_SHOW_DETAILS))
+      if (col != -1 && row != -1 &&
+          (0 != (priv->detail_overflow[row] & (1 << col)) ||
+           0 == (calendar->display_flags & GTK_CALENDAR_SHOW_DETAILS)))
         {
           detail = gtk_calendar_get_detail (calendar, row, col);
           calendar_day_rectangle (calendar, row, col, &day_rect);

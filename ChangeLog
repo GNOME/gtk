@@ -1,5 +1,14 @@
 2008-07-06  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 539248 – gtk_calender_query_tooltip calls ->detail_func with
+	invalid dates
+
+	* gtk/gtkcalendar.c (gtk_calendar_query_tooltip):
+	Check that the cursor is over a valid date before retrieving
+	its details.  Patch by Chris Wilson
+
+2008-07-06  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 493008 – gdk_screen_get_window_stack is not 64-bit-compatible
 
 	* gdk/x11/gdkscreen-x11.c (gdk_screen_get_window_stack): Fix
