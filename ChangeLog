@@ -1,5 +1,12 @@
 2008-07-06  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 493008 – gdk_screen_get_window_stack is not 64-bit-compatible
+
+	* gdk/x11/gdkscreen-x11.c (gdk_screen_get_window_stack): Fix
+	64-bit brokenness. Reported by Christian Hammond.
+
+2008-07-06  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 541645 – gtkfilechooserdefault segfaults when bookmark does not
 	contain ://
 

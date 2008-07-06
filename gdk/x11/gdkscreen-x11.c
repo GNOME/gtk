@@ -1205,14 +1205,14 @@ gdk_screen_get_window_stack (GdkScreen *screen)
       if ((type_return == XA_WINDOW) && (format_return == 32) &&
           (data) && (nitems_return > 0))
         {
-          GdkNativeWindow *stack = (GdkNativeWindow *) data;
+          gulong *stack = (gulong *) data;
           GdkWindow *win;
           int i;
 
           for (i = 0; i < nitems_return; i++)
             {
               win = gdk_window_foreign_new_for_display (screen_x11->display,
-                                                        stack[i]);
+                                                        (GdkNativeWindow)stack[i]);
 
               if (win != NULL)
                 ret = g_list_append (ret, win);
