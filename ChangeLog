@@ -1,3 +1,10 @@
+2008-07-06  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 541540 – Dead link to pkg-config site in GTK+ online FAQ
+	Bug 513580 – Broken link in GTK+ FAQ
+
+	* docs/faq/gtk-faq.sgml: Remove or update some outdated links.
+
 2008-07-07  Christian Dywan  <christian@imendio.com>
 
 	* gtk/gtkcontainer.c (gtk_container_add_with_properties): Remove

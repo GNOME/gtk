@@ -429,7 +429,7 @@ in which they need to be installed:</para>
 
 <itemizedlist spacing=compact>
 <listitem><simpara> pkg-config
-(<ulink url="http://www.freedesktop.org/software/pkgconfig">
+(<ulink url="http://pkg-config.freedesktop.org/wiki">
 pkg-config Site</ulink>)</simpara>
 </listitem>
 
@@ -789,8 +789,7 @@ disgrace to the widget set will gladly be included.</para>
 <para>The new widgets that get added to GTK+ are generally either
 replacements for existing widgets that are no longer
 deemed to be adequate, or have been developed externally to GTK+ but
-have been widely tested. One possible avenue for this is via
-<ulink url="http://cvs.gnome.org/lxr/source/libegg/">libegg</ulink>.</para>
+have been widely tested. 
 
 <para>Before you spend months of your valuable time implementing your
 revolutionary widget, it is highly recommended that you get some
