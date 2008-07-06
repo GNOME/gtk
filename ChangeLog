@@ -1,5 +1,12 @@
 2008-07-06  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 327582 – Incomplete docs for GtkSettings::gtk-icon-sizes
+	
+	* gtk/gtksettings.c: Improve the documentation of the
+	gtk-icon-sizes setting. Proposed by Tommi Komulainen.
+
+2008-07-06  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 539248 – gtk_calender_query_tooltip calls ->detail_func with
 	invalid dates
 

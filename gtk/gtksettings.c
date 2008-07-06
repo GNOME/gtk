@@ -342,6 +342,20 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_FONT_NAME);
 
+  /**
+   * GtkSettings:gtk-icon-sizes:
+   *
+   * A list of icon sizes. The list is separated by colons, and
+   * item has the form:
+   *
+   * <replaceable>size-name</replaceable> = <replaceable>width</replaceable> , <replaceable>height</replaceable>
+   *
+   * E.g. "gtk-menu=16,16:gtk-button=20,20:gtk-dialog=48,48". 
+   * GTK+ itself use the following named icon sizes: gtk-menu, 
+   * gtk-button, gtk-small-toolbar, gtk-large-toolbar, gtk-dnd, 
+   * gtk-dialog. Applications can register their own named icon 
+   * sizes with gtk_icon_size_register().
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-icon-sizes",
 								   P_("Icon Sizes"),
