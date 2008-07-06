@@ -82,13 +82,13 @@ load_pixbufs (GError **error)
     {
       filename = demo_find_file (image_names[i], error);
       if (!filename)
-	return FALSE; /* Note that "error" was filled with a GError */
+        return FALSE; /* Note that "error" was filled with a GError */
       
       images[i] = gdk_pixbuf_new_from_file (filename, error);
       g_free (filename);
       
       if (!images[i])
-	return FALSE; /* Note that "error" was filled with a GError */
+        return FALSE; /* Note that "error" was filled with a GError */
     }
 
   return TRUE;
@@ -96,9 +96,9 @@ load_pixbufs (GError **error)
 
 /* Expose callback for the drawing area */
 static gint
-expose_cb (GtkWidget	  *widget,
-	   GdkEventExpose *event,
-	   gpointer	   data)
+expose_cb (GtkWidget      *widget,
+           GdkEventExpose *event,
+           gpointer        data)
 {
   guchar *pixels;
   int rowstride;
@@ -108,12 +108,12 @@ expose_cb (GtkWidget	  *widget,
   pixels = gdk_pixbuf_get_pixels (frame) + rowstride * event->area.y + event->area.x * 3;
 
   gdk_draw_rgb_image_dithalign (widget->window,
-				widget->style->black_gc,
-				event->area.x, event->area.y,
-				event->area.width, event->area.height,
-				GDK_RGB_DITHER_NORMAL,
-				pixels, rowstride,
-				event->area.x, event->area.y);
+                                widget->style->black_gc,
+                                event->area.x, event->area.y,
+                                event->area.width, event->area.height,
+                                GDK_RGB_DITHER_NORMAL,
+                                pixels, rowstride,
+                                event->area.x, event->area.y);
 
   return TRUE;
 }
@@ -132,7 +132,7 @@ timeout (gpointer data)
   double radius;
 
   gdk_pixbuf_copy_area (background, 0, 0, back_width, back_height,
-			frame, 0, 0);
+                        frame, 0, 0);
 
   f = (double) (frame_num % CYCLE_LEN) / CYCLE_LEN;
 
@@ -175,16 +175,16 @@ timeout (gpointer data)
       r2.height = back_height;
 
       if (gdk_rectangle_intersect (&r1, &r2, &dest))
-	gdk_pixbuf_composite (images[i],
-			      frame,
-			      dest.x, dest.y,
-			      dest.width, dest.height,
-			      xpos, ypos,
-			      k, k,
-			      GDK_INTERP_NEAREST,
-			      ((i & 1)
-			       ? MAX (127, fabs (255 * sin (f * 2.0 * G_PI)))
-			       : MAX (127, fabs (255 * cos (f * 2.0 * G_PI)))));
+        gdk_pixbuf_composite (images[i],
+                              frame,
+                              dest.x, dest.y,
+                              dest.width, dest.height,
+                              xpos, ypos,
+                              k, k,
+                              GDK_INTERP_NEAREST,
+                              ((i & 1)
+                               ? MAX (127, fabs (255 * sin (f * 2.0 * G_PI)))
+                               : MAX (127, fabs (255 * cos (f * 2.0 * G_PI)))));
     }
 
   GDK_THREADS_ENTER ();
@@ -199,7 +199,7 @@ static guint timeout_id;
 
 static void
 cleanup_callback (GtkObject *object,
-		  gpointer   data)
+                  gpointer   data)
 {
   g_source_remove (timeout_id);
   timeout_id = 0;
@@ -214,7 +214,7 @@ do_pixbufs (GtkWidget *do_widget)
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (do_widget));
+                             gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Pixbufs");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
@@ -224,38 +224,38 @@ do_pixbufs (GtkWidget *do_widget)
 
       error = NULL;
       if (!load_pixbufs (&error))
-	{
-	  GtkWidget *dialog;
+        {
+          GtkWidget *dialog;
 
-	  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-					   GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_ERROR,
-					   GTK_BUTTONS_CLOSE,
-					   "Failed to load an image: %s",
-					   error->message);
+          dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                           GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
+                                           "Failed to load an image: %s",
+                                           error->message);
 
-	  g_error_free (error);
+          g_error_free (error);
 
-	  g_signal_connect (dialog, "response",
-			    G_CALLBACK (gtk_widget_destroy), NULL);
+          g_signal_connect (dialog, "response",
+                            G_CALLBACK (gtk_widget_destroy), NULL);
 
-	  gtk_widget_show (dialog);
-	}
+          gtk_widget_show (dialog);
+        }
       else
-	{
-	  gtk_widget_set_size_request (window, back_width, back_height);
+        {
+          gtk_widget_set_size_request (window, back_width, back_height);
 
-	  frame = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, back_width, back_height);
+          frame = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, back_width, back_height);
 
-	  da = gtk_drawing_area_new ();
+          da = gtk_drawing_area_new ();
 
-	  g_signal_connect (da, "expose_event",
-			    G_CALLBACK (expose_cb), NULL);
+          g_signal_connect (da, "expose_event",
+                            G_CALLBACK (expose_cb), NULL);
 
-	  gtk_container_add (GTK_CONTAINER (window), da);
+          gtk_container_add (GTK_CONTAINER (window), da);
 
-	  timeout_id = g_timeout_add (FRAME_DELAY, timeout, NULL);
-	}
+          timeout_id = g_timeout_add (FRAME_DELAY, timeout, NULL);
+        }
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

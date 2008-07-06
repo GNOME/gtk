@@ -1,5 +1,12 @@
 2008-07-06  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 343663 – source-buffer highlighting highlights "char" in
+	gtk_text_iter_forward_char
+
+	* demos/gtk-demo/*.c: Fix up the handrolled hilighting a bit.
+
+2008-07-06  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 327582 – Incomplete docs for GtkSettings::gtk-icon-sizes
 	
 	* gtk/gtksettings.c: Improve the documentation of the

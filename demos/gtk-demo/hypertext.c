@@ -16,16 +16,16 @@
  */
 static void 
 insert_link (GtkTextBuffer *buffer, 
-	     GtkTextIter   *iter, 
-	     gchar         *text, 
-	     gint           page)
+             GtkTextIter   *iter, 
+             gchar         *text, 
+             gint           page)
 {
   GtkTextTag *tag;
   
   tag = gtk_text_buffer_create_tag (buffer, NULL, 
-				    "foreground", "blue", 
-				    "underline", PANGO_UNDERLINE_SINGLE, 
-				    NULL);
+                                    "foreground", "blue", 
+                                    "underline", PANGO_UNDERLINE_SINGLE, 
+                                    NULL);
   g_object_set_data (G_OBJECT (tag), "page", GINT_TO_POINTER (page));
   gtk_text_buffer_insert_with_tags (buffer, iter, text, -1, tag, NULL);
 }
@@ -35,7 +35,7 @@ insert_link (GtkTextBuffer *buffer,
  */
 static void
 show_page (GtkTextBuffer *buffer, 
-	   gint           page)
+           gint           page)
 {
   GtkTextIter iter;
 
@@ -52,12 +52,12 @@ show_page (GtkTextBuffer *buffer,
   else if (page == 2)
     {
       gtk_text_buffer_insert (buffer, &iter, 
-			      "A tag is an attribute that can be applied to some range of text. "
-			      "For example, a tag might be called \"bold\" and make the text inside "
-			      "the tag bold. However, the tag concept is more general than that; "
-			      "tags don't have to affect appearance. They can instead affect the "
-			      "behavior of mouse and key presses, \"lock\" a range of text so the "
-			      "user can't edit it, or countless other things.\n", -1);
+                              "A tag is an attribute that can be applied to some range of text. "
+                              "For example, a tag might be called \"bold\" and make the text inside "
+                              "the tag bold. However, the tag concept is more general than that; "
+                              "tags don't have to affect appearance. They can instead affect the "
+                              "behavior of mouse and key presses, \"lock\" a range of text so the "
+                              "user can't edit it, or countless other things.\n", -1);
       insert_link (buffer, &iter, "Go back", 1);
     }
   else if (page == 3) 
@@ -65,12 +65,12 @@ show_page (GtkTextBuffer *buffer,
       GtkTextTag *tag;
   
       tag = gtk_text_buffer_create_tag (buffer, NULL, 
-					"weight", PANGO_WEIGHT_BOLD, 
-					NULL);
+                                        "weight", PANGO_WEIGHT_BOLD, 
+                                        NULL);
       gtk_text_buffer_insert_with_tags (buffer, &iter, "hypertext:\n", -1, tag, NULL);
       gtk_text_buffer_insert (buffer, &iter, 
-			      "machine-readable text that is not sequential but is organized "
-			      "so that related items of information are connected.\n", -1);
+                              "machine-readable text that is not sequential but is organized "
+                              "so that related items of information are connected.\n", -1);
       insert_link (buffer, &iter, "Go back", 1);
     }
 }
@@ -81,7 +81,7 @@ show_page (GtkTextBuffer *buffer,
  */
 static void
 follow_if_link (GtkWidget   *text_view, 
-		GtkTextIter *iter)
+                GtkTextIter *iter)
 {
   GSList *tags = NULL, *tagp = NULL;
 
@@ -93,8 +93,8 @@ follow_if_link (GtkWidget   *text_view,
 
       if (page != 0)
         {
-	  show_page (gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view)), page);
-	  break;
+          show_page (gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view)), page);
+          break;
         }
     }
 
@@ -106,7 +106,7 @@ follow_if_link (GtkWidget   *text_view,
  */
 static gboolean
 key_press_event (GtkWidget *text_view,
-		 GdkEventKey *event)
+                 GdkEventKey *event)
 {
   GtkTextIter iter;
   GtkTextBuffer *buffer;
@@ -132,7 +132,7 @@ key_press_event (GtkWidget *text_view,
  */
 static gboolean
 event_after (GtkWidget *text_view,
-	     GdkEvent  *ev)
+             GdkEvent  *ev)
 {
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
@@ -215,7 +215,7 @@ set_cursor_if_appropriate (GtkTextView    *text_view,
  */
 static gboolean
 motion_notify_event (GtkWidget      *text_view,
-		     GdkEventMotion *event)
+                     GdkEventMotion *event)
 {
   gint x, y;
 
@@ -234,7 +234,7 @@ motion_notify_event (GtkWidget      *text_view,
  */
 static gboolean
 visibility_notify_event (GtkWidget          *text_view,
-			 GdkEventVisibility *event)
+                         GdkEventVisibility *event)
 {
   gint wx, wy, bx, by;
   
@@ -265,12 +265,12 @@ do_hypertext (GtkWidget *do_widget)
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (do_widget));
+                             gtk_widget_get_screen (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window),
-				   450, 450);
+                                   450, 450);
       
       g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
+                        G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_window_set_title (GTK_WINDOW (window), "Hypertext");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -278,20 +278,20 @@ do_hypertext (GtkWidget *do_widget)
       view = gtk_text_view_new ();
       gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD);
       g_signal_connect (view, "key-press-event", 
-			G_CALLBACK (key_press_event), NULL);
+                        G_CALLBACK (key_press_event), NULL);
       g_signal_connect (view, "event-after", 
-			G_CALLBACK (event_after), NULL);
+                        G_CALLBACK (event_after), NULL);
       g_signal_connect (view, "motion-notify-event", 
-			G_CALLBACK (motion_notify_event), NULL);
+                        G_CALLBACK (motion_notify_event), NULL);
       g_signal_connect (view, "visibility-notify-event", 
-			G_CALLBACK (visibility_notify_event), NULL);
+                        G_CALLBACK (visibility_notify_event), NULL);
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
       
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-				      GTK_POLICY_AUTOMATIC,
-				      GTK_POLICY_AUTOMATIC);
+                                      GTK_POLICY_AUTOMATIC,
+                                      GTK_POLICY_AUTOMATIC);
       gtk_container_add (GTK_CONTAINER (window), sw);
       gtk_container_add (GTK_CONTAINER (sw), view);
 
