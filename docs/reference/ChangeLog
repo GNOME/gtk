@@ -1,3 +1,9 @@
+2008-07-06  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 488019 - Mention bind_textdomain_codeset in gettext related FAQ
+
+	* gtk/question_index.sgml: Mention bind_textdomain_codeset()
+
 2008-07-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.13.4 ===

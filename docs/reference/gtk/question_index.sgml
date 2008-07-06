@@ -190,9 +190,10 @@ to read the documentation.
 <para>
 The short checklist on how to use gettext is: call bindtextdomain() so gettext 
 can find the files containing your translations, call textdomain() to set the 
-default translation domain, then call gettext() to look up each string to be 
-translated in the default domain. Conventionally, people define macros as
-follows for convenience:
+default translation domain, call bind_textdomain_codeset() to request that
+all translated strings are returned in UTF-8, then call gettext() to look up 
+each string to be translated in the default domain. 
+Conventionally, people define macros as follows for convenience:
 <informalexample>
 <programlisting>
   #define  _(x)  gettext (x)
@@ -353,6 +354,11 @@ text = g_convert ("runtime conversion: &copy;", -1, "ISO-8859-1", "UTF-8", NULL,
 g_print(text);
 g_free (text);
 </programlisting></informalexample>
+</para>
+<para>
+If you are using gettext() to localize your application, you need to
+call bind_textdomain_codeset() to ensure that translated strings are
+returned in UTF-8 encoding.
 </para>
 </answer>
 </qandaentry>
