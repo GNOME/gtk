@@ -796,6 +796,7 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
 
   window = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)window;
+  private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
