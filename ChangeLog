@@ -1,5 +1,12 @@
 2008-07-07  Cody Russell  <bratsche@gnome.org>
 
+	Bug 541964 – [Win32] Setting modal hint to current value might confuse the stack
+
+	* gdk/win32/gdkwindow-win32.c: Check if the value is the same as the
+	existing modal hint value before setting it.
+
+2008-07-07  Cody Russell  <bratsche@gnome.org>
+
 	Bug 540994 – [Win32] Some windows don't appear at the top when created
 
 	* gdk/win32/gdkwindow-win32.c: Raise the window when setting it modal.
