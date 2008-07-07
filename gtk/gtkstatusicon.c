@@ -319,7 +319,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * of the status icon. Whether status icons can have context 
    * menus and how these are activated is platform-dependent.
    *
-   * The @button and @activate_timeout parameters should be 
+   * The @button and @activate_time parameters should be 
    * passed as the last to arguments to gtk_menu_popup().
    *
    * Since: 2.10
