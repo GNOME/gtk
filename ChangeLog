@@ -1,3 +1,12 @@
+2008-07-07  Cody Russell  <bratsche@gnome.org>
+
+	Bug 540994 – [Win32] Some windows don't appear at the top when created
+
+	* gdk/win32/gdkwindow-win32.c: Raise the window when setting it modal.
+
+	I actually already committed this one by accident, probably when I committed
+	#541305, but just wanted to document it here in the ChangeLog.
+
 2008-07-07  Johan Dahlin  <johan@gnome.org>
 
 	* gtk/tests/builder.c (test_cell_view):
