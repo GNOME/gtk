@@ -24,10 +24,11 @@
 
 #include <string.h>
 
-#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
+#include "gtkfilechooser.h"
 #include "gtkfilesystem.h"
+#include "gtkicontheme.h"
 #include "gtkprivate.h"
 
 #include "gtkalias.h"
