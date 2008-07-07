@@ -15553,6 +15553,9 @@ gtk_tree_view_set_tooltip_query_cb (GtkWidget  *widget,
  * When enabled, #GtkWidget::has-tooltip will be set to %TRUE and
  * @tree_view will connect a #GtkWidget::query-tooltip signal handler.
  *
+ * Note that the signal handler sets the text with gtk_tooltip_set_markup(),
+ * so &amp;, &lt;, etc have to be escaped in the text.
+ *
  * Since: 2.12
  */
 void

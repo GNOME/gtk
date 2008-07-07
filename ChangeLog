@@ -1,5 +1,12 @@
 2008-07-06  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 507953 – gtk_tree_view_set_tooltip_column() shows markups
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_tooltip_column): Mention
+	that the tooltip is set as markup. Proposed by Czirkos Zoltan.
+
+2008-07-06  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 510225 – gtk_widget_get_composite_name retval should be freed
 
 	* gtk/gtkwidget.c (gtk_widget_get_composite_name): Clarify the
