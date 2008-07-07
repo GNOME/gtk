@@ -1,5 +1,13 @@
 2008-07-06  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 528845 – segv from GtkBuilder on attempting <accelerator> under
+	GtkCellView
+
+	* gtk/gtkcellview.c: Don't blindly chain up in the buildable
+	implementation.  Reported by Kevin Ryde.
+
+2008-07-06  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 469068 – clarify gdk_cairo_create()
 
 	* gdk/gdkcairo.c (gdk_cairo_create): Add a note that cairo
