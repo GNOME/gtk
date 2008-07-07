@@ -29,6 +29,12 @@
  * 
  * Creates a Cairo context for drawing to @drawable.
  *
+ * <note><para>
+ * Note that due to double-buffering, Cairo contexts created 
+ * in a GTK+ expose event handler cannot be cached and reused 
+ * between different expose events. 
+ * </para></note>
+ *
  * Return value: A newly created Cairo context. Free with
  *  cairo_destroy() when you are done drawing.
  * 

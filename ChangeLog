@@ -1,5 +1,13 @@
 2008-07-06  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 469068 – clarify gdk_cairo_create()
+
+	* gdk/gdkcairo.c (gdk_cairo_create): Add a note that cairo
+	contexts cannot be cached for handling expose events.
+	Proposed by Behdad Esfahbod.
+
+2008-07-06  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 507953 – gtk_tree_view_set_tooltip_column() shows markups
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_tooltip_column): Mention
