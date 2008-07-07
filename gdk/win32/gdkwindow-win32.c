@@ -3578,9 +3578,14 @@ gdk_window_set_modal_hint (GdkWindow *window,
 #else
 
   if (modal)
-    _gdk_push_modal_window (window);
+    {
+      _gdk_push_modal_window (window);
+      gdk_window_raise (window);
+    }
   else
-    _gdk_remove_modal_window (window);
+    {
+      _gdk_remove_modal_window (window);
+    }
 
 #endif
 }
