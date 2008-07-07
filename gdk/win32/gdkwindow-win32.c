@@ -3566,6 +3566,9 @@ gdk_window_set_modal_hint (GdkWindow *window,
 
   private = (GdkWindowObject*) window;
 
+  if (modal == private->modal_hint)
+    return;
+
   private->modal_hint = modal;
 
 #if 0
