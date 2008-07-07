@@ -2736,7 +2736,7 @@ update_node (GtkUIManager *self,
 	gtk_widget_destroy (info->proxy);
       if (info->extra)
 	gtk_widget_destroy (info->extra);
-      if (info->type == NODE_TYPE_ACCELERATOR)
+      if (info->type == NODE_TYPE_ACCELERATOR && info->action != NULL)
 	gtk_action_disconnect_accelerator (info->action);
       free_node (node);
       g_node_destroy (node);

@@ -1,3 +1,9 @@
+2008-07-08  Christian Neumair  <cneumair@gnome.org>
+
+	* gtk/gtkuimanager.c (update_node):
+	Skip update of accelerator child node if it has no associated action.
+	Fixes #541950.
+
 2008-07-07  Cody Russell  <bratsche@gnome.org>
 
 	Bug 541964 – [Win32] Setting modal hint to current value might confuse the stack
