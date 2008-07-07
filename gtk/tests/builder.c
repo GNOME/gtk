@@ -1392,6 +1392,7 @@ test_cell_view (void)
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <child>"
     "      <object class=\"GtkCellView\" id=\"cellview1\">"
+    "        <accelerator key=\"q\" signal=\"clicked\"/>"
     "        <property name=\"visible\">True</property>"
     "        <property name=\"model\">liststore1</property>"
     "        <child>"

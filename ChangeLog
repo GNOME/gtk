@@ -1,3 +1,8 @@
+2008-07-07  Johan Dahlin  <johan@gnome.org>
+
+	* gtk/tests/builder.c (test_cell_view):
+	Add a test case for 528845.
+
 2008-07-07  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkwindow-win32.c
