@@ -334,9 +334,9 @@ def process_keysymstxt():
 	""" This is preferential treatment for Greek """
 	# keysymdb['combining_tilde'] = 0x342	
 
-	""" This is for a missing keysym from Marcus Khun's db """
+	""" This is for a missing keysym from Markus Kuhn's db """
 	keysymdb['dead_stroke'] = 0x338
-	""" This is for a missing keysym from Marcus Khun's db """
+	""" This is for a missing keysym from Markus Kuhn's db """
 	# keysymdb['Oslash'] = 0x0d8		
 
 	""" This is for a missing (recently added) keysym """

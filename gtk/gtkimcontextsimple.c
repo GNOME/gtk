@@ -403,8 +403,8 @@ check_algorithmically (GtkIMContextSimple    *context_simple,
 					 */
 	    CASE (dasia, 0x314);
 	    CASE (iota, 0x0345); /* Used by Greek Polytonic layout only; "ypogegrammeni" */
-	    CASE (voiced_sound, 0x3099);	/* Per Marcus Khun keysyms.txt file. */
-	    CASE (semivoiced_sound, 0x309a);	/* Per Marcus Khun keysyms.txt file. */
+	    CASE (voiced_sound, 0x3099);	/* Per Markus Kuhn keysyms.txt file. */
+	    CASE (semivoiced_sound, 0x309a);	/* Per Markus Kuhn keysyms.txt file. */
 	    CASE (belowdot, 0x0323);
 	    CASE (hook, 0x0309);
 	    CASE (horn, 0x031b);	/* Normally is 0x31b; Greek Polytonic needs 0x313 (or 0x343).
