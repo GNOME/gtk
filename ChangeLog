@@ -1,3 +1,10 @@
+2008-07-10  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 542234 – iconview a11y implementation segfaults
+
+	* gtk/gtkiconview.c: Fix a segfault in the a11y code.
+	Patch by Li Yuan.
+
 2008-07-08  Christian Neumair  <cneumair@gnome.org>
 
 	* gtk/gtkuimanager.c (update_node):

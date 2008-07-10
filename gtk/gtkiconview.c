@@ -8970,8 +8970,8 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
         {
           if (tmp_list == NULL)
             tmp_list = items;
-          else    
-            info->index = item->item->index;
+            
+          info->index = item->item->index;
         }
 
       items = items->next;
@@ -8981,11 +8981,8 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
     {
       info = deleted_item->data;
       gtk_icon_view_item_accessible_add_state (GTK_ICON_VIEW_ITEM_ACCESSIBLE (info->item), ATK_STATE_DEFUNCT, TRUE);
-    }
-  g_signal_emit_by_name (atk_obj, "children_changed::remove",
-                         index, NULL, NULL);
-  if (deleted_item)
-    {
+      g_signal_emit_by_name (atk_obj, "children_changed::remove",
+                             index, NULL, NULL);
       priv->items = g_list_remove_link (priv->items, deleted_item);
       g_free (info);
     }
