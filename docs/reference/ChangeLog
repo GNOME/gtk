@@ -1,6 +1,43 @@
+2008-07-10  Stefan Kost  <ensonic@users.sf.net>
+
+        Bug 540967 â€“ docs build slowly because of entities
+
+	* gtk/building.sgml:
+	* gtk/changes-1.2.sgml:
+	* gtk/changes-2.0.sgml:
+	* gtk/compiling.sgml:
+	* gtk/directfb.sgml:
+	* gtk/glossary.xml:
+	* gtk/gtk-docs.sgml:
+	* gtk/gtk-query-immodules-2.0.xml:
+	* gtk/gtk-update-icon-cache.xml:
+	* gtk/migrating-GtkAboutDialog.sgml:
+	* gtk/migrating-GtkAction.sgml:
+	* gtk/migrating-GtkAssistant.sgml:
+	* gtk/migrating-GtkBuilder.sgml:
+	* gtk/migrating-GtkColorButton.sgml:
+	* gtk/migrating-GtkComboBox.sgml:
+	* gtk/migrating-GtkFileChooser.sgml:
+	* gtk/migrating-GtkIconView.sgml:
+	* gtk/migrating-GtkLinkButton.sgml:
+	* gtk/migrating-GtkRecentChooser.sgml:
+	* gtk/migrating-GtkTooltip.sgml:
+	* gtk/migrating-checklist.sgml:
+	* gtk/osx.sgml:
+	* gtk/other_software.sgml:
+	* gtk/question_index.sgml:
+	* gtk/resources.sgml:
+	* gtk/running.sgml:
+	* gtk/text_widget.sgml:
+	* gtk/tree_widget.sgml:
+	* gtk/visual_index.xml:
+	* gtk/windows.sgml:
+	* gtk/x11.sgml:
+	  Use xi:include to speed up doc-build. Remove some unused entities.
+
 2008-07-06  Matthias Clasen  <mclasen@redhat.com>
 
-	Bug 528822 ¿ typo in GtkCombo docs
+	Bug 528822 - typo in GtkCombo docs
 
 	* gtk/tmpl/gtkcombo.sgml: Fix a typo. Pointed out by Kevin Ryde.
 
@@ -92,7 +129,7 @@
 	Bug 465144 - gtkprintjob.h is not included with gtk.h
 
 	* gtk/gtk-sections.txt: Fix include for gtkprintjob.h, pointed
-	out by Étienne Bersac.
+	out by Ã‰tienne Bersac.
 
 2008-05-20  Matthias Clasen  <mclasen@redhat.com>
 
@@ -830,7 +867,7 @@ Tue Oct 10 15:29:15 2006  Tim Janik  <timj@imendio.com>
 2006-08-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkruler.sgml: Fix a swapped argument 
-	description.  (#351241, Étienne Bersac)
+	description.  (#351241, Ã‰tienne Bersac)
 
 2006-08-06  Matthias Clasen  <mclasen@redhat.com>
 
@@ -1260,7 +1297,7 @@ Tue Oct 10 15:29:15 2006  Tim Janik  <timj@imendio.com>
 2005-12-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkmain.sgml: Add deprecation note to
-	gtk_exit()  (#325199, Ævar Arnfjörð Bjarmason)
+	gtk_exit()  (#325199, Ã†var ArnfjÃ¶rÃ° Bjarmason)
 
 2005-12-20  Matthias Clasen  <mclasen@redhat.com>
 
@@ -1555,7 +1592,7 @@ Tue Sep 13 14:16:27 2005  Tim Janik  <timj@imendio.com>
 2005-07-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/migrating-GtkIconView.sgml: Corrections.  
-	(#309718, Tim-Philipp Müller)
+	(#309718, Tim-Philipp MÃ¼ller)
 	
 2005-07-06  Matthias Clasen  <mclasen@redhat.com>
 
@@ -2129,7 +2166,7 @@ Mon Nov  1 13:37:31 2004  Jonathan Blandford  <jrb@redhat.com>
 	* gtk/question_index.sgml: Move the "tail" question to the
 	text view section.
 	Add an entry for "why are my types not registered".  (#156809,
-	Q by Salvador Fandiño, A by Owen Taylor)
+	Q by Salvador FandiÃ±o, A by Owen Taylor)
 	
 2004-10-27  Matthias Clasen  <mclasen@redhat.com>
 
@@ -2651,7 +2688,7 @@ Tue May 11 00:29:53 2004  Matthias Clasen  <maclas@gmx.de>
 
 Fri May  7 01:21:14 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/tmpl/gtkicontheme.sgml: Fix example.  (Steffen Röcker)
+	* gtk/tmpl/gtkicontheme.sgml: Fix example.  (Steffen RÃ¶cker)
 
 Thu May  6 00:22:38 2004  Matthias Clasen  <maclas@gmx.de>
 
@@ -2701,7 +2738,7 @@ Wed May  5 23:12:36 2004  Matthias Clasen  <maclas@gmx.de>
 	casts from examples.  (#139387, Olexiy Avramchenko)
 
 	* gtk/migrating-GtkAction.sgml: Fix an example.  
-	(#138966, Tim-Philipp Müller)
+	(#138966, Tim-Philipp MÃ¼ller)
 
 	* gdk/tmpl/properties.sgml: Document the only_if_exists argument
 	to gdk_atom_intern() as ignored.
@@ -3426,7 +3463,7 @@ Tue Jul 29 14:21:48 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 2003-07-21  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkdnd.sgml: It is GTK_DEST_DEFAULT_DROP, not
-	GTK_DRAG_DEFAULT_DROP. (#117917, Tim-Philipp Müller)
+	GTK_DRAG_DEFAULT_DROP. (#117917, Tim-Philipp MÃ¼ller)
 
 2003-07-19  Matthias Clasen  <maclas@gmx.de>
 
@@ -5794,7 +5831,7 @@ Wed Jan  5 10:23:41 2000  Owen Taylor  <otaylor@redhat.com>
 	* gtk/tmpl/gtkclist.sgml: partially written documentation from
 	Paul Schifferer <isengard@geocities.com> who won't be able to finish it
 
-1999-09-22  Martin Norbäck  <d95mback@dtek.chalmers.se>
+1999-09-22  Martin NorbÃ¤ck  <d95mback@dtek.chalmers.se>
 	
 	* gtk/tmpl/gtkclist.sgml: Added information about the sorting functions
 
