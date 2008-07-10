@@ -1,3 +1,10 @@
+2008-07-11  Simos Xenitellis  <simos@gnome.org>
+
+	Bug 334418 – Support easy input of ellipsis
+
+	* gtk/gtkimcontextsimpleseqs.h: Fixed 18 compose sequences
+	that listed the wrong codepoint.  Reported by Wouter Bolsterlee.
+
 2008-07-03  Murray Cumming  <murrayc@murrayc.com>
 
 	* gtk/gtkwidget.c (gtk_widget_set_property):  tooltip-text and 
