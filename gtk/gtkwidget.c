@@ -2435,6 +2435,15 @@ gtk_widget_set_property (GObject         *object,
       tooltip_window = g_object_get_qdata (object, quark_tooltip_window);
       tooltip_markup = g_value_dup_string (value);
 
+      /* Treat an empty string as a NULL string, 
+       * because an empty string would be useless for a tooltip:
+       */
+      if (tooltip_markup && (strlen (tooltip_markup) == 0))
+      {
+	g_free (tooltip_markup);
+        tooltip_markup = NULL;
+      }
+
       g_object_set_qdata_full (object, quark_tooltip_markup,
 			       tooltip_markup, g_free);
 
@@ -2443,7 +2452,15 @@ gtk_widget_set_property (GObject         *object,
       break;
     case PROP_TOOLTIP_TEXT:
       tooltip_window = g_object_get_qdata (object, quark_tooltip_window);
+
       tooltip_text = g_value_get_string (value);
+
+      /* Treat an empty string as a NULL string, 
+       * because an empty string would be useless for a tooltip:
+       */
+      if (tooltip_text && (strlen (tooltip_text) == 0))
+        tooltip_text = NULL;
+
       tooltip_markup = tooltip_text ? g_markup_escape_text (tooltip_text, -1) : NULL;
 
       g_object_set_qdata_full (object, quark_tooltip_markup,
