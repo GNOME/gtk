@@ -236,6 +236,8 @@ struct _GtkTreeViewPrivate
 
   guint in_grab : 1;
 
+  guint post_validation_flag : 1;
+
 
   /* Auto expand/collapse timeout in hover mode */
   guint auto_expand_timeout;
@@ -268,6 +270,10 @@ struct _GtkTreeViewPrivate
   GdkGC *tree_line_gc;
 
   gint tooltip_column;
+
+  gint last_extra_space;
+  gint last_extra_space_per_column;
+  gint last_number_of_expand_columns;
 };
 
 #ifdef __GNUC__

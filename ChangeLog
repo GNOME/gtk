@@ -1,3 +1,29 @@
+2008-07-11  Kristian Rietveld  <kris@gtk.org>
+
+	Bug 316087 - Resizing columns is chaotic
+
+	* gtk/gtktreeprivate.h: add new member fields.
+
+	* gtk/gtktreeview.c (gtk_tree_view_init), (validate_row): set post
+	validation flag,
+	(gtk_tree_view_size_allocate_columns): rework the size allocation
+	mechanism to only recalculate the expand values if the width of the
+	widget, content or the column configuration has changed,
+	(gtk_tree_view_size_allocate): move call to size_allocate_columns()
+	to before the adjustment updates so the proper width is used after
+	we updated it,
+	(gtk_tree_view_button_press), (gtk_tree_view_motion_resize_column):
+	use the column width minus the expand value for the resized width,
+	(gtk_tree_view_move_column_after): update call to
+	gtk_tree_view_size_allocate_columns().
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_expand): set use
+	resized width to FALSE.
+
+	* tests/Makefile.am:
+	* tests/testtreecolumnsizing.c: new interactive test program
+	for testing column resizing with different column configurations.
+
 2008-07-11  Simos Xenitellis  <simos@gnome.org>
 
 	* gtk/compose-parse.py:

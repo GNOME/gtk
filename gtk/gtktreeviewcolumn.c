@@ -2141,6 +2141,13 @@ gtk_tree_view_column_set_expand (GtkTreeViewColumn *tree_column,
       tree_column->tree_view != NULL &&
       GTK_WIDGET_REALIZED (tree_column->tree_view))
     {
+      /* We want to continue using the original width of the
+       * column that includes additional space added by the user
+       * resizing the columns and possibly extra (expanded) space, which
+       * are not included in the resized width.
+       */
+      tree_column->use_resized_width = FALSE;
+
       gtk_widget_queue_resize (tree_column->tree_view);
     }
 
