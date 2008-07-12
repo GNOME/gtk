@@ -51,6 +51,12 @@
 #define SNIFF_BUFFER_SIZE 4096
 #define LOAD_BUFFER_SIZE 65536
 
+#ifndef G_OS_WIN32
+/* GIO doesn't do mime sniffing on Win32, so we need to do our own */
+#define GDK_PIXBUF_USE_GIO_MIME 1
+#endif
+
+#ifndef GDK_PIXBUF_USE_GIO_MIME 
 static gint 
 format_check (GdkPixbufModule *module, guchar *buffer, int size)
 {
@@ -102,6 +108,7 @@ format_check (GdkPixbufModule *module, guchar *buffer, int size)
 	}
 	return 0;
 }
+#endif
 
 G_LOCK_DEFINE_STATIC (init_lock);
 G_LOCK_DEFINE_STATIC (threadunsafe_loader_lock);
@@ -763,9 +770,33 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
 {
 	GSList *modules;
 
-	gint score, best = 0;
 	GdkPixbufModule *selected = NULL;
 	gchar *display_name = NULL;
+#ifdef GDK_PIXBUF_USE_GIO_MIME
+	gchar *mime_type;
+	gchar **mimes;
+	gint j;
+
+	mime_type = g_content_type_guess (filename, buffer, size, NULL);
+
+	for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
+		GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
+		GdkPixbufFormat *info = module->info;
+
+		if (info->disabled)
+			continue;
+
+		mimes = info->mime_types;
+		for (j = 0; mimes[j] != NULL; j++) {
+			if (g_ascii_strcasecmp (mimes[j], mime_type) == 0) {
+				selected = module;
+				break;
+			}
+		}
+	}
+	g_free (mime_type);
+#else
+	gint score, best = 0;
 
 	for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
 		GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
@@ -781,6 +812,8 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
 		if (score >= 100) 
 			break;
 	}
+#endif
+
 	if (selected != NULL)
 		return selected;
 
