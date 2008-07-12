@@ -17,18 +17,25 @@ implies, most labels are used to label another widget such as a
 The GtkLabel implementation of the GtkBuildable interface supports a 
 custom &lt;attributes&gt; element, which supports any number of &lt;attribute&gt;
 elements. the &lt;attribute&gt; element has attributes named name, value,
-start and end and allows you to specify #PangoAttributs for this label.
+start and end and allows you to specify #PangoAttribute values for this label.
 </para>
 <example>
-<title>A UI definition fragment specifying pango attributes</title>
+<title>A UI definition fragment specifying Pango attributes</title>
 <programlisting><![CDATA[
 <object class="GtkLabel">
   <attributes>
-    <attribute name=\"weight\" value=\"PANGO_WEIGHT_BOLD\"/>
+    <attribute name="weight" value="PANGO_WEIGHT_BOLD"/>
+    <attribute name="background" value="red" start="5" end="10"/>"
   </attributes>
 </object>
 ]]></programlisting>
 </example>
+<para>
+The start and end attributes specify the range of characters to which the
+Pango attribute applies. If start and end are not specified, the attribute is
+applied to the whole text. Note that specifying ranges does not make much
+sense with translatable attributes. Use markup embedded in the translatable
+content instead.
 </refsect2>
 
 
