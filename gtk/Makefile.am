@@ -1108,7 +1108,10 @@ STOCK_ICONS = \
 	stock-icons/24/gtk-paste.png  			\
 	stock-icons/24/gtk-preferences.png    		\
 	stock-icons/24/gtk-print.png  			\
+	stock-icons/24/gtk-print-error.png  		\
 	stock-icons/24/gtk-print-preview.png  		\
+	stock-icons/24/gtk-print-report.png  		\
+	stock-icons/24/gtk-print-warning.png  		\
 	stock-icons/24/gtk-properties.png     		\
 	stock-icons/24/gtk-quit.png   			\
 	stock-icons/24/gtk-redo-ltr.png       		\
