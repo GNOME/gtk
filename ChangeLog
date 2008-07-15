@@ -1,5 +1,14 @@
 2008-07-15  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 339591 – Detect list of availible cover pages
+
+	Patch by Marek Kasik:
+	* modules/printbackends/cups/gtkprintbackendcups.c: Get the list of
+	available cover pages and the default front and back cover pages 
+	from the cups server.
+
+2008-07-15  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 384940 – handle rejecting jobs and authentication meaningfully
 
 	Patch by Marek Kasik, icons by Mike Langlie:

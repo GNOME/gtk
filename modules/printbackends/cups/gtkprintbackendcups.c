@@ -106,6 +106,11 @@ struct _GtkPrintBackendCups
   guint list_printers_poll;
   guint list_printers_pending : 1;
   guint got_default_printer   : 1;
+
+  char **covers;
+  char  *default_cover_before;
+  char  *default_cover_after;
+  int    number_of_covers;
 };
 
 static GObjectClass *backend_parent_class;
@@ -499,6 +504,11 @@ gtk_print_backend_cups_init (GtkPrintBackendCups *backend_cups)
   backend_cups->got_default_printer = FALSE;  
   backend_cups->list_printers_pending = FALSE;
 
+  backend_cups->covers = NULL;
+  backend_cups->default_cover_before = NULL;
+  backend_cups->default_cover_after = NULL;
+  backend_cups->number_of_covers = 0;
+
   cups_request_default_printer (backend_cups);
 }
 
@@ -514,6 +524,12 @@ gtk_print_backend_cups_finalize (GObject *object)
 
   g_free (backend_cups->default_printer);
   backend_cups->default_printer = NULL;
+
+  g_strfreev (backend_cups->covers);
+  backend_cups->number_of_covers = 0;
+
+  g_free (backend_cups->default_cover_before);
+  g_free (backend_cups->default_cover_after);
   
   backend_parent_class->finalize (object);
 }
@@ -794,7 +810,9 @@ cups_request_printer_info (GtkPrintBackendCups *print_backend,
       "printer-info",
       "printer-state-message",
       "printer-state",
-      "queued-job-count"
+      "queued-job-count",
+      "job-sheets-supported",
+      "job-sheets-default"
     };
 
   request = gtk_cups_request_new (NULL,
@@ -1181,6 +1199,30 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
               is_accepting_jobs = TRUE;
             else
               is_accepting_jobs = FALSE;
+          }
+        else if (strcmp (attr->name, "job-sheets-supported") == 0)
+          {
+            if (cups_backend->covers == NULL)
+              {
+                cups_backend->number_of_covers = attr->num_values;
+                cups_backend->covers = g_new (char *, cups_backend->number_of_covers + 1);
+
+                for (i = 0; i < cups_backend->number_of_covers; i++)
+                  cups_backend->covers[i] = g_strdup (attr->values[i].string.text);
+
+                cups_backend->covers[cups_backend->number_of_covers] = NULL;
+              }
+          }
+        else if (strcmp (attr->name, "job-sheets-default") == 0)
+          {
+            if ( (cups_backend->default_cover_before == NULL) && (cups_backend->default_cover_after == NULL))
+              {
+                if (attr->num_values == 2)
+                  {
+                    cups_backend->default_cover_before = g_strdup (attr->values[0].string.text);
+                    cups_backend->default_cover_after = g_strdup (attr->values[1].string.text);
+                  }
+              }
           }
         else
 	  {
@@ -2582,11 +2624,10 @@ cups_printer_get_options (GtkPrinter           *printer,
   char *n_up[] = {"1", "2", "4", "6", "9", "16" };
   char *prio[] = {"100", "80", "50", "30" };
   char *prio_display[] = {N_("Urgent"), N_("High"), N_("Medium"), N_("Low") };
-  char *cover[] = {"none", "classified", "confidential", "secret", "standard", "topsecret", "unclassified" };
-  char *cover_display[] = {N_("None"), N_("Classified"), N_("Confidential"), N_("Secret"), N_("Standard"), N_("Top Secret"), N_("Unclassified"),};
   char *name;
   int num_opts;
   cups_option_t *opts = NULL;
+  GtkPrintBackendCups *backend;
 
 
   set = gtk_printer_option_set_new ();
@@ -2618,24 +2659,66 @@ cups_printer_get_options (GtkPrinter           *printer,
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
 
-  for (i = 0; i < G_N_ELEMENTS(cover_display); i++)
-    cover_display[i] = _(cover_display[i]);
-  
-  option = gtk_printer_option_new ("gtk-cover-before", "Before", GTK_PRINTER_OPTION_TYPE_PICKONE);
-  gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (cover),
-					 cover, cover_display);
-  gtk_printer_option_set (option, "none");
-  set_option_from_settings (option, settings);
-  gtk_printer_option_set_add (set, option);
-  g_object_unref (option);
+  backend = GTK_PRINT_BACKEND_CUPS (gtk_printer_get_backend (printer));
 
-  option = gtk_printer_option_new ("gtk-cover-after", "After", GTK_PRINTER_OPTION_TYPE_PICKONE);
-  gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (cover),
+  if (backend != NULL)
+    {
+      char *cover_default[] = {"none", "classified", "confidential", "secret", "standard", "topsecret", "unclassified" };
+      char *cover_display_default[] = {N_("None"), N_("Classified"), N_("Confidential"), N_("Secret"), N_("Standard"), N_("Top Secret"), N_("Unclassified"),};
+      char **cover = NULL;
+      char **cover_display = NULL;
+      gint num_of_covers = 0;
+      gpointer value;
+      gint j;
+
+      num_of_covers = backend->number_of_covers;
+      cover = g_new (char *, num_of_covers + 1);
+      cover[num_of_covers] = NULL;
+      cover_display = g_new (char *, num_of_covers + 1);
+      cover_display[num_of_covers] = NULL;
+
+      for (i = 0; i < num_of_covers; i++)
+        {
+          cover[i] = g_strdup (backend->covers[i]);
+          value = NULL;
+          for (j = 0; j < G_N_ELEMENTS (cover_default); j++)
+            if (strcmp (cover_default[j], cover[i]) == 0)
+              {
+                value = cover_display_default[j];
+                break;
+              }
+          cover_display[i] = (value != NULL) ? g_strdup (value) : g_strdup (backend->covers[i]);
+        }
+
+      for (i = 0; i < num_of_covers; i++)
+        cover_display[i] = _(cover_display[i]);
+  
+      option = gtk_printer_option_new ("gtk-cover-before", "Before", GTK_PRINTER_OPTION_TYPE_PICKONE);
+      gtk_printer_option_choices_from_array (option, num_of_covers,
 					 cover, cover_display);
-  gtk_printer_option_set (option, "none");
-  set_option_from_settings (option, settings);
-  gtk_printer_option_set_add (set, option);
-  g_object_unref (option);
+
+      if (backend->default_cover_before != NULL)
+        gtk_printer_option_set (option, backend->default_cover_before);
+      else
+        gtk_printer_option_set (option, "none");
+      set_option_from_settings (option, settings);
+      gtk_printer_option_set_add (set, option);
+      g_object_unref (option);
+
+      option = gtk_printer_option_new ("gtk-cover-after", "After", GTK_PRINTER_OPTION_TYPE_PICKONE);
+      gtk_printer_option_choices_from_array (option, num_of_covers,
+					 cover, cover_display);
+      if (backend->default_cover_after != NULL)
+        gtk_printer_option_set (option, backend->default_cover_after);
+      else
+        gtk_printer_option_set (option, "none");
+      set_option_from_settings (option, settings);
+      gtk_printer_option_set_add (set, option);
+      g_object_unref (option);
+
+      g_strfreev (cover);
+      g_strfreev (cover_display);
+    }
 
   option = gtk_printer_option_new ("gtk-print-time", "Print at", GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (print_at),
