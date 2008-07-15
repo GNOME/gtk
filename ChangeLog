@@ -1,3 +1,10 @@
+2008-07-15  Xavier Claessens  <xclaesse@gmail.com>
+
+	Bug 542523 – GtkTextTag should handle setting properties to NULL
+
+	* gtk/gtktexttag.c (gtk_text_tag_set_property): Unset the color when
+	setting it to NULL instead of displaying a warning.
+
 2008-07-15  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 479780 – Bookmarks in left pane of FileChooser cannot be renamed

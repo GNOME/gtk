@@ -1002,7 +1002,9 @@ gtk_text_tag_set_property (GObject      *object,
       {
         GdkColor color;
 
-        if (gdk_color_parse (g_value_get_string (value), &color))
+        if (!g_value_get_string (value))
+          set_bg_color (text_tag, NULL);       /* reset to background_set to FALSE */
+        else if (gdk_color_parse (g_value_get_string (value), &color))
           set_bg_color (text_tag, &color);
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
@@ -1015,7 +1017,9 @@ gtk_text_tag_set_property (GObject      *object,
       {
         GdkColor color;
 
-        if (gdk_color_parse (g_value_get_string (value), &color))
+        if (!g_value_get_string (value))
+          set_fg_color (text_tag, NULL);       /* reset to foreground_set to FALSE */
+        else if (gdk_color_parse (g_value_get_string (value), &color))
           set_fg_color (text_tag, &color);
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
@@ -1295,7 +1299,9 @@ gtk_text_tag_set_property (GObject      *object,
       {
         GdkColor color;
 
-        if (gdk_color_parse (g_value_get_string (value), &color))
+        if (!g_value_get_string (value))
+          set_pg_bg_color (text_tag, NULL);       /* reset to paragraph_background_set to FALSE */
+        else if (gdk_color_parse (g_value_get_string (value), &color))
           set_pg_bg_color (text_tag, &color);
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
