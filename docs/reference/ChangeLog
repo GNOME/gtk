@@ -1,3 +1,7 @@
+2008-07-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtklabel.sgml: Fix markup
+
 2008-07-11  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 537430 – label pango attributes & i18n

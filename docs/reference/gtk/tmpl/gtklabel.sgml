@@ -36,6 +36,7 @@ Pango attribute applies. If start and end are not specified, the attribute is
 applied to the whole text. Note that specifying ranges does not make much
 sense with translatable attributes. Use markup embedded in the translatable
 content instead.
+</para>
 </refsect2>
 
 
