@@ -1,5 +1,13 @@
 2008-07-15  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 479780 – Bookmarks in left pane of FileChooser cannot be renamed
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_build_popup_menu):
+	Call shortcuts_check_popup_sensitivity() every time the
+	menu is popped up. Problem reported by Hong Jen Yee
+	
+2008-07-15  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 488766 – GtkFileChooserButton doesn't clear icon after
 	gtk_file_chooser_unselect_all
 
