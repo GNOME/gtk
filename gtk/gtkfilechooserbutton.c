@@ -2387,12 +2387,15 @@ out:
       g_free (label_text);
     }
   else
-    gtk_label_set_text (GTK_LABEL (priv->label), _(FALLBACK_DISPLAY_NAME));
+    {
+      gtk_label_set_text (GTK_LABEL (priv->label), _(FALLBACK_DISPLAY_NAME));
+      gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), NULL);
+    }
 }
 
 
 /* ************************ *
- *  Child Object Callbacks  *
+ /*  Child Object Callbacks  *
  * ************************ */
 
 /* File System */

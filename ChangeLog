@@ -1,5 +1,12 @@
 2008-07-15  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 488766 – GtkFileChooserButton doesn't clear icon after
+	gtk_file_chooser_unselect_all
+
+	* gtk/gtkfilechooserbutton.c (update_label_and_image): Unset
+	the image when the label is set to "(None)". Reported by
+	Neil Roberts
+
 	* tests/testfilechooserbutton.c: Add an "Unselect all" button.
 
 2008-07-15  Matthias Clasen  <mclasen@redhat.com>
