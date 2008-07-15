@@ -1000,6 +1000,7 @@ STOCK_ICONS = \
 	stock-icons/16/gtk-preferences.png    		\
 	stock-icons/16/gtk-print.png  			\
 	stock-icons/16/gtk-print-error.png  		\
+	stock-icons/16/gtk-print-paused.png  		\
 	stock-icons/16/gtk-print-preview.png  		\
 	stock-icons/16/gtk-print-report.png  		\
 	stock-icons/16/gtk-print-warning.png  		\
@@ -1109,6 +1110,7 @@ STOCK_ICONS = \
 	stock-icons/24/gtk-preferences.png    		\
 	stock-icons/24/gtk-print.png  			\
 	stock-icons/24/gtk-print-error.png  		\
+	stock-icons/24/gtk-print-paused.png  		\
 	stock-icons/24/gtk-print-preview.png  		\
 	stock-icons/24/gtk-print-report.png  		\
 	stock-icons/24/gtk-print-warning.png  		\

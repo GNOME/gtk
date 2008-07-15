@@ -96,6 +96,12 @@ static gboolean dialog_get_collate                 (GtkPrintUnixDialog *dialog);
 static gboolean dialog_get_reverse                 (GtkPrintUnixDialog *dialog);
 static gint     dialog_get_n_copies                (GtkPrintUnixDialog *dialog);
 
+static void     set_cell_sensitivity_func          (GtkTreeViewColumn *tree_column,
+				                    GtkCellRenderer   *cell,
+				                    GtkTreeModel      *model,
+				                    GtkTreeIter       *iter,
+				                    gpointer           data);
+
 /* GtkBuildable */
 static void gtk_print_unix_dialog_buildable_init                    (GtkBuildableIface *iface);
 static GObject *gtk_print_unix_dialog_buildable_get_internal_child  (GtkBuildable *buildable,
@@ -309,12 +315,12 @@ add_custom_button_to_dialog (GtkDialog   *dialog,
   gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, response_id);
 }
 
-/* Presents an overwrite confirmation dialog ("print to file" backend).
+/* This function handles error messages before printing.
  */
 static gboolean
-overwrite_confirmation_dialog (GtkPrintUnixDialog *print_dialog,
-                               gint                print_dialog_response_id,
-                               gpointer            data)
+error_dialogs (GtkPrintUnixDialog *print_dialog,
+               gint                print_dialog_response_id,
+               gpointer            data)
 {
   GtkPrintUnixDialogPrivate *priv = print_dialog->priv;
   GtkPrinterOption          *option = NULL;
@@ -330,6 +336,8 @@ overwrite_confirmation_dialog (GtkPrintUnixDialog *print_dialog,
     {
       printer = gtk_print_unix_dialog_get_selected_printer (print_dialog);
 
+      /* Shows overwrite confirmation dialog in the case of printing to file which
+       * already exists. */
       if (printer != NULL && gtk_printer_is_virtual (printer))
         {
           option = gtk_printer_option_set_lookup (priv->options,
@@ -418,7 +426,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 
   g_signal_connect (dialog,
                     "response",
-                    (GCallback) overwrite_confirmation_dialog,
+                    (GCallback) error_dialogs,
                     NULL);
 
   priv->preview_button = gtk_button_new_from_stock (GTK_STOCK_PRINT_PREVIEW);
@@ -568,6 +576,28 @@ gtk_print_unix_dialog_buildable_get_internal_child (GtkBuildable *buildable,
   return parent_buildable_iface->get_internal_child (buildable, builder, childname);
 }
 
+/* This function controls "sensitive" property of GtkCellRenderer based on pause
+ * state of printers. */
+void set_cell_sensitivity_func (GtkTreeViewColumn *tree_column,
+                                GtkCellRenderer   *cell,
+                                GtkTreeModel      *tree_model,
+                                GtkTreeIter       *iter,
+                                gpointer           data)
+{
+  GtkPrinter *printer;
+  
+  gtk_tree_model_get (tree_model, iter, PRINTER_LIST_COL_PRINTER_OBJ, &printer, -1);
+
+  if (printer != NULL && !gtk_printer_is_accepting_jobs (printer))
+    g_object_set (cell,
+                  "sensitive", FALSE,
+                  NULL);
+  else
+    g_object_set (cell,
+                  "sensitive", TRUE,
+                  NULL);
+}
+
 static void
 printer_status_cb (GtkPrintBackend    *backend, 
 		   GtkPrinter         *printer, 
@@ -575,6 +605,7 @@ printer_status_cb (GtkPrintBackend    *backend,
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkTreeIter *iter;
+  GtkTreeSelection *selection;
 
   iter = g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter");
 
@@ -585,6 +616,10 @@ printer_status_cb (GtkPrintBackend    *backend,
                       PRINTER_LIST_COL_LOCATION, gtk_printer_get_location (printer),
                       -1);
 
+  /* When the pause state change then we need to update sensitive property
+   * of GTK_RESPONSE_OK button inside of selected_printer_changed function. */
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->printer_treeview));
+  selected_printer_changed (selection, dialog);
 }
 
 static void
@@ -1410,6 +1445,21 @@ selected_printer_changed (GtkTreeSelection   *selection,
   			  PRINTER_LIST_COL_PRINTER_OBJ, &printer,
 			  -1);
     }
+
+  /* sets GTK_RESPONSE_OK button sensitive/insensitive depending on whether the printer 
+   * accepts/rejects jobs */
+  if (printer != NULL)
+    {
+      if (!gtk_printer_is_accepting_jobs (printer))
+        {
+          gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
+        }
+      else
+        {
+          if (priv->current_printer == printer && gtk_printer_has_details (printer))
+            gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, TRUE);
+        }
+    }
   
   if (printer != NULL && !gtk_printer_has_details (printer))
     {
@@ -1445,7 +1495,8 @@ selected_printer_changed (GtkTreeSelection   *selection,
 
   priv->printer_capabilities = 0;
   
-  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, TRUE);
+  if (gtk_printer_is_accepting_jobs (printer))
+    gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, TRUE);
   priv->current_printer = printer;
 
   if (printer != NULL)
@@ -1659,6 +1710,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
 						     "icon-name",
 						     PRINTER_LIST_COL_ICON,
 						     NULL);
+  gtk_tree_view_column_set_cell_data_func (column, renderer, set_cell_sensitivity_func, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
 
   renderer = gtk_cell_renderer_text_new ();
@@ -1667,6 +1719,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
 						     "text",
 						     PRINTER_LIST_COL_NAME,
 						     NULL);
+  gtk_tree_view_column_set_cell_data_func (column, renderer, set_cell_sensitivity_func, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
   
   renderer = gtk_cell_renderer_text_new ();
@@ -1675,6 +1728,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
 						     "text",
 						     PRINTER_LIST_COL_LOCATION,
 						     NULL);
+  gtk_tree_view_column_set_cell_data_func (column, renderer, set_cell_sensitivity_func, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
 
   renderer = gtk_cell_renderer_text_new ();
@@ -1684,6 +1738,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
 						     "text",
 						     PRINTER_LIST_COL_STATE,
 						     NULL);
+  gtk_tree_view_column_set_cell_data_func (column, renderer, set_cell_sensitivity_func, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
   
   gtk_widget_show (treeview);

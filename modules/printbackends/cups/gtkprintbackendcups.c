@@ -1058,6 +1058,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       const gchar *reason_msg = NULL;
       gchar *reason_msg_desc = NULL;
       gchar *tmp_msg = NULL;
+      gchar *tmp_msg2 = NULL;
       gint printer_state_reason_level = 0; /* 0 - none, 1 - report, 2 - warning, 3 - error */
       gboolean interested_in = FALSE;
       gboolean found = FALSE;
@@ -1093,6 +1094,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
           N_("Printer '%s' may not be connected."),
           N_("There is a problem on printer '%s'.")
         };
+      gboolean is_paused = FALSE;
+      gboolean is_accepting_jobs = TRUE;
       
       /* Skip leading attributes until we hit a printer...
        */
@@ -1127,6 +1130,12 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
               {
                 if (strcmp (attr->values[i].string.text, "none") != 0)
                   {
+                    /* Sets is_paused flag for paused printer. */
+                    if (strcmp (attr->values[i].string.text, "paused") == 0)
+                      {
+                        is_paused = TRUE;
+                      }
+
                     interested_in = FALSE;
                     for (j = 0; j < G_N_ELEMENTS (reasons); j++)
                         if (strncmp (attr->values[i].string.text, reasons[j], strlen (reasons[j])) == 0)
@@ -1166,6 +1175,13 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
           state = attr->values[0].integer;
         else if (strcmp (attr->name, "queued-job-count") == 0)
           job_count = attr->values[0].integer;
+        else if (strcmp (attr->name, "printer-is-accepting-jobs") == 0)
+          {
+            if (attr->values[0].boolean == 1)
+              is_accepting_jobs = TRUE;
+            else
+              is_accepting_jobs = FALSE;
+          }
         else
 	  {
 	    GTK_NOTE (PRINTING,
@@ -1262,6 +1278,9 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       else
 	g_object_ref (printer);
 
+      gtk_printer_set_is_paused (printer, is_paused);
+      gtk_printer_set_is_accepting_jobs (printer, is_accepting_jobs);
+
       if (!gtk_printer_is_active (printer))
         {
 	  gtk_printer_set_is_active (printer, TRUE);
@@ -1287,6 +1306,19 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       status_changed = gtk_printer_set_job_count (printer, job_count);
       status_changed |= gtk_printer_set_location (printer, location);
       status_changed |= gtk_printer_set_description (printer, description);
+
+      if (state_msg != NULL && strlen (state_msg) == 0)
+        {
+          if (is_paused && !is_accepting_jobs)
+            tmp_msg2 = g_strdup ( N_("Paused ; Rejecting Jobs"));
+          if (is_paused && is_accepting_jobs)
+            tmp_msg2 = g_strdup ( N_("Paused"));
+          if (!is_paused && !is_accepting_jobs)
+            tmp_msg2 = g_strdup ( N_("Rejecting Jobs"));
+
+          if (tmp_msg2 != NULL)
+            state_msg = tmp_msg2;
+        }
 
       /* Set description of the reason and combine it with printer-state-message. */
       if ( (reason_msg != NULL))
@@ -1317,9 +1349,13 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
         }
 
       status_changed |= gtk_printer_set_state_message (printer, state_msg);
+      status_changed |= gtk_printer_set_is_accepting_jobs (printer, is_accepting_jobs);
 
       if (tmp_msg != NULL)
         g_free (tmp_msg);
+
+      if (tmp_msg2 != NULL)
+        g_free (tmp_msg2);
 
       if (reason_msg_desc != NULL)
         g_free (reason_msg_desc);
@@ -1330,6 +1366,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
         gtk_printer_set_icon_name (printer, "gtk-print-error");
       else if (printer_state_reason_level == 2)
         gtk_printer_set_icon_name (printer, "gtk-print-warning");
+      else if (gtk_printer_is_paused (printer))
+        gtk_printer_set_icon_name (printer, "gtk-print-paused");
       else
         gtk_printer_set_icon_name (printer, "gtk-print");
 
@@ -1376,7 +1414,8 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
       "printer-state-message",
       "printer-state-reasons",
       "printer-state",
-      "queued-job-count"
+      "queued-job-count",
+      "printer-is-accepting-jobs"
     };
  
   if (cups_backend->list_printers_pending ||

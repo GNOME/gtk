@@ -148,6 +148,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
 #define GTK_STOCK_PREFERENCES      "gtk-preferences"
 #define GTK_STOCK_PRINT            "gtk-print"
 #define GTK_STOCK_PRINT_ERROR      "gtk-print-error"
+#define GTK_STOCK_PRINT_PAUSED     "gtk-print-paused"
 #define GTK_STOCK_PRINT_PREVIEW    "gtk-print-preview"
 #define GTK_STOCK_PRINT_REPORT     "gtk-print-report"
 #define GTK_STOCK_PRINT_WARNING    "gtk-print-warning"

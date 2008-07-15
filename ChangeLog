@@ -1,5 +1,24 @@
 2008-07-15  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 384940 – handle rejecting jobs and authentication meaningfully
+
+	Patch by Marek Kasik, icons by Mike Langlie:
+	* gtk/gtk.symbols:
+	* gtk/gtkprintbackend.h:
+	* gtk/gtkprinter.[hc]: Add new paused and accepting-jobs properties
+	and getters/setters.
+
+	* gtk/gtkstock.h:
+	* gtk/gtkiconfactory.c:
+	* gtk/Makefile.am:
+	* gtk/stock-icons/{16,24}/gtk-print-paused.{png,svg}: New icon.
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: 
+	* gtk/gtkprintunixdialog.c: Handle paused and job-rejecting 
+	printers.
+
+2008-07-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Add a test to see if GIO can sniff image data,
 	this should make gdk-pixbuf use its own sniffing again, on OS X.
 

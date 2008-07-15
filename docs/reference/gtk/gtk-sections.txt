@@ -6441,6 +6441,8 @@ gtk_printer_get_location
 gtk_printer_get_icon_name
 gtk_printer_get_job_count
 gtk_printer_is_active
+gtk_printer_is_paused
+gtk_printer_is_accepting_jobs
 gtk_printer_is_virtual
 gtk_printer_is_default
 gtk_printer_accepts_ps

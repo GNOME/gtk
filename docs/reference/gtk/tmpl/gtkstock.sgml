@@ -755,8 +755,17 @@ The "Print" item.
 
 <!-- ##### MACRO GTK_STOCK_PRINT_ERROR ##### -->
 <para>
-The "Print Error" item.
+The "Print Error" icon.
 <inlinegraphic fileref="gtk-print-error.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.14
+
+
+<!-- ##### MACRO GTK_STOCK_PRINT_PAUSED ##### -->
+<para>
+The "Print Paused" icon.
+<inlinegraphic fileref="gtk-print-paused.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.14
@@ -772,7 +781,7 @@ The "Print Preview" item.
 
 <!-- ##### MACRO GTK_STOCK_PRINT_REPORT ##### -->
 <para>
-The "Print Report" item.
+The "Print Report" icon.
 <inlinegraphic fileref="gtk-print-report.png" format="PNG"></inlinegraphic>
 </para>
 
@@ -781,7 +790,7 @@ The "Print Report" item.
 
 <!-- ##### MACRO GTK_STOCK_PRINT_WARNING ##### -->
 <para>
-The "Print Warning" item.
+The "Print Warning" icon.
 <inlinegraphic fileref="gtk-print-warning.png" format="PNG"></inlinegraphic>
 </para>
 
