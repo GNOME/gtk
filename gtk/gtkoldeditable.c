@@ -126,6 +126,7 @@ static gboolean gtk_old_editable_get_selection_bounds (GtkEditable *editable,
 static void     gtk_old_editable_set_position        (GtkEditable *editable,
 						      gint         position);
 static gint     gtk_old_editable_get_position        (GtkEditable *editable);
+static void     gtk_old_editable_finalize            (GObject     *object);
 
 static guint editable_signals[LAST_SIGNAL] = { 0 };
 
@@ -136,11 +137,15 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkOldEditable, gtk_old_editable, GTK_TYPE_WID
 static void
 gtk_old_editable_class_init (GtkOldEditableClass *class)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
+  gobject_class = (GObjectClass*) class;
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
+
+  gobject_class->finalize = gtk_old_editable_finalize;
 
   object_class->set_arg = gtk_old_editable_set_arg;
   object_class->get_arg = gtk_old_editable_get_arg;
@@ -368,6 +373,14 @@ gtk_old_editable_init (GtkOldEditable *old_editable)
 
   gtk_selection_add_targets (GTK_WIDGET (old_editable), GDK_SELECTION_PRIMARY,
 			     targets, G_N_ELEMENTS (targets));
+}
+
+static void
+gtk_old_editable_finalize (GObject *object)
+{
+  gtk_selection_clear_targets (GTK_WIDGET (object), GDK_SELECTION_PRIMARY);
+
+  G_OBJECT_CLASS (gtk_old_editable_parent_class)->finalize (object);
 }
 
 static void

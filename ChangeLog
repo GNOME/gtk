@@ -1,3 +1,15 @@
+2008-07-15  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 507394 – mem leak from gtk_selection_add_targets
+
+	* gtk/gtkoldeditable.c: Free target lists in finalize.
+	Reported by Christian Persch
+
+2008-07-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtktypeutils.[hc]: Complete the deprecation of gtk_type_class.
+
 2008-07-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c: Trivial doc fix.
