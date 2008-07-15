@@ -51,11 +51,6 @@
 #define SNIFF_BUFFER_SIZE 4096
 #define LOAD_BUFFER_SIZE 65536
 
-#ifndef G_OS_WIN32
-/* GIO doesn't do mime sniffing on Win32, so we need to do our own */
-#define GDK_PIXBUF_USE_GIO_MIME 1
-#endif
-
 #ifndef GDK_PIXBUF_USE_GIO_MIME 
 static gint 
 format_check (GdkPixbufModule *module, guchar *buffer, int size)

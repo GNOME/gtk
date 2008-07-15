@@ -1,3 +1,8 @@
+2008-07-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Add a test to see if GIO can sniff image data,
+	this should make gdk-pixbuf use its own sniffing again, on OS X.
+
 2008-07-15  Xavier Claessens  <xclaesse@gmail.com>
 
 	Bug 542523 – GtkTextTag should handle setting properties to NULL

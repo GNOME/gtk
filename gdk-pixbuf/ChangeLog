@@ -1,3 +1,8 @@
+2008-07-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-io.c: Move the check for wheter to use 
+	GIO for sniffing to configure.
+
 2008-07-14  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 401985 – Documentation improvement for the
