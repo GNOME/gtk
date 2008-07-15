@@ -1,5 +1,9 @@
 2008-07-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c: Trivial doc fix.
+
+2008-07-14  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 542853 – jasper test fails due to incomplete library arguments
 
 	* configure.in: Add -ljpeg when checking for jasper.
