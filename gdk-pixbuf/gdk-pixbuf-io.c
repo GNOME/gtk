@@ -1040,11 +1040,16 @@ gdk_pixbuf_new_from_file (const char *filename,
  * @height: The height the image should have or -1 to not constrain the height
  * @error: Return location for an error
  *
- * Creates a new pixbuf by loading an image from a file.  The file format is
- * detected automatically. If %NULL is returned, then @error will be set.
- * Possible errors are in the #GDK_PIXBUF_ERROR and #G_FILE_ERROR domains.
+ * Creates a new pixbuf by loading an image from a file.  
+ * The file format is detected automatically. If %NULL is returned, then 
+ * @error will be set. Possible errors are in the #GDK_PIXBUF_ERROR and 
+ * #G_FILE_ERROR domains.
+ *
  * The image will be scaled to fit in the requested size, preserving
- * the image's aspect ratio.
+ * the image's aspect ratio. Note that the returned pixbuf may be smaller
+ * than @width x @height, if the aspect ratio requires it. To load
+ * and image at the requested size, regardless of aspect ratio, use
+ * gdk_pixbuf_new_from_file_at_scale().
  *
  * Return value: A newly-created pixbuf with a reference count of 1, or 
  * %NULL if any of several error conditions occurred:  the file could not 

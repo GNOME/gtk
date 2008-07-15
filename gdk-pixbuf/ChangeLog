@@ -1,3 +1,11 @@
+2008-07-14  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 401985 – Documentation improvement for the
+	gdk_pixbuf_new_from_file_at_scale() function
+
+	* gdk-pixbuf-io.c: Improve docs for gdk_pixbuf_new_from_file_at_scale().
+	Proposed by Juan Manuel Palacios
+
 2008-07-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-io.c: Use GIO for sniffing image types, except
