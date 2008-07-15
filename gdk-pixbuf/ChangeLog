@@ -1,5 +1,13 @@
 2008-07-15  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 543085 – gdk_pixbuf_saturate_and_pixelate may corrupt memory
+
+	* gdk-pixbuf-utils.c (gdk_pixbuf_saturate_and_pixelate):
+	Use gdk_pixbuf_copy_area() to copy between pixbufs.
+	Reported by Andrey Tsyvarev
+
+2008-07-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk-pixbuf-io.c: Move the check for wheter to use 
 	GIO for sniffing to configure.
 
