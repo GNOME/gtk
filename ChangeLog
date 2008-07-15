@@ -1,5 +1,12 @@
 2008-07-14  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 542853 – jasper test fails due to incomplete library arguments
+
+	* configure.in: Add -ljpeg when checking for jasper.
+	Reported by Mike Calmus
+
+2008-07-14  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/Makefile.am: Add some missing stock-icons. Noticed by Marek 
 	Kasik.
 

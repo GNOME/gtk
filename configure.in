@@ -898,7 +898,7 @@ dnl Test for libpng
 
 dnl Test for libjasper
   if test x$with_libjasper != xno && test -z "$LIBJASPER"; then
-    AC_CHECK_LIB(jasper, jas_init, LIBJASPER=-ljasper, [])
+    AC_CHECK_LIB(jasper, jas_init, LIBJASPER=-ljasper, [], -ljpeg)
   fi
 
   if test x$with_libjasper != xno && test -z "$LIBJASPER"; then
