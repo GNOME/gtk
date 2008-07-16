@@ -1,3 +1,8 @@
+2008-07-15  Paolo Borelli  <pborelli@katamail.com>
+
+	* gtk/tests/builder.c: fix up broken test (cellview has no "clicked"
+	signal) case and plug a couple of leaks.
+
 2008-07-15  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 543244 – crashes when renaming a bookmark

@@ -64,7 +64,7 @@ test_parser (void)
   g_assert (error != NULL);
   g_assert (error->domain == GTK_BUILDER_ERROR);
   g_assert (error->code == GTK_BUILDER_ERROR_UNHANDLED_TAG);
-    g_error_free (error);
+  g_error_free (error);
   
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface invalid=\"X\"/>", -1, &error);
@@ -622,7 +622,9 @@ test_list_store (void)
   g_free (lastname);
   g_assert (age == 50);
   g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter) == FALSE);
-  
+
+  g_object_unref (builder);  
+
   builder = builder_new_from_string (buffer3, -1, NULL);
   store = gtk_builder_get_object (builder, "liststore1");
   g_assert (gtk_tree_model_get_n_columns (GTK_TREE_MODEL (store)) == 3);
@@ -1392,9 +1394,9 @@ test_cell_view (void)
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <child>"
     "      <object class=\"GtkCellView\" id=\"cellview1\">"
-    "        <accelerator key=\"q\" signal=\"clicked\"/>"
     "        <property name=\"visible\">True</property>"
     "        <property name=\"model\">liststore1</property>"
+    "        <accelerator key=\"f\" modifiers=\"GDK_CONTROL_MASK\" signal=\"grab_focus\"/>"
     "        <child>"
     "          <object class=\"GtkCellRendererText\" id=\"renderer1\"/>"
     "          <attributes>"
@@ -1938,6 +1940,8 @@ test_icon_factory (void)
   image = gtk_image_new_from_stock ("apple-red", GTK_ICON_SIZE_BUTTON);
   g_assert (image != NULL);
 
+  g_object_unref (builder);
+
   builder = builder_new_from_string (buffer2, -1, NULL);
   factory = gtk_builder_get_object (builder, "iconfactory1");
   g_assert (factory != NULL);
@@ -2099,7 +2103,6 @@ test_pango_attributes (void)
   g_assert (error->code == GTK_BUILDER_ERROR_INVALID_ATTRIBUTE);
   g_object_unref (builder);
   g_error_free (error);
-
 }
 
 
