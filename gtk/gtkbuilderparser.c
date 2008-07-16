@@ -282,6 +282,21 @@ parse_requires (ParserData   *data,
   req_info->tag.name = element_name;
 }
 
+static gboolean
+is_requested_object (const gchar *object,
+                     ParserData  *data)
+{
+  GSList *l;
+
+  for (l = data->requested_objects; l; l = l->next)
+    {
+      if (strcmp (l->data, object) == 0)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 parse_object (ParserData   *data,
               const gchar  *element_name,
@@ -344,6 +359,25 @@ parse_object (ParserData   *data,
     {
       error_missing_attribute (data, element_name, "id", error);
       return;
+    }
+
+  ++data->cur_object_level;
+
+  /* check if we reached a requested object (if it is specified) */
+  if (data->requested_objects && !data->inside_requested_object)
+    {
+      if (is_requested_object (object_id, data))
+        {
+          data->requested_object_level = data->cur_object_level;
+
+          GTK_NOTE (BUILDER, g_print ("requested object \"%s\" found at level %d\n",
+                                      object_id,
+                                      data->requested_object_level));
+
+          data->inside_requested_object = TRUE;
+        }
+      else
+        return;
     }
 
   object_info = g_slice_new0 (ObjectInfo);
@@ -801,6 +835,11 @@ start_element (GMarkupParseContext *context,
     parse_requires (data, element_name, names, values, error);
   else if (strcmp (element_name, "object") == 0)
     parse_object (data, element_name, names, values, error);
+  else if (data->requested_objects && !data->inside_requested_object)
+    {
+      /* If outside a requested object, simply ignore this tag */
+      return;
+    }
   else if (strcmp (element_name, "child") == 0)
     parse_child (data, element_name, names, values, error);
   else if (strcmp (element_name, "property") == 0)
@@ -910,10 +949,31 @@ end_element (GMarkupParseContext *context,
 			 GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
 	}
     }
+  else if (strcmp (element_name, "interface") == 0)
+    {
+    }
+  else if (data->requested_objects && !data->inside_requested_object)
+    {
+      /* If outside a requested object, simply ignore this tag */
+      return;
+    }
   else if (strcmp (element_name, "object") == 0)
     {
       ObjectInfo *object_info = state_pop_info (data, ObjectInfo);
       ChildInfo* child_info = state_peek_info (data, ChildInfo);
+
+      if (data->requested_objects && data->inside_requested_object &&
+          (data->cur_object_level == data->requested_object_level))
+        {
+          GTK_NOTE (BUILDER, g_print ("requested object end found at level %d\n",
+                                      data->requested_object_level));
+
+          data->inside_requested_object = FALSE;
+        }
+
+      --data->cur_object_level;
+
+      g_assert (data->cur_object_level >= 0);
 
       object_info->object = builder_construct (data, object_info, error);
       if (!object_info->object)
@@ -975,9 +1035,6 @@ end_element (GMarkupParseContext *context,
       signal_info->object_name = g_strdup (object_info->id);
       object_info->signals =
         g_slist_prepend (object_info->signals, signal_info);
-    }
-  else if (strcmp (element_name, "interface") == 0)
-    {
     }
   else if (strcmp (element_name, "placeholder") == 0)
     {
@@ -1056,6 +1113,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
                                   const gchar  *filename,
                                   const gchar  *buffer,
                                   gsize         length,
+                                  gchar       **requested_objs,
                                   GError      **error)
 {
   ParserData *data;
@@ -1066,13 +1124,31 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   data->filename = filename;
   data->domain = g_strdup (gtk_builder_get_translation_domain (builder));
 
+  data->requested_objects = NULL;
+  if (requested_objs)
+    {
+      gint i;
+
+      data->inside_requested_object = FALSE;
+      for (i = 0; requested_objs[i]; ++i)
+        {
+          data->requested_objects = g_slist_prepend (data->requested_objects,
+                                                     g_strdup (requested_objs[i]));	
+        }
+    }
+  else
+    {
+      /* get all the objects */
+      data->inside_requested_object = TRUE;
+    }
+
   data->ctx = g_markup_parse_context_new (&parser, 
                                           G_MARKUP_TREAT_CDATA_AS_TEXT, 
                                           data, NULL);
 
   if (!g_markup_parse_context_parse (data->ctx, buffer, length, error))
     goto out;
-  
+
   _gtk_builder_finish (builder);
 
   /* Custom parser_finished */
@@ -1103,6 +1179,8 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   g_slist_foreach (data->custom_finalizers, (GFunc)free_subparser, NULL);
   g_slist_free (data->custom_finalizers);
   g_slist_free (data->finalizers);
+  g_slist_foreach (data->requested_objects, (GFunc) g_free, NULL);
+  g_slist_free (data->requested_objects);
   g_free (data->domain);
   g_markup_parse_context_free (data->ctx);
   g_free (data);

@@ -478,6 +478,8 @@ GtkBuilderError
 gtk_builder_new
 gtk_builder_add_from_file
 gtk_builder_add_from_string
+gtk_builder_add_objects_from_file
+gtk_builder_add_objects_from_string
 gtk_builder_get_object
 gtk_builder_get_objects
 gtk_builder_connect_signals

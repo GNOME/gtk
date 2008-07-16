@@ -100,6 +100,15 @@ guint        gtk_builder_add_from_string         (GtkBuilder    *builder,
                                                   const gchar   *buffer,
                                                   gsize          length,
                                                   GError       **error);
+guint        gtk_builder_add_objects_from_file   (GtkBuilder    *builder,
+                                                  const gchar   *filename,
+                                                  gchar        **object_ids,
+                                                  GError       **error);
+guint        gtk_builder_add_objects_from_string (GtkBuilder    *builder,
+                                                  const gchar   *buffer,
+                                                  gsize          length,
+                                                  gchar        **object_ids,
+                                                  GError       **error);
 GObject*     gtk_builder_get_object              (GtkBuilder    *builder,
                                                   const gchar   *name);
 GSList*      gtk_builder_get_objects             (GtkBuilder    *builder);

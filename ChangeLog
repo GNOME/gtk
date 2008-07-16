@@ -1,5 +1,19 @@
 2008-07-15  Paolo Borelli  <pborelli@katamail.com>
 
+	Bug 447998 - GtkBuilder does not support building parts of the xml tree
+
+	* gtk/gtkbuilder.c:
+	* gtk/gtkbuilder.h:
+	* gtk/gtkbuilderprivate.h:
+	* gtk/gtkbuilderparser.c:
+	* gtk/gtk.symbols:
+	Add two new functions that allow cherry picking and construct
+	objects from a ui description file or string.
+
+	* gtk/tests/builder.c: tests for the above.
+
+2008-07-15  Paolo Borelli  <pborelli@katamail.com>
+
 	* gtk/tests/builder.c: fix up broken test (cellview has no "clicked"
 	signal) case and plug a couple of leaks.
 

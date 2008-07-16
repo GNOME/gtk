@@ -658,7 +658,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
   g_return_val_if_fail (filename != NULL, 0);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, 0);
 
   tmp_error = NULL;
 
@@ -673,6 +673,70 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
 
   _gtk_builder_parser_parse_buffer (builder, filename,
                                     buffer, length,
+                                    NULL,
+                                    &tmp_error);
+
+  g_free (buffer);
+
+  if (tmp_error != NULL)
+    {
+      g_propagate_error (error, tmp_error);
+      return 0;
+    }
+
+  return 1;
+}
+
+/**
+ * gtk_builder_add_objects_from_file:
+ * @builder: a #GtkBuilder
+ * @filename: the name of the file to parse
+ * @object_ids: nul-terminated array of objects to build
+ * @error: return location for an error, or %NULL
+ *
+ * Parses a file containing a <link linkend="BUILDER-UI">GtkBuilder 
+ * UI definition</link> building only the requested objects and merges
+ * them with the current contents of @builder. 
+ *
+ * <note><para>
+ * If you are adding an object that depends on an object that is not 
+ * its child (for instance a #GtkTreeView that depends on its
+ * #GtkTreeModel), you have to explicitely list all of them in @object_ids. 
+ * </para></note>
+ *
+ * Returns: A positive value on success, 0 if an error occurred
+ *
+ * Since: 2.14
+ **/
+guint
+gtk_builder_add_objects_from_file (GtkBuilder   *builder,
+                                   const gchar  *filename,
+                                   gchar       **object_ids,
+                                   GError      **error)
+{
+  gchar *buffer;
+  gsize length;
+  GError *tmp_error;
+
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
+  g_return_val_if_fail (filename != NULL, 0);
+  g_return_val_if_fail (object_ids != NULL && object_ids[0] != NULL, 0);
+  g_return_val_if_fail (error == NULL || *error == NULL, 0);
+
+  tmp_error = NULL;
+
+  if (!g_file_get_contents (filename, &buffer, &length, &tmp_error))
+    {
+      g_propagate_error (error, tmp_error);
+      return 0;
+    }
+  
+  g_free (builder->priv->filename);
+  builder->priv->filename = g_strdup (filename);
+
+  _gtk_builder_parser_parse_buffer (builder, filename,
+                                    buffer, length,
+                                    object_ids,
                                     &tmp_error);
 
   g_free (buffer);
@@ -695,7 +759,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
  *
  * Parses a string containing a <link linkend="BUILDER-UI">GtkBuilder 
  * UI definition</link> and merges it with the current contents of @builder. 
- * 
+ *
  * Returns: A positive value on success, 0 if an error occurred
  *
  * Since: 2.12
@@ -710,7 +774,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
 
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
   g_return_val_if_fail (buffer != NULL, 0);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, 0);
 
   tmp_error = NULL;
 
@@ -719,7 +783,63 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
 
   _gtk_builder_parser_parse_buffer (builder, "<input>",
                                     buffer, length,
+                                    NULL,
                                     &tmp_error);
+  if (tmp_error != NULL)
+    {
+      g_propagate_error (error, tmp_error);
+      return 0;
+    }
+
+  return 1;
+}
+
+/**
+ * gtk_builder_add_objects_from_string:
+ * @builder: a #GtkBuilder
+ * @buffer: the string to parse
+ * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
+ * @object_ids: nul-terminated array of objects to build
+ * @error: return location for an error, or %NULL
+ *
+ * Parses a string containing a <link linkend="BUILDER-UI">GtkBuilder 
+ * UI definition</link> building only the requested objects and merges
+ * them with the current contents of @builder. 
+ * 
+ * <note><para>
+ * If you are adding an object that depends on an object that is not 
+ * its child (for instance a #GtkTreeView that depends on its
+ * #GtkTreeModel), you have to explicitely list all of them in @object_ids. 
+ * </para></note>
+ *
+ * Returns: A positive value on success, 0 if an error occurred
+ *
+ * Since: 2.14
+ **/
+guint
+gtk_builder_add_objects_from_string (GtkBuilder   *builder,
+                                     const gchar  *buffer,
+                                     gsize         length,
+                                     gchar       **object_ids,
+                                     GError      **error)
+{
+  GError *tmp_error;
+
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
+  g_return_val_if_fail (buffer != NULL, 0);
+  g_return_val_if_fail (object_ids != NULL && object_ids[0] != NULL, 0);
+  g_return_val_if_fail (error == NULL || *error == NULL, 0);
+
+  tmp_error = NULL;
+
+  g_free (builder->priv->filename);
+  builder->priv->filename = g_strdup (".");
+
+  _gtk_builder_parser_parse_buffer (builder, "<input>",
+                                    buffer, length,
+                                    object_ids,
+                                    &tmp_error);
+
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);

@@ -445,6 +445,8 @@ gtk_buildable_set_buildable_property
 #if IN_FILE(__GTK_BUILDER_C__)
 gtk_builder_add_from_file
 gtk_builder_add_from_string
+gtk_builder_add_objects_from_file
+gtk_builder_add_objects_from_string
 gtk_builder_error_quark
 gtk_builder_get_object
 gtk_builder_get_objects

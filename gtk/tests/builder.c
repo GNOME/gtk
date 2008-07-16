@@ -2105,7 +2105,6 @@ test_pango_attributes (void)
   g_error_free (error);
 }
 
-
 static void
 test_requires (void)
 {
@@ -2127,6 +2126,133 @@ test_requires (void)
   g_error_free (error);
 }
 
+static void
+test_add_objects (void)
+{
+  GtkBuilder *builder;
+  GError *error;
+  gint ret;
+  GObject *obj;
+  GtkUIManager *manager;
+  GtkWidget *menubar;
+  GObject *menu, *label;
+  GList *children;
+  gchar *objects[2] = {"mainbox", NULL};
+  gchar *objects2[3] = {"mainbox", "window2", NULL};
+  gchar *objects3[2] = {"uimgr1", NULL};
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window\">"
+    "    <child>"
+    "      <object class=\"GtkVBox\" id=\"mainbox\">"
+    "        <property name=\"visible\">True</property>"
+    "        <child>"
+    "          <object class=\"GtkLabel\" id=\"label1\">"
+    "            <property name=\"visible\">True</property>"
+    "            <property name=\"label\" translatable=\"no\">first label</property>"
+    "          </object>"
+    "        </child>"
+    "        <child>"
+    "          <object class=\"GtkLabel\" id=\"label2\">"
+    "            <property name=\"visible\">True</property>"
+    "            <property name=\"label\" translatable=\"no\">second label</property>"
+    "          </object>"
+    "          <packing>"
+    "            <property name=\"position\">1</property>"
+    "          </packing>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "  <object class=\"GtkWindow\" id=\"window2\">"
+    "    <child>"
+    "      <object class=\"GtkLabel\" id=\"label1\">"
+    "        <property name=\"label\" translatable=\"no\">second label</property>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "<interface/>";
+  const gchar buffer2[] =
+    "<interface>"
+    "  <object class=\"GtkUIManager\" id=\"uimgr1\">"
+    "    <child>"
+    "      <object class=\"GtkActionGroup\" id=\"ag1\">"
+    "        <child>"
+    "          <object class=\"GtkAction\" id=\"file\">"
+    "            <property name=\"label\">_File</property>"
+    "          </object>"
+    "          <accelerator key=\"n\" modifiers=\"GDK_CONTROL_MASK\"/>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "    <ui>"
+    "      <menubar name=\"menubar1\">"
+    "        <menu action=\"file\">"
+    "        </menu>"
+    "      </menubar>"
+    "    </ui>"
+    "  </object>"
+    "  <object class=\"GtkWindow\" id=\"window1\">"
+    "    <child>"
+    "      <object class=\"GtkMenuBar\" id=\"menubar1\" constructor=\"uimgr1\"/>"
+    "    </child>"
+    "  </object>"
+    "</interface>";
+
+  error = NULL;
+  builder = gtk_builder_new ();
+  ret = gtk_builder_add_objects_from_string (builder, buffer, -1, objects, &error);
+  g_assert (ret);
+  g_assert (error == NULL);
+  obj = gtk_builder_get_object (builder, "window");
+  g_assert (obj == NULL);
+  obj = gtk_builder_get_object (builder, "window2");
+  g_assert (obj == NULL);
+  obj = gtk_builder_get_object (builder, "mainbox");  
+  g_assert (GTK_IS_WIDGET (obj));
+  g_object_unref (builder);
+
+  error = NULL;
+  builder = gtk_builder_new ();
+  ret = gtk_builder_add_objects_from_string (builder, buffer, -1, objects2, &error);
+  g_assert (ret);
+  g_assert (error == NULL);
+  obj = gtk_builder_get_object (builder, "window");
+  g_assert (obj == NULL);
+  obj = gtk_builder_get_object (builder, "window2");
+  g_assert (GTK_IS_WINDOW (obj));
+  gtk_widget_destroy (GTK_WIDGET (obj));
+  obj = gtk_builder_get_object (builder, "mainbox");  
+  g_assert (GTK_IS_WIDGET (obj));
+  g_object_unref (builder);
+
+  /* test cherry picking a ui manager */
+  error = NULL;
+  builder = gtk_builder_new ();
+  ret = gtk_builder_add_objects_from_string (builder, buffer2, -1, objects3, &error);
+  g_assert (ret);
+  obj = gtk_builder_get_object (builder, "uimgr1");
+  g_assert (GTK_IS_UI_MANAGER (obj));
+  manager = GTK_UI_MANAGER (obj);
+  obj = gtk_builder_get_object (builder, "file");
+  g_assert (GTK_IS_ACTION (obj));
+  menubar = gtk_ui_manager_get_widget (manager, "/menubar1");
+  g_assert (GTK_IS_MENU_BAR (menubar));
+
+  children = gtk_container_get_children (GTK_CONTAINER (menubar));
+  menu = children->data;
+  g_assert (menu != NULL);
+  g_assert (GTK_IS_MENU_ITEM (menu));
+  g_assert (strcmp (GTK_WIDGET (menu)->name, "file") == 0);
+  g_list_free (children);
+ 
+  label = G_OBJECT (GTK_BIN (menu)->child);
+  g_assert (label != NULL);
+  g_assert (GTK_IS_LABEL (label));
+  g_assert (strcmp (gtk_label_get_text (GTK_LABEL (label)), "File") == 0);
+
+  g_object_unref (builder);
+}
 
 static void 
 test_file (const gchar *filename)
@@ -2212,6 +2338,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/IconFactory", test_icon_factory);
   g_test_add_func ("/Builder/PangoAttributes", test_pango_attributes);
   g_test_add_func ("/Builder/Requires", test_requires);
+  g_test_add_func ("/Builder/AddObjects", test_add_objects);
 
   return g_test_run();
 }
