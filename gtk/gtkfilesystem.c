@@ -1127,7 +1127,7 @@ _gtk_file_system_set_bookmark_label (GtkFileSystem *file_system,
 
       if (g_file_equal (file, bookmark->file))
 	{
-	  g_free (bookmark->file);
+          g_free (bookmark->label);
 	  bookmark->label = g_strdup (label);
 	  changed = TRUE;
 	  break;

@@ -1,5 +1,12 @@
 2008-07-15  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 543244 – crashes when renaming a bookmark
+
+	* gtk/gtkfilesystem.c (_gtk_file_system_set_bookmark_label): Don't
+	free a GFile. Reported by Sebastien Bacher
+
+2008-07-15  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 339591 – Detect list of availible cover pages
 
 	Patch by Marek Kasik:
