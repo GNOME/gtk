@@ -2139,7 +2139,8 @@ test_add_objects (void)
   GList *children;
   gchar *objects[2] = {"mainbox", NULL};
   gchar *objects2[3] = {"mainbox", "window2", NULL};
-  gchar *objects3[2] = {"uimgr1", NULL};
+  gchar *objects3[3] = {"uimgr1", "menubar1"};
+  gchar *objects4[2] = {"uimgr1", NULL};
   const gchar buffer[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window\">"
@@ -2226,10 +2227,37 @@ test_add_objects (void)
   g_assert (GTK_IS_WIDGET (obj));
   g_object_unref (builder);
 
-  /* test cherry picking a ui manager */
+  /* test cherry picking a ui manager and menubar that depends on it */
   error = NULL;
   builder = gtk_builder_new ();
   ret = gtk_builder_add_objects_from_string (builder, buffer2, -1, objects3, &error);
+  g_assert (ret);
+  obj = gtk_builder_get_object (builder, "uimgr1");
+  g_assert (GTK_IS_UI_MANAGER (obj));
+  obj = gtk_builder_get_object (builder, "file");
+  g_assert (GTK_IS_ACTION (obj));
+  obj = gtk_builder_get_object (builder, "menubar1");
+  g_assert (GTK_IS_MENU_BAR (obj));
+  menubar = GTK_WIDGET (obj);
+
+  children = gtk_container_get_children (GTK_CONTAINER (menubar));
+  menu = children->data;
+  g_assert (menu != NULL);
+  g_assert (GTK_IS_MENU_ITEM (menu));
+  g_assert (strcmp (GTK_WIDGET (menu)->name, "file") == 0);
+  g_list_free (children);
+ 
+  label = G_OBJECT (GTK_BIN (menu)->child);
+  g_assert (label != NULL);
+  g_assert (GTK_IS_LABEL (label));
+  g_assert (strcmp (gtk_label_get_text (GTK_LABEL (label)), "File") == 0);
+
+  g_object_unref (builder);
+
+  /* test cherry picking just the ui manager */
+  error = NULL;
+  builder = gtk_builder_new ();
+  ret = gtk_builder_add_objects_from_string (builder, buffer2, -1, objects4, &error);
   g_assert (ret);
   obj = gtk_builder_get_object (builder, "uimgr1");
   g_assert (GTK_IS_UI_MANAGER (obj));
