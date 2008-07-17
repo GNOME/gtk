@@ -1,0 +1,4595 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+.head\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-07-14 12:12+0000\n"
+"PO-Revision-Date: 2008-07-15 19:13-0800\n"
+"Last-Translator: Zabeeh Khan <zabeehkhan@gmail.com>\n"
+"Language-Team: Pashto <pathanisation@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Pashto, Pushto\n"
+"X-Poedit-Country: AFGHANISTAN\n"
+
+#: ../gdk/directfb/gdkdisplay-directfb.c:55
+msgid "directfb arg"
+msgstr ""
+
+#: ../gdk/directfb/gdkdisplay-directfb.c:55
+msgid "sdl|system"
+msgstr ""
+
+#. Description of --class=CLASS in --help output
+#: ../gdk/gdk.c:126
+msgid "Program class as used by the window manager"
+msgstr "د کړنلارې پاړکی لکه څنګه چې يې کړکۍ سمبالګر کاروي"
+
+#. Placeholder in --class=CLASS in --help output
+#: ../gdk/gdk.c:127
+msgid "CLASS"
+msgstr "پوړ"
+
+#. Description of --name=NAME in --help output
+#: ../gdk/gdk.c:129
+msgid "Program name as used by the window manager"
+msgstr "د کړنلارې نوم لکه څنګه چې يې کړکۍ سمبالګر کاروي"
+
+#. Placeholder in --name=NAME in --help output
+#: ../gdk/gdk.c:130
+msgid "NAME"
+msgstr "نوم"
+
+#. Description of --display=DISPLAY in --help output
+#: ../gdk/gdk.c:132
+msgid "X display to use"
+msgstr "ښوون X د کارولو لپاره"
+
+#. Placeholder in --display=DISPLAY in --help output
+#: ../gdk/gdk.c:133
+msgid "DISPLAY"
+msgstr "ښوون"
+
+#. Description of --screen=SCREEN in --help output
+#: ../gdk/gdk.c:135
+msgid "X screen to use"
+msgstr "پرده X د کارولو لپاره"
+
+#. Placeholder in --screen=SCREEN in --help output
+#: ../gdk/gdk.c:136
+msgid "SCREEN"
+msgstr "پرده"
+
+#. Description of --gdk-debug=FLAGS in --help output
+#: ../gdk/gdk.c:139
+msgid "Gdk debugging flags to set"
+msgstr ""
+
+#. Placeholder in --gdk-debug=FLAGS in --help output
+#. Placeholder in --gdk-no-debug=FLAGS in --help output
+#. Placeholder in --gtk-debug=FLAGS in --help output
+#. Placeholder in --gtk-no-debug=FLAGS in --help output
+#: ../gdk/gdk.c:140
+#: ../gdk/gdk.c:143
+#: ../gtk/gtkmain.c:428
+#: ../gtk/gtkmain.c:431
+msgid "FLAGS"
+msgstr "جنډې"
+
+#. Description of --gdk-no-debug=FLAGS in --help output
+#: ../gdk/gdk.c:142
+msgid "Gdk debugging flags to unset"
+msgstr ""
+
+#: ../gdk/keyname-table.h:3940
+msgid "keyboard label|BackSpace"
+msgstr "keyboard label|شاتشه"
+
+#: ../gdk/keyname-table.h:3941
+msgid "keyboard label|Tab"
+msgstr "keyboard label|ټوپ"
+
+#: ../gdk/keyname-table.h:3942
+msgid "keyboard label|Return"
+msgstr "keyboard label|Return"
+
+#: ../gdk/keyname-table.h:3943
+msgid "keyboard label|Pause"
+msgstr "keyboard label|ځنډ"
+
+#: ../gdk/keyname-table.h:3944
+msgid "keyboard label|Scroll_Lock"
+msgstr "keyboard label|Scroll_Lock"
+
+#: ../gdk/keyname-table.h:3945
+msgid "keyboard label|Sys_Req"
+msgstr "keyboard label|Sys_Req"
+
+#: ../gdk/keyname-table.h:3946
+msgid "keyboard label|Escape"
+msgstr "keyboard label|پرېښل"
+
+#: ../gdk/keyname-table.h:3947
+msgid "keyboard label|Multi_key"
+msgstr "keyboard label|Multi_key"
+
+#: ../gdk/keyname-table.h:3948
+msgid "keyboard label|Home"
+msgstr "keyboard label|کور"
+
+#: ../gdk/keyname-table.h:3949
+msgid "keyboard label|Left"
+msgstr "keyboard label|کيڼ"
+
+#: ../gdk/keyname-table.h:3950
+msgid "keyboard label|Up"
+msgstr "keyboard label|پاس"
+
+#: ../gdk/keyname-table.h:3951
+msgid "keyboard label|Right"
+msgstr "keyboard label|ښي"
+
+#: ../gdk/keyname-table.h:3952
+msgid "keyboard label|Down"
+msgstr "keyboard label|لاندې"
+
+#: ../gdk/keyname-table.h:3953
+msgid "keyboard label|Page_Up"
+msgstr "keyboard label|‎‏بره_‎مخ"
+
+#: ../gdk/keyname-table.h:3954
+msgid "keyboard label|Page_Down"
+msgstr "keyboard label|‎‏ښکته_‎مخ"
+
+#: ../gdk/keyname-table.h:3955
+msgid "keyboard label|End"
+msgstr "keyboard label|پای"
+
+#: ../gdk/keyname-table.h:3956
+msgid "keyboard label|Begin"
+msgstr "keyboard label|پېل"
+
+#: ../gdk/keyname-table.h:3957
+msgid "keyboard label|Print"
+msgstr "keyboard label|چاپ"
+
+#: ../gdk/keyname-table.h:3958
+msgid "keyboard label|Insert"
+msgstr "keyboard label|ورننويستل"
+
+#: ../gdk/keyname-table.h:3959
+msgid "keyboard label|Num_Lock"
+msgstr "keyboard label|Num_Lock"
+
+#: ../gdk/keyname-table.h:3960
+msgid "keyboard label|KP_Space"
+msgstr "keyboard label|KP_تشه"
+
+#: ../gdk/keyname-table.h:3961
+msgid "keyboard label|KP_Tab"
+msgstr "keyboard label|KP_ټوپ"
+
+#: ../gdk/keyname-table.h:3962
+msgid "keyboard label|KP_Enter"
+msgstr "keyboard label|KP_ننوت"
+
+#: ../gdk/keyname-table.h:3963
+msgid "keyboard label|KP_Home"
+msgstr "keyboard label|KP_کور"
+
+#: ../gdk/keyname-table.h:3964
+msgid "keyboard label|KP_Left"
+msgstr "keyboard label|KP_کيڼ"
+
+#: ../gdk/keyname-table.h:3965
+msgid "keyboard label|KP_Up"
+msgstr "keyboard label|KP_پاس"
+
+#: ../gdk/keyname-table.h:3966
+msgid "keyboard label|KP_Right"
+msgstr "keyboard label|KP_ښي"
+
+#: ../gdk/keyname-table.h:3967
+msgid "keyboard label|KP_Down"
+msgstr "keyboard label|KP_لاندې"
+
+#: ../gdk/keyname-table.h:3968
+msgid "keyboard label|KP_Page_Up"
+msgstr "keyboard label|KP_‎‏بره_‎مخ"
+
+#: ../gdk/keyname-table.h:3969
+msgid "keyboard label|KP_Prior"
+msgstr "keyboard label|KP_Prior"
+
+#: ../gdk/keyname-table.h:3970
+msgid "keyboard label|KP_Page_Down"
+msgstr "keyboard label|KP_‎‏ښکته_‎مخ"
+
+#: ../gdk/keyname-table.h:3971
+msgid "keyboard label|KP_Next"
+msgstr "keyboard label|KP_راتلونکی"
+
+#: ../gdk/keyname-table.h:3972
+msgid "keyboard label|KP_End"
+msgstr "keyboard label|KP_پای"
+
+#: ../gdk/keyname-table.h:3973
+msgid "keyboard label|KP_Begin"
+msgstr "keyboard label|KP_پېلول"
+
+#: ../gdk/keyname-table.h:3974
+msgid "keyboard label|KP_Insert"
+msgstr "keyboard label|KP_ورننويستل"
+
+#: ../gdk/keyname-table.h:3975
+msgid "keyboard label|KP_Delete"
+msgstr "keyboard label|KP_ړنګول"
+
+#: ../gdk/keyname-table.h:3976
+msgid "keyboard label|Delete"
+msgstr "keyboard label|ړنګول"
+
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:945
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1201
+#: ../tests/testfilechooser.c:222
+#, c-format
+msgid "Failed to open file '%s': %s"
+msgstr "%s :دوتنه پرانيستلو کې پاتې راغی '%s'"
+
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:957
+#, c-format
+msgid "Image file '%s' contains no data"
+msgstr "انځور دوتنه اومتوک نه لري '%s'"
+
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:994
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1253
+#: ../tests/testfilechooser.c:267
+#, c-format
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:221
+#, c-format
+msgid "Failed to load animation '%s': reason not known, probably a corrupt animation file"
+msgstr ""
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:571
+#, c-format
+msgid "Unable to load image-loading module: %s: %s"
+msgstr ""
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:586
+#, c-format
+msgid "Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"
+msgstr ""
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:731
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:760
+#, c-format
+msgid "Image type '%s' is not supported"
+msgstr "انځور ډول نه منل کيږي '%s'"
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:826
+#, c-format
+msgid "Couldn't recognize the image file format for file '%s'"
+msgstr ""
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:834
+msgid "Unrecognized image file format"
+msgstr "د انځور ناپېژندلې دوتنه بڼه"
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1003
+#, c-format
+msgid "Failed to load image '%s': %s"
+msgstr "%s :انځور په لېښلو کې پاتې راغی '%s' د"
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1634
+#: ../gdk-pixbuf/io-gdip-utils.c:935
+#, c-format
+msgid "Error writing to image file: %s"
+msgstr "%s :انځور دوتنې کې ليکلو کې پاتې راغی"
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1680
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1811
+#, c-format
+msgid "This build of gdk-pixbuf does not support saving the image format: %s"
+msgstr ""
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1714
+msgid "Insufficient memory to save image to callback"
+msgstr ""
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1727
+msgid "Failed to open temporary file"
+msgstr "د لنډمهالې دوتنې په پرانيستلو کې پاتې راغی"
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1753
+msgid "Failed to read from temporary file"
+msgstr "د لنډمهالې دوتنې نه لوستلو کې پاتې راغی"
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1988
+#, c-format
+msgid "Failed to open '%s' for writing: %s"
+msgstr "%s :د ليکلو لپاره پرانيستلو کې پاتې راغی '%s'"
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2013
+#, c-format
+msgid "Failed to close '%s' while writing image, all data may not have been saved: %s"
+msgstr ""
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2233
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2284
+msgid "Insufficient memory to save image into a buffer"
+msgstr ""
+
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2330
+msgid "Error writing to image stream"
+msgstr ""
+
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
+#, c-format
+msgid "Internal error: Image loader module '%s' failed to complete an operation, but didn't give a reason for the failure"
+msgstr ""
+
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:373
+#, c-format
+msgid "Incremental loading of image type '%s' is not supported"
+msgstr ""
+
+#: ../gdk-pixbuf/gdk-pixdata.c:147
+msgid "Image header corrupt"
+msgstr "د انځور سرۍ اندرغلې ده"
+
+#: ../gdk-pixbuf/gdk-pixdata.c:152
+msgid "Image format unknown"
+msgstr "د انځور بڼه ناپېژندلې ده"
+
+#: ../gdk-pixbuf/gdk-pixdata.c:157
+#: ../gdk-pixbuf/gdk-pixdata.c:487
+msgid "Image pixel data corrupt"
+msgstr ""
+
+#: ../gdk-pixbuf/gdk-pixdata.c:431
+#, c-format
+msgid "failed to allocate image buffer of %u byte"
+msgid_plural "failed to allocate image buffer of %u bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../gdk-pixbuf/io-ani.c:244
+msgid "Unexpected icon chunk in animation"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ani.c:337
+msgid "Unsupported animation type"
+msgstr "د سېلن نامنلی ډول"
+
+#: ../gdk-pixbuf/io-ani.c:348
+#: ../gdk-pixbuf/io-ani.c:406
+#: ../gdk-pixbuf/io-ani.c:432
+#: ../gdk-pixbuf/io-ani.c:455
+#: ../gdk-pixbuf/io-ani.c:482
+#: ../gdk-pixbuf/io-ani.c:569
+msgid "Invalid header in animation"
+msgstr "په سېلن کې ناسمه سرۍ"
+
+#: ../gdk-pixbuf/io-ani.c:358
+#: ../gdk-pixbuf/io-ani.c:380
+#: ../gdk-pixbuf/io-ani.c:464
+#: ../gdk-pixbuf/io-ani.c:491
+#: ../gdk-pixbuf/io-ani.c:542
+#: ../gdk-pixbuf/io-ani.c:614
+msgid "Not enough memory to load animation"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ani.c:398
+#: ../gdk-pixbuf/io-ani.c:424
+#: ../gdk-pixbuf/io-ani.c:443
+msgid "Malformed chunk in animation"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ani.c:711
+msgid "The ANI image format"
+msgstr "انځور بڼه ANI"
+
+#: ../gdk-pixbuf/io-bmp.c:230
+#: ../gdk-pixbuf/io-bmp.c:267
+#: ../gdk-pixbuf/io-bmp.c:338
+#: ../gdk-pixbuf/io-bmp.c:370
+#: ../gdk-pixbuf/io-bmp.c:393
+#: ../gdk-pixbuf/io-bmp.c:496
+msgid "BMP image has bogus header data"
+msgstr ""
+
+#: ../gdk-pixbuf/io-bmp.c:241
+#: ../gdk-pixbuf/io-bmp.c:433
+msgid "Not enough memory to load bitmap image"
+msgstr ""
+
+#: ../gdk-pixbuf/io-bmp.c:319
+msgid "BMP image has unsupported header size"
+msgstr ""
+
+#: ../gdk-pixbuf/io-bmp.c:357
+msgid "Topdown BMP images cannot be compressed"
+msgstr ""
+
+#: ../gdk-pixbuf/io-bmp.c:717
+#: ../gdk-pixbuf/io-pnm.c:709
+msgid "Premature end-of-file encountered"
+msgstr ""
+
+#: ../gdk-pixbuf/io-bmp.c:1329
+msgid "Couldn't allocate memory for saving BMP file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-bmp.c:1370
+msgid "Couldn't write to BMP file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-bmp.c:1423
+#: ../gdk-pixbuf/io-gdip-bmp.c:82
+msgid "The BMP image format"
+msgstr "انځور بڼه BMP"
+
+#: ../gdk-pixbuf/io-gif.c:222
+#, c-format
+msgid "Failure reading GIF: %s"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gif.c:496
+#: ../gdk-pixbuf/io-gif.c:1477
+#: ../gdk-pixbuf/io-gif.c:1638
+msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gif.c:505
+#, c-format
+msgid "Internal error in the GIF loader (%s)"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gif.c:579
+msgid "Stack overflow"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gif.c:639
+msgid "GIF image loader cannot understand this image."
+msgstr ""
+
+#: ../gdk-pixbuf/io-gif.c:668
+msgid "Bad code encountered"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gif.c:678
+msgid "Circular table entry in GIF file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gif.c:866
+#: ../gdk-pixbuf/io-gif.c:1464
+#: ../gdk-pixbuf/io-gif.c:1511
+#: ../gdk-pixbuf/io-gif.c:1626
+msgid "Not enough memory to load GIF file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gif.c:956
+msgid "Not enough memory to composite a frame in GIF file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gif.c:1128
+msgid "GIF image is corrupt (incorrect LZW compression)"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gif.c:1178
+msgid "File does not appear to be a GIF file"
+msgstr "دوتنه وي GIF دوتنه داسې نه ښکاري چې"
+
+#: ../gdk-pixbuf/io-gif.c:1190
+#, c-format
+msgid "Version %s of the GIF file format is not supported"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gif.c:1299
+msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
+msgstr ""
+
+#: ../gdk-pixbuf/io-gif.c:1533
+msgid "GIF image was truncated or incomplete."
+msgstr ""
+
+#: ../gdk-pixbuf/io-gif.c:1689
+#: ../gdk-pixbuf/io-gdip-gif.c:80
+msgid "The GIF image format"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ico.c:211
+#: ../gdk-pixbuf/io-ico.c:225
+#: ../gdk-pixbuf/io-ico.c:277
+#: ../gdk-pixbuf/io-ico.c:290
+#: ../gdk-pixbuf/io-ico.c:359
+msgid "Invalid header in icon"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ico.c:240
+#: ../gdk-pixbuf/io-ico.c:300
+#: ../gdk-pixbuf/io-ico.c:369
+#: ../gdk-pixbuf/io-ico.c:432
+#: ../gdk-pixbuf/io-ico.c:462
+msgid "Not enough memory to load icon"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ico.c:322
+msgid "Icon has zero width"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ico.c:332
+msgid "Icon has zero height"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ico.c:384
+msgid "Compressed icons are not supported"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ico.c:417
+msgid "Unsupported icon type"
+msgstr "نه منل کېدونکی انځورن ډول"
+
+#: ../gdk-pixbuf/io-ico.c:511
+msgid "Not enough memory to load ICO file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ico.c:976
+msgid "Image too large to be saved as ICO"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ico.c:987
+msgid "Cursor hotspot outside image"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ico.c:1010
+#, c-format
+msgid "Unsupported depth for ICO file: %d"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ico.c:1245
+#: ../gdk-pixbuf/io-gdip-ico.c:59
+msgid "The ICO image format"
+msgstr "انځور بڼه ICO"
+
+#: ../gdk-pixbuf/io-icns.c:345
+#, c-format
+msgid "Error reading ICNS image: %s"
+msgstr ""
+
+#: ../gdk-pixbuf/io-icns.c:362
+msgid "Could not decode ICNS file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-icns.c:395
+msgid "The ICNS image format"
+msgstr "انځور بڼهICNS"
+
+#: ../gdk-pixbuf/io-jasper.c:75
+msgid "Couldn't allocate memory for stream"
+msgstr ""
+
+#: ../gdk-pixbuf/io-jasper.c:105
+msgid "Couldn't decode image"
+msgstr ""
+
+#: ../gdk-pixbuf/io-jasper.c:123
+msgid "Transformed JPEG2000 has zero width or height"
+msgstr ""
+
+#: ../gdk-pixbuf/io-jasper.c:137
+msgid "Image type currently not supported"
+msgstr "د انځور ډول اوس نه منل کيږي"
+
+#: ../gdk-pixbuf/io-jasper.c:149
+#: ../gdk-pixbuf/io-jasper.c:157
+msgid "Couldn't allocate memory for color profile"
+msgstr ""
+
+#: ../gdk-pixbuf/io-jasper.c:182
+msgid "Insufficient memory to open JPEG 2000 file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-jasper.c:264
+msgid "Couldn't allocate memory to buffer image data"
+msgstr ""
+
+#: ../gdk-pixbuf/io-jasper.c:308
+msgid "The JPEG 2000 image format"
+msgstr "انځور ډول JPEG ۲۰۰"
+
+#: ../gdk-pixbuf/io-jpeg.c:117
+#, c-format
+msgid "Error interpreting JPEG image file (%s)"
+msgstr ""
+
+#: ../gdk-pixbuf/io-jpeg.c:529
+msgid "Insufficient memory to load image, try exiting some applications to free memory"
+msgstr ""
+
+#: ../gdk-pixbuf/io-jpeg.c:570
+#: ../gdk-pixbuf/io-jpeg.c:776
+#, c-format
+msgid "Unsupported JPEG color space (%s)"
+msgstr ""
+
+#: ../gdk-pixbuf/io-jpeg.c:668
+#: ../gdk-pixbuf/io-jpeg.c:944
+#: ../gdk-pixbuf/io-jpeg.c:1177
+#: ../gdk-pixbuf/io-jpeg.c:1186
+msgid "Couldn't allocate memory for loading JPEG file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-jpeg.c:920
+msgid "Transformed JPEG has zero width or height."
+msgstr ""
+
+#: ../gdk-pixbuf/io-jpeg.c:1133
+#: ../gdk-pixbuf/io-gdip-jpeg.c:53
+#, c-format
+msgid "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
+msgstr ""
+
+#: ../gdk-pixbuf/io-jpeg.c:1148
+#: ../gdk-pixbuf/io-gdip-jpeg.c:68
+#, c-format
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+
+#: ../gdk-pixbuf/io-jpeg.c:1309
+#: ../gdk-pixbuf/io-gdip-jpeg.c:136
+msgid "The JPEG image format"
+msgstr "انځور ډول JPEG"
+
+#: ../gdk-pixbuf/io-pcx.c:187
+msgid "Couldn't allocate memory for header"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pcx.c:202
+#: ../gdk-pixbuf/io-pcx.c:560
+msgid "Couldn't allocate memory for context buffer"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pcx.c:601
+msgid "Image has invalid width and/or height"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pcx.c:613
+#: ../gdk-pixbuf/io-pcx.c:674
+msgid "Image has unsupported bpp"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pcx.c:618
+#: ../gdk-pixbuf/io-pcx.c:626
+#, c-format
+msgid "Image has unsupported number of %d-bit planes"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pcx.c:642
+msgid "Couldn't create new pixbuf"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pcx.c:650
+msgid "Couldn't allocate memory for line data"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pcx.c:657
+msgid "Couldn't allocate memory for paletted data"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pcx.c:704
+msgid "Didn't get all lines of PCX image"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pcx.c:711
+msgid "No palette found at end of PCX data"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pcx.c:756
+msgid "The PCX image format"
+msgstr "انځور ډول PCX"
+
+#: ../gdk-pixbuf/io-png.c:55
+msgid "Bits per channel of PNG image is invalid."
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:136
+#: ../gdk-pixbuf/io-png.c:618
+msgid "Transformed PNG has zero width or height."
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:144
+msgid "Bits per channel of transformed PNG is not 8."
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:153
+msgid "Transformed PNG not RGB or RGBA."
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:162
+msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:183
+#, c-format
+msgid "Fatal error in PNG image file: %s"
+msgstr "%s :انځور دوتنه کې وژونکې تېروتنه PNG په"
+
+#: ../gdk-pixbuf/io-png.c:310
+msgid "Insufficient memory to load PNG file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:633
+#, c-format
+msgid "Insufficient memory to store a %ld by %ld image; try exiting some applications to reduce memory usage"
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:684
+msgid "Fatal error reading PNG image file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:733
+#, c-format
+msgid "Fatal error reading PNG image file: %s"
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:825
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:833
+msgid "Keys for PNG text chunks must be ASCII characters."
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:846
+#: ../gdk-pixbuf/io-gdip-png.c:56
+#, c-format
+msgid "PNG compression level must be a value between 0 and 9; value '%s' could not be parsed."
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:858
+#: ../gdk-pixbuf/io-gdip-png.c:68
+#, c-format
+msgid "PNG compression level must be a value between 0 and 9; value '%d' is not allowed."
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:896
+#, c-format
+msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+msgstr ""
+
+#: ../gdk-pixbuf/io-png.c:1045
+#: ../gdk-pixbuf/io-gdip-png.c:133
+msgid "The PNG image format"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:250
+msgid "PNM loader expected to find an integer, but didn't"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:282
+msgid "PNM file has an incorrect initial byte"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:312
+msgid "PNM file is not in a recognized PNM subformat"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:337
+msgid "PNM file has an image width of 0"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:358
+msgid "PNM file has an image height of 0"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:381
+msgid "Maximum color value in PNM file is 0"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:389
+msgid "Maximum color value in PNM file is too large"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:429
+#: ../gdk-pixbuf/io-pnm.c:459
+#: ../gdk-pixbuf/io-pnm.c:504
+msgid "Raw PNM image type is invalid"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:654
+msgid "PNM image loader does not support this PNM subformat"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:741
+#: ../gdk-pixbuf/io-pnm.c:968
+msgid "Raw PNM formats require exactly one whitespace before sample data"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:768
+msgid "Cannot allocate memory for loading PNM image"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:818
+msgid "Insufficient memory to load PNM context struct"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:869
+msgid "Unexpected end of PNM image data"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:997
+msgid "Insufficient memory to load PNM file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-pnm.c:1081
+msgid "The PNM/PBM/PGM/PPM image format family"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ras.c:126
+msgid "RAS image has bogus header data"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ras.c:148
+msgid "RAS image has unknown type"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ras.c:156
+msgid "unsupported RAS image variation"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ras.c:171
+#: ../gdk-pixbuf/io-ras.c:200
+msgid "Not enough memory to load RAS image"
+msgstr ""
+
+#: ../gdk-pixbuf/io-ras.c:545
+msgid "The Sun raster image format"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:154
+msgid "Cannot allocate memory for IOBuffer struct"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:173
+msgid "Cannot allocate memory for IOBuffer data"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:184
+msgid "Cannot realloc IOBuffer data"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:214
+msgid "Cannot allocate temporary IOBuffer data"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:347
+msgid "Cannot allocate new pixbuf"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:687
+msgid "Cannot allocate colormap structure"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:694
+msgid "Cannot allocate colormap entries"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:716
+msgid "Unexpected bitdepth for colormap entries"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:734
+msgid "Cannot allocate TGA header memory"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:767
+msgid "TGA image has invalid dimensions"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:773
+#: ../gdk-pixbuf/io-tga.c:782
+#: ../gdk-pixbuf/io-tga.c:792
+#: ../gdk-pixbuf/io-tga.c:802
+#: ../gdk-pixbuf/io-tga.c:809
+msgid "TGA image type not supported"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:856
+msgid "Cannot allocate memory for TGA context struct"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:921
+msgid "Excess data in file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tga.c:1000
+msgid "The Targa image format"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tiff.c:160
+msgid "Could not get image width (bad TIFF file)"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tiff.c:167
+msgid "Could not get image height (bad TIFF file)"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tiff.c:175
+msgid "Width or height of TIFF image is zero"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tiff.c:184
+#: ../gdk-pixbuf/io-tiff.c:193
+msgid "Dimensions of TIFF image too large"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tiff.c:217
+#: ../gdk-pixbuf/io-tiff.c:229
+#: ../gdk-pixbuf/io-tiff.c:541
+msgid "Insufficient memory to open TIFF file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tiff.c:275
+msgid "Failed to load RGB data from TIFF file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tiff.c:331
+msgid "Failed to open TIFF image"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tiff.c:343
+#: ../gdk-pixbuf/io-tiff.c:722
+msgid "TIFFClose operation failed"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tiff.c:473
+#: ../gdk-pixbuf/io-tiff.c:486
+msgid "Failed to load TIFF image"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tiff.c:670
+msgid "Failed to save TIFF image"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tiff.c:708
+msgid "Failed to write TIFF data"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tiff.c:760
+msgid "Couldn't write to TIFF file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-tiff.c:814
+msgid "The TIFF image format"
+msgstr ""
+
+#: ../gdk-pixbuf/io-wbmp.c:246
+msgid "Image has zero width"
+msgstr ""
+
+#: ../gdk-pixbuf/io-wbmp.c:264
+msgid "Image has zero height"
+msgstr ""
+
+#: ../gdk-pixbuf/io-wbmp.c:275
+msgid "Not enough memory to load image"
+msgstr ""
+
+#: ../gdk-pixbuf/io-wbmp.c:334
+msgid "Couldn't save the rest"
+msgstr ""
+
+#: ../gdk-pixbuf/io-wbmp.c:375
+msgid "The WBMP image format"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xbm.c:295
+msgid "Invalid XBM file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xbm.c:305
+msgid "Insufficient memory to load XBM image file"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xbm.c:453
+msgid "Failed to write to temporary file when loading XBM image"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xbm.c:492
+msgid "The XBM image format"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xpm.c:468
+msgid "No XPM header found"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xpm.c:477
+msgid "Invalid XPM header"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xpm.c:485
+msgid "XPM file has image width <= 0"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xpm.c:493
+msgid "XPM file has image height <= 0"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xpm.c:501
+msgid "XPM has invalid number of chars per pixel"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xpm.c:510
+msgid "XPM file has invalid number of colors"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xpm.c:522
+#: ../gdk-pixbuf/io-xpm.c:531
+#: ../gdk-pixbuf/io-xpm.c:583
+msgid "Cannot allocate memory for loading XPM image"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xpm.c:545
+msgid "Cannot read XPM colormap"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xpm.c:777
+msgid "Failed to write to temporary file when loading XPM image"
+msgstr ""
+
+#: ../gdk-pixbuf/io-xpm.c:816
+msgid "The XPM image format"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gdip-emf.c:59
+msgid "The EMF image format"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gdip-utils.c:212
+#, c-format
+msgid "Could not allocate memory: %s"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gdip-utils.c:237
+#: ../gdk-pixbuf/io-gdip-utils.c:350
+#: ../gdk-pixbuf/io-gdip-utils.c:383
+#, c-format
+msgid "Could not create stream: %s"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gdip-utils.c:251
+#, c-format
+msgid "Could not seek stream: %s"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gdip-utils.c:263
+#, c-format
+msgid "Could not read from stream: %s"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gdip-utils.c:736
+msgid "Couldn't create pixbuf"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gdip-utils.c:798
+msgid "Couldn't load bitmap"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gdip-utils.c:821
+msgid "Couldn't load metafile"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gdip-utils.c:980
+msgid "Unsupported image format for GDI+"
+msgstr ""
+
+#: ../gdk-pixbuf/io-gdip-utils.c:987
+msgid "Couldn't save"
+msgstr "نه شي ساتلی"
+
+#: ../gdk-pixbuf/io-gdip-wmf.c:58
+msgid "The WMF image format"
+msgstr ""
+
+#. Description of --sync in --help output
+#: ../gdk/win32/gdkmain-win32.c:54
+msgid "Don't batch GDI requests"
+msgstr ""
+
+#. Description of --no-wintab in --help output
+#: ../gdk/win32/gdkmain-win32.c:56
+msgid "Don't use the Wintab API for tablet support"
+msgstr ""
+
+#. Description of --ignore-wintab in --help output
+#: ../gdk/win32/gdkmain-win32.c:58
+msgid "Same as --no-wintab"
+msgstr ""
+
+#. Description of --use-wintab in --help output
+#: ../gdk/win32/gdkmain-win32.c:60
+msgid "Do use the Wintab API [default]"
+msgstr ""
+
+#. Description of --max-colors=COLORS in --help output
+#: ../gdk/win32/gdkmain-win32.c:62
+msgid "Size of the palette in 8 bit mode"
+msgstr ""
+
+#. Placeholder in --max-colors=COLORS in --help output
+#: ../gdk/win32/gdkmain-win32.c:63
+msgid "COLORS"
+msgstr "رنګونه"
+
+#. Description of --sync in --help output
+#: ../gdk/x11/gdkmain-x11.c:92
+msgid "Make X calls synchronous"
+msgstr ""
+
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:303
+#, c-format
+msgid "Starting %s"
+msgstr "پېليږي %s"
+
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:305
+#, c-format
+msgid "Opening %s"
+msgstr "پرانيستل کيږي %s"
+
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:308
+#, c-format
+msgid "Opening %d Item"
+msgid_plural "Opening %d Items"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../gtk/gtkaboutdialog.c:264
+#: ../gtk/gtkaboutdialog.c:2106
+msgid "License"
+msgstr "منښتليک"
+
+#: ../gtk/gtkaboutdialog.c:265
+msgid "The license of the program"
+msgstr ""
+
+#. Add the credits button
+#: ../gtk/gtkaboutdialog.c:500
+msgid "C_redits"
+msgstr "ب_اورونه"
+
+#. Add the license button
+#: ../gtk/gtkaboutdialog.c:513
+msgid "_License"
+msgstr "منښتليک_"
+
+#: ../gtk/gtkaboutdialog.c:742
+#, c-format
+msgid "About %s"
+msgstr "په اړه %s د"
+
+#: ../gtk/gtkaboutdialog.c:2030
+msgid "Credits"
+msgstr "باورونه"
+
+#: ../gtk/gtkaboutdialog.c:2059
+msgid "Written by"
+msgstr "ليکوالان"
+
+#: ../gtk/gtkaboutdialog.c:2062
+msgid "Documented by"
+msgstr "لاسوندونکي"
+
+#: ../gtk/gtkaboutdialog.c:2074
+msgid "Translated by"
+msgstr "ژباړنان"
+
+#: ../gtk/gtkaboutdialog.c:2078
+msgid "Artwork by"
+msgstr "کلاکاران"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the shift key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#. *
+#. * Don't include the prefix "keyboard label|" in the translation.
+#.
+#: ../gtk/gtkaccellabel.c:93
+msgid "keyboard label|Shift"
+msgstr "keyboard label|شېفټ"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the control key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#. *
+#. * Don't include the prefix "keyboard label|" in the translation.
+#.
+#: ../gtk/gtkaccellabel.c:101
+msgid "keyboard label|Ctrl"
+msgstr "keyboard label|کنټرول"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the alt key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#. *
+#. * Don't include the prefix "keyboard label|" in the translation.
+#.
+#: ../gtk/gtkaccellabel.c:109
+msgid "keyboard label|Alt"
+msgstr "keyboard label|الټ"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the super key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#. * And do not translate the part before the |.
+#.
+#: ../gtk/gtkaccellabel.c:679
+msgid "keyboard label|Super"
+msgstr "keyboard label|سوپر"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the hyper key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#. * And do not translate the part before the |.
+#.
+#: ../gtk/gtkaccellabel.c:693
+msgid "keyboard label|Hyper"
+msgstr "keyboard label|هاېپر"
+
+#. This is the text that should appear next to menu accelerators
+#. * that use the meta key. If the text on this key isn't typically
+#. * translated on keyboards used for your language, don't translate
+#. * this.
+#. * And do not translate the part before the |.
+#.
+#: ../gtk/gtkaccellabel.c:708
+msgid "keyboard label|Meta"
+msgstr "keyboard label|ميټا"
+
+#. do not translate the part before the |
+#: ../gtk/gtkaccellabel.c:726
+msgid "keyboard label|Space"
+msgstr "keyboard label|تشه"
+
+#. do not translate the part before the |
+#: ../gtk/gtkaccellabel.c:730
+msgid "keyboard label|Backslash"
+msgstr "keyboard label|شارېوند"
+
+#: ../gtk/gtkbuilderparser.c:325
+#, c-format
+msgid "Invalid type function: `%s'"
+msgstr ""
+
+#: ../gtk/gtkbuilderparser.c:789
+#, c-format
+msgid "Invalid root element: '%s'"
+msgstr ""
+
+#: ../gtk/gtkbuilderparser.c:823
+#, c-format
+msgid "Unhandled tag: '%s'"
+msgstr ""
+
+#. Translate to calendar:YM if you want years to be displayed
+#. * before months; otherwise translate to calendar:MY.
+#. * Do *not* translate it to anything else, if it
+#. * it isn't calendar:YM or calendar:MY it will not work.
+#. *
+#. * Note that this flipping is in top of the text direction flipping,
+#. * so if you have a default text direction of RTL and YM, then
+#. * the year will appear on the right.
+#.
+#: ../gtk/gtkcalendar.c:760
+msgid "calendar:MY"
+msgstr "calendar:MY"
+
+#. Translate to calendar:week_start:0 if you want Sunday to be the
+#. * first day of the week to calendar:week_start:1 if you want Monday
+#. * to be the first day of the week, and so on.
+#.
+#: ../gtk/gtkcalendar.c:798
+msgid "calendar:week_start:0"
+msgstr "calendar:week_start:5"
+
+#. Translators:  This is a text measurement template.
+#. * Translate it to the widest year text.
+#. *
+#. * Don't include the prefix "year measurement template|"
+#. * in the translation.
+#. *
+#. * If you don't understand this, leave it as "2000"
+#.
+#: ../gtk/gtkcalendar.c:1799
+msgid "year measurement template|2000"
+msgstr ""
+
+#. Translators: this defines whether the day numbers should use
+#. * localized digits or the ones used in English (0123...).
+#. *
+#. * Translate to "%Id" if you want to use localized digits, or
+#. * translate to "%d" otherwise.  Don't include the "calendar:day:digits|"
+#. * part in the translation.
+#. *
+#. * Note that translating this doesn't guarantee that you get localized
+#. * digits.  That needs support from your system and locale definition
+#. * too.
+#.
+#: ../gtk/gtkcalendar.c:1830
+#: ../gtk/gtkcalendar.c:2491
+#, c-format
+msgid "calendar:day:digits|%d"
+msgstr "calendar:day:digits|%Id"
+
+#. Translators: this defines whether the week numbers should use
+#. * localized digits or the ones used in English (0123...).
+#. *
+#. * Translate to "%Id" if you want to use localized digits, or
+#. * translate to "%d" otherwise.  Don't include the
+#. * "calendar:week:digits|" part in the translation.
+#. *
+#. * Note that translating this doesn't guarantee that you get localized
+#. * digits.  That needs support from your system and locale definition
+#. * too.
+#.
+#: ../gtk/gtkcalendar.c:1862
+#: ../gtk/gtkcalendar.c:2353
+#, c-format
+msgid "calendar:week:digits|%d"
+msgstr ""
+
+#. Translators: This dictates how the year is displayed in
+#. * gtkcalendar widget.  See strftime() manual for the format.
+#. * Use only ASCII in the translation.
+#. *
+#. * Also look for the msgid "year measurement template|2000".
+#. * Translate that entry to a year with the widest output of this
+#. * msgid.
+#. *
+#. * Don't include the prefix "calendar year format|" in the
+#. * translation. "%Y" is appropriate for most locales.
+#.
+#: ../gtk/gtkcalendar.c:2143
+msgid "calendar year format|%Y"
+msgstr ""
+
+#. This label is displayed in a treeview cell displaying
+#. * a disabled accelerator key combination. Only include
+#. * the text after the | in the translation.
+#.
+#: ../gtk/gtkcellrendereraccel.c:235
+msgid "Accelerator|Disabled"
+msgstr ""
+
+#. This label is displayed in a treeview cell displaying
+#. * an accelerator when the cell is clicked to change the
+#. * acelerator.
+#.
+#: ../gtk/gtkcellrendereraccel.c:368
+#: ../gtk/gtkcellrendereraccel.c:580
+msgid "New accelerator..."
+msgstr ""
+
+#. do not translate the part before the |
+#: ../gtk/gtkcellrendererprogress.c:362
+#: ../gtk/gtkcellrendererprogress.c:449
+#, c-format
+msgid "progress bar label|%d %%"
+msgstr ""
+
+#: ../gtk/gtkcolorbutton.c:188
+#: ../gtk/gtkcolorbutton.c:559
+msgid "Pick a Color"
+msgstr "يو رنګ وټاکﺉ"
+
+#: ../gtk/gtkcolorbutton.c:448
+msgid "Received invalid color data\n"
+msgstr "ناسم رنګ اومتوک لاس ته راغی\n"
+
+#: ../gtk/gtkcolorsel.c:354
+msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:378
+msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:387
+msgid "_Hue:"
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:388
+msgid "Position on the color wheel."
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:390
+msgid "_Saturation:"
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:391
+msgid "\"Deepness\" of the color."
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:392
+msgid "_Value:"
+msgstr ":ارزښت_"
+
+#: ../gtk/gtkcolorsel.c:393
+msgid "Brightness of the color."
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:394
+msgid "_Red:"
+msgstr ":سور_"
+
+#: ../gtk/gtkcolorsel.c:395
+msgid "Amount of red light in the color."
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:396
+msgid "_Green:"
+msgstr ":شين_"
+
+#: ../gtk/gtkcolorsel.c:397
+msgid "Amount of green light in the color."
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:398
+msgid "_Blue:"
+msgstr ":نيل_"
+
+#: ../gtk/gtkcolorsel.c:399
+msgid "Amount of blue light in the color."
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:402
+msgid "Op_acity:"
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:409
+#: ../gtk/gtkcolorsel.c:419
+msgid "Transparency of the color."
+msgstr ".د رنګ روڼوالی"
+
+#: ../gtk/gtkcolorsel.c:426
+msgid "Color _name:"
+msgstr ":د رنګ _نوم"
+
+#: ../gtk/gtkcolorsel.c:440
+msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:470
+msgid "_Palette:"
+msgstr ":رنګدبلی_"
+
+#: ../gtk/gtkcolorsel.c:499
+msgid "Color Wheel"
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:980
+msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:984
+msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
+msgstr ""
+
+#: ../gtk/gtkcolorsel.c:1369
+msgid "_Save color here"
+msgstr "رنګ دلته ساتل_"
+
+#: ../gtk/gtkcolorsel.c:1574
+msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
+
+#: ../gtk/gtkcolorseldialog.c:170
+msgid "Color Selection"
+msgstr "رنګ ټاکنه"
+
+#: ../gtk/gtkentry.c:5376
+#: ../gtk/gtktextview.c:7668
+msgid "Input _Methods"
+msgstr "ننوت لېلې_"
+
+#: ../gtk/gtkentry.c:5390
+#: ../gtk/gtktextview.c:7682
+msgid "_Insert Unicode Control Character"
+msgstr ""
+
+#: ../gtk/gtkfilechooserbutton.c:64
+msgid "Select A File"
+msgstr "يوه دوتنه وټاکﺉ"
+
+#: ../gtk/gtkfilechooserbutton.c:65
+#: ../gtk/gtkfilechooserdefault.c:1899
+msgid "Desktop"
+msgstr "سرپاڼه"
+
+#: ../gtk/gtkfilechooserbutton.c:66
+msgid "(None)"
+msgstr "(هېڅ)"
+
+#: ../gtk/gtkfilechooserbutton.c:2030
+msgid "Other..."
+msgstr "...نور"
+
+#: ../gtk/gtkfilechooserdefault.c:1043
+msgid "Could not retrieve information about the file"
+msgstr "د دوتنې په اړه خبرتياوې نه شي راوستلی"
+
+#: ../gtk/gtkfilechooserdefault.c:1054
+msgid "Could not add a bookmark"
+msgstr "ليکنښه نه شي زياتولی"
+
+#: ../gtk/gtkfilechooserdefault.c:1065
+msgid "Could not remove bookmark"
+msgstr "ليکنښه نه شي ړنګولی"
+
+#: ../gtk/gtkfilechooserdefault.c:1076
+msgid "The folder could not be created"
+msgstr "پوښۍ جوړېدلی شي"
+
+#: ../gtk/gtkfilechooserdefault.c:1089
+msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
+msgstr ""
+
+#: ../gtk/gtkfilechooserdefault.c:1100
+msgid "Invalid file name"
+msgstr "ناسم دوتنه نوم"
+
+#: ../gtk/gtkfilechooserdefault.c:1110
+msgid "The folder contents could not be displayed"
+msgstr "د پوښۍ منځپانګې نه شي ښودلی"
+
+#. Translators: the first string is a path and the second string
+#. * is a hostname. Nautilus and the panel contain the same string
+#. * to translate.
+#.
+#: ../gtk/gtkfilechooserdefault.c:1651
+#, c-format
+msgid "%1$s on %2$s"
+msgstr "%2$s پر ‎%1$s"
+
+#: ../gtk/gtkfilechooserdefault.c:1827
+msgid "Search"
+msgstr "پلټون"
+
+#: ../gtk/gtkfilechooserdefault.c:1851
+msgid "Recently Used"
+msgstr "اوسن کارول شوي"
+
+#: ../gtk/gtkfilechooserdefault.c:2466
+msgid "Select which types of files are shown"
+msgstr "وټاکﺉ چې کوم ډول دوتنې ښکاري"
+
+#: ../gtk/gtkfilechooserdefault.c:2895
+#, c-format
+msgid "Add the folder '%s' to the bookmarks"
+msgstr "پوښۍ ليکنښو ته زياتول '%s'"
+
+#: ../gtk/gtkfilechooserdefault.c:2936
+#, c-format
+msgid "Add the current folder to the bookmarks"
+msgstr "اوسنۍ پوښۍ ليکنښو ته زياتول"
+
+#: ../gtk/gtkfilechooserdefault.c:2938
+#, c-format
+msgid "Add the selected folders to the bookmarks"
+msgstr "ټاکل شوې پوښۍ ليکنښو ته زياتول"
+
+#: ../gtk/gtkfilechooserdefault.c:2978
+#, c-format
+msgid "Remove the bookmark '%s'"
+msgstr "ليکنښه ړنګول '%s'"
+
+#: ../gtk/gtkfilechooserdefault.c:3696
+msgid "Remove"
+msgstr "ړنګول"
+
+#: ../gtk/gtkfilechooserdefault.c:3705
+msgid "Rename..."
+msgstr "...بيانومول"
+
+#. Accessible object name for the file chooser's shortcuts pane
+#: ../gtk/gtkfilechooserdefault.c:3852
+msgid "Places"
+msgstr "ځايونه"
+
+#. Column header for the file chooser's shortcuts pane
+#: ../gtk/gtkfilechooserdefault.c:3909
+msgid "_Places"
+msgstr "ځايونه_"
+
+#: ../gtk/gtkfilechooserdefault.c:3964
+#: ../gtk/gtkstock.c:297
+msgid "_Add"
+msgstr "زياتول_"
+
+#: ../gtk/gtkfilechooserdefault.c:3971
+msgid "Add the selected folder to the Bookmarks"
+msgstr "ټاکل شوې پوښۍ ليکنښو ته زياتول"
+
+#: ../gtk/gtkfilechooserdefault.c:3976
+#: ../gtk/gtkstock.c:386
+msgid "_Remove"
+msgstr "ړنګول_"
+
+#: ../gtk/gtkfilechooserdefault.c:3983
+msgid "Remove the selected bookmark"
+msgstr "ټاکل شوې ليکنښه ړنګول"
+
+#: ../gtk/gtkfilechooserdefault.c:4080
+msgid "Could not select file"
+msgstr "دوتنه نه شي ټاکلی"
+
+#: ../gtk/gtkfilechooserdefault.c:4253
+msgid "_Add to Bookmarks"
+msgstr "ليکنښو ته زياتول_"
+
+#: ../gtk/gtkfilechooserdefault.c:4267
+msgid "Show _Hidden Files"
+msgstr "پټې دوتنې ښودل_"
+
+#: ../gtk/gtkfilechooserdefault.c:4510
+#: ../gtk/gtkfilesel.c:730
+msgid "Files"
+msgstr "دوتنې"
+
+#: ../gtk/gtkfilechooserdefault.c:4559
+msgid "Name"
+msgstr "نوم"
+
+#: ../gtk/gtkfilechooserdefault.c:4584
+msgid "Size"
+msgstr "کچ"
+
+#: ../gtk/gtkfilechooserdefault.c:4598
+msgid "Modified"
+msgstr "بدل شوی"
+
+#. Label
+#: ../gtk/gtkfilechooserdefault.c:4818
+#: ../gtk/gtkprinteroptionwidget.c:786
+msgid "_Name:"
+msgstr ":نوم_"
+
+#: ../gtk/gtkfilechooserdefault.c:4860
+msgid "_Browse for other folders"
+msgstr "نورې پوښۍ لټول_"
+
+#: ../gtk/gtkfilechooserdefault.c:5130
+msgid "Type a file name"
+msgstr "يو دوتنه نوم وليکﺉ"
+
+#. Create Folder
+#: ../gtk/gtkfilechooserdefault.c:5167
+msgid "Create Fo_lder"
+msgstr "پو_ښۍ جوړول"
+
+#: ../gtk/gtkfilechooserdefault.c:5177
+msgid "_Location:"
+msgstr ":ځای_"
+
+#: ../gtk/gtkfilechooserdefault.c:5366
+msgid "Save in _folder:"
+msgstr ":په _پوښۍ کې ساتل"
+
+#: ../gtk/gtkfilechooserdefault.c:5368
+msgid "Create in _folder:"
+msgstr ":په _پوښۍ کې جوړول"
+
+#: ../gtk/gtkfilechooserdefault.c:6962
+msgid "Cannot change to folder because it is not local"
+msgstr ""
+
+#: ../gtk/gtkfilechooserdefault.c:7587
+#: ../gtk/gtkfilechooserdefault.c:7608
+#, c-format
+msgid "Shortcut %s already exists"
+msgstr "لنډلار د مخکې نه شتون لري %s"
+
+#: ../gtk/gtkfilechooserdefault.c:7698
+#, c-format
+msgid "Shortcut %s does not exist"
+msgstr "لنډلار شتون نه لري %s"
+
+#: ../gtk/gtkfilechooserdefault.c:7941
+#: ../gtk/gtkprintunixdialog.c:356
+#, c-format
+msgid "A file named \"%s\" already exists.  Do you want to replace it?"
+msgstr ""
+
+#: ../gtk/gtkfilechooserdefault.c:7944
+#: ../gtk/gtkprintunixdialog.c:360
+#, c-format
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr ""
+
+#: ../gtk/gtkfilechooserdefault.c:7949
+#: ../gtk/gtkprintunixdialog.c:367
+msgid "_Replace"
+msgstr "ځاېناستول_"
+
+#: ../gtk/gtkfilechooserdefault.c:8710
+msgid "Could not start the search process"
+msgstr "د پلټون بهير نه شي پېلولی"
+
+#: ../gtk/gtkfilechooserdefault.c:8711
+msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
+msgstr ""
+
+#: ../gtk/gtkfilechooserdefault.c:8725
+msgid "Could not send the search request"
+msgstr "د پلټون غوښتنه نه شي لېږلی"
+
+#. Label
+#: ../gtk/gtkfilechooserdefault.c:9140
+msgid "_Search:"
+msgstr ":پلټون_"
+
+#: ../gtk/gtkfilechooserdefault.c:10087
+#, c-format
+msgid "Could not mount %s"
+msgstr ""
+
+#: ../gtk/gtkfilechooserdefault.c:10741
+msgid "Type name of new folder"
+msgstr "د نوې پوښۍ نوم وليکﺉ"
+
+#: ../gtk/gtkfilechooserdefault.c:10791
+#, c-format
+msgid "%.1f KB"
+msgstr "%.1f ک ب"
+
+#: ../gtk/gtkfilechooserdefault.c:10793
+#, c-format
+msgid "%.1f MB"
+msgstr "%.1f م ب"
+
+#: ../gtk/gtkfilechooserdefault.c:10795
+#, c-format
+msgid "%.1f GB"
+msgstr "%.1f ګ ب"
+
+#: ../gtk/gtkfilechooserdefault.c:10898
+#: ../gtk/gtkfilechooserdefault.c:10920
+#: ../gtk/gtkfilechooserdefault.c:10991
+msgid "Unknown"
+msgstr "ناپېژندلی"
+
+#: ../gtk/gtkfilechooserdefault.c:10938
+msgid "%H:%M"
+msgstr "%H:%M"
+
+#: ../gtk/gtkfilechooserdefault.c:10940
+msgid "Yesterday at %H:%M"
+msgstr "%H:%M پرون په"
+
+#: ../gtk/gtkfilechooserentry.c:659
+#: ../gtk/gtkfilechooserentry.c:1105
+msgid "Invalid path"
+msgstr "ناسم ځای"
+
+#: ../gtk/gtkfilechooserentry.c:1067
+msgid "No match"
+msgstr "هېڅ ساری"
+
+#: ../gtk/gtkfilechooserentry.c:1075
+msgid "Sole completion"
+msgstr ""
+
+#: ../gtk/gtkfilechooserentry.c:1087
+msgid "Complete, but not unique"
+msgstr ""
+
+#: ../gtk/gtkfilechooserentry.c:1120
+msgid "Completing..."
+msgstr "...بشپړيږي"
+
+#: ../gtk/gtkfilechoosersettings.c:262
+#: ../gtk/gtkfilesel.c:1349
+#: ../gtk/gtkfilesel.c:1358
+#, c-format
+msgid "Error creating folder '%s': %s"
+msgstr "%s :پوښۍ جوړولو کې ستونزه '%s'"
+
+#: ../gtk/gtkfilesel.c:694
+msgid "Folders"
+msgstr "پوښۍ"
+
+#: ../gtk/gtkfilesel.c:698
+msgid "Fol_ders"
+msgstr "پو_ښۍ"
+
+#: ../gtk/gtkfilesel.c:734
+msgid "_Files"
+msgstr "دوتنې_"
+
+#: ../gtk/gtkfilesel.c:821
+#: ../gtk/gtkfilesel.c:2148
+#, c-format
+msgid "Folder unreadable: %s"
+msgstr "%s :پوښۍ نه لوستل کېدونکې ده"
+
+#: ../gtk/gtkfilesel.c:905
+#, c-format
+msgid ""
+"The file \"%s\" resides on another machine (called %s) and may not be available to this program.\n"
+"Are you sure that you want to select it?"
+msgstr ""
+
+#: ../gtk/gtkfilesel.c:1020
+msgid "_New Folder"
+msgstr "نوې پوښۍ_"
+
+#: ../gtk/gtkfilesel.c:1031
+msgid "De_lete File"
+msgstr "دوتنه ړن_ګول"
+
+#: ../gtk/gtkfilesel.c:1042
+msgid "_Rename File"
+msgstr "دوتنه بيانومول_"
+
+#: ../gtk/gtkfilesel.c:1347
+#, c-format
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "پوښۍ نوم داسې پېلامونه لري چې هغه په دوتنه نوم کې نه دي پرېښل شوي \"%s\""
+
+#: ../gtk/gtkfilesel.c:1392
+msgid "New Folder"
+msgstr "نوې پوښۍ"
+
+#: ../gtk/gtkfilesel.c:1407
+msgid "_Folder name:"
+msgstr ":د پوښۍ نوم_"
+
+#: ../gtk/gtkfilesel.c:1431
+msgid "C_reate"
+msgstr "ج_وړول"
+
+#: ../gtk/gtkfilesel.c:1474
+#: ../gtk/gtkfilesel.c:1581
+#: ../gtk/gtkfilesel.c:1594
+#, c-format
+msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
+msgstr "دوتنه نوم داسې پېلامونه لري چې هغه په دوتنه نوم کې نه دي پرېښل شوي \"%s\""
+
+#: ../gtk/gtkfilesel.c:1477
+#: ../gtk/gtkfilesel.c:1487
+#, c-format
+msgid "Error deleting file '%s': %s"
+msgstr "%s :دوتنې په ړنګولو کې ستونزه '%s' د"
+
+#: ../gtk/gtkfilesel.c:1530
+#, c-format
+msgid "Really delete file \"%s\"?"
+msgstr "دوتنه ړنګول غواړﺉ؟ \"%s\" په رښتيا"
+
+#: ../gtk/gtkfilesel.c:1535
+msgid "Delete File"
+msgstr "دوتنه ړنګول"
+
+#: ../gtk/gtkfilesel.c:1583
+#, c-format
+msgid "Error renaming file to \"%s\": %s"
+msgstr "%s :ته دوتنه بيانومولو کې ستونزه \"%s\""
+
+#: ../gtk/gtkfilesel.c:1596
+#, c-format
+msgid "Error renaming file \"%s\": %s"
+msgstr "%s :دوتنې بيانومولو کې ستونزه \"%s\" د"
+
+#: ../gtk/gtkfilesel.c:1605
+#, c-format
+msgid "Error renaming file \"%s\" to \"%s\": %s"
+msgstr "%s :ته بيانومولو کې ستونزه \"%s\" دوتنه \"%s\""
+
+#: ../gtk/gtkfilesel.c:1652
+msgid "Rename File"
+msgstr "دوتنه بيانومول"
+
+#: ../gtk/gtkfilesel.c:1667
+#, c-format
+msgid "Rename file \"%s\" to:"
+msgstr ":دوتنه بيانومول ته \"%s\""
+
+#: ../gtk/gtkfilesel.c:1696
+msgid "_Rename"
+msgstr "بيانومول_"
+
+#: ../gtk/gtkfilesel.c:2128
+msgid "_Selection: "
+msgstr ":ټاکنه_"
+
+#: ../gtk/gtkfilesel.c:3048
+#, c-format
+msgid "The filename \"%s\" couldn't be converted to UTF-8. (try setting the environment variable G_FILENAME_ENCODING): %s"
+msgstr ""
+
+#: ../gtk/gtkfilesel.c:3051
+msgid "Invalid UTF-8"
+msgstr "UTF-8 ناسم"
+
+#: ../gtk/gtkfilesel.c:3925
+msgid "Name too long"
+msgstr "نوم ډېر اوږد دی"
+
+#: ../gtk/gtkfilesel.c:3927
+msgid "Couldn't convert filename"
+msgstr "دوتنه نوم نه شي اړولی"
+
+#. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
+#. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
+#. * token for the fake "File System" volume.  So, we'll return a pointer to
+#. * this particular string.
+#.
+#: ../gtk/gtkfilesystem.c:52
+msgid "File System"
+msgstr "دوتنه غونډال"
+
+#: ../gtk/gtkfilesystemmodel.c:700
+msgid "Could not obtain root folder"
+msgstr ""
+
+#: ../gtk/gtkfilesystemmodel.c:1299
+msgid "(Empty)"
+msgstr "(تش)"
+
+#: ../gtk/gtkfontbutton.c:144
+#: ../gtk/gtkfontbutton.c:266
+msgid "Pick a Font"
+msgstr "ليکبڼه اوچتول"
+
+#. Initialize fields
+#: ../gtk/gtkfontbutton.c:260
+msgid "Sans 12"
+msgstr "Sans ۱۲"
+
+#: ../gtk/gtkfontbutton.c:780
+msgid "Font"
+msgstr "ليکبڼه"
+
+#. This is the default text shown in the preview entry, though the user
+#. can set it. Remember that some fonts only have capital letters.
+#: ../gtk/gtkfontsel.c:75
+msgid "abcdefghijk ABCDEFGHIJK"
+msgstr ""
+
+#: ../gtk/gtkfontsel.c:328
+msgid "_Family:"
+msgstr ":کورنۍ_"
+
+#: ../gtk/gtkfontsel.c:334
+msgid "_Style:"
+msgstr ":ډول_"
+
+#: ../gtk/gtkfontsel.c:340
+msgid "Si_ze:"
+msgstr ":ک_چ"
+
+#. create the text entry widget
+#: ../gtk/gtkfontsel.c:517
+msgid "_Preview:"
+msgstr ":مخليد_"
+
+#: ../gtk/gtkfontsel.c:1571
+msgid "Font Selection"
+msgstr "د ليکبڼې ټاکنه"
+
+#: ../gtk/gtkgamma.c:408
+msgid "Gamma"
+msgstr ""
+
+#: ../gtk/gtkgamma.c:418
+msgid "_Gamma value"
+msgstr ""
+
+#. Remove this icon source so we don't keep trying to
+#. * load it.
+#.
+#: ../gtk/gtkiconfactory.c:1402
+#, c-format
+msgid "Error loading icon: %s"
+msgstr ""
+
+#: ../gtk/gtkicontheme.c:1362
+#, c-format
+msgid ""
+"Could not find the icon '%s'. The '%s' theme\n"
+"was not found either, perhaps you need to install it.\n"
+"You can get a copy from:\n"
+"\t%s"
+msgstr ""
+
+#: ../gtk/gtkicontheme.c:1542
+#, c-format
+msgid "Icon '%s' not present in theme"
+msgstr ""
+
+#: ../gtk/gtkicontheme.c:2983
+msgid "Failed to load icon"
+msgstr "د انځورن په لېښلو کې پاتې راغی"
+
+#: ../gtk/gtkimmodule.c:515
+msgid "Simple"
+msgstr "ساده"
+
+#: ../gtk/gtkimmulticontext.c:542
+msgid "input method menu|System"
+msgstr ""
+
+#: ../gtk/gtkinputdialog.c:192
+msgid "Input"
+msgstr "ننوتۍ"
+
+#: ../gtk/gtkinputdialog.c:207
+msgid "No extended input devices"
+msgstr ""
+
+#: ../gtk/gtkinputdialog.c:220
+msgid "_Device:"
+msgstr ":وزله_"
+
+#: ../gtk/gtkinputdialog.c:237
+msgid "Disabled"
+msgstr "ناتوانول شوی"
+
+#: ../gtk/gtkinputdialog.c:244
+msgid "Screen"
+msgstr "پرده"
+
+#: ../gtk/gtkinputdialog.c:251
+msgid "Window"
+msgstr "کړکۍ"
+
+#: ../gtk/gtkinputdialog.c:258
+msgid "_Mode:"
+msgstr ":اکر_"
+
+#. The axis listbox
+#: ../gtk/gtkinputdialog.c:279
+msgid "Axes"
+msgstr ""
+
+#. Keys listbox
+#: ../gtk/gtkinputdialog.c:297
+msgid "Keys"
+msgstr "کيلۍ"
+
+#: ../gtk/gtkinputdialog.c:524
+msgid "_X:"
+msgstr "_X:"
+
+#: ../gtk/gtkinputdialog.c:525
+msgid "_Y:"
+msgstr "_Y:"
+
+#: ../gtk/gtkinputdialog.c:526
+msgid "_Pressure:"
+msgstr ""
+
+#: ../gtk/gtkinputdialog.c:527
+msgid "X _tilt:"
+msgstr ""
+
+#: ../gtk/gtkinputdialog.c:528
+msgid "Y t_ilt:"
+msgstr ""
+
+#: ../gtk/gtkinputdialog.c:529
+msgid "_Wheel:"
+msgstr ":ګېراړۍ_"
+
+#: ../gtk/gtkinputdialog.c:581
+msgid "none"
+msgstr "هېڅ"
+
+#: ../gtk/gtkinputdialog.c:618
+#: ../gtk/gtkinputdialog.c:654
+msgid "(disabled)"
+msgstr "(ناتوانول شوی)"
+
+#: ../gtk/gtkinputdialog.c:647
+msgid "(unknown)"
+msgstr "(ناپېژندلی)"
+
+#. and clear button
+#: ../gtk/gtkinputdialog.c:751
+msgid "Cl_ear"
+msgstr "پا_کول"
+
+#: ../gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr "URI"
+
+#: ../gtk/gtklinkbutton.c:145
+msgid "The URI bound to this button"
+msgstr ""
+
+#: ../gtk/gtklinkbutton.c:402
+msgid "Copy URL"
+msgstr "لمېستل URL"
+
+#: ../gtk/gtklinkbutton.c:542
+msgid "Invalid URI"
+msgstr "URI ناسم"
+
+#. Description of --gtk-module=MODULES in --help output
+#: ../gtk/gtkmain.c:421
+msgid "Load additional GTK+ modules"
+msgstr ""
+
+#. Placeholder in --gtk-module=MODULES in --help output
+#: ../gtk/gtkmain.c:422
+msgid "MODULES"
+msgstr "رغبېلګې"
+
+#. Description of --g-fatal-warnings in --help output
+#: ../gtk/gtkmain.c:424
+msgid "Make all warnings fatal"
+msgstr "ټولې خبرتياوې وژونکې کول"
+
+#. Description of --gtk-debug=FLAGS in --help output
+#: ../gtk/gtkmain.c:427
+msgid "GTK+ debugging flags to set"
+msgstr ""
+
+#. Description of --gtk-no-debug=FLAGS in --help output
+#: ../gtk/gtkmain.c:430
+msgid "GTK+ debugging flags to unset"
+msgstr ""
+
+#. Translate to default:RTL if you want your widgets
+#. * to be RTL, otherwise translate to default:LTR.
+#. * Do *not* translate it to "predefinito:LTR", if it
+#. * it isn't default:LTR or default:RTL it will not work
+#.
+#: ../gtk/gtkmain.c:678
+msgid "default:LTR"
+msgstr "default:RTL"
+
+#: ../gtk/gtkmain.c:740
+#, c-format
+msgid "Cannot open display: %s"
+msgstr "%s :ښوون نه شي پرانيستلی"
+
+#: ../gtk/gtkmain.c:777
+msgid "GTK+ Options"
+msgstr "غوراوي GTK+"
+
+#: ../gtk/gtkmain.c:777
+msgid "Show GTK+ Options"
+msgstr "غوراوي ښودل GTK+ د"
+
+#: ../gtk/gtkmountoperation.c:476
+msgid "Co_nnect"
+msgstr "نښ_لېدل"
+
+#: ../gtk/gtkmountoperation.c:520
+msgid "Connect _anonymously"
+msgstr "بېنومه نښلېدل_"
+
+#: ../gtk/gtkmountoperation.c:529
+msgid "Connect as u_ser:"
+msgstr ":لکه ک_ارن نښلېدل"
+
+#: ../gtk/gtkmountoperation.c:566
+msgid "_Username:"
+msgstr ":کارننوم_"
+
+#: ../gtk/gtkmountoperation.c:570
+msgid "_Domain:"
+msgstr ":شپول_"
+
+#: ../gtk/gtkmountoperation.c:575
+msgid "_Password:"
+msgstr ":تېرنويې_"
+
+#: ../gtk/gtkmountoperation.c:590
+msgid "_Forget password immediately"
+msgstr "دستي له ياده ويستل_"
+
+#: ../gtk/gtkmountoperation.c:598
+msgid "_Remember password until you logout"
+msgstr "تېرنويې تر وتون ياد ساتل_"
+
+#: ../gtk/gtkmountoperation.c:606
+msgid "_Remember forever"
+msgstr "تل ياد ساتل_"
+
+#: ../gtk/gtknotebook.c:834
+msgid "Arrow spacing"
+msgstr "غشي تشونه"
+
+#: ../gtk/gtknotebook.c:835
+msgid "Scroll arrow spacing"
+msgstr "د رغښت غشي تشونه"
+
+#: ../gtk/gtknotebook.c:4412
+#: ../gtk/gtknotebook.c:6918
+#, c-format
+msgid "Page %u"
+msgstr "مخ %u"
+
+#: ../gtk/gtkpagesetup.c:597
+#: ../gtk/gtkpapersize.c:825
+#: ../gtk/gtkpapersize.c:865
+msgid "Not a valid page setup file"
+msgstr ""
+
+#. Translate to the default units to use for presenting
+#. * lengths to the user. Translate to default:inch if you
+#. * want inches, otherwise translate to default:mm.
+#. * Do *not* translate it to "predefinito:mm", if it
+#. * it isn't default:mm or default:inch it will not work
+#.
+#: ../gtk/gtkpagesetupunixdialog.c:152
+msgid "default:mm"
+msgstr "default:mm"
+
+#: ../gtk/gtkpagesetupunixdialog.c:308
+msgid ""
+"<b>Any Printer</b>\n"
+"For portable documents"
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:894
+#: ../gtk/gtkpagesetupunixdialog.c:1403
+msgid "mm"
+msgstr "م م"
+
+#: ../gtk/gtkpagesetupunixdialog.c:896
+#: ../gtk/gtkpagesetupunixdialog.c:1401
+msgid "inch"
+msgstr "اېنچ"
+
+#: ../gtk/gtkpagesetupunixdialog.c:915
+#, c-format
+msgid ""
+"Margins:\n"
+" Left: %s %s\n"
+" Right: %s %s\n"
+" Top: %s %s\n"
+" Bottom: %s %s"
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:964
+msgid "Manage Custom Sizes..."
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:1012
+msgid "_Format for:"
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:1034
+msgid "_Paper size:"
+msgstr ":د پاڼې کچ_"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1065
+msgid "_Orientation:"
+msgstr ":لورموندنه_"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1129
+#: ../gtk/gtkprintunixdialog.c:2343
+msgid "Page Setup"
+msgstr "مخ امسته"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1448
+msgid "Margins from Printer..."
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:1608
+#, c-format
+msgid "Custom Size %d"
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:1837
+msgid "Manage Custom Sizes"
+msgstr ""
+
+#: ../gtk/gtkpagesetupunixdialog.c:1933
+msgid "_Width:"
+msgstr ":پلنوالی_"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1945
+msgid "_Height:"
+msgstr ":اوږدوالی_"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1957
+msgid "Paper Size"
+msgstr "د پاڼې کچ"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1967
+msgid "_Top:"
+msgstr ":بره_"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1979
+msgid "_Bottom:"
+msgstr ":لاندې_"
+
+#: ../gtk/gtkpagesetupunixdialog.c:1991
+msgid "_Left:"
+msgstr ":کيڼ_"
+
+#: ../gtk/gtkpagesetupunixdialog.c:2003
+msgid "_Right:"
+msgstr ":ښي_"
+
+#: ../gtk/gtkpagesetupunixdialog.c:2044
+msgid "Paper Margins"
+msgstr ""
+
+#: ../gtk/gtkpathbar.c:151
+msgid "Up Path"
+msgstr ""
+
+#: ../gtk/gtkpathbar.c:153
+msgid "Down Path"
+msgstr ""
+
+#: ../gtk/gtkpathbar.c:1464
+msgid "File System Root"
+msgstr "د دوتنه غونډال ولۍ"
+
+#: ../gtk/gtkprinteroptionwidget.c:685
+msgid "Not available"
+msgstr "نه شته"
+
+#: ../gtk/gtkprinteroptionwidget.c:798
+msgid "_Save in folder:"
+msgstr ":په پوښۍ کې ساتل_"
+
+#. translators: this string is the default job title for print
+#. * jobs. %s gets replaced by the application name, %d gets replaced
+#. * by the job number.
+#.
+#: ../gtk/gtkprintoperation.c:173
+#, c-format
+msgid "%s job #%d"
+msgstr ""
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:1504
+msgid "print operation status|Initial state"
+msgstr ""
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:1506
+msgid "print operation status|Preparing to print"
+msgstr ""
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:1508
+msgid "print operation status|Generating data"
+msgstr ""
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:1510
+msgid "print operation status|Sending data"
+msgstr ""
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:1512
+msgid "print operation status|Waiting"
+msgstr ""
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:1514
+msgid "print operation status|Blocking on issue"
+msgstr ""
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:1516
+msgid "print operation status|Printing"
+msgstr ""
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:1518
+msgid "print operation status|Finished"
+msgstr ""
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkprintoperation.c:1520
+msgid "print operation status|Finished with error"
+msgstr ""
+
+#: ../gtk/gtkprintoperation.c:2003
+#, c-format
+msgid "Preparing %d"
+msgstr "چمتو کيږي %d"
+
+#: ../gtk/gtkprintoperation.c:2005
+#: ../gtk/gtkprintoperation.c:2259
+msgid "Preparing"
+msgstr "چمتو کيږي"
+
+#: ../gtk/gtkprintoperation.c:2008
+#, c-format
+msgid "Printing %d"
+msgstr "چاپيږي %d"
+
+#: ../gtk/gtkprintoperation.c:2289
+msgid "Error creating print preview"
+msgstr "د چاپ مخليد په جوړولو کې ستونزه"
+
+#: ../gtk/gtkprintoperation.c:2292
+msgid "The most probable reason is that a temporary file could not be created."
+msgstr ""
+
+#: ../gtk/gtkprintoperation-unix.c:242
+msgid "Error launching preview"
+msgstr "د مخليد په راوستلو کې ستونزه"
+
+#: ../gtk/gtkprintoperation-unix.c:280
+msgid "Error printing"
+msgstr "په چاپولو کې ستونزه"
+
+#: ../gtk/gtkprintoperation-unix.c:381
+#: ../gtk/gtkprintoperation-win32.c:1399
+msgid "Application"
+msgstr "کاريال"
+
+#: ../gtk/gtkprintoperation-win32.c:568
+msgid "Printer offline"
+msgstr ""
+
+#: ../gtk/gtkprintoperation-win32.c:570
+msgid "Out of paper"
+msgstr ""
+
+#: ../gtk/gtkprintoperation-win32.c:572
+msgid "Paused"
+msgstr "ځنډېدلی"
+
+#: ../gtk/gtkprintoperation-win32.c:574
+msgid "Need user intervention"
+msgstr ""
+
+#: ../gtk/gtkprintoperation-win32.c:674
+msgid "Custom size"
+msgstr "دوديز کچ"
+
+#: ../gtk/gtkprintoperation-win32.c:1489
+#: ../gtk/gtkprintoperation-win32.c:1512
+#: ../gtk/gtkprintoperation-win32.c:1560
+msgid "Not enough free memory"
+msgstr ""
+
+#: ../gtk/gtkprintoperation-win32.c:1565
+msgid "Invalid argument to PrintDlgEx"
+msgstr ""
+
+#: ../gtk/gtkprintoperation-win32.c:1570
+msgid "Invalid pointer to PrintDlgEx"
+msgstr ""
+
+#: ../gtk/gtkprintoperation-win32.c:1575
+msgid "Invalid handle to PrintDlgEx"
+msgstr ""
+
+#: ../gtk/gtkprintoperation-win32.c:1580
+msgid "Unspecified error"
+msgstr "ناپېژندل شوې تېروتنه"
+
+#: ../gtk/gtkprintoperation-win32.c:1632
+msgid "Error from StartDoc"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:1665
+msgid "Printer"
+msgstr "چاپګر"
+
+#: ../gtk/gtkprintunixdialog.c:1673
+msgid "Location"
+msgstr "ځای"
+
+#: ../gtk/gtkprintunixdialog.c:1682
+msgid "Status"
+msgstr "انکړ"
+
+#: ../gtk/gtkprintunixdialog.c:1704
+msgid "Range"
+msgstr "سيمه"
+
+#: ../gtk/gtkprintunixdialog.c:1708
+msgid "_All Pages"
+msgstr "ټول مخونه_"
+
+#: ../gtk/gtkprintunixdialog.c:1715
+msgid "C_urrent Page"
+msgstr "ا_وسنی مخ"
+
+#: ../gtk/gtkprintunixdialog.c:1724
+msgid "Pag_es:"
+msgstr ":مخو_نه"
+
+#: ../gtk/gtkprintunixdialog.c:1725
+msgid ""
+"Specify one or more page ranges,\n"
+" e.g. 1-3,7,11"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:1744
+msgid "Copies"
+msgstr "لمېسې"
+
+#. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
+#: ../gtk/gtkprintunixdialog.c:1749
+msgid "Copie_s:"
+msgstr ":لمېس_ې"
+
+#: ../gtk/gtkprintunixdialog.c:1767
+msgid "C_ollate"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:1775
+msgid "_Reverse"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:1795
+msgid "General"
+msgstr "ټولګړي"
+
+#: ../gtk/gtkprintunixdialog.c:2198
+msgid "Layout"
+msgstr "هډوانه"
+
+#: ../gtk/gtkprintunixdialog.c:2202
+msgid "Pages per _side:"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2218
+msgid "T_wo-sided:"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2233
+msgid "_Only print:"
+msgstr ":چاپول يوازې_"
+
+#. In enum order
+#: ../gtk/gtkprintunixdialog.c:2248
+msgid "All sheets"
+msgstr "ټولې پاڼې"
+
+#: ../gtk/gtkprintunixdialog.c:2249
+msgid "Even sheets"
+msgstr "جوتې پاڼې"
+
+#: ../gtk/gtkprintunixdialog.c:2250
+msgid "Odd sheets"
+msgstr "تاکې پاڼې"
+
+#: ../gtk/gtkprintunixdialog.c:2253
+msgid "Sc_ale:"
+msgstr ":مې_چل"
+
+#: ../gtk/gtkprintunixdialog.c:2280
+msgid "Paper"
+msgstr "پاڼه"
+
+#: ../gtk/gtkprintunixdialog.c:2284
+msgid "Paper _type:"
+msgstr ":د پاڼې _ډول"
+
+#: ../gtk/gtkprintunixdialog.c:2299
+msgid "Paper _source:"
+msgstr ":د پاڼو _سرچينه"
+
+#: ../gtk/gtkprintunixdialog.c:2314
+msgid "Output t_ray:"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2366
+msgid "Job Details"
+msgstr "د دندې خبرتياوې"
+
+#: ../gtk/gtkprintunixdialog.c:2372
+msgid "Pri_ority:"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2387
+msgid "_Billing info:"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2405
+msgid "Print Document"
+msgstr "لاسوند چاپول"
+
+#: ../gtk/gtkprintunixdialog.c:2411
+msgid "_Now"
+msgstr "اوس_"
+
+#: ../gtk/gtkprintunixdialog.c:2418
+msgid "A_t:"
+msgstr ":پ_ه"
+
+#: ../gtk/gtkprintunixdialog.c:2433
+msgid "On _hold"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2452
+msgid "Add Cover Page"
+msgstr "پوښ مخ زياتول"
+
+#: ../gtk/gtkprintunixdialog.c:2458
+msgid "Be_fore:"
+msgstr ":مخ_کې"
+
+#: ../gtk/gtkprintunixdialog.c:2473
+msgid "_After:"
+msgstr ":وروسته_"
+
+#: ../gtk/gtkprintunixdialog.c:2488
+msgid "Job"
+msgstr "دنده"
+
+#: ../gtk/gtkprintunixdialog.c:2554
+msgid "Advanced"
+msgstr "ژور"
+
+#: ../gtk/gtkprintunixdialog.c:2589
+msgid "Image Quality"
+msgstr "د انځور څرنګوالی"
+
+#: ../gtk/gtkprintunixdialog.c:2592
+msgid "Color"
+msgstr "رنګ"
+
+#: ../gtk/gtkprintunixdialog.c:2595
+msgid "Finishing"
+msgstr "بشپړيږي"
+
+#: ../gtk/gtkprintunixdialog.c:2605
+msgid "Some of the settings in the dialog conflict"
+msgstr ""
+
+#: ../gtk/gtkprintunixdialog.c:2628
+msgid "Print"
+msgstr "چاپول"
+
+#: ../gtk/gtkradiotoolbutton.c:65
+msgid "Group"
+msgstr "ډله"
+
+#: ../gtk/gtkradiotoolbutton.c:66
+msgid "The radio tool button whose group this button belongs to."
+msgstr ""
+
+#: ../gtk/gtkrc.c:2872
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr ""
+
+#: ../gtk/gtkrc.c:3500
+#: ../gtk/gtkrc.c:3503
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr ""
+
+#: ../gtk/gtkrecentaction.c:155
+#: ../gtk/gtkrecentaction.c:163
+#: ../gtk/gtkrecentchoosermenu.c:551
+#: ../gtk/gtkrecentchoosermenu.c:559
+#, c-format
+msgid "This function is not implemented for widgets of class '%s'"
+msgstr ""
+
+#: ../gtk/gtkrecentchooserdefault.c:454
+msgid "Select which type of documents are shown"
+msgstr ""
+
+#: ../gtk/gtkrecentchooserdefault.c:1096
+#: ../gtk/gtkrecentchooserdefault.c:1133
+#, c-format
+msgid "No item for URI '%s' found"
+msgstr ""
+
+#: ../gtk/gtkrecentchooserdefault.c:1260
+msgid "Untitled filter"
+msgstr ""
+
+#: ../gtk/gtkrecentchooserdefault.c:1613
+msgid "Could not remove item"
+msgstr "توکی نه شي ړنګولی"
+
+#: ../gtk/gtkrecentchooserdefault.c:1656
+msgid "Could not clear list"
+msgstr "لړ نه شي پاکولی"
+
+#: ../gtk/gtkrecentchooserdefault.c:1740
+msgid "Copy _Location"
+msgstr "ځای لمېسل_"
+
+#: ../gtk/gtkrecentchooserdefault.c:1753
+msgid "_Remove From List"
+msgstr "له لړه ړنګول_"
+
+#: ../gtk/gtkrecentchooserdefault.c:1762
+msgid "_Clear List"
+msgstr "لړ پاکول_"
+
+#: ../gtk/gtkrecentchooserdefault.c:1776
+msgid "Show _Private Resources"
+msgstr ""
+
+#. we create a placeholder menuitem, to be used in case
+#. * the menu is empty. this placeholder will stay around
+#. * for the entire lifetime of the menu, and we just hide it
+#. * when it's not used. we have to do this, and do it here,
+#. * because we need a marker for the beginning of the recent
+#. * items list, so that we can insert the new items at the
+#. * right place when idly populating the menu in case the
+#. * user appended or prepended custom menu items to the
+#. * recent chooser menu widget.
+#.
+#: ../gtk/gtkrecentchoosermenu.c:317
+msgid "No items found"
+msgstr "توکي ونه موندل شول"
+
+#: ../gtk/gtkrecentchoosermenu.c:471
+#: ../gtk/gtkrecentchoosermenu.c:527
+#, c-format
+msgid "No recently used resource found with URI `%s'"
+msgstr ""
+
+#: ../gtk/gtkrecentchoosermenu.c:738
+#, c-format
+msgid "Open '%s'"
+msgstr "پرانيستل '%s'"
+
+#: ../gtk/gtkrecentchoosermenu.c:768
+msgid "Unknown item"
+msgstr "ناپېژندلی توکی"
+
+#. This is the label format that is used for the first 10 items
+#. * in a recent files menu. The %d is the number of the item,
+#. * the %s is the name of the item. Please keep the _ in front
+#. * of the number to give these menu items a mnemonic.
+#. *
+#. * Don't include the prefix "recent menu label|" in the translation.
+#.
+#: ../gtk/gtkrecentchoosermenu.c:781
+#, c-format
+msgid "recent menu label|_%d. %s"
+msgstr ""
+
+#. This is the format that is used for items in a recent files menu.
+#. * The %d is the number of the item, the %s is the name of the item.
+#. *
+#. * Don't include the prefix "recent menu label|" in the translation.
+#.
+#: ../gtk/gtkrecentchoosermenu.c:788
+#, c-format
+msgid "recent menu label|%d. %s"
+msgstr ""
+
+#: ../gtk/gtkrecentmanager.c:1012
+#: ../gtk/gtkrecentmanager.c:1025
+#: ../gtk/gtkrecentmanager.c:1163
+#: ../gtk/gtkrecentmanager.c:1173
+#: ../gtk/gtkrecentmanager.c:1226
+#: ../gtk/gtkrecentmanager.c:1235
+#: ../gtk/gtkrecentmanager.c:1250
+#, c-format
+msgid "Unable to find an item with URI '%s'"
+msgstr ""
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
+#: ../gtk/gtkstock.c:288
+msgid "Information"
+msgstr "خبرتيا"
+
+#: ../gtk/gtkstock.c:289
+msgid "Warning"
+msgstr "خبرتيا"
+
+#: ../gtk/gtkstock.c:290
+msgid "Error"
+msgstr "تېروتنه"
+
+#: ../gtk/gtkstock.c:291
+msgid "Question"
+msgstr "پوښتنه"
+
+#. FIXME these need accelerators when appropriate, and
+#. * need the mnemonics to be rationalized
+#.
+#: ../gtk/gtkstock.c:296
+msgid "_About"
+msgstr "په اړه_"
+
+#: ../gtk/gtkstock.c:298
+msgid "_Apply"
+msgstr "کارول_"
+
+#: ../gtk/gtkstock.c:299
+msgid "_Bold"
+msgstr "ډبل_"
+
+#: ../gtk/gtkstock.c:300
+msgid "_Cancel"
+msgstr "بندول_"
+
+#: ../gtk/gtkstock.c:301
+msgid "_CD-Rom"
+msgstr "_CD-Rom"
+
+#: ../gtk/gtkstock.c:302
+msgid "_Clear"
+msgstr "پاکول_"
+
+#: ../gtk/gtkstock.c:303
+msgid "_Close"
+msgstr "بندول_"
+
+#: ../gtk/gtkstock.c:304
+msgid "C_onnect"
+msgstr "ن_ښلېدل"
+
+#: ../gtk/gtkstock.c:305
+msgid "_Convert"
+msgstr "اړول_"
+
+#: ../gtk/gtkstock.c:306
+msgid "_Copy"
+msgstr "لمېسل_"
+
+#: ../gtk/gtkstock.c:307
+msgid "Cu_t"
+msgstr "سکڼ_ل"
+
+#: ../gtk/gtkstock.c:308
+msgid "_Delete"
+msgstr "ړنګول_"
+
+#: ../gtk/gtkstock.c:309
+msgid "_Discard"
+msgstr "بندول_"
+
+#: ../gtk/gtkstock.c:310
+msgid "_Disconnect"
+msgstr "نانښلېدل_"
+
+#: ../gtk/gtkstock.c:311
+msgid "_Execute"
+msgstr ""
+
+#: ../gtk/gtkstock.c:312
+msgid "_Edit"
+msgstr "سمون_"
+
+#: ../gtk/gtkstock.c:313
+msgid "_Find"
+msgstr "لټول_"
+
+#: ../gtk/gtkstock.c:314
+msgid "Find and _Replace"
+msgstr "لټول او _ځاېناستول"
+
+#: ../gtk/gtkstock.c:315
+msgid "_Floppy"
+msgstr "فلاپي_"
+
+#: ../gtk/gtkstock.c:316
+msgid "_Fullscreen"
+msgstr "ټوله پرده_"
+
+#: ../gtk/gtkstock.c:317
+msgid "_Leave Fullscreen"
+msgstr "ټوله پرده پرېښودل_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:319
+msgid "Navigation|_Bottom"
+msgstr "Navigation|لاندې_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:321
+msgid "Navigation|_First"
+msgstr "Navigation|لومړی_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:323
+msgid "Navigation|_Last"
+msgstr "Navigation|وروستی_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:325
+msgid "Navigation|_Top"
+msgstr "Navigation|پاس_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:327
+msgid "Navigation|_Back"
+msgstr "Navigation|شاته_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:329
+msgid "Navigation|_Down"
+msgstr "Navigation|ښکته_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:331
+msgid "Navigation|_Forward"
+msgstr "Navigation|مخکې_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:333
+msgid "Navigation|_Up"
+msgstr "Navigation|بره_"
+
+#: ../gtk/gtkstock.c:334
+msgid "_Harddisk"
+msgstr "کلک ټیکلی_"
+
+#: ../gtk/gtkstock.c:335
+msgid "_Help"
+msgstr "مرسته_"
+
+#: ../gtk/gtkstock.c:336
+msgid "_Home"
+msgstr "کور_"
+
+#: ../gtk/gtkstock.c:337
+msgid "Increase Indent"
+msgstr "سرتشه زياتول"
+
+#: ../gtk/gtkstock.c:338
+msgid "Decrease Indent"
+msgstr "سرتشه کمول"
+
+#: ../gtk/gtkstock.c:339
+msgid "_Index"
+msgstr "لړيال_"
+
+#: ../gtk/gtkstock.c:340
+msgid "_Information"
+msgstr "خبرتيا_"
+
+#: ../gtk/gtkstock.c:341
+msgid "_Italic"
+msgstr "کوږ_"
+
+#: ../gtk/gtkstock.c:342
+msgid "_Jump to"
+msgstr "ته ټوپ وهل_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:344
+msgid "Justify|_Center"
+msgstr "Justify|منځ_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:346
+msgid "Justify|_Fill"
+msgstr "Justify|ډکول_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:348
+msgid "Justify|_Left"
+msgstr "Justify|کيڼ_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:350
+msgid "Justify|_Right"
+msgstr "Justify|ښي_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:353
+msgid "Media|_Forward"
+msgstr "Media|مخکې_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:355
+msgid "Media|_Next"
+msgstr "Media|راتلونکی_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:357
+msgid "Media|P_ause"
+msgstr "Media|ځ_نډول"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:359
+msgid "Media|_Play"
+msgstr "Media|غږول_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:361
+msgid "Media|Pre_vious"
+msgstr "Media|مخ_کنی"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:363
+msgid "Media|_Record"
+msgstr "Media|ساتل_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:365
+msgid "Media|R_ewind"
+msgstr "Media|له سرول_"
+
+#. translators, strip the prefix up to and including the first |
+#: ../gtk/gtkstock.c:367
+msgid "Media|_Stop"
+msgstr "Media|تمول_"
+
+#: ../gtk/gtkstock.c:368
+msgid "_Network"
+msgstr "ځال_"
+
+#: ../gtk/gtkstock.c:369
+msgid "_New"
+msgstr "نوی_"
+
+#: ../gtk/gtkstock.c:370
+msgid "_No"
+msgstr "نه_"
+
+#: ../gtk/gtkstock.c:371
+msgid "_OK"
+msgstr "هوکې_"
+
+#: ../gtk/gtkstock.c:372
+msgid "_Open"
+msgstr "پرانيستل_"
+
+#: ../gtk/gtkstock.c:373
+msgid "Landscape"
+msgstr "پسوریز"
+
+#: ../gtk/gtkstock.c:374
+msgid "Portrait"
+msgstr "تيک"
+
+#: ../gtk/gtkstock.c:375
+msgid "Reverse landscape"
+msgstr "سرچپه پسوریز"
+
+#: ../gtk/gtkstock.c:376
+msgid "Reverse portrait"
+msgstr "سرچپه تیک"
+
+#: ../gtk/gtkstock.c:377
+msgid "Page Set_up"
+msgstr "مخ امس_ته"
+
+#: ../gtk/gtkstock.c:378
+msgid "_Paste"
+msgstr "سرېښل_"
+
+#: ../gtk/gtkstock.c:379
+msgid "_Preferences"
+msgstr "غوراوي_"
+
+#: ../gtk/gtkstock.c:380
+msgid "_Print"
+msgstr "چاپول_"
+
+#: ../gtk/gtkstock.c:381
+msgid "Print Pre_view"
+msgstr "چاپ مخ_ليد"
+
+#: ../gtk/gtkstock.c:382
+msgid "_Properties"
+msgstr "ځانتياوې_"
+
+#: ../gtk/gtkstock.c:383
+msgid "_Quit"
+msgstr "بندول_"
+
+#: ../gtk/gtkstock.c:384
+msgid "_Redo"
+msgstr "بياکړ_"
+
+#: ../gtk/gtkstock.c:385
+msgid "_Refresh"
+msgstr "تاندول_"
+
+#: ../gtk/gtkstock.c:387
+msgid "_Revert"
+msgstr ""
+
+#: ../gtk/gtkstock.c:388
+msgid "_Save"
+msgstr "ساتل_"
+
+#: ../gtk/gtkstock.c:389
+msgid "Save _As"
+msgstr "ساتل _په"
+
+#: ../gtk/gtkstock.c:390
+msgid "Select _All"
+msgstr "ټول ټاکل_"
+
+#: ../gtk/gtkstock.c:391
+msgid "_Color"
+msgstr "رنګ_"
+
+#: ../gtk/gtkstock.c:392
+msgid "_Font"
+msgstr "ليکبڼه_"
+
+#: ../gtk/gtkstock.c:393
+msgid "_Ascending"
+msgstr ""
+
+#: ../gtk/gtkstock.c:394
+msgid "_Descending"
+msgstr ""
+
+#: ../gtk/gtkstock.c:395
+msgid "_Spell Check"
+msgstr "ليکدود کتل_"
+
+#: ../gtk/gtkstock.c:396
+msgid "_Stop"
+msgstr "تمول_"
+
+#: ../gtk/gtkstock.c:397
+msgid "_Strikethrough"
+msgstr ""
+
+#: ../gtk/gtkstock.c:398
+msgid "_Undelete"
+msgstr ""
+
+#: ../gtk/gtkstock.c:399
+msgid "_Underline"
+msgstr "لاندکرښه_"
+
+#: ../gtk/gtkstock.c:400
+msgid "_Undo"
+msgstr "ناکړ_"
+
+#: ../gtk/gtkstock.c:401
+msgid "_Yes"
+msgstr "هو_"
+
+#: ../gtk/gtkstock.c:402
+msgid "_Normal Size"
+msgstr "لېوی کچ_"
+
+#: ../gtk/gtkstock.c:403
+msgid "Best _Fit"
+msgstr "ښه برابرول_"
+
+#: ../gtk/gtkstock.c:404
+msgid "Zoom _In"
+msgstr "لوډېرول_"
+
+#: ../gtk/gtkstock.c:405
+msgid "Zoom _Out"
+msgstr "لو_کمول"
+
+#: ../gtk/gtktextbufferrichtext.c:651
+#, c-format
+msgid "Unknown error when trying to deserialize %s"
+msgstr ""
+
+#: ../gtk/gtktextbufferrichtext.c:710
+#, c-format
+msgid "No deserialize function found for format %s"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:796
+#: ../gtk/gtktextbufferserialize.c:822
+#, c-format
+msgid "Both \"id\" and \"name\" were found on the <%s> element"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:806
+#: ../gtk/gtktextbufferserialize.c:832
+#, c-format
+msgid "The attribute \"%s\" was found twice on the <%s> element"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:846
+#, c-format
+msgid "<%s> element has invalid id \"%s\""
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:856
+#, c-format
+msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:943
+#, c-format
+msgid "Attribute \"%s\" repeated twice on the same <%s> element"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:961
+#: ../gtk/gtktextbufferserialize.c:986
+#, c-format
+msgid "Attribute \"%s\" is invalid on <%s> element in this context"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1022
+#, c-format
+msgid "Tag \"%s\" has not been defined."
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1034
+msgid "Anonymous tag found and tags can not be created."
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1045
+#, c-format
+msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1144
+#: ../gtk/gtktextbufferserialize.c:1219
+#: ../gtk/gtktextbufferserialize.c:1320
+#: ../gtk/gtktextbufferserialize.c:1394
+#, c-format
+msgid "Element <%s> is not allowed below <%s>"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1175
+#, c-format
+msgid "\"%s\" is not a valid attribute type"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1183
+#, c-format
+msgid "\"%s\" is not a valid attribute name"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1193
+#, c-format
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1202
+#, c-format
+msgid "\"%s\" is not a valid value for attribute \"%s\""
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1285
+#, c-format
+msgid "Tag \"%s\" already defined"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1296
+#, c-format
+msgid "Tag \"%s\" has invalid priority \"%s\""
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1349
+#, c-format
+msgid "Outermost element in text must be <text_view_markup> not <%s>"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1358
+#: ../gtk/gtktextbufferserialize.c:1374
+#, c-format
+msgid "A <%s> element has already been specified"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1380
+msgid "A <text> element can't occur before a <tags> element"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1779
+msgid "Serialized data is malformed"
+msgstr ""
+
+#: ../gtk/gtktextbufferserialize.c:1857
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr ""
+
+#: ../gtk/gtktextutil.c:61
+msgid "LRM _Left-to-right mark"
+msgstr ""
+
+#: ../gtk/gtktextutil.c:62
+msgid "RLM _Right-to-left mark"
+msgstr ""
+
+#: ../gtk/gtktextutil.c:63
+msgid "LRE Left-to-right _embedding"
+msgstr ""
+
+#: ../gtk/gtktextutil.c:64
+msgid "RLE Right-to-left e_mbedding"
+msgstr ""
+
+#: ../gtk/gtktextutil.c:65
+msgid "LRO Left-to-right _override"
+msgstr ""
+
+#: ../gtk/gtktextutil.c:66
+msgid "RLO Right-to-left o_verride"
+msgstr ""
+
+#: ../gtk/gtktextutil.c:67
+msgid "PDF _Pop directional formatting"
+msgstr ""
+
+#: ../gtk/gtktextutil.c:68
+msgid "ZWS _Zero width space"
+msgstr ""
+
+#: ../gtk/gtktextutil.c:69
+msgid "ZWJ Zero width _joiner"
+msgstr ""
+
+#: ../gtk/gtktextutil.c:70
+msgid "ZWNJ Zero width _non-joiner"
+msgstr ""
+
+#: ../gtk/gtkthemes.c:71
+#, c-format
+msgid "Unable to locate theme engine in module_path: \"%s\","
+msgstr ""
+
+#: ../gtk/gtktipsquery.c:188
+msgid "--- No Tip ---"
+msgstr "--- هېڅ نکته ---"
+
+#: ../gtk/gtkuimanager.c:1454
+#, c-format
+msgid "Unexpected start tag '%s' on line %d char %d"
+msgstr ""
+
+#: ../gtk/gtkuimanager.c:1544
+#, c-format
+msgid "Unexpected character data on line %d char %d"
+msgstr ""
+
+#: ../gtk/gtkuimanager.c:2367
+msgid "Empty"
+msgstr "تش"
+
+#: ../gtk/gtkvolumebutton.c:77
+msgid "Volume"
+msgstr "غږ"
+
+#: ../gtk/gtkvolumebutton.c:79
+msgid "Turns volume down or up"
+msgstr "غږ لوړوي يا ټيټوي"
+
+#: ../gtk/gtkvolumebutton.c:82
+msgid "Adjusts the volume"
+msgstr "غږ برابروي"
+
+#: ../gtk/gtkvolumebutton.c:85
+#: ../gtk/gtkvolumebutton.c:88
+msgid "Volume Down"
+msgstr "غږ ټيټول"
+
+#: ../gtk/gtkvolumebutton.c:87
+msgid "Decreases the volume"
+msgstr "غږ ټيټوي"
+
+#: ../gtk/gtkvolumebutton.c:91
+#: ../gtk/gtkvolumebutton.c:94
+msgid "Volume Up"
+msgstr "غږ لوړول"
+
+#: ../gtk/gtkvolumebutton.c:93
+msgid "Increases the volume"
+msgstr "غږ لوړوي"
+
+#: ../gtk/gtkvolumebutton.c:151
+msgid "Muted"
+msgstr "تم شوی"
+
+#: ../gtk/gtkvolumebutton.c:155
+msgid "Full Volume"
+msgstr "ټول غږ"
+
+#. Translators: this is the percentage of the current volume,
+#. * as used in the tooltip, eg. "49 %".
+#. * Translate the "%d" to "%Id" if you want to use localised digits,
+#. * or otherwise translate the "%d" to "%d".
+#. * Do not translate and do not include the "volume percentage|"
+#. * part in the translation!
+#.
+#: ../gtk/gtkvolumebutton.c:170
+#, c-format
+msgid "volume percentage|%d %%"
+msgstr "%Id %%"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:5
+msgid "paper size|asme_f"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:7
+msgid "paper size|A0x2"
+msgstr "paper size|A۰x۲"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:9
+msgid "paper size|A0"
+msgstr "paper size|A۰"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:11
+msgid "paper size|A0x3"
+msgstr "paper size|A۰x۳"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:13
+msgid "paper size|A1"
+msgstr "paper size|A۱"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:15
+msgid "paper size|A10"
+msgstr "paper size|A۱۰"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:17
+msgid "paper size|A1x3"
+msgstr "paper size|A۱x۳"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:19
+msgid "paper size|A1x4"
+msgstr "paper size|A۱x۴"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:21
+msgid "paper size|A2"
+msgstr "paper size|A۲"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:23
+msgid "paper size|A2x3"
+msgstr "paper size|A۲x۳"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:25
+msgid "paper size|A2x4"
+msgstr "paper size|A۲x۴"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:27
+msgid "paper size|A2x5"
+msgstr "paper size|A۲x۵"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:29
+msgid "paper size|A3"
+msgstr "paper size|A۳"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:31
+msgid "paper size|A3 Extra"
+msgstr "paper size|A۳ زيات"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:33
+msgid "paper size|A3x3"
+msgstr "paper size|A۳x۳"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:35
+msgid "paper size|A3x4"
+msgstr "paper size|A۳x۴"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:37
+msgid "paper size|A3x5"
+msgstr "paper size|A۳x۵"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:39
+msgid "paper size|A3x6"
+msgstr "paper size|A۳x۶"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:41
+msgid "paper size|A3x7"
+msgstr "paper size|A۳x۷"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:43
+msgid "paper size|A4"
+msgstr "paper size|A۴"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:45
+msgid "paper size|A4 Extra"
+msgstr "paper size|A۴ زيات"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:47
+msgid "paper size|A4 Tab"
+msgstr "paper size|A۴ ټوپ"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:49
+msgid "paper size|A4x3"
+msgstr "paper size|A۴x۳"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:51
+msgid "paper size|A4x4"
+msgstr "paper size|A۴x۴"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:53
+msgid "paper size|A4x5"
+msgstr "paper size|A۴x۵"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:55
+msgid "paper size|A4x6"
+msgstr "paper size|A۴x۶"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:57
+msgid "paper size|A4x7"
+msgstr "paper size|A۴x۷"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:59
+msgid "paper size|A4x8"
+msgstr "paper size|A۴x۸"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:61
+msgid "paper size|A4x9"
+msgstr "paper size|A۴x۹"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:63
+msgid "paper size|A5"
+msgstr "paper size|A۵"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:65
+msgid "paper size|A5 Extra"
+msgstr "paper size|A۵ زيات"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:67
+msgid "paper size|A6"
+msgstr "paper size|A۶"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:69
+msgid "paper size|A7"
+msgstr "paper size|A۷"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:71
+msgid "paper size|A8"
+msgstr "paper size|A۸"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:73
+msgid "paper size|A9"
+msgstr "paper size|A۹"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:75
+msgid "paper size|B0"
+msgstr "paper size|B۰"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:77
+msgid "paper size|B1"
+msgstr "paper size|B۱"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:79
+msgid "paper size|B10"
+msgstr "paper size|B۱۰"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:81
+msgid "paper size|B2"
+msgstr "paper size|B۲"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:83
+msgid "paper size|B3"
+msgstr "paper size|B۳"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:85
+msgid "paper size|B4"
+msgstr "paper size|B۴"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:87
+msgid "paper size|B5"
+msgstr "paper size|B۵"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:89
+msgid "paper size|B5 Extra"
+msgstr "paper size|B۵ زيات"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:91
+msgid "paper size|B6"
+msgstr "paper size|B۶"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:93
+msgid "paper size|B6/C4"
+msgstr "paper size|B۶/C۴"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:95
+msgid "paper size|B7"
+msgstr "paper size|B۷"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:97
+msgid "paper size|B8"
+msgstr "paper size|B۸"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:99
+msgid "paper size|B9"
+msgstr "paper size|B۹"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:101
+msgid "paper size|C0"
+msgstr "paper size|C۰"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:103
+msgid "paper size|C1"
+msgstr "paper size|C۱"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:105
+msgid "paper size|C10"
+msgstr "paper size|C۱۰"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:107
+msgid "paper size|C2"
+msgstr "paper size|C۲"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:109
+msgid "paper size|C3"
+msgstr "paper size|C۳"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:111
+msgid "paper size|C4"
+msgstr "paper size|C۴"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:113
+msgid "paper size|C5"
+msgstr "paper size|C۵"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:115
+msgid "paper size|C6"
+msgstr "paper size|C۶"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:117
+msgid "paper size|C6/C5"
+msgstr "paper size|C۶/C۵"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:119
+msgid "paper size|C7"
+msgstr "paper size|C۷"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:121
+msgid "paper size|C7/C6"
+msgstr "paper size|C۷/C۶"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:123
+msgid "paper size|C8"
+msgstr "paper size|C۸"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:125
+msgid "paper size|C9"
+msgstr "paper size|C۹"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:127
+msgid "paper size|DL Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:129
+msgid "paper size|RA0"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:131
+msgid "paper size|RA1"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:133
+msgid "paper size|RA2"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:135
+msgid "paper size|SRA0"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:137
+msgid "paper size|SRA1"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:139
+msgid "paper size|SRA2"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:141
+msgid "paper size|JB0"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:143
+msgid "paper size|JB1"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:145
+msgid "paper size|JB10"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:147
+msgid "paper size|JB2"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:149
+msgid "paper size|JB3"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:151
+msgid "paper size|JB4"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:153
+msgid "paper size|JB5"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:155
+msgid "paper size|JB6"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:157
+msgid "paper size|JB7"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:159
+msgid "paper size|JB8"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:161
+msgid "paper size|JB9"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:163
+msgid "paper size|jis exec"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:165
+msgid "paper size|Choukei 2 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:167
+msgid "paper size|Choukei 3 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:169
+msgid "paper size|Choukei 4 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:171
+msgid "paper size|hagaki (postcard)"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:173
+msgid "paper size|kahu Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:175
+msgid "paper size|kaku2 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:177
+msgid "paper size|oufuku (reply postcard)"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:179
+msgid "paper size|you4 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:181
+msgid "paper size|10x11"
+msgstr "paper size|۱۰x۱۱"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:183
+msgid "paper size|10x13"
+msgstr "paper size|۱۰x۱۳"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:185
+msgid "paper size|10x14"
+msgstr "paper size|۱۰x۱۴"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:187
+#: ../gtk/paper_names_offsets.c:189
+msgid "paper size|10x15"
+msgstr "paper size|۱۰x۱۵"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:191
+msgid "paper size|11x12"
+msgstr "paper size|۱۱x۱۲"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:193
+msgid "paper size|11x15"
+msgstr "paper size|۱۱x۱۵"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:195
+msgid "paper size|12x19"
+msgstr "paper size|۱۲x۱۹"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:197
+msgid "paper size|5x7"
+msgstr "paper size|۵x۷"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:199
+msgid "paper size|6x9 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:201
+msgid "paper size|7x9 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:203
+msgid "paper size|9x11 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:205
+msgid "paper size|a2 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:207
+msgid "paper size|Arch A"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:209
+msgid "paper size|Arch B"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:211
+msgid "paper size|Arch C"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:213
+msgid "paper size|Arch D"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:215
+msgid "paper size|Arch E"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:217
+msgid "paper size|b-plus"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:219
+msgid "paper size|c"
+msgstr "د پاڼې کچ|c"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:221
+msgid "paper size|c5 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:223
+msgid "paper size|d"
+msgstr "د پاڼې کچ|d"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:225
+msgid "paper size|e"
+msgstr "د پاڼې کچ|e"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:227
+msgid "paper size|edp"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:229
+msgid "paper size|European edp"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:231
+msgid "paper size|Executive"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:233
+msgid "paper size|f"
+msgstr "د پاڼې کچ|f"
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:235
+msgid "paper size|FanFold European"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:237
+msgid "paper size|FanFold US"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:239
+msgid "paper size|FanFold German Legal"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:241
+msgid "paper size|Government Legal"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:243
+msgid "paper size|Government Letter"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:245
+msgid "paper size|Index 3x5"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:247
+msgid "paper size|Index 4x6 (postcard)"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:249
+msgid "paper size|Index 4x6 ext"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:251
+msgid "paper size|Index 5x8"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:253
+msgid "paper size|Invoice"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:255
+msgid "paper size|Tabloid"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:257
+msgid "paper size|US Legal"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:259
+msgid "paper size|US Legal Extra"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:261
+msgid "paper size|US Letter"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:263
+msgid "paper size|US Letter Extra"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:265
+msgid "paper size|US Letter Plus"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:267
+msgid "paper size|Monarch Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:269
+msgid "paper size|#10 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:271
+msgid "paper size|#11 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:273
+msgid "paper size|#12 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:275
+msgid "paper size|#14 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:277
+msgid "paper size|#9 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:279
+msgid "paper size|Personal Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:281
+msgid "paper size|Quarto"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:283
+msgid "paper size|Super A"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:285
+msgid "paper size|Super B"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:287
+msgid "paper size|Wide Format"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:289
+msgid "paper size|Dai-pa-kai"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:291
+msgid "paper size|Folio"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:293
+msgid "paper size|Folio sp"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:295
+msgid "paper size|Invite Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:297
+msgid "paper size|Italian Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:299
+msgid "paper size|juuro-ku-kai"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:301
+msgid "paper size|pa-kai"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:303
+msgid "paper size|Postfix Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:305
+msgid "paper size|Small Photo"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:307
+msgid "paper size|prc1 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:309
+msgid "paper size|prc10 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:311
+msgid "paper size|prc 16k"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:313
+msgid "paper size|prc2 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:315
+msgid "paper size|prc3 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:317
+msgid "paper size|prc 32k"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:319
+msgid "paper size|prc4 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:321
+msgid "paper size|prc5 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:323
+msgid "paper size|prc6 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:325
+msgid "paper size|prc7 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:327
+msgid "paper size|prc8 Envelope"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:329
+msgid "paper size|ROC 16k"
+msgstr ""
+
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:331
+msgid "paper size|ROC 8k"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:492
+#: ../gtk/updateiconcache.c:552
+#, c-format
+msgid "different idatas found for symlinked '%s' and '%s'\n"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1374
+#, c-format
+msgid "Failed to write header\n"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1380
+#, c-format
+msgid "Failed to write hash table\n"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1386
+#, c-format
+msgid "Failed to write folder index\n"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1394
+#, c-format
+msgid "Failed to rewrite header\n"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1454
+#, c-format
+msgid "Failed to open file %s : %s\n"
+msgstr "%s : دوتنه پرانيستلو کې پاتې راغی %s\n"
+
+#: ../gtk/updateiconcache.c:1462
+#, c-format
+msgid "Failed to write cache file: %s\n"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1497
+#, c-format
+msgid "The generated cache was invalid.\n"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1511
+#, c-format
+msgid "Could not rename %s to %s: %s, removing %s then.\n"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1523
+#, c-format
+msgid "Could not rename %s to %s: %s\n"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1530
+#, c-format
+msgid "Could not rename %s back to %s: %s.\n"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1556
+#, c-format
+msgid "Cache file created successfully.\n"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1595
+msgid "Overwrite an existing cache, even if up to date"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1596
+msgid "Don't check for the existence of index.theme"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1597
+msgid "Don't include image data in the cache"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1598
+msgid "Output a C header file"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1599
+msgid "Turn off verbose output"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1600
+msgid "Validate existing icon cache"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1663
+#, c-format
+msgid "File not found: %s\n"
+msgstr "%s :دوتنه ونه موندل شوه\n"
+
+#: ../gtk/updateiconcache.c:1669
+#, c-format
+msgid "Not a valid icon cache: %s\n"
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1682
+#, c-format
+msgid "No theme index file."
+msgstr ""
+
+#: ../gtk/updateiconcache.c:1686
+#, c-format
+msgid ""
+"No theme index file in '%s'.\n"
+"If you really want to create an icon cache here, use --ignore-theme-index.\n"
+msgstr ""
+
+#. ID
+#: ../modules/input/imam-et.c:454
+msgid "Amharic (EZ+)"
+msgstr ""
+
+#. ID
+#: ../modules/input/imcedilla.c:92
+msgid "Cedilla"
+msgstr ""
+
+#. ID
+#: ../modules/input/imcyrillic-translit.c:217
+msgid "Cyrillic (Transliterated)"
+msgstr ""
+
+#. ID
+#: ../modules/input/iminuktitut.c:127
+msgid "Inuktitut (Transliterated)"
+msgstr ""
+
+#. ID
+#: ../modules/input/imipa.c:145
+msgid "IPA"
+msgstr ""
+
+#. ID
+#: ../modules/input/immultipress.c:31
+msgid "Multipress"
+msgstr ""
+
+#. ID
+#: ../modules/input/imthai.c:35
+msgid "Thai-Lao"
+msgstr ""
+
+#. ID
+#: ../modules/input/imti-er.c:453
+msgid "Tigrigna-Eritrean (EZ+)"
+msgstr ""
+
+#. ID
+#: ../modules/input/imti-et.c:453
+msgid "Tigrigna-Ethiopian (EZ+)"
+msgstr ""
+
+#. ID
+#: ../modules/input/imviqr.c:244
+msgid "Vietnamese (VIQR)"
+msgstr ""
+
+#. ID
+#: ../modules/input/imxim.c:28
+msgid "X Input Method"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1082
+#, c-format
+msgid "Printer '%s' is low on toner."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1083
+#, c-format
+msgid "Printer '%s' has no toner left."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1084
+#, c-format
+msgid "Printer '%s' is low on developer."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1085
+#, c-format
+msgid "Printer '%s' is out of developer."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1086
+#, c-format
+msgid "Printer '%s' is low on at least one marker supply."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1087
+#, c-format
+msgid "Printer '%s' is out of at least one marker supply."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1088
+#, c-format
+msgid "The cover is open on printer '%s'."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1089
+#, c-format
+msgid "The door is open on printer '%s'."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1090
+#, c-format
+msgid "Printer '%s' is low on paper."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1091
+#, c-format
+msgid "Printer '%s' is out of paper."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1092
+#, c-format
+msgid "Printer '%s' is currently off-line."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1093
+#, c-format
+msgid "Printer '%s' may not be connected."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1094
+#, c-format
+msgid "There is a problem on printer '%s'."
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1864
+msgid "Two Sided"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1865
+msgid "Paper Type"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1866
+msgid "Paper Source"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1867
+msgid "Output Tray"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1876
+msgid "One Sided"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1877
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1878
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1882
+msgid "Auto Select"
+msgstr "خپله ټاکل"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1879
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1880
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1881
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2351
+msgid "Printer Default"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2545
+msgid "Urgent"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2545
+msgid "High"
+msgstr "لوړ"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2545
+msgid "Medium"
+msgstr "منځنی"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2545
+msgid "Low"
+msgstr "ټيټ"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+msgid "None"
+msgstr "هېڅ"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+msgid "Classified"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+msgid "Confidential"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+msgid "Secret"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+msgid "Standard"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+msgid "Top Secret"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2547
+msgid "Unclassified"
+msgstr ""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2640
+#, c-format
+msgid "Custom %sx%s"
+msgstr ""
+
+#. default filename used for print-to-file
+#: ../modules/printbackends/file/gtkprintbackendfile.c:235
+#, c-format
+msgid "output.%s"
+msgstr ""
+
+#: ../modules/printbackends/file/gtkprintbackendfile.c:464
+msgid "Print to File"
+msgstr "دوتنه کې چاپول"
+
+#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+msgid "PDF"
+msgstr "PDF"
+
+#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+msgid "Postscript"
+msgstr "Postscript"
+
+#: ../modules/printbackends/file/gtkprintbackendfile.c:553
+#: ../modules/printbackends/test/gtkprintbackendtest.c:501
+msgid "Pages per _sheet:"
+msgstr ""
+
+#: ../modules/printbackends/file/gtkprintbackendfile.c:599
+msgid "File"
+msgstr "دوتنه"
+
+#: ../modules/printbackends/file/gtkprintbackendfile.c:608
+msgid "_Output format"
+msgstr ""
+
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:398
+msgid "Print to LPR"
+msgstr ""
+
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
+msgid "Pages Per Sheet"
+msgstr ""
+
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:431
+msgid "Command Line"
+msgstr "بولۍ ليکه"
+
+#. default filename used for print-to-test
+#: ../modules/printbackends/test/gtkprintbackendtest.c:235
+#, c-format
+msgid "test-output.%s"
+msgstr ""
+
+#: ../modules/printbackends/test/gtkprintbackendtest.c:465
+msgid "Print to Test Printer"
+msgstr ""
+
+#: ../tests/testfilechooser.c:207
+#, c-format
+msgid "Could not get information for file '%s': %s"
+msgstr ""
+
