@@ -2,19 +2,19 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Amitakhya Phukan <aphukan@redhat.com>, 2006, 2007.
+# Amitakhya Phukan <aphukan@redhat.com>, 2006, 2007, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-16 16:30-0400\n"
-"PO-Revision-Date: 2007-05-09 17:13+0530\n"
-"Last-Translator: Amitakhya Phukan <aphukan@redhat.com>\n"
-"Language-Team: Assamese <assam@mm.assam-glug.org>\n"
+"PO-Revision-Date: 2008-07-17 12:03+0530\n"
+"Last-Translator: \n"
+"Language-Team: American English <kde-i18n-doc@lists.kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: KAider 0.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1)\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:154 gdk-pixbuf/gdk-pixbuf-io.c:858
@@ -31,18 +31,15 @@ msgstr "প্ৰতিমুৰ্তিৰ নথিপত্ৰ '%s' ত ক�
 #: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:907
 #: gdk-pixbuf/gdk-pixbuf-io.c:1164 tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"'%s' প্ৰতিমুৰ্তি তুলি লোৱাত অক্ষম: কাৰণ অজ্ঞাত, খুব সম্ভৱ এটা প্ৰদূষিত প্ৰতিমুৰ্তিৰ নথিপত্ৰ"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "'%s' প্ৰতিমুৰ্তি তুলি লোৱাত অক্ষম: কাৰণ অজ্ঞাত, খুব সম্ভৱ এটা প্ৰদূষিত প্ৰতিমুৰ্তিৰ নথিপত্ৰ"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:242
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr ""
-"'%s' সঞ্জীবন তুলি লোৱাত অক্ষম: কাৰণ অজ্ঞাত, খুব সম্ভৱ এটা প্ৰদূষিত সঞ্জীবন নথিপত্ৰ"
+msgstr "'%s' সঞ্জীবন তুলি লোৱাত অক্ষম: কাৰণ অজ্ঞাত, খুব সম্ভৱ এটা প্ৰদূষিত সঞ্জীবন নথিপত্ৰ"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:463
 #, c-format
@@ -390,13 +387,11 @@ msgstr "পৰিবৰ্ত্তিত JPEG ৰ শুণ্য বহল ব
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr ""
-"JPEG গুণৰ মান ০ আৰু ১০০ ৰ মাজৰ হ'ব লাগিব; '%s' মানৰ বিশ্লেষণ কৰিব পৰা ন'গ'ল ।"
+msgstr "JPEG গুণৰ মান ০ আৰু ১০০ ৰ মাজৰ হ'ব লাগিব; '%s' মানৰ বিশ্লেষণ কৰিব পৰা ন'গ'ল ।"
 
 #: gdk-pixbuf/io-jpeg.c:949
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG গুণৰ মান ০ আৰু ১০০ ৰ মাজৰ হ'ব লাগিব; '%d' মানৰ অনুমতি নাই ।"
 
 #: gdk-pixbuf/io-jpeg.c:1106
@@ -513,8 +508,7 @@ msgstr "PNG প্ৰতিমুৰ্তিৰ নথিপত্ৰ পঢ়ো
 
 #: gdk-pixbuf/io-png.c:826
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG লিপি খণ্ডৰ চাবিত অতি কমেও ১টা আৰু অতি বেচি ৭৯টা আখৰ হ'ব লাগিব ।"
 
 #: gdk-pixbuf/io-png.c:834
@@ -1664,8 +1658,7 @@ msgstr "নথিপত্ৰৰ নাম \"%s\" ইতিমধ্যে আ�
 
 #: gtk/gtkfilechooserdefault.c:7422
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "নথিপত্ৰ ইতিমধ্যে \"%s\" ত আছে । প্ৰতিস্থাপন কৰিলে বিষয়বস্তু পুনঃ লিখা যাব ।"
 
 #: gtk/gtkfilechooserdefault.c:7427
@@ -1736,10 +1729,8 @@ msgstr ""
 
 #: gtk/gtkfilechoosersettings.c:205
 #, c-format
-msgid ""
-"Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
-msgstr ""
-"শাৰী %d, স্তম্ভ %d: প্ৰত্যাশিত \"%s\" উচ্চস্তৰত, কিন্তু ইয়াৰ সলনি পোৱা গ'ল \"%s\" হে"
+msgid "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
+msgstr "শাৰী %d, স্তম্ভ %d: প্ৰত্যাশিত \"%s\" উচ্চস্তৰত, কিন্তু ইয়াৰ সলনি পোৱা গ'ল \"%s\" হে"
 
 #: gtk/gtkfilechoosersettings.c:241 gtk/gtkfilechoosersettings.c:269
 #: gtk/gtkfilechoosersettings.c:297
@@ -1796,8 +1787,7 @@ msgstr "নথিপত্ৰ পুনঃনামকৰণ কৰক (_R)"
 
 #: gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ফোল্ডাৰৰ নাম \"%s\" ত এনে চিহ্ন আছে যিবোৰৰ নথিপত্ৰৰ নামত অনুমতি নাই"
 
 #: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1062
@@ -2179,7 +2169,7 @@ msgstr "পৃষ্ঠা %u"
 #.
 #: gtk/gtkpagesetupunixdialog.c:154
 msgid "default:mm"
-msgstr "অবিকল্পিত:mm"
+msgstr "default:mm"
 
 #: gtk/gtkpagesetupunixdialog.c:339
 msgid ""
@@ -4195,8 +4185,7 @@ msgstr "\"%s\" এটা বৈধ গুণৰ নাম নহয়"
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" ক \"%s\" ধৰণৰ মানলৈ সলনি কৰিব পৰা ন'গ'ল \"%s\" গুণৰ বাবে"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -4235,8 +4224,7 @@ msgstr "ধাৰাবাহিক তথ্য বিকৃত"
 
 #: gtk/gtktextbufferserialize.c:1866
 #, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "ধাৰাবাহিক তথ্য বিকৃত । প্ৰথম খণ্ড GTKTEXTBUFFERCONTENTS-0001 নহয়"
 
 #: gtk/updateiconcache.c:413
@@ -4318,3 +4306,4 @@ msgstr ""
 "'%s' ত কোনো আলোকচিত্ৰ সূচীপত্ৰৰ নথিপত্ৰ নাই ।\n"
 "আপুনি যদি সঁচাকৈ প্ৰতিকৃতিৰ ভাণ্ডাৰ সৃষ্টি কৰিব খোজে, --ignore-theme-index ব্যৱহাৰ "
 "কৰক ।\n"
+
