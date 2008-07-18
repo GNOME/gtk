@@ -1,5 +1,13 @@
 2007-08-18  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 543545 – GtkAssistant crashes when gtk_widget_hide() is called
+	inside "apply" signal handler
+
+	* gtk/gtkassistant.c: Don't emit signals with extra parameters.
+	Patch by Antti Kaijanmäki
+
+2007-08-18  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 543217 – GTK application crashed with directfb backend
 
 	*  gdk/directfb/gdkvisual-directfb.c: Avoid a crash in

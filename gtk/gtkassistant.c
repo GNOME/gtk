@@ -601,13 +601,13 @@ on_assistant_apply (GtkWidget *widget, GtkAssistant *assistant)
 
   success = compute_next_step (assistant);
 
-  g_signal_emit (assistant, signals [APPLY], 0, priv->current_page->page);
+  g_signal_emit (assistant, signals [APPLY], 0);
 
   /* if the assistant hasn't switched to another page, just emit
    * the CLOSE signal, it't the last page in the assistant flow
    */
   if (!success)
-    g_signal_emit (assistant, signals [CLOSE], 0, priv->current_page->page);
+    g_signal_emit (assistant, signals [CLOSE], 0);
 }
 
 static void
