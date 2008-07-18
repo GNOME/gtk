@@ -1457,7 +1457,9 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
       "printer-state-reasons",
       "printer-state",
       "queued-job-count",
-      "printer-is-accepting-jobs"
+      "printer-is-accepting-jobs",
+      "job-sheets-supported",
+      "job-sheets-default"
     };
  
   if (cups_backend->list_printers_pending ||

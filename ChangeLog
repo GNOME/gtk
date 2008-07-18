@@ -1,3 +1,8 @@
+2008-07-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: Add a forgotten
+	hunk of the previous commit.
+
 2008-07-18  Sven Herzberg  <sven@imendio.com>
 
 	Make aliasfilecheck.sh pass for the quartz backend, too.
