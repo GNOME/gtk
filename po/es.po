@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-15 17:35+0000\n"
-"PO-Revision-Date: 2008-07-16 18:36+0200\n"
+"POT-Creation-Date: 2008-07-16 20:38+0000\n"
+"PO-Revision-Date: 2008-07-18 13:50+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1276,17 +1276,17 @@ msgstr "Espacio"
 msgid "keyboard label|Backslash"
 msgstr "Contrabarra"
 
-#: ../gtk/gtkbuilderparser.c:325
+#: ../gtk/gtkbuilderparser.c:340
 #, c-format
 msgid "Invalid type function: `%s'"
 msgstr "Nombre de función no válido: «%s»"
 
-#: ../gtk/gtkbuilderparser.c:789
+#: ../gtk/gtkbuilderparser.c:823
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Nombre de elemento raíz no válido: «%s»"
 
-#: ../gtk/gtkbuilderparser.c:823
+#: ../gtk/gtkbuilderparser.c:862
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Etiqueta no soportada: «%s»"
@@ -2491,7 +2491,7 @@ msgid "Out of paper"
 msgstr "Papel agotado"
 
 #: ../gtk/gtkprintoperation-win32.c:572
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1315
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1357
 msgid "Paused"
 msgstr "Pausada"
 
@@ -4415,158 +4415,159 @@ msgstr "Vietnamita (VIQR)"
 msgid "X Input Method"
 msgstr "Método de entrada X"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1083
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1101
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "A la impresora «%s» le queda poco tóner."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1084
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1102
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "A la impresora «%s» no le queda tóner."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1085
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1103
 #, c-format
 msgid "Printer '%s' is low on developer."
-msgstr ""
+msgstr "A la impresora «%s» le queda poco revelador."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1086
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1104
 #, c-format
 msgid "Printer '%s' is out of developer."
-msgstr ""
+msgstr "A la impresora «%s» no le queda revelador."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1087
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1105
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr ""
+msgstr "A la impresora «%s» le queda poco de, al menos, un marcador."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1088
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1106
 #, c-format
+#, fuzzy
 msgid "Printer '%s' is out of at least one marker supply."
-msgstr ""
+msgstr "A la impresora «%s» no le queda, al menos, un marcador."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1089
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1107
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "La tapa de la impresora «%s» está abierta."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1090
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1108
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "La puerta de la impresora «%s» está abierta."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1091
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1109
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "La impresora «%s» tiene poco papel."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1092
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1110
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "La impresora «%s» no tiene papel."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1093
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1111
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "La impresora «%s» está actualmente desconectada."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1094
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1112
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "La impresora «%s» parece no estar conectada."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1095
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1113
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Existe un problema con la impresora «%s»."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1313
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1355
 msgid "Paused ; Rejecting Jobs"
 msgstr "Pausado; rechazando trabajos"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1317
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1359
 msgid "Rejecting Jobs"
 msgstr "Rechazando trabajos"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1903
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1945
 msgid "Two Sided"
 msgstr "Dos caras"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1904
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1946
 msgid "Paper Type"
 msgstr "Tipo de papel"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1905
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1947
 msgid "Paper Source"
 msgstr "Fuente de papel"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1906
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1948
 msgid "Output Tray"
 msgstr "Bandeja de salida"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1915
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1957
 msgid "One Sided"
 msgstr "Una cara"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1916
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1917
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1921
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1959
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "Auto Select"
 msgstr "Autoseleccionar"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1918
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1919
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1920
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2390
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1960
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1961
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1962
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2432
 msgid "Printer Default"
 msgstr "Predeterminado de la impresora"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2584
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2626
 msgid "Urgent"
 msgstr "Urgente"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2584
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2626
 msgid "High"
 msgstr "Alta"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2584
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2626
 msgid "Medium"
 msgstr "Media"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2584
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2626
 msgid "Low"
 msgstr "Baja"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2586
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2667
 msgid "None"
 msgstr "Ninguna"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2586
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2667
 msgid "Classified"
 msgstr "Clasificado"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2586
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2667
 msgid "Confidential"
 msgstr "Confidencial"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2586
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2667
 msgid "Secret"
 msgstr "Secreto"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2586
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2667
 msgid "Standard"
 msgstr "Estándar"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2586
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2667
 msgid "Top Secret"
 msgstr "Alto secreto"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2586
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2667
 msgid "Unclassified"
 msgstr "Desclasificado"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2679
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2762
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Personalizado %sx%s"
