@@ -380,7 +380,8 @@ gtk_private_h_sources =		\
 	gtktoggleactionprivate.h\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
-	gtkwindow-decorate.h
+	gtkwindow-decorate.h	\
+	$(gtk_clipboard_dnd_h_sources)
 
 # GTK+ C sources to build the library from
 gtk_base_c_sources =            \
@@ -715,7 +716,8 @@ endif
 endif
 
 if USE_QUARTZ
-gtk_clipboard_dnd_c_sources = gtkclipboard-quartz.c gtkdnd-quartz.c gtkquartz.c gtkquartz.h
+gtk_clipboard_dnd_c_sources = gtkclipboard-quartz.c gtkdnd-quartz.c gtkquartz.c
+gtk_clipboard_dnd_h_sources = gtkquartz.h
 gtk_clipboard_dnd_c_sources_CFLAGS = "-xobjective-c"
 else
 gtk_clipboard_dnd_c_sources = gtkclipboard.c gtkdnd.c

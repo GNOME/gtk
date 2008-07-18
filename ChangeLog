@@ -1,3 +1,9 @@
+2008-07-18  Sven Herzberg  <sven@imendio.com>
+
+	Make aliasfilecheck.sh pass for the quartz backend, too.
+
+	* gtk/Makefile.am: don't include gtkquartz.h in the list of c files
+
 2008-07-17  Runa Bhattacharjee <runabh@gmail.com>
 
 	* configure.in: Added Pashto (ps) to ALL_LINGUAS
