@@ -1,3 +1,10 @@
+2007-08-18  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 543217 – GTK application crashed with directfb backend
+
+	*  gdk/directfb/gdkvisual-directfb.c: Avoid a crash in
+	_gdk_visual_init().  Patch by Huimin He.
+
 2008-07-18  Federico Mena Quintero  <federico@novell.com>
 
 	* demos/gtk-demo/changedisplay.c (find_toplevel_at_pointer): Don't

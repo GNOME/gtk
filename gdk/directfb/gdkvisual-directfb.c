@@ -137,7 +137,7 @@ _gdk_visual_init ()
      to ensure the base format ARGB LUT8 RGB etc then add ones supported
      by the hardware
    */
-  for (i = 0, c = 0; i < G_N_ELEMENTS (formats); i++)
+  for (i = 0; i < G_N_ELEMENTS (formats); i++)
     {
       IDirectFBSurface    *src;
       DFBAccelerationMask  acc;
@@ -157,8 +157,7 @@ _gdk_visual_init ()
 
       if (acc & DFXL_BLIT || formats[i] == dlc.pixelformat)
         {
-            system_visual = GDK_VISUAL (visuals[c]);
-          c++;
+			system_visual = GDK_VISUAL (visuals[i]);
         }
 
       src->Release (src);
