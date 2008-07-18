@@ -2401,6 +2401,7 @@ static void
 create_gridded_geometry (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
+  gpointer window_ptr;
   GtkWidget *entry;
   GtkWidget *label;
 
@@ -2424,7 +2425,8 @@ create_gridded_geometry (GtkWidget *widget)
 
       g_signal_connect (window, "response",
 			G_CALLBACK (gridded_geometry_response), entry);
-      g_object_add_weak_pointer (G_OBJECT (window), (gpointer) &window);
+      window_ptr = &window;
+      g_object_add_weak_pointer (G_OBJECT (window), window_ptr);
 
       gtk_widget_show_all (window);
     }
@@ -4779,6 +4781,7 @@ static void
 create_key_lookup (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
+  gpointer window_ptr;
 
   if (!window)
     {
@@ -4826,8 +4829,9 @@ create_key_lookup (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
       button = accel_button_new (accel_group, "Button 15", "<Shift><Mod4>b");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), button, FALSE, FALSE, 0);
-      
-      g_object_add_weak_pointer (G_OBJECT (window), (gpointer) &window);
+
+      window_ptr = &window;
+      g_object_add_weak_pointer (G_OBJECT (window), window_ptr);
       g_signal_connect (window, "response", G_CALLBACK (gtk_object_destroy), NULL);
 
       gtk_widget_show_all (window);
@@ -12030,7 +12034,12 @@ find_widget_at_pointer (GdkDisplay *display)
  pointer_window = gdk_display_get_window_at_pointer (display, NULL, NULL);
  
  if (pointer_window)
-   gdk_window_get_user_data (pointer_window, (gpointer) &widget);
+   {
+     gpointer widget_ptr;
+
+     gdk_window_get_user_data (pointer_window, &widget_ptr);
+     widget = widget_ptr;
+   }
 
  if (widget)
    {

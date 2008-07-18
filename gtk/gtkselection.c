@@ -1067,6 +1067,7 @@ gtk_selection_convert (GtkWidget *widget,
   if (owner_window != NULL)
     {
       GtkWidget *owner_widget;
+      gpointer owner_widget_ptr;
       GtkSelectionData selection_data;
       
       selection_data.selection = selection;
@@ -1075,7 +1076,8 @@ gtk_selection_convert (GtkWidget *widget,
       selection_data.length = -1;
       selection_data.display = display;
       
-      gdk_window_get_user_data (owner_window, (gpointer *)&owner_widget);
+      gdk_window_get_user_data (owner_window, &owner_widget_ptr);
+      owner_widget = owner_widget_ptr;
       
       if (owner_widget != NULL)
 	{

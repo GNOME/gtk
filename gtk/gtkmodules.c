@@ -254,6 +254,7 @@ load_module (GSList      *module_list,
 	     const gchar *name)
 {
   GtkModuleInitFunc modinit_func;
+  gpointer modinit_func_ptr;
   GtkModuleInfo *info = NULL;
   GModule *module = NULL;
   GSList *l;
@@ -279,8 +280,12 @@ load_module (GSList      *module_list,
 
 	  if (module)
 	    {
-	      if (!g_module_symbol (module, "gtk_module_init", (gpointer *) &modinit_func) ||
-		  !modinit_func)
+	      if (g_module_symbol (module, "gtk_module_init", &modinit_func_ptr))
+		modinit_func = modinit_func_ptr;
+	      else
+		modinit_func = NULL;
+
+	      if (!modinit_func)
 		g_module_close (module);
 	      else
 		{

@@ -549,6 +549,7 @@ easter_egg_callback (GtkWidget *button,
                      gpointer   data)
 {
   static GtkWidget *window = NULL;
+  gpointer window_ptr;
   GtkTextBuffer *buffer;
   GtkWidget     *view;
   GtkTextIter    iter;
@@ -586,8 +587,8 @@ easter_egg_callback (GtkWidget *button,
   gtk_container_add (GTK_CONTAINER (window), sw);
   gtk_container_add (GTK_CONTAINER (sw), view);
 
-  g_object_add_weak_pointer (G_OBJECT (window),
-                             (gpointer *) &window);
+  window_ptr = &window;
+  g_object_add_weak_pointer (G_OBJECT (window), window_ptr);
 
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 400);
   

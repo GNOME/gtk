@@ -81,7 +81,11 @@ find_toplevel_at_pointer (GdkDisplay *display)
    * to the widget that created it.
    */
   if (pointer_window)
-    gdk_window_get_user_data (pointer_window, (gpointer*) &widget);
+    {
+      gpointer widget_ptr;
+      gdk_window_get_user_data (pointer_window, &widget_ptr);
+      widget = widget_ptr;
+    }
 
   return widget ? gtk_widget_get_toplevel (widget) : NULL;
 }

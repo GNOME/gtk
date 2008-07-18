@@ -1358,6 +1358,7 @@ rewrite_event_for_grabs (GdkEvent *event)
 {
   GdkWindow *grab_window;
   GtkWidget *event_widget, *grab_widget;
+  gpointer grab_widget_ptr;
   gboolean owner_events;
   GdkDisplay *display;
 
@@ -1390,7 +1391,8 @@ rewrite_event_for_grabs (GdkEvent *event)
     }
 
   event_widget = gtk_get_event_widget (event);
-  gdk_window_get_user_data (grab_window, (void**) &grab_widget);
+  gdk_window_get_user_data (grab_window, &grab_widget_ptr);
+  grab_widget = grab_widget_ptr;
 
   if (grab_widget &&
       gtk_main_get_window_group (grab_widget) != gtk_main_get_window_group (event_widget))
@@ -2227,11 +2229,15 @@ GtkWidget*
 gtk_get_event_widget (GdkEvent *event)
 {
   GtkWidget *widget;
+  gpointer widget_ptr;
 
   widget = NULL;
   if (event && event->any.window && 
       (event->type == GDK_DESTROY || !GDK_WINDOW_DESTROYED (event->any.window)))
-    gdk_window_get_user_data (event->any.window, (void**) &widget);
+    {
+      gdk_window_get_user_data (event->any.window, &widget_ptr);
+      widget = widget_ptr;
+    }
   
   return widget;
 }

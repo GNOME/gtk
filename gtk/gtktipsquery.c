@@ -470,7 +470,11 @@ gtk_tips_query_event (GtkWidget	       *widget,
 	pointer_window = NULL;
       event_widget = NULL;
       if (pointer_window)
-	gdk_window_get_user_data (pointer_window, (gpointer*) &event_widget);
+	{
+	  gpointer event_widget_ptr;
+	  gdk_window_get_user_data (pointer_window, &event_widget_ptr);
+	  event_widget = event_widget_ptr;
+	}
       gtk_tips_query_emit_widget_entered (tips_query, event_widget);
       event_handled = TRUE;
       break;

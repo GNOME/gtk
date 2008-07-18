@@ -1,3 +1,23 @@
+2008-07-18  Federico Mena Quintero  <federico@novell.com>
+
+	* demos/gtk-demo/changedisplay.c (find_toplevel_at_pointer): Don't
+	do funny casts to avoid compiler warnings.
+
+	* demos/gtk-demo/textview.c (easter_egg_callback): Likewise.
+
+	* gtk/gtkmain.c (rewrite_event_for_grabs, gtk_get_event_widget): Likewise.
+
+	* gtk/gtkmodules.c (load_module): Likewise.
+
+	* gtk/gtkselection.c (gtk_selection_convert): Likewise.
+
+	* gtk/gtktipsquery.c (gtk_tips_query_event): Likewise.
+
+	* gtk/queryimmodules.c (query_module): Likewise.
+
+	* tests/testgtk.c (create_gridded_geometry, create_key_lookup)
+	(find_widget_at_pointer): Likewise.
+
 2008-07-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c: Add a forgotten
