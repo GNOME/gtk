@@ -600,7 +600,7 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
  */
 void
 gdk_display_pointer_ungrab (GdkDisplay *display,
-			    guint32     time)
+			    guint32     time_)
 {
   Display *xdisplay;
   GdkDisplayX11 *display_x11;
@@ -610,33 +610,19 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
   display_x11 = GDK_DISPLAY_X11 (display);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
   
-  _gdk_input_ungrab_pointer (display, time);
-  XUngrabPointer (xdisplay, time);
+  _gdk_input_ungrab_pointer (display, time_);
+  XUngrabPointer (xdisplay, time_);
   XFlush (xdisplay);
 
-  if (time == GDK_CURRENT_TIME || 
-      display_x11->pointer_xgrab_time == GDK_CURRENT_TIME ||
-      !XSERVER_TIME_IS_LATER (display_x11->pointer_xgrab_time, time))
-    display_x11->pointer_xgrab_window = NULL;
-}
-
-/**
- * gdk_display_pointer_is_grabbed:
- * @display: a #GdkDisplay
- *
- * Test if the pointer is grabbed.
- *
- * Returns: %TRUE if an active X pointer grab is in effect
- *
- * Since: 2.2
- */
-gboolean
-gdk_display_pointer_is_grabbed (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
-  
-  return (GDK_DISPLAY_X11 (display)->pointer_xgrab_window != NULL &&
-	  !GDK_DISPLAY_X11 (display)->pointer_xgrab_implicit);
+  if (time_ == GDK_CURRENT_TIME ||
+      display->pointer_grab.time == GDK_CURRENT_TIME ||
+      !XSERVER_TIME_IS_LATER (display->pointer_grab.time, time_))
+    {
+      _gdk_display_unset_has_pointer_grab (display,
+					   FALSE,
+					   FALSE,
+					   time_);
+    }
 }
 
 /**
@@ -1335,7 +1321,9 @@ gdk_display_store_clipboard (GdkDisplay    *display,
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   Atom clipboard_manager, save_targets;
-  
+
+  g_return_if_fail (GDK_WINDOW_IS_X11 (clipboard_window));
+
   clipboard_manager = gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER");
   save_targets = gdk_x11_get_xatom_by_name_for_display (display, "SAVE_TARGETS");
 

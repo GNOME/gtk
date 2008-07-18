@@ -870,7 +870,17 @@ gdk_x11_drawable_get_xid (GdkDrawable *drawable)
   GdkDrawable *impl;
   
   if (GDK_IS_WINDOW (drawable))
-    impl = ((GdkPixmapObject *)drawable)->impl;
+    {
+      if (!GDK_WINDOW_IS_X11 (drawable))
+        {
+	  /* TODO: At this point we could convert a virtual window
+	     to a native one (unless its in an offscreen window) */
+          g_warning (G_STRLOC " drawable is not a native X11 window");
+          return None;
+        }
+
+      impl = ((GdkPixmapObject *)drawable)->impl;
+    }
   else if (GDK_IS_PIXMAP (drawable))
     impl = ((GdkPixmapObject *)drawable)->impl;
   else
@@ -1447,6 +1457,45 @@ gdk_x11_cairo_surface_destroy (void *data)
   impl->cairo_surface = NULL;
 }
 
+void
+_gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
+				       int width,
+				       int height)
+{
+  cairo_xlib_surface_set_size (surface, width, height);
+}
+
+cairo_surface_t *
+_gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
+				     int width,
+				     int height)
+{
+  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  GdkVisual *visual;
+    
+  visual = gdk_drawable_get_visual (drawable);
+  if (visual) 
+    return cairo_xlib_surface_create (GDK_SCREEN_XDISPLAY (impl->screen),
+				      impl->xid,
+				      GDK_VISUAL_XVISUAL (visual),
+				      width, height);
+  else if (gdk_drawable_get_depth (drawable) == 1)
+    return cairo_xlib_surface_create_for_bitmap (GDK_SCREEN_XDISPLAY (impl->screen),
+						    impl->xid,
+						    GDK_SCREEN_XSCREEN (impl->screen),
+						    width, height);
+  else
+    {
+      g_warning ("Using Cairo rendering requires the drawable argument to\n"
+		 "have a specified colormap. All windows have a colormap,\n"
+		 "however, pixmaps only have colormap by default if they\n"
+		 "were created with a non-NULL window argument. Otherwise\n"
+		 "a colormap must be set on them with gdk_drawable_set_colormap");
+      return NULL;
+    }
+  
+}
+
 static cairo_surface_t *
 gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
 {
@@ -1458,35 +1507,15 @@ gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
 
   if (!impl->cairo_surface)
     {
-      GdkVisual *visual = NULL;
       int width, height;
   
-      visual = gdk_drawable_get_visual (drawable);
-
       gdk_drawable_get_size (drawable, &width, &height);
 
-      if (visual) 
-	impl->cairo_surface = cairo_xlib_surface_create (GDK_SCREEN_XDISPLAY (impl->screen),
-							 impl->xid,
-							 GDK_VISUAL_XVISUAL (visual),
-							 width, height);
-      else if (gdk_drawable_get_depth (drawable) == 1)
-	impl->cairo_surface = cairo_xlib_surface_create_for_bitmap (GDK_SCREEN_XDISPLAY (impl->screen),
-								    impl->xid,
-								    GDK_SCREEN_XSCREEN (impl->screen),
-								    width, height);
-      else
-	{
-	  g_warning ("Using Cairo rendering requires the drawable argument to\n"
-		     "have a specified colormap. All windows have a colormap,\n"
-		     "however, pixmaps only have colormap by default if they\n"
-		     "were created with a non-NULL window argument. Otherwise\n"
-		     "a colormap must be set on them with gdk_drawable_set_colormap");
-	  return NULL;
-	}
-
-      cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
-				   drawable, gdk_x11_cairo_surface_destroy);
+      impl->cairo_surface = _gdk_windowing_create_cairo_surface (drawable, width, height);
+      
+      if (impl->cairo_surface)
+	cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
+				     drawable, gdk_x11_cairo_surface_destroy);
     }
   else
     cairo_surface_reference (impl->cairo_surface);

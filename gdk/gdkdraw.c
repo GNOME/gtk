@@ -652,6 +652,8 @@ gdk_draw_drawable (GdkDrawable *drawable,
                                                           &composite_x_offset,
                                                           &composite_y_offset);
 
+  /* TODO: For non-native windows this may copy stuff from other overlapping
+     windows. We should clip that and clear that area in the destination instead. */
   
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc, composite,
                                                     xsrc - composite_x_offset,
@@ -871,7 +873,7 @@ real_draw_glyphs (GdkDrawable       *drawable,
   cairo_t *cr;
 
   cr = gdk_cairo_create (drawable);
-  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE);
+  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE, drawable);
 
   if (matrix)
     {
@@ -995,7 +997,7 @@ gdk_draw_trapezoids (GdkDrawable        *drawable,
   g_return_if_fail (n_trapezoids == 0 || trapezoids != NULL);
 
   cr = gdk_cairo_create (drawable);
-  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE);
+  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE, drawable);
   
   for (i = 0; i < n_trapezoids; i++)
     {
@@ -1185,7 +1187,7 @@ gdk_drawable_real_get_image (GdkDrawable     *drawable,
   return gdk_drawable_copy_to_image (drawable, NULL, x, y, 0, 0, width, height);
 }
 
-static GdkDrawable*
+static GdkDrawable *
 gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
                                           gint         x,
                                           gint         y,
@@ -1769,6 +1771,26 @@ _gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
 
       return screen->normal_gcs[depth];
     }
+}
+
+/**
+ * _gdk_drawable_get_source_drawable:
+ * @drawable: a #GdkDrawable
+ *
+ * Returns a drawable for the passed @drawable that is guaranteed to be
+ * usable to create a pixmap (e.g.: not an offscreen window).
+ *
+ * Since: 2.16
+ */
+GdkDrawable *
+_gdk_drawable_get_source_drawable (GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+
+  if (GDK_DRAWABLE_GET_CLASS (drawable)->get_source_drawable)
+    return GDK_DRAWABLE_GET_CLASS (drawable)->get_source_drawable (drawable);
+
+  return drawable;
 }
 
 #define __GDK_DRAW_C__

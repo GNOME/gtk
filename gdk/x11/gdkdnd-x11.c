@@ -2987,6 +2987,7 @@ gdk_drag_begin (GdkWindow     *window,
   GdkDragContext *new_context;
   
   g_return_val_if_fail (window != NULL, NULL);
+  g_return_val_if_fail (GDK_WINDOW_IS_X11 (window), NULL);
 
   new_context = gdk_drag_context_new ();
   new_context->is_source = TRUE;
@@ -3192,7 +3193,7 @@ gdk_drag_find_window_for_screen (GdkDragContext  *context,
   window_cache = drag_context_find_window_cache (context, screen);
 
   dest = get_client_window_at_coords (window_cache,
-				      drag_window ? 
+				      drag_window && GDK_WINDOW_IS_X11 (drag_window) ? 
 				      GDK_DRAWABLE_XID (drag_window) : None,
 				      x_root, y_root);
 
@@ -3262,6 +3263,7 @@ gdk_drag_motion (GdkDragContext *context,
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
 
   g_return_val_if_fail (context != NULL, FALSE);
+  g_return_val_if_fail (dest_window == NULL || GDK_WINDOW_IS_X11 (dest_window), FALSE);
 
   private->old_actions = context->actions;
   context->actions = possible_actions;

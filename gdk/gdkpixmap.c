@@ -229,6 +229,48 @@ gdk_pixmap_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+GdkPixmap *
+gdk_pixmap_new (GdkDrawable *drawable,
+                gint         width,
+                gint         height,
+                gint         depth)
+{
+  GdkDrawable *source_drawable;
+
+  source_drawable = _gdk_drawable_get_source_drawable (drawable);
+  return _gdk_pixmap_new (source_drawable, width, height, depth);
+}
+
+GdkPixmap *
+gdk_bitmap_create_from_data (GdkDrawable *drawable,
+                             const gchar *data,
+                             gint         width,
+                             gint         height)
+{
+  GdkDrawable *source_drawable;
+
+  source_drawable = _gdk_drawable_get_source_drawable (drawable);
+  return _gdk_bitmap_create_from_data (source_drawable, data, width, height);
+}
+
+GdkPixmap*
+gdk_pixmap_create_from_data (GdkDrawable    *drawable,
+                             const gchar    *data,
+                             gint            width,
+                             gint            height,
+                             gint            depth,
+                             const GdkColor *fg,
+                             const GdkColor *bg)
+{
+  GdkDrawable *source_drawable;
+
+  source_drawable = _gdk_drawable_get_source_drawable (drawable);
+  return _gdk_pixmap_create_from_data (source_drawable,
+                                       data, width, height,
+                                       depth, fg,bg);
+}
+
+
 static GdkGC *
 gdk_pixmap_create_gc (GdkDrawable     *drawable,
                       GdkGCValues     *values,

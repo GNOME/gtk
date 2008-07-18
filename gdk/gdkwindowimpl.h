@@ -56,14 +56,6 @@ struct _GdkWindowImplIface
                                          gint             y,
                                          gint             width,
                                          gint             height);
-  void         (* move_region)          (GdkWindow       *window,
-                                         const GdkRegion *region,
-                                         gint             dx,
-                                         gint             dy);
-  void         (* scroll)               (GdkWindow       *window,
-                                         gint             dx,
-                                         gint             dy);
-
   void         (* clear_area)           (GdkWindow       *window,
                                          gint             x,
                                          gint             y,
@@ -73,8 +65,7 @@ struct _GdkWindowImplIface
   void         (* set_background)       (GdkWindow       *window,
                                          const GdkColor  *color);
   void         (* set_back_pixmap)      (GdkWindow       *window,
-                                         GdkPixmap       *pixmap,
-                                         gboolean         parent_relative);
+                                         GdkPixmap       *pixmap);
 
   GdkEventMask (* get_events)           (GdkWindow       *window);
   void         (* set_events)           (GdkWindow       *window,
@@ -97,9 +88,6 @@ struct _GdkWindowImplIface
   gint         (* get_origin)           (GdkWindow       *window,
                                          gint            *x,
                                          gint            *y);
-  void         (* get_offsets)          (GdkWindow       *window,
-                                         gint            *x_offset,
-                                         gint            *y_offset);
 
   void         (* shape_combine_mask)   (GdkWindow       *window,
                                          GdkBitmap       *mask,
@@ -114,10 +102,37 @@ struct _GdkWindowImplIface
 
   gboolean     (* set_static_gravities) (GdkWindow       *window,
 				         gboolean         use_static);
+
+  /* Called before processing updates for a window. This gives the windowing
+   * layer a chance to save the region for later use in avoiding duplicate
+   * exposes. The return value indicates whether the function has a saved
+   * the region; if the result is TRUE, then the windowing layer is responsible
+   * for destroying the region later.
+   */
+  gboolean     (* queue_antiexpose)     (GdkWindow       *window,
+					 GdkRegion       *update_area);
 };
 
 /* Interface Functions */
 GType gdk_window_impl_get_type (void) G_GNUC_CONST;
+
+/* private definitions from gdkwindow.h */
+
+struct _GdkWindowRedirect
+{
+  GdkWindowObject *redirected;
+  GdkDrawable *pixmap;
+
+  gint src_x;
+  gint src_y;
+  gint dest_x;
+  gint dest_y;
+  gint width;
+  gint height;
+
+  GdkRegion *damage;
+  guint damage_idle;
+};
 
 G_END_DECLS
 

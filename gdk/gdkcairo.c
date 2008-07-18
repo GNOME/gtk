@@ -50,6 +50,10 @@ gdk_cairo_create (GdkDrawable *drawable)
 
   surface = _gdk_drawable_ref_cairo_surface (drawable);
   cr = cairo_create (surface);
+
+  if (GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip)
+    GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip (drawable, cr);
+    
   cairo_surface_destroy (surface);
 
   return cr;

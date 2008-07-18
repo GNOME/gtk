@@ -182,15 +182,21 @@ extern gchar     *_gdk_display_arg_name;
 void      _gdk_events_queue  (GdkDisplay *display);
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
-GList* _gdk_event_queue_find_first  (GdkDisplay *display);
-void   _gdk_event_queue_remove_link (GdkDisplay *display,
-				     GList      *node);
-GList*  _gdk_event_queue_prepend    (GdkDisplay *display,
-				     GdkEvent   *event);
-GList*  _gdk_event_queue_append     (GdkDisplay *display,
-				     GdkEvent   *event);
-void _gdk_event_button_generate     (GdkDisplay *display,
-				     GdkEvent   *event);
+GList* _gdk_event_queue_find_first   (GdkDisplay *display);
+void   _gdk_event_queue_remove_link  (GdkDisplay *display,
+				      GList      *node);
+GList* _gdk_event_queue_prepend      (GdkDisplay *display,
+				      GdkEvent   *event);
+GList* _gdk_event_queue_append       (GdkDisplay *display,
+				      GdkEvent   *event);
+GList* _gdk_event_queue_insert_after (GdkDisplay *display,
+                                      GdkEvent   *after_event,
+                                      GdkEvent   *event);
+GList* _gdk_event_queue_insert_before(GdkDisplay *display,
+                                      GdkEvent   *after_event,
+                                      GdkEvent   *event);
+void   _gdk_event_button_generate    (GdkDisplay *display,
+				      GdkEvent   *event);
 
 void _gdk_windowing_event_data_copy (const GdkEvent *src,
                                      GdkEvent       *dst);
@@ -227,6 +233,8 @@ GdkImage *_gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 
 cairo_surface_t *_gdk_drawable_ref_cairo_surface (GdkDrawable *drawable);
 
+GdkDrawable *_gdk_drawable_get_source_drawable (GdkDrawable *drawable);
+
 /* GC caching */
 GdkGC *_gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
 				     gboolean     graphics_exposures);
@@ -235,20 +243,41 @@ void _gdk_gc_update_context (GdkGC          *gc,
 			     cairo_t        *cr,
 			     const GdkColor *override_foreground,
 			     GdkBitmap      *override_stipple,
-			     gboolean        gc_changed);
+			     gboolean        gc_changed,
+			     GdkDrawable    *target_drawable);
 
 /*************************************
  * Interfaces used by windowing code *
  *************************************/
 
-GdkWindow *_gdk_window_new               (GdkWindow     *window,
-                                          GdkWindowAttr *attributes,
-                                          gint           attributes_mask);
-void       _gdk_window_destroy           (GdkWindow     *window,
-					  gboolean       foreign_destroy);
-void       _gdk_window_clear_update_area (GdkWindow     *window);
+GdkPixmap *_gdk_pixmap_new               (GdkDrawable    *drawable,
+                                          gint            width,
+                                          gint            height,
+                                          gint            depth);
+GdkPixmap *_gdk_pixmap_create_from_data  (GdkDrawable    *drawable,
+                                          const gchar    *data,
+                                          gint            width,
+                                          gint            height,
+                                          gint            depth,
+                                          const GdkColor *fg,
+                                          const GdkColor *bg);
+GdkPixmap *_gdk_bitmap_create_from_data  (GdkDrawable    *drawable,
+                                          const gchar    *data,
+                                          gint            width,
+                                          gint            height);
 
-void       _gdk_screen_close             (GdkScreen     *screen);
+void       _gdk_window_impl_new          (GdkWindow      *window,
+					  GdkScreen      *screen,
+					  GdkVisual      *visual,
+					  GdkEventMask    event_mask,
+                                          GdkWindowAttr  *attributes,
+                                          gint            attributes_mask);
+void       _gdk_window_destroy           (GdkWindow      *window,
+                                          gboolean        foreign_destroy);
+void       _gdk_window_clear_update_area (GdkWindow      *window);
+void       _gdk_window_update_size       (GdkWindow      *window);
+
+void       _gdk_screen_close             (GdkScreen      *screen);
 
 const char *_gdk_get_sm_client_id (void);
 
@@ -263,6 +292,13 @@ GdkPixmap *_gdk_gc_get_tile        (GdkGC *gc);
 GdkBitmap *_gdk_gc_get_stipple     (GdkGC *gc);
 guint32    _gdk_gc_get_fg_pixel    (GdkGC *gc);
 guint32    _gdk_gc_get_bg_pixel    (GdkGC *gc);
+void      _gdk_gc_intersect_clip_region     (GdkGC     *gc,
+					     GdkRegion *region,
+					     GdkRegion **old_region);
+void       _gdk_gc_set_clip_region_internal (GdkGC     *gc,
+					     GdkRegion *region,
+					     gboolean reset_origin);
+GdkSubwindowMode _gdk_gc_get_subwindow (GdkGC *gc);
 
 /*****************************************
  * Interfaces provided by windowing code *
@@ -306,21 +342,14 @@ GdkWindow* _gdk_windowing_window_at_pointer  (GdkDisplay       *display,
 gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
 					gint        depth);
 
-void       _gdk_window_reparent                   (GdkWindow     *window,
-						   GdkWindow     *new_parent,
-						   gint           x,
-						   gint           y);
 
 #define GDK_WINDOW_IS_MAPPED(window) ((((GdkWindowObject*)window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
 
-/* Called before processing updates for a window. This gives the windowing
- * layer a chance to save the region for later use in avoiding duplicate
- * exposes. The return value indicates whether the function has a saved
- * the region; if the result is TRUE, then the windowing layer is responsible
- * for destroying the region later.
- */
-gboolean _gdk_windowing_window_queue_antiexpose (GdkWindow *window,
-						 GdkRegion *area);
+void _gdk_windowing_window_queue_translation (GdkWindow *window,
+					      GdkRegion *area,
+					      gint       dx,
+					      gint       dy);
+
 
 /* Called to do the windowing system specific part of gdk_window_destroy(),
  *
@@ -387,6 +416,7 @@ GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
  * _gdk_windowing_gc_set_clip_region:
  * @gc: a #GdkGC
  * @region: the new clip region
+ * @reset_origin: if TRUE, reset the clip_x/y_origin values to 0
  * 
  * Do any window-system specific processing necessary
  * for a change in clip region. Since the clip origin
@@ -398,7 +428,8 @@ GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
  * will already return the new region.
  **/
 void _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-					const GdkRegion *region);
+					const GdkRegion *region,
+					gboolean reset_origin);
 
 /**
  * _gdk_windowing_gc_copy:
@@ -434,6 +465,78 @@ char *_gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
 					    GList             *files);
 void  _gdk_windowing_launch_failed         (GAppLaunchContext *context, 
 				            const char        *startup_notify_id);
+
+void _gdk_windowing_grab_broken          (GdkDisplay *display);
+
+void _gdk_display_set_has_pointer_grab (GdkDisplay *display,
+					GdkWindow *window,
+					GdkWindow *native_window,
+					gboolean owner_events,
+					GdkEventMask event_mask,
+					unsigned long serial,
+					guint32 time,
+					gboolean implicit);
+void _gdk_display_unset_has_pointer_grab (GdkDisplay *display,
+					  gboolean implicit,
+					  gboolean do_grab_one_pointer_release_event,
+					  guint32 time);
+
+void _gdk_window_invalidate_for_expose (GdkWindow       *window,
+					const GdkRegion *region);
+
+void _gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
+					    int width,
+					    int height);
+
+cairo_surface_t * _gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
+						       int width,
+						       int height);
+GdkWindow * _gdk_window_find_descendant_at (GdkWindow *toplevel,
+					    double x, double y,
+					    double *found_x,
+					    double *found_y);
+
+void _gdk_window_add_damage (GdkWindow *toplevel,
+			     GdkRegion *damaged_region);
+
+GdkEvent * _gdk_make_event (GdkWindow    *window,
+			    GdkEventType  type,
+			    GdkEvent     *event_in_queue,
+			    gboolean      before_event);
+
+void _gdk_syntesize_crossing_events (GdkDisplay                 *display,
+				     GdkWindow                  *src,
+				     GdkWindow                  *dest,
+				     GdkCrossingMode             mode,
+				     gint                        toplevel_x,
+				     gint                        toplevel_y,
+				     GdkModifierType             mask,
+				     guint32                     time_,
+				     gboolean                    do_first,
+				     gboolean                    do_last);
+
+void _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window);
+
+GdkRegion *_gdk_window_calculate_full_clip_region    (GdkWindow     *window,
+                                                      GdkWindow     *base_window,
+                                                      gboolean       do_children,
+                                                      gint          *base_x_offset,
+                                                      gint          *base_y_offset);
+gboolean    _gdk_window_has_impl (GdkWindow *window);
+GdkWindow * _gdk_window_get_impl_window (GdkWindow *window);
+
+
+/*****************************
+ * offscreen window routines *
+ *****************************/
+GType gdk_offscreen_window_get_type (void);
+void       _gdk_offscreen_window_new                 (GdkWindow     *window,
+						      GdkScreen     *screen,
+						      GdkVisual     *visual,
+						      GdkWindowAttr *attributes,
+						      gint           attributes_mask);
+void       _gdk_offscreen_window_destroy             (GdkWindow     *window,
+                                                      gboolean       recursing);
 
 
 /************************************

@@ -251,7 +251,7 @@ gdk_device_get_history  (GdkDevice         *device,
   int tmp_n_events = 0;
   int i;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_WINDOW_IS_X11 (window), FALSE);
 
   if (GDK_WINDOW_DESTROYED (window))
     /* Nothing */ ;
@@ -347,7 +347,7 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
   GdkDisplayX11 *display_x11;
 
   g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_WINDOW_IS_X11 (window));
 
   window_private = (GdkWindowObject*) window;
   display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));

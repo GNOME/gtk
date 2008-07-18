@@ -71,7 +71,6 @@ gdk_set_use_xshm
 gdk_keyboard_grab
 gdk_keyboard_grab_info_libgtk_only
 gdk_pointer_grab
-gdk_pointer_grab_info_libgtk_only
 #endif
 #endif
 
@@ -85,6 +84,8 @@ gdk_pointer_is_grabbed
 gdk_pointer_ungrab
 gdk_event_send_client_message
 gdk_event_send_clientmessage_toall
+gdk_pointer_grab_info_libgtk_only
+gdk_display_pointer_is_grabbed
 #endif
 #endif
 
@@ -251,12 +252,6 @@ gdk_window_type_get_type G_GNUC_CONST
 gdk_window_type_hint_get_type G_GNUC_CONST
 gdk_image_type_get_type G_GNUC_CONST
 gdk_visual_type_get_type G_GNUC_CONST
-#endif
-#endif
-
-#if IN_HEADER(__GDK_PIXMAP_H__)
-#if IN_FILE(__GDK_PIXMAP_X11_C__)
-gdk_bitmap_create_from_data
 #endif
 #endif
 
@@ -466,7 +461,6 @@ gdk_display_get_default_screen
 gdk_display_get_name
 gdk_display_get_n_screens
 gdk_display_get_screen
-gdk_display_pointer_is_grabbed
 gdk_display_pointer_ungrab
 gdk_display_keyboard_ungrab
 gdk_display_open
@@ -720,6 +714,13 @@ gdk_window_set_composited
 #endif
 
 #if IN_HEADER(__GDK_WINDOW_H__)
+#if IN_FILE(__GDK_OFFSCREEN_WINDOW_C__)
+gdk_window_set_offscreen_hooks
+gdk_window_get_offscreen_pixmap
+#endif
+#endif
+
+#if IN_HEADER(__GDK_WINDOW_H__)
 #if IN_FILE(__GDK_DND_X11_C__)
 gdk_window_register_dnd
 #endif
@@ -925,23 +926,24 @@ gdk_pixbuf_render_to_drawable_alpha
 
 #if IN_HEADER(__GDK_PIXMAP_H__)
 #if IN_FILE(__GDK_PIXMAP_C__)
+gdk_bitmap_create_from_data
 gdk_pixmap_colormap_create_from_xpm
+gdk_pixmap_create_from_data
 gdk_pixmap_create_from_xpm
 gdk_pixmap_colormap_create_from_xpm_d
 gdk_pixmap_create_from_xpm_d
 gdk_pixmap_get_type G_GNUC_CONST
+gdk_pixmap_new
 #endif
 #endif
 
 #if IN_HEADER(__GDK_PIXMAP_H__)
 #if IN_FILE(__GDK_PIXMAP_X11_C__)
-gdk_pixmap_create_from_data
 gdk_pixmap_foreign_new
 gdk_pixmap_foreign_new_for_display
 gdk_pixmap_foreign_new_for_screen
 gdk_pixmap_lookup
 gdk_pixmap_lookup_for_display
-gdk_pixmap_new
 #endif
 #endif
 

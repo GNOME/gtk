@@ -37,10 +37,12 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkGeometry           GdkGeometry;
-typedef struct _GdkWindowAttr	      GdkWindowAttr;
-typedef struct _GdkPointerHooks	      GdkPointerHooks;
-typedef struct _GdkWindowRedirect     GdkWindowRedirect;
+typedef struct _GdkGeometry                GdkGeometry;
+typedef struct _GdkWindowAttr              GdkWindowAttr;
+typedef struct _GdkPointerHooks            GdkPointerHooks;
+typedef struct _GdkOffscreenChildHooks     GdkOffscreenChildHooks;
+typedef struct _GdkWindowRedirect          GdkWindowRedirect;
+typedef struct _GdkWindowPaint             GdkWindowPaint;
 
 /* Classes of windows.
  *   InputOutput: Almost every window should be of this type. Such windows
@@ -77,7 +79,8 @@ typedef enum
   GDK_WINDOW_CHILD,
   GDK_WINDOW_DIALOG,
   GDK_WINDOW_TEMP,
-  GDK_WINDOW_FOREIGN
+  GDK_WINDOW_FOREIGN,
+  GDK_WINDOW_OFFSCREEN
 } GdkWindowType;
 
 /* Window attribute mask values.
@@ -248,6 +251,20 @@ struct _GdkPointerHooks
                                    gint            *win_y);
 };
 
+struct _GdkOffscreenChildHooks
+{
+  void       (*from_parent) (GdkWindow *offscreen_child,
+			     gdouble    parent_x,
+			     gdouble    parent_y,
+			     gdouble   *child_x,
+			     gdouble   *child_y);
+  void       (*to_parent)   (GdkWindow *offscreen_child,
+			     gdouble    child_x,
+			     gdouble    child_y,
+			     gdouble   *parent_x,
+			     gdouble   *parent_y);
+};
+
 typedef struct _GdkWindowObject GdkWindowObject;
 typedef struct _GdkWindowObjectClass GdkWindowObjectClass;
 
@@ -307,6 +324,19 @@ struct _GdkWindowObject
   guint update_and_descendants_freeze_count;
 
   GdkWindowRedirect *redirect;
+  const GdkOffscreenChildHooks *offscreen_hooks;
+
+  int abs_x, abs_y; /* Absolute offset in impl */
+  gint width, height;
+  GdkRegion *clip_region; /* Clip region (wrt toplevel) in window coords */
+  GdkRegion *clip_region_with_children; /* Clip region in window coords */
+  GdkColormap *colormap;
+  GdkCursor *cursor;
+  gint8 toplevel_window_type;
+
+  GdkWindowPaint *implicit_paint;
+  
+  cairo_surface_t *cairo_surface;
 };
 
 struct _GdkWindowObjectClass
@@ -645,12 +675,21 @@ GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);
 
 GdkWindow *gdk_get_default_root_window (void);
 
-void gdk_window_redirect_to_drawable (GdkWindow *window,
-				      GdkDrawable *drawable,
-				      gint src_x, gint src_y,
-				      gint dest_x, gint dest_y,
-				      gint width, gint height);
-void gdk_window_remove_redirection   (GdkWindow *window);
+/* Offscreen redirection */
+GdkPixmap *gdk_window_get_offscreen_pixmap   (GdkWindow     *window);
+
+void       gdk_window_redirect_to_drawable   (GdkWindow     *window,
+                                              GdkDrawable   *drawable,
+                                              gint           src_x,
+                                              gint           src_y,
+                                              gint           dest_x,
+                                              gint           dest_y,
+                                              gint           width,
+                                              gint           height);
+void       gdk_window_remove_redirection     (GdkWindow     *window);
+
+void       gdk_window_set_offscreen_hooks    (GdkWindow                    *offscreen_window,
+                                              const GdkOffscreenChildHooks *hooks);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define GDK_ROOT_PARENT()             (gdk_get_default_root_window ())

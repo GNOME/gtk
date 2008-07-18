@@ -120,6 +120,7 @@ gdk_c_sources =                 \
 	gdkintl.h		\
 	gdkkeys.c		\
 	gdkkeyuni.c		\
+	gdkoffscreenwindow.c	\
 	gdkpango.c		\
 	gdkpixbuf-drawable.c	\
 	gdkpixbuf-render.c	\

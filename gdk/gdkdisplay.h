@@ -43,6 +43,32 @@ typedef struct _GdkDisplayPointerHooks GdkDisplayPointerHooks;
 #define GDK_IS_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY))
 #define GDK_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY, GdkDisplayClass))
 
+/* Tracks information about the pointer grab on this display */
+typedef struct
+{
+  GdkWindow *window;
+  GdkWindow *native_window;
+  gulong serial;
+  gboolean owner_events;
+  guint event_mask;
+  gboolean implicit;
+  gboolean converted_implicit;
+  guint32 time;
+
+  GdkWindow *grab_one_pointer_release_event;
+} GdkPointerGrabInfo;
+
+/* Tracks information about which window the pointer is in and
+ * at what position the mouse is. This is useful when we need
+ * to synthesize events later.
+ */
+typedef struct
+{
+  GdkWindow *window_under_pointer;
+  gdouble toplevel_x, toplevel_y;
+  guint32 state;
+} GdkPointerWindowInfo;
+
 struct _GdkDisplay
 {
   GObject parent_instance;
@@ -68,6 +94,9 @@ struct _GdkDisplay
   guint double_click_distance;	/* Maximum distance between clicks in pixels */
   gint button_x[2];             /* The last 2 button click positions. */
   gint button_y[2];
+
+  GdkPointerGrabInfo pointer_grab;
+  GdkPointerWindowInfo pointer_info;
 };
 
 struct _GdkDisplayClass

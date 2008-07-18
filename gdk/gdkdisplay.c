@@ -22,9 +22,11 @@
  */
 
 #include "config.h"
+#include <math.h>
 #include <glib.h>
 #include "gdk.h"		/* gdk_event_send_client_message() */
 #include "gdkdisplay.h"
+#include "gdkwindowimpl.h"
 #include "gdkinternals.h"
 #include "gdkmarshalers.h"
 #include "gdkscreen.h"
@@ -60,6 +62,14 @@ static GdkWindow* singlehead_default_window_get_pointer (GdkWindow       *window
 static GdkWindow* singlehead_default_window_at_pointer  (GdkScreen       *screen,
 							 gint            *win_x,
 							 gint            *win_y);
+static GdkWindow *gdk_window_real_window_get_pointer     (GdkDisplay       *display,
+                                                          GdkWindow        *window,
+                                                          gint             *x,
+                                                          gint             *y,
+                                                          GdkModifierType  *mask);
+static GdkWindow *gdk_display_real_get_window_at_pointer (GdkDisplay       *display,
+                                                          gint             *win_x,
+                                                          gint             *win_y);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -67,8 +77,8 @@ static char *gdk_sm_client_id;
 
 static const GdkDisplayPointerHooks default_pointer_hooks = {
   _gdk_windowing_get_pointer,
-  _gdk_windowing_window_get_pointer,
-  _gdk_windowing_window_at_pointer
+  gdk_window_real_window_get_pointer,
+  gdk_display_real_get_window_at_pointer
 };
 
 static const GdkDisplayPointerHooks singlehead_pointer_hooks = {
@@ -473,6 +483,79 @@ gdk_display_get_pointer (GdkDisplay      *display,
     *mask = tmp_mask;
 }
 
+static GdkWindow *
+gdk_display_real_get_window_at_pointer (GdkDisplay *display,
+                                        gint       *win_x,
+                                        gint       *win_y)
+{
+  GdkWindow *window;
+  gint x, y;
+
+  window = _gdk_windowing_window_at_pointer (display, &x, &y);
+
+  /* This might need corrections, as the native window returned
+     may contain client side children */
+  if (window)
+    {
+      double xx, yy;
+      
+      window = _gdk_window_find_descendant_at (window,
+					       x, y, 
+					       &xx, &yy);
+      x = floor (xx + 0.5);
+      y = floor (yy + 0.5);
+    }
+  
+  *win_x = x;
+  *win_y = y;
+  
+  return window;
+}
+
+static GdkWindow *
+gdk_window_real_window_get_pointer (GdkDisplay       *display,
+                                    GdkWindow        *window,
+                                    gint             *x,
+                                    gint             *y,
+                                    GdkModifierType  *mask)
+{
+  GdkWindowObject *private;
+  GdkWindow *pointer_window;
+  gint tmpx, tmpy;
+
+  private = (GdkWindowObject *) window;
+
+  pointer_window = _gdk_windowing_window_get_pointer (display,
+                                                      window,
+                                                      &tmpx, &tmpy,
+                                                      mask);
+  /* We got the coords on the impl, conver to the window */
+  tmpx += private->abs_x;
+  tmpy += private->abs_y;
+  
+  if (x)
+    *x = tmpx;
+  if (y)
+    *y = tmpy;
+
+  /* We need to recalculate the true child window with the pointer in it
+     due to possible client side child windows */
+  if (pointer_window != NULL)
+    {
+      /* First get the pointer coords relative to pointer_window */
+      _gdk_windowing_window_get_pointer (display,
+					 pointer_window,
+					 &tmpx, &tmpy,
+					 NULL);
+      /* Then convert that to a client side window */
+      pointer_window = _gdk_window_find_descendant_at (pointer_window,
+						       tmpx, tmpy, 
+						       NULL, NULL);
+    }
+
+  return pointer_window;
+}
+
 /**
  * gdk_display_get_window_at_pointer:
  * @display: a #GdkDisplay
@@ -586,8 +669,8 @@ singlehead_default_window_get_pointer (GdkWindow       *window,
 				       gint            *y,
 				       GdkModifierType *mask)
 {
-  return _gdk_windowing_window_get_pointer (gdk_drawable_get_display (window),
-					    window, x, y, mask);
+  return gdk_window_real_window_get_pointer (gdk_drawable_get_display (window),
+                                             window, x, y, mask);
 }
 
 static GdkWindow*
@@ -595,8 +678,8 @@ singlehead_default_window_at_pointer  (GdkScreen       *screen,
 				       gint            *win_x,
 				       gint            *win_y)
 {
-  return _gdk_windowing_window_at_pointer (gdk_screen_get_display (screen),
-					   win_x, win_y);
+  return gdk_display_real_get_window_at_pointer (gdk_screen_get_display (screen),
+                                                 win_x, win_y);
 }
 
 /**
@@ -630,6 +713,201 @@ gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks)
 				 &singlehead_pointer_hooks);
   
   return (GdkPointerHooks *)result;
+}
+
+static void
+generate_grab_broken_event (GdkWindow *window,
+			    gboolean   keyboard,
+			    gboolean   implicit,
+			    GdkWindow *grab_window)
+{
+  g_return_if_fail (window != NULL);
+
+  if (!GDK_WINDOW_DESTROYED (window))
+    {
+      GdkEvent event;
+      event.type = GDK_GRAB_BROKEN;
+      event.grab_broken.window = window;
+      event.grab_broken.send_event = 0;
+      event.grab_broken.keyboard = keyboard;
+      event.grab_broken.implicit = implicit;
+      event.grab_broken.grab_window = grab_window;
+      gdk_event_put (&event);
+    }
+}
+
+void
+_gdk_display_set_has_pointer_grab (GdkDisplay *display,
+				   GdkWindow *window,
+				   GdkWindow *native_window,
+				   gboolean owner_events,
+				   GdkEventMask event_mask,
+				   unsigned long serial,
+				   guint32 time,
+				   gboolean implicit)
+{
+  int wx, wy;
+  
+  /* Normal GRAB events are sent by listening for enter and leave
+   * events on the native event window, which is then proxied
+   * into the virtual windows when the events are seen.
+   * However, there are two cases where X will not send these events:
+   * * When there is already a grab on the native parent of the
+   *   virtual grab window
+   * * When there is no grab, but the pointer is already in the
+   *   native parent of the virtual grab window
+   * In the first case we send the right GRAB events from the grab, but
+   * in the second case we need to generate our own UNGRAB crossing events.
+   */
+  if (display->pointer_grab.window != NULL &&
+      display->pointer_grab.window != window)
+    {
+      generate_grab_broken_event (GDK_WINDOW (display->pointer_grab.window),
+				  FALSE, display->pointer_grab.implicit,
+				  window);
+
+      /* Re-grabbing. Pretend we have no grab for now so that
+	 the GRAB events get delivered */
+      display->pointer_grab.window = NULL;
+      _gdk_syntesize_crossing_events (display, 
+				      display->pointer_grab.window,
+				      window,
+				      GDK_CROSSING_GRAB,
+				      /* These may be stale... */
+				      display->pointer_info.toplevel_x,
+				      display->pointer_info.toplevel_y,
+				      display->pointer_info.state,
+				      time, TRUE, TRUE);
+    }
+  else if (_gdk_windowing_window_at_pointer (display, &wx, &wy) == native_window)
+    {
+      _gdk_syntesize_crossing_events (display, 
+				      display->pointer_info.window_under_pointer,
+				      window,
+				      GDK_CROSSING_GRAB,
+				      /* These may be stale... */
+				      display->pointer_info.toplevel_x,
+				      display->pointer_info.toplevel_y,
+				      display->pointer_info.state,
+				      time, TRUE, TRUE);
+      
+    }
+
+  display->pointer_grab.window = window;
+  display->pointer_grab.native_window = native_window;
+  display->pointer_grab.serial = serial;
+  display->pointer_grab.owner_events = owner_events;
+  display->pointer_grab.event_mask = event_mask;
+  display->pointer_grab.time = time;
+  display->pointer_grab.implicit = implicit;
+  display->pointer_grab.converted_implicit = FALSE;
+}
+
+void
+_gdk_display_unset_has_pointer_grab (GdkDisplay *display,
+				     gboolean implicit,
+				     gboolean do_grab_one_pointer_release_event,
+				     guint32 time)
+{
+  int wx, wy;
+  GdkWindow *old_grab_window;
+  GdkWindow *old_native_grab_window;
+
+
+  old_grab_window = display->pointer_grab.window;
+  old_native_grab_window = display->pointer_grab.native_window;
+
+  if (do_grab_one_pointer_release_event)
+    display->pointer_grab.grab_one_pointer_release_event = display->pointer_grab.window;
+
+  /* We need to set this to null befor syntesizing events to make sure they get
+     delivered to anything but the grab window */
+  display->pointer_grab.window = NULL;
+  
+  /* Normal UNGRAB events are sent by listening for enter and leave
+   * events on the native event window, which is then proxied
+   * into the virtual windows when the events are seen.
+   * However, there are two cases where X will not send these events:
+   * * When this ungrab is due to a new grab on the native window that
+   *   is a parent of the currently grabbed virtual window
+   * * When there is no new grab, and the pointer is already in the
+   *   grabbed virtual windows parent native window
+   * In the first case we send the right GRAB events from the grab, but
+   * in the second case we need to generate our own UNGRAB crossing events.
+   */
+
+  if (_gdk_windowing_window_at_pointer (display, &wx, &wy) == old_native_grab_window)
+    {
+      _gdk_syntesize_crossing_events (display, 
+				      old_grab_window,
+				      display->pointer_info.window_under_pointer,
+				      GDK_CROSSING_UNGRAB,
+				      /* These may be stale... */
+				      display->pointer_info.toplevel_x,
+				      display->pointer_info.toplevel_y,
+				      display->pointer_info.state,
+				      time, TRUE, TRUE);
+    }
+  
+  if (implicit)
+    generate_grab_broken_event (old_grab_window,
+				FALSE, implicit, 
+				NULL);
+  
+}
+
+
+/**
+ * gdk_pointer_grab_info_libgtk_only:
+ * @display: the #GdkDisplay for which to get the grab information
+ * @grab_window: location to store current grab window
+ * @owner_events: location to store boolean indicating whether
+ *   the @owner_events flag to gdk_pointer_grab() was %TRUE.
+ * 
+ * Determines information about the current pointer grab.
+ * This is not public API and must not be used by applications.
+ * 
+ * Return value: %TRUE if this application currently has the
+ *  pointer grabbed.
+ **/
+gboolean
+gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
+				   GdkWindow **grab_window,
+				   gboolean   *owner_events)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  if (display->pointer_grab.window)
+    {
+      if (grab_window)
+        *grab_window = (GdkWindow *)display->pointer_grab.window;
+      if (owner_events)
+        *owner_events = display->pointer_grab.owner_events;
+
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+
+/**
+ * gdk_display_pointer_is_grabbed:
+ * @display: a #GdkDisplay
+ *
+ * Test if the pointer is grabbed.
+ *
+ * Returns: %TRUE if an active X pointer grab is in effect
+ *
+ * Since: 2.2
+ */
+gboolean
+gdk_display_pointer_is_grabbed (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
+  
+  return (display->pointer_grab.window != NULL &&
+	  !display->pointer_grab.implicit);
 }
 
 #define __GDK_DISPLAY_C__

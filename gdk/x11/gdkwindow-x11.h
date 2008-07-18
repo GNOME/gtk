@@ -44,22 +44,6 @@ typedef struct _GdkWindowImplX11 GdkWindowImplX11;
 typedef struct _GdkWindowImplX11Class GdkWindowImplX11Class;
 typedef struct _GdkXPositionInfo GdkXPositionInfo;
 
-struct _GdkXPositionInfo
-{
-  gint x;
-  gint y;
-  gint width;
-  gint height;
-  gint x_offset;		/* Offsets to add to X coordinates within window */
-  gint y_offset;		/*   to get GDK coodinates within window */
-  guint big : 1;
-  guint mapped : 1;
-  guint no_bg : 1;	        /* Set when the window background is temporarily
-				 * unset during resizing and scaling */
-  GdkRectangle clip_rect;	/* visible rectangle of window */
-};
-
-
 /* Window implementation for X11
  */
 
@@ -74,10 +58,8 @@ struct _GdkWindowImplX11
 {
   GdkDrawableImplX11 parent_instance;
 
-  gint width;
-  gint height;
-  
-  GdkXPositionInfo position_info;
+  guint no_bg : 1;	        /* Set when the window background is temporarily
+				 * unset during resizing and scaling */
   GdkToplevelX11 *toplevel;	/* Toplevel-specific information */
   GdkCursor *cursor;
   gint8 toplevel_window_type;

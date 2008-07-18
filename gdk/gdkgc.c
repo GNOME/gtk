@@ -43,6 +43,8 @@ struct _GdkGCPrivate
 {
   GdkRegion *clip_region;
 
+  GdkSubwindowMode subwindow_mode;
+  
   GdkFill fill;
   GdkBitmap *stipple;
   GdkPixmap *tile;
@@ -172,6 +174,8 @@ _gdk_gc_init (GdkGC           *gc,
     priv->fg_pixel = values->foreground.pixel;
   if (values_mask & GDK_GC_BACKGROUND)
     priv->bg_pixel = values->background.pixel;
+  if (values_mask & GDK_GC_SUBWINDOW)
+    priv->subwindow_mode = values->subwindow_mode;
 
   gc->colormap = gdk_drawable_get_colormap (drawable);
   if (gc->colormap)
@@ -183,7 +187,7 @@ gdk_gc_finalize (GObject *object)
 {
   GdkGC *gc = GDK_GC (object);
   GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
-  
+
   if (priv->clip_region)
     gdk_region_destroy (priv->clip_region);
   if (gc->colormap)
@@ -313,6 +317,8 @@ gdk_gc_set_values (GdkGC           *gc,
     priv->fg_pixel = values->foreground.pixel;
   if (values_mask & GDK_GC_BACKGROUND)
     priv->bg_pixel = values->background.pixel;
+  if (values_mask & GDK_GC_SUBWINDOW)
+    priv->subwindow_mode = values->subwindow_mode;
   
   GDK_GC_GET_CLASS (gc)->set_values (gc, values, values_mask);
 }
@@ -542,9 +548,11 @@ gdk_gc_set_clip_mask (GdkGC	*gc,
   gdk_gc_set_values (gc, &values, GDK_GC_CLIP_MASK);
 }
 
-static void
+/* Takes ownership of passed in region */
+void
 _gdk_gc_set_clip_region_internal (GdkGC     *gc,
-				  GdkRegion *region)
+				  GdkRegion *region,
+				  gboolean reset_origin)
 {
   GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
 
@@ -553,7 +561,32 @@ _gdk_gc_set_clip_region_internal (GdkGC     *gc,
 
   priv->clip_region = region;
 
-  _gdk_windowing_gc_set_clip_region (gc, region);
+  _gdk_windowing_gc_set_clip_region (gc, region, reset_origin);
+}
+
+/* Takes ownership of passed in region, returns old clip region */
+void
+_gdk_gc_intersect_clip_region (GdkGC     *gc,
+			       GdkRegion *region,
+			       GdkRegion **old_clip_region)
+{
+  GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
+  GdkRegion *old_clip;
+
+  old_clip = priv->clip_region;
+
+  priv->clip_region = region;
+  if (old_clip)
+    gdk_region_intersect (region, old_clip);
+
+  if (old_clip_region)
+    *old_clip_region = old_clip;
+  else
+    gdk_region_destroy (old_clip);
+  
+  _gdk_windowing_gc_set_clip_region (gc, priv->clip_region, FALSE);
+  
+  return old_clip;
 }
 
 /**
@@ -578,7 +611,7 @@ gdk_gc_set_clip_rectangle (GdkGC              *gc,
   else
     region = NULL;
 
-  _gdk_gc_set_clip_region_internal (gc, region);
+  _gdk_gc_set_clip_region_internal (gc, region, TRUE);
 }
 
 /**
@@ -603,7 +636,7 @@ gdk_gc_set_clip_region (GdkGC           *gc,
   else
     copy = NULL;
 
-  _gdk_gc_set_clip_region_internal (gc, copy);
+  _gdk_gc_set_clip_region_internal (gc, copy, TRUE);
 }
 
 /**
@@ -723,11 +756,25 @@ gdk_gc_set_subwindow (GdkGC	       *gc,
 		      GdkSubwindowMode	mode)
 {
   GdkGCValues values;
+  GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
 
   g_return_if_fail (GDK_IS_GC (gc));
 
+  /* This could get called a lot to reset the subwindow mode in
+     the client side clipping, so bail out early */ 
+  if (priv->subwindow_mode == mode)
+    return;
+  
   values.subwindow_mode = mode;
   gdk_gc_set_values (gc, &values, GDK_GC_SUBWINDOW);
+}
+
+GdkSubwindowMode
+_gdk_gc_get_subwindow (GdkGC *gc)
+{
+  GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
+
+  return priv->subwindow_mode;
 }
 
 /**
@@ -907,6 +954,7 @@ gdk_gc_copy (GdkGC *dst_gc,
 
   dst_priv->fg_pixel = src_priv->fg_pixel;
   dst_priv->bg_pixel = src_priv->bg_pixel;
+  dst_priv->subwindow_mode = src_priv->subwindow_mode;
 }
 
 /**
@@ -1117,6 +1165,8 @@ gc_get_background (GdkGC    *gc,
  *   the fill mode will be forced to %GDK_STIPPLED
  * @gc_changed: pass %FALSE if the @gc has not changed since the
  *     last call to this function
+ * @target_drawable: The drawable you're drawing in. If passed in
+ *     this is used for client side window clip emulation.
  * 
  * Set the attributes of a cairo context to match those of a #GdkGC
  * as far as possible. Some aspects of a #GdkGC, such as clip masks
@@ -1127,7 +1177,8 @@ _gdk_gc_update_context (GdkGC          *gc,
                         cairo_t        *cr,
                         const GdkColor *override_foreground,
                         GdkBitmap      *override_stipple,
-                        gboolean        gc_changed)
+                        gboolean        gc_changed,
+			GdkDrawable    *target_drawable)
 {
   GdkGCPrivate *priv;
   GdkFill fill;
@@ -1246,6 +1297,10 @@ _gdk_gc_update_context (GdkGC          *gc,
 
       cairo_clip (cr);
     }
+
+  /* The reset above resets the window clip rect, so we want to re-set that */
+  if (target_drawable && GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip)
+    GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip (target_drawable, cr);
 }
 
 
