@@ -15,6 +15,11 @@
 
 2008-07-18  Federico Mena Quintero  <federico@novell.com>
 
+	* gtk/updateiconcache.c (build_cache): If the resulting cache file
+	would be empty, erase the old cache file as well as the temporary file.
+
+2008-07-18  Federico Mena Quintero  <federico@novell.com>
+
 	* demos/gtk-demo/changedisplay.c (find_toplevel_at_pointer): Don't
 	do funny casts to avoid compiler warnings.
 

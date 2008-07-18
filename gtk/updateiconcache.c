@@ -1448,6 +1448,7 @@ build_cache (const gchar *path)
 #endif
 
   tmp_cache_path = g_build_filename (path, "."CACHE_NAME, NULL);
+  cache_path = g_build_filename (path, CACHE_NAME, NULL);
 
   if ((fd = g_open (tmp_cache_path, O_WRONLY | O_CREAT | O_EXCL | O_TRUNC | _O_BINARY, mode)) == -1)
     {
@@ -1476,6 +1477,7 @@ build_cache (const gchar *path)
 
       fclose (cache);
       g_unlink (tmp_cache_path);
+      g_unlink (cache_path);
       exit (0);
     }
     
@@ -1498,8 +1500,6 @@ build_cache (const gchar *path)
       //g_unlink (tmp_cache_path);
       exit (1);
     }
-
-  cache_path = g_build_filename (path, CACHE_NAME, NULL);
 
 #ifdef G_OS_WIN32
   if (g_file_test (cache_path, G_FILE_TEST_EXISTS))
