@@ -1,3 +1,7 @@
+2007-08-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2007-08-18  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 543545 – GtkAssistant crashes when gtk_widget_hide() is called

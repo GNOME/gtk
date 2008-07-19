@@ -1,3 +1,68 @@
+Overview of Changes from GTK+ 2.13.4 to 2.13.5
+==============================================
+
+* gdk-pixbuf:
+ - Use GIO for mime type sniffing when possible
+
+* Printing:
+ - Handle paused printers and printers that don't accept jobs
+
+* GtkBuilder:
+ - Support building parts of the XML tree with the new functions
+   gtk_builder_add_objects_from_file, gtk_builder_add_objects_from_string
+
+* Bugs fixed:
+ 540917 deprecate pack_start_defaults()
+ 541645 gtkfilechooserdefault segfaults when bookmark does not contain ://
+ 493008 gdk_screen_get_window_stack is not 64-bit-compatible
+ 539248 gtk_calender_query_tooltip calls ->detail_func with invalid dates
+ 327582 Incomplete docs for GtkSettings::gtk-icon-sizes
+ 343663 source-buffer highlighting highlights "char" in gtk_text_iter_...
+ 541811 g_return_if_fail (widget->parent == container)
+ 541540 Dead link to pkg-config site in GTK+ online FAQ
+ 513580 Broken link in GTK+ FAQ
+ 531129 gtk_style_copy() does not include a return value or description
+ 510225 gtk_widget_get_composite_name retval should be freed
+ 507953 gtk_tree_view_set_tooltip_column() shows markups
+ 469068 clarify gdk_cairo_create()
+ 528845 segv from GtkBuilder on attempting <accelerator> under GtkCellView
+ 540994 [Win32] Some windows don't appear at the top when created
+ 541964 [Win32] Setting modal hint to current value might confuse the stack
+ 541950 Removing recently-added accelerator UI causes a wrong g_warning
+ 542234 iconview a11y implementation segfaults
+ 541399 Widget tooltips: treat "" same as NULL
+ 334418 Support easy input of ellipsis
+ 321896 Synch gdkkeysyms.h/gtkimcontextsimple.c with X.org 6.9/7.0
+ 316087 Resizing columns is chaotic
+ 542853 jasper test fails due to incomplete library arguments
+ 507394 mem leak from gtk_selection_add_targets
+ 488766 GtkFileChooserButton doesn't clear icon after gtk_file_chooser_...
+ 479780 Bookmarks in left pane of FileChooser cannot be renamed
+ 542523 GtkTextTag should handle setting properties to NULL
+ 384940 handle rejecting jobs and authentication meaningfully
+ 339591 Detect list of availible cover pages
+ 543244 crashes when renaming a bookmark
+ 447998 GtkBuilder does not support building parts of the xml tree
+ 543217 GTK application crashed with directfb backend
+ 543545 GtkAssistant crashes when gtk_widget_hide() is called inside ...
+ 401985 Documentation improvement for the gdk_pixbuf_new_from_file_at_...
+ 543085 gdk_pixbuf_saturate_and_pixelate may corrupt memory
+ 488019 Mention bind_textdomain_codeset in gettext related FAQ
+ 528822 typo in GtkCombo docs
+ 540967 docs build slowly because of entities
+ 537430 label pango attributes & i18n
+
+* Updated translations:
+ Assamese (as)
+ Czech (cs)
+ Spanish (es)
+ Galician (gl)
+ Hebrew (he)
+ Pashto (ps)
+ Traditional Chinese (zh_HK)
+ Traditional Chinese (zh_TW)
+
+
 Overview of Changes from GTK+ 2.13.3 to 2.13.4
 ==============================================
 
