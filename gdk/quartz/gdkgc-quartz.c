@@ -290,12 +290,6 @@ gdk_quartz_draw_tiled_pattern (void         *info,
   width = CGImageGetWidth (pattern_image);
   height = CGImageGetHeight (pattern_image);
 
-  if (private->is_window)
-    {
-      CGContextTranslateCTM (context, 0, height);
-      CGContextScaleCTM (context, 1.0, -1.0);
-    }
-
   CGContextDrawImage (context, 
 		      CGRectMake (0, 0, width, height),
 		      pattern_image);

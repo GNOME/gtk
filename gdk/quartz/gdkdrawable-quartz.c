@@ -337,12 +337,20 @@ gdk_quartz_draw_drawable (GdkDrawable *drawable,
   else if (dest_depth != 0 && src_depth == dest_depth)
     {
       CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
+      gint width, height;
 
       if (!context)
 	return;
 
       _gdk_quartz_gc_update_cg_context (gc, drawable, context,
 					GDK_QUARTZ_CONTEXT_STROKE);
+
+      CGContextSaveGState (context);
+
+      /* convert coordinates from gtk+ to core graphics */
+      gdk_drawable_get_size (drawable, &width, &height);
+      CGContextTranslateCTM (context, 0, height);
+      CGContextScaleCTM (context, 1.0, -1.0);
 
       CGContextClipToRect (context, CGRectMake (xdest, ydest, width, height));
       CGContextTranslateCTM (context, xdest - xsrc, ydest - ysrc);
@@ -351,6 +359,8 @@ gdk_quartz_draw_drawable (GdkDrawable *drawable,
 				     GDK_PIXMAP_IMPL_QUARTZ (src_impl)->width, 
 				     GDK_PIXMAP_IMPL_QUARTZ (src_impl)->height), 
 			  GDK_PIXMAP_IMPL_QUARTZ (src_impl)->image);
+
+      CGContextRestoreGState (context);
 
       gdk_quartz_drawable_release_context (drawable, context);
     }

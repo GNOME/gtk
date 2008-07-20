@@ -2,6 +2,21 @@
 
 	reviewed by: Richard Hult
 
+	Fixes #543868: GdkPixmap is upside down on quartz
+
+	* gdk/quartz/gdkdrawable-quartz.c (gdk_quartz_draw_drawable): flip the
+	coordinate space from GTK+ orientation to CoreGraphics orientation
+	before calling CoreGraphics code
+	* gdk/quartz/gdkgc-quartz.c (gdk_quartz_draw_tiled_pattern): drop the
+	coordinate space flipping (we always get it right, now)
+	* gdk/quartz/gdkpixmap-quartz.c
+	(gdk_pixmap_impl_quartz_get_context): flip the coordinate space when
+	creating the CGContextRef
+
+2008-07-20  Sven Herzberg  <sven@imendio.com>
+
+	reviewed by: Richard Hult
+
 	Extracted the CGContextRef creation into a virtual function of
 	GdkDrawableImplQuartz; implement get_context() for GdkPixmap and
 	GdkWindow

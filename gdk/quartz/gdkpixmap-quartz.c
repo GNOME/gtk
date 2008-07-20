@@ -47,6 +47,7 @@ gdk_pixmap_impl_quartz_get_context (GdkDrawable *drawable,
 {
   GdkPixmapImplQuartz *impl = GDK_PIXMAP_IMPL_QUARTZ (drawable);
   CGContextRef cg_context;
+  size_t height;
 
   cg_context = CGBitmapContextCreate (impl->data,
                                       CGImageGetWidth (impl->image),
@@ -56,6 +57,12 @@ gdk_pixmap_impl_quartz_get_context (GdkDrawable *drawable,
                                       CGImageGetColorSpace (impl->image),
                                       CGImageGetBitmapInfo (impl->image));
   CGContextSetAllowsAntialiasing (cg_context, antialias);
+
+  /* convert coordinates from core graphics to gtk+ */
+  height = CGImageGetHeight (impl->image);
+
+  CGContextTranslateCTM (cg_context, 0, height);
+  CGContextScaleCTM (cg_context, 1.0, -1.0);
 
   return cg_context;
 }
