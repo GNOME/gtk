@@ -8,8 +8,8 @@ Base class for box containers
 <para>
 GtkBox is an abstract widget which encapsulates functionality for a
 particular kind of container, one that organizes a variable number of
-widgets into a rectangular area.  GtkBox currently has two derived
-classes, #GtkHBox and #GtkVBox.
+widgets into a rectangular area.  GtkBox has a number of derived
+classes, e.g. #GtkHBox and #GtkVBox.
 </para>
 <para>
 The rectangular area of a GtkBox is organized into either a single row
