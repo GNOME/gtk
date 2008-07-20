@@ -1100,9 +1100,13 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
         {
           N_("Printer '%s' is low on toner."),
           N_("Printer '%s' has no toner left."),
+          /* Translators: "Developer" like on photo development context */
           N_("Printer '%s' is low on developer."),
+          /* Translators: "Developer" like on photo development context */
           N_("Printer '%s' is out of developer."),
+          /* Translators: "marker" is one color bin of the printer */
           N_("Printer '%s' is low on at least one marker supply."),
+          /* Translators: "marker" is one color bin of the printer */
           N_("Printer '%s' is out of at least one marker supply."),
           N_("The cover is open on printer '%s'."),
           N_("The door is open on printer '%s'."),

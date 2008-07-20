@@ -1,3 +1,10 @@
+2008-07-20  Andre Klapper  <a9016009@gmx.de>
+
+	Bug 543915 - translation issues
+
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Add translator comments for several strings.
+
 2008-07-20  Sven Herzberg  <sven@imendio.com>
 
 	reviewed by: Richard Hult
