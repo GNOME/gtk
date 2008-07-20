@@ -664,88 +664,18 @@ gdk_drawable_impl_quartz_get_type (void)
   return object_type;
 }
 
-CGContextRef 
+CGContextRef
 gdk_quartz_drawable_get_context (GdkDrawable *drawable,
 				 gboolean     antialias)
 {
-  GdkDrawableImplQuartz *drawable_impl = GDK_DRAWABLE_IMPL_QUARTZ (drawable);
-  CGContextRef           cg_context;
-
-  if (GDK_IS_WINDOW_IMPL_QUARTZ (drawable) &&
-      GDK_WINDOW_DESTROYED (drawable_impl->wrapper))
-    return NULL;
-
-  if (GDK_IS_WINDOW_IMPL_QUARTZ (drawable))
+  if (!GDK_DRAWABLE_IMPL_QUARTZ_GET_CLASS (drawable)->get_context)
     {
-      GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (drawable);
-
-      /* Lock focus when not called as part of a drawRect call. This
-       * is needed when called from outside "real" expose events, for
-       * example for synthesized expose events when realizing windows
-       * and for widgets that send fake expose events like the arrow
-       * buttons in spinbuttons.
-       */
-      if (window_impl->in_paint_rect_count == 0)
-	{
-	  if (![window_impl->view lockFocusIfCanDraw])
-            return NULL;
-	}
-
-      cg_context = [[NSGraphicsContext currentContext] graphicsPort];
-      CGContextSaveGState (cg_context);
-      CGContextSetAllowsAntialiasing (cg_context, antialias);
-	  
-      /* We'll emulate the clipping caused by double buffering here */
-      if (window_impl->begin_paint_count != 0)
-	{
-	  CGRect rect;
-	  CGRect *cg_rects;
-	  GdkRectangle *rects;
-	  gint n_rects, i;
-	  
-	  gdk_region_get_rectangles (window_impl->paint_clip_region,
-				     &rects, &n_rects);
-	  
-	  if (n_rects == 1)
-	    cg_rects = &rect;
-	  else
-	    cg_rects = g_new (CGRect, n_rects);
-	  
-	  for (i = 0; i < n_rects; i++)
-	    {
-	      cg_rects[i].origin.x = rects[i].x;
-	      cg_rects[i].origin.y = rects[i].y;
-	      cg_rects[i].size.width = rects[i].width;
-	      cg_rects[i].size.height = rects[i].height;
-	    }
-	  
-	  CGContextClipToRects (cg_context, cg_rects, n_rects);
-	  
-	  g_free (rects);
-	  if (cg_rects != &rect)
-	    g_free (cg_rects);
-	}
-    }
-  else if (GDK_IS_PIXMAP_IMPL_QUARTZ (drawable))
-    {
-      GdkPixmapImplQuartz *impl = GDK_PIXMAP_IMPL_QUARTZ (drawable);
-      
-      cg_context = CGBitmapContextCreate (impl->data,
-					  CGImageGetWidth (impl->image),
-					  CGImageGetHeight (impl->image),
-					  CGImageGetBitsPerComponent (impl->image),
-					  CGImageGetBytesPerRow (impl->image),
-					  CGImageGetColorSpace (impl->image),
-					  CGImageGetBitmapInfo (impl->image));
-      CGContextSetAllowsAntialiasing (cg_context, antialias);
-    }
-  else 
-    {
-      g_warning ("Tried to create CGContext for something not a quartz window or pixmap");
-      cg_context = NULL;
+      g_warning ("%s doesn't implement GdkDrawableImplQuartzClass::get_context()",
+                 G_OBJECT_TYPE_NAME (drawable));
+      return NULL;
     }
 
-  return cg_context;
+  return GDK_DRAWABLE_IMPL_QUARTZ_GET_CLASS (drawable)->get_context (drawable, antialias);
 }
 
 void

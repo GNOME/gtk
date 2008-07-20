@@ -49,9 +49,13 @@ struct _GdkDrawableImplQuartz
   cairo_surface_t *cairo_surface;
 };
  
-struct _GdkDrawableImplQuartzClass 
+struct _GdkDrawableImplQuartzClass
 {
   GdkDrawableClass parent_class;
+
+  /* vtable */
+  CGContextRef (*get_context) (GdkDrawable* drawable,
+			       gboolean     antialias);
 };
 
 GType        gdk_drawable_impl_quartz_get_type   (void);

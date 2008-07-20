@@ -41,6 +41,25 @@ gdk_pixmap_impl_quartz_get_size (GdkDrawable *drawable,
     *height = GDK_PIXMAP_IMPL_QUARTZ (drawable)->height;
 }
 
+static CGContextRef
+gdk_pixmap_impl_quartz_get_context (GdkDrawable *drawable,
+				    gboolean     antialias)
+{
+  GdkPixmapImplQuartz *impl = GDK_PIXMAP_IMPL_QUARTZ (drawable);
+  CGContextRef cg_context;
+
+  cg_context = CGBitmapContextCreate (impl->data,
+                                      CGImageGetWidth (impl->image),
+                                      CGImageGetHeight (impl->image),
+                                      CGImageGetBitsPerComponent (impl->image),
+                                      CGImageGetBytesPerRow (impl->image),
+                                      CGImageGetColorSpace (impl->image),
+                                      CGImageGetBitmapInfo (impl->image));
+  CGContextSetAllowsAntialiasing (cg_context, antialias);
+
+  return cg_context;
+}
+
 static void
 gdk_pixmap_impl_quartz_finalize (GObject *object)
 {
@@ -58,12 +77,15 @@ gdk_pixmap_impl_quartz_class_init (GdkPixmapImplQuartzClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
+  GdkDrawableImplQuartzClass *drawable_quartz_class = GDK_DRAWABLE_IMPL_QUARTZ_CLASS (klass);
   
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_pixmap_impl_quartz_finalize;
 
   drawable_class->get_size = gdk_pixmap_impl_quartz_get_size;
+
+  drawable_quartz_class->get_context = gdk_pixmap_impl_quartz_get_context;
 }
 
 GType

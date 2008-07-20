@@ -89,6 +89,67 @@ gdk_window_impl_quartz_get_size (GdkDrawable *drawable,
     *height = GDK_WINDOW_IMPL_QUARTZ (drawable)->height;
 }
 
+static CGContextRef
+gdk_window_impl_quartz_get_context (GdkDrawable *drawable,
+				    gboolean     antialias)
+{
+  GdkDrawableImplQuartz *drawable_impl = GDK_DRAWABLE_IMPL_QUARTZ (drawable);
+  GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (drawable);
+  CGContextRef cg_context;
+
+  if (GDK_WINDOW_DESTROYED (drawable_impl->wrapper))
+    return NULL;
+
+  /* Lock focus when not called as part of a drawRect call. This
+   * is needed when called from outside "real" expose events, for
+   * example for synthesized expose events when realizing windows
+   * and for widgets that send fake expose events like the arrow
+   * buttons in spinbuttons.
+   */
+  if (window_impl->in_paint_rect_count == 0)
+    {
+      if (![window_impl->view lockFocusIfCanDraw])
+        return NULL;
+    }
+
+  cg_context = [[NSGraphicsContext currentContext] graphicsPort];
+  CGContextSaveGState (cg_context);
+  CGContextSetAllowsAntialiasing (cg_context, antialias);
+
+  /* We'll emulate the clipping caused by double buffering here */
+  if (window_impl->begin_paint_count != 0)
+    {
+      CGRect rect;
+      CGRect *cg_rects;
+      GdkRectangle *rects;
+      gint n_rects, i;
+
+      gdk_region_get_rectangles (window_impl->paint_clip_region,
+                                 &rects, &n_rects);
+
+      if (n_rects == 1)
+        cg_rects = &rect;
+      else
+        cg_rects = g_new (CGRect, n_rects);
+
+      for (i = 0; i < n_rects; i++)
+        {
+          cg_rects[i].origin.x = rects[i].x;
+          cg_rects[i].origin.y = rects[i].y;
+          cg_rects[i].size.width = rects[i].width;
+          cg_rects[i].size.height = rects[i].height;
+        }
+
+      CGContextClipToRects (cg_context, cg_rects, n_rects);
+
+      g_free (rects);
+      if (cg_rects != &rect)
+        g_free (cg_rects);
+    }
+
+  return cg_context;
+}
+
 static GdkRegion*
 gdk_window_impl_quartz_get_visible_region (GdkDrawable *drawable)
 {
@@ -159,6 +220,7 @@ gdk_window_impl_quartz_finalize (GObject *object)
 static void
 gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
 {
+  GdkDrawableImplQuartzClass *drawable_quartz_class = GDK_DRAWABLE_IMPL_QUARTZ_CLASS (klass);
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
@@ -167,6 +229,8 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   object_class->finalize = gdk_window_impl_quartz_finalize;
 
   drawable_class->get_size = gdk_window_impl_quartz_get_size;
+
+  drawable_quartz_class->get_context = gdk_window_impl_quartz_get_context;
 
   /* Visible and clip regions are the same */
   drawable_class->get_clip_region = gdk_window_impl_quartz_get_visible_region;

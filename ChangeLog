@@ -1,3 +1,22 @@
+2008-07-20  Sven Herzberg  <sven@imendio.com>
+
+	reviewed by: Richard Hult
+
+	Extracted the CGContextRef creation into a virtual function of
+	GdkDrawableImplQuartz; implement get_context() for GdkPixmap and
+	GdkWindow
+
+	* gdk/quartz/gdkdrawable-quartz.c
+	(gdk_quartz_drawable_get_context): dropped the different
+	implementations; forward to the virtual function now
+	* gdk/quartz/gdkdrawable-quartz.h: added the virtual function
+	* gdk/quartz/gdkpixmap-quartz.c
+	(gdk_pixmap_impl_quartz_get_context),
+	(gdk_pixmap_impl_quartz_class_init): implemented get_context()
+	* gdk/quartz/gdkwindow-quartz.c
+	(gdk_window_impl_quartz_get_context),
+	(gdk_window_impl_quartz_class_init): implemented get_context()
+
 2007-08-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates
