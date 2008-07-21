@@ -1,3 +1,11 @@
+2008-07-21  Cody Russell  <bratsche@gnome.org>
+
+	Bug 153567 – Repaint glitches in widgets
+
+	* gdk/win32/gdkevents-win32.c: Set a sync timer when
+	we receive WM_SYNCPAINT, and RedrawWindow() once
+	the timer expires.
+
 2008-07-21  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_class_init): use the simpler
