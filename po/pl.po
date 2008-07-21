@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk20\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-05 20:31+0000\n"
-"PO-Revision-Date: 2008-07-21 11:53+0100\n"
+"PO-Revision-Date: 2008-07-21 14:17+0100\n"
 "Last-Translator: Tomasz Dominikowski <dominikowski@gmail.com>\n"
 "Language-Team: Polish <translators@gnomepl.org>\n"
 "MIME-Version: 1.0\n"
@@ -2132,7 +2132,7 @@ msgstr "_Wyczyść"
 
 #: ../gtk/gtklinkbutton.c:144
 msgid "URI"
-msgstr "URI"
+msgstr "Adres URI"
 
 #: ../gtk/gtklinkbutton.c:145
 msgid "The URI bound to this button"
