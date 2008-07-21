@@ -492,14 +492,12 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->expose_event = gtk_text_view_expose_event;
   widget_class->focus = gtk_text_view_focus;
 
-  /* need to override the base class function via override_class_closure,
+  /* need to override the base class function via override_class_handler,
    * because the signal slot is not available in GtkWidgetCLass
    */
-  g_signal_override_class_closure (g_signal_lookup ("move-focus",
-                                                    GTK_TYPE_WIDGET),
+  g_signal_override_class_handler ("move-focus",
                                    GTK_TYPE_TEXT_VIEW,
-                                   g_cclosure_new (G_CALLBACK (gtk_text_view_move_focus),
-                                                   NULL, NULL));
+                                   G_CALLBACK (gtk_text_view_move_focus));
 
   widget_class->drag_begin = gtk_text_view_drag_begin;
   widget_class->drag_end = gtk_text_view_drag_end;
@@ -5756,22 +5754,10 @@ gtk_text_view_compat_move_focus (GtkTextView     *text_view,
     {
       /*  if this is a signal emission, chain up  */
 
-      GValue instance_and_params[2] = { { 0, }, { 0, } };
-      GValue return_value = { 0, };
+      gboolean retval;
 
-      g_value_init (&instance_and_params[0], GTK_TYPE_WIDGET);
-      g_value_set_object (&instance_and_params[0], text_view);
-
-      g_value_init (&instance_and_params[1], GTK_TYPE_DIRECTION_TYPE);
-      g_value_set_enum (&instance_and_params[1], direction_type);
-
-      g_value_init (&return_value, G_TYPE_BOOLEAN);
-
-      g_signal_chain_from_overridden (instance_and_params, &return_value);
-
-      g_value_unset (&instance_and_params[0]);
-      g_value_unset (&instance_and_params[1]);
-      g_value_unset (&return_value);
+      g_signal_chain_from_overridden_handler (text_view,
+                                              direction_type, &retval);
     }
   else
     {

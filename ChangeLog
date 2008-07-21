@@ -1,5 +1,18 @@
 2008-07-21  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtktoolbar.c (gtk_toolbar_class_init): use the simpler
+	g_signal_override_class_handler() instead of
+	g_signal_override_class_closure().
+
+	* gtk/gtktextview.c (gtk_text_view_class_init): ditto.
+
+	(gtk_text_view_compat_move_focus): chain up using
+	g_signal_chain_from_overridden_handler() instead of the generic
+	g_signal_chain_from_overridden() which needs manual fiddling with
+	millions of GValues.
+
+2008-07-21  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkuimanager.c: remove redundant include.
 
 2008-07-21  Michael Natterer  <mitch@imendio.com>

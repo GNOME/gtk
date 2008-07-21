@@ -378,14 +378,12 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   widget_class->style_set = gtk_toolbar_style_set;
   widget_class->focus = gtk_toolbar_focus;
 
-  /* need to override the base class function via override_class_closure,
+  /* need to override the base class function via override_class_handler,
    * because the signal slot is not available in GtkWidgetClass
    */
-  g_signal_override_class_closure (g_signal_lookup ("move_focus",
-                                                    GTK_TYPE_WIDGET),
+  g_signal_override_class_handler ("move-focus",
                                    GTK_TYPE_TOOLBAR,
-                                   g_cclosure_new (G_CALLBACK (gtk_toolbar_move_focus),
-                                                   NULL, NULL));
+                                   G_CALLBACK (gtk_toolbar_move_focus));
 
   widget_class->screen_changed = gtk_toolbar_screen_changed;
   widget_class->realize = gtk_toolbar_realize;
