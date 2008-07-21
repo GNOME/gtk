@@ -1690,11 +1690,11 @@ recent_app_info_new (const gchar *app_name)
 
   g_assert (app_name != NULL);
   
-  app_info = g_new0 (RecentAppInfo, 1);
+  app_info = g_slice_new0 (RecentAppInfo);
   app_info->name = g_strdup (app_name);
   app_info->exec = NULL;
   app_info->count = 1;
-  app_info->stamp = time (NULL);
+  app_info->stamp = 0; 
   
   return app_info;
 }
@@ -1706,10 +1706,9 @@ recent_app_info_free (RecentAppInfo *app_info)
     return;
   
   g_free (app_info->name);
-  
   g_free (app_info->exec);
   
-  g_free (app_info);
+  g_slice_free (RecentAppInfo, app_info);
 }
 
 /**

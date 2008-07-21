@@ -1,3 +1,11 @@
+2008-07-21  Emmanuele Bassi  <ebassi@gnome.org>
+
+	* gtk/gtkrecentmanager.c:
+	(recent_app_info_new), (recent_app_info_free): Use GSlice to
+	allocate the application data for recently used resources;
+	do not call time() to initialize the timestamp, as it will
+	be overwritten anyway later. (#535223, Michael Meeks)
+
 2008-07-21  Kristian Rietveld  <kris@gtk.org>
 
 	Bug 543989 - Crash in gtk_tree_view_size_allocate_columns
