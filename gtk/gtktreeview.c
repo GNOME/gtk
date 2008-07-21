@@ -2319,7 +2319,8 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
    * so the total width of the tree view changes.
    */
   tree_view->priv->width = width;
-  *width_changed = TRUE;
+  if (width_changed)
+    *width_changed = TRUE;
 
   if (column_changed)
     gtk_widget_queue_draw (GTK_WIDGET (tree_view));

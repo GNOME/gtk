@@ -1,3 +1,10 @@
+2008-07-21  Kristian Rietveld  <kris@gtk.org>
+
+	Bug 543989 - Crash in gtk_tree_view_size_allocate_columns
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate_columns): check
+	for width_changed != NULL.  (Patch by Josselin Mouette).
+
 2008-07-21  Michael Natterer  <mitch@imendio.com>
 
 	Bug 442042 – GtkScaleButton is too limited
