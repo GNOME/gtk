@@ -282,13 +282,13 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * Since: 2.12
    */
   signals[POPUP] =
-    _gtk_binding_signal_new (I_("popup"),
-			     G_OBJECT_CLASS_TYPE (klass),
-			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			     G_CALLBACK (gtk_scale_button_popup),
-			     NULL, NULL,
-			     g_cclosure_marshal_VOID__VOID,
-			     G_TYPE_NONE, 0);
+    g_signal_new_class_handler (I_("popup"),
+                                G_OBJECT_CLASS_TYPE (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_scale_button_popup),
+                                NULL, NULL,
+                                g_cclosure_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
 
   /**
    * GtkScaleButton::popdown:
@@ -303,13 +303,13 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    * Since: 2.12
    */
   signals[POPDOWN] =
-    _gtk_binding_signal_new (I_("popdown"),
-			     G_OBJECT_CLASS_TYPE (klass),
-			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			     G_CALLBACK (gtk_scale_button_popdown),
-			     NULL, NULL,
-			     g_cclosure_marshal_VOID__VOID,
-			     G_TYPE_NONE, 0);
+    g_signal_new_class_handler (I_("popdown"),
+                                G_OBJECT_CLASS_TYPE (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_scale_button_popdown),
+                                NULL, NULL,
+                                g_cclosure_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
 
   /* Key bindings */
   binding_set = gtk_binding_set_by_class (widget_class);

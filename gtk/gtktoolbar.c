@@ -478,15 +478,15 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
    * Return value: %TRUE if the signal was handled, %FALSE if not
    */
   toolbar_signals[FOCUS_HOME_OR_END] =
-    _gtk_binding_signal_new (I_("focus_home_or_end"),
-			     G_OBJECT_CLASS_TYPE (klass),
-			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			     G_CALLBACK (gtk_toolbar_focus_home_or_end),
-			     NULL, NULL,
-			     _gtk_marshal_BOOLEAN__BOOLEAN,
-			     G_TYPE_BOOLEAN, 1,
-			     G_TYPE_BOOLEAN);
-  
+    g_signal_new_class_handler (I_("focus_home_or_end"),
+                                G_OBJECT_CLASS_TYPE (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_toolbar_focus_home_or_end),
+                                NULL, NULL,
+                                _gtk_marshal_BOOLEAN__BOOLEAN,
+                                G_TYPE_BOOLEAN, 1,
+                                G_TYPE_BOOLEAN);
+
   /* properties */
   g_object_class_install_property (gobject_class,
 				   PROP_ORIENTATION,

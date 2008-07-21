@@ -914,15 +914,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GTK_TYPE_DIRECTION_TYPE);
   widget_signals[MOVE_FOCUS] =
-    _gtk_binding_signal_new (I_("move_focus"),
-                             G_TYPE_FROM_CLASS (object_class),
-                             G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                             G_CALLBACK (gtk_widget_real_move_focus),
-                             NULL, NULL,
-                             _gtk_marshal_VOID__ENUM,
-                             G_TYPE_NONE,
-                             1,
-                             GTK_TYPE_DIRECTION_TYPE);
+    g_signal_new_class_handler (I_("move_focus"),
+                                G_TYPE_FROM_CLASS (object_class),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_widget_real_move_focus),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__ENUM,
+                                G_TYPE_NONE,
+                                1,
+                                GTK_TYPE_DIRECTION_TYPE);
   /**
    * GtkWidget::event:
    * @widget: the object which received the signal.
@@ -1106,14 +1106,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * Since: 2.12
    **/
   widget_signals[KEYNAV_FAILED] =
-    _gtk_binding_signal_new (I_("keynav-failed"),
-                             G_TYPE_FROM_CLASS (gobject_class),
-                             G_SIGNAL_RUN_LAST,
-                             G_CALLBACK (gtk_widget_real_keynav_failed),
-                             _gtk_boolean_handled_accumulator, NULL,
-                             _gtk_marshal_BOOLEAN__ENUM,
-                             G_TYPE_BOOLEAN, 1,
-                             GTK_TYPE_DIRECTION_TYPE);
+    g_signal_new_class_handler (I_("keynav-failed"),
+                                G_TYPE_FROM_CLASS (gobject_class),
+                                G_SIGNAL_RUN_LAST,
+                                G_CALLBACK (gtk_widget_real_keynav_failed),
+                                _gtk_boolean_handled_accumulator, NULL,
+                                _gtk_marshal_BOOLEAN__ENUM,
+                                G_TYPE_BOOLEAN, 1,
+                                GTK_TYPE_DIRECTION_TYPE);
 
   /**
    * GtkWidget::delete-event:

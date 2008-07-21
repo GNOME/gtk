@@ -250,6 +250,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
   menu_shell_signals[SELECTION_DONE] =
     g_signal_new (I_("selection-done"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -258,6 +259,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
   menu_shell_signals[MOVE_CURRENT] =
     g_signal_new (I_("move_current"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -265,8 +267,9 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 		  G_STRUCT_OFFSET (GtkMenuShellClass, move_current),
 		  NULL, NULL,
 		  _gtk_marshal_VOID__ENUM,
-		  G_TYPE_NONE, 1, 
+		  G_TYPE_NONE, 1,
 		  GTK_TYPE_MENU_DIRECTION_TYPE);
+
   menu_shell_signals[ACTIVATE_CURRENT] =
     g_signal_new (I_("activate_current"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -274,8 +277,9 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 		  G_STRUCT_OFFSET (GtkMenuShellClass, activate_current),
 		  NULL, NULL,
 		  _gtk_marshal_VOID__BOOLEAN,
-		  G_TYPE_NONE, 1, 
+		  G_TYPE_NONE, 1,
 		  G_TYPE_BOOLEAN);
+
   menu_shell_signals[CANCEL] =
     g_signal_new (I_("cancel"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -284,27 +288,29 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
   menu_shell_signals[CYCLE_FOCUS] =
-    _gtk_binding_signal_new (I_("cycle_focus"),
-			     G_OBJECT_CLASS_TYPE (object_class),
-			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			     G_CALLBACK (gtk_real_menu_shell_cycle_focus),
-			     NULL, NULL,
-			     _gtk_marshal_VOID__ENUM,
-			     G_TYPE_NONE, 1,
-			     GTK_TYPE_DIRECTION_TYPE);
+    g_signal_new_class_handler (I_("cycle_focus"),
+                                G_OBJECT_CLASS_TYPE (object_class),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_real_menu_shell_cycle_focus),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__ENUM,
+                                G_TYPE_NONE, 1,
+                                GTK_TYPE_DIRECTION_TYPE);
+
   /**
    * GtkMenuShell::move-selected:
    * @menu_shell: the object on which the signal is emitted
    * @distance: +1 to move to the next item, -1 to move to the previous
    *
    * The ::move-selected signal is emitted to move the selection to
-   * another item. 
-   * 
+   * another item.
+   *
    * Returns: %TRUE to stop the signal emission, %FALSE to continue
    *
    * Since: 2.12
-   */ 
+   */
   menu_shell_signals[MOVE_SELECTED] =
     g_signal_new (I_("move_selected"),
 		  G_OBJECT_CLASS_TYPE (object_class),

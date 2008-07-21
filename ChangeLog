@@ -1,5 +1,18 @@
 2008-07-21  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkbindings.[ch]: remove _gtk_binding_signal_new().
+
+	* gtk/gtkfilechooserdefault.c
+	* gtk/gtkmenu.c
+	* gtk/gtkmenushell.c
+	* gtk/gtkscalebutton.c
+	* gtk/gtktextview.c
+	* gtk/gtktoolbar.c
+	* gtk/gtkwidget.c: use g_signal_new_class_handler() instead. Add
+	some missing I_() to the signal names.
+
+2008-07-21  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkspinbutton.c: remove g_return_if_fail() from private
 	functions and virtual function implementations. Some minor
 	cleanups.

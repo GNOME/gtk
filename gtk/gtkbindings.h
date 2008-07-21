@@ -154,21 +154,6 @@ void	 _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
 					 const gchar	*signal_name,
 					 GSList		*binding_args);
 
-/* Creates a signal with a fixed callback instead of a class offset;
- * useful for key binding signals
- */
-guint _gtk_binding_signal_new (const gchar       *signal_name,
-			       GType		  itype,
-			       GSignalFlags	  signal_flags,
-			       GCallback          handler,
-			       GSignalAccumulator accumulator,
-			       gpointer		  accu_data,
-			       GSignalCMarshaller c_marshaller,
-			       GType		  return_type,
-			       guint		  n_params,
-			       ...);
-
 G_END_DECLS
-
 
 #endif /* __GTK_BINDINGS_H__ */

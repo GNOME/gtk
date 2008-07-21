@@ -479,14 +479,14 @@ gtk_menu_class_init (GtkMenuClass *class)
   menu_shell_class->move_current = gtk_menu_move_current;
 
   menu_signals[MOVE_SCROLL] =
-    _gtk_binding_signal_new (I_("move_scroll"),
-			     G_OBJECT_CLASS_TYPE (object_class),
-			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			     G_CALLBACK (gtk_menu_real_move_scroll),
-			     NULL, NULL,
-			     _gtk_marshal_VOID__ENUM,
-			     G_TYPE_NONE, 1,
-			     GTK_TYPE_SCROLL_TYPE);
+    g_signal_new_class_handler (I_("move_scroll"),
+                                G_OBJECT_CLASS_TYPE (object_class),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_menu_real_move_scroll),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__ENUM,
+                                G_TYPE_NONE, 1,
+                                GTK_TYPE_SCROLL_TYPE);
 
   /**
    * GtkMenu:active:

@@ -540,14 +540,14 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * Since: 2.12
    */
   combo_box_signals[MOVE_ACTIVE] =
-    _gtk_binding_signal_new (I_("move-active"),
-                             G_OBJECT_CLASS_TYPE (klass),
-                             G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                             G_CALLBACK (gtk_combo_box_real_move_active),
-                             NULL, NULL,
-                             g_cclosure_marshal_VOID__ENUM,
-                             G_TYPE_NONE, 1,
-                             GTK_TYPE_SCROLL_TYPE);
+    g_signal_new_class_handler (I_("move-active"),
+                                G_OBJECT_CLASS_TYPE (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_combo_box_real_move_active),
+                                NULL, NULL,
+                                g_cclosure_marshal_VOID__ENUM,
+                                G_TYPE_NONE, 1,
+                                GTK_TYPE_SCROLL_TYPE);
 
   /**
    * GtkComboBox::popup:
@@ -562,13 +562,13 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * Since: 2.12
    */
   combo_box_signals[POPUP] =
-    _gtk_binding_signal_new (I_("popup"),
-                             G_OBJECT_CLASS_TYPE (klass),
-                             G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                             G_CALLBACK (gtk_combo_box_real_popup),
-                             NULL, NULL,
-                             g_cclosure_marshal_VOID__VOID,
-                             G_TYPE_NONE, 0);
+    g_signal_new_class_handler (I_("popup"),
+                                G_OBJECT_CLASS_TYPE (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_combo_box_real_popup),
+                                NULL, NULL,
+                                g_cclosure_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
   /**
    * GtkComboBox::popdown:
    * @button: the object which received the signal
@@ -582,13 +582,13 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * Since: 2.12
    */
   combo_box_signals[POPDOWN] =
-    _gtk_binding_signal_new (I_("popdown"),
-                             G_OBJECT_CLASS_TYPE (klass),
-                             G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                             G_CALLBACK (gtk_combo_box_real_popdown),
-                             NULL, NULL,
-                             _gtk_marshal_BOOLEAN__VOID,
-                             G_TYPE_BOOLEAN, 0);
+    g_signal_new_class_handler (I_("popdown"),
+                                G_OBJECT_CLASS_TYPE (klass),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_combo_box_real_popdown),
+                                NULL, NULL,
+                                _gtk_marshal_BOOLEAN__VOID,
+                                G_TYPE_BOOLEAN, 0);
 
   /* key bindings */
   binding_set = gtk_binding_set_by_class (widget_class);

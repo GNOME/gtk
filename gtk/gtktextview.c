@@ -756,15 +756,15 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * There are no default bindings for this signal.
    */
   signals[MOVE_VIEWPORT] =
-    _gtk_binding_signal_new (I_("move_viewport"),
-			     G_OBJECT_CLASS_TYPE (gobject_class),
-			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			     G_CALLBACK (gtk_text_view_move_viewport),
-			     NULL, NULL,
-			     _gtk_marshal_VOID__ENUM_INT,
-			     G_TYPE_NONE, 2,
-			     GTK_TYPE_SCROLL_STEP,
-			     G_TYPE_INT);
+    g_signal_new_class_handler (I_("move_viewport"),
+                                G_OBJECT_CLASS_TYPE (gobject_class),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_text_view_move_viewport),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__ENUM_INT,
+                                G_TYPE_NONE, 2,
+                                GTK_TYPE_SCROLL_STEP,
+                                G_TYPE_INT);
 
   signals[SET_ANCHOR] =
     g_signal_new (I_("set_anchor"),
@@ -951,13 +951,13 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * for selecting and Shift-Ctrl-a and Ctrl-\ for unselecting.
    */
   signals[SELECT_ALL] =
-    _gtk_binding_signal_new (I_("select_all"),
-			     G_OBJECT_CLASS_TYPE (object_class),
-			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			     G_CALLBACK (gtk_text_view_select_all),
-			     NULL, NULL,
-			     _gtk_marshal_VOID__BOOLEAN,
-			     G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+    g_signal_new_class_handler (I_("select_all"),
+                                G_OBJECT_CLASS_TYPE (object_class),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_text_view_select_all),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__BOOLEAN,
+                                G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
   /**
    * GtkTextView::toggle-cursor-visible:
@@ -970,13 +970,13 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * The default binding for this signal is F7.
    */ 
   signals[TOGGLE_CURSOR_VISIBLE] =
-    _gtk_binding_signal_new (I_("toggle_cursor_visible"),
-			     G_OBJECT_CLASS_TYPE (object_class),
-			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-			     G_CALLBACK (gtk_text_view_toggle_cursor_visible),
-			     NULL, NULL,
-			     _gtk_marshal_VOID__VOID,
-			     G_TYPE_NONE, 0);
+    g_signal_new_class_handler (I_("toggle_cursor_visible"),
+                                G_OBJECT_CLASS_TYPE (object_class),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_text_view_toggle_cursor_visible),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
 
   /*
    * Key bindings
