@@ -1,3 +1,12 @@
+2008-07-21  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkbox.c (gtk_box_add): use gtk_box_pack_start() instead of
+	the deprecated gtk_box_pack_start_defaults().
+
+	* gtk/gtkbindings.c (gtk_binding_entry_add_signal)
+	(gtk_binding_parse_signal): use _gtk_binding_entry_add_signall()
+	instead of the deprecated gtk_binding_entry_add_signall().
+
 2008-07-21  Emmanuele Bassi  <ebassi@gnome.org>
 
 	* gtk/gtkrecentmanager.c:

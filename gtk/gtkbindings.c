@@ -31,6 +31,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <gdkkeysyms.h>
+
 #include "gtkbindings.h"
 #include "gtkkeyhash.h"
 #include "gtkwidget.h"
@@ -958,7 +959,7 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
   if (i == n_args || i == 0)
     {
       slist = g_slist_reverse (slist);
-      gtk_binding_entry_add_signall (binding_set, keyval, modifiers, signal_name, slist);
+      _gtk_binding_entry_add_signall (binding_set, keyval, modifiers, signal_name, slist);
     }
 
   free_slist = slist;
@@ -1469,11 +1470,11 @@ gtk_binding_parse_signal (GScanner       *scanner,
 	  if (!(need_arg && seen_comma) && !negate)
 	    {
 	      args = g_slist_reverse (args);
-	      gtk_binding_entry_add_signall (binding_set,
-					     keyval,
-					     modifiers,
-					     signal,
-					     args);
+	      _gtk_binding_entry_add_signall (binding_set,
+                                              keyval,
+                                              modifiers,
+                                              signal,
+                                              args);
 	      expected_token = G_TOKEN_NONE;
 	    }
 	  done = TRUE;

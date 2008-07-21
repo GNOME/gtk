@@ -723,7 +723,7 @@ static void
 gtk_box_add (GtkContainer *container,
 	     GtkWidget    *widget)
 {
-  gtk_box_pack_start_defaults (GTK_BOX (container), widget);
+  gtk_box_pack_start (GTK_BOX (container), widget, TRUE, TRUE, 0);
 }
 
 static void
