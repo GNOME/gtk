@@ -164,14 +164,10 @@ static void
 gtk_spin_button_class_init (GtkSpinButtonClass *class)
 {
   GObjectClass     *gobject_class = G_OBJECT_CLASS (class);
-  GtkObjectClass   *object_class;
-  GtkWidgetClass   *widget_class;
-  GtkEntryClass    *entry_class;
+  GtkObjectClass   *object_class = GTK_OBJECT_CLASS (class);
+  GtkWidgetClass   *widget_class = GTK_WIDGET_CLASS (class);
+  GtkEntryClass    *entry_class = GTK_ENTRY_CLASS (class);
   GtkBindingSet    *binding_set;
-
-  object_class   = (GtkObjectClass*)   class;
-  widget_class   = (GtkWidgetClass*)   class;
-  entry_class    = (GtkEntryClass*)    class;
 
   gobject_class->finalize = gtk_spin_button_finalize;
 
@@ -394,10 +390,8 @@ gtk_spin_button_set_property (GObject      *object,
 			      const GValue *value,
 			      GParamSpec   *pspec)
 {
-  GtkSpinButton *spin_button;
+  GtkSpinButton *spin_button = GTK_SPIN_BUTTON (object);
 
-  spin_button = GTK_SPIN_BUTTON (object);
-  
   switch (prop_id)
     {
       GtkAdjustment *adjustment;
@@ -447,10 +441,8 @@ gtk_spin_button_get_property (GObject      *object,
 			      GValue       *value,
 			      GParamSpec   *pspec)
 {
-  GtkSpinButton *spin_button;
+  GtkSpinButton *spin_button = GTK_SPIN_BUTTON (object);
 
-  spin_button = GTK_SPIN_BUTTON (object);
-  
   switch (prop_id)
     {
     case PROP_ADJUSTMENT:
@@ -547,13 +539,12 @@ gtk_spin_button_unmap (GtkWidget *widget)
 static void
 gtk_spin_button_realize (GtkWidget *widget)
 {
-  GtkSpinButton *spin_button;
+  GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
   GdkWindowAttr attributes;
   gint attributes_mask;
   gboolean return_val;
   gint arrow_size;
 
-  spin_button = GTK_SPIN_BUTTON (widget);
   arrow_size = spin_button_get_arrow_size (spin_button);
 
   gtk_widget_set_events (widget, gtk_widget_get_events (widget) |
@@ -634,14 +625,12 @@ static void
 gtk_spin_button_size_request (GtkWidget      *widget,
 			      GtkRequisition *requisition)
 {
-  GtkEntry *entry;
-  GtkSpinButton *spin_button;
+  GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
+  GtkEntry *entry = GTK_ENTRY (widget);
   gint arrow_size;
 
-  entry = GTK_ENTRY (widget);
-  spin_button = GTK_SPIN_BUTTON (widget);
   arrow_size = spin_button_get_arrow_size (spin_button);
-  
+
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->size_request (widget, requisition);
 
   if (entry->width_chars < 0)
@@ -702,15 +691,11 @@ static void
 gtk_spin_button_size_allocate (GtkWidget     *widget,
 			       GtkAllocation *allocation)
 {
-  GtkSpinButton *spin;
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
   GtkAllocation panel_allocation;
   gint arrow_size;
   gint panel_width;
 
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (widget));
-  g_return_if_fail (allocation != NULL);
-
-  spin = GTK_SPIN_BUTTON (widget);
   arrow_size = spin_button_get_arrow_size (spin);
   panel_width = arrow_size + 2 * widget->style->xthickness;
   
@@ -744,12 +729,7 @@ static gint
 gtk_spin_button_expose (GtkWidget      *widget,
 			GdkEventExpose *event)
 {
-  GtkSpinButton *spin;
-
-  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  spin = GTK_SPIN_BUTTON (widget);
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
@@ -820,9 +800,8 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
   gint width;
   gint h, w;
 
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
   g_return_if_fail (arrow_type == GTK_ARROW_UP || arrow_type == GTK_ARROW_DOWN);
-  
+
   widget = GTK_WIDGET (spin_button);
 
   if (GTK_WIDGET_DRAWABLE (widget))
@@ -1410,8 +1389,6 @@ gtk_spin_button_get_text_area_size (GtkEntry *entry,
 {
   gint arrow_size;
   gint panel_width;
-
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (entry));
 
   GTK_ENTRY_CLASS (gtk_spin_button_parent_class)->get_text_area_size (entry, x, y, width, height);
 

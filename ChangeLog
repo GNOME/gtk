@@ -1,3 +1,9 @@
+2008-07-21  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkspinbutton.c: remove g_return_if_fail() from private
+	functions and virtual function implementations. Some minor
+	cleanups.
+
 2008-07-20  Andre Klapper  <a9016009@gmx.de>
 
 	Bug 543915 - translation issues
