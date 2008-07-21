@@ -1,3 +1,11 @@
+2008-07-21  Michael Natterer  <mitch@imendio.com>
+
+	Bug 442042 – GtkScaleButton is too limited
+
+	* tests/testvolumebutton.c: forgot to commit code that tests
+	toggling the button's orientation. Also fixes the file's coding
+	style.
+
 2008-07-21  Cody Russell  <bratsche@gnome.org>
 
 	Bug 153567 – Repaint glitches in widgets

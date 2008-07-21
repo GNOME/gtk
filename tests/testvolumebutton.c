@@ -21,68 +21,98 @@
 
 static void
 value_changed (GtkWidget *button,
-	       gdouble volume,
-	       gpointer user_data)
+               gdouble volume,
+               gpointer user_data)
 {
-	g_message ("volume changed to %f", volume);
+  g_message ("volume changed to %f", volume);
+}
+
+static void
+toggle_orientation (GtkWidget *button,
+                    GtkWidget *scalebutton)
+{
+  if (gtk_scale_button_get_orientation (GTK_SCALE_BUTTON (scalebutton)) ==
+      GTK_ORIENTATION_HORIZONTAL)
+    {
+      gtk_scale_button_set_orientation (GTK_SCALE_BUTTON (scalebutton),
+                                        GTK_ORIENTATION_VERTICAL);
+    }
+  else
+    {
+      gtk_scale_button_set_orientation (GTK_SCALE_BUTTON (scalebutton),
+                                        GTK_ORIENTATION_HORIZONTAL);
+    }
 }
 
 static void
 response_cb (GtkDialog *dialog,
-	     gint       arg1,
-	     gpointer   user_data)
+             gint       arg1,
+             gpointer   user_data)
 {
-	gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static gboolean
 show_error (gpointer data)
 {
-	GtkWindow *window = (GtkWindow *) data;
-	GtkWidget *dialog;
+  GtkWindow *window = (GtkWindow *) data;
+  GtkWidget *dialog;
 
-	g_message ("showing error");
+  g_message ("showing error");
 
-	dialog = gtk_message_dialog_new (window,
-					 GTK_DIALOG_MODAL,
-					 GTK_MESSAGE_INFO,
-					 GTK_BUTTONS_CLOSE,
-					 "This should have unbroken the grab");
-	g_signal_connect (G_OBJECT (dialog),
-			  "response",
-			  G_CALLBACK (response_cb), NULL);
-	gtk_widget_show (dialog);
+  dialog = gtk_message_dialog_new (window,
+                                   GTK_DIALOG_MODAL,
+                                   GTK_MESSAGE_INFO,
+                                   GTK_BUTTONS_CLOSE,
+                                   "This should have unbroken the grab");
+  g_signal_connect (G_OBJECT (dialog),
+                    "response",
+                    G_CALLBACK (response_cb), NULL);
+  gtk_widget_show (dialog);
 
-	return FALSE;
+  return FALSE;
 }
 
-int main (int argc, char **argv)
+int
+main (int    argc,
+      char **argv)
 {
-	GtkWidget *window;
-	GtkWidget *button;
-	GtkWidget *button2;
-	GtkWidget *box;
+  GtkWidget *window;
+  GtkWidget *button;
+  GtkWidget *button2;
+  GtkWidget *button3;
+  GtkWidget *box;
 
-	gtk_init (&argc, &argv);
+  gtk_init (&argc, &argv);
 
-	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	button = gtk_volume_button_new ();
-	button2 = gtk_volume_button_new ();
- 	box = gtk_hbox_new (FALSE, 0);      
-  
-	g_signal_connect (G_OBJECT (button),
-			  "value-changed",
-			  G_CALLBACK (value_changed), NULL);
-	gtk_container_add (GTK_CONTAINER (window), box);
-	gtk_container_add (GTK_CONTAINER (box), button);
-	gtk_container_add (GTK_CONTAINER (box), button2);
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  button = gtk_volume_button_new ();
+  button2 = gtk_volume_button_new ();
+  box = gtk_hbox_new (FALSE, 0);
 
-	gtk_widget_show_all (window);
-	gtk_button_clicked (GTK_BUTTON (button));
-	g_timeout_add (4000, (GSourceFunc) show_error, window);
+  g_signal_connect (G_OBJECT (button), "value-changed",
+                    G_CALLBACK (value_changed),
+                    NULL);
 
-	gtk_main ();
+  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_container_add (GTK_CONTAINER (box), button2);
 
-	return 0;
+  button3 = gtk_button_new_with_label ("Toggle orientation");
+  gtk_container_add (GTK_CONTAINER (box), button3);
+
+  g_signal_connect (G_OBJECT (button3), "clicked",
+                    G_CALLBACK (toggle_orientation),
+                    button);
+  g_signal_connect (G_OBJECT (button3), "clicked",
+                    G_CALLBACK (toggle_orientation),
+                    button2);
+
+  gtk_widget_show_all (window);
+  gtk_button_clicked (GTK_BUTTON (button));
+  g_timeout_add (4000, (GSourceFunc) show_error, window);
+
+  gtk_main ();
+
+  return 0;
 }
-
