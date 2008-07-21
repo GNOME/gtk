@@ -1,5 +1,9 @@
 2008-07-21  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkuimanager.c: remove redundant include.
+
+2008-07-21  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkbindings.[ch]: remove _gtk_binding_signal_new().
 
 	* gtk/gtkfilechooserdefault.c
