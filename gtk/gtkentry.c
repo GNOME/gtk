@@ -4671,7 +4671,7 @@ gtk_entry_set_editable (GtkEntry *entry,
 /**
  * gtk_entry_set_overwrite_mode:
  * @entry: a #GtkEntry
- * @setting: new value
+ * @overwrite: new value
  * 
  * Sets whether the text is overwritten when typing in the #GtkEntry.
  *
@@ -4679,11 +4679,11 @@ gtk_entry_set_editable (GtkEntry *entry,
  **/
 void
 gtk_entry_set_overwrite_mode (GtkEntry *entry,
-                              gboolean  setting)
+                              gboolean  overwrite)
 {
   g_return_if_fail (GTK_IS_ENTRY (entry));
   
-  if (entry->overwrite_mode == setting) 
+  if (entry->overwrite_mode == overwrite) 
     return;
   
   gtk_entry_toggle_overwrite (entry);

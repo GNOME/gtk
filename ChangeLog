@@ -1,3 +1,15 @@
+2008-07-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktestutils.c:
+	* gtk/gtkscalebutton.c:
+	* gtk/gtkmessagedialog.c:
+	* gtk/gtkmenu.c:
+	* gtk/gtkcontainer.c:
+	* gtk/gtkcolorseldialog.c:
+	* gtk/gtkaccelgroup.c:
+	* gtk/gtkentry.c:
+	* gtk/gtkfontsel.c: Fix some doc problems.
+
 2008-07-21  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkbox.c (gtk_box_add): use gtk_box_pack_start() instead of

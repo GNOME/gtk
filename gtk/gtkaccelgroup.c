@@ -220,11 +220,11 @@ gtk_accel_group_new (void)
  * gtk_accel_group_get_is_locked:
  * @accel_group: a #GtkAccelGroup
  *
- * @returns: %TRUE if there are 1 or more locks on the @accel_group,
- * %FALSE otherwise.
- *
  * Locks are added and removed using gtk_accel_group_lock() and
  * gtk_accel_group_unlock().
+ *
+ * Returns: %TRUE if there are 1 or more locks on the @accel_group,
+ * %FALSE otherwise.
  *
  * Since: 2.14
  */
@@ -240,8 +240,10 @@ gtk_accel_group_get_is_locked (GtkAccelGroup *accel_group)
  * gtk_accel_group_get_modifier_mask:
  * @accel_group: a #GtkAccelGroup
  *
- * @returns: #GdkModifierType representing the mask for this
+ * Gets a #GdkModifierType representing the mask for this
  * @accel_group. For example, #GDK_CONTROL_MASK, #GDK_SHIFT_MASK, etc.
+ *
+ * Returns: the modifier mask for this accel group.
  *
  * Since: 2.14
  */

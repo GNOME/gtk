@@ -764,6 +764,8 @@ gtk_scale_button_set_orientation (GtkScaleButton *button,
  *
  * Retrieves the plus button of the #GtkScaleButton.
  *
+ * Returns: the plus button of the #GtkScaleButton.
+ *
  * Since: 2.14
  */
 GtkWidget *
@@ -779,6 +781,8 @@ gtk_scale_button_get_plus_button (GtkScaleButton *button)
  * @button: a #GtkScaleButton
  *
  * Retrieves the minus button of the #GtkScaleButton.
+ *
+ * Returns: the minus button of the #GtkScaleButton.
  *
  * Since: 2.14
  */

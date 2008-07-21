@@ -1257,6 +1257,8 @@ gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel)
  * gtk_font_selection_get_family:
  * @fontsel: a #GtkFontSelection
  * 
+ * Gets the #PangoFontFamily representing the selected font family.
+ *
  * Return value: A #PangoFontFamily representing the selected font
  * family. Font families are a collection of font faces.
  *
@@ -1274,8 +1276,11 @@ gtk_font_selection_get_family (GtkFontSelection *fontsel)
  * gtk_font_selection_get_face:
  * @fontsel: a #GtkFontSelection
  * 
- * Return value: A #PangoFontFace representing the selected font group
+ * Gets the #PangoFontFace representing the selected font group
  * details (i.e. family, slant, weight, width, etc).   
+ *
+ * Return value: A #PangoFontFace representing the selected font group
+ *     details 
  *
  * Since: 2.14
  **/
@@ -1291,6 +1296,8 @@ gtk_font_selection_get_face (GtkFontSelection *fontsel)
  * gtk_font_selection_get_size:
  * @fontsel: a #GtkFontSelection
  * 
+ * The selected font size.
+ *
  * Return value: A #gint representing the font size selected, or -1
  * if not.
  *
@@ -1602,6 +1609,8 @@ gtk_font_selection_dialog_new (const gchar *title)
  * gtk_font_selection_dialog_get_ok_button:
  * @fsd: a #GtkFontSelectionDialog
  *
+ * Gets the 'OK' button.
+ *
  * Return value: the #GtkWidget used in the dialog for the 'OK' button.
  *
  * Since: 2.14
@@ -1618,6 +1627,8 @@ gtk_font_selection_dialog_get_ok_button (GtkFontSelectionDialog *fsd)
  * gtk_font_selection_dialog_get_apply_button:
  * @fsd: a #GtkFontSelectionDialog
  *
+ * Gets the 'Apply' button.
+ *
  * Return value: the #GtkWidget used in the dialog for the 'Apply' button.
  *
  * Since: 2.14
@@ -1631,8 +1642,10 @@ gtk_font_selection_dialog_get_apply_button (GtkFontSelectionDialog *fsd)
 }
 
 /**
- * gtk_font_selection_dialog_get_apply_button:
+ * gtk_font_selection_dialog_get_cancel_button:
  * @fsd: a #GtkFontSelectionDialog
+ *
+ * Gets the 'Cancel' button.
  *
  * Return value: the #GtkWidget used in the dialog for the 'Cancel' button.
  */

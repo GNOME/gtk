@@ -1785,6 +1785,8 @@ gtk_menu_set_accel_path (GtkMenu     *menu,
  *
  * Retrieves the accelerator path set on the menu.
  *
+ * Returns: the accelerator path set on the menu.
+ *
  * Since: 2.14
  */
 const gchar*

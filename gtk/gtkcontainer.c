@@ -1541,9 +1541,9 @@ gtk_container_foreach_full (GtkContainer       *container,
 /**
  * gtk_container_set_focus_child:
  * @container: a #GtkContainer
- * @widget: a #GtkWidget, or %NULL
+ * @child: a #GtkWidget, or %NULL
  *
- * Sets, or unsets if @widget is %NULL, the focused child of @container.
+ * Sets, or unsets if @child is %NULL, the focused child of @container.
  *
  * This function emits the GtkContainer::set_focus_child signal of
  * @container. Implementations of #GtkContainer can override the
@@ -1551,13 +1551,13 @@ gtk_container_foreach_full (GtkContainer       *container,
  */
 void
 gtk_container_set_focus_child (GtkContainer *container,
-			       GtkWidget    *widget)
+			       GtkWidget    *child)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
-  if (widget)
-    g_return_if_fail (GTK_IS_WIDGET (widget));
+  if (child)
+    g_return_if_fail (GTK_IS_WIDGET (child));
 
-  g_signal_emit (container, container_signals[SET_FOCUS_CHILD], 0, widget);
+  g_signal_emit (container, container_signals[SET_FOCUS_CHILD], 0, child);
 }
 
 /**

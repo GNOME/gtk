@@ -647,6 +647,8 @@ gtk_message_dialog_set_image (GtkMessageDialog *dialog,
  * gtk_message_dialog_get_image:
  * @dialog: a #GtkMessageDialog
  *
+ * Gets the dialog's image.
+ *
  * Return value: the dialog's image
  *
  * Since: 2.14

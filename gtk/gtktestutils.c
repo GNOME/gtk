@@ -40,13 +40,16 @@
  * @argvp: Address of the <parameter>argv</parameter> parameter of main().
  *        Any parameters understood by g_test_init() or gtk_init() are
  *        stripped before return.
+ * @Varargs: currently unused
  *
- * This function is used to initialize a Gtk+ test program.
+ * This function is used to initialize a GTK+ test program.
+ *
  * It will in turn call g_test_init() and gtk_init() to properly
- * initialize the testing framework and graphical toolkit.
- * It'll also set the program's locale to "C" and prevent loading of
- * rc files and Gtk+ modules. This is done to make tets program
+ * initialize the testing framework and graphical toolkit. It'll 
+ * also set the program's locale to "C" and prevent loading of rc 
+ * files and Gtk+ modules. This is done to make tets program
  * environments as deterministic as possible.
+ *
  * Like gtk_init() and g_test_init(), any known arguments will be
  * processed and stripped from @argc and @argv.
  **/
@@ -456,8 +459,10 @@ gtk_test_text_get (GtkWidget *widget)
 
 /**
  * gtk_test_create_widget
- * @widget_type:        valid widget type.
+ * @widget_type: a valid widget type.
  * @first_property_name: Name of first property to set or %NULL
+ * @Varags: value to set the first property to, followed by more
+ *    name-value pairs, terminated by %NULL
  *
  * This function wraps g_object_new() for widget types.
  * It'll automatically show all created non window widgets, also
