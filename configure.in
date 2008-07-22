@@ -2046,6 +2046,7 @@ gdk/win32/rc/Makefile
 gdk/win32/rc/gdk.rc
 gdk/quartz/Makefile
 gdk/directfb/Makefile
+gdk/tests/Makefile
 gtk/Makefile
 gtk/makefile.msc
 gtk/gtkversion.h

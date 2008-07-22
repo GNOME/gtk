@@ -1,3 +1,13 @@
+2008-07-22  Sven Herzberg  <sven@imendio.com>
+
+	Add a test for my fixes from July 20th.
+
+	* configure.in: create gdk/tests/Makefile
+	* gdk/Makefile.am: include the tests subfolder
+	* gdk/tests/Makefile.am: create and run my test
+	* gdk/tests/check-gdk-cairo.c (test), (main): the test that I wrote
+	(passes at least for x11 and quartz backends)
+
 2008-07-22  Frederic Crozat  <fcrozat@mandriva.com>
 
 	* gdk/x11/gdkscreen-x11.c: Don't use RandR 1.2

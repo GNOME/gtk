@@ -1,8 +1,8 @@
 ## Makefile.am for gtk+/gdk
 include $(top_srcdir)/Makefile.decl
 
-SUBDIRS = $(gdktarget)
-DIST_SUBDIRS = win32 x11 quartz directfb
+SUBDIRS = $(gdktarget) . tests
+DIST_SUBDIRS = win32 x11 quartz directfb tests
 
 EXTRA_DIST +=			\
 	keynames.txt		\
