@@ -1045,7 +1045,7 @@ main (int argc, char **argv)
 {
   char *content_type;
   content_type = g_content_type_guess (NULL, data, data_size, NULL);  
-  return strcmp (content_type, "image/png");
+  return !!strcmp (content_type, "image/png");
 }]])],
   [gio_can_sniff=yes
    AC_DEFINE(GDK_PIXBUF_USE_GIO_MIME, 1, [Define if gio can sniff image data])],

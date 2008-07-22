@@ -1,3 +1,9 @@
+2008-07-22  Tor Lillqvist  <tml@novell.com>
+
+	* configure.in: Workaround for what apparently is a bug in MSYS:
+	returning -1 from main() is misinterpreted as exit status 0, so
+	make sure we return 0 or 1.
+
 2008-07-22  Sven Herzberg  <sven@imendio.com>
 
 	Add a test for my fixes from July 20th.
