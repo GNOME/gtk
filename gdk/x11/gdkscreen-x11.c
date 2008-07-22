@@ -674,6 +674,7 @@ init_randr12 (GdkScreen *screen)
   XRRScreenResources *resources;
   int i;
   GArray *monitors;
+  gboolean randr12_compat = FALSE;
 
   if (!display_x11->have_randr12)
       return FALSE;
@@ -690,6 +691,9 @@ init_randr12 (GdkScreen *screen)
     {
       XRROutputInfo *output =
 	XRRGetOutputInfo (dpy, resources, resources->outputs[i]);
+
+      /* Non RandR1.2 X driver have output name "default" */
+      randr12_compat |= !g_strcmp0(output->name, "default");
 
       if (output->crtc)
 	{
@@ -717,6 +721,13 @@ init_randr12 (GdkScreen *screen)
     }
 
   XRRFreeScreenResources (resources);
+
+  /* non RandR 1.2 X driver doesn't return any usable multihead data */
+  if (randr12_compat)
+    {
+      g_array_free (monitors, TRUE);
+      return FALSE;
+    }
 
   screen_x11->n_monitors = monitors->len;
   screen_x11->monitors = (GdkX11Monitor *)g_array_free (monitors, FALSE);

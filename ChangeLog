@@ -1,3 +1,10 @@
+2008-07-22  Frederic Crozat  <fcrozat@mandriva.com>
+
+	* gdk/x11/gdkscreen-x11.c: Don't use RandR 1.2
+	if driver is detected as randr12_compat (ie X driver
+	is not RandR 1.2 compliant). Fixes multihead with 
+	such drivers. Bug #543317.
+
 2008-07-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Default to linking against Xinerama again,
