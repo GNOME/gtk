@@ -1117,6 +1117,8 @@ gtk_selection_convert (GtkWidget *widget,
  *
  * Retrieves the target of the selection.
  *
+ * Returns:  the target of the selection.
+ *
  * Since: 2.14
  **/
 GdkAtom
@@ -1133,6 +1135,8 @@ gtk_selection_data_get_target (GtkSelectionData *selection_data)
  *
  * Retrieves the data type of the selection.
  *
+ * Returns:  the data type of the selection.
+ *
  * Since: 2.14
  **/
 GdkAtom
@@ -1148,6 +1152,8 @@ gtk_selection_data_get_data_type (GtkSelectionData *selection_data)
  * @selection_data: a pointer to a #GtkSelectionData structure.
  *
  * Retrieves the format of the selection.
+ *
+ * Returns: the format of the selection.
  *
  * Since: 2.14
  **/
@@ -1168,6 +1174,8 @@ gtk_selection_data_get_format (GtkSelectionData *selection_data)
  *
  * If @length is not %NULL it is filled with the length of data.
  *
+ * Returns: the raw data of the selection.
+ *
  * Since: 2.14
  **/
 const guchar*
@@ -1187,6 +1195,8 @@ gtk_selection_data_get_data (GtkSelectionData *selection_data,
  * @selection_data: a pointer to a #GtkSelectionData structure.
  *
  * Retrieves the display of the selection.
+ *
+ * Returns: the display of the selection.
  *
  * Since: 2.14
  **/

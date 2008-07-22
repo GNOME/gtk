@@ -113,3 +113,120 @@ Sets the text displayed in the preview area.
 @text: the text to display in the preview area.
 
 
+<!-- ##### FUNCTION gtk_font_selection_dialog_get_apply_button ##### -->
+<para>
+
+</para>
+
+@fsd: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_get_cancel_button ##### -->
+<para>
+
+</para>
+
+@fsd: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_get_ok_button ##### -->
+<para>
+
+</para>
+
+@fsd: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_face ##### -->
+<para>
+
+</para>
+
+@fontsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_face_entry ##### -->
+<para>
+
+</para>
+
+@fontsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_face_list ##### -->
+<para>
+
+</para>
+
+@fontsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_family ##### -->
+<para>
+
+</para>
+
+@fontsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_size ##### -->
+<para>
+
+</para>
+
+@fontsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_family_entry ##### -->
+<para>
+
+</para>
+
+@fontsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_family_list ##### -->
+<para>
+
+</para>
+
+@fontsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_preview_entry ##### -->
+<para>
+
+</para>
+
+@fontsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_size_entry ##### -->
+<para>
+
+</para>
+
+@fontsel: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_size_list ##### -->
+<para>
+
+</para>
+
+@fontsel: 
+@Returns: 
+
+

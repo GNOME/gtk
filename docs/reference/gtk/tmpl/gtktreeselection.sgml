@@ -116,6 +116,15 @@ selected rows.  It will be called on every selected row in the view.
 @destroy: 
 
 
+<!-- ##### FUNCTION gtk_tree_selection_get_select_function ##### -->
+<para>
+
+</para>
+
+@selection: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_selection_get_user_data ##### -->
 <para>
 

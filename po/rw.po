@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-05 15:47-0400\n"
+"POT-Creation-Date: 2008-07-21 19:55-0400\n"
 "PO-Revision-Date: 2004-11-16 14:57-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -244,19 +244,19 @@ msgstr ""
 msgid "keyboard label|Delete"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:912
-#: gdk-pixbuf/gdk-pixbuf-io.c:1168 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:940
+#: gdk-pixbuf/gdk-pixbuf-io.c:1201 tests/testfilechooser.c:222
 #, fuzzy, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Kuri Gufungura IDOSIYE"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:924
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:952
 #, fuzzy, c-format
 msgid "Image file '%s' contains no data"
 msgstr "IDOSIYE Kirimo Oya Ibyatanzwe"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:961
-#: gdk-pixbuf/gdk-pixbuf-io.c:1220 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:989
+#: gdk-pixbuf/gdk-pixbuf-io.c:1253 tests/testfilechooser.c:267
 #, fuzzy, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -269,81 +269,81 @@ msgid ""
 "animation file"
 msgstr "Kuri Ibirimo Iyega OYA a Iyega IDOSIYE"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:564
+#: gdk-pixbuf/gdk-pixbuf-io.c:566
 #, fuzzy, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Kuri Ibirimo Ishusho Itangira... Modire"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:579
+#: gdk-pixbuf/gdk-pixbuf-io.c:581
 #, fuzzy, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr "Itangira... Modire OYA Kohereza NYACYO Bivuye a Verisiyo"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:724 gdk-pixbuf/gdk-pixbuf-io.c:753
+#: gdk-pixbuf/gdk-pixbuf-io.c:726 gdk-pixbuf/gdk-pixbuf-io.c:755
 #, fuzzy, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Ubwoko ni OYA"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:793
+#: gdk-pixbuf/gdk-pixbuf-io.c:821
 #, fuzzy, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Ishusho IDOSIYE Imiterere kugirango IDOSIYE"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:801
+#: gdk-pixbuf/gdk-pixbuf-io.c:829
 #, fuzzy
 msgid "Unrecognized image file format"
 msgstr "Ishusho IDOSIYE Imiterere"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:970
+#: gdk-pixbuf/gdk-pixbuf-io.c:998
 #, fuzzy, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Kuri Ibirimo Ishusho"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1601 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1634 gdk-pixbuf/io-gdip-utils.c:935
 #, fuzzy, c-format
 msgid "Error writing to image file: %s"
 msgstr "Kuri Ishusho IDOSIYE"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1647 gdk-pixbuf/gdk-pixbuf-io.c:1778
+#: gdk-pixbuf/gdk-pixbuf-io.c:1680 gdk-pixbuf/gdk-pixbuf-io.c:1811
 #, fuzzy, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Bya OYA Gushigikira Mu kubika Ishusho Imiterere"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1681
+#: gdk-pixbuf/gdk-pixbuf-io.c:1714
 #, fuzzy
 msgid "Insufficient memory to save image to callback"
 msgstr "Ububiko Kuri Kubika Ishusho Kuri"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1694
+#: gdk-pixbuf/gdk-pixbuf-io.c:1727
 #, fuzzy
 msgid "Failed to open temporary file"
 msgstr "Kuri Gufungura By'igihe gito IDOSIYE"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1720
+#: gdk-pixbuf/gdk-pixbuf-io.c:1753
 #, fuzzy
 msgid "Failed to read from temporary file"
 msgstr "Kuri Gusoma Bivuye By'igihe gito IDOSIYE"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1955
+#: gdk-pixbuf/gdk-pixbuf-io.c:1988
 #, fuzzy, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Kuri Gufungura kugirango"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1980
+#: gdk-pixbuf/gdk-pixbuf-io.c:2013
 #, fuzzy, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr "Kuri Gufunga Ishusho Byose Ibyatanzwe Gicurasi OYA"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2200 gdk-pixbuf/gdk-pixbuf-io.c:2251
+#: gdk-pixbuf/gdk-pixbuf-io.c:2233 gdk-pixbuf/gdk-pixbuf-io.c:2284
 #, fuzzy
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Ububiko Kuri Kubika Ishusho a"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2297
+#: gdk-pixbuf/gdk-pixbuf-io.c:2330
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "Kuri Ishusho IDOSIYE"
@@ -1399,17 +1399,17 @@ msgstr ""
 msgid "keyboard label|Backslash"
 msgstr ""
 
-#: gtk/gtkbuilderparser.c:325
+#: gtk/gtkbuilderparser.c:340
 #, fuzzy, c-format
 msgid "Invalid type function: `%s'"
 msgstr "Izina ry'idosiye:"
 
-#: gtk/gtkbuilderparser.c:789
+#: gtk/gtkbuilderparser.c:823
 #, fuzzy, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Izina ry'idosiye:"
 
-#: gtk/gtkbuilderparser.c:823
+#: gtk/gtkbuilderparser.c:862
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr ""
@@ -1445,7 +1445,7 @@ msgstr "Kalindari 0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1798
+#: gtk/gtkcalendar.c:1799
 msgid "year measurement template|2000"
 msgstr ""
 
@@ -1460,7 +1460,7 @@ msgstr ""
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1829 gtk/gtkcalendar.c:2490
+#: gtk/gtkcalendar.c:1830 gtk/gtkcalendar.c:2491
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr ""
@@ -1476,7 +1476,7 @@ msgstr ""
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1861 gtk/gtkcalendar.c:2352
+#: gtk/gtkcalendar.c:1862 gtk/gtkcalendar.c:2353
 #, fuzzy, c-format
 msgid "calendar:week:digits|%d"
 msgstr "Kalindari 0"
@@ -1492,7 +1492,7 @@ msgstr "Kalindari 0"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2142
+#: gtk/gtkcalendar.c:2143
 msgid "calendar year format|%Y"
 msgstr ""
 
@@ -1679,11 +1679,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "gutoranya ibara"
 
-#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7668
+#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7654
 msgid "Input _Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7682
+#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7668
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -1693,7 +1693,7 @@ msgid "Select A File"
 msgstr "Hitamo Byose"
 
 # sfx2/source\explorer\explorer.src:STR_SFX_DESKTOP.text
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1894
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1909
 msgid "Desktop"
 msgstr "Ibiro"
 
@@ -1706,38 +1706,38 @@ msgstr "(ntacyo)"
 msgid "Other..."
 msgstr "Ikindi..."
 
-#: gtk/gtkfilechooserdefault.c:1043
+#: gtk/gtkfilechooserdefault.c:1053
 #, fuzzy
 msgid "Could not retrieve information about the file"
 msgstr "OYA Ibisobanuro Ibyerekeye IDOSIYE"
 
-#: gtk/gtkfilechooserdefault.c:1054
+#: gtk/gtkfilechooserdefault.c:1064
 #, fuzzy
 msgid "Could not add a bookmark"
 msgstr "OYA Kongeramo a Akamenyetso"
 
-#: gtk/gtkfilechooserdefault.c:1065
+#: gtk/gtkfilechooserdefault.c:1075
 #, fuzzy
 msgid "Could not remove bookmark"
 msgstr "OYA Gukuraho... Akamenyetso"
 
-#: gtk/gtkfilechooserdefault.c:1076
+#: gtk/gtkfilechooserdefault.c:1086
 #, fuzzy
 msgid "The folder could not be created"
 msgstr "Ububiko OYA Byaremwe"
 
-#: gtk/gtkfilechooserdefault.c:1089
+#: gtk/gtkfilechooserdefault.c:1099
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
 
 # svtools/source\misc\errtxt.src:RID_ERRHDL.ERRCODE_IO_MISPLACEDCHAR.text
-#: gtk/gtkfilechooserdefault.c:1100
+#: gtk/gtkfilechooserdefault.c:1110
 msgid "Invalid file name"
 msgstr "Izina ry'idosiye siryo"
 
-#: gtk/gtkfilechooserdefault.c:1110
+#: gtk/gtkfilechooserdefault.c:1120
 #, fuzzy
 msgid "The folder contents could not be displayed"
 msgstr "Ububiko Ibigize OYA"
@@ -1746,221 +1746,221 @@ msgstr "Ububiko Ibigize OYA"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1652
+#: gtk/gtkfilechooserdefault.c:1661
 #, c-format
 msgid "%1$s on %2$s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1822
+#: gtk/gtkfilechooserdefault.c:1837
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1846
+#: gtk/gtkfilechooserdefault.c:1861
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2461
+#: gtk/gtkfilechooserdefault.c:2476
 #, fuzzy
 msgid "Select which types of files are shown"
 msgstr "Bya Idosiye"
 
-#: gtk/gtkfilechooserdefault.c:2890
+#: gtk/gtkfilechooserdefault.c:2905
 #, fuzzy, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Ububiko Kuri Ibirango"
 
-#: gtk/gtkfilechooserdefault.c:2931
+#: gtk/gtkfilechooserdefault.c:2946
 #, fuzzy, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "KIGEZWEHO Ububiko Kuri Ibirango"
 
-#: gtk/gtkfilechooserdefault.c:2933
+#: gtk/gtkfilechooserdefault.c:2948
 #, fuzzy, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Byahiswemo Kuri Ibirango"
 
-#: gtk/gtkfilechooserdefault.c:2973
+#: gtk/gtkfilechooserdefault.c:2988
 #, fuzzy, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Akamenyetso"
 
 # sc/source\ui\dbgui\pivot.src:RID_SCDLG_PIVOT_LAYOUT.BTN_REMOVE.text
-#: gtk/gtkfilechooserdefault.c:3691
+#: gtk/gtkfilechooserdefault.c:3706
 msgid "Remove"
 msgstr "Gukuraho"
 
 # sfx2/source\appl\newhelp.src:MENU_HELP_BOOKMARKS.MID_RENAME.text
-#: gtk/gtkfilechooserdefault.c:3700
+#: gtk/gtkfilechooserdefault.c:3715
 msgid "Rename..."
 msgstr "Guhindura Izina"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3847
+#: gtk/gtkfilechooserdefault.c:3861
 msgid "Places"
 msgstr ""
 
 # basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_RENAMECURRENT.text
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3904
+#: gtk/gtkfilechooserdefault.c:3918
 #, fuzzy
 msgid "_Places"
 msgstr "Guhindura izina"
 
-#: gtk/gtkfilechooserdefault.c:3959 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3973 gtk/gtkstock.c:297
 #, fuzzy
 msgid "_Add"
 msgstr "Kongeramo"
 
-#: gtk/gtkfilechooserdefault.c:3966
+#: gtk/gtkfilechooserdefault.c:3980
 #, fuzzy
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Byahiswemo Ububiko Kuri Ibirango"
 
 # sc/source\ui\dbgui\pivot.src:RID_SCDLG_PIVOT_LAYOUT.BTN_REMOVE.text
-#: gtk/gtkfilechooserdefault.c:3971 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:3985 gtk/gtkstock.c:386
 #, fuzzy
 msgid "_Remove"
 msgstr "Gukuraho"
 
-#: gtk/gtkfilechooserdefault.c:3978
+#: gtk/gtkfilechooserdefault.c:3992
 #, fuzzy
 msgid "Remove the selected bookmark"
 msgstr "Byahiswemo Akamenyetso"
 
-#: gtk/gtkfilechooserdefault.c:4075
+#: gtk/gtkfilechooserdefault.c:4089
 #, fuzzy
 msgid "Could not select file"
 msgstr "gutoranya ibara"
 
-#: gtk/gtkfilechooserdefault.c:4248
+#: gtk/gtkfilechooserdefault.c:4262
 #, fuzzy
 msgid "_Add to Bookmarks"
 msgstr "Kuri"
 
-#: gtk/gtkfilechooserdefault.c:4262
+#: gtk/gtkfilechooserdefault.c:4276
 msgid "Show _Hidden Files"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4505 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4519 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "amadosiye"
 
-#: gtk/gtkfilechooserdefault.c:4554
+#: gtk/gtkfilechooserdefault.c:4568
 msgid "Name"
 msgstr "izina"
 
-#: gtk/gtkfilechooserdefault.c:4579
+#: gtk/gtkfilechooserdefault.c:4593
 msgid "Size"
 msgstr "Ingano"
 
-#: gtk/gtkfilechooserdefault.c:4593
+#: gtk/gtkfilechooserdefault.c:4607
 msgid "Modified"
 msgstr "cya/byahinduwe"
 
 # basctl/source\basicide\moduldlg.src:RID_DLG_NEWLIB.RID_FT_NEWLIB.text
 #. Label
-#: gtk/gtkfilechooserdefault.c:4813 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4827 gtk/gtkprinteroptionwidget.c:786
 #, fuzzy
 msgid "_Name:"
 msgstr "Izina:"
 
-#: gtk/gtkfilechooserdefault.c:4855
+#: gtk/gtkfilechooserdefault.c:4869
 #, fuzzy
 msgid "_Browse for other folders"
 msgstr "kugirango Ikindi"
 
 # svtools/source\misc\errtxt.src:RID_ERRHDL.ERRCODE_IO_MISPLACEDCHAR.text
-#: gtk/gtkfilechooserdefault.c:5125
+#: gtk/gtkfilechooserdefault.c:5139
 #, fuzzy
 msgid "Type a file name"
 msgstr "Izina ry'idosiye siryo"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5176
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "Guhimba idosiye:%s"
 
 # padmin/source\padialog.src:RID_PADIALOG.RID_PA_TXT_LOCATION.text
-#: gtk/gtkfilechooserdefault.c:5172
+#: gtk/gtkfilechooserdefault.c:5186
 #, fuzzy
 msgid "_Location:"
 msgstr "Intaho:"
 
-#: gtk/gtkfilechooserdefault.c:5361
+#: gtk/gtkfilechooserdefault.c:5375
 #, fuzzy
 msgid "Save in _folder:"
 msgstr "Kubika in Ububiko"
 
-#: gtk/gtkfilechooserdefault.c:5363
+#: gtk/gtkfilechooserdefault.c:5377
 #, fuzzy
 msgid "Create in _folder:"
 msgstr "in Ububiko"
 
-#: gtk/gtkfilechooserdefault.c:6957
+#: gtk/gtkfilechooserdefault.c:6971
 #, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "Guhindura>> Kuri Ububiko ni OYA"
 
-#: gtk/gtkfilechooserdefault.c:7582 gtk/gtkfilechooserdefault.c:7603
+#: gtk/gtkfilechooserdefault.c:7596 gtk/gtkfilechooserdefault.c:7617
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "OYA"
 
-#: gtk/gtkfilechooserdefault.c:7693
+#: gtk/gtkfilechooserdefault.c:7707
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "OYA"
 
-#: gtk/gtkfilechooserdefault.c:7936 gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:7950 gtk/gtkprintunixdialog.c:364
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7939 gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:7953 gtk/gtkprintunixdialog.c:368
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
 # basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_RENAMECURRENT.text
-#: gtk/gtkfilechooserdefault.c:7944 gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:7958 gtk/gtkprintunixdialog.c:375
 #, fuzzy
 msgid "_Replace"
 msgstr "Guhindura izina"
 
-#: gtk/gtkfilechooserdefault.c:8705
+#: gtk/gtkfilechooserdefault.c:8719
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Kubika"
 
-#: gtk/gtkfilechooserdefault.c:8706
+#: gtk/gtkfilechooserdefault.c:8720
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8720
+#: gtk/gtkfilechooserdefault.c:8734
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Kubika"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9135
+#: gtk/gtkfilechooserdefault.c:9149
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10082
+#: gtk/gtkfilechooserdefault.c:10096
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr "OYA"
 
-#: gtk/gtkfilechooserdefault.c:10736
+#: gtk/gtkfilechooserdefault.c:10750
 #, fuzzy
 msgid "Type name of new folder"
 msgstr "Izina: Bya Gishya Ububiko"
 
-#: gtk/gtkfilechooserdefault.c:10786
+#: gtk/gtkfilechooserdefault.c:10800
 #, fuzzy, c-format
 msgid "%.1f KB"
 msgstr ""
@@ -1973,7 +1973,7 @@ msgstr ""
 "X- Generator: KBabel 1. 0\n"
 "."
 
-#: gtk/gtkfilechooserdefault.c:10788
+#: gtk/gtkfilechooserdefault.c:10802
 #, fuzzy, c-format
 msgid "%.1f MB"
 msgstr ""
@@ -1986,7 +1986,7 @@ msgstr ""
 "X- Generator: KBabel 1. 0\n"
 "."
 
-#: gtk/gtkfilechooserdefault.c:10790
+#: gtk/gtkfilechooserdefault.c:10804
 #, fuzzy, c-format
 msgid "%.1f GB"
 msgstr ""
@@ -1999,16 +1999,16 @@ msgstr ""
 "X- Generator: KBabel 1. 0\n"
 "."
 
-#: gtk/gtkfilechooserdefault.c:10893 gtk/gtkfilechooserdefault.c:10915
-#: gtk/gtkfilechooserdefault.c:10986
+#: gtk/gtkfilechooserdefault.c:10907 gtk/gtkfilechooserdefault.c:10929
+#: gtk/gtkfilechooserdefault.c:11000
 msgid "Unknown"
 msgstr "Itazwi"
 
-#: gtk/gtkfilechooserdefault.c:10933
+#: gtk/gtkfilechooserdefault.c:10947
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10935
+#: gtk/gtkfilechooserdefault.c:10949
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Ejo"
@@ -2186,7 +2186,7 @@ msgstr "GUHINDURA Izina ry'idosiye:"
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: gtk/gtkfilesystem.c:51
+#: gtk/gtkfilesystem.c:52
 #, fuzzy
 msgid "File System"
 msgstr "imiterere ya dosiye"
@@ -2244,7 +2244,7 @@ msgstr "Ingano"
 msgid "_Preview:"
 msgstr "Igaragazambere:"
 
-#: gtk/gtkfontsel.c:1571
+#: gtk/gtkfontsel.c:1578
 msgid "Font Selection"
 msgstr ""
 
@@ -2260,7 +2260,7 @@ msgstr "Agaciro"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1402
+#: gtk/gtkiconfactory.c:1403
 #, fuzzy, c-format
 msgid "Error loading icon: %s"
 msgstr "Itangira... Agashushondanga"
@@ -2595,7 +2595,7 @@ msgstr "Ubwuzurane"
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_CELLS.SID_FORMATPAGE.text
 # #-#-#-#-#  sc.pot (Gnome 2.12)  #-#-#-#-#
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_EDIT.SID_FORMATPAGE.text
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2343
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2398
 #, fuzzy
 msgid "Page Setup"
 msgstr "Ipaji..."
@@ -2778,6 +2778,7 @@ msgstr ""
 
 # dbaccess/source/ui/inc/toolbox.hrc:MID_SBA_QRY_PASTE.text
 #: gtk/gtkprintoperation-win32.c:572
+#: modules/printbackends/cups/gtkprintbackendcups.c:1361
 #, fuzzy
 msgid "Paused"
 msgstr "Komeka"
@@ -2819,68 +2820,68 @@ msgstr ""
 
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: gtk/gtkprintunixdialog.c:1665
+#: gtk/gtkprintunixdialog.c:1717
 #, fuzzy
 msgid "Printer"
 msgstr "Gucapa"
 
 # padmin/source\padialog.src:RID_PADIALOG.RID_PA_TXT_LOCATION.text
-#: gtk/gtkprintunixdialog.c:1673
+#: gtk/gtkprintunixdialog.c:1726
 #, fuzzy
 msgid "Location"
 msgstr "Intaho:"
 
-#: gtk/gtkprintunixdialog.c:1682
+#: gtk/gtkprintunixdialog.c:1736
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1704
+#: gtk/gtkprintunixdialog.c:1759
 msgid "Range"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1708
+#: gtk/gtkprintunixdialog.c:1763
 msgid "_All Pages"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1715
+#: gtk/gtkprintunixdialog.c:1770
 #, fuzzy
 msgid "C_urrent Page"
 msgstr "Kurema"
 
-#: gtk/gtkprintunixdialog.c:1724
+#: gtk/gtkprintunixdialog.c:1779
 msgid "Pag_es:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1725
+#: gtk/gtkprintunixdialog.c:1780
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1744
+#: gtk/gtkprintunixdialog.c:1799
 msgid "Copies"
 msgstr ""
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1749
+#: gtk/gtkprintunixdialog.c:1804
 msgid "Copie_s:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1767
+#: gtk/gtkprintunixdialog.c:1822
 #, fuzzy
 msgid "C_ollate"
 msgstr "Kurema"
 
-#: gtk/gtkprintunixdialog.c:1775
+#: gtk/gtkprintunixdialog.c:1830
 #, fuzzy
 msgid "_Reverse"
 msgstr "Kugaruza"
 
-#: gtk/gtkprintunixdialog.c:1795
+#: gtk/gtkprintunixdialog.c:1850
 msgid "General"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2198
+#: gtk/gtkprintunixdialog.c:2253
 msgid "Layout"
 msgstr ""
 
@@ -2888,41 +2889,41 @@ msgstr ""
 # basctl/source\basicide\basidesh.src:RID_POPUP_BRKPROPS.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\tbxctl.src:RID_TOOLBOX.SID_SHOW_PROPERTYBROWSER.text
-#: gtk/gtkprintunixdialog.c:2202
+#: gtk/gtkprintunixdialog.c:2257
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "indangakintu"
 
-#: gtk/gtkprintunixdialog.c:2218
+#: gtk/gtkprintunixdialog.c:2273
 msgid "T_wo-sided:"
 msgstr ""
 
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: gtk/gtkprintunixdialog.c:2233
+#: gtk/gtkprintunixdialog.c:2288
 #, fuzzy
 msgid "_Only print:"
 msgstr "Gucapa"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2248
+#: gtk/gtkprintunixdialog.c:2303
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2249
+#: gtk/gtkprintunixdialog.c:2304
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2250
+#: gtk/gtkprintunixdialog.c:2305
 msgid "Odd sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2253
+#: gtk/gtkprintunixdialog.c:2308
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "Agaciro:"
 
-#: gtk/gtkprintunixdialog.c:2280
+#: gtk/gtkprintunixdialog.c:2335
 msgid "Paper"
 msgstr ""
 
@@ -2930,7 +2931,7 @@ msgstr ""
 # basctl/source\basicide\basidesh.src:RID_POPUP_BRKPROPS.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\tbxctl.src:RID_TOOLBOX.SID_SHOW_PROPERTYBROWSER.text
-#: gtk/gtkprintunixdialog.c:2284
+#: gtk/gtkprintunixdialog.c:2339
 #, fuzzy
 msgid "Paper _type:"
 msgstr "indangakintu"
@@ -2939,37 +2940,37 @@ msgstr "indangakintu"
 # basctl/source\basicide\basidesh.src:RID_POPUP_BRKPROPS.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\tbxctl.src:RID_TOOLBOX.SID_SHOW_PROPERTYBROWSER.text
-#: gtk/gtkprintunixdialog.c:2299
+#: gtk/gtkprintunixdialog.c:2354
 #, fuzzy
 msgid "Paper _source:"
 msgstr "indangakintu"
 
-#: gtk/gtkprintunixdialog.c:2314
+#: gtk/gtkprintunixdialog.c:2369
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2366
+#: gtk/gtkprintunixdialog.c:2421
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2372
+#: gtk/gtkprintunixdialog.c:2427
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2387
+#: gtk/gtkprintunixdialog.c:2442
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2405
+#: gtk/gtkprintunixdialog.c:2460
 msgid "Print Document"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2411
+#: gtk/gtkprintunixdialog.c:2466
 #, fuzzy
 msgid "_Now"
 msgstr "Oya"
 
-#: gtk/gtkprintunixdialog.c:2418
+#: gtk/gtkprintunixdialog.c:2473
 msgid "A_t:"
 msgstr ""
 
@@ -2977,52 +2978,52 @@ msgstr ""
 # officecfg/registry\schema\org\openoffice\Office\Common.xcs:....Font.UnderLine..12.text
 # #-#-#-#-#  officecfg.pot (Gnome 2.12)  #-#-#-#-#
 # officecfg/registry\schema\org\openoffice\Office\Common.xcs:....Font.Strikeout..4.text
-#: gtk/gtkprintunixdialog.c:2433
+#: gtk/gtkprintunixdialog.c:2488
 #, fuzzy
 msgid "On _hold"
 msgstr "UTSINDAGIYE"
 
-#: gtk/gtkprintunixdialog.c:2452
+#: gtk/gtkprintunixdialog.c:2507
 msgid "Add Cover Page"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2458
+#: gtk/gtkprintunixdialog.c:2513
 msgid "Be_fore:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2473
+#: gtk/gtkprintunixdialog.c:2528
 msgid "_After:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2488
+#: gtk/gtkprintunixdialog.c:2543
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2554
+#: gtk/gtkprintunixdialog.c:2609
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2589
+#: gtk/gtkprintunixdialog.c:2644
 msgid "Image Quality"
 msgstr ""
 
 # goodies/source\filter.vcl\eps\dlgeps.src:DLG_EXPORT_EPS.RB_COLOR.text
-#: gtk/gtkprintunixdialog.c:2592
+#: gtk/gtkprintunixdialog.c:2647
 #, fuzzy
 msgid "Color"
 msgstr "Ibara"
 
-#: gtk/gtkprintunixdialog.c:2595
+#: gtk/gtkprintunixdialog.c:2650
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2605
+#: gtk/gtkprintunixdialog.c:2660
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: gtk/gtkprintunixdialog.c:2628
+#: gtk/gtkprintunixdialog.c:2683
 #, fuzzy
 msgid "Print"
 msgstr "Gucapa"
@@ -3894,17 +3895,17 @@ msgstr "Kuri in"
 msgid "--- No Tip ---"
 msgstr "---"
 
-#: gtk/gtkuimanager.c:1454
+#: gtk/gtkuimanager.c:1453
 #, fuzzy, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Gutangira Itagi: ku Umurongo INYUGUTI"
 
-#: gtk/gtkuimanager.c:1544
+#: gtk/gtkuimanager.c:1543
 #, fuzzy, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Inyuguti Ibyatanzwe ku Umurongo INYUGUTI"
 
-#: gtk/gtkuimanager.c:2367
+#: gtk/gtkuimanager.c:2366
 msgid "Empty"
 msgstr "kirimo ubusa"
 
@@ -4797,17 +4798,17 @@ msgstr "Kuri Gusoma Bivuye By'igihe gito IDOSIYE"
 msgid "Failed to rewrite header\n"
 msgstr "Kuri Gufungura Ishusho"
 
-#: gtk/updateiconcache.c:1454
+#: gtk/updateiconcache.c:1455
 #, fuzzy, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Kuri Gufungura IDOSIYE"
 
-#: gtk/updateiconcache.c:1462
+#: gtk/updateiconcache.c:1463
 #, fuzzy, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Kuri Gufungura IDOSIYE"
 
-#: gtk/updateiconcache.c:1497
+#: gtk/updateiconcache.c:1499
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr ""
@@ -4933,153 +4934,165 @@ msgstr ""
 msgid "X Input Method"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1082
+#: modules/printbackends/cups/gtkprintbackendcups.c:1101
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1083
+#: modules/printbackends/cups/gtkprintbackendcups.c:1102
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1084
+#. Translators: "Developer" like on photo development context
+#: modules/printbackends/cups/gtkprintbackendcups.c:1104
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1085
+#. Translators: "Developer" like on photo development context
+#: modules/printbackends/cups/gtkprintbackendcups.c:1106
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1086
+#. Translators: "marker" is one color bin of the printer
+#: modules/printbackends/cups/gtkprintbackendcups.c:1108
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1087
+#. Translators: "marker" is one color bin of the printer
+#: modules/printbackends/cups/gtkprintbackendcups.c:1110
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1088
+#: modules/printbackends/cups/gtkprintbackendcups.c:1111
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1089
+#: modules/printbackends/cups/gtkprintbackendcups.c:1112
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1090
+#: modules/printbackends/cups/gtkprintbackendcups.c:1113
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1091
+#: modules/printbackends/cups/gtkprintbackendcups.c:1114
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1092
+#: modules/printbackends/cups/gtkprintbackendcups.c:1115
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1093
+#: modules/printbackends/cups/gtkprintbackendcups.c:1116
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1094
+#: modules/printbackends/cups/gtkprintbackendcups.c:1117
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1864
+#: modules/printbackends/cups/gtkprintbackendcups.c:1359
+msgid "Paused ; Rejecting Jobs"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1363
+msgid "Rejecting Jobs"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1951
 msgid "Two Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1865
+#: modules/printbackends/cups/gtkprintbackendcups.c:1952
 msgid "Paper Type"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1866
+#: modules/printbackends/cups/gtkprintbackendcups.c:1953
 msgid "Paper Source"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1867
+#: modules/printbackends/cups/gtkprintbackendcups.c:1954
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1876
+#: modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "One Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1877
-#: modules/printbackends/cups/gtkprintbackendcups.c:1878
-#: modules/printbackends/cups/gtkprintbackendcups.c:1882
+#: modules/printbackends/cups/gtkprintbackendcups.c:1964
+#: modules/printbackends/cups/gtkprintbackendcups.c:1965
+#: modules/printbackends/cups/gtkprintbackendcups.c:1969
 #, fuzzy
 msgid "Auto Select"
 msgstr "gutoranya ibara"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1879
-#: modules/printbackends/cups/gtkprintbackendcups.c:1880
-#: modules/printbackends/cups/gtkprintbackendcups.c:1881
-#: modules/printbackends/cups/gtkprintbackendcups.c:2351
+#: modules/printbackends/cups/gtkprintbackendcups.c:1966
+#: modules/printbackends/cups/gtkprintbackendcups.c:1967
+#: modules/printbackends/cups/gtkprintbackendcups.c:1968
+#: modules/printbackends/cups/gtkprintbackendcups.c:2438
 #, fuzzy
 msgid "Printer Default"
 msgstr "Mburabuzi"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2545
+#: modules/printbackends/cups/gtkprintbackendcups.c:2632
 msgid "Urgent"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2545
+#: modules/printbackends/cups/gtkprintbackendcups.c:2632
 msgid "High"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2545
+#: modules/printbackends/cups/gtkprintbackendcups.c:2632
 msgid "Medium"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2545
+#: modules/printbackends/cups/gtkprintbackendcups.c:2632
 msgid "Low"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 #, fuzzy
 msgid "None"
 msgstr "(ntacyo)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 msgid "Classified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 msgid "Confidential"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 #, fuzzy
 msgid "Secret"
 msgstr "Ikirahuri"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 msgid "Standard"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 msgid "Top Secret"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 msgid "Unclassified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2640
+#: modules/printbackends/cups/gtkprintbackendcups.c:2768
 #, c-format
 msgid "Custom %sx%s"
 msgstr ""

@@ -106,3 +106,21 @@ on all platforms supported by GTK+.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_plug_get_embedded ##### -->
+<para>
+
+</para>
+
+@plug: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_plug_get_socket_window ##### -->
+<para>
+
+</para>
+
+@plug: 
+@Returns: 
+
+

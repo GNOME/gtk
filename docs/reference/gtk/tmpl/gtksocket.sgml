@@ -159,3 +159,12 @@ never be set by an application.)
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_socket_get_plug_window ##### -->
+<para>
+
+</para>
+
+@socket_: 
+@Returns: 
+
+

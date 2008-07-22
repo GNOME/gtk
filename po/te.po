@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-05 15:47-0400\n"
+"POT-Creation-Date: 2008-07-21 19:55-0400\n"
 "PO-Revision-Date: 2008-03-07 12:13+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Swecha Telugu Localisation Team <localisation@swecha.org>\n"
@@ -232,19 +232,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:912
-#: gdk-pixbuf/gdk-pixbuf-io.c:1168 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:940
+#: gdk-pixbuf/gdk-pixbuf-io.c:1201 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "'%s': దస్త్రమును తెరచుటలో విఫలమైంది %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:924
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:952
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "'%s' ప్రతిబింబ దస్త్రంలో ఏ దత్తాంశమూ లేదు"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:961
-#: gdk-pixbuf/gdk-pixbuf-io.c:1220 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:989
+#: gdk-pixbuf/gdk-pixbuf-io.c:1253 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -259,12 +259,12 @@ msgid ""
 msgstr ""
 "'%s': సచేతనాన్ని నింపుటలో విఫలమైంది. కారణం తెలియదు . బహుశా  సచేతన దస్త్రము చెడిపోయి  వుండవచ్చు."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:564
+#: gdk-pixbuf/gdk-pixbuf-io.c:566
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "%s ప్రతిబింబ  ప్రమాణాన్ని  నింపలేకపోతున్నాం.: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:579
+#: gdk-pixbuf/gdk-pixbuf-io.c:581
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -273,53 +273,53 @@ msgstr ""
 "ప్రతిబింబ ప్రమాణం  %s సరైన అనుసంథానాన్ని  ఎగుమతి చేయలేదు. బహుశా ఇది మరొక జీటికే వివరణం నుండి "
 "అయివుండవచ్చు."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:724 gdk-pixbuf/gdk-pixbuf-io.c:753
+#: gdk-pixbuf/gdk-pixbuf-io.c:726 gdk-pixbuf/gdk-pixbuf-io.c:755
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "'%s' ప్రతిబింబ రకానికి  సహకరించలేము."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:793
+#: gdk-pixbuf/gdk-pixbuf-io.c:821
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "'%sదస్త్రం ప్రతిబింబ రూప లావణ్యాన్ని గుర్తించ లేకపోయింది.'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:801
+#: gdk-pixbuf/gdk-pixbuf-io.c:829
 msgid "Unrecognized image file format"
 msgstr "గుర్తింపలేని ప్రతిబింబ దస్త్ర రూపలావణ్యం"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:970
+#: gdk-pixbuf/gdk-pixbuf-io.c:998
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "'%s'ప్రతిబింబాన్ని నింపుటలో  విఫలమైంది: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1601 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1634 gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "%s ప్రతిబింబ దస్ర్తాన్ని రాయుటలో దోషం"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1647 gdk-pixbuf/gdk-pixbuf-io.c:1778
+#: gdk-pixbuf/gdk-pixbuf-io.c:1680 gdk-pixbuf/gdk-pixbuf-io.c:1811
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "%s నిర్మాణం ప్రతిబింబ రూప లావణాన్ని దాచడానికి సహకరించటంలేదు."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1681
+#: gdk-pixbuf/gdk-pixbuf-io.c:1714
 msgid "Insufficient memory to save image to callback"
 msgstr "ప్రతిబింబాన్ని వెనక్కు రప్పించి దాచుటకు జ్ఞాపక శక్తి చాలదు."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1694
+#: gdk-pixbuf/gdk-pixbuf-io.c:1727
 msgid "Failed to open temporary file"
 msgstr "తాత్కాలిక దస్త్రమును తెరచుటలో విఫలమైంది."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1720
+#: gdk-pixbuf/gdk-pixbuf-io.c:1753
 msgid "Failed to read from temporary file"
 msgstr "తాత్కాలిక దస్త్రము నుండి చదువుట విఫలమంది."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1955
+#: gdk-pixbuf/gdk-pixbuf-io.c:1988
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "'%s' వ్రాయుట కొరకు  తెరచుట  విఫలమైంది %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1980
+#: gdk-pixbuf/gdk-pixbuf-io.c:2013
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -327,11 +327,11 @@ msgid ""
 msgstr ""
 " '%s' ప్రతిబింబాన్ని రాస్తున్నప్పుడు  %sను మూయుటలో విఫలమైంది. దత్తాంశమంతా దాచిపెట్టబడి వుండకపోవచ్చు."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2200 gdk-pixbuf/gdk-pixbuf-io.c:2251
+#: gdk-pixbuf/gdk-pixbuf-io.c:2233 gdk-pixbuf/gdk-pixbuf-io.c:2284
 msgid "Insufficient memory to save image into a buffer"
 msgstr "ప్రతిబింబాన్ని వాటికయందు దాచుటకు శక్తి చాలదు"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2297
+#: gdk-pixbuf/gdk-pixbuf-io.c:2330
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "%s ప్రతిబింబ దస్ర్తాన్ని రాయుటలో దోషం"
@@ -1254,17 +1254,17 @@ msgstr "Space"
 msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
-#: gtk/gtkbuilderparser.c:325
+#: gtk/gtkbuilderparser.c:340
 #, c-format
 msgid "Invalid type function: `%s'"
 msgstr "చెల్లనటువంటి ఫంక్షన్: `%s'"
 
-#: gtk/gtkbuilderparser.c:789
+#: gtk/gtkbuilderparser.c:823
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "సరికాని రూట్ మూలకం: '%s'"
 
-#: gtk/gtkbuilderparser.c:823
+#: gtk/gtkbuilderparser.c:862
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "సంభాలించని టాగ్: '%s'"
@@ -1298,7 +1298,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1798
+#: gtk/gtkcalendar.c:1799
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1313,7 +1313,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1829 gtk/gtkcalendar.c:2490
+#: gtk/gtkcalendar.c:1830 gtk/gtkcalendar.c:2491
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1329,7 +1329,7 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1861 gtk/gtkcalendar.c:2352
+#: gtk/gtkcalendar.c:1862 gtk/gtkcalendar.c:2353
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1345,7 +1345,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2142
+#: gtk/gtkcalendar.c:2143
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1501,11 +1501,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "వర్ణెంపిక"
 
-#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7668
+#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7654
 msgid "Input _Methods"
 msgstr "ఎగుబడి విధానములు(_M)"
 
-#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7682
+#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7668
 msgid "_Insert Unicode Control Character"
 msgstr "యునికోడ్ నియంత్రణ అక్షరాన్ని ప్రవేశపెట్టుము(_I)"
 
@@ -1513,7 +1513,7 @@ msgstr "యునికోడ్ నియంత్రణ అక్షరాన�
 msgid "Select A File"
 msgstr "దస్త్రమును ఎన్నుకో"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1894
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1909
 msgid "Desktop"
 msgstr "రంగస్థలం"
 
@@ -1525,23 +1525,23 @@ msgstr "(ఏమీలేదు)"
 msgid "Other..."
 msgstr "ఇతరములు"
 
-#: gtk/gtkfilechooserdefault.c:1043
+#: gtk/gtkfilechooserdefault.c:1053
 msgid "Could not retrieve information about the file"
 msgstr "దస్త్రమును గురించి సమాచారాన్ని సేకరించలేకపోయాము"
 
-#: gtk/gtkfilechooserdefault.c:1054
+#: gtk/gtkfilechooserdefault.c:1064
 msgid "Could not add a bookmark"
 msgstr "బుక్‌మార్కు ను కలుపలేకపోయాము"
 
-#: gtk/gtkfilechooserdefault.c:1065
+#: gtk/gtkfilechooserdefault.c:1075
 msgid "Could not remove bookmark"
 msgstr "బుక్‌మార్కును తొలగించలేకపోయాము"
 
-#: gtk/gtkfilechooserdefault.c:1076
+#: gtk/gtkfilechooserdefault.c:1086
 msgid "The folder could not be created"
 msgstr "సంచయం సృష్టించబడలేదు"
 
-#: gtk/gtkfilechooserdefault.c:1089
+#: gtk/gtkfilechooserdefault.c:1099
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1549,11 +1549,11 @@ msgstr ""
 "సంచయం సృష్టించబడలేదు, ఒక దస్త్రముగా ఇప్పటికే అదే నామముతో ఉంది.  సంచయానికి కొత్త నామము తో "
 "ప్రయత్నించుము, లేదా దస్త్రమును పునఃనామకరణ చేయుము."
 
-#: gtk/gtkfilechooserdefault.c:1100
+#: gtk/gtkfilechooserdefault.c:1110
 msgid "Invalid file name"
 msgstr "చేల్లని దస్త్రనామము"
 
-#: gtk/gtkfilechooserdefault.c:1110
+#: gtk/gtkfilechooserdefault.c:1120
 msgid "The folder contents could not be displayed"
 msgstr "సంచయం విషయాలు ప్రదర్శించబడలేవు"
 
@@ -1561,218 +1561,218 @@ msgstr "సంచయం విషయాలు ప్రదర్శించబ�
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1652
+#: gtk/gtkfilechooserdefault.c:1661
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%2$s పైన %1$s"
 
-#: gtk/gtkfilechooserdefault.c:1822
+#: gtk/gtkfilechooserdefault.c:1837
 msgid "Search"
 msgstr "శోధించు"
 
-#: gtk/gtkfilechooserdefault.c:1846
+#: gtk/gtkfilechooserdefault.c:1861
 msgid "Recently Used"
 msgstr "ఇటీవల ఉపయోగించిన"
 
-#: gtk/gtkfilechooserdefault.c:2461
+#: gtk/gtkfilechooserdefault.c:2476
 msgid "Select which types of files are shown"
 msgstr "ఏ రకం దస్ర్తాలను చూపించాలో ఎన్నుకొనుము"
 
-#: gtk/gtkfilechooserdefault.c:2890
+#: gtk/gtkfilechooserdefault.c:2905
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr " '%s' సంచిని గుర్తించులకు జతచేయలేకపోయాము."
 
-#: gtk/gtkfilechooserdefault.c:2931
+#: gtk/gtkfilechooserdefault.c:2946
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "ప్రస్తుత సంచిని గుర్తించులకు జతచేయుము"
 
-#: gtk/gtkfilechooserdefault.c:2933
+#: gtk/gtkfilechooserdefault.c:2948
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "ఎన్నుకొన్న సంచులను గుర్తించులకు జతచేయుము"
 
-#: gtk/gtkfilechooserdefault.c:2973
+#: gtk/gtkfilechooserdefault.c:2988
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr " '%sగుర్తించును తొలగించుము'"
 
-#: gtk/gtkfilechooserdefault.c:3691
+#: gtk/gtkfilechooserdefault.c:3706
 msgid "Remove"
 msgstr "తొలగించు"
 
-#: gtk/gtkfilechooserdefault.c:3700
+#: gtk/gtkfilechooserdefault.c:3715
 msgid "Rename..."
 msgstr "పునఃనామకరణం..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3847
+#: gtk/gtkfilechooserdefault.c:3861
 msgid "Places"
 msgstr "స్థానములు"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3904
+#: gtk/gtkfilechooserdefault.c:3918
 msgid "_Places"
 msgstr "స్థానములు(_P)"
 
-#: gtk/gtkfilechooserdefault.c:3959 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3973 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "జతచేయు(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3966
+#: gtk/gtkfilechooserdefault.c:3980
 msgid "Add the selected folder to the Bookmarks"
 msgstr "ఎన్నుకొన్న సంచయము ను బుక్‌మార్కులకు జతచేయుము"
 
-#: gtk/gtkfilechooserdefault.c:3971 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:3985 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "తొలగించు(_R)"
 
-#: gtk/gtkfilechooserdefault.c:3978
+#: gtk/gtkfilechooserdefault.c:3992
 msgid "Remove the selected bookmark"
 msgstr "ఎన్నుకున్న గుర్తించును తొలగించు"
 
-#: gtk/gtkfilechooserdefault.c:4075
+#: gtk/gtkfilechooserdefault.c:4089
 msgid "Could not select file"
 msgstr "దస్త్రాన్ని ఎంచుకొనలేక పోయింది"
 
-#: gtk/gtkfilechooserdefault.c:4248
+#: gtk/gtkfilechooserdefault.c:4262
 msgid "_Add to Bookmarks"
 msgstr "బుక్‌మార్కులను కలుపుము(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4262
+#: gtk/gtkfilechooserdefault.c:4276
 msgid "Show _Hidden Files"
 msgstr "అదృశ్యదస్ర్తాలను చూపుము(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4505 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4519 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "దస్త్రములు"
 
-#: gtk/gtkfilechooserdefault.c:4554
+#: gtk/gtkfilechooserdefault.c:4568
 msgid "Name"
 msgstr "నామము:"
 
-#: gtk/gtkfilechooserdefault.c:4579
+#: gtk/gtkfilechooserdefault.c:4593
 msgid "Size"
 msgstr "పరిమాణము"
 
-#: gtk/gtkfilechooserdefault.c:4593
+#: gtk/gtkfilechooserdefault.c:4607
 msgid "Modified"
 msgstr "మార్చబడిన"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4813 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4827 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "నామము(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4855
+#: gtk/gtkfilechooserdefault.c:4869
 msgid "_Browse for other folders"
 msgstr "ఇతర సంచులకై అన్వేషించు(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5125
+#: gtk/gtkfilechooserdefault.c:5139
 msgid "Type a file name"
 msgstr "దస్త్రనామము ను టైపుచేయుము"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5176
 msgid "Create Fo_lder"
 msgstr "సంచినిసృష్టించు(_l)"
 
-#: gtk/gtkfilechooserdefault.c:5172
+#: gtk/gtkfilechooserdefault.c:5186
 msgid "_Location:"
 msgstr "స్థానము(_L):"
 
-#: gtk/gtkfilechooserdefault.c:5361
+#: gtk/gtkfilechooserdefault.c:5375
 msgid "Save in _folder:"
 msgstr "సంచిలో దాచు(_f):"
 
-#: gtk/gtkfilechooserdefault.c:5363
+#: gtk/gtkfilechooserdefault.c:5377
 msgid "Create in _folder:"
 msgstr "సంచిలో సృష్టించు(_f):"
 
-#: gtk/gtkfilechooserdefault.c:6957
+#: gtk/gtkfilechooserdefault.c:6971
 msgid "Cannot change to folder because it is not local"
 msgstr "సంచిన మార్చలేము. ఎందుకంటే ఇది స్థానికం కాదు"
 
-#: gtk/gtkfilechooserdefault.c:7582 gtk/gtkfilechooserdefault.c:7603
+#: gtk/gtkfilechooserdefault.c:7596 gtk/gtkfilechooserdefault.c:7617
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "లఘువు %s ఇప్పటికే ఉంది"
 
-#: gtk/gtkfilechooserdefault.c:7693
+#: gtk/gtkfilechooserdefault.c:7707
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "లఘువు %s లేదు"
 
-#: gtk/gtkfilechooserdefault.c:7936 gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:7950 gtk/gtkprintunixdialog.c:364
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "దస్త్రనామము \"%s\" ఇప్పటికే ఉంది.  మీరు పునఃస్థాపిద్దామని అనుకుంటున్నారా?"
 
-#: gtk/gtkfilechooserdefault.c:7939 gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:7953 gtk/gtkprintunixdialog.c:368
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "దస్త్రము ఇప్పటికే \"%s\" లో ఉంది.  దానిని పునఃస్థాపించుట వలన దాని విషయాలు తిరిగివ్రాయబడతాయి."
 
-#: gtk/gtkfilechooserdefault.c:7944 gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:7958 gtk/gtkprintunixdialog.c:375
 msgid "_Replace"
 msgstr "పునఃస్థాపన(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8705
+#: gtk/gtkfilechooserdefault.c:8719
 msgid "Could not start the search process"
 msgstr "శోధన ప్రోసెస్ ను ప్రారంభించలేకపోయింది"
 
-#: gtk/gtkfilechooserdefault.c:8706
+#: gtk/gtkfilechooserdefault.c:8720
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 "ఇండెక్సర్ డెమోన్ కు ప్రోగ్రాము అనుసంధానంను సృష్టించలేకపోయింది.  దయచేసి అది నడుచు నట్లు చూడండి."
 
-#: gtk/gtkfilechooserdefault.c:8720
+#: gtk/gtkfilechooserdefault.c:8734
 msgid "Could not send the search request"
 msgstr "శోధన అభ్యర్దనను పంపలేకపోయింది"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9135
+#: gtk/gtkfilechooserdefault.c:9149
 msgid "_Search:"
 msgstr "శోధన(_S):"
 
-#: gtk/gtkfilechooserdefault.c:10082
+#: gtk/gtkfilechooserdefault.c:10096
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s ను మౌంట్ చేయలేకపోయింది"
 
-#: gtk/gtkfilechooserdefault.c:10736
+#: gtk/gtkfilechooserdefault.c:10750
 msgid "Type name of new folder"
 msgstr "కొత్త సంచి నామమును  టైప్ చేయుము"
 
-#: gtk/gtkfilechooserdefault.c:10786
+#: gtk/gtkfilechooserdefault.c:10800
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10788
+#: gtk/gtkfilechooserdefault.c:10802
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10790
+#: gtk/gtkfilechooserdefault.c:10804
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10893 gtk/gtkfilechooserdefault.c:10915
-#: gtk/gtkfilechooserdefault.c:10986
+#: gtk/gtkfilechooserdefault.c:10907 gtk/gtkfilechooserdefault.c:10929
+#: gtk/gtkfilechooserdefault.c:11000
 msgid "Unknown"
 msgstr "అపరిచిత"
 
-#: gtk/gtkfilechooserdefault.c:10933
+#: gtk/gtkfilechooserdefault.c:10947
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10935
+#: gtk/gtkfilechooserdefault.c:10949
 msgid "Yesterday at %H:%M"
 msgstr "నిన్న %H:%M వద్ద"
 
@@ -1940,7 +1940,7 @@ msgstr "దస్త్రనామము మార్చలేము"
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: gtk/gtkfilesystem.c:51
+#: gtk/gtkfilesystem.c:52
 msgid "File System"
 msgstr "దస్త్ర వ్యవస్థ"
 
@@ -1988,7 +1988,7 @@ msgstr "పరిమాణం(_z):"
 msgid "_Preview:"
 msgstr "ఉపదర్శనం(_P):"
 
-#: gtk/gtkfontsel.c:1571
+#: gtk/gtkfontsel.c:1578
 msgid "Font Selection"
 msgstr "అక్షరశైలి ఎంపిక"
 
@@ -2003,7 +2003,7 @@ msgstr "గామా విలువ(_G)"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1402
+#: gtk/gtkiconfactory.c:1403
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "n: ప్రతిమలు నింపుటలో దోషం%s"
@@ -2293,7 +2293,7 @@ msgstr "పుట పరిమాణం(_P):"
 msgid "_Orientation:"
 msgstr "సర్దుబాటు(_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2343
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2398
 msgid "Page Setup"
 msgstr "పుచ అమర్పు"
 
@@ -2464,6 +2464,7 @@ msgid "Out of paper"
 msgstr "పుటలు అయిపోయాయి"
 
 #: gtk/gtkprintoperation-win32.c:572
+#: modules/printbackends/cups/gtkprintbackendcups.c:1361
 msgid "Paused"
 msgstr "నిలుపబడింది"
 
@@ -2500,39 +2501,39 @@ msgstr "తెలుపబడని దోషం"
 msgid "Error from StartDoc"
 msgstr "StartDoc నుండి దోషం"
 
-#: gtk/gtkprintunixdialog.c:1665
+#: gtk/gtkprintunixdialog.c:1717
 msgid "Printer"
 msgstr "ముద్రణాయంత్రం"
 
-#: gtk/gtkprintunixdialog.c:1673
+#: gtk/gtkprintunixdialog.c:1726
 msgid "Location"
 msgstr "స్థానము"
 
-#: gtk/gtkprintunixdialog.c:1682
+#: gtk/gtkprintunixdialog.c:1736
 msgid "Status"
 msgstr "స్థితి"
 
-#: gtk/gtkprintunixdialog.c:1704
+#: gtk/gtkprintunixdialog.c:1759
 #, fuzzy
 msgid "Range"
 msgstr "వ్యాప్తి(_n)"
 
-#: gtk/gtkprintunixdialog.c:1708
+#: gtk/gtkprintunixdialog.c:1763
 #, fuzzy
 msgid "_All Pages"
 msgstr "అన్ని షీట్స్"
 
-#: gtk/gtkprintunixdialog.c:1715
+#: gtk/gtkprintunixdialog.c:1770
 #, fuzzy
 msgid "C_urrent Page"
 msgstr "ప్రస్తుత(_u)"
 
-#: gtk/gtkprintunixdialog.c:1724
+#: gtk/gtkprintunixdialog.c:1779
 #, fuzzy
 msgid "Pag_es:"
 msgstr "స్థానములు"
 
-#: gtk/gtkprintunixdialog.c:1725
+#: gtk/gtkprintunixdialog.c:1780
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2540,141 +2541,141 @@ msgstr ""
 "ఒకటి లేదా ఎక్కువ పుట వ్యాప్తిలను తెలుపుము,\n"
 " ఉ.దా. 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1744
+#: gtk/gtkprintunixdialog.c:1799
 msgid "Copies"
 msgstr "నకళ్ళు"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1749
+#: gtk/gtkprintunixdialog.c:1804
 msgid "Copie_s:"
 msgstr "నకళ్ళు(_s):"
 
-#: gtk/gtkprintunixdialog.c:1767
+#: gtk/gtkprintunixdialog.c:1822
 msgid "C_ollate"
 msgstr "తత్సంభంద(_o)"
 
-#: gtk/gtkprintunixdialog.c:1775
+#: gtk/gtkprintunixdialog.c:1830
 msgid "_Reverse"
 msgstr "అపసవ్య(_R)"
 
-#: gtk/gtkprintunixdialog.c:1795
+#: gtk/gtkprintunixdialog.c:1850
 msgid "General"
 msgstr "సాధారణ"
 
-#: gtk/gtkprintunixdialog.c:2198
+#: gtk/gtkprintunixdialog.c:2253
 msgid "Layout"
 msgstr "నమూనా"
 
-#: gtk/gtkprintunixdialog.c:2202
+#: gtk/gtkprintunixdialog.c:2257
 msgid "Pages per _side:"
 msgstr "ఒక ప్రక్కకి పుటలు(_s):"
 
-#: gtk/gtkprintunixdialog.c:2218
+#: gtk/gtkprintunixdialog.c:2273
 msgid "T_wo-sided:"
 msgstr "రైండు-వైపులా(_w):"
 
-#: gtk/gtkprintunixdialog.c:2233
+#: gtk/gtkprintunixdialog.c:2288
 msgid "_Only print:"
 msgstr "ముద్రణ మాత్రమే(_O):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2248
+#: gtk/gtkprintunixdialog.c:2303
 msgid "All sheets"
 msgstr "అన్ని షీట్స్"
 
-#: gtk/gtkprintunixdialog.c:2249
+#: gtk/gtkprintunixdialog.c:2304
 msgid "Even sheets"
 msgstr "సరి షీట్స్"
 
-#: gtk/gtkprintunixdialog.c:2250
+#: gtk/gtkprintunixdialog.c:2305
 msgid "Odd sheets"
 msgstr "బేసి షీట్స్"
 
-#: gtk/gtkprintunixdialog.c:2253
+#: gtk/gtkprintunixdialog.c:2308
 msgid "Sc_ale:"
 msgstr "కొలత(_a):"
 
-#: gtk/gtkprintunixdialog.c:2280
+#: gtk/gtkprintunixdialog.c:2335
 msgid "Paper"
 msgstr "పుట"
 
-#: gtk/gtkprintunixdialog.c:2284
+#: gtk/gtkprintunixdialog.c:2339
 msgid "Paper _type:"
 msgstr "పుట రకం(_t):"
 
-#: gtk/gtkprintunixdialog.c:2299
+#: gtk/gtkprintunixdialog.c:2354
 msgid "Paper _source:"
 msgstr "పుట మూలం(_s):"
 
-#: gtk/gtkprintunixdialog.c:2314
+#: gtk/gtkprintunixdialog.c:2369
 msgid "Output t_ray:"
 msgstr "అవుట్‌పుట్ ట్రే(_r):"
 
-#: gtk/gtkprintunixdialog.c:2366
+#: gtk/gtkprintunixdialog.c:2421
 msgid "Job Details"
 msgstr "జాబ్ వివరములు"
 
-#: gtk/gtkprintunixdialog.c:2372
+#: gtk/gtkprintunixdialog.c:2427
 msgid "Pri_ority:"
 msgstr "ప్రాముఖ్యత(_o):"
 
-#: gtk/gtkprintunixdialog.c:2387
+#: gtk/gtkprintunixdialog.c:2442
 msgid "_Billing info:"
 msgstr "బిల్లింగ్ సామాచారం(_B):"
 
-#: gtk/gtkprintunixdialog.c:2405
+#: gtk/gtkprintunixdialog.c:2460
 msgid "Print Document"
 msgstr "పత్రమును ముద్రించు"
 
-#: gtk/gtkprintunixdialog.c:2411
+#: gtk/gtkprintunixdialog.c:2466
 msgid "_Now"
 msgstr "ఇప్పడు(_N)"
 
-#: gtk/gtkprintunixdialog.c:2418
+#: gtk/gtkprintunixdialog.c:2473
 msgid "A_t:"
 msgstr "వద్ద(_t):"
 
-#: gtk/gtkprintunixdialog.c:2433
+#: gtk/gtkprintunixdialog.c:2488
 msgid "On _hold"
 msgstr "నిలుపుదలలో ఉంది(_h)"
 
-#: gtk/gtkprintunixdialog.c:2452
+#: gtk/gtkprintunixdialog.c:2507
 msgid "Add Cover Page"
 msgstr "కవర్ పేజీని కలుపుము"
 
-#: gtk/gtkprintunixdialog.c:2458
+#: gtk/gtkprintunixdialog.c:2513
 msgid "Be_fore:"
 msgstr "ముందు(_f):"
 
-#: gtk/gtkprintunixdialog.c:2473
+#: gtk/gtkprintunixdialog.c:2528
 msgid "_After:"
 msgstr "తరువాత(_A):"
 
-#: gtk/gtkprintunixdialog.c:2488
+#: gtk/gtkprintunixdialog.c:2543
 msgid "Job"
 msgstr "జాబ్"
 
-#: gtk/gtkprintunixdialog.c:2554
+#: gtk/gtkprintunixdialog.c:2609
 msgid "Advanced"
 msgstr "ఆధునిక"
 
-#: gtk/gtkprintunixdialog.c:2589
+#: gtk/gtkprintunixdialog.c:2644
 msgid "Image Quality"
 msgstr "చిత్రము నాణ్యత"
 
-#: gtk/gtkprintunixdialog.c:2592
+#: gtk/gtkprintunixdialog.c:2647
 msgid "Color"
 msgstr "వర్ణము"
 
-#: gtk/gtkprintunixdialog.c:2595
+#: gtk/gtkprintunixdialog.c:2650
 msgid "Finishing"
 msgstr "ముగిస్తోంది"
 
-#: gtk/gtkprintunixdialog.c:2605
+#: gtk/gtkprintunixdialog.c:2660
 msgid "Some of the settings in the dialog conflict"
 msgstr "డైలాగ్ లోని కొన్ని అమర్పులు విభేదిస్తున్నాయి"
 
-#: gtk/gtkprintunixdialog.c:2628
+#: gtk/gtkprintunixdialog.c:2683
 msgid "Print"
 msgstr "ముద్రించు"
 
@@ -3349,17 +3350,17 @@ msgstr "థీమ్ ఇంజన్ ను మాడ్యూల్ పాత�
 msgid "--- No Tip ---"
 msgstr "--- ఏ చిట్కాలేదు ---"
 
-#: gtk/gtkuimanager.c:1454
+#: gtk/gtkuimanager.c:1453
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "అనుకోని ప్రారంభ టాగ్ '%s' వరుస %d అక్షరం %d పైన"
 
-#: gtk/gtkuimanager.c:1544
+#: gtk/gtkuimanager.c:1543
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "అనుకోని అక్షర డాటా వరుస %d అక్షరం %d పైన"
 
-#: gtk/gtkuimanager.c:2367
+#: gtk/gtkuimanager.c:2366
 msgid "Empty"
 msgstr "ఖాళీ"
 
@@ -4251,17 +4252,17 @@ msgstr "సంచయపు ఇండేక్స్ కు వ్రాయుట
 msgid "Failed to rewrite header\n"
 msgstr "పీఠికకు వ్రయాటలో విఫలమైంది\n"
 
-#: gtk/updateiconcache.c:1454
+#: gtk/updateiconcache.c:1455
 #, fuzzy, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "'%s': దస్త్రమును తెరచుటలో విఫలమైంది %s"
 
-#: gtk/updateiconcache.c:1462
+#: gtk/updateiconcache.c:1463
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "క్యాచి దస్త్రమునకు వ్రాయుటలో విఫలమైంది: %s\n"
 
-#: gtk/updateiconcache.c:1497
+#: gtk/updateiconcache.c:1499
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "వుద్భవించిన క్యాచి చెల్లనిది.\n"
@@ -4389,149 +4390,161 @@ msgstr "వియత్నాంసి (VIQR)"
 msgid "X Input Method"
 msgstr "X ఇన్‌పుట్ విధానం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1082
+#: modules/printbackends/cups/gtkprintbackendcups.c:1101
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1083
+#: modules/printbackends/cups/gtkprintbackendcups.c:1102
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1084
+#. Translators: "Developer" like on photo development context
+#: modules/printbackends/cups/gtkprintbackendcups.c:1104
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1085
+#. Translators: "Developer" like on photo development context
+#: modules/printbackends/cups/gtkprintbackendcups.c:1106
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1086
+#. Translators: "marker" is one color bin of the printer
+#: modules/printbackends/cups/gtkprintbackendcups.c:1108
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1087
+#. Translators: "marker" is one color bin of the printer
+#: modules/printbackends/cups/gtkprintbackendcups.c:1110
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1088
+#: modules/printbackends/cups/gtkprintbackendcups.c:1111
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1089
+#: modules/printbackends/cups/gtkprintbackendcups.c:1112
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1090
+#: modules/printbackends/cups/gtkprintbackendcups.c:1113
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1091
+#: modules/printbackends/cups/gtkprintbackendcups.c:1114
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1092
+#: modules/printbackends/cups/gtkprintbackendcups.c:1115
 #, fuzzy, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "ముద్రణాయంత్రం ఆఫ్‌లైన్"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1093
+#: modules/printbackends/cups/gtkprintbackendcups.c:1116
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1094
+#: modules/printbackends/cups/gtkprintbackendcups.c:1117
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1864
+#: modules/printbackends/cups/gtkprintbackendcups.c:1359
+msgid "Paused ; Rejecting Jobs"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1363
+msgid "Rejecting Jobs"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1951
 msgid "Two Sided"
 msgstr "రెండు వైపుల"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1865
+#: modules/printbackends/cups/gtkprintbackendcups.c:1952
 msgid "Paper Type"
 msgstr "పుట రకం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1866
+#: modules/printbackends/cups/gtkprintbackendcups.c:1953
 msgid "Paper Source"
 msgstr "పుట మూలం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1867
+#: modules/printbackends/cups/gtkprintbackendcups.c:1954
 msgid "Output Tray"
 msgstr "అవుట్‌పుట్ ట్రే"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1876
+#: modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "One Sided"
 msgstr "ఒక ప్రక్క"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1877
-#: modules/printbackends/cups/gtkprintbackendcups.c:1878
-#: modules/printbackends/cups/gtkprintbackendcups.c:1882
+#: modules/printbackends/cups/gtkprintbackendcups.c:1964
+#: modules/printbackends/cups/gtkprintbackendcups.c:1965
+#: modules/printbackends/cups/gtkprintbackendcups.c:1969
 msgid "Auto Select"
 msgstr "స్వయంచాలకంగా ఎంచుకొను"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1879
-#: modules/printbackends/cups/gtkprintbackendcups.c:1880
-#: modules/printbackends/cups/gtkprintbackendcups.c:1881
-#: modules/printbackends/cups/gtkprintbackendcups.c:2351
+#: modules/printbackends/cups/gtkprintbackendcups.c:1966
+#: modules/printbackends/cups/gtkprintbackendcups.c:1967
+#: modules/printbackends/cups/gtkprintbackendcups.c:1968
+#: modules/printbackends/cups/gtkprintbackendcups.c:2438
 msgid "Printer Default"
 msgstr "ముద్రణాయంత్రం అప్రమేయం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2545
+#: modules/printbackends/cups/gtkprintbackendcups.c:2632
 msgid "Urgent"
 msgstr "అత్యవసరం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2545
+#: modules/printbackends/cups/gtkprintbackendcups.c:2632
 msgid "High"
 msgstr "ఎక్కువ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2545
+#: modules/printbackends/cups/gtkprintbackendcups.c:2632
 msgid "Medium"
 msgstr "మద్యమం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2545
+#: modules/printbackends/cups/gtkprintbackendcups.c:2632
 msgid "Low"
 msgstr "తక్కువ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 msgid "None"
 msgstr "ఏదీకాదు"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 msgid "Classified"
 msgstr "విభజించిన"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 msgid "Confidential"
 msgstr "గుంభనంగా"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 msgid "Secret"
 msgstr "రహస్యం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 msgid "Standard"
 msgstr "ప్రమాణికం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 msgid "Top Secret"
 msgstr "అతిరహస్యం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2547
+#: modules/printbackends/cups/gtkprintbackendcups.c:2673
 msgid "Unclassified"
 msgstr "విభంజించని"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2640
+#: modules/printbackends/cups/gtkprintbackendcups.c:2768
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "మలుచుకొనిన %.2fx%.2f"

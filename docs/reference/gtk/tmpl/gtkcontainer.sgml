@@ -319,6 +319,15 @@ Does the same as gtk_container_get_children().
 @needs_redraws: 
 
 
+<!-- ##### FUNCTION gtk_container_get_focus_child ##### -->
+<para>
+
+</para>
+
+@container: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_container_set_focus_child ##### -->
 <para>
 

@@ -140,3 +140,39 @@ is tailored for this use case.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_scale_button_get_plus_button ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_scale_button_get_minus_button ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_scale_button_set_orientation ##### -->
+<para>
+
+</para>
+
+@button: 
+@orientation: 
+
+
+<!-- ##### FUNCTION gtk_scale_button_get_orientation ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+

@@ -51,13 +51,17 @@ Overview of Changes from GTK+ 2.13.4 to 2.13.5
  528822 typo in GtkCombo docs
  540967 docs build slowly because of entities
  537430 label pango attributes & i18n
+ 543989 Crash in gtk_tree_view_size_allocate_columns
+ 535223 gbookmark file inefficiency ...
 
 * Updated translations:
  Assamese (as)
  Czech (cs)
+ German (de)
  Spanish (es)
  Galician (gl)
  Hebrew (he)
+ Polish (pl)
  Pashto (ps)
  Traditional Chinese (zh_HK)
  Traditional Chinese (zh_TW)

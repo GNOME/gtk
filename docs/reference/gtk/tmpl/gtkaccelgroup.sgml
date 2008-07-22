@@ -202,12 +202,30 @@ Deprecated equivalent of g_object_unref().
 @accel_group: 
 
 
+<!-- ##### FUNCTION gtk_accel_group_get_is_locked ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_accel_group_from_accel_closure ##### -->
 <para>
 
 </para>
 
 @closure: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_get_modifier_mask ##### -->
+<para>
+
+</para>
+
+@accel_group: 
 @Returns: 
 
 

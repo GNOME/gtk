@@ -182,6 +182,15 @@ then call gtk_dialog_add_buttons().
 @image: 
 
 
+<!-- ##### FUNCTION gtk_message_dialog_get_image ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_message_dialog_format_secondary_text ##### -->
 <para>
 

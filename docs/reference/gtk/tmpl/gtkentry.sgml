@@ -262,6 +262,15 @@ The #GtkEntry-struct struct contains only private data.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_entry_get_text_length ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_entry_select_region ##### -->
 <para>
 
@@ -398,6 +407,24 @@ The #GtkEntry-struct struct contains only private data.
 
 
 <!-- ##### FUNCTION gtk_entry_get_alignment ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_overwrite_mode ##### -->
+<para>
+
+</para>
+
+@entry: 
+@overwrite: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_overwrite_mode ##### -->
 <para>
 
 </para>

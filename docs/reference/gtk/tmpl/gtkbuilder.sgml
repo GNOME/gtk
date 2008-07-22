@@ -306,6 +306,31 @@ respective objects, see
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_builder_add_objects_from_file ##### -->
+<para>
+
+</para>
+
+@builder: 
+@filename: 
+@object_ids: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_builder_add_objects_from_string ##### -->
+<para>
+
+</para>
+
+@builder: 
+@buffer: 
+@length: 
+@object_ids: 
+@error: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_builder_get_object ##### -->
 <para>
 

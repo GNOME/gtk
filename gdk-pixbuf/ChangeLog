@@ -1,3 +1,7 @@
+2008-07-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.13.5 ===
+
 2008-07-18  Federico Mena Quintero  <federico@novell.com>
 
 	* queryloaders.c (query_module): Don't do funny casts to avoid

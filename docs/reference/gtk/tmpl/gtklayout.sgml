@@ -179,3 +179,12 @@ area.
 @adjustment: 
 
 
+<!-- ##### FUNCTION gtk_layout_get_bin_window ##### -->
+<para>
+
+</para>
+
+@layout: 
+@Returns: 
+
+

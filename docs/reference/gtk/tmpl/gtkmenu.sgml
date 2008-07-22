@@ -291,6 +291,15 @@ See gtk_menu_set_accel_group().
 @accel_path: 
 
 
+<!-- ##### FUNCTION gtk_menu_get_accel_path ##### -->
+<para>
+
+</para>
+
+@menu: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_menu_set_title ##### -->
 <para>
 </para>
@@ -309,6 +318,15 @@ See gtk_menu_set_accel_group().
 
 
 <!-- ##### FUNCTION gtk_menu_get_title ##### -->
+<para>
+
+</para>
+
+@menu: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_get_monitor ##### -->
 <para>
 
 </para>

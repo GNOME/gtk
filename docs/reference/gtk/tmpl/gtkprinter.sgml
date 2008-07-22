@@ -43,6 +43,11 @@ Printing support was added in GTK+ 2.10.
 @printer: the object which received the signal.
 @arg1: 
 
+<!-- ##### ARG GtkPrinter:accepting-jobs ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkPrinter:accepts-pdf ##### -->
 <para>
 
@@ -79,6 +84,11 @@ Printing support was added in GTK+ 2.10.
 </para>
 
 <!-- ##### ARG GtkPrinter:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrinter:paused ##### -->
 <para>
 
 </para>
@@ -169,6 +179,24 @@ Printing support was added in GTK+ 2.10.
 
 
 <!-- ##### FUNCTION gtk_printer_is_active ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_is_paused ##### -->
+<para>
+
+</para>
+
+@printer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_is_accepting_jobs ##### -->
 <para>
 
 </para>

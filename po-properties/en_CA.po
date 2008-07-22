@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-05 15:47-0400\n"
+"POT-Creation-Date: 2008-07-21 19:55-0400\n"
 "PO-Revision-Date: 2005-07-22 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -249,7 +249,7 @@ msgstr "Accelerator Widget"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "The widget to be monitored for accelerator changes"
 
-#: gtk/gtkaction.c:199 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:119
+#: gtk/gtkaction.c:199 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:123
 #: gtk/gtktextmark.c:89
 msgid "Name"
 msgstr "Name"
@@ -292,7 +292,7 @@ msgid "The stock icon displayed in widgets representing this action."
 msgstr "The stock icon displayed in widgets representing this action."
 
 #: gtk/gtkaction.c:255 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
-#: gtk/gtkprinter.c:168 gtk/gtkstatusicon.c:208 gtk/gtkwindow.c:592
+#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:208 gtk/gtkwindow.c:592
 msgid "Icon Name"
 msgstr "Icon Name"
 
@@ -400,7 +400,7 @@ msgid "Whether the action group is visible."
 msgstr "Whether the action group is visible."
 
 #: gtk/gtkadjustment.c:91 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:273
+#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Value"
 
@@ -706,7 +706,7 @@ msgid "The amount of space between children"
 msgstr "The amount of space between children"
 
 #: gtk/gtkbox.c:108 gtk/gtknotebook.c:644 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:582
+#: gtk/gtktoolbar.c:580
 msgid "Homogeneous"
 msgstr "Homogeneous"
 
@@ -714,7 +714,7 @@ msgstr "Homogeneous"
 msgid "Whether the children should all be the same size"
 msgstr "Whether the children should all be the same size"
 
-#: gtk/gtkbox.c:116 gtk/gtkpreview.c:103 gtk/gtktoolbar.c:574
+#: gtk/gtkbox.c:116 gtk/gtkpreview.c:103 gtk/gtktoolbar.c:572
 #: gtk/gtktreeviewcolumn.c:272
 msgid "Expand"
 msgstr "Expand"
@@ -1292,7 +1292,7 @@ msgstr "The vertical text alignment, from 0 (top) to 1 (bottom)."
 
 #: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:731
 #: gtk/gtkprogressbar.c:124 gtk/gtkscalebutton.c:191 gtk/gtkstatusicon.c:283
-#: gtk/gtktoolbar.c:494 gtk/gtktrayicon-x11.c:95
+#: gtk/gtktoolbar.c:492 gtk/gtktrayicon-x11.c:95
 msgid "Orientation"
 msgstr "Orientation"
 
@@ -1301,7 +1301,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientation and growth direction of the progress bar"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:116 gtk/gtkrange.c:346
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:212
+#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Adjustment"
 
@@ -1313,15 +1313,15 @@ msgstr "The adjustment that holds the value of the spinbutton."
 msgid "Climb rate"
 msgstr "Climb rate"
 
-#: gtk/gtkcellrendererspin.c:110 gtk/gtkspinbutton.c:221
+#: gtk/gtkcellrendererspin.c:110 gtk/gtkspinbutton.c:217
 msgid "The acceleration rate when you hold down a button"
 msgstr "The acceleration rate when you hold down a button"
 
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:142 gtk/gtkspinbutton.c:230
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:142 gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "Digits"
 
-#: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:231
+#: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
 msgstr "The number of decimal places to display"
 
@@ -1386,11 +1386,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Foreground colour as a GdkColor"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:506 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:570
+#: gtk/gtktextview.c:568
 msgid "Editable"
 msgstr "Editable"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:571
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
 msgstr "Whether the text can be modified by the user"
 
@@ -1939,7 +1939,7 @@ msgstr "Active item"
 msgid "The item which is currently active"
 msgstr "The item which is currently active"
 
-#: gtk/gtkcombobox.c:762 gtk/gtkuimanager.c:221
+#: gtk/gtkcombobox.c:762 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Add tearoffs to menus"
 
@@ -1996,7 +1996,7 @@ msgid "The minimum size of the arrow in the combo box"
 msgstr "The minimum size of the arrow in the combo box"
 
 #: gtk/gtkcombobox.c:860 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
-#: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:632
+#: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Shadow type"
@@ -2218,7 +2218,7 @@ msgstr "Whether to truncate multiline pastes to one line."
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "Which kind of shadow to draw around the entry when has-frame is set"
 
-#: gtk/gtkentry.c:647 gtk/gtktextview.c:650
+#: gtk/gtkentry.c:647 gtk/gtktextview.c:648
 msgid "Overwrite mode"
 msgstr "Overwrite mode"
 
@@ -2843,7 +2843,7 @@ msgstr "Icon set"
 msgid "Icon set to display"
 msgstr "Icon set to display"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:549
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:547
 msgid "Icon size"
 msgstr "Icon size"
 
@@ -2899,7 +2899,7 @@ msgstr "The text of the label"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "A list of style attributes to apply to the text of the label"
 
-#: gtk/gtklabel.c:345 gtk/gtktexttag.c:359 gtk/gtktextview.c:587
+#: gtk/gtklabel.c:345 gtk/gtktexttag.c:359 gtk/gtktextview.c:585
 msgid "Justification"
 msgstr "Justification"
 
@@ -3216,7 +3216,7 @@ msgstr "The child pack direction of the menubar"
 msgid "Style of bevel around the menubar"
 msgstr "Style of bevel around the menubar"
 
-#: gtk/gtkmenubar.c:202 gtk/gtktoolbar.c:599
+#: gtk/gtkmenubar.c:202 gtk/gtktoolbar.c:597
 msgid "Internal padding"
 msgstr "Internal padding"
 
@@ -3268,11 +3268,11 @@ msgstr "Width In Characters"
 msgid "The minimum desired width of the menu item in characters"
 msgstr "The desired width of the label, in characters"
 
-#: gtk/gtkmenushell.c:368
+#: gtk/gtkmenushell.c:374
 msgid "Take Focus"
 msgstr "Take Focus"
 
-#: gtk/gtkmenushell.c:369
+#: gtk/gtkmenushell.c:375
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "A boolean that determines whether the menu grabs the keyboard focus"
 
@@ -3701,69 +3701,89 @@ msgid ""
 msgstr ""
 "Whether the preview widget should take up the entire space it is allocated"
 
-#: gtk/gtkprinter.c:120
+#: gtk/gtkprinter.c:124
 msgid "Name of the printer"
 msgstr "Name of the printer"
 
-#: gtk/gtkprinter.c:126
+#: gtk/gtkprinter.c:130
 msgid "Backend"
 msgstr "Backend"
 
-#: gtk/gtkprinter.c:127
+#: gtk/gtkprinter.c:131
 msgid "Backend for the printer"
 msgstr "Backend for the printer"
 
-#: gtk/gtkprinter.c:133
+#: gtk/gtkprinter.c:137
 msgid "Is Virtual"
 msgstr "Is Virtual"
 
-#: gtk/gtkprinter.c:134
+#: gtk/gtkprinter.c:138
 msgid "FALSE if this represents a real hardware printer"
 msgstr "FALSE if this represents a real hardware printer"
 
-#: gtk/gtkprinter.c:140
+#: gtk/gtkprinter.c:144
 msgid "Accepts PDF"
 msgstr "Accepts PDF"
 
-#: gtk/gtkprinter.c:141
+#: gtk/gtkprinter.c:145
 msgid "TRUE if this printer can accept PDF"
 msgstr "TRUE if this printer can accept PDF"
 
-#: gtk/gtkprinter.c:147
+#: gtk/gtkprinter.c:151
 msgid "Accepts PostScript"
 msgstr "Accepts PostScript"
 
-#: gtk/gtkprinter.c:148
+#: gtk/gtkprinter.c:152
 msgid "TRUE if this printer can accept PostScript"
 msgstr "TRUE if this printer can accept PostScript"
 
-#: gtk/gtkprinter.c:154
+#: gtk/gtkprinter.c:158
 msgid "State Message"
 msgstr "State Message"
 
-#: gtk/gtkprinter.c:155
+#: gtk/gtkprinter.c:159
 msgid "String giving the current state of the printer"
 msgstr "String giving the current state of the printer"
 
-#: gtk/gtkprinter.c:161
+#: gtk/gtkprinter.c:165
 msgid "Location"
 msgstr "Location"
 
-#: gtk/gtkprinter.c:162
+#: gtk/gtkprinter.c:166
 msgid "The location of the printer"
 msgstr "The location of the printer"
 
-#: gtk/gtkprinter.c:169
+#: gtk/gtkprinter.c:173
 msgid "The icon name to use for the printer"
 msgstr "The icon name to use for the printer"
 
-#: gtk/gtkprinter.c:175
+#: gtk/gtkprinter.c:179
 msgid "Job Count"
 msgstr "Job Count"
 
-#: gtk/gtkprinter.c:176
+#: gtk/gtkprinter.c:180
 msgid "Number of jobs queued in the printer"
 msgstr "Number of jobs queued in the printer"
+
+#: gtk/gtkprinter.c:198
+#, fuzzy
+msgid "Paused Printer"
+msgstr "Printer"
+
+#: gtk/gtkprinter.c:199
+#, fuzzy
+msgid "TRUE if this printer is paused"
+msgstr "TRUE if this printer can accept PDF"
+
+#: gtk/gtkprinter.c:212
+#, fuzzy
+msgid "Accepting Jobs"
+msgstr "Accept focus"
+
+#: gtk/gtkprinter.c:213
+#, fuzzy
+msgid "TRUE if this printer is accepting new jobs"
+msgstr "TRUE if this printer can accept PDF"
 
 #: gtk/gtkprinteroptionwidget.c:123
 msgid "Source option"
@@ -3793,7 +3813,7 @@ msgstr "Settings"
 msgid "Printer settings"
 msgstr "Printer settings"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:246
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:252
 msgid "Page Setup"
 msgstr "Page Setup"
 
@@ -3817,11 +3837,11 @@ msgstr "Default Page Setup"
 msgid "The GtkPageSetup used by default"
 msgstr "The GtkPageSetup used by default"
 
-#: gtk/gtkprintoperation.c:903 gtk/gtkprintunixdialog.c:264
+#: gtk/gtkprintoperation.c:903 gtk/gtkprintunixdialog.c:270
 msgid "Print Settings"
 msgstr "Print Settings"
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:265
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:271
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "The GtkPrintSettings used for initializing the dialogue"
 
@@ -3841,11 +3861,11 @@ msgstr "Number of Pages"
 msgid "The number of pages in the document."
 msgstr "The number of pages in the document."
 
-#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:254
+#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:260
 msgid "Current Page"
 msgstr "Current Page"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:255
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:261
 msgid "The current page in the document"
 msgstr "The current page in the document"
 
@@ -3921,15 +3941,15 @@ msgstr "Custom tab label"
 msgid "Label for the tab containing custom widgets."
 msgstr "Label for the tab containing custom widgets."
 
-#: gtk/gtkprintunixdialog.c:247
+#: gtk/gtkprintunixdialog.c:253
 msgid "The GtkPageSetup to use"
 msgstr "The GtkPageSetup to use"
 
-#: gtk/gtkprintunixdialog.c:272
+#: gtk/gtkprintunixdialog.c:278
 msgid "Selected Printer"
 msgstr "Selected Printer"
 
-#: gtk/gtkprintunixdialog.c:273
+#: gtk/gtkprintunixdialog.c:279
 msgid "The GtkPrinter which is selected"
 msgstr "The GtkPrinter which is selected"
 
@@ -4657,93 +4677,93 @@ msgstr "Font Name"
 msgid "Name of default font to use"
 msgstr "Name of default font to use"
 
-#: gtk/gtksettings.c:347
+#: gtk/gtksettings.c:361
 msgid "Icon Sizes"
 msgstr "Icon Sizes"
 
-#: gtk/gtksettings.c:348
+#: gtk/gtksettings.c:362
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 
-#: gtk/gtksettings.c:356
+#: gtk/gtksettings.c:370
 msgid "GTK Modules"
 msgstr "GTK Modules"
 
-#: gtk/gtksettings.c:357
+#: gtk/gtksettings.c:371
 msgid "List of currently active GTK modules"
 msgstr "List of currently active GTK modules"
 
-#: gtk/gtksettings.c:366
+#: gtk/gtksettings.c:380
 msgid "Xft Antialias"
 msgstr "Xft Antialias"
 
-#: gtk/gtksettings.c:367
+#: gtk/gtksettings.c:381
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 
-#: gtk/gtksettings.c:376
+#: gtk/gtksettings.c:390
 msgid "Xft Hinting"
 msgstr "Xft Hinting"
 
-#: gtk/gtksettings.c:377
+#: gtk/gtksettings.c:391
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 
-#: gtk/gtksettings.c:386
+#: gtk/gtksettings.c:400
 msgid "Xft Hint Style"
 msgstr "Xft Hint Style"
 
-#: gtk/gtksettings.c:387
+#: gtk/gtksettings.c:401
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 
-#: gtk/gtksettings.c:396
+#: gtk/gtksettings.c:410
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: gtk/gtksettings.c:397
+#: gtk/gtksettings.c:411
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:406
+#: gtk/gtksettings.c:420
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: gtk/gtksettings.c:407
+#: gtk/gtksettings.c:421
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 
-#: gtk/gtksettings.c:416
+#: gtk/gtksettings.c:430
 msgid "Cursor theme name"
 msgstr "Cursor theme name"
 
-#: gtk/gtksettings.c:417
+#: gtk/gtksettings.c:431
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr "Name of the cursor theme to use, or NULL to use the default theme"
 
-#: gtk/gtksettings.c:425
+#: gtk/gtksettings.c:439
 msgid "Cursor theme size"
 msgstr "Cursor theme size"
 
-#: gtk/gtksettings.c:426
+#: gtk/gtksettings.c:440
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "Size to use for cursors, or 0 to use the default size"
 
-#: gtk/gtksettings.c:436
+#: gtk/gtksettings.c:450
 msgid "Alternative button order"
 msgstr "Alternative button order"
 
-#: gtk/gtksettings.c:437
+#: gtk/gtksettings.c:451
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Whether buttons in dialogues should use the alternative button order"
 
-#: gtk/gtksettings.c:454
+#: gtk/gtksettings.c:468
 msgid "Alternative sort indicator direction"
 msgstr "Alternative sort indicator direction"
 
-#: gtk/gtksettings.c:455
+#: gtk/gtksettings.c:469
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
@@ -4751,11 +4771,11 @@ msgstr ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
 
-#: gtk/gtksettings.c:463
+#: gtk/gtksettings.c:477
 msgid "Show the 'Input Methods' menu"
 msgstr "Show the 'Input Methods' menu"
 
-#: gtk/gtksettings.c:464
+#: gtk/gtksettings.c:478
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
@@ -4763,11 +4783,11 @@ msgstr ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
 
-#: gtk/gtksettings.c:472
+#: gtk/gtksettings.c:486
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "Show the 'Insert Unicode Control Character' menu"
 
-#: gtk/gtksettings.c:473
+#: gtk/gtksettings.c:487
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
@@ -4775,217 +4795,217 @@ msgstr ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
 
-#: gtk/gtksettings.c:481
+#: gtk/gtksettings.c:495
 msgid "Start timeout"
 msgstr "Start timeout"
 
-#: gtk/gtksettings.c:482
+#: gtk/gtksettings.c:496
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "Starting value for timeouts, when button is pressed"
 
-#: gtk/gtksettings.c:491
+#: gtk/gtksettings.c:505
 msgid "Repeat timeout"
 msgstr "Repeat timeout"
 
-#: gtk/gtksettings.c:492
+#: gtk/gtksettings.c:506
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "Repeat value for timeouts, when button is pressed"
 
-#: gtk/gtksettings.c:501
+#: gtk/gtksettings.c:515
 msgid "Expand timeout"
 msgstr "Expand timeout"
 
-#: gtk/gtksettings.c:502
+#: gtk/gtksettings.c:516
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr "Expand value for timeouts, when a widget is expanding a new region"
 
-#: gtk/gtksettings.c:537
+#: gtk/gtksettings.c:551
 msgid "Color scheme"
 msgstr "Colour scheme"
 
-#: gtk/gtksettings.c:538
+#: gtk/gtksettings.c:552
 msgid "A palette of named colors for use in themes"
 msgstr "A palette of named colours for use in themes"
 
-#: gtk/gtksettings.c:547
+#: gtk/gtksettings.c:561
 msgid "Enable Animations"
 msgstr "Enable Animations"
 
-#: gtk/gtksettings.c:548
+#: gtk/gtksettings.c:562
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Whether to enable toolkit-wide animations."
 
-#: gtk/gtksettings.c:566
+#: gtk/gtksettings.c:580
 msgid "Enable Touchscreen Mode"
 msgstr "Enable Touchscreen Mode"
 
-#: gtk/gtksettings.c:567
+#: gtk/gtksettings.c:581
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr "When TRUE, there are no motion notify events delivered on this screen"
 
-#: gtk/gtksettings.c:584
+#: gtk/gtksettings.c:598
 msgid "Tooltip timeout"
 msgstr "Tooltip timeout"
 
-#: gtk/gtksettings.c:585
+#: gtk/gtksettings.c:599
 msgid "Timeout before tooltip is shown"
 msgstr "Timeout before tooltip is shown"
 
-#: gtk/gtksettings.c:610
+#: gtk/gtksettings.c:624
 msgid "Tooltip browse timeout"
 msgstr "Tooltip browse timeout"
 
-#: gtk/gtksettings.c:611
+#: gtk/gtksettings.c:625
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr "Timeout before tooltip is shown when browse mode is enabled"
 
-#: gtk/gtksettings.c:632
+#: gtk/gtksettings.c:646
 msgid "Tooltip browse mode timeout"
 msgstr "Tooltip browse mode timeout"
 
-#: gtk/gtksettings.c:633
+#: gtk/gtksettings.c:647
 msgid "Timeout after which browse mode is disabled"
 msgstr "Timeout after which browse mode is disabled"
 
-#: gtk/gtksettings.c:652
+#: gtk/gtksettings.c:666
 msgid "Keynav Cursor Only"
 msgstr "Keynav Cursor Only"
 
-#: gtk/gtksettings.c:653
+#: gtk/gtksettings.c:667
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr "When TRUE, there are only cursor keys available to navigate widgets"
 
-#: gtk/gtksettings.c:670
+#: gtk/gtksettings.c:684
 msgid "Keynav Wrap Around"
 msgstr "Keynav Wrap Around"
 
-#: gtk/gtksettings.c:671
+#: gtk/gtksettings.c:685
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "Whether to wrap around when keyboard-navigating widgets"
 
-#: gtk/gtksettings.c:691
+#: gtk/gtksettings.c:705
 msgid "Error Bell"
 msgstr "Error Bell"
 
-#: gtk/gtksettings.c:692
+#: gtk/gtksettings.c:706
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr "When TRUE, keyboard navigation and other errors will cause a beep"
 
-#: gtk/gtksettings.c:709
+#: gtk/gtksettings.c:723
 msgid "Color Hash"
 msgstr "Colour Hash"
 
-#: gtk/gtksettings.c:710
+#: gtk/gtksettings.c:724
 msgid "A hash table representation of the color scheme."
 msgstr "A hash table representation of the colour scheme."
 
-#: gtk/gtksettings.c:718
+#: gtk/gtksettings.c:732
 msgid "Default file chooser backend"
 msgstr "Default file chooser backend"
 
-#: gtk/gtksettings.c:719
+#: gtk/gtksettings.c:733
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Name of the GtkFileChooser backend to use by default"
 
-#: gtk/gtksettings.c:736
+#: gtk/gtksettings.c:750
 msgid "Default print backend"
 msgstr "Default print backend"
 
-#: gtk/gtksettings.c:737
+#: gtk/gtksettings.c:751
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "List of the GtkPrintBackend backends to use by default"
 
-#: gtk/gtksettings.c:760
+#: gtk/gtksettings.c:774
 msgid "Default command to run when displaying a print preview"
 msgstr "Default command to run when displaying a print preview"
 
-#: gtk/gtksettings.c:761
+#: gtk/gtksettings.c:775
 msgid "Command to run when displaying a print preview"
 msgstr "Command to run when displaying a print preview"
 
-#: gtk/gtksettings.c:777
+#: gtk/gtksettings.c:791
 msgid "Enable Mnemonics"
 msgstr "Enable Mnemonics"
 
-#: gtk/gtksettings.c:778
+#: gtk/gtksettings.c:792
 msgid "Whether labels should have mnemonics"
 msgstr "Whether labels should have mnemonics"
 
-#: gtk/gtksettings.c:794
+#: gtk/gtksettings.c:808
 msgid "Enable Accelerators"
 msgstr "Enable Accelerators"
 
-#: gtk/gtksettings.c:795
+#: gtk/gtksettings.c:809
 msgid "Whether menu items should have accelerators"
 msgstr "Whether menu items should have accelerators"
 
-#: gtk/gtksettings.c:812
+#: gtk/gtksettings.c:826
 msgid "Recent Files Limit"
 msgstr "Recent Files Limit"
 
-#: gtk/gtksettings.c:813
+#: gtk/gtksettings.c:827
 msgid "Number of recently used files"
 msgstr "Number of recently used files"
 
-#: gtk/gtksettings.c:827
+#: gtk/gtksettings.c:841
 msgid "Default IM module"
 msgstr "Default IM module"
 
-#: gtk/gtksettings.c:828
+#: gtk/gtksettings.c:842
 msgid "Which IM module should be used by default"
 msgstr "Which IM module should be used by default"
 
-#: gtk/gtksettings.c:846
+#: gtk/gtksettings.c:860
 msgid "Recent Files Max Age"
 msgstr "Recent Files Max Age"
 
-#: gtk/gtksettings.c:847
+#: gtk/gtksettings.c:861
 msgid "Maximum age of recently used files, in days"
 msgstr "Maximum age of recently used files, in days"
 
-#: gtk/gtksettings.c:856
+#: gtk/gtksettings.c:870
 msgid "Fontconfig configuration timestamp"
 msgstr ""
 
-#: gtk/gtksettings.c:857
+#: gtk/gtksettings.c:871
 msgid "Timestamp of current fontconfig configuration"
 msgstr ""
 
-#: gtk/gtksettings.c:879
+#: gtk/gtksettings.c:893
 #, fuzzy
 msgid "Sound Theme Name"
 msgstr "Icon Theme Name"
 
-#: gtk/gtksettings.c:880
+#: gtk/gtksettings.c:894
 #, fuzzy
 msgid "XDG sound theme name"
 msgstr "Cursor theme name"
 
-#: gtk/gtksettings.c:901
+#: gtk/gtksettings.c:915
 msgid "Aureal Input Feedback"
 msgstr ""
 
-#: gtk/gtksettings.c:902
+#: gtk/gtksettings.c:916
 #, fuzzy
 msgid "Whether to play event sounds as feedback to user input"
 msgstr "Whether the widget responds to input"
 
-#: gtk/gtksettings.c:923
+#: gtk/gtksettings.c:937
 #, fuzzy
 msgid "Enable Event Sounds"
 msgstr "Enable Animations"
 
-#: gtk/gtksettings.c:924
+#: gtk/gtksettings.c:938
 #, fuzzy
 msgid "Whether to play any event sounds at all"
 msgstr "Whether to display an \"inconsistent\" state"
 
-#: gtk/gtksettings.c:939
+#: gtk/gtksettings.c:953
 #, fuzzy
 msgid "Enable Tooltips"
 msgstr "Tooltips"
 
-#: gtk/gtksettings.c:940
+#: gtk/gtksettings.c:954
 #, fuzzy
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Whether tabs should be shown or not"
@@ -5012,19 +5032,19 @@ msgid ""
 msgstr ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 
-#: gtk/gtkspinbutton.c:213
+#: gtk/gtkspinbutton.c:209
 msgid "The adjustment that holds the value of the spinbutton"
 msgstr "The adjustment that holds the value of the spinbutton"
 
-#: gtk/gtkspinbutton.c:220
+#: gtk/gtkspinbutton.c:216
 msgid "Climb Rate"
 msgstr "Climb Rate"
 
-#: gtk/gtkspinbutton.c:240
+#: gtk/gtkspinbutton.c:236
 msgid "Snap to Ticks"
 msgstr "Snap to Ticks"
 
-#: gtk/gtkspinbutton.c:241
+#: gtk/gtkspinbutton.c:237
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
@@ -5032,37 +5052,37 @@ msgstr ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 
-#: gtk/gtkspinbutton.c:248
+#: gtk/gtkspinbutton.c:244
 msgid "Numeric"
 msgstr "Numeric"
 
-#: gtk/gtkspinbutton.c:249
+#: gtk/gtkspinbutton.c:245
 msgid "Whether non-numeric characters should be ignored"
 msgstr "Whether non-numeric characters should be ignored"
 
-#: gtk/gtkspinbutton.c:256
+#: gtk/gtkspinbutton.c:252
 msgid "Wrap"
 msgstr "Wrap"
 
-#: gtk/gtkspinbutton.c:257
+#: gtk/gtkspinbutton.c:253
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr "Whether a spin button should wrap upon reaching its limits"
 
-#: gtk/gtkspinbutton.c:264
+#: gtk/gtkspinbutton.c:260
 msgid "Update Policy"
 msgstr "Update Policy"
 
-#: gtk/gtkspinbutton.c:265
+#: gtk/gtkspinbutton.c:261
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 "Whether the spin button should update always, or only when the value is legal"
 
-#: gtk/gtkspinbutton.c:274
+#: gtk/gtkspinbutton.c:270
 msgid "Reads the current value, or sets a new value"
 msgstr "Reads the current value, or sets a new value"
 
-#: gtk/gtkspinbutton.c:283
+#: gtk/gtkspinbutton.c:279
 msgid "Style of bevel around the spin button"
 msgstr "Style of bevel around the spin button"
 
@@ -5380,7 +5400,7 @@ msgstr ""
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:588
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:586
 msgid "Left, right, or center justification"
 msgstr "Left, right, or centre justification"
 
@@ -5396,7 +5416,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Left margin"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:597
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:595
 msgid "Width of the left margin in pixels"
 msgstr "Width of the left margin in pixels"
 
@@ -5404,15 +5424,15 @@ msgstr "Width of the left margin in pixels"
 msgid "Right margin"
 msgstr "Right margin"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:607
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:605
 msgid "Width of the right margin in pixels"
 msgstr "Width of the right margin in pixels"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:616
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:614
 msgid "Indent"
 msgstr "Indent"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:617
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:615
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Amount to indent the paragraph, in pixels"
 
@@ -5428,7 +5448,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Pixels above lines"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:541
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:539
 msgid "Pixels of blank space above paragraphs"
 msgstr "Pixels of blank space above paragraphs"
 
@@ -5436,7 +5456,7 @@ msgstr "Pixels of blank space above paragraphs"
 msgid "Pixels below lines"
 msgstr "Pixels below lines"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:551
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:549
 msgid "Pixels of blank space below paragraphs"
 msgstr "Pixels of blank space below paragraphs"
 
@@ -5444,21 +5464,21 @@ msgstr "Pixels of blank space below paragraphs"
 msgid "Pixels inside wrap"
 msgstr "Pixels inside wrap"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:561
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:559
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pixels of blank space between wrapped lines in a paragraph"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:579
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:577
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:626
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:624
 msgid "Tabs"
 msgstr "Tabs"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:627
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:625
 msgid "Custom tabs for this text"
 msgstr "Custom tabs for this text"
 
@@ -5602,63 +5622,63 @@ msgstr "Paragraph background set"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Whether this tag affects the paragraph background colour"
 
-#: gtk/gtktextview.c:540
+#: gtk/gtktextview.c:538
 msgid "Pixels Above Lines"
 msgstr "Pixels Above Lines"
 
-#: gtk/gtktextview.c:550
+#: gtk/gtktextview.c:548
 msgid "Pixels Below Lines"
 msgstr "Pixels Below Lines"
 
-#: gtk/gtktextview.c:560
+#: gtk/gtktextview.c:558
 msgid "Pixels Inside Wrap"
 msgstr "Pixels Inside Wrap"
 
-#: gtk/gtktextview.c:578
+#: gtk/gtktextview.c:576
 msgid "Wrap Mode"
 msgstr "Wrap Mode"
 
-#: gtk/gtktextview.c:596
+#: gtk/gtktextview.c:594
 msgid "Left Margin"
 msgstr "Left Margin"
 
-#: gtk/gtktextview.c:606
+#: gtk/gtktextview.c:604
 msgid "Right Margin"
 msgstr "Right Margin"
 
-#: gtk/gtktextview.c:634
+#: gtk/gtktextview.c:632
 msgid "Cursor Visible"
 msgstr "Cursor Visible"
 
-#: gtk/gtktextview.c:635
+#: gtk/gtktextview.c:633
 msgid "If the insertion cursor is shown"
 msgstr "If the insertion cursor is shown"
 
-#: gtk/gtktextview.c:642
+#: gtk/gtktextview.c:640
 msgid "Buffer"
 msgstr "Buffer"
 
-#: gtk/gtktextview.c:643
+#: gtk/gtktextview.c:641
 msgid "The buffer which is displayed"
 msgstr "The buffer which is displayed"
 
-#: gtk/gtktextview.c:651
+#: gtk/gtktextview.c:649
 msgid "Whether entered text overwrites existing contents"
 msgstr "Whether entered text overwrites existing contents"
 
-#: gtk/gtktextview.c:658
+#: gtk/gtktextview.c:656
 msgid "Accepts tab"
 msgstr "Accepts tab"
 
-#: gtk/gtktextview.c:659
+#: gtk/gtktextview.c:657
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Whether Tab will result in a tab character being entered"
 
-#: gtk/gtktextview.c:668
+#: gtk/gtktextview.c:666
 msgid "Error underline color"
 msgstr "Error underline colour"
 
-#: gtk/gtktextview.c:669
+#: gtk/gtktextview.c:667
 msgid "Color with which to draw error-indication underlines"
 msgstr "Colour with which to draw error-indication underlines"
 
@@ -5690,109 +5710,109 @@ msgstr "Draw Indicator"
 msgid "If the toggle part of the button is displayed"
 msgstr "If the toggle part of the button is displayed"
 
-#: gtk/gtktoolbar.c:495
+#: gtk/gtktoolbar.c:493
 msgid "The orientation of the toolbar"
 msgstr "The orientation of the toolbar"
 
-#: gtk/gtktoolbar.c:503
+#: gtk/gtktoolbar.c:501
 msgid "Toolbar Style"
 msgstr "Toolbar Style"
 
-#: gtk/gtktoolbar.c:504
+#: gtk/gtktoolbar.c:502
 msgid "How to draw the toolbar"
 msgstr "How to draw the toolbar"
 
-#: gtk/gtktoolbar.c:511
+#: gtk/gtktoolbar.c:509
 msgid "Show Arrow"
 msgstr "Show Arrow"
 
-#: gtk/gtktoolbar.c:512
+#: gtk/gtktoolbar.c:510
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "If an arrow should be shown if the toolbar doesn't fit"
 
-#: gtk/gtktoolbar.c:527
+#: gtk/gtktoolbar.c:525
 msgid "Tooltips"
 msgstr "Tooltips"
 
-#: gtk/gtktoolbar.c:528
+#: gtk/gtktoolbar.c:526
 msgid "If the tooltips of the toolbar should be active or not"
 msgstr "Whether or not the tooltips of the toolbar should be active"
 
-#: gtk/gtktoolbar.c:550
+#: gtk/gtktoolbar.c:548
 msgid "Size of icons in this toolbar"
 msgstr "Size of icons in this toolbar"
 
-#: gtk/gtktoolbar.c:565
+#: gtk/gtktoolbar.c:563
 msgid "Icon size set"
 msgstr "Icon size set"
 
-#: gtk/gtktoolbar.c:566
+#: gtk/gtktoolbar.c:564
 msgid "Whether the icon-size property has been set"
 msgstr "Whether the icon-size property has been set"
 
-#: gtk/gtktoolbar.c:575
+#: gtk/gtktoolbar.c:573
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Whether the item should receive extra space when the toolbar grows"
 
-#: gtk/gtktoolbar.c:583
+#: gtk/gtktoolbar.c:581
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Whether the item should be the same size as other homogeneous items"
 
-#: gtk/gtktoolbar.c:590
+#: gtk/gtktoolbar.c:588
 msgid "Spacer size"
 msgstr "Spacer size"
 
-#: gtk/gtktoolbar.c:591
+#: gtk/gtktoolbar.c:589
 msgid "Size of spacers"
 msgstr "Size of spacers"
 
-#: gtk/gtktoolbar.c:600
+#: gtk/gtktoolbar.c:598
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Amount of border space between the toolbar shadow and the buttons"
 
-#: gtk/gtktoolbar.c:608
+#: gtk/gtktoolbar.c:606
 msgid "Maximum child expand"
 msgstr "Maximum child expand"
 
-#: gtk/gtktoolbar.c:609
+#: gtk/gtktoolbar.c:607
 msgid "Maximum amount of space an expandable item will be given"
 msgstr "Maximum amount of space an expandable item will be given"
 
-#: gtk/gtktoolbar.c:617
+#: gtk/gtktoolbar.c:615
 msgid "Space style"
 msgstr "Space style"
 
-#: gtk/gtktoolbar.c:618
+#: gtk/gtktoolbar.c:616
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Whether spacers are vertical lines or just blank"
 
-#: gtk/gtktoolbar.c:625
+#: gtk/gtktoolbar.c:623
 msgid "Button relief"
 msgstr "Button relief"
 
-#: gtk/gtktoolbar.c:626
+#: gtk/gtktoolbar.c:624
 msgid "Type of bevel around toolbar buttons"
 msgstr "Type of bevel around toolbar buttons"
 
-#: gtk/gtktoolbar.c:633
+#: gtk/gtktoolbar.c:631
 msgid "Style of bevel around the toolbar"
 msgstr "Style of bevel around the toolbar"
 
-#: gtk/gtktoolbar.c:639
+#: gtk/gtktoolbar.c:637
 msgid "Toolbar style"
 msgstr "Toolbar style"
 
-#: gtk/gtktoolbar.c:640
+#: gtk/gtktoolbar.c:638
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 
-#: gtk/gtktoolbar.c:646
+#: gtk/gtktoolbar.c:644
 msgid "Toolbar icon size"
 msgstr "Toolbar icon size"
 
-#: gtk/gtktoolbar.c:647
+#: gtk/gtktoolbar.c:645
 msgid "Size of icons in default toolbars"
 msgstr "Size of icons in default toolbars"
 
@@ -6184,15 +6204,15 @@ msgstr "Sort order"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Sort direction the sort indicator should indicate"
 
-#: gtk/gtkuimanager.c:222
+#: gtk/gtkuimanager.c:221
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Whether tearoff menu items should be added to menus"
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:228
 msgid "Merged UI definition"
 msgstr "Merged UI definition"
 
-#: gtk/gtkuimanager.c:230
+#: gtk/gtkuimanager.c:229
 msgid "An XML string describing the merged UI"
 msgstr "An XML string describing the merged UI"
 

@@ -363,6 +363,24 @@ directly, but into the @vbox and @action_area, as described above.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_dialog_get_action_area ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_dialog_get_content_area ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_alternative_dialog_button_order ##### -->
 <para>
 

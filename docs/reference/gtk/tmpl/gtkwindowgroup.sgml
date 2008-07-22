@@ -49,3 +49,12 @@ Limit the effect of grabs
 @window: 
 
 
+<!-- ##### FUNCTION gtk_window_group_list_windows ##### -->
+<para>
+
+</para>
+
+@window_group: 
+@Returns: 
+
+

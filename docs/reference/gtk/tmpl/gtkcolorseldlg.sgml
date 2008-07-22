@@ -103,3 +103,12 @@ Creates a new #GtkColorSelectionDialog.
 @Returns: a #GtkColorSelectionDialog.
 
 
+<!-- ##### FUNCTION gtk_color_selection_dialog_get_color_selection ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@Returns: 
+
+

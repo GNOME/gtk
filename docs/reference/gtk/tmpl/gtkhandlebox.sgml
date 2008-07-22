@@ -210,3 +210,12 @@ in the future.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_handle_box_get_child_detached ##### -->
+<para>
+
+</para>
+
+@handle_box: 
+@Returns: 
+
+

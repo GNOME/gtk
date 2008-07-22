@@ -558,6 +558,15 @@ Deprecated alias for gtk_window_set_position().
 @focus: 
 
 
+<!-- ##### FUNCTION gtk_window_get_default ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_set_default ##### -->
 <para>
 

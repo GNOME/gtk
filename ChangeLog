@@ -1,5 +1,9 @@
 2008-07-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.13.5 ===
+
+2008-07-21  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktestutils.c:
 	* gtk/gtkscalebutton.c:
 	* gtk/gtkmessagedialog.c:
