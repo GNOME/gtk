@@ -1,5 +1,11 @@
 2008-07-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Default to linking against Xinerama again,
+	so that we can fallback to Xinerama when broken X drivers
+	make Xrandr useless. Sigh.
+
+2008-07-21  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Bump version
 
 	* === Released 2.13.5 ===

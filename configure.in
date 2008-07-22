@@ -228,7 +228,7 @@ AC_ARG_ENABLE(xkb,
 AC_ARG_ENABLE(xinerama,
               [AC_HELP_STRING([--enable-xinerama],
 	                      [support xinerama extension if available [default=yes]])],,
-              [enable_xinerama="no"])
+              [enable_xinerama="yes"])
 AC_ARG_ENABLE(rebuilds,
               [AC_HELP_STRING([--disable-rebuilds],
                               [disable all source autogeneration rules])],,
