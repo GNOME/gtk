@@ -1,3 +1,9 @@
+2008-07-22  Sven Herzberg  <sven@imendio.com>
+
+	Fix svn:ignore and the include condition
+
+	* gdk/tests/check-gdk-cairo.c: ifndef => ifdef
+
 2008-07-22  Tor Lillqvist  <tml@novell.com>
 
 	* configure.in: Workaround for what apparently is a bug in MSYS:

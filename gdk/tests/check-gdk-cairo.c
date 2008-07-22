@@ -24,7 +24,7 @@
  */
 
 #include <gdk/gdk.h>
-#ifndef CAIRO_HAS_QUARTZ_SURFACE
+#ifdef CAIRO_HAS_QUARTZ_SURFACE
 #include <cairo-quartz.h>
 #endif
 
