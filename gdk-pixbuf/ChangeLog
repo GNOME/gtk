@@ -1,3 +1,8 @@
+2008-07-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-io.c (_gdk_pixbuf_get_module): Compare two content
+	types, not content type and mime type.
+
 2008-07-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.13.5 ===

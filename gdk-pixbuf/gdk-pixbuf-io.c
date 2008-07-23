@@ -770,6 +770,7 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
 #ifdef GDK_PIXBUF_USE_GIO_MIME
 	gchar *mime_type;
 	gchar **mimes;
+	gchar *type;
 	gint j;
 
 	mime_type = g_content_type_guess (filename, buffer, size, NULL);
@@ -783,10 +784,13 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
 
 		mimes = info->mime_types;
 		for (j = 0; mimes[j] != NULL; j++) {
-			if (g_ascii_strcasecmp (mimes[j], mime_type) == 0) {
+			type = g_content_type_from_mime_type (mimes[j]);
+			if (g_ascii_strcasecmp (type, mime_type) == 0) {
+				g_free (type);
 				selected = module;
 				break;
 			}
+			g_free (type);
 		}
 	}
 	g_free (mime_type);

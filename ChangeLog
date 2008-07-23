@@ -1,3 +1,8 @@
+2008-07-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Compare two content types, not content type
+	and mime type.
+
 2008-07-22  Sven Herzberg  <sven@imendio.com>
 
 	Fix svn:ignore and the include condition
