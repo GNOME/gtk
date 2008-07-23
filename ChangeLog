@@ -13,7 +13,8 @@
 
 	* configure.in: Workaround for what apparently is a bug in MSYS:
 	returning -1 from main() is misinterpreted as exit status 0, so
-	make sure we return 0 or 1.
+	make sure we return 0 or 1. (The net effect of the bug was that no
+	image loading worked on Windows.)
 
 2008-07-22  Sven Herzberg  <sven@imendio.com>
 
