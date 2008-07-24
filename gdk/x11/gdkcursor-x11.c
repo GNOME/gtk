@@ -40,6 +40,7 @@
 
 #include "gdkprivate-x11.h"
 #include "gdkcursor.h"
+#include "gdkdisplay-x11.h"
 #include "gdkpixmap-x11.h"
 #include "gdkx.h"
 #include <gdk/gdkpixmap.h>
@@ -401,10 +402,15 @@ _gdk_x11_cursor_update_theme (GdkCursor *cursor)
   Display *xdisplay;
   GdkCursorPrivate *private;
   Cursor new_cursor = None;
+  GdkDisplayX11 *display_x11;
 
   private = (GdkCursorPrivate *) cursor;
   xdisplay = GDK_DISPLAY_XDISPLAY (private->display);
-	  
+  display_x11 = GDK_DISPLAY_X11 (private->display);
+
+  if (!display_x11->have_xfixes)
+    return;
+
   if (private->serial == theme_serial)
     return;
 

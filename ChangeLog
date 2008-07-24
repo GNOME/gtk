@@ -1,3 +1,11 @@
+2008-07-23  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 544265 – GDK assumes XFIXES extension
+
+	* gdk/x11/gdkcursor-x11.c (_gdk_x11_cursor_update_theme):
+	Only call XFixes functions if the server has the extension.
+	Reported by Ian Turner.
+
 2008-07-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Compare two content types, not content type
