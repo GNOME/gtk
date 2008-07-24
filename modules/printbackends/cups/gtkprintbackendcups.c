@@ -2673,6 +2673,7 @@ cups_printer_get_options (GtkPrinter           *printer,
       char *cover_display_default[] = {N_("None"), N_("Classified"), N_("Confidential"), N_("Secret"), N_("Standard"), N_("Top Secret"), N_("Unclassified"),};
       char **cover = NULL;
       char **cover_display = NULL;
+      char **cover_display_translated = NULL;
       gint num_of_covers = 0;
       gpointer value;
       gint j;
@@ -2682,6 +2683,8 @@ cups_printer_get_options (GtkPrinter           *printer,
       cover[num_of_covers] = NULL;
       cover_display = g_new (char *, num_of_covers + 1);
       cover_display[num_of_covers] = NULL;
+      cover_display_translated = g_new (char *, num_of_covers + 1);
+      cover_display_translated[num_of_covers] = NULL;
 
       for (i = 0; i < num_of_covers; i++)
         {
@@ -2697,11 +2700,11 @@ cups_printer_get_options (GtkPrinter           *printer,
         }
 
       for (i = 0; i < num_of_covers; i++)
-        cover_display[i] = _(cover_display[i]);
+        cover_display_translated[i] = _(cover_display[i]);
   
       option = gtk_printer_option_new ("gtk-cover-before", "Before", GTK_PRINTER_OPTION_TYPE_PICKONE);
       gtk_printer_option_choices_from_array (option, num_of_covers,
-					 cover, cover_display);
+					 cover, cover_display_translated);
 
       if (backend->default_cover_before != NULL)
         gtk_printer_option_set (option, backend->default_cover_before);
@@ -2713,7 +2716,7 @@ cups_printer_get_options (GtkPrinter           *printer,
 
       option = gtk_printer_option_new ("gtk-cover-after", "After", GTK_PRINTER_OPTION_TYPE_PICKONE);
       gtk_printer_option_choices_from_array (option, num_of_covers,
-					 cover, cover_display);
+					 cover, cover_display_translated);
       if (backend->default_cover_after != NULL)
         gtk_printer_option_set (option, backend->default_cover_after);
       else
@@ -2724,6 +2727,7 @@ cups_printer_get_options (GtkPrinter           *printer,
 
       g_strfreev (cover);
       g_strfreev (cover_display);
+      g_free (cover_display_translated);
     }
 
   option = gtk_printer_option_new ("gtk-print-time", "Print at", GTK_PRINTER_OPTION_TYPE_PICKONE);

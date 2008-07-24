@@ -1,3 +1,9 @@
+2008-07-24  Sebastien Bacher  <seb128@ubuntu.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	(cups_printer_get_options): don't try free gettext() values,
+	fix a printing dialog crasher (bug 544390)
+
 2008-07-24  Cody Russell  <bratsche@gnome.org>
 
 	Bug 544510 – SetTimer callback signatures has the wrong type
