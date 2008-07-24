@@ -2033,7 +2033,7 @@ handle_stuff_while_moving_or_resizing (void)
 static VOID CALLBACK
 modal_timer_proc (HWND     hwnd,
 		  UINT     msg,
-		  UINT     id,
+		  UINT_PTR id,
 		  DWORD    time)
 {
   if (_sizemove_in_progress)
@@ -2041,10 +2041,10 @@ modal_timer_proc (HWND     hwnd,
 }
 
 static VOID CALLBACK
-sync_timer_proc (HWND hwnd,
-		 UINT msg,
-		 UINT id,
-		 DWORD time)
+sync_timer_proc (HWND     hwnd,
+		 UINT     msg,
+		 UINT_PTR id,
+		 DWORD    time)
 {
   MSG message;
   if (PeekMessageW (&message, hwnd, WM_PAINT, WM_PAINT, PM_REMOVE))

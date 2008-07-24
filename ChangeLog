@@ -1,3 +1,11 @@
+2008-07-24  Cody Russell  <bratsche@gnome.org>
+
+	Bug 544510 – SetTimer callback signatures has the wrong type
+
+	* gdk/win32/gdkevents-win32.c: Fix modal_timer_proc() and
+	sync_timer_proc() to use UINT_PTR for the 'id' parameter
+	instead of 'id'.  Patch by Richard Hult.
+
 2008-07-23  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 543915 – "Sole completion" translation issue
