@@ -1064,6 +1064,9 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
 
     case NO_MATCH:
       beep (chooser_entry);
+      /* translators: this text is shown when there are no completions 
+       * for something the user typed in a file chooser entry
+       */
       pop_up_completion_feedback (chooser_entry, _("No match"));
       break;
 
@@ -1072,6 +1075,9 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
       break;
 
     case NOTHING_INSERTED_UNIQUE:
+      /* translators: this text is shown when there is exactly one completion 
+       * for something the user typed in a file chooser entry
+       */
       pop_up_completion_feedback (chooser_entry, _("Sole completion"));
       break;
 
@@ -1084,6 +1090,10 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
       break;
 
     case COMPLETE_BUT_NOT_UNIQUE:
+      /* translators: this text is shown when the text in a file chooser
+       * entry is a complete filename, but could be continued to find
+       * a longer match
+       */
       pop_up_completion_feedback (chooser_entry, _("Complete, but not unique"));
       break;
 
@@ -1117,6 +1127,9 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
     {
       chooser_entry->load_complete_action = LOAD_COMPLETE_EXPLICIT_COMPLETION;
 
+      /* translators: this text is shown while the system is searching
+       * for possible completions for text in a file chooser entry 
+       */
       pop_up_completion_feedback (chooser_entry, _("Completing..."));
     }
 }

@@ -1,5 +1,12 @@
 2008-07-23  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 543915 – "Sole completion" translation issue
+
+	* gtk/gtkfilechooserentry.c: Add translator hints to a
+	bunch of strings. Requested by Andre Klapper
+
+2008-07-23  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 544265 – GDK assumes XFIXES extension
 
 	* gdk/x11/gdkcursor-x11.c (_gdk_x11_cursor_update_theme):
