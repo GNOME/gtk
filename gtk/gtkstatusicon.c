@@ -294,6 +294,9 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * Gets emitted when the user activates the status icon. 
    * If and how status icons can activated is platform-dependent.
    *
+   * Unlike most G_SIGNAL_ACTION signals, this signal is meant to 
+   * be used by applications and should be wrapped by language bindings.
+   *
    * Since: 2.10
    */
   status_icon_signals [ACTIVATE_SIGNAL] =
@@ -321,6 +324,9 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    *
    * The @button and @activate_time parameters should be 
    * passed as the last to arguments to gtk_menu_popup().
+   *
+   * Unlike most G_SIGNAL_ACTION signals, this signal is meant to 
+   * be used by applications and should be wrapped by language bindings.
    *
    * Since: 2.10
    */

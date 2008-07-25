@@ -1,3 +1,10 @@
+2008-07-25  Murray Cumming  <murrayc@murrayc.com>
+
+	* gtk/gtkstatusicon.c (gtk_status_icon_class_init):
+	Documented the activate and popup-menu signals as being for use 
+	by applications and language bindings, though they are G_SIGNAL_ACTION, 
+	as stated in bug #361561.
+
 2008-07-24  Sebastien Bacher  <seb128@ubuntu.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c:
