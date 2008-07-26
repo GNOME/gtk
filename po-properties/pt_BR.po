@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-21 19:55-0400\n"
-"PO-Revision-Date: 2007-11-26 21:00-0200\n"
-"Last-Translator: Pedro Vaz Mello de Medeiros <pedrovmm@gmail.com>\n"
+"PO-Revision-Date: 2008-07-25 09:18-0300\n"
+"Last-Translator: Vladimir Melo <vladimirmelo.psi@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1715,7 +1715,7 @@ msgstr "Estado de seleção"
 
 #: gtk/gtkcellrenderertoggle.c:151
 msgid "Draw the toggle button as a radio button"
-msgstr "Desenhar o botão de alternância como um botão de seleção"
+msgstr "Desenhar o botão de alternância como um botão de opção"
 
 #: gtk/gtkcellrenderertoggle.c:158
 msgid "Indicator size"
@@ -2449,7 +2449,7 @@ msgstr "Widget de visualização"
 
 #: gtk/gtkfilechooser.c:222
 msgid "Application supplied widget for custom previews."
-msgstr "Widget fornecido pela aplicação para visualizações personalizadas."
+msgstr "Widget fornecido pelo aplicativo para visualizações personalizadas."
 
 #: gtk/gtkfilechooser.c:227
 msgid "Preview Widget Active"
@@ -2459,7 +2459,7 @@ msgstr "Widget de Visualização Ativo"
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr ""
-"Se o widget fornecido pela aplicação para visualizações personalizadas deve "
+"Se o widget fornecido pelo aplicativo para visualizações personalizadas deve "
 "ser mostrado."
 
 #: gtk/gtkfilechooser.c:233
@@ -2476,7 +2476,7 @@ msgstr "Widget extra"
 
 #: gtk/gtkfilechooser.c:240
 msgid "Application supplied widget for extra options."
-msgstr "Widget fornecido pela aplicação para opções extras."
+msgstr "Widget fornecido pelo aplicativo para opções extras."
 
 #: gtk/gtkfilechooser.c:245 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:191
 msgid "Select Multiple"
@@ -2677,7 +2677,7 @@ msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr ""
-"O lado da handlebox que deve estar alinhada com o ponto de acoplamento para "
+"O lado da handlebox que deve estar alinhada com o ponto de encaixe para "
 "anexá-la"
 
 #: gtk/gtkhandlebox.c:204
@@ -5117,8 +5117,8 @@ msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 msgstr ""
-"Se valores errôneos são automaticamente ajustados para o incremento mais "
-"próximo do botão de rotação"
+"Se valores errôneos são automaticamente alterados para o incremento mais "
+"próximo do botão de opção"
 
 #: gtk/gtkspinbutton.c:244
 msgid "Numeric"
@@ -5134,7 +5134,8 @@ msgstr "Dar a Volta"
 
 #: gtk/gtkspinbutton.c:253
 msgid "Whether a spin button should wrap upon reaching its limits"
-msgstr "Se um botão de rodar deve dar a volta ao atingir seus limites"
+msgstr ""
+"Se um botão de seletor numérico deve dar a volta ao atingir seus limites"
 
 #: gtk/gtkspinbutton.c:260
 msgid "Update Policy"
@@ -5144,7 +5145,8 @@ msgstr "Política de Atualização"
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
-"Se o botão de rodar deve se atualizar sempre ou apenas quando o valor é legal"
+"Se o botão do seletor numérico deve se atualizar sempre ou apenas quando o "
+"valor é legal"
 
 #: gtk/gtkspinbutton.c:270
 msgid "Reads the current value, or sets a new value"
@@ -5152,7 +5154,7 @@ msgstr "Lê o valor atual ou define um novo valor"
 
 #: gtk/gtkspinbutton.c:279
 msgid "Style of bevel around the spin button"
-msgstr "Estilo de relevo em volta do botão de rotação"
+msgstr "Estilo de relevo em volta do botão do seletor numérico"
 
 #: gtk/gtkstatusbar.c:141
 msgid "Has Resize Grip"
@@ -6365,11 +6367,11 @@ msgstr "Se o widget responde a entradas"
 
 #: gtk/gtkwidget.c:528
 msgid "Application paintable"
-msgstr "Pintar pela aplicação"
+msgstr "Pintar pelo aplicativo"
 
 #: gtk/gtkwidget.c:529
 msgid "Whether the application will paint directly on the widget"
-msgstr "Se a aplicação pintará diretamente no widget"
+msgstr "Se o aplicativo pintará diretamente no widget"
 
 #: gtk/gtkwidget.c:535
 msgid "Can focus"
@@ -6765,7 +6767,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:633
 msgid "Skip taskbar"
-msgstr "Evitar a lista de tarefas"
+msgstr "Ignorar a lista de tarefas"
 
 #: gtk/gtkwindow.c:634
 msgid "TRUE if the window should not be in the task bar."
@@ -6773,7 +6775,7 @@ msgstr "VERDADEIRO se a janela não deve estar na barra de tarefas."
 
 #: gtk/gtkwindow.c:641
 msgid "Skip pager"
-msgstr "Evitar paginador"
+msgstr "Ignorar paginador"
 
 #: gtk/gtkwindow.c:642
 msgid "TRUE if the window should not be in the pager."
