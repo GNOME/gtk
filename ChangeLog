@@ -1,3 +1,9 @@
+2008-07-27  Sven Herzberg  <sven@imendio.com>
+
+	Bug 544863 – gtkquartz.h not included in released 2.13.5 package
+
+	* gtk/Makefile.am: explicitly include the moved header in EXTRA_DIST
+
 2008-07-25  Murray Cumming  <murrayc@murrayc.com>
 
 	* gtk/gtkstatusicon.c (gtk_status_icon_class_init):
