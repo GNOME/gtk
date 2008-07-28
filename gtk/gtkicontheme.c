@@ -117,6 +117,7 @@ struct _GtkIconInfo
   gchar *cp_filename;
 #endif
   GLoadableIcon *loadable;
+  GSList *emblem_infos;
 
   /* Cache pixbuf (if there is any) */
   GdkPixbuf *cache_pixbuf;
@@ -2678,6 +2679,8 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
 #endif
   if (icon_info->loadable)
     g_object_unref (icon_info->loadable);
+  g_slist_foreach (icon_info->emblem_infos, (GFunc)gtk_icon_info_free, NULL);
+  g_slist_free (icon_info->emblem_infos);
   if (icon_info->pixbuf)
     g_object_unref (icon_info->pixbuf);
   if (icon_info->cache_pixbuf)
@@ -2764,6 +2767,65 @@ gtk_icon_info_get_builtin_pixbuf (GtkIconInfo *icon_info)
   return icon_info->cache_pixbuf;
 }
 
+static gboolean icon_info_ensure_scale_and_pixbuf (GtkIconInfo*, gboolean);
+
+/* Combine the icon with all emblems, the first emblem is placed 
+ * in the southeast corner. Scale emblems to be at most 3/4 of the
+ * size of the icon itself.
+ */
+static void 
+apply_emblems (GtkIconInfo *info)
+{
+  gint pos, w, h, ew, eh, x, y;
+  gdouble scale;
+  GdkPixbuf *icon, *emblem;
+  GSList *l;
+
+  icon = info->pixbuf;
+  w = gdk_pixbuf_get_width (icon);
+  h = gdk_pixbuf_get_height (icon);
+
+  for (l = info->emblem_infos, pos = 0; l; l = l->next, pos++)
+    {
+      GtkIconInfo *emblem_info = l->data;
+      if (icon_info_ensure_scale_and_pixbuf (emblem_info, FALSE)) 
+        {
+           emblem = emblem_info->pixbuf;
+           ew = gdk_pixbuf_get_width (emblem);
+           eh = gdk_pixbuf_get_height (emblem);
+           if (ew >= w)
+             {
+               scale = 0.75;
+               ew = ew * 0.75;
+               eh = eh * 0.75;
+             }
+           else 
+             scale = 1.0;
+           switch (pos % 4) 
+             {
+             case 0: 
+               x = w - ew;
+               y = h - eh;
+               break;
+             case 1: 
+               x = w - ew;
+               y = 0;
+               break;
+             case 2: 
+               x = 0;
+               y = h - eh;
+               break;
+             case 3: 
+               x = 0;
+               y = 0;
+               break;
+           }
+          gdk_pixbuf_composite (emblem, icon, x, y, ew, eh, x, y, 
+                                scale, scale, GDK_INTERP_BILINEAR, 255);
+       } 
+   }
+}
+
 /* This function contains the complicated logic for deciding
  * on the size at which to load the icon and loading it at
  * that size.
@@ -2847,7 +2909,12 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
           g_object_unref (stream);
         }
 
-      return icon_info->pixbuf != NULL;
+      if (!icon_info->pixbuf)
+        return FALSE;
+
+      apply_emblems (icon_info);
+        
+      return TRUE;
     }
 
   /* In many cases, the scale can be determined without actual access
@@ -2937,6 +3004,8 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
 						   GDK_INTERP_BILINEAR);
       g_object_unref (source_pixbuf);
     }
+
+  apply_emblems (icon_info);
 
   return TRUE;
 }
@@ -3334,6 +3403,7 @@ _gtk_icon_theme_check_reload (GdkDisplay *display)
     }
 }
 
+
 /**
  * gtk_icon_theme_lookup_by_gicon:
  * @icon_theme: a #GtkIconTheme
@@ -3382,6 +3452,26 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
 
       names = (const gchar **)g_themed_icon_get_names (G_THEMED_ICON (icon));
       info = gtk_icon_theme_choose_icon (icon_theme, names, size, flags);
+
+      return info;
+    }
+  else if (G_IS_EMBLEMED_ICON (icon))
+    {
+      GIcon *base, *emblem;
+
+      base = g_emblemed_icon_get_icon (G_EMBLEMED_ICON (icon));
+      emblem = g_emblemed_icon_get_emblem (G_EMBLEMED_ICON (icon));
+
+      /* recursively collect information for all emblems */
+      info = gtk_icon_theme_lookup_by_gicon (icon_theme, base, size, flags);
+      if (info)
+        {
+          GtkIconInfo *emblem_info;
+
+          emblem_info = gtk_icon_theme_lookup_by_gicon (icon_theme, emblem, size / 2, flags);
+          if (emblem_info)
+            info->emblem_infos = g_slist_prepend (info->emblem_infos, emblem_info);
+        }
 
       return info;
     }

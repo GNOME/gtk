@@ -1,3 +1,9 @@
+2008-07-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Bump GLib requirement to 2.17.5 for GEmblemedIcon
+
+	* gtk/gtkicontheme.c: Support rendering GEmblemedIcons.
+
 2008-07-27  Sven Herzberg  <sven@imendio.com>
 
 	Bug 544863 – gtkquartz.h not included in released 2.13.5 package
