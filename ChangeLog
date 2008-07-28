@@ -1,5 +1,9 @@
 2008-07-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreemodel.c: Small doc improvements.
+
+2008-07-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Bump GLib requirement to 2.17.5 for GEmblemedIcon
 
 	* gtk/gtkicontheme.c: Support rendering GEmblemedIcons.

@@ -850,10 +850,11 @@ gtk_tree_path_down (GtkTreePath *path)
  * gtk_tree_iter_copy:
  * @iter: A #GtkTreeIter.
  *
- * Creates a dynamically allocated tree iterator as a copy of @iter.  This
- * function is not intended for use in applications, because you can just copy
- * the structs by value (<literal>GtkTreeIter new_iter = iter;</literal>).  You
- * must free this iter with gtk_tree_iter_free ().
+ * Creates a dynamically allocated tree iterator as a copy of @iter.  
+ * This function is not intended for use in applications, because you 
+ * can just copy the structs by value 
+ * (<literal>GtkTreeIter new_iter = iter;</literal>).
+ * You must free this iter with gtk_tree_iter_free().
  *
  * Return value: a newly-allocated copy of @iter.
  **/
@@ -874,8 +875,8 @@ gtk_tree_iter_copy (GtkTreeIter *iter)
  * gtk_tree_iter_free:
  * @iter: A dynamically allocated tree iterator.
  *
- * Frees an iterator that has been allocated on the heap.  This function is
- * mainly used for language bindings.
+ * Frees an iterator that has been allocated by gtk_tree_iter_copy().
+ * This function is mainly used for language bindings.
  **/
 void
 gtk_tree_iter_free (GtkTreeIter *iter)
