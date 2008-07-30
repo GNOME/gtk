@@ -1,3 +1,10 @@
+2008-07-30  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkprintoperation-win32.c: Fix problems in handling custom
+	paper sizes. The DEVMODE::dmPaperWidth and dmPaperLength are in
+	tenths of a millimeter, and the RECT passed to CreateEnhMetaFile()
+	is in hundredths of a millimeter. Patch by Sven Neumann.
+
 2008-07-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreemodel.c: Small doc improvements.
