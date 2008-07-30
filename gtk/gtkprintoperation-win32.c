@@ -954,6 +954,7 @@ devmode_from_settings (GtkPrintSettings *settings,
 	{
 	  devmode->dmPaperSize = DMPAPER_USER;
 	  devmode->dmFields |= DM_PAPERWIDTH | DM_PAPERLENGTH;
+
           /* Lengths in DEVMODE are in tenths of a millimeter */
 	  devmode->dmPaperWidth = gtk_paper_size_get_width (paper_size, GTK_UNIT_MM) * 10.0;
 	  devmode->dmPaperLength = gtk_paper_size_get_height (paper_size, GTK_UNIT_MM) * 10.0;
