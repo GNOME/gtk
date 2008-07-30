@@ -439,6 +439,8 @@ win32_start_page (GtkPrintOperation *op,
     {
       devmode->dmPaperSize = DMPAPER_USER;
       devmode->dmFields |= DM_PAPERWIDTH | DM_PAPERLENGTH;
+
+      /* Lengths in DEVMODE are in tenths of a millimeter */
       devmode->dmPaperWidth = gtk_paper_size_get_width (paper_size, GTK_UNIT_MM) * 10.0;
       devmode->dmPaperLength = gtk_paper_size_get_height (paper_size, GTK_UNIT_MM) * 10.0;
     }
@@ -668,10 +670,12 @@ devmode_to_settings (GtkPrintSettings *settings,
 				     -1, NULL, NULL, NULL);
       if (form_name == NULL || form_name[0] == 0)
 	form_name = g_strdup (_("Custom size"));
+
+      /* Lengths in DEVMODE are in tenths of a millimeter */
       paper_size = gtk_paper_size_new_custom (form_name,
 					      form_name,
-					      devmode->dmPaperWidth * 10.0,
-					      devmode->dmPaperLength * 10.0,
+					      devmode->dmPaperWidth / 10.0,
+					      devmode->dmPaperLength / 10.0,
 					      GTK_UNIT_MM);
       gtk_print_settings_set_paper_size (settings, paper_size);
       gtk_paper_size_free (paper_size);
@@ -950,8 +954,9 @@ devmode_from_settings (GtkPrintSettings *settings,
 	{
 	  devmode->dmPaperSize = DMPAPER_USER;
 	  devmode->dmFields |= DM_PAPERWIDTH | DM_PAPERLENGTH;
-	  devmode->dmPaperWidth = gtk_paper_size_get_width (paper_size, GTK_UNIT_MM) / 10.0;
-	  devmode->dmPaperLength = gtk_paper_size_get_height (paper_size, GTK_UNIT_MM) / 10.0;
+          /* Lengths in DEVMODE are in tenths of a millimeter */
+	  devmode->dmPaperWidth = gtk_paper_size_get_width (paper_size, GTK_UNIT_MM) * 10.0;
+	  devmode->dmPaperLength = gtk_paper_size_get_height (paper_size, GTK_UNIT_MM) * 10.0;
 	}
       gtk_paper_size_free (paper_size);
     }
@@ -1718,7 +1723,6 @@ _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation 
 							      gchar            **target)
 {
   GtkPaperSize *paper_size;
-  double w, h;
   HDC metafile_dc;
   RECT rect;
   char *template;
@@ -1737,13 +1741,12 @@ _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation 
   g_free (filename);
 
   paper_size = gtk_page_setup_get_paper_size (page_setup);
-  w = gtk_paper_size_get_width (paper_size, GTK_UNIT_MM);
-  h = gtk_paper_size_get_height (paper_size, GTK_UNIT_MM);
-  
+
+  /* The rectangle dimensions are given in hundredths of a millimeter */
   rect.left = 0;
-  rect.right = w*100;
+  rect.right = 100.0 * gtk_paper_size_get_width (paper_size, GTK_UNIT_MM);
   rect.top = 0;
-  rect.bottom = h*100;
+  rect.bottom = 100.0 * gtk_paper_size_get_height (paper_size, GTK_UNIT_MM);
   
   metafile_dc = CreateEnhMetaFileW (NULL, filename_utf16,
 				    &rect, L"Gtk+\0Print Preview\0\0");
