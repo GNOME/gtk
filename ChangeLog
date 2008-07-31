@@ -1,5 +1,8 @@
 2008-07-31  Matthisa Clasen  <mclasen@redhat.com>
 
+	* modules/input/gtkimcontextmultipress.c: Use a second-granularity
+	timer for automatic commit.
+
 	* gtk/gtkclipboard.c (gtk_clipboard_store): Use a second-grandularity
 	timer for the store timeout.
 

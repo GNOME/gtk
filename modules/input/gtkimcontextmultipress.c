@@ -378,8 +378,7 @@ vfunc_filter_keypress (GtkIMContext *context, GdkEventKey *event)
       /* Create a timeout that will cause the currently chosen character to be committed,
        * if nothing happens for a certain amount of time:
        */
-      /* g_timeout_add_seconds is only available since glib 2.14: multipress_context->timeout_id = g_timeout_add_seconds(AUTOMATIC_COMPOSE_TIMEOUT, on_timeout, multipress_context); */
-      multipress_context->timeout_id = g_timeout_add (AUTOMATIC_COMPOSE_TIMEOUT * 1000, on_timeout, multipress_context);
+      multipress_context->timeout_id = g_timeout_add_seconds(AUTOMATIC_COMPOSE_TIMEOUT, on_timeout, multipress_context); 
 
       return TRUE; /* TRUE means that the event was handled. */
     }
