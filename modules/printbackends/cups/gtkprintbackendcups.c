@@ -106,6 +106,8 @@ struct _GtkPrintBackendCups
   guint list_printers_poll;
   guint list_printers_pending : 1;
   guint got_default_printer   : 1;
+  guint default_printer_poll;
+  GtkCupsConnectionTest *default_printer_connection_test;
 
   char **covers;
   char  *default_cover_before;
@@ -120,6 +122,7 @@ static void                 gtk_print_backend_cups_init            (GtkPrintBack
 static void                 gtk_print_backend_cups_finalize        (GObject                           *object);
 static void                 gtk_print_backend_cups_dispose         (GObject                           *object);
 static void                 cups_get_printer_list                  (GtkPrintBackend                   *print_backend);
+static void                 cups_get_default_printer               (GtkPrintBackendCups               *print_backend);
 static void                 cups_request_execute                   (GtkPrintBackendCups               *print_backend,
 								    GtkCupsRequest                    *request,
 								    GtkPrintCupsResponseCallbackFunc   callback,
@@ -141,7 +144,7 @@ static void                 cups_printer_prepare_for_print         (GtkPrinter  
 static GList *              cups_printer_list_papers               (GtkPrinter                        *printer);
 static GtkPageSetup *       cups_printer_get_default_page_size     (GtkPrinter                        *printer);
 static void                 cups_printer_request_details           (GtkPrinter                        *printer);
-static void                 cups_request_default_printer           (GtkPrintBackendCups               *print_backend);
+static gboolean             cups_request_default_printer           (GtkPrintBackendCups               *print_backend);
 static void                 cups_request_ppd                       (GtkPrinter                        *printer);
 static void                 cups_printer_get_hard_margins          (GtkPrinter                        *printer,
 								    double                            *top,
@@ -509,7 +512,10 @@ gtk_print_backend_cups_init (GtkPrintBackendCups *backend_cups)
   backend_cups->default_cover_after = NULL;
   backend_cups->number_of_covers = 0;
 
-  cups_request_default_printer (backend_cups);
+  backend_cups->default_printer_poll = 0;
+  backend_cups->default_printer_connection_test = NULL;
+
+  cups_get_default_printer (backend_cups);
 }
 
 static void
@@ -530,6 +536,8 @@ gtk_print_backend_cups_finalize (GObject *object)
 
   g_free (backend_cups->default_cover_before);
   g_free (backend_cups->default_cover_after);
+
+  gtk_cups_connection_test_free (backend_cups->default_printer_connection_test);
   
   backend_parent_class->finalize (object);
 }
@@ -548,6 +556,10 @@ gtk_print_backend_cups_dispose (GObject *object)
     g_source_remove (backend_cups->list_printers_poll);
   backend_cups->list_printers_poll = 0;
   
+  if (backend_cups->default_printer_poll > 0)
+    g_source_remove (backend_cups->default_printer_poll);
+  backend_cups->default_printer_poll = 0;
+
   backend_parent_class->dispose (object);
 }
 
@@ -1812,6 +1824,27 @@ cups_get_user_options (const char     *printer_name,
   return num_options;
 }
 
+/* This function requests default printer from a CUPS server in regular intervals.
+ * In the case of unreachable CUPS server the request is repeated later.
+ * The default printer is not requested in the case of previous success.
+ */
+static void
+cups_get_default_printer (GtkPrintBackendCups *backend)
+{
+  GtkPrintBackendCups *cups_backend;
+
+  cups_backend = backend;
+
+  cups_backend->default_printer_connection_test = gtk_cups_connection_test_new (NULL);
+  if (cups_backend->default_printer_poll == 0)
+    {
+      if (cups_request_default_printer (cups_backend))
+        cups_backend->default_printer_poll = gdk_threads_add_timeout_seconds (1,
+                                                                              (GSourceFunc) cups_request_default_printer,
+                                                                              backend);
+    }
+}
+
 static void
 cups_request_default_printer_cb (GtkPrintBackendCups *print_backend,
 				 GtkCupsResult       *result,
@@ -1819,6 +1852,8 @@ cups_request_default_printer_cb (GtkPrintBackendCups *print_backend,
 {
   ipp_t *response;
   ipp_attribute_t *attr;
+
+  GDK_THREADS_ENTER ();
 
   response = gtk_cups_result_get_response (result);
   
@@ -1832,27 +1867,35 @@ cups_request_default_printer_cb (GtkPrintBackendCups *print_backend,
    */
   if (print_backend->list_printers_poll != 0)
     cups_request_printer_list (print_backend);
+
+  GDK_THREADS_LEAVE ();
 }
 
-static void
+static gboolean
 cups_request_default_printer (GtkPrintBackendCups *print_backend)
 {
   GtkCupsRequest *request;
   const char *str;
   char *name = NULL;
 
+  if (!gtk_cups_connection_test_is_server_available (print_backend->default_printer_connection_test))
+    return TRUE;
+
+  gtk_cups_connection_test_free (print_backend->default_printer_connection_test);
+  print_backend->default_printer_connection_test = NULL;
+
   if ((str = g_getenv ("LPDEST")) != NULL)
     {
       print_backend->default_printer = g_strdup (str);
       print_backend->got_default_printer = TRUE;
-      return;
+      return FALSE;
     }
   else if ((str = g_getenv ("PRINTER")) != NULL &&
 	   strcmp (str, "lp") != 0)
     {
       print_backend->default_printer = g_strdup (str);
       print_backend->got_default_printer = TRUE;
-      return;
+      return FALSE;
     }
   
   /* Figure out user setting for default printer */  
@@ -1861,7 +1904,7 @@ cups_request_default_printer (GtkPrintBackendCups *print_backend)
     {
        print_backend->default_printer = name;
        print_backend->got_default_printer = TRUE;
-       return;
+       return FALSE;
     }
 
   request = gtk_cups_request_new (NULL,
@@ -1876,6 +1919,8 @@ cups_request_default_printer (GtkPrintBackendCups *print_backend)
                         (GtkPrintCupsResponseCallbackFunc) cups_request_default_printer_cb,
 		        g_object_ref (print_backend),
 		        g_object_unref);
+
+  return FALSE;
 }
 
 static void

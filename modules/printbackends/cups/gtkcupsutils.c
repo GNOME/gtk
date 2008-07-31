@@ -29,6 +29,8 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <time.h>
+#include <fcntl.h>
+#include <sys/socket.h>
 
 typedef void (*GtkCupsRequestStateFunc) (GtkCupsRequest *request);
 
@@ -1195,3 +1197,120 @@ gtk_cups_result_get_error_string (GtkCupsResult *result)
   return result->error_msg; 
 }
 
+/* This function allocates new instance of GtkCupsConnectionTest() and creates
+ * a socket for communication with a CUPS server 'server'.
+ */
+GtkCupsConnectionTest *
+gtk_cups_connection_test_new (const char *server)
+{
+  GtkCupsConnectionTest *result = NULL;
+  gchar                 *port_str = NULL;
+
+  result = g_new (GtkCupsConnectionTest, 1);
+
+  port_str = g_strdup_printf ("%d", ippPort ());
+
+  if (server != NULL)
+    result->addrlist = httpAddrGetList (server, AF_UNSPEC, port_str);
+  else
+    result->addrlist = httpAddrGetList (cupsServer (), AF_UNSPEC, port_str);
+
+  g_free (port_str);
+
+  result->socket = -1;
+  result->current_addr = NULL;
+  result->success_at_init = FALSE;
+
+  result->success_at_init = gtk_cups_connection_test_is_server_available (result);
+
+  return result;
+}
+
+
+/* A non-blocking test whether it is possible to connect to a CUPS server specified
+ * inside of GtkCupsConnectionTest structure.
+ *  - you need to check it more then once.
+ * The connection is closed after a successful connection.
+ */
+gboolean 
+gtk_cups_connection_test_is_server_available (GtkCupsConnectionTest *test)
+{
+  http_addrlist_t *iter;
+  gboolean         result = FALSE;
+  gint             flags;
+  gint             code;
+
+  if (test == NULL)
+    return FALSE;
+
+  if (test->success_at_init)
+    {
+      test->success_at_init = FALSE;
+      return TRUE;
+    }
+  else
+    {
+      if (test->socket == -1)
+        {
+          iter = test->addrlist;
+          while (iter)
+            {
+              test->socket = socket (iter->addr.addr.sa_family,
+                                     SOCK_STREAM,
+                                     0);
+
+              if (test->socket >= 0)
+                {
+                  flags = fcntl (test->socket, F_GETFL);
+
+                  if (flags != -1)
+                    flags |= O_NONBLOCK;
+
+                  fcntl (test->socket, F_SETFL, flags);
+              
+                  test->current_addr = iter;
+              
+                  break;
+                }
+               iter = iter->next;
+            }
+        }
+
+      if (test->socket >= 0)
+        {
+          code = connect (test->socket,
+                          &test->current_addr->addr.addr,
+                          httpAddrLength (&test->current_addr->addr));
+
+          if (code == 0)
+            {
+              close (test->socket);
+              test->socket = -1;
+              test->current_addr = NULL;
+              result = TRUE;
+            }
+          else
+            result = FALSE;
+         }
+
+      return result;
+    }
+}
+
+/* This function frees memory used by the GtkCupsConnectionTest structure.
+ */
+void 
+gtk_cups_connection_test_free (GtkCupsConnectionTest *test)
+{
+  if (test == NULL)
+    return FALSE;
+
+  test->current_addr = NULL;
+  httpAddrFreeList (test->addrlist);
+  if (test->socket != -1)
+    {
+      close (test->socket);
+      test->socket = -1;
+    }
+  g_free (test);
+}

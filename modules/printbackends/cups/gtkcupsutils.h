@@ -28,8 +28,9 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkCupsRequest  GtkCupsRequest;
-typedef struct _GtkCupsResult   GtkCupsResult;
+typedef struct _GtkCupsRequest        GtkCupsRequest;
+typedef struct _GtkCupsResult         GtkCupsResult;
+typedef struct _GtkCupsConnectionTest GtkCupsConnectionTest;
 
 typedef enum
 {
@@ -80,6 +81,14 @@ struct _GtkCupsRequest
   gint own_http : 1; 
 };
 
+struct _GtkCupsConnectionTest
+{
+  http_addrlist_t *addrlist;
+  http_addrlist_t *current_addr;
+  gboolean         success_at_init;
+  gint             socket;
+};
+
 #define GTK_CUPS_REQUEST_START 0
 #define GTK_CUPS_REQUEST_DONE 500
 
@@ -105,39 +114,42 @@ enum
   GTK_CUPS_GET_DONE = GTK_CUPS_REQUEST_DONE
 };
 
-GtkCupsRequest * gtk_cups_request_new             (http_t             *connection,
-						   GtkCupsRequestType  req_type,
-						   gint                operation_id,
-						   GIOChannel         *data_io,
-						   const char         *server,
-						   const char         *resource);
-void             gtk_cups_request_ipp_add_string  (GtkCupsRequest     *request,
-						   ipp_tag_t           group,
-						   ipp_tag_t           tag,
-						   const char         *name,
-						   const char         *charset,
-						   const char         *value);
-void             gtk_cups_request_ipp_add_strings (GtkCupsRequest     *request,
-						   ipp_tag_t           group,
-						   ipp_tag_t           tag,
-						   const char         *name,
-						   int                 num_values,
-						   const char         *charset,
-						   const char * const *values);
-gboolean         gtk_cups_request_read_write      (GtkCupsRequest     *request);
-GtkCupsPollState gtk_cups_request_get_poll_state  (GtkCupsRequest     *request);
-void             gtk_cups_request_free            (GtkCupsRequest     *request);
-GtkCupsResult  * gtk_cups_request_get_result      (GtkCupsRequest     *request);
-gboolean         gtk_cups_request_is_done         (GtkCupsRequest     *request);
-void             gtk_cups_request_encode_option   (GtkCupsRequest     *request,
-						   const gchar        *option,
-						   const gchar        *value);
-gboolean         gtk_cups_result_is_error         (GtkCupsResult      *result);
-ipp_t          * gtk_cups_result_get_response     (GtkCupsResult      *result);
-GtkCupsErrorType gtk_cups_result_get_error_type   (GtkCupsResult      *result);
-int              gtk_cups_result_get_error_status (GtkCupsResult      *result);
-int              gtk_cups_result_get_error_code   (GtkCupsResult      *result);
-const char     * gtk_cups_result_get_error_string (GtkCupsResult      *result);
+GtkCupsRequest        * gtk_cups_request_new                         (http_t             *connection,
+								      GtkCupsRequestType  req_type,
+								      gint                operation_id,
+								      GIOChannel         *data_io,
+								      const char         *server,
+								      const char         *resource);
+void                    gtk_cups_request_ipp_add_string              (GtkCupsRequest     *request,
+								      ipp_tag_t           group,
+								      ipp_tag_t           tag,
+								      const char         *name,
+								      const char         *charset,
+								      const char         *value);
+void                    gtk_cups_request_ipp_add_strings             (GtkCupsRequest     *request,
+								      ipp_tag_t           group,
+								      ipp_tag_t           tag,
+								      const char         *name,
+								      int                 num_values,
+								      const char         *charset,
+								      const char * const *values);
+gboolean                gtk_cups_request_read_write                  (GtkCupsRequest     *request);
+GtkCupsPollState        gtk_cups_request_get_poll_state              (GtkCupsRequest     *request);
+void                    gtk_cups_request_free                        (GtkCupsRequest     *request);
+GtkCupsResult         * gtk_cups_request_get_result                  (GtkCupsRequest     *request);
+gboolean                gtk_cups_request_is_done                     (GtkCupsRequest     *request);
+void                    gtk_cups_request_encode_option               (GtkCupsRequest     *request,
+						                      const gchar        *option,
+						                      const gchar        *value);
+gboolean                gtk_cups_result_is_error                     (GtkCupsResult      *result);
+ipp_t                 * gtk_cups_result_get_response                 (GtkCupsResult      *result);
+GtkCupsErrorType        gtk_cups_result_get_error_type               (GtkCupsResult      *result);
+int                     gtk_cups_result_get_error_status             (GtkCupsResult      *result);
+int                     gtk_cups_result_get_error_code               (GtkCupsResult      *result);
+const char            * gtk_cups_result_get_error_string             (GtkCupsResult      *result);
+GtkCupsConnectionTest * gtk_cups_connection_test_new                 (const char            *server);
+gboolean                gtk_cups_connection_test_is_server_available (GtkCupsConnectionTest *test);
+void                    gtk_cups_connection_test_free                (GtkCupsConnectionTest *test);
 
 G_END_DECLS
 #endif 
