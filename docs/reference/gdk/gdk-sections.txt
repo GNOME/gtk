@@ -972,6 +972,8 @@ gdk_threads_add_idle
 gdk_threads_add_idle_full
 gdk_threads_add_timeout
 gdk_threads_add_timeout_full
+gdk_threads_add_timeout_seconds
+gdk_threads_add_timeout_seconds_full
 
 <SUBSECTION Private>
 gdk_threads_lock
