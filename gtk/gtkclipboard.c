@@ -2023,7 +2023,7 @@ gtk_clipboard_store (GtkClipboard *clipboard)
   clipboard->storing_selection = TRUE;
 
   clipboard->store_loop = g_main_loop_new (NULL, TRUE);
-  clipboard->store_timeout = g_timeout_add (10000, (GSourceFunc) gtk_clipboard_store_timeout, clipboard);
+  clipboard->store_timeout = g_timeout_add_seconds (10, (GSourceFunc) gtk_clipboard_store_timeout, clipboard);
 
   if (g_main_loop_is_running (clipboard->store_loop))
     {

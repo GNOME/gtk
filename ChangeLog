@@ -1,5 +1,10 @@
 2008-07-31  Matthisa Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkclipboard.c (gtk_clipboard_store): Use a second-grandularity
+	timer for the store timeout.
+
+2008-07-31  Matthisa Clasen  <mclasen@redhat.com>
+
 	* gdk/gdk.[hc]:
 	* gdk/gdk.symbols: Complete the set of thread-safe timeout function
 	with second-granularity versions. Patch by Marek Kasik.
