@@ -691,6 +691,71 @@ gdk_threads_add_timeout (guint       interval,
 }
 
 
+/**
+ * gdk_threads_add_timeout_seconds_full:
+ * @priority: the priority of the timeout source. Typically this will be in the
+ *            range between #G_PRIORITY_DEFAULT_IDLE and #G_PRIORITY_HIGH_IDLE.
+ * @interval: the time between calls to the function, in seconds
+ * @function: function to call
+ * @data:     data to pass to @function
+ * @notify:   function to call when the timeout is removed, or %NULL
+ *
+ * A variant of gdk_threads_add_timout_full() with second-granularity.
+ * See g_timeout_add_seconds_full() for a discussion of why it is
+ * a good idea to use this function if you don't need finer granularity.
+ *
+ *  Return value: the ID (greater than 0) of the event source.
+ * 
+ * Since: 2.14
+ */
+guint
+gdk_threads_add_timeout_seconds_full (gint           priority,
+                                      guint          interval,
+                                      GSourceFunc    function,
+                                      gpointer       data,
+                                      GDestroyNotify notify)
+{
+  GdkThreadsDispatch *dispatch;
+
+  g_return_val_if_fail (function != NULL, 0);
+
+  dispatch = g_slice_new (GdkThreadsDispatch);
+  dispatch->func = function;
+  dispatch->data = data;
+  dispatch->destroy = notify;
+
+  return g_timeout_add_seconds_full (priority, 
+                                     interval,
+                                     gdk_threads_dispatch, 
+                                     dispatch, 
+                                     gdk_threads_dispatch_free);
+}
+
+/**
+ * gdk_threads_add_timeout_seconds:
+ * @interval: the time between calls to the function, in seconds
+ * @function: function to call
+ * @data:     data to pass to @function
+ *
+ * A wrapper for the common usage of gdk_threads_add_timeout_seconds_full() 
+ * assigning the default priority, #G_PRIORITY_DEFAULT.
+ *
+ * For details, see gdk_threads_add_timeout_full().
+ * 
+ * Return value: the ID (greater than 0) of the event source.
+ *
+ * Since: 2.14
+ */
+guint
+gdk_threads_add_timeout_seconds (guint       interval,
+                                 GSourceFunc function,
+                                 gpointer    data)
+{
+  return gdk_threads_add_timeout_seconds_full (G_PRIORITY_DEFAULT,
+                                               interval, function, data, NULL);
+}
+
+
 G_CONST_RETURN char *
 gdk_get_program_class (void)
 {
