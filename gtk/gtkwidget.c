@@ -298,6 +298,7 @@ static GQuark		quark_accel_closures = 0;
 static GQuark		quark_event_mask = 0;
 static GQuark		quark_extension_event_mode = 0;
 static GQuark		quark_parent_window = 0;
+static GQuark		quark_pointer_window = 0;
 static GQuark		quark_shape_info = 0;
 static GQuark		quark_input_shape_info = 0;
 static GQuark		quark_colormap = 0;
@@ -385,6 +386,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_event_mask = g_quark_from_static_string ("gtk-event-mask");
   quark_extension_event_mode = g_quark_from_static_string ("gtk-extension-event-mode");
   quark_parent_window = g_quark_from_static_string ("gtk-parent-window");
+  quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
   quark_shape_info = g_quark_from_static_string ("gtk-shape-info");
   quark_input_shape_info = g_quark_from_static_string ("gtk-input-shape-info");
   quark_colormap = g_quark_from_static_string ("gtk-colormap");
@@ -8053,6 +8055,282 @@ _gtk_widget_peek_colormap (void)
   return NULL;
 }
 
+/**
+ * _gtk_widget_set_pointer_window:
+ * @widget: a #GtkWidget.
+ * @pointer_window: the new pointer window.
+ *  
+ * Sets pointer window for @widget.  Does not ref @pointer_window.
+ * Actually stores it on the #GdkScreen, but you don't need to know that.
+ **/
+void
+_gtk_widget_set_pointer_window   (GtkWidget *widget,
+				  GdkWindow *pointer_window)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  GdkScreen *screen = gdk_drawable_get_screen (GDK_DRAWABLE (widget->window));
+  g_object_set_qdata (G_OBJECT (screen), quark_pointer_window, pointer_window);
+}
+
+/**
+ * _gtk_widget_get_pointer_window:
+ * @widget: a #GtkWidget.
+ *
+ * Return value: the pointer window set on the #GdkScreen @widget is attached
+ * to, or %NULL.
+ **/
+GdkWindow *
+_gtk_widget_get_pointer_window   (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  GdkScreen *screen = gdk_drawable_get_screen (GDK_DRAWABLE (widget->window));
+  return g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+}
+
+static void
+synth_crossing (GtkWidget      *widget,
+		GdkEventType    type,
+		GdkWindow      *window,
+		GdkCrossingMode mode,
+		GdkNotifyType   detail)
+{
+  GdkEvent *event;
+  
+  event = gdk_event_new (type);
+
+  event->crossing.window = g_object_ref (window);
+  event->crossing.send_event = TRUE;
+  event->crossing.subwindow = g_object_ref (window);
+  event->crossing.time = GDK_CURRENT_TIME;
+  event->crossing.x = event->crossing.y = 0;
+  event->crossing.x_root = event->crossing.y_root = 0;
+  event->crossing.mode = mode;
+  event->crossing.detail = detail;
+  event->crossing.focus = FALSE;
+  event->crossing.state = 0;
+
+  if (!widget)
+    widget = gtk_get_event_widget (event);
+
+  if (widget)
+    gtk_widget_event_internal (widget, event);
+
+  gdk_event_free (event);
+}
+
+/**
+ * _gtk_widget_is_pointer_widget:
+ * @widget: a #GtkWidget
+ *
+ * Returns %TRUE if the pointer window belongs to @widget.
+ *
+ */
+gboolean
+_gtk_widget_is_pointer_widget (GtkWidget *widget)
+{
+  if (GTK_WIDGET_HAS_POINTER (widget))
+    { 
+      GdkWindow *win; 
+      GtkWidget *wid;
+
+      win = _gtk_widget_get_pointer_window (widget);
+      if (win)
+        { 
+          gdk_window_get_user_data (win, &wid);
+          if (wid == widget)
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+/**
+ * _gtk_widget_synthesize_crossing:
+ * @from: the #GtkWidget the virtual pointer is leaving.
+ * @to: the #GtkWidget the virtual pointer is moving to.
+ * @mode: the #GdkCrossingMode to place on the synthesized events.
+ *
+ * Generate crossing event(s) on widget state (sensitivity) or GTK+ grab change.
+ *
+ * The real pointer window is the window that most recently received an enter notify
+ * event.  Windows that don't select for crossing events can't become the real
+ * poiner window.  The real pointer widget that owns the real pointer window.  The
+ * effective pointer window is the same as the real pointer window unless the real
+ * pointer widget is either insensitive or there is a grab on a widget that is not
+ * an ancestor of the real pointer widget (in which case the effective pointer
+ * window should be the root window).
+ *
+ * When the effective pointer window is the same as the real poiner window, we
+ * receive crossing events from the windowing system.  When the effective pointer
+ * window changes to become different from the real pointer window we synthesize
+ * crossing events, attempting to follow X protocol rules:
+ *
+ * When the root window becomes the effective pointer window:
+ *   - leave notify on real pointer window, detail Ancestor
+ *   - leave notify on all of its ancestors, detail Virtual
+ *   - enter notify on root window, detail Inferior
+ *
+ * When the root window ceases to be the effective pointer window:
+ *   - leave notify on root window, detail Inferior
+ *   - enter notify on all ancestors of real pointer window, detail Virtual
+ *   - enter notify on real pointer window, detail Ancestor
+ */
+void
+_gtk_widget_synthesize_crossing (GtkWidget      *from,
+				 GtkWidget      *to,
+				 GdkCrossingMode mode)
+{
+  GdkWindow *from_window = NULL, *to_window = NULL;
+
+  g_return_if_fail (from != NULL || to != NULL);
+
+  if (from != NULL)
+    from_window = GTK_WIDGET_HAS_POINTER (from)
+      ? _gtk_widget_get_pointer_window (from) : from->window;
+  if (to != NULL)
+    to_window = GTK_WIDGET_HAS_POINTER (to)
+      ? _gtk_widget_get_pointer_window (to) : to->window;
+
+  if (from_window == NULL && to_window == NULL)
+    ;
+  else if (from_window != NULL && to_window == NULL)
+    {
+      GList *from_ancestors = NULL, *list;
+      GdkWindow *from_ancestor = from_window;
+
+      while (from_ancestor != NULL)
+	{
+	  if (from_ancestor != NULL)
+	    {
+	      from_ancestor = gdk_window_get_parent (from_ancestor);
+	      if (from_ancestor == NULL)
+		break;
+	      from_ancestors = g_list_prepend (from_ancestors, from_ancestor);
+	    }
+	}
+
+      synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
+		      mode, GDK_NOTIFY_ANCESTOR);
+      for (list = g_list_last (from_ancestors); list; list = list->prev)
+	{
+	  synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkWindow *) list->data,
+			  mode, GDK_NOTIFY_VIRTUAL);
+	}
+
+      /* XXX: enter/inferior on root window? */
+
+      g_list_free (from_ancestors);
+    }
+  else if (from_window == NULL && to_window != NULL)
+    {
+      GList *to_ancestors = NULL, *list;
+      GdkWindow *to_ancestor = to_window;
+
+      while (to_ancestor != NULL)
+	{
+	  if (to_ancestor != NULL)
+	    {
+	      to_ancestor = gdk_window_get_parent (to_ancestor);
+	      if (to_ancestor == NULL)
+		break;
+	      to_ancestors = g_list_prepend (to_ancestors, to_ancestor);
+	    }
+	}
+
+      /* XXX: leave/inferior on root window? */
+
+      for (list = to_ancestors; list; list = list->next)
+	{
+	  synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkWindow *) list->data,
+			  mode, GDK_NOTIFY_VIRTUAL);
+	}
+      synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
+		      mode, GDK_NOTIFY_ANCESTOR);
+
+      g_list_free (to_ancestors);
+    }
+  else if (from_window == to_window)
+    ;
+  else
+    {
+      GList *from_ancestors = NULL, *to_ancestors = NULL, *list;
+      GdkWindow *from_ancestor = from_window, *to_ancestor = to_window;
+
+      while (from_ancestor != NULL || to_ancestor != NULL)
+	{
+	  if (from_ancestor != NULL)
+	    {
+	      from_ancestor = gdk_window_get_parent (from_ancestor);
+	      if (from_ancestor == to_window)
+		break;
+	      from_ancestors = g_list_prepend (from_ancestors, from_ancestor);
+	    }
+	  if (to_ancestor != NULL)
+	    {
+	      to_ancestor = gdk_window_get_parent (to_ancestor);
+	      if (to_ancestor == from_window)
+		break;
+	      to_ancestors = g_list_prepend (to_ancestors, to_ancestor);
+	    }
+	}
+      if (to_ancestor == from_window)
+	{
+	  if (mode != GDK_CROSSING_GTK_UNGRAB)
+	    synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
+			    mode, GDK_NOTIFY_INFERIOR);
+	  for (list = to_ancestors; list; list = list->next)
+	    synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkWindow *) list->data, 
+			    mode, GDK_NOTIFY_VIRTUAL);
+	  synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
+			  mode, GDK_NOTIFY_ANCESTOR);
+	}
+      else if (from_ancestor == to_window)
+	{
+	  synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
+			  mode, GDK_NOTIFY_ANCESTOR);
+	  for (list = g_list_last (from_ancestors); list; list = list->prev)
+	    {
+	      synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkWindow *) list->data,
+			      mode, GDK_NOTIFY_VIRTUAL);
+	    }
+	  if (mode != GDK_CROSSING_GTK_GRAB)
+	    synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
+			    mode, GDK_NOTIFY_INFERIOR);
+	}
+      else
+	{
+	  while (from_ancestors != NULL && to_ancestors != NULL 
+		 && from_ancestors->data == to_ancestors->data)
+	    {
+	      from_ancestors = g_list_delete_link (from_ancestors, 
+						   from_ancestors);
+	      to_ancestors = g_list_delete_link (to_ancestors, to_ancestors);
+	    }
+
+	  synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
+			  mode, GDK_NOTIFY_NONLINEAR);
+
+	  for (list = g_list_last (from_ancestors); list; list = list->prev)
+	    {
+	      synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkWindow *) list->data,
+			      mode, GDK_NOTIFY_NONLINEAR_VIRTUAL);
+	    }
+	  for (list = to_ancestors; list; list = list->next)
+	    {
+	      synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkWindow *) list->data,
+			      mode, GDK_NOTIFY_NONLINEAR_VIRTUAL);
+	    }
+	  synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
+			  mode, GDK_NOTIFY_NONLINEAR);
+	}
+      g_list_free (from_ancestors);
+      g_list_free (to_ancestors);
+    }
+}
+
 static void
 gtk_widget_propagate_state (GtkWidget           *widget,
 			    GtkStateData        *data)
@@ -8107,6 +8385,16 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 	gtk_grab_remove (widget);
 
       g_signal_emit (widget, widget_signals[STATE_CHANGED], 0, old_state);
+
+      if (GTK_WIDGET_HAS_POINTER (widget) && !GTK_WIDGET_SHADOWED (widget))
+	{
+	  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+	    _gtk_widget_synthesize_crossing (widget, NULL, 
+					     GDK_CROSSING_STATE_CHANGED);
+	  else if (old_state == GTK_STATE_INSENSITIVE)
+	    _gtk_widget_synthesize_crossing (NULL, widget, 
+					     GDK_CROSSING_STATE_CHANGED);
+	}
 
       if (GTK_IS_CONTAINER (widget))
 	{

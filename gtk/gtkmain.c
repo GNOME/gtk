@@ -1569,25 +1569,15 @@ gtk_main_do_event (GdkEvent *event)
       break;
       
     case GDK_ENTER_NOTIFY:
+      GTK_PRIVATE_SET_FLAG (event_widget, GTK_HAS_POINTER);
+      _gtk_widget_set_pointer_window (event_widget, event->any.window);
       if (GTK_WIDGET_IS_SENSITIVE (grab_widget))
-	{
-	  g_object_ref (event_widget);
-	  
-	  gtk_widget_event (grab_widget, event);
-	  if (event_widget == grab_widget)
-	    GTK_PRIVATE_SET_FLAG (event_widget, GTK_LEAVE_PENDING);
-	  
-	  g_object_unref (event_widget);
-	}
+	gtk_widget_event (grab_widget, event);
       break;
       
     case GDK_LEAVE_NOTIFY:
-      if (GTK_WIDGET_LEAVE_PENDING (event_widget))
-	{
-	  GTK_PRIVATE_UNSET_FLAG (event_widget, GTK_LEAVE_PENDING);
-	  gtk_widget_event (event_widget, event);
-	}
-      else if (GTK_WIDGET_IS_SENSITIVE (grab_widget))
+      GTK_PRIVATE_UNSET_FLAG (event_widget, GTK_HAS_POINTER);
+      if (GTK_WIDGET_IS_SENSITIVE (grab_widget))
 	gtk_widget_event (grab_widget, event);
       break;
       
@@ -1660,6 +1650,7 @@ typedef struct
   GtkWidget *new_grab_widget;
   gboolean   was_grabbed;
   gboolean   is_grabbed;
+  gboolean   from_grab;
 } GrabNotifyInfo;
 
 static void
@@ -1681,13 +1672,31 @@ gtk_grab_notify_foreach (GtkWidget *child,
   is_shadowed = info->new_grab_widget && !info->is_grabbed;
 
   g_object_ref (child);
+
+  if ((was_shadowed || is_shadowed) && GTK_IS_CONTAINER (child))
+    gtk_container_forall (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
   
+  if (is_shadowed)
+    {
+      GTK_PRIVATE_SET_FLAG (child, GTK_SHADOWED);
+      if (!was_shadowed && GTK_WIDGET_HAS_POINTER (child)
+	  && GTK_WIDGET_IS_SENSITIVE (child))
+	_gtk_widget_synthesize_crossing (child, info->new_grab_widget,
+					 GDK_CROSSING_GTK_GRAB);
+    }
+  else
+    {
+      GTK_PRIVATE_UNSET_FLAG (child, GTK_SHADOWED);
+      if (was_shadowed && GTK_WIDGET_HAS_POINTER (child)
+	  && GTK_WIDGET_IS_SENSITIVE (child))
+	_gtk_widget_synthesize_crossing (info->old_grab_widget, child,
+					 info->from_grab ? GDK_CROSSING_GTK_GRAB
+					 : GDK_CROSSING_GTK_UNGRAB);
+    }
+
   if (was_shadowed != is_shadowed)
     _gtk_widget_grab_notify (child, was_shadowed);
   
-  if ((was_shadowed || is_shadowed) && GTK_IS_CONTAINER (child))
-    gtk_container_forall (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
-      
   g_object_unref (child);
   
   info->was_grabbed = was_grabbed;
@@ -1697,7 +1706,8 @@ gtk_grab_notify_foreach (GtkWidget *child,
 static void
 gtk_grab_notify (GtkWindowGroup *group,
 		 GtkWidget      *old_grab_widget,
-		 GtkWidget      *new_grab_widget)
+		 GtkWidget      *new_grab_widget,
+		 gboolean        from_grab)
 {
   GList *toplevels;
   GrabNotifyInfo info;
@@ -1707,6 +1717,7 @@ gtk_grab_notify (GtkWindowGroup *group,
 
   info.old_grab_widget = old_grab_widget;
   info.new_grab_widget = new_grab_widget;
+  info.from_grab = from_grab;
 
   g_object_ref (group);
 
@@ -1751,7 +1762,7 @@ gtk_grab_add (GtkWidget *widget)
       g_object_ref (widget);
       group->grabs = g_slist_prepend (group->grabs, widget);
 
-      gtk_grab_notify (group, old_grab_widget, widget);
+      gtk_grab_notify (group, old_grab_widget, widget, TRUE);
     }
 }
 
@@ -1787,7 +1798,7 @@ gtk_grab_remove (GtkWidget *widget)
       else
 	new_grab_widget = NULL;
 
-      gtk_grab_notify (group, widget, new_grab_widget);
+      gtk_grab_notify (group, widget, new_grab_widget, FALSE);
       
       g_object_unref (widget);
     }

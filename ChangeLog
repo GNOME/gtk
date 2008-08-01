@@ -1,3 +1,19 @@
+2008-07-31  Cody Russell  <bratsche@gnome.org>
+
+	Bug 56070 – Can't click button after setting it sensitive.
+
+	* gtk/gtkwidget.[ch]
+	* gtk/gtkwindow.c
+	* gtk/gtkmain.c
+	* gtk/gtkbutton.c
+	* gtk/gtkprivate.h
+	* gdk/gdkevents.h: Synthesize crossing events events where necessary.
+
+	* gtk/tests/crossingevents.c: Add unit tests for crossing events.
+
+	Big thanks to Ed Catmur, Matthias Clasen, and everyone else who
+	has worked on and helped out with this.
+
 2008-07-31  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 424207 – printing hangs on unreachable cups server

@@ -37,7 +37,8 @@ typedef enum
 {
   PRIVATE_GTK_USER_STYLE	= 1 <<  0,
   PRIVATE_GTK_RESIZE_PENDING	= 1 <<  2,
-  PRIVATE_GTK_LEAVE_PENDING	= 1 <<  4,
+  PRIVATE_GTK_HAS_POINTER	= 1 <<  3,   /* If the pointer is above a window belonging to the widget */
+  PRIVATE_GTK_SHADOWED		= 1 <<  4,   /* If there is a grab in effect shadowing the widget */
   PRIVATE_GTK_HAS_SHAPE_MASK	= 1 <<  5,
   PRIVATE_GTK_IN_REPARENT       = 1 <<  6,
   PRIVATE_GTK_DIRECTION_SET     = 1 <<  7,   /* If the reading direction is not DIR_NONE */
@@ -54,7 +55,8 @@ typedef enum
 #define GTK_PRIVATE_FLAGS(wid)            (GTK_WIDGET (wid)->private_flags)
 #define GTK_WIDGET_USER_STYLE(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_USER_STYLE) != 0)
 #define GTK_CONTAINER_RESIZE_PENDING(obj) ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_RESIZE_PENDING) != 0)
-#define GTK_WIDGET_LEAVE_PENDING(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_LEAVE_PENDING) != 0)
+#define GTK_WIDGET_HAS_POINTER(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_HAS_POINTER) != 0)
+#define GTK_WIDGET_SHADOWED(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_SHADOWED) != 0)
 #define GTK_WIDGET_HAS_SHAPE_MASK(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_HAS_SHAPE_MASK) != 0)
 #define GTK_WIDGET_IN_REPARENT(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_IN_REPARENT) != 0)
 #define GTK_WIDGET_DIRECTION_SET(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_DIRECTION_SET) != 0)
