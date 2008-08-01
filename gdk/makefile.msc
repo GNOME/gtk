@@ -91,6 +91,7 @@ gdk_OBJECTS = \
 	gdkgc.obj \
 	gdkglobals.obj \
 	gdkimage.obj \
+	gdkwindowimpl.obj \
 	gdkkeynames.obj \
 	gdkkeys.obj \
 	gdkkeyuni.obj \

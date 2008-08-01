@@ -8067,9 +8067,11 @@ void
 _gtk_widget_set_pointer_window   (GtkWidget *widget,
 				  GdkWindow *pointer_window)
 {
+  GdkScreen *screen;
+  
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  GdkScreen *screen = gdk_drawable_get_screen (GDK_DRAWABLE (widget->window));
+  screen = gdk_drawable_get_screen (GDK_DRAWABLE (widget->window));
   g_object_set_qdata (G_OBJECT (screen), quark_pointer_window, pointer_window);
 }
 
@@ -8083,9 +8085,11 @@ _gtk_widget_set_pointer_window   (GtkWidget *widget,
 GdkWindow *
 _gtk_widget_get_pointer_window   (GtkWidget *widget)
 {
+  GdkScreen *screen;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  GdkScreen *screen = gdk_drawable_get_screen (GDK_DRAWABLE (widget->window));
+  screen = gdk_drawable_get_screen (GDK_DRAWABLE (widget->window));
   return g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
 }
 

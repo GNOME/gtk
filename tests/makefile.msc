@@ -41,7 +41,8 @@ all :	\
 #
 TESTAPPS = \
 #	autotestfilechooser autotestfilesystem \
-	buildertest floatingtest objecttests \
+#	buildertest floatingtest \
+	objecttests \
 	testaccel testactions testassistant \
 	testbbox \
 	testcairo testcalendar testcellrenderertext testcombo testcombochange \
@@ -50,17 +51,17 @@ TESTAPPS = \
 	testfilechooser testfilechooserbutton testframe \
 	testgrouping testgtk \
 	testicontheme testiconview testimage testinput \
-	testmenus testmenubars testmerge testmultidisplay testmultiscreen \
+	testmenus testmountoperation testmenubars testmerge testmultidisplay testmultiscreen \
 	testnouiprint testnotebookdnd \
 	testprint \
 	testrecentchooser testrecentchoosermenu testrgb testrichtext \
 	testselection testspinbutton \
-	testtext textbuffertest testtoolbar testtooltips \
-	testtreecolumns testtreeedit testtreeflow testtreefocus \
+	testtext testtoolbar testtooltips \
+	testtreecolumns testtreecolumnsizing testtreeedit testtreeflow testtreefocus \
 	testtreemodel testtreesort testtreeview treestoretest \
 	testsocket testsocket_child teststatusicon \
 	testthreads testvolumebutton testxinerama \
-	simple 
+	simple
 
 # syntax error : illegal character '-' in macro
 #stresstest-toolbar
@@ -101,8 +102,8 @@ EXTRA_OBJETCS = testsocket_common.obj
 EXTRA_OBJETCS = testsocket_common.obj
 !ENDIF
 
-$(TESTAPP).exe : ../gtk/gtk-win32-$(GTK_VER).lib $(TESTAPP).obj $(EXTRA_OBJETCS) pixbuf-init.obj 
-	$(CC) $(CFLAGS) $(TESTAPP).obj $(EXTRA_OBJETCS) pixbuf-init.obj $(GTK_LIBS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) \
+$(TESTAPP).exe : ../gtk/gtk-win32-$(GTK_VER).lib $(TESTAPP).obj $(EXTRA_OBJETCS)
+	$(CC) $(CFLAGS) $(TESTAPP).obj $(EXTRA_OBJETCS) $(GTK_LIBS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) \
 	$(PANGO_LIBS) $(GLIB_LIBS) $(CAIRO_LIBS) $(EXTRA_LIBS) $(LDFLAGS)
 
 $(TESTAPP).obj : $(TESTAPP).c

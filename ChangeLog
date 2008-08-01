@@ -1,3 +1,12 @@
+2008-08-01  Hans Breuer  <hans@breuer.org>
+
+	* gdk/makefile.msc : build gdkwindowimpl
+
+	* gtk/gtkwidget.c : fix c99ism - declaration needs to be at the
+	start of a block
+
+	* tests/makefile.msc : update
+
 2008-07-31  Cody Russell  <bratsche@gnome.org>
 
 	Bug 56070 – Can't click button after setting it sensitive.
