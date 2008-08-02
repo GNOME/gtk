@@ -1,5 +1,12 @@
 2008-08-02  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/gtkprint-win32.c
+	* gtk/gtkprint-win32.h
+	* gtk/gtkprintoperation-win32.c: Cosmetic fixups after patch
+	below.
+
+2008-08-02  Tor Lillqvist  <tml@novell.com>
+
 	Bug 339699 - implement gtk_print_operation_set_show_dialog for
 	Windows
 	

@@ -416,18 +416,23 @@ paper_size_to_win32 (GtkPaperSize *paper_size)
   return 0;
 }
 
-gchar* win32_get_default_printer(){
-  gunichar2* win32_printer_name = NULL;
-  gchar*     printer_name = NULL;
+static gchar*
+get_default_printer (void)
+{
+  wchar_t *win32_printer_name = NULL;
+  gchar *printer_name = NULL;
   DWORD needed;
-  GetDefaultPrinterW(NULL,&needed);
-  win32_printer_name = g_malloc((gsize)needed*sizeof(gunichar2));
-  if(!GetDefaultPrinterW(win32_printer_name,&needed)){
-     g_free(win32_printer_name);
-	 return NULL;
-  }
-  printer_name = g_utf16_to_utf8(win32_printer_name,-1,NULL,NULL,NULL);
-  g_free(win32_printer_name);
+
+  GetDefaultPrinterW (NULL, &needed);
+  win32_printer_name = g_malloc ((gsize) needed * sizeof (wchar_t));
+  if (!GetDefaultPrinterW (win32_printer_name, &needed))
+    {
+      g_free (win32_printer_name);
+      return NULL;
+    }
+  printer_name = g_utf16_to_utf8 (win32_printer_name, -1, NULL, NULL, NULL);
+  g_free (win32_printer_name);
+
   return printer_name;
 }
 
@@ -520,13 +525,13 @@ win32_end_run (GtkPrintOperation *op,
       GlobalUnlock (op_win32->devnames);
     }
   
-  GlobalFree(op_win32->devmode);
-  GlobalFree(op_win32->devnames);
+  GlobalFree (op_win32->devmode);
+  GlobalFree (op_win32->devnames);
 
   cairo_surface_destroy (op_win32->surface);
   op_win32->surface = NULL;
 
-  DeleteDC(op_win32->hdc);
+  DeleteDC (op_win32->hdc);
   
   if (printerHandle != 0)
     {
@@ -1313,8 +1318,8 @@ plug_grab_notify (GtkWidget        *widget,
 		  gboolean          was_grabbed,
 		  GtkPrintOperation *op)
 {
-  EnableWindow(GetAncestor (GDK_WINDOW_HWND (widget->window), GA_ROOT),
-	       was_grabbed);
+  EnableWindow (GetAncestor (GDK_WINDOW_HWND (widget->window), GA_ROOT),
+		was_grabbed);
 }
 
 
@@ -1332,7 +1337,7 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
       op = GTK_PRINT_OPERATION ((gpointer)page->lParam);
       op_win32 = op->priv->platform_data;
 
-      SetWindowLongPtrW(wnd, GWLP_USERDATA, (LONG_PTR)op);
+      SetWindowLongPtrW (wnd, GWLP_USERDATA, (LONG_PTR)op);
       
       plug = _gtk_win32_embed_widget_new ((GdkNativeWindow) wnd);
       gtk_window_set_modal (GTK_WINDOW (plug), TRUE);
@@ -1351,7 +1356,7 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
     }
   else if (message == WM_DESTROY)
     {
-      op = GTK_PRINT_OPERATION (GetWindowLongPtrW(wnd, GWLP_USERDATA));
+      op = GTK_PRINT_OPERATION (GetWindowLongPtrW (wnd, GWLP_USERDATA));
       op_win32 = op->priv->platform_data;
       
       g_signal_emit_by_name (op, "custom-widget-apply", op->priv->custom_widget);
@@ -1361,7 +1366,7 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
     }
   else 
     {
-      op = GTK_PRINT_OPERATION (GetWindowLongPtrW(wnd, GWLP_USERDATA));
+      op = GTK_PRINT_OPERATION (GetWindowLongPtrW (wnd, GWLP_USERDATA));
       op_win32 = op->priv->platform_data;
 
       return _gtk_win32_embed_widget_dialog_procedure (GTK_WIN32_EMBED_WIDGET (op_win32->embed_widget),
@@ -1387,27 +1392,27 @@ create_application_page (GtkPrintOperation *op)
   /* Make the template the size of the custom widget size request */
   gtk_widget_size_request (op->priv->custom_widget, &requisition);
       
-  base_units = GetDialogBaseUnits();
-  baseunitX = LOWORD(base_units);
-  baseunitY = HIWORD(base_units);
+  base_units = GetDialogBaseUnits ();
+  baseunitX = LOWORD (base_units);
+  baseunitY = HIWORD (base_units);
   
   htemplate = GlobalAlloc (GMEM_MOVEABLE, 
-			   sizeof (DLGTEMPLATE) + sizeof(WORD) * 3);
+			   sizeof (DLGTEMPLATE) + sizeof (WORD) * 3);
   template = GlobalLock (htemplate);
   template->style = WS_CHILDWINDOW | DS_CONTROL;
   template->dwExtendedStyle = WS_EX_CONTROLPARENT;
   template->cdit = 0;
-  template->x = MulDiv(0, 4, baseunitX);
-  template->y = MulDiv(0, 8, baseunitY);
-  template->cx = MulDiv(requisition.width, 4, baseunitX);
-  template->cy = MulDiv(requisition.height, 8, baseunitY);
+  template->x = MulDiv (0, 4, baseunitX);
+  template->y = MulDiv (0, 8, baseunitY);
+  template->cx = MulDiv (requisition.width, 4, baseunitX);
+  template->cy = MulDiv (requisition.height, 8, baseunitY);
   
   array = (WORD *) (template+1);
   *array++ = 0; /* menu */
   *array++ = 0; /* class */
   *array++ = 0; /* title */
   
-  memset(&page, 0, sizeof (page));
+  memset (&page, 0, sizeof (page));
   page.dwSize = sizeof (page);
   page.dwFlags = PSP_DLGINDIRECT | PSP_USETITLE | PSP_PREMATURE;
   page.hInstance = GetModuleHandle (NULL);
@@ -1423,7 +1428,7 @@ create_application_page (GtkPrintOperation *op)
   page.pfnDlgProc = pageDlgProc;
   page.pfnCallback = NULL;
   page.lParam = (LPARAM) op;
-  hpage = CreatePropertySheetPageW(&page);
+  hpage = CreatePropertySheetPageW (&page);
   
   GlobalUnlock (htemplate);
   
@@ -1467,8 +1472,9 @@ create_page_setup (GtkPrintOperation *op)
   return page_setup;
 }
 
-GtkPrintOperationResult gtk_print_operation_run_without_dialog(GtkPrintOperation *op,
-						  gboolean *do_print)
+GtkPrintOperationResult
+gtk_print_operation_run_without_dialog (GtkPrintOperation *op,
+					gboolean          *do_print)
 {
   GtkPrintOperationResult result;
   GtkPrintOperationWin32 *op_win32;
@@ -1476,16 +1482,19 @@ GtkPrintOperationResult gtk_print_operation_run_without_dialog(GtkPrintOperation
   GtkPrintSettings *settings;
   GtkPageSetup *page_setup;
   DOCINFOW docinfo;
-  HGLOBAL hDevMode    = NULL;
-  HGLOBAL hDevNames   = NULL;
-  HDC     hDC         = NULL;
-  const char* printer = NULL;
+  HGLOBAL hDevMode = NULL;
+  HGLOBAL hDevNames = NULL;
+  HDC hDC = NULL;
+  const char *printer = NULL;
   double dpi_x, dpi_y;
   int job_id;
   cairo_t *cr;
+  DEVNAMES *pdn;
+  DEVMODEW *pdm;
+
   *do_print = FALSE;
 
-  priv     = op->priv;
+  priv = op->priv;
   settings = priv->print_settings;
   
   op_win32 = g_new0 (GtkPrintOperationWin32, 1);
@@ -1493,49 +1502,48 @@ GtkPrintOperationResult gtk_print_operation_run_without_dialog(GtkPrintOperation
   priv->free_platform_data = (GDestroyNotify) op_win32_free;
   printer = gtk_print_settings_get_printer (settings);
 
-  if (!printer){
-      /**
-      no printer selected,
-      get the system default printer and store it to settings
-      */
-	  gchar* tmp_printer = win32_get_default_printer();
-	  if(!tmp_printer){
-            result = GTK_PRINT_OPERATION_RESULT_ERROR;
-		  	g_set_error_literal (&priv->error,
-		     GTK_PRINT_ERROR,
-		     GTK_PRINT_ERROR_INTERNAL_ERROR,
-		     _("No printer found"));
-			goto out;
-	  }
-	  gtk_print_settings_set_printer(settings,tmp_printer);
+  if (!printer)
+    {
+      /* No printer selected. Get the system default printer and store
+       * it in settings.
+       */
+      gchar *tmp_printer = get_default_printer ();
+      if (!tmp_printer)
+	{
+	  result = GTK_PRINT_OPERATION_RESULT_ERROR;
+	  g_set_error_literal (&priv->error,
+			       GTK_PRINT_ERROR,
+			       GTK_PRINT_ERROR_INTERNAL_ERROR,
+			       _("No printer found"));
+	  goto out;
+	}
+      gtk_print_settings_set_printer (settings, tmp_printer);
       printer = gtk_print_settings_get_printer (settings);
-	  g_free(tmp_printer);
-  }
-  
+      g_free (tmp_printer);
+    }
+
   hDevNames = gtk_print_win32_devnames_to_win32_from_printer_name (printer);
-  hDevMode = devmode_from_settings (settings,
-						op->priv->default_page_setup);
+  hDevMode = devmode_from_settings (settings, op->priv->default_page_setup);
 
-  /**
-  create a printer DC for the print settings and pagesetup provided
-  */
-  DEVNAMES *pdn = GlobalLock(hDevNames);
-  DEVMODEW *pdm = GlobalLock(hDevMode);
-  hDC = CreateDCW((gunichar2*)pdn + pdn->wDriverOffset,
-                  (gunichar2*)pdn + pdn->wDeviceOffset,
-                  (gunichar2*)pdn + pdn->wOutputOffset,
-                  pdm );
-  GlobalUnlock(hDevNames);
-  GlobalUnlock(hDevMode);
+  /* Create a printer DC for the print settings and page setup provided. */
+  pdn = GlobalLock (hDevNames);
+  pdm = GlobalLock (hDevMode);
+  hDC = CreateDCW ((wchar_t*)pdn + pdn->wDriverOffset,
+		   (wchar_t*)pdn + pdn->wDeviceOffset,
+		   (wchar_t*)pdn + pdn->wOutputOffset,
+		   pdm );
+  GlobalUnlock (hDevNames);
+  GlobalUnlock (hDevMode);
 
-  if(!hDC){
+  if (!hDC)
+    {
       result = GTK_PRINT_OPERATION_RESULT_ERROR;
       g_set_error_literal (&priv->error,
-             GTK_PRINT_ERROR,
-             GTK_PRINT_ERROR_INTERNAL_ERROR,
-             _("Invalid argument to CreateDC"));
-	  goto out;
-  }
+			   GTK_PRINT_ERROR,
+			   GTK_PRINT_ERROR_INTERNAL_ERROR,
+			   _("Invalid argument to CreateDC"));
+      goto out;
+    }
   
   priv->print_context = _gtk_print_context_new (op);
   page_setup = create_page_setup (op);
@@ -1545,35 +1553,34 @@ GtkPrintOperationResult gtk_print_operation_run_without_dialog(GtkPrintOperation
   *do_print = TRUE;
 
   op_win32->surface = cairo_win32_printing_surface_create (hDC);
-  dpi_x = (double)GetDeviceCaps (hDC, LOGPIXELSX);
-  dpi_y = (double)GetDeviceCaps (hDC, LOGPIXELSY);
+  dpi_x = (double) GetDeviceCaps (hDC, LOGPIXELSX);
+  dpi_y = (double) GetDeviceCaps (hDC, LOGPIXELSY);
 
   cr = cairo_create (op_win32->surface);
   gtk_print_context_set_cairo_context (priv->print_context, cr, dpi_x, dpi_y);
   cairo_destroy (cr);
 
-  memset( &docinfo, 0, sizeof (DOCINFOW));
+  memset (&docinfo, 0, sizeof (DOCINFOW));
   docinfo.cbSize = sizeof (DOCINFOW); 
-  docinfo.lpszDocName = g_utf8_to_utf16 (op->priv->job_name,
-                                         -1, NULL, NULL, NULL); 
-  docinfo.lpszOutput = (LPCWSTR) NULL; 
-  docinfo.lpszDatatype = (LPCWSTR) NULL; 
+  docinfo.lpszDocName = g_utf8_to_utf16 (op->priv->job_name, -1, NULL, NULL, NULL); 
+  docinfo.lpszOutput = NULL; 
+  docinfo.lpszDatatype = NULL; 
   docinfo.fwType = 0; 
 
-  job_id = StartDocW(hDC, &docinfo); 
+  job_id = StartDocW (hDC, &docinfo); 
   g_free ((void *)docinfo.lpszDocName);
-  if (job_id <= 0) 
-  { 
-    result = GTK_PRINT_OPERATION_RESULT_ERROR;
-    g_set_error_literal (&priv->error,
-           GTK_PRINT_ERROR,
-           GTK_PRINT_ERROR_GENERAL,
-           _("Error from StartDoc"));
-    *do_print = FALSE;
-    cairo_surface_destroy (op_win32->surface);
-    op_win32->surface = NULL;
-    goto out; 
-  } 
+  if (job_id <= 0)
+    { 
+      result = GTK_PRINT_OPERATION_RESULT_ERROR;
+      g_set_error_literal (&priv->error,
+			   GTK_PRINT_ERROR,
+			   GTK_PRINT_ERROR_GENERAL,
+			   _("Error from StartDoc"));
+      *do_print = FALSE;
+      cairo_surface_destroy (op_win32->surface);
+      op_win32->surface = NULL;
+      goto out; 
+    }
 
   result = GTK_PRINT_OPERATION_RESULT_APPLY;
   op_win32->hdc = hDC;
@@ -1596,21 +1603,23 @@ GtkPrintOperationResult gtk_print_operation_run_without_dialog(GtkPrintOperation
   op->priv->end_page = win32_end_page;
   op->priv->end_run = win32_end_run;
   
-  out:
+ out:
   if (!*do_print && hDC != NULL)
-    DeleteDC(hDC);
+    DeleteDC (hDC);
 
   if (!*do_print && hDevMode != NULL)
-    GlobalFree(hDevMode);
+    GlobalFree (hDevMode);
 
   if (!*do_print && hDevNames != NULL)
-    GlobalFree(hDevNames);
+    GlobalFree (hDevNames);
 
   return result;
 }
-GtkPrintOperationResult gtk_print_operation_run_with_dialog(GtkPrintOperation *op,
-						  GtkWindow *parent,
-						  gboolean *do_print)
+
+GtkPrintOperationResult
+gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
+				     GtkWindow         *parent,
+				     gboolean          *do_print)
 {
   HRESULT hResult;
   LPPRINTDLGEXW printdlgex = NULL;
@@ -1650,7 +1659,7 @@ GtkPrintOperationResult gtk_print_operation_run_with_dialog(GtkPrintOperation *o
       goto out;
     }      
 
-  printdlgex->lStructSize = sizeof(PRINTDLGEXW);
+  printdlgex->lStructSize = sizeof (PRINTDLGEXW);
   printdlgex->hwndOwner = parentHWnd;
   printdlgex->hDevMode = NULL;
   printdlgex->hDevNames = NULL;
@@ -1706,7 +1715,7 @@ GtkPrintOperationResult gtk_print_operation_run_with_dialog(GtkPrintOperation *o
   printdlgex->lpCallback = (IUnknown *)callback;
   got_gdk_events_message = RegisterWindowMessage ("GDK_WIN32_GOT_EVENTS");
 
-  hResult = PrintDlgExW(printdlgex);
+  hResult = PrintDlgExW (printdlgex);
   IUnknown_Release ((IUnknown *)callback);
   gdk_win32_set_modal_dialog_libgtk_only (NULL);
 
@@ -1774,14 +1783,14 @@ GtkPrintOperationResult gtk_print_operation_run_with_dialog(GtkPrintOperation *o
       gtk_print_context_set_cairo_context (priv->print_context, cr, dpi_x, dpi_y);
       cairo_destroy (cr);
       
-      memset( &docinfo, 0, sizeof (DOCINFOW));
+      memset ( &docinfo, 0, sizeof (DOCINFOW));
       docinfo.cbSize = sizeof (DOCINFOW); 
       docinfo.lpszDocName = g_utf8_to_utf16 (op->priv->job_name, -1, NULL, NULL, NULL); 
       docinfo.lpszOutput = (LPCWSTR) NULL; 
       docinfo.lpszDatatype = (LPCWSTR) NULL; 
       docinfo.fwType = 0; 
 
-      job_id = StartDocW(printdlgex->hDC, &docinfo); 
+      job_id = StartDocW (printdlgex->hDC, &docinfo); 
       g_free ((void *)docinfo.lpszDocName);
       if (job_id <= 0) 
 	{
@@ -1820,13 +1829,13 @@ GtkPrintOperationResult gtk_print_operation_run_with_dialog(GtkPrintOperation *o
   
   out:
   if (!*do_print && printdlgex && printdlgex->hDC != NULL)
-    DeleteDC(printdlgex->hDC);
+    DeleteDC (printdlgex->hDC);
 
   if (!*do_print && printdlgex && printdlgex->hDevMode != NULL) 
-    GlobalFree(printdlgex->hDevMode); 
+    GlobalFree (printdlgex->hDevMode); 
 
   if (!*do_print && printdlgex && printdlgex->hDevNames != NULL) 
-    GlobalFree(printdlgex->hDevNames); 
+    GlobalFree (printdlgex->hDevNames); 
 
   if (page_ranges)
     GlobalFree (page_ranges);
@@ -1842,14 +1851,14 @@ GtkPrintOperationResult gtk_print_operation_run_with_dialog(GtkPrintOperation *o
 
 GtkPrintOperationResult
 _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
-						  gboolean show_dialog,
-						  GtkWindow *parent,
-						  gboolean *do_print)
+						  gboolean           show_dialog,
+						  GtkWindow         *parent,
+						  gboolean          *do_print)
 {
-	if(show_dialog)
-		return gtk_print_operation_run_with_dialog(op,parent,do_print);
-	else
-		return gtk_print_operation_run_without_dialog(op,do_print);
+  if (show_dialog)
+    return gtk_print_operation_run_with_dialog (op, parent, do_print);
+  else
+    return gtk_print_operation_run_without_dialog (op, do_print);
 }
 
 void
@@ -1910,7 +1919,7 @@ _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation 
 
   template = g_build_filename (g_get_tmp_dir (), "prXXXXXX", NULL);
   fd = g_mkstemp (template);
-  close(fd);
+  close (fd);
 
   filename = g_strconcat (template, ".emf", NULL);
   g_free (template);
@@ -1977,7 +1986,7 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
   
   memset (pagesetupdlg, 0, sizeof (PAGESETUPDLGW));
 
-  pagesetupdlg->lStructSize = sizeof(PAGESETUPDLGW);
+  pagesetupdlg->lStructSize = sizeof (PAGESETUPDLGW);
 
   if (parent != NULL)
     pagesetupdlg->hwndOwner = get_parent_hwnd (GTK_WIDGET (parent));
@@ -1991,8 +2000,8 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
   if (printer)
     pagesetupdlg->hDevNames = gtk_print_win32_devnames_to_win32_from_printer_name (printer);
 
-  GetLocaleInfoW(LOCALE_USER_DEFAULT, LOCALE_IMEASURE|LOCALE_RETURN_NUMBER,
-		 (LPWSTR)&measure_system, sizeof (DWORD));
+  GetLocaleInfoW (LOCALE_USER_DEFAULT, LOCALE_IMEASURE|LOCALE_RETURN_NUMBER,
+		  (LPWSTR)&measure_system, sizeof (DWORD));
 
   if (measure_system == 0)
     {
