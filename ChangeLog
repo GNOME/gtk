@@ -1,4 +1,11 @@
 2008-08-02  Matthias Clasen  <mclasen@redhat.com>
+	
+	Bug 429427 – Add "arrow-spacing" style property to GtkRange
+
+	* gtk/gtkrange.c: Add an arrow-spacing style property.
+	Patch by Carlos Garnacho and Christian Dywan
+
+2008-08-02  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 429411 – add style properties to set minimum progressbar 
 	width/height

@@ -522,6 +522,20 @@ gtk_range_class_init (GtkRangeClass *class)
                                                                  TRUE,
                                                                  GTK_PARAM_READABLE));
 
+  /**
+   * GtkRange:arrow-scaling:
+   *
+   * The arrow size proportion relative to the scroll button size.
+   *
+   * Since: 2.14
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_float ("arrow-scaling",
+							       P_("Arrow scaling"),
+							       P_("Arrow scaling with regard to scroll button size"),
+							       0.0, 1.0, 0.5,
+							       GTK_PARAM_READABLE));
+
   g_type_class_add_private (class, sizeof (GtkRangeLayout));
 }
 
@@ -1324,6 +1338,7 @@ draw_stepper (GtkRange     *range,
   GtkShadowType shadow_type;
   GdkRectangle intersection;
   GtkWidget *widget = GTK_WIDGET (range);
+  gfloat arrow_scaling;
 
   gint arrow_x;
   gint arrow_y;
@@ -1375,11 +1390,13 @@ draw_stepper (GtkRange     *range,
 		 rect->width,
 		 rect->height);
 
-  arrow_width = rect->width / 2;
-  arrow_height = rect->height / 2;
+  gtk_widget_style_get (widget, "arrow-scaling", &arrow_scaling, NULL);
+
+  arrow_width = rect->width * arrow_scaling;
+  arrow_height = rect->height * arrow_scaling;
   arrow_x = widget->allocation.x + rect->x + (rect->width - arrow_width) / 2;
   arrow_y = widget->allocation.y + rect->y + (rect->height - arrow_height) / 2;
-  
+
   if (clicked && arrow_sensitive)
     {
       gint arrow_displacement_x;
