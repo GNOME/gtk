@@ -886,8 +886,8 @@ collect_toplevels (GNode   *node,
  * 
  * Obtains a list of all toplevel widgets of the requested types.
  * 
- * Return value: a newly-allocated of all toplevel widgets of the requested 
- * types. 
+ * Return value: a newly-allocated #GSList of all toplevel widgets of the
+ * requested types.  Free the returned list with g_slist_free().
  *
  * Since: 2.4
  **/
