@@ -1,5 +1,12 @@
 2008-08-02  Tor Lillqvist  <tml@novell.com>
 
+	Bug 538686 - gtkprintoperation-win32.c: devmode_from_settings
+
+	* gtk/gtkprintoperation-win32.c (devmode_from_settings): Plug
+	potential leak. Thanks to Morten Welinder.
+
+2008-08-02  Tor Lillqvist  <tml@novell.com>
+
 	* gtk/gtkprint-win32.c
 	* gtk/gtkprint-win32.h
 	* gtk/gtkprintoperation-win32.c: Cosmetic fixups after patch
