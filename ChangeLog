@@ -1,3 +1,12 @@
+2008-08-02  Tor Lillqvist  <tml@novell.com>
+
+	Bug 339699 - implement gtk_print_operation_set_show_dialog for
+	Windows
+	
+	* gtk/gtkprint-win32.c
+	* gtk/gtkprint-win32.h
+	* gtk/gtkprintoperation-win32.c: Patch by ecyrbe@gmail.com.
+
 2008-08-02  Matthias Clasen  <mclasen@redhat.com>
 	
 	Bug 544302 – GtkStatusIcon should support GIcon

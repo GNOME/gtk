@@ -52,8 +52,9 @@ typedef struct {
 
 void gtk_print_win32_devnames_free (GtkPrintWin32Devnames *devnames);
 GtkPrintWin32Devnames *gtk_print_win32_devnames_from_win32 (HGLOBAL global);
+GtkPrintWin32Devnames *gtk_print_win32_devnames_from_printer_name (const char *printer);
 HGLOBAL gtk_print_win32_devnames_to_win32 (const GtkPrintWin32Devnames *devnames);
-HGLOBAL gtk_print_win32_devnames_from_printer_name (const char *printer);
+HGLOBAL gtk_print_win32_devnames_to_win32_from_printer_name (const char *printer);
 
 G_END_DECLS
 
