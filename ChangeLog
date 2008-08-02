@@ -1,5 +1,14 @@
 2008-08-02  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 344383 – use po/LINGUAS
+
+	* po/LINGUAS: New file, to make translators happy.
+	* configure.in: Use po/LINGUAS
+	* po/Makefile.in.in: Add po/LINGUAS to DISTFILES
+	Patch by Claude Paroz
+
+2008-08-02  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/gdkapplaunchcontext.c: Improve the docs
 
 2008-08-01  Claudio Saavedra  <csaavedra@igalia.com>
