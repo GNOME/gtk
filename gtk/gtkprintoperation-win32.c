@@ -916,8 +916,8 @@ devmode_from_settings (GtkPrintSettings *settings,
     {
       devmode->dmDriverExtra = extras_len;
       memcpy (((char *)devmode) + sizeof (DEVMODEW), extras, extras_len);
-      g_free (extras);
     }
+  g_free (extras);
   if (gtk_print_settings_has_key (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION))
     devmode->dmDriverVersion = gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION);
   
