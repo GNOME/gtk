@@ -219,7 +219,7 @@ other parts of the constructed user interface with the help of the
 <programlisting><![CDATA[
 <object class="GtkUIManager" id="uiman">
   <child>
-    <object class="GtkActionGroup">
+    <object class="GtkActionGroup" id="actiongroup">
       <child>
         <object class="GtkAction" id="file">
           <property name="label">_File</property>

@@ -51,13 +51,13 @@ GtkTreeViewColumn objects as &lt;child&gt; elements in UI definitions.
 <example>
 <title>A UI definition fragment with GtkTreeView</title>
 <programlisting><![CDATA[
-<object class="GtkTreeView">
+<object class="GtkTreeView" id="treeview">
   <property name="model">liststore1</property>
   <child>
-    <object class="GtkTreeViewColumn">
+    <object class="GtkTreeViewColumn" id="test-column">
       <property name="title">Test</property>
       <child>
-        <object class="GtkCellRendererText"/>
+        <object class="GtkCellRendererText" id="test-renderer"/>
         <attributes>
           <attribute name="text">1</attribute>
         </attributes>
