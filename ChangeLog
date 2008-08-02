@@ -1,3 +1,7 @@
+2008-08-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkapplaunchcontext.c: Improve the docs
+
 2008-08-01  Claudio Saavedra  <csaavedra@igalia.com>
 
 	Bug 545931 – small documentation typos
