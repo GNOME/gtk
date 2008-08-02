@@ -1,5 +1,13 @@
 2008-08-02  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 65818 – rename gtk_window_set_default() and add getter for it
+
+	* gtk/gtk.symbols:
+	* gtk/gtkwindow.[hc]: Rename gtk_window_get_default to
+	gtk_window_get_default_widget. Patch by Christian Dywan
+
+2008-08-02  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 344383 – use po/LINGUAS
 
 	* po/LINGUAS: New file, to make translators happy.

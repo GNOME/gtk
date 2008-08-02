@@ -200,7 +200,7 @@ void       gtk_window_set_focus                (GtkWindow           *window,
 GtkWidget *gtk_window_get_focus                (GtkWindow           *window);
 void       gtk_window_set_default              (GtkWindow           *window,
 						GtkWidget           *default_widget);
-GtkWidget *gtk_window_get_default              (GtkWindow           *window);
+GtkWidget *gtk_window_get_default_widget       (GtkWindow           *window);
 gboolean   gtk_window_activate_default	       (GtkWindow           *window);
 
 void       gtk_window_set_transient_for        (GtkWindow           *window, 

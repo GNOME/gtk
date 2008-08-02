@@ -1514,7 +1514,7 @@ gtk_window_set_default (GtkWindow *window,
 }
 
 /**
- * gtk_window_get_default:
+ * gtk_window_get_default_widget:
  * @window: a #GtkWindow
  *
  * Returns the default widget for @window. See gtk_window_set_default()
@@ -1525,7 +1525,7 @@ gtk_window_set_default (GtkWindow *window,
  * Since: 2.14
  **/
 GtkWidget *
-gtk_window_get_default (GtkWindow *window)
+gtk_window_get_default_widget (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
