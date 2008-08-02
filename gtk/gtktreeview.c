@@ -777,7 +777,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 #define _TREE_VIEW_EXPANDER_SIZE 12
 #define _TREE_VIEW_VERTICAL_SEPARATOR 2
 #define _TREE_VIEW_HORIZONTAL_SEPARATOR 2
-    
+
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("expander-size",
 							     P_("Expander Size"),
@@ -5577,6 +5577,8 @@ validate_row (GtkTreeView *tree_view,
   gboolean draw_vgrid_lines, draw_hgrid_lines;
   gint focus_pad;
   gint grid_line_width;
+  gboolean wide_separators;
+  gint separator_height;
 
   /* double check the row needs validating */
   if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) &&
@@ -5591,6 +5593,8 @@ validate_row (GtkTreeView *tree_view,
 			"horizontal-separator", &horizontal_separator,
 			"vertical-separator", &vertical_separator,
 			"grid-line-width", &grid_line_width,
+                        "wide-separators",  &wide_separators,
+                        "separator-height", &separator_height,
 			NULL);
   
   draw_vgrid_lines =
@@ -5637,7 +5641,12 @@ validate_row (GtkTreeView *tree_view,
 	  height = MAX (height, tree_view->priv->expander_size);
 	}
       else
-	height = 2 + 2 * focus_pad;
+        {
+          if (wide_separators)
+            height = separator_height + 2 * focus_pad;
+          else
+            height = 2 + 2 * focus_pad;
+        }
 
       if (gtk_tree_view_is_expander_column (tree_view, column))
         {

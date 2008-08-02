@@ -1,5 +1,13 @@
 2008-08-02  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 539733 – No way to control treeview separator height
+
+	* gtk/gtktreeview.c: Respect the wide-separators and
+	separator-height style properties when drawing separators.
+	Patch by Christian Dywan
+
+2008-08-02  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 65818 – rename gtk_window_set_default() and add getter for it
 
 	* gtk/gtk.symbols:
