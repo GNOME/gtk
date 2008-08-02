@@ -1,5 +1,9 @@
 2008-08-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Add new functions
+
+2008-08-02  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 515596 – GtkUIManager's embedded UI definition example is invalid
 
 	* gtk/tmpl/gtktreeview.sgml:
