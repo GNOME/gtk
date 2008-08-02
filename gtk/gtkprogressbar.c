@@ -38,7 +38,6 @@
 #define MIN_HORIZONTAL_BAR_HEIGHT  20
 #define MIN_VERTICAL_BAR_WIDTH     22
 #define MIN_VERTICAL_BAR_HEIGHT    80
-#define MAX_TEXT_LENGTH            80
 
 enum {
   PROP_0,
@@ -215,9 +214,62 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                              G_PARAM_READWRITE));
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("yspacing",
-                                                             "YSpacing",
-                                                             "Extra spacing applied to the height of a progress bar.",
+                                                             P_("YSpacing"),
+                                                             P_("Extra spacing applied to the height of a progress bar."),
                                                              0, G_MAXINT, 7,
+                                                             G_PARAM_READWRITE));
+
+  /**
+   * GtkProgressBar:min-horizontal-bar-width:
+   *
+   * The minimum horizontal width of the progress bar.
+   *
+   * Since: 2.14
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("min-horizontal-bar-width",
+                                                             P_("Min horizontal bar width"),
+                                                             P_("The minimum horizontal width of the progress bar"),
+                                                             1, G_MAXINT, MIN_HORIZONTAL_BAR_WIDTH,
+                                                             G_PARAM_READWRITE));
+  /**
+   * GtkProgressBar:min-horizontal-bar-height:
+   *
+   * Minimum horizontal height of the progress bar.
+   *
+   * Since: 2.14
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("min-horizontal-bar-height",
+                                                             P_("Min horizontal bar height"),
+                                                             P_("Minimum horizontal height of the progress bar"),
+                                                             1, G_MAXINT, MIN_HORIZONTAL_BAR_HEIGHT,
+                                                             G_PARAM_READWRITE));
+  /**
+   * GtkProgressBar:min-vertical-bar-width:
+   *
+   * The minimum vertical width of the progress bar.
+   *
+   * Since: 2.14
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("min-vertical-bar-width",
+                                                             P_("Min vertical bar width"),
+                                                             P_("The minimum vertical width of the progress bar"),
+                                                             1, G_MAXINT, MIN_VERTICAL_BAR_WIDTH,
+                                                             G_PARAM_READWRITE));
+  /**
+   * GtkProgressBar:min-vertical-bar-height:
+   *
+   * The minimum vertical height of the progress bar.
+   *
+   * Since: 2.14
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("min-vertical-bar-height",
+                                                             P_("Min vertical bar height"),
+                                                             P_("The minimum vertical height of the progress bar"),
+                                                             1, G_MAXINT, MIN_VERTICAL_BAR_HEIGHT,
                                                              G_PARAM_READWRITE));
 }
 
@@ -485,6 +537,7 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
   PangoLayout *layout;
   gint width, height;
   gint xspacing, yspacing;
+  gint min_width, min_height;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
   g_return_if_fail (requisition != NULL);
@@ -537,15 +590,18 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
   
   if (pbar->orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
       pbar->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
-    {
-      requisition->width = MAX (MIN_HORIZONTAL_BAR_WIDTH, width);
-      requisition->height = MAX (MIN_HORIZONTAL_BAR_HEIGHT, height);
-    }
+    gtk_widget_style_get (widget,
+			  "min-horizontal-bar-width", &min_width,
+			  "min-horizontal-bar-height", &min_height,
+			  NULL);
   else
-    {
-      requisition->width = MAX (MIN_VERTICAL_BAR_WIDTH, width);
-      requisition->height = MAX (MIN_VERTICAL_BAR_HEIGHT, height);
-    }
+    gtk_widget_style_get (widget,
+			  "min-vertical-bar-width", &min_width,
+			  "min-vertical-bar-height", &min_height,
+			  NULL);
+
+  requisition->width = MAX (min_width, width);
+  requisition->height = MAX (min_height, height);
 }
 
 static void

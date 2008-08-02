@@ -1,5 +1,13 @@
 2008-08-02  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 429411 – add style properties to set minimum progressbar 
+	width/height
+
+	* gtk/gtkprogressbar.c: Add style properties for minimum size.
+	Patch by Carlos Garnacho and Christian Dywan
+
+2008-08-02  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 526575 – Missing return type in gtk_ui_manager_get_toplevels
 	documentation
 
