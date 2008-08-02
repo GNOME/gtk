@@ -1,5 +1,12 @@
 2008-08-02  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 540834 – Insensitive widgets cannot be grabbed
+
+	* gtk/tmpl/gtkmain.sgml: Explain that insensitive widgets
+	cannot be grabbed. Patch by Björn Lindqvist
+
+2008-08-02  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk-sections.txt: Update
 
 2008-08-02  Matthias Clasen  <mclasen@redhat.com>

@@ -381,6 +381,10 @@ Makes @widget the current grabbed widget. This means that interaction with
 other widgets in the same application is blocked and mouse as well as 
 keyboard events are delivered to this widget.
 </para>
+<para>
+If @widget is not sensitive, it is not set as the current grabbed
+widget and this function does nothing.
+</para>  
 
 @widget: The widget that grabs keyboard and pointer events.
 
@@ -397,6 +401,9 @@ Queries the current grab of the default window group.
 <para>
 Removes the grab from the given widget. You have to pair calls to gtk_grab_add()
 and gtk_grab_remove().
+</para>
+<para>
+If @widget does not have the grab, this function does nothing.
 </para>
 
 @widget: The widget which gives up the grab.
