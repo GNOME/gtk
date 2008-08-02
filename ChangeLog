@@ -1,5 +1,13 @@
 2008-08-02  Matthias Clasen  <mclasen@redhat.com>
 	
+	Bug 544302 – GtkStatusIcon should support GIcon
+
+	* gtk/gtk.symbols:
+	* gtk/gtkstatusicon.[hc]: Add GIcon support to GtkStatusIcon.
+	Patch by Christian Dywan
+
+2008-08-02  Matthias Clasen  <mclasen@redhat.com>
+	
 	Bug 429427 – Add "arrow-spacing" style property to GtkRange
 
 	* gtk/gtkrange.c: Add an arrow-spacing style property.

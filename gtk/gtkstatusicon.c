@@ -71,6 +71,7 @@ enum
   PROP_FILE,
   PROP_STOCK,
   PROP_ICON_NAME,
+  PROP_GICON,
   PROP_STORAGE_TYPE,
   PROP_SIZE,
   PROP_SCREEN,
@@ -125,6 +126,7 @@ struct _GtkStatusIconPrivate
       GdkPixbuf *pixbuf;
       gchar     *stock_id;
       gchar     *icon_name;
+      GIcon     *gicon;
     } image_data;
 
   GdkPixbuf    *blank_icon;
@@ -209,7 +211,23 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
                                                         P_("The name of the icon from the icon theme"),
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkStatusIcon:gicon:
+   *
+   * The #GIcon displayed in the #GtkStatusIcon. For themed icons,
+   * the image will be updated automatically if the theme changes.
+   *
+   * Since: 2.14
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_GICON,
+                                   g_param_spec_object ("gicon",
+                                                        P_("GIcon"),
+                                                        P_("The GIcon being displayed"),
+                                                        G_TYPE_ICON,
+                                                        GTK_PARAM_READWRITE));
+
   g_object_class_install_property (gobject_class,
 				   PROP_STORAGE_TYPE,
 				   g_param_spec_enum ("storage-type",
@@ -698,6 +716,9 @@ gtk_status_icon_set_property (GObject      *object,
     case PROP_ICON_NAME:
       gtk_status_icon_set_from_icon_name (status_icon, g_value_get_string (value));
       break;
+    case PROP_GICON:
+      gtk_status_icon_set_from_gicon (status_icon, g_value_get_object (value));
+      break;
     case PROP_SCREEN:
       gtk_status_icon_set_screen (status_icon, g_value_get_object (value));
       break;
@@ -747,6 +768,17 @@ gtk_status_icon_get_property (GObject    *object,
 	g_value_set_string (value, NULL);
       else
 	g_value_set_string (value, gtk_status_icon_get_icon_name (status_icon));
+      break;
+    case PROP_GICON:
+      if (priv->storage_type != GTK_IMAGE_GICON)
+        g_value_set_object (value, NULL);
+      else
+        {
+          GIcon *icon;
+
+          gtk_status_icon_get_gicon (status_icon, &icon);
+          g_value_set_object (value, icon);
+        }
       break;
     case PROP_STORAGE_TYPE:
       g_value_set_enum (value, gtk_status_icon_get_storage_type (status_icon));
@@ -875,6 +907,25 @@ gtk_status_icon_new_from_icon_name (const gchar *icon_name)
 {
   return g_object_new (GTK_TYPE_STATUS_ICON,
 		       "icon-name", icon_name,
+		       NULL);
+}
+
+/**
+ * gtk_status_icon_new_from_gicon:
+ * @icon: a #GIcon
+ *
+ * Creates a status icon displaying a #GIcon. If the icon is a
+ * themed icon, it will be updated when the theme changes.
+ *
+ * Return value: a new #GtkStatusIcon
+ *
+ * Since: 2.14
+ **/
+GtkStatusIcon *
+gtk_status_icon_new_from_gicon (GIcon *icon)
+{
+  return g_object_new (GTK_TYPE_STATUS_ICON,
+		       "gicon", icon,
 		       NULL);
 }
 
@@ -1173,7 +1224,54 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	
       }
       break;
-      
+
+    case GTK_IMAGE_GICON:
+      {
+#ifdef GDK_WINDOWING_X11
+        GtkIconSize size = find_icon_size (priv->image, priv->size);
+        gtk_image_set_from_gicon (GTK_IMAGE (priv->image),
+                                  priv->image_data.gicon,
+                                  size);
+#endif
+#ifdef GDK_WINDOWING_WIN32
+      {
+        GtkIconInfo *info =
+        gtk_icon_theme_lookup_by_gicon (gtk_icon_theme_get_default (),
+                                        priv->image_data.gicon,
+                                        priv->size,
+                                        0);
+        GdkPixbuf *pixbuf = gtk_icon_icon_info_load_icon (info, NULL);
+
+        prev_hicon = priv->nid.hIcon;
+        priv->nid.hIcon = gdk_win32_pixbuf_to_hicon_libgtk_only (pixbuf);
+        priv->nid.uFlags |= NIF_ICON;
+        if (priv->nid.hWnd != NULL && priv->visible)
+          if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
+            g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+          if (prev_hicon)
+            DestroyIcon (prev_hicon);
+          g_object_unref (pixbuf);
+      }
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+      {
+        GtkIconInfo *info =
+        gtk_icon_theme_lookup_by_gicon (gtk_icon_theme_get_default (),
+                                        priv->image_data.gicon,
+                                        priv->size,
+                                        0);
+        GdkPixbuf *pixbuf = gtk_icon_icon_info_load_icon (info, NULL);
+
+        QUARTZ_POOL_ALLOC;
+        [priv->status_item setImage:pixbuf];
+        QUARTZ_POOL_RELEASE;
+        g_object_unref (pixbuf);
+      }
+#endif
+
+      }
+      break;
+
     case GTK_IMAGE_EMPTY:
 #ifdef GDK_WINDOWING_X11
       gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), NULL);
@@ -1332,7 +1430,14 @@ gtk_status_icon_reset_image_data (GtkStatusIcon *status_icon)
 
       g_object_notify (G_OBJECT (status_icon), "icon-name");
       break;
-      
+
+    case GTK_IMAGE_GICON:
+      g_free (priv->image_data.gicon);
+      priv->image_data.gicon = NULL;
+
+      g_object_notify (G_OBJECT (status_icon), "gicon");
+      break;
+
     case GTK_IMAGE_EMPTY:
       break;
     default:
@@ -1371,6 +1476,10 @@ gtk_status_icon_set_image (GtkStatusIcon *status_icon,
     case GTK_IMAGE_ICON_NAME:
       priv->image_data.icon_name = g_strdup ((const gchar *)data);
       g_object_notify (G_OBJECT (status_icon), "icon-name");
+      break;
+    case GTK_IMAGE_GICON:
+      priv->image_data.gicon = (GIcon *)data;
+      g_object_notify (G_OBJECT (status_icon), "gicon");
       break;
     default:
       g_warning ("Image type %u not handled by GtkStatusIcon", storage_type);
@@ -1473,6 +1582,27 @@ gtk_status_icon_set_from_icon_name (GtkStatusIcon *status_icon,
 
   gtk_status_icon_set_image (status_icon, GTK_IMAGE_ICON_NAME,
       			     (gpointer) icon_name);
+}
+
+/**
+ * gtk_status_icon_set_from_gicon:
+ * @status_icon: a #GtkStatusIcon
+ * @icon: a GIcon
+ *
+ * Makes @status_icon display the #GIcon.
+ * See gtk_status_icon_new_from_gicon() for details.
+ *
+ * Since: 2.14
+ **/
+void
+gtk_status_icon_set_from_gicon (GtkStatusIcon *status_icon,
+                                GIcon         *icon)
+{
+  g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
+  g_return_if_fail (icon != NULL);
+
+  gtk_status_icon_set_image (status_icon, GTK_IMAGE_GICON,
+                             (gpointer) icon);
 }
 
 /**
@@ -1589,6 +1719,40 @@ gtk_status_icon_get_icon_name (GtkStatusIcon *status_icon)
     priv->image_data.icon_name = NULL;
 
   return priv->image_data.icon_name;
+}
+
+/**
+ * gtk_status_icon_get_gicon:
+ * @status_icon: a #GtkStatusIcon
+ * @icon: a place to store a #GIcon
+ *
+ * Retrieves the #GIcon being displayed by the #GtkStatusIcon.
+ * The storage type of the status icon must be %GTK_IMAGE_EMPTY or
+ * %GTK_IMAGE_GICON (see gtk_status_icon_get_storage_type()).
+ * The caller of this function does not own a reference to the
+ * returned #GIcon.
+ *
+ * If this function fails, @icon is left unchanged;
+ *
+ * Since: 2.14
+ **/
+void
+gtk_status_icon_get_gicon (GtkStatusIcon  *status_icon,
+                           GIcon         **icon)
+{
+  GtkStatusIconPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
+
+  priv = status_icon->priv;
+
+  g_return_if_fail (priv->storage_type == GTK_IMAGE_GICON ||
+                    priv->storage_type == GTK_IMAGE_EMPTY);
+
+  if (priv->storage_type == GTK_IMAGE_EMPTY)
+    priv->image_data.gicon = NULL;
+
+  *icon = priv->image_data.gicon;
 }
 
 /**
