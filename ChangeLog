@@ -1,5 +1,14 @@
 2008-08-02  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 523950 – GtkTreeModelFilter's visible function may get an empty
+	row
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_set_visible_func):
+	Explain and show how iterators pointing to empty rows should be
+	handled in the visible function. Patch by Björn Lindqvist
+
+2008-08-02  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 539733 – No way to control treeview separator height
 
 	* gtk/gtktreeview.c: Respect the wide-separators and

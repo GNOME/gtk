@@ -2884,6 +2884,29 @@ gtk_tree_model_filter_get_model (GtkTreeModelFilter *filter)
  * gtk_tree_model_filter_refilter() to keep the visibility information of 
  * the model uptodate.
  *
+ * Note that @func is called whenever a row is inserted, when it may still be
+ * empty. The visible function should therefore take special care of empty
+ * rows, like in the example below.
+ *
+ * <informalexample><programlisting>
+ * static gboolean
+ * visible_func (GtkTreeModel *model,
+ *               GtkTreeIter  *iter,
+ *               gpointer      data)
+ * {
+ *   /&ast; Visible if row is non-empty and first column is "HI" &ast;/
+ *   gchar *str;
+ *   gboolean visible = FALSE;
+ *
+ *   gtk_tree_model_get (model, iter, 0, &str, -1);
+ *   if (str && strcmp (str, "HI") == 0)
+ *     visible = TRUE;
+ *   g_free (str);
+ *
+ *   return visible;
+ * }
+ * </programlisting></informalexample>
+ *
  * Since: 2.4
  */
 void
