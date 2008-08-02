@@ -1,3 +1,9 @@
+2008-08-01  Claudio Saavedra  <csaavedra@igalia.com>
+
+	Bug 545931 – small documentation typos
+
+	* gtk/gtkcomboboxentry.c: Fix some typos in the documentation.
+
 2008-08-01  Hans Breuer  <hans@breuer.org>
 
 	* gdk/makefile.msc : build gdkwindowimpl

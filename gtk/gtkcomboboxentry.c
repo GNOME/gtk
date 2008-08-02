@@ -307,7 +307,7 @@ gtk_combo_box_entry_contents_changed (GtkEntry *entry,
  *
  * Creates a new #GtkComboBoxEntry which has a #GtkEntry as child. After
  * construction, you should set a model using gtk_combo_box_set_model() and a
- * text_column * using gtk_combo_box_entry_set_text_column().
+ * text column using gtk_combo_box_entry_set_text_column().
  *
  * Return value: A new #GtkComboBoxEntry.
  *
