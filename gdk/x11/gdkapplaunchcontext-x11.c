@@ -107,6 +107,14 @@ gicon_to_string (GIcon *icon)
       if (names)
 	return g_strdup (names[0]);
     }
+  else if (G_IS_EMBLEMED_ICON (icon))
+    {
+      GIcon *base;
+
+      base = g_emblemed_icon_get_icon (G_EMBLEMED_ICON (icon));
+
+      return gicon_to_string (base);
+    }
 
   return NULL;
 }

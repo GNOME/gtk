@@ -1,5 +1,9 @@
 2008-08-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkapplaunchcontext-x11.c: Support GEmblemedIcon.
+
+2008-08-03  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 546128 – Weirz string
 
 	* gtk/gtksettings.c: Add a translator hint.
