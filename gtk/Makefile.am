@@ -71,7 +71,7 @@ if MS_LIB_AVAILABLE
 noinst_DATA = gtk-win32-$(GTK_API_VERSION).lib
 
 gtk-win32-$(GTK_API_VERSION).lib: libgtk-win32-$(GTK_API_VERSION).la gtk.def
-	lib -name:libgtk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gtk.def -out:$@
+	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgtk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gtk.def -out:$@
 
 install-ms-lib:
 	$(INSTALL) gtk-win32-$(GTK_API_VERSION).lib $(DESTDIR)$(libdir)
@@ -271,7 +271,7 @@ gtk_public_h_sources =          \
 	gtkseparator.h		\
 	gtkseparatormenuitem.h	\
 	gtkseparatortoolitem.h	\
- 	gtkshow.h		\
+	gtkshow.h		\
 	gtksettings.h		\
 	gtksizegroup.h		\
 	gtksocket.h		\

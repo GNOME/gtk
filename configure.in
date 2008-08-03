@@ -123,11 +123,17 @@ AC_CANONICAL_HOST
 
 MATH_LIB=-lm
 AC_MSG_CHECKING([for native Win32])
+LIB_EXE_MACHINE_FLAG=X86
 case "$host" in
   *-*-mingw*)
     os_win32=yes
     gio_can_sniff=no
     MATH_LIB=
+    case "$host" in
+    x86_64-*-*)
+      LIB_EXE_MACHINE_FLAG=X64
+      ;;
+    esac
     ;;
   *)
     os_win32=no
@@ -135,11 +141,14 @@ case "$host" in
 esac
 AC_MSG_RESULT([$os_win32])
 
+AC_SUBST(LIB_EXE_MACHINE_FLAG)
+
 case $host in
   *-*-linux*)
     os_linux=yes
     ;;
 esac
+
 dnl Initialize libtool
 AC_PROG_CC
 AM_DISABLE_STATIC

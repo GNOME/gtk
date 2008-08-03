@@ -1,5 +1,13 @@
 2008-08-04  Tor Lillqvist  <tml@novell.com>
 
+	* configure.in: Set LIB_EXE_MACHINE_FLAG to either X86 or X64 on
+	Windows. AC_SUBST it.
+
+	* gdk/Makefile.am
+	* gtk/Makefile.am: Pass appropriate -machine flag to lib.exe.
+
+2008-08-04  Tor Lillqvist  <tml@novell.com>
+
 	Bug 544684 - Win64 issue, window handles are assumed to be 32-bit
 
 	* configure.in: On Win64, define GDK_NATIVE_WINDOW_POINTER.
