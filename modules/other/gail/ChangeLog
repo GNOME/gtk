@@ -1,3 +1,8 @@
+2008-08-04  Tor Lillqvist  <tml@novell.com>
+
+	* libgail-util/Makefile.am: Pass appropriate -machine flag to
+	lib.exe.
+
 2008-07-02  Li Yuan  <li.yuan@sun.com>
 
 	* gailoptionmenu.c: (gail_option_menu_real_initialize),

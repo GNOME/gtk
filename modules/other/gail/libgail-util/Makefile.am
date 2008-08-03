@@ -71,7 +71,7 @@ libgailutil_la_LDFLAGS = \
         $(LDFLAGS)
 
 gailutil.lib: libgailutil.la gailutil.def
-	lib -name:libgailutil-$(GAIL_LT_CURRENT_MINUS_AGE).dll -def:gailutil.def -out:$@
+	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgailutil-$(GAIL_LT_CURRENT_MINUS_AGE).dll -def:gailutil.def -out:$@
 
 install-data-local: install-ms-lib install-libtool-import-lib
 
