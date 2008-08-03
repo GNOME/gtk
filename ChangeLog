@@ -1,3 +1,12 @@
+2008-08-04  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdisplay-win32.c: Don't bother looking up
+	EnumDisplayMonitors and GetMonitorInfoA dynamically, they are
+	present in NT-based Windows since Windows 2000.
+	(enum_monitor): For some reason the MONITORINFOEX struct in
+	mingw-win64 is different than the proper one as in MSDN and 32-bit
+	mingw, so just copy the proper definition here.
+
 2008-08-03  Björn Lindqvist  <bjourne@gmail.com>
 
 	Bug 540379 – gtk_tree_view_enable_model_drag_dest and

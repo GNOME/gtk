@@ -30,14 +30,6 @@
 #undef HAVE_MONITOR_INFO
 #endif
 
-#ifdef HAVE_MONITOR_INFO
-typedef BOOL (WINAPI *t_EnumDisplayMonitors)(HDC, LPCRECT, MONITORENUMPROC, LPARAM);
-typedef BOOL (WINAPI *t_GetMonitorInfoA)(HMONITOR, LPMONITORINFO);
-
-static t_EnumDisplayMonitors p_EnumDisplayMonitors = NULL;
-static t_GetMonitorInfoA p_GetMonitorInfoA = NULL;
-#endif
-
 void
 _gdk_windowing_set_default_display (GdkDisplay *display)
 {
@@ -64,7 +56,21 @@ enum_monitor (HMONITOR hmonitor,
 	      LPRECT   rect,
 	      LPARAM   data)
 {
-  MONITORINFOEX monitor_info;
+  /* The struct MONITORINFOEX definition is for some reason different
+   * in the winuser.h bundled with mingw64 from that in MSDN and the
+   * official 32-bit mingw (the MONITORINFO part is in a separate "mi"
+   * member). So to keep this easily compileable with either, repeat
+   * the MSDN definition it here.
+   */
+  typedef struct tagMONITORINFOEXA2 {
+    DWORD cbSize;
+    RECT  rcMonitor;
+    RECT  rcWork;
+    DWORD dwFlags;
+    CHAR szDevice[CCHDEVICENAME];
+  } MONITORINFOEXA2;
+  
+  MONITORINFOEXA2 monitor_info;
   HDC hDC;
 
   gint *index = (gint *) data;
@@ -75,7 +81,7 @@ enum_monitor (HMONITOR hmonitor,
   monitor = _gdk_monitors + *index;
 
   monitor_info.cbSize = sizeof (MONITORINFOEX);
-  (*p_GetMonitorInfoA) (hmonitor, (MONITORINFO *) &monitor_info);
+  GetMonitorInfoA (hmonitor, (MONITORINFO *) &monitor_info);
 
 #ifndef MONITORINFOF_PRIMARY
 #define MONITORINFOF_PRIMARY 1
@@ -112,76 +118,58 @@ void
 _gdk_monitor_init (void)
 {
 #ifdef HAVE_MONITOR_INFO
-  static HMODULE user32 = NULL;
+  gint i, index;
 
-  if (user32 == NULL)
+  _gdk_num_monitors = 0;
+
+  EnumDisplayMonitors (NULL, NULL, count_monitor, (LPARAM) &_gdk_num_monitors);
+
+  _gdk_monitors = g_renew (GdkWin32Monitor, _gdk_monitors, _gdk_num_monitors);
+
+  index = 0;
+  EnumDisplayMonitors (NULL, NULL, enum_monitor, (LPARAM) &index);
+
+  _gdk_offset_x = G_MININT;
+  _gdk_offset_y = G_MININT;
+
+  /* Calculate offset */
+  for (i = 0; i < _gdk_num_monitors; i++)
     {
-      user32 = GetModuleHandle ("user32.dll");
-
-      g_assert (user32 != NULL);
-
-      p_EnumDisplayMonitors = (t_EnumDisplayMonitors) GetProcAddress (user32, "EnumDisplayMonitors");
-      p_GetMonitorInfoA = (t_GetMonitorInfoA) GetProcAddress (user32, "GetMonitorInfoA");
+      _gdk_offset_x = MAX (_gdk_offset_x, -_gdk_monitors[i].rect.x);
+      _gdk_offset_y = MAX (_gdk_offset_y, -_gdk_monitors[i].rect.y);
     }
+  GDK_NOTE (MISC, g_print ("Multi-monitor offset: (%d,%d)\n",
+			   _gdk_offset_x, _gdk_offset_y));
 
-  if (p_EnumDisplayMonitors != NULL && p_GetMonitorInfoA != NULL)
+  /* Translate monitor coords into GDK coordinate space */
+  for (i = 0; i < _gdk_num_monitors; i++)
     {
-      gint i, index;
-
-      _gdk_num_monitors = 0;
-
-      (*p_EnumDisplayMonitors) (NULL, NULL, count_monitor, (LPARAM) &_gdk_num_monitors);
-
-      _gdk_monitors = g_renew (GdkWin32Monitor, _gdk_monitors, _gdk_num_monitors);
-
-      index = 0;
-      (*p_EnumDisplayMonitors) (NULL, NULL, enum_monitor, (LPARAM) &index);
-
-      _gdk_offset_x = G_MININT;
-      _gdk_offset_y = G_MININT;
-
-      /* Calculate offset */
-      for (i = 0; i < _gdk_num_monitors; i++)
-        {
-          _gdk_offset_x = MAX (_gdk_offset_x, -_gdk_monitors[i].rect.x);
-          _gdk_offset_y = MAX (_gdk_offset_y, -_gdk_monitors[i].rect.y);
-        }
-      GDK_NOTE (MISC, g_print ("Multi-monitor offset: (%d,%d)\n",
-                               _gdk_offset_x, _gdk_offset_y));
-
-      /* Translate monitor coords into GDK coordinate space */
-      for (i = 0; i < _gdk_num_monitors; i++)
-        {
-          _gdk_monitors[i].rect.x += _gdk_offset_x;
-          _gdk_monitors[i].rect.y += _gdk_offset_y;
-          GDK_NOTE (MISC, g_print ("Monitor %d: %dx%d@%+d%+d\n",
-                                   i, _gdk_monitors[i].rect.width,
-                                   _gdk_monitors[i].rect.height,
-                                   _gdk_monitors[i].rect.x,
-                                   _gdk_monitors[i].rect.y));
-        }
+      _gdk_monitors[i].rect.x += _gdk_offset_x;
+      _gdk_monitors[i].rect.y += _gdk_offset_y;
+      GDK_NOTE (MISC, g_print ("Monitor %d: %dx%d@%+d%+d\n",
+			       i, _gdk_monitors[i].rect.width,
+			       _gdk_monitors[i].rect.height,
+			       _gdk_monitors[i].rect.x,
+			       _gdk_monitors[i].rect.y));
     }
-  else
-#endif /* HAVE_MONITOR_INFO */
-    {
-      HDC hDC;
+#else
+  HDC hDC;
 
-      _gdk_num_monitors = 1;
-      _gdk_monitors = g_renew (GdkWin32Monitor, _gdk_monitors, 1);
+  _gdk_num_monitors = 1;
+  _gdk_monitors = g_renew (GdkWin32Monitor, _gdk_monitors, 1);
 
-      _gdk_monitors[0].name = g_strdup ("DISPLAY");
-      hDC = GetDC (NULL);
-      _gdk_monitors[0].width_mm = GetDeviceCaps (hDC, HORZSIZE);
-      _gdk_monitors[0].height_mm = GetDeviceCaps (hDC, VERTSIZE);
-      ReleaseDC (NULL, hDC);
-      _gdk_monitors[0].rect.x = 0;
-      _gdk_monitors[0].rect.y = 0;
-      _gdk_monitors[0].rect.width = GetSystemMetrics (SM_CXSCREEN);
-      _gdk_monitors[0].rect.height = GetSystemMetrics (SM_CYSCREEN);
-      _gdk_offset_x = 0;
-      _gdk_offset_y = 0;
-    }
-
+  _gdk_monitors[0].name = g_strdup ("DISPLAY");
+  hDC = GetDC (NULL);
+  _gdk_monitors[0].width_mm = GetDeviceCaps (hDC, HORZSIZE);
+  _gdk_monitors[0].height_mm = GetDeviceCaps (hDC, VERTSIZE);
+  ReleaseDC (NULL, hDC);
+  _gdk_monitors[0].rect.x = 0;
+  _gdk_monitors[0].rect.y = 0;
+  _gdk_monitors[0].rect.width = GetSystemMetrics (SM_CXSCREEN);
+  _gdk_monitors[0].rect.height = GetSystemMetrics (SM_CYSCREEN);
+  _gdk_offset_x = 0;
+  _gdk_offset_y = 0;
+#endif
 }
 
 GdkDisplay *
