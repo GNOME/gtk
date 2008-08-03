@@ -1240,7 +1240,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
                                         priv->image_data.gicon,
                                         priv->size,
                                         0);
-        GdkPixbuf *pixbuf = gtk_icon_icon_info_load_icon (info, NULL);
+        GdkPixbuf *pixbuf = gtk_icon_info_load_icon (info, NULL);
 
         prev_hicon = priv->nid.hIcon;
         priv->nid.hIcon = gdk_win32_pixbuf_to_hicon_libgtk_only (pixbuf);
@@ -1260,7 +1260,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
                                         priv->image_data.gicon,
                                         priv->size,
                                         0);
-        GdkPixbuf *pixbuf = gtk_icon_icon_info_load_icon (info, NULL);
+        GdkPixbuf *pixbuf = gtk_icon_info_load_icon (info, NULL);
 
         QUARTZ_POOL_ALLOC;
         [priv->status_item setImage:pixbuf];

@@ -1,5 +1,10 @@
 2008-08-04  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/gtkstatusicon.c: Fix typo in Win32 and Quartz code:
+	s/gtk_icon_icon_info_load_icon/gtk_icon_info_load_icon/ .
+
+2008-08-04  Tor Lillqvist  <tml@novell.com>
+
 	* configure.in: Don't bother with the test "if gio can sniff png"
 	if $gio_can_sniff has been already set. Preset it to "no" for
 	Win32. This helps cross-compilation from 32-bit Windows to
