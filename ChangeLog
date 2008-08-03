@@ -1,5 +1,13 @@
 2008-08-04  Tor Lillqvist  <tml@novell.com>
 
+	* configure.in: Don't bother with the test "if gio can sniff png"
+	if $gio_can_sniff has been already set. Preset it to "no" for
+	Win32. This helps cross-compilation from 32-bit Windows to
+	64-bit. No idea how this should be handled for cross-compilation
+	in general.
+
+2008-08-04  Tor Lillqvist  <tml@novell.com>
+
 	* gdk/win32/gdkdisplay-win32.c: Don't bother looking up
 	EnumDisplayMonitors and GetMonitorInfoA dynamically, they are
 	present in NT-based Windows since Windows 2000.
