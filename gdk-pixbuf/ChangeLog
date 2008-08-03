@@ -1,3 +1,7 @@
+2008-08-04  Tor Lillqvist  <tml@novell.com>
+
+	* Makefile.am: Pass appropriate -machine flag to lib.exe.
+
 2008-07-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-io.c (_gdk_pixbuf_get_module): Compare two content

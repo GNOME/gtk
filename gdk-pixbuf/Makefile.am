@@ -31,7 +31,7 @@ if MS_LIB_AVAILABLE
 noinst_DATA = gdk_pixbuf-$(GTK_API_VERSION).lib
 
 gdk_pixbuf-$(GTK_API_VERSION).lib: libgdk_pixbuf-$(GTK_API_VERSION).la gdk_pixbuf.def
-	lib -name:libgdk_pixbuf-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gdk_pixbuf.def -out:$@
+	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgdk_pixbuf-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gdk_pixbuf.def -out:$@
 
 install-ms-lib:
 	$(INSTALL) gdk_pixbuf-$(GTK_API_VERSION).lib $(DESTDIR)$(libdir)
