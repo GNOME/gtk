@@ -1,3 +1,11 @@
+2008-08-03  Björn Lindqvist  <bjourne@gmail.com>
+
+	Bug 540379 – gtk_tree_view_enable_model_drag_dest and
+	gtk_tree_view_enable_model_drag_source unsets reorderable property
+
+	* gtk/gtktreeview.c: Improve docstrings regarding reorderable
+	property.
+
 2008-08-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkapplaunchcontext-x11.c: Support GEmblemedIcon.
