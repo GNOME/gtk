@@ -1,5 +1,13 @@
 2008-08-04  Tor Lillqvist  <tml@novell.com>
 
+	Bug 544684 - Win64 issue, window handles are assumed to be 32-bit
+
+	* configure.in: On Win64, define GDK_NATIVE_WINDOW_POINTER.
+
+	* gdk/gdkconfig.h.win32: Ditto here.
+
+2008-08-04  Tor Lillqvist  <tml@novell.com>
+
 	* gtk/gtkstatusicon.c: Fix typo in Win32 and Quartz code:
 	s/gtk_icon_icon_info_load_icon/gtk_icon_info_load_icon/ .
 
