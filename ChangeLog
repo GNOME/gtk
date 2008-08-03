@@ -1,3 +1,10 @@
+2008-08-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 546128 – Weirz string
+
+	* gtk/gtksettings.c: Add a translator hint.
+	Requested by Ignacio Casal Quinteiro
+
 2008-08-02  Tor Lillqvist  <tml@novell.com>
 
 	Bug 538686 - gtkprintoperation-win32.c: devmode_from_settings
