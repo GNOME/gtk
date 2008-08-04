@@ -1,3 +1,7 @@
+2008-08-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkicontheme.c: Update to handle GEmblem.
+
 2008-08-04  Michael Natterer  <mitch@imendio.com>
 
 	* tests/prop-editor.c: undeprecate (apart from still using

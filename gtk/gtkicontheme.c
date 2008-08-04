@@ -3458,19 +3458,21 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
   else if (G_IS_EMBLEMED_ICON (icon))
     {
       GIcon *base, *emblem;
+      GList *list, *l;
+      GtkIconInfo *emblem_info;
 
       base = g_emblemed_icon_get_icon (G_EMBLEMED_ICON (icon));
-      emblem = g_emblemed_icon_get_emblem (G_EMBLEMED_ICON (icon));
-
-      /* recursively collect information for all emblems */
       info = gtk_icon_theme_lookup_by_gicon (icon_theme, base, size, flags);
       if (info)
         {
-          GtkIconInfo *emblem_info;
-
-          emblem_info = gtk_icon_theme_lookup_by_gicon (icon_theme, emblem, size / 2, flags);
-          if (emblem_info)
-            info->emblem_infos = g_slist_prepend (info->emblem_infos, emblem_info);
+          list = g_emblemed_icon_get_emblems (G_EMBLEMED_ICON (icon));
+          for (l = list; l; l = l->next)
+            {
+              emblem = g_emblem_get_icon (G_EMBLEM (l->data));
+              emblem_info = gtk_icon_theme_lookup_by_gicon (icon_theme, emblem, size / 2, flags);
+              if (emblem_info)
+                info->emblem_infos = g_slist_prepend (info->emblem_infos, emblem_info);
+            }
         }
 
       return info;
