@@ -18,6 +18,17 @@
 	platforms, as GdkNativeWindow has been guint32 for them
 	already.
 
+	* gdk/gdkselection.h
+	* gdk/gdkselection.c
+	* gdk/win32/gdkselection-win32.c
+	* gdk/x11/gdkselection-x11.c: Ditto for the requestor window id
+	parameter of gdk_selection_send_notify_for_display() and
+	gdk_selection_send_notify().
+
+	* gdk/win32/gdkselection-win32.c: Add some guchar and char pointer
+	casts to get rid of gcc 4.4 warnings. Print GdkAtom values in
+	debugging output using the %p format.
+	
 2008-08-05  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/gdkrgb.c: Cast pointers to guintptr, not unsigned long,

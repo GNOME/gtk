@@ -144,7 +144,7 @@ _gdk_selection_property_store (GdkWindow *owner,
   if (type == GDK_TARGET_STRING)
     {
       /* We know that data is UTF-8 */
-      prop->data = _gdk_utf8_to_string_target_internal (data, length);
+      prop->data = (guchar *) _gdk_utf8_to_string_target_internal ((char*) data, length);
       g_free (data);
 
       if (!prop->data)
@@ -154,7 +154,7 @@ _gdk_selection_property_store (GdkWindow *owner,
 	  return;
 	}
       else
-	prop->length = strlen (prop->data) + 1;
+	prop->length = strlen ((char*) prop->data) + 1;
     }
   else
     {
@@ -176,7 +176,7 @@ _gdk_dropfiles_store (gchar *data)
       g_assert (dropfiles_prop == NULL);
 
       dropfiles_prop = g_new (GdkSelProp, 1);
-      dropfiles_prop->data = data;
+      dropfiles_prop->data = (guchar *) data;
       dropfiles_prop->length = strlen (data) + 1;
       dropfiles_prop->format = 8;
       dropfiles_prop->type = _text_uri_list;
@@ -211,9 +211,9 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
 
     GDK_NOTE (DND,
 	      (sel_name = gdk_atom_name (selection),
-	       g_print ("gdk_selection_owner_set_for_display: %p %#x (%s)\n",
+	       g_print ("gdk_selection_owner_set_for_display: %p %p (%s)\n",
 			(owner ? GDK_WINDOW_HWND (owner) : NULL),
-			(guint) selection, sel_name),
+			selection, sel_name),
 	       g_free (sel_name)));
   }
 #endif
@@ -267,7 +267,7 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
       tmp_event.selection.selection = selection;
       tmp_event.selection.target = _utf8_string;
       tmp_event.selection.property = _gdk_selection_property;
-      tmp_event.selection.requestor = (guint32) hwnd;
+      tmp_event.selection.requestor = hwnd;
       tmp_event.selection.time = time;
 
       gdk_event_put (&tmp_event);
@@ -303,8 +303,8 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
     
     GDK_NOTE (DND,
 	      (sel_name = gdk_atom_name (selection),
-	       g_print ("gdk_selection_owner_get: %#x (%s) = %p\n",
-			(guint) selection, sel_name,
+	       g_print ("gdk_selection_owner_get: %p (%s) = %p\n",
+			selection, sel_name,
 			(window ? GDK_WINDOW_HWND (window) : NULL)),
 	       g_free (sel_name)));
   }
@@ -356,10 +356,10 @@ gdk_selection_convert (GdkWindow *requestor,
     GDK_NOTE (DND,
 	      (sel_name = gdk_atom_name (selection),
 	       tgt_name = gdk_atom_name (target),
-	       g_print ("gdk_selection_convert: %p %#x (%s) %#x (%s)\n",
+	       g_print ("gdk_selection_convert: %p %p (%s) %p (%s)\n",
 			GDK_WINDOW_HWND (requestor),
-			(guint) selection, sel_name,
-			(guint) target, tgt_name),
+			selection, sel_name,
+			target, tgt_name),
 	       g_free (sel_name),
 	       g_free (tgt_name)));
   }
@@ -750,12 +750,12 @@ _gdk_selection_property_delete (GdkWindow *window)
 }
 
 void
-gdk_selection_send_notify_for_display (GdkDisplay *display,
-                                       guint32     requestor,
-                                       GdkAtom     selection,
-                                       GdkAtom     target,
-                                       GdkAtom     property,
-                                       guint32     time)
+gdk_selection_send_notify_for_display (GdkDisplay      *display,
+                                       GdkNativeWindow  requestor,
+                                       GdkAtom     	selection,
+                                       GdkAtom     	target,
+                                       GdkAtom     	property,
+                                       guint32     	time)
 {
   g_return_if_fail (display == _gdk_display);
 
@@ -767,11 +767,11 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
 	      (sel_name = gdk_atom_name (selection),
 	       tgt_name = gdk_atom_name (target),
 	       prop_name = gdk_atom_name (property),
-	       g_print ("gdk_selection_send_notify_for_display: %p %#x (%s) %#x (%s) %#x (%s)\n",
-			(gpointer) requestor,
-			(guint) selection, sel_name,
-			(guint) target, tgt_name,
-			(guint) property, prop_name),
+	       g_print ("gdk_selection_send_notify_for_display: %p %p (%s) %p (%s) %p (%s)\n",
+			requestor,
+			selection, sel_name,
+			target, tgt_name,
+			property, prop_name),
 	       g_free (sel_name),
 	       g_free (tgt_name),
 	       g_free (prop_name)));

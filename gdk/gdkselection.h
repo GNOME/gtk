@@ -92,19 +92,19 @@ gboolean   gdk_selection_property_get (GdkWindow  *requestor,
 				       gint	  *prop_format);
 
 #ifndef GDK_MULTIHEAD_SAFE
-void	   gdk_selection_send_notify (guint32	    requestor,
-				      GdkAtom	    selection,
-				      GdkAtom	    target,
-				      GdkAtom	    property,
-				      guint32	    time_);
+void	   gdk_selection_send_notify (GdkNativeWindow requestor,
+				      GdkAtom	      selection,
+				      GdkAtom	      target,
+				      GdkAtom	      property,
+				      guint32	      time_);
 #endif /* GDK_MULTIHEAD_SAFE */
 
-void       gdk_selection_send_notify_for_display (GdkDisplay *display,
-						  guint32     requestor,
-						  GdkAtom     selection,
-						  GdkAtom     target,
-						  GdkAtom     property,
-						  guint32     time_);
+void       gdk_selection_send_notify_for_display (GdkDisplay      *display,
+						  GdkNativeWindow  requestor,
+						  GdkAtom     	   selection,
+						  GdkAtom     	   target,
+						  GdkAtom     	   property,
+						  guint32     	   time_);
 
 G_END_DECLS
 

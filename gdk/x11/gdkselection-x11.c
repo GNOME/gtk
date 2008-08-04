@@ -387,12 +387,12 @@ gdk_selection_property_get (GdkWindow  *requestor,
  * Since: 2.2
  **/
 void
-gdk_selection_send_notify_for_display (GdkDisplay *display,
-				       guint32     requestor,
-				       GdkAtom     selection,
-				       GdkAtom     target,
-				       GdkAtom     property, 
-				       guint32     time)
+gdk_selection_send_notify_for_display (GdkDisplay       *display,
+				       GdkNativeWindow  requestor,
+				       GdkAtom          selection,
+				       GdkAtom          target,
+				       GdkAtom          property, 
+				       guint32          time)
 {
   XSelectionEvent xevent;
   
