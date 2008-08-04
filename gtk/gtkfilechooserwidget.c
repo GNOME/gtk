@@ -100,7 +100,7 @@ gtk_file_chooser_widget_constructor (GType                  type,
 
   gtk_widget_push_composite_child ();
 
-  priv->impl = _gtk_file_chooser_default_new (priv->file_system);
+  priv->impl = _gtk_file_chooser_default_new ();
   
   gtk_box_pack_start (GTK_BOX (object), priv->impl, TRUE, TRUE, 0);
   gtk_widget_show (priv->impl);
@@ -181,6 +181,7 @@ gtk_file_chooser_widget_new (GtkFileChooserAction action)
  * Return value: a new #GtkFileChooserWidget
  *
  * Since: 2.4
+ * Deprecated: 2.14
  **/
 GtkWidget *
 gtk_file_chooser_widget_new_with_backend (GtkFileChooserAction  action,
@@ -188,7 +189,6 @@ gtk_file_chooser_widget_new_with_backend (GtkFileChooserAction  action,
 {
   return g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET,
 		       "action", action,
-		       "file-system-backend", backend,
 		       NULL);
 }
 

@@ -59,12 +59,15 @@ GtkWidget *gtk_file_chooser_dialog_new              (const gchar          *title
 						     GtkFileChooserAction  action,
 						     const gchar          *first_button_text,
 						     ...) G_GNUC_NULL_TERMINATED;
+
+#ifndef GTK_DISABLE_DEPRECATED
 GtkWidget *gtk_file_chooser_dialog_new_with_backend (const gchar          *title,
 						     GtkWindow            *parent,
 						     GtkFileChooserAction  action,
 						     const gchar          *backend,
 						     const gchar          *first_button_text,
 						     ...) G_GNUC_NULL_TERMINATED;
+#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

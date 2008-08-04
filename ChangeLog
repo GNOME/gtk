@@ -1,6 +1,16 @@
 2008-08-04  Carlos Garnacho  <carlos@imendio.com>
 
 	* gtk/gtk.symbols:
+	* gtk/gtkfilechooserbutton.[ch]:
+	* gtk/gtkfilechooserdefault.[ch]:
+	* gtk/gtkfilechooserdialog.[ch]:
+	* gtk/gtkfilechooserwidget.[ch]: Deprecate
+	gtk_file_chooser_*_new_with_backend(), since GIO is already used
+	directly. Fixes #545976.
+
+2008-08-04  Carlos Garnacho  <carlos@imendio.com>
+
+	* gtk/gtk.symbols:
 	* gtk/gtkfilechooser.[ch]: Make GFile-oriented API public. Fixes
 	#545978.
 	* gtk/gtkfilechooserbutton.c:

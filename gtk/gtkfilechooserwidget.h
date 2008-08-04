@@ -55,8 +55,13 @@ struct _GtkFileChooserWidgetClass
 
 GType      gtk_file_chooser_widget_get_type         (void) G_GNUC_CONST;
 GtkWidget *gtk_file_chooser_widget_new              (GtkFileChooserAction  action);
+
+
+#ifndef GTK_DISABLE_DEPRECATED
 GtkWidget *gtk_file_chooser_widget_new_with_backend (GtkFileChooserAction  action,
 						     const gchar          *backend);
+#endif /* GTK_DISABLE_DEPRECATED */
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_WIDGET_H__ */

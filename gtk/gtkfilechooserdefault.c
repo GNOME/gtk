@@ -11010,11 +11010,9 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 }
 
 GtkWidget *
-_gtk_file_chooser_default_new (const char *file_system)
+_gtk_file_chooser_default_new (void)
 {
-  return  g_object_new (GTK_TYPE_FILE_CHOOSER_DEFAULT,
-			"file-system-backend", file_system,
-			NULL);
+  return g_object_new (GTK_TYPE_FILE_CHOOSER_DEFAULT, NULL);
 }
 
 static void

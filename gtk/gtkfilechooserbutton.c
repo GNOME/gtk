@@ -137,7 +137,6 @@ struct _GtkFileChooserButtonPrivate
   GtkTreeModel *model;
   GtkTreeModel *filter_model;
 
-  gchar *backend;
   GtkFileSystem *fs;
   GFile *old_file;
 
@@ -646,23 +645,13 @@ gtk_file_chooser_button_constructor (GType                  type,
 
   if (!priv->dialog)
     {
-      if (priv->backend)
-	priv->dialog = gtk_file_chooser_dialog_new_with_backend (NULL, NULL,
-								 GTK_FILE_CHOOSER_ACTION_OPEN,
-								 priv->backend,
-								 GTK_STOCK_CANCEL,
-								 GTK_RESPONSE_CANCEL,
-								 GTK_STOCK_OPEN,
-								 GTK_RESPONSE_ACCEPT,
-								 NULL);
-      else
-	priv->dialog = gtk_file_chooser_dialog_new (NULL, NULL,
-						    GTK_FILE_CHOOSER_ACTION_OPEN,
-						    GTK_STOCK_CANCEL,
-						    GTK_RESPONSE_CANCEL,
-						    GTK_STOCK_OPEN,
-						    GTK_RESPONSE_ACCEPT,
-						    NULL);
+      priv->dialog = gtk_file_chooser_dialog_new (NULL, NULL,
+						  GTK_FILE_CHOOSER_ACTION_OPEN,
+						  GTK_STOCK_CANCEL,
+						  GTK_RESPONSE_CANCEL,
+						  GTK_STOCK_OPEN,
+						  GTK_RESPONSE_ACCEPT,
+						  NULL);
 
       gtk_dialog_set_default_response (GTK_DIALOG (priv->dialog),
 				       GTK_RESPONSE_ACCEPT);
@@ -684,9 +673,6 @@ gtk_file_chooser_button_constructor (GType                  type,
       priv->folder_has_been_set = TRUE;
       g_free (current_folder);
     }
-
-  g_free (priv->backend);
-  priv->backend = NULL;
 
   g_signal_connect (priv->dialog, "delete_event",
 		    G_CALLBACK (dialog_delete_event_cb), object);
@@ -834,8 +820,7 @@ gtk_file_chooser_button_set_property (GObject      *object,
       break;
 
     case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
-      /* Construct-only */
-      priv->backend = g_value_dup_string (value);
+      /* Ignore property */
       break;
 
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
@@ -2755,6 +2740,7 @@ gtk_file_chooser_button_new (const gchar          *title,
  * Returns: a new button widget.
  * 
  * Since: 2.6
+ * Deprecated: 2.14
  **/
 GtkWidget *
 gtk_file_chooser_button_new_with_backend (const gchar          *title,
@@ -2767,7 +2753,6 @@ gtk_file_chooser_button_new_with_backend (const gchar          *title,
   return g_object_new (GTK_TYPE_FILE_CHOOSER_BUTTON,
 		       "action", action,
 		       "title", (title ? title : _(DEFAULT_TITLE)),
-		       "file-system-backend", backend,
 		       NULL);
 }
 

@@ -1446,7 +1446,9 @@ gtk_file_chooser_unselect_uri
 #if IN_FILE(__GTK_FILE_CHOOSER_DIALOG_C__)
 gtk_file_chooser_dialog_get_type G_GNUC_CONST
 gtk_file_chooser_dialog_new
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_file_chooser_dialog_new_with_backend
+#endif
 #endif
 #endif
 
@@ -1454,7 +1456,9 @@ gtk_file_chooser_dialog_new_with_backend
 #if IN_FILE(__GTK_FILE_CHOOSER_WIDGET_C__)
 gtk_file_chooser_widget_get_type G_GNUC_CONST
 gtk_file_chooser_widget_new
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_file_chooser_widget_new_with_backend
+#endif
 #endif
 #endif
 
@@ -1464,7 +1468,9 @@ gtk_file_chooser_button_get_title
 gtk_file_chooser_button_get_type G_GNUC_CONST
 gtk_file_chooser_button_get_width_chars
 gtk_file_chooser_button_new
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_file_chooser_button_new_with_backend
+#endif
 gtk_file_chooser_button_new_with_dialog
 gtk_file_chooser_button_set_title
 gtk_file_chooser_button_set_width_chars

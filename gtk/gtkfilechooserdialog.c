@@ -466,7 +466,6 @@ gtk_file_chooser_dialog_new_valist (const gchar          *title,
   result = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
 			 "title", title,
 			 "action", action,
-			 "file-system-backend", backend,
 			 NULL);
 
   if (parent)
@@ -533,6 +532,7 @@ gtk_file_chooser_dialog_new (const gchar         *title,
  * Return value: a new #GtkFileChooserDialog
  *
  * Since: 2.4
+ * Deprecated: 2.14
  **/
 GtkWidget *
 gtk_file_chooser_dialog_new_with_backend (const gchar          *title,
