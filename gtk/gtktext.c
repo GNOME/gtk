@@ -2191,7 +2191,7 @@ init_tab_cont (GtkText* text, PrevTabCont* tab_cont)
 {
   tab_cont->pixel_offset          = 0;
   tab_cont->tab_start.tab_stops   = text->tab_stops;
-  tab_cont->tab_start.to_next_tab = (gulong) text->tab_stops->data;
+  tab_cont->tab_start.to_next_tab = (gintptr) text->tab_stops->data;
   
   if (!tab_cont->tab_start.to_next_tab)
     tab_cont->tab_start.to_next_tab = text->default_tab_width;
@@ -3545,7 +3545,7 @@ advance_tab_mark (GtkText* text, TabStopMark* tab_mark, GdkWChar ch)
       if (tab_mark->tab_stops->next)
 	{
 	  tab_mark->tab_stops = tab_mark->tab_stops->next;
-	  tab_mark->to_next_tab = (gulong) tab_mark->tab_stops->data;
+	  tab_mark->to_next_tab = (gintptr) tab_mark->tab_stops->data;
 	}
       else
 	{
