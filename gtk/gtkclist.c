@@ -3071,10 +3071,10 @@ gtk_clist_set_row_data (GtkCList *clist,
 }
 
 void
-gtk_clist_set_row_data_full (GtkCList         *clist,
-			     gint              row,
-			     gpointer          data,
-			     GtkDestroyNotify  destroy)
+gtk_clist_set_row_data_full (GtkCList       *clist,
+			     gint            row,
+			     gpointer        data,
+			     GDestroyNotify  destroy)
 {
   GtkCListRow *clist_row;
 

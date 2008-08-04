@@ -141,10 +141,10 @@ GtkObject*	gtk_object_new		  (GtkType	       type,
 GtkObject*	gtk_object_ref		  (GtkObject	      *object);
 void		gtk_object_unref	  (GtkObject	      *object);
 void gtk_object_weakref	  (GtkObject	    *object,
-			   GtkDestroyNotify  notify,
+			   GDestroyNotify    notify,
 			   gpointer	     data);
 void gtk_object_weakunref (GtkObject	    *object,
-			   GtkDestroyNotify  notify,
+			   GDestroyNotify    notify,
 			   gpointer	     data);
 
 /* Set 'data' to the "object_data" field of the object. The
@@ -165,7 +165,7 @@ void	 gtk_object_set_data	     (GtkObject	     *object,
 void	 gtk_object_set_data_full    (GtkObject	     *object,
 				      const gchar    *key,
 				      gpointer	      data,
-				      GtkDestroyNotify destroy);
+				      GDestroyNotify  destroy);
 void	 gtk_object_remove_data	     (GtkObject	     *object,
 				      const gchar    *key);
 gpointer gtk_object_get_data	     (GtkObject	     *object,
@@ -192,7 +192,7 @@ void gtk_object_set_data_by_id		(GtkObject	 *object,
 void gtk_object_set_data_by_id_full	(GtkObject	 *object,
 					 GQuark		  data_id,
 					 gpointer	  data,
-					 GtkDestroyNotify destroy);
+					 GDestroyNotify   destroy);
 gpointer gtk_object_get_data_by_id	(GtkObject	 *object,
 					 GQuark		  data_id);
 void  gtk_object_remove_data_by_id	(GtkObject	 *object,

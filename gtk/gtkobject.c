@@ -520,15 +520,15 @@ typedef struct _GtkWeakRef	GtkWeakRef;
 
 struct _GtkWeakRef
 {
-  GtkWeakRef	   *next;
-  GtkDestroyNotify  notify;
-  gpointer          data;
+  GtkWeakRef	 *next;
+  GDestroyNotify  notify;
+  gpointer        data;
 };
 
 void
-gtk_object_weakref (GtkObject        *object,
-		    GtkDestroyNotify  notify,
-		    gpointer          data)
+gtk_object_weakref (GtkObject      *object,
+		    GDestroyNotify  notify,
+		    gpointer        data)
 {
   GtkWeakRef *weak;
 
@@ -546,9 +546,9 @@ gtk_object_weakref (GtkObject        *object,
 }
 
 void
-gtk_object_weakunref (GtkObject        *object,
-		      GtkDestroyNotify  notify,
-		      gpointer          data)
+gtk_object_weakunref (GtkObject      *object,
+		      GDestroyNotify  notify,
+		      gpointer        data)
 {
   GtkWeakRef *weaks, *w, **wp;
 
@@ -664,10 +664,10 @@ gtk_object_set_data (GtkObject        *object,
 }
 
 void
-gtk_object_set_data_by_id_full (GtkObject        *object,
-				GQuark		  data_id,
-				gpointer          data,
-				GtkDestroyNotify  destroy)
+gtk_object_set_data_by_id_full (GtkObject      *object,
+				GQuark		data_id,
+				gpointer        data,
+				GDestroyNotify  destroy)
 {
   g_return_if_fail (GTK_IS_OBJECT (object));
 
@@ -675,10 +675,10 @@ gtk_object_set_data_by_id_full (GtkObject        *object,
 }
 
 void
-gtk_object_set_data_full (GtkObject        *object,
-			  const gchar      *key,
-			  gpointer          data,
-			  GtkDestroyNotify  destroy)
+gtk_object_set_data_full (GtkObject      *object,
+			  const gchar    *key,
+			  gpointer        data,
+			  GDestroyNotify  destroy)
 {
   g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (key != NULL);

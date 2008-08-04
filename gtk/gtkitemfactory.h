@@ -73,7 +73,7 @@ struct _GtkItemFactory
 
   GtkTranslateFunc       translate_func;
   gpointer               translate_data;
-  GtkDestroyNotify       translate_notify;   
+  GDestroyNotify         translate_notify;
 };
 
 struct _GtkItemFactoryClass
@@ -184,7 +184,7 @@ void	gtk_item_factory_popup		(GtkItemFactory		*ifactory,
 					 guint32		 time_);
 void	gtk_item_factory_popup_with_data(GtkItemFactory		*ifactory,
 					 gpointer		 popup_data,
-					 GtkDestroyNotify	 destroy,
+					 GDestroyNotify          destroy,
 					 guint			 x,
 					 guint			 y,
 					 guint			 mouse_button,
@@ -194,7 +194,7 @@ gpointer gtk_item_factory_popup_data_from_widget (GtkWidget	*widget);
 void   gtk_item_factory_set_translate_func (GtkItemFactory      *ifactory,
 					    GtkTranslateFunc     func,
 					    gpointer             data,
-					    GtkDestroyNotify     notify);
+					    GDestroyNotify       notify);
 
 /* Compatibility functions for deprecated GtkMenuFactory code
  */

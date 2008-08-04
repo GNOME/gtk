@@ -1,3 +1,11 @@
+2008-08-04  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkclist.[ch]
+	* gtk/gtkctree.[ch]
+	* gtk/gtkitemfactory.[ch]
+	* gtk/gtkobject.[ch]
+	* gtk/gtksignal.[ch]: s/GtkDestroyNotify/GDestroyNotify/g
+
 2008-08-04  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtklinkbutton.c (gtk_link_button_set_uri): update the link

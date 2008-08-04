@@ -352,7 +352,7 @@ struct _GtkCListRow
   GtkStyle *style;
 
   gpointer data;
-  GtkDestroyNotify destroy;
+  GDestroyNotify destroy;
   
   guint fg_set     : 1;
   guint bg_set     : 1;
@@ -699,10 +699,10 @@ void gtk_clist_set_row_data (GtkCList *clist,
 			     gpointer  data);
 
 /* sets a data pointer for a given row with destroy notification */
-void gtk_clist_set_row_data_full (GtkCList         *clist,
-			          gint              row,
-			          gpointer          data,
-				  GtkDestroyNotify  destroy);
+void gtk_clist_set_row_data_full (GtkCList       *clist,
+			          gint            row,
+			          gpointer        data,
+				  GDestroyNotify  destroy);
 
 /* returns the data set for a row */
 gpointer gtk_clist_get_row_data (GtkCList *clist,

@@ -3267,7 +3267,7 @@ row_delete (GtkCTree    *ctree,
 
   if (ctree_row->row.destroy)
     {
-      GtkDestroyNotify dnotify = ctree_row->row.destroy;
+      GDestroyNotify dnotify = ctree_row->row.destroy;
       gpointer ddata = ctree_row->row.data;
 
       ctree_row->row.destroy = NULL;
@@ -5131,12 +5131,12 @@ gtk_ctree_node_set_row_data (GtkCTree     *ctree,
 }
 
 void
-gtk_ctree_node_set_row_data_full (GtkCTree         *ctree,
-				  GtkCTreeNode     *node,
-				  gpointer          data,
-				  GtkDestroyNotify  destroy)
+gtk_ctree_node_set_row_data_full (GtkCTree       *ctree,
+				  GtkCTreeNode   *node,
+				  gpointer        data,
+				  GDestroyNotify  destroy)
 {
-  GtkDestroyNotify dnotify;
+  GDestroyNotify dnotify;
   gpointer ddata;
   
   g_return_if_fail (GTK_IS_CTREE (ctree));

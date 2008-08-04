@@ -1482,7 +1482,7 @@ gtk_item_factory_popup (GtkItemFactory		*ifactory,
  * gtk_item_factory_popup_with_data:
  * @ifactory: a #GtkItemFactory of type #GTK_TYPE_MENU (see gtk_item_factory_new())
  * @popup_data: data available for callbacks while the menu is posted
- * @destroy: a #GtkDestroyNotify function to be called on @popup_data when
+ * @destroy: a #GDestroyNotify function to be called on @popup_data when
  *  the menu is unposted
  * @x: the x position 
  * @y: the y position
@@ -1510,7 +1510,7 @@ gtk_item_factory_popup (GtkItemFactory		*ifactory,
 void
 gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
 				  gpointer		 popup_data,
-				  GtkDestroyNotify	 destroy,
+				  GDestroyNotify         destroy,
 				  guint			 x,
 				  guint			 y,
 				  guint			 mouse_button,
@@ -1558,7 +1558,7 @@ gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
  * @ifactory: a #GtkItemFactory
  * @func: the #GtkTranslateFunc function to be used to translate path elements 
  * @data: data to pass to @func and @notify
- * @notify: a #GtkDestroyNotify function to be called when @ifactory is 
+ * @notify: a #GDestroyNotify function to be called when @ifactory is 
  *   destroyed and when the translation function is changed again
  * 
  * Sets a function to be used for translating the path elements before they
@@ -1567,10 +1567,10 @@ gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
  * Deprecated: 2.4: Use #GtkUIManager instead.
  */ 
 void
-gtk_item_factory_set_translate_func (GtkItemFactory      *ifactory,
-				     GtkTranslateFunc     func,
-				     gpointer             data,
-				     GtkDestroyNotify     notify)
+gtk_item_factory_set_translate_func (GtkItemFactory    *ifactory,
+				     GtkTranslateFunc   func,
+				     gpointer           data,
+				     GDestroyNotify     notify)
 {
   g_return_if_fail (ifactory != NULL);
   

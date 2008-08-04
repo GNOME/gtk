@@ -138,7 +138,7 @@ gtk_signal_connect_full (GtkObject           *object,
 			 GtkSignalFunc        func,
 			 GtkCallbackMarshal   unsupported,
 			 gpointer             data,
-			 GtkDestroyNotify     destroy_func,
+			 GDestroyNotify       destroy_func,
 			 gint                 object_signal,
 			 gint                 after)
 {
