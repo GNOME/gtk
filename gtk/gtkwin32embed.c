@@ -71,8 +71,8 @@ _gtk_win32_embed_pop_message (void)
 void
 _gtk_win32_embed_send (GdkWindow               *recipient,
 		       GtkWin32EmbedMessageType message,
-		       gint		        wparam,
-		       gint			lparam)
+		       WPARAM		        wparam,
+		       LPARAM			lparam)
 {
   PostMessage (GDK_WINDOW_HWND (recipient),
 	       _gtk_win32_embed_message_type (message),
@@ -82,7 +82,7 @@ _gtk_win32_embed_send (GdkWindow               *recipient,
 void
 _gtk_win32_embed_send_focus_message (GdkWindow               *recipient,
 				     GtkWin32EmbedMessageType message,
-				     gint		      wparam)
+				     WPARAM		      wparam)
 {
   int lparam = 0;
 

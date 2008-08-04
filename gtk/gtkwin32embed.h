@@ -82,11 +82,11 @@ void _gtk_win32_embed_push_message (MSG *msg);
 void _gtk_win32_embed_pop_message (void);
 void _gtk_win32_embed_send (GdkWindow		    *recipient,
 			    GtkWin32EmbedMessageType message,
-			    gint		     wparam,
-			    gint                     lparam);
+			    WPARAM		     wparam,
+			    LPARAM                   lparam);
 void _gtk_win32_embed_send_focus_message (GdkWindow		  *recipient,
 					  GtkWin32EmbedMessageType message,
-					  gint		           wparam);
+					  WPARAM	           wparam);
 void     _gtk_win32_embed_set_focus_wrapped  (void);
 gboolean _gtk_win32_embed_get_focus_wrapped  (void);
 

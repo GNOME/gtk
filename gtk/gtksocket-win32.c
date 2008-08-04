@@ -62,7 +62,7 @@ void
 _gtk_socket_windowing_end_embedding_toplevel (GtkSocket *socket)
 {
   gtk_window_remove_embedded_xid (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (socket))),
-				  (guint) GDK_WINDOW_HWND (socket->plug_window));
+				  GDK_WINDOW_HWND (socket->plug_window));
 }
 
 void
@@ -215,17 +215,18 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
     default:
       if (msg->message == _gtk_win32_embed_message_type (GTK_WIN32_EMBED_PARENT_NOTIFY))
 	{
-	  GTK_NOTE (PLUGSOCKET, g_printerr ("GtkSocket: PARENT_NOTIFY received window=%#x version=%ld\n", msg->wParam, msg->lParam));
+	  GTK_NOTE (PLUGSOCKET, g_printerr ("GtkSocket: PARENT_NOTIFY received window=%p version=%d\n",
+					    (gpointer) msg->wParam, (int) msg->lParam));
 	  /* If we some day different protocols deployed need to add
 	   * some more elaborate version handshake
 	   */
 	  if (msg->lParam != GTK_WIN32_EMBED_PROTOCOL_VERSION)
 	    g_warning ("GTK Win32 embedding protocol version mismatch, "
-		       "client uses version %ld, we understand version %d",
-		       msg->lParam, GTK_WIN32_EMBED_PROTOCOL_VERSION);
+		       "client uses version %d, we understand version %d",
+		       (int) msg->lParam, GTK_WIN32_EMBED_PROTOCOL_VERSION);
 	  if (!socket->plug_window)
 	    {
-	      _gtk_socket_add_window (socket, msg->wParam, FALSE);
+	      _gtk_socket_add_window (socket, (GdkNativeWindow) msg->wParam, FALSE);
 	      
 	      if (socket->plug_window)
 		GTK_NOTE (PLUGSOCKET, g_printerr ("GtkSocket: window created"));

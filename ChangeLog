@@ -1,3 +1,17 @@
+2008-08-05  Tor Lillqvist  <tml@novell.com>
+
+	Bug 544684 - Win64 issue, window handles are assumed to be 32-bit
+
+	* gtk/gtksocket-win32.c: Don't cast HWND to guint, pass it as such
+	as the GdkNativeWindow parameter to
+	gtk_window_remove_embedded_xid(). Debugging printout format fixes.
+
+	* gtk/gtkwin32embed.h
+	* gtk/gtkwin32embed.c: Change the types of wparam and lparam
+	parameters to actually be WPARAM and LPARAM.
+
+	* gtk/gtkplug-win32.c: Adapt accordingly.
+
 2008-08-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtksettings.c: Improve a setting nick: 'aureal' is not really

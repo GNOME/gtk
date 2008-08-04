@@ -55,7 +55,7 @@ _gtk_plug_windowing_realize_toplevel (GtkPlug *plug)
     {
       _gtk_win32_embed_send (plug->socket_window,
 			     GTK_WIN32_EMBED_PARENT_NOTIFY,
-			     (int) GDK_WINDOW_HWND (GTK_WIDGET (plug)->window),
+			     (WPARAM) GDK_WINDOW_HWND (GTK_WIDGET (plug)->window),
 			     GTK_WIN32_EMBED_PROTOCOL_VERSION);
       _gtk_win32_embed_send (plug->socket_window,
 			     GTK_WIN32_EMBED_EVENT_PLUG_MAPPED, 0, 0);
