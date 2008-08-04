@@ -1314,14 +1314,16 @@ gtk_font_selection_get_size (GtkFontSelection *fontsel)
 /**
  * gtk_font_selection_get_font:
  * @fontsel: a #GtkFontSelection
- * 
- * Return value: A #GdkFont.  
+ *
+ * Return value: A #GdkFont.
+ *
+ * Deprecated: 2.0: Use gtk_font_selection_get_font_name() instead.
  **/
 GdkFont *
 gtk_font_selection_get_font (GtkFontSelection *fontsel)
 {
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
-  
+
   return gtk_font_selection_get_font_internal (fontsel);
 }
 
@@ -1709,13 +1711,15 @@ gtk_font_selection_dialog_get_font_name (GtkFontSelectionDialog *fsd)
  *
  * Return value: the #GdkFont from the #GtkFontSelection for the
  * currently selected font in the dialog.
+ *
+ * Deprecated: 2.0: Use gtk_font_selection_dialog_get_font_name() instead.
  */
 GdkFont*
 gtk_font_selection_dialog_get_font (GtkFontSelectionDialog *fsd)
 {
   g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
 
-  return gtk_font_selection_get_font (GTK_FONT_SELECTION (fsd->fontsel));
+  return gtk_font_selection_get_font_internal (GTK_FONT_SELECTION (fsd->fontsel));
 }
 
 /**

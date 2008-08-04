@@ -1,5 +1,16 @@
 2008-08-04  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkfontsel.c (gtk_font_selection_dialog_get_font):
+	avoid our own deprecated public API and use
+	gtk_font_selection_get_font_internal() instead of
+	gtk_font_selection_get_font().
+
+	(gtk_font_selection_get_font)
+	(gtk_font_selection_dialog_get_font): Add missing
+	"Deprecated: 2.0" to the api doc comments.
+
+2008-08-04  Michael Natterer  <mitch@imendio.com>
+
 	* gdk/tests/Makefile.am: add the generated PNGs to CLEANFILES.
 
 2008-08-04  Tor Lillqvist  <tml@novell.com>
