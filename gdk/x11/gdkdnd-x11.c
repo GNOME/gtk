@@ -3001,15 +3001,15 @@ gdk_drag_begin (GdkWindow     *window,
   return new_context;
 }
 
-static guint32
+static GdkNativeWindow
 _gdk_drag_get_protocol_for_display (GdkDisplay      *display,
-				    guint32          xid,
+				    GdkNativeWindow  xid,
 				    GdkDragProtocol *protocol,
 				    guint           *version)
 
 {
   GdkWindow *window;
-  guint32 retval;
+  GdkNativeWindow retval;
   g_return_val_if_fail (GDK_IS_DISPLAY (display), None);
 
   base_precache_atoms (display);
@@ -3106,25 +3106,26 @@ _gdk_drag_get_protocol_for_display (GdkDisplay      *display,
     }
 
   *protocol = GDK_DRAG_PROTO_NONE;
-  return None;
+
+  return 0; /* a.k.a. None */
 }
 
 /**
  * gdk_drag_get_protocol_for_display:
  * @display: the #GdkDisplay where the destination window resides
- * @xid: the X id of the destination window.
+ * @xid: the windowing system id of the destination window.
  * @protocol: location where the supported DND protocol is returned.
- * @returns: the X id of the window where the drop should happen. This 
- *     may be @xid or the X id of a proxy window, or None if @xid doesn't
+ * @returns: the windowing system id of the window where the drop should happen. This 
+ *     may be @xid or the id of a proxy window, or zero if @xid doesn't
  *     support Drag and Drop.
  *
  * Finds out the DND protocol supported by a window.
  *
  * Since: 2.2
  */ 
-guint32
+GdkNativeWindow
 gdk_drag_get_protocol_for_display (GdkDisplay      *display,
-				   guint32          xid,
+				   GdkNativeWindow  xid,
 				   GdkDragProtocol *protocol)
 {
   return _gdk_drag_get_protocol_for_display (display, xid, protocol, NULL);

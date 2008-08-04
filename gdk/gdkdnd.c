@@ -61,17 +61,17 @@ gdk_drag_find_window (GdkDragContext  *context,
 
 /**
  * gdk_drag_get_protocol:
- * @xid: the X id of the destination window.
+ * @xid: the windowing system id of the destination window.
  * @protocol: location where the supported DND protocol is returned.
  * 
  * Finds out the DND protocol supported by a window.
  * 
- * Return value: the X id of the window where the drop should happen. This 
- *    may be @xid or the X id of a proxy window, or None if @xid doesn't
- *    support Drag and Drop.
+ * Return value: the windowing system specific id for the window where
+ *    the drop should happen. This may be @xid or the id of a proxy
+ *    window, or zero if @xid doesn't support Drag and Drop.
  **/
-guint32
-gdk_drag_get_protocol (guint32          xid,
+GdkNativeWindow
+gdk_drag_get_protocol (GdkNativeWindow  xid,
 		       GdkDragProtocol *protocol)
 {
   return gdk_drag_get_protocol_for_display (gdk_display_get_default (), xid, protocol);

@@ -854,7 +854,7 @@ enum_formats_new (void)
 static gboolean
 resolve_link (HWND     hWnd,
 	      wchar_t *link,
-	      guchar **lpszPath)
+	      gchar  **lpszPath)
 {
   WIN32_FILE_ATTRIBUTE_DATA wfad;
   HRESULT hres;
@@ -938,7 +938,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
   HANDLE hdrop;
   POINT pt;
   gint nfiles, i;
-  guchar *fileName, *linkedFile;
+  gchar *fileName, *linkedFile;
   
   if (msg->message == WM_DROPFILES)
     {
@@ -1294,9 +1294,9 @@ gdk_drag_begin (GdkWindow *window,
 #endif
 }
 
-guint32
+GdkNativeWindow
 gdk_drag_get_protocol_for_display (GdkDisplay      *display,
-				   guint32          xid,
+				   GdkNativeWindow  xid,
 				   GdkDragProtocol *protocol)
 {
   GdkWindow *window;
@@ -1373,7 +1373,7 @@ gdk_drag_find_window_for_screen (GdkDragContext  *context,
     *dest_window = NULL;
   else
     {
-      *dest_window = gdk_win32_handle_table_lookup (GPOINTER_TO_UINT (a.result));
+      *dest_window = gdk_win32_handle_table_lookup (a.result);
       if (*dest_window)
 	{
 	  *dest_window = gdk_window_get_toplevel (*dest_window);
