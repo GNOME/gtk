@@ -1201,7 +1201,7 @@ write_bucket (FILE *cache, HashNode *node, int *offset)
 	    }
 	  else
 	    {
-	      if (!write_card32 (cache, (guint32) image->image_data ? image->image_data->offset : 0))
+	      if (!write_card32 (cache, (guint32) (image->image_data ? image->image_data->offset : 0)))
 		return FALSE;
 	    }
 
