@@ -1,5 +1,11 @@
 2008-08-05  Tor Lillqvist  <tml@novell.com>
 
+	* gtk/gtkprintoperation-win32.c: Don't need to declare
+	IPrintDialogCallback with mingw64 either. It seems to come with
+	newer versions of the headers.
+
+2008-08-05  Tor Lillqvist  <tml@novell.com>
+
 	Bug 544684 - Win64 issue, window handles are assumed to be 32-bit
 
 	* gtk/gtksocket-win32.c: Don't cast HWND to guint, pass it as such
