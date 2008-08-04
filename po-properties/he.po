@@ -6633,7 +6633,7 @@ msgid "Allow Shrink"
 msgstr "Allow Shrink"
 
 #: ../gtk/gtkwindow.c:508
- no-c-format
+#, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
