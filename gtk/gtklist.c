@@ -27,6 +27,9 @@
 #include "config.h"
 #include <string.h> /* memset */
 
+#undef GTK_DISABLE_DEPRECATED
+#define __GTK_LIST_C__
+
 #include "gtklist.h"
 #include "gtklistitem.h"
 #include "gtkmain.h"
@@ -2575,5 +2578,4 @@ gtk_list_drag_begin (GtkWidget      *widget,
     }
 }
 
-#define __GTK_LIST_C__
 #include "gtkaliasdef.c"

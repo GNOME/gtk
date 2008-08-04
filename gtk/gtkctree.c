@@ -28,10 +28,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#undef GDK_DISABLE_DEPRECATED
-
 #include "config.h"
 #include <stdlib.h>
+
+#undef GDK_DISABLE_DEPRECATED
+#undef GTK_DISABLE_DEPRECATED
+#define __GTK_CTREE_C__
+
 #include "gtkctree.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
@@ -6098,5 +6101,4 @@ gtk_ctree_node_get_type (void)
   return our_type;
 }
 
-#define __GTK_CTREE_C__
 #include "gtkaliasdef.c"

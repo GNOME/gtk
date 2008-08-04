@@ -28,6 +28,9 @@
 
 #include <string.h>
 
+#undef GTK_DISABLE_DEPRECATED
+#define __GTK_PROGRESS_BAR_C__
+
 #include "gtkprogressbar.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -1378,5 +1381,4 @@ gtk_progress_bar_get_ellipsize (GtkProgressBar *pbar)
   return pbar->ellipsize;
 }
 
-#define __GTK_PROGRESS_BAR_C__
 #include "gtkaliasdef.c"

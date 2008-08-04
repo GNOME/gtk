@@ -35,7 +35,7 @@
 
 G_BEGIN_DECLS
 
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (__GTK_PROGRESS_C__) || defined (__GTK_PROGRESS_BAR_C__)
 
 #define GTK_TYPE_PROGRESS            (gtk_progress_get_type ())
 #define GTK_PROGRESS(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PROGRESS, GtkProgress))
@@ -44,7 +44,7 @@ G_BEGIN_DECLS
 #define GTK_IS_PROGRESS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PROGRESS))
 #define GTK_PROGRESS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PROGRESS, GtkProgressClass))
 
-#endif /* !GTK_DISABLE_DEPRECATED || GTK_COMPILATION */
+#endif /* !GTK_DISABLE_DEPRECATED */
 
 typedef struct _GtkProgress       GtkProgress;
 typedef struct _GtkProgressClass  GtkProgressClass;
@@ -84,7 +84,7 @@ struct _GtkProgressClass
  * directly.
  */
 
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (__GTK_PROGRESS_C__) || defined (__GTK_PROGRESS_BAR_C__)
 
 GType      gtk_progress_get_type            (void) G_GNUC_CONST;
 void       gtk_progress_set_show_text       (GtkProgress   *progress,
@@ -114,7 +114,7 @@ gdouble    gtk_progress_get_current_percentage (GtkProgress *progress);
 gdouble    gtk_progress_get_percentage_from_value (GtkProgress *progress,
 						   gdouble      value);
 
-#endif /* !GTK_DISABLE_DEPRECATED || GTK_COMPILATION */
+#endif /* !GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

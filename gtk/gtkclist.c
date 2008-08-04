@@ -31,6 +31,8 @@
 #include <string.h>
 
 #undef GDK_DISABLE_DEPRECATED
+#undef GTK_DISABLE_DEPRECATED
+#define __GTK_CLIST_C__
 
 #include <gdk/gdkkeysyms.h>
 
@@ -7790,6 +7792,4 @@ gtk_clist_set_button_actions (GtkCList *clist,
     }
 }
 
-#define __GTK_CLIST_C__
 #include "gtkaliasdef.c"
-

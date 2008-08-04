@@ -27,7 +27,10 @@
 #include "config.h"
 #include <math.h>
 #include <string.h>
+
 #undef GTK_DISABLE_DEPRECATED
+#define __GTK_PROGRESS_C__
+
 #include "gtkprogress.h" 
 #include "gtkprivate.h" 
 #include "gtkintl.h"
@@ -707,5 +710,4 @@ gtk_progress_set_activity_mode (GtkProgress *progress,
     }
 }
 
-#define __GTK_PROGRESS_C__
 #include "gtkaliasdef.c"

@@ -27,10 +27,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#undef GDK_DISABLE_DEPRECATED
-
 #include "config.h"
 #include <math.h>
+
+#undef GDK_DISABLE_DEPRECATED
+#undef GTK_DISABLE_DEPRECATED
+#define __GTK_PIXMAP_C__
+
 #include "gtkcontainer.h"
 #include "gtkpixmap.h"
 #include "gtkintl.h"
@@ -277,5 +280,4 @@ build_insensitive_pixmap (GtkPixmap *gtkpixmap)
   g_object_unref (G_OBJECT (stated));
 }
 
-#define __GTK_PIXMAP_C__
 #include "gtkaliasdef.c"

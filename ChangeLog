@@ -1,5 +1,29 @@
 2008-08-04  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/Makefile.am: build with GTK_DISABLE_DEPRECATED again.
+
+	Fix pltcheck.sh by restricting the visibility of deprecated
+	symbols to the places where they are actually used:
+
+	* gtk/gtkclist.c
+	* gtk/gtkctree.c
+	* gtk/gtklistitem.c
+	* gtk/gtklist.c
+	* gtk/gtkprogressbar.c
+	* gtk/gtkpixmap.c
+	* gtk/gtkprogress.c: #undef GTK_DISABLE_DEPRECATED and #define
+	__GTK_FOO_C__ on top instead of before including gtkaliasdef.c.
+
+	* gtk/gtkclist.h
+	* gtk/gtkctree.h
+	* gtk/gtklistitem.h
+	* gtk/gtklist.h
+	* gtk/gtkpixmap.h
+	* gtk/gtkprogress.h: make the headers visible if the respective
+	__GTK_FOO_C__ are defined.
+
+2008-08-04  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkclist.c
 	* gtk/gtklist.c
 	* gtk/gtkoldeditable.c

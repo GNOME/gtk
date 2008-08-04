@@ -28,6 +28,9 @@
 
 #include <gdk/gdkkeysyms.h>
 
+#undef GTK_DISABLE_DEPRECATED
+#define __GTK_LIST_ITEM_C__
+
 #include "gtkbindings.h"
 #include "gtklabel.h"
 #include "gtklistitem.h"
@@ -624,5 +627,4 @@ gtk_real_list_item_toggle (GtkItem *item)
     }
 }
 
-#define __GTK_LIST_ITEM_C__
 #include "gtkaliasdef.c"
