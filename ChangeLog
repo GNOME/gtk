@@ -1,5 +1,14 @@
 2008-08-04  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkclist.c
+	* gtk/gtkctree.c
+	* gtk/gtkpixmap.c
+	* gtk/gtkpreview.c: get rid of using deprecated GDK APIs.
+
+	* gtk/gtktext.c: ditto, apart from the text cruft APIs.
+
+2008-08-04  Michael Natterer  <mitch@imendio.com>
+
 	* gdk/gdk.c (gdk_parse_args): call gdk_rgb_set_verbose(TRUE) if
 	"gdkrgb" is in the debug flags.
 

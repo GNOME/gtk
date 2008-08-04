@@ -1273,7 +1273,7 @@ gtk_text_realize (GtkWidget *widget)
   text->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
   gdk_window_set_user_data (text->text_area, text);
 
-  gdk_cursor_destroy (attributes.cursor); /* The X server will keep it around as long as necessary */
+  gdk_cursor_unref (attributes.cursor); /* The X server will keep it around as long as necessary */
   
   widget->style = gtk_style_attach (widget->style, widget->window);
   
@@ -1321,7 +1321,7 @@ gtk_text_style_set (GtkWidget *widget,
       
       if (text->bg_gc)
 	{
-	  gdk_gc_destroy (text->bg_gc);
+	  g_object_unref (text->bg_gc);
 	  text->bg_gc = NULL;
 	}
 
@@ -1358,17 +1358,17 @@ gtk_text_unrealize (GtkWidget *widget)
   gdk_window_destroy (text->text_area);
   text->text_area = NULL;
   
-  gdk_gc_destroy (text->gc);
+  g_object_unref (text->gc);
   text->gc = NULL;
 
   if (text->bg_gc)
     {
-      gdk_gc_destroy (text->bg_gc);
+      g_object_unref (text->bg_gc);
       text->bg_gc = NULL;
     }
   
-  gdk_pixmap_unref (text->line_wrap_bitmap);
-  gdk_pixmap_unref (text->line_arrow_bitmap);
+  g_object_unref (text->line_wrap_bitmap);
+  g_object_unref (text->line_arrow_bitmap);
 
   unrealize_properties (text);
 
@@ -1394,7 +1394,7 @@ clear_focus_area (GtkText *text, gint area_x, gint area_y, gint area_width, gint
     
   if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
     {
-      gdk_window_get_size (widget->style->bg_pixmap[GTK_STATE_NORMAL], &width, &height);
+      gdk_drawable_get_size (widget->style->bg_pixmap[GTK_STATE_NORMAL], &width, &height);
   
       gdk_gc_set_ts_origin (text->bg_gc,
 			    (- text->first_onscreen_hor_pixel + xthick) % width,
@@ -1751,7 +1751,7 @@ gtk_text_motion_notify (GtkWidget      *widget,
       !(mask & (GDK_BUTTON1_MASK | GDK_BUTTON3_MASK)))
     return FALSE;
   
-  gdk_window_get_size (text->text_area, NULL, &height);
+  gdk_drawable_get_size (text->text_area, NULL, &height);
   
   if ((y < 0) || (y > height))
     {
@@ -2510,21 +2510,21 @@ delete_expose (GtkText* text, guint nchars, guint old_lines, guint old_pixels)
   
   new_pixels = total_line_height (text, new_line, 1);
   
-  gdk_window_get_size (text->text_area, &width, &height);
+  gdk_drawable_get_size (text->text_area, &width, &height);
   
   if (old_pixels != new_pixels)
     {
       if (!widget->style->bg_pixmap[GTK_STATE_NORMAL])
 	{
-	  gdk_draw_pixmap (text->text_area,
-			   text->gc,
-			   text->text_area,
-			   0,
-			   pixel_height + old_pixels,
-			   0,
-			   pixel_height + new_pixels,
-			   width,
-			   height);
+	  gdk_draw_drawable (text->text_area,
+                             text->gc,
+                             text->text_area,
+                             0,
+                             pixel_height + old_pixels,
+                             0,
+                             pixel_height + new_pixels,
+                             width,
+                             height);
 	}
       text->vadj->upper += new_pixels;
       text->vadj->upper -= old_pixels;
@@ -2697,21 +2697,21 @@ insert_expose (GtkText* text, guint old_pixels, gint nchars,
   
   new_pixels = total_line_height (text, new_lines, new_line_count);
   
-  gdk_window_get_size (text->text_area, &width, &height);
+  gdk_drawable_get_size (text->text_area, &width, &height);
   
   if (old_pixels != new_pixels)
     {
       if (!widget->style->bg_pixmap[GTK_STATE_NORMAL])
 	{
-	  gdk_draw_pixmap (text->text_area,
-			   text->gc,
-			   text->text_area,
-			   0,
-			   pixel_height + old_pixels,
-			   0,
-			   pixel_height + new_pixels,
-			   width,
-			   height + (old_pixels - new_pixels) - pixel_height);
+	  gdk_draw_drawable (text->text_area,
+                             text->gc,
+                             text->text_area,
+                             0,
+                             pixel_height + old_pixels,
+                             0,
+                             pixel_height + new_pixels,
+                             width,
+                             height + (old_pixels - new_pixels) - pixel_height);
 	  
 	}
       text->vadj->upper += new_pixels;
@@ -3450,7 +3450,7 @@ find_line_containing_point (GtkText* text, guint point,
 	scroll_int (text, - LINE_HEIGHT(CACHE_DATA(text->line_start_cache->next)));
     }
 
-  gdk_window_get_size (text->text_area, NULL, &height);
+  gdk_drawable_get_size (text->text_area, NULL, &height);
   
   for (cache = text->line_start_cache; cache; cache = cache->next)
     {
@@ -4177,7 +4177,7 @@ adjust_adj (GtkText* text, GtkAdjustment* adj)
 {
   gint height;
   
-  gdk_window_get_size (text->text_area, NULL, &height);
+  gdk_drawable_get_size (text->text_area, NULL, &height);
   
   adj->step_increment = MIN (adj->upper, SCROLL_PIXELS);
   adj->page_increment = MIN (adj->upper, height - KEY_SCROLL_PIXELS);
@@ -4257,7 +4257,7 @@ set_vertical_scroll (GtkText* text)
   text->vadj->upper = data.pixel_height;
   orig_value = (gint) text->vadj->value;
   
-  gdk_window_get_size (text->text_area, NULL, &height);
+  gdk_drawable_get_size (text->text_area, NULL, &height);
   
   text->vadj->step_increment = MIN (text->vadj->upper, SCROLL_PIXELS);
   text->vadj->page_increment = MIN (text->vadj->upper, height - KEY_SCROLL_PIXELS);
@@ -4322,7 +4322,7 @@ static gint last_visible_line_height (GtkText* text)
   GList *cache = text->line_start_cache;
   gint height;
   
-  gdk_window_get_size (text->text_area, NULL, &height);
+  gdk_drawable_get_size (text->text_area, NULL, &height);
   
   for (; cache->next; cache = cache->next)
     if (pixel_height_of(text, cache->next) > height)
@@ -4375,17 +4375,17 @@ scroll_down (GtkText* text, gint diff0)
       real_diff += 1;
     }
   
-  gdk_window_get_size (text->text_area, &width, &height);
+  gdk_drawable_get_size (text->text_area, &width, &height);
   if (height > real_diff)
-    gdk_draw_pixmap (text->text_area,
-		     text->gc,
-		     text->text_area,
-		     0,
-		     real_diff,
-		     0,
-		     0,
-		     width,
-		     height - real_diff);
+    gdk_draw_drawable (text->text_area,
+                       text->gc,
+                       text->text_area,
+                       0,
+                       real_diff,
+                       0,
+                       0,
+                       width,
+                       height - real_diff);
   
   rect.x      = 0;
   rect.y      = MAX (0, height - real_diff);
@@ -4444,17 +4444,17 @@ scroll_up (GtkText* text, gint diff0)
       real_diff += 1;
     }
   
-  gdk_window_get_size (text->text_area, &width, &height);
+  gdk_drawable_get_size (text->text_area, &width, &height);
   if (height > real_diff)
-    gdk_draw_pixmap (text->text_area,
-		     text->gc,
-		     text->text_area,
-		     0,
-		     0,
-		     0,
-		     real_diff,
-		     width,
-		     height - real_diff);
+    gdk_draw_drawable (text->text_area,
+                       text->gc,
+                       text->text_area,
+                       0,
+                       0,
+                       0,
+                       real_diff,
+                       width,
+                       height - real_diff);
   
   rect.x      = 0;
   rect.y      = 0;
@@ -4471,7 +4471,7 @@ scroll_up (GtkText* text, gint diff0)
       
       text->cursor_pos_y += real_diff;
       cursor_max = drawn_cursor_max(text);
-      gdk_window_get_size (text->text_area, NULL, &height);
+      gdk_drawable_get_size (text->text_area, NULL, &height);
       
       if (cursor_max >= height)
 	find_mouse_cursor (text, text->cursor_pos_x,
@@ -4503,7 +4503,7 @@ find_line_params (GtkText* text,
   gint ch_width;
   GdkFont *font;
   
-  gdk_window_get_size (text->text_area, (gint*) &max_display_pixels, NULL);
+  gdk_drawable_get_size (text->text_area, (gint*) &max_display_pixels, NULL);
   max_display_pixels -= LINE_WRAP_ROOM;
   
   lp.wraps             = 0;
@@ -4892,7 +4892,7 @@ draw_line (GtkText* text,
 	      
 	  len = 1;
 	  
-	  gdk_window_get_size (text->text_area, &pixels_remaining, NULL);
+	  gdk_drawable_get_size (text->text_area, &pixels_remaining, NULL);
 	  pixels_remaining -= (LINE_WRAP_ROOM + running_offset);
 	  
 	  space_width = MARK_CURRENT_TEXT_FONT(text, &mark)->char_widths[' '];
@@ -4939,7 +4939,7 @@ draw_line_wrap (GtkText* text, guint height /* baseline height */)
       bitmap_height = line_arrow_height;
     }
   
-  gdk_window_get_size (text->text_area, &width, NULL);
+  gdk_drawable_get_size (text->text_area, &width, NULL);
   width -= LINE_WRAP_ROOM;
   
   gdk_gc_set_stipple (text->gc,
@@ -5079,7 +5079,7 @@ clear_area (GtkText *text, GdkRectangle *area)
     {
       gint width, height;
       
-      gdk_window_get_size (widget->style->bg_pixmap[GTK_STATE_NORMAL], &width, &height);
+      gdk_drawable_get_size (widget->style->bg_pixmap[GTK_STATE_NORMAL], &width, &height);
       
       gdk_gc_set_ts_origin (text->bg_gc,
 			    (- text->first_onscreen_hor_pixel) % width,
@@ -5101,7 +5101,7 @@ expose_text (GtkText* text, GdkRectangle *area, gboolean cursor)
   gint max_y = MAX (0, area->y + area->height);
   gint height;
   
-  gdk_window_get_size (text->text_area, NULL, &height);
+  gdk_drawable_get_size (text->text_area, NULL, &height);
   max_y = MIN (max_y, height);
   
   TDEBUG (("in expose x=%d y=%d w=%d h=%d\n", area->x, area->y, area->width, area->height));
@@ -5163,7 +5163,7 @@ gtk_text_update_text (GtkOldEditable    *old_editable,
   if (end_pos < start_pos)
     return;
   
-  gdk_window_get_size (text->text_area, &width, &height);
+  gdk_drawable_get_size (text->text_area, &width, &height);
   area.x = 0;
   area.y = -1;
   area.width = width;
@@ -5219,7 +5219,7 @@ recompute_geometry (GtkText* text)
 	 GTK_TEXT_INDEX (text, mark.index - 1) != LINE_DELIM)
     decrement_mark (&mark);
 
-  gdk_window_get_size (text->text_area, &width, &height);
+  gdk_drawable_get_size (text->text_area, &width, &height);
 
   /* Fetch an entire line, to make sure that we get all the text
    * we backed over above, in addition to enough text to fill up

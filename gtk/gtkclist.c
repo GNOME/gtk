@@ -30,7 +30,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 #define __GTK_CLIST_C__
 
@@ -2611,14 +2610,14 @@ cell_size_request (GtkCList       *clist,
   switch (clist_row->cell[column].type)
     {
     case GTK_CELL_PIXTEXT:
-      gdk_window_get_size (GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap,
-			   &width, &height);
+      gdk_drawable_get_size (GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap,
+                             &width, &height);
       requisition->width += width;
       requisition->height = MAX (requisition->height, height);      
       break;
     case GTK_CELL_PIXMAP:
-      gdk_window_get_size (GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap,
-			   &width, &height);
+      gdk_drawable_get_size (GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap,
+                             &width, &height);
       requisition->width += width;
       requisition->height = MAX (requisition->height, height);
       break;
@@ -3216,8 +3215,8 @@ gtk_clist_set_foreground (GtkCList       *clist,
       clist_row->foreground = *color;
       clist_row->fg_set = TRUE;
       if (GTK_WIDGET_REALIZED (clist))
-	gdk_color_alloc (gtk_widget_get_colormap (GTK_WIDGET (clist)),
-			 &clist_row->foreground);
+	gdk_colormap_alloc_color (gtk_widget_get_colormap (GTK_WIDGET (clist)),
+                                  &clist_row->foreground, FALSE, TRUE);
     }
   else
     clist_row->fg_set = FALSE;
@@ -3245,8 +3244,8 @@ gtk_clist_set_background (GtkCList       *clist,
       clist_row->background = *color;
       clist_row->bg_set = TRUE;
       if (GTK_WIDGET_REALIZED (clist))
-	gdk_color_alloc (gtk_widget_get_colormap (GTK_WIDGET (clist)),
-			 &clist_row->background);
+	gdk_colormap_alloc_color (gtk_widget_get_colormap (GTK_WIDGET (clist)),
+                                  &clist_row->background, FALSE, TRUE);
     }
   else
     clist_row->bg_set = FALSE;
@@ -4516,8 +4515,8 @@ gtk_clist_realize (GtkWidget *widget)
   gdk_window_set_background (clist->clist_window,
 			     &widget->style->base[GTK_STATE_NORMAL]);
   gdk_window_show (clist->clist_window);
-  gdk_window_get_size (clist->clist_window, &clist->clist_window_width,
-		       &clist->clist_window_height);
+  gdk_drawable_get_size (clist->clist_window, &clist->clist_window_width,
+                         &clist->clist_window_height);
 
   /* create resize windows */
   attributes.wclass = GDK_INPUT_ONLY;
@@ -4581,9 +4580,11 @@ gtk_clist_realize (GtkWidget *widget)
 
 	  colormap = gtk_widget_get_colormap (widget);
 	  if (clist_row->fg_set)
-	    gdk_color_alloc (colormap, &clist_row->foreground);
+	    gdk_colormap_alloc_color (colormap, &clist_row->foreground,
+                                      FALSE, TRUE);
 	  if (clist_row->bg_set)
-	    gdk_color_alloc (colormap, &clist_row->background);
+	    gdk_colormap_alloc_color (colormap, &clist_row->background,
+                                      FALSE, TRUE);
 	}
       
       for (j = 0; j < clist->columns; j++)
@@ -4632,10 +4633,10 @@ gtk_clist_unrealize (GtkWidget *widget)
 	}
     }
 
-  gdk_cursor_destroy (clist->cursor_drag);
-  gdk_gc_destroy (clist->xor_gc);
-  gdk_gc_destroy (clist->fg_gc);
-  gdk_gc_destroy (clist->bg_gc);
+  gdk_cursor_unref (clist->cursor_drag);
+  g_object_unref (clist->xor_gc);
+  g_object_unref (clist->fg_gc);
+  g_object_unref (clist->bg_gc);
 
   for (i = 0; i < clist->columns; i++)
     {
@@ -5603,7 +5604,7 @@ draw_cell_pixmap (GdkWindow    *window,
   if (y + height > clip_rectangle->y + clip_rectangle->height)
     height = clip_rectangle->y + clip_rectangle->height - y;
 
-  gdk_draw_pixmap (window, fg_gc, pixmap, xsrc, ysrc, x, y, width, height);
+  gdk_draw_drawable (window, fg_gc, pixmap, xsrc, ysrc, x, y, width, height);
   gdk_gc_set_clip_origin (fg_gc, 0, 0);
   if (mask)
     gdk_gc_set_clip_mask (fg_gc, NULL);
@@ -5788,13 +5789,13 @@ draw_row (GtkCList     *clist,
       switch (clist_row->cell[i].type)
 	{
 	case GTK_CELL_PIXMAP:
-	  gdk_window_get_size (GTK_CELL_PIXMAP (clist_row->cell[i])->pixmap,
-			       &pixmap_width, &height);
+	  gdk_drawable_get_size (GTK_CELL_PIXMAP (clist_row->cell[i])->pixmap,
+                                 &pixmap_width, &height);
 	  width += pixmap_width;
 	  break;
 	case GTK_CELL_PIXTEXT:
-	  gdk_window_get_size (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap,
-			       &pixmap_width, &height);
+	  gdk_drawable_get_size (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap,
+                                 &pixmap_width, &height);
 	  width += pixmap_width + GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing;
 	  break;
 	default:

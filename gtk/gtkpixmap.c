@@ -30,7 +30,6 @@
 #include "config.h"
 #include <math.h>
 
-#undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 #define __GTK_PIXMAP_C__
 
@@ -113,15 +112,15 @@ gtk_pixmap_set (GtkPixmap *pixmap,
       oldwidth = GTK_WIDGET (pixmap)->requisition.width;
       oldheight = GTK_WIDGET (pixmap)->requisition.height;
       if (pixmap->pixmap)
-	gdk_pixmap_unref (pixmap->pixmap);
+	g_object_unref (pixmap->pixmap);
       if (pixmap->pixmap_insensitive)
-	gdk_pixmap_unref (pixmap->pixmap_insensitive);
+	g_object_unref (pixmap->pixmap_insensitive);
       pixmap->pixmap = val;
       pixmap->pixmap_insensitive = NULL;
       if (pixmap->pixmap)
 	{
-	  gdk_pixmap_ref (pixmap->pixmap);
-	  gdk_window_get_size (pixmap->pixmap, &width, &height);
+	  g_object_ref (pixmap->pixmap);
+	  gdk_drawable_get_size (pixmap->pixmap, &width, &height);
 	  GTK_WIDGET (pixmap)->requisition.width =
 	    width + GTK_MISC (pixmap)->xpad * 2;
 	  GTK_WIDGET (pixmap)->requisition.height =
@@ -145,10 +144,10 @@ gtk_pixmap_set (GtkPixmap *pixmap,
   if (pixmap->mask != mask)
     {
       if (pixmap->mask)
-	gdk_bitmap_unref (pixmap->mask);
+	g_object_unref (pixmap->mask);
       pixmap->mask = mask;
       if (pixmap->mask)
-	gdk_bitmap_ref (pixmap->mask);
+	g_object_ref (pixmap->mask);
     }
 }
 
@@ -203,17 +202,17 @@ gtk_pixmap_expose (GtkWidget      *widget,
         {
 	  if (!pixmap->pixmap_insensitive)
 	    build_insensitive_pixmap (pixmap);
-          gdk_draw_pixmap (widget->window,
-	   	           widget->style->black_gc,
-		           pixmap->pixmap_insensitive,
-		           0, 0, x, y, -1, -1);
+          gdk_draw_drawable (widget->window,
+                             widget->style->black_gc,
+                             pixmap->pixmap_insensitive,
+                             0, 0, x, y, -1, -1);
         }
       else
 	{
-          gdk_draw_pixmap (widget->window,
-	   	           widget->style->black_gc,
-		           pixmap->pixmap,
-		           0, 0, x, y, -1, -1);
+          gdk_draw_drawable (widget->window,
+                             widget->style->black_gc,
+                             pixmap->pixmap,
+                             0, 0, x, y, -1, -1);
 	}
 
       if (pixmap->mask)
@@ -247,7 +246,7 @@ build_insensitive_pixmap (GtkPixmap *gtkpixmap)
   GdkPixbuf *pixbuf;
   GdkPixbuf *stated;
   
-  gdk_window_get_size (pixmap, &w, &h);
+  gdk_drawable_get_size (pixmap, &w, &h);
 
   pixbuf = gdk_pixbuf_get_from_drawable (NULL,
                                          pixmap,
@@ -261,7 +260,7 @@ build_insensitive_pixmap (GtkPixmap *gtkpixmap)
   gdk_pixbuf_saturate_and_pixelate (pixbuf, stated,
                                     0.8, TRUE);
 
-  g_object_unref (G_OBJECT (pixbuf));
+  g_object_unref (pixbuf);
   pixbuf = NULL;
   
   insensitive = gdk_pixmap_new (GTK_WIDGET (gtkpixmap)->window, w, h, -1);
@@ -277,7 +276,7 @@ build_insensitive_pixmap (GtkPixmap *gtkpixmap)
 
   gtkpixmap->pixmap_insensitive = insensitive;
 
-  g_object_unref (G_OBJECT (stated));
+  g_object_unref (stated);
 }
 
 #include "gtkaliasdef.c"

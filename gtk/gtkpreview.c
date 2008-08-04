@@ -24,9 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#undef GDK_DISABLE_DEPRECATED
-#undef GTK_DISABLE_DEPRECATED
-
 #include "config.h"
 
 #include <math.h>
@@ -35,6 +32,9 @@
 #ifdef HAVE_SYS_PARAM_H
 #include <sys/param.h>
 #endif
+
+#undef GTK_DISABLE_DEPRECATED
+
 #include "gtkpreview.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -94,8 +94,6 @@ gtk_preview_class_init (GtkPreviewClass *klass)
   klass->info.lookup = NULL;
 
   klass->info.gamma = 1.0;
-
-  gdk_rgb_init ();
 
   g_object_class_install_property (gobject_class,
                                    PROP_EXPAND,
@@ -490,8 +488,8 @@ gtk_preview_expose (GtkWidget      *widget,
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       preview = GTK_PREVIEW (widget);
-      
-      gdk_window_get_size (widget->window, &width, &height);
+
+      gdk_drawable_get_size (widget->window, &width, &height);
 
       gtk_preview_put (GTK_PREVIEW (widget),
 		       widget->window, widget->style->black_gc,
