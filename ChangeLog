@@ -1,3 +1,8 @@
+2008-08-04  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtklinkbutton.c (gtk_link_button_set_uri): update the link
+	color when the "visited" state is changed.
+
 2008-08-04  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkwindow.c: move the code of the deprecated
