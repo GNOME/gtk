@@ -1,5 +1,10 @@
 2008-08-05  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/gdkrgb.c: Cast pointers to guintptr, not unsigned long,
+	before doing bit tests on them.
+
+2008-08-05  Tor Lillqvist  <tml@novell.com>
+
 	* configure.in: Define GDK_NATIVE_WINDOW_POINTER on 32-bit
 	Windows, too. It just makes more sense, as a HWND *is* a kind of
 	pointer.

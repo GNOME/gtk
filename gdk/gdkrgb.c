@@ -862,7 +862,7 @@ gdk_rgb_convert_8 (GdkRgbInfo *image_info, GdkImage *image,
     {
       bp2 = bptr;
       obptr = obuf;
-      if (((unsigned long)obuf | (unsigned long) bp2) & 3)
+      if (((guintptr)obuf | (guintptr) bp2) & 3)
 	{
 	  for (x = 0; x < width; x++)
 	    {
@@ -1495,7 +1495,7 @@ gdk_rgb_convert_565 (GdkRgbInfo *image_info, GdkImage *image,
     {
       bp2 = bptr;
       obptr = obuf;
-      if (((unsigned long)obuf | (unsigned long) bp2) & 3)
+      if (((guintptr)obuf | (guintptr) bp2) & 3)
 	{
 	  for (x = 0; x < width; x++)
 	    {
@@ -1626,7 +1626,7 @@ gdk_rgb_convert_565_gray (GdkRgbInfo *image_info, GdkImage *image,
     {
       bp2 = bptr;
       obptr = obuf;
-      if (((unsigned long)obuf | (unsigned long) bp2) & 3)
+      if (((guintptr)obuf | (guintptr) bp2) & 3)
 	{
 	  for (x = 0; x < width; x++)
 	    {
@@ -1768,7 +1768,7 @@ gdk_rgb_convert_565_d (GdkRgbInfo *image_info, GdkImage *image,
       const guint32 *dmp = DM_565 + ((y & (DM_HEIGHT - 1)) << DM_WIDTH_SHIFT);
       bp2 = bptr;
       obptr = obuf;
-      if (((unsigned long)obuf | (unsigned long) bp2) & 3)
+      if (((guintptr)obuf | (guintptr) bp2) & 3)
 	{
 	  for (x = x_align; x < width; x++)
 	    {
@@ -2030,7 +2030,7 @@ gdk_rgb_convert_888_lsb (GdkRgbInfo *image_info, GdkImage *image,
     {
       bp2 = bptr;
       obptr = obuf;
-      if (((unsigned long)obuf | (unsigned long) bp2) & 3)
+      if (((guintptr)obuf | (guintptr) bp2) & 3)
 	{
 	  for (x = 0; x < width; x++)
 	    {
