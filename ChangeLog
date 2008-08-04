@@ -1,3 +1,10 @@
+2008-08-04  Sven Neumann  <sven@gimp.org>
+
+	Merged from trunk:
+
+	* gtk/gtklinkbutton.c (gtk_link_button_set_uri): update the link
+	color when the "visited" state is changed.
+
 2008-08-02  Tor Lillqvist  <tml@novell.com>
 
 	Bug 538686 - gtkprintoperation-win32.c: devmode_from_settings
@@ -31,7 +38,8 @@
 
 	Merged from trunk:
 
-	Bug 541964 – [Win32] Setting modal hint to current value might confuse the stack
+	Bug 541964 – [Win32] Setting modal hint to current value might
+	confuse the stack
 
 	* gdk/win32/gdkwindow-win32.c: Check if the value is the same as the
 	existing modal hint value before setting it.

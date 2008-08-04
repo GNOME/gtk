@@ -599,7 +599,11 @@ gtk_link_button_set_uri (GtkLinkButton *link_button,
   link_button->priv->uri = g_strdup (uri);
   g_free (tmp);
 
-  link_button->priv->visited = FALSE;
+  if (link_button->priv->visited)
+    {
+      link_button->priv->visited = FALSE;
+      set_link_color (link_button);
+    }
   
   g_object_notify (G_OBJECT (link_button), "uri");
 }
