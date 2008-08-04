@@ -222,15 +222,15 @@ gtk_gc_key_hash (gpointer key)
     }
   if (keyval->mask & GDK_GC_TILE)
     {
-      hash_val += (glong) keyval->values.tile;
+      hash_val += (gintptr) keyval->values.tile;
     }
   if (keyval->mask & GDK_GC_STIPPLE)
     {
-      hash_val += (glong) keyval->values.stipple;
+      hash_val += (gintptr) keyval->values.stipple;
     }
   if (keyval->mask & GDK_GC_CLIP_MASK)
     {
-      hash_val += (glong) keyval->values.clip_mask;
+      hash_val += (gintptr) keyval->values.clip_mask;
     }
   if (keyval->mask & GDK_GC_SUBWINDOW)
     {
