@@ -1,5 +1,9 @@
 2008-08-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2008-08-04  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Bump glib dependency to 2.17.6
 
 2008-08-04  Michael Natterer  <mitch@imendio.com>
