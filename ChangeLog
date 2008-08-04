@@ -25,6 +25,7 @@
 	parameter of gdk_selection_send_notify_for_display() and
 	gdk_selection_send_notify().
 
+	* gdk/win32/gdkproperty-win32.c
 	* gdk/win32/gdkselection-win32.c: Add some guchar and char pointer
 	casts to get rid of gcc 4.4 warnings. Print GdkAtom values in
 	debugging output using the %p format.

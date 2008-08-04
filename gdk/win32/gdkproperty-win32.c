@@ -171,10 +171,10 @@ gdk_property_change (GdkWindow    *window,
   GDK_NOTE (DND,
 	    (prop_name = gdk_atom_name (property),
 	     type_name = gdk_atom_name (type),
-	     g_print ("gdk_property_change: %p %#x (%s) %#x (%s) %s %d*%d bytes: %s\n",
+	     g_print ("gdk_property_change: %p %p (%s) %p (%s) %s %d*%d bytes: %s\n",
 		      GDK_WINDOW_HWND (window),
-		      (guint) property, prop_name,
-		      (guint) type, type_name,
+		      property, prop_name,
+		      type, type_name,
 		      (mode == GDK_PROP_MODE_REPLACE ? "REPLACE" :
 		       (mode == GDK_PROP_MODE_PREPEND ? "PREPEND" :
 			(mode == GDK_PROP_MODE_APPEND ? "APPEND" :
@@ -202,7 +202,7 @@ gdk_property_change (GdkWindow    *window,
 	      return;
 	    }
 
-	  nchars = g_utf8_strlen (data, nelements);
+	  nchars = g_utf8_strlen ((char*) data, nelements);
 
 	  /* Check if only ASCII */
 	  for (i = 0; i < nelements; i++)
@@ -225,7 +225,7 @@ gdk_property_change (GdkWindow    *window,
 	      /* Use CF_UNICODETEXT */
 	      method = UNICODE_TEXT;
 
-	      wcptr = g_utf8_to_utf16 (data, nelements, NULL, &wclen, NULL);
+	      wcptr = g_utf8_to_utf16 ((char *) data, nelements, NULL, &wclen, NULL);
 
 	      wclen++;		/* Terminating 0 */
 	      size = wclen * 2;
@@ -320,9 +320,9 @@ gdk_property_delete (GdkWindow *window,
 
   GDK_NOTE (DND,
 	    (prop_name = gdk_atom_name (property),
-	     g_print ("gdk_property_delete: %p %#x (%s)\n",
+	     g_print ("gdk_property_delete: %p %p (%s)\n",
 		      GDK_WINDOW_HWND (window),
-		      (guint) property, prop_name),
+		      property, prop_name),
 	     g_free (prop_name)));
 
   if (property == _gdk_selection_property)
