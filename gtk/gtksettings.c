@@ -913,7 +913,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-enable-input-feedback-sounds",
                                                                    /* Translators: this means sounds that are played as feedback to user input */
-								   P_("Aureal Input Feedback"),
+								   P_("Audible Input Feedback"),
 								   P_("Whether to play event sounds as feedback to user input"),
 								   TRUE,
 								   GTK_PARAM_READWRITE),

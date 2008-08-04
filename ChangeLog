@@ -1,5 +1,22 @@
 2008-08-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksettings.c: Improve a setting nick: 'aureal' is not really
+	a word, use 'audible' instead.
+
+2008-08-04  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 382291 – Automatically dim the combobox when the model is empty
+
+	* gtk/gtk.symbols:
+	* gtkcombobox.[hc]: Add a GtkComboBox::button-sensitivity
+	property with getter and setter to control the sensitity of
+	empty combo boxes. Patch by Carlos Garnacho, Sven Herzberg,
+	Christian Dywan and others.
+
+	* README.in: Add a note about automatic combobox sensitivity.
+	
+2008-08-04  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/tests/Makefile.am: Skip crossingevents test when
 	running make check, since it doesn't work on a naked
 	X server.
