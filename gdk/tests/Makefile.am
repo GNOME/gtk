@@ -18,3 +18,7 @@ check_gdk_cairo_LDADD=\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la \
 	$(top_builddir)/gdk/libgdk-$(gdktarget)-$(GTK_API_VERSION).la \
 	$(NULL)
+
+CLEANFILES = \
+	cairosurface.png	\
+	gdksurface.png

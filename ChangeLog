@@ -1,3 +1,7 @@
+2008-08-04  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/tests/Makefile.am: add the generated PNGs to CLEANFILES.
+
 2008-08-04  Tor Lillqvist  <tml@novell.com>
 
 	* configure.in: Set LIB_EXE_MACHINE_FLAG to either X86 or X64 on
