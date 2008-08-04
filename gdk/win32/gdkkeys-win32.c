@@ -504,7 +504,7 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
 {
   update_keymap ();
 
-  switch (PRIMARYLANGID (LOWORD ((DWORD) _gdk_input_locale)))
+  switch (PRIMARYLANGID (LOWORD ((DWORD) (gintptr) _gdk_input_locale)))
     {
     case LANG_HEBREW:
     case LANG_ARABIC:

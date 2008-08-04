@@ -2027,9 +2027,9 @@ gdk_window_set_transient_for (GdkWindow *window,
    * USENET. Search on Google.
    */
   SetLastError (0);
-  if (SetWindowLong (window_id, GWL_HWNDPARENT, (long) parent_id) == 0 &&
+  if (SetWindowLongPtr (window_id, GWLP_HWNDPARENT, (LONG_PTR) parent_id) == 0 &&
       GetLastError () != 0)
-    WIN32_API_FAILED ("SetWindowLong");
+    WIN32_API_FAILED ("SetWindowLongPtr");
 }
 
 void
@@ -3602,8 +3602,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 	  owner = gdk_window_new_internal (NULL, &wa, 0, TRUE);
 	}
 
-      SetWindowLong (GDK_WINDOW_HWND (window), GWL_HWNDPARENT,
-		     (long) GDK_WINDOW_HWND (owner));
+      SetWindowLongPtr (GDK_WINDOW_HWND (window), GWLP_HWNDPARENT, (LONG_PTR) GDK_WINDOW_HWND (owner));
 
 #if 0 /* Should we also turn off the minimize and maximize buttons? */
       SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE,
@@ -3616,7 +3615,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
     }
   else
     {
-      SetWindowLong (GDK_WINDOW_HWND (window), GWL_HWNDPARENT, 0);
+      SetWindowLongPtr (GDK_WINDOW_HWND (window), GWLP_HWNDPARENT, 0);
     }
 }
 

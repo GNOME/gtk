@@ -292,8 +292,11 @@ _gdk_win32_window_procedure (HWND   hwnd,
   retval = inner_window_procedure (hwnd, message, wparam, lparam);
   debug_indent -= 2;
 
-  GDK_NOTE (EVENTS, g_print (" => %ld%s",
-			     retval, (debug_indent == 0 ? "\n" : "")));
+#ifdef _WIN64
+  GDK_NOTE (EVENTS, g_print (" => %I64d%s", retval, (debug_indent == 0 ? "\n" : "")));
+#else
+  GDK_NOTE (EVENTS, g_print (" => %ld%s", retval, (debug_indent == 0 ? "\n" : "")));
+#endif
 
   return retval;
 }
@@ -2151,7 +2154,7 @@ gdk_event_translate (MSG  *msg,
       /* XXX Handle WM_QUIT here ? */
       if (msg->message == WM_QUIT)
 	{
-	  GDK_NOTE (EVENTS, g_print (" %d", msg->wParam));
+	  GDK_NOTE (EVENTS, g_print (" %d", (int) msg->wParam));
 	  exit (msg->wParam);
 	}
       else if (msg->message == WM_MOVE ||
@@ -2265,9 +2268,9 @@ gdk_event_translate (MSG  *msg,
       _gdk_input_codepage = atoi (buf);
       _gdk_keymap_serial++;
       GDK_NOTE (EVENTS,
-		g_print (" cs:%lu hkl:%lx%s cp:%d",
+		g_print (" cs:%lu hkl:%p%s cp:%d",
 			 (gulong) msg->wParam,
-			 msg->lParam, _gdk_input_locale_is_ime ? " (IME)" : "",
+			 (gpointer) msg->lParam, _gdk_input_locale_is_ime ? " (IME)" : "",
 			 _gdk_input_codepage));
       break;
 
@@ -2276,7 +2279,7 @@ gdk_event_translate (MSG  *msg,
       GDK_NOTE (EVENTS,
 		g_print (" %s ch:%.02x %s",
 			 _gdk_win32_key_to_string (msg->lParam),
-			 msg->wParam,
+			 (int) msg->wParam,
 			 decode_key_lparam (msg->lParam)));
 
       /* If posted without us having keyboard focus, ignore */
@@ -2301,7 +2304,7 @@ gdk_event_translate (MSG  *msg,
       GDK_NOTE (EVENTS, 
 		g_print (" %s ch:%.02x %s",
 			 _gdk_win32_key_to_string (msg->lParam),
-			 msg->wParam,
+			 (int) msg->wParam,
 			 decode_key_lparam (msg->lParam)));
 
     keyup_or_down:
@@ -2408,7 +2411,7 @@ gdk_event_translate (MSG  *msg,
        * WM_IME_CHAR might work on NT4 or Win9x with ActiveIMM, but
        * use WM_IME_COMPOSITION there, too, to simplify the code.
        */
-      GDK_NOTE (EVENTS, g_print (" %#lx", msg->lParam));
+      GDK_NOTE (EVENTS, g_print (" %#lx", (long) msg->lParam));
 
       if (!(msg->lParam & GCS_RESULTSTR))
 	break;
@@ -2590,8 +2593,8 @@ gdk_event_translate (MSG  *msg,
 
     case WM_MOUSEMOVE:
       GDK_NOTE (EVENTS,
-		g_print (" %#x (%d,%d)",
-			 msg->wParam,
+		g_print (" %p (%d,%d)",
+			 (gpointer) msg->wParam,
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
       /* If we haven't moved, don't create any GDK event. Windows
@@ -2877,7 +2880,7 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_SHOWWINDOW:
-      GDK_NOTE (EVENTS, g_print (" %d", msg->wParam));
+      GDK_NOTE (EVENTS, g_print (" %d", (int) msg->wParam));
 
       if (!(((GdkWindowObject *) window)->event_mask & GDK_STRUCTURE_MASK))
 	break;
@@ -3410,7 +3413,7 @@ gdk_event_translate (MSG  *msg,
 	  event->selection.selection = GDK_SELECTION_CLIPBOARD;
 	  event->selection.target = target;
 	  event->selection.property = _gdk_selection_property;
-	  event->selection.requestor = (guint32) msg->hwnd;
+	  event->selection.requestor = msg->hwnd;
 	  event->selection.time = msg->time;
 
 	  fixup_event (event);
@@ -3476,18 +3479,18 @@ gdk_event_translate (MSG  *msg,
        * constants as case labels.
        */
     case WT_PACKET:
-      GDK_NOTE (EVENTS, g_print (" %d %#lx",
-				 msg->wParam, msg->lParam));
+      GDK_NOTE (EVENTS, g_print (" %d %p",
+				 (int) msg->wParam, (gpointer) msg->lParam));
       goto wintab;
       
     case WT_CSRCHANGE:
-      GDK_NOTE (EVENTS, g_print (" %d %#lx",
-				 msg->wParam, msg->lParam));
+      GDK_NOTE (EVENTS, g_print (" %d %p",
+				 (int) msg->wParam, (gpointer) msg->lParam));
       goto wintab;
       
     case WT_PROXIMITY:
-      GDK_NOTE (EVENTS, g_print (" %#x %d %d",
-				 msg->wParam,
+      GDK_NOTE (EVENTS, g_print (" %p %d %d",
+				 (gpointer) msg->wParam,
 				 LOWORD (msg->lParam),
 				 HIWORD (msg->lParam)));
       /* Fall through */

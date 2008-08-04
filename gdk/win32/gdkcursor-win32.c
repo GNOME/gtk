@@ -429,7 +429,8 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon)
     RGBQUAD colors[2];
   } bmi;
   HDC hdc;
-  gchar *pixels, *bits, buf[32];
+  guchar *pixels, *bits;
+  gchar buf[32];
   gint rowstride, x, y, w, h;
 
   if (!GDI_CALL (GetIconInfo, (hicon, &ii)))

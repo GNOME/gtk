@@ -897,7 +897,7 @@ gdk_font_load_logfont (LOGFONT *lfp)
   singlefont->charset = GetTextCharsetInfo (_gdk_display_hdc, &singlefont->fs, 0);
   GetTextFace (_gdk_display_hdc, sizeof (face), face);
   SelectObject (_gdk_display_hdc, oldfont);
-  if (TranslateCharsetInfo ((DWORD *) singlefont->charset, &csi,
+  if (TranslateCharsetInfo ((DWORD *) (gintptr) singlefont->charset, &csi,
 			    TCI_SRCCHARSET)
       && singlefont->charset != MAC_CHARSET)
     singlefont->codepage = csi.ciACP;
@@ -1400,8 +1400,9 @@ gdk_font_id (const GdkFont *font)
 
   private = (const GdkFontPrivateWin32 *) font;
 
+  /* FIXME: What to do on Win64? */
   if (font->type == GDK_FONT_FONT)
-    return (gint) ((GdkWin32SingleFont *) private->fonts->data)->hfont;
+    return (gint) (gintptr) ((GdkWin32SingleFont *) private->fonts->data)->hfont;
   else
     return 0;
 }
@@ -1519,7 +1520,7 @@ _gdk_wchar_text_handle (GdkFont       *font,
       if (!list)
 	singlefont = NULL;
 
-      GDK_NOTE (MISC, g_print ("%d:%d:%d:%p ",
+      GDK_NOTE (MISC, g_print ("%" G_GSIZE_FORMAT ":%" G_GSIZE_FORMAT ":%d:%p ",
 			       start-wcstr, wcp-wcstr, block,
 			       (singlefont ? singlefont->hfont : 0)));
 

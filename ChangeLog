@@ -25,11 +25,26 @@
 	parameter of gdk_selection_send_notify_for_display() and
 	gdk_selection_send_notify().
 
+	* gdk/win32/gdkcursor-win32.c
+	* gdk/win32/xcursors.h: Change some gchar* to guchar* and vice
+	versa to avoid gcc 4.4 signedness warnings.
+
+	* gdk/win32/gdkevents-win32.c
 	* gdk/win32/gdkproperty-win32.c
 	* gdk/win32/gdkselection-win32.c: Add some guchar and char pointer
-	casts to get rid of gcc 4.4 warnings. Print GdkAtom values in
-	debugging output using the %p format.
+	casts to get rid of gcc 4.4 signedness warnings. Print GdkAtom
+	values in debugging output using the %p format.
 	
+	* gdk/win32/gdkkeys-win32.c
+	* gdk/win32/gdkfont-win32.c
+	* gdk/win32/gdkmain-win32.c: Add some casts to avoid gcc warnings.
+ 
+	* gdk/win32/gdkwindow-win32.c: Use SetWindowLongPtr() instead of
+	SetWindowLong().
+
+	* gdk/win32/gdkwin32id.c (gdk_handle_hash): Use all 64 bits of a
+	HANDLE on Win64.
+
 	* gtk/gtkwindow.h
 	* gtk/gtkwindow.c: Change the type of the xid parameter of the
 	internal gtk_window_remove_embedded_xid() and

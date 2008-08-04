@@ -34,12 +34,16 @@ static GHashTable *handle_ht = NULL;
 static guint
 gdk_handle_hash (HANDLE *handle)
 {
+#ifdef _WIN64
+  return ((guint *) handle)[0] ^ ((guint *) handle)[1];
+#else
   return (guint) *handle;
+#endif
 }
 
 static gint
 gdk_handle_equal (HANDLE *a,
-		 HANDLE *b)
+		  HANDLE *b)
 {
   return (*a == *b);
 }

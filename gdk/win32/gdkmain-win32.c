@@ -368,7 +368,7 @@ _gdk_win32_print_dc (HDC hdc)
 	   _gdk_win32_psstyle_to_string (extlogpen.elpPenStyle),
 	   _gdk_win32_psendcap_to_string (extlogpen.elpPenStyle),
 	   _gdk_win32_psjoin_to_string (extlogpen.elpPenStyle),
-	   extlogpen.elpWidth,
+	   (int) extlogpen.elpWidth,
 	   _gdk_win32_lbstyle_to_string (extlogpen.elpBrushStyle));
   g_print ("rop2: %s textcolor=%06lx\n",
 	   _gdk_win32_rop2_to_string (GetROP2 (hdc)),
