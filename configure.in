@@ -1987,9 +1987,7 @@ if test "x$gdktarget" = "xx11" ; then
 #define GDK_WINDOWING_X11'
 elif test "x$gdktarget" = "xwin32" ; then
   gdk_windowing='
-#ifdef _WIN64
-#  define GDK_NATIVE_WINDOW_POINTER
-#endif
+#define GDK_NATIVE_WINDOW_POINTER
 
 #define GDK_WINDOWING_WIN32'
 elif test "x$gdktarget" = "xquartz" ; then

@@ -19,9 +19,7 @@ extern "C" {
 #  endif
 #endif /* !GSEAL */
 
-#ifdef _WIN64
-#  define GDK_NATIVE_WINDOW_POINTER
-#endif
+#define GDK_NATIVE_WINDOW_POINTER
 
 #define GDK_WINDOWING_WIN32
 

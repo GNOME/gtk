@@ -1,3 +1,11 @@
+2008-08-05  Tor Lillqvist  <tml@novell.com>
+
+	* configure.in: Define GDK_NATIVE_WINDOW_POINTER on 32-bit
+	Windows, too. It just makes more sense, as a HWND *is* a kind of
+	pointer.
+
+	* gdk/gdkconfig.h.win32: Ditto here.
+
 2008-08-04  Björn Lindqvist  <bjourne@gmail.com>
 
 	Bug 534979 – GtkImageMenuItem is a bin but has two children.
