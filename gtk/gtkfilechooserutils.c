@@ -207,14 +207,14 @@ delegate_select_file (GtkFileChooser    *chooser,
 		      GFile             *file,
 		      GError           **error)
 {
-  return _gtk_file_chooser_select_file (get_delegate (chooser), file, error);
+  return gtk_file_chooser_select_file (get_delegate (chooser), file, error);
 }
 
 static void
 delegate_unselect_file (GtkFileChooser *chooser,
 			GFile          *file)
 {
-  _gtk_file_chooser_unselect_file (get_delegate (chooser), file);
+  gtk_file_chooser_unselect_file (get_delegate (chooser), file);
 }
 
 static void
@@ -232,13 +232,13 @@ delegate_unselect_all (GtkFileChooser *chooser)
 static GSList *
 delegate_get_files (GtkFileChooser *chooser)
 {
-  return _gtk_file_chooser_get_files (get_delegate (chooser));
+  return gtk_file_chooser_get_files (get_delegate (chooser));
 }
 
 static GFile *
 delegate_get_preview_file (GtkFileChooser *chooser)
 {
-  return _gtk_file_chooser_get_preview_file (get_delegate (chooser));
+  return gtk_file_chooser_get_preview_file (get_delegate (chooser));
 }
 
 static GtkFileSystem *
@@ -294,13 +294,13 @@ delegate_set_current_folder (GtkFileChooser  *chooser,
 			     GFile           *file,
 			     GError         **error)
 {
-  return _gtk_file_chooser_set_current_folder_file (get_delegate (chooser), file, error);
+  return gtk_file_chooser_set_current_folder_file (get_delegate (chooser), file, error);
 }
 
 static GFile *
 delegate_get_current_folder (GtkFileChooser *chooser)
 {
-  return _gtk_file_chooser_get_current_folder_file (get_delegate (chooser));
+  return gtk_file_chooser_get_current_folder_file (get_delegate (chooser));
 }
 
 static void

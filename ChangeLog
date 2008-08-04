@@ -1,3 +1,12 @@
+2008-08-04  Carlos Garnacho  <carlos@imendio.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkfilechooser.[ch]: Make GFile-oriented API public. Fixes
+	#545978.
+	* gtk/gtkfilechooserbutton.c:
+	* gtk/gtkfilechooserdefault.c:
+	* gtk/gtkfilechooserutils.c: Update to use public GFile API.
+
 2008-08-04  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/Makefile.am: build with GTK_DISABLE_DEPRECATED again.

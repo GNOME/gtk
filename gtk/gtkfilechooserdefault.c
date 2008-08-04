@@ -1137,7 +1137,7 @@ change_folder_and_display_error (GtkFileChooserDefault *impl,
    * list_row_activated()
    *   fetches path from model; path belongs to the model (*)
    *   calls change_folder_and_display_error()
-   *     calls _gtk_file_chooser_set_current_folder_file()
+   *     calls gtk_file_chooser_set_current_folder_file()
    *       changing folders fails, sets model to NULL, thus freeing the path in (*)
    */
 
@@ -5296,7 +5296,7 @@ set_local_only (GtkFileChooserDefault *impl,
 
 	  home_file = g_file_new_for_path (home);
 
-	  _gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (impl), home_file, NULL);
+	  gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (impl), home_file, NULL);
 
 	  g_object_unref (home_file);
 	}
@@ -7071,7 +7071,7 @@ gtk_file_chooser_default_select_file (GtkFileChooser  *chooser,
   parent_file = g_file_get_parent (file);
 
   if (!parent_file)
-    return _gtk_file_chooser_set_current_folder_file (chooser, file, error);
+    return gtk_file_chooser_set_current_folder_file (chooser, file, error);
 
   if (impl->operation_mode == OPERATION_MODE_SEARCH ||
       impl->operation_mode == OPERATION_MODE_RECENT ||
@@ -7105,7 +7105,7 @@ gtk_file_chooser_default_select_file (GtkFileChooser  *chooser,
     {
       gboolean result;
 
-      result = _gtk_file_chooser_set_current_folder_file (chooser, parent_file, error);
+      result = gtk_file_chooser_set_current_folder_file (chooser, parent_file, error);
       g_object_unref (parent_file);
       return result;
     }
@@ -7412,7 +7412,7 @@ gtk_file_chooser_default_get_files (GtkFileChooser *chooser)
     {
       GFile *current_folder;
 
-      current_folder = _gtk_file_chooser_get_current_folder_file (chooser);
+      current_folder = gtk_file_chooser_get_current_folder_file (chooser);
 
       if (current_folder)
         info.result = g_slist_prepend (info.result, current_folder);
@@ -7421,7 +7421,7 @@ gtk_file_chooser_default_get_files (GtkFileChooser *chooser)
   return g_slist_reverse (info.result);
 }
 
-static GFile *
+GFile *
 gtk_file_chooser_default_get_preview_file (GtkFileChooser *chooser)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);

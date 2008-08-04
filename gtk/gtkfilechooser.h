@@ -135,6 +135,22 @@ gboolean gtk_file_chooser_set_current_folder_uri (GtkFileChooser *chooser,
 						  const gchar    *uri);
 gchar *  gtk_file_chooser_get_current_folder_uri (GtkFileChooser *chooser);
 
+/* GFile manipulation */
+GFile *  gtk_file_chooser_get_file                (GtkFileChooser  *chooser);
+gboolean gtk_file_chooser_set_file                (GtkFileChooser  *chooser,
+                                                   GFile           *file,
+                                                   GError         **error);
+gboolean gtk_file_chooser_select_file             (GtkFileChooser  *chooser,
+                                                   GFile           *file,
+                                                   GError         **error);
+void     gtk_file_chooser_unselect_file           (GtkFileChooser  *chooser,
+                                                   GFile           *file);
+GSList * gtk_file_chooser_get_files               (GtkFileChooser  *chooser);
+gboolean gtk_file_chooser_set_current_folder_file (GtkFileChooser  *chooser,
+                                                   GFile           *file,
+                                                   GError         **error);
+GFile *  gtk_file_chooser_get_current_folder_file (GtkFileChooser  *chooser);
+
 /* Preview widget
  */
 void       gtk_file_chooser_set_preview_widget        (GtkFileChooser *chooser,
@@ -147,8 +163,9 @@ void       gtk_file_chooser_set_use_preview_label     (GtkFileChooser *chooser,
 						       gboolean        use_label);
 gboolean   gtk_file_chooser_get_use_preview_label     (GtkFileChooser *chooser);
 
-char *gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser);
-char *gtk_file_chooser_get_preview_uri      (GtkFileChooser *chooser);
+char  *gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser);
+char  *gtk_file_chooser_get_preview_uri      (GtkFileChooser *chooser);
+GFile *gtk_file_chooser_get_preview_file     (GtkFileChooser *chooser);
 
 /* Extra widget
  */
