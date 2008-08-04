@@ -1,3 +1,12 @@
+2008-08-04  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/gdk.c (gdk_parse_args): call gdk_rgb_set_verbose(TRUE) if
+	"gdkrgb" is in the debug flags.
+
+	* gdk/gdkrgb.c (gdk_rgb_init): remove setting the verbose flag
+	here, this function is deprecated and the debug flag didn't work
+	when using GDK properly.
+
 2008-08-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkicontheme.c: Update to handle GEmblem.

@@ -233,7 +233,10 @@ gdk_parse_args (int    *argc,
       g_error_free (error);
     }
   g_option_context_free (option_context);
-  
+
+  if (_gdk_debug_flags && GDK_DEBUG_GDKRGB)
+    gdk_rgb_set_verbose (TRUE);
+
   GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
 }
 

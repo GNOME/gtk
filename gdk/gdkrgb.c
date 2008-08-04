@@ -36,7 +36,6 @@
 
 #define ENABLE_GRAYSCALE
 
-#include "gdkprivate.h"
 #include "gdkinternals.h"	/* _gdk_windowing_get_bits_for_depth() */
 
 #include "gdkrgb.h"
@@ -677,9 +676,6 @@ void
 gdk_rgb_init (void)
 {
   static const gint byte_order[1] = { 1 };
-
-  if (_gdk_debug_flags & GDK_DEBUG_GDKRGB)
-    gdk_rgb_verbose = TRUE;
 
   /* check endian sanity */
 #if G_BYTE_ORDER == G_BIG_ENDIAN
