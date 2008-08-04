@@ -1532,14 +1532,12 @@ gtk_window_get_default_widget (GtkWindow *window)
   return window->default_widget;
 }
 
-void
-gtk_window_set_policy (GtkWindow *window,
-		       gboolean   allow_shrink,
-		       gboolean   allow_grow,
-		       gboolean   auto_shrink)
+static void
+gtk_window_set_policy_internal (GtkWindow *window,
+                                gboolean   allow_shrink,
+                                gboolean   allow_grow,
+                                gboolean   auto_shrink)
 {
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
   window->allow_shrink = (allow_shrink != FALSE);
   window->allow_grow = (allow_grow != FALSE);
 
@@ -1548,8 +1546,19 @@ gtk_window_set_policy (GtkWindow *window,
   g_object_notify (G_OBJECT (window), "allow-grow");
   g_object_notify (G_OBJECT (window), "resizable");
   g_object_thaw_notify (G_OBJECT (window));
-  
+
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
+}
+
+void
+gtk_window_set_policy (GtkWindow *window,
+		       gboolean   allow_shrink,
+		       gboolean   allow_grow,
+		       gboolean   auto_shrink)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  gtk_window_set_policy_internal (window, allow_shrink, allow_grow, auto_shrink);
 }
 
 static gboolean
@@ -7003,7 +7012,7 @@ gtk_window_set_resizable (GtkWindow *window,
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  gtk_window_set_policy (window, FALSE, resizable, FALSE);
+  gtk_window_set_policy_internal (window, FALSE, resizable, FALSE);
 }
 
 /**
