@@ -1936,7 +1936,7 @@ gtk_window_list_toplevels (void)
 }
 
 void
-gtk_window_add_embedded_xid (GtkWindow *window, guint xid)
+gtk_window_add_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
 {
   GList *embedded_windows;
 
@@ -1955,7 +1955,7 @@ gtk_window_add_embedded_xid (GtkWindow *window, guint xid)
 }
 
 void
-gtk_window_remove_embedded_xid (GtkWindow *window, guint xid)
+gtk_window_remove_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
 {
   GList *embedded_windows;
   GList *node;
@@ -5140,7 +5140,7 @@ send_client_message_to_embedded_windows (GtkWidget *widget,
       
       while (embedded_windows)
 	{
-	  guint xid = GPOINTER_TO_UINT (embedded_windows->data);
+	  GdkNativeWindow xid = (GdkNativeWindow) embedded_windows->data;
 	  gdk_event_send_client_message_for_display (gtk_widget_get_display (widget), send_event, xid);
 	  embedded_windows = embedded_windows->next;
 	}

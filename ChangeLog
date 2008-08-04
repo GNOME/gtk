@@ -29,6 +29,17 @@
 	casts to get rid of gcc 4.4 warnings. Print GdkAtom values in
 	debugging output using the %p format.
 	
+	* gtk/gtkwindow.h
+	* gtk/gtkwindow.c: Change the type of the xid parameter of the
+	internal gtk_window_remove_embedded_xid() and
+	gtk_window_add_embedded_xid() functions from guint to
+	GdkNativeWindow.
+
+	* gtk/gtkwindow.c (send_client_message_to_embedded_windows):
+	Instead of GPOINTER_TO_UINT(), just cast the gpointer to
+	GdkNativeWindow. GPOINTER_TO_UINT() drops the upper 32 bits on
+	Win64.
+
 2008-08-05  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/gdkrgb.c: Cast pointers to guintptr, not unsigned long,

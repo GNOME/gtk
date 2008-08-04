@@ -398,10 +398,10 @@ GList *          gtk_window_group_list_windows  (GtkWindowGroup     *window_grou
 /* --- internal functions --- */
 void            _gtk_window_internal_set_focus (GtkWindow *window,
 						GtkWidget *focus);
-void            gtk_window_remove_embedded_xid (GtkWindow *window,
-						guint      xid);
-void            gtk_window_add_embedded_xid    (GtkWindow *window,
-						guint      xid);
+void            gtk_window_remove_embedded_xid (GtkWindow       *window,
+						GdkNativeWindow  xid);
+void            gtk_window_add_embedded_xid    (GtkWindow       *window,
+						GdkNativeWindow  xid);
 void            _gtk_window_reposition         (GtkWindow *window,
 						gint       x,
 						gint       y);
