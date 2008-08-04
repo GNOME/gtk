@@ -895,6 +895,8 @@ gtk_combo_box_set_title
 gtk_combo_box_get_title
 gtk_combo_box_set_focus_on_click
 gtk_combo_box_get_focus_on_click
+gtk_combo_box_set_button_sensitivity
+gtk_combo_box_get_button_sensitivity
 <SUBSECTION Standard>
 GTK_TYPE_COMBO_BOX
 GTK_COMBO_BOX

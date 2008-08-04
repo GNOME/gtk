@@ -114,6 +114,10 @@ void                        gtk_combo_box_set_row_separator_func (GtkComboBox   
 								  gpointer                    data,
 								  GDestroyNotify              destroy);
 
+void               gtk_combo_box_set_button_sensitivity (GtkComboBox        *combo_box,
+							 GtkSensitivityType  sensitivity);
+GtkSensitivityType gtk_combo_box_get_button_sensitivity (GtkComboBox        *combo_box);
+
 /* convenience -- text */
 GtkWidget    *gtk_combo_box_new_text         (void);
 void          gtk_combo_box_append_text      (GtkComboBox     *combo_box,

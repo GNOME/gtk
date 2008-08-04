@@ -120,6 +120,7 @@ struct _GtkComboBoxPrivate
   guint editing_canceled : 1;
   guint auto_scroll : 1;
   guint focus_on_click : 1;
+  guint button_sensitivity : 2;
 
   GtkTreeViewRowSeparatorFunc row_separator_func;
   gpointer                    row_separator_data;
@@ -201,7 +202,8 @@ enum {
   PROP_TEAROFF_TITLE,
   PROP_HAS_FRAME,
   PROP_FOCUS_ON_CLICK,
-  PROP_POPUP_SHOWN
+  PROP_POPUP_SHOWN,
+  PROP_BUTTON_SENSITIVITY
 };
 
 static guint combo_box_signals[LAST_SIGNAL] = {0,};
@@ -822,6 +824,24 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READABLE));
 
+
+   /**
+    * GtkComboBox:button-sensitivity:
+    *
+    * Whether the dropdown button is sensitive when
+    * the model is empty.
+    *
+    * Since: 2.14
+    */
+   g_object_class_install_property (object_class,
+                                    PROP_BUTTON_SENSITIVITY,
+                                    g_param_spec_enum ("button-sensitivity",
+                                                       P_("Button Sensitivity"),
+                                                       P_("Whether the dropdown button is sensitive when the model is empty"),
+                                                       GTK_TYPE_SENSITIVITY_TYPE,
+                                                       GTK_SENSITIVITY_AUTO,
+                                                       GTK_PARAM_READWRITE));
+
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("appears-as-list",
                                                                  P_("Appears as list"),
@@ -919,6 +939,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   priv->editing_canceled = FALSE;
   priv->auto_scroll = FALSE;
   priv->focus_on_click = TRUE;
+  priv->button_sensitivity = GTK_SENSITIVITY_AUTO;
 
   combo_box->priv = priv;
 
@@ -979,6 +1000,11 @@ gtk_combo_box_set_property (GObject      *object,
           gtk_combo_box_popdown (combo_box);
         break;
 
+      case PROP_BUTTON_SENSITIVITY:
+        gtk_combo_box_set_button_sensitivity (combo_box,
+                                              g_value_get_enum (value));
+        break;
+
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -1033,6 +1059,10 @@ gtk_combo_box_get_property (GObject    *object,
 
       case PROP_POPUP_SHOWN:
         g_value_set_boolean (value, combo_box->priv->popup_shown);
+        break;
+
+      case PROP_BUTTON_SENSITIVITY:
+        g_value_set_enum (value, combo_box->priv->button_sensitivity);
         break;
 
       default:
@@ -3122,6 +3152,32 @@ gtk_combo_box_menu_item_activate (GtkWidget *item,
 }
 
 static void
+gtk_combo_box_update_sensitivity (GtkComboBox *combo_box)
+{
+  GtkTreeIter iter;
+  gboolean sensitive = TRUE; /* fool code checkers */
+
+  switch (combo_box->priv->button_sensitivity)
+    {
+      case GTK_SENSITIVITY_ON:
+        sensitive = TRUE;
+        break;
+      case GTK_SENSITIVITY_OFF:
+        sensitive = FALSE;
+        break;
+      case GTK_SENSITIVITY_AUTO:
+        sensitive = combo_box->priv->model &&
+                    gtk_tree_model_get_iter_first (combo_box->priv->model, &iter);
+        break;
+      default:
+        g_assert_not_reached ();
+        break;
+    }
+
+  gtk_widget_set_sensitive (combo_box->priv->button, sensitive);
+}
+
+static void
 gtk_combo_box_model_row_inserted (GtkTreeModel     *model,
 				  GtkTreePath      *path,
 				  GtkTreeIter      *iter,
@@ -3133,6 +3189,8 @@ gtk_combo_box_model_row_inserted (GtkTreeModel     *model,
     gtk_combo_box_list_popup_resize (combo_box);
   else
     gtk_combo_box_menu_row_inserted (model, path, iter, user_data);
+
+  gtk_combo_box_update_sensitivity (combo_box);
 }
 
 static void
@@ -3154,6 +3212,8 @@ gtk_combo_box_model_row_deleted (GtkTreeModel     *model,
     gtk_combo_box_list_popup_resize (combo_box);
   else
     gtk_combo_box_menu_row_deleted (model, path, user_data);  
+
+  gtk_combo_box_update_sensitivity (combo_box);
 }
 
 static void
@@ -4945,6 +5005,8 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
                              combo_box->priv->model);
 
 out:
+  gtk_combo_box_update_sensitivity (combo_box);
+
   g_object_notify (G_OBJECT (combo_box), "model");
 }
 
@@ -5668,6 +5730,55 @@ gtk_combo_box_set_row_separator_func (GtkComboBox                 *combo_box,
   gtk_combo_box_relayout (combo_box);
 
   gtk_widget_queue_draw (GTK_WIDGET (combo_box));
+}
+
+/**
+ * gtk_combo_box_set_button_sensitivity:
+ * @combo_box: a #GtkComboBox
+ * @sensitivity: specify the sensitivity of the dropdown button
+ *
+ * Sets whether the dropdown button of the combo box should be
+ * always sensitive (%GTK_SENSITIVITY_ON), never sensitive (%GTK_SENSITIVITY_OFF)
+ * or only if there is at least one item to display (%GTK_SENSITIVITY_AUTO).
+ *
+ * Since: 2.14
+ **/
+void
+gtk_combo_box_set_button_sensitivity (GtkComboBox        *combo_box,
+                                      GtkSensitivityType  sensitivity)
+{
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+
+  if (combo_box->priv->button_sensitivity != sensitivity)
+    {
+      combo_box->priv->button_sensitivity = sensitivity;
+      gtk_combo_box_update_sensitivity (combo_box);
+
+      g_object_notify (G_OBJECT (combo_box), "button-sensitivity");
+    }
+}
+
+/**
+ * gtk_combo_box_get_button_sensitivity:
+ * @combo_box: a #GtkComboBox
+ *
+ * Returns whether the combo box sets the dropdown button
+ * sensitive or not when there are no items in the model.
+ *
+ * Return Value: %GTK_SENSITIVITY_ON if the dropdown button
+ *    is sensitive when the model is empty, %GTK_SENSITIVITY_OFF
+ *    if the button is always insensitive or
+ *    %GTK_SENSITIVITY_AUTO if it is only sensitive as long as
+ *    the model has one item to be selected.
+ *
+ * Since: 2.14
+ **/
+GtkSensitivityType
+gtk_combo_box_get_button_sensitivity (GtkComboBox *combo_box)
+{
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), FALSE);
+
+  return combo_box->priv->button_sensitivity;
 }
 
 

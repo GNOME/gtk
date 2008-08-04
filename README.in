@@ -42,6 +42,12 @@ Release notes for 2.14
   the GtkFileSystem interface is no longer available, nor the filechooser
   will load any GtkFileSystem implementation.
 
+* GtkComboBox now renders the popdown button insensitive when
+  the model is empty. Applications which want to populate the list
+  only before displaying it can set gtk_combo_box_set_button_sensitivity
+  to GTK_SENSITIVITY_ON, so that the button is always sensitive or
+  GTK_SENSITIVITY_OFF to make it insensitive respectively.
+
 Release notes for 2.12
 ======================
 
