@@ -47,9 +47,7 @@
 #include <windows.h>
 #endif
 
-#undef GTK_DISABLE_DEPRECATED
 #include "gtkcalendar.h"
-
 #include "gtkdnd.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -1269,7 +1267,7 @@ calendar_set_display_option (GtkCalendar              *calendar,
     flags = calendar->display_flags | flag;
   else
     flags = calendar->display_flags & ~flag; 
-  gtk_calendar_display_options (calendar, flags);
+  gtk_calendar_set_display_options (calendar, flags);
 }
 
 static gboolean

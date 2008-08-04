@@ -1,3 +1,12 @@
+2008-08-04  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkseparatortoolitem.c
+	* tests/testactions.c: remove pointless #undef GTK_DISABLE_DEPRECATED.
+
+	* gtk/gtkcalendar.c (calendar_set_display_option): use
+	gtk_calendar_set_display_options() instead of the deprecated
+	gtk_calendar_display_options().
+
 2008-08-04  Carlos Garnacho  <carlos@imendio.com>
 
 	* gtk/gtkfilechooserbutton.c: Fix "/* within comment" warning.

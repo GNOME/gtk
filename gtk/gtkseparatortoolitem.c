@@ -19,8 +19,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include "config.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkseparatortoolitem.h"
