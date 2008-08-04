@@ -1,5 +1,16 @@
 2008-08-04  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkbindings.c: move the code of the deprecated
+	gtk_binding_entry_clear() to a new private function
+	gtk_binding_entry_clear_internal() and call it from
+	gtk_binding_entry_clear().
+
+	(_gtk_binding_entry_add_signall)
+	(gtk_binding_parse_bind): use the new internal function in order
+	to avoid our own deprecated public API.
+
+2008-08-04  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkfontsel.c (gtk_font_selection_dialog_get_font):
 	avoid our own deprecated public API and use
 	gtk_font_selection_get_font_internal() instead of

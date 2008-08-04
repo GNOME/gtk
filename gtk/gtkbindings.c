@@ -689,6 +689,23 @@ gtk_binding_set_activate (GtkBindingSet	 *binding_set,
   return FALSE;
 }
 
+static void
+gtk_binding_entry_clear_internal (GtkBindingSet  *binding_set,
+                                  guint           keyval,
+                                  GdkModifierType modifiers)
+{
+  GtkBindingEntry *entry;
+
+  keyval = gdk_keyval_to_lower (keyval);
+  modifiers = modifiers & BINDING_MOD_MASK ();
+
+  entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
+  if (entry)
+    binding_entry_destroy (entry);
+
+  entry = binding_entry_new (binding_set, keyval, modifiers);
+}
+
 /**
  * gtk_binding_entry_clear:
  * @binding_set:
@@ -702,18 +719,9 @@ gtk_binding_entry_clear (GtkBindingSet	*binding_set,
 			 guint		 keyval,
 			 GdkModifierType modifiers)
 {
-  GtkBindingEntry *entry;
-  
   g_return_if_fail (binding_set != NULL);
-  
-  keyval = gdk_keyval_to_lower (keyval);
-  modifiers = modifiers & BINDING_MOD_MASK ();
-  
-  entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
-  if (entry)
-    binding_entry_destroy (entry);
 
-  entry = binding_entry_new (binding_set, keyval, modifiers);
+  gtk_binding_entry_clear_internal (binding_set, keyval, modifiers);
 }
 
 /**
@@ -865,7 +873,7 @@ _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
   entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
   if (!entry)
     {
-      gtk_binding_entry_clear (binding_set, keyval, modifiers);
+      gtk_binding_entry_clear_internal (binding_set, keyval, modifiers);
       entry = binding_ht_lookup_entry (binding_set, keyval, modifiers);
     }
   signal_p = &entry->signals;
@@ -1536,8 +1544,8 @@ gtk_binding_parse_bind (GScanner       *scanner,
   if (scanner->token != '{')
     return '{';
 
-  gtk_binding_entry_clear (binding_set, keyval, modifiers);
-  
+  gtk_binding_entry_clear_internal (binding_set, keyval, modifiers);
+
   g_scanner_peek_next_token (scanner);
   while (scanner->next_token != '}')
     {
