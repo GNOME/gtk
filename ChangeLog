@@ -1,5 +1,10 @@
 2008-08-04  Michael Natterer  <mitch@imendio.com>
 
+	* tests/prop-editor.c: undeprecate (apart from still using
+	GtkOptionMenu).
+
+2008-08-04  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkseparatortoolitem.c
 	* tests/testactions.c: remove pointless #undef GTK_DISABLE_DEPRECATED.
 

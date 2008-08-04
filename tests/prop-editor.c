@@ -113,11 +113,11 @@ free_object_property (ObjectProperty *p)
 }
 
 static void
-connect_controller (GObject       *controller,
-                    const gchar   *signal,
-                    GObject       *model,
-		    GParamSpec    *spec,
-                    GtkSignalFunc  func)
+connect_controller (GObject     *controller,
+                    const gchar *signal,
+                    GObject     *model,
+		    GParamSpec  *spec,
+                    GCallback    func)
 {
   ObjectProperty *p;
 
@@ -683,7 +683,7 @@ property_widget (GObject    *object,
       
       if (can_modify)
 	connect_controller (G_OBJECT (adj), "value_changed",
-			    object, spec, (GtkSignalFunc) int_modified);
+			    object, spec, G_CALLBACK (int_modified));
     }
   else if (type == G_TYPE_PARAM_UINT)
     {
@@ -704,7 +704,7 @@ property_widget (GObject    *object,
       
       if (can_modify)
 	connect_controller (G_OBJECT (adj), "value_changed",
-			    object, spec, (GtkSignalFunc) uint_modified);
+			    object, spec, G_CALLBACK (uint_modified));
     }
   else if (type == G_TYPE_PARAM_FLOAT)
     {
@@ -725,7 +725,7 @@ property_widget (GObject    *object,
       
       if (can_modify)
 	connect_controller (G_OBJECT (adj), "value_changed",
-			    object, spec, (GtkSignalFunc) float_modified);
+			    object, spec, G_CALLBACK (float_modified));
     }
   else if (type == G_TYPE_PARAM_DOUBLE)
     {
@@ -745,7 +745,7 @@ property_widget (GObject    *object,
       
       if (can_modify)
 	connect_controller (G_OBJECT (adj), "value_changed",
-			    object, spec, (GtkSignalFunc) double_modified);
+			    object, spec, G_CALLBACK (double_modified));
     }
   else if (type == G_TYPE_PARAM_STRING)
     {
@@ -757,7 +757,7 @@ property_widget (GObject    *object,
       
       if (can_modify)
 	connect_controller (G_OBJECT (prop_edit), "changed",
-			    object, spec, (GtkSignalFunc) string_modified);
+			    object, spec, G_CALLBACK (string_modified));
     }
   else if (type == G_TYPE_PARAM_BOOLEAN)
     {
@@ -769,7 +769,7 @@ property_widget (GObject    *object,
       
       if (can_modify)
 	connect_controller (G_OBJECT (prop_edit), "toggled",
-			    object, spec, (GtkSignalFunc) bool_modified);
+			    object, spec, G_CALLBACK (bool_modified));
     }
   else if (type == G_TYPE_PARAM_ENUM)
     {
@@ -808,7 +808,7 @@ property_widget (GObject    *object,
 	
 	if (can_modify)
 	  connect_controller (G_OBJECT (prop_edit), "changed",
-			      object, spec, (GtkSignalFunc) enum_modified);
+			      object, spec, G_CALLBACK (enum_modified));
       }
     }
   else if (type == G_TYPE_PARAM_FLAGS)
@@ -831,7 +831,7 @@ property_widget (GObject    *object,
 	    gtk_box_pack_start (GTK_BOX (prop_edit), b, FALSE, FALSE, 0);
 	    if (can_modify) 
 	      connect_controller (G_OBJECT (b), "toggled",
-	     	                  object, spec, (GtkSignalFunc) flags_modified);
+	     	                  object, spec, G_CALLBACK (flags_modified));
 	  }
 	
 	g_type_class_unref (fclass);
@@ -852,7 +852,7 @@ property_widget (GObject    *object,
       
       if (can_modify)
 	connect_controller (G_OBJECT (prop_edit), "changed",
-			    object, spec, (GtkSignalFunc) unichar_modified);
+			    object, spec, G_CALLBACK (unichar_modified));
     }
   else if (type == G_TYPE_PARAM_POINTER)
     {
@@ -895,9 +895,8 @@ property_widget (GObject    *object,
 }
 
 static GtkWidget *
-properties_from_type (GObject     *object,
-		      GType        type,
-		      GtkTooltips *tips)
+properties_from_type (GObject *object,
+		      GType    type)
 {
   GtkWidget *prop_edit;
   GtkWidget *label;
@@ -966,8 +965,8 @@ properties_from_type (GObject     *object,
             gtk_widget_set_sensitive (prop_edit, FALSE);
 
 	  if (g_param_spec_get_blurb (spec))
-	    gtk_tooltips_set_tip (tips, prop_edit, g_param_spec_get_blurb (spec), NULL);
-	  
+	    gtk_widget_set_tooltip_text (prop_edit, g_param_spec_get_blurb (spec));
+
           /* set initial value */
           g_object_notify (object, spec->name);
         }
@@ -991,8 +990,7 @@ properties_from_type (GObject     *object,
 }
 
 static GtkWidget *
-child_properties_from_object (GObject     *object,
-			      GtkTooltips *tips)
+child_properties_from_object (GObject *object)
 {
   GtkWidget *prop_edit;
   GtkWidget *label;
@@ -1050,8 +1048,8 @@ child_properties_from_object (GObject     *object,
             gtk_widget_set_sensitive (prop_edit, FALSE);
 
 	  if (g_param_spec_get_blurb (spec))
-	    gtk_tooltips_set_tip (tips, prop_edit, g_param_spec_get_blurb (spec), NULL);
-	  
+	    gtk_widget_set_tooltip_text (prop_edit, g_param_spec_get_blurb (spec));
+
           /* set initial value */
           gtk_widget_child_notify (GTK_WIDGET (object), spec->name);
         }
@@ -1081,8 +1079,7 @@ child_properties (GtkWidget *button,
 }
 
 static GtkWidget *
-children_from_object (GObject     *object,
-		      GtkTooltips *tips)
+children_from_object (GObject *object)
 {
   GList *children, *c;
   GtkWidget *table, *label, *prop_edit, *button, *vbox, *sw;
@@ -1137,8 +1134,7 @@ children_from_object (GObject     *object,
 }
 
 static GtkWidget *
-cells_from_object (GObject     *object,
-                   GtkTooltips *tips)
+cells_from_object (GObject *object)
 {
   GList *cells, *c;
   GtkWidget *table, *label, *prop_edit, *button, *vbox, *sw;
@@ -1191,12 +1187,6 @@ cells_from_object (GObject     *object,
 
   return sw;
 }
-static void
-kill_tips (GtkWindow *win, GtkObject *tips)
-{
-  gtk_object_destroy (tips);
-  g_object_unref (tips);
-}
 
 /* Pass zero for type if you want all properties */
 GtkWidget*
@@ -1205,7 +1195,6 @@ create_prop_editor (GObject   *object,
 {
   GtkWidget *win;
   GtkWidget *notebook;
-  GtkTooltips *tips;
   GtkWidget *properties;
   GtkWidget *label;
   gchar *title;
@@ -1222,13 +1211,6 @@ create_prop_editor (GObject   *object,
   if (GTK_IS_WIDGET (object))
     gtk_window_set_screen (GTK_WINDOW (win),
 			   gtk_widget_get_screen (GTK_WIDGET (object)));
-
-  tips = gtk_tooltips_new ();
-  g_object_ref (tips);
-  gtk_object_sink (GTK_OBJECT (tips));
-
-  /* Kill the tips when the widget goes away.  */
-  g_signal_connect (win, "destroy", G_CALLBACK (kill_tips), tips);
 
   /* hold a weak ref to the object we're editing */
   g_object_set_data_full (G_OBJECT (object), "prop-editor-win", win, model_destroy);
@@ -1249,7 +1231,7 @@ create_prop_editor (GObject   *object,
       
       while (type)
 	{
-	  properties = properties_from_type (object, type, tips);
+	  properties = properties_from_type (object, type);
 	  if (properties)
 	    {
 	      label = gtk_label_new (g_type_name (type));
@@ -1263,7 +1245,7 @@ create_prop_editor (GObject   *object,
       ifaces = g_type_interfaces (G_TYPE_FROM_INSTANCE (object), &n_ifaces);
       while (n_ifaces--)
 	{
-	  properties = properties_from_type (object, ifaces[n_ifaces], tips);
+	  properties = properties_from_type (object, ifaces[n_ifaces]);
 	  if (properties)
 	    {
 	      label = gtk_label_new (g_type_name (ifaces[n_ifaces]));
@@ -1274,7 +1256,7 @@ create_prop_editor (GObject   *object,
 
       g_free (ifaces);
 
-      properties = child_properties_from_object (object, tips);
+      properties = child_properties_from_object (object);
       if (properties)
 	{
 	  label = gtk_label_new ("Child properties");
@@ -1282,7 +1264,7 @@ create_prop_editor (GObject   *object,
 				    properties, label);
 	}
 
-      properties = children_from_object (object, tips);
+      properties = children_from_object (object);
       if (properties)
 	{
 	  label = gtk_label_new ("Children");
@@ -1290,7 +1272,7 @@ create_prop_editor (GObject   *object,
 				    properties, label);
 	}
 
-      properties = cells_from_object (object, tips);
+      properties = cells_from_object (object);
       if (properties)
 	{
 	  label = gtk_label_new ("Cell renderers");
@@ -1300,7 +1282,7 @@ create_prop_editor (GObject   *object,
     }
   else
     {
-      properties = properties_from_type (object, type, tips);
+      properties = properties_from_type (object, type);
       gtk_container_add (GTK_CONTAINER (win), properties);
       title = g_strdup_printf ("Properties of %s", g_type_name (type));
       gtk_window_set_title (GTK_WINDOW (win), title);
