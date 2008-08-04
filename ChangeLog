@@ -1,3 +1,11 @@
+2008-08-04  Björn Lindqvist  <bjourne@gmail.com>
+
+	Bug 534979 – GtkImageMenuItem is a bin but has two children.
+
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_forall): Do not
+	include the image widget when iterating over non-internal
+	children. Patch by rainwoodman.
+
 2008-08-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates

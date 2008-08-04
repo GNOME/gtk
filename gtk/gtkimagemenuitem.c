@@ -352,7 +352,7 @@ gtk_image_menu_item_forall (GtkContainer   *container,
 								      callback,
 								      callback_data);
 
-  if (image_menu_item->image)
+  if (include_internals && image_menu_item->image)
     (* callback) (image_menu_item->image, callback_data);
 }
 
