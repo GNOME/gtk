@@ -1,5 +1,19 @@
 2008-08-05  Tor Lillqvist  <tml@novell.com>
 
+	Bug 544684 - Win64 issue, window handles are assumed to be 32-bit
+
+	* gdk/gdkdnd.h
+	* gdk/gdkdnd.c
+	* gdk/win32/gdkdnd-win32.c
+	* gdk/x11/gdkdnd-x11.c: Change return value and type of window id
+	from guint32 to GdkNativeWindow for
+	gdk_drag_get_protocol_for_display() and
+	gdk_drag_get_protocol(). This is not an API break on existing
+	platforms, as GdkNativeWindow has been guint32 for them
+	already.
+
+2008-08-05  Tor Lillqvist  <tml@novell.com>
+
 	* gdk/gdkrgb.c: Cast pointers to guintptr, not unsigned long,
 	before doing bit tests on them.
 
