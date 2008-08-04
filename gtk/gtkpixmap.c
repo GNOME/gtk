@@ -135,7 +135,7 @@ gtk_pixmap_set (GtkPixmap *pixmap,
 	      (GTK_WIDGET (pixmap)->requisition.height != oldheight))
 	    gtk_widget_queue_resize (GTK_WIDGET (pixmap));
 	  else
-	    gtk_widget_queue_clear (GTK_WIDGET (pixmap));
+	    gtk_widget_queue_draw (GTK_WIDGET (pixmap));
 	}
     }
 
@@ -231,7 +231,7 @@ gtk_pixmap_set_build_insensitive (GtkPixmap *pixmap, gboolean build)
 
   if (GTK_WIDGET_VISIBLE (pixmap))
     {
-      gtk_widget_queue_clear (GTK_WIDGET (pixmap));
+      gtk_widget_queue_draw (GTK_WIDGET (pixmap));
     }
 }
 

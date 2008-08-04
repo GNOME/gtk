@@ -873,7 +873,7 @@ gtk_list_set_focus_child (GtkContainer *container,
 	}
       container->focus_child = child;
       if (container->focus_child)
-        gtk_widget_ref (container->focus_child);
+        g_object_ref (container->focus_child);
     }
 
   /* check for v adjustment */
@@ -1168,7 +1168,7 @@ gtk_list_clear_items (GtkList *list,
       widget = tmp_list->data;
       tmp_list = tmp_list->next;
 
-      gtk_widget_ref (widget);
+      g_object_ref (widget);
 
       if (widget->state == GTK_STATE_SELECTED)
 	gtk_list_unselect_child (list, widget);
@@ -1289,9 +1289,9 @@ gtk_list_remove_items_internal (GtkList	 *list,
       widget = tmp_list->data;
       tmp_list = tmp_list->next;
 
-      gtk_widget_ref (widget);
+      g_object_ref (widget);
       if (no_unref)
-	gtk_widget_ref (widget);
+	g_object_ref (widget);
 
       if (widget == new_focus_child) 
 	{
@@ -2474,7 +2474,7 @@ gtk_list_signal_item_select (GtkListItem *list_item,
       if (!sel_list)
 	{
 	  list->selection = g_list_prepend (list->selection, list_item);
-	  gtk_widget_ref (GTK_WIDGET (list_item));
+	  g_object_ref (list_item);
 	}
       gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
       break;

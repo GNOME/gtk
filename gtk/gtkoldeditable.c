@@ -392,7 +392,7 @@ gtk_old_editable_insert_text (GtkEditable *editable,
   gchar buf[64];
   gchar *text;
 
-  gtk_widget_ref (GTK_WIDGET (editable));
+  g_object_ref (editable);
 
   if (new_text_length <= 63)
     text = buf;
@@ -419,7 +419,7 @@ gtk_old_editable_delete_text (GtkEditable *editable,
 {
   GtkOldEditable *old_editable = GTK_OLD_EDITABLE (editable);
 
-  gtk_widget_ref (GTK_WIDGET (old_editable));
+  g_object_ref (old_editable);
 
   g_signal_emit_by_name (editable, "delete_text", start_pos, end_pos);
   g_signal_emit_by_name (editable, "changed");

@@ -308,10 +308,10 @@ gtk_tips_query_set_caller (GtkTipsQuery   *tips_query,
     g_return_if_fail (GTK_IS_WIDGET (caller));
 
   if (caller)
-    gtk_widget_ref (caller);
+    g_object_ref (caller);
 
   if (tips_query->caller)
-    gtk_widget_unref (tips_query->caller);
+    g_object_unref (tips_query->caller);
 
   tips_query->caller = caller;
 }
@@ -376,7 +376,7 @@ gtk_tips_query_real_stop_query (GtkTipsQuery *tips_query)
     }
   if (tips_query->last_crossed)
     {
-      gtk_widget_unref (tips_query->last_crossed);
+      g_object_unref (tips_query->last_crossed);
       tips_query->last_crossed = NULL;
     }
   
@@ -419,12 +419,12 @@ gtk_tips_query_emit_widget_entered (GtkTipsQuery *tips_query,
 		       NULL,
 		       NULL,
 		       NULL);
-      gtk_widget_unref (tips_query->last_crossed);
+      g_object_unref (tips_query->last_crossed);
       tips_query->last_crossed = NULL;
     }
   else if (widget && widget != tips_query->last_crossed)
     {
-      gtk_widget_ref (widget);
+      g_object_ref (widget);
       if (tdata || tips_query->emit_always)
 	  gtk_signal_emit (GTK_OBJECT (tips_query),
 			   tips_query_signals[SIGNAL_WIDGET_ENTERED],
@@ -432,7 +432,7 @@ gtk_tips_query_emit_widget_entered (GtkTipsQuery *tips_query,
 			   tdata ? tdata->tip_text : NULL,
 			   tdata ? tdata->tip_private : NULL);
       if (tips_query->last_crossed)
-	gtk_widget_unref (tips_query->last_crossed);
+	g_object_unref (tips_query->last_crossed);
       tips_query->last_crossed = widget;
     }
 }

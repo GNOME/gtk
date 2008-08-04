@@ -643,7 +643,12 @@ gtk_tree_item_paint (GtkWidget    *widget,
 	  if (tree_item->pixmaps_box && 
 	      GTK_WIDGET_VISIBLE(tree_item->pixmaps_box) &&
 	      gtk_widget_intersect (tree_item->pixmaps_box, area, &child_area))
-	    gtk_widget_draw (tree_item->pixmaps_box, &child_area);
+            {
+              gtk_widget_queue_draw_area (tree_item->pixmaps_box,
+                                          child_area.x, child_area.y,
+                                          child_area.width, child_area.height);
+              gdk_window_process_updates (tree_item->pixmaps_box->window, TRUE);
+            }
 	}
 
       if (GTK_WIDGET_HAS_FOCUS (widget))
@@ -847,7 +852,7 @@ gtk_tree_item_destroy (GtkObject *object)
   child = item->subtree;
   if (child)
     {
-      gtk_widget_ref (child);
+      g_object_ref (child);
       gtk_widget_unparent (child);
       gtk_widget_destroy (child);
       g_object_unref (child);
@@ -858,7 +863,7 @@ gtk_tree_item_destroy (GtkObject *object)
   child = item->pixmaps_box;
   if (child)
     {
-      gtk_widget_ref (child);
+      g_object_ref (child);
       gtk_widget_unparent (child);
       gtk_widget_destroy (child);
       g_object_unref (child);

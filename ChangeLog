@@ -1,5 +1,15 @@
 2008-08-04  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkclist.c
+	* gtk/gtklist.c
+	* gtk/gtkoldeditable.c
+	* gtk/gtkpixmap.c
+	* gtk/gtktipsquery.c
+	* gtk/gtktree.c
+	* gtk/gtktreeitem.c: avoid using deprecated GtkWidget API.
+
+2008-08-04  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkclist.[ch]
 	* gtk/gtkctree.[ch]
 	* gtk/gtkitemfactory.[ch]

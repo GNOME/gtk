@@ -2288,9 +2288,9 @@ gtk_clist_set_pixmap (GtkCList  *clist,
 
   clist_row = ROW_ELEMENT (clist, row)->data;
   
-  gdk_pixmap_ref (pixmap);
+  g_object_ref (pixmap);
   
-  if (mask) gdk_pixmap_ref (mask);
+  if (mask) g_object_ref (mask);
   
   GTK_CLIST_GET_CLASS (clist)->set_cell_contents
     (clist, clist_row, column, GTK_CELL_PIXMAP, NULL, 0, pixmap, mask);
@@ -2354,8 +2354,8 @@ gtk_clist_set_pixtext (GtkCList    *clist,
 
   clist_row = ROW_ELEMENT (clist, row)->data;
   
-  gdk_pixmap_ref (pixmap);
-  if (mask) gdk_pixmap_ref (mask);
+  g_object_ref (pixmap);
+  if (mask) g_object_ref (mask);
   GTK_CLIST_GET_CLASS (clist)->set_cell_contents
     (clist, clist_row, column, GTK_CELL_PIXTEXT, text, spacing, pixmap, mask);
 
@@ -2529,9 +2529,9 @@ set_cell_contents (GtkCList    *clist,
 
   g_free (old_text);
   if (old_pixmap)
-    gdk_pixmap_unref (old_pixmap);
+    g_object_unref (old_pixmap);
   if (old_mask)
-    gdk_pixmap_unref (old_mask);
+    g_object_unref (old_mask);
 }
 
 PangoLayout *
