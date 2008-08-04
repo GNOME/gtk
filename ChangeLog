@@ -1,5 +1,12 @@
 2008-08-04  Carlos Garnacho  <carlos@imendio.com>
 
+	* gtk/gtknotebook.c (gtk_notebook_expose): Set drag window background
+	to be the GtkNotebook background color. This is a workaround to
+	prevent black pixels in rounded tabs when reordering. Improves
+	#368234.
+
+2008-08-04  Carlos Garnacho  <carlos@imendio.com>
+
 	* gtk/gtk.symbols:
 	* gtk/gtkfilechooserbutton.[ch]:
 	* gtk/gtkfilechooserdefault.[ch]:

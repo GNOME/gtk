@@ -2147,6 +2147,19 @@ gtk_notebook_expose (GtkWidget      *widget,
   if (event->window == priv->drag_window)
     {
       GdkRectangle area = { 0, };
+      cairo_t *cr;
+
+      /* FIXME: This is a workaround to make tabs reordering work better
+       * with engines with rounded tabs. If the drag window background
+       * isn't set, the rounded corners would be black.
+       *
+       * Ideally, these corners should be made transparent, Either by using
+       * ARGB visuals or shape windows.
+       */
+      cr = gdk_cairo_create (priv->drag_window);
+      gdk_cairo_set_source_color (cr, &widget->style->bg [GTK_STATE_NORMAL]);
+      cairo_paint (cr);
+      cairo_destroy (cr);
 
       gdk_drawable_get_size (priv->drag_window,
 			     &area.width, &area.height);
