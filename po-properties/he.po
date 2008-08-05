@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-02 05:08+0000\n"
+"POT-Creation-Date: 2008-08-04 23:41+0000\n"
 "PO-Revision-Date: 2002-12-07 10:05+0200\n"
 "Last-Translator: Yair Hershkovitz <yairhr@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -730,7 +730,7 @@ msgstr "Homogeneous"
 msgid "Whether the children should all be the same size"
 msgstr "Whether the children should all be the same size"
 
-#: ../gtk/gtkbox.c:116 ../gtk/gtkpreview.c:103 ../gtk/gtktoolbar.c:572
+#: ../gtk/gtkbox.c:116 ../gtk/gtkpreview.c:101 ../gtk/gtktoolbar.c:572
 #: ../gtk/gtktreeviewcolumn.c:272
 msgid "Expand"
 msgstr "Expand"
@@ -819,12 +819,12 @@ msgid ""
 msgstr ""
 "If set, the label is used to pick a stock item instead of being displayed"
 
-#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:786
-#: ../gtk/gtkfilechooserbutton.c:394
+#: ../gtk/gtkbutton.c:223 ../gtk/gtkcombobox.c:788
+#: ../gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Focus on click"
 
-#: ../gtk/gtkbutton.c:224 ../gtk/gtkfilechooserbutton.c:395
+#: ../gtk/gtkbutton.c:224 ../gtk/gtkfilechooserbutton.c:394
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Whether the button grabs focus when it is clicked with the mouse"
 
@@ -936,27 +936,27 @@ msgstr "Show button images"
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Whether stock icons should be shown in buttons"
 
-#: ../gtk/gtkcalendar.c:442
+#: ../gtk/gtkcalendar.c:440
 msgid "Year"
 msgstr "Year"
 
-#: ../gtk/gtkcalendar.c:443
+#: ../gtk/gtkcalendar.c:441
 msgid "The selected year"
 msgstr "The selected year"
 
-#: ../gtk/gtkcalendar.c:456
+#: ../gtk/gtkcalendar.c:454
 msgid "Month"
 msgstr "Month"
 
-#: ../gtk/gtkcalendar.c:457
+#: ../gtk/gtkcalendar.c:455
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "The selected month (as a number between 0 and 11)"
 
-#: ../gtk/gtkcalendar.c:471
+#: ../gtk/gtkcalendar.c:469
 msgid "Day"
 msgstr "Day"
 
-#: ../gtk/gtkcalendar.c:472
+#: ../gtk/gtkcalendar.c:470
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -964,59 +964,59 @@ msgstr ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 
-#: ../gtk/gtkcalendar.c:486
+#: ../gtk/gtkcalendar.c:484
 msgid "Show Heading"
 msgstr "Show Heading"
 
-#: ../gtk/gtkcalendar.c:487
+#: ../gtk/gtkcalendar.c:485
 msgid "If TRUE, a heading is displayed"
 msgstr "If TRUE, a heading is displayed"
 
-#: ../gtk/gtkcalendar.c:501
+#: ../gtk/gtkcalendar.c:499
 msgid "Show Day Names"
 msgstr "Show Day Names"
 
-#: ../gtk/gtkcalendar.c:502
+#: ../gtk/gtkcalendar.c:500
 msgid "If TRUE, day names are displayed"
 msgstr "If TRUE, day names are displayed"
 
-#: ../gtk/gtkcalendar.c:515
+#: ../gtk/gtkcalendar.c:513
 msgid "No Month Change"
 msgstr "No Month Change"
 
-#: ../gtk/gtkcalendar.c:516
+#: ../gtk/gtkcalendar.c:514
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "If TRUE, the selected month cannot be changed"
 
-#: ../gtk/gtkcalendar.c:530
+#: ../gtk/gtkcalendar.c:528
 msgid "Show Week Numbers"
 msgstr "Show Week Numbers"
 
-#: ../gtk/gtkcalendar.c:531
+#: ../gtk/gtkcalendar.c:529
 msgid "If TRUE, week numbers are displayed"
 msgstr "If TRUE, week numbers are displayed"
 
-#: ../gtk/gtkcalendar.c:546
+#: ../gtk/gtkcalendar.c:544
 msgid "Details Width"
 msgstr "Details Width"
 
-#: ../gtk/gtkcalendar.c:547
+#: ../gtk/gtkcalendar.c:545
 msgid "Details width in characters"
 msgstr "Details width in characters"
 
-#: ../gtk/gtkcalendar.c:562
+#: ../gtk/gtkcalendar.c:560
 msgid "Details Height"
 msgstr "Details Height"
 
-#: ../gtk/gtkcalendar.c:563
+#: ../gtk/gtkcalendar.c:561
 msgid "Details height in rows"
 msgstr "Details height in rows"
 
-#: ../gtk/gtkcalendar.c:579
+#: ../gtk/gtkcalendar.c:577
 msgid "Show Details"
 msgstr "Show Details"
 
-#: ../gtk/gtkcalendar.c:580
+#: ../gtk/gtkcalendar.c:578
 msgid "If TRUE, details are shown"
 msgstr "If TRUE, details are shown"
 
@@ -1266,7 +1266,7 @@ msgstr "Value of the progress bar"
 
 #: ../gtk/gtkcellrendererprogress.c:146 ../gtk/gtkcellrenderertext.c:195
 #: ../gtk/gtkentry.c:582 ../gtk/gtkmessagedialog.c:153
-#: ../gtk/gtkprogressbar.c:181 ../gtk/gtktextbuffer.c:197
+#: ../gtk/gtkprogressbar.c:184 ../gtk/gtktextbuffer.c:197
 msgid "Text"
 msgstr "Text"
 
@@ -1286,11 +1286,11 @@ msgstr ""
 "Set this to positive values to indicate that some progress is made, but you "
 "don't know how much."
 
-#: ../gtk/gtkcellrendererprogress.c:187 ../gtk/gtkprogress.c:115
+#: ../gtk/gtkcellrendererprogress.c:187 ../gtk/gtkprogress.c:118
 msgid "Text x alignment"
 msgstr "Text x alignment"
 
-#: ../gtk/gtkcellrendererprogress.c:188 ../gtk/gtkprogress.c:116
+#: ../gtk/gtkcellrendererprogress.c:188 ../gtk/gtkprogress.c:119
 msgid ""
 "The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -1298,26 +1298,26 @@ msgstr ""
 "The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 
-#: ../gtk/gtkcellrendererprogress.c:204 ../gtk/gtkprogress.c:122
+#: ../gtk/gtkcellrendererprogress.c:204 ../gtk/gtkprogress.c:125
 msgid "Text y alignment"
 msgstr "Text y alignment"
 
-#: ../gtk/gtkcellrendererprogress.c:205 ../gtk/gtkprogress.c:123
+#: ../gtk/gtkcellrendererprogress.c:205 ../gtk/gtkprogress.c:126
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "The vertical text alignment, from 0 (top) to 1 (bottom)."
 
 #: ../gtk/gtkcellrendererprogress.c:221 ../gtk/gtkiconview.c:731
-#: ../gtk/gtkprogressbar.c:123 ../gtk/gtkscalebutton.c:191
+#: ../gtk/gtkprogressbar.c:126 ../gtk/gtkscalebutton.c:191
 #: ../gtk/gtkstatusicon.c:301 ../gtk/gtktoolbar.c:492
 #: ../gtk/gtktrayicon-x11.c:95
 msgid "Orientation"
 msgstr "Orientation"
 
-#: ../gtk/gtkcellrendererprogress.c:222 ../gtk/gtkprogressbar.c:124
+#: ../gtk/gtkcellrendererprogress.c:222 ../gtk/gtkprogressbar.c:127
 msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientation and growth direction of the progress bar"
 
-#: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:115
+#: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkprogressbar.c:118
 #: ../gtk/gtkrange.c:346 ../gtk/gtkscalebutton.c:219
 #: ../gtk/gtkspinbutton.c:208
 msgid "Adjustment"
@@ -1520,7 +1520,7 @@ msgstr ""
 "probably don't need it"
 
 #: ../gtk/gtkcellrenderertext.c:411 ../gtk/gtklabel.c:448
-#: ../gtk/gtkprogressbar.c:203
+#: ../gtk/gtkprogressbar.c:206
 msgid "Ellipsize"
 msgstr "Ellipsize"
 
@@ -1532,7 +1532,7 @@ msgstr ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
 
-#: ../gtk/gtkcellrenderertext.c:431 ../gtk/gtkfilechooserbutton.c:422
+#: ../gtk/gtkcellrenderertext.c:431 ../gtk/gtkfilechooserbutton.c:421
 #: ../gtk/gtklabel.c:468
 msgid "Width In Characters"
 msgstr "Width In Characters"
@@ -1553,7 +1553,7 @@ msgstr ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
 
-#: ../gtk/gtkcellrenderertext.c:470 ../gtk/gtkcombobox.c:675
+#: ../gtk/gtkcellrenderertext.c:470 ../gtk/gtkcombobox.c:677
 msgid "Wrap width"
 msgstr "Wrap width"
 
@@ -1796,7 +1796,7 @@ msgstr "Use alpha"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Whether or not to give the color an alpha value"
 
-#: ../gtk/gtkcolorbutton.c:186 ../gtk/gtkfilechooserbutton.c:408
+#: ../gtk/gtkcolorbutton.c:186 ../gtk/gtkfilechooserbutton.c:407
 #: ../gtk/gtkfontbutton.c:142 ../gtk/gtkprintjob.c:116
 #: ../gtk/gtktreeviewcolumn.c:264
 msgid "Title"
@@ -1926,67 +1926,67 @@ msgstr "Value in list"
 msgid "Whether entered values must already be present in the list"
 msgstr "Whether entered values must already be present in the list"
 
-#: ../gtk/gtkcombobox.c:658
+#: ../gtk/gtkcombobox.c:660
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: ../gtk/gtkcombobox.c:659
+#: ../gtk/gtkcombobox.c:661
 msgid "The model for the combo box"
 msgstr "The model for the combo box"
 
-#: ../gtk/gtkcombobox.c:676
+#: ../gtk/gtkcombobox.c:678
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Wrap width for laying out the items in a grid"
 
-#: ../gtk/gtkcombobox.c:698
+#: ../gtk/gtkcombobox.c:700
 msgid "Row span column"
 msgstr "Row span column"
 
-#: ../gtk/gtkcombobox.c:699
+#: ../gtk/gtkcombobox.c:701
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel column containing the row span values"
 
-#: ../gtk/gtkcombobox.c:720
+#: ../gtk/gtkcombobox.c:722
 msgid "Column span column"
 msgstr "Column span column"
 
-#: ../gtk/gtkcombobox.c:721
+#: ../gtk/gtkcombobox.c:723
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel column containing the column span values"
 
-#: ../gtk/gtkcombobox.c:742
+#: ../gtk/gtkcombobox.c:744
 msgid "Active item"
 msgstr "Active item"
 
-#: ../gtk/gtkcombobox.c:743
+#: ../gtk/gtkcombobox.c:745
 msgid "The item which is currently active"
 msgstr "The item which is currently active"
 
-#: ../gtk/gtkcombobox.c:762 ../gtk/gtkuimanager.c:220
+#: ../gtk/gtkcombobox.c:764 ../gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Add tearoffs to menus"
 
-#: ../gtk/gtkcombobox.c:763
+#: ../gtk/gtkcombobox.c:765
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Whether dropdowns should have a tearoff menu item"
 
-#: ../gtk/gtkcombobox.c:778 ../gtk/gtkentry.c:531
+#: ../gtk/gtkcombobox.c:780 ../gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "Has Frame"
 
-#: ../gtk/gtkcombobox.c:779
+#: ../gtk/gtkcombobox.c:781
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Whether the combo box draws a frame around the child"
 
-#: ../gtk/gtkcombobox.c:787
+#: ../gtk/gtkcombobox.c:789
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Whether the combo box grabs focus when it is clicked with the mouse"
 
-#: ../gtk/gtkcombobox.c:802 ../gtk/gtkmenu.c:557
+#: ../gtk/gtkcombobox.c:804 ../gtk/gtkmenu.c:557
 msgid "Tearoff Title"
 msgstr "Tearoff Title"
 
-#: ../gtk/gtkcombobox.c:803
+#: ../gtk/gtkcombobox.c:805
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -1994,37 +1994,45 @@ msgstr ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 
-#: ../gtk/gtkcombobox.c:820
+#: ../gtk/gtkcombobox.c:822
 msgid "Popup shown"
 msgstr "Popup shown"
 
-#: ../gtk/gtkcombobox.c:821
+#: ../gtk/gtkcombobox.c:823
 msgid "Whether the combo's dropdown is shown"
 msgstr "Whether the combo's dropdown is shown"
 
-#: ../gtk/gtkcombobox.c:827
+#: ../gtk/gtkcombobox.c:839
+msgid "Button Sensitivity"
+msgstr "Button Sensitivity"
+
+#: ../gtk/gtkcombobox.c:840
+msgid "Whether the dropdown button is sensitive when the model is empty"
+msgstr "Whether the dropdown button is sensitive when the model is empty"
+
+#: ../gtk/gtkcombobox.c:847
 msgid "Appears as list"
 msgstr "Appears as list"
 
-#: ../gtk/gtkcombobox.c:828
+#: ../gtk/gtkcombobox.c:848
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Whether dropdowns should look like lists rather than menus"
 
-#: ../gtk/gtkcombobox.c:844
+#: ../gtk/gtkcombobox.c:864
 msgid "Arrow Size"
 msgstr "Arrow Size"
 
-#: ../gtk/gtkcombobox.c:845
+#: ../gtk/gtkcombobox.c:865
 msgid "The minimum size of the arrow in the combo box"
 msgstr "The minimum size of the arrow in the combo box"
 
-#: ../gtk/gtkcombobox.c:860 ../gtk/gtkentry.c:631 ../gtk/gtkhandlebox.c:177
+#: ../gtk/gtkcombobox.c:880 ../gtk/gtkentry.c:631 ../gtk/gtkhandlebox.c:177
 #: ../gtk/gtkmenubar.c:194 ../gtk/gtkstatusbar.c:186 ../gtk/gtktoolbar.c:630
 #: ../gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Shadow type"
 
-#: ../gtk/gtkcombobox.c:861
+#: ../gtk/gtkcombobox.c:881
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Which kind of shadow to draw around the combo box"
 
@@ -2409,94 +2417,94 @@ msgstr "Size of the expander arrow"
 msgid "Spacing around expander arrow"
 msgstr "Spacing around expander arrow"
 
-#: ../gtk/gtkfilechooser.c:196
+#: ../gtk/gtkfilechooser.c:194
 msgid "Action"
 msgstr "Action"
 
-#: ../gtk/gtkfilechooser.c:197
+#: ../gtk/gtkfilechooser.c:195
 msgid "The type of operation that the file selector is performing"
 msgstr "The type of operation that the file selector is performing"
 
-#: ../gtk/gtkfilechooser.c:203
+#: ../gtk/gtkfilechooser.c:201
 msgid "File System Backend"
 msgstr "File System Backend"
 
-#: ../gtk/gtkfilechooser.c:204
+#: ../gtk/gtkfilechooser.c:202
 msgid "Name of file system backend to use"
 msgstr "Name of file system backend to use"
 
-#: ../gtk/gtkfilechooser.c:209 ../gtk/gtkrecentchooser.c:252
+#: ../gtk/gtkfilechooser.c:207 ../gtk/gtkrecentchooser.c:252
 msgid "Filter"
 msgstr "Filter"
 
-#: ../gtk/gtkfilechooser.c:210
+#: ../gtk/gtkfilechooser.c:208
 msgid "The current filter for selecting which files are displayed"
 msgstr "The current filter for selecting which files are displayed"
 
-#: ../gtk/gtkfilechooser.c:215
+#: ../gtk/gtkfilechooser.c:213
 msgid "Local Only"
 msgstr "Local Only"
 
-#: ../gtk/gtkfilechooser.c:216
+#: ../gtk/gtkfilechooser.c:214
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr "Whether the selected file(s) should be limited to local file: URLs"
 
-#: ../gtk/gtkfilechooser.c:221
+#: ../gtk/gtkfilechooser.c:219
 msgid "Preview widget"
 msgstr "Preview widget"
 
-#: ../gtk/gtkfilechooser.c:222
+#: ../gtk/gtkfilechooser.c:220
 msgid "Application supplied widget for custom previews."
 msgstr "Application supplied widget for custom previews."
 
-#: ../gtk/gtkfilechooser.c:227
+#: ../gtk/gtkfilechooser.c:225
 msgid "Preview Widget Active"
 msgstr "Preview Widget Active"
 
-#: ../gtk/gtkfilechooser.c:228
+#: ../gtk/gtkfilechooser.c:226
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr ""
 "Whether the application supplied widget for custom previews should be shown."
 
-#: ../gtk/gtkfilechooser.c:233
+#: ../gtk/gtkfilechooser.c:231
 msgid "Use Preview Label"
 msgstr "Use Preview Label"
 
-#: ../gtk/gtkfilechooser.c:234
+#: ../gtk/gtkfilechooser.c:232
 msgid "Whether to display a stock label with the name of the previewed file."
 msgstr "Whether to display a stock label with the name of the previewed file."
 
-#: ../gtk/gtkfilechooser.c:239
+#: ../gtk/gtkfilechooser.c:237
 msgid "Extra widget"
 msgstr "Extra widget"
 
-#: ../gtk/gtkfilechooser.c:240
+#: ../gtk/gtkfilechooser.c:238
 msgid "Application supplied widget for extra options."
 msgstr "Application supplied widget for extra options."
 
-#: ../gtk/gtkfilechooser.c:245 ../gtk/gtkfilesel.c:540
+#: ../gtk/gtkfilechooser.c:243 ../gtk/gtkfilesel.c:540
 #: ../gtk/gtkrecentchooser.c:191
 msgid "Select Multiple"
 msgstr "Select Multiple"
 
-#: ../gtk/gtkfilechooser.c:246 ../gtk/gtkfilesel.c:541
+#: ../gtk/gtkfilechooser.c:244 ../gtk/gtkfilesel.c:541
 msgid "Whether to allow multiple files to be selected"
 msgstr "Whether to allow multiple files to be selected"
 
-#: ../gtk/gtkfilechooser.c:252
+#: ../gtk/gtkfilechooser.c:250
 msgid "Show Hidden"
 msgstr "Show Hidden"
 
-#: ../gtk/gtkfilechooser.c:253
+#: ../gtk/gtkfilechooser.c:251
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Whether the hidden files and folders should be displayed"
 
-#: ../gtk/gtkfilechooser.c:268
+#: ../gtk/gtkfilechooser.c:266
 msgid "Do overwrite confirmation"
 msgstr "Do overwrite confirmation"
 
-#: ../gtk/gtkfilechooser.c:269
+#: ../gtk/gtkfilechooser.c:267
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
@@ -2504,19 +2512,19 @@ msgstr ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
 
-#: ../gtk/gtkfilechooserbutton.c:377
+#: ../gtk/gtkfilechooserbutton.c:376
 msgid "Dialog"
 msgstr "Dialog"
 
-#: ../gtk/gtkfilechooserbutton.c:378
+#: ../gtk/gtkfilechooserbutton.c:377
 msgid "The file chooser dialog to use."
 msgstr "The file chooser dialog to use."
 
-#: ../gtk/gtkfilechooserbutton.c:409
+#: ../gtk/gtkfilechooserbutton.c:408
 msgid "The title of the file chooser dialog."
 msgstr "The title of the file chooser dialog."
 
-#: ../gtk/gtkfilechooserbutton.c:423
+#: ../gtk/gtkfilechooserbutton.c:422
 msgid "The desired width of the button widget, in characters."
 msgstr "The desired width of the button widget, in characters."
 
@@ -3708,7 +3716,7 @@ msgstr "Socket Window"
 msgid "The window of the socket the plug is embedded in"
 msgstr "The window of the socket the plug is embedded in"
 
-#: ../gtk/gtkpreview.c:104
+#: ../gtk/gtkpreview.c:102
 msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
@@ -3963,11 +3971,11 @@ msgstr "Selected Printer"
 msgid "The GtkPrinter which is selected"
 msgstr "The GtkPrinter which is selected"
 
-#: ../gtk/gtkprogress.c:99
+#: ../gtk/gtkprogress.c:102
 msgid "Activity mode"
 msgstr "Activity mode"
 
-#: ../gtk/gtkprogress.c:100
+#: ../gtk/gtkprogress.c:103
 msgid ""
 "If TRUE, the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
@@ -3977,39 +3985,39 @@ msgstr ""
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something but don't know how long it will take."
 
-#: ../gtk/gtkprogress.c:108
+#: ../gtk/gtkprogress.c:111
 msgid "Show text"
 msgstr "Show text"
 
-#: ../gtk/gtkprogress.c:109
+#: ../gtk/gtkprogress.c:112
 msgid "Whether the progress is shown as text."
 msgstr "Whether the progress is shown as text."
 
-#: ../gtk/gtkprogressbar.c:116
+#: ../gtk/gtkprogressbar.c:119
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "The GtkAdjustment connected to the progress bar (Deprecated)"
 
-#: ../gtk/gtkprogressbar.c:132
+#: ../gtk/gtkprogressbar.c:135
 msgid "Bar style"
 msgstr "Bar style"
 
-#: ../gtk/gtkprogressbar.c:133
+#: ../gtk/gtkprogressbar.c:136
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
 msgstr "Specifies the visual style of the bar in percentage mode (Deprecated)"
 
-#: ../gtk/gtkprogressbar.c:141
+#: ../gtk/gtkprogressbar.c:144
 msgid "Activity Step"
 msgstr "Activity Step"
 
-#: ../gtk/gtkprogressbar.c:142
+#: ../gtk/gtkprogressbar.c:145
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr "The increment used for each iteration in activity mode (Deprecated)"
 
-#: ../gtk/gtkprogressbar.c:149
+#: ../gtk/gtkprogressbar.c:152
 msgid "Activity Blocks"
 msgstr "Activity Blocks"
 
-#: ../gtk/gtkprogressbar.c:150
+#: ../gtk/gtkprogressbar.c:153
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
@@ -4017,11 +4025,11 @@ msgstr ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
 
-#: ../gtk/gtkprogressbar.c:157
+#: ../gtk/gtkprogressbar.c:160
 msgid "Discrete Blocks"
 msgstr "Discrete Blocks"
 
-#: ../gtk/gtkprogressbar.c:158
+#: ../gtk/gtkprogressbar.c:161
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
@@ -4029,27 +4037,27 @@ msgstr ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
 
-#: ../gtk/gtkprogressbar.c:165
+#: ../gtk/gtkprogressbar.c:168
 msgid "Fraction"
 msgstr "Fraction"
 
-#: ../gtk/gtkprogressbar.c:166
+#: ../gtk/gtkprogressbar.c:169
 msgid "The fraction of total work that has been completed"
 msgstr "The fraction of total work that has been completed"
 
-#: ../gtk/gtkprogressbar.c:173
+#: ../gtk/gtkprogressbar.c:176
 msgid "Pulse Step"
 msgstr "Pulse Step"
 
-#: ../gtk/gtkprogressbar.c:174
+#: ../gtk/gtkprogressbar.c:177
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr "The fraction of total progress to move the bouncing block when pulsed"
 
-#: ../gtk/gtkprogressbar.c:182
+#: ../gtk/gtkprogressbar.c:185
 msgid "Text to be displayed in the progress bar"
 msgstr "Text to be displayed in the progress bar"
 
-#: ../gtk/gtkprogressbar.c:204
+#: ../gtk/gtkprogressbar.c:207
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
@@ -4057,51 +4065,51 @@ msgstr ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
 
-#: ../gtk/gtkprogressbar.c:211
+#: ../gtk/gtkprogressbar.c:214
 msgid "XSpacing"
 msgstr "XSpacing"
 
-#: ../gtk/gtkprogressbar.c:212
+#: ../gtk/gtkprogressbar.c:215
 msgid "Extra spacing applied to the width of a progress bar."
 msgstr "Extra spacing applied to the width of a progress bar."
 
-#: ../gtk/gtkprogressbar.c:217
+#: ../gtk/gtkprogressbar.c:220
 msgid "YSpacing"
 msgstr "YSpacing"
 
-#: ../gtk/gtkprogressbar.c:218
+#: ../gtk/gtkprogressbar.c:221
 msgid "Extra spacing applied to the height of a progress bar."
 msgstr "Extra spacing applied to the height of a progress bar."
 
-#: ../gtk/gtkprogressbar.c:231
+#: ../gtk/gtkprogressbar.c:234
 msgid "Min horizontal bar width"
 msgstr "Min horizontal bar width"
 
-#: ../gtk/gtkprogressbar.c:232
+#: ../gtk/gtkprogressbar.c:235
 msgid "The minimum horizontal width of the progress bar"
 msgstr "The minimum horizontal width of the progress bar"
 
-#: ../gtk/gtkprogressbar.c:244
+#: ../gtk/gtkprogressbar.c:247
 msgid "Min horizontal bar height"
 msgstr "Min horizontal bar height"
 
-#: ../gtk/gtkprogressbar.c:245
+#: ../gtk/gtkprogressbar.c:248
 msgid "Minimum horizontal height of the progress bar"
 msgstr "Minimum horizontal height of the progress bar"
 
-#: ../gtk/gtkprogressbar.c:257
+#: ../gtk/gtkprogressbar.c:260
 msgid "Min vertical bar width"
 msgstr "Min vertical bar width"
 
-#: ../gtk/gtkprogressbar.c:258
+#: ../gtk/gtkprogressbar.c:261
 msgid "The minimum vertical width of the progress bar"
 msgstr "The minimum vertical width of the progress bar"
 
-#: ../gtk/gtkprogressbar.c:270
+#: ../gtk/gtkprogressbar.c:273
 msgid "Min vertical bar height"
 msgstr "Min vertical bar height"
 
-#: ../gtk/gtkprogressbar.c:271
+#: ../gtk/gtkprogressbar.c:274
 msgid "The minimum vertical height of the progress bar"
 msgstr "The minimum vertical height of the progress bar"
 
@@ -4612,11 +4620,11 @@ msgstr ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
 
-#: ../gtk/gtkseparatortoolitem.c:107
+#: ../gtk/gtkseparatortoolitem.c:105
 msgid "Draw"
 msgstr "Draw"
 
-#: ../gtk/gtkseparatortoolitem.c:108
+#: ../gtk/gtkseparatortoolitem.c:106
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Whether the separator is drawn, or just blank"
 
@@ -5038,27 +5046,28 @@ msgstr "Sound Theme Name"
 msgid "XDG sound theme name"
 msgstr "XDG sound theme name"
 
-#: ../gtk/gtksettings.c:915
-msgid "Aureal Input Feedback"
-msgstr "Aureal Input Feedback"
-
+#. Translators: this means sounds that are played as feedback to user input
 #: ../gtk/gtksettings.c:916
+msgid "Audible Input Feedback"
+msgstr "Audible Input Feedback"
+
+#: ../gtk/gtksettings.c:917
 msgid "Whether to play event sounds as feedback to user input"
 msgstr "Whether to play event sounds as feedback to user input"
 
-#: ../gtk/gtksettings.c:937
+#: ../gtk/gtksettings.c:938
 msgid "Enable Event Sounds"
 msgstr "Enable Event Sounds"
 
-#: ../gtk/gtksettings.c:938
+#: ../gtk/gtksettings.c:939
 msgid "Whether to play any event sounds at all"
 msgstr "Whether to play any event sounds at all"
 
-#: ../gtk/gtksettings.c:953
+#: ../gtk/gtksettings.c:954
 msgid "Enable Tooltips"
 msgstr "Enable Tooltips"
 
-#: ../gtk/gtksettings.c:954
+#: ../gtk/gtksettings.c:955
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Whether tooltips should be shown on widgets"
 
