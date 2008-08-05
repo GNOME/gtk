@@ -1310,9 +1310,11 @@ attributes_start_element (GMarkupParseContext *context,
   guint i;
 
   if (strcmp (element_name, "action-widget") == 0)
-    for (i = 0; names[i]; i++)
-      if (strcmp (names[i], "response") == 0)
-	parser_data->response = g_strdup (values[i]);
+    {
+      for (i = 0; names[i]; i++)
+	if (strcmp (names[i], "response") == 0)
+	  parser_data->response = g_strdup (values[i]);
+    }
   else if (strcmp (element_name, "action-widgets") == 0)
     return;
   else

@@ -1,3 +1,12 @@
+2008-08-04  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 545982 – missing braces cause bogus warnings when using GtkBuilder
+
+	* gtk/gtkcelllayout.c:
+	* gtk/gtkdialog.c:
+	* gtk/gtkcontainer.c: Add missing braces to some GtkBuildable
+	implementations. Patch by Antti Kaijanmäki
+
 2008-08-05  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtktext.c: Cast pointer to gintptr instead of gulong to

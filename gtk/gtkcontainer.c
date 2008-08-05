@@ -367,9 +367,11 @@ attributes_start_element (GMarkupParseContext *context,
   guint i;
 
   if (strcmp (element_name, "property") == 0)
-    for (i = 0; names[i]; i++)
-      if (strcmp (names[i], "name") == 0)
-	parser_data->child_prop_name = g_strdup (values[i]);
+    {
+      for (i = 0; names[i]; i++)
+	if (strcmp (names[i], "name") == 0)
+	  parser_data->child_prop_name = g_strdup (values[i]);
+    }
   else if (strcmp (element_name, "packing") == 0)
     return;
   else
