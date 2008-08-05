@@ -354,7 +354,7 @@ gtk_adjustment_set_value (GtkAdjustment *adjustment,
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  value = CLAMP (value, adjustment->lower, adjustment->upper);
+  value = CLAMP (value, adjustment->lower, adjustment->upper - adjustment->page_size);
 
   if (value != adjustment->value)
     {

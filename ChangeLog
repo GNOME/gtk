@@ -1,5 +1,17 @@
 2008-08-05  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkadjustment.c (gtk_adjustment_set_value): clamp the value
+	to [lower...upper-page_size] instead of only [lower...upper].
+
+	* README: add note about this change.
+
+	While this fix is correct and should have been there forever, it
+	has the potential to break some corner cases, however these cases
+	would set page_size to a value != 0 which suggests they want it
+	honored.
+
+2008-08-05  Michael Natterer  <mitch@imendio.com>
+
 	* tests/testiconview.c: don't use the deprecated
 	gtk_box_pack_start_defaults().
 
