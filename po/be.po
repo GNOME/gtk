@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-21 19:55-0400\n"
+"POT-Creation-Date: 2008-08-05 11:57-0400\n"
 "PO-Revision-Date: 2005-11-16 11:17+0200\n"
 "Last-Translator: Vital Khilko <vk@altlinux.ru>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -234,19 +234,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:940
-#: gdk-pixbuf/gdk-pixbuf-io.c:1201 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:944
+#: gdk-pixbuf/gdk-pixbuf-io.c:1205 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Збой адкрыцьця файлу \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:952
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:956
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Файл з відарысам \"%s\" ня ўтрымлівае даньняў."
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:989
-#: gdk-pixbuf/gdk-pixbuf-io.c:1253 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:993
+#: gdk-pixbuf/gdk-pixbuf-io.c:1257 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -281,49 +281,49 @@ msgstr ""
 msgid "Image type '%s' is not supported"
 msgstr "Відарыс тыпу \"%s\" не падтрымліваецца."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:821
+#: gdk-pixbuf/gdk-pixbuf-io.c:825
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Немагчыма распазнаць фармат файла відарысу \"%s\"."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:829
+#: gdk-pixbuf/gdk-pixbuf-io.c:833
 msgid "Unrecognized image file format"
 msgstr "Нераспазнавальны фармат файла відарысу."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:998
+#: gdk-pixbuf/gdk-pixbuf-io.c:1002
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Збой загрузкі відарысу \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1634 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1638 gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Памылка запісу ў файл відарысу: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1680 gdk-pixbuf/gdk-pixbuf-io.c:1811
+#: gdk-pixbuf/gdk-pixbuf-io.c:1684 gdk-pixbuf/gdk-pixbuf-io.c:1815
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Гэтая зборка gdk-pixbuf не падтрымлівае захаваньне відарысаў у фармаце: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1714
+#: gdk-pixbuf/gdk-pixbuf-io.c:1718
 msgid "Insufficient memory to save image to callback"
 msgstr "Недастаткова памяці для захаваньня відарысу ў адваротны выклік"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1727
+#: gdk-pixbuf/gdk-pixbuf-io.c:1731
 msgid "Failed to open temporary file"
 msgstr "Збой адкрыцьця часовага файлу"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1753
+#: gdk-pixbuf/gdk-pixbuf-io.c:1757
 msgid "Failed to read from temporary file"
 msgstr "Збой чытаньня з часовага файлу"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1988
+#: gdk-pixbuf/gdk-pixbuf-io.c:1992
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Памылка адкрыцьця \"%s\" для запісу: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2013
+#: gdk-pixbuf/gdk-pixbuf-io.c:2017
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -332,11 +332,11 @@ msgstr ""
 "Збой закрыцьця \"%s\" у часе захаваньня відарысу; усе даньні могуць быць не "
 "захаваны: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2233 gdk-pixbuf/gdk-pixbuf-io.c:2284
+#: gdk-pixbuf/gdk-pixbuf-io.c:2237 gdk-pixbuf/gdk-pixbuf-io.c:2288
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Недастаткова памяці для захаваньня відарысу ў буфэр"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2330
+#: gdk-pixbuf/gdk-pixbuf-io.c:2334
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "Памылка запісу ў файл відарысу: %s"
@@ -1144,17 +1144,17 @@ msgstr "КОЛЕРЫ"
 msgid "Make X calls synchronous"
 msgstr "Зрабіць выклікі Х сынхранізаванымі"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:303
+#: gdk/x11/gdkapplaunchcontext-x11.c:311
 #, fuzzy, c-format
 msgid "Starting %s"
 msgstr "_Друкаваць"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:305
+#: gdk/x11/gdkapplaunchcontext-x11.c:313
 #, c-format
 msgid "Opening %s"
 msgstr ""
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:308
+#: gdk/x11/gdkapplaunchcontext-x11.c:316
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -1301,7 +1301,7 @@ msgstr ""
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:760
+#: gtk/gtkcalendar.c:758
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1309,7 +1309,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:798
+#: gtk/gtkcalendar.c:796
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1321,7 +1321,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1799
+#: gtk/gtkcalendar.c:1797
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1336,7 +1336,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1830 gtk/gtkcalendar.c:2491
+#: gtk/gtkcalendar.c:1828 gtk/gtkcalendar.c:2489
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr ""
@@ -1352,7 +1352,7 @@ msgstr ""
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1862 gtk/gtkcalendar.c:2353
+#: gtk/gtkcalendar.c:1860 gtk/gtkcalendar.c:2351
 #, fuzzy, c-format
 msgid "calendar:week:digits|%d"
 msgstr "calendar:week_start:1"
@@ -1368,7 +1368,7 @@ msgstr "calendar:week_start:1"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2143
+#: gtk/gtkcalendar.c:2141
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1550,7 +1550,7 @@ msgstr "Сталец"
 msgid "(None)"
 msgstr "(Няма)"
 
-#: gtk/gtkfilechooserbutton.c:2030
+#: gtk/gtkfilechooserbutton.c:2015
 msgid "Other..."
 msgstr "Іншае..."
 
@@ -1810,25 +1810,38 @@ msgstr ""
 msgid "Yesterday at %H:%M"
 msgstr "Учора"
 
-#: gtk/gtkfilechooserentry.c:659 gtk/gtkfilechooserentry.c:1105
+#: gtk/gtkfilechooserentry.c:659 gtk/gtkfilechooserentry.c:1115
 #, fuzzy
 msgid "Invalid path"
 msgstr "Недапушчальны UTF-8"
 
-#: gtk/gtkfilechooserentry.c:1067
+#. translators: this text is shown when there are no completions
+#. * for something the user typed in a file chooser entry
+#.
+#: gtk/gtkfilechooserentry.c:1070
 msgid "No match"
 msgstr ""
 
-#: gtk/gtkfilechooserentry.c:1075
+#. translators: this text is shown when there is exactly one completion
+#. * for something the user typed in a file chooser entry
+#.
+#: gtk/gtkfilechooserentry.c:1081
 #, fuzzy
 msgid "Sole completion"
 msgstr "Выбар колеру"
 
-#: gtk/gtkfilechooserentry.c:1087
+#. translators: this text is shown when the text in a file chooser
+#. * entry is a complete filename, but could be continued to find
+#. * a longer match
+#.
+#: gtk/gtkfilechooserentry.c:1097
 msgid "Complete, but not unique"
 msgstr ""
 
-#: gtk/gtkfilechooserentry.c:1120
+#. translators: this text is shown while the system is searching
+#. * for possible completions for text in a file chooser entry
+#.
+#: gtk/gtkfilechooserentry.c:1133
 msgid "Completing..."
 msgstr ""
 
@@ -2028,7 +2041,7 @@ msgstr "Па_мер:"
 msgid "_Preview:"
 msgstr "П_рыклад:"
 
-#: gtk/gtkfontsel.c:1578
+#: gtk/gtkfontsel.c:1580
 msgid "Font Selection"
 msgstr "Выбар шрыфту"
 
@@ -2048,7 +2061,7 @@ msgstr "_Гама значэньне"
 msgid "Error loading icon: %s"
 msgstr "Памылка загрузкі значкі: %s"
 
-#: gtk/gtkicontheme.c:1362
+#: gtk/gtkicontheme.c:1363
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2061,12 +2074,12 @@ msgstr ""
 "Вы можаце атрымаць копію з:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1542
+#: gtk/gtkicontheme.c:1543
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Значка \"%s\" адсутнічае ў тэме"
 
-#: gtk/gtkicontheme.c:2983
+#: gtk/gtkicontheme.c:3052
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "Збой загрузкі TIFF відарысу"
@@ -2280,7 +2293,7 @@ msgstr ""
 msgid "Scroll arrow spacing"
 msgstr ""
 
-#: gtk/gtknotebook.c:4412 gtk/gtknotebook.c:6918
+#: gtk/gtknotebook.c:4425 gtk/gtknotebook.c:6931
 #, c-format
 msgid "Page %u"
 msgstr "Старонка %u"
@@ -2507,58 +2520,68 @@ msgstr ""
 msgid "Error printing"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:381 gtk/gtkprintoperation-win32.c:1399
+#: gtk/gtkprintoperation-unix.c:381 gtk/gtkprintoperation-win32.c:1425
 #, fuzzy
 msgid "Application"
 msgstr "Разь_мяшчэньне: "
 
-#: gtk/gtkprintoperation-win32.c:568
+#: gtk/gtkprintoperation-win32.c:590
 msgid "Printer offline"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:570
+#: gtk/gtkprintoperation-win32.c:592
 msgid "Out of paper"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:572
-#: modules/printbackends/cups/gtkprintbackendcups.c:1361
+#: gtk/gtkprintoperation-win32.c:594
+#: modules/printbackends/cups/gtkprintbackendcups.c:1373
 #, fuzzy
 msgid "Paused"
 msgstr "_Уставіць"
 
-#: gtk/gtkprintoperation-win32.c:574
+#: gtk/gtkprintoperation-win32.c:596
 msgid "Need user intervention"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:674
+#: gtk/gtkprintoperation-win32.c:696
 msgid "Custom size"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1489 gtk/gtkprintoperation-win32.c:1512
-#: gtk/gtkprintoperation-win32.c:1560
+#: gtk/gtkprintoperation-win32.c:1517
+#, fuzzy
+msgid "No printer found"
+msgstr "Загаловак XPM адсутнічае"
+
+#: gtk/gtkprintoperation-win32.c:1544
+#, fuzzy
+msgid "Invalid argument to CreateDC"
+msgstr "Несапраўдны загаловак значкі"
+
+#: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1801
+msgid "Error from StartDoc"
+msgstr ""
+
+#: gtk/gtkprintoperation-win32.c:1658 gtk/gtkprintoperation-win32.c:1681
+#: gtk/gtkprintoperation-win32.c:1729
 #, fuzzy
 msgid "Not enough free memory"
 msgstr "Нестае памяці для загрузкі значкі"
 
-#: gtk/gtkprintoperation-win32.c:1565
+#: gtk/gtkprintoperation-win32.c:1734
 msgid "Invalid argument to PrintDlgEx"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1570
+#: gtk/gtkprintoperation-win32.c:1739
 msgid "Invalid pointer to PrintDlgEx"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1575
+#: gtk/gtkprintoperation-win32.c:1744
 #, fuzzy
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Несапраўдны загаловак значкі"
 
-#: gtk/gtkprintoperation-win32.c:1580
+#: gtk/gtkprintoperation-win32.c:1749
 msgid "Unspecified error"
-msgstr ""
-
-#: gtk/gtkprintoperation-win32.c:1632
-msgid "Error from StartDoc"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:1717
@@ -4466,165 +4489,165 @@ msgstr "Віетнамская (VIQR)"
 msgid "X Input Method"
 msgstr "X мэтад уводу"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1101
+#: modules/printbackends/cups/gtkprintbackendcups.c:1113
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1102
+#: modules/printbackends/cups/gtkprintbackendcups.c:1114
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1104
+#: modules/printbackends/cups/gtkprintbackendcups.c:1116
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1106
+#: modules/printbackends/cups/gtkprintbackendcups.c:1118
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1108
+#: modules/printbackends/cups/gtkprintbackendcups.c:1120
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1110
+#: modules/printbackends/cups/gtkprintbackendcups.c:1122
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1111
+#: modules/printbackends/cups/gtkprintbackendcups.c:1123
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1112
+#: modules/printbackends/cups/gtkprintbackendcups.c:1124
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1113
+#: modules/printbackends/cups/gtkprintbackendcups.c:1125
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1114
+#: modules/printbackends/cups/gtkprintbackendcups.c:1126
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1115
+#: modules/printbackends/cups/gtkprintbackendcups.c:1127
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1116
+#: modules/printbackends/cups/gtkprintbackendcups.c:1128
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1117
+#: modules/printbackends/cups/gtkprintbackendcups.c:1129
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1359
+#: modules/printbackends/cups/gtkprintbackendcups.c:1371
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1363
+#: modules/printbackends/cups/gtkprintbackendcups.c:1375
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1951
+#: modules/printbackends/cups/gtkprintbackendcups.c:1996
 msgid "Two Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1952
+#: modules/printbackends/cups/gtkprintbackendcups.c:1997
 msgid "Paper Type"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1953
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paper Source"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1954
+#: modules/printbackends/cups/gtkprintbackendcups.c:1999
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1963
+#: modules/printbackends/cups/gtkprintbackendcups.c:2008
 msgid "One Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1964
-#: modules/printbackends/cups/gtkprintbackendcups.c:1965
-#: modules/printbackends/cups/gtkprintbackendcups.c:1969
+#: modules/printbackends/cups/gtkprintbackendcups.c:2009
+#: modules/printbackends/cups/gtkprintbackendcups.c:2010
+#: modules/printbackends/cups/gtkprintbackendcups.c:2014
 #, fuzzy
 msgid "Auto Select"
 msgstr "Выбар шрыфту"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1966
-#: modules/printbackends/cups/gtkprintbackendcups.c:1967
-#: modules/printbackends/cups/gtkprintbackendcups.c:1968
-#: modules/printbackends/cups/gtkprintbackendcups.c:2438
+#: modules/printbackends/cups/gtkprintbackendcups.c:2011
+#: modules/printbackends/cups/gtkprintbackendcups.c:2012
+#: modules/printbackends/cups/gtkprintbackendcups.c:2013
+#: modules/printbackends/cups/gtkprintbackendcups.c:2483
 #, fuzzy
 msgid "Printer Default"
 msgstr "Прадвызначанае"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2632
+#: modules/printbackends/cups/gtkprintbackendcups.c:2677
 msgid "Urgent"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2632
+#: modules/printbackends/cups/gtkprintbackendcups.c:2677
 msgid "High"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2632
+#: modules/printbackends/cups/gtkprintbackendcups.c:2677
 msgid "Medium"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2632
+#: modules/printbackends/cups/gtkprintbackendcups.c:2677
 msgid "Low"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 #, fuzzy
 msgid "None"
 msgstr "(Няма)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 msgid "Classified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 msgid "Confidential"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 #, fuzzy
 msgid "Secret"
 msgstr "Экран"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 msgid "Standard"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 msgid "Top Secret"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 msgid "Unclassified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2768
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 #, c-format
 msgid "Custom %sx%s"
 msgstr ""

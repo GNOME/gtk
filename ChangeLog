@@ -1,3 +1,10 @@
+2008-08-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.13.6 ===
+
+	* gdk/tests/Makefile.am: Disable check-gdk-cairo test for now,
+	since it breaks make distcheck.
+
 2008-08-05  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_update_sensitivity): bail out

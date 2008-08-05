@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-21 19:55-0400\n"
+"POT-Creation-Date: 2008-08-05 11:57-0400\n"
 "PO-Revision-Date: 2006-08-28 00:35+0600\n"
 "Last-Translator: Mahay Alam Khan (মাহে আলম) <makl10n@yahoo.com>\n"
 "Language-Team: Bengali India <gnome-translation@bengalinux.org>\n"
@@ -236,19 +236,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:940
-#: gdk-pixbuf/gdk-pixbuf-io.c:1201 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:944
+#: gdk-pixbuf/gdk-pixbuf-io.c:1205 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "'%s' ফাইল খুলতে ব্যর্থ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:952
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:956
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "'%s' নামক ছবির ফাইলে তথ্য অনুপস্থিত"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:989
-#: gdk-pixbuf/gdk-pixbuf-io.c:1253 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:993
+#: gdk-pixbuf/gdk-pixbuf-io.c:1257 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -281,61 +281,61 @@ msgstr ""
 msgid "Image type '%s' is not supported"
 msgstr "'%s' প্রকৃতির ছবি সমর্থিত নয়"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:821
+#: gdk-pixbuf/gdk-pixbuf-io.c:825
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "'%s' নামক ফাইলের ছবির ফাইলের বিন্যাস সনাক্ত করতে ব্যর্থ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:829
+#: gdk-pixbuf/gdk-pixbuf-io.c:833
 msgid "Unrecognized image file format"
 msgstr "ছবির ফাইলের বিন্যাস অজানা"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:998
+#: gdk-pixbuf/gdk-pixbuf-io.c:1002
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "'%s' ছবির লোড করতে ব্যর্থ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1634 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1638 gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "চবির ফাইলের লিখতে সমস্যা: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1680 gdk-pixbuf/gdk-pixbuf-io.c:1811
+#: gdk-pixbuf/gdk-pixbuf-io.c:1684 gdk-pixbuf/gdk-pixbuf-io.c:1815
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "gdk-pixbuf'র বর্তমান বিল্ডের দ্বারা চিহ্নিত বিন্যাসের ছবি সংরক্ষণ সমর্থন করা হয় না: "
 "%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1714
+#: gdk-pixbuf/gdk-pixbuf-io.c:1718
 msgid "Insufficient memory to save image to callback"
 msgstr "callback'এ ছবি সংরক্ষণের জন্য পর্যাপ্ত মেমরি অনুপস্থিত"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1727
+#: gdk-pixbuf/gdk-pixbuf-io.c:1731
 msgid "Failed to open temporary file"
 msgstr "অস্থায়ী ফাইল খুলতে ব্যর্থ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1753
+#: gdk-pixbuf/gdk-pixbuf-io.c:1757
 msgid "Failed to read from temporary file"
 msgstr "অস্থায়ী ফাইল থেকে পড়তে ব্যর্থ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1988
+#: gdk-pixbuf/gdk-pixbuf-io.c:1992
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "লেখার উদ্দেশ্যে '%s' খুলতে ব্যর্থ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2013
+#: gdk-pixbuf/gdk-pixbuf-io.c:2017
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr "ছবি লেখার সময় '%s' বন্ধ করতে ব্যর্থ, সম্ভবত সব তথ্য সংরক্ষিত হয়নি: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2233 gdk-pixbuf/gdk-pixbuf-io.c:2284
+#: gdk-pixbuf/gdk-pixbuf-io.c:2237 gdk-pixbuf/gdk-pixbuf-io.c:2288
 msgid "Insufficient memory to save image into a buffer"
 msgstr "বাফারে ছবি সংরক্ষণের উদ্দেশ্যে পর্যাপ্ত মেমরি উপস্থিত নেই"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2330
+#: gdk-pixbuf/gdk-pixbuf-io.c:2334
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "চবির ফাইলের লিখতে সমস্যা: %s"
@@ -1139,17 +1139,17 @@ msgstr "COLORS"
 msgid "Make X calls synchronous"
 msgstr "X'র কল সুসংগতরূপে (সিঙ্ক্রোনাস) করা হবে"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:303
+#: gdk/x11/gdkapplaunchcontext-x11.c:311
 #, fuzzy, c-format
 msgid "Starting %s"
 msgstr "%d প্রিন্ট করা হচ্ছে"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:305
+#: gdk/x11/gdkapplaunchcontext-x11.c:313
 #, fuzzy, c-format
 msgid "Opening %s"
 msgstr "'%s' খুলুন"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:308
+#: gdk/x11/gdkapplaunchcontext-x11.c:316
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -1296,7 +1296,7 @@ msgstr ""
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:760
+#: gtk/gtkcalendar.c:758
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1304,7 +1304,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:798
+#: gtk/gtkcalendar.c:796
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1316,7 +1316,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1799
+#: gtk/gtkcalendar.c:1797
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1331,7 +1331,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1830 gtk/gtkcalendar.c:2491
+#: gtk/gtkcalendar.c:1828 gtk/gtkcalendar.c:2489
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1347,7 +1347,7 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1862 gtk/gtkcalendar.c:2353
+#: gtk/gtkcalendar.c:1860 gtk/gtkcalendar.c:2351
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1363,7 +1363,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2143
+#: gtk/gtkcalendar.c:2141
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1530,7 +1530,7 @@ msgstr "ডেস্কটপ"
 msgid "(None)"
 msgstr "(শূণ্য)"
 
-#: gtk/gtkfilechooserbutton.c:2030
+#: gtk/gtkfilechooserbutton.c:2015
 msgid "Other..."
 msgstr "অন্যান্য..."
 
@@ -1790,25 +1790,38 @@ msgstr ""
 msgid "Yesterday at %H:%M"
 msgstr "গতকাল"
 
-#: gtk/gtkfilechooserentry.c:659 gtk/gtkfilechooserentry.c:1105
+#: gtk/gtkfilechooserentry.c:659 gtk/gtkfilechooserentry.c:1115
 #, fuzzy
 msgid "Invalid path"
 msgstr "অবৈধ URI"
 
-#: gtk/gtkfilechooserentry.c:1067
+#. translators: this text is shown when there are no completions
+#. * for something the user typed in a file chooser entry
+#.
+#: gtk/gtkfilechooserentry.c:1070
 msgid "No match"
 msgstr ""
 
-#: gtk/gtkfilechooserentry.c:1075
+#. translators: this text is shown when there is exactly one completion
+#. * for something the user typed in a file chooser entry
+#.
+#: gtk/gtkfilechooserentry.c:1081
 #, fuzzy
 msgid "Sole completion"
 msgstr "রং নির্বাচন"
 
-#: gtk/gtkfilechooserentry.c:1087
+#. translators: this text is shown when the text in a file chooser
+#. * entry is a complete filename, but could be continued to find
+#. * a longer match
+#.
+#: gtk/gtkfilechooserentry.c:1097
 msgid "Complete, but not unique"
 msgstr ""
 
-#: gtk/gtkfilechooserentry.c:1120
+#. translators: this text is shown while the system is searching
+#. * for possible completions for text in a file chooser entry
+#.
+#: gtk/gtkfilechooserentry.c:1133
 msgid "Completing..."
 msgstr ""
 
@@ -1997,7 +2010,7 @@ msgstr "মাপ:(_z)"
 msgid "_Preview:"
 msgstr "পূর্বপ্রদর্শন:(_P)"
 
-#: gtk/gtkfontsel.c:1578
+#: gtk/gtkfontsel.c:1580
 msgid "Font Selection"
 msgstr "ফন্ট নির্বাচন"
 
@@ -2017,7 +2030,7 @@ msgstr "গামা মান (_G)"
 msgid "Error loading icon: %s"
 msgstr "আইকন লোড করতে সমস্যা: %s"
 
-#: gtk/gtkicontheme.c:1362
+#: gtk/gtkicontheme.c:1363
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2026,12 +2039,12 @@ msgid ""
 "\t%s"
 msgstr ""
 
-#: gtk/gtkicontheme.c:1542
+#: gtk/gtkicontheme.c:1543
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "থিমের মধ্যে আইকন '%s' অনুপস্থিত"
 
-#: gtk/gtkicontheme.c:2983
+#: gtk/gtkicontheme.c:3052
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "TIFF ছবি লোড করতে ব্যর্থ"
@@ -2237,7 +2250,7 @@ msgstr "তীরচিহ্নের মধ্যে অন্তর্বর�
 msgid "Scroll arrow spacing"
 msgstr "এ্যারো স্পেসিং স্ক্রল করো"
 
-#: gtk/gtknotebook.c:4412 gtk/gtknotebook.c:6918
+#: gtk/gtknotebook.c:4425 gtk/gtknotebook.c:6931
 #, c-format
 msgid "Page %u"
 msgstr "পৃষ্ঠা %u"
@@ -2462,55 +2475,65 @@ msgstr "পূর্বরূপ প্রদর্শন আরম্ভ কর
 msgid "Error printing"
 msgstr "প্রিন্ট করতে সমস্যা"
 
-#: gtk/gtkprintoperation-unix.c:381 gtk/gtkprintoperation-win32.c:1399
+#: gtk/gtkprintoperation-unix.c:381 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "অ্যাপ্লিকেশন"
 
-#: gtk/gtkprintoperation-win32.c:568
+#: gtk/gtkprintoperation-win32.c:590
 msgid "Printer offline"
 msgstr "প্রিন্টার অফলাইন অবস্থায়"
 
-#: gtk/gtkprintoperation-win32.c:570
+#: gtk/gtkprintoperation-win32.c:592
 msgid "Out of paper"
 msgstr "কাগজ ফুরিয়ে গেছে"
 
-#: gtk/gtkprintoperation-win32.c:572
-#: modules/printbackends/cups/gtkprintbackendcups.c:1361
+#: gtk/gtkprintoperation-win32.c:594
+#: modules/printbackends/cups/gtkprintbackendcups.c:1373
 msgid "Paused"
 msgstr "স্থগিত"
 
-#: gtk/gtkprintoperation-win32.c:574
+#: gtk/gtkprintoperation-win32.c:596
 msgid "Need user intervention"
 msgstr "ব্যবহারকারীর সহায়তা প্রয়োজন"
 
-#: gtk/gtkprintoperation-win32.c:674
+#: gtk/gtkprintoperation-win32.c:696
 msgid "Custom size"
 msgstr "স্বনির্বাচিত মাপ"
 
-#: gtk/gtkprintoperation-win32.c:1489 gtk/gtkprintoperation-win32.c:1512
-#: gtk/gtkprintoperation-win32.c:1560
+#: gtk/gtkprintoperation-win32.c:1517
+#, fuzzy
+msgid "No printer found"
+msgstr "কোন বস্তু পাওয়া যায়নি"
+
+#: gtk/gtkprintoperation-win32.c:1544
+#, fuzzy
+msgid "Invalid argument to CreateDC"
+msgstr "PrintDlgEx'র ক্ষেত্রে অবৈধ আর্গুমেন্ট প্রেরিত"
+
+#: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1801
+msgid "Error from StartDoc"
+msgstr "StartDoc'এ উত্‌পন্ন সমস্যা"
+
+#: gtk/gtkprintoperation-win32.c:1658 gtk/gtkprintoperation-win32.c:1681
+#: gtk/gtkprintoperation-win32.c:1729
 msgid "Not enough free memory"
 msgstr "পর্যাপ্ত মেমরি অবশিষ্ট নেই"
 
-#: gtk/gtkprintoperation-win32.c:1565
+#: gtk/gtkprintoperation-win32.c:1734
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx'র ক্ষেত্রে অবৈধ আর্গুমেন্ট প্রেরিত"
 
-#: gtk/gtkprintoperation-win32.c:1570
+#: gtk/gtkprintoperation-win32.c:1739
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgEx'র ক্ষেত্রে অবৈধ নির্দেশক"
 
-#: gtk/gtkprintoperation-win32.c:1575
+#: gtk/gtkprintoperation-win32.c:1744
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx'র জন্য অবৈধ হ্যান্ডেল"
 
-#: gtk/gtkprintoperation-win32.c:1580
+#: gtk/gtkprintoperation-win32.c:1749
 msgid "Unspecified error"
 msgstr "অনির্ধারিত ত্রুটি"
-
-#: gtk/gtkprintoperation-win32.c:1632
-msgid "Error from StartDoc"
-msgstr "StartDoc'এ উত্‌পন্ন সমস্যা"
 
 #: gtk/gtkprintunixdialog.c:1717
 msgid "Printer"
@@ -4406,161 +4429,161 @@ msgstr "ভিয়েতনামিস (VIQR)"
 msgid "X Input Method"
 msgstr "X ইনপুট পদ্ধতি"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1101
+#: modules/printbackends/cups/gtkprintbackendcups.c:1113
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1102
+#: modules/printbackends/cups/gtkprintbackendcups.c:1114
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1104
+#: modules/printbackends/cups/gtkprintbackendcups.c:1116
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1106
+#: modules/printbackends/cups/gtkprintbackendcups.c:1118
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1108
+#: modules/printbackends/cups/gtkprintbackendcups.c:1120
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1110
+#: modules/printbackends/cups/gtkprintbackendcups.c:1122
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1111
+#: modules/printbackends/cups/gtkprintbackendcups.c:1123
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1112
+#: modules/printbackends/cups/gtkprintbackendcups.c:1124
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1113
+#: modules/printbackends/cups/gtkprintbackendcups.c:1125
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1114
+#: modules/printbackends/cups/gtkprintbackendcups.c:1126
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1115
+#: modules/printbackends/cups/gtkprintbackendcups.c:1127
 #, fuzzy, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "প্রিন্টার অফলাইন অবস্থায়"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1116
+#: modules/printbackends/cups/gtkprintbackendcups.c:1128
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1117
+#: modules/printbackends/cups/gtkprintbackendcups.c:1129
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1359
+#: modules/printbackends/cups/gtkprintbackendcups.c:1371
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1363
+#: modules/printbackends/cups/gtkprintbackendcups.c:1375
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1951
+#: modules/printbackends/cups/gtkprintbackendcups.c:1996
 msgid "Two Sided"
 msgstr "উভয়পৃষ্ঠ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1952
+#: modules/printbackends/cups/gtkprintbackendcups.c:1997
 msgid "Paper Type"
 msgstr "কাগজের ধরন"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1953
+#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paper Source"
 msgstr "কাগজের সংগ্রহস্থল"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1954
+#: modules/printbackends/cups/gtkprintbackendcups.c:1999
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1963
+#: modules/printbackends/cups/gtkprintbackendcups.c:2008
 msgid "One Sided"
 msgstr "এক পৃষ্ঠ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1964
-#: modules/printbackends/cups/gtkprintbackendcups.c:1965
-#: modules/printbackends/cups/gtkprintbackendcups.c:1969
+#: modules/printbackends/cups/gtkprintbackendcups.c:2009
+#: modules/printbackends/cups/gtkprintbackendcups.c:2010
+#: modules/printbackends/cups/gtkprintbackendcups.c:2014
 msgid "Auto Select"
 msgstr "স্বয়ংক্রিয় নির্বাচন"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1966
-#: modules/printbackends/cups/gtkprintbackendcups.c:1967
-#: modules/printbackends/cups/gtkprintbackendcups.c:1968
-#: modules/printbackends/cups/gtkprintbackendcups.c:2438
+#: modules/printbackends/cups/gtkprintbackendcups.c:2011
+#: modules/printbackends/cups/gtkprintbackendcups.c:2012
+#: modules/printbackends/cups/gtkprintbackendcups.c:2013
+#: modules/printbackends/cups/gtkprintbackendcups.c:2483
 msgid "Printer Default"
 msgstr "প্রিন্টারের ডিফল্ট মান"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2632
+#: modules/printbackends/cups/gtkprintbackendcups.c:2677
 msgid "Urgent"
 msgstr "জরুরী"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2632
+#: modules/printbackends/cups/gtkprintbackendcups.c:2677
 msgid "High"
 msgstr "উচ্চ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2632
+#: modules/printbackends/cups/gtkprintbackendcups.c:2677
 msgid "Medium"
 msgstr "মাঝারি"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2632
+#: modules/printbackends/cups/gtkprintbackendcups.c:2677
 msgid "Low"
 msgstr "নিম্ন"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 msgid "None"
 msgstr "(শূণ্য)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 msgid "Classified"
 msgstr "শ্রেণীবদ্ধ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 msgid "Confidential"
 msgstr "গোপনীয়"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 msgid "Secret"
 msgstr "গোপনীয়"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 msgid "Standard"
 msgstr "প্রমিত মান"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 msgid "Top Secret"
 msgstr "অতিমাত্রায় গোপনীয়"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2673
+#: modules/printbackends/cups/gtkprintbackendcups.c:2718
 msgid "Unclassified"
 msgstr "শ্রেণীবিহীন"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2768
+#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "স্বনির্বাচিত মাপ"

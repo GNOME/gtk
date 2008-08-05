@@ -357,3 +357,27 @@ gdk_threads_enter()/gdk_threads_leave().
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_threads_add_timeout_seconds ##### -->
+<para>
+
+</para>
+
+@interval: 
+@function: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_threads_add_timeout_seconds_full ##### -->
+<para>
+
+</para>
+
+@priority: 
+@interval: 
+@function: 
+@data: 
+@notify: 
+@Returns: 
+
+

@@ -384,7 +384,7 @@ keyboard events are delivered to this widget.
 <para>
 If @widget is not sensitive, it is not set as the current grabbed
 widget and this function does nothing.
-</para>  
+</para>
 
 @widget: The widget that grabs keyboard and pointer events.
 

@@ -19,6 +19,9 @@ Overview of Changes from GTK+ 2.13.5 to 2.13.6
   for creating filechoosers with specific backends have been
   deprecated, since GIO is used directly.
  
+* GtkAdjustment has been sealed, adding getters and setters
+  for all struct fields.
+
 * Bugs fixed:
  544265 GDK assumes XFIXES extension
  543915 "Sole completion" translation issue
@@ -46,6 +49,10 @@ Overview of Changes from GTK+ 2.13.5 to 2.13.6
  544684 Win64 issue, window handles are assumed to be 32-bit
  540834 Insensitive widgets cannot be grabbed
  515596 GtkUIManager's embedded UI definition example is invalid
+ 534979 GtkImageMenuItem is a bin but has two children
+ 382291 Automatically dim the combobox when the model is empty
+ 545982 missing braces cause bogus warnings when using GtkBuilder
+ 544858 Seal GtkAdjustment
 
 * Updated translations:
  Spanish (es)

@@ -1,3 +1,7 @@
+2008-08-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.13.6 ===
+
 2008-08-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add new functions

@@ -118,6 +118,11 @@ of the "steppers". It also provides properties and methods for setting a
 
 </para>
 
+<!-- ##### ARG GtkRange:arrow-scaling ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkRange:slider-width ##### -->
 <para>
 

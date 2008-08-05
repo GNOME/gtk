@@ -2,7 +2,7 @@ include $(top_srcdir)/Makefile.decl
 
 NULL=
 
-check_PROGRAMS=check-gdk-cairo
+#check_PROGRAMS=check-gdk-cairo
 TESTS=$(check_PROGRAMS)
 
 AM_CPPFLAGS=\

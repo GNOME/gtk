@@ -1,7 +1,7 @@
 General Information
 ===================
 
-This is GTK+ version 2.13.5. GTK+ is a multi-platform toolkit for
+This is GTK+ version 2.13.6. GTK+ is a multi-platform toolkit for
 creating graphical user interfaces. Offering a complete set of widgets,
 GTK+ is suitable for projects ranging from small one-off projects to
 complete application suites.
@@ -42,12 +42,11 @@ Release notes for 2.14
   the GtkFileSystem interface is no longer available, nor the filechooser
   will load any GtkFileSystem implementation.
 
-* gtk_adjustment_set_value() now correctly clamps the passed value to
-  [lower...upper-page_size] instead of just to [lower...upper].
-  This has the potential to break some corner cases, however these
-  cases would set page_size to a value != 0 which suggests they want
-  it honored. All manual clamping in code calling set_value() can now
-  be safely removed.
+* GtkComboBox now renders the popdown button insensitive when
+  the model is empty. Applications which want to populate the list
+  only before displaying it can set gtk_combo_box_set_button_sensitivity
+  to GTK_SENSITIVITY_ON, so that the button is always sensitive or
+  GTK_SENSITIVITY_OFF to make it insensitive respectively.
 
 Release notes for 2.12
 ======================

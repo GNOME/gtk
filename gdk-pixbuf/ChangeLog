@@ -1,3 +1,7 @@
+2008-08-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.13.6 ===
+
 2008-08-04  Tor Lillqvist  <tml@novell.com>
 
 	* Makefile.am: Pass appropriate -machine flag to lib.exe.

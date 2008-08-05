@@ -116,6 +116,26 @@ and should be accessed using the functions below.
 
 </para>
 
+<!-- ##### ARG GtkProgressBar:min-horizontal-bar-height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:min-horizontal-bar-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:min-vertical-bar-height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:min-vertical-bar-width ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkProgressBar:xspacing ##### -->
 <para>
 

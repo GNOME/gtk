@@ -88,6 +88,11 @@ gtk_combo_box_get_active_text().
 
 </para>
 
+<!-- ##### ARG GtkComboBox:button-sensitivity ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkComboBox:column-span-column ##### -->
 <para>
 
@@ -419,6 +424,24 @@ gtk_combo_box_get_active_text().
 </para>
 
 @combo: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_button_sensitivity ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@sensitivity: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_button_sensitivity ##### -->
+<para>
+
+</para>
+
+@combo_box: 
 @Returns: 
 
 

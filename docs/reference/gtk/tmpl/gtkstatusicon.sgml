@@ -88,6 +88,11 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 </para>
 
+<!-- ##### ARG GtkStatusIcon:gicon ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkStatusIcon:icon-name ##### -->
 <para>
 
@@ -172,6 +177,15 @@ on Win32 doesn't allow to embed arbitrary widgets.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_status_icon_new_from_gicon ##### -->
+<para>
+
+</para>
+
+@icon: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_status_icon_set_from_pixbuf ##### -->
 <para>
 
@@ -208,6 +222,15 @@ on Win32 doesn't allow to embed arbitrary widgets.
 @icon_name: 
 
 
+<!-- ##### FUNCTION gtk_status_icon_set_from_gicon ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@icon: 
+
+
 <!-- ##### FUNCTION gtk_status_icon_get_storage_type ##### -->
 <para>
 
@@ -242,6 +265,15 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 @status_icon: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_get_gicon ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@icon: 
 
 
 <!-- ##### FUNCTION gtk_status_icon_get_size ##### -->
