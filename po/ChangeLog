@@ -1,3 +1,9 @@
+2008-08-05  Chao-Hsiung Liao  <j_h_liau@yahoo.com.tw>
+
+        * zh_HK.po: Updated Traditional Chinese translation(Hong Kong).
+        * zh_TW.po: Updated Traditional Chinese translation(Taiwan).
+	* LINGUAS: Add zh_TW.
+
 2008-08-05  Daniel Nylander <po@danielnylander.se>
 
 	* sv.po: Updated Swedish translation.
