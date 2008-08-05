@@ -1,3 +1,8 @@
+2008-08-05  Michael Natterer  <mitch@imendio.com>
+
+	* tests/testiconview.c: don't use the deprecated
+	gtk_box_pack_start_defaults().
+
 2008-08-04  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 545982 – missing braces cause bogus warnings when using GtkBuilder

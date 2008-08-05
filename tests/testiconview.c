@@ -564,23 +564,23 @@ main (gint argc, gchar **argv)
 
   button = gtk_button_new_with_label ("Add some");
   g_signal_connect (button, "clicked", G_CALLBACK (add_some), icon_list);
-  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
+  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE, 0);
 
   button = gtk_button_new_with_label ("Add many");
   g_signal_connect (button, "clicked", G_CALLBACK (add_many), icon_list);
-  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
+  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE, 0);
 
   button = gtk_button_new_with_label ("Add large");
   g_signal_connect (button, "clicked", G_CALLBACK (add_large), icon_list);
-  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
+  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE, 0);
 
   button = gtk_button_new_with_label ("Remove selected");
   g_signal_connect (button, "clicked", G_CALLBACK (foreach_selected_remove), icon_list);
-  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
+  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE, 0);
 
   button = gtk_button_new_with_label ("Swap");
   g_signal_connect (button, "clicked", G_CALLBACK (swap_rows), icon_list);
-  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
+  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE, 0);
 
   bbox = gtk_hbutton_box_new ();
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_START);
@@ -588,18 +588,18 @@ main (gint argc, gchar **argv)
 
   button = gtk_button_new_with_label ("Select all");
   g_signal_connect (button, "clicked", G_CALLBACK (select_all), icon_list);
-  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
+  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE, 0);
 
   button = gtk_button_new_with_label ("Unselect all");
   g_signal_connect (button, "clicked", G_CALLBACK (unselect_all), icon_list);
-  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
-  
+  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE, 0);
+
   button = gtk_button_new_with_label ("Select nonexisting");
   g_signal_connect (button, "clicked", G_CALLBACK (select_nonexisting), icon_list);
-  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
+  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE, 0);
 
   icon_list = gtk_icon_view_new ();
-  
+
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (scrolled_window), icon_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
