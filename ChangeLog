@@ -6,14 +6,14 @@
 2008-08-05  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkgc.c: Cast tile, stipple and clip_mask pointers to
-	gintptr when calculating hash, so we get all of the pointer bits
-	on Win64 where long is 32 bits.
+	gintptr instead of long when calculating hash, so we get all of
+	the pointer bits on Win64 where long is 32 bits.
 
 2008-08-05  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkprintoperation-win32.c: Don't need to declare
-	IPrintDialogCallback with mingw64 either. It seems to come with
-	newer versions of the headers.
+	IPrintDialogCallback with mingw64 either. It seems to be provided
+	with the newer versions of the headers included with mingw64.
 
 2008-08-05  Tor Lillqvist  <tml@novell.com>
 
