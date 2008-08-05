@@ -3157,6 +3157,9 @@ gtk_combo_box_update_sensitivity (GtkComboBox *combo_box)
   GtkTreeIter iter;
   gboolean sensitive = TRUE; /* fool code checkers */
 
+  if (!combo_box->priv->button)
+    return;
+
   switch (combo_box->priv->button_sensitivity)
     {
       case GTK_SENSITIVITY_ON:

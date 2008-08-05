@@ -1,5 +1,12 @@
 2008-08-05  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_update_sensitivity): bail out
+	early if priv->button is NULL to avoid zillions of warnings when
+	destroying combo boxes that were working fine before the
+	button sensitivity patch.
+
+2008-08-05  Michael Natterer  <mitch@imendio.com>
+
 	Bug 544858 – Seal GtkAdjustment
 
 	* gtk/gtk.symbols
