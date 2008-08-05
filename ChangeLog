@@ -1,5 +1,17 @@
 2008-08-05  Michael Natterer  <mitch@imendio.com>
 
+	Bug 544858 – Seal GtkAdjustment
+
+	* gtk/gtk.symbols
+	* gtk/gtkadjustment.[ch] (struct GtkAdjustment): seal all struct
+	members.
+
+	Add accessors for all properties and additionally a new function
+	gtk_adjustment_configure() which sets all properties at
+	once. Patch by Christian Dywan and myself.
+
+2008-08-05  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkadjustment.c (gtk_adjustment_set_value): clamp the value
 	to [lower...upper-page_size] instead of only [lower...upper].
 
