@@ -1,3 +1,12 @@
+2008-08-06  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkcombobox.c
+	* gtk/gtkiconview.c
+	* gtk/gtkrange.c
+	* gtk/gtkscrolledwindow.c
+	* gtk/gtktreeview.c: remove CLAMPing from values passed to
+	gtk_adjustment_set_value() since it does it right now.
+
 2008-08-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
