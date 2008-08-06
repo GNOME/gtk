@@ -1,3 +1,15 @@
+2008-08-06  Sven Herzberg  <sven@imendio.com>
+
+	Bug 546549 : Better Type Checking
+	reviewed by mitch
+
+	* gdk-pixbuf.c (gdk_pixbuf_copy), (gdk_pixbuf_get_colorspace),
+	(gdk_pixbuf_get_n_channels), (gdk_pixbuf_get_has_alpha),
+	(gdk_pixbuf_get_bits_per_sample), (gdk_pixbuf_get_pixels),
+	(gdk_pixbuf_get_width), (gdk_pixbuf_get_height),
+	(gdk_pixbuf_get_rowstride): use GDK_IS_PIXBUF() and not pixbuf != NULL
+	in g_return_*() statements
+
 2008-08-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.13.6 ===
