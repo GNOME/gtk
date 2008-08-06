@@ -1303,7 +1303,7 @@ void
 gtk_cups_connection_test_free (GtkCupsConnectionTest *test)
 {
   if (test == NULL)
-    return FALSE;
+    return;
 
   test->current_addr = NULL;
   httpAddrFreeList (test->addrlist);

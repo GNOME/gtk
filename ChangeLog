@@ -1,5 +1,11 @@
 2008-08-06  Michael Natterer  <mitch@imendio.com>
 
+	* modules/printbackends/cups/gtkcupsutils.c
+	(gtk_cups_connection_test_free): remove return value, this
+	function returns void.
+
+2008-08-06  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkcombobox.c
 	* gtk/gtkiconview.c
 	* gtk/gtkrange.c
