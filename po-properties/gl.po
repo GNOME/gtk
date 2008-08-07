@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-06 21:37+0200\n"
-"PO-Revision-Date: 2008-08-06 21:37+0200\n"
+"POT-Creation-Date: 2008-08-07 15:25+0200\n"
+"PO-Revision-Date: 2008-08-07 15:28+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -3097,6 +3097,22 @@ msgstr "A largura da disposición"
 #: ../gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "A altura da disposición"
+
+#: ../gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr "URI"
+
+#: ../gtk/gtklinkbutton.c:145
+msgid "The URI bound to this button"
+msgstr "A URI vinculada a este botón"
+
+#: ../gtk/gtklinkbutton.c:159
+msgid "Visited"
+msgstr "Visitado"
+
+#: ../gtk/gtklinkbutton.c:160
+msgid "Whether this link has been visited."
+msgstr "Indica se esta ligazón foi visitada."
 
 #: ../gtk/gtkmenu.c:503
 msgid "The currently selected menu item"
