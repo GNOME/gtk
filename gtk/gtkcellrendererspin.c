@@ -150,8 +150,7 @@ gtk_cell_renderer_spin_finalize (GObject *object)
   if (priv && priv->adjustment)
     g_object_unref (priv->adjustment);
 
-  if (G_OBJECT_CLASS (gtk_cell_renderer_spin_parent_class)->finalize)
-    (* G_OBJECT_CLASS (gtk_cell_renderer_spin_parent_class)->finalize) (object);
+  G_OBJECT_CLASS (gtk_cell_renderer_spin_parent_class)->finalize (object);
 }
 
 static void

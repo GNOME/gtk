@@ -1,5 +1,12 @@
 2008-08-07  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkactiongroup.c
+	* gtk/gtkcellrendererspin.c
+	* gtk/gtkfilechooserbutton.c
+	* gtk/gtktoolitem.c: chain up unconditionally in finalize().
+
+2008-08-07  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkclist.c
 	* gtk/gtkcontainer.c
 	* gtk/gtkfilechooserbutton.c

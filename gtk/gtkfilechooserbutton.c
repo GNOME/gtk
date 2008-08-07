@@ -883,8 +883,7 @@ gtk_file_chooser_button_finalize (GObject *object)
   if (priv->old_file)
     g_object_unref (priv->old_file);
 
-  if (G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->finalize != NULL)
-    (*G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->finalize) (object);
+  G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->finalize (object);
 }
 
 /* ********************* *

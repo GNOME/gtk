@@ -284,12 +284,11 @@ gtk_tool_item_finalize (GObject *object)
   GtkToolItem *item = GTK_TOOL_ITEM (object);
 
   g_free (item->priv->menu_item_id);
-  
+
   if (item->priv->menu_item)
     g_object_unref (item->priv->menu_item);
-  
-  if (G_OBJECT_CLASS (gtk_tool_item_parent_class)->finalize)
-    G_OBJECT_CLASS (gtk_tool_item_parent_class)->finalize (object);
+
+  G_OBJECT_CLASS (gtk_tool_item_parent_class)->finalize (object);
 }
 
 static void
