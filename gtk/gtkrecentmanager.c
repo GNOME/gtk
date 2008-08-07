@@ -416,6 +416,14 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
 	  g_error_free (write_error);
 	}
 
+      if (g_chmod (priv->filename, 0600) < 0)
+        {
+          filename_warning ("Attempting to set the permissions of `%s', "
+                            "but failed: %s",
+                            priv->filename,
+                            g_strerror (errno));
+        }
+
       /* mark us as clean */
       priv->is_dirty = FALSE;
     }

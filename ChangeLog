@@ -1,3 +1,11 @@
+2008-08-07  Emmanuele Bassi  <ebassi@gnome.org>
+
+	Bug 545031 – list of recently used files is created world-readable
+
+	* gtk/gtkrecentmanager.c:
+	(gtk_recent_manager_real_changed): Set the recently-used.xbel
+	file to 0600. (Guido Berhoerster)
+
 2008-08-06  Michael Natterer  <mitch@imendio.com>
 
 	* modules/printbackends/cups/gtkcupsutils.c
