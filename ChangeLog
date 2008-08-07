@@ -1,3 +1,8 @@
+2008-08-07 16:19:16  Tim Janik  <timj@imendio.com>
+
+	* gdk/gdkrgb.c (gdk_rgb_select_conv): use g_error() instead of a
+	combination of g_warning+exit to avoid misleading the user.
+
 2008-08-07  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkactiongroup.c

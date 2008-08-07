@@ -3265,15 +3265,12 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info)
     conv = gdk_rgb_convert_4_pack;
 
   if (!conv)
-    {
-      g_warning ("Visual type=%d depth=%d, image bpp=%d, %s first\n"
-		 "is not supported by GdkRGB. Please submit a bug report\n"
-		 "with the above values to bugzilla.gnome.org",
-		 vtype, depth, bpp,
-		 byte_order == GDK_LSB_FIRST ? "lsb" : "msb");
-      exit (1);
-    }
-  
+    g_error ("Visual type=%d depth=%d, image bpp=%d, %s first\n"
+             "is not supported by GdkRGB. Please submit a bug report\n"
+             "with the above values to bugzilla.gnome.org",
+             vtype, depth, bpp,
+             byte_order == GDK_LSB_FIRST ? "lsb" : "msb");
+
   if (conv_d == NULL)
     conv_d = conv;
 
