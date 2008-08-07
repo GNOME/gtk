@@ -54,8 +54,8 @@ struct _GtkLinkButtonPrivate
 enum
 {
   PROP_0,
-
-  PROP_URI
+  PROP_URI,
+  PROP_VISITED
 };
 
 #define GTK_LINK_BUTTON_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_LINK_BUTTON, GtkLinkButtonPrivate))
@@ -141,10 +141,25 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   g_object_class_install_property (gobject_class,
   				   PROP_URI,
   				   g_param_spec_string ("uri",
-  				   			_("URI"),
-  				   			_("The URI bound to this button"),
+  				   			P_("URI"),
+  				   			P_("The URI bound to this button"),
   				   			NULL,
   				   			G_PARAM_READWRITE));
+  /**
+   * GtkLinkButton:visited
+   * 
+   * The 'visited' state of this button. A visited link is drawn in a
+   * different color.
+   *
+   * Since: 2.14
+   */
+  g_object_class_install_property (gobject_class,
+  				   PROP_VISITED,
+  				   g_param_spec_boolean ("visited",
+                                                         P_("Visited"),
+                                                         P_("Whether this link has been visited."),
+                                                         FALSE,
+                                                         G_PARAM_READWRITE));
   
   g_type_class_add_private (gobject_class, sizeof (GtkLinkButtonPrivate));
 }
@@ -156,12 +171,13 @@ gtk_link_button_init (GtkLinkButton *link_button)
   
   gtk_button_set_relief (GTK_BUTTON (link_button), GTK_RELIEF_NONE);
   
-  g_signal_connect (link_button, "enter_notify_event",
+  g_signal_connect (link_button, "enter-notify-event",
   		    G_CALLBACK (gtk_link_button_enter_cb), NULL);
-  g_signal_connect (link_button, "leave_notify_event",
+  g_signal_connect (link_button, "leave-notify-event",
   		    G_CALLBACK (gtk_link_button_leave_cb), NULL);
-  g_signal_connect (link_button, "drag_data_get",
+  g_signal_connect (link_button, "drag-data-get",
   		    G_CALLBACK (gtk_link_button_drag_data_get_cb), NULL);
+
   g_object_set (link_button, "has-tooltip", TRUE, NULL);
   g_signal_connect (link_button, "query-tooltip",
                     G_CALLBACK (gtk_link_button_query_tooltip_cb), NULL);
@@ -196,6 +212,9 @@ gtk_link_button_get_property (GObject    *object,
     case PROP_URI:
       g_value_set_string (value, link_button->priv->uri);
       break;
+    case PROP_VISITED:
+      g_value_set_boolean (value, link_button->priv->visited);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -214,6 +233,9 @@ gtk_link_button_set_property (GObject      *object,
     {
     case PROP_URI:
       gtk_link_button_set_uri (link_button, g_value_get_string (value));
+      break;
+    case PROP_VISITED:
+      gtk_link_button_set_visited (link_button, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -450,9 +472,7 @@ gtk_link_button_clicked (GtkButton *button)
   if (uri_func)
     (* uri_func) (link_button, link_button->priv->uri, uri_func_data);
 
-  link_button->priv->visited = TRUE;
-
-  set_link_color (link_button);
+  gtk_link_button_set_visited (link_button, TRUE);
 }
 
 static gboolean
@@ -612,7 +632,8 @@ gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
  * @link_button: a #GtkLinkButton
  * @uri: a valid URI
  *
- * Sets @uri as the URI where the #GtkLinkButton points.
+ * Sets @uri as the URI where the #GtkLinkButton points. As a side-effect
+ * this unsets the 'visited' state of the button.
  *
  * Since: 2.10
  */
@@ -630,13 +651,9 @@ gtk_link_button_set_uri (GtkLinkButton *link_button,
   g_free (priv->uri);
   priv->uri = g_strdup (uri);
 
-  if (priv->visited)
-    {
-      priv->visited = FALSE;
-      set_link_color (link_button);
-    }
-
   g_object_notify (G_OBJECT (link_button), "uri");
+
+  gtk_link_button_set_visited (link_button, FALSE);
 }
 
 /**
@@ -690,6 +707,57 @@ gtk_link_button_set_uri_hook (GtkLinkButtonUriFunc func,
 
   return old_uri_func;
 }
+
+/**
+ * gtk_link_button_set_visited:
+ * @link_button: a #GtkLinkButton
+ * @visited: the new 'visited' state
+ *
+ * Sets the 'visited' state of the URI where the #GtkLinkButton
+ * points.  See gtk_link_button_get_visited() for more details.
+ *
+ * Since: 2.14
+ */
+void
+gtk_link_button_set_visited (GtkLinkButton *link_button,
+                             gboolean       visited)
+{
+  g_return_if_fail (GTK_IS_LINK_BUTTON (link_button));
+
+  visited = visited != FALSE;
+
+  if (link_button->priv->visited != visited)
+    {
+      link_button->priv->visited = visited;
+
+      set_link_color (link_button);
+
+      g_object_notify (G_OBJECT (link_button), "visited");
+    }
+}
+
+/**
+ * gtk_link_button_get_visited:
+ * @link_button: a #GtkLinkButton
+ *
+ * Retrieves the 'visited' state of the URI where the #GtkLinkButton
+ * points. The button becomes visited when it is clicked. If the URI
+ * is changed on the button, the 'visited' state is unset again.
+ *
+ * The state may also be changed using gtk_link_button_set_visited().
+ *
+ * Return value: %TRUE if the link has been visited, %FALSE otherwise
+ *
+ * Since: 2.14
+ */
+gboolean
+gtk_link_button_get_visited (GtkLinkButton *link_button)
+{
+  g_return_val_if_fail (GTK_IS_LINK_BUTTON (link_button), FALSE);
+  
+  return link_button->priv->visited;
+}
+
 
 #define __GTK_LINK_BUTTON_C__
 #include "gtkaliasdef.c"

@@ -79,6 +79,11 @@ GtkLinkButtonUriFunc  gtk_link_button_set_uri_hook      (GtkLinkButtonUriFunc fu
 							 gpointer             data,
 							 GDestroyNotify       destroy);
 
+gboolean              gtk_link_button_get_visited       (GtkLinkButton *link_button);
+void                  gtk_link_button_set_visited       (GtkLinkButton *link_button,
+                                                         gboolean       visited);
+
+
 G_END_DECLS
 
 #endif /* __GTK_LINK_BUTTON_H__ */
