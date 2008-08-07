@@ -1,3 +1,8 @@
+2008-08-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Its g_content_type_from_mime_type, not 
+	g_content_type_for_mime_type. Noticed by Roger Brown
+
 2008-08-07 16:19:16  Tim Janik  <timj@imendio.com>
 
 	* gdk/gdkrgb.c (gdk_rgb_select_conv): use g_error() instead of a
