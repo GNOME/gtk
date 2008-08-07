@@ -1,5 +1,13 @@
 2008-08-07  Richard Hult  <richard@imendio.com>
 
+	Bug 535573 – Deadlock in gdkeventloop-quartz.c:poll_func()
+
+	* gdk/quartz/gdkeventloop-quartz.c: (gdk_event_prepare),
+	(select_thread_func), (poll_func): Patch by Yevgen Muntyan, fixes
+	deadlock and missing events.
+
+2008-08-07  Richard Hult  <richard@imendio.com>
+
 	* gdk/quartz/gdkscreen-quartz.c: (gdk_screen_get_monitor_plug_name)
 	(gdk_screen_get_monitor_height_mm, gdk_screen_get_monitor_width_mm):
 	Implement those, fixes loading python bindings.

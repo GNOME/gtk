@@ -9,7 +9,7 @@
 #include "gdkprivate-quartz.h"
 
 static GPollFD event_poll_fd;
-static NSEvent *current_event;
+static GQueue *current_events;
 
 static GPollFunc old_poll_func;
 
@@ -19,7 +19,6 @@ static int wakeup_pipe[2];
 static pthread_mutex_t pollfd_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t ready_cond = PTHREAD_COND_INITIALIZER;
 static GPollFD *pollfds;
-static GPollFD *pipe_pollfd;
 static guint n_pollfds;
 static CFRunLoopSourceRef select_main_thread_source;
 static CFRunLoopRef main_thread_run_loop;
@@ -28,16 +27,16 @@ static NSAutoreleasePool *autorelease_pool;
 gboolean
 _gdk_quartz_event_loop_check_pending (void)
 {
-  return current_event != NULL;
+  return current_events && current_events->head;
 }
 
 NSEvent*
 _gdk_quartz_event_loop_get_pending (void)
 {
-  NSEvent *event;
+  NSEvent *event = NULL;
 
-  event = current_event;
-  current_event = NULL;
+  if (current_events)
+    event = g_queue_pop_tail (current_events);
 
   return event;
 }
@@ -65,7 +64,8 @@ gdk_event_prepare (GSource *source,
 	                       dequeue: NO];
 
   retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
-	    event != NULL);
+	    (current_events && current_events->head) ||
+            event != NULL);
 
   GDK_THREADS_LEAVE ();
 
@@ -169,7 +169,7 @@ select_thread_func (void *arg)
       n_active_fds = old_poll_func (pollfds, n_pollfds, -1);
       pthread_mutex_lock (&pollfd_mutex);
       select_fd_waiting = FALSE;
-      n = read (pipe_pollfd->fd, &c, 1);
+      n = read (wakeup_pipe[0], &c, 1);
       if (n == 1)
         {
 	  g_assert (c == 'A');
@@ -195,10 +195,11 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
 {
   NSEvent *event;
   NSDate *limit_date;
+  gboolean poll_event_fd = FALSE;
   int n_active = 0;
   int i;
 
-  if (nfds > 1)
+  if (nfds > 1 || ufds[0].fd != -1)
     {
       if (!select_thread) {
         /* Create source used for signalling the main thread */
@@ -218,20 +219,31 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
       while (!ready_for_poll)
         pthread_cond_wait (&ready_cond, &pollfd_mutex);
 
-      n_pollfds = nfds;
-      g_free (pollfds);
-      pollfds = g_memdup (ufds, sizeof (GPollFD) * nfds);
+      /* We cheat and use the fake fd (if it's polled) for our pipe */
 
-      /* We cheat and use the fake fd for our pipe */
       for (i = 0; i < nfds; i++)
+        if (ufds[i].fd == -1)
+          {
+            poll_event_fd = TRUE;
+            break;
+          }
+
+      g_free (pollfds);
+
+      if (i == nfds)
         {
-          if (pollfds[i].fd == -1)
-            {
-              pipe_pollfd = &pollfds[i];
-              pollfds[i].fd = wakeup_pipe[0];
-              pollfds[i].events = G_IO_IN;
-            }
+          n_pollfds = nfds + 1;
+          pollfds = g_new (GPollFD, nfds + 1);
+          memcpy (pollfds, ufds, nfds * sizeof (GPollFD));
         }
+      else
+        {
+          pollfds = g_memdup (ufds, nfds * sizeof (GPollFD));
+          n_pollfds = nfds;
+        }
+
+      pollfds[i].fd = wakeup_pipe[0];
+      pollfds[i].events = G_IO_IN;
 
       /* Start our thread */
       pthread_cond_signal (&ready_cond);
@@ -258,7 +270,7 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
         {
           pthread_mutex_lock (&pollfd_mutex);
 
-          for (i = 0; i < n_pollfds; i++)
+          for (i = 0; i < nfds; i++)
             {
               if (ufds[i].fd == -1)
                 continue;
@@ -275,11 +287,14 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
 
           pthread_mutex_unlock (&pollfd_mutex);
 
-          event = [NSApp nextEventMatchingMask: NSAnyEventMask
-            untilDate: [NSDate distantPast]
-            inMode: NSDefaultRunLoopMode
-            dequeue: YES];
-
+          /* Try to get a Cocoa event too, if requested */
+          if (poll_event_fd)
+            event = [NSApp nextEventMatchingMask: NSAnyEventMask
+                                       untilDate: [NSDate distantPast]
+                                          inMode: NSDefaultRunLoopMode
+                                         dequeue: YES];
+          else
+            event = NULL;
         }
     }
 
@@ -304,7 +319,9 @@ poll_func (GPollFD *ufds, guint nfds, gint timeout_)
             }
         }
 
-      current_event = [event retain];
+      if (!current_events)
+        current_events = g_queue_new ();
+      g_queue_push_head (current_events, [event retain]);
 
       n_active ++;
     }
