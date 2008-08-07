@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 18:21+0000\n"
-"PO-Revision-Date: 2008-08-06 00:16+0200\n"
+"POT-Creation-Date: 2008-08-07 11:38+0000\n"
+"PO-Revision-Date: 2008-08-07 18:32+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -3075,6 +3075,22 @@ msgstr "La anchura de la distribución"
 #: ../gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "La altura de la distribución"
+
+#: ../gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr "URI"
+
+#: ../gtk/gtklinkbutton.c:145
+msgid "The URI bound to this button"
+msgstr "El URI asociado a este botón"
+
+#: ../gtk/gtklinkbutton.c:159
+msgid "Visited"
+msgstr "Visitado"
+
+#: ../gtk/gtklinkbutton.c:160
+msgid "Whether this link has been visited."
+msgstr "Indica si este enlace se ha visitado."
 
 #: ../gtk/gtkmenu.c:503
 msgid "The currently selected menu item"
