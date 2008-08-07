@@ -37,6 +37,7 @@
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
+static void gtk_image_menu_item_destroy              (GtkObject        *object);
 static void gtk_image_menu_item_size_request         (GtkWidget        *widget,
                                                       GtkRequisition   *requisition);
 static void gtk_image_menu_item_size_allocate        (GtkWidget        *widget,
@@ -73,16 +74,14 @@ G_DEFINE_TYPE (GtkImageMenuItem, gtk_image_menu_item, GTK_TYPE_MENU_ITEM)
 static void
 gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
 {
-  GObjectClass *gobject_class;
-  GtkWidgetClass *widget_class;
-  GtkMenuItemClass *menu_item_class;
-  GtkContainerClass *container_class;
+  GObjectClass *gobject_class = (GObjectClass*) klass;
+  GtkObjectClass *object_class = (GtkObjectClass*) klass;
+  GtkWidgetClass *widget_class = (GtkWidgetClass*) klass;
+  GtkMenuItemClass *menu_item_class = (GtkMenuItemClass*) klass;
+  GtkContainerClass *container_class = (GtkContainerClass*) klass;
 
-  gobject_class = (GObjectClass*) klass;
-  widget_class = (GtkWidgetClass*) klass;
-  menu_item_class = (GtkMenuItemClass*) klass;
-  container_class = (GtkContainerClass*) klass;
-  
+  object_class->destroy = gtk_image_menu_item_destroy;
+
   widget_class->screen_changed = gtk_image_menu_item_screen_changed;
   widget_class->size_request = gtk_image_menu_item_size_request;
   widget_class->size_allocate = gtk_image_menu_item_size_allocate;
@@ -170,6 +169,18 @@ show_image (GtkImageMenuItem *image_menu_item)
   g_object_get (settings, "gtk-menu-images", &show, NULL);
 
   return show;
+}
+
+static void
+gtk_image_menu_item_destroy (GtkObject *object)
+{
+  GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (object);
+
+  if (image_menu_item->image)
+    gtk_container_remove (GTK_CONTAINER (image_menu_item),
+                          image_menu_item->image);
+
+  GTK_OBJECT_CLASS (gtk_image_menu_item_parent_class)->destroy (object);
 }
 
 static void

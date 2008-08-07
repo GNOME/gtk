@@ -1,3 +1,13 @@
+2008-08-07  Michael Natterer  <mitch@imendio.com>
+
+	Bug 546756 – gnome-panel crashed with SIGSEGV in
+	g_type_check_instance_cast()
+
+	* gtk/gtkimagemenuitem.c: add GtkObject::destroy() implementation
+	and remove the image now that it's an internal child and isn't
+	destroyed by gtk_container_destroy() any longer. Thanks to tml for
+	helping bisecting this down.
+
 2008-08-07  Sven Neumann  <sven@gimp.org>
 
 	Bug 546771 - Add writable property "visited" to GtkLinkButton
