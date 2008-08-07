@@ -2776,9 +2776,8 @@ static gboolean icon_info_ensure_scale_and_pixbuf (GtkIconInfo*, gboolean);
 static void 
 apply_emblems (GtkIconInfo *info)
 {
-  gint pos, w, h, ew, eh, x, y;
-  gdouble scale;
-  GdkPixbuf *icon, *emblem;
+  GdkPixbuf *icon;
+  gint w, h, pos;
   GSList *l;
 
   icon = info->pixbuf;
@@ -2788,41 +2787,48 @@ apply_emblems (GtkIconInfo *info)
   for (l = info->emblem_infos, pos = 0; l; l = l->next, pos++)
     {
       GtkIconInfo *emblem_info = l->data;
-      if (icon_info_ensure_scale_and_pixbuf (emblem_info, FALSE)) 
+
+      if (icon_info_ensure_scale_and_pixbuf (emblem_info, FALSE))
         {
-           emblem = emblem_info->pixbuf;
-           ew = gdk_pixbuf_get_width (emblem);
-           eh = gdk_pixbuf_get_height (emblem);
-           if (ew >= w)
-             {
-               scale = 0.75;
-               ew = ew * 0.75;
-               eh = eh * 0.75;
-             }
-           else 
-             scale = 1.0;
-           switch (pos % 4) 
-             {
-             case 0: 
-               x = w - ew;
-               y = h - eh;
-               break;
-             case 1: 
-               x = w - ew;
-               y = 0;
-               break;
-             case 2: 
-               x = 0;
-               y = h - eh;
-               break;
-             case 3: 
-               x = 0;
-               y = 0;
-               break;
-           }
-          gdk_pixbuf_composite (emblem, icon, x, y, ew, eh, x, y, 
+          GdkPixbuf *emblem = emblem_info->pixbuf;
+          gint ew, eh;
+          gint x = 0, y = 0; /* silence compiler */
+          gdouble scale;
+
+          ew = gdk_pixbuf_get_width (emblem);
+          eh = gdk_pixbuf_get_height (emblem);
+          if (ew >= w)
+            {
+              scale = 0.75;
+              ew = ew * 0.75;
+              eh = eh * 0.75;
+            }
+          else
+            scale = 1.0;
+
+          switch (pos % 4)
+            {
+            case 0:
+              x = w - ew;
+              y = h - eh;
+              break;
+            case 1:
+              x = w - ew;
+              y = 0;
+              break;
+            case 2:
+              x = 0;
+              y = h - eh;
+              break;
+            case 3:
+              x = 0;
+              y = 0;
+              break;
+            }
+
+          gdk_pixbuf_composite (emblem, icon, x, y, ew, eh, x, y,
                                 scale, scale, GDK_INTERP_BILINEAR, 255);
-       } 
+       }
    }
 }
 

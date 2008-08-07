@@ -1,3 +1,9 @@
+2008-08-07  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkicontheme.c (apply_emblems): move variables to local
+	scopes, fix indentation and silence bogus warning about using
+	uninitialized variables.
+
 2008-08-07  Richard Hult  <richard@imendio.com>
 
 	Bug 535573 – Deadlock in gdkeventloop-quartz.c:poll_func()
