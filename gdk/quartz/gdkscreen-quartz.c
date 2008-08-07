@@ -212,28 +212,78 @@ gdk_screen_get_n_monitors (GdkScreen *screen)
   return n;
 }
 
-void
-gdk_screen_get_monitor_geometry (GdkScreen    *screen, 
-				 gint          monitor_num,
-				 GdkRectangle *dest)
+static void
+screen_get_monitor_geometry (GdkScreen    *screen, 
+                             gint          monitor_num,
+                             GdkRectangle *dest,
+                             gboolean      in_mm)
 {
   NSArray *array;
+  NSScreen *nsscreen;
   NSRect rect;
 
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  g_return_if_fail (monitor_num < gdk_screen_get_n_monitors (screen));
-  g_return_if_fail (monitor_num >= 0);
-
   GDK_QUARTZ_ALLOC_POOL;
+
   array = [NSScreen screens];
-  rect = [[array objectAtIndex:monitor_num] frame];
+  nsscreen = [array objectAtIndex:monitor_num];
+  rect = [nsscreen frame];
   
   dest->x = rect.origin.x;
   dest->y = rect.origin.y;
   dest->width = rect.size.width;
   dest->height = rect.size.height;
 
+  if (in_mm)
+    {
+      dest->x = get_mm_from_pixels (nsscreen, dest->x);
+      dest->y = get_mm_from_pixels (nsscreen, dest->y);
+      dest->width = get_mm_from_pixels (nsscreen, dest->width);
+      dest->height = get_mm_from_pixels (nsscreen, dest->height);
+    }
+
   GDK_QUARTZ_RELEASE_POOL;
+}
+
+gint
+gdk_screen_get_monitor_width_mm	(GdkScreen *screen,
+				 gint       monitor_num)
+{
+  GdkRectangle rect;
+
+  screen_get_monitor_geometry (screen, monitor_num, &rect, TRUE);
+
+  return rect.width;
+}
+
+gint
+gdk_screen_get_monitor_height_mm (GdkScreen *screen,
+                                  gint       monitor_num)
+{
+  GdkRectangle rect;
+
+  screen_get_monitor_geometry (screen, monitor_num, &rect, TRUE);
+
+  return rect.height;
+}
+
+gchar *
+gdk_screen_get_monitor_plug_name (GdkScreen *screen,
+				  gint       monitor_num)
+{
+  /* FIXME: Is there some useful name we could use here? */
+  return NULL;
+}
+
+void
+gdk_screen_get_monitor_geometry (GdkScreen    *screen, 
+				 gint          monitor_num,
+				 GdkRectangle *dest)
+{
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (monitor_num < gdk_screen_get_n_monitors (screen));
+  g_return_if_fail (monitor_num >= 0);
+
+  screen_get_monitor_geometry (screen, monitor_num, dest, FALSE);
 }
 
 gchar *
