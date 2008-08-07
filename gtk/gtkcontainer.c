@@ -1009,7 +1009,7 @@ static void
 gtk_container_destroy (GtkObject *object)
 {
   GtkContainer *container = GTK_CONTAINER (object);
-  
+
   if (GTK_CONTAINER_RESIZE_PENDING (container))
     _gtk_container_dequeue_resize_handler (container);
 
@@ -1018,11 +1018,10 @@ gtk_container_destroy (GtkObject *object)
    */
   if (container->has_focus_chain)
     gtk_container_unset_focus_chain (container);
-  
+
   gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
-  
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static void

@@ -1692,8 +1692,7 @@ gtk_tree_view_destroy (GtkObject *object)
       tree_view->priv->vadjustment = NULL;
     }
 
-  if (GTK_OBJECT_CLASS (gtk_tree_view_parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (gtk_tree_view_parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (gtk_tree_view_parent_class)->destroy (object);
 }
 
 

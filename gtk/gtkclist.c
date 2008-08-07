@@ -4402,8 +4402,7 @@ gtk_clist_destroy (GtkObject *object)
 	clist->column[i].button = NULL;
       }
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (*GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static void

@@ -384,9 +384,8 @@ gtk_radio_button_destroy (GtkObject *object)
     g_signal_emit (old_group_singleton, group_changed_signal, 0);
   if (was_in_group)
     g_signal_emit (radio_button, group_changed_signal, 0);
-  
-  if (GTK_OBJECT_CLASS (gtk_radio_button_parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (gtk_radio_button_parent_class)->destroy) (object);
+
+  GTK_OBJECT_CLASS (gtk_radio_button_parent_class)->destroy (object);
 }
 
 static void

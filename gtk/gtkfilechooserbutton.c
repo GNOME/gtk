@@ -954,8 +954,7 @@ gtk_file_chooser_button_destroy (GtkObject *object)
       priv->fs = NULL;
     }
 
-  if (GTK_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->destroy != NULL)
-    (*GTK_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->destroy (object);
 }
 
 

@@ -408,9 +408,8 @@ gtk_tree_destroy (GtkObject *object)
       g_list_free (tree->selection);
       tree->selection = NULL;
     }
-  
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static void

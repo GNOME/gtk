@@ -265,8 +265,7 @@ gtk_tips_query_destroy (GtkObject	*object)
   g_free (tips_query->label_no_tip);
   tips_query->label_no_tip = NULL;
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 GtkWidget*

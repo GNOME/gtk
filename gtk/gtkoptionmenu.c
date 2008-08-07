@@ -377,8 +377,7 @@ gtk_option_menu_destroy (GtkObject *object)
   if (option_menu->menu)
     gtk_widget_destroy (option_menu->menu);
 
-  if (GTK_OBJECT_CLASS (gtk_option_menu_parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (gtk_option_menu_parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (gtk_option_menu_parent_class)->destroy (object);
 }
 
 static void

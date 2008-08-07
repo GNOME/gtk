@@ -1,5 +1,21 @@
 2008-08-07  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkclist.c
+	* gtk/gtkcontainer.c
+	* gtk/gtkfilechooserbutton.c
+	* gtk/gtkgamma.c
+	* gtk/gtkmenutoolbutton.c
+	* gtk/gtkoptionmenu.c
+	* gtk/gtkradiobutton.c
+	* gtk/gtkradiomenuitem.c
+	* gtk/gtktipsquery.c
+	* gtk/gtktree.c
+	* gtk/gtktreeview.c: chain up unconditionally in destroy().
+
+	* gtk/gtkhandlebox.c: remove empty destroy() implementation.
+
+2008-08-07  Michael Natterer  <mitch@imendio.com>
+
 	Bug 546756 – gnome-panel crashed with SIGSEGV in
 	g_type_check_instance_cast()
 

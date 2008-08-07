@@ -113,7 +113,6 @@ static void gtk_handle_box_get_property   (GObject     *object,
 					   guint        param_id,
 					   GValue      *value,
 					   GParamSpec  *pspec);
-static void gtk_handle_box_destroy        (GtkObject         *object);
 static void gtk_handle_box_map            (GtkWidget         *widget);
 static void gtk_handle_box_unmap          (GtkWidget         *widget);
 static void gtk_handle_box_realize        (GtkWidget         *widget);
@@ -152,12 +151,10 @@ static void
 gtk_handle_box_class_init (GtkHandleBoxClass *class)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
   gobject_class = (GObjectClass *) class;
-  object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
 
@@ -213,8 +210,6 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 							 P_("A boolean value indicating whether the handlebox's child is attached or detached."),
 							 FALSE,
 							 GTK_PARAM_READABLE));
-
-  object_class->destroy = gtk_handle_box_destroy;
 
   widget_class->map = gtk_handle_box_map;
   widget_class->unmap = gtk_handle_box_unmap;
@@ -345,13 +340,6 @@ GtkWidget*
 gtk_handle_box_new (void)
 {
   return g_object_new (GTK_TYPE_HANDLE_BOX, NULL);
-}
-
-static void
-gtk_handle_box_destroy (GtkObject *object)
-{
-  if (GTK_OBJECT_CLASS (gtk_handle_box_parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (gtk_handle_box_parent_class)->destroy) (object);
 }
 
 static void

@@ -423,9 +423,8 @@ gtk_menu_tool_button_destroy (GtkObject *object)
 					    arrow_button_button_press_event_cb, 
 					    button);
     }
-  
-  if (GTK_OBJECT_CLASS (gtk_menu_tool_button_parent_class)->destroy)
-    (*GTK_OBJECT_CLASS (gtk_menu_tool_button_parent_class)->destroy) (object);
+
+  GTK_OBJECT_CLASS (gtk_menu_tool_button_parent_class)->destroy (object);
 }
 
 /**

@@ -485,8 +485,7 @@ gtk_gamma_curve_destroy (GtkObject *object)
   if (c->gamma_dialog)
     gtk_widget_destroy (c->gamma_dialog);
 
-  if (GTK_OBJECT_CLASS (gtk_gamma_curve_parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (gtk_gamma_curve_parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (gtk_gamma_curve_parent_class)->destroy (object);
 }
 
 #define __GTK_GAMMA_CURVE_C__
