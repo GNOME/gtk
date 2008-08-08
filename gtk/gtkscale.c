@@ -102,7 +102,7 @@ single_string_accumulator (GSignalInvocationHint *ihint,
 
 #define add_slider_binding(binding_set, keyval, mask, scroll)              \
   gtk_binding_entry_add_signal (binding_set, keyval, mask,                 \
-                                I_("move_slider"), 1, \
+                                I_("move-slider"), 1, \
                                 GTK_TYPE_SCROLL_TYPE, scroll)
 
 static void
@@ -127,7 +127,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   range_class->get_range_border = gtk_scale_get_range_border;
   
   signals[FORMAT_VALUE] =
-    g_signal_new (I_("format_value"),
+    g_signal_new (I_("format-value"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkScaleClass, format_value),

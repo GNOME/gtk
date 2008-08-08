@@ -357,7 +357,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 
   /* Action signals */
   spinbutton_signals[CHANGE_VALUE] =
-    g_signal_new (I_("change_value"),
+    g_signal_new (I_("change-value"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkSpinButtonClass, change_value),

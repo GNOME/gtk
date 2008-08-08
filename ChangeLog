@@ -1,5 +1,14 @@
 2008-08-08  Sven Neumann  <sven@gimp.org>
 
+	* gtk/gtkscale.c
+	* gtk/gtkscrolledwindow.c
+	* gtk/gtksocket.c
+	* gtk/gtkspinbutton.c
+	* gtk/gtkstatusbar.c
+	* gtk/gtkstatusicon.c: use canonical signal names.
+
+2008-08-08  Sven Neumann  <sven@gimp.org>
+
 	* gtk/gtktext.c
 	* gtk/gtktextbuffer.c
 	* gtk/gtktextlayout.c

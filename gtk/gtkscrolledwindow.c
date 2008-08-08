@@ -157,11 +157,11 @@ add_scroll_binding (GtkBindingSet  *binding_set,
   guint keypad_keyval = keyval - GDK_Left + GDK_KP_Left;
   
   gtk_binding_entry_add_signal (binding_set, keyval, mask,
-                                "scroll_child", 2,
+                                "scroll-child", 2,
                                 GTK_TYPE_SCROLL_TYPE, scroll,
 				G_TYPE_BOOLEAN, horizontal);
   gtk_binding_entry_add_signal (binding_set, keypad_keyval, mask,
-                                "scroll_child", 2,
+                                "scroll-child", 2,
                                 GTK_TYPE_SCROLL_TYPE, scroll,
 				G_TYPE_BOOLEAN, horizontal);
 }
@@ -172,10 +172,10 @@ add_tab_bindings (GtkBindingSet    *binding_set,
 		  GtkDirectionType  direction)
 {
   gtk_binding_entry_add_signal (binding_set, GDK_Tab, modifiers,
-                                "move_focus_out", 1,
+                                "move-focus-out", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, modifiers,
-                                "move_focus_out", 1,
+                                "move-focus-out", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
 }
 
@@ -319,7 +319,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 
 
   signals[SCROLL_CHILD] =
-    g_signal_new (I_("scroll_child"),
+    g_signal_new (I_("scroll-child"),
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkScrolledWindowClass, scroll_child),
@@ -329,7 +329,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                   GTK_TYPE_SCROLL_TYPE,
 		  G_TYPE_BOOLEAN);
   signals[MOVE_FOCUS_OUT] =
-    g_signal_new (I_("move_focus_out"),
+    g_signal_new (I_("move-focus-out"),
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkScrolledWindowClass, move_focus_out),

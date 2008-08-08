@@ -349,7 +349,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * Since: 2.10
    */
   status_icon_signals [POPUP_MENU_SIGNAL] =
-    g_signal_new (I_("popup_menu"),
+    g_signal_new (I_("popup-menu"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkStatusIconClass, popup_menu),
@@ -375,7 +375,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * Since: 2.10
    */
   status_icon_signals [SIZE_CHANGED_SIGNAL] =
-    g_signal_new (I_("size_changed"),
+    g_signal_new (I_("size-changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkStatusIconClass, size_changed),

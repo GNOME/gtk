@@ -152,7 +152,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
    * Is emitted whenever a new message gets pushed onto a statusbar's stack.
    */
   statusbar_signals[SIGNAL_TEXT_PUSHED] =
-    g_signal_new (I_("text_pushed"),
+    g_signal_new (I_("text-pushed"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkStatusbarClass, text_pushed),
@@ -171,7 +171,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
    * Is emitted whenever a new message is popped off a statusbar's stack.
    */
   statusbar_signals[SIGNAL_TEXT_POPPED] =
-    g_signal_new (I_("text_popped"),
+    g_signal_new (I_("text-popped"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkStatusbarClass, text_popped),
