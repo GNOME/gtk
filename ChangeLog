@@ -1,5 +1,14 @@
 2008-08-08  Sven Neumann  <sven@gimp.org>
 
+	* gtk/gtktree.c
+	* gtk/gtktreemodel.c
+	* gtk/gtktreesortable.c
+	* gtk/gtktreeview.c
+	* gtk/gtkuimanager.c
+	* gtk/gtkviewport.c: use canonical signal names.
+
+2008-08-08  Sven Neumann  <sven@gimp.org>
+
 	* gtk/gtkwidget.c:
 	* gtk/gtkwindow.c: use canonical signal names.
 

@@ -63,7 +63,7 @@ gtk_tree_sortable_base_init (gpointer g_class)
 
   if (! initialized)
     {
-      g_signal_new (I_("sort_column_changed"),
+      g_signal_new (I_("sort-column-changed"),
                     GTK_TYPE_TREE_SORTABLE,
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkTreeSortableIface, sort_column_changed),
@@ -85,7 +85,7 @@ gtk_tree_sortable_sort_column_changed (GtkTreeSortable *sortable)
 {
   g_return_if_fail (GTK_IS_TREE_SORTABLE (sortable));
 
-  g_signal_emit_by_name (sortable, "sort_column_changed");
+  g_signal_emit_by_name (sortable, "sort-column-changed");
 }
 
 /**

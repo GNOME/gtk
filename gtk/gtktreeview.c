@@ -5381,7 +5381,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
       gtk_widget_realize (tree_view->priv->search_window);
 
       popup_menu_id = g_signal_connect (tree_view->priv->search_entry, 
-					"popup_menu", G_CALLBACK (gtk_true), NULL);
+					"popup-menu", G_CALLBACK (gtk_true),
+                                        NULL);
 
       /* Move the entry off screen */
       screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
@@ -10315,16 +10316,16 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   gtk_window_set_type_hint (GTK_WINDOW (tree_view->priv->search_window),
 			    GDK_WINDOW_TYPE_HINT_UTILITY);
   gtk_window_set_modal (GTK_WINDOW (tree_view->priv->search_window), TRUE);
-  g_signal_connect (tree_view->priv->search_window, "delete_event",
+  g_signal_connect (tree_view->priv->search_window, "delete-event",
 		    G_CALLBACK (gtk_tree_view_search_delete_event),
 		    tree_view);
-  g_signal_connect (tree_view->priv->search_window, "key_press_event",
+  g_signal_connect (tree_view->priv->search_window, "key-press-event",
 		    G_CALLBACK (gtk_tree_view_search_key_press_event),
 		    tree_view);
-  g_signal_connect (tree_view->priv->search_window, "button_press_event",
+  g_signal_connect (tree_view->priv->search_window, "button-press-event",
 		    G_CALLBACK (gtk_tree_view_search_button_press_event),
 		    tree_view);
-  g_signal_connect (tree_view->priv->search_window, "scroll_event",
+  g_signal_connect (tree_view->priv->search_window, "scroll-event",
 		    G_CALLBACK (gtk_tree_view_search_scroll_event),
 		    tree_view);
 
@@ -10341,14 +10342,14 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   /* add entry */
   tree_view->priv->search_entry = gtk_entry_new ();
   gtk_widget_show (tree_view->priv->search_entry);
-  g_signal_connect (tree_view->priv->search_entry, "populate_popup",
+  g_signal_connect (tree_view->priv->search_entry, "populate-popup",
 		    G_CALLBACK (gtk_tree_view_search_disable_popdown),
 		    tree_view);
   g_signal_connect (tree_view->priv->search_entry,
 		    "activate", G_CALLBACK (gtk_tree_view_search_activate),
 		    tree_view);
   g_signal_connect (GTK_ENTRY (tree_view->priv->search_entry)->im_context,
-		    "preedit_changed",
+		    "preedit-changed",
 		    G_CALLBACK (gtk_tree_view_search_preedit_changed),
 		    tree_view);
   gtk_container_add (GTK_CONTAINER (vbox),
@@ -10767,23 +10768,23 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 
       g_object_ref (tree_view->priv->model);
       g_signal_connect (tree_view->priv->model,
-			"row_changed",
+			"row-changed",
 			G_CALLBACK (gtk_tree_view_row_changed),
 			tree_view);
       g_signal_connect (tree_view->priv->model,
-			"row_inserted",
+			"row-inserted",
 			G_CALLBACK (gtk_tree_view_row_inserted),
 			tree_view);
       g_signal_connect (tree_view->priv->model,
-			"row_has_child_toggled",
+			"row-has-child-toggled",
 			G_CALLBACK (gtk_tree_view_row_has_child_toggled),
 			tree_view);
       g_signal_connect (tree_view->priv->model,
-			"row_deleted",
+			"row-deleted",
 			G_CALLBACK (gtk_tree_view_row_deleted),
 			tree_view);
       g_signal_connect (tree_view->priv->model,
-			"rows_reordered",
+			"rows-reordered",
 			G_CALLBACK (gtk_tree_view_rows_reordered),
 			tree_view);
 
@@ -14074,7 +14075,7 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
 			      tree_view);
 	}
       
-        g_signal_connect (tree_view->priv->search_entry, "key_press_event",
+        g_signal_connect (tree_view->priv->search_entry, "key-press-event",
 		          G_CALLBACK (gtk_tree_view_search_key_press_event),
 		          tree_view);
 
@@ -14825,7 +14826,7 @@ gtk_tree_view_real_start_editing (GtkTreeView       *tree_view,
 				   (GdkEvent *)event);
 
   gtk_widget_grab_focus (GTK_WIDGET (cell_editable));
-  g_signal_connect (cell_editable, "remove_widget",
+  g_signal_connect (cell_editable, "remove-widget",
 		    G_CALLBACK (gtk_tree_view_remove_widget), tree_view);
 }
 

@@ -243,7 +243,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * Since: 2.4
    */
   ui_manager_signals[ADD_WIDGET] =
-    g_signal_new (I_("add_widget"),
+    g_signal_new (I_("add-widget"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkUIManagerClass, add_widget),
@@ -262,7 +262,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * Since: 2.4
    */
   ui_manager_signals[ACTIONS_CHANGED] =
-    g_signal_new (I_("actions_changed"),
+    g_signal_new (I_("actions-changed"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkUIManagerClass, actions_changed),  
@@ -286,7 +286,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * Since: 2.4
    */
   ui_manager_signals[CONNECT_PROXY] =
-    g_signal_new (I_("connect_proxy"),
+    g_signal_new (I_("connect-proxy"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkUIManagerClass, connect_proxy),
@@ -308,7 +308,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * Since: 2.4
    */
   ui_manager_signals[DISCONNECT_PROXY] =
-    g_signal_new (I_("disconnect_proxy"),
+    g_signal_new (I_("disconnect-proxy"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkUIManagerClass, disconnect_proxy),
@@ -332,7 +332,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * Since: 2.4
    */
   ui_manager_signals[PRE_ACTIVATE] =
-    g_signal_new (I_("pre_activate"),
+    g_signal_new (I_("pre-activate"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkUIManagerClass, pre_activate),
@@ -355,7 +355,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * Since: 2.4
    */
   ui_manager_signals[POST_ACTIVATE] =
-    g_signal_new (I_("post_activate"),
+    g_signal_new (I_("post-activate"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkUIManagerClass, post_activate),
@@ -2796,7 +2796,7 @@ queue_update (GtkUIManager *self)
  * the main window before showing it:
  * |[
  * gtk_container_add (GTK_CONTAINER (window), vbox); 
- * g_signal_connect (merge, "add_widget", 
+ * g_signal_connect (merge, "add-widget", 
  *                   G_CALLBACK (add_widget), vbox);
  * gtk_ui_manager_add_ui_from_file (merge, "my-menus");
  * gtk_ui_manager_add_ui_from_file (merge, "my-toolbars");
