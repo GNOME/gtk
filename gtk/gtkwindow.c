@@ -764,7 +764,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 							GTK_PARAM_READWRITE));
 
   window_signals[SET_FOCUS] =
-    g_signal_new (I_("set_focus"),
+    g_signal_new (I_("set-focus"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkWindowClass, set_focus),
@@ -774,7 +774,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                   GTK_TYPE_WIDGET);
   
   window_signals[FRAME_EVENT] =
-    g_signal_new (I_("frame_event"),
+    g_signal_new (I_("frame-event"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWindowClass, frame_event),
@@ -784,7 +784,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                   GDK_TYPE_EVENT);
 
   window_signals[ACTIVATE_FOCUS] =
-    g_signal_new (I_("activate_focus"),
+    g_signal_new (I_("activate-focus"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkWindowClass, activate_focus),
@@ -794,7 +794,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                   0);
 
   window_signals[ACTIVATE_DEFAULT] =
-    g_signal_new (I_("activate_default"),
+    g_signal_new (I_("activate-default"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkWindowClass, activate_default),
@@ -804,7 +804,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                   0);
 
   window_signals[KEYS_CHANGED] =
-    g_signal_new (I_("keys_changed"),
+    g_signal_new (I_("keys-changed"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkWindowClass, keys_changed),
@@ -820,16 +820,16 @@ gtk_window_class_init (GtkWindowClass *klass)
   binding_set = gtk_binding_set_by_class (klass);
 
   gtk_binding_entry_add_signal (binding_set, GDK_space, 0,
-                                "activate_focus", 0);
+                                "activate-focus", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Space, 0,
-                                "activate_focus", 0);
+                                "activate-focus", 0);
   
   gtk_binding_entry_add_signal (binding_set, GDK_Return, 0,
-                                "activate_default", 0);
+                                "activate-default", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_ISO_Enter, 0,
-                                "activate_default", 0);
+                                "activate-default", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0,
-                                "activate_default", 0);
+                                "activate-default", 0);
 
   add_arrow_bindings (binding_set, GDK_Up, GTK_DIR_UP);
   add_arrow_bindings (binding_set, GDK_Down, GTK_DIR_DOWN);
@@ -900,7 +900,7 @@ gtk_window_init (GtkWindow *window)
 
   gtk_decorated_window_init (window);
 
-  g_signal_connect (window->screen, "composited_changed",
+  g_signal_connect (window->screen, "composited-changed",
 		    G_CALLBACK (gtk_window_on_composited_changed), window);
 }
 
@@ -1603,7 +1603,7 @@ gtk_window_add_accel_group (GtkWindow     *window,
   g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
 
   _gtk_accel_group_attach (accel_group, G_OBJECT (window));
-  g_signal_connect_object (accel_group, "accel_changed",
+  g_signal_connect_object (accel_group, "accel-changed",
 			   G_CALLBACK (gtk_window_notify_keys_changed),
 			   window, G_CONNECT_SWAPPED);
   gtk_window_notify_keys_changed (window);
@@ -7248,7 +7248,7 @@ gtk_window_set_screen (GtkWindow *window,
     {
       g_signal_handlers_disconnect_by_func (previous_screen,
 					    gtk_window_on_composited_changed, window);
-      g_signal_connect (screen, "composited_changed", 
+      g_signal_connect (screen, "composited-changed", 
 			G_CALLBACK (gtk_window_on_composited_changed), window);
       
       _gtk_widget_propagate_screen_changed (widget, previous_screen);

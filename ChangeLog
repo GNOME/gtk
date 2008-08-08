@@ -1,5 +1,10 @@
 2008-08-08  Sven Neumann  <sven@gimp.org>
 
+	* gtk/gtkwidget.c:
+	* gtk/gtkwindow.c: use canonical signal names.
+
+2008-08-08  Sven Neumann  <sven@gimp.org>
+
 	* gtk/gtkadjustment.c
 	* gtk/gtkclist.c
 	* gtk/gtkcolorsel.c

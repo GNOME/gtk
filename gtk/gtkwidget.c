@@ -740,7 +740,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   widget_signals[SIZE_REQUEST] =
-    g_signal_new (I_("size_request"),
+    g_signal_new (I_("size-request"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, size_request),
@@ -749,7 +749,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SIZE_ALLOCATE] = 
-    g_signal_new (I_("size_allocate"),
+    g_signal_new (I_("size-allocate"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, size_allocate),
@@ -759,7 +759,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   widget_signals[STATE_CHANGED] =
-    g_signal_new (I_("state_changed"),
+    g_signal_new (I_("state-changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, state_changed),
@@ -778,7 +778,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * has been set on a widget. 
    */
   widget_signals[PARENT_SET] =
-    g_signal_new (I_("parent_set"),
+    g_signal_new (I_("parent-set"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, parent_set),
@@ -800,7 +800,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * a widget changes from un-anchored to anchored or vice-versa.
    */
   widget_signals[HIERARCHY_CHANGED] =
-    g_signal_new (I_("hierarchy_changed"),
+    g_signal_new (I_("hierarchy-changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, hierarchy_changed),
@@ -820,7 +820,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * gtk_widget_modify_base() also cause this signal to be emitted.
    */
   widget_signals[STYLE_SET] =
-    g_signal_new (I_("style_set"),
+    g_signal_new (I_("style-set"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, style_set),
@@ -837,7 +837,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  * of a widget changes.
  */
   widget_signals[DIRECTION_CHANGED] =
-    g_signal_new (I_("direction_changed"),
+    g_signal_new (I_("direction-changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, direction_changed),
@@ -862,7 +862,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * its ancestor.
    */
   widget_signals[GRAB_NOTIFY] =
-    g_signal_new (I_("grab_notify"),
+    g_signal_new (I_("grab-notify"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkWidgetClass, grab_notify),
@@ -881,7 +881,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  * changed on an object. The signal's detail holds the property name. 
  */
   widget_signals[CHILD_NOTIFY] =
-    g_signal_new (I_("child_notify"),
+    g_signal_new (I_("child-notify"),
 		   G_TYPE_FROM_CLASS (gobject_class),
 		   G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE | G_SIGNAL_DETAILED | G_SIGNAL_NO_HOOKS,
 		   G_STRUCT_OFFSET (GtkWidgetClass, child_notify),
@@ -890,7 +890,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		   G_TYPE_NONE, 1,
 		   G_TYPE_PARAM);
   widget_signals[MNEMONIC_ACTIVATE] =
-    g_signal_new (I_("mnemonic_activate"),
+    g_signal_new (I_("mnemonic-activate"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, mnemonic_activate),
@@ -899,7 +899,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  G_TYPE_BOOLEAN);
   widget_signals[GRAB_FOCUS] =
-    g_signal_new (I_("grab_focus"),
+    g_signal_new (I_("grab-focus"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkWidgetClass, grab_focus),
@@ -916,7 +916,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GTK_TYPE_DIRECTION_TYPE);
   widget_signals[MOVE_FOCUS] =
-    g_signal_new_class_handler (I_("move_focus"),
+    g_signal_new_class_handler (I_("move-focus"),
                                 G_TYPE_FROM_CLASS (object_class),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gtk_widget_real_move_focus),
@@ -963,7 +963,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    */
   widget_signals[EVENT_AFTER] =
-    g_signal_new (I_("event_after"),
+    g_signal_new (I_("event-after"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  0,
 		  0,
@@ -989,7 +989,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[BUTTON_PRESS_EVENT] =
-    g_signal_new (I_("button_press_event"),
+    g_signal_new (I_("button-press-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, button_press_event),
@@ -1015,7 +1015,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[BUTTON_RELEASE_EVENT] =
-    g_signal_new (I_("button_release_event"),
+    g_signal_new (I_("button-release-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, button_release_event),
@@ -1042,7 +1042,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[SCROLL_EVENT] =
-    g_signal_new (I_("scroll_event"),
+    g_signal_new (I_("scroll-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, scroll_event),
@@ -1067,7 +1067,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[MOTION_NOTIFY_EVENT] =
-    g_signal_new (I_("motion_notify_event"),
+    g_signal_new (I_("motion-notify-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, motion_notify_event),
@@ -1085,7 +1085,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * See gdk_screen_is_composited().
    */
   widget_signals[COMPOSITED_CHANGED] =
-    g_signal_new (I_("composited_changed"),
+    g_signal_new (I_("composited-changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkWidgetClass, composited_changed),
@@ -1132,7 +1132,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[DELETE_EVENT] =
-    g_signal_new (I_("delete_event"),
+    g_signal_new (I_("delete-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, delete_event),
@@ -1159,7 +1159,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[DESTROY_EVENT] =
-    g_signal_new (I_("destroy_event"),
+    g_signal_new (I_("destroy-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, destroy_event),
@@ -1185,7 +1185,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[EXPOSE_EVENT] =
-    g_signal_new (I_("expose_event"),
+    g_signal_new (I_("expose-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, expose_event),
@@ -1210,7 +1210,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[KEY_PRESS_EVENT] =
-    g_signal_new (I_("key_press_event"),
+    g_signal_new (I_("key-press-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, key_press_event),
@@ -1235,7 +1235,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[KEY_RELEASE_EVENT] =
-    g_signal_new (I_("key_release_event"),
+    g_signal_new (I_("key-release-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, key_release_event),
@@ -1261,7 +1261,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[ENTER_NOTIFY_EVENT] =
-    g_signal_new (I_("enter_notify_event"),
+    g_signal_new (I_("enter-notify-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, enter_notify_event),
@@ -1287,7 +1287,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[LEAVE_NOTIFY_EVENT] =
-    g_signal_new (I_("leave_notify_event"),
+    g_signal_new (I_("leave-notify-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, leave_notify_event),
@@ -1312,7 +1312,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[CONFIGURE_EVENT] =
-    g_signal_new (I_("configure_event"),
+    g_signal_new (I_("configure-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, configure_event),
@@ -1336,7 +1336,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[FOCUS_IN_EVENT] =
-    g_signal_new (I_("focus_in_event"),
+    g_signal_new (I_("focus-in-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, focus_in_event),
@@ -1360,7 +1360,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[FOCUS_OUT_EVENT] =
-    g_signal_new (I_("focus_out_event"),
+    g_signal_new (I_("focus-out-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, focus_out_event),
@@ -1385,7 +1385,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[MAP_EVENT] =
-    g_signal_new (I_("map_event"),
+    g_signal_new (I_("map-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, map_event),
@@ -1410,7 +1410,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[UNMAP_EVENT] =
-    g_signal_new (I_("unmap_event"),
+    g_signal_new (I_("unmap-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, unmap_event),
@@ -1434,7 +1434,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[PROPERTY_NOTIFY_EVENT] =
-    g_signal_new (I_("property_notify_event"),
+    g_signal_new (I_("property-notify-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, property_notify_event),
@@ -1455,7 +1455,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[SELECTION_CLEAR_EVENT] =
-    g_signal_new (I_("selection_clear_event"),
+    g_signal_new (I_("selection-clear-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_clear_event),
@@ -1477,7 +1477,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[SELECTION_REQUEST_EVENT] =
-    g_signal_new (I_("selection_request_event"),
+    g_signal_new (I_("selection-request-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_request_event),
@@ -1487,7 +1487,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   widget_signals[SELECTION_NOTIFY_EVENT] =
-    g_signal_new (I_("selection_notify_event"),
+    g_signal_new (I_("selection-notify-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_notify_event),
@@ -1497,7 +1497,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   widget_signals[SELECTION_RECEIVED] =
-    g_signal_new (I_("selection_received"),
+    g_signal_new (I_("selection-received"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_received),
@@ -1508,7 +1508,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_UINT);
 
   widget_signals[SELECTION_GET] =
-    g_signal_new (I_("selection_get"),
+    g_signal_new (I_("selection-get"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_get),
@@ -1533,7 +1533,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[PROXIMITY_IN_EVENT] =
-    g_signal_new (I_("proximity_in_event"),
+    g_signal_new (I_("proximity-in-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, proximity_in_event),
@@ -1556,7 +1556,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[PROXIMITY_OUT_EVENT] =
-    g_signal_new (I_("proximity_out_event"),
+    g_signal_new (I_("proximity-out-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, proximity_out_event),
@@ -1577,7 +1577,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * with gtk_drag_unhighlight()
    */
   widget_signals[DRAG_LEAVE] =
-    g_signal_new (I_("drag_leave"),
+    g_signal_new (I_("drag-leave"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_leave),
@@ -1597,7 +1597,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * custom drag icon with gtk_drag_source_set_icon().
    */
   widget_signals[DRAG_BEGIN] =
-    g_signal_new (I_("drag_begin"),
+    g_signal_new (I_("drag-begin"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_begin),
@@ -1616,7 +1616,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * things done in #GtkWidget::drag-begin.
    */
   widget_signals[DRAG_END] =
-    g_signal_new (I_("drag_end"),
+    g_signal_new (I_("drag-end"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_end),
@@ -1636,7 +1636,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * "delete" means depends on the context of the drag operation. 
    */
   widget_signals[DRAG_DATA_DELETE] =
-    g_signal_new (I_("drag_data_delete"),
+    g_signal_new (I_("drag-data-delete"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_delete),
@@ -1662,7 +1662,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * Since: 2.12
    */
   widget_signals[DRAG_FAILED] =
-    g_signal_new (I_("drag_failed"),
+    g_signal_new (I_("drag-failed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  0, _gtk_boolean_handled_accumulator, NULL,
@@ -1765,7 +1765,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * ]|
    */
   widget_signals[DRAG_MOTION] =
-    g_signal_new (I_("drag_motion"),
+    g_signal_new (I_("drag-motion"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_motion),
@@ -1798,7 +1798,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * or more of the supported targets.
    */
   widget_signals[DRAG_DROP] =
-    g_signal_new (I_("drag_drop"),
+    g_signal_new (I_("drag-drop"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_drop),
@@ -1826,7 +1826,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * gtk_selection_data_set_text().
    */
   widget_signals[DRAG_DATA_GET] =
-    g_signal_new (I_("drag_data_get"),
+    g_signal_new (I_("drag-data-get"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_get),
@@ -1903,7 +1903,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * ]|
    */
   widget_signals[DRAG_DATA_RECEIVED] =
-    g_signal_new (I_("drag_data_received"),
+    g_signal_new (I_("drag-data-received"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_received),
@@ -1932,7 +1932,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[VISIBILITY_NOTIFY_EVENT] =
-    g_signal_new (I_("visibility_notify_event"),
+    g_signal_new (I_("visibility-notify-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, visibility_notify_event),
@@ -1954,7 +1954,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   the event. %FALSE to propagate the event further.
    */
   widget_signals[CLIENT_EVENT] =
-    g_signal_new (I_("client_event"),
+    g_signal_new (I_("client-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, client_event),
@@ -1978,7 +1978,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   %FALSE to propagate the event further.
    */
   widget_signals[NO_EXPOSE_EVENT] =
-    g_signal_new (I_("no_expose_event"),
+    g_signal_new (I_("no-expose-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, no_expose_event),
@@ -2003,7 +2003,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *   event. %FALSE to propagate the event further.
    */
   widget_signals[WINDOW_STATE_EVENT] =
-    g_signal_new (I_("window_state_event"),
+    g_signal_new (I_("window-state-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, window_state_event),
@@ -2027,7 +2027,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * Since: 2.14
    */
   widget_signals[DAMAGE_EVENT] =
-    g_signal_new (I_("damage_event"),
+    g_signal_new (I_("damage-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
                   0,
@@ -2053,7 +2053,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * Since: 2.8
    */
   widget_signals[GRAB_BROKEN] =
-    g_signal_new (I_("grab_broken_event"),
+    g_signal_new (I_("grab-broken-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, grab_broken_event),
@@ -2115,7 +2115,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * Returns: %TRUE if a menu was activated
    */
   widget_signals[POPUP_MENU] =
-    g_signal_new (I_("popup_menu"),
+    g_signal_new (I_("popup-menu"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkWidgetClass, popup_menu),
@@ -2123,7 +2123,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
   widget_signals[SHOW_HELP] =
-    g_signal_new (I_("show_help"),
+    g_signal_new (I_("show-help"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkWidgetClass, show_help),
@@ -2132,7 +2132,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GTK_TYPE_WIDGET_HELP_TYPE);
   widget_signals[ACCEL_CLOSURES_CHANGED] =
-    g_signal_new (I_("accel_closures_changed"),
+    g_signal_new (I_("accel-closures-changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  0,
 		  0,
@@ -2150,7 +2150,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * screen of a widget has changed.
    */
   widget_signals[SCREEN_CHANGED] =
-    g_signal_new (I_("screen_changed"),
+    g_signal_new (I_("screen-changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, screen_changed),
@@ -2172,7 +2172,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * Returns: %TRUE if the signal can be activated.
    */
   widget_signals[CAN_ACTIVATE_ACCEL] =
-     g_signal_new (I_("can_activate_accel"),
+     g_signal_new (I_("can-activate-accel"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, can_activate_accel),
@@ -2182,24 +2182,24 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_F10, GDK_SHIFT_MASK,
-                                "popup_menu", 0);
+                                "popup-menu", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_Menu, 0,
-                                "popup_menu", 0);  
+                                "popup-menu", 0);  
 
   gtk_binding_entry_add_signal (binding_set, GDK_F1, GDK_CONTROL_MASK,
-                                "show_help", 1,
+                                "show-help", 1,
                                 GTK_TYPE_WIDGET_HELP_TYPE,
                                 GTK_WIDGET_HELP_TOOLTIP);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_F1, GDK_CONTROL_MASK,
-                                "show_help", 1,
+                                "show-help", 1,
                                 GTK_TYPE_WIDGET_HELP_TYPE,
                                 GTK_WIDGET_HELP_TOOLTIP);
   gtk_binding_entry_add_signal (binding_set, GDK_F1, GDK_SHIFT_MASK,
-                                "show_help", 1,
+                                "show-help", 1,
                                 GTK_TYPE_WIDGET_HELP_TYPE,
                                 GTK_WIDGET_HELP_WHATS_THIS);  
   gtk_binding_entry_add_signal (binding_set, GDK_KP_F1, GDK_SHIFT_MASK,
-                                "show_help", 1,
+                                "show-help", 1,
                                 GTK_TYPE_WIDGET_HELP_TYPE,
                                 GTK_WIDGET_HELP_WHATS_THIS);
 
@@ -3053,7 +3053,7 @@ gtk_widget_show_now (GtkWidget *widget)
     {
       gtk_widget_show (widget);
 
-      g_signal_connect (widget, "map_event",
+      g_signal_connect (widget, "map-event",
 			G_CALLBACK (gtk_widget_show_map_callback), 
 			&flag);
 
