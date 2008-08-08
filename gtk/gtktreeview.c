@@ -870,7 +870,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   /* Signals */
   widget_class->set_scroll_adjustments_signal =
-    g_signal_new (I_("set_scroll_adjustments"),
+    g_signal_new (I_("set-scroll-adjustments"),
 		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, set_scroll_adjustments),
@@ -896,7 +896,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * widget conceptual overview</link> as well as #GtkTreeSelection.
    */
   tree_view_signals[ROW_ACTIVATED] =
-    g_signal_new (I_("row_activated"),
+    g_signal_new (I_("row-activated"),
 		  G_TYPE_FROM_CLASS (o_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, row_activated),
@@ -1019,7 +1019,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_NONE, 0);
 
   tree_view_signals[MOVE_CURSOR] =
-    g_signal_new (I_("move_cursor"),
+    g_signal_new (I_("move-cursor"),
 		  G_TYPE_FROM_CLASS (object_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, move_cursor),
@@ -1030,7 +1030,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_INT);
 
   tree_view_signals[SELECT_ALL] =
-    g_signal_new (I_("select_all"),
+    g_signal_new (I_("select-all"),
 		  G_TYPE_FROM_CLASS (object_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, select_all),
@@ -1039,7 +1039,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_BOOLEAN, 0);
 
   tree_view_signals[UNSELECT_ALL] =
-    g_signal_new (I_("unselect_all"),
+    g_signal_new (I_("unselect-all"),
 		  G_TYPE_FROM_CLASS (object_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, unselect_all),
@@ -1048,7 +1048,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_BOOLEAN, 0);
 
   tree_view_signals[SELECT_CURSOR_ROW] =
-    g_signal_new (I_("select_cursor_row"),
+    g_signal_new (I_("select-cursor-row"),
 		  G_TYPE_FROM_CLASS (object_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, select_cursor_row),
@@ -1058,7 +1058,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_BOOLEAN);
 
   tree_view_signals[TOGGLE_CURSOR_ROW] =
-    g_signal_new (I_("toggle_cursor_row"),
+    g_signal_new (I_("toggle-cursor-row"),
 		  G_TYPE_FROM_CLASS (object_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, toggle_cursor_row),
@@ -1067,7 +1067,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_BOOLEAN, 0);
 
   tree_view_signals[EXPAND_COLLAPSE_CURSOR_ROW] =
-    g_signal_new (I_("expand_collapse_cursor_row"),
+    g_signal_new (I_("expand-collapse-cursor-row"),
 		  G_TYPE_FROM_CLASS (object_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, expand_collapse_cursor_row),
@@ -1079,7 +1079,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_BOOLEAN);
 
   tree_view_signals[SELECT_CURSOR_PARENT] =
-    g_signal_new (I_("select_cursor_parent"),
+    g_signal_new (I_("select-cursor-parent"),
 		  G_TYPE_FROM_CLASS (object_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, select_cursor_parent),
@@ -1088,7 +1088,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_BOOLEAN, 0);
 
   tree_view_signals[START_INTERACTIVE_SEARCH] =
-    g_signal_new (I_("start_interactive_search"),
+    g_signal_new (I_("start-interactive-search"),
 		  G_TYPE_FROM_CLASS (object_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, start_interactive_search),
