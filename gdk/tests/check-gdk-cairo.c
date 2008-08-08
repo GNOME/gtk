@@ -134,6 +134,9 @@ main (int   argc,
 	g_object_unref (pbuf_platform);
 	g_object_unref (pbuf_imagesrf);
 
+	g_unlink ("gdksurface.png");
+	g_unlink ("cairosurface.png");
+
 	return 0;
 }
 

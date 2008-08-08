@@ -1,3 +1,12 @@
+2008-08-09  Sven Herzberg  <sven@imendio.com>
+
+	Get the gdk+cairo test to pass distcheck, too
+
+	* gdk/tests/Makefile.am: set GDK_PIXBUF_MODULE_FILE so the test can
+	pick up the one created at build time
+	* gdk/tests/check-gdk-cairo.c (main): delete the output files after a
+	successful test run
+
 2008-08-08  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkscale.c
