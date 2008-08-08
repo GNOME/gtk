@@ -1917,23 +1917,23 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
       gint i, n_columns;
 
       tree_model_sort->changed_id =
-        g_signal_connect (child_model, "row_changed",
+        g_signal_connect (child_model, "row-changed",
                           G_CALLBACK (gtk_tree_model_sort_row_changed),
                           tree_model_sort);
       tree_model_sort->inserted_id =
-        g_signal_connect (child_model, "row_inserted",
+        g_signal_connect (child_model, "row-inserted",
                           G_CALLBACK (gtk_tree_model_sort_row_inserted),
                           tree_model_sort);
       tree_model_sort->has_child_toggled_id =
-        g_signal_connect (child_model, "row_has_child_toggled",
+        g_signal_connect (child_model, "row-has-child-toggled",
                           G_CALLBACK (gtk_tree_model_sort_row_has_child_toggled),
                           tree_model_sort);
       tree_model_sort->deleted_id =
-        g_signal_connect (child_model, "row_deleted",
+        g_signal_connect (child_model, "row-deleted",
                           G_CALLBACK (gtk_tree_model_sort_row_deleted),
                           tree_model_sort);
       tree_model_sort->reordered_id =
-	g_signal_connect (child_model, "rows_reordered",
+	g_signal_connect (child_model, "rows-reordered",
 			  G_CALLBACK (gtk_tree_model_sort_rows_reordered),
 			  tree_model_sort);
 

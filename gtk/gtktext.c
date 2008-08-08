@@ -572,7 +572,7 @@ gtk_text_class_init (GtkTextClass *class)
 							 GTK_PARAM_READWRITE));
 
   widget_class->set_scroll_adjustments_signal =
-    gtk_signal_new (I_("set_scroll_adjustments"),
+    gtk_signal_new (I_("set-scroll-adjustments"),
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTextClass, set_scroll_adjustments),

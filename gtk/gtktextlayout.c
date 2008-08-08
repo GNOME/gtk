@@ -205,7 +205,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_TYPE_INT);
 
   signals[ALLOCATE_CHILD] =
-    g_signal_new (I_("allocate_child"),
+    g_signal_new (I_("allocate-child"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextLayoutClass, allocate_child),
@@ -329,11 +329,11 @@ gtk_text_layout_set_buffer (GtkTextLayout *layout,
       _gtk_text_btree_add_view (_gtk_text_buffer_get_btree (buffer), layout);
 
       /* Bind to all signals that move the insert mark. */
-      g_signal_connect_after (layout->buffer, "mark_set",
+      g_signal_connect_after (layout->buffer, "mark-set",
                               G_CALLBACK (gtk_text_layout_mark_set_handler), layout);
-      g_signal_connect_after (layout->buffer, "insert_text",
+      g_signal_connect_after (layout->buffer, "insert-text",
                               G_CALLBACK (gtk_text_layout_buffer_insert_text), layout);
-      g_signal_connect_after (layout->buffer, "delete_range",
+      g_signal_connect_after (layout->buffer, "delete-range",
                               G_CALLBACK (gtk_text_layout_buffer_delete_range), layout);
 
       gtk_text_layout_update_cursor_line (layout);

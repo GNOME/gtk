@@ -202,7 +202,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  * Return value: %TRUE if the signal was handled, %FALSE if not
  **/
   toolitem_signals[CREATE_MENU_PROXY] =
-    g_signal_new (I_("create_menu_proxy"),
+    g_signal_new (I_("create-menu-proxy"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkToolItemClass, create_menu_proxy),
@@ -227,7 +227,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  * themselves accordingly.
  **/
   toolitem_signals[TOOLBAR_RECONFIGURED] =
-    g_signal_new (I_("toolbar_reconfigured"),
+    g_signal_new (I_("toolbar-reconfigured"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkToolItemClass, toolbar_reconfigured),
@@ -251,7 +251,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
  *   need to use this signal anymore.
  **/
   toolitem_signals[SET_TOOLTIP] =
-    g_signal_new (I_("set_tooltip"),
+    g_signal_new (I_("set-tooltip"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkToolItemClass, set_tooltip),

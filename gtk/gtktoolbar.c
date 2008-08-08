@@ -455,7 +455,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
    * Return value: return %TRUE if the signal was handled, %FALSE if not
    */
   toolbar_signals[POPUP_CONTEXT_MENU] =
-    g_signal_new (I_("popup_context_menu"),
+    g_signal_new (I_("popup-context-menu"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkToolbarClass, popup_context_menu),
@@ -476,7 +476,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
    * Return value: %TRUE if the signal was handled, %FALSE if not
    */
   toolbar_signals[FOCUS_HOME_OR_END] =
-    g_signal_new_class_handler (I_("focus_home_or_end"),
+    g_signal_new_class_handler (I_("focus-home-or-end"),
                                 G_OBJECT_CLASS_TYPE (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gtk_toolbar_focus_home_or_end),
@@ -655,16 +655,16 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   add_arrow_bindings (binding_set, GDK_Down, GTK_DIR_DOWN);
   
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Home, 0,
-                                "focus_home_or_end", 1,
+                                "focus-home-or-end", 1,
 				G_TYPE_BOOLEAN, TRUE);
   gtk_binding_entry_add_signal (binding_set, GDK_Home, 0,
-                                "focus_home_or_end", 1,
+                                "focus-home-or-end", 1,
 				G_TYPE_BOOLEAN, TRUE);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_End, 0,
-                                "focus_home_or_end", 1,
+                                "focus-home-or-end", 1,
 				G_TYPE_BOOLEAN, FALSE);
   gtk_binding_entry_add_signal (binding_set, GDK_End, 0,
-                                "focus_home_or_end", 1,
+                                "focus-home-or-end", 1,
 				G_TYPE_BOOLEAN, FALSE);
   
   add_ctrl_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
@@ -691,7 +691,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   g_object_ref_sink (toolbar->tooltips);
   
   priv->arrow_button = gtk_toggle_button_new ();
-  g_signal_connect (priv->arrow_button, "button_press_event",
+  g_signal_connect (priv->arrow_button, "button-press-event",
 		    G_CALLBACK (gtk_toolbar_arrow_button_press), toolbar);
   g_signal_connect (priv->arrow_button, "clicked",
 		    G_CALLBACK (gtk_toolbar_arrow_button_clicked), toolbar);
@@ -1385,7 +1385,8 @@ rebuild_menu (GtkToolbar *toolbar)
 				 GTK_WIDGET (toolbar),
 				 menu_detached);
 
-      g_signal_connect (priv->menu, "deactivate", G_CALLBACK (menu_deactivated), toolbar);
+      g_signal_connect (priv->menu, "deactivate",
+                        G_CALLBACK (menu_deactivated), toolbar);
     }
 
   gtk_container_foreach (GTK_CONTAINER (priv->menu), remove_item, NULL);

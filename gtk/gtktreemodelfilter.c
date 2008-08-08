@@ -2733,23 +2733,23 @@ gtk_tree_model_filter_set_model (GtkTreeModelFilter *filter,
     {
       g_object_ref (filter->priv->child_model);
       filter->priv->changed_id =
-        g_signal_connect (child_model, "row_changed",
+        g_signal_connect (child_model, "row-changed",
                           G_CALLBACK (gtk_tree_model_filter_row_changed),
                           filter);
       filter->priv->inserted_id =
-        g_signal_connect (child_model, "row_inserted",
+        g_signal_connect (child_model, "row-inserted",
                           G_CALLBACK (gtk_tree_model_filter_row_inserted),
                           filter);
       filter->priv->has_child_toggled_id =
-        g_signal_connect (child_model, "row_has_child_toggled",
+        g_signal_connect (child_model, "row-has-child-toggled",
                           G_CALLBACK (gtk_tree_model_filter_row_has_child_toggled),
                           filter);
       filter->priv->deleted_id =
-        g_signal_connect (child_model, "row_deleted",
+        g_signal_connect (child_model, "row-deleted",
                           G_CALLBACK (gtk_tree_model_filter_row_deleted),
                           filter);
       filter->priv->reordered_id =
-        g_signal_connect (child_model, "rows_reordered",
+        g_signal_connect (child_model, "rows-reordered",
                           G_CALLBACK (gtk_tree_model_filter_rows_reordered),
                           filter);
 

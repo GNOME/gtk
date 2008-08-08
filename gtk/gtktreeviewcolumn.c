@@ -836,7 +836,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
       gtk_widget_show (child);
     }
 
-  g_signal_connect (child, "mnemonic_activate",
+  g_signal_connect (child, "mnemonic-activate",
 		    G_CALLBACK (gtk_tree_view_column_mnemonic_activate),
 		    tree_column);
 
@@ -1209,7 +1209,7 @@ gtk_tree_view_column_setup_sort_column_id_callback (GtkTreeViewColumn *tree_colu
 
       if (tree_column->sort_column_changed_signal == 0)
         tree_column->sort_column_changed_signal =
-	  g_signal_connect (model, "sort_column_changed",
+	  g_signal_connect (model, "sort-column-changed",
 			    G_CALLBACK (gtk_tree_view_model_sort_column_changed),
 			    tree_column);
       

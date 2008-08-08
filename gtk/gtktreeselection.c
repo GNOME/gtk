@@ -637,13 +637,13 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
   g_object_ref (model);
 
   /* connect to signals to monitor changes in treemodel */
-  inserted_id = g_signal_connect_swapped (model, "row_inserted",
+  inserted_id = g_signal_connect_swapped (model, "row-inserted",
 					  G_CALLBACK (model_changed),
 				          &stop);
-  deleted_id = g_signal_connect_swapped (model, "row_deleted",
+  deleted_id = g_signal_connect_swapped (model, "row-deleted",
 					 G_CALLBACK (model_changed),
 				         &stop);
-  reordered_id = g_signal_connect_swapped (model, "rows_reordered",
+  reordered_id = g_signal_connect_swapped (model, "rows-reordered",
 					   G_CALLBACK (model_changed),
 				           &stop);
   changed_id = g_signal_connect_swapped (selection->tree_view, "notify::model",

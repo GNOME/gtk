@@ -1,5 +1,20 @@
 2008-08-08  Sven Neumann  <sven@gimp.org>
 
+	* gtk/gtktext.c
+	* gtk/gtktextbuffer.c
+	* gtk/gtktextlayout.c
+	* gtk/gtktexttagtable.c
+	* gtk/gtktextview.c
+	* gtk/gtktipsquery.c
+	* gtk/gtktoolbar.c
+	* gtk/gtktoolitem.c
+	* gtk/gtktreeitem.c
+	* gtk/gtktreemodelfilter.c
+	* gtk/gtktreemodelsort.c
+	* gtk/gtktreeviewcolumn.c: use canonical signal names.
+
+2008-08-08  Sven Neumann  <sven@gimp.org>
+
 	* gtk/gtktree.c
 	* gtk/gtktreemodel.c
 	* gtk/gtktreesortable.c
