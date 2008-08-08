@@ -4859,7 +4859,7 @@ _gtk_rc_match_widget_class (GSList  *list,
   return match_widget_class_recursive (list, length, path, path_reversed);
 }
 
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
 
 /* DLL ABI stability backward compatibility versions */
 

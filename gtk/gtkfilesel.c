@@ -3929,7 +3929,7 @@ cmpl_strerror (gint err)
     return g_strerror (err);
 }
 
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
 
 /* DLL ABI stability backward compatibility versions */
 
@@ -3983,7 +3983,7 @@ gtk_file_selection_get_selections (GtkFileSelection *filesel)
   return selections;
 }
 
-#endif /* G_OS_WIN32 */
+#endif /* G_OS_WIN32 && !_WIN64 */
 
 #define __GTK_FILESEL_C__
 #include "gtkaliasdef.c"

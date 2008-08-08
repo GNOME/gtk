@@ -90,6 +90,13 @@ while (<>) {
       next;
   }
  
+  if ($_ =~ /^\#ifndef\s+_WIN64/)
+  {
+      print $_;
+      
+      next;
+  }
+ 
   if ($_ =~ /^\#if.*(IN_FILE|IN_HEADER)/)
   {
       print $_;

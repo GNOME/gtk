@@ -1,3 +1,18 @@
+2008-08-08  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtk.symbols
+	* gtk/makegtkalias.pl
+	* gtk/gtkaccelmap.c
+	* gtk/gtkfilechooser.c
+	* gtk/gtkfilesel.c
+	* gtk/gtkiconfactory.c
+	* gtk/gtkicontheme.c
+	* gtk/gtkimage.c
+	* gtk/gtkrc.c
+	* gtk/gtkuimanager.c
+	* gtk/gtkwindow.c: No need for the DLL ABI backward compatibility
+	functions on Win64.
+
 2008-08-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Its g_content_type_from_mime_type, not 

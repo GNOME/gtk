@@ -1959,7 +1959,7 @@ gtk_file_chooser_get_do_overwrite_confirmation (GtkFileChooser *chooser)
   return do_overwrite_confirmation;
 }
 
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
 
 /* DLL ABI stability backward compatibility versions */
 

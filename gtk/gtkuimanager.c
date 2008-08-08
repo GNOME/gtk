@@ -2986,7 +2986,7 @@ gtk_ui_manager_get_ui (GtkUIManager *self)
   return g_string_free (buffer, FALSE);
 }
 
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
 
 #undef gtk_ui_manager_add_ui_from_file
 

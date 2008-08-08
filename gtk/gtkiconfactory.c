@@ -75,7 +75,7 @@ struct _GtkIconSource
   guint any_state : 1;
   guint any_size : 1;
 
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
   /* System codepage version of filename, for DLL ABI backward
    * compatibility functions.
    */
@@ -1925,7 +1925,7 @@ gtk_icon_source_copy (const GtkIconSource *source)
       break;
     case GTK_ICON_SOURCE_FILENAME:
       copy->source.filename = g_strdup (copy->source.filename);
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
       copy->cp_filename = g_strdup (copy->cp_filename);
 #endif
       if (copy->filename_pixbuf)
@@ -1986,7 +1986,7 @@ icon_source_clear (GtkIconSource *source)
     case GTK_ICON_SOURCE_FILENAME:
       g_free (source->source.filename);
       source->source.filename = NULL;
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
       g_free (source->cp_filename);
       source->cp_filename = NULL;
 #endif
@@ -2030,7 +2030,7 @@ gtk_icon_source_set_filename (GtkIconSource *source,
     {
       source->type = GTK_ICON_SOURCE_FILENAME;
       source->source.filename = g_strdup (filename);
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
       source->cp_filename = g_locale_from_utf8 (filename, -1, NULL, NULL, NULL);
 #endif
     }
@@ -2980,7 +2980,7 @@ gtk_icon_factory_buildable_custom_tag_end (GtkBuildable *buildable,
     }
 }
 
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
 
 /* DLL ABI stability backward compatibility versions */
 

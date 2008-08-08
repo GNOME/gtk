@@ -2335,7 +2335,7 @@ gtk_image_get_pixel_size (GtkImage *image)
   return priv->pixel_size;
 }
 
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
 
 #undef gtk_image_new_from_file
 

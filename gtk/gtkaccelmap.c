@@ -1005,7 +1005,7 @@ do_accel_map_changed (AccelEntry *entry)
 		   entry->accel_mods);
 }
 
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
 
 #undef gtk_accel_map_load
 

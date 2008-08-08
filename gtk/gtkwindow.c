@@ -8186,7 +8186,7 @@ gtk_window_set_auto_startup_notification (gboolean setting)
   disable_startup_notification = !setting;
 }
 
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
 
 #undef gtk_window_set_icon_from_file
 

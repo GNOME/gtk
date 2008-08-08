@@ -110,7 +110,7 @@ struct _GtkIconInfo
   /* Information about the source
    */
   gchar *filename;
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
   /* System codepage version of filename, for DLL ABI backward
    * compatibility functions.
    */
@@ -1322,7 +1322,7 @@ choose_icon (GtkIconTheme       *icon_theme,
 	icon_info->filename = g_strdup (unthemed_icon->svg_filename);
       else if (unthemed_icon->no_svg_filename)
 	icon_info->filename = g_strdup (unthemed_icon->no_svg_filename);
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
       icon_info->cp_filename = g_locale_from_utf8 (icon_info->filename,
 						   -1, NULL, NULL, NULL);
 #endif
@@ -2208,7 +2208,7 @@ theme_lookup_icon (IconTheme          *theme,
           file = g_strconcat (icon_name, string_from_suffix (suffix), NULL);
           icon_info->filename = g_build_filename (min_dir->dir, file, NULL);
           g_free (file);
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
           icon_info->cp_filename = g_locale_from_utf8 (icon_info->filename,
 						   -1, NULL, NULL, NULL);
 #endif
@@ -2216,7 +2216,7 @@ theme_lookup_icon (IconTheme          *theme,
       else
         {
           icon_info->filename = NULL;
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
           icon_info->cp_filename = NULL;
 #endif
         }
@@ -2674,7 +2674,7 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
     return;
  
   g_free (icon_info->filename);
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
   g_free (icon_info->cp_filename);
 #endif
   if (icon_info->loadable)
@@ -3515,7 +3515,7 @@ gtk_icon_info_new_for_pixbuf (GtkIconTheme *icon_theme,
   return info;
 }
 
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && !defined (_WIN64)
 
 /* DLL ABI stability backward compatibility versions */
 
