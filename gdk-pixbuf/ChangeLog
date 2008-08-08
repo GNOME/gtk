@@ -1,3 +1,11 @@
+2008-08-08  Sven Herzberg  <sven@imendio.com>
+
+	Bug 546549 : Better Type Checking
+	reviewed by: mitch
+
+	* gdk-pixbuf-animation.c: check if a vfunc is implemented before
+	trying to call into it
+
 2008-08-06  Sven Herzberg  <sven@imendio.com>
 
 	Bug 546549 : Better Type Checking

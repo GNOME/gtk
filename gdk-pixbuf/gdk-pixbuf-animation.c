@@ -447,7 +447,7 @@ gdk_pixbuf_animation_iter_init (GdkPixbufAnimationIter *iter)
 /**
  * gdk_pixbuf_animation_iter_get_delay_time:
  * @iter: an animation iterator
- * 
+ *
  * Gets the number of milliseconds the current pixbuf should be displayed,
  * or -1 if the current pixbuf should be displayed forever. g_timeout_add()
  * conveniently takes a timeout in milliseconds, so you can use a timeout
@@ -459,7 +459,8 @@ int
 gdk_pixbuf_animation_iter_get_delay_time (GdkPixbufAnimationIter *iter)
 {
         g_return_val_if_fail (GDK_IS_PIXBUF_ANIMATION_ITER (iter), -1);
-  
+        g_return_val_if_fail (GDK_PIXBUF_ANIMATION_ITER_GET_CLASS (iter)->get_delay_time, -1);
+
         return GDK_PIXBUF_ANIMATION_ITER_GET_CLASS (iter)->get_delay_time (iter);
 }
 
@@ -485,7 +486,8 @@ GdkPixbuf*
 gdk_pixbuf_animation_iter_get_pixbuf (GdkPixbufAnimationIter *iter)
 {
         g_return_val_if_fail (GDK_IS_PIXBUF_ANIMATION_ITER (iter), NULL);
-  
+        g_return_val_if_fail (GDK_PIXBUF_ANIMATION_ITER_GET_CLASS (iter)->get_pixbuf, NULL);
+
         return GDK_PIXBUF_ANIMATION_ITER_GET_CLASS (iter)->get_pixbuf (iter);
 }
 
@@ -498,14 +500,15 @@ gdk_pixbuf_animation_iter_get_pixbuf (GdkPixbufAnimationIter *iter)
  * for an area of the frame currently streaming in to the loader. So if
  * you're on the currently loading frame, you need to redraw the screen for
  * the updated area.
- * 
+ *
  * Return value: %TRUE if the frame we're on is partially loaded, or the last frame
  **/
 gboolean
 gdk_pixbuf_animation_iter_on_currently_loading_frame (GdkPixbufAnimationIter *iter)
 {
         g_return_val_if_fail (GDK_IS_PIXBUF_ANIMATION_ITER (iter), FALSE);
-        
+        g_return_val_if_fail (GDK_PIXBUF_ANIMATION_ITER_GET_CLASS (iter)->on_currently_loading_frame, FALSE);
+
         return GDK_PIXBUF_ANIMATION_ITER_GET_CLASS (iter)->on_currently_loading_frame (iter);
 }
 
@@ -516,7 +519,7 @@ gdk_pixbuf_animation_iter_on_currently_loading_frame (GdkPixbufAnimationIter *it
  *
  * Possibly advances an animation to a new frame. Chooses the frame based
  * on the start time passed to gdk_pixbuf_animation_get_iter().
- * 
+ *
  * @current_time would normally come from g_get_current_time(), and
  * must be greater than or equal to the time passed to
  * gdk_pixbuf_animation_get_iter(), and must increase or remain
@@ -542,14 +545,15 @@ gdk_pixbuf_animation_iter_advance (GdkPixbufAnimationIter *iter,
                                    const GTimeVal         *current_time)
 {
         GTimeVal val;
-        
+
         g_return_val_if_fail (GDK_IS_PIXBUF_ANIMATION_ITER (iter), FALSE);
+        g_return_val_if_fail (GDK_PIXBUF_ANIMATION_ITER_GET_CLASS (iter)->advance, FALSE);
 
         if (current_time)
                 val = *current_time;
         else
                 g_get_current_time (&val);
-        
+
         return GDK_PIXBUF_ANIMATION_ITER_GET_CLASS (iter)->advance (iter, &val);
 }
 
