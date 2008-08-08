@@ -7987,7 +7987,7 @@ gtk_tree_view_set_adjustments (GtkTreeView   *tree_view,
       tree_view->priv->hadjustment = hadj;
       g_object_ref_sink (tree_view->priv->hadjustment);
 
-      g_signal_connect (tree_view->priv->hadjustment, "value_changed",
+      g_signal_connect (tree_view->priv->hadjustment, "value-changed",
 			G_CALLBACK (gtk_tree_view_adjustment_changed),
 			tree_view);
       need_adjust = TRUE;
@@ -7998,7 +7998,7 @@ gtk_tree_view_set_adjustments (GtkTreeView   *tree_view,
       tree_view->priv->vadjustment = vadj;
       g_object_ref_sink (tree_view->priv->vadjustment);
 
-      g_signal_connect (tree_view->priv->vadjustment, "value_changed",
+      g_signal_connect (tree_view->priv->vadjustment, "value-changed",
 			G_CALLBACK (gtk_tree_view_adjustment_changed),
 			tree_view);
       need_adjust = TRUE;

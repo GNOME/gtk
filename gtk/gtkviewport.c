@@ -442,7 +442,7 @@ viewport_set_adjustment (GtkViewport    *viewport,
   else
     viewport_set_vadjustment_values (viewport, &value_changed);
 
-  g_signal_connect (adjustment, "value_changed",
+  g_signal_connect (adjustment, "value-changed",
 		    G_CALLBACK (gtk_viewport_adjustment_value_changed),
 		    viewport);
 

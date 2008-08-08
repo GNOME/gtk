@@ -814,7 +814,7 @@ gtk_text_set_adjustments (GtkText       *text,
       gtk_signal_connect (GTK_OBJECT (text->hadj), "changed",
 			  (GtkSignalFunc) gtk_text_adjustment,
 			  text);
-      gtk_signal_connect (GTK_OBJECT (text->hadj), "value_changed",
+      gtk_signal_connect (GTK_OBJECT (text->hadj), "value-changed",
 			  (GtkSignalFunc) gtk_text_adjustment,
 			  text);
       gtk_signal_connect (GTK_OBJECT (text->hadj), "destroy",
@@ -833,7 +833,7 @@ gtk_text_set_adjustments (GtkText       *text,
       gtk_signal_connect (GTK_OBJECT (text->vadj), "changed",
 			  (GtkSignalFunc) gtk_text_adjustment,
 			  text);
-      gtk_signal_connect (GTK_OBJECT (text->vadj), "value_changed",
+      gtk_signal_connect (GTK_OBJECT (text->vadj), "value-changed",
 			  (GtkSignalFunc) gtk_text_adjustment,
 			  text);
       gtk_signal_connect (GTK_OBJECT (text->vadj), "destroy",
@@ -4294,7 +4294,7 @@ scroll_int (GtkText* text, gint diff)
   text->vadj->value = MIN (text->vadj->value, upper);
   text->vadj->value = MAX (text->vadj->value, 0.0);
   
-  gtk_signal_emit_by_name (GTK_OBJECT (text->vadj), "value_changed");
+  gtk_signal_emit_by_name (GTK_OBJECT (text->vadj), "value-changed");
 }
 
 static void 

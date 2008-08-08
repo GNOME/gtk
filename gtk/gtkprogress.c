@@ -494,7 +494,7 @@ gtk_progress_set_adjustment (GtkProgress   *progress,
           g_signal_connect (adjustment, "changed",
 			    G_CALLBACK (gtk_progress_changed),
 			    progress);
-          g_signal_connect (adjustment, "value_changed",
+          g_signal_connect (adjustment, "value-changed",
 			    G_CALLBACK (gtk_progress_value_changed),
 			    progress);
         }

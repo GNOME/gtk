@@ -198,7 +198,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 		  G_TYPE_NONE, 0);
 
   adjustment_signals[VALUE_CHANGED] =
-    g_signal_new (I_("value_changed"),
+    g_signal_new (I_("value-changed"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkAdjustmentClass, value_changed),

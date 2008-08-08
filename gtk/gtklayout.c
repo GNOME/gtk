@@ -247,7 +247,7 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
       g_object_ref_sink (layout->hadjustment);
       gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width, FALSE);
       
-      g_signal_connect (layout->hadjustment, "value_changed",
+      g_signal_connect (layout->hadjustment, "value-changed",
 			G_CALLBACK (gtk_layout_adjustment_changed),
 			layout);
       need_adjust = TRUE;
@@ -259,7 +259,7 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
       g_object_ref_sink (layout->vadjustment);
       gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height, FALSE);
       
-      g_signal_connect (layout->vadjustment, "value_changed",
+      g_signal_connect (layout->vadjustment, "value-changed",
 			G_CALLBACK (gtk_layout_adjustment_changed),
 			layout);
       need_adjust = TRUE;

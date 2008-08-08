@@ -259,7 +259,7 @@ gtk_range_class_init (GtkRangeClass *class)
    * Emitted when the range value changes.
    */
   signals[VALUE_CHANGED] =
-    g_signal_new (I_("value_changed"),
+    g_signal_new (I_("value-changed"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkRangeClass, value_changed),
@@ -268,7 +268,7 @@ gtk_range_class_init (GtkRangeClass *class)
                   G_TYPE_NONE, 0);
   
   signals[ADJUST_BOUNDS] =
-    g_signal_new (I_("adjust_bounds"),
+    g_signal_new (I_("adjust-bounds"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkRangeClass, adjust_bounds),
@@ -285,7 +285,7 @@ gtk_range_class_init (GtkRangeClass *class)
    * Virtual function that moves the slider. Used for keybindings.
    */
   signals[MOVE_SLIDER] =
-    g_signal_new (I_("move_slider"),
+    g_signal_new (I_("move-slider"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkRangeClass, move_slider),
@@ -321,7 +321,7 @@ gtk_range_class_init (GtkRangeClass *class)
    * Since: 2.6
    */
   signals[CHANGE_VALUE] =
-    g_signal_new (I_("change_value"),
+    g_signal_new (I_("change-value"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkRangeClass, change_value),
@@ -763,7 +763,7 @@ gtk_range_set_adjustment (GtkRange      *range,
       g_signal_connect (adjustment, "changed",
 			G_CALLBACK (gtk_range_adjustment_changed),
 			range);
-      g_signal_connect (adjustment, "value_changed",
+      g_signal_connect (adjustment, "value-changed",
 			G_CALLBACK (gtk_range_adjustment_value_changed),
 			range);
       

@@ -1172,7 +1172,7 @@ gtk_clist_set_hadjustment (GtkCList      *clist,
       gtk_signal_connect (GTK_OBJECT (clist->hadjustment), "changed",
 			  (GtkSignalFunc) hadjustment_changed,
 			  (gpointer) clist);
-      gtk_signal_connect (GTK_OBJECT (clist->hadjustment), "value_changed",
+      gtk_signal_connect (GTK_OBJECT (clist->hadjustment), "value-changed",
 			  (GtkSignalFunc) hadjustment_value_changed,
 			  (gpointer) clist);
     }
@@ -1219,7 +1219,7 @@ gtk_clist_set_vadjustment (GtkCList      *clist,
       gtk_signal_connect (GTK_OBJECT (clist->vadjustment), "changed",
 			  (GtkSignalFunc) vadjustment_changed,
 			  (gpointer) clist);
-      gtk_signal_connect (GTK_OBJECT (clist->vadjustment), "value_changed",
+      gtk_signal_connect (GTK_OBJECT (clist->vadjustment), "value-changed",
 			  (GtkSignalFunc) vadjustment_value_changed,
 			  (gpointer) clist);
     }
@@ -6036,7 +6036,7 @@ adjust_adjustments (GtkCList *clist,
 	  clist->vadjustment->value = MAX (0, (LIST_HEIGHT (clist) -
 					       clist->clist_window_height));
 	  gtk_signal_emit_by_name (GTK_OBJECT (clist->vadjustment),
-				   "value_changed");
+				   "value-changed");
 	}
       gtk_signal_emit_by_name (GTK_OBJECT (clist->vadjustment), "changed");
     }
@@ -6057,7 +6057,7 @@ adjust_adjustments (GtkCList *clist,
 	  clist->hadjustment->value = MAX (0, (LIST_WIDTH (clist) -
 					       clist->clist_window_width));
 	  gtk_signal_emit_by_name (GTK_OBJECT (clist->hadjustment),
-				   "value_changed");
+				   "value-changed");
 	}
       gtk_signal_emit_by_name (GTK_OBJECT (clist->hadjustment), "changed");
     }

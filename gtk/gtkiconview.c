@@ -2379,7 +2379,7 @@ gtk_icon_view_set_adjustments (GtkIconView   *icon_view,
       icon_view->priv->hadjustment = hadj;
       g_object_ref_sink (icon_view->priv->hadjustment);
 
-      g_signal_connect (icon_view->priv->hadjustment, "value_changed",
+      g_signal_connect (icon_view->priv->hadjustment, "value-changed",
 			G_CALLBACK (gtk_icon_view_adjustment_changed),
 			icon_view);
       need_adjust = TRUE;
@@ -2390,7 +2390,7 @@ gtk_icon_view_set_adjustments (GtkIconView   *icon_view,
       icon_view->priv->vadjustment = vadj;
       g_object_ref_sink (icon_view->priv->vadjustment);
 
-      g_signal_connect (icon_view->priv->vadjustment, "value_changed",
+      g_signal_connect (icon_view->priv->vadjustment, "value-changed",
 			G_CALLBACK (gtk_icon_view_adjustment_changed),
 			icon_view);
       need_adjust = TRUE;

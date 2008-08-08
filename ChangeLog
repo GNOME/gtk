@@ -1,3 +1,19 @@
+2008-08-08  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkadjustment.c
+	* gtk/gtkclist.c
+	* gtk/gtkcolorsel.c
+	* gtk/gtkiconview.c
+	* gtk/gtklayout.c
+	* gtk/gtkprogress.c
+	* gtk/gtkrange.c
+	* gtk/gtkspinbutton.c
+	* gtk/gtktext.c
+	* gtk/gtktextview.c
+	* gtk/gtktreeview.c
+	* gtk/gtkviewport.c: use the canonical signal name "value-changed"
+	instead of "value_changed".
+
 2008-08-08  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtk.symbols

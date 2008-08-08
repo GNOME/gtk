@@ -410,7 +410,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_label_set_mnemonic_widget (GTK_LABEL (priv->opacity_label),
                                  priv->opacity_slider);
   gtk_scale_set_draw_value (GTK_SCALE (priv->opacity_slider), FALSE);
-  g_signal_connect (adjust, "value_changed",
+  g_signal_connect (adjust, "value-changed",
                     G_CALLBACK (adjustment_changed),
                     GINT_TO_POINTER (COLORSEL_OPACITY));
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_slider, 1, 7, 4, 5); 
@@ -2059,7 +2059,7 @@ make_label_spinbutton (GtkColorSelection *colorsel,
 
   gtk_widget_set_tooltip_text (*spinbutton, tooltip);  
 
-  g_signal_connect (adjust, "value_changed",
+  g_signal_connect (adjust, "value-changed",
                     G_CALLBACK (adjustment_changed),
                     GINT_TO_POINTER (channel_type));
   label = gtk_label_new_with_mnemonic (text);
