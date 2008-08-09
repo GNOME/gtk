@@ -719,12 +719,12 @@ endif
 if USE_QUARTZ
 gtk_clipboard_dnd_c_sources = gtkclipboard-quartz.c gtkdnd-quartz.c gtkquartz.c
 gtk_clipboard_dnd_h_sources = gtkquartz.h
-EXTRA_DIST += gtkquartz.h
 gtk_clipboard_dnd_c_sources_CFLAGS = "-xobjective-c"
 else
 gtk_clipboard_dnd_c_sources = gtkclipboard.c gtkdnd.c
 gtk_clipboard_dnd_c_sources_CFLAGS =
 endif
+EXTRA_DIST += gtkquartz.h
 
 # we use our own built_sources variable rules to avoid automake's
 # BUILT_SOURCES oddities
