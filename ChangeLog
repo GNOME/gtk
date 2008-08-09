@@ -1,3 +1,10 @@
+2008-08-08  Cody Russell  <bratsche@gnome.org>
+
+	* gtk/gtkmenushell.c
+	* gtk/gtkmenu.c: In enter/leave notify events, check that the crossing
+	mode is not GTK_GRAB, GTK_UNGRAB, or STATE_CHANGED.  Fixes regressions
+	in menus caused by bug #56070.
+
 2008-08-09  Sven Herzberg  <sven@imendio.com>
 
 	Get the gdk+cairo test to pass distcheck, too

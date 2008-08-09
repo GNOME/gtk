@@ -3623,6 +3623,11 @@ gtk_menu_enter_notify (GtkWidget        *widget,
   GtkWidget *menu_item;
   gboolean   touchscreen_mode;
 
+  if (event->mode == GDK_CROSSING_GTK_GRAB ||
+      event->mode == GDK_CROSSING_GTK_UNGRAB ||
+      event->mode == GDK_CROSSING_STATE_CHANGED)
+    return TRUE;
+
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-touchscreen-mode", &touchscreen_mode,
                 NULL);
@@ -3693,6 +3698,11 @@ gtk_menu_leave_notify (GtkWidget        *widget,
   GtkMenu *menu;
   GtkMenuItem *menu_item;
   GtkWidget *event_widget;
+
+  if (event->mode == GDK_CROSSING_GTK_GRAB ||
+      event->mode == GDK_CROSSING_GTK_UNGRAB ||
+      event->mode == GDK_CROSSING_STATE_CHANGED)
+    return TRUE;
 
   menu = GTK_MENU (widget);
   menu_shell = GTK_MENU_SHELL (widget); 

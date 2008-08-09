@@ -802,6 +802,11 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
 {
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
 
+  if (event->mode == GDK_CROSSING_GTK_GRAB ||
+      event->mode == GDK_CROSSING_GTK_UNGRAB ||
+      event->mode == GDK_CROSSING_STATE_CHANGED)
+    return TRUE;
+
   if (menu_shell->active)
     {
       GtkWidget *menu_item;
@@ -867,6 +872,11 @@ static gint
 gtk_menu_shell_leave_notify (GtkWidget        *widget,
 			     GdkEventCrossing *event)
 {
+  if (event->mode == GDK_CROSSING_GTK_GRAB ||
+      event->mode == GDK_CROSSING_GTK_GRAB ||
+      event->mode == GDK_CROSSING_STATE_CHANGED)
+    return TRUE;
+
   if (GTK_WIDGET_VISIBLE (widget))
     {
       GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
