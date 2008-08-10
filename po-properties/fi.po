@@ -6,14 +6,14 @@
 # Sami Pesonen <sampeson@iki.fi>, 2004
 # Pauli Virtanen <pauli.virtanen@hut.fi>, 2000-2004.
 # Tommi Vainikainen, 2005.
-# Ilkka Tuohela, 2005-2007.
+# Ilkka Tuohela, 2005-2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-10 11:20+0300\n"
-"PO-Revision-Date: 2007-02-13 08:20+0300\n"
+"PO-Revision-Date: 2008-08-10 11:10+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
