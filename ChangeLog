@@ -11,6 +11,8 @@
 
 2008-08-08  Cody Russell  <bratsche@gnome.org>
 
+	Bug 547027 – menus are broken
+
 	* gtk/gtkmenushell.c
 	* gtk/gtkmenu.c: In enter/leave notify events, check that the crossing
 	mode is not GTK_GRAB, GTK_UNGRAB, or STATE_CHANGED.  Fixes regressions
