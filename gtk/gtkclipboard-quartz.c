@@ -817,6 +817,18 @@ gtk_clipboard_request_image (GtkClipboard                  *clipboard,
     g_object_unref (pixbuf);
 }
 
+void 
+gtk_clipboard_request_uris (GtkClipboard                *clipboard,
+			    GtkClipboardURIReceivedFunc  callback,
+			    gpointer                     user_data)
+{
+  gchar **uris = gtk_clipboard_wait_for_uris (clipboard);
+
+  callback (clipboard, uris, user_data);
+
+  g_strfreev (uris);
+}
+
 /**
  * gtk_clipboard_request_targets:
  * @clipboard: a #GtkClipboard
@@ -977,6 +989,25 @@ gtk_clipboard_wait_for_image (GtkClipboard *clipboard)
 	  return pixbuf;
 	}  
   }
+
+  return NULL;
+}
+
+gchar **
+gtk_clipboard_wait_for_uris (GtkClipboard *clipboard)
+{
+  GtkSelectionData *data;
+
+  data = gtk_clipboard_wait_for_contents (clipboard, gdk_atom_intern_static_string ("text/uri-list"));
+  if (data)
+    {
+      gchar **uris;
+
+      uris = gtk_selection_data_get_uris (data);
+      gtk_selection_data_free (data);
+
+      return uris;
+    }  
 
   return NULL;
 }
