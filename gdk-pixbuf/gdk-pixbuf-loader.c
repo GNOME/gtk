@@ -91,7 +91,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
          * the desired size to which the image should be scaled.
          */
         pixbuf_loader_signals[SIZE_PREPARED] =
-                g_signal_new ("size_prepared",
+                g_signal_new ("size-prepared",
                               G_TYPE_FROM_CLASS (object_class),
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (GdkPixbufLoaderClass, size_prepared),
@@ -111,7 +111,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
          * the partially-loaded pixbuf.
          */
         pixbuf_loader_signals[AREA_PREPARED] =
-                g_signal_new ("area_prepared",
+                g_signal_new ("area-prepared",
                               G_TYPE_FROM_CLASS (object_class),
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (GdkPixbufLoaderClass, area_prepared),
@@ -134,7 +134,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
          * areas of an image that is being loaded.
          */
         pixbuf_loader_signals[AREA_UPDATED] =
-                g_signal_new ("area_updated",
+                g_signal_new ("area-updated",
                               G_TYPE_FROM_CLASS (object_class),
                               G_SIGNAL_RUN_LAST,
                               G_STRUCT_OFFSET (GdkPixbufLoaderClass, area_updated),
@@ -209,10 +209,10 @@ gdk_pixbuf_loader_finalize (GObject *object)
  * Causes the image to be scaled while it is loaded. The desired
  * image size can be determined relative to the original size of
  * the image by calling gdk_pixbuf_loader_set_size() from a
- * signal handler for the ::size_prepared signal.
+ * signal handler for the ::size-prepared signal.
  *
  * Attempts to set the desired image size  are ignored after the 
- * emission of the ::size_prepared signal.
+ * emission of the ::size-prepared signal.
  *
  * Since: 2.2
  */
@@ -615,7 +615,7 @@ gdk_pixbuf_loader_new_with_mime_type (const char *mime_type,
  *
  * Queries the #GdkPixbuf that a pixbuf loader is currently creating.
  * In general it only makes sense to call this function after the
- * "area_prepared" signal has been emitted by the loader; this means
+ * "area-prepared" signal has been emitted by the loader; this means
  * that enough data has been read to know the size of the image that
  * will be allocated.  If the loader has not received enough data via
  * gdk_pixbuf_loader_write(), then this function returns %NULL.  The
@@ -649,9 +649,9 @@ gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
  * @loader: A pixbuf loader
  *
  * Queries the #GdkPixbufAnimation that a pixbuf loader is currently creating.
- * In general it only makes sense to call this function after the "area_prepared"
+ * In general it only makes sense to call this function after the "area-prepared"
  * signal has been emitted by the loader. If the loader doesn't have enough
- * bytes yet (hasn't emitted the "area_prepared" signal) this function will 
+ * bytes yet (hasn't emitted the "area-prepared" signal) this function will 
  * return %NULL.
  *
  * Return value: The #GdkPixbufAnimation that the loader is loading, or %NULL if
