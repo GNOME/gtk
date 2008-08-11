@@ -2312,7 +2312,7 @@ gtk_entry_insert_text (GtkEditable *editable,
   text[new_text_length] = '\0';
   strncpy (text, new_text, new_text_length);
 
-  g_signal_emit_by_name (editable, "insert_text", text, new_text_length, position);
+  g_signal_emit_by_name (editable, "insert-text", text, new_text_length, position);
 
   if (!entry->visible)
     trash_area (text, new_text_length);
@@ -2339,7 +2339,7 @@ gtk_entry_delete_text (GtkEditable *editable,
   
   g_object_ref (editable);
 
-  g_signal_emit_by_name (editable, "delete_text", start_pos, end_pos);
+  g_signal_emit_by_name (editable, "delete-text", start_pos, end_pos);
 
   g_object_unref (editable);
 }

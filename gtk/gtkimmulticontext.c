@@ -186,22 +186,22 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
     {
       g_object_ref (multicontext->slave);
 
-      g_signal_connect (multicontext->slave, "preedit_start",
+      g_signal_connect (multicontext->slave, "preedit-start",
 			G_CALLBACK (gtk_im_multicontext_preedit_start_cb),
 			multicontext);
-      g_signal_connect (multicontext->slave, "preedit_end",
+      g_signal_connect (multicontext->slave, "preedit-end",
 			G_CALLBACK (gtk_im_multicontext_preedit_end_cb),
 			multicontext);
-      g_signal_connect (multicontext->slave, "preedit_changed",
+      g_signal_connect (multicontext->slave, "preedit-changed",
 			G_CALLBACK (gtk_im_multicontext_preedit_changed_cb),
 			multicontext);
       g_signal_connect (multicontext->slave, "commit",
 			G_CALLBACK (gtk_im_multicontext_commit_cb),
 			multicontext);
-      g_signal_connect (multicontext->slave, "retrieve_surrounding",
+      g_signal_connect (multicontext->slave, "retrieve-surrounding",
 			G_CALLBACK (gtk_im_multicontext_retrieve_surrounding_cb),
 			multicontext);
-      g_signal_connect (multicontext->slave, "delete_surrounding",
+      g_signal_connect (multicontext->slave, "delete-surrounding",
 			G_CALLBACK (gtk_im_multicontext_delete_surrounding_cb),
 			multicontext);
       
@@ -216,7 +216,7 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
     }
 
   if (need_preedit_changed)
-    g_signal_emit_by_name (multicontext, "preedit_changed");
+    g_signal_emit_by_name (multicontext, "preedit-changed");
 }
 
 static GtkIMContext *
@@ -435,21 +435,21 @@ static void
 gtk_im_multicontext_preedit_start_cb   (GtkIMContext      *slave,
 					GtkIMMulticontext *multicontext)
 {
-  g_signal_emit_by_name (multicontext, "preedit_start");
+  g_signal_emit_by_name (multicontext, "preedit-start");
 }
 
 static void
 gtk_im_multicontext_preedit_end_cb (GtkIMContext      *slave,
 				    GtkIMMulticontext *multicontext)
 {
-  g_signal_emit_by_name (multicontext, "preedit_end");
+  g_signal_emit_by_name (multicontext, "preedit-end");
 }
 
 static void
 gtk_im_multicontext_preedit_changed_cb (GtkIMContext      *slave,
 					GtkIMMulticontext *multicontext)
 {
-  g_signal_emit_by_name (multicontext, "preedit_changed");
+  g_signal_emit_by_name (multicontext, "preedit-changed");
 }
 
 static void
@@ -466,7 +466,7 @@ gtk_im_multicontext_retrieve_surrounding_cb (GtkIMContext      *slave,
 {
   gboolean result;
   
-  g_signal_emit_by_name (multicontext, "retrieve_surrounding", &result);
+  g_signal_emit_by_name (multicontext, "retrieve-surrounding", &result);
 
   return result;
 }
@@ -479,7 +479,7 @@ gtk_im_multicontext_delete_surrounding_cb (GtkIMContext      *slave,
 {
   gboolean result;
   
-  g_signal_emit_by_name (multicontext, "delete_surrounding",
+  g_signal_emit_by_name (multicontext, "delete-surrounding",
 			 offset, n_chars, &result);
 
   return result;

@@ -704,7 +704,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
 
   gtk_widget_set_size_request (filesel->dir_list,
 			       DIR_LIST_WIDTH, DIR_LIST_HEIGHT);
-  g_signal_connect (filesel->dir_list, "row_activated",
+  g_signal_connect (filesel->dir_list, "row-activated",
 		    G_CALLBACK (gtk_file_selection_dir_activate), filesel);
 
   /*  gtk_clist_column_titles_passive (GTK_CLIST (filesel->dir_list)); */
@@ -740,7 +740,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
 
   gtk_widget_set_size_request (filesel->file_list,
 			       FILE_LIST_WIDTH, FILE_LIST_HEIGHT);
-  g_signal_connect (filesel->file_list, "row_activated",
+  g_signal_connect (filesel->file_list, "row-activated",
 		    G_CALLBACK (gtk_file_selection_file_activate), filesel);
   g_signal_connect (gtk_tree_view_get_selection (GTK_TREE_VIEW (filesel->file_list)), "changed",
 		    G_CALLBACK (gtk_file_selection_file_changed), filesel);
@@ -795,13 +795,13 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (eventbox);
 
   filesel->selection_entry = gtk_entry_new ();
-  g_signal_connect (filesel->selection_entry, "key_press_event",
+  g_signal_connect (filesel->selection_entry, "key-press-event",
 		    G_CALLBACK (gtk_file_selection_key_press), filesel);
-  g_signal_connect (filesel->selection_entry, "insert_text",
+  g_signal_connect (filesel->selection_entry, "insert-text",
 		    G_CALLBACK (gtk_file_selection_insert_text), NULL);
   g_signal_connect_swapped (filesel->selection_entry, "changed",
 			    G_CALLBACK (gtk_file_selection_update_fileops), filesel);
-  g_signal_connect_swapped (filesel->selection_entry, "focus_in_event",
+  g_signal_connect_swapped (filesel->selection_entry, "focus-in-event",
 			    G_CALLBACK (grab_default),
 			    filesel->ok_button);
   g_signal_connect_swapped (filesel->selection_entry, "activate",
@@ -980,7 +980,7 @@ file_selection_setup_dnd (GtkFileSelection *filesel)
 		     GDK_ACTION_COPY);
   gtk_drag_dest_add_uri_targets (GTK_WIDGET (filesel));
 
-  g_signal_connect (filesel, "drag_data_received",
+  g_signal_connect (filesel, "drag-data-received",
 		    G_CALLBACK (filenames_dropped), NULL);
 
   eventbox = gtk_widget_get_parent (filesel->selection_text);
@@ -991,7 +991,7 @@ file_selection_setup_dnd (GtkFileSelection *filesel)
   gtk_drag_source_add_uri_targets (eventbox);
   gtk_drag_source_add_text_targets (eventbox);
 
-  g_signal_connect (eventbox, "drag_data_get",
+  g_signal_connect (eventbox, "drag-data-get",
 		    G_CALLBACK (filenames_drag_get), filesel);
 }
 

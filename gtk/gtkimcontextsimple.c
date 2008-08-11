@@ -160,8 +160,8 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
       context_simple->in_hex_sequence = FALSE;  
       context_simple->tentative_match = 0;
       context_simple->tentative_match_len = 0;
-      g_signal_emit_by_name (context_simple, "preedit_changed");
-      g_signal_emit_by_name (context_simple, "preedit_end");
+      g_signal_emit_by_name (context_simple, "preedit-changed");
+      g_signal_emit_by_name (context_simple, "preedit-end");
     }
 
   g_signal_emit_by_name (context, "commit", &buf);
@@ -254,7 +254,7 @@ check_table (GtkIMContextSimple    *context_simple,
 		  context_simple->tentative_match = value;
 		  context_simple->tentative_match_len = n_compose;
 		
-		  g_signal_emit_by_name (context_simple, "preedit_changed");
+		  g_signal_emit_by_name (context_simple, "preedit-changed");
 
 		  return TRUE;
 		}
@@ -316,7 +316,7 @@ check_compact_table (GtkIMContextSimple    *context_simple,
                 break;
               else
                 {
-                  g_signal_emit_by_name (context_simple, "preedit_changed");
+                  g_signal_emit_by_name (context_simple, "preedit-changed");
       		  return TRUE;
                 }
              }
@@ -724,8 +724,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	      context_simple->in_hex_sequence = FALSE;
 	      context_simple->compose_buffer[0] = 0;
 	      
-	      g_signal_emit_by_name (context_simple, "preedit_changed");
-	      g_signal_emit_by_name (context_simple, "preedit_end");
+	      g_signal_emit_by_name (context_simple, "preedit-changed");
+	      g_signal_emit_by_name (context_simple, "preedit-end");
 	    }
 
 	  return TRUE;
@@ -787,10 +787,10 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  context_simple->in_hex_sequence = FALSE;
 	}
 
-      g_signal_emit_by_name (context_simple, "preedit_changed");
+      g_signal_emit_by_name (context_simple, "preedit-changed");
 
       if (!context_simple->in_hex_sequence)
-        g_signal_emit_by_name (context_simple, "preedit_end");
+        g_signal_emit_by_name (context_simple, "preedit-end");
       
       return TRUE;
     }
@@ -824,8 +824,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       context_simple->modifiers_dropped = FALSE;
       context_simple->tentative_match = 0;
 
-      g_signal_emit_by_name (context_simple, "preedit_start");
-      g_signal_emit_by_name (context_simple, "preedit_changed");
+      g_signal_emit_by_name (context_simple, "preedit-start");
+      g_signal_emit_by_name (context_simple, "preedit-changed");
   
       return TRUE;
     }
@@ -881,10 +881,10 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
           else if (!check_hex (context_simple, n_compose))
 	    beep_window (event->window);
 	  
-	  g_signal_emit_by_name (context_simple, "preedit_changed");
+	  g_signal_emit_by_name (context_simple, "preedit-changed");
 
 	  if (!context_simple->in_hex_sequence)
-	    g_signal_emit_by_name (context_simple, "preedit_end");
+	    g_signal_emit_by_name (context_simple, "preedit-end");
 
 	  return TRUE;
         }
@@ -922,8 +922,8 @@ gtk_im_context_simple_reset (GtkIMContext *context)
       context_simple->in_hex_sequence = FALSE;
       context_simple->tentative_match = 0;
       context_simple->tentative_match_len = 0;
-      g_signal_emit_by_name (context_simple, "preedit_changed");
-      g_signal_emit_by_name (context_simple, "preedit_end");
+      g_signal_emit_by_name (context_simple, "preedit-changed");
+      g_signal_emit_by_name (context_simple, "preedit-end");
     }
 }
 

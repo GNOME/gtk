@@ -1151,7 +1151,7 @@ gtk_scrolled_window_move_focus_out (GtkScrolledWindow *scrolled_window,
   g_object_ref (scrolled_window);
   
   scrolled_window->focus_out = TRUE;
-  g_signal_emit_by_name (toplevel, "move_focus", direction_type);
+  g_signal_emit_by_name (toplevel, "move-focus", direction_type);
   scrolled_window->focus_out = FALSE;
   
   g_object_unref (scrolled_window);

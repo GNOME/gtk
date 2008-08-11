@@ -1603,7 +1603,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
 	      if (!(site->flags & GTK_DEST_DEFAULT_DROP) ||
 		  selection_data->length >= 0)
 		g_signal_emit_by_name (drop_widget,
-				       "drag_data_received",
+				       "drag-data-received",
 				       context, info->drop_x, info->drop_y,
 				       selection_data,
 				       target_info, time);
@@ -1612,7 +1612,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
       else
 	{
 	  g_signal_emit_by_name (drop_widget,
-				 "drag_data_received",
+				 "drag-data-received",
 				 context, info->drop_x, info->drop_y,
 				 selection_data,
 				 0, time);
@@ -1964,7 +1964,7 @@ gtk_drag_dest_leave (GtkWidget      *widget,
 
       if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag ||
 	  site->track_motion)
-	g_signal_emit_by_name (widget, "drag_leave", context, time);
+	g_signal_emit_by_name (widget, "drag-leave", context, time);
       
       site->have_drag = FALSE;
     }
@@ -2071,7 +2071,7 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 	}
     }
 
-  g_signal_emit_by_name (widget, "drag_motion",
+  g_signal_emit_by_name (widget, "drag-motion",
 			 context, x, y, time, &retval);
 
   return (site->flags & GTK_DEST_DEFAULT_MOTION) ? TRUE : retval;
@@ -2172,7 +2172,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 	    gtk_drag_get_data (widget, context, target, time);
 	}
 
-      g_signal_emit_by_name (widget, "drag_drop",
+      g_signal_emit_by_name (widget, "drag-drop",
 			     context, x, y, time, &retval);
 
       return (site->flags & GTK_DEST_DEFAULT_DROP) ? TRUE : retval;
@@ -2280,7 +2280,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 			       &info->cur_screen, &info->cur_x, &info->cur_y, NULL);
     }
 
-  g_signal_emit_by_name (widget, "drag_begin", info->context);
+  g_signal_emit_by_name (widget, "drag-begin", info->context);
 
   /* Ensure that we have an icon before we start the drag; the
    * application may have set one in ::drag_begin, or it may
@@ -3449,7 +3449,7 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
   else
     {
       if (!success)
-	g_signal_emit_by_name (info->widget, "drag_failed",
+	g_signal_emit_by_name (info->widget, "drag-failed",
 			       info->context, result, &success);
 
       if (success)
@@ -3537,7 +3537,7 @@ gtk_drag_drop (GtkDragSourceInfo *info,
 	      selection_data.data = NULL;
 	      selection_data.length = -1;
 	      
-	      g_signal_emit_by_name (info->widget, "drag_data_get",
+	      g_signal_emit_by_name (info->widget, "drag-data-get",
 				     info->context, &selection_data,
 				     pair->info,
 				     time);
@@ -3655,7 +3655,7 @@ gtk_drag_selection_get (GtkWidget        *widget,
     {
     case TARGET_DELETE:
       g_signal_emit_by_name (info->widget,
-			     "drag_data_delete", 
+			     "drag-data-delete", 
 			     info->context);
       gtk_selection_data_set (selection_data, null_atom, 8, NULL, 0);
       break;
@@ -3687,7 +3687,7 @@ gtk_drag_selection_get (GtkWidget        *widget,
 				    selection_data->target, 
 				    &target_info))
 	    {
-	      g_signal_emit_by_name (info->widget, "drag_data_get",
+	      g_signal_emit_by_name (info->widget, "drag-data-get",
 				     info->context,
 				     selection_data,
 				     target_info,
@@ -3799,8 +3799,7 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 					info);
 
   if (!info->proxy_dest)
-    g_signal_emit_by_name (info->widget, "drag_end", 
-			   info->context);
+    g_signal_emit_by_name (info->widget, "drag-end", info->context);
 
   if (info->widget)
     g_object_unref (info->widget);

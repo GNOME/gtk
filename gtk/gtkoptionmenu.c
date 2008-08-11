@@ -253,7 +253,7 @@ gtk_option_menu_set_menu (GtkOptionMenu *option_menu,
       g_signal_connect_after (option_menu->menu, "selection-done",
 			      G_CALLBACK (gtk_option_menu_selection_done),
 			      option_menu);
-      g_signal_connect_swapped (option_menu->menu, "size_request",
+      g_signal_connect_swapped (option_menu->menu, "size-request",
 				G_CALLBACK (gtk_option_menu_calc_size),
 				option_menu);
 
@@ -776,7 +776,7 @@ gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 	      gtk_widget_reparent (child, GTK_WIDGET (option_menu));
 	    }
 
-	  g_signal_connect (option_menu->menu_item, "state_changed",
+	  g_signal_connect (option_menu->menu_item, "state-changed",
 			    G_CALLBACK (gtk_option_menu_item_state_changed_cb), option_menu);
 	  g_signal_connect (option_menu->menu_item, "destroy",
 			    G_CALLBACK (gtk_option_menu_item_destroy_cb), option_menu);

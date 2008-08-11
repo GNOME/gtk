@@ -1,5 +1,20 @@
 2008-08-11  Sven Neumann  <sven@gimp.org>
 
+	* gtk/gtkdnd-quartz.c
+	* gtk/gtkdnd.c
+	* gtk/gtkentry.c
+	* gtk/gtkfilesel.c
+	* gtk/gtkimcontextsimple.c
+	* gtk/gtkimmulticontext.c
+	* gtk/gtkoptionmenu.c
+	* gtk/gtkplug.c
+	* gtk/gtkrecentchooserdefault.c
+	* gtk/gtkscrolledwindow.c
+	* gtk/gtksocket-x11.c: use canonical signal names in some more
+	places that I missed earlier.
+
+2008-08-11  Sven Neumann  <sven@gimp.org>
+
 	* gtk/gtkaccelgroup.c
 	* gtk/gtkactiongroup.c
 	* gtk/gtkcalendar.c

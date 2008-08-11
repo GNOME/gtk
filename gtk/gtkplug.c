@@ -334,7 +334,7 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
 
   gtk_widget_set_parent (widget, GTK_WIDGET (socket_));
 
-  g_signal_emit_by_name (socket_, "plug_added");
+  g_signal_emit_by_name (socket_, "plug-added");
 }
 
 /**
@@ -414,7 +414,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
 
   gtk_plug_set_is_child (plug, FALSE);
 		    
-  g_signal_emit_by_name (socket_, "plug_removed", &result);
+  g_signal_emit_by_name (socket_, "plug-removed", &result);
   if (!result)
     gtk_widget_destroy (GTK_WIDGET (socket_));
 
