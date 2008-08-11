@@ -303,7 +303,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 						      GTK_PARAM_READWRITE));
   
   color_selection_signals[COLOR_CHANGED] =
-    g_signal_new (I_("color_changed"),
+    g_signal_new (I_("color-changed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkColorSelectionClass, color_changed),

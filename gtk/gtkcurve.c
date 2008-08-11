@@ -164,7 +164,7 @@ gtk_curve_class_init (GtkCurveClass *class)
 						       GTK_PARAM_READWRITE));
 
   curve_type_changed_signal =
-    g_signal_new (I_("curve_type_changed"),
+    g_signal_new (I_("curve-type-changed"),
 		   G_OBJECT_CLASS_TYPE (gobject_class),
 		   G_SIGNAL_RUN_FIRST,
 		   G_STRUCT_OFFSET (GtkCurveClass, curve_type_changed),

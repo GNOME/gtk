@@ -186,7 +186,7 @@ gtk_clipboard_class_init (GtkClipboardClass *class)
    * Since: 2.6
    */ 
   clipboard_signals[OWNER_CHANGE] =
-    g_signal_new (I_("owner_change"),
+    g_signal_new (I_("owner-change"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkClipboardClass, owner_change),

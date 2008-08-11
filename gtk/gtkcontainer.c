@@ -274,7 +274,7 @@ gtk_container_class_init (GtkContainerClass *class)
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
   container_signals[CHECK_RESIZE] =
-    g_signal_new (I_("check_resize"),
+    g_signal_new (I_("check-resize"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkContainerClass, check_resize),

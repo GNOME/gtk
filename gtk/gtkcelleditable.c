@@ -77,7 +77,7 @@ gtk_cell_editable_base_init (gpointer g_class)
        * gtk_cell_editable_editing_done() is a convenience method
        * for emitting ::editing-done. 
        */
-      g_signal_new (I_("editing_done"),
+      g_signal_new (I_("editing-done"),
                     GTK_TYPE_CELL_EDITABLE,
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkCellEditableIface, editing_done),
@@ -101,7 +101,7 @@ gtk_cell_editable_base_init (gpointer g_class)
        * gtk_cell_editable_remove_widget() is a convenience method
        * for emitting ::remove-widget. 
        */
-      g_signal_new (I_("remove_widget"),
+      g_signal_new (I_("remove-widget"),
                     GTK_TYPE_CELL_EDITABLE,
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkCellEditableIface, remove_widget),
@@ -141,7 +141,7 @@ gtk_cell_editable_editing_done (GtkCellEditable *cell_editable)
 {
   g_return_if_fail (GTK_IS_CELL_EDITABLE (cell_editable));
 
-  g_signal_emit_by_name (cell_editable, "editing_done");
+  g_signal_emit_by_name (cell_editable, "editing-done");
 }
 
 /**
@@ -155,7 +155,7 @@ gtk_cell_editable_remove_widget (GtkCellEditable *cell_editable)
 {
   g_return_if_fail (GTK_IS_CELL_EDITABLE (cell_editable));
 
-  g_signal_emit_by_name (cell_editable, "remove_widget");
+  g_signal_emit_by_name (cell_editable, "remove-widget");
 }
 
 #define __GTK_CELL_EDITABLE_C__

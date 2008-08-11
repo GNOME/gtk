@@ -49,15 +49,15 @@ static void accel_closure_invalidate     (gpointer    data,
 
 
 /* --- variables --- */
-static guint		 signal_accel_activate = 0;
-static guint		 signal_accel_changed = 0;
-static guint		 quark_acceleratable_groups = 0;
-static guint		 default_accel_mod_mask = (GDK_SHIFT_MASK |
-						   GDK_CONTROL_MASK |
-						   GDK_MOD1_MASK |
-						   GDK_SUPER_MASK |
-						   GDK_HYPER_MASK |
-						   GDK_META_MASK);
+static guint  signal_accel_activate      = 0;
+static guint  signal_accel_changed       = 0;
+static guint  quark_acceleratable_groups = 0;
+static guint  default_accel_mod_mask     = (GDK_SHIFT_MASK   |
+                                            GDK_CONTROL_MASK |
+                                            GDK_MOD1_MASK    |
+                                            GDK_SUPER_MASK   |
+                                            GDK_HYPER_MASK   |
+                                            GDK_META_MASK);
 
 
 enum {
@@ -111,7 +111,7 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
    * Returns: %TRUE if the accelerator was activated
    */
   signal_accel_activate =
-    g_signal_new (I_("accel_activate"),
+    g_signal_new (I_("accel-activate"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_DETAILED,
 		  0,
@@ -136,7 +136,7 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
    * their visual representation if the @accel_closure is theirs.
    */
   signal_accel_changed =
-    g_signal_new (I_("accel_changed"),
+    g_signal_new (I_("accel-changed"),
 		  G_OBJECT_CLASS_TYPE (class),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_DETAILED,
 		  G_STRUCT_OFFSET (GtkAccelGroupClass, accel_changed),

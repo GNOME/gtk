@@ -1,5 +1,18 @@
 2008-08-11  Sven Neumann  <sven@gimp.org>
 
+	* gtk/gtkaccelgroup.c
+	* gtk/gtkactiongroup.c
+	* gtk/gtkcalendar.c
+	* gtk/gtkcelleditable.c
+	* gtk/gtkclipboard-quartz.c
+	* gtk/gtkclipboard.c
+	* gtk/gtkcolorbutton.c
+	* gtk/gtkcolorsel.c
+	* gtk/gtkcontainer.c
+	* gtk/gtkcurve.c: use canonical signal names.
+
+2008-08-11  Sven Neumann  <sven@gimp.org>
+
 	* gtk/gtkentry.c
 	* gtk/gtkentrycompletion.c
 	* gtk/gtkhandlebox.c
