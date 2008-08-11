@@ -9,13 +9,13 @@ msgstr ""
 "Project-Id-Version: kn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-05 11:57-0400\n"
-"PO-Revision-Date: 2008-05-08 13:25+0530\n"
+"PO-Revision-Date: 2008-08-11 18:12+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 "\n"
 "X-Generator: KBabel 1.11.4\n"
 
@@ -247,8 +247,7 @@ msgstr "ಚಿತ್ರ ಕಡತ '%s' ದಲ್ಲಿ ಯಾವುದೇ ದತ
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:993
 #: gdk-pixbuf/gdk-pixbuf-io.c:1257 tests/testfilechooser.c:267
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "ಚಿತ್ರ '%s'ವನ್ನು ಲೋಡ್ ಮಾಡುವಲ್ಲಿ ವಿಫಲತೆ: ಕಾರಣ ತಿಳಿದಿಲ್ಲ, ಬಹುಷಃ ಒಂದು ಭ್ರಷ್ಟಗೊಂಡ ಚಿತ್ರ "
 "ಕಡತದಿಂದಾಗಿರಬಹುದು"
@@ -303,8 +302,7 @@ msgstr "ಚಿತ್ರ ಕಡತಕ್ಕೆ ಬರೆಯುವಲ್ಲಿ ವ
 #: gdk-pixbuf/gdk-pixbuf-io.c:1684 gdk-pixbuf/gdk-pixbuf-io.c:1815
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"gdk-pixbuf ನ ಈ ನಿರ್ಮಿತಿಯು ಚಿತ್ರ ವಿನ್ಯಾಸವನ್ನು ಉಳಿಸುವುದನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ: %s"
+msgstr "gdk-pixbuf ನ ಈ ನಿರ್ಮಿತಿಯು ಚಿತ್ರ ವಿನ್ಯಾಸವನ್ನು ಉಳಿಸುವುದನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1718
 msgid "Insufficient memory to save image to callback"
@@ -471,8 +469,7 @@ msgstr "GIF ಕಡತವನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಕಷ�
 
 #: gdk-pixbuf/io-gif.c:956
 msgid "Not enough memory to composite a frame in GIF file"
-msgstr ""
-"GIF ಕಡತದಲ್ಲಿನ ಒಂದು ಚೌಕಟ್ಟನ್ನು ಸಂಯುಕ್ತಗೊಳಿಸಲು (composite) ಸಾಕಷ್ಟು ಮೆಮೊರಿ ಲಭ್ಯವಿಲ್ಲ"
+msgstr "GIF ಕಡತದಲ್ಲಿನ ಒಂದು ಚೌಕಟ್ಟನ್ನು ಸಂಯುಕ್ತಗೊಳಿಸಲು (composite) ಸಾಕಷ್ಟು ಮೆಮೊರಿ ಲಭ್ಯವಿಲ್ಲ"
 
 #: gdk-pixbuf/io-gif.c:1128
 msgid "GIF image is corrupt (incorrect LZW compression)"
@@ -631,8 +628,7 @@ msgstr "JPEG ಗುಣ ಮಟ್ಟವು ೦ ಹಾಗು ೧೦೦; ಮೌಲ�
 
 #: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG ಗುಣ ಮಟ್ತವು ೦ ಹಾಗು ೧೦೦; ಮಾಲ್ಯ '%d' ವು ಬೆಂಬಲಿತವಾಗಿಲ್ಲ."
 
 #: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
@@ -702,8 +698,7 @@ msgstr "ರೂಪಾಂತರಗೊಂಡ PNG ಯು RGB ಅಥವ RGBA ಆಗ�
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"ರೂಪಾಂತರಗೊಂಡ PNG ಯು ಬೆಂಬಲವಿಲ್ಲದ ಸಂಖ್ಯೆಯ ಚಾನಲ್ಲುಗಳನ್ನು ಹೊಂದಿದೆ, ೩ ಅಥವ ೪ ಆಗಿರಬೇಕು."
+msgstr "ರೂಪಾಂತರಗೊಂಡ PNG ಯು ಬೆಂಬಲವಿಲ್ಲದ ಸಂಖ್ಯೆಯ ಚಾನಲ್ಲುಗಳನ್ನು ಹೊಂದಿದೆ, ೩ ಅಥವ ೪ ಆಗಿರಬೇಕು."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -733,8 +728,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ಚಿತ್ರ ಕಡತವನ್ನು ಓದುವಲ್ಲಿ ಮಾರಕ ದೋಷ: %s"
 
 #: gdk-pixbuf/io-png.c:825
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ಪಠ್ಯದ ತುಣುಕುಗಳ ಕೀಲಿಗಳು ಕನಿಷ್ಠ ೧ ಹಾಗು ಗರಿಷ್ಟ ೭೮ ಅಕ್ಷರಗಳನ್ನು ಹೊಂದಿರಬೇಕು."
 
 #: gdk-pixbuf/io-png.c:833
@@ -762,8 +756,7 @@ msgstr ""
 #: gdk-pixbuf/io-png.c:896
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"PNG ಪಠ್ಯ ತುಣುಕು %s ನ ಮೌಲ್ಯವನ್ನು ISO-8859-1 ಸಂಕೇತಿಕರಣಕ್ಕೆ(encoding) ಬದಲಾಯಿಸಲಾಗಿಲ್ಲ."
+msgstr "PNG ಪಠ್ಯ ತುಣುಕು %s ನ ಮೌಲ್ಯವನ್ನು ISO-8859-1 ಸಂಕೇತಿಕರಣಕ್ಕೆ(encoding) ಬದಲಾಯಿಸಲಾಗಿಲ್ಲ."
 
 #: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
@@ -1037,60 +1030,53 @@ msgid "The XPM image format"
 msgstr "XPM ಚಿತ್ರ ವಿನ್ಯಾಸ"
 
 #: gdk-pixbuf/io-gdip-emf.c:59
-#, fuzzy
 msgid "The EMF image format"
-msgstr "BMP ಚಿತ್ರ ವಿನ್ಯಾಸ"
+msgstr "EMF ಚಿತ್ರ ವಿನ್ಯಾಸ"
 
 #: gdk-pixbuf/io-gdip-utils.c:212
-#, fuzzy, c-format
+#, c-format
 msgid "Could not allocate memory: %s"
-msgstr "ಸ್ಟ್ರೀಮ್‍ಗೆ ಮೆಮೊರಿಯನ್ನು ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ"
+msgstr "ಮೆಮೊರಿಯನ್ನು ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:237 gdk-pixbuf/io-gdip-utils.c:350
 #: gdk-pixbuf/io-gdip-utils.c:383
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create stream: %s"
-msgstr "%s ಅನ್ನು %s ಗೆ ಪುನರ್ ನಾಮಕರಣ ಮಾಡಲಾಗಿಲ್ಲ: %s.\n"
+msgstr "ಸ್ಟ್ರೀಮ್ ಅನ್ನು ನಿರ್ಮಿಸಲಾಗಿಲ್ಲ: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:251
-#, fuzzy, c-format
+#, c-format
 msgid "Could not seek stream: %s"
-msgstr "ಅಂಶವನ್ನು ತೆಗೆದುಹಾಕಲಾಗಿಲ್ಲ"
+msgstr "ಸ್ಟ್ರೀಮ್‌ಗಾಗಿ ಪ್ರಯತ್ನಿಸಲಾಗಿಲ್ಲ: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:263
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read from stream: %s"
-msgstr "%s ಅನ್ನು %s ಗೆ ಪುನರ್ ನಾಮಕರಣ ಮಾಡಲಾಗಿಲ್ಲ: %s.\n"
+msgstr "ಸ್ಟ್ರೀಮ್‌ನಿಂದ ಓದಲಾಗಿಲ್ಲ: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:736
-#, fuzzy
 msgid "Couldn't create pixbuf"
-msgstr "ಹೊಸ pixbuf ಅನ್ನು ಸೃಷ್ಟಿಸಲಾಗಿಲ್ಲ"
+msgstr "pixbuf ಅನ್ನು ಸೃಷ್ಟಿಸಲಾಗಿಲ್ಲ"
 
 #: gdk-pixbuf/io-gdip-utils.c:798
-#, fuzzy
 msgid "Couldn't load bitmap"
-msgstr "ಚಿತ್ರವನ್ನು ಡೀಕೊಡ್ ಮಾಡಲಾಗಿಲ್ಲ"
+msgstr "ಬಿಟ್‌ಮ್ಯಾಪನ್ನು ಲೋಡ್ ಮಾಡಲಾಗಿಲ್ಲ"
 
 #: gdk-pixbuf/io-gdip-utils.c:821
-#, fuzzy
 msgid "Couldn't load metafile"
-msgstr "ಚಿತ್ರವನ್ನು ಡೀಕೊಡ್ ಮಾಡಲಾಗಿಲ್ಲ"
+msgstr "ಮೆಟಾಫೈಲನ್ನು ಲೋಡ್ ಮಾಡಲಾಗಿಲ್ಲ"
 
 #: gdk-pixbuf/io-gdip-utils.c:980
-#, fuzzy
 msgid "Unsupported image format for GDI+"
-msgstr "ಬೆಂಬಲವಿಲ್ಲದ RAS ಚಿತ್ರ ಬದಲಾವಣೆ(variation)"
+msgstr "GDI+ ಗೆ ಬೆಂಬಲವಿಲ್ಲದ ಚಿತ್ರ ವಿನ್ಯಾಸ"
 
 #: gdk-pixbuf/io-gdip-utils.c:987
-#, fuzzy
 msgid "Couldn't save"
-msgstr "ಬಾಕಿಯದನ್ನು ಉಳಿಸಲಾಗಲಿಲ್ಲ"
+msgstr "ಉಳಿಸಲಾಗಲಿಲ್ಲ"
 
 #: gdk-pixbuf/io-gdip-wmf.c:58
-#, fuzzy
 msgid "The WMF image format"
-msgstr "WBMP ಚಿತ್ರ ವಿನ್ಯಾಸ"
+msgstr "WMF ಚಿತ್ರ ವಿನ್ಯಾಸ"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:54
@@ -1719,13 +1705,11 @@ msgstr "ಶೀಘ್ರಮಾರ್ಗ (ಶಾರ್ಟ್ ಕಟ್) %s ಅಸ�
 #: gtk/gtkfilechooserdefault.c:7950 gtk/gtkprintunixdialog.c:364
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
-msgstr ""
-"\"%s\" ಹೆಸರಿನ ಒಂದು ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.  ನೀವದನ್ನು ಬದಲಿ ಮಾಡಲು ಬಯಸುತ್ತಿರೆ?"
+msgstr "\"%s\" ಹೆಸರಿನ ಒಂದು ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.  ನೀವದನ್ನು ಬದಲಿ ಮಾಡಲು ಬಯಸುತ್ತಿರೆ?"
 
 #: gtk/gtkfilechooserdefault.c:7953 gtk/gtkprintunixdialog.c:368
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\" ಹೆಸರಿನ ಒಂದು ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.  ನೀವದನ್ನು ಬದಲಿ ಮಾಡಿದರೆ ಅದು "
 "ತಿದ್ದಿಬರೆಯಲ್ಪಡುತ್ತದೆ."
@@ -1873,8 +1857,7 @@ msgstr "ಕಡತವನ್ನು ಪುನರ್ ಹೆಸರಿಸು(_R)"
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" ಕಡತದ ಹೆಸರಿನಲ್ಲಿ ಅನುಮತಿ ಇರದೆ ಇರುವಂತಹ ಸಂಕೇತಗಳು ಇವೆ."
 
 #: gtk/gtkfilesel.c:1392
@@ -2196,7 +2179,7 @@ msgstr "default:LTR"
 #: gtk/gtkmain.c:740
 #, c-format
 msgid "Cannot open display: %s"
-msgstr ""
+msgstr "ಪ್ರದರ್ಶಕವನ್ನು ತೆರೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ: %s"
 
 #: gtk/gtkmain.c:777
 msgid "GTK+ Options"
@@ -2207,44 +2190,40 @@ msgid "Show GTK+ Options"
 msgstr "GTK+ ಆಯ್ಕೆಗಳನ್ನು ತೋರಿಸು"
 
 #: gtk/gtkmountoperation.c:476
-#, fuzzy
 msgid "Co_nnect"
-msgstr "ಸಂಪರ್ಕ ಕಲ್ಪಿಸು (_o)"
+msgstr "ಸಂಪರ್ಕ ಕಲ್ಪಿಸು (_n)"
 
 #: gtk/gtkmountoperation.c:520
 msgid "Connect _anonymously"
-msgstr ""
+msgstr "ಅನಾಮಿಕನಾಗಿ ಸಂಪರ್ಕಿಸು(_a)"
 
 #: gtk/gtkmountoperation.c:529
 msgid "Connect as u_ser:"
-msgstr ""
+msgstr "ಬಳಕೆದಾರನಾಗಿ ಸಂಪರ್ಕಿಸು(_s):"
 
 #: gtk/gtkmountoperation.c:566
-#, fuzzy
 msgid "_Username:"
-msgstr "ಪುನರ್ ಹೆಸರಿಸು(_R)"
+msgstr "ಬಳಕೆದಾರ ಹೆಸರು(_U):"
 
 #: gtk/gtkmountoperation.c:570
-#, fuzzy
 msgid "_Domain:"
-msgstr "ತಾಣ(_L):"
+msgstr "ಕ್ಷೇತ್ರ(_D):"
 
 #: gtk/gtkmountoperation.c:575
-#, fuzzy
 msgid "_Password:"
-msgstr "ಒತ್ತಡ(_P):"
+msgstr "ಗುಪ್ತಪದ(_P):"
 
 #: gtk/gtkmountoperation.c:590
 msgid "_Forget password immediately"
-msgstr ""
+msgstr "ಗುಪ್ತಪದವನ್ನು ತಕ್ಷಣ ಮರೆತು ಬಿಡು(_F)"
 
 #: gtk/gtkmountoperation.c:598
 msgid "_Remember password until you logout"
-msgstr ""
+msgstr "ಗುಪ್ತಪದವನ್ನು ನಿರ್ಗಮಿಸುವ ತನಕ ನೆನಪಿನಲ್ಲಿಡು(_R)"
 
 #: gtk/gtkmountoperation.c:606
 msgid "_Remember forever"
-msgstr ""
+msgstr "ಸದಾ ನೆನಪಿನಲ್ಲಿಡು(_R)"
 
 #: gtk/gtknotebook.c:834
 msgid "Arrow spacing"
@@ -2459,14 +2438,14 @@ msgid "Printing %d"
 msgstr "%d ದ ಮುದ್ರಣ"
 
 #: gtk/gtkprintoperation.c:2289
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating print preview"
-msgstr "ಮುನ್ನೋಟವನ್ನು ತೋರಿಸುವಲ್ಲಿ ದೋಷ"
+msgstr "ಮುದ್ರಣ ಮುನ್ನೋಟವನ್ನು ತೋರಿಸುವಲ್ಲಿ ದೋಷ"
 
 #: gtk/gtkprintoperation.c:2292
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr ""
+msgstr "ಸಾಧ್ಯವಿರಬಹುದಾದ ಒಂದು ಕಾರಣವೆಂದರೆ ತಾತ್ಕಾಲಿಕ ಕಡತವನ್ನು ಸೃಷ್ತಿಸುವಲ್ಲಿ ಉಂಟಾದ ವಿಫಲತೆ."
 
 #: gtk/gtkprintoperation-unix.c:242
 #, c-format
@@ -2504,14 +2483,12 @@ msgid "Custom size"
 msgstr "ಗ್ರಾಹಕೀಯ (ಕಸ್ಟಮ್) ಗಾತ್ರ"
 
 #: gtk/gtkprintoperation-win32.c:1517
-#, fuzzy
 msgid "No printer found"
-msgstr "ಯಾವುದೇ ಅಂಶ ಪತ್ತೆಯಾಗಿಲ್ಲ"
+msgstr "ಯಾವುದೆ ಮುದ್ರಕವು ಕಂಡುಬಂದಿಲ್ಲ"
 
 #: gtk/gtkprintoperation-win32.c:1544
-#, fuzzy
 msgid "Invalid argument to CreateDC"
-msgstr "PrintDlgEx ಗೆ ಅಮಾನ್ಯ ಆರ್ಗ್ಯುಮೆಂಟ್"
+msgstr "CreateDC ಗೆ ಅಮಾನ್ಯ ಆರ್ಗ್ಯುಮೆಂಟ್"
 
 #: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1801
 msgid "Error from StartDoc"
@@ -3271,8 +3248,7 @@ msgstr "ಅನಾಮಿಕ ತಲೆಚೀಟಿಗಳು (Tag) ಕಂಡು ಬ
 #: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
-"ತಲೆಚೀಟಿ \"%s\" ವು ಬಫರಿನಲ್ಲಿ ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ ಹಾಗು ತಲೆಚೀಟಿಗಳನ್ನು ರಚಿಸಲಾಗುವುದಿಲ್ಲ."
+msgstr "ತಲೆಚೀಟಿ \"%s\" ವು ಬಫರಿನಲ್ಲಿ ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ ಹಾಗು ತಲೆಚೀಟಿಗಳನ್ನು ರಚಿಸಲಾಗುವುದಿಲ್ಲ."
 
 #: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
 #: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
@@ -3292,8 +3268,7 @@ msgstr "\"%s\" ವು ಒಂದು ಮಾನ್ಯ ವೈಶಿಷ್ಟ್ಯ�
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" ವನ್ನು \"%s\" ಬಗೆಯ ಮೌಲ್ಯವಾಗಿ ವೈಶಿಷ್ಟ್ಯ \"%s\" ಕ್ಕೆ ಬದಲಾಯಿಸಲಾಗಿಲ್ಲ"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3330,10 +3305,8 @@ msgid "Serialized data is malformed"
 msgstr "ಅನುಕ್ರಮಿತ ದತ್ತಾಂಶವು ವಿರೂಪಗೊಂಡಿದೆ."
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
-"ಅನುಕ್ರಮಿತ ದತ್ತಾಂಶವು ವಿರೂಪಗೊಂಡಿದೆ. ಪ್ರಥಮ ವಿಭಾಗವು GTKTEXTBUFFERCONTENTS-0001 ಆಗಿಲ್ಲ"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr "ಅನುಕ್ರಮಿತ ದತ್ತಾಂಶವು ವಿರೂಪಗೊಂಡಿದೆ. ಪ್ರಥಮ ವಿಭಾಗವು GTKTEXTBUFFERCONTENTS-0001 ಆಗಿಲ್ಲ"
 
 #: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
@@ -3400,31 +3373,31 @@ msgstr "ಖಾಲಿ"
 
 #: gtk/gtkvolumebutton.c:77
 msgid "Volume"
-msgstr "ಪರಿಮಾಣ"
+msgstr "ವಾಲ್ಯೂಮ್"
 
 #: gtk/gtkvolumebutton.c:79
 msgid "Turns volume down or up"
-msgstr ""
+msgstr "ವಾಲ್ಯೂಮ್ ಅನ್ನು ಹೆಚ್ಚು ಅಥವ ಕಡಿಮೆ ಮಾಡುತ್ತದೆ"
 
 #: gtk/gtkvolumebutton.c:82
 msgid "Adjusts the volume"
-msgstr ""
+msgstr "ವಾಲ್ಯೂಮ್ ಅನ್ನು ಹೊಂದಿಸುತ್ತದೆ"
 
 #: gtk/gtkvolumebutton.c:85 gtk/gtkvolumebutton.c:88
 msgid "Volume Down"
-msgstr "ಕೆಳಗಿನ ಪರಿಮಾಣ"
+msgstr "ವಾಲ್ಯೂಮ್ ಅನ್ನು ಕಡಿಮೆಗೊಳಿಸು"
 
 #: gtk/gtkvolumebutton.c:87
 msgid "Decreases the volume"
-msgstr ""
+msgstr "ವಾಲ್ಯೂಮ್ ಅನ್ನು ಕಡಿಮೆಗೊಳಿಸುತ್ತದೆ"
 
 #: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Up"
-msgstr "ಮೇಲಿನ ಪರಿಮಾಣ"
+msgstr "ವಾಲ್ಯೂಮ್ ಅನ್ನು ಹೆಚ್ಚು ಮಾಡು"
 
 #: gtk/gtkvolumebutton.c:93
 msgid "Increases the volume"
-msgstr ""
+msgstr "ವಾಲ್ಯೂಮ್ ಅನ್ನು ಹೆಚ್ಚು ಮಾಡುತ್ತದೆ"
 
 #: gtk/gtkvolumebutton.c:151
 msgid "Muted"
@@ -3432,7 +3405,7 @@ msgstr "ಮೂಕಗೊಳಿಸಲಾಗಿದೆ"
 
 #: gtk/gtkvolumebutton.c:155
 msgid "Full Volume"
-msgstr "ಸಂಪೂರ್ಣ ಪರಿಮಾಣ"
+msgstr "ಸಂಪೂರ್ಣ ವಾಲ್ಯೂಮ್"
 
 #. Translators: this is the percentage of the current volume,
 #. * as used in the tooltip, eg. "49 %".
@@ -4287,9 +4260,9 @@ msgid "Failed to rewrite header\n"
 msgstr "ಶೀರ್ಷಿಕೆಯನ್ನು ಪುನರ್ ಬರೆಯುವಲ್ಲಿ ವಿಫಲತೆ\n"
 
 #: gtk/updateiconcache.c:1455
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr "'%s' ಕಡತವನ್ನು ತೆರೆಯುವಲ್ಲಿ ವಿಫಲತೆ: %s"
+msgstr "%s ಕಡತವನ್ನು ತೆರೆಯುವಲ್ಲಿ ವಿಫಲತೆ: %s\n"
 
 #: gtk/updateiconcache.c:1463
 #, c-format
@@ -4358,7 +4331,7 @@ msgstr "ಒಂದು ಮಾನ್ಯ ಲಾಂಛನ ಕ್ಯಾಶೆ ಅಲ�
 #: gtk/updateiconcache.c:1682
 #, c-format
 msgid "No theme index file."
-msgstr ""
+msgstr "ಯಾವುದೆ ಥೀಮ್ ಸೂಚಕ ಕಡತವಿಲ್ಲ."
 
 #: gtk/updateiconcache.c:1686
 #, c-format
@@ -4428,79 +4401,79 @@ msgstr "X ಆದಾನ ಪದ್ದತಿ"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1113
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr ""
+msgstr "'%s' ಮುದ್ರಕದಲ್ಲಿ ಶಾಯಿ ಕಡಿಮೆಯಾಗಿದೆ."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1114
 #, c-format
 msgid "Printer '%s' has no toner left."
-msgstr ""
+msgstr "'%s' ಮುದ್ರಕದಲ್ಲಿ ಶಾಯಿ ಖಾಲಿಯಾಗಿದೆ."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:1116
 #, c-format
 msgid "Printer '%s' is low on developer."
-msgstr ""
+msgstr "'%s' ಮುದ್ರಕದಲ್ಲಿ ಡೆವಲಪರ್ ಕಡಿಮೆ ಇದೆ."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:1118
 #, c-format
 msgid "Printer '%s' is out of developer."
-msgstr ""
+msgstr "'%s' ಮುದ್ರಕದಲ್ಲಿ ಡೆವಲಪರ್ ಖಾಲಿಯಾಗಿದೆ."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:1120
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr ""
+msgstr "'%s' ಮುದ್ರಕದಲ್ಲಿ ಕನಿಷ್ಟ ಪಕ್ಷ ಒಂದು ಮಾರ್ಕರಿನ ಪೂರೈಕೆಯಲ್ಲಿ ಕೊರತೆ ಇದೆ."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:1122
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
-msgstr ""
+msgstr "'%s' ಮುದ್ರಕದಲ್ಲಿ ಕನಿಷ್ಟ ಪಕ್ಷ ಒಂದು ಮಾರ್ಕರಿನ ಪೂರೈಕೆ ಇಲ್ಲವಾಗಿದೆ."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1123
 #, c-format
 msgid "The cover is open on printer '%s'."
-msgstr ""
+msgstr "'%s' ಮುದ್ರಕದ ಹೊದಿಕೆಯು ತೆರೆದಿದೆ."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1124
 #, c-format
 msgid "The door is open on printer '%s'."
-msgstr ""
+msgstr "'%s' ಮುದ್ರಕದ ಬಾಗಿಲು ತೆರೆದಿದೆ."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1125
 #, c-format
 msgid "Printer '%s' is low on paper."
-msgstr ""
+msgstr "'%s' ಮುದ್ರಕದಲ್ಲಿ ಹಾಳೆಗಳ ಕೊರತೆಯಾಗಿದೆ."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1126
 #, c-format
 msgid "Printer '%s' is out of paper."
-msgstr ""
+msgstr "'%s' ಮುದ್ರಕದಲ್ಲಿ ಹಾಳೆಗಳು ಖಾಲಿಯಾಗಿವೆ."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1127
-#, fuzzy, c-format
+#, c-format
 msgid "Printer '%s' is currently off-line."
-msgstr "ಮುದ್ರಕದ ಆಫ್-ಲೈನ್ ಆಗಿದೆ"
+msgstr "'%s' ಮುದ್ರಕವು ಆಫ್-ಲೈನ್‌ನಲ್ಲಿದೆ."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1128
 #, c-format
 msgid "Printer '%s' may not be connected."
-msgstr ""
+msgstr "'%s' ಮುದ್ರಕವು ಸಂಪರ್ಕಿತಗೊಂಡಿರದೆ ಇರಬಹುದು."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1129
 #, c-format
 msgid "There is a problem on printer '%s'."
-msgstr ""
+msgstr "'%s' ಮುದ್ರಕಕ್ಕೆ ಒಂದು ತೊಂದರೆ ಎದುರಾಗಿದೆ."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1371
 msgid "Paused ; Rejecting Jobs"
-msgstr ""
+msgstr "ತಾತ್ಕಾಲಿಕ ಸ್ಥಗಿತ; ಕೆಲಸವು ತಿರಸ್ಕರಿಸಲ್ಪಟ್ಟಿದೆ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1375
 msgid "Rejecting Jobs"
-msgstr ""
+msgstr "ಕೆಲಸವು ತಿರಸ್ಕರಿಸಲ್ಪಟ್ಟಿದೆ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1996
 msgid "Two Sided"
@@ -4516,7 +4489,7 @@ msgstr "ಕಾಗದದ ಆಕರ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1999
 msgid "Output Tray"
-msgstr "ಪ್ರದಾನ(output) ಟ್ರೇ"
+msgstr "ಪ್ರದಾನ(ಔಟ್‌ಪುಟ್) ಟ್ರೇ"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2008
 msgid "One Sided"
@@ -4588,7 +4561,7 @@ msgstr "ಕಸ್ಟಮ್ %sx%s"
 #: modules/printbackends/file/gtkprintbackendfile.c:235
 #, c-format
 msgid "output.%s"
-msgstr "ಪ್ರದಾನ(output).%s"
+msgstr "ಪ್ರದಾನ(ಔಟ್‌ಪುಟ್).%s"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:464
 msgid "Print to File"
@@ -4613,7 +4586,7 @@ msgstr "ಕಡತ"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:608
 msgid "_Output format"
-msgstr "ಪ್ರದಾನದ (output) ವಿನ್ಯಾಸ (_O)"
+msgstr "ಪ್ರದಾನದ (ಔಟ್‌ಪುಟ್) ವಿನ್ಯಾಸ (_O)"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:398
 msgid "Print to LPR"
@@ -4631,7 +4604,7 @@ msgstr "ಆಜ್ಞಾ ಸಾಲು"
 #: modules/printbackends/test/gtkprintbackendtest.c:235
 #, c-format
 msgid "test-output.%s"
-msgstr "ಪರೀಕ್ಷಾ-ಪ್ರದಾನ (output).%s"
+msgstr "ಪರೀಕ್ಷಾ-ಪ್ರದಾನ (ಔಟ್‌ಪುಟ್).%s"
 
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
@@ -4642,56 +4615,3 @@ msgstr "ಮುದ್ರಕವನ್ನು ಪರೀಕ್ಷಿಸಲು ಮು�
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' ಕಡತಕ್ಕೆ ಮಾಹಿತಿಯನ್ನು ಪಡೆಯಲಾಗಿಲ್ಲ: %s"
 
-#~ msgid "Invalid filename: %s"
-#~ msgstr "ಅಮಾನ್ಯ ಕಡತದ ಹೆಸರು:%s"
-
-#~ msgid ""
-#~ "Could not add a bookmark for '%s' because it is an invalid path name."
-#~ msgstr ""
-#~ "'%s' ಗೆ ಒಂದು ಬುಕ್-ಮಾರ್ಕನ್ನು ಸೇರಿಸಲಾಗಿಲ್ಲ, ಏಕೆಂದರೆ ಅದು ಒಂದು ಅಮಾನ್ಯ ಪಥದ "
-#~ "ಹೆಸರಾಗಿದೆ."
-
-#~ msgid "Could not select file '%s' because it is an invalid path name."
-#~ msgstr "'%s' ಕಡತವನ್ನು ಆರಿಸಲಾಗಿಲ್ಲ ಏಕೆಂದರೆ ಇದು ಒಂದು ಅಮಾನ್ಯ ಪಥದ ಹೆಸರಾಗಿದೆ."
-
-#~ msgid "%d byte"
-#~ msgid_plural "%d bytes"
-#~ msgstr[0] "%d ಅಷ್ಟಕ (ಬೈಟ್)"
-#~ msgstr[1] "%d ಅಷ್ಟಕಗಳು (ಬೈಟ್)"
-
-#~ msgid "Could not get a stock icon for %s\n"
-#~ msgstr "%s ಗೆ ಸ್ಟಾಕ್ ಚಿಹ್ನೆ ಪಡೆಯಲಾಗಿಲ್ಲ\n"
-
-#~ msgid "Error getting information for '%s': %s"
-#~ msgstr "'%s' ಗೆ ಮಾಹಿತಿಯನ್ನು ಪಡೆಯುವಲ್ಲ್ಲಿ ದೋಷ: %s"
-
-#~ msgid "This file system does not support mounting"
-#~ msgstr "ಈ ಕಡತ ವ್ಯವಸ್ಥೆಯು ಆರೋಹಣವನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ"
-
-#~ msgid ""
-#~ "The name \"%s\" is not valid because it contains the character \"%s\". "
-#~ "Please use a different name."
-#~ msgstr ""
-#~ "ಹೆಸರು \"%s\" ಮಾನ್ಯವಲ್ಲ ಏಕೆಂದರೆ ಅದು \"%s\" ಚಿಹ್ನೆಗಳನ್ನು ಹೊಂದಿದೆ. ದಯವಿಟ್ಟು ಬೇರೆ "
-#~ "ಹೆಸರನ್ನು ಬಳಸಿ."
-
-#~ msgid "Bookmark saving failed: %s"
-#~ msgstr "ಬುಕ್-ಮಾರ್ಕನ್ನು ಉಳಿಸುವಲ್ಲಿ ವಿಫಲತೆ: %s"
-
-#~ msgid "'%s' already exists in the bookmarks list"
-#~ msgstr "'%s' ವು ಈಗಾಗಲೆ ಬುಕ್-ಮಾರ್ಕ್ ಪಟ್ಟಿಯಲ್ಲಿ ಇದೆ"
-
-#~ msgid "'%s' does not exist in the bookmarks list"
-#~ msgstr "'%s' ವು ಬುಕ್-ಮಾರ್ಕ್ ಪಟ್ಟಿಯಲ್ಲಿ ಇಲ್ಲ"
-
-#~ msgid "Path is not a folder: '%s'"
-#~ msgstr "ಪಥವು ಒಂದು ಕಡತ ಕೋಶವಾಗಿಲ್ಲ:'%s'"
-
-#~ msgid "Network Drive (%s)"
-#~ msgstr "ಜಾಲಬಂಧ ಡ್ರೈವ್ (%s)"
-
-#~ msgid "%s (%s)"
-#~ msgstr "%s (%s)"
-
-#~ msgid "Unknown attribute '%s' on line %d char %d"
-#~ msgstr "ಅಜ್ಞಾತ ವೈಶಿಷ್ಟ್ಯ '%s'ವು ಸಾಲು %dನಲ್ಲಿನ ಅಕ್ಷರ %d ದಲ್ಲಿ ಕಂಡು ಬಂದಿದೆ"
