@@ -100,6 +100,7 @@
 #include <gtk/gtkhscale.h>
 #include <gtk/gtkhscrollbar.h>
 #include <gtk/gtkhseparator.h>
+#include <gtk/gtkhsv.h>
 #include <gtk/gtkiconfactory.h>
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtkiconview.h>

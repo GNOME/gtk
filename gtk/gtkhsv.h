@@ -21,8 +21,6 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#ifndef __GTK_HSV_H__
-#define __GTK_HSV_H__
 
 /*
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
@@ -31,9 +29,16 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#include <gtk/gtkcontainer.h>
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
 
-G_BEGIN_DECLS 
+#ifndef __GTK_HSV_H__
+#define __GTK_HSV_H__
+
+#include <gtk/gtkwidget.h>
+
+G_BEGIN_DECLS
 
 #define GTK_TYPE_HSV            (gtk_hsv_get_type ())
 #define GTK_HSV(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HSV, GtkHSV))
@@ -49,22 +54,27 @@ typedef struct _GtkHSVClass GtkHSVClass;
 struct _GtkHSV
 {
   GtkWidget parent_instance;
-  
+
   /* Private data */
-  gpointer priv;
+  gpointer GSEAL (priv);
 };
 
 struct _GtkHSVClass
 {
   GtkWidgetClass parent_class;
-  
+
   /* Notification signals */
-  
-  void (*changed) (GtkHSV *hsv);
+  void (* changed) (GtkHSV          *hsv);
 
   /* Keybindings */
-  void (* move) (GtkHSV          *hsv,
-                 GtkDirectionType type);
+  void (* move)    (GtkHSV          *hsv,
+                    GtkDirectionType type);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 
@@ -85,6 +95,8 @@ void       gtk_hsv_get_metrics  (GtkHSV    *hsv,
 				 gint      *size,
 				 gint      *ring_width);
 gboolean   gtk_hsv_is_adjusting (GtkHSV    *hsv);
+
+/* Convert colors between the RGB and HSV color spaces */
 void       gtk_hsv_to_rgb       (gdouble    h,
 				 gdouble    s,
 				 gdouble    v,
@@ -97,7 +109,6 @@ void       gtk_rgb_to_hsv       (gdouble    r,
 				 gdouble   *h,
 				 gdouble   *s,
 				 gdouble   *v);
-
 
 G_END_DECLS
 

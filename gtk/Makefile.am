@@ -212,6 +212,7 @@ gtk_public_h_sources =          \
 	gtkhscale.h		\
 	gtkhscrollbar.h		\
 	gtkhseparator.h		\
+	gtkhsv.h		\
 	gtkiconfactory.h	\
 	gtkicontheme.h		\
 	gtkiconview.h		\
@@ -354,7 +355,6 @@ gtk_private_h_sources =		\
 	gtkfilechooserutils.h	\
 	gtkfilesystem.h		\
 	gtkfilesystemmodel.h	\
-	gtkhsv.h		\
 	gtkiconcache.h		\
 	gtkintl.h		\
 	gtkkeyhash.h		\

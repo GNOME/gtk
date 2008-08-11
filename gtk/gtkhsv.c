@@ -22,23 +22,25 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "config.h"
-#include <math.h>
-#include <string.h>
-#include "gtkhsv.h"
-#include "gdk/gdkkeysyms.h"
-#include "gtkbindings.h"
-#include "gtkcontainer.h"
-#include "gtkmarshalers.h"
-#include "gtkintl.h"
-#include "gtkalias.h"
-
 /*
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
+
+#include "config.h"
+
+#include <math.h>
+#include <string.h>
+
+#include "gdk/gdkkeysyms.h"
+
+#include "gtkhsv.h"
+#include "gtkbindings.h"
+#include "gtkmarshalers.h"
+#include "gtkintl.h"
+#include "gtkalias.h"
 
 /* Default width/height */
 #define DEFAULT_SIZE 100
@@ -537,23 +539,25 @@ compute_triangle (GtkHSV *hsv,
 		  gint   *vy)
 {
   HSVPrivate *priv;
-  gdouble center;
+  gdouble center_x;
+  gdouble center_y;
   gdouble inner, outer;
   gdouble angle;
-  
+
   priv = hsv->priv;
-  
-  center = GTK_WIDGET (hsv)->requisition.width / 2.0;
+
+  center_x = GTK_WIDGET (hsv)->allocation.width / 2.0;
+  center_y = GTK_WIDGET (hsv)->allocation.height / 2.0;
   outer = priv->size / 2.0;
   inner = outer - priv->ring_width;
   angle = priv->h * 2.0 * G_PI;
-  
-  *hx = floor (center + cos (angle) * inner + 0.5);
-  *hy = floor (center - sin (angle) * inner + 0.5);
-  *sx = floor (center + cos (angle + 2.0 * G_PI / 3.0) * inner + 0.5);
-  *sy = floor (center - sin (angle + 2.0 * G_PI / 3.0) * inner + 0.5);
-  *vx = floor (center + cos (angle + 4.0 * G_PI / 3.0) * inner + 0.5);
-  *vy = floor (center - sin (angle + 4.0 * G_PI / 3.0) * inner + 0.5);
+
+  *hx = floor (center_x + cos (angle) * inner + 0.5);
+  *hy = floor (center_y - sin (angle) * inner + 0.5);
+  *sx = floor (center_x + cos (angle + 2.0 * G_PI / 3.0) * inner + 0.5);
+  *sy = floor (center_y - sin (angle + 2.0 * G_PI / 3.0) * inner + 0.5);
+  *vx = floor (center_x + cos (angle + 4.0 * G_PI / 3.0) * inner + 0.5);
+  *vy = floor (center_y - sin (angle + 4.0 * G_PI / 3.0) * inner + 0.5);
 }
 
 /* Computes whether a point is inside the hue ring */
@@ -564,18 +568,21 @@ is_in_ring (GtkHSV *hsv,
 {
   HSVPrivate *priv;
   gdouble dx, dy, dist;
-  gdouble center, inner, outer;
-  
+  gdouble center_x;
+  gdouble center_y;
+  gdouble inner, outer;
+
   priv = hsv->priv;
-  
-  center = priv->size / 2.0;
+
+  center_x = GTK_WIDGET (hsv)->allocation.width / 2.0;
+  center_y = GTK_WIDGET (hsv)->allocation.height / 2.0;
   outer = priv->size / 2.0;
   inner = outer - priv->ring_width;
-  
-  dx = x - center;
-  dy = center - y;
+
+  dx = x - center_x;
+  dy = center_y - y;
   dist = dx * dx + dy * dy;
-  
+
   return (dist >= inner * inner && dist <= outer * outer);
 }
 
@@ -589,18 +596,20 @@ compute_sv (GtkHSV  *hsv,
 {
   int ihx, ihy, isx, isy, ivx, ivy;
   double hx, hy, sx, sy, vx, vy;
-  double center;
-  
+  double center_x;
+  double center_y;
+
   compute_triangle (hsv, &ihx, &ihy, &isx, &isy, &ivx, &ivy);
-  center = GTK_WIDGET (hsv)->requisition.width / 2.0;
-  hx = ihx - center;
-  hy = center - ihy;
-  sx = isx - center;
-  sy = center - isy;
-  vx = ivx - center;
-  vy = center - ivy;
-  x -= center;
-  y = center - y;
+  center_x = GTK_WIDGET (hsv)->allocation.width / 2.0;
+  center_y = GTK_WIDGET (hsv)->allocation.height / 2.0;
+  hx = ihx - center_x;
+  hy = center_y - ihy;
+  sx = isx - center_x;
+  sy = center_y - isy;
+  vx = ivx - center_x;
+  vy = center_y - ivy;
+  x -= center_x;
+  y = center_y - y;
   
   if (vx * (x - sx) + vy * (y - sy) < 0.0)
     {
@@ -688,18 +697,20 @@ compute_v (GtkHSV *hsv,
 	   gdouble x,
 	   gdouble y)
 {
-  double center;
+  double center_x;
+  double center_y;
   double dx, dy;
   double angle;
-  
-  center = GTK_WIDGET (hsv)->requisition.width / 2.0;
-  dx = x - center;
-  dy = center - y;
-  
+
+  center_x = GTK_WIDGET (hsv)->allocation.width / 2.0;
+  center_y = GTK_WIDGET (hsv)->allocation.height / 2.0;
+  dx = x - center_x;
+  dy = center_y - y;
+
   angle = atan2 (dy, dx);
   if (angle < 0.0)
     angle += 2.0 * G_PI;
-  
+
   return angle / (2.0 * G_PI);
 }
 
@@ -889,7 +900,8 @@ paint_ring (GtkHSV      *hsv,
   HSVPrivate *priv;
   int xx, yy;
   gdouble dx, dy, dist;
-  gdouble center;
+  gdouble center_x;
+  gdouble center_y;
   gdouble inner, outer;
   guint32 *buf, *p;
   gdouble angle;
@@ -907,9 +919,10 @@ paint_ring (GtkHSV      *hsv,
 			NULL);
   
   priv = hsv->priv;
-  
-  center = widget->requisition.width / 2.0;
-  
+
+  center_x = widget->allocation.width / 2.0;
+  center_y = widget->allocation.height / 2.0;
+
   outer = priv->size / 2.0;
   inner = outer - priv->ring_width;
   
@@ -922,11 +935,11 @@ paint_ring (GtkHSV      *hsv,
     {
       p = buf + yy * width;
       
-      dy = -(yy + y - center);
+      dy = -(yy + y - center_y);
       
       for (xx = 0; xx < width; xx++)
 	{
-	  dx = xx + x - center;
+	  dx = xx + x - center_x;
 	  
 	  dist = dx * dx + dy * dy;
 	  if (dist < ((inner-1) * (inner-1)) || dist > ((outer+1) * (outer+1)))
@@ -971,10 +984,10 @@ paint_ring (GtkHSV      *hsv,
   else
     cairo_set_source_rgb (source_cr, 1., 1., 1.);
 
-  cairo_move_to (source_cr, -x + center, - y + center);
+  cairo_move_to (source_cr, -x + center_x, - y + center_y);
   cairo_line_to (source_cr,
-		 -x + center + cos (priv->h * 2.0 * G_PI) * center,
-		 -y + center - sin (priv->h * 2.0 * G_PI) * center);
+		 -x + center_x + cos (priv->h * 2.0 * G_PI) * priv->size / 2,
+		 -y + center_y - sin (priv->h * 2.0 * G_PI) * priv->size / 2);
   cairo_stroke (source_cr);
   cairo_destroy (source_cr);
 
@@ -988,7 +1001,7 @@ paint_ring (GtkHSV      *hsv,
   cairo_set_line_width (cr, priv->ring_width);
   cairo_new_path (cr);
   cairo_arc (cr,
-	     center, center,
+	     center_x, center_y,
 	     priv->size / 2. - priv->ring_width / 2.,
 	     0, 2 * G_PI);
   cairo_stroke (cr);
@@ -1357,6 +1370,8 @@ gtk_hsv_focus (GtkWidget       *widget,
  * Creates a new HSV color selector.
  *
  * Return value: A newly-created HSV color selector.
+ *
+ * Since: 2.14
  **/
 GtkWidget*
 gtk_hsv_new (void)
@@ -1373,6 +1388,8 @@ gtk_hsv_new (void)
  *
  * Sets the current color in an HSV color selector.  Color component values must
  * be in the [0.0, 1.0] range.
+ *
+ * Since: 2.14
  **/
 void
 gtk_hsv_set_color (GtkHSV *hsv,
@@ -1407,9 +1424,14 @@ gtk_hsv_set_color (GtkHSV *hsv,
  *
  * Queries the current color in an HSV color selector.  Returned values will be
  * in the [0.0, 1.0] range.
+ *
+ * Since: 2.14
  **/
 void
-gtk_hsv_get_color (GtkHSV *hsv, double *h, double *s, double *v)
+gtk_hsv_get_color (GtkHSV *hsv,
+                   double *h,
+                   double *s,
+                   double *v)
 {
   HSVPrivate *priv;
   
@@ -1434,6 +1456,8 @@ gtk_hsv_get_color (GtkHSV *hsv, double *h, double *s, double *v)
  * @ring_width: Width of the hue ring.
  *
  * Sets the size and ring width of an HSV color selector.
+ *
+ * Since: 2.14
  **/
 void
 gtk_hsv_set_metrics (GtkHSV *hsv,
@@ -1468,6 +1492,8 @@ gtk_hsv_set_metrics (GtkHSV *hsv,
  * @ring_width: Return value for the width of the hue ring.
  *
  * Queries the size and ring width of an HSV color selector.
+ *
+ * Since: 2.14
  **/
 void
 gtk_hsv_get_metrics (GtkHSV *hsv,
@@ -1499,6 +1525,8 @@ gtk_hsv_get_metrics (GtkHSV *hsv,
  * Return value: TRUE if clients can ignore changes to the color value, since
  * they may be transitory, or FALSE if they should consider the color value
  * status to be final.
+ *
+ * Since: 2.14
  **/
 gboolean
 gtk_hsv_is_adjusting (GtkHSV *hsv)
@@ -1520,9 +1548,11 @@ gtk_hsv_is_adjusting (GtkHSV *hsv)
  * @r: Return value for the red component.
  * @g: Return value for the green component.
  * @b: Return value for the blue component.
- * 
+ *
  * Converts a color from HSV space to RGB.  Input values must be in the
  * [0.0, 1.0] range; output values will be in the same range.
+ *
+ * Since: 2.14
  **/
 void
 gtk_hsv_to_rgb (gdouble  h,
@@ -1556,9 +1586,11 @@ gtk_hsv_to_rgb (gdouble  h,
  * @h: Return value for the hue component.
  * @s: Return value for the saturation component.
  * @v: Return value for the value component.
- * 
+ *
  * Converts a color from RGB space to HSV.  Input values must be in the
  * [0.0, 1.0] range; output values will be in the same range.
+ *
+ * Since: 2.14
  **/
 void
 gtk_rgb_to_hsv (gdouble  r,

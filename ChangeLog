@@ -1,3 +1,17 @@
+2008-08-11  Michael Natterer  <mitch@imendio.com>
+
+	Bug 547270 – Make GtkHSV public
+
+	* gtk/Makefile.am
+	* gtk/gtk.h: install gtkhsv.h as public header (its symbols were
+	always public anyway).
+
+	* gtk/gtkhsv.h: add single-include guards, add class struct padding,
+	seal the instance member, cleanup.
+
+	* gtk/gtkhsv.c: center the widget in its allocation,
+	add "Since: 2.14", cleanup.
+
 2008-08-11  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* gtk/gtkcalendar.h: Fix the Since: tag of GtkCalendarDetailFunc
