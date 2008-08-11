@@ -3851,11 +3851,11 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 #ifdef PROFILE_FILE_CHOOSER
   g_object_set_data (G_OBJECT (impl->browse_shortcuts_tree_view), "fmq-name", "shortcuts");
 #endif
-  g_signal_connect (impl->browse_shortcuts_tree_view, "key_press_event",
+  g_signal_connect (impl->browse_shortcuts_tree_view, "key-press-event",
 		    G_CALLBACK (tree_view_keybinding_cb), impl);
-  g_signal_connect (impl->browse_shortcuts_tree_view, "popup_menu",
+  g_signal_connect (impl->browse_shortcuts_tree_view, "popup-menu",
 		    G_CALLBACK (shortcuts_popup_menu_cb), impl);
-  g_signal_connect (impl->browse_shortcuts_tree_view, "button_press_event",
+  g_signal_connect (impl->browse_shortcuts_tree_view, "button-press-event",
 		    G_CALLBACK (shortcuts_button_press_event_cb), impl);
   /* Accessible object name for the file chooser's shortcuts pane */
   atk_object_set_name (gtk_widget_get_accessible (impl->browse_shortcuts_tree_view), _("Places"));
@@ -3884,23 +3884,23 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   g_signal_connect (selection, "changed",
 		    G_CALLBACK (shortcuts_selection_changed_cb), impl);
 
-  g_signal_connect (impl->browse_shortcuts_tree_view, "key_press_event",
+  g_signal_connect (impl->browse_shortcuts_tree_view, "key-press-event",
 		    G_CALLBACK (shortcuts_key_press_event_cb), impl);
 
-  g_signal_connect (impl->browse_shortcuts_tree_view, "drag_begin",
+  g_signal_connect (impl->browse_shortcuts_tree_view, "drag-begin",
 		    G_CALLBACK (shortcuts_drag_begin_cb), impl);
-  g_signal_connect (impl->browse_shortcuts_tree_view, "drag_end",
+  g_signal_connect (impl->browse_shortcuts_tree_view, "drag-end",
 		    G_CALLBACK (shortcuts_drag_end_cb), impl);
-  g_signal_connect (impl->browse_shortcuts_tree_view, "drag_data_delete",
+  g_signal_connect (impl->browse_shortcuts_tree_view, "drag-data-delete",
 		    G_CALLBACK (shortcuts_drag_data_delete_cb), impl);
 
-  g_signal_connect (impl->browse_shortcuts_tree_view, "drag_leave",
+  g_signal_connect (impl->browse_shortcuts_tree_view, "drag-leave",
 		    G_CALLBACK (shortcuts_drag_leave_cb), impl);
-  g_signal_connect (impl->browse_shortcuts_tree_view, "drag_motion",
+  g_signal_connect (impl->browse_shortcuts_tree_view, "drag-motion",
 		    G_CALLBACK (shortcuts_drag_motion_cb), impl);
-  g_signal_connect (impl->browse_shortcuts_tree_view, "drag_drop",
+  g_signal_connect (impl->browse_shortcuts_tree_view, "drag-drop",
 		    G_CALLBACK (shortcuts_drag_drop_cb), impl);
-  g_signal_connect (impl->browse_shortcuts_tree_view, "drag_data_received",
+  g_signal_connect (impl->browse_shortcuts_tree_view, "drag-data-received",
 		    G_CALLBACK (shortcuts_drag_data_received_cb), impl);
 
   /* Support tooltips */
@@ -4527,20 +4527,20 @@ create_file_list (GtkFileChooserDefault *impl)
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
   gtk_drag_dest_add_uri_targets (impl->browse_files_tree_view);
   
-  g_signal_connect (impl->browse_files_tree_view, "row_activated",
+  g_signal_connect (impl->browse_files_tree_view, "row-activated",
 		    G_CALLBACK (list_row_activated), impl);
-  g_signal_connect (impl->browse_files_tree_view, "key_press_event",
+  g_signal_connect (impl->browse_files_tree_view, "key-press-event",
     		    G_CALLBACK (trap_activate_cb), impl);
-  g_signal_connect (impl->browse_files_tree_view, "popup_menu",
+  g_signal_connect (impl->browse_files_tree_view, "popup-menu",
 		    G_CALLBACK (list_popup_menu_cb), impl);
-  g_signal_connect (impl->browse_files_tree_view, "button_press_event",
+  g_signal_connect (impl->browse_files_tree_view, "button-press-event",
 		    G_CALLBACK (list_button_press_event_cb), impl);
 
-  g_signal_connect (impl->browse_files_tree_view, "drag_data_received",
+  g_signal_connect (impl->browse_files_tree_view, "drag-data-received",
                     G_CALLBACK (file_list_drag_data_received_cb), impl);
-  g_signal_connect (impl->browse_files_tree_view, "drag_drop",
+  g_signal_connect (impl->browse_files_tree_view, "drag-drop",
                     G_CALLBACK (file_list_drag_drop_cb), impl);
-  g_signal_connect (impl->browse_files_tree_view, "drag_motion",
+  g_signal_connect (impl->browse_files_tree_view, "drag-motion",
                     G_CALLBACK (file_list_drag_motion_cb), impl);
 
   g_object_set (impl->browse_files_tree_view, "has-tooltip", TRUE, NULL);
@@ -4579,7 +4579,7 @@ create_file_list (GtkFileChooserDefault *impl)
 		NULL);
   g_signal_connect (impl->list_name_renderer, "edited",
 		    G_CALLBACK (renderer_edited_cb), impl);
-  g_signal_connect (impl->list_name_renderer, "editing_canceled",
+  g_signal_connect (impl->list_name_renderer, "editing-canceled",
 		    G_CALLBACK (renderer_editing_canceled_cb), impl);
   gtk_tree_view_column_pack_start (impl->list_name_column, impl->list_name_renderer, TRUE);
   gtk_tree_view_column_set_cell_data_func (impl->list_name_column, impl->list_name_renderer,
@@ -5738,7 +5738,8 @@ gtk_file_chooser_default_hierarchy_changed (GtkWidget *widget,
   if (previous_toplevel)
     {
       g_assert (impl->toplevel_set_focus_id != 0);
-      g_signal_handler_disconnect (previous_toplevel, impl->toplevel_set_focus_id);
+      g_signal_handler_disconnect (previous_toplevel,
+                                   impl->toplevel_set_focus_id);
       impl->toplevel_set_focus_id = 0;
       impl->toplevel_last_focus_widget = NULL;
     }
@@ -5748,7 +5749,7 @@ gtk_file_chooser_default_hierarchy_changed (GtkWidget *widget,
   toplevel = gtk_widget_get_toplevel (widget);
   if (GTK_IS_WINDOW (toplevel))
     {
-      impl->toplevel_set_focus_id = g_signal_connect (toplevel, "set_focus",
+      impl->toplevel_set_focus_id = g_signal_connect (toplevel, "set-focus",
 						      G_CALLBACK (toplevel_set_focus_cb), impl);
       impl->toplevel_last_focus_widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
     }
@@ -6228,7 +6229,7 @@ load_set_model (GtkFileChooserDefault *impl)
   impl->list_sort_ascending = TRUE;
   profile_msg ("    gtk_tree_model_sort_new_with_model end", NULL);
 
-  g_signal_connect (impl->sort_model, "sort_column_changed",
+  g_signal_connect (impl->sort_model, "sort-column-changed",
 		    G_CALLBACK (list_sort_column_changed_cb), impl);
 
   profile_msg ("    gtk_tree_view_set_model start", NULL);

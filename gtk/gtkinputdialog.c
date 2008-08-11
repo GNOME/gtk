@@ -741,7 +741,7 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
       gtk_box_pack_start (GTK_BOX (hbox), key->entry, TRUE, TRUE, 0);
       gtk_widget_show (key->entry);
 
-      g_signal_connect (key->entry, "key_press_event",
+      g_signal_connect (key->entry, "key-press-event",
 			G_CALLBACK (gtk_input_dialog_key_press), key);
       g_signal_connect (key->entry, "destroy",
 			G_CALLBACK (gtk_input_dialog_destroy_key), key);

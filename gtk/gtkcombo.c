@@ -930,16 +930,16 @@ gtk_combo_init (GtkCombo * combo)
   combo->entry_change_id = g_signal_connect (combo->entry, "changed",
 					     G_CALLBACK (gtk_combo_update_list),
 					     combo);
-  g_signal_connect_after (combo->entry, "key_press_event",
+  g_signal_connect_after (combo->entry, "key-press-event",
 			  G_CALLBACK (gtk_combo_entry_key_press), combo);
-  g_signal_connect_after (combo->entry, "focus_out_event",
+  g_signal_connect_after (combo->entry, "focus-out-event",
 			  G_CALLBACK (gtk_combo_entry_focus_out), combo);
   combo->activate_id = g_signal_connect (combo->entry, "activate",
 					 G_CALLBACK (gtk_combo_activate),
 					 combo);
-  g_signal_connect (combo->button, "button_press_event",
+  g_signal_connect (combo->button, "button-press-event",
 		    G_CALLBACK (gtk_combo_popup_button_press), combo);
-  g_signal_connect (combo->button, "leave_notify_event",
+  g_signal_connect (combo->button, "leave-notify-event",
 		    G_CALLBACK (gtk_combo_popup_button_leave), combo);
 
   combo->popwin = gtk_window_new (GTK_WINDOW_POPUP);
@@ -948,7 +948,7 @@ gtk_combo_init (GtkCombo * combo)
   g_object_ref (combo->popwin);
   gtk_window_set_resizable (GTK_WINDOW (combo->popwin), FALSE);
 
-  g_signal_connect (combo->popwin, "key_press_event",
+  g_signal_connect (combo->popwin, "key-press-event",
 		    G_CALLBACK (gtk_combo_window_key_press), combo);
   
   gtk_widget_set_events (combo->popwin, GDK_KEY_PRESS_MASK);
@@ -990,17 +990,17 @@ gtk_combo_init (GtkCombo * combo)
   combo->list_change_id = g_signal_connect (combo->list, "selection-changed",
 					    G_CALLBACK (gtk_combo_selection_changed), combo);
   
-  g_signal_connect (combo->popwin, "key_press_event",
+  g_signal_connect (combo->popwin, "key-press-event",
 		    G_CALLBACK (gtk_combo_list_key_press), combo);
-  g_signal_connect (combo->popwin, "button_press_event",
+  g_signal_connect (combo->popwin, "button-press-event",
 		    G_CALLBACK (gtk_combo_button_press), combo);
 
-  g_signal_connect (combo->popwin, "event_after",
+  g_signal_connect (combo->popwin, "event-after",
 		    G_CALLBACK (gtk_combo_button_event_after), combo);
-  g_signal_connect (combo->list, "event_after",
+  g_signal_connect (combo->list, "event-after",
 		    G_CALLBACK (gtk_combo_button_event_after), combo);
 
-  g_signal_connect (combo->list, "enter_notify_event",
+  g_signal_connect (combo->list, "enter-notify-event",
 		    G_CALLBACK (gtk_combo_list_enter), combo);
 }
 
@@ -1123,7 +1123,9 @@ gtk_combo_set_popdown_strings (GtkCombo *combo,
 }
 
 void
-gtk_combo_set_item_string (GtkCombo * combo, GtkItem * item, const gchar * item_value)
+gtk_combo_set_item_string (GtkCombo    *combo,
+                           GtkItem     *item,
+                           const gchar *item_value)
 {
   g_return_if_fail (GTK_IS_COMBO (combo));
   g_return_if_fail (item != NULL);
@@ -1154,7 +1156,7 @@ gtk_combo_size_allocate (GtkWidget     *widget,
 }
 
 void
-gtk_combo_disable_activate (GtkCombo* combo)
+gtk_combo_disable_activate (GtkCombo *combo)
 {
   g_return_if_fail (GTK_IS_COMBO (combo));
 
@@ -1165,10 +1167,10 @@ gtk_combo_disable_activate (GtkCombo* combo)
 }
 
 static void
-gtk_combo_set_property (GObject         *object,
-			guint            prop_id,
-			const GValue    *value,
-			GParamSpec      *pspec)
+gtk_combo_set_property (GObject      *object,
+			guint         prop_id,
+			const GValue *value,
+			GParamSpec   *pspec)
 {
   GtkCombo *combo = GTK_COMBO (object);
   
@@ -1197,10 +1199,10 @@ gtk_combo_set_property (GObject         *object,
 }
 
 static void
-gtk_combo_get_property (GObject         *object,
-			guint            prop_id,
-			GValue          *value,
-			GParamSpec      *pspec)
+gtk_combo_get_property (GObject    *object,
+			guint       prop_id,
+			GValue     *value,
+			GParamSpec *pspec)
 {
   GtkCombo *combo = GTK_COMBO (object);
   

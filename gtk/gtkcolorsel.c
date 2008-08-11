@@ -433,7 +433,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   g_signal_connect (priv->hex_entry, "activate",
                     G_CALLBACK (hex_changed), colorsel);
 
-  g_signal_connect (priv->hex_entry, "focus_out_event",
+  g_signal_connect (priv->hex_entry, "focus-out-event",
                     G_CALLBACK (hex_focus_out), colorsel);
 
   gtk_widget_set_tooltip_text (priv->hex_entry,
@@ -918,8 +918,7 @@ color_sample_setup_dnd (GtkColorSelection *colorsel, GtkWidget *sample)
 		       targets, 1,
 		       GDK_ACTION_COPY | GDK_ACTION_MOVE);
   
-  g_signal_connect (sample,
-		    "drag_begin",
+  g_signal_connect (sample, "drag-begin",
 		    G_CALLBACK (color_sample_drag_begin),
 		    colorsel);
   if (sample == priv->cur_sample)
@@ -932,18 +931,15 @@ color_sample_setup_dnd (GtkColorSelection *colorsel, GtkWidget *sample)
 			 targets, 1,
 			 GDK_ACTION_COPY);
       
-      g_signal_connect (sample,
-			"drag_end",
+      g_signal_connect (sample, "drag-end",
 			G_CALLBACK (color_sample_drag_end),
 			colorsel);
     }
   
-  g_signal_connect (sample,
-		    "drag_data_get",
+  g_signal_connect (sample, "drag-data-get",
 		    G_CALLBACK (color_sample_drag_handle),
 		    colorsel);
-  g_signal_connect (sample,
-		    "drag_data_received",
+  g_signal_connect (sample, "drag-data-received",
 		    G_CALLBACK (color_sample_drop_handle),
 		    colorsel);
   
@@ -966,10 +962,10 @@ color_sample_new (GtkColorSelection *colorsel)
   gtk_box_pack_start (GTK_BOX (priv->sample_area), priv->cur_sample,
 		      TRUE, TRUE, 0);
   
-  g_signal_connect (priv->old_sample, "expose_event",
+  g_signal_connect (priv->old_sample, "expose-event",
 		    G_CALLBACK (color_old_sample_expose),
 		    colorsel);
-  g_signal_connect (priv->cur_sample, "expose_event",
+  g_signal_connect (priv->cur_sample, "expose-event",
 		    G_CALLBACK (color_cur_sample_expose),
 		    colorsel);
   
@@ -1270,12 +1266,10 @@ palette_set_color (GtkWidget         *drawing_area,
 			   targets, 1,
 			   GDK_ACTION_COPY | GDK_ACTION_MOVE);
       
-      g_signal_connect (drawing_area,
-			"drag_begin",
+      g_signal_connect (drawing_area, "drag-begin",
 			G_CALLBACK (palette_drag_begin),
 			colorsel);
-      g_signal_connect (drawing_area,
-			"drag_data_get",
+      g_signal_connect (drawing_area, "drag-data-get",
 			G_CALLBACK (palette_drag_handle),
 			colorsel);
       
@@ -1543,19 +1537,19 @@ palette_new (GtkColorSelection *colorsel)
                          | GDK_ENTER_NOTIFY_MASK
                          | GDK_LEAVE_NOTIFY_MASK);
   
-  g_signal_connect (retval, "expose_event",
+  g_signal_connect (retval, "expose-event",
 		    G_CALLBACK (palette_expose), colorsel);
-  g_signal_connect (retval, "button_press_event",
+  g_signal_connect (retval, "button-press-event",
 		    G_CALLBACK (palette_press), colorsel);
-  g_signal_connect (retval, "button_release_event",
+  g_signal_connect (retval, "button-release-event",
 		    G_CALLBACK (palette_release), colorsel);
-  g_signal_connect (retval, "enter_notify_event",
+  g_signal_connect (retval, "enter-notify-event",
 		    G_CALLBACK (palette_enter), colorsel);
-  g_signal_connect (retval, "leave_notify_event",
+  g_signal_connect (retval, "leave-notify-event",
 		    G_CALLBACK (palette_leave), colorsel);
-  g_signal_connect (retval, "key_press_event",
+  g_signal_connect (retval, "key-press-event",
 		    G_CALLBACK (palette_activate), colorsel);
-  g_signal_connect (retval, "popup_menu",
+  g_signal_connect (retval, "popup-menu",
 		    G_CALLBACK (palette_popup), colorsel);
   
   gtk_drag_dest_set (retval,
@@ -1565,9 +1559,9 @@ palette_new (GtkColorSelection *colorsel)
 		     targets, 1,
 		     GDK_ACTION_COPY);
   
-  g_signal_connect (retval, "drag_end",
+  g_signal_connect (retval, "drag-end",
                     G_CALLBACK (palette_drag_end), NULL);
-  g_signal_connect (retval, "drag_data_received",
+  g_signal_connect (retval, "drag-data-received",
                     G_CALLBACK (palette_drop_handle), colorsel);
 
   gtk_widget_set_tooltip_text (retval,
@@ -1800,10 +1794,10 @@ mouse_press (GtkWidget      *invisible,
   if (event->type == GDK_BUTTON_PRESS &&
       event->button == 1)
     {
-      g_signal_connect (invisible, "motion_notify_event",
+      g_signal_connect (invisible, "motion-notify-event",
                         G_CALLBACK (mouse_motion),
                         data);
-      g_signal_connect (invisible, "button_release_event",
+      g_signal_connect (invisible, "button-release-event",
                         G_CALLBACK (mouse_release),
                         data);
       g_signal_handlers_disconnect_by_func (invisible,
@@ -1877,9 +1871,9 @@ get_screen_color (GtkWidget *button)
   priv->grab_time = time;
   priv->has_grab = TRUE;
   
-  g_signal_connect (priv->dropper_grab_widget, "button_press_event",
+  g_signal_connect (priv->dropper_grab_widget, "button-press-event",
                     G_CALLBACK (mouse_press), colorsel);
-  g_signal_connect (priv->dropper_grab_widget, "key_press_event",
+  g_signal_connect (priv->dropper_grab_widget, "key-press-event",
                     G_CALLBACK (key_press), colorsel);
 }
 

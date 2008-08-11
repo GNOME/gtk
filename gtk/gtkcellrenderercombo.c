@@ -486,14 +486,14 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
 
   gtk_widget_show (combo);
 
-  g_signal_connect (GTK_CELL_EDITABLE (combo), "editing_done",
+  g_signal_connect (GTK_CELL_EDITABLE (combo), "editing-done",
 		    G_CALLBACK (gtk_cell_renderer_combo_editing_done),
 		    cell_combo);
   g_signal_connect (GTK_CELL_EDITABLE (combo), "changed",
 		    G_CALLBACK (gtk_cell_renderer_combo_changed),
 		    cell_combo);
   cell_combo->focus_out_id = 
-    g_signal_connect (combo, "focus_out_event",
+    g_signal_connect (combo, "focus-out-event",
 		      G_CALLBACK (gtk_cell_renderer_combo_focus_out_event),
 		      cell_combo);
 

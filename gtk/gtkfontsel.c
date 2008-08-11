@@ -321,7 +321,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   g_signal_connect (fontsel->size_entry, "activate",
 		    G_CALLBACK (gtk_font_selection_size_activate),
 		    fontsel);
-  g_signal_connect_after (fontsel->size_entry, "focus_out_event",
+  g_signal_connect_after (fontsel->size_entry, "focus-out-event",
 			  G_CALLBACK (gtk_font_selection_size_focus_out),
 			  fontsel);
   
@@ -354,7 +354,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   fontsel->family_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
   g_object_unref (model);
 
-  g_signal_connect (fontsel->family_list, "row_activated",
+  g_signal_connect (fontsel->family_list, "row-activated",
 		    G_CALLBACK (list_row_activated), fontsel);
 
   column = gtk_tree_view_column_new_with_attributes ("Family",

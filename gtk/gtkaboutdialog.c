@@ -505,7 +505,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_box_pack_end (GTK_BOX (GTK_DIALOG (about)->action_area), 
 		    button, FALSE, TRUE, 0); 
   gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (GTK_DIALOG (about)->action_area), button, TRUE);
-  g_signal_connect (button, "clicked", G_CALLBACK (display_credits_dialog), about);
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (display_credits_dialog), about);
   priv->credits_button = button;
   priv->credits_dialog = NULL;
 
@@ -516,7 +517,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_box_pack_end (GTK_BOX (GTK_DIALOG (about)->action_area), 
 		    button, FALSE, TRUE, 0); 
   gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (GTK_DIALOG (about)->action_area), button, TRUE);
-  g_signal_connect (button, "clicked", G_CALLBACK (display_license_dialog), about);
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (display_license_dialog), about);
   priv->license_button = button;
   priv->license_dialog = NULL;
 
@@ -1900,7 +1902,7 @@ add_credits_page (GtkAboutDialog *about,
     visited_link_color = default_visited_link_color;
 
   view = gtk_text_view_new ();
-  g_signal_connect_object (about, "style_set",
+  g_signal_connect_object (about, "style-set",
 			   G_CALLBACK (text_view_style_set), view, 0);
   
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
@@ -1910,13 +1912,13 @@ add_credits_page (GtkAboutDialog *about,
   gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 8);
   gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 8);
 
-  g_signal_connect (view, "key_press_event",
+  g_signal_connect (view, "key-press-event",
                     G_CALLBACK (credits_key_press_event), about);
-  g_signal_connect (view, "event_after",
+  g_signal_connect (view, "event-after",
                     G_CALLBACK (credits_event_after), about);
-  g_signal_connect (view, "motion_notify_event", 
+  g_signal_connect (view, "motion-notify-event", 
                     G_CALLBACK (credits_motion_notify_event), about);
-  g_signal_connect (view, "visibility_notify_event", 
+  g_signal_connect (view, "visibility-notify-event", 
                     G_CALLBACK (credits_visibility_notify_event), about);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -2288,10 +2290,12 @@ gtk_show_about_dialog (GtkWindow   *parent,
 
       g_object_ref_sink (dialog);
 
-      g_signal_connect (dialog, "delete_event", G_CALLBACK (gtk_widget_hide_on_delete), NULL);
+      g_signal_connect (dialog, "delete-event",
+                        G_CALLBACK (gtk_widget_hide_on_delete), NULL);
 
       /* Close dialog on user response */
-      g_signal_connect (dialog, "response", G_CALLBACK (close_cb), NULL);
+      g_signal_connect (dialog, "response",
+                        G_CALLBACK (close_cb), NULL);
 
       va_start (var_args, first_property_name);
       g_object_set_valist (G_OBJECT (dialog), first_property_name, var_args);

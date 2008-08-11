@@ -2801,10 +2801,10 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
       gtk_widget_show_all (priv->button);
     }
 
-  g_signal_connect (priv->button, "button_press_event",
+  g_signal_connect (priv->button, "button-press-event",
                     G_CALLBACK (gtk_combo_box_menu_button_press),
                     combo_box);
-  g_signal_connect (priv->button, "state_changed",
+  g_signal_connect (priv->button, "state-changed",
 		    G_CALLBACK (gtk_combo_box_button_state_changed), 
 		    combo_box);
 
@@ -2812,7 +2812,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   menu = gtk_menu_new ();
   gtk_widget_set_name (menu, "gtk-combobox-popup-menu");
   
-  g_signal_connect (menu, "key_press_event",
+  g_signal_connect (menu, "key-press-event",
 		    G_CALLBACK (gtk_combo_box_menu_key_press), combo_box);
   gtk_combo_box_set_popup_widget (combo_box, menu);
 
@@ -3617,7 +3617,7 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
   priv->button = gtk_toggle_button_new ();
   gtk_widget_set_parent (priv->button,
                          GTK_BIN (combo_box)->child->parent);
-  g_signal_connect (priv->button, "button_press_event",
+  g_signal_connect (priv->button, "button-press-event",
                     G_CALLBACK (gtk_combo_box_list_button_pressed), combo_box);
   g_signal_connect (priv->button, "toggled",
                     G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
@@ -3654,7 +3654,7 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
       gtk_container_add (GTK_CONTAINER (priv->cell_view_frame), priv->box);
       gtk_widget_show_all (priv->cell_view_frame);
 
-      g_signal_connect (priv->box, "button_press_event",
+      g_signal_connect (priv->box, "button-press-event",
 			G_CALLBACK (gtk_combo_box_list_button_pressed), 
 			combo_box);
     }
@@ -3697,22 +3697,22 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
   /* set sample/popup widgets */
   gtk_combo_box_set_popup_widget (combo_box, priv->tree_view);
 
-  g_signal_connect (priv->tree_view, "key_press_event",
+  g_signal_connect (priv->tree_view, "key-press-event",
                     G_CALLBACK (gtk_combo_box_list_key_press),
                     combo_box);
-  g_signal_connect (priv->tree_view, "enter_notify_event",
+  g_signal_connect (priv->tree_view, "enter-notify-event",
                     G_CALLBACK (gtk_combo_box_list_enter_notify),
                     combo_box);
-  g_signal_connect (priv->tree_view, "row_expanded",
+  g_signal_connect (priv->tree_view, "row-expanded",
 		    G_CALLBACK (gtk_combo_box_model_row_expanded),
 		    combo_box);
-  g_signal_connect (priv->tree_view, "row_collapsed",
+  g_signal_connect (priv->tree_view, "row-collapsed",
 		    G_CALLBACK (gtk_combo_box_model_row_expanded),
 		    combo_box);
-  g_signal_connect (priv->popup_window, "button_press_event",
+  g_signal_connect (priv->popup_window, "button-press-event",
                     G_CALLBACK (gtk_combo_box_list_button_pressed),
                     combo_box);
-  g_signal_connect (priv->popup_window, "button_release_event",
+  g_signal_connect (priv->popup_window, "button-release-event",
                     G_CALLBACK (gtk_combo_box_list_button_released),
                     combo_box);
 
@@ -4972,19 +4972,19 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
   g_object_ref (combo_box->priv->model);
 
   combo_box->priv->inserted_id =
-    g_signal_connect (combo_box->priv->model, "row_inserted",
+    g_signal_connect (combo_box->priv->model, "row-inserted",
 		      G_CALLBACK (gtk_combo_box_model_row_inserted),
 		      combo_box);
   combo_box->priv->deleted_id =
-    g_signal_connect (combo_box->priv->model, "row_deleted",
+    g_signal_connect (combo_box->priv->model, "row-deleted",
 		      G_CALLBACK (gtk_combo_box_model_row_deleted),
 		      combo_box);
   combo_box->priv->reordered_id =
-    g_signal_connect (combo_box->priv->model, "rows_reordered",
+    g_signal_connect (combo_box->priv->model, "rows-reordered",
 		      G_CALLBACK (gtk_combo_box_model_rows_reordered),
 		      combo_box);
   combo_box->priv->changed_id =
-    g_signal_connect (combo_box->priv->model, "row_changed",
+    g_signal_connect (combo_box->priv->model, "row-changed",
 		      G_CALLBACK (gtk_combo_box_model_row_changed),
 		      combo_box);
       
@@ -5502,7 +5502,7 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
 
   if (combo_box->priv->cell_view)
     {
-      g_signal_connect_object (combo_box->priv->button, "key_press_event",
+      g_signal_connect_object (combo_box->priv->button, "key-press-event",
 			       G_CALLBACK (gtk_cell_editable_key_press), 
 			       cell_editable, 0);  
 
@@ -5510,7 +5510,7 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
     }
   else
     {
-      g_signal_connect_object (GTK_BIN (combo_box)->child, "key_press_event",
+      g_signal_connect_object (GTK_BIN (combo_box)->child, "key-press-event",
 			       G_CALLBACK (gtk_cell_editable_key_press), 
 			       cell_editable, 0);  
 

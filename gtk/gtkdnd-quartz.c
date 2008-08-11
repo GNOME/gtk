@@ -373,7 +373,7 @@ gtk_drag_highlight (GtkWidget  *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  g_signal_connect_after (widget, "expose_event",
+  g_signal_connect_after (widget, "expose-event",
 			  G_CALLBACK (gtk_drag_highlight_expose),
 			  NULL);
 
@@ -495,7 +495,7 @@ gtk_drag_dest_set (GtkWidget            *widget,
 
   g_signal_connect (widget, "realize",
 		    G_CALLBACK (gtk_drag_dest_realized), site);
-  g_signal_connect (widget, "hierarchy_changed",
+  g_signal_connect (widget, "hierarchy-changed",
 		    G_CALLBACK (gtk_drag_dest_hierarchy_changed), site);
 
   g_object_set_data_full (G_OBJECT (widget), I_("gtk-drag-dest"),
@@ -1248,13 +1248,13 @@ gtk_drag_source_set (GtkWidget            *widget,
 
       site->icon_type = GTK_IMAGE_EMPTY;
       
-      g_signal_connect (widget, "button_press_event",
+      g_signal_connect (widget, "button-press-event",
 			G_CALLBACK (gtk_drag_source_event_cb),
 			site);
-      g_signal_connect (widget, "button_release_event",
+      g_signal_connect (widget, "button-release-event",
 			G_CALLBACK (gtk_drag_source_event_cb),
 			site);
-      g_signal_connect (widget, "motion_notify_event",
+      g_signal_connect (widget, "motion-notify-event",
 			G_CALLBACK (gtk_drag_source_event_cb),
 			site);
       

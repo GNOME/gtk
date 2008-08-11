@@ -1176,11 +1176,11 @@ gtk_entry_init (GtkEntry *entry)
   
   g_signal_connect (entry->im_context, "commit",
 		    G_CALLBACK (gtk_entry_commit_cb), entry);
-  g_signal_connect (entry->im_context, "preedit_changed",
+  g_signal_connect (entry->im_context, "preedit-changed",
 		    G_CALLBACK (gtk_entry_preedit_changed_cb), entry);
-  g_signal_connect (entry->im_context, "retrieve_surrounding",
+  g_signal_connect (entry->im_context, "retrieve-surrounding",
 		    G_CALLBACK (gtk_entry_retrieve_surrounding_cb), entry);
-  g_signal_connect (entry->im_context, "delete_surrounding",
+  g_signal_connect (entry->im_context, "delete-surrounding",
 		    G_CALLBACK (gtk_entry_delete_surrounding_cb), entry);
 }
 
@@ -2178,7 +2178,7 @@ gtk_entry_focus_in (GtkWidget     *widget,
     }
 
   g_signal_connect (gdk_keymap_get_for_display (gtk_widget_get_display (widget)),
-		    "direction_changed",
+		    "direction-changed",
 		    G_CALLBACK (gtk_entry_keymap_direction_changed), entry);
 
   gtk_entry_reset_blink_time (entry);
@@ -2490,7 +2490,7 @@ gtk_entry_start_editing (GtkCellEditable *cell_editable,
 
   g_signal_connect (cell_editable, "activate",
 		    G_CALLBACK (gtk_cell_editable_entry_activated), NULL);
-  g_signal_connect (cell_editable, "key_press_event",
+  g_signal_connect (cell_editable, "key-press-event",
 		    G_CALLBACK (gtk_cell_editable_key_press_event), NULL);
 }
 
@@ -4569,11 +4569,11 @@ gtk_entry_set_visibility (GtkEntry *entry,
       
       g_signal_connect (entry->im_context, "commit",
 			G_CALLBACK (gtk_entry_commit_cb), entry);
-      g_signal_connect (entry->im_context, "preedit_changed",
+      g_signal_connect (entry->im_context, "preedit-changed",
 			G_CALLBACK (gtk_entry_preedit_changed_cb), entry);
-      g_signal_connect (entry->im_context, "retrieve_surrounding",
+      g_signal_connect (entry->im_context, "retrieve-surrounding",
 			G_CALLBACK (gtk_entry_retrieve_surrounding_cb), entry);
-      g_signal_connect (entry->im_context, "delete_surrounding",
+      g_signal_connect (entry->im_context, "delete-surrounding",
 			G_CALLBACK (gtk_entry_delete_surrounding_cb), entry);
 
       if (GTK_WIDGET_HAS_FOCUS (entry) && visible)
@@ -6293,20 +6293,20 @@ connect_completion_signals (GtkEntry           *entry,
       completion->priv->changed_id =
 	g_signal_connect (entry, "changed",
 			  G_CALLBACK (gtk_entry_completion_changed), completion);
-      g_signal_connect (entry, "key_press_event",
+      g_signal_connect (entry, "key-press-event",
 			G_CALLBACK (gtk_entry_completion_key_press), completion);
     }
  
   if (completion->priv->inline_completion)
     {
       completion->priv->insert_text_id =
-	g_signal_connect (entry, "insert_text",
+	g_signal_connect (entry, "insert-text",
 			  G_CALLBACK (completion_insert_text_callback), completion);
       g_signal_connect (entry, "notify",
 			G_CALLBACK (clear_completion_callback), completion);
       g_signal_connect (entry, "activate",
 			G_CALLBACK (accept_completion_callback), completion);
-      g_signal_connect (entry, "focus_out_event",
+      g_signal_connect (entry, "focus-out-event",
 			G_CALLBACK (accept_completion_callback), completion);
     }
 

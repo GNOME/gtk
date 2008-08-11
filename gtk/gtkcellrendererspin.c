@@ -303,10 +303,10 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer     *cell,
   g_object_set_data_full (G_OBJECT (spin), GTK_CELL_RENDERER_SPIN_PATH,
 			  g_strdup (path), g_free);
 
-  g_signal_connect (G_OBJECT (spin), "focus_out_event",
+  g_signal_connect (G_OBJECT (spin), "focus-out-event",
 		    G_CALLBACK (gtk_cell_renderer_spin_focus_out_event),
 		    cell);
-  g_signal_connect (G_OBJECT (spin), "key_press_event",
+  g_signal_connect (G_OBJECT (spin), "key-press-event",
 		    G_CALLBACK (gtk_cell_renderer_spin_key_press_event),
 		    cell);
 

@@ -1,5 +1,29 @@
 2008-08-11  Sven Neumann  <sven@gimp.org>
 
+	* gtk/gtkaboutdialog.c
+	* gtk/gtkcellrendereraccel.c
+	* gtk/gtkcellrenderercombo.c
+	* gtk/gtkcellrendererspin.c
+	* gtk/gtkcellrenderertext.c
+	* gtk/gtkclipboard.c
+	* gtk/gtkcolorsel.c
+	* gtk/gtkcombo.c
+	* gtk/gtkcombobox.c
+	* gtk/gtkdnd-quartz.c
+	* gtk/gtkdnd.c
+	* gtk/gtkentry.c
+	* gtk/gtkentrycompletion.c
+	* gtk/gtkfilechooserbutton.c
+	* gtk/gtkfilechooserdefault.c
+	* gtk/gtkfilechooserentry.c
+	* gtk/gtkfontsel.c
+	* gtk/gtkinputdialog.c
+	* gtk/gtkmenutoolbutton.c
+	* gtk/gtkpathbar.c
+	* gtk/gtktooltip.c: use canonical signal names in g_signal_connect().
+
+2008-08-11  Sven Neumann  <sven@gimp.org>
+
 	* gdk/gdkkeys.c
 	* gdk/gdkscreen.c
 	* gdk/gdkdisplaymanager.c: use canonical signal names.

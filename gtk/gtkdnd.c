@@ -841,7 +841,7 @@ gtk_drag_get_data (GtkWidget      *widget,
   g_object_ref (context);
   g_object_ref (widget);
   
-  g_signal_connect (selection_widget, "selection_received",
+  g_signal_connect (selection_widget, "selection-received",
 		    G_CALLBACK (gtk_drag_selection_received), widget);
 
   g_object_set_data (G_OBJECT (selection_widget), I_("drag-context"), context);
@@ -931,7 +931,7 @@ gtk_drag_finish (GdkDragContext *context,
       g_object_ref (context);
       
       g_object_set_data (G_OBJECT (selection_widget), I_("drag-context"), context);
-      g_signal_connect (selection_widget, "selection_received",
+      g_signal_connect (selection_widget, "selection-received",
 			G_CALLBACK (gtk_drag_selection_received),
 			NULL);
       
@@ -1011,7 +1011,7 @@ gtk_drag_highlight (GtkWidget  *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  g_signal_connect_after (widget, "expose_event",
+  g_signal_connect_after (widget, "expose-event",
 			  G_CALLBACK (gtk_drag_highlight_expose),
 			  NULL);
 
@@ -1065,7 +1065,7 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
 
   g_signal_connect (widget, "realize",
 		    G_CALLBACK (gtk_drag_dest_realized), site);
-  g_signal_connect (widget, "hierarchy_changed",
+  g_signal_connect (widget, "hierarchy-changed",
 		    G_CALLBACK (gtk_drag_dest_hierarchy_changed), site);
 
   g_object_set_data_full (G_OBJECT (widget), I_("gtk-drag-dest"),
@@ -1830,7 +1830,7 @@ gtk_drag_proxy_begin (GtkWidget       *widget,
   source_info->proxy_dest = dest_info;
   
   g_signal_connect (ipc_widget,
-		    "selection_get",
+		    "selection-get",
 		    G_CALLBACK (gtk_drag_selection_get),
 		    source_info);
   
@@ -2350,19 +2350,19 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   info->start_x = info->cur_x;
   info->start_y = info->cur_y;
 
-  g_signal_connect (info->ipc_widget, "grab_broken_event",
+  g_signal_connect (info->ipc_widget, "grab-broken-event",
 		    G_CALLBACK (gtk_drag_grab_broken_event_cb), info);
-  g_signal_connect (info->ipc_widget, "grab_notify",
+  g_signal_connect (info->ipc_widget, "grab-notify",
 		    G_CALLBACK (gtk_drag_grab_notify_cb), info);
-  g_signal_connect (info->ipc_widget, "button_release_event",
+  g_signal_connect (info->ipc_widget, "button-release-event",
 		    G_CALLBACK (gtk_drag_button_release_cb), info);
-  g_signal_connect (info->ipc_widget, "motion_notify_event",
+  g_signal_connect (info->ipc_widget, "motion-notify-event",
 		    G_CALLBACK (gtk_drag_motion_cb), info);
-  g_signal_connect (info->ipc_widget, "key_press_event",
+  g_signal_connect (info->ipc_widget, "key-press-event",
 		    G_CALLBACK (gtk_drag_key_cb), info);
-  g_signal_connect (info->ipc_widget, "key_release_event",
+  g_signal_connect (info->ipc_widget, "key-release-event",
 		    G_CALLBACK (gtk_drag_key_cb), info);
-  g_signal_connect (info->ipc_widget, "selection_get",
+  g_signal_connect (info->ipc_widget, "selection-get",
 		    G_CALLBACK (gtk_drag_selection_get), info);
 
   info->have_grab = TRUE;
@@ -2443,13 +2443,13 @@ gtk_drag_source_set (GtkWidget            *widget,
 
       site->icon_type = GTK_IMAGE_EMPTY;
       
-      g_signal_connect (widget, "button_press_event",
+      g_signal_connect (widget, "button-press-event",
 			G_CALLBACK (gtk_drag_source_event_cb),
 			site);
-      g_signal_connect (widget, "button_release_event",
+      g_signal_connect (widget, "button-release-event",
 			G_CALLBACK (gtk_drag_source_event_cb),
 			site);
-      g_signal_connect (widget, "motion_notify_event",
+      g_signal_connect (widget, "motion-notify-event",
 			G_CALLBACK (gtk_drag_source_event_cb),
 			site);
       

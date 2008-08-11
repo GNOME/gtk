@@ -398,7 +398,7 @@ gtk_menu_tool_button_init (GtkMenuToolButton *button)
 
   g_signal_connect (arrow_button, "toggled",
 		    G_CALLBACK (arrow_button_toggled_cb), button);
-  g_signal_connect (arrow_button, "button_press_event",
+  g_signal_connect (arrow_button, "button-press-event",
 		    G_CALLBACK (arrow_button_button_press_event_cb), button);
 }
 

@@ -211,16 +211,16 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
                                  cell,
                                  "text", 0);
 
-  g_signal_connect (comp, "match_selected",
+  g_signal_connect (comp, "match-selected",
 		    G_CALLBACK (match_selected_callback), chooser_entry);
 
   gtk_entry_set_completion (GTK_ENTRY (chooser_entry), comp);
   g_object_unref (comp);
 
 #ifdef G_OS_WIN32
-  g_signal_connect (chooser_entry, "insert_text",
+  g_signal_connect (chooser_entry, "insert-text",
 		    G_CALLBACK (insert_text_callback), NULL);
-  g_signal_connect (chooser_entry, "delete_text",
+  g_signal_connect (chooser_entry, "delete-text",
 		    G_CALLBACK (delete_text_callback), NULL);
 #endif
 }
@@ -923,7 +923,7 @@ create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   gtk_container_add (GTK_CONTAINER (chooser_entry->completion_feedback_window), alignment);
   gtk_widget_show (alignment);
 
-  g_signal_connect (chooser_entry->completion_feedback_window, "expose_event",
+  g_signal_connect (chooser_entry->completion_feedback_window, "expose-event",
 		    G_CALLBACK (completion_feedback_window_expose_event_cb), chooser_entry);
   g_signal_connect (chooser_entry->completion_feedback_window, "realize",
 		    G_CALLBACK (completion_feedback_window_realize_cb), chooser_entry);

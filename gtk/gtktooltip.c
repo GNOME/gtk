@@ -144,9 +144,9 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   gtk_container_add (GTK_CONTAINER (tooltip->window), tooltip->alignment);
   gtk_widget_show (tooltip->alignment);
 
-  g_signal_connect_swapped (tooltip->window, "style_set",
+  g_signal_connect_swapped (tooltip->window, "style-set",
 			    G_CALLBACK (gtk_tooltip_window_style_set), tooltip);
-  g_signal_connect_swapped (tooltip->window, "expose_event",
+  g_signal_connect_swapped (tooltip->window, "expose-event",
 			    G_CALLBACK (gtk_tooltip_paint_window), tooltip);
 
   tooltip->box = gtk_hbox_new (FALSE, tooltip->window->style->xthickness);
