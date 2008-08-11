@@ -1,5 +1,5 @@
 /* Change Display
- * 
+ *
  * Demonstrates migrating a window between different displays and
  * screens. A display is a mouse and keyboard with some number of
  * associated monitors. A screen is a set of monitors grouped
@@ -21,7 +21,7 @@
  *  - Changing the screen for a window
  *
  *  - Letting the user choose a window by clicking on it
- * 
+ *
  *  - Using GtkListStore and GtkTreeView
  *
  *  - Using GtkDialog
@@ -45,7 +45,7 @@ struct _ChangeDisplayInfo
   GtkTreeModel *display_model;
   GtkTreeModel *screen_model;
   GtkTreeSelection *screen_selection;
-  
+
   GdkDisplay *current_display;
   GdkScreen *current_screen;
 };
@@ -111,23 +111,23 @@ query_for_toplevel (GdkScreen  *screen,
   GtkWidget *popup, *label, *frame;
   GdkCursor *cursor;
   GtkWidget *toplevel = NULL;
-  
+
   popup = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_screen (GTK_WINDOW (popup), screen);
   gtk_window_set_modal (GTK_WINDOW (popup), TRUE);
   gtk_window_set_position (GTK_WINDOW (popup), GTK_WIN_POS_CENTER);
-  
+
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
   gtk_container_add (GTK_CONTAINER (popup), frame);
-  
+
   label = gtk_label_new (prompt);
   gtk_misc_set_padding (GTK_MISC (label), 10, 10);
   gtk_container_add (GTK_CONTAINER (frame), label);
-  
+
   gtk_widget_show_all (popup);
   cursor = gdk_cursor_new_for_display (display, GDK_CROSSHAIR);
-  
+
   if (gdk_pointer_grab (popup->window, FALSE,
 			GDK_BUTTON_RELEASE_MASK,
 			NULL,
@@ -135,26 +135,26 @@ query_for_toplevel (GdkScreen  *screen,
 			GDK_CURRENT_TIME) == GDK_GRAB_SUCCESS)
     {
       gboolean clicked = FALSE;
-      
+
       g_signal_connect (popup, "button-release-event",
 			G_CALLBACK (button_release_event_cb), &clicked);
-      
+
       /* Process events until clicked is set by button_release_event_cb.
        * We pass in may_block=TRUE since we want to wait if there
        * are no events currently.
        */
       while (!clicked)
 	g_main_context_iteration (NULL, TRUE);
-      
+
       toplevel = find_toplevel_at_pointer (gdk_screen_get_display (screen));
       if (toplevel == popup)
 	toplevel = NULL;
     }
-      
+
   gdk_cursor_unref (cursor);
   gtk_widget_destroy (popup);
   gdk_flush ();			/* Really release the grab */
-  
+
   return toplevel;
 }
 
@@ -188,12 +188,12 @@ fill_screens (ChangeDisplayInfo *info)
     {
       gint n_screens = gdk_display_get_n_screens (info->current_display);
       gint i;
-      
+
       for (i = 0; i < n_screens; i++)
 	{
 	  GdkScreen *screen = gdk_display_get_screen (info->current_display, i);
 	  GtkTreeIter iter;
-	  
+
 	  gtk_list_store_append (GTK_LIST_STORE (info->screen_model), &iter);
 	  gtk_list_store_set (GTK_LIST_STORE (info->screen_model), &iter,
 			      SCREEN_COLUMN_NUMBER, i,
@@ -234,7 +234,7 @@ open_display_cb (GtkWidget         *button,
   GtkWidget *dialog_label;
   gchar *new_screen_name = NULL;
   GdkDisplay *result = NULL;
-  
+
   dialog = gtk_dialog_new_with_buttons ("Open Display",
 					GTK_WINDOW (info->window),
 					GTK_DIALOG_MODAL,
@@ -253,13 +253,13 @@ open_display_cb (GtkWidget         *button,
 
   gtk_widget_grab_focus (display_entry);
   gtk_widget_show_all (GTK_BIN (dialog)->child);
-  
+
   while (!result)
     {
       gint response_id = gtk_dialog_run (GTK_DIALOG (dialog));
       if (response_id != GTK_RESPONSE_OK)
 	break;
-      
+
       new_screen_name = gtk_editable_get_chars (GTK_EDITABLE (display_entry),
 						0, -1);
 
@@ -278,7 +278,7 @@ open_display_cb (GtkWidget         *button,
 	  g_free (new_screen_name);
 	}
     }
-  
+
   gtk_widget_destroy (dialog);
 }
 
@@ -351,7 +351,7 @@ create_frame (ChangeDisplayInfo *info,
   GtkTreeSelection *selection;
   GtkWidget *scrollwin;
   GtkWidget *hbox;
-  
+
   *frame = gtk_frame_new (title);
 
   hbox = gtk_hbox_new (FALSE, 8);
@@ -377,7 +377,7 @@ create_frame (ChangeDisplayInfo *info,
 
   if (!info->size_group)
     info->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-  
+
   gtk_size_group_add_widget (GTK_SIZE_GROUP (info->size_group), *button_vbox);
 }
 
@@ -413,7 +413,7 @@ create_display_frame (ChangeDisplayInfo *info)
   button = left_align_button_new ("_Open...");
   g_signal_connect (button, "clicked",  G_CALLBACK (open_display_cb), info);
   gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE, 0);
-  
+
   button = left_align_button_new ("_Close");
   g_signal_connect (button, "clicked",  G_CALLBACK (close_display_cb), info);
   gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE, 0);
@@ -484,7 +484,7 @@ display_closed_cb (GdkDisplay        *display,
        valid = gtk_tree_model_iter_next (info->display_model, &iter))
     {
       GdkDisplay *tmp_display;
-      
+
       gtk_tree_model_get (info->display_model, &iter,
 			  DISPLAY_COLUMN_DISPLAY, &tmp_display,
 			  -1);
@@ -506,7 +506,7 @@ add_display (ChangeDisplayInfo *info,
 {
   const gchar *name = gdk_display_get_name (display);
   GtkTreeIter iter;
-  
+
   gtk_list_store_append (GTK_LIST_STORE (info->display_model), &iter);
   gtk_list_store_set (GTK_LIST_STORE (info->display_model), &iter,
 		      DISPLAY_COLUMN_NAME, name,
@@ -514,7 +514,7 @@ add_display (ChangeDisplayInfo *info,
 		      -1);
 
   g_signal_connect (display, "closed",
-		    G_CALLBACK (display_closed_cb), info); 
+		    G_CALLBACK (display_closed_cb), info);
 }
 
 /* Called when a new display is opened
@@ -543,7 +543,7 @@ initialize_displays (ChangeDisplayInfo *info)
 
   g_slist_free (tmp_list);
 
-  g_signal_connect (manager, "display_opened",
+  g_signal_connect (manager, "display-opened",
 		    G_CALLBACK (display_opened_cb), info);
 }
 
@@ -566,7 +566,7 @@ destroy_info (ChangeDisplayInfo *info)
     g_signal_handlers_disconnect_by_func (tmp_list->data,
 					  display_closed_cb,
 					  info);
-  
+
   g_slist_free (tmp_list);
 
   g_object_unref (info->size_group);
@@ -605,7 +605,7 @@ do_changedisplay (GtkWidget *do_widget)
       info = g_new0 (ChangeDisplayInfo, 1);
 
       info->window = gtk_dialog_new_with_buttons ("Change Screen or display",
-					    GTK_WINDOW (do_widget), 
+					    GTK_WINDOW (do_widget),
 					    GTK_DIALOG_NO_SEPARATOR,
 					    GTK_STOCK_CLOSE,  GTK_RESPONSE_CLOSE,
 					    "Change",         GTK_RESPONSE_OK,
@@ -620,13 +620,13 @@ do_changedisplay (GtkWidget *do_widget)
 
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
-	
+
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (info->window)->vbox), vbox,
 			  TRUE, TRUE, 0);
 
       frame = create_display_frame (info);
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
-      
+
       frame = create_screen_frame (info);
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
 

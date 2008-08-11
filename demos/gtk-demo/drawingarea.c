@@ -55,7 +55,7 @@ scribble_expose_event (GtkWidget      *widget,
    * but honestly any GC would work. The only thing to worry about
    * is whether the GC has an inappropriate clip region set.
    */
-  
+
   gdk_draw_drawable (widget->window,
                      widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
                      pixmap,
@@ -63,7 +63,7 @@ scribble_expose_event (GtkWidget      *widget,
                      event->area.x, event->area.y,
                      event->area.x, event->area.y,
                      event->area.width, event->area.height);
-  
+
   return FALSE;
 }
 
@@ -100,7 +100,7 @@ scribble_button_press_event (GtkWidget      *widget,
 {
   if (pixmap == NULL)
     return FALSE; /* paranoia check, in case we haven't gotten a configure event */
-  
+
   if (event->button == 1)
     draw_brush (widget, event->x, event->y);
 
@@ -129,9 +129,9 @@ scribble_motion_notify_event (GtkWidget      *widget,
    * we avoid getting a huge number of events faster than we
    * can cope.
    */
-  
+
   gdk_window_get_pointer (event->window, &x, &y, &state);
-    
+
   if (state & GDK_BUTTON1_MASK)
     draw_brush (widget, x, y);
 
@@ -148,10 +148,10 @@ checkerboard_expose (GtkWidget      *da,
   gint i, j, xcount, ycount;
   GdkGC *gc1, *gc2;
   GdkColor color;
-  
+
 #define CHECK_SIZE 10
 #define SPACING 2
-  
+
   /* At the start of an expose handler, a clip region of event->area
    * is set on the window, and event->area has been cleared to the
    * widget's background color. The docs for
@@ -174,7 +174,7 @@ checkerboard_expose (GtkWidget      *da,
   color.green = 65535;
   color.blue = 65535;
   gdk_gc_set_rgb_fg_color (gc2, &color);
-  
+
   xcount = 0;
   i = SPACING;
   while (i < da->allocation.width)
@@ -184,7 +184,7 @@ checkerboard_expose (GtkWidget      *da,
       while (j < da->allocation.height)
         {
           GdkGC *gc;
-          
+
           if (ycount % 2)
             gc = gc1;
           else
@@ -208,10 +208,10 @@ checkerboard_expose (GtkWidget      *da,
       i += CHECK_SIZE + SPACING;
       ++xcount;
     }
-  
+
   g_object_unref (gc1);
   g_object_unref (gc2);
-  
+
   /* return TRUE because we've handled this event, so no
    * further processing is required.
    */
@@ -235,7 +235,7 @@ do_drawingarea (GtkWidget *do_widget)
   GtkWidget *vbox;
   GtkWidget *da;
   GtkWidget *label;
-  
+
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -254,38 +254,38 @@ do_drawingarea (GtkWidget *do_widget)
       /*
        * Create the checkerboard area
        */
-      
+
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
                             "<u>Checkerboard pattern</u>");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-      
+
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
-      
+
       da = gtk_drawing_area_new ();
       /* set a minimum size */
       gtk_widget_set_size_request (da, 100, 100);
 
       gtk_container_add (GTK_CONTAINER (frame), da);
 
-      g_signal_connect (da, "expose_event",
+      g_signal_connect (da, "expose-event",
                         G_CALLBACK (checkerboard_expose), NULL);
 
       /*
        * Create the scribble area
        */
-      
+
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
                             "<u>Scribble area</u>");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-      
+
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
-      
+
       da = gtk_drawing_area_new ();
       /* set a minimum size */
       gtk_widget_set_size_request (da, 100, 100);
@@ -293,17 +293,17 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (frame), da);
 
       /* Signals used to handle backing pixmap */
-      
-      g_signal_connect (da, "expose_event",
+
+      g_signal_connect (da, "expose-event",
                         G_CALLBACK (scribble_expose_event), NULL);
-      g_signal_connect (da,"configure_event",
+      g_signal_connect (da,"configure-event",
                         G_CALLBACK (scribble_configure_event), NULL);
-      
+
       /* Event signals */
-      
-      g_signal_connect (da, "motion_notify_event",
+
+      g_signal_connect (da, "motion-notify-event",
                         G_CALLBACK (scribble_motion_notify_event), NULL);
-      g_signal_connect (da, "button_press_event",
+      g_signal_connect (da, "button-press-event",
                         G_CALLBACK (scribble_button_press_event), NULL);
 
 

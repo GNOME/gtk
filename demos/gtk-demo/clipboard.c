@@ -1,9 +1,9 @@
 /* Clipboard
  *
  * GtkClipboard is used for clipboard handling. This demo shows how to
- * copy and paste text to and from the clipboard. 
+ * copy and paste text to and from the clipboard.
  *
- * It also shows how to transfer images via the clipboard or via 
+ * It also shows how to transfer images via the clipboard or via
  * drag-and-drop, and how to make clipboard contents persist after
  * the application exits. Clipboard persistence requires a clipboard
  * manager to run.
@@ -22,7 +22,7 @@ copy_button_clicked (GtkWidget *button,
   GtkClipboard *clipboard;
 
   entry = GTK_WIDGET (user_data);
-  
+
   /* Get the clipboard object */
   clipboard = gtk_widget_get_clipboard (entry,
                                         GDK_SELECTION_CLIPBOARD);
@@ -39,7 +39,7 @@ paste_received (GtkClipboard *clipboard,
   GtkWidget *entry;
 
   entry = GTK_WIDGET (user_data);
-  
+
   /* Set the entry text */
   if(text)
     gtk_entry_set_text (GTK_ENTRY (entry), text);
@@ -53,7 +53,7 @@ paste_button_clicked (GtkWidget *button,
   GtkClipboard *clipboard;
 
   entry = GTK_WIDGET (user_data);
-  
+
   /* Get the clipboard object */
   clipboard = gtk_widget_get_clipboard (entry,
                                         GDK_SELECTION_CLIPBOARD);
@@ -80,7 +80,7 @@ get_image_pixbuf (GtkImage *image)
       return gtk_widget_render_icon (GTK_WIDGET (image),
                                      stock_id, size, NULL);
     default:
-      g_warning ("Image storage type %d not handled", 
+      g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));
       return NULL;
     }
@@ -98,7 +98,7 @@ drag_begin (GtkWidget      *widget,
   g_object_unref (pixbuf);
 }
 
-void  
+void
 drag_data_get  (GtkWidget        *widget,
                 GdkDragContext   *context,
                 GtkSelectionData *selection_data,
@@ -171,12 +171,12 @@ button_press (GtkWidget      *widget,
 {
   GtkWidget *menu;
   GtkWidget *item;
-  
+
   if (button->button != 3)
     return FALSE;
 
   menu = gtk_menu_new ();
-  
+
   item = gtk_image_menu_item_new_from_stock (GTK_STOCK_COPY, NULL);
   g_signal_connect (item, "activate", G_CALLBACK (copy_image), data);
   gtk_widget_show (item);
@@ -201,18 +201,18 @@ do_clipboard (GtkWidget *do_widget)
       GtkWidget *entry, *button;
       GtkWidget *ebox, *image;
       GtkClipboard *clipboard;
-      
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       vbox = gtk_vbox_new (FALSE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
-      
+
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       label = gtk_label_new ("\"Copy\" will copy the text\nin the entry to the clipboard");
-      
+
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       hbox = gtk_hbox_new (FALSE, 4);
@@ -222,7 +222,7 @@ do_clipboard (GtkWidget *do_widget)
       /* Create the first entry */
       entry = gtk_entry_new ();
       gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-      
+
       /* Create the button */
       button = gtk_button_new_from_stock (GTK_STOCK_COPY);
       gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
@@ -239,13 +239,13 @@ do_clipboard (GtkWidget *do_widget)
       /* Create the second entry */
       entry = gtk_entry_new ();
       gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-      
+
       /* Create the button */
       button = gtk_button_new_from_stock (GTK_STOCK_PASTE);
       gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
       g_signal_connect (button, "clicked",
                         G_CALLBACK (paste_button_clicked), entry);
-      
+
       label = gtk_label_new ("Images can be transferred via the clipboard, too");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
@@ -254,7 +254,7 @@ do_clipboard (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
       /* Create the first image */
-      image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, 
+      image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
                                         GTK_ICON_SIZE_BUTTON);
       ebox = gtk_event_box_new ();
       gtk_container_add (GTK_CONTAINER (ebox), image);
@@ -263,24 +263,24 @@ do_clipboard (GtkWidget *do_widget)
       /* make ebox a drag source */
       gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
       gtk_drag_source_add_image_targets (ebox);
-      g_signal_connect (ebox, "drag_begin", 
+      g_signal_connect (ebox, "drag-begin",
                         G_CALLBACK (drag_begin), image);
-      g_signal_connect (ebox, "drag_data_get", 
+      g_signal_connect (ebox, "drag-data-get",
                         G_CALLBACK (drag_data_get), image);
-      
+
       /* accept drops on ebox */
-      gtk_drag_dest_set (ebox, GTK_DEST_DEFAULT_ALL, 
+      gtk_drag_dest_set (ebox, GTK_DEST_DEFAULT_ALL,
                          NULL, 0, GDK_ACTION_COPY);
       gtk_drag_dest_add_image_targets (ebox);
-      g_signal_connect (ebox, "drag_data_received", 
+      g_signal_connect (ebox, "drag-data-received",
                         G_CALLBACK (drag_data_received), image);
-      
+
       /* context menu on ebox */
-      g_signal_connect (ebox, "button_press_event", 
+      g_signal_connect (ebox, "button-press-event",
                         G_CALLBACK (button_press), image);
 
       /* Create the second image */
-      image = gtk_image_new_from_stock (GTK_STOCK_STOP, 
+      image = gtk_image_new_from_stock (GTK_STOCK_STOP,
                                         GTK_ICON_SIZE_BUTTON);
       ebox = gtk_event_box_new ();
       gtk_container_add (GTK_CONTAINER (ebox), image);
@@ -289,22 +289,22 @@ do_clipboard (GtkWidget *do_widget)
       /* make ebox a drag source */
       gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
       gtk_drag_source_add_image_targets (ebox);
-      g_signal_connect (ebox, "drag_begin", 
+      g_signal_connect (ebox, "drag-begin",
                         G_CALLBACK (drag_begin), image);
-      g_signal_connect (ebox, "drag_data_get", 
+      g_signal_connect (ebox, "drag-data-get",
                         G_CALLBACK (drag_data_get), image);
-      
+
       /* accept drops on ebox */
-      gtk_drag_dest_set (ebox, GTK_DEST_DEFAULT_ALL, 
+      gtk_drag_dest_set (ebox, GTK_DEST_DEFAULT_ALL,
                          NULL, 0, GDK_ACTION_COPY);
       gtk_drag_dest_add_image_targets (ebox);
-      g_signal_connect (ebox, "drag_data_received", 
+      g_signal_connect (ebox, "drag-data-received",
                         G_CALLBACK (drag_data_received), image);
-      
+
       /* context menu on ebox */
-      g_signal_connect (ebox, "button_press_event", 
+      g_signal_connect (ebox, "button-press-event",
                         G_CALLBACK (button_press), image);
-      
+
       /* tell the clipboard manager to make the data persistent */
       clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
       gtk_clipboard_set_can_store (clipboard, NULL, 0);

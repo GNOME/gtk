@@ -218,8 +218,10 @@ do_pixbufs (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Pixbufs");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
-      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
-      g_signal_connect (window, "destroy", G_CALLBACK (cleanup_callback), NULL);
+      g_signal_connect (window, "destroy",
+                        G_CALLBACK (gtk_widget_destroyed), &window);
+      g_signal_connect (window, "destroy",
+                        G_CALLBACK (cleanup_callback), NULL);
 
 
       error = NULL;
@@ -249,7 +251,7 @@ do_pixbufs (GtkWidget *do_widget)
 
           da = gtk_drawing_area_new ();
 
-          g_signal_connect (da, "expose_event",
+          g_signal_connect (da, "expose-event",
                             G_CALLBACK (expose_cb), NULL);
 
           gtk_container_add (GTK_CONTAINER (window), da);
