@@ -1,3 +1,11 @@
+2008-08-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 546616 – CUPS print backend uses 1.2 API without guards
+
+	* modules/printbackends/cups/gtkcupsutils.[hc]: Make use
+	of cups 1.2 api dependent on the HAVE_CUPS_1_2 define.
+	Patch by Sven Herzberg and Richard Hult
+
 2008-08-11  Michael Natterer  <mitch@imendio.com>
 
 	Bug 547270 – Make GtkHSV public

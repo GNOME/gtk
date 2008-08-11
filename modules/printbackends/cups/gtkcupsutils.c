@@ -1204,6 +1204,7 @@ GtkCupsConnectionTest *
 gtk_cups_connection_test_new (const char *server)
 {
   GtkCupsConnectionTest *result = NULL;
+#ifdef HAVE_CUPS_API_1_2
   gchar                 *port_str = NULL;
 
   result = g_new (GtkCupsConnectionTest, 1);
@@ -1222,6 +1223,9 @@ gtk_cups_connection_test_new (const char *server)
   result->success_at_init = FALSE;
 
   result->success_at_init = gtk_cups_connection_test_is_server_available (result);
+#else
+  result = g_new (GtkCupsConnectionTest, 1);
+#endif
 
   return result;
 }
@@ -1235,6 +1239,7 @@ gtk_cups_connection_test_new (const char *server)
 gboolean 
 gtk_cups_connection_test_is_server_available (GtkCupsConnectionTest *test)
 {
+#ifdef HAVE_CUPS_API_1_2
   http_addrlist_t *iter;
   gboolean         result = FALSE;
   gint             flags;
@@ -1295,6 +1300,9 @@ gtk_cups_connection_test_is_server_available (GtkCupsConnectionTest *test)
 
       return result;
     }
+#else
+  return TRUE;
+#endif
 }
 
 /* This function frees memory used by the GtkCupsConnectionTest structure.
@@ -1305,6 +1313,7 @@ gtk_cups_connection_test_free (GtkCupsConnectionTest *test)
   if (test == NULL)
     return;
 
+#ifdef HAVE_CUPS_API_1_2
   test->current_addr = NULL;
   httpAddrFreeList (test->addrlist);
   if (test->socket != -1)
@@ -1312,5 +1321,6 @@ gtk_cups_connection_test_free (GtkCupsConnectionTest *test)
       close (test->socket);
       test->socket = -1;
     }
+#endif
   g_free (test);
 }

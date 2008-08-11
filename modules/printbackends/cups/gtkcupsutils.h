@@ -83,10 +83,12 @@ struct _GtkCupsRequest
 
 struct _GtkCupsConnectionTest
 {
+#ifdef HAVE_CUPS_API_1_2
   http_addrlist_t *addrlist;
   http_addrlist_t *current_addr;
   gboolean         success_at_init;
   gint             socket;
+#endif
 };
 
 #define GTK_CUPS_REQUEST_START 0
