@@ -1,3 +1,8 @@
+2008-08-11  Michael Natterer  <mitch@imendio.com>
+
+	* demos/gtk-demo/textscroll.c (create_text_view): don't use the
+	deprecated gtk_box_pack_start_defaults().
+
 2008-08-11  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkaboutdialog.c
