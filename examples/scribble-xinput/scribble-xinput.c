@@ -157,12 +157,12 @@ create_input_dialog ()
     {
       inputd = gtk_input_dialog_new();
 
-      g_signal_connect (G_OBJECT (inputd), "destroy",
-                        G_CALLBACK (input_dialog_destroy), (gpointer) &inputd);
-      g_signal_connect_swapped (G_OBJECT (GTK_INPUT_DIALOG (inputd)->close_button),
+      g_signal_connect (inputd, "destroy",
+                        G_CALLBACK (input_dialog_destroy), &inputd);
+      g_signal_connect_swapped (GTK_INPUT_DIALOG (inputd)->close_button,
                                 "clicked",
                                 G_CALLBACK (gtk_widget_hide),
-                                G_OBJECT (inputd));
+                                inputd);
       gtk_widget_hide (GTK_INPUT_DIALOG (inputd)->save_button);
 
       gtk_widget_show (inputd);
@@ -194,7 +194,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (window), vbox);
   gtk_widget_show (vbox);
 
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
                     G_CALLBACK (gtk_main_quit), NULL);
 
   /* Create the drawing area */
@@ -207,16 +207,16 @@ main (int argc, char *argv[])
 
   /* Signals used to handle backing pixmap */
 
-  g_signal_connect (G_OBJECT (drawing_area), "expose_event",
+  g_signal_connect (drawing_area, "expose-event",
                     G_CALLBACK (expose_event), NULL);
-  g_signal_connect (G_OBJECT(drawing_area),"configure_event",
+  g_signal_connect (drawing_area,"configure-event",
                     G_CALLBACK (configure_event), NULL);
 
   /* Event signals */
 
-  g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
+  g_signal_connect (drawing_area, "motion-notify-event",
                     G_CALLBACK (motion_notify_event), NULL);
-  g_signal_connect (G_OBJECT (drawing_area), "button_press_event",
+  g_signal_connect (drawing_area, "button-press-event",
                     G_CALLBACK (button_press_event), NULL);
 
   gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
@@ -233,16 +233,16 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("Input Dialog");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  g_signal_connect (G_OBJECT (button), "clicked",
+  g_signal_connect (button, "clicked",
                     G_CALLBACK (create_input_dialog), NULL);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Quit");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  g_signal_connect_swapped (G_OBJECT (button), "clicked",
+  g_signal_connect_swapped (button, "clicked",
                             G_CALLBACK (gtk_widget_destroy),
-                            G_OBJECT (window));
+                            window);
   gtk_widget_show (button);
 
   gtk_widget_show (window);

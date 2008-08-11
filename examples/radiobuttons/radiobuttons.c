@@ -19,12 +19,12 @@ int main( int   argc,
     GtkWidget *button;
     GtkWidget *separator;
     GSList *group;
-  
-    gtk_init (&argc, &argv);    
-      
+
+    gtk_init (&argc, &argv);
+
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  
-    g_signal_connect (G_OBJECT (window), "delete_event",
+
+    g_signal_connect (window, "delete-event",
 		      G_CALLBACK (close_application),
                       NULL);
 
@@ -65,15 +65,15 @@ int main( int   argc,
     gtk_widget_show (box2);
 
     button = gtk_button_new_with_label ("close");
-    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+    g_signal_connect_swapped (button, "clicked",
                               G_CALLBACK (close_application),
-                              G_OBJECT (window));
+                              window);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
     gtk_widget_grab_default (button);
     gtk_widget_show (button);
     gtk_widget_show (window);
-     
+
     gtk_main ();
 
     return 0;

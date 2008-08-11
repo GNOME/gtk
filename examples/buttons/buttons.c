@@ -58,7 +58,7 @@ int main( int   argc,
     g_signal_connect (G_OBJECT (window), "destroy",
 	              G_CALLBACK (gtk_main_quit), NULL);
 
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (G_OBJECT (window), "delete-event",
 	 	      G_CALLBACK (gtk_main_quit), NULL);
 
     /* Sets the border width of the window. */

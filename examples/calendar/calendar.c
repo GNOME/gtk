@@ -40,7 +40,7 @@ typedef struct _CalendarData {
 enum {
   calendar_show_header,
   calendar_show_days,
-  calendar_month_change, 
+  calendar_month_change,
   calendar_show_week,
   calendar_monday_first
 };
@@ -108,7 +108,7 @@ static void calendar_day_selected_double_click ( GtkWidget    *widget,
 
   if (GTK_CALENDAR (data->window)->marked_date[day-1] == 0) {
     gtk_calendar_mark_day (GTK_CALENDAR (data->window), day);
-  } else { 
+  } else {
     gtk_calendar_unmark_day (GTK_CALENDAR (data->window), day);
   }
 }
@@ -154,7 +154,7 @@ static void calendar_set_flags( CalendarData *calendar )
 {
   gint i;
   gint options = 0;
-  for (i = 0;i < 5; i++) 
+  for (i = 0;i < 5; i++)
     if (calendar->settings[i])
       {
 	options = options + (1 << i);
@@ -175,7 +175,7 @@ static void calendar_toggle_flag( GtkWidget    *toggle,
 
   calendar->settings[j] = !calendar->settings[j];
   calendar_set_flags (calendar);
-  
+
 }
 
 static void calendar_font_selection_ok( GtkWidget    *button,
@@ -187,7 +187,7 @@ static void calendar_font_selection_ok( GtkWidget    *button,
   if (calendar->window)
     {
       font_name = gtk_font_selection_dialog_get_font_name (GTK_FONT_SELECTION_DIALOG (calendar->font_dialog));
-      if (font_name) 
+      if (font_name)
 	{
 	  style = gtk_rc_style_new ();
 	  pango_font_description_free (style->font_desc);
@@ -209,18 +209,18 @@ static void calendar_select_font( GtkWidget    *button,
     window = gtk_font_selection_dialog_new ("Font Selection Dialog");
     g_return_if_fail (GTK_IS_FONT_SELECTION_DIALOG (window));
     calendar->font_dialog = window;
-    
+
     gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
-    
+
     g_signal_connect (window, "destroy",
 		      G_CALLBACK (gtk_widget_destroyed),
 		      &calendar->font_dialog);
-    
+
     g_signal_connect (GTK_FONT_SELECTION_DIALOG (window)->ok_button,
 		      "clicked", G_CALLBACK (calendar_font_selection_ok),
 		      calendar);
     g_signal_connect_swapped (GTK_FONT_SELECTION_DIALOG (window)->cancel_button,
-			     "clicked", G_CALLBACK (gtk_widget_destroy), 
+			     "clicked", G_CALLBACK (gtk_widget_destroy),
 			     calendar->font_dialog);
   }
   window = calendar->font_dialog;
@@ -246,7 +246,7 @@ static void create_calendar( void )
   GtkWidget *bbox;
   static CalendarData calendar_data;
   gint i;
-  
+
   struct {
     char *label;
   } flags[] =
@@ -258,7 +258,7 @@ static void create_calendar( void )
       { "Week Start Monday" }
     };
 
-  
+
   calendar_data.window = NULL;
   calendar_data.font_dialog = NULL;
 
@@ -297,27 +297,27 @@ static void create_calendar( void )
   calendar=gtk_calendar_new ();
   calendar_data.window = calendar;
   calendar_set_flags (&calendar_data);
-  gtk_calendar_mark_day (GTK_CALENDAR (calendar), 19);	
+  gtk_calendar_mark_day (GTK_CALENDAR (calendar), 19);
   gtk_container_add (GTK_CONTAINER (frame), calendar);
-  g_signal_connect (calendar, "month_changed", 
+  g_signal_connect (calendar, "month-changed",
 		    G_CALLBACK (calendar_month_changed),
 		    &calendar_data);
-  g_signal_connect (calendar, "day_selected", 
+  g_signal_connect (calendar, "day-selected",
 		    G_CALLBACK (calendar_day_selected),
 		    &calendar_data);
-  g_signal_connect (calendar, "day_selected_double_click", 
+  g_signal_connect (calendar, "day-selected-double-click",
 		    G_CALLBACK (calendar_day_selected_double_click),
 		    &calendar_data);
-  g_signal_connect (calendar, "prev_month", 
+  g_signal_connect (calendar, "prev-month",
 		    G_CALLBACK (calendar_prev_month),
 		    &calendar_data);
-  g_signal_connect (calendar, "next_month", 
+  g_signal_connect (calendar, "next-month",
 		    G_CALLBACK (calendar_next_month),
 		    &calendar_data);
-  g_signal_connect (calendar, "prev_year", 
+  g_signal_connect (calendar, "prev-year",
 		    G_CALLBACK (calendar_prev_year),
 		    &calendar_data);
-  g_signal_connect (calendar, "next_year", 
+  g_signal_connect (calendar, "next-year",
 		    G_CALLBACK (calendar_next_year),
 		    &calendar_data);
 
@@ -327,8 +327,8 @@ static void create_calendar( void )
 
   vbox2 = gtk_vbox_new (FALSE, DEF_PAD);
   gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, DEF_PAD);
-  
-  /* Build the Right frame with the flags in */ 
+
+  /* Build the Right frame with the flags in */
 
   frame = gtk_frame_new ("Flags");
   gtk_box_pack_start (GTK_BOX (vbox2), frame, TRUE, TRUE, DEF_PAD);
@@ -345,7 +345,7 @@ static void create_calendar( void )
       gtk_box_pack_start (GTK_BOX (vbox3), toggle, TRUE, TRUE, 0);
       calendar_data.flag_checkboxes[i] = toggle;
     }
-  /* Build the right font-button */ 
+  /* Build the right font-button */
   button = gtk_button_new_with_label ("Font...");
   g_signal_connect (button,
 		    "clicked",
@@ -362,7 +362,7 @@ static void create_calendar( void )
 
   vbox2 = gtk_vbox_new (TRUE, DEF_PAD_SMALL);
   gtk_container_add (GTK_CONTAINER (frame), vbox2);
-  
+
   hbox = gtk_hbox_new (FALSE, 3);
   gtk_box_pack_start (GTK_BOX (vbox2), hbox, FALSE, TRUE, 0);
   label = gtk_label_new ("Signal:");
@@ -389,8 +389,8 @@ static void create_calendar( void )
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_END);
 
   button = gtk_button_new_with_label ("Close");
-  g_signal_connect (button, "clicked", 
-		    G_CALLBACK (gtk_main_quit), 
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (gtk_main_quit),
 		    NULL);
   gtk_container_add (GTK_CONTAINER (bbox), button);
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);

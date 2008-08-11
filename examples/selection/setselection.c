@@ -47,7 +47,7 @@ static gboolean selection_clear( GtkWidget         *widget,
 }
 
 /* Supplies the current time as the selection. */
-static void selection_handle( GtkWidget        *widget, 
+static void selection_handle( GtkWidget        *widget,
                               GtkSelectionData *selection_data,
                               guint             info,
                               guint             time_stamp,
@@ -57,7 +57,7 @@ static void selection_handle( GtkWidget        *widget,
   time_t current_time;
 
   current_time = time (NULL);
-  timestr = asctime (localtime (&current_time)); 
+  timestr = asctime (localtime (&current_time));
   /* When we return a single string, it should not be null terminated.
      That will be done for us */
 
@@ -71,7 +71,7 @@ int main( int   argc,
   GtkWidget *window;
 
   static int have_selection = FALSE;
-  
+
   gtk_init (&argc, &argv);
 
   /* Create the toplevel window */
@@ -80,7 +80,7 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Event Box");
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 		    G_CALLBACK (exit), NULL);
 
   /* Create a toggle button to act as the selection */
@@ -90,22 +90,22 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), selection_button);
   gtk_widget_show (selection_button);
 
-  g_signal_connect (G_OBJECT (selection_button), "toggled",
-		    G_CALLBACK (selection_toggled), (gpointer) &have_selection);
-  g_signal_connect (G_OBJECT (selection_widget), "selection_clear_event",
-		    G_CALLBACK (selection_clear), (gpointer) &have_selection);
+  g_signal_connect (selection_button, "toggled",
+		    G_CALLBACK (selection_toggled), &have_selection);
+  g_signal_connect (selection_widget, "selection-clear-event",
+		    G_CALLBACK (selection_clear), &have_selection);
 
   gtk_selection_add_target (selection_widget,
 			    GDK_SELECTION_PRIMARY,
 			    GDK_SELECTION_TYPE_STRING,
 		            1);
-  g_signal_connect (G_OBJECT (selection_widget), "selection_get",
-		    G_CALLBACK (selection_handle), (gpointer) &have_selection);
+  g_signal_connect (selection_widget, "selection-get",
+		    G_CALLBACK (selection_handle), &have_selection);
 
   gtk_widget_show (selection_button);
   gtk_widget_show (window);
-  
+
   gtk_main ();
-  
+
   return 0;
 }

@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
-static void selection_received( GtkWidget        *widget, 
-                                GtkSelectionData *selection_data, 
+static void selection_received( GtkWidget        *widget,
+                                GtkSelectionData *selection_data,
                                 gpointer          data );
 
 /* Signal handler invoked when user clicks on the "Get Targets" button */
@@ -11,7 +11,7 @@ static void get_targets( GtkWidget *widget,
                          gpointer data )
 {
   static GdkAtom targets_atom = GDK_NONE;
-  GtkWidget *window = (GtkWidget *)data;	
+  GtkWidget *window = (GtkWidget *)data;
 
   /* Get the atom corresponding to the string "TARGETS" */
   if (targets_atom == GDK_NONE)
@@ -24,7 +24,7 @@ static void get_targets( GtkWidget *widget,
 
 /* Signal handler called when the selections owner returns the data */
 static void selection_received( GtkWidget        *widget,
-                                GtkSelectionData *selection_data, 
+                                GtkSelectionData *selection_data,
                                 gpointer          data )
 {
   GdkAtom *atoms;
@@ -43,7 +43,7 @@ static void selection_received( GtkWidget        *widget,
       g_print ("Selection \"TARGETS\" was not returned as atoms!\n");
       return;
     }
-  
+
   /* Print out the atoms we received */
   atoms = (GdkAtom *)selection_data->data;
 
@@ -66,7 +66,7 @@ int main( int   argc,
 {
   GtkWidget *window;
   GtkWidget *button;
-  
+
   gtk_init (&argc, &argv);
 
   /* Create the toplevel window */
@@ -75,7 +75,7 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Event Box");
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 	            G_CALLBACK (exit), NULL);
 
   /* Create a button the user can click to get targets */
@@ -83,15 +83,15 @@ int main( int   argc,
   button = gtk_button_new_with_label ("Get Targets");
   gtk_container_add (GTK_CONTAINER (window), button);
 
-  g_signal_connect (G_OBJECT (button), "clicked",
+  g_signal_connect (button, "clicked",
 		    G_CALLBACK (get_targets), (gpointer) window);
-  g_signal_connect (G_OBJECT (window), "selection_received",
+  g_signal_connect (window, "selection-received",
 		    G_CALLBACK (selection_received), NULL);
 
   gtk_widget_show (button);
   gtk_widget_show (window);
-  
+
   gtk_main ();
-  
+
   return 0;
 }

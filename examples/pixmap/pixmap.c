@@ -53,12 +53,12 @@ int main( int   argc,
     GdkPixmap *pixmap;
     GdkBitmap *mask;
     GtkStyle *style;
-    
+
     /* create the main window, and attach delete_event signal to terminating
        the application */
     gtk_init (&argc, &argv);
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (window, "delete-event",
                       G_CALLBACK (close_application), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     gtk_widget_show (window);
@@ -79,11 +79,11 @@ int main( int   argc,
     gtk_container_add (GTK_CONTAINER (window), button);
     gtk_widget_show (button);
 
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
                       G_CALLBACK (button_clicked), NULL);
 
     /* show the window */
     gtk_main ();
-          
+
     return 0;
 }

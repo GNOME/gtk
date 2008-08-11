@@ -34,7 +34,7 @@ static void cb_page_size( GtkAdjustment *get,
     set->page_size = get->value;
     set->page_increment = get->value;
 
-    /* This sets the adjustment and makes it emit the "changed" signal to 
+    /* This sets the adjustment and makes it emit the "changed" signal to
        reconfigure all the widgets that are attached to this signal.  */
     gtk_adjustment_set_value (set, CLAMP (set->value,
 					  set->lower,
@@ -47,7 +47,7 @@ static void cb_draw_value( GtkToggleButton *button )
     /* Turn the value display on the scale widgets off or on depending
      *  on the state of the checkbutton */
     gtk_scale_set_draw_value (GTK_SCALE (hscale), button->active);
-    gtk_scale_set_draw_value (GTK_SCALE (vscale), button->active);  
+    gtk_scale_set_draw_value (GTK_SCALE (vscale), button->active);
 }
 
 /* Convenience functions */
@@ -57,9 +57,9 @@ static GtkWidget *make_menu_item ( gchar     *name,
                                    gpointer   data )
 {
     GtkWidget *item;
-  
+
     item = gtk_menu_item_new_with_label (name);
-    g_signal_connect (G_OBJECT (item), "activate",
+    g_signal_connect (item, "activate",
 	              callback, (gpointer) data);
     gtk_widget_show (item);
 
@@ -91,7 +91,7 @@ static void create_range_controls( void )
 
     /* Standard window-creating stuff */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_signal_connect (G_OBJECT (window), "destroy",
+    g_signal_connect (window, "destroy",
                       G_CALLBACK (gtk_main_quit),
                       NULL);
     gtk_window_set_title (GTK_WINDOW (window), "range controls");
@@ -110,7 +110,7 @@ static void create_range_controls( void )
      * scrollbar widgets, and the highest value you'll get is actually
      * (upper - page_size). */
     adj1 = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
-  
+
     vscale = gtk_vscale_new (GTK_ADJUSTMENT (adj1));
     scale_set_default_values (GTK_SCALE (vscale));
     gtk_box_pack_start (GTK_BOX (box2), vscale, TRUE, TRUE, 0);
@@ -131,7 +131,7 @@ static void create_range_controls( void )
     scrollbar = gtk_hscrollbar_new (GTK_ADJUSTMENT (adj1));
     /* Notice how this causes the scales to always be updated
      * continuously when the scrollbar is moved */
-    gtk_range_set_update_policy (GTK_RANGE (scrollbar), 
+    gtk_range_set_update_policy (GTK_RANGE (scrollbar),
                                  GTK_UPDATE_CONTINUOUS);
     gtk_box_pack_start (GTK_BOX (box3), scrollbar, TRUE, TRUE, 0);
     gtk_widget_show (scrollbar);
@@ -144,11 +144,11 @@ static void create_range_controls( void )
     /* A checkbutton to control whether the value is displayed or not */
     button = gtk_check_button_new_with_label("Display value on scale widgets");
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-    g_signal_connect (G_OBJECT (button), "toggled",
+    g_signal_connect (button, "toggled",
                       G_CALLBACK (cb_draw_value), NULL);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     gtk_widget_show (button);
-  
+
     box2 = gtk_hbox_new (FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
 
@@ -156,7 +156,7 @@ static void create_range_controls( void )
     label = gtk_label_new ("Scale Value Position:");
     gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
     gtk_widget_show (label);
-  
+
     opt = gtk_option_menu_new ();
     menu = gtk_menu_new ();
 
@@ -164,19 +164,19 @@ static void create_range_controls( void )
                            G_CALLBACK (cb_pos_menu_select),
                            GINT_TO_POINTER (GTK_POS_TOP));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  
-    item = make_menu_item ("Bottom", G_CALLBACK (cb_pos_menu_select), 
+
+    item = make_menu_item ("Bottom", G_CALLBACK (cb_pos_menu_select),
                            GINT_TO_POINTER (GTK_POS_BOTTOM));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  
+
     item = make_menu_item ("Left", G_CALLBACK (cb_pos_menu_select),
                            GINT_TO_POINTER (GTK_POS_LEFT));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  
+
     item = make_menu_item ("Right", G_CALLBACK (cb_pos_menu_select),
                            GINT_TO_POINTER (GTK_POS_RIGHT));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  
+
     gtk_option_menu_set_menu (GTK_OPTION_MENU (opt), menu);
     gtk_box_pack_start (GTK_BOX (box2), opt, TRUE, TRUE, 0);
     gtk_widget_show (opt);
@@ -192,35 +192,35 @@ static void create_range_controls( void )
     label = gtk_label_new ("Scale Update Policy:");
     gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
     gtk_widget_show (label);
-  
+
     opt = gtk_option_menu_new ();
     menu = gtk_menu_new ();
-  
+
     item = make_menu_item ("Continuous",
                            G_CALLBACK (cb_update_menu_select),
                            GINT_TO_POINTER (GTK_UPDATE_CONTINUOUS));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  
+
     item = make_menu_item ("Discontinuous",
                            G_CALLBACK (cb_update_menu_select),
                            GINT_TO_POINTER (GTK_UPDATE_DISCONTINUOUS));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  
+
     item = make_menu_item ("Delayed",
                            G_CALLBACK (cb_update_menu_select),
                            GINT_TO_POINTER (GTK_UPDATE_DELAYED));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  
+
     gtk_option_menu_set_menu (GTK_OPTION_MENU (opt), menu);
     gtk_box_pack_start (GTK_BOX (box2), opt, TRUE, TRUE, 0);
     gtk_widget_show (opt);
-  
+
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
 
     box2 = gtk_hbox_new (FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-  
+
     /* An HScale widget for adjusting the number of digits on the
      * sample scales. */
     label = gtk_label_new ("Scale Digits:");
@@ -228,7 +228,7 @@ static void create_range_controls( void )
     gtk_widget_show (label);
 
     adj2 = gtk_adjustment_new (1.0, 0.0, 5.0, 1.0, 1.0, 0.0);
-    g_signal_connect (G_OBJECT (adj2), "value_changed",
+    g_signal_connect (adj2, "value_changed",
                       G_CALLBACK (cb_digits_scale), NULL);
     scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
     gtk_scale_set_digits (GTK_SCALE (scale), 0);
@@ -237,10 +237,10 @@ static void create_range_controls( void )
 
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
-  
+
     box2 = gtk_hbox_new (FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-  
+
     /* And, one last HScale widget for adjusting the page size of the
      * scrollbar. */
     label = gtk_label_new ("Scrollbar Page Size:");
@@ -248,7 +248,7 @@ static void create_range_controls( void )
     gtk_widget_show (label);
 
     adj2 = gtk_adjustment_new (1.0, 1.0, 101.0, 1.0, 1.0, 0.0);
-    g_signal_connect (G_OBJECT (adj2), "value_changed",
+    g_signal_connect (adj2, "value-changed",
                       G_CALLBACK (cb_page_size), (gpointer) adj1);
     scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
     gtk_scale_set_digits (GTK_SCALE (scale), 0);
@@ -268,7 +268,7 @@ static void create_range_controls( void )
     gtk_widget_show (box2);
 
     button = gtk_button_new_with_label ("Quit");
-    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+    g_signal_connect_swapped (button, "clicked",
                               G_CALLBACK (gtk_main_quit),
                               NULL);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);

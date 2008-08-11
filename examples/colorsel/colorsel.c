@@ -45,10 +45,11 @@ static gboolean area_event( GtkWidget *widget,
       gtk_color_selection_set_current_color (colorsel, &color);
       gtk_color_selection_set_has_palette (colorsel, TRUE);
 
-      /* Connect to the "color_changed" signal, set the client-data
+      /* Connect to the "color-changed" signal, set the client-data
        * to the colorsel widget */
-      g_signal_connect (G_OBJECT (colorsel), "color_changed",
-                        G_CALLBACK (color_changed_cb), (gpointer) colorsel);
+      g_signal_connect (colorsel, "color-changed",
+                        G_CALLBACK (color_changed_cb),
+                        colorsel);
 
       /* Show the dialog */
       response = gtk_dialog_run (GTK_DIALOG (colorseldlg));

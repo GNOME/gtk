@@ -25,11 +25,11 @@ int main( int   argc,
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_widget_set_size_request (GTK_WIDGET (window), 200, 100);
     gtk_window_set_title (GTK_WINDOW (window), "GTK Menu Test");
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (window, "delete-event",
                       G_CALLBACK (gtk_main_quit), NULL);
 
     /* Init the menu-widget, and remember -- never
-     * gtk_show_widget() the menu widget!! 
+     * gtk_show_widget() the menu widget!!
      * This is the menu that holds the menu items, the one that
      * will pop up when you click on the "Root Menu" in the app */
     menu = gtk_menu_new ();
@@ -52,8 +52,8 @@ int main( int   argc,
             gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_items);
 
 	    /* Do something interesting when the menuitem is selected */
-	    g_signal_connect_swapped (G_OBJECT (menu_items), "activate",
-		                      G_CALLBACK (menuitem_response), 
+	    g_signal_connect_swapped (menu_items, "activate",
+		                      G_CALLBACK (menuitem_response),
                                       (gpointer) g_strdup (buf));
 
             /* Show the widget */
@@ -83,9 +83,9 @@ int main( int   argc,
 
     /* Create a button to which to attach menu as a popup */
     button = gtk_button_new_with_label ("press me");
-    g_signal_connect_swapped (G_OBJECT (button), "event",
-	                      G_CALLBACK (button_press), 
-                              G_OBJECT (menu));
+    g_signal_connect_swapped (button, "event",
+	                      G_CALLBACK (button_press),
+                              menu);
     gtk_box_pack_end (GTK_BOX (vbox), button, TRUE, TRUE, 2);
     gtk_widget_show (button);
 
@@ -113,7 +113,7 @@ static gboolean button_press( GtkWidget *widget,
 {
 
     if (event->type == GDK_BUTTON_PRESS) {
-        GdkEventButton *bevent = (GdkEventButton *) event; 
+        GdkEventButton *bevent = (GdkEventButton *) event;
         gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL,
                         bevent->button, bevent->time);
         /* Tell calling code that we have handled this event; the buck
