@@ -1,3 +1,9 @@
+2008-08-11  Sven Neumann  <sven@gimp.org>
+
+	* gdk/gdkkeys.c
+	* gdk/gdkscreen.c
+	* gdk/gdkdisplaymanager.c: use canonical signal names.
+
 2008-08-10  Richard Hult  <richard@imendio.com>
 
 	* gtk/gtkclipboard-quartz.c: (gtk_clipboard_wait_for_uris),

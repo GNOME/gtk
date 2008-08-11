@@ -49,13 +49,13 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    * GdkKeymap::direction-changed:
    * @keymap: the object on which the signal is emitted
    * 
-   * The ::direction_changed signal gets emitted when the direction of
+   * The ::direction-changed signal gets emitted when the direction of
    * the keymap changes. 
    *
    * Since: 2.0
    */
   signals[DIRECTION_CHANGED] =
-    g_signal_new ("direction_changed",
+    g_signal_new ("direction-changed",
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkKeymapClass, direction_changed),
@@ -67,13 +67,13 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    * GdkKeymap::keys-changed:
    * @keymap: the object on which the signal is emitted
    *
-   * The ::keys_changed signal is emitted when the mapping represented by
+   * The ::keys-changed signal is emitted when the mapping represented by
    * @keymap changes.
    *
    * Since: 2.2
    */
   signals[KEYS_CHANGED] =
-    g_signal_new ("keys_changed",
+    g_signal_new ("keys-changed",
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkKeymapClass, keys_changed),
