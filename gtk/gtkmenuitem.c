@@ -163,7 +163,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->activate_signal = menu_item_signals[ACTIVATE];
 
   menu_item_signals[ACTIVATE_ITEM] =
-    g_signal_new (I_("activate_item"),
+    g_signal_new (I_("activate-item"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkMenuItemClass, activate_item),
@@ -172,7 +172,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 		  G_TYPE_NONE, 0);
 
   menu_item_signals[TOGGLE_SIZE_REQUEST] =
-    g_signal_new (I_("toggle_size_request"),
+    g_signal_new (I_("toggle-size-request"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkMenuItemClass, toggle_size_request),
@@ -182,7 +182,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 		  G_TYPE_POINTER);
 
   menu_item_signals[TOGGLE_SIZE_ALLOCATE] =
-    g_signal_new (I_("toggle_size_allocate"),
+    g_signal_new (I_("toggle-size-allocate"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
  		  G_STRUCT_OFFSET (GtkMenuItemClass, toggle_size_allocate),

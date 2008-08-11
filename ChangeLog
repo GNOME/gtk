@@ -1,3 +1,12 @@
+2008-08-11  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkmenu.c
+	* gtk/gtkmenuitem.c
+	* gtk/gtkmenushell.c
+	* gtk/gtknotebook.c
+	* gtk/gtkoldeditable.c
+	* gtk/gtkpaned.c: use canonical signal names.
+
 2008-08-11  Michael Natterer  <mitch@imendio.com>
 
 	* demos/gtk-demo/textscroll.c (create_text_view): don't use the

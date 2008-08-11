@@ -839,7 +839,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                                              GTK_PARAM_READABLE));
 
   notebook_signals[SWITCH_PAGE] =
-    g_signal_new (I_("switch_page"),
+    g_signal_new (I_("switch-page"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkNotebookClass, switch_page),
@@ -849,7 +849,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 		  G_TYPE_POINTER,
 		  G_TYPE_UINT);
   notebook_signals[FOCUS_TAB] = 
-    g_signal_new (I_("focus_tab"),
+    g_signal_new (I_("focus-tab"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, focus_tab),
@@ -858,7 +858,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_TYPE_BOOLEAN, 1,
                   GTK_TYPE_NOTEBOOK_TAB);
   notebook_signals[SELECT_PAGE] = 
-    g_signal_new (I_("select_page"),
+    g_signal_new (I_("select-page"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, select_page),
@@ -867,7 +867,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_TYPE_BOOLEAN, 1,
                   G_TYPE_BOOLEAN);
   notebook_signals[CHANGE_CURRENT_PAGE] = 
-    g_signal_new (I_("change_current_page"),
+    g_signal_new (I_("change-current-page"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, change_current_page),
@@ -876,7 +876,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_TYPE_BOOLEAN, 1,
                   G_TYPE_INT);
   notebook_signals[MOVE_FOCUS_OUT] =
-    g_signal_new (I_("move_focus_out"),
+    g_signal_new (I_("move-focus-out"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, move_focus_out),
@@ -885,7 +885,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_TYPE_NONE, 1,
                   GTK_TYPE_DIRECTION_TYPE);
   notebook_signals[REORDER_TAB] =
-    g_signal_new (I_("reorder_tab"),
+    g_signal_new (I_("reorder-tab"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, reorder_tab),
@@ -906,7 +906,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * Since: 2.10
    **/
   notebook_signals[PAGE_REORDERED] =
-    g_signal_new (I_("page_reordered"),
+    g_signal_new (I_("page-reordered"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
@@ -926,7 +926,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * Since: 2.10
    **/
   notebook_signals[PAGE_REMOVED] =
-    g_signal_new (I_("page_removed"),
+    g_signal_new (I_("page-removed"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
@@ -946,7 +946,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * Since: 2.10
    **/
   notebook_signals[PAGE_ADDED] =
-    g_signal_new (I_("page_added"),
+    g_signal_new (I_("page-added"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
@@ -979,7 +979,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * Since: 2.12
    */
   notebook_signals[CREATE_WINDOW] = 
-    g_signal_new (I_("create_window"),
+    g_signal_new (I_("create-window"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkNotebookClass, create_window),
@@ -991,46 +991,46 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_space, 0,
-                                "select_page", 1, 
+                                "select-page", 1, 
                                 G_TYPE_BOOLEAN, FALSE);
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_KP_Space, 0,
-                                "select_page", 1, 
+                                "select-page", 1, 
                                 G_TYPE_BOOLEAN, FALSE);
   
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_Home, 0,
-                                "focus_tab", 1, 
+                                "focus-tab", 1, 
                                 GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_FIRST);
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_KP_Home, 0,
-                                "focus_tab", 1, 
+                                "focus-tab", 1, 
                                 GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_FIRST);
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_End, 0,
-                                "focus_tab", 1, 
+                                "focus-tab", 1, 
                                 GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_LAST);
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_KP_End, 0,
-                                "focus_tab", 1, 
+                                "focus-tab", 1, 
                                 GTK_TYPE_NOTEBOOK_TAB, GTK_NOTEBOOK_TAB_LAST);
 
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_Page_Up, GDK_CONTROL_MASK,
-                                "change_current_page", 1,
+                                "change-current-page", 1,
                                 G_TYPE_INT, -1);
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_Page_Down, GDK_CONTROL_MASK,
-                                "change_current_page", 1,
+                                "change-current-page", 1,
                                 G_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_Page_Up, GDK_CONTROL_MASK | GDK_MOD1_MASK,
-                                "change_current_page", 1,
+                                "change-current-page", 1,
                                 G_TYPE_INT, -1);
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_Page_Down, GDK_CONTROL_MASK | GDK_MOD1_MASK,
-                                "change_current_page", 1,
+                                "change-current-page", 1,
                                 G_TYPE_INT, 1);
 
   add_arrow_bindings (binding_set, GDK_Up, GTK_DIR_UP);
@@ -1322,7 +1322,7 @@ gtk_notebook_move_focus_out (GtkNotebook      *notebook,
   g_object_ref (notebook);
   
   notebook->focus_out = TRUE;
-  g_signal_emit_by_name (toplevel, "move_focus", direction_type);
+  g_signal_emit_by_name (toplevel, "move-focus", direction_type);
   notebook->focus_out = FALSE;
   
   g_object_unref (notebook);
@@ -4108,7 +4108,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
 
     page->mnemonic_activate_signal =
       g_signal_connect (tab_label,
-			"mnemonic_activate",
+			"mnemonic-activate",
 			G_CALLBACK (gtk_notebook_mnemonic_activate_switch_page),
 			notebook);
     }
@@ -6938,7 +6938,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
   if (page->tab_label)
     page->mnemonic_activate_signal =
       g_signal_connect (page->tab_label,
-			"mnemonic_activate",
+			"mnemonic-activate",
 			G_CALLBACK (gtk_notebook_mnemonic_activate_switch_page),
 			notebook);
 

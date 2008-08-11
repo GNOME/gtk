@@ -195,7 +195,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_BOOL);
 
   editable_signals[MOVE_CURSOR] =
-    gtk_signal_new (I_("move_cursor"),
+    gtk_signal_new (I_("move-cursor"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, move_cursor),
@@ -205,7 +205,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[MOVE_WORD] =
-    gtk_signal_new (I_("move_word"),
+    gtk_signal_new (I_("move-word"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, move_word),
@@ -214,7 +214,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[MOVE_PAGE] =
-    gtk_signal_new (I_("move_page"),
+    gtk_signal_new (I_("move-page"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, move_page),
@@ -224,7 +224,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[MOVE_TO_ROW] =
-    gtk_signal_new (I_("move_to_row"),
+    gtk_signal_new (I_("move-to-row"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, move_to_row),
@@ -233,7 +233,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[MOVE_TO_COLUMN] =
-    gtk_signal_new (I_("move_to_column"),
+    gtk_signal_new (I_("move-to-column"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, move_to_column),
@@ -242,7 +242,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[KILL_CHAR] =
-    gtk_signal_new (I_("kill_char"),
+    gtk_signal_new (I_("kill-char"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, kill_char),
@@ -251,7 +251,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[KILL_WORD] =
-    gtk_signal_new (I_("kill_word"),
+    gtk_signal_new (I_("kill-word"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, kill_word),
@@ -260,7 +260,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[KILL_LINE] =
-    gtk_signal_new (I_("kill_line"),
+    gtk_signal_new (I_("kill-line"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, kill_line),
@@ -269,7 +269,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_INT);
 
   editable_signals[CUT_CLIPBOARD] =
-    gtk_signal_new (I_("cut_clipboard"),
+    gtk_signal_new (I_("cut-clipboard"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, cut_clipboard),
@@ -277,7 +277,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_NONE, 0);
 
   editable_signals[COPY_CLIPBOARD] =
-    gtk_signal_new (I_("copy_clipboard"),
+    gtk_signal_new (I_("copy-clipboard"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, copy_clipboard),
@@ -285,7 +285,7 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    GTK_TYPE_NONE, 0);
 
   editable_signals[PASTE_CLIPBOARD] =
-    gtk_signal_new (I_("paste_clipboard"),
+    gtk_signal_new (I_("paste-clipboard"),
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkOldEditableClass, paste_clipboard),
@@ -402,7 +402,7 @@ gtk_old_editable_insert_text (GtkEditable *editable,
   text[new_text_length] = '\0';
   strncpy (text, new_text, new_text_length);
   
-  g_signal_emit_by_name (editable, "insert_text", text, new_text_length,
+  g_signal_emit_by_name (editable, "insert-text", text, new_text_length,
 			 position);
   g_signal_emit_by_name (editable, "changed");
   
@@ -421,7 +421,7 @@ gtk_old_editable_delete_text (GtkEditable *editable,
 
   g_object_ref (old_editable);
 
-  g_signal_emit_by_name (editable, "delete_text", start_pos, end_pos);
+  g_signal_emit_by_name (editable, "delete-text", start_pos, end_pos);
   g_signal_emit_by_name (editable, "changed");
 
   if (old_editable->selection_start_pos == old_editable->selection_end_pos &&

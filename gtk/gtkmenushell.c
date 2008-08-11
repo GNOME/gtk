@@ -261,7 +261,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 		  G_TYPE_NONE, 0);
 
   menu_shell_signals[MOVE_CURRENT] =
-    g_signal_new (I_("move_current"),
+    g_signal_new (I_("move-current"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkMenuShellClass, move_current),
@@ -271,7 +271,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 		  GTK_TYPE_MENU_DIRECTION_TYPE);
 
   menu_shell_signals[ACTIVATE_CURRENT] =
-    g_signal_new (I_("activate_current"),
+    g_signal_new (I_("activate-current"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkMenuShellClass, activate_current),
@@ -290,7 +290,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 		  G_TYPE_NONE, 0);
 
   menu_shell_signals[CYCLE_FOCUS] =
-    g_signal_new_class_handler (I_("cycle_focus"),
+    g_signal_new_class_handler (I_("cycle-focus"),
                                 G_OBJECT_CLASS_TYPE (object_class),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gtk_real_menu_shell_cycle_focus),
@@ -312,7 +312,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
    * Since: 2.12
    */
   menu_shell_signals[MOVE_SELECTED] =
-    g_signal_new (I_("move_selected"),
+    g_signal_new (I_("move-selected"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkMenuShellClass, move_selected),
@@ -327,36 +327,36 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 				"cancel", 0);
   gtk_binding_entry_add_signal (binding_set,
 				GDK_Return, 0,
-				"activate_current", 1,
+				"activate-current", 1,
 				G_TYPE_BOOLEAN,
 				TRUE);
   gtk_binding_entry_add_signal (binding_set,
 				GDK_ISO_Enter, 0,
-				"activate_current", 1,
+				"activate-current", 1,
 				G_TYPE_BOOLEAN,
 				TRUE);
   gtk_binding_entry_add_signal (binding_set,
 				GDK_KP_Enter, 0,
-				"activate_current", 1,
+				"activate-current", 1,
 				G_TYPE_BOOLEAN,
 				TRUE);
   gtk_binding_entry_add_signal (binding_set,
 				GDK_space, 0,
-				"activate_current", 1,
+				"activate-current", 1,
 				G_TYPE_BOOLEAN,
 				FALSE);
   gtk_binding_entry_add_signal (binding_set,
 				GDK_KP_Space, 0,
-				"activate_current", 1,
+				"activate-current", 1,
 				G_TYPE_BOOLEAN,
 				FALSE);
   gtk_binding_entry_add_signal (binding_set,
 				GDK_F10, 0,
-				"cycle_focus", 1,
+				"cycle-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
   gtk_binding_entry_add_signal (binding_set,
 				GDK_F10, GDK_SHIFT_MASK,
-				"cycle_focus", 1,
+				"cycle-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 
   /**
