@@ -1,3 +1,16 @@
+2008-08-11  Michael Natterer  <mitch@imendio.com>
+
+	Bug 546754 – 2.13.6 update create rendering issue in the evolution
+	composer
+
+	* gtk/gtkadjustment.c: instead of CLAMP(), use
+
+	value = MIN (value, upper - page_size);
+	value = MAX (value, lower);
+
+	so we don't end up below lower if upper - page_size is smaller
+	than lower.
+
 2008-08-11  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 546616 – CUPS print backend uses 1.2 API without guards
