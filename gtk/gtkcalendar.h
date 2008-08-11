@@ -91,7 +91,7 @@ typedef enum
  * specified day. Examples for such details are holidays or appointments. The
  * function returns %NULL when no information is available.
  *
- * Since: 2.16
+ * Since: 2.14
  *
  * Return value: Newly allocated string with Pango markup with details
  * for the specified day, or %NULL.

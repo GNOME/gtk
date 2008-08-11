@@ -1,3 +1,8 @@
+2008-08-11  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* gtk/gtkcalendar.h: Fix the Since: tag of GtkCalendarDetailFunc
+	to correctly state 2.14, not 2.16.
+
 2008-08-11  Sven Neumann  <sven@gimp.org>
 
 	* demos/gtk-demo/changedisplay.c
