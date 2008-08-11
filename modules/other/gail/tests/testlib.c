@@ -591,9 +591,10 @@ _create_select_tests_window (AtkObject    *obj,
       hbuttonbox = gtk_hbutton_box_new ();
       gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox),
                                  GTK_BUTTONBOX_SPREAD);
-      gtk_box_pack_end_defaults (GTK_BOX (hbuttonbox), 
-                                 GTK_WIDGET (md[window_no]->button));
-      gtk_box_pack_end_defaults (GTK_BOX (md[window_no]->vbox), hbuttonbox);
+      gtk_box_pack_end (GTK_BOX (hbuttonbox),
+                        GTK_WIDGET (md[window_no]->button), TRUE, TRUE, 0);
+      gtk_box_pack_end (GTK_BOX (md[window_no]->vbox), hbuttonbox,
+                        TRUE, TRUE, 0);
       gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolledWindow),
                                              md[window_no]->vbox);
 

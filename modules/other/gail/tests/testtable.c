@@ -770,54 +770,54 @@ void test_choice_gui(AtkObject **obj)
   hbox = gtk_hbox_new(FALSE, 0);
   gtk_box_set_spacing(GTK_BOX(hbox), 10);
   tc->tb_ref_selection = gtk_toggle_button_new_with_label("ref_selection");
-  gtk_box_pack_start_defaults(GTK_BOX(hbox), tc->tb_ref_selection);
+  gtk_box_pack_start (GTK_BOX (hbox), tc->tb_ref_selection, TRUE, TRUE, 0);
   index_label = gtk_label_new("index: ");
-  gtk_box_pack_start_defaults(GTK_BOX(hbox), index_label);
+  gtk_box_pack_start (GTK_BOX (hbox), index_label, TRUE, TRUE, 0);
   tc->index_entry = gtk_entry_new();
   gtk_entry_set_text(GTK_ENTRY(tc->index_entry), "1");
-  gtk_box_pack_start_defaults(GTK_BOX(hbox), tc->index_entry);
-  gtk_box_pack_start_defaults(GTK_BOX(vbox), hbox); 
+  gtk_box_pack_start (GTK_BOX (hbox), tc->index_entry, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0); 
 
   hbox = gtk_hbox_new(FALSE, 0);
   gtk_box_set_spacing(GTK_BOX(hbox), 10);
   tc->tb_ref_at = gtk_toggle_button_new_with_label("ref_at");
-  gtk_box_pack_start_defaults(GTK_BOX(hbox), tc->tb_ref_at);
+  gtk_box_pack_start (GTK_BOX (hbox), tc->tb_ref_at, TRUE, TRUE, 0);
   row_label = gtk_label_new("row:");
-  gtk_box_pack_start_defaults(GTK_BOX(hbox), row_label);
+  gtk_box_pack_start (GTK_BOX (hbox), row_label, TRUE, TRUE, 0);
   tc->row_entry = gtk_entry_new();
   gtk_entry_set_text(GTK_ENTRY(tc->row_entry), "1");
-  gtk_box_pack_start_defaults(GTK_BOX(hbox), tc->row_entry);
+  gtk_box_pack_start (GTK_BOX (hbox), tc->row_entry, TRUE, TRUE, 0);
   col_label = gtk_label_new("column:");
-  gtk_box_pack_start_defaults(GTK_BOX(hbox), col_label);
+  gtk_box_pack_start (GTK_BOX (hbox), col_label, TRUE, TRUE, 0);
   tc->col_entry = gtk_entry_new();
   gtk_entry_set_text(GTK_ENTRY(tc->col_entry), "1");
-  gtk_box_pack_start_defaults(GTK_BOX(hbox), tc->col_entry);
-  gtk_box_pack_start_defaults(GTK_BOX(vbox), hbox); 
+  gtk_box_pack_start (GTK_BOX (hbox), tc->col_entry, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0); 
 
   hbox = gtk_hbox_new(FALSE, 0);
   gtk_box_set_spacing(GTK_BOX(hbox), 10);
   tc->tb_ref_accessible_child = gtk_toggle_button_new_with_label("ref_accessible_child");
-  gtk_box_pack_start_defaults(GTK_BOX(hbox), tc->tb_ref_accessible_child);
+  gtk_box_pack_start (GTK_BOX (hbox), tc->tb_ref_accessible_child, TRUE, TRUE, 0);
   child_label = gtk_label_new("Child no:");
-  gtk_box_pack_start_defaults(GTK_BOX(hbox), child_label); 
+  gtk_box_pack_start (GTK_BOX (hbox), child_label, TRUE, TRUE, 0); 
   tc->child_entry = gtk_entry_new();
   gtk_entry_set_text(GTK_ENTRY(tc->child_entry), "1");
-  gtk_box_pack_start_defaults(GTK_BOX(hbox), tc->child_entry);
-  gtk_box_pack_start_defaults(GTK_BOX(vbox), hbox);
+  gtk_box_pack_start (GTK_BOX (hbox), tc->child_entry, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
 
   tc->tb_others = gtk_toggle_button_new_with_label("others");
-  gtk_box_pack_start_defaults(GTK_BOX(vbox), tc->tb_others);
+  gtk_box_pack_start (GTK_BOX (vbox), tc->tb_others, TRUE, TRUE, 0);
   
   hseparator = gtk_hseparator_new();
-  gtk_box_pack_start_defaults(GTK_BOX(vbox), hseparator);
+  gtk_box_pack_start (GTK_BOX (vbox), hseparator, TRUE, TRUE, 0);
 
   button = gtk_button_new_with_mnemonic("_Run Test");
 
   hbuttonbox = gtk_hbutton_box_new();
   gtk_button_box_set_layout(GTK_BUTTON_BOX(hbuttonbox),
     GTK_BUTTONBOX_SPREAD);
-  gtk_box_pack_end_defaults(GTK_BOX(hbuttonbox), GTK_WIDGET(button));
-  gtk_box_pack_end_defaults(GTK_BOX(vbox), hbuttonbox);
+  gtk_box_pack_end (GTK_BOX (hbuttonbox), GTK_WIDGET (button), TRUE, TRUE, 0);
+  gtk_box_pack_end (GTK_BOX (vbox), hbuttonbox, TRUE, TRUE, 0);
   g_signal_connect(GTK_OBJECT(button), "clicked", GTK_SIGNAL_FUNC(choicecb), obj);
 
   gtk_container_add(GTK_CONTAINER(window), vbox);

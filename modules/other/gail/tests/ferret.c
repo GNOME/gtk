@@ -1890,13 +1890,15 @@ _get_group(TabInfo *tab, GroupId group_id, const gchar *groupname)
 
        if (group->is_scrolled)
          {
-           gtk_box_pack_start_defaults(GTK_BOX(tab->main_box),
-              GTK_WIDGET(group->scroll_outer_frame));
+           gtk_box_pack_start (GTK_BOX (tab->main_box),
+                               GTK_WIDGET (group->scroll_outer_frame),
+                               TRUE, TRUE, 0);
          }
        else
          {
-           gtk_box_pack_start_defaults(GTK_BOX(tab->main_box),
-             GTK_WIDGET(group->frame));
+           gtk_box_pack_start (GTK_BOX (tab->main_box),
+                               GTK_WIDGET (group->frame),
+                               TRUE, TRUE, 0);
          }
      }
 
@@ -2008,10 +2010,12 @@ _get_name_value(GroupInfo *group, const gchar *label,
             break;
           }
 
-        gtk_box_pack_start_defaults(GTK_BOX(name_value->hbox),
-          GTK_WIDGET(name_value->column1));
-        gtk_box_pack_start_defaults(GTK_BOX(name_value->hbox),
-          GTK_WIDGET(name_value->column2));
+        gtk_box_pack_start (GTK_BOX (name_value->hbox),
+                            GTK_WIDGET (name_value->column1),
+                            TRUE, TRUE, 0);
+        gtk_box_pack_start (GTK_BOX (name_value->hbox),
+                            GTK_WIDGET (name_value->column2),
+                            TRUE, TRUE, 0);
         gtk_container_add(GTK_CONTAINER(group->group_vbox),
           GTK_WIDGET(name_value->hbox));
         group->name_value = g_list_append (group->name_value, name_value);
