@@ -1,5 +1,11 @@
 2008-08-11  Sven Neumann  <sven@gimp.org>
 
+	* modules/input/gtkimcontextime.c
+	* modules/input/gtkimcontextmultipress.c
+	* modules/input/gtkimcontextxim.c: use canonical signal names.
+
+2008-08-11  Sven Neumann  <sven@gimp.org>
+
 	* gtk/gtkdnd-quartz.c
 	* gtk/gtkdnd.c
 	* gtk/gtkentry.c

@@ -282,7 +282,7 @@ accept_character (GtkImContextMultipress *multipress_context, const gchar* chara
   /* We must also signal that the preedit has changed, or we will still see the old 
      preedit from the composing of the character that we just committed, hanging around after the cursor.
    */
-  g_signal_emit_by_name (multipress_context, "preedit_changed");
+  g_signal_emit_by_name (multipress_context, "preedit-changed");
 
   /* Provide a character to GTK+: */
   g_signal_emit_by_name (multipress_context, "commit", characters);
@@ -370,7 +370,7 @@ vfunc_filter_keypress (GtkIMContext *context, GdkEventKey *event)
        * This will cause our vfunc_get_preedit_string() vfunc to be called, 
        * which will provide the current possible character for the user to see.
        */
-      g_signal_emit_by_name (multipress_context, "preedit_changed");
+      g_signal_emit_by_name (multipress_context, "preedit-changed");
       
       /* Cancel any outstanding timeout, so we can start the timer again: */
       cancel_automatic_timeout_commit (multipress_context);
