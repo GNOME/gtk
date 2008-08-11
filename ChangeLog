@@ -1,5 +1,12 @@
 2008-08-11  Sven Neumann  <sven@gimp.org>
 
+	* gtk/gtklabel.c
+	* gtk/gtklayout.c
+	* gtk/gtklist.c
+	* gtk/gtklistitem.c: use canonical signal names.
+
+2008-08-11  Sven Neumann  <sven@gimp.org>
+
 	* gtk/gtkmenu.c
 	* gtk/gtkmenuitem.c
 	* gtk/gtkmenushell.c

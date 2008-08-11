@@ -228,14 +228,14 @@ add_move_binding (GtkBindingSet  *binding_set,
   g_return_if_fail ((modmask & GDK_SHIFT_MASK) == 0);
   
   gtk_binding_entry_add_signal (binding_set, keyval, modmask,
-				"move_cursor", 3,
+				"move-cursor", 3,
 				G_TYPE_ENUM, step,
 				G_TYPE_INT, count,
 				G_TYPE_BOOLEAN, FALSE);
 
   /* Selection-extending version */
   gtk_binding_entry_add_signal (binding_set, keyval, modmask | GDK_SHIFT_MASK,
-				"move_cursor", 3,
+				"move-cursor", 3,
 				G_TYPE_ENUM, step,
 				G_TYPE_INT, count,
 				G_TYPE_BOOLEAN, TRUE);
@@ -280,7 +280,7 @@ gtk_label_class_init (GtkLabelClass *class)
   class->copy_clipboard = gtk_label_copy_clipboard;
   
   signals[MOVE_CURSOR] = 
-    g_signal_new (I_("move_cursor"),
+    g_signal_new (I_("move-cursor"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkLabelClass, move_cursor),
@@ -292,7 +292,7 @@ gtk_label_class_init (GtkLabelClass *class)
 		  G_TYPE_BOOLEAN);
   
   signals[COPY_CLIPBOARD] =
-    g_signal_new (I_("copy_clipboard"),
+    g_signal_new (I_("copy-clipboard"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkLabelClass, copy_clipboard),
@@ -301,7 +301,7 @@ gtk_label_class_init (GtkLabelClass *class)
 		  G_TYPE_NONE, 0);
   
   signals[POPULATE_POPUP] =
-    g_signal_new (I_("populate_popup"),
+    g_signal_new (I_("populate-popup"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkLabelClass, populate_popup),
@@ -570,38 +570,38 @@ gtk_label_class_init (GtkLabelClass *class)
 
   /* select all */
   gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
-				"move_cursor", 3,
+				"move-cursor", 3,
 				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
 				G_TYPE_INT, -1,
 				G_TYPE_BOOLEAN, FALSE);
 
   gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
-				"move_cursor", 3,
+				"move-cursor", 3,
 				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
 				G_TYPE_INT, 1,
 				G_TYPE_BOOLEAN, TRUE);
 
   gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
-				"move_cursor", 3,
+				"move-cursor", 3,
 				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
 				G_TYPE_INT, -1,
 				G_TYPE_BOOLEAN, FALSE);
 
   gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
-				"move_cursor", 3,
+				"move-cursor", 3,
 				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
 				G_TYPE_INT, 1,
 				G_TYPE_BOOLEAN, TRUE);
 
   /* unselect all */
   gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-				"move_cursor", 3,
+				"move-cursor", 3,
 				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
 				G_TYPE_INT, 0,
 				G_TYPE_BOOLEAN, FALSE);
 
   gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_CONTROL_MASK,
-				"move_cursor", 3,
+				"move-cursor", 3,
 				G_TYPE_ENUM, GTK_MOVEMENT_PARAGRAPH_ENDS,
 				G_TYPE_INT, 0,
 				G_TYPE_BOOLEAN, FALSE);
@@ -638,7 +638,7 @@ gtk_label_class_init (GtkLabelClass *class)
 
   /* copy */
   gtk_binding_entry_add_signal (binding_set, GDK_c, GDK_CONTROL_MASK,
-				"copy_clipboard", 0);
+				"copy-clipboard", 0);
 
   gtk_settings_install_property (g_param_spec_boolean ("gtk-label-select-on-focus",
 						       P_("Select on focus"),
@@ -3438,7 +3438,7 @@ gtk_label_motion (GtkWidget      *widget,
 
 	  gtk_target_list_add_text_targets (target_list, 0);
 	  
-          g_signal_connect (widget, "drag_begin", 
+          g_signal_connect (widget, "drag-begin", 
                             G_CALLBACK (drag_begin_cb), NULL);
 	  gtk_drag_begin (widget, target_list, 
 			  GDK_ACTION_COPY,

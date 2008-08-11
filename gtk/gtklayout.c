@@ -659,7 +659,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
   class->set_scroll_adjustments = gtk_layout_set_adjustments;
 
   widget_class->set_scroll_adjustments_signal =
-    g_signal_new (I_("set_scroll_adjustments"),
+    g_signal_new (I_("set-scroll-adjustments"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkLayoutClass, set_scroll_adjustments),
