@@ -154,7 +154,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
   klass->disable_device = NULL;
 
   input_dialog_signals[ENABLE_DEVICE] =
-    g_signal_new (I_("enable_device"),
+    g_signal_new (I_("enable-device"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkInputDialogClass, enable_device),
@@ -164,7 +164,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 		  GDK_TYPE_DEVICE);
 
   input_dialog_signals[DISABLE_DEVICE] =
-    g_signal_new (I_("disable_device"),
+    g_signal_new (I_("disable-device"),
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkInputDialogClass, disable_device),
@@ -667,7 +667,7 @@ gtk_input_dialog_key_press (GtkWidget *widget,
   gdk_device_set_key (key->inputd->current_device, key->index, 
 		      event->keyval, event->state & 0xFF);
 
-  g_signal_stop_emission_by_name (widget, "key_press_event");
+  g_signal_stop_emission_by_name (widget, "key-press-event");
   
   return TRUE;
 }

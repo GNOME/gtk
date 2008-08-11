@@ -193,7 +193,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * Since: 2.6
    */ 
   entry_completion_signals[INSERT_PREFIX] =
-    g_signal_new (I_("insert_prefix"),
+    g_signal_new (I_("insert-prefix"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkEntryCompletionClass, insert_prefix),
@@ -218,7 +218,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * Since: 2.4
    */ 
   entry_completion_signals[MATCH_SELECTED] =
-    g_signal_new (I_("match_selected"),
+    g_signal_new (I_("match-selected"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkEntryCompletionClass, match_selected),
@@ -244,7 +244,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    */ 
 
   entry_completion_signals[CURSOR_ON_MATCH] =
-    g_signal_new (I_("cursor_on_match"),
+    g_signal_new (I_("cursor-on-match"),
 		  G_TYPE_FROM_CLASS (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkEntryCompletionClass, cursor_on_match),
@@ -264,7 +264,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * Since: 2.4
    */
   entry_completion_signals[ACTION_ACTIVATED] =
-    g_signal_new (I_("action_activated"),
+    g_signal_new (I_("action-activated"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkEntryCompletionClass, action_activated),

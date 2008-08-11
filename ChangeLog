@@ -1,5 +1,15 @@
 2008-08-11  Sven Neumann  <sven@gimp.org>
 
+	* gtk/gtkentry.c
+	* gtk/gtkentrycompletion.c
+	* gtk/gtkhandlebox.c
+	* gtk/gtkiconview.c
+	* gtk/gtkimcontext.c
+	* gtk/gtkinputdialog.c
+	* gtk/gtktreeview.c: use canonical signal names.
+
+2008-08-11  Sven Neumann  <sven@gimp.org>
+
 	* gtk/gtklabel.c
 	* gtk/gtklayout.c
 	* gtk/gtklist.c
