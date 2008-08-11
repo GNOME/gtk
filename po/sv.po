@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-06 11:01+0200\n"
-"PO-Revision-Date: 2008-08-06 11:02+0100\n"
+"POT-Creation-Date: 2008-08-11 21:40+0200\n"
+"PO-Revision-Date: 2008-08-11 21:54+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -1161,7 +1161,7 @@ msgstr[0] "Öppnar %d objekt"
 msgstr[1] "Öppnar %d objekt"
 
 #: ../gtk/gtkaboutdialog.c:264
-#: ../gtk/gtkaboutdialog.c:2106
+#: ../gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "Licens"
 
@@ -1175,32 +1175,32 @@ msgid "C_redits"
 msgstr "Ta_ck"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:513
+#: ../gtk/gtkaboutdialog.c:514
 msgid "_License"
 msgstr "_Licens"
 
-#: ../gtk/gtkaboutdialog.c:742
+#: ../gtk/gtkaboutdialog.c:744
 #, c-format
 msgid "About %s"
 msgstr "Om %s"
 
-#: ../gtk/gtkaboutdialog.c:2030
+#: ../gtk/gtkaboutdialog.c:2032
 msgid "Credits"
 msgstr "Tack"
 
-#: ../gtk/gtkaboutdialog.c:2059
+#: ../gtk/gtkaboutdialog.c:2061
 msgid "Written by"
 msgstr "Skrivet av"
 
-#: ../gtk/gtkaboutdialog.c:2062
+#: ../gtk/gtkaboutdialog.c:2064
 msgid "Documented by"
 msgstr "Dokumenterat av"
 
-#: ../gtk/gtkaboutdialog.c:2074
+#: ../gtk/gtkaboutdialog.c:2076
 msgid "Translated by"
 msgstr "Översatt av"
 
-#: ../gtk/gtkaboutdialog.c:2078
+#: ../gtk/gtkaboutdialog.c:2080
 msgid "Artwork by"
 msgstr "Grafik av"
 
@@ -1492,19 +1492,19 @@ msgstr "_Palett:"
 msgid "Color Wheel"
 msgstr "Färghjul"
 
-#: ../gtk/gtkcolorsel.c:980
+#: ../gtk/gtkcolorsel.c:976
 msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
 msgstr "Den färg som valdes tidigare, för att du ska kunna jämföra med den färg du väljer nu. Du kan dra färgen till en palettpost, eller välja denna färg som den aktuella genom att dra den till det andra färgprovet."
 
-#: ../gtk/gtkcolorsel.c:984
+#: ../gtk/gtkcolorsel.c:980
 msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
 msgstr "Färgen som du valt. Du kan dra den här färgen till en palettpost för att spara den för framtida bruk."
 
-#: ../gtk/gtkcolorsel.c:1369
+#: ../gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
 msgstr "_Spara färgen här"
 
-#: ../gtk/gtkcolorsel.c:1574
+#: ../gtk/gtkcolorsel.c:1568
 msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr "Klicka på denna palettpost för att göra den till aktuell färg. För att ändra denna post kan du dra ett färgprov hit eller högerklicka och välja \"Spara färg här\"."
 
@@ -1535,7 +1535,7 @@ msgstr "Skrivbord"
 msgid "(None)"
 msgstr "(Ingen)"
 
-#: ../gtk/gtkfilechooserbutton.c:2015
+#: ../gtk/gtkfilechooserbutton.c:2013
 msgid "Other..."
 msgstr "Annan..."
 
@@ -1704,90 +1704,90 @@ msgstr "Spara i _mappen:"
 msgid "Create in _folder:"
 msgstr "Skapa i _mappen:"
 
-#: ../gtk/gtkfilechooserdefault.c:6971
+#: ../gtk/gtkfilechooserdefault.c:6972
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan inte byta till mappen eftersom den inte är lokal"
 
-#: ../gtk/gtkfilechooserdefault.c:7596
-#: ../gtk/gtkfilechooserdefault.c:7617
+#: ../gtk/gtkfilechooserdefault.c:7597
+#: ../gtk/gtkfilechooserdefault.c:7618
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Genvägen %s finns redan"
 
-#: ../gtk/gtkfilechooserdefault.c:7707
+#: ../gtk/gtkfilechooserdefault.c:7708
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Genvägen %s finns inte"
 
-#: ../gtk/gtkfilechooserdefault.c:7950
+#: ../gtk/gtkfilechooserdefault.c:7951
 #: ../gtk/gtkprintunixdialog.c:364
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "En fil med namnet \"%s\" finns redan. Vill du ersätta den?"
 
-#: ../gtk/gtkfilechooserdefault.c:7953
+#: ../gtk/gtkfilechooserdefault.c:7954
 #: ../gtk/gtkprintunixdialog.c:368
 #, c-format
 msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Filen finns redan i \"%s\". Att ersätta den kommer att skriva över dess innehåll."
 
-#: ../gtk/gtkfilechooserdefault.c:7958
+#: ../gtk/gtkfilechooserdefault.c:7959
 #: ../gtk/gtkprintunixdialog.c:375
 msgid "_Replace"
 msgstr "_Ersätt"
 
-#: ../gtk/gtkfilechooserdefault.c:8719
+#: ../gtk/gtkfilechooserdefault.c:8720
 msgid "Could not start the search process"
 msgstr "Kunde inte starta sökprocessen"
 
-#: ../gtk/gtkfilechooserdefault.c:8720
+#: ../gtk/gtkfilechooserdefault.c:8721
 msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
 msgstr "Programmet kunde inte skapa en anslutning till indexeringsdemonen. Försäkra dig om att den kör."
 
-#: ../gtk/gtkfilechooserdefault.c:8734
+#: ../gtk/gtkfilechooserdefault.c:8735
 msgid "Could not send the search request"
 msgstr "Kunde inte skicka sökbegäran"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9149
+#: ../gtk/gtkfilechooserdefault.c:9150
 msgid "_Search:"
 msgstr "_Sök:"
 
-#: ../gtk/gtkfilechooserdefault.c:10096
+#: ../gtk/gtkfilechooserdefault.c:10097
 #, c-format
 msgid "Could not mount %s"
 msgstr "Kunde inte montera %s"
 
-#: ../gtk/gtkfilechooserdefault.c:10750
+#: ../gtk/gtkfilechooserdefault.c:10751
 msgid "Type name of new folder"
 msgstr "Ange namnet på den nya mappen"
 
-#: ../gtk/gtkfilechooserdefault.c:10800
+#: ../gtk/gtkfilechooserdefault.c:10801
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: ../gtk/gtkfilechooserdefault.c:10802
+#: ../gtk/gtkfilechooserdefault.c:10803
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:10804
+#: ../gtk/gtkfilechooserdefault.c:10805
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:10907
-#: ../gtk/gtkfilechooserdefault.c:10929
-#: ../gtk/gtkfilechooserdefault.c:11000
+#: ../gtk/gtkfilechooserdefault.c:10908
+#: ../gtk/gtkfilechooserdefault.c:10930
+#: ../gtk/gtkfilechooserdefault.c:11001
 msgid "Unknown"
 msgstr "Okänd"
 
-#: ../gtk/gtkfilechooserdefault.c:10947
+#: ../gtk/gtkfilechooserdefault.c:10948
 msgid "%H:%M"
 msgstr "%H.%M"
 
-#: ../gtk/gtkfilechooserdefault.c:10949
+#: ../gtk/gtkfilechooserdefault.c:10950
 msgid "Yesterday at %H:%M"
 msgstr "Igår klockan %H.%M"
 
@@ -2051,7 +2051,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Ikonen \"%s\" finns inte i temat"
 
-#: ../gtk/gtkicontheme.c:3052
+#: ../gtk/gtkicontheme.c:3058
 msgid "Failed to load icon"
 msgstr "Misslyckades med att läsa in ikon"
 
@@ -2145,19 +2145,11 @@ msgstr "(okänd)"
 msgid "Cl_ear"
 msgstr "_Töm"
 
-#: ../gtk/gtklinkbutton.c:144
-msgid "URI"
-msgstr "URI"
-
-#: ../gtk/gtklinkbutton.c:145
-msgid "The URI bound to this button"
-msgstr "URI bundet till denna knapp"
-
-#: ../gtk/gtklinkbutton.c:402
+#: ../gtk/gtklinkbutton.c:424
 msgid "Copy URL"
 msgstr "Kopiera url"
 
-#: ../gtk/gtklinkbutton.c:542
+#: ../gtk/gtklinkbutton.c:562
 msgid "Invalid URI"
 msgstr "Ogiltig uri"
 
@@ -2233,16 +2225,16 @@ msgid "_Password:"
 msgstr "_Lösenord:"
 
 #: ../gtk/gtkmountoperation.c:590
-msgid "_Forget password immediately"
-msgstr "_Glöm lösenordet omedelbart"
+msgid "Forget password _immediately"
+msgstr "Glöm lösenordet _omedelbart"
 
 #: ../gtk/gtkmountoperation.c:598
-msgid "_Remember password until you logout"
-msgstr "_Kom ihåg lösenordet tills du loggar ut"
+msgid "Remember password until you _logout"
+msgstr "Kom ihåg lösenordet tills du _loggar ut"
 
 #: ../gtk/gtkmountoperation.c:606
-msgid "_Remember forever"
-msgstr "_Kom ihåg för alltid"
+msgid "Remember _forever"
+msgstr "Kom ihåg _för alltid"
 
 #: ../gtk/gtknotebook.c:834
 msgid "Arrow spacing"
@@ -2381,7 +2373,7 @@ msgstr "Sökväg uppåt"
 msgid "Down Path"
 msgstr "Sökväg nedåt"
 
-#: ../gtk/gtkpathbar.c:1464
+#: ../gtk/gtkpathbar.c:1473
 msgid "File System Root"
 msgstr "Filsystemsrot"
 
@@ -2830,13 +2822,13 @@ msgstr "_%d. %s"
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1012
-#: ../gtk/gtkrecentmanager.c:1025
-#: ../gtk/gtkrecentmanager.c:1163
-#: ../gtk/gtkrecentmanager.c:1173
-#: ../gtk/gtkrecentmanager.c:1226
-#: ../gtk/gtkrecentmanager.c:1235
-#: ../gtk/gtkrecentmanager.c:1250
+#: ../gtk/gtkrecentmanager.c:1020
+#: ../gtk/gtkrecentmanager.c:1033
+#: ../gtk/gtkrecentmanager.c:1171
+#: ../gtk/gtkrecentmanager.c:1181
+#: ../gtk/gtkrecentmanager.c:1234
+#: ../gtk/gtkrecentmanager.c:1243
+#: ../gtk/gtkrecentmanager.c:1258
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Kan inte hitta ett objekt med uri \"%s\""
@@ -4661,6 +4653,10 @@ msgstr "Skriv ut till testskrivare"
 msgid "Could not get information for file '%s': %s"
 msgstr "Kunde inte hämta information för filen \"%s\": %s"
 
+#~ msgid "URI"
+#~ msgstr "URI"
+#~ msgid "The URI bound to this button"
+#~ msgstr "URI bundet till denna knapp"
 #~ msgid "Invalid filename: %s"
 #~ msgstr "Ogiltigt filnamn: %s"
 #~ msgid ""
