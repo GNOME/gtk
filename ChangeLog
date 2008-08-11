@@ -1,3 +1,11 @@
+2008-08-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 547211 – Duplicated mnemonic
+
+	* gtk/gtkmountoperation.c: Change mnemonics around in 
+	the password dialog to avoid a conflict.
+	Reported by Gil Forcada
+
 2008-08-11  Sven Neumann  <sven@gimp.org>
 
 	* gdk-pixbuf/gdk-pixbuf-loader.c: use canonical signal names.

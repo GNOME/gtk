@@ -587,7 +587,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
       gtk_box_pack_start (GTK_BOX (vbox), remember_box,
                           FALSE, FALSE, 0);
 
-      choice = gtk_radio_button_new_with_mnemonic (NULL, _("_Forget password immediately"));
+      choice = gtk_radio_button_new_with_mnemonic (NULL, _("Forget password _immediately"));
       g_object_set_data (G_OBJECT (choice), "password-save",
                          GINT_TO_POINTER (G_PASSWORD_SAVE_NEVER));
       g_signal_connect (choice, "toggled",
@@ -595,7 +595,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
       gtk_box_pack_start (GTK_BOX (remember_box), choice, FALSE, FALSE, 0);
 
       group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (choice));
-      choice = gtk_radio_button_new_with_mnemonic (group, _("_Remember password until you logout"));
+      choice = gtk_radio_button_new_with_mnemonic (group, _("Remember password until you _logout"));
       g_object_set_data (G_OBJECT (choice), "password-save",
                          GINT_TO_POINTER (G_PASSWORD_SAVE_FOR_SESSION));
       g_signal_connect (choice, "toggled",
@@ -603,7 +603,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
       gtk_box_pack_start (GTK_BOX (remember_box), choice, FALSE, FALSE, 0);
 
       group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (choice));
-      choice = gtk_radio_button_new_with_mnemonic (group, _("_Remember forever"));
+      choice = gtk_radio_button_new_with_mnemonic (group, _("Remember _forever"));
       g_object_set_data (G_OBJECT (choice), "password-save",
                          GINT_TO_POINTER (G_PASSWORD_SAVE_PERMANENTLY));
       g_signal_connect (choice, "toggled",
