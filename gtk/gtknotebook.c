@@ -831,8 +831,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("arrow-spacing",
-                                                             _("Arrow spacing"),
-                                                             _("Scroll arrow spacing"),
+                                                             P_("Arrow spacing"),
+                                                             P_("Scroll arrow spacing"),
                                                              0,
                                                              G_MAXINT,
                                                              0,

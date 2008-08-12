@@ -1,3 +1,9 @@
+2008-08-12  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtknotebook.c
+	* gtk/gtkradiotoolbutton.c: property nick and blurb should be
+	marked with P_(), not _().
+
 2008-08-12  Michael Natterer  <mitch@imendio.com>
 
 	* examples/gtkdial/gtkdial.c
