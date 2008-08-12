@@ -1,5 +1,13 @@
 2008-08-12  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkwidget.c: change names of default implementations of
+	our own signals to consistently contain "real":
+
+	gtk_widget_style_set -> gtk_widget_real_style_set
+	gtk_widget_direction_changed -> gtk_widget_real_direction_changed
+
+2008-08-12  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/*.c: consistently chain up using
 	GTK_FOO_CLASS(parent_class)->bar(instance) instead of
 	(*GTK_FOO_CLASS(parent_class))->bar(instance).

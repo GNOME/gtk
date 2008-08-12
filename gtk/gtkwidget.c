@@ -192,10 +192,10 @@ static void	gtk_widget_real_size_request	 (GtkWidget	    *widget,
 						  GtkRequisition    *requisition);
 static void	gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
 						  GtkAllocation	    *allocation);
-static void	gtk_widget_style_set		 (GtkWidget	    *widget,
-						  GtkStyle          *previous_style);
-static void	gtk_widget_direction_changed	 (GtkWidget	    *widget,
-						  GtkTextDirection   previous_direction);
+static void	gtk_widget_real_style_set        (GtkWidget         *widget,
+                                                  GtkStyle          *previous_style);
+static void	gtk_widget_real_direction_changed(GtkWidget         *widget,
+                                                  GtkTextDirection   previous_direction);
 
 static void	gtk_widget_real_grab_focus	 (GtkWidget         *focus_widget);
 static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
@@ -427,8 +427,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->state_changed = NULL;
   klass->parent_set = NULL;
   klass->hierarchy_changed = NULL;
-  klass->style_set = gtk_widget_style_set;
-  klass->direction_changed = gtk_widget_direction_changed;
+  klass->style_set = gtk_widget_real_style_set;
+  klass->direction_changed = gtk_widget_real_direction_changed;
   klass->grab_notify = NULL;
   klass->child_notify = NULL;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
@@ -6047,15 +6047,15 @@ gtk_widget_modify_font (GtkWidget            *widget,
 }
 
 static void
-gtk_widget_direction_changed (GtkWidget        *widget,
-			      GtkTextDirection  previous_direction)
+gtk_widget_real_direction_changed (GtkWidget        *widget,
+                                   GtkTextDirection  previous_direction)
 {
   gtk_widget_queue_resize (widget);
 }
 
 static void
-gtk_widget_style_set (GtkWidget *widget,
-		      GtkStyle  *previous_style)
+gtk_widget_real_style_set (GtkWidget *widget,
+                           GtkStyle  *previous_style)
 {
   if (GTK_WIDGET_REALIZED (widget) &&
       !GTK_WIDGET_NO_WINDOW (widget))
