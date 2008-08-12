@@ -588,15 +588,16 @@ compute_next_step (GtkAssistant *assistant)
 }
 
 static void
-on_assistant_close (GtkWidget *widget, GtkAssistant *assistant)
+on_assistant_close (GtkWidget    *widget,
+                    GtkAssistant *assistant)
 {
   g_signal_emit (assistant, signals [CLOSE], 0, NULL);
 }
 
 static void
-on_assistant_apply (GtkWidget *widget, GtkAssistant *assistant)
+on_assistant_apply (GtkWidget    *widget,
+                    GtkAssistant *assistant)
 {
-  GtkAssistantPrivate *priv = assistant->priv;
   gboolean success;
 
   success = compute_next_step (assistant);
@@ -611,7 +612,8 @@ on_assistant_apply (GtkWidget *widget, GtkAssistant *assistant)
 }
 
 static void
-on_assistant_forward (GtkWidget *widget, GtkAssistant *assistant)
+on_assistant_forward (GtkWidget    *widget,
+                      GtkAssistant *assistant)
 {
   if (!compute_next_step (assistant))
     g_critical ("Page flow is broken, you may want to end it with a page of "
@@ -619,7 +621,8 @@ on_assistant_forward (GtkWidget *widget, GtkAssistant *assistant)
 }
 
 static void
-on_assistant_back (GtkWidget *widget, GtkAssistant *assistant)
+on_assistant_back (GtkWidget    *widget,
+                   GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv = assistant->priv;
   GtkAssistantPage *page_info;
@@ -643,13 +646,15 @@ on_assistant_back (GtkWidget *widget, GtkAssistant *assistant)
 }
 
 static void
-on_assistant_cancel (GtkWidget *widget, GtkAssistant *assistant)
+on_assistant_cancel (GtkWidget    *widget,
+                     GtkAssistant *assistant)
 {
   g_signal_emit (assistant, signals [CANCEL], 0, NULL);
 }
 
 static void
-on_assistant_last (GtkWidget *widget, GtkAssistant *assistant)
+on_assistant_last (GtkWidget    *widget,
+                   GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv = assistant->priv;
 

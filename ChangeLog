@@ -1,5 +1,10 @@
 2008-08-12  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkassistant.c: remove unused variable and fix formatting of
+	some function headers.
+
+2008-08-12  Michael Natterer  <mitch@imendio.com>
+
 	* configure.in: define -DGDK_PIXBUF_DISABLE_DEPRECATED in the
 	global CFLAGS.
 
