@@ -773,12 +773,7 @@ gtk_status_icon_get_property (GObject    *object,
       if (priv->storage_type != GTK_IMAGE_GICON)
         g_value_set_object (value, NULL);
       else
-        {
-          GIcon *icon;
-
-          gtk_status_icon_get_gicon (status_icon, &icon);
-          g_value_set_object (value, icon);
-        }
+        g_value_set_object (value, gtk_status_icon_get_gicon (status_icon));
       break;
     case PROP_STORAGE_TYPE:
       g_value_set_enum (value, gtk_status_icon_get_storage_type (status_icon));
@@ -1724,7 +1719,6 @@ gtk_status_icon_get_icon_name (GtkStatusIcon *status_icon)
 /**
  * gtk_status_icon_get_gicon:
  * @status_icon: a #GtkStatusIcon
- * @icon: a place to store a #GIcon
  *
  * Retrieves the #GIcon being displayed by the #GtkStatusIcon.
  * The storage type of the status icon must be %GTK_IMAGE_EMPTY or
@@ -1734,11 +1728,12 @@ gtk_status_icon_get_icon_name (GtkStatusIcon *status_icon)
  *
  * If this function fails, @icon is left unchanged;
  *
+ * Returns: the displayed icon, or %NULL if the image is empty
+ *
  * Since: 2.14
  **/
-void
-gtk_status_icon_get_gicon (GtkStatusIcon  *status_icon,
-                           GIcon         **icon)
+GIcon *
+gtk_status_icon_get_gicon (GtkStatusIcon *status_icon)
 {
   GtkStatusIconPrivate *priv;
 
@@ -1752,7 +1747,7 @@ gtk_status_icon_get_gicon (GtkStatusIcon  *status_icon,
   if (priv->storage_type == GTK_IMAGE_EMPTY)
     priv->image_data.gicon = NULL;
 
-  *icon = priv->image_data.gicon;
+  return priv->image_data.gicon;
 }
 
 /**
