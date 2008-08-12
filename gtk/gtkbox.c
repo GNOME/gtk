@@ -48,7 +48,6 @@ enum {
   CHILD_PROP_POSITION
 };
 
-
 typedef struct _GtkBoxPrivate GtkBoxPrivate;
 
 struct _GtkBoxPrivate
@@ -56,10 +55,16 @@ struct _GtkBoxPrivate
   GtkOrientation orientation;
   guint          default_expand : 1;
   guint          spacing_set    : 1;
+  GtkSize        spacing_unit;
+  GHashTable    *child_map;
 };
 
-#define GTK_BOX_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_BOX, GtkBoxPrivate))
+typedef struct
+{
+  GtkUSize padding_unit;
+} GtkBoxChildPrivate;
 
+#define GTK_BOX_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_BOX, GtkBoxPrivate))
 
 static void gtk_box_set_property       (GObject        *object,
                                         guint           prop_id,
@@ -94,24 +99,55 @@ static void gtk_box_get_child_property (GtkContainer   *container,
                                         GValue         *value,
                                         GParamSpec     *pspec);
 static GType gtk_box_child_type        (GtkContainer   *container);
-
+static void gtk_box_finalize           (GObject *object);
+static void gtk_box_unit_changed       (GtkWidget *widget);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
                                   G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
                                                          NULL));
 
 static void
+add_priv_child (GtkBox *box, GtkBoxChild *child, GtkBoxChildPrivate *priv_child)
+{
+  GtkBoxPrivate *priv = GTK_BOX_GET_PRIVATE (box);
+  g_hash_table_insert (priv->child_map, child, priv_child);
+}
+
+static GtkBoxChildPrivate *
+get_priv_child (GtkBox *box, GtkBoxChild *child)
+{
+  GtkBoxPrivate *priv = GTK_BOX_GET_PRIVATE (box);
+  GtkBoxChildPrivate *priv_child;
+
+  priv_child = g_hash_table_lookup (priv->child_map, child);
+  if (G_UNLIKELY (priv_child == NULL))
+    g_warning ("GtkBox: No private child for child; the application is munging box->child directly!");
+
+  return priv_child;
+}
+
+static void
+remove_priv_child (GtkBox *box, GtkBoxChild *child)
+{
+  GtkBoxPrivate *priv = GTK_BOX_GET_PRIVATE (box);
+  if (G_UNLIKELY (!g_hash_table_remove (priv->child_map, child)))
+    g_warning ("GtkBox: No private child for child; the application is munging box->child directly!");
+}
+
+static void
 gtk_box_class_init (GtkBoxClass *class)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
-  object_class->set_property = gtk_box_set_property;
-  object_class->get_property = gtk_box_get_property;
-
+  gobject_class->set_property = gtk_box_set_property;
+  gobject_class->get_property = gtk_box_get_property;
+  gobject_class->finalize = gtk_box_finalize;
+   
   widget_class->size_request = gtk_box_size_request;
   widget_class->size_allocate = gtk_box_size_allocate;
+  widget_class->unit_changed = gtk_box_unit_changed;
 
   container_class->add = gtk_box_add;
   container_class->remove = gtk_box_remove;
@@ -120,21 +156,19 @@ gtk_box_class_init (GtkBoxClass *class)
   container_class->set_child_property = gtk_box_set_child_property;
   container_class->get_child_property = gtk_box_get_child_property;
 
-  g_object_class_override_property (object_class,
+  g_object_class_override_property (gobject_class,
                                     PROP_ORIENTATION,
                                     "orientation");
 
-  g_object_class_install_property (object_class,
+  g_object_class_install_property (gobject_class,
                                    PROP_SPACING,
-                                   g_param_spec_int ("spacing",
-                                                     P_("Spacing"),
-                                                     P_("The amount of space between children"),
-                                                     0,
-                                                     G_MAXINT,
-                                                     0,
-                                                     GTK_PARAM_READWRITE));
-
-  g_object_class_install_property (object_class,
+                                   gtk_param_spec_size ("spacing",
+                                                        P_("Spacing"),
+                                                        P_("The amount of space between children"),
+                                                        0, G_MAXINT, 0,
+                                                        GTK_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
                                    PROP_HOMOGENEOUS,
                                    g_param_spec_boolean ("homogeneous",
 							 P_("Homogeneous"),
@@ -158,11 +192,11 @@ gtk_box_class_init (GtkBoxClass *class)
 								    GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_PADDING,
-					      g_param_spec_uint ("padding", 
-								 P_("Padding"), 
-								 P_("Extra space to put between the child and its neighbors, in pixels"),
-								 0, G_MAXINT, 0,
-								 GTK_PARAM_READWRITE));
+					      gtk_param_spec_usize ("padding", 
+                                                                    P_("Padding"), 
+                                                                    P_("Extra space to put between the child and its neighbors, in pixels"),
+                                                                    0, G_MAXINT, 0,
+                                                                    GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_PACK_TYPE,
 					      g_param_spec_enum ("pack-type", 
@@ -178,13 +212,25 @@ gtk_box_class_init (GtkBoxClass *class)
 								-1, G_MAXINT, 0,
 								GTK_PARAM_READWRITE));
 
-  g_type_class_add_private (object_class, sizeof (GtkBoxPrivate));
+  g_type_class_add_private (gobject_class, sizeof (GtkBoxPrivate));
+}
+
+static void
+gtk_box_finalize (GObject *object)
+{
+  GtkBox *box = GTK_BOX (object);
+  GtkBoxPrivate *priv = GTK_BOX_GET_PRIVATE (box);
+
+  /* TODO: should check that hash table is empty */
+  g_hash_table_unref (priv->child_map);
+
+  G_OBJECT_CLASS (gtk_box_parent_class)->finalize (object);
 }
 
 static void
 gtk_box_init (GtkBox *box)
 {
-  GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (box);
+  GtkBoxPrivate *priv = GTK_BOX_GET_PRIVATE (box);
 
   GTK_WIDGET_SET_FLAGS (box, GTK_NO_WINDOW);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), FALSE);
@@ -193,9 +239,14 @@ gtk_box_init (GtkBox *box)
   box->spacing = 0;
   box->homogeneous = FALSE;
 
-  private->orientation = GTK_ORIENTATION_HORIZONTAL;
-  private->default_expand = FALSE;
-  private->spacing_set = FALSE;
+  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
+  priv->default_expand = FALSE;
+  priv->spacing_set = FALSE;
+  priv->spacing_unit = 0;
+  priv->child_map = g_hash_table_new_full (g_direct_hash,
+                                           g_direct_equal,
+                                           NULL,
+                                           g_free);
 }
 
 static void
@@ -214,7 +265,7 @@ gtk_box_set_property (GObject      *object,
       gtk_widget_queue_resize (GTK_WIDGET (box));
       break;
     case PROP_SPACING:
-      gtk_box_set_spacing (box, g_value_get_int (value));
+      gtk_box_set_spacing (box, gtk_value_get_size (value));
       break;
     case PROP_HOMOGENEOUS:
       gtk_box_set_homogeneous (box, g_value_get_boolean (value));
@@ -232,15 +283,15 @@ gtk_box_get_property (GObject    *object,
                       GParamSpec *pspec)
 {
   GtkBox *box = GTK_BOX (object);
-  GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (box);
+  GtkBoxPrivate *priv = GTK_BOX_GET_PRIVATE (box);
 
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      g_value_set_enum (value, private->orientation);
+      g_value_set_enum (value, priv->orientation);
       break;
     case PROP_SPACING:
-      g_value_set_int (value, box->spacing);
+      gtk_value_set_size (value, priv->spacing_unit, box);
       break;
     case PROP_HOMOGENEOUS:
       g_value_set_boolean (value, box->homogeneous);
@@ -650,7 +701,7 @@ gtk_box_set_child_property (GtkContainer *container,
 				 child,
 				 expand,
 				 fill,
-				 g_value_get_uint (value),
+				 gtk_value_get_usize (value),
 				 pack_type);
       break;
     case CHILD_PROP_PACK_TYPE:
@@ -702,7 +753,7 @@ gtk_box_get_child_property (GtkContainer *container,
       g_value_set_boolean (value, fill);
       break;
     case CHILD_PROP_PADDING:
-      g_value_set_uint (value, padding);
+      gtk_value_set_usize (value, padding, container);
       break;
     case CHILD_PROP_PACK_TYPE:
       g_value_set_enum (value, pack_type);
@@ -731,10 +782,11 @@ gtk_box_pack (GtkBox      *box,
               GtkWidget   *child,
               gboolean     expand,
               gboolean     fill,
-              guint        padding,
+              GtkUSize     padding,
               GtkPackType  pack_type)
 {
   GtkBoxChild *child_info;
+  GtkBoxChildPrivate *priv_child_info;
 
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -742,13 +794,17 @@ gtk_box_pack (GtkBox      *box,
 
   child_info = g_new (GtkBoxChild, 1);
   child_info->widget = child;
-  child_info->padding = padding;
+  child_info->padding = gtk_widget_size_to_pixel (box, padding);
   child_info->expand = expand ? TRUE : FALSE;
   child_info->fill = fill ? TRUE : FALSE;
   child_info->pack = pack_type;
   child_info->is_secondary = FALSE;
 
+  priv_child_info = g_new (GtkBoxChildPrivate, 1);
+  priv_child_info->padding_unit = padding;
+
   box->children = g_list_append (box->children, child_info);
+  add_priv_child (box, child_info, priv_child_info);
 
   gtk_widget_freeze_child_notify (child);
 
@@ -813,7 +869,7 @@ gtk_box_pack_start (GtkBox    *box,
 		    GtkWidget *child,
 		    gboolean   expand,
 		    gboolean   fill,
-		    guint      padding)
+		    GtkUSize   padding)
 {
   gtk_box_pack (box, child, expand, fill, padding, GTK_PACK_START);
 }
@@ -845,7 +901,7 @@ gtk_box_pack_end (GtkBox    *box,
 		  GtkWidget *child,
 		  gboolean   expand,
 		  gboolean   fill,
-		  guint      padding)
+		  GtkUSize   padding)
 {
   gtk_box_pack (box, child, expand, fill, padding, GTK_PACK_END);
 }
@@ -945,15 +1001,19 @@ gtk_box_get_homogeneous (GtkBox *box)
  */
 void
 gtk_box_set_spacing (GtkBox *box,
-		     gint    spacing)
+		     GtkSize spacing)
 {
+  GtkBoxPrivate *priv;
+
   g_return_if_fail (GTK_IS_BOX (box));
 
-  if (spacing != box->spacing)
-    {
-      box->spacing = spacing;
-      _gtk_box_set_spacing_set (box, TRUE);
+  priv = GTK_BOX_GET_PRIVATE (box);
 
+  if (spacing != priv->spacing_unit)
+    {
+      box->spacing = gtk_widget_size_to_pixel (box, spacing);
+      priv->spacing_unit = spacing;
+      _gtk_box_set_spacing_set (box, TRUE);
       g_object_notify (G_OBJECT (box), "spacing");
 
       gtk_widget_queue_resize (GTK_WIDGET (box));
@@ -999,6 +1059,28 @@ _gtk_box_get_spacing_set (GtkBox *box)
   private = GTK_BOX_GET_PRIVATE (box);
 
   return private->spacing_set;
+}
+
+/**
+ * gtk_box_get_spacing_unit:
+ * @box: a #GtkBox
+ * 
+ * Like gtk_box_get_spacing() but preserves the unit.
+ * 
+ * Return value: spacing between children
+ *
+ * Since: 2.14
+ **/
+GtkSize
+gtk_box_get_spacing_unit (GtkBox *box)
+{
+  GtkBoxPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_BOX (box), 0);
+
+  priv = GTK_BOX_GET_PRIVATE (box);
+
+  return priv->spacing_unit;
 }
 
 /**
@@ -1113,6 +1195,64 @@ gtk_box_query_child_packing (GtkBox      *box,
 }
 
 /**
+ * gtk_box_query_child_packing_unit:
+ * @box: a #GtkBox
+ * @child: the #GtkWidget of the child to query
+ * @expand: pointer to return location for #GtkBox:expand child property 
+ * @fill: pointer to return location for #GtkBox:fill child property 
+ * @padding: pointer to return location for #GtkBox:padding child property 
+ * @pack_type: pointer to return location for #GtkBox:pack-type child property 
+ * 
+ * Like gtk_box_query_child_packing_unit() but preserves units.
+ *
+ * Since: 2.14
+ */
+void
+gtk_box_query_child_packing_unit (GtkBox      *box,
+                                  GtkWidget   *child,
+                                  gboolean    *expand,
+                                  gboolean    *fill,
+                                  GtkUSize    *padding,
+                                  GtkPackType *pack_type)
+{
+  GList *list;
+  GtkBoxChild *child_info = NULL;
+  GtkBoxChildPrivate *priv_child_info = NULL;
+
+  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+
+  list = box->children;
+  while (list)
+    {
+      child_info = list->data;
+      if (child_info->widget == child)
+	break;
+
+      list = list->next;
+    }
+
+  if (list)
+    {
+      priv_child_info = get_priv_child (box, child_info);
+
+      if (expand)
+	*expand = child_info->expand;
+      if (fill)
+	*fill = child_info->fill;
+      if (padding)
+        {
+          if (priv_child_info != NULL)
+            *padding = priv_child_info->padding_unit;
+          else
+            *padding = child_info->padding;
+        }
+      if (pack_type)
+	*pack_type = child_info->pack;
+    }
+}
+
+/**
  * gtk_box_set_child_packing:
  * @box: a #GtkBox
  * @child: the #GtkWidget of the child to set
@@ -1128,11 +1268,12 @@ gtk_box_set_child_packing (GtkBox      *box,
 			   GtkWidget   *child,
 			   gboolean     expand,
 			   gboolean     fill,
-			   guint        padding,
+			   GtkUSize     padding,
 			   GtkPackType  pack_type)
 {
   GList *list;
   GtkBoxChild *child_info = NULL;
+  GtkBoxChildPrivate *priv_child_info = NULL;
 
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -1150,11 +1291,15 @@ gtk_box_set_child_packing (GtkBox      *box,
   gtk_widget_freeze_child_notify (child);
   if (list)
     {
+      priv_child_info = get_priv_child (box, child_info);
+
       child_info->expand = expand != FALSE;
       gtk_widget_child_notify (child, "expand");
       child_info->fill = fill != FALSE;
       gtk_widget_child_notify (child, "fill");
-      child_info->padding = padding;
+      child_info->padding = gtk_widget_size_to_pixel (box, padding);
+      if (priv_child_info != NULL)
+        priv_child_info->padding_unit = padding;
       gtk_widget_child_notify (child, "padding");
       if (pack_type == GTK_PACK_END)
 	child_info->pack = GTK_PACK_END;
@@ -1212,6 +1357,8 @@ gtk_box_remove (GtkContainer *container,
 	  was_visible = GTK_WIDGET_VISIBLE (widget);
 	  gtk_widget_unparent (widget);
 
+          remove_priv_child (box, child);
+
 	  box->children = g_list_remove_link (box->children, children);
 	  g_list_free (children);
 	  g_free (child);
@@ -1257,6 +1404,34 @@ gtk_box_forall (GtkContainer *container,
 
       if (child->pack == GTK_PACK_END)
 	(* callback) (child->widget, callback_data);
+    }
+}
+
+static void
+gtk_box_unit_changed (GtkWidget *widget)
+{
+  GtkBox *box = GTK_BOX (widget);
+  GtkBoxPrivate *priv = GTK_BOX_GET_PRIVATE (box);
+  GtkBoxChild *child;
+  GtkBoxChildPrivate *priv_child;
+  GList *children;
+
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (gtk_box_parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (gtk_box_parent_class)->unit_changed (widget);
+
+  box->spacing = gtk_widget_size_to_pixel (box, priv->spacing_unit);
+
+  children = box->children;
+  while (children != NULL)
+    {
+      child = children->data;
+      priv_child = get_priv_child (box, child);
+
+      if (priv_child != NULL)
+        child->padding = gtk_widget_size_to_pixel (box, priv_child->padding_unit);
+
+      children = children->next;
     }
 }
 

@@ -52,10 +52,10 @@ typedef struct _GtkButtonBoxClass  GtkButtonBoxClass;
 struct _GtkButtonBox
 {
   GtkBox box;
-  gint GSEAL (child_min_width);
-  gint GSEAL (child_min_height);
-  gint GSEAL (child_ipad_x);
-  gint GSEAL (child_ipad_y);
+  GtkSize GSEAL (child_min_width);
+  GtkSize GSEAL (child_min_height);
+  GtkSize GSEAL (child_ipad_x);
+  GtkSize GSEAL (child_ipad_y);
   GtkButtonBoxStyle GSEAL (layout_style);
 };
 
@@ -81,17 +81,18 @@ void              gtk_button_box_set_child_secondary (GtkButtonBox      *widget,
 #define gtk_button_box_get_spacing(b)   gtk_box_get_spacing (GTK_BOX (b))
 
 void gtk_button_box_set_child_size     (GtkButtonBox *widget,
-					gint          min_width,
-					gint          min_height);
+					GtkSize       min_width,
+					GtkSize       min_height);
 void gtk_button_box_set_child_ipadding (GtkButtonBox *widget,
-					gint          ipad_x,
-					gint          ipad_y);
+					GtkSize       ipad_x,
+					GtkSize       ipad_y);
 void gtk_button_box_get_child_size     (GtkButtonBox *widget,
 					gint         *min_width,
 					gint         *min_height);
 void gtk_button_box_get_child_ipadding (GtkButtonBox *widget,
 					gint         *ipad_x,
 					gint         *ipad_y);
+/* no unit getters because these functions are deprecated already */
 #endif
 
 /* Internal method - do not use. */

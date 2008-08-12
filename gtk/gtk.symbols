@@ -470,6 +470,7 @@ gtk_bin_get_type G_GNUC_CONST
 #if IN_FILE(__GTK_BOX_C__)
 gtk_box_get_homogeneous
 gtk_box_get_spacing
+gtk_box_get_spacing_unit
 gtk_box_get_type G_GNUC_CONST
 gtk_box_pack_end
 gtk_box_pack_start
@@ -478,6 +479,7 @@ gtk_box_pack_end_defaults
 gtk_box_pack_start_defaults
 #endif
 gtk_box_query_child_packing
+gtk_box_query_child_packing_unit
 gtk_box_reorder_child
 gtk_box_set_child_packing
 gtk_box_set_homogeneous

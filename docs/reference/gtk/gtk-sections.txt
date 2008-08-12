@@ -471,9 +471,11 @@ gtk_box_pack_end_defaults
 gtk_box_get_homogeneous
 gtk_box_set_homogeneous
 gtk_box_get_spacing
+gtk_box_get_spacing_unit
 gtk_box_set_spacing
 gtk_box_reorder_child
 gtk_box_query_child_packing
+gtk_box_query_child_packing_unit
 gtk_box_set_child_packing
 <SUBSECTION Standard>
 GTK_BOX

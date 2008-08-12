@@ -76,22 +76,21 @@ struct _GtkBoxChild
 };
 
 
-GType       gtk_box_get_type            (void) G_GNUC_CONST;
+GType	   gtk_box_get_type	       (void) G_GNUC_CONST;
 GtkWidget* _gtk_box_new                 (GtkOrientation  orientation,
                                          gboolean        homogeneous,
                                          gint            spacing);
 
-void        gtk_box_pack_start          (GtkBox         *box,
-                                         GtkWidget      *child,
-                                         gboolean        expand,
-                                         gboolean        fill,
-                                         guint           padding);
-void        gtk_box_pack_end            (GtkBox         *box,
-                                         GtkWidget      *child,
-                                         gboolean        expand,
-                                         gboolean        fill,
-                                         guint           padding);
-
+void	   gtk_box_pack_start	       (GtkBox	     *box,
+					GtkWidget    *child,
+					gboolean      expand,
+					gboolean      fill,
+					GtkUSize      padding);
+void	   gtk_box_pack_end	       (GtkBox	     *box,
+					GtkWidget    *child,
+					gboolean      expand,
+					gboolean      fill,
+					GtkUSize      padding);
 #ifndef GTK_DISABLE_DEPRECATED
 void        gtk_box_pack_start_defaults (GtkBox         *box,
                                          GtkWidget      *widget);
@@ -103,8 +102,9 @@ void        gtk_box_set_homogeneous     (GtkBox         *box,
                                          gboolean        homogeneous);
 gboolean    gtk_box_get_homogeneous     (GtkBox         *box);
 void        gtk_box_set_spacing         (GtkBox         *box,
-                                         gint            spacing);
+					 GtkSize 	 spacing);
 gint        gtk_box_get_spacing         (GtkBox         *box);
+GtkSize     gtk_box_get_spacing_unit    (GtkBox         *box);
 
 void        gtk_box_reorder_child       (GtkBox         *box,
                                          GtkWidget      *child,
@@ -116,11 +116,17 @@ void        gtk_box_query_child_packing (GtkBox         *box,
                                          gboolean       *fill,
                                          guint          *padding,
                                          GtkPackType    *pack_type);
+void        gtk_box_query_child_packing_unit (GtkBox      *box,
+                                              GtkWidget   *child,
+                                              gboolean    *expand,
+                                              gboolean    *fill,
+                                              GtkUSize    *padding,
+                                              GtkPackType *pack_type);
 void        gtk_box_set_child_packing   (GtkBox         *box,
                                          GtkWidget      *child,
                                          gboolean        expand,
                                          gboolean        fill,
-                                         guint           padding,
+                                         GtkUSize        padding,
                                          GtkPackType     pack_type);
 
 /* internal API */

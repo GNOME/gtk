@@ -35,8 +35,25 @@ static void gtk_hbutton_box_size_request  (GtkWidget      *widget,
 static void gtk_hbutton_box_size_allocate (GtkWidget      *widget,
 					   GtkAllocation  *allocation);
 
-static gint default_spacing = 30;
+static gint override_default_spacing = -1;
+static gint get_default_spacing (void);
+static void set_default_spacing (gint size);
+
 static gint default_layout_style = GTK_BUTTONBOX_EDGE;
+
+static gint
+get_default_spacing (void)
+{
+  if (override_default_spacing != -1)
+    return override_default_spacing;
+  return GTK_SIZE_ONE_TWELFTH_EM(30);
+}
+
+static void
+set_default_spacing (gint size)
+{
+  override_default_spacing = size;
+}
 
 G_DEFINE_TYPE (GtkHButtonBox, gtk_hbutton_box, GTK_TYPE_BUTTON_BOX)
 
@@ -73,7 +90,7 @@ gtk_hbutton_box_new (void)
 void 
 gtk_hbutton_box_set_spacing_default (gint spacing)
 {
-  default_spacing = spacing;
+  set_default_spacing (spacing);
 }
 
 
@@ -93,7 +110,12 @@ gtk_hbutton_box_set_layout_default (GtkButtonBoxStyle layout)
 gint 
 gtk_hbutton_box_get_spacing_default (void)
 {
-  return default_spacing;
+  /* This function is just broken: since the default spacing is a
+   * constant number of resolution independent units (e.g. 2.5em), the
+   * pixel size will vary depending on what screen the widget will
+   * appear on (different DPI etc.).
+   */
+  return gtk_size_to_pixel (NULL, 0, get_default_spacing ());
 }
 
 
