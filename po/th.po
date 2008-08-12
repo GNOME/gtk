@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-05 11:57-0400\n"
-"PO-Revision-Date: 2008-07-04 16:54+0700\n"
+"PO-Revision-Date: 2008-08-12 18:52+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -2448,14 +2448,12 @@ msgid "Custom size"
 msgstr "ขนาดกำหนดเอง"
 
 #: gtk/gtkprintoperation-win32.c:1517
-#, fuzzy
 msgid "No printer found"
-msgstr "ไม่พบรายการ"
+msgstr "ไม่พบเครื่องพิมพ์"
 
 #: gtk/gtkprintoperation-win32.c:1544
-#, fuzzy
 msgid "Invalid argument to CreateDC"
-msgstr "อาร์กิวเมนต์ของ PrintDlgEx ผิดพลาด"
+msgstr "อาร์กิวเมนต์ของ CreateDC ผิดพลาด"
 
 #: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1801
 msgid "Error from StartDoc"
@@ -4440,11 +4438,11 @@ msgstr "มีปัญหากับเครื่องพิมพ์ '%s'"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1371
 msgid "Paused ; Rejecting Jobs"
-msgstr ""
+msgstr "หยุดพัก ; ไม่รับงานพิมพ์"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1375
 msgid "Rejecting Jobs"
-msgstr ""
+msgstr "ไม่รับงานพิมพ์"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1996
 msgid "Two Sided"
