@@ -353,7 +353,7 @@ gtk_check_menu_item_expose (GtkWidget      *widget,
 			    GdkEventExpose *event)
 {
   if (GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->expose_event)
-    (* GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->expose_event) (widget, event);
+    GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->expose_event (widget, event);
 
   gtk_check_menu_item_draw_indicator (GTK_CHECK_MENU_ITEM (widget), &event->area);
 
@@ -377,7 +377,7 @@ gtk_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 				    GdkRectangle     *area)
 {
   if (GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->draw_indicator)
-    (* GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->draw_indicator) (check_menu_item, area);
+    GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->draw_indicator (check_menu_item, area);
 }
 
 static void

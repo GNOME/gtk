@@ -2562,7 +2562,7 @@ gtk_label_size_allocate (GtkWidget     *widget,
 
   label = GTK_LABEL (widget);
 
-  (* GTK_WIDGET_CLASS (gtk_label_parent_class)->size_allocate) (widget, allocation);
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->size_allocate (widget, allocation);
 
   if (label->ellipsize)
     {
@@ -3061,8 +3061,8 @@ gtk_label_realize (GtkWidget *widget)
   GtkLabel *label;
 
   label = GTK_LABEL (widget);
-  
-  (* GTK_WIDGET_CLASS (gtk_label_parent_class)->realize) (widget);
+
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->realize (widget);
 
   if (label->select_info)
     gtk_label_create_window (label);
@@ -3077,8 +3077,8 @@ gtk_label_unrealize (GtkWidget *widget)
 
   if (label->select_info)
     gtk_label_destroy_window (label);
-  
-  (* GTK_WIDGET_CLASS (gtk_label_parent_class)->unrealize) (widget);
+
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->unrealize (widget);
 }
 
 static void
@@ -3087,9 +3087,9 @@ gtk_label_map (GtkWidget *widget)
   GtkLabel *label;
 
   label = GTK_LABEL (widget);
-  
-  (* GTK_WIDGET_CLASS (gtk_label_parent_class)->map) (widget);
-  
+
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->map (widget);
+
   if (label->select_info)
     gdk_window_show (label->select_info->window);
 }
@@ -3103,8 +3103,8 @@ gtk_label_unmap (GtkWidget *widget)
 
   if (label->select_info)
     gdk_window_hide (label->select_info->window);
-  
-  (* GTK_WIDGET_CLASS (gtk_label_parent_class)->unmap) (widget);
+
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->unmap (widget);
 }
 
 static void

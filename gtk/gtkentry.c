@@ -1385,7 +1385,7 @@ gtk_entry_unrealize (GtkWidget *widget)
     }
 
   if (GTK_WIDGET_CLASS (gtk_entry_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_entry_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_entry_parent_class)->unrealize (widget);
 }
 
 void

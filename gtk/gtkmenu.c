@@ -2317,7 +2317,7 @@ gtk_menu_unrealize (GtkWidget *widget)
   gdk_window_destroy (menu->bin_window);
   menu->bin_window = NULL;
 
-  (* GTK_WIDGET_CLASS (gtk_menu_parent_class)->unrealize) (widget);
+  GTK_WIDGET_CLASS (gtk_menu_parent_class)->unrealize (widget);
 }
 
 static void
@@ -2722,8 +2722,8 @@ gtk_menu_expose (GtkWidget	*widget,
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       gtk_menu_paint (widget, event);
-      
-      (* GTK_WIDGET_CLASS (gtk_menu_parent_class)->expose_event) (widget, event);
+
+      GTK_WIDGET_CLASS (gtk_menu_parent_class)->expose_event (widget, event);
     }
   
   return FALSE;

@@ -675,8 +675,8 @@ gtk_statusbar_realize (GtkWidget *widget)
   GtkStatusbar *statusbar;
 
   statusbar = GTK_STATUSBAR (widget);
-  
-  (* GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->realize) (widget);
+
+  GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->realize (widget);
 
   if (statusbar->has_resize_grip)
     gtk_statusbar_create_window (statusbar);
@@ -691,8 +691,8 @@ gtk_statusbar_unrealize (GtkWidget *widget)
 
   if (statusbar->grip_window)
     gtk_statusbar_destroy_window (statusbar);
-  
-  (* GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->unrealize) (widget);
+
+  GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->unrealize (widget);
 }
 
 static void
@@ -701,9 +701,9 @@ gtk_statusbar_map (GtkWidget *widget)
   GtkStatusbar *statusbar;
 
   statusbar = GTK_STATUSBAR (widget);
-  
-  (* GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->map) (widget);
-  
+
+  GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->map (widget);
+
   if (statusbar->grip_window)
     gdk_window_show (statusbar->grip_window);
 }
@@ -717,8 +717,8 @@ gtk_statusbar_unmap (GtkWidget *widget)
 
   if (statusbar->grip_window)
     gdk_window_hide (statusbar->grip_window);
-  
-  (* GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->unmap) (widget);
+
+  GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->unmap (widget);
 }
 
 static gboolean

@@ -976,7 +976,7 @@ gtk_spin_button_style_set (GtkWidget *widget,
   if (previous_style && GTK_WIDGET_REALIZED (widget))
     gtk_style_set_background (widget->style, spin->panel, GTK_STATE_NORMAL);
 
-  (* GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->style_set) (widget, previous_style);
+  GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->style_set (widget, previous_style);
 }
 
 

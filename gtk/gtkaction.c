@@ -955,9 +955,9 @@ gtk_action_create_menu_item (GtkAction *action)
 
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
 
-  menu_item = (* GTK_ACTION_GET_CLASS (action)->create_menu_item) (action);
+  menu_item = GTK_ACTION_GET_CLASS (action)->create_menu_item (action);
 
-  (* GTK_ACTION_GET_CLASS (action)->connect_proxy) (action, menu_item);
+  GTK_ACTION_GET_CLASS (action)->connect_proxy (action, menu_item);
 
   return menu_item;
 }
@@ -979,9 +979,9 @@ gtk_action_create_tool_item (GtkAction *action)
 
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
 
-  button = (* GTK_ACTION_GET_CLASS (action)->create_tool_item) (action);
+  button = GTK_ACTION_GET_CLASS (action)->create_tool_item (action);
 
-  (* GTK_ACTION_GET_CLASS (action)->connect_proxy) (action, button);
+  GTK_ACTION_GET_CLASS (action)->connect_proxy (action, button);
 
   return button;
 }
@@ -1013,9 +1013,9 @@ gtk_action_connect_proxy (GtkAction *action,
   prev_action = g_object_get_qdata (G_OBJECT (proxy), quark_gtk_action_proxy);
 
   if (prev_action)
-    (* GTK_ACTION_GET_CLASS (action)->disconnect_proxy) (prev_action, proxy);  
+    GTK_ACTION_GET_CLASS (action)->disconnect_proxy (prev_action, proxy);
 
-  (* GTK_ACTION_GET_CLASS (action)->connect_proxy) (action, proxy);
+  GTK_ACTION_GET_CLASS (action)->connect_proxy (action, proxy);
 }
 
 /**
@@ -1037,7 +1037,7 @@ gtk_action_disconnect_proxy (GtkAction *action,
 
   g_return_if_fail (g_object_get_qdata (G_OBJECT (proxy), quark_gtk_action_proxy) == action);
 
-  (* GTK_ACTION_GET_CLASS (action)->disconnect_proxy) (action, proxy);  
+  GTK_ACTION_GET_CLASS (action)->disconnect_proxy (action, proxy);
 }
 
 /**

@@ -852,9 +852,9 @@ gtk_menu_item_unrealize (GtkWidget *widget)
   gdk_window_set_user_data (menu_item->event_window, NULL);
   gdk_window_destroy (menu_item->event_window);
   menu_item->event_window = NULL;
-  
+
   if (GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->unrealize (widget);
 }
 
 static void
@@ -1013,7 +1013,7 @@ gtk_menu_item_expose (GtkWidget      *widget,
     {
       gtk_menu_item_paint (widget, &event->area);
 
-      (* GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->expose_event) (widget, event);
+      GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->expose_event (widget, event);
     }
 
   return FALSE;

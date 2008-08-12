@@ -638,7 +638,7 @@ gtk_viewport_unrealize (GtkWidget *widget)
   viewport->bin_window = NULL;
 
   if (GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unrealize (widget);
 }
 
 static void
@@ -674,8 +674,8 @@ gtk_viewport_expose (GtkWidget      *widget,
 			     GTK_STATE_NORMAL, GTK_SHADOW_NONE,
 			     &event->area, widget, "viewportbin",
 			     0, 0, -1, -1);
-	  
-	  (* GTK_WIDGET_CLASS (gtk_viewport_parent_class)->expose_event) (widget, event);
+
+	  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->expose_event (widget, event);
 	}
     }
 

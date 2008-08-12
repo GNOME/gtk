@@ -537,7 +537,7 @@ gtk_menu_bar_expose (GtkWidget      *widget,
     {
       gtk_menu_bar_paint (widget, &event->area);
 
-      (* GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->expose_event) (widget, event);
+      GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->expose_event (widget, event);
     }
 
   return FALSE;

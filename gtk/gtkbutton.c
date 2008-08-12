@@ -533,8 +533,8 @@ gtk_button_destroy (GtkObject *object)
       g_free (button->label_text);
       button->label_text = NULL;
     }
-  
-  (* GTK_OBJECT_CLASS (gtk_button_parent_class)->destroy) (object);
+
+  GTK_OBJECT_CLASS (gtk_button_parent_class)->destroy (object);
 }
 
 static GObject*
@@ -545,9 +545,9 @@ gtk_button_constructor (GType                  type,
   GObject *object;
   GtkButton *button;
 
-  object = (* G_OBJECT_CLASS (gtk_button_parent_class)->constructor) (type,
-								      n_construct_properties,
-								      construct_params);
+  object = G_OBJECT_CLASS (gtk_button_parent_class)->constructor (type,
+                                                                  n_construct_properties,
+                                                                  construct_params);
 
   button = GTK_BUTTON (object);
   button->constructed = TRUE;
@@ -1344,10 +1344,10 @@ gtk_button_expose (GtkWidget      *widget,
 			 GTK_WIDGET_STATE (widget),
 			 button->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
 			 "button", "buttondefault");
-      
-      (* GTK_WIDGET_CLASS (gtk_button_parent_class)->expose_event) (widget, event);
+
+      GTK_WIDGET_CLASS (gtk_button_parent_class)->expose_event (widget, event);
     }
-  
+
   return FALSE;
 }
 

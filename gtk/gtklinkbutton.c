@@ -459,7 +459,7 @@ gtk_link_button_button_press (GtkWidget      *widget,
     }
 
   if (GTK_WIDGET_CLASS (gtk_link_button_parent_class)->button_press_event)
-    return (* GTK_WIDGET_CLASS (gtk_link_button_parent_class)->button_press_event) (widget, event);
+    return GTK_WIDGET_CLASS (gtk_link_button_parent_class)->button_press_event (widget, event);
   
   return FALSE;
 }

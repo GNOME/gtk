@@ -408,10 +408,10 @@ gtk_socket_unrealize (GtkWidget *widget)
     }
 
   if (GTK_WIDGET_CLASS (gtk_socket_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_socket_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_socket_parent_class)->unrealize (widget);
 }
-  
-static void 
+
+static void
 gtk_socket_size_request (GtkWidget      *widget,
 			 GtkRequisition *requisition)
 {

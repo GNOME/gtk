@@ -592,7 +592,7 @@ gtk_frame_expose (GtkWidget      *widget,
     {
       gtk_frame_paint (widget, &event->area);
 
-      (* GTK_WIDGET_CLASS (gtk_frame_parent_class)->expose_event) (widget, event);
+      GTK_WIDGET_CLASS (gtk_frame_parent_class)->expose_event (widget, event);
     }
 
   return FALSE;

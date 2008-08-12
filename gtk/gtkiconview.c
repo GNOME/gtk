@@ -1030,7 +1030,7 @@ gtk_icon_view_destroy (GtkObject *object)
   clear_dest_info (icon_view);
   clear_source_info (icon_view);
 
-  (* GTK_OBJECT_CLASS (gtk_icon_view_parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (gtk_icon_view_parent_class)->destroy (object);
 }
 
 /* GObject methods */
@@ -1039,7 +1039,7 @@ gtk_icon_view_finalize (GObject *object)
 {
   gtk_icon_view_cell_layout_clear (GTK_CELL_LAYOUT (object));
 
-  (* G_OBJECT_CLASS (gtk_icon_view_parent_class)->finalize) (object);
+  G_OBJECT_CLASS (gtk_icon_view_parent_class)->finalize (object);
 }
 
 
@@ -1233,7 +1233,7 @@ gtk_icon_view_unrealize (GtkWidget *widget)
 
   /* GtkWidget::unrealize destroys children and widget->window */
   if (GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->unrealize (widget);
 }
 
 static void
@@ -1514,7 +1514,7 @@ gtk_icon_view_expose (GtkWidget *widget,
 
   cairo_destroy (cr);
 
-  (* GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->expose_event) (widget, expose);
+  GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->expose_event (widget, expose);
 
   return TRUE;
 }
@@ -2131,7 +2131,7 @@ gtk_icon_view_key_press (GtkWidget      *widget,
       return TRUE;
     }
 
-  return (* GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->key_press_event) (widget, event);
+  return GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->key_press_event (widget, event);
 }
 
 static gboolean
@@ -2143,7 +2143,7 @@ gtk_icon_view_key_release (GtkWidget      *widget,
   if (icon_view->priv->doing_rubberband)
     return TRUE;
 
-  return (* GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->key_press_event) (widget, event);
+  return GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->key_press_event (widget, event);
 }
 
 static void
@@ -9598,7 +9598,7 @@ gtk_icon_view_get_accessible (GtkWidget *widget)
 				       gtk_icon_view_accessible_factory_get_type ());
       first_time = FALSE;
     } 
-  return (* GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->get_accessible) (widget);
+  return GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->get_accessible (widget);
 }
 
 static gboolean

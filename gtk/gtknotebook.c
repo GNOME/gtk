@@ -1785,7 +1785,7 @@ gtk_notebook_unrealize (GtkWidget *widget)
     }
 
   if (GTK_WIDGET_CLASS (gtk_notebook_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_notebook_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_notebook_parent_class)->unrealize (widget);
 }
 
 static void
@@ -3167,8 +3167,8 @@ gtk_notebook_style_set  (GtkWidget *widget,
   notebook->has_before_next = has_before_next;
   notebook->has_after_previous = has_after_previous;
   notebook->has_after_next = has_after_next;
-  
-  (* GTK_WIDGET_CLASS (gtk_notebook_parent_class)->style_set) (widget, previous);
+
+  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->style_set (widget, previous);
 }
 
 static gboolean

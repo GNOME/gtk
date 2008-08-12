@@ -436,7 +436,7 @@ gtk_path_bar_unrealize (GtkWidget *widget)
   gdk_window_destroy (path_bar->event_window);
   path_bar->event_window = NULL;
 
-  (* GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->unrealize) (widget);
+  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->unrealize (widget);
 }
 
 /* This is a tad complicated

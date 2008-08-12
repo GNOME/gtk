@@ -4716,8 +4716,8 @@ gtk_window_unrealize (GtkWidget *widget)
 
   /* Icons */
   gtk_window_unrealize_icon (window);
-  
-  (* GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize) (widget);
+
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
 }
 
 static void

@@ -469,7 +469,7 @@ gtk_handle_box_unrealize (GtkWidget *widget)
   hb->float_window = NULL;
 
   if (GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->unrealize (widget);
 }
 
 static void
@@ -954,7 +954,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
 			 handle_orientation);
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
-    (* GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->expose_event) (widget, event);
+    GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->expose_event (widget, event);
 }
 
 static gint

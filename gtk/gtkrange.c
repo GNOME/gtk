@@ -1193,7 +1193,7 @@ gtk_range_destroy (GtkObject *object)
       range->adjustment = NULL;
     }
 
-  (* GTK_OBJECT_CLASS (gtk_range_parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (gtk_range_parent_class)->destroy (object);
 }
 
 static void
@@ -1293,9 +1293,9 @@ gtk_range_unrealize (GtkWidget *widget)
   gdk_window_set_user_data (range->event_window, NULL);
   gdk_window_destroy (range->event_window);
   range->event_window = NULL;
-  
+
   if (GTK_WIDGET_CLASS (gtk_range_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_range_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_range_parent_class)->unrealize (widget);
 }
 
 static void
@@ -2331,7 +2331,7 @@ gtk_range_style_set (GtkWidget *widget,
 
   range->need_recalc = TRUE;
 
-  (* GTK_WIDGET_CLASS (gtk_range_parent_class)->style_set) (widget, previous_style);
+  GTK_WIDGET_CLASS (gtk_range_parent_class)->style_set (widget, previous_style);
 }
 
 static void
@@ -2783,7 +2783,7 @@ gtk_range_calc_request (GtkRange      *range,
   border->bottom = 0;
 
   if (GTK_RANGE_GET_CLASS (range)->get_range_border)
-    (* GTK_RANGE_GET_CLASS (range)->get_range_border) (range, border);
+    GTK_RANGE_GET_CLASS (range)->get_range_border (range, border);
 
   n_steppers_ab = 0;
   n_steppers_cd = 0;

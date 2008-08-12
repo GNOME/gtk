@@ -286,7 +286,7 @@ gtk_text_layout_finalize (GObject *object)
     }
 
 
-  (* G_OBJECT_CLASS (gtk_text_layout_parent_class)->finalize) (object);
+  G_OBJECT_CLASS (gtk_text_layout_parent_class)->finalize (object);
 }
 
 void
@@ -665,8 +665,7 @@ gtk_text_layout_free_line_data (GtkTextLayout     *layout,
                                 GtkTextLine       *line,
                                 GtkTextLineData   *line_data)
 {
-  (* GTK_TEXT_LAYOUT_GET_CLASS (layout)->free_line_data)
-    (layout, line, line_data);
+  GTK_TEXT_LAYOUT_GET_CLASS (layout)->free_line_data (layout, line, line_data);
 }
 
 void
@@ -674,8 +673,7 @@ gtk_text_layout_invalidate (GtkTextLayout *layout,
                             const GtkTextIter *start_index,
                             const GtkTextIter *end_index)
 {
-  (* GTK_TEXT_LAYOUT_GET_CLASS (layout)->invalidate)
-    (layout, start_index, end_index);
+  GTK_TEXT_LAYOUT_GET_CLASS (layout)->invalidate (layout, start_index, end_index);
 }
 
 void
@@ -683,8 +681,7 @@ gtk_text_layout_invalidate_cursors (GtkTextLayout *layout,
 				    const GtkTextIter *start_index,
 				    const GtkTextIter *end_index)
 {
-  (* GTK_TEXT_LAYOUT_GET_CLASS (layout)->invalidate_cursors)
-    (layout, start_index, end_index);
+  GTK_TEXT_LAYOUT_GET_CLASS (layout)->invalidate_cursors (layout, start_index, end_index);
 }
 
 GtkTextLineData*
@@ -693,7 +690,7 @@ gtk_text_layout_wrap (GtkTextLayout *layout,
                       /* may be NULL */
                       GtkTextLineData *line_data)
 {
-  return (* GTK_TEXT_LAYOUT_GET_CLASS (layout)->wrap) (layout, line, line_data);
+  return GTK_TEXT_LAYOUT_GET_CLASS (layout)->wrap (layout, line, line_data);
 }
 
 GSList*

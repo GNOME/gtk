@@ -580,7 +580,7 @@ gtk_scale_style_set (GtkWidget *widget,
   
   _gtk_scale_clear_layout (GTK_SCALE (widget));
 
-  (* GTK_WIDGET_CLASS (gtk_scale_parent_class)->style_set) (widget, previous);
+  GTK_WIDGET_CLASS (gtk_scale_parent_class)->style_set (widget, previous);
 }
 
 static void

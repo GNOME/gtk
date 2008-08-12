@@ -229,7 +229,7 @@ gtk_check_button_size_request (GtkWidget      *widget,
       requisition->height = MAX (requisition->height, temp) + 2 * (focus_width + focus_pad);
     }
   else
-    (* GTK_WIDGET_CLASS (gtk_check_button_parent_class)->size_request) (widget, requisition);
+    GTK_WIDGET_CLASS (gtk_check_button_parent_class)->size_request (widget, requisition);
 }
 
 static void
@@ -294,7 +294,7 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 	}
     }
   else
-    (* GTK_WIDGET_CLASS (gtk_check_button_parent_class)->size_allocate) (widget, allocation);
+    GTK_WIDGET_CLASS (gtk_check_button_parent_class)->size_allocate (widget, allocation);
 }
 
 static gint
@@ -319,7 +319,7 @@ gtk_check_button_expose (GtkWidget      *widget,
 					    event);
 	}
       else if (GTK_WIDGET_CLASS (gtk_check_button_parent_class)->expose_event)
-	(* GTK_WIDGET_CLASS (gtk_check_button_parent_class)->expose_event) (widget, event);
+	GTK_WIDGET_CLASS (gtk_check_button_parent_class)->expose_event (widget, event);
     }
   
   return FALSE;
@@ -335,9 +335,9 @@ gtk_check_button_draw_indicator (GtkCheckButton *check_button,
   g_return_if_fail (GTK_IS_CHECK_BUTTON (check_button));
   
   class = GTK_CHECK_BUTTON_GET_CLASS (check_button);
-  
+
   if (class->draw_indicator)
-    (* class->draw_indicator) (check_button, area);
+    class->draw_indicator (check_button, area);
 }
 
 static void

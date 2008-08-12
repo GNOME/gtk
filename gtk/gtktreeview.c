@@ -1532,7 +1532,7 @@ gtk_tree_view_get_property (GObject    *object,
 static void
 gtk_tree_view_finalize (GObject *object)
 {
-  (* G_OBJECT_CLASS (gtk_tree_view_parent_class)->finalize) (object);
+  G_OBJECT_CLASS (gtk_tree_view_parent_class)->finalize (object);
 }
 
 
@@ -1631,14 +1631,14 @@ gtk_tree_view_destroy (GtkObject *object)
   if (tree_view->priv->column_drop_func_data &&
       tree_view->priv->column_drop_func_data_destroy)
     {
-      (* tree_view->priv->column_drop_func_data_destroy) (tree_view->priv->column_drop_func_data);
+      tree_view->priv->column_drop_func_data_destroy (tree_view->priv->column_drop_func_data);
       tree_view->priv->column_drop_func_data = NULL;
     }
 
   if (tree_view->priv->destroy_count_destroy &&
       tree_view->priv->destroy_count_data)
     {
-      (* tree_view->priv->destroy_count_destroy) (tree_view->priv->destroy_count_data);
+      tree_view->priv->destroy_count_destroy (tree_view->priv->destroy_count_data);
       tree_view->priv->destroy_count_data = NULL;
     }
 
@@ -1663,19 +1663,19 @@ gtk_tree_view_destroy (GtkObject *object)
 
   if (tree_view->priv->search_destroy && tree_view->priv->search_user_data)
     {
-      (* tree_view->priv->search_destroy) (tree_view->priv->search_user_data);
+      tree_view->priv->search_destroy (tree_view->priv->search_user_data);
       tree_view->priv->search_user_data = NULL;
     }
 
   if (tree_view->priv->search_position_destroy && tree_view->priv->search_position_user_data)
     {
-      (* tree_view->priv->search_position_destroy) (tree_view->priv->search_position_user_data);
+      tree_view->priv->search_position_destroy (tree_view->priv->search_position_user_data);
       tree_view->priv->search_position_user_data = NULL;
     }
 
   if (tree_view->priv->row_separator_destroy && tree_view->priv->row_separator_data)
     {
-      (* tree_view->priv->row_separator_destroy) (tree_view->priv->row_separator_data);
+      tree_view->priv->row_separator_destroy (tree_view->priv->row_separator_data);
       tree_view->priv->row_separator_data = NULL;
     }
   
@@ -1940,7 +1940,7 @@ gtk_tree_view_unrealize (GtkWidget *widget)
 
   /* GtkWidget::unrealize destroys children and widget->window */
   if (GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize (widget);
 }
 
 /* GtkWidget::size_request helper */
@@ -2484,9 +2484,9 @@ row_is_separator (GtkTreeView *tree_view,
       else
 	gtk_tree_model_get_iter (tree_view->priv->model, &tmpiter, path);
 
-      is_separator = (* tree_view->priv->row_separator_func) (tree_view->priv->model,
-							      &tmpiter,
-							      tree_view->priv->row_separator_data);
+      is_separator = tree_view->priv->row_separator_func (tree_view->priv->model,
+                                                          &tmpiter,
+                                                          tree_view->priv->row_separator_data);
     }
 
   return is_separator;
@@ -5026,7 +5026,7 @@ gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 	    if (!tree_view->priv->column_drop_func)
 	      return left_column;
 
-	    if (!(*tree_view->priv->column_drop_func) (tree_view, column, left_column, cur_column, tree_view->priv->column_drop_func_data))
+	    if (!tree_view->priv->column_drop_func (tree_view, column, left_column, cur_column, tree_view->priv->column_drop_func_data))
 	      {
 		left_column = cur_column;
 		continue;
@@ -5038,7 +5038,7 @@ gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 	if (!tree_view->priv->column_drop_func)
 	  return left_column;
 
-	if ((*tree_view->priv->column_drop_func) (tree_view, column, left_column, NULL, tree_view->priv->column_drop_func_data))
+	if (tree_view->priv->column_drop_func (tree_view, column, left_column, NULL, tree_view->priv->column_drop_func_data))
 	  return left_column;
 	else
 	  return (GtkTreeViewColumn *)0x1;
@@ -5077,7 +5077,7 @@ gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 	    if (!tree_view->priv->column_drop_func)
 	      return left_column;
 
-	    if (!(*tree_view->priv->column_drop_func) (tree_view, column, left_column, cur_column, tree_view->priv->column_drop_func_data))
+	    if (!tree_view->priv->column_drop_func (tree_view, column, left_column, cur_column, tree_view->priv->column_drop_func_data))
 	      {
 		left_column = cur_column;
 		continue;
@@ -5089,7 +5089,7 @@ gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 	if (!tree_view->priv->column_drop_func)
 	  return left_column;
 
-	if ((*tree_view->priv->column_drop_func) (tree_view, column, left_column, NULL, tree_view->priv->column_drop_func_data))
+	if (tree_view->priv->column_drop_func (tree_view, column, left_column, NULL, tree_view->priv->column_drop_func_data))
 	  return left_column;
 	else
 	  return (GtkTreeViewColumn *)0x1;
@@ -5135,7 +5135,7 @@ gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 	    if (!tree_view->priv->column_drop_func)
 	      return left_column;
 
-	    if ((*tree_view->priv->column_drop_func) (tree_view, column, left_column, cur_column, tree_view->priv->column_drop_func_data))
+	    if (tree_view->priv->column_drop_func (tree_view, column, left_column, cur_column, tree_view->priv->column_drop_func_data))
 	      return left_column;
 
 	    cur_column = left_column;
@@ -5145,7 +5145,7 @@ gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 	if (!tree_view->priv->column_drop_func)
 	  return NULL;
 
-	if ((*tree_view->priv->column_drop_func) (tree_view, column, NULL, cur_column, tree_view->priv->column_drop_func_data))
+	if (tree_view->priv->column_drop_func (tree_view, column, NULL, cur_column, tree_view->priv->column_drop_func_data))
 	  return NULL;
 	else
 	  return (GtkTreeViewColumn *)0x1;
@@ -5174,7 +5174,7 @@ gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 	    if (!tree_view->priv->column_drop_func)
 	      return left_column;
 
-	    if ((*tree_view->priv->column_drop_func) (tree_view, column, left_column, cur_column, tree_view->priv->column_drop_func_data))
+	    if (tree_view->priv->column_drop_func (tree_view, column, left_column, cur_column, tree_view->priv->column_drop_func_data))
 	      return left_column;
 
 	    cur_column = left_column;
@@ -5184,7 +5184,7 @@ gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 	if (!tree_view->priv->column_drop_func)
 	  return NULL;
 
-	if ((*tree_view->priv->column_drop_func) (tree_view, column, NULL, cur_column, tree_view->priv->column_drop_func_data))
+	if (tree_view->priv->column_drop_func (tree_view, column, NULL, cur_column, tree_view->priv->column_drop_func_data))
 	  return NULL;
 	else
 	  return (GtkTreeViewColumn *)0x1;
@@ -5435,7 +5435,7 @@ gtk_tree_view_key_release (GtkWidget   *widget,
   if (tree_view->priv->rubber_band_status)
     return TRUE;
 
-  return (* GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->key_release_event) (widget, event);
+  return GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->key_release_event (widget, event);
 }
 
 /* FIXME Is this function necessary? Can I get an enter_notify event
@@ -7889,7 +7889,7 @@ gtk_tree_view_focus (GtkWidget        *widget,
 static void
 gtk_tree_view_grab_focus (GtkWidget *widget)
 {
-  (* GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->grab_focus) (widget);
+  GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->grab_focus (widget);
 
   gtk_tree_view_focus_to_cursor (GTK_TREE_VIEW (widget));
 }
@@ -8471,7 +8471,7 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
       gint child_count = 0;
       if (node->children)
 	_gtk_rbtree_traverse (node->children, node->children->root, G_POST_ORDER, count_children_helper, &child_count);
-      (* tree_view->priv->destroy_count_func) (tree_view, path, child_count, tree_view->priv->destroy_count_data);
+      tree_view->priv->destroy_count_func (tree_view, path, child_count, tree_view->priv->destroy_count_data);
     }
 
   if (tree->root->count == 1)
@@ -9210,7 +9210,7 @@ gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
       /* If it's not the column moving and func tells us to skip over the column, we continue. */
       if (left_column != column && cur_column != column &&
 	  tree_view->priv->column_drop_func &&
-	  ! (* tree_view->priv->column_drop_func) (tree_view, column, left_column, cur_column, tree_view->priv->column_drop_func_data))
+	  ! tree_view->priv->column_drop_func (tree_view, column, left_column, cur_column, tree_view->priv->column_drop_func_data))
 	{
 	  left_column = cur_column;
 	  continue;
@@ -9225,7 +9225,7 @@ gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
   /* Add the last one */
   if (tree_view->priv->column_drop_func == NULL ||
       ((left_column != column) &&
-       (* tree_view->priv->column_drop_func) (tree_view, column, left_column, NULL, tree_view->priv->column_drop_func_data)))
+       tree_view->priv->column_drop_func (tree_view, column, left_column, NULL, tree_view->priv->column_drop_func_data)))
     {
       reorder = g_slice_new0 (GtkTreeViewColumnReorder);
       reorder->left_column = left_column;
@@ -11557,7 +11557,7 @@ gtk_tree_view_set_column_drag_function (GtkTreeView               *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   if (tree_view->priv->column_drop_func_data_destroy)
-    (* tree_view->priv->column_drop_func_data_destroy) (tree_view->priv->column_drop_func_data);
+    tree_view->priv->column_drop_func_data_destroy (tree_view->priv->column_drop_func_data);
 
   tree_view->priv->column_drop_func = func;
   tree_view->priv->column_drop_func_data = user_data;
@@ -12205,7 +12205,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       gtk_tree_path_down (child_path);
       if (node->children)
 	_gtk_rbtree_traverse (node->children, node->children->root, G_POST_ORDER, count_children_helper, &child_count);
-      (* tree_view->priv->destroy_count_func) (tree_view, child_path, child_count, tree_view->priv->destroy_count_data);
+      tree_view->priv->destroy_count_func (tree_view, child_path, child_count, tree_view->priv->destroy_count_data);
       gtk_tree_path_free (child_path);
     }
 
@@ -13849,7 +13849,7 @@ gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   if (tree_view->priv->destroy_count_destroy)
-    (* tree_view->priv->destroy_count_destroy) (tree_view->priv->destroy_count_data);
+    tree_view->priv->destroy_count_destroy (tree_view->priv->destroy_count_data);
 
   tree_view->priv->destroy_count_func = func;
   tree_view->priv->destroy_count_data = data;
@@ -13988,7 +13988,7 @@ gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
   g_return_if_fail (search_equal_func != NULL);
 
   if (tree_view->priv->search_destroy)
-    (* tree_view->priv->search_destroy) (tree_view->priv->search_user_data);
+    tree_view->priv->search_destroy (tree_view->priv->search_user_data);
 
   tree_view->priv->search_equal_func = search_equal_func;
   tree_view->priv->search_user_data = search_user_data;
@@ -14109,7 +14109,7 @@ gtk_tree_view_set_search_position_func (GtkTreeView                   *tree_view
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   if (tree_view->priv->search_position_destroy)
-    (* tree_view->priv->search_position_destroy) (tree_view->priv->search_position_user_data);
+    tree_view->priv->search_position_destroy (tree_view->priv->search_position_user_data);
 
   tree_view->priv->search_position_func = func;
   tree_view->priv->search_position_user_data = user_data;
@@ -15055,7 +15055,7 @@ gtk_tree_view_set_row_separator_func (GtkTreeView                 *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   if (tree_view->priv->row_separator_destroy)
-    (* tree_view->priv->row_separator_destroy) (tree_view->priv->row_separator_data);
+    tree_view->priv->row_separator_destroy (tree_view->priv->row_separator_data);
 
   tree_view->priv->row_separator_func = func;
   tree_view->priv->row_separator_data = data;

@@ -1,3 +1,9 @@
+2008-08-12  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/*.c: consistently chain up using
+	GTK_FOO_CLASS(parent_class)->bar(instance) instead of
+	(*GTK_FOO_CLASS(parent_class))->bar(instance).
+
 2008-08-12  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 546730 – gtk_status_icon_get_gicon() should use a return instead

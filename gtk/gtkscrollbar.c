@@ -127,8 +127,8 @@ gtk_scrollbar_style_set  (GtkWidget *widget,
   range->has_stepper_b = has_b;
   range->has_stepper_c = has_c;
   range->has_stepper_d = has_d;
-  
-  (* GTK_WIDGET_CLASS (gtk_scrollbar_parent_class)->style_set) (widget, previous);
+
+  GTK_WIDGET_CLASS (gtk_scrollbar_parent_class)->style_set (widget, previous);
 }
 
 #define __GTK_SCROLLBAR_C__

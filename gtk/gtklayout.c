@@ -884,7 +884,7 @@ static void
 gtk_layout_style_set (GtkWidget *widget, GtkStyle *old_style)
 {
   if (GTK_WIDGET_CLASS (gtk_layout_parent_class)->style_set)
-    (* GTK_WIDGET_CLASS (gtk_layout_parent_class)->style_set) (widget, old_style);
+    GTK_WIDGET_CLASS (gtk_layout_parent_class)->style_set (widget, old_style);
 
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -927,7 +927,7 @@ gtk_layout_unrealize (GtkWidget *widget)
   layout->bin_window = NULL;
 
   if (GTK_WIDGET_CLASS (gtk_layout_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_layout_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_layout_parent_class)->unrealize (widget);
 }
 
 static void     
@@ -1004,8 +1004,8 @@ gtk_layout_expose (GtkWidget      *widget,
 
   if (event->window != layout->bin_window)
     return FALSE;
-  
-  (* GTK_WIDGET_CLASS (gtk_layout_parent_class)->expose_event) (widget, event);
+
+  GTK_WIDGET_CLASS (gtk_layout_parent_class)->expose_event (widget, event);
 
   return FALSE;
 }

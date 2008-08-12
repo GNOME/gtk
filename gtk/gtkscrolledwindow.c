@@ -998,7 +998,7 @@ gtk_scrolled_window_expose (GtkWidget      *widget,
     {
       gtk_scrolled_window_paint (widget, &event->area);
 
-      (* GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->expose_event) (widget, event);
+      GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->expose_event (widget, event);
     }
 
   return FALSE;

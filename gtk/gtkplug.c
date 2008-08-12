@@ -566,9 +566,9 @@ gtk_plug_unrealize (GtkWidget *widget)
       gtk_window_group_remove_window (plug->modality_group, GTK_WINDOW (plug));
       g_object_unref (plug->modality_group);
     }
-  
+
   if (GTK_WIDGET_CLASS (gtk_plug_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_plug_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_plug_parent_class)->unrealize (widget);
 }
 
 static void

@@ -772,9 +772,9 @@ gtk_paned_unrealize (GtkWidget *widget)
   gtk_paned_set_last_child2_focus (paned, NULL);
   gtk_paned_set_saved_focus (paned, NULL);
   gtk_paned_set_first_paned (paned, NULL);
-  
+
   if (GTK_WIDGET_CLASS (gtk_paned_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_paned_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_paned_parent_class)->unrealize (widget);
 }
 
 static void
@@ -931,7 +931,7 @@ gtk_paned_focus (GtkWidget        *widget,
    */
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS);
-  retval = (* GTK_WIDGET_CLASS (gtk_paned_parent_class)->focus) (widget, direction);
+  retval = GTK_WIDGET_CLASS (gtk_paned_parent_class)->focus (widget, direction);
   GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
 
   return retval;
@@ -1452,7 +1452,7 @@ gtk_paned_set_focus_child (GtkContainer *container,
     }
 
   if (GTK_CONTAINER_CLASS (gtk_paned_parent_class)->set_focus_child)
-    (* GTK_CONTAINER_CLASS (gtk_paned_parent_class)->set_focus_child) (container, focus_child);
+    GTK_CONTAINER_CLASS (gtk_paned_parent_class)->set_focus_child (container, focus_child);
 }
 
 static void

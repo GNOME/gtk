@@ -428,7 +428,7 @@ gtk_list_item_realize (GtkWidget *widget)
   gint attributes_mask;
 
   /*if (GTK_WIDGET_CLASS (parent_class)->realize)
-    (* GTK_WIDGET_CLASS (parent_class)->realize) (widget);*/
+    GTK_WIDGET_CLASS (parent_class)->realize (widget);*/
 
   g_return_if_fail (GTK_IS_LIST_ITEM (widget));
 
@@ -566,8 +566,8 @@ gtk_list_item_expose (GtkWidget      *widget,
                               0, 0, -1, -1);           
         }
 
-      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
-      
+      GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
+
       if (GTK_WIDGET_HAS_FOCUS (widget))
         {
           if (GTK_IS_LIST (widget->parent) && GTK_LIST (widget->parent)->add_mode)

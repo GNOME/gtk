@@ -2770,7 +2770,7 @@ gtk_text_view_destroy (GtkObject *object)
       priv->im_spot_idle = 0;
     }
 
-  (* GTK_OBJECT_CLASS (gtk_text_view_parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (gtk_text_view_parent_class)->destroy (object);
 }
 
 static void
@@ -2810,8 +2810,8 @@ gtk_text_view_finalize (GObject *object)
     text_window_free (text_view->bottom_window);
 
   g_object_unref (text_view->im_context);
-  
-  (* G_OBJECT_CLASS (gtk_text_view_parent_class)->finalize) (object);
+
+  G_OBJECT_CLASS (gtk_text_view_parent_class)->finalize (object);
 }
 
 static void
@@ -3767,11 +3767,11 @@ gtk_text_view_unrealize (GtkWidget *widget)
     text_window_unrealize (text_view->bottom_window);
 
   gtk_text_view_destroy_layout (text_view);
-  
-  (* GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unrealize) (widget);
+
+  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unrealize (widget);
 }
 
-static void 
+static void
 gtk_text_view_set_background (GtkTextView *text_view)
 {
   GtkWidget *widget = GTK_WIDGET (text_view);

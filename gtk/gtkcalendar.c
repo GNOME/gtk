@@ -1235,7 +1235,7 @@ calendar_set_month_prev (GtkCalendar *calendar)
 static void
 gtk_calendar_finalize (GObject *object)
 {
-  (* G_OBJECT_CLASS (gtk_calendar_parent_class)->finalize) (object);
+  G_OBJECT_CLASS (gtk_calendar_parent_class)->finalize (object);
 }
 
 static void
@@ -1656,9 +1656,9 @@ gtk_calendar_unrealize (GtkWidget *widget)
       gdk_window_destroy (priv->day_name_win);
       priv->day_name_win = NULL;      
     }
-  
+
   if (GTK_WIDGET_CLASS (gtk_calendar_parent_class)->unrealize)
-    (* GTK_WIDGET_CLASS (gtk_calendar_parent_class)->unrealize) (widget);
+    GTK_WIDGET_CLASS (gtk_calendar_parent_class)->unrealize (widget);
 }
 
 static gchar*

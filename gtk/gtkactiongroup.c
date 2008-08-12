@@ -743,8 +743,8 @@ gtk_action_group_get_action (GtkActionGroup *action_group,
   g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), NULL);
   g_return_val_if_fail (GTK_ACTION_GROUP_GET_CLASS (action_group)->get_action != NULL, NULL);
 
-  return (* GTK_ACTION_GROUP_GET_CLASS (action_group)->get_action)
-    (action_group, action_name);
+  return GTK_ACTION_GROUP_GET_CLASS (action_group)->get_action (action_group,
+                                                                action_name);
 }
 
 static gboolean
@@ -984,9 +984,9 @@ shared_data_unref (gpointer data)
   shared_data->ref_count--;
   if (shared_data->ref_count == 0)
     {
-      if (shared_data->destroy) 
-	(*shared_data->destroy) (shared_data->data);
-      
+      if (shared_data->destroy)
+	shared_data->destroy (shared_data->data);
+
       g_slice_free (SharedData, shared_data);
     }
 }
