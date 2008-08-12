@@ -145,8 +145,8 @@ struct _GtkWindowGeometryInfo
   /* Default size - used only the FIRST time we map a window,
    * only if > 0.
    */
-  gint           default_width; 
-  gint           default_height;
+  GtkSize        default_width; 
+  GtkSize        default_height;
   /* whether to use initial_x, initial_y */
   guint          initial_pos_set : 1;
   /* CENTER_ALWAYS or other position constraint changed since
@@ -283,9 +283,9 @@ static void     gtk_window_compute_configure_request (GtkWindow    *window,
 
 static void     gtk_window_set_default_size_internal (GtkWindow    *window,
                                                       gboolean      change_width,
-                                                      gint          width,
+                                                      GtkSize       width,
                                                       gboolean      change_height,
-                                                      gint          height,
+                                                      GtkSize       height,
 						      gboolean      is_geometry);
 
 static void     update_themed_icon                    (GtkIconTheme *theme,
@@ -301,6 +301,13 @@ static void        gtk_window_free_key_hash       (GtkWindow   *window);
 static void	   gtk_window_on_composited_changed (GdkScreen *screen,
 						     GtkWindow *window);
 static void gtk_window_update_monitor_num (GtkWindow *window);
+
+static void gtk_window_on_unit_changed (GtkSettings *settings,
+                                        gint         monitor_number,
+                                        GtkWindow   *window);
+
+static int get_monitor_containing_pointer (GtkWindow *window);
+
 
 
 static GSList      *toplevel_list = NULL;
@@ -563,23 +570,19 @@ gtk_window_class_init (GtkWindowClass *klass)
  
   g_object_class_install_property (gobject_class,
                                    PROP_DEFAULT_WIDTH,
-                                   g_param_spec_int ("default-width",
-						     P_("Default Width"),
-						     P_("The default width of the window, used when initially showing the window"),
-						     -1,
-						     G_MAXINT,
-						     -1,
-						     GTK_PARAM_READWRITE));
+                                   gtk_param_spec_size ("default-width",
+                                                        P_("Default Width"),
+                                                        P_("The default width of the window, used when initially showing the window"),
+                                                        -1, G_MAXINT, -1,
+                                                        GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_DEFAULT_HEIGHT,
-                                   g_param_spec_int ("default-height",
-						     P_("Default Height"),
-						     P_("The default height of the window, used when initially showing the window"),
-						     -1,
-						     G_MAXINT,
-						     -1,
-						     GTK_PARAM_READWRITE));
+                                   gtk_param_spec_size ("default-height",
+                                                        P_("Default Height"),
+                                                        P_("The default height of the window, used when initially showing the window"),
+                                                        -1, G_MAXINT, -1,
+                                                        GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_DESTROY_WITH_PARENT,
@@ -966,6 +969,20 @@ gtk_window_init (GtkWindow *window)
 
   g_signal_connect (window->screen, "composited-changed",
 		    G_CALLBACK (gtk_window_on_composited_changed), window);
+  g_signal_connect (gtk_settings_get_for_screen (window->screen),
+                    "unit-changed",
+                    G_CALLBACK (gtk_window_on_unit_changed),
+                    window);
+}
+
+static void
+gtk_window_on_unit_changed (GtkSettings *settings,
+                            gint         monitor_number,
+                            GtkWindow   *window)
+{
+  GtkWidget *widget = GTK_WIDGET (window);
+  if (gtk_widget_get_monitor_num (widget) == monitor_number)
+    _gtk_widget_propagate_unit_changed (widget);
 }
 
 static void
@@ -1014,13 +1031,13 @@ gtk_window_set_property (GObject      *object,
       break;
     case PROP_DEFAULT_WIDTH:
       gtk_window_set_default_size_internal (window,
-                                            TRUE, g_value_get_int (value),
+                                            TRUE, gtk_value_get_size (value),
                                             FALSE, -1, FALSE);
       break;
     case PROP_DEFAULT_HEIGHT:
       gtk_window_set_default_size_internal (window,
                                             FALSE, -1,
-                                            TRUE, g_value_get_int (value), FALSE);
+                                            TRUE, gtk_value_get_size (value), FALSE);
       break;
     case PROP_DESTROY_WITH_PARENT:
       gtk_window_set_destroy_with_parent (window, g_value_get_boolean (value));
@@ -1122,16 +1139,16 @@ gtk_window_get_property (GObject      *object,
     case PROP_DEFAULT_WIDTH:
       info = gtk_window_get_geometry_info (window, FALSE);
       if (!info)
-	g_value_set_int (value, -1);
+	gtk_value_set_size (value, -1, window);
       else
-	g_value_set_int (value, info->default_width);
+	gtk_value_set_size (value, info->default_width, window);
       break;
     case PROP_DEFAULT_HEIGHT:
       info = gtk_window_get_geometry_info (window, FALSE);
       if (!info)
-	g_value_set_int (value, -1);
+	gtk_value_set_size (value, -1, window);
       else
-	g_value_set_int (value, info->default_height);
+	gtk_value_set_size (value, info->default_height, window);
       break;
     case PROP_DESTROY_WITH_PARENT:
       g_value_set_boolean (value, window->destroy_with_parent);
@@ -3856,9 +3873,9 @@ gtk_window_get_default_icon_list (void)
 static void
 gtk_window_set_default_size_internal (GtkWindow    *window,
                                       gboolean      change_width,
-                                      gint          width,
+                                      GtkSize       width,
                                       gboolean      change_height,
-                                      gint          height,
+                                      GtkSize       height,
 				      gboolean      is_geometry)
 {
   GtkWindowGeometryInfo *info;
@@ -3940,8 +3957,8 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  **/
 void       
 gtk_window_set_default_size (GtkWindow   *window,
-			     gint         width,
-			     gint         height)
+			     GtkSize      width,
+			     GtkSize      height)
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (width >= -1);
@@ -3966,6 +3983,34 @@ void
 gtk_window_get_default_size (GtkWindow *window,
 			     gint      *width,
 			     gint      *height)
+{
+  GtkWindowGeometryInfo *info;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  info = gtk_window_get_geometry_info (window, FALSE);
+
+  if (width)
+    *width = info ? gtk_widget_size_to_pixel (window, info->default_width) : -1;
+
+  if (height)
+    *height = info ? gtk_widget_size_to_pixel (window, info->default_height) : -1;
+}
+
+/**
+ * gtk_window_get_default_size_unit:
+ * @window: a #GtkWindow
+ * @width: location to store the default width, or %NULL
+ * @height: location to store the default height, or %NULL
+ *
+ * Like gtk_window_get_default_size() but preserves the unit.
+ *
+ * Since: 2.14
+ **/
+void
+gtk_window_get_default_size_unit (GtkWindow *window,
+                                  GtkSize   *width,
+                                  GtkSize   *height)
 {
   GtkWindowGeometryInfo *info;
 
@@ -4457,6 +4502,8 @@ gtk_window_finalize (GObject *object)
     {
       g_signal_handlers_disconnect_by_func (window->screen,
 					    gtk_window_on_composited_changed, window);
+      g_signal_handlers_disconnect_by_func (gtk_settings_get_for_screen (window->screen),
+					    gtk_window_on_unit_changed, window);
     }
       
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
@@ -4466,6 +4513,7 @@ static void
 gtk_window_show (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   GtkContainer *container = GTK_CONTAINER (window);
   gboolean need_resize;
 
@@ -4482,6 +4530,20 @@ gtk_window_show (GtkWidget *widget)
       GdkGeometry new_geometry;
       guint new_flags;
       gboolean was_realized;
+
+      /* For unit to pixel conversions, which is needed for doing
+       * size_allocate(), we really need to know the monitor since
+       * that affects the conversion - so if the monitor is not
+       * currently set, take the one the pointer is on... if we get it
+       * wrong then monitor_num is updated every time we get a
+       * configure event.
+       */
+      if (priv->monitor_num == -1)
+        {
+          priv->monitor_num = get_monitor_containing_pointer (window);
+          /* also update the widget since we're "on" a new monitor now */
+          _gtk_widget_propagate_unit_changed (GTK_WIDGET (window));
+        }
 
       /* We are going to go ahead and perform this configure request
        * and then emulate a configure notify by going ahead and
@@ -5054,6 +5116,9 @@ gtk_window_update_monitor_num (GtkWindow *window)
     {
       /*g_debug ("monitor num changed from %d to %d for top-level %p (screen %p)", prev_monitor_num, priv->monitor_num, window, window->screen);*/
       g_object_notify (G_OBJECT (window), "monitor-num");
+
+      /* new monitor -> units might have changed */
+      _gtk_widget_propagate_unit_changed (GTK_WIDGET (window));
     }
 }
 
@@ -5650,6 +5715,10 @@ gtk_window_compute_configure_request_size (GtkWindow *window,
 	   gint min_height = 0;
 	   gint width_inc = 1;
 	   gint height_inc = 1;
+           GdkScreen *screen;
+           gint monitor_num;
+           gint pixel_width;
+           gint pixel_height;
 	   
 	   if (info->default_is_geometry &&
 	       (info->default_width > 0 || info->default_height > 0))
@@ -5676,11 +5745,22 @@ gtk_window_compute_configure_request_size (GtkWindow *window,
 		 }
 	     }
 	     
+           /* Catch 22. The default size may be in units but those in
+            * turn depend on the screen/monitor the window belongs
+            * to. Which we don't yet know. For now use the monitor
+            * containing the pointer for converting from units to
+            * pixels
+            */
+           screen = gtk_window_check_screen (window);
+           monitor_num = get_monitor_containing_pointer (window);
+           pixel_width = gtk_size_to_pixel (screen, monitor_num, info->default_width);
+           pixel_height = gtk_size_to_pixel (screen, monitor_num, info->default_height);
+             
 	   if (info->default_width > 0)
-	     *width = MAX (info->default_width * width_inc + base_width, min_width);
+	     *width = MAX (pixel_width * width_inc + base_width, min_width);
 	   
 	   if (info->default_height > 0)
-	     *height = MAX (info->default_height * height_inc + base_height, min_height);
+	     *height = MAX (pixel_height * height_inc + base_height, min_height);
          }
     }
   else
@@ -7477,6 +7557,15 @@ gtk_window_set_screen (GtkWindow *window,
       g_signal_connect (screen, "composited-changed", 
 			G_CALLBACK (gtk_window_on_composited_changed), window);
       
+      g_signal_handlers_disconnect_by_func (gtk_settings_get_for_screen (previous_screen),
+					    gtk_window_on_unit_changed, window);
+      g_signal_connect (gtk_settings_get_for_screen (window->screen),
+                        "unit-changed",
+                        G_CALLBACK (gtk_window_on_unit_changed),
+                        window);
+
+      gtk_window_update_monitor_num (window);
+
       _gtk_widget_propagate_screen_changed (widget, previous_screen);
       _gtk_widget_propagate_composited_changed (widget);
     }

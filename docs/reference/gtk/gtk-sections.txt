@@ -5494,6 +5494,14 @@ gtk_widget_trigger_tooltip_query
 gtk_widget_get_snapshot
 gtk_widget_get_window
 gtk_widget_get_monitor_num
+gtk_widget_get_size_request_unit
+gtk_widget_size_to_pixel
+gtk_widget_size_to_pixel_double
+gtk_widget_style_get_property_unit
+gtk_widget_style_get_unit_valist
+gtk_widget_style_get_unit
+gtk_widget_get_unit_valist
+gtk_widget_get_unit
 <SUBSECTION>
 gtk_requisition_copy
 gtk_requisition_free
@@ -5580,6 +5588,7 @@ gtk_window_get_deletable
 gtk_window_get_default_icon_list
 gtk_window_get_default_icon_name
 gtk_window_get_default_size
+gtk_window_get_default_size_unit
 gtk_window_get_destroy_with_parent
 gtk_window_get_frame_dimensions
 gtk_window_get_has_frame
@@ -6996,4 +7005,31 @@ GTK_TYPE_ORIENTABLE
 
 <SUBSECTION Private>
 gtk_orientable_get_type
+
+<SECTION>
+<TITLE>Units</TITLE>
+<FILE>gtksize</FILE>
+GtkSize
+GtkUSize
+GtkSizeUnit
+gtk_size_em
+gtk_size_mm
+gtk_size_get_em
+gtk_size_get_mm
+GTK_SIZE_ONE_TWELFTH_EM
+GTK_SIZE_MAXPIXEL
+GTK_SIZE_MINPIXEL
+gtk_size_get_unit
+gtk_size_to_pixel
+gtk_size_to_pixel_double
+gtk_size_to_string
+gtk_param_spec_size
+gtk_value_set_size
+gtk_value_get_size
+gtk_value_size_skip_conversion
+gtk_param_spec_usize
+gtk_value_set_usize
+gtk_value_get_usize
+gtk_value_usize_skip_conversion
+gtk_enable_resolution_independence
 </SECTION>

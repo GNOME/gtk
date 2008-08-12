@@ -128,6 +128,7 @@ enum {
   KEYNAV_FAILED,
   DRAG_FAILED,
   DAMAGE_EVENT,
+  UNIT_CHANGED,
   LAST_SIGNAL
 };
 
@@ -276,11 +277,12 @@ static void             gtk_widget_buildable_parser_finished    (GtkBuildable   
 
      
 static void gtk_widget_set_usize_internal (GtkWidget *widget,
-					   gint       width,
-					   gint       height);
+					   GtkSize    width,
+					   GtkSize    height);
 static void gtk_widget_get_draw_rectangle (GtkWidget    *widget,
 					   GdkRectangle *rect);
 
+static void gtk_widget_unit_changed (GtkWidget *widget);
 
 /* --- variables --- */
 static gpointer         gtk_widget_parent_class = NULL;
@@ -476,6 +478,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->get_accessible = gtk_widget_real_get_accessible;
 
   klass->no_expose_event = NULL;
+  klass->unit_changed = gtk_widget_unit_changed;
 
   g_object_class_install_property (gobject_class,
 				   PROP_NAME,
@@ -494,22 +497,18 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   g_object_class_install_property (gobject_class,
 				   PROP_WIDTH_REQUEST,
-				   g_param_spec_int ("width-request",
- 						     P_("Width request"),
- 						     P_("Override for width request of the widget, or -1 if natural request should be used"),
- 						     -1,
- 						     G_MAXINT,
- 						     -1,
- 						     GTK_PARAM_READWRITE));
+				   gtk_param_spec_size ("width-request",
+                                                        P_("Width request"),
+                                                        P_("Override for width request of the widget, or -1 if natural request should be used"),
+                                                        -1, G_MAXINT, -1,
+                                                        GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_HEIGHT_REQUEST,
-				   g_param_spec_int ("height-request",
- 						     P_("Height request"),
- 						     P_("Override for height request of the widget, or -1 if natural request should be used"),
- 						     -1,
- 						     G_MAXINT,
- 						     -1,
- 						     GTK_PARAM_READWRITE));
+				   gtk_param_spec_size ("height-request",
+                                                        P_("Height request"),
+                                                        P_("Override for height request of the widget, or -1 if natural request should be used"),
+                                                        -1, G_MAXINT, -1,
+                                                        GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
@@ -1089,6 +1088,24 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkWidgetClass, composited_changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkWidget::unit-changed:
+   * @widget: the object on which the signal is emitted
+   *
+   * The ::unit-changed signal is emitted when the units
+   * change. @widget should recompute internal pixel sizes.
+   *
+   * Since: 2.14
+   */
+  widget_signals[UNIT_CHANGED] =
+    g_signal_new (I_("unit_changed"),
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkWidgetClass, unit_changed),
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
@@ -2215,11 +2232,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 								 GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (klass,
-					   g_param_spec_int ("focus-line-width",
-							     P_("Focus linewidth"),
-							     P_("Width, in pixels, of the focus indicator line"),
-							     0, G_MAXINT, 1,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("focus-line-width",
+                                                                P_("Focus linewidth"),
+                                                                P_("Width, in pixels, of the focus indicator line"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (1),
+                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_string ("focus-line-pattern",
@@ -2228,11 +2245,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 								"\1\1",
 								GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (klass,
-					   g_param_spec_int ("focus-padding",
-							     P_("Focus padding"),
-							     P_("Width, in pixels, between focus indicator and the widget 'box'"),
-							     0, G_MAXINT, 1,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("focus-padding",
+                                                                P_("Focus padding"),
+                                                                P_("Width, in pixels, between focus indicator and the widget 'box'"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (1),
+                                                                GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boxed ("cursor-color",
 							       P_("Cursor color"),
@@ -2319,11 +2336,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * Since: 2.10
    */
   gtk_widget_class_install_style_property (klass,
-                                           g_param_spec_int ("separator-width",
-                                                             P_("Separator Width"),
-                                                             P_("The width of separators if wide-separators is TRUE"),
-                                                             0, G_MAXINT, 0,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("separator-width",
+                                                                P_("Separator Width"),
+                                                                P_("The width of separators if wide-separators is TRUE"),
+                                                                0, G_MAXINT, 0,
+                                                                GTK_PARAM_READABLE));
 
   /**
    * GtkWidget:separator-height:
@@ -2334,11 +2351,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * Since: 2.10
    */
   gtk_widget_class_install_style_property (klass,
-                                           g_param_spec_int ("separator-height",
-                                                             P_("Separator Height"),
-                                                             P_("The height of separators if \"wide-separators\" is TRUE"),
-                                                             0, G_MAXINT, 0,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("separator-height",
+                                                                P_("Separator Height"),
+                                                                P_("The height of separators if \"wide-separators\" is TRUE"),
+                                                                0, G_MAXINT, 0,
+                                                                GTK_PARAM_READABLE));
 
   /**
    * GtkWidget:scroll-arrow-hlength:
@@ -2349,11 +2366,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * Since: 2.10
    */
   gtk_widget_class_install_style_property (klass,
-                                           g_param_spec_int ("scroll-arrow-hlength",
-                                                             P_("Horizontal Scroll Arrow Length"),
-                                                             P_("The length of horizontal scroll arrows"),
-                                                             1, G_MAXINT, 16,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("scroll-arrow-hlength",
+                                                                P_("Horizontal Scroll Arrow Length"),
+                                                                P_("The length of horizontal scroll arrows"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (16),
+                                                                GTK_PARAM_READABLE));
 
   /**
    * GtkWidget:scroll-arrow-vlength:
@@ -2364,11 +2381,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * Since: 2.10
    */
   gtk_widget_class_install_style_property (klass,
-                                           g_param_spec_int ("scroll-arrow-vlength",
-                                                             P_("Vertical Scroll Arrow Length"),
-                                                             P_("The length of vertical scroll arrows"),
-                                                             1, G_MAXINT, 16,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("scroll-arrow-vlength",
+                                                                P_("Vertical Scroll Arrow Length"),
+                                                                P_("The length of vertical scroll arrows"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (16),
+                                                                GTK_PARAM_READABLE));
 }
 
 static void
@@ -2410,10 +2427,10 @@ gtk_widget_set_property (GObject         *object,
       gtk_container_add (GTK_CONTAINER (g_value_get_object (value)), widget);
       break;
     case PROP_WIDTH_REQUEST:
-      gtk_widget_set_usize_internal (widget, g_value_get_int (value), -2);
+      gtk_widget_set_usize_internal (widget, gtk_value_get_size (value), -2);
       break;
     case PROP_HEIGHT_REQUEST:
-      gtk_widget_set_usize_internal (widget, -2, g_value_get_int (value));
+      gtk_widget_set_usize_internal (widget, -2, gtk_value_get_size (value));
       break;
     case PROP_VISIBLE:
       if (g_value_get_boolean (value))
@@ -2552,14 +2569,14 @@ gtk_widget_get_property (GObject         *object,
       {
         int w;
         gtk_widget_get_size_request (widget, &w, NULL);
-        g_value_set_int (value, w);
+        gtk_value_set_size (value, w, widget);
       }
       break;
     case PROP_HEIGHT_REQUEST:
       {
         int h;
         gtk_widget_get_size_request (widget, NULL, &h);
-        g_value_set_int (value, h);
+        gtk_value_set_size (value, h, widget);
       }
       break;
     case PROP_VISIBLE:
@@ -5632,6 +5649,8 @@ gtk_widget_set_parent (GtkWidget *widget,
 
       gtk_widget_queue_resize (widget);
     }
+
+  _gtk_widget_propagate_unit_changed (widget);
 }
 
 /**
@@ -6297,6 +6316,52 @@ _gtk_widget_propagate_composited_changed (GtkWidget *widget)
   propagate_composited_changed (widget, NULL);
 }
 
+static void
+propagate_unit_changed (GtkWidget *widget,
+                        gpointer dummy)
+{
+  /* It's important to do parents before childs here - just consider a
+   * dialog with a tree view - the dialog will want to redo all
+   * pixbufs *before* the tree view (packed in the dialog) gets the
+   * signal...
+   */
+  g_signal_emit (widget, widget_signals[UNIT_CHANGED], 0);
+  if (GTK_IS_CONTAINER (widget))
+    {
+      gtk_container_forall (GTK_CONTAINER (widget),
+			    propagate_unit_changed,
+			    NULL);
+    }
+}
+
+static void
+propagate_resize (GtkWidget *widget,
+                  gpointer dummy)
+{
+  gtk_widget_queue_resize (widget);
+  if (GTK_IS_CONTAINER (widget))
+    {
+      gtk_container_forall (GTK_CONTAINER (widget),
+			    propagate_resize,
+			    NULL);
+    }
+}
+
+void
+_gtk_widget_propagate_unit_changed (GtkWidget *widget)
+{
+  propagate_unit_changed (widget, NULL);
+  propagate_resize (widget, NULL);
+}
+
+static void
+gtk_widget_unit_changed (GtkWidget *widget)
+{
+  PangoContext *context = g_object_get_qdata (G_OBJECT (widget), quark_pango_context);
+  if (context)
+    g_object_set_qdata (G_OBJECT (widget), quark_pango_context, NULL);
+}
+
 /**
  * _gtk_widget_propagate_screen_changed:
  * @widget: a #GtkWidget
@@ -6321,6 +6386,9 @@ _gtk_widget_propagate_screen_changed (GtkWidget    *widget,
 
   if (previous_screen)
     g_object_unref (previous_screen);
+
+  /* also, the unit is most probably different; update now that the new screen is set */
+  _gtk_widget_propagate_unit_changed (widget);
 }
 
 static void
@@ -6424,6 +6492,7 @@ gtk_widget_update_pango_context (GtkWidget *widget)
   
   if (context)
     {
+      gdouble resolution;
       GdkScreen *screen;
 
       update_pango_context (widget, context);
@@ -6431,10 +6500,13 @@ gtk_widget_update_pango_context (GtkWidget *widget)
       screen = gtk_widget_get_screen_unchecked (widget);
       if (screen)
 	{
-	  pango_cairo_context_set_resolution (context,
-					      gdk_screen_get_resolution (screen));
+          gint monitor_num;
+
+          monitor_num = gtk_widget_get_monitor_num (widget);
+          resolution = gdk_screen_get_resolution_for_monitor (screen, monitor_num);
+	  pango_cairo_context_set_resolution (context, resolution);
 	  pango_cairo_context_set_font_options (context,
-						gdk_screen_get_font_options (screen));
+						gdk_screen_get_font_options_for_monitor (screen, monitor_num));
 	}
     }
 }
@@ -6466,7 +6538,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
       screen = gdk_screen_get_default ();
     }
 
-  context = gdk_pango_context_get_for_screen (screen);
+  context = gdk_pango_context_get_for_screen_for_monitor (screen, gtk_widget_get_monitor_num (widget));
 
   update_pango_context (widget, context);
   pango_context_set_language (context, gtk_get_default_language ());
@@ -7045,8 +7117,8 @@ gtk_widget_set_uposition (GtkWidget *widget,
 
 static void
 gtk_widget_set_usize_internal (GtkWidget *widget,
-			       gint       width,
-			       gint       height)
+			       GtkSize    width,
+			       GtkSize    height)
 {
   GtkWidgetAuxInfo *aux_info;
   gboolean changed = FALSE;
@@ -7102,8 +7174,8 @@ gtk_widget_set_usize_internal (GtkWidget *widget,
  **/
 void
 gtk_widget_set_usize (GtkWidget *widget,
-		      gint	 width,
-		      gint	 height)
+		      GtkSize	 width,
+		      GtkSize	 height)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
@@ -7148,8 +7220,8 @@ gtk_widget_set_usize (GtkWidget *widget,
  **/
 void
 gtk_widget_set_size_request (GtkWidget *widget,
-                             gint       width,
-                             gint       height)
+                             GtkSize    width,
+                             GtkSize    height)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (width >= -1);
@@ -7182,6 +7254,58 @@ void
 gtk_widget_get_size_request (GtkWidget *widget,
                              gint      *width,
                              gint      *height)
+{
+  GtkWidgetAuxInfo *aux_info;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  aux_info = _gtk_widget_get_aux_info (widget, FALSE);
+
+  if (width)
+    {
+      if (aux_info != NULL &&
+          aux_info->width != -1 &&
+          gtk_widget_size_to_pixel (widget, aux_info->width) != aux_info->width)
+        {
+          if (gtk_widget_get_monitor_num (widget) >= 0)
+            *width = gtk_widget_size_to_pixel (widget, aux_info->width);
+          else
+            *width = -1;
+        }
+      else
+        *width = aux_info ? gtk_widget_size_to_pixel (widget, aux_info->width) : -1;
+    }
+
+  if (height)
+    {
+      if (aux_info != NULL &&
+          aux_info->height != -1 &&
+          gtk_widget_size_to_pixel (widget, aux_info->height) != aux_info->height)
+        {
+          if (gtk_widget_get_monitor_num (widget) >= 0)
+            *height = gtk_widget_size_to_pixel (widget, aux_info->height);
+          else
+            *height = -1;
+        }
+      else
+        *height = aux_info ? gtk_widget_size_to_pixel (widget, aux_info->height) : -1;
+    }
+}
+
+/**
+ * gtk_widget_get_size_request_unit:
+ * @widget: a #GtkWidget
+ * @width: return location for width, or %NULL
+ * @height: return location for height, or %NULL
+ *
+ * Like gtk_widget_get_size_request() but preserves the unit.
+ *
+ * Since: 2.14
+ **/
+void
+gtk_widget_get_size_request_unit (GtkWidget *widget,
+                                  GtkSize   *width,
+                                  GtkSize   *height)
 {
   GtkWidgetAuxInfo *aux_info;
 
@@ -9041,18 +9165,38 @@ gtk_widget_style_get_property (GtkWidget   *widget,
   else
     {
       const GValue *peek_value;
+      GValue unit_val = {0, };
+      GValue uunit_val = {0, };
+      const GValue *value_to_use;
 
       peek_value = _gtk_style_peek_property_value (widget->style,
 						   G_OBJECT_TYPE (widget),
 						   pspec,
 						   (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser));
       
+      if (GTK_IS_PARAM_SPEC_SIZE (pspec))
+        {
+          g_value_init (&unit_val, G_TYPE_INT);
+          gtk_value_set_size (&unit_val, gtk_widget_size_to_pixel (widget, g_value_get_int (peek_value)), NULL);
+          value_to_use = &unit_val;
+        }
+      else if (GTK_IS_PARAM_SPEC_USIZE (pspec))
+        {
+          g_value_init (&uunit_val, G_TYPE_UINT);
+          gtk_value_set_size (&uunit_val, gtk_widget_size_to_pixel (widget, g_value_get_int (peek_value)), NULL);
+          value_to_use = &uunit_val;
+        }
+      else
+        {
+          value_to_use = peek_value;
+        }
+
       /* auto-conversion of the caller's value type
        */
       if (G_VALUE_TYPE (value) == G_PARAM_SPEC_VALUE_TYPE (pspec))
-	g_value_copy (peek_value, value);
+	g_value_copy (value_to_use, value);
       else if (g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
-	g_value_transform (peek_value, value);
+	g_value_transform (value_to_use, value);
       else
 	g_warning ("can't retrieve style property `%s' of type `%s' as value of type `%s'",
 		   pspec->name,
@@ -9106,10 +9250,27 @@ gtk_widget_style_get_valist (GtkWidget   *widget,
       /* style pspecs are always readable so we can spare that check here */
 
       peek_value = _gtk_style_peek_property_value (widget->style,
-						   G_OBJECT_TYPE (widget),
-						   pspec,
-						   (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser));
-      G_VALUE_LCOPY (peek_value, var_args, 0, &error);
+                                                   G_OBJECT_TYPE (widget),
+                                                   pspec,
+                                                   (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser));
+      if (GTK_IS_PARAM_SPEC_SIZE (pspec))
+        {
+          GValue unit_val = {0, };
+          g_value_init (&unit_val, G_TYPE_INT);
+          gtk_value_set_size (&unit_val, g_value_get_int (peek_value), widget);
+          G_VALUE_LCOPY (&unit_val, var_args, 0, &error);
+        }
+      else if (GTK_IS_PARAM_SPEC_USIZE (pspec))
+        {
+          GValue uunit_val = {0, };
+          g_value_init (&uunit_val, G_TYPE_UINT);
+          gtk_value_set_size (&uunit_val, g_value_get_uint (peek_value), widget);
+          G_VALUE_LCOPY (&uunit_val, var_args, 0, &error);
+        }
+      else
+        {
+          G_VALUE_LCOPY (peek_value, var_args, 0, &error);
+        }
       if (error)
 	{
 	  g_warning ("%s: %s", G_STRLOC, error);
@@ -9131,7 +9292,9 @@ gtk_widget_style_get_valist (GtkWidget   *widget,
  *   return the property values, starting with the location for 
  *   @first_property_name, terminated by %NULL.
  *
- * Gets the values of a multiple style properties of @widget.
+ * Gets the values of a multiple style properties of @widget. All
+ * #GtkSize properties will be converted to pixels; use
+ * gtk_widget_style_get_unit() to preserve the units.
  */
 void
 gtk_widget_style_get (GtkWidget   *widget,
@@ -9144,6 +9307,152 @@ gtk_widget_style_get (GtkWidget   *widget,
 
   va_start (var_args, first_property_name);
   gtk_widget_style_get_valist (widget, first_property_name, var_args);
+  va_end (var_args);
+}
+
+/**
+ * gtk_widget_style_get_property_unit:
+ * @widget: a #GtkWidget
+ * @property_name: the name of a style property
+ * @value: location to return the property value 
+ *
+ * Like gtk_widget_style_get_property() but preserves units.
+ *
+ * Since: 2.14
+ */
+void
+gtk_widget_style_get_property_unit (GtkWidget   *widget,
+                                    const gchar *property_name,
+                                    GValue      *value)
+{
+  GParamSpec *pspec;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (property_name != NULL);
+  g_return_if_fail (G_IS_VALUE (value));
+
+  g_object_ref (widget);
+  pspec = g_param_spec_pool_lookup (style_property_spec_pool,
+				    property_name,
+				    G_OBJECT_TYPE (widget),
+				    TRUE);
+  if (!pspec)
+    g_warning ("%s: widget class `%s' has no property named `%s'",
+	       G_STRLOC,
+	       G_OBJECT_TYPE_NAME (widget),
+	       property_name);
+  else
+    {
+      const GValue *peek_value;
+
+      peek_value = _gtk_style_peek_property_value (widget->style,
+						   G_OBJECT_TYPE (widget),
+						   pspec,
+						   (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser));
+      
+      /* auto-conversion of the caller's value type
+       */
+      if (G_VALUE_TYPE (value) == G_PARAM_SPEC_VALUE_TYPE (pspec))
+	g_value_copy (peek_value, value);
+      else if (g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
+	g_value_transform (peek_value, value);
+      else
+	g_warning ("can't retrieve style property `%s' of type `%s' as value of type `%s'",
+		   pspec->name,
+		   g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+		   G_VALUE_TYPE_NAME (value));
+    }
+  g_object_unref (widget);
+}
+
+/**
+ * gtk_widget_style_get_unit_valist:
+ * @widget: a #GtkWidget
+ * @first_property_name: the name of the first property to get
+ * @var_args: a <type>va_list</type> of pairs of property names and
+ *     locations to return the property values, starting with the location
+ *     for @first_property_name.
+ *
+ * Non-vararg variant of gtk_widget_style_get_unit(). Used
+ * primarily by language bindings.
+ *
+ * Since: 2.14
+ */
+void
+gtk_widget_style_get_unit_valist (GtkWidget   *widget,
+                                  const gchar *first_property_name,
+                                  va_list      var_args)
+{
+  const gchar *name;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  g_object_ref (widget);
+
+  name = first_property_name;
+  while (name)
+    {
+      const GValue *peek_value;
+      GParamSpec *pspec;
+      gchar *error;
+
+      pspec = g_param_spec_pool_lookup (style_property_spec_pool,
+					name,
+					G_OBJECT_TYPE (widget),
+					TRUE);
+      if (!pspec)
+	{
+	  g_warning ("%s: widget class `%s' has no property named `%s'",
+		     G_STRLOC,
+		     G_OBJECT_TYPE_NAME (widget),
+		     name);
+	  break;
+	}
+      /* style pspecs are always readable so we can spare that check here */
+
+      peek_value = _gtk_style_peek_property_value (widget->style,
+						   G_OBJECT_TYPE (widget),
+						   pspec,
+						   (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser));
+      G_VALUE_LCOPY (peek_value, var_args, 0, &error);
+
+      if (error)
+	{
+	  g_warning ("%s: %s", G_STRLOC, error);
+	  g_free (error);
+	  break;
+	}
+
+      name = va_arg (var_args, gchar*);
+    }
+
+  g_object_unref (widget);
+}
+
+/**
+ * gtk_widget_style_get_unit:
+ * @widget: a #GtkWidget
+ * @first_property_name: the name of the first property to get
+ * @Varargs: pairs of property names and locations to 
+ *   return the property values, starting with the location for 
+ *   @first_property_name, terminated by %NULL.
+ *
+ * Like gtk_widget_stylet_get() but preserves all #GtkSize values
+ * rather than using gtk_size_to_pixel().
+ *
+ * Since: 2.14
+ */
+void
+gtk_widget_style_get_unit (GtkWidget   *widget,
+                           const gchar *first_property_name,
+                           ...)
+{
+  va_list var_args;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  va_start (var_args, first_property_name);
+  gtk_widget_style_get_unit_valist (widget, first_property_name, var_args);
   va_end (var_args);
 }
 
@@ -10368,6 +10677,203 @@ gtk_widget_get_monitor_num (GtkWidget *widget)
     }
 
   return monitor_num;
+}
+
+static void
+get_screen_and_monitor (GtkWidget *widget, GdkScreen **screen, gint *monitor_num)
+{
+  *screen = NULL;
+  *monitor_num = -1;
+
+  if (widget != NULL)
+    {
+      GtkWidget *w;
+      GtkWidget *toplevel;
+      w = GTK_WIDGET (widget);
+      toplevel = gtk_widget_get_toplevel (w);
+      if (toplevel != NULL)
+        {
+          *screen = gtk_widget_get_screen (toplevel);
+          if (*screen != NULL && GTK_WIDGET_TOPLEVEL (toplevel) && GTK_IS_WINDOW (toplevel))
+            *monitor_num = gtk_window_get_monitor_num (GTK_WINDOW (toplevel));
+        }
+    }
+}
+
+/**
+ * gtk_widget_size_to_pixel:
+ * @wid: a #GtkWidget or %NULL
+ * @size: a #GtkSize or #GtkUSize
+ *
+ * Converts @size to an integer representing the number of pixels on
+ * the monitor that @wid's top-level belongs to.
+ *
+ * See also gtk_size_to_pixel().
+ *
+ * Returns: @size converted to pixel value
+ *
+ * Since: 2.14
+ */
+gint
+gtk_widget_size_to_pixel (gpointer widget, GtkSize size)
+{
+  gint monitor_num;
+  GdkScreen *screen;
+
+  get_screen_and_monitor (widget, &screen, &monitor_num);
+
+  return gtk_size_to_pixel (screen, monitor_num, size);
+}
+
+
+/**
+ * gtk_widget_size_to_pixel_double:
+ * @wid: a #GtkWidget or %NULL
+ * @size: a #GtkSize or #GtkUSize
+ *
+ * Like gtk_widget_size_to_pixel() but returns the pixel size as a
+ * @gdouble.
+ *
+ * See also gtk_size_to_pixel_double().
+ *
+ * Returns: @size converted to pixel value
+ *
+ * Since: 2.14
+ */
+gdouble
+gtk_widget_size_to_pixel_double (gpointer widget, GtkSize size)
+{
+  gint monitor_num;
+  GdkScreen *screen;
+
+  get_screen_and_monitor (widget, &screen, &monitor_num);
+
+  return gtk_size_to_pixel_double (screen, monitor_num, size);
+}
+
+/*****************************************
+ * GtkWidget unit-preserving property getter
+ *
+ *****************************************/
+
+static inline void
+object_get_property (GObject     *object,
+		     GParamSpec  *pspec,
+		     GValue      *value)
+{
+  GObjectClass *class = g_type_class_peek (pspec->owner_type);
+  guint param_id = pspec->param_id;
+  GParamSpec *redirect;
+
+  redirect = g_param_spec_get_redirect_target (pspec);
+  if (redirect)
+    pspec = redirect;
+
+  class->get_property (object, param_id, value, pspec);
+}
+
+/**
+ * gtk_widget_get_unit_valist:
+ * @object: a #GtkWidget
+ * @first_property_name: name of the first property to get
+ * @var_args: return location for the first property, followed
+ * optionally by more name/return location pairs, followed by NULL
+ *
+ * Like g_object_get_valist() but preserves the unit for properties of
+ * type #GtkSize and #GtkUSize.
+ *
+ * Since: 2.14
+ **/
+void
+gtk_widget_get_unit_valist (GtkWidget *widget,
+                            const gchar *first_property_name,
+                            va_list	  var_args)
+{
+  const gchar *name;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  g_object_ref (widget);
+
+  name = first_property_name;
+
+  while (name)
+    {
+      GValue value = { 0, };
+      GParamSpec *pspec;
+      gchar *error;
+
+      pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (widget), name);
+      if (!pspec)
+	{
+	  g_warning ("%s: object class `%s' has no property named `%s'",
+		     G_STRFUNC,
+		     G_OBJECT_TYPE_NAME (widget),
+		     name);
+	  break;
+	}
+      if (!(pspec->flags & G_PARAM_READABLE))
+	{
+	  g_warning ("%s: property `%s' of object class `%s' is not readable",
+		     G_STRFUNC,
+		     pspec->name,
+		     G_OBJECT_TYPE_NAME (widget));
+	  break;
+	}
+
+      g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+
+      /* this tells gtk_value_set_size() and gtk_value_set_usize() to
+       * avoid conversion when storing the data
+       */
+      if (GTK_IS_PARAM_SPEC_SIZE (pspec))
+        gtk_value_size_skip_conversion (&value);
+      else if (GTK_IS_PARAM_SPEC_USIZE (pspec))
+        gtk_value_usize_skip_conversion (&value);
+
+      object_get_property (G_OBJECT (widget), pspec, &value);
+
+      G_VALUE_LCOPY (&value, var_args, 0, &error);
+      if (error)
+	{
+	  g_warning ("%s: %s", G_STRFUNC, error);
+	  g_free (error);
+	  g_value_unset (&value);
+	  break;
+	}
+
+      g_value_unset (&value);
+
+      name = va_arg (var_args, gchar*);
+    }
+
+  g_object_unref (widget);
+}
+
+/**
+ * gtk_widget_get_unit:
+ * @object: a #GtkWidget
+ * @first_property_name: name of the first property to get
+ * @...: return location for the first property, followed optionally
+ * by more name/return location pairs, followed by NULL
+ *
+ * Like g_object_get() but preserves the unit for properties of type
+ * #GtkSize and #GtkUSize.
+ *
+ * Since: 2.14
+ **/
+void
+gtk_widget_get_unit (gpointer widget,
+                     const gchar *first_property_name,
+                     ...)
+{
+  va_list var_args;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  va_start (var_args, first_property_name);
+  gtk_widget_get_unit_valist (widget, first_property_name, var_args);
+  va_end (var_args);
 }
 
 #define __GTK_WIDGET_C__

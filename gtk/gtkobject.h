@@ -33,6 +33,7 @@
 
 
 #include <gdkconfig.h>
+#include <gtk/gtksize.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtktypeutils.h>
 #include <gtk/gtkdebug.h>

@@ -133,6 +133,9 @@ typedef enum
 #define GTK_WIDGET_SET_FLAGS(wid,flag)	  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) |= (flag)); }G_STMT_END
 #define GTK_WIDGET_UNSET_FLAGS(wid,flag)  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) &= ~(flag)); }G_STMT_END
 
+gint gtk_widget_size_to_pixel (gpointer widget, GtkSize size);
+gdouble gtk_widget_size_to_pixel_double (gpointer widget, GtkSize size);
+
 #define GTK_TYPE_REQUISITION              (gtk_requisition_get_type ())
 
 /* forward declaration to avoid excessive includes (and concurrent includes)
@@ -425,8 +428,10 @@ struct _GtkWidgetClass
    *                             GdkEventExpose *event);
    */
 
+  /* subclasses MUST chain up to their parent class */
+  void         (* unit_changed) (GtkWidget *widget);
+
   /* Padding for future expansion */
-  void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
   void (*_gtk_reserved7) (void);
 };
@@ -435,8 +440,8 @@ struct _GtkWidgetAuxInfo
 {
   gint x;
   gint y;
-  gint width;
-  gint height;
+  GtkSize width;
+  GtkSize height;
   guint x_set : 1;
   guint y_set : 1;
 };
@@ -583,18 +588,21 @@ gboolean   gtk_widget_keynav_failed       (GtkWidget           *widget,
 void       gtk_widget_error_bell          (GtkWidget           *widget);
 
 void       gtk_widget_set_size_request    (GtkWidget           *widget,
-                                           gint                 width,
-                                           gint                 height);
+                                           GtkSize              width,
+                                           GtkSize              height);
 void       gtk_widget_get_size_request    (GtkWidget           *widget,
                                            gint                *width,
                                            gint                *height);
+void       gtk_widget_get_size_request_unit (GtkWidget           *widget,
+                                             GtkSize             *width,
+                                             GtkSize             *height);
 #ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_widget_set_uposition	  (GtkWidget	       *widget,
 					   gint			x,
 					   gint			y);
 void	   gtk_widget_set_usize		  (GtkWidget	       *widget,
-					   gint			width,
-					   gint			height);
+					   GtkSize		width,
+					   GtkSize		height);
 #endif
 
 void	   gtk_widget_set_events	  (GtkWidget	       *widget,
@@ -742,6 +750,23 @@ void gtk_widget_style_get          (GtkWidget	     *widget,
 				    const gchar    *first_property_name,
 				    ...) G_GNUC_NULL_TERMINATED;
 
+void gtk_widget_style_get_property_unit (GtkWidget	     *widget,
+                                         const gchar    *property_name,
+                                         GValue	     *value);
+void gtk_widget_style_get_unit_valist   (GtkWidget	     *widget,
+                                         const gchar    *first_property_name,
+                                         va_list         var_args);
+void gtk_widget_style_get_unit (GtkWidget	     *widget,
+                                const gchar    *first_property_name,
+                                ...) G_GNUC_NULL_TERMINATED;
+
+void gtk_widget_get_unit_valist (GtkWidget *object,
+                                 const gchar *first_property_name,
+                                 va_list	  var_args);
+
+void gtk_widget_get_unit (gpointer object,
+                          const gchar *first_property_name,
+                          ...)  G_GNUC_NULL_TERMINATED;
 
 gint gtk_widget_get_monitor_num (GtkWidget *widget);
 
@@ -832,6 +857,7 @@ void              _gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
 void              _gtk_widget_propagate_screen_changed    (GtkWidget    *widget,
 							   GdkScreen    *previous_screen);
 void		  _gtk_widget_propagate_composited_changed (GtkWidget    *widget);
+void              _gtk_widget_propagate_unit_changed      (GtkWidget    *widget);
 
 void	   _gtk_widget_set_pointer_window  (GtkWidget      *widget,
 					    GdkWindow      *pointer_window);

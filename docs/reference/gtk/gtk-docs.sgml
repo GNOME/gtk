@@ -126,6 +126,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <xi:include href="xml/gtktypeutils.xml" />
     <xi:include href="xml/gtktesting.xml" />
     <xi:include href="xml/filesystem.xml" />
+    <xi:include href="xml/gtksize.xml" />
   </part>
 
   <part id="gtkobjects">

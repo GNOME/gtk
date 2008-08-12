@@ -361,11 +361,14 @@ void       gtk_window_set_policy               (GtkWindow           *window,
  * resize operations)
  */
 void     gtk_window_set_default_size (GtkWindow   *window,
-                                      gint         width,
-                                      gint         height);
+                                      GtkSize      width,
+                                      GtkSize      height);
 void     gtk_window_get_default_size (GtkWindow   *window,
                                       gint        *width,
                                       gint        *height);
+void     gtk_window_get_default_size_unit (GtkWindow   *window,
+                                           GtkSize     *width,
+                                           GtkSize     *height);
 void     gtk_window_resize           (GtkWindow   *window,
                                       gint         width,
                                       gint         height);

@@ -344,7 +344,10 @@ HTML_IMAGES = \
 	$(srcdir)/images/layout-rlbt.png				\
 	$(srcdir)/images/layout-rltb.png				\
 	$(srcdir)/images/layout-tblr.png				\
-	$(srcdir)/images/layout-tbrl.png
+	$(srcdir)/images/layout-tbrl.png				\
+	$(srcdir)/images/gtk-ri-file-chooser-size-6.png			\
+	$(srcdir)/images/gtk-ri-file-chooser-size-12.png		\
+	$(srcdir)/images/gtk-ri-file-chooser-size-24.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html \

@@ -41,6 +41,13 @@
 
 typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
 
+enum {
+  UNIT_CHANGED_SIGNAL,
+  LAST_SIGNAL,
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 typedef enum
 {
   GTK_SETTINGS_SOURCE_DEFAULT,
@@ -961,6 +968,25 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ENABLE_TOOLTIPS);
+
+  /**
+   * GtkSettings::unit-changed:
+   * @monitor_num: the monitor number on which the unit changed.
+   *
+   * The ::unit-changed signal is emitted when unit conversion factors
+   * on a screen change.
+   *
+   * Since: 2.14
+   */
+  signals[UNIT_CHANGED_SIGNAL] =
+    g_signal_new (I_("unit-changed"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  0, /* gah, no room in GtkSettings class */
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__INT,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_INT);
 }
 
 static void
