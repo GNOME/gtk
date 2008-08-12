@@ -58,6 +58,13 @@ enum {
   PROP_CHILD
 };
 
+#define GTK_CONTAINER_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_CONTAINER, GtkContainerPrivate))
+
+struct _GtkContainerPrivate
+{
+  GtkUSize border_width_unit;
+};
+
 #define PARAM_SPEC_PARAM_ID(pspec)              ((pspec)->param_id)
 #define PARAM_SPEC_SET_PARAM_ID(pspec, id)      ((pspec)->param_id = (id))
 
@@ -100,6 +107,8 @@ static void     gtk_container_unmap                (GtkWidget         *widget);
 
 static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
 							  GtkWidget    *child);
+
+static void gtk_container_unit_changed (GtkWidget *widget);
 
 /* GtkBuildable */
 static void gtk_container_buildable_init           (GtkBuildableIface *iface);
@@ -223,6 +232,7 @@ gtk_container_class_init (GtkContainerClass *class)
   widget_class->map = gtk_container_map;
   widget_class->unmap = gtk_container_unmap;
   widget_class->focus = gtk_container_focus;
+  widget_class->unit_changed = gtk_container_unit_changed;
   
   class->add = gtk_container_add_unimplemented;
   class->remove = gtk_container_remove_unimplemented;
@@ -242,13 +252,11 @@ gtk_container_class_init (GtkContainerClass *class)
                                                       GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_BORDER_WIDTH,
-                                   g_param_spec_uint ("border-width",
-                                                      P_("Border width"),
-                                                      P_("The width of the empty border outside the containers children"),
-						      0,
-						      G_MAXINT,
-						      0,
-                                                      GTK_PARAM_READWRITE));
+                                   gtk_param_spec_usize ("border-width",
+                                                         P_("Border width"),
+                                                         P_("The width of the empty border outside the containers children"),
+                                                         0, G_MAXINT, 0,
+                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_CHILD,
                                    g_param_spec_object ("child",
@@ -291,6 +299,8 @@ gtk_container_class_init (GtkContainerClass *class)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
+
+  g_type_class_add_private (gobject_class, sizeof (GtkContainerPrivate));
 }
 
 static void
@@ -1042,8 +1052,10 @@ gtk_container_remove_unimplemented (GtkContainer     *container,
 static void
 gtk_container_init (GtkContainer *container)
 {
+  GtkContainerPrivate *priv = GTK_CONTAINER_GET_PRIVATE (container);
   container->focus_child = NULL;
   container->border_width = 0;
+  priv->border_width_unit = 0;
   container->need_resize = FALSE;
   container->resize_mode = GTK_RESIZE_PARENT;
   container->reallocate_redraws = FALSE;
@@ -1079,7 +1091,7 @@ gtk_container_set_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_BORDER_WIDTH:
-      gtk_container_set_border_width (container, g_value_get_uint (value));
+      gtk_container_set_border_width (container, gtk_value_get_usize (value));
       break;
     case PROP_RESIZE_MODE:
       gtk_container_set_resize_mode (container, g_value_get_enum (value));
@@ -1100,11 +1112,12 @@ gtk_container_get_property (GObject         *object,
 			    GParamSpec      *pspec)
 {
   GtkContainer *container = GTK_CONTAINER (object);
+  GtkContainerPrivate *priv = GTK_CONTAINER_GET_PRIVATE (container);
   
   switch (prop_id)
     {
     case PROP_BORDER_WIDTH:
-      g_value_set_uint (value, container->border_width);
+      gtk_value_set_usize (value, priv->border_width_unit, container);
       break;
     case PROP_RESIZE_MODE:
       g_value_set_enum (value, container->resize_mode);
@@ -1134,13 +1147,18 @@ gtk_container_get_property (GObject         *object,
  **/
 void
 gtk_container_set_border_width (GtkContainer *container,
-				guint         border_width)
+				GtkUSize      border_width)
 {
+  GtkContainerPrivate *priv;
+
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
-  if (container->border_width != border_width)
+  priv = GTK_CONTAINER_GET_PRIVATE (container);
+
+  if (priv->border_width_unit != border_width)
     {
-      container->border_width = border_width;
+      container->border_width = gtk_widget_size_to_pixel (container, border_width);
+      priv->border_width_unit = border_width;
       g_object_notify (G_OBJECT (container), "border-width");
       
       if (GTK_WIDGET_REALIZED (container))
@@ -1163,6 +1181,28 @@ gtk_container_get_border_width (GtkContainer *container)
   g_return_val_if_fail (GTK_IS_CONTAINER (container), 0);
 
   return container->border_width;
+}
+
+/**
+ * gtk_container_get_border_width_unit:
+ * @container: a #GtkContainer
+ * 
+ * Like gtk_container_get_border_width() but preserves the unit.
+ *
+ * Return value: the current border width
+ *
+ * Since: 2.14
+ **/
+GtkUSize
+gtk_container_get_border_width_unit (GtkContainer *container)
+{
+  GtkContainerPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CONTAINER (container), 0);
+
+  priv = GTK_CONTAINER_GET_PRIVATE (container);
+
+  return priv->border_width_unit;
 }
 
 /**
@@ -2732,6 +2772,19 @@ gtk_container_propagate_expose (GtkContainer   *container,
 	}
       gdk_event_free (child_event);
     }
+}
+
+static void
+gtk_container_unit_changed (GtkWidget *widget)
+{
+  GtkContainer *container = GTK_CONTAINER (widget);
+  GtkContainerPrivate *priv = GTK_CONTAINER_GET_PRIVATE (container);
+
+  container->border_width = gtk_widget_size_to_pixel (container, priv->border_width_unit);
+
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (parent_class)->unit_changed (widget);
 }
 
 #define __GTK_CONTAINER_C__

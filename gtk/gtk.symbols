@@ -1006,6 +1006,7 @@ gtk_container_set_focus_vadjustment
 gtk_container_set_reallocate_redraws
 gtk_container_set_resize_mode
 gtk_container_unset_focus_chain
+gtk_container_get_border_width_unit
 #endif
 #endif
 

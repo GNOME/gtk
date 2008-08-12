@@ -50,6 +50,7 @@ G_BEGIN_DECLS
 
 typedef struct _GtkContainer	   GtkContainer;
 typedef struct _GtkContainerClass  GtkContainerClass;
+typedef struct _GtkContainerPrivate GtkContainerPrivate;
 
 struct _GtkContainer
 {
@@ -106,8 +107,9 @@ struct _GtkContainerClass
 
 GType   gtk_container_get_type		 (void) G_GNUC_CONST;
 void    gtk_container_set_border_width	 (GtkContainer	   *container,
-					  guint		    border_width);
+					  GtkUSize	    border_width);
 guint   gtk_container_get_border_width   (GtkContainer     *container);
+GtkUSize gtk_container_get_border_width_unit (GtkContainer     *container);
 void    gtk_container_add		 (GtkContainer	   *container,
 					  GtkWidget	   *widget);
 void    gtk_container_remove		 (GtkContainer	   *container,
