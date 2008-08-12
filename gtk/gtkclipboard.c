@@ -2011,9 +2011,11 @@ gtk_clipboard_store (GtkClipboard *clipboard)
   g_object_ref (clipboard);
 
   clipboard_widget = get_clipboard_widget (clipboard->display);
-  clipboard->notify_signal_id = g_signal_connect (clipboard_widget, "selection-notify_event",
-						  G_CALLBACK (gtk_clipboard_selection_notify), clipboard);
-  
+  clipboard->notify_signal_id = g_signal_connect (clipboard_widget,
+						  "selection-notify-event",
+						  G_CALLBACK (gtk_clipboard_selection_notify),
+						  clipboard);
+
   gdk_display_store_clipboard (clipboard->display,
 			       clipboard_widget->window,
 			       clipboard_get_timestamp (clipboard),

@@ -1,5 +1,10 @@
 2008-08-12  Paolo Borelli  <pborelli@katamail.com>
 
+	* gtk/gtkclipboard.c (gtk_clipboard_store):
+	use canonical signal name.
+
+2008-08-12  Paolo Borelli  <pborelli@katamail.com>
+
 	Bug 526234 - make shift+ctrl+del delete till the end of line
 
 	* gtk/gtktextview.c: add shift+ctrl+del and shift+ctrl+backspace
