@@ -1152,6 +1152,51 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
       return TRUE;
     }
 
+  /* GtkParamSpecUnit, GtkParamSpecUUnit have fundamental types
+   * G_TYPE_INT resp. G_TYPE_UINT so cannot handle in the switch;
+   * do it separately
+   */
+  if (GTK_IS_PARAM_SPEC_SIZE (pspec) || GTK_IS_PARAM_SPEC_USIZE (pspec))
+    {
+      gdouble val;
+      GtkSize size;
+      gchar *endptr;
+
+      errno = 0;
+      val = strtod (string, &endptr);
+      if (errno != 0 || endptr == string)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Could not parse %s `%s'",
+                       GTK_IS_PARAM_SPEC_SIZE (pspec) ? "GtkSize" : "GtkUSize",
+                       string);
+          return FALSE;
+        }
+
+      if (g_str_has_suffix (string, "em"))
+        size = gtk_size_em (val);
+      else if (g_str_has_suffix (string, "mm"))
+        size = gtk_size_mm (val);
+      else
+        size = (gint) val;
+
+      if (GTK_IS_PARAM_SPEC_SIZE (pspec))
+        {
+          g_value_init (value, G_TYPE_INT);
+          gtk_value_size_skip_conversion (value);
+          gtk_value_set_size (value, size, NULL);
+        }
+      else
+        {
+          g_value_init (value, G_TYPE_UINT);
+          gtk_value_usize_skip_conversion (value);
+          gtk_value_set_usize (value, size, NULL);
+        }
+      return TRUE;
+    }
+
   return gtk_builder_value_from_string_type (builder,
 					     G_PARAM_SPEC_VALUE_TYPE (pspec),
                                              string, value, error);

@@ -597,14 +597,14 @@ get_base_dimension (GtkWidget        *widget,
   if (mode == GTK_SIZE_GROUP_HORIZONTAL)
     {
       if (aux_info && aux_info->width > 0)
-	return aux_info->width;
+        return gtk_widget_size_to_pixel (widget, aux_info->width);
       else
 	return widget->requisition.width;
     }
   else
     {
       if (aux_info && aux_info->height > 0)
-	return aux_info->height;
+	return gtk_widget_size_to_pixel (widget, aux_info->height);
       else
 	return widget->requisition.height;
     }
@@ -751,9 +751,9 @@ get_fast_child_requisition (GtkWidget      *widget,
   if (aux_info)
     {
       if (aux_info->width > 0)
-	requisition->width = aux_info->width;
+        requisition->width = gtk_widget_size_to_pixel (widget, aux_info->width);
       if (aux_info && aux_info->height > 0)
-	requisition->height = aux_info->height;
+	requisition->height = gtk_widget_size_to_pixel (widget, aux_info->height);
     }
 }
 

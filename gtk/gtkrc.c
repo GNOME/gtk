@@ -2552,6 +2552,20 @@ rc_parse_token_or_compound (GScanner   *scanner,
       if (token != G_TOKEN_NONE)
 	return token;
       break;
+    case '!':
+      if (g_scanner_peek_next_token (scanner) == G_TOKEN_FLOAT)
+        {
+          g_scanner_get_next_token (scanner);
+          g_warning ("baz: %g", scanner->value.v_float);
+          g_string_append_printf (gstring, " 0x%lx", (gulong) gtk_size_em (scanner->value.v_float));
+        }
+      else if (g_scanner_peek_next_token (scanner) == G_TOKEN_INT)
+        {
+          g_scanner_get_next_token (scanner);
+          g_warning ("baz2: %d", scanner->value.v_int);
+          g_string_append_printf (gstring, " 0x%lx", (gulong) gtk_size_em (scanner->value.v_int));
+        }
+      break;
     case '@':
       if (g_scanner_peek_next_token (scanner) == G_TOKEN_IDENTIFIER)
         {
@@ -2620,6 +2634,7 @@ gtk_rc_parse_assignment (GScanner      *scanner,
   gboolean numbers_2_int        = scanner->config->numbers_2_int;
   gboolean negate = FALSE;
   gboolean is_color = FALSE;
+  gboolean is_unit = FALSE;
   guint    token;
 
   /* check that this is an assignment */
@@ -2633,6 +2648,7 @@ gtk_rc_parse_assignment (GScanner      *scanner,
   scanner->config->char_2_token         = MY_CHAR_2_TOKEN;
   scanner->config->scan_identifier_NULL = MY_SCAN_IDENTIFIER_NULL;
   scanner->config->numbers_2_int        = MY_NUMBERS_2_INT;
+  scanner->config->scan_float = TRUE;
 
   /* record location */
   if (g_getenv ("GTK_DEBUG"))
@@ -2645,6 +2661,13 @@ gtk_rc_parse_assignment (GScanner      *scanner,
     {
       g_scanner_get_next_token (scanner); /* eat color prefix */
       is_color = TRUE;
+    }
+
+  /* parse optional unit prefixes */
+  if (g_scanner_peek_next_token (scanner) == '!')
+    {
+      g_scanner_get_next_token (scanner); /* eat unit prefix */
+      is_unit = TRUE;
     }
 
   /* parse optional sign */
@@ -2670,14 +2693,27 @@ gtk_rc_parse_assignment (GScanner      *scanner,
     case G_TOKEN_INT:
       g_scanner_get_next_token (scanner);
       g_value_init (&prop->value, G_TYPE_LONG);
-      g_value_set_long (&prop->value, negate ? -scanner->value.v_int : scanner->value.v_int);
+      if (is_unit)
+        g_value_set_long (&prop->value, gtk_size_em (scanner->value.v_int));
+      else
+        g_value_set_long (&prop->value, negate ? -scanner->value.v_int : scanner->value.v_int);
       token = G_TOKEN_NONE;
       break;
     case G_TOKEN_FLOAT:
-      g_scanner_get_next_token (scanner);
-      g_value_init (&prop->value, G_TYPE_DOUBLE);
-      g_value_set_double (&prop->value, negate ? -scanner->value.v_float : scanner->value.v_float);
-      token = G_TOKEN_NONE;
+      if (is_unit)
+        {
+          g_scanner_get_next_token (scanner);
+          g_value_init (&prop->value, G_TYPE_LONG);
+          g_value_set_long (&prop->value, gtk_size_em (scanner->value.v_float));
+          token = G_TOKEN_NONE;
+        }
+      else
+        {
+          g_scanner_get_next_token (scanner);
+          g_value_init (&prop->value, G_TYPE_DOUBLE);
+          g_value_set_double (&prop->value, negate ? -scanner->value.v_float : scanner->value.v_float);
+          token = G_TOKEN_NONE;
+        }
       break;
     case G_TOKEN_STRING:
       g_scanner_get_next_token (scanner);

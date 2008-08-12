@@ -33,6 +33,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkrc.h>
+#include <gtk/gtksize.h>
 
 G_BEGIN_DECLS
 
@@ -100,11 +101,24 @@ GtkIconSet* gtk_icon_factory_lookup_default  (const gchar     *stock_id);
 gboolean gtk_icon_size_lookup              (GtkIconSize  size,
 					    gint        *width,
 					    gint        *height);
+gboolean gtk_icon_size_lookup_unit         (GtkIconSize  size,
+					    GtkSize     *width,
+					    GtkSize     *height);
 #endif /* GDK_MULTIHEAD_SAFE */
 gboolean gtk_icon_size_lookup_for_settings (GtkSettings *settings,
 					    GtkIconSize  size,
 					    gint        *width,
 					    gint        *height);
+gboolean gtk_icon_size_lookup_for_settings_for_monitor (GtkSettings *settings,
+                                                        gint         monitor_num,
+                                                        GtkIconSize  size,
+                                                        gint        *width,
+                                                        gint        *height);
+gboolean gtk_icon_size_lookup_for_settings_unit (GtkSettings *settings,
+                                                 gint         monitor_num,
+                                                 GtkIconSize  size,
+                                                 GtkSize     *width,
+                                                 GtkSize     *height);
 
 GtkIconSize           gtk_icon_size_register       (const gchar *name,
                                                     gint         width,

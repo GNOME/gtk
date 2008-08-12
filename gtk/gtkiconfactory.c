@@ -607,33 +607,33 @@ init_icon_sizes (void)
       
       icon_sizes[GTK_ICON_SIZE_MENU].size = GTK_ICON_SIZE_MENU;
       icon_sizes[GTK_ICON_SIZE_MENU].name = "gtk-menu";
-      icon_sizes[GTK_ICON_SIZE_MENU].width = 16;
-      icon_sizes[GTK_ICON_SIZE_MENU].height = 16;
+      icon_sizes[GTK_ICON_SIZE_MENU].width = GTK_SIZE_ONE_TWELFTH_EM (16);
+      icon_sizes[GTK_ICON_SIZE_MENU].height = GTK_SIZE_ONE_TWELFTH_EM (16);
 
       icon_sizes[GTK_ICON_SIZE_BUTTON].size = GTK_ICON_SIZE_BUTTON;
       icon_sizes[GTK_ICON_SIZE_BUTTON].name = "gtk-button";
-      icon_sizes[GTK_ICON_SIZE_BUTTON].width = 20;
-      icon_sizes[GTK_ICON_SIZE_BUTTON].height = 20;
+      icon_sizes[GTK_ICON_SIZE_BUTTON].width = GTK_SIZE_ONE_TWELFTH_EM (20);
+      icon_sizes[GTK_ICON_SIZE_BUTTON].height = GTK_SIZE_ONE_TWELFTH_EM (20);
 
       icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].size = GTK_ICON_SIZE_SMALL_TOOLBAR;
       icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].name = "gtk-small-toolbar";
-      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].width = 18;
-      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].height = 18;
+      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].width = GTK_SIZE_ONE_TWELFTH_EM (18);
+      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].height = GTK_SIZE_ONE_TWELFTH_EM (18);
       
       icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].size = GTK_ICON_SIZE_LARGE_TOOLBAR;
       icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].name = "gtk-large-toolbar";
-      icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].width = 24;
-      icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].height = 24;
+      icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].width = GTK_SIZE_ONE_TWELFTH_EM (24);
+      icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].height = GTK_SIZE_ONE_TWELFTH_EM (24);
 
       icon_sizes[GTK_ICON_SIZE_DND].size = GTK_ICON_SIZE_DND;
       icon_sizes[GTK_ICON_SIZE_DND].name = "gtk-dnd";
-      icon_sizes[GTK_ICON_SIZE_DND].width = 32;
-      icon_sizes[GTK_ICON_SIZE_DND].height = 32;
+      icon_sizes[GTK_ICON_SIZE_DND].width = GTK_SIZE_ONE_TWELFTH_EM (32);
+      icon_sizes[GTK_ICON_SIZE_DND].height = GTK_SIZE_ONE_TWELFTH_EM (32);
 
       icon_sizes[GTK_ICON_SIZE_DIALOG].size = GTK_ICON_SIZE_DIALOG;
       icon_sizes[GTK_ICON_SIZE_DIALOG].name = "gtk-dialog";
-      icon_sizes[GTK_ICON_SIZE_DIALOG].width = 48;
-      icon_sizes[GTK_ICON_SIZE_DIALOG].height = 48;
+      icon_sizes[GTK_ICON_SIZE_DIALOG].width = GTK_SIZE_ONE_TWELFTH_EM (48);
+      icon_sizes[GTK_ICON_SIZE_DIALOG].height = GTK_SIZE_ONE_TWELFTH_EM (48);
 
       g_assert ((GTK_ICON_SIZE_DIALOG + 1) == NUM_BUILTIN_SIZES);
 
@@ -839,6 +839,15 @@ icon_size_settings_changed (GtkSettings  *settings,
 }
 
 static void
+monitors_changed (GtkSettings  *settings,
+                  GParamSpec   *pspec)
+{
+  icon_size_set_all_from_settings (settings);
+
+  gtk_rc_reset_styles (settings);
+}
+
+static void
 icon_sizes_init_for_settings (GtkSettings *settings)
 {
   g_signal_connect (settings,
@@ -851,9 +860,11 @@ icon_sizes_init_for_settings (GtkSettings *settings)
      
 static gboolean
 icon_size_lookup_intern (GtkSettings *settings,
+                         gint         monitor_num,
 			 GtkIconSize  size,
 			 gint        *widthp,
-			 gint        *heightp)
+			 gint        *heightp,
+                         gboolean     preserve_unit)
 {
   GArray *settings_sizes;
   gint width_for_settings = -1;
@@ -890,10 +901,12 @@ icon_size_lookup_intern (GtkSettings *settings,
     }
 
   if (widthp)
-    *widthp = width_for_settings >= 0 ? width_for_settings : icon_sizes[size].width;
+    *widthp = preserve_unit ? (width_for_settings >= 0 ? width_for_settings : icon_sizes[size].width) :
+      gtk_size_to_pixel (settings->screen, monitor_num, width_for_settings >= 0 ? width_for_settings : icon_sizes[size].width);
 
   if (heightp)
-    *heightp = height_for_settings >= 0 ? height_for_settings : icon_sizes[size].height;
+    *heightp = preserve_unit ? (height_for_settings >= 0 ? height_for_settings : icon_sizes[size].height) :
+      gtk_size_to_pixel (settings->screen, monitor_num, height_for_settings >= 0 ? height_for_settings : icon_sizes[size].height);
 
   return TRUE;
 }
@@ -929,7 +942,63 @@ gtk_icon_size_lookup_for_settings (GtkSettings *settings,
 {
   g_return_val_if_fail (GTK_IS_SETTINGS (settings), FALSE);
 
-  return icon_size_lookup_intern (settings, size, width, height);
+  /* choose the first monitor; should probably also deprecate this function - or make GtkSettings per monitor */
+  return icon_size_lookup_intern (settings, 0, size, width, height, FALSE);
+}
+
+/**
+ * gtk_icon_size_lookup_for_settings_for_monitor:
+ * @settings: a #GtkSettings object, used to determine
+ *   which set of user preferences to used.
+ * @monitor_num: the monitor number or -1 to use default monitor
+ * @size: an icon size
+ * @width: location to store icon width
+ * @height: location to store icon height
+ *
+ * Like gtk_icon_size_lookup_for_settings() but takes a monitor number
+ * as well.
+ * 
+ * Return value: %TRUE if @size was a valid size
+ *
+ * Since: 2.14
+ **/
+gboolean
+gtk_icon_size_lookup_for_settings_for_monitor (GtkSettings *settings,
+                                               gint         monitor_num,
+                                               GtkIconSize  size,
+                                               gint        *width,
+                                               gint        *height)
+{
+  g_return_val_if_fail (GTK_IS_SETTINGS (settings), FALSE);
+
+  return icon_size_lookup_intern (settings, monitor_num, size, width, height, FALSE);
+}
+
+/**
+ * gtk_icon_size_lookup_for_settings_unit:
+ * @settings: a #GtkSettings object, used to determine
+ *   which set of user preferences to used.
+ * @monitor_num: the monitor number or -1 to use default monitor
+ * @size: an icon size
+ * @width: location to store icon width
+ * @height: location to store icon height
+ *
+ * Like gtk_icon_size_lookup_for_settings_for_monitor() but preserves the unit.
+ *
+ * Return value: %TRUE if @size was a valid size
+ *
+ * Since: 2.14
+ **/
+gboolean
+gtk_icon_size_lookup_for_settings_unit (GtkSettings *settings,
+                                        gint         monitor_num,
+                                        GtkIconSize  size,
+                                        GtkSize     *width,
+                                        GtkSize     *height)
+{
+  g_return_val_if_fail (GTK_IS_SETTINGS (settings), FALSE);
+
+  return icon_size_lookup_intern (settings, monitor_num, size, width, height, TRUE);
 }
 
 /**
@@ -962,6 +1031,31 @@ gtk_icon_size_lookup (GtkIconSize  size,
 
   return gtk_icon_size_lookup_for_settings (gtk_settings_get_default (),
 					    size, widthp, heightp);
+}
+
+/**
+ * gtk_icon_size_lookup_unit:
+ * @size: an icon size
+ * @width: location to store icon width
+ * @height: location to store icon height
+ *
+ * Like gtk_icon_size_lookup() but preserves the unit.
+ * 
+ * Return value: %TRUE if @size was a valid size
+ *
+ * Since: 2.14
+ **/
+gboolean
+gtk_icon_size_lookup_unit (GtkIconSize  size,
+                           GtkSize     *widthp,
+                           GtkSize     *heightp)
+{
+  GTK_NOTE (MULTIHEAD,
+	    g_warning ("gtk_icon_size_lookup ()) is not multihead safe"));
+
+  return gtk_icon_size_lookup_for_settings_unit (gtk_settings_get_default (),
+                                                 -1,
+                                                 size, widthp, heightp);
 }
 
 static GtkIconSize
@@ -1052,7 +1146,7 @@ gtk_icon_size_register_alias (const gchar *alias,
 
   init_icon_sizes ();
 
-  if (!icon_size_lookup_intern (NULL, target, NULL, NULL))
+  if (!icon_size_lookup_intern (NULL, 0, target, NULL, NULL, FALSE))
     g_warning ("gtk_icon_size_register_alias: Icon size %u does not exist", target);
 
   ia = g_hash_table_lookup (icon_aliases, alias);
@@ -1125,12 +1219,14 @@ static GdkPixbuf *find_in_cache     (GtkIconSet       *icon_set,
                                      GtkStyle         *style,
                                      GtkTextDirection  direction,
                                      GtkStateType      state,
-                                     GtkIconSize       size);
+                                     GtkIconSize       size,
+                                     gint              monitor_num);
 static void       add_to_cache      (GtkIconSet       *icon_set,
                                      GtkStyle         *style,
                                      GtkTextDirection  direction,
                                      GtkStateType      state,
                                      GtkIconSize       size,
+                                     gint              monitor_num,
                                      GdkPixbuf        *pixbuf);
 /* Clear icon set contents, drop references to all contained
  * GdkPixbuf objects and forget all GtkIconSources. Used to
@@ -1338,8 +1434,8 @@ sizes_equivalent (GtkIconSize lhs,
   
   gint r_w, r_h, l_w, l_h;
 
-  icon_size_lookup_intern (NULL, rhs, &r_w, &r_h);
-  icon_size_lookup_intern (NULL, lhs, &l_w, &l_h);
+  icon_size_lookup_intern (NULL, 0, rhs, &r_w, &r_h, FALSE);
+  icon_size_lookup_intern (NULL, 0, lhs, &l_w, &l_h, FALSE);
 
   return r_w == l_w && r_h == l_h;
 #endif
@@ -1433,6 +1529,7 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
   gint width, height, pixel_size;
   gint *sizes, *s, dist;
   GError *error = NULL;
+  gint monitor_num;
   
   if (widget && gtk_widget_has_screen (widget))
     screen = gtk_widget_get_screen (widget);
@@ -1448,7 +1545,8 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
   icon_theme = gtk_icon_theme_get_for_screen (screen);
   settings = gtk_settings_get_for_screen (screen);
 
-  if (!gtk_icon_size_lookup_for_settings (settings, size, &width, &height))
+  monitor_num = widget != NULL ? gtk_widget_get_monitor_num (widget) : -1;
+  if (!gtk_icon_size_lookup_for_settings_for_monitor (settings, monitor_num, size, &width, &height))
     {
       if (size == (GtkIconSize)-1)
 	{
@@ -1656,6 +1754,7 @@ gtk_icon_set_render_icon (GtkIconSet        *icon_set,
                           const char        *detail)
 {
   GdkPixbuf *icon;
+  gint monitor_num;
   
   g_return_val_if_fail (icon_set != NULL, NULL);
   g_return_val_if_fail (style == NULL || GTK_IS_STYLE (style), NULL);
@@ -1663,10 +1762,14 @@ gtk_icon_set_render_icon (GtkIconSet        *icon_set,
   if (icon_set->sources == NULL)
     return render_fallback_image (style, direction, state, size, widget, detail);
 
+  monitor_num = widget != NULL ? gtk_widget_get_monitor_num (widget) : -1;
+  if (monitor_num < 0)
+    monitor_num = 0;
+
   if (detail == NULL)
     {
       icon = find_in_cache (icon_set, style, direction,
-                        state, size);
+                            state, size, monitor_num);
       
       if (icon)
 	{
@@ -1675,7 +1778,6 @@ gtk_icon_set_render_icon (GtkIconSet        *icon_set,
 	}
     }
 
-
   icon = find_and_render_icon_source (icon_set, style, direction, state, size,
 				      widget, detail);
 
@@ -1683,7 +1785,7 @@ gtk_icon_set_render_icon (GtkIconSet        *icon_set,
     icon = render_fallback_image (style, direction, state, size, widget, detail);
 
   if (detail == NULL)
-    add_to_cache (icon_set, style, direction, state, size, icon);
+    add_to_cache (icon_set, style, direction, state, size, monitor_num, icon);
   
   return icon;
 }
@@ -2427,6 +2529,7 @@ struct _CachedIcon
   GtkTextDirection direction;
   GtkStateType state;
   GtkIconSize size;
+  gint monitor_num;
 
   GdkPixbuf *pixbuf;
 };
@@ -2457,7 +2560,8 @@ find_in_cache (GtkIconSet      *icon_set,
                GtkStyle        *style,
                GtkTextDirection direction,
                GtkStateType     state,
-               GtkIconSize      size)
+               GtkIconSize      size,
+               gint             monitor_num)
 {
   GSList *tmp_list;
   GSList *prev;
@@ -2473,7 +2577,8 @@ find_in_cache (GtkIconSet      *icon_set,
       if (icon->style == style &&
           icon->direction == direction &&
           icon->state == state &&
-          (size == (GtkIconSize)-1 || icon->size == size))
+          (size == (GtkIconSize)-1 || icon->size == size) &&
+          icon->monitor_num == monitor_num)
         {
           if (prev)
             {
@@ -2499,6 +2604,7 @@ add_to_cache (GtkIconSet      *icon_set,
               GtkTextDirection direction,
               GtkStateType     state,
               GtkIconSize      size,
+              gint             monitor_num,
               GdkPixbuf       *pixbuf)
 {
   CachedIcon *icon;
@@ -2523,6 +2629,7 @@ add_to_cache (GtkIconSet      *icon_set,
   icon->direction = direction;
   icon->state = state;
   icon->size = size;
+  icon->monitor_num = monitor_num;
   icon->pixbuf = pixbuf;
 
   if (icon->style)
