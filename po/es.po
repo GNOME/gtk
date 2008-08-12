@@ -14,12 +14,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-07 11:39+0000\n"
-"PO-Revision-Date: 2008-08-10 23:49+0200\n"
+"POT-Creation-Date: 2008-08-12 04:33+0000\n"
+"PO-Revision-Date: 2008-08-12 08:49+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type:  text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
@@ -252,7 +252,8 @@ msgstr "El archivo de imagen «%s» no contiene datos"
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:993
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1257 ../tests/testfilechooser.c:267
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "No se ha podido cargar la imagen «%s»: el motivo es desconocido, "
 "probablemente el archivo gráfico esté corrupto"
@@ -644,7 +645,8 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-jpeg.c:1148 ../gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "La calidad JPEG debe ser un valor entre 0 y 100; el valor «%d» no está "
 "permitido."
@@ -748,7 +750,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Error fatal leyendo el archivo gráfico PNG: %s"
 
 #: ../gdk-pixbuf/io-png.c:825
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Las claves para las porciones de texto PNG deben tener al menos entre 1 y un "
 "máximo de 79 caracteres."
@@ -835,7 +838,8 @@ msgstr "No se puede asignar memoria para cargar la imagen PNM"
 
 #: ../gdk-pixbuf/io-pnm.c:818
 msgid "Insufficient memory to load PNM context struct"
-msgstr "No hay memoria suficiente para cargar la estructura de contexto del PNM"
+msgstr ""
+"No hay memoria suficiente para cargar la estructura de contexto del PNM"
 
 #: ../gdk-pixbuf/io-pnm.c:869
 msgid "Unexpected end of PNM image data"
@@ -929,7 +933,8 @@ msgstr "El formato de imagen Targa"
 
 #: ../gdk-pixbuf/io-tiff.c:160
 msgid "Could not get image width (bad TIFF file)"
-msgstr "No se ha podido obtener el ancho de la imagen (archivo TIFF incorrecto)"
+msgstr ""
+"No se ha podido obtener el ancho de la imagen (archivo TIFF incorrecto)"
 
 #: ../gdk-pixbuf/io-tiff.c:167
 msgid "Could not get image height (bad TIFF file)"
@@ -1053,7 +1058,8 @@ msgstr "No se puede leer el mapa de color de XPM"
 
 #: ../gdk-pixbuf/io-xpm.c:777
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "No se ha podido escribir en el archivo temporal al cargar la imagen XPM"
+msgstr ""
+"No se ha podido escribir en el archivo temporal al cargar la imagen XPM"
 
 #: ../gdk-pixbuf/io-xpm.c:816
 msgid "The XPM image format"
@@ -1160,7 +1166,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Aberiendo %d elemento"
 msgstr[1] "Abriendo %d elementos"
 
-#: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2106
+#: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "Licencia"
 
@@ -1174,32 +1180,32 @@ msgid "C_redits"
 msgstr "C_réditos"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:513
+#: ../gtk/gtkaboutdialog.c:514
 msgid "_License"
 msgstr "_Licencia"
 
-#: ../gtk/gtkaboutdialog.c:742
+#: ../gtk/gtkaboutdialog.c:744
 #, c-format
 msgid "About %s"
 msgstr "Acerca de %s"
 
-#: ../gtk/gtkaboutdialog.c:2030
+#: ../gtk/gtkaboutdialog.c:2032
 msgid "Credits"
 msgstr "Créditos"
 
-#: ../gtk/gtkaboutdialog.c:2059
+#: ../gtk/gtkaboutdialog.c:2061
 msgid "Written by"
 msgstr "Escrito por"
 
-#: ../gtk/gtkaboutdialog.c:2062
+#: ../gtk/gtkaboutdialog.c:2064
 msgid "Documented by"
 msgstr "Documentado por"
 
-#: ../gtk/gtkaboutdialog.c:2074
+#: ../gtk/gtkaboutdialog.c:2076
 msgid "Translated by"
 msgstr "Traducido por"
 
-#: ../gtk/gtkaboutdialog.c:2078
+#: ../gtk/gtkaboutdialog.c:2080
 msgid "Artwork by"
 msgstr "Arte por"
 
@@ -1493,7 +1499,7 @@ msgstr "_Paleta:"
 msgid "Color Wheel"
 msgstr "Rueda de color"
 
-#: ../gtk/gtkcolorsel.c:980
+#: ../gtk/gtkcolorsel.c:976
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1504,7 +1510,7 @@ msgstr ""
 "seleccionar este color como actual arrastrándolo al otro color a lo largo de "
 "la muestra."
 
-#: ../gtk/gtkcolorsel.c:984
+#: ../gtk/gtkcolorsel.c:980
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1512,11 +1518,11 @@ msgstr ""
 "El color elegido. Puede arrastrar este color a una entrada de la paleta para "
 "guardarlo para usarlo en el futuro."
 
-#: ../gtk/gtkcolorsel.c:1369
+#: ../gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
 msgstr "_Guardar color aquí"
 
-#: ../gtk/gtkcolorsel.c:1574
+#: ../gtk/gtkcolorsel.c:1568
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1550,7 +1556,7 @@ msgstr "Escritorio"
 msgid "(None)"
 msgstr "(Ninguno)"
 
-#: ../gtk/gtkfilechooserbutton.c:2015
+#: ../gtk/gtkfilechooserbutton.c:2013
 msgid "Other..."
 msgstr "Otro…"
 
@@ -1721,39 +1727,41 @@ msgstr "_Guardar en la carpeta:"
 msgid "Create in _folder:"
 msgstr "Crear en la _carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:6971
+#: ../gtk/gtkfilechooserdefault.c:6972
 msgid "Cannot change to folder because it is not local"
 msgstr "No se pudo cambiar a la carpeta porque no es local"
 
-#: ../gtk/gtkfilechooserdefault.c:7596 ../gtk/gtkfilechooserdefault.c:7617
+#: ../gtk/gtkfilechooserdefault.c:7597 ../gtk/gtkfilechooserdefault.c:7618
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La combinación %s ya existe"
 
-#: ../gtk/gtkfilechooserdefault.c:7707
+#: ../gtk/gtkfilechooserdefault.c:7708
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La combinación %s no existe"
 
-#: ../gtk/gtkfilechooserdefault.c:7950 ../gtk/gtkprintunixdialog.c:364
+#: ../gtk/gtkfilechooserdefault.c:7951 ../gtk/gtkprintunixdialog.c:364
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ya existe un archivo llamado «%s». ¿Quiere reemplazarlo?"
 
-#: ../gtk/gtkfilechooserdefault.c:7953 ../gtk/gtkprintunixdialog.c:368
+#: ../gtk/gtkfilechooserdefault.c:7954 ../gtk/gtkprintunixdialog.c:368
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr "El archivo ya existe en «%s». Si lo reemplaza sobreescribirá su contenido."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr ""
+"El archivo ya existe en «%s». Si lo reemplaza sobreescribirá su contenido."
 
-#: ../gtk/gtkfilechooserdefault.c:7958 ../gtk/gtkprintunixdialog.c:375
+#: ../gtk/gtkfilechooserdefault.c:7959 ../gtk/gtkprintunixdialog.c:375
 msgid "_Replace"
 msgstr "_Reemplazar"
 
-#: ../gtk/gtkfilechooserdefault.c:8719
+#: ../gtk/gtkfilechooserdefault.c:8720
 msgid "Could not start the search process"
 msgstr "No se ha podido iniciar el proceso de búsqueda"
 
-#: ../gtk/gtkfilechooserdefault.c:8720
+#: ../gtk/gtkfilechooserdefault.c:8721
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1761,49 +1769,49 @@ msgstr ""
 "El programa no fue capaz de crear una conexión con el demonio indexador. Por "
 "favor asegúrese de que se está ejecutando."
 
-#: ../gtk/gtkfilechooserdefault.c:8734
+#: ../gtk/gtkfilechooserdefault.c:8735
 msgid "Could not send the search request"
 msgstr "No se ha podido enviar la petición de búsqueda"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9149
+#: ../gtk/gtkfilechooserdefault.c:9150
 msgid "_Search:"
 msgstr "_Buscar:"
 
-#: ../gtk/gtkfilechooserdefault.c:10096
+#: ../gtk/gtkfilechooserdefault.c:10097
 #, c-format
 msgid "Could not mount %s"
 msgstr "No se pudo montar %s"
 
-#: ../gtk/gtkfilechooserdefault.c:10750
+#: ../gtk/gtkfilechooserdefault.c:10751
 msgid "Type name of new folder"
 msgstr "Teclee el nombre de la carpeta nueva"
 
-#: ../gtk/gtkfilechooserdefault.c:10800
+#: ../gtk/gtkfilechooserdefault.c:10801
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f Kib"
 
-#: ../gtk/gtkfilechooserdefault.c:10802
+#: ../gtk/gtkfilechooserdefault.c:10803
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f Mib"
 
-#: ../gtk/gtkfilechooserdefault.c:10804
+#: ../gtk/gtkfilechooserdefault.c:10805
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f Gib"
 
-#: ../gtk/gtkfilechooserdefault.c:10907 ../gtk/gtkfilechooserdefault.c:10929
-#: ../gtk/gtkfilechooserdefault.c:11000
+#: ../gtk/gtkfilechooserdefault.c:10908 ../gtk/gtkfilechooserdefault.c:10930
+#: ../gtk/gtkfilechooserdefault.c:11001
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../gtk/gtkfilechooserdefault.c:10947
+#: ../gtk/gtkfilechooserdefault.c:10948
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:10949
+#: ../gtk/gtkfilechooserdefault.c:10950
 msgid "Yesterday at %H:%M"
 msgstr "Ayer a las %H:%M"
 
@@ -1888,7 +1896,8 @@ msgstr "_Renombrar archivo"
 
 #: ../gtk/gtkfilesel.c:1347
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "El nombre de la carpeta «%s» contiene símbolos que no están permitidos en los "
 "nombres de archivos"
@@ -2244,15 +2253,15 @@ msgid "_Password:"
 msgstr "_Contraseña:"
 
 #: ../gtk/gtkmountoperation.c:590
-msgid "_Forget password immediately"
-msgstr "_Olvidar contraseña inmediatamente"
+msgid "Forget password _immediately"
+msgstr "Olvidar contraseña _inmediatamente"
 
 #: ../gtk/gtkmountoperation.c:598
-msgid "_Remember password until you logout"
-msgstr "_Recordar la contraseña hasta salir de la sesión"
+msgid "Remember password until you _logout"
+msgstr "Recordar la contraseña hasta _salir de la sesión"
 
 #: ../gtk/gtkmountoperation.c:606
-msgid "_Remember forever"
+msgid "Remember _forever"
 msgstr "_Recordar para siempre"
 
 #: ../gtk/gtknotebook.c:834
@@ -2387,7 +2396,7 @@ msgstr "Ruta superior"
 msgid "Down Path"
 msgstr "Ruta inferior"
 
-#: ../gtk/gtkpathbar.c:1464
+#: ../gtk/gtkpathbar.c:1473
 msgid "File System Root"
 msgstr "Sistema de archivos raíz"
 
@@ -3252,7 +3261,8 @@ msgstr "El elemento <%s> tiene el id inválido \"%s\""
 #: ../gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr "El elemento <%s> no tiene ni un elemento \"name\" ni un elemento \"id\""
+msgstr ""
+"El elemento <%s> no tiene ni un elemento \"name\" ni un elemento \"id\""
 
 #: ../gtk/gtktextbufferserialize.c:943
 #, c-format
@@ -3276,7 +3286,8 @@ msgstr "Se encontró una etiqueta anónima y las etiquetas no se pueden crear."
 #: ../gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr "La etiqueta «%s» no existe en el búfer y las etiquetas no se pueden crear."
+msgstr ""
+"La etiqueta «%s» no existe en el búfer y las etiquetas no se pueden crear."
 
 #: ../gtk/gtktextbufferserialize.c:1144 ../gtk/gtktextbufferserialize.c:1219
 #: ../gtk/gtktextbufferserialize.c:1320 ../gtk/gtktextbufferserialize.c:1394
@@ -3296,8 +3307,10 @@ msgstr "«%s» no es un nombre de atributo válido"
 
 #: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr "\"%s\" no se pudo convertir a un valor de tipo \"%s\"para el atributo \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgstr ""
+"\"%s\" no se pudo convertir a un valor de tipo \"%s\"para el atributo \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:1202
 #, c-format
@@ -3317,7 +3330,8 @@ msgstr "La etiqueta \"%s\" tiene prioridad \"%s\" inválida"
 #: ../gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr "El elemento más externo en el texto debe ser <text_view_markup> no <%s>"
+msgstr ""
+"El elemento más externo en el texto debe ser <text_view_markup> no <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
 #, c-format
@@ -3333,7 +3347,8 @@ msgid "Serialized data is malformed"
 msgstr "Los datos serializados están mal formados"
 
 #: ../gtk/gtktextbufferserialize.c:1857
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Los datos serializados están mal formados. La primera sección no es "
 "GTKTEXTBUFFERCONTENTS-0001"
@@ -4267,7 +4282,8 @@ msgstr "ROC 8k"
 #: ../gtk/updateiconcache.c:492 ../gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr "se encontraron diferentes idatas para el «%s» enlazado simbólicamente y «%s»\n"
+msgstr ""
+"se encontraron diferentes idatas para el «%s» enlazado simbólicamente y «%s»\n"
 
 #: ../gtk/updateiconcache.c:1374
 #, c-format
@@ -4645,4 +4661,3 @@ msgstr "Imprimir a la impresora de prueba"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "No se ha podido obtener información para el archivo «%s» : %s"
-
