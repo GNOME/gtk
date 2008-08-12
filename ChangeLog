@@ -1,5 +1,28 @@
 2008-08-12  Michael Natterer  <mitch@imendio.com>
 
+	* configure.in: define -DGDK_PIXBUF_DISABLE_DEPRECATED in the
+	global CFLAGS.
+
+	* gdk-pixbuf/Makefile.am: make the contents gdk-pixbuf-marshal.h
+	visible for GDK_PIXBUF_COMPILATION.
+
+	* contrib/gdk-pixbuf-xlib/Makefile.am
+	* demos/Makefile.am
+	* demos/gtk-demo/Makefile.am
+	* gdk-pixbuf/pixops/Makefile.am
+	* gdk/Makefile.am
+	* gdk/x11/Makefile.am
+	* gtk/Makefile.am
+	* gtk/tests/Makefile.am
+	* gtk/theme-bits/Makefile.am
+	* modules/engines/ms-windows/Makefile.am
+	* modules/engines/pixbuf/Makefile.am
+	* modules/input/Makefile.am
+	* perf/Makefile.am
+	* tests/Makefile.am: remove -DDGDK_PIXBUF_DISABLE_DEPRECATED here.
+
+2008-08-12  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkstatusicon.c (gtk_status_icon_get_gicon): use
 	g_return_val_if_fail() now that the function has a return value.
 

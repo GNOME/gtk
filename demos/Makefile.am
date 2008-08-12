@@ -3,13 +3,12 @@ include $(top_srcdir)/Makefile.decl
 
 SUBDIRS = gtk-demo
 
-INCLUDES = 						\
-	-I$(top_srcdir) 				\
-	-I$(top_builddir)/gdk				\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
-	-DGDK_DISABLE_DEPRECATED			\
-	-DGTK_DISABLE_DEPRECATED			\
-	$(GTK_DEBUG_FLAGS)				\
+INCLUDES = 				\
+	-I$(top_srcdir) 		\
+	-I$(top_builddir)/gdk		\
+	-DGDK_DISABLE_DEPRECATED	\
+	-DGTK_DISABLE_DEPRECATED	\
+	$(GTK_DEBUG_FLAGS)		\
 	$(GTK_DEP_CFLAGS)
 
 DEPS = 									\

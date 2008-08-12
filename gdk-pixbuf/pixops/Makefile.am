@@ -5,8 +5,7 @@ noinst_LTLIBRARIES = libpixops.la
 INCLUDES = \
 	-I$(top_srcdir) -I$(top_builddir) 	\
 	$(GTK_DEBUG_FLAGS)			\
-	$(GDK_PIXBUF_DEP_CFLAGS)		\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED
+	$(GDK_PIXBUF_DEP_CFLAGS)
 
 noinst_PROGRAMS = timescale
 

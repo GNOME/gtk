@@ -1,7 +1,8 @@
 include $(top_srcdir)/Makefile.decl
 
-INCLUDES = -I$(top_srcdir) -I$(top_builddir) 	\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED		\
+INCLUDES = \
+	-I$(top_srcdir)		\
+	 -I$(top_builddir) 	\
 	$(GDK_PIXBUF_DEP_CFLAGS)
 
 noinst_PROGRAMS = decompose-bits

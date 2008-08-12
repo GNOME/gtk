@@ -5,11 +5,10 @@ SUBDIRS=Theme
 EXTRA_DIST += Makefile.msc
 
 INCLUDES = \
-	-I$(top_srcdir) 				\
-	-I$(top_srcdir)/gdk				\
-	-I$(top_builddir)/gdk				\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
-	-DGDK_DISABLE_DEPRECATED			\
+	-I$(top_srcdir) 		\
+	-I$(top_srcdir)/gdk		\
+	-I$(top_builddir)/gdk		\
+	-DGDK_DISABLE_DEPRECATED	\
 	$(GTK_DEP_CFLAGS)
 
 

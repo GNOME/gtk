@@ -3,14 +3,13 @@ include $(top_srcdir)/Makefile.decl
 
 libgdkincludedir = $(includedir)/gtk-2.0/gdk
 
-INCLUDES = 				\
-	-DG_LOG_DOMAIN=\"Gdk\"		\
-	-DGDK_COMPILATION		\
-	-I$(top_srcdir)			\
-	-I$(top_srcdir)/gdk		\
-	-I$(top_builddir)/gdk		\
-	-DGDK_PIXBUF_DISABLE_DEPRECATED	\
-	$(GTK_DEBUG_FLAGS) 		\
+INCLUDES = 			\
+	-DG_LOG_DOMAIN=\"Gdk\"	\
+	-DGDK_COMPILATION	\
+	-I$(top_srcdir)		\
+	-I$(top_srcdir)/gdk	\
+	-I$(top_builddir)/gdk	\
+	$(GTK_DEBUG_FLAGS) 	\
 	$(GDK_DEP_CFLAGS)
 
 LDADDS = $(GDK_DEP_LIBS)
