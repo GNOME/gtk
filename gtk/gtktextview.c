@@ -1130,6 +1130,21 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 				G_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
 				G_TYPE_INT, -1);
 
+  gtk_binding_entry_add_signal (binding_set, GDK_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+				"delete_from_cursor", 2,
+				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
+				G_TYPE_INT, 1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+				"delete_from_cursor", 2,
+				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
+				G_TYPE_INT, 1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+				"delete_from_cursor", 2,
+				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
+				G_TYPE_INT, -1);
+
   /* Cut/copy/paste */
 
   gtk_binding_entry_add_signal (binding_set, GDK_x, GDK_CONTROL_MASK,
@@ -5480,26 +5495,42 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
       break;
 
     case GTK_DELETE_PARAGRAPH_ENDS:
-      /* If we're already at a newline, we need to
-       * simply delete that newline, instead of
-       * moving to the next one.
-       */
-      if (gtk_text_iter_ends_line (&end))
+      if (count > 0)
         {
-          gtk_text_iter_forward_line (&end);
-          --count;
-        }
+          /* If we're already at a newline, we need to
+           * simply delete that newline, instead of
+           * moving to the next one.
+           */
+          if (gtk_text_iter_ends_line (&end))
+            {
+              gtk_text_iter_forward_line (&end);
+              --count;
+            }
 
-      while (count > 0)
+          while (count > 0)
+            {
+              if (!gtk_text_iter_forward_to_line_end (&end))
+                break;
+
+              --count;
+            }
+        }
+      else if (count < 0)
         {
-          if (!gtk_text_iter_forward_to_line_end (&end))
-            break;
+          if (gtk_text_iter_starts_line (&start))
+            {
+              gtk_text_iter_backward_line (&start);
+              if (!gtk_text_iter_ends_line (&end))
+                gtk_text_iter_forward_to_line_end (&start);
+            }
+          else
+            {
+              gtk_text_iter_set_line_offset (&start, 0);
+            }
+          ++count;
 
-          --count;
+          gtk_text_iter_backward_lines (&start, -count);
         }
-
-      /* FIXME figure out what a negative count means
-         and support that */
       break;
 
     case GTK_DELETE_PARAGRAPHS:

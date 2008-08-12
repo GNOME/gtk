@@ -1,3 +1,10 @@
+2008-08-12  Paolo Borelli  <pborelli@katamail.com>
+
+	Bug 526234 - make shift+ctrl+del delete till the end of line
+
+	* gtk/gtktextview.c: add shift+ctrl+del and shift+ctrl+backspace
+	keyboard shortcuts to delete to the end/start of the current line.
+
 2008-08-12  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtklinkbutton.c (set_link_color): bail out if there is no
