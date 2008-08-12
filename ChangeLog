@@ -1,5 +1,13 @@
 2008-08-12  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtklinkbutton.c (set_link_color): bail out if there is no
+	label to set the color on.
+
+	(gtk_link_button_add): call set_link_color() so the label gets
+	the right color no matter how the link button is created.
+
+2008-08-12  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkassistant.c: remove unused variable and fix formatting of
 	some function headers.
 

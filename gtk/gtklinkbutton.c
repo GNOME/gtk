@@ -250,6 +250,8 @@ set_link_color (GtkLinkButton *link_button)
   GtkWidget *label;
 
   label = gtk_bin_get_child (GTK_BIN (link_button));
+  if (!GTK_IS_LABEL (label))
+    return;
 
   if (link_button->priv->visited)
     {
@@ -303,6 +305,7 @@ gtk_link_button_add (GtkContainer *container,
 {
   GTK_CONTAINER_CLASS (gtk_link_button_parent_class)->add (container, widget);
 
+  set_link_color (GTK_LINK_BUTTON (container));
   set_link_underline (GTK_LINK_BUTTON (container));
 }
 
