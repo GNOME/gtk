@@ -10337,5 +10337,38 @@ gtk_widget_get_window (GtkWidget *widget)
   return widget->window;
 }
 
+/**
+ * gtk_widget_get_monitor_num:
+ * @widget: a #GtkWidget
+ *
+ * Gets the monitor number for the widget. Returns -1 if the widget is
+ * not part of a top-level.
+ * 
+ * Returns: the monitor number
+ *
+ * Since: 2.14
+ **/
+gint
+gtk_widget_get_monitor_num (GtkWidget *widget)
+{
+  int monitor_num;
+  GtkWidget *toplevel;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), -1);
+
+  monitor_num = -1;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (toplevel != NULL)
+    {
+      if (GTK_WIDGET_TOPLEVEL (toplevel) && GTK_IS_WINDOW (toplevel))
+        {
+          monitor_num = gtk_window_get_monitor_num (GTK_WINDOW (toplevel));
+        }
+    }
+
+  return monitor_num;
+}
+
 #define __GTK_WIDGET_C__
 #include "gtkaliasdef.c"

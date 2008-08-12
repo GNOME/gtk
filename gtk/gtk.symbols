@@ -5018,6 +5018,7 @@ gtk_widget_unmap
 gtk_widget_unparent
 gtk_widget_unrealize
 gtk_widget_get_window
+gtk_widget_get_monitor_num
 #endif
 #endif
 
@@ -5142,6 +5143,7 @@ gtk_window_stick
 gtk_window_unfullscreen
 gtk_window_unmaximize
 gtk_window_unstick
+gtk_window_get_monitor_num
 #endif
 #endif
 

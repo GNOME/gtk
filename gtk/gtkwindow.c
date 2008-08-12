@@ -97,6 +97,7 @@ enum {
   /* Readonly properties */
   PROP_IS_ACTIVE,
   PROP_HAS_TOPLEVEL_FOCUS,
+  PROP_MONITOR_NUM,
   
   /* Writeonly properties */
   PROP_STARTUP_ID,
@@ -190,6 +191,8 @@ struct _GtkWindowPrivate
   gdouble opacity;
 
   gchar *startup_id;
+
+  gint monitor_num;
 };
 
 static void gtk_window_dispose            (GObject           *object);
@@ -297,6 +300,8 @@ static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
 static void        gtk_window_free_key_hash       (GtkWindow   *window);
 static void	   gtk_window_on_composited_changed (GdkScreen *screen,
 						     GtkWindow *window);
+static void gtk_window_update_monitor_num (GtkWindow *window);
+
 
 static GSList      *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
@@ -778,6 +783,24 @@ gtk_window_class_init (GtkWindowClass *klass)
 							1.0,
 							GTK_PARAM_READWRITE));
 
+  /**
+   * GtkWindow:monitor-num:
+   *
+   * The monitor number for which the largest area of the window
+   * resides. -1 if window is not realized.
+   *
+   * Since: 2.14
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_MONITOR_NUM,
+				   g_param_spec_int ("monitor-num",
+                                                     P_("Monitor Number"),
+                                                     P_("The monitor number for which the largest area of the window resides"),
+                                                     -1,
+                                                     G_MAXINT,
+                                                     -1,
+                                                     GTK_PARAM_READABLE));
+
   window_signals[SET_FOCUS] =
     g_signal_new (I_("set-focus"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -929,6 +952,7 @@ gtk_window_init (GtkWindow *window)
   priv->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
   priv->opacity = 1.0;
   priv->startup_id = NULL;
+  priv->monitor_num = -1;
 
   colormap = _gtk_widget_peek_colormap ();
   if (colormap)
@@ -1164,6 +1188,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_OPACITY:
       g_value_set_double (value, gtk_window_get_opacity (window));
+      break;
+    case PROP_MONITOR_NUM:
+      g_value_set_int (value, priv->monitor_num);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -4666,6 +4693,7 @@ gtk_window_unmap (GtkWidget *widget)
   window->stick_initially = (state & GDK_WINDOW_STATE_STICKY) != 0;
   priv->above_initially = (state & GDK_WINDOW_STATE_ABOVE) != 0;
   priv->below_initially = (state & GDK_WINDOW_STATE_BELOW) != 0;
+  priv->monitor_num = -1;
 }
 
 static void
@@ -5006,6 +5034,29 @@ gtk_window_frame_event (GtkWindow *window, GdkEvent *event)
   return FALSE;
 }
 
+static void
+gtk_window_update_monitor_num (GtkWindow *window)
+{
+  GdkWindow *gdk_window;
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  gint prev_monitor_num;
+
+  prev_monitor_num = priv->monitor_num;
+
+  gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+  if (gdk_window == NULL)
+    priv->monitor_num = -1;
+  else
+    priv->monitor_num = gdk_screen_get_monitor_at_window (window->screen, gdk_window);
+
+  if (priv->monitor_num != prev_monitor_num &&
+      priv->monitor_num != -1)
+    {
+      /*g_debug ("monitor num changed from %d to %d for top-level %p (screen %p)", prev_monitor_num, priv->monitor_num, window, window->screen);*/
+      g_object_notify (G_OBJECT (window), "monitor-num");
+    }
+}
+
 static gint
 gtk_window_configure_event (GtkWidget         *widget,
 			    GdkEventConfigure *event)
@@ -5030,6 +5081,8 @@ gtk_window_configure_event (GtkWidget         *widget,
       window->configure_request_count -= 1;
       gdk_window_thaw_toplevel_updates_libgtk_only (widget->window);
     }
+
+  gtk_window_update_monitor_num (window);
   
   /* As an optimization, we avoid a resize when possible.
    *
@@ -8442,6 +8495,29 @@ gtk_window_set_default_icon_from_file (const gchar *filename,
 }
 
 #endif
+
+/**
+ * gtk_window_get_monitor_num:
+ * @window: a #GtkWindow
+ *
+ * Gets the monitor number for which the largest area of the window
+ * resides. If the window is not realized, -1 is returned.
+ *
+ * Returns: the monitor number
+ *
+ * Since: 2.14
+ **/
+gint
+gtk_window_get_monitor_num (GtkWindow *window)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), -1);
+
+  priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  return priv->monitor_num;
+}
 
 #define __GTK_WINDOW_C__
 #include "gtkaliasdef.c"

@@ -743,6 +743,8 @@ void gtk_widget_style_get          (GtkWidget	     *widget,
 				    ...) G_GNUC_NULL_TERMINATED;
 
 
+gint gtk_widget_get_monitor_num (GtkWidget *widget);
+
 /* Set certain default values to be used at widget creation time.
  */
 void	     gtk_widget_set_default_colormap (GdkColormap *colormap);

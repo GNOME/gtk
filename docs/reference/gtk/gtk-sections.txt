@@ -5493,6 +5493,7 @@ gtk_widget_set_has_tooltip
 gtk_widget_trigger_tooltip_query
 gtk_widget_get_snapshot
 gtk_widget_get_window
+gtk_widget_get_monitor_num
 <SUBSECTION>
 gtk_requisition_copy
 gtk_requisition_free
@@ -5614,6 +5615,7 @@ gtk_window_set_icon_name
 gtk_window_set_auto_startup_notification
 gtk_window_get_opacity
 gtk_window_set_opacity
+gtk_window_get_monitor_num
 <SUBSECTION Standard>
 GTK_WINDOW
 GTK_IS_WINDOW
