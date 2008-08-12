@@ -104,6 +104,9 @@ void gdk_pango_renderer_set_override_color (GdkPangoRenderer *gdk_renderer,
 
 /************************************************************************/
 
+PangoContext *gdk_pango_context_get_for_screen_for_monitor (GdkScreen    *screen,
+                                                            gint          monitor_num);
+
 PangoContext *gdk_pango_context_get_for_screen (GdkScreen    *screen);
 #ifndef GDK_MULTIHEAD_SAFE
 PangoContext *gdk_pango_context_get            (void);

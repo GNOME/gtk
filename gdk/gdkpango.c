@@ -1496,5 +1496,41 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
   return context;
 }
 
+/**
+ * gdk_pango_context_get_for_screen_for_monitor:
+ * @screen: the #GdkScreen for which the context is to be created.
+ * @monitor_num: monitor number or -1 to use default monitor
+ * 
+ * Like gdk_pango_context_get_for_screen() but also takes a monitor
+ * number.
+ * 
+ * Return value: a new #PangoContext for @screen
+ *
+ * Since: 2.14
+ **/
+PangoContext *
+gdk_pango_context_get_for_screen_for_monitor (GdkScreen *screen,
+                                              gint monitor_num)
+{
+  PangoFontMap *fontmap;
+  PangoContext *context;
+  const cairo_font_options_t *options;
+  double dpi;
+  
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  fontmap = pango_cairo_font_map_get_default ();
+  
+  context = pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (fontmap));
+
+  options = gdk_screen_get_font_options_for_monitor (screen, monitor_num);
+  pango_cairo_context_set_font_options (context, options);
+
+  dpi = gdk_screen_get_resolution_for_monitor (screen, monitor_num);
+  pango_cairo_context_set_resolution (context, dpi);
+
+  return context;
+}
+
 #define __GDK_PANGO_C__
 #include "gdkaliasdef.c"

@@ -118,9 +118,22 @@ void                        gdk_screen_set_font_options (GdkScreen              
 							 const cairo_font_options_t *options);
 const cairo_font_options_t *gdk_screen_get_font_options (GdkScreen                  *screen);
 
+void                        gdk_screen_set_font_options_for_monitor (GdkScreen                  *screen,
+                                                                     gint                        monitor_num,
+                                                                     const cairo_font_options_t *options);
+const cairo_font_options_t *gdk_screen_get_font_options_for_monitor (GdkScreen                  *screen,
+                                                                     gint                        monitor_num);
+
 void    gdk_screen_set_resolution (GdkScreen *screen,
 				   gdouble    dpi);
 gdouble gdk_screen_get_resolution (GdkScreen *screen);
+
+gdouble gdk_screen_get_resolution_for_monitor (GdkScreen *screen,
+                                               gint       monitor_num);
+
+void    gdk_screen_set_resolution_for_monitor (GdkScreen *screen,
+                                               gint       monitor_num,
+                                               gdouble    dpi);
 
 GdkWindow *gdk_screen_get_active_window (GdkScreen *screen);
 GList     *gdk_screen_get_window_stack  (GdkScreen *screen);

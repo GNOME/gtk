@@ -429,6 +429,25 @@ gdk_screen_set_font_options (GdkScreen                  *screen,
 }
 
 /**
+ * gdk_screen_set_font_options_for_monitor:
+ * @screen: a #GdkScreen
+ * @options: a #cairo_font_options_t, or %NULL to unset any
+ *   previously set default font options.
+ *
+ * Like gdk_screen_set_font_options() but per monitor.
+ *
+ * Since: 2.14
+ **/
+void
+gdk_screen_set_font_options_for_monitor (GdkScreen                  *screen,
+                                         gint                        monitor_num,
+                                         const cairo_font_options_t *options)
+{
+    /* TODO: need to implement per-monitor font options */
+    return gdk_screen_set_font_options (screen, options);
+}
+
+/**
  * gdk_screen_get_font_options:
  * @screen: a #GdkScreen
  * 
@@ -445,6 +464,26 @@ gdk_screen_get_font_options (GdkScreen *screen)
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
   return screen->font_options;
+}
+
+/**
+ * gdk_screen_get_font_options_for_monitor:
+ * @screen: a #GdkScreen
+ * @monitor_num: monitor number or -1 for default monitor
+ * 
+ * Like gdk_screen_get_font_options() but per monitor.
+ * 
+ * Return value: the current font options, or %NULL if no default
+ *  font options have been set.
+ *
+ * Since: 2.14
+ **/
+const cairo_font_options_t *
+gdk_screen_get_font_options_for_monitor (GdkScreen *screen,
+                                         gint       monitor_num)
+{
+    /* TODO: need to implement per-monitor font options */
+    return gdk_screen_get_font_options (screen);
 }
 
 /**
@@ -495,6 +534,50 @@ gdk_screen_get_resolution (GdkScreen *screen)
   g_return_val_if_fail (GDK_IS_SCREEN (screen), -1.0);
 
   return screen->resolution;
+}
+
+/**
+ * gdk_screen_get_resolution_for_monitor:
+ * @screen: a #GdkScreen
+ * @monitor_num: monitor number or -1 for default monitor
+ *
+ * Like gdk_screen_get_resolution() but per monitor.
+ * 
+ * Returns: the current resolution or -1 if no resolution has been
+ * set.
+ *
+ * Since: 2.14
+ **/
+gdouble
+gdk_screen_get_resolution_for_monitor (GdkScreen *screen,
+                                       gint       monitor_num)
+{
+#if 0
+  /* Nifty trick to test RI - monitor 0 will have 3 times the user configured DPI */
+  return (monitor_num == 0 ? 3.0 : 1.0) * gdk_screen_get_resolution (screen);
+#endif
+  /* TODO: need to implement per-monitor resolution */
+  return gdk_screen_get_resolution (screen);
+}
+
+/**
+ * gdk_screen_set_resolution_for_monitor:
+ * @screen: a #GdkScreen
+ * @monitor_num: monitor number
+ * @dpi: the resolution in "dots per inch". (Physical inches aren't actually
+ *   involved; the terminology is conventional.)
+ *
+ * Like gdk_screen_set_resolution() but per monitor.
+ *
+ * Since: 2.14
+ **/
+void
+gdk_screen_set_resolution_for_monitor (GdkScreen *screen,
+                                       gint       monitor_num,
+                                       gdouble    dpi)
+{
+  /* TODO: need to implement per-monitor resolution */
+  gdk_screen_set_resolution (screen, dpi);
 }
 
 static void
