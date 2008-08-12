@@ -946,6 +946,7 @@ main (int argc, char **argv)
     }
   /* -- End of hack -- */
   
+  gtk_enable_resolution_independence ();
   gtk_init (&argc, &argv);
 
   setup_default_icon ();
