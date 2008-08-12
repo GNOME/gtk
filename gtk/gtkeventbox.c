@@ -450,8 +450,7 @@ gtk_event_box_unrealize (GtkWidget *widget)
       priv->event_window = NULL;
     }
 
-  if (GTK_WIDGET_CLASS (gtk_event_box_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_event_box_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_event_box_parent_class)->unrealize (widget);
 }
 
 static void

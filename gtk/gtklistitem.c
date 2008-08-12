@@ -427,8 +427,7 @@ gtk_list_item_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  /*if (GTK_WIDGET_CLASS (parent_class)->realize)
-    GTK_WIDGET_CLASS (parent_class)->realize (widget);*/
+  /*GTK_WIDGET_CLASS (parent_class)->realize (widget);*/
 
   g_return_if_fail (GTK_IS_LIST_ITEM (widget));
 

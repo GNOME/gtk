@@ -1,5 +1,41 @@
 2008-08-12  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkaccellabel.c
+	* gtk/gtkcalendar.c
+	* gtk/gtkclist.c
+	* gtk/gtkentry.c
+	* gtk/gtkeventbox.c
+	* gtk/gtkfilechooserbutton.c
+	* gtk/gtkfilechooserdefault.c
+	* gtk/gtkhandlebox.c
+	* gtk/gtkhsv.c
+	* gtk/gtkiconview.c
+	* gtk/gtkimage.c
+	* gtk/gtklayout.c
+	* gtk/gtklistitem.c
+	* gtk/gtkmenuitem.c
+	* gtk/gtkmessagedialog.c
+	* gtk/gtknotebook.c
+	* gtk/gtkpaned.c
+	* gtk/gtkpathbar.c
+	* gtk/gtkplug.c
+	* gtk/gtkprintunixdialog.c
+	* gtk/gtkrange.c
+	* gtk/gtkrecentchooserdefault.c
+	* gtk/gtkruler.c
+	* gtk/gtksocket.c
+	* gtk/gtktext.c
+	* gtk/gtktextview.c
+	* gtk/gtktoolbar.c
+	* gtk/gtktreeitem.c
+	* gtk/gtktreeview.c
+	* gtk/gtkviewport.c
+	* gtk/gtkwin32embedwidget.c: chain up unconditionally in
+	realize(), unrealize(), map(), unmap(), style_set(),
+	key_press_event() and size_request()
+
+2008-08-12  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkwidget.c: change names of default implementations of
 	our own signals to consistently contain "real":
 

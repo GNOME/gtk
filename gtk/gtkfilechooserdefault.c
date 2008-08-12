@@ -5835,8 +5835,7 @@ gtk_file_chooser_default_style_set (GtkWidget *widget,
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
   profile_msg ("    parent class style_set start", NULL);
-  if (GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->style_set)
-    GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->style_set (widget, previous_style);
+  GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->style_set (widget, previous_style);
   profile_msg ("    parent class style_set end", NULL);
 
   if (gtk_widget_has_screen (GTK_WIDGET (impl)))

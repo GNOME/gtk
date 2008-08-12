@@ -330,9 +330,8 @@ gtk_hsv_unrealize (GtkWidget *widget)
   
   g_object_unref (priv->gc);
   priv->gc = NULL;
-  
-  if (GTK_WIDGET_CLASS (gtk_hsv_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_hsv_parent_class)->unrealize (widget);
+
+  GTK_WIDGET_CLASS (gtk_hsv_parent_class)->unrealize (widget);
 }
 
 /* Size_request handler for the HSV color selector */

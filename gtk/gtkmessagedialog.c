@@ -892,8 +892,7 @@ gtk_message_dialog_style_set (GtkWidget *widget,
 
   setup_primary_label_font (dialog);
 
-  if (GTK_WIDGET_CLASS (gtk_message_dialog_parent_class)->style_set)
-    (GTK_WIDGET_CLASS (gtk_message_dialog_parent_class)->style_set) (widget, prev_style);
+  GTK_WIDGET_CLASS (gtk_message_dialog_parent_class)->style_set (widget, prev_style);
 }
 
 #define __GTK_MESSAGE_DIALOG_C__

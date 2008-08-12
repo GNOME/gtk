@@ -1159,8 +1159,7 @@ gtk_file_chooser_button_map (GtkWidget *widget)
       priv->folder_has_been_set = TRUE;
     }
 
-  if (GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->map)
-    GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->map (widget);
+  GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->map (widget);
 }
 
 static gboolean
@@ -1369,9 +1368,8 @@ static void
 gtk_file_chooser_button_style_set (GtkWidget *widget,
 				   GtkStyle  *old_style)
 {
-  if (GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->style_set)
-    GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->style_set (widget,
-									old_style);
+  GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->style_set (widget,
+								      old_style);
 
   if (gtk_widget_has_screen (widget))
     change_icon_theme (GTK_FILE_CHOOSER_BUTTON (widget));

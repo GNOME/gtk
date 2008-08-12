@@ -1458,8 +1458,7 @@ gtk_image_unmap (GtkWidget *widget)
 {
   gtk_image_reset_anim_iter (GTK_IMAGE (widget));
 
-  if (GTK_WIDGET_CLASS (gtk_image_parent_class)->unmap)
-    GTK_WIDGET_CLASS (gtk_image_parent_class)->unmap (widget);
+  GTK_WIDGET_CLASS (gtk_image_parent_class)->unmap (widget);
 }
 
 static void
@@ -1467,8 +1466,7 @@ gtk_image_unrealize (GtkWidget *widget)
 {
   gtk_image_reset_anim_iter (GTK_IMAGE (widget));
 
-  if (GTK_WIDGET_CLASS (gtk_image_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_image_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_image_parent_class)->unrealize (widget);
 }
 
 static gint
@@ -2228,9 +2226,8 @@ gtk_image_style_set (GtkWidget      *widget,
 
   image = GTK_IMAGE (widget);
 
-  if (GTK_WIDGET_CLASS (gtk_image_parent_class)->style_set)
-    GTK_WIDGET_CLASS (gtk_image_parent_class)->style_set (widget, prev_style);
-  
+  GTK_WIDGET_CLASS (gtk_image_parent_class)->style_set (widget, prev_style);
+
   icon_theme_changed (image);
 }
 

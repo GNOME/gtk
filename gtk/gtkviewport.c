@@ -637,8 +637,7 @@ gtk_viewport_unrealize (GtkWidget *widget)
   gdk_window_destroy (viewport->bin_window);
   viewport->bin_window = NULL;
 
-  if (GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unrealize (widget);
 }
 
 static void

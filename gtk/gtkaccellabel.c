@@ -266,9 +266,8 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
   PangoLayout *layout;
   gint width;
-  
-  if (GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->size_request)
-    GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->size_request (widget, requisition);
+
+  GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->size_request (widget, requisition);
 
   layout = gtk_widget_create_pango_layout (widget, gtk_accel_label_get_string (accel_label));
   pango_layout_get_pixel_size (layout, &width, NULL);

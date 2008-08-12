@@ -1384,8 +1384,7 @@ gtk_entry_unrealize (GtkWidget *widget)
       entry->popup_menu = NULL;
     }
 
-  if (GTK_WIDGET_CLASS (gtk_entry_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_entry_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_entry_parent_class)->unrealize (widget);
 }
 
 void

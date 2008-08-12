@@ -4095,9 +4095,10 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
       retval = TRUE;
     }
   /* Binding set */
-  else if (GTK_WIDGET_CLASS (gtk_text_view_parent_class)->key_press_event &&
- 	   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->key_press_event (widget, event))
-    retval = TRUE;
+  else if (GTK_WIDGET_CLASS (gtk_text_view_parent_class)->key_press_event (widget, event))
+    {
+      retval = TRUE;
+    }
   /* use overall editability not can_insert, more predictable for users */
   else if (text_view->editable &&
            (event->keyval == GDK_Return ||

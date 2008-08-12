@@ -773,8 +773,7 @@ gtk_paned_unrealize (GtkWidget *widget)
   gtk_paned_set_saved_focus (paned, NULL);
   gtk_paned_set_first_paned (paned, NULL);
 
-  if (GTK_WIDGET_CLASS (gtk_paned_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_paned_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_paned_parent_class)->unrealize (widget);
 }
 
 static void

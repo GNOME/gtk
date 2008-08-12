@@ -407,8 +407,7 @@ gtk_socket_unrealize (GtkWidget *widget)
       _gtk_socket_end_embedding (socket);
     }
 
-  if (GTK_WIDGET_CLASS (gtk_socket_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_socket_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_socket_parent_class)->unrealize (widget);
 }
 
 static void

@@ -139,8 +139,7 @@ gtk_win32_embed_widget_unrealize (GtkWidget *widget)
       embed_widget->parent_window = NULL;
     }
 
-  if (GTK_WIDGET_CLASS (gtk_win32_embed_widget_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_win32_embed_widget_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_win32_embed_widget_parent_class)->unrealize (widget);
 }
 
 static LRESULT CALLBACK

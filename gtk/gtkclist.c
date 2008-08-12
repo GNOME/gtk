@@ -4662,8 +4662,7 @@ gtk_clist_unrealize (GtkWidget *widget)
   clist->fg_gc = NULL;
   clist->bg_gc = NULL;
 
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
 }
 
 static void
@@ -4817,14 +4816,9 @@ static void
 gtk_clist_style_set (GtkWidget *widget,
 		     GtkStyle  *previous_style)
 {
-  GtkCList *clist;
+  GtkCList *clist = GTK_CLIST (widget);
 
-  g_return_if_fail (GTK_IS_CLIST (widget));
-
-  if (GTK_WIDGET_CLASS (parent_class)->style_set)
-    GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
-
-  clist = GTK_CLIST (widget);
+  GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
 
   if (GTK_WIDGET_REALIZED (widget))
     {

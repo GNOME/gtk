@@ -925,9 +925,8 @@ static void
 gtk_recent_chooser_default_map (GtkWidget *widget)
 {
   GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (widget);
-  
-  if (GTK_WIDGET_CLASS (_gtk_recent_chooser_default_parent_class)->map)
-    GTK_WIDGET_CLASS (_gtk_recent_chooser_default_parent_class)->map (widget);
+
+  GTK_WIDGET_CLASS (_gtk_recent_chooser_default_parent_class)->map (widget);
 
   /* reloads everything */
   reload_recent_items (impl);

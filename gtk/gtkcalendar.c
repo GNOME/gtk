@@ -1657,8 +1657,7 @@ gtk_calendar_unrealize (GtkWidget *widget)
       priv->day_name_win = NULL;      
     }
 
-  if (GTK_WIDGET_CLASS (gtk_calendar_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_calendar_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_calendar_parent_class)->unrealize (widget);
 }
 
 static gchar*

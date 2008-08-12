@@ -853,8 +853,7 @@ gtk_menu_item_unrealize (GtkWidget *widget)
   gdk_window_destroy (menu_item->event_window);
   menu_item->event_window = NULL;
 
-  if (GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->unrealize (widget);
 }
 
 static void

@@ -1231,9 +1231,7 @@ gtk_icon_view_unrealize (GtkWidget *widget)
   gdk_window_destroy (icon_view->priv->bin_window);
   icon_view->priv->bin_window = NULL;
 
-  /* GtkWidget::unrealize destroys children and widget->window */
-  if (GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->unrealize (widget);
 }
 
 static void

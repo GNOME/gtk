@@ -861,9 +861,8 @@ gtk_toolbar_unrealize (GtkWidget *widget)
       gdk_window_destroy (priv->event_window);
       priv->event_window = NULL;
     }
-  
-  if (GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->unrealize (widget);
+
+  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->unrealize (widget);
 }
 
 static gint

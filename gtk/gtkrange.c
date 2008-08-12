@@ -1294,8 +1294,7 @@ gtk_range_unrealize (GtkWidget *widget)
   gdk_window_destroy (range->event_window);
   range->event_window = NULL;
 
-  if (GTK_WIDGET_CLASS (gtk_range_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_range_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_range_parent_class)->unrealize (widget);
 }
 
 static void

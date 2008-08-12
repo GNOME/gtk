@@ -648,8 +648,7 @@ static void
 gtk_path_bar_style_set (GtkWidget *widget,
 			GtkStyle  *previous_style)
 {
-  if (GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->style_set)
-    GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->style_set (widget, previous_style);
+  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->style_set (widget, previous_style);
 
   gtk_path_bar_check_icon_theme (GTK_PATH_BAR (widget));
 }

@@ -1938,9 +1938,7 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       priv->grid_line_gc = NULL;
     }
 
-  /* GtkWidget::unrealize destroys children and widget->window */
-  if (GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize)
-    GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize (widget);
 }
 
 /* GtkWidget::size_request helper */

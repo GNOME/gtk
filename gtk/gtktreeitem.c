@@ -442,8 +442,7 @@ gtk_tree_item_remove_pixmaps (GtkTreeItem *tree_item)
 static void
 gtk_tree_item_realize (GtkWidget *widget)
 {
-  if (GTK_WIDGET_CLASS (parent_class)->realize)
-    GTK_WIDGET_CLASS (parent_class)->realize (widget);
+  GTK_WIDGET_CLASS (parent_class)->realize (widget);
 
   gdk_window_set_background (widget->window, 
 			     &widget->style->base[GTK_STATE_NORMAL]);

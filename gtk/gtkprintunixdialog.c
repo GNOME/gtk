@@ -1630,8 +1630,7 @@ static void
 gtk_print_unix_dialog_style_set (GtkWidget *widget,
 				 GtkStyle  *previous_style)
 {
-  if (GTK_WIDGET_CLASS (gtk_print_unix_dialog_parent_class)->style_set)
-    GTK_WIDGET_CLASS (gtk_print_unix_dialog_parent_class)->style_set (widget, previous_style);
+  GTK_WIDGET_CLASS (gtk_print_unix_dialog_parent_class)->style_set (widget, previous_style);
 
   if (gtk_widget_has_screen (widget))
     {
