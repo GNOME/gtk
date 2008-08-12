@@ -1,3 +1,8 @@
+2008-08-12  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkstatusicon.c (gtk_status_icon_get_gicon): use
+	g_return_val_if_fail() now that the function has a return value.
+
 2008-08-12  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkaccellabel.c
