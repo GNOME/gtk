@@ -3061,7 +3061,7 @@ shortcuts_drag_data_delete_cb (GtkWidget             *widget,
 			       GdkDragContext        *context,
 			       GtkFileChooserDefault *impl)
 {
-  g_signal_stop_emission_by_name (widget, "drag_data_delete");
+  g_signal_stop_emission_by_name (widget, "drag-data-delete");
 }
 
 #if 0
@@ -3248,7 +3248,7 @@ shortcuts_drag_leave_cb (GtkWidget             *widget,
 				   NULL,
 				   GTK_TREE_VIEW_DROP_BEFORE);
 
-  g_signal_stop_emission_by_name (widget, "drag_leave");
+  g_signal_stop_emission_by_name (widget, "drag-leave");
 }
 
 /* Computes the appropriate row and position for dropping */
@@ -3356,7 +3356,7 @@ shortcuts_drag_motion_cb (GtkWidget             *widget,
 
  out:
 
-  g_signal_stop_emission_by_name (widget, "drag_motion");
+  g_signal_stop_emission_by_name (widget, "drag-motion");
 
   if (action != 0)
     {
@@ -3380,7 +3380,7 @@ shortcuts_drag_drop_cb (GtkWidget             *widget,
   shortcuts_cancel_drag_outside_idle (impl);
 #endif
 
-  g_signal_stop_emission_by_name (widget, "drag_drop");
+  g_signal_stop_emission_by_name (widget, "drag-drop");
   return TRUE;
 }
 
@@ -3515,7 +3515,7 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   else if (selection_data->target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
     shortcuts_reorder (impl, position);
 
-  g_signal_stop_emission_by_name (widget, "drag_data_received");
+  g_signal_stop_emission_by_name (widget, "drag-data-received");
 }
 
 /* Callback used to display a tooltip in the shortcuts tree */
@@ -4215,7 +4215,7 @@ file_list_drag_data_received_cb (GtkWidget          *widget,
 				   data);
     }
 
-  g_signal_stop_emission_by_name (widget, "drag_data_received");
+  g_signal_stop_emission_by_name (widget, "drag-data-received");
 }
 
 /* Don't do anything with the drag_drop signal */
@@ -4227,7 +4227,7 @@ file_list_drag_drop_cb (GtkWidget             *widget,
 			guint                  time_,
 			GtkFileChooserDefault *impl)
 {
-  g_signal_stop_emission_by_name (widget, "drag_drop");
+  g_signal_stop_emission_by_name (widget, "drag-drop");
   return TRUE;
 }
 
@@ -4241,7 +4241,7 @@ file_list_drag_motion_cb (GtkWidget             *widget,
                           guint                  time_,
                           GtkFileChooserDefault *impl)
 {
-  g_signal_stop_emission_by_name (widget, "drag_motion");
+  g_signal_stop_emission_by_name (widget, "drag-motion");
   return TRUE;
 }
 

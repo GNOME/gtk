@@ -161,7 +161,7 @@ _gtk_recent_chooser_set_delegate (GtkRecentChooser *receiver,
   		    G_CALLBACK (delegate_notify), receiver);
   g_signal_connect (delegate, "selection-changed",
   		    G_CALLBACK (delegate_selection_changed), receiver);
-  g_signal_connect (delegate, "item_activated",
+  g_signal_connect (delegate, "item-activated",
   		    G_CALLBACK (delegate_item_activated), receiver);
 }
 

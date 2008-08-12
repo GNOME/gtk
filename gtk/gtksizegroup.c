@@ -618,7 +618,7 @@ do_size_request (GtkWidget *widget)
       gtk_widget_ensure_style (widget);      
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_REQUEST_NEEDED);
       g_signal_emit_by_name (widget,
-			     "size_request",
+			     "size-request",
 			     &widget->requisition);
     }
 }

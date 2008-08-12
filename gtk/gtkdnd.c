@@ -1753,7 +1753,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	  new_data.toplevel = FALSE;
 	  
 	  /* need to reference children temporarily in case the
-	   * ::drag_motion/::drag_drop callbacks change the widget heirarchy.
+	   * ::drag-motion/::drag-drop callbacks change the widget hierarchy.
 	   */
 	  gtk_container_forall (GTK_CONTAINER (widget), prepend_and_ref_widget, &children);
 	  for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
@@ -1768,7 +1768,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	}
 
       /* If not, and this widget is registered as a drop site, check to
-       * emit "drag_motion" to check if we are actually in
+       * emit "drag-motion" to check if we are actually in
        * a drop site.
        */
       if (!data->found &&
@@ -1779,7 +1779,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
 					data->x - x_offset - allocation_to_window_x,
 					data->y - y_offset - allocation_to_window_y,
 					data->time);
-	  /* If so, send a "drag_leave" to the last widget */
+	  /* If so, send a "drag-leave" to the last widget */
 	  if (data->found)
 	    {
 	      if (data->info->widget && data->info->widget != widget)
@@ -2265,7 +2265,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   info->icon_window = NULL;
   info->destroy_icon = FALSE;
 
-  /* Set cur_x, cur_y here so if the "drag_begin" signal shows
+  /* Set cur_x, cur_y here so if the "drag-begin" signal shows
    * the drag icon, it will be in the right place
    */
   if (event && event->type == GDK_MOTION_NOTIFY)
@@ -2927,7 +2927,7 @@ gtk_drag_set_icon_window (GdkDragContext *context,
  * 
  * Changes the icon for a widget to a given widget. GTK+
  * will not destroy the icon, so if you don't want
- * it to persist, you should connect to the "drag_end" 
+ * it to persist, you should connect to the "drag-end" 
  * signal and destroy it yourself.
  **/
 void 
@@ -4011,7 +4011,7 @@ gtk_drag_cancel (GtkDragSourceInfo *info, GtkDragResult result, guint32 time)
 
 /*************************************************************
  * gtk_drag_motion_cb:
- *     "motion_notify_event" callback during drag.
+ *     "motion-notify-event" callback during drag.
  *   arguments:
  *     
  *   results:
@@ -4044,7 +4044,7 @@ gtk_drag_motion_cb (GtkWidget      *widget,
 
 /*************************************************************
  * gtk_drag_key_cb:
- *     "key_press/release_event" callback during drag.
+ *     "key-press/release-event" callback during drag.
  *   arguments:
  *     
  *   results:
@@ -4170,7 +4170,7 @@ gtk_drag_grab_notify_cb (GtkWidget        *widget,
 
 /*************************************************************
  * gtk_drag_button_release_cb:
- *     "button_release_event" callback during drag.
+ *     "button-release-event" callback during drag.
  *   arguments:
  *     
  *   results:

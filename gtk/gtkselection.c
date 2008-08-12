@@ -1008,7 +1008,7 @@ gtk_selection_remove_all (GtkWidget *widget)
        In emergency, you could use #GDK_CURRENT_TIME
  * 
  * Requests the contents of a selection. When received, 
- * a "selection_received" signal will be generated.
+ * a "selection-received" signal will be generated.
  * 
  * Return value: %TRUE if requested succeeded. %FALSE if we could not process
  *          request. (e.g., there was already a request in process for
@@ -2635,7 +2635,7 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
 
 /*************************************************************
  * _gtk_selection_notify:
- *     Handler for "selection_notify_event" signals on windows
+ *     Handler for "selection-notify-event" signals on windows
  *     where a retrieval is currently in process. The selection
  *     owner has responded to our conversion request.
  *   arguments:
@@ -2724,7 +2724,7 @@ _gtk_selection_notify (GtkWidget	       *widget,
 
 /*************************************************************
  * _gtk_selection_property_notify:
- *     Handler for "property_notify_event" signals on windows
+ *     Handler for "property-notify-event" signals on windows
  *     where a retrieval is currently in process. The selection
  *     owner has added more data.
  *   arguments:
@@ -2879,7 +2879,7 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
 
 /*************************************************************
  * gtk_selection_retrieval_report:
- *     Emits a "selection_received" signal.
+ *     Emits a "selection-received" signal.
  *   arguments:
  *     info:	  information about the retrieval that completed
  *     buffer:	  buffer containing data (NULL => errror)
@@ -2905,7 +2905,7 @@ gtk_selection_retrieval_report (GtkRetrievalInfo *info,
   data.display = gtk_widget_get_display (info->widget);
   
   g_signal_emit_by_name (info->widget,
-			 "selection_received", 
+			 "selection-received", 
 			 &data, time);
 }
 
@@ -2940,7 +2940,7 @@ gtk_selection_invoke_handler (GtkWidget	       *widget,
       gtk_target_list_find (target_list, data->target, &info))
     {
       g_signal_emit_by_name (widget,
-			     "selection_get",
+			     "selection-get",
 			     data,
 			     info, time);
     }

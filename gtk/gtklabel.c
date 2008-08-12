@@ -4526,11 +4526,11 @@ gtk_label_do_popup (GtkLabel       *label,
     label->select_info->selection_anchor != label->select_info->selection_end;
 
 
-  append_action_signal (label, label->select_info->popup_menu, GTK_STOCK_CUT, "cut_clipboard",
+  append_action_signal (label, label->select_info->popup_menu, GTK_STOCK_CUT, "cut-clipboard",
                         FALSE);
-  append_action_signal (label, label->select_info->popup_menu, GTK_STOCK_COPY, "copy_clipboard",
+  append_action_signal (label, label->select_info->popup_menu, GTK_STOCK_COPY, "copy-clipboard",
                         have_selection);
-  append_action_signal (label, label->select_info->popup_menu, GTK_STOCK_PASTE, "paste_clipboard",
+  append_action_signal (label, label->select_info->popup_menu, GTK_STOCK_PASTE, "paste-clipboard",
                         FALSE);
   
   menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);

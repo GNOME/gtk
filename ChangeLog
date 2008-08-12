@@ -1,5 +1,40 @@
 2008-08-12  Sven Neumann  <sven@gimp.org>
 
+	* gtk/gtkaccellabel.c
+	* gtk/gtkaction.c
+	* gtk/gtkclist.c
+	* gtk/gtkcolorbutton.c
+	* gtk/gtkctree.c
+	* gtk/gtkdialog.c
+	* gtk/gtkdnd-quartz.c
+	* gtk/gtkdnd.c
+	* gtk/gtkentry.c
+	* gtk/gtkfilechooserdefault.c
+	* gtk/gtkfilesel.c
+	* gtk/gtkgamma.c
+	* gtk/gtkiconview.c
+	* gtk/gtkkeyhash.c
+	* gtk/gtklabel.c
+	* gtk/gtkmenu.c
+	* gtk/gtkmenubar.c
+	* gtk/gtkpaned.c
+	* gtk/gtkrecentchooserdialog.c
+	* gtk/gtkrecentchooserutils.c
+	* gtk/gtkselection.c
+	* gtk/gtksizegroup.c
+	* gtk/gtktextbtree.c
+	* gtk/gtktextbuffer.c
+	* gtk/gtktextview.c
+	* gtk/gtktoolbar.c
+	* gtk/gtktreemodel.c
+	* gtk/gtkuimanager.c
+	* gtk/gtkwindow-decorate.c
+	* gtk/gtkwindow.c: use canonical signal names in some more places
+	that I missed earlier. Also changed this in the documentation and
+	comments.
+
+2008-08-12  Sven Neumann  <sven@gimp.org>
+
 	* gtk/gtknotebook.c
 	* gtk/gtkradiotoolbutton.c: property nick and blurb should be
 	marked with P_(), not _().

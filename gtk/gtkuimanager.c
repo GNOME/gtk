@@ -726,10 +726,10 @@ gtk_ui_manager_insert_action_group (GtkUIManager   *self,
   self->private_data->action_groups = 
     g_list_insert (self->private_data->action_groups, action_group, pos);
   g_object_connect (action_group,
-		    "object_signal::connect_proxy", G_CALLBACK (cb_proxy_connect_proxy), self,
-		    "object_signal::disconnect_proxy", G_CALLBACK (cb_proxy_disconnect_proxy), self,
-		    "object_signal::pre_activate", G_CALLBACK (cb_proxy_pre_activate), self,
-		    "object_signal::post_activate", G_CALLBACK (cb_proxy_post_activate), self,
+		    "object-signal::connect-proxy", G_CALLBACK (cb_proxy_connect_proxy), self,
+		    "object-signal::disconnect-proxy", G_CALLBACK (cb_proxy_disconnect_proxy), self,
+		    "object-signal::pre-activate", G_CALLBACK (cb_proxy_pre_activate), self,
+		    "object-signal::post-activate", G_CALLBACK (cb_proxy_post_activate), self,
 		    NULL);
 
   /* dirty all nodes, as action bindings may change */
@@ -761,10 +761,10 @@ gtk_ui_manager_remove_action_group (GtkUIManager   *self,
     g_list_remove (self->private_data->action_groups, action_group);
 
   g_object_disconnect (action_group,
-                       "any_signal::connect_proxy", G_CALLBACK (cb_proxy_connect_proxy), self,
-                       "any_signal::disconnect_proxy", G_CALLBACK (cb_proxy_disconnect_proxy), self,
-                       "any_signal::pre_activate", G_CALLBACK (cb_proxy_pre_activate), self,
-                       "any_signal::post_activate", G_CALLBACK (cb_proxy_post_activate), self, 
+                       "any-signal::connect-proxy", G_CALLBACK (cb_proxy_connect_proxy), self,
+                       "any-signal::disconnect-proxy", G_CALLBACK (cb_proxy_disconnect_proxy), self,
+                       "any-signal::pre-activate", G_CALLBACK (cb_proxy_pre_activate), self,
+                       "any-signal::post-activate", G_CALLBACK (cb_proxy_post_activate), self, 
                        NULL);
   g_object_unref (action_group);
 

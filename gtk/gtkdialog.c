@@ -253,7 +253,7 @@ gtk_dialog_init (GtkDialog *dialog)
    * connection on the dialog.
    */
   g_signal_connect (dialog,
-                    "delete_event",
+                    "delete-event",
                     G_CALLBACK (gtk_dialog_delete_event_handler),
                     NULL);
 

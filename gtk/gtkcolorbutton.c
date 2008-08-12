@@ -582,11 +582,11 @@ gtk_color_button_init (GtkColorButton *color_button)
                        GDK_BUTTON1_MASK|GDK_BUTTON3_MASK,
                        drop_types, 1,
                        GDK_ACTION_COPY);
-  g_signal_connect (color_button, "drag_begin",
+  g_signal_connect (color_button, "drag-begin",
 		    G_CALLBACK (gtk_color_button_drag_begin), color_button);
-  g_signal_connect (color_button, "drag_data_received",
+  g_signal_connect (color_button, "drag-data-received",
                     G_CALLBACK (gtk_color_button_drag_data_received), color_button);
-  g_signal_connect (color_button, "drag_data_get",
+  g_signal_connect (color_button, "drag-data-get",
                     G_CALLBACK (gtk_color_button_drag_data_get), color_button);
 
   gtk_widget_pop_composite_child ();

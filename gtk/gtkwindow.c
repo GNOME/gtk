@@ -342,10 +342,10 @@ add_tab_bindings (GtkBindingSet    *binding_set,
 		  GtkDirectionType  direction)
 {
   gtk_binding_entry_add_signal (binding_set, GDK_Tab, modifiers,
-                                "move_focus", 1,
+                                "move-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, modifiers,
-                                "move_focus", 1,
+                                "move-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
 }
 
@@ -357,16 +357,16 @@ add_arrow_bindings (GtkBindingSet    *binding_set,
   guint keypad_keysym = keysym - GDK_Left + GDK_KP_Left;
   
   gtk_binding_entry_add_signal (binding_set, keysym, 0,
-                                "move_focus", 1,
+                                "move-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
   gtk_binding_entry_add_signal (binding_set, keysym, GDK_CONTROL_MASK,
-                                "move_focus", 1,
+                                "move-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
   gtk_binding_entry_add_signal (binding_set, keypad_keysym, 0,
-                                "move_focus", 1,
+                                "move-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
   gtk_binding_entry_add_signal (binding_set, keypad_keysym, GDK_CONTROL_MASK,
-                                "move_focus", 1,
+                                "move-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
 }
 
@@ -3842,7 +3842,7 @@ gtk_window_resize (GtkWindow *window,
  * because the size of the window may change between the time that you
  * get the size and the time that you perform some action assuming
  * that size is the current size. To avoid race conditions, connect to
- * "configure_event" on the window and adjust your size-dependent
+ * "configure-event" on the window and adjust your size-dependent
  * state to match the size delivered in the #GdkEventConfigure.
  *
  * Note 2: The returned size does <emphasis>not</emphasis> include the
@@ -6599,7 +6599,7 @@ gtk_window_present_with_time (GtkWindow *window,
  * in which case the window will be iconified before it ever appears
  * onscreen.
  *
- * You can track iconification via the "window_state_event" signal
+ * You can track iconification via the "window-state-event" signal
  * on #GtkWidget.
  * 
  **/
@@ -6634,7 +6634,7 @@ gtk_window_iconify (GtkWindow *window)
  * linkend="gtk-X11-arch">window manager</link>) could iconify it
  * again before your code which assumes deiconification gets to run.
  *
- * You can track iconification via the "window_state_event" signal
+ * You can track iconification via the "window-state-event" signal
  * on #GtkWidget.
  **/
 void
@@ -6672,7 +6672,7 @@ gtk_window_deiconify (GtkWindow *window)
  *
  * It's permitted to call this function before showing a window.
  *
- * You can track stickiness via the "window_state_event" signal
+ * You can track stickiness via the "window-state-event" signal
  * on #GtkWidget.
  * 
  **/
@@ -6708,7 +6708,7 @@ gtk_window_stick (GtkWindow *window)
  * manager</link>) could stick it again. But normally the window will
  * end up stuck. Just don't write code that crashes if not.
  *
- * You can track stickiness via the "window_state_event" signal
+ * You can track stickiness via the "window-state-event" signal
  * on #GtkWidget.
  * 
  **/
@@ -6749,7 +6749,7 @@ gtk_window_unstick (GtkWindow *window)
  * in which case the window will be maximized when it appears onscreen
  * initially.
  *
- * You can track maximization via the "window_state_event" signal
+ * You can track maximization via the "window-state-event" signal
  * on #GtkWidget.
  * 
  **/
@@ -6785,7 +6785,7 @@ gtk_window_maximize (GtkWindow *window)
  * managers honor requests to unmaximize. But normally the window will
  * end up unmaximized. Just don't write code that crashes if not.
  *
- * You can track maximization via the "window_state_event" signal
+ * You can track maximization via the "window-state-event" signal
  * on #GtkWidget.
  * 
  **/
@@ -6822,7 +6822,7 @@ gtk_window_unmaximize (GtkWindow *window)
  * windows. But normally the window will end up fullscreen. Just
  * don't write code that crashes if not.
  *
- * You can track the fullscreen state via the "window_state_event" signal
+ * You can track the fullscreen state via the "window-state-event" signal
  * on #GtkWidget.
  * 
  * Since: 2.2
@@ -6862,7 +6862,7 @@ gtk_window_fullscreen (GtkWindow *window)
  * windows. But normally the window will end up restored to its normal
  * state. Just don't write code that crashes if not.
  *
- * You can track the fullscreen state via the "window_state_event" signal
+ * You can track the fullscreen state via the "window-state-event" signal
  * on #GtkWidget.
  * 
  * Since: 2.2
@@ -6907,7 +6907,7 @@ gtk_window_unfullscreen (GtkWindow *window)
  * in which case the window will be kept above when it appears onscreen
  * initially.
  *
- * You can track the above state via the "window_state_event" signal
+ * You can track the above state via the "window-state-event" signal
  * on #GtkWidget.
  *
  * Note that, according to the <ulink 
@@ -6961,7 +6961,7 @@ gtk_window_set_keep_above (GtkWindow *window,
  * in which case the window will be kept below when it appears onscreen
  * initially.
  *
- * You can track the below state via the "window_state_event" signal
+ * You can track the below state via the "window-state-event" signal
  * on #GtkWidget.
  *
  * Note that, according to the <ulink 

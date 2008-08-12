@@ -1784,7 +1784,7 @@ gtk_icon_view_start_editing (GtkIconView         *icon_view,
       gtk_cell_editable_start_editing (GTK_CELL_EDITABLE (editable), 
 				       (GdkEvent *)event);
       gtk_widget_grab_focus (GTK_WIDGET (editable));
-      g_signal_connect (editable, "remove_widget",
+      g_signal_connect (editable, "remove-widget",
 			G_CALLBACK (gtk_icon_view_remove_widget), 
 			icon_view);
 
@@ -6634,7 +6634,7 @@ gtk_icon_view_drag_data_delete (GtkWidget      *widget,
   icon_view = GTK_ICON_VIEW (widget);
   model = gtk_icon_view_get_model (icon_view);
 
-  if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_SOURCE, "drag_data_delete"))
+  if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_SOURCE, "drag-data-delete"))
     return;
 
   if (!icon_view->priv->dest_set)
@@ -6751,7 +6751,7 @@ gtk_icon_view_drag_drop (GtkWidget      *widget,
   if (!icon_view->priv->dest_set)
     return FALSE;
 
-  if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_DEST, "drag_drop"))
+  if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_DEST, "drag-drop"))
     return FALSE;
 
   if (!set_destination (icon_view, context, x, y, &suggested_action, &target))
@@ -6804,7 +6804,7 @@ gtk_icon_view_drag_data_received (GtkWidget        *widget,
   icon_view = GTK_ICON_VIEW (widget);  
   model = gtk_icon_view_get_model (icon_view);
 
-  if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_DEST, "drag_data_received"))
+  if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_DEST, "drag-data-received"))
     return;
 
   if (!icon_view->priv->dest_set)

@@ -5331,11 +5331,11 @@ popup_targets_received (GtkClipboard     *clipboard,
 				 GTK_WIDGET (entry),
 				 popup_menu_detach);
       
-      append_action_signal (entry, entry->popup_menu, GTK_STOCK_CUT, "cut_clipboard",
+      append_action_signal (entry, entry->popup_menu, GTK_STOCK_CUT, "cut-clipboard",
 			    entry->editable && entry->current_pos != entry->selection_bound);
-      append_action_signal (entry, entry->popup_menu, GTK_STOCK_COPY, "copy_clipboard",
+      append_action_signal (entry, entry->popup_menu, GTK_STOCK_COPY, "copy-clipboard",
 			    entry->current_pos != entry->selection_bound);
-      append_action_signal (entry, entry->popup_menu, GTK_STOCK_PASTE, "paste_clipboard",
+      append_action_signal (entry, entry->popup_menu, GTK_STOCK_PASTE, "paste-clipboard",
 			    entry->editable && clipboard_contains_text);
       
       menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);

@@ -1720,7 +1720,7 @@ gtk_file_selection_insert_text (GtkWidget   *widget,
   if (!filename)
     {
       gdk_display_beep (gtk_widget_get_display (widget));
-      g_signal_stop_emission_by_name (widget, "insert_text");
+      g_signal_stop_emission_by_name (widget, "insert-text");
       return FALSE;
     }
   

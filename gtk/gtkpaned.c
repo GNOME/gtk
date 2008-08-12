@@ -148,9 +148,9 @@ add_tab_bindings (GtkBindingSet    *binding_set,
 		  GdkModifierType   modifiers)
 {
   gtk_binding_entry_add_signal (binding_set, GDK_Tab, modifiers,
-                                "toggle_handle_focus", 0);
+                                "toggle-handle-focus", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, modifiers,
-				"toggle_handle_focus", 0);
+				"toggle-handle-focus", 0);
 }
 
 static void
@@ -160,7 +160,7 @@ add_move_binding (GtkBindingSet   *binding_set,
 		  GtkScrollType    scroll)
 {
   gtk_binding_entry_add_signal (binding_set, keyval, mask,
-				"move_handle", 1,
+				"move-handle", 1,
 				GTK_TYPE_SCROLL_TYPE, scroll);
 }
 

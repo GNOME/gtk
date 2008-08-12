@@ -989,7 +989,7 @@ gtk_menu_init (GtkMenu *menu)
 						   "child", menu,
 						   NULL),
 				     "signal::event", gtk_menu_window_event, menu,
-				     "signal::size_request", gtk_menu_window_size_request, menu,
+				     "signal::size-request", gtk_menu_window_size_request, menu,
 				     "signal::destroy", gtk_widget_destroyed, &menu->toplevel,
 				     NULL);
   gtk_window_set_resizable (GTK_WINDOW (menu->toplevel), FALSE);

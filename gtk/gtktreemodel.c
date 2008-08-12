@@ -1463,7 +1463,7 @@ gtk_tree_model_get_valist (GtkTreeModel *tree_model,
  * @path: A #GtkTreePath pointing to the changed row
  * @iter: A valid #GtkTreeIter pointing to the changed row
  * 
- * Emits the "row_changed" signal on @tree_model.
+ * Emits the "row-changed" signal on @tree_model.
  **/
 void
 gtk_tree_model_row_changed (GtkTreeModel *tree_model,
@@ -1483,7 +1483,7 @@ gtk_tree_model_row_changed (GtkTreeModel *tree_model,
  * @path: A #GtkTreePath pointing to the inserted row
  * @iter: A valid #GtkTreeIter pointing to the inserted row
  * 
- * Emits the "row_inserted" signal on @tree_model
+ * Emits the "row-inserted" signal on @tree_model
  **/
 void
 gtk_tree_model_row_inserted (GtkTreeModel *tree_model,
@@ -1503,7 +1503,7 @@ gtk_tree_model_row_inserted (GtkTreeModel *tree_model,
  * @path: A #GtkTreePath pointing to the changed row
  * @iter: A valid #GtkTreeIter pointing to the changed row
  * 
- * Emits the "row_has_child_toggled" signal on @tree_model.  This should be
+ * Emits the "row-has-child-toggled" signal on @tree_model.  This should be
  * called by models after the child state of a node changes.
  **/
 void
@@ -1523,7 +1523,7 @@ gtk_tree_model_row_has_child_toggled (GtkTreeModel *tree_model,
  * @tree_model: A #GtkTreeModel
  * @path: A #GtkTreePath pointing to the previous location of the deleted row.
  * 
- * Emits the "row_deleted" signal on @tree_model.  This should be called by
+ * Emits the "row-deleted" signal on @tree_model.  This should be called by
  * models after a row has been removed.  The location pointed to by @path 
  * should be the location that the row previously was at.  It may not be a 
  * valid location anymore.
@@ -1549,7 +1549,7 @@ gtk_tree_model_row_deleted (GtkTreeModel *tree_model,
  *      to its old position before the re-ordering,
  *      i.e. @new_order<literal>[newpos] = oldpos</literal>.
  * 
- * Emits the "rows_reordered" signal on @tree_model.  This should be called by
+ * Emits the "rows-reordered" signal on @tree_model.  This should be called by
  * models when their rows have been reordered.  
  **/
 void

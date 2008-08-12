@@ -7609,13 +7609,13 @@ popup_targets_received (GtkClipboard     *clipboard,
       
       can_insert = gtk_text_iter_can_insert (&iter, text_view->editable);
       
-      append_action_signal (text_view, text_view->popup_menu, GTK_STOCK_CUT, "cut_clipboard",
+      append_action_signal (text_view, text_view->popup_menu, GTK_STOCK_CUT, "cut-clipboard",
 			    have_selection &&
                             range_contains_editable_text (&sel_start, &sel_end,
                                                           text_view->editable));
-      append_action_signal (text_view, text_view->popup_menu, GTK_STOCK_COPY, "copy_clipboard",
+      append_action_signal (text_view, text_view->popup_menu, GTK_STOCK_COPY, "copy-clipboard",
 			    have_selection);
-      append_action_signal (text_view, text_view->popup_menu, GTK_STOCK_PASTE, "paste_clipboard",
+      append_action_signal (text_view, text_view->popup_menu, GTK_STOCK_PASTE, "paste-clipboard",
 			    can_insert && clipboard_contains_text);
       
       menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);

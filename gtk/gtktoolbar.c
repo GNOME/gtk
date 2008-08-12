@@ -323,10 +323,10 @@ add_arrow_bindings (GtkBindingSet   *binding_set,
   guint keypad_keysym = keysym - GDK_Left + GDK_KP_Left;
   
   gtk_binding_entry_add_signal (binding_set, keysym, 0,
-                                "move_focus", 1,
+                                "move-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, dir);
   gtk_binding_entry_add_signal (binding_set, keypad_keysym, 0,
-                                "move_focus", 1,
+                                "move-focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, dir);
 }
 
@@ -337,11 +337,11 @@ add_ctrl_tab_bindings (GtkBindingSet    *binding_set,
 {
   gtk_binding_entry_add_signal (binding_set,
 				GDK_Tab, GDK_CONTROL_MASK | modifiers,
-				"move_focus", 1,
+				"move-focus", 1,
 				GTK_TYPE_DIRECTION_TYPE, direction);
   gtk_binding_entry_add_signal (binding_set,
 				GDK_KP_Tab, GDK_CONTROL_MASK | modifiers,
-				"move_focus", 1,
+				"move-focus", 1,
 				GTK_TYPE_DIRECTION_TYPE, direction);
 }
 

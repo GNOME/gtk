@@ -150,15 +150,15 @@ gtk_decorated_window_init (GtkWindow   *window)
   gtk_window_set_has_frame (window, TRUE);
 
   g_signal_connect (window,
-		    "frame_event",
+		    "frame-event",
 		    G_CALLBACK (gtk_decorated_window_frame_event),
 		    window);
   g_signal_connect (window,
-		    "focus_in_event",
+		    "focus-in-event",
 		    G_CALLBACK (gtk_decorated_window_focus_change),
 		    window);
   g_signal_connect (window,
-		    "focus_out_event",
+		    "focus-out-event",
 		    G_CALLBACK (gtk_decorated_window_focus_change),
 		    window);
   g_signal_connect (window,

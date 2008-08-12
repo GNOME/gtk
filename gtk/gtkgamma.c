@@ -262,7 +262,7 @@ gtk_gamma_curve_init (GtkGammaCurve *curve)
   gtk_container_add (GTK_CONTAINER (curve), curve->table);
 
   curve->curve = gtk_curve_new ();
-  g_signal_connect (curve->curve, "curve_type_changed",
+  g_signal_connect (curve->curve, "curve-type-changed",
 		    G_CALLBACK (curve_type_changed_callback), curve);
   gtk_table_attach_defaults (GTK_TABLE (curve->table), curve->curve, 0, 1, 0, 1);
 

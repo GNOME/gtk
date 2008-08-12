@@ -799,7 +799,7 @@ connect_proxy (GtkAction     *action,
 
       gtk_action_sync_tooltip (action, proxy);
 
-      g_signal_connect_object (proxy, "create_menu_proxy",
+      g_signal_connect_object (proxy, "create-menu-proxy",
 			       G_CALLBACK (gtk_action_create_menu_proxy),
 			       action, 0);
 
