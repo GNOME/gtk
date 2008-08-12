@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-07 11:39+0000\n"
-"PO-Revision-Date: 2008-08-11 23:35-0300\n"
+"PO-Revision-Date: 2008-08-11 23:38-0300\n"
 "Last-Translator: Henrique P Machado <zehrique@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -1536,7 +1536,7 @@ msgstr "_Métodos de entrada"
 
 #: ../gtk/gtkentry.c:5390 ../gtk/gtktextview.c:7668
 msgid "_Insert Unicode Control Character"
-msgstr "_Inserir caractere de controle unicode"
+msgstr "_Inserir caractere de controle Unicode"
 
 #: ../gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
