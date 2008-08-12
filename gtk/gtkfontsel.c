@@ -559,8 +559,8 @@ gtk_font_selection_finalize (GObject *object)
 
   if (fontsel->font)
     gdk_font_unref (fontsel->font);
-  
-  (* G_OBJECT_CLASS (gtk_font_selection_parent_class)->finalize) (object);
+
+  G_OBJECT_CLASS (gtk_font_selection_parent_class)->finalize (object);
 }
 
 static void

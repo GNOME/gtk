@@ -399,8 +399,7 @@ gtk_list_store_finalize (GObject *object)
       list_store->default_sort_data = NULL;
     }
 
-  /* must chain up */
-  (* G_OBJECT_CLASS (gtk_list_store_parent_class)->finalize) (object);
+  G_OBJECT_CLASS (gtk_list_store_parent_class)->finalize (object);
 }
 
 /* Fulfill the GtkTreeModel requirements */

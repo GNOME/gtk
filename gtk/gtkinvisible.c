@@ -312,9 +312,9 @@ gtk_invisible_constructor (GType                  type,
 {
   GObject *object;
 
-  object = (* G_OBJECT_CLASS (gtk_invisible_parent_class)->constructor) (type,
-									 n_construct_properties,
-									 construct_params);
+  object = G_OBJECT_CLASS (gtk_invisible_parent_class)->constructor (type,
+                                                                     n_construct_properties,
+                                                                     construct_params);
 
   gtk_widget_realize (GTK_WIDGET (object));
 

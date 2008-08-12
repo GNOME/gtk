@@ -99,9 +99,9 @@ gdk_pango_renderer_constructor (GType                  type,
   GObject *object;
   GdkPangoRenderer *gdk_renderer;
 
-  object = (* G_OBJECT_CLASS (gdk_pango_renderer_parent_class)->constructor) (type,
-									      n_construct_properties,
-									      construct_params);
+  object = G_OBJECT_CLASS (gdk_pango_renderer_parent_class)->constructor (type,
+                                                                          n_construct_properties,
+                                                                          construct_params);
 
   gdk_renderer = GDK_PANGO_RENDERER (object);
   

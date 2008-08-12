@@ -306,7 +306,7 @@ gtk_cell_view_finalize (GObject *object)
   if (cellview->priv->displayed_row)
      gtk_tree_row_reference_free (cellview->priv->displayed_row);
 
-  (* G_OBJECT_CLASS (gtk_cell_view_parent_class)->finalize) (object);
+  G_OBJECT_CLASS (gtk_cell_view_parent_class)->finalize (object);
 }
 
 static void

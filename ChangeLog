@@ -1,5 +1,21 @@
 2008-08-12  Michael Natterer  <mitch@imendio.com>
 
+	* examples/gtkdial/gtkdial.c
+	* gdk/gdkapplaunchcontext.c
+	* gdk/gdkpango.c
+	* gtk/gtkcellrendererpixbuf.c
+	* gtk/gtkcellrenderertext.c
+	* gtk/gtkcellview.c
+	* gtk/gtkcombobox.c
+	* gtk/gtkfontsel.c
+	* gtk/gtkinvisible.c
+	* gtk/gtkliststore.c
+	* gtk/gtktexttag.c
+	* gtk/gtktexttagtable.c: remove dereferencing from some function
+	pointers i missed before.
+
+2008-08-12  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkaccellabel.c
 	* gtk/gtkcalendar.c
 	* gtk/gtkclist.c

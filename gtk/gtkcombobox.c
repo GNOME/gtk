@@ -1720,8 +1720,8 @@ tree_column_row_is_sensitive (GtkComboBox *combo_box,
 
   if (priv->row_separator_func)
     {
-      if ((*priv->row_separator_func) (priv->model, iter,
-				       priv->row_separator_data))
+      if (priv->row_separator_func (priv->model, iter,
+                                    priv->row_separator_data))
 	return FALSE;
     }
 
@@ -2902,8 +2902,8 @@ gtk_combo_box_menu_fill_level (GtkComboBox *combo_box,
       gtk_tree_model_iter_nth_child (model, &iter, parent, i);
 
       if (priv->row_separator_func)
-	is_separator = (*priv->row_separator_func) (priv->model, &iter,
-						    priv->row_separator_data);
+	is_separator = priv->row_separator_func (priv->model, &iter,
+                                                 priv->row_separator_data);
       else
 	is_separator = FALSE;
       
@@ -3463,8 +3463,8 @@ gtk_combo_box_menu_row_inserted (GtkTreeModel *model,
     }
   
   if (priv->row_separator_func)
-    is_separator = (*priv->row_separator_func) (model, iter,
-					        priv->row_separator_data);
+    is_separator = priv->row_separator_func (model, iter,
+                                             priv->row_separator_data);
   else
     is_separator = FALSE;
 
@@ -3555,8 +3555,8 @@ gtk_combo_box_menu_row_changed (GtkTreeModel *model,
   item = find_menu_by_path (priv->popup_widget, path, FALSE);
 
   if (priv->row_separator_func)
-    is_separator = (*priv->row_separator_func) (model, iter,
-						priv->row_separator_data);
+    is_separator = priv->row_separator_func (model, iter,
+                                             priv->row_separator_data);
   else
     is_separator = FALSE;
 
@@ -4357,8 +4357,8 @@ combo_cell_data_func (GtkCellLayout   *cell_layout,
   if (!info->func)
     return;
 
-  (*info->func) (cell_layout, cell, tree_model, iter, info->func_data);
-  
+  info->func (cell_layout, cell, tree_model, iter, info->func_data);
+
   if (GTK_IS_WIDGET (cell_layout))
     parent = gtk_widget_get_parent (GTK_WIDGET (cell_layout));
   
@@ -5214,7 +5214,7 @@ gtk_combo_box_get_active_text (GtkComboBox *combo_box)
   class = GTK_COMBO_BOX_GET_CLASS (combo_box);
 
   if (class->get_active_text)
-    return (* class->get_active_text) (combo_box);
+    return class->get_active_text (combo_box);
 
   return NULL;
 }
@@ -5353,7 +5353,7 @@ gtk_combo_box_destroy (GtkObject *object)
   gtk_combo_box_popdown (combo_box);
 
   if (combo_box->priv->row_separator_destroy)
-    (* combo_box->priv->row_separator_destroy) (combo_box->priv->row_separator_data);
+    combo_box->priv->row_separator_destroy (combo_box->priv->row_separator_data);
 
   combo_box->priv->row_separator_func = NULL;
   combo_box->priv->row_separator_data = NULL;
@@ -5720,7 +5720,7 @@ gtk_combo_box_set_row_separator_func (GtkComboBox                 *combo_box,
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
   if (combo_box->priv->row_separator_destroy)
-    (* combo_box->priv->row_separator_destroy) (combo_box->priv->row_separator_data);
+    combo_box->priv->row_separator_destroy (combo_box->priv->row_separator_data);
 
   combo_box->priv->row_separator_func = func;
   combo_box->priv->row_separator_data = data;

@@ -234,7 +234,7 @@ gtk_cell_renderer_pixbuf_finalize (GObject *object)
   if (priv->gicon)
     g_object_unref (priv->gicon);
 
-  (* G_OBJECT_CLASS (gtk_cell_renderer_pixbuf_parent_class)->finalize) (object);
+  G_OBJECT_CLASS (gtk_cell_renderer_pixbuf_parent_class)->finalize (object);
 }
 
 static void

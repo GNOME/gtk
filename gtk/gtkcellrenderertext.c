@@ -605,7 +605,7 @@ gtk_cell_renderer_text_finalize (GObject *object)
   if (priv->language)
     g_object_unref (priv->language);
 
-  (* G_OBJECT_CLASS (gtk_cell_renderer_text_parent_class)->finalize) (object);
+  G_OBJECT_CLASS (gtk_cell_renderer_text_parent_class)->finalize (object);
 }
 
 static PangoFontMask

@@ -152,8 +152,7 @@ gtk_dial_destroy (GtkObject *object)
       dial->adjustment = NULL;
     }
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 GtkAdjustment*

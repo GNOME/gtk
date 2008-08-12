@@ -162,8 +162,8 @@ gtk_text_tag_table_finalize (GObject *object)
   g_slist_free (table->anonymous);
 
   g_slist_free (table->buffers);
-  
-  (* G_OBJECT_CLASS (gtk_text_tag_table_parent_class)->finalize) (object);
+
+  G_OBJECT_CLASS (gtk_text_tag_table_parent_class)->finalize (object);
 }
 static void
 gtk_text_tag_table_set_property (GObject      *object,

@@ -55,7 +55,7 @@ gdk_app_launch_context_finalize (GObject *object)
 
   g_free (priv->icon_name);
 
-  (*G_OBJECT_CLASS (gdk_app_launch_context_parent_class)->finalize) (object);
+  G_OBJECT_CLASS (gdk_app_launch_context_parent_class)->finalize (object);
 }
 
 static char *
