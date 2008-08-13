@@ -41,9 +41,32 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-static const GtkBorder default_default_border = { 1, 1, 1, 1 };
-static const GtkBorder default_default_outside_border = { 0, 0, 0, 0 };
-static const GtkBorder default_inner_border = { 1, 1, 1, 1 };
+static void
+set_default_default_border (GtkWidget *widget, GtkBorder *border)
+{
+  border->left   = gtk_widget_size_to_pixel (widget, GTK_SIZE_ONE_TWELFTH_EM (1));
+  border->right  = gtk_widget_size_to_pixel (widget, GTK_SIZE_ONE_TWELFTH_EM (1));
+  border->top    = gtk_widget_size_to_pixel (widget, GTK_SIZE_ONE_TWELFTH_EM (1));
+  border->bottom = gtk_widget_size_to_pixel (widget, GTK_SIZE_ONE_TWELFTH_EM (1));
+}
+
+static void
+set_default_default_outside_border (GtkWidget *widget, GtkBorder *border)
+{
+  border->left   = 0;
+  border->right  = 0;
+  border->top    = 0;
+  border->bottom = 0;
+}
+
+static void
+set_default_inner_border (GtkWidget *widget, GtkBorder *border)
+{
+  border->left   = gtk_widget_size_to_pixel (widget, GTK_SIZE_ONE_TWELFTH_EM (1));
+  border->right  = gtk_widget_size_to_pixel (widget, GTK_SIZE_ONE_TWELFTH_EM (1));
+  border->top    = gtk_widget_size_to_pixel (widget, GTK_SIZE_ONE_TWELFTH_EM (1));
+  border->bottom = gtk_widget_size_to_pixel (widget, GTK_SIZE_ONE_TWELFTH_EM (1));
+}
 
 /* Time out before giving up on getting a key release when animating
  * the close button.
@@ -442,21 +465,17 @@ gtk_button_class_init (GtkButtonClass *klass)
 							       GTK_TYPE_BORDER,
 							       GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("child-displacement-x",
-							     P_("Child X Displacement"),
-							     P_("How far in the x direction to move the child when the button is depressed"),
-							     G_MININT,
-							     G_MAXINT,
-							     0,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("child-displacement-x",
+                                                                P_("Child X Displacement"),
+                                                                P_("How far in the x direction to move the child when the button is depressed"),
+                                                                0, G_MAXINT, 0,
+                                                                GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("child-displacement-y",
-							     P_("Child Y Displacement"),
-							     P_("How far in the y direction to move the child when the button is depressed"),
-							     G_MININT,
-							     G_MAXINT,
-							     0,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("child-displacement-y",
+                                                                P_("Child Y Displacement"),
+                                                                P_("How far in the y direction to move the child when the button is depressed"),
+                                                                0, G_MAXINT, 0,
+                                                                GTK_PARAM_READABLE));
 
   /**
    * GtkButton:displace-focus:
@@ -495,13 +514,11 @@ gtk_button_class_init (GtkButtonClass *klass)
    * Since: 2.10
    */
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("image-spacing",
-							     P_("Image spacing"),
-							     P_("Spacing in pixels between the image and label"),
-							     0,
-							     G_MAXINT,
-							     2,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("image-spacing",
+                                                                P_("Image spacing"),
+                                                                P_("Spacing in pixels between the image and label"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (2),
+                                                                GTK_PARAM_READABLE));
 
   /**
    * GtkSettings::gtk-button-images:
@@ -933,7 +950,7 @@ gtk_button_construct_child (GtkButton *button)
   GtkWidget *align;
   GtkWidget *image = NULL;
   gchar *label_text = NULL;
-  gint image_spacing;
+  GtkSize image_spacing;
   
   if (!button->constructed)
     return;
@@ -941,9 +958,9 @@ gtk_button_construct_child (GtkButton *button)
   if (!button->label_text && !priv->image)
     return;
   
-  gtk_widget_style_get (GTK_WIDGET (button), 
-			"image-spacing", &image_spacing, 
-			NULL);
+  gtk_widget_style_get_unit (GTK_WIDGET (button), 
+                             "image-spacing", &image_spacing, 
+                             NULL);
 
   if (priv->image && !priv->image_is_stock)
     {
@@ -1241,9 +1258,9 @@ gtk_button_update_image_spacing (GtkButton *button)
       child = GTK_BIN (child)->child;
       if (GTK_IS_BOX (child))
         {
-          gtk_widget_style_get (GTK_WIDGET (button),
-                                "image-spacing", &spacing,
-                                NULL);
+          gtk_widget_style_get_unit (GTK_WIDGET (button),
+                                     "image-spacing", &spacing,
+                                     NULL);
 
           gtk_box_set_spacing (GTK_BOX (child), spacing);
         }
@@ -1273,11 +1290,15 @@ gtk_button_get_props (GtkButton *button,
 
       if (tmp_border)
 	{
+          tmp_border->left = gtk_widget_size_to_pixel (widget, tmp_border->left);
+          tmp_border->right = gtk_widget_size_to_pixel (widget, tmp_border->right);
+          tmp_border->top = gtk_widget_size_to_pixel (widget, tmp_border->top);
+          tmp_border->bottom = gtk_widget_size_to_pixel (widget, tmp_border->bottom);
 	  *default_border = *tmp_border;
 	  gtk_border_free (tmp_border);
 	}
       else
-	*default_border = default_default_border;
+	set_default_default_border (widget, default_border);
     }
 
   if (default_outside_border)
@@ -1286,11 +1307,15 @@ gtk_button_get_props (GtkButton *button,
 
       if (tmp_border)
 	{
+          tmp_border->left = gtk_widget_size_to_pixel (widget, tmp_border->left);
+          tmp_border->right = gtk_widget_size_to_pixel (widget, tmp_border->right);
+          tmp_border->top = gtk_widget_size_to_pixel (widget, tmp_border->top);
+          tmp_border->bottom = gtk_widget_size_to_pixel (widget, tmp_border->bottom);
 	  *default_outside_border = *tmp_border;
 	  gtk_border_free (tmp_border);
 	}
       else
-	*default_outside_border = default_default_outside_border;
+	set_default_default_outside_border (widget, default_outside_border);
     }
 
   if (inner_border)
@@ -1299,11 +1324,15 @@ gtk_button_get_props (GtkButton *button,
 
       if (tmp_border)
 	{
+          tmp_border->left = gtk_widget_size_to_pixel (widget, tmp_border->left);
+          tmp_border->right = gtk_widget_size_to_pixel (widget, tmp_border->right);
+          tmp_border->top = gtk_widget_size_to_pixel (widget, tmp_border->top);
+          tmp_border->bottom = gtk_widget_size_to_pixel (widget, tmp_border->bottom);
 	  *inner_border = *tmp_border;
 	  gtk_border_free (tmp_border);
 	}
       else
-	*inner_border = default_inner_border;
+	set_default_inner_border (widget, inner_border);
     }
 
   if (interior_focus)

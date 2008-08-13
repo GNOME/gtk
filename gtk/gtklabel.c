@@ -162,6 +162,7 @@ static void gtk_label_hierarchy_changed          (GtkWidget     *widget,
 						  GtkWidget     *old_toplevel);
 static void gtk_label_screen_changed             (GtkWidget     *widget,
 						  GdkScreen     *old_screen);
+static void gtk_label_unit_changed               (GtkWidget     *widget);
 
 static void gtk_label_create_window       (GtkLabel *label);
 static void gtk_label_destroy_window      (GtkLabel *label);
@@ -277,6 +278,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
   widget_class->drag_data_get = gtk_label_drag_data_get;
   widget_class->grab_focus = gtk_label_grab_focus;
+  widget_class->unit_changed = gtk_label_unit_changed;
 
   class->move_cursor = gtk_label_move_cursor;
   class->copy_clipboard = gtk_label_copy_clipboard;
@@ -1406,6 +1408,18 @@ label_shortcut_setting_changed (GtkSettings *settings)
 }
 
 static void
+gtk_label_unit_changed (GtkWidget *widget)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+
+  gtk_label_recalculate (label);
+
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (gtk_label_parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (gtk_label_parent_class)->unit_changed (widget);
+}
+
+static void
 gtk_label_screen_changed (GtkWidget *widget,
 			  GdkScreen *old_screen)
 {
@@ -2487,7 +2501,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 	  
 	  aux_info = _gtk_widget_get_aux_info (widget, FALSE);
 	  if (aux_info && aux_info->width > 0)
-	    pango_layout_set_width (label->layout, aux_info->width * PANGO_SCALE);
+	    pango_layout_set_width (label->layout, gtk_widget_size_to_pixel (widget, aux_info->width) * PANGO_SCALE);
 	  else
 	    {
 	      GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (label));
@@ -2607,7 +2621,7 @@ gtk_label_size_request (GtkWidget      *widget,
   if ((label->wrap || label->ellipsize || 
        priv->width_chars > 0 || priv->max_width_chars > 0) && 
       aux_info && aux_info->width > 0)
-    width += aux_info->width;
+    width += gtk_widget_size_to_pixel (widget, aux_info->width);
   else if (label->ellipsize || priv->width_chars > 0 || priv->max_width_chars > 0)
     {
       width += PANGO_PIXELS (get_label_char_width (label));

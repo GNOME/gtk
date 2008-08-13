@@ -266,6 +266,7 @@ gtk_adjustment_value_changed
 #if IN_HEADER(__GTK_ALIGNMENT_H__)
 #if IN_FILE(__GTK_ALIGNMENT_C__)
 gtk_alignment_get_padding
+gtk_alignment_get_padding_unit
 gtk_alignment_get_type G_GNUC_CONST
 gtk_alignment_new
 gtk_alignment_set

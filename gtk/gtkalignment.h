@@ -77,16 +77,22 @@ void       gtk_alignment_set        (GtkAlignment      *alignment,
 				     gfloat             yscale);
 
 void       gtk_alignment_set_padding (GtkAlignment      *alignment,
-				      guint              padding_top,
-				      guint              padding_bottom,
-				      guint              padding_left,
-				      guint              padding_right);
+				      GtkUSize           padding_top,
+				      GtkUSize           padding_bottom,
+				      GtkUSize           padding_left,
+				      GtkUSize           padding_right);
 
 void       gtk_alignment_get_padding (GtkAlignment      *alignment,
 				      guint             *padding_top,
 				      guint             *padding_bottom,
 				      guint             *padding_left,
 				      guint             *padding_right);
+
+void       gtk_alignment_get_padding_unit (GtkAlignment      *alignment,
+                                           GtkUSize          *padding_top,
+                                           GtkUSize          *padding_bottom,
+                                           GtkUSize          *padding_left,
+                                           GtkUSize          *padding_right);
 
 G_END_DECLS
 
