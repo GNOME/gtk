@@ -41,7 +41,7 @@
 
 
 #define BORDER_SPACING  0
-#define DEFAULT_IPADDING 1
+#define DEFAULT_IPADDING GTK_SIZE_ONE_TWELFTH_EM(1)
 
 /* Properties */
 enum {
@@ -198,13 +198,11 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                               GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("internal-padding",
-							     P_("Internal padding"),
-							     P_("Amount of border space between the menubar shadow and the menu items"),
-							     0,
-							     G_MAXINT,
-                                                             DEFAULT_IPADDING,
-                                                             GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("internal-padding",
+                                                                P_("Internal padding"),
+                                                                P_("Amount of border space between the menubar shadow and the menu items"),
+                                                                0, G_MAXINT, DEFAULT_IPADDING,
+                                                                GTK_PARAM_READABLE));
 
   gtk_settings_install_property (g_param_spec_int ("gtk-menu-bar-popup-delay",
 						   P_("Delay before drop down menus appear"),

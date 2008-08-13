@@ -117,13 +117,11 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                          GTK_PARAM_READWRITE));
   
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("indicator-size",
-                                                             P_("Indicator Size"),
-                                                             P_("Size of check or radio indicator"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             13,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("indicator-size",
+                                                                P_("Indicator Size"),
+                                                                P_("Size of check or radio indicator"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (13),
+                                                                GTK_PARAM_READABLE));
 
   widget_class->expose_event = gtk_check_menu_item_expose;
   

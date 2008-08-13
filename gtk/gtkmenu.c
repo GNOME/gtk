@@ -588,40 +588,32 @@ gtk_menu_class_init (GtkMenuClass *class)
 						     GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("vertical-padding",
-							     P_("Vertical Padding"),
-							     P_("Extra space at the top and bottom of the menu"),
-							     0,
-							     G_MAXINT,
-							     1,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("vertical-padding",
+                                                                P_("Vertical Padding"),
+                                                                P_("Extra space at the top and bottom of the menu"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (1),
+                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("horizontal-padding",
-                                                             P_("Horizontal Padding"),
-                                                             P_("Extra space at the left and right edges of the menu"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             0,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("horizontal-padding",
+                                                                P_("Horizontal Padding"),
+                                                                P_("Extra space at the left and right edges of the menu"),
+                                                                0, G_MAXINT, 0,
+                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("vertical-offset",
-							     P_("Vertical Offset"),
-							     P_("When the menu is a submenu, position it this number of pixels offset vertically"),
-							     G_MININT,
-							     G_MAXINT,
-							     0,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("vertical-offset",
+                                                                P_("Vertical Offset"),
+                                                                P_("When the menu is a submenu, position it this number of pixels offset vertically"),
+                                                                0, G_MAXINT, 0,
+                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("horizontal-offset",
-							     P_("Horizontal Offset"),
-							     P_("When the menu is a submenu, position it this number of pixels offset horizontally"),
-							     G_MININT,
-							     G_MAXINT,
-							     -2,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("horizontal-offset",
+                                                                P_("Horizontal Offset"),
+                                                                P_("When the menu is a submenu, position it this number of pixels offset horizontally"),
+                                                                GTK_SIZE_MINPIXEL, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (-2),
+                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("double-arrows",
@@ -2000,7 +1992,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 		gtk_window_set_transient_for (GTK_WINDOW (menu->tearoff_window),
 					      GTK_WINDOW (toplevel));
 	      
-	      menu->tearoff_hbox = gtk_hbox_new (FALSE, FALSE);
+	      menu->tearoff_hbox = gtk_hbox_new (FALSE, 0);
 	      gtk_container_add (GTK_CONTAINER (menu->tearoff_window), menu->tearoff_hbox);
 
 	      gdk_drawable_get_size (GTK_WIDGET (menu)->window, &width, &height);

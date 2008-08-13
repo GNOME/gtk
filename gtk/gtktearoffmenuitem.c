@@ -31,9 +31,9 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-#define ARROW_SIZE 10
-#define TEAR_LENGTH 5
-#define BORDER_SPACING  3
+#define ARROW_SIZE GTK_SIZE_ONE_TWELFTH_EM(10)
+#define TEAR_LENGTH GTK_SIZE_ONE_TWELFTH_EM(5)
+#define BORDER_SPACING  GTK_SIZE_ONE_TWELFTH_EM(3)
 
 static void gtk_tearoff_menu_item_size_request (GtkWidget             *widget,
 				                GtkRequisition        *requisition);
@@ -79,13 +79,13 @@ gtk_tearoff_menu_item_size_request (GtkWidget      *widget,
 {
   requisition->width = (GTK_CONTAINER (widget)->border_width +
 			widget->style->xthickness +
-			BORDER_SPACING) * 2;
+			gtk_widget_size_to_pixel (widget, BORDER_SPACING)) * 2;
   requisition->height = (GTK_CONTAINER (widget)->border_width +
 			 widget->style->ythickness) * 2;
 
   if (GTK_IS_MENU (widget->parent) && GTK_MENU (widget->parent)->torn_off)
     {
-      requisition->height += ARROW_SIZE;
+      requisition->height += gtk_widget_size_to_pixel (widget, ARROW_SIZE);
     }
   else
     {
@@ -143,29 +143,29 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 	  else
 	    shadow_type = GTK_SHADOW_OUT;
 
-	  if (menu_item->toggle_size > ARROW_SIZE)
+	  if (menu_item->toggle_size > gtk_widget_size_to_pixel (widget, ARROW_SIZE))
 	    {
 	      if (direction == GTK_TEXT_DIR_LTR) {
-		arrow_x = x + (menu_item->toggle_size - ARROW_SIZE)/2;
+		arrow_x = x + (menu_item->toggle_size - gtk_widget_size_to_pixel (widget, ARROW_SIZE))/2;
 		arrow_type = GTK_ARROW_LEFT;
 	      }
 	      else {
-		arrow_x = x + width - menu_item->toggle_size + (menu_item->toggle_size - ARROW_SIZE)/2; 
+		arrow_x = x + width - menu_item->toggle_size + (menu_item->toggle_size - gtk_widget_size_to_pixel (widget, ARROW_SIZE))/2; 
 		arrow_type = GTK_ARROW_RIGHT;	    
 	      }
-	      x += menu_item->toggle_size + BORDER_SPACING;
+	      x += menu_item->toggle_size + gtk_widget_size_to_pixel (widget, BORDER_SPACING);
 	    }
 	  else
 	    {
 	      if (direction == GTK_TEXT_DIR_LTR) {
-		arrow_x = ARROW_SIZE / 2;
+		arrow_x = gtk_widget_size_to_pixel (widget, ARROW_SIZE) / 2;
 		arrow_type = GTK_ARROW_LEFT;
 	      }
 	      else {
-		arrow_x = x + width - 2 * ARROW_SIZE + ARROW_SIZE / 2; 
+		arrow_x = x + width - 2 * gtk_widget_size_to_pixel (widget, ARROW_SIZE) + gtk_widget_size_to_pixel (widget, ARROW_SIZE) / 2; 
 		arrow_type = GTK_ARROW_RIGHT;	    
 	      }
-	      x += 2 * ARROW_SIZE;
+	      x += 2 * gtk_widget_size_to_pixel (widget, ARROW_SIZE);
 	    }
 
 
@@ -174,7 +174,7 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 			   NULL, widget, "tearoffmenuitem",
 			   arrow_type, FALSE,
 			   arrow_x, y + height / 2 - 5, 
-			   ARROW_SIZE, ARROW_SIZE);
+			   gtk_widget_size_to_pixel (widget, ARROW_SIZE), gtk_widget_size_to_pixel (widget, ARROW_SIZE));
 	}
 
       while (x < right_max)
@@ -183,17 +183,17 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 
 	  if (direction == GTK_TEXT_DIR_LTR) {
 	    x1 = x;
-	    x2 = MIN (x + TEAR_LENGTH, right_max);
+	    x2 = MIN (x + gtk_widget_size_to_pixel (widget, TEAR_LENGTH), right_max);
 	  }
 	  else {
 	    x1 = right_max - x;
-	    x2 = MAX (right_max - x - TEAR_LENGTH, 0);
+	    x2 = MAX (right_max - x - gtk_widget_size_to_pixel (widget, TEAR_LENGTH), 0);
 	  }
 	  
 	  gtk_paint_hline (widget->style, widget->window, GTK_STATE_NORMAL,
 			   NULL, widget, "tearoffmenuitem",
 			   x1, x2, y + (height - widget->style->ythickness) / 2);
-	  x += 2 * TEAR_LENGTH;
+	  x += 2 * gtk_widget_size_to_pixel (widget, TEAR_LENGTH);
 	}
     }
 }

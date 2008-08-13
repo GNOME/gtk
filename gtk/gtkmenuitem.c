@@ -332,31 +332,25 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 						  gtk_rc_property_parse_enum);
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("horizontal-padding",
-							     "Horizontal Padding",
-							     "Padding to left and right of the menu item",
-							     0,
-							     G_MAXINT,
-							     3,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("horizontal-padding",
+                                                                "Horizontal Padding",
+                                                                "Padding to left and right of the menu item",
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (3),
+                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("toggle-spacing",
-							     "Icon Spacing",
-							     "Space between icon and label",
-							     0,
-							     G_MAXINT,
-							     5,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("toggle-spacing",
+                                                                "Icon Spacing",
+                                                                "Space between icon and label",
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (5),
+                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("arrow-spacing",
-							     "Arrow Spacing",
-							     "Space between label and arrow",
-							     0,
-							     G_MAXINT,
-							     10,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("arrow-spacing",
+                                                                "Arrow Spacing",
+                                                                "Space between label and arrow",
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (10),
+                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_float ("arrow-scaling",
