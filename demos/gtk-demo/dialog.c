@@ -51,16 +51,16 @@ interactive_dialog_clicked (GtkButton *button,
                                         GTK_RESPONSE_CANCEL,
 					NULL);
 
-  hbox = gtk_hbox_new (FALSE, 8);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
+  hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (8));
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), GTK_SIZE_ONE_TWELFTH_EM (8));
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, FALSE, FALSE, 0);
 
   stock = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION, GTK_ICON_SIZE_DIALOG);
   gtk_box_pack_start (GTK_BOX (hbox), stock, FALSE, FALSE, 0);
 
   table = gtk_table_new (2, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 4);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 4);
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (4));
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (4));
   gtk_box_pack_start (GTK_BOX (hbox), table, TRUE, TRUE, 0);
   label = gtk_label_new_with_mnemonic ("_Entry 1");
   gtk_table_attach_defaults (GTK_TABLE (table),
@@ -112,17 +112,17 @@ do_dialog (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Dialogs");
 
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
-      gtk_container_set_border_width (GTK_CONTAINER (window), 8);
+      gtk_container_set_border_width (GTK_CONTAINER (window), GTK_SIZE_ONE_TWELFTH_EM (8));
 
       frame = gtk_frame_new ("Dialogs");
       gtk_container_add (GTK_CONTAINER (window), frame);
 
-      vbox = gtk_vbox_new (FALSE, 8);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
+      vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (8));
+      gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (8));
       gtk_container_add (GTK_CONTAINER (frame), vbox);
 
       /* Standard message dialog */
-      hbox = gtk_hbox_new (FALSE, 8);
+      hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (8));
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("_Message Dialog");
       g_signal_connect (button, "clicked",
@@ -132,7 +132,7 @@ do_dialog (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
 
       /* Interactive dialog*/
-      hbox = gtk_hbox_new (FALSE, 8);
+      hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (8));
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
       vbox2 = gtk_vbox_new (FALSE, 0);
 
@@ -143,8 +143,8 @@ do_dialog (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox2), button, FALSE, FALSE, 0);
 
       table = gtk_table_new (2, 2, FALSE);
-      gtk_table_set_row_spacings (GTK_TABLE (table), 4);
-      gtk_table_set_col_spacings (GTK_TABLE (table), 4);
+      gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (4));
+      gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (4));
       gtk_box_pack_start (GTK_BOX (hbox), table, FALSE, FALSE, 0);
 
       label = gtk_label_new_with_mnemonic ("_Entry 1");

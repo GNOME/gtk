@@ -87,10 +87,10 @@ do_colorsel (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
 
-      gtk_container_set_border_width (GTK_CONTAINER (window), 8);
+      gtk_container_set_border_width (GTK_CONTAINER (window), GTK_SIZE_ONE_TWELFTH_EM (8));
 
-      vbox = gtk_vbox_new (FALSE, 8);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
+      vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (8));
+      gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (8));
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       /*
@@ -108,7 +108,7 @@ do_colorsel (GtkWidget *do_widget)
 			G_CALLBACK (expose_event_callback), NULL);
 
       /* set a minimum size */
-      gtk_widget_set_size_request (da, 200, 200);
+      gtk_widget_set_size_request (da, GTK_SIZE_ONE_TWELFTH_EM (200), GTK_SIZE_ONE_TWELFTH_EM (200));
       /* set the color */
       gtk_widget_modify_bg (da, GTK_STATE_NORMAL, &color);
       

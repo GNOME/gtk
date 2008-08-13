@@ -332,10 +332,10 @@ do_images (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
 			G_CALLBACK (cleanup_callback), NULL);
 
-      gtk_container_set_border_width (GTK_CONTAINER (window), 8);
+      gtk_container_set_border_width (GTK_CONTAINER (window), GTK_SIZE_ONE_TWELFTH_EM (8));
 
-      vbox = gtk_vbox_new (FALSE, 8);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
+      vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (8));
+      gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (8));
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       label = gtk_label_new (NULL);

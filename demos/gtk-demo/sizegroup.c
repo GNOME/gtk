@@ -115,9 +115,9 @@ do_sizegroup (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
 
-      vbox = gtk_vbox_new (FALSE, 5);
+      vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (5));
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, TRUE, TRUE, 0);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+      gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (5));
 
       size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
       
@@ -127,9 +127,9 @@ do_sizegroup (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
 
       table = gtk_table_new (2, 2, FALSE);
-      gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-      gtk_table_set_row_spacings (GTK_TABLE (table), 5);
-      gtk_table_set_col_spacings (GTK_TABLE (table), 10);
+      gtk_container_set_border_width (GTK_CONTAINER (table), GTK_SIZE_ONE_TWELFTH_EM (5));
+      gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (5));
+      gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (10));
       gtk_container_add (GTK_CONTAINER (frame), table);
 
       add_row (GTK_TABLE (table), 0, size_group, "_Foreground", color_options);
@@ -141,9 +141,9 @@ do_sizegroup (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       table = gtk_table_new (2, 2, FALSE);
-      gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-      gtk_table_set_row_spacings (GTK_TABLE (table), 5);
-      gtk_table_set_col_spacings (GTK_TABLE (table), 10);
+      gtk_container_set_border_width (GTK_CONTAINER (table), GTK_SIZE_ONE_TWELFTH_EM (5));
+      gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (5));
+      gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (10));
       gtk_container_add (GTK_CONTAINER (frame), table);
 
       add_row (GTK_TABLE (table), 0, size_group, "_Dashing", dash_options);

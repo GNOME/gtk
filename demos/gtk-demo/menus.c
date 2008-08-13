@@ -179,8 +179,8 @@ do_menus (GtkWidget *do_widget)
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
       
-      box2 = gtk_vbox_new (FALSE, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
+      box2 = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (10));
+      gtk_container_set_border_width (GTK_CONTAINER (box2), GTK_SIZE_ONE_TWELFTH_EM (10));
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
       gtk_widget_show (box2);
 

@@ -764,9 +764,9 @@ create_text (GtkTextBuffer **buffer,
       gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (text_view),
                                    GTK_WRAP_WORD);
       gtk_text_view_set_pixels_above_lines (GTK_TEXT_VIEW (text_view),
-                                            2);
+                                            GTK_SIZE_ONE_TWELFTH_EM (2));
       gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (text_view),
-                                            2);
+                                            GTK_SIZE_ONE_TWELFTH_EM (2));
     }
   
   return scrolled_window;
@@ -792,7 +792,7 @@ create_tree (void)
 
   gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection),
 			       GTK_SELECTION_BROWSE);
-  gtk_widget_set_size_request (tree_view, 200, -1);
+  gtk_widget_set_size_request (tree_view, GTK_SIZE_ONE_TWELFTH_EM (200), -1);
 
   /* this code only supports 1 level of children. If we
    * want more we probably have to use a recursing function.
@@ -970,7 +970,7 @@ main (int argc, char **argv)
 			    gtk_label_new_with_mnemonic ("_Info"));
 
   tag = gtk_text_buffer_create_tag (info_buffer, "title",
-                                    "font", "Sans 18",
+                                    "scale", PANGO_SCALE_XX_LARGE,
                                     NULL);
    g_object_unref (info_buffer);
 
@@ -1000,9 +1000,9 @@ main (int argc, char **argv)
 				    "weight", PANGO_WEIGHT_BOLD,
  				    "foreground", "DarkGoldenrod4",
                                     NULL);
-   g_object_unref (source_buffer);
+  g_object_unref (source_buffer);
   
-  gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
+  gtk_window_set_default_size (GTK_WINDOW (window), GTK_SIZE_ONE_TWELFTH_EM (600), GTK_SIZE_ONE_TWELFTH_EM (400));
   gtk_widget_show_all (window);
   
 

@@ -328,11 +328,11 @@ do_editable_cells (GtkWidget *do_widget)
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Shopping list");
-      gtk_container_set_border_width (GTK_CONTAINER (window), 5);
+      gtk_container_set_border_width (GTK_CONTAINER (window), GTK_SIZE_ONE_TWELFTH_EM (5));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      vbox = gtk_vbox_new (FALSE, 5);
+      vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (5));
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       gtk_box_pack_start (GTK_BOX (vbox),
@@ -365,7 +365,7 @@ do_editable_cells (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (sw), treeview);
 
       /* some buttons */
-      hbox = gtk_hbox_new (TRUE, 4);
+      hbox = gtk_hbox_new (TRUE, GTK_SIZE_ONE_TWELFTH_EM (4));
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
       button = gtk_button_new_with_label ("Add item");
@@ -378,7 +378,7 @@ do_editable_cells (GtkWidget *do_widget)
                         G_CALLBACK (remove_item), treeview);
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
-      gtk_window_set_default_size (GTK_WINDOW (window), 320, 200);
+      gtk_window_set_default_size (GTK_WINDOW (window), GTK_SIZE_ONE_TWELFTH_EM (320), GTK_SIZE_ONE_TWELFTH_EM (200));
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

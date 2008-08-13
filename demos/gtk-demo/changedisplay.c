@@ -354,8 +354,8 @@ create_frame (ChangeDisplayInfo *info,
 
   *frame = gtk_frame_new (title);
 
-  hbox = gtk_hbox_new (FALSE, 8);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
+  hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (8));
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), GTK_SIZE_ONE_TWELFTH_EM (8));
   gtk_container_add (GTK_CONTAINER (*frame), hbox);
 
   scrollwin = gtk_scrolled_window_new (NULL, NULL);
@@ -372,7 +372,7 @@ create_frame (ChangeDisplayInfo *info,
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (*tree_view));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 
-  *button_vbox = gtk_vbox_new (FALSE, 5);
+  *button_vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_box_pack_start (GTK_BOX (hbox), *button_vbox, FALSE, FALSE, 0);
 
   if (!info->size_group)
@@ -611,15 +611,15 @@ do_changedisplay (GtkWidget *do_widget)
 					    "Change",         GTK_RESPONSE_OK,
 					    NULL);
 
-      gtk_window_set_default_size (GTK_WINDOW (info->window), 300, 400);
+      gtk_window_set_default_size (GTK_WINDOW (info->window), GTK_SIZE_ONE_TWELFTH_EM (300), GTK_SIZE_ONE_TWELFTH_EM (400));
 
       g_signal_connect (info->window, "response",
 			G_CALLBACK (response_cb), info);
       g_signal_connect (info->window, "destroy",
 			G_CALLBACK (destroy_cb), &info);
 
-      vbox = gtk_vbox_new (FALSE, 5);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
+      vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (5));
+      gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (8));
 
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (info->window)->vbox), vbox,
 			  TRUE, TRUE, 0);

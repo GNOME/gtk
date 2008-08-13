@@ -245,10 +245,10 @@ do_drawingarea (GtkWidget *do_widget)
 
       g_signal_connect (window, "destroy", G_CALLBACK (close_window), NULL);
 
-      gtk_container_set_border_width (GTK_CONTAINER (window), 8);
+      gtk_container_set_border_width (GTK_CONTAINER (window), GTK_SIZE_ONE_TWELFTH_EM (8));
 
-      vbox = gtk_vbox_new (FALSE, 8);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
+      vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (8));
+      gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (8));
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       /*
@@ -266,7 +266,7 @@ do_drawingarea (GtkWidget *do_widget)
 
       da = gtk_drawing_area_new ();
       /* set a minimum size */
-      gtk_widget_set_size_request (da, 100, 100);
+      gtk_widget_set_size_request (da, GTK_SIZE_ONE_TWELFTH_EM (100), GTK_SIZE_ONE_TWELFTH_EM (100));
 
       gtk_container_add (GTK_CONTAINER (frame), da);
 
@@ -288,7 +288,7 @@ do_drawingarea (GtkWidget *do_widget)
 
       da = gtk_drawing_area_new ();
       /* set a minimum size */
-      gtk_widget_set_size_request (da, 100, 100);
+      gtk_widget_set_size_request (da, GTK_SIZE_ONE_TWELFTH_EM (100), GTK_SIZE_ONE_TWELFTH_EM (100));
 
       gtk_container_add (GTK_CONTAINER (frame), da);
 

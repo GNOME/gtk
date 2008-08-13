@@ -420,12 +420,12 @@ do_stock_browser (GtkWidget *do_widget)
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Stock Icons and Items");
-      gtk_window_set_default_size (GTK_WINDOW (window), -1, 500);
+      gtk_window_set_default_size (GTK_WINDOW (window), -1, GTK_SIZE_ONE_TWELFTH_EM (500));
 
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
-      gtk_container_set_border_width (GTK_CONTAINER (window), 8);
+      gtk_container_set_border_width (GTK_CONTAINER (window), GTK_SIZE_ONE_TWELFTH_EM (8));
 
-      hbox = gtk_hbox_new (FALSE, 8);
+      hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (8));
       gtk_container_add (GTK_CONTAINER (window), hbox);
 
       sw = gtk_scrolled_window_new (NULL, NULL);
@@ -494,8 +494,8 @@ do_stock_browser (GtkWidget *do_widget)
       frame = gtk_frame_new ("Selected Item");
       gtk_container_add (GTK_CONTAINER (align), frame);
 
-      vbox = gtk_vbox_new (FALSE, 8);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 4);
+      vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (8));
+      gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (4));
       gtk_container_add (GTK_CONTAINER (frame), vbox);
 
       display = g_new (StockItemDisplay, 1);

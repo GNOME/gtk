@@ -267,7 +267,7 @@ do_hypertext (GtkWidget *do_widget)
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window),
-                                   450, 450);
+                                   GTK_SIZE_ONE_TWELFTH_EM (450), GTK_SIZE_ONE_TWELFTH_EM (450));
       
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);

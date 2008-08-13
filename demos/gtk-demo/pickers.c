@@ -18,19 +18,20 @@ do_pickers (GtkWidget *do_widget)
     gtk_window_set_screen (GTK_WINDOW (window),
                            gtk_widget_get_screen (do_widget));
     gtk_window_set_title (GTK_WINDOW (window), "Pickers");
+    gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
    
     g_signal_connect (window, "destroy",
                       G_CALLBACK (gtk_widget_destroyed),
                       &window);
     
-    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (window), GTK_SIZE_ONE_TWELFTH_EM (10));
 
     table = gtk_table_new (4, 2, FALSE);    
-    gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
-    gtk_table_set_row_spacings (GTK_TABLE (table), 3);
+    gtk_table_set_col_spacing (GTK_TABLE (table), 0, GTK_SIZE_ONE_TWELFTH_EM (10));
+    gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (3));
     gtk_container_add (GTK_CONTAINER (window), table);
 
-    gtk_container_set_border_width (GTK_CONTAINER (table), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (table), GTK_SIZE_ONE_TWELFTH_EM (10));
 
     label = gtk_label_new ("Color:");
     gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);

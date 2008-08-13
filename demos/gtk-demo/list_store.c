@@ -173,9 +173,9 @@ do_list_store (GtkWidget *do_widget)
 
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
-      gtk_container_set_border_width (GTK_CONTAINER (window), 8);
+      gtk_container_set_border_width (GTK_CONTAINER (window), GTK_SIZE_ONE_TWELFTH_EM (8));
 
-      vbox = gtk_vbox_new (FALSE, 8);
+      vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (8));
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       label = gtk_label_new ("This is the bug list (note: not based on real data, it would be nice to have a nice ODBC interface to bugzilla or so, though).");
@@ -206,7 +206,7 @@ do_list_store (GtkWidget *do_widget)
       add_columns (GTK_TREE_VIEW (treeview));
 
       /* finish & show */
-      gtk_window_set_default_size (GTK_WINDOW (window), 280, 250);
+      gtk_window_set_default_size (GTK_WINDOW (window), GTK_SIZE_ONE_TWELFTH_EM (280), GTK_SIZE_ONE_TWELFTH_EM (250));
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

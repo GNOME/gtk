@@ -189,7 +189,8 @@ do_rotated_text (GtkWidget *do_widget)
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Rotated Text");
-      gtk_window_set_default_size (GTK_WINDOW (window), 4 * RADIUS, 2 * RADIUS);
+      gtk_window_set_default_size (GTK_WINDOW (window),
+                                   gtk_size_em ((4 * RADIUS)), gtk_size_em ((4 * RADIUS)));
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
 
       box = gtk_hbox_new (TRUE, 0);
@@ -207,7 +208,6 @@ do_rotated_text (GtkWidget *do_widget)
 			G_CALLBACK (rotated_text_expose_event), NULL);
 
       /* And a label */
-
       label = gtk_label_new (text);
       gtk_container_add (GTK_CONTAINER (box), label);
 

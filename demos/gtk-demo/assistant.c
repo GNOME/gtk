@@ -59,13 +59,31 @@ on_entry_changed (GtkWidget *widget, gpointer data)
 }
 
 static void
+on_unit_changed (GtkWidget *assistant,
+                 gpointer user_data)
+{
+  int n;
+  GdkPixbuf *pixbuf;
+  GtkWidget *page;
+
+  /* update icons on all pages */
+  for (n = 0; n < 3; n++)
+    {
+      page = gtk_assistant_get_nth_page (GTK_ASSISTANT (assistant), n);
+      pixbuf = gtk_widget_render_icon (assistant, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG, NULL);
+      gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), page, pixbuf);
+      g_object_unref (pixbuf);
+    }
+}
+
+static void
 create_page1 (GtkWidget *assistant)
 {
   GtkWidget *box, *label, *entry;
   GdkPixbuf *pixbuf;
 
-  box = gtk_hbox_new (FALSE, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (box), 12);
+  box = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (10));
+  gtk_container_set_border_width (GTK_CONTAINER (box), GTK_SIZE_ONE_TWELFTH_EM (10));
 
   label = gtk_label_new ("You must fill out this entry to continue:");
   gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
@@ -91,8 +109,8 @@ create_page2 (GtkWidget *assistant)
   GtkWidget *box, *checkbutton;
   GdkPixbuf *pixbuf;
 
-  box = gtk_vbox_new (12, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (box), 12);
+  box = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (10));
+  gtk_container_set_border_width (GTK_CONTAINER (box), GTK_SIZE_ONE_TWELFTH_EM (10));
 
   checkbutton = gtk_check_button_new_with_label ("This is optional data, you may continue "
 						 "even if you do not check this");
@@ -134,7 +152,7 @@ do_assistant (GtkWidget *do_widget)
     {
       assistant = gtk_assistant_new ();
 
-	 gtk_window_set_default_size (GTK_WINDOW (assistant), -1, 300);
+      gtk_window_set_default_size (GTK_WINDOW (assistant), -1, GTK_SIZE_ONE_TWELFTH_EM (300));
 
       gtk_window_set_screen (GTK_WINDOW (assistant),
 			     gtk_widget_get_screen (do_widget));
@@ -151,6 +169,10 @@ do_assistant (GtkWidget *do_widget)
 			G_CALLBACK (on_assistant_apply), NULL);
       g_signal_connect (G_OBJECT (assistant), "prepare",
 			G_CALLBACK (on_assistant_prepare), NULL);
+
+      /* need to reset the header pixbufs to correct size when the units change */
+      g_signal_connect (G_OBJECT (assistant), "unit-changed",
+                        G_CALLBACK (on_unit_changed), NULL);
     }
 
   if (!GTK_WIDGET_VISIBLE (assistant))

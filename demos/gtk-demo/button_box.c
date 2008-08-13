@@ -6,10 +6,10 @@
 #include <gtk/gtk.h>
 
 static GtkWidget *
-create_bbox (gint  horizontal,
-	     char *title, 
-	     gint  spacing,
-	     gint  layout)
+create_bbox (gint    horizontal,
+	     char   *title, 
+	     GtkSize spacing,
+	     gint    layout)
 {
   GtkWidget *frame;
   GtkWidget *bbox;
@@ -22,7 +22,7 @@ create_bbox (gint  horizontal,
   else
     bbox = gtk_vbutton_box_new ();
 
-  gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (bbox), GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_container_add (GTK_CONTAINER (frame), bbox);
 
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), layout);
@@ -61,56 +61,56 @@ do_button_box (GtkWidget *do_widget)
 		      G_CALLBACK (gtk_widget_destroyed),
 		      &window);
     
-    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (window), GTK_SIZE_ONE_TWELFTH_EM (10));
 
     main_vbox = gtk_vbox_new (FALSE, 0);
     gtk_container_add (GTK_CONTAINER (window), main_vbox);
     
     frame_horz = gtk_frame_new ("Horizontal Button Boxes");
-    gtk_box_pack_start (GTK_BOX (main_vbox), frame_horz, TRUE, TRUE, 10);
+    gtk_box_pack_start (GTK_BOX (main_vbox), frame_horz, TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (10));
     
     vbox = gtk_vbox_new (FALSE, 0);
-    gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (10));
     gtk_container_add (GTK_CONTAINER (frame_horz), vbox);
 
     gtk_box_pack_start (GTK_BOX (vbox), 
-			create_bbox (TRUE, "Spread", 40, GTK_BUTTONBOX_SPREAD),
+			create_bbox (TRUE, "Spread", GTK_SIZE_ONE_TWELFTH_EM (40), GTK_BUTTONBOX_SPREAD),
 			TRUE, TRUE, 0);
 
     gtk_box_pack_start (GTK_BOX (vbox), 
-			create_bbox (TRUE, "Edge", 40, GTK_BUTTONBOX_EDGE),
-			TRUE, TRUE, 5);
+			create_bbox (TRUE, "Edge", GTK_SIZE_ONE_TWELFTH_EM (40), GTK_BUTTONBOX_EDGE),
+			TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (5));
     
     gtk_box_pack_start (GTK_BOX (vbox), 
-			create_bbox (TRUE, "Start", 40, GTK_BUTTONBOX_START),
-			TRUE, TRUE, 5);
+			create_bbox (TRUE, "Start", GTK_SIZE_ONE_TWELFTH_EM (40), GTK_BUTTONBOX_START),
+			TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (5));
     
     gtk_box_pack_start (GTK_BOX (vbox), 
-			create_bbox (TRUE, "End", 40, GTK_BUTTONBOX_END),
-			TRUE, TRUE, 5);
+			create_bbox (TRUE, "End", GTK_SIZE_ONE_TWELFTH_EM (40), GTK_BUTTONBOX_END),
+			TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (5));
 
     frame_vert = gtk_frame_new ("Vertical Button Boxes");
-    gtk_box_pack_start (GTK_BOX (main_vbox), frame_vert, TRUE, TRUE, 10);
+    gtk_box_pack_start (GTK_BOX (main_vbox), frame_vert, TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (10));
     
     hbox = gtk_hbox_new (FALSE, 0);
-    gtk_container_set_border_width (GTK_CONTAINER (hbox), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (hbox), GTK_SIZE_ONE_TWELFTH_EM (10));
     gtk_container_add (GTK_CONTAINER (frame_vert), hbox);
 
     gtk_box_pack_start (GTK_BOX (hbox), 
-			create_bbox (FALSE, "Spread", 30, GTK_BUTTONBOX_SPREAD),
+			create_bbox (FALSE, "Spread", GTK_SIZE_ONE_TWELFTH_EM (30), GTK_BUTTONBOX_SPREAD),
 			TRUE, TRUE, 0);
 
     gtk_box_pack_start (GTK_BOX (hbox), 
-			create_bbox (FALSE, "Edge", 30, GTK_BUTTONBOX_EDGE),
-			TRUE, TRUE, 5);
+			create_bbox (FALSE, "Edge", GTK_SIZE_ONE_TWELFTH_EM (30), GTK_BUTTONBOX_EDGE),
+			TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (5));
 
     gtk_box_pack_start (GTK_BOX (hbox), 
-			create_bbox (FALSE, "Start", 30, GTK_BUTTONBOX_START),
-			TRUE, TRUE, 5);
+			create_bbox (FALSE, "Start", GTK_SIZE_ONE_TWELFTH_EM (30), GTK_BUTTONBOX_START),
+			TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (5));
 
     gtk_box_pack_start (GTK_BOX (hbox), 
-			create_bbox (FALSE, "End", 30, GTK_BUTTONBOX_END),
-			TRUE, TRUE, 5);
+			create_bbox (FALSE, "End", GTK_SIZE_ONE_TWELFTH_EM (30), GTK_BUTTONBOX_END),
+			TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (5));
   }
 
   if (!GTK_WIDGET_VISIBLE (window))

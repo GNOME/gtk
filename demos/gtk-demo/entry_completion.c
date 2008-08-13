@@ -58,9 +58,9 @@ do_entry_completion (GtkWidget *do_widget)
     g_signal_connect (window, "destroy",
 		      G_CALLBACK (gtk_widget_destroyed), &window);
 
-    vbox = gtk_vbox_new (FALSE, 5);
+    vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (5));
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, TRUE, TRUE, 0);
-    gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+    gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (5));
 
     label = gtk_label_new (NULL);
     gtk_label_set_markup (GTK_LABEL (label), "Completion demo, try writing <b>total</b> or <b>gnome</b> for example.");

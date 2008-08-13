@@ -11,8 +11,10 @@
 
 enum 
 {
-  PIXBUF_COL,
-  TEXT_COL
+  STOCK_ID_COL,
+  TEXT_COL,
+
+  NUM_COLUMNS,
 };
 
 static gchar *
@@ -50,7 +52,6 @@ create_stock_icon_store (void)
   };
 
   GtkStockItem item;
-  GdkPixbuf *pixbuf;
   GtkWidget *cellview;
   GtkTreeIter iter;
   GtkListStore *store;
@@ -59,29 +60,25 @@ create_stock_icon_store (void)
 
   cellview = gtk_cell_view_new ();
   
-  store = gtk_list_store_new (2, GDK_TYPE_PIXBUF, G_TYPE_STRING);
+  store = gtk_list_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
 
   for (i = 0; i < G_N_ELEMENTS (stock_id); i++)
     {
       if (stock_id[i])
 	{
-	  pixbuf = gtk_widget_render_icon (cellview, stock_id[i],
-					   GTK_ICON_SIZE_BUTTON, NULL);
-	  gtk_stock_lookup (stock_id[i], &item);
+          gtk_stock_lookup (stock_id[i], &item);
 	  label = strip_underscore (item.label);
 	  gtk_list_store_append (store, &iter);
 	  gtk_list_store_set (store, &iter,
-			      PIXBUF_COL, pixbuf,
+                              STOCK_ID_COL, stock_id[i],
 			      TEXT_COL, label,
 			      -1);
-	  g_object_unref (pixbuf);
 	  g_free (label);
 	}
       else
 	{
 	  gtk_list_store_append (store, &iter);
 	  gtk_list_store_set (store, &iter,
-			      PIXBUF_COL, NULL,
 			      TEXT_COL, "separator",
 			      -1);
 	}
@@ -343,9 +340,9 @@ do_combobox (GtkWidget *do_widget)
                       G_CALLBACK (gtk_widget_destroyed),
                       &window);
     
-    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (window), GTK_SIZE_ONE_TWELFTH_EM (10));
 
-    vbox = gtk_vbox_new (FALSE, 2);
+    vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (2));
     gtk_container_add (GTK_CONTAINER (window), vbox);
 
     /* A combobox demonstrating cell renderers, separators and
@@ -355,7 +352,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
     
     box = gtk_vbox_new (FALSE, 0);
-    gtk_container_set_border_width (GTK_CONTAINER (box), 5);
+    gtk_container_set_border_width (GTK_CONTAINER (box), GTK_SIZE_ONE_TWELFTH_EM (5));
     gtk_container_add (GTK_CONTAINER (frame), box);
     
     model = create_stock_icon_store ();
@@ -366,7 +363,7 @@ do_combobox (GtkWidget *do_widget)
     renderer = gtk_cell_renderer_pixbuf_new ();
     gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, FALSE);
     gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
-				    "pixbuf", PIXBUF_COL, 
+				    "stock-id", STOCK_ID_COL, 
 				    NULL);
 
     gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combo),
@@ -396,7 +393,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
     box = gtk_vbox_new (FALSE, 0);
-    gtk_container_set_border_width (GTK_CONTAINER (box), 5);
+    gtk_container_set_border_width (GTK_CONTAINER (box), GTK_SIZE_ONE_TWELFTH_EM (5));
     gtk_container_add (GTK_CONTAINER (frame), box);
     
     model = create_capital_store ();
@@ -425,7 +422,7 @@ do_combobox (GtkWidget *do_widget)
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
     
     box = gtk_vbox_new (FALSE, 0);
-    gtk_container_set_border_width (GTK_CONTAINER (box), 5);
+    gtk_container_set_border_width (GTK_CONTAINER (box), GTK_SIZE_ONE_TWELFTH_EM (5));
     gtk_container_add (GTK_CONTAINER (frame), box);
     
     combo = gtk_combo_box_entry_new_text ();

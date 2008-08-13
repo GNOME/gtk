@@ -204,7 +204,7 @@ do_ui_manager (GtkWidget *do_widget)
 			  FALSE, FALSE, 0);
 
       label = gtk_label_new ("Type\n<alt>\nto start");
-      gtk_widget_set_size_request (label, 200, 200);
+      gtk_widget_set_size_request (label, GTK_SIZE_ONE_TWELFTH_EM (200), GTK_SIZE_ONE_TWELFTH_EM (200));
       gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
       gtk_box_pack_start (GTK_BOX (box1), label, TRUE, TRUE, 0);
 
@@ -213,8 +213,8 @@ do_ui_manager (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
 
-      box2 = gtk_vbox_new (FALSE, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
+      box2 = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (10));
+      gtk_container_set_border_width (GTK_CONTAINER (box2), GTK_SIZE_ONE_TWELFTH_EM (10));
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
 
       button = gtk_button_new_with_label ("close");

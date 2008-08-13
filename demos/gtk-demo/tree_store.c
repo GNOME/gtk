@@ -291,7 +291,7 @@ add_columns (GtkTreeView *treeview)
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (treeview), col_offset - 1);
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column),
 				   GTK_TREE_VIEW_COLUMN_FIXED);
-  gtk_tree_view_column_set_fixed_width (GTK_TREE_VIEW_COLUMN (column), 50);
+  gtk_tree_view_column_set_fixed_width (GTK_TREE_VIEW_COLUMN (column), GTK_SIZE_ONE_TWELFTH_EM (50));
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
 
   /* havoc column */
@@ -313,7 +313,7 @@ add_columns (GtkTreeView *treeview)
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (treeview), col_offset - 1);
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column),
 				   GTK_TREE_VIEW_COLUMN_FIXED);
-  gtk_tree_view_column_set_fixed_width (GTK_TREE_VIEW_COLUMN (column), 50);
+  gtk_tree_view_column_set_fixed_width (GTK_TREE_VIEW_COLUMN (column), GTK_SIZE_ONE_TWELFTH_EM (50));
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
 
   /* tim column */
@@ -336,7 +336,7 @@ add_columns (GtkTreeView *treeview)
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (treeview), col_offset - 1);
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column),
 				   GTK_TREE_VIEW_COLUMN_FIXED);
-  gtk_tree_view_column_set_fixed_width (GTK_TREE_VIEW_COLUMN (column), 50);
+  gtk_tree_view_column_set_fixed_width (GTK_TREE_VIEW_COLUMN (column), GTK_SIZE_ONE_TWELFTH_EM (50));
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
 
   /* owen column */
@@ -358,7 +358,7 @@ add_columns (GtkTreeView *treeview)
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (treeview), col_offset - 1);
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column),
 				   GTK_TREE_VIEW_COLUMN_FIXED);
-  gtk_tree_view_column_set_fixed_width (GTK_TREE_VIEW_COLUMN (column), 50);
+  gtk_tree_view_column_set_fixed_width (GTK_TREE_VIEW_COLUMN (column), GTK_SIZE_ONE_TWELFTH_EM (50));
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
 
   /* dave column */
@@ -380,7 +380,7 @@ add_columns (GtkTreeView *treeview)
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (treeview), col_offset - 1);
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column),
 				   GTK_TREE_VIEW_COLUMN_FIXED);
-  gtk_tree_view_column_set_fixed_width (GTK_TREE_VIEW_COLUMN (column), 50);
+  gtk_tree_view_column_set_fixed_width (GTK_TREE_VIEW_COLUMN (column), GTK_SIZE_ONE_TWELFTH_EM (50));
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
 }
 
@@ -402,8 +402,8 @@ do_tree_store (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
 
-      vbox = gtk_vbox_new (FALSE, 8);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
+      vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (8));
+      gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (8));
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       gtk_box_pack_start (GTK_BOX (vbox),
@@ -435,7 +435,7 @@ do_tree_store (GtkWidget *do_widget)
       /* expand all rows after the treeview widget has been realized */
       g_signal_connect (treeview, "realize",
 			G_CALLBACK (gtk_tree_view_expand_all), NULL);
-      gtk_window_set_default_size (GTK_WINDOW (window), 650, 400);
+      gtk_window_set_default_size (GTK_WINDOW (window), GTK_SIZE_ONE_TWELFTH_EM (50), GTK_SIZE_ONE_TWELFTH_EM (400));
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

@@ -114,7 +114,7 @@ create_tags (GtkTextBuffer *buffer)
 			      "justification", GTK_JUSTIFY_RIGHT, NULL);
 
   gtk_text_buffer_create_tag (buffer, "wide_margins",
-			      "left_margin", 50, "right_margin", 50,
+			      "left_margin", GTK_SIZE_ONE_TWELFTH_EM (50), "right_margin", GTK_SIZE_ONE_TWELFTH_EM (50),
 			      NULL);
   
   gtk_text_buffer_create_tag (buffer, "strikethrough",
@@ -139,9 +139,9 @@ create_tags (GtkTextBuffer *buffer)
   gtk_text_buffer_create_tag (buffer, "rtl_quote",
 			      "wrap_mode", GTK_WRAP_WORD,
 			      "direction", GTK_TEXT_DIR_RTL,
-			      "indent", 30,
-			      "left_margin", 20,
-			      "right_margin", 20,
+			      "indent", GTK_SIZE_ONE_TWELFTH_EM (30),
+			      "left_margin", GTK_SIZE_ONE_TWELFTH_EM (20),
+			      "right_margin", GTK_SIZE_ONE_TWELFTH_EM (20),
 			      NULL);
 }
 
@@ -173,7 +173,10 @@ insert_text (GtkTextBuffer *buffer)
       exit (1);
     }
 
-  scaled = gdk_pixbuf_scale_simple (pixbuf, 32, 32, GDK_INTERP_BILINEAR);
+  scaled = gdk_pixbuf_scale_simple (pixbuf,
+                                    gtk_size_to_pixel (NULL, 0, GTK_SIZE_ONE_TWELFTH_EM (32)),
+                                    gtk_size_to_pixel (NULL, 0, GTK_SIZE_ONE_TWELFTH_EM (32)),
+                                    GDK_INTERP_BILINEAR);
   g_object_unref (pixbuf);
   pixbuf = scaled;
   
@@ -409,7 +412,7 @@ attach_widgets (GtkTextView *text_view)
         {
           widget = gtk_hscale_new (NULL);
           gtk_range_set_range (GTK_RANGE (widget), 0, 100);
-          gtk_widget_set_size_request (widget, 70, -1);
+          gtk_widget_set_size_request (widget, GTK_SIZE_ONE_TWELFTH_EM (70), -1);
         }
       else if (i == 3)
         {
@@ -454,7 +457,7 @@ do_textview (GtkWidget *do_widget)
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window),
-				   450, 450);
+				   GTK_SIZE_ONE_TWELFTH_EM (450), GTK_SIZE_ONE_TWELFTH_EM (450));
       
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
@@ -463,7 +466,7 @@ do_textview (GtkWidget *do_widget)
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       vpaned = gtk_vpaned_new ();
-      gtk_container_set_border_width (GTK_CONTAINER(vpaned), 5);
+      gtk_container_set_border_width (GTK_CONTAINER(vpaned), GTK_SIZE_ONE_TWELFTH_EM (5));
       gtk_container_add (GTK_CONTAINER (window), vpaned);
 
       /* For convenience, we just use the autocreated buffer from
@@ -534,7 +537,7 @@ recursive_attach_view (int                 depth,
   gtk_widget_modify_bg (event_box, GTK_STATE_NORMAL, &color);
 
   align = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-  gtk_container_set_border_width (GTK_CONTAINER (align), 1);
+  gtk_container_set_border_width (GTK_CONTAINER (align), GTK_SIZE_ONE_TWELFTH_EM (1));
   
   gtk_container_add (GTK_CONTAINER (event_box), align);
   gtk_container_add (GTK_CONTAINER (align), child_view);
@@ -590,7 +593,7 @@ easter_egg_callback (GtkWidget *button,
   window_ptr = &window;
   g_object_add_weak_pointer (G_OBJECT (window), window_ptr);
 
-  gtk_window_set_default_size (GTK_WINDOW (window), 300, 400);
+  gtk_window_set_default_size (GTK_WINDOW (window), GTK_SIZE_ONE_TWELFTH_EM (300), GTK_SIZE_ONE_TWELFTH_EM (400));
   
   gtk_widget_show_all (window);
 }

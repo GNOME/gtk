@@ -263,7 +263,7 @@ do_iconview (GtkWidget *do_widget)
       GError *error;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_default_size (GTK_WINDOW (window), 650, 400);
+      gtk_window_set_default_size (GTK_WINDOW (window), GTK_SIZE_ONE_TWELFTH_EM (650), GTK_SIZE_ONE_TWELFTH_EM (400));
 
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (do_widget));

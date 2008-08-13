@@ -148,8 +148,9 @@
 	 </accessibility>
     </object>
     <object class="GtkWindow" id="window1">
-        <property name="default_height">250</property>
-        <property name="default_width">440</property>
+        <!-- 100 mm = 10 cm ~= 4 inches -->
+        <property name="default_height">100 mm</property>
+        <property name="default_width">36.6667em</property>
         <property name="title">GtkBuilder demo</property>
         <child>
             <object class="GtkVBox" id="vbox1">

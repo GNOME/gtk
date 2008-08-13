@@ -65,7 +65,7 @@ create_pane_options (GtkPaned	 *paned,
   GtkWidget *check_button;
   
   frame = gtk_frame_new (frame_label);
-  gtk_container_set_border_width (GTK_CONTAINER (frame), 4);
+  gtk_container_set_border_width (GTK_CONTAINER (frame), GTK_SIZE_ONE_TWELFTH_EM (4));
   
   table = gtk_table_new (3, 2, TRUE);
   gtk_container_add (GTK_CONTAINER (frame), table);
@@ -138,14 +138,14 @@ do_panes (GtkWidget *do_widget)
       
       vpaned = gtk_vpaned_new ();
       gtk_box_pack_start (GTK_BOX (vbox), vpaned, TRUE, TRUE, 0);
-      gtk_container_set_border_width (GTK_CONTAINER(vpaned), 5);
+      gtk_container_set_border_width (GTK_CONTAINER(vpaned), GTK_SIZE_ONE_TWELFTH_EM (5));
 
       hpaned = gtk_hpaned_new ();
       gtk_paned_add1 (GTK_PANED (vpaned), hpaned);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
-      gtk_widget_set_size_request (frame, 60, 60);
+      gtk_widget_set_size_request (frame, GTK_SIZE_ONE_TWELFTH_EM (60), GTK_SIZE_ONE_TWELFTH_EM (60));
       gtk_paned_add1 (GTK_PANED (hpaned), frame);
       
       button = gtk_button_new_with_mnemonic ("_Hi there");
@@ -153,12 +153,12 @@ do_panes (GtkWidget *do_widget)
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
-      gtk_widget_set_size_request (frame, 80, 60);
+      gtk_widget_set_size_request (frame, GTK_SIZE_ONE_TWELFTH_EM (80), GTK_SIZE_ONE_TWELFTH_EM (60));
       gtk_paned_add2 (GTK_PANED (hpaned), frame);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
-      gtk_widget_set_size_request (frame, 60, 80);
+      gtk_widget_set_size_request (frame, GTK_SIZE_ONE_TWELFTH_EM (60), GTK_SIZE_ONE_TWELFTH_EM (80));
       gtk_paned_add2 (GTK_PANED (vpaned), frame);
 
       /* Now create toggle buttons to control sizing */
