@@ -1,3 +1,8 @@
+2008-08-13  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkstock.c (gtk_stock_lookup): cast the return value of
+	g_dgettext() to fix warning about discarded qualifier.
+
 2008-08-12  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/gtkclipboard.c (gtk_clipboard_store):

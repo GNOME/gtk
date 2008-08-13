@@ -176,7 +176,7 @@ gtk_stock_lookup (const gchar  *stock_id,
 	  if (translate != NULL && translate->func != NULL)
 	    item->label = (* translate->func) (item->label, translate->data);
 	  else
-	    item->label = g_dgettext (item->translation_domain, item->label);
+	    item->label = (gchar *) g_dgettext (item->translation_domain, item->label);
 	}
     }
 
