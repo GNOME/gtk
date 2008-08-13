@@ -26,6 +26,9 @@
 
 #include <gtk/gtkcelleditable.h>
 
+/* forward declaration */
+typedef struct _GtkTreeViewColumn      GtkTreeViewColumn;
+
 G_BEGIN_DECLS
 
 typedef enum
@@ -62,8 +65,8 @@ struct _GtkCellRenderer
   gfloat GSEAL (xalign);
   gfloat GSEAL (yalign);
 
-  gint GSEAL (width);
-  gint GSEAL (height);
+  GtkSize GSEAL (width);
+  GtkSize GSEAL (height);
 
   guint16 GSEAL (xpad);
   guint16 GSEAL (ypad);
@@ -87,8 +90,8 @@ struct _GtkCellRendererClass
 				      GdkRectangle         *cell_area,
 				      gint                 *x_offset,
 				      gint                 *y_offset,
-				      gint                 *width,
-				      gint                 *height);
+				      GtkSize              *width,
+				      GtkSize              *height);
   void             (* render)        (GtkCellRenderer      *cell,
 				      GdkDrawable          *window,
 				      GtkWidget            *widget,
@@ -131,6 +134,13 @@ void             gtk_cell_renderer_get_size       (GtkCellRenderer      *cell,
 						   gint                 *y_offset,
 						   gint                 *width,
 						   gint                 *height);
+void             gtk_cell_renderer_get_size_unit  (GtkCellRenderer      *cell,
+						   GtkWidget            *widget,
+						   const GdkRectangle   *cell_area,
+						   gint                 *x_offset,
+						   gint                 *y_offset,
+						   GtkSize              *width,
+						   GtkSize              *height);
 void             gtk_cell_renderer_render         (GtkCellRenderer      *cell,
 						   GdkWindow            *window,
 						   GtkWidget            *widget,
@@ -153,11 +163,18 @@ GtkCellEditable *gtk_cell_renderer_start_editing  (GtkCellRenderer      *cell,
 						   const GdkRectangle   *cell_area,
 						   GtkCellRendererState  flags);
 void             gtk_cell_renderer_set_fixed_size (GtkCellRenderer      *cell,
-						   gint                  width,
-						   gint                  height);
+						   GtkSize               width,
+						   GtkSize               height);
 void             gtk_cell_renderer_get_fixed_size (GtkCellRenderer      *cell,
 						   gint                 *width,
 						   gint                 *height);
+void             gtk_cell_renderer_get_fixed_size_unit (GtkCellRenderer *cell,
+                                                        GtkSize         *width,
+                                                        GtkSize         *height);
+
+GtkTreeViewColumn *gtk_cell_renderer_get_tree_view_column (GtkCellRenderer *cell);
+
+GtkWidget *gtk_cell_renderer_get_tree_view (GtkCellRenderer *cell);
 
 /* For use by cell renderer implementations only */
 #ifndef GTK_DISABLE_DEPRECATED

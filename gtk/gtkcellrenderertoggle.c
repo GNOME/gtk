@@ -71,7 +71,7 @@ enum {
   PROP_INDICATOR_SIZE
 };
 
-#define TOGGLE_WIDTH 13
+#define TOGGLE_WIDTH GTK_SIZE_ONE_TWELFTH_EM(13)
 
 static guint toggle_cell_signals[LAST_SIGNAL] = { 0 };
 
@@ -154,13 +154,11 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 
   g_object_class_install_property (object_class,
 				   PROP_INDICATOR_SIZE,
-				   g_param_spec_int ("indicator-size",
-						     P_("Indicator size"),
-						     P_("Size of check or radio indicator"),
-						     0,
-						     G_MAXINT,
-						     TOGGLE_WIDTH,
-						     GTK_PARAM_READWRITE));
+				   gtk_param_spec_size ("indicator-size",
+                                                        P_("Indicator size"),
+                                                        P_("Size of check or radio indicator"),
+                                                        0, G_MAXINT, TOGGLE_WIDTH,
+                                                        GTK_PARAM_READWRITE));
 
   
   /**
@@ -210,7 +208,8 @@ gtk_cell_renderer_toggle_get_property (GObject     *object,
       g_value_set_boolean (value, celltoggle->radio);
       break;
     case PROP_INDICATOR_SIZE:
-      g_value_set_int (value, priv->indicator_size);
+      gtk_value_set_size (value, priv->indicator_size,
+                          gtk_cell_renderer_get_tree_view (GTK_CELL_RENDERER (celltoggle)));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -245,7 +244,7 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
       celltoggle->radio = g_value_get_boolean (value);
       break;
     case PROP_INDICATOR_SIZE:
-      priv->indicator_size = g_value_get_int (value);
+      priv->indicator_size = gtk_value_get_size (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -287,8 +286,8 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer *cell,
 
   priv = GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE (cell);
 
-  calc_width = (gint) cell->xpad * 2 + priv->indicator_size;
-  calc_height = (gint) cell->ypad * 2 + priv->indicator_size;
+  calc_width = (gint) cell->xpad * 2 + gtk_widget_size_to_pixel (widget, priv->indicator_size);
+  calc_height = (gint) cell->ypad * 2 + gtk_widget_size_to_pixel (widget, priv->indicator_size);
 
   if (width)
     *width = calc_width;

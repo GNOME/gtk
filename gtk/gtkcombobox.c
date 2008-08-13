@@ -243,6 +243,7 @@ static void     gtk_combo_box_add                  (GtkContainer    *container,
                                                     GtkWidget       *widget);
 static void     gtk_combo_box_remove               (GtkContainer    *container,
                                                     GtkWidget       *widget);
+static void     gtk_combo_box_unit_changed         (GtkWidget       *widget);
 
 static ComboCellInfo *gtk_combo_box_get_cell_info  (GtkComboBox      *combo_box,
                                                     GtkCellRenderer  *cell);
@@ -499,6 +500,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->grab_focus = gtk_combo_box_grab_focus;
   widget_class->style_set = gtk_combo_box_style_set;
   widget_class->state_changed = gtk_combo_box_state_changed;
+  widget_class->unit_changed = gtk_combo_box_unit_changed;
 
   gtk_object_class = (GtkObjectClass *)klass;
   gtk_object_class->destroy = gtk_combo_box_destroy;
@@ -861,13 +863,11 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * Since: 2.12
    */
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("arrow-size",
-							     P_("Arrow Size"),
-							     P_("The minimum size of the arrow in the combo box"),
-							     0,
-							     G_MAXINT,
-							     15,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("arrow-size",
+                                                                P_("Arrow Size"),
+                                                                P_("The minimum size of the arrow in the combo box"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (15),
+                                                                GTK_PARAM_READABLE));
 
   /**
    * GtkComboBox:shadow-type:
@@ -5923,6 +5923,19 @@ gtk_combo_box_buildable_custom_tag_end (GtkBuildable *buildable,
     parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
 					    data);
 }
+
+static void
+gtk_combo_box_unit_changed (GtkWidget *widget)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
+
+  gtk_combo_box_check_appearance (combo_box);
+
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (gtk_combo_box_parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (gtk_combo_box_parent_class)->unit_changed (widget);
+}
+
 
 #define __GTK_COMBO_BOX_C__
 #include "gtkaliasdef.c"

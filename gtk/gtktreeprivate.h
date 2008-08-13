@@ -440,6 +440,8 @@ void              _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *c
 							    gint              *left,
 							    gint              *right);
 
+void              _gtk_cell_renderer_set_tree_view_column (GtkCellRenderer *cell,
+                                                           GtkTreeViewColumn *column);
 
 G_END_DECLS
 

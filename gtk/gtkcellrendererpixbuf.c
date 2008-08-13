@@ -431,9 +431,10 @@ gtk_cell_renderer_pixbuf_create_themed_pixbuf (GtkCellRendererPixbuf *cellpixbuf
   icon_theme = gtk_icon_theme_get_for_screen (screen);
   settings = gtk_settings_get_for_screen (screen);
 
-  if (!gtk_icon_size_lookup_for_settings (settings,
-					  priv->stock_size,
-					  &width, &height))
+  if (!gtk_icon_size_lookup_for_settings_for_monitor (settings,
+                                                      gtk_widget_get_monitor_num (widget),
+                                                      priv->stock_size,
+                                                      &width, &height))
     {
       g_warning ("Invalid icon size %u\n", priv->stock_size);
       width = height = 24;

@@ -43,6 +43,9 @@ typedef struct _GtkCellRendererPrivate GtkCellRendererPrivate;
 struct _GtkCellRendererPrivate
 {
   GdkColor cell_background;
+  GtkUSize xpad_unit;
+  GtkUSize ypad_unit;
+  GtkTreeViewColumn *column;
 };
 
 
@@ -79,6 +82,8 @@ G_DEFINE_ABSTRACT_TYPE (GtkCellRenderer, gtk_cell_renderer, GTK_TYPE_OBJECT)
 static void
 gtk_cell_renderer_init (GtkCellRenderer *cell)
 {
+  GtkCellRendererPrivate *priv = GTK_CELL_RENDERER_GET_PRIVATE (cell);
+
   cell->mode = GTK_CELL_RENDERER_MODE_INERT;
   cell->visible = TRUE;
   cell->width = -1;
@@ -87,6 +92,8 @@ gtk_cell_renderer_init (GtkCellRenderer *cell)
   cell->yalign = 0.5;
   cell->xpad = 0;
   cell->ypad = 0;
+  priv->xpad_unit = 0;
+  priv->ypad_unit = 0;
   cell->sensitive = TRUE;
   cell->is_expander = FALSE;
   cell->is_expanded = FALSE;
@@ -217,43 +224,35 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 
   g_object_class_install_property (object_class,
 				   PROP_XPAD,
-				   g_param_spec_uint ("xpad",
-						      P_("xpad"),
-						      P_("The xpad"),
-						      0,
-						      G_MAXUINT,
-						      0,
-						      GTK_PARAM_READWRITE));
+				   gtk_param_spec_usize ("xpad",
+                                                         P_("xpad"),
+                                                         P_("The xpad"),
+                                                         0, G_MAXINT, 0,
+                                                         GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_YPAD,
-				   g_param_spec_uint ("ypad",
-						      P_("ypad"),
-						      P_("The ypad"),
-						      0,
-						      G_MAXUINT,
-						      0,
-						      GTK_PARAM_READWRITE));
+				   gtk_param_spec_usize ("ypad",
+                                                         P_("ypad"),
+                                                         P_("The ypad"),
+                                                         0, G_MAXINT, 0,
+                                                         GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_WIDTH,
-				   g_param_spec_int ("width",
-						     P_("width"),
-						     P_("The fixed width"),
-						     -1,
-						     G_MAXINT,
-						     -1,
-						     GTK_PARAM_READWRITE));
+				   gtk_param_spec_size ("width",
+                                                        P_("width"),
+                                                        P_("The fixed width"),
+                                                        -1, G_MAXINT, -1,
+                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_HEIGHT,
-				   g_param_spec_int ("height",
-						     P_("height"),
-						     P_("The fixed height"),
-						     -1,
-						     G_MAXINT,
-						     -1,
-						     GTK_PARAM_READWRITE));
+				   gtk_param_spec_size ("height",
+                                                        P_("height"),
+                                                        P_("The fixed height"),
+                                                        -1, G_MAXINT, -1,
+                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_IS_EXPANDER,
@@ -336,16 +335,16 @@ gtk_cell_renderer_get_property (GObject     *object,
       g_value_set_float (value, cell->yalign);
       break;
     case PROP_XPAD:
-      g_value_set_uint (value, cell->xpad);
+      gtk_value_set_usize (value, priv->xpad_unit, gtk_cell_renderer_get_tree_view (cell));
       break;
     case PROP_YPAD:
-      g_value_set_uint (value, cell->ypad);
+      gtk_value_set_usize (value, priv->ypad_unit, gtk_cell_renderer_get_tree_view (cell));
       break;
     case PROP_WIDTH:
-      g_value_set_int (value, cell->width);
+      gtk_value_set_size (value, cell->width, gtk_cell_renderer_get_tree_view (cell));
       break;
     case PROP_HEIGHT:
-      g_value_set_int (value, cell->height);
+      gtk_value_set_size (value, cell->height, gtk_cell_renderer_get_tree_view (cell));
       break;
     case PROP_IS_EXPANDER:
       g_value_set_boolean (value, cell->is_expander);
@@ -382,6 +381,7 @@ gtk_cell_renderer_set_property (GObject      *object,
 				GParamSpec   *pspec)
 {
   GtkCellRenderer *cell = GTK_CELL_RENDERER (object);
+  GtkCellRendererPrivate *priv = GTK_CELL_RENDERER_GET_PRIVATE (object);
 
   switch (param_id)
     {
@@ -404,16 +404,18 @@ gtk_cell_renderer_set_property (GObject      *object,
       cell->yalign = g_value_get_float (value);
       break;
     case PROP_XPAD:
-      cell->xpad = g_value_get_uint (value);
+      priv->xpad_unit = gtk_value_get_usize (value);
+      cell->xpad = gtk_widget_size_to_pixel (gtk_cell_renderer_get_tree_view (cell), priv->xpad_unit);
       break;
     case PROP_YPAD:
-      cell->ypad = g_value_get_uint (value);
+      priv->ypad_unit = gtk_value_get_usize (value);
+      cell->ypad = gtk_widget_size_to_pixel (gtk_cell_renderer_get_tree_view (cell), priv->ypad_unit);
       break;
     case PROP_WIDTH:
-      cell->width = g_value_get_int (value);
+      cell->width = gtk_value_get_size (value);
       break;
     case PROP_HEIGHT:
-      cell->height = g_value_get_int (value);
+      cell->height = gtk_value_get_size (value);
       break;
     case PROP_IS_EXPANDER:
       cell->is_expander = g_value_get_boolean (value);
@@ -501,6 +503,59 @@ gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
 			    gint               *y_offset,
 			    gint               *width,
 			    gint               *height)
+{
+  gint *real_width = width;
+  gint *real_height = height;
+
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->get_size != NULL);
+
+  if (width && cell->width != -1)
+    {
+      real_width = NULL;
+      *width = gtk_widget_size_to_pixel (widget, cell->width);
+    }
+  if (height && cell->height != -1)
+    {
+      real_height = NULL;
+      *height = gtk_widget_size_to_pixel (widget, cell->height);
+    }
+
+  GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (cell,
+						widget,
+						(GdkRectangle *) cell_area,
+						x_offset,
+						y_offset,
+						real_width,
+						real_height);
+  if (real_width)
+    *real_width = gtk_widget_size_to_pixel (widget, *real_width);
+  if (real_height)
+    *real_height = gtk_widget_size_to_pixel (widget, *real_height);
+}
+
+/**
+ * gtk_cell_renderer_get_size_unit:
+ * @cell: a #GtkCellRenderer
+ * @widget: the widget the renderer is rendering to
+ * @cell_area: The area a cell will be allocated, or %NULL
+ * @x_offset: location to return x offset of cell relative to @cell_area, or %NULL
+ * @y_offset: location to return y offset of cell relative to @cell_area, or %NULL
+ * @width: location to return width needed to render a cell, or %NULL
+ * @height: location to return height needed to render a cell, or %NULL
+ *
+ * Like gtk_cell_renderer_get_size() but preserves the units.
+ *
+ * Since: 2.14
+ **/
+void
+gtk_cell_renderer_get_size_unit (GtkCellRenderer    *cell,
+                                 GtkWidget          *widget,
+                                 const GdkRectangle *cell_area,
+                                 gint               *x_offset,
+                                 gint               *y_offset,
+                                 GtkSize            *width,
+                                 GtkSize            *height)
 {
   gint *real_width = width;
   gint *real_height = height;
@@ -689,8 +744,8 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
  **/
 void
 gtk_cell_renderer_set_fixed_size (GtkCellRenderer *cell,
-				  gint             width,
-				  gint             height)
+				  GtkSize          width,
+				  GtkSize          height)
 {
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (width >= -1 && height >= -1);
@@ -727,6 +782,29 @@ void
 gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
 				  gint            *width,
 				  gint            *height)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  if (width)
+    (* width) = gtk_widget_size_to_pixel (gtk_cell_renderer_get_tree_view (cell), cell->width);
+  if (height)
+    (* height) = gtk_widget_size_to_pixel (gtk_cell_renderer_get_tree_view (cell), cell->height);
+}
+
+/**
+ * gtk_cell_renderer_get_fixed_size_unit:
+ * @cell: A #GtkCellRenderer
+ * @width: location to fill in with the fixed width of the widget, or %NULL
+ * @height: location to fill in with the fixed height of the widget, or %NULL
+ * 
+ * Like gtk_cell_renderer_get_fixed_size_unit() but preserves the unit information.
+ *
+ * Since: 2.14
+ **/
+void
+gtk_cell_renderer_get_fixed_size_unit (GtkCellRenderer *cell,
+                                       GtkSize         *width,
+                                       GtkSize         *height)
 {
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 
@@ -785,6 +863,67 @@ gtk_cell_renderer_stop_editing (GtkCellRenderer *cell,
       if (canceled)
 	g_signal_emit (cell, cell_renderer_signals[EDITING_CANCELED], 0);
     }
+}
+
+void
+_gtk_cell_renderer_set_tree_view_column (GtkCellRenderer *cell,
+                                         GtkTreeViewColumn *column)
+{
+  GtkCellRendererPrivate *priv = GTK_CELL_RENDERER_GET_PRIVATE (cell);
+  priv->column = column;
+}
+
+/**
+ * gtk_cell_renderer_get_tree_view_column:
+ * @cell: A #GtkCellRenderer
+ *
+ * Gets the #GtkTreeViewColumn wherein @cell has been
+ * inserted. Returns %NULL if @cell is currently not inserted into any
+ * tree column.
+ *
+ * Returns: the #GtkTreeViewColumn that @cell has been inserted into,
+ * %NULL otherwise
+ *
+ * Since: 2.14
+ **/
+GtkTreeViewColumn *
+gtk_cell_renderer_get_tree_view_column (GtkCellRenderer *cell)
+{
+  GtkCellRendererPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), NULL);
+
+  priv = GTK_CELL_RENDERER_GET_PRIVATE (cell);
+
+  return priv->column;
+}
+
+/**
+ * gtk_cell_renderer_get_tree_view:
+ * @cell: A #GtkCellRenderer
+ *
+ * Gets the #GtkTreeView wherein the column that @cell has been
+ * inserted belongs to. Returns %NULL if @cell is currently not
+ * inserted into any tree column or if the tree column is currently
+ * not inserted into any tree.
+ *
+ * Returns: a #GtkTreeView
+ *
+ * Since: 2.14
+ */
+GtkWidget *
+gtk_cell_renderer_get_tree_view (GtkCellRenderer *cell)
+{
+  GtkCellRendererPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), NULL);
+
+  priv = GTK_CELL_RENDERER_GET_PRIVATE (cell);
+
+  if (priv->column == NULL)
+    return NULL;
+
+  return gtk_tree_view_column_get_tree_view (priv->column);
 }
 
 #define __GTK_CELL_RENDERER_C__

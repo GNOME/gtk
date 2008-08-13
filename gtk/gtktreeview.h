@@ -404,6 +404,7 @@ gboolean                    gtk_tree_view_get_show_expanders     (GtkTreeView   
 void                        gtk_tree_view_set_level_indentation  (GtkTreeView                *tree_view,
 								  gint                        indentation);
 gint                        gtk_tree_view_get_level_indentation  (GtkTreeView                *tree_view);
+GtkSize                     gtk_tree_view_get_level_indentation_unit (GtkTreeView            *tree_view);
 
 /* Convenience functions for setting tooltips */
 void          gtk_tree_view_set_tooltip_row    (GtkTreeView       *tree_view,
