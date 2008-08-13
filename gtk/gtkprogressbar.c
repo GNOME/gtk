@@ -37,10 +37,10 @@
 #include "gtkalias.h"
 
 
-#define MIN_HORIZONTAL_BAR_WIDTH   150
-#define MIN_HORIZONTAL_BAR_HEIGHT  20
-#define MIN_VERTICAL_BAR_WIDTH     22
-#define MIN_VERTICAL_BAR_HEIGHT    80
+#define MIN_HORIZONTAL_BAR_WIDTH   GTK_SIZE_ONE_TWELFTH_EM(150)
+#define MIN_HORIZONTAL_BAR_HEIGHT  GTK_SIZE_ONE_TWELFTH_EM(20)
+#define MIN_VERTICAL_BAR_WIDTH     GTK_SIZE_ONE_TWELFTH_EM(22)
+#define MIN_VERTICAL_BAR_HEIGHT    GTK_SIZE_ONE_TWELFTH_EM(80)
 
 enum {
   PROP_0,
@@ -210,17 +210,17 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 						      PANGO_ELLIPSIZE_NONE,
                                                       GTK_PARAM_READWRITE));
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("xspacing",
-                                                             P_("XSpacing"),
-                                                             P_("Extra spacing applied to the width of a progress bar."),
-                                                             0, G_MAXINT, 7,
-                                                             G_PARAM_READWRITE));
+                                           gtk_param_spec_size ("xspacing",
+                                                                P_("XSpacing"),
+                                                                P_("Extra spacing applied to the width of a progress bar."),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (7),
+                                                                G_PARAM_READWRITE));
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("yspacing",
-                                                             P_("YSpacing"),
-                                                             P_("Extra spacing applied to the height of a progress bar."),
-                                                             0, G_MAXINT, 7,
-                                                             G_PARAM_READWRITE));
+                                           gtk_param_spec_size ("yspacing",
+                                                                P_("YSpacing"),
+                                                                P_("Extra spacing applied to the height of a progress bar."),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (7),
+                                                                G_PARAM_READWRITE));
 
   /**
    * GtkProgressBar:min-horizontal-bar-width:
@@ -230,11 +230,11 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    * Since: 2.14
    */
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("min-horizontal-bar-width",
-                                                             P_("Min horizontal bar width"),
-                                                             P_("The minimum horizontal width of the progress bar"),
-                                                             1, G_MAXINT, MIN_HORIZONTAL_BAR_WIDTH,
-                                                             G_PARAM_READWRITE));
+                                           gtk_param_spec_size ("min-horizontal-bar-width",
+                                                                P_("Min horizontal bar width"),
+                                                                P_("The minimum horizontal width of the progress bar"),
+                                                                0, G_MAXINT, MIN_HORIZONTAL_BAR_WIDTH,
+                                                                G_PARAM_READWRITE));
   /**
    * GtkProgressBar:min-horizontal-bar-height:
    *
@@ -243,11 +243,11 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    * Since: 2.14
    */
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("min-horizontal-bar-height",
-                                                             P_("Min horizontal bar height"),
-                                                             P_("Minimum horizontal height of the progress bar"),
-                                                             1, G_MAXINT, MIN_HORIZONTAL_BAR_HEIGHT,
-                                                             G_PARAM_READWRITE));
+                                           gtk_param_spec_size ("min-horizontal-bar-height",
+                                                                P_("Min horizontal bar height"),
+                                                                P_("Minimum horizontal height of the progress bar"),
+                                                                0, G_MAXINT, MIN_HORIZONTAL_BAR_HEIGHT,
+                                                                G_PARAM_READWRITE));
   /**
    * GtkProgressBar:min-vertical-bar-width:
    *
@@ -256,11 +256,11 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    * Since: 2.14
    */
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("min-vertical-bar-width",
-                                                             P_("Min vertical bar width"),
-                                                             P_("The minimum vertical width of the progress bar"),
-                                                             1, G_MAXINT, MIN_VERTICAL_BAR_WIDTH,
-                                                             G_PARAM_READWRITE));
+                                           gtk_param_spec_size ("min-vertical-bar-width",
+                                                                P_("Min vertical bar width"),
+                                                                P_("The minimum vertical width of the progress bar"),
+                                                                0, G_MAXINT, MIN_VERTICAL_BAR_WIDTH,
+                                                                G_PARAM_READWRITE));
   /**
    * GtkProgressBar:min-vertical-bar-height:
    *
@@ -269,11 +269,11 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    * Since: 2.14
    */
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("min-vertical-bar-height",
-                                                             P_("Min vertical bar height"),
-                                                             P_("The minimum vertical height of the progress bar"),
-                                                             1, G_MAXINT, MIN_VERTICAL_BAR_HEIGHT,
-                                                             G_PARAM_READWRITE));
+                                           gtk_param_spec_size ("min-vertical-bar-height",
+                                                                P_("Min vertical bar height"),
+                                                                P_("The minimum vertical height of the progress bar"),
+                                                                0, G_MAXINT, MIN_VERTICAL_BAR_HEIGHT,
+                                                                G_PARAM_READWRITE));
 }
 
 static void

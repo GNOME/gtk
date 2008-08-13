@@ -1417,6 +1417,7 @@ gtk_expander_set_expanded
 gtk_expander_get_expanded
 gtk_expander_set_spacing
 gtk_expander_get_spacing
+gtk_expander_get_spacing_unit
 gtk_expander_set_label
 gtk_expander_get_label
 gtk_expander_set_use_underline

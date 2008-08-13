@@ -1435,6 +1435,7 @@ gtk_expander_get_expanded
 gtk_expander_get_label
 gtk_expander_get_label_widget
 gtk_expander_get_spacing
+gtk_expander_get_spacing_unit
 gtk_expander_get_type G_GNUC_CONST
 gtk_expander_get_use_markup
 gtk_expander_get_use_underline

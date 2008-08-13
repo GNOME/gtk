@@ -258,7 +258,7 @@ gtk_gamma_curve_init (GtkGammaCurve *curve)
   curve->gamma = 1.0;
 
   curve->table = gtk_table_new (1, 2, FALSE);
-  gtk_table_set_col_spacings (GTK_TABLE (curve->table), 3);
+  gtk_table_set_col_spacings (GTK_TABLE (curve->table), GTK_SIZE_ONE_TWELFTH_EM (3));
   gtk_container_add (GTK_CONTAINER (curve), curve->table);
 
   curve->curve = gtk_curve_new ();
@@ -266,7 +266,7 @@ gtk_gamma_curve_init (GtkGammaCurve *curve)
 		    G_CALLBACK (curve_type_changed_callback), curve);
   gtk_table_attach_defaults (GTK_TABLE (curve->table), curve->curve, 0, 1, 0, 1);
 
-  vbox = gtk_vbox_new (/* homogeneous */ FALSE, /* spacing */ 3);
+  vbox = gtk_vbox_new (/* homogeneous */ FALSE, /* spacing */ GTK_SIZE_ONE_TWELFTH_EM (3));
   gtk_table_attach (GTK_TABLE (curve->table), vbox, 1, 2, 0, 1, 0, 0, 0, 0);
 
   /* toggle buttons: */
@@ -412,18 +412,18 @@ button_clicked_callback (GtkWidget *w, gpointer data)
 	  vbox = GTK_DIALOG (c->gamma_dialog)->vbox;
 	  
 	  hbox = gtk_hbox_new (/* homogeneous */ FALSE, 0);
-	  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 2);
+	  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (2));
 	  gtk_widget_show (hbox);
 	  
 	  label = gtk_label_new_with_mnemonic (_("_Gamma value"));
-	  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 2);
+	  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, GTK_SIZE_ONE_TWELFTH_EM (2));
 	  gtk_widget_show (label);
 	  
 	  sprintf (buf, "%g", c->gamma);
 	  c->gamma_text = gtk_entry_new ();
           gtk_label_set_mnemonic_widget (GTK_LABEL (label), c->gamma_text);
 	  gtk_entry_set_text (GTK_ENTRY (c->gamma_text), buf);
-	  gtk_box_pack_start (GTK_BOX (hbox), c->gamma_text, TRUE, TRUE, 2);
+	  gtk_box_pack_start (GTK_BOX (hbox), c->gamma_text, TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (2));
 	  gtk_widget_show (c->gamma_text);
 	  
 	  /* fill in action area: */

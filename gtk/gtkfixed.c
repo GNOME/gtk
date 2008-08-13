@@ -86,23 +86,19 @@ gtk_fixed_class_init (GtkFixedClass *class)
 
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_X,
-					      g_param_spec_int ("x",
-                                                                P_("X position"),
-                                                                P_("X position of child widget"),
-                                                                G_MININT,
-                                                                G_MAXINT,
-                                                                0,
-                                                                GTK_PARAM_READWRITE));
+					      gtk_param_spec_size ("x",
+                                                                   P_("X position"),
+                                                                   P_("X position of child widget"),
+                                                                   0, G_MAXINT, 0,
+                                                                   GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_Y,
-					      g_param_spec_int ("y",
-                                                                P_("Y position"),
-                                                                P_("Y position of child widget"),
-                                                                G_MININT,
-                                                                G_MAXINT,
-                                                                0,
-                                                                GTK_PARAM_READWRITE));
+					      gtk_param_spec_size ("y",
+                                                                   P_("Y position"),
+                                                                   P_("Y position of child widget"),
+                                                                   0, G_MAXINT, 0,
+                                                                   GTK_PARAM_READWRITE));
 }
 
 static GType
@@ -149,8 +145,8 @@ get_child (GtkFixed  *fixed,
 void
 gtk_fixed_put (GtkFixed       *fixed,
                GtkWidget      *widget,
-               gint            x,
-               gint            y)
+               GtkSize         x,
+               GtkSize         y)
 {
   GtkFixedChild *child_info;
 
@@ -171,9 +167,9 @@ static void
 gtk_fixed_move_internal (GtkFixed       *fixed,
                          GtkWidget      *widget,
                          gboolean        change_x,
-                         gint            x,
+                         GtkSize         x,
                          gboolean        change_y,
-                         gint            y)
+                         GtkSize         y)
 {
   GtkFixedChild *child;
   
@@ -208,8 +204,8 @@ gtk_fixed_move_internal (GtkFixed       *fixed,
 void
 gtk_fixed_move (GtkFixed       *fixed,
                 GtkWidget      *widget,
-                gint            x,
-                gint            y)
+                GtkSize         x,
+                GtkSize         y)
 {
   gtk_fixed_move_internal (fixed, widget, TRUE, x, TRUE, y);
 }
@@ -226,14 +222,14 @@ gtk_fixed_set_child_property (GtkContainer    *container,
     case CHILD_PROP_X:
       gtk_fixed_move_internal (GTK_FIXED (container),
                                child,
-                               TRUE, g_value_get_int (value),
+                               TRUE, gtk_value_get_size (value),
                                FALSE, 0);
       break;
     case CHILD_PROP_Y:
       gtk_fixed_move_internal (GTK_FIXED (container),
                                child,
                                FALSE, 0,
-                               TRUE, g_value_get_int (value));
+                               TRUE, gtk_value_get_size (value));
       break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
@@ -255,10 +251,10 @@ gtk_fixed_get_child_property (GtkContainer *container,
   switch (property_id)
     {
     case CHILD_PROP_X:
-      g_value_set_int (value, fixed_child->x);
+      gtk_value_set_size (value, fixed_child->x, container);
       break;
     case CHILD_PROP_Y:
-      g_value_set_int (value, fixed_child->y);
+      gtk_value_set_size (value, fixed_child->y, container);
       break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
@@ -324,10 +320,10 @@ gtk_fixed_size_request (GtkWidget      *widget,
           gtk_widget_size_request (child->widget, &child_requisition);
 
           requisition->height = MAX (requisition->height,
-                                     child->y +
+                                     gtk_widget_size_to_pixel (fixed, child->y) +
                                      child_requisition.height);
           requisition->width = MAX (requisition->width,
-                                    child->x +
+                                    gtk_widget_size_to_pixel (fixed, child->x) +
                                     child_requisition.width);
 	}
     }
@@ -372,8 +368,8 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
 	  gtk_widget_get_child_requisition (child->widget, &child_requisition);
-	  child_allocation.x = child->x + border_width;
-	  child_allocation.y = child->y + border_width;
+	  child_allocation.x = gtk_widget_size_to_pixel (fixed, child->x) + border_width;
+	  child_allocation.y = gtk_widget_size_to_pixel (fixed, child->y) + border_width;
 
 	  if (GTK_WIDGET_NO_WINDOW (widget))
 	    {

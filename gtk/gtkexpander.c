@@ -38,8 +38,8 @@
 
 #define GTK_EXPANDER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_EXPANDER, GtkExpanderPrivate))
 
-#define DEFAULT_EXPANDER_SIZE 10
-#define DEFAULT_EXPANDER_SPACING 2
+#define DEFAULT_EXPANDER_SIZE GTK_SIZE_ONE_TWELFTH_EM(10)
+#define DEFAULT_EXPANDER_SPACING GTK_SIZE_ONE_TWELFTH_EM(2)
 
 enum
 {
@@ -215,13 +215,11 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 
   g_object_class_install_property (gobject_class,
 				   PROP_SPACING,
-				   g_param_spec_int ("spacing",
-						     P_("Spacing"),
-						     P_("Space to put between the label and the child"),
-						     0,
-						     G_MAXINT,
-						     0,
-						     GTK_PARAM_READWRITE));
+				   gtk_param_spec_size ("spacing",
+                                                        P_("Spacing"),
+                                                        P_("Space to put between the label and the child"),
+                                                        0, G_MAXINT, 0,
+                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
 				   PROP_LABEL_WIDGET,
@@ -232,22 +230,18 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 							GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("expander-size",
-							     P_("Expander Size"),
-							     P_("Size of the expander arrow"),
-							     0,
-							     G_MAXINT,
-							     DEFAULT_EXPANDER_SIZE,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("expander-size",
+                                                                P_("Expander Size"),
+                                                                P_("Size of the expander arrow"),
+                                                                0, G_MAXINT, DEFAULT_EXPANDER_SIZE,
+                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("expander-spacing",
-							     P_("Indicator Spacing"),
-							     P_("Spacing around expander arrow"),
-							     0,
-							     G_MAXINT,
-							     DEFAULT_EXPANDER_SPACING,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("expander-spacing",
+                                                                P_("Indicator Spacing"),
+                                                                P_("Spacing around expander arrow"),
+                                                                0, G_MAXINT, DEFAULT_EXPANDER_SPACING,
+                                                                GTK_PARAM_READABLE));
 
   widget_class->activate_signal =
     g_signal_new (I_("activate"),
@@ -330,7 +324,7 @@ gtk_expander_set_property (GObject      *object,
       gtk_expander_set_use_markup (expander, g_value_get_boolean (value));
       break;
     case PROP_SPACING:
-      gtk_expander_set_spacing (expander, g_value_get_int (value));
+      gtk_expander_set_spacing (expander, gtk_value_get_size (value));
       break;
     case PROP_LABEL_WIDGET:
       gtk_expander_set_label_widget (expander, g_value_get_object (value));
@@ -365,7 +359,7 @@ gtk_expander_get_property (GObject    *object,
       g_value_set_boolean (value, priv->use_markup);
       break;
     case PROP_SPACING:
-      g_value_set_int (value, priv->spacing);
+      gtk_value_set_size (value, priv->spacing, expander);
       break;
     case PROP_LABEL_WIDGET:
       g_value_set_object (value,
@@ -1459,7 +1453,7 @@ gtk_expander_get_expanded (GtkExpander *expander)
  **/
 void
 gtk_expander_set_spacing (GtkExpander *expander,
-			  gint         spacing)
+			  GtkSize      spacing)
 {
   g_return_if_fail (GTK_IS_EXPANDER (expander));
   g_return_if_fail (spacing >= 0);
@@ -1486,6 +1480,24 @@ gtk_expander_set_spacing (GtkExpander *expander,
  **/
 gint
 gtk_expander_get_spacing (GtkExpander *expander)
+{
+  g_return_val_if_fail (GTK_IS_EXPANDER (expander), 0);
+
+  return gtk_widget_size_to_pixel (expander, expander->priv->spacing);
+}
+
+/**
+ * gtk_expander_get_spacing_unit:
+ * @expander: a #GtkExpander
+ *
+ * Like gtk_expander_set_spacing() but preserves the unit.
+ *
+ * Return value: spacing between the expander and child.
+ *
+ * Since: 2.14
+ **/
+GtkSize
+gtk_expander_get_spacing_unit (GtkExpander *expander)
 {
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), 0);
 
