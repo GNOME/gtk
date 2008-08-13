@@ -1,3 +1,11 @@
+2008-08-13 Erwann Chenede - <erwann.chenede@sun.com>
+
+	Bug 547456 - gdk/x11/gdkscreen-x11.c : init_solaris_xinerama 
+	doesn't compile on Solaris
+
+	* gdk/x11/gdkscreen-x11.c: make init_solaris_xinerama () compile 
+	when HAVE_SOLARIS_XINERAMA is defined.
+
 2008-08-13  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkstock.c (gtk_stock_lookup): cast the return value of

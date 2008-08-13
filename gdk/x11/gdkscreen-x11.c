@@ -761,20 +761,17 @@ init_solaris_xinerama (GdkScreen *screen)
    */
   if (result == 0)
     {
-      /* FIXME: We need to trap errors, since
-       * XINERAMA isn't always XINERAMA.
-       */ 
-      g_error ("error while retrieving Xinerama information");
+      return FALSE;
     }
 
-  screen_x11->monitors = g_new0 (GdkX11Monitor, n_rects);
-  screen_x11->n_monitors = n_rects;
+  screen_x11->monitors = g_new0 (GdkX11Monitor, n_monitors);
+  screen_x11->n_monitors = n_monitors;
 
-  for (i = 0; i < n_rects; i++)
+  for (i = 0; i < n_monitors; i++)
     {
       init_monitor_geometry (&screen_x11->monitors[i],
-			     rects[i].x, rects[i].y,
-			     rects[i].width, rects[i].height);
+			     monitors[i].x, monitors[i].y,
+			     monitors[i].width, monitors[i].height);
     }
   
   return TRUE;
