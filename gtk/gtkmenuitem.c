@@ -187,7 +187,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 		  G_SIGNAL_RUN_FIRST,
  		  G_STRUCT_OFFSET (GtkMenuItemClass, toggle_size_allocate),
 		  NULL, NULL,
-		  _gtk_marshal_NONE__INT,
+		  _gtk_marshal_VOID__INT,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_INT);
 

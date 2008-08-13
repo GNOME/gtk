@@ -1000,7 +1000,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, columns_changed),
 		  NULL, NULL,
-		  _gtk_marshal_NONE__NONE,
+		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1015,7 +1015,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, cursor_changed),
 		  NULL, NULL,
-		  _gtk_marshal_NONE__NONE,
+		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
   tree_view_signals[MOVE_CURSOR] =
@@ -1035,7 +1035,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, select_all),
 		  NULL, NULL,
-		  _gtk_marshal_BOOLEAN__NONE,
+		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
 
   tree_view_signals[UNSELECT_ALL] =
@@ -1044,7 +1044,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, unselect_all),
 		  NULL, NULL,
-		  _gtk_marshal_BOOLEAN__NONE,
+		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
 
   tree_view_signals[SELECT_CURSOR_ROW] =
@@ -1063,7 +1063,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, toggle_cursor_row),
 		  NULL, NULL,
-		  _gtk_marshal_BOOLEAN__NONE,
+		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
 
   tree_view_signals[EXPAND_COLLAPSE_CURSOR_ROW] =
@@ -1084,7 +1084,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, select_cursor_parent),
 		  NULL, NULL,
-		  _gtk_marshal_BOOLEAN__NONE,
+		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
 
   tree_view_signals[START_INTERACTIVE_SEARCH] =
@@ -1093,7 +1093,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkTreeViewClass, start_interactive_search),
 		  NULL, NULL,
-		  _gtk_marshal_BOOLEAN__NONE,
+		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
 
   /* Key bindings */

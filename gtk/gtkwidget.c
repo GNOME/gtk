@@ -2137,7 +2137,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  0,
 		  0,
 		  NULL, NULL,
-		  _gtk_marshal_NONE__NONE,
+		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
   /**

@@ -1,3 +1,16 @@
+2008-08-13  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmarshalers.list: get rid of the deprecated aliases NONE
+	and BOOL.
+
+	* gtk/gtkdialog.c
+	* gtk/gtkentrycompletion.c
+	* gtk/gtkmenuitem.c
+	* gtk/gtkoldeditable.c
+	* gtk/gtkrange.c
+	* gtk/gtktreeview.c
+	* gtk/gtkwidget.c: changed accordingly.
+
 2008-08-13 Erwann Chenede - <erwann.chenede@sun.com>
 
 	Bug 547456 - gdk/x11/gdkscreen-x11.c : init_solaris_xinerama 

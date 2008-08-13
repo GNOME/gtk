@@ -264,7 +264,7 @@ gtk_range_class_init (GtkRangeClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkRangeClass, value_changed),
                   NULL, NULL,
-                  _gtk_marshal_NONE__NONE,
+                  _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
   
   signals[ADJUST_BOUNDS] =
