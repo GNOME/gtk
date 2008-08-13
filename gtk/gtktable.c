@@ -53,6 +53,131 @@ enum
   CHILD_PROP_Y_PADDING
 };
   
+#define GTK_TABLE_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TABLE, GtkTablePrivate))
+
+typedef struct
+{
+  GtkUSize xpadding_unit;
+  GtkUSize ypadding_unit;
+} GtkTableChildPrivate;
+
+typedef struct
+{
+  GtkUSize spacing_unit;
+} GtkTableRowColPrivate;
+
+struct _GtkTablePrivate
+{
+  GHashTable *child_map;
+  GtkTableRowColPrivate *rows;
+  GtkTableRowColPrivate *cols;
+
+  /* mirror nrows and ncols from public data here for integrity checks (see ensure_integrity()) */
+  guint16 nrows;
+  guint16 ncols;
+
+  GtkUSize column_spacing_unit;
+  GtkUSize row_spacing_unit;
+
+  gboolean skip_priv;
+};
+
+/* the purpose of this function is to detect if an application is
+ * munging the public fields in GtkTable in the same ways that some
+ * apps are munging GtkBox directly
+ *
+ *  http://bugzilla.gnome.org/show_bug.cgi?id=546711#c3
+ *
+ * We check this by mirroring nrows and ncols in private data; if it
+ * has changed, someone external (either an app or a subclass) has
+ * directly modified these sealed fields. The action we take to
+ * remediate this situation is simply to set skip_priv to TRUE; that
+ * will make the widget ignore all private data for rows/cols.
+ */
+static void
+ensure_integrity (GtkTable *table)
+{
+  GtkTablePrivate *priv = GTK_TABLE_GET_PRIVATE (table);
+
+  if (G_UNLIKELY (priv->skip_priv))
+    return;
+
+  if (priv->nrows != table->nrows || priv->ncols != table->ncols)
+    {
+      g_warning ("GtkTable: the application is munging rows/columns directly!");
+      priv->skip_priv = TRUE;
+    }
+}
+
+/* getter/setter functions for private row/column data that respect skip_priv */
+
+static GtkUSize
+get_row_spacing (GtkTable *table, int row)
+{
+  GtkTablePrivate *priv = GTK_TABLE_GET_PRIVATE (table);
+  if (G_UNLIKELY (priv->skip_priv))
+    return table->rows[row].spacing;
+  else
+    return priv->rows[row].spacing_unit;
+}
+
+static GtkUSize
+get_col_spacing (GtkTable *table, int col)
+{
+  GtkTablePrivate *priv = GTK_TABLE_GET_PRIVATE (table);
+  if (G_UNLIKELY (priv->skip_priv))
+    return table->cols[col].spacing;
+  else
+    return priv->cols[col].spacing_unit;
+}
+
+static void
+set_row_spacing (GtkTable *table, int row, GtkUSize spacing_unit)
+{
+  GtkTablePrivate *priv = GTK_TABLE_GET_PRIVATE (table);
+  table->rows[row].spacing = gtk_widget_size_to_pixel (table, spacing_unit);
+  if (G_UNLIKELY (priv->skip_priv))
+    return;
+  priv->rows[row].spacing_unit = spacing_unit;
+}
+
+static void
+set_col_spacing (GtkTable *table, int col, GtkUSize spacing_unit)
+{
+  GtkTablePrivate *priv = GTK_TABLE_GET_PRIVATE (table);
+  table->cols[col].spacing = gtk_widget_size_to_pixel (table, spacing_unit);
+  if (G_UNLIKELY (priv->skip_priv))
+    return;
+  priv->cols[col].spacing_unit = spacing_unit;
+}
+
+static void
+add_priv_child (GtkTable *table, GtkTableChild *child, GtkTableChildPrivate *priv_child)
+{
+  GtkTablePrivate *priv = GTK_TABLE_GET_PRIVATE (table);
+  g_hash_table_insert (priv->child_map, child, priv_child);
+}
+
+static GtkTableChildPrivate *
+get_priv_child (GtkTable *table, GtkTableChild *child)
+{
+  GtkTablePrivate *priv = GTK_TABLE_GET_PRIVATE (table);
+  GtkTableChildPrivate *priv_child;
+
+  priv_child = g_hash_table_lookup (priv->child_map, child);
+  if (G_UNLIKELY (priv_child == NULL))
+    g_warning ("GtkTable: No private child for child; the application is munging table->child directly!");
+
+  return priv_child;
+}
+
+static void
+remove_priv_child (GtkTable *table, GtkTableChild *child)
+{
+  GtkTablePrivate *priv = GTK_TABLE_GET_PRIVATE (table);
+  if (G_UNLIKELY (!g_hash_table_remove (priv->child_map, child)))
+    g_warning ("GtkTable: No private child for child; the application is munging table->child directly!");
+}
 
 static void gtk_table_finalize	    (GObject	    *object);
 static void gtk_table_size_request  (GtkWidget	    *widget,
@@ -87,6 +212,7 @@ static void gtk_table_get_child_property (GtkContainer    *container,
 					  GParamSpec      *pspec);
 static GType gtk_table_child_type   (GtkContainer   *container);
 
+static void gtk_table_unit_changed (GtkWidget *widget);
 
 static void gtk_table_size_request_init	 (GtkTable *table);
 static void gtk_table_size_request_pass1 (GtkTable *table);
@@ -114,6 +240,7 @@ gtk_table_class_init (GtkTableClass *class)
   
   widget_class->size_request = gtk_table_size_request;
   widget_class->size_allocate = gtk_table_size_allocate;
+  widget_class->unit_changed = gtk_table_unit_changed;
   
   container_class->add = gtk_table_add;
   container_class->remove = gtk_table_remove;
@@ -143,22 +270,18 @@ gtk_table_class_init (GtkTableClass *class)
 						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_ROW_SPACING,
-                                   g_param_spec_uint ("row-spacing",
-						     P_("Row spacing"),
-						     P_("The amount of space between two consecutive rows"),
-						     0,
-						     65535,
-						     0,
-						     GTK_PARAM_READWRITE));
+                                   gtk_param_spec_usize ("row-spacing",
+                                                         P_("Row spacing"),
+                                                         P_("The amount of space between two consecutive rows"),
+                                                         0, G_MAXINT, 0,
+                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_COLUMN_SPACING,
-                                   g_param_spec_uint ("column-spacing",
-						     P_("Column spacing"),
-						     P_("The amount of space between two consecutive columns"),
-						     0,
-						     65535,
-						     0,
-						     GTK_PARAM_READWRITE));
+                                   gtk_param_spec_usize ("column-spacing",
+                                                         P_("Column spacing"),
+                                                         P_("The amount of space between two consecutive columns"),
+                                                         0, G_MAXINT, 0,
+                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_HOMOGENEOUS,
                                    g_param_spec_boolean ("homogeneous",
@@ -211,18 +334,20 @@ gtk_table_class_init (GtkTableClass *class)
 								  GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_X_PADDING,
-					      g_param_spec_uint ("x-padding", 
-								 P_("Horizontal padding"), 
-								 P_("Extra space to put between the child and its left and right neighbors, in pixels"),
-								 0, 65535, 0,
-								 GTK_PARAM_READWRITE));
+					      gtk_param_spec_usize ("x-padding", 
+                                                                    P_("Horizontal padding"), 
+                                                                    P_("Extra space to put between the child and its left and right neighbors, in pixels"),
+                                                                    0, G_MAXINT, 0,
+                                                                    GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_Y_PADDING,
-					      g_param_spec_uint ("y-padding", 
-								 P_("Vertical padding"), 
-								 P_("Extra space to put between the child and its upper and lower neighbors, in pixels"),
-								 0, 65535, 0,
-								 GTK_PARAM_READWRITE));
+					      gtk_param_spec_usize ("y-padding", 
+                                                                    P_("Vertical padding"), 
+                                                                    P_("Extra space to put between the child and its upper and lower neighbors, in pixels"),
+                                                                    0, G_MAXINT, 0,
+                                                                    GTK_PARAM_READWRITE));
+
+  g_type_class_add_private (gobject_class, sizeof (GtkTablePrivate));
 }
 
 static GType
@@ -238,8 +363,12 @@ gtk_table_get_property (GObject      *object,
 			GParamSpec   *pspec)
 {
   GtkTable *table;
+  GtkTablePrivate *priv;
 
   table = GTK_TABLE (object);
+  priv = GTK_TABLE_GET_PRIVATE (table);
+
+  ensure_integrity (table);
 
   switch (prop_id)
     {
@@ -250,10 +379,10 @@ gtk_table_get_property (GObject      *object,
       g_value_set_uint (value, table->ncols);
       break;
     case PROP_ROW_SPACING:
-      g_value_set_uint (value, table->row_spacing);
+      gtk_value_set_usize (value, priv->row_spacing_unit, table);
       break;
     case PROP_COLUMN_SPACING:
-      g_value_set_uint (value, table->column_spacing);
+      gtk_value_set_usize (value, priv->column_spacing_unit, table);
       break;
     case PROP_HOMOGENEOUS:
       g_value_set_boolean (value, table->homogeneous);
@@ -274,6 +403,8 @@ gtk_table_set_property (GObject      *object,
 
   table = GTK_TABLE (object);
 
+  ensure_integrity (table);
+
   switch (prop_id)
     {
     case PROP_N_ROWS:
@@ -283,10 +414,10 @@ gtk_table_set_property (GObject      *object,
       gtk_table_resize (table, table->nrows, g_value_get_uint (value));
       break;
     case PROP_ROW_SPACING:
-      gtk_table_set_row_spacings (table, g_value_get_uint (value));
+      gtk_table_set_row_spacings (table, gtk_value_get_usize (value));
       break;
     case PROP_COLUMN_SPACING:
-      gtk_table_set_col_spacings (table, g_value_get_uint (value));
+      gtk_table_set_col_spacings (table, gtk_value_get_usize (value));
       break;
     case PROP_HOMOGENEOUS:
       gtk_table_set_homogeneous (table, g_value_get_boolean (value));
@@ -306,7 +437,10 @@ gtk_table_set_child_property (GtkContainer    *container,
 {
   GtkTable *table = GTK_TABLE (container);
   GtkTableChild *table_child;
+  GtkTableChildPrivate *priv_table_child;
   GList *list;
+
+  ensure_integrity (table);
 
   table_child = NULL;
   for (list = table->children; list; list = list->next)
@@ -321,6 +455,8 @@ gtk_table_set_child_property (GtkContainer    *container,
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
       return;
     }
+
+  priv_table_child = get_priv_child (table, table_child);
 
   switch (property_id)
     {
@@ -363,10 +499,14 @@ gtk_table_set_child_property (GtkContainer    *container,
       table_child->yfill = (g_value_get_flags (value) & GTK_FILL) != 0;
       break;
     case CHILD_PROP_X_PADDING:
-      table_child->xpadding = g_value_get_uint (value);
+      if (priv_table_child != NULL)
+        priv_table_child->xpadding_unit = gtk_value_get_usize (value);
+      table_child->xpadding = gtk_widget_size_to_pixel (table, gtk_value_get_usize (value));
       break;
     case CHILD_PROP_Y_PADDING:
-      table_child->ypadding = g_value_get_uint (value);
+      if (priv_table_child != NULL)
+        priv_table_child->ypadding_unit = gtk_value_get_usize (value);
+      table_child->ypadding = gtk_widget_size_to_pixel (table, gtk_value_get_usize (value));
       break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
@@ -385,7 +525,10 @@ gtk_table_get_child_property (GtkContainer    *container,
 {
   GtkTable *table = GTK_TABLE (container);
   GtkTableChild *table_child;
+  GtkTableChildPrivate *priv_table_child;
   GList *list;
+
+  ensure_integrity (table);
 
   table_child = NULL;
   for (list = table->children; list; list = list->next)
@@ -400,6 +543,8 @@ gtk_table_get_child_property (GtkContainer    *container,
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
       return;
     }
+
+  priv_table_child = get_priv_child (table, table_child);
 
   switch (property_id)
     {
@@ -426,10 +571,16 @@ gtk_table_get_child_property (GtkContainer    *container,
 				 table_child->yfill * GTK_FILL));
       break;
     case CHILD_PROP_X_PADDING:
-      g_value_set_uint (value, table_child->xpadding);
+      if (priv_table_child != NULL)
+        gtk_value_set_usize (value, priv_table_child->xpadding_unit, table);
+      else
+        gtk_value_set_usize (value, table_child->xpadding, table);
       break;
     case CHILD_PROP_Y_PADDING:
-      g_value_set_uint (value, table_child->ypadding);
+      if (priv_table_child != NULL)
+        gtk_value_set_usize (value, priv_table_child->ypadding_unit, table);
+      else
+        gtk_value_set_usize (value, table_child->ypadding, table);
       break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
@@ -440,6 +591,8 @@ gtk_table_get_child_property (GtkContainer    *container,
 static void
 gtk_table_init (GtkTable *table)
 {
+  GtkTablePrivate *priv = GTK_TABLE_GET_PRIVATE (table);
+
   GTK_WIDGET_SET_FLAGS (table, GTK_NO_WINDOW);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (table), FALSE);
   
@@ -451,6 +604,17 @@ gtk_table_init (GtkTable *table)
   table->column_spacing = 0;
   table->row_spacing = 0;
   table->homogeneous = FALSE;
+
+  priv->column_spacing_unit = 0;
+  priv->row_spacing_unit = 0;
+  priv->child_map = g_hash_table_new_full (g_direct_hash,
+                                           g_direct_equal,
+                                           NULL,
+                                           g_free);
+  priv->rows = NULL;
+  priv->cols = NULL;
+  priv->nrows = 0;
+  priv->ncols = 0;
 
   gtk_table_resize (table, 1, 1);
 }
@@ -481,9 +645,15 @@ gtk_table_resize (GtkTable *table,
 		  guint     n_rows,
 		  guint     n_cols)
 {
+  GtkTablePrivate *priv;
+
   g_return_if_fail (GTK_IS_TABLE (table));
   g_return_if_fail (n_rows > 0 && n_rows <= 65535);
   g_return_if_fail (n_cols > 0 && n_cols <= 65535);
+
+  ensure_integrity (table);
+
+  priv = GTK_TABLE_GET_PRIVATE (table);
 
   n_rows = MAX (n_rows, 1);
   n_cols = MAX (n_cols, 1);
@@ -510,16 +680,18 @@ gtk_table_resize (GtkTable *table,
 	  i = table->nrows;
 	  table->nrows = n_rows;
 	  table->rows = g_realloc (table->rows, table->nrows * sizeof (GtkTableRowCol));
+	  priv->nrows = n_rows;
+	  priv->rows = g_realloc (priv->rows, table->nrows * sizeof (GtkTableRowColPrivate));
 	  
 	  for (; i < table->nrows; i++)
 	    {
 	      table->rows[i].requisition = 0;
 	      table->rows[i].allocation = 0;
-	      table->rows[i].spacing = table->row_spacing;
 	      table->rows[i].need_expand = 0;
 	      table->rows[i].need_shrink = 0;
 	      table->rows[i].expand = 0;
 	      table->rows[i].shrink = 0;
+              set_row_spacing (table, i, priv->row_spacing_unit);
 	    }
 
 	  g_object_notify (G_OBJECT (table), "n-rows");
@@ -532,16 +704,18 @@ gtk_table_resize (GtkTable *table,
 	  i = table->ncols;
 	  table->ncols = n_cols;
 	  table->cols = g_realloc (table->cols, table->ncols * sizeof (GtkTableRowCol));
+	  priv->ncols = n_cols;
+	  priv->cols = g_realloc (priv->cols, table->ncols * sizeof (GtkTableRowColPrivate));
 	  
 	  for (; i < table->ncols; i++)
 	    {
 	      table->cols[i].requisition = 0;
 	      table->cols[i].allocation = 0;
-	      table->cols[i].spacing = table->column_spacing;
 	      table->cols[i].need_expand = 0;
 	      table->cols[i].need_shrink = 0;
 	      table->cols[i].expand = 0;
 	      table->cols[i].shrink = 0;
+              set_col_spacing (table, i, priv->column_spacing_unit);
 	    }
 
 	  g_object_notify (G_OBJECT (table), "n-columns");
@@ -558,10 +732,11 @@ gtk_table_attach (GtkTable	  *table,
 		  guint		   bottom_attach,
 		  GtkAttachOptions xoptions,
 		  GtkAttachOptions yoptions,
-		  guint		   xpadding,
-		  guint		   ypadding)
+		  GtkUSize         xpadding,
+		  GtkUSize         ypadding)
 {
   GtkTableChild *table_child;
+  GtkTableChildPrivate *priv_table_child;
   
   g_return_if_fail (GTK_IS_TABLE (table));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -572,6 +747,8 @@ gtk_table_attach (GtkTable	  *table,
   /* g_return_if_fail (top_attach >= 0); */
   g_return_if_fail (top_attach < bottom_attach);
   
+  ensure_integrity (table);
+
   if (right_attach >= table->ncols)
     gtk_table_resize (table, table->nrows, right_attach);
   
@@ -587,13 +764,18 @@ gtk_table_attach (GtkTable	  *table,
   table_child->xexpand = (xoptions & GTK_EXPAND) != 0;
   table_child->xshrink = (xoptions & GTK_SHRINK) != 0;
   table_child->xfill = (xoptions & GTK_FILL) != 0;
-  table_child->xpadding = xpadding;
+  table_child->xpadding = gtk_widget_size_to_pixel (table, xpadding);
   table_child->yexpand = (yoptions & GTK_EXPAND) != 0;
   table_child->yshrink = (yoptions & GTK_SHRINK) != 0;
   table_child->yfill = (yoptions & GTK_FILL) != 0;
-  table_child->ypadding = ypadding;
+  table_child->ypadding = gtk_widget_size_to_pixel (table, ypadding);
+
+  priv_table_child = g_new (GtkTableChildPrivate, 1);
+  priv_table_child->xpadding_unit = xpadding;
+  priv_table_child->ypadding_unit = ypadding;
   
   table->children = g_list_prepend (table->children, table_child);
+  add_priv_child (table, table_child, priv_table_child);
   
   gtk_widget_set_parent (child, GTK_WIDGET (table));
 }
@@ -617,14 +799,16 @@ gtk_table_attach_defaults (GtkTable  *table,
 void
 gtk_table_set_row_spacing (GtkTable *table,
 			   guint     row,
-			   guint     spacing)
+			   GtkUSize  spacing)
 {
   g_return_if_fail (GTK_IS_TABLE (table));
   g_return_if_fail (row < table->nrows);
-  
-  if (table->rows[row].spacing != spacing)
+
+  ensure_integrity (table);
+
+  if (table->rows[row].spacing != gtk_widget_size_to_pixel (table, spacing))
     {
-      table->rows[row].spacing = spacing;
+      set_row_spacing (table, row, spacing);
       
       if (GTK_WIDGET_VISIBLE (table))
 	gtk_widget_queue_resize (GTK_WIDGET (table));
@@ -647,21 +831,48 @@ gtk_table_get_row_spacing (GtkTable *table,
 {
   g_return_val_if_fail (GTK_IS_TABLE (table), 0);
   g_return_val_if_fail (row < table->nrows - 1, 0);
- 
+
+  ensure_integrity (table);
+
   return table->rows[row].spacing;
+}
+
+/**
+ * gtk_table_get_row_spacing_unit:
+ * @table: a #GtkTable
+ * @row: a row in the table, 0 indicates the first row
+ *
+ * Like gtk_table_get_row_spacing() but preserves the unit.
+ *
+ * Return value: the column spacing
+ *
+ * Since: 2.14
+ **/
+GtkUSize
+gtk_table_get_row_spacing_unit (GtkTable *table,
+                                guint     row)
+{
+  g_return_val_if_fail (GTK_IS_TABLE (table), 0);
+  g_return_val_if_fail (row < table->nrows - 1, 0);
+
+  ensure_integrity (table);
+
+  return get_row_spacing (table, row);
 }
 
 void
 gtk_table_set_col_spacing (GtkTable *table,
 			   guint     column,
-			   guint     spacing)
+			   GtkUSize  spacing)
 {
   g_return_if_fail (GTK_IS_TABLE (table));
   g_return_if_fail (column < table->ncols);
-  
-  if (table->cols[column].spacing != spacing)
+
+  ensure_integrity (table);
+
+  if (table->cols[column].spacing != gtk_widget_size_to_pixel (table, spacing))
     {
-      table->cols[column].spacing = spacing;
+      set_col_spacing (table, column, spacing);
       
       if (GTK_WIDGET_VISIBLE (table))
 	gtk_widget_queue_resize (GTK_WIDGET (table));
@@ -685,20 +896,51 @@ gtk_table_get_col_spacing (GtkTable *table,
   g_return_val_if_fail (GTK_IS_TABLE (table), 0);
   g_return_val_if_fail (column < table->ncols, 0);
 
+  ensure_integrity (table);
+
   return table->cols[column].spacing;
+}
+
+/**
+ * gtk_table_get_col_spacing_unit:
+ * @table: a #GtkTable
+ * @column: a column in the table, 0 indicates the first column
+ *
+ * Like gtk_table_get_col_spacing() but preserves the unit.
+ *
+ * Return value: the column spacing
+ *
+ * Since: 2.14
+ **/
+GtkUSize
+gtk_table_get_col_spacing_unit (GtkTable *table,
+                                guint     column)
+{
+  g_return_val_if_fail (GTK_IS_TABLE (table), 0);
+  g_return_val_if_fail (column < table->ncols, 0);
+
+  ensure_integrity (table);
+
+  return get_col_spacing (table, column);
 }
 
 void
 gtk_table_set_row_spacings (GtkTable *table,
-			    guint     spacing)
+			    GtkUSize  spacing)
 {
   guint row;
+  GtkTablePrivate *priv;
   
   g_return_if_fail (GTK_IS_TABLE (table));
+
+  priv = GTK_TABLE_GET_PRIVATE (table);
+
+  ensure_integrity (table);
   
-  table->row_spacing = spacing;
+  table->row_spacing = gtk_widget_size_to_pixel (table, spacing);
+  priv->row_spacing_unit = spacing;
   for (row = 0; row < table->nrows; row++)
-    table->rows[row].spacing = spacing;
+    set_row_spacing (table, row, spacing);
   
   if (GTK_WIDGET_VISIBLE (table))
     gtk_widget_queue_resize (GTK_WIDGET (table));
@@ -721,20 +963,52 @@ gtk_table_get_default_row_spacing (GtkTable *table)
 {
   g_return_val_if_fail (GTK_IS_TABLE (table), 0);
 
+  ensure_integrity (table);
+
   return table->row_spacing;
+}
+
+/**
+ * gtk_table_get_default_row_spacing_unit:
+ * @table: a #GtkTable
+ *
+ * Like gtk_table_get_default_row_spacing() but preserves the unit.
+ *
+ * Return value: the default row spacing
+ *
+ * Since: 2.14
+ **/
+GtkUSize
+gtk_table_get_default_row_spacing_unit (GtkTable *table)
+{
+  GtkTablePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_TABLE (table), 0);
+
+  priv = GTK_TABLE_GET_PRIVATE (table);
+
+  ensure_integrity (table);
+
+  return priv->row_spacing_unit;
 }
 
 void
 gtk_table_set_col_spacings (GtkTable *table,
-			    guint     spacing)
+			    GtkUSize  spacing)
 {
+  GtkTablePrivate *priv;
   guint col;
   
   g_return_if_fail (GTK_IS_TABLE (table));
+
+  priv = GTK_TABLE_GET_PRIVATE (table);
+
+  ensure_integrity (table);
   
-  table->column_spacing = spacing;
+  table->column_spacing = gtk_widget_size_to_pixel (table, spacing);
+  priv->column_spacing_unit = spacing;
   for (col = 0; col < table->ncols; col++)
-    table->cols[col].spacing = spacing;
+    set_col_spacing (table, col, spacing);
   
   if (GTK_WIDGET_VISIBLE (table))
     gtk_widget_queue_resize (GTK_WIDGET (table));
@@ -757,7 +1031,33 @@ gtk_table_get_default_col_spacing (GtkTable *table)
 {
   g_return_val_if_fail (GTK_IS_TABLE (table), 0);
 
+  ensure_integrity (table);
+
   return table->column_spacing;
+}
+
+/**
+ * gtk_table_get_default_col_spacing_unit:
+ * @table: a #GtkTable
+ *
+ * Like gtk_table_get_default_col_spacing() but preserves the unit.
+ *
+ * Return value: the default column spacing
+ *
+ * Since: 2.14
+ **/
+GtkUSize
+gtk_table_get_default_col_spacing_unit (GtkTable *table)
+{
+  GtkTablePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_TABLE (table), 0);
+
+  ensure_integrity (table);
+
+  priv = GTK_TABLE_GET_PRIVATE (table);
+
+  return priv->column_spacing_unit;
 }
 
 void
@@ -765,6 +1065,8 @@ gtk_table_set_homogeneous (GtkTable *table,
 			   gboolean  homogeneous)
 {
   g_return_if_fail (GTK_IS_TABLE (table));
+
+  ensure_integrity (table);
 
   homogeneous = (homogeneous != 0);
   if (homogeneous != table->homogeneous)
@@ -792,6 +1094,8 @@ gtk_table_get_homogeneous (GtkTable *table)
 {
   g_return_val_if_fail (GTK_IS_TABLE (table), FALSE);
 
+  ensure_integrity (table);
+
   return table->homogeneous;
 }
 
@@ -799,9 +1103,15 @@ static void
 gtk_table_finalize (GObject *object)
 {
   GtkTable *table = GTK_TABLE (object);
+  GtkTablePrivate *priv = GTK_TABLE_GET_PRIVATE (table);
 
   g_free (table->rows);
   g_free (table->cols);
+  g_free (priv->rows);
+  g_free (priv->cols);
+
+  /* TODO: should check that hash table is empty */
+  g_hash_table_unref (priv->child_map);
   
   G_OBJECT_CLASS (gtk_table_parent_class)->finalize (object);
 }
@@ -812,6 +1122,8 @@ gtk_table_size_request (GtkWidget      *widget,
 {
   GtkTable *table = GTK_TABLE (widget);
   gint row, col;
+
+  ensure_integrity (table);
 
   requisition->width = 0;
   requisition->height = 0;
@@ -842,6 +1154,8 @@ gtk_table_size_allocate (GtkWidget     *widget,
 {
   GtkTable *table = GTK_TABLE (widget);
 
+  ensure_integrity (table);
+
   widget->allocation = *allocation;
 
   gtk_table_size_allocate_init (table);
@@ -864,6 +1178,8 @@ gtk_table_remove (GtkContainer *container,
   GtkTableChild *child;
   GList *children;
 
+  ensure_integrity (table);
+
   children = table->children;
   
   while (children)
@@ -877,6 +1193,8 @@ gtk_table_remove (GtkContainer *container,
 	  
 	  gtk_widget_unparent (widget);
 	  
+          remove_priv_child (table, child);
+
 	  table->children = g_list_remove (table->children, child);
 	  g_free (child);
 	  
@@ -896,6 +1214,8 @@ gtk_table_forall (GtkContainer *container,
   GtkTable *table = GTK_TABLE (container);
   GtkTableChild *child;
   GList *children;
+
+  ensure_integrity (table);
 
   children = table->children;
   
@@ -1583,7 +1903,7 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
 	  
 	  if (child->xfill)
 	    {
-	      allocation.width = MAX (1, max_width - (gint)child->xpadding * 2);
+	      allocation.width = MAX (1, max_width - child->xpadding * 2);
 	      allocation.x = x + (max_width - allocation.width) / 2;
 	    }
 	  else
@@ -1594,7 +1914,7 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
 	  
 	  if (child->yfill)
 	    {
-	      allocation.height = MAX (1, max_height - (gint)child->ypadding * 2);
+	      allocation.height = MAX (1, max_height - child->ypadding * 2);
 	      allocation.y = y + (max_height - allocation.height) / 2;
 	    }
 	  else
@@ -1609,6 +1929,47 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
 	  
 	  gtk_widget_size_allocate (child->widget, &allocation);
 	}
+    }
+}
+
+static void
+gtk_table_unit_changed (GtkWidget *widget)
+{
+  GtkTable *table = GTK_TABLE (widget);
+  GtkTablePrivate *priv = GTK_TABLE_GET_PRIVATE (table);
+  GtkTableChild *child;
+  GtkTableChildPrivate *priv_child;
+  GList *children;
+  guint row, col;
+
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (gtk_table_parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (gtk_table_parent_class)->unit_changed (widget);
+
+  table->column_spacing = gtk_widget_size_to_pixel (table, priv->column_spacing_unit);
+  table->row_spacing = gtk_widget_size_to_pixel (table, priv->row_spacing_unit);
+
+  children = table->children;
+  while (children != NULL)
+    {
+      child = children->data;
+      children = children->next;
+
+      priv_child = get_priv_child (table, child);
+
+      if (priv_child != NULL)
+        {
+          child->xpadding = gtk_widget_size_to_pixel (table, priv_child->xpadding_unit);
+          child->ypadding = gtk_widget_size_to_pixel (table, priv_child->ypadding_unit);
+        }
+    }
+
+  if (!priv->skip_priv)
+    {
+      for (row = 0; row < table->nrows; row++)
+        table->rows[row].spacing = gtk_widget_size_to_pixel (table, priv->rows[row].spacing_unit);
+      for (col = 0; col < table->ncols; col++)
+        table->cols[col].spacing = gtk_widget_size_to_pixel (table, priv->cols[col].spacing_unit);
     }
 }
 

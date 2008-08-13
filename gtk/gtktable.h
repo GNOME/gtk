@@ -49,6 +49,7 @@ typedef struct _GtkTable	GtkTable;
 typedef struct _GtkTableClass	GtkTableClass;
 typedef struct _GtkTableChild	GtkTableChild;
 typedef struct _GtkTableRowCol	GtkTableRowCol;
+typedef struct _GtkTablePrivate GtkTablePrivate;
 
 struct _GtkTable
 {
@@ -114,8 +115,8 @@ void	   gtk_table_attach	      (GtkTable	       *table,
 				       guint		bottom_attach,
 				       GtkAttachOptions xoptions,
 				       GtkAttachOptions yoptions,
-				       guint		xpadding,
-				       guint		ypadding);
+				       GtkUSize		xpadding,
+				       GtkUSize		ypadding);
 void	   gtk_table_attach_defaults  (GtkTable	       *table,
 				       GtkWidget       *widget,
 				       guint		left_attach,
@@ -124,20 +125,26 @@ void	   gtk_table_attach_defaults  (GtkTable	       *table,
 				       guint		bottom_attach);
 void	   gtk_table_set_row_spacing  (GtkTable	       *table,
 				       guint		row,
-				       guint		spacing);
+				       GtkUSize		spacing);
 guint      gtk_table_get_row_spacing  (GtkTable        *table,
 				       guint            row);
+GtkUSize   gtk_table_get_row_spacing_unit  (GtkTable        *table,
+                                            guint            row);
 void	   gtk_table_set_col_spacing  (GtkTable	       *table,
 				       guint		column,
-				       guint		spacing);
+				       GtkUSize		spacing);
 guint      gtk_table_get_col_spacing  (GtkTable        *table,
 				       guint            column);
+GtkUSize   gtk_table_get_col_spacing_unit  (GtkTable        *table,
+                                            guint            column);
 void	   gtk_table_set_row_spacings (GtkTable	       *table,
-				       guint		spacing);
+				       GtkUSize		spacing);
 guint      gtk_table_get_default_row_spacing (GtkTable        *table);
+GtkUSize   gtk_table_get_default_row_spacing_unit (GtkTable        *table);
 void	   gtk_table_set_col_spacings (GtkTable	       *table,
-				       guint		spacing);
+				       GtkUSize		spacing);
 guint      gtk_table_get_default_col_spacing (GtkTable        *table);
+GtkUSize   gtk_table_get_default_col_spacing_unit (GtkTable        *table);
 void	   gtk_table_set_homogeneous  (GtkTable	       *table,
 				       gboolean		homogeneous);
 gboolean   gtk_table_get_homogeneous  (GtkTable        *table);
