@@ -1263,7 +1263,7 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
 
 	  if (aux_info && aux_info->width > 0)
 	    {
-	      requisition->width += aux_info->width;
+	      requisition->width += gtk_widget_size_to_pixel (widget, aux_info->width);
 	      extra_width = -1;
 	    }
 	  else
@@ -1276,9 +1276,9 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
 	{
 	  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (bin->child, FALSE);
 
-	  if (aux_info && aux_info->height > 0)
+	  if (aux_info && gtk_widget_size_to_pixel (widget, aux_info->height) > 0)
 	    {
-	      requisition->height += aux_info->height;
+	      requisition->height += gtk_widget_size_to_pixel (widget, aux_info->height);
 	      extra_height = -1;
 	    }
 	  else

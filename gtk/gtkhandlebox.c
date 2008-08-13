@@ -54,10 +54,9 @@ enum {
   PROP_CHILD_DETACHED
 };
 
-#define DRAG_HANDLE_SIZE 10
-#define CHILDLESS_SIZE	25
-#define GHOST_HEIGHT 3
-#define TOLERANCE 5
+#define DRAG_HANDLE_SIZE GTK_SIZE_ONE_TWELFTH_EM(10)
+#define CHILDLESS_SIZE	GTK_SIZE_ONE_TWELFTH_EM(25)
+#define TOLERANCE GTK_SIZE_ONE_TWELFTH_EM(5)
 
 enum {
   SIGNAL_CHILD_ATTACHED,
@@ -530,13 +529,13 @@ gtk_handle_box_size_request (GtkWidget      *widget,
   if (handle_position == GTK_POS_LEFT ||
       handle_position == GTK_POS_RIGHT)
     {
-      requisition->width = DRAG_HANDLE_SIZE;
+      requisition->width = gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
       requisition->height = 0;
     }
   else
     {
       requisition->width = 0;
-      requisition->height = DRAG_HANDLE_SIZE;
+      requisition->height = gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
     }
 
   /* if our child is not visible, we still request its size, since we
@@ -582,8 +581,8 @@ gtk_handle_box_size_request (GtkWidget      *widget,
 	}
       else
 	{
-	  requisition->width += CHILDLESS_SIZE;
-	  requisition->height += CHILDLESS_SIZE;
+	  requisition->width += gtk_widget_size_to_pixel (widget, CHILDLESS_SIZE);
+	  requisition->height += gtk_widget_size_to_pixel (widget, CHILDLESS_SIZE);
 	}
     }
 }
@@ -630,9 +629,9 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
       child_allocation.x = border_width;
       child_allocation.y = border_width;
       if (handle_position == GTK_POS_LEFT)
-	child_allocation.x += DRAG_HANDLE_SIZE;
+	child_allocation.x += gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
       else if (handle_position == GTK_POS_TOP)
-	child_allocation.y += DRAG_HANDLE_SIZE;
+	child_allocation.y += gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
 
       if (hb->child_detached)
 	{
@@ -647,9 +646,9 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 	  
 	  if (handle_position == GTK_POS_LEFT ||
 	      handle_position == GTK_POS_RIGHT)
-	    float_width += DRAG_HANDLE_SIZE;
+	    float_width += gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
 	  else
-	    float_height += DRAG_HANDLE_SIZE;
+	    float_height += gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
 
 	  if (GTK_WIDGET_REALIZED (hb))
 	    {
@@ -670,9 +669,9 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 
 	  if (handle_position == GTK_POS_LEFT ||
 	      handle_position == GTK_POS_RIGHT)
-	    child_allocation.width -= DRAG_HANDLE_SIZE;
+	    child_allocation.width -= gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
 	  else
-	    child_allocation.height -= DRAG_HANDLE_SIZE;
+	    child_allocation.height -= gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
 	  
 	  if (GTK_WIDGET_REALIZED (hb))
 	    gdk_window_move_resize (hb->bin_window,
@@ -702,17 +701,17 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb)
   if (handle_position == GTK_POS_LEFT ||
       handle_position == GTK_POS_RIGHT)
     {
-      x = handle_position == GTK_POS_LEFT ? 0 : widget->allocation.width - DRAG_HANDLE_SIZE;
+      x = handle_position == GTK_POS_LEFT ? 0 : widget->allocation.width - gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
       y = 0;
-      width = DRAG_HANDLE_SIZE;
+      width = gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
       height = widget->allocation.height;
     }
   else
     {
       x = 0;
-      y = handle_position == GTK_POS_TOP ? 0 : widget->allocation.height - DRAG_HANDLE_SIZE;
+      y = handle_position == GTK_POS_TOP ? 0 : widget->allocation.height - gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
       width = widget->allocation.width;
-      height = DRAG_HANDLE_SIZE;
+      height = gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
     }
   gtk_paint_shadow (widget->style,
 		    widget->window,
@@ -729,16 +728,16 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb)
 		      widget->window,
 		      GTK_WIDGET_STATE (widget),
 		      NULL, widget, "handlebox",
-		      handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : 0,
-		      handle_position == GTK_POS_LEFT ? widget->allocation.width : widget->allocation.width - DRAG_HANDLE_SIZE,
+		      handle_position == GTK_POS_LEFT ? gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE) : 0,
+		      handle_position == GTK_POS_LEFT ? widget->allocation.width : widget->allocation.width - gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE),
 		      widget->allocation.height / 2);
    else
      gtk_paint_vline (widget->style,
 		      widget->window,
 		      GTK_WIDGET_STATE (widget),
 		      NULL, widget, "handlebox",
-		      handle_position == GTK_POS_TOP ? DRAG_HANDLE_SIZE : 0,
-		      handle_position == GTK_POS_TOP ? widget->allocation.height : widget->allocation.height - DRAG_HANDLE_SIZE,
+		      handle_position == GTK_POS_TOP ? gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE) : 0,
+		      handle_position == GTK_POS_TOP ? widget->allocation.height : widget->allocation.height - gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE),
 		      widget->allocation.width / 2);
 }
 
@@ -915,14 +914,14 @@ gtk_handle_box_paint (GtkWidget      *widget,
     case GTK_POS_LEFT:
       rect.x = 0;
       rect.y = 0; 
-      rect.width = DRAG_HANDLE_SIZE;
+      rect.width = gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
       rect.height = height;
       handle_orientation = GTK_ORIENTATION_VERTICAL;
       break;
     case GTK_POS_RIGHT:
-      rect.x = width - DRAG_HANDLE_SIZE; 
+      rect.x = width - gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE); 
       rect.y = 0;
-      rect.width = DRAG_HANDLE_SIZE;
+      rect.width = gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
       rect.height = height;
       handle_orientation = GTK_ORIENTATION_VERTICAL;
       break;
@@ -930,14 +929,14 @@ gtk_handle_box_paint (GtkWidget      *widget,
       rect.x = 0;
       rect.y = 0; 
       rect.width = width;
-      rect.height = DRAG_HANDLE_SIZE;
+      rect.height = gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
       handle_orientation = GTK_ORIENTATION_HORIZONTAL;
       break;
     case GTK_POS_BOTTOM:
       rect.x = 0;
-      rect.y = height - DRAG_HANDLE_SIZE;
+      rect.y = height - gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
       rect.width = width;
-      rect.height = DRAG_HANDLE_SIZE;
+      rect.height = gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
       handle_orientation = GTK_ORIENTATION_HORIZONTAL;
       break;
     default: 
@@ -1047,10 +1046,10 @@ gtk_handle_box_button_press (GtkWidget      *widget,
 	  switch (handle_position)
 	    {
 	    case GTK_POS_LEFT:
-	      in_handle = event->x < DRAG_HANDLE_SIZE;
+	      in_handle = event->x < gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
 	      break;
 	    case GTK_POS_TOP:
-	      in_handle = event->y < DRAG_HANDLE_SIZE;
+	      in_handle = event->y < gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
 	      break;
 	    case GTK_POS_RIGHT:
 	      in_handle = event->x > 2 * GTK_CONTAINER (hb)->border_width + child->allocation.width;
@@ -1205,18 +1204,18 @@ gtk_handle_box_motion (GtkWidget      *widget,
   switch (snap_edge)
     {
     case GTK_POS_TOP:
-      is_snapped = abs (hb->attach_allocation.y - new_y) < TOLERANCE;
+      is_snapped = abs (hb->attach_allocation.y - new_y) < gtk_widget_size_to_pixel (widget, TOLERANCE);
       break;
     case GTK_POS_BOTTOM:
       is_snapped = abs (hb->attach_allocation.y + (gint)hb->attach_allocation.height -
-			new_y - (gint)hb->float_allocation.height) < TOLERANCE;
+			new_y - (gint)hb->float_allocation.height) < gtk_widget_size_to_pixel (widget, TOLERANCE);
       break;
     case GTK_POS_LEFT:
-      is_snapped = abs (hb->attach_allocation.x - new_x) < TOLERANCE;
+      is_snapped = abs (hb->attach_allocation.x - new_x) < gtk_widget_size_to_pixel (widget, TOLERANCE);
       break;
     case GTK_POS_RIGHT:
       is_snapped = abs (hb->attach_allocation.x + (gint)hb->attach_allocation.width -
-			new_x - (gint)hb->float_allocation.width) < TOLERANCE;
+			new_x - (gint)hb->float_allocation.width) < gtk_widget_size_to_pixel (widget, TOLERANCE);
       break;
     }
 
@@ -1248,10 +1247,10 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	  break;
 	}
 
-      is_snapped = ((attach_pos1 - TOLERANCE < float_pos1) && 
-		    (attach_pos2 + TOLERANCE > float_pos2)) ||
-	           ((float_pos1 - TOLERANCE < attach_pos1) &&
-		    (float_pos2 + TOLERANCE > attach_pos2));
+      is_snapped = ((attach_pos1 - gtk_widget_size_to_pixel (widget, TOLERANCE) < float_pos1) && 
+		    (attach_pos2 + gtk_widget_size_to_pixel (widget, TOLERANCE) > float_pos2)) ||
+                   ((float_pos1 - gtk_widget_size_to_pixel (widget, TOLERANCE) < attach_pos1) &&
+                    (float_pos2 + gtk_widget_size_to_pixel (widget, TOLERANCE) > attach_pos2));
     }
 
   if (is_snapped)
@@ -1321,9 +1320,9 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	  height = child_requisition.height + 2 * GTK_CONTAINER (hb)->border_width;
 
 	  if (handle_position == GTK_POS_LEFT || handle_position == GTK_POS_RIGHT)
-	    width += DRAG_HANDLE_SIZE;
+	    width += gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
 	  else
-	    height += DRAG_HANDLE_SIZE;
+	    height += gtk_widget_size_to_pixel (widget, DRAG_HANDLE_SIZE);
 	  
 	  gdk_window_move_resize (hb->float_window, new_x, new_y, width, height);
 	  gdk_window_reparent (hb->bin_window, hb->float_window, 0, 0);
