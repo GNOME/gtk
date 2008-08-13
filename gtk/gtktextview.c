@@ -211,7 +211,7 @@ static void gtk_text_view_move_focus           (GtkWidget        *widget,
                                                 GtkDirectionType  direction_type);
 static void gtk_text_view_select_all           (GtkWidget        *widget,
                                                 gboolean          select);
-
+static void gtk_text_view_unit_changed         (GtkWidget        *widget);
 
 /* Source side drag signals */
 static void gtk_text_view_drag_begin       (GtkWidget        *widget,
@@ -496,6 +496,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->motion_notify_event = gtk_text_view_motion_event;
   widget_class->expose_event = gtk_text_view_expose_event;
   widget_class->focus = gtk_text_view_focus;
+  widget_class->unit_changed = gtk_text_view_unit_changed;
 
   /* need to override the base class function via override_class_handler,
    * because the signal slot is not available in GtkWidgetCLass
@@ -539,33 +540,27 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
  
   g_object_class_install_property (gobject_class,
                                    PROP_PIXELS_ABOVE_LINES,
-                                   g_param_spec_int ("pixels-above-lines",
-						     P_("Pixels Above Lines"),
-						     P_("Pixels of blank space above paragraphs"),
-						     0,
-						     G_MAXINT,
-						     0,
-						     GTK_PARAM_READWRITE));
+                                   gtk_param_spec_size ("pixels-above-lines",
+                                                        P_("Pixels Above Lines"),
+                                                        P_("Pixels of blank space above paragraphs"),
+                                                        0, G_MAXINT, 0,
+                                                        GTK_PARAM_READWRITE));
  
   g_object_class_install_property (gobject_class,
                                    PROP_PIXELS_BELOW_LINES,
-                                   g_param_spec_int ("pixels-below-lines",
-						     P_("Pixels Below Lines"),
-						     P_("Pixels of blank space below paragraphs"),
-						     0,
-						     G_MAXINT,
-						     0,
-						     GTK_PARAM_READWRITE));
+                                   gtk_param_spec_size ("pixels-below-lines",
+                                                        P_("Pixels Below Lines"),
+                                                        P_("Pixels of blank space below paragraphs"),
+                                                        0, G_MAXINT, 0,
+                                                        GTK_PARAM_READWRITE));
  
   g_object_class_install_property (gobject_class,
                                    PROP_PIXELS_INSIDE_WRAP,
-                                   g_param_spec_int ("pixels-inside-wrap",
-						     P_("Pixels Inside Wrap"),
-						     P_("Pixels of blank space between wrapped lines in a paragraph"),
-						     0,
-						     G_MAXINT,
-						     0,
-						     GTK_PARAM_READWRITE));
+                                   gtk_param_spec_size ("pixels-inside-wrap",
+                                                        P_("Pixels Inside Wrap"),
+                                                        P_("Pixels of blank space between wrapped lines in a paragraph"),
+                                                        0, G_MAXINT, 0,
+                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_EDITABLE,
@@ -595,33 +590,27 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
  
   g_object_class_install_property (gobject_class,
                                    PROP_LEFT_MARGIN,
-                                   g_param_spec_int ("left-margin",
-						     P_("Left Margin"),
-						     P_("Width of the left margin in pixels"),
-						     0,
-						     G_MAXINT,
-						     0,
-						     GTK_PARAM_READWRITE));
+                                   gtk_param_spec_size ("left-margin",
+                                                        P_("Left Margin"),
+                                                        P_("Width of the left margin in pixels"),
+                                                        0, G_MAXINT, 0,
+                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_RIGHT_MARGIN,
-                                   g_param_spec_int ("right-margin",
-						     P_("Right Margin"),
-						     P_("Width of the right margin in pixels"),
-						     0,
-						     G_MAXINT,
-						     0,
-						     GTK_PARAM_READWRITE));
+                                   gtk_param_spec_size ("right-margin",
+                                                        P_("Right Margin"),
+                                                        P_("Width of the right margin in pixels"),
+                                                        0, G_MAXINT, 0,
+                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_INDENT,
-                                   g_param_spec_int ("indent",
-						     P_("Indent"),
-						     P_("Amount to indent the paragraph, in pixels"),
-						     G_MININT,
-						     G_MAXINT,
-						     0,
-						     GTK_PARAM_READWRITE));
+                                   gtk_param_spec_size ("indent",
+                                                        P_("Indent"),
+                                                        P_("Amount to indent the paragraph, in pixels"),
+                                                        0, G_MAXINT, 0,
+                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_TABS,
@@ -2383,7 +2372,7 @@ gtk_text_view_set_pixels_above_lines (GtkTextView *text_view,
 
       if (text_view->layout)
         {
-          text_view->layout->default_style->pixels_above_lines = pixels_above_lines;
+          text_view->layout->default_style->pixels_above_lines = gtk_widget_size_to_pixel (text_view, pixels_above_lines);
           gtk_text_layout_default_style_changed (text_view->layout);
         }
 
@@ -2401,6 +2390,24 @@ gtk_text_view_set_pixels_above_lines (GtkTextView *text_view,
  **/
 gint
 gtk_text_view_get_pixels_above_lines (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
+
+  return gtk_widget_size_to_pixel (text_view, text_view->pixels_above_lines);
+}
+
+/**
+ * gtk_text_view_get_pixels_above_lines_unit:
+ * @text_view: a #GtkTextView
+ * 
+ * Like gtk_text_view_get_pixels_above_lines() but preserves the unit.
+ * 
+ * Return value: default number of pixels above paragraphs
+ *
+ * Since: 2.14
+ **/
+GtkSize
+gtk_text_view_get_pixels_above_lines_unit (GtkTextView *text_view)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
 
@@ -2428,7 +2435,7 @@ gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
 
       if (text_view->layout)
         {
-          text_view->layout->default_style->pixels_below_lines = pixels_below_lines;
+          text_view->layout->default_style->pixels_below_lines = gtk_widget_size_to_pixel (text_view, pixels_below_lines);
           gtk_text_layout_default_style_changed (text_view->layout);
         }
 
@@ -2446,6 +2453,24 @@ gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
  **/
 gint
 gtk_text_view_get_pixels_below_lines (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
+
+  return gtk_widget_size_to_pixel (text_view, text_view->pixels_below_lines);
+}
+
+/**
+ * gtk_text_view_get_pixels_below_lines_unit:
+ * @text_view: a #GtkTextView
+ * 
+ * Like gtk_text_view_get_pixels_below_lines() but preserves the unit.
+ * 
+ * Return value: default number of blank pixels below paragraphs
+ *
+ * Since: 2.14
+ **/
+GtkSize
+gtk_text_view_get_pixels_below_lines_unit (GtkTextView *text_view)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
 
@@ -2473,7 +2498,7 @@ gtk_text_view_set_pixels_inside_wrap (GtkTextView *text_view,
 
       if (text_view->layout)
         {
-          text_view->layout->default_style->pixels_inside_wrap = pixels_inside_wrap;
+          text_view->layout->default_style->pixels_inside_wrap = gtk_widget_size_to_pixel (text_view, pixels_inside_wrap);
           gtk_text_layout_default_style_changed (text_view->layout);
         }
 
@@ -2491,6 +2516,24 @@ gtk_text_view_set_pixels_inside_wrap (GtkTextView *text_view,
  **/
 gint
 gtk_text_view_get_pixels_inside_wrap (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
+
+  return gtk_widget_size_to_pixel (text_view, text_view->pixels_inside_wrap);
+}
+
+/**
+ * gtk_text_view_get_pixels_inside_wrap_unit:
+ * @text_view: a #GtkTextView
+ * 
+ * Like gtk_text_view_get_pixels_inside_wrap() but preserves the unit.
+ * 
+ * Return value: default number of pixels of blank space between wrapped lines
+ *
+ * Since: 2.14
+ **/
+GtkSize
+gtk_text_view_get_pixels_inside_wrap_unit (GtkTextView *text_view)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
 
@@ -2553,7 +2596,7 @@ gtk_text_view_get_justification (GtkTextView *text_view)
  **/
 void
 gtk_text_view_set_left_margin (GtkTextView *text_view,
-                               gint         left_margin)
+                               GtkSize      left_margin)
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
@@ -2563,7 +2606,7 @@ gtk_text_view_set_left_margin (GtkTextView *text_view,
 
       if (text_view->layout)
         {
-          text_view->layout->default_style->left_margin = left_margin;
+          text_view->layout->default_style->left_margin = gtk_widget_size_to_pixel (text_view, left_margin);
           gtk_text_layout_default_style_changed (text_view->layout);
         }
 
@@ -2585,6 +2628,24 @@ gtk_text_view_get_left_margin (GtkTextView *text_view)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
 
+  return gtk_widget_size_to_pixel (text_view, text_view->left_margin);
+}
+
+/**
+ * gtk_text_view_get_left_margin_unit:
+ * @text_view: a #GtkTextView
+ * 
+ * Like gtk_text_view_get_left_margin() but preserves the units.
+ * 
+ * Return value: left margin in pixels
+ *
+ * Since: 2.14
+ **/
+GtkSize
+gtk_text_view_get_left_margin_unit (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
+
   return text_view->left_margin;
 }
 
@@ -2598,7 +2659,7 @@ gtk_text_view_get_left_margin (GtkTextView *text_view)
  **/
 void
 gtk_text_view_set_right_margin (GtkTextView *text_view,
-                                gint         right_margin)
+                                GtkSize      right_margin)
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
@@ -2608,7 +2669,7 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
 
       if (text_view->layout)
         {
-          text_view->layout->default_style->right_margin = right_margin;
+          text_view->layout->default_style->right_margin = gtk_widget_size_to_pixel (text_view, right_margin);
           gtk_text_layout_default_style_changed (text_view->layout);
         }
 
@@ -2627,6 +2688,24 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
  **/
 gint
 gtk_text_view_get_right_margin (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
+
+  return gtk_widget_size_to_pixel (text_view, text_view->right_margin);
+}
+
+/**
+ * gtk_text_view_get_right_margin_unit:
+ * @text_view: a #GtkTextView
+ * 
+ * Like gtk_text_view_get_right_margin() but preserves the unit.
+ * 
+ * Return value: right margin in pixels
+ *
+ * Since: 2.14
+ **/
+GtkSize
+gtk_text_view_get_right_margin_unit (GtkTextView *text_view)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
 
@@ -2653,7 +2732,7 @@ gtk_text_view_set_indent (GtkTextView *text_view,
 
       if (text_view->layout)
         {
-          text_view->layout->default_style->indent = indent;
+          text_view->layout->default_style->indent = gtk_widget_size_to_pixel (text_view, indent);
           gtk_text_layout_default_style_changed (text_view->layout);
         }
 
@@ -2673,6 +2752,24 @@ gtk_text_view_set_indent (GtkTextView *text_view,
  **/
 gint
 gtk_text_view_get_indent (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
+
+  return gtk_widget_size_to_pixel (text_view, text_view->indent);
+}
+
+/**
+ * gtk_text_view_get_indent_unit:
+ * @text_view: a #GtkTextView
+ * 
+ * Like gtk_text_view_get_indent() but preserves the unit.
+ * 
+ * Return value: number of pixels of indentation
+ *
+ * Since: 2.14
+ **/
+GtkSize
+gtk_text_view_get_indent_unit (GtkTextView *text_view)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
 
@@ -2923,15 +3020,15 @@ gtk_text_view_set_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_PIXELS_ABOVE_LINES:
-      gtk_text_view_set_pixels_above_lines (text_view, g_value_get_int (value));
+      gtk_text_view_set_pixels_above_lines (text_view, gtk_value_get_size (value));
       break;
 
     case PROP_PIXELS_BELOW_LINES:
-      gtk_text_view_set_pixels_below_lines (text_view, g_value_get_int (value));
+      gtk_text_view_set_pixels_below_lines (text_view, gtk_value_get_size (value));
       break;
 
     case PROP_PIXELS_INSIDE_WRAP:
-      gtk_text_view_set_pixels_inside_wrap (text_view, g_value_get_int (value));
+      gtk_text_view_set_pixels_inside_wrap (text_view, gtk_value_get_size (value));
       break;
 
     case PROP_EDITABLE:
@@ -2947,15 +3044,15 @@ gtk_text_view_set_property (GObject         *object,
       break;
 
     case PROP_LEFT_MARGIN:
-      gtk_text_view_set_left_margin (text_view, g_value_get_int (value));
+      gtk_text_view_set_left_margin (text_view, gtk_value_get_size (value));
       break;
 
     case PROP_RIGHT_MARGIN:
-      gtk_text_view_set_right_margin (text_view, g_value_get_int (value));
+      gtk_text_view_set_right_margin (text_view, gtk_value_get_size (value));
       break;
 
     case PROP_INDENT:
-      gtk_text_view_set_indent (text_view, g_value_get_int (value));
+      gtk_text_view_set_indent (text_view, gtk_value_get_size (value));
       break;
 
     case PROP_TABS:
@@ -3006,15 +3103,15 @@ gtk_text_view_get_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_PIXELS_ABOVE_LINES:
-      g_value_set_int (value, text_view->pixels_above_lines);
+      gtk_value_set_size (value, text_view->pixels_above_lines, text_view);
       break;
 
     case PROP_PIXELS_BELOW_LINES:
-      g_value_set_int (value, text_view->pixels_below_lines);
+      gtk_value_set_size (value, text_view->pixels_below_lines, text_view);
       break;
 
     case PROP_PIXELS_INSIDE_WRAP:
-      g_value_set_int (value, text_view->pixels_inside_wrap);
+      gtk_value_set_size (value, text_view->pixels_inside_wrap, text_view);
       break;
 
     case PROP_EDITABLE:
@@ -3030,15 +3127,15 @@ gtk_text_view_get_property (GObject         *object,
       break;
 
     case PROP_LEFT_MARGIN:
-      g_value_set_int (value, text_view->left_margin);
+      gtk_value_set_size (value, text_view->left_margin, text_view);
       break;
 
     case PROP_RIGHT_MARGIN:
-      g_value_set_int (value, text_view->right_margin);
+      gtk_value_set_size (value, text_view->right_margin, text_view);
       break;
 
     case PROP_INDENT:
-      g_value_set_int (value, text_view->indent);
+      gtk_value_set_size (value, text_view->indent, text_view);
       break;
 
     case PROP_TABS:
@@ -6377,12 +6474,12 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       gtk_text_view_set_attributes_from_style (text_view,
                                                style, widget->style);
 
-      style->pixels_above_lines = text_view->pixels_above_lines;
-      style->pixels_below_lines = text_view->pixels_below_lines;
-      style->pixels_inside_wrap = text_view->pixels_inside_wrap;
-      style->left_margin = text_view->left_margin;
-      style->right_margin = text_view->right_margin;
-      style->indent = text_view->indent;
+      style->pixels_above_lines = gtk_widget_size_to_pixel (text_view, text_view->pixels_above_lines);
+      style->pixels_below_lines = gtk_widget_size_to_pixel (text_view, text_view->pixels_below_lines);
+      style->pixels_inside_wrap = gtk_widget_size_to_pixel (text_view, text_view->pixels_inside_wrap);
+      style->left_margin = gtk_widget_size_to_pixel (text_view, text_view->left_margin);
+      style->right_margin = gtk_widget_size_to_pixel (text_view, text_view->right_margin);
+      style->indent = gtk_widget_size_to_pixel (text_view, text_view->indent);
       style->tabs = text_view->tabs ? pango_tab_array_copy (text_view->tabs) : NULL;
 
       style->wrap_mode = text_view->wrap_mode;
@@ -9107,6 +9204,18 @@ gtk_text_view_move_visually (GtkTextView *text_view,
   gtk_text_view_ensure_layout (text_view);
 
   return gtk_text_layout_move_iter_visually (text_view->layout, iter, count);
+}
+
+static void
+gtk_text_view_unit_changed (GtkWidget *widget)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unit_changed (widget);
+
+  gtk_text_view_destroy_layout (text_view);
 }
 
 #define __GTK_TEXT_VIEW_C__

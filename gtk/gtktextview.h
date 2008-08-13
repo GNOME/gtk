@@ -76,14 +76,14 @@ struct _GtkTextView
   guint GSEAL (scroll_timeout);
 
   /* Default style settings */
-  gint GSEAL (pixels_above_lines);
-  gint GSEAL (pixels_below_lines);
-  gint GSEAL (pixels_inside_wrap);
+  GtkSize GSEAL (pixels_above_lines);
+  GtkSize GSEAL (pixels_below_lines);
+  GtkSize GSEAL (pixels_inside_wrap);
   GtkWrapMode GSEAL (wrap_mode);
   GtkJustification GSEAL (justify);
-  gint GSEAL (left_margin);
-  gint GSEAL (right_margin);
-  gint GSEAL (indent);
+  GtkSize GSEAL (left_margin);
+  GtkSize GSEAL (right_margin);
+  GtkSize GSEAL (indent);
   PangoTabArray *GSEAL (tabs);
   guint GSEAL (editable) : 1;
 
@@ -337,26 +337,32 @@ void		 gtk_text_view_set_accepts_tab        (GtkTextView	*text_view,
 						       gboolean		 accepts_tab);
 gboolean	 gtk_text_view_get_accepts_tab        (GtkTextView	*text_view);
 void             gtk_text_view_set_pixels_above_lines (GtkTextView      *text_view,
-                                                       gint              pixels_above_lines);
+                                                       GtkSize           pixels_above_lines);
 gint             gtk_text_view_get_pixels_above_lines (GtkTextView      *text_view);
+GtkSize          gtk_text_view_get_pixels_above_lines_unit (GtkTextView *text_view);
 void             gtk_text_view_set_pixels_below_lines (GtkTextView      *text_view,
-                                                       gint              pixels_below_lines);
+                                                       GtkSize           pixels_below_lines);
 gint             gtk_text_view_get_pixels_below_lines (GtkTextView      *text_view);
+GtkSize          gtk_text_view_get_pixels_below_lines_unit (GtkTextView *text_view);
 void             gtk_text_view_set_pixels_inside_wrap (GtkTextView      *text_view,
-                                                       gint              pixels_inside_wrap);
+                                                       GtkSize           pixels_inside_wrap);
 gint             gtk_text_view_get_pixels_inside_wrap (GtkTextView      *text_view);
+GtkSize          gtk_text_view_get_pixels_inside_wrap_unit (GtkTextView *text_view);
 void             gtk_text_view_set_justification      (GtkTextView      *text_view,
                                                        GtkJustification  justification);
 GtkJustification gtk_text_view_get_justification      (GtkTextView      *text_view);
 void             gtk_text_view_set_left_margin        (GtkTextView      *text_view,
-                                                       gint              left_margin);
+                                                       GtkSize           left_margin);
 gint             gtk_text_view_get_left_margin        (GtkTextView      *text_view);
+GtkSize          gtk_text_view_get_left_margin_unit   (GtkTextView      *text_view);
 void             gtk_text_view_set_right_margin       (GtkTextView      *text_view,
-                                                       gint              right_margin);
+                                                       GtkSize           right_margin);
 gint             gtk_text_view_get_right_margin       (GtkTextView      *text_view);
+GtkSize          gtk_text_view_get_right_margin_unit  (GtkTextView      *text_view);
 void             gtk_text_view_set_indent             (GtkTextView      *text_view,
-                                                       gint              indent);
+                                                       GtkSize           indent);
 gint             gtk_text_view_get_indent             (GtkTextView      *text_view);
+GtkSize          gtk_text_view_get_indent_unit        (GtkTextView      *text_view);
 void             gtk_text_view_set_tabs               (GtkTextView      *text_view,
                                                        PangoTabArray    *tabs);
 PangoTabArray*   gtk_text_view_get_tabs               (GtkTextView      *text_view);
