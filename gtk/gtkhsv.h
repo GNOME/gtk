@@ -89,11 +89,14 @@ void       gtk_hsv_get_color    (GtkHSV    *hsv,
 				 gdouble   *s,
 				 gdouble   *v);
 void       gtk_hsv_set_metrics  (GtkHSV    *hsv,
-				 gint       size,
-				 gint       ring_width);
+				 GtkSize    size,
+				 GtkSize    ring_width);
 void       gtk_hsv_get_metrics  (GtkHSV    *hsv,
 				 gint      *size,
 				 gint      *ring_width);
+void       gtk_hsv_get_metrics_unit  (GtkHSV    *hsv,
+                                      GtkSize   *size,
+                                      GtkSize   *ring_width);
 gboolean   gtk_hsv_is_adjusting (GtkHSV    *hsv);
 
 /* Convert colors between the RGB and HSV color spaces */

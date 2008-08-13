@@ -254,13 +254,11 @@ gtk_paned_class_init (GtkPanedClass *class)
 							 GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("handle-size",
-							     P_("Handle Size"),
-							     P_("Width of handle"),
-							     0,
-							     G_MAXINT,
-							     5,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("handle-size",
+                                                                P_("Handle Size"),
+                                                                P_("Width of handle"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (5),
+                                                                GTK_PARAM_READABLE));
   /**
    * GtkPaned:min-position:
    *

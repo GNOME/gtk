@@ -43,10 +43,10 @@
 #include "gtkalias.h"
 
 /* Default width/height */
-#define DEFAULT_SIZE 100
+#define DEFAULT_SIZE GTK_SIZE_ONE_TWELFTH_EM(100)
 
 /* Default ring width */
-#define DEFAULT_RING_WIDTH 10
+#define DEFAULT_RING_WIDTH GTK_SIZE_ONE_TWELFTH_EM(10)
 
 
 /* Dragging modes */
@@ -64,8 +64,8 @@ typedef struct {
   double v;
   
   /* Size and ring width */
-  int size;
-  int ring_width;
+  GtkSize size;
+  GtkSize ring_width;
   
   /* Window for capturing events */
   GdkWindow *window;
@@ -349,8 +349,8 @@ gtk_hsv_size_request (GtkWidget      *widget,
 			"focus-padding", &focus_pad,
 			NULL);
   
-  requisition->width = priv->size + 2 * (focus_width + focus_pad);
-  requisition->height = priv->size + 2 * (focus_width + focus_pad);
+  requisition->width = gtk_widget_size_to_pixel (widget, priv->size) + 2 * (focus_width + focus_pad);
+  requisition->height = gtk_widget_size_to_pixel (widget, priv->size) + 2 * (focus_width + focus_pad);
 }
 
 /* Size_allocate handler for the HSV color selector */
@@ -547,8 +547,8 @@ compute_triangle (GtkHSV *hsv,
 
   center_x = GTK_WIDGET (hsv)->allocation.width / 2.0;
   center_y = GTK_WIDGET (hsv)->allocation.height / 2.0;
-  outer = priv->size / 2.0;
-  inner = outer - priv->ring_width;
+  outer = gtk_widget_size_to_pixel (hsv, priv->size) / 2.0;
+  inner = outer - gtk_widget_size_to_pixel (hsv, priv->ring_width);
   angle = priv->h * 2.0 * G_PI;
 
   *hx = floor (center_x + cos (angle) * inner + 0.5);
@@ -572,11 +572,10 @@ is_in_ring (GtkHSV *hsv,
   gdouble inner, outer;
 
   priv = hsv->priv;
-
   center_x = GTK_WIDGET (hsv)->allocation.width / 2.0;
   center_y = GTK_WIDGET (hsv)->allocation.height / 2.0;
-  outer = priv->size / 2.0;
-  inner = outer - priv->ring_width;
+  outer = gtk_widget_size_to_pixel (hsv, priv->size / 2.0);
+  inner = outer - gtk_widget_size_to_pixel (hsv, priv->ring_width);
 
   dx = x - center_x;
   dy = center_y - y;
@@ -922,8 +921,8 @@ paint_ring (GtkHSV      *hsv,
   center_x = widget->allocation.width / 2.0;
   center_y = widget->allocation.height / 2.0;
 
-  outer = priv->size / 2.0;
-  inner = outer - priv->ring_width;
+  outer = gtk_widget_size_to_pixel (hsv, priv->size) / 2.0;
+  inner = outer - gtk_widget_size_to_pixel (hsv, priv->ring_width);
   
   /* Create an image initialized with the ring colors */
   
@@ -997,11 +996,11 @@ paint_ring (GtkHSV      *hsv,
   cairo_set_source_surface (cr, source, x, y);
   cairo_surface_destroy (source);
 
-  cairo_set_line_width (cr, priv->ring_width);
+  cairo_set_line_width (cr, gtk_widget_size_to_pixel (hsv, priv->ring_width));
   cairo_new_path (cr);
   cairo_arc (cr,
 	     center_x, center_y,
-	     priv->size / 2. - priv->ring_width / 2.,
+	     gtk_widget_size_to_pixel (hsv, priv->size) / 2. - gtk_widget_size_to_pixel (hsv, priv->ring_width) / 2.,
 	     0, 2 * G_PI);
   cairo_stroke (cr);
   
@@ -1459,8 +1458,8 @@ gtk_hsv_get_color (GtkHSV *hsv,
  */
 void
 gtk_hsv_set_metrics (GtkHSV *hsv,
-		     gint    size,
-		     gint    ring_width)
+		     GtkSize size,
+		     GtkSize ring_width)
 {
   HSVPrivate *priv;
   int same_size;
@@ -1468,7 +1467,7 @@ gtk_hsv_set_metrics (GtkHSV *hsv,
   g_return_if_fail (GTK_IS_HSV (hsv));
   g_return_if_fail (size > 0);
   g_return_if_fail (ring_width > 0);
-  g_return_if_fail (2 * ring_width + 1 <= size);
+  g_return_if_fail (2 * gtk_widget_size_to_pixel (hsv, ring_width) + 1 <= gtk_widget_size_to_pixel (hsv, size));
   
   priv = hsv->priv;
   
@@ -1497,6 +1496,34 @@ void
 gtk_hsv_get_metrics (GtkHSV *hsv,
 		     gint   *size,
 		     gint   *ring_width)
+{
+  HSVPrivate *priv;
+  
+  g_return_if_fail (GTK_IS_HSV (hsv));
+  
+  priv = hsv->priv;
+  
+  if (size)
+    *size = gtk_widget_size_to_pixel (hsv, priv->size);
+  
+  if (ring_width)
+    *ring_width = gtk_widget_size_to_pixel (hsv, priv->ring_width);
+}
+
+/**
+ * gtk_hsv_get_metrics_unit:
+ * @hsv: An HSV color selector.
+ * @size: Return value for the diameter of the hue ring.
+ * @ring_width: Return value for the width of the hue ring.
+ *
+ * Like gtk_hsv_get_metrics() but preserves the unit.
+ *
+ * Since: 2.14
+ **/
+void
+gtk_hsv_get_metrics_unit (GtkHSV  *hsv,
+                          GtkSize *size,
+                          GtkSize *ring_width)
 {
   HSVPrivate *priv;
   

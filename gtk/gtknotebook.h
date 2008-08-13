@@ -219,11 +219,11 @@ GtkPositionType gtk_notebook_get_tab_pos   (GtkNotebook     *notebook);
 void     gtk_notebook_set_homogeneous_tabs (GtkNotebook     *notebook,
 					    gboolean         homogeneous);
 void     gtk_notebook_set_tab_border       (GtkNotebook     *notebook,
-					    guint            border_width);
+					    GtkUSize         border_width);
 void     gtk_notebook_set_tab_hborder      (GtkNotebook     *notebook,
-					    guint            tab_hborder);
+					    GtkUSize         tab_hborder);
 void     gtk_notebook_set_tab_vborder      (GtkNotebook     *notebook,
-					    guint            tab_vborder);
+					    GtkUSize         tab_vborder);
 #endif /* GTK_DISABLE_DEPRECATED */
 
 void     gtk_notebook_set_scrollable       (GtkNotebook     *notebook,

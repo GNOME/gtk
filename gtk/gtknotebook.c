@@ -197,6 +197,9 @@ struct _GtkNotebookPrivate
   guint during_reorder : 1;
   guint during_detach  : 1;
   guint has_scrolled   : 1;
+
+  GtkUSize tab_hborder_unit;
+  GtkUSize tab_vborder_unit;
 };
 
 static const GtkTargetEntry notebook_targets [] = {
@@ -412,11 +415,11 @@ static void gtk_notebook_menu_detacher       (GtkWidget        *widget,
 static void gtk_notebook_set_homogeneous_tabs_internal (GtkNotebook *notebook,
 							gboolean     homogeneous);
 static void gtk_notebook_set_tab_border_internal       (GtkNotebook *notebook,
-							guint        border_width);
+							GtkUSize     border_width);
 static void gtk_notebook_set_tab_hborder_internal      (GtkNotebook *notebook,
-							guint        tab_hborder);
+							GtkUSize     tab_hborder);
 static void gtk_notebook_set_tab_vborder_internal      (GtkNotebook *notebook,
-							guint        tab_vborder);
+							GtkUSize     tab_vborder);
 
 static void gtk_notebook_update_tab_states             (GtkNotebook *notebook);
 static gboolean gtk_notebook_mnemonic_activate_switch_page (GtkWidget *child,
@@ -590,31 +593,25 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  						      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_TAB_BORDER,
-				   g_param_spec_uint ("tab-border",
- 						      P_("Tab Border"),
- 						      P_("Width of the border around the tab labels"),
- 						      0,
- 						      G_MAXUINT,
- 						      2,
- 						      GTK_PARAM_WRITABLE));
+				   gtk_param_spec_usize ("tab-border",
+                                                         P_("Tab Border"),
+                                                         P_("Width of the border around the tab labels"),
+                                                         0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (2),
+                                                         GTK_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
 				   PROP_TAB_HBORDER,
-				   g_param_spec_uint ("tab-hborder",
- 						      P_("Horizontal Tab Border"),
- 						      P_("Width of the horizontal border of tab labels"),
- 						      0,
- 						      G_MAXUINT,
- 						      2,
- 						      GTK_PARAM_READWRITE));
+				   gtk_param_spec_usize ("tab-hborder",
+                                                         P_("Horizontal Tab Border"),
+                                                         P_("Width of the horizontal border of tab labels"),
+                                                         0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (2),
+                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_TAB_VBORDER,
-				   g_param_spec_uint ("tab-vborder",
- 						      P_("Vertical Tab Border"),
- 						      P_("Width of the vertical border of tab labels"),
- 						      0,
- 						      G_MAXUINT,
- 						      2,
- 						      GTK_PARAM_READWRITE));
+				   gtk_param_spec_usize ("tab-vborder",
+                                                         P_("Vertical Tab Border"),
+                                                         P_("Width of the vertical border of tab labels"),
+                                                         0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (2),
+                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_TABS,
 				   g_param_spec_boolean ("show-tabs",
@@ -802,13 +799,11 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  * Since: 2.10
  */  
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("tab-overlap",
-							     P_("Tab overlap"),
-							     P_("Size of tab overlap area"),
-							     G_MININT,
-							     G_MAXINT,
-							     2,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("tab-overlap",
+                                                                P_("Tab overlap"),
+                                                                P_("Size of tab overlap area"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (2),
+                                                                GTK_PARAM_READABLE));
 
 /**
  * GtkNotebook:tab-curvature:
@@ -818,13 +813,11 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  * Since: 2.10
  */  
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("tab-curvature",
-							     P_("Tab curvature"),
-							     P_("Size of tab curvature"),
-							     0,
-							     G_MAXINT,
-							     1,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("tab-curvature",
+                                                                P_("Tab curvature"),
+                                                                P_("Size of tab curvature"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (1),
+                                                                GTK_PARAM_READABLE));
 
   /**
    * GtkNotebook:arrow-spacing:
@@ -835,13 +828,11 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * Since: 2.10
    */
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("arrow-spacing",
-                                                             P_("Arrow spacing"),
-                                                             P_("Scroll arrow spacing"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             0,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("arrow-spacing",
+                                                                _("Arrow spacing"),
+                                                                _("Scroll arrow spacing"),
+                                                                0, G_MAXINT, 0,
+                                                                GTK_PARAM_READABLE));
 
   notebook_signals[SWITCH_PAGE] =
     g_signal_new (I_("switch-page"),
@@ -1075,8 +1066,10 @@ gtk_notebook_init (GtkNotebook *notebook)
   notebook->event_window = NULL;
   notebook->menu = NULL;
 
-  notebook->tab_hborder = 2;
-  notebook->tab_vborder = 2;
+  notebook->tab_hborder = gtk_widget_size_to_pixel (notebook, GTK_SIZE_ONE_TWELFTH_EM (2));
+  notebook->tab_vborder = gtk_widget_size_to_pixel (notebook, GTK_SIZE_ONE_TWELFTH_EM (2));
+  priv->tab_hborder_unit = GTK_SIZE_ONE_TWELFTH_EM (2);
+  priv->tab_vborder_unit = GTK_SIZE_ONE_TWELFTH_EM (2);
 
   notebook->show_tabs = TRUE;
   notebook->show_border = TRUE;
@@ -1524,13 +1517,13 @@ gtk_notebook_set_property (GObject         *object,
       gtk_notebook_set_tab_pos (notebook, g_value_get_enum (value));
       break;
     case PROP_TAB_BORDER:
-      gtk_notebook_set_tab_border_internal (notebook, g_value_get_uint (value));
+      gtk_notebook_set_tab_border_internal (notebook, gtk_value_get_usize (value));
       break;
     case PROP_TAB_HBORDER:
-      gtk_notebook_set_tab_hborder_internal (notebook, g_value_get_uint (value));
+      gtk_notebook_set_tab_hborder_internal (notebook, gtk_value_get_usize (value));
       break;
     case PROP_TAB_VBORDER:
-      gtk_notebook_set_tab_vborder_internal (notebook, g_value_get_uint (value));
+      gtk_notebook_set_tab_vborder_internal (notebook, gtk_value_get_usize (value));
       break;
     case PROP_GROUP_ID:
       gtk_notebook_set_group_id (notebook, g_value_get_int (value));
@@ -1580,10 +1573,10 @@ gtk_notebook_get_property (GObject         *object,
       g_value_set_enum (value, notebook->tab_pos);
       break;
     case PROP_TAB_HBORDER:
-      g_value_set_uint (value, notebook->tab_hborder);
+      gtk_value_set_usize (value, priv->tab_hborder_unit, notebook);
       break;
     case PROP_TAB_VBORDER:
-      g_value_set_uint (value, notebook->tab_vborder);
+      gtk_value_set_usize (value, priv->tab_vborder_unit, notebook);
       break;
     case PROP_GROUP_ID:
       g_value_set_int (value, gtk_notebook_get_group_id (notebook));
@@ -1797,6 +1790,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
 			   GtkRequisition *requisition)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  GtkNotebookPrivate *priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
   GtkNotebookPage *page;
   GList *children;
   GtkRequisition child_requisition;
@@ -1886,14 +1880,14 @@ gtk_notebook_size_request (GtkWidget      *widget,
 		    {
 		    case GTK_POS_TOP:
 		    case GTK_POS_BOTTOM:
-		      page->requisition.height += 2 * (notebook->tab_vborder +
+		      page->requisition.height += 2 * (gtk_widget_size_to_pixel (notebook, priv->tab_vborder_unit) +
 						       focus_width);
 		      tab_height = MAX (tab_height, page->requisition.height);
 		      tab_max = MAX (tab_max, page->requisition.width);
 		      break;
 		    case GTK_POS_LEFT:
 		    case GTK_POS_RIGHT:
-		      page->requisition.width += 2 * (notebook->tab_hborder +
+		      page->requisition.width += 2 * (gtk_widget_size_to_pixel (notebook, priv->tab_hborder_unit) +
 						      focus_width);
 		      tab_width = MAX (tab_width, page->requisition.width);
 		      tab_max = MAX (tab_max, page->requisition.height);
@@ -1920,7 +1914,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
 		    tab_height = MAX (tab_height, scroll_arrow_hlength);
 
 		  padding = 2 * (tab_curvature + focus_width +
-				 notebook->tab_hborder) - tab_overlap;
+				 gtk_widget_size_to_pixel (notebook, priv->tab_hborder_unit)) - tab_overlap;
 		  tab_max += padding;
 		  while (children)
 		    {
@@ -1964,7 +1958,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
                                      arrow_spacing + 2 * scroll_arrow_vlength);
 
 		  padding = 2 * (tab_curvature + focus_width +
-				 notebook->tab_vborder) - tab_overlap;
+				 gtk_widget_size_to_pixel (notebook, priv->tab_vborder_unit)) - tab_overlap;
 		  tab_max += padding;
 
 		  while (children)
@@ -5557,6 +5551,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 			    GtkNotebookPage *page)
 {
   GtkWidget *widget = GTK_WIDGET (notebook);
+  GtkNotebookPrivate *priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
   GtkAllocation child_allocation;
   GtkRequisition tab_requisition;
   gint xthickness;
@@ -5588,10 +5583,10 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
     {
     case GTK_POS_TOP:
     case GTK_POS_BOTTOM:
-      padding = tab_curvature + focus_width + notebook->tab_hborder;
+      padding = tab_curvature + focus_width + gtk_widget_size_to_pixel (notebook, priv->tab_hborder_unit);
       if (page->fill)
 	{
-	  child_allocation.x = xthickness + focus_width + notebook->tab_hborder;
+	  child_allocation.x = xthickness + focus_width + gtk_widget_size_to_pixel (notebook, priv->tab_hborder_unit);
 	  child_allocation.width = MAX (1, page->allocation.width - 2 * child_allocation.x);
 	  child_allocation.x += page->allocation.x;
 	}
@@ -5603,17 +5598,17 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 	  child_allocation.width = tab_requisition.width;
 	}
 
-      child_allocation.y = notebook->tab_vborder + focus_width + page->allocation.y;
+      child_allocation.y = gtk_widget_size_to_pixel (notebook, priv->tab_vborder_unit) + focus_width + page->allocation.y;
 
       if (tab_pos == GTK_POS_TOP)
 	child_allocation.y += ythickness;
 
       child_allocation.height = MAX (1, (page->allocation.height - ythickness -
-					 2 * (notebook->tab_vborder + focus_width)));
+					 2 * (gtk_widget_size_to_pixel (notebook, priv->tab_vborder_unit) + focus_width)));
       break;
     case GTK_POS_LEFT:
     case GTK_POS_RIGHT:
-      padding = tab_curvature + focus_width + notebook->tab_vborder;
+      padding = tab_curvature + focus_width + gtk_widget_size_to_pixel (notebook, priv->tab_vborder_unit);
       if (page->fill)
 	{
 	  child_allocation.y = ythickness + padding;
@@ -5629,13 +5624,13 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 	  child_allocation.height = tab_requisition.height;
 	}
 
-      child_allocation.x = notebook->tab_hborder + focus_width + page->allocation.x;
+      child_allocation.x = gtk_widget_size_to_pixel (notebook, priv->tab_hborder_unit) + focus_width + page->allocation.x;
 
       if (tab_pos == GTK_POS_LEFT)
 	child_allocation.x += xthickness;
 
       child_allocation.width = MAX (1, (page->allocation.width - xthickness -
-					2 * (notebook->tab_hborder + focus_width)));
+					2 * (gtk_widget_size_to_pixel (notebook, priv->tab_hborder_unit) + focus_width)));
       break;
     }
 
@@ -6023,10 +6018,14 @@ gtk_notebook_set_homogeneous_tabs_internal (GtkNotebook *notebook,
 
 static void
 gtk_notebook_set_tab_border_internal (GtkNotebook *notebook,
-				      guint        border_width)
+				      GtkUSize     border_width)
 {
-  notebook->tab_hborder = border_width;
-  notebook->tab_vborder = border_width;
+  GtkNotebookPrivate *priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
+
+  notebook->tab_hborder = gtk_widget_size_to_pixel (notebook, border_width);
+  notebook->tab_vborder = gtk_widget_size_to_pixel (notebook, border_width);
+  priv->tab_hborder_unit = border_width;
+  priv->tab_vborder_unit = border_width;
 
   if (GTK_WIDGET_VISIBLE (notebook) && notebook->show_tabs)
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
@@ -6039,12 +6038,15 @@ gtk_notebook_set_tab_border_internal (GtkNotebook *notebook,
 
 static void
 gtk_notebook_set_tab_hborder_internal (GtkNotebook *notebook,
-				       guint        tab_hborder)
+				       GtkUSize     tab_hborder)
 {
-  if (notebook->tab_hborder == tab_hborder)
+  GtkNotebookPrivate *priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
+
+  if (priv->tab_hborder_unit == tab_hborder)
     return;
 
-  notebook->tab_hborder = tab_hborder;
+  notebook->tab_hborder = gtk_widget_size_to_pixel (notebook, tab_hborder);
+  priv->tab_hborder_unit = tab_hborder;
 
   if (GTK_WIDGET_VISIBLE (notebook) && notebook->show_tabs)
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
@@ -6054,12 +6056,15 @@ gtk_notebook_set_tab_hborder_internal (GtkNotebook *notebook,
 
 static void
 gtk_notebook_set_tab_vborder_internal (GtkNotebook *notebook,
-				       guint        tab_vborder)
+				       GtkUSize     tab_vborder)
 {
-  if (notebook->tab_vborder == tab_vborder)
+  GtkNotebookPrivate *priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
+
+  if (priv->tab_vborder_unit == tab_vborder)
     return;
 
-  notebook->tab_vborder = tab_vborder;
+  notebook->tab_vborder = gtk_widget_size_to_pixel (notebook, tab_vborder);
+  priv->tab_vborder_unit = tab_vborder;
 
   if (GTK_WIDGET_VISIBLE (notebook) && notebook->show_tabs)
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
@@ -6704,7 +6709,7 @@ gtk_notebook_set_homogeneous_tabs (GtkNotebook *notebook,
  **/
 void
 gtk_notebook_set_tab_border (GtkNotebook *notebook,
-			     guint        border_width)
+			     GtkUSize     border_width)
 {
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
@@ -6720,7 +6725,7 @@ gtk_notebook_set_tab_border (GtkNotebook *notebook,
  **/
 void
 gtk_notebook_set_tab_hborder (GtkNotebook *notebook,
-			      guint        tab_hborder)
+			      GtkUSize     tab_hborder)
 {
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
@@ -6736,7 +6741,7 @@ gtk_notebook_set_tab_hborder (GtkNotebook *notebook,
  **/
 void
 gtk_notebook_set_tab_vborder (GtkNotebook *notebook,
-			      guint        tab_vborder)
+			      GtkUSize     tab_vborder)
 {
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 

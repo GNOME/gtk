@@ -1819,6 +1819,7 @@ gtk_hseparator_new
 #if IN_FILE(__GTK_HSV_C__)
 gtk_hsv_get_color
 gtk_hsv_get_metrics
+gtk_hsv_get_metrics_unit
 gtk_hsv_get_type G_GNUC_CONST
 gtk_hsv_is_adjusting
 gtk_hsv_new
