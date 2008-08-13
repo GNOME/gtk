@@ -489,15 +489,15 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   priv->wrap_license = FALSE;
 
   gtk_dialog_set_has_separator (dialog, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), GTK_SIZE_ONE_TWELFTH_EM (2)); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), GTK_SIZE_ONE_TWELFTH_EM (5));
 
   /* Widgets */
   gtk_widget_push_composite_child ();
 
-  vbox = gtk_vbox_new (FALSE, 8);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+  vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (8));
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_box_pack_start (GTK_BOX (dialog->vbox), vbox, TRUE, TRUE, 0);
 
   priv->logo_image = gtk_image_new ();
@@ -2129,12 +2129,12 @@ display_credits_dialog (GtkWidget *button,
 					NULL);
   credits_dialog = GTK_DIALOG (dialog);
   gtk_dialog_set_has_separator (credits_dialog, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (credits_dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (credits_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (credits_dialog->action_area), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (credits_dialog), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (credits_dialog->vbox), GTK_SIZE_ONE_TWELFTH_EM (2)); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (credits_dialog->action_area), GTK_SIZE_ONE_TWELFTH_EM (5));
 
   priv->credits_dialog = dialog;
-  gtk_window_set_default_size (GTK_WINDOW (dialog), 360, 260);
+  gtk_window_set_default_size (GTK_WINDOW (dialog), GTK_SIZE_ONE_TWELFTH_EM (360), GTK_SIZE_ONE_TWELFTH_EM (260));
   gtk_dialog_set_default_response (credits_dialog, GTK_RESPONSE_CANCEL);
 
   gtk_window_set_modal (GTK_WINDOW (dialog), 
@@ -2147,7 +2147,7 @@ display_credits_dialog (GtkWidget *button,
 		    &(priv->credits_dialog));
 
   notebook = gtk_notebook_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (notebook), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (notebook), GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), notebook, TRUE, TRUE, 0);
 
   if (priv->authors != NULL) 
@@ -2206,12 +2206,12 @@ display_license_dialog (GtkWidget *button,
 					NULL);
   licence_dialog = GTK_DIALOG (dialog);
   gtk_dialog_set_has_separator (licence_dialog, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (licence_dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (licence_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (licence_dialog->action_area), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (licence_dialog), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (licence_dialog->vbox), GTK_SIZE_ONE_TWELFTH_EM (2)); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (licence_dialog->action_area), GTK_SIZE_ONE_TWELFTH_EM (5));
 
   priv->license_dialog = dialog;
-  gtk_window_set_default_size (GTK_WINDOW (dialog), 420, 320);
+  gtk_window_set_default_size (GTK_WINDOW (dialog), GTK_SIZE_ONE_TWELFTH_EM (420), GTK_SIZE_ONE_TWELFTH_EM (320));
   gtk_dialog_set_default_response (licence_dialog, GTK_RESPONSE_CANCEL);
 
   gtk_window_set_modal (GTK_WINDOW (dialog), 
@@ -2224,7 +2224,7 @@ display_license_dialog (GtkWidget *button,
 		    &(priv->license_dialog));
 
   sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_set_border_width (GTK_CONTAINER (sw), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (sw), GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
 				       GTK_SHADOW_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),

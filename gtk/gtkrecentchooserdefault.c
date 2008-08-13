@@ -350,7 +350,7 @@ _gtk_recent_chooser_default_class_init (GtkRecentChooserDefaultClass *klass)
 static void
 _gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
 {
-  gtk_box_set_spacing (GTK_BOX (impl), 6);
+  gtk_box_set_spacing (GTK_BOX (impl), GTK_SIZE_ONE_TWELFTH_EM (6));
 
   /* by default, we use the global manager */
   impl->local_manager = FALSE;
@@ -471,7 +471,7 @@ gtk_recent_chooser_default_constructor (GType                  type,
 		       GDK_ACTION_COPY);
   gtk_drag_source_add_uri_targets (impl->recent_view);
 
-  impl->filter_combo_hbox = gtk_hbox_new (FALSE, 12);
+  impl->filter_combo_hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
   
   impl->filter_combo = gtk_combo_box_new_text ();
   gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (impl->filter_combo), FALSE);

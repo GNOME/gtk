@@ -94,9 +94,9 @@ gtk_recent_chooser_dialog_init (GtkRecentChooserDialog *dialog)
   dialog->priv = priv;
 
   gtk_dialog_set_has_separator (rc_dialog, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (rc_dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (rc_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (rc_dialog->action_area), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (rc_dialog), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (rc_dialog->vbox), GTK_SIZE_ONE_TWELFTH_EM (2)); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (rc_dialog->action_area), GTK_SIZE_ONE_TWELFTH_EM (5));
 
 }
 
@@ -167,7 +167,7 @@ gtk_recent_chooser_dialog_constructor (GType                  type,
   		    G_CALLBACK (gtk_recent_chooser_item_activated_cb),
   		    object);
 
-  gtk_container_set_border_width (GTK_CONTAINER (priv->chooser), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (priv->chooser), GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (object)->vbox),
                       priv->chooser, TRUE, TRUE, 0);
   gtk_widget_show (priv->chooser);

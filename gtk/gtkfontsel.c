@@ -78,14 +78,14 @@
 
 /* This is the initial and maximum height of the preview entry (it expands
    when large font sizes are selected). Initial height is also the minimum. */
-#define INITIAL_PREVIEW_HEIGHT 44
-#define MAX_PREVIEW_HEIGHT 300
+#define INITIAL_PREVIEW_HEIGHT GTK_SIZE_ONE_TWELFTH_EM(44)
+#define MAX_PREVIEW_HEIGHT GTK_SIZE_ONE_TWELFTH_EM(300)
 
 /* These are the sizes of the font, style & size lists. */
-#define FONT_LIST_HEIGHT	136
-#define FONT_LIST_WIDTH		190
-#define FONT_STYLE_LIST_WIDTH	170
-#define FONT_SIZE_LIST_WIDTH	60
+#define FONT_LIST_HEIGHT	GTK_SIZE_ONE_TWELFTH_EM(136)
+#define FONT_LIST_WIDTH		GTK_SIZE_ONE_TWELFTH_EM(190)
+#define FONT_STYLE_LIST_WIDTH	GTK_SIZE_ONE_TWELFTH_EM(170)
+#define FONT_SIZE_LIST_WIDTH	GTK_SIZE_ONE_TWELFTH_EM(60)
 
 /* These are what we use as the standard font sizes, for the size list.
  */
@@ -302,34 +302,34 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   gtk_widget_push_composite_child ();
 
-  gtk_box_set_spacing (GTK_BOX (fontsel), 12);
+  gtk_box_set_spacing (GTK_BOX (fontsel), GTK_SIZE_ONE_TWELFTH_EM (12));
   fontsel->size = 12 * PANGO_SCALE;
   
   /* Create the table of font, style & size. */
   table = gtk_table_new (3, 3, FALSE);
   gtk_widget_show (table);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (6));
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
   gtk_box_pack_start (GTK_BOX (fontsel), table, TRUE, TRUE, 0);
 
 #ifdef INCLUDE_FONT_ENTRIES
   fontsel->font_entry = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (fontsel->font_entry), FALSE);
-  gtk_widget_set_size_request (fontsel->font_entry, 20, -1);
+  gtk_widget_set_size_request (fontsel->font_entry, GTK_SIZE_ONE_TWELFTH_EM (20), -1);
   gtk_widget_show (fontsel->font_entry);
   gtk_table_attach (GTK_TABLE (table), fontsel->font_entry, 0, 1, 1, 2,
 		    GTK_FILL, 0, 0, 0);
   
   fontsel->font_style_entry = gtk_entry_new ();
   gtk_editable_set_editable (GTK_EDITABLE (fontsel->font_style_entry), FALSE);
-  gtk_widget_set_size_request (fontsel->font_style_entry, 20, -1);
+  gtk_widget_set_size_request (fontsel->font_style_entry, GTK_SIZE_ONE_TWELFTH_EM (20), -1);
   gtk_widget_show (fontsel->font_style_entry);
   gtk_table_attach (GTK_TABLE (table), fontsel->font_style_entry, 1, 2, 1, 2,
 		    GTK_FILL, 0, 0, 0);
 #endif /* INCLUDE_FONT_ENTRIES */
   
   fontsel->size_entry = gtk_entry_new ();
-  gtk_widget_set_size_request (fontsel->size_entry, 20, -1);
+  gtk_widget_set_size_request (fontsel->size_entry, GTK_SIZE_ONE_TWELFTH_EM (20), -1);
   gtk_widget_show (fontsel->size_entry);
   gtk_table_attach (GTK_TABLE (table), fontsel->size_entry, 2, 3, 1, 2,
 		    GTK_FILL, 0, 0, 0);
@@ -524,7 +524,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
     }    
       
 
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
   gtk_widget_show (vbox);
   gtk_box_pack_start (GTK_BOX (fontsel), vbox, FALSE, TRUE, 0);
   
@@ -1155,7 +1155,9 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   gtk_widget_size_request (preview_entry, NULL);
   
   /* We don't ever want to be over MAX_PREVIEW_HEIGHT pixels high. */
-  new_height = CLAMP (preview_entry->requisition.height, INITIAL_PREVIEW_HEIGHT, MAX_PREVIEW_HEIGHT);
+  new_height = CLAMP (preview_entry->requisition.height,
+                      gtk_widget_size_to_pixel (fontsel, INITIAL_PREVIEW_HEIGHT),
+                      gtk_widget_size_to_pixel (fontsel, MAX_PREVIEW_HEIGHT));
 
   if (new_height > old_requisition.height || new_height < old_requisition.height - 30)
     gtk_widget_set_size_request (preview_entry, -1, new_height);
@@ -1605,10 +1607,10 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   GtkDialog *dialog = GTK_DIALOG (fontseldiag);
   
   gtk_dialog_set_has_separator (dialog, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), GTK_SIZE_ONE_TWELFTH_EM (2)); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area), GTK_SIZE_ONE_TWELFTH_EM (6));
 
   gtk_widget_push_composite_child ();
 
@@ -1617,7 +1619,7 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   fontseldiag->main_vbox = dialog->vbox;
   
   fontseldiag->fontsel = gtk_font_selection_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (fontseldiag->fontsel), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (fontseldiag->fontsel), GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_widget_show (fontseldiag->fontsel);
   gtk_box_pack_start (GTK_BOX (fontseldiag->main_vbox),
 		      fontseldiag->fontsel, TRUE, TRUE, 0);

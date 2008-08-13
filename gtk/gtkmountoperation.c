@@ -454,10 +454,10 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
 
   /* Set the dialog up with HIG properties */
   gtk_dialog_set_has_separator (dialog, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), GTK_SIZE_ONE_TWELFTH_EM (2)); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area), GTK_SIZE_ONE_TWELFTH_EM (6));
 
   gtk_window_set_resizable (window, FALSE);
   gtk_window_set_title (window, "");
@@ -476,7 +476,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
 
   /* Build contents */
   hbox = gtk_hbox_new (FALSE, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_box_pack_start (GTK_BOX (dialog->vbox), hbox, TRUE, TRUE, 0);
 
   icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION,
@@ -485,7 +485,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
   gtk_misc_set_alignment (GTK_MISC (icon), 0.5, 0.0);
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0);
 
-  main_vbox = gtk_vbox_new (FALSE, 18);
+  main_vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (18));
   gtk_box_pack_start (GTK_BOX (hbox), main_vbox, TRUE, TRUE, 0);
 
   secondary = strstr (message, "\n");
@@ -516,7 +516,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
                           FALSE, FALSE, 0);
     }
 
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
   gtk_box_pack_start (GTK_BOX (main_vbox), vbox, FALSE, FALSE, 0);
 
   can_anonymous = flags & G_ASK_PASSWORD_ANONYMOUS_SUPPORTED;
@@ -528,7 +528,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
       GtkWidget *choice;
       GSList    *group;
 
-      anon_box = gtk_vbox_new (FALSE, 6);
+      anon_box = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
       gtk_box_pack_start (GTK_BOX (vbox), anon_box,
                           FALSE, FALSE, 0);
 
@@ -571,8 +571,8 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
   priv->entry_container = entry_container;
 
   table = gtk_table_new (rows, 2, FALSE);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (6));
   gtk_container_add (GTK_CONTAINER (entry_container), table);
 
   rows = 0;
@@ -602,7 +602,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
       GSList       *group;
       GPasswordSave password_save;
 
-      remember_box = gtk_vbox_new (FALSE, 6);
+      remember_box = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
       gtk_box_pack_start (GTK_BOX (vbox), remember_box,
                           FALSE, FALSE, 0);
 

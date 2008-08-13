@@ -254,7 +254,7 @@ typedef enum {
 /* Icon size for if we can't get it from the theme */
 #define FALLBACK_ICON_SIZE 16
 
-#define PREVIEW_HBOX_SPACING 12
+#define PREVIEW_HBOX_SPACING GTK_SIZE_ONE_TWELFTH_EM(12)
 #define NUM_LINES 45
 #define NUM_CHARS 60
 
@@ -284,6 +284,7 @@ static void     gtk_file_chooser_default_style_set      (GtkWidget             *
 							 GtkStyle              *previous_style);
 static void     gtk_file_chooser_default_screen_changed (GtkWidget             *widget,
 							 GdkScreen             *previous_screen);
+static void     gtk_file_chooser_default_unit_changed   (GtkWidget             *widget);
 static void     gtk_file_chooser_default_size_allocate  (GtkWidget             *widget,
 							 GtkAllocation         *allocation);
 
@@ -573,6 +574,7 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   widget_class->style_set = gtk_file_chooser_default_style_set;
   widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
   widget_class->size_allocate = gtk_file_chooser_default_size_allocate;
+  widget_class->unit_changed = gtk_file_chooser_default_unit_changed;
 
   signals[LOCATION_POPUP] =
     g_signal_new_class_handler (I_("location-popup"),
@@ -806,7 +808,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->operation_mode = OPERATION_MODE_BROWSE;
   impl->recent_manager = gtk_recent_manager_get_default ();
 
-  gtk_box_set_spacing (GTK_BOX (impl), 12);
+  gtk_box_set_spacing (GTK_BOX (impl), GTK_SIZE_ONE_TWELFTH_EM (12));
 
   set_file_system_backend (impl);
 
@@ -3987,7 +3989,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
   GtkWidget *hbox;
   GtkWidget *widget;
 
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
   gtk_widget_show (vbox);
 
   /* Shortcuts tree */
@@ -3997,7 +3999,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 
   /* Box for buttons */
 
-  hbox = gtk_hbox_new (TRUE, 6);
+  hbox = gtk_hbox_new (TRUE, GTK_SIZE_ONE_TWELFTH_EM (6));
   gtk_size_group_add_widget (size_group, hbox);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_widget_show (hbox);
@@ -4708,7 +4710,7 @@ file_pane_create (GtkFileChooserDefault *impl,
   GtkWidget *hbox;
   GtkWidget *widget;
 
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
   gtk_widget_show (vbox);
 
   /* Box for lists and preview */
@@ -4724,13 +4726,13 @@ file_pane_create (GtkFileChooserDefault *impl,
 
   /* Preview */
 
-  impl->preview_box = gtk_vbox_new (FALSE, 12);
+  impl->preview_box = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
   gtk_box_pack_start (GTK_BOX (hbox), impl->preview_box, FALSE, FALSE, 0);
   /* Don't show preview box initially */
 
   /* Filter combo */
 
-  impl->filter_combo_hbox = gtk_hbox_new (FALSE, 12);
+  impl->filter_combo_hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
 
   widget = filter_create (impl);
 
@@ -4882,13 +4884,13 @@ save_widgets_create (GtkFileChooserDefault *impl)
 
   location_switch_to_path_bar (impl);
 
-  vbox = gtk_vbox_new (FALSE, 12);
+  vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
 
   table = gtk_table_new (2, 2, FALSE);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
   gtk_widget_show (table);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 12);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
 
   /* Label */
 
@@ -5223,10 +5225,10 @@ browse_widgets_create (GtkFileChooserDefault *impl)
 
   /* size group is used by the [+][-] buttons and the filter combo */
   size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
-  vbox = gtk_vbox_new (FALSE, 12);
+  vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
 
   /* Location widgets */
-  hbox = gtk_hbox_new (FALSE, 12);
+  hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_widget_show (hbox);
   impl->browse_path_bar_hbox = hbox;
@@ -5249,7 +5251,7 @@ browse_widgets_create (GtkFileChooserDefault *impl)
 
   /* Box for the location label and entry */
 
-  impl->location_entry_box = gtk_hbox_new (FALSE, 12);
+  impl->location_entry_box = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
   gtk_box_pack_start (GTK_BOX (vbox), impl->location_entry_box, FALSE, FALSE, 0);
 
   impl->location_label = gtk_label_new_with_mnemonic (_("_Location:"));
@@ -5850,7 +5852,10 @@ change_icon_theme (GtkFileChooserDefault *impl)
 
   settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
 
-  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &width, &height))
+  if (gtk_icon_size_lookup_for_settings_for_monitor (settings,
+                                                     gtk_widget_get_monitor_num (GTK_WIDGET (impl)),
+                                                     GTK_ICON_SIZE_MENU,
+                                                     &width, &height))
     impl->icon_size = MAX (width, height);
   else
     impl->icon_size = FALLBACK_ICON_SIZE;
@@ -7935,6 +7940,8 @@ gtk_file_chooser_default_list_shortcut_folders (GtkFileChooser *chooser)
   return g_slist_reverse (list);
 }
 
+/* RI TODO: find_good_size_from_style() probably needs to be removed; just use em's instead */
+
 /* Guesses a size based upon font sizes */
 static void
 find_good_size_from_style (GtkWidget *widget,
@@ -8001,7 +8008,7 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
 	  GTK_WIDGET_VISIBLE (impl->preview_widget))
 	{
 	  gtk_widget_size_request (impl->preview_box, &req);
-	  *default_width += PREVIEW_HBOX_SPACING + req.width;
+	  *default_width += gtk_widget_size_to_pixel (impl, PREVIEW_HBOX_SPACING) + req.width;
 	}
 
       if (impl->extra_widget &&
@@ -9389,7 +9396,7 @@ search_setup_widgets (GtkFileChooserDefault *impl)
 {
   GtkWidget *label;
 
-  impl->search_hbox = gtk_hbox_new (FALSE, 12);
+  impl->search_hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
 
   /* Label */
 
@@ -11740,4 +11747,15 @@ search_model_sort_new (GtkFileChooserDefault *impl,
   model->impl = impl;
 
   return GTK_TREE_MODEL (model);
+}
+
+static void
+gtk_file_chooser_default_unit_changed (GtkWidget *widget)
+{
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->unit_changed (widget);
+
+  if (gtk_widget_has_screen (widget))
+    change_icon_theme (GTK_FILE_CHOOSER_DEFAULT (widget));
 }

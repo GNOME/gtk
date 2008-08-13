@@ -187,13 +187,11 @@ gtk_dialog_class_init (GtkDialogClass *class)
 		  G_TYPE_NONE, 0);
   
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("content-area-border",
-                                                             P_("Content area border"),
-                                                             P_("Width of border around the main dialog area"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             2,
-                                                             GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("content-area-border",
+                                                                P_("Content area border"),
+                                                                P_("Width of border around the main dialog area"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (2),
+                                                                GTK_PARAM_READABLE));
   /**
    * GtkDialog:content-area-spacing:
    *
@@ -205,30 +203,24 @@ gtk_dialog_class_init (GtkDialogClass *class)
    * Since: 2.16
    */
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("content-area-spacing",
-                                                             P_("Content area spacing"),
-                                                             P_("Spacing between elements of the main dialog area"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             0,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("content-area-spacing",
+                                                                P_("Content area spacing"),
+                                                                P_("Spacing between elements of the main dialog area"),
+                                                                0, G_MAXINT, 0,
+                                                                GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("button-spacing",
-                                                             P_("Button spacing"),
-                                                             P_("Spacing between buttons"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             6,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("button-spacing",
+                                                                P_("Button spacing"),
+                                                                P_("Spacing between buttons"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (6),
+                                                                GTK_PARAM_READABLE));
   
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("action-area-border",
-                                                             P_("Action area border"),
-                                                             P_("Width of border around the button area at the bottom of the dialog"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             5,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("action-area-border",
+                                                                P_("Action area border"),
+                                                                P_("Width of border around the button area at the bottom of the dialog"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (5),
+                                                                GTK_PARAM_READABLE));
 
   binding_set = gtk_binding_set_by_class (class);
   
@@ -238,17 +230,17 @@ gtk_dialog_class_init (GtkDialogClass *class)
 static void
 update_spacings (GtkDialog *dialog)
 {
-  gint content_area_border;
-  gint content_area_spacing;
-  gint button_spacing;
-  gint action_area_border;
+  GtkSize content_area_border;
+  GtkSize content_area_spacing;
+  GtkSize button_spacing;
+  GtkSize action_area_border;
 
-  gtk_widget_style_get (GTK_WIDGET (dialog),
-                        "content-area-border", &content_area_border,
-                        "content-area-spacing", &content_area_spacing,
-                        "button-spacing", &button_spacing,
-                        "action-area-border", &action_area_border,
-                        NULL);
+  gtk_widget_style_get_unit (GTK_WIDGET (dialog),
+                             "content-area-border", &content_area_border,
+                             "content-area-spacing", &content_area_spacing,
+                             "button-spacing", &button_spacing,
+                             "action-area-border", &action_area_border,
+                             NULL);
 
   gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox),
                                   content_area_border);

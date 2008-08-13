@@ -132,7 +132,7 @@ gtk_printer_option_widget_init (GtkPrinterOptionWidget *widget)
 {
   widget->priv = GTK_PRINTER_OPTION_WIDGET_GET_PRIVATE (widget); 
 
-  gtk_box_set_spacing (GTK_BOX (widget), 12);
+  gtk_box_set_spacing (GTK_BOX (widget), GTK_SIZE_ONE_TWELFTH_EM (12));
 }
 
 static void
@@ -746,7 +746,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
 
     case GTK_PRINTER_OPTION_TYPE_ALTERNATIVE:
       group = NULL;
-      priv->box = gtk_hbox_new (FALSE, 12);
+      priv->box = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
       gtk_widget_show (priv->box);
       gtk_box_pack_start (GTK_BOX (widget), priv->box, TRUE, TRUE, 0);
       for (i = 0; i < source->num_choices; i++)
@@ -783,8 +783,8 @@ construct_widgets (GtkPrinterOptionWidget *widget)
         GtkWidget *label;
         
         priv->filechooser = gtk_table_new (2, 2, FALSE);
-        gtk_table_set_row_spacings (GTK_TABLE (priv->filechooser), 6);
-        gtk_table_set_col_spacings (GTK_TABLE (priv->filechooser), 12);
+        gtk_table_set_row_spacings (GTK_TABLE (priv->filechooser), GTK_SIZE_ONE_TWELFTH_EM (6));
+        gtk_table_set_col_spacings (GTK_TABLE (priv->filechooser), GTK_SIZE_ONE_TWELFTH_EM (12));
 
         /* TODO: make this a gtkfilechooserentry once we move to GTK */
         priv->entry = gtk_entry_new ();

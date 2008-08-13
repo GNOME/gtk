@@ -785,13 +785,13 @@ gtk_font_button_create_inside (GtkFontButton *font_button)
   font_button->priv->font_label = gtk_label_new (_("Font"));
   
   gtk_label_set_justify (GTK_LABEL (font_button->priv->font_label), GTK_JUSTIFY_LEFT);
-  gtk_box_pack_start (GTK_BOX (widget), font_button->priv->font_label, TRUE, TRUE, 5);
+  gtk_box_pack_start (GTK_BOX (widget), font_button->priv->font_label, TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (5));
 
   if (font_button->priv->show_size) 
     {
       gtk_box_pack_start (GTK_BOX (widget), gtk_vseparator_new (), FALSE, FALSE, 0);
       font_button->priv->size_label = gtk_label_new ("14");
-      gtk_box_pack_start (GTK_BOX (widget), font_button->priv->size_label, FALSE, FALSE, 5);
+      gtk_box_pack_start (GTK_BOX (widget), font_button->priv->size_label, FALSE, FALSE, GTK_SIZE_ONE_TWELFTH_EM (5));
     }
 
   gtk_widget_show_all (widget);

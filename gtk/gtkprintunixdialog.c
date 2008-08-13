@@ -959,12 +959,12 @@ wrap_in_frame (const gchar *label,
   gtk_label_set_markup (GTK_LABEL (label_widget), bold_text);
   g_free (bold_text);
   
-  frame = gtk_vbox_new (FALSE, 6);
+  frame = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
   gtk_box_pack_start (GTK_BOX (frame), label_widget, FALSE, FALSE, 0);
   
   alignment = gtk_alignment_new (0.0, 0.0, 1.0, 1.0);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
-			     0, 0, 12, 0);
+			     0, 0, GTK_SIZE_ONE_TWELFTH_EM (12), 0);
   gtk_box_pack_start (GTK_BOX (frame), alignment, FALSE, FALSE, 0);
 
   gtk_container_add (GTK_CONTAINER (alignment), child);
@@ -1008,7 +1008,7 @@ add_option_to_extension_point (GtkPrinterOption *option,
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
       
-      hbox = gtk_hbox_new (FALSE, 12);
+      hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
       gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
       gtk_widget_show (hbox);
@@ -1233,8 +1233,8 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
 	continue;
 
       table = gtk_table_new (1, 2, FALSE);
-      gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-      gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+      gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (6));
+      gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
       
       gtk_printer_option_set_foreach_in_group (priv->options,
 					       group,
@@ -1626,10 +1626,11 @@ draw_collate_cb (GtkWidget	    *widget,
   rtl = (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL);
 
   settings = gtk_widget_get_settings (widget);
-  gtk_icon_size_lookup_for_settings (settings,
-				     GTK_ICON_SIZE_DIALOG,
-				     &size,
-				     NULL);
+  gtk_icon_size_lookup_for_settings_for_monitor (settings,
+                                                 gtk_widget_get_monitor_num (widget),
+                                                 GTK_ICON_SIZE_DIALOG,
+                                                 &size,
+                                                 NULL);
   scale = size / 48.0;
   text_x = rtl ? 4 : 11;
 
@@ -1671,10 +1672,11 @@ gtk_print_unix_dialog_style_set (GtkWidget *widget,
       gfloat scale;
       
       settings = gtk_widget_get_settings (widget);
-      gtk_icon_size_lookup_for_settings (settings,
-					 GTK_ICON_SIZE_DIALOG,
-					 &size,
-					 NULL);
+      gtk_icon_size_lookup_for_settings_for_monitor (settings,
+                                                     gtk_widget_get_monitor_num (widget),
+                                                     GTK_ICON_SIZE_DIALOG,
+                                                     &size,
+                                                     NULL);
       scale = size / 48.0;
 
       gtk_widget_set_size_request (priv->collate_image,
@@ -1724,11 +1726,11 @@ create_main_page (GtkPrintUnixDialog *dialog)
   GtkWidget *custom_input;
   const gchar *range_tooltip;
 
-  main_vbox = gtk_vbox_new (FALSE, 18);
-  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 12);
+  main_vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (18));
+  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), GTK_SIZE_ONE_TWELFTH_EM (12));
   gtk_widget_show (main_vbox);
 
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
   gtk_box_pack_start (GTK_BOX (main_vbox), vbox, TRUE, TRUE, 0);
   gtk_widget_show (vbox);
 
@@ -1794,18 +1796,18 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_widget_show (treeview);
   gtk_container_add (GTK_CONTAINER (scrolled), treeview);
 
-  custom_input = gtk_hbox_new (FALSE, 18);
+  custom_input = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (18));
   gtk_widget_show (custom_input);
   gtk_box_pack_start (GTK_BOX (vbox), custom_input, FALSE, FALSE, 0);
   priv->extension_point = custom_input;
 
-  hbox = gtk_hbox_new (FALSE, 18);
+  hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (18));
   gtk_widget_show (hbox);
   gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, FALSE, 0);
 
   table = gtk_table_new (3, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (6));
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
   frame = wrap_in_frame (_("Range"), table);
   gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
   gtk_widget_show (table);
@@ -1848,8 +1850,8 @@ create_main_page (GtkPrintUnixDialog *dialog)
   update_entry_sensitivity (radio, entry);
 
   table = gtk_table_new (3, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (6));
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
   frame = wrap_in_frame (_("Copies"), table);
   gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
   gtk_widget_show (table);
@@ -1894,7 +1896,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
 
   priv->collate_image = image;
   gtk_widget_show (image);
-  gtk_widget_set_size_request (image, 70, 90);
+  gtk_widget_set_size_request (image, GTK_SIZE_ONE_TWELFTH_EM (70), GTK_SIZE_ONE_TWELFTH_EM (90));
   gtk_table_attach (GTK_TABLE (table), image,
 		    1, 2, 1, 3, GTK_FILL, 0,
 		    0, 0);
@@ -2506,17 +2508,17 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   GtkWidget *frame, *table, *widget;
   GtkWidget *combo, *spinbutton, *draw;
 
-  main_vbox = gtk_vbox_new (FALSE, 18);
-  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 12);
+  main_vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (18));
+  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), GTK_SIZE_ONE_TWELFTH_EM (12));
   gtk_widget_show (main_vbox);
 
-  hbox = gtk_hbox_new (FALSE, 18);
+  hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (18));
   gtk_widget_show (hbox);
   gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, FALSE, 0);
 
   table = gtk_table_new (5, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (6));
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
   frame = wrap_in_frame (_("Layout"), table);
   gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
   gtk_widget_show (table);
@@ -2597,7 +2599,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
 		    0, 1, 4, 5,  GTK_FILL, 0,
 		    0, 0);
 
-  hbox2 = gtk_hbox_new (FALSE, 6);
+  hbox2 = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
   gtk_widget_show (hbox2);
   gtk_table_attach (GTK_TABLE (table), hbox2,
 		    1, 2, 4, 5,  GTK_FILL, 0,
@@ -2615,10 +2617,10 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, FALSE, 0);
 
   table = gtk_table_new (4, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (6));
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
   frame = wrap_in_frame (_("Paper"), table);
-  gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, 6);
+  gtk_box_pack_start (GTK_BOX (hbox), frame, TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (6));
   gtk_widget_show (table);
 
   label = gtk_label_new_with_mnemonic (_("Paper _type:"));
@@ -2674,7 +2676,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   draw = gtk_drawing_area_new ();
   GTK_WIDGET_SET_FLAGS (draw, GTK_NO_WINDOW);
   priv->page_layout_preview = draw;
-  gtk_widget_set_size_request (draw, 200, 200);
+  gtk_widget_set_size_request (draw, GTK_SIZE_ONE_TWELFTH_EM (200), GTK_SIZE_ONE_TWELFTH_EM (200));
   g_signal_connect (draw, "expose-event", G_CALLBACK (draw_page_cb), dialog);
   gtk_widget_show (draw);
 
@@ -2698,13 +2700,13 @@ create_job_page (GtkPrintUnixDialog *dialog)
   const gchar *on_hold_tooltip;
 
   main_table = gtk_table_new (2, 2, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (main_table), 12);
-  gtk_table_set_row_spacings (GTK_TABLE (main_table), 18);
-  gtk_table_set_col_spacings (GTK_TABLE (main_table), 18);
+  gtk_container_set_border_width (GTK_CONTAINER (main_table), GTK_SIZE_ONE_TWELFTH_EM (12));
+  gtk_table_set_row_spacings (GTK_TABLE (main_table), GTK_SIZE_ONE_TWELFTH_EM (18));
+  gtk_table_set_col_spacings (GTK_TABLE (main_table), GTK_SIZE_ONE_TWELFTH_EM (18));
 
   table = gtk_table_new (2, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (6));
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
   frame = wrap_in_frame (_("Job Details"), table);
   gtk_table_attach (GTK_TABLE (main_table), frame,
 		    0, 1, 0, 1,  GTK_FILL, 0,
@@ -2742,8 +2744,8 @@ create_job_page (GtkPrintUnixDialog *dialog)
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
   table = gtk_table_new (2, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (6));
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
   frame = wrap_in_frame (_("Print Document"), table);
   gtk_table_attach (GTK_TABLE (main_table), frame,
 		    0, 1, 1, 2,  GTK_FILL, 0,
@@ -2815,8 +2817,8 @@ create_job_page (GtkPrintUnixDialog *dialog)
 			    G_CALLBACK (update_print_at_option), dialog);
 
   table = gtk_table_new (2, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (6));
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
   frame = wrap_in_frame (_("Add Cover Page"), table);
   gtk_table_attach (GTK_TABLE (main_table), frame,
 		    1, 2, 0, 1,  GTK_FILL, 0,
@@ -2885,9 +2887,9 @@ create_optional_page (GtkPrintUnixDialog  *dialog,
 				  GTK_POLICY_AUTOMATIC);
   
   table = gtk_table_new (1, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
-  gtk_container_set_border_width (GTK_CONTAINER (table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (6));
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
+  gtk_container_set_border_width (GTK_CONTAINER (table), GTK_SIZE_ONE_TWELFTH_EM (12));
   gtk_widget_show (table);
 
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled),
@@ -2917,8 +2919,8 @@ create_advanced_page (GtkPrintUnixDialog *dialog)
 				  GTK_POLICY_NEVER,
 				  GTK_POLICY_AUTOMATIC);
 
-  main_vbox = gtk_vbox_new (FALSE, 18);
-  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 12);
+  main_vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (18));
+  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), GTK_SIZE_ONE_TWELFTH_EM (12));
   gtk_widget_show (main_vbox);
 
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled),
@@ -2944,13 +2946,13 @@ populate_dialog (GtkPrintUnixDialog *print_dialog)
   GtkWidget *vbox, *conflict_hbox, *image, *label;
 
   gtk_dialog_set_has_separator (dialog, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), GTK_SIZE_ONE_TWELFTH_EM (2)); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area), GTK_SIZE_ONE_TWELFTH_EM (6));
 
-  vbox = gtk_vbox_new (FALSE, 6);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+  vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_box_pack_start (GTK_BOX (dialog->vbox), vbox, TRUE, TRUE, 0);
   gtk_widget_show (vbox);
 
@@ -2974,7 +2976,7 @@ populate_dialog (GtkPrintUnixDialog *print_dialog)
 			&priv->finishing_page);
   create_advanced_page (print_dialog);
 
-  priv->conflicts_widget = conflict_hbox = gtk_hbox_new (FALSE, 12);
+  priv->conflicts_widget = conflict_hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
   gtk_box_pack_end (GTK_BOX (vbox), conflict_hbox, FALSE, FALSE, 0);
   image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);

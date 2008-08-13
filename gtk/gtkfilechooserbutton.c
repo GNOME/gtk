@@ -232,6 +232,7 @@ static void     gtk_file_chooser_button_style_set          (GtkWidget        *wi
 							    GtkStyle         *old_style);
 static void     gtk_file_chooser_button_screen_changed     (GtkWidget        *widget,
 							    GdkScreen        *old_screen);
+static void     gtk_file_chooser_button_unit_changed       (GtkWidget        *widget);
 
 /* Utility Functions */
 static GtkIconTheme *get_icon_theme               (GtkWidget            *widget);
@@ -342,6 +343,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->map = gtk_file_chooser_button_map;
   widget_class->style_set = gtk_file_chooser_button_style_set;
   widget_class->screen_changed = gtk_file_chooser_button_screen_changed;
+  widget_class->unit_changed = gtk_file_chooser_button_unit_changed;
   widget_class->mnemonic_activate = gtk_file_chooser_button_mnemonic_activate;
 
   /**
@@ -449,7 +451,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   gtk_container_add (GTK_CONTAINER (button), priv->button);
   gtk_widget_show (priv->button);
 
-  box = gtk_hbox_new (FALSE, 4);
+  box = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (4));
   gtk_container_add (GTK_CONTAINER (priv->button), box);
   gtk_widget_show (box);
 
@@ -1269,8 +1271,10 @@ change_icon_theme (GtkFileChooserButton *button)
 
   settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
 
-  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU,
-					 &width, &height))
+  if (gtk_icon_size_lookup_for_settings_for_monitor (settings,
+						     gtk_widget_get_monitor_num (GTK_WIDGET (button)),
+						     GTK_ICON_SIZE_MENU,
+						     &width, &height))
     priv->icon_size = MAX (width, height);
   else
     priv->icon_size = FALLBACK_ICON_SIZE;
@@ -2914,6 +2918,17 @@ gtk_file_chooser_button_get_focus_on_click (GtkFileChooserButton *button)
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button), FALSE);
   
   return button->priv->focus_on_click;
+}
+
+static void
+gtk_file_chooser_button_unit_changed (GtkWidget *widget)
+{
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->unit_changed (widget);
+
+  if (gtk_widget_has_screen (widget))
+    change_icon_theme (GTK_FILE_CHOOSER_BUTTON (widget));
 }
 
 #define __GTK_FILE_CHOOSER_BUTTON_C__

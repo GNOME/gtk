@@ -90,9 +90,9 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
   dialog->priv->response_requested = FALSE;
 
   gtk_dialog_set_has_separator (fc_dialog, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (fc_dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (fc_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (fc_dialog->action_area), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (fc_dialog), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (fc_dialog->vbox), GTK_SIZE_ONE_TWELFTH_EM (2)); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (fc_dialog->action_area), GTK_SIZE_ONE_TWELFTH_EM (5));
 
   /* We do a signal connection here rather than overriding the method in
    * class_init because GtkDialog::response is a RUN_LAST signal.  We want *our*
@@ -278,7 +278,7 @@ gtk_file_chooser_dialog_constructor (GType                  type,
   g_signal_connect (priv->widget, "response-requested",
 		    G_CALLBACK (file_chooser_widget_response_requested), object);
 
-  gtk_container_set_border_width (GTK_CONTAINER (priv->widget), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (priv->widget), GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (object)->vbox), priv->widget, TRUE, TRUE, 0);
 
   gtk_widget_show (priv->widget);

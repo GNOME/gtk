@@ -121,6 +121,7 @@ static void gtk_path_bar_style_set                (GtkWidget        *widget,
 						   GtkStyle         *previous_style);
 static void gtk_path_bar_screen_changed           (GtkWidget        *widget,
 						   GdkScreen        *previous_screen);
+static void gtk_path_bar_unit_changed             (GtkWidget        *widget);
 static void gtk_path_bar_check_icon_theme         (GtkPathBar       *path_bar);
 static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   ButtonData       *button_data,
@@ -223,6 +224,7 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   widget_class->size_allocate = gtk_path_bar_size_allocate;
   widget_class->style_set = gtk_path_bar_style_set;
   widget_class->screen_changed = gtk_path_bar_screen_changed;
+  widget_class->unit_changed = gtk_path_bar_unit_changed;
   widget_class->grab_notify = gtk_path_bar_grab_notify;
   widget_class->state_changed = gtk_path_bar_state_changed;
   widget_class->scroll_event = gtk_path_bar_scroll;
@@ -338,7 +340,7 @@ gtk_path_bar_size_request (GtkWidget      *widget,
   /* Theoretically, the slider could be bigger than the other button.  But we're
    * not going to worry about that now.
    */
-  path_bar->slider_width = MIN(requisition->height * 2 / 3 + 5, requisition->height);
+  path_bar->slider_width = MIN(requisition->height * 2 / 3 + gtk_widget_size_to_pixel (widget, GTK_SIZE_ONE_TWELFTH_EM (5)), requisition->height);
   if (path_bar->button_list && path_bar->button_list->next != NULL)
     requisition->width += (path_bar->spacing + path_bar->slider_width) * 2;
 
@@ -1089,7 +1091,10 @@ change_icon_theme (GtkPathBar *path_bar)
 
   settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (path_bar)));
 
-  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &width, &height))
+  if (gtk_icon_size_lookup_for_settings_for_monitor (settings,
+                                                     gtk_widget_get_monitor_num (GTK_WIDGET (path_bar)),
+                                                     GTK_ICON_SIZE_MENU,
+                                                     &width, &height))
     path_bar->icon_size = MAX (width, height);
   else
     path_bar->icon_size = FALLBACK_ICON_SIZE;
@@ -1477,7 +1482,7 @@ make_directory_button (GtkPathBar  *path_bar,
       button_data->label = gtk_label_new (NULL);
       label_alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
       gtk_container_add (GTK_CONTAINER (label_alignment), button_data->label);
-      child = gtk_hbox_new (FALSE, 2);
+      child = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (2));
       gtk_box_pack_start (GTK_BOX (child), button_data->image, FALSE, FALSE, 0);
       gtk_box_pack_start (GTK_BOX (child), label_alignment, FALSE, FALSE, 0);
       break;
@@ -1824,6 +1829,16 @@ _gtk_path_bar_down (GtkPathBar *path_bar)
 	  break;
 	}
     }
+}
+
+static void
+gtk_path_bar_unit_changed (GtkWidget *widget)
+{
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->unit_changed (widget);
+
+  change_icon_theme (GTK_PATH_BAR (widget));
 }
 
 #define __GTK_PATH_BAR_C__

@@ -129,6 +129,7 @@ static void gtk_color_button_drag_data_received (GtkWidget        *widget,
 						 guint32           time,
 						 GtkColorButton   *color_button);
 
+static void gtk_color_button_unit_changed (GtkWidget *widget);
 
 static guint color_button_signals[LAST_SIGNAL] = { 0 };
 
@@ -154,6 +155,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   widget_class->realize = gtk_color_button_realize;
   widget_class->unrealize = gtk_color_button_unrealize;
   widget_class->style_set = gtk_color_button_style_set;
+  widget_class->unit_changed = gtk_color_button_unit_changed;
   button_class->clicked = gtk_color_button_clicked;
   klass->color_set = NULL;
 
@@ -534,7 +536,7 @@ gtk_color_button_init (GtkColorButton *color_button)
   gtk_widget_push_composite_child ();
 
   alignment = gtk_alignment_new (0.5, 0.5, 0.5, 1.0);
-  gtk_container_set_border_width (GTK_CONTAINER (alignment), 1);
+  gtk_container_set_border_width (GTK_CONTAINER (alignment), GTK_SIZE_ONE_TWELFTH_EM (1));
   gtk_container_add (GTK_CONTAINER (color_button), alignment);
   gtk_widget_show (alignment);
 
@@ -550,7 +552,9 @@ gtk_color_button_init (GtkColorButton *color_button)
   pango_layout_get_pixel_extents (layout, NULL, &rect);
   g_object_unref (layout);
 
-  gtk_widget_set_size_request (color_button->priv->draw_area, rect.width - 2, rect.height - 2);
+  gtk_widget_set_size_request (color_button->priv->draw_area,
+                               GTK_SIZE_ONE_TWELFTH_EM (rect.width - 2),
+                               GTK_SIZE_ONE_TWELFTH_EM (rect.height - 2));
   g_signal_connect (color_button->priv->draw_area, "expose-event",
                     G_CALLBACK (expose_event), color_button);
   gtk_container_add (GTK_CONTAINER (frame), color_button->priv->draw_area);
@@ -991,6 +995,23 @@ gtk_color_button_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
     }
+}
+
+static void
+gtk_color_button_unit_changed (GtkWidget *widget)
+{
+  GtkColorButton *color_button = GTK_COLOR_BUTTON (widget);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      if (color_button->priv->pixbuf != NULL)
+	g_object_unref (color_button->priv->pixbuf);
+      color_button->priv->pixbuf = NULL;
+    }
+
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (gtk_color_button_parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (gtk_color_button_parent_class)->unit_changed (widget);
 }
 
 #define __GTK_COLOR_BUTTON_C__

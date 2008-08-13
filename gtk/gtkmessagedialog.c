@@ -94,13 +94,11 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   gobject_class->get_property = gtk_message_dialog_get_property;
   
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("message-border",
-                                                             P_("Image/label border"),
-                                                             P_("Width of border around the label and image in the message dialog"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             12,
-                                                             GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("message-border",
+								P_("Image/label border"),
+								P_("Width of border around the label and image in the message dialog"),
+								0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (12),
+								GTK_PARAM_READABLE));
   /**
    * GtkMessageDialog:use-separator:
    *
@@ -250,8 +248,8 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   gtk_label_set_selectable (GTK_LABEL (priv->secondary_label), TRUE);
   gtk_misc_set_alignment   (GTK_MISC  (priv->secondary_label), 0.0, 0.0);
 
-  hbox = gtk_hbox_new (FALSE, 12);
-  vbox = gtk_vbox_new (FALSE, 12);
+  hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
+  vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
 
   gtk_box_pack_start (GTK_BOX (vbox), dialog->label,
                       FALSE, FALSE, 0);
@@ -269,11 +267,11 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
                       hbox,
                       FALSE, FALSE, 0);
 
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14); /* 14 + 2 * 5 = 24 */
-  gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->action_area), 6);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), GTK_SIZE_ONE_TWELFTH_EM (14)); /* 14 + 2 * 5 = 24 */
+  gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->action_area), GTK_SIZE_ONE_TWELFTH_EM (6));
 
   gtk_widget_show_all (hbox);
 

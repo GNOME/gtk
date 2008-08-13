@@ -65,8 +65,8 @@
 #define GTK_CUSTOM_PALETTE_WIDTH 10
 #define GTK_CUSTOM_PALETTE_HEIGHT 2
 
-#define CUSTOM_PALETTE_ENTRY_WIDTH   20
-#define CUSTOM_PALETTE_ENTRY_HEIGHT  20
+#define CUSTOM_PALETTE_ENTRY_WIDTH   GTK_SIZE_ONE_TWELFTH_EM(20)
+#define CUSTOM_PALETTE_ENTRY_HEIGHT  GTK_SIZE_ONE_TWELFTH_EM(20)
 
 /* The cursor for the dropper */
 #define DROPPER_WIDTH 17
@@ -340,24 +340,26 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   priv->default_set = FALSE;
   priv->default_alpha_set = FALSE;
   
-  top_hbox = gtk_hbox_new (FALSE, 12);
+  top_hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
   gtk_box_pack_start (GTK_BOX (colorsel), top_hbox, FALSE, FALSE, 0);
   
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
   priv->triangle_colorsel = gtk_hsv_new ();
   g_signal_connect (priv->triangle_colorsel, "changed",
                     G_CALLBACK (hsv_changed), colorsel);
-  gtk_hsv_set_metrics (GTK_HSV (priv->triangle_colorsel), 174, 15);
+  gtk_hsv_set_metrics (GTK_HSV (priv->triangle_colorsel),
+                       GTK_SIZE_ONE_TWELFTH_EM (174),
+                       GTK_SIZE_ONE_TWELFTH_EM (15));
   gtk_box_pack_start (GTK_BOX (top_hbox), vbox, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), priv->triangle_colorsel, FALSE, FALSE, 0);
   gtk_widget_set_tooltip_text (priv->triangle_colorsel,
                         _("Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."));
   
-  hbox = gtk_hbox_new (FALSE, 6);
+  hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
   gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   
   frame = gtk_frame_new (NULL);
-  gtk_widget_set_size_request (frame, -1, 30);
+  gtk_widget_set_size_request (frame, -1, GTK_SIZE_ONE_TWELFTH_EM (30));
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
   color_sample_new (colorsel);
   gtk_container_add (GTK_CONTAINER (frame), priv->sample_area);
@@ -377,12 +379,12 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_widget_set_tooltip_text (button,
                         _("Click the eyedropper, then click a color anywhere on your screen to select that color."));
   
-  top_right_vbox = gtk_vbox_new (FALSE, 6);
+  top_right_vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
   gtk_box_pack_start (GTK_BOX (top_hbox), top_right_vbox, FALSE, FALSE, 0);
   table = gtk_table_new (8, 6, FALSE);
   gtk_box_pack_start (GTK_BOX (top_right_vbox), table, FALSE, FALSE, 0);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (6));
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
   
   make_label_spinbutton (colorsel, &priv->hue_spinbutton, _("_Hue:"), table, 0, 0, COLORSEL_HUE,
                          _("Position on the color wheel."));
@@ -417,7 +419,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   priv->opacity_entry = gtk_entry_new (); 
   gtk_widget_set_tooltip_text (priv->opacity_entry,
                         _("Transparency of the color."));
-  gtk_widget_set_size_request (priv->opacity_entry, 40, -1); 
+  gtk_widget_set_size_request (priv->opacity_entry, gtk_widget_size_to_pixel (colorsel, GTK_SIZE_ONE_TWELFTH_EM (40)), -1); 
 
   g_signal_connect (priv->opacity_entry, "activate",
                     G_CALLBACK (opacity_entry_changed), colorsel);
@@ -456,8 +458,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 
   /* Set up the palette */
   table = gtk_table_new (GTK_CUSTOM_PALETTE_HEIGHT, GTK_CUSTOM_PALETTE_WIDTH, TRUE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 1);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 1);
+  gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (1));
+  gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (1));
   for (i = 0; i < GTK_CUSTOM_PALETTE_WIDTH; i++)
     {
       for (j = 0; j < GTK_CUSTOM_PALETTE_HEIGHT; j++)
@@ -466,7 +468,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 	}
     }
   set_selected_palette (colorsel, 0, 0);
-  priv->palette_frame = gtk_vbox_new (FALSE, 6);
+  priv->palette_frame = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
   label = gtk_label_new_with_mnemonic (_("_Palette:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (priv->palette_frame), label, FALSE, FALSE, 0);

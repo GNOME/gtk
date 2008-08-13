@@ -84,11 +84,11 @@ enum
 };
 
 
-#define AXIS_LIST_WIDTH 160
-#define AXIS_LIST_HEIGHT 175
+#define AXIS_LIST_WIDTH GTK_SIZE_ONE_TWELFTH_EM (160)
+#define AXIS_LIST_HEIGHT GTK_SIZE_ONE_TWELFTH_EM (175)
 
-#define KEYS_LIST_WIDTH 200
-#define KEYS_LIST_HEIGHT 175
+#define KEYS_LIST_WIDTH GTK_SIZE_ONE_TWELFTH_EM (200)
+#define KEYS_LIST_HEIGHT GTK_SIZE_ONE_TWELFTH_EM (175)
 
 /* Forward declarations */
 
@@ -192,20 +192,20 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
   gtk_window_set_title (GTK_WINDOW (inputd), _("Input"));
 
   gtk_dialog_set_has_separator (dialog, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (dialog->vbox), GTK_SIZE_ONE_TWELFTH_EM (2)); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), GTK_SIZE_ONE_TWELFTH_EM (5));
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area), GTK_SIZE_ONE_TWELFTH_EM (6));
 
   /* main vbox */
 
-  private->main_vbox = gtk_vbox_new (FALSE, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (private->main_vbox), 5);
+  private->main_vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
+  gtk_container_set_border_width (GTK_CONTAINER (private->main_vbox), GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (inputd)->vbox), private->main_vbox,
 		      TRUE, TRUE, 0);
 
   private->no_devices_label = gtk_label_new (_("No extended input devices"));
-  gtk_container_set_border_width (GTK_CONTAINER (private->main_vbox), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (private->main_vbox), GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (inputd)->vbox),
 		      private->no_devices_label,
 		      TRUE, TRUE, 0);
@@ -214,7 +214,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
   private->device_menu = gtk_menu_new ();
 
-  util_box = gtk_hbox_new (FALSE, 12);
+  util_box = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (12));
   gtk_box_pack_start (GTK_BOX (private->main_vbox), util_box, FALSE, FALSE, 0);
 
   label = gtk_label_new_with_mnemonic (_("_Device:"));
@@ -279,7 +279,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
   label = gtk_label_new (_("Axes"));
 
   inputd->axis_listbox = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_set_border_width (GTK_CONTAINER (inputd->axis_listbox), 12);
+  gtk_container_set_border_width (GTK_CONTAINER (inputd->axis_listbox), GTK_SIZE_ONE_TWELFTH_EM (12));
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(inputd->axis_listbox),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
       
@@ -297,7 +297,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
   label = gtk_label_new (_("Keys"));
 
   inputd->keys_listbox = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_set_border_width (GTK_CONTAINER (inputd->keys_listbox), 12);
+  gtk_container_set_border_width (GTK_CONTAINER (inputd->keys_listbox), GTK_SIZE_ONE_TWELFTH_EM (12));
   gtk_widget_set_size_request (inputd->keys_listbox,
 			       KEYS_LIST_WIDTH, KEYS_LIST_HEIGHT);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (inputd->keys_listbox),
@@ -543,8 +543,8 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
       gtk_widget_destroy (inputd->axis_list);
     }
   inputd->axis_list = gtk_table_new (GDK_AXIS_LAST, 2, 0);
-  gtk_table_set_row_spacings (GTK_TABLE (inputd->axis_list), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (inputd->axis_list), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (inputd->axis_list), GTK_SIZE_ONE_TWELFTH_EM (6));
+  gtk_table_set_col_spacings (GTK_TABLE (inputd->axis_list), GTK_SIZE_ONE_TWELFTH_EM (12));
   
   viewport = gtk_viewport_new (NULL, NULL);
   old_child = gtk_bin_get_child (GTK_BIN (inputd->axis_listbox));
@@ -567,7 +567,7 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
       label = gtk_label_new_with_mnemonic (_(axis_use_strings[i]));
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_table_attach (GTK_TABLE (inputd->axis_list), label, 0, 1, i, i+1, 
-                        GTK_FILL, 0, 2, 2);
+                        GTK_FILL, 0, GTK_SIZE_ONE_TWELFTH_EM (2), GTK_SIZE_ONE_TWELFTH_EM (2));
 
       /* and the use option menu */
       menu = gtk_menu_new();
@@ -594,7 +594,8 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
       inputd->axis_items[i] = option_menu = gtk_option_menu_new ();
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), option_menu);
       gtk_table_attach (GTK_TABLE (inputd->axis_list), option_menu, 
-			1, 2, i, i+1, GTK_EXPAND | GTK_FILL, 0, 2, 2);
+			1, 2, i, i+1, GTK_EXPAND | GTK_FILL, 0,
+                        GTK_SIZE_ONE_TWELFTH_EM (2), GTK_SIZE_ONE_TWELFTH_EM (2));
 
       gtk_widget_show (option_menu);
       gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
@@ -698,8 +699,8 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
     }
 
   inputd->keys_list = gtk_table_new (info->num_keys, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (inputd->keys_list), 6);
-  gtk_table_set_col_spacings (GTK_TABLE (inputd->keys_list), 12);
+  gtk_table_set_row_spacings (GTK_TABLE (inputd->keys_list), GTK_SIZE_ONE_TWELFTH_EM (6));
+  gtk_table_set_col_spacings (GTK_TABLE (inputd->keys_list), GTK_SIZE_ONE_TWELFTH_EM (12));
   
   viewport = gtk_viewport_new (NULL, NULL);
   old_child = gtk_bin_get_child (GTK_BIN (inputd->keys_listbox));
@@ -726,14 +727,14 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDevice *info)
       g_snprintf (buffer, sizeof (buffer), "_%d:", i+1);
       label = gtk_label_new_with_mnemonic (buffer);
       gtk_table_attach (GTK_TABLE (inputd->keys_list), label, 0, 1, i, i+1, 
-			GTK_FILL, 0, 2, 2);
+			GTK_FILL, 0, GTK_SIZE_ONE_TWELFTH_EM (2), GTK_SIZE_ONE_TWELFTH_EM (2));
       gtk_widget_show (label);
 
       /* the entry */
 
-      hbox = gtk_hbox_new (FALSE, 6);
+      hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (6));
       gtk_table_attach (GTK_TABLE (inputd->keys_list), hbox, 1, 2, i, i+1, 
-                        GTK_EXPAND | GTK_FILL, 0, 2, 2);
+                        GTK_EXPAND | GTK_FILL, 0, GTK_SIZE_ONE_TWELFTH_EM (2), GTK_SIZE_ONE_TWELFTH_EM (2));
       gtk_widget_show (hbox);
 
       key->entry = gtk_entry_new ();

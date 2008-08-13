@@ -97,10 +97,10 @@
 #include <sys/cygwin.h>		/* For cygwin_conv_to_posix_path */
 #endif
 
-#define DIR_LIST_WIDTH   180
-#define DIR_LIST_HEIGHT  180
-#define FILE_LIST_WIDTH  180
-#define FILE_LIST_HEIGHT 180
+#define DIR_LIST_WIDTH   GTK_SIZE_ONE_TWELFTH_EM(180)
+#define DIR_LIST_HEIGHT  GTK_SIZE_ONE_TWELFTH_EM(180)
+#define FILE_LIST_WIDTH  GTK_SIZE_ONE_TWELFTH_EM(180)
+#define FILE_LIST_HEIGHT GTK_SIZE_ONE_TWELFTH_EM(180)
 
 /* The Hurd doesn't define either PATH_MAX or MAXPATHLEN, so we put this
  * in here, since the rest of the code in the file does require some
@@ -638,7 +638,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
 
   /* The dialog-sized vertical box  */
   filesel->main_vbox = dialog->vbox;
-  gtk_container_set_border_width (GTK_CONTAINER (filesel), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (filesel), GTK_SIZE_ONE_TWELFTH_EM (10));
 
   /* The horizontal box containing create, rename etc. buttons */
   filesel->button_area = gtk_hbutton_box_new ();
@@ -651,7 +651,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_file_selection_show_fileop_buttons (filesel);
 
   /* hbox for pulldown menu */
-  pulldown_hbox = gtk_hbox_new (TRUE, 5);
+  pulldown_hbox = gtk_hbox_new (TRUE, GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), pulldown_hbox, FALSE, FALSE, 0);
   gtk_widget_show (pulldown_hbox);
   
@@ -664,11 +664,11 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   /*  The horizontal box containing the directory and file listboxes  */
 
   spacer = gtk_hbox_new (FALSE, 0);
-  gtk_widget_set_size_request (spacer, -1, 5);
+  gtk_widget_set_size_request (spacer, -1, GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), spacer, FALSE, FALSE, 0);
   gtk_widget_show (spacer);
   
-  list_hbox = gtk_hbox_new (FALSE, 5);
+  list_hbox = gtk_hbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), list_hbox, TRUE, TRUE, 0);
   gtk_widget_show (list_hbox);
   if (WANT_HPANED)
@@ -681,7 +681,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
     list_container = list_hbox;
 
   spacer = gtk_hbox_new (FALSE, 0);
-  gtk_widget_set_size_request (spacer, -1, 5);
+  gtk_widget_set_size_request (spacer, -1, GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), spacer, FALSE, FALSE, 0);  
   gtk_widget_show (spacer);
   
@@ -782,8 +782,8 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_grab_default (filesel->ok_button);
 
   /*  The selection entry widget  */
-  entry_vbox = gtk_vbox_new (FALSE, 2);
-  gtk_box_pack_end (GTK_BOX (filesel->main_vbox), entry_vbox, FALSE, FALSE, 2);
+  entry_vbox = gtk_vbox_new (FALSE, GTK_SIZE_ONE_TWELFTH_EM (2));
+  gtk_box_pack_end (GTK_BOX (filesel->main_vbox), entry_vbox, FALSE, FALSE, GTK_SIZE_ONE_TWELFTH_EM (2));
   gtk_widget_show (entry_vbox);
   
   eventbox = gtk_event_box_new ();
@@ -1399,21 +1399,21 @@ gtk_file_selection_create_dir (GtkWidget *widget,
       gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
   vbox = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (8));
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
 		     FALSE, FALSE, 0);
   gtk_widget_show( vbox);
   
   label = gtk_label_new_with_mnemonic (_("_Folder name:"));
   gtk_misc_set_alignment(GTK_MISC (label), 0.0, 0.0);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_widget_show (label);
 
   /*  The directory entry widget  */
   fs->fileop_entry = gtk_entry_new ();
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), fs->fileop_entry);
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
-		      TRUE, TRUE, 5);
+		      TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (5));
   GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);
   gtk_entry_set_activates_default (GTK_ENTRY (fs->fileop_entry), TRUE); 
   gtk_widget_show (fs->fileop_entry);
@@ -1659,7 +1659,7 @@ gtk_file_selection_rename_file (GtkWidget *widget,
     gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   
   vbox = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), GTK_SIZE_ONE_TWELFTH_EM (8));
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
 		      FALSE, FALSE, 0);
   gtk_widget_show(vbox);
@@ -1667,14 +1667,14 @@ gtk_file_selection_rename_file (GtkWidget *widget,
   buf = g_strdup_printf (_("Rename file \"%s\" to:"), fs->fileop_file);
   label = gtk_label_new (buf);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, GTK_SIZE_ONE_TWELFTH_EM (5));
   gtk_widget_show (label);
   g_free (buf);
 
   /* New filename entry */
   fs->fileop_entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
-		      TRUE, TRUE, 5);
+		      TRUE, TRUE, GTK_SIZE_ONE_TWELFTH_EM (5));
   GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);
   gtk_entry_set_activates_default (GTK_ENTRY (fs->fileop_entry), TRUE); 
   gtk_widget_show (fs->fileop_entry);
