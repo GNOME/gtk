@@ -1,3 +1,11 @@
+2008-08-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* gtk/gtk-sections.txt: Move
+	gtk_font_selection_dialog_get_apply_button,
+	gtk_font_selection_dialog_get_cancel_button, and
+	gtk_font_selection_dialog_get_ok_button to the
+	GtkFontSelectionDialog section.
+
 2008-08-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.13.6 ===
