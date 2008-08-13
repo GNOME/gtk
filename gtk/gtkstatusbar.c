@@ -198,8 +198,8 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   
   box = GTK_BOX (statusbar);
 
-  box->spacing = 2;
-  box->homogeneous = FALSE;
+  gtk_box_set_spacing (box, GTK_SIZE_ONE_TWELFTH_EM (2));
+  gtk_box_set_homogeneous (box, FALSE);
 
   statusbar->has_resize_grip = TRUE;
 

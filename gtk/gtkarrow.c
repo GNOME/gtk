@@ -31,7 +31,7 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-#define MIN_ARROW_SIZE  15
+#define MIN_ARROW_SIZE GTK_SIZE_ONE_TWELFTH_EM(15)
 
 enum {
   PROP_0,
@@ -50,7 +50,8 @@ static void     gtk_arrow_get_property (GObject        *object,
                                         GParamSpec     *pspec);
 static gboolean gtk_arrow_expose       (GtkWidget      *widget,
                                         GdkEventExpose *event);
-
+static void gtk_arrow_size_request     (GtkWidget      *widget,
+                                        GtkRequisition *requisition);
 
 G_DEFINE_TYPE (GtkArrow, gtk_arrow, GTK_TYPE_MISC)
 
@@ -68,6 +69,7 @@ gtk_arrow_class_init (GtkArrowClass *class)
   gobject_class->get_property = gtk_arrow_get_property;
 
   widget_class->expose_event = gtk_arrow_expose;
+  widget_class->size_request = gtk_arrow_size_request;
 
   g_object_class_install_property (gobject_class,
                                    PROP_ARROW_TYPE,
@@ -148,9 +150,6 @@ gtk_arrow_init (GtkArrow *arrow)
 {
   GTK_WIDGET_SET_FLAGS (arrow, GTK_NO_WINDOW);
 
-  GTK_WIDGET (arrow)->requisition.width = MIN_ARROW_SIZE + GTK_MISC (arrow)->xpad * 2;
-  GTK_WIDGET (arrow)->requisition.height = MIN_ARROW_SIZE + GTK_MISC (arrow)->ypad * 2;
-
   arrow->arrow_type = GTK_ARROW_RIGHT;
   arrow->shadow_type = GTK_SHADOW_OUT;
 }
@@ -200,6 +199,14 @@ gtk_arrow_set (GtkArrow      *arrow,
     }
 }
 
+static void
+gtk_arrow_size_request (GtkWidget      *widget,
+                        GtkRequisition *requisition)
+{
+  GtkArrow *arrow = GTK_ARROW (widget);
+  requisition->width = gtk_widget_size_to_pixel (arrow, MIN_ARROW_SIZE) + GTK_MISC (arrow)->xpad * 2;
+  requisition->height = gtk_widget_size_to_pixel (arrow, MIN_ARROW_SIZE) + GTK_MISC (arrow)->ypad * 2;
+}
 
 static gboolean
 gtk_arrow_expose (GtkWidget      *widget,

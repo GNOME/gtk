@@ -2021,6 +2021,7 @@ gtk_image_set
 gtk_image_get
 gtk_image_set_pixel_size
 gtk_image_get_pixel_size
+gtk_image_get_pixel_size_unit
 <SUBSECTION Standard>
 GTK_IMAGE
 GTK_IS_IMAGE

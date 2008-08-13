@@ -33,8 +33,8 @@
 #include "gtkbuildable.h"
 #include "gtkalias.h"
 
-#define LABEL_PAD 1
-#define LABEL_SIDE_PAD 2
+#define LABEL_PAD GTK_SIZE_ONE_TWELFTH_EM(1)
+#define LABEL_SIDE_PAD GTK_SIZE_ONE_TWELFTH_EM(2)
 
 enum {
   PROP_0,
@@ -560,7 +560,7 @@ gtk_frame_paint (GtkWidget    *widget,
 	  y -= height_extra;
 	  height += height_extra;
 	  
-	  x2 = widget->style->xthickness + (frame->child_allocation.width - child_requisition.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD) * xalign + LABEL_SIDE_PAD;
+	  x2 = widget->style->xthickness + (frame->child_allocation.width - child_requisition.width - 2 * gtk_widget_size_to_pixel (frame, LABEL_PAD) - 2 * gtk_widget_size_to_pixel (frame, LABEL_SIDE_PAD)) * xalign + gtk_widget_size_to_pixel (frame, LABEL_SIDE_PAD);
 	  
 	  /* If the label is completely over or under the frame we can omit the gap */
 	  if (frame->label_yalign == 0.0 || frame->label_yalign == 1.0)
@@ -574,7 +574,7 @@ gtk_frame_paint (GtkWidget    *widget,
 				  area, widget, "frame",
 				  x, y, width, height,
 				  GTK_POS_TOP,
-				  x2, child_requisition.width + 2 * LABEL_PAD);
+				  x2, child_requisition.width + 2 * gtk_widget_size_to_pixel (frame, LABEL_PAD));
 	}
        else
 	 gtk_paint_shadow (widget->style, widget->window,
@@ -610,7 +610,7 @@ gtk_frame_size_request (GtkWidget      *widget,
     {
       gtk_widget_size_request (frame->label_widget, &child_requisition);
 
-      requisition->width = child_requisition.width + 2 * LABEL_PAD + 2 * LABEL_SIDE_PAD;
+      requisition->width = child_requisition.width + 2 * gtk_widget_size_to_pixel (frame, LABEL_PAD) + 2 * gtk_widget_size_to_pixel (frame, LABEL_SIDE_PAD);
       requisition->height =
 	MAX (0, child_requisition.height - widget->style->ythickness);
     }
@@ -674,9 +674,9 @@ gtk_frame_size_allocate (GtkWidget     *widget,
       else
 	xalign = 1 - frame->label_xalign;
       
-      child_allocation.x = frame->child_allocation.x + LABEL_SIDE_PAD +
-	(frame->child_allocation.width - child_requisition.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD) * xalign + LABEL_PAD;
-      child_allocation.width = MIN (child_requisition.width, new_allocation.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD);
+      child_allocation.x = frame->child_allocation.x + gtk_widget_size_to_pixel (frame, LABEL_SIDE_PAD) +
+	(frame->child_allocation.width - child_requisition.width - 2 * gtk_widget_size_to_pixel (frame, LABEL_PAD) - 2 * gtk_widget_size_to_pixel (frame, LABEL_SIDE_PAD)) * xalign + gtk_widget_size_to_pixel (frame, LABEL_PAD);
+      child_allocation.width = MIN (child_requisition.width, new_allocation.width - 2 * gtk_widget_size_to_pixel (frame, LABEL_PAD) - 2 * gtk_widget_size_to_pixel (frame, LABEL_SIDE_PAD));
 
       child_allocation.y = frame->child_allocation.y - MAX (child_requisition.height, widget->style->ythickness);
       child_allocation.height = child_requisition.height;

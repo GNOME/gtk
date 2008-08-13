@@ -68,7 +68,7 @@
 
 #define GTK_ENTRY_COMPLETION_KEY "gtk-entry-completion-key"
 
-#define MIN_ENTRY_WIDTH  150
+#define MIN_ENTRY_WIDTH  GTK_SIZE_ONE_TWELFTH_EM(150)
 #define DRAW_TIMEOUT     20
 #define COMPLETION_TIMEOUT 300
 #define PASSWORD_HINT_MAX 8
@@ -85,11 +85,19 @@
   ((pos) == GTK_ENTRY_ICON_PRIMARY ||                   \
    (pos) == GTK_ENTRY_ICON_SECONDARY)
 
-static const GtkBorder default_inner_border = { 2, 2, 2, 2 };
 static GQuark          quark_inner_border   = 0;
 static GQuark          quark_password_hint  = 0;
 static GQuark          quark_cursor_hadjustment = 0;
 static GQuark          quark_capslock_feedback = 0;
+
+static void
+set_default_inner_border (GtkEntry *entry, GtkBorder *border)
+{
+  border->left   = gtk_widget_size_to_pixel (entry, GTK_SIZE_ONE_TWELFTH_EM (2));
+  border->right  = gtk_widget_size_to_pixel (entry, GTK_SIZE_ONE_TWELFTH_EM (2));
+  border->top    = gtk_widget_size_to_pixel (entry, GTK_SIZE_ONE_TWELFTH_EM (2));
+  border->bottom = gtk_widget_size_to_pixel (entry, GTK_SIZE_ONE_TWELFTH_EM (2));
+}
 
 typedef struct _GtkEntryPrivate GtkEntryPrivate;
 
@@ -381,6 +389,7 @@ static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
 static void gtk_entry_select_all         (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
 static gboolean gtk_entry_popup_menu     (GtkWidget       *widget);
+static void gtk_entry_unit_changed       (GtkWidget      *widget);
 
 static void keymap_direction_changed     (GdkKeymap       *keymap,
 					  GtkEntry        *entry);
@@ -580,6 +589,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->drag_data_delete = gtk_entry_drag_data_delete;
 
   widget_class->popup_menu = gtk_entry_popup_menu;
+  widget_class->unit_changed = gtk_entry_unit_changed;
 
   gtk_object_class->destroy = gtk_entry_destroy;
 
@@ -2760,7 +2770,7 @@ gtk_entry_size_request (GtkWidget      *widget,
   _gtk_entry_effective_inner_border (entry, &inner_border);
 
   if (entry->width_chars < 0)
-    requisition->width = MIN_ENTRY_WIDTH + xborder * 2 + inner_border.left + inner_border.right;
+    requisition->width = gtk_widget_size_to_pixel (entry, MIN_ENTRY_WIDTH) + xborder * 2 + inner_border.left + inner_border.right;
   else
     {
       gint char_width = pango_font_metrics_get_approximate_char_width (metrics);
@@ -2927,12 +2937,16 @@ _gtk_entry_effective_inner_border (GtkEntry  *entry,
 
   if (tmp_border)
     {
+      tmp_border->left = gtk_widget_size_to_pixel (entry, tmp_border->left);
+      tmp_border->right = gtk_widget_size_to_pixel (entry, tmp_border->right);
+      tmp_border->top = gtk_widget_size_to_pixel (entry, tmp_border->top);
+      tmp_border->bottom = gtk_widget_size_to_pixel (entry, tmp_border->bottom);
       *border = *tmp_border;
       gtk_border_free (tmp_border);
       return;
     }
 
-  *border = default_inner_border;
+  set_default_inner_border (entry, border);
 }
 
 static void
@@ -9801,6 +9815,18 @@ keymap_state_changed (GdkKeymap *keymap,
     show_capslock_feedback (entry, text);
   else
     remove_capslock_feedback (entry);
+}
+
+static void
+gtk_entry_unit_changed (GtkWidget *widget)
+{
+  GtkEntry *entry = GTK_ENTRY (widget);
+
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (gtk_entry_parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (gtk_entry_parent_class)->unit_changed (widget);
+
+  gtk_entry_reset_layout (entry);
 }
 
 #define __GTK_ENTRY_C__
