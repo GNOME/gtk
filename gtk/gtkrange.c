@@ -448,29 +448,23 @@ gtk_range_class_init (GtkRangeClass *class)
                                                         GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("slider-width",
-							     P_("Slider Width"),
-							     P_("Width of scrollbar or scale thumb"),
-							     0,
-							     G_MAXINT,
-							     14,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("slider-width",
+                                                                P_("Slider Width"),
+                                                                P_("Width of scrollbar or scale thumb"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (14),
+                                                                GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("trough-border",
-                                                             P_("Trough Border"),
-                                                             P_("Spacing between thumb/steppers and outer trough bevel"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             1,
-                                                             GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("trough-border",
+                                                                P_("Trough Border"),
+                                                                P_("Spacing between thumb/steppers and outer trough bevel"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (1),
+                                                                GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("stepper-size",
-							     P_("Stepper Size"),
-							     P_("Length of step buttons at ends"),
-							     0,
-							     G_MAXINT,
-							     14,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("stepper-size",
+                                                                P_("Stepper Size"),
+                                                                P_("Length of step buttons at ends"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (14),
+                                                                GTK_PARAM_READABLE));
   /**
    * GtkRange:stepper-spacing:
    *
@@ -480,29 +474,23 @@ gtk_range_class_init (GtkRangeClass *class)
    * stepper-spacing won't have any effect if there are no steppers.
    */
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("stepper-spacing",
-							     P_("Stepper Spacing"),
-							     P_("Spacing between step buttons and thumb"),
-                                                             0,
-							     G_MAXINT,
-							     0,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("stepper-spacing",
+                                                                P_("Stepper Spacing"),
+                                                                P_("Spacing between step buttons and thumb"),
+                                                                0, G_MAXINT, 0,
+                                                                GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("arrow-displacement-x",
-							     P_("Arrow X Displacement"),
-							     P_("How far in the x direction to move the arrow when the button is depressed"),
-							     G_MININT,
-							     G_MAXINT,
-							     0,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("arrow-displacement-x",
+                                                                P_("Arrow X Displacement"),
+                                                                P_("How far in the x direction to move the arrow when the button is depressed"),
+                                                                0, G_MAXINT, 0,
+                                                                GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("arrow-displacement-y",
-							     P_("Arrow Y Displacement"),
-							     P_("How far in the y direction to move the arrow when the button is depressed"),
-							     G_MININT,
-							     G_MAXINT,
-							     0,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("arrow-displacement-y",
+                                                                P_("Arrow Y Displacement"),
+                                                                P_("How far in the y direction to move the arrow when the button is depressed"),
+                                                                0, G_MAXINT, 0,
+                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("activate-slider",
@@ -661,7 +649,7 @@ gtk_range_init (GtkRange *range)
   range->update_policy = GTK_UPDATE_CONTINUOUS;
   range->inverted = FALSE;
   range->flippable = FALSE;
-  range->min_slider_size = 1;
+  range->min_slider_size = GTK_SIZE_ONE_TWELFTH_EM (1);
   range->has_stepper_a = FALSE;
   range->has_stepper_b = FALSE;
   range->has_stepper_c = FALSE;
@@ -2935,7 +2923,7 @@ gtk_range_calc_request (GtkRange      *range,
 
   n_steppers = n_steppers_ab + n_steppers_cd;
 
-  slider_length = range->min_slider_size;
+  slider_length = gtk_widget_size_to_pixel (range, range->min_slider_size);
 
   range_rect->x = 0;
   range_rect->y = 0;
@@ -3159,11 +3147,11 @@ gtk_range_calc_layout (GtkRange *range,
 	  height = ((bottom - top) * (range->adjustment->page_size /
 				       (range->adjustment->upper - range->adjustment->lower)));
 	else
-	  height = range->min_slider_size;
+	  height = gtk_widget_size_to_pixel (range, range->min_slider_size);
         
-        if (height < range->min_slider_size ||
+        if (height < gtk_widget_size_to_pixel (range, range->min_slider_size) ||
             range->slider_size_fixed)
-          height = range->min_slider_size;
+          height = gtk_widget_size_to_pixel (range, range->min_slider_size);
 
         height = MIN (height, layout->trough.height);
         
@@ -3308,11 +3296,11 @@ gtk_range_calc_layout (GtkRange *range,
 	  width = ((right - left) * (range->adjustment->page_size /
                                    (range->adjustment->upper - range->adjustment->lower)));
 	else
-	  width = range->min_slider_size;
+	  width = gtk_widget_size_to_pixel (range, range->min_slider_size);
         
-        if (width < range->min_slider_size ||
+        if (width < gtk_widget_size_to_pixel (range, range->min_slider_size) ||
             range->slider_size_fixed)
-          width = range->min_slider_size;
+          width = gtk_widget_size_to_pixel (range, range->min_slider_size);
         
         width = MIN (width, layout->trough.width);
         

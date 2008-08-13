@@ -60,7 +60,7 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-#define SCALE_SIZE 100
+#define SCALE_SIZE GTK_SIZE_ONE_TWELFTH_EM(100)
 #define CLICK_TIMEOUT 250
 
 enum
@@ -125,6 +125,7 @@ static gboolean	gtk_scale_button_scroll		(GtkWidget           *widget,
 						 GdkEventScroll      *event);
 static void gtk_scale_button_screen_changed	(GtkWidget           *widget,
 						 GdkScreen           *previous_screen);
+static void gtk_scale_button_unit_changed	(GtkWidget           *widget);
 static gboolean	gtk_scale_button_press		(GtkWidget           *widget,
 						 GdkEventButton      *event);
 static gboolean gtk_scale_button_key_release	(GtkWidget           *widget,
@@ -183,6 +184,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   widget_class->key_release_event = gtk_scale_button_key_release;
   widget_class->scroll_event = gtk_scale_button_scroll;
   widget_class->screen_changed = gtk_scale_button_screen_changed;
+  widget_class->unit_changed = gtk_scale_button_unit_changed;
 
   /**
    * GtkScaleButton:orientation:
@@ -943,9 +945,9 @@ gtk_scale_popup (GtkWidget *widget,
   y += widget->allocation.y;
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-    gtk_window_move (GTK_WINDOW (priv->dock), x, y - (SCALE_SIZE / 2));
+    gtk_window_move (GTK_WINDOW (priv->dock), x, y - (gtk_widget_size_to_pixel (widget, SCALE_SIZE) / 2));
   else
-    gtk_window_move (GTK_WINDOW (priv->dock), x - (SCALE_SIZE / 2), y);
+    gtk_window_move (GTK_WINDOW (priv->dock), x - (gtk_widget_size_to_pixel (widget, SCALE_SIZE) / 2), y);
 
   gtk_widget_show_all (priv->dock);
 
@@ -968,9 +970,9 @@ gtk_scale_popup (GtkWidget *widget,
 
       x += (widget->allocation.width - priv->dock->allocation.width) / 2;
       y -= startoff;
-      y -= GTK_RANGE (priv->scale)->min_slider_size / 2;
+      y -= gtk_widget_size_to_pixel (widget, GTK_RANGE (priv->scale)->min_slider_size) / 2;
       m = priv->scale->allocation.height -
-          GTK_RANGE (priv->scale)->min_slider_size;
+          gtk_widget_size_to_pixel (widget, GTK_RANGE (priv->scale)->min_slider_size);
       y -= m * (1.0 - v);
     }
   else
@@ -979,9 +981,9 @@ gtk_scale_popup (GtkWidget *widget,
 
       x -= startoff;
       y += (widget->allocation.height - priv->dock->allocation.height) / 2;
-      x -= GTK_RANGE (priv->scale)->min_slider_size / 2;
+      x -= gtk_widget_size_to_pixel (widget, GTK_RANGE (priv->scale)->min_slider_size) / 2;
       m = priv->scale->allocation.width -
-          GTK_RANGE (priv->scale)->min_slider_size;
+          gtk_widget_size_to_pixel (widget, GTK_RANGE (priv->scale)->min_slider_size);
       x -= m * v;
     }
 
@@ -1061,15 +1063,15 @@ gtk_scale_popup (GtkWidget *widget,
         {
           e->x = priv->scale->allocation.width / 2;
           m = priv->scale->allocation.height -
-              GTK_RANGE (priv->scale)->min_slider_size;
-          e->y = ((1.0 - v) * m) + GTK_RANGE (priv->scale)->min_slider_size / 2;
+              gtk_widget_size_to_pixel (widget, GTK_RANGE (priv->scale)->min_slider_size);
+          e->y = ((1.0 - v) * m) + gtk_widget_size_to_pixel (widget, GTK_RANGE (priv->scale)->min_slider_size) / 2;
         }
       else
         {
           e->y = priv->scale->allocation.height / 2;
           m = priv->scale->allocation.width -
-              GTK_RANGE (priv->scale)->min_slider_size;
-          e->x = (v * m) + GTK_RANGE (priv->scale)->min_slider_size / 2;
+              gtk_widget_size_to_pixel (widget, GTK_RANGE (priv->scale)->min_slider_size);
+          e->x = (v * m) + gtk_widget_size_to_pixel (widget, GTK_RANGE (priv->scale)->min_slider_size) / 2;
         }
 
       gtk_widget_event (priv->scale, (GdkEvent *) e);
@@ -1413,12 +1415,14 @@ gtk_scale_button_scale_new (GtkScaleButton *button)
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
-      gtk_widget_set_size_request (GTK_WIDGET (scale), -1, SCALE_SIZE);
+      gtk_widget_set_size_request (GTK_WIDGET (scale), -1,
+		      gtk_widget_size_to_pixel (button, SCALE_SIZE));
       gtk_range_set_inverted (GTK_RANGE (scale), TRUE);
     }
   else
     {
-      gtk_widget_set_size_request (GTK_WIDGET (scale), SCALE_SIZE, -1);
+      gtk_widget_set_size_request (GTK_WIDGET (scale),
+		      gtk_widget_size_to_pixel (button, SCALE_SIZE), -1);
       gtk_range_set_inverted (GTK_RANGE (scale), FALSE);
     }
 
@@ -1563,6 +1567,19 @@ gtk_scale_button_scale_value_changed (GtkRange *range)
   g_signal_emit (button, signals[VALUE_CHANGED], 0, value);
   g_object_notify (G_OBJECT (button), "value");
 }
+
+static void
+gtk_scale_button_unit_changed (GtkWidget *widget)
+{
+  GtkScaleButton *scale_button = GTK_SCALE_BUTTON (widget);
+
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (gtk_scale_button_parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (gtk_scale_button_parent_class)->unit_changed (widget);
+
+  gtk_scale_button_update_icon (scale_button);
+}
+
 
 #define __GTK_SCALE_BUTTON_C__
 #include "gtkaliasdef.c"

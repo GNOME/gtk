@@ -110,6 +110,7 @@ static gboolean gtk_scale_expose                  (GtkWidget      *widget,
 static void     gtk_scale_real_get_layout_offsets (GtkScale       *scale,
                                                    gint           *x,
                                                    gint           *y);
+static void gtk_scale_unit_changed                (GtkWidget      *widget);
 
 G_DEFINE_ABSTRACT_TYPE (GtkScale, gtk_scale, GTK_TYPE_RANGE)
 
@@ -155,6 +156,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   widget_class->screen_changed = gtk_scale_screen_changed;
   widget_class->expose_event = gtk_scale_expose;
   widget_class->size_request = gtk_scale_size_request;
+  widget_class->unit_changed = gtk_scale_unit_changed;
 
   range_class->slider_detail = "Xscale";
   range_class->get_range_border = gtk_scale_get_range_border;
@@ -222,22 +224,18 @@ gtk_scale_class_init (GtkScaleClass *class)
 						      GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("slider-length",
-							     P_("Slider Length"),
-							     P_("Length of scale's slider"),
-							     0,
-							     G_MAXINT,
-							     31,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("slider-length",
+                                                                P_("Slider Length"),
+                                                                P_("Length of scale's slider"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (31),
+                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("value-spacing",
-							     P_("Value spacing"),
-							     P_("Space between value text and the slider/trough area"),
-							     0,
-							     G_MAXINT,
-							     2,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("value-spacing",
+                                                                P_("Value spacing"),
+                                                                P_("Space between value text and the slider/trough area"),
+                                                                0, G_MAXINT, GTK_SIZE_ONE_TWELFTH_EM (2),
+                                                                GTK_PARAM_READABLE));
   
   /* All bindings (even arrow keys) are on both h/v scale, because
    * blind users etc. don't care about scale orientation.
@@ -854,14 +852,14 @@ static void
 gtk_scale_style_set (GtkWidget *widget,
                      GtkStyle  *previous)
 {
-  gint slider_length;
+  GtkSize slider_length;
   GtkRange *range;
 
   range = GTK_RANGE (widget);
   
-  gtk_widget_style_get (widget,
-                        "slider-length", &slider_length,
-                        NULL);
+  gtk_widget_style_get_unit (widget,
+                             "slider-length", &slider_length,
+                             NULL);
   
   range->min_slider_size = slider_length;
   
@@ -1355,6 +1353,14 @@ gtk_scale_add_mark (GtkScale        *scale,
   gtk_widget_queue_resize (GTK_WIDGET (scale));
 }
 
+gtk_scale_unit_changed (GtkWidget *widget)
+{
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (gtk_scale_parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (gtk_scale_parent_class)->unit_changed (widget);
+
+  _gtk_scale_clear_layout (GTK_SCALE (widget));
+}
 
 #define __GTK_SCALE_C__
 #include "gtkaliasdef.c"

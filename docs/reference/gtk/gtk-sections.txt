@@ -2598,6 +2598,7 @@ gtk_misc_set_alignment
 gtk_misc_set_padding
 gtk_misc_get_alignment
 gtk_misc_get_padding
+gtk_misc_get_padding_unit
 <SUBSECTION Standard>
 GTK_MISC
 GTK_IS_MISC

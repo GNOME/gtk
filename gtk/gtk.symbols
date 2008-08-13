@@ -2538,6 +2538,7 @@ gtk_message_dialog_get_image
 #if IN_FILE(__GTK_MISC_C__)
 gtk_misc_get_alignment
 gtk_misc_get_padding
+gtk_misc_get_padding_unit
 gtk_misc_get_type G_GNUC_CONST
 gtk_misc_set_alignment
 gtk_misc_set_padding

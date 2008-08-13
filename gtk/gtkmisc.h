@@ -47,6 +47,7 @@ G_BEGIN_DECLS
 
 typedef struct _GtkMisc	      GtkMisc;
 typedef struct _GtkMiscClass  GtkMiscClass;
+typedef struct _GtkMiscPrivate GtkMiscPrivate;
 
 struct _GtkMisc
 {
@@ -73,11 +74,14 @@ void    gtk_misc_get_alignment (GtkMisc *misc,
 				gfloat  *xalign,
 				gfloat  *yalign);
 void	gtk_misc_set_padding   (GtkMisc *misc,
-				gint	 xpad,
-				gint	 ypad);
+				GtkSize	 xpad,
+				GtkSize	 ypad);
 void    gtk_misc_get_padding   (GtkMisc *misc,
 				gint    *xpad,
 				gint    *ypad);
+void    gtk_misc_get_padding_unit (GtkMisc *misc,
+                                   GtkSize *xpad,
+                                   GtkSize *ypad);
 
 
 G_END_DECLS

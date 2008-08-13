@@ -40,6 +40,14 @@ enum {
   PROP_YPAD
 };
 
+#define GTK_MISC_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_MISC, GtkMiscPrivate))
+
+struct _GtkMiscPrivate
+{
+  GtkSize xpad_unit;
+  GtkSize ypad_unit;
+};
+
 static void gtk_misc_realize      (GtkWidget    *widget);
 static void gtk_misc_set_property (GObject         *object,
 				   guint            prop_id,
@@ -50,6 +58,7 @@ static void gtk_misc_get_property (GObject         *object,
 				   GValue          *value,
 				   GParamSpec      *pspec);
 
+static void gtk_misc_unit_changed (GtkWidget *widget);
 
 G_DEFINE_ABSTRACT_TYPE (GtkMisc, gtk_misc, GTK_TYPE_WIDGET)
 
@@ -66,6 +75,7 @@ gtk_misc_class_init (GtkMiscClass *class)
   gobject_class->get_property = gtk_misc_get_property;
   
   widget_class->realize = gtk_misc_realize;
+  widget_class->unit_changed = gtk_misc_unit_changed;
 
   g_object_class_install_property (gobject_class,
                                    PROP_XALIGN,
@@ -89,32 +99,33 @@ gtk_misc_class_init (GtkMiscClass *class)
 
   g_object_class_install_property (gobject_class,
                                    PROP_XPAD,
-                                   g_param_spec_int ("xpad",
-						     P_("X pad"),
-						     P_("The amount of space to add on the left and right of the widget, in pixels"),
-						     0,
-						     G_MAXINT,
-						     0,
-						     GTK_PARAM_READWRITE));
+                                   gtk_param_spec_size ("xpad",
+                                                        P_("X pad"),
+                                                        P_("The amount of space to add on the left and right of the widget, in pixels"),
+                                                        0, G_MAXINT, 0,
+                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_YPAD,
-                                   g_param_spec_int ("ypad",
-						     P_("Y pad"),
-						     P_("The amount of space to add on the top and bottom of the widget, in pixels"),
-						     0,
-						     G_MAXINT,
-						     0,
-						     GTK_PARAM_READWRITE));
+                                   gtk_param_spec_size ("ypad",
+                                                        P_("Y pad"),
+                                                        P_("The amount of space to add on the top and bottom of the widget, in pixels"),
+                                                        0, G_MAXINT, 0,
+                                                        GTK_PARAM_READWRITE));
+
+  g_type_class_add_private (gobject_class, sizeof (GtkMiscPrivate));
 }
 
 static void
 gtk_misc_init (GtkMisc *misc)
 {
+  GtkMiscPrivate *priv = GTK_MISC_GET_PRIVATE (misc);
   misc->xalign = 0.5;
   misc->yalign = 0.5;
   misc->xpad = 0;
   misc->ypad = 0;
+  priv->xpad_unit = 0;
+  priv->ypad_unit = 0;
 }
 
 static void
@@ -124,8 +135,10 @@ gtk_misc_set_property (GObject      *object,
 		       GParamSpec   *pspec)
 {
   GtkMisc *misc;
+  GtkMiscPrivate *priv;
 
   misc = GTK_MISC (object);
+  priv = GTK_MISC_GET_PRIVATE (misc);
 
   switch (prop_id)
     {
@@ -136,10 +149,10 @@ gtk_misc_set_property (GObject      *object,
       gtk_misc_set_alignment (misc, misc->xalign, g_value_get_float (value));
       break;
     case PROP_XPAD:
-      gtk_misc_set_padding (misc, g_value_get_int (value), misc->ypad);
+      gtk_misc_set_padding (misc, gtk_value_get_size (value), priv->ypad_unit);
       break;
     case PROP_YPAD:
-      gtk_misc_set_padding (misc, misc->xpad, g_value_get_int (value));
+      gtk_misc_set_padding (misc, priv->xpad_unit, gtk_value_get_size (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -154,8 +167,10 @@ gtk_misc_get_property (GObject      *object,
 		       GParamSpec   *pspec)
 {
   GtkMisc *misc;
+  GtkMiscPrivate *priv;
 
   misc = GTK_MISC (object);
+  priv = GTK_MISC_GET_PRIVATE (misc);
 
   switch (prop_id)
     {
@@ -166,10 +181,10 @@ gtk_misc_get_property (GObject      *object,
       g_value_set_float (value, misc->yalign);
       break;
     case PROP_XPAD:
-      g_value_set_int (value, misc->xpad);
+      gtk_value_set_size (value, priv->xpad_unit, misc);
       break;
     case PROP_YPAD:
-      g_value_set_int (value, misc->ypad);
+      gtk_value_set_size (value, priv->ypad_unit, misc);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -244,33 +259,36 @@ gtk_misc_get_alignment (GtkMisc *misc,
 
 void
 gtk_misc_set_padding (GtkMisc *misc,
-		      gint     xpad,
-		      gint     ypad)
+		      GtkSize  xpad,
+		      GtkSize  ypad)
 {
+  GtkMiscPrivate *priv = GTK_MISC_GET_PRIVATE (misc);
   GtkRequisition *requisition;
   
   g_return_if_fail (GTK_IS_MISC (misc));
   
-  if (xpad < 0)
+  if (gtk_widget_size_to_pixel (misc, xpad) < 0)
     xpad = 0;
-  if (ypad < 0)
+  if (gtk_widget_size_to_pixel (misc, ypad) < 0)
     ypad = 0;
   
-  if ((xpad != misc->xpad) || (ypad != misc->ypad))
+  if ((xpad != priv->xpad_unit) || (ypad != priv->ypad_unit))
     {
       g_object_freeze_notify (G_OBJECT (misc));
-      if (xpad != misc->xpad)
+      if (xpad != priv->xpad_unit)
 	g_object_notify (G_OBJECT (misc), "xpad");
 
-      if (ypad != misc->ypad)
+      if (ypad != priv->ypad_unit)
 	g_object_notify (G_OBJECT (misc), "ypad");
 
       requisition = &(GTK_WIDGET (misc)->requisition);
       requisition->width -= misc->xpad * 2;
       requisition->height -= misc->ypad * 2;
       
-      misc->xpad = xpad;
-      misc->ypad = ypad;
+      misc->xpad = gtk_widget_size_to_pixel (misc, xpad);
+      misc->ypad = gtk_widget_size_to_pixel (misc, ypad);
+      priv->xpad_unit = xpad;
+      priv->ypad_unit = ypad;
       
       requisition->width += misc->xpad * 2;
       requisition->height += misc->ypad * 2;
@@ -296,12 +314,43 @@ gtk_misc_get_padding (GtkMisc *misc,
 		      gint    *xpad,
 		      gint    *ypad)
 {
+  GtkMiscPrivate *priv;
+
   g_return_if_fail (GTK_IS_MISC (misc));
 
+  priv = GTK_MISC_GET_PRIVATE (misc);
+
   if (xpad)
-    *xpad = misc->xpad;
+    *xpad = gtk_widget_size_to_pixel (misc, priv->xpad_unit);
   if (ypad)
-    *ypad = misc->ypad;
+    *ypad = gtk_widget_size_to_pixel (misc, priv->ypad_unit);
+}
+
+/**
+ * gtk_misc_get_padding_unit:
+ * @misc: a #GtkMisc
+ * @xpad: location to store padding in the X direction, or %NULL
+ * @ypad: location to store padding in the Y direction, or %NULL
+ *
+ * Like gtk_misc_get_padding() but preserves the unit.
+ *
+ * Since: 2.14
+ **/
+void
+gtk_misc_get_padding_unit (GtkMisc *misc,
+                           GtkSize *xpad,
+                           GtkSize *ypad)
+{
+  GtkMiscPrivate *priv;
+
+  g_return_if_fail (GTK_IS_MISC (misc));
+
+  priv = GTK_MISC_GET_PRIVATE (misc);
+
+  if (xpad)
+    *xpad = priv->xpad_unit;
+  if (ypad)
+    *ypad = priv->ypad_unit;
 }
 
 static void
@@ -337,6 +386,20 @@ gtk_misc_realize (GtkWidget *widget)
       widget->style = gtk_style_attach (widget->style, widget->window);
       gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
     }
+}
+
+static void
+gtk_misc_unit_changed (GtkWidget *widget)
+{
+  GtkMisc *misc = GTK_MISC (widget);
+  GtkMiscPrivate *priv = GTK_MISC_GET_PRIVATE (misc);
+
+  misc->xpad = gtk_widget_size_to_pixel (misc, priv->xpad_unit);
+  misc->ypad = gtk_widget_size_to_pixel (misc, priv->ypad_unit);
+
+  /* must chain up */
+  if (GTK_WIDGET_CLASS (gtk_misc_parent_class)->unit_changed != NULL)
+    GTK_WIDGET_CLASS (gtk_misc_parent_class)->unit_changed (widget);
 }
 
 #define __GTK_MISC_C__
