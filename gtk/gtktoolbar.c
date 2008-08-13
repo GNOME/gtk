@@ -63,7 +63,7 @@ typedef struct _ToolbarContent ToolbarContent;
 
 #define DEFAULT_IPADDING    0
 
-#define DEFAULT_SPACE_SIZE  12
+#define DEFAULT_SPACE_SIZE  GTK_SIZE_ONE_TWELFTH_EM(12)
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
 #define SPACE_LINE_DIVISION 10.0
 #define SPACE_LINE_START    2.0
@@ -577,31 +577,25 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   
   /* style properties */
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("space-size",
-							     P_("Spacer size"),
-							     P_("Size of spacers"),
-							     0,
-							     G_MAXINT,
-                                                             DEFAULT_SPACE_SIZE,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("space-size",
+                                                                P_("Spacer size"),
+                                                                P_("Size of spacers"),
+                                                                0, G_MAXINT, DEFAULT_SPACE_SIZE,
+                                                                GTK_PARAM_READABLE));
   
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("internal-padding",
-							     P_("Internal padding"),
-							     P_("Amount of border space between the toolbar shadow and the buttons"),
-							     0,
-							     G_MAXINT,
-                                                             DEFAULT_IPADDING,
-                                                             GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("internal-padding",
+                                                                P_("Internal padding"),
+                                                                P_("Amount of border space between the toolbar shadow and the buttons"),
+                                                                0, G_MAXINT, DEFAULT_IPADDING,
+                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("max-child-expand",
-                                                             P_("Maximum child expand"),
-                                                             P_("Maximum amount of space an expandable item will be given"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             G_MAXINT,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("max-child-expand",
+                                                                P_("Maximum child expand"),
+                                                                P_("Maximum amount of space an expandable item will be given"),
+                                                                0, G_MAXINT, GTK_SIZE_MAXPIXEL,
+                                                                GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_enum ("space-style",
@@ -4752,7 +4746,7 @@ toolbar_content_hide_all (ToolbarContent  *content)
 static gint
 get_space_size (GtkToolbar *toolbar)
 {
-  gint space_size = DEFAULT_SPACE_SIZE;
+  gint space_size = gtk_widget_size_to_pixel (toolbar, DEFAULT_SPACE_SIZE);
   
   if (toolbar)
     {
@@ -4863,7 +4857,7 @@ gtk_toolbar_check_new_api (GtkToolbar *toolbar)
 
 /* GTK+ internal methods */
 
-gint
+GtkSize
 _gtk_toolbar_get_default_space_size (void)
 {
   return DEFAULT_SPACE_SIZE;

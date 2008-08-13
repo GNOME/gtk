@@ -257,13 +257,11 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
    * Since: 2.10
    */
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("icon-spacing",
-							     P_("Icon spacing"),
-							     P_("Spacing in pixels between the icon and label"),
-							     0,
-							     G_MAXINT,
-							     0,
-							     GTK_PARAM_READWRITE));
+					   gtk_param_spec_size ("icon-spacing",
+                                                                P_("Icon spacing"),
+                                                                P_("Spacing in pixels between the icon and label"),
+                                                                0, G_MAXINT, 0,
+                                                                GTK_PARAM_READWRITE));
 
 /**
  * GtkToolButton::clicked:
@@ -317,13 +315,13 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
   gboolean need_icon = FALSE;
   GtkIconSize icon_size;
   GtkWidget *box = NULL;
-  guint icon_spacing;
+  GtkSize icon_spacing;
 
   button->priv->contents_invalid = FALSE;
 
-  gtk_widget_style_get (GTK_WIDGET (tool_item), 
-			"icon-spacing", &icon_spacing,
-			NULL);
+  gtk_widget_style_get_unit (GTK_WIDGET (tool_item), 
+                             "icon-spacing", &icon_spacing,
+                             NULL);
 
   if (button->priv->icon_widget && button->priv->icon_widget->parent)
     {
@@ -612,8 +610,10 @@ clone_image_menu_size (GtkImage *image, GtkSettings *settings)
       gint width, height;
       
       if (settings &&
-	  gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU,
-					     &width, &height))
+	  gtk_icon_size_lookup_for_settings_for_monitor (settings,
+                                                         gtk_widget_get_monitor_num (GTK_WIDGET (image)),
+                                                         GTK_ICON_SIZE_MENU,
+                                                         &width, &height))
 	{
 	  GdkPixbuf *src_pixbuf, *dest_pixbuf;
 	  GtkWidget *cloned_image;
@@ -717,14 +717,14 @@ static void
 gtk_tool_button_update_icon_spacing (GtkToolButton *button)
 {
   GtkWidget *box;
-  guint spacing;
+  GtkSize spacing;
 
   box = GTK_BIN (button->priv->button)->child;
   if (GTK_IS_BOX (box))
     {
-      gtk_widget_style_get (GTK_WIDGET (button), 
-			    "icon-spacing", &spacing,
-			    NULL);
+      gtk_widget_style_get_unit (GTK_WIDGET (button), 
+                                 "icon-spacing", &spacing,
+                                 NULL);
       gtk_box_set_spacing (GTK_BOX (box), spacing);      
     }
 }

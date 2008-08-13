@@ -32,8 +32,8 @@
 #include "gtkalias.h"
 
 
-#define INDICATOR_SIZE     13
-#define INDICATOR_SPACING  2
+#define INDICATOR_SIZE     GTK_SIZE_ONE_TWELFTH_EM(13)
+#define INDICATOR_SPACING  GTK_SIZE_ONE_TWELFTH_EM(2)
 
 
 static void gtk_check_button_size_request        (GtkWidget           *widget,
@@ -65,21 +65,17 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   class->draw_indicator = gtk_real_check_button_draw_indicator;
 
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("indicator-size",
-							     P_("Indicator Size"),
-							     P_("Size of check or radio indicator"),
-							     0,
-							     G_MAXINT,
-							     INDICATOR_SIZE,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("indicator-size",
+                                                                P_("Indicator Size"),
+                                                                P_("Size of check or radio indicator"),
+                                                                0, G_MAXINT, INDICATOR_SIZE,
+                                                                GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("indicator-spacing",
-							     P_("Indicator Spacing"),
-							     P_("Spacing around check or radio indicator"),
-							     0,
-							     G_MAXINT,
-							     INDICATOR_SPACING,
-							     GTK_PARAM_READABLE));
+					   gtk_param_spec_size ("indicator-spacing",
+                                                                P_("Indicator Spacing"),
+                                                                P_("Spacing around check or radio indicator"),
+                                                                0, G_MAXINT, INDICATOR_SPACING,
+                                                                GTK_PARAM_READABLE));
 }
 
 static void

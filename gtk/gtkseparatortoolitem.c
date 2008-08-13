@@ -49,7 +49,7 @@ static gboolean gtk_separator_tool_item_expose            (GtkWidget            
 							   GdkEventExpose            *event);
 static void     gtk_separator_tool_item_add               (GtkContainer              *container,
 							   GtkWidget                 *child);
-static gint     get_space_size                            (GtkToolItem               *tool_item);
+static GtkSize  get_space_size                            (GtkToolItem               *tool_item);
 
 
 
@@ -62,17 +62,17 @@ struct _GtkSeparatorToolItemPrivate
 
 G_DEFINE_TYPE (GtkSeparatorToolItem, gtk_separator_tool_item, GTK_TYPE_TOOL_ITEM)
 
-static gint
+static GtkSize
 get_space_size (GtkToolItem *tool_item)
 {
-  gint space_size = _gtk_toolbar_get_default_space_size();
+  GtkSize space_size = _gtk_toolbar_get_default_space_size();
   GtkWidget *parent = GTK_WIDGET (tool_item)->parent;
   
   if (GTK_IS_TOOLBAR (parent))
     {
-      gtk_widget_style_get (parent,
-			    "space-size", &space_size,
-			    NULL);
+      gtk_widget_style_get_unit (parent,
+                                 "space-size", &space_size,
+                                 NULL);
     }
   
   return space_size;
@@ -183,12 +183,12 @@ gtk_separator_tool_item_size_request (GtkWidget      *widget,
   
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      requisition->width = get_space_size (item);
+      requisition->width = gtk_widget_size_to_pixel (widget, get_space_size (item));
       requisition->height = 1;
     }
   else
     {
-      requisition->height = get_space_size (item);
+      requisition->height = gtk_widget_size_to_pixel (widget, get_space_size (item));
       requisition->width = 1;
     }
 }
