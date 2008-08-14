@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-10 10:57+0300\n"
+"POT-Creation-Date: 2008-08-14 15:43+0300\n"
 "PO-Revision-Date: 2008-08-10 10:30+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -963,7 +963,7 @@ msgstr "TIFF-tietojen kirjoitus epäonnistui"
 msgid "Couldn't write to TIFF file"
 msgstr "TIFF-tiedostoa ei voitu kirjoittaa"
 
-#: ../gdk-pixbuf/io-tiff.c:814
+#: ../gdk-pixbuf/io-tiff.c:815
 msgid "The TIFF image format"
 msgstr "TIFF-kuvamuoto"
 
@@ -1145,7 +1145,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Avataan %d kohde"
 msgstr[1] "Avataan %d kohdetta"
 
-#: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2106
+#: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "Lisenssi"
 
@@ -1159,32 +1159,32 @@ msgid "C_redits"
 msgstr "_Tekijät"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:513
+#: ../gtk/gtkaboutdialog.c:514
 msgid "_License"
 msgstr "_Lisenssi"
 
-#: ../gtk/gtkaboutdialog.c:742
+#: ../gtk/gtkaboutdialog.c:744
 #, c-format
 msgid "About %s"
 msgstr "Tietoja ohjelmasta %s"
 
-#: ../gtk/gtkaboutdialog.c:2030
+#: ../gtk/gtkaboutdialog.c:2032
 msgid "Credits"
 msgstr "Tekijät"
 
-#: ../gtk/gtkaboutdialog.c:2059
+#: ../gtk/gtkaboutdialog.c:2061
 msgid "Written by"
 msgstr "Ohjelmoijat"
 
-#: ../gtk/gtkaboutdialog.c:2062
+#: ../gtk/gtkaboutdialog.c:2064
 msgid "Documented by"
 msgstr "Dokumentoijat"
 
-#: ../gtk/gtkaboutdialog.c:2074
+#: ../gtk/gtkaboutdialog.c:2076
 msgid "Translated by"
 msgstr "Kääntäjät"
 
-#: ../gtk/gtkaboutdialog.c:2078
+#: ../gtk/gtkaboutdialog.c:2080
 msgid "Artwork by"
 msgstr "Graafinen ulkoasu"
 
@@ -1227,7 +1227,7 @@ msgstr "Alt"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: ../gtk/gtkaccellabel.c:679
+#: ../gtk/gtkaccellabel.c:678
 msgid "keyboard label|Super"
 msgstr "Super"
 
@@ -1237,7 +1237,7 @@ msgstr "Super"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: ../gtk/gtkaccellabel.c:693
+#: ../gtk/gtkaccellabel.c:692
 msgid "keyboard label|Hyper"
 msgstr "Hyper"
 
@@ -1247,17 +1247,17 @@ msgstr "Hyper"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: ../gtk/gtkaccellabel.c:708
+#: ../gtk/gtkaccellabel.c:707
 msgid "keyboard label|Meta"
 msgstr "Meta"
 
 #. do not translate the part before the |
-#: ../gtk/gtkaccellabel.c:726
+#: ../gtk/gtkaccellabel.c:725
 msgid "keyboard label|Space"
 msgstr "Välilyönti"
 
 #. do not translate the part before the |
-#: ../gtk/gtkaccellabel.c:730
+#: ../gtk/gtkaccellabel.c:729
 msgid "keyboard label|Backslash"
 msgstr "Takakeno"
 
@@ -1305,7 +1305,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1797
+#: ../gtk/gtkcalendar.c:1796
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1320,7 +1320,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1828 ../gtk/gtkcalendar.c:2489
+#: ../gtk/gtkcalendar.c:1827 ../gtk/gtkcalendar.c:2488
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1336,7 +1336,7 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1860 ../gtk/gtkcalendar.c:2351
+#: ../gtk/gtkcalendar.c:1859 ../gtk/gtkcalendar.c:2350
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1352,7 +1352,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2141
+#: ../gtk/gtkcalendar.c:2140
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1478,7 +1478,7 @@ msgstr "_Paletti:"
 msgid "Color Wheel"
 msgstr "Väriympyrä"
 
-#: ../gtk/gtkcolorsel.c:980
+#: ../gtk/gtkcolorsel.c:976
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1488,7 +1488,7 @@ msgstr ""
 "tämän värin paletin kohtaan tai valita sen nykyiseksi vetämällä sen vieressä "
 "olevaan värilaikkuun."
 
-#: ../gtk/gtkcolorsel.c:984
+#: ../gtk/gtkcolorsel.c:980
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1496,11 +1496,11 @@ msgstr ""
 "Valitsemasi väri. Voit vetää tämän värin paletin kohtaan tallentaaksesi sen "
 "myöhempää käyttöä varten."
 
-#: ../gtk/gtkcolorsel.c:1369
+#: ../gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
 msgstr "_Tallenna väri tähän"
 
-#: ../gtk/gtkcolorsel.c:1574
+#: ../gtk/gtkcolorsel.c:1568
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1513,11 +1513,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Värin valinta"
 
-#: ../gtk/gtkentry.c:5376 ../gtk/gtktextview.c:7654
+#: ../gtk/gtkentry.c:5375 ../gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "Syöttö_tavat"
 
-#: ../gtk/gtkentry.c:5390 ../gtk/gtktextview.c:7668
+#: ../gtk/gtkentry.c:5389 ../gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "_Lisää Unicode-säätömerkki"
 
@@ -1533,7 +1533,7 @@ msgstr "Työpöytä"
 msgid "(None)"
 msgstr "(ei mikään)"
 
-#: ../gtk/gtkfilechooserbutton.c:2013
+#: ../gtk/gtkfilechooserbutton.c:2011
 msgid "Other..."
 msgstr "Muu..."
 
@@ -2014,7 +2014,7 @@ msgstr "_Koko:"
 msgid "_Preview:"
 msgstr "_Esikatselu:"
 
-#: ../gtk/gtkfontsel.c:1580
+#: ../gtk/gtkfontsel.c:1542
 msgid "Font Selection"
 msgstr "Kirjasinlajin valinta"
 
@@ -2143,11 +2143,11 @@ msgstr "(tuntematon)"
 msgid "Cl_ear"
 msgstr "_Tyhjennä"
 
-#: ../gtk/gtklinkbutton.c:424
+#: ../gtk/gtklinkbutton.c:427
 msgid "Copy URL"
 msgstr "Kopioi URL"
 
-#: ../gtk/gtklinkbutton.c:562
+#: ../gtk/gtklinkbutton.c:565
 msgid "Invalid URI"
 msgstr "Virheellistä URL"
 
@@ -2223,27 +2223,19 @@ msgid "_Password:"
 msgstr "_Salasana:"
 
 #: ../gtk/gtkmountoperation.c:590
-msgid "_Forget password immediately"
+msgid "Forget password _immediately"
 msgstr "_Unohda salasana heti"
 
 #: ../gtk/gtkmountoperation.c:598
-msgid "_Remember password until you logout"
-msgstr "Muista salasana _istunnon ajan"
+msgid "Remember password until you _logout"
+msgstr "Muista _uloskirjautumiseen saakka"
 
 #: ../gtk/gtkmountoperation.c:606
-msgid "_Remember forever"
+msgid "Remember _forever"
 msgstr "_Muista aina"
 
-#: ../gtk/gtknotebook.c:834
-msgid "Arrow spacing"
-msgstr "Nuolten välit"
-
-#: ../gtk/gtknotebook.c:835
-msgid "Scroll arrow spacing"
-msgstr "Vieritysnuolten välit"
-
 # , c-format
-#: ../gtk/gtknotebook.c:4425 ../gtk/gtknotebook.c:6931
+#: ../gtk/gtknotebook.c:4424 ../gtk/gtknotebook.c:6930
 #, c-format
 msgid "Page %u"
 msgstr "Sivu %u"
@@ -2311,7 +2303,7 @@ msgid "_Orientation:"
 msgstr "_Suunta:"
 
 # , c-format
-#: ../gtk/gtkpagesetupunixdialog.c:1129 ../gtk/gtkprintunixdialog.c:2398
+#: ../gtk/gtkpagesetupunixdialog.c:1129 ../gtk/gtkprintunixdialog.c:2397
 msgid "Page Setup"
 msgstr "Sivun asetukset"
 
@@ -2368,7 +2360,7 @@ msgstr "Polkua ylös"
 msgid "Down Path"
 msgstr "Polkua alas"
 
-#: ../gtk/gtkpathbar.c:1464
+#: ../gtk/gtkpathbar.c:1472
 msgid "File System Root"
 msgstr "Tiedostojärjestelmän juuri"
 
@@ -2476,8 +2468,9 @@ msgstr "Tulostin ei ole päällä"
 msgid "Out of paper"
 msgstr "Paperi on loppu"
 
+#. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:594
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1373
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1375
 msgid "Paused"
 msgstr "Pysäytetty"
 
@@ -2522,35 +2515,35 @@ msgstr "Virheellinen kahva toiminnolle PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Määrittelemätön virhe"
 
-#: ../gtk/gtkprintunixdialog.c:1717
+#: ../gtk/gtkprintunixdialog.c:1716
 msgid "Printer"
 msgstr "Tulostin"
 
-#: ../gtk/gtkprintunixdialog.c:1726
+#: ../gtk/gtkprintunixdialog.c:1725
 msgid "Location"
 msgstr "Sijainti"
 
-#: ../gtk/gtkprintunixdialog.c:1736
+#: ../gtk/gtkprintunixdialog.c:1735
 msgid "Status"
 msgstr "Tila"
 
-#: ../gtk/gtkprintunixdialog.c:1759
+#: ../gtk/gtkprintunixdialog.c:1758
 msgid "Range"
 msgstr "Alue"
 
-#: ../gtk/gtkprintunixdialog.c:1763
+#: ../gtk/gtkprintunixdialog.c:1762
 msgid "_All Pages"
 msgstr "K_aikki sivut"
 
-#: ../gtk/gtkprintunixdialog.c:1770
+#: ../gtk/gtkprintunixdialog.c:1769
 msgid "C_urrent Page"
 msgstr "_Nykyinen sivu"
 
-#: ../gtk/gtkprintunixdialog.c:1779
+#: ../gtk/gtkprintunixdialog.c:1778
 msgid "Pag_es:"
 msgstr "Si_vut:"
 
-#: ../gtk/gtkprintunixdialog.c:1780
+#: ../gtk/gtkprintunixdialog.c:1779
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2558,151 +2551,143 @@ msgstr ""
 "Anna yksi tai useampia sivualueita,\n"
 "esim. 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:1799
+#: ../gtk/gtkprintunixdialog.c:1798
 msgid "Copies"
 msgstr "Kopioita"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1804
+#: ../gtk/gtkprintunixdialog.c:1803
 msgid "Copie_s:"
 msgstr "_Kopioita:"
 
-#: ../gtk/gtkprintunixdialog.c:1822
+#: ../gtk/gtkprintunixdialog.c:1821
 msgid "C_ollate"
 msgstr "_Kerää"
 
-#: ../gtk/gtkprintunixdialog.c:1830
+#: ../gtk/gtkprintunixdialog.c:1829
 msgid "_Reverse"
 msgstr "Kää_nteinen"
 
-#: ../gtk/gtkprintunixdialog.c:1850
+#: ../gtk/gtkprintunixdialog.c:1849
 msgid "General"
 msgstr "Yleiset"
 
-#: ../gtk/gtkprintunixdialog.c:2253
+#: ../gtk/gtkprintunixdialog.c:2252
 msgid "Layout"
 msgstr "Asettelu"
 
-#: ../gtk/gtkprintunixdialog.c:2257
+#: ../gtk/gtkprintunixdialog.c:2256
 msgid "Pages per _side:"
 msgstr "Sivuja _puolelle::"
 
-#: ../gtk/gtkprintunixdialog.c:2273
+#: ../gtk/gtkprintunixdialog.c:2272
 msgid "T_wo-sided:"
 msgstr "_Kaksipuolinen:"
 
-#: ../gtk/gtkprintunixdialog.c:2288
+#: ../gtk/gtkprintunixdialog.c:2287
 msgid "_Only print:"
 msgstr "Tulosta _vain:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2303
+#: ../gtk/gtkprintunixdialog.c:2302
 msgid "All sheets"
 msgstr "Kaikki arkit"
 
-#: ../gtk/gtkprintunixdialog.c:2304
+#: ../gtk/gtkprintunixdialog.c:2303
 msgid "Even sheets"
 msgstr "Parilliset arkit"
 
-#: ../gtk/gtkprintunixdialog.c:2305
+#: ../gtk/gtkprintunixdialog.c:2304
 msgid "Odd sheets"
 msgstr "Parittomat arkit"
 
-#: ../gtk/gtkprintunixdialog.c:2308
+#: ../gtk/gtkprintunixdialog.c:2307
 msgid "Sc_ale:"
 msgstr "Mitt_akaava:"
 
-#: ../gtk/gtkprintunixdialog.c:2335
+#: ../gtk/gtkprintunixdialog.c:2334
 msgid "Paper"
 msgstr "Paperi"
 
-#: ../gtk/gtkprintunixdialog.c:2339
+#: ../gtk/gtkprintunixdialog.c:2338
 msgid "Paper _type:"
 msgstr "Paperin _tyyppi:"
 
-#: ../gtk/gtkprintunixdialog.c:2354
+#: ../gtk/gtkprintunixdialog.c:2353
 msgid "Paper _source:"
 msgstr "Paperin _lähde:"
 
-#: ../gtk/gtkprintunixdialog.c:2369
+#: ../gtk/gtkprintunixdialog.c:2368
 msgid "Output t_ray:"
 msgstr "Tulostus_kaukalo:"
 
-#: ../gtk/gtkprintunixdialog.c:2421
+#: ../gtk/gtkprintunixdialog.c:2420
 msgid "Job Details"
 msgstr "Työn yksityiskohdat"
 
-#: ../gtk/gtkprintunixdialog.c:2427
+#: ../gtk/gtkprintunixdialog.c:2426
 msgid "Pri_ority:"
 msgstr "Tär_keys:"
 
-#: ../gtk/gtkprintunixdialog.c:2442
+#: ../gtk/gtkprintunixdialog.c:2441
 msgid "_Billing info:"
 msgstr "_Laskutustiedot:"
 
-#: ../gtk/gtkprintunixdialog.c:2460
+#: ../gtk/gtkprintunixdialog.c:2459
 msgid "Print Document"
 msgstr "Tulosta asiakirja"
 
-#: ../gtk/gtkprintunixdialog.c:2466
+#: ../gtk/gtkprintunixdialog.c:2465
 msgid "_Now"
 msgstr "_Heti"
 
-#: ../gtk/gtkprintunixdialog.c:2473
+#: ../gtk/gtkprintunixdialog.c:2472
 msgid "A_t:"
 msgstr "Ajas_tettuna:"
 
-#: ../gtk/gtkprintunixdialog.c:2488
+#: ../gtk/gtkprintunixdialog.c:2487
 msgid "On _hold"
 msgstr "Pi_dossa"
 
-#: ../gtk/gtkprintunixdialog.c:2507
+#: ../gtk/gtkprintunixdialog.c:2506
 msgid "Add Cover Page"
 msgstr "Lisää kansisivu"
 
-#: ../gtk/gtkprintunixdialog.c:2513
+#: ../gtk/gtkprintunixdialog.c:2512
 msgid "Be_fore:"
 msgstr "_Ennen:"
 
-#: ../gtk/gtkprintunixdialog.c:2528
+#: ../gtk/gtkprintunixdialog.c:2527
 msgid "_After:"
 msgstr "_Jälkeen:"
 
-#: ../gtk/gtkprintunixdialog.c:2543
+#: ../gtk/gtkprintunixdialog.c:2542
 msgid "Job"
 msgstr "Työ"
 
-#: ../gtk/gtkprintunixdialog.c:2609
+#: ../gtk/gtkprintunixdialog.c:2608
 msgid "Advanced"
 msgstr "Lisäasetukset"
 
-#: ../gtk/gtkprintunixdialog.c:2644
+#: ../gtk/gtkprintunixdialog.c:2643
 msgid "Image Quality"
 msgstr "Kuvan laatu"
 
-#: ../gtk/gtkprintunixdialog.c:2647
+#: ../gtk/gtkprintunixdialog.c:2646
 msgid "Color"
 msgstr "Väri"
 
-#: ../gtk/gtkprintunixdialog.c:2650
+#: ../gtk/gtkprintunixdialog.c:2649
 msgid "Finishing"
 msgstr "Viimeistely"
 
-#: ../gtk/gtkprintunixdialog.c:2660
+#: ../gtk/gtkprintunixdialog.c:2659
 msgid "Some of the settings in the dialog conflict"
 msgstr "Jotkut asetukset ikkunassa ovat ristiriidassa"
 
-#: ../gtk/gtkprintunixdialog.c:2683
+#: ../gtk/gtkprintunixdialog.c:2682
 msgid "Print"
 msgstr "Tulosta"
-
-#: ../gtk/gtkradiotoolbutton.c:65
-msgid "Group"
-msgstr "Ryhmä"
-
-#: ../gtk/gtkradiotoolbutton.c:66
-msgid "The radio tool button whose group this button belongs to."
-msgstr "Työkalupalkin vaihtoehtopainike, jonka ryhmään tämä painike kuuluu."
 
 #: ../gtk/gtkrc.c:2872
 #, c-format
@@ -2725,36 +2710,36 @@ msgstr "Tätä funktiota ei ole toteutettu luokan \"%s\" ikkunaelementeille"
 msgid "Select which type of documents are shown"
 msgstr "Valitse, minkä tyyppiset asiakirjat näkyvät"
 
-#: ../gtk/gtkrecentchooserdefault.c:1096 ../gtk/gtkrecentchooserdefault.c:1133
+#: ../gtk/gtkrecentchooserdefault.c:1095 ../gtk/gtkrecentchooserdefault.c:1132
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Kohtaa URIlle \"%s\" ei löytynyt"
 
-#: ../gtk/gtkrecentchooserdefault.c:1260
+#: ../gtk/gtkrecentchooserdefault.c:1259
 msgid "Untitled filter"
 msgstr "Nimeämätön suodatin"
 
-#: ../gtk/gtkrecentchooserdefault.c:1613
+#: ../gtk/gtkrecentchooserdefault.c:1612
 msgid "Could not remove item"
 msgstr "Kohteen poistaminen ei onnistunut"
 
-#: ../gtk/gtkrecentchooserdefault.c:1656
+#: ../gtk/gtkrecentchooserdefault.c:1655
 msgid "Could not clear list"
 msgstr "Luetteloa ei voitu tyhjentää"
 
-#: ../gtk/gtkrecentchooserdefault.c:1740
+#: ../gtk/gtkrecentchooserdefault.c:1739
 msgid "Copy _Location"
 msgstr "Kopioi si_jainti"
 
-#: ../gtk/gtkrecentchooserdefault.c:1753
+#: ../gtk/gtkrecentchooserdefault.c:1752
 msgid "_Remove From List"
 msgstr "_Poista luettelosta"
 
-#: ../gtk/gtkrecentchooserdefault.c:1762
+#: ../gtk/gtkrecentchooserdefault.c:1761
 msgid "_Clear List"
 msgstr "_Tyhjennä luettelo"
 
-#: ../gtk/gtkrecentchooserdefault.c:1776
+#: ../gtk/gtkrecentchooserdefault.c:1775
 msgid "Show _Private Resources"
 msgstr "Näytä _yksityiset resurssit"
 
@@ -4416,36 +4401,36 @@ msgstr "X-syöttötapa"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1113
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr ""
+msgstr "Tulostimesta \"%s\" on väri vähissä."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1114
 #, c-format
 msgid "Printer '%s' has no toner left."
-msgstr ""
+msgstr "Tulostimesta \"%s\" on väri loppu."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1116
 #, c-format
 msgid "Printer '%s' is low on developer."
-msgstr ""
+msgstr "Tulostimesta \"%s\" on kehite vähissä."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1118
 #, c-format
 msgid "Printer '%s' is out of developer."
-msgstr ""
+msgstr "Tulostimesta \"%s\" on kehite loppu."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1120
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr ""
+msgstr "Tulostimesta \"%s\" on ainakin yksi väri vähissä."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1122
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
-msgstr ""
+msgstr "Tulostimesta \"%s\" on ainakin yksi väri loppu."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1123
 #, c-format
@@ -4482,92 +4467,96 @@ msgstr "Tulostinta \"%s\" ei ole ehkä liitetty."
 msgid "There is a problem on printer '%s'."
 msgstr "Tulostimella \"%s\" on ongelma."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1371
+#. Translators: this is a printer status.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1372
 msgid "Paused ; Rejecting Jobs"
 msgstr "Pysäytetty; työt hylätään"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1375
+#. Translators: this is a printer status.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1378
 msgid "Rejecting Jobs"
 msgstr "Työt hylätään"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1999
 msgid "Two Sided"
 msgstr "Kaksipuolinen"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1997
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2000
 msgid "Paper Type"
 msgstr "Paperin tyyppi"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1998
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Paper Source"
 msgstr "Paperin lähde"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2002
 msgid "Output Tray"
 msgstr "Tulostuskaukalo"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2008
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2011
 msgid "One Sided"
 msgstr "Yksipuolinen"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2009
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2010
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2014
+#. Translators: this is an option of "Paper Source"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2013
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2015
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2023
 msgid "Auto Select"
 msgstr "Valitse automaattisesti"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2011
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2012
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2013
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2483
+#. Translators: this is an option of "Paper Source"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2017
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2019
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2492
 msgid "Printer Default"
 msgstr "Oletustulostin"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Urgent"
 msgstr "Kiireellinen"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "High"
 msgstr "Tärkeä"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Medium"
 msgstr "Tavallinen"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Low"
 msgstr "Ei kiireellinen"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "None"
 msgstr "Ei mikään"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Classified"
 msgstr "Luokiteltu"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Confidential"
 msgstr "Luottamuksellinen"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Secret"
 msgstr "Salainen"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Standard"
 msgstr "Normaali"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Top Secret"
 msgstr "Erittäin salainen"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Unclassified"
 msgstr "Luokittelematon"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2817
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2826
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Oma %sx%s"
@@ -4629,6 +4618,18 @@ msgstr "Tulosta testitulostimelle"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Tiedoston \"%s\" tietojen saaminen epäonnistui: %s"
+
+#~ msgid "Arrow spacing"
+#~ msgstr "Nuolten välit"
+
+#~ msgid "Scroll arrow spacing"
+#~ msgstr "Vieritysnuolten välit"
+
+#~ msgid "Group"
+#~ msgstr "Ryhmä"
+
+#~ msgid "The radio tool button whose group this button belongs to."
+#~ msgstr "Työkalupalkin vaihtoehtopainike, jonka ryhmään tämä painike kuuluu."
 
 #~ msgid "URI"
 #~ msgstr "URI"
