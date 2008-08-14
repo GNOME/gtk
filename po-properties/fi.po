@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-10 11:20+0300\n"
+"POT-Creation-Date: 2008-08-14 15:54+0300\n"
 "PO-Revision-Date: 2008-08-10 11:10+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -3067,7 +3067,8 @@ msgstr "Pikanäppäimen polku"
 
 #: ../gtk/gtkmenu.c:533
 msgid "An accel path used to conveniently construct accel paths of child items"
-msgstr "Pikanäppäinpolku lapsikohteiden pikanäppäinpolkujen helppoa luomista varten"
+msgstr ""
+"Pikanäppäinpolku lapsikohteiden pikanäppäinpolkujen helppoa luomista varten"
 
 #: ../gtk/gtkmenu.c:549
 msgid "Attach Widget"
@@ -3502,6 +3503,7 @@ msgstr "Välilehtien raahauksen ja tiputuksen ryhmätunniste"
 
 #: ../gtk/gtknotebook.c:668 ../gtk/gtkradioaction.c:128
 #: ../gtk/gtkradiobutton.c:82 ../gtk/gtkradiomenuitem.c:342
+#: ../gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Ryhmä"
 
@@ -3613,6 +3615,14 @@ msgstr "Välilehden pyöristys"
 #: ../gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "Välilehden pyöristyksen koko"
+
+#: ../gtk/gtknotebook.c:834
+msgid "Arrow spacing"
+msgstr "Nuolten välit"
+
+#: ../gtk/gtknotebook.c:835
+msgid "Scroll arrow spacing"
+msgstr "Vieritysnuolten välistys"
 
 #: ../gtk/gtkobject.c:370
 msgid "User Data"
@@ -4135,6 +4145,10 @@ msgstr "Vaihtoehtopainike, jonka ryhmään tämä säädin kuuluu."
 #: ../gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "Vaihtoehtopainike, jonka ryhmään tämä säädin kuuluu."
+
+#: ../gtk/gtkradiotoolbutton.c:66
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Vaihtoehtotyökalun nappi, jonka ryhmään tämä nappi kuuluu."
 
 #: ../gtk/gtkrange.c:337
 msgid "Update policy"
