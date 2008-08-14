@@ -1,3 +1,10 @@
+2008-08-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 532644 – TIFF loader need to exclude CR2 files
+
+	* io-tiff.c: Add a pattern to exclude CR2 files.
+	Noticed by Hubert Figuire
+
 2008-08-13  Michael Natterer  <mitch@imendio.com>
 
 	* gdk-pixbuf-marshal.list: reorder marshalers for no reason apart
