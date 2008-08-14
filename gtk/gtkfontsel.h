@@ -144,9 +144,7 @@ struct _GtkFontSelectionDialogClass
 
 GType	     gtk_font_selection_get_type	  (void) G_GNUC_CONST;
 GtkWidget *  gtk_font_selection_new               (void);
-GtkWidget *  gtk_font_selection_get_family_entry  (GtkFontSelection *fontsel);
 GtkWidget *  gtk_font_selection_get_family_list   (GtkFontSelection *fontsel);
-GtkWidget *  gtk_font_selection_get_face_entry    (GtkFontSelection *fontsel);
 GtkWidget *  gtk_font_selection_get_face_list     (GtkFontSelection *fontsel);
 GtkWidget *  gtk_font_selection_get_size_entry    (GtkFontSelection *fontsel);
 GtkWidget *  gtk_font_selection_get_size_list     (GtkFontSelection *fontsel);

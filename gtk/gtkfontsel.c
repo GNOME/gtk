@@ -1123,25 +1123,6 @@ gtk_font_selection_get_font_internal (GtkFontSelection *fontsel)
  *****************************************************************************/
 
 /**
- * gtk_font_selection_get_family_entry:
- * @fontsel: a #GtkFontSelection
- *
- * This returns the #GtkEntry that allows the user to manually enter
- * the font family they want to use.
- * 
- * Return value: A #GtkWidget.
- *
- * Since: 2.14
- **/
-GtkWidget *
-gtk_font_selection_get_family_entry (GtkFontSelection *fontsel)
-{
-  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
-  
-  return fontsel->font_entry;
-}
-
-/**
  * gtk_font_selection_get_family_list:
  * @fontsel: a #GtkFontSelection
  *
@@ -1158,25 +1139,6 @@ gtk_font_selection_get_family_list (GtkFontSelection *fontsel)
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
   
   return fontsel->family_list;
-}
-
-/**
- * gtk_font_selection_get_face_entry:
- * @fontsel: a #GtkFontSelection
- *
- * This returns the #GtkEntry responsible for allowing manual
- * configuration of the font style.
- * 
- * Return value: A #GtkWidget. 
- *
- * Since: 2.14
- **/
-GtkWidget *
-gtk_font_selection_get_face_entry (GtkFontSelection *fontsel)
-{
-  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
-  
-  return fontsel->font_style_entry;
 }
 
 /**

@@ -1,5 +1,15 @@
 2008-08-13  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 547673 – Accessors for GtkFileSelection.font_entry and
+	font_style_entry
+
+	* gtk/gtk.symbols:
+	* gtk/gtkfontsel.[hc]: Don't add getters for widgets that are not
+	actually part of the font selection dialog in standard builds.
+	Pointed out by Torsten Schoenfeld
+
+2008-08-13  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 547516 – Add comments for translators in gtkprintbackendcups.c
 
 	* modules/printbackends/cups/gtkprintbackendcups.c: Add translator
