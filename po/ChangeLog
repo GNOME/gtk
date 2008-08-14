@@ -1,5 +1,10 @@
 2008-08-14  Sandeep Shedmake  <sshedmak@redhat.com>  
 
+	* mr.po: Adding Marathi Translations for module 'gtk+/po'
+
+
+2008-08-14  Sandeep Shedmake  <sshedmak@redhat.com>  
+
 	* mr.po: Removing the translated mr.po consisting translations for 'gtk+/po-properties' module
 
 2008-08-13  Sandeep Shedmake  <sshedmak@redhat.com>  
