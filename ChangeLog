@@ -1,3 +1,10 @@
+2008-08-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 547516 – Add comments for translators in gtkprintbackendcups.c
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: Add translator
+	hints. Patch by Leonardo Ferreira Fontenelle
+
 2008-08-13  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmarshalers.list: get rid of the deprecated aliases NONE

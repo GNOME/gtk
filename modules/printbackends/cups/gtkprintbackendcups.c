@@ -1368,10 +1368,13 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       if (state_msg != NULL && strlen (state_msg) == 0)
         {
           if (is_paused && !is_accepting_jobs)
+		  /* Translators: this is a printer status. */
             tmp_msg2 = g_strdup ( N_("Paused ; Rejecting Jobs"));
           if (is_paused && is_accepting_jobs)
+		  /* Translators: this is a printer status. */
             tmp_msg2 = g_strdup ( N_("Paused"));
           if (!is_paused && !is_accepting_jobs)
+		  /* Translators: this is a printer status. */
             tmp_msg2 = g_strdup ( N_("Rejecting Jobs"));
 
           if (tmp_msg2 != NULL)
@@ -2006,11 +2009,17 @@ static const struct {
   const char *translation;
 } cups_choice_translations[] = {
   { "Duplex", "None", N_("One Sided") },
+  /* Translators: this is an option of "Paper Source" */
   { "InputSlot", "Auto", N_("Auto Select") },
+  /* Translators: this is an option of "Paper Source" */
   { "InputSlot", "AutoSelect", N_("Auto Select") },
+  /* Translators: this is an option of "Paper Source" */
   { "InputSlot", "Default", N_("Printer Default") },
+  /* Translators: this is an option of "Paper Source" */
   { "InputSlot", "None", N_("Printer Default") },
+  /* Translators: this is an option of "Paper Source" */
   { "InputSlot", "PrinterDefault", N_("Printer Default") },
+  /* Translators: this is an option of "Paper Source" */
   { "InputSlot", "Unspecified", N_("Auto Select") },
 };
 
