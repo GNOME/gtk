@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-12 17:12+0200\n"
-"PO-Revision-Date: 2008-08-12 17:13+0200\n"
+"POT-Creation-Date: 2008-08-15 11:25+0200\n"
+"PO-Revision-Date: 2008-08-15 11:26+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -938,8 +938,8 @@ msgid "Show button images"
 msgstr "Mostrar imaxes nos botóns"
 
 #: ../gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Indica se deben mostrarse ou non as iconas de inventario nos botóns"
+msgid "Whether images should be shown on buttons"
+msgstr "Indica se se deben mostrar ou non as imaxes nos botóns"
 
 #: ../gtk/gtkcalendar.c:440
 msgid "Year"
@@ -7026,6 +7026,9 @@ msgstr "Estilo do estado IM"
 #: ../modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Como debuxar o método de entrada da barra de estado"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Indica se deben mostrarse ou non as iconas de inventario nos botóns"
 
 #~ msgid "Cancelled"
 #~ msgstr "Cancelado"
