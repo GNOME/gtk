@@ -1,5 +1,11 @@
 2008-08-15  Christian Dywan  <christian@imendio.com>
 
+	Bug 547846 – gtktestutils functions lack Since: tags
+
+	* gtk/gtktestutils.c: Add missing Since tags
+
+2008-08-15  Christian Dywan  <christian@imendio.com>
+
         Bug 547775 – Documentation of gtk-button-images is not correct
 
 	* gtk/gtkbutton.c (gtk_button_class_init): Improve documentation

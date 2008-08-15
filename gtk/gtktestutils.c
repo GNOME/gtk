@@ -52,6 +52,8 @@
  *
  * Like gtk_init() and g_test_init(), any known arguments will be
  * processed and stripped from @argc and @argv.
+ *
+ * Since: 2.14
  **/
 void
 gtk_test_init (int    *argcp,
@@ -111,6 +113,8 @@ test_find_widget_input_windows (GtkWidget *widget,
  * location, see gdk_test_simulate_key() for details.
  *
  * Returns: wether all actions neccessary for the key event simulation were carried out successfully.
+ *
+ * Since: 2.14
  **/
 gboolean
 gtk_test_widget_send_key (GtkWidget      *widget,
@@ -145,6 +149,8 @@ gtk_test_widget_send_key (GtkWidget      *widget,
  * location, see gdk_test_simulate_button() for details.
  *
  * Returns: wether all actions neccessary for the button click simulation were carried out successfully.
+ *
+ * Since: 2.14
  **/
 gboolean
 gtk_test_widget_click (GtkWidget      *widget,
@@ -174,6 +180,8 @@ gtk_test_widget_click (GtkWidget      *widget,
  * spin button's value.
  *
  * Returns: wether all actions neccessary for the button click simulation were carried out successfully.
+ *
+ * Since: 2.14
  **/
 gboolean
 gtk_test_spin_button_click (GtkSpinButton  *spinner,
@@ -206,6 +214,8 @@ gtk_test_spin_button_click (GtkSpinButton  *spinner,
  * predetermined locales, see gtk_test_init() for more details.
  *
  * Returns: a GtkLabel widget if any is found.
+ *
+ * Since: 2.14
  **/
 GtkWidget*
 gtk_test_find_label (GtkWidget    *widget,
@@ -300,6 +310,8 @@ widget_geo_cmp (gconstpointer a,
  * button or text entry widget, given it's corresponding label widget.
  *
  * Returns: a widget of type @widget_type if any is found.
+ *
+ * Since: 2.14
  **/
 GtkWidget*
 gtk_test_find_sibling (GtkWidget *base_widget,
@@ -340,6 +352,8 @@ gtk_test_find_sibling (GtkWidget *base_widget,
  * such widgets and synthesizing widget events.
  *
  * Returns: a valid widget if any is found or %NULL.
+ *
+ * Since: 2.14
  **/
 GtkWidget*
 gtk_test_find_widget (GtkWidget    *widget,
@@ -364,6 +378,8 @@ gtk_test_find_widget (GtkWidget    *widget,
  * spin buttons. The adjustment value of tehse widgets is set to
  * a value between the lower and upper limits, according to the
  * @percentage argument.
+ *
+ * Since: 2.14
  **/
 void
 gtk_test_slider_set_perc (GtkWidget      *widget,
@@ -389,6 +405,8 @@ gtk_test_slider_set_perc (GtkWidget      *widget,
  * as passed in to gtk_test_slider_set_perc().
  *
  * Returns: adjustment->value for an adjustment belonging to @widget.
+ *
+ * Since: 2.14
  **/
 double
 gtk_test_slider_get_value (GtkWidget *widget)
@@ -408,6 +426,8 @@ gtk_test_slider_get_value (GtkWidget *widget)
  *
  * Set the text string of @widget to @string if it is a GtkLabel,
  * GtkEditable (entry and text widgets) or GtkTextView.
+ *
+ * Since: 2.14
  **/
 void
 gtk_test_text_set (GtkWidget   *widget,
@@ -436,6 +456,8 @@ gtk_test_text_set (GtkWidget   *widget,
  * GtkEditable (entry and text widgets) or GtkTextView.
  *
  * Returns: new 0-terminated C string, needs to be releaed with g_free().
+ *
+ * Since: 2.14
  **/
 gchar*
 gtk_test_text_get (GtkWidget *widget)
@@ -470,6 +492,8 @@ gtk_test_text_get (GtkWidget *widget)
  * and set them up for destruction during the next test teardown phase.
  *
  * Returns: a newly created widget.
+ *
+ * Since: 2.14
  */
 GtkWidget*
 gtk_test_create_widget (GType        widget_type,
@@ -525,6 +549,8 @@ test_increment_intp (int *intp)
  * will automatically be destroyed upon test function teardown.
  *
  * Returns: a widget pointer to the newly created GtkWindow.
+ *
+ * Since: 2.14
  **/
 GtkWidget*
 gtk_test_display_button_window (const gchar *window_title,
@@ -565,6 +591,8 @@ gtk_test_display_button_window (const gchar *window_title,
  * will automatically be destroyed upon test function teardown.
  *
  * Returns: a widget pointer to the newly created GtkWindow.
+ *
+ * Since: 2.14
  **/
 GtkWidget*
 gtk_test_create_simple_window (const gchar *window_title,
@@ -588,6 +616,8 @@ static guint  n_all_registered_types = 0;
  *
  * Return the type ids that have been registered after
  * calling gtk_test_register_all_types().
+ *
+ * Since: 2.14
  **/
 const GType*
 gtk_test_list_all_types (guint *n_types)
@@ -603,6 +633,8 @@ gtk_test_list_all_types (guint *n_types)
  * Force registration of all core Gtk+ and Gdk object types.
  * This allowes to refer to any of those object types via
  * g_type_from_name() after calling this function.
+ *
+ * Since: 2.14
  **/
 void
 gtk_test_register_all_types (void)
