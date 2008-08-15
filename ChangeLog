@@ -1,5 +1,12 @@
 2008-08-15  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkdrawable-quartz.c (gdk_quartz_draw_drawable): Some
+	aftermath of the fix of bug #543868. Clip and flip to the source,
+	not the destination. Don't save/restore the gstate, it's already
+	done when getting/releasing the context.
+
+2008-08-15  Richard Hult  <richard@imendio.com>
+
 	* gtk/gtkclipboard-quartz.c (gtk_clipboard_wait_is_uris_available):
 	Add another missing symbol.
 
