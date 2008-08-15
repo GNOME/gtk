@@ -2090,7 +2090,7 @@ settings_update_fontconfig (GtkSettings *settings)
   static guint    last_update_timestamp;
   static gboolean last_update_needed;
 
-  gint timestamp;
+  guint timestamp;
 
   g_object_get (settings,
 		"gtk-fontconfig-timestamp", &timestamp,
@@ -2105,11 +2105,12 @@ settings_update_fontconfig (GtkSettings *settings)
       PangoFontMap *fontmap = pango_cairo_font_map_get_default ();
       gboolean update_needed = FALSE;
 
-      if (PANGO_IS_FC_FONT_MAP (fontmap) &&
-	  !FcConfigUptoDate (NULL) && FcInitReinitialize ())
+      /* bug 547680 */
+      if (PANGO_IS_FC_FONT_MAP (fontmap) && !FcConfigUptoDate (NULL))
 	{
-	  update_needed = TRUE;
 	  pango_fc_font_map_cache_clear (PANGO_FC_FONT_MAP (fontmap));
+	  if (FcInitReinitialize ())
+	    update_needed = TRUE;
 	}
 
       last_update_timestamp = timestamp;

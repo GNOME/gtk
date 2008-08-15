@@ -1,3 +1,10 @@
+2008-08-15  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 547680 – fontconfig monitoring can crash apps
+
+	* gtk/gtksettings.c (settings_update_fontconfig): Clear pango cache
+	before recreating fontconfig config.
+
 2008-08-15  Sven Herzberg  <sven@imendio.com>
 
 	Use the g_test_*() API for this test
