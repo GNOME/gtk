@@ -66,9 +66,9 @@ _check_object (AtkObject *obj)
     widget = GTK_ACCESSIBLE (atk_button)->widget;
     g_assert (GTK_IS_BUTTON (widget));
     g_signal_connect (GTK_OBJECT (widget),
-                                    "pressed",
-                           GTK_SIGNAL_FUNC (button_pressed_handler),
-                                    NULL);
+                      "pressed",
+                      G_CALLBACK (button_pressed_handler),
+                      NULL);
     if (GTK_IS_TOGGLE_BUTTON (widget))
     {
       _toggle_inconsistent (GTK_TOGGLE_BUTTON (widget));
@@ -79,9 +79,9 @@ _check_object (AtkObject *obj)
       return;
 
     if (g_getenv ("TEST_ACCESSIBLE_AUTO"))
-    {
-      gtk_idle_add (_do_button_action, atk_button);
-    }
+      {
+        g_idle_add (_do_button_action, atk_button);
+      }
   }
 }
 
@@ -106,7 +106,7 @@ static gint _do_button_action (gpointer data)
 
   atk_action_do_action (ATK_ACTION (obj), 2);
 
-  gtk_timeout_add (5000, _finish_button_action, obj);
+  g_timeout_add (5000, _finish_button_action, obj);
   return FALSE;
 }
 
@@ -129,11 +129,11 @@ button_pressed_handler (GtkButton *button)
   obj = gtk_widget_get_accessible (GTK_WIDGET (button));
   _print_states (obj);
   _print_button_image_info (obj);
-    
+
   if (GTK_IS_TOGGLE_BUTTON (button))
-  {
-    gtk_idle_add (_toggle_inconsistent, GTK_TOGGLE_BUTTON (button));
-  }
+    {
+      g_idle_add (_toggle_inconsistent, GTK_TOGGLE_BUTTON (button));
+    }
 }
 
 static void 

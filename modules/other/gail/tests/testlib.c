@@ -511,7 +511,7 @@ _create_output_window (OutputWindow **outwin)
    
       localow->outputBuffer = gtk_text_buffer_new(NULL);
       view = gtk_text_view_new_with_buffer(GTK_TEXT_BUFFER(localow->outputBuffer));
-      gtk_widget_set_usize(view, 700, 500);
+      gtk_widget_set_size_request (view, 700, 500);
       gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(view), GTK_WRAP_WORD);
       gtk_text_view_set_editable(GTK_TEXT_VIEW(view), FALSE);	
 
@@ -573,15 +573,15 @@ _create_select_tests_window (AtkObject    *obj,
       gtk_window_set_position (GTK_WINDOW(md[window_no]->selecttestsWindow),
                                GTK_WIN_POS_CENTER); 
       g_signal_connect (GTK_OBJECT(md[window_no]->selecttestsWindow), 
-                          "destroy",
-                          GTK_SIGNAL_FUNC(_destroy), 
-                          &md[window_no]->selecttestsWindow);
+                        "destroy",
+                        G_CALLBACK (_destroy),
+                        &md[window_no]->selecttestsWindow);
      
       /* Setup Scrolling */
       scrolledWindow = gtk_scrolled_window_new(NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledWindow),
                                       GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC); 
-      gtk_widget_set_usize (scrolledWindow, 500, 600);
+      gtk_widget_set_size_request (scrolledWindow, 500, 600);
       gtk_container_add (GTK_CONTAINER (md[window_no]->selecttestsWindow), 
                          scrolledWindow);
       
@@ -602,9 +602,9 @@ _create_select_tests_window (AtkObject    *obj,
       testcb[window_no].obj = obj;
       testcb[window_no].win_num = window_no; 
       g_signal_connect (GTK_OBJECT (md[window_no]->button), 
-                          "clicked",
-                          GTK_SIGNAL_FUNC (_testselectioncb),  
-                          (gpointer)&testcb[window_no]);
+                        "clicked",
+                        G_CALLBACK (_testselectioncb),
+                        (gpointer)&testcb[window_no]);
      
       /* Show all */
       gtk_widget_grab_focus (md[window_no]->button);
@@ -664,7 +664,7 @@ add_test (gint   window,
 	  listoftests[window][testcount[window]].parameterInput[i] = gtk_entry_new();
           gtk_entry_set_text (GTK_ENTRY (listoftests[window][testcount[window]].parameterInput[i]),
             default_names[i]);
-          gtk_widget_set_usize (listoftests[window][testcount[window]].parameterInput[i], 50, 22);
+          gtk_widget_set_size_request (listoftests[window][testcount[window]].parameterInput[i], 50, 22);
 	  gtk_box_pack_start (GTK_BOX (md[window]->hbox),
             listoftests[window][testcount[window]].parameterInput[i], FALSE, FALSE, 0);
           gtk_widget_set_sensitive (
@@ -675,9 +675,9 @@ add_test (gint   window,
 	  gtk_widget_show (listoftests[window][testcount[window]].parameterInput[i]);
         }
       g_signal_connect (GTK_OBJECT (listoftests[window][testcount[window]].toggleButton),
-                          "toggled", 
-                          GTK_SIGNAL_FUNC(_toggle_selectedcb),
-                          (gpointer)&(listoftests[window][testcount[window]]));
+                        "toggled",
+                        G_CALLBACK (_toggle_selectedcb),
+                        (gpointer)&(listoftests[window][testcount[window]]));
       gtk_widget_show (listoftests[window][testcount[window]].toggleButton);
       gtk_widget_show (md[window]->hbox);
       gtk_widget_show (md[window]->vbox);

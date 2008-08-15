@@ -89,7 +89,7 @@ _check_object (AtkObject *obj)
     
       child = atk_object_ref_accessible_child (parent, 1);
       doing_action = TRUE;
-      gtk_timeout_add (5000, _do_menu_item_action, child);
+      g_timeout_add (5000, _do_menu_item_action, child);
     }
   else
     {

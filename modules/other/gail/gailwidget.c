@@ -793,14 +793,14 @@ gail_widget_set_extents (AtkComponent   *component,
           else
             {
               gtk_widget_set_uposition (widget, x_current, y_current);
-              gtk_widget_set_usize (widget, width, height);
+              gtk_widget_set_size_request (widget, width, height);
               return TRUE;
             }
         }
       else if (coord_type == ATK_XY_SCREEN)
         {  
           gtk_widget_set_uposition (widget, x, y);
-          gtk_widget_set_usize (widget, width, height);
+          gtk_widget_set_size_request (widget, width, height);
           return TRUE;
         }
     }
@@ -865,7 +865,7 @@ gail_widget_set_size (AtkComponent   *component,
 
   if (GTK_WIDGET_TOPLEVEL (widget))
     {
-      gtk_widget_set_usize (widget, width, height);
+      gtk_widget_set_size_request (widget, width, height);
       return TRUE;
     }
   else

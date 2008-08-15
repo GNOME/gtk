@@ -52,7 +52,9 @@ libgailutil_la_CPPFLAGS = \
 	-I$(top_builddir)/gdk	\
 	-I$(top_srcdir)/gtk	\
 	-I$(top_builddir)/gtk	\
-	$(AM_CPPFLAGS)
+	$(AM_CPPFLAGS) 		\
+	-DGDK_DISABLE_DEPRECATED\
+	-DGTK_DISABLE_DEPRECATED
 
 libgailutil_la_CFLAGS = \
 	$(GTK_DEP_CFLAGS)	\

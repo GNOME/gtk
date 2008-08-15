@@ -760,9 +760,9 @@ void test_choice_gui(AtkObject **obj)
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(window), "Test to run");
 
-  g_signal_connect(GTK_OBJECT(window), "destroy",
-  GTK_SIGNAL_FUNC(destroy), &window);
- 
+  g_signal_connect(GTK_OBJECT (window), "destroy",
+                   G_CALLBACK (destroy), &window);
+
   vbox = gtk_vbox_new(TRUE, 0);
   gtk_box_set_spacing(GTK_BOX(vbox), 10);
 
@@ -818,7 +818,7 @@ void test_choice_gui(AtkObject **obj)
     GTK_BUTTONBOX_SPREAD);
   gtk_box_pack_end (GTK_BOX (hbuttonbox), GTK_WIDGET (button), TRUE, TRUE, 0);
   gtk_box_pack_end (GTK_BOX (vbox), hbuttonbox, TRUE, TRUE, 0);
-  g_signal_connect(GTK_OBJECT(button), "clicked", GTK_SIGNAL_FUNC(choicecb), obj);
+  g_signal_connect(GTK_OBJECT(button), "clicked", G_CALLBACK (choicecb), obj);
 
   gtk_container_add(GTK_CONTAINER(window), vbox);
   gtk_widget_show(vbox);

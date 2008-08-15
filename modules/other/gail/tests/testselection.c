@@ -138,7 +138,7 @@ _do_selection (AtkObject *obj)
     g_print ("Unexpected selection: %d, expected 0\n", i);
   }
   atk_selection_add_selection (ATK_SELECTION (selection_obj), 1);
-  gtk_timeout_add (2000, _finish_selection, selection_obj);
+  g_timeout_add (2000, _finish_selection, selection_obj);
   g_print ("*** End _do_selection ***\n");
 } 
 

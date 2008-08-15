@@ -71,8 +71,7 @@ gail_boolean_cell_new (void)
   boolean_cell = GAIL_BOOLEAN_CELL(object);
 
   cell->renderer = gtk_cell_renderer_toggle_new ();
-  g_object_ref (cell->renderer);
-  gtk_object_sink (GTK_OBJECT (cell->renderer));
+  g_object_ref_sink (cell->renderer);
   boolean_cell->cell_value = FALSE;
   return atk_object;
 }

@@ -1,3 +1,23 @@
+2008-08-15  Michael Natterer  <mitch@imendio.com>
+
+	* gailbooleancell.c
+	* gailimagecell.c
+	* gailtextcell.c
+	* gailwidget.c
+	* tests/Makefile.am
+	* tests/testbutton.c
+	* tests/testimage.c
+	* tests/testlib.c
+	* tests/testmenuitem.c
+	* tests/testnotebook.c
+	* tests/testoptionmenu.c
+	* tests/testpaned.c
+	* tests/testselection.c
+	* tests/testtable.c: some undeprecation.
+
+	* libgail-util/Makefile.am. build with GDK_DISABLE_DEPRECATED
+	and GTK_DISABLE_DEPRECATED.
+
 2008-08-11  Michael Natterer  <mitch@imendio.com>
 
 	* tests/ferret.c

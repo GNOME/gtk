@@ -107,7 +107,7 @@ static void _check_paned (AtkObject *obj)
       }
       atk_object_connect_property_change_handler (paned_obj,
                    (AtkPropertyChangeHandler*) _property_change_handler);
-      gtk_timeout_add (2000, _test_paned, paned_obj);
+      g_timeout_add (2000, _test_paned, paned_obj);
     }
 
     return;

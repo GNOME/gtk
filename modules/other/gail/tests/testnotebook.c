@@ -154,7 +154,7 @@ _do_selection (AtkObject *obj)
     }
   }
   g_print ("*** End _do_selection ***\n");
-  gtk_timeout_add (5000, _remove_page, selection_obj);
+  g_timeout_add (5000, _remove_page, selection_obj);
 } 
 
 static gint _remove_page (gpointer data)

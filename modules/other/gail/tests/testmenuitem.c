@@ -92,9 +92,9 @@ _check_object (AtkObject *obj)
       else
         return;
       if (g_getenv ("TEST_ACCESSIBLE_AUTO"))
-      {
-        gtk_idle_add (_do_menu_item_action, obj);
-      }
+        {
+          g_idle_add (_do_menu_item_action, obj);
+        }
     }
   }
   else
