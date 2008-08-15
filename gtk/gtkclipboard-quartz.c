@@ -1099,6 +1099,23 @@ gtk_clipboard_wait_is_image_available (GtkClipboard *clipboard)
   return result;
 }
 
+gboolean
+gtk_clipboard_wait_is_uris_available (GtkClipboard *clipboard)
+{
+  GtkSelectionData *data;
+  gboolean result = FALSE;
+
+  data = gtk_clipboard_wait_for_contents (clipboard, 
+					  gdk_atom_intern_static_string ("TARGETS"));
+  if (data)
+    {
+      result = gtk_selection_data_targets_include_uri (data);
+      gtk_selection_data_free (data);
+    }
+
+  return result;
+}
+
 /**
  * gtk_clipboard_wait_for_targets
  * @clipboard: a #GtkClipboard

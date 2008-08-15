@@ -1,3 +1,8 @@
+2008-08-15  Richard Hult  <richard@imendio.com>
+
+	* gtk/gtkclipboard-quartz.c (gtk_clipboard_wait_is_uris_available):
+	Add another missing symbol.
+
 2008-08-15  Behdad Esfahbod  <behdad@gnome.org>
 
 	Bug 547680 – fontconfig monitoring can crash apps
