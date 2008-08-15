@@ -481,15 +481,15 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     GTK_PARAM_READABLE));
 
   /**
-   * GtkButton::gtk-button-images:
-   * 
-   * If stock icon in buttons should be shown at all.
-   * 
+   * GtkSettings::gtk-button-images:
+   *
+   * Whether images should be shown on buttons
+   *
    * Since: 2.4
    */
   gtk_settings_install_property (g_param_spec_boolean ("gtk-button-images",
 						       P_("Show button images"),
-						       P_("Whether stock icons should be shown in buttons"),
+						       P_("Whether images should be shown on buttons"),
 						       TRUE,
 						       GTK_PARAM_READWRITE));
 
