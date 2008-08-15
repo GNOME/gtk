@@ -23,6 +23,7 @@
  * if advised of the possibility of such damage.
  */
 
+#include <glib/gstdio.h>
 #include <gdk/gdk.h>
 #ifdef CAIRO_HAS_QUARTZ_SURFACE
 #include <cairo-quartz.h>
@@ -106,18 +107,14 @@ main (int   argc,
 		g_error ("Eeek! Error loading \"cairosurface.png\"");
 	}
 
-	g_return_val_if_fail (gdk_pixbuf_get_width (pbuf_platform) ==
-			      gdk_pixbuf_get_width (pbuf_imagesrf),
-			      1);
-	g_return_val_if_fail (gdk_pixbuf_get_height (pbuf_platform) ==
-			      gdk_pixbuf_get_height (pbuf_imagesrf),
-			      1);
-	g_return_val_if_fail (gdk_pixbuf_get_rowstride (pbuf_platform) ==
-			      gdk_pixbuf_get_rowstride (pbuf_imagesrf),
-			      1);
-	g_return_val_if_fail (gdk_pixbuf_get_n_channels (pbuf_platform) ==
-			      gdk_pixbuf_get_n_channels (pbuf_imagesrf),
-			      1);
+	g_assert (gdk_pixbuf_get_width (pbuf_platform) ==
+		  gdk_pixbuf_get_width (pbuf_imagesrf));
+	g_assert (gdk_pixbuf_get_height (pbuf_platform) ==
+		  gdk_pixbuf_get_height (pbuf_imagesrf));
+	g_assert (gdk_pixbuf_get_rowstride (pbuf_platform) ==
+		  gdk_pixbuf_get_rowstride (pbuf_imagesrf));
+	g_assert (gdk_pixbuf_get_n_channels (pbuf_platform) ==
+		  gdk_pixbuf_get_n_channels (pbuf_imagesrf));
 
 	data_platform = gdk_pixbuf_get_pixels (pbuf_platform);
 	data_imagesrf = gdk_pixbuf_get_pixels (pbuf_imagesrf);
@@ -127,7 +124,7 @@ main (int   argc,
 			g_warning ("Eeek! Images are differing at byte %d", i);
 			g_object_unref (pbuf_platform);
 			g_object_unref (pbuf_imagesrf);
-			return 1;
+			g_assert_not_reached ();
 		}
 	}
 

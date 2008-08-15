@@ -1,3 +1,11 @@
+2008-08-15  Sven Herzberg  <sven@imendio.com>
+
+	Prepare for using the g_test_*() API
+	reviewed by: Richard Hult
+
+	* gdk/tests/check-gdk-cairo.c: use assertions instead of returning an
+	error code
+
 2008-08-15  Claudio Saavedra  <csaavedra@igalia.com>
 
 	Bug 547944 – Self-reference in gtk_page_setup_load_file's docs
