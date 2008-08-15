@@ -255,6 +255,17 @@ How to compile GTK+ itself
           drawing.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <ulink url="http://www.freedesktop.org/wiki/Software/shared-mime-info">shared-mime-info</ulink> 
+          package is not a hard dependency of GTK+, but it contains definitions 
+          for mime types that are used by GIO and, indirectly, by GTK+. 
+          gdk-pixbuf will use GIO for mime type detection if possible. For this 
+          to work, shared-mime-info needs to be installed and 
+          <envvar>XDG_DATA_DIRS</envvar> set accordingly at configure time. 
+          Otherwise, gdk-pixbuf falls back to its built-in mime type detection.
+        </para>
+      </listitem>
     </itemizedlist>
   </refsect1>
   <refsect1 id="building">

@@ -48,6 +48,11 @@ Release notes for 2.14
   to GTK_SENSITIVITY_ON, so that the button is always sensitive or
   GTK_SENSITIVITY_OFF to make it insensitive respectively.
 
+* gdk-pixbuf will use GIO for mime type detection if possible. For
+  this to work, shared-mime-info needs to be installed and XDG_DATA_DIRS
+  set accordingly at configure time. Otherwise, gdk-pixbuf falls
+  back to its built-in sniffing implementation.
+
 Release notes for 2.12
 ======================
 

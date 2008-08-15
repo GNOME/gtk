@@ -1,3 +1,8 @@
+2008-08-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/building.sgml: Add a note about shared-mime-info and 
+	XDG_DATA_DIRS.
+
 2008-08-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Remove useless getters

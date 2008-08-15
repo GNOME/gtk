@@ -1,3 +1,10 @@
+2008-08-15  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 547655 – gio_can_sniff configure test can fail if not installed
+	with prefix {/usr,/usr/local} and XDG_DATA_DIRS env not set
+
+	* README.in: Add a note about shared-mime-info and XDG_DATA_DIRS.
+
 2008-08-15  Christian Dywan  <christian@imendio.com>
 
 	Bug 547846 – gtktestutils functions lack Since: tags
