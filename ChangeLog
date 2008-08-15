@@ -1,5 +1,13 @@
 2008-08-15  Sven Herzberg  <sven@imendio.com>
 
+	Use the g_test_*() API for this test
+	reviewed by: Richard Hult
+
+	* gdk/tests/check-gdk-cairo.c: use the g_test_*() API to permit adding
+	new tests
+
+2008-08-15  Sven Herzberg  <sven@imendio.com>
+
 	Prepare for using the g_test_*() API
 	reviewed by: Richard Hult
 

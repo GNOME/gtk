@@ -46,9 +46,8 @@ test (cairo_t* cr)
 	cairo_stroke (cr);
 }
 
-int
-main (int   argc,
-      char**argv)
+static void
+test_pixmap_orientation (void)
 {
 	GdkPixmap* pixmap;
 	GdkPixbuf* pixbuf;
@@ -60,8 +59,6 @@ main (int   argc,
 	guchar* data_platform;
 	guchar* data_imagesrf;
 	guint i;
-
-	gdk_init (&argc, &argv);
 
 	/* create "platform.png" via GdkPixmap */
 	pixmap = gdk_pixmap_new (NULL /* drawable */, 100 /* w */, 80 /* h */, 24 /* d */);
@@ -133,7 +130,18 @@ main (int   argc,
 
 	g_unlink ("gdksurface.png");
 	g_unlink ("cairosurface.png");
+}
 
-	return 0;
+int
+main (int   argc,
+      char**argv)
+{
+	g_test_init (&argc, &argv, NULL);
+	gdk_init (&argc, &argv);
+
+	g_test_add_func ("/gdk/pixmap/orientation",
+			 test_pixmap_orientation);
+
+	return g_test_run ();
 }
 
