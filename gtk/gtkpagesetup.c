@@ -479,7 +479,7 @@ gtk_page_setup_get_page_height (GtkPageSetup *setup,
  * @error: return location for an error, or %NULL
  *
  * Reads the page setup from the file @file_name.
- * See gtk_page_setup_load_file().
+ * See gtk_page_setup_to_file().
  *
  * Return value: %TRUE on success
  *

@@ -1,3 +1,10 @@
+2008-08-15  Claudio Saavedra  <csaavedra@igalia.com>
+
+	Bug 547944 – Self-reference in gtk_page_setup_load_file's docs
+
+	* gtk/gtkpagesetup.c: Fix the reference in gtk_page_setup_load_file()
+	documentation.
+
 2008-08-15  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 547655 – gio_can_sniff configure test can fail if not installed
