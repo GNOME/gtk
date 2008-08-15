@@ -3,7 +3,7 @@
 	Bug 547944 – Self-reference in gtk_page_setup_load_file's docs
 
 	* gtk/gtkpagesetup.c: Fix the reference in gtk_page_setup_load_file()
-	documentation.
+	documentation. Pointed out by Torsten Schoenfeld.
 
 2008-08-15  Matthias Clasen  <mclasen@redhat.com>
 
