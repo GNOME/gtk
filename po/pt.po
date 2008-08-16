@@ -630,8 +630,8 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"Qualidade JPEG tem de ser um valor entre 0 e 100; incapaz de parsear valor '%"
-"s'."
+"Qualidade JPEG tem de ser um valor entre 0 e 100; incapaz de processar o "
+"valor '%s'."
 
 #: ../gdk-pixbuf/io-jpeg.c:1148 ../gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
@@ -755,7 +755,7 @@ msgid ""
 "be parsed."
 msgstr ""
 "O nível de compressão PNG tem de ser um valor entre 0 e 9; incapaz de "
-"parsear o valor '%s'."
+"processar o valor '%s'."
 
 #: ../gdk-pixbuf/io-png.c:858 ../gdk-pixbuf/io-gdip-png.c:68
 #, c-format
@@ -4530,7 +4530,7 @@ msgstr "Elevada"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Medium"
-msgstr "Média"
+msgstr "Media"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Low"
