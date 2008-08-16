@@ -4213,7 +4213,7 @@ remove_redirect_from_children (GdkWindowObject   *private,
  * gdk_window_remove_redirection:
  * @window: a #GdkWindow
  *
- * Removes and active redirection started by
+ * Removes any active redirection started by
  * gdk_window_redirect_to_drawable().
  *
  * Since: 2.14
@@ -4267,7 +4267,7 @@ apply_redirect_to_children (GdkWindowObject   *private,
  * @width: width of redirection
  * @height: height of redirection
  *
- * Redirects drawing into @windows so that drawing to the
+ * Redirects drawing into @window so that drawing to the
  * window in the rectangle specified by @src_x, @src_y,
  * @width and @height is also drawn into @drawable at
  * @dest_x, @dest_y.
@@ -4278,10 +4278,6 @@ apply_redirect_to_children (GdkWindowObject   *private,
  *
  * Redirection is active until gdk_window_remove_redirection()
  * is called.
- *
- * This function should not be used on windows created by
- * gdk_window_new_offscreen(), as that is implemented using
- * redirection.
  *
  * Since: 2.14.
  **/

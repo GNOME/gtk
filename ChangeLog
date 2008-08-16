@@ -1,3 +1,8 @@
+2008-08-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* gdk/gdkwindow.c: Fix small issues in the documentation of
+	gdk_window_remove_redirection and gdk_window_redirect_to_drawable.
+
 2008-08-15  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkdrawable-quartz.c (gdk_quartz_draw_drawable): Some
