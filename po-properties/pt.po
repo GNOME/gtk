@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-09 09:27+0100\n"
-"PO-Revision-Date: 2008-08-09 09:30+0000\n"
+"POT-Creation-Date: 2008-08-17 00:03+0100\n"
+"PO-Revision-Date: 2008-08-17 00:05+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -927,8 +927,8 @@ msgid "Show button images"
 msgstr "Apresentar imagens dos botões"
 
 #: ../gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Se os ícones base deverão ou não ser apresentados nos botões"
+msgid "Whether images should be shown on buttons"
+msgstr "Se as images deverão ou não ser apresentadas nos botões"
 
 #: ../gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2011,7 +2011,8 @@ msgstr "Sensibilidade do Botão"
 
 #: ../gtk/gtkcombobox.c:840
 msgid "Whether the dropdown button is sensitive when the model is empty"
-msgstr "Se o botão de caixa de lista é ou não sensível quando o modelo está vazio"
+msgstr ""
+"Se o botão de caixa de lista é ou não sensível quando o modelo está vazio"
 
 #: ../gtk/gtkcombobox.c:847
 msgid "Appears as list"
@@ -3554,6 +3555,7 @@ msgstr "ID de Grupo para arrastar e largar de separadores"
 
 #: ../gtk/gtknotebook.c:668 ../gtk/gtkradioaction.c:128
 #: ../gtk/gtkradiobutton.c:82 ../gtk/gtkradiomenuitem.c:342
+#: ../gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Grupo"
 
@@ -3666,6 +3668,14 @@ msgstr "Curvatura dos separadores"
 #: ../gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "Tamanho da curvatura dos separadores"
+
+#: ../gtk/gtknotebook.c:834
+msgid "Arrow spacing"
+msgstr "Espaçamento da seta"
+
+#: ../gtk/gtknotebook.c:835
+msgid "Scroll arrow spacing"
+msgstr "Espaçamento da seta da barra de rolamento"
 
 #: ../gtk/gtkobject.c:370
 msgid "User Data"
@@ -4200,6 +4210,10 @@ msgstr "O botão exclusivo a cujo grupo este widget pertence."
 #: ../gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "O botão exclusivo a cujo grupo este widget pertence."
+
+#: ../gtk/gtkradiotoolbutton.c:66
+msgid "The radio tool button whose group this button belongs to."
+msgstr "O botão exclusivo a cujo grupo este botão pertence."
 
 #: ../gtk/gtkrange.c:337
 msgid "Update policy"
@@ -6954,6 +6968,9 @@ msgstr "Estilo de estado do IM"
 #: ../modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Como desenhar a barra de estados do método de introdução"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Se os ícones base deverão ou não ser apresentados nos botões"
 
 #~ msgid "Cancelled"
 #~ msgstr "Cancelada"
