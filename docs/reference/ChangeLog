@@ -1,3 +1,8 @@
+2008-08-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* gdk/gdk-sections.txt: Don't mention GdkWindowRedirect in the
+	docs; it's opaque and not used in any public API.
+
 2008-08-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/building.sgml: Add a note about shared-mime-info and 

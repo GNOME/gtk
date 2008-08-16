@@ -767,7 +767,6 @@ GdkPointerHooks
 gdk_set_pointer_hooks
 
 <SUBSECTION>
-GdkWindowRedirect
 gdk_window_redirect_to_drawable
 gdk_window_remove_redirection
 
