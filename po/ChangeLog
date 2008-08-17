@@ -1,3 +1,7 @@
+2008-08-17  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
+
+	* ru.po: Updated Russian translation by Anton Shestakov.
+
 2008-08-17  Yair Hershkoviz  <yairhr@gmail.com>
 
 	* he.po: Updated Hebrew translation.
@@ -17,7 +21,6 @@
 2008-08-14  Sandeep Shedmake  <sshedmak@redhat.com>  
 
 	* mr.po: Adding Marathi Translations for module 'gtk+/po'
-
 
 2008-08-14  Sandeep Shedmake  <sshedmak@redhat.com>  
 
