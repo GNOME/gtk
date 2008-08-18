@@ -596,6 +596,7 @@ class GtkBuilderConverter(object):
                                            template='textbuffer',
                                            properties=dict(text=data))
         prop.childNodes[0].data = tbuffer.getAttribute('id')
+        prop.setAttribute('name', 'buffer')
 
     def _packing_prop_to_child_attr(self, node, prop_name, prop_val,
                                    attr_val=None):
