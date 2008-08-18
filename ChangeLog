@@ -1,3 +1,13 @@
+2008-08-19  Mathias Hasselmann  <mathias@openismus.com>
+
+	Bug 541600 – GtkCalendar segfault for certain values of detail-with-chars
+
+	* gtk/gtkcalendar.c (gtk_calendar_class_init()): Limit the "year"
+	  property to G_MAXINT >> 9, instead of G_MAXINT >> 8: year_to_days()
+	  multiplies the year property with 365 and returns the result as
+	  glong. Therefore ceil(log(365, 2)) = 9 bits must be available,
+	  not just 8 bits.
+
 2008-08-18  Björn Lindqvist  <bjourne@gmail.com>
 
 	Bug 541315 – Segfault when selecting a GtkMenuItem with submenu
