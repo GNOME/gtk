@@ -275,7 +275,7 @@ initialize_size_group_quarks (void)
   if (!size_groups_quark)
     {
       size_groups_quark = g_quark_from_static_string (size_groups_tag);
-      visited_quark = g_quark_from_string (visited_tag);
+      visited_quark = g_quark_from_static_string (visited_tag);
     }
 }
 

@@ -1,3 +1,11 @@
+2008-08-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksizegroup.c: Use g_quark_from_static_string() where possible.
+
+2008-08-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2008-08-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* gdk/gdkwindow.c: Fix small issues in the documentation of
