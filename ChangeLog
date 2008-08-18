@@ -1,3 +1,11 @@
+2008-08-18  Björn Lindqvist  <bjourne@gmail.com>
+
+	Bug 541315 – Segfault when selecting a GtkMenuItem with submenu
+	and no parent
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_real_popup_submenu): Ensure
+	that the menu item has a parent before popping it up.
+
 2008-08-18  Johan Dahlin  <johan@gnome.org>
 
 	Bug 548196 – gtk-builder-convert doesn't properly convert GtkTextView

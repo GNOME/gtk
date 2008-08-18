@@ -1137,7 +1137,7 @@ gtk_menu_item_real_popup_submenu (GtkWidget *widget,
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
 
-  if (GTK_WIDGET_IS_SENSITIVE (menu_item->submenu))
+  if (GTK_WIDGET_IS_SENSITIVE (menu_item->submenu) && widget->parent)
     {
       gboolean take_focus;
       GtkMenuPositionFunc menu_position_func;
