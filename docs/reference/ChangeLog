@@ -1,3 +1,9 @@
+2008-08-19  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* gtk/gtk-sections.txt: Move gtk_menu_set_monitor next to
+	gtk_menu_get_monitor.  Move gtk_menu_set_title next to
+	gtk_menu_get_title.
+
 2008-08-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* ==== Released 2.13.7 ===
