@@ -1,5 +1,7 @@
 2008-08-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version
+
 	* ==== Released 2.13.7 ===
 
 2008-08-19  Mathias Hasselmann  <mathias@openismus.com>
