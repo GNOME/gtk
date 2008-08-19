@@ -1,3 +1,46 @@
+Overview of Changes from GTK+ 2.13.6 to 2.13.7
+==============================================
+
+* Bugs fixed:
+ 545031 list of recently used files is created world-readable
+ 535573 Deadlock in gdkeventloop-quartz.c:poll_func()
+ 546771 Add writable property "visited" to GtkLinkButton
+ 546756 gnome-panel crashed with SIGSEGV in g_type_check_...
+ 547027 menus are broken
+ 544863 gtkquartz.h not included in released 2.13.5 package
+ 547211 Duplicated mnemonic
+ 547270 Make GtkHSV public
+ 546616 CUPS print backend uses 1.2 API without guards
+ 546754 2.13.6 update create rendering issue in the evo...
+ 546730 gtk_status_icon_get_gicon() should use a return...
+ 526234 make shift+ctrl+del delete till the end of line
+ 547456 gdk/x11/gdkscreen-x11.c : init_solaris_xinerama doesn't...
+ 547516 Add comments for translators in gtkprintbackendcups.c
+ 547673 Accessors for GtkFileSelection.font_entry and...
+ 547775 Documentation of gtk-button-images is not correct
+ 547846 gtktestutils functions lack Since: tags
+ 547655 gio_can_sniff configure test can fail...
+ 547944 Self-reference in gtk_page_setup_load_file's docs
+ 547680 fontconfig monitoring can crash apps
+ 546549 Better Type Checking
+ 532644 TIFF loader need to exclude CR2 files
+
+* Updated translations:
+ Arabic (ar)
+ Spanish (es)
+ Basque (eu)
+ Finnish (fi)
+ Galicican (gl)
+ Japanese (ja)
+ Kannada (kn)
+ Marathi (mr)
+ Norwegian bokmål (nb)
+ Portugese (pt)
+ Brazilian Portugese (pt_BR)
+ Swedish (sv)
+ Thai (th)
+
+
 Overview of Changes from GTK+ 2.13.5 to 2.13.6
 ==============================================
 
