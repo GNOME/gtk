@@ -1,3 +1,8 @@
+2008-08-19  Johan Dahlin  <johan@gnome.org>
+
+	* gtk/gtk-builder-convert (GtkBuilderConverter._parse): 
+	Remove the requres-version tag as well
+
 2008-08-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
