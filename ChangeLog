@@ -1,3 +1,11 @@
+2008-08-19  Björn Lindqvist  <bjourne@gmail.com>
+
+	Bug 548354 – Remove repeated code in gtk_cell_view_size_allocate
+
+	* gtk/gtkcellview.c (gtk_cell_view_size_allocate): Remove some
+	code duplication, no need for separate loops for GTK_PACK_START
+	and GTK_PACK_END.
+
 2008-08-19  Johan Dahlin  <johan@gnome.org>
 
 	* gtk/gtk-builder-convert (GtkBuilderConverter._parse): 
