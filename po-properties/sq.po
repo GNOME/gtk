@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2008-07-16 16:49+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -858,7 +858,7 @@ msgstr "Rreshtim horizontal për birin"
 msgid "Vertical alignment for child"
 msgstr "Rreshtim vertikal për birin"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Figura e widget"
 
@@ -945,8 +945,9 @@ msgid "Show button images"
 msgstr "Shfaq figurat e butonit"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Nëse duhen apo jo treguar ikonat rezervë në butonë"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Nëse duhen apo jo treguar figurat tek menutë"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2041,7 +2042,7 @@ msgstr "Madhësia e shigjetës"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Madhësia më e vogël e shigjetës në combo box"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2681,7 +2682,7 @@ msgstr "Drejtimi y i etiketës"
 msgid "The vertical alignment of the label"
 msgstr "Drejtimi vertikal i etiketës"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Veti e papëlqyeshme, përdorni shadow_type më mirë"
 
@@ -2699,24 +2700,24 @@ msgid "A widget to display in place of the usual frame label"
 msgstr ""
 "Një \"widget\" që do të shfaqet në vend të frame të zakonshme të etiketës"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Dukja e hijes që rrethon përmbajtësin"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Vendndodhja e dorezës"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Poziconi i dorezës relativ me widget bir"
 
 # (pofilter) brackets: translation has extra '(', ')'
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Snap (bllokimi) i kornizës"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -2724,11 +2725,11 @@ msgstr ""
 "Ana e kutisë së dorezës që vihet në vijë të drejtë me pikën e lidhjes për të "
 "fiksuar kutinë e dorezës"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Rregullo snap e kornizës"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2736,12 +2737,12 @@ msgstr ""
 "Tregon nëse duhet përdorur vlera e pronësisë snap_edge apo vlerën e derivuar "
 "nga handle_position"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 #, fuzzy
 msgid "Child Detached"
 msgstr "Bir"
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 #, fuzzy
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
@@ -2953,15 +2954,15 @@ msgstr "Lloji i memorizimit"
 msgid "The representation being used for image data"
 msgstr "Paraqitja që po përdoret për të dhënat e figurës"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Widget bir për t'u shfaqur krahas tekstit të menu"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Shfaq figurat e menusë"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Nëse duhen apo jo treguar figurat tek menutë"
 
@@ -3114,6 +3115,25 @@ msgstr "Gjerësia e skemës"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "Lartësia e skemës"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "Gjendja e shkëmbimit për butonin"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "I dukshëm"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Tregon nëse veprimi është i dukshëm."
 
 #: gtk/gtkmenu.c:503
 msgid "The currently selected menu item"
@@ -3590,7 +3610,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "ID e grupit për «drag and drop» e skedave"
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Grupi"
 
@@ -3704,6 +3724,16 @@ msgstr "Harku i skedës"
 #: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "Vlera e harkut të skedës"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Hapësira e shigjetës"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Hapësira e shtyllës së rrëshkitjes"
 
 #: gtk/gtkobject.c:370
 msgid "User Data"
@@ -4254,6 +4284,12 @@ msgstr "Pulsanti radio i grupit të cilit ky \"widget\" i përket."
 #: gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "Elementi i menu «radio» të grupit kujt widget i përket."
+
+# (pofilter) doublequoting: checks whether doublequoting is consistent between the two strings
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Pulsanti radio i grupit të cilit ky \"widget\" i përket."
 
 #: gtk/gtkrange.c:337
 msgid "Update policy"
@@ -7100,3 +7136,6 @@ msgstr "Gjendja e stilit IM"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Tregon si duhet shfaqur metod e input e panelit të gjendjes"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Nëse duhen apo jo treguar ikonat rezervë në butonë"

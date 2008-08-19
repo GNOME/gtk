@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2007-09-11 12:06+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -849,7 +849,7 @@ msgstr "Horizontale Ausrichtung des Kinds"
 msgid "Vertical alignment for child"
 msgstr "Vertikale Ausrichtung des Kinds"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Bild-Widget"
 
@@ -940,8 +940,9 @@ msgid "Show button images"
 msgstr "Knopfbilder anzeigen"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Sollen in Knöpfen Repertoire-Symbole angezeigt werden?"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Sollen in Menüs Bilder angezeigt werden?"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2052,7 +2053,7 @@ msgstr "Pfeilgröße"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Die Minimale Größe des Pfeils im Auswahlfeld"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2701,7 +2702,7 @@ msgstr "Y-Ausrichtung der Beschriftung"
 msgid "The vertical alignment of the label"
 msgstr "Die vertikale Ausrichtung der Beschriftung"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Veraltete Eigenschaft, verwenden Sie stattdessen shadow_type."
 
@@ -2718,23 +2719,23 @@ msgid "A widget to display in place of the usual frame label"
 msgstr ""
 "Ein Widget, das anstatt der üblichen Rahmenbeschriftung angezeigt werden soll"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Aussehen des Schattens, der den Container umgibt"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Griffposition"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Position des Griffs bezüglich des Kind-Widgets"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Einrastende Seite"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -2742,11 +2743,11 @@ msgstr ""
 "Die Seite der Griffbox, die in den Rastpunkt eingefädelt wird, um die "
 "Griffbox einzurasten"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Einrastende Seite einstellen"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2754,11 +2755,11 @@ msgstr ""
 "Soll der Wert der Eigenschaft »snap_edge« oder ein von »handle_position« "
 "abgeleiteter Wert verwendet werden?"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2968,15 +2969,15 @@ msgstr "Speicherform"
 msgid "The representation being used for image data"
 msgstr "Die für die Bilddaten verwendete Darstellung"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Das Kind-Widget, das neben dem Menütext erscheint"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Menübilder anzeigen"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Sollen in Menüs Bilder angezeigt werden?"
 
@@ -3123,6 +3124,25 @@ msgstr "Die Breite des Layouts"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "Die Höhe des Layouts"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "Der Schaltzustand des Knopfes"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Sichtbar"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Soll die Aktion sichtbar sein?"
 
 #: gtk/gtkmenu.c:503
 #, fuzzy
@@ -3599,7 +3619,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "Gruppen-ID für Reiter beim Drag&Drop"
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Gruppe"
 
@@ -3712,6 +3732,16 @@ msgstr "Reiterkrümmung"
 #: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "Die Größe der Reiterkrümmung"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Pfeilskalierung"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Abstand der Rollbalken"
 
 #: gtk/gtkobject.c:370
 msgid "User Data"
@@ -4255,6 +4285,11 @@ msgstr "Der Radioknopf, zu dessen Gruppe dieses Widget gehört."
 #: gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "Das Radio-Menüeintrag, zu dessen Gruppe dieses Widget gehört."
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Der Radioknopf, zu dessen Gruppe dieses Widget gehört."
 
 #: gtk/gtkrange.c:337
 msgid "Update policy"
@@ -7062,6 +7097,9 @@ msgstr "EM-Statusstil"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Wie die Eingabemethoden-Statusleiste gezeichnet werden soll"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Sollen in Knöpfen Repertoire-Symbole angezeigt werden?"
 
 #~ msgid "Cancelled"
 #~ msgstr "Abgebrochen"

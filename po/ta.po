@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2006-09-12 21:04-0700\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -966,7 +966,7 @@ msgstr "TIFF தரவினை எழுத முடியவில்லை"
 msgid "Couldn't write to TIFF file"
 msgstr "TIFF கோப்புக்கு எழுத முடியவில்லை"
 
-#: gdk-pixbuf/io-tiff.c:814
+#: gdk-pixbuf/io-tiff.c:815
 msgid "The TIFF image format"
 msgstr "TIFF உருவ வகை"
 
@@ -1154,7 +1154,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2106
+#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "அங்கீகாரம்"
 
@@ -1168,32 +1168,32 @@ msgid "C_redits"
 msgstr "சன்மானம் (_r)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:513
+#: gtk/gtkaboutdialog.c:514
 msgid "_License"
 msgstr "அங்கீகாரம் (_L)"
 
-#: gtk/gtkaboutdialog.c:742
+#: gtk/gtkaboutdialog.c:744
 #, c-format
 msgid "About %s"
 msgstr "%s பற்றி"
 
-#: gtk/gtkaboutdialog.c:2030
+#: gtk/gtkaboutdialog.c:2032
 msgid "Credits"
 msgstr "சன்மானங்கள்"
 
-#: gtk/gtkaboutdialog.c:2059
+#: gtk/gtkaboutdialog.c:2061
 msgid "Written by"
 msgstr "எழுதியது"
 
-#: gtk/gtkaboutdialog.c:2062
+#: gtk/gtkaboutdialog.c:2064
 msgid "Documented by"
 msgstr "ஆவணமாக்கம்"
 
-#: gtk/gtkaboutdialog.c:2074
+#: gtk/gtkaboutdialog.c:2076
 msgid "Translated by"
 msgstr "மொழிபெயர்ப்பு"
 
-#: gtk/gtkaboutdialog.c:2078
+#: gtk/gtkaboutdialog.c:2080
 msgid "Artwork by"
 msgstr "கலை வேலை"
 
@@ -1236,7 +1236,7 @@ msgstr "Alt"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:679
+#: gtk/gtkaccellabel.c:678
 msgid "keyboard label|Super"
 msgstr "Super"
 
@@ -1246,7 +1246,7 @@ msgstr "Super"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:693
+#: gtk/gtkaccellabel.c:692
 msgid "keyboard label|Hyper"
 msgstr "Hyper"
 
@@ -1256,17 +1256,17 @@ msgstr "Hyper"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:708
+#: gtk/gtkaccellabel.c:707
 msgid "keyboard label|Meta"
 msgstr "Meta"
 
 #. do not translate the part before the |
-#: gtk/gtkaccellabel.c:726
+#: gtk/gtkaccellabel.c:725
 msgid "keyboard label|Space"
 msgstr "இடைவெளி"
 
 #. do not translate the part before the |
-#: gtk/gtkaccellabel.c:730
+#: gtk/gtkaccellabel.c:729
 msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
@@ -1314,7 +1314,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1797
+#: gtk/gtkcalendar.c:1796
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1329,7 +1329,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1828 gtk/gtkcalendar.c:2489
+#: gtk/gtkcalendar.c:1827 gtk/gtkcalendar.c:2488
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "நாள்காட்டி:நாள்:தசமங்கள்|%d"
@@ -1345,7 +1345,7 @@ msgstr "நாள்காட்டி:நாள்:தசமங்கள்|%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1860 gtk/gtkcalendar.c:2351
+#: gtk/gtkcalendar.c:1859 gtk/gtkcalendar.c:2350
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "நாள்காட்டி:வாரம்:தசமம்|%d"
@@ -1361,7 +1361,7 @@ msgstr "நாள்காட்டி:வாரம்:தசமம்|%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2141
+#: gtk/gtkcalendar.c:2140
 msgid "calendar year format|%Y"
 msgstr "நாள்காட்டி வருட வடிவம்|%Y"
 
@@ -1487,7 +1487,7 @@ msgstr "நிறத்தட்டு: (_P)"
 msgid "Color Wheel"
 msgstr "நிறச் சக்கரம்"
 
-#: gtk/gtkcolorsel.c:980
+#: gtk/gtkcolorsel.c:976
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1497,7 +1497,7 @@ msgstr ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 
-#: gtk/gtkcolorsel.c:984
+#: gtk/gtkcolorsel.c:980
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1505,11 +1505,11 @@ msgstr ""
 "தேர்திருக்கும் வண்ணம். எதிர்காலத்தில் பயண்படுத்துவதற்கு, இந்த வண்ணத்தை இழுத்து வண்ணத் தட்டில் "
 "போடவும்."
 
-#: gtk/gtkcolorsel.c:1369
+#: gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
 msgstr "_வண்ணத்தை இங்கு சேமி"
 
-#: gtk/gtkcolorsel.c:1574
+#: gtk/gtkcolorsel.c:1568
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1521,11 +1521,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "வண்ணம் தேர்ந்தெடுத்தல்"
 
-#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7654
+#: gtk/gtkentry.c:5375 gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "உள்ளீட்பு _முறைகள்"
 
-#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7668
+#: gtk/gtkentry.c:5389 gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "யூனிகோட் கட்டுப்பாட்டு வரியுரு _சொருகவும்"
 
@@ -1541,7 +1541,7 @@ msgstr "கணிமேசை"
 msgid "(None)"
 msgstr "(ஒன்றுமில்லை)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2011
 msgid "Other..."
 msgstr "பிற..."
 
@@ -2021,7 +2021,7 @@ msgstr "அளவு:"
 msgid "_Preview:"
 msgstr "_முன்காட்சி"
 
-#: gtk/gtkfontsel.c:1580
+#: gtk/gtkfontsel.c:1542
 msgid "Font Selection"
 msgstr "எழுத்துவகை தேர்வு"
 
@@ -2059,7 +2059,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "திட்டத்தில் சின்னம் '%s' இல்லை"
 
-#: gtk/gtkicontheme.c:3052
+#: gtk/gtkicontheme.c:3058
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "TIFF உருவத்தைத் ஏற்ற முடியவில்லை"
@@ -2152,19 +2152,11 @@ msgstr "(தெரியாதது)"
 msgid "Cl_ear"
 msgstr "துடை (_e)"
 
-#: gtk/gtklinkbutton.c:144
-msgid "URI"
-msgstr "URI"
-
-#: gtk/gtklinkbutton.c:145
-msgid "The URI bound to this button"
-msgstr "இந்தப் பொத்தானுக்கு URI இணை"
-
-#: gtk/gtklinkbutton.c:402
+#: gtk/gtklinkbutton.c:427
 msgid "Copy URL"
 msgstr "URLஐ நகலெடு"
 
-#: gtk/gtklinkbutton.c:542
+#: gtk/gtklinkbutton.c:565
 msgid "Invalid URI"
 msgstr "தவறான URI"
 
@@ -2244,26 +2236,18 @@ msgid "_Password:"
 msgstr "அழுத்தம் (_P)"
 
 #: gtk/gtkmountoperation.c:590
-msgid "_Forget password immediately"
+msgid "Forget password _immediately"
 msgstr ""
 
 #: gtk/gtkmountoperation.c:598
-msgid "_Remember password until you logout"
+msgid "Remember password until you _logout"
 msgstr ""
 
 #: gtk/gtkmountoperation.c:606
-msgid "_Remember forever"
+msgid "Remember _forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:834
-msgid "Arrow spacing"
-msgstr "அம்புக்குறி இடைவெளி"
-
-#: gtk/gtknotebook.c:835
-msgid "Scroll arrow spacing"
-msgstr "உருள் அம்புக்குறி இடைவெளி"
-
-#: gtk/gtknotebook.c:4425 gtk/gtknotebook.c:6931
+#: gtk/gtknotebook.c:4424 gtk/gtknotebook.c:6930
 #, c-format
 msgid "Page %u"
 msgstr "பக்கம் %u"
@@ -2329,7 +2313,7 @@ msgstr "தாள் அளவு: (_P)"
 msgid "_Orientation:"
 msgstr "திசையமைப்பு: (_O)"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2398
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2397
 msgid "Page Setup"
 msgstr "பக்க அமைவு"
 
@@ -2386,7 +2370,7 @@ msgstr ""
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1464
+#: gtk/gtkpathbar.c:1472
 #, fuzzy
 msgid "File System Root"
 msgstr "கோப்பு அமைப்பு"
@@ -2500,8 +2484,9 @@ msgstr "இணைப்பில்லா நிலையில் அச்ச�
 msgid "Out of paper"
 msgstr "தாள் வெளியே உள்ளது"
 
+#. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1373
+#: modules/printbackends/cups/gtkprintbackendcups.c:1375
 msgid "Paused"
 msgstr "இடை நிறுத்தப்பட்டது"
 
@@ -2548,190 +2533,182 @@ msgstr "PrintDlgExஐ தவறான கையாளுதல்"
 msgid "Unspecified error"
 msgstr "குறிப்பிடப்படாத பிழை"
 
-#: gtk/gtkprintunixdialog.c:1717
+#: gtk/gtkprintunixdialog.c:1716
 msgid "Printer"
 msgstr "அச்சடிப்பி"
 
-#: gtk/gtkprintunixdialog.c:1726
+#: gtk/gtkprintunixdialog.c:1725
 msgid "Location"
 msgstr "இடம்"
 
-#: gtk/gtkprintunixdialog.c:1736
+#: gtk/gtkprintunixdialog.c:1735
 msgid "Status"
 msgstr "நிலை"
 
-#: gtk/gtkprintunixdialog.c:1759
+#: gtk/gtkprintunixdialog.c:1758
 #, fuzzy
 msgid "Range"
 msgstr "வரையறை: (_n)"
 
-#: gtk/gtkprintunixdialog.c:1763
+#: gtk/gtkprintunixdialog.c:1762
 #, fuzzy
 msgid "_All Pages"
 msgstr "அனைத்து தாள்கள்"
 
-#: gtk/gtkprintunixdialog.c:1770
+#: gtk/gtkprintunixdialog.c:1769
 #, fuzzy
 msgid "C_urrent Page"
 msgstr "நடப்பு (_u)"
 
-#: gtk/gtkprintunixdialog.c:1779
+#: gtk/gtkprintunixdialog.c:1778
 #, fuzzy
 msgid "Pag_es:"
 msgstr "இடங்கள்"
 
-#: gtk/gtkprintunixdialog.c:1780
+#: gtk/gtkprintunixdialog.c:1779
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1799
+#: gtk/gtkprintunixdialog.c:1798
 msgid "Copies"
 msgstr "நகல்கள்"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1804
+#: gtk/gtkprintunixdialog.c:1803
 msgid "Copie_s:"
 msgstr "நகல்கள்: (_s)"
 
-#: gtk/gtkprintunixdialog.c:1822
+#: gtk/gtkprintunixdialog.c:1821
 msgid "C_ollate"
 msgstr "அடுக்கு (_o)"
 
-#: gtk/gtkprintunixdialog.c:1830
+#: gtk/gtkprintunixdialog.c:1829
 msgid "_Reverse"
 msgstr "பின்னோக்கு (_R)"
 
-#: gtk/gtkprintunixdialog.c:1850
+#: gtk/gtkprintunixdialog.c:1849
 msgid "General"
 msgstr "பொது"
 
-#: gtk/gtkprintunixdialog.c:2253
+#: gtk/gtkprintunixdialog.c:2252
 msgid "Layout"
 msgstr "அமைப்பு"
 
-#: gtk/gtkprintunixdialog.c:2257
+#: gtk/gtkprintunixdialog.c:2256
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "தாளுக்கான பக்கங்கள்: (_s)"
 
-#: gtk/gtkprintunixdialog.c:2273
+#: gtk/gtkprintunixdialog.c:2272
 msgid "T_wo-sided:"
 msgstr "இரட்டை பக்கங்கள்: (_w)"
 
-#: gtk/gtkprintunixdialog.c:2288
+#: gtk/gtkprintunixdialog.c:2287
 msgid "_Only print:"
 msgstr "அச்சிடுதல் மட்டும்: (_O)"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2303
+#: gtk/gtkprintunixdialog.c:2302
 msgid "All sheets"
 msgstr "அனைத்து தாள்கள்"
 
-#: gtk/gtkprintunixdialog.c:2304
+#: gtk/gtkprintunixdialog.c:2303
 msgid "Even sheets"
 msgstr "இரட்டை தாள்கள்"
 
-#: gtk/gtkprintunixdialog.c:2305
+#: gtk/gtkprintunixdialog.c:2304
 msgid "Odd sheets"
 msgstr "ஒற்றை தாள்கள்"
 
-#: gtk/gtkprintunixdialog.c:2308
+#: gtk/gtkprintunixdialog.c:2307
 msgid "Sc_ale:"
 msgstr "அளவு: (_a)"
 
-#: gtk/gtkprintunixdialog.c:2335
+#: gtk/gtkprintunixdialog.c:2334
 msgid "Paper"
 msgstr "தாள்"
 
-#: gtk/gtkprintunixdialog.c:2339
+#: gtk/gtkprintunixdialog.c:2338
 msgid "Paper _type:"
 msgstr "தாள் வகை: (_t)"
 
-#: gtk/gtkprintunixdialog.c:2354
+#: gtk/gtkprintunixdialog.c:2353
 msgid "Paper _source:"
 msgstr "தாள் மூலம்: (_s)"
 
-#: gtk/gtkprintunixdialog.c:2369
+#: gtk/gtkprintunixdialog.c:2368
 msgid "Output t_ray:"
 msgstr "வெளீயிடு தட்டு: (_r)"
 
-#: gtk/gtkprintunixdialog.c:2421
+#: gtk/gtkprintunixdialog.c:2420
 msgid "Job Details"
 msgstr "பணி விவரங்கள்"
 
-#: gtk/gtkprintunixdialog.c:2427
+#: gtk/gtkprintunixdialog.c:2426
 msgid "Pri_ority:"
 msgstr "முன்னுரிமை: (_o)"
 
-#: gtk/gtkprintunixdialog.c:2442
+#: gtk/gtkprintunixdialog.c:2441
 msgid "_Billing info:"
 msgstr "இரசீது தகவல்: (_B)"
 
-#: gtk/gtkprintunixdialog.c:2460
+#: gtk/gtkprintunixdialog.c:2459
 msgid "Print Document"
 msgstr "ஆவணத்தை அச்சிடு"
 
-#: gtk/gtkprintunixdialog.c:2466
+#: gtk/gtkprintunixdialog.c:2465
 msgid "_Now"
 msgstr "இப்போது (_N)"
 
-#: gtk/gtkprintunixdialog.c:2473
+#: gtk/gtkprintunixdialog.c:2472
 msgid "A_t:"
 msgstr "A_t:"
 
-#: gtk/gtkprintunixdialog.c:2488
+#: gtk/gtkprintunixdialog.c:2487
 msgid "On _hold"
 msgstr "நிறுத்திவைப்பு (_h)"
 
-#: gtk/gtkprintunixdialog.c:2507
+#: gtk/gtkprintunixdialog.c:2506
 msgid "Add Cover Page"
 msgstr "அட்டை பக்கத்தையும் சேர்"
 
-#: gtk/gtkprintunixdialog.c:2513
+#: gtk/gtkprintunixdialog.c:2512
 msgid "Be_fore:"
 msgstr "முன்: (_f)"
 
-#: gtk/gtkprintunixdialog.c:2528
+#: gtk/gtkprintunixdialog.c:2527
 msgid "_After:"
 msgstr "பின்: (_A)"
 
-#: gtk/gtkprintunixdialog.c:2543
+#: gtk/gtkprintunixdialog.c:2542
 msgid "Job"
 msgstr "பணி"
 
-#: gtk/gtkprintunixdialog.c:2609
+#: gtk/gtkprintunixdialog.c:2608
 msgid "Advanced"
 msgstr "கூடுதல்"
 
-#: gtk/gtkprintunixdialog.c:2644
+#: gtk/gtkprintunixdialog.c:2643
 msgid "Image Quality"
 msgstr "பட தரம்"
 
-#: gtk/gtkprintunixdialog.c:2647
+#: gtk/gtkprintunixdialog.c:2646
 msgid "Color"
 msgstr "நிறம்"
 
-#: gtk/gtkprintunixdialog.c:2650
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Finishing"
 msgstr "முடிக்கிறது"
 
-#: gtk/gtkprintunixdialog.c:2660
+#: gtk/gtkprintunixdialog.c:2659
 msgid "Some of the settings in the dialog conflict"
 msgstr "இந்த உரையாடலிலுள்ள சில அமைவுகள் முரணாக உள்ளது"
 
-#: gtk/gtkprintunixdialog.c:2683
+#: gtk/gtkprintunixdialog.c:2682
 msgid "Print"
 msgstr "அச்சிடு"
-
-#: gtk/gtkradiotoolbutton.c:65
-msgid "Group"
-msgstr "தொகுப்பு"
-
-#: gtk/gtkradiotoolbutton.c:66
-msgid "The radio tool button whose group this button belongs to."
-msgstr "இந்த தேர்வு கருவி பொத்தான் எந்த குழுவினை சார்ந்தது."
 
 #: gtk/gtkrc.c:2872
 #, c-format
@@ -2753,36 +2730,36 @@ msgstr "சாளரங்களின் வகுப்பில் இந்�
 msgid "Select which type of documents are shown"
 msgstr "எந்த வகை ஆவணங்களை காட்ட வேண்டும் என தேர்ந்தெடு"
 
-#: gtk/gtkrecentchooserdefault.c:1096 gtk/gtkrecentchooserdefault.c:1133
+#: gtk/gtkrecentchooserdefault.c:1095 gtk/gtkrecentchooserdefault.c:1132
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "URI '%s'க்கு ஒரு உருப்படியும் இல்லை"
 
-#: gtk/gtkrecentchooserdefault.c:1260
+#: gtk/gtkrecentchooserdefault.c:1259
 msgid "Untitled filter"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1613
+#: gtk/gtkrecentchooserdefault.c:1612
 msgid "Could not remove item"
 msgstr "உருப்படியை நீக்க முடியாது"
 
-#: gtk/gtkrecentchooserdefault.c:1656
+#: gtk/gtkrecentchooserdefault.c:1655
 msgid "Could not clear list"
 msgstr "பட்டியலை துடைக்க முடியவில்லை"
 
-#: gtk/gtkrecentchooserdefault.c:1740
+#: gtk/gtkrecentchooserdefault.c:1739
 msgid "Copy _Location"
 msgstr "இடத்தை நகலெடு (_L)"
 
-#: gtk/gtkrecentchooserdefault.c:1753
+#: gtk/gtkrecentchooserdefault.c:1752
 msgid "_Remove From List"
 msgstr "பட்டியலிலிருந்து நீக்கு (_R)"
 
-#: gtk/gtkrecentchooserdefault.c:1762
+#: gtk/gtkrecentchooserdefault.c:1761
 msgid "_Clear List"
 msgstr "பட்டியலை துடை (_C)"
 
-#: gtk/gtkrecentchooserdefault.c:1776
+#: gtk/gtkrecentchooserdefault.c:1775
 msgid "Show _Private Resources"
 msgstr "தனிப்பட்ட மூலங்களை காட்டு (_P)"
 
@@ -2836,10 +2813,10 @@ msgstr ""
 msgid "recent menu label|%d. %s"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1025
-#: gtk/gtkrecentmanager.c:1163 gtk/gtkrecentmanager.c:1173
-#: gtk/gtkrecentmanager.c:1226 gtk/gtkrecentmanager.c:1235
-#: gtk/gtkrecentmanager.c:1250
+#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
+#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
+#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
+#: gtk/gtkrecentmanager.c:1258
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s'உடன் உருப்படியை தேட முடியவில்லை"
@@ -4510,92 +4487,96 @@ msgstr ""
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1371
+#. Translators: this is a printer status.
+#: modules/printbackends/cups/gtkprintbackendcups.c:1372
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1375
+#. Translators: this is a printer status.
+#: modules/printbackends/cups/gtkprintbackendcups.c:1378
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1999
 msgid "Two Sided"
 msgstr "இரண்டு பக்கம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1997
+#: modules/printbackends/cups/gtkprintbackendcups.c:2000
 msgid "Paper Type"
 msgstr "தாள் வகை"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1998
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Paper Source"
 msgstr "தாள் மூலம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:2002
 msgid "Output Tray"
 msgstr "வெளியீடு தட்டு"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2008
+#: modules/printbackends/cups/gtkprintbackendcups.c:2011
 msgid "One Sided"
 msgstr "ஒற்றை பக்கம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2009
-#: modules/printbackends/cups/gtkprintbackendcups.c:2010
-#: modules/printbackends/cups/gtkprintbackendcups.c:2014
+#. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2013
+#: modules/printbackends/cups/gtkprintbackendcups.c:2015
+#: modules/printbackends/cups/gtkprintbackendcups.c:2023
 msgid "Auto Select"
 msgstr "தானாக தேர்ந்தெடுத்தல்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2011
-#: modules/printbackends/cups/gtkprintbackendcups.c:2012
-#: modules/printbackends/cups/gtkprintbackendcups.c:2013
-#: modules/printbackends/cups/gtkprintbackendcups.c:2483
+#. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2017
+#: modules/printbackends/cups/gtkprintbackendcups.c:2019
+#: modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: modules/printbackends/cups/gtkprintbackendcups.c:2492
 msgid "Printer Default"
 msgstr "முன்னிருப்பு அச்சடிப்பி"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Urgent"
 msgstr "அவசரம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "High"
 msgstr "உயர்ந்த"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Medium"
 msgstr "நடுத்தரம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Low"
 msgstr "குறைந்த"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "None"
 msgstr "ஒன்றுமில்லை"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Classified"
 msgstr "வகைப்படுத்தல்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Confidential"
 msgstr "அந்தரங்கம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Secret"
 msgstr "இரகசியம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Standard"
 msgstr "இயல்பான"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Top Secret"
 msgstr "உயர்ந்த இரகசியம்"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Unclassified"
 msgstr "வகைப்படுத்தாதது"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2817
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "தனிபயன் அளவு"
@@ -4658,6 +4639,24 @@ msgstr "கோப்புக்கு அச்சிடவும்"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' கோப்பின் தகவல் பெற முடியவில்லை: %s"
+
+#~ msgid "URI"
+#~ msgstr "URI"
+
+#~ msgid "The URI bound to this button"
+#~ msgstr "இந்தப் பொத்தானுக்கு URI இணை"
+
+#~ msgid "Arrow spacing"
+#~ msgstr "அம்புக்குறி இடைவெளி"
+
+#~ msgid "Scroll arrow spacing"
+#~ msgstr "உருள் அம்புக்குறி இடைவெளி"
+
+#~ msgid "Group"
+#~ msgstr "தொகுப்பு"
+
+#~ msgid "The radio tool button whose group this button belongs to."
+#~ msgstr "இந்த தேர்வு கருவி பொத்தான் எந்த குழுவினை சார்ந்தது."
 
 #~ msgid "Invalid filename: %s"
 #~ msgstr "செல்லுபடியாகாத கோப்பு பெயர்: %s"

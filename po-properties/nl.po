@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2008-05-14 03:21+0200\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -868,7 +868,7 @@ msgstr "Horizontale uitlijning voor dochter"
 msgid "Vertical alignment for child"
 msgstr "Verticale uitlijning voor dochter"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Afbeeldingswidget"
 
@@ -961,8 +961,9 @@ msgid "Show button images"
 msgstr "Knopafbeeldingen tonen"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Of standaardpictogrammen in de knoppen worden getoond"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Of afbeeldingen in menus worden getoond"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2078,7 +2079,7 @@ msgstr "Pijlgrootte"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "De minimumgrootte van de pijl in de combobox"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2722,7 +2723,7 @@ msgstr "Label y-uitlijning"
 msgid "The vertical alignment of the label"
 msgstr "De verticale uitlijning van het label"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr ""
 "Verouderde eigenschap, gebruik in plaats hiervan: shadow_type (schaduw_type)"
@@ -2740,23 +2741,23 @@ msgid "A widget to display in place of the usual frame label"
 msgstr ""
 "Een widget dat weergegeven wordt in plaats van het gebruikelijk kaderlabel"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Uiterlijk van de schaduw dat de container omgeeft"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Handle-positie"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Positie van de handle relatief tot het dochterwidget"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Kleefrand"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -2764,11 +2765,11 @@ msgstr ""
 "Zijde van de handle-box die uitgelijnd is met het docking-punt waar de "
 "handle-box afgemeerd wordt"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Kleefrand aangezet"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2776,11 +2777,11 @@ msgstr ""
 "Of de waarde van de snap_edge-eigenschap word gebruikt, of een waarde "
 "afgeleid van handle_position"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2992,15 +2993,15 @@ msgstr "Opslagtype"
 msgid "The representation being used for image data"
 msgstr "De te gebruiken representatie voor afbeeldingsdata"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Dochterwidget dat naast de menutekst verschijnt"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Menu-afbeeldingen tonen"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Of afbeeldingen in menus worden getoond"
 
@@ -3149,6 +3150,25 @@ msgstr "De breedte van de opmaak"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "De hoogte van de opmaak"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "De stand van de schakelknop"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Zichtbaar"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Of de actie zichtbaar is."
 
 # momenteel
 #: gtk/gtkmenu.c:503
@@ -3622,7 +3642,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "Groep-ID voor het verslepen van tabbladen"
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Groep"
 
@@ -3736,6 +3756,16 @@ msgstr "Tabblad-ronding"
 #: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "Grootte van de tabblad-ronding"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Pijl schalen"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Spatiebalk-spatiëring"
 
 #: gtk/gtkobject.c:370
 msgid "User Data"
@@ -4292,6 +4322,13 @@ msgstr "Het keuzerondje wiens groep dit widget toebehoort."
 #: gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "Het keuzemenu-item wiens groep dit widget toebehoort."
+
+# de widget is eigendom van de groep van het keuzerondje
+# de radioknop van de groep waartoe dit widget behoort.
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Het keuzerondje wiens groep dit widget toebehoort."
 
 #: gtk/gtkrange.c:337
 msgid "Update policy"
@@ -7111,6 +7148,9 @@ msgstr "IM-statusstijl"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Hoe de statusbalk voor invoermethode moet worden afgebeeld"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Of standaardpictogrammen in de knoppen worden getoond"
 
 #~ msgid "Cancelled"
 #~ msgstr "Afgebroken"

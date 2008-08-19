@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2007-09-11 12:11+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
 "Language-Team: Gujarati <fedora-trans-gu@redhat.com>\n"
@@ -838,7 +838,7 @@ msgstr "આડી કતારબંધ ગોઠવણી"
 msgid "Vertical alignment for child"
 msgstr "ઊભી કતારબંધ ગોઠવણી"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "ચિત્ર વિજેટ"
 
@@ -921,8 +921,9 @@ msgid "Show button images"
 msgstr "બટન ઈમેજો બતાવો"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "શું સ્ટોક ચિહ્નો બટનોમાં દેખાડવા જોઈએ"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "શું ઈમેજો મેનુઓમાં બતાવવી જોઈએ"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2007,7 +2008,7 @@ msgstr "તીર માપ"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "કમ્બો બોક્સમાં તીરનું ન્યૂનતમ માપ"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2618,7 +2619,7 @@ msgstr "લેબલ yalign"
 msgid "The vertical alignment of the label"
 msgstr "લેબલની ઊભી દિશામાં કતારબંધ ગોઠવણી"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "નકારેલ ગુણધર્મ, તેની જગ્યાએ shadow_type વાપરો"
 
@@ -2634,44 +2635,44 @@ msgstr "ચોકઠાની કિનારીનો દેખાવ"
 msgid "A widget to display in place of the usual frame label"
 msgstr "ચોકઠાના સામાન્ય લેબલની જગ્યાએ દર્શાવવાનું વિજેટ"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "સમાવનારની આસપાસના પડછાયાનો દેખાવ"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "હેન્ડલની સ્થિતિ"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "બાળ વિજેટને સંબધિત હેન્ડલની સ્થિતિ"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "સ્નેપ ઍડ્જ"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr "હેન્ડલબોક્સની બાજુ જે હેન્ડલબોક્સમાં સંગ્રહ કરવા માટે સંગ્રહબિંદુ સાથે હારબંધ કરાઈ છે"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "સ્નેપ ઍડ્જ સુયોજિત છે"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr ""
 "શું સ્નેપ_ઍડ્જ ના ગુણધર્મોમાંથી કિંમત મેળવેલી કે પછી હેન્ડલની સ્થિતિમાંથી તારવેલી કિંમત વાપરવી"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2874,15 +2875,15 @@ msgstr "સંગ્રહનો પ્રકાર"
 msgid "The representation being used for image data"
 msgstr "ચિત્રની માહિતી માટે વપરાતી રજૂઆત"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "મેનુના લેખાણ પછી દેખાતું બાળ વિજેટ"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "મેનુ ઈમેજો બતાવો"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "શું ઈમેજો મેનુઓમાં બતાવવી જોઈએ"
 
@@ -3021,6 +3022,25 @@ msgstr "દેખાવની પહોળાઈ"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "દેખાવની ઊંચાઈ"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "બટનની ફેરબદલની સ્થિતિ"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "દૃશ્યમાન"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "શું વિજેટ દૃશ્યમાન છે"
 
 #: gtk/gtkmenu.c:503
 #, fuzzy
@@ -3474,7 +3494,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "ખેંચો અને મૂકો ટેબો માટે જૂથ ID"
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "જૂથ"
 
@@ -3583,6 +3603,16 @@ msgstr "ટેબ વણાંક"
 #: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "ટેબ વળાંકનું માપ"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "તીરનું માપન"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "ખસેડવાની પટ્ટી વચ્ચેની જગ્યા"
 
 #: gtk/gtkobject.c:370
 msgid "User Data"
@@ -4113,6 +4143,11 @@ msgstr "રેડિયો બટન કે જેનું જૂથ આ વિ
 #: gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "રેડિયો મેનુ વસ્તુ કે જેનું જૂથમાં આ વિજેટ અનુલક્ષે છે."
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
+msgstr "રેડિયો બટન કે જેનું જૂથ આ વિજેટને અનુસરે છે."
 
 #: gtk/gtkrange.c:337
 msgid "Update policy"
@@ -6784,6 +6819,9 @@ msgstr "IM સ્થિતિનો પ્રકાર"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "ઈનપુટ પધ્ધતિની સ્થિતિ દર્શાવતી પટ્ટી કેવી રીતે દોરવી"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "શું સ્ટોક ચિહ્નો બટનોમાં દેખાડવા જોઈએ"
 
 #~ msgid "Cancelled"
 #~ msgstr "રદ કરાયેલ"

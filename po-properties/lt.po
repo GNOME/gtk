@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2007-09-17 12:43+0300\n"
 "Last-Translator: Žygimantas Beručka <zygis@gnome.org>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
@@ -830,7 +830,7 @@ msgstr "Susijusio objekto horizontalus lygiavimas"
 msgid "Vertical alignment for child"
 msgstr "Susijusio objekto vertikalus lygiavimas"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Paveikslėlio objektas"
 
@@ -920,8 +920,9 @@ msgid "Show button images"
 msgstr "Rodyti mygtukų paveikslėlius"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Ar standartinės piktogramos turi būti rodomos mygtukuose"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Ar paveikslėliai turi būti rodomi meniu"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2015,7 +2016,7 @@ msgstr "Rodyklės dydis"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Mažiausias rodyklės dydis išsiskleidžiančiame laukelyje"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2633,7 +2634,7 @@ msgstr "Žymės x lyg"
 msgid "The vertical alignment of the label"
 msgstr "Vertikalus žymės lygiavimas"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Pasenusi savybė, naudokite shadow_type"
 
@@ -2649,44 +2650,44 @@ msgstr "Rėmelio paraštės išvaizda"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Objektas rodomas vietoje įprasto rėmelio užrašo"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Šešėlio gaubiančio konteinerį išvaizda"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Rankenėlės padėtis"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Rankenėlės padėtis lyginant su antriniu objektu"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Prisegimo kraštas"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr ""
 "Pusė pagal kurią reikia lygiuoti rodyklės lauką jį prikabinant prie doko."
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Nustatytas prisegimo kraštas"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr "Naudoti snap_edge ar handle_position savybės reikšmę"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2892,15 +2893,15 @@ msgstr "Saugyklos tipas"
 msgid "The representation being used for image data"
 msgstr "Atvaizdas naudojamas paveikslėlio duomenims"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Susijęs objektas išvedamas šalia meniu teksto"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Rodyti meniu paveikslėlius"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Ar paveikslėliai turi būti rodomi meniu"
 
@@ -3040,6 +3041,25 @@ msgstr "Išdėstymo plotis"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "Išdėstymo aukštis"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "Ar varnelė yra padėta"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Matoma"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Ar veiksmas yra matomas."
 
 #: gtk/gtkmenu.c:503
 #, fuzzy
@@ -3505,7 +3525,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "Kortelių tempimo ir paleidimo grupės ID"
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Grupė"
 
@@ -3615,6 +3635,16 @@ msgstr "Kortelių išlinkimas"
 #: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "Kortelių išlinkimo dydis"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Rodyklės Mastelis"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Slinkties juostos tarpai"
 
 #: gtk/gtkobject.c:370
 msgid "User Data"
@@ -4152,6 +4182,11 @@ msgstr "Žymimoji akutė, kurios grupei priklauso šis objektas."
 #: gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "Meniu žymimoji akutė, kurios grupei priklauso šis objektas."
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Žymimoji akutė, kurios grupei priklauso šis objektas."
 
 #: gtk/gtkrange.c:337
 msgid "Update policy"
@@ -6847,6 +6882,9 @@ msgstr "IM būsenos stilius"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Kaip rodyti įvedimo metodo būsenos juostą"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Ar standartinės piktogramos turi būti rodomos mygtukuose"
 
 #~ msgid "Cancelled"
 #~ msgstr "Atšaukta"

@@ -273,7 +273,7 @@ on Win32 doesn't allow to embed arbitrary widgets.
 </para>
 
 @status_icon: 
-@icon: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_status_icon_get_size ##### -->

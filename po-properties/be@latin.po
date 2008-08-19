@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2007-12-09 14:44+0200\n"
 "Last-Translator: Alaksandar Navicki <zolak@lacinka.org>\n"
 "Language-Team: i18n@mova.org <i18n@mova.org>\n"
@@ -842,7 +842,7 @@ msgstr "Haryzantalnaje raŭnańnie naščadka"
 msgid "Vertical alignment for child"
 msgstr "Vertykalnaje raŭnańnie naščadka"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Widget vyjavy"
 
@@ -931,8 +931,9 @@ msgid "Show button images"
 msgstr "Pakazvaj vyjavy knopak"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Akreślivaje, ci na knopkach pavinny być bačnyja ikony"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Akreślivaje, ci ŭ menu pavinny być pakazanyja vyjavy"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2041,7 +2042,7 @@ msgstr "Pamier strełki"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Minimalny pamier strełki razhortvalnaha menu"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2674,7 +2675,7 @@ msgstr "Vertykalnaje raŭnańnie etykiety"
 msgid "The vertical alignment of the label"
 msgstr "Vertykalnaje raŭnańnie etykiety"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Sastarełaja ŭłaścivaść, užyj zamiest hetaha shadow_type"
 
@@ -2690,33 +2691,33 @@ msgstr "Vyhlad bierahoŭ ramki"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Widget, pakazany ŭ miescy zvyčajnaj etykiety ramki"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Vyhlad cieniu vakoł kantejnera"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Pałažeńnie ručki"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Pałačeńnie ručki adnosna widgetu-naščadka"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Pryciahalny bierah"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr "Bok skrynki z ručkaj, jaki maje być spałučany z punktam dakavańnia"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Pryciahvańnie da bierahu"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2724,11 +2725,11 @@ msgstr ""
 "Akreślivaje, ci pavinna być užytaja vartaść snap_edge ci vartaść z "
 "handle_position"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2935,15 +2936,15 @@ msgstr "Sposab zapisu"
 msgid "The representation being used for image data"
 msgstr "Sposab zapisu źviestak vyjavy"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Widget-naščadak paśla apisańnia elementu menu"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Pakazvaj vyjavy menu"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Akreślivaje, ci ŭ menu pavinny być pakazanyja vyjavy"
 
@@ -3085,6 +3086,25 @@ msgstr "Šyrynia kampazycyi"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "Vyšynia kampazycyi"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "Stan pieraklučeńnia knopki"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Bačnaja"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Akreślivaje, ci aperacyja bačnaja."
 
 #: gtk/gtkmenu.c:503
 #, fuzzy
@@ -3553,7 +3573,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "ID hrupy, kab pieraciahnuć i puścić zakładki"
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Hrupa"
 
@@ -3665,6 +3685,16 @@ msgstr "Kryvizna zakładki"
 #: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "Pamier kryvizny zakładki"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Skalowanie strełak"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Vodstupy paneli prakrutki"
 
 #: gtk/gtkobject.c:370
 msgid "User Data"
@@ -4211,6 +4241,11 @@ msgid "The radio menu item whose group this widget belongs to."
 msgstr ""
 "Hety widget naležyć da hrupy, jakaja źjaŭlajecca častkaj menu adnarazovaha "
 "vybaru."
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Hrupa, da jakoj naležyć hety widget adnarazovaha vybaru."
 
 #: gtk/gtkrange.c:337
 msgid "Update policy"
@@ -6982,6 +7017,9 @@ msgstr "Styl stanu metadu ŭvodu"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Sposab rysavańnia paneli stanu metadu ŭvodu"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Akreślivaje, ci na knopkach pavinny być bačnyja ikony"
 
 #~ msgid "Cancelled"
 #~ msgstr "Anulavanaja"

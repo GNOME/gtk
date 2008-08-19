@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2008-08-12 18:52+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -930,7 +930,7 @@ msgstr "เขียนข้อมูล TIFF ไม่สำเร็จ"
 msgid "Couldn't write to TIFF file"
 msgstr "เขียนแฟ้ม TIFF ไม่สำเร็จ"
 
-#: gdk-pixbuf/io-tiff.c:814
+#: gdk-pixbuf/io-tiff.c:815
 msgid "The TIFF image format"
 msgstr "แฟ้มรูปชนิด TIFF"
 
@@ -1110,7 +1110,7 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "กำลังเปิด %d รายการ"
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2106
+#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "สัญญาอนุญาต"
 
@@ -1124,32 +1124,32 @@ msgid "C_redits"
 msgstr "เ_ครดิต"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:513
+#: gtk/gtkaboutdialog.c:514
 msgid "_License"
 msgstr "สัญญา_อนุญาต"
 
-#: gtk/gtkaboutdialog.c:742
+#: gtk/gtkaboutdialog.c:744
 #, c-format
 msgid "About %s"
 msgstr "เกี่ยวกับ %s"
 
-#: gtk/gtkaboutdialog.c:2030
+#: gtk/gtkaboutdialog.c:2032
 msgid "Credits"
 msgstr "เครดิต"
 
-#: gtk/gtkaboutdialog.c:2059
+#: gtk/gtkaboutdialog.c:2061
 msgid "Written by"
 msgstr "เขียนโดย"
 
-#: gtk/gtkaboutdialog.c:2062
+#: gtk/gtkaboutdialog.c:2064
 msgid "Documented by"
 msgstr "เอกสารโดย"
 
-#: gtk/gtkaboutdialog.c:2074
+#: gtk/gtkaboutdialog.c:2076
 msgid "Translated by"
 msgstr "แปลโดย"
 
-#: gtk/gtkaboutdialog.c:2078
+#: gtk/gtkaboutdialog.c:2080
 msgid "Artwork by"
 msgstr "งานศิลป์โดย"
 
@@ -1192,7 +1192,7 @@ msgstr "Alt"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:679
+#: gtk/gtkaccellabel.c:678
 msgid "keyboard label|Super"
 msgstr "Super"
 
@@ -1202,7 +1202,7 @@ msgstr "Super"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:693
+#: gtk/gtkaccellabel.c:692
 msgid "keyboard label|Hyper"
 msgstr "Hyper"
 
@@ -1212,17 +1212,17 @@ msgstr "Hyper"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:708
+#: gtk/gtkaccellabel.c:707
 msgid "keyboard label|Meta"
 msgstr "Meta"
 
 #. do not translate the part before the |
-#: gtk/gtkaccellabel.c:726
+#: gtk/gtkaccellabel.c:725
 msgid "keyboard label|Space"
 msgstr "Space"
 
 #. do not translate the part before the |
-#: gtk/gtkaccellabel.c:730
+#: gtk/gtkaccellabel.c:729
 msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
@@ -1270,7 +1270,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1797
+#: gtk/gtkcalendar.c:1796
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1285,7 +1285,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1828 gtk/gtkcalendar.c:2489
+#: gtk/gtkcalendar.c:1827 gtk/gtkcalendar.c:2488
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1301,7 +1301,7 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1860 gtk/gtkcalendar.c:2351
+#: gtk/gtkcalendar.c:1859 gtk/gtkcalendar.c:2350
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1317,7 +1317,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2141
+#: gtk/gtkcalendar.c:2140
 msgid "calendar year format|%Y"
 msgstr "%Ey"
 
@@ -1437,7 +1437,7 @@ msgstr "_จานสี:"
 msgid "Color Wheel"
 msgstr "วงสี"
 
-#: gtk/gtkcolorsel.c:980
+#: gtk/gtkcolorsel.c:976
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1446,17 +1446,17 @@ msgstr ""
 "สีเก่าที่เลือกไว้ แสดงไว้เพื่อเทียบกับสีที่จะเลือกใหม่  คุณสามารถลากสีนี้ไปใช้ในจานสีได้ "
 "หรือเลือกสีนี้เป็นสีปัจจุบันโดยลากไปยังแถบสีข้างๆ นี้ก็ได้"
 
-#: gtk/gtkcolorsel.c:984
+#: gtk/gtkcolorsel.c:980
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr "สีที่เลือกอยู่ คุณสามารถลากสีนี้ไปเก็บใว้ในจานสีเพื่อใช้ในอนาคต"
 
-#: gtk/gtkcolorsel.c:1369
+#: gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
 msgstr "_บันทึกสีลงที่นี่"
 
-#: gtk/gtkcolorsel.c:1574
+#: gtk/gtkcolorsel.c:1568
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1468,11 +1468,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "เลือกสี"
 
-#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7654
+#: gtk/gtkentry.c:5375 gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "_วิธีป้อนข้อความ"
 
-#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7668
+#: gtk/gtkentry.c:5389 gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "แ_ทรกอักขระควบคุมของยูนิโค้ด"
 
@@ -1488,7 +1488,7 @@ msgstr "พื้นโต๊ะ"
 msgid "(None)"
 msgstr "(ไม่มี)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2011
 msgid "Other..."
 msgstr "อื่นๆ ..."
 
@@ -1963,7 +1963,7 @@ msgstr "_ขนาด:"
 msgid "_Preview:"
 msgstr "ตัว_อย่าง:"
 
-#: gtk/gtkfontsel.c:1580
+#: gtk/gtkfontsel.c:1542
 msgid "Font Selection"
 msgstr "เลือกแบบอักษร"
 
@@ -2000,7 +2000,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "ชุดตกแต่งไม่มีไอคอน '%s'"
 
-#: gtk/gtkicontheme.c:3052
+#: gtk/gtkicontheme.c:3058
 msgid "Failed to load icon"
 msgstr "โหลดไอคอนไม่สำเร็จ"
 
@@ -2091,19 +2091,11 @@ msgstr "(ไม่รู้จัก)"
 msgid "Cl_ear"
 msgstr "_ล้าง"
 
-#: gtk/gtklinkbutton.c:144
-msgid "URI"
-msgstr "URI"
-
-#: gtk/gtklinkbutton.c:145
-msgid "The URI bound to this button"
-msgstr "URI ที่เชื่อมกับปุ่มนี้"
-
-#: gtk/gtklinkbutton.c:402
+#: gtk/gtklinkbutton.c:427
 msgid "Copy URL"
 msgstr "_คัดลอก URL"
 
-#: gtk/gtklinkbutton.c:542
+#: gtk/gtklinkbutton.c:565
 msgid "Invalid URI"
 msgstr "URI ไม่ถูกต้อง"
 
@@ -2179,26 +2171,21 @@ msgid "_Password:"
 msgstr "_รหัสผ่าน::"
 
 #: gtk/gtkmountoperation.c:590
-msgid "_Forget password immediately"
+#, fuzzy
+msgid "Forget password _immediately"
 msgstr "_ทิ้งรหัสผ่านทันที"
 
 #: gtk/gtkmountoperation.c:598
-msgid "_Remember password until you logout"
+#, fuzzy
+msgid "Remember password until you _logout"
 msgstr "_จำรหัสผ่านไว้จนกว่าจะออก"
 
 #: gtk/gtkmountoperation.c:606
-msgid "_Remember forever"
+#, fuzzy
+msgid "Remember _forever"
 msgstr "จำรหัสผ่านไว้_ตลอดไป"
 
-#: gtk/gtknotebook.c:834
-msgid "Arrow spacing"
-msgstr "ช่องไฟของลูกศร"
-
-#: gtk/gtknotebook.c:835
-msgid "Scroll arrow spacing"
-msgstr "ช่องไฟของลูกศรสำหรับเลื่อน"
-
-#: gtk/gtknotebook.c:4425 gtk/gtknotebook.c:6931
+#: gtk/gtknotebook.c:4424 gtk/gtknotebook.c:6930
 #, c-format
 msgid "Page %u"
 msgstr "หน้า %u"
@@ -2264,7 +2251,7 @@ msgstr "_ขนาดกระดาษ:"
 msgid "_Orientation:"
 msgstr "แ_นววาง:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2398
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2397
 msgid "Page Setup"
 msgstr "ตั้งหน้ากระดาษ"
 
@@ -2321,7 +2308,7 @@ msgstr "เดินขึ้นในพาธ"
 msgid "Down Path"
 msgstr "เดินลงในพาธ"
 
-#: gtk/gtkpathbar.c:1464
+#: gtk/gtkpathbar.c:1472
 msgid "File System Root"
 msgstr "รากของระบบแฟ้ม"
 
@@ -2434,8 +2421,9 @@ msgstr "เครื่องพิมพ์ไม่ได้เชื่อม
 msgid "Out of paper"
 msgstr "กระดาษหมด"
 
+#. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1373
+#: modules/printbackends/cups/gtkprintbackendcups.c:1375
 msgid "Paused"
 msgstr "หยุดพัก"
 
@@ -2480,35 +2468,35 @@ msgstr "แฮนเดิลไปยัง PrintDlgEx ผิดพลาด"
 msgid "Unspecified error"
 msgstr "ข้อผิดพลาดไม่ปรากฏสาเหตุ"
 
-#: gtk/gtkprintunixdialog.c:1717
+#: gtk/gtkprintunixdialog.c:1716
 msgid "Printer"
 msgstr "เครื่องพิมพ์"
 
-#: gtk/gtkprintunixdialog.c:1726
+#: gtk/gtkprintunixdialog.c:1725
 msgid "Location"
 msgstr "ตำแหน่ง"
 
-#: gtk/gtkprintunixdialog.c:1736
+#: gtk/gtkprintunixdialog.c:1735
 msgid "Status"
 msgstr "สถานะ"
 
-#: gtk/gtkprintunixdialog.c:1759
+#: gtk/gtkprintunixdialog.c:1758
 msgid "Range"
 msgstr "ช่วง"
 
-#: gtk/gtkprintunixdialog.c:1763
+#: gtk/gtkprintunixdialog.c:1762
 msgid "_All Pages"
 msgstr "ทุ_กหน้า"
 
-#: gtk/gtkprintunixdialog.c:1770
+#: gtk/gtkprintunixdialog.c:1769
 msgid "C_urrent Page"
 msgstr "หน้า_ปัจจุบัน"
 
-#: gtk/gtkprintunixdialog.c:1779
+#: gtk/gtkprintunixdialog.c:1778
 msgid "Pag_es:"
 msgstr "_หน้า:"
 
-#: gtk/gtkprintunixdialog.c:1780
+#: gtk/gtkprintunixdialog.c:1779
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2516,151 +2504,143 @@ msgstr ""
 "ระบุช่วงของหน้าตั้งแต่หนึ่งช่วงขึ้นไป\n"
 " เช่น 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1799
+#: gtk/gtkprintunixdialog.c:1798
 msgid "Copies"
 msgstr "สำเนา"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1804
+#: gtk/gtkprintunixdialog.c:1803
 msgid "Copie_s:"
 msgstr "จำ_นวนสำเนา:"
 
-#: gtk/gtkprintunixdialog.c:1822
+#: gtk/gtkprintunixdialog.c:1821
 msgid "C_ollate"
 msgstr "_ทีละชุด"
 
-#: gtk/gtkprintunixdialog.c:1830
+#: gtk/gtkprintunixdialog.c:1829
 msgid "_Reverse"
 msgstr "_จากหลังมาหน้า"
 
-#: gtk/gtkprintunixdialog.c:1850
+#: gtk/gtkprintunixdialog.c:1849
 msgid "General"
 msgstr "ทั่วไป"
 
-#: gtk/gtkprintunixdialog.c:2253
+#: gtk/gtkprintunixdialog.c:2252
 msgid "Layout"
 msgstr "การจัดเรียง"
 
-#: gtk/gtkprintunixdialog.c:2257
+#: gtk/gtkprintunixdialog.c:2256
 msgid "Pages per _side:"
 msgstr "จำนวนหน้าต่อห_น้ากระดาษ:"
 
-#: gtk/gtkprintunixdialog.c:2273
+#: gtk/gtkprintunixdialog.c:2272
 msgid "T_wo-sided:"
 msgstr "พิมพ์_สองหน้า:"
 
-#: gtk/gtkprintunixdialog.c:2288
+#: gtk/gtkprintunixdialog.c:2287
 msgid "_Only print:"
 msgstr "พิ_มพ์เฉพาะ:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2303
+#: gtk/gtkprintunixdialog.c:2302
 msgid "All sheets"
 msgstr "ทุกหน้า"
 
-#: gtk/gtkprintunixdialog.c:2304
+#: gtk/gtkprintunixdialog.c:2303
 msgid "Even sheets"
 msgstr "หน้าคู่"
 
-#: gtk/gtkprintunixdialog.c:2305
+#: gtk/gtkprintunixdialog.c:2304
 msgid "Odd sheets"
 msgstr "หน้าคี่"
 
-#: gtk/gtkprintunixdialog.c:2308
+#: gtk/gtkprintunixdialog.c:2307
 msgid "Sc_ale:"
 msgstr "อัตรา_ขยาย:"
 
-#: gtk/gtkprintunixdialog.c:2335
+#: gtk/gtkprintunixdialog.c:2334
 msgid "Paper"
 msgstr "กระดาษ"
 
-#: gtk/gtkprintunixdialog.c:2339
+#: gtk/gtkprintunixdialog.c:2338
 msgid "Paper _type:"
 msgstr "_ชนิดกระดาษ:"
 
-#: gtk/gtkprintunixdialog.c:2354
+#: gtk/gtkprintunixdialog.c:2353
 msgid "Paper _source:"
 msgstr "แหล่ง_ป้อนกระดาษ:"
 
-#: gtk/gtkprintunixdialog.c:2369
+#: gtk/gtkprintunixdialog.c:2368
 msgid "Output t_ray:"
 msgstr "ถาดกระดาษ_ออก:"
 
-#: gtk/gtkprintunixdialog.c:2421
+#: gtk/gtkprintunixdialog.c:2420
 msgid "Job Details"
 msgstr "รายละเอียดงานพิมพ์"
 
-#: gtk/gtkprintunixdialog.c:2427
+#: gtk/gtkprintunixdialog.c:2426
 msgid "Pri_ority:"
 msgstr "_ลำดับความสำคัญ:"
 
-#: gtk/gtkprintunixdialog.c:2442
+#: gtk/gtkprintunixdialog.c:2441
 msgid "_Billing info:"
 msgstr "ข้อมูล_สรุป:"
 
-#: gtk/gtkprintunixdialog.c:2460
+#: gtk/gtkprintunixdialog.c:2459
 msgid "Print Document"
 msgstr "พิมพ์เอกสาร"
 
-#: gtk/gtkprintunixdialog.c:2466
+#: gtk/gtkprintunixdialog.c:2465
 msgid "_Now"
 msgstr "เ_ดี๋ยวนี้"
 
-#: gtk/gtkprintunixdialog.c:2473
+#: gtk/gtkprintunixdialog.c:2472
 msgid "A_t:"
 msgstr "เ_มื่อ:"
 
-#: gtk/gtkprintunixdialog.c:2488
+#: gtk/gtkprintunixdialog.c:2487
 msgid "On _hold"
 msgstr "_รอไว้"
 
-#: gtk/gtkprintunixdialog.c:2507
+#: gtk/gtkprintunixdialog.c:2506
 msgid "Add Cover Page"
 msgstr "เพิ่มหน้าปก"
 
-#: gtk/gtkprintunixdialog.c:2513
+#: gtk/gtkprintunixdialog.c:2512
 msgid "Be_fore:"
 msgstr "ปก_หน้า:"
 
-#: gtk/gtkprintunixdialog.c:2528
+#: gtk/gtkprintunixdialog.c:2527
 msgid "_After:"
 msgstr "ปกหลั_ง:"
 
-#: gtk/gtkprintunixdialog.c:2543
+#: gtk/gtkprintunixdialog.c:2542
 msgid "Job"
 msgstr "งานพิมพ์"
 
-#: gtk/gtkprintunixdialog.c:2609
+#: gtk/gtkprintunixdialog.c:2608
 msgid "Advanced"
 msgstr "ขั้นสูง"
 
-#: gtk/gtkprintunixdialog.c:2644
+#: gtk/gtkprintunixdialog.c:2643
 msgid "Image Quality"
 msgstr "คุณภาพของรูป"
 
-#: gtk/gtkprintunixdialog.c:2647
+#: gtk/gtkprintunixdialog.c:2646
 msgid "Color"
 msgstr "สี"
 
-#: gtk/gtkprintunixdialog.c:2650
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Finishing"
 msgstr "กำลังเสร็จสิ้น"
 
-#: gtk/gtkprintunixdialog.c:2660
+#: gtk/gtkprintunixdialog.c:2659
 msgid "Some of the settings in the dialog conflict"
 msgstr "ค่าตั้งบางค่าในกล่องโต้ตอบขัดแย้งกัน"
 
-#: gtk/gtkprintunixdialog.c:2683
+#: gtk/gtkprintunixdialog.c:2682
 msgid "Print"
 msgstr "พิมพ์"
-
-#: gtk/gtkradiotoolbutton.c:65
-msgid "Group"
-msgstr "กลุ่ม"
-
-#: gtk/gtkradiotoolbutton.c:66
-msgid "The radio tool button whose group this button belongs to."
-msgstr "กลุ่มที่ปุ่มวิทยุนี้อยู่ใน"
 
 #: gtk/gtkrc.c:2872
 #, c-format
@@ -2682,36 +2662,36 @@ msgstr "ฟังก์ชันนี้ยังไม่มีสำหรั
 msgid "Select which type of documents are shown"
 msgstr "เลือกชนิดของแฟ้มที่จะแสดง"
 
-#: gtk/gtkrecentchooserdefault.c:1096 gtk/gtkrecentchooserdefault.c:1133
+#: gtk/gtkrecentchooserdefault.c:1095 gtk/gtkrecentchooserdefault.c:1132
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "ไม่พบรายการสำหรับ URI '%s'"
 
-#: gtk/gtkrecentchooserdefault.c:1260
+#: gtk/gtkrecentchooserdefault.c:1259
 msgid "Untitled filter"
 msgstr "ตัวกรองไม่มีชื่อ"
 
-#: gtk/gtkrecentchooserdefault.c:1613
+#: gtk/gtkrecentchooserdefault.c:1612
 msgid "Could not remove item"
 msgstr "ลบรายการไม่สำเร็จ"
 
-#: gtk/gtkrecentchooserdefault.c:1656
+#: gtk/gtkrecentchooserdefault.c:1655
 msgid "Could not clear list"
 msgstr "ล้างรายการไม่สำเร็จ"
 
-#: gtk/gtkrecentchooserdefault.c:1740
+#: gtk/gtkrecentchooserdefault.c:1739
 msgid "Copy _Location"
 msgstr "คัดลอก_ตำแหน่ง"
 
-#: gtk/gtkrecentchooserdefault.c:1753
+#: gtk/gtkrecentchooserdefault.c:1752
 msgid "_Remove From List"
 msgstr "_ลบออกจากรายการ"
 
-#: gtk/gtkrecentchooserdefault.c:1762
+#: gtk/gtkrecentchooserdefault.c:1761
 msgid "_Clear List"
 msgstr "_ล้างรายการ"
 
-#: gtk/gtkrecentchooserdefault.c:1776
+#: gtk/gtkrecentchooserdefault.c:1775
 msgid "Show _Private Resources"
 msgstr "แสดงทรัพยากร_ส่วนบุคคล"
 
@@ -2765,10 +2745,10 @@ msgstr "_%d. %s"
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1025
-#: gtk/gtkrecentmanager.c:1163 gtk/gtkrecentmanager.c:1173
-#: gtk/gtkrecentmanager.c:1226 gtk/gtkrecentmanager.c:1235
-#: gtk/gtkrecentmanager.c:1250
+#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
+#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
+#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
+#: gtk/gtkrecentmanager.c:1258
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "ไม่พบรายการที่ URI '%s'"
@@ -4436,92 +4416,96 @@ msgstr "เครื่องพิมพ์ '%s' อาจไม่ได้เ
 msgid "There is a problem on printer '%s'."
 msgstr "มีปัญหากับเครื่องพิมพ์ '%s'"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1371
+#. Translators: this is a printer status.
+#: modules/printbackends/cups/gtkprintbackendcups.c:1372
 msgid "Paused ; Rejecting Jobs"
 msgstr "หยุดพัก ; ไม่รับงานพิมพ์"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1375
+#. Translators: this is a printer status.
+#: modules/printbackends/cups/gtkprintbackendcups.c:1378
 msgid "Rejecting Jobs"
 msgstr "ไม่รับงานพิมพ์"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1999
 msgid "Two Sided"
 msgstr "สองหน้า"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1997
+#: modules/printbackends/cups/gtkprintbackendcups.c:2000
 msgid "Paper Type"
 msgstr "ชนิดกระดาษ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1998
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Paper Source"
 msgstr "แหล่งป้อนกระดาษ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:2002
 msgid "Output Tray"
 msgstr "ถาดกระดาษออก"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2008
+#: modules/printbackends/cups/gtkprintbackendcups.c:2011
 msgid "One Sided"
 msgstr "หน้าเดียว"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2009
-#: modules/printbackends/cups/gtkprintbackendcups.c:2010
-#: modules/printbackends/cups/gtkprintbackendcups.c:2014
+#. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2013
+#: modules/printbackends/cups/gtkprintbackendcups.c:2015
+#: modules/printbackends/cups/gtkprintbackendcups.c:2023
 msgid "Auto Select"
 msgstr "เลือกโดยอัตโนมัติ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2011
-#: modules/printbackends/cups/gtkprintbackendcups.c:2012
-#: modules/printbackends/cups/gtkprintbackendcups.c:2013
-#: modules/printbackends/cups/gtkprintbackendcups.c:2483
+#. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2017
+#: modules/printbackends/cups/gtkprintbackendcups.c:2019
+#: modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: modules/printbackends/cups/gtkprintbackendcups.c:2492
 msgid "Printer Default"
 msgstr "ค่าปริยายเครื่องพิมพ์"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Urgent"
 msgstr "ด่วน"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "High"
 msgstr "สูง"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Medium"
 msgstr "ปานกลาง"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Low"
 msgstr "ต่ำ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "None"
 msgstr "ไม่มี"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Classified"
 msgstr "คัดแยกแล้ว"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Confidential"
 msgstr "ปกปิด"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Secret"
 msgstr "ลับ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Standard"
 msgstr "มาตรฐาน"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Top Secret"
 msgstr "ลับสุดยอด"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Unclassified"
 msgstr "ยังไม่คัดแยก"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2817
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 #, c-format
 msgid "Custom %sx%s"
 msgstr "กำหนดเอง %sx%s"
@@ -4583,6 +4567,24 @@ msgstr "พิมพ์ออกยังเครื่องพิมพ์ท
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ไม่สามารถเรียกข้อมูลสำหรับแฟ้ม '%s': %s"
+
+#~ msgid "URI"
+#~ msgstr "URI"
+
+#~ msgid "The URI bound to this button"
+#~ msgstr "URI ที่เชื่อมกับปุ่มนี้"
+
+#~ msgid "Arrow spacing"
+#~ msgstr "ช่องไฟของลูกศร"
+
+#~ msgid "Scroll arrow spacing"
+#~ msgstr "ช่องไฟของลูกศรสำหรับเลื่อน"
+
+#~ msgid "Group"
+#~ msgstr "กลุ่ม"
+
+#~ msgid "The radio tool button whose group this button belongs to."
+#~ msgstr "กลุ่มที่ปุ่มวิทยุนี้อยู่ใน"
 
 #~ msgid "Invalid filename: %s"
 #~ msgstr "ชื่อแฟ้มใช้ไม่ได้: %s"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2004-01-20 00:57+0730\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -847,7 +847,7 @@ msgstr "Jajaran mengufuk bagi anak"
 msgid "Vertical alignment for child"
 msgstr "Jajaran menegak bagi anak"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Wiget imej"
 
@@ -940,7 +940,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:492
 #, fuzzy
-msgid "Whether stock icons should be shown in buttons"
+msgid "Whether images should be shown on buttons"
 msgstr "Samada tab patut dipapar atau sebaliknya"
 
 #: gtk/gtkcalendar.c:440
@@ -2062,7 +2062,7 @@ msgstr "Hala panah"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Model pagi kekotak kombo"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2692,7 +2692,7 @@ msgstr "yalign label"
 msgid "The vertical alignment of the label"
 msgstr "Jajaran menegak bagi label"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Ciri-ciri menyusut, guna shadow_type sebaliknya"
 
@@ -2708,44 +2708,44 @@ msgstr "Penampilan sempadan kerangka"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Widget untuk memaparkan label kerangka biasa"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Penampilan bayang yang mengelilingi bekasnya"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Posisi pengendali"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Posisi pengendali relatif kepada wiget anak"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 #, fuzzy
 msgid "Snap edge set"
 msgstr "Set mod balut"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2969,16 +2969,16 @@ msgstr "Jenis storan"
 msgid "The representation being used for image data"
 msgstr "Perwakilan digunakan oleh data imej"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Wiget anak supaya muncul disebelah teks menu"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 #, fuzzy
 msgid "Show menu images"
 msgstr "Papar Bilangan Minggu"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 #, fuzzy
 msgid "Whether images should be shown in menus"
 msgstr "Samada tab patut dipapar atau sebaliknya"
@@ -3123,6 +3123,25 @@ msgstr "Lebar bagi susunatur"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "Tinggi bagi susunatur"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "Togol keadaan bagi butang"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Tampak"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Samada aksi boleh dilihat."
 
 #: gtk/gtkmenu.c:503
 #, fuzzy
@@ -3602,7 +3621,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr ""
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Kumpulan"
 
@@ -3722,6 +3741,16 @@ msgstr ""
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Saiz ruang ruang"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Jarak ruang baris"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Ruangjarak bar skrol"
 
 #: gtk/gtkobject.c:370
 #, fuzzy
@@ -4280,6 +4309,11 @@ msgstr "Butang radio milik kumpulan mana wiget ini."
 #: gtk/gtkradiomenuitem.c:343
 #, fuzzy
 msgid "The radio menu item whose group this widget belongs to."
+msgstr "Butang radio milik kumpulan mana wiget ini."
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
 msgstr "Butang radio milik kumpulan mana wiget ini."
 
 #: gtk/gtkrange.c:337
@@ -7088,6 +7122,10 @@ msgstr "Gaya Status IM"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Bagaimana hendak melukis kaedah input pada bar status"
+
+#, fuzzy
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Samada tab patut dipapar atau sebaliknya"
 
 #~ msgid ""
 #~ "A number between 0.0 and 1.0 specifying the horizontal alignment of the "

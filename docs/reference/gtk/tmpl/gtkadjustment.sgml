@@ -201,3 +201,107 @@ changed the #GtkAdjustment value field.
 @adjustment: a #GtkAdjustment
 
 
+<!-- ##### FUNCTION gtk_adjustment_configure ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@value: 
+@lower: 
+@upper: 
+@step_increment: 
+@page_increment: 
+@page_size: 
+
+
+<!-- ##### FUNCTION gtk_adjustment_get_lower ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_adjustment_get_page_increment ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_adjustment_get_page_size ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_adjustment_get_step_increment ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_adjustment_get_upper ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_adjustment_set_lower ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@lower: 
+
+
+<!-- ##### FUNCTION gtk_adjustment_set_page_increment ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@page_increment: 
+
+
+<!-- ##### FUNCTION gtk_adjustment_set_page_size ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@page_size: 
+
+
+<!-- ##### FUNCTION gtk_adjustment_set_step_increment ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@step_increment: 
+
+
+<!-- ##### FUNCTION gtk_adjustment_set_upper ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@upper: 
+
+

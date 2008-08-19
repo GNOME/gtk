@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2008-07-13 12:58+0100\n"
 "Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
@@ -830,7 +830,7 @@ msgstr "Vodorovné zarovnání potomka"
 msgid "Vertical alignment for child"
 msgstr "Svislé zarovnání potomka"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Widget obrázku"
 
@@ -917,8 +917,9 @@ msgid "Show button images"
 msgstr "Zobrazovat obrázky tlačítek"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Jestli se v tlačítkách mají zobrazovat standardní ikony"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Jestli se mají v menu zobrazovat obrázky"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -1994,7 +1995,7 @@ msgstr "Velikost šipky"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Minimální velikost šipky v kombinovaném poli"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2608,7 +2609,7 @@ msgstr "Zarovnání textu Y"
 msgid "The vertical alignment of the label"
 msgstr "Svislé zarovnání titulku"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Zastaralá vlastnost, použijte místo ní shadow_type"
 
@@ -2624,34 +2625,34 @@ msgstr "Vzhled okrajů rámu"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Widget používaný pro zobrazení místo obvyklého popisku rámu"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Vzhled stínu okolo kontejneru"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Pozice ovládací části"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Umístění ovládací části relativně k widgetu potomka"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Okraj pro přitahování"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr ""
 "Strana panelu, která je zarovnaná s ukotvovacím bodem pro ukotvení panelu"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Okraj pro přitahování nastaven"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2659,11 +2660,11 @@ msgstr ""
 "Jestli používat hodnotu vlastnosti snap_edge nebo hodnotu odvozenou z "
 "handle_position"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr "Potomek odpojen"
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2871,15 +2872,15 @@ msgstr "Typ uložení"
 msgid "The representation being used for image data"
 msgstr "Reprezentace používaná pro data obrázku"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Widget potomka zobrazovaný vedle textu menu"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Zobrazovat v menu obrázky"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Jestli se mají v menu zobrazovat obrázky"
 
@@ -3018,6 +3019,25 @@ msgstr "Šířka rozložení"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "Výška rozložení"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "Stav přepnutí tlačítka"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Viditelný"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Jestli je akce viditelná."
 
 #: gtk/gtkmenu.c:503
 msgid "The currently selected menu item"
@@ -3469,7 +3489,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "ID skupiny u tažení a puštění karet"
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Skupina"
 
@@ -3580,6 +3600,16 @@ msgstr "Zakřivení karet"
 #: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "Velikost zakřivení karty"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Škálování šipky"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Odstup posuvníků"
 
 #: gtk/gtkobject.c:370
 msgid "User Data"
@@ -4114,6 +4144,11 @@ msgstr "Přepínací tlačítko, do jehož skupiny patří tento widget."
 #: gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "Položka přepínacího tlačítka, do jejíž skupiny patří tento widget."
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Přepínací tlačítko, do jehož skupiny patří tento widget."
 
 #: gtk/gtkrange.c:337
 msgid "Update policy"
@@ -6806,6 +6841,9 @@ msgstr "Styl stavu IM"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Jak kreslit stavovou lištu vstupní metody"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Jestli se v tlačítkách mají zobrazovat standardní ikony"
 
 #~ msgid "Cancelled"
 #~ msgstr "Zrušeno"

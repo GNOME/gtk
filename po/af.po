@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2004-03-30 17:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Afrikaans <translate-discuss-af@lists.sourceforge.net>\n"
@@ -986,7 +986,7 @@ msgstr "Kon nie TIFF-beeld open nie"
 msgid "Couldn't write to TIFF file"
 msgstr "Kon nie lêernaam omsit nie"
 
-#: gdk-pixbuf/io-tiff.c:814
+#: gdk-pixbuf/io-tiff.c:815
 msgid "The TIFF image format"
 msgstr "Die TIFF-beeldformaat"
 
@@ -1179,7 +1179,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2106
+#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr ""
 
@@ -1194,32 +1194,32 @@ msgid "C_redits"
 msgstr "S_kep"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:513
+#: gtk/gtkaboutdialog.c:514
 msgid "_License"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:742
+#: gtk/gtkaboutdialog.c:744
 #, c-format
 msgid "About %s"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2030
+#: gtk/gtkaboutdialog.c:2032
 msgid "Credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2059
+#: gtk/gtkaboutdialog.c:2061
 msgid "Written by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2062
+#: gtk/gtkaboutdialog.c:2064
 msgid "Documented by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2074
+#: gtk/gtkaboutdialog.c:2076
 msgid "Translated by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2078
+#: gtk/gtkaboutdialog.c:2080
 msgid "Artwork by"
 msgstr ""
 
@@ -1262,7 +1262,7 @@ msgstr ""
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:679
+#: gtk/gtkaccellabel.c:678
 msgid "keyboard label|Super"
 msgstr ""
 
@@ -1272,7 +1272,7 @@ msgstr ""
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:693
+#: gtk/gtkaccellabel.c:692
 msgid "keyboard label|Hyper"
 msgstr ""
 
@@ -1282,17 +1282,17 @@ msgstr ""
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:708
+#: gtk/gtkaccellabel.c:707
 msgid "keyboard label|Meta"
 msgstr ""
 
 #. do not translate the part before the |
-#: gtk/gtkaccellabel.c:726
+#: gtk/gtkaccellabel.c:725
 msgid "keyboard label|Space"
 msgstr ""
 
 #. do not translate the part before the |
-#: gtk/gtkaccellabel.c:730
+#: gtk/gtkaccellabel.c:729
 msgid "keyboard label|Backslash"
 msgstr ""
 
@@ -1340,7 +1340,7 @@ msgstr "kalender:week_begin:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1797
+#: gtk/gtkcalendar.c:1796
 msgid "year measurement template|2000"
 msgstr ""
 
@@ -1355,7 +1355,7 @@ msgstr ""
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1828 gtk/gtkcalendar.c:2489
+#: gtk/gtkcalendar.c:1827 gtk/gtkcalendar.c:2488
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr ""
@@ -1371,7 +1371,7 @@ msgstr ""
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1860 gtk/gtkcalendar.c:2351
+#: gtk/gtkcalendar.c:1859 gtk/gtkcalendar.c:2350
 #, fuzzy, c-format
 msgid "calendar:week:digits|%d"
 msgstr "kalender:week_begin:0"
@@ -1387,7 +1387,7 @@ msgstr "kalender:week_begin:0"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2141
+#: gtk/gtkcalendar.c:2140
 msgid "calendar year format|%Y"
 msgstr ""
 
@@ -1517,7 +1517,7 @@ msgstr "_Palet"
 msgid "Color Wheel"
 msgstr "Wiel"
 
-#: gtk/gtkcolorsel.c:980
+#: gtk/gtkcolorsel.c:976
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1527,7 +1527,7 @@ msgstr ""
 "selekteer. Jy kan hierdie kleur sleep na 'n paletinskrywing, of selekteer "
 "die kleur as huidig deurdit te sleep na die ander kleur-monster langsaan."
 
-#: gtk/gtkcolorsel.c:984
+#: gtk/gtkcolorsel.c:980
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1535,11 +1535,11 @@ msgstr ""
 "Die kleur wat jy geselekteer het. Jy kan hierdie kleur sleep na 'n "
 "paletinskrywing om dit vir toekomstige gebruik te stoor."
 
-#: gtk/gtkcolorsel.c:1369
+#: gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
 msgstr "_Stoor kleur hier"
 
-#: gtk/gtkcolorsel.c:1574
+#: gtk/gtkcolorsel.c:1568
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1552,11 +1552,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Kleurseleksie"
 
-#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7654
+#: gtk/gtkentry.c:5375 gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "Toevoer _Metodes"
 
-#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7668
+#: gtk/gtkentry.c:5389 gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "_Voer Unicode-beheer karakter in"
 
@@ -1574,7 +1574,7 @@ msgstr "Werkarea"
 msgid "(None)"
 msgstr "geen"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2011
 msgid "Other..."
 msgstr ""
 
@@ -2088,7 +2088,7 @@ msgstr "Gr_ootte:"
 msgid "_Preview:"
 msgstr "_Voorskou:"
 
-#: gtk/gtkfontsel.c:1580
+#: gtk/gtkfontsel.c:1542
 msgid "Font Selection"
 msgstr "Lettertipe Seleksie"
 
@@ -2126,7 +2126,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Ikoon '%s' nie aanwesig in tema nie"
 
-#: gtk/gtkicontheme.c:3052
+#: gtk/gtkicontheme.c:3058
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "Kon nie TIFF-beeld laai nie"
@@ -2227,20 +2227,12 @@ msgstr "(onbekend)"
 msgid "Cl_ear"
 msgstr "_Maak skoon"
 
-#: gtk/gtklinkbutton.c:144
-msgid "URI"
-msgstr ""
-
-#: gtk/gtklinkbutton.c:145
-msgid "The URI bound to this button"
-msgstr ""
-
-#: gtk/gtklinkbutton.c:402
+#: gtk/gtklinkbutton.c:427
 #, fuzzy
 msgid "Copy URL"
 msgstr "_Kopieer"
 
-#: gtk/gtklinkbutton.c:542
+#: gtk/gtklinkbutton.c:565
 #, fuzzy
 msgid "Invalid URI"
 msgstr "Ongeldige UTF-8"
@@ -2321,26 +2313,18 @@ msgid "_Password:"
 msgstr "Druk"
 
 #: gtk/gtkmountoperation.c:590
-msgid "_Forget password immediately"
+msgid "Forget password _immediately"
 msgstr ""
 
 #: gtk/gtkmountoperation.c:598
-msgid "_Remember password until you logout"
+msgid "Remember password until you _logout"
 msgstr ""
 
 #: gtk/gtkmountoperation.c:606
-msgid "_Remember forever"
+msgid "Remember _forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:834
-msgid "Arrow spacing"
-msgstr ""
-
-#: gtk/gtknotebook.c:835
-msgid "Scroll arrow spacing"
-msgstr ""
-
-#: gtk/gtknotebook.c:4425 gtk/gtknotebook.c:6931
+#: gtk/gtknotebook.c:4424 gtk/gtknotebook.c:6930
 #, c-format
 msgid "Page %u"
 msgstr "Bladsy %u"
@@ -2402,7 +2386,7 @@ msgstr "_Eienskappe"
 msgid "_Orientation:"
 msgstr "_Versadiging:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2398
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2397
 #, fuzzy
 msgid "Page Setup"
 msgstr "Bladsy %u"
@@ -2464,7 +2448,7 @@ msgstr ""
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1464
+#: gtk/gtkpathbar.c:1472
 #, fuzzy
 msgid "File System Root"
 msgstr "Lêersisteem"
@@ -2580,8 +2564,9 @@ msgstr ""
 msgid "Out of paper"
 msgstr ""
 
+#. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1373
+#: modules/printbackends/cups/gtkprintbackendcups.c:1375
 #, fuzzy
 msgid "Paused"
 msgstr "_Plak"
@@ -2631,199 +2616,191 @@ msgstr "Ongeldige kopteks in ikoon"
 msgid "Unspecified error"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1717
+#: gtk/gtkprintunixdialog.c:1716
 #, fuzzy
 msgid "Printer"
 msgstr "_Druk"
 
-#: gtk/gtkprintunixdialog.c:1726
+#: gtk/gtkprintunixdialog.c:1725
 #, fuzzy
 msgid "Location"
 msgstr "_Ligging:"
 
-#: gtk/gtkprintunixdialog.c:1736
+#: gtk/gtkprintunixdialog.c:1735
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1759
+#: gtk/gtkprintunixdialog.c:1758
 msgid "Range"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1763
+#: gtk/gtkprintunixdialog.c:1762
 msgid "_All Pages"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1770
+#: gtk/gtkprintunixdialog.c:1769
 #, fuzzy
 msgid "C_urrent Page"
 msgstr "S_kep"
 
-#: gtk/gtkprintunixdialog.c:1779
+#: gtk/gtkprintunixdialog.c:1778
 msgid "Pag_es:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1780
+#: gtk/gtkprintunixdialog.c:1779
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1799
+#: gtk/gtkprintunixdialog.c:1798
 msgid "Copies"
 msgstr ""
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1804
+#: gtk/gtkprintunixdialog.c:1803
 msgid "Copie_s:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1822
+#: gtk/gtkprintunixdialog.c:1821
 #, fuzzy
 msgid "C_ollate"
 msgstr "S_kep"
 
-#: gtk/gtkprintunixdialog.c:1830
+#: gtk/gtkprintunixdialog.c:1829
 #, fuzzy
 msgid "_Reverse"
 msgstr "_Keer terug"
 
-#: gtk/gtkprintunixdialog.c:1850
+#: gtk/gtkprintunixdialog.c:1849
 msgid "General"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2253
+#: gtk/gtkprintunixdialog.c:2252
 msgid "Layout"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2257
+#: gtk/gtkprintunixdialog.c:2256
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "_Eienskappe"
 
-#: gtk/gtkprintunixdialog.c:2273
+#: gtk/gtkprintunixdialog.c:2272
 msgid "T_wo-sided:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2288
+#: gtk/gtkprintunixdialog.c:2287
 #, fuzzy
 msgid "_Only print:"
 msgstr "_Druk"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2303
+#: gtk/gtkprintunixdialog.c:2302
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2304
+#: gtk/gtkprintunixdialog.c:2303
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2305
+#: gtk/gtkprintunixdialog.c:2304
 msgid "Odd sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2308
+#: gtk/gtkprintunixdialog.c:2307
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "_Waarde:"
 
-#: gtk/gtkprintunixdialog.c:2335
+#: gtk/gtkprintunixdialog.c:2334
 msgid "Paper"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2339
+#: gtk/gtkprintunixdialog.c:2338
 #, fuzzy
 msgid "Paper _type:"
 msgstr "_Eienskappe"
 
-#: gtk/gtkprintunixdialog.c:2354
+#: gtk/gtkprintunixdialog.c:2353
 #, fuzzy
 msgid "Paper _source:"
 msgstr "_Eienskappe"
 
-#: gtk/gtkprintunixdialog.c:2369
+#: gtk/gtkprintunixdialog.c:2368
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2421
+#: gtk/gtkprintunixdialog.c:2420
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2427
+#: gtk/gtkprintunixdialog.c:2426
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2442
+#: gtk/gtkprintunixdialog.c:2441
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2460
+#: gtk/gtkprintunixdialog.c:2459
 msgid "Print Document"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2466
+#: gtk/gtkprintunixdialog.c:2465
 #, fuzzy
 msgid "_Now"
 msgstr "_Nee"
 
-#: gtk/gtkprintunixdialog.c:2473
+#: gtk/gtkprintunixdialog.c:2472
 msgid "A_t:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2488
+#: gtk/gtkprintunixdialog.c:2487
 #, fuzzy
 msgid "On _hold"
 msgstr "_Vetdruk"
 
-#: gtk/gtkprintunixdialog.c:2507
+#: gtk/gtkprintunixdialog.c:2506
 msgid "Add Cover Page"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2513
+#: gtk/gtkprintunixdialog.c:2512
 msgid "Be_fore:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2528
+#: gtk/gtkprintunixdialog.c:2527
 msgid "_After:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2543
+#: gtk/gtkprintunixdialog.c:2542
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2609
+#: gtk/gtkprintunixdialog.c:2608
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2644
+#: gtk/gtkprintunixdialog.c:2643
 msgid "Image Quality"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2647
+#: gtk/gtkprintunixdialog.c:2646
 #, fuzzy
 msgid "Color"
 msgstr "_Kleur"
 
-#: gtk/gtkprintunixdialog.c:2650
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2660
+#: gtk/gtkprintunixdialog.c:2659
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2683
+#: gtk/gtkprintunixdialog.c:2682
 #, fuzzy
 msgid "Print"
 msgstr "_Druk"
-
-#: gtk/gtkradiotoolbutton.c:65
-msgid "Group"
-msgstr "Groep"
-
-#: gtk/gtkradiotoolbutton.c:66
-msgid "The radio tool button whose group this button belongs to."
-msgstr "Die radio nutsgoedknoppie aan wie se groep hierdie knoppie behoort."
 
 #: gtk/gtkrc.c:2872
 #, c-format
@@ -2845,44 +2822,44 @@ msgstr ""
 msgid "Select which type of documents are shown"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1096 gtk/gtkrecentchooserdefault.c:1133
+#: gtk/gtkrecentchooserdefault.c:1095 gtk/gtkrecentchooserdefault.c:1132
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1260
+#: gtk/gtkrecentchooserdefault.c:1259
 msgid "Untitled filter"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1613
+#: gtk/gtkrecentchooserdefault.c:1612
 #, fuzzy
 msgid "Could not remove item"
 msgstr ""
 "Kon nie vouer %s skep nie:\n"
 "%s"
 
-#: gtk/gtkrecentchooserdefault.c:1656
+#: gtk/gtkrecentchooserdefault.c:1655
 #, fuzzy
 msgid "Could not clear list"
 msgstr ""
 "Kon nie vouer %s skep nie:\n"
 "%s"
 
-#: gtk/gtkrecentchooserdefault.c:1740
+#: gtk/gtkrecentchooserdefault.c:1739
 #, fuzzy
 msgid "Copy _Location"
 msgstr "Open Ligging"
 
-#: gtk/gtkrecentchooserdefault.c:1753
+#: gtk/gtkrecentchooserdefault.c:1752
 msgid "_Remove From List"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1762
+#: gtk/gtkrecentchooserdefault.c:1761
 #, fuzzy
 msgid "_Clear List"
 msgstr "_Maak skoon"
 
-#: gtk/gtkrecentchooserdefault.c:1776
+#: gtk/gtkrecentchooserdefault.c:1775
 msgid "Show _Private Resources"
 msgstr ""
 
@@ -2938,10 +2915,10 @@ msgstr ""
 msgid "recent menu label|%d. %s"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1025
-#: gtk/gtkrecentmanager.c:1163 gtk/gtkrecentmanager.c:1173
-#: gtk/gtkrecentmanager.c:1226 gtk/gtkrecentmanager.c:1235
-#: gtk/gtkrecentmanager.c:1250
+#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
+#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
+#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
+#: gtk/gtkrecentmanager.c:1258
 #, fuzzy, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Kon nie insluit-lêer: \"%s\" vind nie"
@@ -4622,96 +4599,100 @@ msgstr ""
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1371
+#. Translators: this is a printer status.
+#: modules/printbackends/cups/gtkprintbackendcups.c:1372
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1375
+#. Translators: this is a printer status.
+#: modules/printbackends/cups/gtkprintbackendcups.c:1378
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1999
 msgid "Two Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1997
+#: modules/printbackends/cups/gtkprintbackendcups.c:2000
 msgid "Paper Type"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1998
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Paper Source"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:2002
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2008
+#: modules/printbackends/cups/gtkprintbackendcups.c:2011
 msgid "One Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2009
-#: modules/printbackends/cups/gtkprintbackendcups.c:2010
-#: modules/printbackends/cups/gtkprintbackendcups.c:2014
+#. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2013
+#: modules/printbackends/cups/gtkprintbackendcups.c:2015
+#: modules/printbackends/cups/gtkprintbackendcups.c:2023
 #, fuzzy
 msgid "Auto Select"
 msgstr "Lettertipe Seleksie"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2011
-#: modules/printbackends/cups/gtkprintbackendcups.c:2012
-#: modules/printbackends/cups/gtkprintbackendcups.c:2013
-#: modules/printbackends/cups/gtkprintbackendcups.c:2483
+#. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2017
+#: modules/printbackends/cups/gtkprintbackendcups.c:2019
+#: modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: modules/printbackends/cups/gtkprintbackendcups.c:2492
 #, fuzzy
 msgid "Printer Default"
 msgstr "Verstek"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Urgent"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "High"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Medium"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Low"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 #, fuzzy
 msgid "None"
 msgstr "geen"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Classified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Confidential"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 #, fuzzy
 msgid "Secret"
 msgstr "Skerm"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Standard"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Top Secret"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Unclassified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2817
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 #, c-format
 msgid "Custom %sx%s"
 msgstr ""
@@ -4778,6 +4759,12 @@ msgstr "_Druk"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Kon nie inligting bekom vir lêer '%s' nie: %s"
+
+#~ msgid "Group"
+#~ msgstr "Groep"
+
+#~ msgid "The radio tool button whose group this button belongs to."
+#~ msgstr "Die radio nutsgoedknoppie aan wie se groep hierdie knoppie behoort."
 
 #~ msgid "Invalid filename: %s"
 #~ msgstr "Ongeldige lêernaam: %s"

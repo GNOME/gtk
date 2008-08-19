@@ -1,3 +1,7 @@
+2008-08-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* ==== Released 2.13.7 ===
+
 2008-08-16  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* gdk/gdk-sections.txt: Don't mention GdkWindowRedirect in the

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2007-09-17 20:57+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -829,7 +829,7 @@ msgstr "Alineació horitzontal per al fill"
 msgid "Vertical alignment for child"
 msgstr "Alineació vertical per al fill"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Element d'imatge"
 
@@ -920,8 +920,9 @@ msgid "Show button images"
 msgstr "Mostra imatges de botons"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Si s'ha de mostrar les icones d'estoc en els botons"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Si s'han de mostrar imatges en els menús."
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2027,7 +2028,7 @@ msgstr "Mida de la fletxa"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "La mida mínima de la fletxa al quadre combinat"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2660,7 +2661,7 @@ msgstr "Etiqueta yalign"
 msgid "The vertical alignment of the label"
 msgstr "L'alineació vertical de l'etiqueta"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Propietat obsoleta, utilitzeu  _tipus d'ombra en el seu lloc"
 
@@ -2676,23 +2677,23 @@ msgstr "Aparença del contorn del marc"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Un giny a visualitzar en lloc del típic marc d'etiqueta"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Aspecte de l'ombra que envolta el contenidor"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Gestiona posició"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Posició de la nansa relativa al giny fill"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Contorn ràpid"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -2700,11 +2701,11 @@ msgstr ""
 "Part del handlebox que es programa amb el punt d'amarratge per amarrar el "
 "handlebox."
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Conjunt de contorn ràpid"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2712,11 +2713,11 @@ msgstr ""
 "Si s'ha d'utilitzar el valor de la propietat snap_edge o un valor derivat de "
 "handle_position"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2924,15 +2925,15 @@ msgstr "Tipus d'emmagatzemament"
 msgid "The representation being used for image data"
 msgstr "La representació utilitzada per les dades de la imatge"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Giny fill que apareix pròxim al text del menú"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Mostra imatges del menú"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Si s'han de mostrar imatges en els menús."
 
@@ -3075,6 +3076,25 @@ msgstr "L'amplada de la disposició"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "L'alçària de la disposició"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "L'estat commutat del botó"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Visible"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Si l'acció és visible"
 
 #: gtk/gtkmenu.c:503
 #, fuzzy
@@ -3545,7 +3565,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "ID del grup per a pestanyes per arrossegar i deixar anar"
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Grup"
 
@@ -3659,6 +3679,16 @@ msgstr "Curvatura de la pestanya"
 #: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "Mida de la curvatura de la pestanya"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Escalat de la fletxa"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Espaiat de barra de desplaçament"
 
 #: gtk/gtkobject.c:370
 msgid "User Data"
@@ -4203,6 +4233,11 @@ msgstr "El botó de grup al grup del qual pertany aquest giny."
 #: gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "L'element del botó de grup el grup del qual pertany aquest giny."
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
+msgstr "El botó de grup al grup del qual pertany aquest giny."
 
 #: gtk/gtkrange.c:337
 msgid "Update policy"
@@ -7004,6 +7039,9 @@ msgstr "Estil de l'estat IM"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Com dibuixar la barra d'estat del mètode d'entrada"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Si s'ha de mostrar les icones d'estoc en els botons"
 
 # La operació
 #~ msgid "Cancelled"

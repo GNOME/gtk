@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2008-07-25 09:18-0300\n"
 "Last-Translator: Vladimir Melo <vladimirmelo.psi@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
@@ -833,7 +833,7 @@ msgstr "Alinhamento horizontal para o filho"
 msgid "Vertical alignment for child"
 msgstr "Alinhamento vertical para o filho"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Widget de imagem"
 
@@ -922,8 +922,9 @@ msgid "Show button images"
 msgstr "Exibir imagens nos botões"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Se os ícones predefinidos devem ser mostrados nos botões"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Mostrar ou não imagens em menus"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2020,7 +2021,7 @@ msgstr "Tamanho da Seta"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "O tamanho mínimo da seta na caixa de combinação"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2649,7 +2650,7 @@ msgstr "Alinhamento y do rótulo"
 msgid "The vertical alignment of the label"
 msgstr "O alinhamento vertical do rótulo"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Propriedade obsoleta, use \"shadow_type\" no lugar"
 
@@ -2665,23 +2666,23 @@ msgstr "Aparência da borda da moldura"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Um widget a ser exibido no lugar do usual rótulo da moldura"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Aparência da sombra que contorna o container"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Posição da alça"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Posição do alça relativo ao widget filho"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Snap edge"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -2689,11 +2690,11 @@ msgstr ""
 "O lado da handlebox que deve estar alinhada com o ponto de encaixe para "
 "anexá-la"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Definir \"snap edge\""
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2701,11 +2702,11 @@ msgstr ""
 "Usar o valor da propriedade \"snap_edge\" ou um valor derivado de "
 "\"handle_position\""
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2914,15 +2915,15 @@ msgstr "Tipo de armazenamento"
 msgid "The representation being used for image data"
 msgstr "A representação usada para os dados da imagem"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Widget filho a aparecer ao lado do texto de menu"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Mostrar imagens nos menus"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Mostrar ou não imagens em menus"
 
@@ -3065,6 +3066,25 @@ msgstr "A largura do layout"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "A altura do layout"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "O estado de alternância do botão"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Visível"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Se a ação está visível."
 
 #: gtk/gtkmenu.c:503
 #, fuzzy
@@ -3534,7 +3554,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "ID de grupo para o arrastar e soltar de abas"
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Grupo"
 
@@ -3645,6 +3665,16 @@ msgstr "Curvatura da aba"
 #: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "Tamanho da curvatura das abas"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Escala da Seta"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Espaçamento da barra de rolagem"
 
 #: gtk/gtkobject.c:370
 msgid "User Data"
@@ -4190,6 +4220,11 @@ msgstr "O botão de opção a cujo grupo este widget pertence."
 
 #: gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
+msgstr "O botão de opção a cujo grupo este widget pertence."
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
 msgstr "O botão de opção a cujo grupo este widget pertence."
 
 #: gtk/gtkrange.c:337
@@ -6934,6 +6969,9 @@ msgstr "Estilo de Estado do ME"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Como desenhar a barra de status do método de entrada"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Se os ícones predefinidos devem ser mostrados nos botões"
 
 #~ msgid "Cancelled"
 #~ msgstr "Cancelada"

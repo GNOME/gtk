@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2008-08-11 18:12+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -247,7 +247,8 @@ msgstr "ಚಿತ್ರ ಕಡತ '%s' ದಲ್ಲಿ ಯಾವುದೇ ದತ
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:993
 #: gdk-pixbuf/gdk-pixbuf-io.c:1257 tests/testfilechooser.c:267
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "ಚಿತ್ರ '%s'ವನ್ನು ಲೋಡ್ ಮಾಡುವಲ್ಲಿ ವಿಫಲತೆ: ಕಾರಣ ತಿಳಿದಿಲ್ಲ, ಬಹುಷಃ ಒಂದು ಭ್ರಷ್ಟಗೊಂಡ ಚಿತ್ರ "
 "ಕಡತದಿಂದಾಗಿರಬಹುದು"
@@ -302,7 +303,8 @@ msgstr "ಚಿತ್ರ ಕಡತಕ್ಕೆ ಬರೆಯುವಲ್ಲಿ ವ
 #: gdk-pixbuf/gdk-pixbuf-io.c:1684 gdk-pixbuf/gdk-pixbuf-io.c:1815
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "gdk-pixbuf ನ ಈ ನಿರ್ಮಿತಿಯು ಚಿತ್ರ ವಿನ್ಯಾಸವನ್ನು ಉಳಿಸುವುದನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ: %s"
+msgstr ""
+"gdk-pixbuf ನ ಈ ನಿರ್ಮಿತಿಯು ಚಿತ್ರ ವಿನ್ಯಾಸವನ್ನು ಉಳಿಸುವುದನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1718
 msgid "Insufficient memory to save image to callback"
@@ -469,7 +471,8 @@ msgstr "GIF ಕಡತವನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಕಷ�
 
 #: gdk-pixbuf/io-gif.c:956
 msgid "Not enough memory to composite a frame in GIF file"
-msgstr "GIF ಕಡತದಲ್ಲಿನ ಒಂದು ಚೌಕಟ್ಟನ್ನು ಸಂಯುಕ್ತಗೊಳಿಸಲು (composite) ಸಾಕಷ್ಟು ಮೆಮೊರಿ ಲಭ್ಯವಿಲ್ಲ"
+msgstr ""
+"GIF ಕಡತದಲ್ಲಿನ ಒಂದು ಚೌಕಟ್ಟನ್ನು ಸಂಯುಕ್ತಗೊಳಿಸಲು (composite) ಸಾಕಷ್ಟು ಮೆಮೊರಿ ಲಭ್ಯವಿಲ್ಲ"
 
 #: gdk-pixbuf/io-gif.c:1128
 msgid "GIF image is corrupt (incorrect LZW compression)"
@@ -628,7 +631,8 @@ msgstr "JPEG ಗುಣ ಮಟ್ಟವು ೦ ಹಾಗು ೧೦೦; ಮೌಲ�
 
 #: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG ಗುಣ ಮಟ್ತವು ೦ ಹಾಗು ೧೦೦; ಮಾಲ್ಯ '%d' ವು ಬೆಂಬಲಿತವಾಗಿಲ್ಲ."
 
 #: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
@@ -698,7 +702,8 @@ msgstr "ರೂಪಾಂತರಗೊಂಡ PNG ಯು RGB ಅಥವ RGBA ಆಗ�
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "ರೂಪಾಂತರಗೊಂಡ PNG ಯು ಬೆಂಬಲವಿಲ್ಲದ ಸಂಖ್ಯೆಯ ಚಾನಲ್ಲುಗಳನ್ನು ಹೊಂದಿದೆ, ೩ ಅಥವ ೪ ಆಗಿರಬೇಕು."
+msgstr ""
+"ರೂಪಾಂತರಗೊಂಡ PNG ಯು ಬೆಂಬಲವಿಲ್ಲದ ಸಂಖ್ಯೆಯ ಚಾನಲ್ಲುಗಳನ್ನು ಹೊಂದಿದೆ, ೩ ಅಥವ ೪ ಆಗಿರಬೇಕು."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -728,7 +733,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ಚಿತ್ರ ಕಡತವನ್ನು ಓದುವಲ್ಲಿ ಮಾರಕ ದೋಷ: %s"
 
 #: gdk-pixbuf/io-png.c:825
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ಪಠ್ಯದ ತುಣುಕುಗಳ ಕೀಲಿಗಳು ಕನಿಷ್ಠ ೧ ಹಾಗು ಗರಿಷ್ಟ ೭೮ ಅಕ್ಷರಗಳನ್ನು ಹೊಂದಿರಬೇಕು."
 
 #: gdk-pixbuf/io-png.c:833
@@ -756,7 +762,8 @@ msgstr ""
 #: gdk-pixbuf/io-png.c:896
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "PNG ಪಠ್ಯ ತುಣುಕು %s ನ ಮೌಲ್ಯವನ್ನು ISO-8859-1 ಸಂಕೇತಿಕರಣಕ್ಕೆ(encoding) ಬದಲಾಯಿಸಲಾಗಿಲ್ಲ."
+msgstr ""
+"PNG ಪಠ್ಯ ತುಣುಕು %s ನ ಮೌಲ್ಯವನ್ನು ISO-8859-1 ಸಂಕೇತಿಕರಣಕ್ಕೆ(encoding) ಬದಲಾಯಿಸಲಾಗಿಲ್ಲ."
 
 #: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
@@ -949,7 +956,7 @@ msgstr "TIFF ದತ್ತಾಂಶವನ್ನು ಬರೆಯುವಲ್ಲಿ
 msgid "Couldn't write to TIFF file"
 msgstr "TIFF ಕಡತಕ್ಕೆ ಬರೆಯಲಾಗಿಲ್ಲ"
 
-#: gdk-pixbuf/io-tiff.c:814
+#: gdk-pixbuf/io-tiff.c:815
 msgid "The TIFF image format"
 msgstr "TIFF ಚಿತ್ರ ವಿನ್ಯಾಸ"
 
@@ -1130,7 +1137,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d ಅಂಶವನ್ನು ತೆಗೆಯಲಾಗುತ್ತಿದೆ"
 msgstr[1] "%d ಅಂಶಗಳನ್ನು ತೆಗೆಯಲಾಗುತ್ತಿದೆ"
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2106
+#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "ಪರವಾನಗಿ"
 
@@ -1144,32 +1151,32 @@ msgid "C_redits"
 msgstr "ಮನ್ನಣೆಗಳು(_r)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:513
+#: gtk/gtkaboutdialog.c:514
 msgid "_License"
 msgstr "ಪರವಾನಗಿ(_L)"
 
-#: gtk/gtkaboutdialog.c:742
+#: gtk/gtkaboutdialog.c:744
 #, c-format
 msgid "About %s"
 msgstr "%s ಬಗ್ಗೆ"
 
-#: gtk/gtkaboutdialog.c:2030
+#: gtk/gtkaboutdialog.c:2032
 msgid "Credits"
 msgstr "ಮನ್ನಣೆಗಳು"
 
-#: gtk/gtkaboutdialog.c:2059
+#: gtk/gtkaboutdialog.c:2061
 msgid "Written by"
 msgstr "ಬರೆದವರು"
 
-#: gtk/gtkaboutdialog.c:2062
+#: gtk/gtkaboutdialog.c:2064
 msgid "Documented by"
 msgstr "ದಸ್ತಾವೇಜುಗೊಳಿಸಿದವರು"
 
-#: gtk/gtkaboutdialog.c:2074
+#: gtk/gtkaboutdialog.c:2076
 msgid "Translated by"
 msgstr "ಅನುವಾದಿಸಿದವರು"
 
-#: gtk/gtkaboutdialog.c:2078
+#: gtk/gtkaboutdialog.c:2080
 msgid "Artwork by"
 msgstr "ಕುಶಲಕಾರ್ಯಗೊಳಿಸಿದವರು"
 
@@ -1212,7 +1219,7 @@ msgstr "Alt"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:679
+#: gtk/gtkaccellabel.c:678
 msgid "keyboard label|Super"
 msgstr "Super"
 
@@ -1222,7 +1229,7 @@ msgstr "Super"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:693
+#: gtk/gtkaccellabel.c:692
 msgid "keyboard label|Hyper"
 msgstr "Hyper"
 
@@ -1232,17 +1239,17 @@ msgstr "Hyper"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:708
+#: gtk/gtkaccellabel.c:707
 msgid "keyboard label|Meta"
 msgstr "Meta"
 
 #. do not translate the part before the |
-#: gtk/gtkaccellabel.c:726
+#: gtk/gtkaccellabel.c:725
 msgid "keyboard label|Space"
 msgstr "Space"
 
 #. do not translate the part before the |
-#: gtk/gtkaccellabel.c:730
+#: gtk/gtkaccellabel.c:729
 msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
@@ -1290,7 +1297,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1797
+#: gtk/gtkcalendar.c:1796
 msgid "year measurement template|2000"
 msgstr "೨೦೦೦"
 
@@ -1305,7 +1312,7 @@ msgstr "೨೦೦೦"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1828 gtk/gtkcalendar.c:2489
+#: gtk/gtkcalendar.c:1827 gtk/gtkcalendar.c:2488
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1321,7 +1328,7 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1860 gtk/gtkcalendar.c:2351
+#: gtk/gtkcalendar.c:1859 gtk/gtkcalendar.c:2350
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1337,7 +1344,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2141
+#: gtk/gtkcalendar.c:2140
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1463,7 +1470,7 @@ msgstr "ವರ್ಣಫಲಕ(_P):"
 msgid "Color Wheel"
 msgstr "ಬಣ್ಣದ ಚಕ್ರ"
 
-#: gtk/gtkcolorsel.c:980
+#: gtk/gtkcolorsel.c:976
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1473,7 +1480,7 @@ msgstr ""
 "ವರ್ಣಫಲಕ ನಮೂದಿಗೆ ಸೇರಿಸಬಹುದು, ಅಥವ ಪಕ್ಕದಲ್ಲಿರುವ ಇನ್ನೊಂದು ಬಣ್ಣ ಮಾದರಿಗೆ ಸೇರಿಸುವ ಮೂಲಕ ಈ "
 "ಬಣ್ಣವನ್ನು ಚಾಲ್ತಿಗೆ ಆರಿಸಿ."
 
-#: gtk/gtkcolorsel.c:984
+#: gtk/gtkcolorsel.c:980
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1481,11 +1488,11 @@ msgstr ""
 "ನೀವು ಆರಿಸಿದ ಬಣ್ಣ. ಈ ಬಣ್ಣವನ್ನು ಒಂದು ವರ್ಣಫಲಕ ನಮೂದಿಗೆ ಸೇರಿಸುವ ಮೂಲಕ ಭವಿಷ್ಯದಲ್ಲಿ ಬಳಸಲು "
 "ಉಳಿಸಿಕೊಳ್ಳಬಹುದು."
 
-#: gtk/gtkcolorsel.c:1369
+#: gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
 msgstr "ಬಣ್ಣವನ್ನು ಇಲ್ಲಿ ಉಳಿಸಿ(_S)"
 
-#: gtk/gtkcolorsel.c:1574
+#: gtk/gtkcolorsel.c:1568
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1498,11 +1505,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "ಬಣ್ಣದ ಆಯ್ಕೆ"
 
-#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7654
+#: gtk/gtkentry.c:5375 gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "ಆದಾನ ಪದ್ದತಿಗಳು(_M)"
 
-#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7668
+#: gtk/gtkentry.c:5389 gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "ಯುನಿಕೊಡ್ ನಿಯಂತ್ರಣ ಚಿಹ್ನೆ (_I)"
 
@@ -1518,7 +1525,7 @@ msgstr "ಗಣಕತೆರೆ"
 msgid "(None)"
 msgstr "(ಯಾವುದೂ ಇಲ್ಲ)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2011
 msgid "Other..."
 msgstr "ಇತರೆ..."
 
@@ -1705,11 +1712,13 @@ msgstr "ಶೀಘ್ರಮಾರ್ಗ (ಶಾರ್ಟ್ ಕಟ್) %s ಅಸ�
 #: gtk/gtkfilechooserdefault.c:7950 gtk/gtkprintunixdialog.c:364
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
-msgstr "\"%s\" ಹೆಸರಿನ ಒಂದು ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.  ನೀವದನ್ನು ಬದಲಿ ಮಾಡಲು ಬಯಸುತ್ತಿರೆ?"
+msgstr ""
+"\"%s\" ಹೆಸರಿನ ಒಂದು ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.  ನೀವದನ್ನು ಬದಲಿ ಮಾಡಲು ಬಯಸುತ್ತಿರೆ?"
 
 #: gtk/gtkfilechooserdefault.c:7953 gtk/gtkprintunixdialog.c:368
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\" ಹೆಸರಿನ ಒಂದು ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.  ನೀವದನ್ನು ಬದಲಿ ಮಾಡಿದರೆ ಅದು "
 "ತಿದ್ದಿಬರೆಯಲ್ಪಡುತ್ತದೆ."
@@ -1857,7 +1866,8 @@ msgstr "ಕಡತವನ್ನು ಪುನರ್ ಹೆಸರಿಸು(_R)"
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" ಕಡತದ ಹೆಸರಿನಲ್ಲಿ ಅನುಮತಿ ಇರದೆ ಇರುವಂತಹ ಸಂಕೇತಗಳು ಇವೆ."
 
 #: gtk/gtkfilesel.c:1392
@@ -1997,7 +2007,7 @@ msgstr "ಗಾತ್ರ(_z):"
 msgid "_Preview:"
 msgstr "ಮುನ್ನೋಟ(_P):"
 
-#: gtk/gtkfontsel.c:1580
+#: gtk/gtkfontsel.c:1542
 msgid "Font Selection"
 msgstr "ಅಕ್ಷರ ಶೈಲಿಯ ಆಯ್ಕೆ"
 
@@ -2035,7 +2045,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "ಲಾಂಛನ '%s' ವು ಥೀಮಿನಲ್ಲಿ ಇಲ್ಲ"
 
-#: gtk/gtkicontheme.c:3052
+#: gtk/gtkicontheme.c:3058
 msgid "Failed to load icon"
 msgstr "ಲಾಂಛನವನ್ನು ಲೋಡ್ ಮಾಡುವಲ್ಲಿ ವಿಫಲವಾಯಿತು"
 
@@ -2126,19 +2136,11 @@ msgstr "(ಗೊತ್ತಿರದ)"
 msgid "Cl_ear"
 msgstr "ತೆರವುಗೊಳಿಸು(_e)"
 
-#: gtk/gtklinkbutton.c:144
-msgid "URI"
-msgstr "URI"
-
-#: gtk/gtklinkbutton.c:145
-msgid "The URI bound to this button"
-msgstr "URI ಈ ಗುಂಡಿಗೆ ಸೀಮಿತವಾಗಿದೆ"
-
-#: gtk/gtklinkbutton.c:402
+#: gtk/gtklinkbutton.c:427
 msgid "Copy URL"
 msgstr "URL ಅನ್ನು ನಕಲಿಸು"
 
-#: gtk/gtklinkbutton.c:542
+#: gtk/gtklinkbutton.c:565
 msgid "Invalid URI"
 msgstr "ಅಮಾನ್ಯ URI"
 
@@ -2214,26 +2216,21 @@ msgid "_Password:"
 msgstr "ಗುಪ್ತಪದ(_P):"
 
 #: gtk/gtkmountoperation.c:590
-msgid "_Forget password immediately"
+#, fuzzy
+msgid "Forget password _immediately"
 msgstr "ಗುಪ್ತಪದವನ್ನು ತಕ್ಷಣ ಮರೆತು ಬಿಡು(_F)"
 
 #: gtk/gtkmountoperation.c:598
-msgid "_Remember password until you logout"
+#, fuzzy
+msgid "Remember password until you _logout"
 msgstr "ಗುಪ್ತಪದವನ್ನು ನಿರ್ಗಮಿಸುವ ತನಕ ನೆನಪಿನಲ್ಲಿಡು(_R)"
 
 #: gtk/gtkmountoperation.c:606
-msgid "_Remember forever"
+#, fuzzy
+msgid "Remember _forever"
 msgstr "ಸದಾ ನೆನಪಿನಲ್ಲಿಡು(_R)"
 
-#: gtk/gtknotebook.c:834
-msgid "Arrow spacing"
-msgstr "ಬಾಣದ ಅಂತರ (Arrow spacing)"
-
-#: gtk/gtknotebook.c:835
-msgid "Scroll arrow spacing"
-msgstr "ಚಲನ ಬಾಣದ ಅಂತರ (Scroll arrow spacing)"
-
-#: gtk/gtknotebook.c:4425 gtk/gtknotebook.c:6931
+#: gtk/gtknotebook.c:4424 gtk/gtknotebook.c:6930
 #, c-format
 msgid "Page %u"
 msgstr "ಪುಟ %u"
@@ -2299,7 +2296,7 @@ msgstr "ಕಾಗದದ ಗಾತ್ರ(_P):"
 msgid "_Orientation:"
 msgstr "ವಾಲಿಕೆ(_Orientation):"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2398
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2397
 msgid "Page Setup"
 msgstr "ಪುಟದ ಸಂಯೋಜನೆ"
 
@@ -2356,7 +2353,7 @@ msgstr "ಮೇಲಿನ ಪಥ"
 msgid "Down Path"
 msgstr "ಕೆಳಗಿನ ಪಥ"
 
-#: gtk/gtkpathbar.c:1464
+#: gtk/gtkpathbar.c:1472
 msgid "File System Root"
 msgstr "ಕಡತ ವ್ಯವಸ್ಥೆ ಮೂಲ"
 
@@ -2445,7 +2442,8 @@ msgstr "ಮುದ್ರಣ ಮುನ್ನೋಟವನ್ನು ತೋರಿಸ�
 #: gtk/gtkprintoperation.c:2292
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr "ಸಾಧ್ಯವಿರಬಹುದಾದ ಒಂದು ಕಾರಣವೆಂದರೆ ತಾತ್ಕಾಲಿಕ ಕಡತವನ್ನು ಸೃಷ್ತಿಸುವಲ್ಲಿ ಉಂಟಾದ ವಿಫಲತೆ."
+msgstr ""
+"ಸಾಧ್ಯವಿರಬಹುದಾದ ಒಂದು ಕಾರಣವೆಂದರೆ ತಾತ್ಕಾಲಿಕ ಕಡತವನ್ನು ಸೃಷ್ತಿಸುವಲ್ಲಿ ಉಂಟಾದ ವಿಫಲತೆ."
 
 #: gtk/gtkprintoperation-unix.c:242
 #, c-format
@@ -2469,8 +2467,9 @@ msgstr "ಮುದ್ರಕದ ಆಫ್-ಲೈನ್ ಆಗಿದೆ"
 msgid "Out of paper"
 msgstr "ಹಾಳೆಗಳಿಲ್ಲ"
 
+#. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1373
+#: modules/printbackends/cups/gtkprintbackendcups.c:1375
 msgid "Paused"
 msgstr "ತಾತ್ಕಾಲಿಕ ಸ್ಥಗಿತಗೊಂಡಿದೆ"
 
@@ -2515,35 +2514,35 @@ msgstr "PrintDlgEx ಗೆ ಅಮಾನ್ಯ ನಿಭಾವಣೆ(handle)"
 msgid "Unspecified error"
 msgstr "ನಿಖರವಾಗದ ದೋಷ"
 
-#: gtk/gtkprintunixdialog.c:1717
+#: gtk/gtkprintunixdialog.c:1716
 msgid "Printer"
 msgstr "ಮುದ್ರಕ"
 
-#: gtk/gtkprintunixdialog.c:1726
+#: gtk/gtkprintunixdialog.c:1725
 msgid "Location"
 msgstr "ತಾಣ"
 
-#: gtk/gtkprintunixdialog.c:1736
+#: gtk/gtkprintunixdialog.c:1735
 msgid "Status"
 msgstr "ಸ್ಥಿತಿ"
 
-#: gtk/gtkprintunixdialog.c:1759
+#: gtk/gtkprintunixdialog.c:1758
 msgid "Range"
 msgstr "ವ್ಯಾಪ್ತಿ"
 
-#: gtk/gtkprintunixdialog.c:1763
+#: gtk/gtkprintunixdialog.c:1762
 msgid "_All Pages"
 msgstr "ಎಲ್ಲಾ ಹಾಳೆಗಳು(_A)"
 
-#: gtk/gtkprintunixdialog.c:1770
+#: gtk/gtkprintunixdialog.c:1769
 msgid "C_urrent Page"
 msgstr "ಈಗಿನ ಪುಟ(_u)"
 
-#: gtk/gtkprintunixdialog.c:1779
+#: gtk/gtkprintunixdialog.c:1778
 msgid "Pag_es:"
 msgstr "ಪುಟಗಳು(_e):"
 
-#: gtk/gtkprintunixdialog.c:1780
+#: gtk/gtkprintunixdialog.c:1779
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2551,151 +2550,143 @@ msgstr ""
 "ಒಂದು ಅಥವ ಹೆಚ್ಚಿನ ಪುಟ ವ್ಯಾಪ್ತಿಗಳನ್ನು ಸೂಚಿಸಿ,\n"
 " ಉದಾ. ೧-೩,೭,೧೧"
 
-#: gtk/gtkprintunixdialog.c:1799
+#: gtk/gtkprintunixdialog.c:1798
 msgid "Copies"
 msgstr "ಪ್ರತಿಗಳು"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1804
+#: gtk/gtkprintunixdialog.c:1803
 msgid "Copie_s:"
 msgstr "ಪ್ರತಿಗಳು(_s):"
 
-#: gtk/gtkprintunixdialog.c:1822
+#: gtk/gtkprintunixdialog.c:1821
 msgid "C_ollate"
 msgstr "ತಾಳೆ ನೋಡು(_o)"
 
-#: gtk/gtkprintunixdialog.c:1830
+#: gtk/gtkprintunixdialog.c:1829
 msgid "_Reverse"
 msgstr "ವಿಲೋಮ(_R)"
 
-#: gtk/gtkprintunixdialog.c:1850
+#: gtk/gtkprintunixdialog.c:1849
 msgid "General"
 msgstr "ಸಾಮಾನ್ಯ"
 
-#: gtk/gtkprintunixdialog.c:2253
+#: gtk/gtkprintunixdialog.c:2252
 msgid "Layout"
 msgstr "ಹೊರವಿನ್ಯಾಸ"
 
-#: gtk/gtkprintunixdialog.c:2257
+#: gtk/gtkprintunixdialog.c:2256
 msgid "Pages per _side:"
 msgstr "ಪ್ರತಿ ಬದಿಯಲ್ಲಿನ ಪುಟಗಳು(_s):"
 
-#: gtk/gtkprintunixdialog.c:2273
+#: gtk/gtkprintunixdialog.c:2272
 msgid "T_wo-sided:"
 msgstr "ಎರಡು ಬದಿಯ(_w):"
 
-#: gtk/gtkprintunixdialog.c:2288
+#: gtk/gtkprintunixdialog.c:2287
 msgid "_Only print:"
 msgstr "ಕೇವಲ ಮುದ್ರಿಸು(_O):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2303
+#: gtk/gtkprintunixdialog.c:2302
 msgid "All sheets"
 msgstr "ಎಲ್ಲಾ ಹಾಳೆಗಳು"
 
-#: gtk/gtkprintunixdialog.c:2304
+#: gtk/gtkprintunixdialog.c:2303
 msgid "Even sheets"
 msgstr "ಸರಿ ಸಂಖ್ಯೆಯ ಹಾಳೆಗಳು"
 
-#: gtk/gtkprintunixdialog.c:2305
+#: gtk/gtkprintunixdialog.c:2304
 msgid "Odd sheets"
 msgstr "ಬೆಸ ಸಂಖ್ಯೆಯ ಹಾಳೆಗಳು"
 
-#: gtk/gtkprintunixdialog.c:2308
+#: gtk/gtkprintunixdialog.c:2307
 msgid "Sc_ale:"
 msgstr "ಸ್ಕೇಲ್(_a):"
 
-#: gtk/gtkprintunixdialog.c:2335
+#: gtk/gtkprintunixdialog.c:2334
 msgid "Paper"
 msgstr "ಕಾಗದ"
 
-#: gtk/gtkprintunixdialog.c:2339
+#: gtk/gtkprintunixdialog.c:2338
 msgid "Paper _type:"
 msgstr "ಕಾಗದದ ಬಗೆ(_t):"
 
-#: gtk/gtkprintunixdialog.c:2354
+#: gtk/gtkprintunixdialog.c:2353
 msgid "Paper _source:"
 msgstr "ಕಾಗದದ ಆಕರ(_s):"
 
-#: gtk/gtkprintunixdialog.c:2369
+#: gtk/gtkprintunixdialog.c:2368
 msgid "Output t_ray:"
 msgstr "ಪ್ರದಾನದ (ಔಟ್ ಪುಟ್) ಟ್ರೇ(_r):"
 
-#: gtk/gtkprintunixdialog.c:2421
+#: gtk/gtkprintunixdialog.c:2420
 msgid "Job Details"
 msgstr "ಕಾರ್ಯದ ವಿವರಗಳು"
 
-#: gtk/gtkprintunixdialog.c:2427
+#: gtk/gtkprintunixdialog.c:2426
 msgid "Pri_ority:"
 msgstr "ಆದ್ಯತೆ(_o):"
 
-#: gtk/gtkprintunixdialog.c:2442
+#: gtk/gtkprintunixdialog.c:2441
 msgid "_Billing info:"
 msgstr "ಬಿಲ್ಲು ಮಾಡುವ ಮಾಹಿತಿ(_B):"
 
-#: gtk/gtkprintunixdialog.c:2460
+#: gtk/gtkprintunixdialog.c:2459
 msgid "Print Document"
 msgstr "ದಸ್ತಾವೇಜನ್ನು ಮುದ್ರಿಸು"
 
-#: gtk/gtkprintunixdialog.c:2466
+#: gtk/gtkprintunixdialog.c:2465
 msgid "_Now"
 msgstr "ಈಗ(_N)"
 
-#: gtk/gtkprintunixdialog.c:2473
+#: gtk/gtkprintunixdialog.c:2472
 msgid "A_t:"
 msgstr "ಇಲ್ಲಿ(_A):"
 
-#: gtk/gtkprintunixdialog.c:2488
+#: gtk/gtkprintunixdialog.c:2487
 msgid "On _hold"
 msgstr "ತಡೆ ಹಿಡಿಯಲಾಗಿದೆ(_h)"
 
-#: gtk/gtkprintunixdialog.c:2507
+#: gtk/gtkprintunixdialog.c:2506
 msgid "Add Cover Page"
 msgstr "ರಕ್ಷಾ ಪುಟವನ್ನು ಸೇರಿಸು"
 
-#: gtk/gtkprintunixdialog.c:2513
+#: gtk/gtkprintunixdialog.c:2512
 msgid "Be_fore:"
 msgstr "ಈ ಮೊದಲು(_f):"
 
-#: gtk/gtkprintunixdialog.c:2528
+#: gtk/gtkprintunixdialog.c:2527
 msgid "_After:"
 msgstr "ನಂತರ(_A):"
 
-#: gtk/gtkprintunixdialog.c:2543
+#: gtk/gtkprintunixdialog.c:2542
 msgid "Job"
 msgstr "ಕಾರ್ಯ"
 
-#: gtk/gtkprintunixdialog.c:2609
+#: gtk/gtkprintunixdialog.c:2608
 msgid "Advanced"
 msgstr "ಪ್ರೌಢ"
 
-#: gtk/gtkprintunixdialog.c:2644
+#: gtk/gtkprintunixdialog.c:2643
 msgid "Image Quality"
 msgstr "ಮುದ್ರಣ ಗುಣಮಟ್ಟ"
 
-#: gtk/gtkprintunixdialog.c:2647
+#: gtk/gtkprintunixdialog.c:2646
 msgid "Color"
 msgstr "ಬಣ್ಣ"
 
-#: gtk/gtkprintunixdialog.c:2650
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Finishing"
 msgstr "ಅಂತ್ಯಗೊಳಿಸಲಾಗುತ್ತಿದೆ"
 
-#: gtk/gtkprintunixdialog.c:2660
+#: gtk/gtkprintunixdialog.c:2659
 msgid "Some of the settings in the dialog conflict"
 msgstr "ಸಂವಾದ ಭಿನ್ನಾಭಿಪ್ರಾಯದಲ್ಲಿನ ಕೆಲವೊಂದು ಸಂಯೋಜನೆಗಳು"
 
-#: gtk/gtkprintunixdialog.c:2683
+#: gtk/gtkprintunixdialog.c:2682
 msgid "Print"
 msgstr "ಮುದ್ರಿಸು"
-
-#: gtk/gtkradiotoolbutton.c:65
-msgid "Group"
-msgstr "ಸಮೂಹ"
-
-#: gtk/gtkradiotoolbutton.c:66
-msgid "The radio tool button whose group this button belongs to."
-msgstr "ಈ ಗುಂಡಿಯು ಸೇರಿದ ಸಮೂಹದ ರೇಡಿಯೋ ಉಪಕರಣ ಗುಂಡಿ."
 
 #: gtk/gtkrc.c:2872
 #, c-format
@@ -2717,36 +2708,36 @@ msgstr "ಈ ಕಾರ್ಯಗಳು '%s' ವರ್ಗದ ಸಂಪರ್ಕತ�
 msgid "Select which type of documents are shown"
 msgstr "ಯಾವ ಬಗೆಯ ದಸ್ತಾವೇಜುಗಳು ತೋರಿಸಲ್ಪಟ್ಟಿವೆ ಎಂಬುದನ್ನು ಆರಿಸಿ"
 
-#: gtk/gtkrecentchooserdefault.c:1096 gtk/gtkrecentchooserdefault.c:1133
+#: gtk/gtkrecentchooserdefault.c:1095 gtk/gtkrecentchooserdefault.c:1132
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "URI '%s' ಗೆ ಯಾವುದೆ ಅಂಶಗಳು ಪತ್ತೆಯಾಗಿಲ್ಲ"
 
-#: gtk/gtkrecentchooserdefault.c:1260
+#: gtk/gtkrecentchooserdefault.c:1259
 msgid "Untitled filter"
 msgstr "ಶೀರ್ಷಿಕೆ ರಹಿತ ಶೋಧಕ(filter)"
 
-#: gtk/gtkrecentchooserdefault.c:1613
+#: gtk/gtkrecentchooserdefault.c:1612
 msgid "Could not remove item"
 msgstr "ಅಂಶವನ್ನು ತೆಗೆದುಹಾಕಲಾಗಿಲ್ಲ"
 
-#: gtk/gtkrecentchooserdefault.c:1656
+#: gtk/gtkrecentchooserdefault.c:1655
 msgid "Could not clear list"
 msgstr "ಪಟ್ಟಿಯನ್ನು ಅಳಿಸಿ(clear) ಹಾಕಲಾಗಿಲ್ಲ"
 
-#: gtk/gtkrecentchooserdefault.c:1740
+#: gtk/gtkrecentchooserdefault.c:1739
 msgid "Copy _Location"
 msgstr "ಇಲ್ಲಿಗೆ ನಕಲಿಸು (_L)"
 
-#: gtk/gtkrecentchooserdefault.c:1753
+#: gtk/gtkrecentchooserdefault.c:1752
 msgid "_Remove From List"
 msgstr "ಪಟ್ಟಿಯಿಂದ ತೆಗೆದುಹಾಕು(_R)"
 
-#: gtk/gtkrecentchooserdefault.c:1762
+#: gtk/gtkrecentchooserdefault.c:1761
 msgid "_Clear List"
 msgstr "ಪಟ್ಟಿಯನ್ನು ಅಳಿಸಿಹಾಕು(_C)"
 
-#: gtk/gtkrecentchooserdefault.c:1776
+#: gtk/gtkrecentchooserdefault.c:1775
 msgid "Show _Private Resources"
 msgstr "ಖಾಸಗಿ ಸಂಪನ್ಮೂಲಗಳನ್ನು ತೋರಿಸು(_P)"
 
@@ -2800,10 +2791,10 @@ msgstr "_%d. %s"
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1025
-#: gtk/gtkrecentmanager.c:1163 gtk/gtkrecentmanager.c:1173
-#: gtk/gtkrecentmanager.c:1226 gtk/gtkrecentmanager.c:1235
-#: gtk/gtkrecentmanager.c:1250
+#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
+#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
+#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
+#: gtk/gtkrecentmanager.c:1258
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' ನೊಂದಿಗಿನ ಒಂದು ಅಂಶವನ್ನು ಪತ್ತೆಮಾಡಲಾಗಿಲ್ಲ"
@@ -3248,7 +3239,8 @@ msgstr "ಅನಾಮಿಕ ತಲೆಚೀಟಿಗಳು (Tag) ಕಂಡು ಬ
 #: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr "ತಲೆಚೀಟಿ \"%s\" ವು ಬಫರಿನಲ್ಲಿ ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ ಹಾಗು ತಲೆಚೀಟಿಗಳನ್ನು ರಚಿಸಲಾಗುವುದಿಲ್ಲ."
+msgstr ""
+"ತಲೆಚೀಟಿ \"%s\" ವು ಬಫರಿನಲ್ಲಿ ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ ಹಾಗು ತಲೆಚೀಟಿಗಳನ್ನು ರಚಿಸಲಾಗುವುದಿಲ್ಲ."
 
 #: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
 #: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
@@ -3268,7 +3260,8 @@ msgstr "\"%s\" ವು ಒಂದು ಮಾನ್ಯ ವೈಶಿಷ್ಟ್ಯ�
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" ವನ್ನು \"%s\" ಬಗೆಯ ಮೌಲ್ಯವಾಗಿ ವೈಶಿಷ್ಟ್ಯ \"%s\" ಕ್ಕೆ ಬದಲಾಯಿಸಲಾಗಿಲ್ಲ"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3305,8 +3298,10 @@ msgid "Serialized data is malformed"
 msgstr "ಅನುಕ್ರಮಿತ ದತ್ತಾಂಶವು ವಿರೂಪಗೊಂಡಿದೆ."
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "ಅನುಕ್ರಮಿತ ದತ್ತಾಂಶವು ವಿರೂಪಗೊಂಡಿದೆ. ಪ್ರಥಮ ವಿಭಾಗವು GTKTEXTBUFFERCONTENTS-0001 ಆಗಿಲ್ಲ"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr ""
+"ಅನುಕ್ರಮಿತ ದತ್ತಾಂಶವು ವಿರೂಪಗೊಂಡಿದೆ. ಪ್ರಥಮ ವಿಭಾಗವು GTKTEXTBUFFERCONTENTS-0001 ಆಗಿಲ್ಲ"
 
 #: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
@@ -4467,92 +4462,96 @@ msgstr "'%s' ಮುದ್ರಕವು ಸಂಪರ್ಕಿತಗೊಂಡಿರ
 msgid "There is a problem on printer '%s'."
 msgstr "'%s' ಮುದ್ರಕಕ್ಕೆ ಒಂದು ತೊಂದರೆ ಎದುರಾಗಿದೆ."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1371
+#. Translators: this is a printer status.
+#: modules/printbackends/cups/gtkprintbackendcups.c:1372
 msgid "Paused ; Rejecting Jobs"
 msgstr "ತಾತ್ಕಾಲಿಕ ಸ್ಥಗಿತ; ಕೆಲಸವು ತಿರಸ್ಕರಿಸಲ್ಪಟ್ಟಿದೆ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1375
+#. Translators: this is a printer status.
+#: modules/printbackends/cups/gtkprintbackendcups.c:1378
 msgid "Rejecting Jobs"
 msgstr "ಕೆಲಸವು ತಿರಸ್ಕರಿಸಲ್ಪಟ್ಟಿದೆ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1999
 msgid "Two Sided"
 msgstr "ಎರಡು ಬದಿಯ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1997
+#: modules/printbackends/cups/gtkprintbackendcups.c:2000
 msgid "Paper Type"
 msgstr "ಕಾಗದದ ಬಗೆ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1998
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Paper Source"
 msgstr "ಕಾಗದದ ಆಕರ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:2002
 msgid "Output Tray"
 msgstr "ಪ್ರದಾನ(ಔಟ್‌ಪುಟ್) ಟ್ರೇ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2008
+#: modules/printbackends/cups/gtkprintbackendcups.c:2011
 msgid "One Sided"
 msgstr "ಒಂದು ಬದಿಯ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2009
-#: modules/printbackends/cups/gtkprintbackendcups.c:2010
-#: modules/printbackends/cups/gtkprintbackendcups.c:2014
+#. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2013
+#: modules/printbackends/cups/gtkprintbackendcups.c:2015
+#: modules/printbackends/cups/gtkprintbackendcups.c:2023
 msgid "Auto Select"
 msgstr "ಸ್ವಯಂಚಾಲಿತ ಆಯ್ಕೆ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2011
-#: modules/printbackends/cups/gtkprintbackendcups.c:2012
-#: modules/printbackends/cups/gtkprintbackendcups.c:2013
-#: modules/printbackends/cups/gtkprintbackendcups.c:2483
+#. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2017
+#: modules/printbackends/cups/gtkprintbackendcups.c:2019
+#: modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: modules/printbackends/cups/gtkprintbackendcups.c:2492
 msgid "Printer Default"
 msgstr "ಮುದ್ರಕ ಪೂರ್ವನಿಯೋಜಿತ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Urgent"
 msgstr "ತುರ್ತು"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "High"
 msgstr "ಹೆಚ್ಚಿನ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Medium"
 msgstr "ಮಧ್ಯಮ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Low"
 msgstr "ಕೆಳಮಟ್ಟದ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "None"
 msgstr "ಯಾವುದೂ ಇಲ್ಲ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Classified"
 msgstr "ವರ್ಗೀಕೃತವಾದದ್ದು"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Confidential"
 msgstr "ಗೌಪ್ಯವಾದ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Secret"
 msgstr "ರಹಸ್ಯ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Standard"
 msgstr "ಸಾಮಾನ್ಯ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Top Secret"
 msgstr "ಉನ್ನತ ರಹಸ್ಯ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Unclassified"
 msgstr "ವರ್ಗೀಕೃತಗೊಳ್ಳದ್ದು"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2817
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 #, c-format
 msgid "Custom %sx%s"
 msgstr "ಕಸ್ಟಮ್ %sx%s"
@@ -4615,3 +4614,20 @@ msgstr "ಮುದ್ರಕವನ್ನು ಪರೀಕ್ಷಿಸಲು ಮು�
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' ಕಡತಕ್ಕೆ ಮಾಹಿತಿಯನ್ನು ಪಡೆಯಲಾಗಿಲ್ಲ: %s"
 
+#~ msgid "URI"
+#~ msgstr "URI"
+
+#~ msgid "The URI bound to this button"
+#~ msgstr "URI ಈ ಗುಂಡಿಗೆ ಸೀಮಿತವಾಗಿದೆ"
+
+#~ msgid "Arrow spacing"
+#~ msgstr "ಬಾಣದ ಅಂತರ (Arrow spacing)"
+
+#~ msgid "Scroll arrow spacing"
+#~ msgstr "ಚಲನ ಬಾಣದ ಅಂತರ (Scroll arrow spacing)"
+
+#~ msgid "Group"
+#~ msgstr "ಸಮೂಹ"
+
+#~ msgid "The radio tool button whose group this button belongs to."
+#~ msgstr "ಈ ಗುಂಡಿಯು ಸೇರಿದ ಸಮೂಹದ ರೇಡಿಯೋ ಉಪಕರಣ ಗುಂಡಿ."

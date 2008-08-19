@@ -1237,3 +1237,81 @@ End:
 -->
 
 
+<!-- ##### FUNCTION gtk_file_chooser_get_current_folder_file ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_file ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_files ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_preview_file ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_select_file ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@file: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_current_folder_file ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@file: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_file ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@file: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_unselect_file ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@file: 
+
+

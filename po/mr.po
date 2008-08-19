@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-14 09:47+0000\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2008-08-14 15:29+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
@@ -17,56 +17,56 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../gdk/directfb/gdkdisplay-directfb.c:55
+#: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
 msgstr "directfb arg"
 
-#: ../gdk/directfb/gdkdisplay-directfb.c:55
+#: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "sdl|system"
 msgstr "प्रणाली"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:126
+#: gdk/gdk.c:126
 msgid "Program class as used by the window manager"
 msgstr "खिडकी व्यवस्थापकाने वापरल्याप्रमाणे कार्यक्रम वर्ग"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:127
+#: gdk/gdk.c:127
 msgid "CLASS"
 msgstr "CLASS"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:129
+#: gdk/gdk.c:129
 msgid "Program name as used by the window manager"
 msgstr "खिडकी व्यवस्थापकाने वापरल्याप्रमाणे कार्यक्रमाचे नाव"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:130
+#: gdk/gdk.c:130
 msgid "NAME"
 msgstr "NAME"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:132
+#: gdk/gdk.c:132
 msgid "X display to use"
 msgstr "वापरावयाचे X प्रदर्शन"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:133
+#: gdk/gdk.c:133
 msgid "DISPLAY"
 msgstr "DISPLAY"
 
 #. Description of --screen=SCREEN in --help output
-#: ../gdk/gdk.c:135
+#: gdk/gdk.c:135
 msgid "X screen to use"
 msgstr "वापरावयाची X स्क्रीन"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: ../gdk/gdk.c:136
+#: gdk/gdk.c:136
 msgid "SCREEN"
 msgstr "SCREEN"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:139
+#: gdk/gdk.c:139
 msgid "Gdk debugging flags to set"
 msgstr "निर्धारित करायचे Gdk त्रुटीनिर्वारण ध्वज"
 
@@ -74,653 +74,641 @@ msgstr "निर्धारित करायचे Gdk त्रुटीन
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:140 ../gdk/gdk.c:143 ../gtk/gtkmain.c:428 ../gtk/gtkmain.c:431
+#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:428 gtk/gtkmain.c:431
 msgid "FLAGS"
 msgstr "FLAGS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:142
+#: gdk/gdk.c:142
 msgid "Gdk debugging flags to unset"
 msgstr "अनिर्धारित करायचे Gdk त्रुटीनिर्वारण ध्वज"
 
-#: ../gdk/keyname-table.h:3940
+#: gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
 msgstr "BackSpace"
 
-#: ../gdk/keyname-table.h:3941
+#: gdk/keyname-table.h:3941
 msgid "keyboard label|Tab"
 msgstr "Tab"
 
-#: ../gdk/keyname-table.h:3942
+#: gdk/keyname-table.h:3942
 msgid "keyboard label|Return"
 msgstr "Return"
 
-#: ../gdk/keyname-table.h:3943
+#: gdk/keyname-table.h:3943
 msgid "keyboard label|Pause"
 msgstr "Pause"
 
-#: ../gdk/keyname-table.h:3944
+#: gdk/keyname-table.h:3944
 msgid "keyboard label|Scroll_Lock"
 msgstr "Scroll_Lock"
 
-#: ../gdk/keyname-table.h:3945
+#: gdk/keyname-table.h:3945
 msgid "keyboard label|Sys_Req"
 msgstr "Sys_Req"
 
-#: ../gdk/keyname-table.h:3946
+#: gdk/keyname-table.h:3946
 msgid "keyboard label|Escape"
 msgstr "Escape"
 
-#: ../gdk/keyname-table.h:3947
+#: gdk/keyname-table.h:3947
 msgid "keyboard label|Multi_key"
 msgstr "Multi_key"
 
-#: ../gdk/keyname-table.h:3948
+#: gdk/keyname-table.h:3948
 msgid "keyboard label|Home"
 msgstr "Home"
 
-#: ../gdk/keyname-table.h:3949
+#: gdk/keyname-table.h:3949
 msgid "keyboard label|Left"
 msgstr "कळफलक लेबल|Left"
 
-#: ../gdk/keyname-table.h:3950
+#: gdk/keyname-table.h:3950
 msgid "keyboard label|Up"
 msgstr "कळफलक लेबल|Up"
 
-#: ../gdk/keyname-table.h:3951
+#: gdk/keyname-table.h:3951
 msgid "keyboard label|Right"
 msgstr "कळफलक लेबल|Right"
 
-#: ../gdk/keyname-table.h:3952
+#: gdk/keyname-table.h:3952
 msgid "keyboard label|Down"
 msgstr "कळफलक लेबल|Down"
 
-#: ../gdk/keyname-table.h:3953
+#: gdk/keyname-table.h:3953
 msgid "keyboard label|Page_Up"
 msgstr "Page_Up"
 
-#: ../gdk/keyname-table.h:3954
+#: gdk/keyname-table.h:3954
 msgid "keyboard label|Page_Down"
 msgstr "Page_Down"
 
-#: ../gdk/keyname-table.h:3955
+#: gdk/keyname-table.h:3955
 msgid "keyboard label|End"
 msgstr "End"
 
-#: ../gdk/keyname-table.h:3956
+#: gdk/keyname-table.h:3956
 msgid "keyboard label|Begin"
 msgstr "Begin"
 
-#: ../gdk/keyname-table.h:3957
+#: gdk/keyname-table.h:3957
 msgid "keyboard label|Print"
 msgstr "Print"
 
-#: ../gdk/keyname-table.h:3958
+#: gdk/keyname-table.h:3958
 msgid "keyboard label|Insert"
 msgstr "Insert"
 
-#: ../gdk/keyname-table.h:3959
+#: gdk/keyname-table.h:3959
 msgid "keyboard label|Num_Lock"
 msgstr "Num_Lock"
 
-#: ../gdk/keyname-table.h:3960
+#: gdk/keyname-table.h:3960
 msgid "keyboard label|KP_Space"
 msgstr "KP_Space"
 
-#: ../gdk/keyname-table.h:3961
+#: gdk/keyname-table.h:3961
 msgid "keyboard label|KP_Tab"
 msgstr "KP_Tab"
 
-#: ../gdk/keyname-table.h:3962
+#: gdk/keyname-table.h:3962
 msgid "keyboard label|KP_Enter"
 msgstr "KP_Enter"
 
-#: ../gdk/keyname-table.h:3963
+#: gdk/keyname-table.h:3963
 msgid "keyboard label|KP_Home"
 msgstr "KP_Home"
 
-#: ../gdk/keyname-table.h:3964
+#: gdk/keyname-table.h:3964
 msgid "keyboard label|KP_Left"
 msgstr "KP_Left"
 
-#: ../gdk/keyname-table.h:3965
+#: gdk/keyname-table.h:3965
 msgid "keyboard label|KP_Up"
 msgstr "KP_Up"
 
-#: ../gdk/keyname-table.h:3966
+#: gdk/keyname-table.h:3966
 msgid "keyboard label|KP_Right"
 msgstr "KP_Right"
 
-#: ../gdk/keyname-table.h:3967
+#: gdk/keyname-table.h:3967
 msgid "keyboard label|KP_Down"
 msgstr "KP_Down"
 
-#: ../gdk/keyname-table.h:3968
+#: gdk/keyname-table.h:3968
 msgid "keyboard label|KP_Page_Up"
 msgstr "KP_Page_Up"
 
-#: ../gdk/keyname-table.h:3969
+#: gdk/keyname-table.h:3969
 msgid "keyboard label|KP_Prior"
 msgstr "KP_Prior"
 
-#: ../gdk/keyname-table.h:3970
+#: gdk/keyname-table.h:3970
 msgid "keyboard label|KP_Page_Down"
 msgstr "KP_Page_Down"
 
-#: ../gdk/keyname-table.h:3971
+#: gdk/keyname-table.h:3971
 msgid "keyboard label|KP_Next"
 msgstr "KP_Next"
 
-#: ../gdk/keyname-table.h:3972
+#: gdk/keyname-table.h:3972
 msgid "keyboard label|KP_End"
 msgstr "KP_End"
 
-#: ../gdk/keyname-table.h:3973
+#: gdk/keyname-table.h:3973
 msgid "keyboard label|KP_Begin"
 msgstr "KP_Begin"
 
-#: ../gdk/keyname-table.h:3974
+#: gdk/keyname-table.h:3974
 msgid "keyboard label|KP_Insert"
 msgstr "KP_Insert"
 
-#: ../gdk/keyname-table.h:3975
+#: gdk/keyname-table.h:3975
 msgid "keyboard label|KP_Delete"
 msgstr "KP_Delete"
 
-#: ../gdk/keyname-table.h:3976
+#: gdk/keyname-table.h:3976
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:944
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1205 ../tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:944
+#: gdk-pixbuf/gdk-pixbuf-io.c:1205 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "'%1s' फाइल उघडण्यात असफल: %2s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146 ../gdk-pixbuf/gdk-pixbuf-io.c:956
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:956
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "प्रतिमा फाइल '%s' मध्ये कोणतीही माहीती नाही "
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:993
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1257 ../tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:993
+#: gdk-pixbuf/gdk-pixbuf-io.c:1257 tests/testfilechooser.c:267
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
-"प्रतिमा '%s' ला सुरु करण्यात असफल: कारण माहीत नाही , बहुदा ही एक दुषित "
-"प्रतिमा फाइल असावी "
+"प्रतिमा '%s' ला सुरु करण्यात असफल: कारण माहीत नाही , बहुदा ही एक दुषित प्रतिमा फाइल "
+"असावी "
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:221
+#: gdk-pixbuf/gdk-pixbuf-animation.c:221
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"प्रतिमा '%s' ला सुरु करण्यात असफल: कारण माहीत नाही, बहुदा ही एक दुषित "
-"प्रतिमा फाइल असावी "
+"प्रतिमा '%s' ला सुरु करण्यात असफल: कारण माहीत नाही, बहुदा ही एक दुषित प्रतिमा फाइल "
+"असावी "
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:566
+#: gdk-pixbuf/gdk-pixbuf-io.c:566
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "प्रतिमा सुरु करण्याची पध्दत %1s: सुरु करण्यास असमर्थ: %2s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:581
+#: gdk-pixbuf/gdk-pixbuf-io.c:581
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"प्रतिमा सुरु करण्यासाठी %s द्वारा योग्य संवाद साधता येत नाही; बहुदा एका भिन्न "
-"जीटीके मजकुरापासून ही प्रतिमा घेतली असावी?"
+"प्रतिमा सुरु करण्यासाठी %s द्वारा योग्य संवाद साधता येत नाही; बहुदा एका भिन्न जीटीके "
+"मजकुरापासून ही प्रतिमा घेतली असावी?"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:726 ../gdk-pixbuf/gdk-pixbuf-io.c:755
+#: gdk-pixbuf/gdk-pixbuf-io.c:726 gdk-pixbuf/gdk-pixbuf-io.c:755
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "'%s' प्रतिमेला आधार नाही"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:825
+#: gdk-pixbuf/gdk-pixbuf-io.c:825
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "फाइल '%s' कोणत्या प्रकारची फाइल आहे ते उमगले नाही"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:833
+#: gdk-pixbuf/gdk-pixbuf-io.c:833
 msgid "Unrecognized image file format"
 msgstr "अपरिचित असणारी प्रतिमा फाइल"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1002
+#: gdk-pixbuf/gdk-pixbuf-io.c:1002
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "'%1s' प्रतिमा उघडण्यास असमर्थ: %2s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1638 ../gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1638 gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "प्रतिमा फाइलवर लिहिण्यात चूक: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1684 ../gdk-pixbuf/gdk-pixbuf-io.c:1815
+#: gdk-pixbuf/gdk-pixbuf-io.c:1684 gdk-pixbuf/gdk-pixbuf-io.c:1815
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "प्रतिमेची रचना रक्षित करण्यासाठी या भागातgdk-pixbf चे सहकार्य नाही : %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1718
+#: gdk-pixbuf/gdk-pixbuf-io.c:1718
 msgid "Insufficient memory to save image to callback"
 msgstr "कॉलबॅकसाठी प्रतिमा सुरक्षित करण्यासाठी पुरेशी स्मृती नाही"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1731
+#: gdk-pixbuf/gdk-pixbuf-io.c:1731
 msgid "Failed to open temporary file"
 msgstr "तात्कालिक फाइल उघडण्यात असफल"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1757
+#: gdk-pixbuf/gdk-pixbuf-io.c:1757
 msgid "Failed to read from temporary file"
 msgstr "तात्कालिक फाइलमधून वाचण्यास असफल"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1992
+#: gdk-pixbuf/gdk-pixbuf-io.c:1992
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "लिहण्यासाठी '%1$s' ही फाइल उघडण्यास अपयशी: %2$s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2017
+#: gdk-pixbuf/gdk-pixbuf-io.c:2017
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
-"लेखन करताना '%s' ला बन्द करता अाले नाही,  बहुदा सर्व माहीती रक्षित झाली "
-"नसेल:%s"
+"लेखन करताना '%s' ला बन्द करता अाले नाही,  बहुदा सर्व माहीती रक्षित झाली नसेल:%s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2237 ../gdk-pixbuf/gdk-pixbuf-io.c:2288
+#: gdk-pixbuf/gdk-pixbuf-io.c:2237 gdk-pixbuf/gdk-pixbuf-io.c:2288
 msgid "Insufficient memory to save image into a buffer"
 msgstr "प्रतिमा बफरमध्ये सुरक्षित करण्यासाठी अपुरी स्मृती"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2334
+#: gdk-pixbuf/gdk-pixbuf-io.c:2334
 msgid "Error writing to image stream"
 msgstr ""
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
-"अंतर्गत चूक: प्रतिमा लोडर माड्यूल '%s' संक्रिया पूर्ण करू शकला नाही, परंतू याचे "
-"कारण दिलेले नाही"
+"अंतर्गत चूक: प्रतिमा लोडर माड्यूल '%s' संक्रिया पूर्ण करू शकला नाही, परंतू याचे कारण दिलेले "
+"नाही"
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:373
+#: gdk-pixbuf/gdk-pixbuf-loader.c:373
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "प्रतिमा प्रकार '%s' चे वाढीव लोडिंग करण्यासाठी कोणतीही मदत नाही"
 
-#: ../gdk-pixbuf/gdk-pixdata.c:147
+#: gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
 msgstr "प्रतिमेची शिर्षक पट्टी भ्रष्ट आहे "
 
-#: ../gdk-pixbuf/gdk-pixdata.c:152
+#: gdk-pixbuf/gdk-pixdata.c:152
 msgid "Image format unknown"
 msgstr "प्रतिमेची रचना अनोळखी आहे"
 
-#: ../gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:487
+#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
 msgid "Image pixel data corrupt"
 msgstr "प्रतिमेमधील चित्रकणविषयक माहिती दुषित आहे "
 
-#: ../gdk-pixbuf/gdk-pixdata.c:431
+#: gdk-pixbuf/gdk-pixdata.c:431
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "%u बाइटचा प्रतिमा बफर बनविण्यास असमर्थ"
 msgstr[1] "%u बाइटचा प्रतिमा बफर बनविण्यास असमर्थ"
 
-#: ../gdk-pixbuf/io-ani.c:244
+#: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
 msgstr "एनिमेशनमध्ये अनपेक्षित चिन्ह चंक"
 
-#: ../gdk-pixbuf/io-ani.c:337
+#: gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
 msgstr "असमर्थनीय एनिमेशन प्रकार"
 
-#: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:406
-#: ../gdk-pixbuf/io-ani.c:432 ../gdk-pixbuf/io-ani.c:455
-#: ../gdk-pixbuf/io-ani.c:482 ../gdk-pixbuf/io-ani.c:569
+#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
+#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
 msgid "Invalid header in animation"
 msgstr "एनिमेशनमधील मथळा अयोग्य आहे"
 
-#: ../gdk-pixbuf/io-ani.c:358 ../gdk-pixbuf/io-ani.c:380
-#: ../gdk-pixbuf/io-ani.c:464 ../gdk-pixbuf/io-ani.c:491
-#: ../gdk-pixbuf/io-ani.c:542 ../gdk-pixbuf/io-ani.c:614
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
+#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
 msgid "Not enough memory to load animation"
 msgstr "एनिमेशन भारीत करण्यासाठी पुरेशी स्मृती नाही"
 
-#: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:424
-#: ../gdk-pixbuf/io-ani.c:443
+#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
 msgid "Malformed chunk in animation"
 msgstr "एनिमेशनमध्ये बिघडलेला चंक"
 
-#: ../gdk-pixbuf/io-ani.c:711
+#: gdk-pixbuf/io-ani.c:711
 msgid "The ANI image format"
 msgstr "ANI प्रतिमा स्वरूप"
 
-#: ../gdk-pixbuf/io-bmp.c:230 ../gdk-pixbuf/io-bmp.c:267
-#: ../gdk-pixbuf/io-bmp.c:338 ../gdk-pixbuf/io-bmp.c:370
-#: ../gdk-pixbuf/io-bmp.c:393 ../gdk-pixbuf/io-bmp.c:496
+#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
+#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
 msgid "BMP image has bogus header data"
 msgstr "BMP प्रतिमेमध्ये असणाऱ्या शिर्षकपट्टी विषयीची माहीती खोटी आहे"
 
-#: ../gdk-pixbuf/io-bmp.c:241 ../gdk-pixbuf/io-bmp.c:433
+#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
 msgid "Not enough memory to load bitmap image"
 msgstr "प्रतिमा उघडण्यासाठी पुरेशी जागा नाही"
 
-#: ../gdk-pixbuf/io-bmp.c:319
+#: gdk-pixbuf/io-bmp.c:319
 msgid "BMP image has unsupported header size"
 msgstr ""
-"BMP प्रतीमेमध्ये असणाऱ्या शिर्षकपट्टी व्यतीरिक्त अन्य शिर्षकपट्या बनवता वाचता "
-"येणार नाहीत"
+"BMP प्रतीमेमध्ये असणाऱ्या शिर्षकपट्टी व्यतीरिक्त अन्य शिर्षकपट्या बनवता वाचता येणार नाहीत"
 
-#: ../gdk-pixbuf/io-bmp.c:357
+#: gdk-pixbuf/io-bmp.c:357
 msgid "Topdown BMP images cannot be compressed"
 msgstr "टॉपडाउन BMP प्रतिमा संकुचित नाही करता येत"
 
-#: ../gdk-pixbuf/io-bmp.c:717 ../gdk-pixbuf/io-pnm.c:709
+#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
 msgid "Premature end-of-file encountered"
 msgstr "फाइल अपूर्ण अवस्थेत बंद झाल्याचे नजरेस आले हे"
 
-#: ../gdk-pixbuf/io-bmp.c:1329
+#: gdk-pixbuf/io-bmp.c:1329
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "BMP फाइल सुरक्षित करण्यासाठी स्मृती राखू शकता आली नाही"
 
-#: ../gdk-pixbuf/io-bmp.c:1370
+#: gdk-pixbuf/io-bmp.c:1370
 msgid "Couldn't write to BMP file"
 msgstr "BMP फाइलमध्ये लिहिता आले नाही"
 
-#: ../gdk-pixbuf/io-bmp.c:1423 ../gdk-pixbuf/io-gdip-bmp.c:82
+#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
 msgid "The BMP image format"
 msgstr "BMP फाइल स्वरूप"
 
-#: ../gdk-pixbuf/io-gif.c:222
+#: gdk-pixbuf/io-gif.c:222
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "GIF %s मधील मजकूर वाचता येत नाहीः"
 
-#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1477
-#: ../gdk-pixbuf/io-gif.c:1638
+#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477 gdk-pixbuf/io-gif.c:1638
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF फाइल मधील काही माहीती हरवली आहे (बहुदा ती माहीती अन्यत्र साठलेली असेल)"
 
-#: ../gdk-pixbuf/io-gif.c:505
+#: gdk-pixbuf/io-gif.c:505
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "GIF प्रतिमेमध्ये (%s) अंतर्गत त्रुटी आहेत"
 
-#: ../gdk-pixbuf/io-gif.c:579
+#: gdk-pixbuf/io-gif.c:579
 msgid "Stack overflow"
 msgstr "माहीती साठवण क्षमतेपेक्षा अधिक आहे"
 
-#: ../gdk-pixbuf/io-gif.c:639
+#: gdk-pixbuf/io-gif.c:639
 msgid "GIF image loader cannot understand this image."
 msgstr "GIF प्रतिमा भारक ही प्रतिमा समजू शकत नाही."
 
-#: ../gdk-pixbuf/io-gif.c:668
+#: gdk-pixbuf/io-gif.c:668
 msgid "Bad code encountered"
 msgstr "सदोष सुत्रे मिळाली"
 
-#: ../gdk-pixbuf/io-gif.c:678
+#: gdk-pixbuf/io-gif.c:678
 msgid "Circular table entry in GIF file"
 msgstr "GIF फाइल मध्ये वर्तुळाकार तक्त्याची नोंद आहे"
 
-#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1464
-#: ../gdk-pixbuf/io-gif.c:1511 ../gdk-pixbuf/io-gif.c:1626
+#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464 gdk-pixbuf/io-gif.c:1511
+#: gdk-pixbuf/io-gif.c:1626
 msgid "Not enough memory to load GIF file"
 msgstr "GIF फाइलसाठी पुरेशी स्मरणशक्ती उपलब्ध नाही"
 
-#: ../gdk-pixbuf/io-gif.c:956
+#: gdk-pixbuf/io-gif.c:956
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "GIF फाइलमध्ये चौकट बसवण्यासाठी पुरेशी स्मृती नाही"
 
-#: ../gdk-pixbuf/io-gif.c:1128
+#: gdk-pixbuf/io-gif.c:1128
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF प्रतिमा खराब आहे  (चुकीचे  LZW संक्षेप )"
 
-#: ../gdk-pixbuf/io-gif.c:1178
+#: gdk-pixbuf/io-gif.c:1178
 msgid "File does not appear to be a GIF file"
 msgstr "ही फाइल GIF फाइल वाटत नाही "
 
-#: ../gdk-pixbuf/io-gif.c:1190
+#: gdk-pixbuf/io-gif.c:1190
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF फाइल मधील %s भागाला समर्थन नाही"
 
-#: ../gdk-pixbuf/io-gif.c:1299
+#: gdk-pixbuf/io-gif.c:1299
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
-"GIF प्रतिमेमध्ये व्यापक रंगसंगती नाही आणि चित्रामधील चौकटीत स्थानिकरंगसंगती "
-"उपलब्ध नाहीत."
+"GIF प्रतिमेमध्ये व्यापक रंगसंगती नाही आणि चित्रामधील चौकटीत स्थानिकरंगसंगती उपलब्ध नाहीत."
 
-#: ../gdk-pixbuf/io-gif.c:1533
+#: gdk-pixbuf/io-gif.c:1533
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF प्रतिमा अपूर्ण किंवा सदोष होते."
 
-#: ../gdk-pixbuf/io-gif.c:1689 ../gdk-pixbuf/io-gdip-gif.c:80
+#: gdk-pixbuf/io-gif.c:1689 gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "GIF प्रतिमा स्वरूप"
 
-#: ../gdk-pixbuf/io-ico.c:211 ../gdk-pixbuf/io-ico.c:225
-#: ../gdk-pixbuf/io-ico.c:277 ../gdk-pixbuf/io-ico.c:290
-#: ../gdk-pixbuf/io-ico.c:359
+#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
+#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
 msgid "Invalid header in icon"
 msgstr "अक्षरमालिकेतील शिर्षकपट्टी अयोग्य आहे"
 
-#: ../gdk-pixbuf/io-ico.c:240 ../gdk-pixbuf/io-ico.c:300
-#: ../gdk-pixbuf/io-ico.c:369 ../gdk-pixbuf/io-ico.c:432
-#: ../gdk-pixbuf/io-ico.c:462
+#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
+#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
 msgid "Not enough memory to load icon"
 msgstr "चिन्ह भारित करण्यासाठी पुरेशी स्मृती नाही"
 
-#: ../gdk-pixbuf/io-ico.c:322
+#: gdk-pixbuf/io-ico.c:322
 msgid "Icon has zero width"
 msgstr "अक्षरमालिकेची रुंदी शुन्य आहे "
 
-#: ../gdk-pixbuf/io-ico.c:332
+#: gdk-pixbuf/io-ico.c:332
 msgid "Icon has zero height"
 msgstr "अक्षरमालिकेची उंची शुन्य आहे"
 
-#: ../gdk-pixbuf/io-ico.c:384
+#: gdk-pixbuf/io-ico.c:384
 msgid "Compressed icons are not supported"
 msgstr ""
-"संक्षेपित अक्षरमालिकेतील अक्षरांना मदत नसल्यामुळे त्या मालिकेचा वापर करता येनार "
-"नाही"
+"संक्षेपित अक्षरमालिकेतील अक्षरांना मदत नसल्यामुळे त्या मालिकेचा वापर करता येनार नाही"
 
-#: ../gdk-pixbuf/io-ico.c:417
+#: gdk-pixbuf/io-ico.c:417
 msgid "Unsupported icon type"
 msgstr "या प्रकारच्या अक्षरमालिकेचा वापर केला जाऊ शकत नाही"
 
-#: ../gdk-pixbuf/io-ico.c:511
+#: gdk-pixbuf/io-ico.c:511
 msgid "Not enough memory to load ICO file"
 msgstr "ICO फाइल सुरू करण्यासाठी पुरेशी स्मरणशक्ती उपलब्ध नाही"
 
-#: ../gdk-pixbuf/io-ico.c:976
+#: gdk-pixbuf/io-ico.c:976
 msgid "Image too large to be saved as ICO"
 msgstr "ICO प्रमाणे सुरक्षित करण्यासाठी प्रतिमा खूप मोठी आहे"
 
-#: ../gdk-pixbuf/io-ico.c:987
+#: gdk-pixbuf/io-ico.c:987
 msgid "Cursor hotspot outside image"
 msgstr "कर्सर हॉटस्पॉट प्रतिमे बाहेर"
 
-#: ../gdk-pixbuf/io-ico.c:1010
+#: gdk-pixbuf/io-ico.c:1010
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "ICO फाइलसाठी असमर्थनीय खोली: %d"
 
-#: ../gdk-pixbuf/io-ico.c:1245 ../gdk-pixbuf/io-gdip-ico.c:59
+#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
 msgid "The ICO image format"
 msgstr "ICO प्रतिमा स्वरूप"
 
-#: ../gdk-pixbuf/io-icns.c:345
+#: gdk-pixbuf/io-icns.c:345
 #, c-format
 msgid "Error reading ICNS image: %s"
 msgstr ""
 
-#: ../gdk-pixbuf/io-icns.c:362
+#: gdk-pixbuf/io-icns.c:362
 msgid "Could not decode ICNS file"
 msgstr ""
 
-#: ../gdk-pixbuf/io-icns.c:395
+#: gdk-pixbuf/io-icns.c:395
 msgid "The ICNS image format"
 msgstr ""
 
-#: ../gdk-pixbuf/io-jasper.c:75
+#: gdk-pixbuf/io-jasper.c:75
 msgid "Couldn't allocate memory for stream"
 msgstr ""
 
-#: ../gdk-pixbuf/io-jasper.c:105
+#: gdk-pixbuf/io-jasper.c:105
 msgid "Couldn't decode image"
 msgstr ""
 
-#: ../gdk-pixbuf/io-jasper.c:123
+#: gdk-pixbuf/io-jasper.c:123
 msgid "Transformed JPEG2000 has zero width or height"
 msgstr ""
 
-#: ../gdk-pixbuf/io-jasper.c:137
+#: gdk-pixbuf/io-jasper.c:137
 msgid "Image type currently not supported"
 msgstr ""
 
-#: ../gdk-pixbuf/io-jasper.c:149 ../gdk-pixbuf/io-jasper.c:157
+#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
 msgid "Couldn't allocate memory for color profile"
 msgstr ""
 
-#: ../gdk-pixbuf/io-jasper.c:182
+#: gdk-pixbuf/io-jasper.c:182
 msgid "Insufficient memory to open JPEG 2000 file"
 msgstr ""
 
-#: ../gdk-pixbuf/io-jasper.c:264
+#: gdk-pixbuf/io-jasper.c:264
 msgid "Couldn't allocate memory to buffer image data"
 msgstr ""
 
-#: ../gdk-pixbuf/io-jasper.c:308
+#: gdk-pixbuf/io-jasper.c:308
 msgid "The JPEG 2000 image format"
 msgstr ""
 
-#: ../gdk-pixbuf/io-jpeg.c:117
+#: gdk-pixbuf/io-jpeg.c:117
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG फाइल (%s) मधील चित्रणाचा अर्थ/आशय कळण्यात चुक आढळते"
 
-#: ../gdk-pixbuf/io-jpeg.c:529
+#: gdk-pixbuf/io-jpeg.c:529
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"प्रतिमा सुरू करण्यासाठी पुरेशी स्मरणशक्ती नाही, त्यातील काही भाग काढून "
-"स्मरणशक्ती वाढवावी"
+"प्रतिमा सुरू करण्यासाठी पुरेशी स्मरणशक्ती नाही, त्यातील काही भाग काढून स्मरणशक्ती वाढवावी"
 
-#: ../gdk-pixbuf/io-jpeg.c:570 ../gdk-pixbuf/io-jpeg.c:776
+#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "असमर्थनीय JPEG रंग अंतराळ (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:668 ../gdk-pixbuf/io-jpeg.c:944
-#: ../gdk-pixbuf/io-jpeg.c:1177 ../gdk-pixbuf/io-jpeg.c:1186
+#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG मधील फाइल सुरु करण्यासाठी आवश्यक ती स्मरणशक्ती देता येत नाही"
 
-#: ../gdk-pixbuf/io-jpeg.c:920
+#: gdk-pixbuf/io-jpeg.c:920
 msgid "Transformed JPEG has zero width or height."
 msgstr "रूपांतरीत JPEG मधील ऊंची किंवा रुंदी शून्य आहे."
 
-#: ../gdk-pixbuf/io-jpeg.c:1133 ../gdk-pixbuf/io-gdip-jpeg.c:53
+#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
-"JPEG ची  गुणवत्ता ० ते 1०0 दरम्यान असायला हवी; %s ची गुणवत्ता मोजली जाऊ "
-"शकत नाही."
+"JPEG ची  गुणवत्ता ० ते 1०0 दरम्यान असायला हवी; %s ची गुणवत्ता मोजली जाऊ शकत नाही."
 
-#: ../gdk-pixbuf/io-jpeg.c:1148 ../gdk-pixbuf/io-gdip-jpeg.c:68
+#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG मधील गुणवत्ता किंमत  ० ते 1०0 दरम्यान असायला हवी; '%d' वैध नाही."
 
-#: ../gdk-pixbuf/io-jpeg.c:1309 ../gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "JPEG प्रतिमा स्वरूप"
 
-#: ../gdk-pixbuf/io-pcx.c:187
+#: gdk-pixbuf/io-pcx.c:187
 msgid "Couldn't allocate memory for header"
 msgstr "मथळ्यासाठी स्मृती राखू शकता आली नाही"
 
-#: ../gdk-pixbuf/io-pcx.c:202 ../gdk-pixbuf/io-pcx.c:560
+#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
 msgid "Couldn't allocate memory for context buffer"
 msgstr "संदर्भ बफरसाठी स्मृती राखता आली नाही"
 
-#: ../gdk-pixbuf/io-pcx.c:601
+#: gdk-pixbuf/io-pcx.c:601
 msgid "Image has invalid width and/or height"
 msgstr "प्रतिमेची रूंदी आणि/किंवा उंची अवैध आहे"
 
-#: ../gdk-pixbuf/io-pcx.c:613 ../gdk-pixbuf/io-pcx.c:674
+#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
 msgid "Image has unsupported bpp"
 msgstr "प्रतिमेत असमर्थनीय bpp आहेत"
 
-#: ../gdk-pixbuf/io-pcx.c:618 ../gdk-pixbuf/io-pcx.c:626
+#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr "प्रतिमेत %d-bit  प्रतलांची असमर्थनीय संख्या आहे"
 
-#: ../gdk-pixbuf/io-pcx.c:642
+#: gdk-pixbuf/io-pcx.c:642
 msgid "Couldn't create new pixbuf"
 msgstr "नविन Pixbuf निर्माण करता येत नाही"
 
-#: ../gdk-pixbuf/io-pcx.c:650
+#: gdk-pixbuf/io-pcx.c:650
 msgid "Couldn't allocate memory for line data"
 msgstr "लाइन डेटासाठी स्मृती राखता आली नाही"
 
-#: ../gdk-pixbuf/io-pcx.c:657
+#: gdk-pixbuf/io-pcx.c:657
 msgid "Couldn't allocate memory for paletted data"
 msgstr "पॅलेटेड डेटासाठी स्मृती राखता आली नाही"
 
-#: ../gdk-pixbuf/io-pcx.c:704
+#: gdk-pixbuf/io-pcx.c:704
 msgid "Didn't get all lines of PCX image"
 msgstr "PCX प्रतिमेच्या सर्व ओळी मिळाल्या नाहीत"
 
-#: ../gdk-pixbuf/io-pcx.c:711
+#: gdk-pixbuf/io-pcx.c:711
 msgid "No palette found at end of PCX data"
 msgstr "PCX डेटाच्या शेवटी पॅलेट डेटा सापडला नाही"
 
-#: ../gdk-pixbuf/io-pcx.c:756
+#: gdk-pixbuf/io-pcx.c:756
 msgid "The PCX image format"
 msgstr "PCX प्रतिमा स्वरूप"
 
-#: ../gdk-pixbuf/io-png.c:55
+#: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG चित्रामधील प्रती ओळीतील कणसमुहांची(बिट्स) संख्या अवैध आहे."
 
-#: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
 msgid "Transformed PNG has zero width or height."
 msgstr "परिवर्तित PNG मधील ऊंची  किंवा रुंदी शुन्य आहे."
 
-#: ../gdk-pixbuf/io-png.c:144
+#: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr "परिवर्तित PNG चित्रामधील प्रती ओळीतील कणसमुहांची(बिट्स) 8 ही संख्या अवैध  आहे."
 
-#: ../gdk-pixbuf/io-png.c:153
+#: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "परिवर्तित PNG, हे प्रतिमा RGB किंवा RGBA प्रतिमा नाही."
 
-#: ../gdk-pixbuf/io-png.c:162
+#: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
-"परिवर्तित PNG प्रतिमेमधील ओळींमधे समर्थन नसनार्या ओळी आहेत, त्या 3 किंवा 4 "
-"असाव्यात."
+"परिवर्तित PNG प्रतिमेमधील ओळींमधे समर्थन नसनार्या ओळी आहेत, त्या 3 किंवा 4 असाव्यात."
 
-#: ../gdk-pixbuf/io-png.c:183
+#: gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
 msgstr "PNG प्रतिमा %s फाइल मध्ये  घातक त्रुटी आहेः"
 
-#: ../gdk-pixbuf/io-png.c:310
+#: gdk-pixbuf/io-png.c:310
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG फाइल सुरु करण्यासाठी पुरेशी स्मरणशक्ती नाही"
 
-#: ../gdk-pixbuf/io-png.c:633
+#: gdk-pixbuf/io-png.c:633
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -729,460 +717,455 @@ msgstr ""
 "%ld x %ld आकाराचे प्रतिमा साठविण्यासाठी पुरेशी स्मरणशक्ती नाही; नको असणाऱ्या "
 "बाबीकाढून उपलब्ध स्मरणशक्तीचा साठा वाढवा"
 
-#: ../gdk-pixbuf/io-png.c:684
+#: gdk-pixbuf/io-png.c:684
 msgid "Fatal error reading PNG image file"
 msgstr "PNG प्रतिमेची फाइल वाचताना घातक चुक झाली आहे"
 
-#: ../gdk-pixbuf/io-png.c:733
+#: gdk-pixbuf/io-png.c:733
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG प्रतिमा फाइल वाचतेवेळी त्रुटी आढळली: %s"
 
-#: ../gdk-pixbuf/io-png.c:825
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#: gdk-pixbuf/io-png.c:825
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG पाठ चंकसाठी कळा किमान 1 आणि कमाल 7९ अक्षरी असाव्यात."
 
-#: ../gdk-pixbuf/io-png.c:833
+#: gdk-pixbuf/io-png.c:833
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG पाठ चंकसाठी कळा ASCII अक्षरांच्याच असाव्यात."
 
-#: ../gdk-pixbuf/io-png.c:846 ../gdk-pixbuf/io-gdip-png.c:56
+#: gdk-pixbuf/io-png.c:846 gdk-pixbuf/io-gdip-png.c:56
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
 msgstr ""
-"PNG संकुचन स्तराचे मुल्य 0 ते 9 च्या दरम्यानच असायला हवे; मुल्य '%s' विश्लेषित केले "
-"जाऊ शकत नाही."
+"PNG संकुचन स्तराचे मुल्य 0 ते 9 च्या दरम्यानच असायला हवे; मुल्य '%s' विश्लेषित केले जाऊ शकत "
+"नाही."
 
-#: ../gdk-pixbuf/io-png.c:858 ../gdk-pixbuf/io-gdip-png.c:68
+#: gdk-pixbuf/io-png.c:858 gdk-pixbuf/io-gdip-png.c:68
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
-msgstr ""
-"PNG संकुचन स्तराचे मुल्य 0 ते 9 च्या दरम्यानच असायला हवे; मुल्य '%d' अनुमत "
-"केलेलेनाही."
+msgstr "PNG संकुचन स्तराचे मुल्य 0 ते 9 च्या दरम्यानच असायला हवे; मुल्य '%d' अनुमत केलेलेनाही."
 
-#: ../gdk-pixbuf/io-png.c:896
+#: gdk-pixbuf/io-png.c:896
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "PNG पाठ चंक %s चे मुल्य ISO-8859-1 एनकोडिंगमध्ये परिवर्तीत केले जाऊ शकत नाही."
 
-#: ../gdk-pixbuf/io-png.c:1045 ../gdk-pixbuf/io-gdip-png.c:133
+#: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "PNM प्रतिमा स्वरूप"
 
-#: ../gdk-pixbuf/io-pnm.c:250
+#: gdk-pixbuf/io-pnm.c:250
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "PNM लोडर ला एक पूर्णांक संख्या पाहीजे, जी आढळली नाही"
 
-#: ../gdk-pixbuf/io-pnm.c:282
+#: gdk-pixbuf/io-pnm.c:282
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM फाइल मध्ये प्रारंभिक बाइट चुकीचा आहे"
 
-#: ../gdk-pixbuf/io-pnm.c:312
+#: gdk-pixbuf/io-pnm.c:312
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "PNM फाइल ही  योग्य PNM उपरचनेत  नाही"
 
-#: ../gdk-pixbuf/io-pnm.c:337
+#: gdk-pixbuf/io-pnm.c:337
 msgid "PNM file has an image width of 0"
 msgstr "PNM फाइलमधील प्रतिमेची रुंदी शून्य आहे "
 
-#: ../gdk-pixbuf/io-pnm.c:358
+#: gdk-pixbuf/io-pnm.c:358
 msgid "PNM file has an image height of 0"
 msgstr "PNM फाइल मधल्या प्रतिमेची उंची शून्य आहे"
 
-#: ../gdk-pixbuf/io-pnm.c:381
+#: gdk-pixbuf/io-pnm.c:381
 msgid "Maximum color value in PNM file is 0"
 msgstr "PNM फाइल मध्ये  रंगाची  कमाल संख्या 0 आहे "
 
-#: ../gdk-pixbuf/io-pnm.c:389
+#: gdk-pixbuf/io-pnm.c:389
 msgid "Maximum color value in PNM file is too large"
 msgstr "PNM फाइल मध्ये  रंगाची  कमाल संख्या बरीच मोठी आहे"
 
-#: ../gdk-pixbuf/io-pnm.c:429 ../gdk-pixbuf/io-pnm.c:459
-#: ../gdk-pixbuf/io-pnm.c:504
+#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
 msgid "Raw PNM image type is invalid"
 msgstr " PNM प्रतिमेचा प्रकार अवैध आहे "
 
-#: ../gdk-pixbuf/io-pnm.c:654
+#: gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM नामक ह्या चित्रासाठी PNM उरने च्या फाइलचा वापर करू शकत नाही"
 
-#: ../gdk-pixbuf/io-pnm.c:741 ../gdk-pixbuf/io-pnm.c:968
+#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr " PNM कच्या फाइल मधील शब्दांमध्ये योग्य रिक्त जागा असाव्यात"
 
-#: ../gdk-pixbuf/io-pnm.c:768
+#: gdk-pixbuf/io-pnm.c:768
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "PNM प्रतिमा भारित करण्यासाठी स्मृती राखता येत नाही"
 
-#: ../gdk-pixbuf/io-pnm.c:818
+#: gdk-pixbuf/io-pnm.c:818
 msgid "Insufficient memory to load PNM context struct"
 msgstr "PNM संरचनेसाठी पुरेशी जागा नाही"
 
-#: ../gdk-pixbuf/io-pnm.c:869
+#: gdk-pixbuf/io-pnm.c:869
 msgid "Unexpected end of PNM image data"
 msgstr "PNM प्रतिमेतील माहीतीचा अनपेक्षित शेवट झाला"
 
-#: ../gdk-pixbuf/io-pnm.c:997
+#: gdk-pixbuf/io-pnm.c:997
 msgid "Insufficient memory to load PNM file"
 msgstr "PNM फाइल सुरू करण्याकरीता पुरेशी जागा नाही"
 
-#: ../gdk-pixbuf/io-pnm.c:1081
+#: gdk-pixbuf/io-pnm.c:1081
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "PNM/PBM/PGM/PPM प्रतिमा स्वरूप परिवार"
 
-#: ../gdk-pixbuf/io-ras.c:126
+#: gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
 msgstr "RAS प्रतिमेतील शिर्षकपट्टीतील माहीती खोटी आहे"
 
-#: ../gdk-pixbuf/io-ras.c:148
+#: gdk-pixbuf/io-ras.c:148
 msgid "RAS image has unknown type"
 msgstr " RAS प्रतिमा अनोळखी आहे"
 
-#: ../gdk-pixbuf/io-ras.c:156
+#: gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
 msgstr "RAS  प्रतिमेमध्ये असणारा बदल विना आधार आहे"
 
-#: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
+#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
 msgstr "RAS प्रतिमा सुरू करण्याकरीता पुरेशी जागा देता येत नाही"
 
-#: ../gdk-pixbuf/io-ras.c:545
+#: gdk-pixbuf/io-ras.c:545
 msgid "The Sun raster image format"
 msgstr "Sun रास्टर प्रतिमा स्वरूप"
 
-#: ../gdk-pixbuf/io-tga.c:154
+#: gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "IOBuffer struct साठी स्मृती राखू शकत नाही"
 
-#: ../gdk-pixbuf/io-tga.c:173
+#: gdk-pixbuf/io-tga.c:173
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "IOBuffer डेटा साठी स्मृती राखू शकत नाही"
 
-#: ../gdk-pixbuf/io-tga.c:184
+#: gdk-pixbuf/io-tga.c:184
 msgid "Cannot realloc IOBuffer data"
 msgstr "IOBuffer डेटासाठी स्मृती पुन्हा राखता येत नाही"
 
-#: ../gdk-pixbuf/io-tga.c:214
+#: gdk-pixbuf/io-tga.c:214
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "तात्पुरत्या IO Buffer डेटासाठी स्मृती राखता येत नाही"
 
-#: ../gdk-pixbuf/io-tga.c:347
+#: gdk-pixbuf/io-tga.c:347
 msgid "Cannot allocate new pixbuf"
 msgstr "नविन  Pixbuf साठी स्मृती राखता येत नाही"
 
-#: ../gdk-pixbuf/io-tga.c:687
+#: gdk-pixbuf/io-tga.c:687
 msgid "Cannot allocate colormap structure"
 msgstr "colormap structure साठी स्मृती राखता येत नाही"
 
-#: ../gdk-pixbuf/io-tga.c:694
+#: gdk-pixbuf/io-tga.c:694
 msgid "Cannot allocate colormap entries"
 msgstr "colormap प्रविष्टांसाठी स्मृती राखता येत नाही"
 
-#: ../gdk-pixbuf/io-tga.c:716
+#: gdk-pixbuf/io-tga.c:716
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "उपलब्द रंगांच्या प्रारंभी अनपेक्षित खोलीच्या अक्षरमालीका दिसते"
 
-#: ../gdk-pixbuf/io-tga.c:734
+#: gdk-pixbuf/io-tga.c:734
 msgid "Cannot allocate TGA header memory"
 msgstr "TGA मथळा स्मृती राखता येत नाही"
 
-#: ../gdk-pixbuf/io-tga.c:767
+#: gdk-pixbuf/io-tga.c:767
 msgid "TGA image has invalid dimensions"
 msgstr "TGA प्रतिमेमध्ये अवैध रूपे आहेत "
 
-#: ../gdk-pixbuf/io-tga.c:773 ../gdk-pixbuf/io-tga.c:782
-#: ../gdk-pixbuf/io-tga.c:792 ../gdk-pixbuf/io-tga.c:802
-#: ../gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
+#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
 msgid "TGA image type not supported"
 msgstr "TGA प्रकारच्या प्रतिमे ला आधार नाही"
 
-#: ../gdk-pixbuf/io-tga.c:856
+#: gdk-pixbuf/io-tga.c:856
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "TGA संदर्भ struct साठी स्मृती राखू शकत नाही"
 
-#: ../gdk-pixbuf/io-tga.c:921
+#: gdk-pixbuf/io-tga.c:921
 msgid "Excess data in file"
 msgstr "फाइलमधील अतिरीक्त माहिती"
 
-#: ../gdk-pixbuf/io-tga.c:1000
+#: gdk-pixbuf/io-tga.c:1000
 msgid "The Targa image format"
 msgstr "Targa प्रतिमा स्वरूप"
 
-#: ../gdk-pixbuf/io-tiff.c:160
+#: gdk-pixbuf/io-tiff.c:160
 msgid "Could not get image width (bad TIFF file)"
 msgstr "प्रतिमेची रुंदी आढळली नाही (TIFF फाइल प्रदुषित आहे)"
 
-#: ../gdk-pixbuf/io-tiff.c:167
+#: gdk-pixbuf/io-tiff.c:167
 msgid "Could not get image height (bad TIFF file)"
 msgstr " प्रतिमेची ऊंची  आढळली नाही(TIFF फाइल प्रदुषित आहे)"
 
-#: ../gdk-pixbuf/io-tiff.c:175
+#: gdk-pixbuf/io-tiff.c:175
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF प्रतिमेची रुंदी किंवा ऊंची शून्य आहे "
 
-#: ../gdk-pixbuf/io-tiff.c:184 ../gdk-pixbuf/io-tiff.c:193
+#: gdk-pixbuf/io-tiff.c:184 gdk-pixbuf/io-tiff.c:193
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF प्रतिमेची रुपे बरीच मोठी आहेत"
 
-#: ../gdk-pixbuf/io-tiff.c:217 ../gdk-pixbuf/io-tiff.c:229
-#: ../gdk-pixbuf/io-tiff.c:541
+#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
 msgid "Insufficient memory to open TIFF file"
 msgstr "TIFF फाइल उघडण्यासाठी जागा अपुरी आहे"
 
-#: ../gdk-pixbuf/io-tiff.c:275
+#: gdk-pixbuf/io-tiff.c:275
 msgid "Failed to load RGB data from TIFF file"
 msgstr "TIFF फाइल मधून  RGB माहीती सुरू करण्यात असफल"
 
-#: ../gdk-pixbuf/io-tiff.c:331
+#: gdk-pixbuf/io-tiff.c:331
 msgid "Failed to open TIFF image"
 msgstr "TIFF प्रतिमा उघडण्यात असफल"
 
-#: ../gdk-pixbuf/io-tiff.c:343 ../gdk-pixbuf/io-tiff.c:722
+#: gdk-pixbuf/io-tiff.c:343 gdk-pixbuf/io-tiff.c:722
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose ही क्रिया असफल"
 
-#: ../gdk-pixbuf/io-tiff.c:473 ../gdk-pixbuf/io-tiff.c:486
+#: gdk-pixbuf/io-tiff.c:473 gdk-pixbuf/io-tiff.c:486
 msgid "Failed to load TIFF image"
 msgstr "TIFF प्रतिमा सुरु करण्यात असफल"
 
-#: ../gdk-pixbuf/io-tiff.c:670
+#: gdk-pixbuf/io-tiff.c:670
 msgid "Failed to save TIFF image"
 msgstr "TIFF प्रतिमा सुरक्षित करण्यात असफल"
 
-#: ../gdk-pixbuf/io-tiff.c:708
+#: gdk-pixbuf/io-tiff.c:708
 msgid "Failed to write TIFF data"
 msgstr "TIFF डेटा लिहीण्यास असफल"
 
-#: ../gdk-pixbuf/io-tiff.c:760
+#: gdk-pixbuf/io-tiff.c:760
 msgid "Couldn't write to TIFF file"
 msgstr "TIFF फाइलवर लिहीता आले नाही"
 
-#: ../gdk-pixbuf/io-tiff.c:815
+#: gdk-pixbuf/io-tiff.c:815
 msgid "The TIFF image format"
 msgstr "TIFF प्रतिमा स्वरूप"
 
-#: ../gdk-pixbuf/io-wbmp.c:246
+#: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
 msgstr "प्रतिमेची रुंदी शून्य आहे"
 
-#: ../gdk-pixbuf/io-wbmp.c:264
+#: gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
 msgstr "प्रतिमेची ऊंची शून्य आहे"
 
-#: ../gdk-pixbuf/io-wbmp.c:275
+#: gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
 msgstr "प्रतिमा सुरु करण्यासाठी पुरेशी जागा नाही"
 
-#: ../gdk-pixbuf/io-wbmp.c:334
+#: gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
 msgstr "उर्वरीत (माहीती) साठवता येऊ शकली नाही "
 
-#: ../gdk-pixbuf/io-wbmp.c:375
+#: gdk-pixbuf/io-wbmp.c:375
 msgid "The WBMP image format"
 msgstr "WBMP प्रतिमा स्वरूप"
 
-#: ../gdk-pixbuf/io-xbm.c:295
+#: gdk-pixbuf/io-xbm.c:295
 msgid "Invalid XBM file"
 msgstr "अवैध XBM फाइल"
 
-#: ../gdk-pixbuf/io-xbm.c:305
+#: gdk-pixbuf/io-xbm.c:305
 msgid "Insufficient memory to load XBM image file"
 msgstr "XBM प्रतिमेची फाइल सुरू करण्यासाठी पुरेशी जागा नाही"
 
-#: ../gdk-pixbuf/io-xbm.c:453
+#: gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "XBM प्रतिमा फाइल सुरु करताना तात्पुरत्या फाइलमध्ये लेखन करतेवेळी असफल"
 
-#: ../gdk-pixbuf/io-xbm.c:492
+#: gdk-pixbuf/io-xbm.c:492
 msgid "The XBM image format"
 msgstr "XBM प्रतिमा स्वरूप"
 
-#: ../gdk-pixbuf/io-xpm.c:468
+#: gdk-pixbuf/io-xpm.c:468
 msgid "No XPM header found"
 msgstr "XPM मथळा सापडला नाही"
 
-#: ../gdk-pixbuf/io-xpm.c:477
+#: gdk-pixbuf/io-xpm.c:477
 msgid "Invalid XPM header"
 msgstr "अवैध XPM मथळा"
 
-#: ../gdk-pixbuf/io-xpm.c:485
+#: gdk-pixbuf/io-xpm.c:485
 msgid "XPM file has image width <= 0"
 msgstr "XPM प्रतिमा फाइलची रुंदी <= 0 आहे"
 
-#: ../gdk-pixbuf/io-xpm.c:493
+#: gdk-pixbuf/io-xpm.c:493
 msgid "XPM file has image height <= 0"
 msgstr "XPM प्रतिमा फाइलची ऊंची  <= 0 आहे"
 
-#: ../gdk-pixbuf/io-xpm.c:501
+#: gdk-pixbuf/io-xpm.c:501
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM फाइलमध्ये प्रति ओळीतील अक्षर संख्या अवैध आहे "
 
-#: ../gdk-pixbuf/io-xpm.c:510
+#: gdk-pixbuf/io-xpm.c:510
 msgid "XPM file has invalid number of colors"
 msgstr "XPM फाइल मध्ये रंगांची संख्या अवैध आहे"
 
-#: ../gdk-pixbuf/io-xpm.c:522 ../gdk-pixbuf/io-xpm.c:531
-#: ../gdk-pixbuf/io-xpm.c:583
+#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "XPM प्रतिमा भारित करण्यासाठी स्मृती राखू शकत नाही"
 
-#: ../gdk-pixbuf/io-xpm.c:545
+#: gdk-pixbuf/io-xpm.c:545
 msgid "Cannot read XPM colormap"
 msgstr "XPM colormap वाचता येत नाही"
 
-#: ../gdk-pixbuf/io-xpm.c:777
+#: gdk-pixbuf/io-xpm.c:777
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "XPM प्रतिमा सुरु करताना तात्पुरत्या फाइल मध्ये लेखन करण्यास असफल"
 
-#: ../gdk-pixbuf/io-xpm.c:816
+#: gdk-pixbuf/io-xpm.c:816
 msgid "The XPM image format"
 msgstr "XPM प्रतिमा स्वरूप"
 
-#: ../gdk-pixbuf/io-gdip-emf.c:59
+#: gdk-pixbuf/io-gdip-emf.c:59
 msgid "The EMF image format"
 msgstr ""
 
-#: ../gdk-pixbuf/io-gdip-utils.c:212
+#: gdk-pixbuf/io-gdip-utils.c:212
 #, c-format
 msgid "Could not allocate memory: %s"
 msgstr ""
 
-#: ../gdk-pixbuf/io-gdip-utils.c:237 ../gdk-pixbuf/io-gdip-utils.c:350
-#: ../gdk-pixbuf/io-gdip-utils.c:383
+#: gdk-pixbuf/io-gdip-utils.c:237 gdk-pixbuf/io-gdip-utils.c:350
+#: gdk-pixbuf/io-gdip-utils.c:383
 #, c-format
 msgid "Could not create stream: %s"
 msgstr ""
 
-#: ../gdk-pixbuf/io-gdip-utils.c:251
+#: gdk-pixbuf/io-gdip-utils.c:251
 #, c-format
 msgid "Could not seek stream: %s"
 msgstr ""
 
-#: ../gdk-pixbuf/io-gdip-utils.c:263
+#: gdk-pixbuf/io-gdip-utils.c:263
 #, c-format
 msgid "Could not read from stream: %s"
 msgstr ""
 
-#: ../gdk-pixbuf/io-gdip-utils.c:736
+#: gdk-pixbuf/io-gdip-utils.c:736
 msgid "Couldn't create pixbuf"
 msgstr ""
 
-#: ../gdk-pixbuf/io-gdip-utils.c:798
+#: gdk-pixbuf/io-gdip-utils.c:798
 msgid "Couldn't load bitmap"
 msgstr ""
 
-#: ../gdk-pixbuf/io-gdip-utils.c:821
+#: gdk-pixbuf/io-gdip-utils.c:821
 msgid "Couldn't load metafile"
 msgstr ""
 
-#: ../gdk-pixbuf/io-gdip-utils.c:980
+#: gdk-pixbuf/io-gdip-utils.c:980
 msgid "Unsupported image format for GDI+"
 msgstr ""
 
-#: ../gdk-pixbuf/io-gdip-utils.c:987
+#: gdk-pixbuf/io-gdip-utils.c:987
 msgid "Couldn't save"
 msgstr ""
 
-#: ../gdk-pixbuf/io-gdip-wmf.c:58
+#: gdk-pixbuf/io-gdip-wmf.c:58
 msgid "The WMF image format"
 msgstr ""
 
 #. Description of --sync in --help output
-#: ../gdk/win32/gdkmain-win32.c:54
+#: gdk/win32/gdkmain-win32.c:54
 msgid "Don't batch GDI requests"
 msgstr "GDI विनंत्यांने बॅच करू नका"
 
 #. Description of --no-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:56
+#: gdk/win32/gdkmain-win32.c:56
 msgid "Don't use the Wintab API for tablet support"
 msgstr "टॅब्लेट आधारासाठी Wintab API वापरू नका"
 
 #. Description of --ignore-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:58
+#: gdk/win32/gdkmain-win32.c:58
 msgid "Same as --no-wintab"
 msgstr "--no-wintab सारखेच"
 
 #. Description of --use-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:60
+#: gdk/win32/gdkmain-win32.c:60
 msgid "Do use the Wintab API [default]"
 msgstr "Wintab API चा वापर कराच [मुलभूत]"
 
 #. Description of --max-colors=COLORS in --help output
-#: ../gdk/win32/gdkmain-win32.c:62
+#: gdk/win32/gdkmain-win32.c:62
 msgid "Size of the palette in 8 bit mode"
 msgstr "8 bit रीतीमध्ये पॅलेटचा आकार"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: ../gdk/win32/gdkmain-win32.c:63
+#: gdk/win32/gdkmain-win32.c:63
 msgid "COLORS"
 msgstr "COLORS"
 
 #. Description of --sync in --help output
-#: ../gdk/x11/gdkmain-x11.c:92
+#: gdk/x11/gdkmain-x11.c:92
 msgid "Make X calls synchronous"
 msgstr "X कॉल्सला सिंक्रोनस करा"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:311
+#: gdk/x11/gdkapplaunchcontext-x11.c:311
 #, c-format
 msgid "Starting %s"
 msgstr ""
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:313
+#: gdk/x11/gdkapplaunchcontext-x11.c:313
 #, c-format
 msgid "Opening %s"
 msgstr ""
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:316
+#: gdk/x11/gdkapplaunchcontext-x11.c:316
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2108
+#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "परवाना"
 
-#: ../gtk/gtkaboutdialog.c:265
+#: gtk/gtkaboutdialog.c:265
 msgid "The license of the program"
 msgstr "कार्यक्रमाचा परवाना"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:500
 msgid "C_redits"
 msgstr "श्रेय (_r)"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:514
+#: gtk/gtkaboutdialog.c:514
 msgid "_License"
 msgstr "परवाना(_L)"
 
-#: ../gtk/gtkaboutdialog.c:744
+#: gtk/gtkaboutdialog.c:744
 #, c-format
 msgid "About %s"
 msgstr "%s च्या विषयी"
 
-#: ../gtk/gtkaboutdialog.c:2032
+#: gtk/gtkaboutdialog.c:2032
 msgid "Credits"
 msgstr "श्रेय"
 
-#: ../gtk/gtkaboutdialog.c:2061
+#: gtk/gtkaboutdialog.c:2061
 msgid "Written by"
 msgstr "लेखक"
 
-#: ../gtk/gtkaboutdialog.c:2064
+#: gtk/gtkaboutdialog.c:2064
 msgid "Documented by"
 msgstr "दस्तऐवजीकरण यांद्वारे"
 
-#: ../gtk/gtkaboutdialog.c:2076
+#: gtk/gtkaboutdialog.c:2076
 msgid "Translated by"
 msgstr "अनुवाद यांद्वारे"
 
-#: ../gtk/gtkaboutdialog.c:2080
+#: gtk/gtkaboutdialog.c:2080
 msgid "Artwork by"
 msgstr "कलाकारी यांद्वारे"
 
@@ -1193,7 +1176,7 @@ msgstr "कलाकारी यांद्वारे"
 #. *
 #. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: ../gtk/gtkaccellabel.c:93
+#: gtk/gtkaccellabel.c:93
 msgid "keyboard label|Shift"
 msgstr "Shift"
 
@@ -1204,7 +1187,7 @@ msgstr "Shift"
 #. *
 #. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: ../gtk/gtkaccellabel.c:101
+#: gtk/gtkaccellabel.c:101
 msgid "keyboard label|Ctrl"
 msgstr "Ctrl"
 
@@ -1215,7 +1198,7 @@ msgstr "Ctrl"
 #. *
 #. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: ../gtk/gtkaccellabel.c:109
+#: gtk/gtkaccellabel.c:109
 msgid "keyboard label|Alt"
 msgstr "Alt"
 
@@ -1225,7 +1208,7 @@ msgstr "Alt"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: ../gtk/gtkaccellabel.c:678
+#: gtk/gtkaccellabel.c:678
 msgid "keyboard label|Super"
 msgstr "Super"
 
@@ -1235,7 +1218,7 @@ msgstr "Super"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: ../gtk/gtkaccellabel.c:692
+#: gtk/gtkaccellabel.c:692
 msgid "keyboard label|Hyper"
 msgstr "Hyper"
 
@@ -1245,31 +1228,31 @@ msgstr "Hyper"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: ../gtk/gtkaccellabel.c:707
+#: gtk/gtkaccellabel.c:707
 msgid "keyboard label|Meta"
 msgstr "Meta"
 
 #. do not translate the part before the |
-#: ../gtk/gtkaccellabel.c:725
+#: gtk/gtkaccellabel.c:725
 msgid "keyboard label|Space"
 msgstr "Space"
 
 #. do not translate the part before the |
-#: ../gtk/gtkaccellabel.c:729
+#: gtk/gtkaccellabel.c:729
 msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
-#: ../gtk/gtkbuilderparser.c:340
+#: gtk/gtkbuilderparser.c:340
 #, c-format
 msgid "Invalid type function: `%s'"
 msgstr "अवैध कार्यपध्दती प्रकार:%s"
 
-#: ../gtk/gtkbuilderparser.c:823
+#: gtk/gtkbuilderparser.c:823
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "अवैध रूट घटक: '%s'"
 
-#: ../gtk/gtkbuilderparser.c:862
+#: gtk/gtkbuilderparser.c:862
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "न हाताळलेले टॅग: '%s'"
@@ -1283,7 +1266,7 @@ msgstr "न हाताळलेले टॅग: '%s'"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: ../gtk/gtkcalendar.c:758
+#: gtk/gtkcalendar.c:758
 msgid "calendar:MY"
 msgstr "calender:MY"
 
@@ -1291,7 +1274,7 @@ msgstr "calender:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:796
+#: gtk/gtkcalendar.c:796
 msgid "calendar:week_start:0"
 msgstr "calender:week_start:0"
 
@@ -1303,7 +1286,7 @@ msgstr "calender:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1796
+#: gtk/gtkcalendar.c:1796
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1318,7 +1301,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1827 ../gtk/gtkcalendar.c:2488
+#: gtk/gtkcalendar.c:1827 gtk/gtkcalendar.c:2488
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1334,7 +1317,7 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1859 ../gtk/gtkcalendar.c:2350
+#: gtk/gtkcalendar.c:1859 gtk/gtkcalendar.c:2350
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1350,7 +1333,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2140
+#: gtk/gtkcalendar.c:2140
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1358,7 +1341,7 @@ msgstr "%Y"
 #. * a disabled accelerator key combination. Only include
 #. * the text after the | in the translation.
 #.
-#: ../gtk/gtkcellrendereraccel.c:235
+#: gtk/gtkcellrendereraccel.c:235
 msgid "Accelerator|Disabled"
 msgstr "अकार्यान्वित"
 
@@ -1366,196 +1349,199 @@ msgstr "अकार्यान्वित"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:368 ../gtk/gtkcellrendereraccel.c:580
+#: gtk/gtkcellrendereraccel.c:368 gtk/gtkcellrendereraccel.c:580
 msgid "New accelerator..."
 msgstr "नविन प्रवेग..."
 
 #. do not translate the part before the |
-#: ../gtk/gtkcellrendererprogress.c:362 ../gtk/gtkcellrendererprogress.c:449
+#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
 #, c-format
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:559
+#: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
 msgstr "रंग उचला"
 
-#: ../gtk/gtkcolorbutton.c:448
+#: gtk/gtkcolorbutton.c:448
 msgid "Received invalid color data\n"
 msgstr "अवैध रंग डेटा मिळाला\n"
 
-#: ../gtk/gtkcolorsel.c:354
+#: gtk/gtkcolorsel.c:354
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"तुम्हाला हवा असणारा रंग बाह्य वलयातून निवडा, अंतर्गत त्रिकोण वापरुन हवा "
-"असणारा गडद किंवा फिक्का रंग निवडा."
+"तुम्हाला हवा असणारा रंग बाह्य वलयातून निवडा, अंतर्गत त्रिकोण वापरुन हवा असणारा गडद "
+"किंवा फिक्का रंग निवडा."
 
-#: ../gtk/gtkcolorsel.c:378
+#: gtk/gtkcolorsel.c:378
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"रंगनिवडक साधनावर क्लिक करा, त्यानंतर पडद्यावरील कोणत्याही भागावर क्लिक "
-"करूनरंग निवडा."
+"रंगनिवडक साधनावर क्लिक करा, त्यानंतर पडद्यावरील कोणत्याही भागावर क्लिक करूनरंग निवडा."
 
-#: ../gtk/gtkcolorsel.c:387
+#: gtk/gtkcolorsel.c:387
 msgid "_Hue:"
 msgstr "रंगछटा(_H):"
 
-#: ../gtk/gtkcolorsel.c:388
+#: gtk/gtkcolorsel.c:388
 msgid "Position on the color wheel."
 msgstr "रंगचक्रावरचे स्थान."
 
-#: ../gtk/gtkcolorsel.c:390
+#: gtk/gtkcolorsel.c:390
 msgid "_Saturation:"
 msgstr "संर्पुक्तता(_S):"
 
-#: ../gtk/gtkcolorsel.c:391
+#: gtk/gtkcolorsel.c:391
 msgid "\"Deepness\" of the color."
 msgstr "रंगाचा \"गडदपणा\"."
 
-#: ../gtk/gtkcolorsel.c:392
+#: gtk/gtkcolorsel.c:392
 msgid "_Value:"
 msgstr "मूल्य(_V) :"
 
-#: ../gtk/gtkcolorsel.c:393
+#: gtk/gtkcolorsel.c:393
 msgid "Brightness of the color."
 msgstr "रंगाचा उजळपणा."
 
-#: ../gtk/gtkcolorsel.c:394
+#: gtk/gtkcolorsel.c:394
 msgid "_Red:"
 msgstr "लाल(_R):"
 
-#: ../gtk/gtkcolorsel.c:395
+#: gtk/gtkcolorsel.c:395
 msgid "Amount of red light in the color."
 msgstr "रंगामधील लालरंगाचे प्रमाण."
 
-#: ../gtk/gtkcolorsel.c:396
+#: gtk/gtkcolorsel.c:396
 msgid "_Green:"
 msgstr "हिरवा(_G):"
 
-#: ../gtk/gtkcolorsel.c:397
+#: gtk/gtkcolorsel.c:397
 msgid "Amount of green light in the color."
 msgstr "रंगामधील हिरव्यारंगाचे प्रमाण."
 
-#: ../gtk/gtkcolorsel.c:398
+#: gtk/gtkcolorsel.c:398
 msgid "_Blue:"
 msgstr "नीळा(_B):"
 
-#: ../gtk/gtkcolorsel.c:399
+#: gtk/gtkcolorsel.c:399
 msgid "Amount of blue light in the color."
 msgstr "रंगामधील निळ्या रंगाचे प्रमाण."
 
-#: ../gtk/gtkcolorsel.c:402
+#: gtk/gtkcolorsel.c:402
 msgid "Op_acity:"
 msgstr "अपारदर्शकता(_a):"
 
-#: ../gtk/gtkcolorsel.c:409 ../gtk/gtkcolorsel.c:419
+#: gtk/gtkcolorsel.c:409 gtk/gtkcolorsel.c:419
 msgid "Transparency of the color."
 msgstr "रंगाची पारदर्शकता."
 
-#: ../gtk/gtkcolorsel.c:426
+#: gtk/gtkcolorsel.c:426
 msgid "Color _name:"
 msgstr "रंगाचे नाव(_n):"
 
-#: ../gtk/gtkcolorsel.c:440
+#: gtk/gtkcolorsel.c:440
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
-msgstr "आपण HTML प्रमाणे रंगाचा हैक्साडेसीमल रंग मुल्य लिहू शकता, किवा ह्या नोदणीतील रंगाचे नाव जसे की 'केसरी'."
+msgstr ""
+"आपण HTML प्रमाणे रंगाचा हैक्साडेसीमल रंग मुल्य लिहू शकता, किवा ह्या नोदणीतील रंगाचे नाव "
+"जसे की 'केसरी'."
 
-#: ../gtk/gtkcolorsel.c:470
+#: gtk/gtkcolorsel.c:470
 msgid "_Palette:"
 msgstr "पटल(_P):"
 
-#: ../gtk/gtkcolorsel.c:499
+#: gtk/gtkcolorsel.c:499
 msgid "Color Wheel"
 msgstr "रंग चाक"
 
-#: ../gtk/gtkcolorsel.c:976
+#: gtk/gtkcolorsel.c:976
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"तुम्ही आत्ता निवडलेला रंग आणि आधी निवडलेला रंग यांची तुलना करण्यासाठीतुम्ही हा "
-"रंग रंगपट्टीकडे घ्या, किंवा इतर रंगखणाकडे घेऊन अपेक्षित रंग निवडा."
+"तुम्ही आत्ता निवडलेला रंग आणि आधी निवडलेला रंग यांची तुलना करण्यासाठीतुम्ही हा रंग "
+"रंगपट्टीकडे घ्या, किंवा इतर रंगखणाकडे घेऊन अपेक्षित रंग निवडा."
 
-#: ../gtk/gtkcolorsel.c:980
+#: gtk/gtkcolorsel.c:980
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr "तुम्ही निवडलेला रंग. तुम्ही हा रंग रंगपट्टीवर घेऊन भावी वापरासाठी साठवू शकता."
 
-#: ../gtk/gtkcolorsel.c:1363
+#: gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
 msgstr "रंगसाठा(_S) येथे करा"
 
-#: ../gtk/gtkcolorsel.c:1568
+#: gtk/gtkcolorsel.c:1568
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"रंग पट्टीवर क्लिक करून त्या द्वारे चालू रंग बनवा.ही नोंद बदलण्यासाठी रंग येथे घ्या "
-"किंवा उजवीकडे क्लिक करुन(माउस) \"रंग साठवा येथे घ्या.\""
+"रंग पट्टीवर क्लिक करून त्या द्वारे चालू रंग बनवा.ही नोंद बदलण्यासाठी रंग येथे घ्या किंवा "
+"उजवीकडे क्लिक करुन(माउस) \"रंग साठवा येथे घ्या.\""
 
-#: ../gtk/gtkcolorseldialog.c:170
+#: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
 msgstr "फोन्ट निवडणे"
 
-#: ../gtk/gtkentry.c:5375 ../gtk/gtktextview.c:7686
+#: gtk/gtkentry.c:5375 gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "माहीती गोळा करण्याच्या पध्दत्ती"
 
-#: ../gtk/gtkentry.c:5389 ../gtk/gtktextview.c:7700
+#: gtk/gtkentry.c:5389 gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "युनिकोड नियंत्रण अक्षर घाला(_I)"
 
-#: ../gtk/gtkfilechooserbutton.c:64
+#: gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
 msgstr "फाइल निवडा"
 
-#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1909
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1909
 msgid "Desktop"
 msgstr "कार्यस्थळ"
 
-#: ../gtk/gtkfilechooserbutton.c:66
+#: gtk/gtkfilechooserbutton.c:66
 msgid "(None)"
 msgstr "(काहीच नाही)"
 
-#: ../gtk/gtkfilechooserbutton.c:2011
+#: gtk/gtkfilechooserbutton.c:2011
 msgid "Other..."
 msgstr "इतर..."
 
-#: ../gtk/gtkfilechooserdefault.c:1053
+#: gtk/gtkfilechooserdefault.c:1053
 msgid "Could not retrieve information about the file"
 msgstr "फाइलविषयी माहिती मिळवता आली नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:1064
+#: gtk/gtkfilechooserdefault.c:1064
 msgid "Could not add a bookmark"
 msgstr "खूणगाठ जमा करता आली नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:1075
+#: gtk/gtkfilechooserdefault.c:1075
 msgid "Could not remove bookmark"
 msgstr "खूणगाठ काढून टाकता आली नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:1086
+#: gtk/gtkfilechooserdefault.c:1086
 msgid "The folder could not be created"
 msgstr "संचयीका निर्माण करता आले नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:1099
+#: gtk/gtkfilechooserdefault.c:1099
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
-msgstr "संचयीका बनवू शकले नाही, कारण त्याच नावाची फाइलं आधिपासून अस्तीत्वात होती.  संचयीका करीता इतर नाव वापरण्याचा प्रयत्न करा, किंवा पहिले फाइल पुनःनामांकीत करा."
+msgstr ""
+"संचयीका बनवू शकले नाही, कारण त्याच नावाची फाइलं आधिपासून अस्तीत्वात होती.  संचयीका "
+"करीता इतर नाव वापरण्याचा प्रयत्न करा, किंवा पहिले फाइल पुनःनामांकीत करा."
 
-#: ../gtk/gtkfilechooserdefault.c:1110
+#: gtk/gtkfilechooserdefault.c:1110
 msgid "Invalid file name"
 msgstr "अवैध फाइल नाव"
 
-#: ../gtk/gtkfilechooserdefault.c:1120
+#: gtk/gtkfilechooserdefault.c:1120
 msgid "The folder contents could not be displayed"
 msgstr "संचयीकामधील सामग्री दाखवता आली नाही"
 
@@ -1563,236 +1549,238 @@ msgstr "संचयीकामधील सामग्री दाखवत�
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1661
+#: gtk/gtkfilechooserdefault.c:1661
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%s, %s"
 
-#: ../gtk/gtkfilechooserdefault.c:1837
+#: gtk/gtkfilechooserdefault.c:1837
 msgid "Search"
 msgstr "शोधा"
 
-#: ../gtk/gtkfilechooserdefault.c:1861
+#: gtk/gtkfilechooserdefault.c:1861
 msgid "Recently Used"
 msgstr "नुकतेच वापरलेले"
 
-#: ../gtk/gtkfilechooserdefault.c:2476
+#: gtk/gtkfilechooserdefault.c:2476
 msgid "Select which types of files are shown"
 msgstr "कोणत्या प्रकारच्या फाइली दाखवल्या आहेत ते निवडा"
 
-#: ../gtk/gtkfilechooserdefault.c:2905
+#: gtk/gtkfilechooserdefault.c:2905
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "संचयीका '%s' खूणगाठींमध्ये जमा करा"
 
-#: ../gtk/gtkfilechooserdefault.c:2946
+#: gtk/gtkfilechooserdefault.c:2946
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "चालू संचयीका खूणगाठींमध्ये जमा करा"
 
-#: ../gtk/gtkfilechooserdefault.c:2948
+#: gtk/gtkfilechooserdefault.c:2948
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "निवडलेले संचयीका खूणगाठींमध्ये जमा करा"
 
-#: ../gtk/gtkfilechooserdefault.c:2988
+#: gtk/gtkfilechooserdefault.c:2988
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "खूणगाठ '%s' काढून टाका"
 
-#: ../gtk/gtkfilechooserdefault.c:3706
+#: gtk/gtkfilechooserdefault.c:3706
 msgid "Remove"
 msgstr "हटवा"
 
-#: ../gtk/gtkfilechooserdefault.c:3715
+#: gtk/gtkfilechooserdefault.c:3715
 msgid "Rename..."
 msgstr "नाव बदलवा..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3861
+#: gtk/gtkfilechooserdefault.c:3861
 msgid "Places"
 msgstr "जागा"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3918
+#: gtk/gtkfilechooserdefault.c:3918
 msgid "_Places"
 msgstr "जागा(_P)"
 
-#: ../gtk/gtkfilechooserdefault.c:3973 ../gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3973 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "जोडा(_A)"
 
-#: ../gtk/gtkfilechooserdefault.c:3980
+#: gtk/gtkfilechooserdefault.c:3980
 msgid "Add the selected folder to the Bookmarks"
 msgstr "निवडलेला संचयीका खूणगाठींमध्ये जमा करा"
 
-#: ../gtk/gtkfilechooserdefault.c:3985 ../gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:3985 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "हटवा(_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:3992
+#: gtk/gtkfilechooserdefault.c:3992
 msgid "Remove the selected bookmark"
 msgstr "निवडलेली खूणगाठ काढून टाका"
 
-#: ../gtk/gtkfilechooserdefault.c:4089
+#: gtk/gtkfilechooserdefault.c:4089
 msgid "Could not select file"
 msgstr "फाइल निवडता आली नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:4262
+#: gtk/gtkfilechooserdefault.c:4262
 msgid "_Add to Bookmarks"
 msgstr "खूणगाठींमध्ये जमा करा(_A)"
 
-#: ../gtk/gtkfilechooserdefault.c:4276
+#: gtk/gtkfilechooserdefault.c:4276
 msgid "Show _Hidden Files"
 msgstr "लपवलेल्या फाइली दाखवा(_H)"
 
-#: ../gtk/gtkfilechooserdefault.c:4519 ../gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4519 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "फाइली"
 
-#: ../gtk/gtkfilechooserdefault.c:4568
+#: gtk/gtkfilechooserdefault.c:4568
 msgid "Name"
 msgstr "नाव"
 
-#: ../gtk/gtkfilechooserdefault.c:4593
+#: gtk/gtkfilechooserdefault.c:4593
 msgid "Size"
 msgstr "आकार"
 
-#: ../gtk/gtkfilechooserdefault.c:4607
+#: gtk/gtkfilechooserdefault.c:4607
 msgid "Modified"
 msgstr "बदलेले"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4827 ../gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4827 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "नाव(_N):"
 
-#: ../gtk/gtkfilechooserdefault.c:4869
+#: gtk/gtkfilechooserdefault.c:4869
 msgid "_Browse for other folders"
 msgstr "इतर संचयीकासाठी ब्राउज करा(_B)"
 
-#: ../gtk/gtkfilechooserdefault.c:5139
+#: gtk/gtkfilechooserdefault.c:5139
 msgid "Type a file name"
 msgstr "फाइलचे नाव टाइप करा"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5176
+#: gtk/gtkfilechooserdefault.c:5176
 msgid "Create Fo_lder"
 msgstr "संचयीका निर्माण करा(_l)"
 
-#: ../gtk/gtkfilechooserdefault.c:5186
+#: gtk/gtkfilechooserdefault.c:5186
 msgid "_Location:"
 msgstr "ठिकाण(_L):"
 
-#: ../gtk/gtkfilechooserdefault.c:5375
+#: gtk/gtkfilechooserdefault.c:5375
 msgid "Save in _folder:"
 msgstr "या संचयीकामध्ये सुरक्षित करा(_f):"
 
-#: ../gtk/gtkfilechooserdefault.c:5377
+#: gtk/gtkfilechooserdefault.c:5377
 msgid "Create in _folder:"
 msgstr "या संचयीकामध्ये निर्माण करा(_f):"
 
-#: ../gtk/gtkfilechooserdefault.c:6971
+#: gtk/gtkfilechooserdefault.c:6971
 msgid "Cannot change to folder because it is not local"
 msgstr "स्थानिक नसल्यामुळे संचयीकामध्ये जाऊ शकत नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:7596 ../gtk/gtkfilechooserdefault.c:7617
+#: gtk/gtkfilechooserdefault.c:7596 gtk/gtkfilechooserdefault.c:7617
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "शॉर्टकट %s आधीच अस्तित्वात आहे"
 
-#: ../gtk/gtkfilechooserdefault.c:7707
+#: gtk/gtkfilechooserdefault.c:7707
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "शॉर्टकट %s अस्तित्वात नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:7950 ../gtk/gtkprintunixdialog.c:364
+#: gtk/gtkfilechooserdefault.c:7950 gtk/gtkprintunixdialog.c:364
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" नावाची फाइल आधीच अस्तित्वात आहे. तुम्ही तिला बदली करू इच्छिता काय?"
 
-#: ../gtk/gtkfilechooserdefault.c:7953 ../gtk/gtkprintunixdialog.c:368
+#: gtk/gtkfilechooserdefault.c:7953 gtk/gtkprintunixdialog.c:368
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
-"\"%s\" नावाची फाइल आधीच अस्तित्वात आहे. तिला बदली केल्याने तिच्यातील मजकूर "
-"गिरवला जाईल."
+"\"%s\" नावाची फाइल आधीच अस्तित्वात आहे. तिला बदली केल्याने तिच्यातील मजकूर गिरवला "
+"जाईल."
 
-#: ../gtk/gtkfilechooserdefault.c:7958 ../gtk/gtkprintunixdialog.c:375
+#: gtk/gtkfilechooserdefault.c:7958 gtk/gtkprintunixdialog.c:375
 msgid "_Replace"
 msgstr "बदलवा(_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:8719
+#: gtk/gtkfilechooserdefault.c:8719
 msgid "Could not start the search process"
 msgstr "शोध माहीती सुरू करू शकले नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:8720
+#: gtk/gtkfilechooserdefault.c:8720
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
-msgstr "अणूक्रमणीका डीमन करीता कार्यक्रम जुळवणी करू शकला नाही.  ते कार्यरत आहे याची खात्री करा."
+msgstr ""
+"अणूक्रमणीका डीमन करीता कार्यक्रम जुळवणी करू शकला नाही.  ते कार्यरत आहे याची खात्री करा."
 
-#: ../gtk/gtkfilechooserdefault.c:8734
+#: gtk/gtkfilechooserdefault.c:8734
 msgid "Could not send the search request"
 msgstr "शोध विनंती पाठवू शकले नाही"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9149
+#: gtk/gtkfilechooserdefault.c:9149
 msgid "_Search:"
 msgstr "शोधा (_S):"
 
-#: ../gtk/gtkfilechooserdefault.c:10096
+#: gtk/gtkfilechooserdefault.c:10096
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s आरोहित करता आले नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:10750
+#: gtk/gtkfilechooserdefault.c:10750
 msgid "Type name of new folder"
 msgstr "नविन संचयीकाचे नाव टाइप करा"
 
-#: ../gtk/gtkfilechooserdefault.c:10800
+#: gtk/gtkfilechooserdefault.c:10800
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: ../gtk/gtkfilechooserdefault.c:10802
+#: gtk/gtkfilechooserdefault.c:10802
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: ../gtk/gtkfilechooserdefault.c:10804
+#: gtk/gtkfilechooserdefault.c:10804
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:10907 ../gtk/gtkfilechooserdefault.c:10929
-#: ../gtk/gtkfilechooserdefault.c:11000
+#: gtk/gtkfilechooserdefault.c:10907 gtk/gtkfilechooserdefault.c:10929
+#: gtk/gtkfilechooserdefault.c:11000
 msgid "Unknown"
 msgstr "अपरिचित"
 
-#: ../gtk/gtkfilechooserdefault.c:10947
+#: gtk/gtkfilechooserdefault.c:10947
 msgid "%H:%M"
 msgstr ""
 
-#: ../gtk/gtkfilechooserdefault.c:10949
+#: gtk/gtkfilechooserdefault.c:10949
 msgid "Yesterday at %H:%M"
 msgstr "काल %H:%M यावेळी"
 
-#: ../gtk/gtkfilechooserentry.c:659 ../gtk/gtkfilechooserentry.c:1115
+#: gtk/gtkfilechooserentry.c:659 gtk/gtkfilechooserentry.c:1115
 msgid "Invalid path"
 msgstr ""
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1070
+#: gtk/gtkfilechooserentry.c:1070
 msgid "No match"
 msgstr ""
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1081
+#: gtk/gtkfilechooserentry.c:1081
 msgid "Sole completion"
 msgstr ""
 
@@ -1800,149 +1788,150 @@ msgstr ""
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: ../gtk/gtkfilechooserentry.c:1097
+#: gtk/gtkfilechooserentry.c:1097
 msgid "Complete, but not unique"
 msgstr ""
 
 #. translators: this text is shown while the system is searching
 #. * for possible completions for text in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1133
+#: gtk/gtkfilechooserentry.c:1133
 msgid "Completing..."
 msgstr ""
 
-#: ../gtk/gtkfilechoosersettings.c:262 ../gtk/gtkfilesel.c:1349
-#: ../gtk/gtkfilesel.c:1358
+#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1349
+#: gtk/gtkfilesel.c:1358
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "संचयीका '%s' निर्माण करतेवेळी त्रुटी: %s"
 
-#: ../gtk/gtkfilesel.c:694
+#: gtk/gtkfilesel.c:694
 msgid "Folders"
 msgstr "संचयीका्स"
 
-#: ../gtk/gtkfilesel.c:698
+#: gtk/gtkfilesel.c:698
 msgid "Fol_ders"
 msgstr "संचयीका्स(_d)"
 
-#: ../gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:734
 msgid "_Files"
 msgstr "फाइली(_F)"
 
-#: ../gtk/gtkfilesel.c:821 ../gtk/gtkfilesel.c:2148
+#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2148
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "संचयीका अवाचनीय: %s"
 
-#: ../gtk/gtkfilesel.c:905
+#: gtk/gtkfilesel.c:905
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"\"%s\" ही फाइल दुसऱ्या एका मशिनवर आहे (मशीन %s) आणि ह्या "
-"कार्यासाठीमिळणारी नाही \n"
+"\"%s\" ही फाइल दुसऱ्या एका मशिनवर आहे (मशीन %s) आणि ह्या कार्यासाठीमिळणारी नाही \n"
 "तुम्हाला तीच फाइल निवडायची आहे का?"
 
-#: ../gtk/gtkfilesel.c:1020
+#: gtk/gtkfilesel.c:1020
 msgid "_New Folder"
 msgstr "नवीन(_N) संचयीका"
 
-#: ../gtk/gtkfilesel.c:1031
+#: gtk/gtkfilesel.c:1031
 msgid "De_lete File"
 msgstr "फाइल हटवा(_l)"
 
-#: ../gtk/gtkfilesel.c:1042
+#: gtk/gtkfilesel.c:1042
 msgid "_Rename File"
 msgstr "फाइलचे नाव बदलवा(_R)"
 
-#: ../gtk/gtkfilesel.c:1347
+#: gtk/gtkfilesel.c:1347
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ह्या संचयीकाच्या नावात \"%s\" चिन्हे अशी आहेत की जी फाइलनावासाठी घेता येत नाही"
 
-#: ../gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1392
 msgid "New Folder"
 msgstr "नवीन संचयीका"
 
-#: ../gtk/gtkfilesel.c:1407
+#: gtk/gtkfilesel.c:1407
 msgid "_Folder name:"
 msgstr "संचयीकाचे(_F) नाव:"
 
-#: ../gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1431
 msgid "C_reate"
 msgstr "निर्माण करा(_r)"
 
-#: ../gtk/gtkfilesel.c:1474 ../gtk/gtkfilesel.c:1581 ../gtk/gtkfilesel.c:1594
+#: gtk/gtkfilesel.c:1474 gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1594
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
-"ह्या संचयीकाच्या नावात \"%s\" चिन्हे अशी आहेत की जी फाइलनावासाठी घेता येत "
-"नाहीत"
+"ह्या संचयीकाच्या नावात \"%s\" चिन्हे अशी आहेत की जी फाइलनावासाठी घेता येत नाहीत"
 
-#: ../gtk/gtkfilesel.c:1477 ../gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1487
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "फाइल '%s' नष्ट करण्यात चूक: %s"
 
-#: ../gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1530
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "\"%s\" फाइल खरोखरच नष्ट करायची आहे का ?"
 
-#: ../gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1535
 msgid "Delete File"
 msgstr "फाइल काढून टाका"
 
-#: ../gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1583
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr "फाइलचे नाव \"%s\" मध्ये बदलण्यात चूक: %s"
 
-#: ../gtk/gtkfilesel.c:1596
+#: gtk/gtkfilesel.c:1596
 #, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr "\"%s\" फाइलचे नाव बदलण्यात चूक: %s"
 
-#: ../gtk/gtkfilesel.c:1605
+#: gtk/gtkfilesel.c:1605
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "फाइलचे नाव \"%s\" ते \"%s\"  बदलताना चुक: %s"
 
-#: ../gtk/gtkfilesel.c:1652
+#: gtk/gtkfilesel.c:1652
 msgid "Rename File"
 msgstr "फाइलचे नाव बदलवा"
 
-#: ../gtk/gtkfilesel.c:1667
+#: gtk/gtkfilesel.c:1667
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "फाइलचे नाव \"%s\" बदलवा:"
 
-#: ../gtk/gtkfilesel.c:1696
+#: gtk/gtkfilesel.c:1696
 msgid "_Rename"
 msgstr "नाव बदलवा (_R)"
 
-#: ../gtk/gtkfilesel.c:2128
+#: gtk/gtkfilesel.c:2128
 msgid "_Selection: "
 msgstr "निवड (_S): "
 
-#: ../gtk/gtkfilesel.c:3048
+#: gtk/gtkfilesel.c:3048
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
-msgstr "फाइलनाव \"%s\" UTF-8 मध्ये रूपांतरीत करू शकले नाही. (कृपया वातावरण गुणांकास G_FILENAME_ENCODING निश्चित करण्याचा प्रयत्न करा): %s"
+msgstr ""
+"फाइलनाव \"%s\" UTF-8 मध्ये रूपांतरीत करू शकले नाही. (कृपया वातावरण गुणांकास "
+"G_FILENAME_ENCODING निश्चित करण्याचा प्रयत्न करा): %s"
 
-#: ../gtk/gtkfilesel.c:3051
+#: gtk/gtkfilesel.c:3051
 msgid "Invalid UTF-8"
 msgstr "अवैध UTF-8"
 
-#: ../gtk/gtkfilesel.c:3925
+#: gtk/gtkfilesel.c:3925
 msgid "Name too long"
 msgstr "नाव बरेच मोठे आहे"
 
-#: ../gtk/gtkfilesel.c:3927
+#: gtk/gtkfilesel.c:3927
 msgid "Couldn't convert filename"
 msgstr "फाइलनाव परिवर्तित करता आले नाही"
 
@@ -1951,75 +1940,75 @@ msgstr "फाइलनाव परिवर्तित करता आले
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: ../gtk/gtkfilesystem.c:52
+#: gtk/gtkfilesystem.c:52
 msgid "File System"
 msgstr "फाइल प्रणाली"
 
-#: ../gtk/gtkfilesystemmodel.c:700
+#: gtk/gtkfilesystemmodel.c:700
 msgid "Could not obtain root folder"
 msgstr "रूट संचयीका मिळवता आले नाही"
 
-#: ../gtk/gtkfilesystemmodel.c:1299
+#: gtk/gtkfilesystemmodel.c:1299
 msgid "(Empty)"
 msgstr "(रिकामे)"
 
-#: ../gtk/gtkfontbutton.c:144 ../gtk/gtkfontbutton.c:266
+#: gtk/gtkfontbutton.c:144 gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
 msgstr "फॉन्ट उचला"
 
 #. Initialize fields
-#: ../gtk/gtkfontbutton.c:260
+#: gtk/gtkfontbutton.c:260
 msgid "Sans 12"
 msgstr "सॅन्स 1२"
 
-#: ../gtk/gtkfontbutton.c:780
+#: gtk/gtkfontbutton.c:780
 msgid "Font"
 msgstr "फोन्ट"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: ../gtk/gtkfontsel.c:75
+#: gtk/gtkfontsel.c:75
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: ../gtk/gtkfontsel.c:328
+#: gtk/gtkfontsel.c:328
 msgid "_Family:"
 msgstr "परिवार(_F):"
 
-#: ../gtk/gtkfontsel.c:334
+#: gtk/gtkfontsel.c:334
 msgid "_Style:"
 msgstr "शैली(_S):"
 
-#: ../gtk/gtkfontsel.c:340
+#: gtk/gtkfontsel.c:340
 msgid "Si_ze:"
 msgstr "आकार(_z):"
 
 #. create the text entry widget
-#: ../gtk/gtkfontsel.c:517
+#: gtk/gtkfontsel.c:517
 msgid "_Preview:"
 msgstr "अवलोकन(_P):"
 
-#: ../gtk/gtkfontsel.c:1542
+#: gtk/gtkfontsel.c:1542
 msgid "Font Selection"
 msgstr "फोन्ट निवडणे"
 
-#: ../gtk/gtkgamma.c:408
+#: gtk/gtkgamma.c:408
 msgid "Gamma"
 msgstr "गामा"
 
-#: ../gtk/gtkgamma.c:418
+#: gtk/gtkgamma.c:418
 msgid "_Gamma value"
 msgstr "गामा(_G) मूल्य"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1403
+#: gtk/gtkiconfactory.c:1403
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "आइकान सुरु करताना चुक: %s"
 
-#: ../gtk/gtkicontheme.c:1363
+#: gtk/gtkicontheme.c:1363
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2032,132 +2021,132 @@ msgstr ""
 "तुम्हाला त्याची प्रत येथून मिळेल:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1543
+#: gtk/gtkicontheme.c:1543
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "चिन्ह '%s' थीममध्ये हजर नाही"
 
-#: ../gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3058
 msgid "Failed to load icon"
 msgstr "चिन्ह दाखल करू शकले नाही"
 
-#: ../gtk/gtkimmodule.c:515
+#: gtk/gtkimmodule.c:515
 msgid "Simple"
 msgstr ""
 
-#: ../gtk/gtkimmulticontext.c:542
+#: gtk/gtkimmulticontext.c:542
 msgid "input method menu|System"
 msgstr ""
 
-#: ../gtk/gtkinputdialog.c:192
+#: gtk/gtkinputdialog.c:192
 msgid "Input"
 msgstr "माहिती"
 
-#: ../gtk/gtkinputdialog.c:207
+#: gtk/gtkinputdialog.c:207
 msgid "No extended input devices"
 msgstr "विस्तारित आदान यंत्रे नाहीत"
 
-#: ../gtk/gtkinputdialog.c:220
+#: gtk/gtkinputdialog.c:220
 msgid "_Device:"
 msgstr "साधन(_D):"
 
-#: ../gtk/gtkinputdialog.c:237
+#: gtk/gtkinputdialog.c:237
 msgid "Disabled"
 msgstr "अक्रियाशील"
 
-#: ../gtk/gtkinputdialog.c:244
+#: gtk/gtkinputdialog.c:244
 msgid "Screen"
 msgstr "पडदा"
 
-#: ../gtk/gtkinputdialog.c:251
+#: gtk/gtkinputdialog.c:251
 msgid "Window"
 msgstr "विन्डो"
 
-#: ../gtk/gtkinputdialog.c:258
+#: gtk/gtkinputdialog.c:258
 msgid "_Mode:"
 msgstr "रीत(_M):"
 
 #. The axis listbox
-#: ../gtk/gtkinputdialog.c:279
+#: gtk/gtkinputdialog.c:279
 msgid "Axes"
 msgstr "अक्ष"
 
 #. Keys listbox
-#: ../gtk/gtkinputdialog.c:297
+#: gtk/gtkinputdialog.c:297
 msgid "Keys"
 msgstr "बटणे"
 
-#: ../gtk/gtkinputdialog.c:524
+#: gtk/gtkinputdialog.c:524
 msgid "_X:"
 msgstr "X (_X):"
 
-#: ../gtk/gtkinputdialog.c:525
+#: gtk/gtkinputdialog.c:525
 msgid "_Y:"
 msgstr "Y (_Y):"
 
-#: ../gtk/gtkinputdialog.c:526
+#: gtk/gtkinputdialog.c:526
 msgid "_Pressure:"
 msgstr "दबाव(_P):"
 
-#: ../gtk/gtkinputdialog.c:527
+#: gtk/gtkinputdialog.c:527
 msgid "X _tilt:"
 msgstr "X वाक (_t):"
 
-#: ../gtk/gtkinputdialog.c:528
+#: gtk/gtkinputdialog.c:528
 msgid "Y t_ilt:"
 msgstr "Y वाक (_i):"
 
-#: ../gtk/gtkinputdialog.c:529
+#: gtk/gtkinputdialog.c:529
 msgid "_Wheel:"
 msgstr "चाक(_W):"
 
-#: ../gtk/gtkinputdialog.c:581
+#: gtk/gtkinputdialog.c:581
 msgid "none"
 msgstr "काही नाहीं"
 
-#: ../gtk/gtkinputdialog.c:618 ../gtk/gtkinputdialog.c:654
+#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
 msgid "(disabled)"
 msgstr "(अक्रियाशील)"
 
-#: ../gtk/gtkinputdialog.c:647
+#: gtk/gtkinputdialog.c:647
 msgid "(unknown)"
 msgstr "(अनोळखी)"
 
 #. and clear button
-#: ../gtk/gtkinputdialog.c:751
+#: gtk/gtkinputdialog.c:751
 msgid "Cl_ear"
 msgstr "साफ करा(_e)"
 
-#: ../gtk/gtklinkbutton.c:427
+#: gtk/gtklinkbutton.c:427
 msgid "Copy URL"
 msgstr "URL प्रतिलिपी करा"
 
-#: ../gtk/gtklinkbutton.c:565
+#: gtk/gtklinkbutton.c:565
 msgid "Invalid URI"
 msgstr "अवैध URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:421
+#: gtk/gtkmain.c:421
 msgid "Load additional GTK+ modules"
 msgstr "अतिरिक्त GTK+ विभाग भारित करा"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:422
+#: gtk/gtkmain.c:422
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:424
+#: gtk/gtkmain.c:424
 msgid "Make all warnings fatal"
 msgstr "सर्व सुचनांस गंभीर करा"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:427
+#: gtk/gtkmain.c:427
 msgid "GTK+ debugging flags to set"
 msgstr "निर्धारित करायचा GTK+ त्रुटीनिर्वारण ध्वज"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:430
+#: gtk/gtkmain.c:430
 msgid "GTK+ debugging flags to unset"
 msgstr "अनिर्धारित करायचा GTK+ त्रुटीनिर्वारण ध्वज"
 
@@ -2166,66 +2155,65 @@ msgstr "अनिर्धारित करायचा GTK+ त्रुट�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:678
+#: gtk/gtkmain.c:678
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:740
+#: gtk/gtkmain.c:740
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: ../gtk/gtkmain.c:777
+#: gtk/gtkmain.c:777
 msgid "GTK+ Options"
 msgstr "GTK+ पर्याय"
 
-#: ../gtk/gtkmain.c:777
+#: gtk/gtkmain.c:777
 msgid "Show GTK+ Options"
 msgstr "GTK+ पर्याय दाखवा"
 
-#: ../gtk/gtkmountoperation.c:476
+#: gtk/gtkmountoperation.c:476
 msgid "Co_nnect"
 msgstr ""
 
-#: ../gtk/gtkmountoperation.c:520
+#: gtk/gtkmountoperation.c:520
 msgid "Connect _anonymously"
 msgstr ""
 
-#: ../gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:529
 msgid "Connect as u_ser:"
 msgstr ""
 
-#: ../gtk/gtkmountoperation.c:566
+#: gtk/gtkmountoperation.c:566
 msgid "_Username:"
 msgstr ""
 
-#: ../gtk/gtkmountoperation.c:570
+#: gtk/gtkmountoperation.c:570
 msgid "_Domain:"
 msgstr ""
 
-#: ../gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:575
 msgid "_Password:"
 msgstr ""
 
-#: ../gtk/gtkmountoperation.c:590
+#: gtk/gtkmountoperation.c:590
 msgid "Forget password _immediately"
 msgstr ""
 
-#: ../gtk/gtkmountoperation.c:598
+#: gtk/gtkmountoperation.c:598
 msgid "Remember password until you _logout"
 msgstr ""
 
-#: ../gtk/gtkmountoperation.c:606
+#: gtk/gtkmountoperation.c:606
 msgid "Remember _forever"
 msgstr ""
 
-#: ../gtk/gtknotebook.c:4424 ../gtk/gtknotebook.c:6930
+#: gtk/gtknotebook.c:4424 gtk/gtknotebook.c:6930
 #, c-format
 msgid "Page %u"
 msgstr "पान %u"
 
-#: ../gtk/gtkpagesetup.c:597 ../gtk/gtkpapersize.c:825
-#: ../gtk/gtkpapersize.c:865
+#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
 msgid "Not a valid page setup file"
 msgstr "वैध मांडणी फाइल नाही"
 
@@ -2235,11 +2223,11 @@ msgstr "वैध मांडणी फाइल नाही"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: ../gtk/gtkpagesetupunixdialog.c:152
+#: gtk/gtkpagesetupunixdialog.c:152
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkpagesetupunixdialog.c:308
+#: gtk/gtkpagesetupunixdialog.c:308
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
@@ -2247,15 +2235,15 @@ msgstr ""
 "<b>कोणताही प्रिंटर</b>\n"
 "हलवण्याजोग्या दस्तावेजांसाठी"
 
-#: ../gtk/gtkpagesetupunixdialog.c:894 ../gtk/gtkpagesetupunixdialog.c:1403
+#: gtk/gtkpagesetupunixdialog.c:894 gtk/gtkpagesetupunixdialog.c:1403
 msgid "mm"
 msgstr "मिमी"
 
-#: ../gtk/gtkpagesetupunixdialog.c:896 ../gtk/gtkpagesetupunixdialog.c:1401
+#: gtk/gtkpagesetupunixdialog.c:896 gtk/gtkpagesetupunixdialog.c:1401
 msgid "inch"
 msgstr "इंच"
 
-#: ../gtk/gtkpagesetupunixdialog.c:915
+#: gtk/gtkpagesetupunixdialog.c:915
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2270,88 +2258,88 @@ msgstr ""
 " वर: %s %s\n"
 " तळ: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:964
+#: gtk/gtkpagesetupunixdialog.c:964
 msgid "Manage Custom Sizes..."
 msgstr "स्वेच्छेचे आकार व्यवस्थापा..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:1012
+#: gtk/gtkpagesetupunixdialog.c:1012
 msgid "_Format for:"
 msgstr "यासाठी स्वरुप(_F):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1034
+#: gtk/gtkpagesetupunixdialog.c:1034
 msgid "_Paper size:"
 msgstr "कागदाचा आकार(_P):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1065
+#: gtk/gtkpagesetupunixdialog.c:1065
 msgid "_Orientation:"
 msgstr "प्राङ्मुखीकरण(_O):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1129 ../gtk/gtkprintunixdialog.c:2397
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2397
 msgid "Page Setup"
 msgstr "पृष्ठ व्यवस्था"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1448
+#: gtk/gtkpagesetupunixdialog.c:1448
 msgid "Margins from Printer..."
 msgstr "प्रिंटरपासून समास..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:1608
+#: gtk/gtkpagesetupunixdialog.c:1608
 #, c-format
 msgid "Custom Size %d"
 msgstr "मनपसंद आकार %d"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1837
+#: gtk/gtkpagesetupunixdialog.c:1837
 msgid "Manage Custom Sizes"
 msgstr "स्वेच्छेचे आकार व्यवस्थापा"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1933
+#: gtk/gtkpagesetupunixdialog.c:1933
 msgid "_Width:"
 msgstr "रुंदी(_W):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1945
+#: gtk/gtkpagesetupunixdialog.c:1945
 msgid "_Height:"
 msgstr "उंची(_H):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1957
+#: gtk/gtkpagesetupunixdialog.c:1957
 msgid "Paper Size"
 msgstr "कागद आकार"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1967
+#: gtk/gtkpagesetupunixdialog.c:1967
 msgid "_Top:"
 msgstr "वरील(_T):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1979
+#: gtk/gtkpagesetupunixdialog.c:1979
 msgid "_Bottom:"
 msgstr "तळ (_B):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1991
+#: gtk/gtkpagesetupunixdialog.c:1991
 msgid "_Left:"
 msgstr "डावीकडे(_L):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:2003
+#: gtk/gtkpagesetupunixdialog.c:2003
 msgid "_Right:"
 msgstr "उजवा(_R):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:2044
+#: gtk/gtkpagesetupunixdialog.c:2044
 msgid "Paper Margins"
 msgstr "कागद समास"
 
-#: ../gtk/gtkpathbar.c:151
+#: gtk/gtkpathbar.c:151
 msgid "Up Path"
 msgstr "वरचा मार्ग"
 
-#: ../gtk/gtkpathbar.c:153
+#: gtk/gtkpathbar.c:153
 msgid "Down Path"
 msgstr "खालील मार्ग"
 
-#: ../gtk/gtkpathbar.c:1472
+#: gtk/gtkpathbar.c:1472
 msgid "File System Root"
 msgstr "फाइल प्रणाली रूट"
 
-#: ../gtk/gtkprinteroptionwidget.c:685
+#: gtk/gtkprinteroptionwidget.c:685
 msgid "Not available"
 msgstr "उपलब्ध नाही"
 
-#: ../gtk/gtkprinteroptionwidget.c:798
+#: gtk/gtkprinteroptionwidget.c:798
 msgid "_Save in folder:"
 msgstr "संचयीकामध्ये सुरक्षित करा(_S):"
 
@@ -2359,174 +2347,179 @@ msgstr "संचयीकामध्ये सुरक्षित करा(
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: ../gtk/gtkprintoperation.c:173
+#: gtk/gtkprintoperation.c:173
 #, c-format
 msgid "%s job #%d"
 msgstr "%s कार्य #%d"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1504
+#: gtk/gtkprintoperation.c:1504
 msgid "print operation status|Initial state"
 msgstr "आरंभीची स्थिती"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1506
+#: gtk/gtkprintoperation.c:1506
 msgid "print operation status|Preparing to print"
 msgstr "छापण्याची तयारी करत आहे"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1508
+#: gtk/gtkprintoperation.c:1508
 msgid "print operation status|Generating data"
 msgstr "डेटा उत्पन्न करत आहे"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1510
+#: gtk/gtkprintoperation.c:1510
 msgid "print operation status|Sending data"
 msgstr "डेटा पाठवत आहे"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1512
+#: gtk/gtkprintoperation.c:1512
 msgid "print operation status|Waiting"
 msgstr "प्रतिक्षा करत आहे"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1514
+#: gtk/gtkprintoperation.c:1514
 msgid "print operation status|Blocking on issue"
 msgstr "मुद्द्यावर स्थगिती लावत आहे"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1516
+#: gtk/gtkprintoperation.c:1516
 msgid "print operation status|Printing"
 msgstr "छापत आहे"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1518
+#: gtk/gtkprintoperation.c:1518
 msgid "print operation status|Finished"
 msgstr "संपले"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkprintoperation.c:1520
+#: gtk/gtkprintoperation.c:1520
 msgid "print operation status|Finished with error"
 msgstr "चुकीसह संपले"
 
-#: ../gtk/gtkprintoperation.c:2003
+#: gtk/gtkprintoperation.c:2003
 #, c-format
 msgid "Preparing %d"
 msgstr "%d तयार करत आहे"
 
-#: ../gtk/gtkprintoperation.c:2005 ../gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2005 gtk/gtkprintoperation.c:2259
+#, c-format
 msgid "Preparing"
 msgstr "तयार करत आहे"
 
-#: ../gtk/gtkprintoperation.c:2008
+#: gtk/gtkprintoperation.c:2008
 #, c-format
 msgid "Printing %d"
 msgstr "%d छापत आहे"
 
-#: ../gtk/gtkprintoperation.c:2289
+#: gtk/gtkprintoperation.c:2289
+#, c-format
 msgid "Error creating print preview"
 msgstr ""
 
-#: ../gtk/gtkprintoperation.c:2292
+#: gtk/gtkprintoperation.c:2292
+#, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: ../gtk/gtkprintoperation-unix.c:242
+#: gtk/gtkprintoperation-unix.c:242
+#, c-format
 msgid "Error launching preview"
 msgstr "पुर्वावलोकन प्रक्षेपित करण्यात चूक"
 
-#: ../gtk/gtkprintoperation-unix.c:280
+#: gtk/gtkprintoperation-unix.c:280
+#, c-format
 msgid "Error printing"
 msgstr "छापण्यात चूक"
 
-#: ../gtk/gtkprintoperation-unix.c:381 ../gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:381 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "अनुप्रयोग"
 
-#: ../gtk/gtkprintoperation-win32.c:590
+#: gtk/gtkprintoperation-win32.c:590
 msgid "Printer offline"
 msgstr "प्रिंटर ऑफलाइन"
 
-#: ../gtk/gtkprintoperation-win32.c:592
+#: gtk/gtkprintoperation-win32.c:592
 msgid "Out of paper"
 msgstr "कागद संपले"
 
 #. Translators: this is a printer status.
-#: ../gtk/gtkprintoperation-win32.c:594
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1375
+#: gtk/gtkprintoperation-win32.c:594
+#: modules/printbackends/cups/gtkprintbackendcups.c:1375
 msgid "Paused"
 msgstr "थांबलेले"
 
-#: ../gtk/gtkprintoperation-win32.c:596
+#: gtk/gtkprintoperation-win32.c:596
 msgid "Need user intervention"
 msgstr "उपयोक्त्याची दखल आवश्यक"
 
-#: ../gtk/gtkprintoperation-win32.c:696
+#: gtk/gtkprintoperation-win32.c:696
 msgid "Custom size"
 msgstr "स्वेच्छेचा आकार"
 
-#: ../gtk/gtkprintoperation-win32.c:1517
+#: gtk/gtkprintoperation-win32.c:1517
 msgid "No printer found"
 msgstr ""
 
-#: ../gtk/gtkprintoperation-win32.c:1544
+#: gtk/gtkprintoperation-win32.c:1544
 msgid "Invalid argument to CreateDC"
 msgstr ""
 
-#: ../gtk/gtkprintoperation-win32.c:1578 ../gtk/gtkprintoperation-win32.c:1801
+#: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1801
 msgid "Error from StartDoc"
 msgstr "StartDoc कडून चूक"
 
-#: ../gtk/gtkprintoperation-win32.c:1658 ../gtk/gtkprintoperation-win32.c:1681
-#: ../gtk/gtkprintoperation-win32.c:1729
+#: gtk/gtkprintoperation-win32.c:1658 gtk/gtkprintoperation-win32.c:1681
+#: gtk/gtkprintoperation-win32.c:1729
 msgid "Not enough free memory"
 msgstr "पुरेशी स्मरणशक्ती नाही"
 
-#: ../gtk/gtkprintoperation-win32.c:1734
+#: gtk/gtkprintoperation-win32.c:1734
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx ला अवैध आर्ग्यूमेंट"
 
-#: ../gtk/gtkprintoperation-win32.c:1739
+#: gtk/gtkprintoperation-win32.c:1739
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgExला अवैध पॉइंटर"
 
-#: ../gtk/gtkprintoperation-win32.c:1744
+#: gtk/gtkprintoperation-win32.c:1744
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx ला अवैध हँडल"
 
-#: ../gtk/gtkprintoperation-win32.c:1749
+#: gtk/gtkprintoperation-win32.c:1749
 msgid "Unspecified error"
 msgstr "न दर्शवलेली चूक"
 
-#: ../gtk/gtkprintunixdialog.c:1716
+#: gtk/gtkprintunixdialog.c:1716
 msgid "Printer"
 msgstr "प्रिंटर"
 
-#: ../gtk/gtkprintunixdialog.c:1725
+#: gtk/gtkprintunixdialog.c:1725
 msgid "Location"
 msgstr "ठिकाण"
 
-#: ../gtk/gtkprintunixdialog.c:1735
+#: gtk/gtkprintunixdialog.c:1735
 msgid "Status"
 msgstr "स्थिती"
 
-#: ../gtk/gtkprintunixdialog.c:1758
+#: gtk/gtkprintunixdialog.c:1758
 msgid "Range"
 msgstr ""
 
-#: ../gtk/gtkprintunixdialog.c:1762
+#: gtk/gtkprintunixdialog.c:1762
 msgid "_All Pages"
 msgstr ""
 
-#: ../gtk/gtkprintunixdialog.c:1769
+#: gtk/gtkprintunixdialog.c:1769
 msgid "C_urrent Page"
 msgstr ""
 
-#: ../gtk/gtkprintunixdialog.c:1778
+#: gtk/gtkprintunixdialog.c:1778
 msgid "Pag_es:"
 msgstr ""
 
-#: ../gtk/gtkprintunixdialog.c:1779
+#: gtk/gtkprintunixdialog.c:1779
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2534,194 +2527,194 @@ msgstr ""
 "एक किंवा अधिक पान क्षेत्र निश्चित करा,\n"
 " उ.दा. 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:1798
+#: gtk/gtkprintunixdialog.c:1798
 msgid "Copies"
 msgstr "प्रती"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1803
+#: gtk/gtkprintunixdialog.c:1803
 msgid "Copie_s:"
 msgstr "प्रती(_s):"
 
-#: ../gtk/gtkprintunixdialog.c:1821
+#: gtk/gtkprintunixdialog.c:1821
 msgid "C_ollate"
 msgstr "कोलेट"
 
-#: ../gtk/gtkprintunixdialog.c:1829
+#: gtk/gtkprintunixdialog.c:1829
 msgid "_Reverse"
 msgstr "उलटे(_R)"
 
-#: ../gtk/gtkprintunixdialog.c:1849
+#: gtk/gtkprintunixdialog.c:1849
 msgid "General"
 msgstr "सामान्य"
 
-#: ../gtk/gtkprintunixdialog.c:2252
+#: gtk/gtkprintunixdialog.c:2252
 msgid "Layout"
 msgstr "लेआउट"
 
-#: ../gtk/gtkprintunixdialog.c:2256
+#: gtk/gtkprintunixdialog.c:2256
 msgid "Pages per _side:"
 msgstr "प्रत्येक बाजूस लागणारी पाने (_s):"
 
-#: ../gtk/gtkprintunixdialog.c:2272
+#: gtk/gtkprintunixdialog.c:2272
 msgid "T_wo-sided:"
 msgstr "पाठपोट(_w):"
 
-#: ../gtk/gtkprintunixdialog.c:2287
+#: gtk/gtkprintunixdialog.c:2287
 msgid "_Only print:"
 msgstr "फक्त मुद्रण(_O):"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2302
+#: gtk/gtkprintunixdialog.c:2302
 msgid "All sheets"
 msgstr "सर्व पत्रे"
 
-#: ../gtk/gtkprintunixdialog.c:2303
+#: gtk/gtkprintunixdialog.c:2303
 msgid "Even sheets"
 msgstr "सम पत्रे"
 
-#: ../gtk/gtkprintunixdialog.c:2304
+#: gtk/gtkprintunixdialog.c:2304
 msgid "Odd sheets"
 msgstr "विषम पत्रे"
 
-#: ../gtk/gtkprintunixdialog.c:2307
+#: gtk/gtkprintunixdialog.c:2307
 msgid "Sc_ale:"
 msgstr "प्रमाण(_a):"
 
-#: ../gtk/gtkprintunixdialog.c:2334
+#: gtk/gtkprintunixdialog.c:2334
 msgid "Paper"
 msgstr "कागद"
 
-#: ../gtk/gtkprintunixdialog.c:2338
+#: gtk/gtkprintunixdialog.c:2338
 msgid "Paper _type:"
 msgstr "कागद प्रकार(_t):"
 
-#: ../gtk/gtkprintunixdialog.c:2353
+#: gtk/gtkprintunixdialog.c:2353
 msgid "Paper _source:"
 msgstr "कागद स्त्रोत(_s):"
 
-#: ../gtk/gtkprintunixdialog.c:2368
+#: gtk/gtkprintunixdialog.c:2368
 msgid "Output t_ray:"
 msgstr "प्रदान ट्रे(_r):"
 
-#: ../gtk/gtkprintunixdialog.c:2420
+#: gtk/gtkprintunixdialog.c:2420
 msgid "Job Details"
 msgstr "कामाचा तपशील"
 
-#: ../gtk/gtkprintunixdialog.c:2426
+#: gtk/gtkprintunixdialog.c:2426
 msgid "Pri_ority:"
 msgstr "प्राधान्यक्रम(_o):"
 
-#: ../gtk/gtkprintunixdialog.c:2441
+#: gtk/gtkprintunixdialog.c:2441
 msgid "_Billing info:"
 msgstr "बिलिंगविषयी माहिती(_B):"
 
-#: ../gtk/gtkprintunixdialog.c:2459
+#: gtk/gtkprintunixdialog.c:2459
 msgid "Print Document"
 msgstr "दस्तावेज छापा"
 
-#: ../gtk/gtkprintunixdialog.c:2465
+#: gtk/gtkprintunixdialog.c:2465
 msgid "_Now"
 msgstr "आत्ता(_N)"
 
-#: ../gtk/gtkprintunixdialog.c:2472
+#: gtk/gtkprintunixdialog.c:2472
 msgid "A_t:"
 msgstr "इथे(_t):"
 
-#: ../gtk/gtkprintunixdialog.c:2487
+#: gtk/gtkprintunixdialog.c:2487
 msgid "On _hold"
 msgstr "स्थगीत केले (_h)"
 
-#: ../gtk/gtkprintunixdialog.c:2506
+#: gtk/gtkprintunixdialog.c:2506
 msgid "Add Cover Page"
 msgstr "प्रारंभ पान जोडा"
 
-#: ../gtk/gtkprintunixdialog.c:2512
+#: gtk/gtkprintunixdialog.c:2512
 msgid "Be_fore:"
 msgstr "आधी(_f):"
 
-#: ../gtk/gtkprintunixdialog.c:2527
+#: gtk/gtkprintunixdialog.c:2527
 msgid "_After:"
 msgstr "नंतर(_A):"
 
-#: ../gtk/gtkprintunixdialog.c:2542
+#: gtk/gtkprintunixdialog.c:2542
 msgid "Job"
 msgstr "काम"
 
-#: ../gtk/gtkprintunixdialog.c:2608
+#: gtk/gtkprintunixdialog.c:2608
 msgid "Advanced"
 msgstr "प्रगत"
 
-#: ../gtk/gtkprintunixdialog.c:2643
+#: gtk/gtkprintunixdialog.c:2643
 msgid "Image Quality"
 msgstr "प्रतिमा दर्जा"
 
-#: ../gtk/gtkprintunixdialog.c:2646
+#: gtk/gtkprintunixdialog.c:2646
 msgid "Color"
 msgstr "रंग"
 
-#: ../gtk/gtkprintunixdialog.c:2649
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Finishing"
 msgstr "संपवित आहे"
 
-#: ../gtk/gtkprintunixdialog.c:2659
+#: gtk/gtkprintunixdialog.c:2659
 msgid "Some of the settings in the dialog conflict"
 msgstr "संवादातील काही रचना संघर्षमयी आहेत"
 
-#: ../gtk/gtkprintunixdialog.c:2682
+#: gtk/gtkprintunixdialog.c:2682
 msgid "Print"
 msgstr "छापा"
 
-#: ../gtk/gtkrc.c:2872
+#: gtk/gtkrc.c:2872
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "समाविष्ट फाइल आढळली नाही: \"%s\""
 
-#: ../gtk/gtkrc.c:3500 ../gtk/gtkrc.c:3503
+#: gtk/gtkrc.c:3500 gtk/gtkrc.c:3503
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path मध्ये प्रतिमा फाइल आढळली नाही: \"%s\""
 
-#: ../gtk/gtkrecentaction.c:155 ../gtk/gtkrecentaction.c:163
-#: ../gtk/gtkrecentchoosermenu.c:551 ../gtk/gtkrecentchoosermenu.c:559
+#: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
+#: gtk/gtkrecentchoosermenu.c:551 gtk/gtkrecentchoosermenu.c:559
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "ही कार्यपध्दती वर्ग '%s' वरील नियंत्रण घटक करीता नाही"
 
-#: ../gtk/gtkrecentchooserdefault.c:454
+#: gtk/gtkrecentchooserdefault.c:454
 msgid "Select which type of documents are shown"
 msgstr "कोणत्या प्रकारचे दस्तावेज उघडावेत ते निवडा"
 
-#: ../gtk/gtkrecentchooserdefault.c:1095 ../gtk/gtkrecentchooserdefault.c:1132
+#: gtk/gtkrecentchooserdefault.c:1095 gtk/gtkrecentchooserdefault.c:1132
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "URI '%s' साठी कोणतीही बाब सापडली नाही"
 
-#: ../gtk/gtkrecentchooserdefault.c:1259
+#: gtk/gtkrecentchooserdefault.c:1259
 msgid "Untitled filter"
 msgstr "शिर्षकहीन फिल्टर"
 
-#: ../gtk/gtkrecentchooserdefault.c:1612
+#: gtk/gtkrecentchooserdefault.c:1612
 msgid "Could not remove item"
 msgstr "बाब काढता आली नाही"
 
-#: ../gtk/gtkrecentchooserdefault.c:1655
+#: gtk/gtkrecentchooserdefault.c:1655
 msgid "Could not clear list"
 msgstr "यादी साफ करता आली नाही"
 
-#: ../gtk/gtkrecentchooserdefault.c:1739
+#: gtk/gtkrecentchooserdefault.c:1739
 msgid "Copy _Location"
 msgstr "ठिकाण प्रतिलिपी करा(_L)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1752
+#: gtk/gtkrecentchooserdefault.c:1752
 msgid "_Remove From List"
 msgstr "यादीतून काढून टाका(_R)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1761
+#: gtk/gtkrecentchooserdefault.c:1761
 msgid "_Clear List"
 msgstr "यादी साफ करा(_C)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1775
+#: gtk/gtkrecentchooserdefault.c:1775
 msgid "Show _Private Resources"
 msgstr "खाजगी साधने दाखवा(_P)"
 
@@ -2735,21 +2728,21 @@ msgstr "खाजगी साधने दाखवा(_P)"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:317
+#: gtk/gtkrecentchoosermenu.c:317
 msgid "No items found"
 msgstr "बाबी सापडल्या नाहीत"
 
-#: ../gtk/gtkrecentchoosermenu.c:471 ../gtk/gtkrecentchoosermenu.c:527
+#: gtk/gtkrecentchoosermenu.c:471 gtk/gtkrecentchoosermenu.c:527
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "URI `%s' सह नुकतेच वापरलेले स्त्रोत आढळले नाही"
 
-#: ../gtk/gtkrecentchoosermenu.c:738
+#: gtk/gtkrecentchoosermenu.c:738
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s' उघडा"
 
-#: ../gtk/gtkrecentchoosermenu.c:768
+#: gtk/gtkrecentchoosermenu.c:768
 msgid "Unknown item"
 msgstr "अपरिचित बाब"
 
@@ -2760,7 +2753,7 @@ msgstr "अपरिचित बाब"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:781
+#: gtk/gtkrecentchoosermenu.c:781
 #, c-format
 msgid "recent menu label|_%d. %s"
 msgstr "अलीकडील मेन्यू लेबल|_%d. %s"
@@ -2770,615 +2763,617 @@ msgstr "अलीकडील मेन्यू लेबल|_%d. %s"
 #. *
 #. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:788
+#: gtk/gtkrecentchoosermenu.c:788
 #, c-format
 msgid "recent menu label|%d. %s"
 msgstr "अलीकडील मेन्यू लेबल|%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1020 ../gtk/gtkrecentmanager.c:1033
-#: ../gtk/gtkrecentmanager.c:1171 ../gtk/gtkrecentmanager.c:1181
-#: ../gtk/gtkrecentmanager.c:1234 ../gtk/gtkrecentmanager.c:1243
-#: ../gtk/gtkrecentmanager.c:1258
+#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
+#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
+#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
+#: gtk/gtkrecentmanager.c:1258
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' साठी बाब शोधण्यास असमर्थ"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: ../gtk/gtkstock.c:288
+#: gtk/gtkstock.c:288
 msgid "Information"
 msgstr "माहीती"
 
-#: ../gtk/gtkstock.c:289
+#: gtk/gtkstock.c:289
 msgid "Warning"
 msgstr "धोक्याची सूचना"
 
-#: ../gtk/gtkstock.c:290
+#: gtk/gtkstock.c:290
 msgid "Error"
 msgstr "चूक"
 
-#: ../gtk/gtkstock.c:291
+#: gtk/gtkstock.c:291
 msgid "Question"
 msgstr "प्रश्न"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: ../gtk/gtkstock.c:296
+#: gtk/gtkstock.c:296
 msgid "_About"
 msgstr "च्या विषयी(_A)"
 
-#: ../gtk/gtkstock.c:298
+#: gtk/gtkstock.c:298
 msgid "_Apply"
 msgstr "लागू करा(_A)"
 
-#: ../gtk/gtkstock.c:299
+#: gtk/gtkstock.c:299
 msgid "_Bold"
 msgstr "स्पष्टपणे(_B)"
 
-#: ../gtk/gtkstock.c:300
+#: gtk/gtkstock.c:300
 msgid "_Cancel"
 msgstr "रद्द करा(_C)"
 
-#: ../gtk/gtkstock.c:301
+#: gtk/gtkstock.c:301
 msgid "_CD-Rom"
 msgstr "सीडी-रॉम(_C)"
 
-#: ../gtk/gtkstock.c:302
+#: gtk/gtkstock.c:302
 msgid "_Clear"
 msgstr "साफ करा(_C)"
 
-#: ../gtk/gtkstock.c:303
+#: gtk/gtkstock.c:303
 msgid "_Close"
 msgstr "बंद करा(_C)"
 
-#: ../gtk/gtkstock.c:304
+#: gtk/gtkstock.c:304
 msgid "C_onnect"
 msgstr "जोडा(_o)"
 
-#: ../gtk/gtkstock.c:305
+#: gtk/gtkstock.c:305
 msgid "_Convert"
 msgstr "रुपांतर(_C) करा"
 
-#: ../gtk/gtkstock.c:306
+#: gtk/gtkstock.c:306
 msgid "_Copy"
 msgstr "प्रत(_C) बनवा"
 
-#: ../gtk/gtkstock.c:307
+#: gtk/gtkstock.c:307
 msgid "Cu_t"
 msgstr "कापा(_t)"
 
-#: ../gtk/gtkstock.c:308
+#: gtk/gtkstock.c:308
 msgid "_Delete"
 msgstr "नष्ट करा(_D)"
 
-#: ../gtk/gtkstock.c:309
+#: gtk/gtkstock.c:309
 msgid "_Discard"
 msgstr "रद्द करा (_D)"
 
-#: ../gtk/gtkstock.c:310
+#: gtk/gtkstock.c:310
 msgid "_Disconnect"
 msgstr "जोडणी तोडा(_D)"
 
-#: ../gtk/gtkstock.c:311
+#: gtk/gtkstock.c:311
 msgid "_Execute"
 msgstr "क्रियान्वित(_E) करा"
 
-#: ../gtk/gtkstock.c:312
+#: gtk/gtkstock.c:312
 msgid "_Edit"
 msgstr "संपादा(_E)"
 
-#: ../gtk/gtkstock.c:313
+#: gtk/gtkstock.c:313
 msgid "_Find"
 msgstr "शोधा(_F)"
 
-#: ../gtk/gtkstock.c:314
+#: gtk/gtkstock.c:314
 msgid "Find and _Replace"
 msgstr "शोधा आणि बदलून घ्या(_R)"
 
-#: ../gtk/gtkstock.c:315
+#: gtk/gtkstock.c:315
 msgid "_Floppy"
 msgstr "फ्लाॅपी(_F)"
 
-#: ../gtk/gtkstock.c:316
+#: gtk/gtkstock.c:316
 msgid "_Fullscreen"
 msgstr "पूर्ण स्क्रीन(_F)"
 
-#: ../gtk/gtkstock.c:317
+#: gtk/gtkstock.c:317
 msgid "_Leave Fullscreen"
 msgstr "पूर्ण स्क्रीन सोडा(_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:319
+#: gtk/gtkstock.c:319
 msgid "Navigation|_Bottom"
 msgstr "तळ(_B)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:321
+#: gtk/gtkstock.c:321
 msgid "Navigation|_First"
 msgstr "पहिला(_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:323
+#: gtk/gtkstock.c:323
 msgid "Navigation|_Last"
 msgstr "शेवटचा(_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:325
+#: gtk/gtkstock.c:325
 msgid "Navigation|_Top"
 msgstr "उच्च(_T)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:327
+#: gtk/gtkstock.c:327
 msgid "Navigation|_Back"
 msgstr "मागे(_B)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:329
+#: gtk/gtkstock.c:329
 msgid "Navigation|_Down"
 msgstr "खाली(_D)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:331
+#: gtk/gtkstock.c:331
 msgid "Navigation|_Forward"
 msgstr "पुढे(_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:333
+#: gtk/gtkstock.c:333
 msgid "Navigation|_Up"
 msgstr "वर(_U)"
 
-#: ../gtk/gtkstock.c:334
+#: gtk/gtkstock.c:334
 msgid "_Harddisk"
 msgstr "हार्डडिस्क(_H)"
 
-#: ../gtk/gtkstock.c:335
+#: gtk/gtkstock.c:335
 msgid "_Help"
 msgstr "मदत करा(_H)"
 
-#: ../gtk/gtkstock.c:336
+#: gtk/gtkstock.c:336
 msgid "_Home"
 msgstr "घर(_H)"
 
-#: ../gtk/gtkstock.c:337
+#: gtk/gtkstock.c:337
 msgid "Increase Indent"
 msgstr "समास वाढवा"
 
-#: ../gtk/gtkstock.c:338
+#: gtk/gtkstock.c:338
 msgid "Decrease Indent"
 msgstr "समास कमी करा"
 
-#: ../gtk/gtkstock.c:339
+#: gtk/gtkstock.c:339
 msgid "_Index"
 msgstr "अनुक्रमणिका/सूची(_I)"
 
-#: ../gtk/gtkstock.c:340
+#: gtk/gtkstock.c:340
 msgid "_Information"
 msgstr "माहीती(_I)"
 
-#: ../gtk/gtkstock.c:341
+#: gtk/gtkstock.c:341
 msgid "_Italic"
 msgstr "इटालिक(_I)"
 
-#: ../gtk/gtkstock.c:342
+#: gtk/gtkstock.c:342
 msgid "_Jump to"
 msgstr "धावा(_J)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:344
+#: gtk/gtkstock.c:344
 msgid "Justify|_Center"
 msgstr "मधोमध(_C)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:346
+#: gtk/gtkstock.c:346
 msgid "Justify|_Fill"
 msgstr "भरा(_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:348
+#: gtk/gtkstock.c:348
 msgid "Justify|_Left"
 msgstr "डावीकडे(_L)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:350
+#: gtk/gtkstock.c:350
 msgid "Justify|_Right"
 msgstr "उजवीकडे(_R)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:353
+#: gtk/gtkstock.c:353
 msgid "Media|_Forward"
 msgstr "पुढे(_F)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:355
+#: gtk/gtkstock.c:355
 msgid "Media|_Next"
 msgstr "पुढील(_N)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:357
+#: gtk/gtkstock.c:357
 msgid "Media|P_ause"
 msgstr "थांबवा(_a)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:359
+#: gtk/gtkstock.c:359
 msgid "Media|_Play"
 msgstr "चालवा(_P)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:361
+#: gtk/gtkstock.c:361
 msgid "Media|Pre_vious"
 msgstr "मागील(_v)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:363
+#: gtk/gtkstock.c:363
 msgid "Media|_Record"
 msgstr "रेकॉर्ड(_R)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:365
+#: gtk/gtkstock.c:365
 msgid "Media|R_ewind"
 msgstr "उलटे फिरवा(_e)"
 
 #. translators, strip the prefix up to and including the first |
-#: ../gtk/gtkstock.c:367
+#: gtk/gtkstock.c:367
 msgid "Media|_Stop"
 msgstr "थांबा(_S)"
 
-#: ../gtk/gtkstock.c:368
+#: gtk/gtkstock.c:368
 msgid "_Network"
 msgstr "संजाळ(_N)"
 
-#: ../gtk/gtkstock.c:369
+#: gtk/gtkstock.c:369
 msgid "_New"
 msgstr "नवीन(_N)"
 
-#: ../gtk/gtkstock.c:370
+#: gtk/gtkstock.c:370
 msgid "_No"
 msgstr "नाही(_N)"
 
-#: ../gtk/gtkstock.c:371
+#: gtk/gtkstock.c:371
 msgid "_OK"
 msgstr "ठिक आहे(_O)"
 
-#: ../gtk/gtkstock.c:372
+#: gtk/gtkstock.c:372
 msgid "_Open"
 msgstr "उघडा(_O)"
 
-#: ../gtk/gtkstock.c:373
+#: gtk/gtkstock.c:373
 msgid "Landscape"
 msgstr "आडवे(लँडस्केप)"
 
-#: ../gtk/gtkstock.c:374
+#: gtk/gtkstock.c:374
 msgid "Portrait"
 msgstr "उभे(पॉट्रेइट)"
 
-#: ../gtk/gtkstock.c:375
+#: gtk/gtkstock.c:375
 msgid "Reverse landscape"
 msgstr "उलटे आडवे"
 
-#: ../gtk/gtkstock.c:376
+#: gtk/gtkstock.c:376
 msgid "Reverse portrait"
 msgstr "उलटे उभे"
 
-#: ../gtk/gtkstock.c:377
+#: gtk/gtkstock.c:377
 msgid "Page Set_up"
 msgstr ""
 
-#: ../gtk/gtkstock.c:378
+#: gtk/gtkstock.c:378
 msgid "_Paste"
 msgstr "चिकटवा(_P)"
 
-#: ../gtk/gtkstock.c:379
+#: gtk/gtkstock.c:379
 msgid "_Preferences"
 msgstr "प्राधान्यता(_P)"
 
-#: ../gtk/gtkstock.c:380
+#: gtk/gtkstock.c:380
 msgid "_Print"
 msgstr "मुद्रण(_P)"
 
-#: ../gtk/gtkstock.c:381
+#: gtk/gtkstock.c:381
 msgid "Print Pre_view"
 msgstr "मुद्रणपूर्व दर्शन(_v)"
 
-#: ../gtk/gtkstock.c:382
+#: gtk/gtkstock.c:382
 msgid "_Properties"
 msgstr "गुणधर्म(_P)"
 
-#: ../gtk/gtkstock.c:383
+#: gtk/gtkstock.c:383
 msgid "_Quit"
 msgstr "बाहेर जा(_Q)"
 
-#: ../gtk/gtkstock.c:384
+#: gtk/gtkstock.c:384
 msgid "_Redo"
 msgstr "पुनः करा(_R)"
 
-#: ../gtk/gtkstock.c:385
+#: gtk/gtkstock.c:385
 msgid "_Refresh"
 msgstr "नव्यारूपात घ्या(_R)"
 
-#: ../gtk/gtkstock.c:387
+#: gtk/gtkstock.c:387
 msgid "_Revert"
 msgstr "पुर्वस्थितीत घ्या(_R)"
 
-#: ../gtk/gtkstock.c:388
+#: gtk/gtkstock.c:388
 msgid "_Save"
 msgstr "साठवा(_S)"
 
-#: ../gtk/gtkstock.c:389
+#: gtk/gtkstock.c:389
 msgid "Save _As"
 msgstr "या नावे साठवा(_A)"
 
-#: ../gtk/gtkstock.c:390
+#: gtk/gtkstock.c:390
 msgid "Select _All"
 msgstr "सर्व निवडा(_A)"
 
-#: ../gtk/gtkstock.c:391
+#: gtk/gtkstock.c:391
 msgid "_Color"
 msgstr "रंग(_C)"
 
-#: ../gtk/gtkstock.c:392
+#: gtk/gtkstock.c:392
 msgid "_Font"
 msgstr "फोन्ट(_F)"
 
-#: ../gtk/gtkstock.c:393
+#: gtk/gtkstock.c:393
 msgid "_Ascending"
 msgstr "वाढता क्रम(_A)"
 
-#: ../gtk/gtkstock.c:394
+#: gtk/gtkstock.c:394
 msgid "_Descending"
 msgstr "उतरता क्रम(_D)"
 
-#: ../gtk/gtkstock.c:395
+#: gtk/gtkstock.c:395
 msgid "_Spell Check"
 msgstr "स्पेलिंग तपासा(_S)"
 
-#: ../gtk/gtkstock.c:396
+#: gtk/gtkstock.c:396
 msgid "_Stop"
 msgstr "थांबा(_S)"
 
-#: ../gtk/gtkstock.c:397
+#: gtk/gtkstock.c:397
 msgid "_Strikethrough"
 msgstr "खोडून काढा(_S)"
 
-#: ../gtk/gtkstock.c:398
+#: gtk/gtkstock.c:398
 msgid "_Undelete"
 msgstr "परत मागे आणा(_U)"
 
-#: ../gtk/gtkstock.c:399
+#: gtk/gtkstock.c:399
 msgid "_Underline"
 msgstr "अधोरेखीत करा(_U)"
 
-#: ../gtk/gtkstock.c:400
+#: gtk/gtkstock.c:400
 msgid "_Undo"
 msgstr "मूळ स्थितीत या(_U)"
 
-#: ../gtk/gtkstock.c:401
+#: gtk/gtkstock.c:401
 msgid "_Yes"
 msgstr "होय(_Y)"
 
-#: ../gtk/gtkstock.c:402
+#: gtk/gtkstock.c:402
 msgid "_Normal Size"
 msgstr "सामान्य आकार(_N)"
 
-#: ../gtk/gtkstock.c:403
+#: gtk/gtkstock.c:403
 msgid "Best _Fit"
 msgstr "सर्वोत्तम भरणी(_F)"
 
-#: ../gtk/gtkstock.c:404
+#: gtk/gtkstock.c:404
 msgid "Zoom _In"
 msgstr "(_I)प्रमाणे आकारमान घ्या"
 
-#: ../gtk/gtkstock.c:405
+#: gtk/gtkstock.c:405
 msgid "Zoom _Out"
 msgstr "छोट्या(_O) आकारमानामध्ये घ्या"
 
-#: ../gtk/gtktextbufferrichtext.c:651
+#: gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr "श्रृंखला %s मोडतेवेळी अपरिचित त्रुटी"
 
-#: ../gtk/gtktextbufferrichtext.c:710
+#: gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "स्वरूपन %s करीता अनुकूल कार्यपध्दती आढळली नाही"
 
-#: ../gtk/gtktextbufferserialize.c:796 ../gtk/gtktextbufferserialize.c:822
+#: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "दोन्ही \"id\" व \"नाव\" <%s> घटकावर आढळले"
 
-#: ../gtk/gtktextbufferserialize.c:806 ../gtk/gtktextbufferserialize.c:832
+#: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "<%s> घटकावर गुणधर्म \"%s\" दोनवेळा आढळले"
 
-#: ../gtk/gtktextbufferserialize.c:846
+#: gtk/gtktextbufferserialize.c:846
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
 msgstr "<%s> घटकावर अवैध id \"%s\" आढळले"
 
-#: ../gtk/gtktextbufferserialize.c:856
+#: gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> घटक करीता \"नान\" किंवा \"id\" गुणधर्म अस्तीत्वात नाही"
 
-#: ../gtk/gtktextbufferserialize.c:943
+#: gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "त्याच <%s> घटकावर गुणधर्म \"%s\" दोनवेळा लिहीले गेले"
 
-#: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
+#: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "या संदर्भात <%s> घटकावरील \"%s\" गुणधर्म अवैध आहे"
 
-#: ../gtk/gtktextbufferserialize.c:1022
+#: gtk/gtktextbufferserialize.c:1022
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "टॅग \"%s\" ची व्याख्या केले गेले नाही."
 
-#: ../gtk/gtktextbufferserialize.c:1034
+#: gtk/gtktextbufferserialize.c:1034
 msgid "Anonymous tag found and tags can not be created."
 msgstr "निनावी टॅग आढळले व टॅगचे निर्माण शक्य नाही."
 
-#: ../gtk/gtktextbufferserialize.c:1045
+#: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "टॅग \"%s\" बफर मध्ये उपलब्ध नाही व टॅग बनविल्या जाऊ शकत नाही."
 
-#: ../gtk/gtktextbufferserialize.c:1144 ../gtk/gtktextbufferserialize.c:1219
-#: ../gtk/gtktextbufferserialize.c:1320 ../gtk/gtktextbufferserialize.c:1394
+#: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
+#: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "<%s> च्या खाली घटक <%s> ला परवानगी नाही"
 
-#: ../gtk/gtktextbufferserialize.c:1175
+#: gtk/gtktextbufferserialize.c:1175
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "\"%s\" वैध गुणधर्म प्रकार नाही"
 
-#: ../gtk/gtktextbufferserialize.c:1183
+#: gtk/gtktextbufferserialize.c:1183
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "\"%s\" वैध गुणधर्म नाव नाही"
 
-#: ../gtk/gtktextbufferserialize.c:1193
+#: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "गुणधर्म \"%s\" करीता \"%s\" ला मुल्याचे प्रकार \"%s\" मध्ये रूपांतर करू शकत नाही"
 
-#: ../gtk/gtktextbufferserialize.c:1202
+#: gtk/gtktextbufferserialize.c:1202
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "गुणधर्म \"%s\" करीता \"%s\" वैध मुल्य नाही"
 
-#: ../gtk/gtktextbufferserialize.c:1285
+#: gtk/gtktextbufferserialize.c:1285
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "टॅग \"%s\" चे वर्णन आधिपासून केले गेले"
 
-#: ../gtk/gtktextbufferserialize.c:1296
+#: gtk/gtktextbufferserialize.c:1296
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "टॅग \"%s\" चे अवैध प्राधान्यक्रम \"%s\""
 
-#: ../gtk/gtktextbufferserialize.c:1349
+#: gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "पाठ्य मधिल बाहेरील घटक <text_view_markup> नसायला <%s> हवे"
 
-#: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
+#: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "<%s> घटकचे आधिपासूनच वर्णन केले आहे"
 
-#: ../gtk/gtktextbufferserialize.c:1380
+#: gtk/gtktextbufferserialize.c:1380
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "<text> घटक <tags> घटकच्या पहिले दिसू शकत नाही"
 
-#: ../gtk/gtktextbufferserialize.c:1779
+#: gtk/gtktextbufferserialize.c:1779
 msgid "Serialized data is malformed"
 msgstr "श्रृंखला माहिती सदोषीत आहे"
 
-#: ../gtk/gtktextbufferserialize.c:1857
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+#: gtk/gtktextbufferserialize.c:1857
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "श्रृंखला माहिती सदोषीत आहे. पहिले विभाग GTKTEXTBUFFERCONTENTS-0001 नाही"
 
-#: ../gtk/gtktextutil.c:61
+#: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
 msgstr "डावीकडून-उजवीकडे असे दाखवणारे LRM चिन्ह"
 
-#: ../gtk/gtktextutil.c:62
+#: gtk/gtktextutil.c:62
 msgid "RLM _Right-to-left mark"
 msgstr "उजवीकडून-डावीकडे असे दाखवणारे RLM चिन्ह"
 
-#: ../gtk/gtktextutil.c:63
+#: gtk/gtktextutil.c:63
 msgid "LRE Left-to-right _embedding"
 msgstr "डावीकडून-उजवीकडे बसवा असे संागणारे LRE चिन्ह"
 
-#: ../gtk/gtktextutil.c:64
+#: gtk/gtktextutil.c:64
 msgid "RLE Right-to-left e_mbedding"
 msgstr "उजवीकडून-डावीकडे बसवा असे संागणारे LRE चिन्ह"
 
-#: ../gtk/gtktextutil.c:65
+#: gtk/gtktextutil.c:65
 msgid "LRO Left-to-right _override"
 msgstr "डावीकडून-उजवीकडे जाताना दुर्लक्ष झाल्याचे सांगणारे LRO"
 
-#: ../gtk/gtktextutil.c:66
+#: gtk/gtktextutil.c:66
 msgid "RLO Right-to-left o_verride"
 msgstr "उजवीकडून-डावीकडे जाताना दुर्लक्ष झाल्याचे सांगणारे LRO"
 
-#: ../gtk/gtktextutil.c:67
+#: gtk/gtktextutil.c:67
 msgid "PDF _Pop directional formatting"
 msgstr "PDF पोप दिशानीय रचना"
 
-#: ../gtk/gtktextutil.c:68
+#: gtk/gtktextutil.c:68
 msgid "ZWS _Zero width space"
 msgstr "शुन्य रुंदीची मोकळी जागा दाखविणारे ZWS चिन्ह"
 
-#: ../gtk/gtktextutil.c:69
+#: gtk/gtktextutil.c:69
 msgid "ZWJ Zero width _joiner"
 msgstr "शुन्य रुंदीचा सांधा जोडणारे ZWJ चिन्ह"
 
-#: ../gtk/gtktextutil.c:70
+#: gtk/gtktextutil.c:70
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "शुन्य रुंदीचा सांधा न जोडणारे ZWNJ चिन्ह"
 
-#: ../gtk/gtkthemes.c:71
+#: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "\"%s\",मार्गावरील यंत्राची कार्यपध्दती निश्चित करणे अशक्य आहे"
 
-#: ../gtk/gtktipsquery.c:188
+#: gtk/gtktipsquery.c:188
 msgid "--- No Tip ---"
 msgstr "--- मदत नाही ---"
 
-#: ../gtk/gtkuimanager.c:1453
+#: gtk/gtkuimanager.c:1453
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "ओळ %2$d char %3$d अनपेक्षीत प्रारंभ टॅग '%1$s'"
 
-#: ../gtk/gtkuimanager.c:1543
+#: gtk/gtkuimanager.c:1543
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "ओळ %d char %d अपरिचीत अक्षर माहिती"
 
-#: ../gtk/gtkuimanager.c:2366
+#: gtk/gtkuimanager.c:2366
 msgid "Empty"
 msgstr "रिकामे"
 
-#: ../gtk/gtkvolumebutton.c:77
+#: gtk/gtkvolumebutton.c:77
 msgid "Volume"
 msgstr "प्रमाण"
 
-#: ../gtk/gtkvolumebutton.c:79
+#: gtk/gtkvolumebutton.c:79
 msgid "Turns volume down or up"
 msgstr ""
 
-#: ../gtk/gtkvolumebutton.c:82
+#: gtk/gtkvolumebutton.c:82
 msgid "Adjusts the volume"
 msgstr ""
 
-#: ../gtk/gtkvolumebutton.c:85 ../gtk/gtkvolumebutton.c:88
+#: gtk/gtkvolumebutton.c:85 gtk/gtkvolumebutton.c:88
 msgid "Volume Down"
 msgstr "आवाज वाढवा कमी करा"
 
-#: ../gtk/gtkvolumebutton.c:87
+#: gtk/gtkvolumebutton.c:87
 msgid "Decreases the volume"
 msgstr ""
 
-#: ../gtk/gtkvolumebutton.c:91 ../gtk/gtkvolumebutton.c:94
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Up"
 msgstr "आवाज वाढवा"
 
-#: ../gtk/gtkvolumebutton.c:93
+#: gtk/gtkvolumebutton.c:93
 msgid "Increases the volume"
 msgstr ""
 
-#: ../gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:151
 msgid "Muted"
 msgstr "मंद केले"
 
-#: ../gtk/gtkvolumebutton.c:155
+#: gtk/gtkvolumebutton.c:155
 msgid "Full Volume"
 msgstr "पूर्णतया आवाज"
 
@@ -3389,926 +3384,926 @@ msgstr "पूर्णतया आवाज"
 #. * Do not translate and do not include the "volume percentage|"
 #. * part in the translation!
 #.
-#: ../gtk/gtkvolumebutton.c:170
+#: gtk/gtkvolumebutton.c:170
 #, c-format
 msgid "volume percentage|%d %%"
 msgstr "आवाज टक्केवारी|%d %%"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:5
+#: gtk/paper_names_offsets.c:5
 msgid "paper size|asme_f"
 msgstr "asme_f"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:7
+#: gtk/paper_names_offsets.c:7
 msgid "paper size|A0x2"
 msgstr "A0x2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:9
+#: gtk/paper_names_offsets.c:9
 msgid "paper size|A0"
 msgstr "A0"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:11
+#: gtk/paper_names_offsets.c:11
 msgid "paper size|A0x3"
 msgstr "A0x3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:13
+#: gtk/paper_names_offsets.c:13
 msgid "paper size|A1"
 msgstr "A1"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:15
+#: gtk/paper_names_offsets.c:15
 msgid "paper size|A10"
 msgstr "A10"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:17
+#: gtk/paper_names_offsets.c:17
 msgid "paper size|A1x3"
 msgstr "A1x3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:19
+#: gtk/paper_names_offsets.c:19
 msgid "paper size|A1x4"
 msgstr "A1x4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:21
+#: gtk/paper_names_offsets.c:21
 msgid "paper size|A2"
 msgstr "A2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:23
+#: gtk/paper_names_offsets.c:23
 msgid "paper size|A2x3"
 msgstr "A2x3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:25
+#: gtk/paper_names_offsets.c:25
 msgid "paper size|A2x4"
 msgstr "A2x4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:27
+#: gtk/paper_names_offsets.c:27
 msgid "paper size|A2x5"
 msgstr "A2x5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:29
+#: gtk/paper_names_offsets.c:29
 msgid "paper size|A3"
 msgstr "A3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:31
+#: gtk/paper_names_offsets.c:31
 msgid "paper size|A3 Extra"
 msgstr "A3 अतिरिक्त"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:33
+#: gtk/paper_names_offsets.c:33
 msgid "paper size|A3x3"
 msgstr "A3x3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:35
+#: gtk/paper_names_offsets.c:35
 msgid "paper size|A3x4"
 msgstr "A3x4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:37
+#: gtk/paper_names_offsets.c:37
 msgid "paper size|A3x5"
 msgstr "A3x5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:39
+#: gtk/paper_names_offsets.c:39
 msgid "paper size|A3x6"
 msgstr "A3x6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:41
+#: gtk/paper_names_offsets.c:41
 msgid "paper size|A3x7"
 msgstr "A3x7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:43
+#: gtk/paper_names_offsets.c:43
 msgid "paper size|A4"
 msgstr "A4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:45
+#: gtk/paper_names_offsets.c:45
 msgid "paper size|A4 Extra"
 msgstr "A4 अतिरिक्त"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:47
+#: gtk/paper_names_offsets.c:47
 msgid "paper size|A4 Tab"
 msgstr "A4 Tab"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:49
+#: gtk/paper_names_offsets.c:49
 msgid "paper size|A4x3"
 msgstr "A4x3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:51
+#: gtk/paper_names_offsets.c:51
 msgid "paper size|A4x4"
 msgstr "A4x4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:53
+#: gtk/paper_names_offsets.c:53
 msgid "paper size|A4x5"
 msgstr "A4x5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:55
+#: gtk/paper_names_offsets.c:55
 msgid "paper size|A4x6"
 msgstr "A4x6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:57
+#: gtk/paper_names_offsets.c:57
 msgid "paper size|A4x7"
 msgstr "A4x7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:59
+#: gtk/paper_names_offsets.c:59
 msgid "paper size|A4x8"
 msgstr "A4x8"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:61
+#: gtk/paper_names_offsets.c:61
 msgid "paper size|A4x9"
 msgstr "A4x9"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:63
+#: gtk/paper_names_offsets.c:63
 msgid "paper size|A5"
 msgstr "A5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:65
+#: gtk/paper_names_offsets.c:65
 msgid "paper size|A5 Extra"
 msgstr "A5 अतिरिक्त"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:67
+#: gtk/paper_names_offsets.c:67
 msgid "paper size|A6"
 msgstr "A6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:69
+#: gtk/paper_names_offsets.c:69
 msgid "paper size|A7"
 msgstr "A7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:71
+#: gtk/paper_names_offsets.c:71
 msgid "paper size|A8"
 msgstr "A8"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:73
+#: gtk/paper_names_offsets.c:73
 msgid "paper size|A9"
 msgstr "A9"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:75
+#: gtk/paper_names_offsets.c:75
 msgid "paper size|B0"
 msgstr "B0"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:77
+#: gtk/paper_names_offsets.c:77
 msgid "paper size|B1"
 msgstr "B1"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:79
+#: gtk/paper_names_offsets.c:79
 msgid "paper size|B10"
 msgstr "B10"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:81
+#: gtk/paper_names_offsets.c:81
 msgid "paper size|B2"
 msgstr "B2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:83
+#: gtk/paper_names_offsets.c:83
 msgid "paper size|B3"
 msgstr "B3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:85
+#: gtk/paper_names_offsets.c:85
 msgid "paper size|B4"
 msgstr "B4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:87
+#: gtk/paper_names_offsets.c:87
 msgid "paper size|B5"
 msgstr "B5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:89
+#: gtk/paper_names_offsets.c:89
 msgid "paper size|B5 Extra"
 msgstr "B5 अतिरिक्त"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:91
+#: gtk/paper_names_offsets.c:91
 msgid "paper size|B6"
 msgstr "B6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:93
+#: gtk/paper_names_offsets.c:93
 msgid "paper size|B6/C4"
 msgstr "B6/C4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:95
+#: gtk/paper_names_offsets.c:95
 msgid "paper size|B7"
 msgstr "B7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:97
+#: gtk/paper_names_offsets.c:97
 msgid "paper size|B8"
 msgstr "B8"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:99
+#: gtk/paper_names_offsets.c:99
 msgid "paper size|B9"
 msgstr "B9"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:101
+#: gtk/paper_names_offsets.c:101
 msgid "paper size|C0"
 msgstr "C0"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:103
+#: gtk/paper_names_offsets.c:103
 msgid "paper size|C1"
 msgstr "C1"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:105
+#: gtk/paper_names_offsets.c:105
 msgid "paper size|C10"
 msgstr "C10"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:107
+#: gtk/paper_names_offsets.c:107
 msgid "paper size|C2"
 msgstr "C2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:109
+#: gtk/paper_names_offsets.c:109
 msgid "paper size|C3"
 msgstr "C3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:111
+#: gtk/paper_names_offsets.c:111
 msgid "paper size|C4"
 msgstr "C4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:113
+#: gtk/paper_names_offsets.c:113
 msgid "paper size|C5"
 msgstr "C5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:115
+#: gtk/paper_names_offsets.c:115
 msgid "paper size|C6"
 msgstr "C6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:117
+#: gtk/paper_names_offsets.c:117
 msgid "paper size|C6/C5"
 msgstr "C6/C5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:119
+#: gtk/paper_names_offsets.c:119
 msgid "paper size|C7"
 msgstr "C7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:121
+#: gtk/paper_names_offsets.c:121
 msgid "paper size|C7/C6"
 msgstr "C7/C6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:123
+#: gtk/paper_names_offsets.c:123
 msgid "paper size|C8"
 msgstr "C8"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:125
+#: gtk/paper_names_offsets.c:125
 msgid "paper size|C9"
 msgstr "C9"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:127
+#: gtk/paper_names_offsets.c:127
 msgid "paper size|DL Envelope"
 msgstr "DL पाकिट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:129
+#: gtk/paper_names_offsets.c:129
 msgid "paper size|RA0"
 msgstr "RA0"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:131
+#: gtk/paper_names_offsets.c:131
 msgid "paper size|RA1"
 msgstr "RA1"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:133
+#: gtk/paper_names_offsets.c:133
 msgid "paper size|RA2"
 msgstr "RA2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:135
+#: gtk/paper_names_offsets.c:135
 msgid "paper size|SRA0"
 msgstr "SRA0"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:137
+#: gtk/paper_names_offsets.c:137
 msgid "paper size|SRA1"
 msgstr "SRA1"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:139
+#: gtk/paper_names_offsets.c:139
 msgid "paper size|SRA2"
 msgstr "SRA2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:141
+#: gtk/paper_names_offsets.c:141
 msgid "paper size|JB0"
 msgstr "JB0"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:143
+#: gtk/paper_names_offsets.c:143
 msgid "paper size|JB1"
 msgstr "JB1"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:145
+#: gtk/paper_names_offsets.c:145
 msgid "paper size|JB10"
 msgstr "JB10"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:147
+#: gtk/paper_names_offsets.c:147
 msgid "paper size|JB2"
 msgstr "JB2"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:149
+#: gtk/paper_names_offsets.c:149
 msgid "paper size|JB3"
 msgstr "JB3"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:151
+#: gtk/paper_names_offsets.c:151
 msgid "paper size|JB4"
 msgstr "JB4"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:153
+#: gtk/paper_names_offsets.c:153
 msgid "paper size|JB5"
 msgstr "JB5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:155
+#: gtk/paper_names_offsets.c:155
 msgid "paper size|JB6"
 msgstr "JB6"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:157
+#: gtk/paper_names_offsets.c:157
 msgid "paper size|JB7"
 msgstr "JB7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:159
+#: gtk/paper_names_offsets.c:159
 msgid "paper size|JB8"
 msgstr "JB8"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:161
+#: gtk/paper_names_offsets.c:161
 msgid "paper size|JB9"
 msgstr "JB9"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:163
+#: gtk/paper_names_offsets.c:163
 msgid "paper size|jis exec"
 msgstr "jis exec"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:165
+#: gtk/paper_names_offsets.c:165
 msgid "paper size|Choukei 2 Envelope"
 msgstr "चौकी 2 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:167
+#: gtk/paper_names_offsets.c:167
 msgid "paper size|Choukei 3 Envelope"
 msgstr "चौकी 3 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:169
+#: gtk/paper_names_offsets.c:169
 msgid "paper size|Choukei 4 Envelope"
 msgstr "चौकी 4 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:171
+#: gtk/paper_names_offsets.c:171
 msgid "paper size|hagaki (postcard)"
 msgstr "हगकी (पोस्टकार्ड)"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:173
+#: gtk/paper_names_offsets.c:173
 msgid "paper size|kahu Envelope"
 msgstr "काहू पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:175
+#: gtk/paper_names_offsets.c:175
 msgid "paper size|kaku2 Envelope"
 msgstr "काकू2 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:177
+#: gtk/paper_names_offsets.c:177
 msgid "paper size|oufuku (reply postcard)"
 msgstr "औफूकू (उत्तराचे पोस्टकार्ड)"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:179
+#: gtk/paper_names_offsets.c:179
 msgid "paper size|you4 Envelope"
 msgstr "यू4 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:181
+#: gtk/paper_names_offsets.c:181
 msgid "paper size|10x11"
 msgstr "10x11"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:183
+#: gtk/paper_names_offsets.c:183
 msgid "paper size|10x13"
 msgstr "10x13"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:185
+#: gtk/paper_names_offsets.c:185
 msgid "paper size|10x14"
 msgstr "10x14"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:187 ../gtk/paper_names_offsets.c:189
+#: gtk/paper_names_offsets.c:187 gtk/paper_names_offsets.c:189
 msgid "paper size|10x15"
 msgstr "10x15"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:191
+#: gtk/paper_names_offsets.c:191
 msgid "paper size|11x12"
 msgstr "11x12"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:193
+#: gtk/paper_names_offsets.c:193
 msgid "paper size|11x15"
 msgstr "11x15"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:195
+#: gtk/paper_names_offsets.c:195
 msgid "paper size|12x19"
 msgstr "12x19"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:197
+#: gtk/paper_names_offsets.c:197
 msgid "paper size|5x7"
 msgstr "5x7"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:199
+#: gtk/paper_names_offsets.c:199
 msgid "paper size|6x9 Envelope"
 msgstr "6x9 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:201
+#: gtk/paper_names_offsets.c:201
 msgid "paper size|7x9 Envelope"
 msgstr "7x9 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:203
+#: gtk/paper_names_offsets.c:203
 msgid "paper size|9x11 Envelope"
 msgstr "9x11 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:205
+#: gtk/paper_names_offsets.c:205
 msgid "paper size|a2 Envelope"
 msgstr "a2 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:207
+#: gtk/paper_names_offsets.c:207
 msgid "paper size|Arch A"
 msgstr "आर्क A"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:209
+#: gtk/paper_names_offsets.c:209
 msgid "paper size|Arch B"
 msgstr "आर्क B"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:211
+#: gtk/paper_names_offsets.c:211
 msgid "paper size|Arch C"
 msgstr "आर्क C"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:213
+#: gtk/paper_names_offsets.c:213
 msgid "paper size|Arch D"
 msgstr "आर्क D"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:215
+#: gtk/paper_names_offsets.c:215
 msgid "paper size|Arch E"
 msgstr "आर्क E"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:217
+#: gtk/paper_names_offsets.c:217
 msgid "paper size|b-plus"
 msgstr "b-plus"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:219
+#: gtk/paper_names_offsets.c:219
 msgid "paper size|c"
 msgstr "c"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:221
+#: gtk/paper_names_offsets.c:221
 msgid "paper size|c5 Envelope"
 msgstr "c5 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:223
+#: gtk/paper_names_offsets.c:223
 msgid "paper size|d"
 msgstr "d"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:225
+#: gtk/paper_names_offsets.c:225
 msgid "paper size|e"
 msgstr "e"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:227
+#: gtk/paper_names_offsets.c:227
 msgid "paper size|edp"
 msgstr "edp"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:229
+#: gtk/paper_names_offsets.c:229
 msgid "paper size|European edp"
 msgstr "यूरोपिअन edp"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:231
+#: gtk/paper_names_offsets.c:231
 msgid "paper size|Executive"
 msgstr "एक्जिक्यूटिव"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:233
+#: gtk/paper_names_offsets.c:233
 msgid "paper size|f"
 msgstr "f"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:235
+#: gtk/paper_names_offsets.c:235
 msgid "paper size|FanFold European"
 msgstr "फॅनफोल्ड युरोपिअन"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:237
+#: gtk/paper_names_offsets.c:237
 msgid "paper size|FanFold US"
 msgstr "फॅनफोल्ड US"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:239
+#: gtk/paper_names_offsets.c:239
 msgid "paper size|FanFold German Legal"
 msgstr "फॅनफोल्ड जर्मन कायदेशीर"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:241
+#: gtk/paper_names_offsets.c:241
 msgid "paper size|Government Legal"
 msgstr "सरकारी कायदेशीर"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:243
+#: gtk/paper_names_offsets.c:243
 msgid "paper size|Government Letter"
 msgstr "सरकारी पत्र"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:245
+#: gtk/paper_names_offsets.c:245
 msgid "paper size|Index 3x5"
 msgstr "Index 3x5"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:247
+#: gtk/paper_names_offsets.c:247
 msgid "paper size|Index 4x6 (postcard)"
 msgstr "Index 4x6 (पोस्टकार्ड)"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:249
+#: gtk/paper_names_offsets.c:249
 msgid "paper size|Index 4x6 ext"
 msgstr "Index 4x6 ext"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:251
+#: gtk/paper_names_offsets.c:251
 msgid "paper size|Index 5x8"
 msgstr "Index 5x8"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:253
+#: gtk/paper_names_offsets.c:253
 msgid "paper size|Invoice"
 msgstr "Invoice"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:255
+#: gtk/paper_names_offsets.c:255
 msgid "paper size|Tabloid"
 msgstr "Tabloid"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:257
+#: gtk/paper_names_offsets.c:257
 msgid "paper size|US Legal"
 msgstr "US कायदेशीर"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:259
+#: gtk/paper_names_offsets.c:259
 msgid "paper size|US Legal Extra"
 msgstr "US कायदेशीर अतिरिक्त"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:261
+#: gtk/paper_names_offsets.c:261
 msgid "paper size|US Letter"
 msgstr "US पत्र"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:263
+#: gtk/paper_names_offsets.c:263
 msgid "paper size|US Letter Extra"
 msgstr "US पत्र अतिरिक्त"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:265
+#: gtk/paper_names_offsets.c:265
 msgid "paper size|US Letter Plus"
 msgstr "US पत्र प्लस"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:267
+#: gtk/paper_names_offsets.c:267
 msgid "paper size|Monarch Envelope"
 msgstr "मोनार्क पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:269
+#: gtk/paper_names_offsets.c:269
 msgid "paper size|#10 Envelope"
 msgstr "#10 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:271
+#: gtk/paper_names_offsets.c:271
 msgid "paper size|#11 Envelope"
 msgstr "कागदाचा आकार|#11 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:273
+#: gtk/paper_names_offsets.c:273
 msgid "paper size|#12 Envelope"
 msgstr "#12 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:275
+#: gtk/paper_names_offsets.c:275
 msgid "paper size|#14 Envelope"
 msgstr "#14 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:277
+#: gtk/paper_names_offsets.c:277
 msgid "paper size|#9 Envelope"
 msgstr "#9 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:279
+#: gtk/paper_names_offsets.c:279
 msgid "paper size|Personal Envelope"
 msgstr "खाजगी पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:281
+#: gtk/paper_names_offsets.c:281
 msgid "paper size|Quarto"
 msgstr "Quarto"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:283
+#: gtk/paper_names_offsets.c:283
 msgid "paper size|Super A"
 msgstr "सूपर A"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:285
+#: gtk/paper_names_offsets.c:285
 msgid "paper size|Super B"
 msgstr "सूपर B"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:287
+#: gtk/paper_names_offsets.c:287
 msgid "paper size|Wide Format"
 msgstr "रूंद स्वरुप"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:289
+#: gtk/paper_names_offsets.c:289
 msgid "paper size|Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:291
+#: gtk/paper_names_offsets.c:291
 msgid "paper size|Folio"
 msgstr "Folio"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:293
+#: gtk/paper_names_offsets.c:293
 msgid "paper size|Folio sp"
 msgstr "Folio sp"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:295
+#: gtk/paper_names_offsets.c:295
 msgid "paper size|Invite Envelope"
 msgstr "आमंत्रण पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:297
+#: gtk/paper_names_offsets.c:297
 msgid "paper size|Italian Envelope"
 msgstr "इटालिअन पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:299
+#: gtk/paper_names_offsets.c:299
 msgid "paper size|juuro-ku-kai"
 msgstr "juuro-ku-kai"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:301
+#: gtk/paper_names_offsets.c:301
 msgid "paper size|pa-kai"
 msgstr "pa-kai"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:303
+#: gtk/paper_names_offsets.c:303
 msgid "paper size|Postfix Envelope"
 msgstr "Postfix पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:305
+#: gtk/paper_names_offsets.c:305
 msgid "paper size|Small Photo"
 msgstr "लहान छायाचित्र"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:307
+#: gtk/paper_names_offsets.c:307
 msgid "paper size|prc1 Envelope"
 msgstr "prc1 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:309
+#: gtk/paper_names_offsets.c:309
 msgid "paper size|prc10 Envelope"
 msgstr "prc10 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:311
+#: gtk/paper_names_offsets.c:311
 msgid "paper size|prc 16k"
 msgstr "prc 16k"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:313
+#: gtk/paper_names_offsets.c:313
 msgid "paper size|prc2 Envelope"
 msgstr "prc2 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:315
+#: gtk/paper_names_offsets.c:315
 msgid "paper size|prc3 Envelope"
 msgstr "prc3 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:317
+#: gtk/paper_names_offsets.c:317
 msgid "paper size|prc 32k"
 msgstr "prc 32k"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:319
+#: gtk/paper_names_offsets.c:319
 msgid "paper size|prc4 Envelope"
 msgstr "prc4 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:321
+#: gtk/paper_names_offsets.c:321
 msgid "paper size|prc5 Envelope"
 msgstr "prc5 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:323
+#: gtk/paper_names_offsets.c:323
 msgid "paper size|prc6 Envelope"
 msgstr "prc6 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:325
+#: gtk/paper_names_offsets.c:325
 msgid "paper size|prc7 Envelope"
 msgstr "prc7 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:327
+#: gtk/paper_names_offsets.c:327
 msgid "paper size|prc8 Envelope"
 msgstr "prc8 पाकीट"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:329
+#: gtk/paper_names_offsets.c:329
 msgid "paper size|ROC 16k"
 msgstr "ROC 16k"
 
 #. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:331
+#: gtk/paper_names_offsets.c:331
 msgid "paper size|ROC 8k"
 msgstr "ROC 8k"
 
-#: ../gtk/updateiconcache.c:492 ../gtk/updateiconcache.c:552
+#: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr "समानजुळवणी '%s' व '%s' करीता विविध idatas आढळले\n"
 
-#: ../gtk/updateiconcache.c:1374
+#: gtk/updateiconcache.c:1374
 #, c-format
 msgid "Failed to write header\n"
 msgstr "हेड्डरवर लिहीण्यास अपयशी\n"
 
-#: ../gtk/updateiconcache.c:1380
+#: gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "हॅश कोष्टक लिहीण्यास अपयशी\n"
 
-#: ../gtk/updateiconcache.c:1386
+#: gtk/updateiconcache.c:1386
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "संचयीका विषयसूची लिहण्यास अपयशी\n"
 
-#: ../gtk/updateiconcache.c:1394
+#: gtk/updateiconcache.c:1394
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "हेड्डर पुन्हा लिहीण्यास अपयशी\n"
 
-#: ../gtk/updateiconcache.c:1455
+#: gtk/updateiconcache.c:1455
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1463
+#: gtk/updateiconcache.c:1463
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "कॅश फाइल लिहीण्यास अपयशी: %s\n"
 
-#: ../gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1499
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "निर्मीत कॅश अवैध आहे.\n"
 
-#: ../gtk/updateiconcache.c:1511
+#: gtk/updateiconcache.c:1511
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s चे %s मध्ये पुनःनामांकन करू शकले नाही: %s, %s काढून टाकत आहे.\n"
 
-#: ../gtk/updateiconcache.c:1523
+#: gtk/updateiconcache.c:1523
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s चे %s असे पुनःनामांकन करू शकले: %s\n"
 
-#: ../gtk/updateiconcache.c:1530
+#: gtk/updateiconcache.c:1530
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s ला %s असे पुनःनामांकीत करू शकले नाही: %s\n"
 
-#: ../gtk/updateiconcache.c:1556
+#: gtk/updateiconcache.c:1556
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "कॅश फाइल यशस्वीरित्या बनविले गेले.\n"
 
-#: ../gtk/updateiconcache.c:1595
+#: gtk/updateiconcache.c:1595
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "अस्तीत्वातील कॅश पुन्हा लिहा, जरी ते पूर्णतया व्यवस्थीत असले तरी"
 
-#: ../gtk/updateiconcache.c:1596
+#: gtk/updateiconcache.c:1596
 msgid "Don't check for the existence of index.theme"
 msgstr "index.theme चे अस्तित्व तपासू नका"
 
-#: ../gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1597
 msgid "Don't include image data in the cache"
 msgstr "कॅश मध्ये प्रतिमा माहिती समाविष्ट करू नका"
 
-#: ../gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1598
 msgid "Output a C header file"
 msgstr "C हेड्डर फाइल आउडपुट स्वरूपी बनवा"
 
-#: ../gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1599
 msgid "Turn off verbose output"
 msgstr "वाचणीय आउटपुट बंद करा"
 
-#: ../gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1600
 msgid "Validate existing icon cache"
 msgstr "अस्तित्वातील चिन्ह कॅश तपासा"
 
-#: ../gtk/updateiconcache.c:1663
+#: gtk/updateiconcache.c:1663
 #, c-format
 msgid "File not found: %s\n"
 msgstr "फाइल आढळले नाही: %s\n"
 
-#: ../gtk/updateiconcache.c:1669
+#: gtk/updateiconcache.c:1669
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "वैध चिन्ह कॅश नाही: %s\n"
 
-#: ../gtk/updateiconcache.c:1682
+#: gtk/updateiconcache.c:1682
 #, c-format
 msgid "No theme index file."
 msgstr ""
 
-#: ../gtk/updateiconcache.c:1686
+#: gtk/updateiconcache.c:1686
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4318,278 +4313,277 @@ msgstr ""
 "जर तुम्हाला नक्की चिन्ह कॅश येथे बनवायचे असेल, तर --ignore-theme-index वापरा.\n"
 
 #. ID
-#: ../modules/input/imam-et.c:454
+#: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
 msgstr "आम्हारिक (EZ+)"
 
 #. ID
-#: ../modules/input/imcedilla.c:92
+#: modules/input/imcedilla.c:92
 msgid "Cedilla"
 msgstr "सेडिल्ला"
 
 #. ID
-#: ../modules/input/imcyrillic-translit.c:217
+#: modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
 msgstr "सिरिलिक (Transliterated)"
 
 #. ID
-#: ../modules/input/iminuktitut.c:127
+#: modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
 msgstr "इनुक्टीटूट (Transliterated)"
 
 #. ID
-#: ../modules/input/imipa.c:145
+#: modules/input/imipa.c:145
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
-#: ../modules/input/immultipress.c:31
+#: modules/input/immultipress.c:31
 msgid "Multipress"
 msgstr "Multipress"
 
 #. ID
-#: ../modules/input/imthai.c:35
+#: modules/input/imthai.c:35
 msgid "Thai-Lao"
 msgstr "Thai-Lao"
 
 #. ID
-#: ../modules/input/imti-er.c:453
+#: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "टिग्रीना-एरिट्रीन (EZ+)"
 
 #. ID
-#: ../modules/input/imti-et.c:453
+#: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "टिग्रीना-इथिओपिअन (EZ+)"
 
 #. ID
-#: ../modules/input/imviqr.c:244
+#: modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
 msgstr "विएतनामी (VIQR)"
 
 #. ID
-#: ../modules/input/imxim.c:28
+#: modules/input/imxim.c:28
 msgid "X Input Method"
 msgstr "X आदान पध्दत "
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1113
+#: modules/printbackends/cups/gtkprintbackendcups.c:1113
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr ""
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1114
+#: modules/printbackends/cups/gtkprintbackendcups.c:1114
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1116
+#: modules/printbackends/cups/gtkprintbackendcups.c:1116
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1118
+#: modules/printbackends/cups/gtkprintbackendcups.c:1118
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1120
+#: modules/printbackends/cups/gtkprintbackendcups.c:1120
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1122
+#: modules/printbackends/cups/gtkprintbackendcups.c:1122
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1123
+#: modules/printbackends/cups/gtkprintbackendcups.c:1123
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr ""
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1124
+#: modules/printbackends/cups/gtkprintbackendcups.c:1124
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr ""
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1125
+#: modules/printbackends/cups/gtkprintbackendcups.c:1125
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr ""
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1126
+#: modules/printbackends/cups/gtkprintbackendcups.c:1126
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr ""
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1127
+#: modules/printbackends/cups/gtkprintbackendcups.c:1127
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr ""
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1128
+#: modules/printbackends/cups/gtkprintbackendcups.c:1128
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr ""
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1129
+#: modules/printbackends/cups/gtkprintbackendcups.c:1129
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1372
+#: modules/printbackends/cups/gtkprintbackendcups.c:1372
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1378
+#: modules/printbackends/cups/gtkprintbackendcups.c:1378
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:1999
 msgid "Two Sided"
 msgstr "पाठपोट"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2000
+#: modules/printbackends/cups/gtkprintbackendcups.c:2000
 msgid "Paper Type"
 msgstr "कागद प्रकार"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2001
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Paper Source"
 msgstr "कागद स्त्रोत"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2002
+#: modules/printbackends/cups/gtkprintbackendcups.c:2002
 msgid "Output Tray"
 msgstr "प्रदान ट्रे"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2011
+#: modules/printbackends/cups/gtkprintbackendcups.c:2011
 msgid "One Sided"
 msgstr "एका बाजूचे"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2013
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2015
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2023
+#: modules/printbackends/cups/gtkprintbackendcups.c:2013
+#: modules/printbackends/cups/gtkprintbackendcups.c:2015
+#: modules/printbackends/cups/gtkprintbackendcups.c:2023
 msgid "Auto Select"
 msgstr "स्वयं निवडणे"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2017
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2019
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2021
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2492
+#: modules/printbackends/cups/gtkprintbackendcups.c:2017
+#: modules/printbackends/cups/gtkprintbackendcups.c:2019
+#: modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: modules/printbackends/cups/gtkprintbackendcups.c:2492
 msgid "Printer Default"
 msgstr "मुलभूत प्रिंटर"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Urgent"
 msgstr "तातडीने"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "High"
 msgstr "उंच"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Medium"
 msgstr "मध्यम"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Low"
 msgstr "खाली"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "None"
 msgstr "काहीच नाही"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Classified"
 msgstr "वर्गीकृत"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Confidential"
 msgstr "गुप्त"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Secret"
 msgstr "गुपित"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Standard"
 msgstr "मानक"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Top Secret"
 msgstr "उच्च गुपित"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Unclassified"
 msgstr "अवर्गिकृत"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2826
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 #, c-format
 msgid "Custom %sx%s"
 msgstr ""
 
 #. default filename used for print-to-file
-#: ../modules/printbackends/file/gtkprintbackendfile.c:235
+#: modules/printbackends/file/gtkprintbackendfile.c:235
 #, c-format
 msgid "output.%s"
 msgstr "प्रदान.%s"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:464
+#: modules/printbackends/file/gtkprintbackendfile.c:464
 msgid "Print to File"
 msgstr "फाइलमध्ये छापा"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+#: modules/printbackends/file/gtkprintbackendfile.c:541
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+#: modules/printbackends/file/gtkprintbackendfile.c:541
 msgid "Postscript"
 msgstr "पोस्टस्क्रीप्ट"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:553
-#: ../modules/printbackends/test/gtkprintbackendtest.c:501
+#: modules/printbackends/file/gtkprintbackendfile.c:553
+#: modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "प्रति पत्र पाने(_s):"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:599
+#: modules/printbackends/file/gtkprintbackendfile.c:599
 msgid "File"
 msgstr "फाइल"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:608
+#: modules/printbackends/file/gtkprintbackendfile.c:608
 msgid "_Output format"
 msgstr "प्रदान स्वरूप(_O)"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:398
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:398
 msgid "Print to LPR"
 msgstr "LPR वर छापा"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:424
 msgid "Pages Per Sheet"
 msgstr "प्रति पत्र पृष्ठे"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:431
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:431
 msgid "Command Line"
 msgstr "आदेश पंक्ती"
 
 #. default filename used for print-to-test
-#: ../modules/printbackends/test/gtkprintbackendtest.c:235
+#: modules/printbackends/test/gtkprintbackendtest.c:235
 #, c-format
 msgid "test-output.%s"
 msgstr "test-output.%s"
 
-#: ../modules/printbackends/test/gtkprintbackendtest.c:465
+#: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "चाचणी छपाईयंत्रकरीता छपाई"
 
-#: ../tests/testfilechooser.c:207
+#: tests/testfilechooser.c:207
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' फाइलची माहिती मिळवता आली नाही: %s"
-

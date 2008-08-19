@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2006-12-13 15:11+0530\n"
 "Last-Translator: Subhransu Behera <sbehera@redhat.com>\n"
 "Language-Team: Oriya <oriya-group@lists.sarovar.org>\n"
@@ -961,7 +961,7 @@ msgstr "TIFF ତଥ୍ଯକୁ ଲେଖିବାରେ ଅସଫଳ"
 msgid "Couldn't write to TIFF file"
 msgstr "TIFF ଫାଇଲରେ ଲେଖିପାରିଲା ନାହିଁ"
 
-#: gdk-pixbuf/io-tiff.c:814
+#: gdk-pixbuf/io-tiff.c:815
 msgid "The TIFF image format"
 msgstr "TIFF ଚିତ୍ର ଶୈଳୀ"
 
@@ -1149,7 +1149,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2106
+#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "ଅନୁମତି ପତ୍ର"
 
@@ -1163,32 +1163,32 @@ msgid "C_redits"
 msgstr "ସ୍ବୀକୃତି (_r)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:513
+#: gtk/gtkaboutdialog.c:514
 msgid "_License"
 msgstr "ଅନୁମତି ପତ୍ର (_L)"
 
-#: gtk/gtkaboutdialog.c:742
+#: gtk/gtkaboutdialog.c:744
 #, c-format
 msgid "About %s"
 msgstr "%s ବିଷୟରେ"
 
-#: gtk/gtkaboutdialog.c:2030
+#: gtk/gtkaboutdialog.c:2032
 msgid "Credits"
 msgstr "ସ୍ବୀକୃତି"
 
-#: gtk/gtkaboutdialog.c:2059
+#: gtk/gtkaboutdialog.c:2061
 msgid "Written by"
 msgstr "ଲେଖକ"
 
-#: gtk/gtkaboutdialog.c:2062
+#: gtk/gtkaboutdialog.c:2064
 msgid "Documented by"
 msgstr "ଦଲିଲକରଣ ଲେଖକ"
 
-#: gtk/gtkaboutdialog.c:2074
+#: gtk/gtkaboutdialog.c:2076
 msgid "Translated by"
 msgstr "ଅନୁବାଦକ"
 
-#: gtk/gtkaboutdialog.c:2078
+#: gtk/gtkaboutdialog.c:2080
 msgid "Artwork by"
 msgstr "ଚିତ୍ରକାର"
 
@@ -1231,7 +1231,7 @@ msgstr "Alt"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:679
+#: gtk/gtkaccellabel.c:678
 msgid "keyboard label|Super"
 msgstr "Super"
 
@@ -1241,7 +1241,7 @@ msgstr "Super"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:693
+#: gtk/gtkaccellabel.c:692
 msgid "keyboard label|Hyper"
 msgstr "Hyper"
 
@@ -1251,17 +1251,17 @@ msgstr "Hyper"
 #. * this.
 #. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:708
+#: gtk/gtkaccellabel.c:707
 msgid "keyboard label|Meta"
 msgstr "Meta"
 
 #. do not translate the part before the |
-#: gtk/gtkaccellabel.c:726
+#: gtk/gtkaccellabel.c:725
 msgid "keyboard label|Space"
 msgstr "Space"
 
 #. do not translate the part before the |
-#: gtk/gtkaccellabel.c:730
+#: gtk/gtkaccellabel.c:729
 msgid "keyboard label|Backslash"
 msgstr "Backslash"
 
@@ -1309,7 +1309,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1797
+#: gtk/gtkcalendar.c:1796
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1324,7 +1324,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1828 gtk/gtkcalendar.c:2489
+#: gtk/gtkcalendar.c:1827 gtk/gtkcalendar.c:2488
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1340,7 +1340,7 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1860 gtk/gtkcalendar.c:2351
+#: gtk/gtkcalendar.c:1859 gtk/gtkcalendar.c:2350
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1356,7 +1356,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2141
+#: gtk/gtkcalendar.c:2140
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1479,7 +1479,7 @@ msgstr "ଥାଳି (_P):"
 msgid "Color Wheel"
 msgstr "ରଙ୍ଗ ଚକ୍ର"
 
-#: gtk/gtkcolorsel.c:980
+#: gtk/gtkcolorsel.c:976
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1488,7 +1488,7 @@ msgstr ""
 "ପୂର୍ବରୁ ବଛାଯାଇଥିବା ରଙ୍ଗ, ବର୍ତମାନ ବଛାଯାଇଥିବା ରଙ୍ଗ ସଙ୍ଗେ ଦୁଳନା ପାଇଁ. ଆପଣ ଏହି ରଙ୍ଗକୁ ଆଳି ଭରଣକୁ "
 "ଟାଣିପାରନ୍ତି ବା ଏହାକୁ ପାଖରେ ସ୍ଥିତ ରଙ୍ଗ ନମୁନା କ୍ଷେତ୍ରକୁ ଟାଣି ସାମ୍ପ୍ରତିକ ରଙ୍ଗ ଭାବରେ ବାଛିପାରନ୍ତି।"
 
-#: gtk/gtkcolorsel.c:984
+#: gtk/gtkcolorsel.c:980
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1496,11 +1496,11 @@ msgstr ""
 "ଆପଣଙ୍କ ଦ୍ବାରା ବଛା ରଙ୍ଗ. ଆପଣ ଏହାକୁ ଗୋଟିଏ ଆଳି ଭରଣକୁ ଟାଣି ଭବିଷ୍ଯତରେ ବ୍ଯବହାର ପାଇଁ ସଂରକ୍ଷିତ "
 "କରିପାରନ୍ତି।"
 
-#: gtk/gtkcolorsel.c:1369
+#: gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
 msgstr "ଏଠାରେ ରଙ୍ଗ  ସଂରକ୍ଷିତ କରନ୍ତୁ (_S)"
 
-#: gtk/gtkcolorsel.c:1574
+#: gtk/gtkcolorsel.c:1568
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1513,11 +1513,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "ରଙ୍ଗ ଚୟନ"
 
-#: gtk/gtkentry.c:5376 gtk/gtktextview.c:7654
+#: gtk/gtkentry.c:5375 gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "ନିବେଶ ପ୍ରଣାଳୀ (_M)"
 
-#: gtk/gtkentry.c:5390 gtk/gtktextview.c:7668
+#: gtk/gtkentry.c:5389 gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "ୟୁନିକୋଡ ନିୟନ୍ତ୍ରଣ ଅକ୍ଷର ଭର୍ତ୍ତି କରନ୍ତୁ (_I)"
 
@@ -1533,7 +1533,7 @@ msgstr "ଡେସ୍କଟପ"
 msgid "(None)"
 msgstr "(କିଛି ନୁହେଁ)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2011
 msgid "Other..."
 msgstr "ଅନ୍ଯାନ୍ଯ ..."
 
@@ -2014,7 +2014,7 @@ msgstr "ଆକାର: (_z)"
 msgid "_Preview:"
 msgstr "ପୂର୍ବାବଲୋକନ: (_P)"
 
-#: gtk/gtkfontsel.c:1580
+#: gtk/gtkfontsel.c:1542
 msgid "Font Selection"
 msgstr "ଅକ୍ଷରରୂପ ଚୟନ"
 
@@ -2052,7 +2052,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "'%s' ଚିତ୍ରସଙ୍କେତ ପ୍ରସଙ୍ଗରେ ଅବସ୍ଥିତ ନାହିଁ"
 
-#: gtk/gtkicontheme.c:3052
+#: gtk/gtkicontheme.c:3058
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "TIFF ଚିତ୍ର ଧାରଣ କରିବାରେ ଅସଫଳ"
@@ -2145,19 +2145,11 @@ msgstr "(ଅଜଣା)"
 msgid "Cl_ear"
 msgstr "ସଫା କରନ୍ତୁ (_e)"
 
-#: gtk/gtklinkbutton.c:144
-msgid "URI"
-msgstr "ୟୁ.ଆର.ଆଇ."
-
-#: gtk/gtklinkbutton.c:145
-msgid "The URI bound to this button"
-msgstr "ଏହି ବଟନ ସହିତ ୟୁ.ଆର.ଆଇ. ଟି ସଂଯୁକ୍ତ"
-
-#: gtk/gtklinkbutton.c:402
+#: gtk/gtklinkbutton.c:427
 msgid "Copy URL"
 msgstr "ୟୁ.ଆର.ଏଲ. କୁ ନକଲ କରନ୍ତୁ"
 
-#: gtk/gtklinkbutton.c:542
+#: gtk/gtklinkbutton.c:565
 msgid "Invalid URI"
 msgstr "ଅବୈଧ ୟୁ.ଆର.ଆଇ."
 
@@ -2237,26 +2229,18 @@ msgid "_Password:"
 msgstr "ଚାପ (_P):"
 
 #: gtk/gtkmountoperation.c:590
-msgid "_Forget password immediately"
+msgid "Forget password _immediately"
 msgstr ""
 
 #: gtk/gtkmountoperation.c:598
-msgid "_Remember password until you logout"
+msgid "Remember password until you _logout"
 msgstr ""
 
 #: gtk/gtkmountoperation.c:606
-msgid "_Remember forever"
+msgid "Remember _forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:834
-msgid "Arrow spacing"
-msgstr "ତୀର ସ୍ଥାନ"
-
-#: gtk/gtknotebook.c:835
-msgid "Scroll arrow spacing"
-msgstr "ତୀର ସ୍ଥାନକୁ ସ୍କ୍ରୋଲ କରନ୍ତୁ"
-
-#: gtk/gtknotebook.c:4425 gtk/gtknotebook.c:6931
+#: gtk/gtknotebook.c:4424 gtk/gtknotebook.c:6930
 #, c-format
 msgid "Page %u"
 msgstr "ପୃଷ୍ଠା %u"
@@ -2322,7 +2306,7 @@ msgstr "କାଗଜର ଆକାର (_P):"
 msgid "_Orientation:"
 msgstr "ଅନୁସ୍ଥାପନ (_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2398
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2397
 msgid "Page Setup"
 msgstr "ପୃଷ୍ଠା ବ୍ଯବସ୍ଥାପନ"
 
@@ -2379,7 +2363,7 @@ msgstr ""
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1464
+#: gtk/gtkpathbar.c:1472
 #, fuzzy
 msgid "File System Root"
 msgstr "ଫାଇଲ ତନ୍ତ୍ର"
@@ -2493,8 +2477,9 @@ msgstr "ମୂଦ୍ରଣୀ ଅଫ-ଲାଇନ"
 msgid "Out of paper"
 msgstr "କାଗଜ ବାହାରେ"
 
+#. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1373
+#: modules/printbackends/cups/gtkprintbackendcups.c:1375
 msgid "Paused"
 msgstr "ସାମୟିକ ବିରାମ ନେଉଛି"
 
@@ -2541,190 +2526,182 @@ msgstr "PrintDlgEx ପାଇଁ ଅବୈଧ ନିୟନ୍ତ୍ରକ"
 msgid "Unspecified error"
 msgstr "ଅନିର୍ଦ୍ଦିଷ୍ଟ ତୃଟି"
 
-#: gtk/gtkprintunixdialog.c:1717
+#: gtk/gtkprintunixdialog.c:1716
 msgid "Printer"
 msgstr "ମୁଦ୍ରଣୀ"
 
-#: gtk/gtkprintunixdialog.c:1726
+#: gtk/gtkprintunixdialog.c:1725
 msgid "Location"
 msgstr "ଅବସ୍ଥାନ"
 
-#: gtk/gtkprintunixdialog.c:1736
+#: gtk/gtkprintunixdialog.c:1735
 msgid "Status"
 msgstr "ସ୍ଥିତି"
 
-#: gtk/gtkprintunixdialog.c:1759
+#: gtk/gtkprintunixdialog.c:1758
 #, fuzzy
 msgid "Range"
 msgstr "ପରିସର (_n):"
 
-#: gtk/gtkprintunixdialog.c:1763
+#: gtk/gtkprintunixdialog.c:1762
 #, fuzzy
 msgid "_All Pages"
 msgstr "ସମସ୍ତ ସୀଟ"
 
-#: gtk/gtkprintunixdialog.c:1770
+#: gtk/gtkprintunixdialog.c:1769
 #, fuzzy
 msgid "C_urrent Page"
 msgstr "ବର୍ତମାନ (_u)"
 
-#: gtk/gtkprintunixdialog.c:1779
+#: gtk/gtkprintunixdialog.c:1778
 #, fuzzy
 msgid "Pag_es:"
 msgstr "ସ୍ଥାନ"
 
-#: gtk/gtkprintunixdialog.c:1780
+#: gtk/gtkprintunixdialog.c:1779
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1799
+#: gtk/gtkprintunixdialog.c:1798
 msgid "Copies"
 msgstr "ପ୍ରତିଲିପି"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1804
+#: gtk/gtkprintunixdialog.c:1803
 msgid "Copie_s:"
 msgstr "ପ୍ରତିଲିପି (_s):"
 
-#: gtk/gtkprintunixdialog.c:1822
+#: gtk/gtkprintunixdialog.c:1821
 msgid "C_ollate"
 msgstr "ତୁଳନା କରନ୍ତୁ (_o)"
 
-#: gtk/gtkprintunixdialog.c:1830
+#: gtk/gtkprintunixdialog.c:1829
 msgid "_Reverse"
 msgstr "ପ୍ରତ୍ଯାବୃତ କରନ୍ତୁ (_R)"
 
-#: gtk/gtkprintunixdialog.c:1850
+#: gtk/gtkprintunixdialog.c:1849
 msgid "General"
 msgstr "ସାମାନ୍ଯ"
 
-#: gtk/gtkprintunixdialog.c:2253
+#: gtk/gtkprintunixdialog.c:2252
 msgid "Layout"
 msgstr "ବିନ୍ଯାସ"
 
-#: gtk/gtkprintunixdialog.c:2257
+#: gtk/gtkprintunixdialog.c:2256
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "ପୃଷ୍ଠା ପ୍ରତି ସୀଟରେ (_s):"
 
-#: gtk/gtkprintunixdialog.c:2273
+#: gtk/gtkprintunixdialog.c:2272
 msgid "T_wo-sided:"
 msgstr "ଉଭୟ ପାର୍ଶ୍ବ (_w):"
 
-#: gtk/gtkprintunixdialog.c:2288
+#: gtk/gtkprintunixdialog.c:2287
 msgid "_Only print:"
 msgstr "କେବଳ ମୁଦ୍ରଣ କରନ୍ତୁ (_O):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2303
+#: gtk/gtkprintunixdialog.c:2302
 msgid "All sheets"
 msgstr "ସମସ୍ତ ସୀଟ"
 
-#: gtk/gtkprintunixdialog.c:2304
+#: gtk/gtkprintunixdialog.c:2303
 msgid "Even sheets"
 msgstr "ଯୁଗ୍ମ ଅଙ୍କ ବିଶିଷ୍ଟ ସୀଟ୍ସ"
 
-#: gtk/gtkprintunixdialog.c:2305
+#: gtk/gtkprintunixdialog.c:2304
 msgid "Odd sheets"
 msgstr "ଅଯୁଗ୍ମ ଅଙ୍କ ବିଶିଷ୍ଟ ସୀଟ୍ସ"
 
-#: gtk/gtkprintunixdialog.c:2308
+#: gtk/gtkprintunixdialog.c:2307
 msgid "Sc_ale:"
 msgstr "ମାପନ୍ତୁ (_a):"
 
-#: gtk/gtkprintunixdialog.c:2335
+#: gtk/gtkprintunixdialog.c:2334
 msgid "Paper"
 msgstr "କାଗଜ"
 
-#: gtk/gtkprintunixdialog.c:2339
+#: gtk/gtkprintunixdialog.c:2338
 msgid "Paper _type:"
 msgstr "କାଗଜର ପ୍ରକାର (_t):"
 
-#: gtk/gtkprintunixdialog.c:2354
+#: gtk/gtkprintunixdialog.c:2353
 msgid "Paper _source:"
 msgstr "କାଗଜର ଉତ୍ସ (_s):"
 
-#: gtk/gtkprintunixdialog.c:2369
+#: gtk/gtkprintunixdialog.c:2368
 msgid "Output t_ray:"
 msgstr "ନିର୍ଗମ ଟ୍ରେ (_r):"
 
-#: gtk/gtkprintunixdialog.c:2421
+#: gtk/gtkprintunixdialog.c:2420
 msgid "Job Details"
 msgstr "କାର୍ଯ୍ଯର ବିସ୍ତ୍ରୁତ ବିବରଣୀ"
 
-#: gtk/gtkprintunixdialog.c:2427
+#: gtk/gtkprintunixdialog.c:2426
 msgid "Pri_ority:"
 msgstr "ଅଗ୍ରାଧିକାର"
 
-#: gtk/gtkprintunixdialog.c:2442
+#: gtk/gtkprintunixdialog.c:2441
 msgid "_Billing info:"
 msgstr "ବିଲି ସମ୍ବନ୍ଧୀୟ ସୂଚନା (_B):"
 
-#: gtk/gtkprintunixdialog.c:2460
+#: gtk/gtkprintunixdialog.c:2459
 msgid "Print Document"
 msgstr "ଦଲିଲକୁ ମୂଦ୍ରଣ କରନ୍ତୁ"
 
-#: gtk/gtkprintunixdialog.c:2466
+#: gtk/gtkprintunixdialog.c:2465
 msgid "_Now"
 msgstr "ବର୍ତମାନ (_N)"
 
-#: gtk/gtkprintunixdialog.c:2473
+#: gtk/gtkprintunixdialog.c:2472
 msgid "A_t:"
 msgstr "ସେହିଠାରେ (_t):"
 
-#: gtk/gtkprintunixdialog.c:2488
+#: gtk/gtkprintunixdialog.c:2487
 msgid "On _hold"
 msgstr "ଆୟତ୍ତ ରେ (_h)"
 
-#: gtk/gtkprintunixdialog.c:2507
+#: gtk/gtkprintunixdialog.c:2506
 msgid "Add Cover Page"
 msgstr "ଉପର ପୃଷ୍ଠାକୁ ସଂଯୋଗ କରନ୍ତୁ"
 
-#: gtk/gtkprintunixdialog.c:2513
+#: gtk/gtkprintunixdialog.c:2512
 msgid "Be_fore:"
 msgstr "ଏହା ପୂର୍ବରୁ (_f):"
 
-#: gtk/gtkprintunixdialog.c:2528
+#: gtk/gtkprintunixdialog.c:2527
 msgid "_After:"
 msgstr "ଏହା ପରେ (_A):"
 
-#: gtk/gtkprintunixdialog.c:2543
+#: gtk/gtkprintunixdialog.c:2542
 msgid "Job"
 msgstr "କାର୍ଯ୍ଯ"
 
-#: gtk/gtkprintunixdialog.c:2609
+#: gtk/gtkprintunixdialog.c:2608
 msgid "Advanced"
 msgstr "ଉନ୍ନତ"
 
-#: gtk/gtkprintunixdialog.c:2644
+#: gtk/gtkprintunixdialog.c:2643
 msgid "Image Quality"
 msgstr "ପ୍ରତିଛବି ଗୁଣବତ୍ତା"
 
-#: gtk/gtkprintunixdialog.c:2647
+#: gtk/gtkprintunixdialog.c:2646
 msgid "Color"
 msgstr "ରଙ୍ଗ"
 
-#: gtk/gtkprintunixdialog.c:2650
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Finishing"
 msgstr "ସମ୍ପନ୍ନ କରୁଅଛି"
 
-#: gtk/gtkprintunixdialog.c:2660
+#: gtk/gtkprintunixdialog.c:2659
 msgid "Some of the settings in the dialog conflict"
 msgstr "ସଂଳାପ ବିରୋଧରେ କିଛି ବିନ୍ଯାସ"
 
-#: gtk/gtkprintunixdialog.c:2683
+#: gtk/gtkprintunixdialog.c:2682
 msgid "Print"
 msgstr "ମୁଦ୍ରଣ କରନ୍ତୁ"
-
-#: gtk/gtkradiotoolbutton.c:65
-msgid "Group"
-msgstr "ସମୂହ"
-
-#: gtk/gtkradiotoolbutton.c:66
-msgid "The radio tool button whose group this button belongs to."
-msgstr "ରେଡିଓ ଉପକରଣ ଚାବି ଯାହା ସମୂହରୁ ଏହି ଚାବିଟି ଆସିଛି."
 
 #: gtk/gtkrc.c:2872
 #, c-format
@@ -2746,36 +2723,36 @@ msgstr "'%s' ଶ୍ରେଣୀର ୱିଜେଟଟ ପାଇଁ ଏହି ପ
 msgid "Select which type of documents are shown"
 msgstr "କେଉଁ ପ୍ରକାରର ଦଲିଲ ମାନଙ୍କୁ ପ୍ରଦର୍ଶନ କରାଯାଇଛି ତାହାକୁ ବାଛନ୍ତୁ"
 
-#: gtk/gtkrecentchooserdefault.c:1096 gtk/gtkrecentchooserdefault.c:1133
+#: gtk/gtkrecentchooserdefault.c:1095 gtk/gtkrecentchooserdefault.c:1132
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "'%s' ୟୁ.ଆର.ଆଇ. ପାଇଁ କୌଣସି ବସ୍ତୁ ମିଳିଲା ନାହିଁ"
 
-#: gtk/gtkrecentchooserdefault.c:1260
+#: gtk/gtkrecentchooserdefault.c:1259
 msgid "Untitled filter"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1613
+#: gtk/gtkrecentchooserdefault.c:1612
 msgid "Could not remove item"
 msgstr "ବସ୍ତୁକୁ ଅପସାରିତ ହେଲା ନାହିଁ"
 
-#: gtk/gtkrecentchooserdefault.c:1656
+#: gtk/gtkrecentchooserdefault.c:1655
 msgid "Could not clear list"
 msgstr "ତାଲିକାକୁ ସଫା କରିହେଲା ନାହିଁ"
 
-#: gtk/gtkrecentchooserdefault.c:1740
+#: gtk/gtkrecentchooserdefault.c:1739
 msgid "Copy _Location"
 msgstr "ଅବସ୍ଥାନକୁ ନକଲ କରନ୍ତୁ (_L)"
 
-#: gtk/gtkrecentchooserdefault.c:1753
+#: gtk/gtkrecentchooserdefault.c:1752
 msgid "_Remove From List"
 msgstr "ତାଲିକାରୁ ବାହାର କରି ଦିଅନ୍ତୁ (_R)"
 
-#: gtk/gtkrecentchooserdefault.c:1762
+#: gtk/gtkrecentchooserdefault.c:1761
 msgid "_Clear List"
 msgstr "ତାଲିକାକୁ ସଫା କରନ୍ତୁ (_C)"
 
-#: gtk/gtkrecentchooserdefault.c:1776
+#: gtk/gtkrecentchooserdefault.c:1775
 msgid "Show _Private Resources"
 msgstr "ବ୍ଯକ୍ତିଗତ ସମ୍ବଳ ଗୁଡିକୁ ଦେଖାନ୍ତୁ (_P)"
 
@@ -2829,10 +2806,10 @@ msgstr ""
 msgid "recent menu label|%d. %s"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:1012 gtk/gtkrecentmanager.c:1025
-#: gtk/gtkrecentmanager.c:1163 gtk/gtkrecentmanager.c:1173
-#: gtk/gtkrecentmanager.c:1226 gtk/gtkrecentmanager.c:1235
-#: gtk/gtkrecentmanager.c:1250
+#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
+#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
+#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
+#: gtk/gtkrecentmanager.c:1258
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "\"%s\" ୟୁ.ଆର.ଆଇ. ବିଶିଷ୍ଟ ଗୋଟିଏ ବସ୍ତୁକୁ ଖୋଜି ପାରିଲା ନାହିଁ"
@@ -4503,92 +4480,96 @@ msgstr ""
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1371
+#. Translators: this is a printer status.
+#: modules/printbackends/cups/gtkprintbackendcups.c:1372
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1375
+#. Translators: this is a printer status.
+#: modules/printbackends/cups/gtkprintbackendcups.c:1378
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1996
+#: modules/printbackends/cups/gtkprintbackendcups.c:1999
 msgid "Two Sided"
 msgstr "ଉଭୟ ପାର୍ଶ୍ବ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1997
+#: modules/printbackends/cups/gtkprintbackendcups.c:2000
 msgid "Paper Type"
 msgstr "କାଗଜର ପ୍ରକାର"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1998
+#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Paper Source"
 msgstr "କାଗଜ ଉତ୍ସ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1999
+#: modules/printbackends/cups/gtkprintbackendcups.c:2002
 msgid "Output Tray"
 msgstr "ନିର୍ଗମ ଟ୍ରେ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2008
+#: modules/printbackends/cups/gtkprintbackendcups.c:2011
 msgid "One Sided"
 msgstr "ଗୋଟିଏ ପାଖ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2009
-#: modules/printbackends/cups/gtkprintbackendcups.c:2010
-#: modules/printbackends/cups/gtkprintbackendcups.c:2014
+#. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2013
+#: modules/printbackends/cups/gtkprintbackendcups.c:2015
+#: modules/printbackends/cups/gtkprintbackendcups.c:2023
 msgid "Auto Select"
 msgstr "ସ୍ବତଃ ଚୟନ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2011
-#: modules/printbackends/cups/gtkprintbackendcups.c:2012
-#: modules/printbackends/cups/gtkprintbackendcups.c:2013
-#: modules/printbackends/cups/gtkprintbackendcups.c:2483
+#. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2017
+#: modules/printbackends/cups/gtkprintbackendcups.c:2019
+#: modules/printbackends/cups/gtkprintbackendcups.c:2021
+#: modules/printbackends/cups/gtkprintbackendcups.c:2492
 msgid "Printer Default"
 msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ମୂଦ୍ରଣୀ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Urgent"
 msgstr "ଜରୁରୀ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "High"
 msgstr "ଉଚ୍ଚ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Medium"
 msgstr "ମଧ୍ଯମ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2677
+#: modules/printbackends/cups/gtkprintbackendcups.c:2686
 msgid "Low"
 msgstr "ନିମ୍ନ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "None"
 msgstr "(କିଛି ନୁହେଁ)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Classified"
 msgstr "ବର୍ଗୀକୃତ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Confidential"
 msgstr "ଗୋପନୀୟ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Secret"
 msgstr "ଗୁପ୍ତ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Standard"
 msgstr "ମାନକ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Top Secret"
 msgstr "ଅତ୍ଯନ୍ତ ଗୋପନୀୟ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2718
+#: modules/printbackends/cups/gtkprintbackendcups.c:2727
 msgid "Unclassified"
 msgstr "ଅବର୍ଗୀକୃତ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2817
+#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "ଆକାରକୁ ଇଚ୍ଛାରୂପଣ କରନ୍ତୁ"
@@ -4651,6 +4632,24 @@ msgstr "ଫାଇଲରେ ମୁଦ୍ରଣ କରନ୍ତୁ (_P)"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' ଫାଇଲ ପାଇଁ ସୂଚନା ଆଣିହେଲା ନାହିଁ: %s"
+
+#~ msgid "URI"
+#~ msgstr "ୟୁ.ଆର.ଆଇ."
+
+#~ msgid "The URI bound to this button"
+#~ msgstr "ଏହି ବଟନ ସହିତ ୟୁ.ଆର.ଆଇ. ଟି ସଂଯୁକ୍ତ"
+
+#~ msgid "Arrow spacing"
+#~ msgstr "ତୀର ସ୍ଥାନ"
+
+#~ msgid "Scroll arrow spacing"
+#~ msgstr "ତୀର ସ୍ଥାନକୁ ସ୍କ୍ରୋଲ କରନ୍ତୁ"
+
+#~ msgid "Group"
+#~ msgstr "ସମୂହ"
+
+#~ msgid "The radio tool button whose group this button belongs to."
+#~ msgstr "ରେଡିଓ ଉପକରଣ ଚାବି ଯାହା ସମୂହରୁ ଏହି ଚାବିଟି ଆସିଛି."
 
 #~ msgid "Invalid filename: %s"
 #~ msgstr "ଅବୈଧ ଫାଇଲ ନାମ: %s"

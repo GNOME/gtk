@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2007-08-07 23:05+0100\n"
 "Last-Translator: wadim dziedzic <wdziedzi@aviary.pl>\n"
 "Language-Team: Polish <translators@gnomepl.org>\n"
@@ -854,7 +854,7 @@ msgstr "Wyrównanie poziome potomka"
 msgid "Vertical alignment for child"
 msgstr "Wyrównanie pionowe potomka"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Kontrolka obrazu"
 
@@ -945,8 +945,9 @@ msgid "Show button images"
 msgstr "Wyświetlanie obrazów przycisków"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Określa czy powinny być wyświetlane ikony w przyciskach"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Określa czy w menu powinny być wyświetlane obrazy"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2054,7 +2055,7 @@ msgstr "Rozmiar strzałki"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Minimalny rozmiar strzałki menu rozwijalnego"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2700,7 +2701,7 @@ msgstr "Pionowe wyrównanie etykiety"
 msgid "The vertical alignment of the label"
 msgstr "Wyrównanie pionowe etykiety"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Przestarzała własność, użyj zamiast tego shadow_type"
 
@@ -2716,34 +2717,34 @@ msgstr "Wygląd krawędzi ramki"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Kontrolka wyświetlana w miejscu zwykłej etykiety ramki"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Wygląd cienia otaczającego kontener"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Położenie uchwytu"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Położenie uchwytu względem kontrolki potomnej"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Przyciągana krawędź"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr ""
 "Strona skrzynki z uchwytem, która powinna być połączona z punktem dokowania"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Przyciąganie do krawędzi"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2751,11 +2752,11 @@ msgstr ""
 "Określa czy powinna być użyta wartość snap_edge czy też pochodząca z "
 "handle_position"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2960,15 +2961,15 @@ msgstr "Sposób zapisu"
 msgid "The representation being used for image data"
 msgstr "Sposób zapisu danych obrazu"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Kontrolka potomna, występująca po napisie pozycji menu"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Wyświetlanie obrazów menu"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Określa czy w menu powinny być wyświetlane obrazy"
 
@@ -3116,6 +3117,25 @@ msgstr "Szerokość układu"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "Wysokość układu"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "Stan przełączenia przycisku"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Widoczność"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Określa czy operacja jest widoczna."
 
 #: gtk/gtkmenu.c:503
 #, fuzzy
@@ -3581,7 +3601,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "ID grupy dla przeciągania i upuszczania kart"
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Grupa"
 
@@ -3695,6 +3715,16 @@ msgstr "Krzywizna zakładki"
 #: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "Rozmiar krzywizny zakładki"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Skalowanie strzałek"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Odstępy paska przewijania"
 
 #: gtk/gtkobject.c:370
 msgid "User Data"
@@ -4244,6 +4274,14 @@ msgstr "Grupa, do której należy ten kontrolka przycisku radiowego."
 #: gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "Do której grupy przycisku radio należy ta kontrolka."
+
+# Wydaje mi się, że w tym bełkotliwym nieco zdaniu
+# chodzi o to, do której grupy należy ów przycisk radiowy,
+# bo takowe przyciski mają sesn tylko jak są w grupie
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Grupa, do której należy ten kontrolka przycisku radiowego."
 
 #: gtk/gtkrange.c:337
 msgid "Update policy"
@@ -7026,6 +7064,9 @@ msgstr "Styl stanu metody wejściowej"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Sposób rysowania paska stanu metody wejściowej"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Określa czy powinny być wyświetlane ikony w przyciskach"
 
 #~ msgid "Cancelled"
 #~ msgstr "Przerwano"

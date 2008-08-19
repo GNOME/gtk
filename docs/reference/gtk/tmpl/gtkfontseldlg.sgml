@@ -107,3 +107,30 @@ Sets the text displayed in the preview area.
 @text: the text to display in the preview area.
 
 
+<!-- ##### FUNCTION gtk_font_selection_dialog_get_apply_button ##### -->
+<para>
+
+</para>
+
+@fsd: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_get_cancel_button ##### -->
+<para>
+
+</para>
+
+@fsd: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_get_ok_button ##### -->
+<para>
+
+</para>
+
+@fsd: 
+@Returns: 
+
+

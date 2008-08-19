@@ -51,6 +51,11 @@ manipulated using the functions below.
 
 </para>
 
+<!-- ##### ARG GtkLinkButton:visited ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_link_button_new ##### -->
 <para>
 

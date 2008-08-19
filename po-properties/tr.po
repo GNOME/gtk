@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2007-08-07 03:17+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -927,7 +927,7 @@ msgid "Vertical alignment for child"
 msgstr "Alt için düşey hizalama"
 
 # gtk/gtkimagemenuitem.c:124
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Resim parçası"
 
@@ -1025,8 +1025,9 @@ msgstr "Düğme resimlerini göster"
 
 # gtk/gtknotebook.c:369
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Depo simgelerinin düğmeler için gösterilmesi"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Menülerde resimlerin gösterilmesi"
 
 # gtk/gtkinputdialog.c:662
 #: gtk/gtkcalendar.c:440
@@ -2321,7 +2322,7 @@ msgstr "Çoklu kutucuğun içindeki okun asgari boyutu"
 
 # gtk/gtkhandlebox.c:183 gtk/gtkmenubar.c:154 gtk/gtkstatusbar.c:157
 # gtk/gtktoolbar.c:276 gtk/gtkviewport.c:147
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -3043,7 +3044,7 @@ msgstr "Etiket yhiza"
 msgid "The vertical alignment of the label"
 msgstr "Etiketin düşey hizalaması"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Özellik artık kullanılmıyor, yerine shadow_type kullanın"
 
@@ -3063,37 +3064,37 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Çerçeve etiketinin yerinde gösterilecek parça"
 
 # gtk/gtkhandlebox.c:184
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Taşıyıcıyı kuşatan gölgenin görünüşü"
 
 # gtk/gtkhandlebox.c:192
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Tutaç konumu"
 
 # gtk/gtkhandlebox.c:193
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Alt parçaya göre tutaç konumu"
 
 # gtk/gtkhandlebox.c:201
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Yakalama kenarı"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr "Tutaç kutunun bağlanma noktası ile sıralanmış kenarı"
 
 # gtk/gtkhandlebox.c:201
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Yakalama kenarı ayarı"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -3101,11 +3102,11 @@ msgstr ""
 "snap_edge özelliğinden veya handle_position özelliğinden türetilmiş "
 "değerlerin kullanılması"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -3338,16 +3339,16 @@ msgid "The representation being used for image data"
 msgstr "Resim verisi için kullanılan sunum"
 
 # gtk/gtkimagemenuitem.c:125
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Menü metninden sonra görünecek alt parçası"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Menü resimlerini göster"
 
 # gtk/gtknotebook.c:369
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Menülerde resimlerin gösterilmesi"
 
@@ -3511,6 +3512,28 @@ msgstr "Düzenin genişliği"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "Düzenin yüksekliği"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+# gtk/gtkcellrenderertoggle.c:128
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "Düğmenin seçim durumu"
+
+# gtk/gtktreeview.c:481 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:442
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Görünür"
+
+# gtk/gtkwidget.c:443
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Eylemin görünür olup olmaması."
 
 # gtk/gtkfilesel.c:503
 #: gtk/gtkmenu.c:503
@@ -4028,7 +4051,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "Sekme sürükle ve bırak için grup kimliği"
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Grup"
 
@@ -4153,6 +4176,18 @@ msgstr "Sekme eğriltmesi"
 #: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "Sekme eğriltmesinin boyutu"
+
+# gtk/gtktable.c:174
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Ok Ölçeği"
+
+# gtk/gtktable.c:183
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Kaydırma çubuğu boşluğu"
 
 # gtk/gtklabel.c:212
 #: gtk/gtkobject.c:370
@@ -4750,6 +4785,11 @@ msgstr "Bu parçanın ait olduğu grubun radyo düğmesi."
 #: gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "Bu parçanın ait olduğu grubun radyo menü öğesi."
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
+msgstr "Bu parçanın ait olduğu grubun radyo düğmesi."
 
 # gtk/gtkrange.c:256
 #: gtk/gtkrange.c:337
@@ -7864,6 +7904,10 @@ msgstr "IM Durum biçemi"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Girdi yöntemi durum çubuğunun nasıl çizileceği"
+
+# gtk/gtknotebook.c:369
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Depo simgelerinin düğmeler için gösterilmesi"
 
 #~ msgid "Cancelled"
 #~ msgstr "İptal edilmiş"

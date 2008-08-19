@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -941,7 +941,7 @@ msgid "Vertical alignment for child"
 msgstr "Хүүгийн босоо зэрэгцүүлэлт "
 
 # gtk/gtkimagemenuitem.c:124
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Зурган элемент"
 
@@ -1040,8 +1040,9 @@ msgstr "Товчны зургууд харуулах"
 
 # gtk/gtknotebook.c:407
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Товчинд эмблем зураг харуулах эсэх"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Зургууд товчинд харуулах эсэх"
 
 # gtk/gtkinputdialog.c:667
 #: gtk/gtkcalendar.c:440
@@ -2314,7 +2315,7 @@ msgstr "Комбобоксын загвар"
 
 # gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:151 gtk/gtkstatusbar.c:158
 # gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -3025,7 +3026,7 @@ msgstr "Y-ийн дагуу жигдрүүлэлт."
 msgid "The vertical alignment of the label"
 msgstr "Нэрний босоо жигдрүүлэлт."
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "shadow_type хэрэглэхийн оронд шинж чанарын эсрэг."
 
@@ -3043,24 +3044,24 @@ msgstr "Кадрын хүрээний төрх."
 msgid "A widget to display in place of the usual frame label"
 msgstr "Энгийн кадрын нэрийн газарт удирдлагын элементийг харуулах."
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Сүүдрийн харагдах байдал, агуулагчийн хүрээ."
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Заагчийн байрлал"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Дэд удирдлагын элементтэй харьцангуй заагчийн байрлал."
 
 # gtk/gtkhandlebox.c:210
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Захыг тэнцүүлэх"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -3068,22 +3069,22 @@ msgstr ""
 "Барих цонхыг ухаж гаргаж ирэх барих цонхны агшаах цэгээр сүвлэгдсэн тал"
 
 # gtk/gtkhandlebox.c:210
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Захыг тэнцүүлэх"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr ""
 "snap_edge онцлогийг эсвэл тодорхойлогчийн байрлалаас өвлөсөн утгыг хэрэглэх"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -3334,16 +3335,16 @@ msgstr "Хадгалах төрөл"
 msgid "The representation being used for image data"
 msgstr "Зургийн өгөгдөлд хэрэглэгдэж байгаа дүрслэл."
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Цэсийн текстийн хажууд гарах удирдлагын дэд элемент."
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Цэсний зургуудыг харуулах"
 
 # gtk/gtknotebook.c:407
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Зургууд товчинд харуулах эсэх"
 
@@ -3498,6 +3499,28 @@ msgstr "Байрлалын өргөн"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "Байрлалын өндөр"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+# gtk/gtkcellrenderertoggle.c:131
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "Шилжилтийг идэвхжүүлэгч товчны төлөв "
+
+# gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Харагдхуйц"
+
+# gtk/gtkwidget.c:424
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Үйлдэл харагдахуйц эсэх."
 
 # gtk/gtkfilesel.c:537
 #: gtk/gtkmenu.c:503
@@ -4017,7 +4040,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr ""
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Бүлэг"
 
@@ -4142,6 +4165,18 @@ msgstr ""
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Зай авагчийн хэмжээ"
+
+# gtk/gtktable.c:174
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Мөрийн хэмжээ"
+
+# gtk/gtktable.c:183
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Дэлгэц гүйлгэгчийн завсар"
 
 # gtk/gtklabel.c:294
 #: gtk/gtkobject.c:370
@@ -4752,6 +4787,11 @@ msgstr "Энэ үзэмжид тэдгээр радио товчинууд ха�
 #: gtk/gtkradiomenuitem.c:343
 #, fuzzy
 msgid "The radio menu item whose group this widget belongs to."
+msgstr "Энэ үзэмжид тэдгээр радио товчинууд харъяалагдана."
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
 msgstr "Энэ үзэмжид тэдгээр радио товчинууд харъяалагдана."
 
 # gtk/gtkrange.c:273
@@ -7807,6 +7847,10 @@ msgstr "IM төлөвийн хэлбэр"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Төлөвийн самбарыг оруулах аргыг хэрхэн үзүүлэх"
+
+# gtk/gtknotebook.c:407
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Товчинд эмблем зураг харуулах эсэх"
 
 # gtk/gtkprogress.c:139
 #~ msgid ""

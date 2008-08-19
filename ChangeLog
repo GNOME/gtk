@@ -1,3 +1,7 @@
+2008-08-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* ==== Released 2.13.7 ===
+
 2008-08-19  Mathias Hasselmann  <mathias@openismus.com>
 
 	Bug 541600 – GtkCalendar segfault for certain values of detail-with-chars

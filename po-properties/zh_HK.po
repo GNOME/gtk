@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.13.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2008-08-05 20:22+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
@@ -802,7 +802,7 @@ msgstr "子元件水平對齊"
 msgid "Vertical alignment for child"
 msgstr "子元件垂直對齊位置"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "圖像元件"
 
@@ -885,8 +885,9 @@ msgid "Show button images"
 msgstr "顯示按鈕圖示"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "內置圖示應否顯示於按鈕內"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "應否在選單項目中顯示圖示"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -1949,7 +1950,7 @@ msgstr "箭頭大小"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "組合方塊中箭頭的最小尺寸"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2551,7 +2552,7 @@ msgstr "標籤垂直位置"
 msgid "The vertical alignment of the label"
 msgstr "標籤的垂直位置"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "本屬性已經過時，請使用 shadow_type 代替"
 
@@ -2567,43 +2568,43 @@ msgstr "框架的邊緣外觀"
 msgid "A widget to display in place of the usual frame label"
 msgstr "用來替代原本框架文字標籤的視窗元件"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "容器元件周圍的陰影的外觀"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "控制項位置"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "相對於子元件的控制項位置"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "貼齊邊緣"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr "控制方塊的側邊與置入該方塊的置入點自動貼齊"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "貼齊邊緣設定"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr "是否根據 snap_edge 屬性，或採用 handle_position 的設定值"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr "子項目已分離"
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2806,15 +2807,15 @@ msgstr "儲存種類"
 msgid "The representation being used for image data"
 msgstr "圖片資料所使用的資料代表"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "選單文字旁邊顯示的子元件"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "顯示選單圖示"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "應否在選單項目中顯示圖示"
 
@@ -2950,6 +2951,25 @@ msgstr "佈置元件闊度"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "佈置元件高度"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "按鈕的切換狀態"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "可見的"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "本指令是否為可見。"
 
 #: gtk/gtkmenu.c:503
 msgid "The currently selected menu item"
@@ -3388,7 +3408,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "用於分頁拖放的羣組 ID"
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "羣組"
 
@@ -3497,6 +3517,16 @@ msgstr "分頁曲率"
 #: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "分頁曲率的大小"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "箭頭縮放"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "捲動列間隔"
 
 #: gtk/gtkobject.c:370
 msgid "User Data"
@@ -4005,6 +4035,11 @@ msgstr "此元件所屬的單選按鈕羣組。"
 #: gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "此元件所屬的單選選單羣組。"
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
+msgstr "此元件所屬的單選按鈕羣組。"
 
 #: gtk/gtkrange.c:337
 msgid "Update policy"
@@ -6624,6 +6659,9 @@ msgstr "輸入法狀態的式樣"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "如何顯示輸入法的狀態列"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "內置圖示應否顯示於按鈕內"
 
 #~ msgid "How long to show the last inputted character in hidden entries"
 #~ msgstr "在隱藏項目中顯示上次輸入字元多久的時間"

@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2004-03-07 18:05+0200\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
 "Language-Team: Azerbaijani Turkish <translation-team-az@lists.sourceforge."
@@ -869,7 +869,7 @@ msgstr "Törəmənin üfüqi səviyyələməsi"
 msgid "Vertical alignment for child"
 msgstr "Törəmənin şaquli səviyyələməsi"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Rəsm pəncərəciyi"
 
@@ -961,8 +961,9 @@ msgid "Show button images"
 msgstr "Düymə rəsmlərini göstər"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Düymələrdə stik timsalların göstəriləcəyi"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Menyularda rəsmlərin göstərilməsi"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2080,7 +2081,7 @@ msgstr "Oxun istiqaməti"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Kombo qutusunun modeli"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2703,7 +2704,7 @@ msgstr "Etiket y tərəfləməsi."
 msgid "The vertical alignment of the label"
 msgstr "Etiketin şaquli tərəfləməsi"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Artıq istifadə edilməyən giriş, onun yerinə shadow_type işlədin"
 
@@ -2719,23 +2720,23 @@ msgstr "Çərçivə kənarının görünüşü"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Çərçivənin etiketinin həmişəki yerində göstəriləcək pəncərəcik"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Daşıyıcı ətrafındakı kölgə görünüşü"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Qulp yeri"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Törəmə pəncərəciyinə nəzarən qulpun yeri"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Kənarı çaxnaşdır"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -2743,22 +2744,22 @@ msgstr ""
 "Qulp qutusunu yapışdırmaq üçün yapışma nöqtəsi ilə sıralanmış qulp qutusunun "
 "böyüklüyü"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Kənarı çaxnaşdır"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr ""
 "snap_edge yoxsa handle_position xassələrindən alınan dəyərlərin işlədiləcəyi"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2982,15 +2983,15 @@ msgstr "Qövs növü"
 msgid "The representation being used for image data"
 msgstr "Rəsm verilənləri üçün istifadə ediləcək təmsil"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Menyu mətninin yanında göstəriləcək törəmə pəncərəcik"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Menyu rəsmlərini göstər"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Menyularda rəsmlərin göstərilməsi"
 
@@ -3132,6 +3133,25 @@ msgstr "Düzülüş eni"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "Düzülüş hündürlüyü"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "Düymənin Açma/Qapama halı."
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Görünən"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Gedişatın görünməsi"
 
 #: gtk/gtkmenu.c:503
 #, fuzzy
@@ -3615,7 +3635,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr ""
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Qrup"
 
@@ -3735,6 +3755,16 @@ msgstr ""
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Aralandırıcıların böyüklüyü"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Sətir aralığı"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Sürüşmə çubuğu boşluğu"
 
 #: gtk/gtkobject.c:370
 #, fuzzy
@@ -4299,6 +4329,11 @@ msgstr "Bu pəncərəciyin ait olduğu qərar düyməsi qrupu"
 #: gtk/gtkradiomenuitem.c:343
 #, fuzzy
 msgid "The radio menu item whose group this widget belongs to."
+msgstr "Bu pəncərəciyin ait olduğu qərar düyməsi qrupu"
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
 msgstr "Bu pəncərəciyin ait olduğu qərar düyməsi qrupu"
 
 #: gtk/gtkrange.c:337
@@ -7108,6 +7143,9 @@ msgstr "IM Vəziyyət tərzi"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Vasitə çubuğunun göstərilmə şəkli"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Düymələrdə stik timsalların göstəriləcəyi"
 
 #~ msgid ""
 #~ "A number between 0.0 and 1.0 specifying the horizontal alignment of the "

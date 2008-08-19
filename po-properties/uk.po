@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2007-09-07 14:55+0200\n"
 "Last-Translator: dziumanenko@gmail.com\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -838,7 +838,7 @@ msgstr "Горизонтальне вирівнювання вкладеного
 msgid "Vertical alignment for child"
 msgstr "Вертикальне вирівнювання вкладеного елементу"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Віджет зображення"
 
@@ -928,8 +928,9 @@ msgid "Show button images"
 msgstr "Показ зображень на кнопках"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Чи потрібно відображати вбудовані значки на кнопках"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Чи потрібно відображати зображення у меню"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2025,7 +2026,7 @@ msgstr "Розмір стрілки"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Мінімальний розмір стрілки у полі зі списком"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2652,7 +2653,7 @@ msgstr "Вирівнювання по Y"
 msgid "The vertical alignment of the label"
 msgstr "Вертикальне вирівнювання позначки"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Заборонена властивість, використовуйте замість неї shadow_type"
 
@@ -2668,23 +2669,23 @@ msgstr "Зовнішній вигляд бордюру рамки"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Віджет для відображення замість звичайної позначки рамки"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Вигляд тіні, що оточує контейнер"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Позиція регулятора"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Позиція регулятора відносно вкладеного віджета"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Вирівнювання країв"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -2692,11 +2693,11 @@ msgstr ""
 "Бік органу керування, вирівняний по точці стикування для стикування органу "
 "керування"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Встановлення вирівнювання країв"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2704,11 +2705,11 @@ msgstr ""
 "Використовувати значення властивості snap_edge чи значення отримане з "
 "handle_position"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2916,15 +2917,15 @@ msgstr "Тип зберігання"
 msgid "The representation being used for image data"
 msgstr "Представлення даних зображення"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Спадкоємний віджет, що з'являтиметься за текстом меню"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Показувати зображення меню"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Чи потрібно відображати зображення у меню"
 
@@ -3067,6 +3068,25 @@ msgstr "Ширина розміщення"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "Висота розміщення"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "Перемикнути стан кнопки"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Видима"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Чи буде дія видимою."
 
 #: gtk/gtkmenu.c:503
 #, fuzzy
@@ -3534,7 +3554,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "Ідентифікатор групи для перетягування"
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Група"
 
@@ -3648,6 +3668,16 @@ msgstr "Кривизна вкладок"
 #: gtk/gtknotebook.c:818
 msgid "Size of tab curvature"
 msgstr "Розмір кривизни вкладок"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Масштаб стрілки"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Відстань до панелей прокрутки"
 
 #: gtk/gtkobject.c:370
 msgid "User Data"
@@ -4186,6 +4216,11 @@ msgstr "Кнопка-перемикач, чиїй групі належить ц
 
 #: gtk/gtkradiomenuitem.c:343
 msgid "The radio menu item whose group this widget belongs to."
+msgstr "Кнопка-перемикач, чиїй групі належить цей віджет."
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
 msgstr "Кнопка-перемикач, чиїй групі належить цей віджет."
 
 #: gtk/gtkrange.c:337
@@ -6930,6 +6965,9 @@ msgstr "Стиль стану методу вводу"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Як зображати панель стану методу вводу"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Чи потрібно відображати вбудовані значки на кнопках"
 
 #~ msgid "Cancelled"
 #~ msgstr "Скасовано"

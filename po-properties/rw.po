@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 317\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2004-11-17 21:21-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <en@li.org>\n"
@@ -944,7 +944,7 @@ msgstr "Itunganya kugirango"
 msgid "Vertical alignment for child"
 msgstr "Itunganya kugirango"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr ""
 
@@ -1040,8 +1040,8 @@ msgstr "Akabuto Ishusho"
 
 #: gtk/gtkbutton.c:492
 #, fuzzy
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Udushushondanga in Utubuto"
+msgid "Whether images should be shown on buttons"
+msgstr "Ishusho in Ibikubiyemo"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2301,7 +2301,7 @@ msgstr "Icyerekezo"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Urugero kugirango i Agasanduku"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 #, fuzzy
@@ -3012,7 +3012,7 @@ msgstr ""
 msgid "The vertical alignment of the label"
 msgstr "Bihagaritse Itunganya Bya i Akarango"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 #, fuzzy
 msgid "Deprecated property, use shadow_type instead"
 msgstr "indangakintu Gukoresha"
@@ -3032,38 +3032,38 @@ msgstr "Bya i Ikadiri Imbibi"
 msgid "A widget to display in place of the usual frame label"
 msgstr "A Kuri Kugaragaza in Bya i Ikadiri Akarango"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 #, fuzzy
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Bya i Igicucu i"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 #, fuzzy
 msgid "Handle position"
 msgstr "Ibirindiro"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 #, fuzzy
 msgid "Position of the handle relative to the child widget"
 msgstr "Bya i Bifitanye isano Kuri i"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 #, fuzzy
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr "Bya i Hejuru Na: i Akadomo Kuri i"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 #, fuzzy
 msgid "Snap edge set"
 msgstr "Gushyiraho"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 #, fuzzy
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
@@ -3071,11 +3071,11 @@ msgid ""
 msgstr ""
 "Kuri Gukoresha i Agaciro Bivuye i indangakintu Cyangwa a Agaciro Bivuye"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -3321,17 +3321,17 @@ msgstr "Ubwoko"
 msgid "The representation being used for image data"
 msgstr "kugirango Ishusho Ibyatanzwe"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 #, fuzzy
 msgid "Child widget to appear next to the menu text"
 msgstr "Kuri Kugaragara Komeza>> Kuri i Ibikubiyemo Umwandiko"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 #, fuzzy
 msgid "Show menu images"
 msgstr "Ibikubiyemo Ishusho"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 #, fuzzy
 msgid "Whether images should be shown in menus"
 msgstr "Ishusho in Ibikubiyemo"
@@ -3496,6 +3496,25 @@ msgstr "Ubugari Bya i Imigaragarire"
 #, fuzzy
 msgid "The height of the layout"
 msgstr "Ubuhagarike Bya i Imigaragarire"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "Mukomatanya Leta Bya i Akabuto"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "kigaragara"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "i Igikorwa ni Kigaragara"
 
 #: gtk/gtkmenu.c:503
 #, fuzzy
@@ -4009,7 +4028,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr ""
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Itsinda"
 
@@ -4141,6 +4160,16 @@ msgstr ""
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Bya"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "itandukanya "
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Isigamwanya"
 
 #: gtk/gtkobject.c:370
 #, fuzzy
@@ -4722,6 +4751,11 @@ msgstr "Akabuto bya Itsinda iyi Kuri"
 #: gtk/gtkradiomenuitem.c:343
 #, fuzzy
 msgid "The radio menu item whose group this widget belongs to."
+msgstr "Akabuto bya Itsinda iyi Kuri"
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
 msgstr "Akabuto bya Itsinda iyi Kuri"
 
 #: gtk/gtkrange.c:337
@@ -7751,6 +7785,10 @@ msgstr "IMISUSIRE"
 #, fuzzy
 msgid "How to draw the input method statusbar"
 msgstr "Kuri Gushushanya i Iyinjiza Uburyo"
+
+#, fuzzy
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Udushushondanga in Utubuto"
 
 #, fuzzy
 #~ msgid ""

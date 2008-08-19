@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-05 11:57-0400\n"
+"POT-Creation-Date: 2008-08-18 18:27-0400\n"
 "PO-Revision-Date: 2005-07-09 12:08+0200\n"
 "Last-Translator: Danilo Šegan <danilo@gnome.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -850,7 +850,7 @@ msgstr "Vodoravno poravnanje za sadržani element"
 msgid "Vertical alignment for child"
 msgstr "Uspravno poravnanje za sadržani element"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:101
+#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
 msgid "Image widget"
 msgstr "Element za sliku"
 
@@ -942,8 +942,9 @@ msgid "Show button images"
 msgstr "Prikaži slike dugmeta"
 
 #: gtk/gtkbutton.c:492
-msgid "Whether stock icons should be shown in buttons"
-msgstr "Da li se prikazuju isporučene ikone u dugmadima"
+#, fuzzy
+msgid "Whether images should be shown on buttons"
+msgstr "Da li se prikazuju slike u meniju"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -2063,7 +2064,7 @@ msgstr "Smer strelica"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Model za padajuću listu"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:177
+#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2687,7 +2688,7 @@ msgstr "Uspravno poravnanje oznake"
 msgid "The vertical alignment of the label"
 msgstr "Uspravno poravnanje oznake"
 
-#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:170
+#: gtk/gtkframe.c:131 gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
 msgstr "Prevaziđena osobina, koristite vrstu senke"
 
@@ -2703,33 +2704,33 @@ msgstr "Izgled ivice okvira"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Element koji se prikazuje namesto uobičajene oznake okvira"
 
-#: gtk/gtkhandlebox.c:178
+#: gtk/gtkhandlebox.c:175
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Izgled senke koja uokviruje sadržalac"
 
-#: gtk/gtkhandlebox.c:186
+#: gtk/gtkhandlebox.c:183
 msgid "Handle position"
 msgstr "Položaj ručke"
 
-#: gtk/gtkhandlebox.c:187
+#: gtk/gtkhandlebox.c:184
 msgid "Position of the handle relative to the child widget"
 msgstr "Položaj ručke u odnosu na sadržani element"
 
-#: gtk/gtkhandlebox.c:195
+#: gtk/gtkhandlebox.c:192
 msgid "Snap edge"
 msgstr "Privuci ivici"
 
-#: gtk/gtkhandlebox.c:196
+#: gtk/gtkhandlebox.c:193
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr "Strana kućice sa ručkom koja se poravnava tačkom prijanjanja"
 
-#: gtk/gtkhandlebox.c:204
+#: gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
 msgstr "Postavljeno privlačenje ivici"
 
-#: gtk/gtkhandlebox.c:205
+#: gtk/gtkhandlebox.c:202
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -2737,11 +2738,11 @@ msgstr ""
 "Da li se koristi vrednost iz osobine snap_edge (privuci ivici) ili vrednost "
 "izvedena iz handle_position (pozicije ručke)"
 
-#: gtk/gtkhandlebox.c:212
+#: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:213
+#: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -2949,15 +2950,15 @@ msgstr "Vrsta smeštaja"
 msgid "The representation being used for image data"
 msgstr "Način zapisa koji se koristi za podatke za sliku"
 
-#: gtk/gtkimagemenuitem.c:102
+#: gtk/gtkimagemenuitem.c:101
 msgid "Child widget to appear next to the menu text"
 msgstr "Sadržani element koji se pojavljuje pored teksta za meni"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:106
 msgid "Show menu images"
 msgstr "Prikaži slike u meniju"
 
-#: gtk/gtkimagemenuitem.c:108
+#: gtk/gtkimagemenuitem.c:107
 msgid "Whether images should be shown in menus"
 msgstr "Da li se prikazuju slike u meniju"
 
@@ -3100,6 +3101,25 @@ msgstr "Širina prikaza"
 #: gtk/gtklayout.c:642
 msgid "The height of the layout"
 msgstr "Visina prikaza"
+
+#: gtk/gtklinkbutton.c:144
+msgid "URI"
+msgstr ""
+
+#: gtk/gtklinkbutton.c:145
+#, fuzzy
+msgid "The URI bound to this button"
+msgstr "Stanje žabice"
+
+#: gtk/gtklinkbutton.c:159
+#, fuzzy
+msgid "Visited"
+msgstr "Vidljivo"
+
+#: gtk/gtklinkbutton.c:160
+#, fuzzy
+msgid "Whether this link has been visited."
+msgstr "Da li je akcija vidljiva."
 
 #: gtk/gtkmenu.c:503
 #, fuzzy
@@ -3568,7 +3588,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr ""
 
 #: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342
+#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Grupa"
 
@@ -3684,6 +3704,16 @@ msgstr ""
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Veličina razmaka"
+
+#: gtk/gtknotebook.c:834
+#, fuzzy
+msgid "Arrow spacing"
+msgstr "Razmak redova"
+
+#: gtk/gtknotebook.c:835
+#, fuzzy
+msgid "Scroll arrow spacing"
+msgstr "Razmak između strelica"
 
 #: gtk/gtkobject.c:370
 #, fuzzy
@@ -4254,6 +4284,11 @@ msgstr "Radio-dugme čijoj grupi ovaj element pripada."
 #: gtk/gtkradiomenuitem.c:343
 #, fuzzy
 msgid "The radio menu item whose group this widget belongs to."
+msgstr "Radio-dugme čijoj grupi ovaj element pripada."
+
+#: gtk/gtkradiotoolbutton.c:66
+#, fuzzy
+msgid "The radio tool button whose group this button belongs to."
 msgstr "Radio-dugme čijoj grupi ovaj element pripada."
 
 #: gtk/gtkrange.c:337
@@ -7056,6 +7091,9 @@ msgstr "Stil stanja IM-a"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Kako iscrtati liniju stanja načina unosa"
+
+#~ msgid "Whether stock icons should be shown in buttons"
+#~ msgstr "Da li se prikazuju isporučene ikone u dugmadima"
 
 #~ msgid ""
 #~ "A number between 0.0 and 1.0 specifying the horizontal alignment of the "
