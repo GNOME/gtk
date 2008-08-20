@@ -6041,6 +6041,8 @@ gtk_file_chooser_default_map (GtkWidget *widget)
 
   settings_load (impl);
 
+  emit_default_size_changed (impl);
+
   profile_end ("end", NULL);
 }
 
