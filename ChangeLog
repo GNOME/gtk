@@ -1,3 +1,8 @@
+Wed Aug 20 18:16:29 2008  Søren Sandmann  <sandmann@redhat.com>
+
+	* gdk/x11/gdkscreen-x11.c (_gdk_x11_screen_size_changed): Emit the
+	monitors changed signal when the screen size changes.
+
 2008-08-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	Bug 548346 – gtk_color_selection_dialog_get_color_selection always

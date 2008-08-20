@@ -985,7 +985,7 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
     return;
 #endif
   
-  init_multihead (screen);
+  _gdk_x11_screen_process_monitors_change (screen);
   g_signal_emit_by_name (screen, "size_changed");
 }
 
