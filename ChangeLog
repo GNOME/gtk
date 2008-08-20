@@ -1,3 +1,12 @@
+2008-08-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	Bug 548346 – gtk_color_selection_dialog_get_color_selection always
+	returns NULL
+
+	* gtk/gtkcolorseldialog.c
+	(gtk_color_selection_dialog_get_color_selection): Use the correct
+	macro to test the validity of the passed-in dialog.
+
 2008-08-05  Milan Crha  <mcrha@redhat.com>
 
 	* gtk/gtknotebook.c: (gtk_notebook_do_arrow): Allow changing page with
