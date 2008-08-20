@@ -324,57 +324,6 @@ gtk_file_chooser_dialog_get_property (GObject         *object,
   g_object_get_property (G_OBJECT (priv->widget), pspec->name, value);
 }
 
-#if 0
-static void
-set_default_size (GtkFileChooserDialog *dialog)
-{
-  GtkWidget *widget;
-  GtkWindow *window;
-  int default_width, default_height;
-  int width, height;
-  int font_size;
-  GdkScreen *screen;
-  int monitor_num;
-  GtkRequisition req;
-  GdkRectangle monitor;
-
-  widget = GTK_WIDGET (dialog);
-  window = GTK_WINDOW (dialog);
-
-  /* Size based on characters */
-
-  font_size = pango_font_description_get_size (widget->style->font_desc);
-  font_size = PANGO_PIXELS (font_size);
-
-  width = font_size * NUM_CHARS;
-  height = font_size * NUM_LINES;
-
-  /* Use at least the requisition size... */
-
-  gtk_widget_size_request (widget, &req);
-  width = MAX (width, req.width);
-  height = MAX (height, req.height);
-
-  /* ... but no larger than the monitor */
-
-  screen = gtk_widget_get_screen (widget);
-  monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
-
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
-
-  width = MIN (width, monitor.width * 3 / 4);
-  height = MIN (height, monitor.height * 3 / 4);
-
-  /* Set size */
-
-  gtk_window_get_default_size (window, &default_width, &default_height);
-
-  gtk_window_set_default_size (window,
-			       (default_width == -1) ? width : default_width,
-			       (default_height == -1) ? height : default_height);
-}
-#endif
-
 static void
 foreach_ensure_default_response_cb (GtkWidget *widget,
 				    gpointer   data)
