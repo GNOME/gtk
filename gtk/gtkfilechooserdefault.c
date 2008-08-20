@@ -1151,6 +1151,17 @@ change_folder_and_display_error (GtkFileChooserDefault *impl,
 }
 
 static void
+emit_default_size_changed (GtkFileChooserDefault *impl)
+{
+  if (!GTK_WIDGET_MAPPED (impl))
+    return;
+
+  profile_msg ("    emit default-size-changed start", NULL);
+  g_signal_emit_by_name (impl, "default-size-changed");
+  profile_msg ("    emit default-size-changed end", NULL);
+}
+
+static void
 update_preview_widget_visibility (GtkFileChooserDefault *impl)
 {
   if (impl->use_preview_label)
@@ -1178,7 +1189,7 @@ update_preview_widget_visibility (GtkFileChooserDefault *impl)
   else
     gtk_widget_hide (impl->preview_box);
 
-  g_signal_emit_by_name (impl, "default-size-changed");
+  emit_default_size_changed (impl);
 }
 
 static void
@@ -5422,7 +5433,7 @@ update_appearance (GtkFileChooserDefault *impl)
    */
   gtk_widget_queue_draw (impl->browse_files_tree_view);
 
-  g_signal_emit_by_name (impl, "default-size-changed");
+  emit_default_size_changed (impl);
 }
 
 static void
@@ -5841,9 +5852,7 @@ gtk_file_chooser_default_style_set (GtkWidget *widget,
   if (gtk_widget_has_screen (GTK_WIDGET (impl)))
     change_icon_theme (impl);
 
-  profile_msg ("    emit default-size-changed start", NULL);
-  g_signal_emit_by_name (widget, "default-size-changed");
-  profile_msg ("    emit default-size-changed end", NULL);
+  emit_default_size_changed (impl);
 
   profile_end ("end", NULL);
 }
@@ -5864,7 +5873,7 @@ gtk_file_chooser_default_screen_changed (GtkWidget *widget,
   remove_settings_signal (impl, previous_screen);
   check_icon_theme (impl);
 
-  g_signal_emit_by_name (widget, "default-size-changed");
+  emit_default_size_changed (impl);
 
   profile_end ("end", NULL);
 }
