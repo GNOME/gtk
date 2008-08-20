@@ -5887,18 +5887,6 @@ gtk_file_chooser_default_size_allocate (GtkWidget     *widget,
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->size_allocate (widget, allocation);
-
-  impl->default_width = allocation->width;
-  impl->default_height = allocation->height;
-
-  if (impl->preview_widget_active &&
-      impl->preview_widget &&
-      GTK_WIDGET_DRAWABLE (impl->preview_widget))
-    impl->default_width -= impl->preview_widget->allocation.width + PREVIEW_HBOX_SPACING;
-
-  if (impl->extra_widget &&
-      GTK_WIDGET_DRAWABLE (impl->extra_widget))
-    impl->default_height -= GTK_BOX (widget)->spacing + impl->extra_widget->allocation.height;
 }
 
 static gboolean

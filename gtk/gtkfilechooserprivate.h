@@ -282,9 +282,6 @@ struct _GtkFileChooserDefault
   GSource *shortcuts_drag_outside_idle;
 #endif
 
-  gint default_width;
-  gint default_height;
-
   /* Flags */
 
   guint local_only : 1;
