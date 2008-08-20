@@ -7806,21 +7806,33 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
   GtkRequisition req;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
-  find_good_size_from_style (GTK_WIDGET (chooser_embed), default_width, default_height);
 
-  if (impl->preview_widget_active &&
-      impl->preview_widget &&
-      GTK_WIDGET_VISIBLE (impl->preview_widget))
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+      || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
+      || impl->expand_folders)
     {
-      gtk_widget_size_request (impl->preview_box, &req);
-      *default_width += PREVIEW_HBOX_SPACING + req.width;
+      find_good_size_from_style (GTK_WIDGET (chooser_embed), default_width, default_height);
+
+      if (impl->preview_widget_active &&
+	  impl->preview_widget &&
+	  GTK_WIDGET_VISIBLE (impl->preview_widget))
+	{
+	  gtk_widget_size_request (impl->preview_box, &req);
+	  *default_width += PREVIEW_HBOX_SPACING + req.width;
+	}
+
+      if (impl->extra_widget &&
+	  GTK_WIDGET_VISIBLE (impl->extra_widget))
+	{
+	  gtk_widget_size_request (impl->extra_align, &req);
+	  *default_height += GTK_BOX (chooser_embed)->spacing + req.height;
+	}
     }
-
-  if (impl->extra_widget &&
-      GTK_WIDGET_VISIBLE (impl->extra_widget))
+  else
     {
-      gtk_widget_size_request (impl->extra_align, &req);
-      *default_height += GTK_BOX (chooser_embed)->spacing + req.height;
+      gtk_widget_size_request (GTK_WIDGET (impl), &req);
+      *default_width = req.width;
+      *default_height = req.height;
     }
 }
 
