@@ -407,7 +407,6 @@ gtk_file_chooser_dialog_map (GtkWidget *widget)
   if (!GTK_WIDGET_MAPPED (priv->widget))
     gtk_widget_map (priv->widget);
 
-  file_chooser_widget_default_size_changed (priv->widget, dialog);
   _gtk_file_chooser_embed_initial_focus (GTK_FILE_CHOOSER_EMBED (priv->widget));
 
   GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->map (widget);
