@@ -1,3 +1,35 @@
+2008-08-19  Federico Mena Quintero  <federico@novell.com>
+
+	http://bugzilla.gnome.org/show_bug.cgi?id=543308 - The file
+	chooser in "compact" mode uses the same size as in "open" mode.
+
+	* gtk/gtkfilechooserdialog.c (gtk_file_chooser_dialog_map): Don't
+	force the default size here.  Let GtkFileChooserDefault be solely
+	in charge of default sizing.
+	(set_default_size): Removed obsolete code.
+
+	* gtk/gtkfilechooserdefault.c (emit_default_size_changed): New
+	helper function, to avoid dupliated code.  Only emits the signal
+	if the widget is mapped, because that is when we actually know the
+	size we'll want.
+	(update_preview_widget_visibility): Use emit_default_size_changed()
+	(update_appearance): Likewise.
+	(gtk_file_chooser_default_style_set): Likewise.
+	(gtk_file_chooser_default_screen_changed): Likewise.
+	(gtk_file_chooser_default_map): Likewise.
+	(find_good_size_from_style): Unconditionally compute a good
+	default size for the "OPEN" modes; don't store it in internal fields.
+	(gtk_file_chooser_default_get_default_size): Only compute the
+	font-based size if we are in one of the "OPEN" modes or in
+	expanded mode.
+
+	* gtk/gtkfilechooserprivate.h (struct _GtkFileChooserDefault):
+	Removed default_width/default_height; we don't store these
+	anymore.  This will make recycled file choosers (like in the GIMP)
+	not "remember" their size across invocations.  However, this
+	prepares the way for actually remembering the user's size globally
+	in the settings file.
+
 2008-08-19  Björn Lindqvist  <bjourne@gmail.com>
 
 	Bug 548354 – Remove repeated code in gtk_cell_view_size_allocate
