@@ -1,3 +1,8 @@
+2008-08-05  Milan Crha  <mcrha@redhat.com>
+
+	* gtk/gtknotebook.c: (gtk_notebook_do_arrow): Allow changing page with
+	arrows even on non-focusable notebook. (#528091)
+
 2008-08-19  Federico Mena Quintero  <federico@novell.com>
 
 	http://bugzilla.gnome.org/show_bug.cgi?id=543308 - The file

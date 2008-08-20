@@ -2330,7 +2330,6 @@ gtk_notebook_do_arrow (GtkNotebook     *notebook,
 		       GtkNotebookArrow arrow)
 {
   GtkWidget *widget = GTK_WIDGET (notebook);
-  GtkDirectionType dir;
   gboolean is_rtl, left;
 
   is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
@@ -2342,14 +2341,8 @@ gtk_notebook_do_arrow (GtkNotebook     *notebook,
 				left ? STEP_PREV : STEP_NEXT,
 				TRUE))
     {
-      if (notebook->tab_pos == GTK_POS_LEFT ||
-	  notebook->tab_pos == GTK_POS_RIGHT)
-	dir = ARROW_IS_LEFT (arrow) ? GTK_DIR_UP : GTK_DIR_DOWN;
-      else
-	dir = ARROW_IS_LEFT (arrow) ? GTK_DIR_LEFT : GTK_DIR_RIGHT;
-
+      gtk_notebook_change_current_page (notebook, left ? -1 : 1);
       gtk_widget_grab_focus (widget);
-      gtk_widget_child_focus (widget, dir);
     }
 }
 
