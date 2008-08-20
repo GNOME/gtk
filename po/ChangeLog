@@ -1,3 +1,8 @@
+2008-08-19  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+
+	* pt_BR.po: Brazilian Portuguese translation updated by Fábio Nogueira
+	and Leonardo Ferreira Fontenelle.
+
 2008-08-19  Priit Laes  <plaes at svn dot gnome dot org>
 
 	* et.po: Translation updated by Ivar Smolin
@@ -40,7 +45,8 @@
 
 2008-08-14  Sandeep Shedmake  <sshedmak@redhat.com>  
 
-	* mr.po: Removing the translated mr.po consisting translations for 'gtk+/po-properties' module
+	* mr.po: Removing the translated mr.po consisting translations for 
+	'gtk+/po-properties' module
 
 2008-08-13  Sandeep Shedmake  <sshedmak@redhat.com>  
 
