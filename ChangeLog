@@ -1,3 +1,20 @@
+2008-08-21  Marek Kasik  <mkasik@redhat.com>
+
+	* ChangeLog: changelog update for previous commit
+
+2008-08-21  Marek Kasik  <mkasik@redhat.com>
+
+	Bug 535158 – can't rearrange the order of multi pages per side
+
+	* gtk/gtkprinter.c
+	* gtk/gtkprinter.h
+	* gtk/gtkprintunixdialog.c
+	* gtk/gtkprintsettings.c
+	* gtk/gtkprintsettings.h
+	* gtk/gtkenums.h
+	* modules/printbackends/cups/gtkprintbackendcups.c: Allow user to
+	specify layout of pages per sheet in number-up mode
+
 Wed Aug 20 18:16:29 2008  Søren Sandmann  <sandmann@redhat.com>
 
 	* gdk/x11/gdkscreen-x11.c (_gdk_x11_screen_size_changed): Emit the
