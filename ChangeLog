@@ -1,3 +1,7 @@
+2008-08-21  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_realize): small formatting fix.
+
 2008-08-21  Marek Kasik  <mkasik@redhat.com>
 
 	Bug 545875 – evo crashed when trying to print pages 6-7 of a 1 page

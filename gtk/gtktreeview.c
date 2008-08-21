@@ -1795,14 +1795,14 @@ gtk_tree_view_realize (GtkWidget *widget)
   attributes.y = TREE_VIEW_HEADER_HEIGHT (tree_view);
   attributes.width = MAX (tree_view->priv->width, widget->allocation.width);
   attributes.height = widget->allocation.height;
-  attributes.event_mask = GDK_EXPOSURE_MASK |
-    GDK_SCROLL_MASK |
-    GDK_POINTER_MOTION_MASK |
-    GDK_ENTER_NOTIFY_MASK |
-    GDK_LEAVE_NOTIFY_MASK |
-    GDK_BUTTON_PRESS_MASK |
-    GDK_BUTTON_RELEASE_MASK |
-    gtk_widget_get_events (widget);
+  attributes.event_mask = (GDK_EXPOSURE_MASK |
+                           GDK_SCROLL_MASK |
+                           GDK_POINTER_MOTION_MASK |
+                           GDK_ENTER_NOTIFY_MASK |
+                           GDK_LEAVE_NOTIFY_MASK |
+                           GDK_BUTTON_PRESS_MASK |
+                           GDK_BUTTON_RELEASE_MASK |
+                           gtk_widget_get_events (widget));
 
   tree_view->priv->bin_window = gdk_window_new (widget->window,
 						&attributes, attributes_mask);
@@ -1814,12 +1814,12 @@ gtk_tree_view_realize (GtkWidget *widget)
   attributes.width = MAX (tree_view->priv->width, widget->allocation.width);
   attributes.height = tree_view->priv->header_height;
   attributes.event_mask = (GDK_EXPOSURE_MASK |
-			   GDK_SCROLL_MASK |
-			   GDK_BUTTON_PRESS_MASK |
-			   GDK_BUTTON_RELEASE_MASK |
-			   GDK_KEY_PRESS_MASK |
-			   GDK_KEY_RELEASE_MASK) |
-    gtk_widget_get_events (widget);
+                           GDK_SCROLL_MASK |
+                           GDK_BUTTON_PRESS_MASK |
+                           GDK_BUTTON_RELEASE_MASK |
+                           GDK_KEY_PRESS_MASK |
+                           GDK_KEY_RELEASE_MASK |
+                           gtk_widget_get_events (widget));
 
   tree_view->priv->header_window = gdk_window_new (widget->window,
 						   &attributes, attributes_mask);
