@@ -3748,7 +3748,7 @@ traverse_cells (GailTreeView *tree_view,
 	  if (cell_info->in_use)
 	  {
 	      row_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
-	      g_assert (row_path != NULL);
+	      g_return_if_fail (row_path != NULL);
 	      if (tree_path == NULL)
 		  act_on_cell = TRUE;
 	      else 

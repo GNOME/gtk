@@ -1,5 +1,11 @@
 2008-08-21  Li Yuan  <li.yuan@sun.com>
 
+	* gailtreeview.c: (traverse_cells):
+	Bug #548783. Change g_assert to g_return_if_fail to avoid
+	unnucessary crash.
+
+2008-08-21  Li Yuan  <li.yuan@sun.com>
+
 	* gailtreeview.c: (model_row_deleted):
 	Bug #548782. Emit children-changed::remove signal when a row is 
 	deleted in gtktreeview.
