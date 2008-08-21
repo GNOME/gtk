@@ -1,5 +1,12 @@
 2008-08-21  Marek Kasik  <mkasik@redhat.com>
 
+	Bug 545875 – evo crashed when trying to print pages 6-7 of a 1 page
+	email
+
+	* gtk/gtkprintoperation.c: Clamp page ranges to correct ranges
+
+2008-08-21  Marek Kasik  <mkasik@redhat.com>
+
 	* ChangeLog: changelog update for previous commit
 
 2008-08-21  Marek Kasik  <mkasik@redhat.com>
