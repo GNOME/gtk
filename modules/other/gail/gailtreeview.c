@@ -2920,7 +2920,7 @@ model_row_deleted (GtkTreeModel *tree_model,
   GtkTreePath *path_copy;
   AtkObject *atk_obj;
   GailTreeView *gailview;
-  gint row;
+  gint row, col, n_cols;
 
   tree_view = (GtkTreeView *)user_data;
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
@@ -2959,6 +2959,17 @@ model_row_deleted (GtkTreeModel *tree_model,
     g_signal_emit_by_name (atk_obj, "row_deleted", row, 
                            gailview->n_children_deleted + 1);
   gailview->n_children_deleted = 0;
+
+  /* Generate children-changed signals */
+  n_cols = get_n_actual_columns (tree_view);
+  for (col = 0; col < n_cols; col++)
+  {
+    /*
+     * Pass NULL as the child object, 4th argument.
+     */
+    g_signal_emit_by_name (atk_obj, "children_changed::remove",
+                           ((row * n_cols) + col), NULL, NULL);
+  }
 }
 
 /* 

@@ -1,3 +1,9 @@
+2008-08-21  Li Yuan  <li.yuan@sun.com>
+
+	* gailtreeview.c: (model_row_deleted):
+	Bug #548782. Emit children-changed::remove signal when a row is 
+	deleted in gtktreeview.
+
 2008-08-15  Michael Natterer  <mitch@imendio.com>
 
 	* gailbooleancell.c
