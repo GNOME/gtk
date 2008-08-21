@@ -2684,17 +2684,23 @@ cups_printer_get_options (GtkPrinter           *printer,
   char *n_up[] = {"1", "2", "4", "6", "9", "16" };
   char *prio[] = {"100", "80", "50", "30" };
   char *prio_display[] = {N_("Urgent"), N_("High"), N_("Medium"), N_("Low") };
+  char *n_up_layout[] = { "lrtb", "lrbt", "rltb", "rlbt", "tblr", "tbrl", "btlr", "btrl" };
+  char *n_up_layout_display[] = { N_("Left to right, top to bottom"), N_("Left to right, bottom to top"), 
+                                  N_("Right to left, top to bottom"), N_("Right to left, bottom to top"), 
+                                  N_("Top to bottom, left to right"), N_("Top to bottom, right to left"), 
+                                  N_("Bottom to top, left to right"), N_("Bottom to top, right to left") };
   char *name;
   int num_opts;
   cups_option_t *opts = NULL;
   GtkPrintBackendCups *backend;
+  GtkTextDirection text_direction;
 
 
   set = gtk_printer_option_set_new ();
 
   /* Cups specific, non-ppd related settings */
 
-  option = gtk_printer_option_new ("gtk-n-up", "Pages Per Sheet", GTK_PRINTER_OPTION_TYPE_PICKONE);
+  option = gtk_printer_option_new ("gtk-n-up", _("Pages Per Sheet"), GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up),
 					 n_up, n_up);
   gtk_printer_option_set (option, "1");
@@ -2702,10 +2708,30 @@ cups_printer_get_options (GtkPrinter           *printer,
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
 
+  if (cups_printer_get_capabilities (printer) & GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT)
+    {
+      for (i = 0; i < G_N_ELEMENTS (n_up_layout_display); i++)
+        n_up_layout_display[i] = _(n_up_layout_display[i]);
+  
+      option = gtk_printer_option_new ("gtk-n-up-layout", _("Page Ordering"), GTK_PRINTER_OPTION_TYPE_PICKONE);
+      gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up_layout),
+                                             n_up_layout, n_up_layout_display);
+
+      text_direction = gtk_widget_get_default_direction ();
+      if (text_direction == GTK_TEXT_DIR_LTR)
+        gtk_printer_option_set (option, "lrtb");
+      else
+        gtk_printer_option_set (option, "rltb");
+
+      set_option_from_settings (option, settings);
+      gtk_printer_option_set_add (set, option);
+      g_object_unref (option);
+    }
+
   for (i = 0; i < G_N_ELEMENTS(prio_display); i++)
     prio_display[i] = _(prio_display[i]);
   
-  option = gtk_printer_option_new ("gtk-job-prio", "Job Priority", GTK_PRINTER_OPTION_TYPE_PICKONE);
+  option = gtk_printer_option_new ("gtk-job-prio", _("Job Priority"), GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (prio),
 					 prio, prio_display);
   gtk_printer_option_set (option, "50");
@@ -2713,7 +2739,7 @@ cups_printer_get_options (GtkPrinter           *printer,
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
 
-  option = gtk_printer_option_new ("gtk-billing-info", "Billing Info", GTK_PRINTER_OPTION_TYPE_STRING);
+  option = gtk_printer_option_new ("gtk-billing-info", _("Billing Info"), GTK_PRINTER_OPTION_TYPE_STRING);
   gtk_printer_option_set (option, "");
   set_option_from_settings (option, settings);
   gtk_printer_option_set_add (set, option);
@@ -2756,7 +2782,7 @@ cups_printer_get_options (GtkPrinter           *printer,
       for (i = 0; i < num_of_covers; i++)
         cover_display_translated[i] = _(cover_display[i]);
   
-      option = gtk_printer_option_new ("gtk-cover-before", "Before", GTK_PRINTER_OPTION_TYPE_PICKONE);
+      option = gtk_printer_option_new ("gtk-cover-before", _("Before"), GTK_PRINTER_OPTION_TYPE_PICKONE);
       gtk_printer_option_choices_from_array (option, num_of_covers,
 					 cover, cover_display_translated);
 
@@ -2768,7 +2794,7 @@ cups_printer_get_options (GtkPrinter           *printer,
       gtk_printer_option_set_add (set, option);
       g_object_unref (option);
 
-      option = gtk_printer_option_new ("gtk-cover-after", "After", GTK_PRINTER_OPTION_TYPE_PICKONE);
+      option = gtk_printer_option_new ("gtk-cover-after", _("After"), GTK_PRINTER_OPTION_TYPE_PICKONE);
       gtk_printer_option_choices_from_array (option, num_of_covers,
 					 cover, cover_display_translated);
       if (backend->default_cover_after != NULL)
@@ -2784,7 +2810,7 @@ cups_printer_get_options (GtkPrinter           *printer,
       g_free (cover_display_translated);
     }
 
-  option = gtk_printer_option_new ("gtk-print-time", "Print at", GTK_PRINTER_OPTION_TYPE_PICKONE);
+  option = gtk_printer_option_new ("gtk-print-time", _("Print at"), GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (print_at),
 					 print_at, print_at);
   gtk_printer_option_set (option, "now");
@@ -2792,7 +2818,7 @@ cups_printer_get_options (GtkPrinter           *printer,
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
   
-  option = gtk_printer_option_new ("gtk-print-time-text", "Print at time", GTK_PRINTER_OPTION_TYPE_STRING);
+  option = gtk_printer_option_new ("gtk-print-time-text", _("Print at time"), GTK_PRINTER_OPTION_TYPE_STRING);
   gtk_printer_option_set (option, "");
   set_option_from_settings (option, settings);
   gtk_printer_option_set_add (set, option);
@@ -3149,6 +3175,11 @@ set_option_from_settings (GtkPrinterOption *option,
       map_settings_to_option (option, all_map, G_N_ELEMENTS (all_map),
 			      settings, GTK_PRINT_SETTINGS_NUMBER_UP, "number-up");
     }
+  else if (strcmp (option->name, "gtk-n-up-layout") == 0)
+    {
+      map_settings_to_option (option, all_map, G_N_ELEMENTS (all_map),
+			      settings, GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT, "number-up-layout");
+    }
   else if (strcmp (option->name, "gtk-billing-info") == 0)
     {
       cups_value = gtk_print_settings_get (settings, "cups-job-billing");
@@ -3229,6 +3260,9 @@ foreach_option_get_settings (GtkPrinterOption *option,
   else if (strcmp (option->name, "gtk-n-up") == 0)
     map_option_to_settings (value, all_map, G_N_ELEMENTS (all_map),
 			    settings, GTK_PRINT_SETTINGS_NUMBER_UP, "number-up");
+  else if (strcmp (option->name, "gtk-n-up-layout") == 0)
+    map_option_to_settings (value, all_map, G_N_ELEMENTS (all_map),
+			    settings, GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT, "number-up-layout");
   else if (strcmp (option->name, "gtk-billing-info") == 0 && strlen (value) > 0)
     gtk_print_settings_set (settings, "cups-job-billing", value);
   else if (strcmp (option->name, "gtk-job-prio") == 0)
@@ -3458,5 +3492,8 @@ cups_printer_get_capabilities (GtkPrinter *printer)
     GTK_PRINT_CAPABILITY_COPIES |
     GTK_PRINT_CAPABILITY_COLLATE |
     GTK_PRINT_CAPABILITY_REVERSE |
+#if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 1 && CUPS_VERSION_PATCH >= 15) || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR > 1) || CUPS_VERSION_MAJOR > 1
+    GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT |
+#endif
     GTK_PRINT_CAPABILITY_NUMBER_UP;
 }

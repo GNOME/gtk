@@ -25,6 +25,7 @@
 #include "gtkprintsettings.h"
 #include "gtkprintutils.h"
 #include "gtkalias.h"
+#include <gtk/gtk.h>
 
 
 typedef struct _GtkPrintSettingsClass GtkPrintSettingsClass;
@@ -1036,6 +1037,108 @@ gtk_print_settings_set_page_set (GtkPrintSettings *settings,
     }
   
   gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_PAGE_SET, str);
+}
+
+/**
+ * gtk_print_settings_get_number_up_layout:
+ * @settings: a #GtkPrintSettings
+ * 
+ * Gets the value of %GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT.
+ * 
+ * Return value: layout of page in number-up mode
+ *
+ * Since: 2.14
+ */
+GtkNumberUpLayout
+gtk_print_settings_get_number_up_layout (GtkPrintSettings *settings)
+{
+  GtkNumberUpLayout layout;
+  GtkTextDirection  text_direction;
+  const gchar      *val;
+
+  val = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT);
+  text_direction = gtk_widget_get_default_direction ();
+
+  if (text_direction == GTK_TEXT_DIR_LTR)
+    layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
+  else
+    layout = GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM;
+
+  if (val == NULL)
+    return layout;
+
+  if (strcmp (val, "lrtb") == 0)
+    return GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
+
+  if (strcmp (val, "lrbt") == 0)
+    return GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP;
+
+  if (strcmp (val, "rltb") == 0)
+    return GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM;
+
+  if (strcmp (val, "rlbt") == 0)
+    return GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP;
+
+  if (strcmp (val, "tblr") == 0)
+    return GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT;
+
+  if (strcmp (val, "tbrl") == 0)
+    return GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_RIGHT_TO_LEFT;
+
+  if (strcmp (val, "btlr") == 0)
+    return GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT;
+
+  if (strcmp (val, "btrl") == 0)
+    return GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT;
+
+  return layout;
+}
+
+/**
+ * gtk_print_settings_set_number_up_layout:
+ * @settings: a #GtkPrintSettings
+ * @number_up_layout: a #GtkNumberUpLayout value
+ * 
+ * Sets the value of %GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT.
+ * 
+ * Since: 2.14
+ */
+void
+gtk_print_settings_set_number_up_layout (GtkPrintSettings  *settings,
+					 GtkNumberUpLayout  number_up_layout)
+{
+  const gchar *str;
+
+  switch (number_up_layout)
+    {
+    default:
+    case GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM:
+      str = "lrtb";
+      break;
+    case GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP:
+      str = "lrbt";
+      break;
+    case GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM:
+      str = "rltb";
+      break;
+    case GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP:
+      str = "rlbt";
+      break;
+    case GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT:
+      str = "tblr";
+      break;
+    case GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_RIGHT_TO_LEFT:
+      str = "tbrl";
+      break;
+    case GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT:
+      str = "btlr";
+      break;
+    case GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT:
+      str = "btrl";
+      break;
+    }
+  
+  gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT, str);
 }
 
 /**
