@@ -1773,10 +1773,6 @@ doesnt_want_key (gint mask,
 {
   GdkWindow *modal_current = _gdk_modal_current ();
   GdkWindow *window = (GdkWindow *) gdk_win32_handle_table_lookup ((GdkNativeWindow)msg->hwnd);
-  gboolean modally_blocked = modal_current != NULL ? gdk_window_get_toplevel (window) != modal_current : FALSE;
-
-  if (modally_blocked == TRUE)
-    return TRUE;
 
   return (((msg->message == WM_KEYUP || msg->message == WM_SYSKEYUP) &&
 	   !(mask & GDK_KEY_RELEASE_MASK)) ||
