@@ -1,3 +1,9 @@
+2008-08-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksettings.c: When reconstructing the color hash, try
+	harder to avoid unnecessary notification, since this can lead
+	to infinite reloading of rc files in some situations.
+
 2008-08-21  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkevents-win32.c (doesnt_want_key): Remove the checks
