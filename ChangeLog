@@ -1,3 +1,12 @@
+2008-08-21  Cody Russell  <bratsche@gnome.org>
+
+	Merged from trunk:
+
+	* gdk/win32/gdkevents-win32.c (doesnt_want_key): Remove the checks
+	to see if the window is modally blocked.  This doesn't get us anything,
+	and it confuses the search window in GtkTreeView (and potentially other
+	utility windows in other apps).  (#520165)
+
 2008-08-04  Sven Neumann  <sven@gimp.org>
 
 	Merged from trunk:
