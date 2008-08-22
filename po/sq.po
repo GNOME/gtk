@@ -8,10 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-19 09:44+0200\n"
-"PO-Revision-Date: 2008-08-18 10:40+0200\n"
+"POT-Creation-Date: 2008-08-21 10:25+0000\n"
+"PO-Revision-Date: 2008-08-22 11:57+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
-"Language-Team: albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
+"Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -292,10 +292,8 @@ msgstr "File '%s' nuk përmban të dhëna"
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:993
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1257 ../tests/testfilechooser.c:267
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Hapja e figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i dëmtuar"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "Hapja e figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i dëmtuar"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:221
 #, c-format
@@ -347,8 +345,7 @@ msgstr "Gabim gjatë shkrimit tek file i figurës: %s"
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1684 ../gdk-pixbuf/gdk-pixbuf-io.c:1815
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
+msgstr "Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1718
 msgid "Insufficient memory to save image to callback"
@@ -682,10 +679,8 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-jpeg.c:1148 ../gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
 
 #: ../gdk-pixbuf/io-jpeg.c:1309 ../gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
@@ -748,8 +743,7 @@ msgstr "Figura e transformuar në PNG ka gjerësi apo lartësi zero."
 
 #: ../gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
-"Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
+msgstr "Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
 
 #: ../gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
@@ -789,8 +783,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Gabim fatal gjatë leximit të file PNG: %s"
 
 #: ../gdk-pixbuf/io-png.c:825
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Kyçet për segmentet e tekstit PNG duhet të kenë të paktën 1 dhe në maksimum "
 "79 simbole."
@@ -1055,8 +1048,7 @@ msgstr "Kujtesë e pamjaftueshme për ngarkimin e file XBM"
 
 #: ../gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
-"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
+msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
 
 #: ../gdk-pixbuf/io-xbm.c:492
 msgid "The XBM image format"
@@ -1097,8 +1089,7 @@ msgstr "I pamundur leximi i hartës së ngjyrave XPM"
 
 #: ../gdk-pixbuf/io-xpm.c:777
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
-"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
+msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
 
 #: ../gdk-pixbuf/io-xpm.c:816
 msgid "The XPM image format"
@@ -1605,7 +1596,7 @@ msgstr "_Shkruaj simbolin Unicode të kontrollit"
 msgid "Select A File"
 msgstr "Zgjidh një file"
 
-#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1909
+#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1920
 msgid "Desktop"
 msgstr "Hapësira e punës"
 
@@ -1654,172 +1645,170 @@ msgstr "E pamundur shfaqja e pëmbajtjes së kartelës"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1661
+#: ../gtk/gtkfilechooserdefault.c:1672
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s mbi %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1837
+#: ../gtk/gtkfilechooserdefault.c:1848
 msgid "Search"
 msgstr "Kërko"
 
-#: ../gtk/gtkfilechooserdefault.c:1861
+#: ../gtk/gtkfilechooserdefault.c:1872
 msgid "Recently Used"
 msgstr "Përdorur së fundmi"
 
-#: ../gtk/gtkfilechooserdefault.c:2476
+#: ../gtk/gtkfilechooserdefault.c:2487
 msgid "Select which types of files are shown"
 msgstr "Zgjidh llojet e files që duhen shfaqur"
 
-#: ../gtk/gtkfilechooserdefault.c:2905
+#: ../gtk/gtkfilechooserdefault.c:2916
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Shto në libërshënues kartelën '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2946
+#: ../gtk/gtkfilechooserdefault.c:2957
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Shto në libërshënues kartelën aktuale"
 
-#: ../gtk/gtkfilechooserdefault.c:2948
+#: ../gtk/gtkfilechooserdefault.c:2959
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Shto në libërshënues kartelat e zgjedhura"
 
-#: ../gtk/gtkfilechooserdefault.c:2988
+#: ../gtk/gtkfilechooserdefault.c:2999
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Hiq libërshënuesin '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:3706
+#: ../gtk/gtkfilechooserdefault.c:3717
 msgid "Remove"
 msgstr "Hiq"
 
-#: ../gtk/gtkfilechooserdefault.c:3715
+#: ../gtk/gtkfilechooserdefault.c:3726
 msgid "Rename..."
 msgstr "Riemërto..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3861
+#: ../gtk/gtkfilechooserdefault.c:3872
 msgid "Places"
 msgstr "Rezervat"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3918
+#: ../gtk/gtkfilechooserdefault.c:3929
 msgid "_Places"
 msgstr "_Rezervat"
 
-#: ../gtk/gtkfilechooserdefault.c:3973 ../gtk/gtkstock.c:297
+#: ../gtk/gtkfilechooserdefault.c:3984 ../gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "_Shto"
 
-#: ../gtk/gtkfilechooserdefault.c:3980
+#: ../gtk/gtkfilechooserdefault.c:3991
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Shto në libërshënues kartelën e zgjedhur"
 
-#: ../gtk/gtkfilechooserdefault.c:3985 ../gtk/gtkstock.c:386
+#: ../gtk/gtkfilechooserdefault.c:3996 ../gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "_Hiq"
 
-#: ../gtk/gtkfilechooserdefault.c:3992
+#: ../gtk/gtkfilechooserdefault.c:4003
 msgid "Remove the selected bookmark"
 msgstr "Hiq libërshënuesin e zgjedhur"
 
-#: ../gtk/gtkfilechooserdefault.c:4089
+#: ../gtk/gtkfilechooserdefault.c:4100
 msgid "Could not select file"
 msgstr "E pamundur zgjedhja e file"
 
-#: ../gtk/gtkfilechooserdefault.c:4262
+#: ../gtk/gtkfilechooserdefault.c:4273
 msgid "_Add to Bookmarks"
 msgstr "_Shto në libërshënues"
 
-#: ../gtk/gtkfilechooserdefault.c:4276
+#: ../gtk/gtkfilechooserdefault.c:4287
 msgid "Show _Hidden Files"
 msgstr "Shfaq Files e _Padukshëm"
 
 # (pofilter) unchanged: please translate
-#: ../gtk/gtkfilechooserdefault.c:4519 ../gtk/gtkfilesel.c:730
+#: ../gtk/gtkfilechooserdefault.c:4530 ../gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "File"
 
-#: ../gtk/gtkfilechooserdefault.c:4568
+#: ../gtk/gtkfilechooserdefault.c:4579
 msgid "Name"
 msgstr "Emri"
 
-#: ../gtk/gtkfilechooserdefault.c:4593
+#: ../gtk/gtkfilechooserdefault.c:4604
 msgid "Size"
 msgstr "Madhësia"
 
-#: ../gtk/gtkfilechooserdefault.c:4607
+#: ../gtk/gtkfilechooserdefault.c:4618
 msgid "Modified"
 msgstr "Ndryshuar"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4827 ../gtk/gtkprinteroptionwidget.c:786
+#: ../gtk/gtkfilechooserdefault.c:4838 ../gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Emri:"
 
-#: ../gtk/gtkfilechooserdefault.c:4869
+#: ../gtk/gtkfilechooserdefault.c:4880
 msgid "_Browse for other folders"
 msgstr "_Shfleto për kartelat e tjera"
 
-#: ../gtk/gtkfilechooserdefault.c:5139
+#: ../gtk/gtkfilechooserdefault.c:5150
 msgid "Type a file name"
 msgstr "Shkruaj emrin e një file"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5176
+#: ../gtk/gtkfilechooserdefault.c:5187
 msgid "Create Fo_lder"
 msgstr "Krijo Karte_lë"
 
-#: ../gtk/gtkfilechooserdefault.c:5186
+#: ../gtk/gtkfilechooserdefault.c:5197
 msgid "_Location:"
 msgstr "_Pozicioni:"
 
-#: ../gtk/gtkfilechooserdefault.c:5375
+#: ../gtk/gtkfilechooserdefault.c:5386
 msgid "Save in _folder:"
 msgstr "Ruaj tek _kartela:"
 
-#: ../gtk/gtkfilechooserdefault.c:5377
+#: ../gtk/gtkfilechooserdefault.c:5388
 msgid "Create in _folder:"
 msgstr "Krijoje tek _kartela:"
 
-#: ../gtk/gtkfilechooserdefault.c:6971
+#: ../gtk/gtkfilechooserdefault.c:6970
 msgid "Cannot change to folder because it is not local"
 msgstr "I pamundur kalimi tek kartela pasi nuk është lokale"
 
-#: ../gtk/gtkfilechooserdefault.c:7596 ../gtk/gtkfilechooserdefault.c:7617
+#: ../gtk/gtkfilechooserdefault.c:7595 ../gtk/gtkfilechooserdefault.c:7616
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Shtegu %s ekziston rregullisht"
 
-#: ../gtk/gtkfilechooserdefault.c:7707
+#: ../gtk/gtkfilechooserdefault.c:7706
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Shtegu %s nuk ekziston"
 
-#: ../gtk/gtkfilechooserdefault.c:7950 ../gtk/gtkprintunixdialog.c:364
+#: ../gtk/gtkfilechooserdefault.c:7954 ../gtk/gtkprintunixdialog.c:368
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Një file i quajtur \"%s\" ekziston.  Dëshiron t'a zëvendësosh?"
 
-#: ../gtk/gtkfilechooserdefault.c:7953 ../gtk/gtkprintunixdialog.c:368
+#: ../gtk/gtkfilechooserdefault.c:7957 ../gtk/gtkprintunixdialog.c:372
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr ""
-"File ekziston në \"%s\".  Zëvendësimi do të mbishkruaj përmbajtjen e tij."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr "File ekziston në \"%s\".  Zëvendësimi do të mbishkruaj përmbajtjen e tij."
 
-#: ../gtk/gtkfilechooserdefault.c:7958 ../gtk/gtkprintunixdialog.c:375
+#: ../gtk/gtkfilechooserdefault.c:7962 ../gtk/gtkprintunixdialog.c:379
 msgid "_Replace"
 msgstr "_Zëvendëso"
 
-#: ../gtk/gtkfilechooserdefault.c:8719
+#: ../gtk/gtkfilechooserdefault.c:8723
 msgid "Could not start the search process"
 msgstr "E pamundur nisja e proçesit të kërkimit"
 
 # (pofilter) doublespacing: checks for bad double-spaces by comparing to original
-#: ../gtk/gtkfilechooserdefault.c:8720
+#: ../gtk/gtkfilechooserdefault.c:8724
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1827,52 +1816,52 @@ msgstr ""
 "Programi nuk mundi të krijojë një lidhje me daemon e indeksimit. Sigurohu që "
 "është duke funksionuar."
 
-#: ../gtk/gtkfilechooserdefault.c:8734
+#: ../gtk/gtkfilechooserdefault.c:8738
 msgid "Could not send the search request"
 msgstr "I pamundur dërgimi i kërkesës së kërkimit"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9149
+#: ../gtk/gtkfilechooserdefault.c:9153
 msgid "_Search:"
 msgstr "_Kërko:"
 
-#: ../gtk/gtkfilechooserdefault.c:10096
+#: ../gtk/gtkfilechooserdefault.c:10100
 #, c-format
 msgid "Could not mount %s"
 msgstr "I pamundur montimi i %s"
 
-#: ../gtk/gtkfilechooserdefault.c:10750
+#: ../gtk/gtkfilechooserdefault.c:10754
 msgid "Type name of new folder"
 msgstr "Shkruaj emrin e kartelës së re"
 
 # (pofilter) unchanged: please translate
-#: ../gtk/gtkfilechooserdefault.c:10800
+#: ../gtk/gtkfilechooserdefault.c:10804
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
 # (pofilter) unchanged: please translate
-#: ../gtk/gtkfilechooserdefault.c:10802
+#: ../gtk/gtkfilechooserdefault.c:10806
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
 # (pofilter) unchanged: please translate
-#: ../gtk/gtkfilechooserdefault.c:10804
+#: ../gtk/gtkfilechooserdefault.c:10808
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: ../gtk/gtkfilechooserdefault.c:10907 ../gtk/gtkfilechooserdefault.c:10929
-#: ../gtk/gtkfilechooserdefault.c:11000
+#: ../gtk/gtkfilechooserdefault.c:10911 ../gtk/gtkfilechooserdefault.c:10933
+#: ../gtk/gtkfilechooserdefault.c:11004
 msgid "Unknown"
 msgstr "Nuk njihet"
 
-#: ../gtk/gtkfilechooserdefault.c:10947
+#: ../gtk/gtkfilechooserdefault.c:10951
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:10949
+#: ../gtk/gtkfilechooserdefault.c:10953
 msgid "Yesterday at %H:%M"
 msgstr "Dje në orën %H:%M"
 
@@ -1959,8 +1948,7 @@ msgstr "_Riemërto File"
 
 #: ../gtk/gtkfilesel.c:1347
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Emri i kartelës \"%s\" përmban simbole që nuk lejohen në emrat e files"
 
 #: ../gtk/gtkfilesel.c:1392
@@ -2331,7 +2319,7 @@ msgstr "Kujto fjalëkalimin derisa të da_lësh"
 msgid "Remember _forever"
 msgstr "Kujto _përgjithmonë"
 
-#: ../gtk/gtknotebook.c:4424 ../gtk/gtknotebook.c:6930
+#: ../gtk/gtknotebook.c:4417 ../gtk/gtknotebook.c:6923
 #, c-format
 msgid "Page %u"
 msgstr "Faqja %u"
@@ -2401,7 +2389,7 @@ msgstr "_Përmasat e fletës:"
 msgid "_Orientation:"
 msgstr "_Orientimi:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1129 ../gtk/gtkprintunixdialog.c:2397
+#: ../gtk/gtkpagesetupunixdialog.c:1129 ../gtk/gtkprintunixdialog.c:2691
 msgid "Page Setup"
 msgstr "Rregullimet e faqes"
 
@@ -2554,8 +2542,7 @@ msgstr "Gabim gjatë krijimit të pamjes së parë së printimit"
 
 #: ../gtk/gtkprintoperation.c:2292
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr ""
-"Shkaku më i mundshëm është pamundësia e krijimit të një file të përkohëshëm."
+msgstr "Shkaku më i mundshëm është pamundësia e krijimit të një file të përkohëshëm."
 
 #: ../gtk/gtkprintoperation-unix.c:242
 msgid "Error launching preview"
@@ -2624,35 +2611,35 @@ msgstr "Trajtues jo korrekt për PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Gabim i papërcaktuar"
 
-#: ../gtk/gtkprintunixdialog.c:1716
+#: ../gtk/gtkprintunixdialog.c:1741
 msgid "Printer"
 msgstr "Printuesi"
 
-#: ../gtk/gtkprintunixdialog.c:1725
+#: ../gtk/gtkprintunixdialog.c:1750
 msgid "Location"
 msgstr "Vendndodhja"
 
-#: ../gtk/gtkprintunixdialog.c:1735
+#: ../gtk/gtkprintunixdialog.c:1760
 msgid "Status"
 msgstr "Gjendja"
 
-#: ../gtk/gtkprintunixdialog.c:1758
+#: ../gtk/gtkprintunixdialog.c:1783
 msgid "Range"
 msgstr "Intervali"
 
-#: ../gtk/gtkprintunixdialog.c:1762
+#: ../gtk/gtkprintunixdialog.c:1787
 msgid "_All Pages"
 msgstr "Të gjith_a faqet"
 
-#: ../gtk/gtkprintunixdialog.c:1769
+#: ../gtk/gtkprintunixdialog.c:1794
 msgid "C_urrent Page"
 msgstr "Faqja akt_uale"
 
-#: ../gtk/gtkprintunixdialog.c:1778
+#: ../gtk/gtkprintunixdialog.c:1803
 msgid "Pag_es:"
 msgstr "Faq_et:"
 
-#: ../gtk/gtkprintunixdialog.c:1779
+#: ../gtk/gtkprintunixdialog.c:1804
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2660,142 +2647,160 @@ msgstr ""
 "Përcakto një apo më shumë intervale faqesh,\n"
 " p.sh. 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:1798
+#: ../gtk/gtkprintunixdialog.c:1823
 msgid "Copies"
 msgstr "Kopjet"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1803
+#: ../gtk/gtkprintunixdialog.c:1828
 msgid "Copie_s:"
 msgstr "Kopj_e:"
 
-#: ../gtk/gtkprintunixdialog.c:1821
+#: ../gtk/gtkprintunixdialog.c:1846
 msgid "C_ollate"
 msgstr "Grup_o"
 
-#: ../gtk/gtkprintunixdialog.c:1829
+#: ../gtk/gtkprintunixdialog.c:1854
 msgid "_Reverse"
 msgstr "Pë_rmbys"
 
-#: ../gtk/gtkprintunixdialog.c:1849
+#: ../gtk/gtkprintunixdialog.c:1874
 msgid "General"
 msgstr "Të përgjithshme"
 
-#: ../gtk/gtkprintunixdialog.c:2252
+#: ../gtk/gtkprintunixdialog.c:2434
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2716
+msgid "Page Ordering"
+msgstr "Renditja e faqeve"
+
+# (pofilter) acronyms: acronyms should not be translated: LRM
+#: ../gtk/gtkprintunixdialog.c:2440
+msgid "Left to right"
+msgstr "Nga e majta në të djathtë"
+
+#: ../gtk/gtkprintunixdialog.c:2441
+msgid "Right to left"
+msgstr "Nga e djathta në të majtë"
+
+#: ../gtk/gtkprintunixdialog.c:2528
 msgid "Layout"
 msgstr "Faqosja"
 
-#: ../gtk/gtkprintunixdialog.c:2256
-msgid "Pages per _side:"
-msgstr "Faqe _për fletë:"
-
-#: ../gtk/gtkprintunixdialog.c:2272
+#: ../gtk/gtkprintunixdialog.c:2532
 msgid "T_wo-sided:"
 msgstr "P_ara-mbrapa:"
 
-#: ../gtk/gtkprintunixdialog.c:2287
+#: ../gtk/gtkprintunixdialog.c:2547
+msgid "Pages per _side:"
+msgstr "Faqe _për fletë:"
+
+#: ../gtk/gtkprintunixdialog.c:2565
+msgid "Page or_dering:"
+msgstr "Ren_ditja e faqeve:"
+
+#: ../gtk/gtkprintunixdialog.c:2581
 msgid "_Only print:"
 msgstr "Print_o vetëm:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2302
+#: ../gtk/gtkprintunixdialog.c:2596
 msgid "All sheets"
 msgstr "Të gjitha faqet"
 
-#: ../gtk/gtkprintunixdialog.c:2303
+#: ../gtk/gtkprintunixdialog.c:2597
 msgid "Even sheets"
 msgstr "Faqet çifte"
 
-#: ../gtk/gtkprintunixdialog.c:2304
+#: ../gtk/gtkprintunixdialog.c:2598
 msgid "Odd sheets"
 msgstr "Faqet teke"
 
-#: ../gtk/gtkprintunixdialog.c:2307
+#: ../gtk/gtkprintunixdialog.c:2601
 msgid "Sc_ale:"
 msgstr "Shk_alla:"
 
-#: ../gtk/gtkprintunixdialog.c:2334
+#: ../gtk/gtkprintunixdialog.c:2628
 msgid "Paper"
 msgstr "Letra"
 
-#: ../gtk/gtkprintunixdialog.c:2338
+#: ../gtk/gtkprintunixdialog.c:2632
 msgid "Paper _type:"
 msgstr "Lloji i le_trës:"
 
-#: ../gtk/gtkprintunixdialog.c:2353
+#: ../gtk/gtkprintunixdialog.c:2647
 msgid "Paper _source:"
 msgstr "Burimi i letrë_s:"
 
-#: ../gtk/gtkprintunixdialog.c:2368
+#: ../gtk/gtkprintunixdialog.c:2662
 msgid "Output t_ray:"
 msgstr "Sirta_ri i daljes:"
 
-#: ../gtk/gtkprintunixdialog.c:2420
+#: ../gtk/gtkprintunixdialog.c:2714
 msgid "Job Details"
 msgstr "Hollësitë e punës"
 
-#: ../gtk/gtkprintunixdialog.c:2426
+#: ../gtk/gtkprintunixdialog.c:2720
 msgid "Pri_ority:"
 msgstr "Pri_oriteti:"
 
-#: ../gtk/gtkprintunixdialog.c:2441
+#: ../gtk/gtkprintunixdialog.c:2735
 msgid "_Billing info:"
 msgstr "Informacione m_bi faturimin:"
 
-#: ../gtk/gtkprintunixdialog.c:2459
+#: ../gtk/gtkprintunixdialog.c:2753
 msgid "Print Document"
 msgstr "Printo dokumentin"
 
-#: ../gtk/gtkprintunixdialog.c:2465
+#: ../gtk/gtkprintunixdialog.c:2759
 msgid "_Now"
 msgstr "Ta_ni"
 
 # (pofilter) accelerators: accelerator _ appears before an invalid accelerator character 'ë' (eg. space)
-#: ../gtk/gtkprintunixdialog.c:2472
+#: ../gtk/gtkprintunixdialog.c:2766
 msgid "A_t:"
 msgstr "_Në:"
 
-#: ../gtk/gtkprintunixdialog.c:2487
+#: ../gtk/gtkprintunixdialog.c:2781
 msgid "On _hold"
 msgstr "_Në pritje"
 
-#: ../gtk/gtkprintunixdialog.c:2506
+#: ../gtk/gtkprintunixdialog.c:2800
 msgid "Add Cover Page"
 msgstr "Shto faqe kapak"
 
-#: ../gtk/gtkprintunixdialog.c:2512
+#: ../gtk/gtkprintunixdialog.c:2806
 msgid "Be_fore:"
 msgstr "Pa_ra:"
 
-#: ../gtk/gtkprintunixdialog.c:2527
+#: ../gtk/gtkprintunixdialog.c:2821
 msgid "_After:"
 msgstr "Mb_as:"
 
-#: ../gtk/gtkprintunixdialog.c:2542
+#: ../gtk/gtkprintunixdialog.c:2836
 msgid "Job"
 msgstr "Puna e printimit"
 
-#: ../gtk/gtkprintunixdialog.c:2608
+#: ../gtk/gtkprintunixdialog.c:2902
 msgid "Advanced"
 msgstr "Detajuar"
 
-#: ../gtk/gtkprintunixdialog.c:2643
+#: ../gtk/gtkprintunixdialog.c:2937
 msgid "Image Quality"
 msgstr "Cilësia e figurës"
 
-#: ../gtk/gtkprintunixdialog.c:2646
+#: ../gtk/gtkprintunixdialog.c:2940
 msgid "Color"
 msgstr "Ngjyra"
 
-#: ../gtk/gtkprintunixdialog.c:2649
+#: ../gtk/gtkprintunixdialog.c:2943
 msgid "Finishing"
 msgstr "Duke përfunduar"
 
-#: ../gtk/gtkprintunixdialog.c:2659
+#: ../gtk/gtkprintunixdialog.c:2953
 msgid "Some of the settings in the dialog conflict"
 msgstr "Disa nga rregullimet në dritaren e dialogut janë në konflikt"
 
-#: ../gtk/gtkprintunixdialog.c:2682
+#: ../gtk/gtkprintunixdialog.c:2976
 msgid "Print"
 msgstr "Printo"
 
@@ -3380,8 +3385,7 @@ msgstr "\"%s\" nuk është një emër i vlefshëm atributi"
 
 #: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 "\"%s\" nuk mund të konvertohet në një vlerë të llojit \"%s\" për atributin "
 "\"%s\""
@@ -3404,8 +3408,7 @@ msgstr "Tag \"%s\" ka prioritet \"%s\" të pavlefshëm"
 #: ../gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
-"Elementi më i jashtëm në tekst duhet të jetë <text_view_markup> e jo <%s>"
+msgstr "Elementi më i jashtëm në tekst duhet të jetë <text_view_markup> e jo <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
 #, c-format
@@ -3421,8 +3424,7 @@ msgid "Serialized data is malformed"
 msgstr "Të dhënat e serializuara janë të keqformuara"
 
 #: ../gtk/gtktextbufferserialize.c:1857
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Të dhënat e serializuara janë të keqformuara. Seksioni i parë nuk është "
 "GTKTEXTBUFFERCONTENTS-0001"
@@ -4810,38 +4812,100 @@ msgstr "Mesatare"
 msgid "Low"
 msgstr "E ulët"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2688
+msgid "Left to right, top to bottom"
+msgstr "Nga e majta në të djathtë, nga sipër poshtë"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2688
+msgid "Left to right, bottom to top"
+msgstr "Nga e majta në të djathtë, nga poshtë lart"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2689
+msgid "Right to left, top to bottom"
+msgstr "Nga e djathta në të majtë, nga sipër poshtë"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2689
+msgid "Right to left, bottom to top"
+msgstr "Nga e djathta në të majtë, nga poshtë lart"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2690
+msgid "Top to bottom, left to right"
+msgstr "Nga sipër poshtë, nga e majta në të djathtë"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2690
+msgid "Top to bottom, right to left"
+msgstr "Nga sipër poshtë, nga e djathta në të majtë"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2691
+msgid "Bottom to top, left to right"
+msgstr "Nga poshtë sipër, nga e majta në të djathtë"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2691
+msgid "Bottom to top, right to left"
+msgstr "Nga poshtë sipër, nga e djathta në të majtë"
+
+#. Cups specific, non-ppd related settings
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2703
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
+msgid "Pages Per Sheet"
+msgstr "Faqe për fletë"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2734
+msgid "Job Priority"
+msgstr "Prioriteti i punës"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2742
+msgid "Billing Info"
+msgstr "Informacione mbi faturimin"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
 msgid "None"
 msgstr "Asnjë"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
 msgid "Classified"
 msgstr "Klasifikimi"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
 msgid "Confidential"
 msgstr "Në konfidencë"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
 msgid "Secret"
 msgstr "Sekrete"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
 msgid "Standard"
 msgstr "Standart"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
 msgid "Top Secret"
 msgstr "Top sekret"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
 msgid "Unclassified"
 msgstr "Pa klasifikim"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2785
+msgid "Before"
+msgstr "Para"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2797
+msgid "After"
+msgstr "Mbas"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2813
+msgid "Print at"
+msgstr "Printo në"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2821
+msgid "Print at time"
+msgstr "Printo në orën"
 
 # (pofilter) variables: do not translate: %s, %s
 # (pofilter) isfuzzy: Check if the unit has been marked fuzzy.
 # (pofilter) printf: checks whether printf format strings match
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2826
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2852
 #, c-format
 msgid "Custom %sx%s"
 msgstr "E personalizuar %sx%s"
@@ -4884,10 +4948,6 @@ msgstr "Formati i _output"
 msgid "Print to LPR"
 msgstr "Printo në LPR"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
-msgid "Pages Per Sheet"
-msgstr "Faqe për fletë"
-
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:431
 msgid "Command Line"
 msgstr "Rreshti i komandës"
@@ -4907,3 +4967,4 @@ msgstr "Printo në Test Printer"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "E pamundur marrja e informacioneve për file '%s': %s"
+
