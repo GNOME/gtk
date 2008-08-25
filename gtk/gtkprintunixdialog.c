@@ -1747,6 +1747,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
   
   renderer = gtk_cell_renderer_text_new ();
+  /* Translators: this is the header for the location column in the print dialog */
   column = gtk_tree_view_column_new_with_attributes (_("Location"),
 						     renderer,
 						     "text",
@@ -1757,6 +1758,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
 
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+  /* Translators: this is the header for the printer status column in the print dialog */
   column = gtk_tree_view_column_new_with_attributes (_("Status"),
 						     renderer,
 						     "text",
@@ -2756,12 +2758,19 @@ create_job_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
   gtk_widget_show (table);
 
+  /* Translators: this is one of the choices for the print at option 
+   * in the print dialog
+   */
   radio = gtk_radio_button_new_with_mnemonic (NULL, _("_Now"));
   priv->print_now_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
 		    0, 2, 0, 1,  GTK_FILL, 0,
 		    0, 0);
+  /* Translators: this is one of the choices for the print at option 
+   * in the print dialog. It also serves as the label for an entry that
+   * allows the user to enter a time.
+   */
   radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
 					      _("A_t:"));
   priv->print_at_radio = radio;
@@ -2777,6 +2786,10 @@ create_job_page (GtkPrintUnixDialog *dialog)
 		    1, 2, 1, 2,  GTK_FILL, 0,
 		    0, 0);
 
+  /* Translators: this is one of the choices for the print at option 
+   * in the print dialog. It means that the print job will not be
+   * printed until it explicitly gets 'released'.
+   */
   radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
 					      _("On _hold"));
   priv->print_hold_radio = radio;
@@ -2803,6 +2816,9 @@ create_job_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
   gtk_widget_show (table);
 
+  /* Translators, this is the label used for the option in the print 
+   * dialog that controls the front cover page.
+   */
   label = gtk_label_new_with_mnemonic (_("Be_fore:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
@@ -2818,6 +2834,9 @@ create_job_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
+  /* Translators, this is the label used for the option in the print 
+   * dialog that controls the back cover page.
+   */
   label = gtk_label_new_with_mnemonic (_("_After:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_widget_show (label);
@@ -2833,6 +2852,9 @@ create_job_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
+  /* Translators: this is the tab label for the notebook tab containing
+   * job-specific options in the print dialog
+   */
   label = gtk_label_new (_("Job"));
   gtk_widget_show (label);
 

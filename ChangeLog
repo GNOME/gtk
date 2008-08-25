@@ -1,5 +1,6 @@
 2008-08-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c:
 	* modules/printbackends/cups/gtkprintbackendcups.c: Add translator
 	hints to many strings.
 
