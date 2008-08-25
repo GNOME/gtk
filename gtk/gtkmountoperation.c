@@ -767,6 +767,8 @@ gtk_mount_operation_is_showing (GtkMountOperation *op)
  *
  * Sets the transient parent for windows shown by the
  * #GtkMountOperation.
+ *
+ * Since: 2.14
  */
 void
 gtk_mount_operation_set_parent (GtkMountOperation *op,

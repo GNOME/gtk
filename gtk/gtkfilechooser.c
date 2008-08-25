@@ -1181,6 +1181,8 @@ gtk_file_chooser_set_file (GtkFileChooser  *chooser,
  * folder.
  *
  * Returns: a selected #GFile
+ *
+ * Since: 2.14
  **/
 GFile *
 gtk_file_chooser_get_file (GtkFileChooser *chooser)

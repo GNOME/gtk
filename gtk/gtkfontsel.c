@@ -1612,6 +1612,8 @@ gtk_font_selection_dialog_get_apply_button (GtkFontSelectionDialog *fsd)
  * Gets the 'Cancel' button.
  *
  * Return value: the #GtkWidget used in the dialog for the 'Cancel' button.
+ *
+ * Since: 2.14
  */
 GtkWidget *
 gtk_font_selection_dialog_get_cancel_button (GtkFontSelectionDialog *fsd)
