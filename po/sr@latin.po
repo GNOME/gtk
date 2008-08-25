@@ -304,8 +304,7 @@ msgstr "Greška pri upisu u datoteku slike: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1684 gdk-pixbuf/gdk-pixbuf-io.c:1815
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Ovo izdanje programa gdk-pixbuf ne podržava čuvanje ove vrste slike: %s"
+msgstr "Ovo izdanje programa gdk-pixbuf ne podržava čuvanje ove vrste slike: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1718
 msgid "Insufficient memory to save image to callback"
@@ -348,8 +347,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Unutrašnja greška: deo za učitavanje slika „%s“ nije uspeo da obavi "
-"operaciju, a nije naveo ni razlog neuspeha"
+"Unutrašnja greška: deo za učitavanje slika „%s“ nije uspeo da obavi operaciju, "
+"a nije naveo ni razlog neuspeha"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:373
 #, c-format
@@ -494,8 +493,7 @@ msgstr "Izdanje %s GIF vrste zapisa nije podržano"
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
-"GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
+msgstr "GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
 
 #: gdk-pixbuf/io-gif.c:1533
 msgid "GIF image was truncated or incomplete."
@@ -623,8 +621,8 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"Nedovoljno memorije za učitavanje slike, zatvorite neke programe da "
-"oslobodite memoriju"
+"Nedovoljno memorije za učitavanje slike, zatvorite neke programe da oslobodite "
+"memoriju"
 
 # grafički dizajneri, kako se ovo prevodi?
 #: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
@@ -656,8 +654,8 @@ msgstr ""
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"Kvalitet JPEG-a mora biti vrednost između 0 i 100; nije dozvoljena vrednost "
-"„%d“."
+"Kvalitet JPEG-a mora biti vrednost između 0 i 100; nije dozvoljena vrednost „%"
+"d“."
 
 #: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
@@ -761,8 +759,7 @@ msgstr "Kobna greška pri čitanju PNG slike: %s"
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
-"Ključevi za tekstualne odeljke PNG-a moraju imati bar 1, a najviše 79 "
-"znakova."
+"Ključevi za tekstualne odeljke PNG-a moraju imati bar 1, a najviše 79 znakova."
 
 #: gdk-pixbuf/io-png.c:833
 msgid "Keys for PNG text chunks must be ASCII characters."
@@ -1782,8 +1779,8 @@ msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
-"Program ne može da uspostavi vezu sa servisom indeksiranja. Uveri se da je "
-"on pokrenut."
+"Program ne može da uspostavi vezu sa servisom indeksiranja. Uveri se da je on "
+"pokrenut."
 
 #: gtk/gtkfilechooserdefault.c:8734
 msgid "Could not send the search request"
@@ -3344,8 +3341,7 @@ msgstr "Oznaka „%s“ ima neispravan prioritet „%s“"
 #: gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
-"Prvi spoljašnji element u tekstu mora biti <text_view_markup> a ne <%s>"
+msgstr "Prvi spoljašnji element u tekstu mora biti <text_view_markup> a ne <%s>"
 
 #: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
 #, c-format
