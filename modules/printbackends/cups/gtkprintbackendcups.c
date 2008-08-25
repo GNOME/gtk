@@ -2683,8 +2683,14 @@ cups_printer_get_options (GtkPrinter           *printer,
   char *print_at[] = { "now", "at", "on-hold" };
   char *n_up[] = {"1", "2", "4", "6", "9", "16" };
   char *prio[] = {"100", "80", "50", "30" };
+  /* Translators: These strings name the possible values of the 
+   * job priority option in the print dialog
+   */
   char *prio_display[] = {N_("Urgent"), N_("High"), N_("Medium"), N_("Low") };
   char *n_up_layout[] = { "lrtb", "lrbt", "rltb", "rlbt", "tblr", "tbrl", "btlr", "btrl" };
+  /* Translators: These strings name the possible arrangements of
+   * multiple pages on a sheet when printing
+   */
   char *n_up_layout_display[] = { N_("Left to right, top to bottom"), N_("Left to right, bottom to top"), 
                                   N_("Right to left, top to bottom"), N_("Right to left, bottom to top"), 
                                   N_("Top to bottom, left to right"), N_("Top to bottom, right to left"), 
@@ -2700,6 +2706,9 @@ cups_printer_get_options (GtkPrinter           *printer,
 
   /* Cups specific, non-ppd related settings */
 
+   /* Translators, this string is used to label the pages-per-sheet option 
+    * in the print dialog 
+    */
   option = gtk_printer_option_new ("gtk-n-up", _("Pages Per Sheet"), GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up),
 					 n_up, n_up);
@@ -2713,6 +2722,9 @@ cups_printer_get_options (GtkPrinter           *printer,
       for (i = 0; i < G_N_ELEMENTS (n_up_layout_display); i++)
         n_up_layout_display[i] = _(n_up_layout_display[i]);
   
+       /* Translators, this string is used to label the option in the print 
+        * dialog that controls in what order multiple pages are arranged 
+        */
       option = gtk_printer_option_new ("gtk-n-up-layout", _("Page Ordering"), GTK_PRINTER_OPTION_TYPE_PICKONE);
       gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up_layout),
                                              n_up_layout, n_up_layout_display);
@@ -2731,6 +2743,9 @@ cups_printer_get_options (GtkPrinter           *printer,
   for (i = 0; i < G_N_ELEMENTS(prio_display); i++)
     prio_display[i] = _(prio_display[i]);
   
+  /* Translators, this string is used to label the job priority option 
+   * in the print dialog 
+   */
   option = gtk_printer_option_new ("gtk-job-prio", _("Job Priority"), GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (prio),
 					 prio, prio_display);
@@ -2739,6 +2754,9 @@ cups_printer_get_options (GtkPrinter           *printer,
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
 
+  /* Translators, this string is used to label the billing info entry
+   * in the print dialog 
+   */
   option = gtk_printer_option_new ("gtk-billing-info", _("Billing Info"), GTK_PRINTER_OPTION_TYPE_STRING);
   gtk_printer_option_set (option, "");
   set_option_from_settings (option, settings);
@@ -2750,6 +2768,9 @@ cups_printer_get_options (GtkPrinter           *printer,
   if (backend != NULL)
     {
       char *cover_default[] = {"none", "classified", "confidential", "secret", "standard", "topsecret", "unclassified" };
+      /* Translators, these strings are names for various 'standard' cover 
+       * pages that the printing system may support.
+       */
       char *cover_display_default[] = {N_("None"), N_("Classified"), N_("Confidential"), N_("Secret"), N_("Standard"), N_("Top Secret"), N_("Unclassified"),};
       char **cover = NULL;
       char **cover_display = NULL;
@@ -2782,6 +2803,9 @@ cups_printer_get_options (GtkPrinter           *printer,
       for (i = 0; i < num_of_covers; i++)
         cover_display_translated[i] = _(cover_display[i]);
   
+      /* Translators, this is the label used for the option in the print 
+       * dialog that controls the front cover page.
+       */
       option = gtk_printer_option_new ("gtk-cover-before", _("Before"), GTK_PRINTER_OPTION_TYPE_PICKONE);
       gtk_printer_option_choices_from_array (option, num_of_covers,
 					 cover, cover_display_translated);
@@ -2794,6 +2818,9 @@ cups_printer_get_options (GtkPrinter           *printer,
       gtk_printer_option_set_add (set, option);
       g_object_unref (option);
 
+      /* Translators, this is the label used for the option in the print 
+       * dialog that controls the back cover page.
+       */
       option = gtk_printer_option_new ("gtk-cover-after", _("After"), GTK_PRINTER_OPTION_TYPE_PICKONE);
       gtk_printer_option_choices_from_array (option, num_of_covers,
 					 cover, cover_display_translated);
@@ -2810,6 +2837,10 @@ cups_printer_get_options (GtkPrinter           *printer,
       g_free (cover_display_translated);
     }
 
+  /* Translators: this is the name of the option that controls when
+   * a print job is printed. Possible values are 'now', a specified time,
+   * or 'on hold'
+   */
   option = gtk_printer_option_new ("gtk-print-time", _("Print at"), GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (print_at),
 					 print_at, print_at);
@@ -2818,6 +2849,9 @@ cups_printer_get_options (GtkPrinter           *printer,
   gtk_printer_option_set_add (set, option);
   g_object_unref (option);
   
+  /* Translators: this is the name of the option that allows the user
+   * to specify a time when a print job will be printed.
+   */
   option = gtk_printer_option_new ("gtk-print-time-text", _("Print at time"), GTK_PRINTER_OPTION_TYPE_STRING);
   gtk_printer_option_set (option, "");
   set_option_from_settings (option, settings);
@@ -2849,6 +2883,10 @@ cups_printer_get_options (GtkPrinter           *printer,
 
 	  g_ascii_formatd (width, sizeof (width), "%.2f", gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS));
 	  g_ascii_formatd (height, sizeof (height), "%.2f", gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS));
+          /* Translators: this format is used to display a custom paper
+           * size. The two placeholders are replaced with the width and height
+           * in points. E.g: "Custom 230.4x142.9"
+           */
 	  custom_name = g_strdup_printf (_("Custom %sx%s"), width, height);
           strncpy (option->defchoice, custom_name, PPD_MAX_NAME);
           g_free (custom_name);
