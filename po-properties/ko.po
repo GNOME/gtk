@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-18 18:27-0400\n"
-"PO-Revision-Date: 2008-08-05 00:02+0900\n"
+"PO-Revision-Date: 2008-08-25 11:53+0900\n"
 "Last-Translator: Eunju Kim <eukim@redhat.com>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -797,11 +797,11 @@ msgstr ""
 
 #: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:788 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
-msgstr "클릭하면 포커스"
+msgstr "누르면 포커스"
 
 #: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:394
 msgid "Whether the button grabs focus when it is clicked with the mouse"
-msgstr "마우스로 클릭하면 단추에 포커스가 가는 지 여부"
+msgstr "마우스로 누르면 단추에 포커스가 가는 지 여부"
 
 #: gtk/gtkbutton.c:231
 msgid "Border relief"
@@ -902,9 +902,8 @@ msgid "Show button images"
 msgstr "단추 그림 표시"
 
 #: gtk/gtkbutton.c:492
-#, fuzzy
 msgid "Whether images should be shown on buttons"
-msgstr "메뉴에 그림을 표시할 지 여부"
+msgstr "단추에 그림을 표시할 지 여부"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -1950,12 +1949,11 @@ msgstr "콤보에 드롭다운 메뉴를 표시할 지 여부"
 
 #: gtk/gtkcombobox.c:839
 msgid "Button Sensitivity"
-msgstr ""
+msgstr "단추 반응"
 
 #: gtk/gtkcombobox.c:840
-#, fuzzy
 msgid "Whether the dropdown button is sensitive when the model is empty"
-msgstr "마우스로 클릭하면 단추에 포커스가 가는 지 여부"
+msgstr "모델이 없을 때 드롭다운 단추가 반응할 지 여부"
 
 #: gtk/gtkcombobox.c:847
 msgid "Appears as list"
@@ -2994,22 +2992,19 @@ msgstr "레이아웃의 높이"
 
 #: gtk/gtklinkbutton.c:144
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: gtk/gtklinkbutton.c:145
-#, fuzzy
 msgid "The URI bound to this button"
-msgstr "단추의 토글 상태"
+msgstr "이 단추에 해당하는 URI"
 
 #: gtk/gtklinkbutton.c:159
-#, fuzzy
 msgid "Visited"
-msgstr "보임"
+msgstr "방문함"
 
 #: gtk/gtklinkbutton.c:160
-#, fuzzy
 msgid "Whether this link has been visited."
-msgstr "동작을 표시할 지 여부."
+msgstr "이 링크를 방문했는 지 여부."
 
 #: gtk/gtkmenu.c:503
 msgid "The currently selected menu item"
@@ -3565,14 +3560,12 @@ msgid "Size of tab curvature"
 msgstr "탭 구부러진 부분의 크기"
 
 #: gtk/gtknotebook.c:834
-#, fuzzy
 msgid "Arrow spacing"
-msgstr "화살표 크기 조정"
+msgstr "화살표 간격"
 
 #: gtk/gtknotebook.c:835
-#, fuzzy
 msgid "Scroll arrow spacing"
-msgstr "스크롤 막대 간격"
+msgstr "스크롤 화살표 간격"
 
 #: gtk/gtkobject.c:370
 msgid "User Data"
@@ -4090,9 +4083,8 @@ msgid "The radio menu item whose group this widget belongs to."
 msgstr "이 위젯이 속한 그룹의 라디오 메뉴 항목."
 
 #: gtk/gtkradiotoolbutton.c:66
-#, fuzzy
 msgid "The radio tool button whose group this button belongs to."
-msgstr "이 위젯이 속한 그룹의 라디오 단추."
+msgstr "이 단추가 속한 그룹의 라디오 단추."
 
 #: gtk/gtkrange.c:337
 msgid "Update policy"
@@ -4558,23 +4550,23 @@ msgstr "구분 표시를 그릴 지, 아니면 그냥 비워둘 지 결정합니
 
 #: gtk/gtksettings.c:215
 msgid "Double Click Time"
-msgstr "두 번 클릭 시간"
+msgstr "두 번 누르기 시간"
 
 #: gtk/gtksettings.c:216
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
-msgstr "두 번 클릭으로 인식하는 두 번의 클릭 사이의 최대 시간 (천분의 일초)"
+msgstr "두 번 누르기로 인식하는 두 번의 누르기 사이의 최대 시간 (천분의 일초)"
 
 #: gtk/gtksettings.c:223
 msgid "Double Click Distance"
-msgstr "두 번 클릭 거리"
+msgstr "두 번 누르기 거리"
 
 #: gtk/gtksettings.c:224
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
-msgstr "두 번 클릭으로 인식하는 두 번의 클릭 사이의 최대 거리 (픽셀 단위)"
+msgstr "두 번 누르기로 인식하는 두 번의 눌린 위치 사이의 최대 거리 (픽셀 단위)"
 
 #: gtk/gtksettings.c:240
 msgid "Cursor Blink"
@@ -4968,9 +4960,8 @@ msgstr "XDG 사운드 테마 이름"
 
 #. Translators: this means sounds that are played as feedback to user input
 #: gtk/gtksettings.c:916
-#, fuzzy
 msgid "Audible Input Feedback"
-msgstr "입력 피드백 사운드"
+msgstr "사운드 입력 피드백"
 
 #: gtk/gtksettings.c:917
 msgid "Whether to play event sounds as feedback to user input"
@@ -5883,11 +5874,11 @@ msgstr "열 헤더 단추 표시"
 
 #: gtk/gtktreeview.c:602
 msgid "Headers Clickable"
-msgstr "헤더 클릭 가능"
+msgstr "헤더 누르기 가능"
 
 #: gtk/gtktreeview.c:603
 msgid "Column headers respond to click events"
-msgstr "열 헤더가 클릭 이벤트에 반응하기"
+msgstr "열 헤더가 누르기 이벤트에 반응하기"
 
 #: gtk/gtktreeview.c:610
 msgid "Expander Column"
@@ -6141,11 +6132,11 @@ msgstr "위젯에 추가로 너비를 할당하면 각 열도 그에 따라 늘�
 
 #: gtk/gtktreeviewcolumn.c:280
 msgid "Clickable"
-msgstr "클릭 가능"
+msgstr "누르기 가능"
 
 #: gtk/gtktreeviewcolumn.c:281
 msgid "Whether the header can be clicked"
-msgstr "헤더가 클릭 가능한지"
+msgstr "헤더가 누르기 가능한지"
 
 #: gtk/gtktreeviewcolumn.c:289
 msgid "Widget"

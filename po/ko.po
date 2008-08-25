@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-18 18:27-0400\n"
-"PO-Revision-Date: 2008-08-04 23:53+0900\n"
+"PO-Revision-Date: 2008-08-25 11:50+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -2201,19 +2201,16 @@ msgid "_Password:"
 msgstr "암호(_P):"
 
 #: gtk/gtkmountoperation.c:590
-#, fuzzy
 msgid "Forget password _immediately"
-msgstr "즉시 암호 지우기(_F)"
+msgstr "즉시 암호 지우기(_I)"
 
 #: gtk/gtkmountoperation.c:598
-#, fuzzy
 msgid "Remember password until you _logout"
-msgstr "로그아웃할 때까지 암호 기억(_R)"
+msgstr "로그아웃할 때까지 암호 기억(_L)"
 
 #: gtk/gtkmountoperation.c:606
-#, fuzzy
 msgid "Remember _forever"
-msgstr "계속 암호 기억(_R)"
+msgstr "계속 암호 기억(_F)"
 
 #: gtk/gtknotebook.c:4424 gtk/gtknotebook.c:6930
 #, c-format
