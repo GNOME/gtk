@@ -1,5 +1,10 @@
 2008-08-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* modules/printbackends/cups/gtkprintbackendcups.c: Replace 
+	a long timeout with a second-granularity timeout.
+
+2008-08-25  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkprintunixdialog.c:
 	* modules/printbackends/cups/gtkprintbackendcups.c: Add translator
 	hints to many strings.

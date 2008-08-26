@@ -1516,7 +1516,7 @@ cups_get_printer_list (GtkPrintBackend *backend)
   if (cups_backend->list_printers_poll == 0)
     {
       cups_request_printer_list (cups_backend);
-      cups_backend->list_printers_poll = gdk_threads_add_timeout (3000,
+      cups_backend->list_printers_poll = gdk_threads_add_timeout_seconds (3,
                                                         (GSourceFunc) cups_request_printer_list,
                                                         backend);
     }
