@@ -1,3 +1,10 @@
+2008-08-26  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 549354 – Crash trying to open a file on a remote folder
+
+	* gtk/gtkfilechooserdefault.c (error_message_with_parent): Handle
+	the fact that parent may be NULL without crashing. 
+
 2008-08-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c: Replace 
