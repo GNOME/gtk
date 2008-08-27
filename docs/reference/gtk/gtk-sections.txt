@@ -2235,6 +2235,8 @@ gtk_link_button_get_uri
 gtk_link_button_set_uri
 GtkLinkButtonUriFunc
 gtk_link_button_set_uri_hook
+gtk_link_button_get_visited
+gtk_link_button_set_visited
 
 <SUBSECTION Standard>
 GTK_TYPE_LINK_BUTTON
@@ -5876,6 +5878,7 @@ GtkClipboardTextReceivedFunc
 GtkClipboardImageReceivedFunc
 GtkClipboardTargetsReceivedFunc
 GtkClipboardRichTextReceivedFunc
+GtkClipboardURIReceivedFunc
 GtkClipboardGetFunc
 GtkClipboardClearFunc
 gtk_clipboard_get
