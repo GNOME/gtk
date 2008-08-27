@@ -1,3 +1,8 @@
+2008-08-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: Don't capitalize
+	"per" in "Pages per Slide".
+
 2008-08-26  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 549354 – Crash trying to open a file on a remote folder

@@ -2709,7 +2709,7 @@ cups_printer_get_options (GtkPrinter           *printer,
    /* Translators, this string is used to label the pages-per-sheet option 
     * in the print dialog 
     */
-  option = gtk_printer_option_new ("gtk-n-up", _("Pages Per Sheet"), GTK_PRINTER_OPTION_TYPE_PICKONE);
+  option = gtk_printer_option_new ("gtk-n-up", _("Pages per Sheet"), GTK_PRINTER_OPTION_TYPE_PICKONE);
   gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up),
 					 n_up, n_up);
   gtk_printer_option_set (option, "1");
