@@ -1,7 +1,7 @@
 2008-08-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/printbackends/cups/gtkprintbackendcups.c: Don't capitalize
-	"per" in "Pages per Slide".
+	"per" in "Pages per Sheet".
 
 2008-08-26  Matthias Clasen  <mclasen@redhat.com>
 
