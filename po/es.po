@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-21 10:25+0000\n"
-"PO-Revision-Date: 2008-08-22 10:43+0200\n"
+"POT-Creation-Date: 2008-08-28 03:49+0000\n"
+"PO-Revision-Date: 2008-08-28 08:33+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2331,7 +2331,7 @@ msgstr "Tamaño del _papel:"
 msgid "_Orientation:"
 msgstr "_Orientación:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1129 ../gtk/gtkprintunixdialog.c:2691
+#: ../gtk/gtkpagesetupunixdialog.c:1129 ../gtk/gtkprintunixdialog.c:2693
 msgid "Page Setup"
 msgstr "Configuración de página"
 
@@ -2454,25 +2454,25 @@ msgstr "Terminado"
 msgid "print operation status|Finished with error"
 msgstr "Terminado con error"
 
-#: ../gtk/gtkprintoperation.c:2003
+#: ../gtk/gtkprintoperation.c:2043
 #, c-format
 msgid "Preparing %d"
 msgstr "Preparando %d"
 
-#: ../gtk/gtkprintoperation.c:2005 ../gtk/gtkprintoperation.c:2259
+#: ../gtk/gtkprintoperation.c:2045 ../gtk/gtkprintoperation.c:2301
 msgid "Preparing"
 msgstr "Preparando"
 
-#: ../gtk/gtkprintoperation.c:2008
+#: ../gtk/gtkprintoperation.c:2048
 #, c-format
 msgid "Printing %d"
 msgstr "Imprimiendo %d"
 
-#: ../gtk/gtkprintoperation.c:2289
+#: ../gtk/gtkprintoperation.c:2331
 msgid "Error creating print preview"
 msgstr "Error al crear la vista previa de impresión"
 
-#: ../gtk/gtkprintoperation.c:2292
+#: ../gtk/gtkprintoperation.c:2334
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "La razón más probable es que no se pudiera crear un archivo temporal."
 
@@ -2547,31 +2547,33 @@ msgstr "Error no especificado"
 msgid "Printer"
 msgstr "Impresora"
 
-#: ../gtk/gtkprintunixdialog.c:1750
+#. Translators: this is the header for the location column in the print dialog
+#: ../gtk/gtkprintunixdialog.c:1751
 msgid "Location"
 msgstr "Lugar"
 
-#: ../gtk/gtkprintunixdialog.c:1760
+#. Translators: this is the header for the printer status column in the print dialog
+#: ../gtk/gtkprintunixdialog.c:1762
 msgid "Status"
 msgstr "Estado"
 
-#: ../gtk/gtkprintunixdialog.c:1783
+#: ../gtk/gtkprintunixdialog.c:1785
 msgid "Range"
 msgstr "Rango"
 
-#: ../gtk/gtkprintunixdialog.c:1787
+#: ../gtk/gtkprintunixdialog.c:1789
 msgid "_All Pages"
 msgstr "_Todas las páginas"
 
-#: ../gtk/gtkprintunixdialog.c:1794
+#: ../gtk/gtkprintunixdialog.c:1796
 msgid "C_urrent Page"
 msgstr "Página a_ctual"
 
-#: ../gtk/gtkprintunixdialog.c:1803
+#: ../gtk/gtkprintunixdialog.c:1805
 msgid "Pag_es:"
 msgstr "Págin_as:"
 
-#: ../gtk/gtkprintunixdialog.c:1804
+#: ../gtk/gtkprintunixdialog.c:1806
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2579,158 +2581,173 @@ msgstr ""
 "Especifique uno o más rangos de páginas,\n"
 "ej. 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:1823
+#: ../gtk/gtkprintunixdialog.c:1825
 msgid "Copies"
 msgstr "Copias"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1828
+#: ../gtk/gtkprintunixdialog.c:1830
 msgid "Copie_s:"
 msgstr "_Copias:"
 
-#: ../gtk/gtkprintunixdialog.c:1846
+#: ../gtk/gtkprintunixdialog.c:1848
 msgid "C_ollate"
 msgstr "_Intercalar"
 
-#: ../gtk/gtkprintunixdialog.c:1854
+#: ../gtk/gtkprintunixdialog.c:1856
 msgid "_Reverse"
 msgstr "In_vertir"
 
-#: ../gtk/gtkprintunixdialog.c:1874
+#: ../gtk/gtkprintunixdialog.c:1876
 msgid "General"
 msgstr "General"
 
-#: ../gtk/gtkprintunixdialog.c:2434
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2716
+#. Translators, this string is used to label the option in the print
+#. * dialog that controls in what order multiple pages are arranged
+#.
+#: ../gtk/gtkprintunixdialog.c:2436
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2728
 msgid "Page Ordering"
 msgstr "Orden de las hojas"
 
-#: ../gtk/gtkprintunixdialog.c:2440
+#: ../gtk/gtkprintunixdialog.c:2442
 msgid "Left to right"
 msgstr "Izquierda a derecha"
 
-#: ../gtk/gtkprintunixdialog.c:2441
+#: ../gtk/gtkprintunixdialog.c:2443
 msgid "Right to left"
 msgstr "Derecha a izquierda"
 
-#: ../gtk/gtkprintunixdialog.c:2528
+#: ../gtk/gtkprintunixdialog.c:2530
 msgid "Layout"
 msgstr "Disposición"
 
-#: ../gtk/gtkprintunixdialog.c:2532
+#: ../gtk/gtkprintunixdialog.c:2534
 msgid "T_wo-sided:"
 msgstr "Por las _dos caras:"
 
-#: ../gtk/gtkprintunixdialog.c:2547
+#: ../gtk/gtkprintunixdialog.c:2549
 msgid "Pages per _side:"
 msgstr "Páginas por _hoja:"
 
-#: ../gtk/gtkprintunixdialog.c:2565
+#: ../gtk/gtkprintunixdialog.c:2567
 msgid "Page or_dering:"
 msgstr "Or_den de páginas:"
 
-#: ../gtk/gtkprintunixdialog.c:2581
+#: ../gtk/gtkprintunixdialog.c:2583
 msgid "_Only print:"
 msgstr "_Sólo imprimir:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2596
+#: ../gtk/gtkprintunixdialog.c:2598
 msgid "All sheets"
 msgstr "Todas las hojas"
 
-#: ../gtk/gtkprintunixdialog.c:2597
+#: ../gtk/gtkprintunixdialog.c:2599
 msgid "Even sheets"
 msgstr "Hojas pares"
 
-#: ../gtk/gtkprintunixdialog.c:2598
+#: ../gtk/gtkprintunixdialog.c:2600
 msgid "Odd sheets"
 msgstr "Hojas impares"
 
-#: ../gtk/gtkprintunixdialog.c:2601
+#: ../gtk/gtkprintunixdialog.c:2603
 msgid "Sc_ale:"
 msgstr "_Escala:"
 
-#: ../gtk/gtkprintunixdialog.c:2628
+#: ../gtk/gtkprintunixdialog.c:2630
 msgid "Paper"
 msgstr "Papel"
 
-#: ../gtk/gtkprintunixdialog.c:2632
+#: ../gtk/gtkprintunixdialog.c:2634
 msgid "Paper _type:"
 msgstr "_Tipo de papel:"
 
-#: ../gtk/gtkprintunixdialog.c:2647
+#: ../gtk/gtkprintunixdialog.c:2649
 msgid "Paper _source:"
 msgstr "_Fuente del papel:"
 
-#: ../gtk/gtkprintunixdialog.c:2662
+#: ../gtk/gtkprintunixdialog.c:2664
 msgid "Output t_ray:"
 msgstr "_Bandeja de salida:"
 
-#: ../gtk/gtkprintunixdialog.c:2714
+#: ../gtk/gtkprintunixdialog.c:2716
 msgid "Job Details"
 msgstr "Detalles de la tarea"
 
-#: ../gtk/gtkprintunixdialog.c:2720
+#: ../gtk/gtkprintunixdialog.c:2722
 msgid "Pri_ority:"
 msgstr "_Prioridad:"
 
-#: ../gtk/gtkprintunixdialog.c:2735
+#: ../gtk/gtkprintunixdialog.c:2737
 msgid "_Billing info:"
 msgstr "Info de _facturación:"
 
-#: ../gtk/gtkprintunixdialog.c:2753
+#: ../gtk/gtkprintunixdialog.c:2755
 msgid "Print Document"
 msgstr "Imprimir documento"
 
-#: ../gtk/gtkprintunixdialog.c:2759
+#. Translators: this is one of the choices for the print at option
+#. * in the print dialog
+#.
+#: ../gtk/gtkprintunixdialog.c:2764
 msgid "_Now"
 msgstr "_Ahora"
 
-#: ../gtk/gtkprintunixdialog.c:2766
+#: ../gtk/gtkprintunixdialog.c:2775
 msgid "A_t:"
 msgstr "_En:"
 
-#: ../gtk/gtkprintunixdialog.c:2781
+#: ../gtk/gtkprintunixdialog.c:2794
 msgid "On _hold"
 msgstr "En _espera"
 
-#: ../gtk/gtkprintunixdialog.c:2800
+#: ../gtk/gtkprintunixdialog.c:2813
 msgid "Add Cover Page"
 msgstr "Añadir página de cubierta"
 
-#: ../gtk/gtkprintunixdialog.c:2806
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the front cover page.
+#.
+#: ../gtk/gtkprintunixdialog.c:2822
 msgid "Be_fore:"
 msgstr "An_tes:"
 
-#: ../gtk/gtkprintunixdialog.c:2821
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the back cover page.
+#.
+#: ../gtk/gtkprintunixdialog.c:2840
 msgid "_After:"
 msgstr "_Después:"
 
-#: ../gtk/gtkprintunixdialog.c:2836
+#. Translators: this is the tab label for the notebook tab containing
+#. * job-specific options in the print dialog
+#.
+#: ../gtk/gtkprintunixdialog.c:2858
 msgid "Job"
 msgstr "Tarea"
 
-#: ../gtk/gtkprintunixdialog.c:2902
+#: ../gtk/gtkprintunixdialog.c:2924
 msgid "Advanced"
 msgstr "Avanzado"
 
-#: ../gtk/gtkprintunixdialog.c:2937
+#: ../gtk/gtkprintunixdialog.c:2959
 msgid "Image Quality"
 msgstr "Calidad de imagen"
 
-#: ../gtk/gtkprintunixdialog.c:2940
+#: ../gtk/gtkprintunixdialog.c:2962
 msgid "Color"
 msgstr "Color"
 
-#: ../gtk/gtkprintunixdialog.c:2943
+#: ../gtk/gtkprintunixdialog.c:2965
 msgid "Finishing"
 msgstr "Terminando"
 
-#: ../gtk/gtkprintunixdialog.c:2953
+#: ../gtk/gtkprintunixdialog.c:2975
 msgid "Some of the settings in the dialog conflict"
 msgstr "Algunos de los ajustes del diálogo están en conflicto"
 
-#: ../gtk/gtkprintunixdialog.c:2976
+#: ../gtk/gtkprintunixdialog.c:2998
 msgid "Print"
 msgstr "Imprimir"
 
@@ -4560,114 +4577,148 @@ msgstr "Autoseleccionar"
 msgid "Printer Default"
 msgstr "Predeterminado de la impresora"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
+#. Translators: These strings name the possible values of the
+#. * job priority option in the print dialog
+#.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "Urgent"
 msgstr "Urgente"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "High"
 msgstr "Alta"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "Medium"
 msgstr "Media"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "Low"
 msgstr "Baja"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2688
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing
+#.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2694
 msgid "Left to right, top to bottom"
 msgstr "De izquierda a derecha, de arriba a abajo"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2688
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2694
 msgid "Left to right, bottom to top"
 msgstr "De izquierda a derecha, de abajo a arriba"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2689
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2695
 msgid "Right to left, top to bottom"
 msgstr "De derecha a izquierda, de arriba a abajo"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2689
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2695
 msgid "Right to left, bottom to top"
 msgstr "De derecha a izquierda, de abajo a arriba"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2690
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2696
 msgid "Top to bottom, left to right"
 msgstr "De arriba a abajo, de izquierda a derecha"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2690
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2696
 msgid "Top to bottom, right to left"
 msgstr "De arriba a abajo, de derecha a izquierda"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2691
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2697
 msgid "Bottom to top, left to right"
 msgstr "De abajo a arriba, de izquierda a derecha"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2691
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2697
 msgid "Bottom to top, right to left"
 msgstr "De abajo a arriba, de derecha a izquierda"
 
 #. Cups specific, non-ppd related settings
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2703
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
-msgid "Pages Per Sheet"
+#. Translators, this string is used to label the pages-per-sheet option
+#. * in the print dialog
+#.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2712
+msgid "Pages per Sheet"
 msgstr "Páginas por hoja"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2734
+#. Translators, this string is used to label the job priority option
+#. * in the print dialog
+#.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2749
 msgid "Job Priority"
 msgstr "Prioridad del trabajo"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2742
+#. Translators, this string is used to label the billing info entry
+#. * in the print dialog
+#.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2760
 msgid "Billing Info"
 msgstr "Información de facturación"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
+#. Translators, these strings are names for various 'standard' cover
+#. * pages that the printing system may support.
+#.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "None"
 msgstr "Ninguna"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Classified"
 msgstr "Clasificado"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Confidential"
 msgstr "Confidencial"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Secret"
 msgstr "Secreto"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Standard"
 msgstr "Estándar"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Top Secret"
 msgstr "Alto secreto"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2753
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Unclassified"
 msgstr "Desclasificado"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2785
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the front cover page.
+#.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2809
 msgid "Before"
 msgstr "Antes"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2797
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the back cover page.
+#.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2824
 msgid "After"
 msgstr "Después"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2813
+#. Translators: this is the name of the option that controls when
+#. * a print job is printed. Possible values are 'now', a specified time,
+#. * or 'on hold'
+#.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2844
 msgid "Print at"
 msgstr "Imprimir en"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2821
+#. Translators: this is the name of the option that allows the user
+#. * to specify a time when a print job will be printed.
+#.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2855
 msgid "Print at time"
 msgstr "Imprimir a la hora"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2852
+#. Translators: this format is used to display a custom paper
+#. * size. The two placeholders are replaced with the width and height
+#. * in points. E.g: "Custom 230.4x142.9"
+#.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2890
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Personalizado %sx%s"
@@ -4706,6 +4757,10 @@ msgstr "Formato de _salida"
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:398
 msgid "Print to LPR"
 msgstr "Imprimir a LPR"
+
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
+msgid "Pages Per Sheet"
+msgstr "Páginas por hoja"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:431
 msgid "Command Line"
