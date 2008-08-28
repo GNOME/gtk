@@ -1,3 +1,10 @@
+2008-08-27  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 549322 – Typo in gdk_pixbuf_save_to_buffer docs
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_save_to_buffer): Fix the docs.
+	Spotted by Cosimo Cecchi.
+
 2008-08-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* ==== Released 2.13.7 ===

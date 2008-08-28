@@ -2171,7 +2171,7 @@ gdk_pixbuf_save_to_callbackv   (GdkPixbuf  *pixbuf,
  * "png", "tiff", "ico" or "bmp".  This is a convenience function that uses
  * gdk_pixbuf_save_to_callback() to do the real work. Note that the buffer 
  * is not nul-terminated and may contain embedded  nuls.
- * If @error is set, %FALSE will be returned and @string will be set to
+ * If @error is set, %FALSE will be returned and @buffer will be set to
  * %NULL. Possible errors include those in the #GDK_PIXBUF_ERROR
  * domain.
  *
