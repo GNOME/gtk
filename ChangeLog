@@ -1,3 +1,11 @@
+2008-08-28  Christian Dywan  <christian@imendio.com>
+
+	Bug 549734 – gtk_selection_data_get_data prototype is wrong
+
+	* gtk/gtkselection.[ch] (gtk_selection_data_get_data): make the
+	'length' argument of gtk_selection_data_get_data a 'gint', that's
+	what it should be.
+
 2008-08-27  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkevents-win32.c:

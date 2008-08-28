@@ -1180,7 +1180,7 @@ gtk_selection_data_get_format (GtkSelectionData *selection_data)
  **/
 const guchar*
 gtk_selection_data_get_data (GtkSelectionData *selection_data,
-                             guint	      *length)
+                             gint             *length)
 {
   g_return_val_if_fail (selection_data != NULL, NULL);
 
