@@ -1,3 +1,13 @@
+2008-08-27  Cody Russell  <bratsche@gnome.org>
+
+	* gdk/win32/gdkevents-win32.c:
+	* gdk/win32/gdkwindow-win32.c (show_window_recurse): Check if 
+	the window's state has GDK_WINDOW_STATE_MAXIMIZED set before
+	calling ShowWindow (), and show using SW_SHOWMAXIMIZED or
+	SW_RESTORE accordingly.  This fixes an issue where maximized
+	windows that are iconified do not restore back to maximized
+	when you click the taskbar. (#528975)
+
 2008-08-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintoperation.c: Documentation fixes.

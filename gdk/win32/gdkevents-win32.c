@@ -1304,7 +1304,14 @@ show_window_recurse (GdkWindow *window, gboolean hide_window)
 	    {
 	      if (GDK_WINDOW_OBJECT (window)->state & GDK_WINDOW_STATE_ICONIFIED)
 		{
-		  ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+		  if (GDK_WINDOW_OBJECT (window)->state & GDK_WINDOW_STATE_MAXIMIZED)
+		    {
+		      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMAXIMIZED);
+		    }
+		  else
+		    {
+		      ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+		    }
 		}
 	    }
 	  else
@@ -1318,7 +1325,7 @@ show_window_recurse (GdkWindow *window, gboolean hide_window)
 }
 
 static void
-show_window_internal (GdkWindow *window, gboolean hide_window)
+do_show_window (GdkWindow *window, gboolean hide_window)
 {
   GdkWindow *tmp_window = NULL;
   GdkWindowImplWin32 *tmp_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
@@ -1339,7 +1346,10 @@ show_window_internal (GdkWindow *window, gboolean hide_window)
 	}
 
       /* Recursively show/hide every window in the chain. */
-      show_window_recurse (tmp_window, hide_window);
+      if (tmp_window != window)
+	{
+	  show_window_recurse (tmp_window, hide_window);
+	}
     }
 }
 
@@ -2922,7 +2932,7 @@ gdk_event_translate (MSG  *msg,
 	{
 	case SC_MINIMIZE:
 	case SC_RESTORE:
-	  show_window_internal (window, msg->wParam == SC_MINIMIZE ? TRUE : FALSE);
+	  do_show_window (window, msg->wParam == SC_MINIMIZE ? TRUE : FALSE);
 	  break;
 	}
 
@@ -2951,7 +2961,7 @@ gdk_event_translate (MSG  *msg,
 	  gdk_synthesize_window_state (window,
 				       GDK_WINDOW_STATE_WITHDRAWN,
 				       GDK_WINDOW_STATE_ICONIFIED);
-	  show_window_internal (window, TRUE);
+	  do_show_window (window, TRUE);
 	}
       else if ((msg->wParam == SIZE_RESTORED ||
 		msg->wParam == SIZE_MAXIMIZED) &&
@@ -2973,7 +2983,7 @@ gdk_event_translate (MSG  *msg,
 
 	      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_TEMP && !GDK_WINDOW_IS_MAPPED (window))
 		{
-		  show_window_internal (window, FALSE);
+		  do_show_window (window, FALSE);
 		}
 	    }
 	  else if (msg->wParam == SIZE_MAXIMIZED)
