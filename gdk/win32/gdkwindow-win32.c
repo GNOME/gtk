@@ -1090,15 +1090,25 @@ show_window_internal (GdkWindow *window,
     }
 
   if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
-    gdk_window_fullscreen (window);
+    {
+      gdk_window_fullscreen (window);
+    }
   else if (private->state & GDK_WINDOW_STATE_MAXIMIZED)
-    ShowWindow (GDK_WINDOW_HWND (window), SW_MAXIMIZE);
+    {
+      ShowWindow (GDK_WINDOW_HWND (window), SW_MAXIMIZE);
+    }
   else if (private->state & GDK_WINDOW_STATE_ICONIFIED)
-    ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+    {
+      ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+    }
   else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP || !focus_on_map)
-    ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
+    {
+      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
+    }
   else
-    ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+    {
+      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+    }
 
   if (raise)
     {
@@ -1110,17 +1120,25 @@ show_window_internal (GdkWindow *window,
 	       GDK_WINDOW_TYPE (window) == GDK_WINDOW_DIALOG)
 	{
           if (focus_on_map && private->accept_focus)
-            SetForegroundWindow (GDK_WINDOW_HWND (window));
+	    {
+	      SetForegroundWindow (GDK_WINDOW_HWND (window));
+	    }
 	  else
-            SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOP,
-	  	          0, 0, 0, 0,
-		          SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+	    {
+	      SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOP,
+			    0, 0, 0, 0,
+			    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+	    }
 	}
       else
-        BringWindowToTop (GDK_WINDOW_HWND (window));
+	{
+	  BringWindowToTop (GDK_WINDOW_HWND (window));
+	}
     }
   else if (old_active_window != GDK_WINDOW_HWND (window))
-    SetActiveWindow (old_active_window);
+    {
+      SetActiveWindow (old_active_window);
+    }
 }
 
 void
