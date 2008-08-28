@@ -1830,7 +1830,7 @@ gdk_window_x11_reparent (GdkWindow *window,
   parent_private->children = g_list_prepend (parent_private->children, window);
   _gdk_window_init_position (GDK_WINDOW (window_private));
 
-  return TRUE;
+  return FALSE;
 }
 
 static void
