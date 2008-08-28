@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-28 09:32+0200\n"
-"PO-Revision-Date: 2008-08-28 09:34+0200\n"
+"POT-Creation-Date: 2008-08-28 09:36+0200\n"
+"PO-Revision-Date: 2008-08-28 09:36+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1717,7 +1717,7 @@ msgstr "Geben Sie einen Dateinamen an"
 #. Create Folder
 #: ../gtk/gtkfilechooserdefault.c:5187
 msgid "Create Fo_lder"
-msgstr "Or_dner anlegen"
+msgstr "Ordner anle_gen"
 
 #: ../gtk/gtkfilechooserdefault.c:5197
 msgid "_Location:"
