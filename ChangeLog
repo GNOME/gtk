@@ -1,5 +1,10 @@
 2008-08-29  Michael Natterer  <mitch@imendio.com>
 
+	* configure.in: remove -DPANGO_DISABLE_SINGLE_INCLUDES from
+	CPPFLAGS, I committed that accidentially.
+
+2008-08-29  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkpaned.c: minor indentation / coding style fixes.
 
 2008-08-29  Matthias Clasen  <mclasen@redhat.com>
