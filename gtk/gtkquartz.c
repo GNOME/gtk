@@ -260,12 +260,13 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
   GdkDisplay *display;
   gint format;
   const guchar *data;
-  guint length;
+  gint length;
 
   target = gdk_atom_name (gtk_selection_data_get_target (selection_data));
   display = gtk_selection_data_get_display (selection_data);
   format = gtk_selection_data_get_format (selection_data);
-  data = gtk_selection_data_get_data (selection_data, &length);
+  data = gtk_selection_data_get_data (selection_data);
+  length = gtk_selection_data_get_length (selection_data);
 
   type = target_to_pasteboard_type (target);
   g_free (target);

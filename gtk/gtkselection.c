@@ -1168,7 +1168,6 @@ gtk_selection_data_get_format (GtkSelectionData *selection_data)
 /**
  * gtk_selection_data_get_data:
  * @selection_data: a pointer to a #GtkSelectionData structure.
- * @length: an integer to be filled in, or %NULL
  *
  * Retrieves the raw data of the selection.
  *
@@ -1179,15 +1178,29 @@ gtk_selection_data_get_format (GtkSelectionData *selection_data)
  * Since: 2.14
  **/
 const guchar*
-gtk_selection_data_get_data (GtkSelectionData *selection_data,
-                             gint             *length)
+gtk_selection_data_get_data (GtkSelectionData *selection_data)
 {
   g_return_val_if_fail (selection_data != NULL, NULL);
 
-  if (length)
-      *length = selection_data->length;
-
   return selection_data->data;
+}
+
+/**
+ * gtk_selection_data_get_length:
+ * @selection_data: a pointer to a #GtkSelectionData structure.
+ *
+ * Retrieves the length of the raw data of the selection.
+ *
+ * Returns: the length of the data of the selection.
+ *
+ * Since: 2.14
+ */
+gint
+gtk_selection_data_get_length (GtkSelectionData *selection_data)
+{
+  g_return_val_if_fail (selection_data != NULL, -1);
+
+  return selection_data->length;
 }
 
 /**

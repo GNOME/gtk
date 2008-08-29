@@ -1,3 +1,11 @@
+2008-08-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_selection_data_get_length
+
+2008-08-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add some forgotten apis.
+
 2008-08-19  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* gtk/gtk-sections.txt: Move gtk_menu_set_monitor next to

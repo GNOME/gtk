@@ -150,8 +150,8 @@ gboolean gtk_selection_convert       (GtkWidget            *widget,
 GdkAtom       gtk_selection_data_get_target    (GtkSelectionData *selection_data);
 GdkAtom       gtk_selection_data_get_data_type (GtkSelectionData *selection_data);
 gint          gtk_selection_data_get_format    (GtkSelectionData *selection_data);
-const guchar *gtk_selection_data_get_data      (GtkSelectionData *selection_data,
-                                                gint             *length);
+const guchar *gtk_selection_data_get_data      (GtkSelectionData *selection_data);
+gint          gtk_selection_data_get_length    (GtkSelectionData *selection_data);
 GdkDisplay   *gtk_selection_data_get_display   (GtkSelectionData *selection_data);
 
 void     gtk_selection_data_set      (GtkSelectionData     *selection_data,
