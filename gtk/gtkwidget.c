@@ -6564,6 +6564,26 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
     }
 }
 
+/**
+ * gtk_widget_get_parent_window:
+ * @widget: a #GtkWidget.
+ * @returns: the parent window of @widget.
+ *
+ * Gets @widget's parent window.
+ **/
+GdkWindow *
+gtk_widget_get_parent_window (GtkWidget *widget)
+{
+  GdkWindow *parent_window;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  parent_window = g_object_get_qdata (G_OBJECT (widget), quark_parent_window);
+
+  return (parent_window != NULL) ? parent_window :
+	 (widget->parent != NULL) ? widget->parent->window : NULL;
+}
+
 
 /**
  * gtk_widget_set_child_visible:
@@ -6772,26 +6792,6 @@ gtk_widget_get_root_window (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   return gdk_screen_get_root_window (gtk_widget_get_screen (widget));
-}
-
-/**
- * gtk_widget_get_parent_window:
- * @widget: a #GtkWidget.
- * @returns: the parent window of @widget.
- * 
- * Gets @widget's parent window.
- **/
-GdkWindow *
-gtk_widget_get_parent_window   (GtkWidget           *widget)
-{
-  GdkWindow *parent_window;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  
-  parent_window = g_object_get_qdata (G_OBJECT (widget), quark_parent_window);
-
-  return (parent_window != NULL) ? parent_window : 
-	 (widget->parent != NULL) ? widget->parent->window : NULL;
 }
 
 /**

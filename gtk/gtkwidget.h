@@ -567,16 +567,15 @@ void                  gtk_widget_set_redraw_on_allocate (GtkWidget    *widget,
 							 gboolean      redraw_on_allocate);
 void                  gtk_widget_set_parent             (GtkWidget    *widget,
 							 GtkWidget    *parent);
+GtkWidget           * gtk_widget_get_parent             (GtkWidget    *widget);
 void                  gtk_widget_set_parent_window      (GtkWidget    *widget,
 							 GdkWindow    *parent_window);
+GdkWindow           * gtk_widget_get_parent_window      (GtkWidget    *widget);
 void                  gtk_widget_set_child_visible      (GtkWidget    *widget,
 							 gboolean      is_visible);
 gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
 GtkAllocation	      gtk_widget_get_allocation         (GtkWidget    *widget);
 GdkWindow*            gtk_widget_get_window             (GtkWidget    *widget);
-
-GtkWidget *gtk_widget_get_parent          (GtkWidget           *widget);
-GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
 
 gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
                                            GtkDirectionType     direction);

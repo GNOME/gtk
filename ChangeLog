@@ -1,5 +1,14 @@
 2008-08-29  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkwidget.h: move the gtk_widget_get_parent() and
+	gtk_widget_get_parent_window() prototypes together with their
+	respective setters.
+
+	* gtk/gtkwidget.c: move gtk_widget_get_parent_window() together
+	with its setter.
+
+2008-08-29  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkscrolledwindow.c: events return gboolean not gint,
 	reindent prototypes.
 
