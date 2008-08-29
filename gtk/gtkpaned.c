@@ -67,16 +67,16 @@ static void     gtk_paned_get_property          (GObject          *object,
 						 guint             prop_id,
 						 GValue           *value,
 						 GParamSpec       *pspec);
-static void gtk_paned_set_child_property        (GtkContainer      *container,
-						 GtkWidget         *child,
-						 guint              property_id,
-						 const GValue      *value,
-						 GParamSpec        *pspec);
-static void gtk_paned_get_child_property        (GtkContainer      *container,
-						 GtkWidget         *child,
-						 guint              property_id,
-						 GValue            *value,
-						 GParamSpec        *pspec);
+static void     gtk_paned_set_child_property    (GtkContainer     *container,
+                                                 GtkWidget        *child,
+                                                 guint             property_id,
+                                                 const GValue     *value,
+                                                 GParamSpec       *pspec);
+static void     gtk_paned_get_child_property    (GtkContainer     *container,
+                                                 GtkWidget        *child,
+                                                 guint             property_id,
+                                                 GValue           *value,
+                                                 GParamSpec       *pspec);
 static void     gtk_paned_finalize              (GObject          *object);
 static void     gtk_paned_realize               (GtkWidget        *widget);
 static void     gtk_paned_unrealize             (GtkWidget        *widget);
@@ -228,7 +228,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 							 P_("TRUE if the Position property should be used"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
-				   
+
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("handle-size",
 							     P_("Handle Size"),
@@ -273,14 +273,14 @@ gtk_paned_class_init (GtkPanedClass *class)
 						     G_MAXINT,
 						     GTK_PARAM_READABLE));
 
-/**
- * GtkPaned:resize:
- *
- * The "resize" child property determines whether the child expands and 
- * shrinks along with the paned widget.
- * 
- * Since: 2.4 
- */
+  /**
+   * GtkPaned:resize:
+   *
+   * The "resize" child property determines whether the child expands and
+   * shrinks along with the paned widget.
+   *
+   * Since: 2.4
+   */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_RESIZE,
 					      g_param_spec_boolean ("resize", 
@@ -289,14 +289,14 @@ gtk_paned_class_init (GtkPanedClass *class)
 								    TRUE,
 								    GTK_PARAM_READWRITE));
 
-/**
- * GtkPaned:shrink:
- *
- * The "shrink" child property determines whether the child can be made 
- * smaller than its requisition.
- * 
- * Since: 2.4 
- */
+  /**
+   * GtkPaned:shrink:
+   *
+   * The "shrink" child property determines whether the child can be made
+   * smaller than its requisition.
+   *
+   * Since: 2.4
+   */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_SHRINK,
 					      g_param_spec_boolean ("shrink", 
@@ -444,7 +444,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   binding_set = gtk_binding_set_by_class (class);
 
   /* F6 and friends */
-  gtk_binding_entry_add_signal (binding_set,				
+  gtk_binding_entry_add_signal (binding_set,
                                 GDK_F6, 0,
                                 "cycle-child-focus", 1, 
                                 G_TYPE_BOOLEAN, FALSE);

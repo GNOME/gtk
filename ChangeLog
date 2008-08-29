@@ -1,3 +1,7 @@
+2008-08-29  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkpaned.c: minor indentation / coding style fixes.
+
 2008-08-29  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 549262 – GtkScrolledWindow should not accept focus unless
