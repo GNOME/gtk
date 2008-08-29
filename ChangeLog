@@ -1,5 +1,10 @@
 2008-08-29  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkscrolledwindow.c: events return gboolean not gint,
+	reindent prototypes.
+
+2008-08-29  Michael Natterer  <mitch@imendio.com>
+
 	* configure.in: remove -DPANGO_DISABLE_SINGLE_INCLUDES from
 	CPPFLAGS, I committed that accidentially.
 
