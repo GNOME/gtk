@@ -238,11 +238,13 @@ output_file_from_settings (GtkPrintSettings *settings,
 
       if (locale_name != NULL)
         {
-          path = g_build_filename (g_get_current_dir (), locale_name, NULL);
+	  gchar *current_dir = g_get_current_dir ();
+          path = g_build_filename (current_dir, locale_name, NULL);
           g_free (locale_name);
 
           uri = g_filename_to_uri (path, NULL, NULL);
           g_free (path);
+	  g_free (current_dir);
 	}
     }
 

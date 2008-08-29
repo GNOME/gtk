@@ -1,3 +1,14 @@
+2008-08-29  Christian Dywan  <christian@imendio.com>
+
+	Bug 549810 – Memory leaks in printing code
+
+	* gtk/gtkprintjob.c (gtk_print_job_set_property):
+	* modules/printbackends/file/gtkprintbackendfile.c
+	(output_file_from_settings):
+	* modules/printbackends/test/gtkprintbackendtest.c
+	(output_test_from_settings): free some temporary strings.
+        Patch by Yevgen Muntyan.
+
 2008-08-29  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkwidget.h: move the gtk_widget_get_parent() and
