@@ -1,3 +1,10 @@
+2008-08-29  Björn Lindqvist  <bjourne@gmail.com>
+
+	Bug 437791 – Animation is played at the wrong speed
+
+	* gdk-pixbuf/io-gif.c (gif_get_lzw): Better 100 ms timeout for
+	broken GIFs with 0 frame timeout.
+
 2008-08-29  Christian Dywan  <christian@imendio.com>
 
 	Bug 549810 – Memory leaks in printing code

@@ -874,10 +874,14 @@ gif_get_lzw (GifContext *context)
                 /* GIF delay is in hundredths, we want thousandths */
                 context->frame->delay_time = context->gif89.delay_time * 10;
 
-                /* Some GIFs apparently have delay time of 0,
-                 * that crashes everything so set it to "fast".
-                 * Also, timeouts less than 20 or so just lock up
-                 * the app or make the animation choppy, so fix them.
+                /* GIFs with delay time 0 are mostly broken, but they
+                 * just want a default, "not that fast" delay.
+                 */
+                if (context->frame->delay_time == 0)
+                        context->frame->delay_time = 100;
+
+                /* No GIFs gets to play faster than 50 fps. They just
+                 * lock up poor gtk.
                  */
                 if (context->frame->delay_time < 20)
                         context->frame->delay_time = 20; /* 20 = "fast" */
