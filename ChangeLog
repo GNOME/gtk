@@ -1,5 +1,14 @@
 2008-08-29  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 549262 – GtkScrolledWindow should not accept focus unless
+	GTK_CAN_FOCUS is set
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_focus): only grab the
+	focus, if GTK_WIDGET_CAN_FOCUS() returns TRUE. Patch by Sven 
+	Herzberg
+
+2008-08-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols:
 	* gtk/gtkselection.[hc]: Split gtk_selection_data_get_data into
 	gtk_selection_data_get_data and gtk_selection_data_get_length.
