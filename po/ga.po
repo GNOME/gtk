@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-28 02:29-0400\n"
-"PO-Revision-Date: 2008-08-28 02:28-0500\n"
+"POT-Creation-Date: 2008-08-29 22:16-0400\n"
+"PO-Revision-Date: 2008-08-29 22:16-0500\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -50,7 +50,7 @@ msgstr "AINM"
 #. Description of --display=DISPLAY in --help output
 #: ../gdk/gdk.c:132
 msgid "X display to use"
-msgstr "Taispeáint X a úsáid"
+msgstr "Taispeáint X le húsáid"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: ../gdk/gdk.c:133
@@ -60,7 +60,7 @@ msgstr "TAISPEÁINT"
 #. Description of --screen=SCREEN in --help output
 #: ../gdk/gdk.c:135
 msgid "X screen to use"
-msgstr "Scáileán X a úsáid"
+msgstr "Scáileán X le húsáid"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: ../gdk/gdk.c:136
@@ -70,7 +70,7 @@ msgstr "SCÁILEÁN"
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:139
 msgid "Gdk debugging flags to set"
-msgstr "Bratacha dífhabhtaithe Gdk a shocrú"
+msgstr "Bratacha dífhabhtaithe Gdk le socrú"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -83,7 +83,7 @@ msgstr "BRATACHA"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:142
 msgid "Gdk debugging flags to unset"
-msgstr "Bratacha dífhabhtaithe Gdk a dhíshocrú"
+msgstr "Bratacha dífhabhtaithe Gdk le díshocrú"
 
 #: ../gdk/keyname-table.h:3940
 msgid "keyboard label|BackSpace"
@@ -438,8 +438,8 @@ msgstr "An fhormáid íomhá BMP"
 msgid "Failure reading GIF: %s"
 msgstr "Theip ar léamh GIF: %s"
 
-#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1477
-#: ../gdk-pixbuf/io-gif.c:1638
+#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1481
+#: ../gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 
@@ -464,39 +464,39 @@ msgstr "Teagmhaíodh drochchód"
 msgid "Circular table entry in GIF file"
 msgstr ""
 
-#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1464
-#: ../gdk-pixbuf/io-gif.c:1511 ../gdk-pixbuf/io-gif.c:1626
+#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1468
+#: ../gdk-pixbuf/io-gif.c:1515 ../gdk-pixbuf/io-gif.c:1630
 msgid "Not enough memory to load GIF file"
 msgstr "Níl cuimhne go leor ann chun comhad GIF a luchtú"
 
-#: ../gdk-pixbuf/io-gif.c:956
+#: ../gdk-pixbuf/io-gif.c:960
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr ""
 
-#: ../gdk-pixbuf/io-gif.c:1128
+#: ../gdk-pixbuf/io-gif.c:1132
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Is truallaithe í an íomhá GIF (comhbhrú LZW mícheart)"
 
-#: ../gdk-pixbuf/io-gif.c:1178
+#: ../gdk-pixbuf/io-gif.c:1182
 msgid "File does not appear to be a GIF file"
 msgstr "Is cosúil nach comhad GIF é an comhad"
 
-#: ../gdk-pixbuf/io-gif.c:1190
+#: ../gdk-pixbuf/io-gif.c:1194
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Ní thacaítear leagan %s an fhormáid chomhaid GIF"
 
-#: ../gdk-pixbuf/io-gif.c:1299
+#: ../gdk-pixbuf/io-gif.c:1303
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
 
-#: ../gdk-pixbuf/io-gif.c:1533
+#: ../gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
 msgstr "Bhí íomhá GIF teasctha nó neamhiomlán."
 
-#: ../gdk-pixbuf/io-gif.c:1689 ../gdk-pixbuf/io-gdip-gif.c:80
+#: ../gdk-pixbuf/io-gif.c:1693 ../gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "An fhormáid íomhá GIF"
 
@@ -1766,7 +1766,7 @@ msgstr "Conair neamhbhailí"
 #.
 #: ../gtk/gtkfilechooserentry.c:1070
 msgid "No match"
-msgstr ""
+msgstr "Gan rud comhoiriúnach"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
@@ -1781,14 +1781,14 @@ msgstr "An comhlánú amháin"
 #.
 #: ../gtk/gtkfilechooserentry.c:1097
 msgid "Complete, but not unique"
-msgstr ""
+msgstr "Curtha i grích, ach nach uathúil"
 
 #. translators: this text is shown while the system is searching
 #. * for possible completions for text in a file chooser entry
 #.
 #: ../gtk/gtkfilechooserentry.c:1133
 msgid "Completing..."
-msgstr ""
+msgstr "Á chur i grích..."
 
 #: ../gtk/gtkfilechoosersettings.c:262 ../gtk/gtkfilesel.c:1349
 #: ../gtk/gtkfilesel.c:1358
@@ -2160,7 +2160,7 @@ msgstr "_Nasc"
 
 #: ../gtk/gtkmountoperation.c:520
 msgid "Connect _anonymously"
-msgstr ""
+msgstr "Nasc gan _ainm"
 
 #: ../gtk/gtkmountoperation.c:529
 msgid "Connect as u_ser:"
@@ -2180,15 +2180,15 @@ msgstr "_Focal Faire:"
 
 #: ../gtk/gtkmountoperation.c:590
 msgid "Forget password _immediately"
-msgstr ""
+msgstr "Déan _dearmad ar an bhfocal faire láithreach"
 
 #: ../gtk/gtkmountoperation.c:598
 msgid "Remember password until you _logout"
-msgstr ""
+msgstr "Meabhraigh focal faire go _logálann tú amach"
 
 #: ../gtk/gtkmountoperation.c:606
 msgid "Remember _forever"
-msgstr ""
+msgstr "Meabhraigh go d_eo"
 
 #: ../gtk/gtknotebook.c:4417 ../gtk/gtknotebook.c:6923
 #, c-format
@@ -2235,6 +2235,11 @@ msgid ""
 " Top: %s %s\n"
 " Bottom: %s %s"
 msgstr ""
+"Imill:\n"
+" Clé: %s %s\n"
+" Deis: %s %s\n"
+" Barr: %s %s\n"
+" Bun: %s %s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:964
 msgid "Manage Custom Sizes..."
@@ -2881,11 +2886,11 @@ msgstr "Diosca _Bog"
 
 #: ../gtk/gtkstock.c:316
 msgid "_Fullscreen"
-msgstr "_Scáileán Iomlán"
+msgstr "_Lánscáileán"
 
 #: ../gtk/gtkstock.c:317
 msgid "_Leave Fullscreen"
-msgstr "_Fág Scáileán Iomlán"
+msgstr "_Fág Lánscáileán"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:319
@@ -4637,28 +4642,28 @@ msgstr "%sx%s Saincheaptha"
 msgid "output.%s"
 msgstr "aschur.%s"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:464
+#: ../modules/printbackends/file/gtkprintbackendfile.c:466
 msgid "Print to File"
 msgstr "Priontáil go Comhad"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+#: ../modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+#: ../modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:553
-#: ../modules/printbackends/test/gtkprintbackendtest.c:501
+#: ../modules/printbackends/file/gtkprintbackendfile.c:555
+#: ../modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "_Leathanaigh sa leathán:"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:599
+#: ../modules/printbackends/file/gtkprintbackendfile.c:601
 msgid "File"
 msgstr "Comhad"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:608
+#: ../modules/printbackends/file/gtkprintbackendfile.c:610
 msgid "_Output format"
 msgstr "_Formáid aschurtha"
 
@@ -4680,7 +4685,7 @@ msgstr "Líne na n-Orduithe"
 msgid "test-output.%s"
 msgstr "aschur-trialach.%s"
 
-#: ../modules/printbackends/test/gtkprintbackendtest.c:465
+#: ../modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "Priontáil go Printéir Tástála"
 
