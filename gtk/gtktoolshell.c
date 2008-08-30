@@ -128,7 +128,7 @@ gtk_tool_shell_get_relief_style (GtkToolShell *shell)
   GtkToolShellIface *iface = GTK_TOOL_SHELL_GET_IFACE (shell);
 
   if (iface->get_relief_style)
-    iface->get_relief_style (shell);
+    return iface->get_relief_style (shell);
 
   return GTK_RELIEF_NONE;
 }

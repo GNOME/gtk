@@ -1,3 +1,11 @@
+2008-08-30  Matthew Barnes  <mbarnes@redhat.com>
+
+	Bug 549943 – gtk_tool_shell_get_relief_style() always returns
+	GTK_RELIEF_NONE
+
+	* gtk/gtktoolshell.c (gtk_tool_shell_get_relief_style): Return
+	the correct relief style.
+
 2008-08-29  Björn Lindqvist  <bjourne@gmail.com>
 
 	Bug 437791 – Animation is played at the wrong speed
