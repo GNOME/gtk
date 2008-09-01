@@ -1171,8 +1171,6 @@ gtk_selection_data_get_format (GtkSelectionData *selection_data)
  *
  * Retrieves the raw data of the selection.
  *
- * If @length is not %NULL it is filled with the length of data.
- *
  * Returns: the raw data of the selection.
  *
  * Since: 2.14

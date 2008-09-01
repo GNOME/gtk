@@ -1,3 +1,10 @@
+2008-09-01  Wouter Bolsterlee  <wbolster@svn.gnome.org>
+
+	* gtk/gtkselection.c:
+	Update documentation for gtk_selection_data_get_data to
+	match the changes introduced in -r21232 (the length
+	parameter was removed).
+
 2008-08-30  Matthew Barnes  <mbarnes@redhat.com>
 
 	Bug 549943 – gtk_tool_shell_get_relief_style() always returns
@@ -22,7 +29,7 @@
 	(output_file_from_settings):
 	* modules/printbackends/test/gtkprintbackendtest.c
 	(output_test_from_settings): free some temporary strings.
-        Patch by Yevgen Muntyan.
+	Patch by Yevgen Muntyan.
 
 2008-08-29  Michael Natterer  <mitch@imendio.com>
 
