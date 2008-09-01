@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-27 01:11+0200\n"
-"PO-Revision-Date: 2008-08-27 00:27+0200\n"
+"POT-Creation-Date: 2008-09-02 01:01+0200\n"
+"PO-Revision-Date: 2008-09-02 00:58+0200\n"
 "Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -447,8 +447,8 @@ msgstr "Formát obrázku BMP"
 msgid "Failure reading GIF: %s"
 msgstr "Chyba při čtení formátu GIF: %s"
 
-#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1477
-#: ../gdk-pixbuf/io-gif.c:1638
+#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1481
+#: ../gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "V souboru GIF chybí některá data (možná byl nějakým způsobem zkrácen?)"
 
@@ -473,29 +473,29 @@ msgstr "Nalezen chybný kód"
 msgid "Circular table entry in GIF file"
 msgstr "Cyklická položka tabulky v souboru GIF"
 
-#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1464
-#: ../gdk-pixbuf/io-gif.c:1511 ../gdk-pixbuf/io-gif.c:1626
+#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1468
+#: ../gdk-pixbuf/io-gif.c:1515 ../gdk-pixbuf/io-gif.c:1630
 msgid "Not enough memory to load GIF file"
 msgstr "Nedostatek paměti k načtení obrázku GIF"
 
-#: ../gdk-pixbuf/io-gif.c:956
+#: ../gdk-pixbuf/io-gif.c:960
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Nedostatek paměti ke složení políčka v souboru GIF"
 
-#: ../gdk-pixbuf/io-gif.c:1128
+#: ../gdk-pixbuf/io-gif.c:1132
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Obrázek GIF je poškozen (chybná komprese LZW)"
 
-#: ../gdk-pixbuf/io-gif.c:1178
+#: ../gdk-pixbuf/io-gif.c:1182
 msgid "File does not appear to be a GIF file"
 msgstr "Soubor nevypadá jako soubor GIF"
 
-#: ../gdk-pixbuf/io-gif.c:1190
+#: ../gdk-pixbuf/io-gif.c:1194
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Verze %s formátu souborů GIF není podporována"
 
-#: ../gdk-pixbuf/io-gif.c:1299
+#: ../gdk-pixbuf/io-gif.c:1303
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -503,11 +503,11 @@ msgstr ""
 "Obrázek GIF neobsahuje globální mapu barev a políčko v něm neobsahuje "
 "lokální mapu."
 
-#: ../gdk-pixbuf/io-gif.c:1533
+#: ../gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
 msgstr "Obrázek GIF byl zkrácen nebo není úplný."
 
-#: ../gdk-pixbuf/io-gif.c:1689 ../gdk-pixbuf/io-gdip-gif.c:80
+#: ../gdk-pixbuf/io-gif.c:1693 ../gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "Formát obrázku GIF"
 
@@ -4603,8 +4603,7 @@ msgstr "Zdola nahoru, zprava doleva"
 #. * in the print dialog
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2712
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
-msgid "Pages Per Sheet"
+msgid "Pages per Sheet"
 msgstr "Stran na list"
 
 #. Translators, this string is used to label the job priority option
@@ -4696,34 +4695,38 @@ msgstr "Vlastní %sx%s"
 msgid "output.%s"
 msgstr "výstup.%s"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:464
+#: ../modules/printbackends/file/gtkprintbackendfile.c:466
 msgid "Print to File"
 msgstr "Tisknout do souboru"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+#: ../modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+#: ../modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:553
-#: ../modules/printbackends/test/gtkprintbackendtest.c:501
+#: ../modules/printbackends/file/gtkprintbackendfile.c:555
+#: ../modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "St_ran na list:"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:599
+#: ../modules/printbackends/file/gtkprintbackendfile.c:601
 msgid "File"
 msgstr "Soubor"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:608
+#: ../modules/printbackends/file/gtkprintbackendfile.c:610
 msgid "_Output format"
 msgstr "_Výstupní formát"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:398
 msgid "Print to LPR"
 msgstr "Tisknout na LPR"
+
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
+msgid "Pages Per Sheet"
+msgstr "Stran na list"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:431
 msgid "Command Line"
@@ -4735,7 +4738,7 @@ msgstr "Příkazový řádek"
 msgid "test-output.%s"
 msgstr "zkušební_výstup.%s"
 
-#: ../modules/printbackends/test/gtkprintbackendtest.c:465
+#: ../modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "Tisknout na zkušební tiskárnu"
 
