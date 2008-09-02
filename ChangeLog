@@ -1,5 +1,10 @@
 2008-09-02  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkdialog.c (gtk_dialog_delete_event_handler): return
+	gboolean instead of gint. Reindent static prototypes.
+
+2008-09-02  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkwidget.c (gtk_widget_get_allocation): removed this
 	function because there is massive disagreement about how to
 	implement it. Needs some general discussion in the next

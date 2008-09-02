@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include <stdlib.h>
@@ -55,45 +55,46 @@ struct _ResponseData
   gint response_id;
 };
 
-static void gtk_dialog_add_buttons_valist (GtkDialog   *dialog,
-                                           const gchar *first_button_text,
-                                           va_list      args);
+static void      gtk_dialog_add_buttons_valist   (GtkDialog    *dialog,
+                                                  const gchar  *first_button_text,
+                                                  va_list       args);
 
-static gint gtk_dialog_delete_event_handler (GtkWidget   *widget,
-                                             GdkEventAny *event,
-                                             gpointer     user_data);
+static gboolean  gtk_dialog_delete_event_handler (GtkWidget    *widget,
+                                                  GdkEventAny  *event,
+                                                  gpointer      user_data);
 
-static void gtk_dialog_set_property      (GObject          *object,
-                                          guint             prop_id,
-                                          const GValue     *value,
-                                          GParamSpec       *pspec);
-static void gtk_dialog_get_property      (GObject          *object,
-                                          guint             prop_id,
-                                          GValue           *value,
-                                          GParamSpec       *pspec);
-static void gtk_dialog_style_set         (GtkWidget        *widget,
-                                          GtkStyle         *prev_style);
-static void gtk_dialog_map               (GtkWidget        *widget);
+static void      gtk_dialog_set_property         (GObject      *object,
+                                                  guint         prop_id,
+                                                  const GValue *value,
+                                                  GParamSpec   *pspec);
+static void      gtk_dialog_get_property         (GObject      *object,
+                                                  guint         prop_id,
+                                                  GValue       *value,
+                                                  GParamSpec   *pspec);
+static void      gtk_dialog_style_set            (GtkWidget    *widget,
+                                                  GtkStyle     *prev_style);
+static void      gtk_dialog_map                  (GtkWidget    *widget);
 
-static void gtk_dialog_close             (GtkDialog        *dialog);
+static void      gtk_dialog_close                (GtkDialog    *dialog);
 
-static ResponseData* get_response_data   (GtkWidget        *widget,
-					  gboolean          create);
-static void gtk_dialog_buildable_interface_init     (GtkBuildableIface *iface);
-static GObject * gtk_dialog_buildable_get_internal_child (GtkBuildable *buildable,
-						     GtkBuilder   *builder,
-						     const gchar  *childname);
-static gboolean gtk_dialog_buildable_custom_tag_start (GtkBuildable  *buildable,
-						       GtkBuilder    *builder,
-						       GObject       *child,
-						       const gchar   *tagname,
-						       GMarkupParser *parser,
-						       gpointer      *data);
-static void gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
-						  GtkBuilder   *builder,
-						  GObject       *child,
-						  const gchar   *tagname,
-						  gpointer      user_data);
+static ResponseData * get_response_data          (GtkWidget    *widget,
+                                                  gboolean      create);
+
+static void      gtk_dialog_buildable_interface_init     (GtkBuildableIface *iface);
+static GObject * gtk_dialog_buildable_get_internal_child (GtkBuildable  *buildable,
+                                                          GtkBuilder    *builder,
+                                                          const gchar   *childname);
+static gboolean  gtk_dialog_buildable_custom_tag_start   (GtkBuildable  *buildable,
+                                                          GtkBuilder    *builder,
+                                                          GObject       *child,
+                                                          const gchar   *tagname,
+                                                          GMarkupParser *parser,
+                                                          gpointer      *data);
+static void      gtk_dialog_buildable_custom_finished    (GtkBuildable  *buildable,
+                                                          GtkBuilder    *builder,
+                                                          GObject       *child,
+                                                          const gchar   *tagname,
+                                                          gpointer       user_data);
 
 
 enum {
@@ -350,7 +351,7 @@ gtk_dialog_get_property (GObject     *object,
     }
 }
 
-static gint
+static gboolean
 gtk_dialog_delete_event_handler (GtkWidget   *widget,
                                  GdkEventAny *event,
                                  gpointer     user_data)
