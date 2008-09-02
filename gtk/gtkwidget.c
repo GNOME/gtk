@@ -10198,25 +10198,6 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_get_allocation:
- * @widget: a #GtkWidget
- *
- * Retrieves the widget's allocation.
- *
- * Return value: widget's allocation
- *
- * Since: 2.14
- */
-GtkAllocation
-gtk_widget_get_allocation (GtkWidget *widget)
-{
-  static GtkAllocation allocation = { 0 };
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), allocation);
-
-  return widget->allocation;
-}
-
-/**
  * gtk_widget_get_window:
  * @widget: a #GtkWidget
  *
