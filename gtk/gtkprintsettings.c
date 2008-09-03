@@ -22,10 +22,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <glib/gprintf.h>
+#include <gtk/gtk.h>
 #include "gtkprintsettings.h"
 #include "gtkprintutils.h"
 #include "gtkalias.h"
-#include <gtk/gtk.h>
 
 
 typedef struct _GtkPrintSettingsClass GtkPrintSettingsClass;
