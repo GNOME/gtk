@@ -1,5 +1,10 @@
 2008-09-03  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkarrow.c: expose-event returns gboolean not gint,
+	reindented static prototypes and did some minor cleanups.
+
+2008-09-03  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkmenu.c: some more trivial cosmetic fixes.
 
 2008-09-03  Christian Dywan  <christian@imendio.com>
