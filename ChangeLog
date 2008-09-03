@@ -1,3 +1,13 @@
+2008-09-03  Christian Dywan  <christian@imendio.com>
+
+	Bug 547449 – Entry/ Combo popup misplaced after resize
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_position),
+	(gtk_combo_box_size_allocate): reposition the combo popup when the
+        allocation changes
+	* gtk/gtkentry.c (gtk_entry_size_allocate): reposition the
+        completion popup when the allocation changes
+
 2008-09-03  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmenu.c (get_arrows_visible_area): proper function header

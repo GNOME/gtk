@@ -1605,8 +1605,9 @@ gtk_combo_box_menu_position (GtkMenu  *menu,
       gtk_combo_box_menu_position_over (menu, x, y, push_in, user_data);
     }
 
-  gtk_window_set_type_hint (GTK_WINDOW (GTK_MENU (priv->popup_widget)->toplevel),
-                            GDK_WINDOW_TYPE_HINT_COMBO);
+  if (!GTK_WIDGET_VISIBLE (GTK_MENU (priv->popup_widget)->toplevel))
+    gtk_window_set_type_hint (GTK_WINDOW (GTK_MENU (priv->popup_widget)->toplevel),
+                              GDK_WINDOW_TYPE_HINT_COMBO);
 }
 
 static void
@@ -2293,6 +2294,23 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
               child.width -= child.x;
             }
 
+          if (GTK_WIDGET_VISIBLE (priv->popup_widget))
+            {
+              gint width;
+              GtkRequisition requisition;
+
+              /* Warning here, without the check in the position func */
+              gtk_menu_reposition (GTK_MENU (priv->popup_widget));
+              if (priv->wrap_width == 0)
+                {
+                  width = GTK_WIDGET (combo_box)->allocation.width;
+                  gtk_widget_set_size_request (priv->popup_widget, -1, -1);
+                  gtk_widget_size_request (priv->popup_widget, &requisition);
+                  gtk_widget_set_size_request (priv->popup_widget,
+                    MAX (width, requisition.width), -1);
+               }
+            }
+
 	  child.width = MAX (1, child.width);
 	  child.height = MAX (1, child.height);
           gtk_widget_size_allocate (GTK_BIN (widget)->child, &child);
@@ -2362,6 +2380,15 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           child.width -= delta_x * 2;
           child.height -= delta_y * 2;
         }
+
+      if (GTK_WIDGET_VISIBLE (priv->popup_window))
+        {
+          gint x, y, width, height;
+          gtk_combo_box_list_position (combo_box, &x, &y, &width, &height);
+          gtk_window_move (GTK_WINDOW (priv->popup_window), x, y);
+          gtk_widget_set_size_request (priv->popup_window, width, height);
+        }
+
       
       child.width = MAX (1, child.width);
       child.height = MAX (1, child.height);

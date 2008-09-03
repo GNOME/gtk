@@ -1581,6 +1581,7 @@ gtk_entry_size_allocate (GtkWidget     *widget,
        * be affected by the usize of the entry, if set
        */
       gint x, y, width, height;
+      GtkEntryCompletion* completion;
 
       get_widget_window_size (entry, &x, &y, &width, &height);
       
@@ -1593,6 +1594,10 @@ gtk_entry_size_allocate (GtkWidget     *widget,
                               x, y, width, height);
 
       gtk_entry_recompute (entry);
+
+      completion = gtk_entry_get_completion (entry);
+      if (completion && GTK_WIDGET_MAPPED (completion->priv->popup_window))
+        _gtk_entry_completion_resize_popup (completion);
     }
 }
 
