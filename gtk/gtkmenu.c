@@ -773,16 +773,14 @@ gtk_menu_class_init (GtkMenuClass *class)
 }
 
 
-static void 
+static void
 gtk_menu_set_property (GObject      *object,
 		       guint         prop_id,
 		       const GValue *value,
 		       GParamSpec   *pspec)
 {
-  GtkMenu *menu;
-  
-  menu = GTK_MENU (object);
-  
+  GtkMenu *menu = GTK_MENU (object);
+
   switch (prop_id)
     {
     case PROP_ACTIVE:
@@ -822,16 +820,14 @@ gtk_menu_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_menu_get_property (GObject     *object,
 		       guint        prop_id,
 		       GValue      *value,
 		       GParamSpec  *pspec)
 {
-  GtkMenu *menu;
-  
-  menu = GTK_MENU (object);
-  
+  GtkMenu *menu = GTK_MENU (object);
+
   switch (prop_id)
     {
     case PROP_ACTIVE:
@@ -1790,7 +1786,7 @@ gtk_menu_set_accel_path (GtkMenu     *menu,
  * Since: 2.14
  */
 const gchar*
-gtk_menu_get_accel_path (GtkMenu     *menu)
+gtk_menu_get_accel_path (GtkMenu *menu)
 {
   g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
 
@@ -1816,11 +1812,11 @@ refresh_accel_paths_foreach (GtkWidget *widget,
 }
 
 static void
-_gtk_menu_refresh_accel_paths (GtkMenu *menu,
-			       gboolean group_changed)
+_gtk_menu_refresh_accel_paths (GtkMenu  *menu,
+			       gboolean  group_changed)
 {
   g_return_if_fail (GTK_IS_MENU (menu));
-      
+
   if (menu->accel_path && menu->accel_group)
     {
       AccelPropagation prop;
@@ -2145,7 +2141,8 @@ gtk_menu_style_set (GtkWidget *widget,
 }
 
 static void
-get_arrows_border (GtkMenu *menu, GtkBorder *border)
+get_arrows_border (GtkMenu   *menu,
+                   GtkBorder *border)
 {
   guint scroll_arrow_height;
 
@@ -3032,8 +3029,10 @@ gtk_menu_key_press (GtkWidget	*widget,
 
 static gboolean
 check_threshold (GtkWidget *widget,
-		 int start_x, int start_y,
-		 int x, int y)
+                 gint       start_x,
+                 gint       start_y,
+                 gint       x,
+                 gint       y)
 {
 #define THRESHOLD 8
   
@@ -3043,9 +3042,9 @@ check_threshold (GtkWidget *widget,
 }
 
 static gboolean
-definitely_within_item (GtkWidget *widget, 
-			int x,
-			int y)
+definitely_within_item (GtkWidget *widget,
+                        gint       x,
+                        gint       y)
 {
   GdkWindow *window = GTK_MENU_ITEM (widget)->event_window;
   int w, h;
@@ -3060,8 +3059,8 @@ definitely_within_item (GtkWidget *widget,
 }
 
 static gboolean
-gtk_menu_motion_notify  (GtkWidget	   *widget,
-			 GdkEventMotion    *event)
+gtk_menu_motion_notify (GtkWidget      *widget,
+                        GdkEventMotion *event)
 {
   GtkWidget *menu_item;
   GtkMenu *menu;
@@ -3332,7 +3331,7 @@ gtk_menu_scroll (GtkWidget	*widget,
 }
 
 static void
-get_arrows_sensitive_area (GtkMenu *menu,
+get_arrows_sensitive_area (GtkMenu      *menu,
                            GdkRectangle *upper,
                            GdkRectangle *lower)
 {
@@ -4466,8 +4465,8 @@ compute_child_offset (GtkMenu   *menu,
 }
 
 static void
-gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
-			      GtkWidget       *menu_item)
+gtk_menu_scroll_item_visible (GtkMenuShell *menu_shell,
+			      GtkWidget    *menu_item)
 {
   GtkMenu *menu;
   gint child_offset, child_height;
@@ -4541,8 +4540,8 @@ gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
 }
 
 static void
-gtk_menu_select_item (GtkMenuShell  *menu_shell,
-		      GtkWidget     *menu_item)
+gtk_menu_select_item (GtkMenuShell *menu_shell,
+		      GtkWidget    *menu_item)
 {
   GtkMenu *menu = GTK_MENU (menu_shell);
 
@@ -4584,9 +4583,9 @@ gtk_menu_select_item (GtkMenuShell  *menu_shell,
  * (the image of the menu) is left in place.
  */
 static void 
-gtk_menu_reparent (GtkMenu      *menu, 
-		   GtkWidget    *new_parent, 
-		   gboolean      unrealize)
+gtk_menu_reparent (GtkMenu   *menu,
+                   GtkWidget *new_parent,
+                   gboolean   unrealize)
 {
   GtkObject *object = GTK_OBJECT (menu);
   GtkWidget *widget = GTK_WIDGET (menu);
@@ -4763,8 +4762,8 @@ find_child_containing (GtkMenuShell *menu_shell,
 }
 
 static void
-gtk_menu_move_current (GtkMenuShell *menu_shell,
-                       GtkMenuDirectionType direction)
+gtk_menu_move_current (GtkMenuShell         *menu_shell,
+                       GtkMenuDirectionType  direction)
 {
   GtkMenu *menu = GTK_MENU (menu_shell);
   gint i;

@@ -1,3 +1,7 @@
+2008-09-03  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmenu.c: some more trivial cosmetic fixes.
+
 2008-09-03  Christian Dywan  <christian@imendio.com>
 
 	Bug 547449 – Entry/ Combo popup misplaced after resize
