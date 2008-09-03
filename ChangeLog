@@ -1,3 +1,8 @@
+2008-09-03  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkmenu.c (get_arrows_visible_area): proper function header
+	formatting.
+
 2008-09-02  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkdialog.c (gtk_dialog_delete_event_handler): return

@@ -2579,17 +2579,17 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 }
 
 static void
-get_arrows_visible_area (GtkMenu *menu,
+get_arrows_visible_area (GtkMenu      *menu,
                          GdkRectangle *border,
                          GdkRectangle *upper,
                          GdkRectangle *lower,
-                         gint *arrow_space)
+                         gint         *arrow_space)
 {
   GtkWidget *widget = GTK_WIDGET (menu);
   guint vertical_padding;
   guint horizontal_padding;
   gint scroll_arrow_height;
-  
+
   gtk_widget_style_get (widget,
                         "vertical-padding", &vertical_padding,
                         "horizontal-padding", &horizontal_padding,
