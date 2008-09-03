@@ -1,3 +1,10 @@
+2008-09-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 549711 – Race condition when loading gdk-pixbuf image modules
+
+	* gdk-pixbuf-io.c: Fix a race condition in module loading,
+	spotted by Chris Lord.
+
 2008-08-27  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 549322 – Typo in gdk_pixbuf_save_to_buffer docs

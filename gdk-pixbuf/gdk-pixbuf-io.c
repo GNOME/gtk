@@ -626,6 +626,20 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 	GdkPixbufModuleFillInfoFunc fill_info = NULL;
         GdkPixbufModuleFillVtableFunc fill_vtable = NULL;
 
+	/* be extra careful, maybe the module initializes
+	 * the thread system
+	 */
+	if (g_threads_got_initialized) {
+		G_LOCK (init_lock);
+		locked = TRUE;
+	}
+
+	if (image_module->module != NULL) {
+		if (locked)
+			G_UNLOCK (init_lock);
+		return TRUE;
+	}
+
 #define try_module(format,id)						\
 	if (fill_info == NULL &&					\
 	    strcmp (image_module->module_name, #format) == 0) {		\
@@ -701,34 +715,26 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 		image_module->info = g_new0 (GdkPixbufFormat, 1);
 		(* fill_info) (image_module->info);
 
-                return TRUE;
+                ret = TRUE;
 	}
-
+	else {
 #ifdef USE_GMODULE
+		ret = _gdk_pixbuf_load_module_unlocked (image_module, error);
+#else
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+			     _("Image type '%s' is not supported",
+			     image_module->module_name);
 
-	/* be extra careful, maybe the module initializes
-	 * the thread system
-	 */
-	if (g_threads_got_initialized)
-	{
-		G_LOCK (init_lock);
-		locked = TRUE;
+		ret = FALSE;
+#endif
 	}
-	ret = _gdk_pixbuf_load_module_unlocked (image_module, error);
+
 	if (locked)
 		G_UNLOCK (init_lock);
+
 	return ret;
-
-#else
-	g_set_error (error,
-		     GDK_PIXBUF_ERROR,
-		     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-		     _("Image type '%s' is not supported"),
-		     image_module->module_name);
-
-	return FALSE;
-
-#endif
 }
 
 
@@ -967,12 +973,11 @@ gdk_pixbuf_new_from_file (const char *filename,
                 return NULL;
         }
 
-	if (image_module->module == NULL)
-                if (!_gdk_pixbuf_load_module (image_module, error)) {
-			g_free (display_name);
-                        fclose (f);
-                        return NULL;
-                }
+        if (!_gdk_pixbuf_load_module (image_module, error)) {
+		g_free (display_name);
+        	fclose (f);
+        	return NULL;
+        }
 
 	fseek (f, 0, SEEK_SET);
 	pixbuf = _gdk_pixbuf_generic_image_load (image_module, f, error);
@@ -1561,12 +1566,10 @@ gdk_pixbuf_new_from_xpm_data (const char **data)
 		return NULL;
 	}
 
-	if (xpm_module->module == NULL) {
-                if (!_gdk_pixbuf_load_module (xpm_module, &error)) {
-                        g_warning ("Error loading XPM image loader: %s", error->message);
-                        g_error_free (error);
-                        return NULL;
-                }
+        if (!_gdk_pixbuf_load_module (xpm_module, &error)) {
+                g_warning ("Error loading XPM image loader: %s", error->message);
+                g_error_free (error);
+                return NULL;
         }
 
 	locked = _gdk_pixbuf_lock (xpm_module);
@@ -1659,9 +1662,8 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
 	if (image_module == NULL)
 		return FALSE;
        
-	if (image_module->module == NULL)
-		if (!_gdk_pixbuf_load_module (image_module, error))
-			return FALSE;
+	if (!_gdk_pixbuf_load_module (image_module, error))
+		return FALSE;
 
 	locked = _gdk_pixbuf_lock (image_module);
 
@@ -1790,9 +1792,8 @@ gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
 	if (image_module == NULL)
 		return FALSE;
        
-	if (image_module->module == NULL)
-		if (!_gdk_pixbuf_load_module (image_module, error))
-			return FALSE;
+	if (!_gdk_pixbuf_load_module (image_module, error))
+		return FALSE;
 
 	locked = _gdk_pixbuf_lock (image_module);
 
