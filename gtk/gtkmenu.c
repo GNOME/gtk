@@ -21,21 +21,19 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #define GTK_MENU_INTERNALS
 #include "config.h"
-#include <string.h> /* memset */
+#include <string.h>
 #include "gdk/gdkkeysyms.h"
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkbindings.h"
-#include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
-#include "gtkmenuitem.h"
 #include "gtktearoffmenuitem.h"
 #include "gtkwindow.h"
 #include "gtkhbox.h"
@@ -46,20 +44,18 @@
 #include "gtkalias.h"
 
 
-#define MENU_ITEM_CLASS(w)   GTK_MENU_ITEM_GET_CLASS (w)
-
-#define DEFAULT_POPUP_DELAY    225
+#define DEFAULT_POPUP_DELAY     225
 #define DEFAULT_POPDOWN_DELAY  1000
 
 #define NAVIGATION_REGION_OVERSHOOT 50  /* How much the navigation region
 					 * extends below the submenu
 					 */
 
-#define MENU_SCROLL_STEP1 8
-#define MENU_SCROLL_STEP2 15
-#define MENU_SCROLL_FAST_ZONE 8
-#define MENU_SCROLL_TIMEOUT1 50
-#define MENU_SCROLL_TIMEOUT2 20
+#define MENU_SCROLL_STEP1      8
+#define MENU_SCROLL_STEP2     15
+#define MENU_SCROLL_FAST_ZONE  8
+#define MENU_SCROLL_TIMEOUT1  50
+#define MENU_SCROLL_TIMEOUT2  20
 
 #define ATTACH_INFO_KEY "gtk-menu-child-attach-info-key"
 #define ATTACHED_MENUS "gtk-attached-menus"
@@ -248,7 +244,7 @@ static gboolean gtk_menu_real_can_activate_accel (GtkWidget *widget,
 static void _gtk_menu_refresh_accel_paths (GtkMenu *menu,
 					   gboolean group_changed);
 
-static const gchar	  attach_data_key[] = "gtk-menu-attach-data";
+static const gchar attach_data_key[] = "gtk-menu-attach-data";
 
 static guint menu_signals[LAST_SIGNAL] = { 0 };
 

@@ -1,5 +1,11 @@
 2008-09-03  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkmenu.c
+	* gtk/gtkmenuitem.c: remove unused macro cruft. Also remove some
+	unneeded includes.
+
+2008-09-03  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkarrow.c: expose-event returns gboolean not gint,
 	reindented static prototypes and did some minor cleanups.
 
