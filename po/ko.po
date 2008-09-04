@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-26 14:31+0900\n"
-"PO-Revision-Date: 2008-08-26 14:32+0900\n"
+"POT-Creation-Date: 2008-09-04 20:49+0900\n"
+"PO-Revision-Date: 2008-09-04 20:50+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -229,19 +229,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:944
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1205 ../tests/testfilechooser.c:222
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:950
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1210 ../tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "파일 '%s' 열기 실패 : %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146 ../gdk-pixbuf/gdk-pixbuf-io.c:956
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146 ../gdk-pixbuf/gdk-pixbuf-io.c:962
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "그림 파일 '%s'에 데이타가 없습니다"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:993
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1257 ../tests/testfilechooser.c:267
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:998
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1262 ../tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -271,53 +271,53 @@ msgstr ""
 "%s 그림 읽기 모듈이 올바른 인터페이스를 내놓지 않습니다; 아마 다른 GTK 버전"
 "의 모듈일 것입니다"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:726 ../gdk-pixbuf/gdk-pixbuf-io.c:755
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:727 ../gdk-pixbuf/gdk-pixbuf-io.c:761
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "그림 형식 '%s'을(를) 지원하지 않습니다"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:825
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:831
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "파일 '%s'의 그림파일 형식을 알 수 없습니다"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:833
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:839
 msgid "Unrecognized image file format"
 msgstr "알 수 없는 그림 파일 형식"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1002
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1007
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "그림 '%s' 읽기 실패: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1638 ../gdk-pixbuf/io-gdip-utils.c:935
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1641 ../gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "그림 파일을 쓰는 중 오류가 발생했습니다: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1684 ../gdk-pixbuf/gdk-pixbuf-io.c:1815
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1686 ../gdk-pixbuf/gdk-pixbuf-io.c:1816
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "gtk-pixbuf의 이 빌드에서는 그림 형식 저장을 지원하지 않습니다: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1718
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1720
 msgid "Insufficient memory to save image to callback"
 msgstr "콜백에 그림을 저장하기에는 메모리가 부족합니다"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1731
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1733
 msgid "Failed to open temporary file"
 msgstr "임시 파일을 여는 데 실패했습니다"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1757
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1759
 msgid "Failed to read from temporary file"
 msgstr "임시 파일을 읽는 데 실패했습니다"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1992
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1993
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "쓰기용 '%s' 열기 실패: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2017
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2018
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -326,11 +326,11 @@ msgstr ""
 "그림을 저장하는 동안 '%s'을(를) 닫는데 실패하였습니다, 모든 데이타가 저장되"
 "지 않았을 것입니다: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2237 ../gdk-pixbuf/gdk-pixbuf-io.c:2288
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2238 ../gdk-pixbuf/gdk-pixbuf-io.c:2289
 msgid "Insufficient memory to save image into a buffer"
 msgstr "버퍼에 그림을 저장하기에는 메모리가 부족합니다"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2334
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2335
 msgid "Error writing to image stream"
 msgstr "그림 스트림을 쓰는 중 오류가 발생했습니다"
 
@@ -434,8 +434,8 @@ msgstr "BMP 그림 형식"
 msgid "Failure reading GIF: %s"
 msgstr "GIF 읽는 중 실패: %s"
 
-#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1477
-#: ../gdk-pixbuf/io-gif.c:1638
+#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1481
+#: ../gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF 파일에 데이타가 부족합니다 (중간에 잘린 파일?)"
 
@@ -460,39 +460,39 @@ msgstr "잘못된 코드 발견"
 msgid "Circular table entry in GIF file"
 msgstr "GIF 파일에 순환 테이블 항목"
 
-#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1464
-#: ../gdk-pixbuf/io-gif.c:1511 ../gdk-pixbuf/io-gif.c:1626
+#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1468
+#: ../gdk-pixbuf/io-gif.c:1515 ../gdk-pixbuf/io-gif.c:1630
 msgid "Not enough memory to load GIF file"
 msgstr "GIF 파일을 읽는데 메모리가 충분하지 않습니다"
 
-#: ../gdk-pixbuf/io-gif.c:956
+#: ../gdk-pixbuf/io-gif.c:960
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "GIF 파일의 프레임을 만드는 데 메모리가 충분하지 않습니다"
 
-#: ../gdk-pixbuf/io-gif.c:1128
+#: ../gdk-pixbuf/io-gif.c:1132
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF 그림이 잘못되었습니다 (잘못된 LZW 압축)"
 
-#: ../gdk-pixbuf/io-gif.c:1178
+#: ../gdk-pixbuf/io-gif.c:1182
 msgid "File does not appear to be a GIF file"
 msgstr "GIF 파일이 아닌 것 같습니다"
 
-#: ../gdk-pixbuf/io-gif.c:1190
+#: ../gdk-pixbuf/io-gif.c:1194
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF 파일 형식의 버전 %s은(는) 지원되지 않습니다."
 
-#: ../gdk-pixbuf/io-gif.c:1299
+#: ../gdk-pixbuf/io-gif.c:1303
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr "GIF 그림에 전체 컬러맵이 없고, 프레임 내부에 부분 컬러맵이 없습니다."
 
-#: ../gdk-pixbuf/io-gif.c:1533
+#: ../gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF 그림이 잘려져 있거나 불완전합니다."
 
-#: ../gdk-pixbuf/io-gif.c:1689 ../gdk-pixbuf/io-gdip-gif.c:80
+#: ../gdk-pixbuf/io-gif.c:1693 ../gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "GIF 그림 형식"
 
@@ -1501,11 +1501,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "색 선택"
 
-#: ../gtk/gtkentry.c:5375 ../gtk/gtktextview.c:7686
+#: ../gtk/gtkentry.c:5380 ../gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "입력기(_M)"
 
-#: ../gtk/gtkentry.c:5389 ../gtk/gtktextview.c:7700
+#: ../gtk/gtkentry.c:5394 ../gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "유니코드 제어 문자 넣기(_I)"
 
@@ -4381,12 +4381,12 @@ msgstr "키릴어 (음역)"
 #. ID
 #: ../modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
-msgstr "Inuktitut (음역)"
+msgstr "이누이트어 (음역)"
 
 #. ID
 #: ../modules/input/imipa.c:145
 msgid "IPA"
-msgstr "IPA"
+msgstr "국제 음성 기호"
 
 #. ID
 #: ../modules/input/immultipress.c:31
@@ -4406,8 +4406,9 @@ msgstr "티그리니아어-에트리아어 (EZ+)"
 #. ID
 #: ../modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr "Tigrigna-에티오피아어 (EZ+)"
+msgstr "티그리니아어-에티오피아어 (EZ+)"
 
+# VIQR - http://en.wikipedia.org/wiki/Vietnamese_Quoted-Readable
 #. ID
 #: ../modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
@@ -4591,8 +4592,7 @@ msgstr "아래에서 위, 오른쪽에서 왼쪽"
 #. * in the print dialog
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2712
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
-msgid "Pages Per Sheet"
+msgid "Pages per Sheet"
 msgstr "한 장당 페이지 수"
 
 #. Translators, this string is used to label the job priority option
@@ -4684,34 +4684,38 @@ msgstr "사용자 지정 %sx%s"
 msgid "output.%s"
 msgstr "출력.%s"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:464
+#: ../modules/printbackends/file/gtkprintbackendfile.c:466
 msgid "Print to File"
 msgstr "파일로 인쇄"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+#: ../modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+#: ../modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:553
-#: ../modules/printbackends/test/gtkprintbackendtest.c:501
+#: ../modules/printbackends/file/gtkprintbackendfile.c:555
+#: ../modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "한 장당 페이지 수(_S):"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:599
+#: ../modules/printbackends/file/gtkprintbackendfile.c:601
 msgid "File"
 msgstr "파일"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:608
+#: ../modules/printbackends/file/gtkprintbackendfile.c:610
 msgid "_Output format"
 msgstr "출력 형식(_O)"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:398
 msgid "Print to LPR"
 msgstr "LPR로 인쇄"
+
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
+msgid "Pages Per Sheet"
+msgstr "한 장당 페이지 수"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:431
 msgid "Command Line"
@@ -4723,7 +4727,7 @@ msgstr "명령행"
 msgid "test-output.%s"
 msgstr "테스트-출력.%s"
 
-#: ../modules/printbackends/test/gtkprintbackendtest.c:465
+#: ../modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "테스트 프린터로 인쇄"
 
@@ -4731,87 +4735,3 @@ msgstr "테스트 프린터로 인쇄"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "파일 '%s'의 정보를 가져올 수 없습니다: %s"
-
-#~ msgid "URI"
-#~ msgstr "URI"
-
-#~ msgid "The URI bound to this button"
-#~ msgstr "이 단추에 연결되는 URI"
-
-#~ msgid "Arrow spacing"
-#~ msgstr "화살표 간격"
-
-#~ msgid "Scroll arrow spacing"
-#~ msgstr "스크롤 화살표 간격"
-
-#~ msgid "Group"
-#~ msgstr "그룹"
-
-#~ msgid "The radio tool button whose group this button belongs to."
-#~ msgstr "이 단추가 속한 그룹의 라디오 도구 단추."
-
-#~ msgid "Invalid filename: %s"
-#~ msgstr "잘못된 파일 이름: %s"
-
-#~ msgid ""
-#~ "Could not add a bookmark for '%s' because it is an invalid path name."
-#~ msgstr "%s에 대한 책갈피를 더할 수 없습니다.  경로 이름이 잘못되었습니다."
-
-#~ msgid "Could not select file '%s' because it is an invalid path name."
-#~ msgstr "'%s' 파일을 선택할 수 없습니다.  경로 이름이 잘못되었습니다."
-
-#~ msgid "%d byte"
-#~ msgid_plural "%d bytes"
-#~ msgstr[0] "%d바이트"
-
-#~ msgid "Today at %H:%M"
-#~ msgstr "오늘 %H:%M"
-
-#~ msgid "Could not get a stock icon for %s\n"
-#~ msgstr "%s에 대한 스톡 아이콘을 가져올 수 없습니다\n"
-
-#~ msgid "Error getting information for '%s': %s"
-#~ msgstr "'%s'에 대한 정보를 가져오는 데 오류가 발생했습니다: %s"
-
-#~ msgid "This file system does not support mounting"
-#~ msgstr "이 파일 시스템은 마운트를 지원하지 않습니다"
-
-#~ msgid ""
-#~ "The name \"%s\" is not valid because it contains the character \"%s\". "
-#~ "Please use a different name."
-#~ msgstr ""
-#~ "\"%s\"(이)라는 이름은 쓸 수 없습니다. 이름에 \"%s\" 문자가 들어 있습니다. "
-#~ "다른 이름을 사용하십시오."
-
-#~ msgid "Bookmark saving failed: %s"
-#~ msgstr "책갈피 저장이 실패했습니다: %s"
-
-#~ msgid "'%s' already exists in the bookmarks list"
-#~ msgstr "책갈피 목록에 '%s'이(가) 이미 있습니다"
-
-#~ msgid "'%s' does not exist in the bookmarks list"
-#~ msgstr "책갈피 목록에 '%s'이(가) 없습니다"
-
-#~ msgid "Path is not a folder: '%s'"
-#~ msgstr "경로가 폴더가 아닙니다: '%s'"
-
-#~ msgid "Network Drive (%s)"
-#~ msgstr "네트워크 드라이브 (%s)"
-
-#~ msgid "%s (%s)"
-#~ msgstr "%s (%s)"
-
-#~ msgid "Default"
-#~ msgstr "기본"
-
-#~ msgid "Print Pages"
-#~ msgstr "인쇄 페이지"
-
-#~ msgid "_All"
-#~ msgstr "모두(_A)"
-
-#~ msgid "Unknown attribute '%s' on line %d char %d"
-#~ msgstr "알 수 없는 속성 '%s' (%d번째 줄 문자 %d)"
-
-#~ msgid "Location:"
-#~ msgstr "위치:"
