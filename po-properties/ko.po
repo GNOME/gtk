@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 18:27-0400\n"
+"POT-Creation-Date: 2008-09-04 10:41-0400\n"
 "PO-Revision-Date: 2008-08-25 11:53+0900\n"
 "Last-Translator: Eunju Kim <eukim@redhat.com>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -520,27 +520,27 @@ msgstr "오른쪽 여백"
 msgid "The padding to insert at the right of the widget."
 msgstr "위젯의 오른쪽에 끼워 넣을 여백."
 
-#: gtk/gtkarrow.c:73
+#: gtk/gtkarrow.c:75
 msgid "Arrow direction"
 msgstr "화살표 방향"
 
-#: gtk/gtkarrow.c:74
+#: gtk/gtkarrow.c:76
 msgid "The direction the arrow should point"
 msgstr "화살표가 가리킬 방향"
 
-#: gtk/gtkarrow.c:81
+#: gtk/gtkarrow.c:84
 msgid "Arrow shadow"
 msgstr "화살표 그림자"
 
-#: gtk/gtkarrow.c:82
+#: gtk/gtkarrow.c:85
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "화살표 주위의 그림자 모양"
 
-#: gtk/gtkarrow.c:88 gtk/gtkmenuitem.c:279
+#: gtk/gtkarrow.c:92 gtk/gtkmenuitem.c:276
 msgid "Arrow Scaling"
 msgstr "화살표 크기 조정"
 
-#: gtk/gtkarrow.c:89
+#: gtk/gtkarrow.c:93
 msgid "Amount of space used up by arrow"
 msgstr "화살표에 사용된 공간"
 
@@ -1711,7 +1711,7 @@ msgstr "표시기 간격"
 msgid "Spacing around check or radio indicator"
 msgstr "체크 혹은 라디오 표시기 주위의 간격"
 
-#: gtk/gtkcheckmenuitem.c:87 gtk/gtkmenu.c:502 gtk/gtktoggleaction.c:118
+#: gtk/gtkcheckmenuitem.c:87 gtk/gtkmenu.c:498 gtk/gtktoggleaction.c:118
 #: gtk/gtktogglebutton.c:102 gtk/gtktoggletoolbutton.c:101
 msgid "Active"
 msgstr "활성"
@@ -1929,7 +1929,7 @@ msgstr "콤보 상자의 하위 위젯 주위에 프레임을 그릴 지 여부"
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "마우스로 킬릭하면 콤보 상자에 포커스가 가는 지 여부"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:557
+#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "떼어내기 제목"
 
@@ -2046,35 +2046,35 @@ msgstr "최대 Y"
 msgid "Maximum possible value for Y"
 msgstr "최대 Y 값"
 
-#: gtk/gtkdialog.c:144
+#: gtk/gtkdialog.c:145
 msgid "Has separator"
 msgstr "구분선 사용"
 
-#: gtk/gtkdialog.c:145
+#: gtk/gtkdialog.c:146
 msgid "The dialog has a separator bar above its buttons"
 msgstr "대화 상자의 단추 위에 구분선이 있는지"
 
-#: gtk/gtkdialog.c:190
+#: gtk/gtkdialog.c:191
 msgid "Content area border"
 msgstr "내용 영역 테두리"
 
-#: gtk/gtkdialog.c:191
+#: gtk/gtkdialog.c:192
 msgid "Width of border around the main dialog area"
 msgstr "주 대화 상자 영역 주위 테두리의 두께"
 
-#: gtk/gtkdialog.c:198
+#: gtk/gtkdialog.c:199
 msgid "Button spacing"
 msgstr "단추 간격"
 
-#: gtk/gtkdialog.c:199
+#: gtk/gtkdialog.c:200
 msgid "Spacing between buttons"
 msgstr "단추 사이의 간격"
 
-#: gtk/gtkdialog.c:207
+#: gtk/gtkdialog.c:208
 msgid "Action area border"
 msgstr "동작 영역 테두리"
 
-#: gtk/gtkdialog.c:208
+#: gtk/gtkdialog.c:209
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "대화 상자 아래의 단추 영역 주위의 테두리 두께"
 
@@ -3006,77 +3006,77 @@ msgstr "방문함"
 msgid "Whether this link has been visited."
 msgstr "이 링크를 방문했는 지 여부."
 
-#: gtk/gtkmenu.c:503
+#: gtk/gtkmenu.c:499
 msgid "The currently selected menu item"
 msgstr "현재 선택한 메뉴 항목"
 
-#: gtk/gtkmenu.c:517
+#: gtk/gtkmenu.c:513
 msgid "Accel Group"
 msgstr "단축키 그룹"
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:514
 msgid "The accel group holding accelerators for the menu"
 msgstr "메뉴의 단축키가 들어 있는 단축키 그룹"
 
-#: gtk/gtkmenu.c:532 gtk/gtkmenuitem.c:236
+#: gtk/gtkmenu.c:528 gtk/gtkmenuitem.c:233
 msgid "Accel Path"
 msgstr "단축 경로"
 
-#: gtk/gtkmenu.c:533
+#: gtk/gtkmenu.c:529
 msgid "An accel path used to conveniently construct accel paths of child items"
 msgstr "하위 항목의 단축 경로를 쉽게 만드는 데 사용하는 단축 경로"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:545
 msgid "Attach Widget"
 msgstr "붙이기 위젯"
 
-#: gtk/gtkmenu.c:550
+#: gtk/gtkmenu.c:546
 msgid "The widget the menu is attached to"
 msgstr "메뉴를 붙일 위젯"
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:554
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "이 메뉴를 떼어냈을 때 창 관리자가 표시할 제목"
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:568
 msgid "Tearoff State"
 msgstr "떼어내기 상태"
 
-#: gtk/gtkmenu.c:573
+#: gtk/gtkmenu.c:569
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "메뉴를 떼어냈는 지 여부를 나타내는 불리언 값"
 
-#: gtk/gtkmenu.c:587
+#: gtk/gtkmenu.c:583
 msgid "Monitor"
 msgstr "모니터"
 
-#: gtk/gtkmenu.c:588
+#: gtk/gtkmenu.c:584
 msgid "The monitor the menu will be popped up on"
 msgstr "메뉴가 나타날 모니터"
 
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:590
 msgid "Vertical Padding"
 msgstr "세로 채움"
 
-#: gtk/gtkmenu.c:595
+#: gtk/gtkmenu.c:591
 msgid "Extra space at the top and bottom of the menu"
 msgstr "메뉴의 위쪽/아래쪽에 추가할 공간"
 
-#: gtk/gtkmenu.c:603
+#: gtk/gtkmenu.c:599
 msgid "Horizontal Padding"
 msgstr "가로 채움"
 
-#: gtk/gtkmenu.c:604
+#: gtk/gtkmenu.c:600
 msgid "Extra space at the left and right edges of the menu"
 msgstr "메뉴의 왼쪽/오른쪽에 추가할 공간"
 
-#: gtk/gtkmenu.c:612
+#: gtk/gtkmenu.c:608
 msgid "Vertical Offset"
 msgstr "세로 방향 오프셋"
 
-#: gtk/gtkmenu.c:613
+#: gtk/gtkmenu.c:609
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -3084,11 +3084,11 @@ msgstr ""
 "메뉴가 하위 메뉴일 경우, 세로 방향의 위치를 이 픽셀 개수만큼의 오프셋으로 합"
 "니다"
 
-#: gtk/gtkmenu.c:621
+#: gtk/gtkmenu.c:617
 msgid "Horizontal Offset"
 msgstr "가로 방향 오프셋"
 
-#: gtk/gtkmenu.c:622
+#: gtk/gtkmenu.c:618
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -3096,69 +3096,69 @@ msgstr ""
 "메뉴가 하위 메뉴일 경우, 가로 방향의 위치를 이 픽셀 개수만큼의 오프셋으로 합"
 "니다"
 
-#: gtk/gtkmenu.c:630
+#: gtk/gtkmenu.c:626
 msgid "Double Arrows"
 msgstr "화살표 두 개"
 
-#: gtk/gtkmenu.c:631
+#: gtk/gtkmenu.c:627
 msgid "When scrolling, always show both arrows."
 msgstr "스크롤할 때 화살표 두 개를 항상 표시합니다."
 
-#: gtk/gtkmenu.c:639
+#: gtk/gtkmenu.c:635
 msgid "Left Attach"
 msgstr "왼쪽 붙임"
 
-#: gtk/gtkmenu.c:640 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:636 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "하위 위젯의 왼쪽을 붙일 열 번호"
 
-#: gtk/gtkmenu.c:647
+#: gtk/gtkmenu.c:643
 msgid "Right Attach"
 msgstr "오른쪽 붙임"
 
-#: gtk/gtkmenu.c:648
+#: gtk/gtkmenu.c:644
 msgid "The column number to attach the right side of the child to"
 msgstr "하위 위젯의 오른쪽을 붙일 열 번호"
 
-#: gtk/gtkmenu.c:655
+#: gtk/gtkmenu.c:651
 msgid "Top Attach"
 msgstr "위쪽 붙임"
 
-#: gtk/gtkmenu.c:656
+#: gtk/gtkmenu.c:652
 msgid "The row number to attach the top of the child to"
 msgstr "하위 위젯의 위쪽을 붙일 행 번호"
 
-#: gtk/gtkmenu.c:663
+#: gtk/gtkmenu.c:659
 msgid "Bottom Attach"
 msgstr "아래쪽 붙임"
 
-#: gtk/gtkmenu.c:664 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:660 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "하위 위젯의 아래쪽을 붙일 행 번호"
 
-#: gtk/gtkmenu.c:751
+#: gtk/gtkmenu.c:747
 msgid "Can change accelerators"
 msgstr "단축키 바꾸기 가능"
 
-#: gtk/gtkmenu.c:752
+#: gtk/gtkmenu.c:748
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "메뉴 항목 위에서 키를 눌러 메뉴 단축키를 바꿀 수 있는지 여부"
 
-#: gtk/gtkmenu.c:757
+#: gtk/gtkmenu.c:753
 msgid "Delay before submenus appear"
 msgstr "하위 메뉴가 보이기 전까지의 지연 시간"
 
-#: gtk/gtkmenu.c:758
+#: gtk/gtkmenu.c:754
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "하위 메뉴가 보이기 전까지 포인터가 메뉴 항목 위에서 기다릴 최소 시간"
 
-#: gtk/gtkmenu.c:765
+#: gtk/gtkmenu.c:761
 msgid "Delay before hiding a submenu"
 msgstr "하위 메뉴를 감추기 전까지의 지연 시간"
 
-#: gtk/gtkmenu.c:766
+#: gtk/gtkmenu.c:762
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3200,36 +3200,36 @@ msgstr "드롭 다운 메뉴를 표시하기 전까지의 지연 시간"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "메뉴 모음의 하위 메뉴를 표시하기 전까지의 지연 시간"
 
-#: gtk/gtkmenuitem.c:204
+#: gtk/gtkmenuitem.c:201
 msgid "Right Justified"
 msgstr "오른쪽 정렬"
 
-#: gtk/gtkmenuitem.c:205
+#: gtk/gtkmenuitem.c:202
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr "메뉴 항목을 메뉴 모음의 오른쪽에 맞출 지 여부를 설정"
 
-#: gtk/gtkmenuitem.c:219
+#: gtk/gtkmenuitem.c:216
 msgid "Submenu"
 msgstr "하위 메뉴"
 
-#: gtk/gtkmenuitem.c:220
+#: gtk/gtkmenuitem.c:217
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "메뉴 항목에 첨부된 하위 메뉴 또는 하위 메뉴가 없으면 NULL"
 
-#: gtk/gtkmenuitem.c:237
+#: gtk/gtkmenuitem.c:234
 msgid "Sets the accelerator path of the menu item"
 msgstr "메뉴 항목의 단축키 경로를 설정"
 
-#: gtk/gtkmenuitem.c:280
+#: gtk/gtkmenuitem.c:277
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "화살표가 사용한 공간의 크기, 메뉴 항목의 글꼴 크기에 상대 크기"
 
-#: gtk/gtkmenuitem.c:293
+#: gtk/gtkmenuitem.c:290
 msgid "Width in Characters"
 msgstr "너비 (문자 개수 단위)"
 
-#: gtk/gtkmenuitem.c:294
+#: gtk/gtkmenuitem.c:291
 msgid "The minimum desired width of the menu item in characters"
 msgstr "메뉴 항목의 최소 너비, 문자 개수 단위"
 
@@ -3769,11 +3769,11 @@ msgstr "설정"
 msgid "Printer settings"
 msgstr "프린터 설정"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:252
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:256
 msgid "Page Setup"
 msgstr "페이지 설정"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1012
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1013
 msgid "Track Print Status"
 msgstr "인쇄 상태 추적"
 
@@ -3785,51 +3785,51 @@ msgstr ""
 "참이면 인쇄 데이터를 프린터나 인쇄 서버로 보낸 후에 계속해서 status-changed "
 "시그널을 보냅니다."
 
-#: gtk/gtkprintoperation.c:884
+#: gtk/gtkprintoperation.c:885
 msgid "Default Page Setup"
 msgstr "기본 페이지 설정"
 
-#: gtk/gtkprintoperation.c:885
+#: gtk/gtkprintoperation.c:886
 msgid "The GtkPageSetup used by default"
 msgstr "기본으로 사용하는 GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:903 gtk/gtkprintunixdialog.c:270
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:274
 msgid "Print Settings"
 msgstr "프린터 설정"
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:271
+#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:275
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "대화 상자를 초기화할 때 사용하는 GtkPrintSettings"
 
-#: gtk/gtkprintoperation.c:922
+#: gtk/gtkprintoperation.c:923
 msgid "Job Name"
 msgstr "작업 이름"
 
-#: gtk/gtkprintoperation.c:923
+#: gtk/gtkprintoperation.c:924
 msgid "A string used for identifying the print job."
 msgstr "인쇄 작업을 구별하는 데 사용하는 문자열."
 
-#: gtk/gtkprintoperation.c:947
+#: gtk/gtkprintoperation.c:948
 msgid "Number of Pages"
 msgstr "페이지 수"
 
-#: gtk/gtkprintoperation.c:948
+#: gtk/gtkprintoperation.c:949
 msgid "The number of pages in the document."
 msgstr "문서의 페이지 수."
 
-#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:260
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:264
 msgid "Current Page"
 msgstr "현재 페이지"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:261
+#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:265
 msgid "The current page in the document"
 msgstr "문서의 현재 페이지"
 
-#: gtk/gtkprintoperation.c:991
+#: gtk/gtkprintoperation.c:992
 msgid "Use full page"
 msgstr "전체 페이지 사용"
 
-#: gtk/gtkprintoperation.c:992
+#: gtk/gtkprintoperation.c:993
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -3837,7 +3837,7 @@ msgstr ""
 "참이면 텍스트의 원본이 페이지의 구석에 있습니다 (그릴 수 있는 부분의 구석이 "
 "아님)"
 
-#: gtk/gtkprintoperation.c:1013
+#: gtk/gtkprintoperation.c:1014
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3845,27 +3845,27 @@ msgstr ""
 "참이면 인쇄 데이터를 프린터나 인쇄 서버로 보낸 후에 계속해서 인쇄 작업의 상태"
 "를 보냅니다."
 
-#: gtk/gtkprintoperation.c:1030
+#: gtk/gtkprintoperation.c:1031
 msgid "Unit"
 msgstr "단위"
 
-#: gtk/gtkprintoperation.c:1031
+#: gtk/gtkprintoperation.c:1032
 msgid "The unit in which distances can be measured in the context"
 msgstr "내용상에 거리를 측정할 때 사용하는 단위"
 
-#: gtk/gtkprintoperation.c:1048
+#: gtk/gtkprintoperation.c:1049
 msgid "Show Dialog"
 msgstr "대화 상자 표시"
 
-#: gtk/gtkprintoperation.c:1049
+#: gtk/gtkprintoperation.c:1050
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "참이면 인쇄하는 동안 진행률 표시 대화 상자를 보여줍니다."
 
-#: gtk/gtkprintoperation.c:1072
+#: gtk/gtkprintoperation.c:1073
 msgid "Allow Async"
 msgstr "비동기 허용"
 
-#: gtk/gtkprintoperation.c:1073
+#: gtk/gtkprintoperation.c:1074
 msgid "TRUE if print process may run asynchronous."
 msgstr "참이면 인쇄 프로세스를 비동기로 동작하도록 합니다."
 
@@ -3897,15 +3897,15 @@ msgstr "사용자 설정 탭 레이블"
 msgid "Label for the tab containing custom widgets."
 msgstr "사용자 설정 위젯이 들어 있는 탭의 레이블."
 
-#: gtk/gtkprintunixdialog.c:253
+#: gtk/gtkprintunixdialog.c:257
 msgid "The GtkPageSetup to use"
 msgstr "사용할 GtkPageSetup"
 
-#: gtk/gtkprintunixdialog.c:278
+#: gtk/gtkprintunixdialog.c:282
 msgid "Selected Printer"
 msgstr "선택한 프린터"
 
-#: gtk/gtkprintunixdialog.c:279
+#: gtk/gtkprintunixdialog.c:283
 msgid "The GtkPrinter which is selected"
 msgstr "선택한 GtkPrinter"
 

@@ -1,7 +1,7 @@
 General Information
 ===================
 
-This is GTK+ version 2.13.7. GTK+ is a multi-platform toolkit for
+This is GTK+ version 2.14.0. GTK+ is a multi-platform toolkit for
 creating graphical user interfaces. Offering a complete set of widgets,
 GTK+ is suitable for projects ranging from small one-off projects to
 complete application suites.
@@ -47,6 +47,12 @@ Release notes for 2.14
   only before displaying it can set gtk_combo_box_set_button_sensitivity
   to GTK_SENSITIVITY_ON, so that the button is always sensitive or
   GTK_SENSITIVITY_OFF to make it insensitive respectively.
+
+* GtkAdjustment now enforces that values are restricted to the
+  range [lower, upper - page_size]. This has always been the documented
+  behaviour, and the recommended practice is to set page_size to 0
+  when using adjustments for simple scalar values, like in a slider
+  or spin button. 
 
 * gdk-pixbuf will use GIO for mime type detection if possible. For
   this to work, shared-mime-info needs to be installed and XDG_DATA_DIRS

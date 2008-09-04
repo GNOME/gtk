@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 18:27-0400\n"
+"POT-Creation-Date: 2008-09-04 10:41-0400\n"
 "PO-Revision-Date: 2007-08-07 03:17+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -577,31 +577,31 @@ msgid "The padding to insert at the right of the widget."
 msgstr "Parçanın sağına eklenecek doldurma."
 
 # gtk/gtkarrow.c:97
-#: gtk/gtkarrow.c:73
+#: gtk/gtkarrow.c:75
 msgid "Arrow direction"
 msgstr "Ok yönü"
 
 # gtk/gtkarrow.c:98
-#: gtk/gtkarrow.c:74
+#: gtk/gtkarrow.c:76
 msgid "The direction the arrow should point"
 msgstr "Okun hedef aldığı yön"
 
 # gtk/gtkarrow.c:105
-#: gtk/gtkarrow.c:81
+#: gtk/gtkarrow.c:84
 msgid "Arrow shadow"
 msgstr "Ok gölgesi"
 
 # gtk/gtkarrow.c:106
-#: gtk/gtkarrow.c:82
+#: gtk/gtkarrow.c:85
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Oku çevreleyen gölgenin görünümü"
 
 # gtk/gtktable.c:174
-#: gtk/gtkarrow.c:88 gtk/gtkmenuitem.c:279
+#: gtk/gtkarrow.c:92 gtk/gtkmenuitem.c:276
 msgid "Arrow Scaling"
 msgstr "Ok Ölçeği"
 
-#: gtk/gtkarrow.c:89
+#: gtk/gtkarrow.c:93
 msgid "Amount of space used up by arrow"
 msgstr "Ok tarafından kullanılacak alanın boyutu"
 
@@ -2012,7 +2012,7 @@ msgid "Spacing around check or radio indicator"
 msgstr "Onay ya da radyo düğmesi belirteci etrafındaki boşluk"
 
 # gtk/gtkcheckmenuitem.c:114 gtk/gtktogglebutton.c:144
-#: gtk/gtkcheckmenuitem.c:87 gtk/gtkmenu.c:502 gtk/gtktoggleaction.c:118
+#: gtk/gtkcheckmenuitem.c:87 gtk/gtkmenu.c:498 gtk/gtktoggleaction.c:118
 #: gtk/gtktogglebutton.c:102 gtk/gtktoggletoolbutton.c:101
 msgid "Active"
 msgstr "Etkin"
@@ -2271,7 +2271,7 @@ msgstr "Çoklu kutunun alt çevresinde çerçeve çizmesi"
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Çoklu kutunun fare ile tıklandığında odağı yakalaması"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:557
+#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "Ayıraç Başlığı"
 
@@ -2414,42 +2414,42 @@ msgid "Maximum possible value for Y"
 msgstr "Y için mümkün olan en büyük değer"
 
 # gtk/gtkdialog.c:125
-#: gtk/gtkdialog.c:144
+#: gtk/gtkdialog.c:145
 msgid "Has separator"
 msgstr "Ayraca sahip"
 
 # gtk/gtkdialog.c:126
-#: gtk/gtkdialog.c:145
+#: gtk/gtkdialog.c:146
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Pencere, düğmeleri arasında bir ayraç çubuğuna sahip"
 
 # gtk/gtkdialog.c:149
-#: gtk/gtkdialog.c:190
+#: gtk/gtkdialog.c:191
 msgid "Content area border"
 msgstr "İçerik alanı kenarlığı"
 
 # gtk/gtkdialog.c:150
-#: gtk/gtkdialog.c:191
+#: gtk/gtkdialog.c:192
 msgid "Width of border around the main dialog area"
 msgstr "Ana pencere alanını çevreleyen kenarlığın genişliği"
 
 # gtk/gtkdialog.c:157
-#: gtk/gtkdialog.c:198
+#: gtk/gtkdialog.c:199
 msgid "Button spacing"
 msgstr "Düğme aralığı"
 
 # gtk/gtkdialog.c:158
-#: gtk/gtkdialog.c:199
+#: gtk/gtkdialog.c:200
 msgid "Spacing between buttons"
 msgstr "Düğmeler arası boşluk"
 
 # gtk/gtkdialog.c:166
-#: gtk/gtkdialog.c:207
+#: gtk/gtkdialog.c:208
 msgid "Action area border"
 msgstr "Eylem alanı kenarlığı"
 
 # gtk/gtkdialog.c:167
-#: gtk/gtkdialog.c:208
+#: gtk/gtkdialog.c:209
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Pencerenin altındaki düğme alanını çevreleyen kenarlığın genişliği"
 
@@ -3536,179 +3536,179 @@ msgid "Whether this link has been visited."
 msgstr "Eylemin görünür olup olmaması."
 
 # gtk/gtkfilesel.c:503
-#: gtk/gtkmenu.c:503
+#: gtk/gtkmenu.c:499
 #, fuzzy
 msgid "The currently selected menu item"
 msgstr "Seçilmiş dosya adı"
 
 # gtk/gtkprogressbar.c:187
-#: gtk/gtkmenu.c:517
+#: gtk/gtkmenu.c:513
 #, fuzzy
 msgid "Accel Group"
 msgstr "Eylem Grubu"
 
 # gtk/gtklabel.c:259
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:514
 #, fuzzy
 msgid "The accel group holding accelerators for the menu"
 msgstr "Bu etiket için anımsatıcı hızlandırıcı tuş"
 
-#: gtk/gtkmenu.c:532 gtk/gtkmenuitem.c:236
+#: gtk/gtkmenu.c:528 gtk/gtkmenuitem.c:233
 msgid "Accel Path"
 msgstr ""
 
-#: gtk/gtkmenu.c:533
+#: gtk/gtkmenu.c:529
 msgid "An accel path used to conveniently construct accel paths of child items"
 msgstr ""
 
 # gtk/gtkimagemenuitem.c:124
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:545
 #, fuzzy
 msgid "Attach Widget"
 msgstr "Ek parçası"
 
 # gtk/gtkcheckmenuitem.c:115
-#: gtk/gtkmenu.c:550
+#: gtk/gtkmenu.c:546
 #, fuzzy
 msgid "The widget the menu is attached to"
 msgstr "Menü öğesinin işaretlenmiş olması"
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:554
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 "Bu menü ayrıldığında pencere yöneticisi tarafından gösterilebilecek başlık"
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:568
 msgid "Tearoff State"
 msgstr "Ayıraç Durumu"
 
-#: gtk/gtkmenu.c:573
+#: gtk/gtkmenu.c:569
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Menünün ayrı olup olmadığını belirten mantıksal değer"
 
 # gtk/gtkcellrenderertext.c:219 gtk/gtkcellrenderertext.c:227
 # gtk/gtkfontsel.c:192 gtk/gtktexttag.c:284 gtk/gtktexttag.c:292
-#: gtk/gtkmenu.c:587
+#: gtk/gtkmenu.c:583
 #, fuzzy
 msgid "Monitor"
 msgstr "Ay"
 
-#: gtk/gtkmenu.c:588
+#: gtk/gtkmenu.c:584
 msgid "The monitor the menu will be popped up on"
 msgstr ""
 
 # gtk/gtkmenubar.c:162 gtk/gtktoolbar.c:250
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:590
 msgid "Vertical Padding"
 msgstr "Dikey Doldurma"
 
 # gtk/gtkmisc.c:128
-#: gtk/gtkmenu.c:595
+#: gtk/gtkmenu.c:591
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Menünü altına ve üstüne eklenecek boşluk"
 
 # gtk/gtkalignment.c:102
-#: gtk/gtkmenu.c:603
+#: gtk/gtkmenu.c:599
 msgid "Horizontal Padding"
 msgstr "Yatay Doldurma"
 
 # gtk/gtkmisc.c:128
-#: gtk/gtkmenu.c:604
+#: gtk/gtkmenu.c:600
 msgid "Extra space at the left and right edges of the menu"
 msgstr "Menünü sağına ve soluna eklenecek boşluk"
 
 # gtk/gtkalignment.c:130
-#: gtk/gtkmenu.c:612
+#: gtk/gtkmenu.c:608
 msgid "Vertical Offset"
 msgstr "Düşey Ofset"
 
-#: gtk/gtkmenu.c:613
+#: gtk/gtkmenu.c:609
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Menü alt menü olduğunda, bu sayıdaki düşey ofsette onu konumlandır"
 
 # gtk/gtkalignment.c:121
-#: gtk/gtkmenu.c:621
+#: gtk/gtkmenu.c:617
 msgid "Horizontal Offset"
 msgstr "Yatay Ofset"
 
-#: gtk/gtkmenu.c:622
+#: gtk/gtkmenu.c:618
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "Menü alt menü olduğunda, bu sayıdaki yatay ofsette onu konumlandır"
 
 # gtk/gtknotebook.c:375
-#: gtk/gtkmenu.c:630
+#: gtk/gtkmenu.c:626
 msgid "Double Arrows"
 msgstr "Çift Ok"
 
-#: gtk/gtkmenu.c:631
+#: gtk/gtkmenu.c:627
 msgid "When scrolling, always show both arrows."
 msgstr "Kaydırılırken, her zaman iki oku da göster."
 
-#: gtk/gtkmenu.c:639
+#: gtk/gtkmenu.c:635
 msgid "Left Attach"
 msgstr "Sol Ek"
 
-#: gtk/gtkmenu.c:640 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:636 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "Altın sol tarafına eklenecek sütun sayısı"
 
-#: gtk/gtkmenu.c:647
+#: gtk/gtkmenu.c:643
 msgid "Right Attach"
 msgstr "Sağ Ek"
 
-#: gtk/gtkmenu.c:648
+#: gtk/gtkmenu.c:644
 msgid "The column number to attach the right side of the child to"
 msgstr "Altın sağ tarafına eklenecek sütun sayısı"
 
-#: gtk/gtkmenu.c:655
+#: gtk/gtkmenu.c:651
 msgid "Top Attach"
 msgstr "Üst Ek"
 
-#: gtk/gtkmenu.c:656
+#: gtk/gtkmenu.c:652
 msgid "The row number to attach the top of the child to"
 msgstr "Altın üstüne eklenecek satır sayısı"
 
-#: gtk/gtkmenu.c:663
+#: gtk/gtkmenu.c:659
 msgid "Bottom Attach"
 msgstr "Alt Ek"
 
-#: gtk/gtkmenu.c:664 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:660 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "Altın, alt tarafına eklenecek satır sayısı"
 
 # gtk/gtkmenubar.c:147
-#: gtk/gtkmenu.c:751
+#: gtk/gtkmenu.c:747
 msgid "Can change accelerators"
 msgstr "Hızlandırıcılar değiştirilebilir"
 
-#: gtk/gtkmenu.c:752
+#: gtk/gtkmenu.c:748
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Menü hızlandırıcıları menü öğesi için belirtilen bir tuşla değiştirilebilsin"
 
-#: gtk/gtkmenu.c:757
+#: gtk/gtkmenu.c:753
 msgid "Delay before submenus appear"
 msgstr "Alt menüler belirmeden önceki bekleme süresi"
 
-#: gtk/gtkmenu.c:758
+#: gtk/gtkmenu.c:754
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Alt menünün belirmesi için imlecin menünün üzerinde kalması gereken en az "
 "süre"
 
-#: gtk/gtkmenu.c:765
+#: gtk/gtkmenu.c:761
 msgid "Delay before hiding a submenu"
 msgstr "Bir alt menüyü saklamadan önceki bekleme süresi"
 
-#: gtk/gtkmenu.c:766
+#: gtk/gtkmenu.c:762
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3757,39 +3757,39 @@ msgstr "Açılır menüler belirmeden önceki bekleme"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Menü cubuğunun altmenüleri belirmeden önceki bekleme"
 
-#: gtk/gtkmenuitem.c:204
+#: gtk/gtkmenuitem.c:201
 msgid "Right Justified"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:205
+#: gtk/gtkmenuitem.c:202
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:219
+#: gtk/gtkmenuitem.c:216
 msgid "Submenu"
 msgstr "Alt menü"
 
-#: gtk/gtkmenuitem.c:220
+#: gtk/gtkmenuitem.c:217
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "Menü öğesine eklenmiş alt menü, ya da eğer yoksa NULL"
 
-#: gtk/gtkmenuitem.c:237
+#: gtk/gtkmenuitem.c:234
 msgid "Sets the accelerator path of the menu item"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:280
+#: gtk/gtkmenuitem.c:277
 #, fuzzy
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "Ok tarafından kullanılacak alanın boyutu"
 
 # gtk/gtkentry.c:435
-#: gtk/gtkmenuitem.c:293
+#: gtk/gtkmenuitem.c:290
 #, fuzzy
 msgid "Width in Characters"
 msgstr "Karakter Olarak Genişlik"
 
-#: gtk/gtkmenuitem.c:294
+#: gtk/gtkmenuitem.c:291
 #, fuzzy
 msgid "The minimum desired width of the menu item in characters"
 msgstr "Etiketin arzu edilen genişliği, karakter olarak"
@@ -4421,11 +4421,11 @@ msgid "Printer settings"
 msgstr "Yazıcı seçenekleri"
 
 # gtk/gtkruler.c:148
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:252
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:256
 msgid "Page Setup"
 msgstr "Sayfa Ayarı"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1012
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1013
 msgid "Track Print Status"
 msgstr "Yazdırma Durumunu Takip Et"
 
@@ -4438,56 +4438,56 @@ msgstr ""
 "sonra bile yazdırma görevi status-changed sinyali vermeye devam eder."
 
 # gtk/gtkwindow.c:399
-#: gtk/gtkprintoperation.c:884
+#: gtk/gtkprintoperation.c:885
 msgid "Default Page Setup"
 msgstr "Öntanımlı Sayfa Yapısı"
 
-#: gtk/gtkprintoperation.c:885
+#: gtk/gtkprintoperation.c:886
 msgid "The GtkPageSetup used by default"
 msgstr "Öntanımlı olarak kullanılacak GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:903 gtk/gtkprintunixdialog.c:270
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:274
 msgid "Print Settings"
 msgstr "Yazdırma Ayarları"
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:271
+#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:275
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Pencere başlatılırken kullanılacak GtkPrintSettings"
 
 # gtk/gtkfontsel.c:185
-#: gtk/gtkprintoperation.c:922
+#: gtk/gtkprintoperation.c:923
 msgid "Job Name"
 msgstr "Görev İsmi"
 
-#: gtk/gtkprintoperation.c:923
+#: gtk/gtkprintoperation.c:924
 msgid "A string used for identifying the print job."
 msgstr "Yazdırma görevini tanımlamak için kullanılacak dizgi."
 
-#: gtk/gtkprintoperation.c:947
+#: gtk/gtkprintoperation.c:948
 msgid "Number of Pages"
 msgstr "Sayfa Sayısı"
 
 # gtk/gtktable.c:157
-#: gtk/gtkprintoperation.c:948
+#: gtk/gtkprintoperation.c:949
 msgid "The number of pages in the document."
 msgstr "Belgedeki sayfa sayısı."
 
 # gtk/gtkcolorsel.c:1689
-#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:260
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:264
 msgid "Current Page"
 msgstr "Mevcut Sayfa"
 
 # gtk/gtkcellrenderertoggle.c:128
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:261
+#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:265
 msgid "The current page in the document"
 msgstr "Belgedeki şu anda bulunulan sayfa"
 
 # gtk/gtklabel.c:212
-#: gtk/gtkprintoperation.c:991
+#: gtk/gtkprintoperation.c:992
 msgid "Use full page"
 msgstr "Tam sayfa kullan"
 
-#: gtk/gtkprintoperation.c:992
+#: gtk/gtkprintoperation.c:993
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4495,7 +4495,7 @@ msgstr ""
 "TRUE ise içeriğin orijini sayfanın köşesinde olmalıdır ve resimlenebilir "
 "alanın köşesinde olmamalıdır"
 
-#: gtk/gtkprintoperation.c:1013
+#: gtk/gtkprintoperation.c:1014
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4503,28 +4503,28 @@ msgstr ""
 "TRUE ise yazdırma verisi yazıcıya ya da yazdırma sunucusuna gönderildikten "
 "sonra bile yazdırma işlemi yazdırma görev durumunu bildirmeye devam eder."
 
-#: gtk/gtkprintoperation.c:1030
+#: gtk/gtkprintoperation.c:1031
 msgid "Unit"
 msgstr "Birim"
 
-#: gtk/gtkprintoperation.c:1031
+#: gtk/gtkprintoperation.c:1032
 msgid "The unit in which distances can be measured in the context"
 msgstr "İçerik içerisinde mesafelerin ölçülebileceği birim"
 
 # gtk/gtktable.c:174
-#: gtk/gtkprintoperation.c:1048
+#: gtk/gtkprintoperation.c:1049
 msgid "Show Dialog"
 msgstr "Pencere Göster"
 
-#: gtk/gtkprintoperation.c:1049
+#: gtk/gtkprintoperation.c:1050
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE ise yazdırma esnasında bir ilerleme penceresi gösterilir."
 
-#: gtk/gtkprintoperation.c:1072
+#: gtk/gtkprintoperation.c:1073
 msgid "Allow Async"
 msgstr "Eşzamansıza İzin Ver"
 
-#: gtk/gtkprintoperation.c:1073
+#: gtk/gtkprintoperation.c:1074
 msgid "TRUE if print process may run asynchronous."
 msgstr "TRUE ise yazdırma süreci eş zamansız olarak çalışabilir."
 
@@ -4559,17 +4559,17 @@ msgstr "Özel sekme etiketi"
 msgid "Label for the tab containing custom widgets."
 msgstr "Özel parçalar içeren sekme için etiket."
 
-#: gtk/gtkprintunixdialog.c:253
+#: gtk/gtkprintunixdialog.c:257
 msgid "The GtkPageSetup to use"
 msgstr "Kullanılacak GtkPageSetup"
 
 # gtk/gtkfilesel.c:503
-#: gtk/gtkprintunixdialog.c:278
+#: gtk/gtkprintunixdialog.c:282
 msgid "Selected Printer"
 msgstr "Seçilen Yazıcı"
 
 # gtk/gtkfontsel.c:193
-#: gtk/gtkprintunixdialog.c:279
+#: gtk/gtkprintunixdialog.c:283
 msgid "The GtkPrinter which is selected"
 msgstr "Seçilmiş olan GtkPrinter"
 

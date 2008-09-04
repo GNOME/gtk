@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 18:27-0400\n"
+"POT-Creation-Date: 2008-09-04 10:40-0400\n"
 "PO-Revision-Date: 2007-09-10 15:09+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com>\n"
 "Language-Team: Malayalam\n"
@@ -235,19 +235,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:944
-#: gdk-pixbuf/gdk-pixbuf-io.c:1205 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:950
+#: gdk-pixbuf/gdk-pixbuf-io.c:1210 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "'%s' എന്ന ഫയല്‍ തുറക്കുന്നില്‍ പരാജയം: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:956
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:962
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "'%s' എന്ന ഇമേജ് ഫയലില്‍ ഡേറ്റാ ലഭ്യമല്ല"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:993
-#: gdk-pixbuf/gdk-pixbuf-io.c:1257 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:998
+#: gdk-pixbuf/gdk-pixbuf-io.c:1262 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -275,53 +275,53 @@ msgstr ""
 "ഇമേജ് ലഭ്യമാക്കുന്ന ഘടകമായ %s ശരിയായ സംയോജക ഘടകം എക്സ്പോറ്‍ട്ട് ചെയ്യുന്നില്ല; മറ്റൊരു GTK "
 "ലക്കത്തില്‍ നിന്നുമാവാം?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:726 gdk-pixbuf/gdk-pixbuf-io.c:755
+#: gdk-pixbuf/gdk-pixbuf-io.c:727 gdk-pixbuf/gdk-pixbuf-io.c:761
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "'%s' തരത്തിലുള്ള ഇമേജിന് പിന്തുണ ലഭ്യമല്ല"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:825
+#: gdk-pixbuf/gdk-pixbuf-io.c:831
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "'%s' ഫയലിനുള്ള ഇമേജിന്റെ ഫയലിന്റെ രീതി തിരിച്ചറിയുവാന്‍ സാധ്യമായില്ല"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:833
+#: gdk-pixbuf/gdk-pixbuf-io.c:839
 msgid "Unrecognized image file format"
 msgstr "ഇമേജ് ഫയലിന്റെ അപരിചിതമായ രീതി"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1002
+#: gdk-pixbuf/gdk-pixbuf-io.c:1007
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "'%s' എന്ന ഇമേജ് ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1638 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1641 gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "ഇമേജ് ഫയലിലേക്ക് സൂക്ഷിക്കുന്നതില്‍ പരാജയം: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1684 gdk-pixbuf/gdk-pixbuf-io.c:1815
+#: gdk-pixbuf/gdk-pixbuf-io.c:1686 gdk-pixbuf/gdk-pixbuf-io.c:1816
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "ഇമേജിന്റെ രീതി സൂക്ഷിക്കുന്നതിനുള്ള പിന്തുണ gdk-pixbuf -ന്റെ ഈ ബിള്‍ഡില്‍ ലഭ്യമല്ല: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718
+#: gdk-pixbuf/gdk-pixbuf-io.c:1720
 msgid "Insufficient memory to save image to callback"
 msgstr "കോള്‍ബാക്കിലേക്ക് ഇമേജ് സൂക്ഷിക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1731
+#: gdk-pixbuf/gdk-pixbuf-io.c:1733
 msgid "Failed to open temporary file"
 msgstr "താല്‍ക്കാലിക ഫയല്‍ തുറക്കുന്നതില്‍ പരാജയം"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1757
+#: gdk-pixbuf/gdk-pixbuf-io.c:1759
 msgid "Failed to read from temporary file"
 msgstr "താല്‍ക്കാലിക ഫയലില്‍ നിന്നും വായിക്കുന്നതില്‍ പരാജയം"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1992
+#: gdk-pixbuf/gdk-pixbuf-io.c:1993
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "'%s'-ലേക്ക് സൂക്കഷിക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2017
+#: gdk-pixbuf/gdk-pixbuf-io.c:2018
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -330,11 +330,11 @@ msgstr ""
 "ഇമേജ് സൂക്ഷിക്കുമ്പോള്‍ '%s' അടയ്ക്കുന്നതില്‍ പരാജയം, ഡേറ്റാ പൂറ്‍ണ്ണമായി സൂക്ഷിക്കുവാന്‍ സാധ്യമായി "
 "കാണില്ല: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2237 gdk-pixbuf/gdk-pixbuf-io.c:2288
+#: gdk-pixbuf/gdk-pixbuf-io.c:2238 gdk-pixbuf/gdk-pixbuf-io.c:2289
 msgid "Insufficient memory to save image into a buffer"
 msgstr "ബഫറിലേക്ക് ഇമേജ് സൂക്ഷിക്കുന്നതിനാവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2334
+#: gdk-pixbuf/gdk-pixbuf-io.c:2335
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "ഇമേജ് ഫയലിലേക്ക് സൂക്ഷിക്കുന്നതില്‍ പരാജയം: %s"
@@ -436,7 +436,7 @@ msgstr "BMP ഇമേജ് രീതി"
 msgid "Failure reading GIF: %s"
 msgstr "GIF ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477 gdk-pixbuf/io-gif.c:1638
+#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF ഫയലില്‍ പൂറ്‍ണ്ണ ഡേറ്റാ ലഭ്യമല്ല "
 
@@ -461,40 +461,40 @@ msgstr "തെറ്റായ കോഡ് ലഭിച്ചു"
 msgid "Circular table entry in GIF file"
 msgstr "GIF ഫയലില്‍ സിറ്‍ക്കുലാറ്‍ ടേബിള്‍ എന്‍ട്രി"
 
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464 gdk-pixbuf/io-gif.c:1511
-#: gdk-pixbuf/io-gif.c:1626
+#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
+#: gdk-pixbuf/io-gif.c:1630
 msgid "Not enough memory to load GIF file"
 msgstr "GIF ഫയല്‍ ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
 
-#: gdk-pixbuf/io-gif.c:956
+#: gdk-pixbuf/io-gif.c:960
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "GIF ഫയലില്‍ ഒരു ഫ്റെയിം തയ്യാറാക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
 
-#: gdk-pixbuf/io-gif.c:1128
+#: gdk-pixbuf/io-gif.c:1132
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF ഇമേജില്‍ തകരാറ് (തെറ്റായ LZW കംപ്റഷന്‍)"
 
-#: gdk-pixbuf/io-gif.c:1178
+#: gdk-pixbuf/io-gif.c:1182
 msgid "File does not appear to be a GIF file"
 msgstr "ഫയല്‍ ഒരു GIF ഫയല്‍ അല്ല"
 
-#: gdk-pixbuf/io-gif.c:1190
+#: gdk-pixbuf/io-gif.c:1194
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF ഫയലിന്റെ %s ലക്കത്തിനുള്ള പിന്തുണ ലഭ്യമല്ല"
 
-#: gdk-pixbuf/io-gif.c:1299
+#: gdk-pixbuf/io-gif.c:1303
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
 "GIF ഇമേജില്‍ ഗ്ളോബല്‍ കളറ്‍മാപ്പ് ലഭ്യമല്ല, അതിലുള്ള ഒരു ഫ്റെയിമില്‍ ലോക്കല്‍ കളറ്‍മാപ്പും ലഭ്യമല്ല."
 
-#: gdk-pixbuf/io-gif.c:1533
+#: gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF ഇമേജ് പൂറ്‍ണ്ണമല്ല."
 
-#: gdk-pixbuf/io-gif.c:1689 gdk-pixbuf/io-gdip-gif.c:80
+#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "GIF ഇമേജ് രീതി"
 
@@ -1496,11 +1496,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "നിറം തിരഞ്ഞെടുക്കല്‍"
 
-#: gtk/gtkentry.c:5375 gtk/gtktextview.c:7686
+#: gtk/gtkentry.c:5380 gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "ഇന്‍പുട്ട് രീതികള്‍ (_M) "
 
-#: gtk/gtkentry.c:5389 gtk/gtktextview.c:7700
+#: gtk/gtkentry.c:5394 gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "_Insert Unicode Control Character"
 
@@ -1508,7 +1508,7 @@ msgstr "_Insert Unicode Control Character"
 msgid "Select A File"
 msgstr "ഒരു ഫയല്‍ തിരഞ്ഞെടുക്കുക"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1909
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1920
 msgid "Desktop"
 msgstr "ഡസ്ക്ടോപ്പ്"
 
@@ -1556,170 +1556,170 @@ msgstr "ഫോള്‍ഡറിലുള്ളവ പ്റദറ്‍ശി�
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1661
+#: gtk/gtkfilechooserdefault.c:1672
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s, %2$s-ല്‍"
 
-#: gtk/gtkfilechooserdefault.c:1837
+#: gtk/gtkfilechooserdefault.c:1848
 msgid "Search"
 msgstr "തിരയുക"
 
-#: gtk/gtkfilechooserdefault.c:1861
+#: gtk/gtkfilechooserdefault.c:1872
 msgid "Recently Used"
 msgstr "ഏറ്റവും ഒടുവില്‍ ഉപയോഗിച്ച"
 
-#: gtk/gtkfilechooserdefault.c:2476
+#: gtk/gtkfilechooserdefault.c:2487
 msgid "Select which types of files are shown"
 msgstr "ഏത് തരം ഫയലുകളാണ് കാണിച്ചിട്ടുള്ളത് എന്ന് തിരഞ്ഞെടുക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:2905
+#: gtk/gtkfilechooserdefault.c:2916
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "ബുക്ക്മാറ്‍ക്കിലേക്ക് '%s' ഫോള്‍ഡറ്‍ ചേറ്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:2946
+#: gtk/gtkfilechooserdefault.c:2957
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "ഈ ഫോള്‍ഡറ്‍ ബുക്ക്മാറ്‍ക്കിലേക്ക് ചേറ്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:2948
+#: gtk/gtkfilechooserdefault.c:2959
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "തിരഞ്ഞെടുത്ത ഫോള്‍ഡറുകള്‍ ബുക്ക്മാറ്‍ക്കിലേക്ക് ചേറ്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:2988
+#: gtk/gtkfilechooserdefault.c:2999
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' എന്ന ബുക്ക്മാറ്‍ക്ക് നീക്കം ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:3706
+#: gtk/gtkfilechooserdefault.c:3717
 msgid "Remove"
 msgstr "നീക്കം ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:3715
+#: gtk/gtkfilechooserdefault.c:3726
 msgid "Rename..."
 msgstr "പേര് മാറ്റുക..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3861
+#: gtk/gtkfilechooserdefault.c:3872
 msgid "Places"
 msgstr "സ്ഥലങ്ങള്‍"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3918
+#: gtk/gtkfilechooserdefault.c:3929
 msgid "_Places"
 msgstr "സ്ഥലങ്ങള്‍ (_P)"
 
-#: gtk/gtkfilechooserdefault.c:3973 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3984 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "ചേറ്‍ക്കുക (_A)"
 
-#: gtk/gtkfilechooserdefault.c:3980
+#: gtk/gtkfilechooserdefault.c:3991
 msgid "Add the selected folder to the Bookmarks"
 msgstr "തിരഞ്ഞെടുത്ത ഫോള്‍ഡറ്‍ ബുക്ക്മാറ്‍ക്കിലേക്ക് ചേറ്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:3985 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:3996 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "നീക്കം ചെയ്യുക (_R)"
 
-#: gtk/gtkfilechooserdefault.c:3992
+#: gtk/gtkfilechooserdefault.c:4003
 msgid "Remove the selected bookmark"
 msgstr "തിരഞ്ഞെടുത്ത ബുക്ക്മാറ്‍ക്ക് നീക്കം ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:4089
+#: gtk/gtkfilechooserdefault.c:4100
 msgid "Could not select file"
 msgstr "ഫയല്‍ തിരഞ്ഞെടുക്കുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:4262
+#: gtk/gtkfilechooserdefault.c:4273
 msgid "_Add to Bookmarks"
 msgstr "ബുക്ക്മാറ്‍ക്കിലേക്ക് ചേറ്‍ക്കുക (_A)"
 
-#: gtk/gtkfilechooserdefault.c:4276
+#: gtk/gtkfilechooserdefault.c:4287
 msgid "Show _Hidden Files"
 msgstr "അദൃശ്യമായ ഫയലുകള്‍ കാണിക്കുക (_H)"
 
-#: gtk/gtkfilechooserdefault.c:4519 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4530 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ഫയലുകള്‍"
 
-#: gtk/gtkfilechooserdefault.c:4568
+#: gtk/gtkfilechooserdefault.c:4579
 msgid "Name"
 msgstr "പേര്"
 
-#: gtk/gtkfilechooserdefault.c:4593
+#: gtk/gtkfilechooserdefault.c:4604
 msgid "Size"
 msgstr "വലിപ്പം"
 
-#: gtk/gtkfilechooserdefault.c:4607
+#: gtk/gtkfilechooserdefault.c:4618
 msgid "Modified"
 msgstr "മാറ്റം വരുത്തിയവ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4827 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4838 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "പേര് (_N):"
 
-#: gtk/gtkfilechooserdefault.c:4869
+#: gtk/gtkfilechooserdefault.c:4880
 msgid "_Browse for other folders"
 msgstr "മറ്റ് ഫോള്‍ഡറുകള്‍ക്കായി തിരയുക (_B)"
 
-#: gtk/gtkfilechooserdefault.c:5139
+#: gtk/gtkfilechooserdefault.c:5150
 msgid "Type a file name"
 msgstr "ഒരു ഫയലിന്റെ പേര് ടൈപ്പ് ചെയ്യുക"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5176
+#: gtk/gtkfilechooserdefault.c:5187
 msgid "Create Fo_lder"
 msgstr "ഫോള്‍ഡറ്‍ ഉണ്ടാക്കുക (_l)"
 
-#: gtk/gtkfilechooserdefault.c:5186
+#: gtk/gtkfilechooserdefault.c:5197
 msgid "_Location:"
 msgstr "സ്ഥാനം (_L):"
 
-#: gtk/gtkfilechooserdefault.c:5375
+#: gtk/gtkfilechooserdefault.c:5386
 msgid "Save in _folder:"
 msgstr "ഫോള്‍ഡറില്‍ സൂക്ഷിക്കുക (_f):"
 
-#: gtk/gtkfilechooserdefault.c:5377
+#: gtk/gtkfilechooserdefault.c:5388
 msgid "Create in _folder:"
 msgstr "ഫോള്‍ഡറില്‍ ഉണ്ടാക്കുക (_f):"
 
-#: gtk/gtkfilechooserdefault.c:6971
+#: gtk/gtkfilechooserdefault.c:6970
 msgid "Cannot change to folder because it is not local"
 msgstr "ലോക്കല്‍ ആയതിനാല്‍ ഫോള്‍ഡറിലേക്ക് മാറ്റുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:7596 gtk/gtkfilechooserdefault.c:7617
+#: gtk/gtkfilechooserdefault.c:7595 gtk/gtkfilechooserdefault.c:7616
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s എന്ന കുറുക്ക് വഴി നിലവിലുണ്ട്"
 
-#: gtk/gtkfilechooserdefault.c:7707
+#: gtk/gtkfilechooserdefault.c:7706
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s എന്ന കുറുക്ക് വഴി നിലവിലില്ല"
 
-#: gtk/gtkfilechooserdefault.c:7950 gtk/gtkprintunixdialog.c:364
+#: gtk/gtkfilechooserdefault.c:7954 gtk/gtkprintunixdialog.c:368
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" എന്ന പേരില്‍ ഒരു ഫയല്‍ നിലവിലുണ്ട്.  നിങ്ങള്‍ക്ക് അത് മാറ്റി എഴുതണമോ?"
 
-#: gtk/gtkfilechooserdefault.c:7953 gtk/gtkprintunixdialog.c:368
+#: gtk/gtkfilechooserdefault.c:7957 gtk/gtkprintunixdialog.c:372
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\"-ല്‍ ഒരു ഫയല്‍ ഉണ്ട്.  അതിന്റെ സ്ഥാനത്ത് ഇത് സൂക്ഷിച്ചാല്‍ ഉള്ളടക്കം മാറ്റി എഴുതപ്പെടുന്നു."
 
-#: gtk/gtkfilechooserdefault.c:7958 gtk/gtkprintunixdialog.c:375
+#: gtk/gtkfilechooserdefault.c:7962 gtk/gtkprintunixdialog.c:379
 msgid "_Replace"
 msgstr "മാറ്റി വേറെ സൂക്ഷിക്കുക (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8719
+#: gtk/gtkfilechooserdefault.c:8723
 msgid "Could not start the search process"
 msgstr "തിരച്ചില്‍ പ്റക്റിയ ആരംഭിക്കുവാനായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:8720
+#: gtk/gtkfilechooserdefault.c:8724
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1727,49 +1727,49 @@ msgstr ""
 "indexer ഡെമണിലേക്ക് ഒരു കണക്ഷന്‍ ഉണ്ടാക്കുവാന്‍ പ്റോഗ്റാമിന് സാധ്യമായില്ല.  അത് പ്റവറ്‍ത്തിക്കുന്നു "
 "എന്നുറപ്പാക്കുക."
 
-#: gtk/gtkfilechooserdefault.c:8734
+#: gtk/gtkfilechooserdefault.c:8738
 msgid "Could not send the search request"
 msgstr "തിരച്ചിലിനുള്ള ആവശ്യം അയയ്ക്കുവാന്‍ സാധ്യമായില്ല"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9149
+#: gtk/gtkfilechooserdefault.c:9153
 msgid "_Search:"
 msgstr "തിരയുക (_S):"
 
-#: gtk/gtkfilechooserdefault.c:10096
+#: gtk/gtkfilechooserdefault.c:10100
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s മൌണ്ട് ചെയ്യുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:10750
+#: gtk/gtkfilechooserdefault.c:10754
 msgid "Type name of new folder"
 msgstr "പുതിയ ഫോള്‍ഡറിന്റെ പേര് ടൈപ്പ് ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:10800
+#: gtk/gtkfilechooserdefault.c:10804
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10802
+#: gtk/gtkfilechooserdefault.c:10806
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10804
+#: gtk/gtkfilechooserdefault.c:10808
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10907 gtk/gtkfilechooserdefault.c:10929
-#: gtk/gtkfilechooserdefault.c:11000
+#: gtk/gtkfilechooserdefault.c:10911 gtk/gtkfilechooserdefault.c:10933
+#: gtk/gtkfilechooserdefault.c:11004
 msgid "Unknown"
 msgstr "അപരിചിതം"
 
-#: gtk/gtkfilechooserdefault.c:10947
+#: gtk/gtkfilechooserdefault.c:10951
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10949
+#: gtk/gtkfilechooserdefault.c:10953
 msgid "Yesterday at %H:%M"
 msgstr "ഇന്നലെ %H:%M"
 
@@ -2219,7 +2219,7 @@ msgstr ""
 msgid "Remember _forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:4424 gtk/gtknotebook.c:6930
+#: gtk/gtknotebook.c:4417 gtk/gtknotebook.c:6923
 #, c-format
 msgid "Page %u"
 msgstr "പേജ് %u"
@@ -2285,7 +2285,7 @@ msgstr "പേപ്പറിന്റെ വ്യാപ്തി (_P):"
 msgid "_Orientation:"
 msgstr "സംവേദനം (_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2397
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2655
 msgid "Page Setup"
 msgstr "പേജിന്‍റെ ക്രമീകരണം"
 
@@ -2408,27 +2408,27 @@ msgstr "പൂറ്‍ത്തിയായിരിക്കുന്നു"
 msgid "print operation status|Finished with error"
 msgstr "പിശകോടെ പൂറ്‍ത്തിയാക്കിയിരിക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:2003
+#: gtk/gtkprintoperation.c:2043
 #, c-format
 msgid "Preparing %d"
 msgstr "%d തയ്യാറാക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:2005 gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2045 gtk/gtkprintoperation.c:2301
 #, c-format
 msgid "Preparing"
 msgstr "തയ്യാറാക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:2008
+#: gtk/gtkprintoperation.c:2048
 #, c-format
 msgid "Printing %d"
 msgstr "%d പ്റിന്റ് ചെയ്യുന്നു"
 
-#: gtk/gtkprintoperation.c:2289
+#: gtk/gtkprintoperation.c:2331
 #, c-format
 msgid "Error creating print preview"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:2292
+#: gtk/gtkprintoperation.c:2334
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
@@ -2504,39 +2504,41 @@ msgstr "PrintDlgEx-നുള്ള തെറ്റായ ഹാന്‍ഡി�
 msgid "Unspecified error"
 msgstr "വ്യക്തമാക്കാത്ത പിശക്"
 
-#: gtk/gtkprintunixdialog.c:1716
+#: gtk/gtkprintunixdialog.c:1741
 msgid "Printer"
 msgstr "പ്രിന്‍റര്‍"
 
-#: gtk/gtkprintunixdialog.c:1725
+#. Translators: this is the header for the location column in the print dialog
+#: gtk/gtkprintunixdialog.c:1751
 msgid "Location"
 msgstr "സ്ഥാനം"
 
-#: gtk/gtkprintunixdialog.c:1735
+#. Translators: this is the header for the printer status column in the print dialog
+#: gtk/gtkprintunixdialog.c:1762
 msgid "Status"
 msgstr "അവസ്ഥ"
 
-#: gtk/gtkprintunixdialog.c:1758
+#: gtk/gtkprintunixdialog.c:1785
 #, fuzzy
 msgid "Range"
 msgstr "പരിധി (_n)"
 
-#: gtk/gtkprintunixdialog.c:1762
+#: gtk/gtkprintunixdialog.c:1789
 #, fuzzy
 msgid "_All Pages"
 msgstr "എല്ലാ ഷീറ്റുകളും"
 
-#: gtk/gtkprintunixdialog.c:1769
+#: gtk/gtkprintunixdialog.c:1796
 #, fuzzy
 msgid "C_urrent Page"
 msgstr "നിലവിലുളള (_u)"
 
-#: gtk/gtkprintunixdialog.c:1778
+#: gtk/gtkprintunixdialog.c:1805
 #, fuzzy
 msgid "Pag_es:"
 msgstr "സ്ഥലങ്ങള്‍"
 
-#: gtk/gtkprintunixdialog.c:1779
+#: gtk/gtkprintunixdialog.c:1806
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2544,141 +2546,176 @@ msgstr ""
 "ഒന്നോ അതിലധികമോ പേജ് പരിധികള്‍ നല്‍കുക,\n"
 " ഉദാ. 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1798
+#: gtk/gtkprintunixdialog.c:1825
 msgid "Copies"
 msgstr "പകറ്‍പ്പുകള്‍"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1803
+#: gtk/gtkprintunixdialog.c:1830
 msgid "Copie_s:"
 msgstr "പകറ്‍പ്പുകള്‍ (_s):"
 
-#: gtk/gtkprintunixdialog.c:1821
+#: gtk/gtkprintunixdialog.c:1848
 msgid "C_ollate"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1829
+#: gtk/gtkprintunixdialog.c:1856
 msgid "_Reverse"
 msgstr "തിരിക്കുക (_R)"
 
-#: gtk/gtkprintunixdialog.c:1849
+#: gtk/gtkprintunixdialog.c:1876
 msgid "General"
 msgstr "സാധാരണ"
 
-#: gtk/gtkprintunixdialog.c:2252
+#. Translators, this string is used to label the option in the print
+#. * dialog that controls in what order multiple pages are arranged
+#.
+#: gtk/gtkprintunixdialog.c:2416
+#: modules/printbackends/cups/gtkprintbackendcups.c:2728
+#, fuzzy
+msgid "Page Ordering"
+msgstr "തയ്യാറാക്കുന്നു"
+
+#: gtk/gtkprintunixdialog.c:2422
+msgid "Left to right"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2423
+#, fuzzy
+msgid "Right to left"
+msgstr "ഫയലിലേക്ക് പ്റിന്റ് ചെയ്യുക"
+
+#: gtk/gtkprintunixdialog.c:2492
 msgid "Layout"
 msgstr "ലേയൌട്ട് "
 
-#: gtk/gtkprintunixdialog.c:2256
-msgid "Pages per _side:"
-msgstr "ഒരു വശത്ത് എത്റ പേജ് (_s):"
-
-#: gtk/gtkprintunixdialog.c:2272
+#: gtk/gtkprintunixdialog.c:2496
 msgid "T_wo-sided:"
 msgstr "ഇരു വശമുള്ള (_w):"
 
-#: gtk/gtkprintunixdialog.c:2287
+#: gtk/gtkprintunixdialog.c:2511
+msgid "Pages per _side:"
+msgstr "ഒരു വശത്ത് എത്റ പേജ് (_s):"
+
+#: gtk/gtkprintunixdialog.c:2529
+#, fuzzy
+msgid "Page or_dering:"
+msgstr "ഒരു വശത്ത് എത്റ പേജ് (_s):"
+
+#: gtk/gtkprintunixdialog.c:2545
 msgid "_Only print:"
 msgstr "പ്റിന്റ് മാത്റം ചെയ്യുക (_O):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2302
+#: gtk/gtkprintunixdialog.c:2560
 msgid "All sheets"
 msgstr "എല്ലാ ഷീറ്റുകളും"
 
-#: gtk/gtkprintunixdialog.c:2303
+#: gtk/gtkprintunixdialog.c:2561
 msgid "Even sheets"
 msgstr "ഇവന്‍ ഷീറ്റുകള്‍"
 
-#: gtk/gtkprintunixdialog.c:2304
+#: gtk/gtkprintunixdialog.c:2562
 msgid "Odd sheets"
 msgstr "ഓഡ് ഷീറ്റുകള്‍"
 
-#: gtk/gtkprintunixdialog.c:2307
+#: gtk/gtkprintunixdialog.c:2565
 msgid "Sc_ale:"
 msgstr "അളവ് (_a):"
 
-#: gtk/gtkprintunixdialog.c:2334
+#: gtk/gtkprintunixdialog.c:2592
 msgid "Paper"
 msgstr "പേപ്പറ്‍"
 
-#: gtk/gtkprintunixdialog.c:2338
+#: gtk/gtkprintunixdialog.c:2596
 msgid "Paper _type:"
 msgstr "ഏത് തരം പേപ്പറ്‍ (_t):"
 
-#: gtk/gtkprintunixdialog.c:2353
+#: gtk/gtkprintunixdialog.c:2611
 msgid "Paper _source:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2368
+#: gtk/gtkprintunixdialog.c:2626
 msgid "Output t_ray:"
 msgstr "ഔട്ട്പുട്ട് ട്റേ (_r):"
 
-#: gtk/gtkprintunixdialog.c:2420
+#: gtk/gtkprintunixdialog.c:2678
 msgid "Job Details"
 msgstr "ജോലിയുടെ വിശദവിവരങ്ങള്‍"
 
-#: gtk/gtkprintunixdialog.c:2426
+#: gtk/gtkprintunixdialog.c:2684
 msgid "Pri_ority:"
 msgstr "മുന്‍ഗണന (_o):"
 
-#: gtk/gtkprintunixdialog.c:2441
+#: gtk/gtkprintunixdialog.c:2699
 msgid "_Billing info:"
 msgstr "ബില്ലിങ് വിവരം (_B): "
 
-#: gtk/gtkprintunixdialog.c:2459
+#: gtk/gtkprintunixdialog.c:2717
 msgid "Print Document"
 msgstr "രേഖ പ്റിന്റ് ചെയ്യുക"
 
-#: gtk/gtkprintunixdialog.c:2465
+#. Translators: this is one of the choices for the print at option
+#. * in the print dialog
+#.
+#: gtk/gtkprintunixdialog.c:2726
 msgid "_Now"
 msgstr "ഉടന്‍ (_N)"
 
-#: gtk/gtkprintunixdialog.c:2472
+#: gtk/gtkprintunixdialog.c:2737
 msgid "A_t:"
 msgstr "എപ്പോള്‍ (_t):"
 
-#: gtk/gtkprintunixdialog.c:2487
+#: gtk/gtkprintunixdialog.c:2756
 msgid "On _hold"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2506
+#: gtk/gtkprintunixdialog.c:2775
 msgid "Add Cover Page"
 msgstr "കവറ്‍ പേജ് ചേറ്‍ക്കുക"
 
-#: gtk/gtkprintunixdialog.c:2512
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the front cover page.
+#.
+#: gtk/gtkprintunixdialog.c:2784
 msgid "Be_fore:"
 msgstr "മുമ്പ് (_f):"
 
-#: gtk/gtkprintunixdialog.c:2527
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the back cover page.
+#.
+#: gtk/gtkprintunixdialog.c:2802
 msgid "_After:"
 msgstr "ശേഷം (_A):"
 
-#: gtk/gtkprintunixdialog.c:2542
+#. Translators: this is the tab label for the notebook tab containing
+#. * job-specific options in the print dialog
+#.
+#: gtk/gtkprintunixdialog.c:2820
 msgid "Job"
 msgstr "ജോലി"
 
-#: gtk/gtkprintunixdialog.c:2608
+#: gtk/gtkprintunixdialog.c:2886
 msgid "Advanced"
 msgstr "പുരോഗമിച്ച"
 
-#: gtk/gtkprintunixdialog.c:2643
+#: gtk/gtkprintunixdialog.c:2921
 msgid "Image Quality"
 msgstr "ഇമേജിന്റെ നിലവാരം"
 
-#: gtk/gtkprintunixdialog.c:2646
+#: gtk/gtkprintunixdialog.c:2924
 msgid "Color"
 msgstr "നിറം"
 
-#: gtk/gtkprintunixdialog.c:2649
+#: gtk/gtkprintunixdialog.c:2927
 msgid "Finishing"
 msgstr "പൂറ്‍ത്തിയാക്കുന്നു"
 
-#: gtk/gtkprintunixdialog.c:2659
+#: gtk/gtkprintunixdialog.c:2937
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2682
+#: gtk/gtkprintunixdialog.c:2960
 msgid "Print"
 msgstr "പ്രിന്റ് ചെയ്യുക"
 
@@ -4499,51 +4536,154 @@ msgstr "സ്വയം തിരഞ്ഞെടുക്കുക"
 msgid "Printer Default"
 msgstr "സ്വതവേസുള്ള പ്റിന്ററ്‍"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2686
+#. Translators: These strings name the possible values of the
+#. * job priority option in the print dialog
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "Urgent"
 msgstr "അത്യാവശ്യമായ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "High"
 msgstr "കൂടിയ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "Medium"
 msgstr "ഇടത്തരം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "Low"
 msgstr "കുറഞ്ഞ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2694
+msgid "Left to right, top to bottom"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2694
+msgid "Left to right, bottom to top"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2695
+msgid "Right to left, top to bottom"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2695
+msgid "Right to left, bottom to top"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2696
+msgid "Top to bottom, left to right"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2696
+msgid "Top to bottom, right to left"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2697
+msgid "Bottom to top, left to right"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2697
+msgid "Bottom to top, right to left"
+msgstr ""
+
+#. Cups specific, non-ppd related settings
+#. Translators, this string is used to label the pages-per-sheet option
+#. * in the print dialog
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2712
+#, fuzzy
+msgid "Pages per Sheet"
+msgstr "ഒരു ഷീറ്റില്‍ എത്റ പേജ്"
+
+#. Translators, this string is used to label the job priority option
+#. * in the print dialog
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2749
+#, fuzzy
+msgid "Job Priority"
+msgstr "മുന്‍ഗണന (_o):"
+
+#. Translators, this string is used to label the billing info entry
+#. * in the print dialog
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2760
+#, fuzzy
+msgid "Billing Info"
+msgstr "ബില്ലിങ് വിവരം (_B): "
+
+#. Translators, these strings are names for various 'standard' cover
+#. * pages that the printing system may support.
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "None"
 msgstr "ഒന്നുമില്ല"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Classified"
 msgstr "വേറ്‍തിരിച്ച"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Confidential"
 msgstr "വളരെ രഹസ്യമായ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Secret"
 msgstr "രഹസ്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Standard"
 msgstr "നിലവാരമുള്ള"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Top Secret"
 msgstr "പരമ രഹസ്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Unclassified"
 msgstr "വേറ്‍തിരിച്ചിട്ടില്ലാത്ത"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2826
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the front cover page.
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#, fuzzy
+msgid "Before"
+msgstr "മുമ്പ് (_f):"
+
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the back cover page.
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2824
+#, fuzzy
+msgid "After"
+msgstr "ശേഷം (_A):"
+
+#. Translators: this is the name of the option that controls when
+#. * a print job is printed. Possible values are 'now', a specified time,
+#. * or 'on hold'
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2844
+#, fuzzy
+msgid "Print at"
+msgstr "പ്രിന്റ് ചെയ്യുക"
+
+#. Translators: this is the name of the option that allows the user
+#. * to specify a time when a print job will be printed.
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2855
+#, fuzzy
+msgid "Print at time"
+msgstr "ഫയലിലേക്ക് പ്റിന്റ് ചെയ്യുക"
+
+#. Translators: this format is used to display a custom paper
+#. * size. The two placeholders are replaced with the width and height
+#. * in points. E.g: "Custom 230.4x142.9"
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2890
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "കസ്റ്റം %.2fx%.2f"
@@ -4554,28 +4694,28 @@ msgstr "കസ്റ്റം %.2fx%.2f"
 msgid "output.%s"
 msgstr "output.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:464
+#: modules/printbackends/file/gtkprintbackendfile.c:466
 msgid "Print to File"
 msgstr "ഫയലിലേക്ക് പ്റിന്റ് ചെയ്യുക"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:541
+#: modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:541
+#: modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "Postscript"
 msgstr "പോസ്റ്റ് സ്ക്രിപ്റ്റ് "
 
-#: modules/printbackends/file/gtkprintbackendfile.c:553
-#: modules/printbackends/test/gtkprintbackendtest.c:501
+#: modules/printbackends/file/gtkprintbackendfile.c:555
+#: modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "ഒരു ഷീറ്റില്‍ എത്റ പേജ്: _s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:599
+#: modules/printbackends/file/gtkprintbackendfile.c:601
 msgid "File"
 msgstr "ഫയല്‍"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:608
+#: modules/printbackends/file/gtkprintbackendfile.c:610
 msgid "_Output format"
 msgstr "ഔട്ട്പുട്ട് രീതി (_O)"
 
@@ -4597,7 +4737,7 @@ msgstr "കമാന്‍ഡ് ലൈന്‍"
 msgid "test-output.%s"
 msgstr "test-output.%s"
 
-#: modules/printbackends/test/gtkprintbackendtest.c:465
+#: modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "ടെസ്റ്റ് പ്റിന്ററിലേക്ക് പ്റിന്റ് ചെയ്യുക"
 

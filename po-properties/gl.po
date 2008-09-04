@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 18:27-0400\n"
+"POT-Creation-Date: 2008-09-04 10:41-0400\n"
 "PO-Revision-Date: 2008-08-15 11:26+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
@@ -542,27 +542,27 @@ msgstr "Recheo á dereita"
 msgid "The padding to insert at the right of the widget."
 msgstr "O recheo para introducir á dereita do widget."
 
-#: gtk/gtkarrow.c:73
+#: gtk/gtkarrow.c:75
 msgid "Arrow direction"
 msgstr "Dirección da frecha"
 
-#: gtk/gtkarrow.c:74
+#: gtk/gtkarrow.c:76
 msgid "The direction the arrow should point"
 msgstr "A dirección á que a frecha deberá apuntar"
 
-#: gtk/gtkarrow.c:81
+#: gtk/gtkarrow.c:84
 msgid "Arrow shadow"
 msgstr "Sombra da frecha"
 
-#: gtk/gtkarrow.c:82
+#: gtk/gtkarrow.c:85
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Aparencia da sombra que rodea a frecha"
 
-#: gtk/gtkarrow.c:88 gtk/gtkmenuitem.c:279
+#: gtk/gtkarrow.c:92 gtk/gtkmenuitem.c:276
 msgid "Arrow Scaling"
 msgstr "Escalado de frechas"
 
-#: gtk/gtkarrow.c:89
+#: gtk/gtkarrow.c:93
 msgid "Amount of space used up by arrow"
 msgstr "Cantidade de espazo ocupado por frecha"
 
@@ -1752,7 +1752,7 @@ msgstr "Espazamento do indicador"
 msgid "Spacing around check or radio indicator"
 msgstr "Espazamento en torno do indicador de opción ou de verificación"
 
-#: gtk/gtkcheckmenuitem.c:87 gtk/gtkmenu.c:502 gtk/gtktoggleaction.c:118
+#: gtk/gtkcheckmenuitem.c:87 gtk/gtkmenu.c:498 gtk/gtktoggleaction.c:118
 #: gtk/gtktogglebutton.c:102 gtk/gtktoggletoolbutton.c:101
 msgid "Active"
 msgstr "Activo"
@@ -1980,7 +1980,7 @@ msgstr "Indica se a caixa de combinación debuxa un marco ao redor do fillo"
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Indica se a caixa de combinación captura o foco cando se preme co rato"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:557
+#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "Título do tirador"
 
@@ -2098,35 +2098,35 @@ msgstr "Y máximo"
 msgid "Maximum possible value for Y"
 msgstr "Máximo valor posible para Y"
 
-#: gtk/gtkdialog.c:144
+#: gtk/gtkdialog.c:145
 msgid "Has separator"
 msgstr "Ten un separador"
 
-#: gtk/gtkdialog.c:145
+#: gtk/gtkdialog.c:146
 msgid "The dialog has a separator bar above its buttons"
 msgstr "A caixa de diálogo ten unha barra separadora sobre os seus botóns"
 
-#: gtk/gtkdialog.c:190
+#: gtk/gtkdialog.c:191
 msgid "Content area border"
 msgstr "Bordo da área de contidos"
 
-#: gtk/gtkdialog.c:191
+#: gtk/gtkdialog.c:192
 msgid "Width of border around the main dialog area"
 msgstr "Largura do bordo ao redor da área principal da caixa de diálogo"
 
-#: gtk/gtkdialog.c:198
+#: gtk/gtkdialog.c:199
 msgid "Button spacing"
 msgstr "Espazamento dos botóns"
 
-#: gtk/gtkdialog.c:199
+#: gtk/gtkdialog.c:200
 msgid "Spacing between buttons"
 msgstr "Espazamento entre os botóns"
 
-#: gtk/gtkdialog.c:207
+#: gtk/gtkdialog.c:208
 msgid "Action area border"
 msgstr "Bordo da área de acción"
 
-#: gtk/gtkdialog.c:208
+#: gtk/gtkdialog.c:209
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 "Largura do bordo ao redor da área do botón na parte inferior da caixa de "
@@ -3090,37 +3090,37 @@ msgstr "Visitado"
 msgid "Whether this link has been visited."
 msgstr "Indica se esta ligazón foi visitada."
 
-#: gtk/gtkmenu.c:503
+#: gtk/gtkmenu.c:499
 msgid "The currently selected menu item"
 msgstr "O elemento do menú actualmente seleccionado"
 
-#: gtk/gtkmenu.c:517
+#: gtk/gtkmenu.c:513
 msgid "Accel Group"
 msgstr "Grupo de acelaración"
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:514
 msgid "The accel group holding accelerators for the menu"
 msgstr "O grupo de aceleración que contén os aceleradores para o menú"
 
-#: gtk/gtkmenu.c:532 gtk/gtkmenuitem.c:236
+#: gtk/gtkmenu.c:528 gtk/gtkmenuitem.c:233
 msgid "Accel Path"
 msgstr "Camiño do acelerador"
 
-#: gtk/gtkmenu.c:533
+#: gtk/gtkmenu.c:529
 msgid "An accel path used to conveniently construct accel paths of child items"
 msgstr ""
 "Un camiño de acelerador usado para construír convenientemente camiños de "
 "aceleración de elementos fillo"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:545
 msgid "Attach Widget"
 msgstr "Adxuntar widget"
 
-#: gtk/gtkmenu.c:550
+#: gtk/gtkmenu.c:546
 msgid "The widget the menu is attached to"
 msgstr "O menú ao que está acoplado o widget adxuntado"
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:554
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -3128,43 +3128,43 @@ msgstr ""
 "Un título que o xestor de ventás poderá mostrar cando este menú estea "
 "desprazado"
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:568
 msgid "Tearoff State"
 msgstr "Estado de desprazamento"
 
-#: gtk/gtkmenu.c:573
+#: gtk/gtkmenu.c:569
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Un booleano que indica se o menú está desprazado"
 
-#: gtk/gtkmenu.c:587
+#: gtk/gtkmenu.c:583
 msgid "Monitor"
 msgstr "Monitor"
 
-#: gtk/gtkmenu.c:588
+#: gtk/gtkmenu.c:584
 msgid "The monitor the menu will be popped up on"
 msgstr "O monitor no que se mostrará o menú"
 
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:590
 msgid "Vertical Padding"
 msgstr "Recheo vertical"
 
-#: gtk/gtkmenu.c:595
+#: gtk/gtkmenu.c:591
 msgid "Extra space at the top and bottom of the menu"
 msgstr "O espazo adicional na parte superior e inferior do menú"
 
-#: gtk/gtkmenu.c:603
+#: gtk/gtkmenu.c:599
 msgid "Horizontal Padding"
 msgstr "Recheo horizontal"
 
-#: gtk/gtkmenu.c:604
+#: gtk/gtkmenu.c:600
 msgid "Extra space at the left and right edges of the menu"
 msgstr "O espazo adicional nos bordos dereito e esquerdo do menú"
 
-#: gtk/gtkmenu.c:612
+#: gtk/gtkmenu.c:608
 msgid "Vertical Offset"
 msgstr "Desprazamento vertical"
 
-#: gtk/gtkmenu.c:613
+#: gtk/gtkmenu.c:609
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -3172,11 +3172,11 @@ msgstr ""
 "Cando o menú é un submenú, colóqueo verticalmente con este número de píxeles "
 "de desprazamento"
 
-#: gtk/gtkmenu.c:621
+#: gtk/gtkmenu.c:617
 msgid "Horizontal Offset"
 msgstr "Desprazamento horizontal"
 
-#: gtk/gtkmenu.c:622
+#: gtk/gtkmenu.c:618
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -3184,73 +3184,73 @@ msgstr ""
 "Cando o menú é un submenú, colóqueo horizontalmente con este número de "
 "píxeles de desprazamento"
 
-#: gtk/gtkmenu.c:630
+#: gtk/gtkmenu.c:626
 msgid "Double Arrows"
 msgstr "Frechas duplas"
 
-#: gtk/gtkmenu.c:631
+#: gtk/gtkmenu.c:627
 msgid "When scrolling, always show both arrows."
 msgstr "Mostrar sempre ambas as frechas ao desprazar."
 
-#: gtk/gtkmenu.c:639
+#: gtk/gtkmenu.c:635
 msgid "Left Attach"
 msgstr "Anexar á esquerda"
 
-#: gtk/gtkmenu.c:640 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:636 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "A cantidade de columnas para anexar ao lado esquerdo do fillo"
 
-#: gtk/gtkmenu.c:647
+#: gtk/gtkmenu.c:643
 msgid "Right Attach"
 msgstr "Anexar á dereita"
 
-#: gtk/gtkmenu.c:648
+#: gtk/gtkmenu.c:644
 msgid "The column number to attach the right side of the child to"
 msgstr "A cantidade de columnas para anexar ao lado dereito do fillo"
 
-#: gtk/gtkmenu.c:655
+#: gtk/gtkmenu.c:651
 msgid "Top Attach"
 msgstr "Anexar arriba"
 
-#: gtk/gtkmenu.c:656
+#: gtk/gtkmenu.c:652
 msgid "The row number to attach the top of the child to"
 msgstr "O número de filas para anexar encima do fillo"
 
-#: gtk/gtkmenu.c:663
+#: gtk/gtkmenu.c:659
 msgid "Bottom Attach"
 msgstr "Anexar abaixo"
 
-#: gtk/gtkmenu.c:664 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:660 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "O número de filas para anexar debaixo do fillo"
 
-#: gtk/gtkmenu.c:751
+#: gtk/gtkmenu.c:747
 msgid "Can change accelerators"
 msgstr "Pode cambiar as teclas rápidas"
 
-#: gtk/gtkmenu.c:752
+#: gtk/gtkmenu.c:748
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Indica se as teclas rápidas do menú poden ser cambiadas premendo unha tecla "
 "sobre o elemento de menú"
 
-#: gtk/gtkmenu.c:757
+#: gtk/gtkmenu.c:753
 msgid "Delay before submenus appear"
 msgstr "Atraso antes de que os submenús aparezan"
 
-#: gtk/gtkmenu.c:758
+#: gtk/gtkmenu.c:754
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Tempo mínimo no que o punteiro debe permanecer sobre un elemento de menú "
 "antes de que o submenú apareza"
 
-#: gtk/gtkmenu.c:765
+#: gtk/gtkmenu.c:761
 msgid "Delay before hiding a submenu"
 msgstr "Atraso antes de ocultar un submenú"
 
-#: gtk/gtkmenu.c:766
+#: gtk/gtkmenu.c:762
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3296,40 +3296,40 @@ msgstr "Atraso antes de que os menús despregables aparezan"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Atraso antes de que os submenús dunha barra de menú aparezan"
 
-#: gtk/gtkmenuitem.c:204
+#: gtk/gtkmenuitem.c:201
 msgid "Right Justified"
 msgstr "Xustificado á dereita"
 
-#: gtk/gtkmenuitem.c:205
+#: gtk/gtkmenuitem.c:202
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 "Establece se o elemento do menú aparece xustificado na parte dereita dunha "
 "barra de menú"
 
-#: gtk/gtkmenuitem.c:219
+#: gtk/gtkmenuitem.c:216
 msgid "Submenu"
 msgstr "Submenú"
 
-#: gtk/gtkmenuitem.c:220
+#: gtk/gtkmenuitem.c:217
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "O submenú anexado ao elemento do menú, ou NULL se non ten ningún"
 
-#: gtk/gtkmenuitem.c:237
+#: gtk/gtkmenuitem.c:234
 msgid "Sets the accelerator path of the menu item"
 msgstr "Establece o camiño do acelerador do elemento do menú"
 
-#: gtk/gtkmenuitem.c:280
+#: gtk/gtkmenuitem.c:277
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr ""
 "Cantidade de espazo ocupado pola frecha, relativo ao tipo de letra do "
 "elemento de menú"
 
-#: gtk/gtkmenuitem.c:293
+#: gtk/gtkmenuitem.c:290
 msgid "Width in Characters"
 msgstr "Largura en caracteres"
 
-#: gtk/gtkmenuitem.c:294
+#: gtk/gtkmenuitem.c:291
 msgid "The minimum desired width of the menu item in characters"
 msgstr "A largura desexada do elemento do menú en caracteres"
 
@@ -3885,11 +3885,11 @@ msgstr "Configuracións"
 msgid "Printer settings"
 msgstr "Configuracións da impresora"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:252
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:256
 msgid "Page Setup"
 msgstr "Configuración da páxina"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1012
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1013
 msgid "Track Print Status"
 msgstr "Seguimento do estado de impresión"
 
@@ -3902,51 +3902,51 @@ msgstr ""
 "estado despois de que os datos de impresión sexan enviados á impresora ou ao "
 "servidor de impresoras."
 
-#: gtk/gtkprintoperation.c:884
+#: gtk/gtkprintoperation.c:885
 msgid "Default Page Setup"
 msgstr "Configuración de páxina predeterminada"
 
-#: gtk/gtkprintoperation.c:885
+#: gtk/gtkprintoperation.c:886
 msgid "The GtkPageSetup used by default"
 msgstr "A GtkPageSetup que se usa por defecto"
 
-#: gtk/gtkprintoperation.c:903 gtk/gtkprintunixdialog.c:270
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:274
 msgid "Print Settings"
 msgstr "Configuracións da impresora"
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:271
+#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:275
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Os GtkPrintSettings que se usan para inicializar o diálogo"
 
-#: gtk/gtkprintoperation.c:922
+#: gtk/gtkprintoperation.c:923
 msgid "Job Name"
 msgstr "Nome do traballo"
 
-#: gtk/gtkprintoperation.c:923
+#: gtk/gtkprintoperation.c:924
 msgid "A string used for identifying the print job."
 msgstr "Unha cadea que se usa para identificar o traballo de impresión."
 
-#: gtk/gtkprintoperation.c:947
+#: gtk/gtkprintoperation.c:948
 msgid "Number of Pages"
 msgstr "Número de páxinas"
 
-#: gtk/gtkprintoperation.c:948
+#: gtk/gtkprintoperation.c:949
 msgid "The number of pages in the document."
 msgstr "O número de páxinas do documento."
 
-#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:260
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:264
 msgid "Current Page"
 msgstr "Páxina actual"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:261
+#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:265
 msgid "The current page in the document"
 msgstr "A páxina actual do documento"
 
-#: gtk/gtkprintoperation.c:991
+#: gtk/gtkprintoperation.c:992
 msgid "Use full page"
 msgstr "Usar a páxina completa"
 
-#: gtk/gtkprintoperation.c:992
+#: gtk/gtkprintoperation.c:993
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -3954,7 +3954,7 @@ msgstr ""
 "É TRUE se a orixe do contexto debe estar na esquina da páxina e non na "
 "esquina da área de imaxe"
 
-#: gtk/gtkprintoperation.c:1013
+#: gtk/gtkprintoperation.c:1014
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3963,27 +3963,27 @@ msgstr ""
 "impresión despois de que os datos de impresión sexan enviados á impresora ou "
 "ao servidor de impresoras."
 
-#: gtk/gtkprintoperation.c:1030
+#: gtk/gtkprintoperation.c:1031
 msgid "Unit"
 msgstr "Unidade"
 
-#: gtk/gtkprintoperation.c:1031
+#: gtk/gtkprintoperation.c:1032
 msgid "The unit in which distances can be measured in the context"
 msgstr "A unidade na que se poden medir as distancias no contexto"
 
-#: gtk/gtkprintoperation.c:1048
+#: gtk/gtkprintoperation.c:1049
 msgid "Show Dialog"
 msgstr "Mostrar diálogo"
 
-#: gtk/gtkprintoperation.c:1049
+#: gtk/gtkprintoperation.c:1050
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "É TRUE se se mostra un diálogo de progreso ao imprimir."
 
-#: gtk/gtkprintoperation.c:1072
+#: gtk/gtkprintoperation.c:1073
 msgid "Allow Async"
 msgstr "Permitir asíncrono"
 
-#: gtk/gtkprintoperation.c:1073
+#: gtk/gtkprintoperation.c:1074
 msgid "TRUE if print process may run asynchronous."
 msgstr "É TRUE se o proceso de impresión se pode executar asincronamente."
 
@@ -4015,15 +4015,15 @@ msgstr "Etiqueta de separador personalizado"
 msgid "Label for the tab containing custom widgets."
 msgstr "Etiqueta para o separador que contén widgets personalizados."
 
-#: gtk/gtkprintunixdialog.c:253
+#: gtk/gtkprintunixdialog.c:257
 msgid "The GtkPageSetup to use"
 msgstr "O GtkPageSetup que usar"
 
-#: gtk/gtkprintunixdialog.c:278
+#: gtk/gtkprintunixdialog.c:282
 msgid "Selected Printer"
 msgstr "Impresora seleccionada"
 
-#: gtk/gtkprintunixdialog.c:279
+#: gtk/gtkprintunixdialog.c:283
 msgid "The GtkPrinter which is selected"
 msgstr "O GtkPrinter que está seleccionado"
 

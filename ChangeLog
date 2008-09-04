@@ -1,5 +1,9 @@
 2008-09-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.14.0 ===
+
+2008-09-04  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkenums.h: Add nicks for the GtkNumberUpLayout values.
 
 	* gtk/gtkprintunixdialog.c:

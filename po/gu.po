@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 18:27-0400\n"
+"POT-Creation-Date: 2008-09-04 10:40-0400\n"
 "PO-Revision-Date: 2007-08-16 13:26+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
 "Language-Team: Gujarati <fedora-trans-gu@redhat.com>\n"
@@ -257,19 +257,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:944
-#: gdk-pixbuf/gdk-pixbuf-io.c:1205 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:950
+#: gdk-pixbuf/gdk-pixbuf-io.c:1210 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "'%s' ફાઈલ લાવવામાં નિષ્ફળ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:956
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:962
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "ચિત્ર ફાઈલ '%s'માં કોઇ માહિતી નથી"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:993
-#: gdk-pixbuf/gdk-pixbuf-io.c:1257 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:998
+#: gdk-pixbuf/gdk-pixbuf-io.c:1262 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -297,53 +297,53 @@ msgstr ""
 "ચિત્ર લાવવા માટેનું મોડ્યુલ %s યોગ્ય ઈન્ટરફેસનો નિકાસ કરતું નથી, કદાચ એ અલગ GTK "
 "અહેવાલમાંથી છે?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:726 gdk-pixbuf/gdk-pixbuf-io.c:755
+#: gdk-pixbuf/gdk-pixbuf-io.c:727 gdk-pixbuf/gdk-pixbuf-io.c:761
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "ચિત્રનો પ્રકાર '%s' આધાર આપતો નથી"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:825
+#: gdk-pixbuf/gdk-pixbuf-io.c:831
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "ફાઈલ %s માટે ચિત્રનું બંધારણ ઓળખી શકાતું નથી."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:833
+#: gdk-pixbuf/gdk-pixbuf-io.c:839
 msgid "Unrecognized image file format"
 msgstr "ચિત્ર ફાઈલનું બંધારણ અજાણ્યુ છે."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1002
+#: gdk-pixbuf/gdk-pixbuf-io.c:1007
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "ચિત્ર '%s' લાવવામાં નિષ્ફળ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1638 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1641 gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "ચિત્રની ફાઇલમાં લખવામાં ભૂલ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1684 gdk-pixbuf/gdk-pixbuf-io.c:1815
+#: gdk-pixbuf/gdk-pixbuf-io.c:1686 gdk-pixbuf/gdk-pixbuf-io.c:1816
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "gdk-pixbfનું બંધારણ ચિત્રના બંધારણનો સંગ્રહ કરવા માટે આધાર આપતું નથી: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718
+#: gdk-pixbuf/gdk-pixbuf-io.c:1720
 msgid "Insufficient memory to save image to callback"
 msgstr "કૉલબેક માટે ચિત્ર ફાઈલને લાવવા માટે અપૂરતી મેમરી."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1731
+#: gdk-pixbuf/gdk-pixbuf-io.c:1733
 msgid "Failed to open temporary file"
 msgstr "કામચલાઉ ફાઇલ ખોલવામાં નિષ્ફળ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1757
+#: gdk-pixbuf/gdk-pixbuf-io.c:1759
 msgid "Failed to read from temporary file"
 msgstr "કામચલાઉ ફાઇલમાંથી વાંચવામાં નિષ્ફળ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1992
+#: gdk-pixbuf/gdk-pixbuf-io.c:1993
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "લખવા માટે '%s' ખોલવામાં નિષ્ફળ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2017
+#: gdk-pixbuf/gdk-pixbuf-io.c:2018
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -351,11 +351,11 @@ msgid ""
 msgstr ""
 "ચિત્ર લખતી વખતે %s બંધ કરવામાં નિષ્ફળ, કદાચ બધી માહિતીનો સંગ્રહ નહિ થયો હોય: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2237 gdk-pixbuf/gdk-pixbuf-io.c:2288
+#: gdk-pixbuf/gdk-pixbuf-io.c:2238 gdk-pixbuf/gdk-pixbuf-io.c:2289
 msgid "Insufficient memory to save image into a buffer"
 msgstr "અનામત મૅમરીમાં ચિત્રનો સંગ્રહ કરવા માટે અપૂરતી મૅમરી"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2334
+#: gdk-pixbuf/gdk-pixbuf-io.c:2335
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "ચિત્રની ફાઇલમાં લખવામાં ભૂલ: %s"
@@ -457,7 +457,7 @@ msgstr "BMP ચિત્ર બંધારણ"
 msgid "Failure reading GIF: %s"
 msgstr "GIF વાંચવામાં નિષ્ફળ: %s"
 
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477 gdk-pixbuf/io-gif.c:1638
+#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF ફાઈલને કોઈ માહિતીની અછત વર્તાય છે (કદાચ તે કોઇક રીતે છેદાઇ ગયું?)"
 
@@ -482,29 +482,29 @@ msgstr "ખરાબ કોડનો સામનો થયો"
 msgid "Circular table entry in GIF file"
 msgstr "GIF ફાઈલમાં ફરતો કોષ્ટક પ્રવેશ"
 
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464 gdk-pixbuf/io-gif.c:1511
-#: gdk-pixbuf/io-gif.c:1626
+#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
+#: gdk-pixbuf/io-gif.c:1630
 msgid "Not enough memory to load GIF file"
 msgstr "GIF ફાઈલ લાવવા માટે પૂરતી મેમરી નથી"
 
-#: gdk-pixbuf/io-gif.c:956
+#: gdk-pixbuf/io-gif.c:960
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "GIF ફાઈલમાં ચોકઠું સમાવવા માટે પૂરતી મેમરી નથી"
 
-#: gdk-pixbuf/io-gif.c:1128
+#: gdk-pixbuf/io-gif.c:1132
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF ચિત્ર બગડેલુ છે (ખોટુ LZW સંકોચન)"
 
-#: gdk-pixbuf/io-gif.c:1178
+#: gdk-pixbuf/io-gif.c:1182
 msgid "File does not appear to be a GIF file"
 msgstr "આ ફાઈલ GIF ફાઈલ હોય એવું લાગતુ નથી"
 
-#: gdk-pixbuf/io-gif.c:1190
+#: gdk-pixbuf/io-gif.c:1194
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF ફાઈલના બંધારણની %s આવૃત્તિ માટે આધાર નથી"
 
-#: gdk-pixbuf/io-gif.c:1299
+#: gdk-pixbuf/io-gif.c:1303
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -512,11 +512,11 @@ msgstr ""
 "GIF ચિત્ર માટે કોઈ વૈશ્વિક રંગનક્શો નથી, અને તેની અંદરના ચોકઠા માટે કોઈ પ્રાદેશિક રંગનક્શો "
 "નથી."
 
-#: gdk-pixbuf/io-gif.c:1533
+#: gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF ચિત્ર છેદાયેલ અથવા અધૂરુ છે"
 
-#: gdk-pixbuf/io-gif.c:1689 gdk-pixbuf/io-gdip-gif.c:80
+#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "GIF ચિત્ર બંધારણ"
 
@@ -1534,11 +1534,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "રંગની પસંદગી"
 
-#: gtk/gtkentry.c:5375 gtk/gtktextview.c:7686
+#: gtk/gtkentry.c:5380 gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "ઈનપુટ પધ્ધતિઓ (_M)"
 
-#: gtk/gtkentry.c:5389 gtk/gtktextview.c:7700
+#: gtk/gtkentry.c:5394 gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "યૂનિકોડ નિયંત્રણ અક્ષર ઉમેરો (_I)"
 
@@ -1546,7 +1546,7 @@ msgstr "યૂનિકોડ નિયંત્રણ અક્ષર ઉમે
 msgid "Select A File"
 msgstr "ફાઈલ પસંદ કરો"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1909
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1920
 msgid "Desktop"
 msgstr "ડેસ્કટોપ"
 
@@ -1594,170 +1594,170 @@ msgstr "ફોલ્ડર સમાવિષ્ટો દર્શાવી શ
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1661
+#: gtk/gtkfilechooserdefault.c:1672
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s, %2$s પર"
 
-#: gtk/gtkfilechooserdefault.c:1837
+#: gtk/gtkfilechooserdefault.c:1848
 msgid "Search"
 msgstr "શોધો"
 
-#: gtk/gtkfilechooserdefault.c:1861
+#: gtk/gtkfilechooserdefault.c:1872
 msgid "Recently Used"
 msgstr "છેલ્લે વપરાયેલ"
 
-#: gtk/gtkfilechooserdefault.c:2476
+#: gtk/gtkfilechooserdefault.c:2487
 msgid "Select which types of files are shown"
 msgstr "કયા પ્રકારની ફાઈલ બતાવવી છે તે પસંદ કરો"
 
-#: gtk/gtkfilechooserdefault.c:2905
+#: gtk/gtkfilechooserdefault.c:2916
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "ફોલ્ડર '%s' ને બુકમાર્કોમાં ઉમેરો"
 
-#: gtk/gtkfilechooserdefault.c:2946
+#: gtk/gtkfilechooserdefault.c:2957
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "વર્તમાન ફોલ્ડરને બુકમાર્કોમાં ઉમેરો"
 
-#: gtk/gtkfilechooserdefault.c:2948
+#: gtk/gtkfilechooserdefault.c:2959
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "પસંદિત ફોલ્ડરોને બુકમાર્કોમાં ઉમેરો"
 
-#: gtk/gtkfilechooserdefault.c:2988
+#: gtk/gtkfilechooserdefault.c:2999
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "બુકમાર્ક '%s' દૂર કરો"
 
-#: gtk/gtkfilechooserdefault.c:3706
+#: gtk/gtkfilechooserdefault.c:3717
 msgid "Remove"
 msgstr "દૂર કરો"
 
-#: gtk/gtkfilechooserdefault.c:3715
+#: gtk/gtkfilechooserdefault.c:3726
 msgid "Rename..."
 msgstr "નામ બદલો..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3861
+#: gtk/gtkfilechooserdefault.c:3872
 msgid "Places"
 msgstr "જગ્યાઓ"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3918
+#: gtk/gtkfilechooserdefault.c:3929
 msgid "_Places"
 msgstr "જગ્યાઓ (_P)"
 
-#: gtk/gtkfilechooserdefault.c:3973 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3984 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "ઉમેરો (_A)"
 
-#: gtk/gtkfilechooserdefault.c:3980
+#: gtk/gtkfilechooserdefault.c:3991
 msgid "Add the selected folder to the Bookmarks"
 msgstr "પસંદિત ફોલ્ડરને બુકમાર્કોમાં ઉમેરો"
 
-#: gtk/gtkfilechooserdefault.c:3985 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:3996 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "દૂર કરો (_R)"
 
-#: gtk/gtkfilechooserdefault.c:3992
+#: gtk/gtkfilechooserdefault.c:4003
 msgid "Remove the selected bookmark"
 msgstr "પસંદિત બુકમાર્ક દૂર કરો"
 
-#: gtk/gtkfilechooserdefault.c:4089
+#: gtk/gtkfilechooserdefault.c:4100
 msgid "Could not select file"
 msgstr "ફાઈલ પસંદી કરી શક્યા નહિં"
 
-#: gtk/gtkfilechooserdefault.c:4262
+#: gtk/gtkfilechooserdefault.c:4273
 msgid "_Add to Bookmarks"
 msgstr "બુકમાર્કોમાં ઉમેરો (_A)"
 
-#: gtk/gtkfilechooserdefault.c:4276
+#: gtk/gtkfilechooserdefault.c:4287
 msgid "Show _Hidden Files"
 msgstr "છુપી ફાઈલો બતાવો (_H)"
 
-#: gtk/gtkfilechooserdefault.c:4519 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4530 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ફાઈલો"
 
-#: gtk/gtkfilechooserdefault.c:4568
+#: gtk/gtkfilechooserdefault.c:4579
 msgid "Name"
 msgstr "નામ"
 
-#: gtk/gtkfilechooserdefault.c:4593
+#: gtk/gtkfilechooserdefault.c:4604
 msgid "Size"
 msgstr "માપ"
 
-#: gtk/gtkfilechooserdefault.c:4607
+#: gtk/gtkfilechooserdefault.c:4618
 msgid "Modified"
 msgstr "સુધારેલ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4827 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4838 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "નામ (_N):"
 
-#: gtk/gtkfilechooserdefault.c:4869
+#: gtk/gtkfilechooserdefault.c:4880
 msgid "_Browse for other folders"
 msgstr "બીજા ફોલ્ડરો માટે શોધો (_B)"
 
-#: gtk/gtkfilechooserdefault.c:5139
+#: gtk/gtkfilechooserdefault.c:5150
 msgid "Type a file name"
 msgstr "ફાઈલ નામ લખો"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5176
+#: gtk/gtkfilechooserdefault.c:5187
 msgid "Create Fo_lder"
 msgstr "ફોલ્ડર બનાવો (_F)"
 
-#: gtk/gtkfilechooserdefault.c:5186
+#: gtk/gtkfilechooserdefault.c:5197
 msgid "_Location:"
 msgstr "સ્થાન (_L):"
 
-#: gtk/gtkfilechooserdefault.c:5375
+#: gtk/gtkfilechooserdefault.c:5386
 msgid "Save in _folder:"
 msgstr "ફોલ્ડરમાં સંગ્રહ કરો (_F):"
 
-#: gtk/gtkfilechooserdefault.c:5377
+#: gtk/gtkfilechooserdefault.c:5388
 msgid "Create in _folder:"
 msgstr "ફોલ્ડરમાં બનાવો (_F):"
 
-#: gtk/gtkfilechooserdefault.c:6971
+#: gtk/gtkfilechooserdefault.c:6970
 msgid "Cannot change to folder because it is not local"
 msgstr "ફોલ્ડર બદલી શકતા નથી કારણ કે તે સ્થાનિક પથ નથી"
 
-#: gtk/gtkfilechooserdefault.c:7596 gtk/gtkfilechooserdefault.c:7617
+#: gtk/gtkfilechooserdefault.c:7595 gtk/gtkfilechooserdefault.c:7616
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "ટૂંકાણ %s પહેલાથી જ અસ્તિત્વમાં છે"
 
-#: gtk/gtkfilechooserdefault.c:7707
+#: gtk/gtkfilechooserdefault.c:7706
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "ટૂંકાણ %s અસ્તિત્વમાં નથી"
 
-#: gtk/gtkfilechooserdefault.c:7950 gtk/gtkprintunixdialog.c:364
+#: gtk/gtkfilechooserdefault.c:7954 gtk/gtkprintunixdialog.c:368
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" નામવાળી ફાઈલ પહેલાથી જ હાજર છે.  શું તમે તેને બદલવા માંગો છો?"
 
-#: gtk/gtkfilechooserdefault.c:7953 gtk/gtkprintunixdialog.c:368
+#: gtk/gtkfilechooserdefault.c:7957 gtk/gtkprintunixdialog.c:372
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "ફાઈલ પહેલાથી જ \"%s\" માં અસ્તિત્વમાં છે.  તેને બદલવાનું તેના સમાવિષ્ટો પર ફરીથી લખશે."
 
-#: gtk/gtkfilechooserdefault.c:7958 gtk/gtkprintunixdialog.c:375
+#: gtk/gtkfilechooserdefault.c:7962 gtk/gtkprintunixdialog.c:379
 msgid "_Replace"
 msgstr "બદલો (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8719
+#: gtk/gtkfilechooserdefault.c:8723
 msgid "Could not start the search process"
 msgstr "શોધ પ્રક્રિયા શરૂ કરી શક્યા નહિં"
 
-#: gtk/gtkfilechooserdefault.c:8720
+#: gtk/gtkfilechooserdefault.c:8724
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1765,49 +1765,49 @@ msgstr ""
 "કાર્યક્રમ indexer ડિમન સાથે જોડાણ બનાવવા માટે અસમર્થ હતો.  મહેરબાની કરીને ખાતરી કરો "
 "કે તે ચાલી રહ્યું છે."
 
-#: gtk/gtkfilechooserdefault.c:8734
+#: gtk/gtkfilechooserdefault.c:8738
 msgid "Could not send the search request"
 msgstr "શોધ અરજી મોકલી શક્યા નહિં"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9149
+#: gtk/gtkfilechooserdefault.c:9153
 msgid "_Search:"
 msgstr "શોધો (_S):"
 
-#: gtk/gtkfilechooserdefault.c:10096
+#: gtk/gtkfilechooserdefault.c:10100
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s માઉન્ટ કરી શક્યા નહિં"
 
-#: gtk/gtkfilechooserdefault.c:10750
+#: gtk/gtkfilechooserdefault.c:10754
 msgid "Type name of new folder"
 msgstr "નવા ફોલ્ડરના પ્રકારનુ નામ"
 
-#: gtk/gtkfilechooserdefault.c:10800
+#: gtk/gtkfilechooserdefault.c:10804
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10802
+#: gtk/gtkfilechooserdefault.c:10806
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10804
+#: gtk/gtkfilechooserdefault.c:10808
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10907 gtk/gtkfilechooserdefault.c:10929
-#: gtk/gtkfilechooserdefault.c:11000
+#: gtk/gtkfilechooserdefault.c:10911 gtk/gtkfilechooserdefault.c:10933
+#: gtk/gtkfilechooserdefault.c:11004
 msgid "Unknown"
 msgstr "અજ્ઞાત"
 
-#: gtk/gtkfilechooserdefault.c:10947
+#: gtk/gtkfilechooserdefault.c:10951
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10949
+#: gtk/gtkfilechooserdefault.c:10953
 msgid "Yesterday at %H:%M"
 msgstr "ગઈકાલે %H:%M વાગ્યે"
 
@@ -2260,7 +2260,7 @@ msgstr ""
 msgid "Remember _forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:4424 gtk/gtknotebook.c:6930
+#: gtk/gtknotebook.c:4417 gtk/gtknotebook.c:6923
 #, c-format
 msgid "Page %u"
 msgstr "પાનું %u"
@@ -2326,7 +2326,7 @@ msgstr "કાગળ માપ (_P):"
 msgid "_Orientation:"
 msgstr "દિશા (_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2397
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2655
 msgid "Page Setup"
 msgstr "પાનાં સુયોજન"
 
@@ -2449,27 +2449,27 @@ msgstr "સમાપ્ત થયેલ"
 msgid "print operation status|Finished with error"
 msgstr "ભૂલ સાથે સમાપ્ત થયેલ"
 
-#: gtk/gtkprintoperation.c:2003
+#: gtk/gtkprintoperation.c:2043
 #, c-format
 msgid "Preparing %d"
 msgstr "%d તૈયાર કરી રહ્યા છીએ"
 
-#: gtk/gtkprintoperation.c:2005 gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2045 gtk/gtkprintoperation.c:2301
 #, c-format
 msgid "Preparing"
 msgstr "તૈયાર કરી રહ્યા છીએ"
 
-#: gtk/gtkprintoperation.c:2008
+#: gtk/gtkprintoperation.c:2048
 #, c-format
 msgid "Printing %d"
 msgstr "%d છાપી રહ્યા છીએ"
 
-#: gtk/gtkprintoperation.c:2289
+#: gtk/gtkprintoperation.c:2331
 #, fuzzy, c-format
 msgid "Error creating print preview"
 msgstr "પૂર્વદર્શન લોન્ચ કરવામાં ભૂલ"
 
-#: gtk/gtkprintoperation.c:2292
+#: gtk/gtkprintoperation.c:2334
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
@@ -2545,39 +2545,41 @@ msgstr "PrintDlgEx નો અયોગ્ય નિયંત્રક"
 msgid "Unspecified error"
 msgstr "સ્પષ્ટ નહિં એવી ભૂલ"
 
-#: gtk/gtkprintunixdialog.c:1716
+#: gtk/gtkprintunixdialog.c:1741
 msgid "Printer"
 msgstr "પ્રિન્ટર"
 
-#: gtk/gtkprintunixdialog.c:1725
+#. Translators: this is the header for the location column in the print dialog
+#: gtk/gtkprintunixdialog.c:1751
 msgid "Location"
 msgstr "સ્થાન"
 
-#: gtk/gtkprintunixdialog.c:1735
+#. Translators: this is the header for the printer status column in the print dialog
+#: gtk/gtkprintunixdialog.c:1762
 msgid "Status"
 msgstr "પરિસ્થિતિ"
 
-#: gtk/gtkprintunixdialog.c:1758
+#: gtk/gtkprintunixdialog.c:1785
 #, fuzzy
 msgid "Range"
 msgstr "વિસ્તાર (_n)"
 
-#: gtk/gtkprintunixdialog.c:1762
+#: gtk/gtkprintunixdialog.c:1789
 #, fuzzy
 msgid "_All Pages"
 msgstr "બધી શીટો"
 
-#: gtk/gtkprintunixdialog.c:1769
+#: gtk/gtkprintunixdialog.c:1796
 #, fuzzy
 msgid "C_urrent Page"
 msgstr "વર્તમાન (_u)"
 
-#: gtk/gtkprintunixdialog.c:1778
+#: gtk/gtkprintunixdialog.c:1805
 #, fuzzy
 msgid "Pag_es:"
 msgstr "જગ્યાઓ"
 
-#: gtk/gtkprintunixdialog.c:1779
+#: gtk/gtkprintunixdialog.c:1806
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2585,141 +2587,177 @@ msgstr ""
 "એક અથવા વધુ પાનાં વિસ્તારો સ્પષ્ટ કરો,\n"
 " દા.ત. ૧-૩,૭,૧૧"
 
-#: gtk/gtkprintunixdialog.c:1798
+#: gtk/gtkprintunixdialog.c:1825
 msgid "Copies"
 msgstr "નકલો"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1803
+#: gtk/gtkprintunixdialog.c:1830
 msgid "Copie_s:"
 msgstr "નકલો (_s):"
 
-#: gtk/gtkprintunixdialog.c:1821
+#: gtk/gtkprintunixdialog.c:1848
 msgid "C_ollate"
 msgstr "ભેગું કરો (_o)"
 
-#: gtk/gtkprintunixdialog.c:1829
+#: gtk/gtkprintunixdialog.c:1856
 msgid "_Reverse"
 msgstr "ઉલટાવો (_R)"
 
-#: gtk/gtkprintunixdialog.c:1849
+#: gtk/gtkprintunixdialog.c:1876
 msgid "General"
 msgstr "સામાન્ય"
 
-#: gtk/gtkprintunixdialog.c:2252
+#. Translators, this string is used to label the option in the print
+#. * dialog that controls in what order multiple pages are arranged
+#.
+#: gtk/gtkprintunixdialog.c:2416
+#: modules/printbackends/cups/gtkprintbackendcups.c:2728
+#, fuzzy
+msgid "Page Ordering"
+msgstr "તૈયાર કરી રહ્યા છીએ"
+
+#: gtk/gtkprintunixdialog.c:2422
+#, fuzzy
+msgid "Left to right"
+msgstr "LRM ડાબેથી-જમણાની નિશાની (_L)"
+
+#: gtk/gtkprintunixdialog.c:2423
+#, fuzzy
+msgid "Right to left"
+msgstr "ફાઈલમાં છાપો"
+
+#: gtk/gtkprintunixdialog.c:2492
 msgid "Layout"
 msgstr "દેખાવ"
 
-#: gtk/gtkprintunixdialog.c:2256
-msgid "Pages per _side:"
-msgstr "બાજુ પ્રતિ પાનાંઓ (_s):"
-
-#: gtk/gtkprintunixdialog.c:2272
+#: gtk/gtkprintunixdialog.c:2496
 msgid "T_wo-sided:"
 msgstr "બે-બાજુવાળું (_w):"
 
-#: gtk/gtkprintunixdialog.c:2287
+#: gtk/gtkprintunixdialog.c:2511
+msgid "Pages per _side:"
+msgstr "બાજુ પ્રતિ પાનાંઓ (_s):"
+
+#: gtk/gtkprintunixdialog.c:2529
+#, fuzzy
+msgid "Page or_dering:"
+msgstr "બાજુ પ્રતિ પાનાંઓ (_s):"
+
+#: gtk/gtkprintunixdialog.c:2545
 msgid "_Only print:"
 msgstr "માત્ર છાપો (_O):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2302
+#: gtk/gtkprintunixdialog.c:2560
 msgid "All sheets"
 msgstr "બધી શીટો"
 
-#: gtk/gtkprintunixdialog.c:2303
+#: gtk/gtkprintunixdialog.c:2561
 msgid "Even sheets"
 msgstr "બેકી સંખ્યાની શીટો"
 
-#: gtk/gtkprintunixdialog.c:2304
+#: gtk/gtkprintunixdialog.c:2562
 msgid "Odd sheets"
 msgstr "એકી સંખ્યાની શીટો"
 
-#: gtk/gtkprintunixdialog.c:2307
+#: gtk/gtkprintunixdialog.c:2565
 msgid "Sc_ale:"
 msgstr "માપદંડ (_a):"
 
-#: gtk/gtkprintunixdialog.c:2334
+#: gtk/gtkprintunixdialog.c:2592
 msgid "Paper"
 msgstr "કાગળ"
 
-#: gtk/gtkprintunixdialog.c:2338
+#: gtk/gtkprintunixdialog.c:2596
 msgid "Paper _type:"
 msgstr "કાગળ પ્રકાર (_t):"
 
-#: gtk/gtkprintunixdialog.c:2353
+#: gtk/gtkprintunixdialog.c:2611
 msgid "Paper _source:"
 msgstr "કાગળ સ્રોત (_s):"
 
-#: gtk/gtkprintunixdialog.c:2368
+#: gtk/gtkprintunixdialog.c:2626
 msgid "Output t_ray:"
 msgstr "આઉટપુટ ટ્રે (_r):"
 
-#: gtk/gtkprintunixdialog.c:2420
+#: gtk/gtkprintunixdialog.c:2678
 msgid "Job Details"
 msgstr "જોબ વિગતો"
 
-#: gtk/gtkprintunixdialog.c:2426
+#: gtk/gtkprintunixdialog.c:2684
 msgid "Pri_ority:"
 msgstr "પ્રાધાન્ય (_o):"
 
-#: gtk/gtkprintunixdialog.c:2441
+#: gtk/gtkprintunixdialog.c:2699
 msgid "_Billing info:"
 msgstr "બીલ જાણકારી (_B):"
 
-#: gtk/gtkprintunixdialog.c:2459
+#: gtk/gtkprintunixdialog.c:2717
 msgid "Print Document"
 msgstr "દસ્તાવેજ છાપો"
 
-#: gtk/gtkprintunixdialog.c:2465
+#. Translators: this is one of the choices for the print at option
+#. * in the print dialog
+#.
+#: gtk/gtkprintunixdialog.c:2726
 msgid "_Now"
 msgstr "હમણાં (_N)"
 
-#: gtk/gtkprintunixdialog.c:2472
+#: gtk/gtkprintunixdialog.c:2737
 msgid "A_t:"
 msgstr "આગળ (_t):"
 
-#: gtk/gtkprintunixdialog.c:2487
+#: gtk/gtkprintunixdialog.c:2756
 msgid "On _hold"
 msgstr "અટકાવેલ (_h)"
 
-#: gtk/gtkprintunixdialog.c:2506
+#: gtk/gtkprintunixdialog.c:2775
 msgid "Add Cover Page"
 msgstr "કવર પાનું ઉમેરો"
 
-#: gtk/gtkprintunixdialog.c:2512
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the front cover page.
+#.
+#: gtk/gtkprintunixdialog.c:2784
 msgid "Be_fore:"
 msgstr "પહેલાં (_f):"
 
-#: gtk/gtkprintunixdialog.c:2527
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the back cover page.
+#.
+#: gtk/gtkprintunixdialog.c:2802
 msgid "_After:"
 msgstr "પછી (_A):"
 
-#: gtk/gtkprintunixdialog.c:2542
+#. Translators: this is the tab label for the notebook tab containing
+#. * job-specific options in the print dialog
+#.
+#: gtk/gtkprintunixdialog.c:2820
 msgid "Job"
 msgstr "જોબ"
 
-#: gtk/gtkprintunixdialog.c:2608
+#: gtk/gtkprintunixdialog.c:2886
 msgid "Advanced"
 msgstr "અદ્યતન"
 
-#: gtk/gtkprintunixdialog.c:2643
+#: gtk/gtkprintunixdialog.c:2921
 msgid "Image Quality"
 msgstr "ચિત્ર ગુણવત્તા"
 
-#: gtk/gtkprintunixdialog.c:2646
+#: gtk/gtkprintunixdialog.c:2924
 msgid "Color"
 msgstr "રંગ"
 
-#: gtk/gtkprintunixdialog.c:2649
+#: gtk/gtkprintunixdialog.c:2927
 msgid "Finishing"
 msgstr "સમાપ્ત કરી રહ્યા છીએ"
 
-#: gtk/gtkprintunixdialog.c:2659
+#: gtk/gtkprintunixdialog.c:2937
 msgid "Some of the settings in the dialog conflict"
 msgstr "સંવાદના અમુક સુયોજનોની તકરાર થાય છે"
 
-#: gtk/gtkprintunixdialog.c:2682
+#: gtk/gtkprintunixdialog.c:2960
 msgid "Print"
 msgstr "છાપો"
 
@@ -4540,51 +4578,154 @@ msgstr "આપોઆપ પસંદગી"
 msgid "Printer Default"
 msgstr "પ્રિન્ટર મૂળભૂત"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2686
+#. Translators: These strings name the possible values of the
+#. * job priority option in the print dialog
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "Urgent"
 msgstr "તાત્કાલિક"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "High"
 msgstr "ઊંચુ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "Medium"
 msgstr "મધ્યમ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "Low"
 msgstr "નીચું"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2694
+msgid "Left to right, top to bottom"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2694
+msgid "Left to right, bottom to top"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2695
+msgid "Right to left, top to bottom"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2695
+msgid "Right to left, bottom to top"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2696
+msgid "Top to bottom, left to right"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2696
+msgid "Top to bottom, right to left"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2697
+msgid "Bottom to top, left to right"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2697
+msgid "Bottom to top, right to left"
+msgstr ""
+
+#. Cups specific, non-ppd related settings
+#. Translators, this string is used to label the pages-per-sheet option
+#. * in the print dialog
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2712
+#, fuzzy
+msgid "Pages per Sheet"
+msgstr "શીટ પ્રતિ પાનાંઓ"
+
+#. Translators, this string is used to label the job priority option
+#. * in the print dialog
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2749
+#, fuzzy
+msgid "Job Priority"
+msgstr "પ્રાધાન્ય (_o):"
+
+#. Translators, this string is used to label the billing info entry
+#. * in the print dialog
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2760
+#, fuzzy
+msgid "Billing Info"
+msgstr "બીલ જાણકારી (_B):"
+
+#. Translators, these strings are names for various 'standard' cover
+#. * pages that the printing system may support.
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "None"
 msgstr "કંઈ નંહિ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Classified"
 msgstr "વર્ગીકૃત"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Confidential"
 msgstr "ખાનગી"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Secret"
 msgstr "ખાનગી"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Standard"
 msgstr "પ્રમાણભૂત"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Top Secret"
 msgstr "ખૂબ ખાનગી"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Unclassified"
 msgstr "બિનવર્ગીકૃત"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2826
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the front cover page.
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#, fuzzy
+msgid "Before"
+msgstr "પહેલાં (_f):"
+
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the back cover page.
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2824
+#, fuzzy
+msgid "After"
+msgstr "પછી (_A):"
+
+#. Translators: this is the name of the option that controls when
+#. * a print job is printed. Possible values are 'now', a specified time,
+#. * or 'on hold'
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2844
+#, fuzzy
+msgid "Print at"
+msgstr "છાપો"
+
+#. Translators: this is the name of the option that allows the user
+#. * to specify a time when a print job will be printed.
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2855
+#, fuzzy
+msgid "Print at time"
+msgstr "ફાઈલમાં છાપો"
+
+#. Translators: this format is used to display a custom paper
+#. * size. The two placeholders are replaced with the width and height
+#. * in points. E.g: "Custom 230.4x142.9"
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2890
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "વૈવિધ્યપૂર્ણ %.2fx%.2f"
@@ -4595,28 +4736,28 @@ msgstr "વૈવિધ્યપૂર્ણ %.2fx%.2f"
 msgid "output.%s"
 msgstr "output.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:464
+#: modules/printbackends/file/gtkprintbackendfile.c:466
 msgid "Print to File"
 msgstr "ફાઈલમાં છાપો"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:541
+#: modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:541
+#: modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:553
-#: modules/printbackends/test/gtkprintbackendtest.c:501
+#: modules/printbackends/file/gtkprintbackendfile.c:555
+#: modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "શીટ પ્રતિ પાનાંઓ (_s):"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:599
+#: modules/printbackends/file/gtkprintbackendfile.c:601
 msgid "File"
 msgstr "ફાઈલ"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:608
+#: modules/printbackends/file/gtkprintbackendfile.c:610
 msgid "_Output format"
 msgstr "આઉટપુટ બંધારણ (_O)"
 
@@ -4638,7 +4779,7 @@ msgstr "આદેશ વાક્ય"
 msgid "test-output.%s"
 msgstr "test-output.%s"
 
-#: modules/printbackends/test/gtkprintbackendtest.c:465
+#: modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "ચકાસણી પ્રિન્ટર પર છાપો"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ku\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 18:27-0400\n"
+"POT-Creation-Date: 2008-09-04 10:40-0400\n"
 "PO-Revision-Date: 2008-01-13 20:17+0100\n"
 "Last-Translator: Erdal Ronahi <erdal dot ronahi at gmail dot com>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
@@ -233,19 +233,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete (Jêbirin)"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:944
-#: gdk-pixbuf/gdk-pixbuf-io.c:1205 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:950
+#: gdk-pixbuf/gdk-pixbuf-io.c:1210 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Vekirina pelê '%s' biserneket: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:956
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:962
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Di pelê wêne '%s' de qet agahî nîn e"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:993
-#: gdk-pixbuf/gdk-pixbuf-io.c:1257 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:998
+#: gdk-pixbuf/gdk-pixbuf-io.c:1262 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -275,53 +275,53 @@ msgstr ""
 "Modula barkirina wêne %s ji navrûyê rastî re nehatiye şandin. Gelo dibe ew "
 "guhertoyeke cuda ya GTK'ê be?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:726 gdk-pixbuf/gdk-pixbuf-io.c:755
+#: gdk-pixbuf/gdk-pixbuf-io.c:727 gdk-pixbuf/gdk-pixbuf-io.c:761
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Cureyê wêne %s' destekê nade"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:825
+#: gdk-pixbuf/gdk-pixbuf-io.c:831
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Nikare formata pelê wêne nasbike ji bo pelê '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:833
+#: gdk-pixbuf/gdk-pixbuf-io.c:839
 msgid "Unrecognized image file format"
 msgstr "Formata pelê wêne nenaskirî ye"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1002
+#: gdk-pixbuf/gdk-pixbuf-io.c:1007
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Barkirina wêneya '%s' biserneket: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1638 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1641 gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Çewtiya nivisandinê ya pelê wêne : %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1684 gdk-pixbuf/gdk-pixbuf-io.c:1815
+#: gdk-pixbuf/gdk-pixbuf-io.c:1686 gdk-pixbuf/gdk-pixbuf-io.c:1816
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Ev avakirina gdk-pixbuf destekê nade tomarkirina formata wêne: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718
+#: gdk-pixbuf/gdk-pixbuf-io.c:1720
 msgid "Insufficient memory to save image to callback"
 msgstr "Ji bo paş de vegerandinê dema wêne dihate tomarkirin bîr têrê nake"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1731
+#: gdk-pixbuf/gdk-pixbuf-io.c:1733
 msgid "Failed to open temporary file"
 msgstr "Vekirina pelê demîn serneket"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1757
+#: gdk-pixbuf/gdk-pixbuf-io.c:1759
 msgid "Failed to read from temporary file"
 msgstr "Xwendina ji pelê demî biserneket"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1992
+#: gdk-pixbuf/gdk-pixbuf-io.c:1993
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Vekirina '%s' ji bo nivîsandinê bi ser neket: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2017
+#: gdk-pixbuf/gdk-pixbuf-io.c:2018
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -330,11 +330,11 @@ msgstr ""
 "Çewtiya girtinê'%s' di dema nivisandina wêne de, dibe ku hemû dane nehatibin "
 "tomar kirin: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2237 gdk-pixbuf/gdk-pixbuf-io.c:2288
+#: gdk-pixbuf/gdk-pixbuf-io.c:2238 gdk-pixbuf/gdk-pixbuf-io.c:2289
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Bîr têr nake ku wêne di Bîra navbênkar de were tomarkirin"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2334
+#: gdk-pixbuf/gdk-pixbuf-io.c:2335
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "Çewtiya nivisandinê ya pelê wêne : %s"
@@ -438,7 +438,7 @@ msgstr "Formata wêneya BMP"
 msgid "Failure reading GIF: %s"
 msgstr "Çewtî di dema xwendina GIF: %s de"
 
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1477 gdk-pixbuf/io-gif.c:1638
+#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "Pelê GIF hin dane winda kirin (dibe ku hatiye qudkirin?)"
 
@@ -463,29 +463,29 @@ msgstr "Şifreyek ne durust hate dîtin"
 msgid "Circular table entry in GIF file"
 msgstr "Malika gilover di pelê GIF de"
 
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1464 gdk-pixbuf/io-gif.c:1511
-#: gdk-pixbuf/io-gif.c:1626
+#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
+#: gdk-pixbuf/io-gif.c:1630
 msgid "Not enough memory to load GIF file"
 msgstr "Bîr têra barkirina pelê GIF nake"
 
-#: gdk-pixbuf/io-gif.c:956
+#: gdk-pixbuf/io-gif.c:960
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Bîr têra barkirina frame bo dosya GIF nake"
 
-#: gdk-pixbuf/io-gif.c:1128
+#: gdk-pixbuf/io-gif.c:1132
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Wêneyê GIF xerabe ye (şidandina LZW ne duriste)"
 
-#: gdk-pixbuf/io-gif.c:1178
+#: gdk-pixbuf/io-gif.c:1182
 msgid "File does not appear to be a GIF file"
 msgstr "Xuyaye ku dosya ne GIF e"
 
-#: gdk-pixbuf/io-gif.c:1190
+#: gdk-pixbuf/io-gif.c:1194
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Guhertoya %s dosya GIF nayê destekirin"
 
-#: gdk-pixbuf/io-gif.c:1299
+#: gdk-pixbuf/io-gif.c:1303
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -493,11 +493,11 @@ msgstr ""
 "Nexşeya reng a wêneyê GIF tuneye û nexşeya rengan a herêmî jî di çarçoveya "
 "hidurê wê de tuneye."
 
-#: gdk-pixbuf/io-gif.c:1533
+#: gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
 msgstr "Wêneyê GIF kême an perçekiriye."
 
-#: gdk-pixbuf/io-gif.c:1689 gdk-pixbuf/io-gdip-gif.c:80
+#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "Formata wêneya GIF"
 
@@ -1507,11 +1507,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Hilbijartina rengan"
 
-#: gtk/gtkentry.c:5375 gtk/gtktextview.c:7686
+#: gtk/gtkentry.c:5380 gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "Riyên_Têketinê"
 
-#: gtk/gtkentry.c:5389 gtk/gtktextview.c:7700
+#: gtk/gtkentry.c:5394 gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "_Şifreya kontrola sembolê derbas bike"
 
@@ -1519,7 +1519,7 @@ msgstr "_Şifreya kontrola sembolê derbas bike"
 msgid "Select A File"
 msgstr "Pelekî Hilbijêre"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1909
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1920
 msgid "Desktop"
 msgstr "Sermasê"
 
@@ -1567,155 +1567,155 @@ msgstr "Naveroka peldankê nehate nîşandan"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1661
+#: gtk/gtkfilechooserdefault.c:1672
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s di %2$s de"
 
-#: gtk/gtkfilechooserdefault.c:1837
+#: gtk/gtkfilechooserdefault.c:1848
 msgid "Search"
 msgstr "Lêgerîn"
 
-#: gtk/gtkfilechooserdefault.c:1861
+#: gtk/gtkfilechooserdefault.c:1872
 msgid "Recently Used"
 msgstr "Teze Bikaranî"
 
-#: gtk/gtkfilechooserdefault.c:2476
+#: gtk/gtkfilechooserdefault.c:2487
 msgid "Select which types of files are shown"
 msgstr "Hilbijêre kîjan cureyê pelan hatiye nîşandan"
 
-#: gtk/gtkfilechooserdefault.c:2905
+#: gtk/gtkfilechooserdefault.c:2916
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Belgedankekê  '%s' li beyanameyê zêde bike"
 
-#: gtk/gtkfilechooserdefault.c:2946
+#: gtk/gtkfilechooserdefault.c:2957
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Belgedanka heyî li beyanameyê zêde bike"
 
-#: gtk/gtkfilechooserdefault.c:2948
+#: gtk/gtkfilechooserdefault.c:2959
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Belgedanka hilbijartî li beyanameyê zêde bike"
 
-#: gtk/gtkfilechooserdefault.c:2988
+#: gtk/gtkfilechooserdefault.c:2999
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Bijareya '%s' rake"
 
-#: gtk/gtkfilechooserdefault.c:3706
+#: gtk/gtkfilechooserdefault.c:3717
 msgid "Remove"
 msgstr "Rake"
 
-#: gtk/gtkfilechooserdefault.c:3715
+#: gtk/gtkfilechooserdefault.c:3726
 msgid "Rename..."
 msgstr "Nav biguherîne..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3861
+#: gtk/gtkfilechooserdefault.c:3872
 msgid "Places"
 msgstr "Cih"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3918
+#: gtk/gtkfilechooserdefault.c:3929
 msgid "_Places"
 msgstr "_Cih"
 
-#: gtk/gtkfilechooserdefault.c:3973 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3984 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "_Têxê"
 
-#: gtk/gtkfilechooserdefault.c:3980
+#: gtk/gtkfilechooserdefault.c:3991
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Beyanameya hilbijartî li peldankê zêde bike"
 
-#: gtk/gtkfilechooserdefault.c:3985 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:3996 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "_Rake"
 
-#: gtk/gtkfilechooserdefault.c:3992
+#: gtk/gtkfilechooserdefault.c:4003
 msgid "Remove the selected bookmark"
 msgstr "Beyanameya hilbijartî jê bibe"
 
-#: gtk/gtkfilechooserdefault.c:4089
+#: gtk/gtkfilechooserdefault.c:4100
 msgid "Could not select file"
 msgstr "Nikare pel hilbijêre"
 
-#: gtk/gtkfilechooserdefault.c:4262
+#: gtk/gtkfilechooserdefault.c:4273
 msgid "_Add to Bookmarks"
 msgstr "_Li beyanameyê zêde bike"
 
-#: gtk/gtkfilechooserdefault.c:4276
+#: gtk/gtkfilechooserdefault.c:4287
 msgid "Show _Hidden Files"
 msgstr "Pelên veşartî _nîşan bide"
 
-#: gtk/gtkfilechooserdefault.c:4519 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4530 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Pel"
 
-#: gtk/gtkfilechooserdefault.c:4568
+#: gtk/gtkfilechooserdefault.c:4579
 msgid "Name"
 msgstr "Nav"
 
-#: gtk/gtkfilechooserdefault.c:4593
+#: gtk/gtkfilechooserdefault.c:4604
 msgid "Size"
 msgstr "Mezinahî"
 
-#: gtk/gtkfilechooserdefault.c:4607
+#: gtk/gtkfilechooserdefault.c:4618
 msgid "Modified"
 msgstr "Hatiye guherandin"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4827 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4838 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Nav:"
 
-#: gtk/gtkfilechooserdefault.c:4869
+#: gtk/gtkfilechooserdefault.c:4880
 msgid "_Browse for other folders"
 msgstr "_Li peldankên din binere"
 
-#: gtk/gtkfilechooserdefault.c:5139
+#: gtk/gtkfilechooserdefault.c:5150
 msgid "Type a file name"
 msgstr "Navê pelekî binivîse"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5176
+#: gtk/gtkfilechooserdefault.c:5187
 msgid "Create Fo_lder"
 msgstr "_Peldankê biafirîne"
 
-#: gtk/gtkfilechooserdefault.c:5186
+#: gtk/gtkfilechooserdefault.c:5197
 msgid "_Location:"
 msgstr "_Cih:"
 
-#: gtk/gtkfilechooserdefault.c:5375
+#: gtk/gtkfilechooserdefault.c:5386
 msgid "Save in _folder:"
 msgstr "Di _peldankê de tomar bike:"
 
-#: gtk/gtkfilechooserdefault.c:5377
+#: gtk/gtkfilechooserdefault.c:5388
 msgid "Create in _folder:"
 msgstr "Di peldankê de _biafirîne:"
 
-#: gtk/gtkfilechooserdefault.c:6971
+#: gtk/gtkfilechooserdefault.c:6970
 msgid "Cannot change to folder because it is not local"
 msgstr "Nikare peldank biguhêre ji ber ne herîmiye"
 
-#: gtk/gtkfilechooserdefault.c:7596 gtk/gtkfilechooserdefault.c:7617
+#: gtk/gtkfilechooserdefault.c:7595 gtk/gtkfilechooserdefault.c:7616
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Kurterê %s jixwe heye"
 
-#: gtk/gtkfilechooserdefault.c:7707
+#: gtk/gtkfilechooserdefault.c:7706
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Kurterê %s tuneye"
 
-#: gtk/gtkfilechooserdefault.c:7950 gtk/gtkprintunixdialog.c:364
+#: gtk/gtkfilechooserdefault.c:7954 gtk/gtkprintunixdialog.c:368
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Pelek bi navê \"%s\" ji berê ve heye. Tu dixwazî ser wî binivîsî?"
 
-#: gtk/gtkfilechooserdefault.c:7953 gtk/gtkprintunixdialog.c:368
+#: gtk/gtkfilechooserdefault.c:7957 gtk/gtkprintunixdialog.c:372
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1723,15 +1723,15 @@ msgstr ""
 "Ev pel ji berê ve di \"%s\" de heye. Heke tu biguhêrî dê di ser naveroka "
 "pelê berê de were nivisandin."
 
-#: gtk/gtkfilechooserdefault.c:7958 gtk/gtkprintunixdialog.c:375
+#: gtk/gtkfilechooserdefault.c:7962 gtk/gtkprintunixdialog.c:379
 msgid "_Replace"
 msgstr "_Guhestin"
 
-#: gtk/gtkfilechooserdefault.c:8719
+#: gtk/gtkfilechooserdefault.c:8723
 msgid "Could not start the search process"
 msgstr "Despêkirina lêgerînê biserneket"
 
-#: gtk/gtkfilechooserdefault.c:8720
+#: gtk/gtkfilechooserdefault.c:8724
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1739,49 +1739,49 @@ msgstr ""
 "Bername nikarî bi daemona fihrîstkirina re girê bide.  Ji kerema xwe re "
 "xebitandina wî kontrol bike."
 
-#: gtk/gtkfilechooserdefault.c:8734
+#: gtk/gtkfilechooserdefault.c:8738
 msgid "Could not send the search request"
 msgstr "Şandina lêpirsîna lêgerînê biserneket"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9149
+#: gtk/gtkfilechooserdefault.c:9153
 msgid "_Search:"
 msgstr "Lê_gerîn:"
 
-#: gtk/gtkfilechooserdefault.c:10096
+#: gtk/gtkfilechooserdefault.c:10100
 #, c-format
 msgid "Could not mount %s"
 msgstr "Siwarkirina %s biserneket"
 
-#: gtk/gtkfilechooserdefault.c:10750
+#: gtk/gtkfilechooserdefault.c:10754
 msgid "Type name of new folder"
 msgstr "Navê celebê peldanka nû"
 
-#: gtk/gtkfilechooserdefault.c:10800
+#: gtk/gtkfilechooserdefault.c:10804
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10802
+#: gtk/gtkfilechooserdefault.c:10806
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10804
+#: gtk/gtkfilechooserdefault.c:10808
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10907 gtk/gtkfilechooserdefault.c:10929
-#: gtk/gtkfilechooserdefault.c:11000
+#: gtk/gtkfilechooserdefault.c:10911 gtk/gtkfilechooserdefault.c:10933
+#: gtk/gtkfilechooserdefault.c:11004
 msgid "Unknown"
 msgstr "Nenas"
 
-#: gtk/gtkfilechooserdefault.c:10947
+#: gtk/gtkfilechooserdefault.c:10951
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10949
+#: gtk/gtkfilechooserdefault.c:10953
 msgid "Yesterday at %H:%M"
 msgstr "Do de %H:%M de"
 
@@ -2233,7 +2233,7 @@ msgstr ""
 msgid "Remember _forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:4424 gtk/gtknotebook.c:6930
+#: gtk/gtknotebook.c:4417 gtk/gtknotebook.c:6923
 #, c-format
 msgid "Page %u"
 msgstr "Rûpela %u"
@@ -2299,7 +2299,7 @@ msgstr "_Mezinahiya rûpelê:"
 msgid "_Orientation:"
 msgstr "_Alî:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2397
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2655
 msgid "Page Setup"
 msgstr "Mîhengên Rûpelê"
 
@@ -2422,27 +2422,27 @@ msgstr "Qediya"
 msgid "print operation status|Finished with error"
 msgstr "Qediya lê çewtiyek derket"
 
-#: gtk/gtkprintoperation.c:2003
+#: gtk/gtkprintoperation.c:2043
 #, c-format
 msgid "Preparing %d"
 msgstr "%d tê amadekirin"
 
-#: gtk/gtkprintoperation.c:2005 gtk/gtkprintoperation.c:2259
+#: gtk/gtkprintoperation.c:2045 gtk/gtkprintoperation.c:2301
 #, c-format
 msgid "Preparing"
 msgstr "Tê amadekirin"
 
-#: gtk/gtkprintoperation.c:2008
+#: gtk/gtkprintoperation.c:2048
 #, c-format
 msgid "Printing %d"
 msgstr "%d tê çapkirin"
 
-#: gtk/gtkprintoperation.c:2289
+#: gtk/gtkprintoperation.c:2331
 #, fuzzy, c-format
 msgid "Error creating print preview"
 msgstr "Çewtî di dema destpêkirinê"
 
-#: gtk/gtkprintoperation.c:2292
+#: gtk/gtkprintoperation.c:2334
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
@@ -2518,35 +2518,37 @@ msgstr "Ji bo PrintDlgEx xebatkera nederbasdar"
 msgid "Unspecified error"
 msgstr "Çewtiyeke nenas"
 
-#: gtk/gtkprintunixdialog.c:1716
+#: gtk/gtkprintunixdialog.c:1741
 msgid "Printer"
 msgstr "Çaper"
 
-#: gtk/gtkprintunixdialog.c:1725
+#. Translators: this is the header for the location column in the print dialog
+#: gtk/gtkprintunixdialog.c:1751
 msgid "Location"
 msgstr "Cih"
 
-#: gtk/gtkprintunixdialog.c:1735
+#. Translators: this is the header for the printer status column in the print dialog
+#: gtk/gtkprintunixdialog.c:1762
 msgid "Status"
 msgstr "Rewş"
 
-#: gtk/gtkprintunixdialog.c:1758
+#: gtk/gtkprintunixdialog.c:1785
 msgid "Range"
 msgstr "Beş"
 
-#: gtk/gtkprintunixdialog.c:1762
+#: gtk/gtkprintunixdialog.c:1789
 msgid "_All Pages"
 msgstr "_Hemû Rûpel"
 
-#: gtk/gtkprintunixdialog.c:1769
+#: gtk/gtkprintunixdialog.c:1796
 msgid "C_urrent Page"
 msgstr "Rûpela _Heyî"
 
-#: gtk/gtkprintunixdialog.c:1778
+#: gtk/gtkprintunixdialog.c:1805
 msgid "Pag_es:"
 msgstr "_Rûpel:"
 
-#: gtk/gtkprintunixdialog.c:1779
+#: gtk/gtkprintunixdialog.c:1806
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2554,141 +2556,177 @@ msgstr ""
 "Yek an zêdetir beş diyar bike,\n"
 " wekî 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1798
+#: gtk/gtkprintunixdialog.c:1825
 msgid "Copies"
 msgstr "Kopî"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1803
+#: gtk/gtkprintunixdialog.c:1830
 msgid "Copie_s:"
 msgstr "Kopî:"
 
-#: gtk/gtkprintunixdialog.c:1821
+#: gtk/gtkprintunixdialog.c:1848
 msgid "C_ollate"
 msgstr "B_irêzkirin"
 
-#: gtk/gtkprintunixdialog.c:1829
+#: gtk/gtkprintunixdialog.c:1856
 msgid "_Reverse"
 msgstr "_Berevajî bike"
 
-#: gtk/gtkprintunixdialog.c:1849
+#: gtk/gtkprintunixdialog.c:1876
 msgid "General"
 msgstr "Giştî"
 
-#: gtk/gtkprintunixdialog.c:2252
+#. Translators, this string is used to label the option in the print
+#. * dialog that controls in what order multiple pages are arranged
+#.
+#: gtk/gtkprintunixdialog.c:2416
+#: modules/printbackends/cups/gtkprintbackendcups.c:2728
+#, fuzzy
+msgid "Page Ordering"
+msgstr "Tê amadekirin"
+
+#: gtk/gtkprintunixdialog.c:2422
+#, fuzzy
+msgid "Left to right"
+msgstr "LRM nîşankirina ji çepê ya ber bi rastê ve"
+
+#: gtk/gtkprintunixdialog.c:2423
+#, fuzzy
+msgid "Right to left"
+msgstr "Li ser pelê (file) çap bike"
+
+#: gtk/gtkprintunixdialog.c:2492
 msgid "Layout"
 msgstr "Bicihkirin"
 
-#: gtk/gtkprintunixdialog.c:2256
-msgid "Pages per _side:"
-msgstr "Di her ka_xizekê rûpel:"
-
-#: gtk/gtkprintunixdialog.c:2272
+#: gtk/gtkprintunixdialog.c:2496
 msgid "T_wo-sided:"
 msgstr "Du_alî:"
 
-#: gtk/gtkprintunixdialog.c:2287
+#: gtk/gtkprintunixdialog.c:2511
+msgid "Pages per _side:"
+msgstr "Di her ka_xizekê rûpel:"
+
+#: gtk/gtkprintunixdialog.c:2529
+#, fuzzy
+msgid "Page or_dering:"
+msgstr "Di her ka_xizekê rûpel:"
+
+#: gtk/gtkprintunixdialog.c:2545
 msgid "_Only print:"
 msgstr "_tenê bide çapê:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2302
+#: gtk/gtkprintunixdialog.c:2560
 msgid "All sheets"
 msgstr "Hemû kaxiz"
 
-#: gtk/gtkprintunixdialog.c:2303
+#: gtk/gtkprintunixdialog.c:2561
 msgid "Even sheets"
 msgstr "Kaxizên cot"
 
-#: gtk/gtkprintunixdialog.c:2304
+#: gtk/gtkprintunixdialog.c:2562
 msgid "Odd sheets"
 msgstr "Kaxizên fer"
 
-#: gtk/gtkprintunixdialog.c:2307
+#: gtk/gtkprintunixdialog.c:2565
 msgid "Sc_ale:"
 msgstr "Pî_van:"
 
-#: gtk/gtkprintunixdialog.c:2334
+#: gtk/gtkprintunixdialog.c:2592
 msgid "Paper"
 msgstr "Kaxiz"
 
-#: gtk/gtkprintunixdialog.c:2338
+#: gtk/gtkprintunixdialog.c:2596
 msgid "Paper _type:"
 msgstr "_Cureyê rûpel:"
 
-#: gtk/gtkprintunixdialog.c:2353
+#: gtk/gtkprintunixdialog.c:2611
 msgid "Paper _source:"
 msgstr "Çavkaniya _rûpelan:"
 
-#: gtk/gtkprintunixdialog.c:2368
+#: gtk/gtkprintunixdialog.c:2626
 msgid "Output t_ray:"
 msgstr "Tepsiya _derketanê:"
 
-#: gtk/gtkprintunixdialog.c:2420
+#: gtk/gtkprintunixdialog.c:2678
 msgid "Job Details"
 msgstr "Kîtekîtên Kar"
 
-#: gtk/gtkprintunixdialog.c:2426
+#: gtk/gtkprintunixdialog.c:2684
 msgid "Pri_ority:"
 msgstr "Pê_şikî:"
 
-#: gtk/gtkprintunixdialog.c:2441
+#: gtk/gtkprintunixdialog.c:2699
 msgid "_Billing info:"
 msgstr "_Agahiyên fatorê:"
 
-#: gtk/gtkprintunixdialog.c:2459
+#: gtk/gtkprintunixdialog.c:2717
 msgid "Print Document"
 msgstr "Belgeyê çap bike"
 
-#: gtk/gtkprintunixdialog.c:2465
+#. Translators: this is one of the choices for the print at option
+#. * in the print dialog
+#.
+#: gtk/gtkprintunixdialog.c:2726
 msgid "_Now"
 msgstr "_Niha"
 
-#: gtk/gtkprintunixdialog.c:2472
+#: gtk/gtkprintunixdialog.c:2737
 msgid "A_t:"
 msgstr "_Li:"
 
-#: gtk/gtkprintunixdialog.c:2487
+#: gtk/gtkprintunixdialog.c:2756
 msgid "On _hold"
 msgstr "Li _bendê ye"
 
-#: gtk/gtkprintunixdialog.c:2506
+#: gtk/gtkprintunixdialog.c:2775
 msgid "Add Cover Page"
 msgstr "Rûpelê xuya lê zêde bike"
 
-#: gtk/gtkprintunixdialog.c:2512
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the front cover page.
+#.
+#: gtk/gtkprintunixdialog.c:2784
 msgid "Be_fore:"
 msgstr "_Berê:"
 
-#: gtk/gtkprintunixdialog.c:2527
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the back cover page.
+#.
+#: gtk/gtkprintunixdialog.c:2802
 msgid "_After:"
 msgstr "_Piştî:"
 
-#: gtk/gtkprintunixdialog.c:2542
+#. Translators: this is the tab label for the notebook tab containing
+#. * job-specific options in the print dialog
+#.
+#: gtk/gtkprintunixdialog.c:2820
 msgid "Job"
 msgstr "Kar"
 
-#: gtk/gtkprintunixdialog.c:2608
+#: gtk/gtkprintunixdialog.c:2886
 msgid "Advanced"
 msgstr "Pêşketî"
 
-#: gtk/gtkprintunixdialog.c:2643
+#: gtk/gtkprintunixdialog.c:2921
 msgid "Image Quality"
 msgstr "Kalîteya Dîmen"
 
-#: gtk/gtkprintunixdialog.c:2646
+#: gtk/gtkprintunixdialog.c:2924
 msgid "Color"
 msgstr "Reng"
 
-#: gtk/gtkprintunixdialog.c:2649
+#: gtk/gtkprintunixdialog.c:2927
 msgid "Finishing"
 msgstr "Bidawîkirin"
 
-#: gtk/gtkprintunixdialog.c:2659
+#: gtk/gtkprintunixdialog.c:2937
 msgid "Some of the settings in the dialog conflict"
 msgstr "Hin mîhengên ku di paceyê de ne li hev nakin"
 
-#: gtk/gtkprintunixdialog.c:2682
+#: gtk/gtkprintunixdialog.c:2960
 msgid "Print"
 msgstr "Çap"
 
@@ -4516,51 +4554,154 @@ msgstr "Hilbijartina bixweber"
 msgid "Printer Default"
 msgstr "Standarda Çapgerê"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2686
+#. Translators: These strings name the possible values of the
+#. * job priority option in the print dialog
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "Urgent"
 msgstr "Bilez"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "High"
 msgstr "Bilind"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "Medium"
 msgstr "Orte"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2686
+#: modules/printbackends/cups/gtkprintbackendcups.c:2689
 msgid "Low"
 msgstr "Nizim"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2694
+msgid "Left to right, top to bottom"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2694
+msgid "Left to right, bottom to top"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2695
+msgid "Right to left, top to bottom"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2695
+msgid "Right to left, bottom to top"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2696
+msgid "Top to bottom, left to right"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2696
+msgid "Top to bottom, right to left"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2697
+msgid "Bottom to top, left to right"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2697
+msgid "Bottom to top, right to left"
+msgstr ""
+
+#. Cups specific, non-ppd related settings
+#. Translators, this string is used to label the pages-per-sheet option
+#. * in the print dialog
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2712
+#, fuzzy
+msgid "Pages per Sheet"
+msgstr "Serê Kaxiz Rûpelek"
+
+#. Translators, this string is used to label the job priority option
+#. * in the print dialog
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2749
+#, fuzzy
+msgid "Job Priority"
+msgstr "Pê_şikî:"
+
+#. Translators, this string is used to label the billing info entry
+#. * in the print dialog
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2760
+#, fuzzy
+msgid "Billing Info"
+msgstr "_Agahiyên fatorê:"
+
+#. Translators, these strings are names for various 'standard' cover
+#. * pages that the printing system may support.
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "None"
 msgstr "Ne yek jî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Classified"
 msgstr "Taybet"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Confidential"
 msgstr "Veşartî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Secret"
 msgstr "Veşartî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Standard"
 msgstr "Standart"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Top Secret"
 msgstr "Gelekî Veşartî"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2727
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Unclassified"
 msgstr "Ji rêzê"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2826
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the front cover page.
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2809
+#, fuzzy
+msgid "Before"
+msgstr "_Berê:"
+
+#. Translators, this is the label used for the option in the print
+#. * dialog that controls the back cover page.
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2824
+#, fuzzy
+msgid "After"
+msgstr "_Piştî:"
+
+#. Translators: this is the name of the option that controls when
+#. * a print job is printed. Possible values are 'now', a specified time,
+#. * or 'on hold'
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2844
+#, fuzzy
+msgid "Print at"
+msgstr "Çap"
+
+#. Translators: this is the name of the option that allows the user
+#. * to specify a time when a print job will be printed.
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2855
+#, fuzzy
+msgid "Print at time"
+msgstr "Li ser pelê (file) çap bike"
+
+#. Translators: this format is used to display a custom paper
+#. * size. The two placeholders are replaced with the width and height
+#. * in points. E.g: "Custom 230.4x142.9"
+#.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2890
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "Taybet %.2fx%.2f"
@@ -4571,28 +4712,28 @@ msgstr "Taybet %.2fx%.2f"
 msgid "output.%s"
 msgstr "Derketan %s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:464
+#: modules/printbackends/file/gtkprintbackendfile.c:466
 msgid "Print to File"
 msgstr "Li ser pelê (file) çap bike"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:541
+#: modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:541
+#: modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:553
-#: modules/printbackends/test/gtkprintbackendtest.c:501
+#: modules/printbackends/file/gtkprintbackendfile.c:555
+#: modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "Rûpelê her ka_xizekê:"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:599
+#: modules/printbackends/file/gtkprintbackendfile.c:601
 msgid "File"
 msgstr "Pel"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:608
+#: modules/printbackends/file/gtkprintbackendfile.c:610
 msgid "_Output format"
 msgstr "_Şêweyê derketanê"
 
@@ -4614,7 +4755,7 @@ msgstr "Rêzika Fermanê"
 msgid "test-output.%s"
 msgstr "Derketana-test.%s"
 
-#: modules/printbackends/test/gtkprintbackendtest.c:465
+#: modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "Bi çapera test çap bike"
 

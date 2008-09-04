@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 18:27-0400\n"
+"POT-Creation-Date: 2008-09-04 10:41-0400\n"
 "PO-Revision-Date: 2007-09-11 12:11+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
 "Language-Team: Gujarati <fedora-trans-gu@redhat.com>\n"
@@ -548,27 +548,27 @@ msgstr "જમણો હાંસ્યો"
 msgid "The padding to insert at the right of the widget."
 msgstr "વિજેટની ડાબી અને જમણી બાજુને ઉમેરવામાં આવતી જગ્યા પિક્સેલમાં"
 
-#: gtk/gtkarrow.c:73
+#: gtk/gtkarrow.c:75
 msgid "Arrow direction"
 msgstr "તીરની દિશા"
 
-#: gtk/gtkarrow.c:74
+#: gtk/gtkarrow.c:76
 msgid "The direction the arrow should point"
 msgstr "દિશા કે જે તીરે દર્શાવવી જોઈએ."
 
-#: gtk/gtkarrow.c:81
+#: gtk/gtkarrow.c:84
 msgid "Arrow shadow"
 msgstr "તીરનો પડછાયો."
 
-#: gtk/gtkarrow.c:82
+#: gtk/gtkarrow.c:85
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "તીરની આજુબાજુ તેના પડછાયાનો દેખાવ."
 
-#: gtk/gtkarrow.c:88 gtk/gtkmenuitem.c:279
+#: gtk/gtkarrow.c:92 gtk/gtkmenuitem.c:276
 msgid "Arrow Scaling"
 msgstr "તીરનું માપન"
 
-#: gtk/gtkarrow.c:89
+#: gtk/gtkarrow.c:93
 msgid "Amount of space used up by arrow"
 msgstr "તીર દ્વારા વાપરવામાં આવતી જગ્યાનો જથ્થો"
 
@@ -1740,7 +1740,7 @@ msgstr "સૂચક માટેની જગ્યા"
 msgid "Spacing around check or radio indicator"
 msgstr "ચેક અથવા રેડિયો સૂચકની આસપાસની જગ્યા"
 
-#: gtk/gtkcheckmenuitem.c:87 gtk/gtkmenu.c:502 gtk/gtktoggleaction.c:118
+#: gtk/gtkcheckmenuitem.c:87 gtk/gtkmenu.c:498 gtk/gtktoggleaction.c:118
 #: gtk/gtktogglebutton.c:102 gtk/gtktoggletoolbutton.c:101
 msgid "Active"
 msgstr "કાર્યશીલ"
@@ -1965,7 +1965,7 @@ msgstr "શું હેડરોની આસપાસ સ્તંભને �
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "શું કમ્બો બોક્સ ફોકસ મેળવે છે જ્યારે તે માઉસ સાથે ક્લિક થાય છે"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:557
+#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "Tearoff શીર્ષક"
 
@@ -2082,35 +2082,35 @@ msgstr "મહત્તમ Y"
 msgid "Maximum possible value for Y"
 msgstr "Y માટે મહત્તમ શક્ય કિંમત"
 
-#: gtk/gtkdialog.c:144
+#: gtk/gtkdialog.c:145
 msgid "Has separator"
 msgstr "વિભાજક છે"
 
-#: gtk/gtkdialog.c:145
+#: gtk/gtkdialog.c:146
 msgid "The dialog has a separator bar above its buttons"
 msgstr "સંવાદમાં તેના બટનની ઉપર એક વિભાજક પટ્ટી છે"
 
-#: gtk/gtkdialog.c:190
+#: gtk/gtkdialog.c:191
 msgid "Content area border"
 msgstr "સમાવિષ્ટ વિસ્તારની કિનારી"
 
-#: gtk/gtkdialog.c:191
+#: gtk/gtkdialog.c:192
 msgid "Width of border around the main dialog area"
 msgstr "મુખ્ય સંવાદ વિસ્તારની આસપાસ કિનારીની પહોળાઈ"
 
-#: gtk/gtkdialog.c:198
+#: gtk/gtkdialog.c:199
 msgid "Button spacing"
 msgstr "બટન વચ્ચે છોડેલી જગ્યા"
 
-#: gtk/gtkdialog.c:199
+#: gtk/gtkdialog.c:200
 msgid "Spacing between buttons"
 msgstr "બટનો વચ્ચેની જગ્યા"
 
-#: gtk/gtkdialog.c:207
+#: gtk/gtkdialog.c:208
 msgid "Action area border"
 msgstr "કાર્યશીલ વિસ્તારની કિનારી"
 
-#: gtk/gtkdialog.c:208
+#: gtk/gtkdialog.c:209
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "સંવાદના નીચલા ભાગમાં બટનની આસપાસ કિનારીની પહોળાઈ"
 
@@ -3042,161 +3042,161 @@ msgstr "દૃશ્યમાન"
 msgid "Whether this link has been visited."
 msgstr "શું વિજેટ દૃશ્યમાન છે"
 
-#: gtk/gtkmenu.c:503
+#: gtk/gtkmenu.c:499
 #, fuzzy
 msgid "The currently selected menu item"
 msgstr "વર્તમાનમાં પસંદ કરેલી ફાઈલનું નામ"
 
-#: gtk/gtkmenu.c:517
+#: gtk/gtkmenu.c:513
 #, fuzzy
 msgid "Accel Group"
 msgstr "કાર્યશીલ વિસ્તારની કિનારી"
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:514
 #, fuzzy
 msgid "The accel group holding accelerators for the menu"
 msgstr "આ લેબલ માટે સંજ્ઞાસૂચી પ્રવેગક કી"
 
-#: gtk/gtkmenu.c:532 gtk/gtkmenuitem.c:236
+#: gtk/gtkmenu.c:528 gtk/gtkmenuitem.c:233
 msgid "Accel Path"
 msgstr ""
 
-#: gtk/gtkmenu.c:533
+#: gtk/gtkmenu.c:529
 msgid "An accel path used to conveniently construct accel paths of child items"
 msgstr ""
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:545
 #, fuzzy
 msgid "Attach Widget"
 msgstr "વધારાનું વિજેટ"
 
-#: gtk/gtkmenu.c:550
+#: gtk/gtkmenu.c:546
 #, fuzzy
 msgid "The widget the menu is attached to"
 msgstr "શું મેનુની વસ્તુઓ ચકાસાયેલી છે"
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:554
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "જ્યારે આ મેનુ બંધ કરવામાં આવે ત્યારે વિન્ડો મેનેજર દ્વારા આ શીર્ષક દર્શાવવામાં આવે છે"
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:568
 msgid "Tearoff State"
 msgstr "Tearoff શીર્ષક"
 
-#: gtk/gtkmenu.c:573
+#: gtk/gtkmenu.c:569
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "જ્યારે આ મેનુ બંધ કરવામાં આવે ત્યારે વિન્ડો મેનેજર દ્વારા આ શીર્ષક દર્શાવવામાં આવે છે"
 
-#: gtk/gtkmenu.c:587
+#: gtk/gtkmenu.c:583
 #, fuzzy
 msgid "Monitor"
 msgstr "મહિનો"
 
-#: gtk/gtkmenu.c:588
+#: gtk/gtkmenu.c:584
 msgid "The monitor the menu will be popped up on"
 msgstr ""
 
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:590
 msgid "Vertical Padding"
 msgstr "ઊભી દિશામાં ખાલી જગ્યાઓ ભરવી"
 
-#: gtk/gtkmenu.c:595
+#: gtk/gtkmenu.c:591
 msgid "Extra space at the top and bottom of the menu"
 msgstr "વિજેટની ઉપર અને નીચે બાજુને ઉમેરવામાં આવતી જગ્યા પિક્સેલમાં"
 
-#: gtk/gtkmenu.c:603
+#: gtk/gtkmenu.c:599
 msgid "Horizontal Padding"
 msgstr "આડી દિશામાં ખાલી જગ્યાઓ ભરવી"
 
-#: gtk/gtkmenu.c:604
+#: gtk/gtkmenu.c:600
 msgid "Extra space at the left and right edges of the menu"
 msgstr "મેનુની ડાબી અને જમણી બાજુએ વધારાની જગ્યા"
 
-#: gtk/gtkmenu.c:612
+#: gtk/gtkmenu.c:608
 msgid "Vertical Offset"
 msgstr "ઉભુ માપદંડ"
 
-#: gtk/gtkmenu.c:613
+#: gtk/gtkmenu.c:609
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "જ્યારે મેનુ એ ઉપમેનુ હોય, તો તેને આ પિક્સેલોની સંખ્યાનો ઓફસેટ ઊભી રીતે ગોઠવો"
 
-#: gtk/gtkmenu.c:621
+#: gtk/gtkmenu.c:617
 msgid "Horizontal Offset"
 msgstr "આડુ માપદંડ"
 
-#: gtk/gtkmenu.c:622
+#: gtk/gtkmenu.c:618
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "જ્યારે મેનુ એ ઉપમેનુ હોય, તો તેને આ પિક્સેલોની સંખ્યાનો ઓફસેટ આડી રીતે ગોઠવો"
 
-#: gtk/gtkmenu.c:630
+#: gtk/gtkmenu.c:626
 msgid "Double Arrows"
 msgstr "દ્વિ તીરો"
 
-#: gtk/gtkmenu.c:631
+#: gtk/gtkmenu.c:627
 msgid "When scrolling, always show both arrows."
 msgstr "જ્યારે સરકાવી રહ્યા હોય, ત્યારે હંમેશા બંને તીરો બતાવો."
 
-#: gtk/gtkmenu.c:639
+#: gtk/gtkmenu.c:635
 msgid "Left Attach"
 msgstr "ડાબેથી જોડાયેલુ"
 
-#: gtk/gtkmenu.c:640 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:636 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "બાળની ડાબી બાજુ જોડવા માટેનો સ્તંભનો ક્રમાંક"
 
-#: gtk/gtkmenu.c:647
+#: gtk/gtkmenu.c:643
 msgid "Right Attach"
 msgstr "જમણેથી જોડાયેલુ"
 
-#: gtk/gtkmenu.c:648
+#: gtk/gtkmenu.c:644
 msgid "The column number to attach the right side of the child to"
 msgstr "બાળની ડાબી બાજુ જોડવા માટેનો સ્તંભનો ક્રમાંક"
 
-#: gtk/gtkmenu.c:655
+#: gtk/gtkmenu.c:651
 msgid "Top Attach"
 msgstr "ઉપરથી જોડાયેલુ"
 
-#: gtk/gtkmenu.c:656
+#: gtk/gtkmenu.c:652
 msgid "The row number to attach the top of the child to"
 msgstr "બાળને નીચેથી જોડવાની હરોળની સંખ્યા"
 
-#: gtk/gtkmenu.c:663
+#: gtk/gtkmenu.c:659
 msgid "Bottom Attach"
 msgstr "નીચેથી જોડાયેલુ"
 
-#: gtk/gtkmenu.c:664 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:660 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "બાળને નીચેથી જોડવાની હરોળની સંખ્યા"
 
-#: gtk/gtkmenu.c:751
+#: gtk/gtkmenu.c:747
 msgid "Can change accelerators"
 msgstr "પ્રવેગકો બદલી શકે છે"
 
-#: gtk/gtkmenu.c:752
+#: gtk/gtkmenu.c:748
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "શું મેનુની વસ્તુ ઉપર કી દબાવવાથી મેનુનો પ્રવેગક બદલી શકાય છે"
 
-#: gtk/gtkmenu.c:757
+#: gtk/gtkmenu.c:753
 msgid "Delay before submenus appear"
 msgstr "ઉપમેનુ ઓવે તે પહેલાનો વિલંબ"
 
-#: gtk/gtkmenu.c:758
+#: gtk/gtkmenu.c:754
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "ઉપમેનુ આવતાં પહેલા ન્યૂનતમ સમય કે જ્યાં સુધી નિર્દેશક મેનુ પર રહેવુ જોઈએ"
 
-#: gtk/gtkmenu.c:765
+#: gtk/gtkmenu.c:761
 msgid "Delay before hiding a submenu"
 msgstr "ઉપમેનુ છૂપાવતા પહેલાનો વિલંબ"
 
-#: gtk/gtkmenu.c:766
+#: gtk/gtkmenu.c:762
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3238,38 +3238,38 @@ msgstr "નીચે આવતુ મેનુ દેખાય તે પહે�
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "મેનુબારની ઉપમેનુ દેખાય તે પહેલાનો વિલંબ"
 
-#: gtk/gtkmenuitem.c:204
+#: gtk/gtkmenuitem.c:201
 msgid "Right Justified"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:205
+#: gtk/gtkmenuitem.c:202
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:219
+#: gtk/gtkmenuitem.c:216
 msgid "Submenu"
 msgstr "ઉપમેનુ"
 
-#: gtk/gtkmenuitem.c:220
+#: gtk/gtkmenuitem.c:217
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "મેનુ વસ્તુ સાથે જોડાયેલ ઉપમેનુ, અથવા NULL જો તેની પાસે કંઈ નહિં હોય"
 
-#: gtk/gtkmenuitem.c:237
+#: gtk/gtkmenuitem.c:234
 msgid "Sets the accelerator path of the menu item"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:280
+#: gtk/gtkmenuitem.c:277
 #, fuzzy
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "તીર દ્વારા વાપરવામાં આવતી જગ્યાનો જથ્થો"
 
-#: gtk/gtkmenuitem.c:293
+#: gtk/gtkmenuitem.c:290
 #, fuzzy
 msgid "Width in Characters"
 msgstr "અક્ષરોમાં પહોળાઈ"
 
-#: gtk/gtkmenuitem.c:294
+#: gtk/gtkmenuitem.c:291
 #, fuzzy
 msgid "The minimum desired width of the menu item in characters"
 msgstr "લેબલની જરૂરી પહોળાઈ, અક્ષરોમાં"
@@ -3821,11 +3821,11 @@ msgstr "સુયોજનો"
 msgid "Printer settings"
 msgstr "પ્રિન્ટર સુયોજનો"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:252
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:256
 msgid "Page Setup"
 msgstr "પાનાં સુયોજન"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1012
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1013
 msgid "Track Print Status"
 msgstr "છાપન પરિસ્થિતિ ટ્રેક કરો"
 
@@ -3837,57 +3837,57 @@ msgstr ""
 "TRUE જો છાપન ક્રિયા પરિસ્થિતિ-બદલાયેલ સંકેતોને છાપન  માહિતી પ્રિન્ટર અથવા પ્રિન્ટ "
 "સર્વરને મોકલાઈ ગયા પછી મોકલવાનું ચાલુ રાખશે."
 
-#: gtk/gtkprintoperation.c:884
+#: gtk/gtkprintoperation.c:885
 msgid "Default Page Setup"
 msgstr "મૂળભૂત પાનાં સુયોજન"
 
-#: gtk/gtkprintoperation.c:885
+#: gtk/gtkprintoperation.c:886
 msgid "The GtkPageSetup used by default"
 msgstr "GtkPageSetup મૂળભૂત રીતે વપરાય છે"
 
-#: gtk/gtkprintoperation.c:903 gtk/gtkprintunixdialog.c:270
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:274
 msgid "Print Settings"
 msgstr "છાપન સુયોજનો"
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:271
+#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:275
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings એ સંવાદનો આરંભ કરવા માટે વપરાય છે"
 
-#: gtk/gtkprintoperation.c:922
+#: gtk/gtkprintoperation.c:923
 msgid "Job Name"
 msgstr "ક્રિયા નામ"
 
-#: gtk/gtkprintoperation.c:923
+#: gtk/gtkprintoperation.c:924
 msgid "A string used for identifying the print job."
 msgstr "છાપન ક્રિયા ઓળખવા માટે વપરાતી શબ્દમાળા."
 
-#: gtk/gtkprintoperation.c:947
+#: gtk/gtkprintoperation.c:948
 msgid "Number of Pages"
 msgstr "પાનાંઓની સંખ્યા"
 
-#: gtk/gtkprintoperation.c:948
+#: gtk/gtkprintoperation.c:949
 msgid "The number of pages in the document."
 msgstr "દસ્તાવેજમાં પાનાંઓની સંખ્યા."
 
-#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:260
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:264
 msgid "Current Page"
 msgstr "વર્તમાન પાનું"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:261
+#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:265
 msgid "The current page in the document"
 msgstr "દસ્તાવેજમાં વર્તમાન પાનું"
 
-#: gtk/gtkprintoperation.c:991
+#: gtk/gtkprintoperation.c:992
 msgid "Use full page"
 msgstr "આખું પાનું વાપરો"
 
-#: gtk/gtkprintoperation.c:992
+#: gtk/gtkprintoperation.c:993
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr "TRUE જો સંદર્ભનું મૂળ પાનાંના ખૂણે હોવું જોઈએ અને ચિત્રવાળા વિસ્તારના ખૂણે નહિં"
 
-#: gtk/gtkprintoperation.c:1013
+#: gtk/gtkprintoperation.c:1014
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3895,27 +3895,27 @@ msgstr ""
 "જો TRUE હોય તો છાપન માહિતી પ્રિન્ટર અથવા પ્રિન્ટ સર્વરને મોકલાઈ જાય પછી છાપન "
 "પ્રક્રિયા છાપન ક્રિયા પરિસ્થિતિ પર અહેવાલ આપવા માટે ચાલુ રહેશે."
 
-#: gtk/gtkprintoperation.c:1030
+#: gtk/gtkprintoperation.c:1031
 msgid "Unit"
 msgstr "એકમ"
 
-#: gtk/gtkprintoperation.c:1031
+#: gtk/gtkprintoperation.c:1032
 msgid "The unit in which distances can be measured in the context"
 msgstr "એકમ કે જેમાં અંતરો સંદર્ભમાં માપી શકાય છે"
 
-#: gtk/gtkprintoperation.c:1048
+#: gtk/gtkprintoperation.c:1049
 msgid "Show Dialog"
 msgstr "સંવાદ બતાવો"
 
-#: gtk/gtkprintoperation.c:1049
+#: gtk/gtkprintoperation.c:1050
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE જો છાપતી વખતે પ્રગતિ સંવાદ બતાવાયેલ હોય."
 
-#: gtk/gtkprintoperation.c:1072
+#: gtk/gtkprintoperation.c:1073
 msgid "Allow Async"
 msgstr "અસુમેળને પરવાનગી આપો"
 
-#: gtk/gtkprintoperation.c:1073
+#: gtk/gtkprintoperation.c:1074
 msgid "TRUE if print process may run asynchronous."
 msgstr "જો છાપન પ્રક્રિયા અસુમેળ રીતે ચાલશે તો TRUE"
 
@@ -3947,15 +3947,15 @@ msgstr "વૈવિધ્યપૂર્ણ ટેબ લેબલ"
 msgid "Label for the tab containing custom widgets."
 msgstr "વૈવિધ્યપૂર્ણ વિજેટોને સમાવતી ટેબ માટેનું લેબલ."
 
-#: gtk/gtkprintunixdialog.c:253
+#: gtk/gtkprintunixdialog.c:257
 msgid "The GtkPageSetup to use"
 msgstr "વાપરવા માટેનું GtkPageSetup"
 
-#: gtk/gtkprintunixdialog.c:278
+#: gtk/gtkprintunixdialog.c:282
 msgid "Selected Printer"
 msgstr "પસંદ કરેલ પ્રિન્ટર"
 
-#: gtk/gtkprintunixdialog.c:279
+#: gtk/gtkprintunixdialog.c:283
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter કે જે પસંદ થયેલ છે"
 

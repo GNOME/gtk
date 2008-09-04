@@ -118,3 +118,21 @@ clicked.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_link_button_get_visited ##### -->
+<para>
+
+</para>
+
+@link_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_link_button_set_visited ##### -->
+<para>
+
+</para>
+
+@link_button: 
+@visited: 
+
+

@@ -164,6 +164,16 @@ Storing data on clipboards
 @data: 
 
 
+<!-- ##### USER_FUNCTION GtkClipboardURIReceivedFunc ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@uris: 
+@data: 
+
+
 <!-- ##### USER_FUNCTION GtkClipboardGetFunc ##### -->
 <para>
 A function that will be called to provide the contents of the selection.

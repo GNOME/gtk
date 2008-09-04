@@ -552,6 +552,31 @@ Printing support was added in GTK+ 2.10.
 @number_up: 
 
 
+<!-- ##### MACRO GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_print_settings_get_number_up_layout ##### -->
+<para>
+
+</para>
+
+@settings: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_settings_set_number_up_layout ##### -->
+<para>
+
+</para>
+
+@settings: 
+@number_up_layout: 
+
+
 <!-- ##### MACRO GTK_PRINT_SETTINGS_RESOLUTION ##### -->
 <para>
 

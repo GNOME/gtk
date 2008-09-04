@@ -1,3 +1,7 @@
+2008-09-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.14.0 ===
+
 2008-09-03  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 549711 – Race condition when loading gdk-pixbuf image modules
