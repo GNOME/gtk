@@ -1,3 +1,15 @@
+2008-09-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkenums.h: Add nicks for the GtkNumberUpLayout values.
+
+	* gtk/gtkprintunixdialog.c:
+	* gtk/gtkprintsettings.c: Simplify the handling of GtkNumberUpLayout
+	values. Followup on #535158, proposed by Christian Persch.
+
+2008-09-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* INSTALL.in: Update required versions
+
 2008-09-04  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkhandlebox.c: events return gboolean not gint.

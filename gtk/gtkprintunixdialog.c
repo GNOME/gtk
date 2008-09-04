@@ -2128,50 +2128,30 @@ dialog_get_number_up_layout (GtkPrintUnixDialog *dialog)
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkPrintCapabilities       caps;
   GtkNumberUpLayout          layout;
-  GtkTextDirection           text_direction;
   const gchar               *val;
+  GEnumClass                *enum_class;
+  GEnumValue                *enum_value;
 
   val = gtk_printer_option_widget_get_value (priv->number_up_layout);
-  text_direction = gtk_widget_get_default_direction ();
 
   caps = priv->manual_capabilities | priv->printer_capabilities;
 
-  if (caps & GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT)
-    {
-      if (text_direction == GTK_TEXT_DIR_LTR)
-        layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
-      else
-        layout = GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM;
-    }
-  else
+  if ((caps & GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT) == 0)
+    return GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
+
+  if (gtk_widget_get_direction (GTK_WIDGET (dialog)) == GTK_TEXT_DIR_LTR)
     layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
+  else
+    layout = GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM;
 
   if (val == NULL)
     return layout;
 
-  if (strcmp (val, "lrtb") == 0)
-    return GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
-
-  if (strcmp (val, "lrbt") == 0)
-    return GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP;
-
-  if (strcmp (val, "rltb") == 0)
-    return GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM;
-
-  if (strcmp (val, "rlbt") == 0)
-    return GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP;
-
-  if (strcmp (val, "tblr") == 0)
-    return GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT;
-
-  if (strcmp (val, "tbrl") == 0)
-    return GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_RIGHT_TO_LEFT;
-
-  if (strcmp (val, "btlr") == 0)
-    return GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT;
-
-  if (strcmp (val, "btrl") == 0)
-    return GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT;
+  enum_class = g_type_class_ref (GTK_TYPE_NUMBER_UP_LAYOUT);
+  enum_value = g_enum_get_value_by_nick (enum_class, val);
+  if (enum_value)
+    layout = enum_value->value;
+  g_type_class_unref (enum_class);
 
   return layout;
 }
@@ -2204,7 +2184,7 @@ draw_page_cb (GtkWidget	         *widget,
     (orientation == GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE);
 
   number_up_layout = dialog_get_number_up_layout (dialog);
-  
+
   cr = gdk_cairo_create (widget->window);
   
   cairo_translate (cr, widget->allocation.x, widget->allocation.y);
@@ -2451,6 +2431,10 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
 
       if (dialog_get_pages_per_sheet (dialog) != 1)
         {
+          GEnumClass *enum_class;
+          GEnumValue *enum_value;
+          enum_class = g_type_class_ref (GTK_TYPE_NUMBER_UP_LAYOUT);
+
           if (dialog_get_pages_per_sheet (dialog) == 2)
             {
               option = priv->number_up_layout_2_option;
@@ -2459,42 +2443,20 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
                   layout == GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP ||
                   layout == GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT ||
                   layout == GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT)
-                gtk_printer_option_set (option, "lrtb");
+                enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM);
               else
-                gtk_printer_option_set (option, "rltb");
+                enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM);
             }
           else
             {
               option = priv->number_up_layout_n_option;
 
-              switch (layout)
-                {
-                  case GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM:
-                    gtk_printer_option_set (option, "lrtb");
-                    break;
-                  case GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP:
-                    gtk_printer_option_set (option, "lrbt");
-                    break;
-                  case GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM:
-                    gtk_printer_option_set (option, "rltb");
-                    break;
-                  case GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP:
-                    gtk_printer_option_set (option, "rlbt");
-                    break;
-                  case GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT:
-                    gtk_printer_option_set (option, "tblr");
-                    break;
-                  case GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_RIGHT_TO_LEFT:
-                    gtk_printer_option_set (option, "tbrl");
-                    break;
-                  case GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT:
-                    gtk_printer_option_set (option, "btlr");
-                    break;
-                  case GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT:
-                    gtk_printer_option_set (option, "btrl");
-                    break;
-               }
+              enum_value = g_enum_get_value (enum_class, layout);
             }
+
+          g_assert (enum_value != NULL);
+          gtk_printer_option_set (option, enum_value->value_nick);
+          g_type_class_unref (enum_class);
 
           gtk_printer_option_set_add (set, option);
         }
