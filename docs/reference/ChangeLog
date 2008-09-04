@@ -1,5 +1,9 @@
 2008-09-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtk-sections.txt: Add some missing functions
+
+2008-09-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/tmpl/gtkprintunixdialog.sgml: Document n-up-layout capability
 
 2008-08-29  Matthias Clasen  <mclasen@redhat.com>
