@@ -889,7 +889,7 @@ _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
  * @modifiers:   key modifier of binding to install
  * @signal_name: signal to execute upon activation
  * @n_args:      number of arguments to @signal_name
- * @:            arguments to @signal_name
+ * @Varargs:     arguments to @signal_name
  *
  * Override or install a new key binding for @keyval with @modifiers on
  * @binding_set.  When the binding is activated, @signal_name will be
