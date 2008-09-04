@@ -708,9 +708,9 @@ gtk_binding_entry_clear_internal (GtkBindingSet  *binding_set,
 
 /**
  * gtk_binding_entry_clear:
- * @binding_set:
- * @keyval:
- * @modifiers:
+ * @binding_set: @binding_set to clear an entry of
+ * @keyval:      key value of binding to clear
+ * @modifiers:   key modifier of binding to clear
  *
  * Use of this function is deprecated.
  **/
