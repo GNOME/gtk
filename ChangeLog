@@ -1,5 +1,8 @@
 2008-09-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcolorsel.c: Set page_size to 0 for the spinbuttons
+	in the color selector.
+
 	* README.in: Add a note about the GtkAdjustment clamping change
 
 2008-09-03  Matthias Clasen  <mclasen@redhat.com>
