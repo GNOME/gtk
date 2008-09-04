@@ -1,3 +1,9 @@
+2008-09-04  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkwidget.c (gtk_widget_get_draw_rectangle): when extending
+	the draw rectangle by the "draw-border" style property, subtract
+	"left" from "x" and "top" from "y", not the other way around.
+
 2008-09-03  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gdk/gdkwindow.c:
