@@ -730,11 +730,11 @@ gtk_binding_entry_clear (GtkBindingSet	*binding_set,
  * @keyval:      key value of binding to skip
  * @modifiers:   key modifier of binding to skip
  *
- * Since: 2.12
- *
  * Install a binding on @binding_set which causes key lookups
  * to be aborted, to prevent bindings from lower priority sets
  * to be activated.
+ *
+ * Since: 2.12
  **/
 void
 gtk_binding_entry_skip (GtkBindingSet  *binding_set,
