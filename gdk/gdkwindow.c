@@ -4279,7 +4279,7 @@ apply_redirect_to_children (GdkWindowObject   *private,
  * Redirection is active until gdk_window_remove_redirection()
  * is called.
  *
- * Since: 2.14.
+ * Since: 2.14
  **/
 void
 gdk_window_redirect_to_drawable (GdkWindow   *window,

@@ -1,5 +1,6 @@
 2008-09-03  Matthias Clasen  <mclasen@redhat.com>
 	
+	* gdk/gdkwindow.c:
 	* gtk/gtkbindings.c:
 	* gtk/gtkcolorseldialog.c: More doc fixes
 
