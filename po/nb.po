@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.13.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-27 13:20+0200\n"
-"PO-Revision-Date: 2008-08-27 13:23+0200\n"
+"POT-Creation-Date: 2008-09-04 15:04+0200\n"
+"PO-Revision-Date: 2008-09-04 15:07+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -230,19 +230,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:944
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1205 ../tests/testfilechooser.c:222
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:950
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1210 ../tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Klarte ikke å åpne fil «%s»: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146 ../gdk-pixbuf/gdk-pixbuf-io.c:956
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146 ../gdk-pixbuf/gdk-pixbuf-io.c:962
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Bildefil «%s» inneholder ikke data"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:993
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1257 ../tests/testfilechooser.c:267
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:998
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1262 ../tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -273,54 +273,54 @@ msgstr ""
 "Modul %s for bildelasting eksporterer ikke riktig grensesnitt; kanskje den "
 "er fra en annen GTK-versjon?"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:726 ../gdk-pixbuf/gdk-pixbuf-io.c:755
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:727 ../gdk-pixbuf/gdk-pixbuf-io.c:761
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Bildetype «%s» er ikke støttet"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:825
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:831
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Kunne ikke gjenkjenne bildeformatet for fil «%s»"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:833
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:839
 msgid "Unrecognized image file format"
 msgstr "Ikke-gjenkjent bildeformat"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1002
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1007
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Feil under lasting av bilde «%s»: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1638 ../gdk-pixbuf/io-gdip-utils.c:935
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1641 ../gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Feil under skriving til bildefil: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1684 ../gdk-pixbuf/gdk-pixbuf-io.c:1815
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1686 ../gdk-pixbuf/gdk-pixbuf-io.c:1816
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Dette versjonen av gdk-pixbuf støtter ikke lagring av bildeformatet: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1718
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1720
 msgid "Insufficient memory to save image to callback"
 msgstr "Ikke nok minne til å lagre bilde til callback"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1731
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1733
 msgid "Failed to open temporary file"
 msgstr "Kunne ikke åpne midlertidig fil"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1757
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1759
 msgid "Failed to read from temporary file"
 msgstr "Kunne ikke lese fra midlertidig fil"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1992
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1993
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Feil under åpning av «%s» for skriving: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2017
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2018
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -329,11 +329,11 @@ msgstr ""
 "Feil under lukking av «%s» under skriving av bilde. Det er ikke sikkert at "
 "alle data er lagret: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2237 ../gdk-pixbuf/gdk-pixbuf-io.c:2288
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2238 ../gdk-pixbuf/gdk-pixbuf-io.c:2289
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Ikke nok minne til å lagre bilde til buffer"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2334
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2335
 msgid "Error writing to image stream"
 msgstr "Feil under skriving til bildestrøm"
 
@@ -438,8 +438,8 @@ msgstr "BMP bildeformat"
 msgid "Failure reading GIF: %s"
 msgstr "Feil under lesing av GIF: %s"
 
-#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1477
-#: ../gdk-pixbuf/io-gif.c:1638
+#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1481
+#: ../gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF-fil mangler data (kanskje den har blitt avkuttet på en måte?)"
 
@@ -464,29 +464,29 @@ msgstr "Ugyldig kode funnet"
 msgid "Circular table entry in GIF file"
 msgstr "Sirkulær tabelloppføring i GIF-fil"
 
-#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1464
-#: ../gdk-pixbuf/io-gif.c:1511 ../gdk-pixbuf/io-gif.c:1626
+#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1468
+#: ../gdk-pixbuf/io-gif.c:1515 ../gdk-pixbuf/io-gif.c:1630
 msgid "Not enough memory to load GIF file"
 msgstr "Ikke nok minne til å laste GIF-bilde"
 
-#: ../gdk-pixbuf/io-gif.c:956
+#: ../gdk-pixbuf/io-gif.c:960
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Ikke nok minne til å sette sammen en ramme i GIF-filen"
 
-#: ../gdk-pixbuf/io-gif.c:1128
+#: ../gdk-pixbuf/io-gif.c:1132
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF-bilde er korrupt (ukorrekt LZW-kompresjon)"
 
-#: ../gdk-pixbuf/io-gif.c:1178
+#: ../gdk-pixbuf/io-gif.c:1182
 msgid "File does not appear to be a GIF file"
 msgstr "Filen ser ikke ut til å være en GIF-fil"
 
-#: ../gdk-pixbuf/io-gif.c:1190
+#: ../gdk-pixbuf/io-gif.c:1194
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Versjon %s av GIF filformatet er ikke støttet"
 
-#: ../gdk-pixbuf/io-gif.c:1299
+#: ../gdk-pixbuf/io-gif.c:1303
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -494,11 +494,11 @@ msgstr ""
 "GIF-bildet har ikke globalt fargekart, og et delbilde i det har ikke lokalt "
 "fargekart."
 
-#: ../gdk-pixbuf/io-gif.c:1533
+#: ../gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-bildet er avkuttet eller ukomplett."
 
-#: ../gdk-pixbuf/io-gif.c:1689 ../gdk-pixbuf/io-gdip-gif.c:80
+#: ../gdk-pixbuf/io-gif.c:1693 ../gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "GIF bildeformat"
 
@@ -1511,11 +1511,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Fargevalg"
 
-#: ../gtk/gtkentry.c:5375 ../gtk/gtktextview.c:7686
+#: ../gtk/gtkentry.c:5380 ../gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: ../gtk/gtkentry.c:5389 ../gtk/gtktextview.c:7700
+#: ../gtk/gtkentry.c:5394 ../gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
@@ -4596,8 +4596,7 @@ msgstr "Bunn til topp, høyre til venstre"
 #. * in the print dialog
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2712
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
-msgid "Pages Per Sheet"
+msgid "Pages per Sheet"
 msgstr "Sider per ark"
 
 #. Translators, this string is used to label the job priority option
@@ -4689,34 +4688,38 @@ msgstr "Egendefinert %sx%s"
 msgid "output.%s"
 msgstr "utfil.%s"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:464
+#: ../modules/printbackends/file/gtkprintbackendfile.c:466
 msgid "Print to File"
 msgstr "Skriv ut til fil"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+#: ../modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:541
+#: ../modules/printbackends/file/gtkprintbackendfile.c:543
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:553
-#: ../modules/printbackends/test/gtkprintbackendtest.c:501
+#: ../modules/printbackends/file/gtkprintbackendfile.c:555
+#: ../modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "_Sider per ark:"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:599
+#: ../modules/printbackends/file/gtkprintbackendfile.c:601
 msgid "File"
 msgstr "Fil"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:608
+#: ../modules/printbackends/file/gtkprintbackendfile.c:610
 msgid "_Output format"
 msgstr "F_ormat"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:398
 msgid "Print to LPR"
 msgstr "Skriv ut til LPR"
+
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:424
+msgid "Pages Per Sheet"
+msgstr "Sider per ark"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:431
 msgid "Command Line"
@@ -4728,7 +4731,7 @@ msgstr "Kommandolinje"
 msgid "test-output.%s"
 msgstr "testutfil.%s"
 
-#: ../modules/printbackends/test/gtkprintbackendtest.c:465
+#: ../modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "Skriv ut til testskriver"
 
