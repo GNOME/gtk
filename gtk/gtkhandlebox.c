@@ -105,45 +105,45 @@ enum {
  *          <--------bin_window-------------------->
  */
 
-static void gtk_handle_box_set_property   (GObject      *object,
-					   guint         param_id,
-					   const GValue *value,
-					   GParamSpec   *pspec);
-static void gtk_handle_box_get_property   (GObject     *object,
-					   guint        param_id,
-					   GValue      *value,
-					   GParamSpec  *pspec);
-static void gtk_handle_box_map            (GtkWidget         *widget);
-static void gtk_handle_box_unmap          (GtkWidget         *widget);
-static void gtk_handle_box_realize        (GtkWidget         *widget);
-static void gtk_handle_box_unrealize      (GtkWidget         *widget);
-static void gtk_handle_box_style_set      (GtkWidget         *widget,
-					   GtkStyle          *previous_style);
-static void gtk_handle_box_size_request   (GtkWidget         *widget,
-					   GtkRequisition    *requisition);
-static void gtk_handle_box_size_allocate  (GtkWidget         *widget,
-					   GtkAllocation     *real_allocation);
-static void gtk_handle_box_add            (GtkContainer      *container,
-					   GtkWidget         *widget);
-static void gtk_handle_box_remove         (GtkContainer      *container,
-					   GtkWidget         *widget);
-static void gtk_handle_box_draw_ghost     (GtkHandleBox      *hb);
-static void gtk_handle_box_paint          (GtkWidget         *widget,
-					   GdkEventExpose    *event,
-					   GdkRectangle      *area);
-static gint gtk_handle_box_expose         (GtkWidget         *widget,
-					   GdkEventExpose    *event);
-static gint gtk_handle_box_button_changed (GtkWidget         *widget,
-					   GdkEventButton    *event);
-static gint gtk_handle_box_motion         (GtkWidget         *widget,
-					   GdkEventMotion    *event);
-static gint gtk_handle_box_delete_event   (GtkWidget         *widget,
-					   GdkEventAny       *event);
-static void gtk_handle_box_reattach       (GtkHandleBox      *hb);
-static void gtk_handle_box_end_drag       (GtkHandleBox      *hb,
-					   guint32            time);
+static void     gtk_handle_box_set_property  (GObject        *object,
+                                              guint           param_id,
+                                              const GValue   *value,
+                                              GParamSpec     *pspec);
+static void     gtk_handle_box_get_property  (GObject        *object,
+                                              guint           param_id,
+                                              GValue         *value,
+                                              GParamSpec     *pspec);
+static void     gtk_handle_box_map           (GtkWidget      *widget);
+static void     gtk_handle_box_unmap         (GtkWidget      *widget);
+static void     gtk_handle_box_realize       (GtkWidget      *widget);
+static void     gtk_handle_box_unrealize     (GtkWidget      *widget);
+static void     gtk_handle_box_style_set     (GtkWidget      *widget,
+                                              GtkStyle       *previous_style);
+static void     gtk_handle_box_size_request  (GtkWidget      *widget,
+                                              GtkRequisition *requisition);
+static void     gtk_handle_box_size_allocate (GtkWidget      *widget,
+                                              GtkAllocation  *real_allocation);
+static void     gtk_handle_box_add           (GtkContainer   *container,
+                                              GtkWidget      *widget);
+static void     gtk_handle_box_remove        (GtkContainer   *container,
+                                              GtkWidget      *widget);
+static void     gtk_handle_box_draw_ghost    (GtkHandleBox   *hb);
+static void     gtk_handle_box_paint         (GtkWidget      *widget,
+                                              GdkEventExpose *event,
+                                              GdkRectangle   *area);
+static gboolean gtk_handle_box_expose        (GtkWidget      *widget,
+                                              GdkEventExpose *event);
+static gboolean gtk_handle_box_button_press  (GtkWidget      *widget,
+                                              GdkEventButton *event);
+static gboolean gtk_handle_box_motion        (GtkWidget      *widget,
+                                              GdkEventMotion *event);
+static gboolean gtk_handle_box_delete_event  (GtkWidget      *widget,
+                                              GdkEventAny    *event);
+static void     gtk_handle_box_reattach      (GtkHandleBox   *hb);
+static void     gtk_handle_box_end_drag      (GtkHandleBox   *hb,
+                                              guint32         time);
 
-static guint        handle_box_signals[SIGNAL_LAST] = { 0 };
+static guint handle_box_signals[SIGNAL_LAST] = { 0 };
 
 G_DEFINE_TYPE (GtkHandleBox, gtk_handle_box, GTK_TYPE_BIN)
 
@@ -219,7 +219,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   widget_class->size_request = gtk_handle_box_size_request;
   widget_class->size_allocate = gtk_handle_box_size_allocate;
   widget_class->expose_event = gtk_handle_box_expose;
-  widget_class->button_press_event = gtk_handle_box_button_changed;
+  widget_class->button_press_event = gtk_handle_box_button_press;
   widget_class->delete_event = gtk_handle_box_delete_event;
 
   container_class->add = gtk_handle_box_add;
@@ -869,8 +869,7 @@ gtk_handle_box_get_child_detached (GtkHandleBox *handle_box)
 
 static void
 gtk_handle_box_paint (GtkWidget      *widget,
-		  
-    GdkEventExpose *event,
+                      GdkEventExpose *event,
 		      GdkRectangle   *area)
 {
   GtkBin *bin;
@@ -956,7 +955,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
     GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->expose_event (widget, event);
 }
 
-static gint
+static gboolean
 gtk_handle_box_expose (GtkWidget      *widget,
 		       GdkEventExpose *event)
 {
@@ -1018,9 +1017,9 @@ gtk_handle_box_grab_event (GtkWidget    *widget,
   return FALSE;
 }
 
-static gint
-gtk_handle_box_button_changed (GtkWidget      *widget,
-			       GdkEventButton *event)
+static gboolean
+gtk_handle_box_button_press (GtkWidget      *widget,
+                             GdkEventButton *event)
 {
   GtkHandleBox *hb;
   gboolean event_handled;
@@ -1146,7 +1145,7 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
   return event_handled;
 }
 
-static gint
+static gboolean
 gtk_handle_box_motion (GtkWidget      *widget,
 		       GdkEventMotion *event)
 {
