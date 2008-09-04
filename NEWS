@@ -1,3 +1,53 @@
+Overview of Changes from GTK+ 2.13.7 to 2.14.0
+==============================================
+
+* Bugs fixed:
+ 548354 Remove repeated code in gtk_cell_view_size_allocate
+ 548346 gtk_color_selection_dialog_get_color_selection always...
+ 535158 can't rearrange the order of multi pages per side
+ 545875 evo crashed when trying to print pages 6-7 of a 1 page...
+ 549236 missing Since 2.14 in gtk_file_chooser_get_file
+ 549354 Crash trying to open a file on a remote folder
+ 549734 gtk_selection_data_get_data prototype is wrong
+ 549262 GtkScrolledWindow should not accept focus unless...
+ 549810 Memory leaks in printing code 
+ 437791 Animation is played at the wrong speed
+ 549943 gtk_tool_shell_get_relief_style() always returns...
+ 547449 Entry/Combo popup misplaced after resize
+ 550528 IconView DND interface does not work if only used as source
+ 548993 regression: gdk 2.13 leaves stray windows in certain cases
+ 520165 typeahead find (interactive search) only accepts one char...
+ 528091 Arrows for scrollable notebooks don't work with unset GTK...
+ 528975 Can not maximize the window
+ 543308 FileChooser size problems since gtk+-2.13.x 
+ 549322 Typo in gdk_pixbuf_save_to_buffer docs
+ 549711 Race condition when loading gdk-pixbuf image modules
+
+* Updated translations:
+ Czech (cs)
+ German (de)
+ Spanish (es)
+ Estonian (et)
+ British English (en_GB)
+ Finnish (fi)
+ French (fr)
+ Irish (ga)
+ Galician (gl)
+ Japanese (ja)
+ Hebrew (he)
+ Hungarian (hu)
+ Korean (ko)
+ Maithili (mai)
+ Norwegian bokmål (nb)
+ Polish (pl)
+ Brazilian Portugese (pt_BR)
+ Albanian (sq)
+ Swedish (sw)
+ Telugu (te)
+ Thai (th)
+ Vietnamese (vi)
+
+
 Overview of Changes from GTK+ 2.13.6 to 2.13.7
 ==============================================
 
