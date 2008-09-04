@@ -1,5 +1,13 @@
 2008-09-03  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 550528 - IconView DND interface does not work if only used as
+	source
+
+	* gtk/gtkiconview.c: Make source-only DND work. 
+	Found by Alex Simon
+
+2008-09-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols: Add some missing symbols
 
 2008-09-03  Matthias Clasen  <mclasen@redhat.com>
