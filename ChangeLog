@@ -1,4 +1,8 @@
 2008-09-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: Add some missing symbols
+
+2008-09-03  Matthias Clasen  <mclasen@redhat.com>
 	
 	* gtk/gtkprintsettings.c: Fix order of includes to avoid unwanted
 	PLT entries.
