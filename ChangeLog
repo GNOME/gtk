@@ -1,5 +1,9 @@
 2008-09-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktestutils.c: Fix a typo in the docs.
+
+2008-09-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* NEWS: Updates
 
 	* configure.in: Bump version to 2.14.0

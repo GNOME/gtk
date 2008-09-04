@@ -483,7 +483,7 @@ gtk_test_text_get (GtkWidget *widget)
  * gtk_test_create_widget
  * @widget_type: a valid widget type.
  * @first_property_name: Name of first property to set or %NULL
- * @Varags: value to set the first property to, followed by more
+ * @Varargs: value to set the first property to, followed by more
  *    name-value pairs, terminated by %NULL
  *
  * This function wraps g_object_new() for widget types.
