@@ -48,6 +48,12 @@ Release notes for 2.14
   to GTK_SENSITIVITY_ON, so that the button is always sensitive or
   GTK_SENSITIVITY_OFF to make it insensitive respectively.
 
+* GtkAdjustment now enforces that values are restricted to the
+  range [lower, upper - page_size]. This has always been the documented
+  behaviour, and the recommended practice is to set page_size to 0
+  when using adjustments for simple scalar values, like in a slider
+  or spin button. 
+
 * gdk-pixbuf will use GIO for mime type detection if possible. For
   this to work, shared-mime-info needs to be installed and XDG_DATA_DIRS
   set accordingly at configure time. Otherwise, gdk-pixbuf falls
