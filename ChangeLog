@@ -1,5 +1,9 @@
 2008-09-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version to 2.14.0
+
+2008-09-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcolorsel.c: Set page_size to 0 for the spinbuttons
 	in the color selector.
 
