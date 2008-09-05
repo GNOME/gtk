@@ -292,6 +292,11 @@ gdk_pixbuf_get_module_file (void)
 
 #endif	/* USE_GMODULE */
 
+
+static gboolean
+gdk_pixbuf_load_module_unlocked (GdkPixbufModule *image_module,
+				 GError         **error);
+
 static void 
 gdk_pixbuf_io_init (void)
 {
@@ -318,7 +323,7 @@ gdk_pixbuf_io_init (void)
 #define load_one_builtin_module(format)					\
 	builtin_module = g_new0 (GdkPixbufModule, 1);			\
 	builtin_module->module_name = #format;				\
-	if (_gdk_pixbuf_load_module (builtin_module, NULL))		\
+	if (gdk_pixbuf_load_module_unlocked (builtin_module, NULL))		\
 		file_formats = g_slist_prepend (file_formats, builtin_module);\
 	else								\
 		g_free (builtin_module)
@@ -541,50 +546,6 @@ gdk_pixbuf_io_init (void)
 #endif
 }
 
-#ifdef USE_GMODULE
-
-/* actually load the image handler - gdk_pixbuf_get_module only get a */
-/* reference to the module to load, it doesn't actually load it       */
-/* perhaps these actions should be combined in one function           */
-static gboolean
-_gdk_pixbuf_load_module_unlocked (GdkPixbufModule *image_module,
-				  GError         **error)
-{
-	char *path;
-	GModule *module;
-	gpointer sym;
-		
-        g_return_val_if_fail (image_module->module == NULL, FALSE);
-
-	path = image_module->module_path;
-	module = g_module_open (path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
-
-        if (!module) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_FAILED,
-                             _("Unable to load image-loading module: %s: %s"),
-                             path, g_module_error ());
-                return FALSE;
-        }
-
-	image_module->module = module;        
-        
-        if (g_module_symbol (module, "fill_vtable", &sym)) {
-                GdkPixbufModuleFillVtableFunc func = (GdkPixbufModuleFillVtableFunc) sym;
-                (* func) (image_module);
-                return TRUE;
-        } else {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_FAILED,
-                             _("Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"),
-                             path);
-                return FALSE;
-        }
-}
-
-#endif  /* !USE_GMODULE */
 
 #define module(type) \
   extern void _gdk_pixbuf__##type##_fill_info   (GdkPixbufFormat *info);   \
@@ -617,28 +578,18 @@ module (gdip_tiff);
 
 #undef module
 
-gboolean
-_gdk_pixbuf_load_module (GdkPixbufModule *image_module,
-			 GError         **error)
+/* actually load the image handler - gdk_pixbuf_get_module only get a */
+/* reference to the module to load, it doesn't actually load it       */
+/* perhaps these actions should be combined in one function           */
+static gboolean
+gdk_pixbuf_load_module_unlocked (GdkPixbufModule *image_module,
+				 GError         **error)
 {
-	gboolean ret;
-	gboolean locked = FALSE;
 	GdkPixbufModuleFillInfoFunc fill_info = NULL;
         GdkPixbufModuleFillVtableFunc fill_vtable = NULL;
-
-	/* be extra careful, maybe the module initializes
-	 * the thread system
-	 */
-	if (g_threads_got_initialized) {
-		G_LOCK (init_lock);
-		locked = TRUE;
-	}
-
-	if (image_module->module != NULL) {
-		if (locked)
-			G_UNLOCK (init_lock);
-		return TRUE;
-	}
+		
+        if (image_module->module != NULL)
+               return TRUE;
 
 #define try_module(format,id)						\
 	if (fill_info == NULL &&					\
@@ -715,21 +666,69 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 		image_module->info = g_new0 (GdkPixbufFormat, 1);
 		(* fill_info) (image_module->info);
 
-                ret = TRUE;
+                return TRUE;
 	}
-	else {
+	else 
 #ifdef USE_GMODULE
-		ret = _gdk_pixbuf_load_module_unlocked (image_module, error);
-#else
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-			     _("Image type '%s' is not supported",
-			     image_module->module_name);
+	{
+		char *path;
+		GModule *module;
+		gpointer sym;
 
-		ret = FALSE;
-#endif
+		path = image_module->module_path;
+		module = g_module_open (path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
+
+        	if (!module) {
+                	g_set_error (error,
+                             	     GDK_PIXBUF_ERROR,
+                             	     GDK_PIXBUF_ERROR_FAILED,
+                             	     _("Unable to load image-loading module: %s: %s"),
+                             	     path, g_module_error ());
+                	return FALSE;
+        	}
+
+		image_module->module = module;        
+        
+        	if (g_module_symbol (module, "fill_vtable", &sym)) {
+                	fill_vtable = (GdkPixbufModuleFillVtableFunc) sym;
+                	(* fill_vtable) (image_module);
+                	return TRUE;
+        	} else {
+                	g_set_error (error,
+                        	     GDK_PIXBUF_ERROR,
+                             	     GDK_PIXBUF_ERROR_FAILED,
+                             	     _("Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"),
+                             	     path);
+                	return FALSE;
+        	}
 	}
+#else
+	g_set_error (error,
+		     GDK_PIXBUF_ERROR,
+		     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+		     _("Image type '%s' is not supported",
+		     image_module->module_name);
+	return FALSE;
+#endif  /* !USE_GMODULE */
+}
+
+
+gboolean
+_gdk_pixbuf_load_module (GdkPixbufModule *image_module,
+			 GError         **error)
+{
+	gboolean ret;
+	gboolean locked = FALSE;
+
+	/* be extra careful, maybe the module initializes
+	 * the thread system
+	 */
+	if (g_threads_got_initialized) {
+		G_LOCK (init_lock);
+		locked = TRUE;
+	}
+
+        ret = gdk_pixbuf_load_module_unlocked (image_module, error);
 
 	if (locked)
 		G_UNLOCK (init_lock);

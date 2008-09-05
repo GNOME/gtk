@@ -1,5 +1,12 @@
 2008-09-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf-io.c: Fix a deadlock introduced in the previous
+	commit.
+
+	* gdk-pixbuf-loader.c: Fix the race condition here, too.
+
+2008-09-04  Matthias Clasen  <mclasen@redhat.com>
+
 	* === Released 2.14.0 ===
 
 2008-09-03  Matthias Clasen  <mclasen@redhat.com>
