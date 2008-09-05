@@ -1,3 +1,10 @@
+2008-09-05  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkfilechooserdefault.c (file_list_drag_data_received_cb):
+	stop the emission of the signal also when we bail out early
+	because we don't accept drops from ourselves. Keeps the code from
+	running into a warning in gtktreeview.c.
+
 2008-09-05  Tor Lillqvist  <tml@novell.com>
 
 	* gtk-zip.sh.in: Fetch manpages from share/man where they get
