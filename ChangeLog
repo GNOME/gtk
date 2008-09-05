@@ -1,3 +1,9 @@
+2008-09-05  Tor Lillqvist  <tml@novell.com>
+
+	* gtk-zip.sh.in: Fetch manpages from share/man where they get
+	installed. Don't include pointless entries for directories in the
+	zip files.
+
 2008-09-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version

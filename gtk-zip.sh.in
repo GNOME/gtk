@@ -32,29 +32,24 @@ zip $ZIP share/themes/Default/gtk-2.0-key/gtkrc
 zip $ZIP share/themes/Emacs/gtk-2.0-key/gtkrc
 zip $ZIP share/themes/MS-Windows/gtk-2.0/gtkrc
 
-if [ -f share/locale/de/LC_MESSAGES/gtk20.mo ]; then
-  zip -r $ZIP share/locale/*/LC_MESSAGES/gtk20.mo
-  zip -r $ZIP share/locale/*/LC_MESSAGES/gtk20-properties.mo
-else
-  zip -r $ZIP lib/locale/*/LC_MESSAGES/gtk20.mo
-  zip -r $ZIP lib/locale/*/LC_MESSAGES/gtk20-properties.mo
-fi
+zip $ZIP share/locale/*/LC_MESSAGES/gtk20.mo
+zip $ZIP share/locale/*/LC_MESSAGES/gtk20-properties.mo
 
-zip -r $ZIP share/doc/gtk+-@GTK_VERSION@
+zip -r -D $ZIP share/doc/gtk+-@GTK_VERSION@
 
 rm $DEVZIP
-zip -r $DEVZIP -@ <<EOF
+zip -r -D $DEVZIP -@ <<EOF
 include/gtk-2.0
 include/gail-1.0
 bin/gdk-pixbuf-csource.exe
 bin/gtk-builder-convert
 bin/gtk-demo.exe
 bin/gtk-update-icon-cache.exe
-man/man1/gdk-builder-convert.1
-man/man1/gdk-pixbuf-csource.1
-man/man1/gdk-update-icon-cache.1
-man/man1/gtk-pixbuf-query-loaders.1
-man/man1/gtk-query-immodules-2.0.1
+share/man/man1/gdk-builder-convert.1
+share/man/man1/gdk-pixbuf-csource.1
+share/man/man1/gdk-update-icon-cache.1
+share/man/man1/gtk-pixbuf-query-loaders.1
+share/man/man1/gtk-query-immodules-2.0.1
 lib/libgdk_pixbuf-@GTK_API_VERSION@.dll.a
 lib/gdk_pixbuf-@GTK_API_VERSION@.lib
 lib/libgdk-win32-@GTK_API_VERSION@.dll.a
