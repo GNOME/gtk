@@ -1,3 +1,8 @@
+2008-09-05  Sebastien Bacher  <seb128@ubuntu.com>
+
+	* gdk-pixbuf-io.c: (gdk_pixbuf_load_module_unlocked):
+	bug 550969 - fix a typo which breaks the static build
+
 2008-09-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.14.1 ===

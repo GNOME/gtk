@@ -706,7 +706,7 @@ gdk_pixbuf_load_module_unlocked (GdkPixbufModule *image_module,
 	g_set_error (error,
 		     GDK_PIXBUF_ERROR,
 		     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-		     _("Image type '%s' is not supported",
+		     _("Image type '%s' is not supported"),
 		     image_module->module_name);
 	return FALSE;
 #endif  /* !USE_GMODULE */
