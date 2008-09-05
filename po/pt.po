@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-04 10:40-0400\n"
+"POT-Creation-Date: 2008-09-04 21:57-0400\n"
 "PO-Revision-Date: 2008-08-17 00:05+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -231,19 +231,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:950
-#: gdk-pixbuf/gdk-pixbuf-io.c:1210 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:949
+#: gdk-pixbuf/gdk-pixbuf-io.c:1209 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Falha ao abrir ficheiro '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:962
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:961
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Ficheiro de imagem '%s' não contém dados"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:998
-#: gdk-pixbuf/gdk-pixbuf-io.c:1262 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:997
+#: gdk-pixbuf/gdk-pixbuf-io.c:1261 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -260,12 +260,12 @@ msgstr ""
 "Falha ao ler animação '%s': razão desconhecida, provavelmente um ficheiro de "
 "animação corrompido"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:566
+#: gdk-pixbuf/gdk-pixbuf-io.c:685
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Incapaz de ler módulo de leitura de imagens: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:581
+#: gdk-pixbuf/gdk-pixbuf-io.c:700
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -274,54 +274,54 @@ msgstr ""
 "Módulo de leitura de imagens %s não exporta o interface apropriado; será de "
 "uma versão diferente do GTK?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:727 gdk-pixbuf/gdk-pixbuf-io.c:761
+#: gdk-pixbuf/gdk-pixbuf-io.c:709 gdk-pixbuf/gdk-pixbuf-io.c:760
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Tipo de imagem '%s' não é suportado"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:831
+#: gdk-pixbuf/gdk-pixbuf-io.c:830
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Incapaz de reconhecer o formato de imagem do ficheiro '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:839
+#: gdk-pixbuf/gdk-pixbuf-io.c:838
 msgid "Unrecognized image file format"
 msgstr "Formato de ficheiro de imagem desconhecido"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1007
+#: gdk-pixbuf/gdk-pixbuf-io.c:1006
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Falha ao ler imagem '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1641 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1640 gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Erro ao escrever no ficheiro de imagem: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1686 gdk-pixbuf/gdk-pixbuf-io.c:1816
+#: gdk-pixbuf/gdk-pixbuf-io.c:1685 gdk-pixbuf/gdk-pixbuf-io.c:1815
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Esta compilação do gdk-pixbuf não suporta a gravação do formato de imagem: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1720
+#: gdk-pixbuf/gdk-pixbuf-io.c:1719
 msgid "Insufficient memory to save image to callback"
 msgstr "Memória insuficiente para gravar imagem no invocador"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1733
+#: gdk-pixbuf/gdk-pixbuf-io.c:1732
 msgid "Failed to open temporary file"
 msgstr "Falha ao abrir ficheiro temporário"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1759
+#: gdk-pixbuf/gdk-pixbuf-io.c:1758
 msgid "Failed to read from temporary file"
 msgstr "Falha ao ler o ficheiro temporário"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1993
+#: gdk-pixbuf/gdk-pixbuf-io.c:1992
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Falha ao abrir '%s' para escrita: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2018
+#: gdk-pixbuf/gdk-pixbuf-io.c:2017
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -330,11 +330,11 @@ msgstr ""
 "Falha ao fechar '%s' ao escrever imagem, poderão não ter sido gravados todos "
 "os dados: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2238 gdk-pixbuf/gdk-pixbuf-io.c:2289
+#: gdk-pixbuf/gdk-pixbuf-io.c:2237 gdk-pixbuf/gdk-pixbuf-io.c:2288
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Memória insuficiente para gravar ficheiro num buffer"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2335
+#: gdk-pixbuf/gdk-pixbuf-io.c:2334
 msgid "Error writing to image stream"
 msgstr "Erro ao escrever no fluxo de imagem"
 
@@ -347,7 +347,7 @@ msgstr ""
 "Erro interno: Módulo de leitura de imagem '%s' falhou ao terminar uma "
 "operação, mas não apresentou um motivo para a falha"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:373
+#: gdk-pixbuf/gdk-pixbuf-loader.c:372
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Leitura incremental do tipo de imagem '%s' não é suportado"

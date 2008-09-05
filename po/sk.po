@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-04 10:40-0400\n"
+"POT-Creation-Date: 2008-09-04 21:57-0400\n"
 "PO-Revision-Date: 2008-04-03 22:52+0200\n"
 "Last-Translator: Pavol Šimo <palo.simo@gmail.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -234,19 +234,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:950
-#: gdk-pixbuf/gdk-pixbuf-io.c:1210 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:949
+#: gdk-pixbuf/gdk-pixbuf-io.c:1209 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Nepodarilo sa otvoriť súbor '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:962
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:961
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Súbor obrázku '%s' nič neobsahuje"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:998
-#: gdk-pixbuf/gdk-pixbuf-io.c:1262 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:997
+#: gdk-pixbuf/gdk-pixbuf-io.c:1261 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -261,12 +261,12 @@ msgid ""
 msgstr ""
 "Nepodarilo sa načítať animáciu '%s': príčina neznáma, asi poškodený súbor"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:566
+#: gdk-pixbuf/gdk-pixbuf-io.c:685
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Nepodarilo sa načítať modul pre načítanie obrázkov: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:581
+#: gdk-pixbuf/gdk-pixbuf-io.c:700
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -275,53 +275,53 @@ msgstr ""
 "Modul pre načítanie obrázku %s neexportuje správne rozhranie, možno je z "
 "inej verzie GTK?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:727 gdk-pixbuf/gdk-pixbuf-io.c:761
+#: gdk-pixbuf/gdk-pixbuf-io.c:709 gdk-pixbuf/gdk-pixbuf-io.c:760
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Typ obrázku '%s' nie je podporovaný"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:831
+#: gdk-pixbuf/gdk-pixbuf-io.c:830
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Nepodarilo sa určiť formát súboru obrázku pre '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:839
+#: gdk-pixbuf/gdk-pixbuf-io.c:838
 msgid "Unrecognized image file format"
 msgstr "Nerozpoznaný formát súboru obrázku"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1007
+#: gdk-pixbuf/gdk-pixbuf-io.c:1006
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Nepodarilo sa načítať obrázok '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1641 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1640 gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Chyba pri zápise obrázku: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1686 gdk-pixbuf/gdk-pixbuf-io.c:1816
+#: gdk-pixbuf/gdk-pixbuf-io.c:1685 gdk-pixbuf/gdk-pixbuf-io.c:1815
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Táto verzia gdk-pixbuf nepodporuje ukladanie vo formáte: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1720
+#: gdk-pixbuf/gdk-pixbuf-io.c:1719
 msgid "Insufficient memory to save image to callback"
 msgstr "Nedostatok pamäte pre uloženie obrázku pre spätné volanie"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1733
+#: gdk-pixbuf/gdk-pixbuf-io.c:1732
 msgid "Failed to open temporary file"
 msgstr "Nepodarilo sa otvoriť dočasný súbor"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1759
+#: gdk-pixbuf/gdk-pixbuf-io.c:1758
 msgid "Failed to read from temporary file"
 msgstr "Nepodarilo sa prečítať dočasný súbor"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1993
+#: gdk-pixbuf/gdk-pixbuf-io.c:1992
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Nepodarilo sa otvoriť pre zápis '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2018
+#: gdk-pixbuf/gdk-pixbuf-io.c:2017
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -330,11 +330,11 @@ msgstr ""
 "Nepodarilo sa zavrieť '%s' počas zápisu obrázku. Niektoré dáta nemusia byť "
 "uložené: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2238 gdk-pixbuf/gdk-pixbuf-io.c:2289
+#: gdk-pixbuf/gdk-pixbuf-io.c:2237 gdk-pixbuf/gdk-pixbuf-io.c:2288
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nedostatok pamäte pre uloženie obrázku do medzipamäte"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2335
+#: gdk-pixbuf/gdk-pixbuf-io.c:2334
 msgid "Error writing to image stream"
 msgstr "Chyba pri zápise do prúdu obrázku"
 
@@ -347,7 +347,7 @@ msgstr ""
 "Interná chyba: Modul pre načítavanie obrázku '%s' neskončil načítavať "
 "obrázok, ale pre toto zlyhanie nepodal žiadny dôvod"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:373
+#: gdk-pixbuf/gdk-pixbuf-loader.c:372
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Postupné načítavanie typu obrázku '%s' nie je podporované"

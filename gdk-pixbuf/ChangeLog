@@ -1,5 +1,9 @@
 2008-09-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.14.1 ===
+
+2008-09-04  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk-pixbuf-io.c: Fix a deadlock introduced in the previous
 	commit.
 
