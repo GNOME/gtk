@@ -17,6 +17,7 @@ zip $ZIP -@ <<EOF
 etc/gtk-2.0/gdk-pixbuf.loaders
 etc/gtk-2.0/gtkrc
 etc/gtk-2.0/gtk.immodules
+etc/gtk-2.0/im-multipress.conf
 bin/libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 bin/libgdk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 bin/libgtk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll

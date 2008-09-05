@@ -2,7 +2,7 @@
 
 	* gtk-zip.sh.in: Fetch manpages from share/man where they get
 	installed. Don't include pointless entries for directories in the
-	zip files.
+	zip files. Add etc/gtk-2.0/im-multipress.conf.
 
 2008-09-04  Matthias Clasen  <mclasen@redhat.com>
 
