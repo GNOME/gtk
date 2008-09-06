@@ -1,35 +1,13 @@
 <?xml version="1.0"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY gdk-pixbuf-gdk-pixbuf SYSTEM "xml/gdk-pixbuf.xml">
-<!ENTITY gdk-pixbuf-refcounting SYSTEM "xml/refcounting.xml">
-<!ENTITY gdk-pixbuf-file-loading SYSTEM "xml/file-loading.xml">
-<!ENTITY gdk-pixbuf-file-saving SYSTEM "xml/file-saving.xml">
-<!ENTITY gdk-pixbuf-creating SYSTEM "xml/creating.xml">
-<!ENTITY gdk-pixbuf-inline SYSTEM "xml/inline.xml">
-<!ENTITY gdk-pixbuf-scaling SYSTEM "xml/scaling.xml">
-<!ENTITY gdk-pixbuf-rendering SYSTEM "gdk-pixbuf-rendering.sgml">
-<!ENTITY gdk-pixbuf-from-drawables SYSTEM "gdk-pixbuf-from-drawables.sgml">
-<!ENTITY gdk-pixbuf-util SYSTEM "xml/util.xml">
-<!ENTITY gdk-pixbuf-animation SYSTEM "xml/animation.xml">
-<!ENTITY GdkPixbufLoader SYSTEM "xml/gdk-pixbuf-loader.xml">
-<!ENTITY module-interface SYSTEM "xml/module_interface.xml">
-<!ENTITY initialization-versions SYSTEM "xml/initialization_versions.xml">
-<!ENTITY gdk-pixbuf-gdk-pixbuf-xlib-init SYSTEM "xml/gdk-pixbuf-xlib-init.xml">
-<!ENTITY gdk-pixbuf-gdk-pixbuf-xlib-rendering SYSTEM "xml/gdk-pixbuf-xlib-rendering.xml">
-<!ENTITY gdk-pixbuf-gdk-pixbuf-xlib-from-drawables SYSTEM "xml/gdk-pixbuf-xlib-from-drawables.xml">
-<!ENTITY gdk-pixbuf-gdk-pixbuf-xlib-rgb SYSTEM "xml/gdk-pixbuf-xlib-rgb.xml">
-
-<!ENTITY Porting-From-Imlib SYSTEM "porting-from-imlib.sgml">
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+<!ENTITY version SYSTEM "version.xml">
 
 <!ENTITY gdk-pixbuf "<application>gdk-pixbuf</application>">
 <!ENTITY Imlib "<application>Imlib</application>">
-<!ENTITY version SYSTEM "version.xml">
-<!ENTITY gdk-pixbuf-csource SYSTEM "gdk-pixbuf-csource.xml">
-<!ENTITY gdk-pixbuf-query-loaders SYSTEM "gdk-pixbuf-query-loaders.xml">
 ]>
-
-<book id="index">
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
     <title>The &gdk-pixbuf; Library</title>
     <releaseinfo>Version &version;</releaseinfo>
@@ -93,27 +71,27 @@
       </para>
     </partintro>
 
-    &initialization-versions;
+    <xi:include href="xml/initialization_versions.xml" />
 
-    &gdk-pixbuf-gdk-pixbuf;
-    &gdk-pixbuf-refcounting;
-    &gdk-pixbuf-file-loading;
-    &gdk-pixbuf-file-saving;
-    &gdk-pixbuf-creating;
-    &gdk-pixbuf-inline;
-    &gdk-pixbuf-scaling;
-    &gdk-pixbuf-rendering;
-    &gdk-pixbuf-from-drawables;
-    &gdk-pixbuf-util;
-    &gdk-pixbuf-animation;
+    <xi:include href="xml/gdk-pixbuf.xml" />
+    <xi:include href="xml/refcounting.xml" />
+    <xi:include href="xml/file-loading.xml" />
+    <xi:include href="xml/file-saving.xml" />
+    <xi:include href="xml/creating.xml" />
+    <xi:include href="xml/inline.xml" />
+    <xi:include href="xml/scaling.xml" />
+    <xi:include href="gdk-pixbuf-rendering.sgml" />
+    <xi:include href="gdk-pixbuf-from-drawables.sgml" />
+    <xi:include href="xml/util.xml" />
+    <xi:include href="xml/animation.xml" />
 
-    &GdkPixbufLoader;
-    &module-interface;
+    <xi:include href="xml/gdk-pixbuf-loader.xml" />
+    <xi:include href="xml/module_interface.xml" />
 
-    &gdk-pixbuf-gdk-pixbuf-xlib-init;
-    &gdk-pixbuf-gdk-pixbuf-xlib-rendering;
-    &gdk-pixbuf-gdk-pixbuf-xlib-from-drawables;
-    &gdk-pixbuf-gdk-pixbuf-xlib-rgb;
+    <xi:include href="xml/gdk-pixbuf-xlib-init.xml" />
+    <xi:include href="xml/gdk-pixbuf-xlib-rendering.xml" />
+    <xi:include href="xml/gdk-pixbuf-xlib-from-drawables.xml" />
+    <xi:include href="xml/gdk-pixbuf-xlib-rgb.xml" />
   </reference>
 
   <reference>
@@ -126,33 +104,50 @@
       </para>
     </partintro>
 
-    &gdk-pixbuf-csource;
-    &gdk-pixbuf-query-loaders;
+    <xi:include href="gdk-pixbuf-csource.xml" />
+    <xi:include href="gdk-pixbuf-query-loaders.xml" />
   </reference>
 
-  <index>
-    <title>Index</title>
+  <index id="api-index-full">
+    <title>Index of all symbols</title>
+    <xi:include href="xml/api-index-full.xml"><xi:fallback /></xi:include>
   </index>
-  <index role="deprecated">
+  <index id="api-index-deprecated" role="deprecated">
     <title>Index of deprecated symbols</title>
+    <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
   </index>
-  <index role="2.2">
+  <index id="api-index-2-2" role="2.2">
     <title>Index of new symbols in 2.2</title>
+    <xi:include href="xml/api-index-2.2.xml"><xi:fallback /></xi:include>
   </index>
-  <index role="2.4">
+  <index id="api-index-2-4" role="2.4">
     <title>Index of new symbols in 2.4</title>
+    <xi:include href="xml/api-index-2.4.xml"><xi:fallback /></xi:include>
   </index>  
-  <index role="2.6">
+  <index id="api-index-2-6" role="2.6">
     <title>Index of new symbols in 2.6</title>
+    <xi:include href="xml/api-index-2.6.xml"><xi:fallback /></xi:include>
   </index>  
-  <index role="2.8">
+  <index id="api-index-2-8" role="2.8">
     <title>Index of new symbols in 2.8</title>
+    <xi:include href="xml/api-index-2.8.xml"><xi:fallback /></xi:include>
+  </index>
+  <!-- -->
+  <index id="api-index-2-10" role="2.10">
+    <title>Index of new symbols in 2.10</title>
+    <xi:include href="xml/api-index-2.10.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-2-12" role="2.12">
+    <title>Index of new symbols in 2.12</title>
+    <xi:include href="xml/api-index-2.12.xml"><xi:fallback /></xi:include>
   </index>  
-  <index role="2.14">
+  <!-- -->
+  <index id="api-index-2-14" role="2.14">
     <title>Index of new symbols in 2.14</title>
+    <xi:include href="xml/api-index-2.14.xml"><xi:fallback /></xi:include>
   </index>  
 
-  &Porting-From-Imlib;
+   <xi:include href="porting-from-imlib.sgml" />
 
   <!-- License -->
 

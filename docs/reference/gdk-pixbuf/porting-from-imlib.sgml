@@ -1,3 +1,9 @@
+<?xml version="1.0"?>
+<!DOCTYPE appendix PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY gdk-pixbuf "<application>gdk-pixbuf</application>">
+<!ENTITY Imlib "<application>Imlib</application>">
+]>
   <appendix>
     <title>Porting applications from &Imlib; to &gdk-pixbuf;</title>
 

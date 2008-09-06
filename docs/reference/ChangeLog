@@ -1,3 +1,17 @@
+2008-09-06  Stefan Kost  <ensonic@users.sf.net>
+
+	* gdk-pixbuf/gdk-pixbuf-csource.xml:
+	* gdk-pixbuf/gdk-pixbuf-from-drawables.sgml:
+	* gdk-pixbuf/gdk-pixbuf-query-loaders.xml:
+	* gdk-pixbuf/gdk-pixbuf-rendering.sgml:
+	* gdk-pixbuf/gdk-pixbuf.sgml:
+	* gdk-pixbuf/porting-from-imlib.sgml:
+	* gdk/gdk-docs.sgml:
+	* gdk/multihead.sgml:
+	* libgail-util/gail-libgail-util-docs.sgml:
+	  Use xi:include instead of entities to ease maintenance and speed up
+	  documentation build. Fixes #540967
+
 2008-09-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.14.1 ===
