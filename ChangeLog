@@ -1,3 +1,12 @@
+2008-09-06  Sven Herzberg  <sven@imendio.com>
+
+	Bug 551063 – deprecated marking without a link to what new code should
+	use
+
+	* gdk/gdkevents.c: added inline documentation for gdk_input_add() and
+	gdk_input_add_full(); added replacement hints into the deprecation
+	message
+
 2008-09-05  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkfilechooserdefault.c (file_list_drag_data_received_cb):

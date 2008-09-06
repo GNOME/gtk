@@ -1,3 +1,11 @@
+2008-09-06  Sven Herzberg  <sven@imendio.com>
+
+	Bug 551063 – deprecated marking without a link to what new code should
+	use
+
+	* gdk/tmpl/input.sgml: dropped tmpl documentation for gdk_input_add()
+	and gdk_input_add_full()
+
 2008-09-06  Stefan Kost  <ensonic@users.sf.net>
 
 	* gdk-pixbuf/gdk-pixbuf-csource.xml:

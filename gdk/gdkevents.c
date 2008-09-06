@@ -1015,6 +1015,23 @@ gdk_io_invoke (GIOChannel   *source,
   return TRUE;
 }
 
+/**
+ * gdk_input_add_full:
+ * @source: a file descriptor.
+ * @condition: the condition.
+ * @function: the callback function.
+ * @data: callback data passed to @function.
+ * @destroy: callback function to call with @data when the input
+ * handler is removed.
+ *
+ * Establish a callback when a condition becomes true on
+ * a file descriptor.
+ *
+ * Returns: a tag that can later be used as an argument to
+ * gdk_input_remove().
+ *
+ * Deprecated: Use g_io_add_watch_full() on a #GIOChannel
+ */
 gint
 gdk_input_add_full (gint	      source,
 		    GdkInputCondition condition,
@@ -1048,6 +1065,21 @@ gdk_input_add_full (gint	      source,
   return result;
 }
 
+/**
+ * gdk_input_add:
+ * @source: a file descriptor.
+ * @condition: the condition.
+ * @function: the callback function.
+ * @data: callback data passed to @function.
+ *
+ * Establish a callback when a condition becomes true on
+ * a file descriptor.
+ *
+ * Returns: a tag that can later be used as an argument to
+ * gdk_input_remove().
+ *
+ * Deprecated: Use g_io_add_watch() on a #GIOChannel
+ */
 gint
 gdk_input_add (gint		 source,
 	       GdkInputCondition condition,
