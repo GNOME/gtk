@@ -1,3 +1,8 @@
+2008-09-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_io_init): Plug a small memory
+	leak in an error path.
+
 2008-09-06  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 517233 – Calling gdk_pixbuf_loader_close causes "GError set over

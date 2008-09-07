@@ -402,6 +402,7 @@ gdk_pixbuf_io_init (void)
 		if (file_formats == NULL)
 			g_warning ("Cannot open pixbuf loader module file '%s': %s",
 				   filename, error->message);
+		g_free (filename);
 		return;
 	}
 	
