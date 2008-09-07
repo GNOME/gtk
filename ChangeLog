@@ -1,3 +1,11 @@
+2008-09-06  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 550989 – gdk_display_put_event() should call
+	g_main_context_wakeup()
+
+	* gdk/gdkdisplay.c (gdk_display_put_event): Wake up the main loop
+	after queueing the event. Patch by Owen Taylor
+
 2008-09-07  Yair Hershkovitz  <yairhr@gmail.com>
 
 	Bug 319849 - gtkcalendar look in RTL locales

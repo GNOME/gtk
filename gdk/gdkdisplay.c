@@ -258,6 +258,8 @@ gdk_display_put_event (GdkDisplay     *display,
   g_return_if_fail (event != NULL);
 
   _gdk_event_queue_append (display, gdk_event_copy (event));
+  /* If the main loop is blocking in a different thread, wake it up */
+  g_main_context_wakeup (NULL); 
 }
 
 /**
