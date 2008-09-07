@@ -1958,6 +1958,8 @@ shortcuts_append_bookmarks (GtkFileChooserDefault *impl,
       label = _gtk_file_system_get_bookmark_label (impl->file_system, file);
 
       shortcuts_insert_file (impl, start_row + num_inserted, SHORTCUT_TYPE_FILE, NULL, file, label, TRUE, SHORTCUTS_BOOKMARKS);
+      g_free (label);
+
       num_inserted++;
     }
 
