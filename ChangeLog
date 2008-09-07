@@ -1,5 +1,12 @@
 2008-09-06  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 550062 – Small update in gdk/gdkkeysyms.h
+
+	* gdk/gdkkeysyms.h: Add dead_perspomeni and fix dead_dasia.
+	Patch by Simos Xenitellis
+
+2008-09-06  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 550989 – gdk_display_put_event() should call
 	g_main_context_wakeup()
 

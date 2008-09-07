@@ -19,7 +19,7 @@
  */
 
 /*
- * File auto-generated from script http://svn.gnome.org/viewcvs/gtk%2B/trunk/gdk/gdkkeysyms-update.pl
+ * File auto-generated from script http://svn.gnome.org/viewvc/gtk+/trunk/gdk/gdkkeysyms-update.pl
  * using the input file
  * http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h
  */
@@ -251,6 +251,7 @@
 #define GDK_dead_acute 0xfe51
 #define GDK_dead_circumflex 0xfe52
 #define GDK_dead_tilde 0xfe53
+#define GDK_dead_perispomeni 0xfe53
 #define GDK_dead_macron 0xfe54
 #define GDK_dead_breve 0xfe55
 #define GDK_dead_abovedot 0xfe56
@@ -270,7 +271,7 @@
 #define GDK_dead_abovecomma 0xfe64
 #define GDK_dead_psili 0xfe64
 #define GDK_dead_abovereversedcomma 0xfe65
-#define GDK_dead_dasia 0xfe66
+#define GDK_dead_dasia 0xfe65
 #define GDK_First_Virtual_Screen 0xfed0
 #define GDK_Prev_Virtual_Screen 0xfed1
 #define GDK_Next_Virtual_Screen 0xfed2
