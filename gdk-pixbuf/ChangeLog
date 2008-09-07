@@ -1,3 +1,11 @@
+2008-09-06  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 517233 – Calling gdk_pixbuf_loader_close causes "GError set over
+	the top of a previous GError" warning
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Don't overwrite
+	errors. Reported by Andrey Tsyvarev
+
 2008-09-05  Sebastien Bacher  <seb128@ubuntu.com>
 
 	* gdk-pixbuf-io.c: (gdk_pixbuf_load_module_unlocked):
