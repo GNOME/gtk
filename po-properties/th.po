@@ -1,16 +1,17 @@
 # Thai translation for gtk+.
-# Copyright (C) 2003 Free Software Foundation, Inc.
+# Copyright (C) 2003-2008 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
-# Paisa Seeluangsawat <paisa@users.sf.net>, 2003.
+# Paisa Seeluangsawat <paisa@users.sf.net>, 2003-2004.
+# Theppitak Karoonboonyanan <thep@linux.thai.net>, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-04 21:58-0400\n"
-"PO-Revision-Date: 2004-02-16 21:19-0600\n"
-"Last-Translator: Paisa Seeluangsawat <paisa@users.sf.net>\n"
-"Language-Team: Thai <L10n@opentle.net>\n"
+"PO-Revision-Date: 2008-09-09 00:25+0700\n"
+"Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
+"Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -115,117 +116,116 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:197
 msgid "Program name"
-msgstr ""
+msgstr "ชื่อโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:198
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
-msgstr ""
+msgstr "ชื่อของโปรแกรม ถ้าไม่กำหนด จะใช้ผลจาก g_get_application_name() โดยปริยาย"
 
 #: gtk/gtkaboutdialog.c:212
 msgid "Program version"
-msgstr ""
+msgstr "รุ่นโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:213
-#, fuzzy
 msgid "The version of the program"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "รุ่นของโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:227
 msgid "Copyright string"
-msgstr ""
+msgstr "ข้อความสงวนลิขสิทธิ์"
 
 #: gtk/gtkaboutdialog.c:228
 msgid "Copyright information for the program"
-msgstr ""
+msgstr "ข้อมูลลิขสิทธิ์ของโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:245
 msgid "Comments string"
-msgstr ""
+msgstr "ข้อความอธิบาย"
 
 #: gtk/gtkaboutdialog.c:246
 msgid "Comments about the program"
-msgstr ""
+msgstr "คำอธิบายอย่างสั้นเกี่ยวกับโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:280
 msgid "Website URL"
-msgstr ""
+msgstr "URL ของเว็บไซต์"
 
 #: gtk/gtkaboutdialog.c:281
 msgid "The URL for the link to the website of the program"
-msgstr ""
+msgstr "URL สำหรับลิงก์ไปยังเว็บไซต์ของโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:297
 msgid "Website label"
-msgstr ""
+msgstr "ชื่อเว็บไซต์"
 
 #: gtk/gtkaboutdialog.c:298
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
-msgstr ""
+msgstr "ฉลากสำหรับลิงก์ไปยังเว็บไซต์ของโปรแกรม ถ้าไม่กำหนด จะใช้ URL โดยปริยาย"
 
 #: gtk/gtkaboutdialog.c:314
 msgid "Authors"
-msgstr ""
+msgstr "ผู้เขียน"
 
 #: gtk/gtkaboutdialog.c:315
-#, fuzzy
 msgid "List of authors of the program"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "รายชื่อผู้เขียนโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:331
 msgid "Documenters"
-msgstr ""
+msgstr "ผู้จัดทำเอกสาร"
 
 #: gtk/gtkaboutdialog.c:332
 msgid "List of people documenting the program"
-msgstr ""
+msgstr "รายชื่อผู้จัดทำเอกสารของโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:348
 msgid "Artists"
-msgstr ""
+msgstr "ศิลปิน"
 
 #: gtk/gtkaboutdialog.c:349
 msgid "List of people who have contributed artwork to the program"
-msgstr ""
+msgstr "รายชื่อผู้ที่ร่วมสมทบงานศิลป์ให้กับโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:366
 msgid "Translator credits"
-msgstr ""
+msgstr "เครดิตผู้แปล"
 
 #: gtk/gtkaboutdialog.c:367
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
-msgstr ""
+msgstr "เครดิตสำหรับผู้แปล ข้อความนี้ควรกำหนดให้แปลได้"
 
 #: gtk/gtkaboutdialog.c:382
 msgid "Logo"
-msgstr ""
+msgstr "โลโก้"
 
 #: gtk/gtkaboutdialog.c:383
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
+"โลโก้สำหรับกล่องข้อมูลเกี่ยวกับโปรแกรม ถ้าไม่กำหนด จะใช้ผลลัพธ์จาก "
+"gtk_window_get_default_icon_list() โดยปริยาย"
 
 #: gtk/gtkaboutdialog.c:398
-#, fuzzy
 msgid "Logo Icon Name"
-msgstr "ชื่อแบบอักษร"
+msgstr "ชื่อไอคอนของโลโก้"
 
 #: gtk/gtkaboutdialog.c:399
 msgid "A named icon to use as the logo for the about box."
-msgstr ""
+msgstr "ชื่อไอคอนที่จะใช้เป็นโลโก้ของกล่องข้อมูลเกี่ยวกับโปรแกรม"
 
 #: gtk/gtkaboutdialog.c:412
 msgid "Wrap license"
-msgstr ""
+msgstr "ตัดบรรทัดสัญญาอนุญาต"
 
 #: gtk/gtkaboutdialog.c:413
 msgid "Whether to wrap the license text."
-msgstr ""
+msgstr "กำหนดว่าจะตัดบรรทัดในการแสดงข้อความสัญญาอนุญาตหรือไม่"
 
 #: gtk/gtkaccellabel.c:129
 msgid "Accelerator Closure"
@@ -246,515 +246,514 @@ msgstr ""
 #: gtk/gtkaction.c:199 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:123
 #: gtk/gtktextmark.c:89
 msgid "Name"
-msgstr ""
+msgstr "ชื่อ"
 
 #: gtk/gtkaction.c:200
 msgid "A unique name for the action."
-msgstr ""
+msgstr "ชื่อเฉพาะสำหรับการกระทำ"
 
 #: gtk/gtkaction.c:215 gtk/gtkbutton.c:199 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:316 gtk/gtktoolbutton.c:180
 msgid "Label"
-msgstr ""
+msgstr "ฉลาก"
 
 #: gtk/gtkaction.c:216
 msgid "The label used for menu items and buttons that activate this action."
-msgstr ""
+msgstr "ฉลากสำหรับรายการเมนูและปุ่มที่เรียกใช้การกระทำนี้"
 
 #: gtk/gtkaction.c:223
 msgid "Short label"
-msgstr ""
+msgstr "ฉลากแบบสั้น"
 
 #: gtk/gtkaction.c:224
 msgid "A shorter label that may be used on toolbar buttons."
-msgstr ""
+msgstr "ฉลากแบบสั้นที่สามารถใช้กับปุ่มในแถบเครื่องมือได้"
 
 #: gtk/gtkaction.c:230
 msgid "Tooltip"
-msgstr ""
+msgstr "คำแนะนำเครื่องมือ"
 
 #: gtk/gtkaction.c:231
 msgid "A tooltip for this action."
-msgstr ""
+msgstr "คำแนะนำเครื่องมือสำหรับการกระทำนี้"
 
 #: gtk/gtkaction.c:237
 msgid "Stock Icon"
-msgstr ""
+msgstr "ไอคอนสำเร็จรูป"
 
 #: gtk/gtkaction.c:238
 msgid "The stock icon displayed in widgets representing this action."
-msgstr ""
+msgstr "ไอคอนสำเร็จรูปที่แสดงบนวิดเจ็ตที่แทนการกระทำนี้"
 
 #: gtk/gtkaction.c:255 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
 #: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:210 gtk/gtkwindow.c:592
-#, fuzzy
 msgid "Icon Name"
-msgstr "ชื่อแบบอักษร"
+msgstr "ชื่อไอคอน"
 
 #: gtk/gtkaction.c:256 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:231
 #: gtk/gtkstatusicon.c:211
-#, fuzzy
 msgid "The name of the icon from the icon theme"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ชื่อของไอคอนจากชุดตกแต่งไอคอน"
 
 #: gtk/gtkaction.c:262 gtk/gtktoolitem.c:156
 msgid "Visible when horizontal"
-msgstr ""
+msgstr "แสดงเมื่ออยู่ในแนวนอน"
 
 #: gtk/gtkaction.c:263 gtk/gtktoolitem.c:157
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
-msgstr ""
+msgstr "กำหนดว่าชิ้นส่วนแถบเครื่องมือนี้จะแสดงหรือไม่ เมื่อแถบเครื่องมือวางในแนวนอน"
 
 #: gtk/gtkaction.c:278
 msgid "Visible when overflown"
-msgstr ""
+msgstr "แสดงเมื่อลอยตัว"
 
 #: gtk/gtkaction.c:279
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr ""
+msgstr "ถ้าเป็น TRUE ชิ้นเครื่องมือที่แทนการกระทำนี้จะปรากฏตัวในแถบเครื่องมือที่ลอยตัว"
 
 #: gtk/gtkaction.c:286 gtk/gtktoolitem.c:163
 msgid "Visible when vertical"
-msgstr ""
+msgstr "แสดงเมื่ออยู่ในแนตั้ง"
 
 #: gtk/gtkaction.c:287 gtk/gtktoolitem.c:164
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
-msgstr ""
+msgstr "กำหนดว่าชิ้นส่วนแถบเครื่องมือนี้จะแสดงหรือไม่ เมื่อแถบเครื่องมือวางในแนวตั้ง"
 
 #: gtk/gtkaction.c:294 gtk/gtktoolitem.c:170
 msgid "Is important"
-msgstr ""
+msgstr "สำคัญ"
 
 #: gtk/gtkaction.c:295
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
 msgstr ""
+"กำหนดว่าการกระทำนี้ถือว่าสำคัญหรือไม่ ถ้าเป็น TRUE "
+"ชิ้นเครื่องมือที่แทนการกระทำนี้จะแสดงข้อความในโหมด GTK_TOOLBAR_BOTH_HORIZ"
 
 #: gtk/gtkaction.c:303
 msgid "Hide if empty"
-msgstr ""
+msgstr "ซ่อนถ้าว่างเปล่า"
 
 #: gtk/gtkaction.c:304
 msgid "When TRUE, empty menu proxies for this action are hidden."
-msgstr ""
+msgstr "ถ้าเป็น TRUE เมนูที่แทนการกระทำนี้จะถูกซ่อนถ้าว่างเปล่า"
 
 #: gtk/gtkaction.c:310 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
 #: gtk/gtkwidget.c:523
 msgid "Sensitive"
-msgstr ""
+msgstr "มีการตอบสนอง"
 
 #: gtk/gtkaction.c:311
 msgid "Whether the action is enabled."
-msgstr ""
+msgstr "กำหนดว่าการกระทำนี้เปิดใช้หรือไม่"
 
 #: gtk/gtkaction.c:317 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:269
 #: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:516
 msgid "Visible"
-msgstr ""
+msgstr "ปรากฏ"
 
 #: gtk/gtkaction.c:318
 msgid "Whether the action is visible."
-msgstr ""
+msgstr "กำหนดว่าการกระทำนี้ปรากฏให้เห็นหรือไม่"
 
 #: gtk/gtkaction.c:324
 msgid "Action Group"
-msgstr ""
+msgstr "กลุ่มการกระทำ"
 
 #: gtk/gtkaction.c:325
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
 msgstr ""
+"GtkActionGroup ที่อ็อบเจกต์ GtkAction นี้เชื่อมโยงอยู่ หรือเป็นค่า NULL "
+"(สำหรับใช้เป็นการภายใน)"
 
 #: gtk/gtkactiongroup.c:171
 msgid "A name for the action group."
-msgstr ""
+msgstr "ชื่อของกลุ่มการกระทำ"
 
 #: gtk/gtkactiongroup.c:178
 msgid "Whether the action group is enabled."
-msgstr ""
+msgstr "กำหนดว่ากลุ่มการกระทำนี้เปิดใช้หรือไม่"
 
 #: gtk/gtkactiongroup.c:185
 msgid "Whether the action group is visible."
-msgstr ""
+msgstr "กำหนดว่ากลุ่มการกระทำนี้ปรากฏให้เห็นหรือไม่"
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
 #: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
 msgid "Value"
-msgstr ""
+msgstr "ค่า"
 
 #: gtk/gtkadjustment.c:94
-#, fuzzy
 msgid "The value of the adjustment"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ค่าของอ็อบเจกต์ปรับค่า"
 
 #: gtk/gtkadjustment.c:110
 msgid "Minimum Value"
-msgstr ""
+msgstr "ค่าต่ำสุด"
 
 #: gtk/gtkadjustment.c:111
-#, fuzzy
 msgid "The minimum value of the adjustment"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ค่าต่ำสุดของอ็อบเจกต์ปรับค่า"
 
 #: gtk/gtkadjustment.c:130
 msgid "Maximum Value"
-msgstr ""
+msgstr "ค่าสูงสุด"
 
 #: gtk/gtkadjustment.c:131
-#, fuzzy
 msgid "The maximum value of the adjustment"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ค่าสูงสุดของอ็อบเจกต์ปรับค่า"
 
 #: gtk/gtkadjustment.c:147
 msgid "Step Increment"
-msgstr ""
+msgstr "ค่าที่เพิ่มทีละขั้น"
 
 #: gtk/gtkadjustment.c:148
-#, fuzzy
 msgid "The step increment of the adjustment"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ค่าที่เพิ่มทีละขั้นของอ็อบเจกต์ปรับค่า"
 
 #: gtk/gtkadjustment.c:164
 msgid "Page Increment"
-msgstr ""
+msgstr "ค่าที่เพิ่มทีละหน้า"
 
 #: gtk/gtkadjustment.c:165
-#, fuzzy
 msgid "The page increment of the adjustment"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ค่าที่เพิ่มทีละหน้าของอ็อบเจกต์ปรับค่า"
 
 #: gtk/gtkadjustment.c:184
-#, fuzzy
 msgid "Page Size"
-msgstr "ขนาด"
+msgstr "ขนาดของหน้า"
 
 #: gtk/gtkadjustment.c:185
-#, fuzzy
 msgid "The page size of the adjustment"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ขนาดของหน้าของอ็อบเจกต์ปรับค่า"
 
 #: gtk/gtkalignment.c:90
 msgid "Horizontal alignment"
-msgstr ""
+msgstr "การจัดเรียงตามแนวนอน"
 
 #: gtk/gtkalignment.c:91 gtk/gtkbutton.c:250
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
 msgstr ""
+"ตำแหน่งตามแนวนอนของการจัดวางอ็อบเจกต์ลูกในพื้นที่ว่างที่มี 0.0 คือเรียงชิดขอบซ้าย 1.0 "
+"คือเรียงชิดขอบขวา"
 
 #: gtk/gtkalignment.c:100
 msgid "Vertical alignment"
-msgstr ""
+msgstr "การจัดเรียงตามแนวตั้ง"
 
 #: gtk/gtkalignment.c:101 gtk/gtkbutton.c:269
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
 msgstr ""
+"ตำแหน่งตามแนวตั้งของการจัดวางอ็อบเจกต์ลูกในพื้นที่ว่างที่มี 0.0 คือเรียงชิดขอบบน 1.0 "
+"คือเรียงชิดขอบล่าง"
 
 #: gtk/gtkalignment.c:109
 msgid "Horizontal scale"
-msgstr ""
+msgstr "สัดส่วนตามแนวนอน"
 
 #: gtk/gtkalignment.c:110
 msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
+"ถ้าพื้นที่ว่างตามแนวนอนมีขนาดใหญ่กว่าพื้นที่ที่อ็อบเจกต์ลูกต้องการ "
+"จะให้พื้นที่ส่วนเกินนั้นเท่าไรกับอ็อบเจกต์ลูก 0.0 หมายถึงไม่ให้เลย 1.0 หมายถึงให้ทั้งหมด"
 
 #: gtk/gtkalignment.c:118
 msgid "Vertical scale"
-msgstr ""
+msgstr "สัดส่วนตามแนวตั้ง"
 
 #: gtk/gtkalignment.c:119
 msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
+"ถ้าพื้นที่ว่างตามแนวตั้งมีขนาดใหญ่กว่าพื้นที่ที่อ็อบเจกต์ลูกต้องการ "
+"จะให้พื้นที่ส่วนเกินนั้นเท่าไรกับอ็อบเจกต์ลูก 0.0 หมายถึงไม่ให้เลย 1.0 หมายถึงให้ทั้งหมด"
 
 #: gtk/gtkalignment.c:136
 msgid "Top Padding"
-msgstr ""
+msgstr "การเติมพื้นที่ด้านบน"
 
 #: gtk/gtkalignment.c:137
 msgid "The padding to insert at the top of the widget."
-msgstr ""
+msgstr "พื้นที่ที่จะแทรกที่ด้านบนของวิดเจ็ต"
 
 #: gtk/gtkalignment.c:153
 msgid "Bottom Padding"
-msgstr ""
+msgstr "การเติมพื้นที่ด้านล่าง"
 
 #: gtk/gtkalignment.c:154
 msgid "The padding to insert at the bottom of the widget."
-msgstr ""
+msgstr "พื้นที่ที่จะแทรกที่ด้านล่างของวิดเจ็ต"
 
 #: gtk/gtkalignment.c:170
 msgid "Left Padding"
-msgstr ""
+msgstr "การเติมพื้นที่ด้านซ้าย"
 
 #: gtk/gtkalignment.c:171
 msgid "The padding to insert at the left of the widget."
-msgstr ""
+msgstr "พื้นที่ที่จะแทรกที่ด้านซ้ายของวิดเจ็ต"
 
 #: gtk/gtkalignment.c:187
 msgid "Right Padding"
-msgstr ""
+msgstr "การเติมพื้นที่ด้านขวา"
 
 #: gtk/gtkalignment.c:188
 msgid "The padding to insert at the right of the widget."
-msgstr ""
+msgstr "พื้นที่ที่จะแทรกที่ด้านขวาของวิดเจ็ต"
 
 #: gtk/gtkarrow.c:75
 msgid "Arrow direction"
-msgstr ""
+msgstr "ทิศทางของลูกศร"
 
 #: gtk/gtkarrow.c:76
 msgid "The direction the arrow should point"
-msgstr ""
+msgstr "ทิศทางการชี้ของลูกศร"
 
 #: gtk/gtkarrow.c:84
 msgid "Arrow shadow"
-msgstr ""
+msgstr "เงาของลูกศร"
 
 #: gtk/gtkarrow.c:85
 msgid "Appearance of the shadow surrounding the arrow"
-msgstr ""
+msgstr "รูปแบบของเงารอบลูกศร"
 
 #: gtk/gtkarrow.c:92 gtk/gtkmenuitem.c:276
 msgid "Arrow Scaling"
-msgstr ""
+msgstr "การปรับขนาดของลูกศร"
 
 #: gtk/gtkarrow.c:93
 msgid "Amount of space used up by arrow"
-msgstr ""
+msgstr "เนื้อที่ที่ใช้โดยลูกศร"
 
 #: gtk/gtkaspectframe.c:79
 msgid "Horizontal Alignment"
-msgstr ""
+msgstr "การจัดเรียงตามแนวนอน"
 
 #: gtk/gtkaspectframe.c:80
 msgid "X alignment of the child"
-msgstr ""
+msgstr "การจัดเรียงในแนวแกน X ของอ็อบเจกต์ลูก"
 
 #: gtk/gtkaspectframe.c:86
 msgid "Vertical Alignment"
-msgstr ""
+msgstr "การจัดเรียงตามแนวตั้ง"
 
 #: gtk/gtkaspectframe.c:87
 msgid "Y alignment of the child"
-msgstr ""
+msgstr "การจัดเรียงในแนวแกน Y ของอ็อบเจกต์ลูก"
 
 #: gtk/gtkaspectframe.c:93
 msgid "Ratio"
-msgstr ""
+msgstr "สัดส่วน"
 
 #: gtk/gtkaspectframe.c:94
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr ""
+msgstr "สัดส่วนขนาดในกรณีที่ obey_child เป็น FALSE"
 
 #: gtk/gtkaspectframe.c:100
 msgid "Obey child"
-msgstr ""
+msgstr "ตามอ็อบเจกต์ลูก"
 
 #: gtk/gtkaspectframe.c:101
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr ""
+msgstr "บังคับสัดส่วนขนาดให้ตรงกับของอ็อบเจกต์ลูกของเฟรม"
 
 #: gtk/gtkassistant.c:261
 msgid "Header Padding"
-msgstr ""
+msgstr "การเติมพื้นที่ให้กับหัวเรื่อง"
 
 #: gtk/gtkassistant.c:262
-#, fuzzy
 msgid "Number of pixels around the header."
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "จำนวนจุดที่จะเติมรอบหัวเรื่อง"
 
 #: gtk/gtkassistant.c:269
 msgid "Content Padding"
-msgstr ""
+msgstr "การเติมพื้นที่ให้กับเนื้อหา"
 
 #: gtk/gtkassistant.c:270
-#, fuzzy
 msgid "Number of pixels around the content pages."
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "จำนวนจุดที่จะเติมรอบเนื้อหาของหน้า"
 
 #: gtk/gtkassistant.c:286
-#, fuzzy
 msgid "Page type"
-msgstr "ขนาด"
+msgstr "ชนิดของหน้า"
 
 #: gtk/gtkassistant.c:287
-#, fuzzy
 msgid "The type of the assistant page"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ชนิดของหน้าเครื่องมือช่วย"
 
 #: gtk/gtkassistant.c:304
-#, fuzzy
 msgid "Page title"
-msgstr "ขนาด"
+msgstr "หัวเรื่องของหน้า"
 
 #: gtk/gtkassistant.c:305
-#, fuzzy
 msgid "The title of the assistant page"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "หัวเรื่องของหน้าเครื่องมือช่วย"
 
 #: gtk/gtkassistant.c:321
 msgid "Header image"
-msgstr ""
+msgstr "ภาพที่หัวเรื่อง"
 
 #: gtk/gtkassistant.c:322
 msgid "Header image for the assistant page"
-msgstr ""
+msgstr "ภาพที่หัวเรื่องของหน้าเครื่องมือช่วย"
 
 #: gtk/gtkassistant.c:338
 msgid "Sidebar image"
-msgstr ""
+msgstr "ภาพที่แถบข้าง"
 
 #: gtk/gtkassistant.c:339
 msgid "Sidebar image for the assistant page"
-msgstr ""
+msgstr "ภาพที่แถบข้างของหน้าเครื่องมือช่วย"
 
 #: gtk/gtkassistant.c:354
-#, fuzzy
 msgid "Page complete"
-msgstr "ขนาด"
+msgstr "หน้าเสร็จสมบูรณ์"
 
 #: gtk/gtkassistant.c:355
 msgid "Whether all required fields on the page have been filled out"
-msgstr ""
+msgstr "ระบุว่าข้อมูลที่จำเป็นทั้งหมดของหน้าได้ถูกเติมเรียบร้อยแล้ว"
 
 #: gtk/gtkbbox.c:91
 msgid "Minimum child width"
-msgstr ""
+msgstr "ความกว้างต่ำสุดของอ็อบเจกต์ลูก"
 
 #: gtk/gtkbbox.c:92
 msgid "Minimum width of buttons inside the box"
-msgstr ""
+msgstr "ความกว้างต่ำสุดของปุ่มภายในกล่อง"
 
 #: gtk/gtkbbox.c:100
 msgid "Minimum child height"
-msgstr ""
+msgstr "ความสูงต่ำสุดของอ็อบเจกต์ลูก"
 
 #: gtk/gtkbbox.c:101
 msgid "Minimum height of buttons inside the box"
-msgstr ""
+msgstr "ความสูงต่ำสุดของปุ่มภายในกล่อง"
 
 #: gtk/gtkbbox.c:109
 msgid "Child internal width padding"
-msgstr ""
+msgstr "ความกว้างภายในที่จะเติมให้อ็อบเจกต์ลูก"
 
 #: gtk/gtkbbox.c:110
 msgid "Amount to increase child's size on either side"
-msgstr ""
+msgstr "ขนาดที่จะเพิ่มให้กับอ็อบเจกต์ลูกทางด้านข้าง"
 
 #: gtk/gtkbbox.c:118
 msgid "Child internal height padding"
-msgstr ""
+msgstr "ความสูงภายในที่จะเติมให้อ็อบเจกต์ลูก"
 
 #: gtk/gtkbbox.c:119
 msgid "Amount to increase child's size on the top and bottom"
-msgstr ""
+msgstr "ขนาดที่จะเพิ่มให้กับอ็อบเจกต์ลูกทางด้านบนและด้านล่าง"
 
 #: gtk/gtkbbox.c:127
 msgid "Layout style"
-msgstr ""
+msgstr "รูปแบบการจัดวาง"
 
 #: gtk/gtkbbox.c:128
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
 msgstr ""
+"วิธีการจัดวางปุ่มในกล่อง ค่าที่เป็นไปได้คือ default (แบบปกติ), spread (กระจาย), edge "
+"(ชิดขอบ), start (ชิดต้นกล่อง) และ end (ชิดท้ายกล่อง)"
 
 #: gtk/gtkbbox.c:136
 msgid "Secondary"
-msgstr ""
+msgstr "ชุดรอง"
 
 #: gtk/gtkbbox.c:137
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
-msgstr ""
+msgstr "ถ้าเป็น TRUE อ็อบเจกต์ลูกจะปรากฏในกลุ่มรอง ซึ่งเหมาะสำหรับอ็อบเจกต์อย่างปุ่มวิธีใช้ เป็นต้น"
 
 #: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:666
 #: gtk/gtktreeviewcolumn.c:216
 msgid "Spacing"
-msgstr ""
+msgstr "ช่องไฟ"
 
 #: gtk/gtkbox.c:99
 msgid "The amount of space between children"
-msgstr ""
+msgstr "ช่องไฟระหว่างอ็อบเจกต์ลูก"
 
 #: gtk/gtkbox.c:108 gtk/gtknotebook.c:644 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:580
 msgid "Homogeneous"
-msgstr ""
+msgstr "สม่ำเสมอ"
 
 #: gtk/gtkbox.c:109
 msgid "Whether the children should all be the same size"
-msgstr ""
+msgstr "กำหนดว่าอ็อบเจกต์ลูกควรมีขนาดเท่ากันหมดหรือไม่"
 
 #: gtk/gtkbox.c:116 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:572
 #: gtk/gtktreeviewcolumn.c:272
 msgid "Expand"
-msgstr ""
+msgstr "ขยาย"
 
 #: gtk/gtkbox.c:117
 msgid "Whether the child should receive extra space when the parent grows"
-msgstr ""
+msgstr "กำหนดว่าอ็อบเจกต์ลูกควรได้พื้นที่เพิ่มตามการขยายขนาดของอ็อบเจกต์แม่หรือไม่"
 
 #: gtk/gtkbox.c:123
 msgid "Fill"
-msgstr ""
+msgstr "เติมเต็ม"
 
 #: gtk/gtkbox.c:124
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
+"กำหนดว่าพื้นที่ที่เพิ่มให้กับอ็อบเจกต์ลูกนั้น ควรให้อ็อบเจกต์ลูกขยายตัวจนเต็ม หรือให้ใช้เติมพื้นที่หรือไม่"
 
 #: gtk/gtkbox.c:130
 msgid "Padding"
-msgstr ""
+msgstr "การเติมพื้นที่"
 
 #: gtk/gtkbox.c:131
 msgid "Extra space to put between the child and its neighbors, in pixels"
-msgstr ""
+msgstr "พื้นที่ที่จะเติมลงระหว่างอ็อบเจกต์ลูกกับสิ่งที่อยู่รอบๆ ในหน่วยพิกเซล"
 
 #: gtk/gtkbox.c:137
 msgid "Pack type"
-msgstr ""
+msgstr "วิธีบรรจุ"
 
 #: gtk/gtkbox.c:138 gtk/gtknotebook.c:711
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
-msgstr ""
+msgstr "ค่า GtkPackType ระบุว่าอ็อบเจกต์ลูกบรรจุโดยเทียบกับต้นหรือท้ายของอ็อบเจกต์แม่"
 
 #: gtk/gtkbox.c:144 gtk/gtknotebook.c:689 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:110
 msgid "Position"
-msgstr ""
+msgstr "ตำแหน่ง"
 
 #: gtk/gtkbox.c:145 gtk/gtknotebook.c:690
 msgid "The index of the child in the parent"
-msgstr ""
+msgstr "เลขดัชนีของอ็อบเจกต์ลูกภายในอ็อบเจกต์แม่"
 
 #: gtk/gtkbuilder.c:96
 msgid "Translation Domain"
-msgstr ""
+msgstr "โดเมนคำแปล"
 
 #: gtk/gtkbuilder.c:97
 msgid "The translation domain used by gettext"
-msgstr ""
+msgstr "โดเมนคำแปลที่ gettext ใช้"
 
 #: gtk/gtkbutton.c:200
 msgid ""
@@ -1095,9 +1094,8 @@ msgid "Accelerator key"
 msgstr ""
 
 #: gtk/gtkcellrendereraccel.c:105
-#, fuzzy
 msgid "The keyval of the accelerator"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkcellrendereraccel.c:121
 msgid "Accelerator modifiers"
@@ -1781,9 +1779,8 @@ msgid "Palette to use in the color selector"
 msgstr ""
 
 #: gtk/gtkcolorseldialog.c:102
-#, fuzzy
 msgid "Color Selection"
-msgstr "ปีที่เลือก"
+msgstr ""
 
 #: gtk/gtkcolorseldialog.c:103
 msgid "The color selection embedded in the dialog."
@@ -1794,27 +1791,24 @@ msgid "OK Button"
 msgstr ""
 
 #: gtk/gtkcolorseldialog.c:110
-#, fuzzy
 msgid "The OK button of the dialog."
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Cancel Button"
 msgstr ""
 
 #: gtk/gtkcolorseldialog.c:117
-#, fuzzy
 msgid "The cancel button of the dialog."
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkcolorseldialog.c:123
 msgid "Help Button"
 msgstr ""
 
 #: gtk/gtkcolorseldialog.c:124
-#, fuzzy
 msgid "The help button of the dialog."
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkcombo.c:145
 msgid "Enable arrow keys"
@@ -2261,9 +2255,8 @@ msgid "If TRUE, the popup window will appear for a single match."
 msgstr ""
 
 #: gtk/gtkentrycompletion.c:388
-#, fuzzy
 msgid "Inline selection"
-msgstr "ปีที่เลือก"
+msgstr ""
 
 #: gtk/gtkentrycompletion.c:389
 msgid "Your description here"
@@ -2342,9 +2335,8 @@ msgid "The type of operation that the file selector is performing"
 msgstr ""
 
 #: gtk/gtkfilechooser.c:201
-#, fuzzy
 msgid "File System Backend"
-msgstr "ระบบแฟ้ม"
+msgstr ""
 
 #: gtk/gtkfilechooser.c:202
 msgid "Name of file system backend to use"
@@ -2621,9 +2613,8 @@ msgid "Selection mode"
 msgstr ""
 
 #: gtk/gtkiconview.c:551
-#, fuzzy
 msgid "The selection mode"
-msgstr "ปีที่เลือก"
+msgstr ""
 
 #: gtk/gtkiconview.c:569
 msgid "Pixbuf column"
@@ -2791,9 +2782,8 @@ msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
 
 #: gtk/gtkimage.c:205
-#, fuzzy
 msgid "Pixel size"
-msgstr "ขนาด"
+msgstr ""
 
 #: gtk/gtkimage.c:206
 msgid "Pixel size to use for named icon"
@@ -2975,9 +2965,8 @@ msgid "Whether this link has been visited."
 msgstr ""
 
 #: gtk/gtkmenu.c:499
-#, fuzzy
 msgid "The currently selected menu item"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkmenu.c:513
 msgid "Accel Group"
@@ -3018,9 +3007,8 @@ msgid "A boolean that indicates whether the menu is torn-off"
 msgstr ""
 
 #: gtk/gtkmenu.c:583
-#, fuzzy
 msgid "Monitor"
-msgstr "เดือน"
+msgstr ""
 
 #: gtk/gtkmenu.c:584
 msgid "The monitor the menu will be popped up on"
@@ -3135,9 +3123,8 @@ msgid "Pack direction"
 msgstr ""
 
 #: gtk/gtkmenubar.c:169
-#, fuzzy
 msgid "The pack direction of the menubar"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkmenubar.c:185
 msgid "Child Pack direction"
@@ -3627,9 +3614,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkprinter.c:124
-#, fuzzy
 msgid "Name of the printer"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkprinter.c:130
 msgid "Backend"
@@ -3676,14 +3662,12 @@ msgid "Location"
 msgstr ""
 
 #: gtk/gtkprinter.c:166
-#, fuzzy
 msgid "The location of the printer"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkprinter.c:173
-#, fuzzy
 msgid "The icon name to use for the printer"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkprinter.c:179
 msgid "Job Count"
@@ -3694,9 +3678,8 @@ msgid "Number of jobs queued in the printer"
 msgstr ""
 
 #: gtk/gtkprinter.c:198
-#, fuzzy
 msgid "Paused Printer"
-msgstr "ปีที่เลือก"
+msgstr ""
 
 #: gtk/gtkprinter.c:199
 msgid "TRUE if this printer is paused"
@@ -3739,9 +3722,8 @@ msgid "Printer settings"
 msgstr ""
 
 #: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:256
-#, fuzzy
 msgid "Page Setup"
-msgstr "ขนาด"
+msgstr ""
 
 #: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1013
 msgid "Track Print Status"
@@ -3770,9 +3752,8 @@ msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:923
-#, fuzzy
 msgid "Job Name"
-msgstr "ชื่อแบบอักษร"
+msgstr ""
 
 #: gtk/gtkprintoperation.c:924
 msgid "A string used for identifying the print job."
@@ -3783,18 +3764,16 @@ msgid "Number of Pages"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:949
-#, fuzzy
 msgid "The number of pages in the document."
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:264
 msgid "Current Page"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:265
-#, fuzzy
 msgid "The current page in the document"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkprintoperation.c:992
 msgid "Use full page"
@@ -3837,18 +3816,16 @@ msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
 #: gtk/gtkprintoperation.c:1096 gtk/gtkprintoperation.c:1097
-#, fuzzy
 msgid "Export filename"
-msgstr "ชื่อแฟ้ม"
+msgstr ""
 
 #: gtk/gtkprintoperation.c:1111
 msgid "Status"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:1112
-#, fuzzy
 msgid "The status of the print operation"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkprintoperation.c:1132
 msgid "Status String"
@@ -3871,9 +3848,8 @@ msgid "The GtkPageSetup to use"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:282
-#, fuzzy
 msgid "Selected Printer"
-msgstr "ปีที่เลือก"
+msgstr ""
 
 #: gtk/gtkprintunixdialog.c:283
 msgid "The GtkPrinter which is selected"
@@ -4001,18 +3977,16 @@ msgid "Min vertical bar width"
 msgstr ""
 
 #: gtk/gtkprogressbar.c:261
-#, fuzzy
 msgid "The minimum vertical width of the progress bar"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkprogressbar.c:273
 msgid "Min vertical bar height"
 msgstr ""
 
 #: gtk/gtkprogressbar.c:274
-#, fuzzy
 msgid "The minimum vertical height of the progress bar"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkradioaction.c:111
 msgid "The value"
@@ -4029,9 +4003,8 @@ msgid "The radio action whose group this action belongs to."
 msgstr ""
 
 #: gtk/gtkradioaction.c:144
-#, fuzzy
 msgid "The current value"
-msgstr "สีปัจจุบัน"
+msgstr ""
 
 #: gtk/gtkradioaction.c:145
 msgid ""
@@ -4268,18 +4241,16 @@ msgid "Limit"
 msgstr ""
 
 #: gtk/gtkrecentchooser.c:223
-#, fuzzy
 msgid "The maximum number of items to be displayed"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkrecentchooser.c:237
 msgid "Sort Type"
 msgstr ""
 
 #: gtk/gtkrecentchooser.c:238
-#, fuzzy
 msgid "The sorting order of the items displayed"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkrecentchooser.c:253
 msgid "The current filter for selecting which resources are displayed"
@@ -4371,14 +4342,12 @@ msgid "Space between value text and the slider/trough area"
 msgstr ""
 
 #: gtk/gtkscalebutton.c:192
-#, fuzzy
 msgid "The orientation of the scale"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkscalebutton.c:201
-#, fuzzy
 msgid "The value of the scale"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkscalebutton.c:211
 msgid "The icon size"
@@ -4394,9 +4363,8 @@ msgid "Icons"
 msgstr ""
 
 #: gtk/gtkscalebutton.c:249
-#, fuzzy
 msgid "List of icon names"
-msgstr "ชื่อแบบอักษร"
+msgstr ""
 
 #: gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"
@@ -4585,9 +4553,8 @@ msgid "Fallback Icon Theme Name"
 msgstr ""
 
 #: gtk/gtksettings.c:303
-#, fuzzy
 msgid "Name of a icon theme to fall back to"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtksettings.c:311
 msgid "Key Theme Name"
@@ -4683,9 +4650,8 @@ msgid "Cursor theme name"
 msgstr ""
 
 #: gtk/gtksettings.c:431
-#, fuzzy
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtksettings.c:439
 msgid "Cursor theme size"
@@ -4762,9 +4728,8 @@ msgid "Color scheme"
 msgstr ""
 
 #: gtk/gtksettings.c:552
-#, fuzzy
 msgid "A palette of named colors for use in themes"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtksettings.c:561
 msgid "Enable Animations"
@@ -5030,9 +4995,8 @@ msgid "GIcon"
 msgstr ""
 
 #: gtk/gtkstatusicon.c:244
-#, fuzzy
 msgid "The size of the icon"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkstatusicon.c:254
 msgid "The screen where this status icon will be displayed"
@@ -5055,9 +5019,8 @@ msgid "Whether or not the status icon is embedded"
 msgstr ""
 
 #: gtk/gtkstatusicon.c:302 gtk/gtktrayicon-x11.c:96
-#, fuzzy
 msgid "The orientation of the tray"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtktable.c:129
 msgid "Rows"
@@ -5192,9 +5155,8 @@ msgid "Current text of the buffer"
 msgstr ""
 
 #: gtk/gtktextbuffer.c:212
-#, fuzzy
 msgid "Has selection"
-msgstr "ปีที่เลือก"
+msgstr ""
 
 #: gtk/gtktextbuffer.c:213
 msgid "Whether the buffer has some text currently selected"
@@ -5752,14 +5714,12 @@ msgid "The stock icon displayed on the item"
 msgstr ""
 
 #: gtk/gtktoolbutton.c:218
-#, fuzzy
 msgid "Icon name"
-msgstr "ชื่อแบบอักษร"
+msgstr ""
 
 #: gtk/gtktoolbutton.c:219
-#, fuzzy
 msgid "The name of the themed icon displayed on the item"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtktoolbutton.c:225
 msgid "Icon widget"
@@ -6636,18 +6596,16 @@ msgid "Transient for Window"
 msgstr ""
 
 #: gtk/gtkwindow.c:745
-#, fuzzy
 msgid "The transient parent of the dialog"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: gtk/gtkwindow.c:759
 msgid "Opacity for Window"
 msgstr ""
 
 #: gtk/gtkwindow.c:760
-#, fuzzy
 msgid "The opacity of the window, from 0 to 1"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr ""
 
 #: modules/input/gtkimcontextxim.c:334
 msgid "IM Preedit style"
