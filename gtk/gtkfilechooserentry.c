@@ -1545,7 +1545,7 @@ install_start_autocompletion_idle (GtkFileChooserEntry *chooser_entry)
   if (chooser_entry->start_autocompletion_idle_id != 0)
     return;
 
-  chooser_entry->start_autocompletion_idle_id = g_idle_add (start_autocompletion_idle_handler, chooser_entry);
+  chooser_entry->start_autocompletion_idle_id = gdk_threads_add_idle (start_autocompletion_idle_handler, chooser_entry);
 }
 
 #ifdef G_OS_WIN32

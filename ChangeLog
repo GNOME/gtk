@@ -1,3 +1,9 @@
+2008-09-08  Paolo Borelli  <pborelli@katamail.com>
+
+	* gtk/gtkfilechooserentry.c (install_start_autocompletion_idle):
+	use gdk_threads_add_idle so that the handler acquires the lock
+	since it calls gtk functions.
+
 2008-09-08  Tor Lillqvist  <tml@novell.com>
 
 	* configure.in (debug_default): Correct help string for
