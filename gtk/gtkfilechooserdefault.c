@@ -8677,7 +8677,6 @@ search_add_hit (GtkFileChooserDefault *impl,
                       SEARCH_MODEL_COL_CANCELLABLE, cancellable,
                       -1);
 
-  g_object_unref (file);
   g_free (filename);
 }
 

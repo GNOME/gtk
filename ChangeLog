@@ -1,5 +1,11 @@
 2008-09-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (search_add_hit): Don't unref the
+	GFile we just put into the search_model. This adds a new memory
+	leak...
+
+2008-09-07  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserdefault.c (shortcuts_append_bookmarks): Plug
 	a memory leak.
 
