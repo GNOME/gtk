@@ -102,7 +102,7 @@ gtk_editable_base_init (gpointer g_class)
  * @new_text_length: the text to append
  * @position: position text will be inserted at
  *
- * Appends @new_text_length characters of @text to the contents of the widget,
+ * Appends @new_text_length characters of @new_text to the contents of the widget,
  * at position @position. Note that this position is in characters, not in bytes.
  **/
 void

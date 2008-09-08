@@ -1,3 +1,10 @@
+2008-09-08  Cosimo Cecchi  <cosimoc@gnome.org>
+
+	Bug 551325 - Reference to wrong parameter in gtk_editable_insert_text
+
+	* gtk/gtkeditable.c: Fix a reference to an invalid parameter in the
+	docs.
+
 2008-09-08  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/gtkfilechooserentry.c (install_start_autocompletion_idle):
