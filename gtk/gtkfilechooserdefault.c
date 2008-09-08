@@ -5913,7 +5913,7 @@ get_is_file_filtered (GtkFileChooserDefault *impl,
   needed = gtk_file_filter_get_needed (impl->current_filter);
 
   filter_info.display_name = g_file_info_get_display_name (file_info);
-  filter_info.mime_type = g_file_info_get_content_type (file_info);
+  filter_info.mime_type = g_content_type_get_mime_type (g_file_info_get_content_type (file_info));
 
   if (needed & GTK_FILE_FILTER_FILENAME)
     {
@@ -5935,10 +5935,9 @@ get_is_file_filtered (GtkFileChooserDefault *impl,
 
   result = gtk_file_filter_filter (impl->current_filter, &filter_info);
 
-  if (filter_info.filename)
-    g_free ((gchar *)filter_info.filename);
-  if (filter_info.uri)
-    g_free ((gchar *)filter_info.uri);
+  g_free ((gchar *)filter_info.filename);
+  g_free ((gchar *)filter_info.uri);
+  g_free ((gchar *)filter_info.mime_type);
 
   return !result;
 }
@@ -8593,7 +8592,7 @@ search_hit_get_info_cb (GCancellable *cancellable,
     }
 
   display_name = g_strdup (g_file_info_get_display_name (info));
-  mime_type = g_strdup (g_file_info_get_content_type (info));
+  mime_type = g_content_type_get_mime_type (g_file_info_get_content_type (info));
   is_folder = (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY);
   pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (request->impl),
 				       request->impl->icon_size);

@@ -1,5 +1,10 @@
 2008-09-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c: Actually use mime types, not content
+	types, for mimetype-based filtering, so it may work on win32.
+
+2008-09-07  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserdefault.c (search_selected_foreach_get_file_cb): 
 	Ref the files, to make gtk_file_chooser_get_files() behave as
 	documented.
