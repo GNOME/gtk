@@ -793,7 +793,7 @@ AC_ARG_WITH(libjasper,
                             [disable JPEG2000 loader for gdk-pixbuf])])
 
 AC_ARG_ENABLE(gdiplus,
-            [AC_HELP_STRING([--disable-gdiplus-loaders],
+            [AC_HELP_STRING([--disable-gdiplus],
                             [disable GDI+ loaders for gdk-pixbuf])])
 
 AM_CONDITIONAL(BUILD_GDIPLUS_LOADERS, [ test x$os_win32 = xyes && test x$enable_gdiplus != xno ])

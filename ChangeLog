@@ -1,3 +1,8 @@
+2008-09-08  Tor Lillqvist  <tml@novell.com>
+
+	* configure.in (debug_default): Correct help string for
+	--disable-gdiplus.
+
 2008-09-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c: Actually use mime types, not content
