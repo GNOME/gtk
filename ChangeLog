@@ -1,5 +1,17 @@
 2008-09-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (search_selected_foreach_get_file_cb): 
+	Ref the files, to make gtk_file_chooser_get_files() behave as
+	documented.
+
+	* gtk/gtkfilechooserdefault.c (search_clear_model): Don't leak
+	the content of the search model.
+	
+	* gtk/gtkfilechooserdefault.c (search_hit_get_info_cb): Don't leak
+	the content here, either.
+
+2008-09-07  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserdefault.c (search_add_hit): Don't unref the
 	GFile we just put into the search_model. This adds a new memory
 	leak...
