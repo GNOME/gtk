@@ -852,7 +852,7 @@ gtk_printer_set_is_default (GtkPrinter *printer,
 {
   g_return_if_fail (GTK_IS_PRINTER (printer));
 
-  printer->priv->is_default = TRUE;
+  printer->priv->is_default = val;
 }
 
 /**

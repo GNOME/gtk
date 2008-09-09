@@ -1,3 +1,9 @@
+2008-09-09  Marek Kasik  <mkasik@redhat.com>
+	Bug 551386 – gtk_printer_set_is_default() always sets TRUE
+
+	* gtk/gtkprinter.c: sets the is_default parameter to the value
+	given by caller
+
 2008-09-08  Cosimo Cecchi  <cosimoc@gnome.org>
 
 	Bug 551325 - Reference to wrong parameter in gtk_editable_insert_text
