@@ -664,81 +664,6 @@ init_fake_xinerama (GdkScreen *screen)
 }
 
 static gboolean
-init_randr12 (GdkScreen *screen)
-{
-#ifdef HAVE_RANDR
-  GdkDisplay *display = gdk_screen_get_display (screen);
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
-  Display *dpy = GDK_SCREEN_XDISPLAY (screen);
-  XRRScreenResources *resources;
-  int i;
-  GArray *monitors;
-  gboolean randr12_compat = FALSE;
-
-  if (!display_x11->have_randr12)
-      return FALSE;
-
-  resources = XRRGetScreenResources (screen_x11->xdisplay,
-				     screen_x11->xroot_window);
-  if (!resources)
-    return FALSE;
-  
-  monitors = g_array_sized_new (FALSE, TRUE, sizeof (GdkX11Monitor),
-                                resources->noutput);
-
-  for (i = 0; i < resources->noutput; ++i)
-    {
-      XRROutputInfo *output =
-	XRRGetOutputInfo (dpy, resources, resources->outputs[i]);
-
-      /* Non RandR1.2 X driver have output name "default" */
-      randr12_compat |= !g_strcmp0(output->name, "default");
-
-      if (output->crtc)
-	{
-	  GdkX11Monitor monitor;
-	  XRRCrtcInfo *crtc = XRRGetCrtcInfo (dpy, resources, output->crtc);
-
-	  monitor.geometry.x = crtc->x;
-	  monitor.geometry.y = crtc->y;
-	  monitor.geometry.width = crtc->width;
-	  monitor.geometry.height = crtc->height;
-
-	  /* FIXME: fill this out properly - need EDID parser */
-	  monitor.output = resources->outputs[i];
-	  monitor.width_mm = -1;
-	  monitor.height_mm = -1;
-	  monitor.output_name = NULL;
-	  monitor.manufacturer = NULL;
-
-	  g_array_append_val (monitors, monitor);
-
-          XRRFreeCrtcInfo (crtc);
-	}
-
-      XRRFreeOutputInfo (output);
-    }
-
-  XRRFreeScreenResources (resources);
-
-  /* non RandR 1.2 X driver doesn't return any usable multihead data */
-  if (randr12_compat)
-    {
-      g_array_free (monitors, TRUE);
-      return FALSE;
-    }
-
-  screen_x11->n_monitors = monitors->len;
-  screen_x11->monitors = (GdkX11Monitor *)g_array_free (monitors, FALSE);
-
-  return TRUE;
-#endif
-  
-  return FALSE;
-}
-
-static gboolean
 init_solaris_xinerama (GdkScreen *screen)
 {
 #ifdef HAVE_SOLARIS_XINERAMA
@@ -861,12 +786,12 @@ init_multihead (GdkScreen *screen)
    *  3. Solaris Xinerama
    *  4. XFree86/Xorg Xinerama
    *
-   * We use them in that order.
+   * However, there are performance issues with calling
+   * XRRGetScreenResources() every time an application starts,
+   * so in the RandR case we simply rely on the information being
+   * exported through Xinerama as well.
    */
   if (init_fake_xinerama (screen))
-    return;
-
-  if (init_randr12 (screen))
     return;
 
   if (XQueryExtension (GDK_SCREEN_XDISPLAY (screen), "XINERAMA",

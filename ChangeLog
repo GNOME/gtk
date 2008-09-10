@@ -1,3 +1,10 @@
+Wed Sep 10 06:18:25 2008  Søren Sandmann  <sandmann@redhat.com>
+
+	* gdk/x11/gdkscreen-x11.c (init_multihead): Don't use
+	XRRGetScreenResources() as there are performance issues with
+	it. Instead rely on the fact that the RandR information is
+	propagated through Xinerama as well.
+
 2008-09-09  Marek Kasik  <mkasik@redhat.com>
 	Bug 551386 – gtk_printer_set_is_default() always sets TRUE
 
