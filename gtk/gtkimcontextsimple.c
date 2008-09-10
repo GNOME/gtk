@@ -61,7 +61,7 @@ struct _GtkComposeTableCompact
 static const GtkComposeTableCompact gtk_compose_table_compact = {
   gtk_compose_seqs_compact,
   5,
-  21,
+  22,
   6
 };
 
@@ -340,10 +340,77 @@ check_compact_table (GtkIMContextSimple    *context_simple,
   return FALSE;
 }
 
+/* This function receives a sequence of Unicode characters and tries to
+ * normalize it (NFC). We check for the case the the resulting string
+ * has length 1 (single character).
+ * NFC normalisation normally rearranges diacritic marks, unless these
+ * belong to the same Canonical Combining Class.
+ * If they belong to the same canonical combining class, we produce all
+ * permutations of the diacritic marks, then attempt to normalize.
+ */
+static gboolean
+check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
+{
+  gunichar combination_buffer_temp[GTK_MAX_COMPOSE_LEN];
+  gchar *combination_utf8_temp = NULL;
+  gchar *nfc_temp = NULL;
+  gint n_combinations;
+  gunichar temp_swap;
+  gint i;
+
+  n_combinations = 1;
+
+  for (i = 1; i < n_compose; i++ )
+     n_combinations *= i;
+
+  /* Xorg reuses dead_tilde for the perispomeni diacritic mark.
+   * We check if base character belongs to Greek Unicode block,
+   * and if so, we replace tilde with perispomeni. */
+  if (combination_buffer[0] >= 0x390 && combination_buffer[0] <= 0x3FF)
+    {
+      for (i = 1; i < n_compose; i++ )
+        if (combination_buffer[i] == 0x303)
+          combination_buffer[i] = 0x342;
+    }
+
+  memcpy (combination_buffer_temp, combination_buffer, GTK_MAX_COMPOSE_LEN * sizeof (gunichar) );
+
+  for (i = 0; i < n_combinations; i++ )
+    {
+      g_unicode_canonical_ordering (combination_buffer_temp, n_compose);
+      combination_utf8_temp = g_ucs4_to_utf8 (combination_buffer_temp, -1, NULL, NULL, NULL);
+      nfc_temp = g_utf8_normalize (combination_utf8_temp, -1, G_NORMALIZE_NFC);	       	
+
+      if (g_utf8_strlen (nfc_temp, -1) == 1)
+        {
+          memcpy (combination_buffer, combination_buffer_temp, GTK_MAX_COMPOSE_LEN * sizeof (gunichar) );
+
+          g_free (combination_utf8_temp);
+          g_free (nfc_temp);
+
+          return TRUE;
+        }
+
+      g_free (combination_utf8_temp);
+      g_free (nfc_temp);
+
+      if (n_compose > 2)
+        {
+          temp_swap = combination_buffer_temp[i % (n_compose - 1) + 1];
+          combination_buffer_temp[i % (n_compose - 1) + 1] = combination_buffer_temp[(i+1) % (n_compose - 1) + 1];
+          combination_buffer_temp[(i+1) % (n_compose - 1) + 1] = temp_swap;
+        }
+      else
+        break;
+    }
+
+  return FALSE;
+}
+
 /* When updating the table of the compose sequences, also update here.
  */
 #define IS_DEAD_KEY(k) \
-    (((k) >= GDK_dead_grave && (k) <= GDK_dead_stroke) || \
+    (((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1)) || \
      g_unichar_type (gdk_keyval_to_unicode (k)) == G_UNICODE_NON_SPACING_MARK)
 
 static gboolean
@@ -351,12 +418,9 @@ check_algorithmically (GtkIMContextSimple    *context_simple,
 		       gint                   n_compose)
 
 {
-  int i;
-  int k;
+  gint i;
   gunichar combination_buffer[GTK_MAX_COMPOSE_LEN];
-  gunichar combination_buffer_temp[GTK_MAX_COMPOSE_LEN];
   gchar *combination_utf8, *nfc;
-  gchar *combination_utf8_temp = NULL, *nfc_temp = NULL;
 
   if (n_compose >= GTK_MAX_COMPOSE_LEN)
     return FALSE;
@@ -381,39 +445,33 @@ check_algorithmically (GtkIMContextSimple    *context_simple,
 	    CASE (grave, 0x0300);
 	    CASE (acute, 0x0301);
 	    CASE (circumflex, 0x0302);
-	    CASE (tilde, 0x0303);	/* Normally is 0x303; Greek Polytonic needs 0x342.
-					 * We modified the compose sequences for now
-					 * so that for Greek we don't apply algorithmic
-					 * when perispomeni (0x342) is required
-					 * Filed report; pending, bug 14013 (Freedesktop).
-					 */
+	    CASE (tilde, 0x0303);	/* Also used with perispomeni, 0x342. */
 	    CASE (macron, 0x0304);
 	    CASE (breve, 0x0306);
 	    CASE (abovedot, 0x0307);
 	    CASE (diaeresis, 0x0308);
+	    CASE (hook, 0x0309);
 	    CASE (abovering, 0x030A);
 	    CASE (doubleacute, 0x030B);
 	    CASE (caron, 0x030C);
-	    CASE (cedilla, 0x0327);
-	    CASE (ogonek, 0x0328);	/* Normally is 0x328; Greek Polytonic needs 0x314.
-					 * We modified the compose sequences for now to 
-					 * so that for Greek we don't apply algorithmic
-					 * when dasia (0x314) is required
-					 * Patch accepted in Xorg/GIT, may take a bit to propagate.
-					 */
-	    CASE (dasia, 0x314);
-	    CASE (iota, 0x0345); /* Used by Greek Polytonic layout only; "ypogegrammeni" */
-	    CASE (voiced_sound, 0x3099);	/* Per Markus Kuhn keysyms.txt file. */
-	    CASE (semivoiced_sound, 0x309a);	/* Per Markus Kuhn keysyms.txt file. */
+	    CASE (abovecomma, 0x0313);         /* Equivalent to psili */
+	    CASE (abovereversedcomma, 0x0314); /* Equivalent to dasia */
+	    CASE (horn, 0x031B);	/* Legacy use for psili, 0x313 (or 0x343). */
 	    CASE (belowdot, 0x0323);
-	    CASE (hook, 0x0309);
-	    CASE (horn, 0x031b);	/* Normally is 0x31b; Greek Polytonic needs 0x313 (or 0x343).
-					 * We modified the compose sequences for now to 
-					 * so that for Greek we don't apply algorithmic
-					 * when psili (0x343) is required
-					 * Patch accepted in Xorg/GIT, may take a bit to propagate.
-					 */
-	    CASE (psili, 0x343);
+	    CASE (cedilla, 0x0327);
+	    CASE (ogonek, 0x0328);	/* Legacy use for dasia, 0x314.*/
+	    CASE (iota, 0x0345);
+	    CASE (voiced_sound, 0x3099);	/* Per Markus Kuhn keysyms.txt file. */
+	    CASE (semivoiced_sound, 0x309A);	/* Per Markus Kuhn keysyms.txt file. */
+
+	    /* The following cases are to be removed once xkeyboard-config,
+ 	     * xorg are fully updated.
+ 	     */
+            /* Workaround for typo in 1.4.x xserver-xorg */
+	    case 0xfe66: combination_buffer[i+1] = 0x314; break;
+	    /* CASE (dasia, 0x314); */
+	    /* CASE (perispomeni, 0x342); */
+	    /* CASE (psili, 0x343); */
 #undef CASE
 	    default:
 	      combination_buffer[i+1] = gdk_keyval_to_unicode (context_simple->compose_buffer[i]);
@@ -421,56 +479,24 @@ check_algorithmically (GtkIMContextSimple    *context_simple,
 	  i--;
 	}
       
-      if (n_compose > 2)
-	{
-	  gint n_combinations;
-	  gunichar temp_swap;
+      /* If the buffer normalizes to a single character, 
+       * then modify the order of combination_buffer accordingly, if necessary,
+       * and return TRUE. 
+       */
+      if (check_normalize_nfc (combination_buffer, n_compose))
+        {
+      	  combination_utf8 = g_ucs4_to_utf8 (combination_buffer, -1, NULL, NULL, NULL);
+          nfc = g_utf8_normalize (combination_utf8, -1, G_NORMALIZE_NFC);
 
-	  /* We calculate the number of permutations of the diacritic marks, factorial(n_compose-1).
- 	   * When diacritic marks belong to the same Canonical Combining Class, 
- 	   * a normalisation does not attempt reorder them, thus we do this ourselves.
-   	   */
-	  n_combinations = 1;
-	  for (k = 1; k < n_compose; k++ )
-	     n_combinations *= k;
+          gunichar value = g_utf8_get_char (nfc);
+          gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
+          context_simple->compose_buffer[0] = 0;
 
-	  memcpy (combination_buffer_temp, combination_buffer, GTK_MAX_COMPOSE_LEN * sizeof (gunichar) );
+          g_free (combination_utf8);
+          g_free (nfc);
 
-	  for (k = 0; k < n_combinations; k++ )
-	     {
-	       g_unicode_canonical_ordering (combination_buffer_temp, n_compose);
-      	       combination_utf8_temp = g_ucs4_to_utf8 (combination_buffer_temp, -1, NULL, NULL, NULL);
-               nfc_temp = g_utf8_normalize (combination_utf8_temp, -1, G_NORMALIZE_NFC);	       	
-
-	       if (g_utf8_strlen (nfc_temp, -1) == 1)
-	         {
-	  	   memcpy (combination_buffer, combination_buffer_temp, GTK_MAX_COMPOSE_LEN * sizeof (gunichar) );
-		   break;
-		 }
-
-	       temp_swap = combination_buffer_temp[k % (n_compose - 1) + 1];
-	       combination_buffer_temp[k % (n_compose - 1) + 1] = combination_buffer_temp[(k+1) % (n_compose - 1) + 1];
-	       combination_buffer_temp[(k+1) % (n_compose - 1) + 1] = temp_swap;
-	     }
-
-	  g_free (combination_utf8_temp);
-	  g_free (nfc_temp);
-	}
-
-      combination_utf8 = g_ucs4_to_utf8 (combination_buffer, -1, NULL, NULL, NULL);
-      nfc = g_utf8_normalize (combination_utf8, -1, G_NORMALIZE_NFC);
-      if (g_utf8_strlen (nfc, -1) == 1)
-	{
-	  gunichar value = g_utf8_get_char (nfc);
-	  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-	  context_simple->compose_buffer[0] = 0;
-
-	  g_free (combination_utf8);
-	  g_free (nfc);
-	  return TRUE;
-	}
-      g_free (combination_utf8);
-      g_free (nfc);
+          return TRUE;
+        }
     }
 
   return FALSE;
@@ -899,11 +925,11 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
           tmp_list = tmp_list->next;
         }
   
-      if (check_compact_table (context_simple, &gtk_compose_table_compact, n_compose))
-        return TRUE;
-
       if (check_algorithmically (context_simple, n_compose))
 	return TRUE;
+
+      if (check_compact_table (context_simple, &gtk_compose_table_compact, n_compose))
+        return TRUE;
     }
   
   /* The current compose_buffer doesn't match anything */

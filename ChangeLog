@@ -1,3 +1,21 @@
+2008-09-10  Simos Xenitellis  <simos@gnome.org>
+
+	Bug 550676 – Memory leak, update keyboard layout data structure 
+
+	* gtk/gtkimcontextsimple.c (check_normalize_nfc): Added 
+	function that checks if unicode sequence can be normalised (NFC)
+	to single character. Fixed memory leaks.
+	(check_algorithmically): Moved code to check_normalize_nfc, 
+	updated switch statement for dead keys.
+	(gtk_im_context_simple_filter_keypress): Changed order; first
+	check_algorithmically() is attempted, then check_compact_table().
+
+	* gtk/gtkimcontextsimpleseqs.c: Updated compose sequence table
+	gtk_compose_seqs_compac[].
+
+	* gtk/compose-parse.py: Updated compose table generation script,
+	matches output to gtk/gtkimcontextsimpleseqs.c.
+
 Wed Sep 10 06:18:25 2008  Søren Sandmann  <sandmann@redhat.com>
 
 	* gdk/x11/gdkscreen-x11.c (init_multihead): Don't use

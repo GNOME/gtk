@@ -279,8 +279,16 @@ def process_gdkkeysymsh():
 
 	""" Patch up the keysymdb with some of our own stuff """
 
-	""" This is for a missing keysym from the currently upstread file """
+	""" This is for a missing keysym from the currently upstream file """
 	keysymdb['dead_stroke'] = 0x338
+
+	""" This is for a missing keysym from the currently upstream file """
+	###keysymdb['dead_belowring'] = 0x323
+	###keysymdb['dead_belowmacron'] = 0x331
+	###keysymdb['dead_belowcircumflex'] = 0x32d
+	###keysymdb['dead_belowtilde'] = 0x330
+	###keysymdb['dead_belowbreve'] = 0x32e
+	###keysymdb['dead_belowdiaeresis'] = 0x324
 
 	""" This is^Wwas preferential treatment for Greek """
 	# keysymdb['dead_tilde'] = 0x342  		
@@ -327,6 +335,13 @@ def process_keysymstxt():
 	keysymstxt.close()
 
 	""" Patch up the keysymdb with some of our own stuff """
+	""" This is for a missing keysym from the currently upstream file """
+	###keysymdb['dead_belowring'] = 0x323
+	###keysymdb['dead_belowmacron'] = 0x331
+	###keysymdb['dead_belowcircumflex'] = 0x32d
+	###keysymdb['dead_belowtilde'] = 0x330
+	###keysymdb['dead_belowbreve'] = 0x32e
+	###keysymdb['dead_belowdiaeresis'] = 0x324
 
 	""" This is preferential treatment for Greek """
 	""" => we get more savings if used for Greek """
@@ -337,7 +352,7 @@ def process_keysymstxt():
 	""" This is for a missing keysym from Markus Kuhn's db """
 	keysymdb['dead_stroke'] = 0x338
 	""" This is for a missing keysym from Markus Kuhn's db """
-	# keysymdb['Oslash'] = 0x0d8		
+	keysymdb['Oslash'] = 0x0d8		
 
 	""" This is for a missing (recently added) keysym """
 	keysymdb['dead_psili'] = 0x313		
@@ -362,8 +377,9 @@ def keysymvalue(keysym, file = "n/a", linenum = 0):
        	elif keysym[:2] == '0x' and match('[0-9a-fA-F]+$', keysym[2:]):
 		return atoi(keysym[2:], 16)
 	else:
-        	print 'UNKNOWN{%(keysym)s}' % { "keysym": keysym }
-               	sys.exit(-1)
+        	#print 'UNKNOWN{%(keysym)s}' % { "keysym": keysym }
+               	return -1
+		#sys.exit(-1)
 
 def keysymunicodevalue(keysym, file = "n/a", linenum = 0):
 	""" Extracts a value from the keysym """
@@ -428,13 +444,21 @@ for line in composefile.readlines():
 	values = split('\s+', val)
 	unichar_temp = split('"', values[0])
 	unichar = unichar_temp[1]
+	if len(values) == 1:
+		continue
 	codepointstr = values[1]
+	if values[1] == '#':
+		# No codepoints that are >1 characters yet.
+		continue
 	if raw_sequence[0][0] == 'U' and match('[0-9a-fA-F]+$', raw_sequence[0][1:]):
 		raw_sequence[0] = '0x' + raw_sequence[0][1:]
 	if codepointstr[0] == 'U' and match('[0-9a-fA-F]+$', codepointstr[1:]):
 		codepoint = atoi(codepointstr[1:], 16)
-	elif keysymdatabase.has_key(codepointstr):
-		codepoint = keysymdatabase[codepointstr]
+	elif keysymunicodedatabase.has_key(codepointstr):
+		if keysymdatabase[codepointstr] != keysymunicodedatabase[codepointstr]:
+			print "DIFFERENCE: 0x%(a)X 0x%(b)X" % { "a": keysymdatabase[codepointstr], "b": keysymunicodedatabase[codepointstr]},
+			print raw_sequence, codepointstr
+		codepoint = keysymunicodedatabase[codepointstr]
 	else:
 		print
 		print "Invalid codepoint at line %(linenum_compose)d in %(filename)s:\
@@ -448,13 +472,21 @@ for line in composefile.readlines():
 			if opt_plane1:
 				print sequence
 			break
+		if keysymvalue(i) < 0:
+			reject_this = True
+			break
 	if reject_this:
 		continue
-	if "U0313" in sequence or "U0314" in sequence or "0x0313" in sequence or "0x0314" in sequence:
+	if "U0342" in sequence or \
+		"U0313" in sequence or \
+		"U0314" in sequence or \
+		"0x0313" in sequence or \
+		"0x0342" in sequence or \
+		"0x0314" in sequence:
 		continue
-	for i in range(len(sequence)):
-		if sequence[i] == "0x0342":
-			sequence[i] = "dead_tilde"
+	#for i in range(len(sequence)):
+	#	if sequence[i] == "0x0342":
+	#		sequence[i] = "dead_tilde"
 	if "Multi_key" not in sequence:
 		""" Ignore for now >0xFFFF keysyms """
 		if codepoint < 0xFFFF:
@@ -473,7 +505,7 @@ for line in composefile.readlines():
 					    because of lack of dead_perispomeni (i.e. conflict)
 					"""
 					bc = basechar
-					if sequence[-1] == "dead_tilde" and (bc >= 0x370 and bc <= 0x3ff) or (bc >= 0x1f00 and bc <= 0x1fff):
+					"""if sequence[-1] == "dead_tilde" and (bc >= 0x370 and bc <= 0x3ff) or (bc >= 0x1f00 and bc <= 0x1fff):
 						skipping_this = True
 						break
 					if sequence[-1] == "dead_horn" and (bc >= 0x370 and bc <= 0x3ff) or (bc >= 0x1f00 and bc <= 0x1fff):
@@ -486,6 +518,7 @@ for line in composefile.readlines():
 						sequence[i] = "dead_horn"
 					if sequence[-1] == "dead_dasia":
 						sequence[-1] = "dead_ogonek"
+					"""
 					unisequence.append(unichr(keysymunicodevalue(sequence.pop(), filename_compose, linenum_compose)))
 					
 				if skipping_this:
