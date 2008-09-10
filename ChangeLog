@@ -1,3 +1,11 @@
+2008-09-10  Björn Lindqvist  <bjourne@gmail.com>
+
+	Bug 551699 – gtk_scrolled_window_destroy() is broken
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_destroy,
+	gtk_scrolled_window_finalize): Check that the [hv]scrollbar
+	attributes are not-NULL before destroying and unparenting them.
+
 2008-09-10  Simos Xenitellis  <simos@gnome.org>
 
 	Bug 550676 – Memory leak, update keyboard layout data structure 
