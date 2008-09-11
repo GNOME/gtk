@@ -922,6 +922,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
  * The list is terminated by a -1. For example, to set column 0 with type
  * %G_TYPE_STRING to "Foo", you would write <literal>gtk_list_store_set (store, iter,
  * 0, "Foo", -1)</literal>.
+ * The value will be copied or referenced by the store if appropriate.
  **/
 void
 gtk_list_store_set (GtkListStore *list_store,
