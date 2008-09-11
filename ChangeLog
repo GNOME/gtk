@@ -1,3 +1,11 @@
+2008-09-11  Marek Kasik  <mkasik@redhat.com>
+
+	Bug 551378 - Print dialog: should try UDS when fetching PPD for
+	localhost
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: Add ability
+	to get PPD file from CUPS through Unix domain socket
+
 2008-09-11  Christian Dywan  <christian@imendio.com>
 
 	Bug 551567 – DND mark broken
