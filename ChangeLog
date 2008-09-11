@@ -1,3 +1,10 @@
+2008-09-11  Christian Dywan  <christian@imendio.com>
+
+	Bug 551567 – DND mark broken
+
+	* gtk/gtktextbtree.c (redisplay_mark): invalidate mark properly
+        Patch by Yevgen Muntyan.
+
 2008-09-10  Björn Lindqvist  <bjourne@gmail.com>
 
 	Bug 551699 – gtk_scrolled_window_destroy() is broken
