@@ -2,6 +2,16 @@
 
 	Merged from trunk:
 
+	Bug 319849 - gtkcalendar look in RTL locales
+
+	* gtk/gtkcalendar.c (calendar_realize_week_numbers), 
+	(gtk_calendar_realize): added missing RTL code to handle week numbers
+	from gtk_calendar_size_alloc. Patch by Yair Hershkovitz
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtkwidget.c (gtk_widget_get_draw_rectangle): when extending 
 	the draw rectangle by the "draw-border" style property, subtract
 	"left" from "x" and "top" from "y", not the other way around.

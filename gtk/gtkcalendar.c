@@ -1417,7 +1417,10 @@ calendar_realize_week_numbers (GtkCalendar *calendar)
       attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
       
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-      attributes.x = widget->style->xthickness + INNER_BORDER;
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
+	attributes.x = widget->style->xthickness + INNER_BORDER;
+      else 
+	attributes.x = widget->allocation.width - priv->week_width - (widget->style->xthickness + INNER_BORDER);
       attributes.y = (priv->header_h + priv->day_name_h 
 		      + (widget->style->ythickness + INNER_BORDER));
       attributes.width = priv->week_width;
@@ -1473,11 +1476,18 @@ gtk_calendar_realize (GtkWidget *widget)
 			    | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK
 			    | GDK_POINTER_MOTION_MASK | GDK_LEAVE_NOTIFY_MASK);
   
-  attributes.x = priv->week_width + (widget->style->ythickness + INNER_BORDER);
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
+    attributes.x = priv->week_width + (widget->style->ythickness + INNER_BORDER);
+  else
+    attributes.x = widget->style->ythickness + INNER_BORDER;
+
   attributes.y = (priv->header_h + priv->day_name_h 
 		  + (widget->style->ythickness + INNER_BORDER));
   attributes.width = (widget->allocation.width - attributes.x 
 		      - (widget->style->xthickness + INNER_BORDER));
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    attributes.width -= priv->week_width;
+
   attributes.height = priv->main_h;
   priv->main_win = gdk_window_new (widget->window,
 				   &attributes, attributes_mask);
