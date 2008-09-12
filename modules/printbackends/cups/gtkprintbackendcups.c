@@ -1097,6 +1097,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 	  char hostname[HTTP_MAX_URI];	/* Hostname */
 	  char resource[HTTP_MAX_URI];	/* Resource name */
 	  int  port;			/* Port number */
+	  char *cups_server;            /* CUPS server */
 	  
           list_has_changed = TRUE;
 	  cups_printer = gtk_printer_cups_new (printer_name, backend);
@@ -1143,8 +1144,19 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
             }
 
 	  gethostname (uri, sizeof (uri));
+	  cups_server = g_strdup (cupsServer());
+
 	  if (strcasecmp (uri, hostname) == 0)
 	    strcpy (hostname, "localhost");
+
+          /* if the cups server is local and listening at a unix domain socket 
+           * then use the socket connection
+           */
+	  if ((strstr (hostname, "localhost") != NULL) &&
+	      (cups_server[0] == '/'))
+	    strcpy (hostname, cups_server);
+
+	  g_free (cups_server);
 
 	  cups_printer->hostname = g_strdup (hostname);
 	  cups_printer->port = port;

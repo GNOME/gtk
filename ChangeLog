@@ -2,6 +2,17 @@
 
 	Merged from trunk:
 
+	Bug 551378 - Print dialog: should try UDS when fetching PPD for
+	localhost
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: Add ability
+	to get PPD file from CUPS through Unix domain socket. 
+	Patch by Marek Kasik
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 551567 – DND mark broken
 
 	* gtk/gtktextbtree.c (redisplay_mark): invalidate mark properly
