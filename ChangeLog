@@ -2,6 +2,14 @@
 
 	Merged from trunk:
 
+	* gtk/gtkfilechooserbutton.c (update_label_and_image): Unset
+	the image when the label is set to "(None)". Reported by
+	Neil Roberts
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtkuimanager.c (update_node): Skip update of accelerator 
 	child node if it has no associated action. Fixes #541950.
 	Patch by Christian Neumair
