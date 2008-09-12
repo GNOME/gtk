@@ -2,6 +2,15 @@
 
 	Merged from trunk:
 
+	Bug 549711 - Race condition when loading gdk-pixbuf image modules
+
+	* gdk-pixbuf-io.c: Fix a race condition in module loading,
+	spotted by Chris Lord.
+
+2008-09-12  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 532644 - TIFF loader need to exclude CR2 files
 
 	* io-tiff.c: Add a pattern to exclude CR2 files.

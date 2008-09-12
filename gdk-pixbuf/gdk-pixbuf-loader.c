@@ -356,9 +356,8 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader,
         if (priv->image_module == NULL)
                 return 0;
   
-        if (priv->image_module->module == NULL)
-                if (!_gdk_pixbuf_load_module (priv->image_module, error))
-                        return 0;
+        if (!_gdk_pixbuf_load_module (priv->image_module, error))
+                return 0;
   
         if (priv->image_module->module == NULL)
                 return 0;
