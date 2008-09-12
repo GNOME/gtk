@@ -2,6 +2,13 @@
 
 	Merged from trunk:
 
+	* gtk/gtkprinter.c: sets the is_default parameter to the value
+	given by caller. Patch by Marek Kasik
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 319849 - gtkcalendar look in RTL locales
 
 	* gtk/gtkcalendar.c (calendar_realize_week_numbers), 
