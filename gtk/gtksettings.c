@@ -1726,14 +1726,13 @@ _gtk_settings_handle_event (GdkEventSetting *event)
       if (property_id == PROP_COLOR_SCHEME)
         {
           GValue value = { 0, };
-
+ 
           g_value_init (&value, G_TYPE_STRING);
           if (!gdk_screen_get_setting (settings->screen, pspec->name, &value))
             g_value_set_static_string (&value, "");
           merge_color_scheme (settings, &value, GTK_SETTINGS_SOURCE_XSETTING);
           g_value_unset (&value);
         }
-
       g_object_notify (G_OBJECT (settings), pspec->name);
    }
 }
@@ -2052,6 +2051,7 @@ update_color_hash (ColorSchemeData   *data,
 {
   gboolean changed = FALSE;
   gint i;
+  GHashTable *old_hash;
 
   if ((str == NULL || *str == '\0') && 
       (data->lastentry[source] == NULL || data->lastentry[source][0] == '\0'))
@@ -2085,8 +2085,7 @@ update_color_hash (ColorSchemeData   *data,
     return FALSE;
     
   /* Rebuild the merged hash table. */
-  if (data->color_hash)
-    g_hash_table_unref (data->color_hash);
+  old_hash = data->color_hash;
   data->color_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
 					    (GDestroyNotify) gdk_color_free);
   for (i = 0; i <= GTK_SETTINGS_SOURCE_APPLICATION; i++)
@@ -2096,7 +2095,35 @@ update_color_hash (ColorSchemeData   *data,
 			      data->color_hash);
     }
 
-  return TRUE;
+  if (old_hash)
+    {
+      /* now check if the merged hash has changed */
+      changed = FALSE;
+      if (g_hash_table_size (old_hash) != g_hash_table_size (data->color_hash))
+        changed = TRUE;
+      else
+        {
+          GHashTableIter iter;
+          gpointer key, value, new_value;
+
+          g_hash_table_iter_init (&iter, old_hash);
+          while (g_hash_table_iter_next (&iter, &key, &value))
+            {
+              new_value = g_hash_table_lookup (data->color_hash, key);
+              if (!new_value || !gdk_color_equal (value, new_value))
+                {
+                  changed = TRUE;
+                  break;
+                } 
+            }
+        }
+
+      g_hash_table_unref (old_hash);
+    }
+  else 
+    changed = TRUE;
+
+  return changed;
 }
 
 static void

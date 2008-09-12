@@ -2,6 +2,14 @@
 
 	Merged from trunk:
 
+	* gtk/gtksettings.c: When reconstructing the color hash, try
+	harder to avoid unnecessary notification, since this can lead
+	to infinite reloading of rc files in some situations.
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 545875 – evo crashed when trying to print pages 6-7 of a 1 page
 	email
 
