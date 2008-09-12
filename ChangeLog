@@ -1,4 +1,9 @@
 2008-09-12  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/gtkfilechooserdefault.c (browse_files_select_first_row): Correct
+	a mismerge, spotted by Wouter Bolsterlee.
+
+2008-09-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates
 

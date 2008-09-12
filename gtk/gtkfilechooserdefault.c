@@ -6466,7 +6466,6 @@ browse_files_select_first_row (GtkFileChooserDefault *impl)
     return;
 
   path = gtk_tree_path_new_from_indices (0, -1);
-  gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view), path, NULL, FALSE);
   tree_model = gtk_tree_view_get_model (GTK_TREE_VIEW (impl->browse_files_tree_view));
 
   /* If the list is empty, do nothing. */
