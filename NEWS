@@ -1,3 +1,44 @@
+Overview of Changes from GTK+ 2.12.11 to 2.12.12
+================================================
+
+* Bugs fixed:
+ 539164 Windows' System Menu blocks main loop
+ 540861 invalid UTF-8 in input device name
+ 540994 Some windows don't appear at the top when created
+ 541964 Setting modal hint to current value might confuse the stack
+ 541399 Widget tooltips: treat "" same as NULL
+ 520165 typeahead find (interactive search) only accepts one character
+ 528975 Can not maximize the window
+ 541950 Removing recently-added accelerator UI causes a wrong g_warning
+ 545931 small documentation typos
+ 538686 gtkprintoperation-win32.c: devmode_from_settings
+ 538863 Fixes assertion on entering empty folder
+ 541645 gtkfilechooserdefault segfaults when bookmark does not contain ://
+ 528845 segv from GtkBuilder on attempting <accelerator> under GtkCellView
+ 479780 Bookmarks in left pane of FileChooser cannot be renamed
+ 542523 GtkTextTag should handle setting properties to NULL
+ 543545 GtkAssistant crashes when gtk_widget_hide() is called inside... 
+ 545875 evo crashed when trying to print pages 6-7 of a 1 page email
+ 549354 Crash trying to open a file on a remote folder
+ 549810 Memory leaks in printing code
+ 550528 IconView DND interface does not work if only used as source
+ 319849 gtkcalendar look in RTL locales
+ 551699 gtk_scrolled_window_destroy() is broken
+ 551567 DND mark broken
+ 551378 Print dialog: should try UDS when fetching PPD for localhost
+ 532644 TIFF loader need to exclude CR2 files
+ 549711 Race condition when loading gdk-pixbuf image modules
+ 517233 Calling gdk_pixbuf_loader_close causes "GError set over the top...
+
+* Updated translations:
+ Assamese (as)
+ Czech (cs)
+ Spanish (es)
+ Italian (it)
+ Japanese (ja)
+ Russian (ru)
+
+
 Overview of Changes from GTK+ 2.12.10 to 2.12.11
 ================================================
 
