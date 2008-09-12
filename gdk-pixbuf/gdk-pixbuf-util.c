@@ -190,9 +190,10 @@ gdk_pixbuf_saturate_and_pixelate(const GdkPixbuf *src,
   
         if (saturation == 1.0 && !pixelate) {
                 if (dest != src)
-                        memcpy (gdk_pixbuf_get_pixels (dest),
-                                gdk_pixbuf_get_pixels (src),
-                                gdk_pixbuf_get_height (src) * gdk_pixbuf_get_rowstride (src));
+                        gdk_pixbuf_copy_area (src, 0, 0, 
+                                              gdk_pixbuf_get_width (src),
+                                              gdk_pixbuf_get_height (src),
+                                              dest, 0, 0);
         } else {
                 int i, j, t;
                 int width, height, has_alpha, src_rowstride, dest_rowstride, bytes_per_pixel;

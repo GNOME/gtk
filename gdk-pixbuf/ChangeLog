@@ -1,3 +1,11 @@
+2008-09-12  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gdk-pixbuf-utils.c (gdk_pixbuf_saturate_and_pixelate):
+	Use gdk_pixbuf_copy_area() to copy between pixbufs.
+	Reported by Andrey Tsyvarev
+
 2008-07-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.12.11 ===
