@@ -2,6 +2,16 @@
 
 	Merged from trunk:
 
+	Bug 541645 – gtkfilechooserdefault segfaults when bookmark does not
+	contain ://
+
+	* gtk/gtkfilechooserdefault.c (_gtk_file_chooser_label_for_file):
+	Be more robust. Reported by  Jelte van der Hoek
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 538863 – Fixes assertion on entering empty folder
 
 	* gtk/gtkfilechooserdefault.c (browse_files_select_first_row): Don't

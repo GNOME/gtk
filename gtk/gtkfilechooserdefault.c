@@ -1691,37 +1691,43 @@ _gtk_file_chooser_label_for_uri (const gchar *uri)
   gchar *host, *label;
   
   start = strstr (uri, "://");
-  start += 3;
-  path = strchr (start, '/');
+  if (start)
+    {
+      start += 3;
+      path = strchr (start, '/');
+      if (path)
+        end = path;
+      else
+        {
+          end = uri + strlen (uri);
+          path = "/";
+        }
+
+      /* strip username */
+      p = strchr (start, '@');
+      if (p && p < end)
+        {
+          start = p + 1;
+        }
   
-  if (path)
-    end = path;
+      p = strchr (start, ':');
+      if (p && p < end)
+        end = p;
+  
+      host = g_strndup (start, end - start);
+
+      /* Translators: the first string is a path and the second string 
+       * is a hostname. Nautilus and the panel contain the same string 
+       * to translate. 
+       */
+      label = g_strdup_printf (_("%1$s on %2$s"), path, host);
+  
+      g_free (host);
+    }
   else
     {
-      end = uri + strlen (uri);
-      path = "/";
+      label = g_strdup (uri);
     }
-
-  /* strip username */
-  p = strchr (start, '@');
-  if (p && p < end)
-    {
-      start = p + 1;
-    }
-  
-  p = strchr (start, ':');
-  if (p && p < end)
-    end = p;
-  
-  host = g_strndup (start, end - start);
-
-  /* Translators: the first string is a path and the second string 
-   * is a hostname. Nautilus and the panel contain the same string 
-   * to translate. 
-   */
-  label = g_strdup_printf (_("%1$s on %2$s"), path, host);
-  
-  g_free (host);
 
   return label;
 }
