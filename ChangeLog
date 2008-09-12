@@ -2,6 +2,15 @@
 
 	Merged from trunk:
 
+	Bug 550528 - IconView DND interface does not work if only used as
+	source
+
+	* gtk/gtkiconview.c: Make source-only DND work.  Found by Alex Simon
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 549810 – Memory leaks in printing code
 
 	* gtk/gtkprintjob.c (gtk_print_job_set_property):

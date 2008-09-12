@@ -6620,7 +6620,7 @@ gtk_icon_view_drag_data_get (GtkWidget        *widget,
   if (model == NULL)
     return;
 
-  if (!icon_view->priv->dest_set)
+  if (!icon_view->priv->source_set)
     return;
 
   source_row = get_source_row (context);
@@ -6663,7 +6663,7 @@ gtk_icon_view_drag_data_delete (GtkWidget      *widget,
   if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_SOURCE, "drag_data_delete"))
     return;
 
-  if (!icon_view->priv->dest_set)
+  if (!icon_view->priv->source_set)
     return;
 
   source_row = get_source_row (context);
