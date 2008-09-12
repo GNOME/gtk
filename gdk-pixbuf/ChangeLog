@@ -2,6 +2,28 @@
 
 	Merged from trunk:
 
+	* gdk-pixbuf-io.c: Plug a small memory leak
+
+	Bug 517233 - Calling gdk_pixbuf_loader_close causes "GError set over
+	the top of a previous GError" warning
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Don't overwrite
+	errors. Reported by Andrey Tsyvarev
+	
+2008-09-12  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	Bug 517233 - Calling gdk_pixbuf_loader_close causes "GError set over
+	the top of a previous GError" warning
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Don't overwrite
+	errors. Reported by Andrey Tsyvarev
+
+2008-09-12  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 549711 - Race condition when loading gdk-pixbuf image modules
 
 	* gdk-pixbuf-io.c: Fix a race condition in module loading,
