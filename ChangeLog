@@ -2,6 +2,15 @@
 
 	Merged from trunk:
 
+	Bug 549354 – Crash trying to open a file on a remote folder
+
+	* gtk/gtkfilechooserdefault.c (error_message_with_parent): Handle
+	the fact that parent may be NULL without crashing.
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtksettings.c: When reconstructing the color hash, try
 	harder to avoid unnecessary notification, since this can lead
 	to infinite reloading of rc files in some situations.

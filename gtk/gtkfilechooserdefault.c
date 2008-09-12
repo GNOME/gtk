@@ -1037,7 +1037,7 @@ error_message_with_parent (GtkWindow  *parent,
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 					    "%s", detail);
 
-  if (parent->group)
+  if (parent && parent->group)
     gtk_window_group_add_window (parent->group, GTK_WINDOW (dialog));
 
   gtk_dialog_run (GTK_DIALOG (dialog));
