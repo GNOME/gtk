@@ -799,6 +799,7 @@ MODULE_ENTRY (tiff, fill_info) (GdkPixbufFormat *info)
         static GdkPixbufModulePattern signature[] = {
                 { "MM \x2a", "  z ", 100 },
                 { "II\x2a ", "   z", 100 },
+                { "II* \020   CR\002 ", "   z zzz   z", 0 },
                 { NULL, NULL, 0 }
         };
 	static gchar * mime_types[] = {
