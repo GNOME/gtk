@@ -2,6 +2,19 @@
 
 	Merged from trunk:
 
+	Bug 549810 – Memory leaks in printing code
+
+	* gtk/gtkprintjob.c (gtk_print_job_set_property):
+	* modules/printbackends/file/gtkprintbackendfile.c
+	(output_file_from_settings):
+	* modules/printbackends/test/gtkprintbackendtest.c
+	(output_test_from_settings): free some temporary strings.
+	Patch by Yevgen Muntyan.
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 549354 – Crash trying to open a file on a remote folder
 
 	* gtk/gtkfilechooserdefault.c (error_message_with_parent): Handle
