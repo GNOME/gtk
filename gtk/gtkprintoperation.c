@@ -1919,6 +1919,46 @@ find_range (PrintPagesData *data)
     }
 }
 
+static void
+clamp_page_ranges (PrintPagesData *data)
+{
+  GtkPrintOperationPrivate *priv; 
+  gint                      num_of_correct_ranges;
+  gint                      i;
+
+  priv = data->op->priv;
+
+  num_of_correct_ranges = 0;
+
+  for (i = 0; i < data->num_ranges; i++)
+    if ((data->ranges[i].start >= 0) &&
+        (data->ranges[i].start < priv->nr_of_pages) &&
+        (data->ranges[i].end >= 0) &&
+        (data->ranges[i].end < priv->nr_of_pages))
+      {
+        data->ranges[num_of_correct_ranges] = data->ranges[i];
+        num_of_correct_ranges++;
+      }
+    else if ((data->ranges[i].start >= 0) &&
+             (data->ranges[i].start < priv->nr_of_pages) &&
+             (data->ranges[i].end >= priv->nr_of_pages))
+      {
+        data->ranges[i].end = priv->nr_of_pages - 1;
+        data->ranges[num_of_correct_ranges] = data->ranges[i];
+        num_of_correct_ranges++;
+      }
+    else if ((data->ranges[i].end >= 0) &&
+             (data->ranges[i].end < priv->nr_of_pages) &&
+             (data->ranges[i].start < 0))
+      {
+        data->ranges[i].start = 0;
+        data->ranges[num_of_correct_ranges] = data->ranges[i];
+        num_of_correct_ranges++;
+      }
+
+  data->num_ranges = num_of_correct_ranges;
+}
+
 static gboolean 
 increment_page_sequence (PrintPagesData *data)
 {
@@ -2132,6 +2172,8 @@ print_pages_idle (gpointer user_data)
 	  data->ranges[0].end = priv->nr_of_pages - 1;
 	}
       
+      clamp_page_ranges (data);
+
       if (priv->manual_reverse)
 	{
 	  data->range = data->num_ranges - 1;

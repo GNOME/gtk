@@ -2,6 +2,26 @@
 
 	Merged from trunk:
 
+	Bug 545875 – evo crashed when trying to print pages 6-7 of a 1 page
+	email
+
+	* gtk/gtkprintoperation.c: Clamp page ranges to correct ranges.
+	Patch by Marek Kasik
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	Bug 543545 – GtkAssistant crashes when gtk_widget_hide() is called
+	inside "apply" signal handler
+
+	* gtk/gtkassistant.c: Don't emit signals with extra parameters.
+	Patch by Antti Kaijanmäki
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 542523 - GtkTextTag should handle setting properties to NULL
 
 	* gtk/gtktexttag.c (gtk_text_tag_set_property): Unset the color when
