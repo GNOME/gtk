@@ -1,3 +1,13 @@
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	Bug 538863 – Fixes assertion on entering empty folder
+
+	* gtk/gtkfilechooserdefault.c (browse_files_select_first_row): Don't
+	select the first row if the folder is empty.
+	Patch by Olle Bergkvist.
+
 2008-08-27  Cody Russell  <bratsche@gnome.org>
 
 	Merged from trunk:
