@@ -2,6 +2,15 @@
 
 	Merged from trunk:
 
+	Bug 551567 – DND mark broken
+
+	* gtk/gtktextbtree.c (redisplay_mark): invalidate mark properly
+	Patch by Yevgen Muntyan.
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 551699 – gtk_scrolled_window_destroy() is broken
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_destroy,
