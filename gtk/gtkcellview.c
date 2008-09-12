@@ -1105,7 +1105,8 @@ gtk_cell_view_buildable_custom_tag_start (GtkBuildable  *buildable,
 					  GMarkupParser *parser,
 					  gpointer      *data)
 {
-  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
+  if (parent_buildable_iface->custom_tag_start &&
+      parent_buildable_iface->custom_tag_start (buildable, builder, child,
 						tagname, parser, data))
     return TRUE;
 
@@ -1123,7 +1124,7 @@ gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
   if (strcmp (tagname, "attributes") == 0)
     _gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
 					       data);
-  else
+  else if (parent_buildable_iface->custom_tag_end)
     parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
 					    data);
 }

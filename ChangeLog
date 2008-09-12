@@ -2,6 +2,16 @@
 
 	Merged from trunk:
 
+	Bug 528845 – segv from GtkBuilder on attempting <accelerator> under
+	GtkCellView
+
+	* gtk/gtkcellview.c: Don't blindly chain up in the buildable
+	implementation.  Reported by Kevin Ryde.
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 541645 – gtkfilechooserdefault segfaults when bookmark does not
 	contain ://
 
