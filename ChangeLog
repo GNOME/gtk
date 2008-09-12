@@ -2,6 +2,14 @@
 
 	Merged from trunk:
 
+	* gtk/gtkuimanager.c (update_node): Skip update of accelerator 
+	child node if it has no associated action. Fixes #541950.
+	Patch by Christian Neumair
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 528845 – segv from GtkBuilder on attempting <accelerator> under
 	GtkCellView
 
