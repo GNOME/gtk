@@ -3455,8 +3455,8 @@ gtk_widget_get_draw_rectangle (GtkWidget    *widget,
 			    NULL);
       if (draw_border)
 	{
-	  rect->x -= draw_border->top;
-	  rect->y -= draw_border->left;
+	  rect->x -= draw_border->left;
+	  rect->y -= draw_border->top;
 	  rect->width += draw_border->left + draw_border->right;
 	  rect->height += draw_border->top + draw_border->bottom;
 
