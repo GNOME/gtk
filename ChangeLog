@@ -2,6 +2,17 @@
 
 	Merged from trunk:
 
+	Bug 551699 – gtk_scrolled_window_destroy() is broken
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_destroy,
+	gtk_scrolled_window_finalize): Check that the [hv]scrollbar
+	attributes are not-NULL before destroying and unparenting them.
+	Patch by Björn Lindqvist
+
+2008-09-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtkprinter.c: sets the is_default parameter to the value
 	given by caller. Patch by Marek Kasik
 
