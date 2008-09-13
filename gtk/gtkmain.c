@@ -92,7 +92,7 @@ _gtk_get_localedir (void)
 	;
 
       temp = g_win32_get_package_installation_subdirectory
-        (GETTEXT_PACKAGE, dll_name, p);
+        (NULL, dll_name, p);
 
       /* gtk_localedir is passed to bindtextdomain() which isn't
        * UTF-8-aware.
@@ -308,7 +308,7 @@ _gtk_get_datadir (void)
   static char *gtk_datadir = NULL;
   if (gtk_datadir == NULL)
     gtk_datadir = g_win32_get_package_installation_subdirectory
-      (GETTEXT_PACKAGE, dll_name, "share");
+      (NULL, dll_name, "share");
 
   return gtk_datadir;
 }
@@ -319,7 +319,7 @@ _gtk_get_libdir (void)
   static char *gtk_libdir = NULL;
   if (gtk_libdir == NULL)
     gtk_libdir = g_win32_get_package_installation_subdirectory
-      (GETTEXT_PACKAGE, dll_name, "lib");
+      (NULL, dll_name, "lib");
 
   return gtk_libdir;
 }
@@ -330,7 +330,7 @@ _gtk_get_sysconfdir (void)
   static char *gtk_sysconfdir = NULL;
   if (gtk_sysconfdir == NULL)
     gtk_sysconfdir = g_win32_get_package_installation_subdirectory
-      (GETTEXT_PACKAGE, dll_name, "etc");
+      (NULL, dll_name, "etc");
 
   return gtk_sysconfdir;
 }
@@ -341,7 +341,7 @@ _gtk_get_data_prefix (void)
   static char *gtk_data_prefix = NULL;
   if (gtk_data_prefix == NULL)
     gtk_data_prefix = g_win32_get_package_installation_directory
-      (GETTEXT_PACKAGE, dll_name);
+      (NULL, dll_name);
 
   return gtk_data_prefix;
 }

@@ -1,3 +1,9 @@
+2008-09-13  Tor Lillqvist  <tml@novell.com>
+
+	* gdk-pixbuf-io.c: Do as the docs for
+	g_win32_get_package_installation_directory() say and pass NULL as
+	the first parameter.
+
 2008-09-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-io.c (gdk_pixbuf_io_init): Plug a small memory

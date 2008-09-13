@@ -238,7 +238,7 @@ get_toplevel (void)
 
   if (toplevel == NULL)
     toplevel = g_win32_get_package_installation_subdirectory
-      (GETTEXT_PACKAGE, dll_name, "");
+      (NULL, dll_name, "");
 
   return toplevel;
 }
@@ -250,7 +250,7 @@ get_sysconfdir (void)
 
   if (sysconfdir == NULL)
     sysconfdir = g_win32_get_package_installation_subdirectory
-      (GETTEXT_PACKAGE, dll_name, "etc");
+      (NULL, dll_name, "etc");
 
   return sysconfdir;
 }
