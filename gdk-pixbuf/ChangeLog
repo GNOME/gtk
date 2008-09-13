@@ -1,8 +1,11 @@
 2008-09-13  Tor Lillqvist  <tml@novell.com>
 
-	* gdk-pixbuf-io.c: Do as the docs for
-	g_win32_get_package_installation_directory() say and pass NULL as
-	the first parameter.
+	* gdk-pixbuf-io.c: Don't use the deprectated
+	g_win32_get_package_installation_subdirectory(). Use
+	g_win32_get_package_installation_directory_of_module()
+	instead. Also, don't use the deprecated silly
+	G_WIN32_DLLMAIN_FOR_DLL_NAME() macro, but an explicit minimal
+	DllMain() that just saves the DLL handle.
 
 2008-09-07  Matthias Clasen  <mclasen@redhat.com>
 

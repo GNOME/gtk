@@ -68,7 +68,22 @@
 
 #ifdef G_OS_WIN32
 
-G_WIN32_DLLMAIN_FOR_DLL_NAME(static, dll_name)
+static HMODULE gtk_dll;
+
+BOOL WINAPI
+DllMain (HINSTANCE hinstDLL,
+	 DWORD     fdwReason,
+	 LPVOID    lpvReserved)
+{
+  switch (fdwReason)
+    {
+    case DLL_PROCESS_ATTACH:
+      gtk_dll = (HMODULE) hinstDLL;
+      break;
+    }
+
+  return TRUE;
+}
 
 /* This here before inclusion of gtkprivate.h so that it sees the
  * original GTK_LOCALEDIR definition. Yeah, this is a bit sucky.
@@ -80,7 +95,7 @@ _gtk_get_localedir (void)
   if (gtk_localedir == NULL)
     {
       const gchar *p;
-      gchar *temp;
+      gchar *root, *temp;
       
       /* GTK_LOCALEDIR ends in either /lib/locale or
        * /share/locale. Scan for that slash.
@@ -91,8 +106,9 @@ _gtk_get_localedir (void)
       while (*--p != '/')
 	;
 
-      temp = g_win32_get_package_installation_subdirectory
-        (NULL, dll_name, p);
+      root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      temp = g_build_filename (root, p, NULL);
+      g_free (root);
 
       /* gtk_localedir is passed to bindtextdomain() which isn't
        * UTF-8-aware.
@@ -307,8 +323,11 @@ _gtk_get_datadir (void)
 {
   static char *gtk_datadir = NULL;
   if (gtk_datadir == NULL)
-    gtk_datadir = g_win32_get_package_installation_subdirectory
-      (NULL, dll_name, "share");
+    {
+      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      gtk_datadir = g_build_filename (root, "share", NULL);
+      g_free (root);
+    }
 
   return gtk_datadir;
 }
@@ -318,8 +337,11 @@ _gtk_get_libdir (void)
 {
   static char *gtk_libdir = NULL;
   if (gtk_libdir == NULL)
-    gtk_libdir = g_win32_get_package_installation_subdirectory
-      (NULL, dll_name, "lib");
+    {
+      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      gtk_libdir = g_build_filename (root, "lib", NULL);
+      g_free (root);
+    }
 
   return gtk_libdir;
 }
@@ -329,8 +351,11 @@ _gtk_get_sysconfdir (void)
 {
   static char *gtk_sysconfdir = NULL;
   if (gtk_sysconfdir == NULL)
-    gtk_sysconfdir = g_win32_get_package_installation_subdirectory
-      (NULL, dll_name, "etc");
+    {
+      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      gtk_sysconfdir = g_build_filename (root, "etc", NULL);
+      g_free (root);
+    }
 
   return gtk_sysconfdir;
 }
@@ -340,8 +365,7 @@ _gtk_get_data_prefix (void)
 {
   static char *gtk_data_prefix = NULL;
   if (gtk_data_prefix == NULL)
-    gtk_data_prefix = g_win32_get_package_installation_directory
-      (NULL, dll_name);
+    gtk_data_prefix = g_win32_get_package_installation_directory_of_module (gtk_dll);
 
   return gtk_data_prefix;
 }

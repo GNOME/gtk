@@ -1,3 +1,13 @@
+2008-09-13  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkmain.c: Don't use the deprectated
+	g_win32_get_package_installation_directory() and
+	g_win32_get_package_installation_subdirectory() functions. Use
+	g_win32_get_package_installation_directory_of_module()
+	instead. Also, don't use the deprecated silly
+	G_WIN32_DLLMAIN_FOR_DLL_NAME() macro, but an explicit minimal
+	DllMain() that just saves the DLL handle.
+
 2008-09-13  Cosimo Cecchi  <cosimoc@gnome.org>
 
 	Bug 552153 – GtkModules loading with XSettings doesn't work if the
@@ -7,12 +17,6 @@
 	* gtk/gtkmodules.c: (_gtk_modules_init):
 	Call _gtk_modules_init () even if gtk_modules_string is NULL, so
 	that GtkModules specified with XSettings could be loaded.
-
-2008-09-13  Tor Lillqvist  <tml@novell.com>
-
-	* gtk/gtkmain.c: Do as the docs for
-	g_win32_get_package_installation_directory() say and pass NULL as
-	the first parameter.
 
 2008-09-11  Cosimo Cecchi  <cosimoc@gnome.org>
 
