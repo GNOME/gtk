@@ -1,3 +1,13 @@
+2008-09-13  Cosimo Cecchi  <cosimoc@gnome.org>
+
+	Bug 552153 – GtkModules loading with XSettings doesn't work if the
+	GTK_MODULES env var isn't set.
+
+	* gtk/gtkmain.c: (do_post_parse_initialization):
+	* gtk/gtkmodules.c: (_gtk_modules_init):
+	Call _gtk_modules_init () even if gtk_modules_string is NULL, so
+	that GtkModules specified with XSettings could be loaded.
+
 2008-09-13  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkmain.c: Do as the docs for

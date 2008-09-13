@@ -511,11 +511,13 @@ _gtk_modules_init (gint        *argc,
 		    G_CALLBACK (display_opened_cb), 
 		    NULL);
 
-  /* Modules specified in the GTK_MODULES environment variable
-   * or on the command line are always loaded, so we'll just leak 
-   * the refcounts.
-   */
-  g_slist_free (load_modules (gtk_modules_args));
+  if (gtk_modules_args) {
+    /* Modules specified in the GTK_MODULES environment variable
+     * or on the command line are always loaded, so we'll just leak 
+     * the refcounts.
+     */
+    g_slist_free (load_modules (gtk_modules_args));
+  }
 }
 
 static void

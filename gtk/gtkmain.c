@@ -699,6 +699,10 @@ do_post_parse_initialization (int    *argc,
       _gtk_modules_init (argc, argv, gtk_modules_string->str);
       g_string_free (gtk_modules_string, TRUE);
     }
+  else
+    {
+      _gtk_modules_init (argc, argv, NULL);
+    }
 }
 
 
