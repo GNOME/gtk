@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-01 11:07-0400\n"
+"POT-Creation-Date: 2008-09-12 21:21-0400\n"
 "PO-Revision-Date: 2006-07-18 17:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -2920,7 +2920,7 @@ msgstr ""
 msgid "Horizontal adjustment"
 msgstr "ཐད་སྙོམས་་བདེ་སྒྲིག"
 
-#: gtk/gtklayout.c:603 gtk/gtkscrolledwindow.c:222
+#: gtk/gtklayout.c:603 gtk/gtkscrolledwindow.c:220
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "ཐད་སྙོམས་གནས་ལུགས་ཀྱི་དོན་ལུ་ GtkAdjustment"
 
@@ -2928,7 +2928,7 @@ msgstr "ཐད་སྙོམས་གནས་ལུགས་ཀྱི་དོ
 msgid "Vertical adjustment"
 msgstr "ཀེར་ཕྲང་བདེ་སྒྲིག"
 
-#: gtk/gtklayout.c:611 gtk/gtkscrolledwindow.c:229
+#: gtk/gtklayout.c:611 gtk/gtkscrolledwindow.c:227
 msgid "The GtkAdjustment for the vertical position"
 msgstr "ཀེར་ཕྲང་གནས་སའི་དོན་ལས་ GtkAdjustment།"
 
@@ -4248,35 +4248,35 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "བཤུད་ཕྲ་གི་མཇུག་ལྡོག་ལུ་ གདོང་བསྐྱོད་ཀྱི་མདའ་རྟགས་ཨེབ་རྟ་ གཉིས་པ་ཅིག་ བཀྲམ་སྟོན་འབད།"
 
-#: gtk/gtkscrolledwindow.c:221 gtk/gtktext.c:541 gtk/gtktreeview.c:572
+#: gtk/gtkscrolledwindow.c:219 gtk/gtktext.c:541 gtk/gtktreeview.c:572
 msgid "Horizontal Adjustment"
 msgstr "ཐད་སྙོམས་བདེ་སྒྲིག"
 
-#: gtk/gtkscrolledwindow.c:228 gtk/gtktext.c:549 gtk/gtktreeview.c:580
+#: gtk/gtkscrolledwindow.c:226 gtk/gtktext.c:549 gtk/gtktreeview.c:580
 msgid "Vertical Adjustment"
 msgstr "ཀེར་ཕྲང་བདེ་སྒྲིག"
 
-#: gtk/gtkscrolledwindow.c:235
+#: gtk/gtkscrolledwindow.c:233
 msgid "Horizontal Scrollbar Policy"
 msgstr "ཐད་སྙོམས་ཀྱི་ བཤུད་ཕྲ་སྲིད་བྱུས།"
 
-#: gtk/gtkscrolledwindow.c:236
+#: gtk/gtkscrolledwindow.c:234
 msgid "When the horizontal scrollbar is displayed"
 msgstr "ཐད་སྙོམས་ཀྱི་ བཤུད་ཕྲ་དེ་ བཀྲམ་སྟོན་འབདཝ་ད།"
 
-#: gtk/gtkscrolledwindow.c:243
+#: gtk/gtkscrolledwindow.c:241
 msgid "Vertical Scrollbar Policy"
 msgstr "ཀེར་ཕྲང་གི་ བཤུད་ཕྲ་སྲིད་བྱུས།"
 
-#: gtk/gtkscrolledwindow.c:244
+#: gtk/gtkscrolledwindow.c:242
 msgid "When the vertical scrollbar is displayed"
 msgstr "ཀེར་ཕྲང་གི་ བཤུད་ཕྲ་དེ་ བཀྲམ་སྟོན་འབདཝ་ད།"
 
-#: gtk/gtkscrolledwindow.c:252
+#: gtk/gtkscrolledwindow.c:250
 msgid "Window Placement"
 msgstr "སྒོ་སྒྲིག་བཙུགས་བཞག"
 
-#: gtk/gtkscrolledwindow.c:253
+#: gtk/gtkscrolledwindow.c:251
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
@@ -4284,11 +4284,11 @@ msgstr ""
 "ནང་དོན་ཚུ་བཤུད་ཕྲ་ཚུ་དང་འཁྲིལ་ཏེ་ཡོད་ག་མེད།  \"window-placement-set\" དེ་བདེན་པ་ཅིན་པ་ཅིན་"
 "རྐྱངམ་གཅིག་ རྒྱུ་དངོས་འདི་ལུ་ནུས་པ་འཐོབ་ཨིན།"
 
-#: gtk/gtkscrolledwindow.c:270
+#: gtk/gtkscrolledwindow.c:268
 msgid "Window Placement Set"
 msgstr "སྒོ་སྒྲིག་བཙུགས་བཞག་ཆ་ཚན།"
 
-#: gtk/gtkscrolledwindow.c:271
+#: gtk/gtkscrolledwindow.c:269
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -4296,37 +4296,37 @@ msgstr ""
 "ནང་དོན་གྱི་གནས་ཁོངས་ཚུ་བཤུད་ཕྲ་ཚུ་དང་འཁྲིལ་ཏེ་ ཐག་བཅད་ནི་ལུ་ \"window-placement\"ལག་ལེན་"
 "འཐབ་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkscrolledwindow.c:277
+#: gtk/gtkscrolledwindow.c:275
 msgid "Shadow Type"
 msgstr "གྱིབ་མའི་དབྱེ་བ།"
 
-#: gtk/gtkscrolledwindow.c:278
+#: gtk/gtkscrolledwindow.c:276
 msgid "Style of bevel around the contents"
 msgstr "ནང་དོན་ཚུ་གི་མཐའ་སྐོར་གྱི་ སེར་ཁའི་བཟོ་རྣམ།"
 
-#: gtk/gtkscrolledwindow.c:292
+#: gtk/gtkscrolledwindow.c:290
 #, fuzzy
 msgid "Scrollbars within bevel"
 msgstr "བཤུད་ཕྲ་གི་ བར་སྟོང་བཞག་ཐངས།"
 
-#: gtk/gtkscrolledwindow.c:293
+#: gtk/gtkscrolledwindow.c:291
 #, fuzzy
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "བཤུད་ཕྲ་ཚུ་དང་ བཤུད་སྒྲིལ་སྒོ་སྒྲིག་གི་བར་ན་ པིག་སེལསི་གི་གྱངས་ཁ།"
 
-#: gtk/gtkscrolledwindow.c:299
+#: gtk/gtkscrolledwindow.c:297
 msgid "Scrollbar spacing"
 msgstr "བཤུད་ཕྲ་གི་ བར་སྟོང་བཞག་ཐངས།"
 
-#: gtk/gtkscrolledwindow.c:300
+#: gtk/gtkscrolledwindow.c:298
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "བཤུད་ཕྲ་ཚུ་དང་ བཤུད་སྒྲིལ་སྒོ་སྒྲིག་གི་བར་ན་ པིག་སེལསི་གི་གྱངས་ཁ།"
 
-#: gtk/gtkscrolledwindow.c:315
+#: gtk/gtkscrolledwindow.c:313
 msgid "Scrolled Window Placement"
 msgstr "བཤུད་སྒྲིལ་འབད་ཡོད་པའི་སྒོ་སྒྲིག་བཙུགས་བཞག"
 
-#: gtk/gtkscrolledwindow.c:316
+#: gtk/gtkscrolledwindow.c:314
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-01 11:07-0400\n"
+"POT-Creation-Date: 2008-09-12 21:20-0400\n"
 "PO-Revision-Date: 2007-09-17 21:50+0200\n"
 "Last-Translator: Robert Millan <rmh@aybabtu.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -233,19 +233,19 @@ msgstr "KP_Supr"
 msgid "keyboard label|Delete"
 msgstr "Supr"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:154 gdk-pixbuf/gdk-pixbuf-io.c:851
-#: gdk-pixbuf/gdk-pixbuf-io.c:1109 tests/testfilechooser.c:218
+#: gdk-pixbuf/gdk-pixbuf-animation.c:154 gdk-pixbuf/gdk-pixbuf-io.c:858
+#: gdk-pixbuf/gdk-pixbuf-io.c:1115 tests/testfilechooser.c:218
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "No s'ha pogut obrir el fitxer «%s»: «%s»"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:167 gdk-pixbuf/gdk-pixbuf-io.c:863
+#: gdk-pixbuf/gdk-pixbuf-animation.c:167 gdk-pixbuf/gdk-pixbuf-io.c:870
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "El fitxer gràfic «%s» no conté dades"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:900
-#: gdk-pixbuf/gdk-pixbuf-io.c:1160 tests/testfilechooser.c:263
+#: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:906
+#: gdk-pixbuf/gdk-pixbuf-io.c:1166 tests/testfilechooser.c:263
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -262,12 +262,12 @@ msgstr ""
 "No es pot carregar l'animació '%s': el motiu és desconegut, probablement un "
 "fitxer d'animació corrupte"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:531
+#: gdk-pixbuf/gdk-pixbuf-io.c:624
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "No és possible carregar el mòdul per a la càrrega d'imatges: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:546
+#: gdk-pixbuf/gdk-pixbuf-io.c:639
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -276,57 +276,57 @@ msgstr ""
 "El mòdul %s per carregar imatges no exporta la interfície adequada; potser "
 "és d'una versió GTK diferent"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:663 gdk-pixbuf/gdk-pixbuf-io.c:692
+#: gdk-pixbuf/gdk-pixbuf-io.c:648 gdk-pixbuf/gdk-pixbuf-io.c:699
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "El tipus d'imatge «%s» no està implementat"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:732
+#: gdk-pixbuf/gdk-pixbuf-io.c:739
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "No s'ha pogut reconèixer el format gràfic del fitxer «%s»"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:740
+#: gdk-pixbuf/gdk-pixbuf-io.c:747
 #, c-format
 msgid "Unrecognized image file format"
 msgstr "No es coneix el format del fitxer gràfic"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:909
+#: gdk-pixbuf/gdk-pixbuf-io.c:915
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "No s'ha pogut carregar la imatge «%s»: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1390
+#: gdk-pixbuf/gdk-pixbuf-io.c:1394
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "S'ha produït un error en escriure el fitxer gràfic: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1436 gdk-pixbuf/gdk-pixbuf-io.c:1567
+#: gdk-pixbuf/gdk-pixbuf-io.c:1439 gdk-pixbuf/gdk-pixbuf-io.c:1569
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Este muntatge de gdk-pixbuf no permet alçar el format d'imatge: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1470
+#: gdk-pixbuf/gdk-pixbuf-io.c:1473
 #, c-format
 msgid "Insufficient memory to save image to callback"
 msgstr "No hi ha memòria suficient per alçar la imatge a la crida de retorn"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1483
+#: gdk-pixbuf/gdk-pixbuf-io.c:1486
 #, c-format
 msgid "Failed to open temporary file"
 msgstr "No s'ha pogut obrir el fitxer temporal"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1509
+#: gdk-pixbuf/gdk-pixbuf-io.c:1512
 #, c-format
 msgid "Failed to read from temporary file"
 msgstr "No s'ha pogut llegir el fitxer temporal"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1744
+#: gdk-pixbuf/gdk-pixbuf-io.c:1746
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "No s'ha pogut obrir «%s» per a escriptura: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1769
+#: gdk-pixbuf/gdk-pixbuf-io.c:1771
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -335,7 +335,7 @@ msgstr ""
 "No s'ha pogut alçar '%s' en escriure la imatge, és probable que no s'hagen "
 "alçat totes les dades: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1989 gdk-pixbuf/gdk-pixbuf-io.c:2039
+#: gdk-pixbuf/gdk-pixbuf-io.c:1991 gdk-pixbuf/gdk-pixbuf-io.c:2041
 #, c-format
 msgid "Insufficient memory to save image into a buffer"
 msgstr ""
@@ -350,7 +350,7 @@ msgstr ""
 "Error intern: El carregador d'imatge «%s» no ha pogut acabar una operació, "
 "però no ha donat cap raó per a la fallada"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:373
+#: gdk-pixbuf/gdk-pixbuf-loader.c:372
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "No està implementada la càrrega incremental del tipus d'imatge «%s»"
@@ -1007,7 +1007,7 @@ msgstr "No s'han pogut escriure dades TIFF"
 msgid "Couldn't write to TIFF file"
 msgstr "No s'ha pogut escriure al fitxer TIFF"
 
-#: gdk-pixbuf/io-tiff.c:816
+#: gdk-pixbuf/io-tiff.c:817
 msgid "The TIFF image format"
 msgstr "El format d'imatge TIFF"
 
@@ -1298,7 +1298,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1595
+#: gtk/gtkcalendar.c:1605
 msgid "year measurement template|2000"
 msgstr "2000"
 
@@ -1313,7 +1313,7 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1626 gtk/gtkcalendar.c:2204
+#: gtk/gtkcalendar.c:1636 gtk/gtkcalendar.c:2214
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1329,7 +1329,7 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1660 gtk/gtkcalendar.c:2078
+#: gtk/gtkcalendar.c:1670 gtk/gtkcalendar.c:2088
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1345,7 +1345,7 @@ msgstr "%d"
 #. * Don't include the prefix "calendar year format|" in the
 #. * translation. "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1869
+#: gtk/gtkcalendar.c:1879
 msgid "calendar year format|%Y"
 msgstr "%Y"
 
@@ -1519,7 +1519,7 @@ msgstr "_Inserix caràcters de control Unicode"
 msgid "Select A File"
 msgstr "Seleccioneu un fitxer"
 
-#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1973
+#: gtk/gtkfilechooserbutton.c:69 gtk/gtkfilechooserdefault.c:1979
 msgid "Desktop"
 msgstr "Escriptori"
 
@@ -1574,184 +1574,184 @@ msgstr "No s'ha pogut mostrar el contingut de la carpeta"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1722
+#: gtk/gtkfilechooserdefault.c:1723
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s a %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1900
+#: gtk/gtkfilechooserdefault.c:1906
 msgid "Search"
 msgstr "Cerca"
 
-#: gtk/gtkfilechooserdefault.c:1924
+#: gtk/gtkfilechooserdefault.c:1930
 msgid "Recently Used"
 msgstr "Utilitzats recentment"
 
-#: gtk/gtkfilechooserdefault.c:2589
+#: gtk/gtkfilechooserdefault.c:2595
 msgid "Select which types of files are shown"
 msgstr "Seleccioneu quins tipus de fitxers es mostren"
 
-#: gtk/gtkfilechooserdefault.c:3017
+#: gtk/gtkfilechooserdefault.c:3023
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Afig la carpeta «%s» a les adreces d'interès"
 
-#: gtk/gtkfilechooserdefault.c:3058
+#: gtk/gtkfilechooserdefault.c:3064
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Afig la carpeta actual a les adreces d'interès"
 
-#: gtk/gtkfilechooserdefault.c:3060
+#: gtk/gtkfilechooserdefault.c:3066
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Afig les carpetes seleccionades a les adreces d'interès"
 
-#: gtk/gtkfilechooserdefault.c:3100
+#: gtk/gtkfilechooserdefault.c:3106
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Suprimix l'adreça d'interès «%s»"
 
-#: gtk/gtkfilechooserdefault.c:3532
+#: gtk/gtkfilechooserdefault.c:3538
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr ""
 "No s'ha pogut afegir una adreça d'interès per a «%s» perquè és un nom de camí "
 "invàlid."
 
-#: gtk/gtkfilechooserdefault.c:3771
+#: gtk/gtkfilechooserdefault.c:3777
 msgid "Remove"
 msgstr "Suprimix"
 
-#: gtk/gtkfilechooserdefault.c:3780
+#: gtk/gtkfilechooserdefault.c:3786
 msgid "Rename..."
 msgstr "Canvia el nom..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3922
+#: gtk/gtkfilechooserdefault.c:3927
 msgid "Places"
 msgstr "Llocs"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3973
+#: gtk/gtkfilechooserdefault.c:3978
 msgid "_Places"
 msgstr "_Llocs"
 
-#: gtk/gtkfilechooserdefault.c:4028 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:4033 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "_Afig"
 
-#: gtk/gtkfilechooserdefault.c:4035
+#: gtk/gtkfilechooserdefault.c:4040
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Afig la carpeta seleccionada a les adreces d'interès"
 
-#: gtk/gtkfilechooserdefault.c:4040 gtk/gtkstock.c:385
+#: gtk/gtkfilechooserdefault.c:4045 gtk/gtkstock.c:385
 msgid "_Remove"
 msgstr "_Suprimix"
 
-#: gtk/gtkfilechooserdefault.c:4047
+#: gtk/gtkfilechooserdefault.c:4052
 msgid "Remove the selected bookmark"
 msgstr "Suprimix les adreces d'interès seleccionades"
 
-#: gtk/gtkfilechooserdefault.c:4144
+#: gtk/gtkfilechooserdefault.c:4149
 msgid "Could not select file"
 msgstr "No s'ha pogut seleccionar el fitxer"
 
-#: gtk/gtkfilechooserdefault.c:4281
+#: gtk/gtkfilechooserdefault.c:4286
 #, c-format
 msgid "Could not select file '%s' because it is an invalid path name."
 msgstr ""
 "No s'ha pogut seleccionar el fitxer «%s» perquè és un nom de camí invàlid."
 
-#: gtk/gtkfilechooserdefault.c:4338
+#: gtk/gtkfilechooserdefault.c:4343
 msgid "_Add to Bookmarks"
 msgstr "_Afig a les adreces d'interès"
 
-#: gtk/gtkfilechooserdefault.c:4352
+#: gtk/gtkfilechooserdefault.c:4357
 msgid "Show _Hidden Files"
 msgstr "Mostra els fitxers _ocults"
 
-#: gtk/gtkfilechooserdefault.c:4596 gtk/gtkfilesel.c:729
+#: gtk/gtkfilechooserdefault.c:4601 gtk/gtkfilesel.c:729
 msgid "Files"
 msgstr "Fitxers"
 
-#: gtk/gtkfilechooserdefault.c:4645
+#: gtk/gtkfilechooserdefault.c:4650
 msgid "Name"
 msgstr "Nom"
 
-#: gtk/gtkfilechooserdefault.c:4670
+#: gtk/gtkfilechooserdefault.c:4675
 msgid "Size"
 msgstr "Grandària"
 
-#: gtk/gtkfilechooserdefault.c:4684
+#: gtk/gtkfilechooserdefault.c:4689
 msgid "Modified"
 msgstr "Modificat"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4904 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4909 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Nom:"
 
-#: gtk/gtkfilechooserdefault.c:4946
+#: gtk/gtkfilechooserdefault.c:4951
 msgid "_Browse for other folders"
 msgstr "Na_vega per unes altres carpetes"
 
-#: gtk/gtkfilechooserdefault.c:5220
+#: gtk/gtkfilechooserdefault.c:5225
 msgid "Type a file name"
 msgstr "Teclegeu un nom de fitxer"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5257
+#: gtk/gtkfilechooserdefault.c:5262
 msgid "Create Fo_lder"
 msgstr "Crea una ca_rpeta"
 
-#: gtk/gtkfilechooserdefault.c:5267
+#: gtk/gtkfilechooserdefault.c:5272
 msgid "_Location:"
 msgstr "_Ubicació:"
 
-#: gtk/gtkfilechooserdefault.c:5505
+#: gtk/gtkfilechooserdefault.c:5510
 msgid "Save in _folder:"
 msgstr "De_sa en la carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:5507
+#: gtk/gtkfilechooserdefault.c:5512
 msgid "Create in _folder:"
 msgstr "Crea en la _carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:7116
+#: gtk/gtkfilechooserdefault.c:7128
 #, c-format
 msgid "Cannot change to folder because it is not local"
 msgstr "No es pot canviar a la carpeta perquè no és local"
 
-#: gtk/gtkfilechooserdefault.c:7732 gtk/gtkfilechooserdefault.c:7753
+#: gtk/gtkfilechooserdefault.c:7744 gtk/gtkfilechooserdefault.c:7765
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La drecera %s ja existix"
 
-#: gtk/gtkfilechooserdefault.c:7843
+#: gtk/gtkfilechooserdefault.c:7855
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La drecera %s no existix"
 
-#: gtk/gtkfilechooserdefault.c:8098 gtk/gtkprintunixdialog.c:356
+#: gtk/gtkfilechooserdefault.c:8110 gtk/gtkprintunixdialog.c:356
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ja existix un fitxer amb el nom «%s». Voleu reemplaçar-ho?"
 
-#: gtk/gtkfilechooserdefault.c:8101 gtk/gtkprintunixdialog.c:360
+#: gtk/gtkfilechooserdefault.c:8113 gtk/gtkprintunixdialog.c:360
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "El fitxer ja existix a «%s». Si ho reemplaceu sobreescriureu el seu contingut."
 
-#: gtk/gtkfilechooserdefault.c:8106 gtk/gtkprintunixdialog.c:367
+#: gtk/gtkfilechooserdefault.c:8118 gtk/gtkprintunixdialog.c:367
 msgid "_Replace"
 msgstr "_Reemplaça"
 
-#: gtk/gtkfilechooserdefault.c:8909
+#: gtk/gtkfilechooserdefault.c:8921
 msgid "Could not start the search process"
 msgstr "No s'ha pogut iniciar el procés de cerca"
 
-#: gtk/gtkfilechooserdefault.c:8910
+#: gtk/gtkfilechooserdefault.c:8922
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1759,56 +1759,56 @@ msgstr ""
 "El programa no ha pogut crear cap connexió al dimoni d'indexació. Assegureu-"
 "vos que s'està executant."
 
-#: gtk/gtkfilechooserdefault.c:8924
+#: gtk/gtkfilechooserdefault.c:8936
 msgid "Could not send the search request"
 msgstr "No s'ha pogut enviar la sol·licitud de cerca"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9352
+#: gtk/gtkfilechooserdefault.c:9364
 msgid "_Search:"
 msgstr "_Cerca:"
 
-#: gtk/gtkfilechooserdefault.c:10305
+#: gtk/gtkfilechooserdefault.c:10317
 #, c-format
 msgid "Could not mount %s"
 msgstr "No s'ha pogut muntar %s"
 
-#: gtk/gtkfilechooserdefault.c:10911
+#: gtk/gtkfilechooserdefault.c:10923
 msgid "Type name of new folder"
 msgstr "Nom del tipus de la nova carpeta"
 
-#: gtk/gtkfilechooserdefault.c:10959
+#: gtk/gtkfilechooserdefault.c:10971
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octets"
 
-#: gtk/gtkfilechooserdefault.c:10961
+#: gtk/gtkfilechooserdefault.c:10973
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10963
+#: gtk/gtkfilechooserdefault.c:10975
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10965
+#: gtk/gtkfilechooserdefault.c:10977
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:11066 gtk/gtkfilechooserdefault.c:11088
-#: gtk/gtkfilechooserdefault.c:11159
+#: gtk/gtkfilechooserdefault.c:11078 gtk/gtkfilechooserdefault.c:11100
+#: gtk/gtkfilechooserdefault.c:11171
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/gtkfilechooserdefault.c:11106
+#: gtk/gtkfilechooserdefault.c:11118
 msgid "Today at %H:%M"
 msgstr "Avui a les %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11108
+#: gtk/gtkfilechooserdefault.c:11120
 msgid "Yesterday at %H:%M"
 msgstr "Ahir a les %H:%M"
 
@@ -2446,17 +2446,17 @@ msgstr "Finalitzat"
 msgid "print operation status|Finished with error"
 msgstr "Finalitzat amb error"
 
-#: gtk/gtkprintoperation.c:1996
+#: gtk/gtkprintoperation.c:2036
 #, c-format
 msgid "Preparing %d"
 msgstr "S'està preparant %d"
 
-#: gtk/gtkprintoperation.c:1998 gtk/gtkprintoperation.c:2252
+#: gtk/gtkprintoperation.c:2038 gtk/gtkprintoperation.c:2294
 #, c-format
 msgid "Preparing"
 msgstr "S'està preparant"
 
-#: gtk/gtkprintoperation.c:2001
+#: gtk/gtkprintoperation.c:2041
 #, c-format
 msgid "Printing %d"
 msgstr "S'està imprimint %d"
@@ -2471,58 +2471,58 @@ msgstr "S'ha produït un error en llançar la previsualització"
 msgid "Error printing"
 msgstr "S'ha produït un error en imprimir"
 
-#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1395
+#: gtk/gtkprintoperation-unix.c:388 gtk/gtkprintoperation-win32.c:1401
 msgid "Application"
 msgstr "Aplicació"
 
 # Connectada? (josep)
-#: gtk/gtkprintoperation-win32.c:564
+#: gtk/gtkprintoperation-win32.c:566
 msgid "Printer offline"
 msgstr "La impressora no està en línia"
 
-#: gtk/gtkprintoperation-win32.c:566
+#: gtk/gtkprintoperation-win32.c:568
 msgid "Out of paper"
 msgstr "No hi ha paper"
 
-#: gtk/gtkprintoperation-win32.c:568
+#: gtk/gtkprintoperation-win32.c:570
 msgid "Paused"
 msgstr "En pausa"
 
-#: gtk/gtkprintoperation-win32.c:570
+#: gtk/gtkprintoperation-win32.c:572
 msgid "Need user intervention"
 msgstr "Cal la intervenció de l'usuari"
 
-#: gtk/gtkprintoperation-win32.c:670
+#: gtk/gtkprintoperation-win32.c:672
 msgid "Custom size"
 msgstr "Grandària personalitzada"
 
-#: gtk/gtkprintoperation-win32.c:1485 gtk/gtkprintoperation-win32.c:1508
-#: gtk/gtkprintoperation-win32.c:1556
+#: gtk/gtkprintoperation-win32.c:1491 gtk/gtkprintoperation-win32.c:1514
+#: gtk/gtkprintoperation-win32.c:1562
 #, c-format
 msgid "Not enough free memory"
 msgstr "No hi ha prou memòria"
 
-#: gtk/gtkprintoperation-win32.c:1561
+#: gtk/gtkprintoperation-win32.c:1567
 #, c-format
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Argument no vàlid a PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1566
+#: gtk/gtkprintoperation-win32.c:1572
 #, c-format
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Punter no vàlid a PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1571
+#: gtk/gtkprintoperation-win32.c:1577
 #, c-format
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Gestor no vàlid a PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1576
+#: gtk/gtkprintoperation-win32.c:1582
 #, c-format
 msgid "Unspecified error"
 msgstr "Error no especificat"
 
-#: gtk/gtkprintoperation-win32.c:1627
+#: gtk/gtkprintoperation-win32.c:1633
 #, c-format
 msgid "Error from StartDoc"
 msgstr "Error de StartDoc"
@@ -4416,84 +4416,84 @@ msgstr "Vietnamita (VIQR)"
 msgid "X Input Method"
 msgstr "Mètode d'entrada d'X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1716
+#: modules/printbackends/cups/gtkprintbackendcups.c:1728
 msgid "Two Sided"
 msgstr "Doble cara"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1717
+#: modules/printbackends/cups/gtkprintbackendcups.c:1729
 msgid "Paper Type"
 msgstr "Tipus de paper"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1718
+#: modules/printbackends/cups/gtkprintbackendcups.c:1730
 msgid "Paper Source"
 msgstr "Font del paper"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1719
+#: modules/printbackends/cups/gtkprintbackendcups.c:1731
 msgid "Output Tray"
 msgstr "Safata d'eixida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1728
+#: modules/printbackends/cups/gtkprintbackendcups.c:1740
 msgid "One Sided"
 msgstr "Una cara"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1729
-#: modules/printbackends/cups/gtkprintbackendcups.c:1730
-#: modules/printbackends/cups/gtkprintbackendcups.c:1734
+#: modules/printbackends/cups/gtkprintbackendcups.c:1741
+#: modules/printbackends/cups/gtkprintbackendcups.c:1742
+#: modules/printbackends/cups/gtkprintbackendcups.c:1746
 msgid "Auto Select"
 msgstr "Selecció automàtica"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1731
-#: modules/printbackends/cups/gtkprintbackendcups.c:1732
-#: modules/printbackends/cups/gtkprintbackendcups.c:1733
-#: modules/printbackends/cups/gtkprintbackendcups.c:2203
+#: modules/printbackends/cups/gtkprintbackendcups.c:1743
+#: modules/printbackends/cups/gtkprintbackendcups.c:1744
+#: modules/printbackends/cups/gtkprintbackendcups.c:1745
+#: modules/printbackends/cups/gtkprintbackendcups.c:2215
 msgid "Printer Default"
 msgstr "Predeterminat de la impressora"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2397
+#: modules/printbackends/cups/gtkprintbackendcups.c:2409
 msgid "Urgent"
 msgstr "Urgent"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2397
+#: modules/printbackends/cups/gtkprintbackendcups.c:2409
 msgid "High"
 msgstr "Alta"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2397
+#: modules/printbackends/cups/gtkprintbackendcups.c:2409
 msgid "Medium"
 msgstr "Mitjana"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2397
+#: modules/printbackends/cups/gtkprintbackendcups.c:2409
 msgid "Low"
 msgstr "Baixa"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2399
+#: modules/printbackends/cups/gtkprintbackendcups.c:2411
 msgid "None"
 msgstr "Cap"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2399
+#: modules/printbackends/cups/gtkprintbackendcups.c:2411
 msgid "Classified"
 msgstr "Classificat"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2399
+#: modules/printbackends/cups/gtkprintbackendcups.c:2411
 msgid "Confidential"
 msgstr "Confidencial"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2399
+#: modules/printbackends/cups/gtkprintbackendcups.c:2411
 msgid "Secret"
 msgstr "Secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2399
+#: modules/printbackends/cups/gtkprintbackendcups.c:2411
 msgid "Standard"
 msgstr "Estàndard"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2399
+#: modules/printbackends/cups/gtkprintbackendcups.c:2411
 msgid "Top Secret"
 msgstr "Alt secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2399
+#: modules/printbackends/cups/gtkprintbackendcups.c:2411
 msgid "Unclassified"
 msgstr "Desclassificat"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2492
+#: modules/printbackends/cups/gtkprintbackendcups.c:2504
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "Personalitzat %.2fx%.2f"
@@ -4504,28 +4504,28 @@ msgstr "Personalitzat %.2fx%.2f"
 msgid "output.%s"
 msgstr "eixida %s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:465
+#: modules/printbackends/file/gtkprintbackendfile.c:467
 msgid "Print to File"
 msgstr "Imprimix a un fitxer"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:542
+#: modules/printbackends/file/gtkprintbackendfile.c:544
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:542
+#: modules/printbackends/file/gtkprintbackendfile.c:544
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:554
-#: modules/printbackends/test/gtkprintbackendtest.c:501
+#: modules/printbackends/file/gtkprintbackendfile.c:556
+#: modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "Pàgines per _full:"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:600
+#: modules/printbackends/file/gtkprintbackendfile.c:602
 msgid "File"
 msgstr "Fitxer"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:609
+#: modules/printbackends/file/gtkprintbackendfile.c:611
 msgid "_Output format"
 msgstr "F_ormat d'eixida"
 
@@ -4548,7 +4548,7 @@ msgstr "Línia d'ordres"
 msgid "test-output.%s"
 msgstr "prova-de-eixida.%s"
 
-#: modules/printbackends/test/gtkprintbackendtest.c:465
+#: modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "Imprimiu per a provar la impressora"
 

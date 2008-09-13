@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-01 11:07-0400\n"
+"POT-Creation-Date: 2008-09-12 21:21-0400\n"
 "PO-Revision-Date: 2005-02-08 08:59+0200\n"
 "Last-Translator: Canonical Ltd <translations@canonical.com>\n"
 "Language-Team: Xhosa <xh-translate@ubuntu.com>\n"
@@ -3050,7 +3050,7 @@ msgstr "Nokuba ngaba ukhethe iziqulatho zesingeniso xa sigxininisiwe"
 msgid "Horizontal adjustment"
 msgstr "Uhlenga-hlengiso oluthe tyaba"
 
-#: gtk/gtklayout.c:603 gtk/gtkscrolledwindow.c:222
+#: gtk/gtklayout.c:603 gtk/gtkscrolledwindow.c:220
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "I-GtkAdjustment ngokwendawo ethe tyaba"
 
@@ -3058,7 +3058,7 @@ msgstr "I-GtkAdjustment ngokwendawo ethe tyaba"
 msgid "Vertical adjustment"
 msgstr "Uhlenga-hlengiso oluthe nkqo"
 
-#: gtk/gtklayout.c:611 gtk/gtkscrolledwindow.c:229
+#: gtk/gtklayout.c:611 gtk/gtkscrolledwindow.c:227
 msgid "The GtkAdjustment for the vertical position"
 msgstr "I-GtkAdjustment ngokwendawo ethe nkqo"
 
@@ -4485,89 +4485,89 @@ msgstr ""
 "Bonisa iqhosha lesalathisi esijonge ngaphambili esikudidi lwesibinikwelinye "
 "icala lomgca wokwehlisa usenyusa"
 
-#: gtk/gtkscrolledwindow.c:221 gtk/gtktext.c:541 gtk/gtktreeview.c:572
+#: gtk/gtkscrolledwindow.c:219 gtk/gtktext.c:541 gtk/gtktreeview.c:572
 msgid "Horizontal Adjustment"
 msgstr "Uhlenga-hlengiso Oluthe Tyaba"
 
-#: gtk/gtkscrolledwindow.c:228 gtk/gtktext.c:549 gtk/gtktreeview.c:580
+#: gtk/gtkscrolledwindow.c:226 gtk/gtktext.c:549 gtk/gtktreeview.c:580
 msgid "Vertical Adjustment"
 msgstr "Uhlenga-hlengiso Oluthe Nkqo"
 
-#: gtk/gtkscrolledwindow.c:235
+#: gtk/gtkscrolledwindow.c:233
 msgid "Horizontal Scrollbar Policy"
 msgstr "Umgaqo-nkqubo Womgca Wokwehlisa Usenyusa Othe Tyaba"
 
-#: gtk/gtkscrolledwindow.c:236
+#: gtk/gtkscrolledwindow.c:234
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Xa umgca wokwehlisa usenyusa othe tyaba ubonakalisiwe"
 
-#: gtk/gtkscrolledwindow.c:243
+#: gtk/gtkscrolledwindow.c:241
 msgid "Vertical Scrollbar Policy"
 msgstr "Umgaqo-nkqubo Womgca Wokwehlisa Usenyusa Othe Nkqo"
 
-#: gtk/gtkscrolledwindow.c:244
+#: gtk/gtkscrolledwindow.c:242
 msgid "When the vertical scrollbar is displayed"
 msgstr "Xa umgca wokwehlisa usenyusa othe nkqo ubonakalisiwe"
 
-#: gtk/gtkscrolledwindow.c:252
+#: gtk/gtkscrolledwindow.c:250
 msgid "Window Placement"
 msgstr "Ukubekwa Kwefestile Ngokwendawo"
 
-#: gtk/gtkscrolledwindow.c:253
+#: gtk/gtkscrolledwindow.c:251
 #, fuzzy
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
 msgstr "Apho zikhoyo iziqulatho ngokunxulumene nemigca yokuhlisa usenyusa"
 
-#: gtk/gtkscrolledwindow.c:270
+#: gtk/gtkscrolledwindow.c:268
 #, fuzzy
 msgid "Window Placement Set"
 msgstr "Ukubekwa Kwefestile Ngokwendawo"
 
-#: gtk/gtkscrolledwindow.c:271
+#: gtk/gtkscrolledwindow.c:269
 #, fuzzy
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
 msgstr "Apho zikhoyo iziqulatho ngokunxulumene nemigca yokuhlisa usenyusa"
 
-#: gtk/gtkscrolledwindow.c:277
+#: gtk/gtkscrolledwindow.c:275
 msgid "Shadow Type"
 msgstr "Uhlobo Lwesithunzi"
 
-#: gtk/gtkscrolledwindow.c:278
+#: gtk/gtkscrolledwindow.c:276
 msgid "Style of bevel around the contents"
 msgstr "Isimbo somphetho othambekileyo ngokujikeleze iziqulatho"
 
-#: gtk/gtkscrolledwindow.c:292
+#: gtk/gtkscrolledwindow.c:290
 #, fuzzy
 msgid "Scrollbars within bevel"
 msgstr "Ukufaka izithuba kumgca wokuhlisa usenyusa"
 
-#: gtk/gtkscrolledwindow.c:293
+#: gtk/gtkscrolledwindow.c:291
 #, fuzzy
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr ""
 "Inani lee-pixels eziphakathi kwemigca yokuhlisa usenyusa kunye nefestile "
 "enokwehliswa kwenyuswa kuyo"
 
-#: gtk/gtkscrolledwindow.c:299
+#: gtk/gtkscrolledwindow.c:297
 msgid "Scrollbar spacing"
 msgstr "Ukufaka izithuba kumgca wokuhlisa usenyusa"
 
-#: gtk/gtkscrolledwindow.c:300
+#: gtk/gtkscrolledwindow.c:298
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "Inani lee-pixels eziphakathi kwemigca yokuhlisa usenyusa kunye nefestile "
 "enokwehliswa kwenyuswa kuyo"
 
-#: gtk/gtkscrolledwindow.c:315
+#: gtk/gtkscrolledwindow.c:313
 #, fuzzy
 msgid "Scrolled Window Placement"
 msgstr "Ukubekwa Kwefestile Ngokwendawo"
 
-#: gtk/gtkscrolledwindow.c:316
+#: gtk/gtkscrolledwindow.c:314
 #, fuzzy
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
