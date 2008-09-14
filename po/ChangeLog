@@ -1,3 +1,7 @@
+2008-09-13  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+
+	* pt_BR.po: Fixed translation of "login" and improved some access keys.
+
 2008-09-11  Sweta Kothari  <swkothar@redhat.com>
 
 	* gu.po: Committed Gujarati Translation.

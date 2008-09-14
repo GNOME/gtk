@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-04 21:57-0400\n"
-"PO-Revision-Date: 2008-08-31 01:32-0300\n"
+"PO-Revision-Date: 2008-09-13 23:06-0300\n"
 "Last-Translator: Leonardo Ferreira Fontenelle <leonardof@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -2234,15 +2234,15 @@ msgstr "_Senha:"
 
 #: gtk/gtkmountoperation.c:590
 msgid "Forget password _immediately"
-msgstr "Esquecer senha i_mediatamente"
+msgstr "_Esquecer senha imediatamente"
 
 #: gtk/gtkmountoperation.c:598
 msgid "Remember password until you _logout"
-msgstr "Lembrar senha até que você d_esconecte"
+msgstr "Lembrar senha até o _fim dessa sessão"
 
 #: gtk/gtkmountoperation.c:606
 msgid "Remember _forever"
-msgstr "Lembrar para sem_pre"
+msgstr "_Lembrar para sempre"
 
 #: gtk/gtknotebook.c:4417 gtk/gtknotebook.c:6923
 #, c-format
