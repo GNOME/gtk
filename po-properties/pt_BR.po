@@ -2,7 +2,7 @@
 # Copyright (C) 1999, 2004, 2005 Free Software Foundation, Inc.
 # Alex Sandro Queiroz e Silva <asandro@lcg.dc.ufc.br>, 1999.
 # Afonso Celso Medina <medina@maua.br>, 2004, 2005.
-# Leonardo Ferreira Fontenelle <leo.fontenelle@gmail.com>, 2006, 2008.
+# Leonardo Ferreira Fontenelle <leonardof@gnome.org>, 2006, 2008.
 # Og Maciel <ogmaciel@gnome.org>, 2007.
 # Pedro Vaz Mello de Medeiros <pedrovmm@gmail.com>, 2007.
 # Henrique P Machado <zehrique@gmail.com>, 2008.
@@ -585,7 +585,7 @@ msgstr "Taxa"
 
 #: ../gtk/gtkaspectframe.c:94
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr "Proporção se \"obey_child\" for FALSO"
+msgstr "Taxa de proporção se \"obey_child\" for FALSO"
 
 #: ../gtk/gtkaspectframe.c:100
 msgid "Obey child"
@@ -593,7 +593,7 @@ msgstr "Obedecer ao filho"
 
 #: ../gtk/gtkaspectframe.c:101
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr "Força proporção a acompanhar a do filho dentro da moldura"
+msgstr "Força taxa de proporção a acompanhar a do filho dentro da moldura"
 
 #: ../gtk/gtkassistant.c:261
 msgid "Header Padding"
@@ -6626,11 +6626,11 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:2246
 msgid "Cursor line aspect ratio"
-msgstr "Proporção da linha do cursor"
+msgstr "Taxa de proporção da linha do cursor"
 
 #: ../gtk/gtkwidget.c:2247
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr "Proporção com a qual desenhar o cursor de inserção"
+msgstr "Taxa de proporção com a qual desenhar o cursor de inserção"
 
 #: ../gtk/gtkwidget.c:2261
 msgid "Draw Border"
@@ -6961,16 +6961,8 @@ msgstr "Como desenhar a barra de status do método de entrada"
 #~ "Um número entre 0.0 e 1.0 especificando o alinhamento vertical do texto "
 #~ "no widget de progresso"
 
-#, fuzzy
-#~ msgid "The current page in the document."
-#~ msgstr "O tamanho da página do ajuste"
-
 #~ msgid "Homogenous"
 #~ msgstr "Homogéneo"
-
-#, fuzzy
-#~ msgid "Show Preview"
-#~ msgstr "Mostrar texto"
 
 #~ msgid "Whether this text is hidden. Not implemented in GTK 2.0"
 #~ msgstr "Se este texto está escondido. Não implementado no GTK 2.0"
