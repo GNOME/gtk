@@ -1,3 +1,8 @@
+2008-09-16  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkwidget.c (_gtk_widget_set,get_pointer_window): don't
+	access widget->window if the widget is not realized.
+
 2008-09-16  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 551987 – GtkPaned redrawing problem

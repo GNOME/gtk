@@ -8059,20 +8059,23 @@ _gtk_widget_peek_colormap (void)
  * _gtk_widget_set_pointer_window:
  * @widget: a #GtkWidget.
  * @pointer_window: the new pointer window.
- *  
+ *
  * Sets pointer window for @widget.  Does not ref @pointer_window.
  * Actually stores it on the #GdkScreen, but you don't need to know that.
  **/
 void
-_gtk_widget_set_pointer_window   (GtkWidget *widget,
-				  GdkWindow *pointer_window)
+_gtk_widget_set_pointer_window (GtkWidget *widget,
+                                GdkWindow *pointer_window)
 {
-  GdkScreen *screen;
-  
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  screen = gdk_drawable_get_screen (GDK_DRAWABLE (widget->window));
-  g_object_set_qdata (G_OBJECT (screen), quark_pointer_window, pointer_window);
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      GdkScreen *screen = gdk_drawable_get_screen (widget->window);
+
+      g_object_set_qdata (G_OBJECT (screen), quark_pointer_window,
+                          pointer_window);
+    }
 }
 
 /**
@@ -8083,14 +8086,18 @@ _gtk_widget_set_pointer_window   (GtkWidget *widget,
  * to, or %NULL.
  **/
 GdkWindow *
-_gtk_widget_get_pointer_window   (GtkWidget *widget)
+_gtk_widget_get_pointer_window (GtkWidget *widget)
 {
-  GdkScreen *screen;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  screen = gdk_drawable_get_screen (GDK_DRAWABLE (widget->window));
-  return g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      GdkScreen *screen = gdk_drawable_get_screen (widget->window);
+
+      return g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+    }
+
+  return NULL;
 }
 
 static void
