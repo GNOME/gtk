@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-04 21:57-0400\n"
-"PO-Revision-Date: 2008-08-30 20:29+0700\n"
+"PO-Revision-Date: 2008-09-16 20:26+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -3138,7 +3138,7 @@ msgstr "_หยุด"
 
 #: gtk/gtkstock.c:397
 msgid "_Strikethrough"
-msgstr "_ขีดทับ"
+msgstr "ขีด_ทับ"
 
 #: gtk/gtkstock.c:398
 msgid "_Undelete"
