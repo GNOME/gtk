@@ -2,6 +2,12 @@
 
 	Bug 551987 – GtkPaned redrawing problem
 
+	* gtk/gtkpaned.c: Remove excess invalidations. Patch by Owen Taylor
+
+2008-09-16  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 551987 – GtkPaned redrawing problem
+
 	* gtk/gtkhpaned.c:
 	* gtk/gtkvpaned.c: Queue invalidations when the handle is moved 
 	due to child changes. Patch by Owen Taylor

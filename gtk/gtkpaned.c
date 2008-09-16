@@ -536,7 +536,11 @@ static void
 gtk_paned_init (GtkPaned *paned)
 {
   GTK_WIDGET_SET_FLAGS (paned, GTK_NO_WINDOW | GTK_CAN_FOCUS);
-  
+
+  /* We only need to redraw when the handle position moves, which is
+   * independent of the overall allocation of the GtkPaned */
+  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (paned), FALSE);
+
   paned->child1 = NULL;
   paned->child2 = NULL;
   paned->handle = NULL;
@@ -577,7 +581,7 @@ gtk_paned_set_property (GObject        *object,
       break;
     case PROP_POSITION_SET:
       paned->position_set = g_value_get_boolean (value);
-      gtk_widget_queue_resize (GTK_WIDGET (paned));
+      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (paned));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -658,7 +662,7 @@ gtk_paned_set_child_property (GtkContainer    *container,
       break;
     }
   if (old_value != new_value)
-    gtk_widget_queue_resize (GTK_WIDGET (container));
+    gtk_widget_queue_resize_no_redraw (GTK_WIDGET (container));
 }
 
 static void
@@ -1145,7 +1149,7 @@ gtk_paned_remove (GtkContainer *container,
       paned->child1 = NULL;
 
       if (was_visible && GTK_WIDGET_VISIBLE (container))
-	gtk_widget_queue_resize (GTK_WIDGET (container));
+	gtk_widget_queue_resize_no_redraw (GTK_WIDGET (container));
     }
   else if (paned->child2 == widget)
     {
@@ -1154,7 +1158,7 @@ gtk_paned_remove (GtkContainer *container,
       paned->child2 = NULL;
 
       if (was_visible && GTK_WIDGET_VISIBLE (container))
-	gtk_widget_queue_resize (GTK_WIDGET (container));
+	gtk_widget_queue_resize_no_redraw (GTK_WIDGET (container));
     }
 }
 
@@ -1232,7 +1236,7 @@ gtk_paned_set_position (GtkPaned *paned,
   g_object_notify (object, "position-set");
   g_object_thaw_notify (object);
 
-  gtk_widget_queue_resize (GTK_WIDGET (paned));
+  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (paned));
 
 #ifdef G_OS_WIN32
   /* Hacky work-around for bug #144269 */
