@@ -130,6 +130,7 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
       GtkAllocation child2_allocation;
       GtkRequisition child1_requisition;
       GtkRequisition child2_requisition;
+      GdkRectangle old_handle_pos;
       gint handle_size;
       
       gtk_widget_style_get (widget, "handle-size", &handle_size, NULL);
@@ -143,6 +144,8 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
 				       - 2 * border_width),
 				  child1_requisition.width,
 				  child2_requisition.width);
+
+      old_handle_pos = paned->handle_pos;
       
       paned->handle_pos.x = widget->allocation.x + paned->child1_size + border_width;
       paned->handle_pos.y = widget->allocation.y + border_width;
@@ -164,6 +167,14 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
 	  flip_child (widget, &(paned->handle_pos));
 	}
       
+      if (GTK_WIDGET_MAPPED (widget) &&
+	  (old_handle_pos.x != paned->handle_pos.x || old_handle_pos.y != paned->handle_pos.y ||
+	   old_handle_pos.width != paned->handle_pos.width || old_handle_pos.height != paned->handle_pos.height))
+	{
+	  gdk_window_invalidate_rect (widget->window, &old_handle_pos, FALSE);
+	  gdk_window_invalidate_rect (widget->window, &paned->handle_pos, FALSE);
+	}
+
       if (GTK_WIDGET_REALIZED (widget))
 	{
 	  if (GTK_WIDGET_MAPPED (widget))
