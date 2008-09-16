@@ -1,3 +1,11 @@
+2008-09-16  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 552001 – gtkimcontextsimple.c: variable is declared at middle of
+	block
+
+	* gtk/gtkimcontextsimple.c: Fix a C99ism, pointed out by Kazuki
+	Iwamoto.
+
 2008-09-13  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkmain.c: Don't use the deprectated

@@ -485,10 +485,11 @@ check_algorithmically (GtkIMContextSimple    *context_simple,
        */
       if (check_normalize_nfc (combination_buffer, n_compose))
         {
+          gunichar value;
       	  combination_utf8 = g_ucs4_to_utf8 (combination_buffer, -1, NULL, NULL, NULL);
           nfc = g_utf8_normalize (combination_utf8, -1, G_NORMALIZE_NFC);
 
-          gunichar value = g_utf8_get_char (nfc);
+          value = g_utf8_get_char (nfc);
           gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
           context_simple->compose_buffer[0] = 0;
 
