@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: te\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-05 02:37+0000\n"
-"PO-Revision-Date: 2008-09-11 19:37+0530\n"
+"PO-Revision-Date: 2008-09-12 19:23+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,6 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 
@@ -2129,7 +2130,7 @@ msgstr "అసత్యము, అసలు పాఠమునకు బదు�
 
 #: ../gtk/gtkentry.c:532
 msgid "FALSE removes outside bevel from entry"
-msgstr "అసత్యము, ప్రవేశము నుంచి వాలు అంచు బయటవైపును తొలగించును"
+msgstr "అసత్యము, ప్రవేశము నుంచి వాలుఅంచు బయటవైపును తొలగించును"
 
 #: ../gtk/gtkentry.c:540
 msgid "Border between text and frame. Overrides the inner-border style property"
@@ -2163,7 +2164,7 @@ msgstr "ప్రవేశములోని కొరకు ఖాళీ వద
 
 #: ../gtk/gtkentry.c:572
 msgid "Scroll offset"
-msgstr "ఆఫ్‌సెట్‌ను స్క్రాల్‌చేయి"
+msgstr "ఆఫ్‌సెట్‌ను జార్చు"
 
 #: ../gtk/gtkentry.c:573
 msgid "Number of pixels of the entry scrolled off the screen to the left"
@@ -3178,7 +3179,7 @@ msgstr "కట్ట దిశ"
 
 #: ../gtk/gtkmenubar.c:169
 msgid "The pack direction of the menubar"
-msgstr "మెనూబార్ యొక్క కట్ట దిశ"
+msgstr "మెనూపట్టీ యొక్క కట్ట దిశ"
 
 #: ../gtk/gtkmenubar.c:185
 msgid "Child Pack direction"
@@ -3186,11 +3187,11 @@ msgstr "శిశువు కట్ట దిశ"
 
 #: ../gtk/gtkmenubar.c:186
 msgid "The child pack direction of the menubar"
-msgstr "మోనూబార్ యొక్క శిశువు కట్ట దిశ"
+msgstr "మోనూపట్టీ యొక్క శిశువు కట్ట దిశ"
 
 #: ../gtk/gtkmenubar.c:195
 msgid "Style of bevel around the menubar"
-msgstr "మెనూబార్ చుట్టూ బెవెల్ యొక్క శైలి"
+msgstr "మెనూపట్టీ చుట్టూ బెవెల్ యొక్క శైలి"
 
 #: ../gtk/gtkmenubar.c:202 ../gtk/gtktoolbar.c:597
 msgid "Internal padding"
@@ -3198,7 +3199,7 @@ msgstr "అంతర్గత పాడింగ్"
 
 #: ../gtk/gtkmenubar.c:203
 msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr "మెనూబార్ నీడకు మరియు మెనూబార్ అంశములకు మధ్యన సరిహద్దు ఖాళీయొక్క మొత్తం"
+msgstr "మెనూపట్టీ నీడకు మరియు మెనూపట్టీ అంశములకు మధ్యన సరిహద్దు ఖాళీయొక్క మొత్తం"
 
 #: ../gtk/gtkmenubar.c:210
 msgid "Delay before drop down menus appear"
@@ -3206,7 +3207,7 @@ msgstr "డ్రాప్ డౌన్ మెనూలు కనిపించ
 
 #: ../gtk/gtkmenubar.c:211
 msgid "Delay before the submenus of a menu bar appear"
-msgstr "మెనూబార్ యొక్క వుపమెనూలు కనిపించుటకు ముందు ఆలస్యం"
+msgstr "మెనూపట్టీ యొక్క వుపమెనూలు కనిపించుటకు ముందు ఆలస్యం"
 
 #: ../gtk/gtkmenuitem.c:201
 msgid "Right Justified"
@@ -3214,7 +3215,7 @@ msgstr "కుడి సర్దుబాటు"
 
 #: ../gtk/gtkmenuitem.c:202
 msgid "Sets whether the menu item appears justified at the right side of a menu bar"
-msgstr "కనిపించే మెనూఅంశము మెనూబార్‌యొక్క కుడిప్రక్కన సర్దుబాటు కావలెనంటే అమర్చుతుంది"
+msgstr "కనిపించే మెనూఅంశము మెనూపట్టీయొక్క కుడిప్రక్కన సర్దుబాటు కావలెనంటే అమర్చుతుంది"
 
 #: ../gtk/gtkmenuitem.c:216
 msgid "Submenu"
@@ -3424,11 +3425,11 @@ msgstr "సరిహద్దు చూపబడవలెనా లేదా"
 
 #: ../gtk/gtknotebook.c:630
 msgid "Scrollable"
-msgstr "స్క్రాల్‌చేయగల"
+msgstr "జార్చగల"
 
 #: ../gtk/gtknotebook.c:631
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
-msgstr "నిజమైతే, ఎక్కువ టాబ్‌లు పట్టించవలిసినప్పుడు స్క్రాల్ బాణాలు జతచేయబడతాయి"
+msgstr "నిజమైతే, ఎక్కువ టాబ్‌లు పట్టించవలిసినప్పుడు జార్చే బాణాలు జతచేయబడతాయి"
 
 #: ../gtk/gtknotebook.c:637
 msgid "Enable Popup"
@@ -3570,7 +3571,7 @@ msgstr "బాణము క్రమాంతరీకరణం"
 
 #: ../gtk/gtknotebook.c:835
 msgid "Scroll arrow spacing"
-msgstr "బాణము క్రమాంతరీకరణం స్క్రాల్‌చేయి"
+msgstr "బాణము క్రమాంతరీకరణం జార్చు"
 
 #: ../gtk/gtkobject.c:370
 msgid "User Data"
@@ -3937,15 +3938,15 @@ msgstr "పురోగతి పాఠ్యములాగా చూపిం�
 
 #: ../gtk/gtkprogressbar.c:119
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
-msgstr "జిటికెసర్దుబాటు పురోగతి బార్‌కు అనుసంధానించబడింది (ఆపివేయబడింది)"
+msgstr "జిటికెసర్దుబాటు పురోగతి పట్టీకు అనుసంధానించబడింది (ఆపివేయబడింది)"
 
 #: ../gtk/gtkprogressbar.c:135
 msgid "Bar style"
-msgstr "బార్ శైలి"
+msgstr "పట్టీ శైలి"
 
 #: ../gtk/gtkprogressbar.c:136
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
-msgstr "బార్‌యొక్క దృశ్య శైలిని శాతము రీతిలో తెలుపుతుంది (ఆపివేయబడింది)"
+msgstr "పట్టీయొక్క దృశ్య శైలిని శాతము రీతిలో తెలుపుతుంది (ఆపివేయబడింది)"
 
 #: ../gtk/gtkprogressbar.c:144
 msgid "Activity Step"
@@ -3963,7 +3964,7 @@ msgstr "క్రియాశీలత బ్లాక్స్‍"
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
-msgstr "క్రియాశీలత రీతినందు పురోగతి బార్ ప్రాంతమునందు పట్టగలిగే బ్లాకుల సంఖ్య (ఆపివేయబడింది)"
+msgstr "క్రియాశీలత రీతినందు పురోగతి పట్టీ ప్రాంతమునందు పట్టగలిగే బ్లాకుల సంఖ్య (ఆపివేయబడింది)"
 
 #: ../gtk/gtkprogressbar.c:160
 msgid "Discrete Blocks"
@@ -3973,7 +3974,7 @@ msgstr "ఒంటరి బ్లాకులు"
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
-msgstr "పురోగతి బార్‌నందలి వొంటరి బ్లాకుల సంఖ్య (ఒంటరి శైలిలో చూపినప్పుడు)"
+msgstr "పురోగతి పట్టీనందలి వొంటరి బ్లాకుల సంఖ్య (ఒంటరి శైలిలో చూపినప్పుడు)"
 
 #: ../gtk/gtkprogressbar.c:168
 msgid "Fraction"
@@ -3993,14 +3994,14 @@ msgstr "పల్సైనప్పుడు బౌన్సింగ్ బ్�
 
 #: ../gtk/gtkprogressbar.c:185
 msgid "Text to be displayed in the progress bar"
-msgstr "పురోగతిబార్ నందు ప్రదర్శించవలసిన పాఠ్యము"
+msgstr "పురోగతిపట్టీ నందు ప్రదర్శించవలసిన పాఠ్యము"
 
 #: ../gtk/gtkprogressbar.c:207
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
 msgstr ""
-"ఒకవేళ పూర్తి పదబంధమును ప్రదర్శించుటకు పురోగతి బార్‌నందు తగిన స్థలము లేనిచో, పదబంధమును "
+"ఒకవేళ పూర్తి పదబంధమును ప్రదర్శించుటకు పురోగతి పట్టీనందు తగిన స్థలము లేనిచో, పదబంధమును "
 "బహుళ వరుసలలోనికి విడగొట్టుటకు అభీష్టస్థలము"
 
 #: ../gtk/gtkprogressbar.c:214
@@ -4009,7 +4010,7 @@ msgstr "XSpacing"
 
 #: ../gtk/gtkprogressbar.c:215
 msgid "Extra spacing applied to the width of a progress bar."
-msgstr "పురోగతి బార్ యొక్క వెడల్పునకు ఆపాదించిన అధిక క్రమాంతరీకరణ"
+msgstr "పురోగతి పట్టీ యొక్క వెడల్పునకు ఆపాదించిన అధిక క్రమాంతరీకరణ"
 
 #: ../gtk/gtkprogressbar.c:220
 msgid "YSpacing"
@@ -4017,11 +4018,11 @@ msgstr "YSpacing"
 
 #: ../gtk/gtkprogressbar.c:221
 msgid "Extra spacing applied to the height of a progress bar."
-msgstr "పురోగతి బార్ యొక్క ఎత్తుకు ఆపాదించిన అధిక క్రమాంతరీకరణ."
+msgstr "పురోగతి పట్టీ యొక్క ఎత్తుకు ఆపాదించిన అధిక క్రమాంతరీకరణ."
 
 #: ../gtk/gtkprogressbar.c:234
 msgid "Min horizontal bar width"
-msgstr "హారిజాంటల్ బార్ కనీస వెడల్పు"
+msgstr "హారిజాంటల్ పట్టీ కనీస వెడల్పు"
 
 #: ../gtk/gtkprogressbar.c:235
 msgid "The minimum horizontal width of the progress bar"
@@ -4029,27 +4030,27 @@ msgstr "పరోగమన పట్టీ యొక్క కనీస హా�
 
 #: ../gtk/gtkprogressbar.c:247
 msgid "Min horizontal bar height"
-msgstr "హారిజాంటల్ బార్ కనీస ఎత్తు"
+msgstr "హారిజాంటల్ పట్టీ కనీస ఎత్తు"
 
 #: ../gtk/gtkprogressbar.c:248
 msgid "Minimum horizontal height of the progress bar"
-msgstr "పురోగమన బార్‌యొక్క కనీస హారిజాంటల్ ఎత్తు"
+msgstr "పురోగమన పట్టీయొక్క కనీస హారిజాంటల్ ఎత్తు"
 
 #: ../gtk/gtkprogressbar.c:260
 msgid "Min vertical bar width"
-msgstr "నిలువు బార్ యొక్క కనీస ఎత్తు"
+msgstr "నిలువు పట్టీ యొక్క కనీస ఎత్తు"
 
 #: ../gtk/gtkprogressbar.c:261
 msgid "The minimum vertical width of the progress bar"
-msgstr "పురోగమన బార్‌యొక్క కనీసపు నిలువు ఎత్తు"
+msgstr "పురోగమన పట్టీయొక్క కనీసపు నిలువు ఎత్తు"
 
 #: ../gtk/gtkprogressbar.c:273
 msgid "Min vertical bar height"
-msgstr "నిలువు బార్ కనీస ఎత్తు"
+msgstr "నిలువు పట్టీ కనీస ఎత్తు"
 
 #: ../gtk/gtkprogressbar.c:274
 msgid "The minimum vertical height of the progress bar"
-msgstr "పురోగమన బార్‌యొక్క కనీసపు నిలువు ఎత్తు"
+msgstr "పురోగమన పట్టీయొక్క కనీసపు నిలువు ఎత్తు"
 
 #: ../gtk/gtkradioaction.c:111
 msgid "The value"
@@ -4159,7 +4160,7 @@ msgstr "స్లైడర్ వెడల్పు"
 
 #: ../gtk/gtkrange.c:432
 msgid "Width of scrollbar or scale thumb"
-msgstr "స్క్రాల్‌బార్ లేదా స్కేల్ థంబ్ యొక్క వెడల్పు"
+msgstr "జారుడుపట్టీ లేదా స్కేల్ థంబ్ యొక్క వెడల్పు"
 
 #: ../gtk/gtkrange.c:439
 msgid "Trough Border"
@@ -4167,7 +4168,7 @@ msgstr "వంపు సరిహద్దు"
 
 #: ../gtk/gtkrange.c:440
 msgid "Spacing between thumb/steppers and outer trough bevel"
-msgstr "థంబ్/స్టెప్పర్స్‍ మరియు బయటి వంపు స్థాయికి మధ్య క్రమాంతరీకరణ"
+msgstr "థంబ్/స్టెప్పర్స్‍ మరియు బయటి వంపు బెవెల్‌కి మధ్య క్రమాంతరీకరణ"
 
 #: ../gtk/gtkrange.c:447
 msgid "Stepper Size"
@@ -4222,6 +4223,8 @@ msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
 msgstr ""
+"సత్యము అయినప్పుడు, స్లైడర్ యొక్క రెండు ప్రక్కలపైన వంపుయొక్క బాగములు వేర్వేరు "
+"వివరములతో గీయబడతాయి"
 
 #: ../gtk/gtkrange.c:520
 msgid "Trough Under Steppers"
@@ -4241,7 +4244,7 @@ msgstr "బాణము స్కేలింగ్"
 
 #: ../gtk/gtkrange.c:535
 msgid "Arrow scaling with regard to scroll button size"
-msgstr "స్క్రాల్ బటన్ పరిమాణంను అనుసరించి బాణము స్కేలింగ్"
+msgstr "జారుడు బటన్ పరిమాణంను అనుసరించి బాణము స్కేలింగ్"
 
 #: ../gtk/gtkrecentaction.c:679 ../gtk/gtkrecentchoosermenu.c:206
 msgid "Show Numbers"
@@ -4313,7 +4316,7 @@ msgstr "ప్రదర్శించు అంశములయొక్క గ�
 
 #: ../gtk/gtkrecentchooser.c:237
 msgid "Sort Type"
-msgstr ""
+msgstr "వరుసక్రమము రకము"
 
 #: ../gtk/gtkrecentchooser.c:238
 msgid "The sorting order of the items displayed"
@@ -4321,91 +4324,93 @@ msgstr "ప్రదర్శించబడిన అంశములయొక�
 
 #: ../gtk/gtkrecentchooser.c:253
 msgid "The current filter for selecting which resources are displayed"
-msgstr ""
+msgstr "ఏ వనరులు ప్రదర్శించబడాలో యెంపికచేయుటకు ప్రస్తుత వడపోత"
 
 #: ../gtk/gtkrecentmanager.c:215
 msgid "The full path to the file to be used to store and read the list"
 msgstr ""
+"జాబితాను నిల్వవుంచుటకు మరియు చదువుటకు వుపయోగించిన దస్త్రముకు "
+"పూర్తి పాత్"
 
 #: ../gtk/gtkrecentmanager.c:230
 msgid "The maximum number of items to be returned by gtk_recent_manager_get_items()"
-msgstr ""
+msgstr "gtk_recent_manager_get_items() ద్వారా తిరిగియివ్వబడే అంశములయొక్క గరిష్ఠ సంఖ్య"
 
 #: ../gtk/gtkrecentmanager.c:246
 msgid "The size of the recently used resources list"
-msgstr ""
+msgstr "ఇటీవల వుపయోగించిన వనరుల జాబితాయొక్క పరిమాణము"
 
 #: ../gtk/gtkruler.c:90
 msgid "Lower"
-msgstr "తక్కువ"
+msgstr "దిగువ"
 
 #: ../gtk/gtkruler.c:91
 msgid "Lower limit of ruler"
-msgstr ""
+msgstr "రూలర్‌యొక్క దిగువ పరిమితి"
 
 #: ../gtk/gtkruler.c:100
 msgid "Upper"
-msgstr ""
+msgstr "ఎగువ"
 
 #: ../gtk/gtkruler.c:101
 msgid "Upper limit of ruler"
-msgstr ""
+msgstr "రూలర్‌యొక్క ఎగువ పరిమితి"
 
 #: ../gtk/gtkruler.c:111
 msgid "Position of mark on the ruler"
-msgstr ""
+msgstr "రూలర్‌పైన గుర్తుయొక్క స్థానము"
 
 #: ../gtk/gtkruler.c:120
 msgid "Max Size"
-msgstr ""
+msgstr "గరిష్ఠ పరిమాణము"
 
 #: ../gtk/gtkruler.c:121
 msgid "Maximum size of the ruler"
-msgstr ""
+msgstr "రూలర్‌యొక్క గరిష్ఠ పరిమాణము"
 
 #: ../gtk/gtkruler.c:136
 msgid "Metric"
-msgstr ""
+msgstr "మెట్రిక్"
 
 #: ../gtk/gtkruler.c:137
 msgid "The metric used for the ruler"
-msgstr ""
+msgstr "రూలర్‌కు వుపయోగించబడిన కొలమానము"
 
 #: ../gtk/gtkscale.c:143
 msgid "The number of decimal places that are displayed in the value"
-msgstr ""
+msgstr "విలువనందు ప్రదర్శించబడుతున్న దశాంశ స్థానముల సంఖ్య"
 
 #: ../gtk/gtkscale.c:152
 msgid "Draw Value"
-msgstr ""
+msgstr "గీయుటకు విలువ"
 
 #: ../gtk/gtkscale.c:153
 msgid "Whether the current value is displayed as a string next to the slider"
-msgstr ""
+msgstr "ప్రస్తుత విలువ స్ట్రింగ్‌వలె స్లైడర్ తర్వాత ప్రదర్శించబడాలా"
 
 #: ../gtk/gtkscale.c:160
 msgid "Value Position"
-msgstr ""
+msgstr "విలువ స్థానము"
 
 #: ../gtk/gtkscale.c:161
 msgid "The position in which the current value is displayed"
-msgstr ""
+msgstr "ప్రస్తుత విలువ ప్రదర్శితమయ్యే స్థానము"
 
 #: ../gtk/gtkscale.c:168
 msgid "Slider Length"
-msgstr ""
+msgstr "స్లైడర్ పొడవు"
 
 #: ../gtk/gtkscale.c:169
 msgid "Length of scale's slider"
-msgstr ""
+msgstr "స్కేల్‌ స్లైడర్‌యొక్క పొడవు"
 
 #: ../gtk/gtkscale.c:177
 msgid "Value spacing"
-msgstr ""
+msgstr "విలువ క్రమాంతరీకరణం"
 
 #: ../gtk/gtkscale.c:178
 msgid "Space between value text and the slider/trough area"
-msgstr ""
+msgstr "విలువ పాఠ్యముకు మరియు స్లైడర్/వంపు ప్రాంతముకు మద్య ఖాళి"
 
 #: ../gtk/gtkscalebutton.c:192
 msgid "The orientation of the scale"
@@ -4433,329 +4438,345 @@ msgstr "ప్రతిమ నామములయొక్క జాబితా"
 
 #: ../gtk/gtkscrollbar.c:50
 msgid "Minimum Slider Length"
-msgstr ""
+msgstr "స్లైడర్‌యొక్క కనీసపు పొడవు"
 
 #: ../gtk/gtkscrollbar.c:51
 msgid "Minimum length of scrollbar slider"
-msgstr ""
+msgstr "జారుడుపట్టీ స్లైడర్‌యొక్క కనీస పొడవు"
 
 #: ../gtk/gtkscrollbar.c:59
 msgid "Fixed slider size"
-msgstr ""
+msgstr "నిర్దిష్ట స్లైడర్ పరిమాణము"
 
 #: ../gtk/gtkscrollbar.c:60
 msgid "Don't change slider size, just lock it to the minimum length"
-msgstr ""
+msgstr "స్లైడర్ పరిమాణమును మార్చవద్దు, దానిని కనీసపు పొడవుకు లాక్‌చేయుము"
 
 #: ../gtk/gtkscrollbar.c:84
 msgid "Display a second backward arrow button on the opposite end of the scrollbar"
-msgstr ""
+msgstr "జారుడుపట్టీ యొక్క వ్యతిరేకపు చివరిపై రెండవ వైనుకవైపు బాణమును ప్రదర్శించుము"
 
 #: ../gtk/gtkscrollbar.c:92
 msgid "Display a second forward arrow button on the opposite end of the scrollbar"
-msgstr ""
+msgstr "జారుడుపట్టీ యొక్క వ్యతిరేకపు చివరిపై రెండవ ముందువైపు బాణమును ప్రదర్శించుము"
 
 #: ../gtk/gtkscrolledwindow.c:220 ../gtk/gtktext.c:545
 #: ../gtk/gtktreeview.c:578
 msgid "Horizontal Adjustment"
-msgstr ""
+msgstr "హారిజాంటల్ సర్దుబాటు"
 
 #: ../gtk/gtkscrolledwindow.c:227 ../gtk/gtktext.c:553
 #: ../gtk/gtktreeview.c:586
 msgid "Vertical Adjustment"
-msgstr ""
+msgstr "నిలువు సర్దుబాటు"
 
 #: ../gtk/gtkscrolledwindow.c:234
 msgid "Horizontal Scrollbar Policy"
-msgstr ""
+msgstr "హారిజాంటల్ జారుడుపట్టీ విధానము"
 
 #: ../gtk/gtkscrolledwindow.c:235
 msgid "When the horizontal scrollbar is displayed"
-msgstr ""
+msgstr "హారిజాంటల్ జారుడుపట్టీ ప్రదర్శించబడినప్పుడు"
 
 #: ../gtk/gtkscrolledwindow.c:242
 msgid "Vertical Scrollbar Policy"
-msgstr ""
+msgstr "నిలువు జారుడుపట్టీ విధానం"
 
 #: ../gtk/gtkscrolledwindow.c:243
 msgid "When the vertical scrollbar is displayed"
-msgstr ""
+msgstr "నిలువు జారుడుపట్టీ ప్రదర్శించబడినప్పుడు"
 
 #: ../gtk/gtkscrolledwindow.c:251
 msgid "Window Placement"
-msgstr ""
+msgstr "విండో స్థానీకరణము"
 
 #: ../gtk/gtkscrolledwindow.c:252
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
 msgstr ""
+"జారుడుపట్టీలకు అనుగుణంగా సారములు వుంచబడేచోటు. \"window-placement-set\" "
+"సత్యమైతేనే ఈ లక్షణం ప్రభావితమౌతుంది."
 
 #: ../gtk/gtkscrolledwindow.c:269
 msgid "Window Placement Set"
-msgstr ""
+msgstr "విండో స్థానీకరణము అమర్చబడింది"
 
 #: ../gtk/gtkscrolledwindow.c:270
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
 msgstr ""
+"జారుడుపట్టీలకు అనుగుణంగా సారముల స్థానమును నిర్ణయించుటకు \"window-placement\" "
+"వుపయోగించాలా"
 
 #: ../gtk/gtkscrolledwindow.c:276
 msgid "Shadow Type"
-msgstr ""
+msgstr "నీడ రకము"
 
 #: ../gtk/gtkscrolledwindow.c:277
 msgid "Style of bevel around the contents"
-msgstr ""
+msgstr "సారములచుట్టూ బెవెల్‌యొక్క శైలి"
 
 #: ../gtk/gtkscrolledwindow.c:291
 msgid "Scrollbars within bevel"
-msgstr ""
+msgstr "బెవెల్‌లోపలి జారుడుపట్టీలు"
 
 #: ../gtk/gtkscrolledwindow.c:292
 msgid "Place scrollbars within the scrolled window's bevel"
-msgstr ""
+msgstr "జారే విండోయొక్క బెవల్‌లొపల జారుడుపట్టీలను వుంచుము"
 
 #: ../gtk/gtkscrolledwindow.c:298
 msgid "Scrollbar spacing"
-msgstr ""
+msgstr "జారుడుపట్టీ క్రమాంతరీకరణ"
 
 #: ../gtk/gtkscrolledwindow.c:299
 msgid "Number of pixels between the scrollbars and the scrolled window"
-msgstr ""
+msgstr "జారుడుపట్టీలకు మరియు జారు విండోకి మద్యన పిగ్జెల్స్‍ సంఖ్య"
 
 #: ../gtk/gtkscrolledwindow.c:314
 msgid "Scrolled Window Placement"
-msgstr ""
+msgstr "జారు విండో స్థానీకరణము"
 
 #: ../gtk/gtkscrolledwindow.c:315
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
 msgstr ""
+"జారు విండోయొక్క సారములు దానియొక్క స్వంత స్థానీకరణముతో తిరిగివ్రాయబడి "
+"వుండకపోతే, జారుడుపట్టీలకు అనుగుణముగా వుంచాలా."
 
 #: ../gtk/gtkseparatortoolitem.c:105
 msgid "Draw"
-msgstr ""
+msgstr "గీయుము"
 
 #: ../gtk/gtkseparatortoolitem.c:106
 msgid "Whether the separator is drawn, or just blank"
-msgstr ""
+msgstr "విచ్ఛేదని గీయాలా, లేక ఖాళీ వదలాలా"
 
 #: ../gtk/gtksettings.c:215
 msgid "Double Click Time"
-msgstr ""
+msgstr "రెండు నొక్కులకు సమయం"
 
 #: ../gtk/gtksettings.c:216
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr ""
+"రెండు వరుసనొక్కులను రెండు నొక్కులుగా పరిగణించుటకు వాటిమద్య అనుమతించదగు "
+"గరిష్ఠ సమయం (మిల్లీసెకనులలో)"
 
 #: ../gtk/gtksettings.c:223
 msgid "Double Click Distance"
-msgstr ""
+msgstr "రెండు నొక్కుల దూరము"
 
 #: ../gtk/gtksettings.c:224
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr ""
+"రెండు వరుసనొక్కులను రెండు నొక్కులగా పరిగణించుటకు వాటిమద్య అనుమతించదగిన గరిష్ఠ "
+"దూరము (పిగ్జెల్స్‍‌లో)"
 
 #: ../gtk/gtksettings.c:240
 msgid "Cursor Blink"
-msgstr ""
+msgstr "కర్సర్ బ్లింక్"
 
 #: ../gtk/gtksettings.c:241
 msgid "Whether the cursor should blink"
-msgstr ""
+msgstr "కర్సర్ బ్లింక్ అవ్వాలా"
 
 #: ../gtk/gtksettings.c:248
 msgid "Cursor Blink Time"
-msgstr ""
+msgstr "కర్సర్ బ్లింక్ సమయం"
 
 #: ../gtk/gtksettings.c:249
 msgid "Length of the cursor blink cycle, in milliseconds"
-msgstr ""
+msgstr "కర్సర్ బ్లింక్ చక్రము యొక్క పొడవు, మిల్లీసెకనులలో"
 
 #: ../gtk/gtksettings.c:268
 msgid "Cursor Blink Timeout"
-msgstr ""
+msgstr "కర్సర్ బ్లింక్ సమయముగింపు"
 
 #: ../gtk/gtksettings.c:269
 msgid "Time after which the cursor stops blinking, in seconds"
-msgstr ""
+msgstr "కర్సర్ బ్లింకింగ్ యెంత సమయంలో ఆగును, సెకనులలో"
 
 #: ../gtk/gtksettings.c:276
 msgid "Split Cursor"
-msgstr ""
+msgstr "కర్సర్‌ను విభజించుము"
 
 #: ../gtk/gtksettings.c:277
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
-msgstr ""
+msgstr "ఎడమ-కుడి మరియు కుడి-ఎడమ మిశ్రమ పాఠ్యమునకు రెండు కర్సర్‌లు ప్రదర్శించవలెనా"
 
 #: ../gtk/gtksettings.c:284
 msgid "Theme Name"
-msgstr ""
+msgstr "థీమ్ నామము"
 
 #: ../gtk/gtksettings.c:285
 msgid "Name of theme RC file to load"
-msgstr ""
+msgstr "నింపబడు థీమ్ RC దస్త్రము నామము"
 
 #: ../gtk/gtksettings.c:293
 msgid "Icon Theme Name"
-msgstr ""
+msgstr "ప్రతిమ థీమ్ నామము"
 
 #: ../gtk/gtksettings.c:294
 msgid "Name of icon theme to use"
-msgstr ""
+msgstr "ఉపయోగించుటకు ప్రతిమ థీమ్‌యొక్క నామము"
 
 #: ../gtk/gtksettings.c:302
 msgid "Fallback Icon Theme Name"
-msgstr ""
+msgstr "ఫాల్‌బ్యాక్ ప్రతిమ థీమ్ నామము"
 
 #: ../gtk/gtksettings.c:303
 msgid "Name of a icon theme to fall back to"
-msgstr ""
+msgstr "ఫాల్‌ బ్యాక్‌కు ప్రతిమ థీమ్‌యొక్క నామము"
 
 #: ../gtk/gtksettings.c:311
 msgid "Key Theme Name"
-msgstr ""
+msgstr "కీ థీమ్ నామము"
 
 #: ../gtk/gtksettings.c:312
 msgid "Name of key theme RC file to load"
-msgstr ""
+msgstr "నింపుటకు కీ థీమ్ RC దస్త్రముయొక్క నామము"
 
 #: ../gtk/gtksettings.c:320
 msgid "Menu bar accelerator"
-msgstr ""
+msgstr "మెను పట్టీ త్వరుణి"
 
 #: ../gtk/gtksettings.c:321
 msgid "Keybinding to activate the menu bar"
-msgstr ""
+msgstr "మెనూ పట్టీని క్రియాశీలపర్చుటకు కీబందనము"
 
 #: ../gtk/gtksettings.c:329
 msgid "Drag threshold"
-msgstr ""
+msgstr "త్రెష్‌హోల్డ్‍‌ను లాగుము"
 
 #: ../gtk/gtksettings.c:330
 msgid "Number of pixels the cursor can move before dragging"
-msgstr ""
+msgstr "లాగుటకు ముందుగా కర్సర్ కదలగల పిగ్జెల్స్‍ సంఖ్య"
 
 #: ../gtk/gtksettings.c:338
 msgid "Font Name"
-msgstr ""
+msgstr "ఫాంట్ నామము"
 
 #: ../gtk/gtksettings.c:339
 msgid "Name of default font to use"
-msgstr ""
+msgstr "అప్రమేయంగా వుపయోగించు ఫాంట్ నామము"
 
 #: ../gtk/gtksettings.c:361
 msgid "Icon Sizes"
-msgstr ""
+msgstr "ప్రతిమ పరిమాణములు"
 
 #: ../gtk/gtksettings.c:362
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
-msgstr ""
+msgstr "ప్రతిమ పరిమాణముల జాబితా (gtk-menu=16,16:gtk-button=20,20..."
 
 #: ../gtk/gtksettings.c:370
 msgid "GTK Modules"
-msgstr ""
+msgstr "GTK మాడ్యూల్స్‍"
 
 #: ../gtk/gtksettings.c:371
 msgid "List of currently active GTK modules"
-msgstr ""
+msgstr "ప్రస్తుతం క్రియాశీలముగావున్న GTK మాడ్యూళ్ళ జాబితా"
 
 #: ../gtk/gtksettings.c:380
 msgid "Xft Antialias"
-msgstr ""
+msgstr "Xft ఏంటీయెలియాస్"
 
 #: ../gtk/gtksettings.c:381
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "ఏంటీయెలియాస్ Xft ఫాంట్సా; 0=కాదు 1=అవును -1=అప్రమేయం"
 
 #: ../gtk/gtksettings.c:390
 msgid "Xft Hinting"
-msgstr ""
+msgstr "Xft హింటింగ్"
 
 #: ../gtk/gtksettings.c:391
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "Xft ఫాంట్లకు హింట్ యివ్వాలా; 0=కాదు, 1=అవును, -1=అప్రమేయ"
 
 #: ../gtk/gtksettings.c:400
 msgid "Xft Hint Style"
-msgstr ""
+msgstr "Xft హింట్ శైలి"
 
 #: ../gtk/gtksettings.c:401
 msgid "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
-msgstr ""
+msgstr "ఏ తరగతిలో హింటింగ్ వుపయోగించాలి; హింట్‌నన్, హింట్‌లైట్, హింట్‌మీడియం లేదా హింట్‌ఫుల్"
 
 #: ../gtk/gtksettings.c:410
 msgid "Xft RGBA"
-msgstr ""
+msgstr "Xft RGBA"
 
 #: ../gtk/gtksettings.c:411
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
-msgstr ""
+msgstr "ఉపపిగ్జెల్స్‍ ఏంటీయెలియాసింగ్ యొక్క రకము; ఏదీకాదు, rgb, bgr, vrgb, vbgr"
 
 #: ../gtk/gtksettings.c:420
 msgid "Xft DPI"
-msgstr ""
+msgstr "Xft DPI"
 
 #: ../gtk/gtksettings.c:421
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
-msgstr ""
+msgstr "Xft కు తీవ్రత, 1024 * చుక్కలు/అంగుళం లో. అప్రమేయ విలువను వుపయోగించుటకు -1"
 
 #: ../gtk/gtksettings.c:430
 msgid "Cursor theme name"
-msgstr ""
+msgstr "కర్సర్ థీమ్ నామము"
 
 #: ../gtk/gtksettings.c:431
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
-msgstr ""
+msgstr "కర్సర్ థీమ్‌యొక్క నామము, లేదా అప్రమేయ థీమ్‌ను వుపయోగించుటకు NULL"
 
 #: ../gtk/gtksettings.c:439
 msgid "Cursor theme size"
-msgstr ""
+msgstr "కర్సర్ థీమ్ పరిమాణము"
 
 #: ../gtk/gtksettings.c:440
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr ""
+"కర్సర్‌లకు వుపయోగించుటకు పరిమాణము, లేదా అప్రమేయ పరిమాణంను "
+"వుపయోగించుటకు 0"
 
 #: ../gtk/gtksettings.c:450
 msgid "Alternative button order"
-msgstr ""
+msgstr "ప్రత్యామ్నాయ బటన్ క్రమము"
 
 #: ../gtk/gtksettings.c:451
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr ""
+msgstr "డెలాగ్స్‍‌నందలి బటన్‌లు ప్రత్యామ్నాయ బటన్ క్రమమును వుపయోగించాలా"
 
 #: ../gtk/gtksettings.c:468
 msgid "Alternative sort indicator direction"
-msgstr ""
+msgstr "ప్రత్యామ్నాయ వరుసక్రమ సూచకి దిశ"
 
 #: ../gtk/gtksettings.c:469
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
 msgstr ""
+"అప్రమేయంతో పోల్చినప్పుడు వరుసక్రమ సూచికల దిశ జాబితా మరియు ట్రీ దర్శనంనందు "
+"విలోమంగా వుండాలా (ఇక్కడ క్రిందికి అంటే ఆరోహణము అని)"
 
 #: ../gtk/gtksettings.c:477
 msgid "Show the 'Input Methods' menu"
-msgstr ""
+msgstr "'ఇన్‌పుట్ పద్దతుల' మెనూను చూపుము"
 
 #: ../gtk/gtksettings.c:478
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
 msgstr ""
+"ప్రవేశాల మరియు పాఠ్య దర్శనాల సందర్భ మెనూలు ఇన్‌పుట్ పద్దతిని "
+"మార్చుటకు అవకాశమివ్వాలా"
 
 #: ../gtk/gtksettings.c:486
 msgid "Show the 'Insert Unicode Control Character' menu"
-msgstr ""
+msgstr "'యూనికోడ్ నియంత్రణ అక్షరము చేర్చుము' మెనూను చూపుము"
 
 #: ../gtk/gtksettings.c:487
 msgid ""
@@ -6437,7 +6458,7 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:2349
 msgid "Horizontal Scroll Arrow Length"
-msgstr "హారిజాంటల్ స్క్రాల్ బాణము పొడవు"
+msgstr "హారిజాంటల్ జార్చు బాణము పొడవు"
 
 #: ../gtk/gtkwidget.c:2350
 msgid "The length of horizontal scroll arrows"
@@ -6676,5 +6697,5 @@ msgstr "IM స్థితి శైలి"
 
 #: ../modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
-msgstr "ఇన్‌పుట్ పద్దతి స్థితిబార్‌ను యెలా గీయాలి"
+msgstr "ఇన్‌పుట్ పద్దతి స్థితిపట్టీను యెలా గీయాలి"
 
