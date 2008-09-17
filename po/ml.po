@@ -1,6 +1,6 @@
 # translation of gtk+.HEAD.ml.po to Malayalam
-# This file is distributed under the same license as the PACKAGE package.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
+# This file is distributed under the same license as the gtk+ package.
+# Copyright (C) 2003-2008 gtk+'S COPYRIGHT HOLDER.
 #
 # FSF-India <locale@gnu.org.in>, 2003.
 # Ani Peter <apeter@redhat.com>, 2006, 2007.
@@ -11,7 +11,7 @@ msgstr ""
 "POT-Creation-Date: 2008-09-04 21:57-0400\n"
 "PO-Revision-Date: 2007-09-10 15:09+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com>\n"
-"Language-Team: Malayalam\n"
+"Language-Team: Malayalam <smc-discuss@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,7 +32,7 @@ msgstr "sdl|system"
 #. Description of --class=CLASS in --help output
 #: gdk/gdk.c:126
 msgid "Program class as used by the window manager"
-msgstr "ജാലകത്തിന്റെ മാനേജറിനിനുള്ള പ്റോഗ്റാം ക്ളാസ്സ്"
+msgstr "ജാലകത്തിന്റെ മാനേജറിനിനുള്ള പ്രോഗ്രാം ക്ലാസ്സ്"
 
 #. Placeholder in --class=CLASS in --help output
 #: gdk/gdk.c:127
@@ -42,7 +42,7 @@ msgstr "CLASS"
 #. Description of --name=NAME in --help output
 #: gdk/gdk.c:129
 msgid "Program name as used by the window manager"
-msgstr "ജാലകത്തിന്റെ മാനേജറിനിനുള്ള പ്റോഗ്റാമിന്റെ പേര്"
+msgstr "ജാലകത്തിന്റെ മാനേജറിനിനുള്ള പ്രോഗ്രാമിന്റെ പേരു്"
 
 #. Placeholder in --name=NAME in --help output
 #: gdk/gdk.c:130
@@ -72,7 +72,7 @@ msgstr "SCREEN"
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:139
 msgid "Gdk debugging flags to set"
-msgstr "ക്റമികരിക്കാനുള്ള Gdk ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍"
+msgstr "ക്രമീകരിക്കാനുള്ള Gdk ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -501,28 +501,28 @@ msgstr "GIF ഇമേജ് രീതി"
 #: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
 #: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
 msgid "Invalid header in icon"
-msgstr "പ്റതിരൂപത്തില്‍ തെറ്റായ ഹേഡറ്‍"
+msgstr "ചിഹ്നത്തില്‍ തെറ്റായ ഹേഡറ്‍"
 
 #: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
 #: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
 msgid "Not enough memory to load icon"
-msgstr "പ്റതിരൂപം ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
+msgstr "ചിഹ്നം ലഭ്യമാക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
 
 #: gdk-pixbuf/io-ico.c:322
 msgid "Icon has zero width"
-msgstr "പ്റതിരൂപത്തിന്റെ വീതി പൂജ്യം"
+msgstr "ചിഹ്നത്തിന്റെ വീതി പൂജ്യം"
 
 #: gdk-pixbuf/io-ico.c:332
 msgid "Icon has zero height"
-msgstr "പ്റതിരൂപത്തിന്റെ ഉയരം പൂജ്യം"
+msgstr "ചിഹ്നത്തിന്റെ ഉയരം പൂജ്യം"
 
 #: gdk-pixbuf/io-ico.c:384
 msgid "Compressed icons are not supported"
-msgstr "കംപ്റസ് ചെയ്ത പ്റതിരൂപങ്ങള്‍ക്ക് പിന്തുണ ലഭ്യമല്ല"
+msgstr "കംപ്റസ് ചെയ്ത ചിഹ്നങ്ങള്‍ക്ക് പിന്തുണ ലഭ്യമല്ല"
 
 #: gdk-pixbuf/io-ico.c:417
 msgid "Unsupported icon type"
-msgstr "പ്റതിരൂപത്തിന്റെ രീതിയ്ക്കുള്ള പിന്തുണ ലഭ്യമല്ല"
+msgstr "ചിഹ്നത്തിന്റെ രീതിയ്ക്കുള്ള പിന്തുണ ലഭ്യമല്ല"
 
 #: gdk-pixbuf/io-ico.c:511
 msgid "Not enough memory to load ICO file"
@@ -553,7 +553,7 @@ msgstr "PNG ഇമേജ് ഫയല്‍ തുറക്കുന്നതി
 #: gdk-pixbuf/io-icns.c:362
 #, fuzzy
 msgid "Could not decode ICNS file"
-msgstr "ഫയല്‍ തിരഞ്ഞെടുക്കുവാന്‍ സാധ്യമായില്ല"
+msgstr "ഫയല്‍ തെരഞ്ഞെടുക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: gdk-pixbuf/io-icns.c:395
 #, fuzzy
@@ -1144,21 +1144,21 @@ msgstr[1] ""
 
 #: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
 msgid "License"
-msgstr "ലൈസന്‍സ് "
+msgstr "അനുമതിപത്രം "
 
 #: gtk/gtkaboutdialog.c:265
 msgid "The license of the program"
-msgstr "പ്റോഗ്റാമിനുള്ള ലൈസന്‍സ്"
+msgstr "പ്രോഗ്രാമിനുള്ള അനുമതിപത്രം"
 
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:500
 msgid "C_redits"
-msgstr "ക്റെഡിറ്റുകള്‍ _r"
+msgstr "_ബഹുമതികള്‍"
 
 #. Add the license button
 #: gtk/gtkaboutdialog.c:514
 msgid "_License"
-msgstr "ലൈസന്‍സ് (_L)"
+msgstr "_അനുമതിപത്രം"
 
 #: gtk/gtkaboutdialog.c:744
 #, c-format
@@ -1167,23 +1167,23 @@ msgstr "%s സംബന്ധിച്ച്"
 
 #: gtk/gtkaboutdialog.c:2032
 msgid "Credits"
-msgstr "ക്റെഡിറ്റുകള്‍"
+msgstr "ബഹുമതികള്‍"
 
 #: gtk/gtkaboutdialog.c:2061
 msgid "Written by"
-msgstr "രചിച്ചത്"
+msgstr "എഴുതിയതു്"
 
 #: gtk/gtkaboutdialog.c:2064
 msgid "Documented by"
-msgstr "എഴുതിയത്"
+msgstr "സഹായക്കുറിപ്പുകള്‍"
 
 #: gtk/gtkaboutdialog.c:2076
 msgid "Translated by"
-msgstr "തറ്‍ജ്ജമ ചെയ്തത്"
+msgstr "പരിഭാഷകര്‍"
 
 #: gtk/gtkaboutdialog.c:2080
 msgid "Artwork by"
-msgstr ""
+msgstr "കലാവിരുതുകള്‍"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -1377,7 +1377,7 @@ msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
-msgstr "ഒരു നിറം തിരഞ്ഞെടുക്കുക"
+msgstr "ഒരു നിറം തെരഞ്ഞെടുക്കുക"
 
 #: gtk/gtkcolorbutton.c:448
 msgid "Received invalid color data\n"
@@ -1494,11 +1494,11 @@ msgstr ""
 
 #: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
-msgstr "നിറം തിരഞ്ഞെടുക്കല്‍"
+msgstr "നിറം തെരഞ്ഞെടുക്കല്‍"
 
 #: gtk/gtkentry.c:5380 gtk/gtktextview.c:7686
 msgid "Input _Methods"
-msgstr "ഇന്‍പുട്ട് രീതികള്‍ (_M) "
+msgstr "ഇന്‍പുട്ട് _രീതികള്‍"
 
 #: gtk/gtkentry.c:5394 gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
@@ -1506,11 +1506,11 @@ msgstr "_Insert Unicode Control Character"
 
 #: gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
-msgstr "ഒരു ഫയല്‍ തിരഞ്ഞെടുക്കുക"
+msgstr "ഒരു ഫയല്‍ തെരഞ്ഞെടുക്കുക"
 
 #: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1920
 msgid "Desktop"
-msgstr "ഡസ്ക്ടോപ്പ്"
+msgstr "പണിയിടം"
 
 #: gtk/gtkfilechooserbutton.c:66
 msgid "(None)"
@@ -1526,22 +1526,22 @@ msgstr "ഫയല്‍ സംബന്ധിച്ചുള്ള വിവര�
 
 #: gtk/gtkfilechooserdefault.c:1064
 msgid "Could not add a bookmark"
-msgstr "ഒരു ബുക്ക്മാറ്‍ക്ക് ചേറ്‍ക്കുവാന്‍ സാധ്യമായില്ല"
+msgstr "ഒരു ഓര്‍മ്മക്കുറിപ്പു് ചേര്‍ക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: gtk/gtkfilechooserdefault.c:1075
 msgid "Could not remove bookmark"
-msgstr "ബുക്ക്മാറ്‍ക്ക് നീക്കം ചെയ്യുവാന്‍ സാധ്യമായില്ല"
+msgstr "ഓര്‍മ്മക്കുറിപ്പു് നീക്കം ചെയ്യുവാന്‍ സാധ്യമായില്ല"
 
 #: gtk/gtkfilechooserdefault.c:1086
 msgid "The folder could not be created"
-msgstr "ഫോള്‍ഡറ്‍ ഉണ്ടാക്കുവാന്‍ സാധ്യമായില്ല"
+msgstr "അറ ഉണ്ടാക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: gtk/gtkfilechooserdefault.c:1099
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"ഫോള്‍ഡറ്‍ ഉണ്ടാക്കുവാന്‍ സാധ്യമായില്ല, കാരണം ആ പേരില്‍ മറ്റൊരു ഫയല്‍ നിലവിലുണ്ട്. വേറൊരു പേര് "
+"അറ ഉണ്ടാക്കുവാന്‍ സാധ്യമായില്ല, കാരണം ആ പേരില്‍ മറ്റൊരു ഫയല്‍ നിലവിലുണ്ട്. വേറൊരു പേര് "
 "ഉപയോഗിക്കുക, അല്ലെങ്കില്‍ ആദ്യം ഫയലിന്റെ പേര് മാറ്റുക."
 
 #: gtk/gtkfilechooserdefault.c:1110
@@ -1550,7 +1550,7 @@ msgstr "തെറ്റായ ഫയല്‍ നാമം"
 
 #: gtk/gtkfilechooserdefault.c:1120
 msgid "The folder contents could not be displayed"
-msgstr "ഫോള്‍ഡറിലുള്ളവ പ്റദറ്‍ശിപ്പിക്കുവാന്‍ സാധ്യമായില്ല"
+msgstr "അറയിലുള്ളവ പ്രദര്‍ശിപ്പിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
@@ -1563,7 +1563,7 @@ msgstr "%1$s, %2$s-ല്‍"
 
 #: gtk/gtkfilechooserdefault.c:1848
 msgid "Search"
-msgstr "തിരയുക"
+msgstr "തെരയുക"
 
 #: gtk/gtkfilechooserdefault.c:1872
 msgid "Recently Used"
@@ -1571,27 +1571,27 @@ msgstr "ഏറ്റവും ഒടുവില്‍ ഉപയോഗിച്�
 
 #: gtk/gtkfilechooserdefault.c:2487
 msgid "Select which types of files are shown"
-msgstr "ഏത് തരം ഫയലുകളാണ് കാണിച്ചിട്ടുള്ളത് എന്ന് തിരഞ്ഞെടുക്കുക"
+msgstr "ഏത് തരം ഫയലുകളാണ് കാണിച്ചിട്ടുള്ളത് എന്ന് തെരഞ്ഞെടുക്കുക"
 
 #: gtk/gtkfilechooserdefault.c:2916
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr "ബുക്ക്മാറ്‍ക്കിലേക്ക് '%s' ഫോള്‍ഡറ്‍ ചേറ്‍ക്കുക"
+msgstr "ഓര്‍മ്മക്കുറിപ്പിലേയ്ക്കു് '%s' അറ ചേര്‍ക്കുക"
 
 #: gtk/gtkfilechooserdefault.c:2957
 #, c-format
 msgid "Add the current folder to the bookmarks"
-msgstr "ഈ ഫോള്‍ഡറ്‍ ബുക്ക്മാറ്‍ക്കിലേക്ക് ചേറ്‍ക്കുക"
+msgstr "ഈ അറ ഓര്‍മ്മക്കുറിപ്പിലേയ്ക്കു് ചേര്‍ക്കുക"
 
 #: gtk/gtkfilechooserdefault.c:2959
 #, c-format
 msgid "Add the selected folders to the bookmarks"
-msgstr "തിരഞ്ഞെടുത്ത ഫോള്‍ഡറുകള്‍ ബുക്ക്മാറ്‍ക്കിലേക്ക് ചേറ്‍ക്കുക"
+msgstr "തെരഞ്ഞെടുത്ത അറകള്‍ ഓര്‍മ്മക്കുറിപ്പിലേയ്ക്കു് ചേര്‍ക്കുക"
 
 #: gtk/gtkfilechooserdefault.c:2999
 #, c-format
 msgid "Remove the bookmark '%s'"
-msgstr "'%s' എന്ന ബുക്ക്മാറ്‍ക്ക് നീക്കം ചെയ്യുക"
+msgstr "'%s' എന്ന ഓര്‍മ്മക്കുറിപ്പു് നീക്കം ചെയ്യുക"
 
 #: gtk/gtkfilechooserdefault.c:3717
 msgid "Remove"
@@ -1609,35 +1609,35 @@ msgstr "സ്ഥലങ്ങള്‍"
 #. Column header for the file chooser's shortcuts pane
 #: gtk/gtkfilechooserdefault.c:3929
 msgid "_Places"
-msgstr "സ്ഥലങ്ങള്‍ (_P)"
+msgstr "_സ്ഥലങ്ങള്‍"
 
 #: gtk/gtkfilechooserdefault.c:3984 gtk/gtkstock.c:297
 msgid "_Add"
-msgstr "ചേറ്‍ക്കുക (_A)"
+msgstr "_ചേര്‍ക്കുക"
 
 #: gtk/gtkfilechooserdefault.c:3991
 msgid "Add the selected folder to the Bookmarks"
-msgstr "തിരഞ്ഞെടുത്ത ഫോള്‍ഡറ്‍ ബുക്ക്മാറ്‍ക്കിലേക്ക് ചേറ്‍ക്കുക"
+msgstr "തെരഞ്ഞെടുത്ത അറ ഓര്‍മ്മക്കുറിപ്പിലേയ്ക്കു് ചേര്‍ക്കുക"
 
 #: gtk/gtkfilechooserdefault.c:3996 gtk/gtkstock.c:386
 msgid "_Remove"
-msgstr "നീക്കം ചെയ്യുക (_R)"
+msgstr "_നീക്കം ചെയ്യുക"
 
 #: gtk/gtkfilechooserdefault.c:4003
 msgid "Remove the selected bookmark"
-msgstr "തിരഞ്ഞെടുത്ത ബുക്ക്മാറ്‍ക്ക് നീക്കം ചെയ്യുക"
+msgstr "തെരഞ്ഞെടുത്ത ഓര്‍മ്മക്കുറിപ്പു് നീക്കം ചെയ്യുക"
 
 #: gtk/gtkfilechooserdefault.c:4100
 msgid "Could not select file"
-msgstr "ഫയല്‍ തിരഞ്ഞെടുക്കുവാന്‍ സാധ്യമായില്ല"
+msgstr "ഫയല്‍ തെരഞ്ഞെടുക്കുവാന്‍ സാധ്യമായില്ല"
 
 #: gtk/gtkfilechooserdefault.c:4273
 msgid "_Add to Bookmarks"
-msgstr "ബുക്ക്മാറ്‍ക്കിലേക്ക് ചേറ്‍ക്കുക (_A)"
+msgstr "ഓര്‍മ്മക്കുറിപ്പിലേയ്ക്കു് _ചേര്‍ക്കുക"
 
 #: gtk/gtkfilechooserdefault.c:4287
 msgid "Show _Hidden Files"
-msgstr "അദൃശ്യമായ ഫയലുകള്‍ കാണിക്കുക (_H)"
+msgstr "_അദൃശ്യമായ ഫയലുകള്‍ കാണിക്കുക"
 
 #: gtk/gtkfilechooserdefault.c:4530 gtk/gtkfilesel.c:730
 msgid "Files"
@@ -1645,7 +1645,7 @@ msgstr "ഫയലുകള്‍"
 
 #: gtk/gtkfilechooserdefault.c:4579
 msgid "Name"
-msgstr "പേര്"
+msgstr "പേരു്"
 
 #: gtk/gtkfilechooserdefault.c:4604
 msgid "Size"
@@ -1658,11 +1658,11 @@ msgstr "മാറ്റം വരുത്തിയവ"
 #. Label
 #: gtk/gtkfilechooserdefault.c:4838 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
-msgstr "പേര് (_N):"
+msgstr "_പേരു്:"
 
 #: gtk/gtkfilechooserdefault.c:4880
 msgid "_Browse for other folders"
-msgstr "മറ്റ് ഫോള്‍ഡറുകള്‍ക്കായി തിരയുക (_B)"
+msgstr "മറ്റ് അറകള്‍ക്കായി പരതുക"
 
 #: gtk/gtkfilechooserdefault.c:5150
 msgid "Type a file name"
@@ -1671,23 +1671,23 @@ msgstr "ഒരു ഫയലിന്റെ പേര് ടൈപ്പ് ച�
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:5187
 msgid "Create Fo_lder"
-msgstr "ഫോള്‍ഡറ്‍ ഉണ്ടാക്കുക (_l)"
+msgstr "_അറ ഉണ്ടാക്കുക"
 
 #: gtk/gtkfilechooserdefault.c:5197
 msgid "_Location:"
-msgstr "സ്ഥാനം (_L):"
+msgstr "_സ്ഥാനം:"
 
 #: gtk/gtkfilechooserdefault.c:5386
 msgid "Save in _folder:"
-msgstr "ഫോള്‍ഡറില്‍ സൂക്ഷിക്കുക (_f):"
+msgstr "_അറയില്‍ സൂക്ഷിക്കുക:"
 
 #: gtk/gtkfilechooserdefault.c:5388
 msgid "Create in _folder:"
-msgstr "ഫോള്‍ഡറില്‍ ഉണ്ടാക്കുക (_f):"
+msgstr "_അറയില്‍ ഉണ്ടാക്കുക:"
 
 #: gtk/gtkfilechooserdefault.c:6970
 msgid "Cannot change to folder because it is not local"
-msgstr "ലോക്കല്‍ ആയതിനാല്‍ ഫോള്‍ഡറിലേക്ക് മാറ്റുവാന്‍ സാധ്യമായില്ല"
+msgstr "ലോക്കല്‍ ആയതിനാല്‍ അറയിലേയ്ക്കു് മാറ്റുവാന്‍ സാധ്യമായില്ല"
 
 #: gtk/gtkfilechooserdefault.c:7595 gtk/gtkfilechooserdefault.c:7616
 #, c-format
@@ -1734,7 +1734,7 @@ msgstr "തിരച്ചിലിനുള്ള ആവശ്യം അയയ�
 #. Label
 #: gtk/gtkfilechooserdefault.c:9153
 msgid "_Search:"
-msgstr "തിരയുക (_S):"
+msgstr "തെരയുക (_S):"
 
 #: gtk/gtkfilechooserdefault.c:10100
 #, c-format
@@ -1791,7 +1791,7 @@ msgstr ""
 #: gtk/gtkfilechooserentry.c:1081
 #, fuzzy
 msgid "Sole completion"
-msgstr "നിറം തിരഞ്ഞെടുക്കല്‍"
+msgstr "നിറം തെരഞ്ഞെടുക്കല്‍"
 
 #. translators: this text is shown when the text in a file chooser
 #. * entry is a complete filename, but could be continued to find
@@ -1812,15 +1812,15 @@ msgstr ""
 #: gtk/gtkfilesel.c:1358
 #, c-format
 msgid "Error creating folder '%s': %s"
-msgstr "'%s' ഫോള്‍ഡറ്‍ ഉണ്ടാക്കുന്നതില്‍ പിശക്: %s"
+msgstr "'%s' അറ ഉണ്ടാക്കുന്നതില്‍ പിശക്: %s"
 
 #: gtk/gtkfilesel.c:694
 msgid "Folders"
-msgstr "ഫോള്‍ഡറുകള്‍"
+msgstr "അറകള്‍"
 
 #: gtk/gtkfilesel.c:698
 msgid "Fol_ders"
-msgstr "ഫോള്‍ഡറുകള്‍ (_d)"
+msgstr "അറകള്‍ (_d)"
 
 #: gtk/gtkfilesel.c:734
 msgid "_Files"
@@ -1829,7 +1829,7 @@ msgstr "ഫയലുകള്‍ (_F)"
 #: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2148
 #, c-format
 msgid "Folder unreadable: %s"
-msgstr "ഫോള്‍ഡറ്‍ വായിക്കുവാനായില്ല: %s"
+msgstr "അറ വായിക്കുവാനായില്ല: %s"
 
 #: gtk/gtkfilesel.c:905
 #, c-format
@@ -1841,7 +1841,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1020
 msgid "_New Folder"
-msgstr "പുതിയ ഫോള്‍ഡറ്‍ (_N)"
+msgstr "പുതിയ അറ (_N)"
 
 #: gtk/gtkfilesel.c:1031
 msgid "De_lete File"
@@ -1860,7 +1860,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1392
 msgid "New Folder"
-msgstr "പുതിയ ഫോള്‍ഡറ്‍"
+msgstr "പുതിയ അറ"
 
 #: gtk/gtkfilesel.c:1407
 msgid "_Folder name:"
@@ -1920,7 +1920,7 @@ msgstr "പേര് മാറ്റുക (_R)"
 
 #: gtk/gtkfilesel.c:2128
 msgid "_Selection: "
-msgstr "തിരഞ്ഞെടുക്കല്‍ (_S):"
+msgstr "തെരഞ്ഞെടുക്കല്‍ (_S):"
 
 #: gtk/gtkfilesel.c:3048
 #, c-format
@@ -1952,7 +1952,7 @@ msgstr "ഫയല്‍ സിസ്റ്റം"
 
 #: gtk/gtkfilesystemmodel.c:700
 msgid "Could not obtain root folder"
-msgstr "റൂട്ട് ഫോള്‍ഡറ്‍ ലഭ്യമായില്ല"
+msgstr "റൂട്ട് അറ ലഭ്യമായില്ല"
 
 #: gtk/gtkfilesystemmodel.c:1299
 msgid "(Empty)"
@@ -1960,7 +1960,7 @@ msgstr "(ശൂന്യം)"
 
 #: gtk/gtkfontbutton.c:144 gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
-msgstr "ഒരു ലിപി തിരഞ്ഞെടുക്കുക"
+msgstr "ഒരു ലിപി തെരഞ്ഞെടുക്കുക"
 
 #. Initialize fields
 #: gtk/gtkfontbutton.c:260
@@ -1996,7 +1996,7 @@ msgstr "സ്ക്രീനില്‍ കാണുക (_P):"
 
 #: gtk/gtkfontsel.c:1542
 msgid "Font Selection"
-msgstr "ലിപി തിരഞ്ഞെടുക്കല്‍"
+msgstr "ലിപി തെരഞ്ഞെടുക്കല്‍"
 
 #: gtk/gtkgamma.c:408
 msgid "Gamma"
@@ -2012,7 +2012,7 @@ msgstr "ഗാമായുടെ മൂല്ല്യം (_G)"
 #: gtk/gtkiconfactory.c:1403
 #, c-format
 msgid "Error loading icon: %s"
-msgstr "പ്റതിരൂപം ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
+msgstr "ചിഹ്നം ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
 #: gtk/gtkicontheme.c:1363
 #, c-format
@@ -2022,7 +2022,7 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
-"'%s' എന്ന പ്റതിരൂപം ലഭ്യമാക്കുവാനായില്ല. '%s' എന്ന പ്റമേയവും\n"
+"'%s' എന്ന ചിഹ്നം ലഭ്യമാക്കുവാനായില്ല. '%s' എന്ന പ്റമേയവും\n"
 "ലഭ്യമായില്ല. ഒരു പക്ഷേ അവ ഇന്‍സ്റ്റോള്‍ ചെയ്യണമായിരിക്കാം.\n"
 "നിങ്ങള്‍ക്ക് ഇവിടെ നിന്നും ഒരു പകറ്‍പ്പ് ലഭ്യമാകുന്നു:\n"
 "\t%s"
@@ -2030,11 +2030,11 @@ msgstr ""
 #: gtk/gtkicontheme.c:1543
 #, c-format
 msgid "Icon '%s' not present in theme"
-msgstr "പ്റമേയത്തില്‍ '%s' എന്ന പ്റതിരൂപം ലഭ്യമല്ല"
+msgstr "പ്റമേയത്തില്‍ '%s' എന്ന ചിഹ്നം ലഭ്യമല്ല"
 
 #: gtk/gtkicontheme.c:3058
 msgid "Failed to load icon"
-msgstr "പ്റതിരൂപം ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
+msgstr "ചിഹ്നം ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
 
 #: gtk/gtkimmodule.c:515
 #, fuzzy
@@ -2150,7 +2150,7 @@ msgstr "എല്ലാ മുന്നറിയിപ്പുകളും പ�
 #. Description of --gtk-debug=FLAGS in --help output
 #: gtk/gtkmain.c:427
 msgid "GTK+ debugging flags to set"
-msgstr "ക്റമികരിക്കാനുള്ള GTK+ ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍"
+msgstr "ക്രമീകരിക്കാനുള്ള GTK+ ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: gtk/gtkmain.c:430
@@ -2352,7 +2352,7 @@ msgstr "ലഭ്യമല്ല"
 
 #: gtk/gtkprinteroptionwidget.c:798
 msgid "_Save in folder:"
-msgstr "ഫോള്‍ഡറില്‍ സൂക്ഷിക്കുക (_S):"
+msgstr "അറയില്‍ സൂക്ഷിക്കുക (_S):"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
@@ -2672,7 +2672,7 @@ msgstr ""
 
 #: gtk/gtkprintunixdialog.c:2775
 msgid "Add Cover Page"
-msgstr "കവറ്‍ പേജ് ചേറ്‍ക്കുക"
+msgstr "കവറ്‍ പേജ് ചേര്‍ക്കുക"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
@@ -2737,7 +2737,7 @@ msgstr ""
 
 #: gtk/gtkrecentchooserdefault.c:454
 msgid "Select which type of documents are shown"
-msgstr "ഏത് തരം രേഖകളാണ് പ്റദറ്‍ശിപ്പിച്ചിരിക്കുന്നത് എന്ന് തിരഞ്ഞെടുക്കുക"
+msgstr "ഏത് തരം രേഖകളാണ് പ്രദര്‍ശിപ്പിച്ചിരിക്കുന്നത് എന്ന് തെരഞ്ഞെടുക്കുക"
 
 #: gtk/gtkrecentchooserdefault.c:1095 gtk/gtkrecentchooserdefault.c:1132
 #, c-format
@@ -4277,7 +4277,7 @@ msgstr "hash ടേബിള്‍ എഴുതുന്നതില്‍ പ�
 #: gtk/updateiconcache.c:1386
 #, c-format
 msgid "Failed to write folder index\n"
-msgstr "index ഫോള്‍ഡറ്‍ എഴുതുന്നതില്‍ പരാ‍ജയം\n"
+msgstr "index അറ എഴുതുന്നതില്‍ പരാ‍ജയം\n"
 
 #: gtk/updateiconcache.c:1394
 #, c-format
@@ -4526,7 +4526,7 @@ msgstr "ഒരു വശം മാത്റം"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2015
 #: modules/printbackends/cups/gtkprintbackendcups.c:2023
 msgid "Auto Select"
-msgstr "സ്വയം തിരഞ്ഞെടുക്കുക"
+msgstr "സ്വയം തെരഞ്ഞെടുക്കുക"
 
 #. Translators: this is an option of "Paper Source"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2017
@@ -4766,7 +4766,7 @@ msgstr "'%s' എന്ന ഫയലിന് ആവശ്യമുള്ള വ�
 
 #~ msgid "Could not select file '%s' because it is an invalid path name."
 #~ msgstr ""
-#~ "തെറ്റായ ഒരു പാഥിന്റെ നാമം ആയതിനാല്‍ '%s' എന്ന ഫയല്‍ തിരഞ്ഞെടുക്കുവാന്‍ സാധ്യമായില്ല."
+#~ "തെറ്റായ ഒരു പാഥിന്റെ നാമം ആയതിനാല്‍ '%s' എന്ന ഫയല്‍ തെരഞ്ഞെടുക്കുവാന്‍ സാധ്യമായില്ല."
 
 #~ msgid "%d byte"
 #~ msgid_plural "%d bytes"
@@ -4796,7 +4796,7 @@ msgstr "'%s' എന്ന ഫയലിന് ആവശ്യമുള്ള വ�
 #~ msgstr "'%s' ബുക്ക് മാറ്‍ക്കിന്റെ ലിസ്റ്റില്‍ ഇല്ല"
 
 #~ msgid "Path is not a folder: '%s'"
-#~ msgstr "പാഥ് ഒരു ഫോള്‍ഡറ്‍ അല്ല: '%s'"
+#~ msgstr "പാഥ് ഒരു അറ അല്ല: '%s'"
 
 #~ msgid "Network Drive (%s)"
 #~ msgstr "നെറ്റ്‌വറ്‍ക്ക് ഡ്റൈവ് (%s)"
