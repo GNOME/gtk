@@ -4800,22 +4800,35 @@ gtk_widget_set_scroll_adjustments (GtkWidget     *widget,
 				   GtkAdjustment *hadjustment,
 				   GtkAdjustment *vadjustment)
 {
+  guint signal_id;
+  GSignalQuery query;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
   if (hadjustment)
     g_return_val_if_fail (GTK_IS_ADJUSTMENT (hadjustment), FALSE);
   if (vadjustment)
     g_return_val_if_fail (GTK_IS_ADJUSTMENT (vadjustment), FALSE);
 
-  if (WIDGET_CLASS (widget)->set_scroll_adjustments_signal)
-    {
-      /* FIXME: we should eventually check the signals signature here */
-      g_signal_emit (widget,
-		     WIDGET_CLASS (widget)->set_scroll_adjustments_signal, 0,
-		     hadjustment, vadjustment);
-      return TRUE;
-    }
-  else
+  signal_id = WIDGET_CLASS (widget)->set_scroll_adjustments_signal;
+  if (!signal_id)
     return FALSE;
+
+  g_signal_query (signal_id, &query);
+  if (!query.signal_id ||
+      !g_type_is_a (query.itype, GTK_TYPE_WIDGET) ||
+      query.return_type != G_TYPE_NONE ||
+      query.n_params != 2 ||
+      query.param_types[0] != GTK_TYPE_ADJUSTMENT ||
+      query.param_types[1] != GTK_TYPE_ADJUSTMENT)
+    {
+      g_warning (G_STRLOC ": signal \"%s::%s\" has wrong signature",
+		 G_OBJECT_TYPE_NAME (widget), query.signal_name);
+      return FALSE;
+    }
+      
+  g_signal_emit (widget, signal_id, 0, hadjustment, vadjustment);
+  return TRUE;
 }
 
 static void
