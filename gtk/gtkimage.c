@@ -1611,7 +1611,6 @@ ensure_pixbuf_for_gicon (GtkImage *image)
   gint width, height;
   GtkIconInfo *info;
   GtkIconLookupFlags flags;
-  GError *error = NULL;
 
   g_return_if_fail (image->storage_type == GTK_IMAGE_GICON);
 
@@ -1643,10 +1642,14 @@ ensure_pixbuf_for_gicon (GtkImage *image)
       info = gtk_icon_theme_lookup_by_gicon (icon_theme,
 					     image->data.gicon.icon,
 					     MIN (width, height), flags);
-      image->data.gicon.pixbuf = gtk_icon_info_load_icon (info, &error);
+      if (info)
+        {
+          image->data.gicon.pixbuf = gtk_icon_info_load_icon (info, NULL);
+          gtk_icon_info_free (info);
+        }
+
       if (image->data.gicon.pixbuf == NULL)
 	{
-	  g_error_free (error);
 	  image->data.gicon.pixbuf =
 	    gtk_widget_render_icon (GTK_WIDGET (image),
 				    GTK_STOCK_MISSING_IMAGE,

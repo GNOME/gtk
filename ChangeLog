@@ -1,3 +1,10 @@
+2008-09-17  Christian Persch  <chpe@gnome.org>
+
+	Bug 552667 – gtkimage containing gicon leaks memory
+
+	* gtk/gtkimage.c: (ensure_pixbuf_for_gicon): Fix critical warnings
+	when looking up the icon fails. Plug a mem leak.
+
 2008-09-17  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 329593 – Entering characters on a line very cpu intensive and 
