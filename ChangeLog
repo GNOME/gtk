@@ -1,5 +1,14 @@
 2008-09-17  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 408154 – [PATCH] Change GtkEntryCompletion max-items to style
+	property
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
+	Take actions into account when finding the available space for
+	matches. Patch by Ross Burton
+
+2008-09-17  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 552500 – GtkPrintSettings API doc not precise enough
 
 	* gtk/gtkprintsettings.c: Documentation improvements. Suggested
