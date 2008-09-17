@@ -1,5 +1,17 @@
 2008-09-17  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 329593 – Entering characters on a line very cpu intensive and 
+	slow
+
+	* gtk/gtknotebook.c (gtk_notebook_page_allocate): Return a boolean
+	that indicates whether the tab allocation has changed.
+	(gtk_notebook_pages_allocate): Only redraw the tabs if their
+	allocation has changed.
+	(gtk_notebook_calculate_tabs_allocations): Remove unused return value.
+	Patch by Owen Taylor
+
+2008-09-17  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 408154 – [PATCH] Change GtkEntryCompletion max-items to style
 	property
 
