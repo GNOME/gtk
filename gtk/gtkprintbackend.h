@@ -55,6 +55,13 @@ GQuark     gtk_print_backend_error_quark      (void);
 #define GTK_IS_PRINT_BACKEND_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINT_BACKEND))
 #define GTK_PRINT_BACKEND_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINT_BACKEND, GtkPrintBackendClass))
 
+typedef enum 
+{
+  GTK_PRINT_BACKEND_STATUS_UNKNOWN,
+  GTK_PRINT_BACKEND_STATUS_OK,
+  GTK_PRINT_BACKEND_STATUS_UNAVAILABLE
+} GtkPrintBackendStatus;
+
 struct _GtkPrintBackend
 {
   GObject parent_instance;

@@ -33,13 +33,22 @@
 #define GTK_PRINT_BACKEND_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINT_BACKEND, GtkPrintBackendPrivate))
 
-static void gtk_print_backend_dispose (GObject *object);
+static void gtk_print_backend_dispose      (GObject      *object);
+static void gtk_print_backend_set_property (GObject      *object,
+                                            guint         prop_id,
+                                            const GValue *value,
+                                            GParamSpec   *pspec);
+static void gtk_print_backend_get_property (GObject      *object,
+                                            guint         prop_id,
+                                            GValue       *value,
+                                            GParamSpec   *pspec);
 
 struct _GtkPrintBackendPrivate
 {
   GHashTable *printers;
   guint printer_list_requested : 1;
   guint printer_list_done : 1;
+  GtkPrintBackendStatus status;
 };
 
 enum {
@@ -52,6 +61,12 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
+
+enum 
+{ 
+  PROP_ZERO,
+  PROP_STATUS
+};
 
 static GObjectClass *backend_parent_class;
 
@@ -171,6 +186,50 @@ _gtk_print_backend_module_class_init (GtkPrintBackendModuleClass *class)
   module_class->unload = gtk_print_backend_module_unload;
 
   gobject_class->finalize = gtk_print_backend_module_finalize;
+}
+
+static void 
+gtk_print_backend_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  GtkPrintBackend *backend = GTK_PRINT_BACKEND (object);
+  GtkPrintBackendPrivate *priv;
+
+  priv = backend->priv = GTK_PRINT_BACKEND_GET_PRIVATE (backend); 
+
+  switch (prop_id)
+    {
+    case PROP_STATUS:
+      priv->status = g_value_get_int (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void 
+gtk_print_backend_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  GtkPrintBackend *backend = GTK_PRINT_BACKEND (object);
+  GtkPrintBackendPrivate *priv;
+
+  priv = backend->priv = GTK_PRINT_BACKEND_GET_PRIVATE (backend); 
+
+  switch (prop_id)
+    {
+    case PROP_STATUS:
+      g_value_set_int (value, priv->status);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -304,6 +363,8 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
   backend_parent_class = g_type_class_peek_parent (class);
   
   object_class->dispose = gtk_print_backend_dispose;
+  object_class->set_property = gtk_print_backend_set_property;
+  object_class->get_property = gtk_print_backend_get_property;
 
   class->printer_request_details = fallback_printer_request_details;
   class->printer_mark_conflicts = fallback_printer_mark_conflicts;
@@ -312,6 +373,16 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
   class->printer_get_default_page_size = fallback_printer_get_default_page_size;
   class->printer_get_capabilities = fallback_printer_get_capabilities;
   
+  g_object_class_install_property (object_class, 
+                                   PROP_STATUS,
+                                   g_param_spec_int ("status",
+                                                     "Status",
+                                                     "The status of the print backend",
+                                                     GTK_PRINT_BACKEND_STATUS_UNKNOWN,
+                                                     GTK_PRINT_BACKEND_STATUS_UNAVAILABLE,
+                                                     GTK_PRINT_BACKEND_STATUS_UNKNOWN,
+                                                     GTK_PARAM_READWRITE)); 
+
   g_type_class_add_private (class, sizeof (GtkPrintBackendPrivate));
   
   signals[PRINTER_LIST_CHANGED] =
@@ -520,7 +591,7 @@ gtk_print_backend_get_printer_list (GtkPrintBackend *backend)
 	GTK_PRINT_BACKEND_GET_CLASS (backend)->request_printer_list (backend);
       priv->printer_list_requested = TRUE;
     }
-  
+
   return result;
 }
 
@@ -580,6 +651,7 @@ gtk_print_backend_destroy (GtkPrintBackend *print_backend)
    */
   g_object_run_dispose (G_OBJECT (print_backend));
 }
+
 
 #define __GTK_PRINT_BACKEND_C__
 #include "gtkaliasdef.c"

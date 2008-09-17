@@ -1,3 +1,28 @@
+2008-09-17  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 346903 – gtk_enumerate_printers needs events to complete
+
+	* gtk/gtkprintbackend.h:
+	* gtk/gtkprintbackend.c: Add a GtkPrintBackend::status property.
+
+	* modules/printbackends/cups/gtkcupsutils.h:
+	* modules/printbackends/cups/gtkcupsutils.c: Turn the connection
+	test into a tristate available/unavailable/in progress.
+	
+	* modules/printbackends/cups/gtkprintbackendcups.c: Use a single
+	connection test instance for getting the default printer and for
+	getting the printer list. Set the GtkPrintBackend::status property
+	according to the result of the connection test. Use the printer-type
+	attribute to find the default printer, if cups supports it.
+
+	* gtk/gtkprinter.c: When enumerating printers, give up when
+	the backend status is 'unavailable'.
+
+	* gtk/gtkprintunixdialog.c (printer_status_cb): Select the printer
+	when it is the default and nothing else has been selected yet.
+
+	Patch by Marek Kasik.
+
 2008-09-17  Christian Persch  <chpe@gnome.org>
 
 	Bug 552668 – format not a string literal and no format arguments in

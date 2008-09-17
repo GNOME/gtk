@@ -101,6 +101,8 @@ static void     set_cell_sensitivity_func          (GtkTreeViewColumn *tree_colu
 				                    GtkTreeModel      *model,
 				                    GtkTreeIter       *iter,
 				                    gpointer           data);
+static gboolean set_active_printer                 (GtkPrintUnixDialog *dialog,
+						    const gchar        *printer_name);
 
 /* GtkBuildable */
 static void gtk_print_unix_dialog_buildable_init                    (GtkBuildableIface *iface);
@@ -644,6 +646,11 @@ printer_status_cb (GtkPrintBackend    *backend,
    * of GTK_RESPONSE_OK button inside of selected_printer_changed function. */
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->printer_treeview));
   selected_printer_changed (selection, dialog);
+
+  if (gtk_print_backend_printer_list_is_done (backend) &&
+      gtk_printer_is_default (printer) &&
+      (gtk_tree_selection_count_selected_rows (selection) == 0))
+    set_active_printer (dialog, gtk_printer_get_name (printer));
 }
 
 static void

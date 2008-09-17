@@ -1220,9 +1220,9 @@ gtk_cups_connection_test_new (const char *server)
 
   result->socket = -1;
   result->current_addr = NULL;
-  result->success_at_init = FALSE;
+  result->at_init = GTK_CUPS_CONNECTION_NOT_AVAILABLE;
 
-  result->success_at_init = gtk_cups_connection_test_is_server_available (result);
+  result->at_init = gtk_cups_connection_test_get_state (result);
 #else
   result = g_new (GtkCupsConnectionTest, 1);
 #endif
@@ -1236,22 +1236,23 @@ gtk_cups_connection_test_new (const char *server)
  *  - you need to check it more then once.
  * The connection is closed after a successful connection.
  */
-gboolean 
-gtk_cups_connection_test_is_server_available (GtkCupsConnectionTest *test)
+GtkCupsConnectionState 
+gtk_cups_connection_test_get_state (GtkCupsConnectionTest *test)
 {
 #ifdef HAVE_CUPS_API_1_2
-  http_addrlist_t *iter;
-  gboolean         result = FALSE;
-  gint             flags;
-  gint             code;
+  GtkCupsConnectionState result = GTK_CUPS_CONNECTION_NOT_AVAILABLE;
+  http_addrlist_t       *iter;
+  gint                   error_code;
+  gint                   flags;
+  gint                   code;
 
   if (test == NULL)
-    return FALSE;
+    return GTK_CUPS_CONNECTION_NOT_AVAILABLE;
 
-  if (test->success_at_init)
+  if (test->at_init == GTK_CUPS_CONNECTION_AVAILABLE)
     {
-      test->success_at_init = FALSE;
-      return TRUE;
+      test->at_init = GTK_CUPS_CONNECTION_NOT_AVAILABLE;
+      return GTK_CUPS_CONNECTION_AVAILABLE;
     }
   else
     {
@@ -1287,21 +1288,28 @@ gtk_cups_connection_test_is_server_available (GtkCupsConnectionTest *test)
                           &test->current_addr->addr.addr,
                           httpAddrLength (&test->current_addr->addr));
 
+          error_code = errno;
+
           if (code == 0)
             {
               close (test->socket);
               test->socket = -1;
               test->current_addr = NULL;
-              result = TRUE;
+              result = GTK_CUPS_CONNECTION_AVAILABLE;
             }
           else
-            result = FALSE;
+            {
+              if (error_code == EALREADY || error_code == EINPROGRESS)
+                result = GTK_CUPS_CONNECTION_IN_PROGRESS;
+              else
+                result = GTK_CUPS_CONNECTION_NOT_AVAILABLE;
+            }
          }
 
       return result;
     }
 #else
-  return TRUE;
+  return GTK_CUPS_CONNECTION_AVAILABLE;
 #endif
 }
 
