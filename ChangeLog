@@ -1,5 +1,12 @@
 2008-09-17  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 552107 – Small libtool fixes
+
+	* configure.in: Regenerate libtool early, quote $deplibs_check_method.
+	Patch by Patryk Zawadzki
+
+2008-09-17  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 551722 – gtk_widget_set_scroll_adjustments() should check the
 	signal signature
 

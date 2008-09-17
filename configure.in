@@ -184,6 +184,9 @@ fi
 
 AC_LIBTOOL_WIN32_DLL
 AM_PROG_LIBTOOL
+dnl when using libtool 2.x create libtool early, because it's used in configure
+m4_ifdef([LT_OUTPUT], [LT_OUTPUT])
+
 
 # Make sure we use 64-bit versions of various file stuff.
 AC_SYS_LARGEFILE
@@ -398,7 +401,7 @@ AC_MSG_CHECKING([Whether to write dependencies into .pc files])
 case $enable_explicit_deps in
   auto)
     export SED
-    deplibs_check_method=`(./libtool --config; echo 'eval echo $deplibs_check_method') | sh`
+    deplibs_check_method=`(./libtool --config; echo 'eval echo \"$deplibs_check_method\"') | sh`
     if test "x$deplibs_check_method" '!=' xpass_all || test "x$enable_static" = xyes ; then
       enable_explicit_deps=yes  
     else
