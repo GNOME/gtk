@@ -101,7 +101,7 @@ gtk_im_module_load (GTypeModule *module)
       im_module->library = g_module_open (im_module->path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
       if (!im_module->library)
 	{
-	  g_warning (g_module_error());
+	  g_warning ("%s", g_module_error());
 	  return FALSE;
 	}
   
@@ -115,7 +115,7 @@ gtk_im_module_load (GTypeModule *module)
 	  !g_module_symbol (im_module->library, "im_module_create", 
 			    (gpointer *)&im_module->create))
 	{
-	  g_warning (g_module_error());
+	  g_warning ("%s", g_module_error());
 	  g_module_close (im_module->library);
 	  
 	  return FALSE;

@@ -1,5 +1,12 @@
 2008-09-17  Christian Persch  <chpe@gnome.org>
 
+	Bug 552668 – format not a string literal and no format arguments in
+	gtkimmodule
+
+	* gtk/gtkimmodule.c: (gtk_im_module_load): Use %s with g_warning here.
+
+2008-09-17  Christian Persch  <chpe@gnome.org>
+
 	Bug 552667 – gtkimage containing gicon leaks memory
 
 	* gtk/gtkimage.c: (ensure_pixbuf_for_gicon): Fix critical warnings
