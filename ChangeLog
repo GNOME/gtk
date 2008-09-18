@@ -1,3 +1,15 @@
+2008-09-18  Emmanuele Bassi  <ebassi@linux.intel.com>
+
+	Bug 325095 – show a 'size' column
+
+	* gtk/gtkfilechooserdefault.c:
+	* gtk/gtkfilechooserprivate.h: Add a context menu item controlling
+	the visibility of the file size column. This works only for the
+	browse mode, and the column is not visible by default.
+
+	* gtk/gtkfilechoosersettings.[ch]: Add a ShowSizeColumn key to the
+	settings file.
+
 2008-09-18  Dominic Lachowicz  <domlachowicz@gmail.com>
 
 	* modules/engines/ms-windows/*: Revert most of previous patch, as it didn't work as expected; 

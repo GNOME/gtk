@@ -178,6 +178,7 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_files_popup_menu;
   GtkWidget *browse_files_popup_menu_add_shortcut_item;
   GtkWidget *browse_files_popup_menu_hidden_files_item;
+  GtkWidget *browse_files_popup_menu_size_column_item;
   GtkWidget *browse_new_folder_button;
   GtkWidget *browse_path_bar_hbox;
   GtkWidget *browse_path_bar;
@@ -267,6 +268,7 @@ struct _GtkFileChooserDefault
   GtkTreeViewColumn *list_name_column;
   GtkCellRenderer *list_name_renderer;
   GtkTreeViewColumn *list_mtime_column;
+  GtkTreeViewColumn *list_size_column;
 
   GSource *edited_idle;
   char *edited_new_text;
@@ -298,6 +300,7 @@ struct _GtkFileChooserDefault
   guint has_desktop : 1;
   guint has_search : 1;
   guint has_recent : 1;
+  guint show_size_column : 1;
 
 #if 0
   guint shortcuts_drag_outside : 1;

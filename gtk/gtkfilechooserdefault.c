@@ -407,13 +407,11 @@ static void list_name_data_func (GtkTreeViewColumn *tree_column,
 				 GtkTreeModel      *tree_model,
 				 GtkTreeIter       *iter,
 				 gpointer           data);
-#if 0
 static void list_size_data_func (GtkTreeViewColumn *tree_column,
 				 GtkCellRenderer   *cell,
 				 GtkTreeModel      *tree_model,
 				 GtkTreeIter       *iter,
 				 gpointer           data);
-#endif
 static void list_mtime_data_func (GtkTreeViewColumn *tree_column,
 				  GtkCellRenderer   *cell,
 				  GtkTreeModel      *tree_model,
@@ -794,6 +792,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->use_preview_label = TRUE;
   impl->select_multiple = FALSE;
   impl->show_hidden = FALSE;
+  impl->show_size_column = FALSE;
   impl->icon_size = FALLBACK_ICON_SIZE;
   impl->load_state = LOAD_EMPTY;
   impl->reload_state = RELOAD_EMPTY;
@@ -4094,6 +4093,18 @@ show_hidden_toggled_cb (GtkCheckMenuItem      *item,
 		NULL);
 }
 
+/* Callback used when the "Show Size Column" menu item is toggled */
+static void
+show_size_column_toggled_cb (GtkCheckMenuItem *item,
+                             GtkFileChooserDefault *impl)
+{
+  impl->show_size_column = gtk_check_menu_item_get_active (item);
+
+  if (impl->list_size_column)
+    gtk_tree_view_column_set_visible (impl->list_size_column,
+                                      impl->show_size_column);
+}
+
 /* Shows an error dialog about not being able to select a dragged file */
 static void
 error_selecting_dragged_file_dialog (GtkFileChooserDefault *impl,
@@ -4297,6 +4308,13 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
 		    G_CALLBACK (show_hidden_toggled_cb), impl);
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
+
+  item = gtk_check_menu_item_new_with_mnemonic (_("Show _Size Column"));
+  impl->browse_files_popup_menu_size_column_item = item;
+  g_signal_connect (item, "toggled",
+                    G_CALLBACK (show_size_column_toggled_cb), impl);
+  gtk_widget_show (item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
 }
 
 /* Updates the popup menu for the file list, creating it if necessary */
@@ -4311,12 +4329,21 @@ file_list_update_popup_menu (GtkFileChooserDefault *impl)
    * bookmarks_check_add_sensitivity()
    */
 
+  /* 'Show Hidden Files' */
   g_signal_handlers_block_by_func (impl->browse_files_popup_menu_hidden_files_item,
 				   G_CALLBACK (show_hidden_toggled_cb), impl);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (impl->browse_files_popup_menu_hidden_files_item),
 				  impl->show_hidden);
   g_signal_handlers_unblock_by_func (impl->browse_files_popup_menu_hidden_files_item,
 				     G_CALLBACK (show_hidden_toggled_cb), impl);
+
+  /* 'Show Size Column' */
+  g_signal_handlers_block_by_func (impl->browse_files_popup_menu_size_column_item,
+				   G_CALLBACK (show_size_column_toggled_cb), impl);
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (impl->browse_files_popup_menu_size_column_item),
+				  impl->show_size_column);
+  g_signal_handlers_unblock_by_func (impl->browse_files_popup_menu_size_column_item,
+				     G_CALLBACK (show_size_column_toggled_cb), impl);
 }
 
 static void
@@ -4410,15 +4437,16 @@ list_button_press_event_cb (GtkWidget             *widget,
 static void
 file_list_set_sort_column_ids (GtkFileChooserDefault *impl)
 {
-  int name_id, mtime_id;
+  int name_id, mtime_id, size_id;
 
-  name_id = mtime_id = 0;
+  name_id = mtime_id = size_id = 0;
 
   switch (impl->operation_mode)
     {
     case OPERATION_MODE_BROWSE:
       name_id = FILE_LIST_COL_NAME;
       mtime_id = FILE_LIST_COL_MTIME;
+      size_id = FILE_LIST_COL_SIZE;
       break;
     case OPERATION_MODE_SEARCH:
       name_id = SEARCH_MODEL_COL_FILE;
@@ -4432,6 +4460,7 @@ file_list_set_sort_column_ids (GtkFileChooserDefault *impl)
 
   gtk_tree_view_column_set_sort_column_id (impl->list_name_column, name_id);
   gtk_tree_view_column_set_sort_column_id (impl->list_mtime_column, mtime_id);
+  gtk_tree_view_column_set_sort_column_id (impl->list_size_column, size_id);
 }
 
 static gboolean
@@ -4604,7 +4633,7 @@ create_file_list (GtkFileChooserDefault *impl)
 					   list_name_data_func, impl, NULL);
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->browse_files_tree_view), impl->list_name_column);
-#if 0
+
   /* Size column */
 
   column = gtk_tree_view_column_new ();
@@ -4616,7 +4645,7 @@ create_file_list (GtkFileChooserDefault *impl)
 					   list_size_data_func, impl, NULL);
   gtk_tree_view_column_set_sort_column_id (column, FILE_LIST_COL_SIZE);
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->browse_files_tree_view), column);
-#endif
+  impl->list_size_column = column;
 
   /* Modification time column */
 
@@ -5949,12 +5978,14 @@ settings_load (GtkFileChooserDefault *impl)
   LocationMode location_mode;
   gboolean show_hidden;
   gboolean expand_folders;
+  gboolean show_size_column;
 
   settings = _gtk_file_chooser_settings_new ();
 
   location_mode = _gtk_file_chooser_settings_get_location_mode (settings);
   show_hidden = _gtk_file_chooser_settings_get_show_hidden (settings);
   expand_folders = _gtk_file_chooser_settings_get_expand_folders (settings);
+  show_size_column = _gtk_file_chooser_settings_get_show_size_column (settings);
 
   g_object_unref (settings);
 
@@ -5963,6 +5994,9 @@ settings_load (GtkFileChooserDefault *impl)
   impl->expand_folders = expand_folders;
   if (impl->save_expander)
     gtk_expander_set_expanded (GTK_EXPANDER (impl->save_expander), expand_folders);
+  impl->show_size_column = show_size_column;
+  if (impl->list_size_column)
+    gtk_tree_view_column_set_visible (impl->list_size_column, show_size_column);
 }
 
 static void
@@ -8856,6 +8890,8 @@ search_switch_to_browse_mode (GtkFileChooserDefault *impl)
 	gtk_widget_show (impl->location_entry_box);
     }
 
+  gtk_tree_view_column_set_visible (impl->list_size_column, impl->show_size_column);
+
   impl->operation_mode = OPERATION_MODE_BROWSE;
 
   file_list_set_sort_column_ids (impl);
@@ -9215,6 +9251,9 @@ search_setup_widgets (GtkFileChooserDefault *impl)
   gtk_widget_hide (impl->browse_path_bar);
   gtk_widget_hide (impl->browse_new_folder_button);
 
+  /* hide the file size column if it's visible */
+  gtk_tree_view_column_set_visible (impl->list_size_column, FALSE);
+
   /* Box for search widgets */
   gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->search_hbox, TRUE, TRUE, 0);
   gtk_widget_show_all (impl->search_hbox);
@@ -9366,6 +9405,8 @@ recent_switch_to_browse_mode (GtkFileChooserDefault *impl)
       if (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY)
 	gtk_widget_show (impl->location_entry_box);
     }
+
+  gtk_tree_view_column_set_visible (impl->list_size_column, impl->show_size_column);
 
   impl->operation_mode = OPERATION_MODE_BROWSE;
 
@@ -9930,6 +9971,10 @@ recent_activate (GtkFileChooserDefault *impl)
     }
 
   recent_hide_entry (impl);
+
+  /* hide the file size column if it's visible */
+  gtk_tree_view_column_set_visible (impl->list_size_column, FALSE);
+
   file_list_set_sort_column_ids (impl);
   recent_start_loading (impl);
 }
@@ -10804,7 +10849,6 @@ list_name_data_func (GtkTreeViewColumn *tree_column,
 		NULL);
 }
 
-#if 0
 static void
 list_size_data_func (GtkTreeViewColumn *tree_column,
 		     GtkCellRenderer   *cell,
@@ -10813,10 +10857,17 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
 		     gpointer           data)
 {
   GtkFileChooserDefault *impl = data;
-  GFileInfo *info = get_list_file_info (impl, iter);
-  gint64 size;
+  GFileInfo *info;
+  goffset size;
   gchar *str;
-  gboolean sensitive = TRUE;
+  gboolean sensitive;
+
+  if (impl->operation_mode == OPERATION_MODE_SEARCH ||
+      impl->operation_mode == OPERATION_MODE_RECENT)
+    return;
+
+  info = get_list_file_info (impl, iter);
+  sensitive = TRUE;
 
   if (!info || g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
     {
@@ -10827,18 +10878,9 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
       return;
     }
 
-  size = gtk_file_info_get_size (info);
-#if 0
-  if (size < (gint64)1024)
-    str = g_strdup_printf (g_dngettext (GETTEXT_DOMAIN, "%d byte", "%d bytes", (gint)size), (gint)size);
-  else if (size < (gint64)1024*1024)
-    str = g_strdup_printf (_("%.1f KB"), size / (1024.));
-  else if (size < (gint64)1024*1024*1024)
-    str = g_strdup_printf (_("%.1f MB"), size / (1024.*1024.));
-  else
-    str = g_strdup_printf (_("%.1f GB"), size / (1024.*1024.*1024.));
-#endif
-  str = g_strdup_printf ("%" G_GINT64_FORMAT, size);
+  size = g_file_info_get_size (info);
+  str = g_format_size_for_display (size);
+
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
       impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     sensitive = FALSE;
@@ -10851,7 +10893,6 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
 
   g_free (str);
 }
-#endif
 
 /* Tree column data callback for the file list; fetches the mtime of a file */
 static void

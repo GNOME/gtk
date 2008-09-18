@@ -41,6 +41,7 @@
 #define LOCATION_MODE_KEY	"LocationMode"
 #define SHOW_HIDDEN_KEY		"ShowHidden"
 #define EXPAND_FOLDERS_KEY	"ExpandFolders"
+#define SHOW_SIZE_COLUMN_KEY    "ShowSizeColumn"
 
 #define MODE_PATH_BAR          "path-bar"
 #define MODE_FILENAME_ENTRY    "filename-entry"
@@ -57,6 +58,22 @@ static char *
 get_config_filename (void)
 {
   return g_build_filename (g_get_user_config_dir (), "gtk-2.0", "gtkfilechooser.ini", NULL);
+}
+
+static void
+warn_if_invalid_key_and_clear_error (const gchar  *key,
+                                     GError      **error)
+{
+  if (error && *error)
+    {
+      if ((*error)->domain == G_KEY_FILE_ERROR &&
+          (*error)->code != G_KEY_FILE_ERROR_KEY_NOT_FOUND)
+        g_warning ("Failed to read '%s' setting in filechooser settings: %s",
+                   key,
+                   (*error)->message);
+
+      g_clear_error (error);
+    }
 }
 
 static void
@@ -108,24 +125,23 @@ ensure_settings_read (GtkFileChooserSettings *settings)
   value = g_key_file_get_boolean (key_file, SETTINGS_GROUP,
 				  SHOW_HIDDEN_KEY, &error);
   if (error)
-    {
-      g_warning ("Failed to read show-hidden setting in filechooser settings: %s",
-		 error->message);
-      g_clear_error (&error);
-    }
+    warn_if_invalid_key_and_clear_error (SHOW_HIDDEN_KEY, &error);
   else
     settings->show_hidden = value != FALSE;
 
   value = g_key_file_get_boolean (key_file, SETTINGS_GROUP,
 				  EXPAND_FOLDERS_KEY, &error);
   if (error)
-    {
-      g_warning ("Failed to read expand-folders setting in filechooser settings: %s",
-		 error->message);
-      g_clear_error (&error);
-    }
+    warn_if_invalid_key_and_clear_error (EXPAND_FOLDERS_KEY, &error);
   else
     settings->expand_folders = value != FALSE;
+
+  value = g_key_file_get_boolean (key_file, SETTINGS_GROUP,
+				  SHOW_SIZE_COLUMN_KEY, &error);
+  if (error)
+    warn_if_invalid_key_and_clear_error (SHOW_SIZE_COLUMN_KEY, &error);
+  else
+    settings->show_size_column = value != FALSE;
 
  out:
 
@@ -148,6 +164,7 @@ _gtk_file_chooser_settings_init (GtkFileChooserSettings *settings)
   settings->location_mode = LOCATION_MODE_PATH_BAR;
   settings->show_hidden = FALSE;
   settings->expand_folders = FALSE;
+  settings->show_size_column = FALSE;
 }
 
 GtkFileChooserSettings *
@@ -189,6 +206,20 @@ _gtk_file_chooser_settings_get_expand_folders (GtkFileChooserSettings *settings)
 {
   ensure_settings_read (settings);
   return settings->expand_folders;
+}
+
+void
+_gtk_file_chooser_settings_set_show_size_column (GtkFileChooserSettings *settings,
+					         gboolean show_column)
+{
+  settings->show_size_column = show_column != FALSE;
+}
+
+gboolean
+_gtk_file_chooser_settings_get_show_size_column (GtkFileChooserSettings *settings)
+{
+  ensure_settings_read (settings);
+  return settings->show_size_column;
 }
 
 void
@@ -238,6 +269,8 @@ _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
 			  SHOW_HIDDEN_KEY, settings->show_hidden);
   g_key_file_set_boolean (key_file, SETTINGS_GROUP,
 			  EXPAND_FOLDERS_KEY, settings->expand_folders);
+  g_key_file_set_boolean (key_file, SETTINGS_GROUP,
+			  SHOW_SIZE_COLUMN_KEY, settings->show_size_column);
 
   contents = g_key_file_to_data (key_file, &len, error);
   g_key_file_free (key_file);
