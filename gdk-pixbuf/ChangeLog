@@ -1,3 +1,7 @@
+2008-09-18  Dominic Lachowicz  <domlachowicz@gmail.com>
+
+	* io-gdip-utils.c: Fix 2 cases where we leaked a GpImage (#552545)
+
 2008-09-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.14.2 ===

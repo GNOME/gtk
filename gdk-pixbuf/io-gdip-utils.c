@@ -58,6 +58,10 @@ static GdipLoadImageFromStreamFunc GdipLoadImageFromStream;
 static GdipDeleteGraphicsFunc GdipDeleteGraphics;
 static GdipGetImageEncodersFunc GdipGetImageEncoders;
 static GdipGetImageEncodersSizeFunc GdipGetImageEncodersSize;
+static GdipBitmapLockBitsFunc GdipBitmapLockBits;
+static GdipBitmapUnlockBitsFunc GdipBitmapUnlockBits;
+static GdipGetImagePixelFormatFunc GdipGetImagePixelFormat;
+static GdipCloneBitmapAreaIFunc GdipCloneBitmapAreaI;
 
 DEFINE_GUID(FrameDimensionTime, 0x6aedbd6d,0x3fb5,0x418a,0x83,0xa6,0x7f,0x45,0x22,0x9d,0xc8,0x72);
 DEFINE_GUID(FrameDimensionPage, 0x7462dc86,0x6180,0x4c7e,0x8e,0x3f,0xee,0x73,0x33,0xa7,0xa4,0x83);
@@ -161,6 +165,10 @@ gdip_init (void)
   LOOKUP (GdipDeleteGraphics);
   LOOKUP (GdipGetImageEncoders);
   LOOKUP (GdipGetImageEncodersSize);
+  LOOKUP (GdipBitmapLockBits);
+  LOOKUP (GdipBitmapUnlockBits);
+  LOOKUP (GdipGetImagePixelFormat);
+  LOOKUP (GdipCloneBitmapAreaI);
 
 #undef LOOKUP
 
@@ -338,12 +346,14 @@ gdip_buffer_to_bitmap (const gchar *buffer, size_t size, GError **error)
   GpBitmap *bitmap = NULL;
   IStream *stream = NULL;
   GpStatus status;
+  guint64 size64 = size;
 
   hg = gdip_buffer_to_hglobal (buffer, size, error);
 
   if (!hg)
     return NULL;
 
+  IStream_SetSize (stream, *(ULARGE_INTEGER *)&size64);
   hr = CreateStreamOnHGlobal (hg, FALSE, (LPSTREAM *)&stream);
 
   if (!SUCCEEDED (hr)) {
@@ -371,6 +381,7 @@ gdip_buffer_to_image (const gchar *buffer, size_t size, GError **error)
   GpImage *image = NULL;
   IStream *stream = NULL;
   GpStatus status;
+  guint64 size64 = size;
 
   hg = gdip_buffer_to_hglobal (buffer, size, error);
 
@@ -385,6 +396,7 @@ gdip_buffer_to_image (const gchar *buffer, size_t size, GError **error)
     return NULL;
   }
   
+  IStream_SetSize (stream, *(ULARGE_INTEGER *)&size64);
   status = GdipLoadImageFromStream (stream, &image);
 
   if (Ok != status)
@@ -651,7 +663,7 @@ gdk_pixbuf__gdip_image_load_increment (gpointer data,
 }
 
 static GdkPixbuf *
-gdip_bitmap_to_pixbuf (GpBitmap *bitmap)
+gdip_bitmap_to_pixbuf (GpBitmap *bitmap, GError **error)
 {
   GdkPixbuf *pixbuf = NULL;
   guchar *cursor = NULL;
@@ -667,8 +679,10 @@ gdip_bitmap_to_pixbuf (GpBitmap *bitmap)
 
   pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, has_alpha, 8, width, height);
 
-  if (!pixbuf)
+  if (!pixbuf) {
+    g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't load bitmap"));
     return NULL;
+  }
 
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   cursor = gdk_pixbuf_get_pixels (pixbuf);
@@ -677,9 +691,11 @@ gdip_bitmap_to_pixbuf (GpBitmap *bitmap)
   for (y = 0; y < height; y++) {
     for (x = 0; x < width; x++) {
       ARGB pixel;
+      GpStatus status;
       guchar *b = cursor + (y * rowstride + (x * n_channels));
       
-      if (Ok != GdipBitmapGetPixel (bitmap, x, y, &pixel)) {
+      if (Ok != (status = GdipBitmapGetPixel (bitmap, x, y, &pixel))) {
+        gdip_set_error_from_gpstatus (error, GDK_PIXBUF_ERROR_FAILED, status);
         g_object_unref (pixbuf);
         return NULL;
       }
@@ -726,14 +742,14 @@ stop_load (GpBitmap *bitmap, GdipContext *context, GError **error)
 
     gdip_bitmap_select_frame (bitmap, i, TRUE);
     
-    pixbuf = gdip_bitmap_to_pixbuf (bitmap);
+    pixbuf = gdip_bitmap_to_pixbuf (bitmap, error);
     
     if (!pixbuf) {
       if (animation != NULL)
         g_object_unref (G_OBJECT (animation));
 
+      GdipDisposeImage ((GpImage *)bitmap);
       destroy_gdipcontext (context);
-      g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY, _("Couldn't create pixbuf"));
       return FALSE;
     }
     
@@ -779,6 +795,7 @@ stop_load (GpBitmap *bitmap, GdipContext *context, GError **error)
   if (animation != NULL)
     g_object_unref (G_OBJECT (animation));
 
+  GdipDisposeImage ((GpImage *)bitmap);
   destroy_gdipcontext (context);
   
   return TRUE;

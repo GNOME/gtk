@@ -188,6 +188,26 @@ struct _ImageCodecInfo
 };
 typedef struct _ImageCodecInfo ImageCodecInfo;
 
+struct _BitmapData
+{
+    UINT Width;
+    UINT Height;
+    INT Stride;
+    PixelFormat PixelFormat;
+    VOID* Scan0;
+    UINT_PTR Reserved;
+};
+typedef struct _BitmapData BitmapData;
+
+struct _GpRect
+{
+    INT X;
+    INT Y;
+    INT Width;
+    INT Height;
+};
+typedef struct _GpRect GpRect;
+
 #ifndef IStream_Release
 #define IStream_Release(This) (This)->lpVtbl->Release(This)
 #endif
@@ -198,6 +218,10 @@ typedef struct _ImageCodecInfo ImageCodecInfo;
 
 #ifndef IStream_Read
 #define IStream_Read(This,pv,cb,pcbRead) (This)->lpVtbl->Read(This,pv,cb,pcbRead)
+#endif
+
+#ifndef IStream_SetSize
+#define IStream_SetSize(This,size) (This)->lpVtbl->SetSize(This,size)
 #endif
 
 typedef GpStatus (WINGDIPAPI* GdiplusStartupFunc) (gpointer, const gpointer, gpointer);
@@ -231,5 +255,10 @@ typedef GpStatus (WINGDIPAPI* GdipGetImageHorizontalResolutionFunc) (GpImage *im
 typedef GpStatus (WINGDIPAPI* GdipGetImageVerticalResolutionFunc) (GpImage *image, float *resolution);
 typedef GpStatus (WINGDIPAPI* GdipLoadImageFromStreamFunc) (IStream* stream, GpImage **image);
 typedef GpStatus (WINGDIPAPI* GdipDeleteGraphicsFunc) (GpGraphics *graphics);
+
+typedef GpStatus (WINGDIPAPI* GdipBitmapLockBitsFunc) (GpBitmap* bitmap, const GpRect* rect, UINT flags, PixelFormat format, BitmapData* lockedBitmapData);
+typedef GpStatus (WINGDIPAPI* GdipBitmapUnlockBitsFunc) (GpBitmap* bitmap, BitmapData* lockedBitmapData);
+typedef GpStatus (WINGDIPAPI* GdipGetImagePixelFormatFunc) (GpImage *image, PixelFormat *format);
+typedef GpStatus (WINGDIPAPI* GdipCloneBitmapAreaIFunc) (INT x, INT y, INT width, INT height, PixelFormat format, GpBitmap *srcBitmap, GpBitmap **dstBitmap);
 
 #endif
