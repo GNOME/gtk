@@ -6009,6 +6009,7 @@ settings_save (GtkFileChooserDefault *impl)
   _gtk_file_chooser_settings_set_location_mode (settings, impl->location_mode);
   _gtk_file_chooser_settings_set_show_hidden (settings, gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (impl)));
   _gtk_file_chooser_settings_set_expand_folders (settings, impl->expand_folders);
+  _gtk_file_chooser_settings_set_show_size_column (settings, impl->show_size_column);
 
   /* NULL GError */
   _gtk_file_chooser_settings_save (settings, NULL);

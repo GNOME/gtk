@@ -1,5 +1,10 @@
 2008-09-18  Emmanuele Bassi  <ebassi@linux.intel.com>
 
+	* gtk/gtkfilechooserdefault.c (settings_save): Save the size column
+	visibility state with the rest of the FileChooser settings.
+
+2008-09-18  Emmanuele Bassi  <ebassi@linux.intel.com>
+
 	Bug 325095 – show a 'size' column
 
 	* gtk/gtkfilechooserdefault.c:
