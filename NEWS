@@ -1,3 +1,60 @@
+Overview of Changes from GTK+ 2.14.1 to 2.14.2
+==============================================
+
+* Don't use XRRGetScreenResources, since it doesn't work well
+
+* Bugs fixed:
+ 551063 deprecated marking without a link to what new code should use
+ 319849 gtkcalendar look in RTL locales
+ 550989 gdk_display_put_event should call g_main_context_wakeup
+ 550062 Small update in gdk/gdkkeysyms.h
+ 551325 Reference to wrong parameter in gtk_editable_insert_text
+ 551386 gtk_printer_set_is_default() always sets TRUE
+ 550676 Memory leak, update keyboard layout data structure
+ 551699 gtk_scrolled_window_destroy() is broken
+ 551567 DND mark broken
+ 551378 Print dialog: should try UDS when fetching PPD for localhost
+ 536542 gtk_list_store_set() documentation doesn't say whether...
+ 552153 GtkModules loading with XSettings doesn't work...
+ 552001 gtkimcontextsimple.c: variable is declared at middle...
+ 551987 GtkPaned redrawing problem
+ 551722 gtk_widget_set_scroll_adjustments() should check...
+ 552107 Small libtool fixes
+ 552500 GtkPrintSettings API doc not precise enough
+ 408154 Change GtkEntryCompletion max-items to style property
+ 329593 Entering characters on a line very cpu intensive and slow
+ 552667 gtkimage containing gicon leaks memory
+ 552668 format not a string literal and no format arguments...
+ 346903 gtk_enumerate_printers needs events to complete
+ 550969 fix a typo which breaks the static build
+ 517233 Calling gdk_pixbuf_loader_close causes "GError set over...
+ 551063 deprecated marking without a link to what new code should use
+ 540967 docs build slowly because of entities
+
+* Updated translations:
+ Afrikaans (af)
+ Arabic (ar)
+ Assamese (as)
+ Bulgarian (bg)
+ Bengali India (bn_IN)
+ Catalan (ca)
+ Finnish (fi)
+ French (fr)
+ Gujarati (gu)
+ Croatian (hr)
+ Italian (it)
+ Lithuanian (lt)
+ Malayalam (ml)
+ Marathi (mr)
+ Dutch (nl)
+ Oriya (or)
+ Brazilian Portugese (pt_BR)
+ Portugese (pt)
+ Telugu (te)
+ Thai (th)
+ Turkish (tr)
+
+
 Overview of Changes from GTK+ 2.14.0 to 2.14.1
 ==============================================
 

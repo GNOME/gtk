@@ -1,5 +1,9 @@
 2008-09-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2008-09-17  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 346903 – gtk_enumerate_printers needs events to complete
 
 	* gtk/gtkprintbackend.h:
@@ -186,6 +190,7 @@ Wed Sep 10 06:18:25 2008  Søren Sandmann  <sandmann@redhat.com>
 	propagated through Xinerama as well.
 
 2008-09-09  Marek Kasik  <mkasik@redhat.com>
+
 	Bug 551386 – gtk_printer_set_is_default() always sets TRUE
 
 	* gtk/gtkprinter.c: sets the is_default parameter to the value
