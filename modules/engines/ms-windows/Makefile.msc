@@ -38,9 +38,7 @@ GTK_LIBS= \
 	pango-1.0.lib \
 	gobject-2.0.lib \
 	gmodule-2.0.lib \
-	glib-2.0.lib \
-	intl.lib \
-	iconv.lib
+	glib-2.0.lib
 
 ##
 # WIN32

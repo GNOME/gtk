@@ -1,6 +1,12 @@
 2008-09-18  Dominic Lachowicz  <domlachowicz@gmail.com>
 
-	* modules/engins/ms-windows/*: MS Windows style should use pango_win32_font_description_from_logfont;
+	* modules/engines/ms-windows/*: Revert most of previous patch, as it didn't work as expected; 
+	Some work toward #531086 - the new GtkTooltip widget doesn't theme properly on win32. Now, at least
+	the background color seems okay
+	
+2008-09-18  Dominic Lachowicz  <domlachowicz@gmail.com>
+
+	* modules/engines/ms-windows/*: MS Windows style should use pango_win32_font_description_from_logfont;
 	Allows us to rip out a lot of potentially buggy code, and also get the font specification from the
 	XP theme (#434987)
 	
