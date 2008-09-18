@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+_properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-04 21:58-0400\n"
+"POT-Creation-Date: 2008-09-17 23:14-0400\n"
 "PO-Revision-Date: 2008-08-23 10:20+0200\n"
 "Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -3093,7 +3093,7 @@ msgstr ""
 msgid "Horizontal adjustment"
 msgstr "Ajustement horizontal"
 
-#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:221
+#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:219
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Le GtkAdjustement pour cette position horizontale"
 
@@ -3101,7 +3101,7 @@ msgstr "Le GtkAdjustement pour cette position horizontale"
 msgid "Vertical adjustment"
 msgstr "Ajustement vertical"
 
-#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:228
+#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:226
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Le GtkAdjustement pour cette position verticale"
 
@@ -3913,7 +3913,7 @@ msgstr "Paramètres"
 msgid "Printer settings"
 msgstr "Paramètres d'imprimante"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:256
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:258
 msgid "Page Setup"
 msgstr "Mise en page"
 
@@ -3938,11 +3938,11 @@ msgstr "Mise en page par défaut"
 msgid "The GtkPageSetup used by default"
 msgstr "L'objet GtkPageSetup utilisé par défaut"
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:274
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "Paramètres d'impression"
 
-#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:275
+#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "L'objet GtkPrintSettings utilisé pour initialiser la boîte de dialogue"
 
@@ -3963,11 +3963,11 @@ msgstr "Nombre de pages"
 msgid "The number of pages in the document."
 msgstr "Le nombre de pages du document."
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:264
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "Page actuelle"
 
-#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:265
+#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "La page actuelle du document"
 
@@ -4049,15 +4049,15 @@ msgid "Label for the tab containing custom widgets."
 msgstr ""
 "Étiquette pour l'onglet contenant les composants graphiques personnalisés."
 
-#: gtk/gtkprintunixdialog.c:257
+#: gtk/gtkprintunixdialog.c:259
 msgid "The GtkPageSetup to use"
 msgstr "L'objet GtkPageSetup à utiliser"
 
-#: gtk/gtkprintunixdialog.c:282
+#: gtk/gtkprintunixdialog.c:284
 msgid "Selected Printer"
 msgstr "Imprimante sélectionnée"
 
-#: gtk/gtkprintunixdialog.c:283
+#: gtk/gtkprintunixdialog.c:285
 msgid "The GtkPrinter which is selected"
 msgstr "L'objet GtkPrinter sélectionné"
 
@@ -4646,35 +4646,35 @@ msgstr ""
 "Afficher un second bouton fléché avant au côté opposé de la barre de "
 "défilement"
 
-#: gtk/gtkscrolledwindow.c:220 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
 msgid "Horizontal Adjustment"
 msgstr "Ajustement horizontal"
 
-#: gtk/gtkscrolledwindow.c:227 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
 msgid "Vertical Adjustment"
 msgstr "Ajustement vertical"
 
-#: gtk/gtkscrolledwindow.c:234
+#: gtk/gtkscrolledwindow.c:232
 msgid "Horizontal Scrollbar Policy"
 msgstr "Politique d'affichage des barres de défilement horizontales"
 
-#: gtk/gtkscrolledwindow.c:235
+#: gtk/gtkscrolledwindow.c:233
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Quand la barre de défilement horizontale est affichée"
 
-#: gtk/gtkscrolledwindow.c:242
+#: gtk/gtkscrolledwindow.c:240
 msgid "Vertical Scrollbar Policy"
 msgstr "Politique d'affichage des barres de défilement verticales"
 
-#: gtk/gtkscrolledwindow.c:243
+#: gtk/gtkscrolledwindow.c:241
 msgid "When the vertical scrollbar is displayed"
 msgstr "Quand la barre de défilement verticale est affichée"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:249
 msgid "Window Placement"
 msgstr "Placement de la fenêtre"
 
-#: gtk/gtkscrolledwindow.c:252
+#: gtk/gtkscrolledwindow.c:250
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
@@ -4683,11 +4683,11 @@ msgstr ""
 "propriété n'est effective que si la propriété « window-placement-"
 "set » (placement de la fenêtre défini) est définie à vrai."
 
-#: gtk/gtkscrolledwindow.c:269
+#: gtk/gtkscrolledwindow.c:267
 msgid "Window Placement Set"
 msgstr "Placement de la fenêtre défini"
 
-#: gtk/gtkscrolledwindow.c:270
+#: gtk/gtkscrolledwindow.c:268
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -4696,38 +4696,38 @@ msgstr ""
 "pour déterminer l'emplacement du contenu par rapport aux barres de "
 "défilement."
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:274
 msgid "Shadow Type"
 msgstr "Type d'ombre"
 
-#: gtk/gtkscrolledwindow.c:277
+#: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
 msgstr "Style de mise en relief autour du contenu"
 
-#: gtk/gtkscrolledwindow.c:291
+#: gtk/gtkscrolledwindow.c:289
 msgid "Scrollbars within bevel"
 msgstr "Barres de défilement à l'intérieur du relief"
 
-#: gtk/gtkscrolledwindow.c:292
+#: gtk/gtkscrolledwindow.c:290
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr ""
 "Place les barres de défilement à l'intérieur du relief de la fenêtre "
 "défilante"
 
-#: gtk/gtkscrolledwindow.c:298
+#: gtk/gtkscrolledwindow.c:296
 msgid "Scrollbar spacing"
 msgstr "Espacement de la barre de défilement"
 
-#: gtk/gtkscrolledwindow.c:299
+#: gtk/gtkscrolledwindow.c:297
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "Nombre de pixels entre les barres de défilement et la fenêtre défilante"
 
-#: gtk/gtkscrolledwindow.c:314
+#: gtk/gtkscrolledwindow.c:312
 msgid "Scrolled Window Placement"
 msgstr "Placement de la fenêtre défilante"
 
-#: gtk/gtkscrolledwindow.c:315
+#: gtk/gtkscrolledwindow.c:313
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."

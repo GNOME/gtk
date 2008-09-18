@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-04 21:58-0400\n"
+"POT-Creation-Date: 2008-09-17 23:14-0400\n"
 "PO-Revision-Date: 2004-01-20 00:57+0730\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -3104,7 +3104,7 @@ msgstr "Samada untuk memilih kandungan kemasukan bila ianya difokus"
 msgid "Horizontal adjustment"
 msgstr "Pelarasan mengufuk"
 
-#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:221
+#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:219
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "GtkAdjustment bagi  posisi mengufuk"
 
@@ -3112,7 +3112,7 @@ msgstr "GtkAdjustment bagi  posisi mengufuk"
 msgid "Vertical adjustment"
 msgstr "Pelarasan menegak"
 
-#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:228
+#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:226
 msgid "The GtkAdjustment for the vertical position"
 msgstr "GtkAdjustment bagi posisi menegak"
 
@@ -3972,7 +3972,7 @@ msgstr ""
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:256
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:258
 #, fuzzy
 msgid "Page Setup"
 msgstr "Saiz Maksimum"
@@ -3996,11 +3996,11 @@ msgstr "Tinggi Default"
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:274
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:275
+#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -4023,12 +4023,12 @@ msgstr "Bilangan Saluran"
 msgid "The number of pages in the document."
 msgstr "Bilangan baris pada jadual"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:264
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:266
 #, fuzzy
 msgid "Current Page"
 msgstr "Alfa semasa"
 
-#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:265
+#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:267
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Togol keadaan bagi butang"
@@ -4107,16 +4107,16 @@ msgstr "Pelet sendiri"
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:257
+#: gtk/gtkprintunixdialog.c:259
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:282
+#: gtk/gtkprintunixdialog.c:284
 #, fuzzy
 msgid "Selected Printer"
 msgstr "Tahun yang dipilih"
 
-#: gtk/gtkprintunixdialog.c:283
+#: gtk/gtkprintunixdialog.c:285
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "Item yang yang kini aktif"
@@ -4713,47 +4713,47 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "Papar butang panah maju sekunder pada hujung berlawanan bagi bar skrol"
 
-#: gtk/gtkscrolledwindow.c:220 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
 msgid "Horizontal Adjustment"
 msgstr "Pelarasan Mengufuk"
 
-#: gtk/gtkscrolledwindow.c:227 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
 msgid "Vertical Adjustment"
 msgstr "Pelarasan Menegak"
 
-#: gtk/gtkscrolledwindow.c:234
+#: gtk/gtkscrolledwindow.c:232
 msgid "Horizontal Scrollbar Policy"
 msgstr "Polisi Bar Skrol Mengufuk"
 
-#: gtk/gtkscrolledwindow.c:235
+#: gtk/gtkscrolledwindow.c:233
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Bila bar skrol mengufuk dipaparkan"
 
-#: gtk/gtkscrolledwindow.c:242
+#: gtk/gtkscrolledwindow.c:240
 msgid "Vertical Scrollbar Policy"
 msgstr "Polisi Bar Skrol Menegak"
 
-#: gtk/gtkscrolledwindow.c:243
+#: gtk/gtkscrolledwindow.c:241
 msgid "When the vertical scrollbar is displayed"
 msgstr "Bila bar skrol menegak dipaparkan"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:249
 msgid "Window Placement"
 msgstr "Penempatan Tetingkap"
 
-#: gtk/gtkscrolledwindow.c:252
+#: gtk/gtkscrolledwindow.c:250
 #, fuzzy
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
 msgstr "Dimana kandungan ditempatkan sesuai dengan scrollbar"
 
-#: gtk/gtkscrolledwindow.c:269
+#: gtk/gtkscrolledwindow.c:267
 #, fuzzy
 msgid "Window Placement Set"
 msgstr "Penempatan Tetingkap"
 
-#: gtk/gtkscrolledwindow.c:270
+#: gtk/gtkscrolledwindow.c:268
 #, fuzzy
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
@@ -4761,38 +4761,38 @@ msgid ""
 msgstr "Dimana kandungan ditempatkan sesuai dengan scrollbar"
 
 # Gila Bayang (Angau)
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:274
 msgid "Shadow Type"
 msgstr "Jenis Bayang"
 
-#: gtk/gtkscrolledwindow.c:277
+#: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
 msgstr "Gaya bevel sekeliling kandungannya"
 
-#: gtk/gtkscrolledwindow.c:291
+#: gtk/gtkscrolledwindow.c:289
 #, fuzzy
 msgid "Scrollbars within bevel"
 msgstr "Ruangjarak bar skrol"
 
-#: gtk/gtkscrolledwindow.c:292
+#: gtk/gtkscrolledwindow.c:290
 #, fuzzy
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "Bilangan piksel antara bar skrol dan tetingkap diskrolkan"
 
-#: gtk/gtkscrolledwindow.c:298
+#: gtk/gtkscrolledwindow.c:296
 msgid "Scrollbar spacing"
 msgstr "Ruangjarak bar skrol"
 
-#: gtk/gtkscrolledwindow.c:299
+#: gtk/gtkscrolledwindow.c:297
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Bilangan piksel antara bar skrol dan tetingkap diskrolkan"
 
-#: gtk/gtkscrolledwindow.c:314
+#: gtk/gtkscrolledwindow.c:312
 #, fuzzy
 msgid "Scrolled Window Placement"
 msgstr "Penempatan Tetingkap"
 
-#: gtk/gtkscrolledwindow.c:315
+#: gtk/gtkscrolledwindow.c:313
 #, fuzzy
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "

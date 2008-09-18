@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.13.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-04 21:58-0400\n"
+"POT-Creation-Date: 2008-09-17 23:14-0400\n"
 "PO-Revision-Date: 2008-08-05 20:21+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <community@linuxhall.org>\n"
@@ -2932,7 +2932,7 @@ msgstr "當可選擇標籤取得焦點時，其內容是否呈現被選取狀態
 msgid "Horizontal adjustment"
 msgstr "水平調整"
 
-#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:221
+#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:219
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "水平位置的 GtkAdjustment"
 
@@ -2940,7 +2940,7 @@ msgstr "水平位置的 GtkAdjustment"
 msgid "Vertical adjustment"
 msgstr "垂直調整"
 
-#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:228
+#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:226
 msgid "The GtkAdjustment for the vertical position"
 msgstr "垂直位置的 GtkAdjustment"
 
@@ -3730,7 +3730,7 @@ msgstr "設定值"
 msgid "Printer settings"
 msgstr "印表機設定值"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:256
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:258
 msgid "Page Setup"
 msgstr "頁面設定"
 
@@ -3754,11 +3754,11 @@ msgstr "預設頁面設定"
 msgid "The GtkPageSetup used by default"
 msgstr "預設使用的 GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:274
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "列印設定值"
 
-#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:275
+#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "用來初始化對話盒的 GtkPrintSettings"
 
@@ -3778,11 +3778,11 @@ msgstr "頁數"
 msgid "The number of pages in the document."
 msgstr "文件中的頁數。"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:264
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "目前的頁面"
 
-#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:265
+#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "文件中目前的頁面"
 
@@ -3856,15 +3856,15 @@ msgstr "自訂分頁標籤"
 msgid "Label for the tab containing custom widgets."
 msgstr "包含自訂視窗元件分頁的標籤。"
 
-#: gtk/gtkprintunixdialog.c:257
+#: gtk/gtkprintunixdialog.c:259
 msgid "The GtkPageSetup to use"
 msgstr "要使用的 GtkPageSetup"
 
-#: gtk/gtkprintunixdialog.c:282
+#: gtk/gtkprintunixdialog.c:284
 msgid "Selected Printer"
 msgstr "選取的印表機"
 
-#: gtk/gtkprintunixdialog.c:283
+#: gtk/gtkprintunixdialog.c:285
 msgid "The GtkPrinter which is selected"
 msgstr "選取的 GtkPrinter"
 
@@ -4409,35 +4409,35 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "在捲動列對另一端顯示第二個前進箭頭按鈕"
 
-#: gtk/gtkscrolledwindow.c:220 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
 msgid "Horizontal Adjustment"
 msgstr "水平調整"
 
-#: gtk/gtkscrolledwindow.c:227 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
 msgid "Vertical Adjustment"
 msgstr "垂直調整"
 
-#: gtk/gtkscrolledwindow.c:234
+#: gtk/gtkscrolledwindow.c:232
 msgid "Horizontal Scrollbar Policy"
 msgstr "水平捲動列規則"
 
-#: gtk/gtkscrolledwindow.c:235
+#: gtk/gtkscrolledwindow.c:233
 msgid "When the horizontal scrollbar is displayed"
 msgstr "何時顯示水平捲動列"
 
-#: gtk/gtkscrolledwindow.c:242
+#: gtk/gtkscrolledwindow.c:240
 msgid "Vertical Scrollbar Policy"
 msgstr "垂直捲動列規則"
 
-#: gtk/gtkscrolledwindow.c:243
+#: gtk/gtkscrolledwindow.c:241
 msgid "When the vertical scrollbar is displayed"
 msgstr "何時顯示垂直捲動列"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:249
 msgid "Window Placement"
 msgstr "視窗放置"
 
-#: gtk/gtkscrolledwindow.c:252
+#: gtk/gtkscrolledwindow.c:250
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
@@ -4445,45 +4445,45 @@ msgstr ""
 "相應於捲動列的哪個位置顯示內容。這只在「window-placement-set」為 TRUE 時會生"
 "效。"
 
-#: gtk/gtkscrolledwindow.c:269
+#: gtk/gtkscrolledwindow.c:267
 msgid "Window Placement Set"
 msgstr "視窗放置設定"
 
-#: gtk/gtkscrolledwindow.c:270
+#: gtk/gtkscrolledwindow.c:268
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
 msgstr "是否使用「window-placement」來決定相應於捲動列的位置顯示內容。"
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:274
 msgid "Shadow Type"
 msgstr "陰影類型"
 
-#: gtk/gtkscrolledwindow.c:277
+#: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
 msgstr "內容周圍的斜邊樣式"
 
-#: gtk/gtkscrolledwindow.c:291
+#: gtk/gtkscrolledwindow.c:289
 msgid "Scrollbars within bevel"
 msgstr "捲動列在斜邊裡"
 
-#: gtk/gtkscrolledwindow.c:292
+#: gtk/gtkscrolledwindow.c:290
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "將捲動列置於要捲動的視窗的斜邊"
 
-#: gtk/gtkscrolledwindow.c:298
+#: gtk/gtkscrolledwindow.c:296
 msgid "Scrollbar spacing"
 msgstr "捲動列間隔"
 
-#: gtk/gtkscrolledwindow.c:299
+#: gtk/gtkscrolledwindow.c:297
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "捲動列及要捲動的視窗之間的像素數目"
 
-#: gtk/gtkscrolledwindow.c:314
+#: gtk/gtkscrolledwindow.c:312
 msgid "Scrolled Window Placement"
 msgstr "捲動列視窗放置"
 
-#: gtk/gtkscrolledwindow.c:315
+#: gtk/gtkscrolledwindow.c:313
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."

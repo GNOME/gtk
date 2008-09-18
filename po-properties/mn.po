@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-04 21:58-0400\n"
+"POT-Creation-Date: 2008-09-17 23:14-0400\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -3480,7 +3480,7 @@ msgstr "Голлуулах үед бүртгэлийн агуулгыг сонг
 msgid "Horizontal adjustment"
 msgstr "Хэвтээ зэрэгцүүлэлт"
 
-#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:221
+#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:219
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "GtkAdjustment - элементийн хэвтээ байрлал."
 
@@ -3488,7 +3488,7 @@ msgstr "GtkAdjustment - элементийн хэвтээ байрлал."
 msgid "Vertical adjustment"
 msgstr "Босоо зэрэгцүүлэлт"
 
-#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:228
+#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:226
 msgid "The GtkAdjustment for the vertical position"
 msgstr "GtkAdjustment элементийн босоо байрлал."
 
@@ -4417,7 +4417,7 @@ msgid "Printer settings"
 msgstr ""
 
 # gtk/gtkruler.c:148
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:256
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:258
 #, fuzzy
 msgid "Page Setup"
 msgstr "Хуудсын хэмжээ"
@@ -4442,11 +4442,11 @@ msgstr "Стандалрт өндөр"
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:274
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:275
+#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
@@ -4472,13 +4472,13 @@ msgid "The number of pages in the document."
 msgstr "Хүснэгт дэх мөрийн тоо"
 
 # gtk/gtkcolorsel.c:1725
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:264
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:266
 #, fuzzy
 msgid "Current Page"
 msgstr "Харгалзах альфа-суваг "
 
 # gtk/gtkcellrenderertoggle.c:131
-#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:265
+#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:267
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Зэрэгцүүлэлтийн хуудсын хэмжээ"
@@ -4562,18 +4562,18 @@ msgstr "Сонголт хийх өнгөний нийлүүлэг "
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:257
+#: gtk/gtkprintunixdialog.c:259
 msgid "The GtkPageSetup to use"
 msgstr ""
 
 # gtk/gtkfilesel.c:537
-#: gtk/gtkprintunixdialog.c:282
+#: gtk/gtkprintunixdialog.c:284
 #, fuzzy
 msgid "Selected Printer"
 msgstr "Сонгогдсон жил"
 
 # gtk/gtkfontsel.c:210
-#: gtk/gtkprintunixdialog.c:283
+#: gtk/gtkprintunixdialog.c:285
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "Идэвхитэй байгаа элемент"
@@ -5217,37 +5217,37 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "Гүйлгүүрийн эсрэг талд урагш шилжих сумтай хоёр дох товчийг дүрслэх"
 
-#: gtk/gtkscrolledwindow.c:220 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
 msgid "Horizontal Adjustment"
 msgstr "Хэвтээ зэрэгцүүлэлт"
 
-#: gtk/gtkscrolledwindow.c:227 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
 msgid "Vertical Adjustment"
 msgstr "Босоо зэрэгцүүлэлт"
 
-#: gtk/gtkscrolledwindow.c:234
+#: gtk/gtkscrolledwindow.c:232
 msgid "Horizontal Scrollbar Policy"
 msgstr "Хэвтээ гүйх зурвас"
 
-#: gtk/gtkscrolledwindow.c:235
+#: gtk/gtkscrolledwindow.c:233
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Хэвтээ гүйх зурвас дүрслэгдэх үед"
 
-#: gtk/gtkscrolledwindow.c:242
+#: gtk/gtkscrolledwindow.c:240
 msgid "Vertical Scrollbar Policy"
 msgstr "Босоо гүйх зурвас"
 
-#: gtk/gtkscrolledwindow.c:243
+#: gtk/gtkscrolledwindow.c:241
 msgid "When the vertical scrollbar is displayed"
 msgstr "Босоо гүйх зурвас дүрслэгдэх үед"
 
 # gtk/gtkscrolledwindow.c:267
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:249
 msgid "Window Placement"
 msgstr "Цонхны байршил"
 
 # gtk/gtkscrolledwindow.c:268
-#: gtk/gtkscrolledwindow.c:252
+#: gtk/gtkscrolledwindow.c:250
 #, fuzzy
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
@@ -5255,13 +5255,13 @@ msgid ""
 msgstr "Гүйлгүүрээр элементүүд хэрхэн байрлах"
 
 # gtk/gtkscrolledwindow.c:267
-#: gtk/gtkscrolledwindow.c:269
+#: gtk/gtkscrolledwindow.c:267
 #, fuzzy
 msgid "Window Placement Set"
 msgstr "Цонхны байршил"
 
 # gtk/gtkscrolledwindow.c:268
-#: gtk/gtkscrolledwindow.c:270
+#: gtk/gtkscrolledwindow.c:268
 #, fuzzy
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
@@ -5269,43 +5269,43 @@ msgid ""
 msgstr "Гүйлгүүрээр элементүүд хэрхэн байрлах"
 
 # gtk/gtkscrolledwindow.c:275
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:274
 msgid "Shadow Type"
 msgstr "Сүүдрийн төрөл"
 
 # gtk/gtkscrolledwindow.c:276
-#: gtk/gtkscrolledwindow.c:277
+#: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
 msgstr "Агуулгыг тойрсон налуу гадаргын хэлбэр"
 
 # gtk/gtktable.c:183
-#: gtk/gtkscrolledwindow.c:291
+#: gtk/gtkscrolledwindow.c:289
 #, fuzzy
 msgid "Scrollbars within bevel"
 msgstr "Дэлгэц гүйлгэгчийн завсар"
 
-#: gtk/gtkscrolledwindow.c:292
+#: gtk/gtkscrolledwindow.c:290
 #, fuzzy
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "Дэлгэц гүйлгэгч ба гүйсэн цонх хоорондын пикселийн зай"
 
 # gtk/gtktable.c:183
-#: gtk/gtkscrolledwindow.c:298
+#: gtk/gtkscrolledwindow.c:296
 msgid "Scrollbar spacing"
 msgstr "Дэлгэц гүйлгэгчийн завсар"
 
-#: gtk/gtkscrolledwindow.c:299
+#: gtk/gtkscrolledwindow.c:297
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Дэлгэц гүйлгэгч ба гүйсэн цонх хоорондын пикселийн зай"
 
 # gtk/gtkscrolledwindow.c:267
-#: gtk/gtkscrolledwindow.c:314
+#: gtk/gtkscrolledwindow.c:312
 #, fuzzy
 msgid "Scrolled Window Placement"
 msgstr "Цонхны байршил"
 
 # gtk/gtkscrolledwindow.c:268
-#: gtk/gtkscrolledwindow.c:315
+#: gtk/gtkscrolledwindow.c:313
 #, fuzzy
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "

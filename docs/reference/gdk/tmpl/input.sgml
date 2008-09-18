@@ -85,6 +85,13 @@ structure or object that @data points to.
 <!-- ##### FUNCTION gdk_input_add ##### -->
 
 
+@source: 
+@condition: 
+@function: 
+@data: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_input_remove ##### -->
 <para>
 Remove a callback added with gdk_input_add() or 

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-04 21:58-0400\n"
+"POT-Creation-Date: 2008-09-17 23:14-0400\n"
 "PO-Revision-Date: 2006-08-15 19:52+0200\n"
 "Last-Translator: Nickolay V. Shmyrev <nshmyrev@yandex.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -3068,7 +3068,7 @@ msgstr ""
 msgid "Horizontal adjustment"
 msgstr "Подгонка по горизонтали"
 
-#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:221
+#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:219
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Значение GtkAdjustment для горизонтальной позиции элемента"
 
@@ -3076,7 +3076,7 @@ msgstr "Значение GtkAdjustment для горизонтальной по�
 msgid "Vertical adjustment"
 msgstr "Подгонка по вертикали"
 
-#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:228
+#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:226
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Значение GtkAdjustment для вертикальной позиции элемента."
 
@@ -3910,7 +3910,7 @@ msgstr "Настройки"
 msgid "Printer settings"
 msgstr "Настройки принтера"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:256
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:258
 msgid "Page Setup"
 msgstr "Настройки страницы"
 
@@ -3934,11 +3934,11 @@ msgstr "Настройки страницы по умолчанию"
 msgid "The GtkPageSetup used by default"
 msgstr "Объект GtkPageSetup используемый по умолчанию"
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:274
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "Настройки печати"
 
-#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:275
+#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Объект GtkPrintSettings, используемый для инициализации диалога"
 
@@ -3958,11 +3958,11 @@ msgstr "Число страниц"
 msgid "The number of pages in the document."
 msgstr "Число страниц в документе."
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:264
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "Текущая страница"
 
-#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:265
+#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "Текущая страница документа"
 
@@ -4039,15 +4039,15 @@ msgstr "Настраиваемая метка вкладки"
 msgid "Label for the tab containing custom widgets."
 msgstr "Метка для вкладки, содержащей дополнительные элементы."
 
-#: gtk/gtkprintunixdialog.c:257
+#: gtk/gtkprintunixdialog.c:259
 msgid "The GtkPageSetup to use"
 msgstr "Используемый объект GtkPageSetup"
 
-#: gtk/gtkprintunixdialog.c:282
+#: gtk/gtkprintunixdialog.c:284
 msgid "Selected Printer"
 msgstr "Выбранный принтер"
 
-#: gtk/gtkprintunixdialog.c:283
+#: gtk/gtkprintunixdialog.c:285
 msgid "The GtkPrinter which is selected"
 msgstr "Выбранный объект GtkPrinter"
 
@@ -4644,35 +4644,35 @@ msgstr ""
 "Отображать вторую кнопку со стрелкой вперёд на противоположной стороне "
 "полосы прокрутки"
 
-#: gtk/gtkscrolledwindow.c:220 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
 msgid "Horizontal Adjustment"
 msgstr "Выравнивание по горизонтали"
 
-#: gtk/gtkscrolledwindow.c:227 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
 msgid "Vertical Adjustment"
 msgstr "Выравнивание по вертикали"
 
-#: gtk/gtkscrolledwindow.c:234
+#: gtk/gtkscrolledwindow.c:232
 msgid "Horizontal Scrollbar Policy"
 msgstr "Горизонтальная полоса прокрутки"
 
-#: gtk/gtkscrolledwindow.c:235
+#: gtk/gtkscrolledwindow.c:233
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Когда будет отображаться горизонтальная полоса прокрутки"
 
-#: gtk/gtkscrolledwindow.c:242
+#: gtk/gtkscrolledwindow.c:240
 msgid "Vertical Scrollbar Policy"
 msgstr "Вертикальная полоса прокрутки"
 
-#: gtk/gtkscrolledwindow.c:243
+#: gtk/gtkscrolledwindow.c:241
 msgid "When the vertical scrollbar is displayed"
 msgstr "Когда будет отображаться вертикальная полоса прокрутки"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:249
 msgid "Window Placement"
 msgstr "Размещение окна"
 
-#: gtk/gtkscrolledwindow.c:252
+#: gtk/gtkscrolledwindow.c:250
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
@@ -4680,11 +4680,11 @@ msgstr ""
 "Располагать ли содержимое в соответствии с полосами прокрутки. Это свойство "
 "имеет действие только если установлено \"Размещение окна\"."
 
-#: gtk/gtkscrolledwindow.c:269
+#: gtk/gtkscrolledwindow.c:267
 msgid "Window Placement Set"
 msgstr "Установлено размещение окна"
 
-#: gtk/gtkscrolledwindow.c:270
+#: gtk/gtkscrolledwindow.c:268
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -4692,38 +4692,38 @@ msgstr ""
 "Использовать ли свойство \"Размещение окна\" для определения положения "
 "содержимого по отношению к полосам прокрутки"
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:274
 msgid "Shadow Type"
 msgstr "Тип тени"
 
-#: gtk/gtkscrolledwindow.c:277
+#: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
 msgstr "Стиль скоса вокруг содержимого"
 
-#: gtk/gtkscrolledwindow.c:291
+#: gtk/gtkscrolledwindow.c:289
 msgid "Scrollbars within bevel"
 msgstr "Полосы прокрутки внутри скоса"
 
-#: gtk/gtkscrolledwindow.c:292
+#: gtk/gtkscrolledwindow.c:290
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr ""
 "Помещать полосы прокрутки внутри скоса окнаКоличество точек растра между "
 "полосами прокрутки и прокручиваемым окном"
 
-#: gtk/gtkscrolledwindow.c:298
+#: gtk/gtkscrolledwindow.c:296
 msgid "Scrollbar spacing"
 msgstr "Интервал полос прокрутки"
 
-#: gtk/gtkscrolledwindow.c:299
+#: gtk/gtkscrolledwindow.c:297
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "Количество точек растра между полосами прокрутки и прокручиваемым окном"
 
-#: gtk/gtkscrolledwindow.c:314
+#: gtk/gtkscrolledwindow.c:312
 msgid "Scrolled Window Placement"
 msgstr "Положение прокручиваемого окна"
 
-#: gtk/gtkscrolledwindow.c:315
+#: gtk/gtkscrolledwindow.c:313
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."

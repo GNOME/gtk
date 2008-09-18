@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-04 21:58-0400\n"
+"POT-Creation-Date: 2008-09-17 23:14-0400\n"
 "PO-Revision-Date: 2007-05-14 22:44-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -3057,7 +3057,7 @@ msgstr "A ddylid dewis cynnwys label dewisadwy wrth iddo gael ei ffocysu"
 msgid "Horizontal adjustment"
 msgstr "Addasiad llorweddol"
 
-#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:221
+#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:219
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Y GtkAdjustment ar gyfer y safle llorweddol"
 
@@ -3065,7 +3065,7 @@ msgstr "Y GtkAdjustment ar gyfer y safle llorweddol"
 msgid "Vertical adjustment"
 msgstr "Addasiad fertigol"
 
-#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:228
+#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:226
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Y GtkAdjustment ar gyfer y safle fertigol"
 
@@ -3893,7 +3893,7 @@ msgstr "Gosodiadau"
 msgid "Printer settings"
 msgstr "Gosodiadau argraffydd"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:256
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:258
 msgid "Page Setup"
 msgstr "Gosodiad Tudalen"
 
@@ -3917,11 +3917,11 @@ msgstr "Gosodiad Rhagosodedig Tudalen"
 msgid "The GtkPageSetup used by default"
 msgstr "Y GtkPageSetup ddefnyddir yn rhagosodedig"
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:274
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "Gosodiadau Argraffu"
 
-#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:275
+#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Y GtkPrintSettings ddefnyddiwyd i ymgychwyn y ddeialog"
 
@@ -3941,11 +3941,11 @@ msgstr "Nifer y Tudalennau"
 msgid "The number of pages in the document."
 msgstr "Nifer y tudalennau yn y ddogfen"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:264
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "Tudalen Gyfredol"
 
-#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:265
+#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "Y dudalen bresennol yn y ddogfen"
 
@@ -4023,15 +4023,15 @@ msgstr "Label tab addasedig"
 msgid "Label for the tab containing custom widgets."
 msgstr "Label ar gyfer y tab sy'n cynnwys teclynnau addasedig."
 
-#: gtk/gtkprintunixdialog.c:257
+#: gtk/gtkprintunixdialog.c:259
 msgid "The GtkPageSetup to use"
 msgstr "Y GtkPageSetup i'w ddefnyddio"
 
-#: gtk/gtkprintunixdialog.c:282
+#: gtk/gtkprintunixdialog.c:284
 msgid "Selected Printer"
 msgstr "Argraffydd sydd wedi'i Ddewis"
 
-#: gtk/gtkprintunixdialog.c:283
+#: gtk/gtkprintunixdialog.c:285
 msgid "The GtkPrinter which is selected"
 msgstr "Y GtkPrinter sydd wedi'i ddewis"
 
@@ -4625,36 +4625,36 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "Dangos ail fotwm tuag ymlaen ar ochr gyferbyn y bar sgrolio"
 
-#: gtk/gtkscrolledwindow.c:220 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
 msgid "Horizontal Adjustment"
 msgstr "Addasydd Llorweddol"
 
-#: gtk/gtkscrolledwindow.c:227 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
 msgid "Vertical Adjustment"
 msgstr "Addasydd Fertigol"
 
-#: gtk/gtkscrolledwindow.c:234
+#: gtk/gtkscrolledwindow.c:232
 msgid "Horizontal Scrollbar Policy"
 msgstr "Polisi Bar Sgrolio Llorweddol"
 
-#: gtk/gtkscrolledwindow.c:235
+#: gtk/gtkscrolledwindow.c:233
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Pryd ddangosir y bar sgrolio llorweddol"
 
-#: gtk/gtkscrolledwindow.c:242
+#: gtk/gtkscrolledwindow.c:240
 msgid "Vertical Scrollbar Policy"
 msgstr "Polisi Bar Sgrolio Fertigol"
 
-#: gtk/gtkscrolledwindow.c:243
+#: gtk/gtkscrolledwindow.c:241
 msgid "When the vertical scrollbar is displayed"
 msgstr "Pryd ddangosir y bar sgrolio fertigol"
 
 # EFALLAI
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:249
 msgid "Window Placement"
 msgstr "Gosodiad Ffenestr"
 
-#: gtk/gtkscrolledwindow.c:252
+#: gtk/gtkscrolledwindow.c:250
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
@@ -4663,11 +4663,11 @@ msgstr ""
 "placement-set\" yn WIR y daw'r briodwedd hon i rym."
 
 # EFALLAI
-#: gtk/gtkscrolledwindow.c:269
+#: gtk/gtkscrolledwindow.c:267
 msgid "Window Placement Set"
 msgstr "Lleoli Ffenestr wedi'i Osod"
 
-#: gtk/gtkscrolledwindow.c:270
+#: gtk/gtkscrolledwindow.c:268
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -4675,36 +4675,36 @@ msgstr ""
 "A ddylid defnyddio \"window-placement\" i benodi lleoliad y cynnwys o'i "
 "gymharu â'r bariau sgrolio."
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:274
 msgid "Shadow Type"
 msgstr "Math Cysgod"
 
-#: gtk/gtkscrolledwindow.c:277
+#: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
 msgstr "Arddull y befel o amgylch y cynnwys"
 
-#: gtk/gtkscrolledwindow.c:291
+#: gtk/gtkscrolledwindow.c:289
 msgid "Scrollbars within bevel"
 msgstr "Bariau sgrolio o fewn y befel"
 
-#: gtk/gtkscrolledwindow.c:292
+#: gtk/gtkscrolledwindow.c:290
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "Rhoi bariau sgrolio o fewn befel y ffenestr a sgroliwyd"
 
-#: gtk/gtkscrolledwindow.c:298
+#: gtk/gtkscrolledwindow.c:296
 msgid "Scrollbar spacing"
 msgstr "Bylchu bar sgrolio"
 
-#: gtk/gtkscrolledwindow.c:299
+#: gtk/gtkscrolledwindow.c:297
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Y nifer o bicseli rhwng y bariau sgrolio a'r ffenestr wedi sgrolio"
 
 # EFALLAI
-#: gtk/gtkscrolledwindow.c:314
+#: gtk/gtkscrolledwindow.c:312
 msgid "Scrolled Window Placement"
 msgstr "Gosodiad Ffenestr sy'n Sgrolio"
 
-#: gtk/gtkscrolledwindow.c:315
+#: gtk/gtkscrolledwindow.c:313
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."

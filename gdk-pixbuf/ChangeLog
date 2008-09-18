@@ -1,3 +1,7 @@
+2008-09-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.14.2 ===
+
 2008-09-13  Tor Lillqvist  <tml@novell.com>
 
 	* gdk-pixbuf-io.c: Don't use the deprectated

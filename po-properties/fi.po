@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-04 21:58-0400\n"
+"POT-Creation-Date: 2008-09-17 23:14-0400\n"
 "PO-Revision-Date: 2008-08-27 11:30+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -2987,7 +2987,7 @@ msgstr "Muuttuuko sisältö valituksi, kun kenttä saa syöttökohdistuksen"
 msgid "Horizontal adjustment"
 msgstr "Vaakakoonmuutos"
 
-#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:221
+#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:219
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Vaakasijainnin GtkAdjustment"
 
@@ -2995,7 +2995,7 @@ msgstr "Vaakasijainnin GtkAdjustment"
 msgid "Vertical adjustment"
 msgstr "Pystykoonmuutos"
 
-#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:228
+#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:226
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Pystysijainnin GdkAdjustment"
 
@@ -3801,7 +3801,7 @@ msgstr "Asetukset"
 msgid "Printer settings"
 msgstr "Tulostimen asetukset"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:256
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:258
 msgid "Page Setup"
 msgstr "Sivun asetukset"
 
@@ -3825,11 +3825,11 @@ msgstr "Sivun oletusasetukset"
 msgid "The GtkPageSetup used by default"
 msgstr "Oletuksena käytetty GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:274
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "Tulostusasetukset"
 
-#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:275
+#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Ikkunan alustuksesta käytetty GtkPrintSettings-osa"
 
@@ -3849,11 +3849,11 @@ msgstr "Sivujen lukumäärä"
 msgid "The number of pages in the document."
 msgstr "Sivujen lukumäärä asiakirjassa."
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:264
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "Nykyinen sivu"
 
-#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:265
+#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "Nykyinen sivu asiakirjassa"
 
@@ -3929,15 +3929,15 @@ msgstr "Oman välilehden otsikko"
 msgid "Label for the tab containing custom widgets."
 msgstr "Otsake välilehdelle, joka sisältää omia ikkunaelementtejä."
 
-#: gtk/gtkprintunixdialog.c:257
+#: gtk/gtkprintunixdialog.c:259
 msgid "The GtkPageSetup to use"
 msgstr "Käytettävä GtkPageSetup"
 
-#: gtk/gtkprintunixdialog.c:282
+#: gtk/gtkprintunixdialog.c:284
 msgid "Selected Printer"
 msgstr "Valittu tulostin"
 
-#: gtk/gtkprintunixdialog.c:283
+#: gtk/gtkprintunixdialog.c:285
 msgid "The GtkPrinter which is selected"
 msgstr "Nyt valittu GtkPrinter"
 
@@ -4501,35 +4501,35 @@ msgid ""
 msgstr ""
 "Näytä toinen eteenpäin-nuolipainike vierityspalkin vastakkaisessa päässä"
 
-#: gtk/gtkscrolledwindow.c:220 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
 msgid "Horizontal Adjustment"
 msgstr "Vaakakoonmuutos"
 
-#: gtk/gtkscrolledwindow.c:227 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
 msgid "Vertical Adjustment"
 msgstr "Pystykoonmuutos"
 
-#: gtk/gtkscrolledwindow.c:234
+#: gtk/gtkscrolledwindow.c:232
 msgid "Horizontal Scrollbar Policy"
 msgstr "Vaakavierityspalkkikäytäntö"
 
-#: gtk/gtkscrolledwindow.c:235
+#: gtk/gtkscrolledwindow.c:233
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Milloin vaakavierityspalkki näkyy"
 
-#: gtk/gtkscrolledwindow.c:242
+#: gtk/gtkscrolledwindow.c:240
 msgid "Vertical Scrollbar Policy"
 msgstr "Pystyvierityspalkkikäytäntö"
 
-#: gtk/gtkscrolledwindow.c:243
+#: gtk/gtkscrolledwindow.c:241
 msgid "When the vertical scrollbar is displayed"
 msgstr "Milloin pystyvierityspalkki näkyy"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:249
 msgid "Window Placement"
 msgstr "Ikkunan sijoittelu"
 
-#: gtk/gtkscrolledwindow.c:252
+#: gtk/gtkscrolledwindow.c:250
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
@@ -4537,11 +4537,11 @@ msgstr ""
 "Missä sisältö on suhteessa vierityspalkkeihin. Tämä ominaisuus on käytössä "
 "vain, jos \"window-placement-set\" on TRUE"
 
-#: gtk/gtkscrolledwindow.c:269
+#: gtk/gtkscrolledwindow.c:267
 msgid "Window Placement Set"
 msgstr "Ikkunan sijoittelujoukko"
 
-#: gtk/gtkscrolledwindow.c:270
+#: gtk/gtkscrolledwindow.c:268
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -4549,35 +4549,35 @@ msgstr ""
 "Käytetäänkö arvoa \"window-placement\" määrittelemään sisällön sijainti "
 "suhteessa vierityspalkkeihin."
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:274
 msgid "Shadow Type"
 msgstr "Varjotyyppi"
 
-#: gtk/gtkscrolledwindow.c:277
+#: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
 msgstr "Sisältöä ympäröivän reunuksen tyyli"
 
-#: gtk/gtkscrolledwindow.c:291
+#: gtk/gtkscrolledwindow.c:289
 msgid "Scrollbars within bevel"
 msgstr "Vieritinpalkit ikkunan reunuksen sisällä"
 
-#: gtk/gtkscrolledwindow.c:292
+#: gtk/gtkscrolledwindow.c:290
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "Sijoita vieritinpalkit ikkunan reunuksen sisäpuolelle"
 
-#: gtk/gtkscrolledwindow.c:298
+#: gtk/gtkscrolledwindow.c:296
 msgid "Scrollbar spacing"
 msgstr "Vieritinpalkin välit"
 
-#: gtk/gtkscrolledwindow.c:299
+#: gtk/gtkscrolledwindow.c:297
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Vieritinpalkin ja vieritysikkunan välisten kuvapisteiden määrä"
 
-#: gtk/gtkscrolledwindow.c:314
+#: gtk/gtkscrolledwindow.c:312
 msgid "Scrolled Window Placement"
 msgstr "Vieritetyn ikkunan sijoittelu"
 
-#: gtk/gtkscrolledwindow.c:315
+#: gtk/gtkscrolledwindow.c:313
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."

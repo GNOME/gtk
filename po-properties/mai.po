@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gedit.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-04 21:58-0400\n"
+"POT-Creation-Date: 2008-09-17 23:14-0400\n"
 "PO-Revision-Date: 2008-01-25 13:49+0530\n"
 "Last-Translator: Sangeeta Kumari\n"
 "Language-Team:  <en@li.org>\n"
@@ -2956,7 +2956,7 @@ msgstr "जखन ई फोकस होइछ तखन की ओकर स�
 msgid "Horizontal adjustment"
 msgstr "क्षैतिज समायोजन"
 
-#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:221
+#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:219
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "क्षैतिज स्थिति क' लेल GtkAdjustment"
 
@@ -2964,7 +2964,7 @@ msgstr "क्षैतिज स्थिति क' लेल GtkAdjustment"
 msgid "Vertical adjustment"
 msgstr "उर्ध्वाधर समायोजन"
 
-#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:228
+#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:226
 msgid "The GtkAdjustment for the vertical position"
 msgstr "लँबवत स्थिति क' लेल GtkAdjustment"
 
@@ -3752,7 +3752,7 @@ msgstr "जमावट"
 msgid "Printer settings"
 msgstr "मुद्रक जमावट"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:256
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:258
 msgid "Page Setup"
 msgstr "पृष्ठ सेटअप"
 
@@ -3776,11 +3776,11 @@ msgstr "मूलभूत पृष्ठ सेटअप"
 msgid "The GtkPageSetup used by default"
 msgstr "मूलभूत रूप सँ प्रयुक्त GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:274
+#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "छपाइ जमावट"
 
-#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:275
+#: gtk/gtkprintoperation.c:905 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings समाद आरंभीकरणमे प्रयुक्त"
 
@@ -3800,11 +3800,11 @@ msgstr "पृष्ठसभ क सँख्या"
 msgid "The number of pages in the document."
 msgstr "दस्ताबेजमे पृष्ठसभक सँख्या"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:264
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "मोजुदा पृष्ठ"
 
-#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:265
+#: gtk/gtkprintoperation.c:971 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "दस्ताबेजमे मोजुदा पृष्ठ"
 
@@ -3878,15 +3878,15 @@ msgstr "पसंदीदा टैब स्तर"
 msgid "Label for the tab containing custom widgets."
 msgstr "पसंदीदा विजेटकेँ समाहित करत टैब क' लेल लेबल"
 
-#: gtk/gtkprintunixdialog.c:257
+#: gtk/gtkprintunixdialog.c:259
 msgid "The GtkPageSetup to use"
 msgstr "प्रयोग करबाक लेल GtkPageSetup"
 
-#: gtk/gtkprintunixdialog.c:282
+#: gtk/gtkprintunixdialog.c:284
 msgid "Selected Printer"
 msgstr "चुनल मुद्रक"
 
-#: gtk/gtkprintunixdialog.c:283
+#: gtk/gtkprintunixdialog.c:285
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter जे चुनल अछि"
 
@@ -4431,35 +4431,35 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "स्क्रालबार पर उनटा सिरा पर एकटा दोसर आगाँ तीर बटन देखाबू"
 
-#: gtk/gtkscrolledwindow.c:220 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
 msgid "Horizontal Adjustment"
 msgstr "क्षैतिज समायोजन"
 
-#: gtk/gtkscrolledwindow.c:227 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
 msgid "Vertical Adjustment"
 msgstr "उर्ध्वाधर समायोजन"
 
-#: gtk/gtkscrolledwindow.c:234
+#: gtk/gtkscrolledwindow.c:232
 msgid "Horizontal Scrollbar Policy"
 msgstr "क्षैतिज स्क्रालबार नीति"
 
-#: gtk/gtkscrolledwindow.c:235
+#: gtk/gtkscrolledwindow.c:233
 msgid "When the horizontal scrollbar is displayed"
 msgstr "क्षैतिज स्क्रालबार केँ कखन प्रदर्शित कएल जएनाइ अछि"
 
-#: gtk/gtkscrolledwindow.c:242
+#: gtk/gtkscrolledwindow.c:240
 msgid "Vertical Scrollbar Policy"
 msgstr "उर्ध्वाधर स्क्रालबार नीति"
 
-#: gtk/gtkscrolledwindow.c:243
+#: gtk/gtkscrolledwindow.c:241
 msgid "When the vertical scrollbar is displayed"
 msgstr "उर्ध्वाधर स्क्रालबारकेँ कखन प्रदर्शित कएल जएनाइ अछि"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:249
 msgid "Window Placement"
 msgstr "विंडो स्थान निर्धारण"
 
-#: gtk/gtkscrolledwindow.c:252
+#: gtk/gtkscrolledwindow.c:250
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
@@ -4467,11 +4467,11 @@ msgstr ""
 "की सामग्री स्क्रोल बार क' संदर्भमे अवस्थित अछि. ई गुण केवल तखन प्रभावी होइछ जँ \"window-"
 "placement-set\" सही अछि."
 
-#: gtk/gtkscrolledwindow.c:269
+#: gtk/gtkscrolledwindow.c:267
 msgid "Window Placement Set"
 msgstr "विंडो स्थान निर्धारण सेट"
 
-#: gtk/gtkscrolledwindow.c:270
+#: gtk/gtkscrolledwindow.c:268
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -4479,35 +4479,35 @@ msgstr ""
 "की \"window-placement\" केँ सामग्री क' स्थानकेँ निर्धारित करबाक लेल प्रयुक्त कएल जाइछ "
 "स्क्रोल बार क' संदर्भमे."
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:274
 msgid "Shadow Type"
 msgstr "छाया प्रकार"
 
-#: gtk/gtkscrolledwindow.c:277
+#: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
 msgstr "विषय वस्तु क' चारू दिस क' उठाव क' प्रकार"
 
-#: gtk/gtkscrolledwindow.c:291
+#: gtk/gtkscrolledwindow.c:289
 msgid "Scrollbars within bevel"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:292
+#: gtk/gtkscrolledwindow.c:290
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:298
+#: gtk/gtkscrolledwindow.c:296
 msgid "Scrollbar spacing"
 msgstr "स्क्राल दूरी"
 
-#: gtk/gtkscrolledwindow.c:299
+#: gtk/gtkscrolledwindow.c:297
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "ई प्रविष्टिमे कतेक पिक्सल स्क्रीन क' बम्माँ तरफ स्क्रोल करैत अछि"
 
-#: gtk/gtkscrolledwindow.c:314
+#: gtk/gtkscrolledwindow.c:312
 msgid "Scrolled Window Placement"
 msgstr "स्क्राल विंडो स्थान निर्धारण"
 
-#: gtk/gtkscrolledwindow.c:315
+#: gtk/gtkscrolledwindow.c:313
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
