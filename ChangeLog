@@ -1,3 +1,9 @@
+2008-09-18  Dominic Lachowicz  <domlachowicz@gmail.com>
+
+	* modules/engins/ms-windows/*: MS Windows style should use pango_win32_font_description_from_logfont;
+	Allows us to rip out a lot of potentially buggy code, and also get the font specification from the
+	XP theme (#434987)
+	
 2008-09-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: updated version number to 2.15.0 for development.

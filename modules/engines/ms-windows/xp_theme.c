@@ -31,8 +31,11 @@
 #include <string.h>
 #include <stdio.h>
 
-/* #include "gdk/gdkwin32.h" */
+#ifdef BUILDING_STANDALONE
+#include "gdk/gdkwin32.h"
+#else
 #include "gdk/win32/gdkwin32.h"
+#endif
 
 #include "xp_theme_defs.h"
 
@@ -156,7 +159,7 @@ static HINSTANCE uxtheme_dll = NULL;
 static HTHEME open_themes[XP_THEME_CLASS__SIZEOF];
 static gboolean use_xp_theme = FALSE;
 
-typedef HRESULT (FAR PASCAL *GetThemeSysFontFunc)           (HTHEME hTheme, int iFontID, OUT LOGFONT *plf);
+typedef HRESULT (FAR PASCAL *GetThemeSysFontFunc)           (HTHEME hTheme, int iFontID, OUT LOGFONTW *plf);
 typedef int (FAR PASCAL *GetThemeSysSizeFunc)               (HTHEME hTheme, int iSizeId);
 typedef COLORREF (FAR PASCAL *GetThemeSysColorFunc)         (HTHEME hTheme,
 							     int iColorID);
@@ -916,7 +919,7 @@ xp_theme_is_drawable (XpThemeElement element)
 
 gboolean
 xp_theme_get_system_font (XpThemeClass klazz, XpThemeFont fontId,
-			  OUT LOGFONT *lf)
+			  OUT LOGFONTW *lf)
 {
   if (xp_theme_is_active () && get_theme_sys_font_func != NULL)
     {
