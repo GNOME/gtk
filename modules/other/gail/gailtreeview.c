@@ -3667,12 +3667,12 @@ static gboolean
 garbage_collect_cell_data (gpointer data)
 {
       GailTreeView *tree_view;
-      GList *temp_list;
+      GList *temp_list, *list;
       GailTreeViewCellInfo *cell_info;
 
       g_assert (GAIL_IS_TREE_VIEW (data));
       tree_view = (GailTreeView *)data;
-      temp_list = g_list_copy (tree_view->cell_data);
+      list = g_list_copy (tree_view->cell_data);
 
       tree_view->garbage_collection_pending = FALSE;
       if (tree_view->idle_garbage_collect_id != 0) 
@@ -3682,6 +3682,7 @@ garbage_collect_cell_data (gpointer data)
       }
 
       /* Must loop through them all */
+      temp_list = list;
       while (temp_list != NULL)
       {
           cell_info = temp_list->data;
@@ -3696,7 +3697,7 @@ garbage_collect_cell_data (gpointer data)
 	  }
           temp_list = temp_list->next;
       }
-      g_list_free (temp_list);
+      g_list_free (list);
 
       return tree_view->garbage_collection_pending;
 }
