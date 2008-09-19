@@ -9,10 +9,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.10\n"
+"Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-17 23:14-0400\n"
-"PO-Revision-Date: 2007-09-06 22:10+0200\n"
+"PO-Revision-Date: 2008-09-19 20:36+0200\n"
 "Last-Translator: Горан Ракић <grakic@devbase.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
 "MIME-Version: 1.0\n"
@@ -337,9 +337,8 @@ msgid "Insufficient memory to save image into a buffer"
 msgstr "Недовољно меморије за чување слике у бафер"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2349
-#, fuzzy
 msgid "Error writing to image stream"
-msgstr "Грешка при упису у датотеку слике: %s"
+msgstr "Грешка при упису у ток слике"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
@@ -554,61 +553,51 @@ msgid "The ICO image format"
 msgstr "ICO запис слике"
 
 #: gdk-pixbuf/io-icns.c:345
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading ICNS image: %s"
-msgstr "Кобна грешка при читању PNG слике: %s"
+msgstr "Грешка при читању ICNS слике: %s"
 
 #: gdk-pixbuf/io-icns.c:362
-#, fuzzy
 msgid "Could not decode ICNS file"
-msgstr "Не могу да изаберем датотеку"
+msgstr "Не могу да декодирам ICNS датотеку"
 
 #
 #: gdk-pixbuf/io-icns.c:395
-#, fuzzy
 msgid "The ICNS image format"
-msgstr "ICO запис слике"
+msgstr "ICNS формат слике"
 
 #: gdk-pixbuf/io-jasper.c:75
-#, fuzzy
 msgid "Couldn't allocate memory for stream"
-msgstr "Не могу да обезбедим меморију за заглавље"
+msgstr "Не могу да обезбедим меморију за ток"
 
 #: gdk-pixbuf/io-jasper.c:105
-#, fuzzy
 msgid "Couldn't decode image"
-msgstr "Не могу претворити име датотеке"
+msgstr "Не могу да декодирам слику"
 
 # колико њих ће ме тући због „преиначени"?
 #: gdk-pixbuf/io-jasper.c:123
-#, fuzzy
 msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Преиначени ЈПЕГ има висину или ширину нула."
+msgstr "Преиначени ЈПЕГ2000 има висину или ширину нула."
 
 #: gdk-pixbuf/io-jasper.c:137
-#, fuzzy
 msgid "Image type currently not supported"
-msgstr "Врста слике „%s“ није подржана"
+msgstr "Врста слике за сада није подржана"
 
 #: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-#, fuzzy
 msgid "Couldn't allocate memory for color profile"
-msgstr "Не могу обезбедити меморију за учитавање JPEG датотеке"
+msgstr "Не могу да обезбедим меморију за палету боја"
 
 #: gdk-pixbuf/io-jasper.c:182
-#, fuzzy
 msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Недовољно меморије за отварање TIFF датотеке"
+msgstr "Недовољно меморије за отварање ЈПЕГ2000 датотеке"
 
 #: gdk-pixbuf/io-jasper.c:264
-#, fuzzy
 msgid "Couldn't allocate memory to buffer image data"
-msgstr "Не могу обезбедити меморију за податке линије"
+msgstr "Не могу да обезбедим меморију за бафер података слике"
 
 #: gdk-pixbuf/io-jasper.c:308
-#, fuzzy
 msgid "The JPEG 2000 image format"
-msgstr "JPEG запис слике"
+msgstr "ЈПЕГ2000 запис слике"
 
 # као код фотоапарата/развијања слика ;)
 #: gdk-pixbuf/io-jpeg.c:117
@@ -1071,61 +1060,54 @@ msgid "The XPM image format"
 msgstr "XPM запис слике"
 
 #: gdk-pixbuf/io-gdip-emf.c:59
-#, fuzzy
 msgid "The EMF image format"
-msgstr "BMP запис слике"
+msgstr "ЕМФ запис слике"
 
 #: gdk-pixbuf/io-gdip-utils.c:212
-#, fuzzy, c-format
+#, c-format
 msgid "Could not allocate memory: %s"
-msgstr "Не могу да обезбедим меморију за заглавље"
+msgstr "Не могу да обезбедим меморију: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:237 gdk-pixbuf/io-gdip-utils.c:350
 #: gdk-pixbuf/io-gdip-utils.c:383
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create stream: %s"
-msgstr "Грешка при прављењу директоријума: %s"
+msgstr "Не могу да направим ток: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:251
-#, fuzzy, c-format
+#, c-format
 msgid "Could not seek stream: %s"
-msgstr "Не могу да изаберем ставку"
+msgstr "Не могу да се крећем по току: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:263
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read from stream: %s"
-msgstr "Неуспело премештање %s у %s: %s\n"
+msgstr "Не могу да читам из тока: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:736
-#, fuzzy
 msgid "Couldn't create pixbuf"
-msgstr "Не могу да направим нови pixbuf"
+msgstr "Не могу да направим pixbuf"
 
 #: gdk-pixbuf/io-gdip-utils.c:798
-#, fuzzy
 msgid "Couldn't load bitmap"
-msgstr "Не могу претворити име датотеке"
+msgstr "Не могу да отворим битмапу"
 
 #: gdk-pixbuf/io-gdip-utils.c:821
-#, fuzzy
 msgid "Couldn't load metafile"
-msgstr "Не могу претворити име датотеке"
+msgstr "Не могу да отворим metafile"
 
 # мало слободе овак'оме уметнику се мора дати
 #: gdk-pixbuf/io-gdip-utils.c:980
-#, fuzzy
 msgid "Unsupported image format for GDI+"
-msgstr "неподржана врста RAS слике"
+msgstr "Неподржана врста слике за ГДИ+"
 
 #: gdk-pixbuf/io-gdip-utils.c:987
-#, fuzzy
 msgid "Couldn't save"
-msgstr "Не могу да сачувам остатак"
+msgstr "Не могу да сачувам"
 
 #: gdk-pixbuf/io-gdip-wmf.c:58
-#, fuzzy
 msgid "The WMF image format"
-msgstr "WBMP запис слика"
+msgstr "WMF запис слика"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:54
@@ -1163,22 +1145,22 @@ msgid "Make X calls synchronous"
 msgstr "Учини Икс позиве синхроним"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:311
-#, fuzzy, c-format
+#, c-format
 msgid "Starting %s"
-msgstr "Штампам %d"
+msgstr "Покрећем %s"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:313
-#, fuzzy, c-format
+#, c-format
 msgid "Opening %s"
-msgstr "Отвори „%s“"
+msgstr "Отварам „%s“"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:316
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Отварам %d ставку"
+msgstr[1] "Отварам %d ставке"
+msgstr[2] "Отварам %d ставки"
 
 #: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
 msgid "License"
@@ -1822,31 +1804,29 @@ msgstr "Непознато"
 
 #: gtk/gtkfilechooserdefault.c:10982
 msgid "%H:%M"
-msgstr ""
+msgstr "%H:%M"
 
 #: gtk/gtkfilechooserdefault.c:10984
 msgid "Yesterday at %H:%M"
 msgstr "Јуче у %H:%M"
 
 #: gtk/gtkfilechooserentry.c:659 gtk/gtkfilechooserentry.c:1115
-#, fuzzy
 msgid "Invalid path"
-msgstr "Неисправан УРЛ"
+msgstr "Неисправна путања"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
 #: gtk/gtkfilechooserentry.c:1070
 msgid "No match"
-msgstr ""
+msgstr "Без поклапања"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
 #: gtk/gtkfilechooserentry.c:1081
-#, fuzzy
 msgid "Sole completion"
-msgstr "Избор боје"
+msgstr "Један могући наставак"
 
 #. translators: this text is shown when the text in a file chooser
 #. * entry is a complete filename, but could be continued to find
@@ -1854,14 +1834,14 @@ msgstr "Избор боје"
 #.
 #: gtk/gtkfilechooserentry.c:1097
 msgid "Complete, but not unique"
-msgstr ""
+msgstr "Поклапање, али има и других"
 
 #. translators: this text is shown while the system is searching
 #. * for possible completions for text in a file chooser entry
 #.
 #: gtk/gtkfilechooserentry.c:1133
 msgid "Completing..."
-msgstr ""
+msgstr "Настављам..."
 
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1349
 #: gtk/gtkfilesel.c:1358
@@ -2097,13 +2077,12 @@ msgid "Failed to load icon"
 msgstr "Неуспело учитавање иконице"
 
 #: gtk/gtkimmodule.c:515
-#, fuzzy
 msgid "Simple"
-msgstr "Величина"
+msgstr "Једноставна"
 
 #: gtk/gtkimmulticontext.c:542
 msgid "input method menu|System"
-msgstr ""
+msgstr "Системска"
 
 #: gtk/gtkinputdialog.c:192
 msgid "Input"
@@ -2230,7 +2209,7 @@ msgstr "default:LTR"
 #: gtk/gtkmain.c:768
 #, c-format
 msgid "Cannot open display: %s"
-msgstr ""
+msgstr "Не могу да приступим екрану: %s"
 
 #: gtk/gtkmain.c:805
 msgid "GTK+ Options"
@@ -2241,44 +2220,40 @@ msgid "Show GTK+ Options"
 msgstr "Прикажи Гтк+ опције"
 
 #: gtk/gtkmountoperation.c:476
-#, fuzzy
 msgid "Co_nnect"
-msgstr "Успостави ве_зу"
+msgstr "Повежи _се"
 
 #: gtk/gtkmountoperation.c:520
 msgid "Connect _anonymously"
-msgstr ""
+msgstr "Повежи се _анонимно"
 
 #: gtk/gtkmountoperation.c:529
 msgid "Connect as u_ser:"
-msgstr ""
+msgstr "Повежи се као _корисник:"
 
 #: gtk/gtkmountoperation.c:566
-#, fuzzy
 msgid "_Username:"
-msgstr "_Преименуј"
+msgstr "_Корисничко име:"
 
 #: gtk/gtkmountoperation.c:570
-#, fuzzy
 msgid "_Domain:"
-msgstr "_Путања:"
+msgstr "_Домен:"
 
 #: gtk/gtkmountoperation.c:575
-#, fuzzy
 msgid "_Password:"
-msgstr "_Притисак:"
+msgstr "_Лозинка:"
 
 #: gtk/gtkmountoperation.c:590
 msgid "Forget password _immediately"
-msgstr ""
+msgstr "_Одмах заборави лозинку"
 
 #: gtk/gtkmountoperation.c:598
 msgid "Remember password until you _logout"
-msgstr ""
+msgstr "Запамти лозинку _до одјављивања"
 
 #: gtk/gtkmountoperation.c:606
 msgid "Remember _forever"
-msgstr ""
+msgstr "Запамти _заувек"
 
 #: gtk/gtknotebook.c:4417 gtk/gtknotebook.c:6924
 #, c-format
@@ -2485,14 +2460,14 @@ msgid "Printing %d"
 msgstr "Штампам %d"
 
 #: gtk/gtkprintoperation.c:2331
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating print preview"
-msgstr "Грешка при покретању прегледа"
+msgstr "Грешка при изради прегледа"
 
 #: gtk/gtkprintoperation.c:2334
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr ""
+msgstr "Најчешћи разлог је да није могуће направити привремену датотеку."
 
 #: gtk/gtkprintoperation-unix.c:242
 #, c-format
@@ -2531,14 +2506,12 @@ msgid "Custom size"
 msgstr "Посебна величина"
 
 #: gtk/gtkprintoperation-win32.c:1517
-#, fuzzy
 msgid "No printer found"
-msgstr "Ни једна ставка није пронађена"
+msgstr "Штампач није пронађен"
 
 #: gtk/gtkprintoperation-win32.c:1544
-#, fuzzy
 msgid "Invalid argument to CreateDC"
-msgstr "Неисправан аргумент са PrintDlgEx"
+msgstr "Неисправан аргумент за CreateDC"
 
 #: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1801
 msgid "Error from StartDoc"
@@ -2580,24 +2553,20 @@ msgid "Status"
 msgstr "Стање"
 
 #: gtk/gtkprintunixdialog.c:1792
-#, fuzzy
 msgid "Range"
-msgstr "Оп_сег"
+msgstr "Опсег"
 
 #: gtk/gtkprintunixdialog.c:1796
-#, fuzzy
 msgid "_All Pages"
-msgstr "Све листове"
+msgstr "_Све листове"
 
 #: gtk/gtkprintunixdialog.c:1803
-#, fuzzy
 msgid "C_urrent Page"
-msgstr "Тренутну"
+msgstr "_Тренутну"
 
 #: gtk/gtkprintunixdialog.c:1812
-#, fuzzy
 msgid "Pag_es:"
-msgstr "Места"
+msgstr "Стран_е"
 
 #: gtk/gtkprintunixdialog.c:1813
 msgid ""
@@ -2633,19 +2602,16 @@ msgstr "Опште"
 #.
 #: gtk/gtkprintunixdialog.c:2423
 #: modules/printbackends/cups/gtkprintbackendcups.c:2813
-#, fuzzy
 msgid "Page Ordering"
-msgstr "Припремам"
+msgstr "Слагање страна"
 
 #: gtk/gtkprintunixdialog.c:2429
-#, fuzzy
 msgid "Left to right"
-msgstr "LRM Обележивач за с_лева-на-десно"
+msgstr "Са лева на десно"
 
 #: gtk/gtkprintunixdialog.c:2430
-#, fuzzy
 msgid "Right to left"
-msgstr "Штампај у датотеку"
+msgstr "Са десна на лево"
 
 #: gtk/gtkprintunixdialog.c:2499
 msgid "Layout"
@@ -2660,9 +2626,8 @@ msgid "Pages per _side:"
 msgstr "_Страна на листу:"
 
 #: gtk/gtkprintunixdialog.c:2536
-#, fuzzy
 msgid "Page or_dering:"
-msgstr "_Страна на листу:"
+msgstr "Ре_дослед страна:"
 
 #: gtk/gtkprintunixdialog.c:2552
 msgid "_Only print:"
@@ -3173,9 +3138,8 @@ msgid "Reverse portrait"
 msgstr "Преврнути портрет"
 
 #: gtk/gtkstock.c:377
-#, fuzzy
 msgid "Page Set_up"
-msgstr "Подешавање стране"
+msgstr "Поде_шавање стране"
 
 #: gtk/gtkstock.c:378
 msgid "_Paste"
@@ -3470,11 +3434,11 @@ msgstr "Јачина"
 
 #: gtk/gtkvolumebutton.c:79
 msgid "Turns volume down or up"
-msgstr ""
+msgstr "Мења јачину на доле или горе"
 
 #: gtk/gtkvolumebutton.c:82
 msgid "Adjusts the volume"
-msgstr ""
+msgstr "Подешава јачину"
 
 #: gtk/gtkvolumebutton.c:85 gtk/gtkvolumebutton.c:88
 msgid "Volume Down"
@@ -3482,7 +3446,7 @@ msgstr "Потишај"
 
 #: gtk/gtkvolumebutton.c:87
 msgid "Decreases the volume"
-msgstr ""
+msgstr "Потишај звук"
 
 #: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Up"
@@ -3490,7 +3454,7 @@ msgstr "Појачај"
 
 #: gtk/gtkvolumebutton.c:93
 msgid "Increases the volume"
-msgstr ""
+msgstr "Појачај звук"
 
 #: gtk/gtkvolumebutton.c:151
 msgid "Muted"
@@ -4357,9 +4321,9 @@ msgid "Failed to rewrite header\n"
 msgstr "Неуспело преписивање заглавља\n"
 
 #: gtk/updateiconcache.c:1455
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr "Не могу да отворим датотеку „%s“: %s"
+msgstr "Не могу да отворим датотеку „%s“: %s\n"
 
 #: gtk/updateiconcache.c:1463
 #, c-format
@@ -4428,7 +4392,7 @@ msgstr "Неисправна остава за иконице: %s\n"
 #: gtk/updateiconcache.c:1682
 #, c-format
 msgid "No theme index file."
-msgstr ""
+msgstr "Нема индекс датотеке теме."
 
 #: gtk/updateiconcache.c:1686
 #, c-format
@@ -4498,81 +4462,81 @@ msgstr "Иксов начин уноса (XIM)"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1115
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr ""
+msgstr "Штампачу „%s“ понестаје тонер."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1116
 #, c-format
 msgid "Printer '%s' has no toner left."
-msgstr ""
+msgstr "Штампач „%s“ је остао без тонера."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:1118
 #, c-format
 msgid "Printer '%s' is low on developer."
-msgstr ""
+msgstr "Штампачу „%s“ слаби развијач."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:1120
 #, c-format
 msgid "Printer '%s' is out of developer."
-msgstr ""
+msgstr "Штампач „%s“ је остао без развијача."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:1122
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr ""
+msgstr "Штампачу „%s“ понестаје најмање једне боје."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:1124
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
-msgstr ""
+msgstr "Штампач „%s“ је остао без најмање једне боје."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1125
 #, c-format
 msgid "The cover is open on printer '%s'."
-msgstr ""
+msgstr "Поклопац је отворен на штампачу „%s“."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1126
 #, c-format
 msgid "The door is open on printer '%s'."
-msgstr ""
+msgstr "Вратанца су отворена на штампачу „%s“."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1127
 #, c-format
 msgid "Printer '%s' is low on paper."
-msgstr ""
+msgstr "Штампач „%s“ остаје без папира."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1128
 #, c-format
 msgid "Printer '%s' is out of paper."
-msgstr ""
+msgstr "Штампач „%s“ је остао без папира."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1129
-#, fuzzy, c-format
+#, c-format
 msgid "Printer '%s' is currently off-line."
-msgstr "Штампач је искључен"
+msgstr "Штампач „%s“ је искључен."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1130
 #, c-format
 msgid "Printer '%s' may not be connected."
-msgstr ""
+msgstr "Штампач „%s“ изгледа није повезан."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1131
 #, c-format
 msgid "There is a problem on printer '%s'."
-msgstr ""
+msgstr "Проблем на штампачу „%s“."
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:1410
 msgid "Paused ; Rejecting Jobs"
-msgstr ""
+msgstr "Заустављен ; Одбија послове"
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:1416
 msgid "Rejecting Jobs"
-msgstr ""
+msgstr "Одбија послове"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2084
 msgid "Two Sided"
@@ -4633,42 +4597,41 @@ msgstr "Небитно"
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Left to right, top to bottom"
-msgstr ""
+msgstr "С лева на десно, одозго на доле"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Left to right, bottom to top"
-msgstr ""
+msgstr "С лева на десно, одоздо на горе"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Right to left, top to bottom"
-msgstr ""
+msgstr "С десна на лево, одозго на доле"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Right to left, bottom to top"
-msgstr ""
+msgstr "С десна на лево, одоздо на горе"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Top to bottom, left to right"
-msgstr ""
+msgstr "Одозго на доле, с лева на десно"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Top to bottom, right to left"
-msgstr ""
+msgstr "Одозго на доле, с десна на лево"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "Bottom to top, left to right"
-msgstr ""
+msgstr "Одоздо на горе, с лева на десно"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "Bottom to top, right to left"
-msgstr ""
+msgstr "Одоздо на горе, с десна на лево"
 
 #. Cups specific, non-ppd related settings
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2797
-#, fuzzy
 msgid "Pages per Sheet"
 msgstr "Страна на листу"
 
@@ -4676,18 +4639,16 @@ msgstr "Страна на листу"
 #. * in the print dialog
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2834
-#, fuzzy
 msgid "Job Priority"
-msgstr "Важн_ост:"
+msgstr "Важност"
 
 # bug(goran): ???
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2845
-#, fuzzy
 msgid "Billing Info"
-msgstr "Подаци за _фактурисање:"
+msgstr "Фактурисање"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
@@ -4724,43 +4685,39 @@ msgstr "Некатегорисано"
 #. * dialog that controls the front cover page.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2894
-#, fuzzy
 msgid "Before"
-msgstr "П_ре:"
+msgstr "Пре"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2909
-#, fuzzy
 msgid "After"
-msgstr "П_осле:"
+msgstr "После"
 
 #. Translators: this is the name of the option that controls when
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2929
-#, fuzzy
 msgid "Print at"
-msgstr "Штампај"
+msgstr "Закажи штампу"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2940
-#, fuzzy
 msgid "Print at time"
-msgstr "Штампај у датотеку"
+msgstr "Штампај у"
 
 #. Translators: this format is used to display a custom paper
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2975
-#, fuzzy, c-format
+#, c-format
 msgid "Custom %sx%s"
-msgstr "Посебно %.2fx%.2f"
+msgstr "Посебно %sx%s"
 
 #. default filename used for print-to-file
 #: modules/printbackends/file/gtkprintbackendfile.c:235
