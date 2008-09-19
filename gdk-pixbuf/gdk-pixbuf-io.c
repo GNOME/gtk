@@ -678,9 +678,10 @@ gdk_pixbuf_load_module_unlocked (GdkPixbufModule *image_module,
         if (fill_vtable) {
 		image_module->module = (void *) 1;
                 (* fill_vtable) (image_module);
-		image_module->info = g_new0 (GdkPixbufFormat, 1);
-		(* fill_info) (image_module->info);
-
+		if (image_module->info == NULL) {
+			image_module->info = g_new0 (GdkPixbufFormat, 1);
+			(* fill_info) (image_module->info);
+		}
                 return TRUE;
 	}
 	else 
