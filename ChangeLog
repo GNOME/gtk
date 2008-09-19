@@ -1,3 +1,17 @@
+2008-09-19  Carlos Garnacho  <carlos@imendio.com>
+
+	Bug 83935 – GtkEntry's default invisible char should be U+25CF
+
+	* gtk/gtkentry.c (find_invisible_char) (gtk_entry_init): Find a
+	more suitable invisible char than '*' based on the used font.
+	(gtk_entry_class_init) (gtk_entry_set_property)
+	(gtk_entry_get_property): Add a "invisible-char-set" property.
+	(gtk_entry_unset_invisible_char): New function, needed now that the
+	default invisible char isn't fixed.
+	* gtk/gtkentry.h:
+	* gtk/gtk.symbols:
+	* docs/reference/gtk/gtk-sections.txt: Add the new function.
+
 2008-09-19  Christian Persch  <chpe@gnome.org>
  
  	Bug 552837 – mem leak in gtkimmulticontext

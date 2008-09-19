@@ -1228,6 +1228,7 @@ gtk_entry_get_text_length
 gtk_entry_select_region
 gtk_entry_set_visibility
 gtk_entry_set_invisible_char
+gtk_entry_unset_invisible_char
 gtk_entry_set_editable
 gtk_entry_set_max_length
 gtk_entry_get_activates_default

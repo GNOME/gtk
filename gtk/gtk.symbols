@@ -1299,6 +1299,7 @@ gtk_entry_set_width_chars
 gtk_entry_text_index_to_layout_index
 gtk_entry_set_cursor_hadjustment
 gtk_entry_get_cursor_hadjustment
+gtk_entry_unset_invisible_char
 #endif
 #endif
 

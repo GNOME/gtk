@@ -87,6 +87,7 @@ struct _GtkEntryPrivate
   guint blink_time;  /* time in msec the cursor has blinked since last user event */
   guint interior_focus : 1;
   guint real_changed   : 1;
+  guint invisible_char_set : 1;
   guint change_count   : 8;
 
   gint focus_width;
@@ -135,7 +136,8 @@ enum {
   PROP_TRUNCATE_MULTILINE,
   PROP_SHADOW_TYPE,
   PROP_OVERWRITE_MODE,
-  PROP_TEXT_LENGTH
+  PROP_TEXT_LENGTH,
+  PROP_INVISIBLE_CHAR_SET
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -664,6 +666,20 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                       G_MAXUINT16,
                                                       0,
                                                       GTK_PARAM_READABLE));
+  /**
+   * GtkEntry:invisible-char-set:
+   *
+   * Whether the invisible char has been set for the #GtkEntry.
+   *
+   * Since: 2.16
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_INVISIBLE_CHAR_SET,
+                                   g_param_spec_boolean ("invisible-char-set",
+                                                         P_("Invisible char set"),
+                                                         P_("Whether the invisible char has been set"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
 
   signals[POPULATE_POPUP] =
     g_signal_new (I_("populate-popup"),
@@ -1063,6 +1079,13 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_overwrite_mode (entry, g_value_get_boolean (value));
       break;
 
+    case PROP_INVISIBLE_CHAR_SET:
+      if (g_value_get_boolean (value))
+        priv->invisible_char_set = TRUE;
+      else
+        gtk_entry_unset_invisible_char (entry);
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -1133,11 +1156,55 @@ gtk_entry_get_property (GObject         *object,
     case PROP_TEXT_LENGTH:
       g_value_set_uint (value, entry->text_length);
       break;
-
+    case PROP_INVISIBLE_CHAR_SET:
+      g_value_set_boolean (value, priv->invisible_char_set);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static gunichar
+find_invisible_char (GtkWidget *widget)
+{
+  PangoLayout *layout;
+  PangoAttrList *attr_list;
+  gint i;
+  gunichar invisible_chars [] = {
+    0x25cf, /* BLACK CIRCLE */
+    0x2022, /* BULLET */
+    0x2731, /* HEAVY ASTERISK */
+    0x273a  /* SIXTEEN POINTED ASTERISK */
+  };
+
+  layout = gtk_widget_create_pango_layout (widget, NULL);
+
+  attr_list = pango_attr_list_new ();
+  pango_attr_list_insert (attr_list, pango_attr_fallback_new (FALSE));
+
+  pango_layout_set_attributes (layout, attr_list);
+  pango_attr_list_unref (attr_list);
+
+  for (i = 0; i < G_N_ELEMENTS (invisible_chars); i++)
+    {
+      gchar text[7] = { 0, };
+      gint len, count;
+
+      len = g_unichar_to_utf8 (invisible_chars[i], text);
+      pango_layout_set_text (layout, text, len);
+
+      count = pango_layout_get_unknown_glyphs_count (layout);
+
+      if (count == 0)
+        {
+          g_object_unref (layout);
+          return invisible_chars[i];
+        }
+    }
+
+  g_object_unref (layout);
+  return '*';
 }
 
 static void
@@ -1153,7 +1220,7 @@ gtk_entry_init (GtkEntry *entry)
 
   entry->editable = TRUE;
   entry->visible = TRUE;
-  entry->invisible_char = '*';
+  entry->invisible_char = find_invisible_char (GTK_WIDGET (entry));
   entry->dnd_position = -1;
   entry->width_chars = -1;
   entry->is_cell_renderer = FALSE;
@@ -2441,7 +2508,10 @@ gtk_entry_style_set	(GtkWidget      *widget,
 
   priv->focus_width = focus_width;
   priv->interior_focus = interior_focus;
-  
+
+  if (!priv->invisible_char_set)
+    entry->invisible_char = find_invisible_char (GTK_WIDGET (entry));
+
   gtk_entry_recompute (entry);
 
   if (previous_style && GTK_WIDGET_REALIZED (widget))
@@ -4548,8 +4618,9 @@ gtk_entry_set_position (GtkEntry *entry,
  * as the invisible char, and will also appear that way when 
  * the text in the entry widget is copied elsewhere.
  *
- * The default invisible char is the asterisk '*', but it can
- * be changed with gtk_entry_set_invisible_char().
+ * By default, GTK+ picks the best invisible character available
+ * in the current font, but it can be changed with
+ * gtk_entry_set_invisible_char().
  */
 void
 gtk_entry_set_visibility (GtkEntry *entry,
@@ -4615,16 +4686,26 @@ gtk_entry_get_visibility (GtkEntry *entry)
  * Sets the character to use in place of the actual text when
  * gtk_entry_set_visibility() has been called to set text visibility
  * to %FALSE. i.e. this is the character used in "password mode" to
- * show the user how many characters have been typed. The default
- * invisible char is an asterisk ('*').  If you set the invisible char
- * to 0, then the user will get no feedback at all; there will be
- * no text on the screen as they type.
+ * show the user how many characters have been typed. By default, GTK+
+ * picks the best invisible char available in the current font. If you
+ * set the invisible char to 0, then the user will get no feedback
+ * at all; there will be no text on the screen as they type.
  **/
 void
 gtk_entry_set_invisible_char (GtkEntry *entry,
                               gunichar  ch)
 {
+  GtkEntryPrivate *priv;
+
   g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  priv = GTK_ENTRY_GET_PRIVATE (entry);
+
+  if (!priv->invisible_char_set)
+    {
+      priv->invisible_char_set = TRUE;
+      g_object_notify (G_OBJECT (entry), "invisible-char-set");
+    }
 
   if (ch == entry->invisible_char)
     return;
@@ -4650,6 +4731,42 @@ gtk_entry_get_invisible_char (GtkEntry *entry)
   g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
 
   return entry->invisible_char;
+}
+
+/**
+ * gtk_entry_unset_invisible_char:
+ * @entry: a #GtkEntry
+ *
+ * Unsets the invisible char previously set with
+ * gtk_entry_set_invisible_char(). So that the
+ * default invisible char is used again.
+ *
+ * Since: 2.16
+ **/
+void
+gtk_entry_unset_invisible_char (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv;
+  gunichar ch;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  priv = GTK_ENTRY_GET_PRIVATE (entry);
+
+  if (!priv->invisible_char_set)
+    return;
+
+  priv->invisible_char_set = FALSE;
+  ch = find_invisible_char (GTK_WIDGET (entry));
+
+  if (entry->invisible_char != ch)
+    {
+      entry->invisible_char = ch;
+      g_object_notify (G_OBJECT (entry), "invisible-char");
+    }
+
+  g_object_notify (G_OBJECT (entry), "invisible-char-set");
+  gtk_entry_recompute (entry);
 }
 
 /**
