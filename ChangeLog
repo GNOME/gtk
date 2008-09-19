@@ -1,3 +1,10 @@
+2008-09-19  Christian Persch  <chpe@gnome.org>
+ 
+ 	Bug 552837 – mem leak in gtkimmulticontext
+ 
+ 	* gtk/gtkimmulticontext.c: (gtk_im_multicontext_get_slave): Plug mem
+ 	leak.
+ 
 2008-09-18  Emmanuele Bassi  <ebassi@linux.intel.com>
 
 	* gtk/gtkfilechooserdefault.c (settings_save): Save the size column

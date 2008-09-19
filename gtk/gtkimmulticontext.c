@@ -237,6 +237,7 @@ gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
       gtk_im_multicontext_set_slave (multicontext, slave, FALSE);
       g_object_unref (slave);
 
+      g_free (multicontext->context_id);
       multicontext->context_id = g_strdup (global_context_id);
     }
 
