@@ -1,3 +1,10 @@
+2008-09-19  Christian Persch  <chpe@gnome.org>
+
+	Bug 552837 – mem leak in gtkimmulticontext
+
+	* gtk/gtkimmulticontext.c: (gtk_im_multicontext_get_slave): Plug mem
+	leak.
+
 2008-09-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
