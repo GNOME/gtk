@@ -600,7 +600,7 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
       {
 	XReparentEvent *xre = &xevent->xreparent;
 
-	GTK_NOTE (PLUGSOCKET, g_message ("GtkPlug: ReparentNotify received\n"));
+	GTK_NOTE (PLUGSOCKET, g_message ("GtkSocket - ReparentNotify received"));
 	if (!socket->plug_window && xre->parent == GDK_WINDOW_XWINDOW (widget->window))
 	  {
 	    _gtk_socket_add_window (socket, xre->window, FALSE);
