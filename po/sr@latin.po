@@ -9,10 +9,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.10\n"
+"Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-17 23:14-0400\n"
-"PO-Revision-Date: 2007-09-06 22:10+0200\n"
+"PO-Revision-Date: 2008-09-19 20:36+0200\n"
 "Last-Translator: Goran Rakić <grakic@devbase.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
 "MIME-Version: 1.0\n"
@@ -304,8 +304,7 @@ msgstr "Greška pri upisu u datoteku slike: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1700 gdk-pixbuf/gdk-pixbuf-io.c:1830
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Ovo izdanje programa gdk-pixbuf ne podržava čuvanje ove vrste slike: %s"
+msgstr "Ovo izdanje programa gdk-pixbuf ne podržava čuvanje ove vrste slike: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1734
 msgid "Insufficient memory to save image to callback"
@@ -338,9 +337,8 @@ msgid "Insufficient memory to save image into a buffer"
 msgstr "Nedovoljno memorije za čuvanje slike u bafer"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2349
-#, fuzzy
 msgid "Error writing to image stream"
-msgstr "Greška pri upisu u datoteku slike: %s"
+msgstr "Greška pri upisu u tok slike"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
@@ -348,8 +346,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Unutrašnja greška: deo za učitavanje slika „%s“ nije uspeo da obavi "
-"operaciju, a nije naveo ni razlog neuspeha"
+"Unutrašnja greška: deo za učitavanje slika „%s“ nije uspeo da obavi operaciju, "
+"a nije naveo ni razlog neuspeha"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:372
 #, c-format
@@ -494,8 +492,7 @@ msgstr "Izdanje %s GIF vrste zapisa nije podržano"
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
-"GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
+msgstr "GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
 
 #: gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
@@ -556,61 +553,51 @@ msgid "The ICO image format"
 msgstr "ICO zapis slike"
 
 #: gdk-pixbuf/io-icns.c:345
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading ICNS image: %s"
-msgstr "Kobna greška pri čitanju PNG slike: %s"
+msgstr "Greška pri čitanju ICNS slike: %s"
 
 #: gdk-pixbuf/io-icns.c:362
-#, fuzzy
 msgid "Could not decode ICNS file"
-msgstr "Ne mogu da izaberem datoteku"
+msgstr "Ne mogu da dekodiram ICNS datoteku"
 
 #
 #: gdk-pixbuf/io-icns.c:395
-#, fuzzy
 msgid "The ICNS image format"
-msgstr "ICO zapis slike"
+msgstr "ICNS format slike"
 
 #: gdk-pixbuf/io-jasper.c:75
-#, fuzzy
 msgid "Couldn't allocate memory for stream"
-msgstr "Ne mogu da obezbedim memoriju za zaglavlje"
+msgstr "Ne mogu da obezbedim memoriju za tok"
 
 #: gdk-pixbuf/io-jasper.c:105
-#, fuzzy
 msgid "Couldn't decode image"
-msgstr "Ne mogu pretvoriti ime datoteke"
+msgstr "Ne mogu da dekodiram sliku"
 
 # koliko njih će me tući zbog „preinačeni"?
 #: gdk-pixbuf/io-jasper.c:123
-#, fuzzy
 msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Preinačeni JPEG ima visinu ili širinu nula."
+msgstr "Preinačeni JPEG2000 ima visinu ili širinu nula."
 
 #: gdk-pixbuf/io-jasper.c:137
-#, fuzzy
 msgid "Image type currently not supported"
-msgstr "Vrsta slike „%s“ nije podržana"
+msgstr "Vrsta slike za sada nije podržana"
 
 #: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
-#, fuzzy
 msgid "Couldn't allocate memory for color profile"
-msgstr "Ne mogu obezbediti memoriju za učitavanje JPEG datoteke"
+msgstr "Ne mogu da obezbedim memoriju za paletu boja"
 
 #: gdk-pixbuf/io-jasper.c:182
-#, fuzzy
 msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "Nedovoljno memorije za otvaranje TIFF datoteke"
+msgstr "Nedovoljno memorije za otvaranje JPEG2000 datoteke"
 
 #: gdk-pixbuf/io-jasper.c:264
-#, fuzzy
 msgid "Couldn't allocate memory to buffer image data"
-msgstr "Ne mogu obezbediti memoriju za podatke linije"
+msgstr "Ne mogu da obezbedim memoriju za bafer podataka slike"
 
 #: gdk-pixbuf/io-jasper.c:308
-#, fuzzy
 msgid "The JPEG 2000 image format"
-msgstr "JPEG zapis slike"
+msgstr "JPEG2000 zapis slike"
 
 # kao kod fotoaparata/razvijanja slika ;)
 #: gdk-pixbuf/io-jpeg.c:117
@@ -623,8 +610,8 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"Nedovoljno memorije za učitavanje slike, zatvorite neke programe da "
-"oslobodite memoriju"
+"Nedovoljno memorije za učitavanje slike, zatvorite neke programe da oslobodite "
+"memoriju"
 
 # grafički dizajneri, kako se ovo prevodi?
 #: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
@@ -656,8 +643,8 @@ msgstr ""
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"Kvalitet JPEG-a mora biti vrednost između 0 i 100; nije dozvoljena vrednost "
-"„%d“."
+"Kvalitet JPEG-a mora biti vrednost između 0 i 100; nije dozvoljena vrednost „%"
+"d“."
 
 #: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
@@ -761,8 +748,7 @@ msgstr "Kobna greška pri čitanju PNG slike: %s"
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
-"Ključevi za tekstualne odeljke PNG-a moraju imati bar 1, a najviše 79 "
-"znakova."
+"Ključevi za tekstualne odeljke PNG-a moraju imati bar 1, a najviše 79 znakova."
 
 #: gdk-pixbuf/io-png.c:833
 msgid "Keys for PNG text chunks must be ASCII characters."
@@ -1074,61 +1060,54 @@ msgid "The XPM image format"
 msgstr "XPM zapis slike"
 
 #: gdk-pixbuf/io-gdip-emf.c:59
-#, fuzzy
 msgid "The EMF image format"
-msgstr "BMP zapis slike"
+msgstr "EMF zapis slike"
 
 #: gdk-pixbuf/io-gdip-utils.c:212
-#, fuzzy, c-format
+#, c-format
 msgid "Could not allocate memory: %s"
-msgstr "Ne mogu da obezbedim memoriju za zaglavlje"
+msgstr "Ne mogu da obezbedim memoriju: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:237 gdk-pixbuf/io-gdip-utils.c:350
 #: gdk-pixbuf/io-gdip-utils.c:383
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create stream: %s"
-msgstr "Greška pri pravljenju direktorijuma: %s"
+msgstr "Ne mogu da napravim tok: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:251
-#, fuzzy, c-format
+#, c-format
 msgid "Could not seek stream: %s"
-msgstr "Ne mogu da izaberem stavku"
+msgstr "Ne mogu da se krećem po toku: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:263
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read from stream: %s"
-msgstr "Neuspelo premeštanje %s u %s: %s\n"
+msgstr "Ne mogu da čitam iz toka: %s"
 
 #: gdk-pixbuf/io-gdip-utils.c:736
-#, fuzzy
 msgid "Couldn't create pixbuf"
-msgstr "Ne mogu da napravim novi pixbuf"
+msgstr "Ne mogu da napravim pixbuf"
 
 #: gdk-pixbuf/io-gdip-utils.c:798
-#, fuzzy
 msgid "Couldn't load bitmap"
-msgstr "Ne mogu pretvoriti ime datoteke"
+msgstr "Ne mogu da otvorim bitmapu"
 
 #: gdk-pixbuf/io-gdip-utils.c:821
-#, fuzzy
 msgid "Couldn't load metafile"
-msgstr "Ne mogu pretvoriti ime datoteke"
+msgstr "Ne mogu da otvorim metafile"
 
 # malo slobode ovak'ome umetniku se mora dati
 #: gdk-pixbuf/io-gdip-utils.c:980
-#, fuzzy
 msgid "Unsupported image format for GDI+"
-msgstr "nepodržana vrsta RAS slike"
+msgstr "Nepodržana vrsta slike za GDI+"
 
 #: gdk-pixbuf/io-gdip-utils.c:987
-#, fuzzy
 msgid "Couldn't save"
-msgstr "Ne mogu da sačuvam ostatak"
+msgstr "Ne mogu da sačuvam"
 
 #: gdk-pixbuf/io-gdip-wmf.c:58
-#, fuzzy
 msgid "The WMF image format"
-msgstr "WBMP zapis slika"
+msgstr "WMF zapis slika"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:54
@@ -1166,22 +1145,22 @@ msgid "Make X calls synchronous"
 msgstr "Učini Iks pozive sinhronim"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:311
-#, fuzzy, c-format
+#, c-format
 msgid "Starting %s"
-msgstr "Štampam %d"
+msgstr "Pokrećem %s"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:313
-#, fuzzy, c-format
+#, c-format
 msgid "Opening %s"
-msgstr "Otvori „%s“"
+msgstr "Otvaram „%s“"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:316
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Otvaram %d stavku"
+msgstr[1] "Otvaram %d stavke"
+msgstr[2] "Otvaram %d stavki"
 
 #: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
 msgid "License"
@@ -1782,8 +1761,8 @@ msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
-"Program ne može da uspostavi vezu sa servisom indeksiranja. Uveri se da je "
-"on pokrenut."
+"Program ne može da uspostavi vezu sa servisom indeksiranja. Uveri se da je on "
+"pokrenut."
 
 #: gtk/gtkfilechooserdefault.c:8744
 msgid "Could not send the search request"
@@ -1825,31 +1804,29 @@ msgstr "Nepoznato"
 
 #: gtk/gtkfilechooserdefault.c:10982
 msgid "%H:%M"
-msgstr ""
+msgstr "%H:%M"
 
 #: gtk/gtkfilechooserdefault.c:10984
 msgid "Yesterday at %H:%M"
 msgstr "Juče u %H:%M"
 
 #: gtk/gtkfilechooserentry.c:659 gtk/gtkfilechooserentry.c:1115
-#, fuzzy
 msgid "Invalid path"
-msgstr "Neispravan URL"
+msgstr "Neispravna putanja"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
 #: gtk/gtkfilechooserentry.c:1070
 msgid "No match"
-msgstr ""
+msgstr "Bez poklapanja"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
 #: gtk/gtkfilechooserentry.c:1081
-#, fuzzy
 msgid "Sole completion"
-msgstr "Izbor boje"
+msgstr "Jedan mogući nastavak"
 
 #. translators: this text is shown when the text in a file chooser
 #. * entry is a complete filename, but could be continued to find
@@ -1857,14 +1834,14 @@ msgstr "Izbor boje"
 #.
 #: gtk/gtkfilechooserentry.c:1097
 msgid "Complete, but not unique"
-msgstr ""
+msgstr "Poklapanje, ali ima i drugih"
 
 #. translators: this text is shown while the system is searching
 #. * for possible completions for text in a file chooser entry
 #.
 #: gtk/gtkfilechooserentry.c:1133
 msgid "Completing..."
-msgstr ""
+msgstr "Nastavljam..."
 
 #: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1349
 #: gtk/gtkfilesel.c:1358
@@ -2100,13 +2077,12 @@ msgid "Failed to load icon"
 msgstr "Neuspelo učitavanje ikonice"
 
 #: gtk/gtkimmodule.c:515
-#, fuzzy
 msgid "Simple"
-msgstr "Veličina"
+msgstr "Jednostavna"
 
 #: gtk/gtkimmulticontext.c:542
 msgid "input method menu|System"
-msgstr ""
+msgstr "Sistemska"
 
 #: gtk/gtkinputdialog.c:192
 msgid "Input"
@@ -2233,7 +2209,7 @@ msgstr "default:LTR"
 #: gtk/gtkmain.c:768
 #, c-format
 msgid "Cannot open display: %s"
-msgstr ""
+msgstr "Ne mogu da pristupim ekranu: %s"
 
 #: gtk/gtkmain.c:805
 msgid "GTK+ Options"
@@ -2244,44 +2220,40 @@ msgid "Show GTK+ Options"
 msgstr "Prikaži Gtk+ opcije"
 
 #: gtk/gtkmountoperation.c:476
-#, fuzzy
 msgid "Co_nnect"
-msgstr "Uspostavi ve_zu"
+msgstr "Poveži _se"
 
 #: gtk/gtkmountoperation.c:520
 msgid "Connect _anonymously"
-msgstr ""
+msgstr "Poveži se _anonimno"
 
 #: gtk/gtkmountoperation.c:529
 msgid "Connect as u_ser:"
-msgstr ""
+msgstr "Poveži se kao _korisnik:"
 
 #: gtk/gtkmountoperation.c:566
-#, fuzzy
 msgid "_Username:"
-msgstr "_Preimenuj"
+msgstr "_Korisničko ime:"
 
 #: gtk/gtkmountoperation.c:570
-#, fuzzy
 msgid "_Domain:"
-msgstr "_Putanja:"
+msgstr "_Domen:"
 
 #: gtk/gtkmountoperation.c:575
-#, fuzzy
 msgid "_Password:"
-msgstr "_Pritisak:"
+msgstr "_Lozinka:"
 
 #: gtk/gtkmountoperation.c:590
 msgid "Forget password _immediately"
-msgstr ""
+msgstr "_Odmah zaboravi lozinku"
 
 #: gtk/gtkmountoperation.c:598
 msgid "Remember password until you _logout"
-msgstr ""
+msgstr "Zapamti lozinku _do odjavljivanja"
 
 #: gtk/gtkmountoperation.c:606
 msgid "Remember _forever"
-msgstr ""
+msgstr "Zapamti _zauvek"
 
 #: gtk/gtknotebook.c:4417 gtk/gtknotebook.c:6924
 #, c-format
@@ -2488,14 +2460,14 @@ msgid "Printing %d"
 msgstr "Štampam %d"
 
 #: gtk/gtkprintoperation.c:2331
-#, fuzzy, c-format
+#, c-format
 msgid "Error creating print preview"
-msgstr "Greška pri pokretanju pregleda"
+msgstr "Greška pri izradi pregleda"
 
 #: gtk/gtkprintoperation.c:2334
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr ""
+msgstr "Najčešći razlog je da nije moguće napraviti privremenu datoteku."
 
 #: gtk/gtkprintoperation-unix.c:242
 #, c-format
@@ -2534,14 +2506,12 @@ msgid "Custom size"
 msgstr "Posebna veličina"
 
 #: gtk/gtkprintoperation-win32.c:1517
-#, fuzzy
 msgid "No printer found"
-msgstr "Ni jedna stavka nije pronađena"
+msgstr "Štampač nije pronađen"
 
 #: gtk/gtkprintoperation-win32.c:1544
-#, fuzzy
 msgid "Invalid argument to CreateDC"
-msgstr "Neispravan argument sa PrintDlgEx"
+msgstr "Neispravan argument za CreateDC"
 
 #: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1801
 msgid "Error from StartDoc"
@@ -2583,24 +2553,20 @@ msgid "Status"
 msgstr "Stanje"
 
 #: gtk/gtkprintunixdialog.c:1792
-#, fuzzy
 msgid "Range"
-msgstr "Op_seg"
+msgstr "Opseg"
 
 #: gtk/gtkprintunixdialog.c:1796
-#, fuzzy
 msgid "_All Pages"
-msgstr "Sve listove"
+msgstr "_Sve listove"
 
 #: gtk/gtkprintunixdialog.c:1803
-#, fuzzy
 msgid "C_urrent Page"
-msgstr "Trenutnu"
+msgstr "_Trenutnu"
 
 #: gtk/gtkprintunixdialog.c:1812
-#, fuzzy
 msgid "Pag_es:"
-msgstr "Mesta"
+msgstr "Stran_e"
 
 #: gtk/gtkprintunixdialog.c:1813
 msgid ""
@@ -2636,19 +2602,16 @@ msgstr "Opšte"
 #.
 #: gtk/gtkprintunixdialog.c:2423
 #: modules/printbackends/cups/gtkprintbackendcups.c:2813
-#, fuzzy
 msgid "Page Ordering"
-msgstr "Pripremam"
+msgstr "Slaganje strana"
 
 #: gtk/gtkprintunixdialog.c:2429
-#, fuzzy
 msgid "Left to right"
-msgstr "LRM Obeleživač za s_leva-na-desno"
+msgstr "Sa leva na desno"
 
 #: gtk/gtkprintunixdialog.c:2430
-#, fuzzy
 msgid "Right to left"
-msgstr "Štampaj u datoteku"
+msgstr "Sa desna na levo"
 
 #: gtk/gtkprintunixdialog.c:2499
 msgid "Layout"
@@ -2663,9 +2626,8 @@ msgid "Pages per _side:"
 msgstr "_Strana na listu:"
 
 #: gtk/gtkprintunixdialog.c:2536
-#, fuzzy
 msgid "Page or_dering:"
-msgstr "_Strana na listu:"
+msgstr "Re_dosled strana:"
 
 #: gtk/gtkprintunixdialog.c:2552
 msgid "_Only print:"
@@ -3176,9 +3138,8 @@ msgid "Reverse portrait"
 msgstr "Prevrnuti portret"
 
 #: gtk/gtkstock.c:377
-#, fuzzy
 msgid "Page Set_up"
-msgstr "Podešavanje strane"
+msgstr "Pode_šavanje strane"
 
 #: gtk/gtkstock.c:378
 msgid "_Paste"
@@ -3382,8 +3343,7 @@ msgstr "Oznaka „%s“ ima neispravan prioritet „%s“"
 #: gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
-"Prvi spoljašnji element u tekstu mora biti <text_view_markup> a ne <%s>"
+msgstr "Prvi spoljašnji element u tekstu mora biti <text_view_markup> a ne <%s>"
 
 #: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
 #, c-format
@@ -3474,11 +3434,11 @@ msgstr "Jačina"
 
 #: gtk/gtkvolumebutton.c:79
 msgid "Turns volume down or up"
-msgstr ""
+msgstr "Menja jačinu na dole ili gore"
 
 #: gtk/gtkvolumebutton.c:82
 msgid "Adjusts the volume"
-msgstr ""
+msgstr "Podešava jačinu"
 
 #: gtk/gtkvolumebutton.c:85 gtk/gtkvolumebutton.c:88
 msgid "Volume Down"
@@ -3486,7 +3446,7 @@ msgstr "Potišaj"
 
 #: gtk/gtkvolumebutton.c:87
 msgid "Decreases the volume"
-msgstr ""
+msgstr "Potišaj zvuk"
 
 #: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Up"
@@ -3494,7 +3454,7 @@ msgstr "Pojačaj"
 
 #: gtk/gtkvolumebutton.c:93
 msgid "Increases the volume"
-msgstr ""
+msgstr "Pojačaj zvuk"
 
 #: gtk/gtkvolumebutton.c:151
 msgid "Muted"
@@ -4361,9 +4321,9 @@ msgid "Failed to rewrite header\n"
 msgstr "Neuspelo prepisivanje zaglavlja\n"
 
 #: gtk/updateiconcache.c:1455
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr "Ne mogu da otvorim datoteku „%s“: %s"
+msgstr "Ne mogu da otvorim datoteku „%s“: %s\n"
 
 #: gtk/updateiconcache.c:1463
 #, c-format
@@ -4432,7 +4392,7 @@ msgstr "Neispravna ostava za ikonice: %s\n"
 #: gtk/updateiconcache.c:1682
 #, c-format
 msgid "No theme index file."
-msgstr ""
+msgstr "Nema indeks datoteke teme."
 
 #: gtk/updateiconcache.c:1686
 #, c-format
@@ -4502,81 +4462,81 @@ msgstr "Iksov način unosa (XIM)"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1115
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr ""
+msgstr "Štampaču „%s“ ponestaje toner."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1116
 #, c-format
 msgid "Printer '%s' has no toner left."
-msgstr ""
+msgstr "Štampač „%s“ je ostao bez tonera."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:1118
 #, c-format
 msgid "Printer '%s' is low on developer."
-msgstr ""
+msgstr "Štampaču „%s“ slabi razvijač."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:1120
 #, c-format
 msgid "Printer '%s' is out of developer."
-msgstr ""
+msgstr "Štampač „%s“ je ostao bez razvijača."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:1122
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr ""
+msgstr "Štampaču „%s“ ponestaje najmanje jedne boje."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:1124
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
-msgstr ""
+msgstr "Štampač „%s“ je ostao bez najmanje jedne boje."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1125
 #, c-format
 msgid "The cover is open on printer '%s'."
-msgstr ""
+msgstr "Poklopac je otvoren na štampaču „%s“."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1126
 #, c-format
 msgid "The door is open on printer '%s'."
-msgstr ""
+msgstr "Vratanca su otvorena na štampaču „%s“."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1127
 #, c-format
 msgid "Printer '%s' is low on paper."
-msgstr ""
+msgstr "Štampač „%s“ ostaje bez papira."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1128
 #, c-format
 msgid "Printer '%s' is out of paper."
-msgstr ""
+msgstr "Štampač „%s“ je ostao bez papira."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1129
-#, fuzzy, c-format
+#, c-format
 msgid "Printer '%s' is currently off-line."
-msgstr "Štampač je isključen"
+msgstr "Štampač „%s“ je isključen."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1130
 #, c-format
 msgid "Printer '%s' may not be connected."
-msgstr ""
+msgstr "Štampač „%s“ izgleda nije povezan."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1131
 #, c-format
 msgid "There is a problem on printer '%s'."
-msgstr ""
+msgstr "Problem na štampaču „%s“."
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:1410
 msgid "Paused ; Rejecting Jobs"
-msgstr ""
+msgstr "Zaustavljen ; Odbija poslove"
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:1416
 msgid "Rejecting Jobs"
-msgstr ""
+msgstr "Odbija poslove"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2084
 msgid "Two Sided"
@@ -4637,42 +4597,41 @@ msgstr "Nebitno"
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Left to right, top to bottom"
-msgstr ""
+msgstr "S leva na desno, odozgo na dole"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Left to right, bottom to top"
-msgstr ""
+msgstr "S leva na desno, odozdo na gore"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Right to left, top to bottom"
-msgstr ""
+msgstr "S desna na levo, odozgo na dole"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Right to left, bottom to top"
-msgstr ""
+msgstr "S desna na levo, odozdo na gore"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Top to bottom, left to right"
-msgstr ""
+msgstr "Odozgo na dole, s leva na desno"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Top to bottom, right to left"
-msgstr ""
+msgstr "Odozgo na dole, s desna na levo"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "Bottom to top, left to right"
-msgstr ""
+msgstr "Odozdo na gore, s leva na desno"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "Bottom to top, right to left"
-msgstr ""
+msgstr "Odozdo na gore, s desna na levo"
 
 #. Cups specific, non-ppd related settings
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2797
-#, fuzzy
 msgid "Pages per Sheet"
 msgstr "Strana na listu"
 
@@ -4680,18 +4639,16 @@ msgstr "Strana na listu"
 #. * in the print dialog
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2834
-#, fuzzy
 msgid "Job Priority"
-msgstr "Važn_ost:"
+msgstr "Važnost"
 
 # bug(goran): ???
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2845
-#, fuzzy
 msgid "Billing Info"
-msgstr "Podaci za _fakturisanje:"
+msgstr "Fakturisanje"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
@@ -4728,43 +4685,39 @@ msgstr "Nekategorisano"
 #. * dialog that controls the front cover page.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2894
-#, fuzzy
 msgid "Before"
-msgstr "P_re:"
+msgstr "Pre"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2909
-#, fuzzy
 msgid "After"
-msgstr "P_osle:"
+msgstr "Posle"
 
 #. Translators: this is the name of the option that controls when
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2929
-#, fuzzy
 msgid "Print at"
-msgstr "Štampaj"
+msgstr "Zakaži štampu"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2940
-#, fuzzy
 msgid "Print at time"
-msgstr "Štampaj u datoteku"
+msgstr "Štampaj u"
 
 #. Translators: this format is used to display a custom paper
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2975
-#, fuzzy, c-format
+#, c-format
 msgid "Custom %sx%s"
-msgstr "Posebno %.2fx%.2f"
+msgstr "Posebno %sx%s"
 
 #. default filename used for print-to-file
 #: modules/printbackends/file/gtkprintbackendfile.c:235
