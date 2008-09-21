@@ -1,3 +1,8 @@
+2008-09-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c (filter_model_visible_func): Don't
+	leak a GFile.
+
 2008-09-19  Owen Taylor  <otaylor@redhat.com>
 
 	Small cleanups to debug messages for GtkPlug/GtkSocket
