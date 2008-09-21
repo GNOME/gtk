@@ -392,6 +392,8 @@ gail_button_init_textutil (GailButton  *button,
 {
   const gchar *label_text;
 
+  if (button->textutil)
+    g_object_unref (button->textutil);
   button->textutil = gail_text_util_new ();
   label_text = gtk_label_get_text (GTK_LABEL (label));
   gail_text_util_text_setup (button->textutil, label_text);
