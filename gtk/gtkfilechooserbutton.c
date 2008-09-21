@@ -2106,6 +2106,7 @@ filter_model_visible_func (GtkTreeModel *model,
 		  {
 		    if (!g_file_is_native (base_file))
 		      retval = FALSE;
+                    g_object_unref (base_file);
 		  }
 		else
 		  retval = FALSE;

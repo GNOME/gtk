@@ -1,3 +1,10 @@
+2008-09-20  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/gtkfilechooserbutton.c (filter_model_visible_func): Don't
+	leak a GFile.
+
 2008-09-19  Christian Persch  <chpe@gnome.org>
 
 	Bug 552837 – mem leak in gtkimmulticontext
