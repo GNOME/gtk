@@ -220,6 +220,9 @@ setup_buffer (GtkTextView  *view,
   if (buffer == NULL)
     return;
 
+  if (gail_view->textutil)
+    g_object_unref (gail_view->textutil);
+
   gail_view->textutil = gail_text_util_new ();
   gail_text_util_buffer_setup (gail_view->textutil, buffer);
 

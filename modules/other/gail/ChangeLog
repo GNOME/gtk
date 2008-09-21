@@ -1,3 +1,10 @@
+2008-09-20  Matthias Clasen <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gailtextview.c:
+	* gailbutton.c: Fix possible leaks of textutils.
+
 2008-09-19  Matthias Clasen <mclasen@redhat.com>
 
 	Merged from trunk:
