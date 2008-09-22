@@ -812,13 +812,13 @@ gtk_text_set_adjustments (GtkText       *text,
       g_object_ref_sink (text->hadj);
       
       gtk_signal_connect (GTK_OBJECT (text->hadj), "changed",
-			  (GtkSignalFunc) gtk_text_adjustment,
+			  G_CALLBACK (gtk_text_adjustment),
 			  text);
       gtk_signal_connect (GTK_OBJECT (text->hadj), "value-changed",
-			  (GtkSignalFunc) gtk_text_adjustment,
+			  G_CALLBACK (gtk_text_adjustment),
 			  text);
       gtk_signal_connect (GTK_OBJECT (text->hadj), "destroy",
-			  (GtkSignalFunc) gtk_text_adjustment_destroyed,
+			  G_CALLBACK (gtk_text_adjustment_destroyed),
 			  text);
       gtk_text_adjustment (hadj, text);
 
@@ -831,13 +831,13 @@ gtk_text_set_adjustments (GtkText       *text,
       g_object_ref_sink (text->vadj);
       
       gtk_signal_connect (GTK_OBJECT (text->vadj), "changed",
-			  (GtkSignalFunc) gtk_text_adjustment,
+			  G_CALLBACK (gtk_text_adjustment),
 			  text);
       gtk_signal_connect (GTK_OBJECT (text->vadj), "value-changed",
-			  (GtkSignalFunc) gtk_text_adjustment,
+			  G_CALLBACK (gtk_text_adjustment),
 			  text);
       gtk_signal_connect (GTK_OBJECT (text->vadj), "destroy",
-			  (GtkSignalFunc) gtk_text_adjustment_destroyed,
+			  G_CALLBACK (gtk_text_adjustment_destroyed),
 			  text);
       gtk_text_adjustment (vadj, text);
 

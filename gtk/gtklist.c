@@ -985,46 +985,46 @@ gtk_list_insert_items (GtkList *list,
 
       gtk_widget_set_parent (widget, GTK_WIDGET (list));
       gtk_signal_connect (GTK_OBJECT (widget), "drag-begin",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_drag_begin),
+			  G_CALLBACK (gtk_list_signal_drag_begin),
 			  list);
       gtk_signal_connect (GTK_OBJECT (widget), "toggle-focus-row",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_toggle_focus_row),
+			  G_CALLBACK (gtk_list_signal_toggle_focus_row),
 			  list);
       gtk_signal_connect (GTK_OBJECT (widget), "select-all",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_select_all),
+			  G_CALLBACK (gtk_list_signal_select_all),
 			  list);
       gtk_signal_connect (GTK_OBJECT (widget), "unselect-all",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_unselect_all),
+			  G_CALLBACK (gtk_list_signal_unselect_all),
 			  list);
       gtk_signal_connect (GTK_OBJECT (widget), "undo-selection",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_undo_selection),
+			  G_CALLBACK (gtk_list_signal_undo_selection),
 			  list);
       gtk_signal_connect (GTK_OBJECT (widget), "start-selection",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_start_selection),
+			  G_CALLBACK (gtk_list_signal_start_selection),
 			  list);
       gtk_signal_connect (GTK_OBJECT (widget), "end-selection",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_end_selection),
+			  G_CALLBACK (gtk_list_signal_end_selection),
 			  list);
       gtk_signal_connect (GTK_OBJECT (widget), "extend-selection",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_extend_selection),
+			  G_CALLBACK (gtk_list_signal_extend_selection),
 			  list);
       gtk_signal_connect (GTK_OBJECT (widget), "scroll-horizontal",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_scroll_horizontal),
+			  G_CALLBACK (gtk_list_signal_scroll_horizontal),
 			  list);
       gtk_signal_connect (GTK_OBJECT (widget), "scroll-vertical",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_scroll_vertical),
+			  G_CALLBACK (gtk_list_signal_scroll_vertical),
 			  list);
       gtk_signal_connect (GTK_OBJECT (widget), "toggle-add-mode",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_toggle_add_mode),
+			  G_CALLBACK (gtk_list_signal_toggle_add_mode),
 			  list);
       gtk_signal_connect (GTK_OBJECT (widget), "select",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_item_select),
+			  G_CALLBACK (gtk_list_signal_item_select),
 			  list);
       gtk_signal_connect (GTK_OBJECT (widget), "deselect",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_item_deselect),
+			  G_CALLBACK (gtk_list_signal_item_deselect),
 			  list);
       gtk_signal_connect (GTK_OBJECT (widget), "toggle",
-			  GTK_SIGNAL_FUNC (gtk_list_signal_item_toggle),
+			  G_CALLBACK (gtk_list_signal_item_toggle),
 			  list);
     }
 

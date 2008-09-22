@@ -1,3 +1,13 @@
+2008-09-22  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtksignal.[ch]
+	* gtk/gtkclist.c
+	* gtk/gtklist.c
+	* gtk/gtkmain.c
+	* gtk/gtktext.c
+	* gtk/gtktreeitem.c: use G_CALLBACK and GCallback instead of
+	GTK_SIGNAL_FUNC and GtkSignalFunc also in deprecated code.
+
 2008-09-22  Frederic Crozat  <fcrozat@mandriva.com>
 
 	* gtk/gtkfilesystem.c: use the correct gi18n header.

@@ -1170,10 +1170,10 @@ gtk_clist_set_hadjustment (GtkCList      *clist,
       g_object_ref_sink (clist->hadjustment);
 
       gtk_signal_connect (GTK_OBJECT (clist->hadjustment), "changed",
-			  (GtkSignalFunc) hadjustment_changed,
+			  G_CALLBACK (hadjustment_changed),
 			  (gpointer) clist);
       gtk_signal_connect (GTK_OBJECT (clist->hadjustment), "value-changed",
-			  (GtkSignalFunc) hadjustment_value_changed,
+			  G_CALLBACK (hadjustment_value_changed),
 			  (gpointer) clist);
     }
 
@@ -1217,10 +1217,10 @@ gtk_clist_set_vadjustment (GtkCList      *clist,
       g_object_ref_sink (clist->vadjustment);
 
       gtk_signal_connect (GTK_OBJECT (clist->vadjustment), "changed",
-			  (GtkSignalFunc) vadjustment_changed,
+			  G_CALLBACK (vadjustment_changed),
 			  (gpointer) clist);
       gtk_signal_connect (GTK_OBJECT (clist->vadjustment), "value-changed",
-			  (GtkSignalFunc) vadjustment_value_changed,
+			  G_CALLBACK (vadjustment_value_changed),
 			  (gpointer) clist);
     }
 
@@ -1375,7 +1375,7 @@ gtk_clist_column_title_active (GtkCList *clist,
   clist->column[column].button_passive = FALSE;
 
   gtk_signal_disconnect_by_func (GTK_OBJECT (clist->column[column].button),
-				 (GtkSignalFunc) column_title_passive_func,
+				 G_CALLBACK (column_title_passive_func),
 				 NULL);
 
   GTK_WIDGET_SET_FLAGS (clist->column[column].button, GTK_CAN_FOCUS);
@@ -1406,7 +1406,8 @@ gtk_clist_column_title_passive (GtkCList *clist,
     gtk_button_leave (button);
 
   gtk_signal_connect (GTK_OBJECT (clist->column[column].button), "event",
-		      (GtkSignalFunc) column_title_passive_func, NULL);
+		      G_CALLBACK (column_title_passive_func),
+                      NULL);
 
   GTK_WIDGET_UNSET_FLAGS (clist->column[column].button, GTK_CAN_FOCUS);
   if (GTK_WIDGET_VISIBLE (clist))
@@ -2138,7 +2139,7 @@ column_button_create (GtkCList *clist,
   gtk_widget_set_parent (button, GTK_WIDGET (clist));
 
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc) column_button_clicked,
+		      G_CALLBACK (column_button_clicked),
 		      (gpointer) clist);
   gtk_widget_show (button);
 }
