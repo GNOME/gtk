@@ -1,3 +1,14 @@
+2008-09-22  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	Bug 553135 – eog crash: assertion failed. Gtk error:
+	shortcuts_remove_rows: code should not be reached
+
+	* gtk/gtkfilechooserdefault.c: Disconnect from GtkFileSystem
+	signals when we are destroyed, in order to avoid nasty surprises.
+	Patch by Claudio Saavedra
+
 2008-09-22  Frederic Crozat  <fcrozat@mandriva.com>
 
 	* gtk/gtkfilesystem.c: use the correct gi18n header.

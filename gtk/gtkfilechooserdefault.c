@@ -456,6 +456,7 @@ static void     recent_get_valid_child_iter  (GtkFileChooserDefault *impl,
                                               GtkTreeIter           *child_iter,
                                               GtkTreeIter           *iter);
 static void     set_file_system_backend      (GtkFileChooserDefault *impl);
+static void     unset_file_system_backend    (GtkFileChooserDefault *impl);
 
 
 
@@ -922,6 +923,8 @@ gtk_file_chooser_default_finalize (GObject *object)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (object);
   GSList *l;
+
+  unset_file_system_backend (impl);
 
   if (impl->shortcuts_pane_filter_model)
     g_object_unref (impl->shortcuts_pane_filter_model);
@@ -5371,6 +5374,17 @@ set_file_system_backend (GtkFileChooserDefault *impl)
 		    G_CALLBACK (volumes_bookmarks_changed_cb), impl);
 
   profile_end ("end", NULL);
+}
+
+static void
+unset_file_system_backend (GtkFileChooserDefault *impl)
+{
+  g_signal_handlers_disconnect_by_func (impl->file_system,
+					G_CALLBACK (volumes_bookmarks_changed_cb), impl);
+
+  g_object_unref (impl->file_system);
+
+  impl->file_system = NULL;
 }
 
 /* This function is basically a do_all function.
