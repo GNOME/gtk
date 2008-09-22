@@ -1,3 +1,13 @@
+2008-09-22  Emmanuele Bassi  <ebassi@linux.intel.com>
+
+	Bug 552789 – Show size column in the search and recently used
+	files modes
+
+	* gtk/gtkfilechooserdefault.c: Display the file size column
+	when in OPERATION_MODE_SEARCH. This removes a stat() call
+	and simplifies the code a little bit by changing the query
+	for file informations for each search engine hit.
+
 2008-09-22  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtksignal.[ch]

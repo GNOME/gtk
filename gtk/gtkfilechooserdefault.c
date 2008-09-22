@@ -203,7 +203,8 @@ enum {
   SEARCH_MODEL_COL_FILE,
   SEARCH_MODEL_COL_DISPLAY_NAME,
   SEARCH_MODEL_COL_COLLATION_KEY,
-  SEARCH_MODEL_COL_STAT,
+  SEARCH_MODEL_COL_MTIME,
+  SEARCH_MODEL_COL_SIZE,
   SEARCH_MODEL_COL_CANCELLABLE,
   SEARCH_MODEL_COL_PIXBUF,
   SEARCH_MODEL_COL_MIME_TYPE,
@@ -4450,7 +4451,8 @@ file_list_set_sort_column_ids (GtkFileChooserDefault *impl)
       break;
     case OPERATION_MODE_SEARCH:
       name_id = SEARCH_MODEL_COL_FILE;
-      mtime_id = SEARCH_MODEL_COL_STAT;
+      mtime_id = SEARCH_MODEL_COL_MTIME;
+      size_id = SEARCH_MODEL_COL_SIZE;
       break;
     case OPERATION_MODE_RECENT:
       name_id = RECENT_MODEL_COL_FILE;
@@ -5990,10 +5992,13 @@ settings_load (GtkFileChooserDefault *impl)
   g_object_unref (settings);
 
   location_mode_set (impl, location_mode, TRUE);
+
   gtk_file_chooser_set_show_hidden (GTK_FILE_CHOOSER (impl), show_hidden);
+
   impl->expand_folders = expand_folders;
   if (impl->save_expander)
     gtk_expander_set_expanded (GTK_EXPANDER (impl->save_expander), expand_folders);
+
   impl->show_size_column = show_size_column;
   if (impl->list_size_column)
     gtk_tree_view_column_set_visible (impl->list_size_column, show_size_column);
@@ -8590,6 +8595,9 @@ search_hit_get_info_cb (GCancellable *cancellable,
   GtkTreeIter iter;
   GCancellable *model_cancellable;
   gboolean is_folder = FALSE;
+  GTimeVal mtime;
+  guint64 modification_time = 0;
+  goffset size;
   char *mime_type;
   char *display_name;
   struct SearchHitInsertRequest *request = data;
@@ -8621,13 +8629,16 @@ search_hit_get_info_cb (GCancellable *cancellable,
 
   if (!info)
     {
-      search_clear_model_row (request->impl->search_model, &iter);
+      search_clear_model_row (GTK_TREE_MODEL (request->impl->search_model), &iter);
       gtk_list_store_remove (request->impl->search_model, &iter);
       goto out;
     }
 
   display_name = g_strdup (g_file_info_get_display_name (info));
   mime_type = g_content_type_get_mime_type (g_file_info_get_content_type (info));
+  g_file_info_get_modification_time (info, &mtime);
+  modification_time = (guint64) mtime.tv_sec;
+  size = g_file_info_get_size (info);
   is_folder = (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY);
   pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (request->impl),
 				       request->impl->icon_size);
@@ -8637,6 +8648,8 @@ search_hit_get_info_cb (GCancellable *cancellable,
                       SEARCH_MODEL_COL_DISPLAY_NAME, display_name,
                       SEARCH_MODEL_COL_MIME_TYPE, mime_type,
                       SEARCH_MODEL_COL_IS_FOLDER, is_folder,
+                      SEARCH_MODEL_COL_MTIME, modification_time,
+                      SEARCH_MODEL_COL_SIZE, size,
                       -1);
 
   if (pixbuf)
@@ -8657,35 +8670,22 @@ search_add_hit (GtkFileChooserDefault *impl,
 		gchar                 *uri)
 {
   GFile *file;
-  char *filename;
   char *tmp;
   char *collation_key;
-  struct stat statbuf;
-  struct stat *statbuf_copy;
   GtkTreeIter iter;
   GtkTreePath *p;
   GCancellable *cancellable;
   struct SearchHitInsertRequest *request;
 
   file = g_file_new_for_uri (uri);
+  if (!file)
+    return;
 
   if (!g_file_is_native (file))
     {
       g_object_unref (file);
       return;
     }
-
-  filename = g_file_get_path (file);
-
-  if (stat (filename, &statbuf) != 0)
-    {
-      g_object_unref (file);
-      g_free (filename);
-      return;
-    }
-
-  statbuf_copy = g_new (struct stat, 1);
-  *statbuf_copy = statbuf;
 
   tmp = g_file_get_parse_name (file);
   collation_key = g_utf8_collate_key_for_filename (tmp, -1);
@@ -8702,19 +8702,20 @@ search_add_hit (GtkFileChooserDefault *impl,
   gtk_tree_path_free (p);
 
   cancellable = _gtk_file_system_get_info (impl->file_system, file,
-					   "standard::type,standard::icon,"
-					   "standard::content-type,standard::display-name",
+					   "standard::type,"
+                                           "standard::icon,"
+					   "standard::content-type,"
+                                           "standard::display-name,"
+                                           "time::modified,"
+                                           "standard::size",
 					   search_hit_get_info_cb,
 					   request);
 
   gtk_list_store_set (impl->search_model, &iter,
                       SEARCH_MODEL_COL_FILE, file,
                       SEARCH_MODEL_COL_COLLATION_KEY, collation_key,
-                      SEARCH_MODEL_COL_STAT, statbuf_copy,
                       SEARCH_MODEL_COL_CANCELLABLE, cancellable,
                       -1);
-
-  g_free (filename);
 }
 
 /* Callback used from GtkSearchEngine when we get new hits */
@@ -8788,7 +8789,6 @@ search_clear_model_row (GtkTreeModel *model,
   GFile *file;
   gchar *display_name;
   gchar *collation_key;
-  struct stat *statbuf;
   GCancellable *cancellable;
   gchar *mime_type;
 
@@ -8796,7 +8796,6 @@ search_clear_model_row (GtkTreeModel *model,
                       SEARCH_MODEL_COL_FILE, &file,
                       SEARCH_MODEL_COL_DISPLAY_NAME, &display_name,
                       SEARCH_MODEL_COL_COLLATION_KEY, &collation_key,
-                      SEARCH_MODEL_COL_STAT, &statbuf,
                       SEARCH_MODEL_COL_CANCELLABLE, &cancellable,
                       SEARCH_MODEL_COL_MIME_TYPE, &mime_type,
                       -1);
@@ -8806,7 +8805,6 @@ search_clear_model_row (GtkTreeModel *model,
 
   g_free (display_name);
   g_free (collation_key);
-  g_free (statbuf);
   g_free (mime_type);
            
   if (cancellable)
@@ -8891,8 +8889,6 @@ search_switch_to_browse_mode (GtkFileChooserDefault *impl)
 	gtk_widget_show (impl->location_entry_box);
     }
 
-  gtk_tree_view_column_set_visible (impl->list_size_column, impl->show_size_column);
-
   impl->operation_mode = OPERATION_MODE_BROWSE;
 
   file_list_set_sort_column_ids (impl);
@@ -8935,6 +8931,41 @@ search_column_path_sort_func (GtkTreeModel *model,
   return strcmp (collation_key_a, collation_key_b);
 }
 
+/* Sort callback from the size column */
+static gint
+search_column_size_sort_func (GtkTreeModel *model,
+                              GtkTreeIter  *a,
+                              GtkTreeIter  *b,
+                              gpointer      user_data)
+{
+  GtkFileChooserDefault *impl = user_data;
+  GtkTreeIter child_a, child_b;
+  gboolean is_folder_a, is_folder_b;
+  goffset size_a, size_b;
+
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_a, a);
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_b, b);
+
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_a,
+                      SEARCH_MODEL_COL_IS_FOLDER, &is_folder_a,
+                      SEARCH_MODEL_COL_SIZE, &size_a,
+                      -1);
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_b,
+                      SEARCH_MODEL_COL_IS_FOLDER, &is_folder_b,
+                      SEARCH_MODEL_COL_SIZE, &size_b,
+                      -1);
+  
+  if (is_folder_a != is_folder_b)
+    return is_folder_a ? 1 : -1;
+
+  if (size_a < size_b)
+    return -1;
+  else if (size_a > size_b)
+    return 1;
+  else
+    return 0;
+}
+
 /* Sort callback from the modification time column */
 static gint
 search_column_mtime_sort_func (GtkTreeModel *model,
@@ -8944,38 +8975,27 @@ search_column_mtime_sort_func (GtkTreeModel *model,
 {
   GtkFileChooserDefault *impl = user_data;
   GtkTreeIter child_a, child_b;
-  const struct stat *statbuf_a, *statbuf_b;
   gboolean is_folder_a, is_folder_b;
+  guint64 mtime_a, mtime_b;
 
   gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_a, a);
   gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_b, b);
 
-  /* Note that although we store a whole struct stat in the model, we only
-   * compare the mtime here.  If we add another column relative to a struct stat
-   * (e.g. a file size column), we'll want another sort callback similar to this
-   * one as well.
-   */
   gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_a,
                       SEARCH_MODEL_COL_IS_FOLDER, &is_folder_a,
-                      SEARCH_MODEL_COL_STAT, &statbuf_a,
+                      SEARCH_MODEL_COL_MTIME, &mtime_a,
                       -1);
   gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_b,
                       SEARCH_MODEL_COL_IS_FOLDER, &is_folder_b,
-                      SEARCH_MODEL_COL_STAT, &statbuf_b,
+                      SEARCH_MODEL_COL_MTIME, &mtime_b,
                       -1);
   
-  if (!statbuf_a)
-    return 1;
-
-  if (!statbuf_b)
-    return -1;
-
   if (is_folder_a != is_folder_b)
     return is_folder_a ? 1 : -1;
 
-  if (statbuf_a->st_mtime < statbuf_b->st_mtime)
+  if (mtime_a < mtime_b)
     return -1;
-  else if (statbuf_a->st_mtime > statbuf_b->st_mtime)
+  else if (mtime_a > mtime_b)
     return 1;
   else
     return 0;
@@ -9075,7 +9095,8 @@ search_setup_model (GtkFileChooserDefault *impl)
    *   as a pointer not as a G_TYPE_STRING
    * SEARCH_MODEL_COL_COLLATION_KEY - collation key for the filename, stored
    *   as a pointer not as a G_TYPE_STRING
-   * SEARCH_MODEL_COL_STAT - pointer to a struct stat
+   * SEARCH_MODEL_COL_MTIME - G_TYPE_UINT64 for the modification time
+   * SEARCH_MODEL_COL_SIZE - G_TYPE_INT64 for the size
    * SEARCH_MODEL_COL_CANCELLABLE - cancellable used when getting the hit's info
    * SEARCH_MODEL_COL_PIXBUF - GdkPixbuf for the hit's icon
    * SEARCH_MODEL_COL_MIME_TYPE - a string with the hit's MIME type
@@ -9085,14 +9106,15 @@ search_setup_model (GtkFileChooserDefault *impl)
    * of this file.
    */
   impl->search_model = gtk_list_store_new (SEARCH_MODEL_COL_NUM_COLUMNS,
-					   G_TYPE_POINTER,
-					   G_TYPE_POINTER,
-					   G_TYPE_POINTER,
-					   G_TYPE_POINTER,
-                                           G_TYPE_POINTER,
-                                           GDK_TYPE_PIXBUF,
-                                           G_TYPE_POINTER,
-                                           G_TYPE_BOOLEAN);
+					   G_TYPE_POINTER, /* file */
+					   G_TYPE_POINTER, /* display-name */
+					   G_TYPE_POINTER, /* collation-key */
+					   G_TYPE_UINT64, /* mtime */
+                                           G_TYPE_INT64, /* size */
+                                           G_TYPE_POINTER, /* cancellable */
+                                           GDK_TYPE_PIXBUF, /* pixbuf */
+                                           G_TYPE_POINTER, /* mime-type */
+                                           G_TYPE_BOOLEAN /*is-folder */);
   
   impl->search_model_filter =
     GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (impl->search_model), NULL));
@@ -9107,11 +9129,15 @@ search_setup_model (GtkFileChooserDefault *impl)
 				   search_column_path_sort_func,
 				   impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->search_model_sort),
-				   SEARCH_MODEL_COL_STAT,
+				   SEARCH_MODEL_COL_MTIME,
 				   search_column_mtime_sort_func,
 				   impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->search_model_sort),
+				   SEARCH_MODEL_COL_SIZE,
+				   search_column_size_sort_func,
+				   impl, NULL);
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->search_model_sort),
-					SEARCH_MODEL_COL_STAT,
+					SEARCH_MODEL_COL_MTIME,
 					GTK_SORT_DESCENDING);
 
   /* EB: setting the model here will make the hits list update feel
@@ -9251,9 +9277,6 @@ search_setup_widgets (GtkFileChooserDefault *impl)
 
   gtk_widget_hide (impl->browse_path_bar);
   gtk_widget_hide (impl->browse_new_folder_button);
-
-  /* hide the file size column if it's visible */
-  gtk_tree_view_column_set_visible (impl->list_size_column, FALSE);
 
   /* Box for search widgets */
   gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->search_hbox, TRUE, TRUE, 0);
@@ -10861,14 +10884,42 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
   GFileInfo *info;
   goffset size;
   gchar *str;
-  gboolean sensitive;
+  gboolean sensitive = TRUE;
 
-  if (impl->operation_mode == OPERATION_MODE_SEARCH ||
-      impl->operation_mode == OPERATION_MODE_RECENT)
+  if (impl->operation_mode == OPERATION_MODE_RECENT)
     return;
 
+  if (impl->operation_mode == OPERATION_MODE_SEARCH)
+    {
+      GtkTreeIter child_iter;
+      gboolean is_folder = FALSE;
+
+      search_get_valid_child_iter (impl, &child_iter, iter);
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
+                          SEARCH_MODEL_COL_SIZE, &size,
+                          SEARCH_MODEL_COL_IS_FOLDER, &is_folder,
+			  -1);
+
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+          impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+        sensitive = is_folder ? TRUE : FALSE;
+
+      if (!is_folder)
+        str = g_format_size_for_display (size);
+      else
+        str = NULL;
+
+      g_object_set (cell,
+                    "text", str,
+                    "sensitive", sensitive,
+                    NULL);
+
+      g_free (str);
+
+      return;
+    }
+
   info = get_list_file_info (impl, iter);
-  sensitive = TRUE;
 
   if (!info || g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
     {
@@ -10919,19 +10970,16 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
   if (impl->operation_mode == OPERATION_MODE_SEARCH)
     {
       GtkTreeIter child_iter;
-      struct stat *statbuf;
+      guint64 mtime;
       gboolean is_folder;
 
       search_get_valid_child_iter (impl, &child_iter, iter);
       gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
-                          SEARCH_MODEL_COL_STAT, &statbuf,
+                          SEARCH_MODEL_COL_MTIME, &mtime,
                           SEARCH_MODEL_COL_IS_FOLDER, &is_folder,
 			  -1);
-      if (statbuf)
-        time_mtime = statbuf->st_mtime;
-      else
-        time_mtime = 0;
 
+      time_mtime = (time_t) mtime;
 
       if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
           impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
