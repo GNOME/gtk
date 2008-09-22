@@ -1,3 +1,8 @@
+2008-09-22  Frederic Crozat  <fcrozat@mandriva.com>
+
+	* gtk/gtkfilesystem.c: use the correct gi18n header.
+	Fixes bug #553000.
+
 2008-09-20  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:
