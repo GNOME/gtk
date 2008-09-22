@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-19 07:34+0000\n"
-"PO-Revision-Date: 2008-09-19 15:01+0100\n"
+"POT-Creation-Date: 2008-09-19 14:49+0000\n"
+"PO-Revision-Date: 2008-09-22 11:16+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1074,7 +1074,7 @@ msgstr "Urejanje"
 
 #: ../gtk/gtkcellrenderer.c:295
 msgid "Whether the cell renderer is currently in editing mode"
-msgstr ""
+msgstr "Ali je izrisevalec celice trenutno v načinu urejanja"
 
 #: ../gtk/gtkcellrenderer.c:303
 msgid "Cell background set"
@@ -2380,7 +2380,7 @@ msgstr "Nad podrejenim predmetom"
 
 #: ../gtk/gtkeventbox.c:99
 msgid "Whether the event-trapping window of the eventbox is above the window of the child widget as opposed to below it."
-msgstr ""
+msgstr "Ali je okno zaznavanja dogodkov nad oknom odrejenega gradnika ali je spodaj."
 
 #: ../gtk/gtkexpander.c:187
 msgid "Expanded"
@@ -2479,7 +2479,7 @@ msgstr "Predogled gradnika je zagnan"
 
 #: ../gtk/gtkfilechooser.c:226
 msgid "Whether the application supplied widget for custom previews should be shown."
-msgstr ""
+msgstr "Ali naj bo gradnik programa za predogled po meri prikazan."
 
 #: ../gtk/gtkfilechooser.c:231
 msgid "Use Preview Label"
@@ -2487,7 +2487,7 @@ msgstr "Uporabi predogledno oznako"
 
 #: ../gtk/gtkfilechooser.c:232
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr ""
+msgstr "Ali naj bo prikazana oznaka sklada z imenom predogledane datoteke."
 
 #: ../gtk/gtkfilechooser.c:237
 msgid "Extra widget"
@@ -2522,7 +2522,7 @@ msgstr "Izvedi potrditev prepisovanja"
 
 #: ../gtk/gtkfilechooser.c:267
 msgid "Whether a file chooser in save mode will present an overwrite confirmation dialog if necessary."
-msgstr ""
+msgstr "Ali naj izbirnik datotek v načinu shranjevanja predstavi pregledno potrditveno pojavno okno."
 
 #: ../gtk/gtkfilechooserbutton.c:376
 msgid "Dialog"
