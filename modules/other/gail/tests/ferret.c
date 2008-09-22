@@ -959,7 +959,7 @@ _print_action (AtkAction *aobject)
         nv->atkobj = ATK_OBJECT(aobject);
         nv->action_num = j;
         nv->signal_id = g_signal_connect (GTK_OBJECT (nv->button),
-          "clicked", GTK_SIGNAL_FUNC (_action_cb), nv);
+          "clicked", G_CALLBACK (_action_cb), nv);
 
         g_free(label_str);
 
@@ -1593,7 +1593,7 @@ _create_notebook (void)
 
   g_signal_connect (GTK_OBJECT (notebook),
                       "switch-page",
-                      GTK_SIGNAL_FUNC (_update_current_page),
+                      G_CALLBACK (_update_current_page),
                       NULL);
 }
 
@@ -1663,7 +1663,7 @@ _create_window (void)
         gtk_window_set_policy (GTK_WINDOW(window), TRUE, TRUE, FALSE);
 
         g_signal_connect (GTK_OBJECT (window), "destroy",
-                           GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+                           G_CALLBACK (gtk_widget_destroyed),
                            &window);
 
         gtk_window_set_title (GTK_WINDOW (window), "GTK+ Ferret Output");
@@ -1685,20 +1685,20 @@ _create_window (void)
         gtk_widget_show (menu);
 
         _add_menu(&menu, &menuitem_trackmouse, "Track Mouse", track_mouse,
-           GTK_SIGNAL_FUNC(_toggle_trackmouse));
+           G_CALLBACK(_toggle_trackmouse));
         _add_menu(&menu, &menuitem_trackfocus, "Track Focus", track_focus,
-           GTK_SIGNAL_FUNC(_toggle_trackfocus));
+           G_CALLBACK(_toggle_trackfocus));
         _add_menu(&menu, &menuitem_magnifier, "Magnifier", use_magnifier,
-           GTK_SIGNAL_FUNC(_toggle_magnifier));
+           G_CALLBACK(_toggle_magnifier));
         _add_menu(&menu, &menuitem_festival, "Festival", use_festival,
-           GTK_SIGNAL_FUNC(_toggle_festival));
+           G_CALLBACK(_toggle_festival));
         _add_menu(&menu, &menuitem_festival_terse, "Festival Terse",
           (!say_role && !say_accel),
-          GTK_SIGNAL_FUNC(_toggle_festival_terse));
+          G_CALLBACK(_toggle_festival_terse));
         _add_menu(&menu, &menuitem_terminal, "Terminal Output", display_ascii,
-           GTK_SIGNAL_FUNC(_toggle_terminal));
+           G_CALLBACK(_toggle_terminal));
         _add_menu(&menu, &menuitem_no_signals, "No ATK Signals", no_signals,
-           GTK_SIGNAL_FUNC(_toggle_no_signals));
+           G_CALLBACK(_toggle_no_signals));
 
         _create_notebook ();
         gtk_container_add (GTK_CONTAINER (vbox1), GTK_WIDGET (notebook));

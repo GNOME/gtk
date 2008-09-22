@@ -1,3 +1,7 @@
+2008-09-22  Michael Natterer  <mitch@imendio.com>
+
+	* tests/ferret.c: s/GTK_SIGNAL_FUNC/G_CALLBACK/
+
 2008-09-20  Matthias Clasen <mclasen@redhat.com>
 
 	* gailtextview.c:
