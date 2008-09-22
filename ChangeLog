@@ -1,3 +1,12 @@
+2008-09-22  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 553135 – eog crash: assertion failed. Gtk error:
+	shortcuts_remove_rows: code should not be reached
+
+	* gtk/gtkfilechooserdefault.c: Disconnect from GtkFileSystem 
+	signals when we are destroyed, in order to avoid nasty surprises.
+	Patch by Claudio Saavedra
+
 2008-09-22  Emmanuele Bassi  <ebassi@linux.intel.com>
 
 	Bug 552789 – Show size column in the search and recently used
