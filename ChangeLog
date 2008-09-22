@@ -1,3 +1,10 @@
+2008-09-22  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktoolbar.[ch]: add "Deprecated: 2.4" to all the deprecated
+	append(), prepend() and insert() functions and recommend to use
+	gtk_toolbar_insert() instead. Use GCallback instead of
+	GtkSignalFunc even in deprecated API.
+
 2008-09-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserbutton.c (filter_model_visible_func): Don't

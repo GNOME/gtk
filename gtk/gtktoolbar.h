@@ -193,21 +193,21 @@ GtkWidget* gtk_toolbar_append_item   (GtkToolbar      *toolbar,
 				      const char      *tooltip_text,
 				      const char      *tooltip_private_text,
 				      GtkWidget       *icon,
-				      GtkSignalFunc    callback,
+				      GCallback        callback,
 				      gpointer         user_data);
 GtkWidget* gtk_toolbar_prepend_item  (GtkToolbar      *toolbar,
 				      const char      *text,
 				      const char      *tooltip_text,
 				      const char      *tooltip_private_text,
 				      GtkWidget       *icon,
-				      GtkSignalFunc    callback,
+				      GCallback        callback,
 				      gpointer         user_data);
 GtkWidget* gtk_toolbar_insert_item   (GtkToolbar      *toolbar,
 				      const char      *text,
 				      const char      *tooltip_text,
 				      const char      *tooltip_private_text,
 				      GtkWidget       *icon,
-				      GtkSignalFunc    callback,
+				      GCallback        callback,
 				      gpointer         user_data,
 				      gint             position);
 
@@ -216,7 +216,7 @@ GtkWidget* gtk_toolbar_insert_stock    (GtkToolbar      *toolbar,
 					const gchar     *stock_id,
 					const char      *tooltip_text,
 					const char      *tooltip_private_text,
-					GtkSignalFunc    callback,
+					GCallback        callback,
 					gpointer         user_data,
 					gint             position);
 
@@ -235,7 +235,7 @@ GtkWidget* gtk_toolbar_append_element  (GtkToolbar      *toolbar,
 					const char      *tooltip_text,
 					const char      *tooltip_private_text,
 					GtkWidget       *icon,
-					GtkSignalFunc    callback,
+					GCallback        callback,
 					gpointer         user_data);
 
 GtkWidget* gtk_toolbar_prepend_element (GtkToolbar      *toolbar,
@@ -245,7 +245,7 @@ GtkWidget* gtk_toolbar_prepend_element (GtkToolbar      *toolbar,
 					const char      *tooltip_text,
 					const char      *tooltip_private_text,
 					GtkWidget       *icon,
-					GtkSignalFunc    callback,
+					GCallback        callback,
 					gpointer         user_data);
 
 GtkWidget* gtk_toolbar_insert_element  (GtkToolbar      *toolbar,
@@ -255,7 +255,7 @@ GtkWidget* gtk_toolbar_insert_element  (GtkToolbar      *toolbar,
 					const char      *tooltip_text,
 					const char      *tooltip_private_text,
 					GtkWidget       *icon,
-					GtkSignalFunc    callback,
+					GCallback        callback,
 					gpointer         user_data,
 					gint             position);
 

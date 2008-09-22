@@ -223,7 +223,7 @@ static GtkWidget *internal_insert_element          (GtkToolbar          *toolbar
 						    const char          *tooltip_text,
 						    const char          *tooltip_private_text,
 						    GtkWidget           *icon,
-						    GtkSignalFunc        callback,
+						    GCallback            callback,
 						    gpointer             user_data,
 						    gint                 position,
 						    gboolean             use_stock);
@@ -3284,14 +3284,16 @@ gtk_toolbar_unset_icon_size (GtkToolbar *toolbar)
  * @icon: a #GtkWidget that should be used as the button's icon.
  * @callback: the function to be executed when the button is pressed.
  * @user_data: a pointer to any data you wish to be passed to the callback.
- * 
+ *
  * Inserts a new item into the toolbar. You must specify the position
  * in the toolbar where it will be inserted.
  *
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Return value: the new toolbar item as a #GtkWidget.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 GtkWidget *
 gtk_toolbar_append_item (GtkToolbar    *toolbar,
@@ -3299,7 +3301,7 @@ gtk_toolbar_append_item (GtkToolbar    *toolbar,
 			 const char    *tooltip_text,
 			 const char    *tooltip_private_text,
 			 GtkWidget     *icon,
-			 GtkSignalFunc  callback,
+			 GCallback      callback,
 			 gpointer       user_data)
 {
   return gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_BUTTON,
@@ -3318,13 +3320,15 @@ gtk_toolbar_append_item (GtkToolbar    *toolbar,
  * @icon: a #GtkWidget that should be used as the button's icon.
  * @callback: the function to be executed when the button is pressed.
  * @user_data: a pointer to any data you wish to be passed to the callback.
- * 
+ *
  * Adds a new button to the beginning (top or left edges) of the given toolbar.
  *
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Return value: the new toolbar item as a #GtkWidget.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 GtkWidget *
 gtk_toolbar_prepend_item (GtkToolbar    *toolbar,
@@ -3332,7 +3336,7 @@ gtk_toolbar_prepend_item (GtkToolbar    *toolbar,
 			  const char    *tooltip_text,
 			  const char    *tooltip_private_text,
 			  GtkWidget     *icon,
-			  GtkSignalFunc  callback,
+			  GCallback      callback,
 			  gpointer       user_data)
 {
   return gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_BUTTON,
@@ -3352,14 +3356,16 @@ gtk_toolbar_prepend_item (GtkToolbar    *toolbar,
  * @callback: the function to be executed when the button is pressed.
  * @user_data: a pointer to any data you wish to be passed to the callback.
  * @position: the number of widgets to insert this item after.
- * 
+ *
  * Inserts a new item into the toolbar. You must specify the position in the
  * toolbar where it will be inserted.
  *
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Return value: the new toolbar item as a #GtkWidget.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 GtkWidget *
 gtk_toolbar_insert_item (GtkToolbar    *toolbar,
@@ -3367,7 +3373,7 @@ gtk_toolbar_insert_item (GtkToolbar    *toolbar,
 			 const char    *tooltip_text,
 			 const char    *tooltip_private_text,
 			 GtkWidget     *icon,
-			 GtkSignalFunc  callback,
+			 GCallback      callback,
 			 gpointer       user_data,
 			 gint           position)
 {
@@ -3394,16 +3400,18 @@ gtk_toolbar_insert_item (GtkToolbar    *toolbar,
  * except that underscores used to mark mnemonics are removed.
  *
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Returns: the inserted widget
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  */
 GtkWidget*
 gtk_toolbar_insert_stock (GtkToolbar      *toolbar,
 			  const gchar     *stock_id,
 			  const char      *tooltip_text,
 			  const char      *tooltip_private_text,
-			  GtkSignalFunc    callback,
+			  GCallback        callback,
 			  gpointer         user_data,
 			  gint             position)
 {
@@ -3417,8 +3425,10 @@ gtk_toolbar_insert_stock (GtkToolbar      *toolbar,
 /**
  * gtk_toolbar_append_space:
  * @toolbar: a #GtkToolbar.
- * 
+ *
  * Adds a new space to the end of the toolbar.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 void
 gtk_toolbar_append_space (GtkToolbar *toolbar)
@@ -3433,8 +3443,10 @@ gtk_toolbar_append_space (GtkToolbar *toolbar)
 /**
  * gtk_toolbar_prepend_space:
  * @toolbar: a #GtkToolbar.
- * 
+ *
  * Adds a new space to the beginning of the toolbar.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 void
 gtk_toolbar_prepend_space (GtkToolbar *toolbar)
@@ -3450,8 +3462,10 @@ gtk_toolbar_prepend_space (GtkToolbar *toolbar)
  * gtk_toolbar_insert_space:
  * @toolbar: a #GtkToolbar
  * @position: the number of widgets after which a space should be inserted.
- * 
+ *
  * Inserts a new space in the toolbar at the specified position.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 void
 gtk_toolbar_insert_space (GtkToolbar *toolbar,
@@ -3468,8 +3482,10 @@ gtk_toolbar_insert_space (GtkToolbar *toolbar,
  * gtk_toolbar_remove_space:
  * @toolbar: a #GtkToolbar.
  * @position: the index of the space to remove.
- * 
+ *
  * Removes a space from the specified position.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 void
 gtk_toolbar_remove_space (GtkToolbar *toolbar,
@@ -3509,9 +3525,11 @@ gtk_toolbar_remove_space (GtkToolbar *toolbar,
  * @widget: a #GtkWidget to add to the toolbar. 
  * @tooltip_text: the element's tooltip.
  * @tooltip_private_text: used for context-sensitive help about this toolbar element.
- * 
+ *
  * Adds a widget to the end of the given toolbar.
- **/ 
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
+ **/
 void
 gtk_toolbar_append_widget (GtkToolbar  *toolbar,
 			   GtkWidget   *widget,
@@ -3531,9 +3549,11 @@ gtk_toolbar_append_widget (GtkToolbar  *toolbar,
  * @widget: a #GtkWidget to add to the toolbar. 
  * @tooltip_text: the element's tooltip.
  * @tooltip_private_text: used for context-sensitive help about this toolbar element.
- * 
+ *
  * Adds a widget to the beginning of the given toolbar.
- **/ 
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
+ **/
 void
 gtk_toolbar_prepend_widget (GtkToolbar  *toolbar,
 			    GtkWidget   *widget,
@@ -3556,6 +3576,8 @@ gtk_toolbar_prepend_widget (GtkToolbar  *toolbar,
  * @position: the number of widgets to insert this widget after.
  * 
  * Inserts a widget in the toolbar at the given position.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/ 
 void
 gtk_toolbar_insert_widget (GtkToolbar *toolbar,
@@ -3591,9 +3613,11 @@ gtk_toolbar_insert_widget (GtkToolbar *toolbar,
  * be %NULL.
  * 
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Return value: the new toolbar element as a #GtkWidget.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 GtkWidget*
 gtk_toolbar_append_element (GtkToolbar          *toolbar,
@@ -3603,7 +3627,7 @@ gtk_toolbar_append_element (GtkToolbar          *toolbar,
 			    const char          *tooltip_text,
 			    const char          *tooltip_private_text,
 			    GtkWidget           *icon,
-			    GtkSignalFunc        callback,
+			    GCallback            callback,
 			    gpointer             user_data)
 {
   return gtk_toolbar_insert_element (toolbar, type, widget, text,
@@ -3632,9 +3656,11 @@ gtk_toolbar_append_element (GtkToolbar          *toolbar,
  * be %NULL.
  * 
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Return value: the new toolbar element as a #GtkWidget.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 GtkWidget *
 gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
@@ -3644,7 +3670,7 @@ gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
 			     const char          *tooltip_text,
 			     const char          *tooltip_private_text,
 			     GtkWidget           *icon,
-			     GtkSignalFunc        callback,
+			     GCallback            callback,
 			     gpointer             user_data)
 {
   return gtk_toolbar_insert_element (toolbar, type, widget, text,
@@ -3674,9 +3700,11 @@ gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
  * be %NULL.
  *
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Return value: the new toolbar element as a #GtkWidget.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 GtkWidget *
 gtk_toolbar_insert_element (GtkToolbar          *toolbar,
@@ -3686,7 +3714,7 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
 			    const char          *tooltip_text,
 			    const char          *tooltip_private_text,
 			    GtkWidget           *icon,
-			    GtkSignalFunc        callback,
+			    GCallback            callback,
 			    gpointer             user_data,
 			    gint                 position)
 {
@@ -3741,7 +3769,7 @@ internal_insert_element (GtkToolbar          *toolbar,
 			 const char          *tooltip_text,
 			 const char          *tooltip_private_text,
 			 GtkWidget           *icon,
-			 GtkSignalFunc        callback,
+			 GCallback            callback,
 			 gpointer             user_data,
 			 gint                 position,
 			 gboolean             use_stock)
