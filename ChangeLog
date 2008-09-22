@@ -1,3 +1,8 @@
+2008-09-22  Frederic Crozat  <fcrozat@mandriva.com>
+
+	* gtk/gtkfilesystem.c: use the correct gi18n header.
+	Fixes bug #553000.
+
 2008-09-22  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtktoolbar.[ch]: add "Deprecated: 2.4" to all the deprecated
