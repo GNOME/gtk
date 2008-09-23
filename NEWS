@@ -1,3 +1,30 @@
+Overview of Changes from GTK+ 2.14.2 to 2.14.3
+==============================================
+
+* Revert problematic GtkAdjustment changes
+
+* Bugs fixed: 
+ 552837 mem leak in gtkimmulticontext
+ 553000 incorrect i18n header in gtkfilesystem.c
+ 553135 eog crash: assertion failed
+ 552545 leaks GpImage
+
+* Updated translations:
+ Afrikaans (af)
+ Arabic (ar)
+ Danish (da)
+ Estonian (et)
+ Finnish (fi)
+ Gujarati (gu)
+ Hindi (hi)
+ Japanese (ja)
+ Malayalam (ml)
+ Romanian (ro)
+ Russian (ru)
+ Serbian (sr, sr@latin)
+ Tamil (ta)
+ 
+
 Overview of Changes from GTK+ 2.14.1 to 2.14.2
 ==============================================
 
