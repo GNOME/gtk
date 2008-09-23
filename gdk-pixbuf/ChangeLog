@@ -1,3 +1,9 @@
+2008-09-23 13:28:23  Tim Janik  <timj@imendio.com>
+
+	* gdk-pixdata.c: prevent RLE encoding of 1x1 pixel images, since the
+	encoder comparison operator requires at least 2 pixels, fixes #553374:
+	Bug 553374 - gdk_pixdata_from_pixbuf fails for some images with use_rle set to TRUE
+
 2008-09-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-io.c: Don't call fill_info if we've already filled

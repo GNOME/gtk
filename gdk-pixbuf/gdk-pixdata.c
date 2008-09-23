@@ -328,8 +328,8 @@ gdk_pixdata_from_pixbuf (GdkPixdata      *pixdata,
 
   height = pixbuf->height;
   rowstride = pixbuf->rowstride;
-  encoding = use_rle ? GDK_PIXDATA_ENCODING_RLE : GDK_PIXDATA_ENCODING_RAW;
   bpp = pixbuf->has_alpha ? 4 : 3;
+  encoding = use_rle && ((rowstride / bpp | height) > 1) ? GDK_PIXDATA_ENCODING_RLE : GDK_PIXDATA_ENCODING_RAW;
 
   if (encoding == GDK_PIXDATA_ENCODING_RLE)
     {
