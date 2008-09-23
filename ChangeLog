@@ -1,5 +1,7 @@
 2008-09-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkspinbutton.c: Warn if the adjustment has nonzero page size.
+
 	* README.in: Update to explain the situation.
 
 	* gtk/gtkadjustment.c: Revert to the old behaviour of allowing
