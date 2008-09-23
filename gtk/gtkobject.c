@@ -216,7 +216,7 @@ gtk_arg_proxy_get_property (GObject     *object,
 
 void
 gtk_object_add_arg_type (const gchar *arg_name,
-			 GtkType      arg_type,
+			 GType        arg_type,
 			 guint        arg_flags,
 			 guint        arg_id)
 {
@@ -593,7 +593,7 @@ gtk_object_notify_weaks (GtkObject *object)
 }
 
 GtkObject*
-gtk_object_new (GtkType      object_type,
+gtk_object_new (GType        object_type,
 		const gchar *first_property_name,
 		...)
 {

@@ -1,5 +1,11 @@
 2008-09-23  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkobject.c
+	* gtk/gtksignal.[ch]: s/GtkType/GType/ and
+	s/GtkSignalMarshaller/GSignalCMarshaller/.
+
+2008-09-23  Michael Natterer  <mitch@imendio.com>
+
 	* gdk/x11/gdkevents-x11.c (gdk_event_translate): remove unused
 	variable and fix indentation.
 

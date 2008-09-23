@@ -34,12 +34,12 @@
 guint
 gtk_signal_newv (const gchar         *name,
 		 GtkSignalRunType     signal_flags,
-		 GtkType              object_type,
+		 GType                object_type,
 		 guint                function_offset,
-		 GtkSignalMarshaller  marshaller,
-		 GtkType              return_val,
+		 GSignalCMarshaller   marshaller,
+		 GType                return_val,
 		 guint                n_params,
-		 GtkType             *params)
+		 GType               *params)
 {
   GClosure *closure;
   
@@ -54,14 +54,14 @@ gtk_signal_newv (const gchar         *name,
 guint
 gtk_signal_new (const gchar         *name,
 		GtkSignalRunType     signal_flags,
-		GtkType              object_type,
+		GType                object_type,
 		guint                function_offset,
-		GtkSignalMarshaller  marshaller,
-		GtkType              return_val,
+		GSignalCMarshaller   marshaller,
+		GType                return_val,
 		guint                n_params,
 		...)
 {
-  GtkType *params;
+  GType *params;
   guint signal_id;
   
   if (n_params)
@@ -69,10 +69,10 @@ gtk_signal_new (const gchar         *name,
       va_list args;
       guint i;
       
-      params = g_new (GtkType, n_params);
+      params = g_new (GType, n_params);
       va_start (args, n_params);
       for (i = 0; i < n_params; i++)
-	params[i] = va_arg (args, GtkType);
+	params[i] = va_arg (args, GType);
       va_end (args);
     }
   else
