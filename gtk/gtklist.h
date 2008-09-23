@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if !defined (GTK_DISABLE_DEPRECATED) || defined (__GTK_LIST_C__)
@@ -34,11 +34,11 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_LIST                  (gtk_list_get_type ())
-#define GTK_LIST(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_LIST, GtkList))
-#define GTK_LIST_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_LIST, GtkListClass))
-#define GTK_IS_LIST(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_LIST))
-#define GTK_IS_LIST_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LIST))
-#define GTK_LIST_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_LIST, GtkListClass))
+#define GTK_LIST(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LIST, GtkList))
+#define GTK_LIST_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_LIST, GtkListClass))
+#define GTK_IS_LIST(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LIST))
+#define GTK_IS_LIST_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LIST))
+#define GTK_LIST_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LIST, GtkListClass))
 
 
 typedef struct _GtkList	      GtkList;
@@ -81,7 +81,7 @@ struct _GtkListClass
 };
 
 
-GtkType	   gtk_list_get_type		  (void) G_GNUC_CONST;
+GType      gtk_list_get_type		  (void) G_GNUC_CONST;
 GtkWidget* gtk_list_new			  (void);
 void	   gtk_list_insert_items	  (GtkList	    *list,
 					   GList	    *items,

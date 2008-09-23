@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #ifndef GTK_DISABLE_DEPRECATED
@@ -35,11 +35,11 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_OLD_EDITABLE            (gtk_old_editable_get_type ())
-#define GTK_OLD_EDITABLE(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_OLD_EDITABLE, GtkOldEditable))
-#define GTK_OLD_EDITABLE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_OLD_EDITABLE, GtkOldEditableClass))
-#define GTK_IS_OLD_EDITABLE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_OLD_EDITABLE))
-#define GTK_IS_OLD_EDITABLE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_OLD_EDITABLE))
-#define GTK_OLD_EDITABLE_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_OLD_EDITABLE, GtkOldEditableClass))
+#define GTK_OLD_EDITABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_OLD_EDITABLE, GtkOldEditable))
+#define GTK_OLD_EDITABLE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_OLD_EDITABLE, GtkOldEditableClass))
+#define GTK_IS_OLD_EDITABLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_OLD_EDITABLE))
+#define GTK_IS_OLD_EDITABLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_OLD_EDITABLE))
+#define GTK_OLD_EDITABLE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_OLD_EDITABLE, GtkOldEditableClass))
 
 
 typedef struct _GtkOldEditable       GtkOldEditable;
@@ -113,7 +113,7 @@ struct _GtkOldEditableClass
 			 gint             position);
 };
 
-GtkType    gtk_old_editable_get_type        (void) G_GNUC_CONST;
+GType      gtk_old_editable_get_type        (void) G_GNUC_CONST;
 void       gtk_old_editable_claim_selection (GtkOldEditable *old_editable,
 					     gboolean        claim,
 					     guint32         time_);

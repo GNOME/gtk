@@ -135,7 +135,7 @@ void gtk_object_destroy	  (GtkObject *object);
 
 #ifndef GTK_DISABLE_DEPRECATED
 
-GtkObject*	gtk_object_new		  (GtkType	       type,
+GtkObject*	gtk_object_new		  (GType	       type,
 					   const gchar	      *first_property_name,
 					   ...);
 GtkObject*	gtk_object_ref		  (GtkObject	      *object);
@@ -219,10 +219,10 @@ void	gtk_object_get		(GtkObject	*object,
 void	gtk_object_set		(GtkObject	*object,
 				 const gchar	*first_property_name,
 				 ...) G_GNUC_NULL_TERMINATED;
-void	gtk_object_add_arg_type		(const gchar	*arg_name,
-					 GtkType	 arg_type,
-					 guint		 arg_flags,
-					 guint		 arg_id);
+void	gtk_object_add_arg_type		(const gchar    *arg_name,
+					 GType           arg_type,
+					 guint           arg_flags,
+					 guint           arg_id);
 
 #endif /* GTK_DISABLE_DEPRECATED */
 

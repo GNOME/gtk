@@ -1,3 +1,19 @@
+2008-09-23  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkclist.h
+	* gtk/gtkctree.h
+	* gtk/gtklist.h
+	* gtk/gtklistitem.h
+	* gtk/gtkobject.h
+	* gtk/gtkoldeditable.h
+	* gtk/gtkpixmap.h
+	* gtk/gtkpreview.h
+	* gtk/gtktext.h
+	* gtk/gtktipsquery.h
+	* gtk/gtktree.h
+	* gtk/gtktreeitem.h: get rid of GtkType and GTK_CHECK_FOO() also
+	in all deprecated headers.
+
 2008-09-22  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 553135 – eog crash: assertion failed. Gtk error:

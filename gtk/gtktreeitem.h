@@ -37,11 +37,11 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_TREE_ITEM              (gtk_tree_item_get_type ())
-#define GTK_TREE_ITEM(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_TREE_ITEM, GtkTreeItem))
-#define GTK_TREE_ITEM_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_ITEM, GtkTreeItemClass))
-#define GTK_IS_TREE_ITEM(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_TREE_ITEM))
-#define GTK_IS_TREE_ITEM_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_ITEM))
-#define GTK_TREE_ITEM_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TREE_ITEM, GtkTreeItemClass))
+#define GTK_TREE_ITEM(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_ITEM, GtkTreeItem))
+#define GTK_TREE_ITEM_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_ITEM, GtkTreeItemClass))
+#define GTK_IS_TREE_ITEM(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TREE_ITEM))
+#define GTK_IS_TREE_ITEM_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_ITEM))
+#define GTK_TREE_ITEM_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_ITEM, GtkTreeItemClass))
 
 
 #define GTK_TREE_ITEM_SUBTREE(obj)      (GTK_TREE_ITEM(obj)->subtree)
@@ -72,7 +72,7 @@ struct _GtkTreeItemClass
 };
 
 
-GtkType    gtk_tree_item_get_type       (void) G_GNUC_CONST;
+GType      gtk_tree_item_get_type       (void) G_GNUC_CONST;
 GtkWidget* gtk_tree_item_new            (void);
 GtkWidget* gtk_tree_item_new_with_label (const gchar *label);
 void       gtk_tree_item_set_subtree    (GtkTreeItem *tree_item,

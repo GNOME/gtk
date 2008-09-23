@@ -39,11 +39,11 @@ G_BEGIN_DECLS
 
 /* --- type macros --- */
 #define	GTK_TYPE_TIPS_QUERY		(gtk_tips_query_get_type ())
-#define GTK_TIPS_QUERY(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_TIPS_QUERY, GtkTipsQuery))
-#define GTK_TIPS_QUERY_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TIPS_QUERY, GtkTipsQueryClass))
-#define GTK_IS_TIPS_QUERY(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_TIPS_QUERY))
-#define GTK_IS_TIPS_QUERY_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TIPS_QUERY))
-#define GTK_TIPS_QUERY_GET_CLASS(obj)   (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TIPS_QUERY, GtkTipsQueryClass))
+#define GTK_TIPS_QUERY(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TIPS_QUERY, GtkTipsQuery))
+#define GTK_TIPS_QUERY_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TIPS_QUERY, GtkTipsQueryClass))
+#define GTK_IS_TIPS_QUERY(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TIPS_QUERY))
+#define GTK_IS_TIPS_QUERY_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TIPS_QUERY))
+#define GTK_TIPS_QUERY_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TIPS_QUERY, GtkTipsQueryClass))
 
 
 /* --- typedefs --- */
@@ -92,7 +92,7 @@ struct	_GtkTipsQueryClass
 
 
 /* --- prototypes --- */
-GtkType		gtk_tips_query_get_type		(void) G_GNUC_CONST;
+GType		gtk_tips_query_get_type		(void) G_GNUC_CONST;
 GtkWidget*	gtk_tips_query_new		(void);
 void		gtk_tips_query_start_query	(GtkTipsQuery	*tips_query);
 void		gtk_tips_query_stop_query	(GtkTipsQuery	*tips_query);

@@ -39,11 +39,11 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_TREE                  (gtk_tree_get_type ())
-#define GTK_TREE(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_TREE, GtkTree))
-#define GTK_TREE_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE, GtkTreeClass))
-#define GTK_IS_TREE(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TREE))
-#define GTK_IS_TREE_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE))
-#define GTK_TREE_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TREE, GtkTreeClass))
+#define GTK_TREE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE, GtkTree))
+#define GTK_TREE_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE, GtkTreeClass))
+#define GTK_IS_TREE(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TREE))
+#define GTK_IS_TREE_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE))
+#define GTK_TREE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE, GtkTreeClass))
 
 
 #define GTK_IS_ROOT_TREE(obj)   ((GtkObject*) GTK_TREE(obj)->root_tree == (GtkObject*)obj)
@@ -88,7 +88,7 @@ struct _GtkTreeClass
 };
 
 
-GtkType    gtk_tree_get_type           (void) G_GNUC_CONST;
+GType      gtk_tree_get_type           (void) G_GNUC_CONST;
 GtkWidget* gtk_tree_new                (void);
 void       gtk_tree_append             (GtkTree          *tree,
 				        GtkWidget        *tree_item);
