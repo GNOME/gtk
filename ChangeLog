@@ -1,5 +1,10 @@
 2008-09-23  Michael Natterer  <mitch@imendio.com>
 
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): remove unused
+	variable and fix indentation.
+
+2008-09-23  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkclist.h
 	* gtk/gtkctree.h
 	* gtk/gtklist.h
