@@ -1,3 +1,19 @@
+2008-09-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* README.in: Update to explain the situation.
+
+	* gtk/gtkadjustment.c: Revert to the old behaviour of allowing
+	values in the range [lower, upper]. Relying on the possibility
+	to set values in the [upper - page_size, upper] subrange is
+	considered deprecated, though, and will trigger a warning.
+
+	* gtk/gtkcombobox.c:
+	* gtk/gtkiconview.c:
+	* gtk/gtkrange.c:
+	* gtk/gtkscrolledwindow.c:
+	* gtk/gtktreeview.c: Add the CLAMPing back that was removed after
+	the GtkAdjustment behaviour change.
+
 2008-09-22  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:
