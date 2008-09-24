@@ -795,7 +795,7 @@ test_spin_button (void)
     "<property name=\"upper\">10</property>"
     "<property name=\"step-increment\">2</property>"
     "<property name=\"page-increment\">3</property>"
-    "<property name=\"page-size\">5</property>"
+    "<property name=\"page-size\">0</property>"
     "<property name=\"value\">1</property>"
     "</object>"
     "<object class=\"GtkSpinButton\" id=\"spinbutton1\">"
@@ -823,7 +823,7 @@ test_spin_button (void)
   g_object_get (adjustment, "page-increment", &value, NULL);
   g_assert (value == 3);
   g_object_get (adjustment, "page-size", &value, NULL);
-  g_assert (value == 5);
+  g_assert (value == 0);
   
   g_object_unref (builder);
 }
