@@ -1,3 +1,10 @@
+2008-09-24  Christian Dywan  <christian@imendio.com>
+
+	Bug 541391 – Unfocussable Treeview swallows focus
+
+	* gtk/gtktreeview.c (grab_focus_and_unset_draw_keyfocus),
+	(gtk_tree_view_focus): Honor GTK_WIDGET_CAN_FOCUS properly
+
 2008-09-24  Denis Washington  <denisw@svn.gnome.org>
 
 	* gtk/gtkiconview.c: draw focus as a rectangle around the
