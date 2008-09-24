@@ -1,3 +1,8 @@
+2008-09-24  Denis Washington  <denisw@svn.gnome.org>
+
+	* gtk/gtkiconview.c: draw focus as a rectangle around the
+	complete item, not just the text. (Bug #38254)
+
 2008-09-23  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkobject.c
