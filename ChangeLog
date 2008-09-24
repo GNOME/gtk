@@ -1,3 +1,8 @@
+2008-09-24  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkeventbox.c: events return gboolean not gint, reindented
+	static prototypes.
+
 2008-09-24  Johan Dahlin  <johan@gnome.org>
 
 	Bug 553385 – gtk-builder-convert creates untranslated combobox models

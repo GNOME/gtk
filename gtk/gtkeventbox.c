@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -30,7 +30,7 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-typedef struct 
+typedef struct
 {
   gboolean above_child;
   GdkWindow *event_window;
@@ -45,26 +45,26 @@ enum {
 
 #define GTK_EVENT_BOX_GET_PRIVATE(obj)  G_TYPE_INSTANCE_GET_PRIVATE((obj), GTK_TYPE_EVENT_BOX, GtkEventBoxPrivate)
 
-static void gtk_event_box_realize       (GtkWidget        *widget);
-static void gtk_event_box_unrealize     (GtkWidget        *widget);
-static void gtk_event_box_map           (GtkWidget        *widget);
-static void gtk_event_box_unmap         (GtkWidget        *widget);
-static void gtk_event_box_size_request  (GtkWidget        *widget,
-					 GtkRequisition   *requisition);
-static void gtk_event_box_size_allocate (GtkWidget        *widget,
-					 GtkAllocation    *allocation);
-static void gtk_event_box_paint         (GtkWidget        *widget,
-					 GdkRectangle     *area);
-static gint gtk_event_box_expose        (GtkWidget        *widget,
-					 GdkEventExpose   *event);
-static void gtk_event_box_set_property  (GObject          *object,
-					 guint             prop_id,
-					 const GValue     *value,
-					 GParamSpec       *pspec);
-static void gtk_event_box_get_property  (GObject          *object,
-					 guint             prop_id,
-					 GValue           *value,
-					 GParamSpec       *pspec);
+static void     gtk_event_box_realize       (GtkWidget        *widget);
+static void     gtk_event_box_unrealize     (GtkWidget        *widget);
+static void     gtk_event_box_map           (GtkWidget        *widget);
+static void     gtk_event_box_unmap         (GtkWidget        *widget);
+static void     gtk_event_box_size_request  (GtkWidget        *widget,
+                                             GtkRequisition   *requisition);
+static void     gtk_event_box_size_allocate (GtkWidget        *widget,
+                                             GtkAllocation    *allocation);
+static void     gtk_event_box_paint         (GtkWidget        *widget,
+                                             GdkRectangle     *area);
+static gboolean gtk_event_box_expose        (GtkWidget        *widget,
+                                             GdkEventExpose   *event);
+static void     gtk_event_box_set_property  (GObject          *object,
+                                             guint             prop_id,
+                                             const GValue     *value,
+                                             GParamSpec       *pspec);
+static void     gtk_event_box_get_property  (GObject          *object,
+                                             guint             prop_id,
+                                             GValue           *value,
+                                             GParamSpec       *pspec);
 
 G_DEFINE_TYPE (GtkEventBox, gtk_event_box, GTK_TYPE_BIN)
 
@@ -562,7 +562,7 @@ gtk_event_box_paint (GtkWidget    *widget,
 			0, 0, -1, -1);
 }
 
-static gint
+static gboolean
 gtk_event_box_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
