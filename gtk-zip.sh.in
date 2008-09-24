@@ -46,11 +46,7 @@ bin/gdk-pixbuf-csource.exe
 bin/gtk-builder-convert
 bin/gtk-demo.exe
 bin/gtk-update-icon-cache.exe
-share/man/man1/gdk-builder-convert.1
-share/man/man1/gdk-pixbuf-csource.1
-share/man/man1/gdk-update-icon-cache.1
-share/man/man1/gtk-pixbuf-query-loaders.1
-share/man/man1/gtk-query-immodules-2.0.1
+share/man
 lib/libgdk_pixbuf-@GTK_API_VERSION@.dll.a
 lib/gdk_pixbuf-@GTK_API_VERSION@.lib
 lib/libgdk-win32-@GTK_API_VERSION@.dll.a
@@ -60,16 +56,10 @@ lib/gtk-win32-@GTK_API_VERSION@.lib
 lib/libgailutil.dll.a
 lib/gailutil.lib
 lib/gtk-2.0/include
-lib/pkgconfig/gdk-pixbuf-2.0.pc
-lib/pkgconfig/gdk-2.0.pc
-lib/pkgconfig/gdk-win32-2.0.pc
-lib/pkgconfig/gtk+-2.0.pc
-lib/pkgconfig/gtk+-win32-2.0.pc
-share/aclocal/gtk-2.0.m4
+lib/pkgconfig
+share/aclocal
 share/gtk-2.0
-share/gtk-doc/html/gdk-pixbuf
-share/gtk-doc/html/gdk
-share/gtk-doc/html/gtk
+share/gtk-doc
 EOF
 
 zip -r $DEVZIP share/doc/gtk+-dev-@GTK_VERSION@
