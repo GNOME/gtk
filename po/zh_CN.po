@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-17 23:14-0400\n"
+"POT-Creation-Date: 2008-09-23 23:08-0400\n"
 "PO-Revision-Date: 2008-03-13 10:25+0800\n"
 "Last-Translator: Deng Xiyue <manphiz@gmail.com>\n"
 "Language-Team: i18n-zh <i18n-zh@googlegroups.com>\n"
@@ -236,19 +236,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:964
-#: gdk-pixbuf/gdk-pixbuf-io.c:1224 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:965
+#: gdk-pixbuf/gdk-pixbuf-io.c:1225 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "打开文件“%s”失败：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:976
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:977
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "图像文件“%s”没有内容"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1012
-#: gdk-pixbuf/gdk-pixbuf-io.c:1276 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1013
+#: gdk-pixbuf/gdk-pixbuf-io.c:1277 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -261,76 +261,76 @@ msgid ""
 "animation file"
 msgstr "载入动画“%s”失败：原因未知，可能是动画文件已损坏"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:700
+#: gdk-pixbuf/gdk-pixbuf-io.c:701
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "加载用来载入图像的模块失败：%s：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
+#: gdk-pixbuf/gdk-pixbuf-io.c:716
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr "图像载入模块 %s 没有导出正确的接口；它是否属于另一个 GTK 版本？"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:724 gdk-pixbuf/gdk-pixbuf-io.c:775
+#: gdk-pixbuf/gdk-pixbuf-io.c:725 gdk-pixbuf/gdk-pixbuf-io.c:776
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "不支持图像类型“%s”"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:845
+#: gdk-pixbuf/gdk-pixbuf-io.c:846
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "识别文件“%s”的图像文件格式失败"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:853
+#: gdk-pixbuf/gdk-pixbuf-io.c:854
 msgid "Unrecognized image file format"
 msgstr "无法识别的图像文件格式"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1021
+#: gdk-pixbuf/gdk-pixbuf-io.c:1022
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "载入图像“%s”失败：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1655 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1656 gdk-pixbuf/io-gdip-utils.c:952
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "写入图像文件时出错：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1700 gdk-pixbuf/gdk-pixbuf-io.c:1830
+#: gdk-pixbuf/gdk-pixbuf-io.c:1701 gdk-pixbuf/gdk-pixbuf-io.c:1831
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "此 gdk-pixbuf 不支持要保存的图像格式：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1734
+#: gdk-pixbuf/gdk-pixbuf-io.c:1735
 msgid "Insufficient memory to save image to callback"
 msgstr "内存不足以保存回调的图像"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1747
+#: gdk-pixbuf/gdk-pixbuf-io.c:1748
 msgid "Failed to open temporary file"
 msgstr "打开临时文件失败"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1773
+#: gdk-pixbuf/gdk-pixbuf-io.c:1774
 msgid "Failed to read from temporary file"
 msgstr "从临时文件读取失败"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2007
+#: gdk-pixbuf/gdk-pixbuf-io.c:2008
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "打开“%s”进行写入失败：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2032
+#: gdk-pixbuf/gdk-pixbuf-io.c:2033
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr "写入图像时无法关闭“%s”，可能没有保存数据：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2252 gdk-pixbuf/gdk-pixbuf-io.c:2303
+#: gdk-pixbuf/gdk-pixbuf-io.c:2253 gdk-pixbuf/gdk-pixbuf-io.c:2304
 msgid "Insufficient memory to save image into a buffer"
 msgstr "内存不足以将图像保存至缓冲区"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2349
+#: gdk-pixbuf/gdk-pixbuf-io.c:2350
 msgid "Error writing to image stream"
 msgstr "写入图像流时出错"
 
@@ -1016,48 +1016,43 @@ msgstr "XPM 图像格式"
 msgid "The EMF image format"
 msgstr "BMP 图像格式"
 
-#: gdk-pixbuf/io-gdip-utils.c:212
+#: gdk-pixbuf/io-gdip-utils.c:220
 #, fuzzy, c-format
 msgid "Could not allocate memory: %s"
 msgstr "无法为流分配内存"
 
-#: gdk-pixbuf/io-gdip-utils.c:237 gdk-pixbuf/io-gdip-utils.c:350
-#: gdk-pixbuf/io-gdip-utils.c:383
+#: gdk-pixbuf/io-gdip-utils.c:245 gdk-pixbuf/io-gdip-utils.c:360
+#: gdk-pixbuf/io-gdip-utils.c:394
 #, fuzzy, c-format
 msgid "Could not create stream: %s"
 msgstr "无法创建目录：%s"
 
-#: gdk-pixbuf/io-gdip-utils.c:251
+#: gdk-pixbuf/io-gdip-utils.c:259
 #, fuzzy, c-format
 msgid "Could not seek stream: %s"
 msgstr "无法删除项目"
 
-#: gdk-pixbuf/io-gdip-utils.c:263
+#: gdk-pixbuf/io-gdip-utils.c:271
 #, fuzzy, c-format
 msgid "Could not read from stream: %s"
 msgstr "无法将 %s 重命名为 %s：%s\n"
 
-#: gdk-pixbuf/io-gdip-utils.c:736
-#, fuzzy
-msgid "Couldn't create pixbuf"
-msgstr "无法创建新像素缓冲"
-
-#: gdk-pixbuf/io-gdip-utils.c:798
+#: gdk-pixbuf/io-gdip-utils.c:683 gdk-pixbuf/io-gdip-utils.c:815
 #, fuzzy
 msgid "Couldn't load bitmap"
 msgstr "无法解码图像"
 
-#: gdk-pixbuf/io-gdip-utils.c:821
+#: gdk-pixbuf/io-gdip-utils.c:838
 #, fuzzy
 msgid "Couldn't load metafile"
 msgstr "无法解码图像"
 
-#: gdk-pixbuf/io-gdip-utils.c:980
+#: gdk-pixbuf/io-gdip-utils.c:997
 #, fuzzy
 msgid "Unsupported image format for GDI+"
 msgstr "不支持的 RAS 图像变种"
 
-#: gdk-pixbuf/io-gdip-utils.c:987
+#: gdk-pixbuf/io-gdip-utils.c:1004
 #, fuzzy
 msgid "Couldn't save"
 msgstr "无法保存剩余部分"
@@ -1489,7 +1484,7 @@ msgstr "插入 Unicode 控制字符(_I)"
 msgid "Select A File"
 msgstr "选择文件"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1922
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1925
 msgid "Desktop"
 msgstr "桌面"
 
@@ -1501,23 +1496,23 @@ msgstr "(无)"
 msgid "Other..."
 msgstr "其它..."
 
-#: gtk/gtkfilechooserdefault.c:1055
+#: gtk/gtkfilechooserdefault.c:1058
 msgid "Could not retrieve information about the file"
 msgstr "无法获取关于文件的信息"
 
-#: gtk/gtkfilechooserdefault.c:1066
+#: gtk/gtkfilechooserdefault.c:1069
 msgid "Could not add a bookmark"
 msgstr "无法添加书签"
 
-#: gtk/gtkfilechooserdefault.c:1077
+#: gtk/gtkfilechooserdefault.c:1080
 msgid "Could not remove bookmark"
 msgstr "无法删除书签"
 
-#: gtk/gtkfilechooserdefault.c:1088
+#: gtk/gtkfilechooserdefault.c:1091
 msgid "The folder could not be created"
 msgstr "无法创建文件夹"
 
-#: gtk/gtkfilechooserdefault.c:1101
+#: gtk/gtkfilechooserdefault.c:1104
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1525,11 +1520,11 @@ msgstr ""
 "无法创建文件夹，因为已经存在同名文件。请试着为文件夹使用不同的名称，或者先重"
 "命名文件。"
 
-#: gtk/gtkfilechooserdefault.c:1112
+#: gtk/gtkfilechooserdefault.c:1115
 msgid "Invalid file name"
 msgstr "无效的文件名"
 
-#: gtk/gtkfilechooserdefault.c:1122
+#: gtk/gtkfilechooserdefault.c:1125
 msgid "The folder contents could not be displayed"
 msgstr "无法显示文件夹内容"
 
@@ -1537,217 +1532,217 @@ msgstr "无法显示文件夹内容"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1674
+#: gtk/gtkfilechooserdefault.c:1677
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%2$s 上的 %1$s"
 
-#: gtk/gtkfilechooserdefault.c:1850
+#: gtk/gtkfilechooserdefault.c:1853
 msgid "Search"
 msgstr "搜索"
 
-#: gtk/gtkfilechooserdefault.c:1874
+#: gtk/gtkfilechooserdefault.c:1877
 msgid "Recently Used"
 msgstr "最近使用的"
 
-#: gtk/gtkfilechooserdefault.c:2491
+#: gtk/gtkfilechooserdefault.c:2494
 msgid "Select which types of files are shown"
 msgstr "选择要显示的文件类型"
 
-#: gtk/gtkfilechooserdefault.c:2920
+#: gtk/gtkfilechooserdefault.c:2923
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "将文件夹“%s”添加到书签"
 
-#: gtk/gtkfilechooserdefault.c:2961
+#: gtk/gtkfilechooserdefault.c:2964
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "将当前文件夹添加到书签"
 
-#: gtk/gtkfilechooserdefault.c:2963
+#: gtk/gtkfilechooserdefault.c:2966
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "将选中文件夹添加到书签"
 
-#: gtk/gtkfilechooserdefault.c:3003
+#: gtk/gtkfilechooserdefault.c:3006
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "删除书签“%s”"
 
-#: gtk/gtkfilechooserdefault.c:3721
+#: gtk/gtkfilechooserdefault.c:3724
 msgid "Remove"
 msgstr "删除"
 
-#: gtk/gtkfilechooserdefault.c:3730
+#: gtk/gtkfilechooserdefault.c:3733
 msgid "Rename..."
 msgstr "重命名..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3876
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "Places"
 msgstr "位置"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3933
+#: gtk/gtkfilechooserdefault.c:3936
 msgid "_Places"
 msgstr "位置(_R)"
 
-#: gtk/gtkfilechooserdefault.c:3988 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3991 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "添加(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3995
+#: gtk/gtkfilechooserdefault.c:3998
 msgid "Add the selected folder to the Bookmarks"
 msgstr "将选中的文件夹添加到书签"
 
-#: gtk/gtkfilechooserdefault.c:4000 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:4003 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "删除(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4007
+#: gtk/gtkfilechooserdefault.c:4010
 msgid "Remove the selected bookmark"
 msgstr "删除选中的书签"
 
-#: gtk/gtkfilechooserdefault.c:4104
+#: gtk/gtkfilechooserdefault.c:4107
 msgid "Could not select file"
 msgstr "无法选择文件"
 
-#: gtk/gtkfilechooserdefault.c:4280
+#: gtk/gtkfilechooserdefault.c:4283
 msgid "_Add to Bookmarks"
 msgstr "添加到书签(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4294
+#: gtk/gtkfilechooserdefault.c:4297
 msgid "Show _Hidden Files"
 msgstr "显示隐藏文件(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4537 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4540 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "文件"
 
-#: gtk/gtkfilechooserdefault.c:4586
+#: gtk/gtkfilechooserdefault.c:4589
 msgid "Name"
 msgstr "名称"
 
-#: gtk/gtkfilechooserdefault.c:4611
+#: gtk/gtkfilechooserdefault.c:4614
 msgid "Size"
 msgstr "大小"
 
-#: gtk/gtkfilechooserdefault.c:4625
+#: gtk/gtkfilechooserdefault.c:4628
 msgid "Modified"
 msgstr "修改日期"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4845 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4848 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "名称(_N)："
 
-#: gtk/gtkfilechooserdefault.c:4887
+#: gtk/gtkfilechooserdefault.c:4890
 msgid "_Browse for other folders"
 msgstr "浏览其它文件夹(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5157
+#: gtk/gtkfilechooserdefault.c:5160
 msgid "Type a file name"
 msgstr "输入文件名"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5194
+#: gtk/gtkfilechooserdefault.c:5197
 msgid "Create Fo_lder"
 msgstr "创建文件夹(_L)"
 
-#: gtk/gtkfilechooserdefault.c:5204
+#: gtk/gtkfilechooserdefault.c:5207
 msgid "_Location:"
 msgstr "位置(_L)："
 
-#: gtk/gtkfilechooserdefault.c:5393
+#: gtk/gtkfilechooserdefault.c:5407
 msgid "Save in _folder:"
 msgstr "保存于文件夹(_F)："
 
-#: gtk/gtkfilechooserdefault.c:5395
+#: gtk/gtkfilechooserdefault.c:5409
 msgid "Create in _folder:"
 msgstr "创建于文件夹(_F)："
 
-#: gtk/gtkfilechooserdefault.c:6976
+#: gtk/gtkfilechooserdefault.c:6990
 msgid "Cannot change to folder because it is not local"
 msgstr "无法更改为文件夹，因为该文件夹并非本地"
 
-#: gtk/gtkfilechooserdefault.c:7601 gtk/gtkfilechooserdefault.c:7622
+#: gtk/gtkfilechooserdefault.c:7615 gtk/gtkfilechooserdefault.c:7636
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "快捷方式 %s 已经存在"
 
-#: gtk/gtkfilechooserdefault.c:7712
+#: gtk/gtkfilechooserdefault.c:7726
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "快捷方式 %s 不存在"
 
-#: gtk/gtkfilechooserdefault.c:7960 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:7974 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "已经存在名为“%s”的文件。您是否想要替换？"
 
-#: gtk/gtkfilechooserdefault.c:7963 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:7977 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "文件已经在“%s”中存在了。替换该文件将覆盖其中的内容。"
 
-#: gtk/gtkfilechooserdefault.c:7968 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:7982 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "替换(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8729
+#: gtk/gtkfilechooserdefault.c:8743
 msgid "Could not start the search process"
 msgstr "无法开启搜索进程"
 
-#: gtk/gtkfilechooserdefault.c:8730
+#: gtk/gtkfilechooserdefault.c:8744
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "程序无法连接到索引守护进程。请确保它在运行。"
 
-#: gtk/gtkfilechooserdefault.c:8744
+#: gtk/gtkfilechooserdefault.c:8758
 msgid "Could not send the search request"
 msgstr "无法发送搜索请求"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9184
+#: gtk/gtkfilechooserdefault.c:9198
 msgid "_Search:"
 msgstr "搜索(_S)："
 
-#: gtk/gtkfilechooserdefault.c:10131
+#: gtk/gtkfilechooserdefault.c:10145
 #, c-format
 msgid "Could not mount %s"
 msgstr "无法挂载 %s"
 
-#: gtk/gtkfilechooserdefault.c:10785
+#: gtk/gtkfilechooserdefault.c:10799
 msgid "Type name of new folder"
 msgstr "输入新建文件夹的名称"
 
-#: gtk/gtkfilechooserdefault.c:10835
+#: gtk/gtkfilechooserdefault.c:10849
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10837
+#: gtk/gtkfilechooserdefault.c:10851
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10839
+#: gtk/gtkfilechooserdefault.c:10853
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10942 gtk/gtkfilechooserdefault.c:10964
-#: gtk/gtkfilechooserdefault.c:11035
+#: gtk/gtkfilechooserdefault.c:10956 gtk/gtkfilechooserdefault.c:10978
+#: gtk/gtkfilechooserdefault.c:11049
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/gtkfilechooserdefault.c:10982
+#: gtk/gtkfilechooserdefault.c:10996
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:10984
+#: gtk/gtkfilechooserdefault.c:10998
 msgid "Yesterday at %H:%M"
 msgstr "昨天于 %H:%M"
 
@@ -2016,7 +2011,7 @@ msgstr "载入图标失败"
 msgid "Simple"
 msgstr "简单"
 
-#: gtk/gtkimmulticontext.c:542
+#: gtk/gtkimmulticontext.c:543
 msgid "input method menu|System"
 msgstr "输入法菜单|系统"
 
@@ -4716,6 +4711,10 @@ msgstr "打印到测试打印机"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "无法获得文件“%s”的信息：%s"
+
+#, fuzzy
+#~ msgid "Couldn't create pixbuf"
+#~ msgstr "无法创建新像素缓冲"
 
 #~ msgid "URI"
 #~ msgstr "URI"

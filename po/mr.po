@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-17 23:14-0400\n"
+"POT-Creation-Date: 2008-09-23 23:08-0400\n"
 "PO-Revision-Date: 2008-09-17 12:39+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
@@ -231,19 +231,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:964
-#: gdk-pixbuf/gdk-pixbuf-io.c:1224 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:965
+#: gdk-pixbuf/gdk-pixbuf-io.c:1225 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "'%1s' फाइल उघडण्यात असफल: %2s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:976
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:977
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "प्रतिमा फाइल '%s' मध्ये कोणतीही माहीती नाही "
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1012
-#: gdk-pixbuf/gdk-pixbuf-io.c:1276 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1013
+#: gdk-pixbuf/gdk-pixbuf-io.c:1277 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -260,12 +260,12 @@ msgstr ""
 "प्रतिमा '%s' ला सुरु करण्यात असफल: कारण माहीत नाही, बहुदा ही एक दुषित प्रतिमा फाइल "
 "असावी "
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:700
+#: gdk-pixbuf/gdk-pixbuf-io.c:701
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "प्रतिमा सुरु करण्याची पध्दत %1s: सुरु करण्यास असमर्थ: %2s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
+#: gdk-pixbuf/gdk-pixbuf-io.c:716
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -274,53 +274,53 @@ msgstr ""
 "प्रतिमा सुरु करण्यासाठी %s द्वारा योग्य संवाद साधता येत नाही; बहुदा एका भिन्न जीटीके "
 "मजकुरापासून ही प्रतिमा घेतली असावी?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:724 gdk-pixbuf/gdk-pixbuf-io.c:775
+#: gdk-pixbuf/gdk-pixbuf-io.c:725 gdk-pixbuf/gdk-pixbuf-io.c:776
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "'%s' प्रतिमेला आधार नाही"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:845
+#: gdk-pixbuf/gdk-pixbuf-io.c:846
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "फाइल '%s' कोणत्या प्रकारची फाइल आहे ते उमगले नाही"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:853
+#: gdk-pixbuf/gdk-pixbuf-io.c:854
 msgid "Unrecognized image file format"
 msgstr "अपरिचित असणारी प्रतिमा फाइल"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1021
+#: gdk-pixbuf/gdk-pixbuf-io.c:1022
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "'%1s' प्रतिमा उघडण्यास असमर्थ: %2s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1655 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1656 gdk-pixbuf/io-gdip-utils.c:952
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "प्रतिमा फाइलवर लिहिण्यात चूक: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1700 gdk-pixbuf/gdk-pixbuf-io.c:1830
+#: gdk-pixbuf/gdk-pixbuf-io.c:1701 gdk-pixbuf/gdk-pixbuf-io.c:1831
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "प्रतिमेची रचना रक्षित करण्यासाठी या भागातgdk-pixbf चे सहकार्य नाही : %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1734
+#: gdk-pixbuf/gdk-pixbuf-io.c:1735
 msgid "Insufficient memory to save image to callback"
 msgstr "कॉलबॅकसाठी प्रतिमा सुरक्षित करण्यासाठी पुरेशी स्मृती नाही"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1747
+#: gdk-pixbuf/gdk-pixbuf-io.c:1748
 msgid "Failed to open temporary file"
 msgstr "तात्कालिक फाइल उघडण्यात असफल"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1773
+#: gdk-pixbuf/gdk-pixbuf-io.c:1774
 msgid "Failed to read from temporary file"
 msgstr "तात्कालिक फाइलमधून वाचण्यास असफल"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2007
+#: gdk-pixbuf/gdk-pixbuf-io.c:2008
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "लिहण्यासाठी '%1$s' ही फाइल उघडण्यास अपयशी: %2$s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2032
+#: gdk-pixbuf/gdk-pixbuf-io.c:2033
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -328,11 +328,11 @@ msgid ""
 msgstr ""
 "लेखन करताना '%s' ला बन्द करता अाले नाही,  बहुदा सर्व माहीती रक्षित झाली नसेल:%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2252 gdk-pixbuf/gdk-pixbuf-io.c:2303
+#: gdk-pixbuf/gdk-pixbuf-io.c:2253 gdk-pixbuf/gdk-pixbuf-io.c:2304
 msgid "Insufficient memory to save image into a buffer"
 msgstr "प्रतिमा बफरमध्ये सुरक्षित करण्यासाठी अपुरी स्मृती"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2349
+#: gdk-pixbuf/gdk-pixbuf-io.c:2350
 msgid "Error writing to image stream"
 msgstr "प्रतिमा स्ट्रीम करीता लिहीतेवेळी त्रुटी आढळली"
 
@@ -1029,44 +1029,40 @@ msgstr "XPM प्रतिमा स्वरूप"
 msgid "The EMF image format"
 msgstr "EMF प्रतिमा स्वरूप"
 
-#: gdk-pixbuf/io-gdip-utils.c:212
+#: gdk-pixbuf/io-gdip-utils.c:220
 #, c-format
 msgid "Could not allocate memory: %s"
 msgstr "स्मृती वाटप करू शकत नाही: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:237 gdk-pixbuf/io-gdip-utils.c:350
-#: gdk-pixbuf/io-gdip-utils.c:383
+#: gdk-pixbuf/io-gdip-utils.c:245 gdk-pixbuf/io-gdip-utils.c:360
+#: gdk-pixbuf/io-gdip-utils.c:394
 #, c-format
 msgid "Could not create stream: %s"
 msgstr "स्ट्रीम बनवू शकत नाही: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:251
+#: gdk-pixbuf/io-gdip-utils.c:259
 #, c-format
 msgid "Could not seek stream: %s"
 msgstr "माहिती ते स्ट्रीम रूपांतर अपयशी: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:263
+#: gdk-pixbuf/io-gdip-utils.c:271
 #, c-format
 msgid "Could not read from stream: %s"
 msgstr "स्ट्रीम पासून वाचण्यास अपयशी: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:736
-msgid "Couldn't create pixbuf"
-msgstr "pixbuf बनवू शकले नाही"
-
-#: gdk-pixbuf/io-gdip-utils.c:798
+#: gdk-pixbuf/io-gdip-utils.c:683 gdk-pixbuf/io-gdip-utils.c:815
 msgid "Couldn't load bitmap"
 msgstr "bitmap दाखल करू शकले नाही"
 
-#: gdk-pixbuf/io-gdip-utils.c:821
+#: gdk-pixbuf/io-gdip-utils.c:838
 msgid "Couldn't load metafile"
 msgstr "मेटाफाइल दाखल करू शकले नाही"
 
-#: gdk-pixbuf/io-gdip-utils.c:980
+#: gdk-pixbuf/io-gdip-utils.c:997
 msgid "Unsupported image format for GDI+"
 msgstr "GDI+ करीता असमर्थीत प्रतिमा प्रकार"
 
-#: gdk-pixbuf/io-gdip-utils.c:987
+#: gdk-pixbuf/io-gdip-utils.c:1004
 msgid "Couldn't save"
 msgstr "संचयीत करू शकले नाही"
 
@@ -1501,7 +1497,7 @@ msgstr "युनिकोड नियंत्रण अक्षर घाल
 msgid "Select A File"
 msgstr "फाइल निवडा"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1922
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1925
 msgid "Desktop"
 msgstr "कार्यस्थळ"
 
@@ -1513,23 +1509,23 @@ msgstr "(काहीच नाही)"
 msgid "Other..."
 msgstr "इतर..."
 
-#: gtk/gtkfilechooserdefault.c:1055
+#: gtk/gtkfilechooserdefault.c:1058
 msgid "Could not retrieve information about the file"
 msgstr "फाइलविषयी माहिती मिळवता आली नाही"
 
-#: gtk/gtkfilechooserdefault.c:1066
+#: gtk/gtkfilechooserdefault.c:1069
 msgid "Could not add a bookmark"
 msgstr "खूणगाठ जमा करता आली नाही"
 
-#: gtk/gtkfilechooserdefault.c:1077
+#: gtk/gtkfilechooserdefault.c:1080
 msgid "Could not remove bookmark"
 msgstr "खूणगाठ काढून टाकता आली नाही"
 
-#: gtk/gtkfilechooserdefault.c:1088
+#: gtk/gtkfilechooserdefault.c:1091
 msgid "The folder could not be created"
 msgstr "संचयीका निर्माण करता आले नाही"
 
-#: gtk/gtkfilechooserdefault.c:1101
+#: gtk/gtkfilechooserdefault.c:1104
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1537,11 +1533,11 @@ msgstr ""
 "संचयीका बनवू शकले नाही, कारण त्याच नावाची फाइलं आधिपासून अस्तीत्वात होती.  संचयीका "
 "करीता इतर नाव वापरण्याचा प्रयत्न करा, किंवा पहिले फाइल पुनःनामांकीत करा."
 
-#: gtk/gtkfilechooserdefault.c:1112
+#: gtk/gtkfilechooserdefault.c:1115
 msgid "Invalid file name"
 msgstr "अवैध फाइल नाव"
 
-#: gtk/gtkfilechooserdefault.c:1122
+#: gtk/gtkfilechooserdefault.c:1125
 msgid "The folder contents could not be displayed"
 msgstr "संचयीकामधील सामग्री दाखवता आली नाही"
 
@@ -1549,155 +1545,155 @@ msgstr "संचयीकामधील सामग्री दाखवत�
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1674
+#: gtk/gtkfilechooserdefault.c:1677
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%s, %s"
 
-#: gtk/gtkfilechooserdefault.c:1850
+#: gtk/gtkfilechooserdefault.c:1853
 msgid "Search"
 msgstr "शोधा"
 
-#: gtk/gtkfilechooserdefault.c:1874
+#: gtk/gtkfilechooserdefault.c:1877
 msgid "Recently Used"
 msgstr "नुकतेच वापरलेले"
 
-#: gtk/gtkfilechooserdefault.c:2491
+#: gtk/gtkfilechooserdefault.c:2494
 msgid "Select which types of files are shown"
 msgstr "कोणत्या प्रकारच्या फाइली दाखवल्या आहेत ते निवडा"
 
-#: gtk/gtkfilechooserdefault.c:2920
+#: gtk/gtkfilechooserdefault.c:2923
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "संचयीका '%s' खूणगाठींमध्ये जमा करा"
 
-#: gtk/gtkfilechooserdefault.c:2961
+#: gtk/gtkfilechooserdefault.c:2964
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "चालू संचयीका खूणगाठींमध्ये जमा करा"
 
-#: gtk/gtkfilechooserdefault.c:2963
+#: gtk/gtkfilechooserdefault.c:2966
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "निवडलेले संचयीका खूणगाठींमध्ये जमा करा"
 
-#: gtk/gtkfilechooserdefault.c:3003
+#: gtk/gtkfilechooserdefault.c:3006
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "खूणगाठ '%s' काढून टाका"
 
-#: gtk/gtkfilechooserdefault.c:3721
+#: gtk/gtkfilechooserdefault.c:3724
 msgid "Remove"
 msgstr "हटवा"
 
-#: gtk/gtkfilechooserdefault.c:3730
+#: gtk/gtkfilechooserdefault.c:3733
 msgid "Rename..."
 msgstr "नाव बदलवा..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3876
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "Places"
 msgstr "जागा"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3933
+#: gtk/gtkfilechooserdefault.c:3936
 msgid "_Places"
 msgstr "जागा(_P)"
 
-#: gtk/gtkfilechooserdefault.c:3988 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3991 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "जोडा(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3995
+#: gtk/gtkfilechooserdefault.c:3998
 msgid "Add the selected folder to the Bookmarks"
 msgstr "निवडलेला संचयीका खूणगाठींमध्ये जमा करा"
 
-#: gtk/gtkfilechooserdefault.c:4000 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:4003 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "हटवा(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4007
+#: gtk/gtkfilechooserdefault.c:4010
 msgid "Remove the selected bookmark"
 msgstr "निवडलेली खूणगाठ काढून टाका"
 
-#: gtk/gtkfilechooserdefault.c:4104
+#: gtk/gtkfilechooserdefault.c:4107
 msgid "Could not select file"
 msgstr "फाइल निवडता आली नाही"
 
-#: gtk/gtkfilechooserdefault.c:4280
+#: gtk/gtkfilechooserdefault.c:4283
 msgid "_Add to Bookmarks"
 msgstr "खूणगाठींमध्ये जमा करा(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4294
+#: gtk/gtkfilechooserdefault.c:4297
 msgid "Show _Hidden Files"
 msgstr "लपवलेल्या फाइली दाखवा(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4537 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4540 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "फाइली"
 
-#: gtk/gtkfilechooserdefault.c:4586
+#: gtk/gtkfilechooserdefault.c:4589
 msgid "Name"
 msgstr "नाव"
 
-#: gtk/gtkfilechooserdefault.c:4611
+#: gtk/gtkfilechooserdefault.c:4614
 msgid "Size"
 msgstr "आकार"
 
-#: gtk/gtkfilechooserdefault.c:4625
+#: gtk/gtkfilechooserdefault.c:4628
 msgid "Modified"
 msgstr "बदलेले"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4845 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4848 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "नाव(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4887
+#: gtk/gtkfilechooserdefault.c:4890
 msgid "_Browse for other folders"
 msgstr "इतर संचयीकासाठी ब्राउज करा(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5157
+#: gtk/gtkfilechooserdefault.c:5160
 msgid "Type a file name"
 msgstr "फाइलचे नाव टाइप करा"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5194
+#: gtk/gtkfilechooserdefault.c:5197
 msgid "Create Fo_lder"
 msgstr "संचयीका निर्माण करा(_l)"
 
-#: gtk/gtkfilechooserdefault.c:5204
+#: gtk/gtkfilechooserdefault.c:5207
 msgid "_Location:"
 msgstr "ठिकाण(_L):"
 
-#: gtk/gtkfilechooserdefault.c:5393
+#: gtk/gtkfilechooserdefault.c:5407
 msgid "Save in _folder:"
 msgstr "या संचयीकामध्ये सुरक्षित करा(_f):"
 
-#: gtk/gtkfilechooserdefault.c:5395
+#: gtk/gtkfilechooserdefault.c:5409
 msgid "Create in _folder:"
 msgstr "या संचयीकामध्ये निर्माण करा(_f):"
 
-#: gtk/gtkfilechooserdefault.c:6976
+#: gtk/gtkfilechooserdefault.c:6990
 msgid "Cannot change to folder because it is not local"
 msgstr "स्थानिक नसल्यामुळे संचयीकामध्ये जाऊ शकत नाही"
 
-#: gtk/gtkfilechooserdefault.c:7601 gtk/gtkfilechooserdefault.c:7622
+#: gtk/gtkfilechooserdefault.c:7615 gtk/gtkfilechooserdefault.c:7636
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "शॉर्टकट %s आधीच अस्तित्वात आहे"
 
-#: gtk/gtkfilechooserdefault.c:7712
+#: gtk/gtkfilechooserdefault.c:7726
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "शॉर्टकट %s अस्तित्वात नाही"
 
-#: gtk/gtkfilechooserdefault.c:7960 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:7974 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" नावाची फाइल आधीच अस्तित्वात आहे. तुम्ही तिला बदली करू इच्छिता काय?"
 
-#: gtk/gtkfilechooserdefault.c:7963 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:7977 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1705,64 +1701,64 @@ msgstr ""
 "\"%s\" नावाची फाइल आधीच अस्तित्वात आहे. तिला बदली केल्याने तिच्यातील मजकूर गिरवला "
 "जाईल."
 
-#: gtk/gtkfilechooserdefault.c:7968 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:7982 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "बदलवा(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8729
+#: gtk/gtkfilechooserdefault.c:8743
 msgid "Could not start the search process"
 msgstr "शोध माहीती सुरू करू शकले नाही"
 
-#: gtk/gtkfilechooserdefault.c:8730
+#: gtk/gtkfilechooserdefault.c:8744
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 "अणूक्रमणीका डीमन करीता कार्यक्रम जुळवणी करू शकला नाही.  ते कार्यरत आहे याची खात्री करा."
 
-#: gtk/gtkfilechooserdefault.c:8744
+#: gtk/gtkfilechooserdefault.c:8758
 msgid "Could not send the search request"
 msgstr "शोध विनंती पाठवू शकले नाही"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9184
+#: gtk/gtkfilechooserdefault.c:9198
 msgid "_Search:"
 msgstr "शोधा (_S):"
 
-#: gtk/gtkfilechooserdefault.c:10131
+#: gtk/gtkfilechooserdefault.c:10145
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s आरोहित करता आले नाही"
 
-#: gtk/gtkfilechooserdefault.c:10785
+#: gtk/gtkfilechooserdefault.c:10799
 msgid "Type name of new folder"
 msgstr "नविन संचयीकाचे नाव टाइप करा"
 
-#: gtk/gtkfilechooserdefault.c:10835
+#: gtk/gtkfilechooserdefault.c:10849
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10837
+#: gtk/gtkfilechooserdefault.c:10851
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10839
+#: gtk/gtkfilechooserdefault.c:10853
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10942 gtk/gtkfilechooserdefault.c:10964
-#: gtk/gtkfilechooserdefault.c:11035
+#: gtk/gtkfilechooserdefault.c:10956 gtk/gtkfilechooserdefault.c:10978
+#: gtk/gtkfilechooserdefault.c:11049
 msgid "Unknown"
 msgstr "अपरिचित"
 
-#: gtk/gtkfilechooserdefault.c:10982
+#: gtk/gtkfilechooserdefault.c:10996
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:10984
+#: gtk/gtkfilechooserdefault.c:10998
 msgid "Yesterday at %H:%M"
 msgstr "काल %H:%M यावेळी"
 
@@ -2034,7 +2030,7 @@ msgstr "चिन्ह दाखल करू शकले नाही"
 msgid "Simple"
 msgstr "सोपे"
 
-#: gtk/gtkimmulticontext.c:542
+#: gtk/gtkimmulticontext.c:543
 msgid "input method menu|System"
 msgstr "प्रणाली"
 
@@ -4717,3 +4713,6 @@ msgstr "चाचणी छपाईयंत्रकरीता छपाई"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' फाइलची माहिती मिळवता आली नाही: %s"
+
+#~ msgid "Couldn't create pixbuf"
+#~ msgstr "pixbuf बनवू शकले नाही"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-17 23:14-0400\n"
+"POT-Creation-Date: 2008-09-23 23:08-0400\n"
 "PO-Revision-Date: 2008-05-08 00:30+0000\n"
 "Last-Translator: Launchpad Translations Administrators <rosetta@launchpad."
 "net>\n"
@@ -232,19 +232,19 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:964
-#: gdk-pixbuf/gdk-pixbuf-io.c:1224 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:965
+#: gdk-pixbuf/gdk-pixbuf-io.c:1225 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Greška pri otvaranju datoteke '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:976
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:977
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Slika \"%s\" ne sadrži podatke"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1012
-#: gdk-pixbuf/gdk-pixbuf-io.c:1276 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1013
+#: gdk-pixbuf/gdk-pixbuf-io.c:1277 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -260,12 +260,12 @@ msgstr ""
 "Ne mogu učitati animaciju \"%s\": razlog nepoznat, vjerojatno neispravan "
 "zapis"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:700
+#: gdk-pixbuf/gdk-pixbuf-io.c:701
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Ne mogu učitati modul za učitavanje slika: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
+#: gdk-pixbuf/gdk-pixbuf-io.c:716
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -274,53 +274,53 @@ msgstr ""
 "Dio za učitavanje slike %s ne podržava odgovarajuće sučelje; možda je iz "
 "različite GTK inačice?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:724 gdk-pixbuf/gdk-pixbuf-io.c:775
+#: gdk-pixbuf/gdk-pixbuf-io.c:725 gdk-pixbuf/gdk-pixbuf-io.c:776
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Vrsta slike \"%s\" nije podržana"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:845
+#: gdk-pixbuf/gdk-pixbuf-io.c:846
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Ne mogu prepoznati datotečni format slike za datoteku \"%s\""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:853
+#: gdk-pixbuf/gdk-pixbuf-io.c:854
 msgid "Unrecognized image file format"
 msgstr "Nepoznat način zapisa slike"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1021
+#: gdk-pixbuf/gdk-pixbuf-io.c:1022
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Ne mogu učitati sliku \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1655 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1656 gdk-pixbuf/io-gdip-utils.c:952
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Greška pri interpretiranju JPEG slike (%s)"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1700 gdk-pixbuf/gdk-pixbuf-io.c:1830
+#: gdk-pixbuf/gdk-pixbuf-io.c:1701 gdk-pixbuf/gdk-pixbuf-io.c:1831
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Ovo izdanje programa gdk-pixbuf ne podržava ovu sliku vrste %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1734
+#: gdk-pixbuf/gdk-pixbuf-io.c:1735
 msgid "Insufficient memory to save image to callback"
 msgstr "Nema dovoljno memorije za spremanje slike u originalno mjesto"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1747
+#: gdk-pixbuf/gdk-pixbuf-io.c:1748
 msgid "Failed to open temporary file"
 msgstr "Nisam uspio otvoriti privremenu datoteku"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1773
+#: gdk-pixbuf/gdk-pixbuf-io.c:1774
 msgid "Failed to read from temporary file"
 msgstr "Nisam uspio čitati iz privremene datoteke"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2007
+#: gdk-pixbuf/gdk-pixbuf-io.c:2008
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Ne mogu otvoriti '%s' za pisanje: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2032
+#: gdk-pixbuf/gdk-pixbuf-io.c:2033
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -329,11 +329,11 @@ msgstr ""
 "Ne može da zatvori \"%s\" pri upisu slike, moguće je da nisu spremljeni svi "
 "podaci: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2252 gdk-pixbuf/gdk-pixbuf-io.c:2303
+#: gdk-pixbuf/gdk-pixbuf-io.c:2253 gdk-pixbuf/gdk-pixbuf-io.c:2304
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nema dovoljno memorije za spremanje slike u međuspremnik"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2349
+#: gdk-pixbuf/gdk-pixbuf-io.c:2350
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "Greška pri interpretiranju JPEG slike (%s)"
@@ -1057,55 +1057,50 @@ msgstr "XPM zapis slike"
 msgid "The EMF image format"
 msgstr "BMP zapis slike"
 
-#: gdk-pixbuf/io-gdip-utils.c:212
+#: gdk-pixbuf/io-gdip-utils.c:220
 #, fuzzy, c-format
 msgid "Could not allocate memory: %s"
 msgstr "Ne može se alocirati memorija za zaglavlje"
 
-#: gdk-pixbuf/io-gdip-utils.c:237 gdk-pixbuf/io-gdip-utils.c:350
-#: gdk-pixbuf/io-gdip-utils.c:383
+#: gdk-pixbuf/io-gdip-utils.c:245 gdk-pixbuf/io-gdip-utils.c:360
+#: gdk-pixbuf/io-gdip-utils.c:394
 #, fuzzy, c-format
 msgid "Could not create stream: %s"
 msgstr ""
 "Nisam mogao označiti %s:\n"
 "%s"
 
-#: gdk-pixbuf/io-gdip-utils.c:251
+#: gdk-pixbuf/io-gdip-utils.c:259
 #, fuzzy, c-format
 msgid "Could not seek stream: %s"
 msgstr ""
 "Nisam mogao označiti %s:\n"
 "%s"
 
-#: gdk-pixbuf/io-gdip-utils.c:263
+#: gdk-pixbuf/io-gdip-utils.c:271
 #, fuzzy, c-format
 msgid "Could not read from stream: %s"
 msgstr ""
 "Nisam mogao označiti %s:\n"
 "%s"
 
-#: gdk-pixbuf/io-gdip-utils.c:736
-#, fuzzy
-msgid "Couldn't create pixbuf"
-msgstr "Ne mogu napraviti novi pixbuf"
-
-#: gdk-pixbuf/io-gdip-utils.c:798
+#: gdk-pixbuf/io-gdip-utils.c:683 gdk-pixbuf/io-gdip-utils.c:815
 #, fuzzy
 msgid "Couldn't load bitmap"
 msgstr ""
 "Nisam mogao označiti %s:\n"
 "%s"
 
-#: gdk-pixbuf/io-gdip-utils.c:821
+#: gdk-pixbuf/io-gdip-utils.c:838
 msgid "Couldn't load metafile"
 msgstr "Nisam mogao učitati metadatoteku"
 
-#: gdk-pixbuf/io-gdip-utils.c:980
+#: gdk-pixbuf/io-gdip-utils.c:997
 #, fuzzy
 msgid "Unsupported image format for GDI+"
 msgstr "nije podržana vrsta RAS slike"
 
-#: gdk-pixbuf/io-gdip-utils.c:987
+#: gdk-pixbuf/io-gdip-utils.c:1004
 #, fuzzy
 msgid "Couldn't save"
 msgstr "Ne mogu spremiti ostatak"
@@ -1551,7 +1546,7 @@ msgstr "_Ubaciti Unicode kontrolni znak"
 msgid "Select A File"
 msgstr "Odaberite datoteku"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1922
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1925
 msgid "Desktop"
 msgstr "Radna površina"
 
@@ -1563,23 +1558,23 @@ msgstr "(Ništa)"
 msgid "Other..."
 msgstr "Ostalo..."
 
-#: gtk/gtkfilechooserdefault.c:1055
+#: gtk/gtkfilechooserdefault.c:1058
 msgid "Could not retrieve information about the file"
 msgstr "Nisam mogao dohvatiti informaciju o datoteci %s: %s"
 
-#: gtk/gtkfilechooserdefault.c:1066
+#: gtk/gtkfilechooserdefault.c:1069
 msgid "Could not add a bookmark"
 msgstr "Nisam mogao dodati knjižnu oznaku %s"
 
-#: gtk/gtkfilechooserdefault.c:1077
+#: gtk/gtkfilechooserdefault.c:1080
 msgid "Could not remove bookmark"
 msgstr "Nisam mogao ukloniti zabilješku"
 
-#: gtk/gtkfilechooserdefault.c:1088
+#: gtk/gtkfilechooserdefault.c:1091
 msgid "The folder could not be created"
 msgstr "Mapa nije mogla biti kreirana"
 
-#: gtk/gtkfilechooserdefault.c:1101
+#: gtk/gtkfilechooserdefault.c:1104
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1587,11 +1582,11 @@ msgstr ""
 "Mapa nije mogla biti kreirana, jer već postoji datoteka s istim imenom. "
 "Pokušajte koristiti drugo ime za mapu, ili prvo preimenujte datoteku."
 
-#: gtk/gtkfilechooserdefault.c:1112
+#: gtk/gtkfilechooserdefault.c:1115
 msgid "Invalid file name"
 msgstr "Neispravno ime datoteke"
 
-#: gtk/gtkfilechooserdefault.c:1122
+#: gtk/gtkfilechooserdefault.c:1125
 msgid "The folder contents could not be displayed"
 msgstr "Sadržaj mape nije mogao biti prikazan"
 
@@ -1599,174 +1594,174 @@ msgstr "Sadržaj mape nije mogao biti prikazan"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1674
+#: gtk/gtkfilechooserdefault.c:1677
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s na %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1850
+#: gtk/gtkfilechooserdefault.c:1853
 msgid "Search"
 msgstr "Pretraživanje"
 
-#: gtk/gtkfilechooserdefault.c:1874
+#: gtk/gtkfilechooserdefault.c:1877
 msgid "Recently Used"
 msgstr "Nedavno korišteno"
 
-#: gtk/gtkfilechooserdefault.c:2491
+#: gtk/gtkfilechooserdefault.c:2494
 msgid "Select which types of files are shown"
 msgstr "Odaberite koji tipovi datoteka se prikazuju"
 
-#: gtk/gtkfilechooserdefault.c:2920
+#: gtk/gtkfilechooserdefault.c:2923
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Dodaj mapu '%s' u zabilješke"
 
-#: gtk/gtkfilechooserdefault.c:2961
+#: gtk/gtkfilechooserdefault.c:2964
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Dodaj trenutnu mapu u zabilješke"
 
-#: gtk/gtkfilechooserdefault.c:2963
+#: gtk/gtkfilechooserdefault.c:2966
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Dodaj odabrane mape u zabilješke"
 
-#: gtk/gtkfilechooserdefault.c:3003
+#: gtk/gtkfilechooserdefault.c:3006
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Ukloni zabilješku '%s'"
 
-#: gtk/gtkfilechooserdefault.c:3721
+#: gtk/gtkfilechooserdefault.c:3724
 msgid "Remove"
 msgstr "Ukloni"
 
-#: gtk/gtkfilechooserdefault.c:3730
+#: gtk/gtkfilechooserdefault.c:3733
 msgid "Rename..."
 msgstr "Preimenuj..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3876
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "Places"
 msgstr "Mjesta"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3933
+#: gtk/gtkfilechooserdefault.c:3936
 #, fuzzy
 msgid "_Places"
 msgstr "_Promijeni ime"
 
-#: gtk/gtkfilechooserdefault.c:3988 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3991 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "_Dodaj"
 
-#: gtk/gtkfilechooserdefault.c:3995
+#: gtk/gtkfilechooserdefault.c:3998
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Dodaj odabranu mapu u zabilješke"
 
-#: gtk/gtkfilechooserdefault.c:4000 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:4003 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "_Ukloni"
 
-#: gtk/gtkfilechooserdefault.c:4007
+#: gtk/gtkfilechooserdefault.c:4010
 msgid "Remove the selected bookmark"
 msgstr "Maknu odabrane zabilješke"
 
-#: gtk/gtkfilechooserdefault.c:4104
+#: gtk/gtkfilechooserdefault.c:4107
 msgid "Could not select file"
 msgstr "Nisam mogao odabrati datoteku"
 
-#: gtk/gtkfilechooserdefault.c:4280
+#: gtk/gtkfilechooserdefault.c:4283
 msgid "_Add to Bookmarks"
 msgstr "_Dodaj u zabilješke"
 
-#: gtk/gtkfilechooserdefault.c:4294
+#: gtk/gtkfilechooserdefault.c:4297
 msgid "Show _Hidden Files"
 msgstr "Prikaži _skrivene datoteke"
 
-#: gtk/gtkfilechooserdefault.c:4537 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4540 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Datoteke"
 
-#: gtk/gtkfilechooserdefault.c:4586
+#: gtk/gtkfilechooserdefault.c:4589
 msgid "Name"
 msgstr "Ime"
 
-#: gtk/gtkfilechooserdefault.c:4611
+#: gtk/gtkfilechooserdefault.c:4614
 msgid "Size"
 msgstr "Veličina"
 
-#: gtk/gtkfilechooserdefault.c:4625
+#: gtk/gtkfilechooserdefault.c:4628
 msgid "Modified"
 msgstr "Mijenjano"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4845 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4848 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Ime:"
 
-#: gtk/gtkfilechooserdefault.c:4887
+#: gtk/gtkfilechooserdefault.c:4890
 msgid "_Browse for other folders"
 msgstr "_Pregledaj druge mape"
 
-#: gtk/gtkfilechooserdefault.c:5157
+#: gtk/gtkfilechooserdefault.c:5160
 #, fuzzy
 msgid "Type a file name"
 msgstr "Neispravno ime datoteke: %s"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5194
+#: gtk/gtkfilechooserdefault.c:5197
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "Stvori _mapu"
 
-#: gtk/gtkfilechooserdefault.c:5204
+#: gtk/gtkfilechooserdefault.c:5207
 #, fuzzy
 msgid "_Location:"
 msgstr "_Mjesto:"
 
-#: gtk/gtkfilechooserdefault.c:5393
+#: gtk/gtkfilechooserdefault.c:5407
 msgid "Save in _folder:"
 msgstr "Spremi u _mapu:"
 
-#: gtk/gtkfilechooserdefault.c:5395
+#: gtk/gtkfilechooserdefault.c:5409
 msgid "Create in _folder:"
 msgstr "Stvori u _mapi:"
 
-#: gtk/gtkfilechooserdefault.c:6976
+#: gtk/gtkfilechooserdefault.c:6990
 msgid "Cannot change to folder because it is not local"
 msgstr "Nisam se mogao postaviti u mapu jer nije na lokalnom računalu"
 
-#: gtk/gtkfilechooserdefault.c:7601 gtk/gtkfilechooserdefault.c:7622
+#: gtk/gtkfilechooserdefault.c:7615 gtk/gtkfilechooserdefault.c:7636
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "Ne postoji kratica %s"
 
-#: gtk/gtkfilechooserdefault.c:7712
+#: gtk/gtkfilechooserdefault.c:7726
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Kratica %s ne postoji"
 
-#: gtk/gtkfilechooserdefault.c:7960 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:7974 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Datoteka imena \"%s\" već postoji. Želite li ju zamjeniti?"
 
-#: gtk/gtkfilechooserdefault.c:7963 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:7977 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Datoteka već postoji u \"%s\". Zamjena će prebrisati njezin sadržaj."
 
-#: gtk/gtkfilechooserdefault.c:7968 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:7982 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "_Zamijeni"
 
-#: gtk/gtkfilechooserdefault.c:8729
+#: gtk/gtkfilechooserdefault.c:8743
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Ne mogu spremiti ostatak"
 
-#: gtk/gtkfilechooserdefault.c:8730
+#: gtk/gtkfilechooserdefault.c:8744
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1774,50 +1769,50 @@ msgstr ""
 "Aplikacija se ne može spojiti na indekser daemon. Provjerite ako je indekser "
 "pokrenut."
 
-#: gtk/gtkfilechooserdefault.c:8744
+#: gtk/gtkfilechooserdefault.c:8758
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Ne mogu spremiti ostatak"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9184
+#: gtk/gtkfilechooserdefault.c:9198
 msgid "_Search:"
 msgstr "_Traži:"
 
-#: gtk/gtkfilechooserdefault.c:10131
+#: gtk/gtkfilechooserdefault.c:10145
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nisam mogao montirati %s"
 
-#: gtk/gtkfilechooserdefault.c:10785
+#: gtk/gtkfilechooserdefault.c:10799
 msgid "Type name of new folder"
 msgstr "Upišite ime nove mape"
 
-#: gtk/gtkfilechooserdefault.c:10835
+#: gtk/gtkfilechooserdefault.c:10849
 #, fuzzy, c-format
 msgid "%.1f KB"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:10837
+#: gtk/gtkfilechooserdefault.c:10851
 #, fuzzy, c-format
 msgid "%.1f MB"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:10839
+#: gtk/gtkfilechooserdefault.c:10853
 #, fuzzy, c-format
 msgid "%.1f GB"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:10942 gtk/gtkfilechooserdefault.c:10964
-#: gtk/gtkfilechooserdefault.c:11035
+#: gtk/gtkfilechooserdefault.c:10956 gtk/gtkfilechooserdefault.c:10978
+#: gtk/gtkfilechooserdefault.c:11049
 msgid "Unknown"
 msgstr "Nepoznato"
 
-#: gtk/gtkfilechooserdefault.c:10982
+#: gtk/gtkfilechooserdefault.c:10996
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10984
+#: gtk/gtkfilechooserdefault.c:10998
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Jučer"
@@ -2097,7 +2092,7 @@ msgstr "Neuspjelo učitavanje TIFF slike"
 msgid "Simple"
 msgstr "Datoteke"
 
-#: gtk/gtkimmulticontext.c:542
+#: gtk/gtkimmulticontext.c:543
 msgid "input method menu|System"
 msgstr ""
 
@@ -4850,6 +4845,10 @@ msgstr "_Ispis"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nisam mogao dohvatiti podatak za datoteku '%s': %s"
+
+#, fuzzy
+#~ msgid "Couldn't create pixbuf"
+#~ msgstr "Ne mogu napraviti novi pixbuf"
 
 #~ msgid "Invalid filename: %s"
 #~ msgstr "Neispravno ime datoteke: %s"
