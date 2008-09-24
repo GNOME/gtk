@@ -1,5 +1,12 @@
 2008-09-24  Christian Dywan  <christian@imendio.com>
 
+	Bug 538782 – Make GtkMenu's arrow size themable
+
+	* gtk/gtkmenu.c (gtk_menu_class_init), (gtk_menu_paint):
+        Implement "arrow-scaling" style property in GtkMenu.
+
+2008-09-24  Christian Dywan  <christian@imendio.com>
+
 	Bug 408244 – add GtkDialog::content-area-spacing
 
 	* gtk/gtkbox.c (gtk_box_init), (gtk_box_set_spacing),

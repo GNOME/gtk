@@ -661,6 +661,20 @@ gtk_menu_class_init (GtkMenuClass *class)
 								-1, INT_MAX, -1,
                                                                GTK_PARAM_READWRITE));
 
+ /**
+  * GtkMenu::arrow-scaling
+  *
+  * Arbitrary constant to scale down the size of the scroll arrow.
+  *
+  * Since: 2.16
+  */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_float ("arrow-scaling",
+                                                               P_("Arrow Scaling"),
+                                                               P_("Arbitrary constant to scale down the size of the scroll arrow"),
+                                                               0.0, 1.0, 0.7,
+                                                               GTK_PARAM_READABLE));
+
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set,
 				GDK_Up, 0,
@@ -2626,7 +2640,11 @@ gtk_menu_paint (GtkWidget      *widget,
 
   if (event->window == widget->window)
     {
-      gint arrow_size = 0.7 * arrow_space;
+      gfloat arrow_scaling;
+      gint arrow_size;
+
+      gtk_widget_style_get (widget, "arrow-scaling", &arrow_scaling, NULL);
+      arrow_size = arrow_scaling * arrow_space;
 
       gtk_paint_box (widget->style,
 		     widget->window,
