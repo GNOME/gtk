@@ -1,3 +1,10 @@
+2008-09-24  Johan Dahlin  <johan@gnome.org>
+
+	Bug 553385 – gtk-builder-convert creates untranslated combobox models
+
+	* gtk/gtk-builder-convert: Set the translatable property on
+	col tags for converted combos.
+
 2008-09-24  Tor Lillqvist  <tml@novell.com>
 
 	* gtk-zip.sh.in: Include all of share/man, lib/pkgconfig,
