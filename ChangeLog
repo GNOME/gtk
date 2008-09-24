@@ -1,3 +1,10 @@
+2008-09-24  Tor Lillqvist  <tml@novell.com>
+
+	* gtk-zip.sh.in: Include all of share/man, lib/pkgconfig,
+	share/aclocal and share/gtk-doc instead of trying to list
+	individual files or subdirectories. We had missed gail.pc, for
+	instance.
+
 2008-09-24  Christian Dywan  <christian@imendio.com>
 
 	Bug 538782 – Make GtkMenu's arrow size themable
