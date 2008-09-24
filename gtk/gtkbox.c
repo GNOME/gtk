@@ -101,7 +101,7 @@ gtk_box_class_init (GtkBoxClass *class)
                                                      G_MAXINT,
                                                      0,
                                                      GTK_PARAM_READWRITE));
-  
+
   g_object_class_install_property (gobject_class,
                                    PROP_HOMOGENEOUS,
                                    g_param_spec_boolean ("homogeneous",
@@ -155,6 +155,7 @@ gtk_box_init (GtkBox *box)
   
   box->children = NULL;
   box->spacing = 0;
+  box->spacing_set = FALSE;
   box->homogeneous = FALSE;
 }
 
@@ -531,7 +532,10 @@ gtk_box_set_spacing (GtkBox *box,
   if (spacing != box->spacing)
     {
       box->spacing = spacing;
+      box->spacing_set = TRUE;
+
       g_object_notify (G_OBJECT (box), "spacing");
+
       gtk_widget_queue_resize (GTK_WIDGET (box));
     }
 }
@@ -550,6 +554,23 @@ gtk_box_get_spacing (GtkBox *box)
   g_return_val_if_fail (GTK_IS_BOX (box), 0);
 
   return box->spacing;
+}
+
+void
+_gtk_box_set_spacing_set (GtkBox  *box,
+                          gboolean spacing_set)
+{
+  g_return_if_fail (GTK_IS_BOX (box));
+
+  box->spacing_set = spacing_set;
+}
+
+gboolean
+_gtk_box_get_spacing_set (GtkBox *box)
+{
+  g_return_val_if_fail (GTK_IS_BOX (box), FALSE);
+
+  return box->spacing_set;
 }
 
 /**

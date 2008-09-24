@@ -59,6 +59,7 @@ struct _GtkBox
   GList *GSEAL (children);
   gint16 GSEAL (spacing);
   guint GSEAL (homogeneous) : 1;
+  guint GSEAL (spacing_set) : 1;
 };
 
 struct _GtkBoxClass
@@ -115,6 +116,9 @@ void	   gtk_box_set_child_packing   (GtkBox	     *box,
 					gboolean      fill,
 					guint	      padding,
 					GtkPackType   pack_type);
+gboolean   _gtk_box_get_spacing_set    (GtkBox*	      box);
+void	   _gtk_box_set_spacing_set    (GtkBox       *box,
+                                        gboolean      spacing_set);
 
 
 G_END_DECLS

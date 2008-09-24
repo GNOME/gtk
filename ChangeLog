@@ -1,5 +1,17 @@
 2008-09-24  Christian Dywan  <christian@imendio.com>
 
+	Bug 408244 – add GtkDialog::content-area-spacing
+
+	* gtk/gtkbox.c (gtk_box_init), (gtk_box_set_spacing),
+	(_gtk_box_set_spacing_set), (_gtk_box_get_spacing_set):
+	* gtk/gtkbox.h:
+	* gtk/gtkdialog.c (gtk_dialog_class_init), (update_spacings):
+        Implement "content-area-spacing" style property in GtkDialog
+        and internal helper _gtk_box_get_spacing_set in GtkBox.
+        Patch by Tim Janik, Sven Herzberg and myself.
+
+2008-09-24  Christian Dywan  <christian@imendio.com>
+
 	Bug 541391 – Unfocussable Treeview swallows focus
 
 	* gtk/gtktreeview.c (grab_focus_and_unset_draw_keyfocus),

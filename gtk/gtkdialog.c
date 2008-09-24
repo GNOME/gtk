@@ -194,6 +194,24 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              G_MAXINT,
                                                              2,
                                                              GTK_PARAM_READABLE));
+  /**
+   * GtkDialog:content-area-spacing:
+   *
+   * The default spacing used between elements of the
+   * content area of the dialog, as returned by
+   * gtk_dialog_get_content_area(), unless gtk_box_set_spacing()
+   * was called on that widget directly.
+   *
+   * Since: 2.16
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("content-area-spacing",
+                                                             P_("Content area spacing"),
+                                                             P_("Spacing between elements of the main dialog area"),
+                                                             0,
+                                                             G_MAXINT,
+                                                             0,
+                                                             GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("button-spacing",
                                                              P_("Button spacing"),
@@ -220,21 +238,25 @@ gtk_dialog_class_init (GtkDialogClass *class)
 static void
 update_spacings (GtkDialog *dialog)
 {
-  GtkWidget *widget;
   gint content_area_border;
+  gint content_area_spacing;
   gint button_spacing;
   gint action_area_border;
-  
-  widget = GTK_WIDGET (dialog);
 
-  gtk_widget_style_get (widget,
+  gtk_widget_style_get (GTK_WIDGET (dialog),
                         "content-area-border", &content_area_border,
+                        "content-area-spacing", &content_area_spacing,
                         "button-spacing", &button_spacing,
                         "action-area-border", &action_area_border,
                         NULL);
 
   gtk_container_set_border_width (GTK_CONTAINER (dialog->vbox),
                                   content_area_border);
+  if (!_gtk_box_get_spacing_set (GTK_BOX (dialog->vbox)))
+    {
+      gtk_box_set_spacing (GTK_BOX (dialog->vbox), content_area_spacing);
+      _gtk_box_set_spacing_set (GTK_BOX (dialog->vbox), FALSE);
+    }
   gtk_box_set_spacing (GTK_BOX (dialog->action_area),
                        button_spacing);
   gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area),
