@@ -1,3 +1,12 @@
+2008-09-25  Marek Kasik  <mkasik@redhat.com>
+
+	Bug 553241 – double freed pointer in lpr_write cause firefox3 crash
+
+	* modules/printbackends/lpr/gtkprintbackendlpr.c:
+	The redundant freeing of memory was removed.
+
+	Patch by Chris Wang
+
 2008-09-25  Michael Natterer  <mitch@imendio.com>
 
 	Merged from trunk:
