@@ -289,8 +289,6 @@ lpr_write (GIOChannel   *source,
       lpr_print_cb (GTK_PRINT_BACKEND_LPR (ps->backend), 
 		    error, user_data);
 
-      if (error)
-	g_error_free (error);
 
       if (error != NULL)
         {
