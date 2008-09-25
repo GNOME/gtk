@@ -934,8 +934,6 @@ gtk_file_chooser_default_finalize (GObject *object)
 
   shortcuts_free (impl);
 
-  g_object_unref (impl->file_system);
-
   g_free (impl->browse_files_last_selected_name);
 
   for (l = impl->filters; l; l = l->next)

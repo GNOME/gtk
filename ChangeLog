@@ -1,3 +1,11 @@
+2008-09-25  Michael Natterer  <mitch@imendio.com>
+
+	Merged from trunk:
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_finalize):
+	don't unref the file system backend, the newly added
+	unset_file_system_backend() already does this (bug #553135).
+
 2008-09-24  Tor Lillqvist  <tml@novell.com>
 
 	* gtk-zip.sh.in: Include all of share/man, lib/pkgconfig,
