@@ -1,3 +1,12 @@
+2008-09-26  Cody Russell  <bratsche@gnome.org>
+
+	Bug 553917 – Typo in gdkwindow-win32.c
+
+	* gdk/win32/gdkwindow-win32.c: Fixed a typo in
+	update_system_menu().  Changed GDK_DECOR_ALL to GDK_FUNC_ALL.
+
+	Reported by Richard Hult
+
 2008-09-25  Marek Kasik  <mkasik@redhat.com>
 
 	Bug 553241 – double freed pointer in lpr_write cause firefox3 crash

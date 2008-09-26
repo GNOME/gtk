@@ -2959,7 +2959,7 @@ update_system_menu (GdkWindow *window)
     {
       HMENU hmenu = GetSystemMenu (GDK_WINDOW_HWND (window), FALSE);
 
-      all = (functions & GDK_DECOR_ALL);
+      all = (functions & GDK_FUNC_ALL);
       update_single_system_menu_entry (hmenu, all, functions & GDK_FUNC_RESIZE, SC_SIZE);
       update_single_system_menu_entry (hmenu, all, functions & GDK_FUNC_MOVE, SC_MOVE);
       update_single_system_menu_entry (hmenu, all, functions & GDK_FUNC_MINIMIZE, SC_MINIMIZE);
