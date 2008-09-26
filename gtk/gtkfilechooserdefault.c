@@ -10192,12 +10192,16 @@ shortcuts_activate_volume (GtkFileChooserDefault *impl,
 
   if (!_gtk_file_system_volume_is_mounted (volume))
     {
+      GtkMountOperation *mount_op;
+
       set_busy_cursor (impl, TRUE);
 
+      mount_op = gtk_mount_operation_new (get_toplevel (GTK_WIDGET (impl)));
       impl->shortcuts_activate_iter_cancellable =
-        _gtk_file_system_mount_volume (impl->file_system, volume, NULL,
+        _gtk_file_system_mount_volume (impl->file_system, volume, mount_op,
 				       shortcuts_activate_volume_mount_cb,
 				       g_object_ref (impl));
+      g_object_unref (mount_op);
     }
   else
     {
