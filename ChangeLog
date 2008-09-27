@@ -1,5 +1,23 @@
 2008-09-26  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 552959 – GtkTrayIcon: _NET_SYSTEM_TRAY_VISUAL and real
+	transparency
+
+	* gtk/gtktrayicon-x11.c: Add support for the _BET_SYSTEM_TRAY_VISUAL
+	property described in
+	http://lists.freedesktop.org/archives/xdg/2008-September/009919.html
+	If _NET_SYSTEM_TRAY_VISUAL is a visual with an alpha channel, the 
+	parent-relative-background hack is skipped and we draw with a real
+	transparent background.
+
+	* gtk/gtkrc.c: Remove the default GtkTrayIcon style, since the
+	parent-relative background is now set when realizing the tray
+	icon.
+
+	Patch by Owen Taylor
+
+2008-09-26  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 552956 – Should check composite extension version
 
 	* gdk/x11/gdkdisplay-x11.c: Check that the version of the

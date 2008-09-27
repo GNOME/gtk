@@ -876,18 +876,12 @@ _gtk_rc_init (void)
 		       "  text[PRELIGHT] = \"#ffffff\"\n"
 		       "}\n"
 		       "\n"
-                       /* Make transparent tray icons work */
-		       "style \"gtk-default-tray-icon-style\" {\n"
-		       "  bg_pixmap[NORMAL] = \"<parent>\"\n"
-		       "}\n"
-		       "\n"
                        /* Work around clipping of accelerator underlines */
                        "style \"gtk-default-label-style\" {\n"
                        "  GtkWidget::draw-border = {0,0,0,1}\n"
                        "}\n"
                        "\n"    
 		       "class \"GtkProgressBar\" style : gtk \"gtk-default-progress-bar-style\"\n"
-		       "class \"GtkTrayIcon\" style : gtk \"gtk-default-tray-icon-style\"\n"
 		       "widget \"gtk-tooltip*\" style : gtk \"gtk-default-tooltips-style\"\n"
 		       "widget_class \"*<GtkMenuItem>*\" style : gtk \"gtk-default-menu-item-style\"\n"
 		       "widget_class \"*<GtkMenuBar>*<GtkMenuItem>\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
