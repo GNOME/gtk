@@ -10,10 +10,15 @@
 2008-09-26  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 553133 – GtkFileChooser won't ask to mount a volume
+	Bug 553211 – GtkFileChooserButton unsets filter after first use
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_activate_volume): Use
 	a GtkMountOperation when mounting, so that we get a password
 	dialog when required.  
+
+	* gtk/gtkfilechooserdefault.c (show_and_select_files): Also
+	get the content-type, since it is used later on. 
+	Pointed out by Davyd Madeley.
 
 2008-09-26  Cody Russell  <bratsche@gnome.org>
 
