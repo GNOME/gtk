@@ -1,4 +1,16 @@
 2008-09-26  Matthias Clasen  <mclasen@redhat.com>
+	
+	Bug 553803 – eventually call XCloseDevice on XOpenDevice results
+
+	* gdk/x11/gdkinput.c: Add a finalize function for device objects,
+	and call XCloseDevice there. 
+
+	* gdk/x11/gdkinput-x11.c:
+	* gdk/x11/gdkdisplay-x11.c: Move freeing of device objects to
+	the finalize function.
+	Patch by Caolan McNamara
+	
+2008-09-26  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 553578 - tabs are not drawn correctly
 

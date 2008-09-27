@@ -246,10 +246,6 @@ gdk_input_device_new (GdkDisplay  *display,
 
  error:
 
-  g_free (gdkdev->info.name);
-  g_free (gdkdev->axes);
-  g_free (gdkdev->info.keys);
-  g_free (gdkdev->info.axes);
   g_object_unref (gdkdev);
   
   return NULL;

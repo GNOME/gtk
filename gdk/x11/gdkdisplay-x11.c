@@ -830,7 +830,6 @@ gdk_display_x11_finalize (GObject *object)
   g_slist_free (display_x11->event_types);
 
   /* input GdkDevice list */
-  /* FIXME need to write finalize fct */
   g_list_foreach (display_x11->input_devices, (GFunc) g_object_unref, NULL);
   g_list_free (display_x11->input_devices);
 
