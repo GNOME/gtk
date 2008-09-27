@@ -160,6 +160,8 @@ struct _GtkIconViewPrivate
 
   gint tooltip_column;
 
+  guint draw_focus : 1;
+
   /* Drag-and-drop. */
   GdkModifierType start_button_mask;
   gint pressed_button;
@@ -989,6 +991,8 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->row_spacing = 6;
   icon_view->priv->column_spacing = 6;
   icon_view->priv->margin = 6;
+
+  icon_view->priv->draw_focus = TRUE;
 }
 
 static void
@@ -1432,7 +1436,8 @@ gtk_icon_view_expose (GtkWidget *widget,
       
       gtk_icon_view_paint_item (icon_view, cr, item, &expose->area, 
 				icon_view->priv->bin_window,
-				item->x, item->y, TRUE); 
+				item->x, item->y,
+				icon_view->priv->draw_focus); 
  
       if (dest_index == item->index)
 	dest_item = item;
@@ -2076,6 +2081,8 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 	    gtk_icon_view_start_rubberbanding (icon_view, event->x, event->y);
 	}
 
+      /* don't draw keyboard focus around an clicked-on item */
+      icon_view->priv->draw_focus = FALSE;
     }
 
   if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
@@ -3710,6 +3717,8 @@ gtk_icon_view_real_move_cursor (GtkIconView     *icon_view,
 
   icon_view->priv->ctrl_pressed = FALSE;
   icon_view->priv->shift_pressed = FALSE;
+
+  icon_view->priv->draw_focus = TRUE;
 
   return TRUE;
 }

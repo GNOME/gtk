@@ -1,3 +1,8 @@
+2008-09-27  Denis Washington  <denisw@svn.gnome.org>
+
+	* gtk/gtkiconview.c: only draw keyboard focus when keyboard navigation
+	is used, like GtkTreeView. (Bug #553575)
+
 2008-09-26  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 552959 – GtkTrayIcon: _NET_SYSTEM_TRAY_VISUAL and real
