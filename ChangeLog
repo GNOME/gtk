@@ -2,6 +2,16 @@
 
 	Merged from trunk:
 
+	Bug 553211 – GtkFileChooserButton unsets filter after first use
+
+	* gtk/gtkfilechooserdefault.c (show_and_select_files): Also
+	get the content-type, since it is used later on.
+	Pointed out by Davyd Madeley.
+
+2008-09-26  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 553578 - tabs are not drawn correctly
 
 	* gtk/gtknotebook.c: Track the visibility state of notebook tabs

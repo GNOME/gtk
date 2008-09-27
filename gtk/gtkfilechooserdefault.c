@@ -6502,7 +6502,7 @@ show_and_select_files (GtkFileChooserDefault *impl,
 
   impl->show_and_select_files_cancellable =
     _gtk_file_system_get_folder (impl->file_system, parent_file,
- 				 "standard::is-hidden,standard::type,standard::name",
+ 				 "standard::is-hidden,standard::type,standard::name,standard::content-type",
 			         show_and_select_files_get_folder_cb, info);
 
   profile_end ("end", NULL);
