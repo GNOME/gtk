@@ -153,6 +153,11 @@ struct _GtkNotebookPage
   guint reorderable  : 1;
   guint detachable   : 1;
 
+  /* if true, the tab label was visible on last allocation; we track this so
+   * that we know to redraw the tab area if a tab label was hidden then shown
+   * without changing position */
+  guint tab_allocated_visible : 1;
+
   GtkRequisition requisition;
   GtkAllocation allocation;
 
@@ -5556,9 +5561,15 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   gint tab_curvature;
   gint tab_pos = get_effective_tab_pos (notebook);
   gboolean tab_allocation_changed;
+  gboolean was_visible = page->tab_allocated_visible;
 
-  if (!page->tab_label)
-    return FALSE;
+  if (!page->tab_label ||
+      !GTK_WIDGET_VISIBLE (page->tab_label) ||
+      !gtk_widget_get_child_visible (page->tab_label))
+    {
+      page->tab_allocated_visible = FALSE;
+      return was_visible;
+    }
 
   xthickness = widget->style->xthickness;
   ythickness = widget->style->ythickness;
@@ -5629,6 +5640,12 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 			    child_allocation.height != page->tab_label->allocation.height);
 
   gtk_widget_size_allocate (page->tab_label, &child_allocation);
+
+  if (!was_visible)
+    {
+      page->tab_allocated_visible = TRUE;
+      tab_allocation_changed = TRUE;
+    }
 
   return tab_allocation_changed;
 }

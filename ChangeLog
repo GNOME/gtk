@@ -2,6 +2,17 @@
 
 	Merged from trunk:
 
+	Bug 553578 - tabs are not drawn correctly
+
+	* gtk/gtknotebook.c: Track the visibility state of notebook tabs
+	between allocations so that we know to redraw the tab labels if
+	tabs are hidden and shown without changing position.
+	Reported by Marek Kašík, patch by Owen Taylor.
+
+2008-09-26  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	Bug 553133 – GtkFileChooser won't ask to mount a volume
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_activate_volume): Use
