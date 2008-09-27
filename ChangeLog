@@ -1,4 +1,12 @@
 2008-09-26  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 552956 – Should check composite extension version
+
+	* gdk/x11/gdkdisplay-x11.c: Check that the version of the
+	composite extension is at least 0.4.
+	Patch by Owen Taylor
+
+2008-09-26  Matthias Clasen  <mclasen@redhat.com>
 	
 	Bug 553803 – eventually call XCloseDevice on XOpenDevice results
 
