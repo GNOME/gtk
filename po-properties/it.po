@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-22 17:04+0200\n"
-"PO-Revision-Date: 2008-09-25 15:31+0200\n"
+"PO-Revision-Date: 2008-09-27 13:17+0200\n"
 "Last-Translator: Milo Casagrande <milo@ubuntu.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -3947,7 +3947,7 @@ msgstr "Spaziatura freccia"
 # GTK-2-14
 #: ../gtk/gtknotebook.c:835
 msgid "Scroll arrow spacing"
-msgstr "Spaziatura freccia scorrimento"
+msgstr "Spaziatura freccia di scorrimento"
 
 #: ../gtk/gtkobject.c:370
 msgid "User Data"
@@ -4491,9 +4491,11 @@ msgstr ""
 "Il valore restituito da gtk_radio_action_get_current_value() quando questa "
 "azione è l'azione corrente del suo gruppo."
 
+# GTK-2-14
+# REVIEW
 #: ../gtk/gtkradioaction.c:129
 msgid "The radio action whose group this action belongs to."
-msgstr "L'azione «radio» del gruppo al quale questa azione appartiene."
+msgstr "L'azione «radio» al cui gruppo appartiene questa azione."
 
 #: ../gtk/gtkradioaction.c:144
 msgid "The current value"
@@ -4507,19 +4509,23 @@ msgstr ""
 "Il valore attuale della proprietà del componente correntemente attivo nel "
 "gruppo a cui appartiene l'azione."
 
+# GTK-2-14
+# REVIEW
 #: ../gtk/gtkradiobutton.c:83
 msgid "The radio button whose group this widget belongs to."
-msgstr "Il pulsante «radio» del gruppo al quale questo widget appartiene."
-
-#: ../gtk/gtkradiomenuitem.c:343
-msgid "The radio menu item whose group this widget belongs to."
-msgstr "L'elemento del menù «radio» del gruppo al quale il widget appartiene."
+msgstr "Il pulsante «radio» al cui gruppo appartiene questo widget."
 
 # GTK-2-14
-# mancherebbe la traduzione di tool, è pulsante su barra degli strumenti
+# REVIEW
+#: ../gtk/gtkradiomenuitem.c:343
+msgid "The radio menu item whose group this widget belongs to."
+msgstr "La voce di menù «radio» al cui gruppo appartiene questo widget."
+
+# GTK-2-14
+# REVIEW
 #: ../gtk/gtkradiotoolbutton.c:66
 msgid "The radio tool button whose group this button belongs to."
-msgstr "Il pulsante «radio» del gruppo al quale questo pulsante appartiene."
+msgstr "Il pulsante «radio» sulla barra degli strumenti al cui gruppo appartiene questo pulsante."
 
 #: ../gtk/gtkrange.c:337
 msgid "Update policy"
