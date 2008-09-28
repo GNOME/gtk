@@ -846,7 +846,7 @@ gtk_im_context_xim_set_cursor_location (GtkIMContext *context,
     return;
 
   spot.x = area->x;
-  spot.y = area->y;
+  spot.y = area->y + area->height;
 
   preedit_attr = XVaCreateNestedList (0,
 				      XNSpotLocation, &spot,

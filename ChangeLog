@@ -1,3 +1,10 @@
+2008-09-27  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 339367 – Incorrect spotlocation
+
+	* modules/input/gtkimcontextxim.c: Correct the spot location
+	for on-the-spot style.
+
 2008-09-27  Denis Washington  <denisw@svn.gnome.org>
 
 	* gtk/gtkiconview.c: only draw keyboard focus when keyboard navigation
