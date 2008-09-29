@@ -2019,6 +2019,7 @@ gtk_im_context_simple_new
 #if IN_HEADER(__GTK_IM_MULTICONTEXT_H__)
 #if IN_FILE(__GTK_IM_MULTICONTEXT_C__)
 gtk_im_multicontext_append_menuitems
+gtk_im_multicontext_get_context_id
 gtk_im_multicontext_get_type G_GNUC_CONST
 gtk_im_multicontext_new
 #endif

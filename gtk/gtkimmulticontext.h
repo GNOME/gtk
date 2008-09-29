@@ -68,6 +68,8 @@ GtkIMContext *gtk_im_multicontext_new      (void);
 
 void          gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 						    GtkMenuShell      *menushell);
+const char  * gtk_im_multicontext_get_context_id   (GtkIMMulticontext *context);
+
 
 G_END_DECLS
 

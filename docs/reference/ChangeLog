@@ -1,5 +1,9 @@
 2008-09-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Add gtk_im_multi_context_get_context_id.
+	
+2008-09-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/gdk-sections.txt: Add gdk_keymap_get_caps_locks_state.
 
 2008-09-17  Matthias Clasen  <mclasen@redhat.com>

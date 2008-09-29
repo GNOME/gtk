@@ -524,7 +524,7 @@ pathnamecmp (const char *a,
 
 /**
  * gtk_im_multicontext_append_menuitems:
- * @context: a #GtkIMMultiContext
+ * @context: a #GtkIMMulticontext
  * @menushell: a #GtkMenuShell
  * 
  * Add menuitems for various available input methods to a menu;
@@ -627,6 +627,23 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 
   g_free (contexts);
 }
+
+/**
+ * gtk_im_multicontext_get_context_id:
+ * @context: a #GtkIMMulticontext
+ *
+ * Gets the id of the currently active slave of the @context.
+ *
+ * Returns: the id of the currently active slave
+ *
+ * Since: 2.16
+ */
+const char *
+gtk_im_multicontext_get_context_id (GtkIMMulticontext *context)
+{
+  return context->context_id;
+}
+
 
 #define __GTK_IM_MULTICONTEXT_C__
 #include "gtkaliasdef.c"
