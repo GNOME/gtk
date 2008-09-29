@@ -2494,6 +2494,7 @@ gtk_widget_set_property (GObject         *object,
 
       tmp = (tooltip_window != NULL || tooltip_markup != NULL);
       gtk_widget_real_set_has_tooltip (widget, tmp, FALSE);
+      gtk_widget_trigger_tooltip_query (widget);
       break;
     case PROP_TOOLTIP_TEXT:
       tooltip_window = g_object_get_qdata (object, quark_tooltip_window);
@@ -2513,6 +2514,7 @@ gtk_widget_set_property (GObject         *object,
 
       tmp = (tooltip_window != NULL || tooltip_markup != NULL);
       gtk_widget_real_set_has_tooltip (widget, tmp, FALSE);
+      gtk_widget_trigger_tooltip_query (widget);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

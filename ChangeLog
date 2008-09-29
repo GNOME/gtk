@@ -1,3 +1,12 @@
+2008-09-29  Kristian Rietveld  <kris@imendio.com>
+
+	Bug 487624 - Tooltips doesn't get updated if ther's no mouse motion
+	over widget
+
+	* gtk/gtkwidget.c (gtk_widget_set_property): after updating
+	tooltip text or markup, call gtk_widget_trigger_tooltip_query()
+	so that existing visible tooltips are updated.
+
 2008-09-29  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 371908 – Password Entry broken
