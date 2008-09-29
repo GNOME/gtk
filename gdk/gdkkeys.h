@@ -75,6 +75,7 @@ struct _GdkKeymapClass
 
   void (*direction_changed) (GdkKeymap *keymap);
   void (*keys_changed)      (GdkKeymap *keymap);
+  void (*state_changed)     (GdkKeymap *keymap);
 };
 
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
@@ -106,6 +107,7 @@ gboolean       gdk_keymap_get_entries_for_keycode  (GdkKeymap           *keymap,
 						    gint                *n_entries);
 PangoDirection gdk_keymap_get_direction            (GdkKeymap           *keymap);
 gboolean       gdk_keymap_have_bidi_layouts        (GdkKeymap           *keymap);
+gboolean       gdk_keymap_get_caps_lock_state      (GdkKeymap           *keymap);
 
 /* Key values
  */

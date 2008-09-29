@@ -1,3 +1,17 @@
+2008-09-29  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 107000 – Add signals to GdkKeymap for monitoring caps_lock, etc.
+
+	* gdk/gdk.symbols:
+	* gdk/gdkkeys.[ch]: Add a new GdkKeymap::state-changed signal, and
+	a gdk_keymap_get_caps_lock_state function.
+
+	* gdk/x11/gdkkeys-x11.c: Implement it here. For now, only emit
+	state-changed when caps lock lockedness changes. 
+
+	* gdk/x11/gdkdisplay-x11.c: Also select for modifier lock status
+	changes in the XkbSelectEventDetails call.
+
 2008-09-29  Kristian Rietveld  <kris@imendio.com>
 
 	Bug 487624 - Tooltips doesn't get updated if ther's no mouse motion

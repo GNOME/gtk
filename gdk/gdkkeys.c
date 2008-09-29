@@ -33,6 +33,7 @@
 enum {
   DIRECTION_CHANGED,
   KEYS_CHANGED,
+  STATE_CHANGED,
   LAST_SIGNAL
 };
 
@@ -81,6 +82,26 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE,
 		  0);
+
+  /**
+   * GdkKeymap::state-changed:
+   * @keymap: the object on which the signal is emitted
+   *
+   * The ::state-changed signal is emitted when the state of the
+   * keyboard changes, e.g when the Caps Lock is turned on or off.
+   * See gdk_keyboard_get_caps_lock_state().
+   *
+   * Since: 2.16
+   */
+  signals[STATE_CHANGED] =
+    g_signal_new ("state_changed",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GdkKeymapClass, state_changed),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 
+                  0);
 }
 
 static void

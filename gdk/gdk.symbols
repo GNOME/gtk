@@ -829,6 +829,7 @@ gdk_keymap_get_entries_for_keycode
 gdk_keymap_get_entries_for_keyval
 gdk_keymap_get_for_display
 gdk_keymap_have_bidi_layouts
+gdk_keymap_get_caps_lock_state
 gdk_keymap_lookup_key
 gdk_keymap_translate_keyboard_state
 gdk_keyval_convert_case

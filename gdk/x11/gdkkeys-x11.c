@@ -82,9 +82,10 @@ struct _GdkKeymapX11
   GdkModifierType group_switch_mask;
   GdkModifierType num_lock_mask;
   GdkModifierType modmap[8];
-  gboolean sun_keypad;
   PangoDirection current_direction;
-  gboolean have_direction;
+  guint sun_keypad      : 1;
+  guint have_direction  : 1;
+  guint caps_lock_state : 1;
   guint current_serial;
 
 #ifdef HAVE_XKB
@@ -656,12 +657,17 @@ get_num_groups (GdkKeymap *keymap,
       return xkb->ctrls->num_groups;
 }
 
-static void
+static gboolean
 update_direction (GdkKeymapX11 *keymap_x11,
 		  gint          group)
 {
   XkbDescPtr xkb = get_xkb (keymap_x11);
   Atom group_atom;
+  gboolean had_direction;
+  PangoDirection old_direction;
+      
+  had_direction = keymap_x11->have_direction;
+  old_direction = keymap_x11->current_direction;
 
   group_atom = xkb->names->groups[group];
 
@@ -672,6 +678,21 @@ update_direction (GdkKeymapX11 *keymap_x11,
       keymap_x11->current_group_atom = group_atom;
       keymap_x11->have_direction = TRUE;
     }
+
+  return !had_direction || old_direction != keymap_x11->current_direction;
+}
+
+static gboolean
+update_lock_state (GdkKeymapX11 *keymap_x11,
+                   gint          locked_mods)
+{
+  gboolean caps_lock_state;
+  
+  caps_lock_state = keymap_x11->caps_lock_state;
+
+  keymap_x11->caps_lock_state = (locked_mods & GDK_LOCK_MASK) != 0;
+  
+  return caps_lock_state != keymap_x11->caps_lock_state;
 }
 
 /* keep this in sync with the XkbSelectEventDetails() call 
@@ -684,19 +705,16 @@ _gdk_keymap_state_changed (GdkDisplay *display,
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   XkbEvent *xkb_event = (XkbEvent *)xevent;
   
+  g_print ("keymap state changed\n");
   if (display_x11->keymap)
     {
       GdkKeymapX11 *keymap_x11 = GDK_KEYMAP_X11 (display_x11->keymap);
-      gboolean had_direction;
-      PangoDirection direction;
       
-      had_direction = keymap_x11->have_direction;
-      direction = keymap_x11->current_direction;
-      
-      update_direction (keymap_x11, XkbStateGroup (&xkb_event->state));
-      
-      if (!had_direction || direction != keymap_x11->current_direction)
-	g_signal_emit_by_name (keymap_x11, "direction_changed");      
+      if (update_direction (keymap_x11, XkbStateGroup (&xkb_event->state)))
+	g_signal_emit_by_name (keymap_x11, "direction-changed");      
+
+      if (update_lock_state (keymap_x11, xkb_event->state.locked_mods))
+	g_signal_emit_by_name (keymap_x11, "state-changed");      
     }
 }
 
@@ -791,6 +809,29 @@ gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
 #endif /* HAVE_XKB */
     return FALSE;
 }
+
+/**
+ * gdk_keymap_get_caps_lock_state:
+ * @keymap: a #GdkKeymap
+ *
+ * Returns wether the Caps Lock modifer is locked. 
+ *
+ * Returns: %TRUE if Caps Lock is on
+ *
+ * Since: 2.16
+ */
+gboolean
+gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
+{
+  GdkKeymapX11 *keymap_x11;
+  
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);
+  
+  keymap_x11 = GDK_KEYMAP_X11 (keymap);
+  
+  return keymap_x11->caps_lock_state;
+}
+
 
 /**
  * gdk_keymap_get_entries_for_keyval:
