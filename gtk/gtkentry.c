@@ -1085,7 +1085,6 @@ gtk_entry_set_property (GObject         *object,
       else
         gtk_entry_unset_invisible_char (entry);
       break;
-
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -3010,7 +3009,7 @@ gtk_entry_backspace (GtkEntry *entry)
       return;
     }
 
-  prev_pos = gtk_entry_move_logically(entry, entry->current_pos, -1);
+  prev_pos = gtk_entry_move_logically (entry, entry->current_pos, -1);
 
   if (prev_pos < entry->current_pos)
     {
@@ -3020,7 +3019,8 @@ gtk_entry_backspace (GtkEntry *entry)
 
       pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
 
-      if (log_attrs[entry->current_pos].backspace_deletes_character)
+      if (entry->visible &&
+          log_attrs[entry->current_pos].backspace_deletes_character)
 	{
 	  gchar *cluster_text;
 	  gchar *normalized_text;
@@ -3432,27 +3432,17 @@ gtk_entry_create_layout (GtkEntry *entry,
           gint preedit_len_chars;
           gunichar invisible_char;
 
-          ch_len = g_utf8_strlen (entry->text, entry->n_bytes);
-          preedit_len_chars = g_utf8_strlen (preedit_string, -1);
-          ch_len += preedit_len_chars;
-
           if (entry->invisible_char != 0)
             invisible_char = entry->invisible_char;
           else
             invisible_char = ' '; /* just pick a char */
-          
+
+          ch_len = g_utf8_strlen (entry->text, entry->n_bytes);
           append_char (tmp_string, invisible_char, ch_len);
-          
-          /* Fix cursor index to point to invisible char corresponding
-           * to the preedit, fix preedit_length to be the length of
-           * the invisible chars representing the preedit
-           */
           cursor_index =
             g_utf8_offset_to_pointer (tmp_string->str, entry->current_pos) -
             tmp_string->str;
-          preedit_length =
-            preedit_len_chars *
-            g_unichar_to_utf8 (invisible_char, NULL);
+          g_string_insert (tmp_string, cursor_index, preedit_string);
         }
       
       pango_layout_set_text (layout, tmp_string->str, tmp_string->len);
@@ -4632,28 +4622,6 @@ gtk_entry_set_visibility (GtkEntry *entry,
 
   if (entry->visible != visible)
     {
-      if (GTK_WIDGET_HAS_FOCUS (entry) && !visible)
-	gtk_im_context_focus_out (entry->im_context);
-
-      g_object_unref (entry->im_context);
-
-      if (visible)
-        entry->im_context = gtk_im_multicontext_new ();
-      else
-        entry->im_context = gtk_im_context_simple_new ();
-      
-      g_signal_connect (entry->im_context, "commit",
-			G_CALLBACK (gtk_entry_commit_cb), entry);
-      g_signal_connect (entry->im_context, "preedit-changed",
-			G_CALLBACK (gtk_entry_preedit_changed_cb), entry);
-      g_signal_connect (entry->im_context, "retrieve-surrounding",
-			G_CALLBACK (gtk_entry_retrieve_surrounding_cb), entry);
-      g_signal_connect (entry->im_context, "delete-surrounding",
-			G_CALLBACK (gtk_entry_delete_surrounding_cb), entry);
-
-      if (GTK_WIDGET_HAS_FOCUS (entry) && visible)
-	gtk_im_context_focus_in (entry->im_context); 
-
       entry->visible = visible;
 
       g_object_notify (G_OBJECT (entry), "visibility");

@@ -1,3 +1,18 @@
+2008-09-29  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 371908 – Password Entry broken
+	Bug 317002 – Disable input method completely in GtkEntry when it's 
+	in invisible mode.
+
+	* gtk/gtkentry.c (gtk_entry_backspace): Make backspace behave
+	properly when invisible.
+
+	* gtk/gtkentry.c (gtk_entry_create_layout): Show preedit even if
+	invisible. 
+
+	* gtk/gtkentry.c (gtk_entry_set_visibility): Don't disable input
+	methods when making the entry invisible.
+	
 2008-09-29  Emmanuele Bassi  <ebassi@linux.intel.com>
 
 	* gdk/x11/gdkinput.c:
