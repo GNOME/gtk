@@ -1,3 +1,10 @@
+2008-09-29  Richard Hult  <richard@imendio.com>
+
+	Bug 554141 – uninitialized data use/free in gtkclipboard-quartz.c
+
+	* gtk/gtkclipboard-quartz.c: (gtk_clipboard_wait_for_contents):
+	Patch from Jon A. Cruz to initialize the allocated selection data.
+
 2008-09-27  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 339367 – Incorrect spotlocation
