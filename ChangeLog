@@ -1,3 +1,9 @@
+2008-09-29  Emmanuele Bassi  <ebassi@linux.intel.com>
+
+	* gdk/x11/gdkinput.c:
+	(gdk_device_class_init), (gdk_device_finalize): Correctly chain
+	up the finalize implementation.
+
 2008-09-29  Richard Hult  <richard@imendio.com>
 
 	Bug 554141 – uninitialized data use/free in gtkclipboard-quartz.c
