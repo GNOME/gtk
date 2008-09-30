@@ -1,3 +1,9 @@
+2008-09-30  Christian Dywan  <christian@imendio.com>
+
+	Fix a typo in the tutorial.
+
+	* docs/tutorial/gtk-tut.sgml: It's mnemonic, not 'mnemnonic'.
+
 2008-09-29  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 553086 – hard to see current immodule

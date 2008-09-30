@@ -8246,7 +8246,7 @@ GtkWidget *gtk_menu_item_new( void );
 
 GtkWidget *gtk_menu_item_new_with_label( const char *label );
 
-GtkWidget *gtk_menu_item_new_with_mnemnonic( const char *label );
+GtkWidget *gtk_menu_item_new_with_mnemonic( const char *label );
 </programlisting>
 
 <para>These calls are used to create the menu items that are to be
