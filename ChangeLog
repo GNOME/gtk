@@ -1,5 +1,10 @@
 2008-09-30  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtk.symbols: forgot the G_GNUC_CONST of
+	gtk_orientable_get_type().
+
+2008-09-30  Michael Natterer  <mitch@imendio.com>
+
 	Bug 541009 – Get rid of separate subclasses for horizontal and
 	vertical orientation:
 
