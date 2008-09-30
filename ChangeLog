@@ -1,5 +1,13 @@
 2008-09-29  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 553086 – hard to see current immodule
+
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_append_menuitems):
+	Display the actually selected context in the system menuitem.
+	Complaint by Akira Tagoh.
+
+2008-09-29  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 530568 – Entries with visibility=FALSE should warn for caps-lock
 	on
 
