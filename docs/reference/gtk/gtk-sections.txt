@@ -3267,6 +3267,7 @@ gtk_scrolled_window_get_type
 <FILE>gtkseparator</FILE>
 <TITLE>GtkSeparator</TITLE>
 GtkSeparator
+gtk_separator_new
 <SUBSECTION Standard>
 GTK_SEPARATOR
 GTK_IS_SEPARATOR
