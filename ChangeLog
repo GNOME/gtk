@@ -1,3 +1,12 @@
+2008-09-30  Marek Kasik  <mkasik@redhat.com>
+
+	Bug 344522 – support non-local destination files (GtkPrint):
+
+	* gtk/gtkprintunixdialog.c
+	* gtk/gtkprinteroptionwidget.c: Process URI instead of filename.
+	* modules/printbackends/file/gtkprintbackendfile.c: Add ability
+	to save files on non-local filesystems.
+
 2008-09-30  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtk.symbols: forgot the G_GNUC_CONST of

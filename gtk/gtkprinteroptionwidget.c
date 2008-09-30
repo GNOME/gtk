@@ -454,8 +454,8 @@ filesave_changed_cb (GtkWidget              *button,
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
   gchar *uri, *file;
+  gchar *directory;
 
-  /* TODO: how do we support nonlocal file systems? */
   file = g_filename_from_utf8 (gtk_entry_get_text (GTK_ENTRY (priv->entry)),
 			       -1, NULL, NULL, NULL);
   if (file == NULL)
@@ -464,31 +464,38 @@ filesave_changed_cb (GtkWidget              *button,
   /* combine the value of the chooser with the value of the entry */
   g_signal_handler_block (priv->source, priv->source_changed_handler);  
 
-  if (g_path_is_absolute (file))
-    uri = g_filename_to_uri (file, NULL, NULL);
-  else
+  directory = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (priv->combo));
+
+  if ((g_uri_parse_scheme (file) == NULL) && (directory != NULL))
     {
-      gchar *path;
+      if (g_path_is_absolute (file))
+        uri = g_filename_to_uri (file, NULL, NULL);
+      else
+        {
+          gchar *path;
 
 #ifdef G_OS_UNIX
-      if (file[0] == '~' && file[1] == '/')
-        {
-          path = g_build_filename (g_get_home_dir (), file + 2, NULL);
-	}
-      else
+          if (file[0] == '~' && file[1] == '/')
+            {
+              path = g_build_filename (g_get_home_dir (), file + 2, NULL);
+            }
+          else
 #endif
-        {
-          gchar *directory;
+            {
+              path = g_build_filename (directory, file, NULL);
+            }
 
-          directory = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (priv->combo));
-          path = g_build_filename (directory, file, NULL);
+          uri = g_filename_to_uri (path, NULL, NULL);
 
-          g_free (directory);
+          g_free (path);
         }
-
-      uri = g_filename_to_uri (path, NULL, NULL);
-
-      g_free (path);
+    }
+  else
+    {
+      if (g_uri_parse_scheme (file) != NULL)
+        uri = g_strdup (file);
+      else
+        uri = g_build_path ("/", gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (priv->combo)), file, NULL);
     }
  
   if (uri)
@@ -496,6 +503,7 @@ filesave_changed_cb (GtkWidget              *button,
 
   g_free (uri);
   g_free (file);
+  g_free (directory);
 
   g_signal_handler_unblock (priv->source, priv->source_changed_handler);
   emit_changed (widget);
@@ -782,6 +790,8 @@ construct_widgets (GtkPrinterOptionWidget *widget)
         priv->entry = gtk_entry_new ();
         priv->combo = gtk_file_chooser_button_new (source->display_text,
                                                    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+
+        g_object_set (priv->combo, "local-only", FALSE, NULL);
 
         label = gtk_label_new_with_mnemonic (_("_Name:"));
         gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
