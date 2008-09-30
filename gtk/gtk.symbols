@@ -2548,6 +2548,14 @@ gtk_object_get_type G_GNUC_CONST
 #endif
 #endif
 
+#if IN_HEADER(__GTK_ORIENTABLE_H__)
+#if IN_FILE(__GTK_ORIENTABLE_C__)
+gtk_orientable_get_type
+gtk_orientable_get_orientation
+gtk_orientable_set_orientation
+#endif
+#endif
+
 #if IN_HEADER(__GTK_OLD_EDITABLE_H__)
 #if IN_FILE(__GTK_OLD_EDITABLE_C__)
 gtk_old_editable_changed

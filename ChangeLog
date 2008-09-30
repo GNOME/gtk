@@ -1,3 +1,14 @@
+2008-09-30  Michael Natterer  <mitch@imendio.com>
+
+	Bug 541009 – Get rid of separate subclasses for horizontal and
+	vertical orientation:
+
+	* gtk/Makefile.am
+	* gtk/gtk.symbols
+	* gtk/gtk.h
+	* gtk/gtkorientable.[ch]: add new interface GtkOrientable which
+	will be implemented by everything that can switch orientation.
+
 2008-09-30  Christian Dywan  <christian@imendio.com>
 
 	Fix a typo in the tutorial.

@@ -240,6 +240,7 @@ gtk_public_h_sources =          \
 	gtkmountoperation.h     \
 	gtknotebook.h		\
 	gtkobject.h		\
+	gtkorientable.h		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
 	gtkpapersize.h		\
@@ -498,6 +499,7 @@ gtk_base_c_sources =            \
 	gtkmountoperation.c     \
 	gtknotebook.c		\
 	gtkobject.c		\
+	gtkorientable.c		\
 	gtkpagesetup.c		\
 	gtkpaned.c		\
 	gtkpapersize.c		\
