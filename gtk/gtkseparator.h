@@ -46,7 +46,6 @@ G_BEGIN_DECLS
 #define GTK_SEPARATOR_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SEPARATOR, GtkSeparatorClass))
 
 
-
 typedef struct _GtkSeparator       GtkSeparator;
 typedef struct _GtkSeparatorClass  GtkSeparatorClass;
 
@@ -61,8 +60,8 @@ struct _GtkSeparatorClass
 };
 
 
-GType  gtk_separator_get_type (void) G_GNUC_CONST;
-
+GType       gtk_separator_get_type (void) G_GNUC_CONST;
+GtkWidget * gtk_separator_new      (GtkOrientation  orientation);
 
 G_END_DECLS
 

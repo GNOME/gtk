@@ -1,3 +1,17 @@
+2008-09-30  Michael Natterer  <mitch@imendio.com>
+
+	Bug 553582 – Add orientation API to GtkSeparator
+
+	* gtk/gtkseparator.[ch]: implement the GtkOrientable interface and
+	swallow all code from GtkHSeparator and GtkVSeparator. Add
+	gtk_separator_new() which takes a GtkOrientation argument.
+
+	* gtk/gtkhseparator.c
+	* gtk/gtkvseparator.c: remove all code except the constructor and
+	call gtk_orientable_set_orientation() in init().
+
+	* gtk/gtk.symbols: add gtk_separator_new().
+
 2008-09-30  Marek Kasik  <mkasik@redhat.com>
 
 	Bug 344522 – support non-local destination files (GtkPrint):

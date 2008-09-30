@@ -3506,6 +3506,7 @@ gtk_target_table_free
 #if IN_HEADER(__GTK_SEPARATOR_H__)
 #if IN_FILE(__GTK_SEPARATOR_C__)
 gtk_separator_get_type G_GNUC_CONST
+gtk_separator_new
 #endif
 #endif
 
