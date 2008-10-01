@@ -705,7 +705,6 @@ _gdk_keymap_state_changed (GdkDisplay *display,
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   XkbEvent *xkb_event = (XkbEvent *)xevent;
   
-  g_print ("keymap state changed\n");
   if (display_x11->keymap)
     {
       GdkKeymapX11 *keymap_x11 = GDK_KEYMAP_X11 (display_x11->keymap);
