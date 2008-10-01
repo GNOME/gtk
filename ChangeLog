@@ -1,3 +1,10 @@
+2008-10-01  Simos Xenitellis  <simos@gnome.org>
+
+	Bug 554506 – combining diacritics broken, became deadkeys
+
+	* gtk/gtkimcontextsimple.c: added check if keysym is greater
+	than 0x1000000, in this case it is not a dead key.
+
 2008-09-30  Michael Natterer  <mitch@imendio.com>
 
 	Bug 553582 – Add orientation API to GtkSeparator
