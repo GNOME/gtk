@@ -19,7 +19,9 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef _WIN32
 #define _GNU_SOURCE
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>

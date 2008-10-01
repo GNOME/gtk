@@ -1,3 +1,8 @@
+2008-10-01  Tor Lillqvist  <tml@novell.com>
+
+	* io-icns.c: Don't #define _GNU_SOURCE on Windows as it confuses
+	newest mingw headers.
+
 2008-09-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.14.3 ===
