@@ -3460,6 +3460,7 @@ gtk_selection_clear_targets
 gtk_selection_convert
 gtk_selection_data_copy
 gtk_selection_data_free
+gtk_selection_data_get_selection
 gtk_selection_data_get_target
 gtk_selection_data_get_data_type
 gtk_selection_data_get_display

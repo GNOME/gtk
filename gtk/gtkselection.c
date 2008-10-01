@@ -1112,6 +1112,24 @@ gtk_selection_convert (GtkWidget *widget,
 }
 
 /**
+ * gtk_selection_data_get_selection:
+ * @selection_data: a pointer to a #GtkSelectionData structure.
+ *
+ * Retrieves the selection #GdkAtom of the selection data.
+ *
+ * Returns: the selection #GdkAtom of the selection data.
+ *
+ * Since: 2.16
+ **/
+GdkAtom
+gtk_selection_data_get_selection (GtkSelectionData *selection_data)
+{
+  g_return_val_if_fail (selection_data != NULL, 0);
+
+  return selection_data->selection;
+}
+
+/**
  * gtk_selection_data_get_target:
  * @selection_data: a pointer to a #GtkSelectionData structure.
  *

@@ -1,3 +1,11 @@
+2008-10-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* docs/reference/gtk/gtk-sections.txt:
+	* gtk/gtk.symbols:
+	* gtk/gtkselection.c:
+	* gtk/gtkselection.h: Add gtk_selection_data_get_selection to
+	retrieve the sealed struct field GtkSelectionData.selection.
+
 2008-10-01  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkscalebutton.c: Don't #define _GNU_SOURCE on Windows as it
