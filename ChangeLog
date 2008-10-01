@@ -1,3 +1,8 @@
+2008-10-01  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkscalebutton.c: Don't #define _GNU_SOURCE on Windows as it
+	confuses newest mingw headers.
+
 2008-09-29  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:
