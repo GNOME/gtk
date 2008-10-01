@@ -1,3 +1,10 @@
+2008-10-01  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkkeys-win32.c (gdk_keymap_get_caps_lock_state):
+	Implement trivially on Windows. Not sure if something more complex
+	is actually needed, more specifically whether the function needs
+	to differentiate between "Caps Lock" and "Shift Lock" semantics?
+
 2008-10-01  Simos Xenitellis  <simos@gnome.org>
 
 	Bug 554506 – combining diacritics broken, became deadkeys
