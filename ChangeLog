@@ -1,3 +1,9 @@
+2008-10-02  Christian Persch
+
+        Bug 554690 – mem leak in filechooser
+
+        * gtk/gtkfilechooserdefault.c: Plug a mem leak.
+
 2008-10-01  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtkscalebutton.c: Don't #define _GNU_SOURCE on Windows as it
