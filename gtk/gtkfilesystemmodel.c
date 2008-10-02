@@ -1133,6 +1133,7 @@ _gtk_file_system_model_path_do (GtkFileSystemModel        *model,
 	  return;
 	}
     }
+  g_object_unref (parent_file);
 
   if (g_slist_length (files) < 1)
     return;
