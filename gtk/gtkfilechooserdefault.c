@@ -2186,6 +2186,7 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
 
   bookmarks = _gtk_file_system_list_bookmarks (impl->file_system);
   shortcuts_append_bookmarks (impl, bookmarks);
+  g_slist_foreach (bookmarks, (GFunc) g_object_unref, NULL);
   g_slist_free (bookmarks);
 
   if (impl->num_bookmarks == 0)

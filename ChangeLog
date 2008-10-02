@@ -1,5 +1,11 @@
 2008-10-02  Christian Persch
 
+        Bug 554698 – mem leak in filechooser
+
+        * gtk/gtkfilechooserdefault.c: Plug a mem leak.
+
+2008-10-02  Christian Persch
+
         Bug 554696 – invalid free function used
 
         * gtk/gtkfilesystemmodel.c: Use the right free func.
