@@ -1022,7 +1022,7 @@ ref_path_cb (GCancellable *cancellable,
       goto out;
     }
 
-  g_object_unref (info->files);
+  g_object_unref (info->files->data);
   info->files = g_slist_remove (info->files, info->files->data);
 
   if (g_slist_length (info->files) < 1)
@@ -1070,7 +1070,8 @@ ref_path_cb (GCancellable *cancellable,
 out:
   if (info->node)
     unref_node_and_parents (info->model, info->node);
-  g_object_unref (info->files);
+  g_slist_foreach (info->files, (GFunc)g_object_unref, NULL);
+  g_slist_free (info->files);
   g_slist_foreach (info->cleanups, (GFunc)g_object_unref, NULL);
   g_slist_free (info->cleanups);
   g_object_unref (info->model);
