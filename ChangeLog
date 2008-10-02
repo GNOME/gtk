@@ -1,5 +1,12 @@
 2008-10-02  Christian Persch
 
+        Bug 554701 – filechooser spams console with useless warnings
+
+        * gtk/gtkfilesystem.c.c: Don't warn if the async call was simply
+        cancelled.
+
+2008-10-02  Christian Persch
+
         Bug 554698 – mem leak in filechooser
 
         * gtk/gtkfilechooserdefault.c: Plug a mem leak.
