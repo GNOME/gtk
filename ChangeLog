@@ -1,5 +1,12 @@
 2008-10-02  Christian Persch
 
+        Bug 554704 – gtkfilesystemmodel does too much work
+
+        * gtk/gtkfilesystemmodel.c: Replace g_slist_length()<1 check with a
+        simple NULL check.
+
+2008-10-02  Christian Persch
+
         Bug 554701 – filechooser spams console with useless warnings
 
         * gtk/gtkfilesystem.c.c: Don't warn if the async call was simply
