@@ -3151,6 +3151,7 @@ gtk_recent_action_get_type
 <TITLE>GtkRuler</TITLE>
 GtkRuler
 GtkRulerMetric
+gtk_ruler_new
 gtk_ruler_set_metric
 gtk_ruler_set_range
 gtk_ruler_get_metric
@@ -3162,7 +3163,6 @@ GTK_TYPE_RULER
 GTK_RULER_CLASS
 GTK_IS_RULER_CLASS
 GTK_RULER_GET_CLASS
-
 <SUBSECTION Private>
 gtk_ruler_get_type
 gtk_ruler_draw_ticks
