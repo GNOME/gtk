@@ -2074,10 +2074,17 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
 	  if (_gtk_file_system_volume_is_mounted (volume))
 	    {
 	      GFile *base_file;
+              gboolean base_is_native = TRUE;
 
 	      base_file = _gtk_file_system_volume_get_root (volume);
-	      if (base_file != NULL && !g_file_is_native (base_file))
-		continue;
+              if (base_file != NULL)
+                {
+                  base_is_native = g_file_is_native (base_file);
+                  g_object_unref (base_file);
+                }
+
+              if (!base_is_native)
+                continue;
 	    }
 	}
 

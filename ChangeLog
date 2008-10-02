@@ -1,3 +1,9 @@
+2008-10-02  Christian Persch
+
+        Bug 554690 – mem leak in filechooser
+
+        * gtk/gtkfilechooserdefault.c: Plug a mem leak.
+
 2008-10-02  Michael Natterer  <mitch@imendio.com>
 
 	Bug 553585 – Add orientation API to GtkRuler
