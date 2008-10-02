@@ -1304,7 +1304,9 @@ enumerator_files_callback (GObject      *source_object,
 
   if (error)
     {
-      g_warning (error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("%s", error->message);
+
       g_error_free (error);
       return;
     }
