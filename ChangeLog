@@ -1,3 +1,17 @@
+2008-10-02  Michael Natterer  <mitch@imendio.com>
+
+	Bug 553585 – Add orientation API to GtkRuler
+
+	* gtk/gtkruler.[ch]: implement the GtkOrientable interface and
+	swallow all code from GtkHRuler and GtkVRuler. Add gtk_ruler_new()
+	which takes a GtkOrientation argument.
+
+	* gtk/gtkhruler.c
+	* gtk/gtkvruler.c: remove all code except the constructor and
+	call gtk_orientable_set_orientation() in init().
+
+	* gtk/gtk.symbols: add gtk_ruler_new().
+
 2008-10-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* docs/reference/gtk/gtk-sections.txt:
