@@ -1,3 +1,20 @@
+2008-10-02  Matthias Clasen <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	530575 – GtkEntry with invisible chars has a confused cursor in
+	overwrite mode
+	Bug 371908 – Password Entry broken
+
+	* gtk/gtkentry.c (gtk_entry_draw_cursor): Use the visible text
+	in the layout when positioning the cursor, not the actual text
+	content of the entry. This makes a different when using overwrite
+	mode in an invisible entry.
+	Problem noticed by Jonathan Blandford
+
+	* gtk/gtkentry.c (gtk_entry_backspace): Make backspace behave
+	properly when invisible. 
+
 2008-10-02  Simos Xenitellis  <simos@gnome.org>
 
         Bug 554506 – combining diacritics broken, became deadkeys
