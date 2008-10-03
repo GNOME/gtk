@@ -406,7 +406,7 @@ layout_get_char_width (PangoLayout *layout)
  * @layout: a #PangoLayout
  * @index: index at which cursor is located
  * @pos: cursor location
- * @at_line_end: whether cursor i sdrawn at line end, not over some
+ * @at_line_end: whether cursor is drawn at line end, not over some
  * character
  *
  * Returns: whether cursor should actually be drawn as a rectangle.

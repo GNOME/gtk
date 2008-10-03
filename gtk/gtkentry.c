@@ -3794,6 +3794,8 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       gint cursor_index;
       gboolean block;
       gboolean block_at_line_end;
+      PangoLayout *layout;
+      const char *text;
 
       _gtk_entry_effective_inner_border (entry, &inner_border);
 
@@ -3801,11 +3803,13 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
       gdk_drawable_get_size (entry->text_area, NULL, &text_area_height);
 
-      cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos + entry->preedit_cursor) - entry->text;
+      layout = gtk_entry_ensure_layout (entry, TRUE);
+      text = pango_layout_get_text (layout);
+      cursor_index = g_utf8_offset_to_pointer (text, entry->current_pos + entry->preedit_cursor) - text;
       if (!entry->overwrite_mode)
         block = FALSE;
       else
-        block = _gtk_text_util_get_block_cursor_location (gtk_entry_ensure_layout (entry, TRUE),
+        block = _gtk_text_util_get_block_cursor_location (layout,
                                                           cursor_index, &cursor_rect, &block_at_line_end);
 
       if (!block)
@@ -3861,7 +3865,6 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
         }
       else /* overwrite_mode */
         {
-          PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
           GdkColor cursor_color;
           GdkRectangle rect;
           cairo_t *cr;
