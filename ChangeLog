@@ -1,5 +1,12 @@
 2008-10-02  Matthias Clasen <mclasen@redhat.com>
 
+	Bug 96431 – Can't cut and paste / DND within invisible entry
+
+	* gtk/gtkentry.c: Disable cut, copy and drag out of an invisible
+	entry. Proposed by Owen Taylor
+
+2008-10-02  Matthias Clasen <mclasen@redhat.com>
+
 	Bug 530575 – GtkEntry with invisible chars has a confused cursor in
 	overwrite mode
 

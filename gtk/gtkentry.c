@@ -2082,7 +2082,8 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 
   if (entry->in_drag)
     {
-      if (gtk_drag_check_threshold (widget,
+      if (entry->visible &&
+          gtk_drag_check_threshold (widget,
                                     entry->drag_start_x, entry->drag_start_y,
                                     event->x + entry->scroll_offset, event->y))
         {
@@ -2094,11 +2095,8 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 
           gtk_target_list_add_text_targets (target_list, 0);
 
-          if (entry->visible)
-            {
-              text = _gtk_entry_get_selected_text (entry);
-              pixmap = _gtk_text_util_create_drag_icon (widget, text, -1);
-            }
+          text = _gtk_entry_get_selected_text (entry);
+          pixmap = _gtk_text_util_create_drag_icon (widget, text, -1);
 
           context = gtk_drag_begin (widget, target_list, actions,
                                     entry->button, (GdkEvent *)event);
@@ -3127,6 +3125,12 @@ gtk_entry_copy_clipboard (GtkEntry *entry)
 
   if (gtk_editable_get_selection_bounds (editable, &start, &end))
     {
+      if (!entry->visible)
+        {
+          gtk_widget_error_bell (GTK_WIDGET (entry));
+          return;
+        }
+
       gchar *str = gtk_entry_get_public_chars (entry, start, end);
       gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (entry),
 							GDK_SELECTION_CLIPBOARD),
@@ -3140,6 +3144,12 @@ gtk_entry_cut_clipboard (GtkEntry *entry)
 {
   GtkEditable *editable = GTK_EDITABLE (entry);
   gint start, end;
+
+  if (!entry->visible)
+    {
+      gtk_widget_error_bell (GTK_WIDGET (entry));
+      return;
+    }
 
   gtk_entry_copy_clipboard (entry);
 
@@ -5480,9 +5490,9 @@ popup_targets_received (GtkClipboard     *clipboard,
 				 popup_menu_detach);
       
       append_action_signal (entry, entry->popup_menu, GTK_STOCK_CUT, "cut-clipboard",
-			    entry->editable && entry->current_pos != entry->selection_bound);
+			    entry->editable && entry->visible && entry->current_pos != entry->selection_bound);
       append_action_signal (entry, entry->popup_menu, GTK_STOCK_COPY, "copy-clipboard",
-			    entry->current_pos != entry->selection_bound);
+			    entry->visible && entry->current_pos != entry->selection_bound);
       append_action_signal (entry, entry->popup_menu, GTK_STOCK_PASTE, "paste-clipboard",
 			    entry->editable && clipboard_contains_text);
       
