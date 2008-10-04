@@ -98,6 +98,7 @@
 #define GDK_DEBUG_EVENTS_OR_INPUT (GDK_DEBUG_EVENTS|GDK_DEBUG_INPUT)
 #define GDK_DEBUG_PIXMAP_OR_COLORMAP (GDK_DEBUG_PIXMAP|GDK_DEBUG_COLORMAP)
 #define GDK_DEBUG_MISC_OR_COLORMAP (GDK_DEBUG_MISC|GDK_DEBUG_COLORMAP)
+#define GDK_DEBUG_MISC_OR_EVENTS (GDK_DEBUG_MISC|GDK_DEBUG_EVENTS)
 
 #define GDK_TYPE_GC_WIN32              (_gdk_gc_win32_get_type ())
 #define GDK_GC_WIN32(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_WIN32, GdkGCWin32))
@@ -311,6 +312,7 @@ gchar *_gdk_win32_line_style_to_string (GdkLineStyle line_style);
 gchar *_gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask);
 gchar *_gdk_win32_window_state_to_string (GdkWindowState state);
 gchar *_gdk_win32_window_style_to_string (LONG style);
+gchar *_gdk_win32_window_exstyle_to_string (LONG style);
 gchar *_gdk_win32_drawable_description (GdkDrawable *d);
 
 gchar *_gdk_win32_rop2_to_string       (int          rop2);
