@@ -629,6 +629,38 @@ _gdk_win32_window_exstyle_to_string (LONG style)
 }
 
 gchar *
+_gdk_win32_window_pos_bits_to_string (UINT flags)
+{
+  gchar buf[1000];
+  gchar *bufp = buf;
+  gchar *s = "";
+
+  buf[0] = '\0';
+
+#define BIT(x)						\
+  if (flags & SWP_ ## x)				\
+    (bufp += sprintf (bufp, "%s" #x, s), s = "|")
+
+  BIT (DRAWFRAME);
+  BIT (FRAMECHANGED);
+  BIT (HIDEWINDOW);
+  BIT (NOACTIVATE);
+  BIT (NOCOPYBITS);
+  BIT (NOMOVE);
+  BIT (NOSIZE);
+  BIT (NOREDRAW);
+  BIT (NOZORDER);
+  BIT (SHOWWINDOW);
+  BIT (NOOWNERZORDER);
+  BIT (NOSENDCHANGING);
+  BIT (DEFERERASE);
+  BIT (ASYNCWINDOWPOS);
+#undef BIT
+
+  return static_printf ("%s", buf);  
+}
+
+gchar *
 _gdk_win32_rop2_to_string (int rop2)
 {
   switch (rop2)

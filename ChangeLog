@@ -1,9 +1,10 @@
 2008-10-04  Tor Lillqvist  <tml@novell.com>
 
-	* gdk/win32/gdkmain-win32.c (_gdk_win32_window_exstyle_to_string):
-	New debugging printout function. Decodes the WS_EX_* bits.
-	
-	* gdk/win32/gdkprivate-win32.h: Declare it. Define
+	* gdk/win32/gdkmain-win32.c (_gdk_win32_window_exstyle_to_string)
+	(_gdk_win32_window_pos_bits_to_string): New debugging printout
+	functions. Decode the WS_EX_* and SWP_* bits.
+
+	* gdk/win32/gdkprivate-win32.h: Declare them. Define
 	GDK_DEBUG_MISC_OR_EVENTS for use in GDK_NOTE() to match either
 	"misc" or "events".
 
