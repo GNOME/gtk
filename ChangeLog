@@ -1,5 +1,48 @@
 2008-10-04  Tor Lillqvist  <tml@novell.com>
 
+	Bug 132501 - Make utility window translate to tool window in win32
+
+	Implement the utility window type hint. Such windows are kept on
+	top of other windows. Makes GIMP's toolbox and dock windows behave
+	more like in GNOME under metacity. Apply the same logic also to
+	windows marked with the dialog window type hint, and windows that
+	are transient for some other window. I'll call such windows
+	"transient-type" below.
+
+	* gdk/win32/gdkevents-win32.c (doesnt_want_key): Drop unused
+	variables.
+
+	(ensure_stacking_on_unminimize)
+	(ensure_stacking_on_window_pos_changing)
+	(ensure_stacking_on_activate_app): New functions to implement the
+	desired stacking order. Make sure that a window that is not
+	transient-type stays below any transient-type windows of the
+	application. When activating a non-transient-type window make sure
+	it rises as high as possible.
+
+	(gdk_event_translate): Call above functions on
+	WM_WINDOWPOSCHANGING, WM_ACTIVATEAPP and on WM_SIZE when
+	unminimizing. Improve debugging printout.
+
+	* gdk/win32/gdkwindow-win32.c (get_effective_window_decorations):
+	Handle utility windows like toolbar windows.
+
+	(gdk_window_new_internal) (update_style_bits): Give utility
+	windows the WS_EX_TOOLWINDOW extended style.
+
+	(gdk_window_set_title): If debugging "misc" or "events", make the
+	handle of top-level windows show up in their title bars. Very
+	useful when looking at debugging output.
+
+	(gdk_window_set_keep_above) (gdk_window_set_keep_below)
+	(gdk_window_set_modal_hint) (gdk_window_set_skip_taskbar_hint)
+	(gdk_window_set_skip_pager_hint): Add and improve debugging
+	printout.
+
+	(gdk_window_set_type_hint): Print hint symbolically in GDK_NOTE().
+
+2008-10-04  Tor Lillqvist  <tml@novell.com>
+
 	* gdk/win32/gdkmain-win32.c (_gdk_win32_window_exstyle_to_string)
 	(_gdk_win32_window_pos_bits_to_string): New debugging printout
 	functions. Decode the WS_EX_* and SWP_* bits.
