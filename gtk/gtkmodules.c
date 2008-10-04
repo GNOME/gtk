@@ -539,6 +539,8 @@ _gtk_modules_settings_changed (GtkSettings *settings,
 {
   GSList *new_modules = NULL;
 
+  GTK_NOTE (MODULES, g_print ("gtk-modules setting changed to: %s\n", modules));
+
   /* load/ref before unreffing existing */
   if (modules && modules[0])
     new_modules = load_modules (modules);

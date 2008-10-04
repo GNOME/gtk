@@ -1,3 +1,8 @@
+2008-10-03  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkmodules.c (_gtk_modules_settings_changed): Add some
+	debug output.
+
 2008-10-02  Matthias Clasen <mclasen@redhat.com>
 
 	Bug 96431 – Can't cut and paste / DND within invisible entry
