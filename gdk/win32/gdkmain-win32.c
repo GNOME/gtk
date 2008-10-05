@@ -553,7 +553,7 @@ _gdk_win32_window_style_to_string (LONG style)
   buf[0] = '\0';
 
 #define BIT(x)						\
-  if (style & WS_ ## x)			\
+  if (style & WS_ ## x)					\
     (bufp += sprintf (bufp, "%s" #x, s), s = "|")
 
   /* Note that many of the WS_* macros are in face several bits.
@@ -580,6 +580,81 @@ _gdk_win32_window_style_to_string (LONG style)
   BIT (THICKFRAME);
   BIT (VISIBLE);
   BIT (VSCROLL);
+#undef BIT
+
+  return static_printf ("%s", buf);  
+}
+
+gchar *
+_gdk_win32_window_exstyle_to_string (LONG style)
+{
+  gchar buf[1000];
+  gchar *bufp = buf;
+  gchar *s = "";
+
+  buf[0] = '\0';
+
+#define BIT(x)						\
+  if (style & WS_EX_ ## x)				\
+    (bufp += sprintf (bufp, "%s" #x, s), s = "|")
+
+  /* Note that many of the WS_EX_* macros are in face several bits.
+   * Handle just the individual bits here. Sort as in w32api's
+   * winuser.h.
+   */
+  BIT (ACCEPTFILES);
+  BIT (APPWINDOW);
+  BIT (CLIENTEDGE);
+  BIT (COMPOSITED);
+  BIT (CONTEXTHELP);
+  BIT (CONTROLPARENT);
+  BIT (DLGMODALFRAME);
+  BIT (LAYERED);
+  BIT (LAYOUTRTL);
+  BIT (LEFTSCROLLBAR);
+  BIT (MDICHILD);
+  BIT (NOACTIVATE);
+  BIT (NOINHERITLAYOUT);
+  BIT (NOPARENTNOTIFY);
+  BIT (RIGHT);
+  BIT (RTLREADING);
+  BIT (STATICEDGE);
+  BIT (TOOLWINDOW);
+  BIT (TOPMOST);
+  BIT (TRANSPARENT);
+  BIT (WINDOWEDGE);
+#undef BIT
+
+  return static_printf ("%s", buf);  
+}
+
+gchar *
+_gdk_win32_window_pos_bits_to_string (UINT flags)
+{
+  gchar buf[1000];
+  gchar *bufp = buf;
+  gchar *s = "";
+
+  buf[0] = '\0';
+
+#define BIT(x)						\
+  if (flags & SWP_ ## x)				\
+    (bufp += sprintf (bufp, "%s" #x, s), s = "|")
+
+  BIT (DRAWFRAME);
+  BIT (FRAMECHANGED);
+  BIT (HIDEWINDOW);
+  BIT (NOACTIVATE);
+  BIT (NOCOPYBITS);
+  BIT (NOMOVE);
+  BIT (NOSIZE);
+  BIT (NOREDRAW);
+  BIT (NOZORDER);
+  BIT (SHOWWINDOW);
+  BIT (NOOWNERZORDER);
+  BIT (NOSENDCHANGING);
+  BIT (DEFERERASE);
+  BIT (ASYNCWINDOWPOS);
 #undef BIT
 
   return static_printf ("%s", buf);  

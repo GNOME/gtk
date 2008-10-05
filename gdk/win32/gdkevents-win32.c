@@ -292,11 +292,7 @@ _gdk_win32_window_procedure (HWND   hwnd,
   retval = inner_window_procedure (hwnd, message, wparam, lparam);
   debug_indent -= 2;
 
-#ifdef _WIN64
-  GDK_NOTE (EVENTS, g_print (" => %I64d%s", retval, (debug_indent == 0 ? "\n" : "")));
-#else
-  GDK_NOTE (EVENTS, g_print (" => %ld%s", retval, (debug_indent == 0 ? "\n" : "")));
-#endif
+  GDK_NOTE (EVENTS, g_print (" => %I64d%s", (gint64) retval, (debug_indent == 0 ? "\n" : "")));
 
   return retval;
 }
@@ -1781,9 +1777,6 @@ static gboolean
 doesnt_want_key (gint mask,
 		 MSG *msg)
 {
-  GdkWindow *modal_current = _gdk_modal_current ();
-  GdkWindow *window = (GdkWindow *) gdk_win32_handle_table_lookup ((GdkNativeWindow)msg->hwnd);
-
   return (((msg->message == WM_KEYUP || msg->message == WM_SYSKEYUP) &&
 	   !(mask & GDK_KEY_RELEASE_MASK)) ||
 	  ((msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN) &&
@@ -2106,6 +2099,143 @@ generate_button_event (GdkEventType type,
     _gdk_event_button_generate (_gdk_display, event);
 }
 
+static void
+ensure_stacking_on_unminimize (MSG *msg)
+{
+  HWND rover;
+  HWND lowest_transient = NULL;
+
+  rover = msg->hwnd;
+  while ((rover = GetNextWindow (rover, GW_HWNDNEXT)))
+    {
+      GdkWindow *rover_gdkw = gdk_win32_handle_table_lookup (rover);
+
+      /* Checking window group not implemented yet */
+      if (rover_gdkw)
+	{
+	  GdkWindowImplWin32 *rover_impl =
+	    (GdkWindowImplWin32 *)((GdkWindowObject *)rover_gdkw)->impl;
+
+	  if (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
+	      rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
+	      rover_impl->transient_owner != NULL)
+	    {
+	      lowest_transient = rover;
+	    }
+	}
+    }
+  if (lowest_transient != NULL)
+    {
+      GDK_NOTE (EVENTS, g_print (" restacking: %p", lowest_transient));
+      SetWindowPos (msg->hwnd, lowest_transient, 0, 0, 0, 0,
+		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+    }
+}
+
+static gboolean
+ensure_stacking_on_window_pos_changing (MSG       *msg,
+					GdkWindow *window)
+{
+  GdkWindowImplWin32 *impl = (GdkWindowImplWin32 *)((GdkWindowObject *) window)->impl;
+  WINDOWPOS *windowpos = (WINDOWPOS *) msg->lParam;
+
+  if (GetActiveWindow () == msg->hwnd &&
+      impl->type_hint != GDK_WINDOW_TYPE_HINT_UTILITY &&
+      impl->type_hint != GDK_WINDOW_TYPE_HINT_DIALOG &&
+      impl->transient_owner == NULL)
+    {
+      /* Make sure the window stays behind any transient-type windows
+       * of the same window group.
+       *
+       * If the window is not active and being activated, we let
+       * Windows bring it to the top and rely on the WM_ACTIVATEAPP
+       * handling to bring any utility windows on top of it.
+       */
+      HWND rover;
+      gboolean restacking;
+
+      rover = windowpos->hwndInsertAfter;
+      restacking = FALSE;
+      while (rover)
+	{
+	  GdkWindow *rover_gdkw = gdk_win32_handle_table_lookup (rover);
+
+	  /* Checking window group not implemented yet */
+	  if (rover_gdkw)
+	    {
+	      GdkWindowImplWin32 *rover_impl =
+		(GdkWindowImplWin32 *)((GdkWindowObject *)rover_gdkw)->impl;
+
+	      if (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
+		  rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
+		  rover_impl->transient_owner != NULL)
+		{
+		  restacking = TRUE;
+		  windowpos->hwndInsertAfter = rover;
+		}
+	    }
+	  rover = GetNextWindow (rover, GW_HWNDNEXT);
+	}
+
+      if (restacking)
+	{
+	  GDK_NOTE (EVENTS, g_print (" restacking: %p", windowpos->hwndInsertAfter));
+	  return TRUE;
+	}
+    }
+  return FALSE;
+}
+
+static void
+ensure_stacking_on_activate_app (MSG       *msg,
+				 GdkWindow *window)
+{
+  GdkWindowImplWin32 *impl = (GdkWindowImplWin32 *)((GdkWindowObject *) window)->impl;
+
+  if (impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
+      impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
+      impl->transient_owner != NULL)
+    {
+      SetWindowPos (msg->hwnd, HWND_TOP, 0, 0, 0, 0,
+		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+      return;
+    }
+
+  if (IsWindowVisible (msg->hwnd) &&
+      gdk_win32_handle_table_lookup (GetActiveWindow ()))
+    {
+      /* This window is not a transient-type window and this or some
+       * other window in this app is the active window. Make sure this
+       * window is as visible as possible, just below the lowest
+       * transient-type window of this app.
+       */
+      HWND rover;
+
+      rover = msg->hwnd;
+      while ((rover = GetNextWindow (rover, GW_HWNDPREV)))
+	{
+	  GdkWindow *rover_gdkw = gdk_win32_handle_table_lookup (rover);
+
+	  /* Checking window group not implemented yet */
+	  if (rover_gdkw)
+	    {
+	      GdkWindowImplWin32 *rover_impl =
+		(GdkWindowImplWin32 *)((GdkWindowObject *)rover_gdkw)->impl;
+
+	      if (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
+		  rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
+		  rover_impl->transient_owner != NULL)
+		{
+		  GDK_NOTE (EVENTS, g_print (" restacking: %p", rover));
+		  SetWindowPos (msg->hwnd, rover, 0, 0, 0, 0,
+				SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+		  break;
+		}
+	    }
+	}
+    }
+}
+
 static gboolean
 gdk_event_translate (MSG  *msg,
 		     gint *ret_valp)
@@ -2117,6 +2247,7 @@ gdk_event_translate (MSG  *msg,
   HCURSOR hcursor;
   BYTE key_state[256];
   HIMC himc;
+  WINDOWPOS *windowpos;
 
   GdkEvent *event;
 
@@ -2852,7 +2983,6 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_SYNCPAINT:
-
       sync_timer = SetTimer (GDK_WINDOW_HWND (window),
 			     1,
 			     200, sync_timer_proc);
@@ -2886,7 +3016,14 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_SHOWWINDOW:
-      GDK_NOTE (EVENTS, g_print (" %d", (int) msg->wParam));
+      GDK_NOTE (EVENTS, g_print (" %s %s",
+				 (msg->wParam ? "YES" : "NO"),
+				 (msg->lParam == 0 ? "ShowWindow" :
+				  (msg->lParam == SW_OTHERUNZOOM ? "OTHERUNZOOM" :
+				   (msg->lParam == SW_OTHERZOOM ? "OTHERZOOM" :
+				    (msg->lParam == SW_PARENTCLOSING ? "PARENTCLOSING" :
+				     (msg->lParam == SW_PARENTOPENING ? "PARENTOPENING" :
+				      "???")))))));
 
       if (!(((GdkWindowObject *) window)->event_mask & GDK_STRUCTURE_MASK))
 	break;
@@ -2927,7 +3064,6 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_SYSCOMMAND:
-
       switch (msg->wParam)
 	{
 	case SC_MINIMIZE:
@@ -2969,6 +3105,9 @@ gdk_event_translate (MSG  *msg,
 	{
 	  GdkWindowState withdrawn_bit =
 	    IsWindowVisible (msg->hwnd) ? GDK_WINDOW_STATE_WITHDRAWN : 0;
+
+	  if (((GdkWindowObject *) window)->state & GDK_WINDOW_STATE_ICONIFIED)
+	    ensure_stacking_on_unminimize (msg);
 
 	  if (!GDK_WINDOW_DESTROYED (window))
 	    handle_configure_event (msg, window);
@@ -3024,7 +3163,33 @@ gdk_event_translate (MSG  *msg,
       KillTimer (NULL, modal_timer);
       break;
 
-    case WM_WINDOWPOSCHANGED :
+    case WM_WINDOWPOSCHANGING:
+      GDK_NOTE (EVENTS, g_print (" %s %s %dx%d@%+d%+d now below %p",
+				 _gdk_win32_window_pos_bits_to_string (windowpos->flags),
+				 (windowpos->hwndInsertAfter == HWND_BOTTOM ? "BOTTOM" :
+				  (windowpos->hwndInsertAfter == HWND_NOTOPMOST ? "NOTOPMOST" :
+				   (windowpos->hwndInsertAfter == HWND_TOP ? "TOP" :
+				    (windowpos->hwndInsertAfter == HWND_TOPMOST ? "TOPMOST" :
+				     (sprintf (buf, "%p", windowpos->hwndInsertAfter),
+				      buf))))),
+				 windowpos->cx, windowpos->cy, windowpos->x, windowpos->y,
+				 GetNextWindow (msg->hwnd, GW_HWNDPREV)));
+
+      return_val = ensure_stacking_on_window_pos_changing (msg, window);
+      break;
+
+    case WM_WINDOWPOSCHANGED:
+      GDK_NOTE (EVENTS, (windowpos = (WINDOWPOS *) msg->lParam,
+			 g_print (" %s %s %dx%d@%+d%+d",
+				  _gdk_win32_window_pos_bits_to_string (windowpos->flags),
+				  (windowpos->hwndInsertAfter == HWND_BOTTOM ? "BOTTOM" :
+				   (windowpos->hwndInsertAfter == HWND_NOTOPMOST ? "NOTOPMOST" :
+				    (windowpos->hwndInsertAfter == HWND_TOP ? "TOP" :
+				     (windowpos->hwndInsertAfter == HWND_TOPMOST ? "TOPMOST" :
+				      (sprintf (buf, "%p", windowpos->hwndInsertAfter),
+				       buf))))),
+				  windowpos->cx, windowpos->cy, windowpos->x, windowpos->y)));
+
       /* Once we've entered the moving or sizing modal loop, we won't
        * return to the main loop until we're done sizing or moving.
        */
@@ -3034,6 +3199,7 @@ gdk_event_translate (MSG  *msg,
 	{
 	  if (((GdkWindowObject *) window)->event_mask & GDK_STRUCTURE_MASK)
 	    {
+	      GDK_NOTE (EVENTS, g_print (" do magic"));
 	      if (((GdkWindowObject *) window)->resize_count > 1)
 		((GdkWindowObject *) window)->resize_count -= 1;
 	      
@@ -3457,11 +3623,17 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_ACTIVATE:
-
+      GDK_NOTE (EVENTS, g_print (" %s%s %p",
+				 (LOWORD (msg->wParam) == WA_ACTIVE ? "ACTIVE" :
+				  (LOWORD (msg->wParam) == WA_CLICKACTIVE ? "CLICKACTIVE" :
+				   (LOWORD (msg->wParam) == WA_INACTIVE ? "INACTIVE" : "???"))),
+				 HIWORD (msg->wParam) ? " minimized" : "",
+				 (HWND) msg->lParam));
       /* We handle mouse clicks for modally-blocked windows under WM_MOUSEACTIVATE,
        * but we still need to deal with alt-tab, or with SetActiveWindow() type
-       * situations. */
-      if (is_modally_blocked (window) && msg->wParam == WA_ACTIVE)
+       * situations.
+       */
+      if (is_modally_blocked (window) && LOWORD (msg->wParam) == WA_ACTIVE)
 	{
 	  GdkWindow *modal_current = _gdk_modal_current ();
 	  SetActiveWindow (GDK_WINDOW_HWND (modal_current));
@@ -3479,6 +3651,13 @@ gdk_event_translate (MSG  *msg,
 	_gdk_input_set_tablet_active ();
       break;
 
+    case WM_ACTIVATEAPP:
+      GDK_NOTE (EVENTS, g_print (" %s thread: %I64d",
+				 msg->wParam ? "YES" : "NO",
+				 (gint64) msg->lParam));
+
+      ensure_stacking_on_activate_app (msg, window);
+      break;
 
       /* Handle WINTAB events here, as we know that gdkinput.c will
        * use the fixed WT_DEFBASE as lcMsgBase, and we thus can use the
