@@ -18,7 +18,8 @@
 	desired stacking order. Make sure that a window that is not
 	transient-type stays below any transient-type windows of the
 	application. When activating a non-transient-type window make sure
-	it rises as high as possible.
+	it rises as high as possible while still staying below the lowest
+	transient-type window.
 
 	(gdk_event_translate): Call above functions on
 	WM_WINDOWPOSCHANGING, WM_ACTIVATEAPP and on WM_SIZE when
@@ -34,8 +35,9 @@
 	handle of top-level windows show up in their title bars. Very
 	useful when looking at debugging output.
 
-	(gdk_window_set_keep_above) (gdk_window_set_keep_below)
-	(gdk_window_set_modal_hint) (gdk_window_set_skip_taskbar_hint)
+	(gdk_window_set_transient_for) (gdk_window_set_keep_above)
+	(gdk_window_set_keep_below) (gdk_window_set_modal_hint)
+	(gdk_window_set_skip_taskbar_hint)
 	(gdk_window_set_skip_pager_hint): Add and improve debugging
 	printout.
 
