@@ -1,7 +1,7 @@
 # translation of nb.po to Norwegian Bokmal
 # Norwegian (bokmål) translation of gtk+.
 # Copyright (C) 1998-2004, 2005 Free Software Foundation, Inc.
-# Kjartan Maraas <kmaraas@gnome.org>, 1998-2007.
+# Kjartan Maraas <kmaraas@gnome.org>, 1998-2008.
 # Terance Edward Sola <terance@lyse.net>, 2005.
 #
 msgid ""
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-23 23:09-0400\n"
-"PO-Revision-Date: 2008-04-22 22:01+0200\n"
+"PO-Revision-Date: 2008-10-06 18:29+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -994,16 +994,15 @@ msgstr "Høyde for detaljer"
 
 #: gtk/gtkcalendar.c:561
 msgid "Details height in rows"
-msgstr ""
+msgstr "Detaljert høyde i rader"
 
 #: gtk/gtkcalendar.c:577
 msgid "Show Details"
 msgstr "Vis detaljer"
 
 #: gtk/gtkcalendar.c:578
-#, fuzzy
 msgid "If TRUE, details are shown"
-msgstr "Dagnavn vises hvis denne settes til TRUE"
+msgstr "Detaljer vises hvis denne settes til TRUE"
 
 #: gtk/gtkcellrenderer.c:177
 msgid "mode"
@@ -1106,14 +1105,12 @@ msgid "Cell background color as a GdkColor"
 msgstr "Bakgrunnsfarge for celle som en GdkColor"
 
 #: gtk/gtkcellrenderer.c:294
-#, fuzzy
 msgid "Editing"
-msgstr "Størrelse"
+msgstr "Redigerer"
 
 #: gtk/gtkcellrenderer.c:295
-#, fuzzy
 msgid "Whether the cell renderer is currently in editing mode"
-msgstr "Om etiketten er i singellinjemodus"
+msgstr "Om celle-rendreren er i redigeringsmodus"
 
 #: gtk/gtkcellrenderer.c:303
 msgid "Cell background set"
@@ -1241,9 +1238,8 @@ msgid "Icon"
 msgstr "Ikon"
 
 #: gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:248 gtk/gtkstatusicon.c:227
-#, fuzzy
 msgid "The GIcon being displayed"
-msgstr "Ikonsett som skal vises"
+msgstr "GIcon som vises"
 
 #: gtk/gtkcellrendererprogress.c:129
 msgid "Value of the progress bar"
@@ -1828,9 +1824,8 @@ msgid "Palette to use in the color selector"
 msgstr "Palett som skal brukes i fargevelgeren"
 
 #: gtk/gtkcolorseldialog.c:102
-#, fuzzy
 msgid "Color Selection"
-msgstr "Svevende utvalg"
+msgstr "Fargevalg"
 
 #: gtk/gtkcolorseldialog.c:103
 #, fuzzy
@@ -1839,32 +1834,27 @@ msgstr "Tittel på dialogen for fargevalg"
 
 #: gtk/gtkcolorseldialog.c:109
 msgid "OK Button"
-msgstr ""
+msgstr "OK-knapp"
 
 #: gtk/gtkcolorseldialog.c:110
-#, fuzzy
 msgid "The OK button of the dialog."
-msgstr "Knappene som vises i meldingsdialogen"
+msgstr "OK-knapp for dialogen"
 
 #: gtk/gtkcolorseldialog.c:116
-#, fuzzy
 msgid "Cancel Button"
-msgstr "Meldingsknapper"
+msgstr "Avbryt-knapp"
 
 #: gtk/gtkcolorseldialog.c:117
-#, fuzzy
 msgid "The cancel button of the dialog."
-msgstr "Knappene som vises i meldingsdialogen"
+msgstr "Avbryt-knapp for dialogen"
 
 #: gtk/gtkcolorseldialog.c:123
-#, fuzzy
 msgid "Help Button"
-msgstr "Meldingsknapper"
+msgstr "Hjelp-knapp"
 
 #: gtk/gtkcolorseldialog.c:124
-#, fuzzy
 msgid "The help button of the dialog."
-msgstr "Knappene som vises i meldingsdialogen"
+msgstr "Hjelp-knapp for dialogen."
 
 #: gtk/gtkcombo.c:145
 msgid "Enable arrow keys"
@@ -1984,7 +1974,7 @@ msgstr "Om komboboksens nedtrekksmeny vises"
 
 #: gtk/gtkcombobox.c:839
 msgid "Button Sensitivity"
-msgstr ""
+msgstr "Sensitivitet for knapp"
 
 #: gtk/gtkcombobox.c:840
 #, fuzzy
@@ -2239,9 +2229,8 @@ msgid "Whether new text overwrites existing text"
 msgstr "Om oppgitt tekst overskriver eksisterende innhold"
 
 #: gtk/gtkentry.c:661
-#, fuzzy
 msgid "Text length"
-msgstr "X-justering for tekst"
+msgstr "Lengde på tekst"
 
 #: gtk/gtkentry.c:662
 msgid "Length of the text currently in the entry"
@@ -3053,24 +3042,20 @@ msgid "The URI bound to this button"
 msgstr "Tilstand for knapp (vending)"
 
 #: gtk/gtklinkbutton.c:159
-#, fuzzy
 msgid "Visited"
-msgstr "Synlig"
+msgstr "Besøkt"
 
 #: gtk/gtklinkbutton.c:160
-#, fuzzy
 msgid "Whether this link has been visited."
-msgstr "Om handlingen er synlig"
+msgstr "Om lenken har vært besøkt"
 
 #: gtk/gtkmenu.c:499
-#, fuzzy
 msgid "The currently selected menu item"
-msgstr "Valgt filnavn"
+msgstr "Valgt menyoppføring"
 
 #: gtk/gtkmenu.c:513
-#, fuzzy
 msgid "Accel Group"
-msgstr "Handlingsgruppe"
+msgstr "Akselleratorgruppe"
 
 #: gtk/gtkmenu.c:514
 #, fuzzy
@@ -3086,14 +3071,12 @@ msgid "An accel path used to conveniently construct accel paths of child items"
 msgstr ""
 
 #: gtk/gtkmenu.c:545
-#, fuzzy
 msgid "Attach Widget"
-msgstr "Ekstra komponent"
+msgstr "Fest komponent"
 
 #: gtk/gtkmenu.c:546
-#, fuzzy
 msgid "The widget the menu is attached to"
-msgstr "Om menyoppføringen er avkrysset"
+msgstr "Komponent menyen er festet til"
 
 #: gtk/gtkmenu.c:554
 msgid ""
@@ -3111,9 +3094,8 @@ msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "En bolsk verdi som indikerer om menyen er avrevet"
 
 #: gtk/gtkmenu.c:583
-#, fuzzy
 msgid "Monitor"
-msgstr "Måned"
+msgstr "Monitor"
 
 #: gtk/gtkmenu.c:584
 msgid "The monitor the menu will be popped up on"
@@ -3293,7 +3275,6 @@ msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "Mengde plass som brukes av pilen"
 
 #: gtk/gtkmenuitem.c:290
-#, fuzzy
 msgid "Width in Characters"
 msgstr "Bredde i tegn"
 
@@ -3807,28 +3788,24 @@ msgid "Number of jobs queued in the printer"
 msgstr "Antall jobber som er kølagt for denne skriveren"
 
 #: gtk/gtkprinter.c:198
-#, fuzzy
 msgid "Paused Printer"
-msgstr "Skriver"
+msgstr "Skriver på pause"
 
 #: gtk/gtkprinter.c:199
-#, fuzzy
 msgid "TRUE if this printer is paused"
-msgstr "TRUE hvis skriveren kan motta PDF"
+msgstr "TRUE hvis skriveren står på pause"
 
 #: gtk/gtkprinter.c:212
-#, fuzzy
 msgid "Accepting Jobs"
-msgstr "Godta fokus"
+msgstr "Godtar jobber"
 
 #: gtk/gtkprinter.c:213
-#, fuzzy
 msgid "TRUE if this printer is accepting new jobs"
-msgstr "TRUE hvis skriveren kan motta PDF"
+msgstr "TRUE hvis skriveren mottar nye jobber"
 
 #: gtk/gtkprinteroptionwidget.c:123
 msgid "Source option"
-msgstr ""
+msgstr "Alternativ for kilde"
 
 #: gtk/gtkprinteroptionwidget.c:124
 msgid "The PrinterOption backing this widget"
@@ -4093,9 +4070,8 @@ msgid "Extra spacing applied to the width of a progress bar."
 msgstr ""
 
 #: gtk/gtkprogressbar.c:220
-#, fuzzy
 msgid "YSpacing"
-msgstr "Mellomrom"
+msgstr "Y-mellomrom"
 
 #: gtk/gtkprogressbar.c:221
 msgid "Extra spacing applied to the height of a progress bar."
@@ -4731,14 +4707,12 @@ msgid "Name of icon theme to use"
 msgstr "Navn på ikontema som skal brukes"
 
 #: gtk/gtksettings.c:302
-#, fuzzy
 msgid "Fallback Icon Theme Name"
-msgstr "Navn på ikontema"
+msgstr "Navn på reserve-ikontema"
 
 #: gtk/gtksettings.c:303
-#, fuzzy
 msgid "Name of a icon theme to fall back to"
-msgstr "Navn på ikontema som skal brukes"
+msgstr "Navn på ikontema som skal brukes som reserve"
 
 #: gtk/gtksettings.c:311
 msgid "Key Theme Name"
@@ -5024,9 +4998,8 @@ msgid "Command to run when displaying a print preview"
 msgstr ""
 
 #: gtk/gtksettings.c:791
-#, fuzzy
 msgid "Enable Mnemonics"
-msgstr "Animasjon"
+msgstr "Bruk hurtigtaster"
 
 #: gtk/gtksettings.c:792
 #, fuzzy
@@ -5051,9 +5024,8 @@ msgid "Number of recently used files"
 msgstr "Antall nylig brukte filer"
 
 #: gtk/gtksettings.c:841
-#, fuzzy
 msgid "Default IM module"
-msgstr "Standard bredde"
+msgstr "Forvalgt IM-modul"
 
 #: gtk/gtksettings.c:842
 #, fuzzy
@@ -5061,14 +5033,12 @@ msgid "Which IM module should be used by default"
 msgstr "Skal en palett brukes"
 
 #: gtk/gtksettings.c:860
-#, fuzzy
 msgid "Recent Files Max Age"
-msgstr "Grense for nylig brukte filer"
+msgstr "Maksimal alder for nylig brukte filer"
 
 #: gtk/gtksettings.c:861
-#, fuzzy
 msgid "Maximum age of recently used files, in days"
-msgstr "Antall nylig brukte filer"
+msgstr "Maksimal alder for nylig brukte filer, i dager"
 
 #: gtk/gtksettings.c:870
 msgid "Fontconfig configuration timestamp"
@@ -5079,14 +5049,12 @@ msgid "Timestamp of current fontconfig configuration"
 msgstr ""
 
 #: gtk/gtksettings.c:893
-#, fuzzy
 msgid "Sound Theme Name"
-msgstr "Navn på ikontema"
+msgstr "Navn på lydtema"
 
 #: gtk/gtksettings.c:894
-#, fuzzy
 msgid "XDG sound theme name"
-msgstr "Navn på pekertema"
+msgstr "Navn på XDG lydtema"
 
 #. Translators: this means sounds that are played as feedback to user input
 #: gtk/gtksettings.c:916
@@ -5099,19 +5067,16 @@ msgid "Whether to play event sounds as feedback to user input"
 msgstr "Widgetet tar imot inndata"
 
 #: gtk/gtksettings.c:938
-#, fuzzy
 msgid "Enable Event Sounds"
-msgstr "Aktiver animasjoner"
+msgstr "Aktiver lyder for hendelser"
 
 #: gtk/gtksettings.c:939
-#, fuzzy
 msgid "Whether to play any event sounds at all"
-msgstr "Om inkonsistent tilstand skal anvises"
+msgstr "Om lydhendelser skal spilles av"
 
 #: gtk/gtksettings.c:954
-#, fuzzy
 msgid "Enable Tooltips"
-msgstr "Verktøytips"
+msgstr "Bruk verktøytips"
 
 #: gtk/gtksettings.c:955
 #, fuzzy
@@ -5208,9 +5173,8 @@ msgid "Style of bevel around the statusbar text"
 msgstr "Stil for kant rundt statuslinjetekst"
 
 #: gtk/gtkstatusicon.c:226
-#, fuzzy
 msgid "GIcon"
-msgstr "Ikon"
+msgstr "GIcon"
 
 #: gtk/gtkstatusicon.c:244
 msgid "The size of the icon"
@@ -5415,9 +5379,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtktextmark.c:90
-#, fuzzy
 msgid "Mark name"
-msgstr "Navn på tag"
+msgstr "Navn på merke"
 
 #: gtk/gtktextmark.c:97
 msgid "Left gravity"
@@ -6915,12 +6878,3 @@ msgstr "IM statusstil"
 #: modules/input/gtkimcontextxim.c:344
 msgid "How to draw the input method statusbar"
 msgstr "Hvordan statuslinjen for inndatametoden tegnes"
-
-#~ msgid "Whether stock icons should be shown in buttons"
-#~ msgstr "Om standardikoner skal vises i knapper"
-
-#~ msgid "Cancelled"
-#~ msgstr "Avbrutt"
-
-#~ msgid "Whether or not the operation has been successfully cancelled"
-#~ msgstr "Om avbrudd av operasjonen ble fullført eller ikke"
