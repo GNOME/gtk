@@ -90,6 +90,15 @@ and drag and drop.
 @model: 
 
 
+<!-- ##### FUNCTION gtk_cell_view_get_model ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@Returns:
+
+
 <!-- ##### FUNCTION gtk_cell_view_set_displayed_row ##### -->
 <para>
 

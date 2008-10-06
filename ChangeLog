@@ -1,3 +1,10 @@
+2008-10-06  Björn Lindqvist  <bjourne@gmail.com>
+
+	Bug 539464 – gtk_cell_view_get_model is missing in GtkCellView
+
+	* gtk/gtkcellview.c (gtk_cell_view_get_model): Add
+	gtk_cell_view_get_model.
+
 2008-10-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkprintunixdialog.c (create_main_page): Show the tooltip
