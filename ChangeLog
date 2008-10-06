@@ -10,11 +10,11 @@
 	Bug 132501 - Make utility window translate to tool window in win32
 
 	Implement the utility window type hint. Such windows are kept on
-	top of other windows. Makes GIMP's toolbox and dock windows behave
-	more like in GNOME under metacity. Apply the same logic also to
-	windows marked with the dialog window type hint, and windows that
-	are transient for some other window. I'll call such windows
-	"transient-type" below.
+	top of other windows of the same process. Makes GIMP's toolbox and
+	dock windows behave more like in GNOME under metacity. Apply the
+	same logic also to windows marked with the dialog window type
+	hint, and windows that are transient for some other window. I'll
+	call such windows "transient-type" below.
 
 	* gdk/win32/gdkevents-win32.c (doesnt_want_key): Drop unused
 	variables.
