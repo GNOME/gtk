@@ -1,3 +1,10 @@
+2008-10-06  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/gtkprintunixdialog.c (create_main_page): Show the tooltip
+	on the range entry itself, too.
+
 2008-10-04  Tor Lillqvist  <tml@novell.com>
 
 	Bug 132501 - Make utility window translate to tool window in win32
