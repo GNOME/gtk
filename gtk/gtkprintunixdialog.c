@@ -1709,6 +1709,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
   GtkWidget *custom_input;
+  const gchar *range_tooltip;
 
   main_vbox = gtk_vbox_new (FALSE, 18);
   gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 12);
@@ -1811,7 +1812,8 @@ create_main_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
  
   radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)), _("Pag_es:"));
-  gtk_widget_set_tooltip_text (radio, _("Specify one or more page ranges,\n e.g. 1-3,7,11"));
+  range_tooltip = _("Specify one or more page ranges,\n e.g. 1-3,7,11");
+  gtk_widget_set_tooltip_text (radio, range_tooltip);
  
   priv->page_range_radio = radio;
   gtk_widget_show (radio);
@@ -1819,6 +1821,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
 		    0, 1, 2, 3,  GTK_FILL, 0,
 		    0, 0);
   entry = gtk_entry_new ();
+  gtk_widget_set_tooltip_text (entry, range_tooltip);
   priv->page_range_entry = entry;
   gtk_widget_show (entry);
   gtk_table_attach (GTK_TABLE (table), entry,
