@@ -911,6 +911,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
   if (tooltip->keyboard_mode_enabled)
     {
+      x = y = -1;
       pointer_widget = tooltip_widget = tooltip->keyboard_widget;
     }
   else
