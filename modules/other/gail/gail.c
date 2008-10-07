@@ -980,3 +980,12 @@ gtk_module_init (gint *argc, char** argv[])
 
   return 0;
 }
+
+const char *
+g_module_check_init (GModule *module)
+{
+  g_module_make_resident (module);
+
+  return NULL;
+}
+ 

@@ -1,3 +1,10 @@
+2008-10-07 Matthias Clasen <mclasen@redhat.com>
+
+	Bug 554950 – gail must make itself resident
+
+	* gail.c: Make the module resident, since it can't handle
+	being unloaded.
+
 2008-09-22  Michael Natterer  <mitch@imendio.com>
 
 	* tests/ferret.c: s/GTK_SIGNAL_FUNC/G_CALLBACK/
