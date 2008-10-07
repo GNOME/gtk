@@ -2,6 +2,13 @@
 
 	Merged from trunk:
 
+	* gtk/gtktooltip.c (gtk_tooltip_show_tooltip): Avoid unitialized
+	memory warnings from valgrind.
+
+2008-10-06  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtkprintunixdialog.c (create_main_page): Show the tooltip
 	on the range entry itself, too.
 
