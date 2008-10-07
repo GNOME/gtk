@@ -43,7 +43,7 @@ gtk_hbox_init (GtkHBox *hbox)
   gtk_orientable_set_orientation (GTK_ORIENTABLE (hbox),
                                   GTK_ORIENTATION_HORIZONTAL);
 
-  _gtk_box_set_default_expand (GTK_BOX (hbox));
+  _gtk_box_set_old_defaults (GTK_BOX (hbox));
 }
 
 GtkWidget *

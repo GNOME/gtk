@@ -43,7 +43,7 @@ gtk_vbox_init (GtkVBox *vbox)
   gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox),
                                   GTK_ORIENTATION_VERTICAL);
 
-  _gtk_box_set_default_expand (GTK_BOX (vbox));
+  _gtk_box_set_old_defaults (GTK_BOX (vbox));
 }
 
 GtkWidget *

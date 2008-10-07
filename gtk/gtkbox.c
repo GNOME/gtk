@@ -96,10 +96,13 @@ static void gtk_box_get_child_property (GtkContainer   *container,
 static GType gtk_box_child_type        (GtkContainer   *container);
 
 
+#if 0
 G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
-                                                NULL))
-
+                                                NULL));
+#else
+G_DEFINE_ABSTRACT_TYPE (GtkBox, gtk_box, GTK_TYPE_CONTAINER);
+#endif
 
 static void
 gtk_box_class_init (GtkBoxClass *class)
@@ -775,10 +778,10 @@ gtk_box_pack (GtkBox      *box,
  *
  * Since: 2.16
  **/
-GtkWidget *
-gtk_box_new (GtkOrientation orientation,
-             gboolean       homogeneous,
-             gint           spacing)
+GtkWidget*
+_gtk_box_new (GtkOrientation orientation,
+              gboolean       homogeneous,
+              gint           spacing)
 {
   return g_object_new (GTK_TYPE_BOX,
                        "orientation", orientation,
@@ -1170,7 +1173,7 @@ gtk_box_set_child_packing (GtkBox      *box,
 }
 
 void
-_gtk_box_set_default_expand (GtkBox *box)
+_gtk_box_set_old_defaults (GtkBox *box)
 {
   GtkBoxPrivate *private;
 

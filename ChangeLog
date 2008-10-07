@@ -1,3 +1,9 @@
+2008-10-07 11:03:30  Tim Janik  <timj@imendio.com>
+
+	* gtk/gtkbox.h: keep GtkBox as an abstract type and keep _gtk_box_new()
+	as private function until we settle on the exact semantics.
+	renamed _gtk_box_set_old_defaults() as suggested by Mitch.
+
 2008-10-07  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkbox.c: reindent static prototypes.
