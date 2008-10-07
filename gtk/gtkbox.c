@@ -61,39 +61,39 @@ struct _GtkBoxPrivate
 #define GTK_BOX_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_BOX, GtkBoxPrivate))
 
 
-static void gtk_box_set_property (GObject         *object,
-				  guint            prop_id,
-				  const GValue    *value,
-				  GParamSpec      *pspec);
-static void gtk_box_get_property (GObject         *object,
-				  guint            prop_id,
-				  GValue          *value,
-				  GParamSpec      *pspec);
+static void gtk_box_set_property       (GObject        *object,
+                                        guint           prop_id,
+                                        const GValue   *value,
+                                        GParamSpec     *pspec);
+static void gtk_box_get_property       (GObject        *object,
+                                        guint           prop_id,
+                                        GValue         *value,
+                                        GParamSpec     *pspec);
 
-static void gtk_box_size_request  (GtkWidget      *widget,
-                                   GtkRequisition *requisition);
-static void gtk_box_size_allocate (GtkWidget      *widget,
-                                   GtkAllocation  *allocation);
+static void gtk_box_size_request       (GtkWidget      *widget,
+                                        GtkRequisition *requisition);
+static void gtk_box_size_allocate      (GtkWidget      *widget,
+                                        GtkAllocation  *allocation);
 
-static void gtk_box_add        (GtkContainer   *container,
-			        GtkWidget      *widget);
-static void gtk_box_remove     (GtkContainer   *container,
-			        GtkWidget      *widget);
-static void gtk_box_forall     (GtkContainer   *container,
-				gboolean	include_internals,
-			        GtkCallback     callback,
-			        gpointer        callback_data);
-static void gtk_box_set_child_property (GtkContainer    *container,
-					GtkWidget       *child,
-					guint            property_id,
-					const GValue    *value,
-					GParamSpec      *pspec);
-static void gtk_box_get_child_property (GtkContainer    *container,
-					GtkWidget       *child,
-					guint            property_id,
-					GValue          *value,
-					GParamSpec      *pspec);
-static GType gtk_box_child_type (GtkContainer   *container);
+static void gtk_box_add                (GtkContainer   *container,
+                                        GtkWidget      *widget);
+static void gtk_box_remove             (GtkContainer   *container,
+                                        GtkWidget      *widget);
+static void gtk_box_forall             (GtkContainer   *container,
+                                        gboolean        include_internals,
+                                        GtkCallback     callback,
+                                        gpointer        callback_data);
+static void gtk_box_set_child_property (GtkContainer   *container,
+                                        GtkWidget      *child,
+                                        guint           property_id,
+                                        const GValue   *value,
+                                        GParamSpec     *pspec);
+static void gtk_box_get_child_property (GtkContainer   *container,
+                                        GtkWidget      *child,
+                                        guint           property_id,
+                                        GValue         *value,
+                                        GParamSpec     *pspec);
+static GType gtk_box_child_type        (GtkContainer   *container);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
@@ -610,11 +610,11 @@ gtk_box_child_type (GtkContainer   *container)
 }
 
 static void
-gtk_box_set_child_property (GtkContainer    *container,
-			    GtkWidget       *child,
-			    guint            property_id,
-			    const GValue    *value,
-			    GParamSpec      *pspec)
+gtk_box_set_child_property (GtkContainer *container,
+                            GtkWidget    *child,
+                            guint         property_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
 {
   gboolean expand = 0;
   gboolean fill = 0;

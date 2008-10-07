@@ -1,5 +1,9 @@
 2008-10-07  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkbox.c: reindent static prototypes.
+
+2008-10-07  Michael Natterer  <mitch@imendio.com>
+
 	Bug 553573 – Add orientation API to GtkBox
 
 	* gtk/gtkbox.[hh]: implement the GtkOrientable interface and
