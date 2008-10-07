@@ -1,3 +1,7 @@
+2008-10-07  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtk-sections.txt: add gtk_box_new.
+
 2008-10-02  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtk-sections.txt: add gtk_ruler_new.
