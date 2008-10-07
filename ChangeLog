@@ -1,3 +1,19 @@
+2008-10-07  Michael Natterer  <mitch@imendio.com>
+
+	Bug 553573 – Add orientation API to GtkBox
+
+	* gtk/gtkbox.[hh]: implement the GtkOrientable interface and
+	swallow all code from GtkHBox and GtkVBox. Add gtk_box_new()
+	which takes a GtkOrientation argument. Also move the newly
+	added "spacing_set" boolean from struct GtkBox to the new
+	private struct.
+
+	* gtk/gtkhbox.[ch]
+	* gtk/gtkvbox.[ch]: remove all code except the constructor and
+	call gtk_orientable_set_orientation() in init().
+
+	* gtk/gtk.symbols: add gtk_box_new().
+
 2008-10-06  Björn Lindqvist  <bjourne@gmail.com>
 
 	Bug 539464 – gtk_cell_view_get_model is missing in GtkCellView

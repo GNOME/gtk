@@ -427,6 +427,7 @@ gtk_bin_get_type G_GNUC_CONST
 gtk_box_get_homogeneous
 gtk_box_get_spacing
 gtk_box_get_type G_GNUC_CONST
+gtk_box_new
 gtk_box_pack_end
 gtk_box_pack_start
 #ifndef GTK_DISABLE_DEPRECATED
