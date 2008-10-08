@@ -2,7 +2,7 @@
 
 	* gtk/gtkfilechooserdefault.c (update_current_folder_get_info_cb):
 	Don't forget to reset reload_state when current_folder is already
-	correct.
+	correct. Fixes https://bugzilla.redhat.com/show_bug.cgi?id=465992
 
 2008-10-08  Christian Dywan  <christian@imendio.com>
 
