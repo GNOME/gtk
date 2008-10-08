@@ -933,12 +933,12 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
             return TRUE;
           tmp_list = tmp_list->next;
         }
-  
-      if (check_algorithmically (context_simple, n_compose))
-	return TRUE;
 
       if (check_compact_table (context_simple, &gtk_compose_table_compact, n_compose))
         return TRUE;
+  
+      if (check_algorithmically (context_simple, n_compose))
+	return TRUE;
     }
   
   /* The current compose_buffer doesn't match anything */
