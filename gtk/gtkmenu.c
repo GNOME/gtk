@@ -628,6 +628,20 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                                  TRUE,
                                                                  GTK_PARAM_READABLE));
 
+  /**
+   * GtkMenu:arrow-placement:
+   *
+   * Indicates where scroll arrows should be placed.
+   *
+   * Since: 2.16
+   **/
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_enum ("arrow-placement",
+                                                              P_("Arrow Placement"),
+                                                              P_("Indicates where scroll arrows should be placed"),
+                                                              GTK_TYPE_ARROW_PLACEMENT,
+                                                              GTK_ARROWS_BOTH,
+                                                              GTK_PARAM_READABLE));
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_LEFT_ATTACH,
@@ -2155,13 +2169,32 @@ get_arrows_border (GtkMenu   *menu,
                    GtkBorder *border)
 {
   guint scroll_arrow_height;
+  GtkArrowPlacement arrow_placement;
 
   gtk_widget_style_get (GTK_WIDGET (menu),
                         "scroll-arrow-vlength", &scroll_arrow_height,
+                        "arrow_placement", &arrow_placement,
                         NULL);
 
-  border->top = menu->upper_arrow_visible ? scroll_arrow_height : 0;
-  border->bottom = menu->lower_arrow_visible ? scroll_arrow_height : 0;
+  switch (arrow_placement)
+    {
+    case GTK_ARROWS_BOTH:
+      border->top = menu->upper_arrow_visible ? scroll_arrow_height : 0;
+      border->bottom = menu->lower_arrow_visible ? scroll_arrow_height : 0;
+      break;
+
+    case GTK_ARROWS_START:
+      border->top = (menu->upper_arrow_visible ||
+                     menu->lower_arrow_visible) ? scroll_arrow_height : 0;
+      border->bottom = 0;
+      break;
+
+    case GTK_ARROWS_END:
+      border->top = 0;
+      border->bottom = (menu->upper_arrow_visible ||
+                        menu->lower_arrow_visible) ? scroll_arrow_height : 0;
+      break;
+    }
 
   border->left = border->right = 0;
 }
@@ -2596,26 +2629,57 @@ get_arrows_visible_area (GtkMenu      *menu,
   guint vertical_padding;
   guint horizontal_padding;
   gint scroll_arrow_height;
+  GtkArrowPlacement arrow_placement;
 
   gtk_widget_style_get (widget,
                         "vertical-padding", &vertical_padding,
                         "horizontal-padding", &horizontal_padding,
                         "scroll-arrow-vlength", &scroll_arrow_height,
+                        "arrow-placement", &arrow_placement,
                         NULL);
 
   border->x = GTK_CONTAINER (widget)->border_width + widget->style->xthickness + horizontal_padding;
   border->y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness + vertical_padding;
   gdk_drawable_get_size (widget->window, &border->width, &border->height);
 
-  upper->x = border->x;
-  upper->y = border->y;
-  upper->width = border->width - 2 * border->x;
-  upper->height = scroll_arrow_height;
+  switch (arrow_placement)
+    {
+    case GTK_ARROWS_BOTH:
+      upper->x = border->x;
+      upper->y = border->y;
+      upper->width = border->width - 2 * border->x;
+      upper->height = scroll_arrow_height;
 
-  lower->x = border->x;
-  lower->y = border->height - border->y - scroll_arrow_height;
-  lower->width = border->width - 2 * border->x;
-  lower->height = scroll_arrow_height;
+      lower->x = border->x;
+      lower->y = border->height - border->y - scroll_arrow_height;
+      lower->width = border->width - 2 * border->x;
+      lower->height = scroll_arrow_height;
+      break;
+
+    case GTK_ARROWS_START:
+      upper->x = border->x;
+      upper->y = border->y;
+      upper->width = (border->width - 2 * border->x) / 2;
+      upper->height = scroll_arrow_height;
+
+      lower->x = border->x + upper->width;
+      lower->y = border->y;
+      lower->width = (border->width - 2 * border->x) / 2;
+      lower->height = scroll_arrow_height;
+      break;
+
+    case GTK_ARROWS_END:
+      upper->x = border->x;
+      upper->y = border->height - border->y - scroll_arrow_height;
+      upper->width = (border->width - 2 * border->x) / 2;
+      upper->height = scroll_arrow_height;
+
+      lower->x = border->x + upper->width;
+      lower->y = border->height - border->y - scroll_arrow_height;
+      lower->width = (border->width - 2 * border->x) / 2;
+      lower->height = scroll_arrow_height;
+      break;
+    }
 
   *arrow_space = scroll_arrow_height - 2 * widget->style->ythickness;
 }
@@ -3173,12 +3237,17 @@ gtk_menu_motion_notify (GtkWidget      *widget,
 static gboolean
 get_double_arrows (GtkMenu *menu)
 {
-  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
-  gboolean        double_arrows;
+  GtkMenuPrivate   *priv = gtk_menu_get_private (menu);
+  gboolean          double_arrows;
+  GtkArrowPlacement arrow_placement;
 
   gtk_widget_style_get (GTK_WIDGET (menu),
                         "double-arrows", &double_arrows,
+                        "arrow-placement", &arrow_placement,
                         NULL);
+
+  if (arrow_placement != GTK_ARROWS_BOTH)
+    return TRUE;
 
   return double_arrows || (priv->initially_pushed_in &&
                            menu->scroll_offset != 0);
@@ -3354,12 +3423,14 @@ get_arrows_sensitive_area (GtkMenu      *menu,
   guint vertical_padding;
   gint win_x, win_y;
   gint scroll_arrow_height;
+  GtkArrowPlacement arrow_placement;
 
   gdk_drawable_get_size (GTK_WIDGET (menu)->window, &width, &height);
 
   gtk_widget_style_get (GTK_WIDGET (menu),
                         "vertical-padding", &vertical_padding,
                         "scroll-arrow-vlength", &scroll_arrow_height,
+                        "arrow-placement", &arrow_placement,
                         NULL);
 
   border = GTK_CONTAINER (menu)->border_width +
@@ -3367,20 +3438,61 @@ get_arrows_sensitive_area (GtkMenu      *menu,
 
   gdk_window_get_position (GTK_WIDGET (menu)->window, &win_x, &win_y);
 
-  if (upper)
+  switch (arrow_placement)
     {
-      upper->x = win_x;
-      upper->y = win_y;
-      upper->width = width;
-      upper->height = scroll_arrow_height + border;
-    }
+    case GTK_ARROWS_BOTH:
+      if (upper)
+        {
+          upper->x = win_x;
+          upper->y = win_y;
+          upper->width = width;
+          upper->height = scroll_arrow_height + border;
+        }
 
-  if (lower)
-    {
-      lower->x = win_x;
-      lower->y = win_y + height - border - scroll_arrow_height;
-      lower->width = width;
-      lower->height = scroll_arrow_height + border;
+      if (lower)
+        {
+          lower->x = win_x;
+          lower->y = win_y + height - border - scroll_arrow_height;
+          lower->width = width;
+          lower->height = scroll_arrow_height + border;
+        }
+      break;
+
+    case GTK_ARROWS_START:
+      if (upper)
+        {
+          upper->x = win_x;
+          upper->y = win_y;
+          upper->width = width / 2;
+          upper->height = scroll_arrow_height + border;
+        }
+
+      if (lower)
+        {
+          lower->x = win_x + width / 2;
+          lower->y = win_y;
+          lower->width = width / 2;
+          lower->height = scroll_arrow_height + border;
+        }
+      break;
+
+    case GTK_ARROWS_END:
+      if (upper)
+        {
+          upper->x = win_x;
+          upper->y = win_y + height - border - scroll_arrow_height;
+          upper->width = width / 2;
+          upper->height = scroll_arrow_height + border;
+        }
+
+      if (lower)
+        {
+          lower->x = win_x + width / 2;
+          lower->y = win_y + height - border - scroll_arrow_height;
+          lower->width = width / 2;
+          lower->height = scroll_arrow_height + border;
+        }
+      break;
     }
 }
 

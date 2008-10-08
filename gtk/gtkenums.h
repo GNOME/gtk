@@ -57,6 +57,14 @@ typedef enum
   GTK_ANCHOR_E		= GTK_ANCHOR_EAST
 } GtkAnchorType;
 
+/* Arrow placement */
+typedef enum
+{
+  GTK_ARROWS_BOTH,
+  GTK_ARROWS_START,
+  GTK_ARROWS_END
+} GtkArrowPlacement;
+
 /* Arrow types */
 typedef enum
 {

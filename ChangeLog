@@ -1,5 +1,16 @@
 2008-10-08  Christian Dywan  <christian@imendio.com>
 
+	Bug 436533 – Allow more space efficient scroll arrows placement
+
+	* gtk/gtkenums.h: Add GtkArrowPlacement
+	* gtk/gtkmenu.c (gtk_menu_class_init), (get_arrows_border),
+	(get_arrows_visible_area), (get_double_arrows),
+	(get_arrows_sensitive_area): Implement GtkMenu::arrow-placement
+        to allow scrolling arrows to be placed at the start, end or both
+        Patch by Tommi Komulainen and myself
+
+2008-10-08  Christian Dywan  <christian@imendio.com>
+
 	Bug 555387 – Changing the sensitivity of a statusbar
 	mistakenly requires a display
 
