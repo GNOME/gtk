@@ -6952,9 +6952,9 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
 	g_object_unref (impl->current_folder);
 
       impl->current_folder = g_object_ref (data->file);
-
-      impl->reload_state = RELOAD_HAS_FOLDER;
     }
+
+  impl->reload_state = RELOAD_HAS_FOLDER;
 
   /* Update the widgets that may trigger a folder change themselves.  */
 
