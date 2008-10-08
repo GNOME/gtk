@@ -1,3 +1,9 @@
+2008-10-08  Christian Persch  <chpe@gnome.org>
+
+        Bug 554702 – gtkfilesystem leaks GError
+
+        * gtk/gtkfilesystem.c (_gtk_file_system_init): Free the GError.
+
 2008-10-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (update_current_folder_get_info_cb):
