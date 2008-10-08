@@ -418,7 +418,7 @@ gtk_message_dialog_set_property (GObject      *object,
 				g_value_get_boolean (value));
       break;
     case PROP_IMAGE:
-      gtk_message_dialog_set_image (dialog, (GtkWidget *)g_value_get_object (value));
+      gtk_message_dialog_set_image (dialog, g_value_get_object (value));
       break;
 
     default:
@@ -628,6 +628,13 @@ gtk_message_dialog_set_image (GtkMessageDialog *dialog,
   GtkWidget *parent;
 
   g_return_if_fail (GTK_IS_MESSAGE_DIALOG (dialog));
+  g_return_if_fail (image == NULL || GTK_IS_WIDGET (image));
+
+  if (image == NULL)
+    {
+      image = gtk_image_new_from_stock (NULL, GTK_ICON_SIZE_DIALOG);
+      gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0.0);
+    }
 
   priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (dialog);
 

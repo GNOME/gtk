@@ -1,5 +1,14 @@
 2008-10-08  Christian Dywan  <christian@imendio.com>
 
+	Bug 555270 – Allow unsetting a MessageDialog's image
+
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_set_property),
+        Remove a superfluous cast to GtkWidget*
+	(gtk_message_dialog_set_image): Accept NULL for the image
+	and unset the image in that case.
+
+2008-10-08  Christian Dywan  <christian@imendio.com>
+
 	Bug 436533 – Allow more space efficient scroll arrows placement
 
 	* gtk/gtkenums.h: Add GtkArrowPlacement
