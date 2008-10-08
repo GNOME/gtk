@@ -323,7 +323,7 @@ save_bookmarks (GFile  *bookmarks_file,
 				NULL, FALSE, 0, NULL,
 				NULL, &error))
     {
-      g_critical (error->message);
+      g_critical ("%s", error->message);
       g_error_free (error);
     }
 
@@ -531,7 +531,10 @@ _gtk_file_system_init (GtkFileSystem *file_system)
 						 G_FILE_MONITOR_NONE,
 						 NULL, &error);
   if (error)
-    g_warning (error->message);
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+    }
   else
     g_signal_connect (priv->bookmarks_monitor, "changed",
 		      G_CALLBACK (bookmarks_file_changed), file_system);
@@ -1362,7 +1365,10 @@ gtk_folder_constructed (GObject *object)
   priv->directory_monitor = g_file_monitor_directory (priv->folder_file, G_FILE_MONITOR_NONE, NULL, &error);
 
   if (error)
-    g_warning (error->message);
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+    }
   else
     g_signal_connect (priv->directory_monitor, "changed",
 		      G_CALLBACK (directory_monitor_changed), object);
