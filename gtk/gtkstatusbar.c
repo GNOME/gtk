@@ -586,7 +586,7 @@ get_grip_rect (GtkStatusbar *statusbar,
 static void
 set_grip_cursor (GtkStatusbar *statusbar)
 {
-  if (statusbar->has_resize_grip)
+  if (statusbar->has_resize_grip && statusbar->grip_window != NULL)
     {
       GtkWidget *widget = GTK_WIDGET (statusbar);
       GdkDisplay *display = gtk_widget_get_display (widget);

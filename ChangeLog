@@ -1,3 +1,11 @@
+2008-10-08  Christian Dywan  <christian@imendio.com>
+
+	Bug 555387 – Changing the sensitivity of a statusbar
+	mistakenly requires a display
+
+	* gtk/gtkstatusbar.c (set_grip_cursor): Only change the cursor
+        of the resize grip if there is a grip window.
+
 2008-10-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktooltip.c (gtk_tooltip_show_tooltip): Avoid unitialized
