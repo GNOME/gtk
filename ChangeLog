@@ -1,3 +1,12 @@
+2008-10-09  Simos Xenitellis  <simos@gnome.org>
+
+	Bug 554192 – double press on the "circumflex" dead key 
+	(standard french 105 keyboard) no longer produces the "^" character
+
+	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_filter_keypress):
+	Changed the order, put check_compact_table() first, then 
+	check_algorithmically().
+
 2008-10-08  Christian Persch  <chpe@gnome.org>
 
         Bug 554702 – gtkfilesystem leaks GError
