@@ -5096,7 +5096,7 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
        * be set by the next loop.
        */
       toplevel = gtk_widget_get_toplevel (focus_widget);
-      if (GTK_WIDGET_TOPLEVEL (toplevel))
+      if (GTK_IS_WINDOW (toplevel))
 	{
 	  widget = GTK_WINDOW (toplevel)->focus_widget;
 	  

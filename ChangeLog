@@ -1,5 +1,12 @@
 2008-10-09  Christian Dywan  <christian@imendio.com>
 
+	Bug 555676 – gtk_widget_real_grab_focus assumes toplevel == window
+
+	* gtk/gtkwidget.c (gtk_widget_real_grab_focus):
+        Test for GTK_IS_WINDOW instead of GTK_WIDGET_TOPLEVEL
+
+2008-10-09  Christian Dywan  <christian@imendio.com>
+
 	Bug 555573 – gtk_font_selection_set_font_name
         shouldn't require a screen
 
