@@ -80,6 +80,7 @@ struct _Node {
 
   guint dirty : 1;
   guint expand : 1;  /* used for separators */
+  guint popup_accels : 1;
 };
 
 #define GTK_UI_MANAGER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_UI_MANAGER, GtkUIManagerPrivate))
@@ -1208,7 +1209,8 @@ start_element_handler (GMarkupParseContext *context,
   GQuark action_quark;
   gboolean top;
   gboolean expand = FALSE;
-  
+  gboolean accelerators = FALSE;
+
   gboolean raise_error = TRUE;
 
   node_name = NULL;
@@ -1235,6 +1237,10 @@ start_element_handler (GMarkupParseContext *context,
 	{
 	  expand = !strcmp (attribute_values[i], "true");
 	}
+      else if (!strcmp (attribute_names[i], "accelerators"))
+        {
+          accelerators = !strcmp (attribute_values[i], "true");
+        }
       /*  else silently skip unknown attributes to be compatible with
        *  future additional attributes.
        */
@@ -1347,6 +1353,9 @@ start_element_handler (GMarkupParseContext *context,
 					 node_name, strlen (node_name),
 					 NODE_TYPE_POPUP,
 					 TRUE, FALSE);
+
+          NODE_INFO (ctx->current)->popup_accels = accelerators;
+
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = action_quark;
 	  
@@ -1799,6 +1808,7 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
 	  node_type = NODE_TYPE_TOOLBAR;
 	  break;
 	case GTK_UI_MANAGER_POPUP:
+	case GTK_UI_MANAGER_POPUP_WITH_ACCELS:
 	  node_type = NODE_TYPE_POPUP;
 	  break;
 	case GTK_UI_MANAGER_ACCELERATOR:
@@ -1822,6 +1832,9 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
   child = get_child_node (self, node, sibling,
 			  name, name ? strlen (name) : 0,
 			  node_type, TRUE, top);
+
+  if (type == GTK_UI_MANAGER_POPUP_WITH_ACCELS)
+    NODE_INFO (child)->popup_accels = TRUE;
 
   if (action != NULL)
     action_quark = g_quark_from_string (action);
@@ -2199,7 +2212,8 @@ update_smart_separators (GtkWidget *proxy)
 static void
 update_node (GtkUIManager *self, 
 	     GNode        *node,
-	     gboolean      in_popup)
+	     gboolean      in_popup,
+             gboolean      popup_accels)
 {
   Node *info;
   GNode *child;
@@ -2219,7 +2233,11 @@ update_node (GtkUIManager *self,
   if (!info->dirty)
     return;
 
-  in_popup = in_popup || (info->type == NODE_TYPE_POPUP);
+  if (info->type == NODE_TYPE_POPUP)
+    {
+      in_popup = TRUE;
+      popup_accels = info->popup_accels;
+    }
 
 #ifdef DEBUG_UI_MANAGER
   g_print ("update_node name=%s dirty=%d popup %d (", 
@@ -2576,7 +2594,7 @@ update_node (GtkUIManager *self,
         {
           g_signal_connect (info->proxy, "notify::visible",
 			    G_CALLBACK (update_smart_separators), NULL);
-          if (in_popup) 
+          if (in_popup && !popup_accels)
 	    {
 	      /* don't show accels in popups */
 	      GtkWidget *label = GTK_BIN (info->proxy)->child;
@@ -2715,7 +2733,7 @@ update_node (GtkUIManager *self,
       
       current = child;
       child = current->next;
-      update_node (self, current, in_popup);
+      update_node (self, current, in_popup, popup_accels);
     }
   
   if (info->proxy) 
@@ -2757,7 +2775,7 @@ do_updates (GtkUIManager *self)
    *    the proxy is reconnected to the new action (or a new proxy widget
    *    is created and added to the parent container).
    */
-  update_node (self, self->private_data->root_node, FALSE);
+  update_node (self, self->private_data->root_node, FALSE, FALSE);
 
   self->private_data->update_tag = 0;
 

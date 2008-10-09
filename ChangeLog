@@ -1,3 +1,15 @@
+2008-10-09  Michael Natterer  <mitch@imendio.com>
+
+	Bug 516425 – Optionally display accelerators in popups
+
+	* gtk/gtkuimanager.h (enum GtkUIManagerItemType): add value
+	GTK_UI_MANAGER_POPUP_WITH_ACCELS which works like _POPUP but
+	shows the actions' accelerators.
+
+	* gtk/gtkuimanager.c: honor the new enum value for programmatically
+	created UIs, and support <popup accelerators="true"> in the XML
+	for the same purpose.
+
 2008-10-09  Simos Xenitellis  <simos@gnome.org>
 
 	Bug 554192 – double press on the "circumflex" dead key 
