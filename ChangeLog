@@ -1,3 +1,11 @@
+2008-10-09  Richard Hult  <richard@imendio.com>
+
+	Bug 550342 – Splash screens have a caption
+
+	* gdk/quartz/gdkwindow-quartz.c: (_gdk_window_new),
+	(gdk_window_set_decorations): Patch from Marianne Gagnon to make
+	splash windows borderless.
+
 2008-10-09  Michael Natterer  <mitch@imendio.com>
 
 	Bug 516425 – Optionally display accelerators in popups
