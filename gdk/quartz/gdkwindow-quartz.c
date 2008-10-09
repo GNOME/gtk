@@ -1016,12 +1016,13 @@ _gdk_window_new (GdkWindow     *parent,
         content_rect = NSMakeRect (-500 - impl->width, -500 - impl->height,
                                    impl->width, impl->height);
 
-	switch (attributes->window_type) 
+        if (attributes->window_type == GDK_WINDOW_TEMP ||
+            attributes->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN)
           {
-          case GDK_WINDOW_TEMP:
             style_mask = NSBorderlessWindowMask;
-            break;
-          default:
+          }
+        else
+          {
             style_mask = (NSTitledWindowMask |
                           NSClosableWindowMask |
                           NSMiniaturizableWindowMask |
@@ -2733,7 +2734,8 @@ gdk_window_set_decorations (GdkWindow       *window,
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
 
-  if (decorations == 0 || GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
+  if (decorations == 0 || GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP ||
+      impl->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN )
     {
       new_mask = NSBorderlessWindowMask;
     }

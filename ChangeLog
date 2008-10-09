@@ -1,3 +1,13 @@
+2008-10-09  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	Bug 550342 – Splash screens have a caption
+
+	* gdk/quartz/gdkwindow-quartz.c: (_gdk_window_new),
+	(gdk_window_set_decorations): Patch from Marianne Gagnon to make
+	splash windows borderless.
+
 2008-10-09  Simos Xenitellis  <simos@gnome.org>
 
 	Bug 554192 – double press on the "circumflex" dead key
