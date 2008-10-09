@@ -1,5 +1,13 @@
 2008-10-09  Christian Dywan  <christian@imendio.com>
 
+	Bug 555573 – gtk_font_selection_set_font_name
+        shouldn't require a screen
+
+	* gtk/gtkfontsel.c (gtk_font_selection_set_font_name):
+        Don't warn if there is no screen, just return FALSE
+
+2008-10-09  Christian Dywan  <christian@imendio.com>
+
 	Bug 555523 – gtk_scale_button_set_adjustment should accept NULL
 
 	* gtk/gtkscalebutton.c (gtk_scale_button_set_adjustment):

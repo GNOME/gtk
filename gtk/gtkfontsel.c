@@ -1350,8 +1350,10 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   const gchar *new_family_name;
   
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), FALSE);
-  g_return_val_if_fail (gtk_widget_has_screen (GTK_WIDGET (fontsel)), FALSE);
-  
+
+  if (!gtk_widget_has_screen (GTK_WIDGET (fontsel)))
+    return FALSE;
+
   new_desc = pango_font_description_from_string (fontname);
   new_family_name = pango_font_description_get_family (new_desc);
 
