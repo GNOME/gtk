@@ -1,3 +1,11 @@
+2008-10-09  Christian Dywan  <christian@imendio.com>
+
+	Bug 555578 – GtkTable propertiy maxima are wrong
+
+	* gtk/gtktable.c (gtk_table_class_init), (gtk_table_resize):
+        Always use 65535 instead of G_MAXUINT since that is
+        the actually supported maximum number of columns and rows
+
 2008-10-09  Richard Hult  <richard@imendio.com>
 
 	Bug 550342 – Splash screens have a caption

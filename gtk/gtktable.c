@@ -129,7 +129,7 @@ gtk_table_class_init (GtkTableClass *class)
 						     P_("Rows"),
 						     P_("The number of rows in the table"),
 						     1,
-						     G_MAXUINT,
+						     65535,
 						     1,
 						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
@@ -138,7 +138,7 @@ gtk_table_class_init (GtkTableClass *class)
 						     P_("Columns"),
 						     P_("The number of columns in the table"),
 						     1,
-						     G_MAXUINT,
+						     65535,
 						     1,
 						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
@@ -147,7 +147,7 @@ gtk_table_class_init (GtkTableClass *class)
 						     P_("Row spacing"),
 						     P_("The amount of space between two consecutive rows"),
 						     0,
-						     G_MAXUINT,
+						     65535,
 						     0,
 						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
@@ -156,7 +156,7 @@ gtk_table_class_init (GtkTableClass *class)
 						     P_("Column spacing"),
 						     P_("The amount of space between two consecutive columns"),
 						     0,
-						     G_MAXUINT,
+						     65535,
 						     0,
 						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
@@ -482,8 +482,8 @@ gtk_table_resize (GtkTable *table,
 		  guint     n_cols)
 {
   g_return_if_fail (GTK_IS_TABLE (table));
-  g_return_if_fail (n_rows > 0 && n_rows < 65536);
-  g_return_if_fail (n_cols > 0 && n_cols < 65536);
+  g_return_if_fail (n_rows > 0 && n_rows <= 65535);
+  g_return_if_fail (n_cols > 0 && n_cols <= 65535);
 
   n_rows = MAX (n_rows, 1);
   n_cols = MAX (n_cols, 1);
