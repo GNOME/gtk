@@ -678,16 +678,22 @@ gtk_scale_button_set_adjustment	(GtkScaleButton *button,
 				 GtkAdjustment  *adjustment)
 {
   g_return_if_fail (GTK_IS_SCALE_BUTTON (button));
-  g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+  if (!adjustment)
+    adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  else
+    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  if (button->priv->adjustment)
-    g_object_unref (button->priv->adjustment);
-  button->priv->adjustment = g_object_ref_sink (adjustment);
+  if (button->priv->adjustment != adjustment)
+    {
+      if (button->priv->adjustment)
+        g_object_unref (button->priv->adjustment);
+      button->priv->adjustment = g_object_ref_sink (adjustment);
 
-  if (button->priv->scale)
-    gtk_range_set_adjustment (GTK_RANGE (button->priv->scale), adjustment);
+      if (button->priv->scale)
+        gtk_range_set_adjustment (GTK_RANGE (button->priv->scale), adjustment);
 
-  g_object_notify (G_OBJECT (button), "adjustment");
+      g_object_notify (G_OBJECT (button), "adjustment");
+    }
 }
 
 /**
