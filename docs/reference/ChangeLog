@@ -1,3 +1,10 @@
+2008-10-09  Michael Natterer  <mitch@imendio.com>
+
+	Bug 516425 – Optionally display accelerators in popups
+
+	* gtk/tmpl/gtkuimanager.sgml: document the enhanced XML syntax and
+	the new enum value for popups with accelerators.
+
 2008-10-07  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtk-sections.txt: add gtk_box_new.
