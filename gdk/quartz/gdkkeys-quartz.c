@@ -417,6 +417,13 @@ gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
 }
 
 gboolean
+gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
+{
+  /* FIXME: Implement this. */
+  return FALSE;
+}
+
+gboolean
 gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                    guint          keyval,
                                    GdkKeymapKey **keys,

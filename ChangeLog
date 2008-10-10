@@ -1,3 +1,8 @@
+2008-10-10  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkkeys-quartz.c: (gdk_keymap_get_caps_lock_state)
+	Add empty stub to fix linking.
+
 2008-10-10  Simos Xenitellis  <simos@gnome.org>
 
 	Bug 555000 – Wrong treatment on non-spacing marks dead keys in 
