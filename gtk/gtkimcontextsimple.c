@@ -410,16 +410,12 @@ check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
 /* Checks if a keysym is a dead key. Dead key keysym values are defined in
  * ../gdk/gdkkeysyms.h and the first is GDK_dead_grave. As X.Org is updated,
  * more dead keys are added and we need to update the upper limit.
- * Also checks if the keysym belongs to the non-spacing mark Unicode category,
- * by invoking gdk_keyval_to_unicode(). For keysyms like 0x1000000 + 0x0301,
- * it converts them to 0x301, which makes g_unichar_type() report them as
- * non-spacing mark. Thus, we check that the value is less then 0x1000000.
- * check_algorithmically() does not handle keysyms > 0x1000000.
+ * Currently, the upper limit is GDK_dead_dasia+1. The +1 has to do with 
+ * a temporary issue in the X.Org header files. 
+ * In future versions it will be just the keysym (no +1).
  */
 #define IS_DEAD_KEY(k) \
-    (((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1)) || \
-     ((g_unichar_type (gdk_keyval_to_unicode (k)) == G_UNICODE_NON_SPACING_MARK) && \
-      ((k) < 0x1000000)))
+    ((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1))
 
 static gboolean
 check_algorithmically (GtkIMContextSimple    *context_simple,
