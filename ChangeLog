@@ -5,7 +5,7 @@
 	Bug 555000 – Wrong treatment on non-spacing marks dead keys in
 	GtkIMContextSimple
 
-	* gtk/gtkimcontextsimple.c: Change IS_DEY() macro so that
+	* gtk/gtkimcontextsimple.c: Change IS_DEAD_KEY() macro so that
 	it on checksf input is a deadkey 
 
 2008-10-09  Richard Hult  <richard@imendio.com>
