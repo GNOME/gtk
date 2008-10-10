@@ -1,3 +1,11 @@
+2008-10-10  Simos Xenitellis  <simos@gnome.org>
+
+	Bug 555000 – Wrong treatment on non-spacing marks dead keys in 
+	GtkIMContextSimple
+
+	* gtk/gtkimcontextsimple.c: Change IS_DEY() macro so that
+	it on checksf input is a deadkey keysym.
+
 2008-10-09  Christian Dywan  <christian@imendio.com>
 
 	Bug 555676 – gtk_widget_real_grab_focus assumes toplevel == window
