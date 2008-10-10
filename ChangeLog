@@ -4,7 +4,7 @@
 	GtkIMContextSimple
 
 	* gtk/gtkimcontextsimple.c: Change IS_DEAD_KEY() macro so that
-	it on checksf input is a deadkey keysym.
+	it only checks if input is a deadkey keysym.
 
 2008-10-09  Christian Dywan  <christian@imendio.com>
 
