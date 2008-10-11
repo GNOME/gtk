@@ -1,3 +1,10 @@
+2008-10-11  Christian Dywan  <christian@imendio.com>
+
+	Bug 555676 – gtk_widget_real_grab_focus assumes toplevel == window
+
+	* gtk/gtkwidget.c (gtk_widget_real_grab_focus):
+        Actually test for GTK_IS_WINDOW *and* GTK_WIDGET_TOPLEVEL
+
 2008-10-10  Behdad Esfahbod  <behdad@gnome.org>
 
 	Bug 551355 – [PATCH] Make glib build with libtool 2.2
