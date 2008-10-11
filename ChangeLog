@@ -1,3 +1,10 @@
+2008-10-10  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 551355 – [PATCH] Make glib build with libtool 2.2
+
+	* autogen.sh: Accept libtool 2.2.   We are moving towards having
+	it working.
+
 2008-10-10  Richard Hult  <richard@imendio.com>
 
 	* gdk/quartz/gdkkeys-quartz.c: (gdk_keymap_get_caps_lock_state)
