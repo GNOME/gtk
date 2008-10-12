@@ -1,3 +1,16 @@
+2008-10-12  Simos Xenitellis  <simos@gnome.org>
+
+	Bug 555625 – Updated gtk_compose_seqs_compact table 
+	(gtkimcontextsimpleseqs.h)
+	
+	* gtk/gtkimcontextsimpleseqs.c: Updated the compose sequence table.
+	In this update we removed a further set of compose sequences that
+	are otherwise covered by check_algorithmically(). 
+
+	* gtk/gtkimcontextsimple.c: Updated table value that shows how many 
+	distinct first values exist in the compose sequences. 
+	Change from 22 to 20.
+	
 2008-10-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktoolbar.c: Revert the GtkSettings::gtk-toolbar-icon-size
