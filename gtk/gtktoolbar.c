@@ -543,12 +543,12 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_ICON_SIZE,
-				   g_param_spec_enum ("icon-size",
-						      P_("Icon size"),
-						      P_("Size of icons in this toolbar"),
-						      GTK_TYPE_ICON_SIZE,
-						      DEFAULT_ICON_SIZE,
-						      GTK_PARAM_READWRITE));  
+				   g_param_spec_int ("icon-size",
+						     P_("Icon size"),
+						     P_("Size of icons in this toolbar"),
+						     0, G_MAXINT,
+						     DEFAULT_ICON_SIZE,
+						     GTK_PARAM_READWRITE));  
 
   /**
    * GtkToolbar:icon-size-set:
@@ -640,12 +640,12 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                     DEFAULT_TOOLBAR_STYLE,
                                                     GTK_PARAM_READWRITE));
   
-  gtk_settings_install_property (g_param_spec_enum ("gtk-toolbar-icon-size",
-                                                    P_("Toolbar icon size"),
-                                                    P_("Size of icons in default toolbars"),
-                                                    GTK_TYPE_ICON_SIZE,
-                                                    DEFAULT_ICON_SIZE,
-                                                    GTK_PARAM_READWRITE));  
+  gtk_settings_install_property (g_param_spec_int ("gtk-toolbar-icon-size",
+                                                   P_("Toolbar icon size"),
+                                                   P_("Size of icons in default toolbars"),
+                                                   0, G_MAXINT,
+                                                   DEFAULT_ICON_SIZE,
+                                                   GTK_PARAM_READWRITE));  
 
   binding_set = gtk_binding_set_by_class (klass);
   
@@ -742,7 +742,7 @@ gtk_toolbar_set_property (GObject      *object,
       gtk_toolbar_set_tooltips (toolbar, g_value_get_boolean (value));
       break;
     case PROP_ICON_SIZE:
-      gtk_toolbar_set_icon_size (toolbar, g_value_get_enum (value));
+      gtk_toolbar_set_icon_size (toolbar, g_value_get_int (value));
       break;
     case PROP_ICON_SIZE_SET:
       if (g_value_get_boolean (value))
@@ -780,7 +780,7 @@ gtk_toolbar_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_toolbar_get_tooltips (toolbar));
       break;
     case PROP_ICON_SIZE:
-      g_value_set_enum (value, gtk_toolbar_get_icon_size (toolbar));
+      g_value_set_int (value, gtk_toolbar_get_icon_size (toolbar));
       break;
     case PROP_ICON_SIZE_SET:
       g_value_set_boolean (value, toolbar->icon_size_set);
