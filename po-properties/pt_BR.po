@@ -4903,9 +4903,8 @@ msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
 msgstr ""
-"Se a direção do indicador de ordenação em listas ou visualizadores de "
-"árvores está invertida se comparada ao padrão (no qual para baixo significa "
-"\"crescendo\")"
+"Se a direção do indicador de ordenação em listas ou em visões em árvore está "
+"invertida se comparada ao padrão (no qual para baixo significa \"crescendo\")"
 
 #: ../gtk/gtksettings.c:477
 msgid "Show the 'Input Methods' menu"
@@ -6039,7 +6038,7 @@ msgstr "Modelo de TreeView"
 
 #: ../gtk/gtktreeview.c:571
 msgid "The model for the tree view"
-msgstr "O modelo para o visualizador de árvore"
+msgstr "O modelo para a visão em árvore"
 
 #: ../gtk/gtktreeview.c:579
 msgid "Horizontal Adjustment for the widget"
@@ -6159,7 +6158,7 @@ msgstr "Habilitar linhas de grade"
 
 #: ../gtk/gtktreeview.c:753
 msgid "Whether grid lines should be drawn in the tree view"
-msgstr "Se as linhas de grade devem ser desenhadas no visualizador de árvore"
+msgstr "Se as linhas de grade devem ser desenhadas na visão em árvore"
 
 #: ../gtk/gtktreeview.c:761
 msgid "Enable Tree Lines"
@@ -6167,7 +6166,7 @@ msgstr "Habilitar linhas de árvore"
 
 #: ../gtk/gtktreeview.c:762
 msgid "Whether tree lines should be drawn in the tree view"
-msgstr "Se linhas de árvores devem ser desenhadas no visualizador de árvore"
+msgstr "Se linhas de árvores devem ser desenhadas na visão em árvore"
 
 #: ../gtk/gtktreeview.c:770
 msgid "The column in the model containing the tooltip texts for the rows"
@@ -6236,7 +6235,7 @@ msgstr "Espessura de linha da grade"
 
 #: ../gtk/gtktreeview.c:846
 msgid "Width, in pixels, of the tree view grid lines"
-msgstr "Espessura, em pixels, das linhas de grade no visualizador de árvore"
+msgstr "Espessura, em pixels, das linhas de grade da visão em árvore"
 
 #: ../gtk/gtktreeview.c:852
 msgid "Tree line width"
@@ -6244,7 +6243,7 @@ msgstr "Espessura de linha de árvore"
 
 #: ../gtk/gtktreeview.c:853
 msgid "Width, in pixels, of the tree view lines"
-msgstr "Espessura, em pixels, das linhas no visualizador de árvore"
+msgstr "Espessura, em pixels, das linhas da visão em árvore"
 
 #: ../gtk/gtktreeview.c:859
 msgid "Grid line pattern"
@@ -6253,8 +6252,7 @@ msgstr "Padrão de linha de grade"
 #: ../gtk/gtktreeview.c:860
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr ""
-"Padrão do tracejado usado para desenhar as linhas de grade no visualizador "
-"de árvore"
+"Padrão do tracejado usado para desenhar as linhas de grade da visão em árvore"
 
 #: ../gtk/gtktreeview.c:866
 msgid "Tree line pattern"
@@ -6262,8 +6260,7 @@ msgstr "Padrão de linha de árvore"
 
 #: ../gtk/gtktreeview.c:867
 msgid "Dash pattern used to draw the tree view lines"
-msgstr ""
-"Padrão do tracejado usado para desenhar linhas no visualizador de árvore"
+msgstr "Padrão do tracejado usado para desenhar as linhas da visão em árvore"
 
 #: ../gtk/gtktreeviewcolumn.c:192
 msgid "Whether to display the column"
