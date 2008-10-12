@@ -1,5 +1,12 @@
 2008-10-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbar.c: Revert the GtkSettings::gtk-toolbar-icon-size
+	part of the previous change, since it doesn't work correctly without
+	extra complication, and using custom icon sizes doesn't make too
+	much sense in a desktop-wide setting.
+
+2008-10-11  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 555186 – Setting gtk-toolbar-icon-size with custom icon_size
 
 	* gtk/gtktoolbar.c: Turn GtkToolbar::icon-size and
