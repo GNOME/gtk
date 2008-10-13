@@ -1,3 +1,7 @@
+2008-10-13  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po: Fixed wrong translations (Bug #556017).
+
 2008-10-01 Og Maciel <ogmaciel@gnome.org>
 
 	* pt_BR.po: Updated Brazilian Portuguese translation by Vladimir Melo.
