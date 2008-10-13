@@ -1,3 +1,13 @@
+2008-10-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	Bug 555791 – Natuilus Crashes when opening USB MP3 Player Contents
+
+	* io-tga.c (gdk_pixbuf__tga_stop_load): Don't segfault on
+	short files.
+	Problem reported by Pedro Villavicencio 
+
 2008-10-01  Tor Lillqvist  <tml@novell.com>
 
 	* io-icns.c: Don't #define _GNU_SOURCE on Windows as it confuses
