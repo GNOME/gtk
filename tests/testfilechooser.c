@@ -491,7 +491,7 @@ main (int argc, char **argv)
   char *backend = NULL;
   GError *error = NULL;
   GOptionEntry options[] = {
-    { "action", 'a', 0, G_OPTION_ARG_STRING, &action, "Filechooser action", "ACTION" },
+    { "action", 'a', 0, G_OPTION_ARG_STRING, &action_arg, "Filechooser action", "ACTION" },
     { "backend", 'b', 0, G_OPTION_ARG_STRING, &backend, "Filechooser backend (default: gtk+)", "BACKEND" },
     { "multiple", 'm', 0, G_OPTION_ARG_NONE, &multiple, "Select-multiple", NULL },
     { "right-to-left", 'r', 0, G_OPTION_ARG_NONE, &force_rtl, "Force right-to-left layout.", NULL },

@@ -1,3 +1,8 @@
+2008-10-13  Cody Russell <cody@jhu.edu>
+
+	* test/testfilechooser.c: Fix option parsing so that -a and
+	--action work correctly.
+
 2008-10-13  Christian Persch <chpe@gnome.org>
 
 	Bug 555386 – format not a string literal and no format arguments
