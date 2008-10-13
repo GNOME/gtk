@@ -349,7 +349,7 @@ static gboolean fill_in_context(TGAContext *ctx, GError **err)
 	}
 
 	ctx->pbuf_bytes = ctx->pbuf->rowstride * ctx->pbuf->height;
-	if (ctx->hdr->flags & TGA_ORIGIN_UPPER || ctx->run_length_encoded)
+	if ((ctx->hdr->flags & TGA_ORIGIN_UPPER) || ctx->run_length_encoded)
 		ctx->pptr = ctx->pbuf->pixels;
 	else
 		ctx->pptr = ctx->pbuf->pixels + (ctx->pbuf->height - 1)*ctx->pbuf->rowstride;
@@ -935,8 +935,10 @@ static gboolean gdk_pixbuf__tga_stop_load(gpointer data, GError **err)
 	TGAContext *ctx = (TGAContext *) data;
 	g_return_val_if_fail(ctx != NULL, FALSE);
 
-	if (!(ctx->hdr->flags & TGA_ORIGIN_UPPER) && 
-            ctx->run_length_encoded && ctx->pbuf) {
+	if (ctx->hdr &&
+            (ctx->hdr->flags & TGA_ORIGIN_UPPER) == 0 && 
+            ctx->run_length_encoded && 
+            ctx->pbuf) {
 		pixbuf_flip_vertically (ctx->pbuf);
 		if (ctx->ufunc)
 			(*ctx->ufunc) (ctx->pbuf, 0, 0,
