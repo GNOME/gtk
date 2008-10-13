@@ -2863,7 +2863,7 @@ icon_source_start_element (GMarkupParseContext *context,
 		 error_domain,
 		 tmp);
 #else
-    g_warning (tmp);
+    g_warning ("%s", tmp);
 #endif    
     g_free (tmp);
     g_free (stock_id);

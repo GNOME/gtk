@@ -1848,10 +1848,10 @@ run_pdf (GtkPrintOperation  *op,
 				      width, height);
   if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
     {
-      g_set_error (&priv->error,
-		   GTK_PRINT_ERROR,
-		   GTK_PRINT_ERROR_GENERAL,
-		   cairo_status_to_string (cairo_surface_status (surface)));
+      g_set_error_literal (&priv->error,
+                           GTK_PRINT_ERROR,
+                           GTK_PRINT_ERROR_GENERAL,
+                           cairo_status_to_string (cairo_surface_status (surface)));
       *do_print = FALSE;
       return GTK_PRINT_OPERATION_RESULT_ERROR;
     }

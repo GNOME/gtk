@@ -1,5 +1,17 @@
 2008-10-13  Christian Persch <chpe@gnome.org>
 
+	Bug 555386 – format not a string literal and no format arguments
+
+	* gtk/gtkiconfactory.c
+	* gtk/gtkprintbackend.c
+	* gtk/gtkprintoperation.c
+	* gtk/gtkthemes.c
+	* gtk/tests/builder.c
+	* modules/other/gail/gailtextview.c
+	* tests/testmerge.c: Use printf safely.
+
+2008-10-13  Christian Persch <chpe@gnome.org>
+
 	Bug 555724 – gtkcellrendereraccel not initialised correctly
 
 	* gtk/gtkcellrendereraccel.c: Initialise the cell text.

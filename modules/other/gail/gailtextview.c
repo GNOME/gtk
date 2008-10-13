@@ -1733,11 +1733,11 @@ static GIOChannel*       gail_streamable_content_get_stream       (AtkStreamable
 	    gio = g_io_channel_unix_new (fd);
 	    g_io_channel_set_encoding (gio, NULL, &err);
 	    if (!err) g_io_channel_write_chars (gio, (const char *) cbuf, (gssize) len, &written, &err);
-	    else g_message (err->message);
+	    else g_message ("%s", err->message);
 	    if (!err) g_io_channel_seek_position (gio, 0, G_SEEK_SET, &err);
-	    else g_message (err->message);
+	    else g_message ("%s", err->message);
 	    if (!err) g_io_channel_flush (gio, &err);
-	    else g_message (err->message);
+	    else g_message ("%s", err->message);
 	    if (err) {
 		g_message ("<error writing to stream [%s]>", tname);
 		g_error_free (err);

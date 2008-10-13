@@ -81,7 +81,7 @@ gtk_theme_engine_load (GTypeModule *module)
   g_free(engine_path);
   if (!engine->library)
     {
-      g_warning (g_module_error());
+      g_warning ("%s", g_module_error());
       return FALSE;
     }
   
@@ -93,7 +93,7 @@ gtk_theme_engine_load (GTypeModule *module)
       !g_module_symbol (engine->library, "theme_create_rc_style", 
 			(gpointer *)&engine->create_rc_style))
     {
-      g_warning (g_module_error());
+      g_warning ("%s", g_module_error());
       g_module_close (engine->library);
       
       return FALSE;
