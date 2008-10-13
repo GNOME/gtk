@@ -1,3 +1,8 @@
+2008-10-13  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po: Fixed wrong translations (Bug #556017).
+
+
 2008-10-12  Jorge Gonzalez  <jorgegonz@svn.gnome.org>   
 
 	* es.po: Updated Spanish translation
