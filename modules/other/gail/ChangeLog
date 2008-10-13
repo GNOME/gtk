@@ -1,3 +1,9 @@
+2008-10-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 555953 – libferret missing link against libgtk-x11
+
+	* test/Makefile.am: Link libferret against gtk.
+	
 2008-10-07 Matthias Clasen <mclasen@redhat.com>
 
 	Bug 554950 – gail must make itself resident

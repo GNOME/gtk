@@ -52,10 +52,12 @@ libferret_la_SOURCES = 		\
 
 libferret_la_LDFLAGS =		\
 	-rpath $(moduledir) -module -avoid-version \
-	$(GTK_DEP_LIBS)	\
+	$(no_undefined)	\
 	$(LDFLAGS)
 
-libferret_la_LIBADD =		\
+libferret_la_LIBADD =			    \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+        $(GTK_DEP_LIBS)  		    \
 	$(GAIL_INET_LIBS)
 endif
 
