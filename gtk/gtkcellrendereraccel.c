@@ -52,6 +52,10 @@ static GtkCellEditable *
                                                   GdkRectangle    *background_area,
                                                   GdkRectangle    *cell_area,
                                                   GtkCellRendererState flags);
+static gchar *convert_keysym_state_to_string     (GtkCellRendererAccel *accel,
+                                                  guint                 keysym,
+                                                  GdkModifierType       mask,
+                                                  guint                 keycode);
 
 enum {
   ACCEL_EDITED,
@@ -74,6 +78,11 @@ G_DEFINE_TYPE (GtkCellRendererAccel, gtk_cell_renderer_accel, GTK_TYPE_CELL_REND
 static void
 gtk_cell_renderer_accel_init (GtkCellRendererAccel *cell_accel)
 {
+  gchar *text;
+
+  text = convert_keysym_state_to_string (cell_accel, 0, 0, 0);
+  g_object_set (cell_accel, "text", text, NULL);
+  g_free (text);
 }
 
 static void

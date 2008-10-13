@@ -1,3 +1,9 @@
+2008-10-13  Christian Persch <chpe@gnome.org>
+
+	Bug 555724 – gtkcellrendereraccel not initialised correctly
+
+	* gtk/gtkcellrendereraccel.c: Initialise the cell text.
+
 2008-10-12  Simos Xenitellis  <simos@gnome.org>
 
 	Bug 555625 – Updated gtk_compose_seqs_compact table 
