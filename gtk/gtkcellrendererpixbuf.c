@@ -454,8 +454,16 @@ gtk_cell_renderer_pixbuf_create_themed_pixbuf (GtkCellRendererPixbuf *cellpixbuf
                                              priv->gicon,
 			                     MIN (width, height), 
                                              GTK_ICON_LOOKUP_USE_BUILTIN);
-      cellpixbuf->pixbuf = gtk_icon_info_load_icon (info, &error);
-      gtk_icon_info_free (info);
+      if (!info)
+        {
+          g_set_error (&error, GTK_ICON_THEME_ERROR,  GTK_ICON_THEME_NOT_FOUND,
+                       _("Icon not present in theme"));
+        }
+      else
+        {
+          cellpixbuf->pixbuf = gtk_icon_info_load_icon (info, &error);
+          gtk_icon_info_free (info);
+        }
     }
 
   if (!cellpixbuf->pixbuf) 
