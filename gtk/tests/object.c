@@ -87,11 +87,7 @@ list_ignore_properties (gboolean buglist)
   };
   /* properties suspected to be Gdk/Gtk+ bugs */
   static const IgnoreProperty bug_properties[] = {
-    { "GtkMessageDialog",       "image",                NULL, },                        /* FIXME: should accept NULL images */
-    { "GtkOptionMenu",          "menu",                 NULL, },                        /* FIXME: should accept NULL menus */
     { "GtkComboBox",            "active",               (void*) MATCH_ANY_VALUE },      /* FIXME: triggers NULL model bug */
-    { "GtkComboBoxEntry",       "text-column",          (void*) 0xffffffff },           /* FIXME: triggers signedness bug */
-    { "GtkCTree",               "indent",               (void*) MATCH_ANY_VALUE },      /* FIXME: triggers signedness bug */
     { "GtkCTree",               "spacing",              (void*) MATCH_ANY_VALUE },      /* FIXME: triggers signedness bug */
     { "GtkCurve",               "curve-type",           (void*) MATCH_ANY_VALUE },      /* FIXME: triggers OOM */
     { "GtkCurve",               "min-x",                (void*) 0x80000000 },           /* FIXME: triggers coordinate OOB */
@@ -100,18 +96,8 @@ list_ignore_properties (gboolean buglist)
     { "GtkCurve",               "max-y",                (void*) 0x80000000 },           /* FIXME: triggers coordinate OOB */
     { "GtkFileChooserButton",   "local-only",           (void*) MATCH_ANY_VALUE },      /* FIXME: triggers NULL path assertion */
     { "GtkFileChooserDialog",   "local-only",           (void*) MATCH_ANY_VALUE },      /* FIXME: triggers NULL path assertion */
-    { "GtkFileChooserDialog",   "action",               (void*) MATCH_ANY_VALUE },      /* FIXME: triggers closure->ref_count assertion */
-    { "GtkFileChooserDialog",   "visible",              (void*) TRUE },                 /* FIXME: triggers gtk_window_resize assertion */
     { "GtkFileChooserWidget",   "local-only",           (void*) MATCH_ANY_VALUE },      /* FIXME: triggers NULL path assertion */
-    { "GtkFontSelection",       "font-name",            (void*) MATCH_ANY_VALUE },      /* FIXME: requires non-NULL GdkScreen */
-    { "GtkInvisible",           "has-focus",            (void*) TRUE },                 /* FIXME: triggers invalid window cast */
-    { "GtkInvisible",           "is-focus",             (void*) TRUE },                 /* FIXME: triggers invalid window cast */
     { "GtkMenu",                "tearoff-state",        (void*) MATCH_ANY_VALUE },      /* FIXME: triggers NULL widget cast */
-    { "GtkProgress",            "activity-mode",        (void*) TRUE },                 /* FIXME: segfaults */
-    { "GtkScaleButton",         "adjustment",           NULL, },                        /* FIXME: should accept NULL adjustments */
-    { "GtkStatusbar",           "sensitive",            (void*) FALSE },                /* FIXME: check if widget is realize */
-    { "GtkTable",               "n-rows",               (void*) MATCH_ANY_VALUE },      /* FIXME: fix property minimum/maximum */
-    { "GtkTable",               "n-columns",            (void*) MATCH_ANY_VALUE },      /* FIXME: fix property minimum/maximum */
     { "GtkText",                "text-position",        (void*) MATCH_ANY_VALUE },      /* FIXME: segfaults, fix property minimum/maximum */
     { NULL, NULL, NULL }
   };
