@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-01 11:47-0400\n"
-"PO-Revision-Date: 2008-09-13 23:06-0300\n"
+"POT-Creation-Date: 2008-10-14 11:45-0400\n"
+"PO-Revision-Date: 2008-10-14 23:06-0300\n"
 "Last-Translator: Leonardo Ferreira Fontenelle <leonardof@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -926,7 +926,7 @@ msgstr "Não foi possível alocar memória para a estrutura de contexto TGA"
 msgid "Excess data in file"
 msgstr "Excesso de dados no arquivo"
 
-#: ../gdk-pixbuf/io-tga.c:1000
+#: ../gdk-pixbuf/io-tga.c:1002
 msgid "The Targa image format"
 msgstr "Formato de imagem Targa"
 
@@ -1372,7 +1372,7 @@ msgstr "%Y"
 #. * a disabled accelerator key combination. Only include
 #. * the text after the | in the translation.
 #.
-#: ../gtk/gtkcellrendereraccel.c:235
+#: ../gtk/gtkcellrendereraccel.c:244
 msgid "Accelerator|Disabled"
 msgstr "Desabilitado"
 
@@ -1380,9 +1380,14 @@ msgstr "Desabilitado"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:368 ../gtk/gtkcellrendereraccel.c:580
+#: ../gtk/gtkcellrendereraccel.c:377 ../gtk/gtkcellrendereraccel.c:589
 msgid "New accelerator..."
 msgstr "Novo acelerador..."
+
+#: ../gtk/gtkcellrendererpixbuf.c:460
+#, c-format
+msgid "Icon not present in theme"
+msgstr "Ícone ausente no tema"
 
 #. do not translate the part before the |
 #: ../gtk/gtkcellrendererprogress.c:362 ../gtk/gtkcellrendererprogress.c:449
@@ -1527,25 +1532,25 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Seleção de cor"
 
-#: ../gtk/gtkentry.c:5517 ../gtk/gtktextview.c:7686
+#: ../gtk/gtkentry.c:5530 ../gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:5531 ../gtk/gtktextview.c:7700
+#: ../gtk/gtkentry.c:5544 ../gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserir caractere de controle Unicode"
 
-#: ../gtk/gtkentry.c:6743
+#: ../gtk/gtkentry.c:6756
 msgid ""
 "You have the Caps Lock key on\n"
 "and an active input method"
 msgstr ""
 
-#: ../gtk/gtkentry.c:6745
+#: ../gtk/gtkentry.c:6758
 msgid "You have the Caps Lock key on"
 msgstr ""
 
-#: ../gtk/gtkentry.c:6747
+#: ../gtk/gtkentry.c:6760
 msgid "You have an active input method"
 msgstr ""
 
@@ -1615,161 +1620,161 @@ msgstr "Pesquisar"
 msgid "Recently Used"
 msgstr "Usado recentemente"
 
-#: ../gtk/gtkfilechooserdefault.c:2492
+#: ../gtk/gtkfilechooserdefault.c:2500
 msgid "Select which types of files are shown"
 msgstr "Seleciona quais tipos de arquivos são mostrados"
 
-#: ../gtk/gtkfilechooserdefault.c:2921
+#: ../gtk/gtkfilechooserdefault.c:2929
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Adiciona a pasta \"%s\" aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:2962
+#: ../gtk/gtkfilechooserdefault.c:2970
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Adiciona a pasta atual aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:2964
+#: ../gtk/gtkfilechooserdefault.c:2972
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Adiciona as pastas selecionadas aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:3004
+#: ../gtk/gtkfilechooserdefault.c:3012
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Remove o marcador \"%s\""
 
-#: ../gtk/gtkfilechooserdefault.c:3722
+#: ../gtk/gtkfilechooserdefault.c:3730
 msgid "Remove"
 msgstr "Remover"
 
-#: ../gtk/gtkfilechooserdefault.c:3731
+#: ../gtk/gtkfilechooserdefault.c:3739
 msgid "Rename..."
 msgstr "Renomear..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3877
+#: ../gtk/gtkfilechooserdefault.c:3885
 msgid "Places"
 msgstr "Locais"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3934
+#: ../gtk/gtkfilechooserdefault.c:3942
 msgid "_Places"
 msgstr "_Locais"
 
-#: ../gtk/gtkfilechooserdefault.c:3989 ../gtk/gtkstock.c:297
+#: ../gtk/gtkfilechooserdefault.c:3997 ../gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "_Adicionar"
 
-#: ../gtk/gtkfilechooserdefault.c:3996
+#: ../gtk/gtkfilechooserdefault.c:4004
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Adiciona a pasta selecionada aos Marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:4001 ../gtk/gtkstock.c:386
+#: ../gtk/gtkfilechooserdefault.c:4009 ../gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "_Remover"
 
-#: ../gtk/gtkfilechooserdefault.c:4008
+#: ../gtk/gtkfilechooserdefault.c:4016
 msgid "Remove the selected bookmark"
 msgstr "Remove o marcador selecionado"
 
-#: ../gtk/gtkfilechooserdefault.c:4117
+#: ../gtk/gtkfilechooserdefault.c:4125
 msgid "Could not select file"
 msgstr "Não foi possível selecionar arquivo"
 
-#: ../gtk/gtkfilechooserdefault.c:4293
+#: ../gtk/gtkfilechooserdefault.c:4301
 msgid "_Add to Bookmarks"
 msgstr "_Adicionar aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:4307
+#: ../gtk/gtkfilechooserdefault.c:4315
 msgid "Show _Hidden Files"
 msgstr "Mostrar arquivos _ocultos"
 
-#: ../gtk/gtkfilechooserdefault.c:4314
+#: ../gtk/gtkfilechooserdefault.c:4322
 msgid "Show _Size Column"
 msgstr ""
 
-#: ../gtk/gtkfilechooserdefault.c:4569 ../gtk/gtkfilesel.c:730
+#: ../gtk/gtkfilechooserdefault.c:4577 ../gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Arquivos"
 
-#: ../gtk/gtkfilechooserdefault.c:4618
+#: ../gtk/gtkfilechooserdefault.c:4626
 msgid "Name"
 msgstr "Nome"
 
-#: ../gtk/gtkfilechooserdefault.c:4643
+#: ../gtk/gtkfilechooserdefault.c:4651
 msgid "Size"
 msgstr "Tamanho"
 
-#: ../gtk/gtkfilechooserdefault.c:4657
+#: ../gtk/gtkfilechooserdefault.c:4665
 msgid "Modified"
 msgstr "Modificado"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4877 ../gtk/gtkprinteroptionwidget.c:796
+#: ../gtk/gtkfilechooserdefault.c:4885 ../gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "_Nome:"
 
-#: ../gtk/gtkfilechooserdefault.c:4919
+#: ../gtk/gtkfilechooserdefault.c:4927
 msgid "_Browse for other folders"
 msgstr "_Navegar em outras pastas"
 
-#: ../gtk/gtkfilechooserdefault.c:5189
+#: ../gtk/gtkfilechooserdefault.c:5197
 msgid "Type a file name"
 msgstr "Digite um nome de arquivo"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5226
+#: ../gtk/gtkfilechooserdefault.c:5234
 msgid "Create Fo_lder"
 msgstr "Criar _pasta"
 
-#: ../gtk/gtkfilechooserdefault.c:5236
+#: ../gtk/gtkfilechooserdefault.c:5244
 msgid "_Location:"
 msgstr "_Localização"
 
-#: ../gtk/gtkfilechooserdefault.c:5436
+#: ../gtk/gtkfilechooserdefault.c:5444
 msgid "Save in _folder:"
 msgstr "Salvar na _pasta:"
 
-#: ../gtk/gtkfilechooserdefault.c:5438
+#: ../gtk/gtkfilechooserdefault.c:5446
 msgid "Create in _folder:"
 msgstr "Criar na _pasta:"
 
-#: ../gtk/gtkfilechooserdefault.c:7028
+#: ../gtk/gtkfilechooserdefault.c:7036
 msgid "Cannot change to folder because it is not local"
 msgstr "Não foi possível ir para a pasta porque ela não é local"
 
-#: ../gtk/gtkfilechooserdefault.c:7653 ../gtk/gtkfilechooserdefault.c:7674
+#: ../gtk/gtkfilechooserdefault.c:7661 ../gtk/gtkfilechooserdefault.c:7682
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "O atalho %s já existe"
 
-#: ../gtk/gtkfilechooserdefault.c:7764
+#: ../gtk/gtkfilechooserdefault.c:7772
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "O atalho %s não existe"
 
-#: ../gtk/gtkfilechooserdefault.c:8012 ../gtk/gtkprintunixdialog.c:370
+#: ../gtk/gtkfilechooserdefault.c:8020 ../gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Um arquivo com o nome \"%s\" já existe. Você deseja substituí-lo?"
 
-#: ../gtk/gtkfilechooserdefault.c:8015 ../gtk/gtkprintunixdialog.c:374
+#: ../gtk/gtkfilechooserdefault.c:8023 ../gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "O arquivo já existe em \"%s\". Substituí-lo irá sobrescrever seu conteúdo."
 
-#: ../gtk/gtkfilechooserdefault.c:8020 ../gtk/gtkprintunixdialog.c:381
+#: ../gtk/gtkfilechooserdefault.c:8028 ../gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "Substitui_r"
 
-#: ../gtk/gtkfilechooserdefault.c:8777
+#: ../gtk/gtkfilechooserdefault.c:8785
 msgid "Could not start the search process"
 msgstr "Não foi possível iniciar o processo de pesquisa"
 
-#: ../gtk/gtkfilechooserdefault.c:8778
+#: ../gtk/gtkfilechooserdefault.c:8786
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1777,34 +1782,34 @@ msgstr ""
 "Não foi possível estabelecer uma conexão com o serviço indexador. Por favor, "
 "certifique-se de que o serviço está em execução."
 
-#: ../gtk/gtkfilechooserdefault.c:8792
+#: ../gtk/gtkfilechooserdefault.c:8800
 msgid "Could not send the search request"
 msgstr "Não foi possível enviar o pedido de pesquisa"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9259
+#: ../gtk/gtkfilechooserdefault.c:9267
 msgid "_Search:"
 msgstr "_Pesquisar:"
 
-#: ../gtk/gtkfilechooserdefault.c:10212
+#: ../gtk/gtkfilechooserdefault.c:10220
 #, c-format
 msgid "Could not mount %s"
 msgstr "Não foi possível montar %s"
 
-#: ../gtk/gtkfilechooserdefault.c:10870
+#: ../gtk/gtkfilechooserdefault.c:10878
 msgid "Type name of new folder"
 msgstr "Digite o nome da nova pasta"
 
-#: ../gtk/gtkfilechooserdefault.c:11048 ../gtk/gtkfilechooserdefault.c:11070
-#: ../gtk/gtkfilechooserdefault.c:11141
+#: ../gtk/gtkfilechooserdefault.c:11056 ../gtk/gtkfilechooserdefault.c:11078
+#: ../gtk/gtkfilechooserdefault.c:11149
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: ../gtk/gtkfilechooserdefault.c:11088
+#: ../gtk/gtkfilechooserdefault.c:11096
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:11090
+#: ../gtk/gtkfilechooserdefault.c:11098
 msgid "Yesterday at %H:%M"
 msgstr "Ontem às %H:%M"
 
@@ -1994,7 +1999,7 @@ msgstr "Sistema de arquivos"
 msgid "Could not obtain root folder"
 msgstr "Não foi possível obter a pasta raiz"
 
-#: ../gtk/gtkfilesystemmodel.c:1299
+#: ../gtk/gtkfilesystemmodel.c:1301
 msgid "(Empty)"
 msgstr "(Vazio)"
 
@@ -2034,7 +2039,7 @@ msgstr "_Tamanho:"
 msgid "_Preview:"
 msgstr "_Visualizar:"
 
-#: ../gtk/gtkfontsel.c:1542
+#: ../gtk/gtkfontsel.c:1544
 msgid "Font Selection"
 msgstr "Seleção de fonte"
 
@@ -2326,7 +2331,7 @@ msgstr "Tamanho do _papel:"
 msgid "_Orientation:"
 msgstr "_Orientação:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1129 ../gtk/gtkprintunixdialog.c:2663
+#: ../gtk/gtkpagesetupunixdialog.c:1129 ../gtk/gtkprintunixdialog.c:2666
 msgid "Page Setup"
 msgstr "Configurar página"
 
@@ -2540,37 +2545,37 @@ msgstr "Manipulador para PrintDlgEx inválido"
 msgid "Unspecified error"
 msgstr "Erro não especificado"
 
-#: ../gtk/gtkprintunixdialog.c:1749
+#: ../gtk/gtkprintunixdialog.c:1750
 msgid "Printer"
 msgstr "Impressora"
 
 #. Translators: this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:1759
+#: ../gtk/gtkprintunixdialog.c:1760
 msgid "Location"
 msgstr "Localização"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:1770
+#: ../gtk/gtkprintunixdialog.c:1771
 msgid "Status"
 msgstr "Estado"
 
-#: ../gtk/gtkprintunixdialog.c:1793
+#: ../gtk/gtkprintunixdialog.c:1794
 msgid "Range"
 msgstr "Intervalo"
 
-#: ../gtk/gtkprintunixdialog.c:1797
+#: ../gtk/gtkprintunixdialog.c:1798
 msgid "_All Pages"
 msgstr "_Todas as páginas"
 
-#: ../gtk/gtkprintunixdialog.c:1804
+#: ../gtk/gtkprintunixdialog.c:1805
 msgid "C_urrent Page"
 msgstr "Página _atual"
 
-#: ../gtk/gtkprintunixdialog.c:1813
+#: ../gtk/gtkprintunixdialog.c:1814
 msgid "Pag_es:"
 msgstr "_Páginas:"
 
-#: ../gtk/gtkprintunixdialog.c:1814
+#: ../gtk/gtkprintunixdialog.c:1815
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2578,173 +2583,173 @@ msgstr ""
 "Especificar um ou mais intervalos de páginas,\n"
 " ex.: 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:1833
+#: ../gtk/gtkprintunixdialog.c:1836
 msgid "Copies"
 msgstr "Cópias"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:1838
+#: ../gtk/gtkprintunixdialog.c:1841
 msgid "Copie_s:"
 msgstr "Cópia_s:"
 
-#: ../gtk/gtkprintunixdialog.c:1856
+#: ../gtk/gtkprintunixdialog.c:1859
 msgid "C_ollate"
 msgstr "_Intercalar"
 
-#: ../gtk/gtkprintunixdialog.c:1864
+#: ../gtk/gtkprintunixdialog.c:1867
 msgid "_Reverse"
 msgstr "Inverte_r"
 
-#: ../gtk/gtkprintunixdialog.c:1884
+#: ../gtk/gtkprintunixdialog.c:1887
 msgid "General"
 msgstr "Geral"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:2424
+#: ../gtk/gtkprintunixdialog.c:2427
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Page Ordering"
 msgstr "Ordem das páginas"
 
-#: ../gtk/gtkprintunixdialog.c:2430
+#: ../gtk/gtkprintunixdialog.c:2433
 msgid "Left to right"
 msgstr "Esquerda para direita"
 
-#: ../gtk/gtkprintunixdialog.c:2431
+#: ../gtk/gtkprintunixdialog.c:2434
 msgid "Right to left"
 msgstr "Direita para esquerda"
 
-#: ../gtk/gtkprintunixdialog.c:2500
+#: ../gtk/gtkprintunixdialog.c:2503
 msgid "Layout"
 msgstr "Layout"
 
-#: ../gtk/gtkprintunixdialog.c:2504
+#: ../gtk/gtkprintunixdialog.c:2507
 msgid "T_wo-sided:"
 msgstr "Frente e _verso:"
 
-#: ../gtk/gtkprintunixdialog.c:2519
+#: ../gtk/gtkprintunixdialog.c:2522
 msgid "Pages per _side:"
 msgstr "Página_s por lado:"
 
-#: ../gtk/gtkprintunixdialog.c:2537
+#: ../gtk/gtkprintunixdialog.c:2540
 msgid "Page or_dering:"
 msgstr "O_rdem das páginas:"
 
-#: ../gtk/gtkprintunixdialog.c:2553
+#: ../gtk/gtkprintunixdialog.c:2556
 msgid "_Only print:"
 msgstr "_Apenas imprimir:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:2568
+#: ../gtk/gtkprintunixdialog.c:2571
 msgid "All sheets"
 msgstr "Todas as páginas"
 
-#: ../gtk/gtkprintunixdialog.c:2569
+#: ../gtk/gtkprintunixdialog.c:2572
 msgid "Even sheets"
 msgstr "Páginas pares"
 
-#: ../gtk/gtkprintunixdialog.c:2570
+#: ../gtk/gtkprintunixdialog.c:2573
 msgid "Odd sheets"
 msgstr "Páginas ímpares"
 
-#: ../gtk/gtkprintunixdialog.c:2573
+#: ../gtk/gtkprintunixdialog.c:2576
 msgid "Sc_ale:"
 msgstr "Esc_ala:"
 
-#: ../gtk/gtkprintunixdialog.c:2600
+#: ../gtk/gtkprintunixdialog.c:2603
 msgid "Paper"
 msgstr "Papel"
 
-#: ../gtk/gtkprintunixdialog.c:2604
+#: ../gtk/gtkprintunixdialog.c:2607
 msgid "Paper _type:"
 msgstr "_Tipo de papel:"
 
-#: ../gtk/gtkprintunixdialog.c:2619
+#: ../gtk/gtkprintunixdialog.c:2622
 msgid "Paper _source:"
 msgstr "_Origem do papel:"
 
-#: ../gtk/gtkprintunixdialog.c:2634
+#: ../gtk/gtkprintunixdialog.c:2637
 msgid "Output t_ray:"
 msgstr "_Bandeja de saída:"
 
-#: ../gtk/gtkprintunixdialog.c:2686
+#: ../gtk/gtkprintunixdialog.c:2689
 msgid "Job Details"
 msgstr "Detalhes do trabalho"
 
-#: ../gtk/gtkprintunixdialog.c:2692
+#: ../gtk/gtkprintunixdialog.c:2695
 msgid "Pri_ority:"
 msgstr "Pri_oridade:"
 
-#: ../gtk/gtkprintunixdialog.c:2707
+#: ../gtk/gtkprintunixdialog.c:2710
 msgid "_Billing info:"
 msgstr "Informações de _valores:"
 
-#: ../gtk/gtkprintunixdialog.c:2725
+#: ../gtk/gtkprintunixdialog.c:2728
 msgid "Print Document"
 msgstr "Imprimir documento"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:2734
+#: ../gtk/gtkprintunixdialog.c:2737
 msgid "_Now"
 msgstr "_Agora"
 
-#: ../gtk/gtkprintunixdialog.c:2745
+#: ../gtk/gtkprintunixdialog.c:2748
 msgid "A_t:"
 msgstr "À_s:"
 
-#: ../gtk/gtkprintunixdialog.c:2764
+#: ../gtk/gtkprintunixdialog.c:2767
 msgid "On _hold"
 msgstr "Em _espera"
 
-#: ../gtk/gtkprintunixdialog.c:2783
+#: ../gtk/gtkprintunixdialog.c:2786
 msgid "Add Cover Page"
 msgstr "Adicionar página de capa"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:2792
+#: ../gtk/gtkprintunixdialog.c:2795
 msgid "Be_fore:"
 msgstr "_Antes:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:2810
+#: ../gtk/gtkprintunixdialog.c:2813
 msgid "_After:"
 msgstr "_Depois:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:2828
+#: ../gtk/gtkprintunixdialog.c:2831
 msgid "Job"
 msgstr "Trabalho"
 
-#: ../gtk/gtkprintunixdialog.c:2894
+#: ../gtk/gtkprintunixdialog.c:2897
 msgid "Advanced"
 msgstr "Avançado"
 
-#: ../gtk/gtkprintunixdialog.c:2929
+#: ../gtk/gtkprintunixdialog.c:2932
 msgid "Image Quality"
 msgstr "Qualidade da imagem"
 
-#: ../gtk/gtkprintunixdialog.c:2932
+#: ../gtk/gtkprintunixdialog.c:2935
 msgid "Color"
 msgstr "Cor"
 
-#: ../gtk/gtkprintunixdialog.c:2935
+#: ../gtk/gtkprintunixdialog.c:2938
 msgid "Finishing"
 msgstr "Concluindo"
 
-#: ../gtk/gtkprintunixdialog.c:2945
+#: ../gtk/gtkprintunixdialog.c:2948
 msgid "Some of the settings in the dialog conflict"
 msgstr "Algumas configurações no diálogo de conflito"
 
-#: ../gtk/gtkprintunixdialog.c:2968
+#: ../gtk/gtkprintunixdialog.c:2971
 msgid "Print"
 msgstr "Imprimir"
 
@@ -3415,17 +3420,17 @@ msgstr ""
 msgid "--- No Tip ---"
 msgstr "--- Sem dica ---"
 
-#: ../gtk/gtkuimanager.c:1453
+#: ../gtk/gtkuimanager.c:1462
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Tag de início \"%s\" inesperada na linha %d caractere %d"
 
-#: ../gtk/gtkuimanager.c:1543
+#: ../gtk/gtkuimanager.c:1552
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Dados de caractere inesperados na linha %d caractere %d"
 
-#: ../gtk/gtkuimanager.c:2366
+#: ../gtk/gtkuimanager.c:2384
 msgid "Empty"
 msgstr "Vazio"
 
