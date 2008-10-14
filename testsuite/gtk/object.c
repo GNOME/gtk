@@ -63,6 +63,7 @@ list_ignore_properties (gboolean buglist)
     { "GtkCellView",            "background",           (void*) "", },                  /* "" is not a valid background color */
     { "GtkColorButton",         "color",                (void*) NULL, },                /* not a valid boxed color */
     { "GtkInputDialog",         "has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
+    { "GtkInvisible",           "screen",               (void*) MATCH_ANY_VALUE },      /* cannot create GdkScreen */
     { "GtkMessageDialog",       "has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
     { "GtkFontSelectionDialog", "has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
     { "GtkColorSelectionDialog","has-separator",        (void*) MATCH_ANY_VALUE, },     /* property disabled */
@@ -80,6 +81,8 @@ list_ignore_properties (gboolean buglist)
     { "GtkRecentChooserMenu",   "select-multiple",      (void*) MATCH_ANY_VALUE },      /* property disabled */
     { "GtkTextView",            "overwrite",            (void*) MATCH_ANY_VALUE },      /* needs text buffer */
     { "GtkToolbar",             "icon-size",            (void*) GTK_ICON_SIZE_INVALID },
+    { "GtkTreeView",            "expander-column",      (void*) MATCH_ANY_VALUE },      /* assertion list != NULL */
+    { "GtkWindow",              "screen",               (void*) MATCH_ANY_VALUE },      /* cannot create GdkScreen */
     { NULL, NULL, NULL }
   };
   /* properties suspected to be Gdk/Gtk+ bugs */
@@ -162,12 +165,27 @@ pspec_select_value (GParamSpec *pspec,
       else if (dvalue <= -1)
         g_value_set_flags (value, fspec->flags_class->values[g_test_rand_int_range (0, fspec->flags_class->n_values)].value);
     }
+  else if (G_IS_PARAM_SPEC_OBJECT (pspec))
+    {
+      gpointer object = NULL;
+      if (!G_TYPE_IS_ABSTRACT (pspec->value_type) &&
+          !G_TYPE_IS_INTERFACE (pspec->value_type))
+        {
+          if (g_type_is_a (pspec->value_type, GDK_TYPE_PIXBUF))
+            object = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 32, 32);
+          else if (g_type_is_a (pspec->value_type, GDK_TYPE_PIXBUF_ANIMATION))
+            object = gdk_pixbuf_simple_anim_new (32, 32, 15);
+          else
+            object = g_object_new (pspec->value_type, NULL);
+          g_object_ref_sink (object);
+          g_value_take_object (value, object);
+        }
+    }
   /* unimplemented:
    * G_IS_PARAM_SPEC_PARAM
    * G_IS_PARAM_SPEC_BOXED
    * G_IS_PARAM_SPEC_POINTER
    * G_IS_PARAM_SPEC_VALUE_ARRAY
-   * G_IS_PARAM_SPEC_OBJECT
    */
 }
 
