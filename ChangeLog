@@ -1,3 +1,14 @@
+2008-10-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged to trunk:
+
+	Bug 552318 – menubar mnemonics consumed even when
+	gtk-enable-mnemonics=false
+
+	* gtk/gtkwindow.c (gtk_window_activate_key): Don't let mnemonic
+	entries block accelerator activation when gtk-enable-mnemonics is
+	FALSE. Problem reported by Andreas Moog.
+
 2008-10-10  Simos Xenitellis  <simos@gnome.org>
 
 	Merged from trunk:

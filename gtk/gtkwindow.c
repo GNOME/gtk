@@ -8028,6 +8028,8 @@ gtk_window_activate_key (GtkWindow   *window,
 {
   GtkKeyHash *key_hash;
   GtkWindowKeyEntry *found_entry = NULL;
+  gboolean enable_mnemonics;
+  gboolean enable_accels;
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -8036,39 +8038,43 @@ gtk_window_activate_key (GtkWindow   *window,
 
   if (key_hash)
     {
+      GSList *tmp_list;
       GSList *entries = _gtk_key_hash_lookup (key_hash,
 					      event->hardware_keycode,
 					      event->state,
 					      gtk_accelerator_get_default_mod_mask (),
 					      event->group);
-      GSList *tmp_list;
-
-      for (tmp_list = entries; tmp_list; tmp_list = tmp_list->next)
-	{
-	  GtkWindowKeyEntry *entry = tmp_list->data;
-	  if (entry->is_mnemonic)
-	    {
-	      found_entry = entry;
-	      break;
-	    }
-	}
-      
-      if (!found_entry && entries)
-	found_entry = entries->data;
-
-      g_slist_free (entries);
-    }
-
-  if (found_entry)
-    {
-      gboolean enable_mnemonics;
-      gboolean enable_accels;
 
       g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
                     "gtk-enable-mnemonics", &enable_mnemonics,
                     "gtk-enable-accels", &enable_accels,
                     NULL);
 
+      for (tmp_list = entries; tmp_list; tmp_list = tmp_list->next)
+	{
+	  GtkWindowKeyEntry *entry = tmp_list->data;
+	  if (entry->is_mnemonic)
+            {
+              if (enable_mnemonics)
+	        {
+	          found_entry = entry;
+	          break;
+	        }
+            }
+          else 
+            {
+              if (enable_accels && !found_entry)
+                {
+	          found_entry = entry;
+                }
+            }
+	}
+
+      g_slist_free (entries);
+    }
+
+  if (found_entry)
+    {
       if (found_entry->is_mnemonic)
         {
           if (enable_mnemonics)
