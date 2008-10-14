@@ -1,5 +1,14 @@
 2008-10-13  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 555779 – GtkCellRendererPixbuf crashed on failed GIcon lookup
+
+	* gtk/gtkcellrendererpixbuf
+	(gtk_cell_renderer_pixbuf_create_themed_pixbuf): Don't crash
+	if a GIcon is not present in the current theme. Patch by 
+	Alex Larsson.
+
+2008-10-13  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 552318 – menubar mnemonics consumed even when
 	gtk-enable-mnemonics=false
 
