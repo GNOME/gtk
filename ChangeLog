@@ -1,3 +1,10 @@
+2008-10-15  Michael Natterer  <mitch@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/gdkapplaunchcontext.h (GDK_IS_APP_LAUNCH_CONTEXT): fix typo
+	in the type name so the macro becomes usable.
+
 2008-10-13  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:
