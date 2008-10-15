@@ -1,3 +1,8 @@
+2008-10-15  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/gdkapplaunchcontext.h (GDK_IS_APP_LAUNCH_CONTEXT): fix typo
+	in the type name so the macro becomes usable.
+
 2008-10-14  Christian Dywan  <christian@imendio.com>
 
 	556150 – gtk 'object' property test fixing
