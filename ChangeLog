@@ -1,3 +1,11 @@
+2008-10-16  Marek Kasik  <mkasik@redhat.com>
+
+	Bug 556527 - The current page property is not passed to
+	GtkPrintUnixDialog
+
+	* gtk/gtkprintoperation-unix.c: pass current-page property
+	to GtkPrintUnixDialog
+
 2008-10-15  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/gdkapplaunchcontext.h (GDK_IS_APP_LAUNCH_CONTEXT): fix typo

@@ -367,6 +367,9 @@ get_print_dialog (GtkPrintOperation *op,
     gtk_print_unix_dialog_set_page_setup (GTK_PRINT_UNIX_DIALOG (pd), 
                                           priv->default_page_setup);
 
+  gtk_print_unix_dialog_set_current_page (GTK_PRINT_UNIX_DIALOG (pd), 
+                                          priv->current_page);
+
   g_signal_emit_by_name (op, "create-custom-widget",
 			 &priv->custom_widget);
 
