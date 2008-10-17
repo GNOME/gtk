@@ -1,3 +1,43 @@
+Overview of Changes from GTK+ 2.14.3 to 2.14.4
+==============================================
+
+* Bugs fixed:
+ 553135 eog crash: assertion failed...
+ 553241 double freed pointer in lpr_write cause firefox3 crash
+ 553133 GtkFileChooser won't ask to mount a volume
+ 553578 tabs are not drawn correctly
+ 553211 GtkFileChooserButton unsets filter after first use
+ 554141 uninitialized data use/free in gtkclipboard-quartz.c
+ 554690 mem leak in filechooser
+ 554691 mem leak in filechooser
+ 554696 invalid free function used
+ 554698 mem leak in filechooser
+ 554701 filechooser spams console with useless warnings
+ 554704 gtkfilesystemmodel does too much work
+ 554506 combining diacritics broken, became deadkeys
+ 530575 GtkEntry with invisible chars has a confused cursor...
+ 371908 Password Entry broken
+ 132501 Make utility window translate to tool window in win32
+ 554702 gtkfilesystem leaks GError
+ 554192 double press on the "circumflex" dead key...
+ 550342 Splash screens have a caption
+ 555000 Wrong treatment on non-spacing marks dead keys...
+ 552318 menubar mnemonics consumed even when gtk-enable-mnemonics=false
+ 555779 GtkCellRendererPixbuf crashed on failed GIcon lookup
+ 555791 Nautilus Crashes when opening USB MP3 Player Contents
+
+* Updated translations:
+ Catalan (ca)
+ German (de)
+ Spanish (es)
+ French (fr)
+ Italian (it)
+ Japanese (ja)
+ Macedonian (mk)
+ Brazilian Portugese (pt_BR)
+ Slovak (sk)
+ Swedish (sv)
+ 
 Overview of Changes from GTK+ 2.14.2 to 2.14.3
 ==============================================
 
