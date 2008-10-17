@@ -3167,16 +3167,17 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_WINDOWPOSCHANGING:
-      GDK_NOTE (EVENTS, g_print (" %s %s %dx%d@%+d%+d now below %p",
-				 _gdk_win32_window_pos_bits_to_string (windowpos->flags),
-				 (windowpos->hwndInsertAfter == HWND_BOTTOM ? "BOTTOM" :
-				  (windowpos->hwndInsertAfter == HWND_NOTOPMOST ? "NOTOPMOST" :
-				   (windowpos->hwndInsertAfter == HWND_TOP ? "TOP" :
-				    (windowpos->hwndInsertAfter == HWND_TOPMOST ? "TOPMOST" :
-				     (sprintf (buf, "%p", windowpos->hwndInsertAfter),
-				      buf))))),
-				 windowpos->cx, windowpos->cy, windowpos->x, windowpos->y,
-				 GetNextWindow (msg->hwnd, GW_HWNDPREV)));
+      GDK_NOTE (EVENTS, (windowpos = (WINDOWPOS *) msg->lParam,
+			 g_print (" %s %s %dx%d@%+d%+d now below %p",
+				  _gdk_win32_window_pos_bits_to_string (windowpos->flags),
+				  (windowpos->hwndInsertAfter == HWND_BOTTOM ? "BOTTOM" :
+				   (windowpos->hwndInsertAfter == HWND_NOTOPMOST ? "NOTOPMOST" :
+				    (windowpos->hwndInsertAfter == HWND_TOP ? "TOP" :
+				     (windowpos->hwndInsertAfter == HWND_TOPMOST ? "TOPMOST" :
+				      (sprintf (buf, "%p", windowpos->hwndInsertAfter),
+				       buf))))),
+				  windowpos->cx, windowpos->cy, windowpos->x, windowpos->y,
+				  GetNextWindow (msg->hwnd, GW_HWNDPREV))));
 
       if (GDK_WINDOW_IS_MAPPED (window))
 	return_val = ensure_stacking_on_window_pos_changing (msg, window);

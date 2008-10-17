@@ -1,5 +1,11 @@
 2008-10-18  Tor Lillqvist  <tml@novell.com>
 
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On
+	WM_WINDOWPOSCHANGING, don't dereference windowpos in the debugging
+	output without setting it first.
+
+2008-10-18  Tor Lillqvist  <tml@novell.com>
+
 	Bug 556578 - GIMP windows stay on top of other windows
 
 	* gdk/win32/gdkevents-win32.c (ensure_stacking_on_unminimize)
