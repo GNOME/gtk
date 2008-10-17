@@ -1,3 +1,22 @@
+2008-10-18  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On
+	WM_WINDOWPOSCHANGING, don't dereference windowpos in the debugging
+	output without setting it first.
+
+2008-10-18  Tor Lillqvist  <tml@novell.com>
+
+	Bug 556578 - GIMP windows stay on top of other windows
+
+	* gdk/win32/gdkevents-win32.c (ensure_stacking_on_unminimize)
+	(ensure_stacking_on_window_pos_changing)
+	(ensure_stacking_on_activate_app): Ignore unmapped windows in the
+	loops where we look for the lowest "transient-type" window.
+
+	(gdk_event_translate): Don't call
+	ensure_stacking_on_window_pos_changing() or
+	ensure_stacking_on_activate_app() for unmapped windows.
+
 2008-10-16  Marek Kasik  <mkasik@redhat.com>
 
 	Bug 556527 - The current page property is not passed to

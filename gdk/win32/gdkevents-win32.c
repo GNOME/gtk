@@ -2116,9 +2116,10 @@ ensure_stacking_on_unminimize (MSG *msg)
 	  GdkWindowImplWin32 *rover_impl =
 	    (GdkWindowImplWin32 *)((GdkWindowObject *)rover_gdkw)->impl;
 
-	  if (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
-	      rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
-	      rover_impl->transient_owner != NULL)
+	  if (GDK_WINDOW_IS_MAPPED (rover_gdkw) &&
+	      (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
+	       rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
+	       rover_impl->transient_owner != NULL))
 	    {
 	      lowest_transient = rover;
 	    }
@@ -2166,9 +2167,10 @@ ensure_stacking_on_window_pos_changing (MSG       *msg,
 	      GdkWindowImplWin32 *rover_impl =
 		(GdkWindowImplWin32 *)((GdkWindowObject *)rover_gdkw)->impl;
 
-	      if (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
-		  rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
-		  rover_impl->transient_owner != NULL)
+	      if (GDK_WINDOW_IS_MAPPED (rover_gdkw) &&
+		  (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
+		   rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
+		   rover_impl->transient_owner != NULL))
 		{
 		  restacking = TRUE;
 		  windowpos->hwndInsertAfter = rover;
@@ -2222,9 +2224,10 @@ ensure_stacking_on_activate_app (MSG       *msg,
 	      GdkWindowImplWin32 *rover_impl =
 		(GdkWindowImplWin32 *)((GdkWindowObject *)rover_gdkw)->impl;
 
-	      if (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
-		  rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
-		  rover_impl->transient_owner != NULL)
+	      if (GDK_WINDOW_IS_MAPPED (rover_gdkw) &&
+		  (rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY ||
+		   rover_impl->type_hint == GDK_WINDOW_TYPE_HINT_DIALOG ||
+		   rover_impl->transient_owner != NULL))
 		{
 		  GDK_NOTE (EVENTS, g_print (" restacking: %p", rover));
 		  SetWindowPos (msg->hwnd, rover, 0, 0, 0, 0,
@@ -3164,18 +3167,20 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_WINDOWPOSCHANGING:
-      GDK_NOTE (EVENTS, g_print (" %s %s %dx%d@%+d%+d now below %p",
-				 _gdk_win32_window_pos_bits_to_string (windowpos->flags),
-				 (windowpos->hwndInsertAfter == HWND_BOTTOM ? "BOTTOM" :
-				  (windowpos->hwndInsertAfter == HWND_NOTOPMOST ? "NOTOPMOST" :
-				   (windowpos->hwndInsertAfter == HWND_TOP ? "TOP" :
-				    (windowpos->hwndInsertAfter == HWND_TOPMOST ? "TOPMOST" :
-				     (sprintf (buf, "%p", windowpos->hwndInsertAfter),
-				      buf))))),
-				 windowpos->cx, windowpos->cy, windowpos->x, windowpos->y,
-				 GetNextWindow (msg->hwnd, GW_HWNDPREV)));
+      GDK_NOTE (EVENTS, (windowpos = (WINDOWPOS *) msg->lParam,
+			 g_print (" %s %s %dx%d@%+d%+d now below %p",
+				  _gdk_win32_window_pos_bits_to_string (windowpos->flags),
+				  (windowpos->hwndInsertAfter == HWND_BOTTOM ? "BOTTOM" :
+				   (windowpos->hwndInsertAfter == HWND_NOTOPMOST ? "NOTOPMOST" :
+				    (windowpos->hwndInsertAfter == HWND_TOP ? "TOP" :
+				     (windowpos->hwndInsertAfter == HWND_TOPMOST ? "TOPMOST" :
+				      (sprintf (buf, "%p", windowpos->hwndInsertAfter),
+				       buf))))),
+				  windowpos->cx, windowpos->cy, windowpos->x, windowpos->y,
+				  GetNextWindow (msg->hwnd, GW_HWNDPREV))));
 
-      return_val = ensure_stacking_on_window_pos_changing (msg, window);
+      if (GDK_WINDOW_IS_MAPPED (window))
+	return_val = ensure_stacking_on_window_pos_changing (msg, window);
       break;
 
     case WM_WINDOWPOSCHANGED:
@@ -3656,7 +3661,8 @@ gdk_event_translate (MSG  *msg,
 				 msg->wParam ? "YES" : "NO",
 				 (gint64) msg->lParam));
 
-      ensure_stacking_on_activate_app (msg, window);
+      if (GDK_WINDOW_IS_MAPPED (window))
+	ensure_stacking_on_activate_app (msg, window);
       break;
 
       /* Handle WINTAB events here, as we know that gdkinput.c will
