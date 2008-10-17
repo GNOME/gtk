@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-23 23:09-0400\n"
+"POT-Creation-Date: 2008-10-17 00:37-0400\n"
 "PO-Revision-Date: 2008-09-18 17:49+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -396,7 +396,7 @@ msgid "Whether the action group is visible."
 msgstr "ಈ ಕ್ರಿಯಾ ಸಮೂಹವು ಗೋಚರಿಸುತ್ತದೆಯೆ."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:202 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "ಮೌಲ್ಯ"
 
@@ -700,7 +700,7 @@ msgstr "ಅಂತರ"
 msgid "The amount of space between children"
 msgstr "ಚಿಲ್ಡ್ರನ್ ನಡುವಿನ ಅಂತರ"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:644 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:649 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:580
 msgid "Homogeneous"
 msgstr "ಏಕರೂಪದ"
@@ -741,19 +741,19 @@ msgstr "ರಿಕ್ತಸ್ಥಳವನ್ನು ಸಂರಕ್ಷಿಸು/�
 msgid "Pack type"
 msgstr "ಪ್ಯಾಕಿನ ಬಗೆ"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:711
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:716
 #, fuzzy
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr "ಪೂರ್ವಜ (ಪೇರೆಂಟ್)"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:689 gtk/gtkpaned.c:218
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:694 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "ಸ್ಥಳ"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:690
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:695
 #, fuzzy
 msgid "The index of the child in the parent"
 msgstr "ಅನುಕ್ರಮವನ್ನು (ಇಂಡೆಕ್ಸ್) ತಯಾರಿಸಲಾಗುತ್ತಿದೆ"
@@ -1334,7 +1334,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "ಲಂಬ ಸಾಲುಗಳು"
 
 #: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:731
-#: gtk/gtkprogressbar.c:126 gtk/gtkscalebutton.c:191 gtk/gtkstatusicon.c:301
+#: gtk/gtkprogressbar.c:126 gtk/gtkscalebutton.c:193 gtk/gtkstatusicon.c:301
 #: gtk/gtktoolbar.c:492 gtk/gtktrayicon-x11.c:95
 msgid "Orientation"
 msgstr "ನಿಲುವು (Orientation)"
@@ -1345,7 +1345,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "ಅಜ್ಞಾತ ನಿಲುವು"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:346
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:221 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "ಹೊಂದಾಣಿಕೆ"
 
@@ -3123,7 +3123,7 @@ msgstr "ಚಿಹ್ನೆ ಗಾತ್ರ"
 msgid "Icon set to display"
 msgstr "ಪ್ರದರ್ಶನವನ್ನು ಸಂರಚಿಸು"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:547
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:212 gtk/gtktoolbar.c:547
 msgid "Icon size"
 msgstr "ಚಿಹ್ನೆ ಗಾತ್ರ"
 
@@ -3763,250 +3763,250 @@ msgstr ""
 msgid "The screen where this window will be displayed."
 msgstr "ಕಿಟಕಿಯನ್ನು ಪ್ರಧಾನಕೊಳಿಸು/ಪ್ರಧಾನ ಕಿಟಕಿ"
 
-#: gtk/gtknotebook.c:572
+#: gtk/gtknotebook.c:577
 msgid "Page"
 msgstr "ಪುಟ"
 
-#: gtk/gtknotebook.c:573
+#: gtk/gtknotebook.c:578
 #, fuzzy
 msgid "The index of the current page"
 msgstr "ಪ್ರಸ್ತುತ ಗುಪ್ತಪದ (ಪಾಸ್ ವರ್ಡ್)"
 
-#: gtk/gtknotebook.c:581
+#: gtk/gtknotebook.c:586
 #, fuzzy
 msgid "Tab Position"
 msgstr "ಸ್ಥಳ"
 
-#: gtk/gtknotebook.c:582
+#: gtk/gtknotebook.c:587
 msgid "Which side of the notebook holds the tabs"
 msgstr ""
 
-#: gtk/gtknotebook.c:589
+#: gtk/gtknotebook.c:594
 #, fuzzy
 msgid "Tab Border"
 msgstr "ಸೀಮೆ (ಬಾರ್ಡರ್) ಬೇಡ/ಇಲ್ಲದ"
 
-#: gtk/gtknotebook.c:590
+#: gtk/gtknotebook.c:595
 #, fuzzy
 msgid "Width of the border around the tab labels"
 msgstr "ಸೀಮೆ (ಬಾರ್ಡರ್) ಬೇಡ/ಇಲ್ಲದ"
 
-#: gtk/gtknotebook.c:598
+#: gtk/gtknotebook.c:603
 #, fuzzy
 msgid "Horizontal Tab Border"
 msgstr "ಅಡ್ಡಲಾದ ಸಾಲುಗಳು"
 
-#: gtk/gtknotebook.c:599
+#: gtk/gtknotebook.c:604
 #, fuzzy
 msgid "Width of the horizontal border of tab labels"
 msgstr "ಅಡ್ಡಲಾದ ಸಾಲುಗಳು"
 
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:612
 #, fuzzy
 msgid "Vertical Tab Border"
 msgstr "ಲಂಬ ಸಾಲುಗಳು"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:613
 #, fuzzy
 msgid "Width of the vertical border of tab labels"
 msgstr "ಲಂಬ ಸಾಲುಗಳು"
 
-#: gtk/gtknotebook.c:616
+#: gtk/gtknotebook.c:621
 #, fuzzy
 msgid "Show Tabs"
 msgstr "ಸಲಕರಣೆ ಸುಳಿವುಗಳನ್ನು ತೋರಿಸು"
 
-#: gtk/gtknotebook.c:617
+#: gtk/gtknotebook.c:622
 #, fuzzy
 msgid "Whether tabs should be shown or not"
 msgstr "ತೋರಿಸಲಾದ"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:628
 #, fuzzy
 msgid "Show Border"
 msgstr "ಸೀಮೆ (ಬಾರ್ಡರ್) ಬೇಡ/ಇಲ್ಲದ"
 
-#: gtk/gtknotebook.c:624
+#: gtk/gtknotebook.c:629
 #, fuzzy
 msgid "Whether the border should be shown or not"
 msgstr "ಸೀಮೆ (ಬಾರ್ಡರ್) ಬೇಡ/ಇಲ್ಲದ"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:635
 msgid "Scrollable"
 msgstr ""
 
-#: gtk/gtknotebook.c:631
+#: gtk/gtknotebook.c:636
 #, fuzzy
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "ಸುರುಳು"
 
-#: gtk/gtknotebook.c:637
+#: gtk/gtknotebook.c:642
 #, fuzzy
 msgid "Enable Popup"
 msgstr "ಎಚ್ಚರಕವನ್ನು (ಅಲಾರಮ್) ಶಕ್ತಗೊಳಿಸು"
 
-#: gtk/gtknotebook.c:638
+#: gtk/gtknotebook.c:643
 #, fuzzy
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr "ಬಲ ಗುಂಡಿ"
 
-#: gtk/gtknotebook.c:645
+#: gtk/gtknotebook.c:650
 #, fuzzy
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "ಗಾತ್ರಗಳು"
 
-#: gtk/gtknotebook.c:651
+#: gtk/gtknotebook.c:656
 msgid "Group ID"
 msgstr "ಸಮೂಹ ID"
 
-#: gtk/gtknotebook.c:652
+#: gtk/gtknotebook.c:657
 #, fuzzy
 msgid "Group ID for tabs drag and drop"
 msgstr "ಕಿಟಕಿಗಳನ್ನು ಸಮೂಹಗೊಳಿಸು"
 
-#: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:673 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "ಸಮೂಹ"
 
-#: gtk/gtknotebook.c:669
+#: gtk/gtknotebook.c:674
 #, fuzzy
 msgid "Group for tabs drag and drop"
 msgstr "ಕಿಟಕಿಗಳನ್ನು ಸಮೂಹಗೊಳಿಸು"
 
-#: gtk/gtknotebook.c:675
+#: gtk/gtknotebook.c:680
 #, fuzzy
 msgid "Tab label"
 msgstr "ಗುರುತುಪಟ್ಟಿ (ಲೇಬಲ್)"
 
-#: gtk/gtknotebook.c:676
+#: gtk/gtknotebook.c:681
 #, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "ಪ್ರದರ್ಶಿತ"
 
-#: gtk/gtknotebook.c:682
+#: gtk/gtknotebook.c:687
 #, fuzzy
 msgid "Menu label"
 msgstr "ಗುರುತುಪಟ್ಟಿ (ಲೇಬಲ್)"
 
-#: gtk/gtknotebook.c:683
+#: gtk/gtknotebook.c:688
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "ಪ್ರದರ್ಶಿತ"
 
-#: gtk/gtknotebook.c:696
+#: gtk/gtknotebook.c:701
 #, fuzzy
 msgid "Tab expand"
 msgstr "ವಿಸ್ತರಿಸು"
 
-#: gtk/gtknotebook.c:697
+#: gtk/gtknotebook.c:702
 #, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "ವಿಸ್ತರಿಸು"
 
-#: gtk/gtknotebook.c:703
+#: gtk/gtknotebook.c:708
 #, fuzzy
 msgid "Tab fill"
 msgstr "ಹೊಸ ಹಾಳೆ (ಟಾಬ್)"
 
-#: gtk/gtknotebook.c:704
+#: gtk/gtknotebook.c:709
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "ತದ್ರೂಪು ಹಾಳೆ (ಟಾಬ್)"
 
-#: gtk/gtknotebook.c:710
+#: gtk/gtknotebook.c:715
 #, fuzzy
 msgid "Tab pack type"
 msgstr "ಬಗೆಗಳನ್ನು ಆರಿಸು"
 
-#: gtk/gtknotebook.c:717
+#: gtk/gtknotebook.c:722
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "ಹೊಸ ಹಾಳೆ (ಟಾಬ್)"
 
-#: gtk/gtknotebook.c:718
+#: gtk/gtknotebook.c:723
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "ಬಳಕೆದಾರನ ಹೆಸರು"
 
-#: gtk/gtknotebook.c:724
+#: gtk/gtknotebook.c:729
 #, fuzzy
 msgid "Tab detachable"
 msgstr "ಹೊಸ ಹಾಳೆ (ಟಾಬ್)"
 
-#: gtk/gtknotebook.c:725
+#: gtk/gtknotebook.c:730
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "ಹಾಳೆಯನ್ನು (ಟಾಬ್) ಮುಚ್ಚು"
 
-#: gtk/gtknotebook.c:740 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:745 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr ""
 
-#: gtk/gtknotebook.c:741
+#: gtk/gtknotebook.c:746
 #, fuzzy
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "ಪ್ರದರ್ಶನವನ್ನು ಸಂರಚಿಸು"
 
-#: gtk/gtknotebook.c:756 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:761 gtk/gtkscrollbar.c:91
 #, fuzzy
 msgid "Secondary forward stepper"
 msgstr "ಮುಂದಕ್ಕೆ/ಮುಂದಕ್ಕೆ ರವಾನಿಸು"
 
-#: gtk/gtknotebook.c:757
+#: gtk/gtknotebook.c:762
 #, fuzzy
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "ಮುಂದಕ್ಕೆ/ಮುಂದಕ್ಕೆ ರವಾನಿಸು"
 
-#: gtk/gtknotebook.c:771 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:776 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr ""
 
-#: gtk/gtknotebook.c:772 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:777 gtk/gtkscrollbar.c:68
 #, fuzzy
 msgid "Display the standard backward arrow button"
 msgstr "ಪ್ರಮಾಣಿತ ಅಕ್ಷರಶೈಲಿ"
 
-#: gtk/gtknotebook.c:786 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:791 gtk/gtkscrollbar.c:75
 #, fuzzy
 msgid "Forward stepper"
 msgstr "ಮುಂದಕ್ಕೆ/ಮುಂದಕ್ಕೆ ರವಾನಿಸು"
 
-#: gtk/gtknotebook.c:787 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:792 gtk/gtkscrollbar.c:76
 #, fuzzy
 msgid "Display the standard forward arrow button"
 msgstr "ಪ್ರಮಾಣಿತ ಅಕ್ಷರಶೈಲಿ"
 
-#: gtk/gtknotebook.c:801
+#: gtk/gtknotebook.c:806
 #, fuzzy
 msgid "Tab overlap"
 msgstr "ಅತಿವ್ಯಾಪ್ತಿ (ಓವರ್ ಲ್ಯಾಪ್)"
 
-#: gtk/gtknotebook.c:802
+#: gtk/gtknotebook.c:807
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "ಅತಿವ್ಯಾಪ್ತಿ (ಓವರ್ ಲ್ಯಾಪ್)"
 
-#: gtk/gtknotebook.c:817
+#: gtk/gtknotebook.c:822
 #, fuzzy
 msgid "Tab curvature"
 msgstr "ಹೊಸ ಹಾಳೆ (ಟಾಬ್)"
 
-#: gtk/gtknotebook.c:818
+#: gtk/gtknotebook.c:823
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "ಅಕ್ಷರ ಗಾತ್ರ"
 
-#: gtk/gtknotebook.c:834
+#: gtk/gtknotebook.c:839
 #, fuzzy
 msgid "Arrow spacing"
 msgstr "ಚೌಕಳಿ ಅಂತರ"
 
-#: gtk/gtknotebook.c:835
+#: gtk/gtknotebook.c:840
 #, fuzzy
 msgid "Scroll arrow spacing"
 msgstr "ಚೌಕಳಿ ಅಂತರ"
@@ -4973,31 +4973,31 @@ msgstr "ಚೌಕಳಿ ಅಂತರ"
 msgid "Space between value text and the slider/trough area"
 msgstr "ರಿಕ್ತಸ್ಥಳವನ್ನು ಸಂರಕ್ಷಿಸು/ಸ್ಥಳವನ್ನು ಉಳಿಸು"
 
-#: gtk/gtkscalebutton.c:192
+#: gtk/gtkscalebutton.c:194
 #, fuzzy
 msgid "The orientation of the scale"
 msgstr "ಗಾತ್ರಗುಣಿಸು (ಸ್ಕೇಲ್)"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:203
 #, fuzzy
 msgid "The value of the scale"
 msgstr "ಗಾತ್ರಗುಣಿಸು (ಸ್ಕೇಲ್)"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:213
 msgid "The icon size"
 msgstr "ಚಿಹ್ನೆ ಗಾತ್ರ"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:222
 #, fuzzy
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "ಪ್ರಸ್ತುತ ಪಾಲಕ"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:250
 msgid "Icons"
 msgstr "ಚಿಹ್ನೆಗಳು"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:251
 msgid "List of icon names"
 msgstr "ಚಿಹ್ನೆ ಹೆಸರುಗಳ ಪಟ್ಟಿ"
 

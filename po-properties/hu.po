@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-23 23:09-0400\n"
+"POT-Creation-Date: 2008-10-17 00:37-0400\n"
 "PO-Revision-Date: 2008-09-21 13:54+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
@@ -407,7 +407,7 @@ msgid "Whether the action group is visible."
 msgstr "Látható-e a műveletcsoport."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:202 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Érték"
 
@@ -714,7 +714,7 @@ msgstr "Távolság"
 msgid "The amount of space between children"
 msgstr "A gyermekek közötti távolság"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:644 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:649 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:580
 msgid "Homogeneous"
 msgstr "Homogén"
@@ -756,7 +756,7 @@ msgstr "Extra terület a gyermek és szomszédai között, képpontokban megadva
 msgid "Pack type"
 msgstr "Csomag típusa"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:711
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:716
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -764,12 +764,12 @@ msgstr ""
 "Egy GtkPackType, amely azt jelzi, hogy a gyermekben a hivatkozás a szülő "
 "elejére vagy végére mutat"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:689 gtk/gtkpaned.c:218
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:694 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Pozíció"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:690
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:695
 msgid "The index of the child in the parent"
 msgstr "A gyermek indexe a szülőben"
 
@@ -1297,7 +1297,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "A függőleges szövegigazítás, 0 (felül) és 1 (alul) között."
 
 #: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:731
-#: gtk/gtkprogressbar.c:126 gtk/gtkscalebutton.c:191 gtk/gtkstatusicon.c:301
+#: gtk/gtkprogressbar.c:126 gtk/gtkscalebutton.c:193 gtk/gtkstatusicon.c:301
 #: gtk/gtktoolbar.c:492 gtk/gtktrayicon-x11.c:95
 msgid "Orientation"
 msgstr "Elhelyezkedés"
@@ -1307,7 +1307,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "A folyamatjelző tájolása és a növekedés iránya"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:346
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:221 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Igazítás"
 
@@ -2870,7 +2870,7 @@ msgstr "Ikonkészlet"
 msgid "Icon set to display"
 msgstr "A megjelenítendő ikonkészlet"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:547
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:212 gtk/gtktoolbar.c:547
 msgid "Icon size"
 msgstr "Ikonméret"
 
@@ -3440,76 +3440,76 @@ msgstr "Megjelenik-e párbeszédablak"
 msgid "The screen where this window will be displayed."
 msgstr "A képernyő, amelyen az ablak megjelenik."
 
-#: gtk/gtknotebook.c:572
+#: gtk/gtknotebook.c:577
 msgid "Page"
 msgstr "Lap"
 
-#: gtk/gtknotebook.c:573
+#: gtk/gtknotebook.c:578
 msgid "The index of the current page"
 msgstr "Az aktuális oldal indexe"
 
-#: gtk/gtknotebook.c:581
+#: gtk/gtknotebook.c:586
 msgid "Tab Position"
 msgstr "Lappozíció"
 
-#: gtk/gtknotebook.c:582
+#: gtk/gtknotebook.c:587
 msgid "Which side of the notebook holds the tabs"
 msgstr "A notesz melyik oldalán vannak a lapok"
 
-#: gtk/gtknotebook.c:589
+#: gtk/gtknotebook.c:594
 msgid "Tab Border"
 msgstr "Lapszegély"
 
-#: gtk/gtknotebook.c:590
+#: gtk/gtknotebook.c:595
 msgid "Width of the border around the tab labels"
 msgstr "A lap címkéi körüli szegély szélessége"
 
-#: gtk/gtknotebook.c:598
+#: gtk/gtknotebook.c:603
 msgid "Horizontal Tab Border"
 msgstr "Vízszintes lapszegély"
 
-#: gtk/gtknotebook.c:599
+#: gtk/gtknotebook.c:604
 msgid "Width of the horizontal border of tab labels"
 msgstr "A lapcímke vízszintes szegélyének szélessége"
 
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:612
 msgid "Vertical Tab Border"
 msgstr "Függőleges lapszegély"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:613
 msgid "Width of the vertical border of tab labels"
 msgstr "A lapcímke függőleges szegélyének szélessége"
 
-#: gtk/gtknotebook.c:616
+#: gtk/gtknotebook.c:621
 msgid "Show Tabs"
 msgstr "Lapok megjelenítése"
 
-#: gtk/gtknotebook.c:617
+#: gtk/gtknotebook.c:622
 msgid "Whether tabs should be shown or not"
 msgstr "A lapok meg legyenek-e jelenítve vagy sem"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:628
 msgid "Show Border"
 msgstr "Szegély mutatása"
 
-#: gtk/gtknotebook.c:624
+#: gtk/gtknotebook.c:629
 msgid "Whether the border should be shown or not"
 msgstr "A szegély meg legyen-e jelenítve vagy sem"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:635
 msgid "Scrollable"
 msgstr "Görgethető"
 
-#: gtk/gtknotebook.c:631
+#: gtk/gtknotebook.c:636
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Ha TRUE, akkor görgetősávok kerülnek megjelenítésre, ha túl sok lap látszana"
 
-#: gtk/gtknotebook.c:637
+#: gtk/gtknotebook.c:642
 msgid "Enable Popup"
 msgstr "Előugró menü engedélyezése"
 
-#: gtk/gtknotebook.c:638
+#: gtk/gtknotebook.c:643
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3517,136 +3517,136 @@ msgstr ""
 "Ha TRUE, akkor a noteszen a jobb egérgomb megnyomására előugrik egy menü, "
 "amellyel egy adott oldalra lehet ugrani"
 
-#: gtk/gtknotebook.c:645
+#: gtk/gtknotebook.c:650
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Egységes méretűek legyenek-e a lapok"
 
-#: gtk/gtknotebook.c:651
+#: gtk/gtknotebook.c:656
 msgid "Group ID"
 msgstr "Csoportazonosító"
 
-#: gtk/gtknotebook.c:652
+#: gtk/gtknotebook.c:657
 msgid "Group ID for tabs drag and drop"
 msgstr "Lapok csoportazonosítója húzd és ejtsd műveletnél"
 
-#: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:673 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Csoport"
 
-#: gtk/gtknotebook.c:669
+#: gtk/gtknotebook.c:674
 msgid "Group for tabs drag and drop"
 msgstr "Lapok csoportja húzd és ejtsd műveletnél"
 
-#: gtk/gtknotebook.c:675
+#: gtk/gtknotebook.c:680
 msgid "Tab label"
 msgstr "Lapcímke"
 
-#: gtk/gtknotebook.c:676
+#: gtk/gtknotebook.c:681
 msgid "The string displayed on the child's tab label"
 msgstr "A gyermek lap címkéjén megjelenő karakterlánc"
 
-#: gtk/gtknotebook.c:682
+#: gtk/gtknotebook.c:687
 msgid "Menu label"
 msgstr "Menücímke"
 
-#: gtk/gtknotebook.c:683
+#: gtk/gtknotebook.c:688
 msgid "The string displayed in the child's menu entry"
 msgstr "A gyermek menübejegyzésen megjelenő karakterlánc"
 
-#: gtk/gtknotebook.c:696
+#: gtk/gtknotebook.c:701
 msgid "Tab expand"
 msgstr "Lap kibontása"
 
-#: gtk/gtknotebook.c:697
+#: gtk/gtknotebook.c:702
 msgid "Whether to expand the child's tab or not"
 msgstr "A gyermek lap kibontásra kerüljön-e vagy sem"
 
-#: gtk/gtknotebook.c:703
+#: gtk/gtknotebook.c:708
 msgid "Tab fill"
 msgstr "Lap kitöltés"
 
-#: gtk/gtknotebook.c:704
+#: gtk/gtknotebook.c:709
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "A gyermek lap kitöltse-e a számára lefoglalt teret vagy sem"
 
-#: gtk/gtknotebook.c:710
+#: gtk/gtknotebook.c:715
 msgid "Tab pack type"
 msgstr "Lap csomagolástípus"
 
-#: gtk/gtknotebook.c:717
+#: gtk/gtknotebook.c:722
 msgid "Tab reorderable"
 msgstr "A lap átrendezhető"
 
-#: gtk/gtknotebook.c:718
+#: gtk/gtknotebook.c:723
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "A lap átrendezhető-e a felhasználó által vagy sem"
 
-#: gtk/gtknotebook.c:724
+#: gtk/gtknotebook.c:729
 msgid "Tab detachable"
 msgstr "A lap leválasztható"
 
-#: gtk/gtknotebook.c:725
+#: gtk/gtknotebook.c:730
 msgid "Whether the tab is detachable"
 msgstr "A lap leválasztható-e"
 
-#: gtk/gtknotebook.c:740 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:745 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Másodlagos visszaléptető"
 
-#: gtk/gtknotebook.c:741
+#: gtk/gtknotebook.c:746
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Egy második visszaléptető nyíl gomb megjelenítése a lapterület túlsó szélén"
 
-#: gtk/gtknotebook.c:756 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:761 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Másodlagos előre léptető"
 
-#: gtk/gtknotebook.c:757
+#: gtk/gtknotebook.c:762
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Egy második előre léptető nyíl gomb megjelenítése a címketerület túlsó szélén"
 
-#: gtk/gtknotebook.c:771 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:776 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Visszaléptető"
 
-#: gtk/gtknotebook.c:772 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:777 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "A normál visszaléptető nyíl gomb megjelenítése"
 
-#: gtk/gtknotebook.c:786 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:791 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Előre léptető"
 
-#: gtk/gtknotebook.c:787 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:792 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "A normál előre léptető nyíl gomb megjelenítése"
 
-#: gtk/gtknotebook.c:801
+#: gtk/gtknotebook.c:806
 msgid "Tab overlap"
 msgstr "Lapátfedés"
 
-#: gtk/gtknotebook.c:802
+#: gtk/gtknotebook.c:807
 msgid "Size of tab overlap area"
 msgstr "A lap átfedési területének mérete"
 
-#: gtk/gtknotebook.c:817
+#: gtk/gtknotebook.c:822
 msgid "Tab curvature"
 msgstr "Lap görbülete"
 
-#: gtk/gtknotebook.c:818
+#: gtk/gtknotebook.c:823
 msgid "Size of tab curvature"
 msgstr "A lap görbületének mérete"
 
-#: gtk/gtknotebook.c:834
+#: gtk/gtknotebook.c:839
 msgid "Arrow spacing"
 msgstr "Nyíl kitöltése"
 
-#: gtk/gtknotebook.c:835
+#: gtk/gtknotebook.c:840
 msgid "Scroll arrow spacing"
 msgstr "Görgetőnyíl kitöltése"
 
@@ -4511,28 +4511,28 @@ msgstr "Értékek távolsága"
 msgid "Space between value text and the slider/trough area"
 msgstr "Az érték szövege és a csúszka/vályú terület közötti távolság"
 
-#: gtk/gtkscalebutton.c:192
+#: gtk/gtkscalebutton.c:194
 msgid "The orientation of the scale"
 msgstr "A méretezés tájolása"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:203
 msgid "The value of the scale"
 msgstr "A méretezés értéke"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:213
 msgid "The icon size"
 msgstr "Az ikon mérete"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:222
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "A méretezőgomb-objektum aktuális értékét tartalmazó GtkAdjustment"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:250
 msgid "Icons"
 msgstr "Ikonok"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:251
 msgid "List of icon names"
 msgstr "Ikonnevek listája"
 

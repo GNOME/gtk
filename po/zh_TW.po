@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.13.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-23 23:08-0400\n"
+"POT-Creation-Date: 2008-10-17 00:37-0400\n"
 "PO-Revision-Date: 2008-08-05 20:11+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <community@linuxhall.org>\n"
@@ -540,16 +540,16 @@ msgstr "ICO 檔含有未支援的色彩深度：%d"
 msgid "The ICO image format"
 msgstr "ICO 圖片格式"
 
-#: gdk-pixbuf/io-icns.c:345
+#: gdk-pixbuf/io-icns.c:347
 #, c-format
 msgid "Error reading ICNS image: %s"
 msgstr "讀取 ICNS 圖片檔時發生錯誤：%s"
 
-#: gdk-pixbuf/io-icns.c:362
+#: gdk-pixbuf/io-icns.c:364
 msgid "Could not decode ICNS file"
 msgstr "無法解碼 ICNS 檔案"
 
-#: gdk-pixbuf/io-icns.c:395
+#: gdk-pixbuf/io-icns.c:397
 msgid "The ICNS image format"
 msgstr "ICNS 圖片格式"
 
@@ -886,7 +886,7 @@ msgstr "無法分配記憶體來載入 TGA 內容結構"
 msgid "Excess data in file"
 msgstr "檔案內有冗餘的資料"
 
-#: gdk-pixbuf/io-tga.c:1000
+#: gdk-pixbuf/io-tga.c:1002
 msgid "The Targa image format"
 msgstr "Targa 圖片格式"
 
@@ -1341,6 +1341,11 @@ msgstr "已停用"
 msgid "New accelerator..."
 msgstr "新增快捷鍵..."
 
+#: gtk/gtkcellrendererpixbuf.c:460
+#, fuzzy, c-format
+msgid "Icon not present in theme"
+msgstr "圖示‘%s’不存在於佈景主題中"
+
 #. do not translate the part before the |
 #: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
 #, c-format
@@ -1476,11 +1481,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "色彩選擇"
 
-#: gtk/gtkentry.c:5380 gtk/gtktextview.c:7686
+#: gtk/gtkentry.c:5384 gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "輸入法(_M)"
 
-#: gtk/gtkentry.c:5394 gtk/gtktextview.c:7700
+#: gtk/gtkentry.c:5398 gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "插入統一碼控制字元(_I)"
 
@@ -1488,7 +1493,7 @@ msgstr "插入統一碼控制字元(_I)"
 msgid "Select A File"
 msgstr "選取檔案"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1925
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1923
 msgid "Desktop"
 msgstr "桌面"
 
@@ -1500,23 +1505,23 @@ msgstr "（沒有）"
 msgid "Other..."
 msgstr "其它..."
 
-#: gtk/gtkfilechooserdefault.c:1058
+#: gtk/gtkfilechooserdefault.c:1056
 msgid "Could not retrieve information about the file"
 msgstr "無法取得關於檔案的資訊"
 
-#: gtk/gtkfilechooserdefault.c:1069
+#: gtk/gtkfilechooserdefault.c:1067
 msgid "Could not add a bookmark"
 msgstr "無法加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:1080
+#: gtk/gtkfilechooserdefault.c:1078
 msgid "Could not remove bookmark"
 msgstr "無法移除書籤"
 
-#: gtk/gtkfilechooserdefault.c:1091
+#: gtk/gtkfilechooserdefault.c:1089
 msgid "The folder could not be created"
 msgstr "無法建立資料夾"
 
-#: gtk/gtkfilechooserdefault.c:1104
+#: gtk/gtkfilechooserdefault.c:1102
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1524,11 +1529,11 @@ msgstr ""
 "此資料夾無法建立，因為已有相同名稱的檔案存在。試著使用不同的資料夾名稱，或者"
 "先重新命名該檔案。"
 
-#: gtk/gtkfilechooserdefault.c:1115
+#: gtk/gtkfilechooserdefault.c:1113
 msgid "Invalid file name"
 msgstr "無效的檔案名稱"
 
-#: gtk/gtkfilechooserdefault.c:1125
+#: gtk/gtkfilechooserdefault.c:1123
 msgid "The folder contents could not be displayed"
 msgstr "無法顯示資料夾內容"
 
@@ -1536,217 +1541,217 @@ msgstr "無法顯示資料夾內容"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1677
+#: gtk/gtkfilechooserdefault.c:1675
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s 於 %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1853
+#: gtk/gtkfilechooserdefault.c:1851
 msgid "Search"
 msgstr "搜尋"
 
-#: gtk/gtkfilechooserdefault.c:1877
+#: gtk/gtkfilechooserdefault.c:1875
 msgid "Recently Used"
 msgstr "最近使用的"
 
-#: gtk/gtkfilechooserdefault.c:2494
+#: gtk/gtkfilechooserdefault.c:2500
 msgid "Select which types of files are shown"
 msgstr "選擇顯示哪種類型的檔案"
 
-#: gtk/gtkfilechooserdefault.c:2923
+#: gtk/gtkfilechooserdefault.c:2929
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "將資料夾‘%s’加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:2964
+#: gtk/gtkfilechooserdefault.c:2970
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "將目前的資料夾加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:2966
+#: gtk/gtkfilechooserdefault.c:2972
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "將已選的資料夾加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:3006
+#: gtk/gtkfilechooserdefault.c:3012
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "移除書籤‘%s’"
 
-#: gtk/gtkfilechooserdefault.c:3724
+#: gtk/gtkfilechooserdefault.c:3730
 msgid "Remove"
 msgstr "移除"
 
-#: gtk/gtkfilechooserdefault.c:3733
+#: gtk/gtkfilechooserdefault.c:3739
 msgid "Rename..."
 msgstr "更改名稱..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3879
+#: gtk/gtkfilechooserdefault.c:3885
 msgid "Places"
 msgstr "位置"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3936
+#: gtk/gtkfilechooserdefault.c:3942
 msgid "_Places"
 msgstr "位置(_P)"
 
-#: gtk/gtkfilechooserdefault.c:3991 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3997 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "新增(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3998
+#: gtk/gtkfilechooserdefault.c:4004
 msgid "Add the selected folder to the Bookmarks"
 msgstr "將已選的資料夾加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:4003 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:4009 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "移除(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4010
+#: gtk/gtkfilechooserdefault.c:4016
 msgid "Remove the selected bookmark"
 msgstr "移除已選的書籤"
 
-#: gtk/gtkfilechooserdefault.c:4107
+#: gtk/gtkfilechooserdefault.c:4113
 msgid "Could not select file"
 msgstr "無法選取檔案"
 
-#: gtk/gtkfilechooserdefault.c:4283
+#: gtk/gtkfilechooserdefault.c:4289
 msgid "_Add to Bookmarks"
 msgstr "加入書籤(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4297
+#: gtk/gtkfilechooserdefault.c:4303
 msgid "Show _Hidden Files"
 msgstr "顯示隱藏檔案(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4540 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4546 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "檔案"
 
-#: gtk/gtkfilechooserdefault.c:4589
+#: gtk/gtkfilechooserdefault.c:4595
 msgid "Name"
 msgstr "名稱"
 
-#: gtk/gtkfilechooserdefault.c:4614
+#: gtk/gtkfilechooserdefault.c:4620
 msgid "Size"
 msgstr "大小"
 
-#: gtk/gtkfilechooserdefault.c:4628
+#: gtk/gtkfilechooserdefault.c:4634
 msgid "Modified"
 msgstr "最後更改"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4848 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4854 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "名稱(_N)："
 
-#: gtk/gtkfilechooserdefault.c:4890
+#: gtk/gtkfilechooserdefault.c:4896
 msgid "_Browse for other folders"
 msgstr "瀏覽其它資料夾(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5160
+#: gtk/gtkfilechooserdefault.c:5166
 msgid "Type a file name"
 msgstr "輸入檔案名稱"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5197
+#: gtk/gtkfilechooserdefault.c:5203
 msgid "Create Fo_lder"
 msgstr "建立資料夾(_L)"
 
-#: gtk/gtkfilechooserdefault.c:5207
+#: gtk/gtkfilechooserdefault.c:5213
 msgid "_Location:"
 msgstr "位置(_L)："
 
-#: gtk/gtkfilechooserdefault.c:5407
+#: gtk/gtkfilechooserdefault.c:5413
 msgid "Save in _folder:"
 msgstr "儲存於資料夾(_F)："
 
-#: gtk/gtkfilechooserdefault.c:5409
+#: gtk/gtkfilechooserdefault.c:5415
 msgid "Create in _folder:"
 msgstr "新增於資料夾(_F)："
 
-#: gtk/gtkfilechooserdefault.c:6990
+#: gtk/gtkfilechooserdefault.c:6996
 msgid "Cannot change to folder because it is not local"
 msgstr "無法進入資料夾，因為它不是本地資料夾"
 
-#: gtk/gtkfilechooserdefault.c:7615 gtk/gtkfilechooserdefault.c:7636
+#: gtk/gtkfilechooserdefault.c:7621 gtk/gtkfilechooserdefault.c:7642
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "捷徑 %s 已經存在"
 
-#: gtk/gtkfilechooserdefault.c:7726
+#: gtk/gtkfilechooserdefault.c:7732
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "捷徑 %s 不存在"
 
-#: gtk/gtkfilechooserdefault.c:7974 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:7980 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "名為“%s”的檔案已經存在。要取代它嗎？"
 
-#: gtk/gtkfilechooserdefault.c:7977 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:7983 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "檔案已經存在於“%s”。取代它的話會複寫其內容。"
 
-#: gtk/gtkfilechooserdefault.c:7982 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:7988 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "取代(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8743
+#: gtk/gtkfilechooserdefault.c:8749
 msgid "Could not start the search process"
 msgstr "無法開始搜尋程序"
 
-#: gtk/gtkfilechooserdefault.c:8744
+#: gtk/gtkfilechooserdefault.c:8750
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "此程式無法建立至 indexer 伺服程式的連線。請確認它是否已執行。"
 
-#: gtk/gtkfilechooserdefault.c:8758
+#: gtk/gtkfilechooserdefault.c:8764
 msgid "Could not send the search request"
 msgstr "無法傳送搜尋要求"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9198
+#: gtk/gtkfilechooserdefault.c:9204
 msgid "_Search:"
 msgstr "搜尋(_S):"
 
-#: gtk/gtkfilechooserdefault.c:10145
+#: gtk/gtkfilechooserdefault.c:10151
 #, c-format
 msgid "Could not mount %s"
 msgstr "無法掛載 %s"
 
-#: gtk/gtkfilechooserdefault.c:10799
+#: gtk/gtkfilechooserdefault.c:10809
 msgid "Type name of new folder"
 msgstr "請輸入新資料夾名稱"
 
-#: gtk/gtkfilechooserdefault.c:10849
+#: gtk/gtkfilechooserdefault.c:10859
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10851
+#: gtk/gtkfilechooserdefault.c:10861
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10853
+#: gtk/gtkfilechooserdefault.c:10863
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10956 gtk/gtkfilechooserdefault.c:10978
-#: gtk/gtkfilechooserdefault.c:11049
+#: gtk/gtkfilechooserdefault.c:10966 gtk/gtkfilechooserdefault.c:10988
+#: gtk/gtkfilechooserdefault.c:11059
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/gtkfilechooserdefault.c:10996
+#: gtk/gtkfilechooserdefault.c:11006
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:10998
+#: gtk/gtkfilechooserdefault.c:11008
 msgid "Yesterday at %H:%M"
 msgstr "昨天的 %H:%M"
 
@@ -1930,7 +1935,7 @@ msgstr "檔案系統"
 msgid "Could not obtain root folder"
 msgstr "無法取得根資料夾"
 
-#: gtk/gtkfilesystemmodel.c:1299
+#: gtk/gtkfilesystemmodel.c:1301
 msgid "(Empty)"
 msgstr "（空的）"
 
@@ -2193,7 +2198,7 @@ msgstr "記憶密碼到登出之前(_R)"
 msgid "Remember _forever"
 msgstr "永遠記住密碼(_R)"
 
-#: gtk/gtknotebook.c:4417 gtk/gtknotebook.c:6924
+#: gtk/gtknotebook.c:4422 gtk/gtknotebook.c:6941
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 頁"
@@ -2259,7 +2264,7 @@ msgstr "紙張大小(_P)："
 msgid "_Orientation:"
 msgstr "方向(_O)："
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2662
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2665
 msgid "Page Setup"
 msgstr "頁面設定"
 
@@ -2476,37 +2481,37 @@ msgstr "給 PrintDlgEx 的處理無效"
 msgid "Unspecified error"
 msgstr "無法指定的錯誤"
 
-#: gtk/gtkprintunixdialog.c:1748
+#: gtk/gtkprintunixdialog.c:1749
 msgid "Printer"
 msgstr "印表機"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1758
+#: gtk/gtkprintunixdialog.c:1759
 msgid "Location"
 msgstr "位置"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1769
+#: gtk/gtkprintunixdialog.c:1770
 msgid "Status"
 msgstr "狀態"
 
-#: gtk/gtkprintunixdialog.c:1792
+#: gtk/gtkprintunixdialog.c:1793
 msgid "Range"
 msgstr "範圍"
 
-#: gtk/gtkprintunixdialog.c:1796
+#: gtk/gtkprintunixdialog.c:1797
 msgid "_All Pages"
 msgstr "所有頁面(_A)"
 
-#: gtk/gtkprintunixdialog.c:1803
+#: gtk/gtkprintunixdialog.c:1804
 msgid "C_urrent Page"
 msgstr "目前頁面(_U)"
 
-#: gtk/gtkprintunixdialog.c:1812
+#: gtk/gtkprintunixdialog.c:1813
 msgid "Pag_es:"
 msgstr "頁數(_E):"
 
-#: gtk/gtkprintunixdialog.c:1813
+#: gtk/gtkprintunixdialog.c:1814
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2514,177 +2519,177 @@ msgstr ""
 "指定一或多個頁面範圍，\n"
 "例如 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1832
+#: gtk/gtkprintunixdialog.c:1835
 msgid "Copies"
 msgstr "列印數量"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1837
+#: gtk/gtkprintunixdialog.c:1840
 msgid "Copie_s:"
 msgstr "份數(_S)："
 
-#: gtk/gtkprintunixdialog.c:1855
+#: gtk/gtkprintunixdialog.c:1858
 msgid "C_ollate"
 msgstr "順序(_O)"
 
-#: gtk/gtkprintunixdialog.c:1863
+#: gtk/gtkprintunixdialog.c:1866
 msgid "_Reverse"
 msgstr "反序(_R)"
 
-#: gtk/gtkprintunixdialog.c:1883
+#: gtk/gtkprintunixdialog.c:1886
 msgid "General"
 msgstr "一般"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2423
+#: gtk/gtkprintunixdialog.c:2426
 #: modules/printbackends/cups/gtkprintbackendcups.c:2813
 #, fuzzy
 msgid "Page Ordering"
 msgstr "準備中"
 
-#: gtk/gtkprintunixdialog.c:2429
+#: gtk/gtkprintunixdialog.c:2432
 #, fuzzy
 msgid "Left to right"
 msgstr "_LRM 左至右標記"
 
-#: gtk/gtkprintunixdialog.c:2430
+#: gtk/gtkprintunixdialog.c:2433
 #, fuzzy
 msgid "Right to left"
 msgstr "列印至檔案"
 
-#: gtk/gtkprintunixdialog.c:2499
+#: gtk/gtkprintunixdialog.c:2502
 msgid "Layout"
 msgstr "配置"
 
-#: gtk/gtkprintunixdialog.c:2503
+#: gtk/gtkprintunixdialog.c:2506
 msgid "T_wo-sided:"
 msgstr "雙面(_W)："
 
-#: gtk/gtkprintunixdialog.c:2518
+#: gtk/gtkprintunixdialog.c:2521
 msgid "Pages per _side:"
 msgstr "每張紙的頁數(_S):"
 
-#: gtk/gtkprintunixdialog.c:2536
+#: gtk/gtkprintunixdialog.c:2539
 #, fuzzy
 msgid "Page or_dering:"
 msgstr "每張紙的頁數(_S):"
 
-#: gtk/gtkprintunixdialog.c:2552
+#: gtk/gtkprintunixdialog.c:2555
 msgid "_Only print:"
 msgstr "列印範圍(_O)："
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2567
+#: gtk/gtkprintunixdialog.c:2570
 msgid "All sheets"
 msgstr "所有頁面"
 
-#: gtk/gtkprintunixdialog.c:2568
+#: gtk/gtkprintunixdialog.c:2571
 msgid "Even sheets"
 msgstr "奇數頁"
 
-#: gtk/gtkprintunixdialog.c:2569
+#: gtk/gtkprintunixdialog.c:2572
 msgid "Odd sheets"
 msgstr "偶數頁"
 
-#: gtk/gtkprintunixdialog.c:2572
+#: gtk/gtkprintunixdialog.c:2575
 msgid "Sc_ale:"
 msgstr "比例(_A)："
 
-#: gtk/gtkprintunixdialog.c:2599
+#: gtk/gtkprintunixdialog.c:2602
 msgid "Paper"
 msgstr "紙張"
 
-#: gtk/gtkprintunixdialog.c:2603
+#: gtk/gtkprintunixdialog.c:2606
 msgid "Paper _type:"
 msgstr "紙張類型(_T)："
 
-#: gtk/gtkprintunixdialog.c:2618
+#: gtk/gtkprintunixdialog.c:2621
 msgid "Paper _source:"
 msgstr "紙張來源(_S)："
 
-#: gtk/gtkprintunixdialog.c:2633
+#: gtk/gtkprintunixdialog.c:2636
 msgid "Output t_ray:"
 msgstr "出紙匣(_R)："
 
-#: gtk/gtkprintunixdialog.c:2685
+#: gtk/gtkprintunixdialog.c:2688
 msgid "Job Details"
 msgstr "列印工作詳細資料"
 
-#: gtk/gtkprintunixdialog.c:2691
+#: gtk/gtkprintunixdialog.c:2694
 msgid "Pri_ority:"
 msgstr "優先等級(_O)："
 
-#: gtk/gtkprintunixdialog.c:2706
+#: gtk/gtkprintunixdialog.c:2709
 msgid "_Billing info:"
 msgstr "帳目資訊(_B)："
 
-#: gtk/gtkprintunixdialog.c:2724
+#: gtk/gtkprintunixdialog.c:2727
 msgid "Print Document"
 msgstr "列印文件"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2733
+#: gtk/gtkprintunixdialog.c:2736
 msgid "_Now"
 msgstr "現在(_N)"
 
-#: gtk/gtkprintunixdialog.c:2744
+#: gtk/gtkprintunixdialog.c:2747
 msgid "A_t:"
 msgstr "於(_T)："
 
-#: gtk/gtkprintunixdialog.c:2763
+#: gtk/gtkprintunixdialog.c:2766
 msgid "On _hold"
 msgstr "擱置(_H)"
 
-#: gtk/gtkprintunixdialog.c:2782
+#: gtk/gtkprintunixdialog.c:2785
 msgid "Add Cover Page"
 msgstr "加入封面"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2791
+#: gtk/gtkprintunixdialog.c:2794
 msgid "Be_fore:"
 msgstr "這頁之前(_F)："
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2809
+#: gtk/gtkprintunixdialog.c:2812
 msgid "_After:"
 msgstr "這頁之後(_A)："
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2827
+#: gtk/gtkprintunixdialog.c:2830
 msgid "Job"
 msgstr "列印工作"
 
-#: gtk/gtkprintunixdialog.c:2893
+#: gtk/gtkprintunixdialog.c:2896
 msgid "Advanced"
 msgstr "進階"
 
-#: gtk/gtkprintunixdialog.c:2928
+#: gtk/gtkprintunixdialog.c:2931
 msgid "Image Quality"
 msgstr "圖片品質"
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2934
 msgid "Color"
 msgstr "色彩"
 
-#: gtk/gtkprintunixdialog.c:2934
+#: gtk/gtkprintunixdialog.c:2937
 msgid "Finishing"
 msgstr "準備完成"
 
-#: gtk/gtkprintunixdialog.c:2944
+#: gtk/gtkprintunixdialog.c:2947
 msgid "Some of the settings in the dialog conflict"
 msgstr "對話視窗中某些設定有衝突"
 
-#: gtk/gtkprintunixdialog.c:2967
+#: gtk/gtkprintunixdialog.c:2970
 msgid "Print"
 msgstr "列印"
 
@@ -4690,15 +4695,15 @@ msgstr "檔案"
 msgid "_Output format"
 msgstr "輸出格式(_O)"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:398
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:396
 msgid "Print to LPR"
 msgstr "列印至 LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:424
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:422
 msgid "Pages Per Sheet"
 msgstr "每張紙的頁數"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:431
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:429
 msgid "Command Line"
 msgstr "命令列"
 

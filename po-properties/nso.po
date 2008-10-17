@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-23 23:09-0400\n"
+"POT-Creation-Date: 2008-10-17 00:37-0400\n"
 "PO-Revision-Date: 2004-11-30 15:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -417,7 +417,7 @@ msgid "Whether the action group is visible."
 msgstr "Ge eba sehlopha sa mogato se a bonagala."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:202 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Boleng"
 
@@ -737,7 +737,7 @@ msgstr "Go dira sekgoba"
 msgid "The amount of space between children"
 msgstr "Tekanyo ya sekgoba magareng ga bana"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:644 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:649 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:580
 msgid "Homogeneous"
 msgstr "Mohuta o swanago"
@@ -783,7 +783,7 @@ msgstr ""
 msgid "Pack type"
 msgstr "Mohuta wa ngatana"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:711
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:716
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -791,12 +791,12 @@ msgstr ""
 "Mohuta wa Ngatana wa Gtk o bontšhago ge eba ngwana a pakilwe ka tšhupetšo go "
 "mathomo goba mafelelo a motswadi"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:689 gtk/gtkpaned.c:218
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:694 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Boemo"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:690
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:695
 msgid "The index of the child in the parent"
 msgstr "Tlhatlamano ya ngwana motswading"
 
@@ -1362,7 +1362,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Teka-tekanyo e tsepamego, go tloga go 0 (godimo) go ya go 1 (ka tlase)"
 
 #: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:731
-#: gtk/gtkprogressbar.c:126 gtk/gtkscalebutton.c:191 gtk/gtkstatusicon.c:301
+#: gtk/gtkprogressbar.c:126 gtk/gtkscalebutton.c:193 gtk/gtkstatusicon.c:301
 #: gtk/gtktoolbar.c:492 gtk/gtktrayicon-x11.c:95
 msgid "Orientation"
 msgstr "Thulaganyo"
@@ -1372,7 +1372,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Moo thulaganyo le kgolo di lebilego tša bara ya tšwelopele"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:346
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:221 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Tokišo"
 
@@ -3027,7 +3027,7 @@ msgstr "Peakanyo ya leswao"
 msgid "Icon set to display"
 msgstr "Peakanyo ya leswao yeo e swanetšego go bontšhwa"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:547
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:212 gtk/gtktoolbar.c:547
 msgid "Icon size"
 msgstr "Bogolo bja leswao"
 
@@ -3663,77 +3663,77 @@ msgstr ""
 msgid "The screen where this window will be displayed."
 msgstr "Sekirini seo lefesetere le le tla bontšhwago"
 
-#: gtk/gtknotebook.c:572
+#: gtk/gtknotebook.c:577
 msgid "Page"
 msgstr "Letlakala"
 
-#: gtk/gtknotebook.c:573
+#: gtk/gtknotebook.c:578
 msgid "The index of the current page"
 msgstr "Tlhatlamano ya letlakala la gona bjale"
 
-#: gtk/gtknotebook.c:581
+#: gtk/gtknotebook.c:586
 msgid "Tab Position"
 msgstr "Boemo bja Tab"
 
-#: gtk/gtknotebook.c:582
+#: gtk/gtknotebook.c:587
 msgid "Which side of the notebook holds the tabs"
 msgstr "Ke lehlakore lefe la puku ya go ngwalela dintlha leo le swerego di-tab"
 
-#: gtk/gtknotebook.c:589
+#: gtk/gtknotebook.c:594
 msgid "Tab Border"
 msgstr "Mollwane wa Tab"
 
-#: gtk/gtknotebook.c:590
+#: gtk/gtknotebook.c:595
 msgid "Width of the border around the tab labels"
 msgstr "Bophara bja mollwane go dikologa maswao a tab"
 
-#: gtk/gtknotebook.c:598
+#: gtk/gtknotebook.c:603
 msgid "Horizontal Tab Border"
 msgstr "Mollwane wa Tab o Rapamego"
 
-#: gtk/gtknotebook.c:599
+#: gtk/gtknotebook.c:604
 msgid "Width of the horizontal border of tab labels"
 msgstr "Bophara bja mollwane o rapamego bja maswao a tab"
 
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:612
 msgid "Vertical Tab Border"
 msgstr "Mollwane wa Tab o Tsepamego"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:613
 msgid "Width of the vertical border of tab labels"
 msgstr "Bophara bja mollwane o tsepamego bja maswao a tab"
 
-#: gtk/gtknotebook.c:616
+#: gtk/gtknotebook.c:621
 msgid "Show Tabs"
 msgstr "Bontšha Di-tab"
 
-#: gtk/gtknotebook.c:617
+#: gtk/gtknotebook.c:622
 msgid "Whether tabs should be shown or not"
 msgstr "Ge eba di-tab di swanetše go bontšhwa goba aowa"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:628
 msgid "Show Border"
 msgstr "Bontšha Mollwane"
 
-#: gtk/gtknotebook.c:624
+#: gtk/gtknotebook.c:629
 msgid "Whether the border should be shown or not"
 msgstr "Ge eba mollwane o swanetše go bontšhwa goba aowa"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:635
 msgid "Scrollable"
 msgstr "E išegago godimo le tlase"
 
-#: gtk/gtknotebook.c:631
+#: gtk/gtknotebook.c:636
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Ge eba e le THEREŠO, marungwana a go iša godimo le tlase a oketšwa ge eba go "
 "na le di-taba tše dintši kudu tšeo di swanetšego go lekanywa"
 
-#: gtk/gtknotebook.c:637
+#: gtk/gtknotebook.c:642
 msgid "Enable Popup"
 msgstr "Kgontšha tšeo di tšwelelago di sa letelwa"
 
-#: gtk/gtknotebook.c:638
+#: gtk/gtknotebook.c:643
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3742,151 +3742,151 @@ msgstr ""
 "dintlha go tšweletša lelokelelo la dikagare leo o ka le dirišetšago go ya "
 "letlakaleng"
 
-#: gtk/gtknotebook.c:645
+#: gtk/gtknotebook.c:650
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Ge eba di-tab di swanetše go ba le bogolo bja mohuta o swanago"
 
-#: gtk/gtknotebook.c:651
+#: gtk/gtknotebook.c:656
 #, fuzzy
 msgid "Group ID"
 msgstr "Sehlopha"
 
-#: gtk/gtknotebook.c:652
+#: gtk/gtknotebook.c:657
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:673 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Sehlopha"
 
-#: gtk/gtknotebook.c:669
+#: gtk/gtknotebook.c:674
 msgid "Group for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:675
+#: gtk/gtknotebook.c:680
 msgid "Tab label"
 msgstr "Leswao la tab"
 
-#: gtk/gtknotebook.c:676
+#: gtk/gtknotebook.c:681
 #, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "Mothaladi o bontšhitšwego leswaong la tab la ngwana"
 
-#: gtk/gtknotebook.c:682
+#: gtk/gtknotebook.c:687
 msgid "Menu label"
 msgstr "Leswao la lelokelelo la dikagare"
 
-#: gtk/gtknotebook.c:683
+#: gtk/gtknotebook.c:688
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "Mothaladi o bontšhitšwego tsenong ya lelokelelo la dikagare la ngwana"
 
-#: gtk/gtknotebook.c:696
+#: gtk/gtknotebook.c:701
 msgid "Tab expand"
 msgstr "Go katologa ga tab"
 
-#: gtk/gtknotebook.c:697
+#: gtk/gtknotebook.c:702
 #, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "Ge eba go swanetše go katološwe tab ya ngwana goba aowa"
 
-#: gtk/gtknotebook.c:703
+#: gtk/gtknotebook.c:708
 msgid "Tab fill"
 msgstr "Tlatša tab"
 
-#: gtk/gtknotebook.c:704
+#: gtk/gtknotebook.c:709
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Ge eba tab ya ngwana e swanetše go tlatša lefelo le abilwego goba aowa"
 
-#: gtk/gtknotebook.c:710
+#: gtk/gtknotebook.c:715
 msgid "Tab pack type"
 msgstr "Mohuta wa ngatana ya tab"
 
-#: gtk/gtknotebook.c:717
+#: gtk/gtknotebook.c:722
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "E laelwago gape"
 
-#: gtk/gtknotebook.c:718
+#: gtk/gtknotebook.c:723
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Ge eba mollwane o swanetše go bontšhwa goba aowa"
 
-#: gtk/gtknotebook.c:724
+#: gtk/gtknotebook.c:729
 #, fuzzy
 msgid "Tab detachable"
 msgstr "Leswao la tab"
 
-#: gtk/gtknotebook.c:725
+#: gtk/gtknotebook.c:730
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "Ge eba mogato o kgontšhitšwe."
 
-#: gtk/gtknotebook.c:740 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:745 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Mogato o boelago morago wa motheo"
 
-#: gtk/gtknotebook.c:741
+#: gtk/gtknotebook.c:746
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Bontšha konope ya lerungwana la bobedi la go boela morago lehlakoreng le "
 "fapanego la lefelo la tab"
 
-#: gtk/gtknotebook.c:756 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:761 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Mogato wa go ya pele wa motheo"
 
-#: gtk/gtknotebook.c:757
+#: gtk/gtknotebook.c:762
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Bontšha konope ya lerungwana la bobedi la go ya pele ka lehlakoreng le "
 "fapanego la lefelo la tab"
 
-#: gtk/gtknotebook.c:771 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:776 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Mogato o boelago morago"
 
-#: gtk/gtknotebook.c:772 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:777 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Bontšha konope ya lerungwana la go boela morago la motheo"
 
-#: gtk/gtknotebook.c:786 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:791 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Mogato o yago pele"
 
-#: gtk/gtknotebook.c:787 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:792 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Bontšha konope ya lerungwana la go ya pele la motheo"
 
-#: gtk/gtknotebook.c:801
+#: gtk/gtknotebook.c:806
 #, fuzzy
 msgid "Tab overlap"
 msgstr "Mollwane wa Tab"
 
-#: gtk/gtknotebook.c:802
+#: gtk/gtknotebook.c:807
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "Bogolo bja lerungwana la sekatološi"
 
-#: gtk/gtknotebook.c:817
+#: gtk/gtknotebook.c:822
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:818
+#: gtk/gtknotebook.c:823
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Bogolo bja sediri sa sekgoba"
 
-#: gtk/gtknotebook.c:834
+#: gtk/gtknotebook.c:839
 #, fuzzy
 msgid "Arrow spacing"
 msgstr "Go dira sekgoba mothalong"
 
-#: gtk/gtknotebook.c:835
+#: gtk/gtknotebook.c:840
 #, fuzzy
 msgid "Scroll arrow spacing"
 msgstr "Go dira sekgoba ga bara ya go ya godimo le tlase"
@@ -4820,34 +4820,34 @@ msgstr "Go dira sekgoba ga boleng"
 msgid "Space between value text and the slider/trough area"
 msgstr "Sekgoba magareng ga sengwalwa sa boleng le lefelo la seširogi/sedibelo"
 
-#: gtk/gtkscalebutton.c:192
+#: gtk/gtkscalebutton.c:194
 #, fuzzy
 msgid "The orientation of the scale"
 msgstr "Thulaganyo ya bara ya sedirišwa"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:203
 #, fuzzy
 msgid "The value of the scale"
 msgstr "Boleng bja tokišo"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:213
 #, fuzzy
 msgid "The icon size"
 msgstr "Bogolo bja leswao la bara ya sedirišwa"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:222
 #, fuzzy
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
 "GtkAdjustment yeo e nago le boleng bja gona bjale bja sedirišwa se sa mohuta"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:250
 #, fuzzy
 msgid "Icons"
 msgstr "Leswao"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:251
 #, fuzzy
 msgid "List of icon names"
 msgstr "Leina la Sehlogo sa Leswao"

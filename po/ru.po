@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-23 23:08-0400\n"
+"POT-Creation-Date: 2008-10-17 00:37-0400\n"
 "PO-Revision-Date: 2008-09-15 18:06+0300\n"
 "Last-Translator: Yuriy Penkin <yuriy.penkin@gmail.com>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -561,16 +561,16 @@ msgstr "Глубина цвета %d для файла формата ICO не �
 msgid "The ICO image format"
 msgstr "Формат изображений ICO"
 
-#: gdk-pixbuf/io-icns.c:345
+#: gdk-pixbuf/io-icns.c:347
 #, c-format
 msgid "Error reading ICNS image: %s"
 msgstr "При чтении изображения ICNS произошла ошибка: %s"
 
-#: gdk-pixbuf/io-icns.c:362
+#: gdk-pixbuf/io-icns.c:364
 msgid "Could not decode ICNS file"
 msgstr "Не удалось декодировать файл ICNS"
 
-#: gdk-pixbuf/io-icns.c:395
+#: gdk-pixbuf/io-icns.c:397
 msgid "The ICNS image format"
 msgstr "Формат изображений ICNS"
 
@@ -929,7 +929,7 @@ msgstr "Не удалось выделить память для структу�
 msgid "Excess data in file"
 msgstr "Данные в файле избыточны"
 
-#: gdk-pixbuf/io-tga.c:1000
+#: gdk-pixbuf/io-tga.c:1002
 msgid "The Targa image format"
 msgstr "Формат изображений Targa"
 
@@ -1390,6 +1390,11 @@ msgstr "Нет"
 msgid "New accelerator..."
 msgstr "Новая комбинация клавиш..."
 
+#: gtk/gtkcellrendererpixbuf.c:460
+#, fuzzy, c-format
+msgid "Icon not present in theme"
+msgstr "Значок «%s» не присутствует в теме"
+
 #. do not translate the part before the |
 #: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
 #, c-format
@@ -1531,12 +1536,12 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Выбор цвета"
 
-#: gtk/gtkentry.c:5380 gtk/gtktextview.c:7686
+#: gtk/gtkentry.c:5384 gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "_Методы ввода"
 
 # длинный перевод слишком сильно растягивает контекстное меню
-#: gtk/gtkentry.c:5394 gtk/gtktextview.c:7700
+#: gtk/gtkentry.c:5398 gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "Вст_авить управляющий символ Юникод"
 
@@ -1544,7 +1549,7 @@ msgstr "Вст_авить управляющий символ Юникод"
 msgid "Select A File"
 msgstr "Выберите файл"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1925
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1923
 msgid "Desktop"
 msgstr "Рабочий стол"
 
@@ -1556,23 +1561,23 @@ msgstr "(Нет)"
 msgid "Other..."
 msgstr "Другой..."
 
-#: gtk/gtkfilechooserdefault.c:1058
+#: gtk/gtkfilechooserdefault.c:1056
 msgid "Could not retrieve information about the file"
 msgstr "Не удалось получить информацию о файле"
 
-#: gtk/gtkfilechooserdefault.c:1069
+#: gtk/gtkfilechooserdefault.c:1067
 msgid "Could not add a bookmark"
 msgstr "Не удалось добавить закладку"
 
-#: gtk/gtkfilechooserdefault.c:1080
+#: gtk/gtkfilechooserdefault.c:1078
 msgid "Could not remove bookmark"
 msgstr "Не удалось удалить закладку"
 
-#: gtk/gtkfilechooserdefault.c:1091
+#: gtk/gtkfilechooserdefault.c:1089
 msgid "The folder could not be created"
 msgstr "Не удалось создать папку"
 
-#: gtk/gtkfilechooserdefault.c:1104
+#: gtk/gtkfilechooserdefault.c:1102
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1580,11 +1585,11 @@ msgstr ""
 "Папка не может быть создана, так как файл с таким именем уже существует.  "
 "Выберите другое имя для папки, или переименуйте файл."
 
-#: gtk/gtkfilechooserdefault.c:1115
+#: gtk/gtkfilechooserdefault.c:1113
 msgid "Invalid file name"
 msgstr "Недопустимое имя файла"
 
-#: gtk/gtkfilechooserdefault.c:1125
+#: gtk/gtkfilechooserdefault.c:1123
 msgid "The folder contents could not be displayed"
 msgstr "Не удалось отобразить содержимое папки"
 
@@ -1592,170 +1597,170 @@ msgstr "Не удалось отобразить содержимое папки
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1677
+#: gtk/gtkfilechooserdefault.c:1675
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s на %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1853
+#: gtk/gtkfilechooserdefault.c:1851
 msgid "Search"
 msgstr "Поиск"
 
-#: gtk/gtkfilechooserdefault.c:1877
+#: gtk/gtkfilechooserdefault.c:1875
 msgid "Recently Used"
 msgstr "Недавние документы"
 
-#: gtk/gtkfilechooserdefault.c:2494
+#: gtk/gtkfilechooserdefault.c:2500
 msgid "Select which types of files are shown"
 msgstr "Выбрать отображаемые типы файлов"
 
-#: gtk/gtkfilechooserdefault.c:2923
+#: gtk/gtkfilechooserdefault.c:2929
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Создать закладку для папки «%s»"
 
-#: gtk/gtkfilechooserdefault.c:2964
+#: gtk/gtkfilechooserdefault.c:2970
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Создать закладку для текущей папки"
 
-#: gtk/gtkfilechooserdefault.c:2966
+#: gtk/gtkfilechooserdefault.c:2972
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Создать закладки для выделенных папок"
 
-#: gtk/gtkfilechooserdefault.c:3006
+#: gtk/gtkfilechooserdefault.c:3012
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Удалить закладку «%s»"
 
-#: gtk/gtkfilechooserdefault.c:3724
+#: gtk/gtkfilechooserdefault.c:3730
 msgid "Remove"
 msgstr "Удалить"
 
-#: gtk/gtkfilechooserdefault.c:3733
+#: gtk/gtkfilechooserdefault.c:3739
 msgid "Rename..."
 msgstr "Переименовать..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3879
+#: gtk/gtkfilechooserdefault.c:3885
 msgid "Places"
 msgstr "Места"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3936
+#: gtk/gtkfilechooserdefault.c:3942
 msgid "_Places"
 msgstr "_Места"
 
-#: gtk/gtkfilechooserdefault.c:3991 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3997 gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "_Добавить"
 
-#: gtk/gtkfilechooserdefault.c:3998
+#: gtk/gtkfilechooserdefault.c:4004
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Создать закладку для выделенной папки"
 
-#: gtk/gtkfilechooserdefault.c:4003 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:4009 gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "_Удалить"
 
-#: gtk/gtkfilechooserdefault.c:4010
+#: gtk/gtkfilechooserdefault.c:4016
 msgid "Remove the selected bookmark"
 msgstr "Удалить выделенную закладку"
 
-#: gtk/gtkfilechooserdefault.c:4107
+#: gtk/gtkfilechooserdefault.c:4113
 msgid "Could not select file"
 msgstr "Не удалось выделить файл"
 
-#: gtk/gtkfilechooserdefault.c:4283
+#: gtk/gtkfilechooserdefault.c:4289
 msgid "_Add to Bookmarks"
 msgstr "_Добавить в закладки"
 
-#: gtk/gtkfilechooserdefault.c:4297
+#: gtk/gtkfilechooserdefault.c:4303
 msgid "Show _Hidden Files"
 msgstr "Показывать _скрытые файлы"
 
-#: gtk/gtkfilechooserdefault.c:4540 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4546 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Файлы"
 
-#: gtk/gtkfilechooserdefault.c:4589
+#: gtk/gtkfilechooserdefault.c:4595
 msgid "Name"
 msgstr "Имя"
 
-#: gtk/gtkfilechooserdefault.c:4614
+#: gtk/gtkfilechooserdefault.c:4620
 msgid "Size"
 msgstr "Размер"
 
-#: gtk/gtkfilechooserdefault.c:4628
+#: gtk/gtkfilechooserdefault.c:4634
 msgid "Modified"
 msgstr "Изменён"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4848 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4854 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Имя:"
 
-#: gtk/gtkfilechooserdefault.c:4890
+#: gtk/gtkfilechooserdefault.c:4896
 msgid "_Browse for other folders"
 msgstr "П_росмотреть другие папки"
 
-#: gtk/gtkfilechooserdefault.c:5160
+#: gtk/gtkfilechooserdefault.c:5166
 msgid "Type a file name"
 msgstr "Введите имя файла"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5197
+#: gtk/gtkfilechooserdefault.c:5203
 msgid "Create Fo_lder"
 msgstr "Создать п_апку"
 
-#: gtk/gtkfilechooserdefault.c:5207
+#: gtk/gtkfilechooserdefault.c:5213
 msgid "_Location:"
 msgstr "_Расположение:"
 
-#: gtk/gtkfilechooserdefault.c:5407
+#: gtk/gtkfilechooserdefault.c:5413
 msgid "Save in _folder:"
 msgstr "Сохранить в _папке"
 
-#: gtk/gtkfilechooserdefault.c:5409
+#: gtk/gtkfilechooserdefault.c:5415
 msgid "Create in _folder:"
 msgstr "Создать в _папке:"
 
-#: gtk/gtkfilechooserdefault.c:6990
+#: gtk/gtkfilechooserdefault.c:6996
 msgid "Cannot change to folder because it is not local"
 msgstr "Не удалось перейти в папку, так как она не является локальной"
 
-#: gtk/gtkfilechooserdefault.c:7615 gtk/gtkfilechooserdefault.c:7636
+#: gtk/gtkfilechooserdefault.c:7621 gtk/gtkfilechooserdefault.c:7642
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Комбинация %s уже существует"
 
-#: gtk/gtkfilechooserdefault.c:7726
+#: gtk/gtkfilechooserdefault.c:7732
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Комбинация %s не существует"
 
-#: gtk/gtkfilechooserdefault.c:7974 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:7980 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Файл с именем «%s» уже существует. Заменить его?"
 
-#: gtk/gtkfilechooserdefault.c:7977 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:7983 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Файл уже существует в «%s». Его замена приведёт к перезаписи содержимого."
 
-#: gtk/gtkfilechooserdefault.c:7982 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:7988 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "_Заменить"
 
-#: gtk/gtkfilechooserdefault.c:8743
+#: gtk/gtkfilechooserdefault.c:8749
 msgid "Could not start the search process"
 msgstr "Не удалось начать поиск"
 
-#: gtk/gtkfilechooserdefault.c:8744
+#: gtk/gtkfilechooserdefault.c:8750
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1763,49 +1768,49 @@ msgstr ""
 "Не удалось соединиться с сервисом индексированного поиска. Проверьте, что "
 "сервис запущен."
 
-#: gtk/gtkfilechooserdefault.c:8758
+#: gtk/gtkfilechooserdefault.c:8764
 msgid "Could not send the search request"
 msgstr "Не удалось послать запрос на поиск"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9198
+#: gtk/gtkfilechooserdefault.c:9204
 msgid "_Search:"
 msgstr "_Найти:"
 
-#: gtk/gtkfilechooserdefault.c:10145
+#: gtk/gtkfilechooserdefault.c:10151
 #, c-format
 msgid "Could not mount %s"
 msgstr "Не удалось подключить %s"
 
-#: gtk/gtkfilechooserdefault.c:10799
+#: gtk/gtkfilechooserdefault.c:10809
 msgid "Type name of new folder"
 msgstr "Введите имя новой папки"
 
-#: gtk/gtkfilechooserdefault.c:10849
+#: gtk/gtkfilechooserdefault.c:10859
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f КБ"
 
-#: gtk/gtkfilechooserdefault.c:10851
+#: gtk/gtkfilechooserdefault.c:10861
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f МБ"
 
-#: gtk/gtkfilechooserdefault.c:10853
+#: gtk/gtkfilechooserdefault.c:10863
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f ГБ"
 
-#: gtk/gtkfilechooserdefault.c:10956 gtk/gtkfilechooserdefault.c:10978
-#: gtk/gtkfilechooserdefault.c:11049
+#: gtk/gtkfilechooserdefault.c:10966 gtk/gtkfilechooserdefault.c:10988
+#: gtk/gtkfilechooserdefault.c:11059
 msgid "Unknown"
 msgstr "Неизвестен"
 
-#: gtk/gtkfilechooserdefault.c:10996
+#: gtk/gtkfilechooserdefault.c:11006
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:10998
+#: gtk/gtkfilechooserdefault.c:11008
 msgid "Yesterday at %H:%M"
 msgstr "Вчера в %H:%M"
 
@@ -1991,7 +1996,7 @@ msgstr "Файловая система"
 msgid "Could not obtain root folder"
 msgstr "Не удалось получить корневую папку"
 
-#: gtk/gtkfilesystemmodel.c:1299
+#: gtk/gtkfilesystemmodel.c:1301
 msgid "(Empty)"
 msgstr "(Пусто)"
 
@@ -2251,7 +2256,7 @@ msgstr "Запомнить пароль _до выхода из сеанса"
 msgid "Remember _forever"
 msgstr "Запомнить _навсегда"
 
-#: gtk/gtknotebook.c:4417 gtk/gtknotebook.c:6924
+#: gtk/gtknotebook.c:4422 gtk/gtknotebook.c:6941
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
@@ -2317,7 +2322,7 @@ msgstr "_Размер бумаги:"
 msgid "_Orientation:"
 msgstr "_Расположение:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2662
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2665
 msgid "Page Setup"
 msgstr "Параметры страницы"
 
@@ -2534,37 +2539,37 @@ msgstr "Ошибочный дескриптор PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Неуказанная ошибка"
 
-#: gtk/gtkprintunixdialog.c:1748
+#: gtk/gtkprintunixdialog.c:1749
 msgid "Printer"
 msgstr "Принтер"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1758
+#: gtk/gtkprintunixdialog.c:1759
 msgid "Location"
 msgstr "Расположение"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1769
+#: gtk/gtkprintunixdialog.c:1770
 msgid "Status"
 msgstr "Состояние"
 
-#: gtk/gtkprintunixdialog.c:1792
+#: gtk/gtkprintunixdialog.c:1793
 msgid "Range"
 msgstr "Диапазон"
 
-#: gtk/gtkprintunixdialog.c:1796
+#: gtk/gtkprintunixdialog.c:1797
 msgid "_All Pages"
 msgstr "_Все страницы"
 
-#: gtk/gtkprintunixdialog.c:1803
+#: gtk/gtkprintunixdialog.c:1804
 msgid "C_urrent Page"
 msgstr "_Текущую страницу"
 
-#: gtk/gtkprintunixdialog.c:1812
+#: gtk/gtkprintunixdialog.c:1813
 msgid "Pag_es:"
 msgstr "Страни_цы:"
 
-#: gtk/gtkprintunixdialog.c:1813
+#: gtk/gtkprintunixdialog.c:1814
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2572,173 +2577,173 @@ msgstr ""
 "Введите один или несколько диапазонов страниц,\n"
 "например, 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1832
+#: gtk/gtkprintunixdialog.c:1835
 msgid "Copies"
 msgstr "Копии"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1837
+#: gtk/gtkprintunixdialog.c:1840
 msgid "Copie_s:"
 msgstr "_Копий:"
 
-#: gtk/gtkprintunixdialog.c:1855
+#: gtk/gtkprintunixdialog.c:1858
 msgid "C_ollate"
 msgstr "_Упорядочить"
 
-#: gtk/gtkprintunixdialog.c:1863
+#: gtk/gtkprintunixdialog.c:1866
 msgid "_Reverse"
 msgstr "_Наоборот"
 
-#: gtk/gtkprintunixdialog.c:1883
+#: gtk/gtkprintunixdialog.c:1886
 msgid "General"
 msgstr "Общие"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2423
+#: gtk/gtkprintunixdialog.c:2426
 #: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Page Ordering"
 msgstr "Порядок страниц"
 
-#: gtk/gtkprintunixdialog.c:2429
+#: gtk/gtkprintunixdialog.c:2432
 msgid "Left to right"
 msgstr "Слева направо"
 
-#: gtk/gtkprintunixdialog.c:2430
+#: gtk/gtkprintunixdialog.c:2433
 msgid "Right to left"
 msgstr "Справа налево"
 
-#: gtk/gtkprintunixdialog.c:2499
+#: gtk/gtkprintunixdialog.c:2502
 msgid "Layout"
 msgstr "Размещение"
 
-#: gtk/gtkprintunixdialog.c:2503
+#: gtk/gtkprintunixdialog.c:2506
 msgid "T_wo-sided:"
 msgstr "Двухсторонняя:"
 
-#: gtk/gtkprintunixdialog.c:2518
+#: gtk/gtkprintunixdialog.c:2521
 msgid "Pages per _side:"
 msgstr "Страниц на _сторону:"
 
-#: gtk/gtkprintunixdialog.c:2536
+#: gtk/gtkprintunixdialog.c:2539
 msgid "Page or_dering:"
 msgstr "Порядок ст_раниц:"
 
-#: gtk/gtkprintunixdialog.c:2552
+#: gtk/gtkprintunixdialog.c:2555
 msgid "_Only print:"
 msgstr "Печатать т_олько:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2567
+#: gtk/gtkprintunixdialog.c:2570
 msgid "All sheets"
 msgstr "Все листы"
 
-#: gtk/gtkprintunixdialog.c:2568
+#: gtk/gtkprintunixdialog.c:2571
 msgid "Even sheets"
 msgstr "Чётные листы"
 
-#: gtk/gtkprintunixdialog.c:2569
+#: gtk/gtkprintunixdialog.c:2572
 msgid "Odd sheets"
 msgstr "Нечётные листы"
 
-#: gtk/gtkprintunixdialog.c:2572
+#: gtk/gtkprintunixdialog.c:2575
 msgid "Sc_ale:"
 msgstr "_Масштаб:"
 
-#: gtk/gtkprintunixdialog.c:2599
+#: gtk/gtkprintunixdialog.c:2602
 msgid "Paper"
 msgstr "Бумага"
 
-#: gtk/gtkprintunixdialog.c:2603
+#: gtk/gtkprintunixdialog.c:2606
 msgid "Paper _type:"
 msgstr "_Тип бумаги:"
 
-#: gtk/gtkprintunixdialog.c:2618
+#: gtk/gtkprintunixdialog.c:2621
 msgid "Paper _source:"
 msgstr "_Источник бумаги:"
 
-#: gtk/gtkprintunixdialog.c:2633
+#: gtk/gtkprintunixdialog.c:2636
 msgid "Output t_ray:"
 msgstr "Выходной лоток:"
 
-#: gtk/gtkprintunixdialog.c:2685
+#: gtk/gtkprintunixdialog.c:2688
 msgid "Job Details"
 msgstr "Сведения о задании"
 
-#: gtk/gtkprintunixdialog.c:2691
+#: gtk/gtkprintunixdialog.c:2694
 msgid "Pri_ority:"
 msgstr "При_оритет:"
 
-#: gtk/gtkprintunixdialog.c:2706
+#: gtk/gtkprintunixdialog.c:2709
 msgid "_Billing info:"
 msgstr "_Расположение:"
 
-#: gtk/gtkprintunixdialog.c:2724
+#: gtk/gtkprintunixdialog.c:2727
 msgid "Print Document"
 msgstr "Печатать документ"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2733
+#: gtk/gtkprintunixdialog.c:2736
 msgid "_Now"
 msgstr "_Сейчас"
 
-#: gtk/gtkprintunixdialog.c:2744
+#: gtk/gtkprintunixdialog.c:2747
 msgid "A_t:"
 msgstr "_В:"
 
-#: gtk/gtkprintunixdialog.c:2763
+#: gtk/gtkprintunixdialog.c:2766
 msgid "On _hold"
 msgstr "О_жидание"
 
-#: gtk/gtkprintunixdialog.c:2782
+#: gtk/gtkprintunixdialog.c:2785
 msgid "Add Cover Page"
 msgstr "Добавить титульный лист"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2791
+#: gtk/gtkprintunixdialog.c:2794
 msgid "Be_fore:"
 msgstr "_До:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2809
+#: gtk/gtkprintunixdialog.c:2812
 msgid "_After:"
 msgstr "_После:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2827
+#: gtk/gtkprintunixdialog.c:2830
 msgid "Job"
 msgstr "Задание"
 
-#: gtk/gtkprintunixdialog.c:2893
+#: gtk/gtkprintunixdialog.c:2896
 msgid "Advanced"
 msgstr "Дополнительно"
 
-#: gtk/gtkprintunixdialog.c:2928
+#: gtk/gtkprintunixdialog.c:2931
 msgid "Image Quality"
 msgstr "Качество изображения"
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2934
 msgid "Color"
 msgstr "Цвет"
 
-#: gtk/gtkprintunixdialog.c:2934
+#: gtk/gtkprintunixdialog.c:2937
 msgid "Finishing"
 msgstr "Завершение"
 
-#: gtk/gtkprintunixdialog.c:2944
+#: gtk/gtkprintunixdialog.c:2947
 msgid "Some of the settings in the dialog conflict"
 msgstr "Некоторые параметры в диалоге конфликтуют"
 
-#: gtk/gtkprintunixdialog.c:2967
+#: gtk/gtkprintunixdialog.c:2970
 msgid "Print"
 msgstr "Печать"
 
@@ -4739,15 +4744,15 @@ msgstr "Файл"
 msgid "_Output format"
 msgstr "Формат _вывода"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:398
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:396
 msgid "Print to LPR"
 msgstr "Печатать на LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:424
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:422
 msgid "Pages Per Sheet"
 msgstr "Страниц на лист"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:431
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:429
 msgid "Command Line"
 msgstr "Командная строка"
 

@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-23 23:09-0400\n"
+"POT-Creation-Date: 2008-10-17 00:37-0400\n"
 "PO-Revision-Date: 2002-12-07 10:05+0200\n"
 "Last-Translator: Yair Hershkovitz <yairhr@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -412,7 +412,7 @@ msgid "Whether the action group is visible."
 msgstr "Whether the action group is visible."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:202 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Value"
 
@@ -717,7 +717,7 @@ msgstr "Spacing"
 msgid "The amount of space between children"
 msgstr "The amount of space between children"
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:644 gtk/gtktable.c:165
+#: gtk/gtkbox.c:108 gtk/gtknotebook.c:649 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:580
 msgid "Homogeneous"
 msgstr "Homogeneous"
@@ -759,7 +759,7 @@ msgstr "Extra space to put between the child and its neighbors, in pixels"
 msgid "Pack type"
 msgstr "Pack type"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:711
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:716
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -767,12 +767,12 @@ msgstr ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:689 gtk/gtkpaned.c:218
+#: gtk/gtkbox.c:144 gtk/gtknotebook.c:694 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:110
 msgid "Position"
 msgstr "Position"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:690
+#: gtk/gtkbox.c:145 gtk/gtknotebook.c:695
 msgid "The index of the child in the parent"
 msgstr "The index of the child in the parent"
 
@@ -1299,7 +1299,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "The vertical text alignment, from 0 (top) to 1 (bottom)."
 
 #: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:731
-#: gtk/gtkprogressbar.c:126 gtk/gtkscalebutton.c:191 gtk/gtkstatusicon.c:301
+#: gtk/gtkprogressbar.c:126 gtk/gtkscalebutton.c:193 gtk/gtkstatusicon.c:301
 #: gtk/gtktoolbar.c:492 gtk/gtktrayicon-x11.c:95
 msgid "Orientation"
 msgstr "Orientation"
@@ -1309,7 +1309,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientation and growth direction of the progress bar"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:346
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:221 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Adjustment"
 
@@ -2852,7 +2852,7 @@ msgstr "Icon set"
 msgid "Icon set to display"
 msgstr "Icon set to display"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:547
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:212 gtk/gtktoolbar.c:547
 msgid "Icon size"
 msgstr "Icon size"
 
@@ -3417,75 +3417,75 @@ msgstr "Are we showing a dialog"
 msgid "The screen where this window will be displayed."
 msgstr "The screen where this window will be displayed."
 
-#: gtk/gtknotebook.c:572
+#: gtk/gtknotebook.c:577
 msgid "Page"
 msgstr "Page"
 
-#: gtk/gtknotebook.c:573
+#: gtk/gtknotebook.c:578
 msgid "The index of the current page"
 msgstr "The index of the current page"
 
-#: gtk/gtknotebook.c:581
+#: gtk/gtknotebook.c:586
 msgid "Tab Position"
 msgstr "Tab Position"
 
-#: gtk/gtknotebook.c:582
+#: gtk/gtknotebook.c:587
 msgid "Which side of the notebook holds the tabs"
 msgstr "Which side of the notebook holds the tabs"
 
-#: gtk/gtknotebook.c:589
+#: gtk/gtknotebook.c:594
 msgid "Tab Border"
 msgstr "Tab Border"
 
-#: gtk/gtknotebook.c:590
+#: gtk/gtknotebook.c:595
 msgid "Width of the border around the tab labels"
 msgstr "Width of the border around the tab labels"
 
-#: gtk/gtknotebook.c:598
+#: gtk/gtknotebook.c:603
 msgid "Horizontal Tab Border"
 msgstr "Horizontal Tab Border"
 
-#: gtk/gtknotebook.c:599
+#: gtk/gtknotebook.c:604
 msgid "Width of the horizontal border of tab labels"
 msgstr "Width of the horizontal border of tab labels"
 
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:612
 msgid "Vertical Tab Border"
 msgstr "Vertical Tab Border"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:613
 msgid "Width of the vertical border of tab labels"
 msgstr "Width of the vertical border of tab labels"
 
-#: gtk/gtknotebook.c:616
+#: gtk/gtknotebook.c:621
 msgid "Show Tabs"
 msgstr "Show Tabs"
 
-#: gtk/gtknotebook.c:617
+#: gtk/gtknotebook.c:622
 msgid "Whether tabs should be shown or not"
 msgstr "Whether tabs should be shown or not"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:628
 msgid "Show Border"
 msgstr "Show Border"
 
-#: gtk/gtknotebook.c:624
+#: gtk/gtknotebook.c:629
 msgid "Whether the border should be shown or not"
 msgstr "Whether the border should be shown or not"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:635
 msgid "Scrollable"
 msgstr "Scrollable"
 
-#: gtk/gtknotebook.c:631
+#: gtk/gtknotebook.c:636
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "If TRUE, scroll arrows are added if there are too many tabs to fit"
 
-#: gtk/gtknotebook.c:637
+#: gtk/gtknotebook.c:642
 msgid "Enable Popup"
 msgstr "Enable Popup"
 
-#: gtk/gtknotebook.c:638
+#: gtk/gtknotebook.c:643
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3493,136 +3493,136 @@ msgstr ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 
-#: gtk/gtknotebook.c:645
+#: gtk/gtknotebook.c:650
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Whether tabs should have homogeneous sizes"
 
-#: gtk/gtknotebook.c:651
+#: gtk/gtknotebook.c:656
 msgid "Group ID"
 msgstr "Group ID"
 
-#: gtk/gtknotebook.c:652
+#: gtk/gtknotebook.c:657
 msgid "Group ID for tabs drag and drop"
 msgstr "Group ID for tabs drag and drop"
 
-#: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:673 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Group"
 
-#: gtk/gtknotebook.c:669
+#: gtk/gtknotebook.c:674
 msgid "Group for tabs drag and drop"
 msgstr "Group for tabs drag and drop"
 
-#: gtk/gtknotebook.c:675
+#: gtk/gtknotebook.c:680
 msgid "Tab label"
 msgstr "Tab label"
 
-#: gtk/gtknotebook.c:676
+#: gtk/gtknotebook.c:681
 msgid "The string displayed on the child's tab label"
 msgstr "The string displayed on the child's tab label"
 
-#: gtk/gtknotebook.c:682
+#: gtk/gtknotebook.c:687
 msgid "Menu label"
 msgstr "Menu label"
 
-#: gtk/gtknotebook.c:683
+#: gtk/gtknotebook.c:688
 msgid "The string displayed in the child's menu entry"
 msgstr "The string displayed in the child's menu entry"
 
-#: gtk/gtknotebook.c:696
+#: gtk/gtknotebook.c:701
 msgid "Tab expand"
 msgstr "Tab expand"
 
-#: gtk/gtknotebook.c:697
+#: gtk/gtknotebook.c:702
 msgid "Whether to expand the child's tab or not"
 msgstr "Whether to expand the child's tab or not"
 
-#: gtk/gtknotebook.c:703
+#: gtk/gtknotebook.c:708
 msgid "Tab fill"
 msgstr "Tab fill"
 
-#: gtk/gtknotebook.c:704
+#: gtk/gtknotebook.c:709
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Whether the child's tab should fill the allocated area or not"
 
-#: gtk/gtknotebook.c:710
+#: gtk/gtknotebook.c:715
 msgid "Tab pack type"
 msgstr "Tab pack type"
 
-#: gtk/gtknotebook.c:717
+#: gtk/gtknotebook.c:722
 msgid "Tab reorderable"
 msgstr "Tab reorderable"
 
-#: gtk/gtknotebook.c:718
+#: gtk/gtknotebook.c:723
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Whether the tab is reorderable by user action or not"
 
-#: gtk/gtknotebook.c:724
+#: gtk/gtknotebook.c:729
 msgid "Tab detachable"
 msgstr "Tab detachable"
 
-#: gtk/gtknotebook.c:725
+#: gtk/gtknotebook.c:730
 msgid "Whether the tab is detachable"
 msgstr "Whether the tab is detachable"
 
-#: gtk/gtknotebook.c:740 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:745 gtk/gtkscrollbar.c:83
 msgid "Secondary backward stepper"
 msgstr "Secondary backward stepper"
 
-#: gtk/gtknotebook.c:741
+#: gtk/gtknotebook.c:746
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Display a second backward arrow button on the opposite end of the tab area"
 
-#: gtk/gtknotebook.c:756 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:761 gtk/gtkscrollbar.c:91
 msgid "Secondary forward stepper"
 msgstr "Secondary forward stepper"
 
-#: gtk/gtknotebook.c:757
+#: gtk/gtknotebook.c:762
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Display a second forward arrow button on the opposite end of the tab area"
 
-#: gtk/gtknotebook.c:771 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:776 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Backward stepper"
 
-#: gtk/gtknotebook.c:772 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:777 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Display the standard backward arrow button"
 
-#: gtk/gtknotebook.c:786 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:791 gtk/gtkscrollbar.c:75
 msgid "Forward stepper"
 msgstr "Forward stepper"
 
-#: gtk/gtknotebook.c:787 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:792 gtk/gtkscrollbar.c:76
 msgid "Display the standard forward arrow button"
 msgstr "Display the standard forward arrow button"
 
-#: gtk/gtknotebook.c:801
+#: gtk/gtknotebook.c:806
 msgid "Tab overlap"
 msgstr "Tab overlap"
 
-#: gtk/gtknotebook.c:802
+#: gtk/gtknotebook.c:807
 msgid "Size of tab overlap area"
 msgstr "Size of tab overlap area"
 
-#: gtk/gtknotebook.c:817
+#: gtk/gtknotebook.c:822
 msgid "Tab curvature"
 msgstr "Tab curvature"
 
-#: gtk/gtknotebook.c:818
+#: gtk/gtknotebook.c:823
 msgid "Size of tab curvature"
 msgstr "Size of tab curvature"
 
-#: gtk/gtknotebook.c:834
+#: gtk/gtknotebook.c:839
 msgid "Arrow spacing"
 msgstr "Arrow spacing"
 
-#: gtk/gtknotebook.c:835
+#: gtk/gtknotebook.c:840
 msgid "Scroll arrow spacing"
 msgstr "Scroll arrow spacing"
 
@@ -4483,29 +4483,29 @@ msgstr "Value spacing"
 msgid "Space between value text and the slider/trough area"
 msgstr "Space between value text and the slider/trough area"
 
-#: gtk/gtkscalebutton.c:192
+#: gtk/gtkscalebutton.c:194
 msgid "The orientation of the scale"
 msgstr "The orientation of the scale"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:203
 msgid "The value of the scale"
 msgstr "The value of the scale"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:213
 msgid "The icon size"
 msgstr "The icon size"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:222
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
 "The GtkAdjustment that contains the current value of this scale button object"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:250
 msgid "Icons"
 msgstr "Icons"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:251
 msgid "List of icon names"
 msgstr "List of icon names"
 
