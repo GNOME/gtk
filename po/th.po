@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-10-17 00:37-0400\n"
-"PO-Revision-Date: 2008-10-19 09:54+0700\n"
+"PO-Revision-Date: 2008-10-19 11:02+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1733,7 +1733,7 @@ msgstr "%.1f GB"
 #: gtk/gtkfilechooserdefault.c:10966 gtk/gtkfilechooserdefault.c:10988
 #: gtk/gtkfilechooserdefault.c:11059
 msgid "Unknown"
-msgstr "ไม่รู้จัก"
+msgstr "ไม่ทราบ"
 
 #: gtk/gtkfilechooserdefault.c:11006
 msgid "%H:%M"
