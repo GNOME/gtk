@@ -2776,13 +2776,15 @@ static gboolean icon_info_ensure_scale_and_pixbuf (GtkIconInfo*, gboolean);
 static void 
 apply_emblems (GtkIconInfo *info)
 {
-  GdkPixbuf *icon;
+  GdkPixbuf *icon = NULL;
   gint w, h, pos;
   GSList *l;
 
-  icon = info->pixbuf;
-  w = gdk_pixbuf_get_width (icon);
-  h = gdk_pixbuf_get_height (icon);
+  if (info->emblem_infos == NULL)
+    return;
+
+  w = gdk_pixbuf_get_width (info->pixbuf);
+  h = gdk_pixbuf_get_height (info->pixbuf);
 
   for (l = info->emblem_infos, pos = 0; l; l = l->next, pos++)
     {
@@ -2826,10 +2828,23 @@ apply_emblems (GtkIconInfo *info)
               break;
             }
 
+          if (icon == NULL)
+            {
+              icon = gdk_pixbuf_copy (info->pixbuf);
+              if (icon == NULL)
+                break;
+            }
+
           gdk_pixbuf_composite (emblem, icon, x, y, ew, eh, x, y,
                                 scale, scale, GDK_INTERP_BILINEAR, 255);
        }
    }
+
+  if (icon)
+    {
+      g_object_unref (info->pixbuf);
+      info->pixbuf = icon;
+    }
 }
 
 /* This function contains the complicated logic for deciding
