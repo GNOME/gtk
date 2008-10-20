@@ -1,3 +1,11 @@
+2008-10-20  Christian Persch  <chpe@gnome.org>
+
+	Bug 557059 – crash when compositing emblems with icon
+
+	* gtk/gtkicontheme.c: (apply_emblems): Copy the pixbuf before using it
+	with gtk_pixbuf_composite, in case its pixdata is read-only (mmaped
+	from icon cache or builtins).
+
 2008-10-20  Murray Cumming  <murrayc@murrayc.com>
 
 	* gtk/gtkiconview.c: gtk_icon_view_set_tooltip_row(), 
