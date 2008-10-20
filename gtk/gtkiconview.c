@@ -4734,6 +4734,7 @@ gtk_icon_view_get_item_at_pos (GtkIconView      *icon_view,
  * @path: a #GtkTreePath
  * 
  * Sets the tip area of @tooltip to be the area covered by the item at @path.
+ * See also gtk_icon_view_set_tooltip_column() for a simpler alternative.
  * See also gtk_tooltip_set_tip_area().
  * 
  * Since: 2.12
@@ -4758,6 +4759,8 @@ gtk_icon_view_set_tooltip_item (GtkIconView     *icon_view,
  *
  * Sets the tip area of @tooltip to the area which @cell occupies in
  * the item pointed to by @path. See also gtk_tooltip_set_tip_area().
+ *
+ * See also gtk_icon_view_set_tooltip_column() for a simpler alternative.
  *
  * Since: 2.12
  */

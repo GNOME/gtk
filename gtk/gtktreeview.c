@@ -15367,6 +15367,7 @@ gtk_tree_view_get_level_indentation (GtkTreeView *tree_view)
  * @path: a #GtkTreePath
  *
  * Sets the tip area of @tooltip to be the area covered by the row at @path.
+ * See also gtk_tree_view_set_tooltip_column() for a simpler alternative.
  * See also gtk_tooltip_set_tip_area().
  *
  * Since: 2.12
@@ -15399,6 +15400,8 @@ gtk_tree_view_set_tooltip_row (GtkTreeView *tree_view,
  * containing the expander, the tooltip might not show and hide at the correct
  * position.  In such cases @path must be set to the current node under the
  * mouse cursor for this function to operate correctly.
+ *
+ * See also gtk_tree_view_set_tooltip_column() for a simpler alternative.
  *
  * Since: 2.12
  */

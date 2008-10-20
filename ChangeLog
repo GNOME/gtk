@@ -1,3 +1,12 @@
+2008-10-20  Murray Cumming  <murrayc@murrayc.com>
+
+	* gtk/gtkiconview.c: gtk_icon_view_set_tooltip_row(), 
+	gtk_icon_view_set_tooltip_item():
+	* gtk/gtktreeview.c: gtk_icon_view_set_tooltip_row(), 
+	gtk_icon_view_set_tooltip_cell():
+	Documentation: Mention the simple set_tooltip_column() 
+	alternative.
+
 2008-10-18  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On
