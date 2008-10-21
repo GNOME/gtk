@@ -1,3 +1,18 @@
+2008-10-21  Tor Lillqvist  <tml@novell.com>
+
+	Bug 557266 - Window Management Problem
+
+	Also reported in mail to gtk-list, and of course it has been well
+	known in general that window state management is messy and buggy
+	in various ways in gdk/win32.
+
+	* gdk/win32/gdkwindow-win32.c (show_window_internal): Correct
+	handling of GDK_WINDOW_STATE_ABOVE windows. It doesn't work to set
+	the WS_EX_TOPMOST extended style bit using SetWindowLong(). We
+	must call SetWindowPos() on the window using HWND_TOPMOST
+	instead. The description for WS_EX_TOPMOST in the documentation
+	for CreateWindowEx() even implies that if you read it carefully.
+
 2008-10-21  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/gdkapplaunchcontext.c: reorder functions to be in standard

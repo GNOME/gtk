@@ -1028,6 +1028,8 @@ show_window_internal (GdkWindow *window,
   GdkWindowObject *private;
   HWND old_active_window;
   gboolean focus_on_map = TRUE;
+  DWORD exstyle;
+  HWND top;
 
   private = (GdkWindowObject *) window;
 
@@ -1078,34 +1080,37 @@ show_window_internal (GdkWindow *window,
       focus_on_map = private->focus_on_map;
     }
 
+  exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
+
+  if (private->state & GDK_WINDOW_STATE_BELOW)
+    exstyle &= (~WS_EX_TOPMOST);
+
+  if (private->state & GDK_WINDOW_STATE_ABOVE)
+    exstyle |= WS_EX_TOPMOST;
+
+  if (exstyle & WS_EX_TOPMOST)
+    top = HWND_TOPMOST;
+  else
+    top = HWND_TOP;
+
   /* Use SetWindowPos to show transparent windows so automatic redraws
    * in other windows can be suppressed.
    */
-  if (GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
+  if (exstyle & WS_EX_TRANSPARENT)
     {
       UINT flags = SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE;
+
       if (!raise)
 	flags |= SWP_NOZORDER;
       if (!raise || GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP || !focus_on_map)
 	flags |= SWP_NOACTIVATE;
 
-      SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOP, 0, 0, 0, 0, flags);
+      SetWindowPos (GDK_WINDOW_HWND (window), top, 0, 0, 0, 0, flags);
+
       return;
     }
 
   old_active_window = GetActiveWindow ();
-
-  if (private->state & (GDK_WINDOW_STATE_BELOW | GDK_WINDOW_STATE_ABOVE))
-    {
-      DWORD exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-
-      if (private->state & GDK_WINDOW_STATE_BELOW)
-        exstyle &= (~WS_EX_TOPMOST);
-      if (private->state & GDK_WINDOW_STATE_ABOVE)
-        exstyle |= WS_EX_TOPMOST;
-
-      API_CALL (SetWindowLong, (GDK_WINDOW_HWND (window), GWL_EXSTYLE, exstyle));
-    }
 
   if (private->state & GDK_WINDOW_STATE_FULLSCREEN)
     {
@@ -1140,10 +1145,14 @@ show_window_internal (GdkWindow *window,
           if (focus_on_map && private->accept_focus)
 	    {
 	      SetForegroundWindow (GDK_WINDOW_HWND (window));
+	      if (top == HWND_TOPMOST)
+		SetWindowPos (GDK_WINDOW_HWND (window), top,
+			      0, 0, 0, 0,
+			      SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 	    }
 	  else
 	    {
-	      SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOP,
+	      SetWindowPos (GDK_WINDOW_HWND (window), top,
 			    0, 0, 0, 0,
 			    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 	    }
