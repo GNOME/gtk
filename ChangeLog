@@ -1,3 +1,9 @@
+2008-10-21  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/gdkapplaunchcontext.c: reorder functions to be in standard
+	order, add prototypes and namespace to static functions, add
+	g_return_if_fail()s which were missing all over the place.
+
 2008-10-20  Christian Persch  <chpe@gnome.org>
 
 	Bug 557059 – crash when compositing emblems with icon
