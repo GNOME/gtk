@@ -45,7 +45,9 @@
 GdkImage *
 gdk_image_ref (GdkImage *image)
 {
-  return (GdkImage *) g_object_ref (image);
+  g_return_val_if_fail (GDK_IS_IMAGE (image), NULL);
+
+  return g_object_ref (image);
 }
 
 /**
@@ -120,7 +122,6 @@ gdk_image_set_colormap (GdkImage       *image,
       image->colormap = colormap;
       g_object_ref (image->colormap);
     }
-    
 }
 
 /**

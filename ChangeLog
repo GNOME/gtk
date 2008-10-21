@@ -1,3 +1,13 @@
+2008-10-21  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/gdkdraw.c
+	* gdk/gdkimage.c
+	* gdk/gdkscreen.c
+	* gdk/gdkwindow.c: replace assertions for obj != NULL by
+	GDK_IS_OBJ(), remove redundant != NULL checks when there is
+	already a type check, add some g_return_if_fail() that were
+	missing entirely, fix some broken indentation and spacing.
+
 2008-10-21  Tor Lillqvist  <tml@novell.com>
 
 	Bug 557266 - Window Management Problem

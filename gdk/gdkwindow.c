@@ -368,7 +368,8 @@ gdk_window_new (GdkWindow     *parent,
 {
   GdkWindow *window;
   GdkWindowObject *private, *parent_private;
-  
+
+  g_return_val_if_fail (parent == NULL || GDK_IS_WINDOW (parent), NULL);
   g_return_val_if_fail (attributes != NULL, NULL);
 
   window = _gdk_window_new (parent, attributes, attributes_mask);
@@ -403,7 +404,7 @@ gdk_window_reparent (GdkWindow *window,
 {
   GdkWindowObject *private;
   gboolean show;
-  
+
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
   g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_ROOT);
@@ -480,9 +481,9 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
   GdkScreen *screen;
   GList *children;
   GList *tmp;
-  
-  g_return_if_fail (window != NULL);
-  
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
   private = (GdkWindowObject*) window;
   
   if (GDK_WINDOW_DESTROYED (window))
@@ -637,8 +638,8 @@ void
 gdk_window_set_user_data (GdkWindow *window,
 			  gpointer   user_data)
 {
-  g_return_if_fail (window != NULL);
-  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
   ((GdkWindowObject*)window)->user_data = user_data;
 }
 
@@ -655,8 +656,8 @@ void
 gdk_window_get_user_data (GdkWindow *window,
 			  gpointer  *data)
 {
-  g_return_if_fail (window != NULL);
-  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
   *data = ((GdkWindowObject*)window)->user_data;
 }
 
@@ -986,8 +987,7 @@ gdk_window_is_viewable (GdkWindow *window)
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkScreen *screen;
   GdkWindow *root_window;
-  
-  g_return_val_if_fail (window != NULL, FALSE);
+
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
   screen = gdk_drawable_get_screen (window);
@@ -1041,7 +1041,6 @@ gdk_window_begin_paint_rect (GdkWindow          *window,
 {
   GdkRegion *region;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   region = gdk_region_rectangle (rectangle);
@@ -1107,8 +1106,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   GdkRectangle clip_box;
   GdkWindowPaint *paint;
   GSList *list;
-  
-  g_return_if_fail (window != NULL);
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -1180,7 +1178,6 @@ gdk_window_end_paint (GdkWindow *window)
   GdkRectangle clip_box;
   gint x_offset, y_offset;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -2160,8 +2157,7 @@ void
 gdk_window_clear (GdkWindow *window)
 {
   gint width, height;
-  
-  g_return_if_fail (window != NULL);
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   gdk_drawable_get_size (GDK_DRAWABLE (window), &width, &height);
@@ -2190,7 +2186,6 @@ gdk_window_clear_area (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (private->paint_stack)
@@ -2231,7 +2226,6 @@ gdk_window_clear_area_e (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (private->paint_stack)
@@ -2694,9 +2688,8 @@ gdk_window_process_updates (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
-  
+
   if (GDK_IS_PAINTABLE (private->impl))
     {
       GdkPaintableIface *iface = GDK_PAINTABLE_GET_IFACE (private->impl);
@@ -2746,7 +2739,6 @@ gdk_window_invalidate_rect (GdkWindow          *window,
   GdkRegion *region;
   GdkWindowObject *private = (GdkWindowObject *)window;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -2830,7 +2822,6 @@ gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
   GdkRegion *visible_region;
   GList *tmp_list;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -2987,7 +2978,6 @@ gdk_window_get_update_area (GdkWindow *window)
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkRegion *tmp_region;
 
-  g_return_val_if_fail (window != NULL, NULL);
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
   if (private->update_area)
@@ -3015,7 +3005,6 @@ _gdk_window_clear_update_area (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (private->update_area)
@@ -3042,7 +3031,6 @@ gdk_window_freeze_updates (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   private->update_freeze_count++;
@@ -3059,7 +3047,6 @@ gdk_window_thaw_updates (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (private->update_freeze_count > 0);
 
@@ -3087,7 +3074,6 @@ gdk_window_freeze_toplevel_updates_libgtk_only (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (private->window_type != GDK_WINDOW_CHILD);
 
@@ -3109,7 +3095,6 @@ gdk_window_thaw_toplevel_updates_libgtk_only (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (private->window_type != GDK_WINDOW_CHILD);
   g_return_if_fail (private->update_and_descendants_freeze_count > 0);
@@ -4166,7 +4151,6 @@ gdk_window_set_composited (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkDisplay *display;
 
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   composited = composited != FALSE;

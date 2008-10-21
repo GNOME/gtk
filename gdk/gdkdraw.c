@@ -347,8 +347,6 @@ gdk_draw_line (GdkDrawable *drawable,
 {
   GdkSegment segment;
 
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (gc != NULL);
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (GDK_IS_GC (gc));
 
@@ -630,7 +628,7 @@ gdk_draw_drawable (GdkDrawable *drawable,
   gint composite_y_offset = 0;
 
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (src != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (src));
   g_return_if_fail (GDK_IS_GC (gc));
 
   if (width < 0 || height < 0)
@@ -693,7 +691,7 @@ gdk_draw_image (GdkDrawable *drawable,
 		gint         height)
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (image != NULL);
+  g_return_if_fail (GDK_IS_IMAGE (image));
   g_return_if_fail (GDK_IS_GC (gc));
 
   if (width == -1)
@@ -1505,7 +1503,7 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
   GdkRegion *clip;
   GdkRegion *drect;
   GdkRectangle tmp_rect;
-				       
+
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
   g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
   g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
