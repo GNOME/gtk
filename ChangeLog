@@ -1,3 +1,11 @@
+2008-10-22  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 555920 – gtkentry.c passes wrong enum to
+	pango_layout_set_alignment()
+
+	* gtk/gtkentry.c (gtk_entry_create_layout): Don't set layout
+	adjustment.
+
 2008-10-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkscreen-x11.c: Only emit size-changed if the screen

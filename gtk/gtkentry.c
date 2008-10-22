@@ -3550,8 +3550,6 @@ gtk_entry_create_layout (GtkEntry *entry,
       pango_context_set_base_dir (gtk_widget_get_pango_context (widget),
 				  pango_dir);
 
-      pango_layout_set_alignment (layout, pango_dir);
-
       entry->resolved_dir = pango_dir;
       
       if (entry->visible)
