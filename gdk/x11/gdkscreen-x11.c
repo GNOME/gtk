@@ -894,6 +894,11 @@ void
 _gdk_x11_screen_size_changed (GdkScreen *screen,
 			      XEvent    *event)
 {
+  gint width, height;
+
+  width = gdk_screen_get_width (screen);
+  height = gdk_screen_get_height (screen);
+
 #ifdef HAVE_RANDR
   if (!XRRUpdateConfiguration (event))
     return;
@@ -909,7 +914,11 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
   else
     return;
 #endif
-  
+
+  if (width == gdk_screen_get_width (screen) && 
+      height == gdk_screen_get_height (screen))
+    return;
+
   _gdk_x11_screen_process_monitors_change (screen);
   g_signal_emit_by_name (screen, "size_changed");
 }

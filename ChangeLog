@@ -1,3 +1,10 @@
+2008-10-22  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gdk/x11/gdkscreen-x11.c: Only emit size-changed if the screen
+	size actually changed.
+
 2008-10-21  Tor Lillqvist  <tml@novell.com>
 
 	Bug 557266 - Window Management Problem
