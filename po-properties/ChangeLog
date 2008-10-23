@@ -1,3 +1,8 @@
+2008-10-23  Gil Forcada  <gforcada@gnome.org>
+
+	* ast.po: Added empty Asturian translation, so we don't break the build
+	system.
+
 2008-10-19  Gil Forcada  <gforcada@gnome.org>
 
 	* ca.po: Updated Catalan translation by David Planella.
