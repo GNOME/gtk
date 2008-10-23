@@ -1,3 +1,14 @@
+2008-10-23  Alexander Larsson  <alexl@redhat.com>
+
+	Bug 528320 - Incorrect icons displayed for files with custom mimetype icons
+	
+        * gtk/gtkfilesystem.c:
+        (_gtk_file_info_render_icon):
+	Fall back on default file icon if there was no icon or it
+	was not found in the theme. This goes with the corresponding
+	change in glib to not add the fallback icon, but is useful
+	in other cases too.
+
 2008-10-22  Behdad Esfahbod  <behdad@gnome.org>
 
 	Bug 555920 – gtkentry.c passes wrong enum to
