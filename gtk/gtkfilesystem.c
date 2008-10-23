@@ -1738,6 +1738,14 @@ _gtk_file_info_render_icon (GFileInfo *info,
 
       if (icon)
 	pixbuf = get_pixbuf_from_gicon (icon, widget, icon_size, NULL);
+
+      if (!pixbuf)
+	{
+	   /* Use general fallback for all files without icon */
+	  icon = g_themed_icon_new ("text-x-generic");
+	  pixbuf = get_pixbuf_from_gicon (icon, widget, icon_size, NULL);
+	  g_object_unref (icon);
+	}
     }
 
   return pixbuf;
