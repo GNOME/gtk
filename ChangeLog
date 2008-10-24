@@ -1,3 +1,8 @@
+2008-10-24  Tristan Van Berkom  <tvb@gnome.org>
+
+	* gtk/gtkwidget.c: Added a note about GtkWidget:has-tooltip in
+	the docs for GtkWidget::query-tooltip.
+
 2008-10-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmountoperation.c: The "screen" property ought to have

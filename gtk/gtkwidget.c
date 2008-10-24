@@ -2071,8 +2071,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @keyboard_mode: %TRUE if the tooltip was trigged using the keyboard
    * @tooltip: a #GtkTooltip
    *
-   * Emitted when the #GtkSettings:gtk-tooltip-timeout has expired with 
-   * the cursor hovering "above" @widget; or emitted when @widget got 
+   * Emitted when #GtkWidget:has-tooltip is %TRUE and the #GtkSettings:gtk-tooltip-timeout 
+   * has expired with the cursor hovering "above" @widget; or emitted when @widget got 
    * focus in keyboard mode.
    *
    * Using the given coordinates, the signal handler should determine
