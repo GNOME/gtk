@@ -96,6 +96,7 @@ gtk_menu_shell_get_type
 gtk_menu_tool_button_get_type
 gtk_message_dialog_get_type
 gtk_misc_get_type
+gtk_mount_operation_get_type
 gtk_notebook_get_type
 gtk_object_get_type
 gtk_old_editable_get_type
