@@ -1,5 +1,12 @@
 2008-10-24  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 556835 – gtkentry.c: variable is declared at middle of block
+
+	* gtk/gtkentry.c (gtk_entry_copy_clipboard): Fix a C99ism pointed
+	out by Kazuki Iwamoto
+
+2008-10-24  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 557524 – "va_end(args);" should be added into
 	gtk_text_buffer_insert_with_tags_by_name( )
 

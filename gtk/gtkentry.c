@@ -3122,6 +3122,7 @@ gtk_entry_copy_clipboard (GtkEntry *entry)
 {
   GtkEditable *editable = GTK_EDITABLE (entry);
   gint start, end;
+  gchar *str;
 
   if (gtk_editable_get_selection_bounds (editable, &start, &end))
     {
@@ -3131,7 +3132,7 @@ gtk_entry_copy_clipboard (GtkEntry *entry)
           return;
         }
 
-      gchar *str = gtk_entry_get_public_chars (entry, start, end);
+      str = gtk_entry_get_public_chars (entry, start, end);
       gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (entry),
 							GDK_SELECTION_CLIPBOARD),
 			      str, -1);
