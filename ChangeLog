@@ -1,5 +1,13 @@
 2008-10-24  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 556954 – gtk+/gtk/gtkrecentchooserdefault.c: mismatching
+	allocation and deallocation
+
+	* gtk/gtkrecentchooserdefault.c (remove_selected_from_list): Don't
+	free a strdup'ed string by g_free. Pointed out by Daniel Marjamäki
+
+2008-10-24  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 556835 – gtkentry.c: variable is declared at middle of block
 
 	* gtk/gtkentry.c (gtk_entry_copy_clipboard): Fix a C99ism pointed

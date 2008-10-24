@@ -1609,7 +1609,7 @@ remove_selected_from_list (GtkRecentChooserDefault *impl)
     {
       gchar *msg;
    
-      msg = strdup (_("Could not remove item"));
+      msg = g_strdup (_("Could not remove item"));
       error_message (impl, msg, err->message);
       
       g_free (msg);
