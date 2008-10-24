@@ -1,3 +1,11 @@
+2008-10-24  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 557524 – "va_end(args);" should be added into
+	gtk_text_buffer_insert_with_tags_by_name( )
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_insert_with_tags_by_name):
+	Don't forget to call va_end. Pointed out by Boram Park
+
 2008-10-23  Alexander Larsson  <alexl@redhat.com>
 
 	Bug 528320 - Incorrect icons displayed for files with custom mimetype icons

@@ -1530,6 +1530,7 @@ gtk_text_buffer_insert_with_tags_by_name  (GtkTextBuffer *buffer,
       if (tag == NULL)
         {
           g_warning ("%s: no tag with name '%s'!", G_STRLOC, tag_name);
+          va_end (args);
           return;
         }
 
