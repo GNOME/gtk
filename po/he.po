@@ -11,13 +11,13 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-17 23:14-0400\n"
-"PO-Revision-Date: 2006-04-13 20:09+0300\n"
-"Last-Translator: Yair Hershkovitz <yairhr@gmail.com>\n"
+"PO-Revision-Date: 2008-10-24 14:32+0200\n"
+"Last-Translator: Mark Krapivner <mark125@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
@@ -76,7 +76,10 @@ msgstr "Gdk debugging flags to set"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:452 gtk/gtkmain.c:455
+#: gdk/gdk.c:140
+#: gdk/gdk.c:143
+#: gtk/gtkmain.c:452
+#: gtk/gtkmain.c:455
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -233,29 +236,31 @@ msgstr "KP_Delete"
 msgid "keyboard label|Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:964
-#: gdk-pixbuf/gdk-pixbuf-io.c:1224 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133
+#: gdk-pixbuf/gdk-pixbuf-io.c:964
+#: gdk-pixbuf/gdk-pixbuf-io.c:1224
+#: tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "נכשל בפתיחת הקובץ '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:976
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146
+#: gdk-pixbuf/gdk-pixbuf-io.c:976
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "התמונה '%s' לא מכילה מידע"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1012
-#: gdk-pixbuf/gdk-pixbuf-io.c:1276 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188
+#: gdk-pixbuf/gdk-pixbuf-io.c:1012
+#: gdk-pixbuf/gdk-pixbuf-io.c:1276
+#: tests/testfilechooser.c:267
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "נכשל בפתיחת התמונה '%s': הסיבה איננה ידועה, כנראה קובץ תמונה פגום"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:221
 #, c-format
-msgid ""
-"Failed to load animation '%s': reason not known, probably a corrupt "
-"animation file"
+msgid "Failed to load animation '%s': reason not known, probably a corrupt animation file"
 msgstr "נכשל בפתיחת ההנפשה '%s': הסיבה איננה ידועה, כנראה קובץ הנפשה פגום"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:700
@@ -265,14 +270,11 @@ msgstr "Unable to load image-loading module: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:715
 #, c-format
-msgid ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
-msgstr ""
-"Image-loading module %s does not export the proper interface; perhaps it's "
-"from a different GTK version?"
+msgid "Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"
+msgstr "Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:724 gdk-pixbuf/gdk-pixbuf-io.c:775
+#: gdk-pixbuf/gdk-pixbuf-io.c:724
+#: gdk-pixbuf/gdk-pixbuf-io.c:775
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "סוג התמונה '%s' אינו נתמך"
@@ -291,12 +293,14 @@ msgstr "פורמט קובץ תמונה לא מזוהה"
 msgid "Failed to load image '%s': %s"
 msgstr "נכשל בטעינת התמונה '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1655 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1655
+#: gdk-pixbuf/io-gdip-utils.c:935
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "שגיאה בכתיבה לקובץ תמונה: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1700 gdk-pixbuf/gdk-pixbuf-io.c:1830
+#: gdk-pixbuf/gdk-pixbuf-io.c:1700
+#: gdk-pixbuf/gdk-pixbuf-io.c:1830
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "בניה זו של gdk-pixbuf לא תומכת בשמירת התמונה בפורמט: %s"
@@ -320,12 +324,11 @@ msgstr "נכשל בפתיחת '%s' לכתיבה: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2032
 #, c-format
-msgid ""
-"Failed to close '%s' while writing image, all data may not have been saved: %"
-"s"
+msgid "Failed to close '%s' while writing image, all data may not have been saved: %s"
 msgstr "נכשל בסגירת '%s' בזמן כתיבת תמונה, ייתכן וכל המידע לא נשמר: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2252 gdk-pixbuf/gdk-pixbuf-io.c:2303
+#: gdk-pixbuf/gdk-pixbuf-io.c:2252
+#: gdk-pixbuf/gdk-pixbuf-io.c:2303
 msgid "Insufficient memory to save image into a buffer"
 msgstr "אין מספיק זיכרון לשמירת התמונה לחוצץ"
 
@@ -335,12 +338,8 @@ msgstr "שגיאה בכתיבה לזרימת תמונה"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
-msgid ""
-"Internal error: Image loader module '%s' failed to complete an operation, "
-"but didn't give a reason for the failure"
-msgstr ""
-"שגיאה פנימית: מודול טעינת התמונה '%s' נכשל בהשלמת פעולה, אך לא נתן סיבה "
-"לכשלון זה"
+msgid "Internal error: Image loader module '%s' failed to complete an operation, but didn't give a reason for the failure"
+msgstr "שגיאה פנימית: מודול טעינת התמונה '%s' נכשל בהשלמת פעולה, אך לא נתן סיבה לכשלון זה"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:372
 #, c-format
@@ -355,7 +354,8 @@ msgstr "כותרת תמונה פגומה"
 msgid "Image format unknown"
 msgstr "פורמט תמונה לא ידוע"
 
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
+#: gdk-pixbuf/gdk-pixdata.c:157
+#: gdk-pixbuf/gdk-pixdata.c:487
 msgid "Image pixel data corrupt"
 msgstr "מידע הפיקסלים של התמונה פגום"
 
@@ -374,17 +374,27 @@ msgstr "נתך סמל לא צפוי בהנפשה"
 msgid "Unsupported animation type"
 msgstr "סוג הנפשה שאינו נתמך"
 
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
+#: gdk-pixbuf/io-ani.c:348
+#: gdk-pixbuf/io-ani.c:406
+#: gdk-pixbuf/io-ani.c:432
+#: gdk-pixbuf/io-ani.c:455
+#: gdk-pixbuf/io-ani.c:482
+#: gdk-pixbuf/io-ani.c:569
 msgid "Invalid header in animation"
 msgstr "כותרת לא תקנית בהנפשה"
 
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
+#: gdk-pixbuf/io-ani.c:358
+#: gdk-pixbuf/io-ani.c:380
+#: gdk-pixbuf/io-ani.c:464
+#: gdk-pixbuf/io-ani.c:491
+#: gdk-pixbuf/io-ani.c:542
+#: gdk-pixbuf/io-ani.c:614
 msgid "Not enough memory to load animation"
 msgstr "אין מספיק זכרון לטעינת ההנפשה"
 
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
+#: gdk-pixbuf/io-ani.c:398
+#: gdk-pixbuf/io-ani.c:424
+#: gdk-pixbuf/io-ani.c:443
 msgid "Malformed chunk in animation"
 msgstr "נתח פגום בהנפשה"
 
@@ -392,12 +402,17 @@ msgstr "נתח פגום בהנפשה"
 msgid "The ANI image format"
 msgstr "פורמט תמונת ANI"
 
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
+#: gdk-pixbuf/io-bmp.c:230
+#: gdk-pixbuf/io-bmp.c:267
+#: gdk-pixbuf/io-bmp.c:338
+#: gdk-pixbuf/io-bmp.c:370
+#: gdk-pixbuf/io-bmp.c:393
+#: gdk-pixbuf/io-bmp.c:496
 msgid "BMP image has bogus header data"
 msgstr "לתמונת ה BMP יש מידע כותרת מזוייף"
 
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
+#: gdk-pixbuf/io-bmp.c:241
+#: gdk-pixbuf/io-bmp.c:433
 msgid "Not enough memory to load bitmap image"
 msgstr "אין מספיק זכרון לטעינת תמונת מפת סיביות"
 
@@ -409,7 +424,8 @@ msgstr "לתמונת ה BMP יש גודל כותרת שאינו נתמך"
 msgid "Topdown BMP images cannot be compressed"
 msgstr "Topdown BMP images cannot be compressed"
 
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
+#: gdk-pixbuf/io-bmp.c:717
+#: gdk-pixbuf/io-pnm.c:709
 msgid "Premature end-of-file encountered"
 msgstr "התקלות מוקדמת מידי בסוף הקובץ"
 
@@ -421,7 +437,8 @@ msgstr "לא ניתן להקצות זכרון לטעינת קובץ BMP"
 msgid "Couldn't write to BMP file"
 msgstr "לא ניתן לכתוב לקובץ ה BMP"
 
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
+#: gdk-pixbuf/io-bmp.c:1423
+#: gdk-pixbuf/io-gdip-bmp.c:82
 msgid "The BMP image format"
 msgstr "פורמט תמונת BMP"
 
@@ -430,7 +447,9 @@ msgstr "פורמט תמונת BMP"
 msgid "Failure reading GIF: %s"
 msgstr "שגיאה בקריאת GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
+#: gdk-pixbuf/io-gif.c:496
+#: gdk-pixbuf/io-gif.c:1481
+#: gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "לקובץ ה GIF חסר מידע (ייתכן ונקטע בדרך כלשהי?)"
 
@@ -455,7 +474,9 @@ msgstr "התקלות בקוד גרוע"
 msgid "Circular table entry in GIF file"
 msgstr "רישום טבלה מעגלי בקובץ ה GIF"
 
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
+#: gdk-pixbuf/io-gif.c:866
+#: gdk-pixbuf/io-gif.c:1468
+#: gdk-pixbuf/io-gif.c:1515
 #: gdk-pixbuf/io-gif.c:1630
 msgid "Not enough memory to load GIF file"
 msgstr "אין מספיק זכרון לטעינת קובץ GIF"
@@ -478,28 +499,31 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "גירסה %s של פורמט קובץ ה GIF אינה נתמכת"
 
 #: gdk-pixbuf/io-gif.c:1303
-msgid ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
-msgstr ""
-"GIF image has no global colormap, and a frame inside it has no local "
-"colormap."
+msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
+msgstr "GIF image has no global colormap, and a frame inside it has no local colormap."
 
 #: gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
 msgstr "תמונת ה GIF הייתה קטועה או לא מושלמת."
 
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
+#: gdk-pixbuf/io-gif.c:1693
+#: gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "פורמט קובץ GIF"
 
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
+#: gdk-pixbuf/io-ico.c:211
+#: gdk-pixbuf/io-ico.c:225
+#: gdk-pixbuf/io-ico.c:277
+#: gdk-pixbuf/io-ico.c:290
+#: gdk-pixbuf/io-ico.c:359
 msgid "Invalid header in icon"
 msgstr "כותרת לא תקנית בסמל"
 
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
+#: gdk-pixbuf/io-ico.c:240
+#: gdk-pixbuf/io-ico.c:300
+#: gdk-pixbuf/io-ico.c:369
+#: gdk-pixbuf/io-ico.c:432
+#: gdk-pixbuf/io-ico.c:462
 msgid "Not enough memory to load icon"
 msgstr "אין מספיק זכרון לטעינת סמל"
 
@@ -536,7 +560,8 @@ msgstr "Cursor hotspot outside image"
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Unsupported depth for ICO file: %d"
 
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
+#: gdk-pixbuf/io-ico.c:1245
+#: gdk-pixbuf/io-gdip-ico.c:59
 msgid "The ICO image format"
 msgstr "פורמט קובץ ICO"
 
@@ -570,7 +595,8 @@ msgstr "Transformed PNG has zero width or height."
 msgid "Image type currently not supported"
 msgstr "סוג התמונה אינו נתמך"
 
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
+#: gdk-pixbuf/io-jasper.c:149
+#: gdk-pixbuf/io-jasper.c:157
 msgid "Couldn't allocate memory for color profile"
 msgstr "לא ניתן להקצות זכרון עבור פרופיל הצבע"
 
@@ -593,18 +619,18 @@ msgid "Error interpreting JPEG image file (%s)"
 msgstr "שגיאה בפיענוח קובץ תמונת JPEG (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:529
-msgid ""
-"Insufficient memory to load image, try exiting some applications to free "
-"memory"
-msgstr ""
-"אין מספיק זיכרון לטעינת התמונה, נסה לסגור מספר יישומים כדי לפנות זיכרון"
+msgid "Insufficient memory to load image, try exiting some applications to free memory"
+msgstr "אין מספיק זיכרון לטעינת התמונה, נסה לסגור מספר יישומים כדי לפנות זיכרון"
 
-#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
+#: gdk-pixbuf/io-jpeg.c:570
+#: gdk-pixbuf/io-jpeg.c:776
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Unsupported JPEG color space (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:668
+#: gdk-pixbuf/io-jpeg.c:944
+#: gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "לא ניתן להקצות זכרון לטעינת קובץ JPEG"
@@ -614,21 +640,20 @@ msgstr "לא ניתן להקצות זכרון לטעינת קובץ JPEG"
 msgid "Transformed JPEG has zero width or height."
 msgstr "Transformed PNG has zero width or height."
 
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
+#: gdk-pixbuf/io-jpeg.c:1133
+#: gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%s' could not be "
-"parsed."
-msgstr ""
-"איכות קובץ JPEG חייבת להיות בין 0 ל 100, הערך '%s' לא יכול להיות מפורש."
+msgid "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
+msgstr "איכות קובץ JPEG חייבת להיות בין 0 ל 100, הערך '%s' לא יכול להיות מפורש."
 
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
+#: gdk-pixbuf/io-jpeg.c:1148
+#: gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "איכות קובץ JPEG חייבת להיות בין 0 ל 100, הערך '%d' אינו מורשה."
 
-#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1309
+#: gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "פורמט קובץ JPEG"
 
@@ -636,7 +661,8 @@ msgstr "פורמט קובץ JPEG"
 msgid "Couldn't allocate memory for header"
 msgstr "לא ניתן להקצות זיכרון לכותרת"
 
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
+#: gdk-pixbuf/io-pcx.c:202
+#: gdk-pixbuf/io-pcx.c:560
 msgid "Couldn't allocate memory for context buffer"
 msgstr "Couldn't allocate memory for context buffer"
 
@@ -644,11 +670,13 @@ msgstr "Couldn't allocate memory for context buffer"
 msgid "Image has invalid width and/or height"
 msgstr "לתמונה יש רוחב ו/או גובה לא תקניים"
 
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
+#: gdk-pixbuf/io-pcx.c:613
+#: gdk-pixbuf/io-pcx.c:674
 msgid "Image has unsupported bpp"
 msgstr "לתמונת יש bpp לא נתמך"
 
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
+#: gdk-pixbuf/io-pcx.c:618
+#: gdk-pixbuf/io-pcx.c:626
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr "Image has unsupported number of %d-bit planes"
@@ -681,7 +709,8 @@ msgstr "פורמט תמונת PCX"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "הסיביות לערוץ של קובץ PNG אינן תקינות."
 
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:136
+#: gdk-pixbuf/io-png.c:618
 msgid "Transformed PNG has zero width or height."
 msgstr "Transformed PNG has zero width or height."
 
@@ -708,12 +737,8 @@ msgstr "אין מספיק זיכרון לטעינת קובץ PNG"
 
 #: gdk-pixbuf/io-png.c:633
 #, c-format
-msgid ""
-"Insufficient memory to store a %ld by %ld image; try exiting some "
-"applications to reduce memory usage"
-msgstr ""
-"אין מספיק זיכרון לשמירת %ld על-ידי תמונת %ld; נסה לצאת ממספר יישומים כדי "
-"להקטין את השימוש בזיכרון"
+msgid "Insufficient memory to store a %ld by %ld image; try exiting some applications to reduce memory usage"
+msgstr "אין מספיק זיכרון לשמירת %ld על-ידי תמונת %ld; נסה לצאת ממספר יישומים כדי להקטין את השימוש בזיכרון"
 
 #: gdk-pixbuf/io-png.c:684
 msgid "Fatal error reading PNG image file"
@@ -725,36 +750,32 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "שגיאה חמורה בקריאת קובץ PNG: %s"
 
 #: gdk-pixbuf/io-png.c:825
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 
 #: gdk-pixbuf/io-png.c:833
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Keys for PNG text chunks must be ASCII characters."
 
-#: gdk-pixbuf/io-png.c:846 gdk-pixbuf/io-gdip-png.c:56
+#: gdk-pixbuf/io-png.c:846
+#: gdk-pixbuf/io-gdip-png.c:56
 #, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%s' could not "
-"be parsed."
+msgid "PNG compression level must be a value between 0 and 9; value '%s' could not be parsed."
 msgstr "איכות קובץ PNG חייבת להיות בין 0 ל 100, הערך '%s' לא יכול להיות מפורש."
 
-#: gdk-pixbuf/io-png.c:858 gdk-pixbuf/io-gdip-png.c:68
+#: gdk-pixbuf/io-png.c:858
+#: gdk-pixbuf/io-gdip-png.c:68
 #, c-format
-msgid ""
-"PNG compression level must be a value between 0 and 9; value '%d' is not "
-"allowed."
+msgid "PNG compression level must be a value between 0 and 9; value '%d' is not allowed."
 msgstr "איכות קובץ PNG חייבת להיות בין 0 ל 100, הערך '%d' אינו מורשה."
 
 #: gdk-pixbuf/io-png.c:896
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+msgstr "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 
-#: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
+#: gdk-pixbuf/io-png.c:1045
+#: gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "פורמט תמונת PNG"
 
@@ -786,7 +807,9 @@ msgstr "ערך הצבע המקסימלי בקובץ PNM הוא 0"
 msgid "Maximum color value in PNM file is too large"
 msgstr "ערך הצבע המקסימלי בקובץ PNM הוא גדול מידי"
 
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
+#: gdk-pixbuf/io-pnm.c:429
+#: gdk-pixbuf/io-pnm.c:459
+#: gdk-pixbuf/io-pnm.c:504
 msgid "Raw PNM image type is invalid"
 msgstr "Raw PNM image type is invalid"
 
@@ -794,7 +817,8 @@ msgstr "Raw PNM image type is invalid"
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM image loader does not support this PNM subformat"
 
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
+#: gdk-pixbuf/io-pnm.c:741
+#: gdk-pixbuf/io-pnm.c:968
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Raw PNM formats require exactly one whitespace before sample data"
 
@@ -830,7 +854,8 @@ msgstr "תמונת RAS מסוג לא ידוע"
 msgid "unsupported RAS image variation"
 msgstr "צורת תמונת RAS לא נתמכת"
 
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
+#: gdk-pixbuf/io-ras.c:171
+#: gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
 msgstr "אין מספיק זיכרון לטעינת תמונת RAS"
 
@@ -878,8 +903,11 @@ msgstr "לא ניתן להקצות זיכרון לכותרת TGA"
 msgid "TGA image has invalid dimensions"
 msgstr "לתמונת TGA יש מימדים לא תקניים"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
-#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:773
+#: gdk-pixbuf/io-tga.c:782
+#: gdk-pixbuf/io-tga.c:792
+#: gdk-pixbuf/io-tga.c:802
+#: gdk-pixbuf/io-tga.c:809
 msgid "TGA image type not supported"
 msgstr "סוג תמונת TGA אינו נתמך"
 
@@ -907,11 +935,14 @@ msgstr "לא ניתן לקבל את גובה התמונה (קובץ TIFF שגו�
 msgid "Width or height of TIFF image is zero"
 msgstr "גובה או רוחב תמונת TIFF הוא אפס"
 
-#: gdk-pixbuf/io-tiff.c:184 gdk-pixbuf/io-tiff.c:193
+#: gdk-pixbuf/io-tiff.c:184
+#: gdk-pixbuf/io-tiff.c:193
 msgid "Dimensions of TIFF image too large"
 msgstr "מימדי תמונת TIFF גדולים מידי"
 
-#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
+#: gdk-pixbuf/io-tiff.c:217
+#: gdk-pixbuf/io-tiff.c:229
+#: gdk-pixbuf/io-tiff.c:541
 msgid "Insufficient memory to open TIFF file"
 msgstr "אין מספיק זיכרון לפתיחת תמונת TIFF"
 
@@ -923,11 +954,13 @@ msgstr "נכשל בטעינת מידע RGB מקובץ TIFF"
 msgid "Failed to open TIFF image"
 msgstr "נכשל בפתיחת תמונת TIFF"
 
-#: gdk-pixbuf/io-tiff.c:343 gdk-pixbuf/io-tiff.c:722
+#: gdk-pixbuf/io-tiff.c:343
+#: gdk-pixbuf/io-tiff.c:722
 msgid "TIFFClose operation failed"
 msgstr "פעולת TIFFClose נכשלה"
 
-#: gdk-pixbuf/io-tiff.c:473 gdk-pixbuf/io-tiff.c:486
+#: gdk-pixbuf/io-tiff.c:473
+#: gdk-pixbuf/io-tiff.c:486
 msgid "Failed to load TIFF image"
 msgstr "נכשל בטעינת תמונת TIFF"
 
@@ -1007,7 +1040,9 @@ msgstr "לקובץ XPM יש מספר לא תקני של תוים לפיקסלי�
 msgid "XPM file has invalid number of colors"
 msgstr "לקובץ XPM יש מספר לא תקני של צבעים"
 
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
+#: gdk-pixbuf/io-xpm.c:522
+#: gdk-pixbuf/io-xpm.c:531
+#: gdk-pixbuf/io-xpm.c:583
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "לא ניתן להקצות זיכרון לטעינת תמונת XPM"
 
@@ -1032,7 +1067,8 @@ msgstr "פורמט התמונה EMF"
 msgid "Could not allocate memory: %s"
 msgstr "לא ניתן להקצות זיכרון: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:237 gdk-pixbuf/io-gdip-utils.c:350
+#: gdk-pixbuf/io-gdip-utils.c:237
+#: gdk-pixbuf/io-gdip-utils.c:350
 #: gdk-pixbuf/io-gdip-utils.c:383
 #, c-format
 msgid "Could not create stream: %s"
@@ -1125,7 +1161,8 @@ msgid_plural "Opening %d Items"
 msgstr[0] "פותח פריט אחד"
 msgstr[1] "פותח %d פריטים"
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
+#: gtk/gtkaboutdialog.c:264
+#: gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "רישיון"
 
@@ -1300,7 +1337,8 @@ msgstr "2000"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1837 gtk/gtkcalendar.c:2498
+#: gtk/gtkcalendar.c:1837
+#: gtk/gtkcalendar.c:2498
 #, c-format
 msgid "calendar:day:digits|%d"
 msgstr "%d"
@@ -1316,7 +1354,8 @@ msgstr "%d"
 #. * digits.  That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1869 gtk/gtkcalendar.c:2360
+#: gtk/gtkcalendar.c:1869
+#: gtk/gtkcalendar.c:2360
 #, c-format
 msgid "calendar:week:digits|%d"
 msgstr "%d"
@@ -1348,17 +1387,20 @@ msgstr "לא מאופשר"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:368 gtk/gtkcellrendereraccel.c:580
+#: gtk/gtkcellrendereraccel.c:368
+#: gtk/gtkcellrendereraccel.c:580
 msgid "New accelerator..."
 msgstr "מאיץ חדש..."
 
 #. do not translate the part before the |
-#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
+#: gtk/gtkcellrendererprogress.c:362
+#: gtk/gtkcellrendererprogress.c:449
 #, c-format
 msgid "progress bar label|%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
+#: gtk/gtkcolorbutton.c:188
+#: gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
 msgstr "בחר צבע"
 
@@ -1367,17 +1409,11 @@ msgid "Received invalid color data\n"
 msgstr "התקבל מידע צבע לא תקני\n"
 
 #: gtk/gtkcolorsel.c:354
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
-"בחר את הצבע שאתה רוצה מהטבעת החיצונית. בחר את הכהות או הבהירות של הצבע הזה "
-"בעזרת המשולש הפנימי."
+msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
+msgstr "בחר את הצבע שאתה רוצה מהטבעת החיצונית. בחר את הכהות או הבהירות של הצבע הזה בעזרת המשולש הפנימי."
 
 #: gtk/gtkcolorsel.c:378
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
+msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
 msgstr "לחץ על הטפטפת, אז לחץ על צבע כלשהו במסך לבחירת אותו צבע."
 
 #: gtk/gtkcolorsel.c:387
@@ -1432,7 +1468,8 @@ msgstr "כמות האור הכחול בצבע."
 msgid "Op_acity:"
 msgstr "_אטימות:"
 
-#: gtk/gtkcolorsel.c:409 gtk/gtkcolorsel.c:419
+#: gtk/gtkcolorsel.c:409
+#: gtk/gtkcolorsel.c:419
 msgid "Transparency of the color."
 msgstr "שקיפות הצבע."
 
@@ -1441,12 +1478,8 @@ msgid "Color _name:"
 msgstr "_שם צבע:"
 
 #: gtk/gtkcolorsel.c:440
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"אתה יכול להזין ערך צבע הקסדצימלי בסגנון HTML, או פשוט לכתוב שם צבע באנגלית "
-"כמו 'orange' בערך זה."
+msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
+msgstr "אתה יכול להזין ערך צבע הקסדצימלי בסגנון HTML, או פשוט לכתוב שם צבע באנגלית כמו 'orange' בערך זה."
 
 #: gtk/gtkcolorsel.c:470
 msgid "_Palette:"
@@ -1457,42 +1490,32 @@ msgid "Color Wheel"
 msgstr "גלגלת צבע"
 
 #: gtk/gtkcolorsel.c:976
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now. You can drag this color to a palette entry, or select this color as "
-"current by dragging it to the other color swatch alongside."
-msgstr ""
-"הצבע הקודם שבחרת, להשוואה עם הצבע שאתה בוחר עכשיו. אתה יכול לגרור צבע זה "
-"לערך פלטה, או לבחור צבע זה כנוכחי על-ידי גרירתו לפיסת הצבע השניה לצידו."
+msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
+msgstr "הצבע הקודם שבחרת, להשוואה עם הצבע שאתה בוחר עכשיו. אתה יכול לגרור צבע זה לערך פלטה, או לבחור צבע זה כנוכחי על-ידי גרירתו לפיסת הצבע השניה לצידו."
 
 #: gtk/gtkcolorsel.c:980
-msgid ""
-"The color you've chosen. You can drag this color to a palette entry to save "
-"it for use in the future."
-msgstr ""
-"הצבע שבחרת. אתה יכול לגרור צבע זה לערך פלטה כדי לשמור אותו לשימוש בעתיד."
+msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
+msgstr "הצבע שבחרת. אתה יכול לגרור צבע זה לערך פלטה כדי לשמור אותו לשימוש בעתיד."
 
 #: gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
 msgstr "_שמור צבע כאן"
 
 #: gtk/gtkcolorsel.c:1568
-msgid ""
-"Click this palette entry to make it the current color. To change this entry, "
-"drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr ""
-"לחץ על ערך הפלטה כדי לעשותו הצבע הנוכחי. כדי לשנות ערך זה, גרור פיסת צבע "
-"לכאן או לחץ לחיצה ימינית ובחר \"שמור צבע כאן\"."
+msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr "לחץ על ערך הפלטה כדי לעשותו הצבע הנוכחי. כדי לשנות ערך זה, גרור פיסת צבע לכאן או לחץ לחיצה ימינית ובחר \"שמור צבע כאן\"."
 
 #: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
 msgstr "בחירת צבע"
 
-#: gtk/gtkentry.c:5380 gtk/gtktextview.c:7686
+#: gtk/gtkentry.c:5380
+#: gtk/gtktextview.c:7686
 msgid "Input _Methods"
 msgstr "_שיטות קלט"
 
-#: gtk/gtkentry.c:5394 gtk/gtktextview.c:7700
+#: gtk/gtkentry.c:5394
+#: gtk/gtktextview.c:7700
 msgid "_Insert Unicode Control Character"
 msgstr "_הזן תו בקרה יוניקוד"
 
@@ -1500,7 +1523,8 @@ msgstr "_הזן תו בקרה יוניקוד"
 msgid "Select A File"
 msgstr "בחר קובץ"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1922
+#: gtk/gtkfilechooserbutton.c:65
+#: gtk/gtkfilechooserdefault.c:1922
 msgid "Desktop"
 msgstr "שולחן עבודה"
 
@@ -1529,12 +1553,8 @@ msgid "The folder could not be created"
 msgstr "לא ניתן ליצור את התיקייה"
 
 #: gtk/gtkfilechooserdefault.c:1101
-msgid ""
-"The folder could not be created, as a file with the same name already "
-"exists.  Try using a different name for the folder, or rename the file first."
-msgstr ""
-"לא ניתן לייצר את התיקייה מכיוון שקיים קובץ בעל שם דומה. נסה לבחור שם חדש "
-"לתיקייה, או לשנות את שם הקובץ."
+msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
+msgstr "לא ניתן לייצר את התיקייה מכיוון שקיים קובץ בעל שם דומה. נסה לבחור שם חדש לתיקייה, או לשנות את שם הקובץ."
 
 #: gtk/gtkfilechooserdefault.c:1112
 msgid "Invalid file name"
@@ -1603,7 +1623,8 @@ msgstr "מקומות"
 msgid "_Places"
 msgstr "_מקומות"
 
-#: gtk/gtkfilechooserdefault.c:3988 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3988
+#: gtk/gtkstock.c:297
 msgid "_Add"
 msgstr "_הוסף"
 
@@ -1611,7 +1632,8 @@ msgstr "_הוסף"
 msgid "Add the selected folder to the Bookmarks"
 msgstr "הוסף את התיקייה הנבחרת לסימניות"
 
-#: gtk/gtkfilechooserdefault.c:4000 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:4000
+#: gtk/gtkstock.c:386
 msgid "_Remove"
 msgstr "_הסר"
 
@@ -1633,7 +1655,8 @@ msgstr "הצג קבצים _נסתרים"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
-#: gtk/gtkfilechooserdefault.c:4537 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4537
+#: gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "קבצים"
 
@@ -1650,7 +1673,8 @@ msgid "Modified"
 msgstr "שונה"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4845 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4845
+#: gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_שם:"
 
@@ -1683,7 +1707,8 @@ msgstr "צור ב_תיקייה:"
 msgid "Cannot change to folder because it is not local"
 msgstr "לא ניתן לשנות תיקייה כיוון שהיא איננה מקומית"
 
-#: gtk/gtkfilechooserdefault.c:7601 gtk/gtkfilechooserdefault.c:7622
+#: gtk/gtkfilechooserdefault.c:7601
+#: gtk/gtkfilechooserdefault.c:7622
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "הקיצור %s כבר קיים"
@@ -1693,18 +1718,20 @@ msgstr "הקיצור %s כבר קיים"
 msgid "Shortcut %s does not exist"
 msgstr "הקיצור %s אינו קיים"
 
-#: gtk/gtkfilechooserdefault.c:7960 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:7960
+#: gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "קובץ בשם \"%s\" כבר קיים. האם ברצונך להחליפו?"
 
-#: gtk/gtkfilechooserdefault.c:7963 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:7963
+#: gtk/gtkprintunixdialog.c:374
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "הקובץ כבר קיים ב-\"%s\". החלפתו תגרום לאיבוד תוכנו."
 
-#: gtk/gtkfilechooserdefault.c:7968 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:7968
+#: gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "ה_חלף"
 
@@ -1713,9 +1740,7 @@ msgid "Could not start the search process"
 msgstr "לא ניתן להתחיל את תהליך החיפוש"
 
 #: gtk/gtkfilechooserdefault.c:8730
-msgid ""
-"The program was not able to create a connection to the indexer daemon.  "
-"Please make sure it is running."
+msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:8744
@@ -1751,7 +1776,8 @@ msgstr "%.1f MB"
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10942 gtk/gtkfilechooserdefault.c:10964
+#: gtk/gtkfilechooserdefault.c:10942
+#: gtk/gtkfilechooserdefault.c:10964
 #: gtk/gtkfilechooserdefault.c:11035
 msgid "Unknown"
 msgstr "לא ידוע"
@@ -1764,7 +1790,8 @@ msgstr "%H:%M"
 msgid "Yesterday at %H:%M"
 msgstr "אתמול ב-%H:%M"
 
-#: gtk/gtkfilechooserentry.c:659 gtk/gtkfilechooserentry.c:1115
+#: gtk/gtkfilechooserentry.c:659
+#: gtk/gtkfilechooserentry.c:1115
 msgid "Invalid path"
 msgstr "נתיב לא תקין"
 
@@ -1798,7 +1825,8 @@ msgstr ""
 msgid "Completing..."
 msgstr ""
 
-#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1349
+#: gtk/gtkfilechoosersettings.c:262
+#: gtk/gtkfilesel.c:1349
 #: gtk/gtkfilesel.c:1358
 #, c-format
 msgid "Error creating folder '%s': %s"
@@ -1822,7 +1850,8 @@ msgstr "_תיקיות"
 msgid "_Files"
 msgstr "_קבצים"
 
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2148
+#: gtk/gtkfilesel.c:821
+#: gtk/gtkfilesel.c:2148
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "תיקייה לא קריאה: %s"
@@ -1830,12 +1859,9 @@ msgstr "תיקייה לא קריאה: %s"
 #: gtk/gtkfilesel.c:905
 #, c-format
 msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
+"The file \"%s\" resides on another machine (called %s) and may not be available to this program.\n"
 "Are you sure that you want to select it?"
-msgstr ""
-"הקובץ \"%s\" תלוי במכונה אחרת (הנקראת %s) וייתכן כי לא תיהיה זמינה לתוכנית "
-"זו. האם אתה בטוח שברצונך לבחור אותו?"
+msgstr "הקובץ \"%s\" תלוי במכונה אחרת (הנקראת %s) וייתכן כי לא תיהיה זמינה לתוכנית זו. האם אתה בטוח שברצונך לבחור אותו?"
 
 #: gtk/gtkfilesel.c:1020
 msgid "_New Folder"
@@ -1851,8 +1877,7 @@ msgstr "_שנה שם קובץ"
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "התיקייה בשם \"%s\" מכילה סמלים שאינם מותרים בשמות קבצים"
 
 #: gtk/gtkfilesel.c:1392
@@ -1867,12 +1892,15 @@ msgstr "שם ה_תיקייה:"
 msgid "C_reate"
 msgstr "_צור"
 
-#: gtk/gtkfilesel.c:1474 gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1594
+#: gtk/gtkfilesel.c:1474
+#: gtk/gtkfilesel.c:1581
+#: gtk/gtkfilesel.c:1594
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "שם הקובץ \"%s\" מכיל סמלים שאינם מותרים לשימוש בשמות קבצים"
 
-#: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1477
+#: gtk/gtkfilesel.c:1487
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "שגיאה במחיקת הקובץ '%s': %s"
@@ -1920,12 +1948,8 @@ msgstr "_בחירה:"
 
 #: gtk/gtkfilesel.c:3048
 #, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"הקובץ \"%s\" לא יכול להיות מומר ל UTF-8 (נסה לשנות את משתנה הסביבה "
-"G_FILENAME_ENCODING): %s"
+msgid "The filename \"%s\" couldn't be converted to UTF-8. (try setting the environment variable G_FILENAME_ENCODING): %s"
+msgstr "הקובץ \"%s\" לא יכול להיות מומר ל UTF-8 (נסה לשנות את משתנה הסביבה G_FILENAME_ENCODING): %s"
 
 #: gtk/gtkfilesel.c:3051
 msgid "Invalid UTF-8"
@@ -1958,7 +1982,8 @@ msgstr "לא ניתן להשיג את תיקיית ה-root"
 msgid "(Empty)"
 msgstr "(ריק)"
 
-#: gtk/gtkfontbutton.c:144 gtk/gtkfontbutton.c:266
+#: gtk/gtkfontbutton.c:144
+#: gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
 msgstr "בחר גופן"
 
@@ -2110,7 +2135,8 @@ msgstr "_גלגל:"
 msgid "none"
 msgstr "ללא"
 
-#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
+#: gtk/gtkinputdialog.c:618
+#: gtk/gtkinputdialog.c:654
 msgid "(disabled)"
 msgstr "(כבוי)"
 
@@ -2214,12 +2240,15 @@ msgstr "_זכור את הסיסמה עד ההתנתקות"
 msgid "Remember _forever"
 msgstr "זכור ל_תמיד"
 
-#: gtk/gtknotebook.c:4417 gtk/gtknotebook.c:6924
+#: gtk/gtknotebook.c:4417
+#: gtk/gtknotebook.c:6924
 #, c-format
 msgid "Page %u"
 msgstr "עמוד %u"
 
-#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
+#: gtk/gtkpagesetup.c:597
+#: gtk/gtkpapersize.c:825
+#: gtk/gtkpapersize.c:865
 msgid "Not a valid page setup file"
 msgstr "קובץ הגדרות עמוד לא תקין"
 
@@ -2241,11 +2270,13 @@ msgstr ""
 "<b>כל מדפסת</b>\n"
 "עבור מסמכים ניידים"
 
-#: gtk/gtkpagesetupunixdialog.c:894 gtk/gtkpagesetupunixdialog.c:1403
+#: gtk/gtkpagesetupunixdialog.c:894
+#: gtk/gtkpagesetupunixdialog.c:1403
 msgid "mm"
 msgstr "מילימטר"
 
-#: gtk/gtkpagesetupunixdialog.c:896 gtk/gtkpagesetupunixdialog.c:1401
+#: gtk/gtkpagesetupunixdialog.c:896
+#: gtk/gtkpagesetupunixdialog.c:1401
 msgid "inch"
 msgstr "אינץ"
 
@@ -2280,7 +2311,8 @@ msgstr "_גודל נייר:"
 msgid "_Orientation:"
 msgstr "_כיווניות:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2662
+#: gtk/gtkpagesetupunixdialog.c:1129
+#: gtk/gtkprintunixdialog.c:2662
 msgid "Page Setup"
 msgstr "הגדרות עמוד"
 
@@ -2410,7 +2442,8 @@ msgstr "סיים עם שגיאה"
 msgid "Preparing %d"
 msgstr "מכין %d"
 
-#: gtk/gtkprintoperation.c:2045 gtk/gtkprintoperation.c:2301
+#: gtk/gtkprintoperation.c:2045
+#: gtk/gtkprintoperation.c:2301
 #, c-format
 msgid "Preparing"
 msgstr "מכין"
@@ -2440,7 +2473,8 @@ msgstr "שגיאה בשיגור תצוגה מקדימה"
 msgid "Error printing"
 msgstr "שגיאה בהדפסה"
 
-#: gtk/gtkprintoperation-unix.c:381 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:381
+#: gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "יישום"
 
@@ -2475,11 +2509,13 @@ msgstr "לא נמצאה מדפסת"
 msgid "Invalid argument to CreateDC"
 msgstr "Invalid argument to PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1801
+#: gtk/gtkprintoperation-win32.c:1578
+#: gtk/gtkprintoperation-win32.c:1801
 msgid "Error from StartDoc"
 msgstr "Error from StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1658 gtk/gtkprintoperation-win32.c:1681
+#: gtk/gtkprintoperation-win32.c:1658
+#: gtk/gtkprintoperation-win32.c:1681
 #: gtk/gtkprintoperation-win32.c:1729
 msgid "Not enough free memory"
 msgstr "אין מספיק זכרון"
@@ -2649,7 +2685,7 @@ msgstr "הדפס מסמך"
 #.
 #: gtk/gtkprintunixdialog.c:2733
 msgid "_Now"
-msgstr "_כאת"
+msgstr "_כעת"
 
 #: gtk/gtkprintunixdialog.c:2744
 msgid "A_t:"
@@ -2713,13 +2749,16 @@ msgstr "הדפס"
 msgid "Unable to find include file: \"%s\""
 msgstr "לא ניתן למצוא את קובץ ה include: \"%s\""
 
-#: gtk/gtkrc.c:3500 gtk/gtkrc.c:3503
+#: gtk/gtkrc.c:3500
+#: gtk/gtkrc.c:3503
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "לא מצליח לאתר את קובץ התמונה ב-pixmap_path: \"%s\""
 
-#: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:551 gtk/gtkrecentchoosermenu.c:559
+#: gtk/gtkrecentaction.c:155
+#: gtk/gtkrecentaction.c:163
+#: gtk/gtkrecentchoosermenu.c:551
+#: gtk/gtkrecentchoosermenu.c:559
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "This function is not implemented for widgets of class '%s'"
@@ -2728,7 +2767,8 @@ msgstr "This function is not implemented for widgets of class '%s'"
 msgid "Select which type of documents are shown"
 msgstr "בחר איזה סוגי מסמכים מוצגים"
 
-#: gtk/gtkrecentchooserdefault.c:1095 gtk/gtkrecentchooserdefault.c:1132
+#: gtk/gtkrecentchooserdefault.c:1095
+#: gtk/gtkrecentchooserdefault.c:1132
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "לא נמצא פריט עבור הכתובת '%s'"
@@ -2775,7 +2815,8 @@ msgstr "הצג _משאבים פרטיים"
 msgid "No items found"
 msgstr "לא נמצאו פריטים"
 
-#: gtk/gtkrecentchoosermenu.c:471 gtk/gtkrecentchoosermenu.c:527
+#: gtk/gtkrecentchoosermenu.c:471
+#: gtk/gtkrecentchoosermenu.c:527
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "No recently used resource found with URI `%s'"
@@ -2811,9 +2852,12 @@ msgstr "_%d. %s"
 msgid "recent menu label|%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
-#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
+#: gtk/gtkrecentmanager.c:1020
+#: gtk/gtkrecentmanager.c:1033
+#: gtk/gtkrecentmanager.c:1171
+#: gtk/gtkrecentmanager.c:1181
+#: gtk/gtkrecentmanager.c:1234
+#: gtk/gtkrecentmanager.c:1243
 #: gtk/gtkrecentmanager.c:1258
 #, c-format
 msgid "Unable to find an item with URI '%s'"
@@ -3218,12 +3262,14 @@ msgstr "Unknown error when trying to deserialize %s"
 msgid "No deserialize function found for format %s"
 msgstr "No deserialize function found for format %s"
 
-#: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
+#: gtk/gtktextbufferserialize.c:796
+#: gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Both \"id\" and \"name\" were found on the <%s> element"
 
-#: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
+#: gtk/gtktextbufferserialize.c:806
+#: gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "The attribute \"%s\" was found twice on the <%s> element"
@@ -3243,7 +3289,8 @@ msgstr "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Attribute \"%s\" repeated twice on the same <%s> element"
 
-#: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
+#: gtk/gtktextbufferserialize.c:961
+#: gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Attribute \"%s\" is invalid on <%s> element in this context"
@@ -3262,8 +3309,10 @@ msgstr "Anonymous tag found and tags can not be created."
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "Tag \"%s\" does not exist in buffer and tags can not be created."
 
-#: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
-#: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
+#: gtk/gtktextbufferserialize.c:1144
+#: gtk/gtktextbufferserialize.c:1219
+#: gtk/gtktextbufferserialize.c:1320
+#: gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Element <%s> is not allowed below <%s>"
@@ -3280,10 +3329,8 @@ msgstr "\"%s\" is not a valid attribute name"
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgstr "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 
 #: gtk/gtktextbufferserialize.c:1202
 #, c-format
@@ -3305,7 +3352,8 @@ msgstr "Tag \"%s\" has invalid priority \"%s\""
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Outermost element in text must be <text_view_markup> not <%s>"
 
-#: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
+#: gtk/gtktextbufferserialize.c:1358
+#: gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "A <%s> element has already been specified"
@@ -3319,10 +3367,8 @@ msgid "Serialized data is malformed"
 msgstr "Serialized data is malformed"
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 
 #: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
@@ -3399,7 +3445,8 @@ msgstr "מגביר אט מנמיך את העוצמה"
 msgid "Adjusts the volume"
 msgstr "מתאים את העוצמה"
 
-#: gtk/gtkvolumebutton.c:85 gtk/gtkvolumebutton.c:88
+#: gtk/gtkvolumebutton.c:85
+#: gtk/gtkvolumebutton.c:88
 msgid "Volume Down"
 msgstr "הגבה עוצמה"
 
@@ -3407,7 +3454,8 @@ msgstr "הגבה עוצמה"
 msgid "Decreases the volume"
 msgstr "מנמיך את העוצמה"
 
-#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
+#: gtk/gtkvolumebutton.c:91
+#: gtk/gtkvolumebutton.c:94
 msgid "Volume Up"
 msgstr "הנמך עוצמה"
 
@@ -3891,7 +3939,8 @@ msgid "paper size|10x14"
 msgstr "10x14"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:187 gtk/paper_names_offsets.c:189
+#: gtk/paper_names_offsets.c:187
+#: gtk/paper_names_offsets.c:189
 msgid "paper size|10x15"
 msgstr "10x15"
 
@@ -4250,7 +4299,8 @@ msgstr "ROC 16k"
 msgid "paper size|ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
+#: gtk/updateiconcache.c:492
+#: gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr "different idatas found for symlinked '%s' and '%s'\n"
@@ -4733,3 +4783,4 @@ msgstr "הדפס למדפסת בדיקה"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "לא ניתן לקבל מידע על הקובץ '%s': %s"
+
