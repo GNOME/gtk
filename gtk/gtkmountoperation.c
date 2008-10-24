@@ -175,7 +175,7 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
                                    g_param_spec_object ("screen",
                                                         P_("Screen"),
                                                         P_("The screen where this window will be displayed."),
-                                                        GTK_TYPE_WINDOW,
+                                                        GDK_TYPE_SCREEN,
                                                         GTK_PARAM_READWRITE));
 
 }

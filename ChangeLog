@@ -1,5 +1,10 @@
 2008-10-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmountoperation.c: The "screen" property ought to have
+	type GdkScreen, not GtkWindow. Found by Cosimo Cecchi
+
+2008-10-24  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 556954 – gtk+/gtk/gtkrecentchooserdefault.c: mismatching
 	allocation and deallocation
 
