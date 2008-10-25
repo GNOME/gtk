@@ -1,3 +1,10 @@
+2008-10-25  Matthias Clasen  <mclasen@redhat.com>
+	
+	Bug 557315 – stale clipboard target cache
+
+	* gtk/gtkclipboard.c (gtk_clipboard_set_contents): Remove cached
+	targets. Pointed out by Evan Stade
+
 2008-10-24  Tristan Van Berkom  <tvb@gnome.org>
 
 	* gtk/gtkwidget.c: Added a note about GtkWidget:has-tooltip in

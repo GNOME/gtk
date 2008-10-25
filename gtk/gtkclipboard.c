@@ -236,6 +236,7 @@ gtk_clipboard_finalize (GObject *object)
     g_signal_handler_disconnect (clipboard_widget, clipboard->notify_signal_id);
   
   g_free (clipboard->storable_targets);
+  g_free (clipboard->cached_targets);
 
   G_OBJECT_CLASS (gtk_clipboard_parent_class)->finalize (object);
 }
@@ -513,6 +514,13 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
 					   clipboard_get_timestamp (clipboard)))
     {
       clipboard->have_selection = TRUE;
+
+      if (clipboard->n_cached_targets != -1)
+        {
+          g_free (clipboard->cached_targets);
+	  clipboard->cached_targets = NULL;
+          clipboard->n_cached_targets = -1;
+        }
 
       if (!(clipboard->have_owner && have_owner) ||
 	  clipboard->user_data != user_data)
@@ -1840,8 +1848,9 @@ gtk_clipboard_owner_change (GtkClipboard        *clipboard,
 {
   if (clipboard->n_cached_targets != -1)
     {
-      clipboard->n_cached_targets = -1;
       g_free (clipboard->cached_targets);
+      clipboard->cached_targets = NULL;
+      clipboard->n_cached_targets = -1;
     }
 }
 
