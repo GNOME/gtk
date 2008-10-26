@@ -1,3 +1,10 @@
+2008-10-26  Philip Withnall  <philip@tecnocode.co.uk>
+
+	Bug 530454 – Clarify page_nr when printing
+
+	* gtk/gtkprintoperation.c (gtk_print_operation_class_init): Point out
+	that page_nr is 0-based in the documentation.
+
 2008-10-25  Matthias Clasen  <mclasen@redhat.com>
 	
 	Bug 557315 – stale clipboard target cache

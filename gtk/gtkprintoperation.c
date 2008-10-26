@@ -646,7 +646,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * GtkPrintOperation::request-page-setup:
    * @operation: the #GtkPrintOperation on which the signal was emitted
    * @context: the #GtkPrintContext for the current operation
-   * @page_nr: the number of the currently printed page
+   * @page_nr: the number of the currently printed page (0-based)
    * @setup: the #GtkPageSetup 
    * 
    * Emitted once for every page that is printed, to give
@@ -671,7 +671,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * GtkPrintOperation::draw-page:
    * @operation: the #GtkPrintOperation on which the signal was emitted
    * @context: the #GtkPrintContext for the current operation
-   * @page_nr: the number of the currently printed page
+   * @page_nr: the number of the currently printed page (0-based)
    *
    * Emitted for every page that is printed. The signal handler
    * must render the @page_nr's page onto the cairo context obtained
