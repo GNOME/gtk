@@ -418,7 +418,6 @@ gtk_cell_renderer_pixbuf_create_themed_pixbuf (GtkCellRendererPixbuf *cellpixbuf
   GtkIconTheme *icon_theme;
   GtkSettings *settings;
   gint width, height;
-  GError *error = NULL;
 
   priv = GTK_CELL_RENDERER_PIXBUF_GET_PRIVATE (cellpixbuf);
 
@@ -445,7 +444,7 @@ gtk_cell_renderer_pixbuf_create_themed_pixbuf (GtkCellRendererPixbuf *cellpixbuf
 			                           priv->icon_name,
 			                           MIN (width, height), 
                                                    GTK_ICON_LOOKUP_USE_BUILTIN,
-                                                   &error);
+                                                   NULL);
   else if (priv->gicon)
     {
       GtkIconInfo *info;
@@ -454,22 +453,11 @@ gtk_cell_renderer_pixbuf_create_themed_pixbuf (GtkCellRendererPixbuf *cellpixbuf
                                              priv->gicon,
 			                     MIN (width, height), 
                                              GTK_ICON_LOOKUP_USE_BUILTIN);
-      if (!info)
+      if (info)
         {
-          g_set_error (&error, GTK_ICON_THEME_ERROR,  GTK_ICON_THEME_NOT_FOUND,
-                       _("Icon not present in theme"));
-        }
-      else
-        {
-          cellpixbuf->pixbuf = gtk_icon_info_load_icon (info, &error);
+          cellpixbuf->pixbuf = gtk_icon_info_load_icon (info, NULL);
           gtk_icon_info_free (info);
         }
-    }
-
-  if (!cellpixbuf->pixbuf) 
-  {
-      g_warning ("could not load image: %s\n", error->message);
-      g_error_free (error);
     }
 
   g_object_notify (G_OBJECT (cellpixbuf), "pixbuf");
