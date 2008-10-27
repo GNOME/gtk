@@ -1,3 +1,8 @@
+2008-10-2r76  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktoolshell.c:
+	* gtk/gtktoolitem.c: Remove markup from short descriptions.
+
 2008-10-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/keyname-table.h:

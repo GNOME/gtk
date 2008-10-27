@@ -28,7 +28,7 @@
 
 /**
  * SECTION:gtktoolshell
- * @short_description: Interface for containers containing #GtkToolItem widgets.
+ * @short_description: Interface for containers containing GtkToolItem widgets.
  *
  * The #GtkToolShell interface allows container widgets to provide additional
  * information when embedding #GtkToolItem widgets.

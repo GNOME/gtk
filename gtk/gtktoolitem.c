@@ -37,7 +37,7 @@
 
 /**
  * SECTION:gtktoolitem
- * @short_description: The base class of widgets that can be added to #GtkToolShell
+ * @short_description: The base class of widgets that can be added to GtkToolShell
  *
  * #GtkToolItem<!-- -->s are widgets that can appear on a toolbar. To
  * create a toolbar item that contain something else than a button, use
