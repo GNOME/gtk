@@ -245,7 +245,7 @@ gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
   if (owner_events)
     *owner_events = pointer_grab_owner_events;
 
-  return FALSE;
+  return TRUE;
 }
 
 void

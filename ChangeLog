@@ -1,3 +1,14 @@
+2008-10-27  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	Bug 557894 – Wrong return value for
+	gdk_pointer_grab_info_libgtk_only()
+
+	* gdk/quartz/gdkevents-quartz.c:
+	(gdk_pointer_grab_info_libgtk_only): Return TRUE when there is a
+	pointer grab. Patch by Owen Taylor.
+
 2008-10-23  Alexander Larsson  <alexl@redhat.com>
 
 	Merged from trunk:
