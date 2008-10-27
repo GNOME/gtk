@@ -101,6 +101,7 @@ gtk_notebook_get_type
 gtk_object_get_type
 gtk_old_editable_get_type
 gtk_option_menu_get_type
+gtk_orientable_get_type
 gtk_page_setup_get_type
 gtk_page_setup_unix_dialog_get_type
 gtk_paned_get_type

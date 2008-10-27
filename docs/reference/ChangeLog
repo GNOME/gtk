@@ -1,3 +1,9 @@
+2008-10-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt:
+	* gtk/gtk-docs.sgml:
+	* gtk/gtk.types: Add GtkOrientable
+
 2008-10-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.types: Add gtk_mount_operation_get_type
