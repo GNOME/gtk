@@ -1500,31 +1500,22 @@ _gtk_print_operation_set_status (GtkPrintOperation *op,
 {
   GtkPrintOperationPrivate *priv = op->priv;
   static const gchar *status_strs[] = {
-    /* translators, strip the prefix up to and including the first | */
-    N_("print operation status|Initial state"),
-    /* translators, strip the prefix up to and including the first | */
-    N_("print operation status|Preparing to print"),
-    /* translators, strip the prefix up to and including the first | */
-    N_("print operation status|Generating data"),
-    /* translators, strip the prefix up to and including the first | */
-    N_("print operation status|Sending data"),
-    /* translators, strip the prefix up to and including the first | */
-    N_("print operation status|Waiting"),
-    /* translators, strip the prefix up to and including the first | */
-    N_("print operation status|Blocking on issue"),
-    /* translators, strip the prefix up to and including the first | */
-    N_("print operation status|Printing"),
-    /* translators, strip the prefix up to and including the first | */
-    N_("print operation status|Finished"),
-    /* translators, strip the prefix up to and including the first | */
-    N_("print operation status|Finished with error")
+    NC_("print operation status", "Initial state"),
+    NC_("print operation status", "Preparing to print"),
+    NC_("print operation status", "Generating data"),
+    NC_("print operation status", "Sending data"),
+    NC_("print operation status", "Waiting"),
+    NC_("print operation status", "Blocking on issue"),
+    NC_("print operation status", "Printing"),
+    NC_("print operation status", "Finished"),
+    NC_("print operation status", "Finished with error")
   };
 
   if (status < 0 || status > GTK_PRINT_STATUS_FINISHED_ABORTED)
     status = GTK_PRINT_STATUS_FINISHED_ABORTED;
 
   if (string == NULL)
-    string = g_strip_context (status_strs[status], _(status_strs[status]));
+    string = g_dpgettext2 (GETTEXT_PACKAGE, "print operation status", status_strs[status]);
   
   if (priv->status == status &&
       strcmp (string, priv->status_string) == 0)

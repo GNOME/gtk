@@ -1,3 +1,7 @@
+2008-10-26  Matthias Clasen <mclasen@redhat.com>
+
+	* Makefile.in.in: Modify xgettext call to extract C_() macros.
+
 2008-10-24  Mark Krapivner  <mark125@gmail.com>
 
 	* he.po: fix a typo.

@@ -733,13 +733,9 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
 	    g_string_append_c (gstring, g_ascii_toupper (tmp[0]));
 	  else
 	    {
-	      gchar msg[128];
-	      gchar *str;
-	      
-	      strcpy (msg, "keyboard label|");
-	      g_strlcat (msg, tmp, 128);
-	      str = _(msg);
-	      if (str == msg)
+	      const gchar *str;
+              str = g_dpgettext2 (GETTEXT_PACKAGE, "keyboard label", tmp);
+	      if (str == tmp)
 		{
 		  g_string_append (gstring, tmp);
 		  substitute_underscores (gstring->str);

@@ -1,5 +1,15 @@
 2008-10-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/keyname-table.h:
+	* gtk/gen-paper-names.c:
+	* gtk/paper_names_offsets.c:
+	* gtk/gtkpapersize.c:
+	* gtk/gtkaccellabel.c:
+	* gtk/gtkprintoperation.c:
+	* gtk/gtkstock.c: More conversion to C_().
+
+2008-10-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkaccellabel.c:
 	* gtk/gtkcalendar.c:
 	* gtk/gtkcellrendereraccel.c:

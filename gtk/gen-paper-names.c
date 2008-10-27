@@ -184,7 +184,7 @@ main (int argc, char *argv[])
   printf ("#if 0\n");
   for (i = 0; i < n_infos; i++)
     printf ("/* translators, strip everything up to the first | */\n"
-	    "N_(\"paper size|%s\")\n", standard_names[i].display_name);
+	    "NC_(\"paper size\", \"%s\")\n", standard_names[i].display_name);
   printf ("#endif\n\n");
 
   /* write strings */

@@ -525,7 +525,7 @@ gtk_paper_size_get_display_name (GtkPaperSize *size)
   g_assert (size->info != NULL);
 
   display_name = paper_names + size->info->display_name;
-  return g_strip_context (display_name, _(display_name));
+  return g_dpgettext2 (GETTEXT_PACKAGE, "paper size", display_name);
 }
 
 /**
