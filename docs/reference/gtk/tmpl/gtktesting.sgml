@@ -1,0 +1,177 @@
+<!-- ##### SECTION Title ##### -->
+Testing
+
+<!-- ##### SECTION Short_Description ##### -->
+Utilities for testing GTK+ applications
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION gtk_test_create_simple_window ##### -->
+<para>
+
+</para>
+
+@window_title: 
+@dialog_text: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_test_create_widget ##### -->
+<para>
+
+</para>
+
+@widget_type: 
+@first_property_name: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_test_display_button_window ##### -->
+<para>
+
+</para>
+
+@window_title: 
+@dialog_text: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_test_find_label ##### -->
+<para>
+
+</para>
+
+@widget: 
+@label_pattern: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_test_find_sibling ##### -->
+<para>
+
+</para>
+
+@base_widget: 
+@widget_type: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_test_find_widget ##### -->
+<para>
+
+</para>
+
+@widget: 
+@label_pattern: 
+@widget_type: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_test_init ##### -->
+<para>
+
+</para>
+
+@argcp: 
+@argvp: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_test_list_all_types ##### -->
+<para>
+
+</para>
+
+@n_types: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_test_register_all_types ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_test_slider_get_value ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_test_slider_set_perc ##### -->
+<para>
+
+</para>
+
+@widget: 
+@percentage: 
+
+
+<!-- ##### FUNCTION gtk_test_spin_button_click ##### -->
+<para>
+
+</para>
+
+@spinner: 
+@button: 
+@upwards: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_test_text_get ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_test_text_set ##### -->
+<para>
+
+</para>
+
+@widget: 
+@string: 
+
+
+<!-- ##### FUNCTION gtk_test_widget_click ##### -->
+<para>
+
+</para>
+
+@widget: 
+@button: 
+@modifiers: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_test_widget_send_key ##### -->
+<para>
+
+</para>
+
+@widget: 
+@keyval: 
+@modifiers: 
+@Returns: 
+
+
