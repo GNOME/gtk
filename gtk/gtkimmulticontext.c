@@ -542,7 +542,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
   const char *system_context_id; 
   
   system_context_id = _gtk_im_module_get_default_context_id (context->priv->client_window);
-  system_menuitem = menuitem = gtk_radio_menu_item_new_with_label (group, Q_("input method menu|System"));
+  system_menuitem = menuitem = gtk_radio_menu_item_new_with_label (group, C_("input method menu", "System"));
   if (!user_context_id)
     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
   group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
@@ -626,7 +626,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
           char *text;
 
           label = gtk_bin_get_child (GTK_BIN (system_menuitem));
-          text = g_strdup_printf (Q_("input method menu|System (%s)"), translated_name);
+          text = g_strdup_printf (C_("input method menu", "System (%s)"), translated_name);
           gtk_label_set_text (GTK_LABEL (label), text);
           g_free (text);
         }     

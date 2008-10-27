@@ -87,26 +87,20 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
    * that use the shift key. If the text on this key isn't typically
    * translated on keyboards used for your language, don't translate
    * this.
-   * 
-   * Don't include the prefix "keyboard label|" in the translation.
    */
-  class->mod_name_shift = g_strdup (Q_("keyboard label|Shift"));
+  class->mod_name_shift = g_strdup (C_("keyboard label", "Shift"));
   /* This is the text that should appear next to menu accelerators
    * that use the control key. If the text on this key isn't typically
    * translated on keyboards used for your language, don't translate
    * this.
-   *
-   * Don't include the prefix "keyboard label|" in the translation.
    */
-  class->mod_name_control = g_strdup (Q_("keyboard label|Ctrl"));
+  class->mod_name_control = g_strdup (C_("keyboard label", "Ctrl"));
   /* This is the text that should appear next to menu accelerators
    * that use the alt key. If the text on this key isn't typically
    * translated on keyboards used for your language, don't translate
    * this.
-   *
-   * Don't include the prefix "keyboard label|" in the translation.
    */
-  class->mod_name_alt = g_strdup (Q_("keyboard label|Alt"));
+  class->mod_name_alt = g_strdup (C_("keyboard label", "Alt"));
   class->mod_separator = g_strdup ("+");
 #else /* GDK_WINDOWING_QUARTZ */
 
@@ -673,9 +667,8 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
        * that use the super key. If the text on this key isn't typically
        * translated on keyboards used for your language, don't translate
        * this.
-       * And do not translate the part before the |.
        */
-      g_string_append (gstring, Q_("keyboard label|Super"));
+      g_string_append (gstring, C_("keyboard label", "Super"));
       seen_mod = TRUE;
     }
   if (accelerator_mods & GDK_HYPER_MASK)
@@ -687,9 +680,8 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
        * that use the hyper key. If the text on this key isn't typically
        * translated on keyboards used for your language, don't translate
        * this.
-       * And do not translate the part before the |.
        */
-      g_string_append (gstring, Q_("keyboard label|Hyper"));
+      g_string_append (gstring, C_("keyboard label", "Hyper"));
       seen_mod = TRUE;
     }
   if (accelerator_mods & GDK_META_MASK)
@@ -702,9 +694,8 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
        * that use the meta key. If the text on this key isn't typically
        * translated on keyboards used for your language, don't translate
        * this.
-       * And do not translate the part before the |.
        */
-      g_string_append (gstring, Q_("keyboard label|Meta"));
+      g_string_append (gstring, C_("keyboard label", "Meta"));
 #else
       /* Command key symbol U+2318 PLACE OF INTEREST SIGN */
       g_string_append (gstring, "\xe2\x8c\x98");
@@ -721,12 +712,10 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
       switch (ch)
 	{
 	case ' ':
-	  /* do not translate the part before the | */
-	  g_string_append (gstring, Q_("keyboard label|Space"));
+	  g_string_append (gstring, C_("keyboard label", "Space"));
 	  break;
 	case '\\':
-	  /* do not translate the part before the | */
-	  g_string_append (gstring, Q_("keyboard label|Backslash"));
+	  g_string_append (gstring, C_("keyboard label", "Backslash"));
 	  break;
 	default:
 	  g_string_append_unichar (gstring, g_unichar_toupper (ch));

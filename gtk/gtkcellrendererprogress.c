@@ -358,8 +358,7 @@ recompute_label (GtkCellRendererProgress *cellprogress)
   if (priv->text)
     label = g_strdup (priv->text);
   else if (priv->pulse < 0)
-    /* do not translate the part before the | */
-    label = g_strdup_printf (Q_("progress bar label|%d %%"), priv->value);
+    label = g_strdup_printf (C_("progress bar label", "%d %%"), priv->value);
   else
     label = NULL;
  
@@ -446,7 +445,7 @@ gtk_cell_renderer_progress_get_size (GtkCellRenderer *cell,
 
   if (priv->min_w < 0)
     {
-      text = g_strdup_printf (Q_("progress bar label|%d %%"), 100);
+      text = g_strdup_printf (C_("progress bar label", "%d %%"), 100);
       compute_dimensions (cell, widget, text,
 			  &priv->min_w,
 			  &priv->min_h);

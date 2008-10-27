@@ -771,21 +771,17 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
       
       /* avoid clashing mnemonics */
       if (count <= 10)
-        /* This is the label format that is used for the first 10 items 
+        /* This is the label format that is used for the first 10 items
          * in a recent files menu. The %d is the number of the item,
          * the %s is the name of the item. Please keep the _ in front
          * of the number to give these menu items a mnemonic.
-         *
-         * Don't include the prefix "recent menu label|" in the translation.
          */
-        text = g_strdup_printf (Q_("recent menu label|_%d. %s"), count, escaped);
+        text = g_strdup_printf (C_("recent menu label", "_%d. %s"), count, escaped);
       else
-        /* This is the format that is used for items in a recent files menu. 
-         * The %d is the number of the item, the %s is the name of the item. 
-         *
-         * Don't include the prefix "recent menu label|" in the translation.
+        /* This is the format that is used for items in a recent files menu.
+         * The %d is the number of the item, the %s is the name of the item.
          */
-        text = g_strdup_printf (Q_("recent menu label|%d. %s"), count, escaped);
+        text = g_strdup_printf (C_("recent menu label", "%d. %s"), count, escaped);
       
       item = gtk_image_menu_item_new_with_mnemonic (text);
       

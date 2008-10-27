@@ -1796,14 +1796,11 @@ gtk_calendar_size_request (GtkWidget	  *widget,
 
       priv->max_year_width = 0;
       /* Translators:  This is a text measurement template.
-       * Translate it to the widest year text. 
-       * 
-       * Don't include the prefix "year measurement template|" 
-       * in the translation.
+       * Translate it to the widest year text
        *
        * If you don't understand this, leave it as "2000"
        */
-      pango_layout_set_text (layout, Q_("year measurement template|2000"), -1);	  
+      pango_layout_set_text (layout, C_("year measurement template", "2000"), -1);	  
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
       priv->max_year_width = MAX (priv->max_year_width,
 				  logical_rect.width + 8);
@@ -1834,7 +1831,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   for (i = 0; i < 9; i++)
     {
       gchar buffer[32];
-      g_snprintf (buffer, sizeof (buffer), Q_("calendar:day:digits|%d"), i * 11);
+      g_snprintf (buffer, sizeof (buffer), C_("calendar:day:digits", "%d"), i * 11);
       pango_layout_set_text (layout, buffer, -1);	  
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
       priv->min_day_width = MAX (priv->min_day_width,
@@ -1866,7 +1863,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
     for (i = 0; i < 9; i++)
       {
 	gchar buffer[32];
-	g_snprintf (buffer, sizeof (buffer), Q_("calendar:week:digits|%d"), i * 11);
+	g_snprintf (buffer, sizeof (buffer), C_("calendar:week:digits", "%d"), i * 11);
 	pango_layout_set_text (layout, buffer, -1);	  
 	pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	priv->max_week_char_width = MAX (priv->max_week_char_width,
@@ -2140,14 +2137,13 @@ calendar_paint_header (GtkCalendar *calendar)
    * gtkcalendar widget.  See strftime() manual for the format.
    * Use only ASCII in the translation.
    *
-   * Also look for the msgid "year measurement template|2000".  
+   * Also look for the msgid "2000".
    * Translate that entry to a year with the widest output of this
-   * msgid. 
-   * 
-   * Don't include the prefix "calendar year format|" in the 
-   * translation. "%Y" is appropriate for most locales.
+   * msgid.
+   *
+   * "%Y" is appropriate for most locales.
    */
-  strftime (buffer, sizeof (buffer), Q_("calendar year format|%Y"), tm);
+  strftime (buffer, sizeof (buffer), C_("calendar year format", "%Y"), tm);
   str = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
   layout = gtk_widget_create_pango_layout (widget, str);
   g_free (str);
@@ -2350,14 +2346,13 @@ calendar_paint_week_numbers (GtkCalendar *calendar)
        * localized digits or the ones used in English (0123...).
        *
        * Translate to "%Id" if you want to use localized digits, or
-       * translate to "%d" otherwise.  Don't include the
-       * "calendar:week:digits|" part in the translation.
+       * translate to "%d" otherwise.
        *
        * Note that translating this doesn't guarantee that you get localized
-       * digits.  That needs support from your system and locale definition
+       * digits. That needs support from your system and locale definition
        * too.
        */
-      g_snprintf (buffer, sizeof (buffer), Q_("calendar:week:digits|%d"), week);
+      g_snprintf (buffer, sizeof (buffer), C_("calendar:week:digits", "%d"), week);
       pango_layout_set_text (layout, buffer, -1);
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
@@ -2488,14 +2483,13 @@ calendar_paint_day (GtkCalendar *calendar,
    * localized digits or the ones used in English (0123...).
    *
    * Translate to "%Id" if you want to use localized digits, or
-   * translate to "%d" otherwise.  Don't include the "calendar:day:digits|"
-   * part in the translation.
+   * translate to "%d" otherwise.
    *
    * Note that translating this doesn't guarantee that you get localized
-   * digits.  That needs support from your system and locale definition
+   * digits. That needs support from your system and locale definition
    * too.
    */
-  g_snprintf (buffer, sizeof (buffer), Q_("calendar:day:digits|%d"), day);
+  g_snprintf (buffer, sizeof (buffer), C_("calendar:day:digits", "%d"), day);
 
   /* Get extra information to show, if any: */
 

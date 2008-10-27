@@ -238,10 +238,9 @@ convert_keysym_state_to_string (GtkCellRendererAccel *accel,
 {
   if (keysym == 0 && keycode == 0)
     /* This label is displayed in a treeview cell displaying
-     * a disabled accelerator key combination. Only include
-     * the text after the | in the translation.
+     * a disabled accelerator key combination.
      */
-    return g_strdup (Q_("Accelerator|Disabled"));
+    return g_strdup (C_("Accelerator", "Disabled"));
   else 
     {
       if (accel->accel_mode == GTK_CELL_RENDERER_ACCEL_MODE_GTK)

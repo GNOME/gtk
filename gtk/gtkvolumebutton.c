@@ -164,10 +164,8 @@ cb_query_tooltip (GtkWidget  *button,
        * as used in the tooltip, eg. "49 %".
        * Translate the "%d" to "%Id" if you want to use localised digits,
        * or otherwise translate the "%d" to "%d".
-       * Do not translate and do not include the "volume percentage|"
-       * part in the translation!
        */
-      str = g_strdup_printf (Q_("volume percentage|%d %%"), percent);
+      str = g_strdup_printf (C_("volume percentage", "%d %%"), percent);
     }
 
   gtk_tooltip_set_text (tooltip, str);

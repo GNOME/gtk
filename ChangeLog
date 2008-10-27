@@ -1,3 +1,13 @@
+2008-10-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaccellabel.c:
+	* gtk/gtkcalendar.c:
+	* gtk/gtkcellrendereraccel.c:
+	* gtk/gtkcellrendererprogress.c:
+	* gtk/gtkimmulticontext.c:
+	* gtk/gtkrecentchoosermenu.c:
+	* gtk/gtkvolumebutton.c: Use C_() instead of Q_(). String change!
+
 2008-10-26  Christian Persch  <chpe@gnome.org>
 
 	Bug 557065 – gtkcellrendererpixbuf spams console over and over with
