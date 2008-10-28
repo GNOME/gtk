@@ -1,3 +1,7 @@
+2008-10-28  Michael Natterer  <mitch@imendio.com>
+
+	* gdk/keyname-table.h: fix small typo.
+
 2008-10-27  Richard Hult  <richard@imendio.com>
 
 	Bug 557894 – Wrong return value for

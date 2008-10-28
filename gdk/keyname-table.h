@@ -3938,7 +3938,7 @@ static const gdk_key gdk_keys_by_name[] = {
 #if 0
 
 NC_("keyboard label", "BackSpace")
-NC_("keyboard labe", "Tab")
+NC_("keyboard label", "Tab")
 NC_("keyboard label", "Return")
 NC_("keyboard label", "Pause")
 NC_("keyboard label", "Scroll_Lock")
