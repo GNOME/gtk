@@ -118,7 +118,7 @@ GdkDisplay * gdk_display_open (const gchar *display_name)
   ret=directfb->GetInputDevice (directfb, DIDID_KEYBOARD, &keyboard);
 
   if (ret != DFB_OK){
-      DirectFBError ("gdk_display_open: GetDisplayLayer", ret);
+      DirectFBError ("gdk_display_open: GetInputDevice", ret);
    	return NULL;
   }
 

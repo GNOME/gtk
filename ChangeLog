@@ -1,5 +1,12 @@
 2008-10-29  Christian Dywan  <christian@imendio.com>
 
+	Bug 557762 – Misleading error message in GDK DirectFB
+
+	* gdk/directfb/gdkdisplay-directfb.c (gdk_display_open):
+	Correctly say GetInputDevice instead of GetDisplayLayer
+
+2008-10-29  Christian Dywan  <christian@imendio.com>
+
 	Bug 558397 – gtk_widget_error_bell undefined without a screen
 
 	* gtk/gtkwidget.c (gtk_widget_error_bell): Test the settings
