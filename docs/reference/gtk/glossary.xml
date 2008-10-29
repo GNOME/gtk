@@ -197,7 +197,9 @@
 	draw its contents, but rather shares its <glossterm
 	linkend="parent">parent's</glossterm>.  Such a widget has the
 	%GTK_NO_WINDOW <link linkend="GtkWidgetFlags">flag</link> set, and 
-        can be tested with the GTK_WIDGET_NO_WINDOW() macro.
+        can be tested with the GTK_WIDGET_NO_WINDOW() macro.  See
+	<xref linkend="window-no-window-widgets"/> for a detailed
+	description of this flag.
       </para>
     </glossdef>
   </glossentry>

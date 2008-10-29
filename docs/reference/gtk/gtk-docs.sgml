@@ -96,6 +96,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <xi:include href="directfb.sgml" />
     <xi:include href="resources.sgml" />
     <xi:include href="xml/question_index.sgml" />
+    <xi:include href="drawing-model.xml" />
   </part>
 
 

@@ -128,6 +128,7 @@ content_files =					\
 	changes-2.0.sgml			\
 	compiling.sgml				\
 	directfb.sgml				\
+	drawing-model.xml			\
 	glossary.xml				\
 	migrating-checklist.sgml		\
 	migrating-GtkAction.sgml		\
@@ -301,6 +302,8 @@ HTML_IMAGES = \
 	$(srcdir)/images/combo-box.png					\
 	$(srcdir)/images/combo-box-entry.png				\
 	$(srcdir)/images/entry.png					\
+	$(srcdir)/images/figure-hierarchical-drawing.png		\
+	$(srcdir)/images/figure-windowed-label.png			\
 	$(srcdir)/images/file-button.png				\
 	$(srcdir)/images/filechooser.png				\
 	$(srcdir)/images/font-button.png				\

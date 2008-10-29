@@ -939,13 +939,18 @@ Tells about certain properties of the widget.
 @GTK_APP_PAINTABLE: 
         Set and unset by gtk_widget_set_app_paintable().
         Must be set on widgets whose window the application directly draws on, 
-	in order to keep GTK+ from overwriting the drawn stuff.
+	in order to keep GTK+ from overwriting the drawn stuff.  See
+        <xref linkend="app-paintable-widgets"/> for a detailed
+        description of this flag.
 @GTK_RECEIVES_DEFAULT: 
         The widget when focused will receive the default action and have 
         %GTK_HAS_DEFAULT set even if there is a different widget set as default.
 @GTK_DOUBLE_BUFFERED: 
         Set and unset by gtk_widget_set_double_buffered().
-        Indicates that exposes done on the widget should be double-buffered.
+        Indicates that exposes done on the widget should be
+        double-buffered.  See <xref linkend="double-buffering"/> for a
+        detailed discussion of how double-buffering works in GTK+ and
+        why you may want to disable it for special cases.
 @GTK_NO_SHOW_ALL: 
 
 <!-- ##### MACRO GTK_WIDGET_TYPE ##### -->
