@@ -6943,11 +6943,16 @@ gtk_widget_keynav_failed (GtkWidget        *widget,
 void
 gtk_widget_error_bell (GtkWidget *widget)
 {
+  GtkSettings* settings;
   gboolean beep;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  g_object_get (gtk_widget_get_settings (widget),
+  settings = gtk_widget_get_settings (widget);
+  if (!settings)
+    return;
+
+  g_object_get (settings,
                 "gtk-error-bell", &beep,
                 NULL);
 

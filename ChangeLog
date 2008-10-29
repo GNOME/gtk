@@ -1,3 +1,10 @@
+2008-10-29  Christian Dywan  <christian@imendio.com>
+
+	Bug 558397 – gtk_widget_error_bell undefined without a screen
+
+	* gtk/gtkwidget.c (gtk_widget_error_bell): Test the settings
+	instance and return silently if unset
+
 2008-10-28  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/keyname-table.h: fix small typo.
