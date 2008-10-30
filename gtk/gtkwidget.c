@@ -2542,10 +2542,7 @@ gtk_widget_get_property (GObject         *object,
 	g_value_set_static_string (value, "");
       break;
     case PROP_PARENT:
-      if (widget->parent)
-	g_value_set_object (value, widget->parent);
-      else
-	g_value_set_object (value, NULL);
+      g_value_set_object (value, widget->parent);
       break;
     case PROP_WIDTH_REQUEST:
       {

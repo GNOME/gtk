@@ -1,3 +1,8 @@
+2008-10-30  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkwidget.c (gtk_widget_get_property): removed redundant
+	conditional.
+
 2008-10-30  Christian Dywan  <christian@imendio.com>
 
 	Bug 557316 – GtkLinkButton should consider user-defined tooltip
