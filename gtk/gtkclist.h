@@ -30,7 +30,7 @@
 #ifndef __GTK_CLIST_H__
 #define __GTK_CLIST_H__
 
-#include <gdk/gdk.h>
+
 #include <gtk/gtksignal.h>
 #include <gtk/gtkalignment.h>
 #include <gtk/gtklabel.h>
@@ -38,6 +38,7 @@
 #include <gtk/gtkhscrollbar.h>
 #include <gtk/gtkvscrollbar.h>
 #include <gtk/gtkenums.h>
+
 
 G_BEGIN_DECLS
 

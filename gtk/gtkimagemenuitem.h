@@ -32,8 +32,8 @@
 #define __GTK_IMAGE_MENU_ITEM_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkmenuitem.h>
+
 
 G_BEGIN_DECLS
 

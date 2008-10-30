@@ -36,9 +36,9 @@
 #define __GTK_FONTSEL_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkvbox.h>
+
 
 G_BEGIN_DECLS
 

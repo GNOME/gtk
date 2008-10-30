@@ -36,7 +36,7 @@
 #ifndef __GTK_TOOLBAR_H__
 #define __GTK_TOOLBAR_H__
 
-#include <gdk/gdk.h>
+
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtktooltips.h>

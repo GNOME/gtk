@@ -32,7 +32,6 @@
 #define __GTK_DIALOG_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkwindow.h>
 
 

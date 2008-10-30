@@ -42,7 +42,6 @@
 #define __GTK_GAMMA_CURVE_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkvbox.h>
 
 

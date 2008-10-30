@@ -32,7 +32,6 @@
 #define __GTK_HSEPARATOR_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkseparator.h>
 
 

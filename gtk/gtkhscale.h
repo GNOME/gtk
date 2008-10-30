@@ -32,7 +32,6 @@
 #define __GTK_HSCALE_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkscale.h>
 
 

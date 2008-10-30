@@ -35,7 +35,6 @@
 #define __GTK_SPIN_BUTTON_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkadjustment.h>
 

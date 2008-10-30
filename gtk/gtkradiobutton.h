@@ -32,7 +32,6 @@
 #define __GTK_RADIO_BUTTON_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkcheckbutton.h>
 
 

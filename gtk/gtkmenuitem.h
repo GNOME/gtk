@@ -32,7 +32,6 @@
 #define __GTK_MENU_ITEM_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkitem.h>
 
 

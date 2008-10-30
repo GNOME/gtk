@@ -32,7 +32,6 @@
 #define __GTK_BIN_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkcontainer.h>
 
 

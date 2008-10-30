@@ -32,7 +32,6 @@
 #define __GTK_DRAWING_AREA_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkwidget.h>
 
 

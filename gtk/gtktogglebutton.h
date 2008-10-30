@@ -32,8 +32,8 @@
 #define __GTK_TOGGLE_BUTTON_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkbutton.h>
+
 
 G_BEGIN_DECLS
 

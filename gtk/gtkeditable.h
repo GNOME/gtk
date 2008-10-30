@@ -32,8 +32,8 @@
 #define __GTK_EDITABLE_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkwidget.h>
+
 
 G_BEGIN_DECLS
 

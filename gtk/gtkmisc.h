@@ -32,7 +32,6 @@
 #define __GTK_MISC_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkwidget.h>
 
 
@@ -52,10 +51,10 @@ typedef struct _GtkMiscClass  GtkMiscClass;
 struct _GtkMisc
 {
   GtkWidget widget;
-  
+
   gfloat GSEAL (xalign);
   gfloat GSEAL (yalign);
-  
+
   guint16 GSEAL (xpad);
   guint16 GSEAL (ypad);
 };

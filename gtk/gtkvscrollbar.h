@@ -32,7 +32,6 @@
 #define __GTK_VSCROLLBAR_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkscrollbar.h>
 
 

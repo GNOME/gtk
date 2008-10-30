@@ -32,7 +32,6 @@
 #define __GTK_SCROLLBAR_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkrange.h>
 
 

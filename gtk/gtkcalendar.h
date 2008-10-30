@@ -33,7 +33,7 @@
 #ifndef __GTK_CALENDAR_H__
 #define __GTK_CALENDAR_H__
 
-#include <gdk/gdk.h>
+
 #include <gtk/gtkwidget.h>
 
 /* Not needed, retained for compatibility -Yosh */

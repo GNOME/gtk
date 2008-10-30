@@ -20,15 +20,16 @@
  * Modified by the GTK+ Team and others 1997-2006.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #ifndef __GTK_WIN32_EMBED_WIDGET_H__
 #define __GTK_WIN32_EMBED_WIDGET_H__
 
-#include <gdk/gdk.h>
+
 #include <gtk/gtkwindow.h>
 #include "win32/gdkwin32.h"
+
 
 G_BEGIN_DECLS
 

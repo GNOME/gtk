@@ -42,8 +42,8 @@
 #define __GTK_CURVE_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkdrawingarea.h>
+
 
 G_BEGIN_DECLS
 

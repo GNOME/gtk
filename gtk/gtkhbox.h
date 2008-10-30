@@ -32,7 +32,6 @@
 #define __GTK_HBOX_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkbox.h>
 
 

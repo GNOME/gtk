@@ -32,8 +32,8 @@
 #define __GTK_RADIO_MENU_ITEM_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkcheckmenuitem.h>
+
 
 G_BEGIN_DECLS
 

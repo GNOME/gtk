@@ -32,7 +32,6 @@
 #define __GTK_RANGE_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkwidget.h>
 

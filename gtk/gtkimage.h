@@ -32,7 +32,6 @@
 #define __GTK_IMAGE_H__
 
 
-#include <gdk/gdk.h>
 #include <gio/gio.h>
 #include <gtk/gtkmisc.h>
 

@@ -31,10 +31,10 @@
 #define __GTK_LABEL_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkmisc.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkmenu.h>
+
 
 G_BEGIN_DECLS
 

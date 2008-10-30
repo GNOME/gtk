@@ -32,6 +32,7 @@
 #ifndef __GTK_TIPS_QUERY_H__
 #define __GTK_TIPS_QUERY_H__
 
+
 #include <gtk/gtk.h>
 
 
@@ -101,7 +102,7 @@ void		gtk_tips_query_set_caller	(GtkTipsQuery	*tips_query,
 void		gtk_tips_query_set_labels 	(GtkTipsQuery   *tips_query,
 						 const gchar    *label_inactive,
 						 const gchar    *label_no_tip);
-     
+
 G_END_DECLS
 
 #endif	/* __GTK_TIPS_QUERY_H__ */

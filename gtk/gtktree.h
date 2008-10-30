@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #ifdef GTK_ENABLE_BROKEN
@@ -29,14 +29,14 @@
 #ifndef __GTK_TREE_H__
 #define __GTK_TREE_H__
 
-/* set this flag to enable tree debugging output */
-/* #define TREE_DEBUG */
 
-#include <gdk/gdk.h>
 #include <gtk/gtkcontainer.h>
 
 
 G_BEGIN_DECLS
+
+/* set this flag to enable tree debugging output */
+/* #define TREE_DEBUG */
 
 #define GTK_TYPE_TREE                  (gtk_tree_get_type ())
 #define GTK_TREE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE, GtkTree))

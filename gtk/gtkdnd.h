@@ -32,10 +32,11 @@
 #ifndef __GTK_DND_H__
 #define __GTK_DND_H__
 
-#include <gdk/gdk.h>
+
 #include <gtk/gtkenums.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkselection.h>
+
 
 G_BEGIN_DECLS
 

@@ -32,7 +32,6 @@
 #define __GTK_ARROW_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkmisc.h>
 
 

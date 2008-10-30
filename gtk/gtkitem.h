@@ -32,7 +32,6 @@
 #define __GTK_ITEM_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkbin.h>
 
 

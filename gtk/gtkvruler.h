@@ -42,7 +42,6 @@
 #define __GTK_VRULER_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkruler.h>
 
 

@@ -31,7 +31,6 @@
 #define __GTK_PLUG_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtksocket.h>
 #include <gtk/gtkwindow.h>
 

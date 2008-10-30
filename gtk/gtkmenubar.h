@@ -32,7 +32,6 @@
 #define __GTK_MENU_BAR_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkmenushell.h>
 
 

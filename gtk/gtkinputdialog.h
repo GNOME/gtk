@@ -42,7 +42,6 @@
 #define __GTK_INPUTDIALOG_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkdialog.h>
 
 

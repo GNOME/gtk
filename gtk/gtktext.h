@@ -30,9 +30,8 @@
 #define __GTK_TEXT_H__
 
 
-#include <gdk/gdk.h>
-#include <gtk/gtkadjustment.h>
 #include <gtk/gtkoldeditable.h>
+
 
 G_BEGIN_DECLS
 

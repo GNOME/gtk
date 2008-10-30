@@ -42,7 +42,6 @@
 #define __GTK_RULER_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkwidget.h>
 
 

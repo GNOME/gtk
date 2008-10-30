@@ -42,7 +42,6 @@
 #define __GTK_HRULER_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkruler.h>
 
 

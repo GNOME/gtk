@@ -32,12 +32,12 @@
 #define __GTK_ENTRY_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkentrycompletion.h>
 #include <pango/pango.h>
+
 
 G_BEGIN_DECLS
 

@@ -33,8 +33,8 @@
 #define __GTK_NOTEBOOK_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkcontainer.h>
+
 
 G_BEGIN_DECLS
 

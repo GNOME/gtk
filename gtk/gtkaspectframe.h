@@ -32,8 +32,8 @@
 #define __GTK_ASPECT_FRAME_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkframe.h>
+
 
 G_BEGIN_DECLS
 
