@@ -34,7 +34,6 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
-#include <pango/pango.h>
 
 
 G_BEGIN_DECLS

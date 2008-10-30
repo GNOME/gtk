@@ -24,9 +24,10 @@
 #ifndef __GTK_IM_CONTEXT_H__
 #define __GTK_IM_CONTEXT_H__
 
+
 #include <gdk/gdk.h>
 #include <gtk/gtkobject.h>
-#include <pango/pango.h>
+
 
 G_BEGIN_DECLS
 

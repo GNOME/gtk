@@ -36,7 +36,6 @@
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkentrycompletion.h>
-#include <pango/pango.h>
 
 
 G_BEGIN_DECLS

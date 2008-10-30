@@ -1,3 +1,12 @@
+2008-10-30  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/gtkcellrenderertext.h
+	* gtk/gtkentry.[ch]
+	* gtk/gtkimcontext.h
+	* gtk/gtklabel.c
+	* gtk/gtkstyle.h: <pango/pango.h> is pulled in by <gdk/gdk.h>,
+	remove its inclusion here.
+
 2008-10-30  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/*.h: no need to include <gtk/gtkenums.h> in headers which

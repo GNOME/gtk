@@ -20,12 +20,14 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
+
 #include <math.h>
 #include <string.h>
+
 #include "gtklabel.h"
 #include "gtkaccellabel.h"
 #include "gtkdnd.h"
@@ -34,7 +36,6 @@
 #include "gtkwindow.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkclipboard.h"
-#include <pango/pango.h>
 #include "gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtkseparatormenuitem.h"
