@@ -620,7 +620,9 @@ gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
   label = gtk_button_get_label (GTK_BUTTON (link_button));
   uri = link_button->priv->uri;
 
-  if (label && *label != '\0' && uri && strcmp (label, uri) != 0)
+  if (!gtk_widget_get_tooltip_text (widget)
+    && !gtk_widget_get_tooltip_markup (widget)
+    && label && *label != '\0' && uri && strcmp (label, uri) != 0)
     {
       gtk_tooltip_set_text (tooltip, uri);
       return TRUE;

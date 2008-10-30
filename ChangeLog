@@ -1,3 +1,10 @@
+2008-10-30  Christian Dywan  <christian@imendio.com>
+
+	Bug 557316 – GtkLinkButton should consider user-defined tooltip
+
+	* gtk/gtklinkbutton.c (gtk_link_button_query_tooltip_cb):
+	Only override the tooltip if not previously set
+
 2008-10-29  Christian Dywan  <christian@imendio.com>
 
 	Bug 557762 – Misleading error message in GDK DirectFB
