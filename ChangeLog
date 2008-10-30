@@ -1,4 +1,4 @@
-2008-10-30  Michael Natterer  <mitch@gimp.org>
+2008-10-30  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkcellrenderertext.h
 	* gtk/gtkentry.[ch]
