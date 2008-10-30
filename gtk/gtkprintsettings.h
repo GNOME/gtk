@@ -133,6 +133,9 @@ void              gtk_print_settings_set_int                 (GtkPrintSettings  
 #define GTK_PRINT_SETTINGS_NUMBER_UP        "number-up"
 #define GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT "number-up-layout"
 #define GTK_PRINT_SETTINGS_OUTPUT_BIN       "output-bin"
+#define GTK_PRINT_SETTINGS_RESOLUTION_X     "resolution-x"
+#define GTK_PRINT_SETTINGS_RESOLUTION_Y     "resolution-y"
+#define GTK_PRINT_SETTINGS_PRINTER_LPI      "printer-lpi"
 
 #define GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT  "output-file-format"
 #define GTK_PRINT_SETTINGS_OUTPUT_URI          "output-uri"
@@ -188,6 +191,14 @@ void                  gtk_print_settings_set_number_up_layout  (GtkPrintSettings
 gint                  gtk_print_settings_get_resolution        (GtkPrintSettings   *settings);
 void                  gtk_print_settings_set_resolution        (GtkPrintSettings   *settings,
 								gint                resolution);
+gint                  gtk_print_settings_get_resolution_x      (GtkPrintSettings   *settings);
+gint                  gtk_print_settings_get_resolution_y      (GtkPrintSettings   *settings);
+void                  gtk_print_settings_set_resolution_xy     (GtkPrintSettings   *settings,
+								gint                resolution_x,
+								gint                resolution_y);
+gdouble               gtk_print_settings_get_printer_lpi       (GtkPrintSettings   *settings);
+void                  gtk_print_settings_set_printer_lpi       (GtkPrintSettings   *settings,
+								gdouble             lpi);
 gdouble               gtk_print_settings_get_scale             (GtkPrintSettings   *settings);
 void                  gtk_print_settings_set_scale             (GtkPrintSettings   *settings,
 								gdouble             scale);

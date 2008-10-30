@@ -1193,7 +1193,9 @@ gtk_print_settings_get_resolution (GtkPrintSettings *settings)
  * @settings: a #GtkPrintSettings
  * @resolution: the resolution in dpi
  * 
- * Sets the value of %GTK_PRINT_SETTINGS_RESOLUTION.
+ * Sets the values of %GTK_PRINT_SETTINGS_RESOLUTION,
+ * %GTK_PRINT_SETTINGS_RESOLUTION_X and 
+ * %GTK_PRINT_SETTINGS_RESOLUTION_Y.
  * 
  * Since: 2.10
  */
@@ -1203,6 +1205,100 @@ gtk_print_settings_set_resolution (GtkPrintSettings *settings,
 {
   gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION,
 			      resolution);
+  gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION_X,
+			      resolution);
+  gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION_Y,
+			      resolution);
+}
+
+/**
+ * gtk_print_settings_get_resolution_x:
+ * @settings: a #GtkPrintSettings
+ * 
+ * Gets the value of %GTK_PRINT_SETTINGS_RESOLUTION_X.
+ * 
+ * Return value: the horizontal resolution in dpi
+ *
+ * Since: 2.16
+ */
+gint
+gtk_print_settings_get_resolution_x (GtkPrintSettings *settings)
+{
+  return gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_RESOLUTION_X);
+}
+
+/**
+ * gtk_print_settings_get_resolution_y:
+ * @settings: a #GtkPrintSettings
+ * 
+ * Gets the value of %GTK_PRINT_SETTINGS_RESOLUTION_Y.
+ * 
+ * Return value: the vertical resolution in dpi
+ *
+ * Since: 2.16
+ */
+gint
+gtk_print_settings_get_resolution_y (GtkPrintSettings *settings)
+{
+  return gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_RESOLUTION_Y);
+}
+
+/**
+ * gtk_print_settings_set_resolution_xy:
+ * @settings: a #GtkPrintSettings
+ * @resolution_x: the horizontal resolution in dpi
+ * @resolution_y: the vertical resolution in dpi
+ * 
+ * Sets the values of %GTK_PRINT_SETTINGS_RESOLUTION,
+ * %GTK_PRINT_SETTINGS_RESOLUTION_X and
+ * %GTK_PRINT_SETTINGS_RESOLUTION_Y.
+ * 
+ * Since: 2.16
+ */
+void
+gtk_print_settings_set_resolution_xy (GtkPrintSettings *settings,
+				      gint              resolution_x,
+				      gint              resolution_y)
+{
+  gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION_X,
+			      resolution_x);
+  gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION_Y,
+			      resolution_y);
+  gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION,
+			      resolution_x);
+}
+
+/**
+ * gtk_print_settings_get_printer_lpi:
+ * @settings: a #GtkPrintSettings
+ * 
+ * Gets the value of %GTK_PRINT_SETTINGS_PRINTER_LPI.
+ * 
+ * Return value: the resolution in lpi (lines per inch)
+ *
+ * Since: 2.16
+ */
+gdouble
+gtk_print_settings_get_printer_lpi (GtkPrintSettings *settings)
+{
+  return gtk_print_settings_get_double (settings, GTK_PRINT_SETTINGS_PRINTER_LPI);
+}
+
+/**
+ * gtk_print_settings_set_printer_lpi:
+ * @settings: a #GtkPrintSettings
+ * @resolution: the resolution in lpi (lines per inch)
+ * 
+ * Sets the value of %GTK_PRINT_SETTINGS_PRINTER_LPI
+ * 
+ * Since: 2.16
+ */
+void
+gtk_print_settings_set_printer_lpi (GtkPrintSettings *settings,
+				    gdouble           lpi)
+{
+  gtk_print_settings_set_double (settings, GTK_PRINT_SETTINGS_PRINTER_LPI,
+			         lpi);
 }
 
 /**

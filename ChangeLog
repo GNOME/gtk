@@ -1,3 +1,18 @@
+2008-10-30  Marek Kasik  <mkasik@redhat.com>
+
+	Bug 339714 - Set printer dpi on cairo ps/pdf surfaces when printing
+
+	* gtk/gtk.symbols
+	* gtk/gtkprintsettings.c
+	* gtk/gtkprintsettings.h
+	* docs/reference/gtk/gtk-sections.txt
+	* modules/printbackends/file/gtkprintbackendfile.c
+	* modules/printbackends/test/gtkprintbackendtest.c
+	* modules/printbackends/cups/gtkprintbackendcups.c
+	* modules/printbackends/lpr/gtkprintbackendlpr.c:
+	Added lpi (lines per inch) setting to GtkPrintSettings and support
+	for anamorphic dpi. Surface fallback resolution is set to 2*lpi.
+
 2008-10-30  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/*.h: no need to include <gdk/gdk.h> in any widget header,

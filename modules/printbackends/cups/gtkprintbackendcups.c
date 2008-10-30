@@ -316,6 +316,10 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
   cairo_surface_t *surface; 
   ppd_file_t      *ppd_file = NULL;
   ppd_attr_t      *ppd_attr = NULL;
+  ppd_attr_t      *ppd_attr_res = NULL;
+  ppd_attr_t      *ppd_attr_screen_freq = NULL;
+  ppd_attr_t      *ppd_attr_res_screen_freq = NULL;
+  gchar           *res_string = NULL;
   int              level = 2;
  
   /* TODO: check if it is a ps or pdf printer */
@@ -330,6 +334,57 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
 
       if (ppd_attr != NULL)
         level = atoi (ppd_attr->value);
+
+      if (gtk_print_settings_get_resolution (settings) == 0)
+        {
+          ppd_attr_res = ppdFindAttr (ppd_file, "DefaultResolution", NULL);
+
+          if (ppd_attr_res != NULL)
+            {
+              int res, res_x, res_y;
+
+              if (sscanf (ppd_attr_res->value, "%dx%ddpi", &res_x, &res_y) == 2)
+                {
+                  if (res_x != 0 && res_y != 0)
+                    gtk_print_settings_set_resolution_xy (settings, res_x, res_y);
+                }
+              else if (sscanf (ppd_attr_res->value, "%ddpi", &res) == 1)
+                {
+                  if (res != 0)
+                    gtk_print_settings_set_resolution (settings, res);
+                }
+              else
+                gtk_print_settings_set_resolution (settings, 300);
+            }
+        }
+
+      res_string = g_strdup_printf ("%ddpi", 
+                                    gtk_print_settings_get_resolution (settings));
+      ppd_attr_res_screen_freq = ppdFindAttr (ppd_file, "ResScreenFreq", res_string);
+      g_free (res_string);
+
+      if (ppd_attr_res_screen_freq == NULL)
+        {
+          res_string = g_strdup_printf ("%dx%ddpi", 
+                                        gtk_print_settings_get_resolution_x (settings),
+                                        gtk_print_settings_get_resolution_y (settings));
+          ppd_attr_res_screen_freq = ppdFindAttr (ppd_file, "ResScreenFreq", res_string);
+          g_free (res_string);
+        }
+
+      ppd_attr_screen_freq = ppdFindAttr (ppd_file, "ScreenFreq", NULL);
+
+      if (ppd_attr_res_screen_freq != NULL)
+        gtk_print_settings_set_printer_lpi (settings, atof (ppd_attr_res_screen_freq->value));
+      else if (ppd_attr_screen_freq != NULL)
+        gtk_print_settings_set_printer_lpi (settings, atof (ppd_attr_screen_freq->value));
+      else
+        gtk_print_settings_set_printer_lpi (settings, 150.0);
+    }
+  else
+    {
+      gtk_print_settings_set_resolution (settings, 300);
+      gtk_print_settings_set_printer_lpi (settings, 150.0);
     }
 
   if (level == 2)
@@ -338,8 +393,9 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
   if (level == 3)
     cairo_ps_surface_restrict_to_level (surface, CAIRO_PS_LEVEL_3);
 
-  /* TODO: DPI from settings object? */
-  cairo_surface_set_fallback_resolution (surface, 300, 300);
+  cairo_surface_set_fallback_resolution (surface,
+                                         2.0 * gtk_print_settings_get_printer_lpi (settings),
+                                         2.0 * gtk_print_settings_get_printer_lpi (settings));
 
   return surface;
 }
@@ -3282,7 +3338,16 @@ set_option_from_settings (GtkPrinterOption *option,
       else
 	{
 	  int res = gtk_print_settings_get_resolution (settings);
-	  if (res != 0)
+	  int res_x = gtk_print_settings_get_resolution_x (settings);
+	  int res_y = gtk_print_settings_get_resolution_y (settings);
+
+          if (res_x != res_y)
+            {
+	      value = g_strdup_printf ("%dx%ddpi", res_x, res_y);
+	      gtk_printer_option_set (option, value);
+	      g_free (value);
+            }
+          else if (res != 0)
 	    {
 	      value = g_strdup_printf ("%ddpi", res);
 	      gtk_printer_option_set (option, value);
@@ -3371,10 +3436,19 @@ foreach_option_get_settings (GtkPrinterOption *option,
 			    settings, GTK_PRINT_SETTINGS_QUALITY, "OutputMode");
   else if (strcmp (option->name, "cups-Resolution") == 0)
     {
-      int res = atoi (value);
-      /* TODO: What if resolution is on XXXxYYYdpi form? */
-      if (res != 0)
-	gtk_print_settings_set_resolution (settings, res);
+      int res, res_x, res_y;
+
+      if (sscanf (value, "%dx%ddpi", &res_x, &res_y) == 2)
+        {
+          if (res_x != 0 && res_y != 0)
+            gtk_print_settings_set_resolution_xy (settings, res_x, res_y);
+        }
+      else if (sscanf (value, "%ddpi", &res) == 1)
+        {
+          if (res != 0)
+            gtk_print_settings_set_resolution (settings, res);
+        }
+
       gtk_print_settings_set (settings, option->name, value);
     }
   else if (strcmp (option->name, "gtk-paper-type") == 0)
