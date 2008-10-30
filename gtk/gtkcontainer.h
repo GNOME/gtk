@@ -32,7 +32,6 @@
 #define __GTK_CONTAINER_H__
 
 
-#include <gtk/gtkenums.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkadjustment.h>
 

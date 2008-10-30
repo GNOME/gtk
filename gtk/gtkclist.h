@@ -37,7 +37,6 @@
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkhscrollbar.h>
 #include <gtk/gtkvscrollbar.h>
-#include <gtk/gtkenums.h>
 
 
 G_BEGIN_DECLS

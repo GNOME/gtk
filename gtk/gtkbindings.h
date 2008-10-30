@@ -37,7 +37,6 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkobject.h>
-#include <gtk/gtkenums.h>
 
 
 G_BEGIN_DECLS

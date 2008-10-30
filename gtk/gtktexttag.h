@@ -54,11 +54,13 @@
 #ifndef __GTK_TEXT_TAG_H__
 #define __GTK_TEXT_TAG_H__
 
+
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
 
 /* Not needed, retained for compatibility -Yosh */
 #include <gtk/gtkobject.h>
+
 
 G_BEGIN_DECLS
 

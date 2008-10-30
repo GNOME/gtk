@@ -1,3 +1,8 @@
+2008-10-30  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/*.h: no need to include <gtk/gtkenums.h> in headers which
+	somehow include gtkobject.h or another header which includes it.
+
 2008-10-30  Marek Kasik  <mkasik@redhat.com>
 
 	Bug 339714 - Set printer dpi on cairo ps/pdf surfaces when printing

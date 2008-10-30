@@ -31,9 +31,10 @@
 #ifndef __GTK_SELECTION_H__
 #define __GTK_SELECTION_H__
 
-#include <gtk/gtkenums.h>
+
 #include <gtk/gtkwidget.h>
 #include <gtk/gtktextiter.h>
+
 
 G_BEGIN_DECLS
 

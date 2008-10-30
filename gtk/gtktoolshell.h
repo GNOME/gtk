@@ -27,7 +27,9 @@
 #ifndef __GTK_TOOL_SHELL_H__
 #define __GTK_TOOL_SHELL_H__
 
+
 #include <gtk/gtkenums.h>
+
 
 G_BEGIN_DECLS
 

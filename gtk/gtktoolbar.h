@@ -38,7 +38,6 @@
 
 
 #include <gtk/gtkcontainer.h>
-#include <gtk/gtkenums.h>
 #include <gtk/gtktooltips.h>
 #include <gtk/gtktoolitem.h>
 

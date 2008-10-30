@@ -25,14 +25,15 @@
 #ifndef __GTK_PRINT_OPERATION_H__
 #define __GTK_PRINT_OPERATION_H__
 
+
 #include <cairo.h>
 #include <gtk/gtkmain.h>
-#include <gtk/gtkenums.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkprintsettings.h>
 #include <gtk/gtkprintcontext.h>
 #include <gtk/gtkprintoperationpreview.h>
+
 
 G_BEGIN_DECLS
 

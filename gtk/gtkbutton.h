@@ -33,7 +33,6 @@
 
 
 #include <gtk/gtkbin.h>
-#include <gtk/gtkenums.h>
 #include <gtk/gtkimage.h>
 
 

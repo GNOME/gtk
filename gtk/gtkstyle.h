@@ -36,6 +36,7 @@
 #include <gtk/gtkenums.h>
 #include <pango/pango.h>
 
+
 G_BEGIN_DECLS
 
 #define GTK_TYPE_STYLE              (gtk_style_get_type ())
