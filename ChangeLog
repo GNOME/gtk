@@ -1,8 +1,9 @@
-2008-10-30  set REAL_NAME environment variable  <kalikiana@gyokuro>
+2008-10-30  Christian Dywan  <christian@imendio.com>
 
-	reviewed by: <delete if not using a buddy>
+	Bug 557316 – GtkLinkButton should consider user-defined tooltip
 
 	* gtk/gtklinkbutton.c (gtk_link_button_query_tooltip_cb):
+	Only override the tooltip if not previously set
 
 2008-10-27  Richard Hult  <richard@imendio.com>
 
