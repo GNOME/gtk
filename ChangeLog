@@ -1,3 +1,12 @@
+2008-10-31  Christian Dywan  <christian@imendio.com>
+
+	Bug 558667 – gtk_font_selection_dialog_get_apply_button - deprecate?
+
+	* gtk/gtk.symbols:
+	* gtk/gtkfontsel.c:
+	* gtk/gtkfontsel.h:
+	Deprecate gtk_font_selection_dialog_get_apply_button
+
 2008-10-31  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 558323 – glitches when popping up combos in treeviews

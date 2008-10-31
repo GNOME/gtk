@@ -1601,7 +1601,6 @@ gtk_font_button_set_use_size
 
 #if IN_HEADER(__GTK_FONTSEL_H__)
 #if IN_FILE(__GTK_FONTSEL_C__)
-gtk_font_selection_dialog_get_apply_button
 gtk_font_selection_dialog_get_cancel_button
 gtk_font_selection_dialog_get_font_name
 gtk_font_selection_dialog_get_ok_button
@@ -1611,6 +1610,7 @@ gtk_font_selection_dialog_new
 gtk_font_selection_dialog_set_font_name
 gtk_font_selection_dialog_set_preview_text
 #ifndef GTK_DISABLE_DEPRECATED
+gtk_font_selection_dialog_get_apply_button
 gtk_font_selection_get_font
 gtk_font_selection_dialog_get_font
 #endif

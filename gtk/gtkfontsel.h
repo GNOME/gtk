@@ -176,7 +176,9 @@ GType	   gtk_font_selection_dialog_get_type	       (void) G_GNUC_CONST;
 GtkWidget *gtk_font_selection_dialog_new	       (const gchar            *title);
 
 GtkWidget *gtk_font_selection_dialog_get_ok_button     (GtkFontSelectionDialog *fsd);
+#ifndef GTK_DISABLE_DEPRECATED
 GtkWidget *gtk_font_selection_dialog_get_apply_button  (GtkFontSelectionDialog *fsd);
+#endif
 GtkWidget *gtk_font_selection_dialog_get_cancel_button (GtkFontSelectionDialog *fsd);
 
 /* This returns the X Logical Font Description fontname, or NULL if no font

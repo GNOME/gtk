@@ -1593,11 +1593,13 @@ gtk_font_selection_dialog_get_ok_button (GtkFontSelectionDialog *fsd)
  * gtk_font_selection_dialog_get_apply_button:
  * @fsd: a #GtkFontSelectionDialog
  *
- * Gets the 'Apply' button.
+ * Obtains a button. The button doesn't have any function.
  *
- * Return value: the #GtkWidget used in the dialog for the 'Apply' button.
+ * Return value: a #GtkWidget
  *
  * Since: 2.14
+ *
+ * Deprecated: 2.16: Don't use this function.
  */
 GtkWidget *
 gtk_font_selection_dialog_get_apply_button (GtkFontSelectionDialog *fsd)
