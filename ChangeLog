@@ -1,3 +1,11 @@
+2008-10-31  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 558323 – glitches when popping up combos in treeviews
+
+	gtk/gtkcellrenderercombo.c (gtk_cell_renderer_combo_set_property):
+	Don't set the model property on the combo box, since that leads
+	to loops. Reported by Tristan Van Berkom
+
 2008-10-30  Christian Dywan  <christian@imendio.com>
 
 	Bug 557316 – GtkLinkButton should consider user-defined tooltip
