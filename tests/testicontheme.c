@@ -68,6 +68,8 @@ main (int argc, char *argv[])
 
   if (strcmp (argv[1], "display") == 0)
     {
+      GError *error;
+      GdkPixbuf *pixbuf;
       GtkWidget *window, *image;
       GtkIconSize size;
 
@@ -82,10 +84,23 @@ main (int argc, char *argv[])
 	size = atoi (argv[4]);
       else 
 	size = GTK_ICON_SIZE_BUTTON;
-      
+
+      error = NULL;
+      pixbuf = gtk_icon_theme_load_icon (icon_theme, argv[3], size,
+                                         GTK_ICON_LOOKUP_USE_BUILTIN, &error);
+      if (!pixbuf)
+        {
+          g_print ("%s\n", error->message);
+          return 1;
+        }
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      image = gtk_image_new_from_icon_name (argv[3], size); 
+      image = gtk_image_new ();
+      gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
+      g_object_unref (pixbuf);
       gtk_container_add (GTK_CONTAINER (window), image);
+      g_signal_connect (window, "delete-event",
+                        G_CALLBACK (gtk_main_quit), window);
       gtk_widget_show_all (window);
       
       gtk_main ();

@@ -1,3 +1,10 @@
+2008-10-31  Christian Dywan  <christian@imendio.com>
+
+	Bug 347230 – testicontheme shortcomings
+
+	* tests/testicontheme.c (main):
+	Use theme for "display" and quit on window closing
+
 2008-10-30  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 558522 – scroll arrow painted insensitive even though there
