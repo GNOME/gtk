@@ -268,30 +268,16 @@ gtk_cell_renderer_combo_set_property (GObject      *object,
     {
     case PROP_MODEL:
       {
-	GObject *object;
         GtkCellRendererComboPrivate *priv;
 
         priv = GTK_CELL_RENDERER_COMBO_GET_PRIVATE (cell);
 
-	if (cell->model)
-	  {
-            if (priv->combo)
-              gtk_combo_box_set_model (GTK_COMBO_BOX (priv->combo), NULL);
-	    g_object_unref (cell->model);
-	    cell->model = NULL;
-	  }
-
-	object = g_value_get_object (value);
-        if (object)
-          {
-            g_return_if_fail (GTK_IS_TREE_MODEL (object));
-            g_object_ref (object);
-
-            cell->model = GTK_TREE_MODEL (object);
-            if (priv->combo)
-              gtk_combo_box_set_model (GTK_COMBO_BOX (priv->combo), cell->model);
-          }
-	break;
+        if (cell->model)
+          g_object_unref (cell->model);
+        cell->model = GTK_TREE_MODEL (g_value_get_object (value));
+        if (cell->model)
+          g_object_ref (cell->model);
+        break;
       }
     case PROP_TEXT_COLUMN:
       cell->text_column = g_value_get_int (value);
@@ -337,6 +323,7 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
   gboolean canceled;
   GtkCellRendererComboPrivate *priv;
 
+  g_print ("combo cell editing done\n");
   cell = GTK_CELL_RENDERER_COMBO (data);
   priv = GTK_CELL_RENDERER_COMBO_GET_PRIVATE (data);
 
