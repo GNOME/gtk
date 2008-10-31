@@ -4128,6 +4128,9 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
 
   gtk_notebook_update_tab_states (notebook);
 
+  if (notebook->scrollable)
+    gtk_notebook_redraw_arrows (notebook);
+
   gtk_widget_child_notify (child, "tab-expand");
   gtk_widget_child_notify (child, "tab-fill");
   gtk_widget_child_notify (child, "tab-pack");

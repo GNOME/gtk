@@ -1,3 +1,11 @@
+2008-10-30  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 558522 – scroll arrow painted insensitive even though there
+	are pages beyond the edge
+
+	* gtk/gtknotebook.c (gtk_notebook_real_insert_page): Redraw
+	arrows. Pointed out by Christian Persch
+
 2008-10-30  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkcellrenderertext.h
@@ -71,7 +79,7 @@
 	(gdk_pointer_grab_info_libgtk_only): Return TRUE when there is a
 	pointer grab. Patch by Owen Taylor.
 
-2008-10-2r76  Matthias Clasen  <mclasen@redhat.com>
+2008-10-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktoolshell.c:
 	* gtk/gtktoolitem.c: Remove markup from short descriptions.
