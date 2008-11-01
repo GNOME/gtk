@@ -1070,6 +1070,16 @@ print_event (GdkEvent *event)
 	       event->configure.x, event->configure.y,
 	       event->configure.width, event->configure.height);
       break;
+    case GDK_CLIENT_EVENT:
+      g_print ("%s %d %ld %ld %ld %ld %ld",
+	       gdk_atom_name (event->client.message_type),
+	       event->client.data_format,
+	       event->client.data.l[0],
+	       event->client.data.l[1],
+	       event->client.data.l[2],
+	       event->client.data.l[3],
+	       event->client.data.l[4]);
+      break;
     case GDK_SCROLL:
       g_print ("(%.4g,%.4g) (%.4g,%.4g) %s ",
 	       event->scroll.x, event->scroll.y,
@@ -1213,9 +1223,9 @@ fill_key_event_string (GdkEvent *event)
 }
 
 static GdkFilterReturn
-apply_filters (GdkWindow  *window,
-	       MSG        *msg,
-	       GList      *filters)
+apply_event_filters (GdkWindow  *window,
+		     MSG        *msg,
+		     GList      *filters)
 {
   GdkFilterReturn result = GDK_FILTER_CONTINUE;
   GdkEvent *event;
@@ -2276,7 +2286,7 @@ gdk_event_translate (MSG  *msg,
     {
       /* Apply global filters */
 
-      GdkFilterReturn result = apply_filters (NULL, msg, _gdk_default_filters);
+      GdkFilterReturn result = apply_event_filters (NULL, msg, _gdk_default_filters);
       
       /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
        * happened. If it is GDK_FILTER_REMOVE or GDK_FILTER_TRANSLATE,
@@ -2335,7 +2345,7 @@ gdk_event_translate (MSG  *msg,
     {
       /* Apply per-window filters */
 
-      GdkFilterReturn result = apply_filters (window, msg, ((GdkWindowObject *) window)->filters);
+      GdkFilterReturn result = apply_event_filters (window, msg, ((GdkWindowObject *) window)->filters);
 
       if (result == GDK_FILTER_REMOVE || result == GDK_FILTER_TRANSLATE)
 	{
@@ -2348,8 +2358,14 @@ gdk_event_translate (MSG  *msg,
     {
       GList *tmp_list;
       GdkFilterReturn result = GDK_FILTER_CONTINUE;
+      GList *node;
 
       GDK_NOTE (EVENTS, g_print (" client_message"));
+
+      event = gdk_event_new (GDK_NOTHING);
+      ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
+
+      node = _gdk_event_queue_append (_gdk_display, event);
 
       tmp_list = client_filters;
       while (tmp_list)
@@ -2360,38 +2376,41 @@ gdk_event_translate (MSG  *msg,
 
 	  if (filter->type == GDK_POINTER_TO_ATOM (msg->wParam))
 	    {
-	      GList *filter_list = g_list_append (NULL, filter);
-	      
 	      GDK_NOTE (EVENTS, g_print (" (match)"));
 
-	      result = apply_filters (window, msg, filter_list);
-
-	      g_list_free (filter_list);
+	      result = (*filter->function) (msg, event, filter->data);
 
 	      if (result != GDK_FILTER_CONTINUE)
 		break;
 	    }
 	}
 
-      if (result == GDK_FILTER_REMOVE || result == GDK_FILTER_TRANSLATE)
+      switch (result)
 	{
+	case GDK_FILTER_REMOVE:
+	  _gdk_event_queue_remove_link (_gdk_display, node);
+	  g_list_free_1 (node);
+	  gdk_event_free (event);
 	  return_val = TRUE;
 	  goto done;
-	}
-      else
-	{
+
+	case GDK_FILTER_TRANSLATE:
+	  ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
+	  GDK_NOTE (EVENTS, print_event (event));
+	  return_val = TRUE;
+	  goto done;
+
+	case GDK_FILTER_CONTINUE:
 	  /* Send unknown client messages on to Gtk for it to use */
 
-	  event = gdk_event_new (GDK_CLIENT_EVENT);
+	  event->client.type = GDK_CLIENT_EVENT;
 	  event->client.window = window;
 	  event->client.message_type = GDK_POINTER_TO_ATOM (msg->wParam);
 	  event->client.data_format = 32;
 	  event->client.data.l[0] = msg->lParam;
 	  for (i = 1; i < 5; i++)
 	    event->client.data.l[i] = 0;
-	  
-	  append_event (event);
-	  
+	  GDK_NOTE (EVENTS, print_event (event));
 	  return_val = TRUE;
 	  goto done;
 	}
