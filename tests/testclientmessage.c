@@ -83,9 +83,9 @@ main (int argc, char **argv)
 						  g_rand_int_range (g_rand_new (), 1, 99)),
 				 FALSE);
 
-  g_print ("using client message type %s\n", gdk_atom_name (my_type));
+  g_print ("using random client message type %s\n", gdk_atom_name (random_type));
 
- window = g_object_connect (g_object_new (gtk_window_get_type (),
+  window = g_object_connect (g_object_new (gtk_window_get_type (),
 					   "type", GTK_WINDOW_TOPLEVEL,
 					   "title", "testclientmessage",
 					   "border_width", 10,
