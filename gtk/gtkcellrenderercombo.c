@@ -323,7 +323,6 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
   gboolean canceled;
   GtkCellRendererComboPrivate *priv;
 
-  g_print ("combo cell editing done\n");
   cell = GTK_CELL_RENDERER_COMBO (data);
   priv = GTK_CELL_RENDERER_COMBO_GET_PRIVATE (data);
 
