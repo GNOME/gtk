@@ -35,6 +35,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testcombo			\
 	testcombochange			\
 	testcellrenderertext		\
+	testclientmessage		\
 	testdnd				\
 	testellipsise			\
 	testentrycompletion 		\
@@ -113,6 +114,7 @@ testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
 testcombochange_DEPENDENCIES = $(TEST_DEPS)
 testcellrenderertext_DEPENDENCIES = $(TEST_DEPS)
+testclientmessage_DEPENDENCIES = $(TEST_DEPS)
 testdnd_DEPENDENCIES = $(TEST_DEPS)
 testellipsise_DEPENDENCIES = $(TEST_DEPS)
 testentrycompletion_DEPENDENCIES = $(TEST_DEPS)
@@ -166,6 +168,7 @@ testcalendar_LDADD = $(LDADDS)
 testcombo_LDADD = $(LDADDS)
 testcombochange_LDADD = $(LDADDS)
 testcellrenderertext_LDADD = $(LDADDS)
+testclientmessage_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)
 testellipsise_LDADD = $(LDADDS)
 testentrycompletion_LDADD = $(LDADDS)

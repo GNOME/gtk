@@ -14,6 +14,11 @@
 	although not exactly, as the parameter list and return value
 	semantics of gdk_event_translate() is different.
 
+	* tests/testclientmessage.c: New interactive test program to
+	verify client message functionality.
+
+	* tests/Makefile.am: Add it.
+
 2008-11-01  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 409435 – GtkStatusIcon enhancements: DnD, scroll events, 
