@@ -1,3 +1,7 @@
+2008-11-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add new GtkStyle functions.
+
 2008-10-29  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/drawing-model.xml: New chapter for "The GTK+ Drawing Model".

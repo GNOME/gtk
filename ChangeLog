@@ -1,3 +1,12 @@
+2008-11-01  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 412134 – Add API to query style properties from the style
+
+	* gtk/gtk.symbols:
+	* gtk/gtkstyle.[hc]: Add getters for style properties to
+	avoid the need for ugly workarounds with dummy widget instances.
+	Patch by Mariano Suárez-Alvarez
+
 2008-10-31  Christian Dywan  <christian@imendio.com>
 
 	Bug 558667 – gtk_font_selection_dialog_get_apply_button - deprecate?
