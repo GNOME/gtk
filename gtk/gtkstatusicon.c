@@ -40,6 +40,7 @@
 
 #include "gtkprivate.h"
 #include "gtkwidget.h"
+#include "gtktooltip.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "gdk/x11/gdkx.h"
@@ -86,6 +87,9 @@ enum
   ACTIVATE_SIGNAL,
   POPUP_MENU_SIGNAL,
   SIZE_CHANGED_SIGNAL,
+  BUTTON_PRESS_EVENT_SIGNAL,
+  BUTTON_RELEASE_EVENT_SIGNAL,
+  SCROLL_EVENT_SIGNAL,
   LAST_SIGNAL
 };
 
@@ -157,12 +161,16 @@ static void     gtk_status_icon_screen_changed   (GtkStatusIcon  *status_icon,
 						  GdkScreen      *old_screen);
 static void     gtk_status_icon_embedded_changed (GtkStatusIcon *status_icon);
 static void     gtk_status_icon_orientation_changed (GtkStatusIcon *status_icon);
+static gboolean gtk_status_icon_scroll           (GtkStatusIcon  *status_icon,
+						  GdkEventScroll *event);
 
 static gboolean gtk_status_icon_key_press        (GtkStatusIcon  *status_icon,
 						  GdkEventKey    *event);
 static void     gtk_status_icon_popup_menu       (GtkStatusIcon  *status_icon);
 #endif
 static gboolean gtk_status_icon_button_press     (GtkStatusIcon  *status_icon,
+						  GdkEventButton *event);
+static gboolean gtk_status_icon_button_release   (GtkStatusIcon  *status_icon,
 						  GdkEventButton *event);
 static void     gtk_status_icon_disable_blinking (GtkStatusIcon  *status_icon);
 static void     gtk_status_icon_reset_image_data (GtkStatusIcon  *status_icon);
@@ -179,6 +187,10 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
   gobject_class->finalize     = gtk_status_icon_finalize;
   gobject_class->set_property = gtk_status_icon_set_property;
   gobject_class->get_property = gtk_status_icon_get_property;
+
+  class->button_press_event   = NULL;
+  class->button_release_event = NULL;
+  class->scroll_event         = NULL;
 
   g_object_class_install_property (gobject_class,
 				   PROP_PIXBUF,
@@ -304,7 +316,6 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 						      GTK_ORIENTATION_HORIZONTAL,
 						      GTK_PARAM_READABLE));
 
-
   /**
    * GtkStatusIcon::activate:
    * @status_icon: the object which received the signal
@@ -386,6 +397,86 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 		  1,
 		  G_TYPE_INT);
 
+  /**
+   * GtkStatusIcon::button-press-event:
+   * @status_icon: the object which received the signal
+   * @event: the #GdkEventButton which triggered this signal
+   *
+   * The ::button-press-event signal will be emitted when a button
+   * (typically from a mouse) is pressed.
+   *
+   * Whether this event is emitted is platform-dependent.  Use the 
+   * #GtkStatusIcon::activate and #GtkStatusIcon::popup-menu signals 
+   * in preference.
+   *
+   * Return value: %TRUE to stop other handlers from being invoked
+   * for the event. %FALSE to propagate the event further.
+   *
+   * Since: 2.16
+   */
+  status_icon_signals [BUTTON_PRESS_EVENT_SIGNAL] =
+    g_signal_new (I_("button_press_event"),
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkStatusIconClass, button_press_event),
+		  g_signal_accumulator_true_handled, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  /**
+   * GtkStatusIcon::button-release-event:
+   * @status_icon: the object which received the signal
+   * @event: the #GdkEventButton which triggered this signal
+   *
+   * The ::button-release-event signal will be emitted when a button
+   * (typically from a mouse) is released.
+   *
+   * Whether this event is emitted is platform-dependent.  Use the 
+   * #GtkStatusIcon::activate and #GtkStatusIcon::popup-menu signals 
+   * in preference.
+   *
+   * Return value: %TRUE to stop other handlers from being invoked
+   * for the event. %FALSE to propagate the event further.
+   *
+   * Since: 2.16
+   */
+  status_icon_signals [BUTTON_RELEASE_EVENT_SIGNAL] =
+    g_signal_new (I_("button_release_event"),
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkStatusIconClass, button_release_event),
+		  g_signal_accumulator_true_handled, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  /**
+   * GtkStatusIcon::scroll-event:
+   * @status_icon: the object which received the signal.
+   * @event: the #GdkEventScroll which triggered this signal
+   *
+   * The ::scroll-event signal is emitted when a button in the 4 to 7
+   * range is pressed. Wheel mice are usually configured to generate
+   * button press events for buttons 4 and 5 when the wheel is turned.
+   *
+   * Whether this event is emitted is platform-dependent.
+   *
+   * Returns: %TRUE to stop other handlers from being invoked for the event.
+   *   %FALSE to propagate the event further.
+   *
+   * Since: 2.16
+   */
+  status_icon_signals[SCROLL_EVENT_SIGNAL] =
+    g_signal_new (I_("scroll_event"),
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkStatusIconClass, scroll_event),
+		  g_signal_accumulator_true_handled, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+
   g_type_class_add_private (class, sizeof (GtkStatusIconPrivate));
 }
 
@@ -426,7 +517,10 @@ button_callback (gpointer data)
 {
   ButtonCallbackData *bc = (ButtonCallbackData *) data;
 
-  gtk_status_icon_button_press (bc->status_icon, bc->event);
+  if (event->type == GDK_BUTTON_PRESS)
+    gtk_status_icon_button_press (bc->status_icon, bc->event);
+  else
+    gtk_status_icon_button_release (bc->status_icon, bc->event);
 
   gdk_event_free ((GdkEvent *) bc->event);
   g_free (data);
@@ -472,17 +566,62 @@ wndproc (HWND   hwnd,
   if (message == WM_GTK_TRAY_NOTIFICATION)
     {
       ButtonCallbackData *bc;
+      guint button;
       
       switch (lparam)
 	{
 	case WM_LBUTTONDOWN:
+	  button = 1;
+	  goto buttondown0;
+
+	case WM_MBUTTONDOWN:
+	  button = 2;
+	  goto buttondown0;
+
 	case WM_RBUTTONDOWN:
+	  button = 3;
+	  goto buttondown0;
+
+	case WM_XBUTTONDOWN:
+	  if (HIWORD (wparam) == XBUTTON1)
+	    button = 4;
+	  else
+	    button = 5;
+
+	buttondown0:
 	  bc = g_new (ButtonCallbackData, 1);
 	  bc->event = (GdkEventButton *) gdk_event_new (GDK_BUTTON_PRESS);
 	  bc->status_icon = GTK_STATUS_ICON (wparam);
-	  build_button_event (bc->status_icon->priv, bc->event, (lparam == WM_LBUTTONDOWN) ? 1 : 3);
+	  build_button_event (bc->status_icon->priv, bc->event, button);
 	  g_idle_add (button_callback, bc);
 	  break;
+
+	case WM_LBUTTONUP:
+	  button = 1;
+	  goto buttonup0;
+
+	case WM_MBUTTONUP:
+	  button = 2;
+	  goto buttonup0;
+
+	case WM_RBUTTONUP:
+	  button = 3;
+	  goto buttonup0;
+
+	case WM_XBUTTONUP:
+	  if (HIWORD (wparam) == XBUTTON1)
+	    button = 4;
+	  else
+	    button = 5;
+
+	buttonup0:
+	  bc = g_new (ButtonCallbackData, 1);
+	  bc->event = (GdkEventButton *) gdk_event_new (GDK_BUTTON_RELEASE);
+	  bc->status_icon = GTK_STATUS_ICON (wparam);
+	  build_button_event (bc->status_icon->priv, bc->event, button);
+	  g_idle_add (button_callback, bc);
+	  break;
+
 	default :
 	  break;
 	}
@@ -551,7 +690,8 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   priv->tray_icon = GTK_WIDGET (_gtk_tray_icon_new (NULL));
 
   gtk_widget_add_events (GTK_WIDGET (priv->tray_icon),
-			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
+			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+			 GDK_SCROLL_MASK);
 
   g_signal_connect_swapped (priv->tray_icon, "key-press-event",
 			    G_CALLBACK (gtk_status_icon_key_press), status_icon);
@@ -563,6 +703,10 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
 			    G_CALLBACK (gtk_status_icon_orientation_changed), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "button-press-event",
 			    G_CALLBACK (gtk_status_icon_button_press), status_icon);
+  g_signal_connect_swapped (priv->tray_icon, "button-release-event",
+			    G_CALLBACK (gtk_status_icon_button_release), status_icon);
+  g_signal_connect_swapped (priv->tray_icon, "scroll-event",
+			    G_CALLBACK (gtk_status_icon_scroll), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "screen-changed",
 		    	    G_CALLBACK (gtk_status_icon_screen_changed), status_icon);
   priv->image = gtk_image_new ();
@@ -1384,6 +1528,14 @@ static gboolean
 gtk_status_icon_button_press (GtkStatusIcon  *status_icon,
 			      GdkEventButton *event)
 {
+  gboolean handled = FALSE;
+
+  g_signal_emit (status_icon,
+		 status_icon_signals [BUTTON_PRESS_EVENT_SIGNAL], 0,
+		 event, &handled);
+  if (handled)
+    return TRUE;
+
   if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
     {
       emit_activate_signal (status_icon);
@@ -1397,6 +1549,30 @@ gtk_status_icon_button_press (GtkStatusIcon  *status_icon,
 
   return FALSE;
 }
+
+static gboolean
+gtk_status_icon_button_release (GtkStatusIcon  *status_icon,
+				GdkEventButton *event)
+{
+  gboolean handled = FALSE;
+  g_signal_emit (status_icon,
+		 status_icon_signals [BUTTON_RELEASE_EVENT_SIGNAL], 0,
+		 event, &handled);
+  return handled;
+}
+
+#ifdef GDK_WINDOWING_X11
+static gboolean
+gtk_status_icon_scroll (GtkStatusIcon  *status_icon,
+			GdkEventScroll *event)
+{
+  gboolean handled = FALSE;
+  g_signal_emit (status_icon,
+		 status_icon_signals [SCROLL_EVENT_SIGNAL], 0,
+		 event, &handled);
+  return handled;
+}
+#endif /* GDK_WINDOWING_X11 */
 
 static void
 gtk_status_icon_reset_image_data (GtkStatusIcon *status_icon)

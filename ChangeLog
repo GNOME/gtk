@@ -1,5 +1,13 @@
 2008-11-01  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 409435 – GtkStatusIcon enhancements: DnD, scroll events, 
+	middle click, rich tooltips
+
+	* gtk/gtkstatusicon.[hc]: Add support for button press/release and
+	scroll events. Patch by Ed Catmur
+
+2008-11-01  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 322934 – Replace menu's proxy icons with empty space hiding icons
 
 	* gtk/gtkmenu.c (gtk_menu_size_request): Use consistent padding
