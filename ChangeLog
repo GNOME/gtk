@@ -1,3 +1,19 @@
+2008-11-01  Tor Lillqvist  <tml@novell.com>
+
+	Bug 558278 - Crash when calling a callback set by
+	gdk_add_client_message_filter()
+
+	* gdk/win32/gdkevents-win32.c (apply_event_filters): Rename from
+	apply_filters() so that it is clear that this function is for
+	GdkEventFilters only.
+
+	(print_event): Print more information for GDK_CLIENT_EVENT events.
+
+	(gdk_event_translate): When handling client filters, don't use
+	apply_event_filters(). Use similar code as in the X11 backend,
+	although not exactly, as the parameter list and return value
+	semantics of gdk_event_translate() is different.
+
 2008-11-01  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 409435 – GtkStatusIcon enhancements: DnD, scroll events, 
