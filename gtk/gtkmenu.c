@@ -31,6 +31,8 @@
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkbindings.h"
+#include "gtkcheckmenuitem.h"
+#include  <gobject/gvaluecollector.h>
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
@@ -2429,10 +2431,26 @@ gtk_menu_size_request (GtkWidget      *widget,
        priv->heights[t] = MAX (priv->heights[t], part);
     }
 
+  /* if the menu doesn't include any images or check items
+   * reserve the space so that all menus are consistent */
+  if (max_toggle_size == 0)
+    {
+      guint toggle_spacing;
+      guint indicator_size;
+
+      gtk_style_get (widget->style,
+                     GTK_TYPE_CHECK_MENU_ITEM,
+                     "toggle-spacing", &toggle_spacing,
+                     "indicator-size", &indicator_size,
+                     NULL);
+
+      max_toggle_size = indicator_size + toggle_spacing;
+    }
+
   for (i = 0; i < gtk_menu_get_n_rows (menu); i++)
     requisition->height += priv->heights[i];
 
-  requisition->width += max_toggle_size + max_accel_width;
+  requisition->width += 2 * max_toggle_size + max_accel_width;
   requisition->width *= gtk_menu_get_n_columns (menu);
 
   gtk_widget_style_get (GTK_WIDGET (menu),

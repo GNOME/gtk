@@ -1,5 +1,14 @@
 2008-11-01  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 322934 – Replace menu's proxy icons with empty space hiding icons
+
+	* gtk/gtkmenu.c (gtk_menu_size_request): Use consistent padding
+	regardless of imagees or checks being in the menu. Also add
+	padding on the right edge.
+	Proposal by Luca Ferretti, patch by Jon McCann
+
+2008-11-01  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 412134 – Add API to query style properties from the style
 
 	* gtk/gtk.symbols:
