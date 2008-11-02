@@ -42,6 +42,7 @@ static void gtk_image_menu_item_size_request         (GtkWidget        *widget,
                                                       GtkRequisition   *requisition);
 static void gtk_image_menu_item_size_allocate        (GtkWidget        *widget,
                                                       GtkAllocation    *allocation);
+static void gtk_image_menu_item_map                  (GtkWidget        *widget);
 static void gtk_image_menu_item_remove               (GtkContainer          *container,
                                                       GtkWidget             *child);
 static void gtk_image_menu_item_toggle_size_request  (GtkMenuItem           *menu_item,
@@ -85,6 +86,7 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
   widget_class->screen_changed = gtk_image_menu_item_screen_changed;
   widget_class->size_request = gtk_image_menu_item_size_request;
   widget_class->size_allocate = gtk_image_menu_item_size_allocate;
+  widget_class->map = gtk_image_menu_item_map;
 
   container_class->forall = gtk_image_menu_item_forall;
   container_class->remove = gtk_image_menu_item_remove;
@@ -172,6 +174,19 @@ show_image (GtkImageMenuItem *image_menu_item)
 }
 
 static void
+gtk_image_menu_item_map (GtkWidget *widget)
+{
+  GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
+
+  GTK_WIDGET_CLASS (gtk_image_menu_item_parent_class)->map (widget);
+
+  if (image_menu_item->image)
+    g_object_set (image_menu_item->image,
+                  "visible", show_image (image_menu_item),
+                  NULL);
+}
+
+static void
 gtk_image_menu_item_destroy (GtkObject *object)
 {
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (object);
@@ -197,7 +212,7 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 
   *requisition = 0;
 
-  if (image_menu_item->image && show_image (image_menu_item))
+  if (image_menu_item->image && GTK_WIDGET_VISIBLE (image_menu_item->image))
     {
       GtkRequisition image_requisition;
       guint toggle_spacing;
@@ -237,10 +252,8 @@ gtk_image_menu_item_size_request (GtkWidget      *widget,
     pack_dir = GTK_PACK_DIRECTION_LTR;
 
   image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
-  
-  if (image_menu_item->image && 
-      GTK_WIDGET_VISIBLE (image_menu_item->image) && 
-      show_image (image_menu_item))
+
+  if (image_menu_item->image && GTK_WIDGET_VISIBLE (image_menu_item->image))
     {
       GtkRequisition child_requisition;
       
@@ -284,7 +297,7 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
 
   GTK_WIDGET_CLASS (gtk_image_menu_item_parent_class)->size_allocate (widget, allocation);
 
-  if (image_menu_item->image && show_image (image_menu_item))
+  if (image_menu_item->image && GTK_WIDGET_VISIBLE (image_menu_item->image))
     {
       gint x, y, offset;
       GtkRequisition child_requisition;
@@ -486,7 +499,6 @@ gtk_image_menu_item_new_from_stock (const gchar      *stock_id,
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
     }
 
-  gtk_widget_show (image);
   return item;
 }
 
@@ -518,7 +530,7 @@ gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
     return;
 
   gtk_widget_set_parent (image, GTK_WIDGET (image_menu_item));
-  g_object_set (image, 
+  g_object_set (image,
 		"visible", show_image (image_menu_item),
 		"no-show-all", TRUE,
 		NULL);

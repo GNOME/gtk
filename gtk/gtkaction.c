@@ -749,9 +749,9 @@ connect_proxy (GtkAction     *action,
 	  if (!image)
 	    {
 	      image = gtk_image_new ();
+	      gtk_widget_show (image);
 	      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (proxy),
 					     image);
-	      gtk_widget_show (image);
 	    }
 	  
 	  if (action->private_data->stock_id &&

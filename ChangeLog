@@ -1,3 +1,11 @@
+2008-11-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimagemenuitem.c: Make it possible to overrule the
+	gtk-menu-images setting.
+
+	* gtk/gtkaction.c (connect_proxy): Show the image before adding
+	it to the image menu item.
+
 2008-11-01  Tor Lillqvist  <tml@novell.com>
 
 	Bug 558278 - Crash when calling a callback set by
