@@ -517,7 +517,7 @@ button_callback (gpointer data)
 {
   ButtonCallbackData *bc = (ButtonCallbackData *) data;
 
-  if (event->type == GDK_BUTTON_PRESS)
+  if (bc->event->type == GDK_BUTTON_PRESS)
     gtk_status_icon_button_press (bc->status_icon, bc->event);
   else
     gtk_status_icon_button_release (bc->status_icon, bc->event);

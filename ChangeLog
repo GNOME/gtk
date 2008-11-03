@@ -1,5 +1,11 @@
 2008-11-02  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 558929 – gtkstatusicon.c: 'event' is a member of the structure
+
+	* gtk/gtkstatusicon.c: Fix the build.
+
+2008-11-02  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkimagemenuitem.c: Make it possible to overrule the
 	gtk-menu-images setting.
 
