@@ -1,3 +1,9 @@
+2008-11-03  Christian Persch  <chpe@gnome.org>
+
+	Bug 558001 – gtk_icon_view_enable_model_drag_[source|dest] problem
+
+	* gtk/gtkiconview.c: Make gtk_drag_*_add_*_targets() usable with GtkIconView.
+
 2008-11-02  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 558929 – gtkstatusicon.c: 'event' is a member of the structure

@@ -168,10 +168,7 @@ struct _GtkIconViewPrivate
   gint press_start_x;
   gint press_start_y;
 
-  GtkTargetList *source_targets;
   GdkDragAction source_actions;
-
-  GtkTargetList *dest_targets;
   GdkDragAction dest_actions;
 
   GtkTreeRowReference *dest_item;
@@ -451,8 +448,6 @@ static gboolean gtk_icon_view_maybe_begin_drag   (GtkIconView             *icon_
 					   	  GdkEventMotion          *event);
 
 static void     remove_scroll_timeout            (GtkIconView *icon_view);
-static void     clear_dest_info                  (GtkIconView *icon_view);
-static void     clear_source_info                (GtkIconView *icon_view);
 
 static void     adjust_wrap_width                (GtkIconView     *icon_view,
 						  GtkIconViewItem *item);
@@ -1032,9 +1027,6 @@ gtk_icon_view_destroy (GtkObject *object)
       icon_view->priv->vadjustment = NULL;
     }
   
-  clear_dest_info (icon_view);
-  clear_source_info (icon_view);
-
   GTK_OBJECT_CLASS (gtk_icon_view_parent_class)->destroy (object);
 }
 
@@ -6154,26 +6146,6 @@ unset_reorderable (GtkIconView *icon_view)
 }
 
 static void
-clear_source_info (GtkIconView *icon_view)
-{
-  if (icon_view->priv->source_targets)
-    gtk_target_list_unref (icon_view->priv->source_targets);
-  icon_view->priv->source_targets = NULL;
-
-  icon_view->priv->source_set = FALSE;
-}
-
-static void
-clear_dest_info (GtkIconView *icon_view)
-{
-  if (icon_view->priv->dest_targets)
-    gtk_target_list_unref (icon_view->priv->dest_targets);
-  icon_view->priv->dest_targets = NULL;
-
-  icon_view->priv->dest_set = FALSE;
-}
-
-static void
 set_source_row (GdkDragContext *context,
                 GtkTreeModel   *model,
                 GtkTreePath    *source_row)
@@ -6381,7 +6353,8 @@ set_destination (GtkIconView    *icon_view,
       return FALSE; /* no longer a drop site */
     }
 
-  *target = gtk_drag_dest_find_target (widget, context, icon_view->priv->dest_targets);
+  *target = gtk_drag_dest_find_target (widget, context,
+                                       gtk_drag_dest_get_target_list (widget));
   if (*target == GDK_NONE)
     return FALSE;
 
@@ -6501,6 +6474,7 @@ static gboolean
 gtk_icon_view_maybe_begin_drag (GtkIconView    *icon_view,
 				GdkEventMotion *event)
 {
+  GtkWidget *widget = GTK_WIDGET (icon_view);
   GdkDragContext *context;
   GtkTreePath *path = NULL;
   gint button;
@@ -6547,8 +6521,8 @@ gtk_icon_view_maybe_begin_drag (GtkIconView    *icon_view,
   
   retval = TRUE;
 
-  context = gtk_drag_begin (GTK_WIDGET (icon_view),
-                            icon_view->priv->source_targets,
+  context = gtk_drag_begin (widget,
+                            gtk_drag_source_get_target_list (widget),
                             icon_view->priv->source_actions,
                             button,
                             (GdkEvent*)event);
@@ -6926,11 +6900,9 @@ gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
 
-  gtk_drag_source_set (GTK_WIDGET (icon_view), 0, NULL, 0, actions);
+  gtk_drag_source_set (GTK_WIDGET (icon_view), 0, targets, n_targets, actions);
 
-  clear_source_info (icon_view);
   icon_view->priv->start_button_mask = start_button_mask;
-  icon_view->priv->source_targets = gtk_target_list_new (targets, n_targets);
   icon_view->priv->source_actions = actions;
 
   icon_view->priv->source_set = TRUE;
@@ -6958,11 +6930,8 @@ gtk_icon_view_enable_model_drag_dest (GtkIconView          *icon_view,
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
 
-  gtk_drag_dest_set (GTK_WIDGET (icon_view), 0, NULL, 0, actions);
+  gtk_drag_dest_set (GTK_WIDGET (icon_view), 0, targets, n_targets, actions);
 
-  clear_dest_info (icon_view);
-
-  icon_view->priv->dest_targets = gtk_target_list_new (targets, n_targets);
   icon_view->priv->dest_actions = actions;
 
   icon_view->priv->dest_set = TRUE;
@@ -6986,7 +6955,7 @@ gtk_icon_view_unset_model_drag_source (GtkIconView *icon_view)
   if (icon_view->priv->source_set)
     {
       gtk_drag_source_unset (GTK_WIDGET (icon_view));
-      clear_source_info (icon_view);
+      icon_view->priv->source_set = FALSE;
     }
 
   unset_reorderable (icon_view);
@@ -7008,7 +6977,7 @@ gtk_icon_view_unset_model_drag_dest (GtkIconView *icon_view)
   if (icon_view->priv->dest_set)
     {
       gtk_drag_dest_unset (GTK_WIDGET (icon_view));
-      clear_dest_info (icon_view);
+      icon_view->priv->dest_set = FALSE;
     }
 
   unset_reorderable (icon_view);
