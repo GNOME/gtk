@@ -1,3 +1,14 @@
+2008-11-04  Tor Lillqvist  <tml@novell.com>
+
+	Bug 557212 - Problem with which window gains focus and is visible
+
+	* gdk/win32/gdkevents-win32.c (ensure_stacking_on_activate_app):
+	Only do the restacking for the active window of the
+	application. Seems to fix the problem.
+
+	(gdk_event_translate): Only call ensure_stacking_on_activate_app()
+	when the application is being activated, not deactivated.
+
 2008-11-01  Tor Lillqvist  <tml@novell.com>
 
 	Bug 558278 - Crash when calling a callback set by
