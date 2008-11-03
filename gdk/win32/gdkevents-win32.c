@@ -2214,12 +2214,12 @@ ensure_stacking_on_activate_app (MSG       *msg,
     }
 
   if (IsWindowVisible (msg->hwnd) &&
-      gdk_win32_handle_table_lookup (GetActiveWindow ()))
+      msg->hwnd == GetActiveWindow ())
     {
-      /* This window is not a transient-type window and this or some
-       * other window in this app is the active window. Make sure this
-       * window is as visible as possible, just below the lowest
-       * transient-type window of this app.
+      /* This window is not a transient-type window and it is the
+       * activated window. Make sure this window is as visible as
+       * possible, just below the lowest transient-type window of this
+       * app.
        */
       HWND rover;
 
@@ -3680,7 +3680,7 @@ gdk_event_translate (MSG  *msg,
 				 msg->wParam ? "YES" : "NO",
 				 (gint64) msg->lParam));
 
-      if (GDK_WINDOW_IS_MAPPED (window))
+      if (msg->wParam && GDK_WINDOW_IS_MAPPED (window))
 	ensure_stacking_on_activate_app (msg, window);
       break;
 
