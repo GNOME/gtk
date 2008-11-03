@@ -67,10 +67,14 @@ struct _GtkStatusIconClass
                                      GdkEventButton *event);
   gboolean (* scroll_event)         (GtkStatusIcon  *status_icon,
                                      GdkEventScroll *event);
+  gboolean (* query_tooltip)        (GtkStatusIcon  *status_icon,
+                                     gint            x,
+                                     gint            y,
+                                     gboolean        keyboard_mode,
+                                     GtkTooltip     *tooltip);
 
   void (*__gtk_reserved1);
   void (*__gtk_reserved2);
-  void (*__gtk_reserved3);
 };
 
 GType                 gtk_status_icon_get_type           (void) G_GNUC_CONST;
@@ -106,8 +110,16 @@ void                  gtk_status_icon_set_screen         (GtkStatusIcon      *st
                                                           GdkScreen          *screen);
 GdkScreen            *gtk_status_icon_get_screen         (GtkStatusIcon      *status_icon);
 
+#ifndef GTK_DISABLE_DEPRECATED
 void                  gtk_status_icon_set_tooltip        (GtkStatusIcon      *status_icon,
                                                           const gchar        *tooltip_text);
+#endif
+void                  gtk_status_icon_set_has_tooltip    (GtkStatusIcon      *status_icon,
+                                                          gboolean            has_tooltip);
+void                  gtk_status_icon_set_tooltip_text   (GtkStatusIcon      *status_icon,
+                                                          const char         *text);
+void                  gtk_status_icon_set_tooltip_markup (GtkStatusIcon      *status_icon,
+                                                          const char         *markup);
 void                  gtk_status_icon_set_visible        (GtkStatusIcon      *status_icon,
 							  gboolean            visible);
 gboolean              gtk_status_icon_get_visible        (GtkStatusIcon      *status_icon);

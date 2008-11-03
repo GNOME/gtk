@@ -1,3 +1,8 @@
+2008-11-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkstatusicon.[hc]: Add new tooltip api.
+
 2008-11-03  Christian Persch  <chpe@gnome.org>
 
 	Bug 558001 – gtk_icon_view_enable_model_drag_[source|dest] problem

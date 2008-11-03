@@ -79,7 +79,10 @@ enum
   PROP_VISIBLE,
   PROP_ORIENTATION,
   PROP_EMBEDDED,
-  PROP_BLINKING
+  PROP_BLINKING,
+  PROP_HAS_TOOLTIP,
+  PROP_TOOLTIP_TEXT,
+  PROP_TOOLTIP_MARKUP
 };
 
 enum 
@@ -90,6 +93,7 @@ enum
   BUTTON_PRESS_EVENT_SIGNAL,
   BUTTON_RELEASE_EVENT_SIGNAL,
   SCROLL_EVENT_SIGNAL,
+  QUERY_TOOLTIP_SIGNAL,
   LAST_SIGNAL
 };
 
@@ -111,11 +115,13 @@ struct _GtkStatusIconPrivate
   NOTIFYICONDATAW nid;
   gint		last_click_x, last_click_y;
   GtkOrientation orientation;
+  gchar         *tooltip_text;
 #endif
 	
 #ifdef GDK_WINDOWING_QUARTZ
   GtkWidget     *dummy_widget;
   GtkQuartzStatusIcon *status_item;
+  gchar         *tooltip_text;
 #endif
 
   gint          size;
@@ -163,6 +169,11 @@ static void     gtk_status_icon_embedded_changed (GtkStatusIcon *status_icon);
 static void     gtk_status_icon_orientation_changed (GtkStatusIcon *status_icon);
 static gboolean gtk_status_icon_scroll           (GtkStatusIcon  *status_icon,
 						  GdkEventScroll *event);
+static gboolean gtk_status_icon_query_tooltip    (GtkStatusIcon *status_icon,
+						  gint           x,
+						  gint           y,
+						  gboolean       keyboard_tip,
+						  GtkTooltip    *tooltip);
 
 static gboolean gtk_status_icon_key_press        (GtkStatusIcon  *status_icon,
 						  GdkEventKey    *event);
@@ -191,6 +202,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
   class->button_press_event   = NULL;
   class->button_release_event = NULL;
   class->scroll_event         = NULL;
+  class->query_tooltip        = NULL;
 
   g_object_class_install_property (gobject_class,
 				   PROP_PIXBUF,
@@ -316,6 +328,80 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 						      GTK_ORIENTATION_HORIZONTAL,
 						      GTK_PARAM_READABLE));
 
+/**
+ * GtkStatusIcon:has-tooltip:
+ *
+ * Enables or disables the emission of #GtkStatusIcon::query-tooltip on
+ * @status_icon.  A value of %TRUE indicates that @status_icon can have a
+ * tooltip, in this case the status icon will be queried using
+ * #GtkStatusIcon::query-tooltip to determine whether it will provide a
+ * tooltip or not.
+ *
+ * Note that setting this property to %TRUE for the first time will change
+ * the event masks of the windows of this status icon to include leave-notify
+ * and motion-notify events. This will not be undone when the property is set
+ * to %FALSE again.
+ *
+ * Whether this property is respected is platform dependent.
+ * For plain text tooltips, use #GtkStatusIcon:tooltip-text in preference.
+ *
+ * Since: 2.16
+ */
+  g_object_class_install_property (gobject_class,
+				   PROP_HAS_TOOLTIP,
+				   g_param_spec_boolean ("has-tooltip",
+ 							 P_("Has tooltip"),
+ 							 P_("Whether this tray icon has a tooltip"),
+ 							 FALSE,
+ 							 GTK_PARAM_READWRITE));
+  /**
+   * GtkStatusIcon:tooltip-text:
+   *
+   * Sets the text of tooltip to be the given string.
+   *
+   * Also see gtk_tooltip_set_text().
+   *
+   * This is a convenience property which will take care of getting the
+   * tooltip shown if the given string is not %NULL.
+   * #GtkStatusIcon:has-tooltip will automatically be set to %TRUE and
+   * the default handler for the #GtkStatusIcon::query-tooltip signal
+   * will take care of displaying the tooltip.
+   *
+   * Since: 2.16
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TOOLTIP_TEXT,
+                                   g_param_spec_string ("tooltip-text",
+                                                        P_("Tooltip Text"),
+                                                        P_("The contents of the tooltip for this widget"),
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
+  /**
+   * GtkStatusIcon:tooltip-markup:
+   *
+   * Sets the text of tooltip to be the given string, which is marked up
+   * with the <link linkend="PangoMarkupFormat">Pango text markup 
+   * language</link>. Also see gtk_tooltip_set_markup().
+   *
+   * This is a convenience property which will take care of getting the
+   * tooltip shown if the given string is not %NULL.
+   * #GtkStatusIcon:has-tooltip will automatically be set to %TRUE and
+   * the default handler for the #GtkStatusIcon::query-tooltip signal
+   * will take care of displaying the tooltip.
+   *
+   * On some platforms, embedded markup will be ignored.
+   *
+   * Since: 2.16
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_TOOLTIP_MARKUP,
+				   g_param_spec_string ("tooltip-markup",
+ 							P_("Tooltip markup"),
+							P_("The contents of the tooltip for this tray icon"),
+							NULL,
+							GTK_PARAM_READWRITE));
+
+
   /**
    * GtkStatusIcon::activate:
    * @status_icon: the object which received the signal
@@ -405,14 +491,13 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * The ::button-press-event signal will be emitted when a button
    * (typically from a mouse) is pressed.
    *
-   * Whether this event is emitted is platform-dependent.  Use the 
-   * #GtkStatusIcon::activate and #GtkStatusIcon::popup-menu signals 
-   * in preference.
+   * Whether this event is emitted is platform-dependent.  Use the ::activate
+   * and ::popup-menu signals in preference.
    *
    * Return value: %TRUE to stop other handlers from being invoked
    * for the event. %FALSE to propagate the event further.
    *
-   * Since: 2.16
+   * Since: 2.14
    */
   status_icon_signals [BUTTON_PRESS_EVENT_SIGNAL] =
     g_signal_new (I_("button_press_event"),
@@ -432,14 +517,13 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * The ::button-release-event signal will be emitted when a button
    * (typically from a mouse) is released.
    *
-   * Whether this event is emitted is platform-dependent.  Use the 
-   * #GtkStatusIcon::activate and #GtkStatusIcon::popup-menu signals 
-   * in preference.
+   * Whether this event is emitted is platform-dependent.  Use the ::activate
+   * and ::popup-menu signals in preference.
    *
    * Return value: %TRUE to stop other handlers from being invoked
    * for the event. %FALSE to propagate the event further.
    *
-   * Since: 2.16
+   * Since: 2.14
    */
   status_icon_signals [BUTTON_RELEASE_EVENT_SIGNAL] =
     g_signal_new (I_("button_release_event"),
@@ -457,15 +541,13 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * @event: the #GdkEventScroll which triggered this signal
    *
    * The ::scroll-event signal is emitted when a button in the 4 to 7
-   * range is pressed. Wheel mice are usually configured to generate
+   * range is pressed. Wheel mice are usually configured to generate 
    * button press events for buttons 4 and 5 when the wheel is turned.
    *
    * Whether this event is emitted is platform-dependent.
    *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
+   * Returns: %TRUE to stop other handlers from being invoked for the event. 
    *   %FALSE to propagate the event further.
-   *
-   * Since: 2.16
    */
   status_icon_signals[SCROLL_EVENT_SIGNAL] =
     g_signal_new (I_("scroll_event"),
@@ -476,6 +558,49 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  /**
+   * GtkStatusIcon::query-tooltip:
+   * @status_icon: the object which received the signal
+   * @x: the x coordinate of the cursor position where the request has been
+   *     emitted, relative to @status_icon
+   * @y: the y coordinate of the cursor position where the request has been
+   *     emitted, relative to @status_icon
+   * @keyboard_mode: %TRUE if the tooltip was trigged using the keyboard
+   * @tooltip: a #GtkTooltip
+   *
+   * Emitted when the #GtkSettings:gtk-tooltip-timeout has expired with the
+   * cursor hovering above @status_icon; or emitted when @status_icon got
+   * focus in keyboard mode.
+   *
+   * Using the given coordinates, the signal handler should determine
+   * whether a tooltip should be shown for @status_icon. If this is
+   * the case %TRUE should be returned, %FALSE otherwise. Note that if
+   * @keyboard_mode is %TRUE, the values of @x and @y are undefined and
+   * should not be used.
+   *
+   * The signal handler is free to manipulate @tooltip with the therefore
+   * destined function calls.
+   *
+   * Whether this signal is emitted is platform-dependent.
+   * For plain text tooltips, use #GtkStatusIcon:tooltip-text in preference.
+   *
+   * Returns: %TRUE if @tooltip should be shown right now, %FALSE otherwise.
+   *
+   * Since: 2.16
+   */
+  status_icon_signals [QUERY_TOOLTIP_SIGNAL] =
+    g_signal_new (I_("query_tooltip"),
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkStatusIconClass, query_tooltip),
+		  g_signal_accumulator_true_handled, NULL,
+		  _gtk_marshal_BOOLEAN__INT_INT_BOOLEAN_OBJECT,
+		  G_TYPE_BOOLEAN, 4,
+		  G_TYPE_INT,
+		  G_TYPE_INT,
+		  G_TYPE_BOOLEAN,
+		  GTK_TYPE_TOOLTIP);
 
   g_type_class_add_private (class, sizeof (GtkStatusIconPrivate));
 }
@@ -517,7 +642,7 @@ button_callback (gpointer data)
 {
   ButtonCallbackData *bc = (ButtonCallbackData *) data;
 
-  if (bc->event->type == GDK_BUTTON_PRESS)
+  if (event->type == GDK_BUTTON_PRESS)
     gtk_status_icon_button_press (bc->status_icon, bc->event);
   else
     gtk_status_icon_button_release (bc->status_icon, bc->event);
@@ -707,6 +832,8 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
 			    G_CALLBACK (gtk_status_icon_button_release), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "scroll-event",
 			    G_CALLBACK (gtk_status_icon_scroll), status_icon);
+  g_signal_connect_swapped (priv->tray_icon, "query-tooltip",
+			    G_CALLBACK (gtk_status_icon_query_tooltip), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "screen-changed",
 		    	    G_CALLBACK (gtk_status_icon_screen_changed), status_icon);
   priv->image = gtk_image_new ();
@@ -823,6 +950,7 @@ gtk_status_icon_finalize (GObject *object)
     Shell_NotifyIconW (NIM_DELETE, &priv->nid);
   if (priv->nid.hIcon)
     DestroyIcon (priv->nid.hIcon);
+  g_free (priv->tooltip_text);
 
   gtk_widget_destroy (priv->dummy_widget);
 
@@ -833,6 +961,7 @@ gtk_status_icon_finalize (GObject *object)
   QUARTZ_POOL_ALLOC;
   [priv->status_item release];
   QUARTZ_POOL_RELEASE;
+  g_free (priv->tooltip_text);
 #endif
 
   G_OBJECT_CLASS (gtk_status_icon_parent_class)->finalize (object);
@@ -872,6 +1001,12 @@ gtk_status_icon_set_property (GObject      *object,
     case PROP_VISIBLE:
       gtk_status_icon_set_visible (status_icon, g_value_get_boolean (value));
       break;
+    case PROP_HAS_TOOLTIP:
+      gtk_status_icon_set_has_tooltip (status_icon, g_value_get_boolean (value));
+    case PROP_TOOLTIP_TEXT:
+      gtk_status_icon_set_tooltip_text (status_icon, g_value_get_string (value));
+    case PROP_TOOLTIP_MARKUP:
+      gtk_status_icon_set_tooltip_markup (status_icon, g_value_get_string (value));
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -944,6 +1079,15 @@ gtk_status_icon_get_property (GObject    *object,
 #ifdef GDK_WINDOWING_WIN32
       g_value_set_enum (value, status_icon->priv->orientation);
 #endif
+      break;
+    case PROP_HAS_TOOLTIP:
+      g_value_set_boolean (value, gtk_status_icon_get_has_tooltip (status_icon));
+      break;
+    case PROP_TOOLTIP_TEXT:
+      g_value_set_string (value, gtk_status_icon_get_tooltip_text (status_icon));
+      break;
+    case PROP_TOOLTIP_MARKUP:
+      g_value_set_string (value, gtk_status_icon_get_tooltip_markup (status_icon));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1572,6 +1716,20 @@ gtk_status_icon_scroll (GtkStatusIcon  *status_icon,
 		 event, &handled);
   return handled;
 }
+
+static gboolean
+gtk_status_icon_query_tooltip (GtkStatusIcon *status_icon,
+			       gint           x,
+			       gint           y,
+			       gboolean       keyboard_tip,
+			       GtkTooltip    *tooltip)
+{
+  gboolean handled = FALSE;
+  g_signal_emit (status_icon,
+		 status_icon_signals [QUERY_TOOLTIP_SIGNAL], 0,
+		 x, y, keyboard_tip, tooltip, &handled);
+  return handled;
+}
 #endif /* GDK_WINDOWING_X11 */
 
 static void
@@ -1999,47 +2157,18 @@ gtk_status_icon_get_screen (GtkStatusIcon *status_icon)
  * gtk_status_icon_set_tooltip:
  * @status_icon: a #GtkStatusIcon
  * @tooltip_text: the tooltip text, or %NULL
- * 
+ *
  * Sets the tooltip of the status icon.
- * 
+ *
  * Since: 2.10
- **/ 
+ *
+ * Deprecated:2.16: Use gtk_status_icon_set_tooltip_text() instead.
+ */
 void
 gtk_status_icon_set_tooltip (GtkStatusIcon *status_icon,
 			     const gchar   *tooltip_text)
 {
-  GtkStatusIconPrivate *priv;
-
-  g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
-
-  priv = status_icon->priv;
-
-#ifdef GDK_WINDOWING_X11
-
-  gtk_widget_set_tooltip_text (priv->tray_icon, tooltip_text);
-
-#endif
-#ifdef GDK_WINDOWING_WIN32
-  if (tooltip_text == NULL)
-    priv->nid.uFlags &= ~NIF_TIP;
-  else
-    {
-      WCHAR *wcs = g_utf8_to_utf16 (tooltip_text, -1, NULL, NULL, NULL);
-
-      priv->nid.uFlags |= NIF_TIP;
-      wcsncpy (priv->nid.szTip, wcs, G_N_ELEMENTS (priv->nid.szTip) - 1);
-      priv->nid.szTip[G_N_ELEMENTS (priv->nid.szTip) - 1] = 0;
-      g_free (wcs);
-    }
-  if (priv->nid.hWnd != NULL && priv->visible)
-    if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-      g_warning ("%s:%d:Shell_NotifyIconW(NIM_MODIFY) failed", __FILE__, __LINE__-1);
-#endif
-#ifdef GDK_WINDOWING_QUARTZ
-  QUARTZ_POOL_ALLOC;
-  [priv->status_item setToolTip:tooltip_text];
-  QUARTZ_POOL_RELEASE;
-#endif
+  gtk_status_icon_set_tooltip_text (status_icon, tooltip_text);
 }
 
 static gboolean
@@ -2438,6 +2567,251 @@ gtk_status_icon_get_geometry (GtkStatusIcon    *status_icon,
 #else
   return FALSE;
 #endif /* GDK_WINDOWING_X11 */
+}
+
+/**
+ * gtk_status_icon_set_has_tooltip:
+ * @status_icon: a #GtkStatusIcon
+ * @has_tooltip: whether or not @status_icon has a tooltip
+ *
+ * Sets the has-tooltip property on @status_icon to @has_tooltip.
+ * See #GtkStatusIcon:has-tooltip for more information.
+ *
+ * Since: 2.16
+ */
+void
+gtk_status_icon_set_has_tooltip (GtkStatusIcon *status_icon,
+				 gboolean       has_tooltip)
+{
+  GtkStatusIconPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
+
+  priv = status_icon->priv;
+
+#ifdef GDK_WINDOWING_X11
+  gtk_widget_set_has_tooltip (priv->tray_icon, has_tooltip);
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (!has_tooltip && priv->tooltip_text)
+    gtk_tray_icon_set_tooltip_text (status_icon, NULL);
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+  if (!has_tooltip && priv->tooltip_text)
+    gtk_tray_icon_set_tooltip_text (status_icon, NULL);
+#endif
+}
+
+/**
+ * gtk_status_icon_get_has_tooltip:
+ * @status_icon: a #GtkStatusIcon
+ *
+ * Returns the current value of the has-tooltip property.
+ * See #GtkStatusIcon:has-tooltip for more information.
+ *
+ * Return value: current value of has-tooltip on @status_icon.
+ *
+ * Since: 2.16
+ */
+gboolean
+gtk_status_icon_get_has_tooltip (GtkStatusIcon *status_icon)
+{
+  GtkStatusIconPrivate *priv;
+  gboolean has_tooltip = FALSE;
+
+  g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), FALSE);
+
+  priv = status_icon->priv;
+
+#ifdef GDK_WINDOWING_X11
+  has_tooltip = gtk_widget_get_has_tooltip (priv->tray_icon);
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  has_tooltip = (priv->tooltip_text != NULL);
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+  has_tooltip = (priv->tooltip_text != NULL);
+#endif
+
+  return has_tooltip;
+}
+
+/**
+ * gtk_status_icon_set_tooltip_text:
+ * @status_icon: a #GtkStatusIcon
+ * @tooltip_text: the contents of the tooltip for @status_icon
+ *
+ * Sets @tooltip_text as the contents of the tooltip.
+ *
+ * This function will take care of setting #GtkStatusIcon:has-tooltip to
+ * %TRUE and of the default handler for the #GtkStatusIcon::query-tooltip
+ * signal.
+ *
+ * See also the #GtkStatusIcon:tooltip-text property and
+ * gtk_tooltip_set_text().
+ *
+ * Since: 2.16
+ */
+void
+gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,
+				  const gchar   *tooltip_text)
+{
+  GtkStatusIconPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
+
+  priv = status_icon->priv;
+
+#ifdef GDK_WINDOWING_X11
+
+  gtk_widget_set_tooltip_text (priv->tray_icon, tooltip_text);
+
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (tooltip_text == NULL)
+    priv->nid.uFlags &= ~NIF_TIP;
+  else
+    {
+      WCHAR *wcs = g_utf8_to_utf16 (tooltip_text, -1, NULL, NULL, NULL);
+
+      priv->nid.uFlags |= NIF_TIP;
+      wcsncpy (priv->nid.szTip, wcs, G_N_ELEMENTS (priv->nid.szTip) - 1);
+      priv->nid.szTip[G_N_ELEMENTS (priv->nid.szTip) - 1] = 0;
+      g_free (wcs);
+    }
+  if (priv->nid.hWnd != NULL && priv->visible)
+    if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
+      g_warning ("%s:%d:Shell_NotifyIconW(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+
+  g_free (priv->tooltip_text);
+  priv->tooltip_text = g_strdup (tooltip_text);
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+  QUARTZ_POOL_ALLOC;
+  [priv->status_item setToolTip:tooltip_text];
+  QUARTZ_POOL_RELEASE;
+
+  g_free (priv->tooltip_text);
+  priv->tooltip_text = g_strdup (tooltip_text);
+#endif
+}
+
+/**
+ * gtk_status_icon_get_tooltip_text:
+ * @status_icon: a #GtkStatusIcon
+ *
+ * Gets the contents of the tooltip for @status_icon.
+ *
+ * Return value: the tooltip text, or %NULL. You should free the
+ *   returned string with g_free() when done.
+ *
+ * Since: 2.16
+ */
+gchar *
+gtk_status_icon_get_tooltip_text (GtkStatusIcon *status_icon)
+{
+  GtkStatusIconPrivate *priv;
+  gchar *tooltip_text = NULL;
+
+  g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), NULL);
+
+  priv = status_icon->priv;
+
+#ifdef GDK_WINDOWING_X11
+  tooltip_text = gtk_widget_get_tooltip_text (priv->tray_icon);
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (priv->tooltip_text)
+    tooltip_text = g_strdup (priv->tooltip_text);
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+  if (priv->tooltip_text)
+    tooltip_text = g_strdup (priv->tooltip_text);
+#endif
+
+  return tooltip_text;
+}
+
+/**
+ * gtk_status_icon_set_tooltip_markup:
+ * @status_icon: a #GtkStatusIcon
+ * @markup: the contents of the tooltip for @status_icon, or %NULL
+ *
+ * Sets @markup as the contents of the tooltip, which is marked up with
+ *  the <link linkend="PangoMarkupFormat">Pango text markup language</link>.
+ *
+ * This function will take care of setting #GtkStatusIcon:has-tooltip to %TRUE
+ * and of the default handler for the #GtkStatusIcon::query-tooltip signal.
+ *
+ * See also the #GtkStatusIcon:tooltip-markup property and
+ * gtk_tooltip_set_markup().
+ *
+ * Since: 2.16
+ */
+void
+gtk_status_icon_set_tooltip_markup (GtkStatusIcon *status_icon,
+				    const gchar   *markup)
+{
+  GtkStatusIconPrivate *priv;
+#ifndef GDK_WINDOWING_X11
+  gchar *text = NULL;
+#endif
+
+  g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
+
+  priv = status_icon->priv;
+
+#ifdef GDK_WINDOWING_X11
+  gtk_widget_set_tooltip_markup (priv->tray_icon, markup);
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (markup)
+    pango_parse_markup (markup, -1, 0, NULL, &text, NULL, NULL);
+  gtk_status_icon_set_tooltip_text (status_icon, text);
+  g_free (text);
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+  if (markup)
+    pango_parse_markup (markup, -1, 0, NULL, &text, NULL, NULL);
+  gtk_status_icon_set_tooltip_text (status_icon, text);
+  g_free (text);
+#endif
+}
+
+/**
+ * gtk_status_icon_get_tooltip_markup:
+ * @status_icon: a #GtkStatusIcon
+ *
+ * Gets the contents of the tooltip for @status_icon.
+ *
+ * Return value: the tooltip text, or %NULL. You should free the
+ *   returned string with g_free() when done.
+ *
+ * Since: 2.16
+ */
+gchar *
+gtk_status_icon_get_tooltip_markup (GtkStatusIcon *status_icon)
+{
+  GtkStatusIconPrivate *priv;
+  gchar *markup = NULL;
+
+  g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), NULL);
+
+  priv = status_icon->priv;
+
+#ifdef GDK_WINDOWING_X11
+  markup = gtk_widget_get_tooltip_markup (priv->tray_icon);
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (priv->tooltip_text)
+    markup = g_markup_escape_text (priv->tooltip_text);
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+  if (priv->tooltip_text)
+    markup = g_markup_escape_text (priv->tooltip_text);
+#endif
+
+  return markup;
 }
 
 /**
