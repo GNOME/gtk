@@ -1,3 +1,7 @@
+2008-11-05  Nickolay V. Shmyrev  <nshmyrev@yandex.ru>
+
+	* ru.po: Updated Russian translation by Anton Shestakov.
+
 2008-10-26  Matthias Clasen <mclasen@redhat.com>
 
 	* Makefile.in.in: Modify xgettext call to extract C_() macros.
