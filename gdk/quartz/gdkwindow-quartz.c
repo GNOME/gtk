@@ -281,13 +281,13 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
       _gdk_quartz_colormap_get_rgba_from_pixel (gdk_drawable_get_colormap (drawable_impl->wrapper),
 				      GDK_WINDOW_OBJECT (drawable_impl->wrapper)->bg_color.pixel,
 				      &r, &g, &b, &a);
+      CGContextSetRGBFillColor (cg_context, r, g, b, a);
  
-      for (i = 0; i < n_rects; i++) 
+      for (i = 0; i < n_rects; i++)
         {
-	  CGContextSetRGBFillColor (cg_context, r, g, b, a);
           CGContextFillRect (cg_context,
-			     CGRectMake (rects[i].x, rects[i].y,
-					 rects[i].width, rects[i].height));
+                             CGRectMake (rects[i].x, rects[i].y,
+                                         rects[i].width, rects[i].height));
         }
 
       gdk_quartz_drawable_release_context (GDK_DRAWABLE (impl), cg_context);

@@ -1,5 +1,11 @@
 2008-11-05  Richard Hult  <richard@imendio.com>
 
+	* gdk/quartz/gdkwindow-quartz.c:
+	(gdk_window_impl_quartz_begin_paint_region): Set the fill color
+	outside the loop.
+
+2008-11-05  Richard Hult  <richard@imendio.com>
+
 	* gtk/gtkstatusicon.c: (gtk_status_icon_set_has_tooltip),
 	(gtk_status_icon_get_tooltip_markup): Fix build for win32 and
 	quartz.
