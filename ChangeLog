@@ -1,3 +1,11 @@
+2008-11-05  Richard Hult  <richard@imendio.com>
+
+	* gdk/quartz/gdkevents-quartz.c:
+	(get_keyboard_modifiers_from_ns_event), (create_key_event): Revert
+	(at least for now) the alt/cmd switching since it breaks the
+	"alt-gr" functionality of alt which makes it impossible to input
+	lots of characters.
+
 2008-11-05  Christian Dywan  <christian@imendio.com>
 
 	Bug 559404 – gtk_editable_insert_text counts length in bytes

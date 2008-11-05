@@ -475,8 +475,6 @@ get_keyboard_modifiers_from_ns_event (NSEvent *nsevent)
   if (nsflags & NSControlKeyMask)
     modifiers |= GDK_CONTROL_MASK;
   if (nsflags & NSCommandKeyMask)
-    modifiers |= GDK_META_MASK;
-  if (nsflags & NSAlternateKeyMask)
     modifiers |= GDK_MOD1_MASK;
 
   return modifiers;
@@ -1587,7 +1585,7 @@ create_key_event (GdkWindow    *window,
         {
         case GDK_Meta_R:
         case GDK_Meta_L:
-          mask = GDK_META_MASK;
+          mask = GDK_MOD1_MASK;
           break;
         case GDK_Shift_R:
         case GDK_Shift_L:
@@ -1598,7 +1596,7 @@ create_key_event (GdkWindow    *window,
           break;
         case GDK_Alt_R:
         case GDK_Alt_L:
-          mask = GDK_MOD1_MASK;
+          mask = GDK_MOD5_MASK;
           break;
         case GDK_Control_R:
         case GDK_Control_L:
