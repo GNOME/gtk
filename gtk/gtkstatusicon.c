@@ -2594,11 +2594,11 @@ gtk_status_icon_set_has_tooltip (GtkStatusIcon *status_icon,
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (!has_tooltip && priv->tooltip_text)
-    gtk_tray_icon_set_tooltip_text (status_icon, NULL);
+    gtk_status_icon_set_tooltip_text (status_icon, NULL);
 #endif
 #ifdef GDK_WINDOWING_QUARTZ
   if (!has_tooltip && priv->tooltip_text)
-    gtk_tray_icon_set_tooltip_text (status_icon, NULL);
+    gtk_status_icon_set_tooltip_text (status_icon, NULL);
 #endif
 }
 
@@ -2804,11 +2804,11 @@ gtk_status_icon_get_tooltip_markup (GtkStatusIcon *status_icon)
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (priv->tooltip_text)
-    markup = g_markup_escape_text (priv->tooltip_text);
+    markup = g_markup_escape_text (priv->tooltip_text, -1);
 #endif
 #ifdef GDK_WINDOWING_QUARTZ
   if (priv->tooltip_text)
-    markup = g_markup_escape_text (priv->tooltip_text);
+    markup = g_markup_escape_text (priv->tooltip_text, -1);
 #endif
 
   return markup;
