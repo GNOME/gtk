@@ -1,3 +1,13 @@
+2008-11-05  Richard Hult  <richard@imendio.com>
+
+	Merged from trunk:
+
+	* gdk/quartz/gdkevents-quartz.c:
+	(get_keyboard_modifiers_from_ns_event), (create_key_event): Revert
+	(at least for now) the alt/cmd switching since it breaks the
+	"alt-gr" functionality of alt which makes it impossible to input
+	lots of characters.
+
 2008-11-04  Tor Lillqvist  <tml@novell.com>
 
 	Bug 557212 - Problem with which window gains focus and is visible
