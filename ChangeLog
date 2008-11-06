@@ -1,3 +1,10 @@
+2008-11-06  Tristan Van Berkom <tvb@gnome.org>
+
+	* gtk/gtklabel.c: gtk_label_set_attributes() now applies attributes
+	on top of any markup or mnemonic attributes (bug 558409).
+
+	* README: Updated and added release notes for 2.16
+
 2008-11-06  Richard Hult  <richard@imendio.com>
 
 	Bug 558586 – handling of keyboard under darwin (quartz)

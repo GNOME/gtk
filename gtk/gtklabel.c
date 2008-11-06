@@ -1530,6 +1530,36 @@ gtk_label_set_use_underline_internal (GtkLabel *label,
 }
 
 static void
+gtk_label_compose_effective_attrs (GtkLabel *label)
+{
+  PangoAttrIterator *iter;
+  PangoAttribute    *attr;
+  GSList            *iter_attrs, *l;
+
+  if (label->attrs)
+    {
+      if (label->effective_attrs)
+	{
+	  if ((iter = pango_attr_list_get_iterator (label->attrs)))
+	    do 
+	      {
+		iter_attrs = pango_attr_iterator_get_attrs (iter);
+		for (l = iter_attrs; l; l = l->next)
+		  {
+		    attr = l->data;
+		    pango_attr_list_insert (label->effective_attrs, attr);
+		  }
+		g_slist_free (iter_attrs);
+	      }
+	    while (pango_attr_iterator_next (iter));
+	}
+      else
+	label->effective_attrs = 
+	  pango_attr_list_ref (label->attrs);
+    }
+}
+
+static void
 gtk_label_set_attributes_internal (GtkLabel      *label,
 				   PangoAttrList *attrs)
 {
@@ -1538,17 +1568,8 @@ gtk_label_set_attributes_internal (GtkLabel      *label,
   
   if (label->attrs)
     pango_attr_list_unref (label->attrs);
-
-  if (!label->use_markup && !label->use_underline)
-    {
-      if (attrs)
-	pango_attr_list_ref (attrs);
-      if (label->effective_attrs)
-	pango_attr_list_unref (label->effective_attrs);
-      label->effective_attrs = attrs;
-    }
-
   label->attrs = attrs;
+
   g_object_notify (G_OBJECT (label), "attributes");
 }
 
@@ -1562,11 +1583,17 @@ gtk_label_recalculate (GtkLabel *label)
   guint keyval = label->mnemonic_keyval;
 
   if (label->use_markup)
-    set_markup (label, label->label, label->use_underline);
+    {
+      set_markup (label, label->label, label->use_underline);
+      gtk_label_compose_effective_attrs (label);
+    }
   else
     {
       if (label->use_underline)
-	gtk_label_set_uline_text_internal (label, label->label);
+	{
+	  gtk_label_set_uline_text_internal (label, label->label);
+	  gtk_label_compose_effective_attrs (label);
+	}
       else
 	{
 	  gtk_label_set_text_internal (label, g_strdup (label->label));
@@ -1624,9 +1651,14 @@ gtk_label_set_text (GtkLabel    *label,
  * @attrs: a #PangoAttrList
  * 
  * Sets a #PangoAttrList; the attributes in the list are applied to the
- * label text. The attributes set with this function will be ignored
- * if the #GtkLabel:use-underline" or #GtkLabel:use-markup properties
- * are set to %TRUE.
+ * label text. 
+ *
+ * <note><para>The attributes set with this function will be applied
+ * and merged with any other attributes previously effected by way
+ * of the #GtkLabel:use-underline or #GtkLabel:use-markup properties.
+ * While it is not recommended to mix markup strings with manually set
+ * attributes, if you must; know that the attributes will be applied
+ * to the label after the markup string is parsed.</para></note>
  **/
 void
 gtk_label_set_attributes (GtkLabel         *label,
@@ -1635,7 +1667,9 @@ gtk_label_set_attributes (GtkLabel         *label,
   g_return_if_fail (GTK_IS_LABEL (label));
 
   gtk_label_set_attributes_internal (label, attrs);
-  
+
+  gtk_label_recalculate (label);
+
   gtk_label_clear_layout (label);  
   gtk_widget_queue_resize (GTK_WIDGET (label));
 }
