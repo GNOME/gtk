@@ -1,3 +1,9 @@
+2008-11-07  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkscrollbar.c: remove bogus newlines in the middle of
+	function calls, fix broken indentation and remove trailing
+	whitespace.
+
 2008-11-06  Tristan Van Berkom <tvb@gnome.org>
 
 	* gtk/gtkmenuitem.c: Made buildable and added support for adding
