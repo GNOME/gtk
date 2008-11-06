@@ -1,37 +1,45 @@
 2008-11-06  Tristan Van Berkom <tvb@gnome.org>
 
-	* gtk/gtkmenuitem.c: Made buildable and added support for adding children
-	of type "submenu"
+	* gtk/gtkmenuitem.c: Made buildable and added support for adding
+	children of type "submenu"
 
-	* gtk/gtkwindow.c: Added support for custom tag "accel-groups" to add GtkAccelGroups
-	to the window.
+	* gtk/gtkwindow.c: Added support for custom tag "accel-groups" to
+	add GtkAccelGroups to the window.
 
-	* gtk/gtkcontainer.c: Added builder contextual warnings in buildable_add_child()
+	* gtk/gtkcontainer.c: Added builder contextual warnings in
+	buildable_add_child()
 
-	* gtk/tests/builder.c: Added tests for buildable menus (test that accelerators are
-	properly connected on stock items, test the menu hierarchy, test permission to
-	add alien/custom menuitem children).
+	* gtk/tests/builder.c: Added tests for buildable menus (test that
+	accelerators are properly connected on stock items, test the menu
+	hierarchy, test permission to add alien/custom menuitem children).
 
-	* docs/reference/gtk/tmpl/gtkbuilder.sgml, docs/reference/gtk/tmpl/gtkwindow.sgml,
-	docs/reference/gtk/tmpl/gtkmenuitem.sgml: Updated docs for buildable submenus
-	and accel groups.
-
-2008-11-06  Tristan Van Berkom <tvb@gnome.org>
-
-	* gtk/gtkmenuitem.[ch]: added new apis gtk_menu_item_[set/get]_label() and
-	gtk_menu_item_[set/get]_use_underline() with "label" and "use-underline"
-	properties, constructors cleaned up to use g_object_new().
-	GtkMenuItemClass take new vfuncs ->get/set_label().
-
-	* gtk/gtkcheckmenuitem.c: constructors cleaned up to use g_object_new().
-
-	* gtk/gtkimagemenuitem.[ch]: added new apis gtk_image_menu_item_[get/set]_use_stock()
-	and gtk_image_menu_item_set_accel_group() with "use-stock" and write-only
-	"accel-group" properties. constructors cleaned up to use g_object_new().
+	* docs/reference/gtk/tmpl/gtkbuilder.sgml
+	* docs/reference/gtk/tmpl/gtkwindow.sgml
+	* docs/reference/gtk/tmpl/gtkmenuitem.sgml: Updated docs for
+	buildable submenus and accel groups.
 
 2008-11-06  Tristan Van Berkom <tvb@gnome.org>
 
-	* gtk/gtkbuilder.h: Fixed a crasher in GTK_BUILDER_WARN_INVALID_CHILD_TYPE()
+	* gtk/gtkmenuitem.[ch]: added new apis
+	gtk_menu_item_[set/get]_label() and
+	gtk_menu_item_[set/get]_use_underline() with "label" and
+	"use-underline" properties, constructors cleaned up to use
+	g_object_new().  GtkMenuItemClass take new vfuncs
+	->get/set_label().
+
+	* gtk/gtkcheckmenuitem.c: constructors cleaned up to use
+	g_object_new().
+
+	* gtk/gtkimagemenuitem.[ch]: added new apis
+	gtk_image_menu_item_[get/set]_use_stock() and
+	gtk_image_menu_item_set_accel_group() with "use-stock" and
+	write-only "accel-group" properties. constructors cleaned up to
+	use g_object_new().
+
+2008-11-06  Tristan Van Berkom <tvb@gnome.org>
+
+	* gtk/gtkbuilder.h: Fixed a crasher in
+	GTK_BUILDER_WARN_INVALID_CHILD_TYPE()
 
 2008-11-06  Tristan Van Berkom <tvb@gnome.org>
 
@@ -96,7 +104,8 @@
 
 	Bug 558001 – gtk_icon_view_enable_model_drag_[source|dest] problem
 
-	* gtk/gtkiconview.c: Make gtk_drag_*_add_*_targets() usable with GtkIconView.
+	* gtk/gtkiconview.c: Make gtk_drag_*_add_*_targets() usable with
+	GtkIconView.
 
 2008-11-02  Matthias Clasen  <mclasen@redhat.com>
 
@@ -347,7 +356,8 @@
 
 2008-10-23  Alexander Larsson  <alexl@redhat.com>
 
-	Bug 528320 - Incorrect icons displayed for files with custom mimetype icons
+	Bug 528320 - Incorrect icons displayed for files with custom
+	mimetype icons
 	
         * gtk/gtkfilesystem.c:
         (_gtk_file_info_render_icon):
