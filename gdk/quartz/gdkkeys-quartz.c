@@ -61,7 +61,11 @@
 
 static GdkKeymap *default_keymap = NULL;
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
+static TISInputSourceRef current_layout = NULL;
+#else
 static KeyboardLayoutRef current_layout = NULL;
+#endif
 
 /* This is a table of all keyvals. Each keycode gets KEYVALS_PER_KEYCODE entries.
  * TThere is 1 keyval per modifier (Nothing, Shift, Alt, Shift+Alt);
@@ -179,28 +183,46 @@ const static struct {
 static void
 maybe_update_keymap (void)
 {
+  const void *chr_data = NULL;
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
+  TISInputSourceRef new_layout = TISCopyCurrentKeyboardLayoutInputSource ();
+  CFDataRef layout_data_ref;
+
+#else
   KeyboardLayoutRef new_layout;
+  KeyboardLayoutKind layout_kind;
 
   KLGetCurrentKeyboardLayout (&new_layout);
+#endif
 
   if (new_layout != current_layout)
     {
       guint *p;
       int i;
 
-      KeyboardLayoutKind layout_kind;
-      
       g_free (keyval_array);
       keyval_array = g_new0 (guint, NUM_KEYCODES * KEYVALS_PER_KEYCODE);
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
+      layout_data_ref = (CFDataRef) TISGetInputSourceProperty
+	(new_layout, kTISPropertyUnicodeKeyLayoutData);
+
+      if (layout_data_ref)
+	chr_data = CFDataGetBytePtr (layout_data_ref);
+
+      if (chr_data == NULL)
+	{
+	  g_error ("cannot get keyboard layout data");
+	  return;
+	}
+#else
       /* Get the layout kind */
       KLGetKeyboardLayoutProperty (new_layout, kKLKind, (const void **)&layout_kind);
 
       /* 8-bit-only keyabord layout */
       if (layout_kind == kKLKCHRKind)
 	{ 
-	  const void *chr_data;
-	  
 	  /* Get chr data */
 	  KLGetKeyboardLayoutProperty (new_layout, kKLKCHRData, (const void **)&chr_data);
 	  
@@ -282,10 +304,9 @@ maybe_update_keymap (void)
       /* unicode keyboard layout */
       else if (layout_kind == kKLKCHRuchrKind || layout_kind == kKLuchrKind)
 	{ 
-	  const void *chr_data;
-	  
 	  /* Get chr data */
 	  KLGetKeyboardLayoutProperty (new_layout, kKLuchrData, (const void **)&chr_data);
+#endif  /* MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4 */
 	  
 	  for (i = 0; i < NUM_KEYCODES; i++) 
 	    {
@@ -361,12 +382,14 @@ maybe_update_keymap (void)
 		  p[1] == p[3])
 		p[2] = p[3] = 0;
 	    }
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
 	}
       else
 	{
 	  g_error ("unknown type of keyboard layout (neither KCHR nor uchr)"
 	           " - not supported right now");
 	}
+#endif
 
       for (i = 0; i < G_N_ELEMENTS (known_keys); i++)
 	{
