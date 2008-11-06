@@ -1,5 +1,9 @@
 2008-11-06  Tristan Van Berkom <tvb@gnome.org>
 
+	* gtk/gtkbuilder.h: Fixed a crasher in GTK_BUILDER_WARN_INVALID_CHILD_TYPE()
+
+2008-11-06  Tristan Van Berkom <tvb@gnome.org>
+
 	* gtk/gtklabel.c: gtk_label_set_attributes() now applies attributes
 	on top of any markup or mnemonic attributes (bug 558409).
 
