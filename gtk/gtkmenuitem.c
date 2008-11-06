@@ -36,6 +36,7 @@
 #include "gtkmenubar.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkprivate.h"
+#include "gtkbuildable.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -113,9 +114,19 @@ static void gtk_real_menu_item_set_label (GtkMenuItem     *menu_item,
 static G_CONST_RETURN gchar * gtk_real_menu_item_get_label (GtkMenuItem *menu_item);
 
 
+static void gtk_menu_item_buildable_interface_init (GtkBuildableIface   *iface);
+static void gtk_menu_item_buildable_add_child      (GtkBuildable        *buildable,
+						    GtkBuilder          *builder,
+						    GObject             *child,
+						    const gchar         *type);
+
 static guint menu_item_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkMenuItem, gtk_menu_item, GTK_TYPE_ITEM)
+static GtkBuildableIface *parent_buildable_iface;
+
+G_DEFINE_TYPE_WITH_CODE (GtkMenuItem, gtk_menu_item, GTK_TYPE_ITEM,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+						gtk_menu_item_buildable_interface_init))
 
 static void
 gtk_menu_item_class_init (GtkMenuItemClass *klass)
@@ -472,6 +483,26 @@ gtk_menu_item_detacher (GtkWidget *widget,
   g_return_if_fail (menu_item->submenu == (GtkWidget*) menu);
 
   menu_item->submenu = NULL;
+}
+
+static void
+gtk_menu_item_buildable_interface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add_child = gtk_menu_item_buildable_add_child;
+}
+
+static void 
+gtk_menu_item_buildable_add_child (GtkBuildable *buildable,
+				   GtkBuilder   *builder,
+				   GObject      *child,
+				   const gchar  *type)
+{
+  if (type && strcmp (type, "submenu") == 0)
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (buildable),
+				   GTK_WIDGET (child));
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
 }
 
 /**

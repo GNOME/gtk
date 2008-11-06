@@ -1,5 +1,23 @@
 2008-11-06  Tristan Van Berkom <tvb@gnome.org>
 
+	* gtk/gtkmenuitem.c: Made buildable and added support for adding children
+	of type "submenu"
+
+	* gtk/gtkwindow.c: Added support for custom tag "accel-groups" to add GtkAccelGroups
+	to the window.
+
+	* gtk/gtkcontainer.c: Added builder contextual warnings in buildable_add_child()
+
+	* gtk/tests/builder.c: Added tests for buildable menus (test that accelerators are
+	properly connected on stock items, test the menu hierarchy, test permission to
+	add alien/custom menuitem children).
+
+	* docs/reference/gtk/tmpl/gtkbuilder.sgml, docs/reference/gtk/tmpl/gtkwindow.sgml,
+	docs/reference/gtk/tmpl/gtkmenuitem.sgml: Updated docs for buildable submenus
+	and accel groups.
+
+2008-11-06  Tristan Van Berkom <tvb@gnome.org>
+
 	* gtk/gtkmenuitem.[ch]: added new apis gtk_menu_item_[set/get]_label() and
 	gtk_menu_item_[set/get]_use_underline() with "label" and "use-underline"
 	properties, constructors cleaned up to use g_object_new().

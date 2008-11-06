@@ -14,6 +14,24 @@ alignment, events and submenus.
 As it derives from #GtkBin it can hold any valid child widget, altough
 only a few are really useful.
 </para>
+<refsect2 id="GtkMenuItem-BUILDER-UI">
+<title>GtkMenuItem as GtkBuildable</title>
+<para>
+The GtkMenuItem implementation of the GtkBuildable interface
+supports adding a submenu by specifying "submenu" as the "type" 
+attribute of a &lt;child&gt; element.
+</para>
+<example>
+<title>A UI definition fragment with submenus</title>
+<programlisting><![CDATA[
+<object class="GtkMenuItem">
+  <child type="submenu">
+    <object class="GtkMenu"/>
+  </child>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>

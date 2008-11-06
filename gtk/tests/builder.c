@@ -2282,6 +2282,158 @@ test_add_objects (void)
   g_object_unref (builder);
 }
 
+GtkWidget *
+get_parent_menubar (GtkWidget *menuitem)
+{
+  GtkMenuShell *menu_shell = (GtkMenuShell *)menuitem->parent;
+  GtkWidget *attach = NULL;
+
+  g_assert (GTK_IS_MENU_SHELL (menu_shell));
+
+  while (menu_shell && !GTK_IS_MENU_BAR (menu_shell))
+    {
+      if (GTK_IS_MENU (menu_shell) && 
+	  (attach = gtk_menu_get_attach_widget (GTK_MENU (menu_shell))) != NULL)
+	menu_shell = (GtkMenuShell *)attach->parent;
+      else
+	menu_shell = NULL;
+    }
+
+  return menu_shell ? GTK_WIDGET (menu_shell) : NULL;
+}
+
+static void
+test_menus (void)
+{
+  gchar *buffer =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window1\">"
+    "    <accel-groups>"
+    "      <group name=\"accelgroup1\"/>"
+    "    </accel-groups>"
+    "    <child>"
+    "      <object class=\"GtkVBox\" id=\"vbox1\">"
+    "        <property name=\"visible\">True</property>"
+    "        <property name=\"orientation\">vertical</property>"
+    "        <child>"
+    "          <object class=\"GtkMenuBar\" id=\"menubar1\">"
+    "            <property name=\"visible\">True</property>"
+    "            <child>"
+    "              <object class=\"GtkMenuItem\" id=\"menuitem1\">"
+    "                <property name=\"visible\">True</property>"
+    "                <property name=\"label\" translatable=\"yes\">_File</property>"
+    "                <property name=\"use_underline\">True</property>"
+    "                <child type=\"submenu\">"
+    "                  <object class=\"GtkMenu\" id=\"menu1\">"
+    "                    <property name=\"visible\">True</property>"
+    "                    <child>"
+    "                      <object class=\"GtkImageMenuItem\" id=\"imagemenuitem1\">"
+    "                        <property name=\"label\">gtk-new</property>"
+    "                        <property name=\"visible\">True</property>"
+    "                        <property name=\"use_stock\">True</property>"
+    "                        <property name=\"accel_group\">accelgroup1</property>"
+    "                      </object>"
+    "                    </child>"
+    "                  </object>"
+    "                </child>"
+    "              </object>"
+    "            </child>"
+    "          </object>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "<object class=\"GtkAccelGroup\" id=\"accelgroup1\"/>"
+    "</interface>";
+
+  gchar *buffer1 =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window1\">"
+    "    <accel-groups>"
+    "      <group name=\"accelgroup1\"/>"
+    "    </accel-groups>"
+    "    <child>"
+    "      <object class=\"GtkVBox\" id=\"vbox1\">"
+    "        <property name=\"visible\">True</property>"
+    "        <property name=\"orientation\">vertical</property>"
+    "        <child>"
+    "          <object class=\"GtkMenuBar\" id=\"menubar1\">"
+    "            <property name=\"visible\">True</property>"
+    "            <child>"
+    "              <object class=\"GtkImageMenuItem\" id=\"imagemenuitem1\">"
+    "                <property name=\"visible\">True</property>"
+    "                <child>"
+    "                  <object class=\"GtkLabel\" id=\"custom1\">"
+    "                    <property name=\"visible\">True</property>"
+    "                    <property name=\"label\">a label</property>"
+    "                  </object>"
+    "                </child>"
+    "              </object>"
+    "            </child>"
+    "          </object>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "<object class=\"GtkAccelGroup\" id=\"accelgroup1\"/>"
+    "</interface>";
+  GtkBuilder *builder;
+  GtkWidget *window, *item;
+  GtkAccelGroup *accel_group;
+  GtkWidget *item_accel_label, *sample_accel_label, *sample_menu_item, *custom;
+
+  /* Check that the item has the correct accel label string set
+   */
+  builder = builder_new_from_string (buffer, -1, NULL);
+  window = (GtkWidget *)gtk_builder_get_object (builder, "window1");
+  item = (GtkWidget *)gtk_builder_get_object (builder, "imagemenuitem1");
+  accel_group = (GtkAccelGroup *)gtk_builder_get_object (builder, "accelgroup1");
+
+  gtk_widget_show_all (window);
+
+  sample_menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_NEW, accel_group);
+
+  g_assert (GTK_BIN (sample_menu_item)->child);
+  g_assert (GTK_IS_ACCEL_LABEL (GTK_BIN (sample_menu_item)->child));
+  sample_accel_label = GTK_WIDGET (GTK_BIN (sample_menu_item)->child);
+  gtk_widget_show (sample_accel_label);
+
+  g_assert (GTK_BIN (item)->child);
+  g_assert (GTK_IS_ACCEL_LABEL (GTK_BIN (item)->child));
+  item_accel_label = GTK_WIDGET (GTK_BIN (item)->child);
+
+  gtk_accel_label_refetch (GTK_ACCEL_LABEL (sample_accel_label));
+  gtk_accel_label_refetch (GTK_ACCEL_LABEL (item_accel_label));
+
+  g_assert (GTK_ACCEL_LABEL (sample_accel_label)->accel_string != NULL);
+  g_assert (GTK_ACCEL_LABEL (item_accel_label)->accel_string != NULL);
+  g_assert (strcmp (GTK_ACCEL_LABEL (item_accel_label)->accel_string, 
+		    GTK_ACCEL_LABEL (sample_accel_label)->accel_string) == 0);
+
+  /* Check the menu heirarchy worked here  */
+  g_assert (get_parent_menubar (item));
+
+  gtk_widget_destroy (GTK_WIDGET (window));
+  gtk_widget_destroy (sample_menu_item);
+  g_object_unref (builder);
+
+
+  /* Check that we can add alien children to menu items via normal
+   * GtkContainer apis.
+   */
+  builder = builder_new_from_string (buffer1, -1, NULL);
+  window = (GtkWidget *)gtk_builder_get_object (builder, "window1");
+  item = (GtkWidget *)gtk_builder_get_object (builder, "imagemenuitem1");
+  custom = (GtkWidget *)gtk_builder_get_object (builder, "custom1");
+
+  g_assert (custom->parent == item);
+
+  gtk_widget_destroy (GTK_WIDGET (window));
+  g_object_unref (builder);
+
+}
+
+
 static void 
 test_file (const gchar *filename)
 {
@@ -2367,6 +2519,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/PangoAttributes", test_pango_attributes);
   g_test_add_func ("/Builder/Requires", test_requires);
   g_test_add_func ("/Builder/AddObjects", test_add_objects);
+  g_test_add_func ("/Builder/Menus", test_menus);
 
   return g_test_run();
 }

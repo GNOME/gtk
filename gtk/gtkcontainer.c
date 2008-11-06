@@ -307,9 +307,17 @@ gtk_container_buildable_add_child (GtkBuildable  *buildable,
 				   GObject       *child,
 				   const gchar   *type)
 {
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
-  gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+  if (type)
+    {
+      GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
+    }
+  else if (GTK_IS_WIDGET (child) && GTK_WIDGET_TOPLEVEL (child) == FALSE)
+    {
+      gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+    }
+  else
+    g_warning ("Cannot add an object of type %s to a container of type %s", 
+	       g_type_name (G_OBJECT_TYPE (child)), g_type_name (G_OBJECT_TYPE (buildable)));
 }
 
 static void

@@ -310,6 +310,7 @@ static GQuark       quark_gtk_embedded = 0;
 static GQuark       quark_gtk_window_key_hash = 0;
 static GQuark       quark_gtk_window_default_icon_pixmap = 0;
 static GQuark       quark_gtk_window_icon_info = 0;
+static GQuark       quark_gtk_buildable_accels = 0;
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -330,6 +331,17 @@ static void gtk_window_buildable_set_buildable_property (GtkBuildable        *bu
 							 const GValue        *value);
 static void gtk_window_buildable_parser_finished (GtkBuildable     *buildable,
 						  GtkBuilder       *builder);
+static gboolean gtk_window_buildable_custom_tag_start (GtkBuildable  *buildable,
+						       GtkBuilder    *builder,
+						       GObject       *child,
+						       const gchar   *tagname,
+						       GMarkupParser *parser,
+						       gpointer      *data);
+static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
+						      GtkBuilder    *builder,
+						      GObject       *child,
+						      const gchar   *tagname,
+						      gpointer       user_data);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
@@ -415,6 +427,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   quark_gtk_window_key_hash = g_quark_from_static_string ("gtk-window-key-hash");
   quark_gtk_window_default_icon_pixmap = g_quark_from_static_string ("gtk-window-default-icon-pixmap");
   quark_gtk_window_icon_info = g_quark_from_static_string ("gtk-window-icon-info");
+  quark_gtk_buildable_accels = g_quark_from_static_string ("gtk-window-buildable-accels");
 
   gobject_class->dispose = gtk_window_dispose;
   gobject_class->finalize = gtk_window_finalize;
@@ -1137,7 +1150,8 @@ gtk_window_buildable_interface_init (GtkBuildableIface *iface)
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->set_buildable_property = gtk_window_buildable_set_buildable_property;
   iface->parser_finished = gtk_window_buildable_parser_finished;
-
+  iface->custom_tag_start = gtk_window_buildable_custom_tag_start;
+  iface->custom_finished = gtk_window_buildable_custom_finished;
 }
 
 static void
@@ -1159,11 +1173,118 @@ gtk_window_buildable_parser_finished (GtkBuildable *buildable,
 				      GtkBuilder   *builder)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (buildable);
+  GObject *object;
+  GSList *accels, *l;
 
   if (priv->builder_visible)
     gtk_widget_show (GTK_WIDGET (buildable));
 
-    parent_buildable_iface->parser_finished (buildable, builder);
+  accels = g_object_get_qdata (G_OBJECT (buildable), quark_gtk_buildable_accels);
+  for (l = accels; l; l = l->next)
+    {
+      object = gtk_builder_get_object (builder, l->data);
+      if (!object)
+	{
+	  g_warning ("Unknown accel group %s specified in window %s",
+		     (const gchar*)l->data, gtk_buildable_get_name (buildable));
+	  continue;
+	}
+      gtk_window_add_accel_group (GTK_WINDOW (buildable),
+				  GTK_ACCEL_GROUP (object));
+      g_free (l->data);
+    }
+
+  g_object_set_qdata (G_OBJECT (buildable), quark_gtk_buildable_accels, NULL);
+
+  parent_buildable_iface->parser_finished (buildable, builder);
+}
+
+typedef struct {
+  GObject *object;
+  GSList *items;
+} GSListSubParserData;
+
+static void
+window_start_element (GMarkupParseContext *context,
+			  const gchar         *element_name,
+			  const gchar        **names,
+			  const gchar        **values,
+			  gpointer            user_data,
+			  GError            **error)
+{
+  guint i;
+  GSListSubParserData *data = (GSListSubParserData*)user_data;
+
+  if (strcmp (element_name, "group") == 0)
+    {
+      for (i = 0; names[i]; i++)
+	{
+	  if (strcmp (names[i], "name") == 0)
+	    data->items = g_slist_prepend (data->items, g_strdup (values[i]));
+	}
+    }
+  else if (strcmp (element_name, "accel-groups") == 0)
+    return;
+  else
+    g_warning ("Unsupported tag type for GtkWindow: %s\n",
+	       element_name);
+
+}
+
+static const GMarkupParser window_parser =
+  {
+    window_start_element
+  };
+
+static gboolean
+gtk_window_buildable_custom_tag_start (GtkBuildable  *buildable,
+				       GtkBuilder    *builder,
+				       GObject       *child,
+				       const gchar   *tagname,
+				       GMarkupParser *parser,
+				       gpointer      *data)
+{
+  GSListSubParserData *parser_data;
+
+  if (parent_buildable_iface->custom_tag_start (buildable, builder, child, 
+						tagname, parser, data))
+    return TRUE;
+
+  if (strcmp (tagname, "accel-groups") == 0)
+    {
+      parser_data = g_slice_new0 (GSListSubParserData);
+      parser_data->items = NULL;
+      parser_data->object = G_OBJECT (buildable);
+
+      *parser = window_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
+					  GtkBuilder    *builder,
+					  GObject       *child,
+					  const gchar   *tagname,
+					  gpointer       user_data)
+{
+  GSListSubParserData *data;
+
+  parent_buildable_iface->custom_finished (buildable, builder, child, 
+					   tagname, user_data);
+
+  if (strcmp (tagname, "accel-groups") != 0)
+    return;
+  
+  data = (GSListSubParserData*)user_data;
+
+  g_object_set_qdata_full (G_OBJECT (buildable), quark_gtk_buildable_accels, 
+			   data->items, (GDestroyNotify) g_slist_free);
+
+  g_slice_free (GSListSubParserData, data);
 }
 
 /**

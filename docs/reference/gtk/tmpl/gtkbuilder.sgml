@@ -212,6 +212,7 @@ These XML fragments are explained in the documentation of the
 respective objects, see 
 <link linkend="GtkWidget-BUILDER-UI">GtkWidget</link>,
 <link linkend="GtkLabel-BUILDER-UI">GtkLabel</link>,
+<link linkend="GtkWindow-BUILDER-UI">GtkWindow</link>,
 <link linkend="GtkContainer-BUILDER-UI">GtkContainer</link>,
 <link linkend="GtkDialog-BUILDER-UI">GtkDialog</link>,
 <link linkend="GtkCellLayout-BUILDER-UI">GtkCellLayout</link>,
@@ -227,6 +228,7 @@ respective objects, see
 <link linkend="GtkTreeView-BUILDER-UI">GtkTreeView</link>,
 <link linkend="GtkUIManager-BUILDER-UI">GtkUIManager</link>,
 <link linkend="GtkActionGroup-BUILDER-UI">GtkActionGroup</link>.
+<link linkend="GtkMenuItem-BUILDER-UI">GtkMenuItem</link>.
 </para>
 </refsect2>
 
