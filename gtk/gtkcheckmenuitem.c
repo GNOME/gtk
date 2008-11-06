@@ -143,18 +143,9 @@ gtk_check_menu_item_new (void)
 GtkWidget*
 gtk_check_menu_item_new_with_label (const gchar *label)
 {
-  GtkWidget *check_menu_item;
-  GtkWidget *accel_label;
-
-  check_menu_item = gtk_check_menu_item_new ();
-  accel_label = gtk_accel_label_new (label);
-  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
-
-  gtk_container_add (GTK_CONTAINER (check_menu_item), accel_label);
-  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), check_menu_item);
-  gtk_widget_show (accel_label);
-
-  return check_menu_item;
+  return g_object_new (GTK_TYPE_CHECK_MENU_ITEM, 
+		       "label", label,
+		       NULL);
 }
 
 
@@ -171,19 +162,10 @@ gtk_check_menu_item_new_with_label (const gchar *label)
 GtkWidget*
 gtk_check_menu_item_new_with_mnemonic (const gchar *label)
 {
-  GtkWidget *check_menu_item;
-  GtkWidget *accel_label;
-
-  check_menu_item = gtk_check_menu_item_new ();
-  accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
-  gtk_label_set_text_with_mnemonic (GTK_LABEL (accel_label), label);
-  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
-
-  gtk_container_add (GTK_CONTAINER (check_menu_item), accel_label);
-  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), check_menu_item);
-  gtk_widget_show (accel_label);
-
-  return check_menu_item;
+  return g_object_new (GTK_TYPE_CHECK_MENU_ITEM, 
+		       "label", label,
+		       "use-underline", TRUE,
+		       NULL);
 }
 
 void

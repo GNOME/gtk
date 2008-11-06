@@ -1,5 +1,18 @@
 2008-11-06  Tristan Van Berkom <tvb@gnome.org>
 
+	* gtk/gtkmenuitem.[ch]: added new apis gtk_menu_item_[set/get]_label() and
+	gtk_menu_item_[set/get]_use_underline() with "label" and "use-underline"
+	properties, constructors cleaned up to use g_object_new().
+	GtkMenuItemClass take new vfuncs ->get/set_label().
+
+	* gtk/gtkcheckmenuitem.c: constructors cleaned up to use g_object_new().
+
+	* gtk/gtkimagemenuitem.[ch]: added new apis gtk_image_menu_item_[get/set]_use_stock()
+	and gtk_image_menu_item_set_accel_group() with "use-stock" and write-only
+	"accel-group" properties. constructors cleaned up to use g_object_new().
+
+2008-11-06  Tristan Van Berkom <tvb@gnome.org>
+
 	* gtk/gtkbuilder.h: Fixed a crasher in GTK_BUILDER_WARN_INVALID_CHILD_TYPE()
 
 2008-11-06  Tristan Van Berkom <tvb@gnome.org>

@@ -51,7 +51,9 @@ enum {
   PROP_0,
   PROP_RIGHT_JUSTIFIED,
   PROP_SUBMENU,
-  PROP_ACCEL_PATH
+  PROP_ACCEL_PATH,
+  PROP_LABEL,
+  PROP_USE_UNDERLINE
 };
 
 
@@ -90,6 +92,7 @@ static void gtk_real_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
 static gboolean gtk_menu_item_mnemonic_activate     (GtkWidget   *widget,
 						     gboolean     group_cycling);
 
+static void gtk_menu_item_ensure_label   (GtkMenuItem      *menu_item);
 static gint gtk_menu_item_popup_timeout  (gpointer          data);
 static void gtk_menu_item_position_menu  (GtkMenu          *menu,
 					  gint             *x,
@@ -104,6 +107,10 @@ static void gtk_menu_item_forall         (GtkContainer    *container,
 					  gpointer         callback_data);
 static gboolean gtk_menu_item_can_activate_accel (GtkWidget *widget,
 						  guint      signal_id);
+
+static void gtk_real_menu_item_set_label (GtkMenuItem     *menu_item,
+					  const gchar     *label);
+static G_CONST_RETURN gchar * gtk_real_menu_item_get_label (GtkMenuItem *menu_item);
 
 
 static guint menu_item_signals[LAST_SIGNAL] = { 0 };
@@ -146,6 +153,8 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   klass->activate_item = gtk_real_menu_item_activate_item;
   klass->toggle_size_request = gtk_real_menu_item_toggle_size_request;
   klass->toggle_size_allocate = gtk_real_menu_item_toggle_size_allocate;
+  klass->set_label = gtk_real_menu_item_set_label;
+  klass->get_label = gtk_real_menu_item_get_label;
 
   klass->hide_on_activate = TRUE;
 
@@ -217,6 +226,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                                         P_("The submenu attached to the menu item, or NULL if it has none"),
                                                         GTK_TYPE_MENU,
                                                         GTK_PARAM_READWRITE));
+  
 
   /**
    * GtkMenuItem:accel-path:
@@ -234,6 +244,38 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                                         P_("Sets the accelerator path of the menu item"),
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkMenuItem:label:
+   *
+   * The text for the child label.
+   *
+   * Since: 2.16
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_LABEL,
+                                   g_param_spec_string ("label",
+							P_("Label"),
+							P_("The text for the child label"),
+							NULL,
+							GTK_PARAM_READWRITE));
+
+  /**
+   * GtkMenuItem:use-underline:
+   *
+   * %TRUE if underlines in the text indicate mnemonics  
+   *
+   * Since: 2.16
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_USE_UNDERLINE,
+                                   g_param_spec_boolean ("use-underline",
+							 P_("Use underline"),
+							 P_("If set, an underline in the text indicates "
+							    "the next character should be used for the "
+							    "mnemonic accelerator key"),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property_parser (widget_class,
 						  g_param_spec_enum ("selected-shadow-type",
@@ -321,18 +363,9 @@ gtk_menu_item_new (void)
 GtkWidget*
 gtk_menu_item_new_with_label (const gchar *label)
 {
-  GtkWidget *menu_item;
-  GtkWidget *accel_label;
-
-  menu_item = gtk_menu_item_new ();
-  accel_label = gtk_accel_label_new (label);
-  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
-
-  gtk_container_add (GTK_CONTAINER (menu_item), accel_label);
-  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), menu_item);
-  gtk_widget_show (accel_label);
-
-  return menu_item;
+  return g_object_new (GTK_TYPE_MENU_ITEM, 
+		       "label", label,
+		       NULL);
 }
 
 
@@ -349,19 +382,10 @@ gtk_menu_item_new_with_label (const gchar *label)
 GtkWidget*
 gtk_menu_item_new_with_mnemonic (const gchar *label)
 {
-  GtkWidget *menu_item;
-  GtkWidget *accel_label;
-
-  menu_item = gtk_menu_item_new ();
-  accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
-  gtk_label_set_text_with_mnemonic (GTK_LABEL (accel_label), label);
-  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
-
-  gtk_container_add (GTK_CONTAINER (menu_item), accel_label);
-  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), menu_item);
-  gtk_widget_show (accel_label);
-
-  return menu_item;
+  return g_object_new (GTK_TYPE_MENU_ITEM, 
+		       "use-underline", TRUE,
+		       "label", label,
+		       NULL);
 }
 
 static void 
@@ -382,6 +406,12 @@ gtk_menu_item_set_property (GObject      *object,
       break;
     case PROP_ACCEL_PATH:
       gtk_menu_item_set_accel_path (menu_item, g_value_get_string (value));
+      break;
+    case PROP_LABEL:
+      gtk_menu_item_set_label (menu_item, g_value_get_string (value));
+      break;
+    case PROP_USE_UNDERLINE:
+      gtk_menu_item_set_use_underline (menu_item, g_value_get_boolean (value));
       break;
 
     default:
@@ -408,6 +438,12 @@ gtk_menu_item_get_property (GObject    *object,
       break;
     case PROP_ACCEL_PATH:
       g_value_set_string (value, gtk_menu_item_get_accel_path (menu_item));
+      break;
+    case PROP_LABEL:
+      g_value_set_string (value, gtk_menu_item_get_label (menu_item));
+      break;
+    case PROP_USE_UNDERLINE:
+      g_value_set_boolean (value, gtk_menu_item_get_use_underline (menu_item));
       break;
 
     default:
@@ -1123,6 +1159,31 @@ gtk_real_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
 }
 
 static void
+gtk_real_menu_item_set_label (GtkMenuItem *menu_item,
+			      const gchar *label)
+{
+  gtk_menu_item_ensure_label (menu_item);
+
+  if (GTK_IS_LABEL (GTK_BIN (menu_item)->child))
+    {
+      gtk_label_set_label (GTK_LABEL (GTK_BIN (menu_item)->child), label ? label : "");
+      
+      g_object_notify (G_OBJECT (menu_item), "label");
+    }
+}
+
+static G_CONST_RETURN gchar *
+gtk_real_menu_item_get_label (GtkMenuItem *menu_item)
+{
+  gtk_menu_item_ensure_label (menu_item);
+
+  if (GTK_IS_LABEL (GTK_BIN (menu_item)->child))
+    return gtk_label_get_label (GTK_LABEL (GTK_BIN (menu_item)->child));
+
+  return NULL;
+}
+
+static void
 free_timeval (GTimeVal *val)
 {
   g_slice_free (GTimeVal, val);
@@ -1752,6 +1813,113 @@ _gtk_menu_item_is_selectable (GtkWidget *menu_item)
 
   return TRUE;
 }
+
+static void
+gtk_menu_item_ensure_label (GtkMenuItem *menu_item)
+{
+  GtkWidget *accel_label;
+
+  if (!GTK_BIN (menu_item)->child)
+    {
+      accel_label = (GtkWidget *)g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
+      gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
+
+      gtk_container_add (GTK_CONTAINER (menu_item), accel_label);
+      gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), 
+					GTK_WIDGET (menu_item));
+      gtk_widget_show (accel_label);
+    }
+}
+
+/**
+ * gtk_menu_item_set_label:
+ * @menu_item: a #GtkMenuItem
+ * @label: the text you want to set
+ *
+ * Sets @text on the @menu_item label
+ *
+ * Since: 2.16
+ **/
+void
+gtk_menu_item_set_label (GtkMenuItem *menu_item,
+			 const gchar *label)
+{
+  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
+
+  GTK_MENU_ITEM_GET_CLASS (menu_item)->set_label (menu_item, label);
+}
+
+/**
+ * gtk_menu_item_get_label:
+ * @menu_item: a #GtkMenuItem
+ *
+ * Sets @text on the @menu_item label
+ *
+ * Returns: The text in the @menu_item label. This is the internal
+ *   string used by the label, and must not be modified.
+ *
+ * Since: 2.16
+ **/
+G_CONST_RETURN gchar *
+gtk_menu_item_get_label (GtkMenuItem *menu_item)
+{
+  g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), NULL);
+
+  return GTK_MENU_ITEM_GET_CLASS (menu_item)->get_label (menu_item);
+}
+
+/**
+ * gtk_menu_item_set_use_underline:
+ * @menu_item: a #GtkMenuItem
+ * @setting: %TRUE if underlines in the text indicate mnemonics  
+ *
+ * If true, an underline in the text indicates the next character should be
+ * used for the mnemonic accelerator key.
+ *
+ * Since: 2.16
+ **/
+void
+gtk_menu_item_set_use_underline (GtkMenuItem *menu_item,
+				 gboolean     setting)
+{
+  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
+
+  gtk_menu_item_ensure_label (menu_item);
+
+  if (GTK_IS_LABEL (GTK_BIN (menu_item)->child))
+    {
+      gtk_label_set_use_underline (GTK_LABEL (GTK_BIN (menu_item)->child), setting);
+
+      g_object_notify (G_OBJECT (menu_item), "use-underline");
+    }
+}
+
+/**
+ * gtk_menu_item_get_use_underline:
+ * @menu_item: a #GtkMenuItem
+ *
+ * Checks if an underline in the text indicates the next character should be
+ * used for the mnemonic accelerator key.
+ *
+ * Return value: %TRUE if an embedded underline in the label indicates
+ *               the mnemonic accelerator key.
+ *
+ * Since: 2.16
+ **/
+gboolean
+gtk_menu_item_get_use_underline (GtkMenuItem *menu_item)
+{
+  g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), FALSE);
+
+  gtk_menu_item_ensure_label (menu_item);
+  
+  if (GTK_IS_LABEL (GTK_BIN (menu_item)->child))
+    return gtk_label_get_use_underline (GTK_LABEL (GTK_BIN (menu_item)->child));
+
+  return FALSE;
+}
+
+
 
 #define __GTK_MENU_ITEM_C__
 #include "gtkaliasdef.c"
