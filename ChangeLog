@@ -1,3 +1,8 @@
+2008-11-07  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkcontainer.c (gtk_container_buildable_add_child):
+	Check for child->parent instead of GTK_WIDGET_TOPLEVEL.
+
 2008-11-07  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkscrollbar.c: remove bogus newlines in the middle of

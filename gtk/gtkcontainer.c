@@ -311,7 +311,7 @@ gtk_container_buildable_add_child (GtkBuildable  *buildable,
     {
       GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
     }
-  else if (GTK_IS_WIDGET (child) && GTK_WIDGET_TOPLEVEL (child) == FALSE)
+  else if (GTK_IS_WIDGET (child) && GTK_WIDGET (child)->parent == NULL)
     {
       gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
     }
