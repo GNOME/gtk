@@ -1,3 +1,18 @@
+2008-11-07  Michael Natterer  <mitch@gimp.org>
+
+	Bug 553586 – Add orientation API to GtkPaned
+
+	* gtk/gtkpaned.[ch]: implement the GtkOrientable interface
+	and swallow all code from GtkHPaned and GtkVPaned. Add
+	gtk_paned_new() which takes a GtkOrientation argument. Deprecate
+	gtk_paned_compute_position() for good (also for GTK_COMPILATION).
+
+	* gtk/gtkhpaned.[ch]
+	* gtk/gtkvpaned.[ch]: remove all code except the constructor and
+	call gtk_orientable_set_orientation() in init().
+
+	* gtk/gtk.symbols: add gtk_box_new().
+
 2008-11-07  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkcontainer.c (gtk_container_buildable_add_child):

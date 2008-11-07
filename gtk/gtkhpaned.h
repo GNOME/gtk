@@ -56,8 +56,9 @@ struct _GtkHPanedClass
   GtkPanedClass parent_class;
 };
 
-GType      gtk_hpaned_get_type (void) G_GNUC_CONST;
-GtkWidget *gtk_hpaned_new      (void);
+
+GType       gtk_hpaned_get_type (void) G_GNUC_CONST;
+GtkWidget * gtk_hpaned_new      (void);
 
 G_END_DECLS
 

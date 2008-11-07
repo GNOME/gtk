@@ -33,9 +33,7 @@
 
 #include <gtk/gtkpaned.h>
 
-
 G_BEGIN_DECLS
-
 
 #define GTK_TYPE_VPANED            (gtk_vpaned_get_type ())
 #define GTK_VPANED(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_VPANED, GtkVPaned))
@@ -58,11 +56,10 @@ struct _GtkVPanedClass
   GtkPanedClass parent_class;
 };
 
-GType      gtk_vpaned_get_type (void) G_GNUC_CONST;
-GtkWidget *gtk_vpaned_new      (void);
 
+GType       gtk_vpaned_get_type (void) G_GNUC_CONST;
+GtkWidget * gtk_vpaned_new      (void);
 
 G_END_DECLS
-
 
 #endif /* __GTK_VPANED_H__ */

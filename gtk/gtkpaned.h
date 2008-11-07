@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -107,34 +106,35 @@ struct _GtkPanedClass
 };
 
 
-GType   gtk_paned_get_type        (void) G_GNUC_CONST;
-void    gtk_paned_add1            (GtkPaned  *paned,
-				   GtkWidget *child);
-void    gtk_paned_add2            (GtkPaned  *paned,
-				   GtkWidget *child);
-void    gtk_paned_pack1           (GtkPaned  *paned,
-				   GtkWidget *child,
-				   gboolean   resize,
-				   gboolean   shrink);
-void    gtk_paned_pack2           (GtkPaned  *paned,
-				   GtkWidget *child,
-				   gboolean   resize,
-				   gboolean   shrink);
-gint    gtk_paned_get_position    (GtkPaned  *paned);
-void    gtk_paned_set_position    (GtkPaned  *paned,
-				   gint       position);
+GType       gtk_paned_get_type     (void) G_GNUC_CONST;
+GtkWidget * gtk_paned_new          (GtkOrientation  orientation);
 
-GtkWidget *gtk_paned_get_child1   (GtkPaned  *paned);
-GtkWidget *gtk_paned_get_child2   (GtkPaned  *paned);
+void        gtk_paned_add1         (GtkPaned       *paned,
+                                    GtkWidget      *child);
+void        gtk_paned_add2         (GtkPaned       *paned,
+                                    GtkWidget      *child);
+void        gtk_paned_pack1        (GtkPaned       *paned,
+                                    GtkWidget      *child,
+                                    gboolean        resize,
+                                    gboolean        shrink);
+void        gtk_paned_pack2        (GtkPaned       *paned,
+                                    GtkWidget      *child,
+                                    gboolean        resize,
+                                    gboolean        shrink);
 
-/* Internal function */
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-void    gtk_paned_compute_position (GtkPaned  *paned,
-				    gint       allocation,
-				    gint       child1_req,
-				    gint       child2_req);
-#endif /* !GTK_DISABLE_DEPRECATED || GTK_COMPILATION */
+gint        gtk_paned_get_position (GtkPaned       *paned);
+void        gtk_paned_set_position (GtkPaned       *paned,
+                                    gint            position);
+
+GtkWidget * gtk_paned_get_child1   (GtkPaned       *paned);
+GtkWidget * gtk_paned_get_child2   (GtkPaned       *paned);
+
 #ifndef GTK_DISABLE_DEPRECATED
+/* Internal function */
+void    gtk_paned_compute_position (GtkPaned  *paned,
+                                    gint       allocation,
+                                    gint       child1_req,
+                                    gint       child2_req);
 #define	gtk_paned_gutter_size(p,s)		(void) 0
 #define	gtk_paned_set_gutter_size(p,s)		(void) 0
 #endif /* GTK_DISABLE_DEPRECATED */
