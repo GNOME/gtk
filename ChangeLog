@@ -1,4 +1,4 @@
-2008-11-07  Michael Natterer  <mitch@gimp.org>
+2008-11-07  Michael Natterer  <mitch@imendio.com>
 
 	Bug 553586 – Add orientation API to GtkPaned
 
