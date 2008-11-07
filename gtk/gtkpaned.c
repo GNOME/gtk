@@ -843,12 +843,12 @@ gtk_paned_size_allocate (GtkWidget     *widget,
 
       if (paned->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          gtk_paned_compute_position (paned,
-                                      MAX (1, widget->allocation.width
-                                           - handle_size
-                                           - 2 * border_width),
-                                      child1_requisition.width,
-                                      child2_requisition.width);
+          gtk_paned_calc_position (paned,
+                                   MAX (1, widget->allocation.width
+                                        - handle_size
+                                        - 2 * border_width),
+                                   child1_requisition.width,
+                                   child2_requisition.width);
 
           paned->handle_pos.x = widget->allocation.x + paned->child1_size + border_width;
           paned->handle_pos.y = widget->allocation.y + border_width;
@@ -872,12 +872,12 @@ gtk_paned_size_allocate (GtkWidget     *widget,
         }
       else
         {
-          gtk_paned_compute_position (paned,
-                                      MAX (1, widget->allocation.height
-                                           - handle_size
-                                           - 2 * border_width),
-                                      child1_requisition.height,
-                                      child2_requisition.height);
+          gtk_paned_calc_position (paned,
+                                   MAX (1, widget->allocation.height
+                                        - handle_size
+                                        - 2 * border_width),
+                                   child1_requisition.height,
+                                   child2_requisition.height);
 
           paned->handle_pos.x = widget->allocation.x + border_width;
           paned->handle_pos.y = widget->allocation.y + paned->child1_size + border_width;
@@ -1501,7 +1501,7 @@ gtk_paned_set_position (GtkPaned *paned,
        * if the total allocation changes at the same time
        * as the position, the position set is with reference
        * to the new total size. If only the position changes,
-       * then clamping will occur in gtk_paned_compute_position()
+       * then clamping will occur in gtk_paned_calc_position()
        */
 
       paned->child1_size = position;

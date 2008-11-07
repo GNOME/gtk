@@ -1,5 +1,11 @@
 2008-11-07  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkpaned.c: argh, actually call the newly added private
+	gtk_paned_calc_position() instead of the deprecated public
+	version.
+
+2008-11-07  Michael Natterer  <mitch@imendio.com>
+
 	Bug 553586 – Add orientation API to GtkPaned
 
 	* gtk/gtkpaned.[ch]: implement the GtkOrientable interface
