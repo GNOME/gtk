@@ -1697,6 +1697,19 @@ update_range_sensitivity (GtkWidget *button,
   gtk_widget_set_sensitive (range, active);
 }
 
+void
+emit_ok_response (GtkTreeView       *tree_view,
+                  GtkTreePath       *path,
+                  GtkTreeViewColumn *column,
+                  gpointer          *user_data)
+{
+  GtkPrintUnixDialog *print_dialog;
+
+  print_dialog = (GtkPrintUnixDialog *) user_data;
+
+  gtk_dialog_response (GTK_DIALOG (print_dialog), GTK_RESPONSE_OK);
+}
+
 static void
 create_main_page (GtkPrintUnixDialog *dialog)
 {
@@ -1775,6 +1788,8 @@ create_main_page (GtkPrintUnixDialog *dialog)
 						     NULL);
   gtk_tree_view_column_set_cell_data_func (column, renderer, set_cell_sensitivity_func, NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
+
+  g_signal_connect (GTK_TREE_VIEW (treeview), "row-activated", G_CALLBACK (emit_ok_response), dialog);
   
   gtk_widget_show (treeview);
   gtk_container_add (GTK_CONTAINER (scrolled), treeview);

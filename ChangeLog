@@ -1,3 +1,10 @@
+2008-11-10  Marek Kasik  <mkasik@redhat.com>
+
+	Bug 560135 - Print when the user double clicks a printer
+
+	* gtk/gtkprintunixdialog.c: add handling of double click to
+	GtkPrintUnixDialog.
+
 2008-11-07  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkpaned.c: argh, actually call the newly added private
