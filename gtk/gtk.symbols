@@ -3421,6 +3421,7 @@ gtk_scale_get_draw_value
 gtk_scale_get_layout
 gtk_scale_get_layout_offsets
 gtk_scale_get_type G_GNUC_CONST
+gtk_scale_new
 gtk_scale_get_value_pos
 gtk_scale_set_digits
 gtk_scale_set_draw_value
@@ -3448,6 +3449,7 @@ gtk_scale_button_get_popup
 #if IN_HEADER(__GTK_SCROLLBAR_H__)
 #if IN_FILE(__GTK_SCROLLBAR_C__)
 gtk_scrollbar_get_type G_GNUC_CONST
+gtk_scrollbar_new
 #endif
 #endif
 
