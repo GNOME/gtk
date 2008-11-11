@@ -1,5 +1,31 @@
 2008-11-11  Michael Natterer  <mitch@imendio.com>
 
+	Bug 553765 – Add orientation API to GtkRange
+
+	* gtk/gtkrange.[ch]: implement the GtkOrientable interface. Add
+	evil code that makes sure that the stepper_detail and slider_detail
+	set in GtkRangeClass continue to work with the hacked subclasses
+	below.
+
+	* gtk/gtkscale.[ch]: swallow all code from GtkHScale and GtkVScale
+	and add gtk_scale_new() and gtk_scale_new_with_range() which take
+	a GtkOrientation argument. Set slider_detail to "Xscale" so above
+	evil code works.
+
+	* gtk/gtkscrollbar.[ch]: add gtk_scrollbar_new() which takes a
+	GtkOrientation argument. Set stepper_detail to "Xscrollbar" so
+	above evil code works.
+
+	* gtk/gtkhscale.c
+	* gtk/gtkvscale.c
+	* gtk/gtkhscrollbar.c
+	* gtk/gtkvscrollbar.c: remove all code except the constructor and
+	call gtk_orientable_set_orientation() in init().
+
+	* gtk/gtk.symbols: changed accordingly.
+
+2008-11-11  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktoolbar.h: move deprecated functions together, move
 	setters and getters together, some indentation cleanup.
 

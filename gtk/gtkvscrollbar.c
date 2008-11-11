@@ -22,12 +22,13 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
+
+#include "gtkorientable.h"
 #include "gtkvscrollbar.h"
-#include "gdk/gdkkeysyms.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -42,23 +43,19 @@ gtk_vscrollbar_class_init (GtkVScrollbarClass *class)
 static void
 gtk_vscrollbar_init (GtkVScrollbar *vscrollbar)
 {
-  GtkRange *range;
-
-  range = GTK_RANGE (vscrollbar);
-
-  range->orientation = GTK_ORIENTATION_VERTICAL;
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (vscrollbar),
+                                  GTK_ORIENTATION_VERTICAL);
 }
 
-GtkWidget*
+GtkWidget *
 gtk_vscrollbar_new (GtkAdjustment *adjustment)
 {
-  GtkWidget *vscrollbar;
-  
-  vscrollbar = g_object_new (GTK_TYPE_VSCROLLBAR,
-			     "adjustment", adjustment,
-			     NULL);
-  
-  return vscrollbar;
+  g_return_val_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment),
+                        NULL);
+
+  return g_object_new (GTK_TYPE_VSCROLLBAR,
+                       "adjustment", adjustment,
+                       NULL);
 }
 
 #define __GTK_VSCROLLBAR_C__

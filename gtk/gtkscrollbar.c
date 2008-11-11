@@ -35,7 +35,7 @@
 static void gtk_scrollbar_style_set (GtkWidget *widget,
                                      GtkStyle  *previous);
 
-G_DEFINE_ABSTRACT_TYPE (GtkScrollbar, gtk_scrollbar, GTK_TYPE_RANGE)
+G_DEFINE_TYPE (GtkScrollbar, gtk_scrollbar, GTK_TYPE_RANGE)
 
 static void
 gtk_scrollbar_class_init (GtkScrollbarClass *class)
@@ -43,6 +43,8 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   widget_class->style_set = gtk_scrollbar_style_set;
+
+  GTK_RANGE_CLASS (class)->stepper_detail = "Xscrollbar";
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("min-slider-length",
@@ -121,6 +123,30 @@ gtk_scrollbar_style_set (GtkWidget *widget,
   range->has_stepper_d = has_d;
 
   GTK_WIDGET_CLASS (gtk_scrollbar_parent_class)->style_set (widget, previous);
+}
+
+/**
+ * gtk_scrollbar_new:
+ * @orientation: the scrollbar's orientation.
+ * @adjustment: the #GtkAdjustment to use, or %NULL to create a new adjustment.
+ *
+ * Creates a new scrollbar with the given orientation.
+ *
+ * Return value:  the new #GtkScrollbar.
+ *
+ * Since: 2.16
+ **/
+GtkWidget *
+gtk_scrollbar_new (GtkOrientation  orientation,
+                   GtkAdjustment  *adjustment)
+{
+  g_return_val_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment),
+                        NULL);
+
+  return g_object_new (GTK_TYPE_SCROLLBAR,
+                       "orientation", orientation,
+                       "adjustment",  adjustment,
+                       NULL);
 }
 
 #define __GTK_SCROLLBAR_C__

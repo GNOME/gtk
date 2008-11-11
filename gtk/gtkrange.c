@@ -26,15 +26,18 @@
  */
 
 #include "config.h"
+
 #include <stdio.h>
 #include <math.h>
+
 #include <gdk/gdkkeysyms.h>
-#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtkorientable.h"
 #include "gtkrange.h"
 #include "gtkscrollbar.h"
 #include "gtkprivate.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #define SCROLL_DELAY_FACTOR 5    /* Scroll repeat multiplier */
@@ -42,6 +45,7 @@
 
 enum {
   PROP_0,
+  PROP_ORIENTATION,
   PROP_UPDATE_POLICY,
   PROP_ADJUSTMENT,
   PROP_INVERTED,
@@ -110,6 +114,9 @@ struct _GtkRangeLayout
   guint repaint_id;
 
   gdouble fill_level;
+
+  GQuark slider_detail_quark;
+  GQuark stepper_detail_quark;
 };
 
 
@@ -208,9 +215,12 @@ static gboolean      gtk_range_key_press                (GtkWidget     *range,
 							 GdkEventKey   *event);
 
 
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkRange, gtk_range, GTK_TYPE_WIDGET,
+                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
+                                                         NULL))
+
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_ABSTRACT_TYPE (GtkRange, gtk_range, GTK_TYPE_WIDGET)
 
 static void
 gtk_range_class_init (GtkRangeClass *class)
@@ -225,6 +235,7 @@ gtk_range_class_init (GtkRangeClass *class)
 
   gobject_class->set_property = gtk_range_set_property;
   gobject_class->get_property = gtk_range_get_property;
+
   object_class->destroy = gtk_range_destroy;
 
   widget_class->size_request = gtk_range_size_request;
@@ -330,6 +341,10 @@ gtk_range_class_init (GtkRangeClass *class)
                   G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_SCROLL_TYPE,
                   G_TYPE_DOUBLE);
+
+  g_object_class_override_property (gobject_class,
+                                    PROP_ORIENTATION,
+                                    "orientation");
 
   g_object_class_install_property (gobject_class,
                                    PROP_UPDATE_POLICY,
@@ -545,12 +560,18 @@ gtk_range_set_property (GObject      *object,
 			const GValue *value,
 			GParamSpec   *pspec)
 {
-  GtkRange *range;
-
-  range = GTK_RANGE (object);
+  GtkRange *range = GTK_RANGE (object);
 
   switch (prop_id)
     {
+    case PROP_ORIENTATION:
+      range->orientation = g_value_get_enum (value);
+
+      range->layout->slider_detail_quark = 0;
+      range->layout->stepper_detail_quark = 0;
+
+      gtk_widget_queue_resize (GTK_WIDGET (range));
+      break;
     case PROP_UPDATE_POLICY:
       gtk_range_set_update_policy (range, g_value_get_enum (value));
       break;
@@ -587,12 +608,13 @@ gtk_range_get_property (GObject      *object,
 			GValue       *value,
 			GParamSpec   *pspec)
 {
-  GtkRange *range;
-
-  range = GTK_RANGE (object);
+  GtkRange *range = GTK_RANGE (object);
 
   switch (prop_id)
     {
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, range->orientation);
+      break;
     case PROP_UPDATE_POLICY:
       g_value_set_enum (value, range->update_policy);
       break;
@@ -628,6 +650,7 @@ gtk_range_init (GtkRange *range)
 {
   GTK_WIDGET_SET_FLAGS (range, GTK_NO_WINDOW);
 
+  range->orientation = GTK_ORIENTATION_HORIZONTAL;
   range->adjustment = NULL;
   range->update_policy = GTK_UPDATE_CONTINUOUS;
   range->inverted = FALSE;
@@ -1319,6 +1342,58 @@ gtk_range_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_range_parent_class)->unmap (widget);
 }
 
+static const gchar *
+gtk_range_get_slider_detail (GtkRange *range)
+{
+  const gchar *slider_detail;
+
+  if (range->layout->slider_detail_quark)
+    return g_quark_to_string (range->layout->slider_detail_quark);
+
+  slider_detail = GTK_RANGE_GET_CLASS (range)->slider_detail;
+
+  if (slider_detail && slider_detail[0] == 'X')
+    {
+      gchar *detail = g_strdup (slider_detail);
+
+      detail[0] = range->orientation == GTK_ORIENTATION_HORIZONTAL ? 'h' : 'v';
+
+      range->layout->slider_detail_quark = g_quark_from_string (detail);
+
+      g_free (detail);
+
+      return g_quark_to_string (range->layout->slider_detail_quark);
+    }
+
+  return slider_detail;
+}
+
+static const gchar *
+gtk_range_get_stepper_detail (GtkRange *range)
+{
+  const gchar *stepper_detail;
+
+  if (range->layout->stepper_detail_quark)
+    return g_quark_to_string (range->layout->stepper_detail_quark);
+
+  stepper_detail = GTK_RANGE_GET_CLASS (range)->stepper_detail;
+
+  if (stepper_detail && stepper_detail[0] == 'X')
+    {
+      gchar *detail = g_strdup (stepper_detail);
+
+      detail[0] = range->orientation == GTK_ORIENTATION_HORIZONTAL ? 'h' : 'v';
+
+      range->layout->stepper_detail_quark = g_quark_from_string (detail);
+
+      g_free (detail);
+
+      return g_quark_to_string (range->layout->stepper_detail_quark);
+    }
+
+  return stepper_detail;
+}
+
 static void
 draw_stepper (GtkRange     *range,
               GdkRectangle *rect,
@@ -1377,7 +1452,7 @@ draw_stepper (GtkRange     *range,
 		 widget->window,
 		 state_type, shadow_type,
 		 &intersection, widget,
-		 GTK_RANGE_GET_CLASS (range)->stepper_detail,
+		 gtk_range_get_stepper_detail (range),
 		 widget->allocation.x + rect->x,
 		 widget->allocation.y + rect->y,
 		 rect->width,
@@ -1407,7 +1482,7 @@ draw_stepper (GtkRange     *range,
                    widget->window,
                    state_type, shadow_type, 
                    &intersection, widget,
-                   GTK_RANGE_GET_CLASS (range)->stepper_detail,
+                   gtk_range_get_stepper_detail (range),
                    arrow_type,
                    TRUE,
 		   arrow_x, arrow_y, arrow_width, arrow_height);
@@ -1679,7 +1754,7 @@ gtk_range_expose (GtkWidget      *widget,
                         shadow_type,
                         &area,
                         widget,
-                        GTK_RANGE_GET_CLASS (range)->slider_detail,
+                        gtk_range_get_slider_detail (range),
                         widget->allocation.x + range->layout->slider.x,
                         widget->allocation.y + range->layout->slider.y,
                         range->layout->slider.width,
