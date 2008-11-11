@@ -1,3 +1,7 @@
+2008-11-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkspinbutton.c: Chain up in enter and leave notify handlers.
+
 2008-11-11  Michael Natterer  <mitch@imendio.com>
 
 	Bug 553765 – Add orientation API to GtkRange

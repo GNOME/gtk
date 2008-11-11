@@ -915,7 +915,10 @@ gtk_spin_button_enter_notify (GtkWidget        *widget,
 
       gtk_widget_queue_draw (GTK_WIDGET (spin));
     }
-  
+ 
+  if (GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->enter_notify_event)
+    return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->enter_notify_event (widget, event);
+
   return FALSE;
 }
 
@@ -927,7 +930,10 @@ gtk_spin_button_leave_notify (GtkWidget        *widget,
 
   spin->in_child = NO_ARROW;
   gtk_widget_queue_draw (GTK_WIDGET (spin));
-  
+ 
+  if (GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->leave_notify_event)
+    return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->leave_notify_event (widget, event);
+
   return FALSE;
 }
 
