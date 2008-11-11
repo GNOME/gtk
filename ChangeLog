@@ -1,3 +1,10 @@
+2008-11-11  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtktoolbar.[ch]: implement the GtkOrientable interface
+	and deprecate gtk_toolbar_get,set_orientation().
+
+	* gtk/gtk.symbols: changed accordingly.
+
 2008-11-10  Marek Kasik  <mkasik@redhat.com>
 
 	Bug 560135 - Print when the user double clicks a printer

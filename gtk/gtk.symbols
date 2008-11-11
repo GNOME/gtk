@@ -4158,7 +4158,9 @@ gtk_toolbar_get_icon_size
 gtk_toolbar_get_item_index
 gtk_toolbar_get_n_items
 gtk_toolbar_get_nth_item
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_toolbar_get_orientation
+#endif
 gtk_toolbar_get_relief_style
 gtk_toolbar_get_show_arrow
 gtk_toolbar_get_style
@@ -4169,7 +4171,9 @@ gtk_toolbar_get_type G_GNUC_CONST
 gtk_toolbar_insert
 gtk_toolbar_new
 gtk_toolbar_set_drop_highlight_item
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_toolbar_set_orientation
+#endif
 gtk_toolbar_set_show_arrow
 gtk_toolbar_set_style
 #ifndef GTK_DISABLE_DEPRECATED

@@ -5,7 +5,7 @@
  * Copyright (C) 2002 Anders Carlsson <andersca@gnome.org>
  * Copyright (C) 2002 James Henstridge <james@daa.com.au>
  * Copyright (C) 2003, 2004 Soeren Sandmann <sandmann@daimi.au.dk>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -26,35 +26,39 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #undef GTK_DISABLE_DEPRECATED
 
 #include "config.h"
+
+#include <math.h>
+#include <string.h>
+
+#include <gdk/gdkkeysyms.h>
+
 #include "gtkarrow.h"
+#include "gtkbindings.h"
+#include "gtkhbox.h"
+#include "gtkimage.h"
+#include "gtklabel.h"
+#include "gtkmain.h"
+#include "gtkmarshalers.h"
+#include "gtkmenu.h"
+#include "gtkorientable.h"
+#include "gtkradiobutton.h"
+#include "gtkradiotoolbutton.h"
+#include "gtkseparatormenuitem.h"
+#include "gtkseparatortoolitem.h"
+#include "gtkstock.h"
+#include "gtktoolbar.h"
 #include "gtktoolbar.h"
 #include "gtktoolshell.h"
-#include "gtkradiotoolbutton.h"
-#include "gtkseparatortoolitem.h"
-#include "gtkmenu.h"
-#include "gtkradiobutton.h"
-#include "gtktoolbar.h"
-#include "gtkbindings.h"
-#include <gdk/gdkkeysyms.h>
-#include "gtkmarshalers.h"
-#include "gtkmain.h"
-#include "gtkstock.h"
-#include "gtklabel.h"
+#include "gtkvbox.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include <string.h>
-#include "gtkhbox.h"
-#include "gtkvbox.h"
-#include "gtkimage.h"
-#include "gtkseparatormenuitem.h"
 #include "gtkalias.h"
-#include <math.h>
 
 typedef struct _ToolbarContent ToolbarContent;
 
@@ -310,10 +314,15 @@ static void            toolbar_rebuild_menu                 (GtkToolShell       
 #define GTK_TOOLBAR_GET_PRIVATE(o)  \
   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TOOLBAR, GtkToolbarPrivate))
 
-static guint			toolbar_signals [LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkToolbar, gtk_toolbar, GTK_TYPE_CONTAINER,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TOOL_SHELL, toolbar_tool_shell_iface_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TOOL_SHELL,
+                                                toolbar_tool_shell_iface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
+                                                NULL))
+
+static guint toolbar_signals[LAST_SIGNAL] = { 0 };
+
 
 static void
 add_arrow_bindings (GtkBindingSet   *binding_set,
@@ -343,16 +352,6 @@ add_ctrl_tab_bindings (GtkBindingSet    *binding_set,
 				GDK_KP_Tab, GDK_CONTROL_MASK | modifiers,
 				"move-focus", 1,
 				GTK_TYPE_DIRECTION_TYPE, direction);
-}
-
-static void
-toolbar_tool_shell_iface_init (GtkToolShellIface *iface)
-{
-  iface->get_icon_size    = toolbar_get_icon_size;
-  iface->get_orientation  = toolbar_get_orientation;
-  iface->get_style        = toolbar_get_style;
-  iface->get_relief_style = toolbar_get_relief_style;
-  iface->rebuild_menu     = toolbar_rebuild_menu;
 }
 
 static void
@@ -486,15 +485,10 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                 G_TYPE_BOOLEAN);
 
   /* properties */
-  g_object_class_install_property (gobject_class,
-				   PROP_ORIENTATION,
-				   g_param_spec_enum ("orientation",
- 						      P_("Orientation"),
- 						      P_("The orientation of the toolbar"),
- 						      GTK_TYPE_ORIENTATION,
- 						      GTK_ORIENTATION_HORIZONTAL,
- 						      GTK_PARAM_READWRITE));
-  
+  g_object_class_override_property (gobject_class,
+                                    PROP_ORIENTATION,
+                                    "orientation");
+
   g_object_class_install_property (gobject_class,
 				   PROP_TOOLBAR_STYLE,
 				   g_param_spec_enum ("toolbar-style",
@@ -674,6 +668,16 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 }
 
 static void
+toolbar_tool_shell_iface_init (GtkToolShellIface *iface)
+{
+  iface->get_icon_size    = toolbar_get_icon_size;
+  iface->get_orientation  = toolbar_get_orientation;
+  iface->get_style        = toolbar_get_style;
+  iface->get_relief_style = toolbar_get_relief_style;
+  iface->rebuild_menu     = toolbar_rebuild_menu;
+}
+
+static void
 gtk_toolbar_init (GtkToolbar *toolbar)
 {
   GtkToolbarPrivate *priv;
@@ -730,7 +734,8 @@ gtk_toolbar_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      gtk_toolbar_set_orientation (toolbar, g_value_get_enum (value));
+      g_signal_emit (toolbar, toolbar_signals[ORIENTATION_CHANGED], 0,
+                     g_value_get_enum (value));
       break;
     case PROP_TOOLBAR_STYLE:
       gtk_toolbar_set_style (toolbar, g_value_get_enum (value));
@@ -2830,8 +2835,10 @@ gtk_toolbar_get_item_index (GtkToolbar  *toolbar,
  * gtk_toolbar_set_orientation:
  * @toolbar: a #GtkToolbar.
  * @orientation: a new #GtkOrientation.
- * 
+ *
  * Sets whether a toolbar should appear horizontally or vertically.
+ *
+ * Deprecated: 2.16: Use gtk_orientable_set_orientation() instead.
  **/
 void
 gtk_toolbar_set_orientation (GtkToolbar     *toolbar,
@@ -2845,11 +2852,13 @@ gtk_toolbar_set_orientation (GtkToolbar     *toolbar,
 /**
  * gtk_toolbar_get_orientation:
  * @toolbar: a #GtkToolbar
- * 
+ *
  * Retrieves the current orientation of the toolbar. See
  * gtk_toolbar_set_orientation().
  *
  * Return value: the orientation
+ *
+ * Deprecated: 2.16: Use gtk_orientable_get_orientation() instead.
  **/
 GtkOrientation
 gtk_toolbar_get_orientation (GtkToolbar *toolbar)
