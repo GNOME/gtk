@@ -1,5 +1,10 @@
 2008-11-11  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtktoolbar.h: move deprecated functions together, move
+	setters and getters together, some indentation cleanup.
+
+2008-11-11  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtktoolbar.[ch]: implement the GtkOrientable interface
 	and deprecate gtk_toolbar_get,set_orientation().
 
