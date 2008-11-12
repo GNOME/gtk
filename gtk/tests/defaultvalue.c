@@ -168,6 +168,11 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "cancel-button") == 0))
 	continue;
 
+      /* Default invisible char is determined at runtime */
+      if (g_type_is_a (type, GTK_TYPE_ENTRY) &&
+	  strcmp (pspec->name, "invisible-char") == 0)
+	continue;
+
       /* Gets set to the cwd */
       if (g_type_is_a (type, GTK_TYPE_FILE_SELECTION) &&
 	  strcmp (pspec->name, "filename") == 0)
