@@ -1,3 +1,10 @@
+2008-11-12  Christian Dywan  <christian@imendio.com>
+
+	Bug 525550 – GTK+ 2.13.0 GtkCurve test fails
+
+	* gtk/tests/object.c (list_ignore_properties),
+	(object_test_property), (main): Ignore GtkCurve when testing
+
 2008-11-12  Richard Hult  <richard@imendio.com>
 
 	Bug 550942 – [patch] Rework of gdkeventloop-quartz.c
