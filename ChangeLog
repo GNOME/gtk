@@ -1,5 +1,12 @@
 2008-11-12  Christian Dywan  <christian@imendio.com>
 
+	Bug 560139 – GtkEntry doesn't paint with the right state
+
+	* gtk/gtkentry.c (gtk_entry_class_init), (gtk_entry_draw_frame),
+	(gtk_entry_expose): Reflect the right state if state-hint is set
+
+2008-11-12  Christian Dywan  <christian@imendio.com>
+
 	Bug 559619 – invisible-char default cannot be tested
 
 	* gtk/tests/defaultvalue.c (test_type):
