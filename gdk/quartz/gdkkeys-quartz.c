@@ -61,7 +61,12 @@
 
 static GdkKeymap *default_keymap = NULL;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
+/* Note: we could check only if building against the 10.5 SDK instead, but
+ * that would make non-xml layouts not work in 32-bit which would be a quite
+ * bad regression. This way, old unsupported layouts will just not work in
+ * 64-bit.
+ */
+#ifdef __LP64__
 static TISInputSourceRef current_layout = NULL;
 #else
 static KeyboardLayoutRef current_layout = NULL;
@@ -185,7 +190,7 @@ maybe_update_keymap (void)
 {
   const void *chr_data = NULL;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
+#ifdef __LP64__
   TISInputSourceRef new_layout = TISCopyCurrentKeyboardLayoutInputSource ();
   CFDataRef layout_data_ref;
 
@@ -204,7 +209,7 @@ maybe_update_keymap (void)
       g_free (keyval_array);
       keyval_array = g_new0 (guint, NUM_KEYCODES * KEYVALS_PER_KEYCODE);
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
+#ifdef __LP64__
       layout_data_ref = (CFDataRef) TISGetInputSourceProperty
 	(new_layout, kTISPropertyUnicodeKeyLayoutData);
 
@@ -306,7 +311,7 @@ maybe_update_keymap (void)
 	{ 
 	  /* Get chr data */
 	  KLGetKeyboardLayoutProperty (new_layout, kKLuchrData, (const void **)&chr_data);
-#endif  /* MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4 */
+#endif
 	  
 	  for (i = 0; i < NUM_KEYCODES; i++) 
 	    {
@@ -382,7 +387,7 @@ maybe_update_keymap (void)
 		  p[1] == p[3])
 		p[2] = p[3] = 0;
 	    }
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+#ifndef __LP64__
 	}
       else
 	{

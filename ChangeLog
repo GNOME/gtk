@@ -1,3 +1,12 @@
+2008-11-12  Richard Hult  <richard@imendio.com>
+
+	Bug 558586 – handling of keyboard under darwin (quartz)
+
+	* gdk/quartz/gdkkeys-quartz.c: Follow up on this bug, only use the
+	new API when building on 64-bit, since there are still old non-xml
+	layouts used out there we don't want to break them. (For 64-bit
+	those layouts doesn't work so we don't have a choice there.)
+
 2008-11-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkspinbutton.c: Chain up in enter and leave notify handlers.
