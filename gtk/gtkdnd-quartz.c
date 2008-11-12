@@ -1668,7 +1668,20 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
 			  gint               hot_x,
 			  gint               hot_y)
 {
-  g_warning ("gtk_drag_set_icon_pixmap is not supported on Mac OS X");
+  GdkPixbuf *pixbuf;
+
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (context->is_source);
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+  g_return_if_fail (GDK_IS_PIXMAP (pixmap));
+
+  pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, colormap,
+                                         0, 0, /* src */
+                                         0, 0, /* dst */
+                                         -1, -1);
+
+  gtk_drag_set_icon_pixbuf (context, pixbuf, hot_x, hot_y);
+  g_object_unref (pixbuf);
 }
 
 /**

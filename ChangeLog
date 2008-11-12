@@ -1,3 +1,8 @@
+2008-11-12  Richard Hult  <richard@imendio.com>
+
+	* gtk/gtkdnd-quartz.c: (gtk_drag_set_icon_pixmap): Implement,
+	patch from Paul Davis.
+
 2008-11-12  Christian Dywan  <christian@imendio.com>
 
 	Bug 525550 – GTK+ 2.13.0 GtkCurve test fails
