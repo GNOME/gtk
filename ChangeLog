@@ -1,5 +1,15 @@
 2008-11-12  Richard Hult  <richard@imendio.com>
 
+	Bug 550942 – [patch] Rework of gdkeventloop-quartz.c
+
+	* gdk/gdk.c:
+	* gdk/gdkinternals.h: Add eventloop debug facility.
+	* gdk/quartz/gdkeventloop-quartz.c: Big rework of the quartz
+	mainloop integration, patch from Owen Taylor. See bug #550942 for
+	the details.
+
+2008-11-12  Richard Hult  <richard@imendio.com>
+
 	Bug 558586 – handling of keyboard under darwin (quartz)
 
 	* gdk/quartz/gdkkeys-quartz.c: Follow up on this bug, only use the
