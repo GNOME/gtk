@@ -268,7 +268,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                    g_param_spec_string ("label",
 							P_("Label"),
 							P_("The text for the child label"),
-							NULL,
+							"",
 							GTK_PARAM_READWRITE));
 
   /**

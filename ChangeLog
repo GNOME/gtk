@@ -1,3 +1,10 @@
+2008-11-13  Christian Dywan  <christian@imendio.com>
+
+	Bug 560602 – Wrong GtkMenuItem default value (test fails)
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_class_init):
+	Correct default "label" value to ""
+
 2008-11-12  Christian Dywan  <christian@imendio.com>
 
 	Bug 560139 – GtkEntry doesn't paint with the right state
