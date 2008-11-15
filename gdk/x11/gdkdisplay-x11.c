@@ -236,7 +236,17 @@ gdk_display_open (const gchar *display_name)
 #ifdef HAVE_XCOMPOSITE
   if (XCompositeQueryExtension (display_x11->xdisplay,
 				&ignore, &ignore))
-      display_x11->have_xcomposite = TRUE;
+    {
+      int major, minor;
+              
+      XCompositeQueryVersion (display_x11->xdisplay, &major, &minor);
+
+      /* Prior to Composite version 0.4, composited windows clipped their
+       * parents, so you had to use IncludeInferiors to draw to the parent
+       * This isn't useful for our purposes, so require 0.4
+       */
+      display_x11->have_xcomposite = major > 0 || (major == 0 && minor >= 4);
+    }
   else
 #endif
     display_x11->have_xcomposite = FALSE;
