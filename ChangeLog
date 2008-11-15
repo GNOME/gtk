@@ -1,3 +1,13 @@
+2008-11-14  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	Bug 541391 – Unfocussable Treeview swallows focus
+
+	* gtk/gtktreeview.c (grab_focus_and_unset_draw_keyfocus),
+	(gtk_tree_view_focus): Honor GTK_WIDGET_CAN_FOCUS properly.
+	Patch by Christian Dywan.
+
 2008-11-05  Richard Hult  <richard@imendio.com>
 
 	Merged from trunk:

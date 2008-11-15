@@ -2461,7 +2461,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 static void
 grab_focus_and_unset_draw_keyfocus (GtkTreeView *tree_view)
 {
-  if (!GTK_WIDGET_HAS_FOCUS (tree_view))
+  if (GTK_WIDGET_CAN_FOCUS (tree_view) && !GTK_WIDGET_HAS_FOCUS (tree_view))
     gtk_widget_grab_focus (GTK_WIDGET (tree_view));
   GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
 }
@@ -7841,7 +7841,8 @@ gtk_tree_view_focus (GtkWidget        *widget,
   GtkContainer *container = GTK_CONTAINER (widget);
   GtkWidget *focus_child;
 
-  if (!GTK_WIDGET_IS_SENSITIVE (container))
+  if (!GTK_WIDGET_IS_SENSITIVE (container) ||
+      !GTK_WIDGET_CAN_FOCUS (widget))
     return FALSE;
 
   focus_child = container->focus_child;
