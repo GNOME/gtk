@@ -3009,7 +3009,7 @@ msgstr "_Выполнить"
 #: ../gtk/gtkstock.c:312
 msgctxt "Stock label"
 msgid "_Edit"
-msgstr "_Правка"
+msgstr "_Изменить"
 
 #: ../gtk/gtkstock.c:313
 msgctxt "Stock label"
