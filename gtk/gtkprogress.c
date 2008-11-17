@@ -69,7 +69,7 @@ static void gtk_progress_value_changed   (GtkAdjustment    *adjustment,
 static void gtk_progress_changed         (GtkAdjustment    *adjustment,
 					  GtkProgress      *progress);
 
-G_DEFINE_TYPE (GtkProgress, gtk_progress, GTK_TYPE_WIDGET)
+G_DEFINE_ABSTRACT_TYPE (GtkProgress, gtk_progress, GTK_TYPE_WIDGET)
 
 static void
 gtk_progress_class_init (GtkProgressClass *class)

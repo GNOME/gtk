@@ -1,3 +1,9 @@
+2008-11-17  Christian Dywan  <christian@imendio.com>
+
+	Bug 377699 – realizing gtk.Progress() causes SEGV
+
+	* gtk/gtkprogress.c: Define GtkProgress as an abstract type
+
 2008-11-13  Christian Dywan  <christian@imendio.com>
 
 	Bug 560602 – Wrong GtkMenuItem default value (test fails)
