@@ -1906,7 +1906,7 @@ fi
 # Checks for gtk-doc and docbook-tools
 ##################################################
 
-GTK_DOC_CHECK([1.8])
+GTK_DOC_CHECK([1.11])
 
 AC_CHECK_PROG(DB2HTML, db2html, true, false)
 AM_CONDITIONAL(HAVE_DOCBOOK, $DB2HTML)

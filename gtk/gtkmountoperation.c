@@ -102,7 +102,7 @@ enum {
 
 };
 
-struct GtkMountOperationPrivate {
+struct _GtkMountOperationPrivate {
   GtkWindow *parent_window;
   GtkDialog *dialog;
   GdkScreen *screen;

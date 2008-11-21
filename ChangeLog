@@ -1,3 +1,13 @@
+2008-11-21  Matthias Clasen <mclasen@redhat.com>
+
+	* configure.in: Bump gtk-doc dependency to 1.11 for
+	nicer index-generation.
+
+2008-11-21  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtkmountoperation.[hc]: Declare structs in a way that
+	gtk-doc understands.
+
 2008-11-17  Christian Dywan  <christian@imendio.com>
 
 	Bug 377699 – realizing gtk.Progress() causes SEGV
