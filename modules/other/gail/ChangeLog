@@ -1,3 +1,8 @@
+2008-11-08  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gailtextview.c: (gail_streamable_content_get_stream):
+	Missing format specifier. Bug #554567.
+
 2008-10-13  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:
