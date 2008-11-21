@@ -52,7 +52,7 @@ GTKDOC_LIBS = $(top_builddir)/gdk/$(gdktargetlib)
 
 
 # Extra options to supply to gtkdoc-mkdb
-MKDB_OPTIONS=--sgml-mode --output-format=xml
+MKDB_OPTIONS=--sgml-mode --output-format=xml --name-space=gdk
 
 # Extra SGML files that are included by DOC_MAIN_SGML_FILE
 content_files = 		\

@@ -47,7 +47,7 @@ GTKDOC_LIBS = \
 
 
 # Extra options to supply to gtkdoc-mkdb
-MKDB_OPTIONS=--main-sgml-file=$(DOC_MAIN_SGML_FILE) --sgml-mode --source-dir=../../../contrib/gdk-pixbuf-xlib --output-format=xml
+MKDB_OPTIONS=--main-sgml-file=$(DOC_MAIN_SGML_FILE) --sgml-mode --source-dir=../../../contrib/gdk-pixbuf-xlib --output-format=xml --name-space=gdk_pixbuf
 
 # Extra SGML files that are included by DOC_MAIN_SGML_FILE
 content_files =				\

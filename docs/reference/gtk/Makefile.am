@@ -117,7 +117,7 @@ GTKDOC_LIBS = \
 
 
 # Extra options to supply to gtkdoc-mkdb
-MKDB_OPTIONS=--sgml-mode --output-format=xml
+MKDB_OPTIONS=--sgml-mode --output-format=xml --name-space=gtk
 
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
 content_files =					\
@@ -156,6 +156,7 @@ content_files =					\
 	visual_index.xml
 
 expand_content_files = 				\
+	drawing-model.xml			\
 	glossary.xml				\
 	migrating-checklist.sgml		\
 	migrating-GtkAction.sgml		\
