@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-10-17 00:37-0400\n"
-"PO-Revision-Date: 2008-09-04 20:50+0900\n"
+"PO-Revision-Date: 2008-11-20 19:51+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -1347,9 +1347,9 @@ msgid "New accelerator..."
 msgstr "새 단축키..."
 
 #: gtk/gtkcellrendererpixbuf.c:460
-#, fuzzy, c-format
+#, c-format
 msgid "Icon not present in theme"
-msgstr "테마에 '%s' 아이콘이 없습니다"
+msgstr "테마에 아이콘이 없습니다"
 
 #. do not translate the part before the |
 #: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
@@ -1590,7 +1590,7 @@ msgstr "'%s' 책갈피를 지웁니다"
 
 #: gtk/gtkfilechooserdefault.c:3730
 msgid "Remove"
-msgstr "지우기"
+msgstr "제거"
 
 #: gtk/gtkfilechooserdefault.c:3739
 msgid "Rename..."
@@ -1608,7 +1608,7 @@ msgstr "위치(_P)"
 
 #: gtk/gtkfilechooserdefault.c:3997 gtk/gtkstock.c:297
 msgid "_Add"
-msgstr "더하기(_A)"
+msgstr "추가(_A)"
 
 #: gtk/gtkfilechooserdefault.c:4004
 msgid "Add the selected folder to the Bookmarks"
@@ -1616,7 +1616,7 @@ msgstr "선택한 폴더를 책갈피에 추가합니다"
 
 #: gtk/gtkfilechooserdefault.c:4009 gtk/gtkstock.c:386
 msgid "_Remove"
-msgstr "지우기(_R)"
+msgstr "제거(_R)"
 
 #: gtk/gtkfilechooserdefault.c:4016
 msgid "Remove the selected bookmark"
@@ -1840,7 +1840,7 @@ msgstr "새 폴더(_N)"
 
 #: gtk/gtkfilesel.c:1031
 msgid "De_lete File"
-msgstr "파일 지우기(_L)"
+msgstr "파일 삭제(_L)"
 
 #: gtk/gtkfilesel.c:1042
 msgid "_Rename File"
@@ -1883,7 +1883,7 @@ msgstr "정말로 \"%s\" 파일을 지우시겠습니까?"
 
 #: gtk/gtkfilesel.c:1535
 msgid "Delete File"
-msgstr "파일 지우기"
+msgstr "파일 삭제"
 
 #: gtk/gtkfilesel.c:1583
 #, c-format
@@ -2119,7 +2119,7 @@ msgstr "(모름)"
 #. and clear button
 #: gtk/gtkinputdialog.c:751
 msgid "Cl_ear"
-msgstr "비우기(_E)"
+msgstr "지우기(_E)"
 
 #: gtk/gtklinkbutton.c:427
 msgid "Copy URL"
@@ -2747,11 +2747,11 @@ msgstr "위치 복사(_L)"
 
 #: gtk/gtkrecentchooserdefault.c:1752
 msgid "_Remove From List"
-msgstr "목록에서 지우기(_R)"
+msgstr "목록에서 제거(_R)"
 
 #: gtk/gtkrecentchooserdefault.c:1761
 msgid "_Clear List"
-msgstr "목록 비우기(_C)"
+msgstr "목록 지우기(_C)"
 
 #: gtk/gtkrecentchooserdefault.c:1775
 msgid "Show _Private Resources"
@@ -2857,7 +2857,7 @@ msgstr "CD-ROM(_C)"
 
 #: gtk/gtkstock.c:302
 msgid "_Clear"
-msgstr "비우기(_C)"
+msgstr "지우기(_C)"
 
 #: gtk/gtkstock.c:303
 msgid "_Close"
@@ -2881,7 +2881,7 @@ msgstr "잘라내기(_T)"
 
 #: gtk/gtkstock.c:308
 msgid "_Delete"
-msgstr "지우기(_D)"
+msgstr "삭제(_D)"
 
 #: gtk/gtkstock.c:309
 msgid "_Discard"
@@ -3097,7 +3097,7 @@ msgstr "페이지 설정(_U)"
 
 #: gtk/gtkstock.c:378
 msgid "_Paste"
-msgstr "붙여 넣기(_P)"
+msgstr "붙여넣기(_P)"
 
 #: gtk/gtkstock.c:379
 msgid "_Preferences"
@@ -3173,7 +3173,7 @@ msgstr "취소선(_S)"
 
 #: gtk/gtkstock.c:398
 msgid "_Undelete"
-msgstr "되살리기(_U)"
+msgstr "삭제 취소(_U)"
 
 #: gtk/gtkstock.c:399
 msgid "_Underline"
