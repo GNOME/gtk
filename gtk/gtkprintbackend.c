@@ -119,7 +119,7 @@ gtk_print_backend_module_load (GTypeModule *module)
   pb_module->library = g_module_open (pb_module->path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
   if (!pb_module->library)
     {
-      g_warning (g_module_error());
+      g_warning ("%s", g_module_error());
       return FALSE;
     }
   
@@ -131,7 +131,7 @@ gtk_print_backend_module_load (GTypeModule *module)
       !g_module_symbol (pb_module->library, "pb_module_create", 
 			&createp))
     {
-      g_warning (g_module_error());
+      g_warning ("%s", g_module_error());
       g_module_close (pb_module->library);
       
       return FALSE;

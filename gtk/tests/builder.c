@@ -2293,7 +2293,7 @@ test_file (const gchar *filename)
 
   if (!gtk_builder_add_from_file (builder, filename, &error))
     {
-      g_error (error->message);
+      g_error ("%s", error->message);
       g_error_free (error);
       return;
     }

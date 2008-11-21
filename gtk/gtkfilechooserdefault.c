@@ -4165,7 +4165,7 @@ file_list_drag_data_received_get_info_cb (GCancellable *cancellable,
 
   if ((data->impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
        data->impl->action == GTK_FILE_CHOOSER_ACTION_SAVE) &&
-      data->uris[1] == 0 && !error &&
+      data->uris[1] == NULL && !error &&
       g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
     change_folder_and_display_error (data->impl, data->file, FALSE);
   else

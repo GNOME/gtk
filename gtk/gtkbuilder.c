@@ -1456,7 +1456,7 @@ _gtk_builder_flags_from_string (GType         type,
   gboolean eos, ret;
 
   g_return_val_if_fail (G_TYPE_IS_FLAGS (type), FALSE);
-  g_return_val_if_fail (string != 0, FALSE);
+  g_return_val_if_fail (string != NULL, FALSE);
 
   ret = TRUE;
   

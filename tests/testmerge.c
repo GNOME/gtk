@@ -43,7 +43,7 @@ dump_tree (GtkWidget    *button,
   gchar *dump;
 
   dump = gtk_ui_manager_get_ui (merge);
-  g_message (dump);
+  g_message ("%s", dump);
   g_free (dump);
 }
 

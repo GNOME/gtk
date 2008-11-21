@@ -1,3 +1,17 @@
+2008-11-21  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gtk/gtkbuilder.c: (_gtk_builder_flags_from_string):
+	* gtk/gtkfilechooserdefault.c:
+	(file_list_drag_data_received_get_info_cb):
+	* gtk/gtkiconfactory.c: (icon_source_start_element):
+	* gtk/gtkprintbackend.c: (gtk_print_backend_module_load):
+	* gtk/gtkprintoperation.c: (run_pdf):
+	* gtk/gtkthemes.c: (gtk_theme_engine_load):
+	* gtk/tests/builder.c: (test_file):
+	* tests/testmerge.c: (dump_tree):
+	Missing format specifiers and some other small bits.
+	Bugzilla bug #554567.
+
 2008-11-14  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from trunk:
