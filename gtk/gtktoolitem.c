@@ -527,7 +527,7 @@ gtk_tool_item_new (void)
 
 /**
  * gtk_tool_item_get_icon_size:
- * @tool_item: a #GtkToolItem:
+ * @tool_item: a #GtkToolItem
  * 
  * Returns the icon size used for @tool_item. Custom subclasses of
  * #GtkToolItem should call this function to find out what size icons
@@ -553,7 +553,7 @@ gtk_tool_item_get_icon_size (GtkToolItem *tool_item)
 
 /**
  * gtk_tool_item_get_orientation:
- * @tool_item: a #GtkToolItem: 
+ * @tool_item: a #GtkToolItem 
  * 
  * Returns the orientation used for @tool_item. Custom subclasses of
  * #GtkToolItem should call this function to find out what size icons
@@ -580,7 +580,7 @@ gtk_tool_item_get_orientation (GtkToolItem *tool_item)
 
 /**
  * gtk_tool_item_get_toolbar_style:
- * @tool_item: a #GtkToolItem: 
+ * @tool_item: a #GtkToolItem 
  * 
  * Returns the toolbar style used for @tool_item. Custom subclasses of
  * #GtkToolItem should call this function in the handler of the
@@ -623,7 +623,7 @@ gtk_tool_item_get_toolbar_style (GtkToolItem *tool_item)
 
 /**
  * gtk_tool_item_get_relief_style:
- * @tool_item: a #GtkToolItem: 
+ * @tool_item: a #GtkToolItem 
  * 
  * Returns the relief style of @tool_item. See gtk_button_set_relief_style().
  * Custom subclasses of #GtkToolItem should call this function in the handler
@@ -651,7 +651,7 @@ gtk_tool_item_get_relief_style (GtkToolItem *tool_item)
 
 /**
  * gtk_tool_item_set_expand:
- * @tool_item: a #GtkToolItem: 
+ * @tool_item: a #GtkToolItem 
  * @expand: Whether @tool_item is allocated extra space
  * 
  * Sets whether @tool_item is allocated extra space when there
@@ -679,7 +679,7 @@ gtk_tool_item_set_expand (GtkToolItem *tool_item,
 
 /**
  * gtk_tool_item_get_expand:
- * @tool_item: a #GtkToolItem: 
+ * @tool_item: a #GtkToolItem 
  * 
  * Returns whether @tool_item is allocated extra space.
  * See gtk_tool_item_set_expand().
@@ -698,7 +698,7 @@ gtk_tool_item_get_expand (GtkToolItem *tool_item)
 
 /**
  * gtk_tool_item_set_homogeneous:
- * @tool_item: a #GtkToolItem: 
+ * @tool_item: a #GtkToolItem 
  * @homogeneous: whether @tool_item is the same size as other homogeneous items
  * 
  * Sets whether @tool_item is to be allocated the same size as other
@@ -725,13 +725,13 @@ gtk_tool_item_set_homogeneous (GtkToolItem *tool_item,
 
 /**
  * gtk_tool_item_get_homogeneous:
- * @tool_item: a #GtkToolItem: 
+ * @tool_item: a #GtkToolItem 
  * 
  * Returns whether @tool_item is the same size as other homogeneous
  * items. See gtk_tool_item_set_homogeneous().
  * 
  * Return value: %TRUE if the item is the same size as other homogeneous
- * item.s
+ * items.
  * 
  * Since: 2.4
  **/
@@ -810,7 +810,7 @@ gtk_tool_item_real_set_tooltip (GtkToolItem *tool_item,
 
 /**
  * gtk_tool_item_set_tooltip:
- * @tool_item: a #GtkToolItem: 
+ * @tool_item: a #GtkToolItem 
  * @tooltips: The #GtkTooltips object to be used
  * @tip_text: text to be used as tooltip text for @tool_item
  * @tip_private: text to be used as private tooltip text
@@ -839,7 +839,7 @@ gtk_tool_item_set_tooltip (GtkToolItem *tool_item,
 
 /**
  * gtk_tool_item_set_tooltip_text:
- * @tool_item: a #GtkToolItem: 
+ * @tool_item: a #GtkToolItem 
  * @text: text to be used as tooltip for @tool_item
  *
  * Sets the text to be displayed as tooltip on the item.
@@ -863,7 +863,7 @@ gtk_tool_item_set_tooltip_text (GtkToolItem *tool_item,
 
 /**
  * gtk_tool_item_set_tooltip_markup:
- * @tool_item: a #GtkToolItem: 
+ * @tool_item: a #GtkToolItem 
  * @markup: markup text to be used as tooltip for @tool_item
  *
  * Sets the markup text to be displayed as tooltip on the item.
@@ -1043,7 +1043,7 @@ gtk_tool_item_get_visible_vertical (GtkToolItem *toolitem)
 
 /**
  * gtk_tool_item_retrieve_proxy_menu_item:
- * @tool_item: a #GtkToolItem: 
+ * @tool_item: a #GtkToolItem 
  * 
  * Returns the #GtkMenuItem that was last set by
  * gtk_tool_item_set_proxy_menu_item(), ie. the #GtkMenuItem
@@ -1069,7 +1069,7 @@ gtk_tool_item_retrieve_proxy_menu_item (GtkToolItem *tool_item)
 
 /**
  * gtk_tool_item_get_proxy_menu_item:
- * @tool_item: a #GtkToolItem: 
+ * @tool_item: a #GtkToolItem 
  * @menu_item_id: a string used to identify the menu item
  * 
  * If @menu_item_id matches the string passed to
@@ -1128,7 +1128,7 @@ gtk_tool_item_rebuild_menu (GtkToolItem *tool_item)
 
 /**
  * gtk_tool_item_set_proxy_menu_item:
- * @tool_item: a #GtkToolItem:
+ * @tool_item: a #GtkToolItem
  * @menu_item_id: a string used to identify @menu_item
  * @menu_item: a #GtkMenuItem to be used in the overflow menu
  * 
