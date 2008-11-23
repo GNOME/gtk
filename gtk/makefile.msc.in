@@ -144,7 +144,6 @@ gtk_OBJECTS_file = \
 	gtkfilefilter.obj \
 	gtkfilesystem.obj \
 	gtkfilesystemmodel.obj \
-	gtkfilesystemwin32.obj \
 
 gtk_OBJECTS_print = \
 	gtkprint-win32.obj \
@@ -291,6 +290,7 @@ gtk_OBJECTS = \
 	gtkruler.obj \
 	gtkscale.obj \
 	gtkscalebutton.obj \
+	gtkshow.obj \
 	gtkscrollbar.obj \
 	gtkscrolledwindow.obj \
 	gtksearchengine.obj \

@@ -1,3 +1,8 @@
+2008-11-23  Hans Breuer  <hans@breuer.org>
+
+	* config.h.win32.in : don't define USE_MMX for msvc
+	* gdk-pixbuf/makefile.msc gtk/makefile.msc.in : updated
+
 2008-11-21  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* gtk/gtkbuilder.c: (_gtk_builder_flags_from_string):
