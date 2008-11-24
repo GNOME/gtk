@@ -1,3 +1,32 @@
+Overview of Changes from GTK+ 2.14.4 to 2.14.5
+==============================================
+
+* Bugs fixed:
+ 556578 GIMP windows stay on top of other windows
+ 557059 crash when compositing emblems with icon
+ 557266 Window Management Problem
+ 528320 Incorrect icons displayed for files with custom mimetype icons
+ 557894 Wrong return value for gdk_pointer_grab_info_libgtk_only
+ 557316 GtkLinkButton should consider user-defined tooltip
+ 558323 glitches when popping up combos in treeviews
+ 558278 Crash when calling a callback set by gdk_add_client_message_filter
+ 557212 Problem with which window gains focus and is visible
+ 541391 Unfocussable Treeview swallows focus
+ 552956 Should check composite extension version
+ 554567 warning fixes (missing format specifiers and NULL vs 0)
+
+* Updated translations:
+ Asturian (ast)
+ Catalan (ca)
+ Czech (cs)
+ Galician (gl)
+ Hebrew (he)
+ Italian (it)
+ Japanese (ja)
+ Lithuanian (lt)
+ Norwegian bokmål (nb)
+ Thai (th)
+
 Overview of Changes from GTK+ 2.14.3 to 2.14.4
 ==============================================
 
