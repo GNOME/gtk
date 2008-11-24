@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-08-28 11:45+0100\n"
 "Last-Translator: Tomasz Dominikowski <dominikowski@gmail.com>\n"
 "Language-Team: Aviary.pl <gnomepl@aviary.pl>\n"
@@ -2058,7 +2058,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Brak ikony \"%s\" w motywie"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "Nie można wczytać ikony"
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-03-19 21:18+0100\n"
 "Last-Translator: Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
@@ -2044,7 +2044,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "პიქტოგრამა \"%s\" თემაში არ არსებობს"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "ხატულა ვერ ჩაიტვირთა"
 

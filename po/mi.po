@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2004-01-27 07:36+1300\n"
 "Last-Translator: Wesley Parish <wes.parish@paradise.net.nz>\n"
 "Language-Team: GNOME Māori Team <maori@nzlinux.org.nz>\n"
@@ -2066,7 +2066,7 @@ msgstr "Kaore te pakoko '%s' i te kitea.  '%s' %s"
 msgid "Icon '%s' not present in theme"
 msgstr "Kaore te pakoko '%s' kei te "
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "Kua hinga kia uta ataahua TIFF"

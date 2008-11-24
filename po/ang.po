@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2004-08-08 16:54-0600\n"
 "Last-Translator: James Johnson <modean52@comcast.net>\n"
 "Language-Team: Old English <modean52@comcast.net>\n"
@@ -2038,7 +2038,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Segn '%s' nis andweard in forþsetennesse"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "Tósǽlde tó hládenne onlícnesse '%s': %s"

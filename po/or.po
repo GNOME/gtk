@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-09-17 20:27+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya\n"
@@ -2028,7 +2028,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "'%s' ଚିତ୍ରସଙ୍କେତ ପ୍ରସଙ୍ଗରେ ଅବସ୍ଥିତ ନାହିଁ"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "ଚିତ୍ର ସଂକେତ ଧାରଣ କରିବାରେ ଅସଫଳ"
 

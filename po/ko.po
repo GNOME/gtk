@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-11-20 19:51+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -2030,7 +2030,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "테마에 '%s' 아이콘이 없습니다"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "아이콘을 읽어들이는 데 실패"
 

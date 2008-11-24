@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2007-05-14 21:28-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -2067,7 +2067,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Nid yw'r eicon '%s' yn bresennol yn y thema"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "Methu llwytho delwedd TIFF"

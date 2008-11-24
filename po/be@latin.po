@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-menus\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2007-12-09 14:43+0200\n"
 "Last-Translator: Alaksandar Navicki <zolak@lacinka.org>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -2065,7 +2065,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Ikona \"%s\" adsutnaja ŭ matyvie"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "Niemahčyma zahruzić ikonu"
 

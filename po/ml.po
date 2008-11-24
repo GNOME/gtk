@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-09-20 01:38+0530\n"
 "Last-Translator: Hari Vishnu <harivishnu@gmail.com>\n"
 "Language-Team: Malayalam <smc-discuss@googlegroups.com>\n"
@@ -2011,7 +2011,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "പ്രമേയത്തില്‍ '%s' എന്ന ചിഹ്നം ലഭ്യമല്ല"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "ചിഹ്നം ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
 

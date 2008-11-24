@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk.gnome-2-14.ne\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2006-07-07 14:33+0545\n"
 "Last-Translator: Mahesh subedi <submanesh@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -2068,7 +2068,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "विषयवस्तुमा प्रतिमा '%s' उपस्थित छैन"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "TIFF छवि लोड गर्न असफल"

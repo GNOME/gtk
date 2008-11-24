@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2004-11-30 16:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -2146,7 +2146,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Leswao la '%s' ga le gona sehlogong"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "E paletšwe go laiša seswantšho sa TIFF"

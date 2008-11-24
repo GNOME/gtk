@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-09-18 03:13+0300\n"
 "Last-Translator: Anas Afif Emad <anas.e87@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -2032,7 +2032,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "الأيقونة '%s' غير موجودة في السِمة"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "فشل تحميل الأيقونة"
 

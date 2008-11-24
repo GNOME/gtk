@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: si\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2007-12-28 13:32+0530\n"
 "Last-Translator: Danishka Navin <danishka@gmail.com>\n"
 "Language-Team: Sinhala <en@li.org>\n"
@@ -2028,7 +2028,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "'%s' තේමාව තුළ අයිකනය පිහිටා නැත"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "සංකේතය පූරණය අසමත් විය"
 

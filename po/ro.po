@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-09-19 00:21+0300\n"
 "Last-Translator: Mișu Moldovan <dumol@gnome.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -2051,7 +2051,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Iconița „%s” nu e prezentă în temă"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "Nu s-a putut încărca iconița"
 

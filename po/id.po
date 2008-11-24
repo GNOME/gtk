@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2006-09-05 15:56+0700\n"
 "Last-Translator: Muhammad Hilman <hilman09121991@yahoo.com>\n"
 "Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
@@ -2061,7 +2061,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Ikon '%s' tidak ada pada tema"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "Gagal memuat ikon"
 

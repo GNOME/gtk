@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-09-15 18:06+0300\n"
 "Last-Translator: Yuriy Penkin <yuriy.penkin@gmail.com>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -2074,7 +2074,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Значок «%s» не присутствует в теме"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "Не удалось загрузить значок"
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2004-04-04 01:11+0730\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@my-penguin.org>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -2110,7 +2110,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Ikon '%s' tak wujud pada tema"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "Gagal memuatkan imej TIFF"

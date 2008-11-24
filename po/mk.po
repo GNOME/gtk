@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-09-29 01:35+0200\n"
 "Last-Translator: Jovan Naumovski <jovan@lugola.net>\n"
 "Language-Team: en_US <kde-i18n-doc@lists.kde.org>\n"
@@ -2054,7 +2054,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Иконата „%s“ не постои во темата"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "Не успеав да ја вчитам иконата"
 

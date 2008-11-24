@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2005-02-14 18:03+0330\n"
 "Last-Translator: Roozbeh Pournader <roozbeh@farsiweb.info>\n"
 "Language-Team: Persian <farsi@lists.sharif.edu>\n"
@@ -2075,7 +2075,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "شمایل «%s» در تم وجود ندارد"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "بار کردن پرونده‌ی TIFF شکست خورد"

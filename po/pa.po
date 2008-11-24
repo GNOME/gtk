@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-08-13 20:04+0530\n"
 "Last-Translator: Amanpreet Singh Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@lists.sf.net>\n"
@@ -2025,7 +2025,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "ਸਰੂਪ ਵਿੱਚ ਆਈਕਾਨ '%s' ਮੌਜੂਦ ਨਹੀਂ ਹੈ"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "ਆਈਕਾਨ ਲੋਡ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ"
 

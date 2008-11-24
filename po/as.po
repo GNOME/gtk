@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-09-08 17:43+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@redhat.com>\n"
 "Language-Team: American English <kde-i18n-doc@lists.kde.org>\n"
@@ -2030,7 +2030,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "'%s'প্ৰতিমুৰ্তি আলোকচিত্ৰত নাই"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "আইকণ তোলাত বিফল"
 

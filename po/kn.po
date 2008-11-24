@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-08-11 18:12+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -2046,7 +2046,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "ಲಾಂಛನ '%s' ವು ಥೀಮಿನಲ್ಲಿ ಇಲ್ಲ"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "ಲಾಂಛನವನ್ನು ಲೋಡ್ ಮಾಡುವಲ್ಲಿ ವಿಫಲವಾಯಿತು"
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-04-04 09:34+0200\n"
 "Last-Translator: Eskild Hustvedt <eskildh@gnome.org>\n"
 "Language-Team: Norwegian Nynorsk <i18n-no@lister.ping.uio.no>\n"
@@ -2171,7 +2171,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Ikonet «%s» er ikkje med i drakta"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "Feil under lasting av ikon"
 

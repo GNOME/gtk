@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-4.bs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2004-07-31 01:30+0200\n"
 "Last-Translator: Kenan Hadžiavdić <kenan@bgnett.no>\n"
 "Language-Team: Bosnian <lokal@linux.org.ba>\n"
@@ -2130,7 +2130,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Nema ikone '%s' u temi"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "Nisam uspio učitati TIFF sliku"

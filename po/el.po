@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-01-31 02:30+0200\n"
 "Last-Translator: NikosCharonitakis <nikosx@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -2090,7 +2090,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Το εικονίδιο '%s' δε βρίσκεται στο θέμα"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "Αποτυχία φόρτωσης εικονιδίου"
 

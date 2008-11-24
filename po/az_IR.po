@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2004-09-27 14:58+0330\n"
 "Last-Translator: Amir Hedayaty <amir@bamdad.org>\n"
 "Language-Team: Iranian Azerbaijani <az-ir@lists.sharif.edu>\n"
@@ -1983,7 +1983,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr ""
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr ""
 

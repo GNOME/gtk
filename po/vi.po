@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.13.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-08-22 12:03+0700\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -2039,7 +2039,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Biểu tượng « %s » không có trong sắc thái"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "Lỗi nạp biểu tượng"
 

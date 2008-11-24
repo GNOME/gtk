@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2006-08-09 10:30+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -2068,7 +2068,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "ངོས་དཔར་ ’%s’ དེ་ བརྗོད་དོན་ནང་མིན་འདུག"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "ཊི་ཨའི་ཨེཕ་ཨེཕ་ གཟུགས་བརྙན་མངོན་གསལ་འབད་མ་ཚུགས།།"

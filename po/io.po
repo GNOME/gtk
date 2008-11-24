@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.12.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2007-09-22 14:13-0500\n"
 "Last-Translator: Michael Terry <mike@mterry.name>\n"
 "Language-Team: Ido <gnome-ido@lists.mterry.name>\n"
@@ -2006,7 +2006,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr ""
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "Faliis charjar ikono"
 

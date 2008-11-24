@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-17 00:37-0400\n"
+"POT-Creation-Date: 2008-11-24 10:30-0500\n"
 "PO-Revision-Date: 2008-05-08 00:30+0000\n"
 "Last-Translator: Launchpad Translations Administrators <rosetta@launchpad."
 "net>\n"
@@ -2087,7 +2087,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Sličica %s nije prisutna u temi"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "Neuspjelo učitavanje TIFF slike"
