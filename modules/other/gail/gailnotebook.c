@@ -148,6 +148,7 @@ gail_notebook_page_added (GtkNotebook *gtk_notebook,
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (gtk_notebook));
   notebook = GAIL_NOTEBOOK (atk_obj);
   create_notebook_page_accessible (notebook, gtk_notebook, page_num, FALSE, NULL);
+  notebook->page_count++;
 }
 
 static void

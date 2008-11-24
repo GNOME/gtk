@@ -1,3 +1,8 @@
+2008-11-24  Li Yuan  <li.yuan@sun.com>
+
+	* gailnotebook.c: (gail_notebook_page_added):
+	Bug #554002. Add cache's page count when add pages.
+
 2008-10-13  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 555953 – libferret missing link against libgtk-x11
