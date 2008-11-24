@@ -466,8 +466,8 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
       padding_horizontal = priv->padding_left + priv->padding_right;
       padding_vertical = priv->padding_top + priv->padding_bottom;
 
-      width = allocation->width - padding_horizontal - 2 * border_width;
-      height = allocation->height - padding_vertical - 2 * border_width;
+      width  = MAX (1, allocation->width - padding_horizontal - 2 * border_width);
+      height = MAX (1, allocation->height - padding_vertical - 2 * border_width);
     
       if (width > child_requisition.width)
 	child_allocation.width = (child_requisition.width *

@@ -1,3 +1,8 @@
+2008-11-24  Tristan Van Berkom <tvb@gnome.org>
+
+	* gtk/gtkalignment.c: Bug 561539 - Fix warnings when size allocations
+	fall short of border width and padding.
+
 2008-11-24  Matthias Clasen <mclasen@redhat.com>
 
 	* configure.in: Bump version
