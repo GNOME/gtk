@@ -1,3 +1,10 @@
+2008-11-25  Christian Dywan  <christian@imendio.com>
+
+	Bug 559009 – gtk_radio_button_get_group documentation needs
+        to say whether to free the returned GSList
+
+	* gtk/tmpl/gtkradiobutton.sgml: Clarify radio_button_get_group docs
+
 2008-11-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add new statusicon api.

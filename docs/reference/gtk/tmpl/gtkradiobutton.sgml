@@ -203,6 +203,7 @@ Retrieves the group assigned to a radio button.
 
 @radio_button: a #GtkRadioButton.
 @Returns: a linked list containing all the radio buttons in the same group
-as @radio_button.
+as @radio_button. The returned list is owned by the radio button
+and must not be modified or freed.
 
 
