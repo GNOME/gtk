@@ -269,9 +269,14 @@ class GtkBuilderConverter(object):
 
         # Output the newly created root objects and sort them
         # by attribute id
-        for obj in sorted(self.root_objects,
-                          key=lambda n: n.getAttribute('id'),
-                          reverse=True):
+        # FIXME: Use sorted(self.root_objects,
+        #                   key=lambda n: n.getAttribute('id'),
+        #                   reverse=True):
+        # when we can depend on python 2.4 or higher
+        root_objects = self.root_objects[:]
+        root_objects.sort(lambda a, b: cmp(b.getAttribute('id'),
+                                           a.getAttribute('id')))
+        for obj in root_objects:
             self._interface.childNodes.insert(0, obj)
 
     def _convert(self, klass, node):

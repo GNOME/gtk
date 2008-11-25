@@ -1,3 +1,10 @@
+2008-11-25  Johan Dahlin  <jdahlin@async.com.br>
+
+	Bug 559947 – Unchecked dependency on python>=2.4
+
+	* gtk/gtk-builder-convert:
+	Avoid using sorted() which is only present in python 2.
+
 2008-11-24  Tristan Van Berkom <tvb@gnome.org>
 
 	* gtk/gtkalignment.c: Bug 561539 - Fix warnings when size allocations
