@@ -13895,6 +13895,10 @@ main (int argc, char *argv[])
    */
   if (file_exists ("testgtkrc"))
     gtk_rc_add_default_file ("testgtkrc");
+  else if (file_exists ("tests/testgtkrc"))
+    gtk_rc_add_default_file ("tests/testgtkrc");
+  else
+    g_warning ("Couldn't find file \"testgtkrc\".");
 
   g_set_application_name ("GTK+ Test Program");
 

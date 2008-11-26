@@ -1,3 +1,10 @@
+2008-11-26  Christian Dywan  <christian@imendio.com>
+
+	Bug 561504 – testgtk should load rc file from sub folder
+
+	* tests/testgtk.c (main):
+        Make testgtk look in subfolder and warn if not found
+
 2008-11-25  Johan Dahlin  <jdahlin@async.com.br>
 
 	Bug 559947 – Unchecked dependency on python>=2.4
