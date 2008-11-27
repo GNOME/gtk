@@ -53,7 +53,7 @@ struct _GtkComposeTableCompact
  */
 #include "gtkimcontextsimpleseqs.h"
 
-/* From the values below, the value 22 means the number of different first keysyms 
+/* From the values below, the value 23 means the number of different first keysyms 
  * that exist in the Compose file (from Xorg). When running compose-parse.py without 
  * parameters, you get the count that you can put here. Needed when updating the
  * gtkimcontextsimpleseqs.h header file (contains the compose sequences).
@@ -61,7 +61,7 @@ struct _GtkComposeTableCompact
 static const GtkComposeTableCompact gtk_compose_table_compact = {
   gtk_compose_seqs_compact,
   5,
-  22,
+  23,
   6
 };
 
@@ -415,7 +415,7 @@ check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
  * In future versions it will be just the keysym (no +1).
  */
 #define IS_DEAD_KEY(k) \
-    ((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1))
+    ((k) >= GDK_dead_stroke && (k) <= (GDK_dead_dasia+1))
 
 static gboolean
 check_algorithmically (GtkIMContextSimple    *context_simple,
