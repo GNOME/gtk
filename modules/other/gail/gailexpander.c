@@ -45,6 +45,7 @@ static void                  gail_expander_real_initialize  (AtkObject         *
 static void                  gail_expander_finalize         (GObject           *object);
 static void                  gail_expander_init_textutil    (GailExpander      *expander,
                                                              GtkExpander       *widget);
+static G_CONST_RETURN gchar* gail_expander_get_full_text    (GtkExpander       *widget);
 
 static void                  atk_action_interface_init  (AtkActionIface *iface);
 static gboolean              gail_expander_do_action    (AtkAction      *action,
@@ -169,7 +170,7 @@ gail_expander_get_name (AtkObject *obj)
 
       g_return_val_if_fail (GTK_IS_EXPANDER (widget), NULL);
 
-      return gtk_expander_get_label (GTK_EXPANDER (widget)); 
+      return gail_expander_get_full_text (GTK_EXPANDER (widget));
     }
 }
 
@@ -293,7 +294,7 @@ gail_expander_real_notify_gtk (GObject    *obj,
       const gchar* label_text;
 
 
-      label_text = gtk_expander_get_label (expander);
+      label_text = gail_expander_get_full_text (expander);
 
       gail_expander = GAIL_EXPANDER (atk_obj);
       if (gail_expander->textutil)
@@ -323,6 +324,19 @@ gail_expander_real_notify_gtk (GObject    *obj,
     GAIL_WIDGET_CLASS (gail_expander_parent_class)->notify_gtk (obj, pspec);
 }
 
+static G_CONST_RETURN gchar*
+gail_expander_get_full_text (GtkExpander *widget)
+{
+  GtkWidget *label_widget;
+
+  label_widget = gtk_expander_get_label_widget (widget);
+
+  if (!GTK_IS_LABEL (label_widget))
+    return NULL;
+
+  return gtk_label_get_text (GTK_LABEL (label_widget));
+}
+
 static void
 gail_expander_init_textutil (GailExpander *expander,
                              GtkExpander  *widget)
@@ -330,7 +344,7 @@ gail_expander_init_textutil (GailExpander *expander,
   const gchar *label_text;
 
   expander->textutil = gail_text_util_new ();
-  label_text = gtk_expander_get_label (widget);
+  label_text = gail_expander_get_full_text (widget);
   gail_text_util_text_setup (expander->textutil, label_text);
 }
 
@@ -578,7 +592,7 @@ gail_expander_get_text (AtkText *text,
   if (!expander->textutil) 
     gail_expander_init_textutil (expander, GTK_EXPANDER (widget));
 
-  label_text = gtk_expander_get_label (GTK_EXPANDER (widget));
+  label_text = gail_expander_get_full_text (GTK_EXPANDER (widget));
 
   if (label_text == NULL)
     return NULL;
