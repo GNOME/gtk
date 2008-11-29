@@ -1,3 +1,12 @@
+2008-11-29  Federico Mena Quintero  <federico@novell.com>
+
+	Merged from trunk:
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): If tree lines are
+	enabled, flip them around for the right-to-left case.  Fixes
+	https://bugzilla.novell.com/show_bug.cgi?id=447004.  Patch by
+	Ricardo Cruz <rpmcruz@alunos.dcc.fc.up.pt>
+
 2008-11-27  Simos Xenitellis  <simos@gnome.org>
 
 	Bug 557420 – Some compose sequences don't work anymore (or only in 

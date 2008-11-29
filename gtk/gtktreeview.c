@@ -4576,24 +4576,33 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	  if (gtk_tree_view_is_expander_column (tree_view, column) &&
 	      tree_view->priv->tree_lines_enabled)
 	    {
+	      gint x = background_area.x;
+	      gint mult = rtl ? -1 : 1;
+	      gint y0 = background_area.y;
+	      gint y1 = background_area.y + background_area.height/2;
+	      gint y2 = background_area.y + background_area.height;
+
+	      if (rtl)
+		x += background_area.width - 1;
+
 	      if ((node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT
 		  && depth > 1)
 	        {
 		  gdk_draw_line (event->window,
 				 tree_view->priv->tree_line_gc,
-			         background_area.x + tree_view->priv->expander_size * (depth - 1.5),
-			         background_area.y + background_area.height / 2,
-			         background_area.x + tree_view->priv->expander_size * (depth - 1.1),
-			         background_area.y + background_area.height / 2);
+			         x + tree_view->priv->expander_size * (depth - 1.5) * mult,
+				 y1,
+			         x + tree_view->priv->expander_size * (depth - 1.1) * mult,
+				 y1);
 	        }
 	      else if (depth > 1)
 	        {
 		  gdk_draw_line (event->window,
 				 tree_view->priv->tree_line_gc,
-			         background_area.x + tree_view->priv->expander_size * (depth - 1.5),
-			         background_area.y + background_area.height / 2,
-			         background_area.x + tree_view->priv->expander_size * (depth - 0.5),
-			         background_area.y + background_area.height / 2);
+			         x + tree_view->priv->expander_size * (depth - 1.5) * mult,
+				 y1,
+			         x + tree_view->priv->expander_size * (depth - 0.5) * mult,
+				 y1);
 		}
 
 	      if (depth > 1)
@@ -4605,17 +4614,17 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	          if (!_gtk_rbtree_next (tree, node))
 		    gdk_draw_line (event->window,
 				   tree_view->priv->tree_line_gc,
-				   background_area.x + tree_view->priv->expander_size * (depth - 1.5),
-				   background_area.y,
-				   background_area.x + tree_view->priv->expander_size * (depth - 1.5),
-				   background_area.y + background_area.height / 2);
+				   x + tree_view->priv->expander_size * (depth - 1.5) * mult,
+				   y0,
+				   x + tree_view->priv->expander_size * (depth - 1.5) * mult,
+				   y1);
 		  else
 		    gdk_draw_line (event->window,
 				   tree_view->priv->tree_line_gc,
-				   background_area.x + tree_view->priv->expander_size * (depth - 1.5),
-				   background_area.y,
-				   background_area.x + tree_view->priv->expander_size * (depth - 1.5),
-				   background_area.y + background_area.height);
+				   x + tree_view->priv->expander_size * (depth - 1.5) * mult,
+				   y0,
+				   x + tree_view->priv->expander_size * (depth - 1.5) * mult,
+				   y2);
 
 		  tmp_node = tree->parent_node;
 		  tmp_tree = tree->parent_tree;
@@ -4625,10 +4634,10 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	              if (_gtk_rbtree_next (tmp_tree, tmp_node))
 			gdk_draw_line (event->window,
 				       tree_view->priv->tree_line_gc,
-				       background_area.x + tree_view->priv->expander_size * (i - 0.5),
-				       background_area.y,
-				       background_area.x + tree_view->priv->expander_size * (i - 0.5),
-				       background_area.y + background_area.height);
+				       x + tree_view->priv->expander_size * (i - 0.5) * mult,
+				       y0,
+				       x + tree_view->priv->expander_size * (i - 0.5) * mult,
+				       y2);
 
 		      tmp_node = tmp_tree->parent_node;
 		      tmp_tree = tmp_tree->parent_tree;
