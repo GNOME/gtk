@@ -2178,7 +2178,7 @@ gtk_selection_init (void)
  * @widget: a #GtkWidget
  * @event: the event
  * 
- * The default handler for the GtkWidget::selection_clear_event
+ * The default handler for the #GtkWidget::selectionr-clear-event
  * signal. 
  * 
  * Return value: %TRUE if the event was handled, otherwise false
@@ -2186,7 +2186,7 @@ gtk_selection_init (void)
  * Since: 2.2
  *
  * Deprecated: 2.4: Instead of calling this function, chain up from
- * your selection_clear_event handler. Calling this function
+ * your selection-clear-event handler. Calling this function
  * from any other context is illegal. 
  **/
 gboolean
