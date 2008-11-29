@@ -1,3 +1,16 @@
+2008-11-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkbbox.sgml: Improve deprecation annotations.
+
+2008-11-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/Makefile.am:
+	* gdk/Makefile.am:
+	* gdk-pixbuf/Makefile.am: Use a new gtk-doc feature to generate
+	much nicer indices.
+
+	* gtk/drawing-model.xml: Fix document structure
+
 2008-11-25  Christian Dywan  <christian@imendio.com>
 
 	Bug 559009 – gtk_radio_button_get_group documentation needs
