@@ -1776,6 +1776,7 @@ Equivalent to <literal>gtk_widget_set_style (widget, NULL)</literal>.
 </para>
 
 @widget: a #GtkWidget.
+@Deprecated: Use gtk_widget_set_style() with a %NULL @style argument instead.
 
 
 <!-- ##### FUNCTION gtk_widget_ensure_style ##### -->
@@ -1801,6 +1802,7 @@ Equivalent to <literal>gtk_widget_set_style (widget, NULL)</literal>.
 </para>
 
 @widget: a #GtkWidget.
+@Deprecated: Use gtk_widget_set_style() with a %NULL @style argument instead.
 
 
 <!-- ##### FUNCTION gtk_widget_reset_rc_styles ##### -->

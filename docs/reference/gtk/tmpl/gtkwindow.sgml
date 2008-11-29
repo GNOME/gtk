@@ -373,6 +373,8 @@ the child gets a larger allocation than it requests.
 Deprecated alias for gtk_window_set_position().
 </para>
 
+@Deprecated: Use gtk_window_set_position() instead.
+
 
 
 <!-- ##### FUNCTION gtk_window_activate_focus ##### -->

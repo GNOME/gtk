@@ -1,5 +1,8 @@
 2008-11-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkwindow.sgml:
+	* gtk/tmpl/gtkwidget.sgml:
+	* gtk/tmpl/gtktogglebutton.sgml:
 	* gtk/tmpl/gtkstyle.sgml:
 	* gtk/tmpl/gtkspinbutton.sgml:
 	* gtk/tmpl/gtkrc.sgml:
