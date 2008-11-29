@@ -849,42 +849,39 @@ specific portions of a RC file.
 <para>
 Adds a #GtkRcStyle that will be looked up by a match against
 the widget's pathname. This is equivalent to a:
-<literal>
-widget PATTERN style STYLE
-</literal>
+ <literal>widget PATTERN style STYLE</literal>
 statement in a RC file.
 </para>
 
 @rc_style: the #GtkRcStyle to use for widgets matching @pattern
 @pattern: the pattern
+@Deprecated: Use gtk_rc_parse_string() with a suitable string instead.
 
 
 <!-- ##### FUNCTION gtk_rc_add_widget_class_style ##### -->
 <para>
 Adds a #GtkRcStyle that will be looked up by a match against
 the widget's class pathname. This is equivalent to a:
-<literal>
-widget_class PATTERN style STYLE
-</literal>
+<literal>widget_class PATTERN style STYLE</literal>
 statement in a RC file.
 </para>
 
 @rc_style: the #GtkRcStyle to use for widgets matching @pattern
 @pattern: the pattern
+@Deprecated: Use gtk_rc_parse_string() with a suitable string instead.
 
 
 <!-- ##### FUNCTION gtk_rc_add_class_style ##### -->
 <para>
 Adds a #GtkRcStyle that will be looked up by a matching against
 the class hierarchy of the widget. This is equivalent to a:
-<literal>
-class PATTERN style STYLE
-</literal>
+<literal>class PATTERN style STYLE</literal>
 statement in a RC file.
 </para>
 
 @rc_style: the #GtkRcStyle to use for widgets deriving from @pattern
 @pattern: the pattern
+@Deprecated: Use gtk_rc_parse_string() with a suitable string instead.
 
 
 <!-- ##### FUNCTION gtk_rc_parse ##### -->

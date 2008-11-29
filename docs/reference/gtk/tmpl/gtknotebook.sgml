@@ -382,10 +382,10 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 
 <!-- ##### MACRO gtk_notebook_current_page ##### -->
 <para>
-Deprecated compatibility macro. Use
-gtk_notebook_get_current_page() instead.
+Deprecated compatibility macro. 
 </para>
 
+@Deprecated: Use gtk_notebook_get_current_page() instead.
 
 
 <!-- ##### FUNCTION gtk_notebook_page_num ##### -->
@@ -399,10 +399,10 @@ gtk_notebook_get_current_page() instead.
 
 <!-- ##### MACRO gtk_notebook_set_page ##### -->
 <para>
-Deprecated compatibility macro. Use
-gtk_notebook_set_current_page() instead.
+Deprecated compatibility macro. 
 </para>
 
+@Deprecated: Use gtk_notebook_set_current_page() instead.
 
 
 <!-- ##### FUNCTION gtk_notebook_next_page ##### -->
