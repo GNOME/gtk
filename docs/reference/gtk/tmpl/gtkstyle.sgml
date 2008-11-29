@@ -149,7 +149,7 @@ Returns whether the style is attached to a window.
 
 <!-- ##### MACRO gtk_style_apply_default_pixmap ##### -->
 <para>
-Deprecated alias for gtk_style_apply_default_background().
+Does the same as gtk_style_apply_default_background().
 </para>
 
 @s: 
@@ -160,6 +160,8 @@ Deprecated alias for gtk_style_apply_default_background().
 @y: 
 @w: 
 @h: 
+@Deprecated: Use gtk_style_apply_default_background() instead.
+
 
 
 <!-- ##### FUNCTION gtk_style_lookup_color ##### -->
@@ -214,6 +216,39 @@ Deprecated alias for gtk_style_apply_default_background().
 
 @style: 
 @font: 
+
+
+<!-- ##### FUNCTION gtk_style_get_property ##### -->
+<para>
+
+</para>
+
+@style: 
+@widget_type: 
+@property_name: 
+@value: 
+
+
+<!-- ##### FUNCTION gtk_style_get_valist ##### -->
+<para>
+
+</para>
+
+@style: 
+@widget_type: 
+@first_property_name: 
+@var_args: 
+
+
+<!-- ##### FUNCTION gtk_style_get ##### -->
+<para>
+
+</para>
+
+@style: 
+@widget_type: 
+@first_property_name: 
+@Varargs: 
 
 
 <!-- ##### FUNCTION gtk_draw_hline ##### -->
