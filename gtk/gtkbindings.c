@@ -707,12 +707,25 @@ gtk_binding_entry_clear_internal (GtkBindingSet  *binding_set,
 }
 
 /**
+ * gtk_binding_entry_add:
+ * @binding_set: @binding_set to clear an entry of
+ * @keyval:      key value of binding to clear
+ * @modifiers:   key modifier of binding to clear
+ *
+ * Adds a binding entry.
+ *
+ * Deprecated: 2.12: Use gtk_binding_entry_add_signal() instead.
+ */
+
+/**
  * gtk_binding_entry_clear:
  * @binding_set: @binding_set to clear an entry of
  * @keyval:      key value of binding to clear
  * @modifiers:   key modifier of binding to clear
  *
- * Use of this function is deprecated.
+ * Clears a binding entry.
+ *
+ * Deprecated: 2.12: Use gtk_binding_entry_remove() instead.
  **/
 void
 gtk_binding_entry_clear (GtkBindingSet	*binding_set,
@@ -790,7 +803,10 @@ gtk_binding_entry_remove (GtkBindingSet	 *binding_set,
  * @signal_name:  signal name to be bound
  * @binding_args: list of #GtkBindingArg signal arguments
  *
- * Deprecated.
+ * Override or install a new key binding for @keyval with @modifiers on
+ * @binding_set.
+ *
+ * Deprecated: 2.12: Use gtk_binding_entry_add_signal() instead.
  **/
 void
 gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
@@ -1576,9 +1592,11 @@ gtk_binding_parse_bind (GScanner       *scanner,
  * gtk_binding_parse_binding:
  * @scanner: GtkRC scanner
  *
- * Deprecated as public API, used only internally.
+ * Parse a binding entry from a gtkrc file.
  *
  * Return value: expected token upon errors, %G_TOKEN_NONE on success.
+ *
+ * Deprecated: 2.12: There should be no need to call this function outside GTK+.
  **/
 guint
 gtk_binding_parse_binding (GScanner *scanner)
