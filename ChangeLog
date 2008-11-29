@@ -1,5 +1,6 @@
 2008-11-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcolorsel.c:
 	* gtk/gtkbindings.c: Improve deprecation annotations.
 
 2008-11-26  Christian Dywan  <christian@imendio.com>
