@@ -394,6 +394,7 @@ must not write to it.
 
 @label: The #GtkLabel widget you want to get the text from.
 @str: The reference to the pointer you want to point to the text.
+@Deprecated: Use gtk_label_get_text() instead.
 
 
 <!-- ##### FUNCTION gtk_label_parse_uline ##### -->
@@ -408,7 +409,7 @@ probably only used within the GTK+ library itself for menu items and such.
 @label: The #GtkLabel you want to affect.
 @string: The string you want to parse for underlines.
 @Returns: The lowercase keyval of the last character underlined.
-
+@Deprecated: Use gtk_label_set_use_underline() instead.
 
 <!-- ##### FUNCTION gtk_label_set_line_wrap ##### -->
 <para>
@@ -430,10 +431,10 @@ probably only used within the GTK+ library itself for menu items and such.
 
 <!-- ##### MACRO gtk_label_set ##### -->
 <para>
-Aliases gtk_label_set_text().  Probably used for backward compatibility with
-GTK+ 1.0.x.
+Sets the text within the GtkLabel widget.
 </para>
 
+@Deprecated: Use gtk_label_set_text() instead.
 
 
 <!-- ##### FUNCTION gtk_label_get_layout_offsets ##### -->
