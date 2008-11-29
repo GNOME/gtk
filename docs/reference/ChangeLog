@@ -1,3 +1,46 @@
+2008-11-29  Baptiste Mille-Mathias <baptiste.millemathias@gmail.com>
+
+	* docs/reference/gtk/images/accel-label.png:
+	* docs/reference/gtk/images/assistant.png:
+	* docs/reference/gtk/images/button.png:
+	* docs/reference/gtk/images/check-button.png:
+	* docs/reference/gtk/images/color-button.png:
+	* docs/reference/gtk/images/colorsel.png:
+	* docs/reference/gtk/images/combo-box-entry.png:
+	* docs/reference/gtk/images/combo-box.png:
+	* docs/reference/gtk/images/entry.png:
+	* docs/reference/gtk/images/file-button.png:
+	* docs/reference/gtk/images/filechooser.png:
+	* docs/reference/gtk/images/font-button.png:
+	* docs/reference/gtk/images/fontsel.png:
+	* docs/reference/gtk/images/frame.png:
+	* docs/reference/gtk/images/icon-view.png:
+	* docs/reference/gtk/images/image.png:
+	* docs/reference/gtk/images/label.png
+	* docs/reference/gtk/images/link-button.png:
+	* docs/reference/gtk/images/list-and-tree.png:
+	* docs/reference/gtk/images/menubar.png:
+	* docs/reference/gtk/images/messagedialog.png:
+	* docs/reference/gtk/images/multiline-text.png:
+	* docs/reference/gtk/images/notebook.png:
+	* docs/reference/gtk/images/pagesetupdialog.png:
+	* docs/reference/gtk/images/panes.png:
+	* docs/reference/gtk/images/printdialog.png:
+	* docs/reference/gtk/images/progressbar.png:
+	* docs/reference/gtk/images/radio-group.png:
+	* docs/reference/gtk/images/recentchooserdialog.png:
+	* docs/reference/gtk/images/scales.png:
+	* docs/reference/gtk/images/scrolledwindow.png:
+	* docs/reference/gtk/images/separator.png:
+	* docs/reference/gtk/images/spinbutton.png:
+	* docs/reference/gtk/images/statusbar.png:
+	* docs/reference/gtk/images/toggle-button.png:
+	* docs/reference/gtk/images/toolbar.png:
+	* docs/reference/gtk/images/volumebutton.png:
+	* docs/reference/gtk/images/window.png: 
+	update all screenshots to have a consistent look. 
+	Closes the bug 523264.
+
 2008-11-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtktooltips.sgml:
