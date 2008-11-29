@@ -318,7 +318,6 @@ calendar.
 
 @calendar: 
 @flags: 
-@Deprecated: 
 
 
 <!-- ##### FUNCTION gtk_calendar_freeze ##### -->
