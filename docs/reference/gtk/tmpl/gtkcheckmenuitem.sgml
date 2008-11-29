@@ -104,9 +104,10 @@ Creates a new #GtkCheckMenuItem with a label.
 
 <!-- ##### MACRO gtk_check_menu_item_set_state ##### -->
 <para>
-This macro is provided to preserve compatibility with older code.
-New code should use gtk_check_menu_item_set_active() function instead.
+Sets the active state of the menu item's check box.
 </para>
+
+@Deprecated: Use gtk_check_menu_item_set_active() instead.
 
 
 
