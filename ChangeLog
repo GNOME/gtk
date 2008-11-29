@@ -1,3 +1,10 @@
+2008-11-29  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): If tree lines are
+	enabled, flip them around for the right-to-left case.  Fixes
+	https://bugzilla.novell.com/show_bug.cgi?id=447004.  Patch by
+	Ricardo Cruz <rpmcruz@alunos.dcc.fc.up.pt>
+
 2008-11-29  Christian Persch  <chpe@gnome.org>
 
 	* gtk/gtkselection.c: Typo fix.
