@@ -1,3 +1,7 @@
+2008-11-29  Christian Persch  <chpe@gnome.org>
+
+	* gtk/gtkselection.c: Typo fix.
+
 2008-11-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkselection.c:

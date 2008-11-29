@@ -2178,7 +2178,7 @@ gtk_selection_init (void)
  * @widget: a #GtkWidget
  * @event: the event
  * 
- * The default handler for the #GtkWidget::selectionr-clear-event
+ * The default handler for the #GtkWidget::selection-clear-event
  * signal. 
  * 
  * Return value: %TRUE if the event was handled, otherwise false
