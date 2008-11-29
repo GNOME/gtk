@@ -3239,8 +3239,9 @@ gtk_drag_set_icon_default (GdkDragContext *context)
  * 
  * Changes the default drag icon. GTK+ retains references for the
  * arguments, and will release them when they are no longer needed.
- * This function is obsolete. The default icon should now be changed
- * via the stock system by changing the stock pixbuf for #GTK_STOCK_DND.
+ *
+ * Deprecated: Change the default drag icon via the stock system by 
+ *     changing the stock pixbuf for #GTK_STOCK_DND instead.
  **/
 void 
 gtk_drag_set_default_icon (GdkColormap   *colormap,

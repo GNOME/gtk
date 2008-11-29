@@ -124,7 +124,6 @@ Creates a new drawing area.
 
 <!-- ##### FUNCTION gtk_drawing_area_size ##### -->
 <para>
-(Use gtk_widget_set_size_request() instead.)
 Sets the size that the drawing area will request
 in response to a "size_request" signal. The 
 drawing area may actually be allocated a size
@@ -132,8 +131,8 @@ larger than this depending on how it is packed
 within the enclosing containers.
 </para>
 
-@darea: a #GtkDrawingArea.
-@width: the width to request.
-@height: the height to request.
-
+@darea: a #GtkDrawingArea
+@width: the width to request
+@height: the height to request
+@Deprecated: Use gtk_widget_set_size_request() instead.
 
