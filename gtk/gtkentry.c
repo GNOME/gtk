@@ -333,7 +333,6 @@ static void         gtk_entry_get_cursor_locations     (GtkEntry       *entry,
 							CursorType      type,
 							gint           *strong_x,
 							gint           *weak_x);
-static void         gtk_entry_adjust_scroll            (GtkEntry       *entry);
 static gint         gtk_entry_move_visually            (GtkEntry       *editable,
 							gint            start,
 							gint            count);
@@ -1480,7 +1479,7 @@ gtk_entry_realize (GtkWidget *widget)
 
   gtk_im_context_set_client_window (entry->im_context, entry->text_area);
 
-  gtk_entry_adjust_scroll (entry);
+  _gtk_entry_adjust_scroll (entry);
   gtk_entry_update_primary_selection (entry);
 }
 
@@ -3442,7 +3441,7 @@ recompute_idle_func (gpointer data)
   
   if (gtk_widget_has_screen (GTK_WIDGET (entry)))
     {
-      gtk_entry_adjust_scroll (entry);
+      _gtk_entry_adjust_scroll (entry);
       gtk_entry_queue_draw (entry);
       
       update_im_cursor_location (entry);
@@ -4042,8 +4041,8 @@ gtk_entry_get_cursor_locations (GtkEntry   *entry,
     }
 }
 
-static void
-gtk_entry_adjust_scroll (GtkEntry *entry)
+void
+_gtk_entry_adjust_scroll (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   gint min_offset, max_offset;
@@ -4565,14 +4564,9 @@ gtk_entry_new (void)
  *
  * Creates a new #GtkEntry widget with the given maximum length.
  * 
- * Note: the existence of this function is inconsistent
- * with the rest of the GTK+ API. The normal setup would
- * be to just require the user to make an extra call
- * to gtk_entry_set_max_length() instead. It is not
- * expected that this function will be removed, but
- * it would be better practice not to use it.
- * 
- * Return value: a new #GtkEntry.
+ * Return value: a new #GtkEntry
+ *
+ * Deprecated: Use gtk_entry_set_max_length() instead.
  **/
 GtkWidget*
 gtk_entry_new_with_max_length (gint max)
@@ -5803,7 +5797,8 @@ gtk_entry_drag_data_get (GtkWidget        *widget,
   gint sel_start, sel_end;
 
   GtkEditable *editable = GTK_EDITABLE (widget);
-  
+
+  g_print ("GtkEntry drag_data_get class handler\n");  
   if (gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end))
     {
       gchar *str = gtk_entry_get_public_chars (GTK_ENTRY (widget), sel_start, sel_end);
@@ -5823,6 +5818,7 @@ gtk_entry_drag_data_delete (GtkWidget      *widget,
 
   GtkEditable *editable = GTK_EDITABLE (widget);
   
+  g_print ("entry_drag_data_delete\n");
   if (GTK_ENTRY (widget)->editable &&
       gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end))
     gtk_editable_delete_text (editable, sel_start, sel_end);
