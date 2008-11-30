@@ -946,6 +946,8 @@ gdk_screen_get_toplevel_windows (GdkScreen *screen)
  * its elements need not be freed.
  * 
  * Return value: list of toplevel windows, free with g_list_free()
+ *
+ * Deprecated: 2.16: Use gdk_screen_get_toplevel_windows() instead.
  **/
 GList *
 gdk_window_get_toplevels (void)

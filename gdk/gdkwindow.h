@@ -565,7 +565,7 @@ gboolean      gdk_window_get_decorations (GdkWindow       *window,
 					  GdkWMDecoration *decorations);
 void	      gdk_window_set_functions	 (GdkWindow	  *window,
 					  GdkWMFunction	   functions);
-#ifndef GDK_MULTIHEAD_SAFE
+#if !defined(GDK_MULTIHEAD_SAFE) && !defined(GDK_DISABLE_DEPRECATED)
 GList *       gdk_window_get_toplevels   (void);
 #endif
 
