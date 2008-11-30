@@ -172,7 +172,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
    *
    * The ::close signal is a 
    * <link linkend="keybinding-signals">keybinding signal</link>
-   * which getrs emitted when the user uses a keybinding to close
+   * which gets emitted when the user uses a keybinding to close
    * the dialog.
    *
    * The default binding for this signal is the Escape key.

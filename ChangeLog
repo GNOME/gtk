@@ -1,3 +1,9 @@
+2008-12-01  Paul Bolle  <pebolle@tiscali.nl>
+
+	Bug 562817 – GtkDialog: typo
+
+	* gtk/gtkdialog.c: Fix typo
+
 2008-11-29  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 554453 – "typeahead find" widget of GtkTreeView appears on 
