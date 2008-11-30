@@ -64,7 +64,7 @@ _gdk_init_input_core (GdkDisplay *display)
 }
 
 static void gdk_device_class_init (GdkDeviceClass *klass);
-static void gdk_device_finalize (GObject *object);
+static void gdk_device_dispose    (GObject        *object);
 
 static gpointer gdk_device_parent_class = NULL;
 
@@ -103,29 +103,36 @@ gdk_device_class_init (GdkDeviceClass *klass)
 
   gdk_device_parent_class = g_type_class_peek_parent (klass);
 
-  object_class->finalize = gdk_device_finalize;
+  object_class->dispose  = gdk_device_dispose;
 }
 
 static void
-gdk_device_finalize (GObject *object)
+gdk_device_dispose (GObject *object)
 {
-  GdkDevicePrivate *gdkdev = (GdkDevicePrivate *)GDK_DEVICE(object);
+  GdkDevicePrivate *gdkdev = (GdkDevicePrivate *) object;
 
-  if (!GDK_IS_CORE (gdkdev))
+  if (gdkdev->display && !GDK_IS_CORE (gdkdev))
     {
 #ifndef XINPUT_NONE
       if (gdkdev->xdevice)
-        XCloseDevice (GDK_DISPLAY_XDISPLAY(gdkdev->display), gdkdev->xdevice);
-
+        {
+          XCloseDevice (GDK_DISPLAY_XDISPLAY (gdkdev->display), gdkdev->xdevice);
+          gdkdev->xdevice = NULL;
+        }
       g_free (gdkdev->axes);
+      gdkdev->axes = NULL;
 #endif /* !XINPUT_NONE */
 
       g_free (gdkdev->info.name);
       g_free (gdkdev->info.keys);
       g_free (gdkdev->info.axes);
+
+      gdkdev->info.name = NULL;
+      gdkdev->info.keys = NULL;
+      gdkdev->info.axes = NULL;
     }
 
-  G_OBJECT_CLASS (gdk_device_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_device_parent_class)->dispose (object);
 }
 
 /**

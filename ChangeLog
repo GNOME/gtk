@@ -1,5 +1,13 @@
 2008-11-30  Christian Dywan  <christian@imendio.com>
 
+	Bug 559622 – GdkDevice test segfaults
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_x11_dispose):
+	* gdk/x11/gdkinput.c (gdk_device_class_init), (gdk_device_dispose):
+	Free and reset device in dispose. Patch by Michael Natterer and myself.
+
+2008-11-30  Christian Dywan  <christian@imendio.com>
+
 	Bug 554076 – eventually release g_new-ed supported_atoms
 
 	* gdk/x11/gdkevents-x11.c (cleanup_atoms),

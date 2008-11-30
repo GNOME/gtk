@@ -798,6 +798,8 @@ gdk_display_x11_dispose (GObject *object)
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
   gint           i;
 
+  g_list_foreach (display_x11->input_devices, (GFunc) g_object_run_dispose, NULL);
+
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     _gdk_screen_close (display_x11->screens[i]);
 
