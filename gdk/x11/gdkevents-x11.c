@@ -2742,6 +2742,15 @@ struct _NetWmSupportedAtoms
   gulong n_atoms;
 };
 
+static void
+cleanup_atoms(gpointer data)
+{
+  NetWmSupportedAtoms *supported_atoms = data;
+  if (supported_atoms->atoms)
+      XFree (supported_atoms->atoms);
+  g_free (supported_atoms);
+}
+
 /**
  * gdk_x11_screen_supports_net_wm_hint:
  * @screen: the relevant #GdkScreen.
@@ -2787,7 +2796,7 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
   if (!supported_atoms)
     {
       supported_atoms = g_new0 (NetWmSupportedAtoms, 1);
-      g_object_set_data (G_OBJECT (screen), "gdk-net-wm-supported-atoms", supported_atoms);
+      g_object_set_data_full (G_OBJECT (screen), "gdk-net-wm-supported-atoms", supported_atoms, cleanup_atoms);
     }
 
   fetch_net_wm_check_window (screen);

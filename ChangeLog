@@ -1,5 +1,13 @@
 2008-11-30  Christian Dywan  <christian@imendio.com>
 
+	Bug 554076 – eventually release g_new-ed supported_atoms
+
+	* gdk/x11/gdkevents-x11.c (cleanup_atoms),
+	(gdk_x11_screen_supports_net_wm_hint): Set cleanup callback.
+        Patch by Caolan McNamara.
+
+2008-11-30  Christian Dywan  <christian@imendio.com>
+
 	Bug 539263 – Deprecate gdk_window_get_toplevels
 
 	* gdk/gdkwindow.c:
