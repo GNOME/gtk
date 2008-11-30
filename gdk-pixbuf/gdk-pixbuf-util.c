@@ -55,7 +55,7 @@ gdk_pixbuf_add_alpha (const GdkPixbuf *pixbuf,
 	GdkPixbuf *new_pixbuf;
 	int x, y;
 
-	g_return_val_if_fail (pixbuf != NULL, NULL);
+	g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
 	g_return_val_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB, NULL);
 	g_return_val_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4, NULL);
 	g_return_val_if_fail (pixbuf->bits_per_sample == 8, NULL);
@@ -277,7 +277,7 @@ gdk_pixbuf_apply_embedded_orientation (GdkPixbuf *src)
 	GdkPixbuf   *temp;
 	GdkPixbuf   *dest;
 
-	g_return_val_if_fail (src != NULL, NULL);
+	g_return_val_if_fail (GDK_IS_PIXBUF (src), NULL);
 
 	/* Read the orientation option associated with the pixbuf */
 	orientation_string = gdk_pixbuf_get_option (src, "orientation");	

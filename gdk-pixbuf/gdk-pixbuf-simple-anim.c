@@ -423,8 +423,8 @@ gdk_pixbuf_simple_anim_add_frame (GdkPixbufSimpleAnim *animation,
   GdkPixbufFrame *frame;
   int nframe = 0;
   
-  g_return_if_fail (animation != NULL);
-  g_return_if_fail (pixbuf != NULL);
+  g_return_if_fail (GDK_IS_PIXBUF_SIMPLE_ANIM (animation));
+  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
   
   nframe = g_list_length (animation->frames);
   
@@ -432,7 +432,7 @@ gdk_pixbuf_simple_anim_add_frame (GdkPixbufSimpleAnim *animation,
   frame->delay_time = (gint) (1000 / animation->rate);
   frame->elapsed = (gint) (frame->delay_time * nframe);
   animation->total_time += frame->delay_time;
-  frame->pixbuf = GDK_PIXBUF (g_object_ref (pixbuf));
+  frame->pixbuf = g_object_ref (pixbuf);
 
   animation->frames = g_list_append (animation->frames, frame);
 }

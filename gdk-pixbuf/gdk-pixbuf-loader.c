@@ -446,7 +446,6 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
 {
         GdkPixbufLoaderPrivate *priv;
   
-        g_return_val_if_fail (loader != NULL, FALSE);
         g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), FALSE);
   
         g_return_val_if_fail (buf != NULL, FALSE);
@@ -632,7 +631,6 @@ gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
 {
         GdkPixbufLoaderPrivate *priv;
   
-        g_return_val_if_fail (loader != NULL, NULL);
         g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), NULL);
   
         priv = loader->priv;
@@ -661,7 +659,6 @@ gdk_pixbuf_loader_get_animation (GdkPixbufLoader *loader)
 {
         GdkPixbufLoaderPrivate *priv;
   
-        g_return_val_if_fail (loader != NULL, NULL);
         g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), NULL);
   
         priv = loader->priv;
@@ -694,7 +691,6 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
         GdkPixbufLoaderPrivate *priv;
         gboolean retval = TRUE;
   
-        g_return_val_if_fail (loader != NULL, TRUE);
         g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), TRUE);
         g_return_val_if_fail (error == NULL || *error == NULL, TRUE);
   
@@ -773,7 +769,6 @@ gdk_pixbuf_loader_get_format (GdkPixbufLoader *loader)
 {
         GdkPixbufLoaderPrivate *priv;
   
-        g_return_val_if_fail (loader != NULL, NULL);
         g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), NULL);
   
         priv = loader->priv;

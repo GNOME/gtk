@@ -1,3 +1,18 @@
+2008-11-30  Christian Dywan  <christian@imendio.com>
+
+	Bug 561186 – GdkPixbuf API type checking needs cleanup
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_write),
+	(gdk_pixbuf_loader_get_pixbuf), (gdk_pixbuf_loader_get_animation),
+	(gdk_pixbuf_loader_close), (gdk_pixbuf_loader_get_format):
+	* gdk-pixbuf-scale.c (gdk_pixbuf_scale), (gdk_pixbuf_composite),
+	(gdk_pixbuf_composite_color), (gdk_pixbuf_scale_simple),
+	(gdk_pixbuf_composite_color_simple):
+	* gdk-pixbuf-simple-anim.c (gdk_pixbuf_simple_anim_add_frame):
+	* gdk-pixbuf-util.c (gdk_pixbuf_add_alpha),
+	(gdk_pixbuf_apply_embedded_orientation):
+        Improve type checking in pixbuf API
+
 2008-10-13  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 555791 – Natuilus Crashes when opening USB MP3 Player Contents

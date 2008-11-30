@@ -70,8 +70,8 @@ gdk_pixbuf_scale (const GdkPixbuf *src,
 		  double           scale_y,
 		  GdkInterpType    interp_type)
 {
-  g_return_if_fail (src != NULL);
-  g_return_if_fail (dest != NULL);
+  g_return_if_fail (GDK_IS_PIXBUF (src));
+  g_return_if_fail (GDK_IS_PIXBUF (dest));
   g_return_if_fail (dest_x >= 0 && dest_x + dest_width <= dest->width);
   g_return_if_fail (dest_y >= 0 && dest_y + dest_height <= dest->height);
 
@@ -130,8 +130,8 @@ gdk_pixbuf_composite (const GdkPixbuf *src,
 		      GdkInterpType    interp_type,
 		      int              overall_alpha)
 {
-  g_return_if_fail (src != NULL);
-  g_return_if_fail (dest != NULL);
+  g_return_if_fail (GDK_IS_PIXBUF (src));
+  g_return_if_fail (GDK_IS_PIXBUF (dest));
   g_return_if_fail (dest_x >= 0 && dest_x + dest_width <= dest->width);
   g_return_if_fail (dest_y >= 0 && dest_y + dest_height <= dest->height);
   g_return_if_fail (overall_alpha >= 0 && overall_alpha <= 255);
@@ -197,8 +197,8 @@ gdk_pixbuf_composite_color (const GdkPixbuf *src,
 			    guint32          color1,
 			    guint32          color2)
 {
-  g_return_if_fail (src != NULL);
-  g_return_if_fail (dest != NULL);
+  g_return_if_fail (GDK_IS_PIXBUF (src));
+  g_return_if_fail (GDK_IS_PIXBUF (dest));
   g_return_if_fail (dest_x >= 0 && dest_x + dest_width <= dest->width);
   g_return_if_fail (dest_y >= 0 && dest_y + dest_height <= dest->height);
   g_return_if_fail (overall_alpha >= 0 && overall_alpha <= 255);
@@ -247,7 +247,7 @@ gdk_pixbuf_scale_simple (const GdkPixbuf *src,
 {
   GdkPixbuf *dest;
 
-  g_return_val_if_fail (src != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_PIXBUF (src), NULL);
   g_return_val_if_fail (dest_width > 0, NULL);
   g_return_val_if_fail (dest_height > 0, NULL);
 
@@ -293,7 +293,7 @@ gdk_pixbuf_composite_color_simple (const GdkPixbuf *src,
 {
   GdkPixbuf *dest;
 
-  g_return_val_if_fail (src != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_PIXBUF (src), NULL);
   g_return_val_if_fail (dest_width > 0, NULL);
   g_return_val_if_fail (dest_height > 0, NULL);
   g_return_val_if_fail (overall_alpha >= 0 && overall_alpha <= 255, NULL);
