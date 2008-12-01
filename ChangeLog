@@ -1,3 +1,8 @@
+2008-12-01  Matthisa Clasen <mclasen@redhat.com>
+
+	* gtk/gtkentry.c: Revert an accidental change that sneaked
+	in with the last commit.
+
 2008-12-01  Paul Bolle  <pebolle@tiscali.nl>
 
 	Bug 562817 – GtkDialog: typo

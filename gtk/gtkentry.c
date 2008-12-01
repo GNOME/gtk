@@ -333,6 +333,7 @@ static void         gtk_entry_get_cursor_locations     (GtkEntry       *entry,
 							CursorType      type,
 							gint           *strong_x,
 							gint           *weak_x);
+static void         gtk_entry_adjust_scroll            (GtkEntry       *entry);
 static gint         gtk_entry_move_visually            (GtkEntry       *editable,
 							gint            start,
 							gint            count);
@@ -1479,7 +1480,7 @@ gtk_entry_realize (GtkWidget *widget)
 
   gtk_im_context_set_client_window (entry->im_context, entry->text_area);
 
-  _gtk_entry_adjust_scroll (entry);
+  gtk_entry_adjust_scroll (entry);
   gtk_entry_update_primary_selection (entry);
 }
 
@@ -3441,7 +3442,7 @@ recompute_idle_func (gpointer data)
   
   if (gtk_widget_has_screen (GTK_WIDGET (entry)))
     {
-      _gtk_entry_adjust_scroll (entry);
+      gtk_entry_adjust_scroll (entry);
       gtk_entry_queue_draw (entry);
       
       update_im_cursor_location (entry);
@@ -4041,8 +4042,8 @@ gtk_entry_get_cursor_locations (GtkEntry   *entry,
     }
 }
 
-void
-_gtk_entry_adjust_scroll (GtkEntry *entry)
+static void
+gtk_entry_adjust_scroll (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   gint min_offset, max_offset;
