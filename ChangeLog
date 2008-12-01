@@ -1,4 +1,11 @@
-2008-12-01  Matthisa Clasen <mclasen@redhat.com>
+2008-12-01  Matthias Clasen <mclasen@redhat.com>
+
+	Bug 555334 – connected server feature
+
+	* gtk/gtkfilesystem.c (get_volumes_list): Filter out shadow mounts.
+	Patch by David Zeuthen.
+
+2008-12-01  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtkentry.c: Revert an accidental change that sneaked
 	in with the last commit.

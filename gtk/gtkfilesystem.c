@@ -362,6 +362,39 @@ bookmarks_file_changed (GFileMonitor      *monitor,
     }
 }
 
+static gboolean
+mount_referenced_by_volume_activation_root (GList *volumes, GMount *mount)
+{
+  GList *l;
+  GFile *mount_root;
+  gboolean ret;
+
+  ret = FALSE;
+
+  mount_root = g_mount_get_root (mount);
+
+  for (l = volumes; l != NULL; l = l->next)
+    {
+      GVolume *volume = G_VOLUME (l->data);
+      GFile *volume_activation_root;
+
+      volume_activation_root = g_volume_get_activation_root (volume);
+      if (volume_activation_root != NULL)
+        {
+          if (g_file_has_prefix (volume_activation_root, mount_root))
+            {
+              ret = TRUE;
+              g_object_unref (volume_activation_root);
+              break;
+            }
+          g_object_unref (volume_activation_root);
+        }
+    }
+
+  g_object_unref (mount_root);
+  return ret;
+}
+
 static void
 get_volumes_list (GtkFileSystem *file_system)
 {
@@ -468,8 +501,6 @@ get_volumes_list (GtkFileSystem *file_system)
         }
     }
 
-  g_list_free (volumes);
-
   /* add mounts that has no volume (/etc/mtab mounts, ftp, sftp,...) */
   mounts = g_volume_monitor_get_mounts (priv->volume_monitor);
 
@@ -484,9 +515,19 @@ get_volumes_list (GtkFileSystem *file_system)
           continue;
         }
 
+      /* if there's exists one or more volumes with an activation root inside the mount,
+       * don't display the mount
+       */
+      if (mount_referenced_by_volume_activation_root (volumes, mount))
+        {
+          continue;
+        }
+
       /* show this mount */
       priv->volumes = g_slist_prepend (priv->volumes, g_object_ref (mount));
     }
+
+  g_list_free (volumes);
 
   g_list_free (mounts);
 }
