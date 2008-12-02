@@ -1,3 +1,13 @@
+2008-12-02  Carlos Garcia Campos  <carlosgc@gnome.org>
+
+	Bug 562878 – password save incorrectly set in gtkmountoperation
+
+	* gtk/gtkmountoperation.c (remember_button_toggled),
+	(gtk_mount_operation_ask_password): Remember the password save
+	flags only when the radio button becomes active. Set also the
+	default state of the radio buttons depending on the current value
+	of password save flags. 
+	
 2008-12-01  Matthias Clasen <mclasen@redhat.com>
 
 	Bug 555334 – connected server feature

@@ -252,14 +252,18 @@ gtk_mount_operation_init (GtkMountOperation *operation)
 }
 
 static void
-remember_button_toggled (GtkWidget         *widget,
+remember_button_toggled (GtkToggleButton   *button,
                          GtkMountOperation *operation)
 {
   GtkMountOperationPrivate *priv = operation->priv;
-  gpointer data;
 
-  data = g_object_get_data (G_OBJECT (widget), "password-save");
-  priv->password_save = GPOINTER_TO_INT (data);
+  if (gtk_toggle_button_get_active (button))
+    {
+      gpointer data;
+
+      data = g_object_get_data (G_OBJECT (button), "password-save");
+      priv->password_save = GPOINTER_TO_INT (data);
+    }
 }
 
 static void
@@ -579,15 +583,20 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
 
    if (flags & G_ASK_PASSWORD_SAVING_SUPPORTED)
     {
-      GtkWidget  *choice;
-      GtkWidget  *remember_box;
-      GSList     *group;
+      GtkWidget    *choice;
+      GtkWidget    *remember_box;
+      GSList       *group;
+      GPasswordSave password_save;
 
       remember_box = gtk_vbox_new (FALSE, 6);
       gtk_box_pack_start (GTK_BOX (vbox), remember_box,
                           FALSE, FALSE, 0);
 
+      password_save = g_mount_operation_get_password_save (mount_op);
+      
       choice = gtk_radio_button_new_with_mnemonic (NULL, _("Forget password _immediately"));
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (choice),
+                                    password_save == G_PASSWORD_SAVE_NEVER);
       g_object_set_data (G_OBJECT (choice), "password-save",
                          GINT_TO_POINTER (G_PASSWORD_SAVE_NEVER));
       g_signal_connect (choice, "toggled",
@@ -596,6 +605,8 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
 
       group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (choice));
       choice = gtk_radio_button_new_with_mnemonic (group, _("Remember password until you _logout"));
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (choice),
+                                    password_save == G_PASSWORD_SAVE_FOR_SESSION);
       g_object_set_data (G_OBJECT (choice), "password-save",
                          GINT_TO_POINTER (G_PASSWORD_SAVE_FOR_SESSION));
       g_signal_connect (choice, "toggled",
@@ -604,6 +615,8 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
 
       group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (choice));
       choice = gtk_radio_button_new_with_mnemonic (group, _("Remember _forever"));
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (choice),
+                                    password_save == G_PASSWORD_SAVE_PERMANENTLY);
       g_object_set_data (G_OBJECT (choice), "password-save",
                          GINT_TO_POINTER (G_PASSWORD_SAVE_PERMANENTLY));
       g_signal_connect (choice, "toggled",
