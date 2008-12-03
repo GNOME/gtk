@@ -871,17 +871,19 @@ gdk_x11_drawable_get_xid (GdkDrawable *drawable)
   
   if (GDK_IS_WINDOW (drawable))
     {
-      /* Try to ensure the window has a native window */
-      if (!GDK_WINDOW_IS_X11 (drawable))
-	gdk_window_set_has_native ((GdkWindow *)drawable, TRUE);
+      GdkWindow *window = (GdkWindow *)drawable;
       
-      if (!GDK_WINDOW_IS_X11 (drawable))
+      /* Try to ensure the window has a native window */
+      if (!_gdk_window_has_impl (window))
+	gdk_window_set_has_native (window, TRUE);
+      
+      if (!GDK_WINDOW_IS_X11 (window))
         {
           g_warning (G_STRLOC " drawable is not a native X11 window");
           return None;
         }
 
-      impl = ((GdkPixmapObject *)drawable)->impl;
+      impl = ((GdkWindowObject *)drawable)->impl;
     }
   else if (GDK_IS_PIXMAP (drawable))
     impl = ((GdkPixmapObject *)drawable)->impl;
