@@ -628,7 +628,12 @@ gtk_font_button_set_show_size (GtkFontButton *font_button,
  * gtk_font_button_get_font_name:
  * @font_button: a #GtkFontButton
  *
- * Retrieves the name of the currently selected font.
+ * Retrieves the name of the currently selected font. This name includes
+ * style and size information as well. If you want to render something
+ * with the font, use this string with pango_font_description_from_string() .
+ * If you're interested in peeking certain values (family name,
+ * style, size, weight) just query these properties from the
+ * #PangoFontDescription object.
  *
  * Returns: an internal copy of the font name which must not be freed.
  *

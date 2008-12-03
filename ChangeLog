@@ -1,3 +1,10 @@
+2008-12-03  Sven Herzberg  <sven@imendio.com>
+
+	Bug 562998 – GtkFontButton documentation improvements
+
+	* gtk/gtkfontbutton.c: mention the way the font string should be used.
+	Patch by Sven Herzberg and Nelson Benitez
+
 2008-12-03  Marek Kasik  <mkasik@redhat.com>
 
 	Bug 559914 – eog doesn't apply paper setup.
