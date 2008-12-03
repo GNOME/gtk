@@ -1,3 +1,10 @@
+2008-12-03  Marek Kasik  <mkasik@redhat.com>
+
+	Bug 559914 – eog doesn't apply paper setup.
+
+	* gtk/gtkpapersize.c: Call the gtk_paper_size_new_from_ppd() with width
+	and height in points.
+
 2008-12-02  Carlos Garcia Campos  <carlosgc@gnome.org>
 
 	Bug 562878 – password save incorrectly set in gtkmountoperation
