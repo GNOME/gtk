@@ -1,3 +1,16 @@
+2008-12-03  Simos Xenitellis  <simos@gnome.org>
+
+	Bug 557420 – Some compose sequences don't work anymore (or only in
+	a specific order)
+
+	* gtk/gtkimcontextsimple.c: Update of table size, keysym boundary,
+	to match the gtkimcontextsimpleseqs.h table.
+	* gtk/gtkimcontextsimpleseqs.h: Update with older gtk+ compose
+	sequences that went missing due to table update with upstream.
+	* gtk/compose-parse.py: Updated to include gtk-compose-lookaside.txt
+	* gtk/gtk-compose-lookaside.txt: Older gtk+ compose sequences that
+	are not found in the X.Org Compose file.
+
 2008-12-03  Sven Herzberg  <sven@imendio.com>
 
 	Bug 562998 – GtkFontButton documentation improvements

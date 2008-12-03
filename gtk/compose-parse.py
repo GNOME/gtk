@@ -25,6 +25,7 @@ URL_COMPOSE = 'http://gitweb.freedesktop.org/?p=xorg/lib/libX11.git;a=blob_plain
 URL_KEYSYMSTXT = "http://www.cl.cam.ac.uk/~mgk25/ucs/keysyms.txt"
 URL_GDKKEYSYMSH = "http://svn.gnome.org/svn/gtk%2B/trunk/gdk/gdkkeysyms.h"
 URL_UNICODEDATATXT = 'http://www.unicode.org/Public/5.0.0/ucd/UnicodeData.txt'
+FILENAME_COMPOSE_SUPPLEMENTARY = 'gtk-compose-lookaside.txt'
 
 # We currently support keysyms of size 2; once upstream xorg gets sorted, 
 # we might produce some tables with size 2 and some with size 4.
@@ -421,17 +422,36 @@ except:
 	print "Unexpected error: ", sys.exc_info()[0]
 	sys.exit(-1)
 
+""" Look if there is a lookaside (supplementary) compose file in the current
+    directory, and if so, open, then merge with upstream Compose file.
+"""
+try:
+        composefile_lookaside = open(FILENAME_COMPOSE_SUPPLEMENTARY, 'r')
+except IOError, (errno, strerror):
+        if not opt_quiet:
+                print "I/O error(%s): %s" % (errno, strerror)
+                print "Did not find lookaside compose file. Continuing..."
+except:
+        print "Unexpected error: ", sys.exc_info()[0]
+        sys.exit(-1)
+
+xorg_compose_sequences_raw = []
+for seq in composefile.readlines():
+        xorg_compose_sequences_raw.append(seq)
+for seq in composefile_lookaside.readlines():
+        xorg_compose_sequences_raw.append(seq)
+
 """ Parse the compose file in  xorg_compose_sequences"""
 xorg_compose_sequences = []
 xorg_compose_sequences_algorithmic = []
 linenum_compose = 0
-for line in composefile.readlines():
+for line in xorg_compose_sequences_raw:
 	linenum_compose += 1
 	line = line.strip()
 	if line is "" or match("^XCOMM", line) or match("^#", line):
 		continue
 
-	line = line[:-1]
+	#line = line[:-1]
 	components = split(':', line)
 	if len(components) != 2:
 		print "Invalid line %(linenum_compose)d in %(filename)s: No sequence\
@@ -483,6 +503,14 @@ for line in composefile.readlines():
 		"0x0313" in sequence or \
 		"0x0342" in sequence or \
 		"0x0314" in sequence:
+		continue
+	if "dead_belowring" in sequence or\
+		"dead_belowcomma" in sequence or\
+		"dead_belowmacron" in sequence or\
+		"dead_belowtilde" in sequence or\
+		"dead_belowbreve" in sequence or\
+		"dead_belowdiaeresis" in sequence or\
+		"dead_belowcircumflex" in sequence:
 		continue
 	#for i in range(len(sequence)):
 	#	if sequence[i] == "0x0342":
