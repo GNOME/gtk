@@ -636,6 +636,7 @@ gdk_window_new (GdkWindow     *parent,
   int x, y, depth;
   gboolean native;
   GdkEventMask event_mask;
+  GdkWindow *real_parent;
   
   g_return_val_if_fail (attributes != NULL, NULL);
   
@@ -661,6 +662,7 @@ gdk_window_new (GdkWindow     *parent,
   /* Windows with a foreign parent are treated as if they are children
    * of the root window, except for actual creation.
    */
+  real_parent = parent;
   if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_FOREIGN)
     parent = gdk_screen_get_root_window (screen);
 
@@ -783,7 +785,7 @@ gdk_window_new (GdkWindow     *parent,
 	event_mask = GDK_EXPOSURE_MASK;
       
       /* Create the impl */
-      _gdk_window_impl_new (window, screen, visual, event_mask, attributes, attributes_mask);
+      _gdk_window_impl_new (window, real_parent, screen, visual, event_mask, attributes, attributes_mask);
     }
   else
     {
@@ -1019,9 +1021,9 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
   GdkVisual *visual;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_ROOT);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT ||
+      GDK_WINDOW_DESTROYED (window))
     return;
 
   private = (GdkWindowObject *) window;
@@ -1043,7 +1045,7 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
       visual = gdk_drawable_get_visual (window);
 
       old_impl = private->impl;
-      _gdk_window_impl_new (window, screen, visual, GDK_EXPOSURE_MASK, NULL, 0);
+      _gdk_window_impl_new (window, private->parent, screen, visual, GDK_EXPOSURE_MASK, NULL, 0);
       new_impl = private->impl;
       
       private->impl = old_impl;
@@ -1482,6 +1484,11 @@ gdk_window_add_filter (GdkWindow     *window,
   private = (GdkWindowObject*) window;
   if (private && GDK_WINDOW_DESTROYED (window))
     return;
+
+  /* Filters are for the native events on the native window, so
+     ensure there is a native window. */
+  if (window)
+    gdk_window_set_has_native (window, TRUE);
   
   if (private)
     tmp_list = private->filters;

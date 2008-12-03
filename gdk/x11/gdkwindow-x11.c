@@ -624,6 +624,7 @@ setup_toplevel_window (GdkWindow *window,
 
 void
 _gdk_window_impl_new (GdkWindow     *window,
+		      GdkWindow     *real_parent,
 		      GdkScreen     *screen,
 		      GdkVisual     *visual,
 		      GdkEventMask   event_mask,
@@ -652,7 +653,7 @@ _gdk_window_impl_new (GdkWindow     *window,
   private = (GdkWindowObject *) window;
   
   screen_x11 = GDK_SCREEN_X11 (screen);
-  xparent = GDK_WINDOW_XID (private->parent);
+  xparent = GDK_WINDOW_XID (real_parent);
   
   impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl = (GdkDrawable *)impl;

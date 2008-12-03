@@ -267,6 +267,7 @@ GdkPixmap *_gdk_bitmap_create_from_data  (GdkDrawable    *drawable,
                                           gint            height);
 
 void       _gdk_window_impl_new          (GdkWindow      *window,
+					  GdkWindow      *real_parent,
 					  GdkScreen      *screen,
 					  GdkVisual      *visual,
 					  GdkEventMask    event_mask,
