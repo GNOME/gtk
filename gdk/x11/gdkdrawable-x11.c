@@ -871,10 +871,12 @@ gdk_x11_drawable_get_xid (GdkDrawable *drawable)
   
   if (GDK_IS_WINDOW (drawable))
     {
+      /* Try to ensure the window has a native window */
+      if (!GDK_WINDOW_IS_X11 (drawable))
+	gdk_window_set_has_native ((GdkWindow *)drawable, TRUE);
+      
       if (!GDK_WINDOW_IS_X11 (drawable))
         {
-	  /* TODO: At this point we could convert a virtual window
-	     to a native one (unless its in an offscreen window) */
           g_warning (G_STRLOC " drawable is not a native X11 window");
           return None;
         }
