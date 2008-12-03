@@ -534,7 +534,9 @@ recompute_visible_regions_internal (GdkWindowObject *private,
       private->window_type != GDK_WINDOW_OFFSCREEN &&
       /* or for toplevels */
       private->parent != NULL &&
-      GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT
+      GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT &&
+      /* or for foreign windows */
+      GDK_WINDOW_TYPE (private) != GDK_WINDOW_FOREIGN
       )
     {
       GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_region ((GdkWindow *)private, private->clip_region, 0, 0);
