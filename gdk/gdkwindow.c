@@ -998,7 +998,8 @@ gdk_window_reparent (GdkWindow *window,
     case GDK_WINDOW_CHILD:
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
-      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
+      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD && \
+	  GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 	{
 	  /* Save the original window type so we can restore it if the
 	   * window is reparented back to be a toplevel
