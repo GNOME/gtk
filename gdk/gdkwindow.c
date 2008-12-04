@@ -924,6 +924,11 @@ gdk_window_reparent (GdkWindow *window,
   was_toplevel = private->parent == NULL;
   was_mapped = GDK_WINDOW_IS_MAPPED (window);
   show = FALSE;
+
+  /* Reparenting to toplevel. Ensure we have a native window so this can work */
+  if (new_parent_private->window_type == GDK_WINDOW_ROOT ||
+      new_parent_private->window_type == GDK_WINDOW_FOREIGN)
+    gdk_window_set_has_native (window, TRUE);
   
   if (gdk_window_has_impl (private))
     {
@@ -932,12 +937,9 @@ gdk_window_reparent (GdkWindow *window,
     }
   else
     {
-      if (new_parent_private->window_type == GDK_WINDOW_ROOT)
-	{
-	  /* TODO: We need to convert to a native window here */
-	  g_warning ("Reparenting client side windows to the root window not yet supported");
-	  return;
-	}
+      /* This shouldn't happen, as we created a native in this case, check anyway to see if that ever fails */
+      g_assert (new_parent_private->window_type != GDK_WINDOW_ROOT &&
+		new_parent_private->window_type != GDK_WINDOW_FOREIGN);
 
       show = was_mapped;
       gdk_window_hide (window);
