@@ -1080,7 +1080,9 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
       if (private->parent == NULL ||
 	  GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT)
 	return; /* toplevel, must be native */
-      
+
+      g_warning ("Tried to turn native window to client side window, this is not supported yet.");
+
       /* TODO: remove native */
     }
 }
