@@ -44,6 +44,8 @@ struct _GdkGCPrivate
   GdkRegion *clip_region;
 
   guint32 region_tag_applied;
+  int region_tag_offset_x;
+  int region_tag_offset_y;
   
   GdkRegion *old_clip_region;
   
@@ -597,9 +599,18 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
 {
   GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
 
-  g_assert (priv->old_clip_region == NULL);
+  if (priv->region_tag_applied == region_tag &&
+      offset_x == priv->region_tag_offset_x &&
+      offset_y == priv->region_tag_offset_y)
+    return; /* Already appied this drawable region */
   
+  if (priv->region_tag_applied)
+    _gdk_gc_remove_drawable_clip (gc);
+
   priv->region_tag_applied = region_tag;
+  priv->region_tag_offset_x = offset_x;
+  priv->region_tag_offset_y = offset_y;
+  
   priv->old_clip_region = priv->clip_region;
 
   region = gdk_region_copy (region);

@@ -275,6 +275,14 @@ add_damage (GdkOffscreenWindow *offscreen,
   gdk_region_destroy (damage);
 }
 
+static GdkDrawable *
+get_real_drawable (GdkOffscreenWindow *offscreen)
+{
+  GdkPixmapObject *pixmap;
+  pixmap = (GdkPixmapObject *) offscreen->pixmap;
+  return GDK_DRAWABLE (pixmap->impl);
+}
+
 static void
 gdk_offscreen_window_draw_drawable (GdkDrawable *drawable,
 				    GdkGC       *gc,
@@ -287,7 +295,7 @@ gdk_offscreen_window_draw_drawable (GdkDrawable *drawable,
 				    gint         height)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = GDK_DRAWABLE (offscreen->pixmap);
+  GdkDrawable *real_drawable = get_real_drawable (offscreen);
   
   gdk_draw_drawable (real_drawable, gc,
 		     src, xsrc, ysrc,
@@ -307,7 +315,7 @@ gdk_offscreen_window_draw_rectangle (GdkDrawable  *drawable,
 				     gint	   height)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = GDK_DRAWABLE (offscreen->pixmap);
+  GdkDrawable *real_drawable = get_real_drawable (offscreen);
 
   gdk_draw_rectangle (real_drawable,
 		      gc, filled, x, y, width, height);
@@ -328,7 +336,7 @@ gdk_offscreen_window_draw_arc (GdkDrawable  *drawable,
 			       gint		angle2)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = GDK_DRAWABLE (offscreen->pixmap);
+  GdkDrawable *real_drawable = get_real_drawable (offscreen);
 
   gdk_draw_arc (real_drawable,
 		gc,
@@ -350,7 +358,7 @@ gdk_offscreen_window_draw_polygon (GdkDrawable  *drawable,
 				   gint		npoints)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = GDK_DRAWABLE (offscreen->pixmap);
+  GdkDrawable *real_drawable = get_real_drawable (offscreen);
   
   gdk_draw_polygon (real_drawable,
 		    gc,
@@ -389,7 +397,7 @@ gdk_offscreen_window_draw_text (GdkDrawable  *drawable,
 				gint		text_length)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = GDK_DRAWABLE (offscreen->pixmap);
+  GdkDrawable *real_drawable = get_real_drawable (offscreen);
   GdkWindowObject *private = GDK_WINDOW_OBJECT (offscreen->wrapper);
 
   gdk_draw_text (real_drawable,
@@ -414,7 +422,7 @@ gdk_offscreen_window_draw_text_wc (GdkDrawable	 *drawable,
 				   gint		  text_length)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = GDK_DRAWABLE (offscreen->pixmap);
+  GdkDrawable *real_drawable = get_real_drawable (offscreen);
   GdkWindowObject *private = GDK_WINDOW_OBJECT (offscreen->wrapper);
 
   gdk_draw_text_wc (real_drawable,
@@ -436,7 +444,7 @@ gdk_offscreen_window_draw_points (GdkDrawable  *drawable,
 				  gint		npoints)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = GDK_DRAWABLE (offscreen->pixmap);
+  GdkDrawable *real_drawable = get_real_drawable (offscreen);
 
   gdk_draw_points (real_drawable,
 		   gc,
@@ -472,7 +480,7 @@ gdk_offscreen_window_draw_segments (GdkDrawable  *drawable,
 				    gint	  nsegs)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = GDK_DRAWABLE (offscreen->pixmap);
+  GdkDrawable *real_drawable = get_real_drawable (offscreen);
 
   gdk_draw_segments (real_drawable,
 		     gc,
@@ -512,7 +520,7 @@ gdk_offscreen_window_draw_lines (GdkDrawable  *drawable,
 				 gint          npoints)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = GDK_DRAWABLE (offscreen->pixmap);
+  GdkDrawable *real_drawable = get_real_drawable (offscreen);
   GdkWindowObject *private = GDK_WINDOW_OBJECT (offscreen->wrapper);
 
   gdk_draw_lines (real_drawable,
@@ -538,7 +546,7 @@ gdk_offscreen_window_draw_image (GdkDrawable *drawable,
 				 gint	       height)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = GDK_DRAWABLE (offscreen->pixmap);
+  GdkDrawable *real_drawable = get_real_drawable (offscreen);
 
   gdk_draw_image (real_drawable,
 		  gc,
@@ -569,7 +577,7 @@ gdk_offscreen_window_draw_pixbuf (GdkDrawable *drawable,
 				  gint         y_dither)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  GdkDrawable *real_drawable = GDK_DRAWABLE (offscreen->pixmap);
+  GdkDrawable *real_drawable = get_real_drawable (offscreen);
   
   gdk_draw_pixbuf (real_drawable,
 		   gc,
