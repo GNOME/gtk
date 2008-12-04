@@ -252,7 +252,10 @@ gdk_bitmap_create_from_data (GdkDrawable *drawable,
 {
   GdkDrawable *source_drawable;
 
-  source_drawable = _gdk_drawable_get_source_drawable (drawable);
+  if (drawable)
+    source_drawable = _gdk_drawable_get_source_drawable (drawable);
+  else
+    source_drawable = NULL;
   return _gdk_bitmap_create_from_data (source_drawable, data, width, height);
 }
 
