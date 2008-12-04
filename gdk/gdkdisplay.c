@@ -531,8 +531,8 @@ gdk_window_real_window_get_pointer (GdkDisplay       *display,
                                                       &tmpx, &tmpy,
                                                       mask);
   /* We got the coords on the impl, conver to the window */
-  tmpx += private->abs_x;
-  tmpy += private->abs_y;
+  tmpx -= private->abs_x;
+  tmpy -= private->abs_y;
   
   if (x)
     *x = tmpx;
