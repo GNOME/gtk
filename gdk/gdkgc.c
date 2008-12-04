@@ -564,17 +564,25 @@ _gdk_gc_set_clip_region_internal (GdkGC     *gc,
   _gdk_windowing_gc_set_clip_region (gc, region, reset_origin);
 }
 
-/* Takes ownership of passed in region, returns old clip region */
+/* returns old clip region */
 void
 _gdk_gc_intersect_clip_region (GdkGC     *gc,
 			       GdkRegion *region,
+			       int        offset_x,
+			       int        offset_y,
 			       GdkRegion **old_clip_region)
 {
   GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
   GdkRegion *old_clip;
+  gboolean free;
 
   old_clip = priv->clip_region;
 
+  region = gdk_region_copy (region);
+
+  if (offset_x != 0 || offset_y != 0)
+    gdk_region_offset (region, offset_x, offset_y);
+  
   priv->clip_region = region;
   if (old_clip)
     gdk_region_intersect (region, old_clip);

@@ -1983,6 +1983,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
 				     clip_box.x, clip_box.y,
 				     clip_box.width, clip_box.height);
     }
+
 #endif /* USE_BACKING_STORE */
 }
 
@@ -2270,16 +2271,15 @@ setup_clip_for_draw (GdkDrawable *drawable,
   GdkRegion *clip;
 
   if (_gdk_gc_get_subwindow (gc) == GDK_CLIP_BY_CHILDREN)
-    clip = gdk_region_copy (private->clip_region_with_children);
+    clip = private->clip_region_with_children;
   else
-    clip = gdk_region_copy (private->clip_region);
+    clip = private->clip_region;
     
-  /* There was a clip origin set appart from the window offset,
-     need to take this into consideration */
-  if (old_clip_x != 0 || old_clip_y != 0)
-    gdk_region_offset (clip, -old_clip_x, -old_clip_y);
-
-  _gdk_gc_intersect_clip_region (gc, clip, old_clip_region);
+  _gdk_gc_intersect_clip_region (gc, clip,
+				 /* If there was a clip origin set appart from the
+				  * window offset, need to take that into consideration */
+				 -old_clip_x, -old_clip_y,
+				 old_clip_region);
 }
 
 static void
@@ -2289,16 +2289,13 @@ setup_clip_for_paint (GdkDrawable *drawable,
 		      int old_clip_x, int old_clip_y,
 		      GdkRegion **old_clip_region)
 {
-  GdkRegion *clip;
-
-  clip = gdk_region_copy (paint->region);
-  
-  /* There was a clip origin set appart from the window offset,
-     need to take this into consideration */
-  if (old_clip_x != 0 || old_clip_y != 0)
-    gdk_region_offset (clip, -old_clip_x, -old_clip_y);
-
-  _gdk_gc_intersect_clip_region (gc, clip, old_clip_region);
+  _gdk_gc_intersect_clip_region (gc,
+				 /* This includes the window clip */
+				 paint->region,
+				 /* If there was a clip origin set appart from the
+				  * window offset, need to take that into consideration */
+				 -old_clip_x, -old_clip_y,
+				 old_clip_region);
 }
 
 
