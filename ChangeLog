@@ -1,3 +1,8 @@
+2008-12-04  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gtk/gtkstatusicon.c:
+	Add missing space in gtk-doc deprecated syntax
+
 2008-12-03  Simos Xenitellis  <simos@gnome.org>
 
 	Bug 557420 – Some compose sequences don't work anymore (or only in

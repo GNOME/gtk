@@ -2162,7 +2162,7 @@ gtk_status_icon_get_screen (GtkStatusIcon *status_icon)
  *
  * Since: 2.10
  *
- * Deprecated:2.16: Use gtk_status_icon_set_tooltip_text() instead.
+ * Deprecated: 2.16: Use gtk_status_icon_set_tooltip_text() instead.
  */
 void
 gtk_status_icon_set_tooltip (GtkStatusIcon *status_icon,
