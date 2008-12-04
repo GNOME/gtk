@@ -611,6 +611,22 @@ _gdk_window_update_size (GdkWindow *window)
   recompute_visible_regions ((GdkWindowObject *)window, TRUE, FALSE);
 }
 
+static GdkEventMask
+get_native_event_mask (GdkWindowObject *private)
+{
+  if (GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT)
+    return
+      GDK_EXPOSURE_MASK |
+      GDK_POINTER_MOTION_MASK |
+      GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+      GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK |
+      GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
+      GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK | GDK_PROPERTY_CHANGE_MASK |
+      GDK_PROXIMITY_IN_MASK | GDK_PROXIMITY_OUT_MASK | GDK_SCROLL_MASK;
+  else
+    return GDK_EXPOSURE_MASK;
+}
+
 
 /**
  * gdk_window_new:
@@ -774,17 +790,7 @@ gdk_window_new (GdkWindow     *parent,
     }
   else if (native)
     {
-      if (GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT)
-	event_mask =
-	  GDK_EXPOSURE_MASK |
-	  GDK_POINTER_MOTION_MASK |
-	  GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-	  GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK |
-	  GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
-	  GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK | GDK_PROPERTY_CHANGE_MASK |
-	  GDK_PROXIMITY_IN_MASK | GDK_PROXIMITY_OUT_MASK | GDK_SCROLL_MASK;
-      else
-	event_mask = GDK_EXPOSURE_MASK;
+      event_mask = get_native_event_mask (private);
       
       /* Create the impl */
       _gdk_window_impl_new (window, real_parent, screen, visual, event_mask, attributes, attributes_mask);
@@ -983,6 +989,11 @@ gdk_window_reparent (GdkWindow *window,
 	}
     }
 
+  /* We might have changed window type for a native windows, so we
+     need to change the event mask too. */
+  if (gdk_window_has_impl (private))
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_events (window, get_native_event_mask (private));
+  
   /* Inherit parent redirect if we don't have our own */
   if (private->parent && private->redirect == NULL)
     {
@@ -1047,7 +1058,8 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
       visual = gdk_drawable_get_visual (window);
 
       old_impl = private->impl;
-      _gdk_window_impl_new (window, (GdkWindow *)private->parent, screen, visual, GDK_EXPOSURE_MASK, NULL, 0);
+      _gdk_window_impl_new (window, (GdkWindow *)private->parent, screen, visual,
+			    get_native_event_mask (private), NULL, 0);
       new_impl = private->impl;
       
       private->impl = old_impl;
