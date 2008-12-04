@@ -48,12 +48,15 @@ struct _GdkGCPrivate
   int region_tag_offset_y;
   
   GdkRegion *old_clip_region;
+  GdkPixmap *old_clip_mask;
   
   GdkSubwindowMode subwindow_mode;
   
   GdkFill fill;
   GdkBitmap *stipple;
   GdkPixmap *tile;
+
+  GdkPixmap *clip_mask;
   
   guint32 fg_pixel;
   guint32 bg_pixel;
@@ -158,6 +161,8 @@ _gdk_gc_init (GdkGC           *gc,
     gc->clip_x_origin = values->clip_x_origin;
   if (values_mask & GDK_GC_CLIP_Y_ORIGIN)
     gc->clip_y_origin = values->clip_y_origin;
+  if ((values_mask & GDK_GC_CLIP_MASK) && values->clip_mask)
+    priv->clip_mask = g_object_ref (values->clip_mask);
   if (values_mask & GDK_GC_TS_X_ORIGIN)
     gc->ts_x_origin = values->ts_x_origin;
   if (values_mask & GDK_GC_TS_Y_ORIGIN)
@@ -198,6 +203,10 @@ gdk_gc_finalize (GObject *object)
     gdk_region_destroy (priv->clip_region);
   if (priv->old_clip_region)
     gdk_region_destroy (priv->old_clip_region);
+  if (priv->clip_mask)
+    g_object_unref (priv->clip_mask);
+  if (priv->old_clip_mask)
+    g_object_unref (priv->old_clip_mask);
   if (gc->colormap)
     g_object_unref (gc->colormap);
   if (priv->tile)
@@ -297,6 +306,14 @@ gdk_gc_set_values (GdkGC           *gc,
     gc->ts_y_origin = values->ts_y_origin;
   if (values_mask & GDK_GC_CLIP_MASK)
     {
+      if (priv->clip_mask)
+	{
+	  g_object_unref (priv->clip_mask);
+	  priv->clip_mask = NULL;
+	}
+      if (values->clip_mask)
+	priv->clip_mask = g_object_ref (values->clip_mask);
+      
       if (priv->clip_region)
 	{
 	  gdk_region_destroy (priv->clip_region);
@@ -570,6 +587,12 @@ _gdk_gc_set_clip_region_real (GdkGC     *gc,
 {
   GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
 
+  if (priv->clip_mask)
+    {
+      g_object_unref (priv->clip_mask);
+      priv->clip_mask = NULL;
+    }
+  
   if (priv->clip_region)
     gdk_region_destroy (priv->clip_region);
 
@@ -607,21 +630,48 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
   if (priv->region_tag_applied)
     _gdk_gc_remove_drawable_clip (gc);
 
-  priv->region_tag_applied = region_tag;
-  priv->region_tag_offset_x = offset_x;
-  priv->region_tag_offset_y = offset_y;
-  
-  priv->old_clip_region = priv->clip_region;
-
   region = gdk_region_copy (region);
   if (offset_x != 0 || offset_y != 0)
     gdk_region_offset (region, offset_x, offset_y);
-  
-  priv->clip_region = region;
-  if (priv->old_clip_region)
-    gdk_region_intersect (region, priv->old_clip_region);
 
-  _gdk_windowing_gc_set_clip_region (gc, priv->clip_region, FALSE);
+  if (priv->clip_mask)
+    {
+      int w, h;
+      GdkPixmap *new_mask;
+      GdkGC *tmp_gc;
+      GdkColor black = {0, 0, 0, 0};
+      
+      priv->old_clip_mask = g_object_ref (priv->clip_mask);
+      gdk_drawable_get_size (priv->old_clip_mask, &w, &h);
+
+      new_mask = gdk_pixmap_new	(priv->old_clip_mask, w, h, -1);
+      tmp_gc = _gdk_drawable_get_scratch_gc ((GdkDrawable *)new_mask, FALSE);
+
+      gdk_gc_set_foreground (tmp_gc, &black);
+      gdk_draw_rectangle (new_mask, tmp_gc, TRUE, 0, 0, -1, -1);
+      _gdk_gc_set_clip_region_internal (tmp_gc, region, TRUE); /* Takes ownership of region */
+      gdk_draw_drawable  (new_mask,
+			  tmp_gc,
+			  priv->old_clip_mask,
+			  0, 0,
+			  0, 0,
+			  -1, -1);
+      gdk_gc_set_clip_region (tmp_gc, NULL);
+      gdk_gc_set_clip_mask (gc, new_mask);
+    }
+  else
+    {
+      priv->old_clip_region = priv->clip_region;
+      priv->clip_region = region;
+      if (priv->old_clip_region)
+	gdk_region_intersect (region, priv->old_clip_region);
+      
+      _gdk_windowing_gc_set_clip_region (gc, priv->clip_region, FALSE);
+    }
+
+  priv->region_tag_applied = region_tag;
+  priv->region_tag_offset_x = offset_x;
+  priv->region_tag_offset_y = offset_y;
 }
 
 void
@@ -631,9 +681,18 @@ _gdk_gc_remove_drawable_clip (GdkGC *gc)
 
   if (priv->region_tag_applied)
     {
-      _gdk_gc_set_clip_region_real (gc, priv->old_clip_region, FALSE);
-      priv->old_clip_region = NULL;
       priv->region_tag_applied = 0;
+      if (priv->old_clip_mask)
+	{
+	  gdk_gc_set_clip_mask (gc, priv->old_clip_mask);
+	  g_object_unref (priv->old_clip_mask);
+	  priv->old_clip_mask = NULL;
+	}
+      else
+	{
+	  _gdk_gc_set_clip_region_real (gc, priv->old_clip_region, FALSE);
+	  priv->old_clip_region = NULL;
+	}
     }
 }
 
@@ -999,6 +1058,16 @@ gdk_gc_copy (GdkGC *dst_gc,
     dst_priv->old_clip_region = gdk_region_copy (src_priv->old_clip_region);
   else
     dst_priv->old_clip_region = NULL;
+
+  if (src_priv->clip_mask)
+    dst_priv->clip_mask = g_object_ref (src_priv->clip_mask);
+  else
+    dst_priv->clip_mask = NULL;
+  
+  if (src_priv->old_clip_mask)
+    dst_priv->old_clip_mask = g_object_ref (src_priv->old_clip_mask);
+  else
+    dst_priv->old_clip_mask = NULL;
   
   dst_priv->fill = src_priv->fill;
   
