@@ -478,7 +478,8 @@ gdk_pixmap_draw_pixbuf (GdkDrawable     *drawable,
 {
   GdkPixmapObject *private = (GdkPixmapObject *)drawable;
 
-  _gdk_gc_remove_drawable_clip (gc);  
+  if (gc)
+    _gdk_gc_remove_drawable_clip (gc);  
   gdk_draw_pixbuf (private->impl, gc, pixbuf,
 		   src_x, src_y, dest_x, dest_y, width, height,
 		   dither, x_dither, y_dither);
