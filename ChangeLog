@@ -1,3 +1,10 @@
+2008-12-04  Simos Xenitellis  <simos@gnome.org>
+
+	Bug 557420#c23:
+
+	* gtk/gtkimcontextsimple.c: Fixed the lower bound for dead keys
+	to dead_grave (instead of dead_stroke).
+
 2008-12-01  Matthias Clasen <mclasen@redhat.com>
 
 	Merged from trunk:

@@ -415,7 +415,7 @@ check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
  * In future versions it will be just the keysym (no +1).
  */
 #define IS_DEAD_KEY(k) \
-    ((k) >= GDK_dead_stroke && (k) <= (GDK_dead_dasia+1))
+    ((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1))
 
 static gboolean
 check_algorithmically (GtkIMContextSimple    *context_simple,
