@@ -43,6 +43,10 @@ struct _GdkGCPrivate
 {
   GdkRegion *clip_region;
 
+  guint32 region_tag_applied;
+  
+  GdkRegion *old_clip_region;
+  
   GdkSubwindowMode subwindow_mode;
   
   GdkFill fill;
@@ -190,6 +194,8 @@ gdk_gc_finalize (GObject *object)
 
   if (priv->clip_region)
     gdk_region_destroy (priv->clip_region);
+  if (priv->old_clip_region)
+    gdk_region_destroy (priv->old_clip_region);
   if (gc->colormap)
     g_object_unref (gc->colormap);
   if (priv->tile)
@@ -273,6 +279,12 @@ gdk_gc_set_values (GdkGC           *gc,
 
   priv = GDK_GC_GET_PRIVATE (gc);
 
+  if ((values_mask & GDK_GC_CLIP_X_ORIGIN) ||
+      (values_mask & GDK_GC_CLIP_Y_ORIGIN) ||
+      (values_mask & GDK_GC_CLIP_MASK) ||
+      (values_mask & GDK_GC_SUBWINDOW))
+    _gdk_gc_remove_drawable_clip (gc);
+  
   if (values_mask & GDK_GC_CLIP_X_ORIGIN)
     gc->clip_x_origin = values->clip_x_origin;
   if (values_mask & GDK_GC_CLIP_Y_ORIGIN)
@@ -549,10 +561,10 @@ gdk_gc_set_clip_mask (GdkGC	*gc,
 }
 
 /* Takes ownership of passed in region */
-void
-_gdk_gc_set_clip_region_internal (GdkGC     *gc,
-				  GdkRegion *region,
-				  gboolean reset_origin)
+static void
+_gdk_gc_set_clip_region_real (GdkGC     *gc,
+			      GdkRegion *region,
+			      gboolean reset_origin)
 {
   GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
 
@@ -564,37 +576,54 @@ _gdk_gc_set_clip_region_internal (GdkGC     *gc,
   _gdk_windowing_gc_set_clip_region (gc, region, reset_origin);
 }
 
+/* Doesn't copy region, allows not to reset origin */
+void
+_gdk_gc_set_clip_region_internal (GdkGC     *gc,
+				  GdkRegion *region,
+				  gboolean reset_origin)
+{
+  _gdk_gc_remove_drawable_clip (gc);
+  _gdk_gc_set_clip_region_real (gc, region, reset_origin);
+}
+
+
 /* returns old clip region */
 void
-_gdk_gc_intersect_clip_region (GdkGC     *gc,
-			       GdkRegion *region,
-			       int        offset_x,
-			       int        offset_y,
-			       GdkRegion **old_clip_region)
+_gdk_gc_add_drawable_clip (GdkGC     *gc,
+			   guint32    region_tag,
+			   GdkRegion *region,
+			   int        offset_x,
+			   int        offset_y)
 {
   GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
-  GdkRegion *old_clip;
-  gboolean free;
 
-  old_clip = priv->clip_region;
+  g_assert (priv->old_clip_region == NULL);
+  
+  priv->region_tag_applied = region_tag;
+  priv->old_clip_region = priv->clip_region;
 
   region = gdk_region_copy (region);
-
   if (offset_x != 0 || offset_y != 0)
     gdk_region_offset (region, offset_x, offset_y);
   
   priv->clip_region = region;
-  if (old_clip)
-    gdk_region_intersect (region, old_clip);
+  if (priv->old_clip_region)
+    gdk_region_intersect (region, priv->old_clip_region);
 
-  if (old_clip_region)
-    *old_clip_region = old_clip;
-  else
-    gdk_region_destroy (old_clip);
-  
   _gdk_windowing_gc_set_clip_region (gc, priv->clip_region, FALSE);
-  
-  return old_clip;
+}
+
+void
+_gdk_gc_remove_drawable_clip (GdkGC *gc)
+{
+  GdkGCPrivate *priv = GDK_GC_GET_PRIVATE (gc);
+
+  if (priv->region_tag_applied)
+    {
+      _gdk_gc_set_clip_region_real (gc, priv->old_clip_region, FALSE);
+      priv->old_clip_region = NULL;
+      priv->region_tag_applied = 0;
+    }
 }
 
 /**
@@ -614,12 +643,14 @@ gdk_gc_set_clip_rectangle (GdkGC              *gc,
   
   g_return_if_fail (GDK_IS_GC (gc));
 
+  _gdk_gc_remove_drawable_clip (gc);
+  
   if (rectangle)
     region = gdk_region_rectangle (rectangle);
   else
     region = NULL;
 
-  _gdk_gc_set_clip_region_internal (gc, region, TRUE);
+  _gdk_gc_set_clip_region_real (gc, region, TRUE);
 }
 
 /**
@@ -639,12 +670,14 @@ gdk_gc_set_clip_region (GdkGC           *gc,
 
   g_return_if_fail (GDK_IS_GC (gc));
 
+  _gdk_gc_remove_drawable_clip (gc);
+  
   if (region)
     copy = gdk_region_copy (region);
   else
     copy = NULL;
 
-  _gdk_gc_set_clip_region_internal (gc, copy, TRUE);
+  _gdk_gc_set_clip_region_real (gc, copy, TRUE);
 }
 
 /**
@@ -945,6 +978,16 @@ gdk_gc_copy (GdkGC *dst_gc,
     dst_priv->clip_region = gdk_region_copy (src_priv->clip_region);
   else
     dst_priv->clip_region = NULL;
+
+  dst_priv->region_tag_applied = src_priv->region_tag_applied;
+  
+  if (dst_priv->old_clip_region)
+    gdk_region_destroy (dst_priv->old_clip_region);
+
+  if (src_priv->old_clip_region)
+    dst_priv->old_clip_region = gdk_region_copy (src_priv->old_clip_region);
+  else
+    dst_priv->old_clip_region = NULL;
   
   dst_priv->fill = src_priv->fill;
   

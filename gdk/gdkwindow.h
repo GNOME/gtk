@@ -328,6 +328,7 @@ struct _GdkWindowObject
 
   int abs_x, abs_y; /* Absolute offset in impl */
   gint width, height;
+  guint32 clip_tag;
   GdkRegion *clip_region; /* Clip region (wrt toplevel) in window coords */
   GdkRegion *clip_region_with_children; /* Clip region in window coords */
   GdkColormap *colormap;

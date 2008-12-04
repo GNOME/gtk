@@ -69,6 +69,7 @@ struct _GdkWindowPaint
   gint y_offset;
   cairo_surface_t *surface;
   guint uses_implicit : 1;
+  guint32 region_tag;
 };
 
 /* Global info */
@@ -233,6 +234,14 @@ static void recompute_visible_regions (GdkWindowObject *private,
 static gpointer parent_class = NULL;
 
 static const cairo_user_data_key_t gdk_window_cairo_key;
+
+static guint32
+new_region_tag (void)
+{
+  static guint32 tag = 0;
+
+  return ++tag;
+}
 
 GType
 gdk_window_object_get_type (void)
@@ -509,6 +518,7 @@ recompute_visible_regions_internal (GdkWindowObject *private,
       if (private->clip_region)
 	gdk_region_destroy (private->clip_region);
       private->clip_region = new_clip;
+      private->clip_tag = new_region_tag ();
 
       private->clip_region_with_children = gdk_region_copy (private->clip_region);
       remove_child_area (private, NULL, private->clip_region_with_children);
@@ -1925,17 +1935,19 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   implicit_paint = impl_window->implicit_paint;
 
   paint = g_new (GdkWindowPaint, 1);
+  paint->region = gdk_region_copy (region);
+  paint->region_tag = new_region_tag ();
+      
   if (implicit_paint)
     {
       int width, height;
-
+      
       paint->uses_implicit = TRUE;
       paint->pixmap = g_object_ref (implicit_paint->pixmap);
       paint->x_offset = -private->abs_x + implicit_paint->x_offset;
       paint->y_offset = -private->abs_y + implicit_paint->y_offset;
-      paint->region = gdk_region_copy (region);
       gdk_region_intersect (paint->region, private->clip_region_with_children);
-
+      
       /* It would be nice if we had some cairo support here so we
 	 could set the clip rect on the cairo surface */
       width = private->abs_x + private->width;
@@ -1943,9 +1955,6 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       
       paint->surface = _gdk_windowing_create_cairo_surface (((GdkPixmapObject *)paint->pixmap)->impl,
 							    width, height);
-      if (paint->surface)
-	cairo_surface_set_device_offset (paint->surface,
-					 - paint->x_offset, - paint->y_offset);
 
       /* Mark the region as valid on the implicit paint */
       gdk_region_offset (paint->region, private->abs_x, private->abs_y); 
@@ -1955,19 +1964,18 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   else
     {
       paint->uses_implicit = FALSE;
-      paint->region = gdk_region_copy (region);
       paint->x_offset = clip_box.x;
       paint->y_offset = clip_box.y;
       paint->pixmap =
 	gdk_pixmap_new (window,
 			MAX (clip_box.width, 1), MAX (clip_box.height, 1), -1);
-
       paint->surface = _gdk_drawable_ref_cairo_surface (paint->pixmap);
-      cairo_surface_set_device_offset (paint->surface,
-				       - paint->x_offset, - paint->y_offset);
     }
+ 
+  if (paint->surface)
+    cairo_surface_set_device_offset (paint->surface,
+				     -paint->x_offset, -paint->y_offset);
   
-      
   for (list = private->paint_stack; list != NULL; list = list->next)
     {
       GdkWindowPaint *tmp_paint = list->data;
@@ -2264,8 +2272,7 @@ gdk_window_get_internal_paint_info (GdkWindow    *window,
 static void
 setup_clip_for_draw (GdkDrawable *drawable,
 		     GdkGC *gc,
-		     int old_clip_x, int old_clip_y,
-		     GdkRegion **old_clip_region)
+		     int old_clip_x, int old_clip_y)
 {
   GdkWindowObject *private = (GdkWindowObject *)drawable;
   GdkRegion *clip;
@@ -2275,27 +2282,27 @@ setup_clip_for_draw (GdkDrawable *drawable,
   else
     clip = private->clip_region;
     
-  _gdk_gc_intersect_clip_region (gc, clip,
-				 /* If there was a clip origin set appart from the
-				  * window offset, need to take that into consideration */
-				 -old_clip_x, -old_clip_y,
-				 old_clip_region);
+  _gdk_gc_add_drawable_clip (gc,
+			     private->clip_tag,
+			     clip,
+			     /* If there was a clip origin set appart from the
+			      * window offset, need to take that into consideration */
+			     -old_clip_x, -old_clip_y);
 }
 
 static void
 setup_clip_for_paint (GdkDrawable *drawable,
 		      GdkWindowPaint *paint,
 		      GdkGC *gc,
-		      int old_clip_x, int old_clip_y,
-		      GdkRegion **old_clip_region)
+		      int old_clip_x, int old_clip_y)
 {
-  _gdk_gc_intersect_clip_region (gc,
-				 /* This includes the window clip */
-				 paint->region,
-				 /* If there was a clip origin set appart from the
-				  * window offset, need to take that into consideration */
-				 -old_clip_x, -old_clip_y,
-				 old_clip_region);
+  _gdk_gc_add_drawable_clip (gc,
+			     paint->region_tag,
+			     /* This includes the window clip */
+			     paint->region,
+			     /* If there was a clip origin set appart from the
+			      * window offset, need to take that into consideration */
+			     -old_clip_x, -old_clip_y);
 }
 
 
@@ -2322,23 +2329,21 @@ setup_clip_for_paint (GdkDrawable *drawable,
      }
 
 #define SETUP_PAINT_GC_CLIP(gc)                             \
-      GdkRegion *old_clip_region;                           \
       if (paint->uses_implicit)        			    \
 	setup_clip_for_paint (drawable, paint, gc, old_clip_x,	\
-                              old_clip_y, &old_clip_region);
+                              old_clip_y);
 
 #define RESTORE_PAINT_GC_CLIP(gc)                          \
       if (paint->uses_implicit)    			   \
-        _gdk_gc_set_clip_region_internal (gc, old_clip_region, FALSE);
+        _gdk_gc_remove_drawable_clip (gc);
 
 
 #define SETUP_DIRECT_GC_CLIP(gc)                            \
-      GdkRegion *old_clip_region;                           \
       gdk_window_flush_implicit_paint ((GdkWindow *)drawable);\
-      setup_clip_for_draw (drawable, gc, old_clip_x, old_clip_y, &old_clip_region);
+      setup_clip_for_draw (drawable, gc, old_clip_x, old_clip_y);
 
 #define RESTORE_DIRECT_GC_CLIP(gc)                                 \
-      _gdk_gc_set_clip_region_internal (gc, old_clip_region, FALSE);
+      _gdk_gc_remove_drawable_clip (gc);
 
 static GdkGC *
 gdk_window_create_gc (GdkDrawable     *drawable,

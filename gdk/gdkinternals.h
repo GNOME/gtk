@@ -293,11 +293,12 @@ GdkPixmap *_gdk_gc_get_tile        (GdkGC *gc);
 GdkBitmap *_gdk_gc_get_stipple     (GdkGC *gc);
 guint32    _gdk_gc_get_fg_pixel    (GdkGC *gc);
 guint32    _gdk_gc_get_bg_pixel    (GdkGC *gc);
-void      _gdk_gc_intersect_clip_region     (GdkGC     *gc,
-					     GdkRegion *region,
-					     int        offset_x,
-					     int        offset_y,
-					     GdkRegion **old_region);
+void      _gdk_gc_add_drawable_clip     (GdkGC     *gc,
+					 guint32    region_tag,
+					 GdkRegion *region,
+					 int        offset_x,
+					 int        offset_y);
+void      _gdk_gc_remove_drawable_clip  (GdkGC     *gc);
 void       _gdk_gc_set_clip_region_internal (GdkGC     *gc,
 					     GdkRegion *region,
 					     gboolean reset_origin);
