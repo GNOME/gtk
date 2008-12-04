@@ -522,6 +522,7 @@ gdk_window_real_window_get_pointer (GdkDisplay       *display,
   GdkWindowObject *private;
   GdkWindow *pointer_window;
   gint tmpx, tmpy;
+  GdkModifierType tmp_mask;
 
   private = (GdkWindowObject *) window;
 
@@ -546,7 +547,7 @@ gdk_window_real_window_get_pointer (GdkDisplay       *display,
       _gdk_windowing_window_get_pointer (display,
 					 pointer_window,
 					 &tmpx, &tmpy,
-					 NULL);
+					 &tmp_mask);
       /* Then convert that to a client side window */
       pointer_window = _gdk_window_find_descendant_at (pointer_window,
 						       tmpx, tmpy, 
