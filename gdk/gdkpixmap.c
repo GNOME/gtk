@@ -237,7 +237,10 @@ gdk_pixmap_new (GdkDrawable *drawable,
 {
   GdkDrawable *source_drawable;
 
-  source_drawable = _gdk_drawable_get_source_drawable (drawable);
+  if (drawable)
+    source_drawable = _gdk_drawable_get_source_drawable (drawable);
+  else
+    source_drawable = NULL;
   return _gdk_pixmap_new (source_drawable, width, height, depth);
 }
 
