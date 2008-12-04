@@ -868,6 +868,24 @@ set_user_time (GdkWindow *window,
 }
 
 static gboolean
+is_parent_of (GdkWindow *parent,
+              GdkWindow *child)
+{
+  GdkWindow *w;
+
+  w = child;
+  while (w != NULL)
+    {
+      if (w == parent)
+	return TRUE;
+
+      w = gdk_window_get_parent (w);
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gdk_event_translate (GdkDisplay *display,
 		     GdkEvent   *event,
 		     XEvent     *xevent,
@@ -941,10 +959,20 @@ gdk_event_translate (GdkDisplay *display,
     
   if (window != NULL)
     {
-      /* Rewrite keyboard grabs to offscreen windows */
-      if ((xevent->type == KeyPress || xevent->type == KeyRelease) &&
-          window_private == display_x11->keyboard_xgrab_native_window)
+      /* Apply keyboard grabs to non-native windows */
+      if (/* Is key event */
+	  (xevent->type == KeyPress || xevent->type == KeyRelease) &&
+	  /* And we have a grab */
+	  display_x11->keyboard_xgrab_window != NULL &&
+	  (
+	   /* The window is not a descendant of the grabbed window */
+	   !is_parent_of (display_x11->keyboard_xgrab_window, window) ||
+	   /* Or owner event is false */
+	   !display_x11->keyboard_xgrab_owner_events
+	   )
+	  )
         {
+	  /* Report key event against grab window */
           window_private = display_x11->keyboard_xgrab_window;
           window = (GdkWindow *) window_private;
         }

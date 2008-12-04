@@ -206,6 +206,10 @@ gdk_pointer_grab (GdkWindow *	  window,
 
   native = gdk_window_get_toplevel (window);
 
+  /* TODO: What do we do for offscreens and  children? We need to proxy the grab somehow */
+  if (!GDK_IS_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (native)->impl))
+    return GDK_GRAB_SUCCESS;
+  
   if (confine_to)
     confine_to = _gdk_window_get_impl_window (confine_to);
 
@@ -310,13 +314,15 @@ gdk_keyboard_grab (GdkWindow *	   window,
   GdkDisplayX11 *display_x11;
   GdkWindow *native;
 
-  if (1) return 0; /* TODO: fix */
-  
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
-  native = _gdk_window_get_impl_window (window);
+  native = gdk_window_get_toplevel (window);
 
+  /* TODO: What do we do for offscreens and  children? We need to proxy the grab somehow */
+  if (!GDK_IS_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (native)->impl))
+    return GDK_GRAB_SUCCESS;
+  
   display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (native));
 
   serial = NextRequest (GDK_WINDOW_XDISPLAY (native));
