@@ -6837,6 +6837,7 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
   GdkWindow *a;
   GdkWindow *b;
   GdkWindow *event_win;
+  GdkWindowObject *toplevel;
 
   /* TODO: Don't send events to toplevel, as we get those from the windowing system */
   
@@ -6844,12 +6845,14 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
   b = dest;
   if (a == b)
     return; /* No crossings generated between src and dest */
-  
+
   c = find_common_ancestor (a, b);
   non_linear = (c != a) && (c != b);
 
   if (a) /* There might not be a source (i.e. if no previous pointer_in_window) */
     {
+      toplevel = (GdkWindowObject *)gdk_window_get_toplevel (a);
+      
       /* Traverse up from a to (excluding) c sending leave events */
 
       event_win = get_target_window_for_pointer_event (display, a, GDK_LEAVE_NOTIFY, mask);
@@ -6861,8 +6864,8 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 	  convert_toplevel_coords_to_window (event_win,
 					     toplevel_x, toplevel_y,
 					     &event->crossing.x, &event->crossing.y);
-	  event->crossing.x_root = toplevel_x;
-	  event->crossing.y_root = toplevel_y;
+	  event->crossing.x_root = toplevel_x + toplevel->x;
+	  event->crossing.y_root = toplevel_y + toplevel->y;
 	  event->crossing.mode = mode;
 	  if (non_linear)
 	    event->crossing.detail = GDK_NOTIFY_NONLINEAR;
@@ -6889,8 +6892,8 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 		  convert_toplevel_coords_to_window (event_win,
 						     toplevel_x, toplevel_y,
 						     &event->crossing.x, &event->crossing.y);
-		  event->crossing.x_root = toplevel_x;
-		  event->crossing.y_root = toplevel_y;
+		  event->crossing.x_root = toplevel_x + toplevel->x;
+		  event->crossing.y_root = toplevel_y + toplevel->y;
 		  event->crossing.mode = mode;
 		  if (non_linear)
 		    event->crossing.detail = GDK_NOTIFY_NONLINEAR_VIRTUAL;
@@ -6907,6 +6910,8 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 
   if (b) /* Might not be a dest, e.g. if we're moving out of the window */
     {
+      toplevel = (GdkWindowObject *)gdk_window_get_toplevel (b);
+      
       /* Traverse down from c to b */
       if (c != b)
 	{
@@ -6937,8 +6942,8 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 		  convert_toplevel_coords_to_window (event_win,
 						     toplevel_x, toplevel_y,
 						     &event->crossing.x, &event->crossing.y);
-		  event->crossing.x_root = toplevel_x;
-		  event->crossing.y_root = toplevel_y;
+		  event->crossing.x_root = toplevel_x + toplevel->x;
+		  event->crossing.y_root = toplevel_y + toplevel->y;
 		  event->crossing.mode = mode;
 		  if (non_linear)
 		    event->crossing.detail = GDK_NOTIFY_NONLINEAR_VIRTUAL;
@@ -6960,8 +6965,8 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 	  convert_toplevel_coords_to_window (event_win,
 					     toplevel_x, toplevel_y,
 					     &event->crossing.x, &event->crossing.y);
-	  event->crossing.x_root = toplevel_x;
-	  event->crossing.y_root = toplevel_y;
+	  event->crossing.x_root = toplevel_x + toplevel->x;
+	  event->crossing.y_root = toplevel_y + toplevel->y;
 	  event->crossing.mode = mode;
 	  if (non_linear)
 	    event->crossing.detail = GDK_NOTIFY_NONLINEAR;
@@ -7136,8 +7141,8 @@ proxy_pointer_event (GdkDisplay                 *display,
 	  convert_toplevel_coords_to_window (event_win,
 					     toplevel_x, toplevel_y,
 					     &event->motion.x, &event->motion.y);
-	  event->motion.x_root = toplevel_x; /* TODO: right? */
-	  event->motion.y_root = toplevel_y;
+	  event->motion.x_root = source_event->motion.x_root;
+	  event->motion.y_root = source_event->motion.y_root;;
 	  event->motion.state = state;
 	  event->motion.is_hint = FALSE;
 	  event->motion.device = NULL;
@@ -7214,8 +7219,8 @@ proxy_button_event (GdkWindow                  *pointer_window,
 	  convert_toplevel_coords_to_window (event_win,
 					     toplevel_x, toplevel_y,
 					     &event->button.x, &event->button.y);
-          event->button.x_root = toplevel_x;
-          event->button.y_root = toplevel_y;
+          event->button.x_root = source_event->button.x_root;
+          event->button.y_root = source_event->button.y_root;
           event->button.state = state;
           event->button.device = source_event->button.device;
 
@@ -7228,8 +7233,8 @@ proxy_button_event (GdkWindow                  *pointer_window,
 	  convert_toplevel_coords_to_window (event_win,
 					     toplevel_x, toplevel_y,
 					     &event->scroll.x, &event->scroll.y);
-          event->scroll.x_root = toplevel_x;
-          event->scroll.y_root = toplevel_y;
+          event->scroll.x_root = source_event->scroll.x_root;
+          event->scroll.y_root = source_event->scroll.y_root;
           event->scroll.state = state;
           event->scroll.device = source_event->scroll.device;
           return TRUE;
