@@ -204,7 +204,7 @@ gdk_pointer_grab (GdkWindow *	  window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
 
-  native = _gdk_window_get_impl_window (window);
+  native = gdk_window_get_toplevel (window);
 
   if (confine_to)
     confine_to = _gdk_window_get_impl_window (confine_to);
