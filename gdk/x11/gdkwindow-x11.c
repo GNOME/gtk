@@ -5758,13 +5758,17 @@ gdk_window_enable_synchronized_configure (GdkWindow *window)
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplX11 *impl;
 
-  if (!WINDOW_IS_TOPLEVEL (window))
+  if (!GDK_IS_WINDOW_IMPL_X11 (private->impl))
     return;
-
+  
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
 	  
   if (!impl->use_synchronized_configure)
     {
+      /* This basically means you want to do fancy X specific stuff, so
+	 ensure we have a native window */
+      gdk_window_set_has_native (window, TRUE);
+  
       impl->use_synchronized_configure = TRUE;
       ensure_sync_counter (window);
     }
