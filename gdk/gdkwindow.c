@@ -1047,7 +1047,7 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
       visual = gdk_drawable_get_visual (window);
 
       old_impl = private->impl;
-      _gdk_window_impl_new (window, private->parent, screen, visual, GDK_EXPOSURE_MASK, NULL, 0);
+      _gdk_window_impl_new (window, (GdkWindow *)private->parent, screen, visual, GDK_EXPOSURE_MASK, NULL, 0);
       new_impl = private->impl;
       
       private->impl = old_impl;
@@ -7252,8 +7252,21 @@ _gdk_windowing_got_event (GdkDisplay *display,
 	is_motion_type (event->type)))
     return;
 
-  /* We should only get these events on toplevel windows */
-  g_assert (GDK_WINDOW_TYPE (event_private->parent) == GDK_WINDOW_ROOT);
+  if (GDK_WINDOW_TYPE (event_private->parent) != GDK_WINDOW_ROOT)
+    {
+      GEnumValue *event_type_value, *window_type_value;
+      
+      event_type_value = g_enum_get_value ((GEnumClass *) g_type_class_ref (GDK_TYPE_EVENT_TYPE),
+					   event->type);
+      window_type_value = g_enum_get_value ((GEnumClass *) g_type_class_ref (GDK_TYPE_WINDOW_TYPE),
+					    event_private->window_type);
+      
+     /* We should only get these events on toplevel windows */
+      g_warning ("got unexpected event of type %s on non-toplevel window (type %s)",
+		 event_type_value->value_name,
+		 window_type_value->value_name);
+      return;
+    }
   
   gdk_event_get_coords (event, &x, &y);
   pointer_window = _gdk_window_find_descendant_at (event_window, x, y,
