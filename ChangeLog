@@ -1,3 +1,15 @@
+2008-12-05  Michael Natterer  <mitch@imendio.com>
+
+	Bug 546285 – Allow GtkEntry to draw progress
+
+	* gtk/gtkentry.[ch]: add new API similar to GtkProgressBar which
+	allows to set the entry's progress_fraction, its progress_pulse_step
+	and to let the entry's progress pulse.
+
+	* gtk/gtk.symbols: updated.
+
+	* tests/testgtk.c: add progress demo code to the "Entry" window.
+
 2008-12-04  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gtk/gtkstatusicon.c:

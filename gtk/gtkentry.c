@@ -26,6 +26,8 @@
  */
 
 #include "config.h"
+
+#include <math.h>
 #include <string.h>
 
 #include "gdk/gdkkeysyms.h"
@@ -86,14 +88,20 @@ struct _GtkEntryPrivate
   gfloat xalign;
   gint insert_pos;
   guint blink_time;  /* time in msec the cursor has blinked since last user event */
-  guint interior_focus : 1;
-  guint real_changed   : 1;
-  guint invisible_char_set : 1;
-  guint caps_lock_warning : 1;
-  guint change_count   : 8;
+  guint interior_focus          : 1;
+  guint real_changed            : 1;
+  guint invisible_char_set      : 1;
+  guint caps_lock_warning       : 1;
+  guint change_count            : 8;
+  guint progress_pulse_mode     : 1;
+  guint progress_pulse_way_back : 1;
 
   gint focus_width;
   GtkShadowType shadow_type;
+
+  gdouble progress_fraction;
+  gdouble progress_pulse_fraction;
+  gdouble progress_pulse_current;
 };
 
 typedef struct _GtkEntryPasswordHint GtkEntryPasswordHint;
@@ -149,7 +157,9 @@ enum {
   PROP_OVERWRITE_MODE,
   PROP_TEXT_LENGTH,
   PROP_INVISIBLE_CHAR_SET,
-  PROP_CAPS_LOCK_WARNING
+  PROP_CAPS_LOCK_WARNING,
+  PROP_PROGRESS_FRACTION,
+  PROP_PROGRESS_PULSE_STEP
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -184,6 +194,8 @@ static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
 static void   gtk_entry_draw_frame           (GtkWidget        *widget,
                                               GdkRectangle     *area);
+static void   gtk_entry_draw_progress        (GtkWidget        *widget,
+                                              GdkEventExpose   *event);
 static gint   gtk_entry_expose               (GtkWidget        *widget,
 					      GdkEventExpose   *event);
 static gint   gtk_entry_button_press         (GtkWidget        *widget,
@@ -668,6 +680,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          P_("Whether new text overwrites existing text"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
+
   /**
    * GtkEntry:text-length:
    *
@@ -699,8 +712,6 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
-
-
   /**
    * GtkEntry:caps-lock-warning
    *
@@ -717,7 +728,41 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
 
- 
+  /**
+   * GtkEntry:progress-fraction:
+   *
+   * The current fraction of the task that's been completed.
+   *
+   * Since: 2.16
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_PROGRESS_FRACTION,
+                                   g_param_spec_double ("progress-fraction",
+                                                        P_("Progress Fraction"),
+                                                        P_("The current fraction of the task that's been completed"),
+                                                        0.0,
+                                                        1.0,
+                                                        0.0,
+                                                        GTK_PARAM_READWRITE));
+
+  /**
+   * GtkEntry:progress-pulse-step:
+   *
+   * The fraction of total entry width to move the progress
+   * bouncing block for each call to gtk_entry_progress_pulse().
+   *
+   * Since: 2.16
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_PROGRESS_PULSE_STEP,
+                                   g_param_spec_double ("progress-pulse-step",
+                                                        P_("Progress Pulse Step"),
+                                                        P_("The fraction of total entry width to move the progress bouncing block for each call to gtk_entry_progress_pulse()"),
+                                                        0.0,
+                                                        1.0,
+                                                        0.1,
+                                                        GTK_PARAM_READWRITE));
+
   signals[POPULATE_POPUP] =
     g_signal_new (I_("populate-popup"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -1142,6 +1187,14 @@ gtk_entry_set_property (GObject         *object,
       priv->caps_lock_warning = g_value_get_boolean (value);
       break;
 
+    case PROP_PROGRESS_FRACTION:
+      gtk_entry_set_progress_fraction (entry, g_value_get_double (value));
+      break;
+
+    case PROP_PROGRESS_PULSE_STEP:
+      gtk_entry_set_progress_pulse_step (entry, g_value_get_double (value));
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -1218,6 +1271,13 @@ gtk_entry_get_property (GObject         *object,
     case PROP_CAPS_LOCK_WARNING:
       g_value_set_boolean (value, priv->caps_lock_warning);
       break;
+    case PROP_PROGRESS_FRACTION:
+      g_value_set_double (value, priv->progress_fraction);
+      break;
+    case PROP_PROGRESS_PULSE_STEP:
+      g_value_set_double (value, priv->progress_pulse_fraction);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1289,6 +1349,8 @@ gtk_entry_init (GtkEntry *entry)
   priv->shadow_type = GTK_SHADOW_IN;
   priv->xalign = 0.0;
   priv->caps_lock_warning = TRUE;
+  priv->progress_fraction = 0.0;
+  priv->progress_pulse_fraction = 0.1;
 
   gtk_drag_dest_set (GTK_WIDGET (entry),
                      GTK_DEST_DEFAULT_HIGHLIGHT,
@@ -1784,6 +1846,52 @@ gtk_entry_draw_frame (GtkWidget    *widget,
     }
 }
 
+static void
+gtk_entry_draw_progress (GtkWidget      *widget,
+                         GdkEventExpose *event)
+{
+  GtkEntryPrivate *private = GTK_ENTRY_GET_PRIVATE (widget);
+  GtkEntry *entry = GTK_ENTRY (widget);
+
+  if (private->progress_pulse_mode)
+    {
+      gdouble value = private->progress_pulse_current;
+      gint    area_width, area_height;
+
+      gdk_drawable_get_size (entry->text_area, &area_width, &area_height);
+
+      gtk_paint_box (widget->style, entry->text_area,
+                     GTK_STATE_SELECTED, GTK_SHADOW_OUT,
+                     &event->area, widget, "entry-progress",
+                     value * area_width, 0,
+                     private->progress_pulse_fraction * area_width, area_height);
+    }
+  else if (private->progress_fraction > 0)
+    {
+      gdouble value = private->progress_fraction;
+      gint    area_width, area_height;
+
+      gdk_drawable_get_size (entry->text_area, &area_width, &area_height);
+
+      if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+        {
+          gtk_paint_box (widget->style, entry->text_area,
+                         GTK_STATE_SELECTED, GTK_SHADOW_OUT,
+                         &event->area, widget, "entry-progress",
+                         area_width - value * area_width, 0,
+                         value * area_width, area_height);
+        }
+      else
+        {
+          gtk_paint_box (widget->style, entry->text_area,
+                         GTK_STATE_SELECTED, GTK_SHADOW_OUT,
+                         &event->area, widget, "entry-progress",
+                         0, 0,
+                         value * area_width, area_height);
+        }
+    }
+}
+
 static gint
 gtk_entry_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
@@ -1810,6 +1918,8 @@ gtk_entry_expose (GtkWidget      *widget,
 			  state, GTK_SHADOW_NONE,
 			  &event->area, widget, "entry_bg",
 			  0, 0, area_width, area_height);
+
+      gtk_entry_draw_progress (widget, event);
 
       if (entry->dnd_position != -1)
 	gtk_entry_draw_cursor (GTK_ENTRY (widget), CURSOR_DND);
@@ -6628,6 +6738,179 @@ gtk_entry_get_cursor_hadjustment (GtkEntry *entry)
   return g_object_get_qdata (G_OBJECT (entry), quark_cursor_hadjustment);
 }
 
+/**
+ * gtk_entry_set_progress_fraction:
+ * @entry: a #GtkEntry
+ * @fraction: fraction of the task that's been completed
+ *
+ * Causes the entry's progress indicator to "fill in" the given
+ * fraction of the bar. The fraction should be between 0.0 and 1.0,
+ * inclusive.
+ *
+ * Since: 2.16
+ */
+void
+gtk_entry_set_progress_fraction (GtkEntry *entry,
+                                 gdouble   fraction)
+{
+  GtkEntryPrivate *private;
+  gdouble          old_fraction;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  private = GTK_ENTRY_GET_PRIVATE (entry);
+
+  if (private->progress_pulse_mode)
+    old_fraction = -1;
+  else
+    old_fraction = private->progress_fraction;
+
+  fraction = CLAMP (fraction, 0.0, 1.0);
+
+  private->progress_fraction = fraction;
+  private->progress_pulse_mode = FALSE;
+  private->progress_pulse_current = 0.0;
+
+  if (fabs (fraction - old_fraction) > 0.0001)
+    gtk_entry_queue_draw (entry);
+
+  if (fraction != old_fraction)
+    g_object_notify (G_OBJECT (entry), "progress-fraction");
+}
+
+/**
+ * gtk_entry_get_progress_fraction:
+ * @entry: a #GtkEntry
+ *
+ * Returns the current fraction of the task that's been completed.
+ * See gtk_entry_set_progress_fraction().
+ *
+ * Return value: a fraction from 0.0 to 1.0
+ *
+ * Since: 2.16
+ */
+gdouble
+gtk_entry_get_progress_fraction (GtkEntry *entry)
+{
+  GtkEntryPrivate *private;
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0.0);
+
+  private = GTK_ENTRY_GET_PRIVATE (entry);
+
+  return private->progress_fraction;
+}
+
+/**
+ * gtk_entry_set_progress_pulse_step:
+ * @entry: a #GtkEntry
+ * @fraction: fraction between 0.0 and 1.0
+ *
+ * Sets the fraction of total entry width to move the progress
+ * bouncing block for each call to gtk_entry_progress_pulse().
+ *
+ * Since: 2.16
+ */
+void
+gtk_entry_set_progress_pulse_step (GtkEntry *entry,
+                                   gdouble   fraction)
+{
+  GtkEntryPrivate *private;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  private = GTK_ENTRY_GET_PRIVATE (entry);
+
+  fraction = CLAMP (fraction, 0.0, 1.0);
+
+  if (fraction != private->progress_pulse_fraction)
+    {
+      private->progress_pulse_fraction = fraction;
+
+      gtk_entry_queue_draw (entry);
+
+      g_object_notify (G_OBJECT (entry), "progress-pulse-step");
+    }
+}
+
+/**
+ * gtk_entry_get_progress_pulse_step:
+ * @entry: a #GtkEntry
+ *
+ * Retrieves the pulse step set with gtk_entry_set_progress_pulse_step().
+ *
+ * Return value: a fraction from 0.0 to 1.0
+ *
+ * Since: 2.16
+ */
+gdouble
+gtk_entry_get_progress_pulse_step (GtkEntry *entry)
+{
+  GtkEntryPrivate *private;
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0.0);
+
+  private = GTK_ENTRY_GET_PRIVATE (entry);
+
+  return private->progress_pulse_fraction;
+}
+
+/**
+ * gtk_entry_progress_pulse:
+ * @entry: a #GtkEntry
+ *
+ * Indicates that some progress is made, but you don't know how much.
+ * Causes the entry's progress indicator to enter "activity mode,"
+ * where a block bounces back and forth. Each call to
+ * gtk_entry_progress_pulse() causes the block to move by a little bit
+ * (the amount of movement per pulse is determined by
+ * gtk_entry_set_progress_pulse_step()).
+ *
+ * Since: 2.16
+ */
+void
+gtk_entry_progress_pulse (GtkEntry *entry)
+{
+  GtkEntryPrivate *private;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  private = GTK_ENTRY_GET_PRIVATE (entry);
+
+  if (private->progress_pulse_mode)
+    {
+      if (private->progress_pulse_way_back)
+        {
+          private->progress_pulse_current -= private->progress_pulse_fraction;
+
+          if (private->progress_pulse_current < 0.0)
+            {
+              private->progress_pulse_current = 0.0;
+              private->progress_pulse_way_back = FALSE;
+            }
+        }
+      else
+        {
+          private->progress_pulse_current += private->progress_pulse_fraction;
+
+          if (private->progress_pulse_current > 1.0 - private->progress_pulse_fraction)
+            {
+              private->progress_pulse_current = 1.0 - private->progress_pulse_fraction;
+              private->progress_pulse_way_back = TRUE;
+            }
+        }
+    }
+  else
+    {
+      private->progress_fraction = 0.0;
+      private->progress_pulse_mode = TRUE;
+      private->progress_pulse_way_back = FALSE;
+      private->progress_pulse_current = 0.0;
+    }
+
+  gtk_entry_queue_draw (entry);
+}
+
 /* Caps Lock warning for password entries */
 
 static void
@@ -6792,7 +7075,6 @@ keymap_state_changed (GdkKeymap *keymap,
   else
     remove_capslock_feedback (entry);
 }
-
 
 #define __GTK_ENTRY_C__
 #include "gtkaliasdef.c"

@@ -5193,6 +5193,65 @@ entry_toggle_sensitive (GtkWidget *checkbutton,
    gtk_widget_set_sensitive (entry, GTK_TOGGLE_BUTTON(checkbutton)->active);
 }
 
+static gboolean
+entry_progress_timeout (gpointer data)
+{
+  if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (data), "progress-pulse")))
+    {
+      gtk_entry_progress_pulse (GTK_ENTRY (data));
+    }
+  else
+    {
+      gdouble fraction;
+
+      fraction = gtk_entry_get_progress_fraction (GTK_ENTRY (data));
+
+      fraction += 0.05;
+      if (fraction > 1.0001)
+        fraction = 0.0;
+
+      gtk_entry_set_progress_fraction (GTK_ENTRY (data), fraction);
+    }
+
+  return TRUE;
+}
+
+static void
+entry_remove_timeout (gpointer data)
+{
+  g_source_remove (GPOINTER_TO_UINT (data));
+}
+
+static void
+entry_toggle_progress (GtkWidget *checkbutton,
+                       GtkWidget *entry)
+{
+  if (GTK_TOGGLE_BUTTON (checkbutton)->active)
+    {
+      guint timeout = gdk_threads_add_timeout (100,
+                                               entry_progress_timeout,
+                                               entry);
+      g_object_set_data_full (G_OBJECT (entry), "timeout-id",
+                              GUINT_TO_POINTER (timeout),
+                              entry_remove_timeout);
+    }
+  else
+    {
+      g_object_set_data (G_OBJECT (entry), "timeout-id",
+                         GUINT_TO_POINTER (0));
+
+      gtk_entry_set_progress_fraction (GTK_ENTRY (entry), 0.0);
+    }
+}
+
+static void
+entry_toggle_pulse (GtkWidget *checkbutton,
+                    GtkWidget *entry)
+{
+  g_object_set_data (G_OBJECT (entry), "progress-pulse",
+                     GINT_TO_POINTER (GTK_TOGGLE_BUTTON (checkbutton)->active));
+}
+
 static void
 entry_props_clicked (GtkWidget *button,
 		     GObject   *entry)
@@ -5211,6 +5270,7 @@ create_entry (GtkWidget *widget)
   GtkWidget *hbox;
   GtkWidget *has_frame_check;
   GtkWidget *sensitive_check;
+  GtkWidget *progress_check;
   GtkWidget *entry, *cb;
   GtkWidget *button;
   GtkWidget *separator;
@@ -5281,7 +5341,17 @@ create_entry (GtkWidget *widget)
       g_signal_connect (has_frame_check, "toggled",
 			G_CALLBACK (entry_toggle_frame), entry);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (has_frame_check), TRUE);
-      
+
+      progress_check = gtk_check_button_new_with_label("Show Progress");
+      gtk_box_pack_start (GTK_BOX (box2), progress_check, FALSE, TRUE, 0);
+      g_signal_connect (progress_check, "toggled",
+			G_CALLBACK (entry_toggle_progress), entry);
+
+      progress_check = gtk_check_button_new_with_label("Pulse Progress");
+      gtk_box_pack_start (GTK_BOX (box2), progress_check, FALSE, TRUE, 0);
+      g_signal_connect (progress_check, "toggled",
+			G_CALLBACK (entry_toggle_pulse), entry);
+
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 

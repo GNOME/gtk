@@ -212,6 +212,18 @@ void           gtk_entry_set_cursor_hadjustment (GtkEntry      *entry,
                                                  GtkAdjustment *adjustment);
 GtkAdjustment* gtk_entry_get_cursor_hadjustment (GtkEntry      *entry);
 
+/* Progress API
+ */
+void           gtk_entry_set_progress_fraction   (GtkEntry     *entry,
+                                                  gdouble       fraction);
+gdouble        gtk_entry_get_progress_fraction   (GtkEntry     *entry);
+
+void           gtk_entry_set_progress_pulse_step (GtkEntry     *entry,
+                                                  gdouble       fraction);
+gdouble        gtk_entry_get_progress_pulse_step (GtkEntry     *entry);
+
+void           gtk_entry_progress_pulse          (GtkEntry     *entry);
+
 /* Deprecated compatibility functions
  */
 
