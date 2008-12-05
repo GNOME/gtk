@@ -623,7 +623,7 @@ gdk_draw_drawable (GdkDrawable *drawable,
 		   gint         width,
 		   gint         height)
 {
-  GdkDrawable *composite;
+  GdkDrawable *composite, *composite_impl;
   gint composite_x_offset = 0;
   gint composite_y_offset = 0;
 
@@ -652,10 +652,21 @@ gdk_draw_drawable (GdkDrawable *drawable,
                                                           &composite_x_offset,
                                                           &composite_y_offset);
 
+  /* The draw_drawable call below is will recurse into gdk_draw_drawable again,
+   * specifying the right impl for the destination. This means the composite
+   * we got here will be fed to get_composite_drawable again, which is a problem
+   * for window as that causes double the composite offset. Avoid this by passing
+   * in the impl directly.
+   */
+  if (GDK_IS_WINDOW (composite))
+    composite_impl = GDK_WINDOW_OBJECT (src)->impl;
+  else
+    composite_impl = composite;
+  
   /* TODO: For non-native windows this may copy stuff from other overlapping
      windows. We should clip that and clear that area in the destination instead. */
   
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc, composite,
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc, composite_impl,
                                                     xsrc - composite_x_offset,
                                                     ysrc - composite_y_offset,
                                                     xdest, ydest,

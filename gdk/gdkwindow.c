@@ -2764,13 +2764,6 @@ gdk_window_draw_drawable (GdkDrawable *drawable,
   if (GDK_WINDOW_DESTROYED (drawable))
     return;
 
-  /* By this time the src has been gotten via get_composite_drawable.
-     If it is a window this implies lots of stuff that we don't want
-     to do again in the call below. So, we use the impl as the source to
-     avoid this. */
-  if (GDK_IS_WINDOW (src))
-    src = GDK_WINDOW_OBJECT (src)->impl;
-  
   /* If we have a backing pixmap draw to that */
   if (private->paint_stack)
     {
