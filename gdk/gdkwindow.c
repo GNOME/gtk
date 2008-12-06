@@ -385,7 +385,7 @@ gdk_window_is_offscreen (GdkWindowObject *window)
 static GdkWindowObject *
 gdk_window_get_impl_window (GdkWindowObject *window)
 {
-  while (window->parent->impl == window->impl)
+  while (window->parent != NULL && window->parent->impl == window->impl)
     window = window->parent;
 
   return window;
