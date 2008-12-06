@@ -1,3 +1,7 @@
+2008-12-06  Ilkka Tuohela <hile@iki.fi>
+
+	* fi.po: Updated Finnish translation.
+
 2008-10-30  Tor Lillqvist  <tml@novell.com>
 
 	* ast.po: Remove fuzzy marker from header and use charset=UTF-8 to
