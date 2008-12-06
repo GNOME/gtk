@@ -88,6 +88,9 @@ struct _GdkWindowImplIface
   gint         (* get_origin)           (GdkWindow       *window,
                                          gint            *x,
                                          gint            *y);
+  gint         (* get_deskrelative_origin) (GdkWindow       *window,
+                                         gint            *x,
+                                         gint            *y);
 
   void         (* shape_combine_mask)   (GdkWindow       *window,
                                          GdkBitmap       *mask,

@@ -2793,80 +2793,54 @@ gdk_window_x11_get_origin (GdkWindow *window,
   return return_val;
 }
 
-/**
- * gdk_window_get_deskrelative_origin:
- * @window: a toplevel #GdkWindow
- * @x: return location for X coordinate
- * @y: return location for Y coordinate
- * 
- * This gets the origin of a #GdkWindow relative to
- * an Enlightenment-window-manager desktop. As long as you don't
- * assume that the user's desktop/workspace covers the entire
- * root window (i.e. you don't assume that the desktop begins
- * at root window coordinate 0,0) this function is not necessary.
- * It's deprecated for that reason.
- * 
- * Return value: not meaningful
- **/
-gboolean
-gdk_window_get_deskrelative_origin (GdkWindow *window,
-				    gint      *x,
-				    gint      *y)
+static gboolean
+gdk_window_x11_get_deskrelative_origin (GdkWindow *window,
+					gint      *x,
+					gint      *y)
 {
   gboolean return_val = FALSE;
   gint num_children, format_return;
   Window win, *child, parent, root;
-  gint tx = 0;
-  gint ty = 0;
   Atom type_return;
   Atom atom;
   gulong number_return, bytes_after_return;
   guchar *data_return;
   
-  if (!GDK_WINDOW_DESTROYED (window) &&
-      WINDOW_IS_TOPLEVEL (window))
+  atom = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
+						"ENLIGHTENMENT_DESKTOP");
+  win = GDK_WINDOW_XID (window);
+  
+  while (XQueryTree (GDK_WINDOW_XDISPLAY (window), win, &root, &parent,
+		     &child, (unsigned int *)&num_children))
     {
-      atom = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
-						    "ENLIGHTENMENT_DESKTOP");
-      win = GDK_WINDOW_XID (window);
+      if ((child) && (num_children > 0))
+	XFree (child);
       
-      while (XQueryTree (GDK_WINDOW_XDISPLAY (window), win, &root, &parent,
-			 &child, (unsigned int *)&num_children))
+      if (!parent)
+	break;
+      else
+	win = parent;
+      
+      if (win == root)
+	break;
+      
+      data_return = NULL;
+      XGetWindowProperty (GDK_WINDOW_XDISPLAY (window), win, atom, 0, 0,
+			  False, XA_CARDINAL, &type_return, &format_return,
+			  &number_return, &bytes_after_return, &data_return);
+      
+      if (type_return == XA_CARDINAL)
 	{
-	  if ((child) && (num_children > 0))
-	    XFree (child);
-	  
-	  if (!parent)
-	    break;
-	  else
-	    win = parent;
-	  
-	  if (win == root)
-	    break;
-	  
-	  data_return = NULL;
-	  XGetWindowProperty (GDK_WINDOW_XDISPLAY (window), win, atom, 0, 0,
-			      False, XA_CARDINAL, &type_return, &format_return,
-			      &number_return, &bytes_after_return, &data_return);
-
-	  if (type_return == XA_CARDINAL)
-	    {
-	      XFree (data_return);
-              break;
-	    }
+	  XFree (data_return);
+	  break;
 	}
-      
-      return_val = XTranslateCoordinates (GDK_WINDOW_XDISPLAY (window),
-					  GDK_WINDOW_XID (window),
-					  win,
-					  0, 0, &tx, &ty,
-					  &root);
-      if (x)
-	*x = tx;
-      if (y)
-	*y = ty;
     }
   
+  return_val = XTranslateCoordinates (GDK_WINDOW_XDISPLAY (window),
+				      GDK_WINDOW_XID (window),
+				      win,
+				      0, 0, x, y,
+				      &root);
   
   return return_val;
 }
@@ -5959,6 +5933,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->set_cursor = gdk_window_x11_set_cursor;
   iface->get_geometry = gdk_window_x11_get_geometry;
   iface->get_origin = gdk_window_x11_get_origin;
+  iface->get_deskrelative_origin = gdk_window_x11_get_deskrelative_origin;
   iface->shape_combine_mask = gdk_window_x11_shape_combine_mask;
   iface->shape_combine_region = gdk_window_x11_shape_combine_region;
   iface->set_child_shapes = gdk_window_x11_set_child_shapes;

@@ -5945,6 +5945,49 @@ gdk_window_get_origin (GdkWindow *window,
   return TRUE;
 }
 
+
+/**
+ * gdk_window_get_deskrelative_origin:
+ * @window: a toplevel #GdkWindow
+ * @x: return location for X coordinate
+ * @y: return location for Y coordinate
+ * 
+ * This gets the origin of a #GdkWindow relative to
+ * an Enlightenment-window-manager desktop. As long as you don't
+ * assume that the user's desktop/workspace covers the entire
+ * root window (i.e. you don't assume that the desktop begins
+ * at root window coordinate 0,0) this function is not necessary.
+ * It's deprecated for that reason.
+ * 
+ * Return value: not meaningful
+ **/
+gboolean
+gdk_window_get_deskrelative_origin (GdkWindow *window,
+				    gint      *x,
+				    gint      *y)
+{
+  GdkWindowObject *private;
+  gboolean return_val = FALSE;
+  gint tx = 0;
+  gint ty = 0;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+  
+  if (!GDK_WINDOW_DESTROYED (window))
+    {
+      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_deskrelative_origin (window, &tx, &ty);
+      
+      if (x)
+	*x = tx + private->abs_x;
+      if (y)
+	*y = ty + private->abs_y;
+    }
+  
+  return return_val;
+}
+
 /**
  * gdk_window_shape_combine_mask:
  * @window: a #GdkWindow
