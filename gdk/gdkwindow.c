@@ -5978,13 +5978,13 @@ gdk_window_get_deskrelative_origin (GdkWindow *window,
   gint tx = 0;
   gint ty = 0;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
   private = (GdkWindowObject *) window;
   
   if (!GDK_WINDOW_DESTROYED (window))
     {
-      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_deskrelative_origin (window, &tx, &ty);
+      return_val = GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_deskrelative_origin (window, &tx, &ty);
       
       if (x)
 	*x = tx + private->abs_x;
