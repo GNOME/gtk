@@ -3309,6 +3309,13 @@ gdk_window_clear_area_internal (GdkWindow *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  /* This is what XClearArea does, and e.g. GtkCList uses it,
+     so we need to duplicate that */
+  if (width == 0)
+    width = private->width - x;
+  if (height == 0)
+    height = private->height - y;
+  
   if (private->paint_stack)
     gdk_window_clear_backing_rect (window, x, y, width, height);
   else
