@@ -973,13 +973,13 @@ gdk_window_reparent (GdkWindow *window,
       new_parent_private = (GdkWindowObject *)new_parent;
     }
 
+  if (private->parent)
+    private->parent->children = g_list_remove (private->parent->children, window);
+  
   private->parent = new_parent_private;
   private->x = x;
   private->y = y;
 
-  if (private->parent)
-    private->parent->children = g_list_remove (private->parent->children, window);
-  
   new_parent_private->children = g_list_prepend (new_parent_private->children, window);
   
   /* Switch the window type as appropriate */
