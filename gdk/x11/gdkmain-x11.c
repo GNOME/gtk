@@ -206,7 +206,7 @@ gdk_pointer_grab (GdkWindow *	  window,
 
   native = gdk_window_get_toplevel (window);
 
-  /* TODO: What do we do for offscreens and  children? We need to proxy the grab somehow */
+  /* TODO: What do we do for offscreens and  their children? We need to proxy the grab somehow */
   if (!GDK_IS_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (native)->impl))
     return GDK_GRAB_SUCCESS;
   
@@ -239,6 +239,11 @@ gdk_pointer_grab (GdkWindow *	  window,
       if (event_mask & (1 << (i + 1)))
 	xevent_mask |= _gdk_event_mask_table[i];
     }
+
+  /* We don't want to set a native motion hint mask, as we're emulating motion
+   * hints. If we set a native one we just wouldn't get any events.
+   */
+  xevent_mask &= ~PointerMotionHintMask;
   
   return_val = _gdk_input_grab_pointer (native,
 					owner_events,
