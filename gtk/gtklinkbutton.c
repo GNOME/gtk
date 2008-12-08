@@ -474,6 +474,26 @@ gtk_link_button_clicked (GtkButton *button)
 
   if (uri_func)
     (* uri_func) (link_button, link_button->priv->uri, uri_func_data);
+  else
+    {
+      GdkScreen *screen;
+      GError *error;
+
+      if (gtk_widget_has_screen (GTK_WIDGET (button)));
+        screen = gtk_widget_get_screen (GTK_WIDGET (button));
+      else
+        screen = NULL;
+
+      error = NULL;
+      gtk_show_uri (screen, link_button->priv->uri, GDK_CURRENT_TIME, &error);
+      if (error)
+        {
+          g_warning ("Unable to show '%s': %s",
+                     link_button->priv->uri,
+                     error->message);
+          g_error_free (error);
+        }
+    }
 
   gtk_link_button_set_visited (link_button, TRUE);
 }
@@ -689,6 +709,8 @@ gtk_link_button_get_uri (GtkLinkButton *link_button)
  * Sets @func as the function that should be invoked every time a user clicks
  * a #GtkLinkButton. This function is called before every callback registered
  * for the "clicked" signal.
+ *
+ * If no uri hook has been set, GTK+ defaults to calling gtk_show_uri().
  *
  * Return value: the previously set hook function.
  *

@@ -1,5 +1,12 @@
 2008-12-07  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 554274 – Add default hook for GtkLinkButton
+
+	* gtk/gtklinkbutton.c: Call gtk_show_uri() if no uri hook has
+	been set. Patch by Emmanuele Bassi
+
+2008-12-07  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 559325 – documentation for gdk_display_get_window_at_pointer() 
 	is wrong
 
