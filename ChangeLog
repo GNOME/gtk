@@ -1,10 +1,12 @@
 2008-12-07  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 546378 – GtkAssistant page title is not translatable
+
 	* gtk/gtkbuilderparser.c: Make gtk_builder_get_translation_domain()
 	useful for subparsers.
 
 	* gtk/gtkcontainer.c: Make the child property parser support
-	translatable child properties.
+	translatable child properties. Patch by Antti Kaijanmäki
  
 2008-12-07  Matthias Clasen  <mclasen@redhat.com>
 
