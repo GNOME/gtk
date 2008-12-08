@@ -634,9 +634,24 @@ parse_interface (ParserData   *data,
     {
       if (strcmp (names[i], "domain") == 0)
 	{
-	  g_free (data->domain);
-	  data->domain = g_strdup (values[i]);
-	  break;
+
+	  if (data->domain)
+	    {
+	      if (strcmp (data->domain, values[i]) == 0)
+		continue;
+	      else
+		g_warning ("%s: interface domain '%s' overrides "
+			   "programically set domain '%s'",
+			   data->filename,
+			   values[i],
+			   data->domain
+			   );
+	      
+	      g_free (data->domain);
+	    }
+	  
+ 	  data->domain = g_strdup (values[i]);
+	  gtk_builder_set_translation_domain (data->builder, data->domain);
 	}
       else
 	error_invalid_attribute (data, "interface", names[i], error);
@@ -1116,13 +1131,21 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
                                   gchar       **requested_objs,
                                   GError      **error)
 {
+  const gchar* domain;
   ParserData *data;
   GSList *l;
   
+  /* Store the original domain so that interface domain attribute can be
+   * applied for the builder and the original domain can be restored after
+   * parsing has finished. This allows subparsers to translate elements with
+   * gtk_builder_get_translation_domain() without breaking the ABI or API
+   */
+  domain = gtk_builder_get_translation_domain (builder);
+
   data = g_new0 (ParserData, 1);
   data->builder = builder;
   data->filename = filename;
-  data->domain = g_strdup (gtk_builder_get_translation_domain (builder));
+  data->domain = g_strdup (domain);
 
   data->requested_objects = NULL;
   if (requested_objs)
@@ -1184,4 +1207,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   g_free (data->domain);
   g_markup_parse_context_free (data->ctx);
   g_free (data);
+
+  /* restore the original domain */
+  gtk_builder_set_translation_domain (builder, domain);
 }

@@ -1,5 +1,13 @@
 2008-12-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkbuilderparser.c: Make gtk_builder_get_translation_domain()
+	useful for subparsers.
+
+	* gtk/gtkcontainer.c: Make the child property parser support
+	translatable child properties.
+ 
+2008-12-07  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 554274 – Add default hook for GtkLinkButton
 
 	* gtk/gtklinkbutton.c: Call gtk_show_uri() if no uri hook has
@@ -8,7 +16,7 @@
 2008-12-07  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 559325 – documentation for gdk_display_get_window_at_pointer() 
-	is wrong
+:	is wrong
 
 	* gdk/gdkdisplay.c (gdk_display_get_window_at_pointer): Correct
 	the documentation. Patch by Paul Davis

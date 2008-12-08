@@ -1,3 +1,8 @@
+2008-12-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkcontainer.sgml: Document translatable child
+	properties in GtkBuilder
+
 2008-11-29  Baptiste Mille-Mathias <baptiste.millemathias@gmail.com>
 
 	* docs/reference/gtk/images/accel-label.png:

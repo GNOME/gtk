@@ -31,6 +31,7 @@
 
 #include "gtkcontainer.h"
 #include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -361,6 +362,8 @@ typedef struct {
   GtkContainer *container;
   GtkWidget    *child;
   gchar        *child_prop_name;
+  gchar        *context;
+  gboolean     translatable
 } PackingPropertiesData;
 
 static void
@@ -379,6 +382,20 @@ attributes_start_element (GMarkupParseContext *context,
       for (i = 0; names[i]; i++)
 	if (strcmp (names[i], "name") == 0)
 	  parser_data->child_prop_name = g_strdup (values[i]);
+	else if (strcmp (names[i], "translatable") == 0)
+	  {
+	    if (!_gtk_builder_boolean_from_string (values[1],
+						   &parser_data->translatable,
+						   error))
+	      return;
+	  }
+	else if (strcmp (names[i], "comments") == 0)
+	  ; /* for translators */
+	else if (strcmp (names[i], "context") == 0)
+	  parser_data->context = g_strdup (values[1]);
+	else
+	  g_warning ("Unsupported attribute for GtkContainer Child "
+		     "property: %s\n", names[i]);
     }
   else if (strcmp (element_name, "packing") == 0)
     return;
@@ -394,18 +411,37 @@ attributes_text_element (GMarkupParseContext *context,
 			 GError             **error)
 {
   PackingPropertiesData *parser_data = (PackingPropertiesData*)user_data;
+  const gchar* value;
 
   if (!parser_data->child_prop_name)
     return;
+  
+  if (parser_data->translatable && text_len)
+    {
+      const gchar* domain;
+      domain = gtk_builder_get_translation_domain (parser_data->builder);
+      
+      value = _gtk_builder_parser_translate (domain,
+					     parser_data->context,
+					     text);
+    }
+  else
+    {
+      value = g_strdup (text);
+    }
 
   gtk_container_buildable_set_child_property (parser_data->container,
 					      parser_data->builder,
 					      parser_data->child,
 					      parser_data->child_prop_name,
-					      text);
+					      value);
 
   g_free (parser_data->child_prop_name);
+  g_free (parser_data->context);
+  g_free (value);
   parser_data->child_prop_name = NULL;
+  parser_data->context = NULL;
+  parser_data->translatable = FALSE;
 }
 
 static const GMarkupParser attributes_parser =
