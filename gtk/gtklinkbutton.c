@@ -34,6 +34,7 @@
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtkstock.h"
+#include "gtkshow.h"
 #include "gtktooltip.h"
 
 #include "gtklinkbutton.h"
@@ -479,7 +480,7 @@ gtk_link_button_clicked (GtkButton *button)
       GdkScreen *screen;
       GError *error;
 
-      if (gtk_widget_has_screen (GTK_WIDGET (button)));
+      if (gtk_widget_has_screen (GTK_WIDGET (button)))
         screen = gtk_widget_get_screen (GTK_WIDGET (button));
       else
         screen = NULL;
