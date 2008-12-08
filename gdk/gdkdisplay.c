@@ -476,13 +476,15 @@ gdk_display_get_pointer (GdkDisplay      *display,
 /**
  * gdk_display_get_window_at_pointer:
  * @display: a #GdkDisplay
- * @win_x: return location for origin of the window under the pointer
- * @win_y: return location for origin of the window under the pointer
+ * @win_x: return location for x coordinate of the pointer location relative 
+ *    to the window origin, or %NULL
+ * @win_y: return location for y coordinate of the pointer location relative
+ &    to the window origin, or %NULL
  * 
  * Obtains the window underneath the mouse pointer, returning the location
- * of that window in @win_x, @win_y for @screen. Returns %NULL if the window 
- * under the mouse pointer is not known to GDK (for example, belongs to
- * another application).
+ * of the pointer in that window in @win_x, @win_y for @screen. Returns %NULL 
+ * if the window under the mouse pointer is not known to GDK (for example, 
+ * belongs to another application).
  * 
  * Returns: the window under the mouse pointer, or %NULL
  *

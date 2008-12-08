@@ -1,5 +1,13 @@
 2008-12-07  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 559325 – documentation for gdk_display_get_window_at_pointer() 
+	is wrong
+
+	* gdk/gdkdisplay.c (gdk_display_get_window_at_pointer): Correct
+	the documentation. Patch by Paul Davis
+
+2008-12-07  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 563285 – test print backend does not compile
 
 	* modules/printbackends/test/gtkprintbackendtest.c: Clean up
