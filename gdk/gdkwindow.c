@@ -6200,6 +6200,9 @@ gdk_window_set_composited (GdkWindow *window,
   if (private->composited == composited)
     return;
 
+  if (composited)
+    gdk_window_set_has_native (window, TRUE);
+
   display = gdk_drawable_get_display (GDK_DRAWABLE (window));
 
   if (!gdk_display_supports_composite (display) && composited)
