@@ -5302,7 +5302,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
     {
       if (GDK_WINDOW_IS_MAPPED (window))
 	{
-	  expose = TRUE;
+	  expose = !private->input_only;
 	  old_region = gdk_region_copy (private->clip_region);
 	  /* Adjust region to parent window coords */
 	  gdk_region_offset (old_region, private->x, private->y);
@@ -5314,7 +5314,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
     {
       if (GDK_WINDOW_IS_MAPPED (window))
 	{
-	  expose = TRUE;
+	  expose = !private->input_only;
 	  old_region = gdk_region_copy (private->clip_region);
 	  /* Adjust region to parent window coords */
 	  gdk_region_offset (old_region, private->x, private->y);
