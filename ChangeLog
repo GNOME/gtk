@@ -1,3 +1,10 @@
+2008-12-07  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 563285 – test print backend does not compile
+
+	* modules/printbackends/test/gtkprintbackendtest.c: Clean up
+	includes. 
+
 2008-12-07  Behdad Esfahbod  <behdad@gnome.org>
 
 	Bug 563547 – Update gdkx11 atom precache table

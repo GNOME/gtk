@@ -35,13 +35,12 @@
 
 #include <glib/gi18n-lib.h>
 
-#include "gtkprintoperation.h"
+#include <gtk/gtkprintbackend.h>
+#include <gtk/gtkunixprint.h>
+#include <gtk/gtkprinter-private.h>
 
-#include "gtkprintbackend.h"
 #include "gtkprintbackendtest.h"
 
-#include "gtkprinter.h"
-#include "gtkprinter-private.h"
 
 typedef struct _GtkPrintBackendTestClass GtkPrintBackendTestClass;
 
