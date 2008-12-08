@@ -370,9 +370,6 @@ gdk_window_finalize (GObject *object)
   if (obj->cursor)
     gdk_cursor_unref (obj->cursor);
 
-  if (obj->colormap)
-    g_object_unref (obj->colormap);
-  
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -668,7 +665,7 @@ gdk_window_new (GdkWindow     *parent,
   GdkWindowObject *private;
   GdkScreen *screen;
   GdkVisual *visual;
-  int x, y, depth;
+  int x, y;
   gboolean native;
   GdkEventMask event_mask;
   GdkWindow *real_parent;
@@ -774,13 +771,8 @@ gdk_window_new (GdkWindow     *parent,
 
   if (attributes->wclass == GDK_INPUT_OUTPUT)
     {
-      depth = visual->depth;
-
-      if (attributes_mask & GDK_WA_COLORMAP)
-	private->colormap = g_object_ref (attributes->colormap);
-      
       private->input_only = FALSE;
-      private->depth = depth;
+      private->depth = visual->depth;
   
       private->bg_color.pixel = 0; // TODO: BlackPixel (xdisplay, screen_x11->screen_num);
       private->bg_color.red = private->bg_color.green = private->bg_color.blue = 0;
@@ -789,7 +781,6 @@ gdk_window_new (GdkWindow     *parent,
     }
   else
     {
-      depth = 0;
       private->depth = 0;
       private->input_only = TRUE;
     }
@@ -800,6 +791,12 @@ gdk_window_new (GdkWindow     *parent,
   native = FALSE; /* Default */
   if (GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT)
     native = TRUE; /* Always use native windows for toplevels */
+  else if (!private->input_only &&
+	   ((attributes_mask & GDK_WA_COLORMAP &&
+	     attributes->colormap != gdk_drawable_get_colormap ((GdkDrawable *)private->parent)) ||
+	    (attributes_mask & GDK_WA_VISUAL &&
+	     attributes->visual != gdk_drawable_get_visual ((GdkDrawable *)private->parent))))
+    native = TRUE; /* InputOutput window with different colormap or visual than parent, needs native window */
 
   if (private->window_type == GDK_WINDOW_OFFSCREEN)
     {
@@ -1052,6 +1049,7 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
   GdkDrawable *new_impl, *old_impl;
   GdkScreen *screen;
   GdkVisual *visual;
+  GdkWindowAttr attributes;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -1077,9 +1075,11 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
       screen = gdk_drawable_get_screen (window);
       visual = gdk_drawable_get_visual (window);
 
+      attributes.colormap = gdk_drawable_get_colormap (window);
+      
       old_impl = private->impl;
       _gdk_window_impl_new (window, (GdkWindow *)private->parent, screen, visual,
-			    get_native_event_mask (private), NULL, 0);
+			    get_native_event_mask (private), &attributes, GDK_WA_COLORMAP);
       new_impl = private->impl;
       
       private->impl = old_impl;
@@ -3596,12 +3596,21 @@ static void
 gdk_window_real_set_colormap (GdkDrawable *drawable,
                               GdkColormap *cmap)
 {
+  GdkWindowObject *private;
+  
   g_return_if_fail (GDK_IS_WINDOW (drawable));  
 
   if (GDK_WINDOW_DESTROYED (drawable))
     return;
+
+  private = (GdkWindowObject *)drawable;
+
+  /* different colormap than parent, requires native window */
+  if (!private->input_only &&
+      cmap != gdk_drawable_get_colormap ((GdkDrawable *)(private->parent)))
+    gdk_window_set_has_native ((GdkWindow *)drawable, TRUE);
   
-  gdk_drawable_set_colormap (((GdkWindowObject*)drawable)->impl, cmap);
+  gdk_drawable_set_colormap (private->impl, cmap);
 }
 
 static GdkColormap*

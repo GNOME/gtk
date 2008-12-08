@@ -644,7 +644,6 @@ _gdk_window_impl_new (GdkWindow     *window,
   XSetWindowAttributes xattributes;
   long xattributes_mask;
   XClassHint *class_hint;
-  int depth;
   
   unsigned int class;
   const char *title;
@@ -709,12 +708,11 @@ _gdk_window_impl_new (GdkWindow     *window,
   if (!private->input_only)
     {
       class = InputOutput;
-      depth = visual->depth;
 
-      if (private->colormap)
+      if (attributes_mask & GDK_WA_COLORMAP)
         {
-          draw_impl->colormap = private->colormap;
-          g_object_ref (private->colormap);
+          draw_impl->colormap = attributes->colormap;
+          g_object_ref (attributes->colormap);
         }
       else
 	{
@@ -756,7 +754,6 @@ _gdk_window_impl_new (GdkWindow     *window,
     }
   else
     {
-      depth = 0;
       class = InputOnly;
       draw_impl->colormap = gdk_screen_get_system_colormap (screen);
       g_object_ref (draw_impl->colormap);
@@ -766,7 +763,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 					private->x + private->parent->abs_x,
 					private->y + private->parent->abs_y,
 					private->width, private->height,
-					0, depth, class, xvisual,
+					0, private->depth, class, xvisual,
 					xattributes_mask, &xattributes);
 
   g_object_ref (window);

@@ -331,7 +331,6 @@ struct _GdkWindowObject
   guint32 clip_tag;
   GdkRegion *clip_region; /* Clip region (wrt toplevel) in window coords */
   GdkRegion *clip_region_with_children; /* Clip region in window coords */
-  GdkColormap *colormap;
   GdkCursor *cursor;
   gint8 toplevel_window_type;
 
