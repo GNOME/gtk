@@ -429,7 +429,7 @@ remove_child_area (GdkWindowObject *private,
       if (child == until)
 	break;
       
-      if (!GDK_WINDOW_IS_MAPPED (child) || child->input_only)
+      if (!GDK_WINDOW_IS_MAPPED (child) || child->input_only || child->composited)
 	continue;
 
       /* Ignore offscreen children, as they don't draw in their parent and
@@ -6214,6 +6214,8 @@ gdk_window_set_composited (GdkWindow *window,
 
   _gdk_windowing_window_set_composited (window, composited);
 
+  recompute_visible_regions (private, TRUE, FALSE);
+			     
   private->composited = composited;
 }
 
