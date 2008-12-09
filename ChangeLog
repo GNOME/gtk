@@ -1,5 +1,9 @@
 2008-12-09  Michael Natterer  <mitch@imendio.com>
 
+	* gdk/gdk.symbols: add missing #ifndef GDK_DISABLE_DEPRECATED.
+
+2008-12-09  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkcontainer.c (struct PackingPropertiesData): add missing
 	semicolon.
 

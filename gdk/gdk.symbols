@@ -693,7 +693,9 @@ gdk_window_get_pointer
 gdk_window_get_position
 gdk_window_get_state
 gdk_window_get_toplevel
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_window_get_toplevels
+#endif
 gdk_window_get_update_area
 gdk_window_get_user_data
 gdk_window_get_window_type
