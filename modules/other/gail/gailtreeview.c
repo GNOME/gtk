@@ -1261,7 +1261,7 @@ gail_tree_view_get_n_rows (AtkTable *table)
       GtkTreePath *root_tree;
 
       n_rows = 0;
-      root_tree = gtk_tree_path_new_root ();
+      root_tree = gtk_tree_path_new_first ();
       iterate_thru_children (tree_view, tree_model,
                              root_tree, NULL, &n_rows, 0);
       gtk_tree_path_free (root_tree);
@@ -3090,8 +3090,9 @@ is_cell_showing (GtkTreeView   *tree_view,
   tree_cell_rect->height = cell_rect->height;
 
   gtk_tree_view_get_visible_rect (tree_view, visible_rect);
-  gtk_tree_view_widget_to_tree_coords (tree_view, cell_rect->x, cell_rect->y,
-                                       NULL, &(rect1.y));
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view,
+                                                     cell_rect->x, cell_rect->y,
+                                                     NULL, &(rect1.y));
 
   if (((tree_cell_rect->x + tree_cell_rect->width) < visible_rect->x) ||
      ((tree_cell_rect->y + tree_cell_rect->height) < (visible_rect->y)) ||
@@ -3232,7 +3233,7 @@ set_iter_nth_row (GtkTreeView *tree_view,
   GtkTreeModel *tree_model;
   
   tree_model = gtk_tree_view_get_model (tree_view);
-  gtk_tree_model_get_iter_root (tree_model, iter);
+  gtk_tree_model_get_iter_first (tree_model, iter);
   iter = return_iter_nth_row (tree_view, tree_model, iter, 0 , row);
 }
 
@@ -3250,7 +3251,7 @@ get_row_from_tree_path (GtkTreeView *tree_view,
     row = gtk_tree_path_get_indices (path)[0];
   else
     {
-      root_tree = gtk_tree_path_new_root ();
+      root_tree = gtk_tree_path_new_first ();
       row = 0;
       iterate_thru_children (tree_view, tree_model, root_tree, path, &row, 0);
       gtk_tree_path_free (root_tree);
