@@ -7344,14 +7344,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
     unlink_event = proxy_button_event (pointer_window, x, y,
                                        event);
 
-  if (unlink_event)
-    {
-      _gdk_event_queue_remove_link (display, event_link);
-      g_list_free_1 (event_link);
-      gdk_event_free (event);
-    }
-
-
   /* Store last pointer window and position/state */
 
   display->pointer_info.toplevel_x = x;
@@ -7365,6 +7357,13 @@ _gdk_windowing_got_event (GdkDisplay *display,
       display->pointer_info.window_under_pointer = NULL;
       if (pointer_window)
 	display->pointer_info.window_under_pointer = g_object_ref (pointer_window);
+    }
+
+  if (unlink_event)
+    {
+      _gdk_event_queue_remove_link (display, event_link);
+      g_list_free_1 (event_link);
+      gdk_event_free (event);
     }
 }
 
