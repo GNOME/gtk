@@ -363,7 +363,7 @@ typedef struct {
   GtkWidget    *child;
   gchar        *child_prop_name;
   gchar        *context;
-  gboolean     translatable
+  gboolean     translatable;
 } PackingPropertiesData;
 
 static void
@@ -411,7 +411,7 @@ attributes_text_element (GMarkupParseContext *context,
 			 GError             **error)
 {
   PackingPropertiesData *parser_data = (PackingPropertiesData*)user_data;
-  const gchar* value;
+  gchar* value;
 
   if (!parser_data->child_prop_name)
     return;

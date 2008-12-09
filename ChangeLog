@@ -1,3 +1,11 @@
+2008-12-09  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkcontainer.c (struct PackingPropertiesData): add missing
+	semicolon.
+
+	* gtk/gtkcontainer.c (attributes_text_element): "value" is a
+	gchar*, not const gchar*.
+
 2008-12-07  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 546378 – GtkAssistant page title is not translatable
