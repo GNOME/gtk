@@ -18,7 +18,6 @@
 	* tests/ferret.c
 	* tests/testcombo.c
 	* tests/testlib.h
-
 	* tests/testoptionmenu.c: #undef it where we need to access
 	deprecated cruft.
 
