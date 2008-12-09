@@ -2201,6 +2201,15 @@ gdk_window_free_paint_stack (GdkWindow *window)
     }
 }
 
+/* Flushes all outstanding changes to the window, call this
+ * before drawing directly to the window (i.e. outside a begin/end_paint pair).
+ */
+static void
+gdk_window_flush (GdkWindow *window)
+{
+  gdk_window_flush_implicit_paint (window);
+}
+
 static void
 gdk_window_get_offsets (GdkWindow *window,
 			gint      *x_offset,
@@ -2345,7 +2354,7 @@ setup_clip_for_paint (GdkDrawable *drawable,
 
 
 #define SETUP_DIRECT_GC_CLIP(gc)                            \
-      gdk_window_flush_implicit_paint ((GdkWindow *)drawable);\
+      gdk_window_flush ((GdkWindow *)drawable);\
       setup_clip_for_draw (drawable, gc, old_clip_x, old_clip_y);
 
 #define RESTORE_DIRECT_GC_CLIP(gc)
@@ -3683,7 +3692,7 @@ gdk_window_ref_cairo_surface (GdkDrawable *drawable)
     {
       
       /* This will be drawing directly to the window, so flush implicit paint */
-      gdk_window_flush_implicit_paint ((GdkWindow *)drawable);
+      gdk_window_flush ((GdkWindow *)drawable);
       
       if (!private->cairo_surface)
 	{
