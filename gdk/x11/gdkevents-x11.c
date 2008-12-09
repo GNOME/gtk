@@ -902,6 +902,9 @@ gdk_event_translate (GdkDisplay *display,
   GdkToplevelX11 *toplevel = NULL;
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   Window xwindow, filter_xwindow;
+  int exposure_x_offset = 0;
+  int exposure_y_offset = 0;
+  GdkWindow *unref_pixmap = NULL;
   
   return_val = FALSE;
 
@@ -929,13 +932,31 @@ gdk_event_translate (GdkDisplay *display,
    * are reported same as structure events
    */
   get_real_window (display, xevent, &xwindow, &filter_xwindow);
-  
+
   window = gdk_window_lookup_for_display (display, xwindow);
+  
   /* We may receive events such as NoExpose/GraphicsExpose
    * and ShmCompletion for pixmaps
    */
   if (window && !GDK_IS_WINDOW (window))
-    window = NULL;
+    {
+      GdkPixmapObject *pixmap = (GdkPixmapObject *)window;
+      if ((xevent->type == GraphicsExpose ||
+	   xevent->type == NoExpose) &&
+	  GDK_IS_PIXMAP (window) &&
+	  pixmap->backing_for != NULL)
+	{
+	  /* Unref the pixmap once for each finished set of GraphicsExposes */
+	  if (xevent->type == NoExpose ||
+	      xevent->xgraphicsexpose.count == 0)
+	    unref_pixmap = window;
+	  window = g_object_ref (pixmap->backing_for);
+	  exposure_x_offset = pixmap->backing_x_offset;
+	  exposure_y_offset = pixmap->backing_x_offset;
+	}
+      else
+	window = NULL;
+    }
   window_private = (GdkWindowObject *) window;
 
   /* We always run the filters for the window where the event
@@ -1660,8 +1681,8 @@ gdk_event_translate (GdkDisplay *display,
             break;
           }
         
-	expose_rect.x = xevent->xgraphicsexpose.x;
-	expose_rect.y = xevent->xgraphicsexpose.y;
+	expose_rect.x = xevent->xgraphicsexpose.x + exposure_x_offset;
+	expose_rect.y = xevent->xgraphicsexpose.y + exposure_y_offset;
 	expose_rect.width = xevent->xgraphicsexpose.width;
 	expose_rect.height = xevent->xgraphicsexpose.height;
 	    
@@ -2202,6 +2223,9 @@ gdk_event_translate (GdkDisplay *display,
   
   if (window)
     g_object_unref (window);
+
+  if (unref_pixmap)
+    g_object_unref (unref_pixmap);
   
   return return_val;
 }

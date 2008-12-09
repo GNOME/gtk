@@ -225,6 +225,9 @@ gdk_pixmap_finalize (GObject *object)
 
   g_object_unref (obj->impl);
   obj->impl = NULL;
+
+  if (obj->backing_for)
+    g_object_unref (obj->backing_for);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -276,6 +279,30 @@ gdk_pixmap_create_from_data (GdkDrawable    *drawable,
                                        depth, fg,bg);
 }
 
+
+/* Make GraphicsExposures and NoExposures and similar things report
+ * events on this window. Make sure to ref the pixmap for each operation
+ * that will result in a GraphicsExposure, because the core code will unref
+ * if for each such event. This is so that the pixmap live long enought to
+ * get the events on the window.
+ */
+void
+_gdk_pixmap_set_as_backing (GdkPixmap      *pixmap,
+			    GdkWindow      *window,
+			    int             x_offset,
+			    int             y_offset)
+{
+  GdkPixmapObject *private = (GdkPixmapObject *)pixmap;
+
+  if (private->backing_for)
+    g_object_unref (private->backing_for);
+  private->backing_for = window;
+  if (private->backing_for)
+    g_object_ref (private->backing_for);
+  private->backing_x_offset = x_offset;
+  private->backing_y_offset = y_offset;
+  
+}
 
 static GdkGC *
 gdk_pixmap_create_gc (GdkDrawable     *drawable,

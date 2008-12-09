@@ -265,6 +265,11 @@ GdkPixmap *_gdk_bitmap_create_from_data  (GdkDrawable    *drawable,
                                           const gchar    *data,
                                           gint            width,
                                           gint            height);
+void       _gdk_pixmap_set_as_backing    (GdkPixmap      *pixmap,
+					  GdkWindow      *window,
+					  int             x_offset,
+					  int             y_offset);
+					  
 
 void       _gdk_window_impl_new          (GdkWindow      *window,
 					  GdkWindow      *real_parent,
