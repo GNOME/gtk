@@ -4860,29 +4860,6 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   return gdk_window_foreign_new_for_display (gdk_display_get_default (), anid);
 }
 
-/* Called when window becomes viewable. Clears and sends exposes
-   for all the already mapped windows in the hierarchy */
-static void
-synthesize_clears (GdkWindowObject *window)
-{
-  GList *l;
-  
-  if (!gdk_window_has_impl (window) && !window->input_only)
-    {
-      gdk_window_clear_area_e (GDK_WINDOW (window),
-			       0, 0,
-			       window->width, window->height);
-    }
-  
-  for (l = window->children; l != NULL; l = l->next)
-    {
-      GdkWindow *child = GDK_WINDOW (l->data);
-      
-      if (GDK_WINDOW_IS_MAPPED (child))
-	synthesize_clears (GDK_WINDOW_OBJECT (child));
-    }
-}
-
 static inline void
 gdk_window_raise_internal (GdkWindow *window)
 {
@@ -4951,8 +4928,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
     }
   
   if (!was_mapped && gdk_window_is_viewable (window))
-    synthesize_clears (private);
-  
+    gdk_window_invalidate_rect (window, NULL, TRUE);
 }
   
 /**
