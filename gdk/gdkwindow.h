@@ -335,6 +335,8 @@ struct _GdkWindowObject
   gint8 toplevel_window_type;
 
   GdkWindowPaint *implicit_paint;
+
+  GList *outstanding_moves;
   
   cairo_surface_t *cairo_surface;
 };
