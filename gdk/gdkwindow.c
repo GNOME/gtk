@@ -5249,6 +5249,49 @@ move_native_children (GdkWindowObject *private)
     }
 }
 
+/* Moves bits and update area by dx/dy in impl window
+ * Takes ownership of region.
+ */
+static void
+move_region_on_impl (GdkWindowObject *private,
+		     GdkRegion *region, /* In impl window coords */
+		     int dx, int dy)
+{
+  GdkGC *tmp_gc;
+  GdkRectangle copy_rect;
+  GdkWindowObject *impl_window;
+  
+  gdk_region_get_clipbox (region, &copy_rect);
+  tmp_gc = _gdk_drawable_get_scratch_gc ((GdkWindow *)private, TRUE);
+  gdk_gc_set_clip_region (tmp_gc, region);
+  gdk_draw_drawable (private->impl,
+		     tmp_gc,
+		     private->impl,
+		     copy_rect.x-dx, copy_rect.y-dy,
+		     copy_rect.x, copy_rect.y,
+		     copy_rect.width, copy_rect.height);
+  gdk_gc_set_clip_region (tmp_gc, NULL);
+
+  impl_window = gdk_window_get_impl_window (private);
+  
+  /* Move any old invalid regions in the copy source area by dx/dy */
+  if (impl_window->update_area)
+    {
+      GdkRegion *update_area;
+      
+      update_area = gdk_region_copy (region);
+      /* Convert from target to source */
+      gdk_region_offset (update_area, -dx, -dy);
+      gdk_region_intersect (update_area, impl_window->update_area);
+      gdk_region_subtract (impl_window->update_area, update_area);
+      /* Convert back */
+      gdk_region_offset (update_area, dx, dy);
+      gdk_region_union (impl_window->update_area, update_area);
+      gdk_region_destroy (update_area);
+    }
+  
+  gdk_region_destroy (region);
+}
 
 static void
 gdk_window_move_resize_internal (GdkWindow *window,
@@ -5264,8 +5307,6 @@ gdk_window_move_resize_internal (GdkWindow *window,
   gboolean expose;
   int old_x, old_y, old_abs_x, old_abs_y;
   int dx, dy;
-  GdkRectangle copy_rect;
-  GdkGC *tmp_gc;
   gboolean do_move_native_children;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -5370,30 +5411,11 @@ gdk_window_move_resize_internal (GdkWindow *window,
       if (!gdk_window_is_offscreen (impl_window)) 
 	_gdk_windowing_window_queue_translation ((GdkWindow *)impl_window, old_region, dx, dy);
       
-      /* convert from parent coords to real parent */
+      /* convert from parent coords to impl */
       gdk_region_offset (copy_area, private->abs_x - private->x, private->abs_y - private->y);
-      gdk_region_get_clipbox (copy_area, &copy_rect);
-      tmp_gc = _gdk_drawable_get_scratch_gc (window, TRUE);
-      gdk_gc_set_clip_region (tmp_gc, copy_area);
-      gdk_draw_drawable (private->impl,
-			 tmp_gc,
-			 private->impl,
-			 copy_rect.x-dx, copy_rect.y-dy,
-			 copy_rect.x, copy_rect.y,
-			 copy_rect.width, copy_rect.height);
-      gdk_gc_set_clip_region (tmp_gc, NULL);
 
-      /* Move any old invalid regions in the copy source area by dx/dy */
-      if (impl_window->update_area)
-	{
-	  /* Convert from target to source */
-	  gdk_region_offset (copy_area, -dx, -dy);
-	  gdk_region_intersect (copy_area, impl_window->update_area);
-	  gdk_region_subtract (impl_window->update_area, copy_area);
-	  gdk_region_offset (copy_area, dx, dy);
-	  gdk_region_union (impl_window->update_area, copy_area);
-	}
-      
+      move_region_on_impl (private, copy_area, dx, dy); /* Takes ownership of copy_area */
+
       /* Invalidate affected part in the parent window
        *  (no higher window should be affected)
        * We also invalidate any children in that area, which could include
@@ -5401,10 +5423,8 @@ gdk_window_move_resize_internal (GdkWindow *window,
        */
       gdk_window_invalidate_region (GDK_WINDOW (private->parent), new_region, TRUE);
 
-      
       gdk_region_destroy (old_region);
       gdk_region_destroy (new_region);
-      gdk_region_destroy (copy_area);
     }
 
   _gdk_syntesize_crossing_events_for_geometry_change (window);
@@ -5509,8 +5529,6 @@ gdk_window_scroll (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *) window;
   GdkWindowObject *impl_window;
   GdkRegion *source_area, *copy_area, *noncopy_area;
-  GdkRectangle copy_rect;
-  GdkGC *tmp_gc;
   GList *tmp_list;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -5572,35 +5590,15 @@ gdk_window_scroll (GdkWindow *window,
       gdk_region_destroy (source_area);
     }
   
-  /* convert from window coords to real parent */
+  /* convert from window coords to impl */
   gdk_region_offset (copy_area, private->abs_x, private->abs_y);
-  gdk_region_get_clipbox (copy_area, &copy_rect);
-  tmp_gc = _gdk_drawable_get_scratch_gc (window, TRUE);
-  gdk_gc_set_clip_region (tmp_gc, copy_area);
-  gdk_draw_drawable (private->impl,
-		     tmp_gc,
-		     private->impl,
-		     copy_rect.x-dx, copy_rect.y-dy,
-		     copy_rect.x, copy_rect.y,
-		     copy_rect.width, copy_rect.height);
-  gdk_gc_set_clip_region (tmp_gc, NULL);
 
-  /* Move the current invalid region for the copy area */
-  if (private->update_area)
-    {
-      /* Convert from target to source */
-      gdk_region_offset (copy_area, -dx, -dy);
-      gdk_region_intersect (copy_area, impl_window->update_area);
-      gdk_region_subtract (impl_window->update_area, copy_area);
-      gdk_region_offset (copy_area, dx, dy);
-      gdk_region_union (impl_window->update_area, copy_area);
-    }
-  
+  move_region_on_impl (private, copy_area, dx, dy); /* Takes ownership of copy_area */
+   
   /* Invalidate not copied regions */
   gdk_window_invalidate_region (window, noncopy_area, TRUE);
 
   gdk_region_destroy (noncopy_area);
-  gdk_region_destroy (copy_area);
   
   _gdk_syntesize_crossing_events_for_geometry_change (window);
 }
@@ -5631,9 +5629,6 @@ gdk_window_move_region (GdkWindow       *window,
   GdkRegion *source_area;
   GdkRegion *nocopy_area;
   GdkRegion *copy_area;
-  GdkRegion *moving_invalid_region;
-  GdkRectangle copy_rect;
-  GdkGC *tmp_gc;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (region != NULL);
@@ -5655,18 +5650,6 @@ gdk_window_move_region (GdkWindow       *window,
   gdk_region_offset (copy_area, dx, dy);
   gdk_region_intersect (copy_area, private->clip_region_with_children);
 
-  /* Move the current invalid region for the copy area */
-  if (impl_window->update_area)
-    {
-      moving_invalid_region = gdk_region_copy (copy_area);
-      gdk_region_offset (moving_invalid_region, private->abs_x - dx, private->abs_y - dy);
-      gdk_region_intersect (moving_invalid_region, impl_window->update_area);
-      gdk_region_subtract (impl_window->update_area, moving_invalid_region);
-      gdk_region_offset (moving_invalid_region, dx, dy);
-      gdk_region_union (impl_window->update_area, moving_invalid_region);
-      gdk_region_destroy (moving_invalid_region);
-    }
-  
   /* invalidate parts of the region not covered by the copy */
   nocopy_area = gdk_region_copy (region);
   gdk_region_offset (nocopy_area, dx, dy);
@@ -5681,20 +5664,12 @@ gdk_window_move_region (GdkWindow       *window,
       _gdk_windowing_window_queue_translation ((GdkWindow *)impl_window, source_area, dx, dy);
     }
 
+  /* convert from window coords to impl */
   gdk_region_offset (copy_area, private->abs_x, private->abs_y);
-  gdk_region_get_clipbox (copy_area, &copy_rect);
-  tmp_gc = _gdk_drawable_get_scratch_gc (window, TRUE);
-  gdk_gc_set_clip_region (tmp_gc, copy_area);
-  gdk_draw_drawable (private->impl,
-		     tmp_gc,
-		     private->impl,
-		     copy_rect.x-dx, copy_rect.y-dy,
-		     copy_rect.x, copy_rect.y,
-		     copy_rect.width, copy_rect.height);
-  gdk_gc_set_clip_region (tmp_gc, NULL);
+  
+  move_region_on_impl (private, copy_area, dx, dy); /* Takes ownership of copy_area */
 
   gdk_region_destroy (source_area);
-  gdk_region_destroy (copy_area);
 }
 
 /**
