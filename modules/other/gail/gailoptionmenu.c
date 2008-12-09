@@ -20,8 +20,12 @@
 #include "config.h"
 
 #include <string.h>
+
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+
 #include "gailoptionmenu.h"
 
 static void                  gail_option_menu_class_init       (GailOptionMenuClass *klass);

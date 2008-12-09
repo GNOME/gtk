@@ -1,5 +1,5 @@
-#include <gtk/gtk.h>
 #include <stdio.h>
+#include <gtk/gtk.h>
 
 /* Maximum characters in the output buffer */
 #define MAX_LINE_SIZE   1000

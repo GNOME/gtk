@@ -21,7 +21,11 @@
 
 #include <stdlib.h>
 #include <string.h>
+
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
+
 #include "gailtoplevel.h"
 
 static void             gail_toplevel_class_init        (GailToplevelClass      *klass);

@@ -1,5 +1,7 @@
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
-#include <testlib.h>
+#include "testlib.h"
 
 static void _test_selection (AtkObject *obj);
 static void _check_combo_box (AtkObject *obj);

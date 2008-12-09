@@ -1,5 +1,29 @@
 2008-12-09  Michael Natterer  <mitch@imendio.com>
 
+	* Makefile.am
+	* tests/Makefile.am: add GTK_DISABLE_DEPRECATED to CFLAGS.
+
+	* gail.c
+	* gailclist.c
+	* gailclistcell.c
+	* gailcombo.c
+	* gaillist.c
+	* gailmenu.c
+	* gailoptionmenu.c
+	* gailpixmap.c
+	* gailprogressbar.c
+	* gailtoplevel.c
+	* gailwidget.c
+	* gailwindow.c
+	* tests/ferret.c
+	* tests/testcombo.c
+	* tests/testlib.h
+
+	* tests/testoptionmenu.c: #undef it where we need to access
+	deprecated cruft.
+
+2008-12-09  Michael Natterer  <mitch@imendio.com>
+
 	* gailtreeview.c: undeprecate.
 
 2008-11-27  Matthias Clasen  <mclasen@redhat.com>

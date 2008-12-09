@@ -19,8 +19,11 @@
 
 #include "config.h"
 
-#include <gtk/gtk.h>
 #include <stdio.h>
+
+#undef GTK_DISABLE_DEPRECATED
+
+#include <gtk/gtk.h>
 #include "gailclist.h"
 #include "gailclistcell.h"
 #include "gailcellparent.h"

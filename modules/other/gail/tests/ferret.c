@@ -1,7 +1,10 @@
 #define MAX_BUFFER 256
+#undef GTK_DISABLE_DEPRECATED
 #define GTK_ENABLE_BROKEN
 #define MAX_GROUPS 20
 #define MAX_NAME_VALUE 20
+
+#include "config.h"
 
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -11,8 +14,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <strings.h>
+
 #include "testlib.h"
-#include "config.h"
 
 typedef enum
 {
@@ -1856,7 +1859,7 @@ _get_group(TabInfo *tab, GroupId group_id, const gchar *groupname)
        if (group->is_scrolled)
          {
            group->frame = gtk_scrolled_window_new (NULL, NULL);
-           gtk_widget_set_usize(GTK_WIDGET(group->frame), -2,
+           gtk_widget_set_size_request (GTK_WIDGET (group->frame), -2,
              group->default_height);
            group->scroll_outer_frame = GTK_FRAME(gtk_frame_new(groupname));
            gtk_container_add(GTK_CONTAINER(group->scroll_outer_frame),

@@ -1,4 +1,7 @@
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
+
 #include "testlib.h"
 
 /*

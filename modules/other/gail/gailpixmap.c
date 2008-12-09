@@ -19,7 +19,10 @@
 
 #include "config.h"
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
+
 #include "gailpixmap.h"
 
 static void	 gail_pixmap_class_init		(GailPixmapClass *klass);

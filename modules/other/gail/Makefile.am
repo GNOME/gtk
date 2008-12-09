@@ -146,6 +146,7 @@ libgail_la_CPPFLAGS = \
 	-I$(top_builddir)/gtk		\
 	-DGTK_VERSION=\"$(GTK_VERSION)\"\
 	-DGDK_DISABLE_DEPRECATED	\
+	-DGTK_DISABLE_DEPRECATED	\
 	$(AM_CPPFLAGS)
 
 libgail_la_CFLAGS = \
