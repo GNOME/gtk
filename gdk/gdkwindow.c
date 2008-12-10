@@ -3021,7 +3021,7 @@ gdk_window_draw_points (GdkDrawable *drawable,
   else
     {
       SETUP_DIRECT_GC_CLIP(gc);
-      gdk_draw_points (private->impl, gc, points, npoints);
+      gdk_draw_points (private->impl, gc, new_points, npoints);
       RESTORE_DIRECT_GC_CLIP(gc);
     }
 
