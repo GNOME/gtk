@@ -16,19 +16,15 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "config.h"
-
+#include <config.h>
 #include <string.h>
-
-#include "gtk/gtk.h"
-#include "gdk/gdkkeysyms.h"
-
-#include "gtk/gtkimmodule.h"
+#include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+#include <gtk/gtkimmodule.h>
 #include "gtkimcontextmultipress.h"
 
 #define AUTOMATIC_COMPOSE_TIMEOUT 1 /* seconds */
 
-/* Just the last part of the name, not the whole path: */
 #define CONFIGURATION_FILENAME MULTIPRESS_CONFDIR G_DIR_SEPARATOR_S "im-multipress.conf"
 
 #define MULTIPRESS_PASSTHROUGH_FLAG "multipress-passthrough-flag"
@@ -39,53 +35,50 @@
 struct _KeySequence
 {
   gunichar key_press; /* Such as 'a' (== GDK_a) */
-  gchar** characters; /* Array of strings. */
+  gchar **characters; /* Array of strings. */
   gsize characters_length; /* size of the array of strings. */
 };
 
-
 static void gtk_im_context_multipress_class_init (GtkImContextMultipressClass *klass);
 static void gtk_im_context_multipress_init (GtkImContextMultipress *self);
-static void gtk_im_context_multipress_finalize (GObject * obj);
+static void gtk_im_context_multipress_finalize (GObject *obj);
 
 static void gtk_im_context_multipress_load_config (GtkImContextMultipress *self);
 
-static GObjectClass* gtk_im_context_multipress_parent_class = NULL;
+static GObjectClass *gtk_im_context_multipress_parent_class = NULL;
 static GType gtk_im_multi_press_im_context_type = 0;
 
-/** Notice that we have a *_register_type(GTypeModule*) function instead of a *_get_type() function,
- * because we must use g_type_module_register_type(), providing the GTypeModule* that was provided to im_context_init().
- * That is also why we are not using G_DEFINE_TYPE().
+/* Notice that we have a *_register_type(GTypeModule*) function instead of a
+ * *_get_type() function, because we must use g_type_module_register_type(),
+ * providing the GTypeModule* that was provided to im_context_init(). That
+ * is also why we are not using G_DEFINE_TYPE().
  */
-void 
+void
 gtk_im_context_multipress_register_type (GTypeModule* type_module)
 {
-  if (gtk_im_multi_press_im_context_type == 0)
+  static const GTypeInfo im_context_multipress_info =
   {
-    static const GTypeInfo im_context_multipress_info =
-    {
-      sizeof(GtkImContextMultipressClass),
-      (GBaseInitFunc) NULL,
-      (GBaseFinalizeFunc) NULL,
-      (GClassInitFunc) gtk_im_context_multipress_class_init,
-      NULL,
-      NULL,
-      sizeof(GtkImContextMultipress),
-      0,
-      (GInstanceInitFunc) gtk_im_context_multipress_init,
-      0,
-    };
+    sizeof (GtkImContextMultipressClass),
+    (GBaseInitFunc) NULL,
+    (GBaseFinalizeFunc) NULL,
+    (GClassInitFunc) gtk_im_context_multipress_class_init,
+    NULL,
+    NULL,
+    sizeof (GtkImContextMultipress),
+    0,
+    (GInstanceInitFunc) gtk_im_context_multipress_init,
+    0,
+  };
 
-    gtk_im_multi_press_im_context_type =
-      g_type_module_register_type (type_module,
-                                   GTK_TYPE_IM_CONTEXT,
-                                   "GtkImContextMultipress",
-                                   &im_context_multipress_info, 0);
-  }
+  gtk_im_multi_press_im_context_type =
+    g_type_module_register_type (type_module,
+                                 GTK_TYPE_IM_CONTEXT,
+                                 "GtkImContextMultipress",
+                                 &im_context_multipress_info, 0);
 }
 
-GType 
-gtk_im_context_multipress_get_type(void)
+GType
+gtk_im_context_multipress_get_type (void)
 {
   g_assert (gtk_im_multi_press_im_context_type != 0);
   return gtk_im_multi_press_im_context_type;
@@ -95,7 +88,7 @@ gtk_im_context_multipress_get_type(void)
  * Returns TRUE if the passthrough flag is set on the currently focused
  * child of the widget that owns the GDK window.  In order to turn on
  * passthrough mode, call:
- * g_object_set_data(widget, "multipress-passthrough-flag", GINT_TO_POINTER(1));
+ * g_object_set_data (widget, "multipress-passthrough-flag", GINT_TO_POINTER (1));
  */
 static gboolean 
 passthrough_enabled_for_window (GdkWindow* window)
@@ -112,20 +105,20 @@ passthrough_enabled_for_window (GdkWindow* window)
    */
   gdk_window_get_user_data (window, &event_widget);
 
-  if (event_widget && GTK_IS_WIDGET(event_widget))
+  if (event_widget && GTK_IS_WIDGET (event_widget))
   {
-    GtkWidget* toplevel;
-    GtkWidget* focus_widget;
+    GtkWidget *toplevel;
+    GtkWidget *focus_widget;
     /*
      * The event window for key presses will usually belong to the toplevel
      * GtkWindow, but that might not be true for synthetic events.  In any
      * case we need to find the currently focused child widget.
      */
-    toplevel = gtk_widget_get_toplevel ((GtkWidget*) event_widget);
+    toplevel = gtk_widget_get_toplevel ((GtkWidget *)event_widget);
 
-    g_return_val_if_fail (toplevel != NULL && GTK_IS_WINDOW(toplevel), FALSE);
+    g_return_val_if_fail (toplevel != NULL && GTK_IS_WINDOW (toplevel), FALSE);
 
-    focus_widget = gtk_window_get_focus ((GtkWindow*) toplevel);
+    focus_widget = gtk_window_get_focus ((GtkWindow *)toplevel);
 
     if (focus_widget)
     {
@@ -134,7 +127,7 @@ passthrough_enabled_for_window (GdkWindow* window)
       if (!quark_passthrough_flag)
         quark_passthrough_flag = g_quark_from_string (MULTIPRESS_PASSTHROUGH_FLAG);
 
-      if (g_object_get_qdata (G_OBJECT(focus_widget), quark_passthrough_flag))
+      if (g_object_get_qdata (G_OBJECT (focus_widget), quark_passthrough_flag))
         return TRUE;
     }
   }
@@ -142,20 +135,21 @@ passthrough_enabled_for_window (GdkWindow* window)
   return FALSE;
 }
 
-static gboolean vfunc_filter_keypress (GtkIMContext *context, GdkEventKey  *event);
+static gboolean vfunc_filter_keypress (GtkIMContext *context,
+									   GdkEventKey  *event);
 static void vfunc_reset (GtkIMContext *context);
 static void vfunc_get_preedit_string (GtkIMContext   *context,
-					  gchar         **str,
-					  PangoAttrList **attrs,
-					  gint           *cursor_pos);
+					                  gchar         **str,
+					                  PangoAttrList **attrs,
+					                  gint           *cursor_pos);
 
-static void 
+static void
 gtk_im_context_multipress_class_init (GtkImContextMultipressClass *klass)
 {
   GtkIMContextClass* im_context_class;
 
   /* Set this so we can use it later: */
-  gtk_im_context_multipress_parent_class = g_type_class_peek_parent(klass);
+  gtk_im_context_multipress_parent_class = g_type_class_peek_parent (klass);
 
   /* Specify our vfunc implementations: */
   im_context_class = GTK_IM_CONTEXT_CLASS (klass);
@@ -163,19 +157,19 @@ gtk_im_context_multipress_class_init (GtkImContextMultipressClass *klass)
   im_context_class->reset = vfunc_reset;
   im_context_class->get_preedit_string = vfunc_get_preedit_string;
 
-  G_OBJECT_CLASS(klass)->finalize = gtk_im_context_multipress_finalize;
+  G_OBJECT_CLASS (klass)->finalize = gtk_im_context_multipress_finalize;
 }
 
-static void 
+static void
 gtk_im_context_multipress_init (GtkImContextMultipress *self)
 {
   gtk_im_context_multipress_load_config (self);
 }
 
-static void 
-gtk_im_context_multipress_finalize (GObject * obj)
+static void
+gtk_im_context_multipress_finalize (GObject *obj)
 {
-  GtkImContextMultipress *self = gtk_im_context_multipress(obj);
+  GtkImContextMultipress *self = GTK_IM_CONTEXT_MULTIPRESS (obj);
    
   /* Release the configuration data: */
 
@@ -183,19 +177,19 @@ gtk_im_context_multipress_finalize (GObject * obj)
   gsize i = 0;
   for (i = 0; i < self->key_sequences_count; ++i)
   {
-    KeySequence* item = self->key_sequences[i];
+    KeySequence *item = self->key_sequences[i];
 
     /* Free the array of strings in the item: */
     /* This is only for null-terminated arrays: g_strfreev(item->characters); */
     gsize i = 0;
     for (i = 0; i < item->characters_length; ++i)
     {
-      gchar* str = item->characters[i];
+      gchar *str = item->characters[i];
       g_free (str);
       item->characters[i] = NULL;
     }
 
-    g_free(item->characters);
+    g_free (item->characters);
     item->characters = NULL;
     item->characters_length = 0;
 
@@ -210,28 +204,29 @@ gtk_im_context_multipress_finalize (GObject * obj)
   self->key_sequences_count = 0;
 
     
-  G_OBJECT_CLASS (gtk_im_context_multipress_parent_class)->finalize(obj);
+  gtk_im_context_multipress_parent_class->finalize (obj);
 }
 
 
-GtkIMContext 
+GtkIMContext
 *gtk_im_context_multipress_new (void)
 {
-  return (GtkIMContext*)g_object_new (GTK_TYPE_IM_CONTEXT_MULTIPRESS, NULL);
+  return (GtkIMContext *)g_object_new (GTK_TYPE_IM_CONTEXT_MULTIPRESS, NULL);
 }
 
-/** Lookup a compose sequence for the key press, from the table.
- *  The result is an null-terminated array of gchar*. It should not be freed by the caller.
+/* Lookup a compose sequence for the key press, from the table.  The result is
+ * a null-terminated array of gchar*. It should not be freed by the caller.
  */
-static KeySequence* 
+static KeySequence *
 lookup_characters (GtkImContextMultipress *multipress_context, guint keypress)
 {
 
-  /* Find the matching KeySequence, so that the caller can look at the possible characters for this keypress: */
+  /* Find the matching KeySequence, so that the caller can look at the possible
+   * characters for this keypress: */
   gsize i = 0;
   for (i = 0; i < multipress_context->key_sequences_count; ++i)
   {
-    KeySequence* item = multipress_context->key_sequences[i];
+    KeySequence *item = multipress_context->key_sequences[i];
 
     /* Just compare the first item, to match the keyval: */
     if (keypress == item->key_press)
@@ -241,109 +236,100 @@ lookup_characters (GtkImContextMultipress *multipress_context, guint keypress)
   return NULL;
 }
 
-static void 
+static void
 cancel_automatic_timeout_commit (GtkImContextMultipress *multipress_context)
 {
   /* printf("debug: cancelling timeout\n"); */
 
   if (multipress_context->timeout_id)
-    g_source_remove (multipress_context->timeout_id); /* This function cancels timeouts, idle handlers, etc. */
+    g_source_remove (multipress_context->timeout_id);
  
   multipress_context->timeout_id = 0;
 }
 
 
-/** Clear the compose buffer, so we are ready to compose the next character.
+/* Clear the compose buffer, so we are ready to compose the next character.
  */
-static void 
+static void
 clear_compose_buffer (GtkImContextMultipress *multipress_context)
 {
   multipress_context->key_last_entered = 0;
   multipress_context->compose_count = 0;
 
   multipress_context->tentative_match = NULL;
-  cancel_automatic_timeout_commit(multipress_context);
-}
-
-/** Finish composing, provide the character, and clear our compose buffer.
- */
-static void 
-accept_character (GtkImContextMultipress *multipress_context, const gchar* characters)
-{
-  /* printf("debug: accepting character: %c\n", (char)character); */
- 
   cancel_automatic_timeout_commit (multipress_context);
 
-  /* Accept the character: */
-
-  /* Clear the compose buffer, so we are ready to compose the next character. */
-  clear_compose_buffer (multipress_context);
-
-  /* We must also signal that the preedit has changed, or we will still see the old 
-     preedit from the composing of the character that we just committed, hanging around after the cursor.
-   */
   g_signal_emit_by_name (multipress_context, "preedit-changed");
-
-  /* Provide a character to GTK+: */
-  g_signal_emit_by_name (multipress_context, "commit", characters);
-
-  /* Note that if we emit preedit_changed after commit, 
-   * there's a segfault/invalid-write with GtkTextView in gtk_text_layout_free_line_display(), when destroying a PangoLayout
-   * (this can also be avoided by not using any pango attributes in get_preedit_string().
-   */
+  g_signal_emit_by_name (multipress_context, "preedit-end");
 }
 
-static gboolean 
+/* Finish composing, provide the character, and clear our compose buffer.
+ */
+static void
+accept_character (GtkImContextMultipress *multipress_context, const gchar *characters)
+{
+  /* Clear the compose buffer, so we are ready to compose the next character.
+   * Note that if we emit "preedit-changed" after "commit", there's a segfault/
+   * invalid-write with GtkTextView in gtk_text_layout_free_line_display(), when
+   * destroying a PangoLayout (this can also be avoided by not using any Pango
+   * attributes in get_preedit_string(). */
+  clear_compose_buffer (multipress_context);
+
+  /* Provide the character to GTK+ */
+  g_signal_emit_by_name (multipress_context, "commit", characters);
+}
+
+static gboolean
 on_timeout (gpointer data)
 {
-  GtkImContextMultipress* multipress_context;
+  GtkImContextMultipress *multipress_context;
 
   GDK_THREADS_ENTER();
 
   /* printf("debug: on_timeout\n"); */
 
-  multipress_context = gtk_im_context_multipress(data);
+  multipress_context = GTK_IM_CONTEXT_MULTIPRESS (data);
 
-  /* A certain amount of time has passed,
-   * so we will assume that the user really wants the currently chosen character:
-   */
+  /* A certain amount of time has passed, so we will assume that the user
+   * really wants the currently chosen character */
   accept_character (multipress_context, multipress_context->tentative_match);
 
   multipress_context->timeout_id = 0;
 
   GDK_THREADS_LEAVE();
 
-  return FALSE; /* Don't call this callback again. We only need to call it once. */
+  return FALSE; /* don't call me again */
 }
 
-static gboolean 
+static gboolean
 vfunc_filter_keypress (GtkIMContext *context, GdkEventKey *event)
 {
-  GtkIMContextClass* parent;
-  GtkImContextMultipress* multipress_context;
+  GtkIMContextClass *parent;
+  GtkImContextMultipress *multipress_context;
 
   /* printf("debug: vfunc_filter_keypress:\n"); */
 
-  multipress_context = gtk_im_context_multipress (context);
+  multipress_context = GTK_IM_CONTEXT_MULTIPRESS (context);
 
   if (event->type == GDK_KEY_PRESS)
   {
-    KeySequence* possible = NULL;
+    KeySequence *possible = NULL;
 
     /* printf("debug: multipress_context->compose_count=%d\n", multipress_context->compose_count); */
 
-    /* Check whether the current key is the same as previously entered,
-     *  because if it is not then we should accept the previous one, and start a new character.
-     */
-    if (multipress_context->compose_count > 0 && multipress_context->key_last_entered != event->keyval)
-    {
-      /* Accept the previously chosen character: */
-      if (multipress_context->tentative_match)
-      {
-        /* This wipes the compose_count and key_last_entered. */
-        accept_character (multipress_context, multipress_context->tentative_match);
-      } 
-    }
+    /* Check whether the current key is the same as previously entered, because
+	 * if it is not then we should accept the previous one, and start a new
+	 * character. */
+    if (multipress_context->compose_count > 0
+		&& multipress_context->key_last_entered != event->keyval)
+	{
+	  /* Accept the previously chosen character: */
+	  if (multipress_context->tentative_match)
+	  {
+	    /* This wipes the compose_count and key_last_entered. */
+	    accept_character (multipress_context, multipress_context->tentative_match);
+	  } 
+	}
 
     /* Decide what character this key press would choose: */
     if (!passthrough_enabled_for_window (event->window))
@@ -351,20 +337,20 @@ vfunc_filter_keypress (GtkIMContext *context, GdkEventKey *event)
 
     if (possible)
     {
+      if (multipress_context->compose_count == 0)
+        g_signal_emit_by_name (multipress_context, "preedit-start");
+
       /* Check whether we are at the end of a compose sequence, with no more possible characters: */
       /* Cycle back to the start if necessary: */
       if (multipress_context->compose_count >= possible->characters_length)
-      {
-        clear_compose_buffer (multipress_context);
-        return vfunc_filter_keypress (context, event);
-      }
+        multipress_context->compose_count = 0;
 
       /* Store the last key pressed in the compose sequence. */
       multipress_context->key_last_entered = event->keyval; 
-      ++(multipress_context->compose_count);
 
-      /* Get the possible match for this number of presses of the key: */ 
-      multipress_context->tentative_match = possible->characters[multipress_context->compose_count -1]; /* compose_count starts at 1, so that 0 can mean not composing. */
+      /* Get the possible match for this number of presses of the key.
+       * compose_count starts at 1, so that 0 can mean not composing. */ 
+      multipress_context->tentative_match = possible->characters[multipress_context->compose_count++];
 
       /* Indicate the current possible character.
        * This will cause our vfunc_get_preedit_string() vfunc to be called, 
@@ -378,7 +364,8 @@ vfunc_filter_keypress (GtkIMContext *context, GdkEventKey *event)
       /* Create a timeout that will cause the currently chosen character to be committed,
        * if nothing happens for a certain amount of time:
        */
-      multipress_context->timeout_id = g_timeout_add_seconds(AUTOMATIC_COMPOSE_TIMEOUT, on_timeout, multipress_context); 
+      multipress_context->timeout_id = g_timeout_add_seconds
+		  (AUTOMATIC_COMPOSE_TIMEOUT, on_timeout, multipress_context);
 
       return TRUE; /* TRUE means that the event was handled. */
     }
@@ -425,7 +412,7 @@ vfunc_filter_keypress (GtkIMContext *context, GdkEventKey *event)
 static void 
 vfunc_reset (GtkIMContext *context)
 {
-  GtkImContextMultipress *multipress_context = gtk_im_context_multipress (context);
+  GtkImContextMultipress *multipress_context = GTK_IM_CONTEXT_MULTIPRESS (context);
 
   clear_compose_buffer (multipress_context);
 }
@@ -433,13 +420,13 @@ vfunc_reset (GtkIMContext *context)
 
 static void 
 vfunc_get_preedit_string (GtkIMContext   *context,
-					  gchar         **str,
-					  PangoAttrList **attrs,
-					  gint           *cursor_pos)
+                          gchar         **str,
+                          PangoAttrList **attrs,
+                          gint           *cursor_pos)
 {
   /* printf("debug: get_preedit_string:\n"); */
 
-  GtkImContextMultipress *multipress_context = gtk_im_context_multipress (context);
+  GtkImContextMultipress *multipress_context = GTK_IM_CONTEXT_MULTIPRESS (context);
 
   /* Show the user what character he will get if he accepts: */
   gsize len_bytes = 0;
@@ -471,15 +458,15 @@ vfunc_get_preedit_string (GtkIMContext   *context,
   if (attrs)
     {
       *attrs = pango_attr_list_new ();
-      
+
       if (len_bytes)
-	{
-	  PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
-	  attr->start_index = 0;
+        {
+          PangoAttribute *attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+          attr->start_index = 0;
           attr->end_index = len_bytes;
-	  pango_attr_list_insert (*attrs, attr);
-	}
-    }
+          pango_attr_list_insert (*attrs, attr);
+        }
+  }
 
   if (cursor_pos)
     *cursor_pos = len_utf8_chars;
@@ -489,9 +476,9 @@ static void
 gtk_im_context_multipress_load_config (GtkImContextMultipress *self)
 {
   /* Open the configuration file: */
-  GKeyFile* key_file;
-  GError* error = NULL;
-  GArray* array;
+  GKeyFile *key_file;
+  GError *error = NULL;
+  GArray *array;
   gboolean found;
   guint key_suffix_num = 0;
   gboolean keep_looking = TRUE;
@@ -548,8 +535,8 @@ gtk_im_context_multipress_load_config (GtkImContextMultipress *self)
     }
     else
     {
-      KeySequence* key_sequence;
-      GArray* array_characters;
+      KeySequence *key_sequence;
+      GArray *array_characters;
       gsize value_index = 0;
 
       key_sequence = g_new0 (KeySequence, 1);
@@ -560,8 +547,8 @@ gtk_im_context_multipress_load_config (GtkImContextMultipress *self)
 
       for (value_index = 0; value_index < length_values; ++value_index)
       {
-        gchar* value;
-        gchar* value_copy;
+        gchar *value;
+        gchar *value_copy;
 
         value = values[value_index];
 
@@ -581,7 +568,8 @@ gtk_im_context_multipress_load_config (GtkImContextMultipress *self)
       g_strfreev (values);
 
       key_sequence->characters_length = array_characters->len;
-      key_sequence->characters = (gchar**)g_array_free(array_characters, FALSE /* Don't free items - return a real array of them. */);
+      key_sequence->characters = (gchar **)g_array_free(array_characters,
+          FALSE /* Don't free items - return a real array of them. */);
     }
 
     g_free (key_name);
@@ -591,7 +579,8 @@ gtk_im_context_multipress_load_config (GtkImContextMultipress *self)
   g_key_file_free (key_file);
 
   self->key_sequences_count = array->len;
-  self->key_sequences = (KeySequence**)g_array_free (array, FALSE /* Don't free items - return a real array of them. */);
+  self->key_sequences = (KeySequence **)g_array_free (array,
+      FALSE /* Don't free items - return a real array of them. */);
 
   /* debug_output_key_sequences_array(self); */
 }

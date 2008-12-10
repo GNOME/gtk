@@ -24,11 +24,11 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_IM_CONTEXT_MULTIPRESS            (gtk_im_context_multipress_get_type ())
-#define gtk_im_context_multipress(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipress))
-#define gtk_im_context_multipress_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipressClass))
+#define GTK_IM_CONTEXT_MULTIPRESS(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipress))
+#define GTK_IM_CONTEXT_MULTIPRESS_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipressClass))
 #define GTK_IS_IM_CONTEXT_MULTIPRESS(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS))
 #define GTK_IS_IM_CONTEXT_MULTIPRESS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IM_CONTEXT_MULTIPRESS))
-#define gtk_im_context_multipress_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipressClass))
+#define GTK_IM_CONTEXT_MULTIPRESS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipressClass))
 
 
 typedef struct _KeySequence KeySequence;
@@ -76,7 +76,7 @@ struct _GtkImContextMultipressClass
 };
 
 void gtk_im_context_multipress_register_type (GTypeModule* type_module);
-GType gtk_im_context_multipress_get_type (void) G_GNUC_CONST;
+GType gtk_im_context_multipress_get_type (void);
 GtkIMContext *gtk_im_context_multipress_new (void);
 
 G_END_DECLS

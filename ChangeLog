@@ -1,3 +1,17 @@
+2008-12-10  Daniel Elstner  <danielk@openismus.com>
+
+	Maintenance of Multipress input method by Openismus GmbH:
+
+	* modules/input/gtkimcontextmultipress.[ch]: Clean up the code
+	a bit to follow the GTK+ coding style more closely.  Fix the code
+	to emit "preedit-start" and "preedit-end", too, rather than only
+	"preedit-changed".
+	(GTK_IM_CONTEXT_MULTIPRESS*): Rename incorrectly spelled macros
+	gtk_im_context_multipress*. Shouldn't break API or ABI as it's
+	only used internally.
+	* modules/input/immultipress.c: More cleanup,
+	* modules/input/README.multipress: ditto.
+
 2008-12-09  Michael Natterer  <mitch@imendio.com>
 
 	* gdk/gdk.symbols: add missing #ifndef GDK_DISABLE_DEPRECATED.

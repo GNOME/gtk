@@ -22,7 +22,7 @@ This file is in GKeyFile-format, and contains explanatory comments.
 *** Per-widget deactivation
 
 When the input method is active (either by choosing it from the context menu, or 
-by defining the default language as "*" in src/im-multipress.c), the multipress 
+by defining the default language as "*" in immultipress.c), the multipress 
 behaviour can be turned off for individual widgets, like so:
 
   g_object_set_data(G_OBJECT(yourwidget), "multipress-passthrough-flag", GINT_TO_POINTER(1));
@@ -32,7 +32,8 @@ For a C++ gtkmm project, you could make a convenience function to do this. For i
 
   void multipress_deactivate(Gtk::Widget& widget)
   {
-    g_object_set_data(G_OBJECT(widget.gobj()), "multipress-passthrough-flag", GINT_TO_POINTER(1));
+    static const Glib::Quark quark ("multipress-passthrough-flag");
+    widget.set_data(quark, GINT_TO_POINTER(1));
   }
 
 *** Contact
