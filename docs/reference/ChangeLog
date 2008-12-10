@@ -1,3 +1,9 @@
+2008-12-10  Matthias Clasen <mclasen@redhat.com>
+
+	Bug 563876 – [Regression] GTK_MODULES env var is no longer relevant
+
+	* gtk/running.sgml: Improve GTK_MODULES docs.
+
 2008-11-24  Matthias Clasen <mclasen@redhat.com>
 
 	* === Released 2.14.5 ===
