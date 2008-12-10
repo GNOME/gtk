@@ -2737,7 +2737,7 @@ gtk_file_chooser_button_new (const gchar          *title,
  * Returns: a new button widget.
  * 
  * Since: 2.6
- * Deprecated: 2.14
+ * Deprecated: 2.14: Use gtk_file_chooser_button_new() instead.
  **/
 GtkWidget *
 gtk_file_chooser_button_new_with_backend (const gchar          *title,
