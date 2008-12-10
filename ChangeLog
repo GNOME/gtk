@@ -1,3 +1,10 @@
+2008-12-10  Matthias Clasen  <mclasen@redhat.com>
+
+        Bug 563991 – gtk_file_chooser_button_new_with_backend is deprecated
+        -- but what should be used instead?
+
+        * gtk/gtkfilechooserbutton.c: Enhanced deprecation annotation.
+
 2008-12-10  Daniel Elstner  <danielk@openismus.com>
 
 	Maintenance of Multipress input method by Openismus GmbH:
