@@ -1,3 +1,9 @@
+2008-12-10  Matthias Clasen <mclasen@redhat.com>
+
+        Bug 563876 – [Regression] GTK_MODULES env var is no longer relevant
+
+        * gtk/running.sgml: Improve GTK_MODULES docs.
+
 2008-12-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkcontainer.sgml: Document translatable child
