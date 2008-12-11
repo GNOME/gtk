@@ -1,3 +1,20 @@
+2008-12-11  Daniel Elstner  <danielk@openismus.com>
+
+	Bug 563994 – Input method module interface not documented
+
+	* gtk/gtkimcontext.h: Add public/private markers.
+	* gtk/gtkimcontext.c: Add section documentation which explains how
+	to add a new input method module to GTK+.  Document the signals and
+	virtual functions of GtkIMContextClass.
+	* gtk/gtkimmodule.c: Document struct GtkIMContextInfo.
+	* docs/reference/gtk/gtk-sections.txt: Add GtkIMContextClass and
+	GtkIMContextInfo to section GtkIMContext.
+	* docs/reference/gtk/Makefile.am (IGNORE_HFILES): Remove
+	gtkimmodule.h from the list in order to pick up GtkIMContextInfo.
+	* docs/reference/gtk/tmpl/gtkimcontext.sgml: Remove file from
+	repository since all the hand-edited content has been migrated to
+	source file comments.
+
 2008-12-10  Matthias Clasen  <mclasen@redhat.com>
 
         Bug 563991 – gtk_file_chooser_button_new_with_backend is deprecated

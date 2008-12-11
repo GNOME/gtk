@@ -49,11 +49,13 @@ struct _GtkIMContext
 
 struct _GtkIMContextClass
 {
+  /*< private >*/
   /* Yes, this should be GObjectClass, be we can't fix it without breaking
    * binary compatibility - see bug #90935
    */
   GtkObjectClass parent_class;
 
+  /*< public >*/
   /* Signals */
   void     (*preedit_start)        (GtkIMContext *context);
   void     (*preedit_end)          (GtkIMContext *context);
@@ -87,7 +89,7 @@ struct _GtkIMContextClass
   gboolean (*get_surrounding)     (GtkIMContext   *context,
 				   gchar         **text,
 				   gint           *cursor_index);
-
+  /*< private >*/
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);

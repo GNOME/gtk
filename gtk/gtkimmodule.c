@@ -51,6 +51,20 @@
 
 #define SIMPLE_ID "gtk-im-context-simple"
 
+/**
+ * GtkIMContextInfo:
+ * @context_id: The unique identification string of the input method.
+ * @context_name: The human-readable name of the input method.
+ * @domain: Translation domain to be used with
+ *   <function>dgettext&lpar;&rpar;</function>.
+ * @domain_dirname: Name of locale directory for use with
+ *   <function>bindtextdomain&lpar;&rpar;</function>.
+ * @default_locales: A colon-separated list of locales where this input method
+ *   should be the default. The asterisk "*" sets the default for all locales.
+ *
+ * Bookkeeping information about a loadable input method.
+ */
+
 typedef struct _GtkIMModule      GtkIMModule;
 typedef struct _GtkIMModuleClass GtkIMModuleClass;
 

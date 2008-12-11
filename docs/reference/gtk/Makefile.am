@@ -45,7 +45,6 @@ IGNORE_HFILES=				\
 	gtkiconcache.h			\
         gtkiconcachevalidator.h         \
 	gtkiconthemeparser.h		\
-	gtkimmodule.h			\
 	gtkintl.h			\
 	gtkkeyhash.h			\
 	gtkmarshal.h			\
