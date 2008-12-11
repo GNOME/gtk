@@ -1,3 +1,15 @@
+2008-12-11  Sven Herzberg  <sven@imendio.com>
+
+	Document the "set-scroll-adjustments" signal
+
+	Reviewed by Kristian Rietveld.
+
+	* gtk/gtkiconview.c,
+	* gtk/gtklayout.c,
+	* gtk/gtktextview.c,
+	* gtk/gtktreeview.c,
+	* gtk/gtkviewport.c: added proper documentation for the signal
+
 2008-12-11  Daniel Elstner  <danielk@openismus.com>
 
 	Bug 563994 – Input method module interface not documented

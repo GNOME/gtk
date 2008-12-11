@@ -658,6 +658,15 @@ gtk_layout_class_init (GtkLayoutClass *class)
 
   class->set_scroll_adjustments = gtk_layout_set_adjustments;
 
+  /**
+   * GtkLayout::set-scroll-adjustments
+   * @horizontal: the horizontal #GtkAdjustment
+   * @vertical: the vertical #GtkAdjustment
+   *
+   * Set the scroll adjustments for the layout. Usually scrolled containers
+   * like #GtkScrolledWindow will emit this signal to connect two instances
+   * of #GtkScrollbar to the scroll directions of the #GtkLayout.
+   */
   widget_class->set_scroll_adjustments_signal =
     g_signal_new (I_("set-scroll-adjustments"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),

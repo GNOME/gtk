@@ -869,6 +869,15 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 								GTK_PARAM_READABLE));
 
   /* Signals */
+  /**
+   * GtkTreeView::set-scroll-adjustments
+   * @horizontal: the horizontal #GtkAdjustment
+   * @vertical: the vertical #GtkAdjustment
+   *
+   * Set the scroll adjustments for the tree view. Usually scrolled containers
+   * like #GtkScrolledWindow will emit this signal to connect two instances
+   * of #GtkScrollbar to the scroll directions of the #GtkTreeView.
+   */
   widget_class->set_scroll_adjustments_signal =
     g_signal_new (I_("set-scroll-adjustments"),
 		  G_TYPE_FROM_CLASS (o_class),

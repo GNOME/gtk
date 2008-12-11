@@ -125,6 +125,15 @@ gtk_viewport_class_init (GtkViewportClass *class)
 						      GTK_SHADOW_IN,
 						      GTK_PARAM_READWRITE));
 
+  /**
+   * GtkViewport::set-scroll-adjustments
+   * @horizontal: the horizontal #GtkAdjustment
+   * @vertical: the vertical #GtkAdjustment
+   *
+   * Set the scroll adjustments for the viewport. Usually scrolled containers
+   * like #GtkScrolledWindow will emit this signal to connect two instances
+   * of #GtkScrollbar to the scroll directions of the #GtkViewport.
+   */
   widget_class->set_scroll_adjustments_signal =
     g_signal_new (I_("set-scroll-adjustments"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
