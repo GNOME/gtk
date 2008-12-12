@@ -2422,6 +2422,8 @@ gail_tree_view_changed_gtk (GtkTreeSelection *selection,
 
   tree_selection = gtk_tree_view_get_selection (tree_view);
 
+  clean_rows (gailview);
+
   for (l = cell_list; l; l = l->next)
     {
       info = (GailTreeViewCellInfo *) (l->data);
@@ -3529,7 +3531,7 @@ clean_cell_info (GailTreeView *gailview,
   if (cell_info->in_use) {
       obj = G_OBJECT (cell_info->cell);
       
-      gail_cell_add_state (cell_info->cell, ATK_STATE_DEFUNCT, TRUE);
+      gail_cell_add_state (cell_info->cell, ATK_STATE_DEFUNCT, FALSE);
       g_object_weak_unref (obj, (GWeakNotify) cell_destroyed, cell_info);
       cell_info->in_use = FALSE; 
       if (!gailview->garbage_collection_pending) {
