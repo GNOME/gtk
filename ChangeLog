@@ -2,6 +2,15 @@
 
 	Merged from trunk:
 
+        Bug 556839 – Crash when opening a link
+
+        * gtk/gtkstatusicon.c (gtk_status_icon_finalize): Destroy the
+        image too. Patch by Carlos Garcia Campos
+
+2008-12-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
         Bug 563751 – xatom cache is prefilled too late
 
         * gdk/x11/gdkdisplay-x11.c (gdk_display_open): Initialize the
