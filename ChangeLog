@@ -1,5 +1,13 @@
 2008-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 564212 – gtk_icon_view_accessible_model_rows_reordered explain 
+	new_order in the wrong way
+
+	* gtk/gtkiconview.c (gtk_icon_view_accessible_model_rows_reordered):
+	Use the new order correctly.  Patch by Li Yuan
+
+2008-12-13  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 563835 – Typo in gtk_widget_has_screen() docs
 
 	* gdk/directfb/gdkwindow-directfb.c:
