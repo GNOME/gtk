@@ -837,6 +837,8 @@ gtk_rc_parse_default_files (GtkRcContext *context)
 {
   gint i;
 
+  gtk_rc_add_initial_default_files ();
+  
   for (i = 0; gtk_rc_default_files[i] != NULL; i++)
     gtk_rc_context_parse_file (context, gtk_rc_default_files[i], GTK_PATH_PRIO_RC, FALSE);
 }

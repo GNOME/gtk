@@ -2,6 +2,15 @@
 
 	Merged from trunk:
 
+        Bug 564066 – Crash in gtk_rc_parse_default_files
+
+        * gtk/gtkrc.c (gtk_rc_parse_default_files): Handle being called
+        early. Bug report by Andrés G. Aragoneses
+
+2008-12-12  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
         * gtk/gtkmountoperation.c: Set an empty title on password dialogs.
         Pointed out by Máirín Duffy.
 
