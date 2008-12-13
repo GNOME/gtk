@@ -1,3 +1,16 @@
+2008-12-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 563835 – Typo in gtk_widget_has_screen() docs
+
+	* gdk/directfb/gdkwindow-directfb.c:
+	* gdk/gdkwindow.c:
+	* gdk/x11/gdkwindow-x11.c:
+	* gtk/gtkmenushell.c:
+	* gtk/gtkwidget.c:
+	* gtk/tests/builder.c:
+	* tests/testdnd.c: s/heirarchy/hierarchy/ in docs and comments.
+	Pointed out by Wouter Bolsterlee
+
 2008-12-12  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 564066 – Crash in gtk_rc_parse_default_files

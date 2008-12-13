@@ -83,7 +83,7 @@ enum {
  *
  * There is also is a concept of the current menu and a current
  * menu item. The current menu item is the selected menu item
- * that is furthest down in the heirarchy. (Every active menu_shell
+ * that is furthest down in the hierarchy. (Every active menu_shell
  * does not necessarily contain a selected menu item, but if
  * it does, then menu_shell->parent_menu_shell must also contain
  * a selected menu item. The current menu is the menu that 

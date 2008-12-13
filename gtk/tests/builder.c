@@ -2410,7 +2410,7 @@ test_menus (void)
   g_assert (strcmp (GTK_ACCEL_LABEL (item_accel_label)->accel_string, 
 		    GTK_ACCEL_LABEL (sample_accel_label)->accel_string) == 0);
 
-  /* Check the menu heirarchy worked here  */
+  /* Check the menu hierarchy worked here  */
   g_assert (get_parent_menubar (item));
 
   gtk_widget_destroy (GTK_WIDGET (window));

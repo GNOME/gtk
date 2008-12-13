@@ -432,7 +432,7 @@ source_drag_data_get  (GtkWidget          *widget,
 }
   
 /* The following is a rather elaborate example demonstrating/testing
- * changing of the window heirarchy during a drag - in this case,
+ * changing of the window hierarchy during a drag - in this case,
  * via a "spring-loaded" popup window.
  */
 static GtkWidget *popup_window = NULL;

@@ -6241,8 +6241,7 @@ gtk_widget_propagate_screen_changed_recurse (GtkWidget *widget,
  *
  * Please note that the semantics of this call will change
  * in the future if used on a widget that has a composited
- * window in its heirarchy (as set by
- * gdk_window_set_composited()).
+ * window in its hierarchy (as set by gdk_window_set_composited()).
  * 
  * Return value: %TRUE if the widget can rely on its alpha
  * channel being drawn correctly.
@@ -6741,7 +6740,7 @@ gtk_widget_get_screen (GtkWidget *widget)
  * 
  * Checks whether there is a #GdkScreen is associated with
  * this widget. All toplevel widgets have an associated
- * screen, and all widgets added into a heirarchy with a toplevel
+ * screen, and all widgets added into a hierarchy with a toplevel
  * window at the top.
  * 
  * Return value: %TRUE if there is a #GdkScreen associcated
@@ -6787,7 +6786,7 @@ gtk_widget_get_display (GtkWidget *widget)
  * 
  * Get the root window where this widget is located. This function can
  * only be called after the widget has been added to a widget
- * heirarchy with #GtkWindow at the top.
+ * hierarchy with #GtkWindow at the top.
  *
  * The root window is useful for such purposes as creating a popup
  * #GdkWindow associated with the window. In general, you should only

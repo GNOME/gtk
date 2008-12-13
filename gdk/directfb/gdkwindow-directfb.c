@@ -660,7 +660,7 @@ _gdk_window_new (GdkWindow     *parent,
 void
 _gdk_windowing_window_destroy_foreign (GdkWindow *window)
 {
-  /* It's somebody else's window, but in our heirarchy,
+  /* It's somebody else's window, but in our hierarchy,
    * so reparent it to the root window, and then send
    * it a delete event, as if we were a WM
    */

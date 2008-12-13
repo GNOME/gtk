@@ -508,9 +508,9 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	{
 	  /* Logically, it probably makes more sense to send
 	   * a "destroy yourself" message to the foreign window
-	   * whether or not it's in our heirarchy; but for historical
+	   * whether or not it's in our hierarchy; but for historical
 	   * reasons, we only send "destroy yourself" messages to
-	   * foreign windows in our heirarchy.
+	   * foreign windows in our hierarchy.
 	   */
 	  if (private->parent)
 	    _gdk_windowing_window_destroy_foreign (window);
