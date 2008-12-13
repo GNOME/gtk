@@ -9008,20 +9008,29 @@ gtk_icon_view_accessible_model_rows_reordered (GtkTreeModel *tree_model,
   GtkIconViewItemAccessible *item;
   GList *items;
   AtkObject *atk_obj;
+  gint *order;
+  gint length, i;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
   icon_view = GTK_ICON_VIEW (user_data);
   priv = gtk_icon_view_accessible_get_priv (atk_obj);
+
+  length = gtk_tree_model_iter_n_children (tree_model, NULL);
+
+  order = g_new (gint, length);
+  for (i = 0; i < length; i++)
+    order [new_order[i]] = i;
 
   items = priv->items;
   while (items)
     {
       info = items->data;
       item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (info->item);
-      info->index = new_order[info->index];
+      info->index = order[info->index];
       item->item = g_list_nth_data (icon_view->priv->items, info->index);
       items = items->next;
     }
+  g_free (order);
   priv->items = g_list_sort (priv->items, 
                              (GCompareFunc)gtk_icon_view_accessible_item_compare);
 
