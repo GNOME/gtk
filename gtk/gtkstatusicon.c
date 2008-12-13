@@ -942,6 +942,7 @@ gtk_status_icon_finalize (GObject *object)
   priv->blank_icon = NULL;
 
 #ifdef GDK_WINDOWING_X11
+  gtk_widget_destroy (priv->image);
   gtk_widget_destroy (priv->tray_icon);
 #endif
 
