@@ -1,5 +1,14 @@
 2008-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 563158 – CellRendererProgress pulsing and progressing rows can 
+	not be used together
+
+	* gtk/gtkcellrendererprogress.c (gtk_cell_renderer_progress_set_pulse):
+	Don't try to keep state in a cell renderer between two paint
+	calls. It doesn't work. Patch by Kristian Mueller
+
+2008-12-13  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 555560 – gtk_combo_box_set_active fails with no model
 	
 	* gtk/gtkcombobox.c: Allow out-of-order setting of model and active.
