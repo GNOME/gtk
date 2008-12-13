@@ -1,5 +1,12 @@
 2008-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 563751 – xatom cache is prefilled too late
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Initialize the
+	XAtom cache earlier. Patch by Christian Persch
+
+2008-12-13  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 564212 – gtk_icon_view_accessible_model_rows_reordered explain 
 	new_order in the wrong way
 

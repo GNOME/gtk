@@ -181,6 +181,8 @@ gdk_display_open (const gchar *display_name)
   XAddConnectionWatch (xdisplay, gdk_internal_connection_watch, NULL);
 #endif /* HAVE_X11R6 */
   
+  _gdk_x11_precache_atoms (display, precache_atoms, G_N_ELEMENTS (precache_atoms));
+
   /* RandR must be initialized before we initialize the screens */
   display_x11->have_randr12 = FALSE;
 #ifdef HAVE_RANDR
@@ -217,8 +219,6 @@ gdk_display_open (const gchar *display_name)
   attr.width = 10;
   attr.height = 10;
   attr.event_mask = 0;
-
-  _gdk_x11_precache_atoms (display, precache_atoms, G_N_ELEMENTS (precache_atoms));
 
   display_x11->leader_gdk_window = gdk_window_new (GDK_SCREEN_X11 (display_x11->default_screen)->root_window, 
 						   &attr, GDK_WA_X | GDK_WA_Y);
