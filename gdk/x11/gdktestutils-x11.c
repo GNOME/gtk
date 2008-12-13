@@ -189,8 +189,11 @@ gdk_test_simulate_button (GdkWindow      *window,
     0,  /* serial */
     1,  /* send_event */
   };
+  gboolean success;
+
   g_return_val_if_fail (button_pressrelease == GDK_BUTTON_PRESS || button_pressrelease == GDK_BUTTON_RELEASE, FALSE);
   g_return_val_if_fail (window != NULL, FALSE);
+
   if (!GDK_WINDOW_IS_MAPPED (window))
     return FALSE;
   screen = gdk_colormap_get_screen (gdk_drawable_get_colormap (window));
@@ -218,7 +221,7 @@ gdk_test_simulate_button (GdkWindow      *window,
                                            &xev.subwindow);
   if (!xev.subwindow)
     xev.subwindow = xev.window;
-  gboolean success = xev.same_screen;
+  success = xev.same_screen;
   success &= 0 != XWarpPointer (xev.display, None, xev.window, 0, 0, 0, 0, xev.x, xev.y);
   success &= 0 != XSendEvent (xev.display, xev.window, True, button_pressrelease == GDK_BUTTON_PRESS ? ButtonPressMask : ButtonReleaseMask, (XEvent*) &xev);
   XSync (xev.display, False);

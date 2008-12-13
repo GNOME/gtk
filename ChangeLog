@@ -1,5 +1,12 @@
 2008-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 558306 – Cannot build gdk (gtk+ 2.14.4) on Solaris 8
+
+	* gdk/x11/gdktestutils-x11.c (gdk_test_simulate_button):
+	Remove a C99ism. Pointed out by Eric Lamarque
+
+2008-12-13  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 549251 – GTK icon view accessible issue.
 
 	* gtk/gtkiconview.c (gtk_icon_view_accessible_model_row_changed):
