@@ -397,10 +397,10 @@ gtk_cell_renderer_progress_set_pulse (GtkCellRendererProgress *cellprogress,
 
    if (pulse != priv->pulse)
      {
-       if (priv->pulse <= 0)
+       if (pulse <= 0)
          priv->offset = 0;
        else
-         priv->offset++;
+         priv->offset = pulse;
      }
 
    priv->pulse = pulse;
