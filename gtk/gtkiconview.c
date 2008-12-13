@@ -8880,8 +8880,36 @@ gtk_icon_view_accessible_model_row_changed (GtkTreeModel *tree_model,
                                             gpointer     user_data)
 {
   AtkObject *atk_obj;
+  gint index;
+  GtkWidget *widget;
+  GtkIconView *icon_view;
+  GtkIconViewItem *item;
+  GtkIconViewAccessible *a11y_view;
+  GtkIconViewItemAccessible *a11y_item;
+  gchar *name, *text;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
+  a11y_view = GTK_ICON_VIEW_ACCESSIBLE (atk_obj);
+  index = gtk_tree_path_get_indices(path)[0];
+  a11y_item = gtk_icon_view_accessible_find_child (atk_obj, index);
+
+  widget = GTK_ACCESSIBLE (atk_obj)->widget;
+  icon_view = GTK_ICON_VIEW (widget);
+  item = a11y_item->item;
+
+  name = gtk_icon_view_item_accessible_get_name (ATK_OBJECT (a11y_item));
+
+  if (!name || strcmp (name, "") == 0)
+    {
+      gtk_icon_view_set_cell_data (icon_view, item);
+      text = get_text (icon_view, item);
+      if (text)
+        {
+          gtk_text_buffer_set_text (a11y_item->text_buffer, text, -1);
+          g_free (text);
+        }
+    }
+
   g_signal_emit_by_name (atk_obj, "visible-data-changed");
 
   return;
