@@ -1,5 +1,12 @@
 2008-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 549251 – GTK icon view accessible issue.
+
+	* gtk/gtkiconview.c (gtk_icon_view_accessible_model_row_changed):
+	Handle separate append/set for rows.  Patch by Li Yuan
+
+2008-12-13  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 556839 – Crash when opening a link
 
 	* gtk/gtkstatusicon.c (gtk_status_icon_finalize): Destroy the
