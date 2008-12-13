@@ -469,6 +469,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
   gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
 
   gtk_window_set_resizable (window, FALSE);
+  gtk_window_set_title (window, "");
   gtk_window_set_icon_name (window, GTK_STOCK_DIALOG_AUTHENTICATION);
 
   gtk_dialog_add_buttons (dialog,
