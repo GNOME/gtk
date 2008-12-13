@@ -81,6 +81,7 @@ struct _GtkComboBoxPrivate
   gint wrap_width;
   GtkShadowType shadow_type;
 
+  gint active; /* Only temporary */
   GtkTreeRowReference *active_row;
 
   GtkWidget *tree_view;
@@ -928,6 +929,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   priv->height = 0;
   priv->wrap_width = 0;
 
+  priv->active = -1;
   priv->active_row = NULL;
   priv->col_column = -1;
   priv->row_column = -1;
@@ -4839,6 +4841,13 @@ gtk_combo_box_set_active (GtkComboBox *combo_box,
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   g_return_if_fail (index_ >= -1);
 
+  if (combo_box->priv->model == NULL)
+    {
+      /* Save index, in case the model is set after the index */
+      combo_box->priv->active = index_;
+      return;
+    }
+
   if (index_ != -1)
     path = gtk_tree_path_new_from_indices (index_, -1);
    
@@ -5033,6 +5042,13 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
   if (combo_box->priv->cell_view)
     gtk_cell_view_set_model (GTK_CELL_VIEW (combo_box->priv->cell_view),
                              combo_box->priv->model);
+
+  if (combo_box->priv->active != -1)
+    {
+      /* If an index was set in advance, apply it now */
+      gtk_combo_box_set_active (combo_box, combo_box->priv->active);
+      combo_box->priv->active = -1;
+    }
 
 out:
   gtk_combo_box_update_sensitivity (combo_box);

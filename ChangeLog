@@ -2,6 +2,15 @@
 
 	Merged from trunk:
 
+        Bug 555560 – gtk_combo_box_set_active fails with no model
+
+        * gtk/gtkcombobox.c: Allow out-of-order setting of model and active.
+        Patch by Christian Dywan
+
+2008-12-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
         Bug 558306 – Cannot build gdk (gtk+ 2.14.4) on Solaris 8
 
         * gdk/x11/gdktestutils-x11.c (gdk_test_simulate_button):
