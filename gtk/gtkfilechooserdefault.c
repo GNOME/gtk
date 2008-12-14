@@ -5340,7 +5340,8 @@ set_local_only (GtkFileChooserDefault *impl,
 	  shortcuts_add_bookmarks (impl);
 	}
 
-      if (local_only && !g_file_is_native (impl->current_folder))
+      if (local_only && impl->current_folder &&
+           !g_file_is_native (impl->current_folder))
 	{
 	  /* If we are pointing to a non-local folder, make an effort to change
 	   * back to a local folder, but it's really up to the app to not cause

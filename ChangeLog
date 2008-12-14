@@ -1,5 +1,12 @@
 2008-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 556233 – local-only causes G_IS_FILE warning
+
+	* gtk/gktfilechooserdefault.c (set_local_only): Avoid a warning
+	in tests. Patch by Christian Dywan
+
+2008-12-13  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 563158 – CellRendererProgress pulsing and progressing rows can 
 	not be used together
 
