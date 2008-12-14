@@ -6870,6 +6870,41 @@ struct UpdateCurrentFolderData
 };
 
 static void
+update_current_folder_mount_enclosing_volume_cb (GCancellable        *cancellable,
+                                                 GtkFileSystemVolume *volume,
+                                                 const GError        *error,
+                                                 gpointer             user_data)
+{
+  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
+  struct UpdateCurrentFolderData *data = user_data;
+  GtkFileChooserDefault *impl = data->impl;
+
+  if (cancellable != impl->update_current_folder_cancellable)
+    goto out;
+
+  impl->update_current_folder_cancellable = NULL;
+  set_busy_cursor (impl, FALSE);
+
+  if (cancelled)
+    goto out;
+
+  if (error)
+    {
+      error_changing_folder_dialog (data->impl, data->file, g_error_copy (error));
+      impl->reload_state = RELOAD_EMPTY;
+      goto out;
+    }
+
+  change_folder_and_display_error (impl, data->file, data->clear_entry);
+
+out:
+  g_object_unref (data->file);
+  g_free (data);
+
+  g_object_unref (cancellable);
+}
+
+static void
 update_current_folder_get_info_cb (GCancellable *cancellable,
 				   GFileInfo    *info,
 				   const GError *error,
@@ -6893,6 +6928,27 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
   if (error)
     {
       GFile *parent_file;
+
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_MOUNTED))
+        {
+          GMountOperation *mount_operation;
+          GtkWidget *toplevel;
+
+          g_object_unref (cancellable);
+          toplevel = gtk_widget_get_toplevel (GTK_WIDGET (impl));
+
+          mount_operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
+
+          set_busy_cursor (impl, TRUE);
+
+          impl->update_current_folder_cancellable =
+            _gtk_file_system_mount_enclosing_volume (impl->file_system, data->file,
+                                                     mount_operation,
+                                                     update_current_folder_mount_enclosing_volume_cb,
+                                                     data);
+
+          return;
+        }
 
       if (!data->original_file)
         {
