@@ -998,7 +998,7 @@ dnd_select_folder_get_info_cb (GCancellable *cancellable,
     {
       gboolean is_folder;
 
-      is_folder = (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY);
+      is_folder = _gtk_file_info_consider_as_directory (info);
 
       data->selected =
 	(((data->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER && is_folder) ||
@@ -1455,7 +1455,7 @@ set_info_get_info_cb (GCancellable *cancellable,
   if (!data->label)
     data->label = g_strdup (g_file_info_get_display_name (info));
 
-  is_folder = (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY);
+  is_folder = _gtk_file_info_consider_as_directory (info);
 
   gtk_list_store_set (GTK_LIST_STORE (data->button->priv->model), &iter,
 		      ICON_COLUMN, pixbuf,

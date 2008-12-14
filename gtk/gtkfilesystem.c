@@ -959,6 +959,11 @@ enclosing_volume_mount_cb (GObject      *source_object,
   g_file_mount_enclosing_volume_finish (G_FILE (source_object), result, &error);
   volume = _gtk_file_system_get_volume_for_file (async_data->file_system, G_FILE (source_object));
 
+  /* Silently drop G_IO_ERROR_ALREADY_MOUNTED error for gvfs backends without visible mounts. */
+  /* Better than doing query_info with additional I/O every time. */
+  if (error && g_error_matches (error, G_IO_ERROR, G_IO_ERROR_ALREADY_MOUNTED))
+    g_clear_error (&error);
+
   gdk_threads_enter ();
   ((GtkFileSystemVolumeMountCallback) async_data->callback) (async_data->cancellable, volume,
 							     error, async_data->data);
@@ -1791,3 +1796,13 @@ _gtk_file_info_render_icon (GFileInfo *info,
 
   return pixbuf;
 }
+
+gboolean
+_gtk_file_info_consider_as_directory (GFileInfo *info)
+{
+  GFileType type = g_file_info_get_file_type (info);
+  
+  return (type == G_FILE_TYPE_DIRECTORY ||
+          type == G_FILE_TYPE_MOUNTABLE);
+}
+

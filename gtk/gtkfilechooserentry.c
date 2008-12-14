@@ -439,7 +439,7 @@ maybe_append_separator_to_file (GtkFileChooserEntry *chooser_entry,
 
       if (info)
 	{
-	  if (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
+	  if (_gtk_file_info_consider_as_directory (info))
 	    {
 	      gchar *tmp = display_name;
 	      display_name = g_strconcat (tmp, G_DIR_SEPARATOR_S, NULL);
@@ -1812,7 +1812,7 @@ _gtk_file_chooser_entry_get_is_folder (GtkFileChooserEntry *chooser_entry,
 
       if (file_info)
         {
-	  retval = (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY);
+	  retval = _gtk_file_info_consider_as_directory (file_info);
 	  g_object_unref (file_info);
 	}
     }
