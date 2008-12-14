@@ -1,3 +1,8 @@
+2008-12-14  Tor Lillqvist  <tml@novell.com>
+
+	* ast.po: Use charset=UTF-8 to avoid error with some versions of
+	GNU msgfmt.
+
 2008-11-24  Matthias Clasen <mclasen@redhat.com>
 
 	* === Released 2.14.5 ===
