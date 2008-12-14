@@ -2,6 +2,26 @@
 
 	Merged from trunk:
 
+        Bug 561494 – FileChooser network browsing and authentication support
+
+        * gtk/gtkfilesystem.[hc] (_gtk_file_info_consider_as_directory):
+        Privately export this method. It classifies directories and mountables
+        the same.
+
+        * gtk/gtkfilesystem.c (enclosing_volume_mount_cb): Silently drop
+        G_IO_ERROR_ALREADY_MOUNTED error for gvfs backends without visible
+        mounts.
+
+        * gtk/gtkfilesystemmodel.c:
+        * gtk/gtkfilechooserbutton.c:
+        * gtk/gtkfilechooserentry.c:
+        * gtk/gtkfilechooserdefault.c: Use the new function instead of
+        direct checks for G_FILE_TYPE_DIRECTORY throughout.
+
+2008-12-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
         Bug 562579 – Remove error dialog when directory does not exist
 
         * gtk/gtkfilechooserdefault.c (update_current_folder_get_info_cb):

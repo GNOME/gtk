@@ -444,7 +444,7 @@ gtk_file_system_model_iter_has_child (GtkTreeModel *tree_model,
   else
     {
       GFileInfo *info = file_model_node_get_info (model, node);
-      return (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY);
+      return _gtk_file_info_consider_as_directory (info);
     }
 }
 
@@ -1330,7 +1330,7 @@ file_model_node_is_visible (GtkFileSystemModel *model,
 	  return FALSE;
 	}
 
-      is_folder = (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY);
+      is_folder = _gtk_file_info_consider_as_directory (info);
 
       if (model->show_folders != model->show_files &&
 	  model->show_folders != is_folder)
@@ -1553,7 +1553,7 @@ file_model_node_get_children (GtkFileSystemModel *model,
     {
       GFileInfo *info = file_model_node_get_info (model, node);
       gboolean has_children = FALSE;
-      gboolean is_folder = (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY);
+      gboolean is_folder = _gtk_file_info_consider_as_directory (info);
 
       file_model_node_idle_clear_cancel (node);
 
