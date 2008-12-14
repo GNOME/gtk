@@ -2,6 +2,14 @@
 
 	Merged from trunk:
 
+        * gtk/gtkfilechooserdefault.c (update_current_folder_get_info_cb):
+        Mount the enclosing volume if the folder we're switching to is not
+        mounted. Patch by Tomas Bzatek, based on work by Carlos Garnacho
+
+2008-12-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
         Bug 561494 – FileChooser network browsing and authentication support
 
         * gtk/gtkfilesystem.[hc] (_gtk_file_info_consider_as_directory):
