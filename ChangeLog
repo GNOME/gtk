@@ -2,6 +2,16 @@
 
 	Merged from trunk:
 
+        Bug 562579 – Remove error dialog when directory does not exist
+
+        * gtk/gtkfilechooserdefault.c (update_current_folder_get_info_cb):
+        Don't show an error dialog when changing to a non-existing folder,
+        since this is ususally just an annoyance. 
+
+2008-12-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
         Bug 556233 – local-only causes G_IS_FILE warning
 
         * gtk/gktfilechooserdefault.c (set_local_only): Avoid a warning
