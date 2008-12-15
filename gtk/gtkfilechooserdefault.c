@@ -10649,7 +10649,8 @@ list_row_activated (GtkTreeView           *tree_view,
 	    const gchar *target_uri;
 
             file = _gtk_file_system_model_get_file (impl->browse_files_model, &child_iter);
-            if (g_file_info_get_file_type (info) == G_FILE_TYPE_MOUNTABLE) 
+            if (g_file_info_get_file_type (info) == G_FILE_TYPE_MOUNTABLE ||
+                g_file_info_get_file_type (info) == G_FILE_TYPE_SHORTCUT) 
               {
                 target_uri = g_file_info_get_attribute_string (info, G_FILE_ATTRIBUTE_STANDARD_TARGET_URI);
                 if (target_uri)
