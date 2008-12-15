@@ -1120,6 +1120,15 @@ gdk_offscreen_window_queue_antiexpose (GdkWindow *window,
 }
 
 static void
+gdk_offscreen_window_queue_translation (GdkWindow *window,
+					GdkRegion *area,
+					gint       dx,
+					gint       dy)
+{
+}
+
+
+static void
 gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
 {
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
@@ -1173,6 +1182,7 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->merge_child_shapes = gdk_offscreen_window_merge_child_shapes;
   iface->set_static_gravities = gdk_offscreen_window_set_static_gravities;
   iface->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
+  iface->queue_translation = gdk_offscreen_window_queue_translation;
   iface->get_origin = gdk_offscreen_window_get_origin;
 }
 

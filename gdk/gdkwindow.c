@@ -5559,9 +5559,8 @@ gdk_window_move_resize_internal (GdkWindow *window,
 
       /* The old_region area is moved and we queue translations for all expose events
 	 to it that will be sent before the copy operation */
-      /* TODO: Make queue_translation a vtable call instead of hardcoding this crap */
-      if (!gdk_window_is_offscreen (impl_window)) 
-	_gdk_windowing_window_queue_translation ((GdkWindow *)impl_window, old_region, dx, dy);
+      GDK_WINDOW_IMPL_GET_IFACE (impl_window->impl)->queue_translation ((GdkWindow *)impl_window,
+									old_region, dx, dy);
       
       /* convert from parent coords to impl */
       gdk_region_offset (copy_area, private->abs_x - private->x, private->abs_y - private->y);
@@ -5732,15 +5731,13 @@ gdk_window_scroll (GdkWindow *window,
   /* Get window clip and convert to real window coords, this
      area is moved and we queue translations for all expose events
      to it that will be sent before the copy operation */
-  /* TODO: Make queue_translation a vtable call instead of hardcoding this crap */
-  if (!gdk_window_is_offscreen (impl_window))
-    {
-      source_area = gdk_region_copy (private->clip_region);
-      /* convert from window coords to real parent */
-      gdk_region_offset (source_area, private->abs_x, private->abs_y);
-      _gdk_windowing_window_queue_translation ((GdkWindow *)impl_window, source_area, dx, dy);
-      gdk_region_destroy (source_area);
-    }
+
+  source_area = gdk_region_copy (private->clip_region);
+  /* convert from window coords to real parent */
+  gdk_region_offset (source_area, private->abs_x, private->abs_y);
+  GDK_WINDOW_IMPL_GET_IFACE (impl_window->impl)->queue_translation ((GdkWindow *)impl_window,
+								    source_area, dx, dy);
+  gdk_region_destroy (source_area);
   
   /* convert from window coords to impl */
   gdk_region_offset (copy_area, private->abs_x, private->abs_y);
@@ -5809,13 +5806,10 @@ gdk_window_move_region (GdkWindow       *window,
   gdk_window_invalidate_region (window, nocopy_area, FALSE);
   gdk_region_destroy (nocopy_area);
 
-  /* TODO: Make queue_translation a vtable call instead of hardcoding this crap */
-  if (!gdk_window_is_offscreen (impl_window))
-    {
-      gdk_region_offset (source_area, private->abs_x, private->abs_y);
-      _gdk_windowing_window_queue_translation ((GdkWindow *)impl_window, source_area, dx, dy);
-    }
-
+  gdk_region_offset (source_area, private->abs_x, private->abs_y);
+  GDK_WINDOW_IMPL_GET_IFACE (impl_window->impl)->queue_translation ((GdkWindow *)impl_window,
+								    source_area, dx, dy);
+  
   /* convert from window coords to impl */
   gdk_region_offset (copy_area, private->abs_x, private->abs_y);
   

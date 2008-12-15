@@ -359,11 +359,6 @@ gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
 
 #define GDK_WINDOW_IS_MAPPED(window) ((((GdkWindowObject*)window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
 
-void _gdk_windowing_window_queue_translation (GdkWindow *window,
-					      GdkRegion *area,
-					      gint       dx,
-					      gint       dy);
-
 
 /* Called to do the windowing system specific part of gdk_window_destroy(),
  *

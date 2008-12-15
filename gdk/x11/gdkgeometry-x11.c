@@ -357,10 +357,10 @@ gdk_window_queue (GdkWindow          *window,
 }
 
 void
-_gdk_windowing_window_queue_translation (GdkWindow *window,
-					 GdkRegion *area,
-					 gint       dx,
-					 gint       dy)
+_gdk_x11_window_queue_translation (GdkWindow *window,
+				   GdkRegion *area,
+				   gint       dx,
+				   gint       dy)
 {
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
   item->type = GDK_WINDOW_QUEUE_TRANSLATE;

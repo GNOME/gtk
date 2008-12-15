@@ -127,9 +127,12 @@ void _gdk_window_process_expose    (GdkWindow     *window,
                                     gulong         serial,
                                     GdkRectangle  *area);
 
-gboolean _gdk_x11_window_queue_antiexpose (GdkWindow *window,
-					   GdkRegion *area);
-
+gboolean _gdk_x11_window_queue_antiexpose  (GdkWindow *window,
+					    GdkRegion *area);
+void     _gdk_x11_window_queue_translation (GdkWindow *window,
+					    GdkRegion *area,
+					    gint       dx,
+					    gint       dy);
 
 void     _gdk_selection_window_destroyed   (GdkWindow            *window);
 gboolean _gdk_selection_filter_clear_event (XSelectionClearEvent *event);

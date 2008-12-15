@@ -5925,6 +5925,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->merge_child_shapes = gdk_window_x11_merge_child_shapes;
   iface->set_static_gravities = gdk_window_x11_set_static_gravities;
   iface->queue_antiexpose = _gdk_x11_window_queue_antiexpose;
+  iface->queue_translation = _gdk_x11_window_queue_translation;
 }
 
 #define __GDK_WINDOW_X11_C__
