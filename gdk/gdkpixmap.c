@@ -145,6 +145,9 @@ static GdkImage* gdk_pixmap_copy_to_image (GdkDrawable *drawable,
 					   gint         height);
 
 static cairo_surface_t *gdk_pixmap_ref_cairo_surface (GdkDrawable *drawable);
+static cairo_surface_t *gdk_pixmap_create_cairo_surface (GdkDrawable *drawable,
+							 int width,
+							 int height);
 
 static GdkVisual*   gdk_pixmap_real_get_visual   (GdkDrawable *drawable);
 static gint         gdk_pixmap_real_get_depth    (GdkDrawable *drawable);
@@ -216,6 +219,7 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->get_visual = gdk_pixmap_real_get_visual;
   drawable_class->_copy_to_image = gdk_pixmap_copy_to_image;
   drawable_class->ref_cairo_surface = gdk_pixmap_ref_cairo_surface;
+  drawable_class->create_cairo_surface = gdk_pixmap_create_cairo_surface;
 }
 
 static void
@@ -604,6 +608,17 @@ gdk_pixmap_ref_cairo_surface (GdkDrawable *drawable)
 {
   return _gdk_drawable_ref_cairo_surface (((GdkPixmapObject*)drawable)->impl);
 }
+
+static cairo_surface_t *
+gdk_pixmap_create_cairo_surface (GdkDrawable *drawable,
+				 int width,
+				 int height)
+{
+  return _gdk_windowing_create_cairo_surface (GDK_PIXMAP_OBJECT(drawable)->impl,
+					      width, height);
+}
+
+
 
 static GdkBitmap *
 make_solid_mask (GdkScreen *screen, gint width, gint height)

@@ -1804,5 +1804,15 @@ _gdk_drawable_get_source_drawable (GdkDrawable *drawable)
   return drawable;
 }
 
+cairo_surface_t *
+_gdk_drawable_create_cairo_surface (GdkDrawable *drawable,
+				    int width,
+				    int height)
+{
+  return GDK_DRAWABLE_GET_CLASS (drawable)->create_cairo_surface (drawable,
+								  width, height);
+}
+
+
 #define __GDK_DRAW_C__
 #include "gdkaliasdef.c"

@@ -234,6 +234,9 @@ GdkImage *_gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 cairo_surface_t *_gdk_drawable_ref_cairo_surface (GdkDrawable *drawable);
 
 GdkDrawable *_gdk_drawable_get_source_drawable (GdkDrawable *drawable);
+cairo_surface_t * _gdk_drawable_create_cairo_surface (GdkDrawable *drawable,
+						      int width,
+						      int height);
 
 /* GC caching */
 GdkGC *_gdk_drawable_get_scratch_gc (GdkDrawable *drawable,

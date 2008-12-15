@@ -204,8 +204,12 @@ struct _GdkDrawableClass
 
   void         (*set_cairo_clip)      (GdkDrawable *drawable,
 				       cairo_t *cr);
+
+  cairo_surface_t * (*create_cairo_surface) (GdkDrawable *drawable,
+					     int width,
+					     int height);
+
   /* Padding for future expansion */
-  void         (*_gdk_reserved6)  (void);
   void         (*_gdk_reserved7)  (void);
   void         (*_gdk_reserved9)  (void);
   void         (*_gdk_reserved10) (void);

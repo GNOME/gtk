@@ -192,6 +192,9 @@ static GdkImage* gdk_window_copy_to_image (GdkDrawable *drawable,
 					   gint         height);
 
 static cairo_surface_t *gdk_window_ref_cairo_surface (GdkDrawable *drawable);
+static cairo_surface_t *gdk_window_create_cairo_surface (GdkDrawable *drawable,
+							 int width,
+							 int height);
 static void             gdk_window_set_cairo_clip    (GdkDrawable *drawable,
 						      cairo_t *cr);
 
@@ -344,6 +347,7 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->get_visual = gdk_window_real_get_visual;
   drawable_class->_copy_to_image = gdk_window_copy_to_image;
   drawable_class->ref_cairo_surface = gdk_window_ref_cairo_surface;
+  drawable_class->create_cairo_surface = gdk_window_create_cairo_surface;
   drawable_class->set_cairo_clip = gdk_window_set_cairo_clip;
   drawable_class->get_clip_region = gdk_window_get_clip_region;
   drawable_class->get_visible_region = gdk_window_get_visible_region;
@@ -2010,8 +2014,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       width = private->abs_x + private->width;
       height = private->abs_y + private->height;
       
-      paint->surface = _gdk_windowing_create_cairo_surface (((GdkPixmapObject *)paint->pixmap)->impl,
-							    width, height);
+      paint->surface = _gdk_drawable_create_cairo_surface (paint->pixmap, width, height);
 
       /* Mark the region as valid on the implicit paint */
       gdk_region_offset (paint->region, private->abs_x, private->abs_y); 
@@ -3869,6 +3872,16 @@ gdk_window_cairo_surface_destroy (void *data)
 }
 
 static cairo_surface_t *
+gdk_window_create_cairo_surface (GdkDrawable *drawable,
+				 int width,
+				 int height)
+{
+  return _gdk_windowing_create_cairo_surface (GDK_WINDOW_OBJECT(drawable)->impl,
+					      width, height);
+}
+
+
+static cairo_surface_t *
 gdk_window_ref_cairo_surface (GdkDrawable *drawable)
 {
   GdkWindowObject *private = (GdkWindowObject*) drawable;
@@ -3900,8 +3913,7 @@ gdk_window_ref_cairo_surface (GdkDrawable *drawable)
 	  source = _gdk_drawable_get_source_drawable (drawable);
 
 	  /* TODO: Avoid the typecheck crap by adding virtual call */
-	  private->cairo_surface = _gdk_windowing_create_cairo_surface (GDK_IS_PIXMAP (source) ? GDK_PIXMAP_OBJECT(source)->impl : GDK_WINDOW_OBJECT(source)->impl,
-									width, height);
+	  private->cairo_surface = _gdk_drawable_create_cairo_surface (source, width, height);
 	  
 	  if (private->cairo_surface)
 	    {
@@ -5933,7 +5945,7 @@ update_cursor (GdkDisplay *display)
       !is_parent_of (display->pointer_grab.window, (GdkWindow *)cursor_window))
     cursor_window = (GdkWindowObject *)display->pointer_grab.window;
   
-  GDK_WINDOW_IMPL_GET_IFACE (pointer_window->impl)->set_cursor (pointer_window,
+  GDK_WINDOW_IMPL_GET_IFACE (pointer_window->impl)->set_cursor ((GdkWindow *)pointer_window,
 								cursor_window->cursor);
 }
 
@@ -7402,8 +7414,7 @@ proxy_button_event (GdkEvent *source_event)
 	    break;
 	  w = w->parent;
 	}
-      pointer_window = w;
-      
+      pointer_window = (GdkWindow *)w;
       
       if (pointer_window != NULL &&
 	  pointer_window != source_event->any.window)
