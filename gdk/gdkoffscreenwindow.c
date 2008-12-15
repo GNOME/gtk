@@ -75,13 +75,6 @@ struct _GdkOffscreenWindowClass
 
 static void       gdk_offscreen_window_impl_iface_init    (GdkWindowImplIface         *iface);
 static void       gdk_offscreen_window_hide               (GdkWindow                  *window);
-static void       gdk_offscreen_window_clear_area         (GdkWindow                  *window,
-							   gint                        x,
-							   gint                        y,
-							   gint                        width,
-							   gint                        height,
-							   gboolean                    send_expose);
-
 
 G_DEFINE_TYPE_WITH_CODE (GdkOffscreenWindow,
                          gdk_offscreen_window,
@@ -962,43 +955,6 @@ setup_backing_rect_gc (GdkWindow *window, int x_offset, int y_offset)
 }
 
 static void
-gdk_offscreen_window_clear_area (GdkWindow *window,
-				 gint       x,
-				 gint       y,
-				 gint       width,
-				 gint       height,
-				 gboolean   send_expose)
-{
-  GdkGC *gc;
-  
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  /* Actual drawing is done by gdkwindow.c */
-
-  gc = setup_backing_rect_gc (window, 0, 0);
-  gdk_draw_rectangle (window, gc, TRUE, x, y, width, height);
-  g_object_unref (gc);
-  
-  if (send_expose)
-    {
-      GdkRectangle visible, rect;
-
-      visible.x = visible.y = 0;
-      gdk_drawable_get_size (GDK_DRAWABLE (window), &visible.width, &visible.height);
-
-      rect.x = x;
-      rect.y = x;
-      rect.width = width;
-      rect.height = height;
-
-      gdk_rectangle_intersect (&rect, &visible, &rect);
-
-      gdk_window_invalidate_rect (window, &rect, TRUE);
-    }
-}
-
-static void
 gdk_offscreen_window_set_background (GdkWindow      *window,
 				     const GdkColor *color)
 {
@@ -1208,7 +1164,6 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->set_back_pixmap = gdk_offscreen_window_set_back_pixmap;
   iface->get_events = gdk_offscreen_window_get_events;
   iface->set_events = gdk_offscreen_window_set_events;
-  iface->clear_area = gdk_offscreen_window_clear_area;
   iface->reparent = gdk_offscreen_window_reparent;
   iface->set_cursor = gdk_offscreen_window_set_cursor;
   iface->get_geometry = gdk_offscreen_window_get_geometry;

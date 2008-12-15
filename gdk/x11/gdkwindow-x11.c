@@ -1670,20 +1670,6 @@ gdk_window_x11_reparent (GdkWindow *window,
 }
 
 static void
-gdk_window_x11_clear_area (GdkWindow *window,
-                           gint       x,
-                           gint       y,
-                           gint       width,
-                           gint       height,
-                           gboolean   send_expose)
-{
-  if (!GDK_WINDOW_DESTROYED (window))
-    XClearArea (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
-		x, y, width, height,
-                send_expose);
-}
-
-static void
 gdk_window_x11_raise (GdkWindow *window)
 {
   if (!GDK_WINDOW_DESTROYED (window))
@@ -5923,7 +5909,6 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->withdraw = gdk_window_x11_withdraw;
   iface->set_events = gdk_window_x11_set_events;
   iface->get_events = gdk_window_x11_get_events;
-  iface->clear_area = gdk_window_x11_clear_area;
   iface->raise = gdk_window_x11_raise;
   iface->lower = gdk_window_x11_lower;
   iface->move_resize = gdk_window_x11_move_resize;

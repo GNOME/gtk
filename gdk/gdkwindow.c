@@ -3529,8 +3529,6 @@ gdk_window_clear_area_internal (GdkWindow *window,
     {
       if (private->redirect)
 	gdk_window_clear_backing_rect_redirect (window, x, y, width, height);
-
-      
       
       gdk_window_clear_backing_rect_direct (window, x, y, width, height);
       if (send_expose)

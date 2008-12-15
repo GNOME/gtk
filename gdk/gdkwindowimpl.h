@@ -56,12 +56,6 @@ struct _GdkWindowImplIface
                                          gint             y,
                                          gint             width,
                                          gint             height);
-  void         (* clear_area)           (GdkWindow       *window,
-                                         gint             x,
-                                         gint             y,
-                                         gint             width,
-                                         gint             height,
-                                         gboolean         send_expose);
   void         (* set_background)       (GdkWindow       *window,
                                          const GdkColor  *color);
   void         (* set_back_pixmap)      (GdkWindow       *window,
