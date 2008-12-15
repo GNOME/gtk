@@ -5927,6 +5927,17 @@ gdk_window_set_back_pixmap (GdkWindow *window,
     GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_back_pixmap (window, private->bg_pixmap);
 }
 
+static GdkCursor *
+get_cursor_for_window (GdkWindowObject *cursor_window)
+{
+  while (cursor_window->cursor == NULL &&
+	 cursor_window->parent != NULL &&
+	 cursor_window->parent->window_type != GDK_WINDOW_ROOT)
+    cursor_window = cursor_window->parent;
+
+  return cursor_window->cursor;
+}
+
 /**
  * gdk_window_set_cursor:
  * @window: a #GdkWindow
@@ -5943,10 +5954,12 @@ gdk_window_set_cursor (GdkWindow *window,
 		       GdkCursor *cursor)
 {
   GdkWindowObject *private;
+  GdkDisplay *display;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   private = (GdkWindowObject *) window;
+  display = gdk_drawable_get_display (window);
 
   if (private->cursor)
     {
@@ -5959,9 +5972,9 @@ gdk_window_set_cursor (GdkWindow *window,
       if (cursor)
 	private->cursor = gdk_cursor_ref (cursor);
 
-      /* TODO: Track this via pointer_window 
-	 GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_cursor (window, cursor);
-      */
+      if (is_parent_of (window, display->pointer_info.window_under_pointer))
+	GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_cursor (window,
+							       get_cursor_for_window (private));
     }
 }
 
@@ -7233,15 +7246,23 @@ get_pointer_window (GdkDisplay *display,
   return pointer_window;
 }
 
-static void
-set_window_under_pointer (GdkDisplay *display,
-			  GdkWindow *window)
+void
+_gdk_display_set_window_under_pointer (GdkDisplay *display,
+				       GdkWindow *window)
 {
+  GdkWindowObject *private;
+
+  private = (GdkWindowObject *)window;
+
   if (display->pointer_info.window_under_pointer)
     g_object_unref (display->pointer_info.window_under_pointer);
   display->pointer_info.window_under_pointer = window;
   if (window)
     g_object_ref (window);
+
+  if (window)
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_cursor (window,
+							   get_cursor_for_window (private));
 }
 
 void
@@ -7273,7 +7294,7 @@ _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
 					  display->pointer_info.state,
 					  GDK_CURRENT_TIME,
 					  NULL);
-	  set_window_under_pointer (display, new_window_under_pointer);
+	  _gdk_display_set_window_under_pointer (display, new_window_under_pointer);
 	}
     }
 }
@@ -7370,7 +7391,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 				      state, time_,
 				      source_event);
 
-      set_window_under_pointer (display, pointer_window);
+      _gdk_display_set_window_under_pointer (display, pointer_window);
     }
   else if (source_event->type == GDK_MOTION_NOTIFY)
     {

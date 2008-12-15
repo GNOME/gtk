@@ -737,17 +737,6 @@ generate_grab_broken_event (GdkWindow *window,
     }
 }
 
-static void
-set_window_under_pointer (GdkDisplay *display,
-			  GdkWindow *window)
-{
-  if (display->pointer_info.window_under_pointer)
-    g_object_unref (display->pointer_info.window_under_pointer);
-  display->pointer_info.window_under_pointer = window;
-  if (window)
-    g_object_ref (window);
-}
-
 void
 _gdk_display_set_has_pointer_grab (GdkDisplay *display,
 				   GdkWindow *window,
@@ -840,7 +829,7 @@ _gdk_display_set_has_pointer_grab (GdkDisplay *display,
       /* !owner_event Grabbing a window that we're not inside, current status is
 	 now NULL (i.e. outside grabbed window) */
       if (!owner_events && display->pointer_info.window_under_pointer != window)
-	set_window_under_pointer (display, NULL);
+	_gdk_display_set_window_under_pointer (display, NULL);
     }
 
   display->pointer_grab.window = window;
@@ -966,7 +955,7 @@ _gdk_display_unset_has_pointer_grab (GdkDisplay *display,
     }
 
   /* We're now ungrabbed, update the window_under_pointer */
-  set_window_under_pointer (display, pointer_window);
+  _gdk_display_set_window_under_pointer (display, pointer_window);
   
   if (implicit)
     generate_grab_broken_event (old_grab_window,
