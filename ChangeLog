@@ -1,5 +1,9 @@
 2008-12-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintunixdialog.c: Don't export emit_ok_response
+
+2008-12-15  Matthias Clasen  <mclasen@redhat.com>
+
 	* NEWS: Updates
 
 2008-12-15  Tomas Bzatek  <tbzatek@redhat.com>
