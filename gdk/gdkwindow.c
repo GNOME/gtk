@@ -2489,6 +2489,9 @@ setup_clip_for_draw (GdkDrawable *drawable,
   GdkWindowObject *private = (GdkWindowObject *)drawable;
   GdkRegion *clip;
 
+  if (private->window_type == GDK_WINDOW_ROOT)
+    return;
+  
   if (_gdk_gc_get_subwindow (gc) == GDK_CLIP_BY_CHILDREN)
     clip = private->clip_region_with_children;
   else
@@ -7012,8 +7015,7 @@ send_crossing_event (GdkDisplay                 *display,
 		     gint                        toplevel_y,
 		     GdkModifierType             mask,
 		     guint32                     time_,
-		     GdkEvent                   *event_in_queue,
-		     gboolean                    before_event)
+		     GdkEvent                   *event_in_queue)
 {
   GdkEvent *event;
   guint32 event_mask;
@@ -7030,7 +7032,7 @@ send_crossing_event (GdkDisplay                 *display,
 
   if (window->event_mask & event_mask)
     {
-      event = _gdk_make_event ((GdkWindow *)window, type, event_in_queue, before_event);
+      event = _gdk_make_event ((GdkWindow *)window, type, event_in_queue, TRUE);
       event->crossing.time = time_;
       event->crossing.subwindow = subwindow;
       if (subwindow)
@@ -7062,8 +7064,7 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 				gint                        toplevel_y,
 				GdkModifierType             mask,
 				guint32                     time_,
-				GdkEvent                   *event_in_queue,
-				gboolean                    before_event)
+				GdkEvent                   *event_in_queue)
 {
   GdkWindowObject *c;
   GdkWindowObject *win, *last, *next;
@@ -7103,7 +7104,7 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 			   NULL,
 			   toplevel_x, toplevel_y,
 			   mask, time_,
-			   event_in_queue, before_event);
+			   event_in_queue);
      
       if (c != a)
 	{
@@ -7123,7 +7124,7 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 				   (GdkWindow *)last,
 				   toplevel_x, toplevel_y,
 				   mask, time_,
-				   event_in_queue, before_event);
+				   event_in_queue);
 	      
 	      last = win;
 	      win = win->parent;
@@ -7168,7 +7169,7 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 				   (GdkWindow *)next,
 				   toplevel_x, toplevel_y,
 				   mask, time_,
-				   event_in_queue, before_event);
+				   event_in_queue);
 	    }
 	  g_list_free (path);
 	}
@@ -7188,7 +7189,7 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 			   NULL,
 			   toplevel_x, toplevel_y,
 			   mask, time_,
-			   event_in_queue, before_event);
+			   event_in_queue);
     }
 }
 
@@ -7271,7 +7272,7 @@ _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
 					  display->pointer_info.toplevel_y,
 					  display->pointer_info.state,
 					  GDK_CURRENT_TIME,
-					  NULL, FALSE);
+					  NULL);
 	  set_window_under_pointer (display, new_window_under_pointer);
 	}
     }
@@ -7367,7 +7368,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 				      GDK_CROSSING_NORMAL,
 				      toplevel_x, toplevel_y,
 				      state, time_,
-				      source_event, source_event->type == GDK_LEAVE_NOTIFY);
+				      source_event);
 
       set_window_under_pointer (display, pointer_window);
     }
@@ -7551,19 +7552,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
        * when grabbing.
        */
 
-      /* Some grab in another window (by perhaps another client) did a grab.
-       * The pointer is still in this window, but we won't get told if it
-       * moves out, so NULL this now and set it back to the right value at
-       * ungrab time.
-       */
-      if (event->type == GDK_LEAVE_NOTIFY &&
-	  event->crossing.mode == GDK_CROSSING_GRAB)
-	{
-	  g_assert (display->pointer_info.toplevel_under_pointer == event_window);
-	  g_object_unref (display->pointer_info.toplevel_under_pointer);
-	  display->pointer_info.toplevel_under_pointer = NULL;
-	}
-      
       /* We ended up in this window after some (perhaps other clients)
 	 grab, so update the toplevel_under_window state */
       if (event->type == GDK_ENTER_NOTIFY &&
@@ -7581,14 +7569,16 @@ _gdk_windowing_got_event (GdkDisplay *display,
   if (event->type == GDK_ENTER_NOTIFY &&
       event->crossing.detail != GDK_NOTIFY_INFERIOR)
     {
-      g_assert (display->pointer_info.toplevel_under_pointer == NULL);
+      if (display->pointer_info.toplevel_under_pointer)
+	g_object_unref (display->pointer_info.toplevel_under_pointer);
       display->pointer_info.toplevel_under_pointer = g_object_ref (event_window);
     }
   else if (event->type == GDK_LEAVE_NOTIFY &&
-	   event->crossing.detail != GDK_NOTIFY_INFERIOR)
+	   event->crossing.detail != GDK_NOTIFY_INFERIOR &&
+	   display->pointer_info.toplevel_under_pointer == event_window)
     {
-      g_assert (display->pointer_info.toplevel_under_pointer == event_window);
-      g_object_unref (display->pointer_info.toplevel_under_pointer);
+      if (display->pointer_info.toplevel_under_pointer)
+	g_object_unref (display->pointer_info.toplevel_under_pointer);
       display->pointer_info.toplevel_under_pointer = NULL;
     }
 

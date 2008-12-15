@@ -810,7 +810,7 @@ _gdk_display_set_has_pointer_grab (GdkDisplay *display,
 					      GDK_CROSSING_GRAB,
 					      x, y, state,
 					      time,
-					      NULL, FALSE);
+					      NULL);
 	    }
 	  else
 	    {
@@ -823,7 +823,7 @@ _gdk_display_set_has_pointer_grab (GdkDisplay *display,
 					      GDK_CROSSING_GRAB,
 					      x, y, state,
 					      time,
-					      NULL, FALSE);
+					      NULL);
 	      _gdk_windowing_window_get_pointer (display,
 						 dest_toplevel,
 						 &x, &y, &state);
@@ -833,7 +833,7 @@ _gdk_display_set_has_pointer_grab (GdkDisplay *display,
 					      GDK_CROSSING_GRAB,
 					      x, y, state,
 					      time,
-					      NULL, FALSE);
+					      NULL);
 	    }
 	}
 
@@ -868,6 +868,9 @@ _gdk_display_unset_has_pointer_grab (GdkDisplay *display,
 
   old_grab_window = display->pointer_grab.window;
   old_native_grab_window = display->pointer_grab.native_window;
+
+  if (old_grab_window == NULL)
+    return; /* This happens in the gdk_window_hide case */
 
   if (do_grab_one_pointer_release_event)
     display->pointer_grab.grab_one_pointer_release_event = display->pointer_grab.window;
@@ -921,7 +924,7 @@ _gdk_display_unset_has_pointer_grab (GdkDisplay *display,
 				      GDK_CROSSING_UNGRAB,
 				      x, y, state,
 				      time,
-				      NULL, FALSE);
+				      NULL);
     }
   else
     {
@@ -939,7 +942,7 @@ _gdk_display_unset_has_pointer_grab (GdkDisplay *display,
 					      GDK_CROSSING_UNGRAB,
 					      x, y, state,
 					      time,
-					      NULL, FALSE);
+					      NULL);
 	    }
 	  else
 	    {
@@ -950,14 +953,14 @@ _gdk_display_unset_has_pointer_grab (GdkDisplay *display,
 					      GDK_CROSSING_UNGRAB,
 					      x, y, state,
 					      time,
-					      NULL, FALSE);
+					      NULL);
 	      _gdk_syntesize_crossing_events (display,
 					      NULL,
 					      pointer_window,
 					      GDK_CROSSING_UNGRAB,
 					      x, y, state,
 					      time,
-					      NULL, FALSE);
+					      NULL);
 	    }
 	}
     }

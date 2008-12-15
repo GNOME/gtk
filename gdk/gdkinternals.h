@@ -526,8 +526,7 @@ void _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 				     gint                        toplevel_y,
 				     GdkModifierType             mask,
 				     guint32                     time_,
-				     GdkEvent                   *event_in_queue,
-				     gboolean                    before_event);
+				     GdkEvent                   *event_in_queue);
 
 void _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window);
 
