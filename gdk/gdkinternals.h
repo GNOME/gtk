@@ -345,7 +345,12 @@ GdkWindow* _gdk_windowing_window_get_pointer (GdkDisplay       *display,
 					      GdkModifierType  *mask);
 GdkWindow* _gdk_windowing_window_at_pointer  (GdkDisplay       *display,
 					      gint             *win_x,
-					      gint             *win_y);
+					      gint             *win_y,
+					      GdkModifierType  *mask);
+void _gdk_windowing_got_event                (GdkDisplay       *display,
+					      GList            *event_link,
+					      GdkEvent         *event);
+
 
 /* Return the number of bits-per-pixel for images of the specified depth. */
 gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
@@ -521,8 +526,8 @@ void _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 				     gint                        toplevel_y,
 				     GdkModifierType             mask,
 				     guint32                     time_,
-				     gboolean                    do_first,
-				     gboolean                    do_last);
+				     GdkEvent                   *event_in_queue,
+				     gboolean                    before_event);
 
 void _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window);
 

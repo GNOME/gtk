@@ -491,7 +491,7 @@ gdk_display_real_get_window_at_pointer (GdkDisplay *display,
   GdkWindow *window;
   gint x, y;
 
-  window = _gdk_windowing_window_at_pointer (display, &x, &y);
+  window = _gdk_windowing_window_at_pointer (display, &x, &y, NULL);
 
   /* This might need corrections, as the native window returned
      may contain client side children */
@@ -737,6 +737,17 @@ generate_grab_broken_event (GdkWindow *window,
     }
 }
 
+static void
+set_window_under_pointer (GdkDisplay *display,
+			  GdkWindow *window)
+{
+  if (display->pointer_info.window_under_pointer)
+    g_object_unref (display->pointer_info.window_under_pointer);
+  display->pointer_info.window_under_pointer = window;
+  if (window)
+    g_object_ref (window);
+}
+
 void
 _gdk_display_set_has_pointer_grab (GdkDisplay *display,
 				   GdkWindow *window,
@@ -747,51 +758,89 @@ _gdk_display_set_has_pointer_grab (GdkDisplay *display,
 				   guint32 time,
 				   gboolean implicit)
 {
-  int wx, wy;
+  GdkWindow *pointer_window, *src_toplevel, *dest_toplevel, *src_window;
   
-  /* Normal GRAB events are sent by listening for enter and leave
-   * events on the native event window, which is then proxied
-   * into the virtual windows when the events are seen.
-   * However, there are two cases where X will not send these events:
-   * * When there is already a grab on the native parent of the
-   *   virtual grab window
-   * * When there is no grab, but the pointer is already in the
-   *   native parent of the virtual grab window
-   * In the first case we send the right GRAB events from the grab, but
-   * in the second case we need to generate our own UNGRAB crossing events.
-   */
   if (display->pointer_grab.window != NULL &&
       display->pointer_grab.window != window)
     {
       generate_grab_broken_event (GDK_WINDOW (display->pointer_grab.window),
 				  FALSE, display->pointer_grab.implicit,
 				  window);
-
-      /* Re-grabbing. Pretend we have no grab for now so that
-	 the GRAB events get delivered */
-      display->pointer_grab.window = NULL;
-      _gdk_syntesize_crossing_events (display, 
-				      display->pointer_grab.window,
-				      window,
-				      GDK_CROSSING_GRAB,
-				      /* These may be stale... */
-				      display->pointer_info.toplevel_x,
-				      display->pointer_info.toplevel_y,
-				      display->pointer_info.state,
-				      time, TRUE, TRUE);
     }
-  else if (_gdk_windowing_window_at_pointer (display, &wx, &wy) == native_window)
+  
+  /* We need to generate crossing events for the grab.
+   * However, there are never any crossing events for implicit grabs
+   * TODO: ... Actually, this could happen if the pointer window doesn't have button mask so a parent gets the event... 
+   */
+  if (!implicit)
     {
-      _gdk_syntesize_crossing_events (display, 
-				      display->pointer_info.window_under_pointer,
-				      window,
-				      GDK_CROSSING_GRAB,
-				      /* These may be stale... */
-				      display->pointer_info.toplevel_x,
-				      display->pointer_info.toplevel_y,
-				      display->pointer_info.state,
-				      time, TRUE, TRUE);
+      GdkScreen *screen;
+      GdkWindowObject *w;
+      int x, y;
+      GdkModifierType state;
+
+      /* We send GRAB crossing events from the window under the pointer to the
+	 grab window. Except if there is an old grab then we start from that */
+      if (display->pointer_grab.window)
+	src_window = display->pointer_grab.window;
+      else
+	src_window = display->pointer_info.window_under_pointer;
+
+      /* Unset any current grab to make sure we send the events */
+      display->pointer_grab.window = NULL;
       
+      if (src_window != window)
+	{
+	  /* _gdk_syntesize_crossing_events only works inside one toplevel, split into two calls if needed */
+	  if (src_window)
+	    src_toplevel = gdk_window_get_toplevel (src_window);
+	  else
+	    src_toplevel = NULL;
+	  dest_toplevel = gdk_window_get_toplevel (window);
+	  
+	  if (src_toplevel == NULL ||
+	      src_toplevel == dest_toplevel)
+	    {
+	      _gdk_windowing_window_get_pointer (display,
+						 dest_toplevel,
+						 &x, &y, &state);
+	      _gdk_syntesize_crossing_events (display,
+					      src_window,
+					      window,
+					      GDK_CROSSING_GRAB,
+					      x, y, state,
+					      time,
+					      NULL, FALSE);
+	    }
+	  else
+	    {
+	      _gdk_windowing_window_get_pointer (display,
+						 src_toplevel,
+						 &x, &y, &state);
+	      _gdk_syntesize_crossing_events (display,
+					      src_window,
+					      NULL,
+					      GDK_CROSSING_GRAB,
+					      x, y, state,
+					      time,
+					      NULL, FALSE);
+	      _gdk_windowing_window_get_pointer (display,
+						 dest_toplevel,
+						 &x, &y, &state);
+	      _gdk_syntesize_crossing_events (display,
+					      NULL,
+					      window,
+					      GDK_CROSSING_GRAB,
+					      x, y, state,
+					      time,
+					      NULL, FALSE);
+	    }
+	}
+
+      /* !owner_event Grabbing a window that we're not inside, current status is
+	 now NULL (i.e. outside grabbed window) */
+      if (!owner_events && display->pointer_info.window_under_pointer != window)
+	set_window_under_pointer (display, NULL);
     }
 
   display->pointer_grab.window = window;
@@ -810,10 +859,12 @@ _gdk_display_unset_has_pointer_grab (GdkDisplay *display,
 				     gboolean do_grab_one_pointer_release_event,
 				     guint32 time)
 {
-  int wx, wy;
+  GdkWindow *pointer_window, *src_toplevel, *dest_toplevel;
   GdkWindow *old_grab_window;
   GdkWindow *old_native_grab_window;
-
+  int x, y;
+  GdkModifierType state;
+  GdkWindowObject *w;
 
   old_grab_window = display->pointer_grab.window;
   old_native_grab_window = display->pointer_grab.native_window;
@@ -821,34 +872,98 @@ _gdk_display_unset_has_pointer_grab (GdkDisplay *display,
   if (do_grab_one_pointer_release_event)
     display->pointer_grab.grab_one_pointer_release_event = display->pointer_grab.window;
 
-  /* We need to set this to null befor syntesizing events to make sure they get
-     delivered to anything but the grab window */
+  /* Set first so crossing events get sent */
   display->pointer_grab.window = NULL;
   
-  /* Normal UNGRAB events are sent by listening for enter and leave
-   * events on the native event window, which is then proxied
-   * into the virtual windows when the events are seen.
-   * However, there are two cases where X will not send these events:
-   * * When this ungrab is due to a new grab on the native window that
-   *   is a parent of the currently grabbed virtual window
-   * * When there is no new grab, and the pointer is already in the
-   *   grabbed virtual windows parent native window
-   * In the first case we send the right GRAB events from the grab, but
-   * in the second case we need to generate our own UNGRAB crossing events.
-   */
+  pointer_window = _gdk_windowing_window_at_pointer (display,  &x, &y, &state);
+	  
+  if (pointer_window != NULL &&
+      (GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_ROOT ||
+       GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_FOREIGN))
+    pointer_window = NULL;
 
-  if (_gdk_windowing_window_at_pointer (display, &wx, &wy) == old_native_grab_window)
+  /* We force checked what window we're in, so we need to
+   * update the toplevel_under_pointer info, as that won't get told of
+   * this change.
+   */
+  if (display->pointer_info.toplevel_under_pointer)
+    g_object_unref (display->pointer_info.toplevel_under_pointer);
+  display->pointer_info.toplevel_under_pointer = NULL;
+  
+  if (pointer_window)
     {
-      _gdk_syntesize_crossing_events (display, 
-				      old_grab_window,
-				      display->pointer_info.window_under_pointer,
-				      GDK_CROSSING_UNGRAB,
-				      /* These may be stale... */
-				      display->pointer_info.toplevel_x,
-				      display->pointer_info.toplevel_y,
-				      display->pointer_info.state,
-				      time, TRUE, TRUE);
+      /* Convert to toplevel */
+      w = (GdkWindowObject *)pointer_window;
+      while (w->parent->window_type != GDK_WINDOW_ROOT)
+	{
+	  x += w->x;
+	  y += w->y;
+	  w = w->parent;
+	}
+
+      /* w is now toplevel and x,y in toplevel coords */
+
+      display->pointer_info.toplevel_under_pointer = g_object_ref (w);
+      
+      /* Find child window */
+      pointer_window =
+	_gdk_window_find_descendant_at ((GdkWindow *)w,
+					x, y,
+					NULL, NULL);
     }
+  
+  
+  if (pointer_window == NULL)
+    {
+      _gdk_syntesize_crossing_events (display,
+				      old_grab_window,
+				      NULL,
+				      GDK_CROSSING_UNGRAB,
+				      x, y, state,
+				      time,
+				      NULL, FALSE);
+    }
+  else
+    {
+      if (pointer_window != old_grab_window)
+	{
+	  /* _gdk_syntesize_crossing_events only works inside one toplevel, split into two calls if needed */
+	  src_toplevel = gdk_window_get_toplevel (old_grab_window);
+	  dest_toplevel = gdk_window_get_toplevel (pointer_window);
+
+	  if (src_toplevel == dest_toplevel)
+	    {
+	      _gdk_syntesize_crossing_events (display,
+					      display->pointer_info.window_under_pointer,
+					      pointer_window,
+					      GDK_CROSSING_UNGRAB,
+					      x, y, state,
+					      time,
+					      NULL, FALSE);
+	    }
+	  else
+	    {
+	      /* TODO: We're reporting the wrong coords here. They are in pointer_window toplevel coords */
+	      _gdk_syntesize_crossing_events (display,
+					      display->pointer_info.window_under_pointer,
+					      NULL,
+					      GDK_CROSSING_UNGRAB,
+					      x, y, state,
+					      time,
+					      NULL, FALSE);
+	      _gdk_syntesize_crossing_events (display,
+					      NULL,
+					      pointer_window,
+					      GDK_CROSSING_UNGRAB,
+					      x, y, state,
+					      time,
+					      NULL, FALSE);
+	    }
+	}
+    }
+
+  /* We're now ungrabbed, update the window_under_pointer */
+  set_window_under_pointer (display, pointer_window);
   
   if (implicit)
     generate_grab_broken_event (old_grab_window,

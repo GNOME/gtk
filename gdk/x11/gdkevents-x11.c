@@ -987,7 +987,7 @@ gdk_event_translate (GdkDisplay *display,
 	  display_x11->keyboard_xgrab_window != NULL &&
 	  (
 	   /* The window is not a descendant of the grabbed window */
-	   !is_parent_of (display_x11->keyboard_xgrab_window, window) ||
+	   !is_parent_of ((GdkWindow *)display_x11->keyboard_xgrab_window, window) ||
 	   /* Or owner event is false */
 	   !display_x11->keyboard_xgrab_owner_events
 	   )

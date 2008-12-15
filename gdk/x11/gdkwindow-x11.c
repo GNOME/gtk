@@ -3185,7 +3185,8 @@ gdk_display_warp_pointer (GdkDisplay *display,
 GdkWindow*
 _gdk_windowing_window_at_pointer (GdkDisplay *display,
                                   gint       *win_x,
-				  gint       *win_y)
+				  gint       *win_y,
+				  GdkModifierType *mask)
 {
   GdkWindow *window;
   GdkScreen *screen;
@@ -3294,7 +3295,9 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
   window = gdk_window_lookup_for_display (display, xwindow_last);
   *win_x = window ? winx : -1;
   *win_y = window ? winy : -1;
-
+  if (mask)
+    *mask = xmask;
+  
   return window;
 }
 

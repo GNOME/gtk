@@ -58,14 +58,18 @@ typedef struct
   GdkWindow *grab_one_pointer_release_event;
 } GdkPointerGrabInfo;
 
-/* Tracks information about which window the pointer is in and
- * at what position the mouse is. This is useful when we need
- * to synthesize events later.
+/* Tracks information about which window and position the pointer last was in.
+ * This is useful when we need to synthesize events later.
+ * Note that we track toplevel_under_pointer using enter/leave events,
+ * so in the case of a grab, either with owner_events==FALSE or with the
+ * pointer in no clients window the x/y coordinates may actually be outside
+ * the window.
  */
 typedef struct
 {
-  GdkWindow *window_under_pointer;
-  gdouble toplevel_x, toplevel_y;
+  GdkWindow *toplevel_under_pointer; /* The toplevel window with mouse inside, tracked via native events */
+  GdkWindow *window_under_pointer; /* The window that last got sent a normal enter event */
+  gdouble toplevel_x, toplevel_y; 
   guint32 state;
 } GdkPointerWindowInfo;
 
