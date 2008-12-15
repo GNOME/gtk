@@ -5927,15 +5927,25 @@ gdk_window_set_back_pixmap (GdkWindow *window,
     GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_back_pixmap (window, private->bg_pixmap);
 }
 
-static GdkCursor *
-get_cursor_for_window (GdkWindowObject *cursor_window)
+static void
+update_cursor (GdkDisplay *display)
 {
+  GdkWindowObject *pointer_window, *cursor_window;
+  
+  pointer_window = (GdkWindowObject *)display->pointer_info.window_under_pointer;
+  
+  cursor_window = pointer_window;
   while (cursor_window->cursor == NULL &&
 	 cursor_window->parent != NULL &&
 	 cursor_window->parent->window_type != GDK_WINDOW_ROOT)
     cursor_window = cursor_window->parent;
 
-  return cursor_window->cursor;
+  if (display->pointer_grab.window != NULL &&
+      !is_parent_of (display->pointer_grab.window, (GdkWindow *)cursor_window))
+    cursor_window = (GdkWindowObject *)display->pointer_grab.window;
+  
+  GDK_WINDOW_IMPL_GET_IFACE (pointer_window->impl)->set_cursor (pointer_window,
+								cursor_window->cursor);
 }
 
 /**
@@ -5973,8 +5983,7 @@ gdk_window_set_cursor (GdkWindow *window,
 	private->cursor = gdk_cursor_ref (cursor);
 
       if (is_parent_of (window, display->pointer_info.window_under_pointer))
-	GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_cursor (window,
-							       get_cursor_for_window (private));
+	update_cursor (display);
     }
 }
 
@@ -6792,73 +6801,6 @@ update_evmask_for_button_motion (guint           evmask,
   return evmask;
 }
 
-static GdkWindow *
-get_target_window_for_pointer_event (GdkDisplay                 *display,
-				     GdkWindow                  *window,
-                                     GdkEventType                type,
-                                     GdkModifierType             mask)
-{
-  guint evmask;
-  gboolean crossing_event;
-  GdkWindow *w, *grab_window;
-
-  /* crossing events don't propagate up like other types of events */
-  crossing_event = (type == GDK_ENTER_NOTIFY || type == GDK_LEAVE_NOTIFY);
-
-  if ((display->pointer_grab.window != NULL && !display->pointer_grab.owner_events) ||
-      (type == GDK_BUTTON_RELEASE && display->pointer_grab.grab_one_pointer_release_event))
-    {
-      evmask = display->pointer_grab.event_mask;
-      evmask = update_evmask_for_button_motion (evmask, mask);
-
-      if (type == GDK_BUTTON_RELEASE &&
-	  display->pointer_grab.grab_one_pointer_release_event)
-	{
-	  grab_window = display->pointer_grab.grab_one_pointer_release_event;
-	  display->pointer_grab.grab_one_pointer_release_event = NULL;
-	}
-      else
-	grab_window = display->pointer_grab.window;
-
-      if ((evmask & type_masks[type]) &&
-          (!crossing_event || window == grab_window))
-	return grab_window;
-      else
-	return NULL;
-    }
-
-  w = window;
-  while (w != NULL)
-    {
-      evmask = GDK_WINDOW_OBJECT(window)->event_mask;
-      evmask = update_evmask_for_button_motion (evmask, mask);
-
-      if (evmask & type_masks[type])
-	return w;
-
-      if (crossing_event)
-	break;
-
-      w = gdk_window_get_parent (w);
-    }
-
-  if (display->pointer_grab.window != NULL &&
-      display->pointer_grab.owner_events)
-    {
-      evmask = display->pointer_grab.event_mask;
-      evmask = update_evmask_for_button_motion (evmask, mask);
-
-      if ((evmask & type_masks[type]) &&
-	  (!crossing_event || window == display->pointer_grab.window))
-	return display->pointer_grab.window;
-      else
-	return NULL;
-    }
-
-  return NULL;
-}
-
-
 static gboolean
 is_button_type (GdkEventType type)
 {
@@ -7261,8 +7203,7 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
     g_object_ref (window);
 
   if (window)
-    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_cursor (window,
-							   get_cursor_for_window (private));
+    update_cursor (display);
 }
 
 void
@@ -7270,7 +7211,6 @@ _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
 {
   GdkDisplay *display;
   GdkWindow *changed_toplevel;
-  GdkWindow *pointer_toplevel, *grab_toplevel;
   GdkWindow *new_window_under_pointer;
 
   changed_toplevel = get_toplevel (changed_window);
@@ -7583,7 +7523,8 @@ _gdk_windowing_got_event (GdkDisplay *display,
 	  display->pointer_info.toplevel_under_pointer = g_object_ref (event_window);
 	}
       
-      return TRUE;
+      unlink_event = TRUE;
+      goto out;
     }
   
   /* Store last pointer window and position/state */
@@ -7616,6 +7557,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
   else if (is_button_type (event->type))
     unlink_event = proxy_button_event (event);
 
+ out:
   if (unlink_event)
     {
       _gdk_event_queue_remove_link (display, event_link);
