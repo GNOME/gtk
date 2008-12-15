@@ -1803,6 +1803,7 @@ _gtk_file_info_consider_as_directory (GFileInfo *info)
   GFileType type = g_file_info_get_file_type (info);
   
   return (type == G_FILE_TYPE_DIRECTORY ||
-          type == G_FILE_TYPE_MOUNTABLE);
+          type == G_FILE_TYPE_MOUNTABLE ||
+          type == G_FILE_TYPE_SHORTCUT);
 }
 

@@ -1,3 +1,9 @@
+2008-12-15  Tomas Bzatek  <tbzatek@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c: (list_row_activated):
+	* gtk/gtkfilesystem.c: (_gtk_file_info_consider_as_directory):
+	Mask G_FILE_TYPE_SHORTCUT as a directory (#561494)
+
 2008-12-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (update_current_folder_get_info_cb):
