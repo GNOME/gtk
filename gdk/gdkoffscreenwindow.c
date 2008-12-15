@@ -103,9 +103,10 @@ gdk_offscreen_window_init (GdkOffscreenWindow *window)
 {
 }
 
-void
-_gdk_offscreen_window_destroy (GdkWindow *window,
-                               gboolean   recursing)
+static void
+gdk_offscreen_window_destroy (GdkWindow *window,
+			      gboolean   recursing,
+			      gboolean   foreign_destroy)
 {
   GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
   GdkOffscreenWindow *offscreen;
@@ -1184,6 +1185,7 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
   iface->queue_translation = gdk_offscreen_window_queue_translation;
   iface->get_origin = gdk_offscreen_window_get_origin;
+  iface->destroy = gdk_offscreen_window_destroy;
 }
 
 #define __GDK_OFFSCREEN_WINDOW_C__

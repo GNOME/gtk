@@ -1001,10 +1001,10 @@ gdk_toplevel_x11_free_contents (GdkDisplay *display,
 #endif
 }
 
-void
-_gdk_windowing_window_destroy (GdkWindow *window,
-			       gboolean   recursing,
-			       gboolean   foreign_destroy)
+static void
+_gdk_x11_window_destroy (GdkWindow *window,
+			 gboolean   recursing,
+			 gboolean   foreign_destroy)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkToplevelX11 *toplevel;
@@ -5926,6 +5926,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->set_static_gravities = gdk_window_x11_set_static_gravities;
   iface->queue_antiexpose = _gdk_x11_window_queue_antiexpose;
   iface->queue_translation = _gdk_x11_window_queue_translation;
+  iface->destroy = _gdk_x11_window_destroy;
 }
 
 #define __GDK_WINDOW_X11_C__

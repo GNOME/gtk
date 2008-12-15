@@ -1261,10 +1261,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 
 	  if (gdk_window_has_impl (private))
 	    {
-	      if (gdk_window_is_offscreen (private))
-		_gdk_offscreen_window_destroy (window, recursing);
-	      else
-		_gdk_windowing_window_destroy (window, recursing, foreign_destroy);
+	      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->destroy (window, recursing, foreign_destroy);
 	    }
 	  else
 	    {

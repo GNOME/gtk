@@ -112,7 +112,23 @@ struct _GdkWindowImplIface
 					 GdkRegion       *area,
 					 gint            dx,
 					 gint            dy);
-  
+
+/* Called to do the windowing system specific part of gdk_window_destroy(),
+ *
+ * window: The window being destroyed
+ * recursing: If TRUE, then this is being called because a parent
+ *            was destroyed. This generally means that the call to the windowing system
+ *            to destroy the window can be omitted, since it will be destroyed as a result
+ *            of the parent being destroyed. Unless @foreign_destroy
+ *            
+ * foreign_destroy: If TRUE, the window or a parent was destroyed by some external 
+ *            agency. The window has already been destroyed and no windowing
+ *            system calls should be made. (This may never happen for some
+ *            windowing systems.)
+ */
+  void         (* destroy)              (GdkWindow       *window,
+					 gboolean         recursing,
+					 gboolean         foreign_destroy);
 };
 
 /* Interface Functions */
