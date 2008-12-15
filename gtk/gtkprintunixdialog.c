@@ -1697,7 +1697,7 @@ update_range_sensitivity (GtkWidget *button,
   gtk_widget_set_sensitive (range, active);
 }
 
-void
+static void
 emit_ok_response (GtkTreeView       *tree_view,
                   GtkTreePath       *path,
                   GtkTreeViewColumn *column,
