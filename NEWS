@@ -1,3 +1,27 @@
+Overview of Changes from GTK+ 2.14.5 to 2.14.6
+==============================================
+
+* Bugs fixed:
+ 561539 Fix warnings when size allocations fall short of border width...
+ 557420 Some compose sequences don't work anymore
+ 555334 connected server feature
+ 563547 Update gdkx11 atom precache table
+ 563991 gtk_file_chooser_button_new_with_backend is deprecated
+ 560135 Print when the user double clicks a printer
+ 564066 Crash in gtk_rc_parse_default_files
+ 564212 gtk_icon_view_accessible_model_rows_reordered explain new_order...
+ 563751 xatom cache is prefilled too late
+ 556839 Crash when opening a link
+ 549251 GTK icon view accessible issue
+ 558306 Cannot build gdk (gtk+ 2.14.4) on Solaris 8
+ 555560 gtk_combo_box_set_active fails with no model
+ 563158 CellRendererProgress pulsing and progressing rows can not...
+ 556233 local-only causes G_IS_FILE warning
+ 562579 Remove error dialog when directory does not exist
+ 561494 FileChooser network browsing and authentication support
+ 563876 GTK_MODULES env var is no longer relevant
+
+
 Overview of Changes from GTK+ 2.14.4 to 2.14.5
 ==============================================
 
