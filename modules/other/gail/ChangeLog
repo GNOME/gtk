@@ -1,3 +1,9 @@
+2008-12-15  Li Yuan  <li.yuan@sun.com>
+
+	* gailitem.c:
+	Bug #564555.  #undef GTK_DISABLE_DEPRECATED where we need to access
+	deprecated symbols.
+
 2008-12-12  Li Yuan  <li.yuan@sun.com>
 
 	* gailtreeview.c: Bug #512743.
