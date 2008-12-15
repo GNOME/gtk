@@ -7386,6 +7386,7 @@ proxy_button_event (GdkEvent *source_event)
   GdkEventType type;
   gdouble toplevel_x, toplevel_y;
   GdkDisplay *display;
+  GdkWindowObject *w;
 
   type = source_event->any.type;
   toplevel_window = source_event->any.window;
@@ -7403,6 +7404,17 @@ proxy_button_event (GdkEvent *source_event)
 	_gdk_window_find_descendant_at (toplevel_window,
 					toplevel_x, toplevel_y,
 					NULL, NULL);
+
+      /* Find the actual event window, its what gets the grab */
+      w = (GdkWindowObject *)pointer_window;
+      while (w != NULL && w->parent->window_type != GDK_WINDOW_ROOT)
+	{
+	  if (w->event_mask & GDK_BUTTON_PRESS_MASK)
+	    break;
+	  w = w->parent;
+	}
+      pointer_window = w;
+      
       
       if (pointer_window != NULL &&
 	  pointer_window != source_event->any.window)
