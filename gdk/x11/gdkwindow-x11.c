@@ -4757,48 +4757,92 @@ gdk_add_to_span (struct _gdk_span **s,
   return;
 }
 
-GdkRegion *
-_gdk_windowing_window_get_shape (GdkWindow *window)
+static GdkRegion *
+xwindow_get_shape (Display *xdisplay,
+		   Window window)
 {
   GdkRegion *shape;
+  GdkRectangle *rl;
+  XRectangle *xrl;
+  gint rn, ord, i;
 
   shape = NULL;
   
 #if defined(HAVE_SHAPE_EXT)
+  xrl = XShapeGetRectangles (xdisplay,
+			     window,
+			     ShapeBounding, &rn, &ord);
+
+  if (rn == 0)
+    return NULL;
+  
+  if (ord != YXBanded)
+    {
+      /* This really shouldn't happen with any xserver, as they
+	 generally convert regions to YXBanded internally */
+      g_warning ("non YXBanded shape masks not supported");
+      XFree (xrl);
+      return NULL;
+    }
+
+  rl = g_new (GdkRectangle, rn);
+  for (i = 0; i < rn; i++)
+    {
+      rl[i].x = xrl[i].x;
+      rl[i].y = xrl[i].y;
+      rl[i].width = xrl[i].width;
+      rl[i].height = xrl[i].height;
+    }
+  XFree (xrl);
+  
+  shape = _gdk_region_new_from_yxbanded_rects (rl, rn);
+  g_free (rl);
+#endif
+  
+  return shape;
+}
+
+
+GdkRegion *
+_gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
+{
+  GdkDisplay *display;
+  Window window;
+  GdkRegion *region;
+
+  display = gdk_drawable_get_display (GDK_DRAWABLE (mask));
+
+  window = XCreateSimpleWindow (GDK_DISPLAY_XDISPLAY (display),
+				GDK_SCREEN_XROOTWIN (gdk_display_get_default_screen (display)),
+				-1, -1, 1, 1, 0,
+				0, 0);
+  XShapeCombineMask (GDK_DISPLAY_XDISPLAY (display),
+		     window,
+		     ShapeBounding,
+		     0, 0,
+		     GDK_PIXMAP_XID (mask),
+		     ShapeSet);
+  
+  region = xwindow_get_shape (GDK_DISPLAY_XDISPLAY (display),
+			      window);
+
+  XDestroyWindow (GDK_DISPLAY_XDISPLAY (display),
+		  window);
+
+  return region;
+}
+
+GdkRegion *
+_gdk_windowing_window_get_shape (GdkWindow *window)
+{
+#if defined(HAVE_SHAPE_EXT)
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
-    {
-      GdkRectangle *rl;
-      XRectangle *xrl;
-      gint rn, ord, i;
-      
-      xrl = XShapeGetRectangles (GDK_WINDOW_XDISPLAY (window),
-				 GDK_WINDOW_XID (window),
-				 ShapeBounding, &rn, &ord);
-      
-      if (ord != YXBanded)
-	{
-	  /* This really shouldn't happen with any xserver, as they
-	     generally convert regions to YXBanded internally */
-	  g_warning ("non YXBanded shape masks not supported");
-	  XFree (rl);
-	  return NULL;
-	}
-
-      rl = g_new (GdkRectangle, rn);
-      for (i = 0; i < rn; i++)
-	{
-	  rl[i].x = xrl[i].x;
-	  rl[i].y = xrl[i].y;
-	  rl[i].width = xrl[i].width;
-	  rl[i].height = xrl[i].height;
-	}
-      
-      shape = _gdk_region_new_from_yxbanded_rects (rl, rn);
-      g_free (rl);
-      XFree (rl);
-    }
+    return xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
+			      GDK_WINDOW_XID (window));
 #endif
+
+  return NULL;
 }
 
 static void

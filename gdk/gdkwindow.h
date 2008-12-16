@@ -337,6 +337,8 @@ struct _GdkWindowObject
   GdkWindowPaint *implicit_paint;
 
   GList *outstanding_moves;
+
+  GdkRegion *shape;
   
   cairo_surface_t *cairo_surface;
 };

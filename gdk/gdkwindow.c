@@ -457,10 +457,25 @@ remove_child_area (GdkWindowObject *private,
       r.y = child->y;
       r.width = child->width;
       r.height = child->height;
-      
+
       child_region = gdk_region_rectangle (&r);
+      
+      if (child->shape)
+	gdk_region_intersect (child_region, child->shape);
+      else if (private->window_type == GDK_WINDOW_FOREIGN)
+	{
+	  GdkRegion *shape;
+	  shape = _gdk_windowing_window_get_shape ((GdkWindow *)child);
+	  if (shape)
+	    {
+	      gdk_region_intersect (child_region, shape);
+	      gdk_region_destroy (shape);
+	    }
+	}
+      
       gdk_region_subtract (region, child_region);
       gdk_region_destroy (child_region);
+
     }
 }
 
@@ -512,7 +527,7 @@ recompute_visible_regions_internal (GdkWindowObject *private,
       r.width = private->width;
       r.height = private->height;
       new_clip = gdk_region_rectangle (&r);
-      
+
       if (private->parent != NULL && GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
 	{
 	  gdk_region_intersect (new_clip, private->parent->clip_region);
@@ -523,6 +538,9 @@ recompute_visible_regions_internal (GdkWindowObject *private,
       
       /* Convert from parent coords to window coords */
       gdk_region_offset (new_clip, -private->x, -private->y);
+
+      if (private->shape)
+	gdk_region_intersect (new_clip, private->shape);
 
       if (private->clip_region == NULL ||
 	  !gdk_region_equal (private->clip_region, new_clip))
@@ -562,9 +580,10 @@ recompute_visible_regions_internal (GdkWindowObject *private,
       gdk_window_has_impl (private) &&
       /* Not for offscreens */
       private->window_type != GDK_WINDOW_OFFSCREEN &&
-      /* or for toplevels */
-      private->parent != NULL &&
-      GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT &&
+      /* or for non-shaped toplevels */
+      (private->shaped ||
+       (private->parent != NULL &&
+	GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)) &&
       /* or for foreign windows */
       GDK_WINDOW_TYPE (private) != GDK_WINDOW_FOREIGN
       )
@@ -6171,12 +6190,19 @@ gdk_window_shape_combine_mask (GdkWindow *window,
                                gint       y)
 {
   GdkWindowObject *private;
+  GdkRegion *region;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   private = (GdkWindowObject *) window;
 
-  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_mask (window, mask, x, y);
+  region = _gdk_windowing_get_shape_for_mask (mask);
+
+  gdk_window_shape_combine_region (window,
+				   region,
+				   x, y);
+
+  gdk_region_destroy (region);
 }
 
 /**
@@ -6214,7 +6240,47 @@ gdk_window_shape_combine_region (GdkWindow       *window,
 
   private = (GdkWindowObject *) window;
 
-  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_region (window, shape_region, offset_x, offset_y);
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  private->shaped = (shape_region != NULL);
+
+  if (private->shape)
+    gdk_region_destroy (private->shape);
+
+  if (shape_region)
+    {
+      private->shape = gdk_region_copy (shape_region);
+      gdk_region_offset (private->shape, offset_x, offset_y);      
+    }
+  else
+    private->shape = NULL;
+  
+  recompute_visible_regions (private, TRUE, FALSE);
+}
+
+static void
+do_child_shapes (GdkWindow *window,
+		 gboolean merge)
+{
+  GdkWindowObject *private;
+  GdkRectangle r;
+  GdkRegion *region;
+
+  private = (GdkWindowObject *) window;
+  
+  r.x = 0;
+  r.y = 0;
+  r.width = private->width;
+  r.height = private->height;
+  
+  region = gdk_region_rectangle (&r);
+  remove_child_area (private, NULL, region);
+
+  if (merge && private->shape)
+    gdk_region_subtract (region, private->shape);
+  
+  gdk_window_shape_combine_region (window, region, 0, 0);
 }
 
 /**
@@ -6229,13 +6295,9 @@ gdk_window_shape_combine_region (GdkWindow       *window,
 void
 gdk_window_set_child_shapes (GdkWindow *window)
 {
-  GdkWindowObject *private;
-
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  private = (GdkWindowObject *) window;
-
-  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_child_shapes (window);
+  do_child_shapes (window, FALSE);
 }
 
 /**
@@ -6254,13 +6316,9 @@ gdk_window_set_child_shapes (GdkWindow *window)
 void
 gdk_window_merge_child_shapes (GdkWindow *window)
 {
-  GdkWindowObject *private;
-
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  private = (GdkWindowObject *) window;
-
-  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->merge_child_shapes (window);
+  do_child_shapes (window, TRUE);
 }
 
 
@@ -6650,10 +6708,12 @@ static gboolean
 point_in_window (GdkWindowObject *window,
 		 double x, double y)
 {
-  /* TODO: Input Shape */
   return
     x >= 0 &&  x < window->width &&
-    y >= 0 && y < window->height;
+    y >= 0 && y < window->height &&
+    (window->shape == NULL ||
+     gdk_region_point_in (window->shape,
+			  x, y));
 }
 
 static void
