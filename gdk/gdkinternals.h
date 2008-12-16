@@ -335,6 +335,7 @@ gchar *_gdk_windowing_substitute_screen_number (const gchar *display_name,
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
 						 gint       *x_offset,
 						 gint       *y_offset);
+GdkRegion *_gdk_windowing_window_get_shape      (GdkWindow  *window);
 
 void       _gdk_windowing_get_pointer        (GdkDisplay       *display,
 					      GdkScreen       **screen,
@@ -521,7 +522,7 @@ GdkRegion *_gdk_window_calculate_full_clip_region    (GdkWindow     *window,
                                                       gint          *base_y_offset);
 gboolean    _gdk_window_has_impl (GdkWindow *window);
 GdkWindow * _gdk_window_get_impl_window (GdkWindow *window);
-
+GdkRegion  *_gdk_region_new_from_yxbanded_rects (GdkRectangle *rects, int n_rects);
 
 /*****************************
  * offscreen window routines *

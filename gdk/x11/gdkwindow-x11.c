@@ -4757,6 +4757,50 @@ gdk_add_to_span (struct _gdk_span **s,
   return;
 }
 
+GdkRegion *
+_gdk_windowing_window_get_shape (GdkWindow *window)
+{
+  GdkRegion *shape;
+
+  shape = NULL;
+  
+#if defined(HAVE_SHAPE_EXT)
+  if (!GDK_WINDOW_DESTROYED (window) &&
+      gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
+    {
+      GdkRectangle *rl;
+      XRectangle *xrl;
+      gint rn, ord, i;
+      
+      xrl = XShapeGetRectangles (GDK_WINDOW_XDISPLAY (window),
+				 GDK_WINDOW_XID (window),
+				 ShapeBounding, &rn, &ord);
+      
+      if (ord != YXBanded)
+	{
+	  /* This really shouldn't happen with any xserver, as they
+	     generally convert regions to YXBanded internally */
+	  g_warning ("non YXBanded shape masks not supported");
+	  XFree (rl);
+	  return NULL;
+	}
+
+      rl = g_new (GdkRectangle, rn);
+      for (i = 0; i < rn; i++)
+	{
+	  rl[i].x = xrl[i].x;
+	  rl[i].y = xrl[i].y;
+	  rl[i].width = xrl[i].width;
+	  rl[i].height = xrl[i].height;
+	}
+      
+      shape = _gdk_region_new_from_yxbanded_rects (rl, rn);
+      g_free (rl);
+      XFree (rl);
+    }
+#endif
+}
+
 static void
 gdk_add_rectangles (Display           *disp,
 		    Window             win,

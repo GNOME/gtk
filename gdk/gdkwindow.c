@@ -6650,6 +6650,7 @@ static gboolean
 point_in_window (GdkWindowObject *window,
 		 double x, double y)
 {
+  /* TODO: Input Shape */
   return
     x >= 0 &&  x < window->width &&
     y >= 0 && y < window->height;

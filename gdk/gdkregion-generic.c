@@ -96,6 +96,7 @@ static void miRegionOp   (GdkRegion       *newReg,
 			  overlapFunc      overlapFn,
 			  nonOverlapFunc   nonOverlap1Fn,
 			  nonOverlapFunc   nonOverlap2Fn);
+static void miSetExtents (GdkRegion       *pReg);
 
 /**
  * gdk_region_new:
@@ -121,6 +122,31 @@ gdk_region_new (void)
   
   return temp;
 }
+
+GdkRegion *
+_gdk_region_new_from_yxbanded_rects (GdkRectangle *rects,
+				     int num_rects)
+{
+  GdkRegion *temp;
+  int i;
+
+  temp = g_slice_new (GdkRegion);
+
+  temp->rects = g_new (GdkRegionBox, num_rects);
+  temp->size = num_rects;
+  temp->numRects = num_rects;
+  for (i = 0; i < num_rects; i++)
+    {
+      temp->rects[i].x1 = rects[i].x;
+      temp->rects[i].y1 = rects[i].y;
+      temp->rects[i].x2 = rects[i].x + rects[i].width;
+      temp->rects[i].y2 = rects[i].y + rects[i].height;
+    }
+  miSetExtents (temp);  
+  
+  return temp;
+}
+
 
 /**
  * gdk_region_rectangle:
