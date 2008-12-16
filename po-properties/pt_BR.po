@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2008-09-08 12:58-0300\n"
 "Last-Translator: Vladimir Melo <vladimirmelo.psi@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
@@ -810,7 +810,7 @@ msgstr ""
 "Se definido, o rótulo é usado para obter um item predefinido ao invés de ser "
 "exibido"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:788 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Focar ao clicar"
 
@@ -1534,7 +1534,7 @@ msgstr ""
 "Como quebrar a string em múltiplas linhas, caso o renderizador de célula não "
 "tiver espaço suficiente para exibir a string inteira"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:677
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
 msgid "Wrap width"
 msgstr "Largura da quebra"
 
@@ -1906,67 +1906,67 @@ msgstr "Valor na lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Se valores inseridos precisam estar presentes na lista"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:661
 msgid "ComboBox model"
 msgstr "Modelo de ComboBox"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:662
 msgid "The model for the combo box"
 msgstr "O modelo para a caixa de combinação"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:679
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Número de caracteres por linha ao diagramar os itens em uma grade"
 
-#: gtk/gtkcombobox.c:700
+#: gtk/gtkcombobox.c:701
 msgid "Row span column"
 msgstr "Coluna com linhas de comprimento"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:702
 msgid "TreeModel column containing the row span values"
 msgstr "Coluna TreeModel contendo os valores de linhas de comprimento"
 
-#: gtk/gtkcombobox.c:722
+#: gtk/gtkcombobox.c:723
 msgid "Column span column"
 msgstr "Coluna com colunas de comprimento"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:724
 msgid "TreeModel column containing the column span values"
 msgstr "Coluna TreeModel contendo os valores de colunas de comprimento"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:745
 msgid "Active item"
 msgstr "Item ativo"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:746
 msgid "The item which is currently active"
 msgstr "O item que está atualmente ativo"
 
-#: gtk/gtkcombobox.c:764 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Adicionar destacador aos menus"
 
-#: gtk/gtkcombobox.c:765
+#: gtk/gtkcombobox.c:766
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Se os menus de rolagem devem possuir um item destacador"
 
-#: gtk/gtkcombobox.c:780 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "Tem moldura"
 
-#: gtk/gtkcombobox.c:781
+#: gtk/gtkcombobox.c:782
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Se a caixa de combinação desenha uma moldura ao redor do filho"
 
-#: gtk/gtkcombobox.c:789
+#: gtk/gtkcombobox.c:790
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Se a caixa de combinação mantém o foco quando é clicado com o mouse"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
+#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "Título destacado"
 
-#: gtk/gtkcombobox.c:805
+#: gtk/gtkcombobox.c:806
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -1974,45 +1974,45 @@ msgstr ""
 "Um título que pode ser exibido pelo gerenciador de janelas quando o menu de "
 "contexto é retirado"
 
-#: gtk/gtkcombobox.c:822
+#: gtk/gtkcombobox.c:823
 msgid "Popup shown"
 msgstr "Menu instantâneo mostrado"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:824
 msgid "Whether the combo's dropdown is shown"
 msgstr "Se o menu desdobrável da caixa de combinação deve ser mostrado"
 
-#: gtk/gtkcombobox.c:839
+#: gtk/gtkcombobox.c:840
 msgid "Button Sensitivity"
 msgstr "Botão Sensibilidade"
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:841
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Se o botão desdobrável é sensível quando o modelo está vazio"
 
-#: gtk/gtkcombobox.c:847
+#: gtk/gtkcombobox.c:848
 msgid "Appears as list"
 msgstr "Aparece como lista"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:849
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Se os menus desdobráveis devem parecer como listas ao invés de menus"
 
-#: gtk/gtkcombobox.c:864
+#: gtk/gtkcombobox.c:865
 msgid "Arrow Size"
 msgstr "Tamanho da Seta"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:866
 msgid "The minimum size of the arrow in the combo box"
 msgstr "O tamanho mínimo da seta na caixa de combinação"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Tipo de sombra"
 
-#: gtk/gtkcombobox.c:881
+#: gtk/gtkcombobox.c:882
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Que tipo de sombra desenhar ao redor da caixa de combinação"
 

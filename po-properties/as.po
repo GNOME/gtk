@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2008-09-16 17:42+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@redhat.com>\n"
 "Language-Team: American English <>\n"
@@ -795,7 +795,7 @@ msgid ""
 msgstr ""
 "নিৰ্ধাৰিত থাকিলে, প্ৰদৰ্শনৰ বিকল্পে লেবেলক এটা স্টকৰ বস্তু নিৰ্ব্বাচন কৰিবলৈ ব্যৱহৃত হয়"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:788 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "ক্লিক কৰিলে ফ'কাচ হ'ব"
 
@@ -1505,7 +1505,7 @@ msgstr ""
 "সেল ৰেন্ডাৰাৰে সম্পূৰ্ণ পঙ্‌ক্তি প্ৰদৰ্শনেৰ বাবে পৰ্যাপ্ত স্থান না থাকলে, যিভাবে পঙ্‌ক্তিকে "
 "একাধিক লাইনে ভেঙ্গে প্ৰদৰ্শন কৰা হ'ব"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:677
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
 msgid "Wrap width"
 msgstr "গুটিয়ে যাওয়াৰ দৈৰ্ঘ্য"
 
@@ -1885,112 +1885,112 @@ msgstr "মানটি তালিকায় আছে"
 msgid "Whether entered values must already be present in the list"
 msgstr "যিসব মান লেখা হ'ব সেগুলো সৰ্বদা তালিকায় থাকতে হ'ব নে নাই"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:661
 msgid "ComboBox model"
 msgstr "কম্বোবক্স মডেল"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:662
 msgid "The model for the combo box"
 msgstr "কম্বোবক্সেৰ মডেল"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:679
 msgid "Wrap width for laying out the items in a grid"
 msgstr "গুটানো প্ৰস্থ উল্লিখিত সময় অবধি"
 
-#: gtk/gtkcombobox.c:700
+#: gtk/gtkcombobox.c:701
 msgid "Row span column"
 msgstr "প্ৰতি শাৰীতে স্তম্ভেৰ সংখ্যা"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:702
 msgid "TreeModel column containing the row span values"
 msgstr "শাৰীৰ প্ৰস্থেৰ মান ধাৰনকাৰী TreeModel স্তম্ভ"
 
-#: gtk/gtkcombobox.c:722
+#: gtk/gtkcombobox.c:723
 msgid "Column span column"
 msgstr "প্ৰতি স্তম্ভে স্তম্ভেৰ সংখ্যা"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:724
 msgid "TreeModel column containing the column span values"
 msgstr "স্তম্ভেৰ প্ৰস্থেৰ মান ধাৰনকাৰী TreeModel স্তম্ভ"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:745
 msgid "Active item"
 msgstr "সক্ৰিয় আইটেম"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:746
 msgid "The item which is currently active"
 msgstr "বৰ্তমানে সক্ৰিয় আইটেম"
 
-#: gtk/gtkcombobox.c:764 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "মেনুতে টিয়াৰঅফ (Tearoff) যোগ কৰো"
 
-#: gtk/gtkcombobox.c:765
+#: gtk/gtkcombobox.c:766
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "ড্ৰপডাউনে কোন টিয়াৰ-অফ তালিকা বস্তু থাকবে নে নাই"
 
-#: gtk/gtkcombobox.c:780 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "ফ্ৰেম আছে"
 
-#: gtk/gtkcombobox.c:781
+#: gtk/gtkcombobox.c:782
 msgid "Whether the combo box draws a frame around the child"
 msgstr "চাইল্ডৰ চাৰদিকে কম্বো বাক্স কোন ফ্ৰেম আঁকবে নে নাই"
 
-#: gtk/gtkcombobox.c:789
+#: gtk/gtkcombobox.c:790
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "মাউসেৰ সাহায্যি কম্বো বাক্সকে ক্লিক কৰা হলে তা ফ'কাচ হয়ে যাবে নে নাই"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
+#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "বিচ্ছিন্ন শিৰোনাম"
 
-#: gtk/gtkcombobox.c:805
+#: gtk/gtkcombobox.c:806
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "প'পআপ হলো"
 
-#: gtk/gtkcombobox.c:822
+#: gtk/gtkcombobox.c:823
 msgid "Popup shown"
 msgstr "পপ-আপ"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:824
 msgid "Whether the combo's dropdown is shown"
 msgstr "হলো"
 
-#: gtk/gtkcombobox.c:839
+#: gtk/gtkcombobox.c:840
 msgid "Button Sensitivity"
 msgstr ""
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:841
 #, fuzzy
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "কোন বুটামৰ মাউসেৰ সাহায্যি ক্লিক কৰা হলে তা ফ'কাচ হয়ে যাবে নে নাই"
 
-#: gtk/gtkcombobox.c:847
+#: gtk/gtkcombobox.c:848
 msgid "Appears as list"
 msgstr "তালিকাৰ মত মনে হয়"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:849
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "ড্ৰপডাউনেৰ চেহাৰা তালিকাৰ মত নহ'বকি মেনুৰ মত"
 
-#: gtk/gtkcombobox.c:864
+#: gtk/gtkcombobox.c:865
 msgid "Arrow Size"
 msgstr "মাপ"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:866
 msgid "The minimum size of the arrow in the combo box"
 msgstr "সৰ্বমোট"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "ছায়াৰ ধৰন"
 
-#: gtk/gtkcombobox.c:881
+#: gtk/gtkcombobox.c:882
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "সৰ্বমোট"
 

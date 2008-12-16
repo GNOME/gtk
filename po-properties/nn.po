@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2004-01-03 23:53+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@fys.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -842,7 +842,7 @@ msgstr ""
 "Dersom denne er satt, skal merkelappen brukast til å velja ei "
 "standardoppføring i staden for å visast"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:788 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Fokuser ved klikk"
 
@@ -1593,7 +1593,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:677
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
 msgid "Wrap width"
 msgstr "Brytingsbreidde"
 
@@ -1984,71 +1984,71 @@ msgstr "Verdi i lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Om verdiar som vert skrivne inn alt må vera i lista"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:661
 msgid "ComboBox model"
 msgstr "Kombinasjonsboks-modell"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:662
 msgid "The model for the combo box"
 msgstr "Modellen for kombinasjonsboksen"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:679
 #, fuzzy
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Brytingsbreidde når elementa vert plasserte i eit rutenett"
 
-#: gtk/gtkcombobox.c:700
+#: gtk/gtkcombobox.c:701
 msgid "Row span column"
 msgstr ""
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:702
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:722
+#: gtk/gtkcombobox.c:723
 msgid "Column span column"
 msgstr ""
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:724
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:745
 msgid "Active item"
 msgstr "Vald oppføring"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:746
 msgid "The item which is currently active"
 msgstr "Oppføringa som er valt no"
 
-#: gtk/gtkcombobox.c:764 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Legg til avrivingslinjer på menyane"
 
-#: gtk/gtkcombobox.c:765
+#: gtk/gtkcombobox.c:766
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Om arkfanene skal vera like store"
 
-#: gtk/gtkcombobox.c:780 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "Har ramme"
 
-#: gtk/gtkcombobox.c:781
+#: gtk/gtkcombobox.c:782
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Om kolonna kan omorganiserast etter titlar"
 
-#: gtk/gtkcombobox.c:789
+#: gtk/gtkcombobox.c:790
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Om knappen tek fokus når han vert klikka med musa"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
+#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "Tittel på avriven meny"
 
-#: gtk/gtkcombobox.c:805
+#: gtk/gtkcombobox.c:806
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
@@ -2056,51 +2056,51 @@ msgid ""
 msgstr ""
 "Ein tittel som kan visast av vindaugshandsamaren når denne menyen er riven av"
 
-#: gtk/gtkcombobox.c:822
+#: gtk/gtkcombobox.c:823
 #, fuzzy
 msgid "Popup shown"
 msgstr "Fokuslinjebreidde"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:824
 #, fuzzy
 msgid "Whether the combo's dropdown is shown"
 msgstr "Om kanten skal visast eller ikkje"
 
-#: gtk/gtkcombobox.c:839
+#: gtk/gtkcombobox.c:840
 msgid "Button Sensitivity"
 msgstr ""
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:841
 #, fuzzy
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Om knappen tek fokus når han vert klikka med musa"
 
-#: gtk/gtkcombobox.c:847
+#: gtk/gtkcombobox.c:848
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:849
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Om det skal veljast mapper i staden for filer"
 
-#: gtk/gtkcombobox.c:864
+#: gtk/gtkcombobox.c:865
 #, fuzzy
 msgid "Arrow Size"
 msgstr "Retning på pil"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:866
 #, fuzzy
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Modellen for kombinasjonsboksen"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Skuggetype"
 
-#: gtk/gtkcombobox.c:881
+#: gtk/gtkcombobox.c:882
 #, fuzzy
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Breidda på kanten rundt arkfanemerkelappane"

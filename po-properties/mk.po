@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2008-09-29 02:02+0200\n"
 "Last-Translator: Jovan Naumovski <jovan@lugola.net>\n"
 "Language-Team: en_US <kde-i18n-doc@lists.kde.org>\n"
@@ -808,7 +808,7 @@ msgid ""
 msgstr ""
 "If set, the label is used to pick a stock item instead of being displayed"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:788 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Focus on click"
 
@@ -1528,7 +1528,7 @@ msgstr ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:677
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
 msgid "Wrap width"
 msgstr "Завиткај широчина"
 
@@ -1895,67 +1895,67 @@ msgstr "Вредност во листата"
 msgid "Whether entered values must already be present in the list"
 msgstr "Дали внесената вредност мора да биде присутна на листата"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:661
 msgid "ComboBox model"
 msgstr "ComboBox model"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:662
 msgid "The model for the combo box"
 msgstr "The model for the combo box"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:679
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Зголеми ја ширината за поставување на предметите на мрежата"
 
-#: gtk/gtkcombobox.c:700
+#: gtk/gtkcombobox.c:701
 msgid "Row span column"
 msgstr "Row span column"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:702
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel column containing the row span values"
 
-#: gtk/gtkcombobox.c:722
+#: gtk/gtkcombobox.c:723
 msgid "Column span column"
 msgstr "Column span column"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:724
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel column containing the column span values"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:745
 msgid "Active item"
 msgstr "Активен предмет"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:746
 msgid "The item which is currently active"
 msgstr "Предметот кој што е моментално активен"
 
-#: gtk/gtkcombobox.c:764 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Add tearoffs to menus"
 
-#: gtk/gtkcombobox.c:765
+#: gtk/gtkcombobox.c:766
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Whether dropdowns should have a tearoff menu item"
 
-#: gtk/gtkcombobox.c:780 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "Има рамка"
 
-#: gtk/gtkcombobox.c:781
+#: gtk/gtkcombobox.c:782
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Whether the combo box draws a frame around the child"
 
-#: gtk/gtkcombobox.c:789
+#: gtk/gtkcombobox.c:790
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Whether the combo box grabs focus when it is clicked with the mouse"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
+#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "Tearoff Title"
 
-#: gtk/gtkcombobox.c:805
+#: gtk/gtkcombobox.c:806
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -1963,45 +1963,45 @@ msgstr ""
 "Ознака која може да биде прикажан од менаџерот на прозорци кога скокачкиот "
 "прозорец се одделува"
 
-#: gtk/gtkcombobox.c:822
+#: gtk/gtkcombobox.c:823
 msgid "Popup shown"
 msgstr "Прикажан е скокачки прозорец"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:824
 msgid "Whether the combo's dropdown is shown"
 msgstr "Дали отпуштањето на комбинираните полиња е прикажано"
 
-#: gtk/gtkcombobox.c:839
+#: gtk/gtkcombobox.c:840
 msgid "Button Sensitivity"
 msgstr "Чувствителност на копчиња"
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:841
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Дали паѓачкото копче е чувствително кога моделот е празен"
 
-#: gtk/gtkcombobox.c:847
+#: gtk/gtkcombobox.c:848
 msgid "Appears as list"
 msgstr "Се појавува на листата"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:849
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Whether dropdowns should look like lists rather than menus"
 
-#: gtk/gtkcombobox.c:864
+#: gtk/gtkcombobox.c:865
 msgid "Arrow Size"
 msgstr "Големина на стрелка"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:866
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Минималната големина на стрелката во комбинираното поле"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Shadow type"
 
-#: gtk/gtkcombobox.c:881
+#: gtk/gtkcombobox.c:882
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Кој тип на сенка ќе се исцртува околу комбинираното поле"
 

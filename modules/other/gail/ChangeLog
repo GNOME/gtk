@@ -1,3 +1,7 @@
+2008-12-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.14.6 ===
+
 2008-11-27  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 353088 – gtk_expander_get_label should return the full label text

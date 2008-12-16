@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2008-09-27 13:17+0200\n"
 "Last-Translator: Milo Casagrande <milo@ubuntu.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -939,7 +939,7 @@ msgstr ""
 "Se impostato, l'etichetta non sarà visualizzata, ma sarà usata per "
 "selezionare un oggetto nello stock"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:788 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Focus al clic"
 
@@ -1700,7 +1700,7 @@ msgstr ""
 "Indica come spezzare la stringa su più righe, se la cella di visualizzazione "
 "non ha spazio sufficiente per mostrare l'intera stringa"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:677
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
 msgid "Wrap width"
 msgstr "Adatta larghezza"
 
@@ -2085,71 +2085,71 @@ msgstr "Valore nella lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Indica se il valore inserito dev'essere già presente nella lista"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:661
 msgid "ComboBox model"
 msgstr "Modello ComboBox"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:662
 msgid "The model for the combo box"
 msgstr "Il modello per il combo box"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:679
 msgid "Wrap width for laying out the items in a grid"
 msgstr ""
 "Adatta la larghezza per la visualizzazione degli elementi su una griglia"
 
-#: gtk/gtkcombobox.c:700
+#: gtk/gtkcombobox.c:701
 msgid "Row span column"
 msgstr "Spaziatura riga-colonna"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:702
 msgid "TreeModel column containing the row span values"
 msgstr "Colonna di TreeModel contenente i valori di spaziatura della riga"
 
-#: gtk/gtkcombobox.c:722
+#: gtk/gtkcombobox.c:723
 msgid "Column span column"
 msgstr "Spaziatura colonna-colonna"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:724
 msgid "TreeModel column containing the column span values"
 msgstr "Colonna di TreeModel contenente i valori di spaziatura della colonna"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:745
 msgid "Active item"
 msgstr "Elemento attivo"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:746
 msgid "The item which is currently active"
 msgstr "L'elemento attivo in questo momento"
 
-#: gtk/gtkcombobox.c:764 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Aggiunge gli elementi per staccare i menùu"
 
-#: gtk/gtkcombobox.c:765
+#: gtk/gtkcombobox.c:766
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr ""
 "Indica se i menù a discesa devono avere un elemento per il distaccamento del "
 "menù"
 
-#: gtk/gtkcombobox.c:780 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "Con bordo"
 
-#: gtk/gtkcombobox.c:781
+#: gtk/gtkcombobox.c:782
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Indica se il combo box disegna una cornice attorno al figlio"
 
-#: gtk/gtkcombobox.c:789
+#: gtk/gtkcombobox.c:790
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Indica se il combo box riceve il focus quando viene cliccato con il mouse"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
+#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "Nome del menù staccato"
 
-#: gtk/gtkcombobox.c:805
+#: gtk/gtkcombobox.c:806
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -2157,54 +2157,54 @@ msgstr ""
 "Titolo che può essere visualizzato dal gestore di finestre se il menù viene "
 "staccato"
 
-#: gtk/gtkcombobox.c:822
+#: gtk/gtkcombobox.c:823
 msgid "Popup shown"
 msgstr "Popup visualizzato"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:824
 msgid "Whether the combo's dropdown is shown"
 msgstr "Indica se il menù a discesa del combo viene mostrato"
 
 # GTK-2-14
-#: gtk/gtkcombobox.c:839
+#: gtk/gtkcombobox.c:840
 msgid "Button Sensitivity"
 msgstr "Sensibilità pulsante"
 
 # GTK-2-14
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:841
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr ""
 "Indica se il pulsante del menù a discesa è sensibile quando il modello è "
 "vuoto"
 
-#: gtk/gtkcombobox.c:847
+#: gtk/gtkcombobox.c:848
 msgid "Appears as list"
 msgstr "Appare come una lista"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:849
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Indica se i menù a discesa assomigliano a delle liste piuttosto che a dei "
 "menù"
 
 # GTK-2-12
-#: gtk/gtkcombobox.c:864
+#: gtk/gtkcombobox.c:865
 msgid "Arrow Size"
 msgstr "Dimensione freccia"
 
 # GTK-2-12
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:866
 msgid "The minimum size of the arrow in the combo box"
 msgstr "La dimensione minima della freccia nella casella combinata"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Tipo di ombra"
 
 # GTK-2-12
-#: gtk/gtkcombobox.c:881
+#: gtk/gtkcombobox.c:882
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Indica il tipo di ombra da disegnare intorno alla casella combinata"
 

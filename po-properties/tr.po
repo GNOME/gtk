@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2008-09-07 07:34+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -896,7 +896,7 @@ msgstr ""
 "Eğer seçiliyse, etiket gösterilen yerine bir depo öğesini seçmekte "
 "kullanılacak"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:788 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Tıklama ile odaklama"
 
@@ -1746,7 +1746,7 @@ msgstr ""
 "dizginin birden fazla satıra nasıl bölüneceği"
 
 # gtk/gtklayout.c:435 gtk/gtktreeviewcolumn.c:188 gtk/gtkwidget.c:424
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:677
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
 msgid "Wrap width"
 msgstr "Satır bölme genişliği"
 
@@ -2189,76 +2189,76 @@ msgstr "Listedeki değer"
 msgid "Whether entered values must already be present in the list"
 msgstr "Girilen değerlerin listede zaten bulunma zorunluluğu"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:661
 msgid "ComboBox model"
 msgstr "ComboBox modeli"
 
 # gtk/gtktreeview.c:458
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:662
 msgid "The model for the combo box"
 msgstr "Çoklu kutucuğun modeli"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:679
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Izgara içindeki öğelerin düzeni için satır bölme genişliği"
 
 # gtk/gtktable.c:174
-#: gtk/gtkcombobox.c:700
+#: gtk/gtkcombobox.c:701
 msgid "Row span column"
 msgstr "Satır atlama sütunu"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:702
 msgid "TreeModel column containing the row span values"
 msgstr "Satır atlama sütunu değerlerini içeren TreeModel sütunu"
 
 # gtk/gtktable.c:183
-#: gtk/gtkcombobox.c:722
+#: gtk/gtkcombobox.c:723
 msgid "Column span column"
 msgstr "Sütun atlama sütunu"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:724
 msgid "TreeModel column containing the column span values"
 msgstr "Sütun atlama sütunu değerlerini içeren TreeModel sütunu"
 
 # gtk/gtkcheckmenuitem.c:114 gtk/gtktogglebutton.c:144
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:745
 msgid "Active item"
 msgstr "Etkin öğe"
 
 # gtk/gtkfontsel.c:193
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:746
 msgid "The item which is currently active"
 msgstr "Şu an etkin olan öğe"
 
-#: gtk/gtkcombobox.c:764 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Menülere ayraçları ekle"
 
 # gtk/gtknotebook.c:397
-#: gtk/gtkcombobox.c:765
+#: gtk/gtkcombobox.c:766
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Açılan menülerin ayıraç menü öğesi içermesi"
 
 # gtk/gtkcolorsel.c:1675
-#: gtk/gtkcombobox.c:780 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "Çerçeve Var"
 
 # gtk/gtkcellrenderertext.c:212 gtk/gtktexttag.c:277 gtk/gtktextview.c:553
-#: gtk/gtkcombobox.c:781
+#: gtk/gtkcombobox.c:782
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Çoklu kutunun alt çevresinde çerçeve çizmesi"
 
 # gtk/gtklabel.c:252
-#: gtk/gtkcombobox.c:789
+#: gtk/gtkcombobox.c:790
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Çoklu kutunun fare ile tıklandığında odağı yakalaması"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
+#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "Ayıraç Başlığı"
 
-#: gtk/gtkcombobox.c:805
+#: gtk/gtkcombobox.c:806
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -2266,52 +2266,52 @@ msgstr ""
 "Açılanların ayrıldığında pencere yöneticisi tarafından gösterilebilecek "
 "başlık"
 
-#: gtk/gtkcombobox.c:822
+#: gtk/gtkcombobox.c:823
 msgid "Popup shown"
 msgstr "Açılan gösterimi"
 
 # gtk/gtknotebook.c:376
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:824
 msgid "Whether the combo's dropdown is shown"
 msgstr "Çoklunun açılanlarının gösterilmesi"
 
-#: gtk/gtkcombobox.c:839
+#: gtk/gtkcombobox.c:840
 msgid "Button Sensitivity"
 msgstr "Düğme Duyarlılığı"
 
 # gtk/gtklabel.c:252
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:841
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Model boş olduğunda açılan düğmenin duyarlı olıp olmayacağı"
 
-#: gtk/gtkcombobox.c:847
+#: gtk/gtkcombobox.c:848
 msgid "Appears as list"
 msgstr "Liste olarak görünür"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:849
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Çoklu kutu açılanlarının menü yerine liste gibi görüntülenmesi"
 
 # gtk/gtkarrow.c:97
-#: gtk/gtkcombobox.c:864
+#: gtk/gtkcombobox.c:865
 msgid "Arrow Size"
 msgstr "Ok Boyutu"
 
 # gtk/gtktreeview.c:458
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:866
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Çoklu kutucuğun içindeki okun asgari boyutu"
 
 # gtk/gtkhandlebox.c:183 gtk/gtkmenubar.c:154 gtk/gtkstatusbar.c:157
 # gtk/gtktoolbar.c:276 gtk/gtkviewport.c:147
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Gölge türü"
 
 # gtk/gtknotebook.c:342
-#: gtk/gtkcombobox.c:881
+#: gtk/gtkcombobox.c:882
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Çoklu kutunun çevresine ne tür bir gölge çizileceği"
 

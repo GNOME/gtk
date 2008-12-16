@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2006-03-24 15:19+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <kontak@id.gnome.org>\n"
@@ -824,7 +824,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "Jika ini diisi, tulisan pada label akan dipilih dari item stok"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:788 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Klik untuk membuat fokus"
 
@@ -1575,7 +1575,7 @@ msgstr ""
 "Cara memecah kalimat dalam baris-baris pada saat kotak sel tidak memiliki "
 "cukup ruang untuk menampilkan keseluruhan teks"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:677
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
 msgid "Wrap width"
 msgstr "Potong lebar"
 
@@ -1959,121 +1959,121 @@ msgstr "Nilai dalam daftar"
 msgid "Whether entered values must already be present in the list"
 msgstr "Menentukan apakah nilai yang dimasukan selalu ada pada daftar"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:661
 msgid "ComboBox model"
 msgstr "Model ComboBox"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:662
 msgid "The model for the combo box"
 msgstr "Model kotak combo"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:679
 #, fuzzy
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Lebar pemotongan untuk menata isi pada kotak-kotak"
 
-#: gtk/gtkcombobox.c:700
+#: gtk/gtkcombobox.c:701
 msgid "Row span column"
 msgstr "Jarak antar baris"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:702
 msgid "TreeModel column containing the row span values"
 msgstr "Kolom TreeModel berisi nilai row span"
 
-#: gtk/gtkcombobox.c:722
+#: gtk/gtkcombobox.c:723
 msgid "Column span column"
 msgstr "Jarak antar kolom"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:724
 msgid "TreeModel column containing the column span values"
 msgstr "Kolom TreeModel berisi nilai column span"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:745
 msgid "Active item"
 msgstr "Objek aktif"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:746
 msgid "The item which is currently active"
 msgstr "Objek yang aktif"
 
-#: gtk/gtkcombobox.c:764 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Tambahkan penyobek pada menu"
 
-#: gtk/gtkcombobox.c:765
+#: gtk/gtkcombobox.c:766
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Apakah dropdown harus memiliki sebuah objek menu tearoff"
 
-#: gtk/gtkcombobox.c:780 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "Ada bingkai atau tidak"
 
-#: gtk/gtkcombobox.c:781
+#: gtk/gtkcombobox.c:782
 msgid "Whether the combo box draws a frame around the child"
 msgstr ""
 "Menentukan apakah kotak combo mengambarkan suatu bingkai di sekitar anak"
 
-#: gtk/gtkcombobox.c:789
+#: gtk/gtkcombobox.c:790
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Menentukan apakah kotak combo memfokuskan ketika diklik dengan mouse"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
+#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "Judul saat disobek"
 
-#: gtk/gtkcombobox.c:805
+#: gtk/gtkcombobox.c:806
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "Judul yang ditampilkan jendela manager saat menu ini disobek"
 
-#: gtk/gtkcombobox.c:822
+#: gtk/gtkcombobox.c:823
 #, fuzzy
 msgid "Popup shown"
 msgstr "Lebar popup"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:824
 #, fuzzy
 msgid "Whether the combo's dropdown is shown"
 msgstr "Menentukan apakah batas digambar atau tidak"
 
-#: gtk/gtkcombobox.c:839
+#: gtk/gtkcombobox.c:840
 msgid "Button Sensitivity"
 msgstr ""
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:841
 #, fuzzy
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr ""
 "Menentukan apakah tombol mendapatkan fokus pada saat diklik dengan mouse"
 
-#: gtk/gtkcombobox.c:847
+#: gtk/gtkcombobox.c:848
 msgid "Appears as list"
 msgstr "Tampilkan sebagai daftar"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:849
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Menentukan apakah dropdowns harus kelihatan seperti daftar dari pada menu"
 
-#: gtk/gtkcombobox.c:864
+#: gtk/gtkcombobox.c:865
 #, fuzzy
 msgid "Arrow Size"
 msgstr "Arah panah"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:866
 #, fuzzy
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Model kotak combo"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Tipe shadow"
 
-#: gtk/gtkcombobox.c:881
+#: gtk/gtkcombobox.c:882
 #, fuzzy
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Lebar batas di sekeliling label tab"

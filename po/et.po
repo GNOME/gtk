@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2008-08-29 08:06+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
@@ -1643,49 +1643,49 @@ msgstr "Eemalda valitud järjehoidja"
 msgid "Could not select file"
 msgstr "Faili pole võimalik valida"
 
-#: gtk/gtkfilechooserdefault.c:4289
+#: gtk/gtkfilechooserdefault.c:4288
 msgid "_Add to Bookmarks"
 msgstr "_Lisa järjehoidjatesse"
 
-#: gtk/gtkfilechooserdefault.c:4303
+#: gtk/gtkfilechooserdefault.c:4302
 msgid "Show _Hidden Files"
 msgstr "Näita _peidetud faile"
 
-#: gtk/gtkfilechooserdefault.c:4546 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4545 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Failid"
 
-#: gtk/gtkfilechooserdefault.c:4595
+#: gtk/gtkfilechooserdefault.c:4594
 msgid "Name"
 msgstr "Nimi"
 
-#: gtk/gtkfilechooserdefault.c:4620
+#: gtk/gtkfilechooserdefault.c:4619
 msgid "Size"
 msgstr "Suurus"
 
-#: gtk/gtkfilechooserdefault.c:4634
+#: gtk/gtkfilechooserdefault.c:4633
 msgid "Modified"
 msgstr "Muudetud"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4854 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4853 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "_Nimi:"
 
-#: gtk/gtkfilechooserdefault.c:4896
+#: gtk/gtkfilechooserdefault.c:4895
 msgid "_Browse for other folders"
 msgstr "Si_rvi teisi katalooge"
 
-#: gtk/gtkfilechooserdefault.c:5166
+#: gtk/gtkfilechooserdefault.c:5165
 msgid "Type a file name"
 msgstr "Faili nime sisestamine"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5203
+#: gtk/gtkfilechooserdefault.c:5202
 msgid "Create Fo_lder"
 msgstr "Loo _kataloog"
 
-#: gtk/gtkfilechooserdefault.c:5213
+#: gtk/gtkfilechooserdefault.c:5212
 msgid "_Location:"
 msgstr "Asuk_oht:"
 
@@ -1697,41 +1697,41 @@ msgstr "Salvestada _kataloogi:"
 msgid "Create in _folder:"
 msgstr "Loo _kataloogi:"
 
-#: gtk/gtkfilechooserdefault.c:6996
+#: gtk/gtkfilechooserdefault.c:7057
 msgid "Cannot change to folder because it is not local"
 msgstr "Kataloogi pole võimalik muuta kuna see pole kohalik kataloog"
 
-#: gtk/gtkfilechooserdefault.c:7621 gtk/gtkfilechooserdefault.c:7642
+#: gtk/gtkfilechooserdefault.c:7682 gtk/gtkfilechooserdefault.c:7703
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Kiirklahv %s on juba olemas"
 
-#: gtk/gtkfilechooserdefault.c:7732
+#: gtk/gtkfilechooserdefault.c:7793
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Kiirklahvi %s pole olemas"
 
-#: gtk/gtkfilechooserdefault.c:7980 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8041 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Fail nimega \"%s\" on juba olemas.  Kas sa soovid seda asendada?"
 
-#: gtk/gtkfilechooserdefault.c:7983 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8044 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Fail on juba \"%s\" all olemas.  Asendamine kirjutab selle faili sisu üle."
 
-#: gtk/gtkfilechooserdefault.c:7988 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8049 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "_Asenda"
 
-#: gtk/gtkfilechooserdefault.c:8749
+#: gtk/gtkfilechooserdefault.c:8810
 msgid "Could not start the search process"
 msgstr "Otsinguprotsessi pole võimalik alustada"
 
-#: gtk/gtkfilechooserdefault.c:8750
+#: gtk/gtkfilechooserdefault.c:8811
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1739,49 +1739,49 @@ msgstr ""
 "Programmil pole võimalik indekseerimisdeemoniga ühendust luua. Palun veendu, "
 "et see deemon töötaks."
 
-#: gtk/gtkfilechooserdefault.c:8764
+#: gtk/gtkfilechooserdefault.c:8825
 msgid "Could not send the search request"
 msgstr "Otsingupäringut pole võimalik saata"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9204
+#: gtk/gtkfilechooserdefault.c:9265
 msgid "_Search:"
 msgstr "_Otsing:"
 
-#: gtk/gtkfilechooserdefault.c:10151
+#: gtk/gtkfilechooserdefault.c:10212
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s pole võimalik ühendada"
 
-#: gtk/gtkfilechooserdefault.c:10809
+#: gtk/gtkfilechooserdefault.c:10887
 msgid "Type name of new folder"
 msgstr "Sisesta uue kataloogi nimi"
 
-#: gtk/gtkfilechooserdefault.c:10859
+#: gtk/gtkfilechooserdefault.c:10937
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10861
+#: gtk/gtkfilechooserdefault.c:10939
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10863
+#: gtk/gtkfilechooserdefault.c:10941
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10966 gtk/gtkfilechooserdefault.c:10988
-#: gtk/gtkfilechooserdefault.c:11059
+#: gtk/gtkfilechooserdefault.c:11044 gtk/gtkfilechooserdefault.c:11066
+#: gtk/gtkfilechooserdefault.c:11137
 msgid "Unknown"
 msgstr "tundmatu"
 
-#: gtk/gtkfilechooserdefault.c:11006
+#: gtk/gtkfilechooserdefault.c:11084
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11008
+#: gtk/gtkfilechooserdefault.c:11086
 msgid "Yesterday at %H:%M"
 msgstr "Eile kell %H:%M"
 
@@ -2191,39 +2191,39 @@ msgstr "GTK+ võtmed"
 msgid "Show GTK+ Options"
 msgstr "GTK+ võtmete näitamine"
 
-#: gtk/gtkmountoperation.c:476
+#: gtk/gtkmountoperation.c:477
 msgid "Co_nnect"
 msgstr "Ü_hendu"
 
-#: gtk/gtkmountoperation.c:520
+#: gtk/gtkmountoperation.c:521
 msgid "Connect _anonymously"
 msgstr "Ühendu _anonüümselt"
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:530
 msgid "Connect as u_ser:"
 msgstr "Ühendu _kasutajana:"
 
-#: gtk/gtkmountoperation.c:566
+#: gtk/gtkmountoperation.c:567
 msgid "_Username:"
 msgstr "_Kasutajanimi:"
 
-#: gtk/gtkmountoperation.c:570
+#: gtk/gtkmountoperation.c:571
 msgid "_Domain:"
 msgstr "_Domeen:"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:576
 msgid "_Password:"
 msgstr "_Parool:"
 
-#: gtk/gtkmountoperation.c:590
+#: gtk/gtkmountoperation.c:591
 msgid "Forget password _immediately"
 msgstr "_Unusta parool koheselt"
 
-#: gtk/gtkmountoperation.c:598
+#: gtk/gtkmountoperation.c:599
 msgid "Remember password until you _logout"
 msgstr "_Jäta parool kuni väljalogimiseni meelde"
 
-#: gtk/gtkmountoperation.c:606
+#: gtk/gtkmountoperation.c:607
 msgid "Remember _forever"
 msgstr "_Jäta igavesti meelde"
 
@@ -2293,7 +2293,7 @@ msgstr "_Paberi suurus:"
 msgid "_Orientation:"
 msgstr "_Suund:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2665
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2680
 msgid "Page Setup"
 msgstr "Lehekülje sätted"
 
@@ -2511,37 +2511,37 @@ msgstr "Vigane PrintDlgEx käsitleja"
 msgid "Unspecified error"
 msgstr "Kirjeldamata viga"
 
-#: gtk/gtkprintunixdialog.c:1749
+#: gtk/gtkprintunixdialog.c:1762
 msgid "Printer"
 msgstr "Printer"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1759
+#: gtk/gtkprintunixdialog.c:1772
 msgid "Location"
 msgstr "Asukoht"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1770
+#: gtk/gtkprintunixdialog.c:1783
 msgid "Status"
 msgstr "Olek"
 
-#: gtk/gtkprintunixdialog.c:1793
+#: gtk/gtkprintunixdialog.c:1808
 msgid "Range"
 msgstr "Vahemik"
 
-#: gtk/gtkprintunixdialog.c:1797
+#: gtk/gtkprintunixdialog.c:1812
 msgid "_All Pages"
 msgstr "_Kõik leheküljed"
 
-#: gtk/gtkprintunixdialog.c:1804
+#: gtk/gtkprintunixdialog.c:1819
 msgid "C_urrent Page"
 msgstr "Kä_esolev lehekülg"
 
-#: gtk/gtkprintunixdialog.c:1813
+#: gtk/gtkprintunixdialog.c:1828
 msgid "Pag_es:"
 msgstr "Le_heküljed:"
 
-#: gtk/gtkprintunixdialog.c:1814
+#: gtk/gtkprintunixdialog.c:1829
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2549,183 +2549,183 @@ msgstr ""
 "Määra üks või rohkem leheküljevahemikku.\n"
 " Näiteks: 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1835
+#: gtk/gtkprintunixdialog.c:1850
 msgid "Copies"
 msgstr "Koopiad"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1840
+#: gtk/gtkprintunixdialog.c:1855
 msgid "Copie_s:"
 msgstr "Koop_iaid:"
 
-#: gtk/gtkprintunixdialog.c:1858
+#: gtk/gtkprintunixdialog.c:1873
 msgid "C_ollate"
 msgstr "_Eksemplarhaaval"
 
-#: gtk/gtkprintunixdialog.c:1866
+#: gtk/gtkprintunixdialog.c:1881
 msgid "_Reverse"
 msgstr "Pöö_ratud järjestuses"
 
-#: gtk/gtkprintunixdialog.c:1886
+#: gtk/gtkprintunixdialog.c:1901
 msgid "General"
 msgstr "Üldine"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2426
+#: gtk/gtkprintunixdialog.c:2441
 #: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Page Ordering"
 msgstr "Lehekülgede järjekord"
 
-#: gtk/gtkprintunixdialog.c:2432
+#: gtk/gtkprintunixdialog.c:2447
 msgid "Left to right"
 msgstr "Vasakult paremale"
 
-#: gtk/gtkprintunixdialog.c:2433
+#: gtk/gtkprintunixdialog.c:2448
 msgid "Right to left"
 msgstr "Paremalt vasakule"
 
-#: gtk/gtkprintunixdialog.c:2502
+#: gtk/gtkprintunixdialog.c:2517
 msgid "Layout"
 msgstr "Paigutus"
 
 # msgstr "Le_hekülgi lehel:"
-#: gtk/gtkprintunixdialog.c:2506
+#: gtk/gtkprintunixdialog.c:2521
 msgid "T_wo-sided:"
 msgstr "Kahe_poolne:"
 
-#: gtk/gtkprintunixdialog.c:2521
+#: gtk/gtkprintunixdialog.c:2536
 msgid "Pages per _side:"
 msgstr "Le_hekülgi slaidil:"
 
-#: gtk/gtkprintunixdialog.c:2539
+#: gtk/gtkprintunixdialog.c:2554
 msgid "Page or_dering:"
 msgstr "Lehekülgede _järjestamine:"
 
-#: gtk/gtkprintunixdialog.c:2555
+#: gtk/gtkprintunixdialog.c:2570
 msgid "_Only print:"
 msgstr "Prindita_kse ainult:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2570
+#: gtk/gtkprintunixdialog.c:2585
 msgid "All sheets"
 msgstr "Kõik leheküljed"
 
-#: gtk/gtkprintunixdialog.c:2571
+#: gtk/gtkprintunixdialog.c:2586
 msgid "Even sheets"
 msgstr "Paarisnumbriga leheküljed"
 
-#: gtk/gtkprintunixdialog.c:2572
+#: gtk/gtkprintunixdialog.c:2587
 msgid "Odd sheets"
 msgstr "Paaritu numbriga leheküljed"
 
-#: gtk/gtkprintunixdialog.c:2575
+#: gtk/gtkprintunixdialog.c:2590
 msgid "Sc_ale:"
 msgstr "_Skaleerimine:"
 
-#: gtk/gtkprintunixdialog.c:2602
+#: gtk/gtkprintunixdialog.c:2617
 msgid "Paper"
 msgstr "Paber"
 
-#: gtk/gtkprintunixdialog.c:2606
+#: gtk/gtkprintunixdialog.c:2621
 msgid "Paper _type:"
 msgstr "Pa_beri liik:"
 
-#: gtk/gtkprintunixdialog.c:2621
+#: gtk/gtkprintunixdialog.c:2636
 msgid "Paper _source:"
 msgstr "Paberi _allikas:"
 
-#: gtk/gtkprintunixdialog.c:2636
+#: gtk/gtkprintunixdialog.c:2651
 msgid "Output t_ray:"
 msgstr "_Väljundsalv:"
 
-#: gtk/gtkprintunixdialog.c:2688
+#: gtk/gtkprintunixdialog.c:2703
 msgid "Job Details"
 msgstr "Töö üksikasjad"
 
-#: gtk/gtkprintunixdialog.c:2694
+#: gtk/gtkprintunixdialog.c:2709
 msgid "Pri_ority:"
 msgstr "Tä_htsus:"
 
-#: gtk/gtkprintunixdialog.c:2709
+#: gtk/gtkprintunixdialog.c:2724
 msgid "_Billing info:"
 msgstr "_Maksmise andmed:"
 
-#: gtk/gtkprintunixdialog.c:2727
+#: gtk/gtkprintunixdialog.c:2742
 msgid "Print Document"
 msgstr "Dokumenti printimine"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2736
+#: gtk/gtkprintunixdialog.c:2751
 msgid "_Now"
 msgstr "_Nüüd"
 
-#: gtk/gtkprintunixdialog.c:2747
+#: gtk/gtkprintunixdialog.c:2762
 msgid "A_t:"
 msgstr "A_jal:"
 
-#: gtk/gtkprintunixdialog.c:2766
+#: gtk/gtkprintunixdialog.c:2781
 msgid "On _hold"
 msgstr "_Ootel"
 
-#: gtk/gtkprintunixdialog.c:2785
+#: gtk/gtkprintunixdialog.c:2800
 msgid "Add Cover Page"
 msgstr "Esilehe lisamine"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2794
+#: gtk/gtkprintunixdialog.c:2809
 msgid "Be_fore:"
 msgstr "_Enne:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2812
+#: gtk/gtkprintunixdialog.c:2827
 msgid "_After:"
 msgstr "_Pärast:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2830
+#: gtk/gtkprintunixdialog.c:2845
 msgid "Job"
 msgstr "Töö"
 
-#: gtk/gtkprintunixdialog.c:2896
+#: gtk/gtkprintunixdialog.c:2911
 msgid "Advanced"
 msgstr "Laiendatud"
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2946
 msgid "Image Quality"
 msgstr "Pildikvaliteet"
 
-#: gtk/gtkprintunixdialog.c:2934
+#: gtk/gtkprintunixdialog.c:2949
 msgid "Color"
 msgstr "Värv"
 
-#: gtk/gtkprintunixdialog.c:2937
+#: gtk/gtkprintunixdialog.c:2952
 msgid "Finishing"
 msgstr "Lõpetamine"
 
-#: gtk/gtkprintunixdialog.c:2947
+#: gtk/gtkprintunixdialog.c:2962
 msgid "Some of the settings in the dialog conflict"
 msgstr "Selle dialoogi mõned sätted on omavahel vastuolus"
 
-#: gtk/gtkprintunixdialog.c:2970
+#: gtk/gtkprintunixdialog.c:2985
 msgid "Print"
 msgstr "Prindi"
 
-#: gtk/gtkrc.c:2872
+#: gtk/gtkrc.c:2874
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Faili pole võimalik kaasata: \"%s\""
 
-#: gtk/gtkrc.c:3500 gtk/gtkrc.c:3503
+#: gtk/gtkrc.c:3502 gtk/gtkrc.c:3505
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\""

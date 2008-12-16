@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2008-08-11 18:12+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -1642,49 +1642,49 @@ msgstr "ಆರಿಸಲ್ಪಟ್ಟ ಬುಕ್-ಮಾರ್ಕನ್ನು 
 msgid "Could not select file"
 msgstr "ಕಡತವನ್ನು ಆರಿಸಲಾಗಿಲ್ಲ"
 
-#: gtk/gtkfilechooserdefault.c:4289
+#: gtk/gtkfilechooserdefault.c:4288
 msgid "_Add to Bookmarks"
 msgstr "ಬುಕ್-ಮಾರ್ಕಿಗೆ ಸೇರಿಸು(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4303
+#: gtk/gtkfilechooserdefault.c:4302
 msgid "Show _Hidden Files"
 msgstr "ಗೌಪ್ಯವಾಗಿರಸಲಾದ ಕಡತಗಳನ್ನು ತೋರಿಸು (_H)"
 
-#: gtk/gtkfilechooserdefault.c:4546 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4545 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ಕಡತಗಳು"
 
-#: gtk/gtkfilechooserdefault.c:4595
+#: gtk/gtkfilechooserdefault.c:4594
 msgid "Name"
 msgstr "ಹೆಸರು"
 
-#: gtk/gtkfilechooserdefault.c:4620
+#: gtk/gtkfilechooserdefault.c:4619
 msgid "Size"
 msgstr "ಗಾತ್ರ"
 
-#: gtk/gtkfilechooserdefault.c:4634
+#: gtk/gtkfilechooserdefault.c:4633
 msgid "Modified"
 msgstr "ಮಾರ್ಪಾಟುಗೊಂಡಿದೆ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4854 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4853 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "ಹೆಸರು(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4896
+#: gtk/gtkfilechooserdefault.c:4895
 msgid "_Browse for other folders"
 msgstr "ಇತರೆ ಕಡತಕೋಶಗಳಿಗಾಗಿ ಹುಡುಕು(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5166
+#: gtk/gtkfilechooserdefault.c:5165
 msgid "Type a file name"
 msgstr "ಒಂದು ಕಡತದ ಹೆಸರನ್ನು ಟೈಪಿಸು"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5203
+#: gtk/gtkfilechooserdefault.c:5202
 msgid "Create Fo_lder"
 msgstr "ಕಡತಕೋಶವನ್ನು ಸೃಷ್ಟಿಸು(_l)"
 
-#: gtk/gtkfilechooserdefault.c:5213
+#: gtk/gtkfilechooserdefault.c:5212
 msgid "_Location:"
 msgstr "ತಾಣ(_L):"
 
@@ -1696,27 +1696,27 @@ msgstr "ಈ ಕಡತಕೋಶದಲ್ಲಿ ಉಳಿಸು(_f):"
 msgid "Create in _folder:"
 msgstr "ಈ ಕಡತಕೋಶದಲ್ಲಿ ಸೃಷ್ಟಿಸು(_f):"
 
-#: gtk/gtkfilechooserdefault.c:6996
+#: gtk/gtkfilechooserdefault.c:7057
 msgid "Cannot change to folder because it is not local"
 msgstr "ಕಡತಕೋಶಕ್ಕೆ ಬದಲಾಯಿಸಲಾಗಿಲ್ಲ ಏಕೆಂದರೆ ಅದು ಸ್ಥಳಿಯವಲ್ಲ"
 
-#: gtk/gtkfilechooserdefault.c:7621 gtk/gtkfilechooserdefault.c:7642
+#: gtk/gtkfilechooserdefault.c:7682 gtk/gtkfilechooserdefault.c:7703
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "ಶೀಘ್ರಮಾರ್ಗ (ಶಾರ್ಟ್ ಕಟ್) %s ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ"
 
-#: gtk/gtkfilechooserdefault.c:7732
+#: gtk/gtkfilechooserdefault.c:7793
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "ಶೀಘ್ರಮಾರ್ಗ (ಶಾರ್ಟ್ ಕಟ್) %s ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ"
 
-#: gtk/gtkfilechooserdefault.c:7980 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8041 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 "\"%s\" ಹೆಸರಿನ ಒಂದು ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.  ನೀವದನ್ನು ಬದಲಿ ಮಾಡಲು ಬಯಸುತ್ತಿರೆ?"
 
-#: gtk/gtkfilechooserdefault.c:7983 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8044 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1724,15 +1724,15 @@ msgstr ""
 "\"%s\" ಹೆಸರಿನ ಒಂದು ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.  ನೀವದನ್ನು ಬದಲಿ ಮಾಡಿದರೆ ಅದು "
 "ತಿದ್ದಿಬರೆಯಲ್ಪಡುತ್ತದೆ."
 
-#: gtk/gtkfilechooserdefault.c:7988 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8049 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "ಬದಲಿ ಮಾಡು (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8749
+#: gtk/gtkfilechooserdefault.c:8810
 msgid "Could not start the search process"
 msgstr "ಶೋಧಿಸುವ ಪ್ರಕ್ರಿಯೆಯನ್ನು ಆರಂಭಿಸಲಾಗಿಲ್ಲ"
 
-#: gtk/gtkfilechooserdefault.c:8750
+#: gtk/gtkfilechooserdefault.c:8811
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1740,49 +1740,49 @@ msgstr ""
 "ಈ ಪ್ರೋಗ್ರಾಂ ಸೂಚಕ ಡೆಮೊನಿಗೆ (indexer daemon) ಸಂಪರ್ಕವನ್ನು ಕಲ್ಪಿಸಲಾಗಿಲ್ಲ. ಅದು "
 "ಚಾಲನೆಯಲ್ಲಿದೆ ಎಂದು ದಯವಿಟ್ಟು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ."
 
-#: gtk/gtkfilechooserdefault.c:8764
+#: gtk/gtkfilechooserdefault.c:8825
 msgid "Could not send the search request"
 msgstr "ಶೋಧನೆಯ ಮನವಿಯನ್ನು ಕಳುಹಿಸಲಾಗಿಲ್ಲ್ಲ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9204
+#: gtk/gtkfilechooserdefault.c:9265
 msgid "_Search:"
 msgstr "ಶೋಧಿಸು(_S):"
 
-#: gtk/gtkfilechooserdefault.c:10151
+#: gtk/gtkfilechooserdefault.c:10212
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s ಅನ್ನು ಆರೋಹಿಸಲಾಗಿಲ್ಲ"
 
-#: gtk/gtkfilechooserdefault.c:10809
+#: gtk/gtkfilechooserdefault.c:10887
 msgid "Type name of new folder"
 msgstr "ಹೊಸ ಕಡತಕೋಶದ ಹೆಸರನ್ನು ಟೈಪಿಸಿ"
 
-#: gtk/gtkfilechooserdefault.c:10859
+#: gtk/gtkfilechooserdefault.c:10937
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:10861
+#: gtk/gtkfilechooserdefault.c:10939
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:10863
+#: gtk/gtkfilechooserdefault.c:10941
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:10966 gtk/gtkfilechooserdefault.c:10988
-#: gtk/gtkfilechooserdefault.c:11059
+#: gtk/gtkfilechooserdefault.c:11044 gtk/gtkfilechooserdefault.c:11066
+#: gtk/gtkfilechooserdefault.c:11137
 msgid "Unknown"
 msgstr "ಗೊತ್ತಿರದ"
 
-#: gtk/gtkfilechooserdefault.c:11006
+#: gtk/gtkfilechooserdefault.c:11084
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11008
+#: gtk/gtkfilechooserdefault.c:11086
 msgid "Yesterday at %H:%M"
 msgstr "ನಿನ್ನೆ %H:%M ಗೆ"
 
@@ -2192,41 +2192,41 @@ msgstr "GTK+ ಆಯ್ಕೆಗಳು"
 msgid "Show GTK+ Options"
 msgstr "GTK+ ಆಯ್ಕೆಗಳನ್ನು ತೋರಿಸು"
 
-#: gtk/gtkmountoperation.c:476
+#: gtk/gtkmountoperation.c:477
 msgid "Co_nnect"
 msgstr "ಸಂಪರ್ಕ ಕಲ್ಪಿಸು (_n)"
 
-#: gtk/gtkmountoperation.c:520
+#: gtk/gtkmountoperation.c:521
 msgid "Connect _anonymously"
 msgstr "ಅನಾಮಿಕನಾಗಿ ಸಂಪರ್ಕಿಸು(_a)"
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:530
 msgid "Connect as u_ser:"
 msgstr "ಬಳಕೆದಾರನಾಗಿ ಸಂಪರ್ಕಿಸು(_s):"
 
-#: gtk/gtkmountoperation.c:566
+#: gtk/gtkmountoperation.c:567
 msgid "_Username:"
 msgstr "ಬಳಕೆದಾರ ಹೆಸರು(_U):"
 
-#: gtk/gtkmountoperation.c:570
+#: gtk/gtkmountoperation.c:571
 msgid "_Domain:"
 msgstr "ಕ್ಷೇತ್ರ(_D):"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:576
 msgid "_Password:"
 msgstr "ಗುಪ್ತಪದ(_P):"
 
-#: gtk/gtkmountoperation.c:590
+#: gtk/gtkmountoperation.c:591
 #, fuzzy
 msgid "Forget password _immediately"
 msgstr "ಗುಪ್ತಪದವನ್ನು ತಕ್ಷಣ ಮರೆತು ಬಿಡು(_F)"
 
-#: gtk/gtkmountoperation.c:598
+#: gtk/gtkmountoperation.c:599
 #, fuzzy
 msgid "Remember password until you _logout"
 msgstr "ಗುಪ್ತಪದವನ್ನು ನಿರ್ಗಮಿಸುವ ತನಕ ನೆನಪಿನಲ್ಲಿಡು(_R)"
 
-#: gtk/gtkmountoperation.c:606
+#: gtk/gtkmountoperation.c:607
 #, fuzzy
 msgid "Remember _forever"
 msgstr "ಸದಾ ನೆನಪಿನಲ್ಲಿಡು(_R)"
@@ -2297,7 +2297,7 @@ msgstr "ಕಾಗದದ ಗಾತ್ರ(_P):"
 msgid "_Orientation:"
 msgstr "ವಾಲಿಕೆ(_Orientation):"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2665
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2680
 msgid "Page Setup"
 msgstr "ಪುಟದ ಸಂಯೋಜನೆ"
 
@@ -2515,37 +2515,37 @@ msgstr "PrintDlgEx ಗೆ ಅಮಾನ್ಯ ನಿಭಾವಣೆ(handle)"
 msgid "Unspecified error"
 msgstr "ನಿಖರವಾಗದ ದೋಷ"
 
-#: gtk/gtkprintunixdialog.c:1749
+#: gtk/gtkprintunixdialog.c:1762
 msgid "Printer"
 msgstr "ಮುದ್ರಕ"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1759
+#: gtk/gtkprintunixdialog.c:1772
 msgid "Location"
 msgstr "ತಾಣ"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1770
+#: gtk/gtkprintunixdialog.c:1783
 msgid "Status"
 msgstr "ಸ್ಥಿತಿ"
 
-#: gtk/gtkprintunixdialog.c:1793
+#: gtk/gtkprintunixdialog.c:1808
 msgid "Range"
 msgstr "ವ್ಯಾಪ್ತಿ"
 
-#: gtk/gtkprintunixdialog.c:1797
+#: gtk/gtkprintunixdialog.c:1812
 msgid "_All Pages"
 msgstr "ಎಲ್ಲಾ ಹಾಳೆಗಳು(_A)"
 
-#: gtk/gtkprintunixdialog.c:1804
+#: gtk/gtkprintunixdialog.c:1819
 msgid "C_urrent Page"
 msgstr "ಈಗಿನ ಪುಟ(_u)"
 
-#: gtk/gtkprintunixdialog.c:1813
+#: gtk/gtkprintunixdialog.c:1828
 msgid "Pag_es:"
 msgstr "ಪುಟಗಳು(_e):"
 
-#: gtk/gtkprintunixdialog.c:1814
+#: gtk/gtkprintunixdialog.c:1829
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2553,186 +2553,186 @@ msgstr ""
 "ಒಂದು ಅಥವ ಹೆಚ್ಚಿನ ಪುಟ ವ್ಯಾಪ್ತಿಗಳನ್ನು ಸೂಚಿಸಿ,\n"
 " ಉದಾ. ೧-೩,೭,೧೧"
 
-#: gtk/gtkprintunixdialog.c:1835
+#: gtk/gtkprintunixdialog.c:1850
 msgid "Copies"
 msgstr "ಪ್ರತಿಗಳು"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1840
+#: gtk/gtkprintunixdialog.c:1855
 msgid "Copie_s:"
 msgstr "ಪ್ರತಿಗಳು(_s):"
 
-#: gtk/gtkprintunixdialog.c:1858
+#: gtk/gtkprintunixdialog.c:1873
 msgid "C_ollate"
 msgstr "ತಾಳೆ ನೋಡು(_o)"
 
-#: gtk/gtkprintunixdialog.c:1866
+#: gtk/gtkprintunixdialog.c:1881
 msgid "_Reverse"
 msgstr "ವಿಲೋಮ(_R)"
 
-#: gtk/gtkprintunixdialog.c:1886
+#: gtk/gtkprintunixdialog.c:1901
 msgid "General"
 msgstr "ಸಾಮಾನ್ಯ"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2426
+#: gtk/gtkprintunixdialog.c:2441
 #: modules/printbackends/cups/gtkprintbackendcups.c:2813
 #, fuzzy
 msgid "Page Ordering"
 msgstr "ತಯಾರಾಗುತ್ತಿದೆ"
 
-#: gtk/gtkprintunixdialog.c:2432
+#: gtk/gtkprintunixdialog.c:2447
 #, fuzzy
 msgid "Left to right"
 msgstr "LRM ಎಡದಿಂದ-ಬಲಕ್ಕೆ ಗುರುತು(_L)"
 
-#: gtk/gtkprintunixdialog.c:2433
+#: gtk/gtkprintunixdialog.c:2448
 #, fuzzy
 msgid "Right to left"
 msgstr "ಕಡತಕ್ಕೆ ಮುದ್ರಿಸು"
 
-#: gtk/gtkprintunixdialog.c:2502
+#: gtk/gtkprintunixdialog.c:2517
 msgid "Layout"
 msgstr "ಹೊರವಿನ್ಯಾಸ"
 
-#: gtk/gtkprintunixdialog.c:2506
+#: gtk/gtkprintunixdialog.c:2521
 msgid "T_wo-sided:"
 msgstr "ಎರಡು ಬದಿಯ(_w):"
 
-#: gtk/gtkprintunixdialog.c:2521
+#: gtk/gtkprintunixdialog.c:2536
 msgid "Pages per _side:"
 msgstr "ಪ್ರತಿ ಬದಿಯಲ್ಲಿನ ಪುಟಗಳು(_s):"
 
-#: gtk/gtkprintunixdialog.c:2539
+#: gtk/gtkprintunixdialog.c:2554
 #, fuzzy
 msgid "Page or_dering:"
 msgstr "ಪ್ರತಿ ಬದಿಯಲ್ಲಿನ ಪುಟಗಳು(_s):"
 
-#: gtk/gtkprintunixdialog.c:2555
+#: gtk/gtkprintunixdialog.c:2570
 msgid "_Only print:"
 msgstr "ಕೇವಲ ಮುದ್ರಿಸು(_O):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2570
+#: gtk/gtkprintunixdialog.c:2585
 msgid "All sheets"
 msgstr "ಎಲ್ಲಾ ಹಾಳೆಗಳು"
 
-#: gtk/gtkprintunixdialog.c:2571
+#: gtk/gtkprintunixdialog.c:2586
 msgid "Even sheets"
 msgstr "ಸರಿ ಸಂಖ್ಯೆಯ ಹಾಳೆಗಳು"
 
-#: gtk/gtkprintunixdialog.c:2572
+#: gtk/gtkprintunixdialog.c:2587
 msgid "Odd sheets"
 msgstr "ಬೆಸ ಸಂಖ್ಯೆಯ ಹಾಳೆಗಳು"
 
-#: gtk/gtkprintunixdialog.c:2575
+#: gtk/gtkprintunixdialog.c:2590
 msgid "Sc_ale:"
 msgstr "ಸ್ಕೇಲ್(_a):"
 
-#: gtk/gtkprintunixdialog.c:2602
+#: gtk/gtkprintunixdialog.c:2617
 msgid "Paper"
 msgstr "ಕಾಗದ"
 
-#: gtk/gtkprintunixdialog.c:2606
+#: gtk/gtkprintunixdialog.c:2621
 msgid "Paper _type:"
 msgstr "ಕಾಗದದ ಬಗೆ(_t):"
 
-#: gtk/gtkprintunixdialog.c:2621
+#: gtk/gtkprintunixdialog.c:2636
 msgid "Paper _source:"
 msgstr "ಕಾಗದದ ಆಕರ(_s):"
 
-#: gtk/gtkprintunixdialog.c:2636
+#: gtk/gtkprintunixdialog.c:2651
 msgid "Output t_ray:"
 msgstr "ಪ್ರದಾನದ (ಔಟ್ ಪುಟ್) ಟ್ರೇ(_r):"
 
-#: gtk/gtkprintunixdialog.c:2688
+#: gtk/gtkprintunixdialog.c:2703
 msgid "Job Details"
 msgstr "ಕಾರ್ಯದ ವಿವರಗಳು"
 
-#: gtk/gtkprintunixdialog.c:2694
+#: gtk/gtkprintunixdialog.c:2709
 msgid "Pri_ority:"
 msgstr "ಆದ್ಯತೆ(_o):"
 
-#: gtk/gtkprintunixdialog.c:2709
+#: gtk/gtkprintunixdialog.c:2724
 msgid "_Billing info:"
 msgstr "ಬಿಲ್ಲು ಮಾಡುವ ಮಾಹಿತಿ(_B):"
 
-#: gtk/gtkprintunixdialog.c:2727
+#: gtk/gtkprintunixdialog.c:2742
 msgid "Print Document"
 msgstr "ದಸ್ತಾವೇಜನ್ನು ಮುದ್ರಿಸು"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2736
+#: gtk/gtkprintunixdialog.c:2751
 msgid "_Now"
 msgstr "ಈಗ(_N)"
 
-#: gtk/gtkprintunixdialog.c:2747
+#: gtk/gtkprintunixdialog.c:2762
 msgid "A_t:"
 msgstr "ಇಲ್ಲಿ(_A):"
 
-#: gtk/gtkprintunixdialog.c:2766
+#: gtk/gtkprintunixdialog.c:2781
 msgid "On _hold"
 msgstr "ತಡೆ ಹಿಡಿಯಲಾಗಿದೆ(_h)"
 
-#: gtk/gtkprintunixdialog.c:2785
+#: gtk/gtkprintunixdialog.c:2800
 msgid "Add Cover Page"
 msgstr "ರಕ್ಷಾ ಪುಟವನ್ನು ಸೇರಿಸು"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2794
+#: gtk/gtkprintunixdialog.c:2809
 msgid "Be_fore:"
 msgstr "ಈ ಮೊದಲು(_f):"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2812
+#: gtk/gtkprintunixdialog.c:2827
 msgid "_After:"
 msgstr "ನಂತರ(_A):"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2830
+#: gtk/gtkprintunixdialog.c:2845
 msgid "Job"
 msgstr "ಕಾರ್ಯ"
 
-#: gtk/gtkprintunixdialog.c:2896
+#: gtk/gtkprintunixdialog.c:2911
 msgid "Advanced"
 msgstr "ಪ್ರೌಢ"
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2946
 msgid "Image Quality"
 msgstr "ಮುದ್ರಣ ಗುಣಮಟ್ಟ"
 
-#: gtk/gtkprintunixdialog.c:2934
+#: gtk/gtkprintunixdialog.c:2949
 msgid "Color"
 msgstr "ಬಣ್ಣ"
 
-#: gtk/gtkprintunixdialog.c:2937
+#: gtk/gtkprintunixdialog.c:2952
 msgid "Finishing"
 msgstr "ಅಂತ್ಯಗೊಳಿಸಲಾಗುತ್ತಿದೆ"
 
-#: gtk/gtkprintunixdialog.c:2947
+#: gtk/gtkprintunixdialog.c:2962
 msgid "Some of the settings in the dialog conflict"
 msgstr "ಸಂವಾದ ಭಿನ್ನಾಭಿಪ್ರಾಯದಲ್ಲಿನ ಕೆಲವೊಂದು ಸಂಯೋಜನೆಗಳು"
 
-#: gtk/gtkprintunixdialog.c:2970
+#: gtk/gtkprintunixdialog.c:2985
 msgid "Print"
 msgstr "ಮುದ್ರಿಸು"
 
-#: gtk/gtkrc.c:2872
+#: gtk/gtkrc.c:2874
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "ಅಡಕಗೊಳ್ಳಿಸುವ ಕಡತವು ಕಂಡುಬಂದಿಲ್ಲ: \"%s\""
 
-#: gtk/gtkrc.c:3500 gtk/gtkrc.c:3503
+#: gtk/gtkrc.c:3502 gtk/gtkrc.c:3505
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path ದಲ್ಲಿ ಚಿತ್ರ ಕಡತವನ್ನು ಪತ್ತೆಮಾಡಲಾಗಿಲ್ಲ: \"%s\""

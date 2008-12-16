@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2006-08-28 00:35+0600\n"
 "Last-Translator: Mahay Alam Khan (মাহে আলম) <makl10n@yahoo.com>\n"
 "Language-Team: Bengali India <gnome-translation@bengalinux.org>\n"
@@ -1645,50 +1645,50 @@ msgstr "নির্বাচিত বুকমার্ক মুছে ফে
 msgid "Could not select file"
 msgstr "ফাইল নির্বাচন করতে ব্যর্থ"
 
-#: gtk/gtkfilechooserdefault.c:4289
+#: gtk/gtkfilechooserdefault.c:4288
 msgid "_Add to Bookmarks"
 msgstr "বুকমার্ক তালিকায় যোগ করুন(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4303
+#: gtk/gtkfilechooserdefault.c:4302
 msgid "Show _Hidden Files"
 msgstr "লুকোনো ফাইল প্রদর্শন করা হবে (_H)"
 
-#: gtk/gtkfilechooserdefault.c:4546 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4545 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ফাইল"
 
-#: gtk/gtkfilechooserdefault.c:4595
+#: gtk/gtkfilechooserdefault.c:4594
 msgid "Name"
 msgstr "নাম"
 
-#: gtk/gtkfilechooserdefault.c:4620
+#: gtk/gtkfilechooserdefault.c:4619
 msgid "Size"
 msgstr "মাপ"
 
-#: gtk/gtkfilechooserdefault.c:4634
+#: gtk/gtkfilechooserdefault.c:4633
 msgid "Modified"
 msgstr "সর্বশেষ পরিবর্তন"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4854 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4853 gtk/gtkprinteroptionwidget.c:786
 msgid "_Name:"
 msgstr "নাম:(_N)"
 
 # FIXME
-#: gtk/gtkfilechooserdefault.c:4896
+#: gtk/gtkfilechooserdefault.c:4895
 msgid "_Browse for other folders"
 msgstr "অন্যান্য ফোল্ডার অনুসন্ধানের জন্য ব্রাউজ করুন (_B)"
 
-#: gtk/gtkfilechooserdefault.c:5166
+#: gtk/gtkfilechooserdefault.c:5165
 msgid "Type a file name"
 msgstr "ফাইলের নাম টাইপ করুন"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5203
+#: gtk/gtkfilechooserdefault.c:5202
 msgid "Create Fo_lder"
 msgstr "ফোল্ডার নির্মাণ করুন (_l)"
 
-#: gtk/gtkfilechooserdefault.c:5213
+#: gtk/gtkfilechooserdefault.c:5212
 msgid "_Location:"
 msgstr "অবস্থান :(_L)"
 
@@ -1700,26 +1700,26 @@ msgstr "চিহ্নিত ফোল্ডারে সংরক্ষণ ক
 msgid "Create in _folder:"
 msgstr "চিহ্নিত ফোল্ডারে নির্মাণ করা করুন:(_f)"
 
-#: gtk/gtkfilechooserdefault.c:6996
+#: gtk/gtkfilechooserdefault.c:7057
 msgid "Cannot change to folder because it is not local"
 msgstr "স্থানীয় অবস্থানে না হওয়ার ফলে ফোল্ডার পরিবর্তন করতে ব্যর্থ"
 
-#: gtk/gtkfilechooserdefault.c:7621 gtk/gtkfilechooserdefault.c:7642
+#: gtk/gtkfilechooserdefault.c:7682 gtk/gtkfilechooserdefault.c:7703
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s শর্টকাট বর্তমানে উপস্থিত রয়েছে"
 
-#: gtk/gtkfilechooserdefault.c:7732
+#: gtk/gtkfilechooserdefault.c:7793
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s শর্টকাট বর্তমানে অনুপস্থিত"
 
-#: gtk/gtkfilechooserdefault.c:7980 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8041 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" নামক ফাইল বর্তমানে উপস্থিত রয়েছে। প্রতিস্থাপন করা হবে কি?"
 
-#: gtk/gtkfilechooserdefault.c:7983 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8044 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1727,65 +1727,65 @@ msgstr ""
 "ফাইল \"%s\"'র মধ্যে বর্তমানে উপস্থিত রয়েছে। নতুন ফাইল দ্বারা প্রতিস্থাপন করা হলে "
 "পূর্ববর্তী ফাইলের বিষয়বস্তু মুছে যাবে।"
 
-#: gtk/gtkfilechooserdefault.c:7988 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8049 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "প্রতিস্থাপন (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8749
+#: gtk/gtkfilechooserdefault.c:8810
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "অবশিষ্ট অংশ সংরক্ষণ করতে ব্যর্থ"
 
-#: gtk/gtkfilechooserdefault.c:8750
+#: gtk/gtkfilechooserdefault.c:8811
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8764
+#: gtk/gtkfilechooserdefault.c:8825
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "অবশিষ্ট অংশ সংরক্ষণ করতে ব্যর্থ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9204
+#: gtk/gtkfilechooserdefault.c:9265
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10151
+#: gtk/gtkfilechooserdefault.c:10212
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s মাউন্ট করতে ব্যর্থ"
 
-#: gtk/gtkfilechooserdefault.c:10809
+#: gtk/gtkfilechooserdefault.c:10887
 msgid "Type name of new folder"
 msgstr "নতুন ফোল্ডারের নাম লিখুন"
 
-#: gtk/gtkfilechooserdefault.c:10859
+#: gtk/gtkfilechooserdefault.c:10937
 #, c-format
 msgid "%.1f KB"
 msgstr "%.1f কিলোবাইট"
 
-#: gtk/gtkfilechooserdefault.c:10861
+#: gtk/gtkfilechooserdefault.c:10939
 #, c-format
 msgid "%.1f MB"
 msgstr "%.1f মেগাবাইট"
 
-#: gtk/gtkfilechooserdefault.c:10863
+#: gtk/gtkfilechooserdefault.c:10941
 #, c-format
 msgid "%.1f GB"
 msgstr "%.1f গিগাবাইট"
 
-#: gtk/gtkfilechooserdefault.c:10966 gtk/gtkfilechooserdefault.c:10988
-#: gtk/gtkfilechooserdefault.c:11059
+#: gtk/gtkfilechooserdefault.c:11044 gtk/gtkfilechooserdefault.c:11066
+#: gtk/gtkfilechooserdefault.c:11137
 msgid "Unknown"
 msgstr "অজানা"
 
-#: gtk/gtkfilechooserdefault.c:11006
+#: gtk/gtkfilechooserdefault.c:11084
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11008
+#: gtk/gtkfilechooserdefault.c:11086
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "গতকাল"
@@ -2194,43 +2194,43 @@ msgstr "GTK+ সংক্রান্ত বিকল্প"
 msgid "Show GTK+ Options"
 msgstr "GTK+ সংক্রান্ত বিকল্প প্রদর্শন করা হবে"
 
-#: gtk/gtkmountoperation.c:476
+#: gtk/gtkmountoperation.c:477
 #, fuzzy
 msgid "Co_nnect"
 msgstr "সংযোগ করুন (_o)"
 
-#: gtk/gtkmountoperation.c:520
+#: gtk/gtkmountoperation.c:521
 msgid "Connect _anonymously"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:530
 msgid "Connect as u_ser:"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:566
+#: gtk/gtkmountoperation.c:567
 #, fuzzy
 msgid "_Username:"
 msgstr "নাম পরিবর্তন করুন (_R)"
 
-#: gtk/gtkmountoperation.c:570
+#: gtk/gtkmountoperation.c:571
 #, fuzzy
 msgid "_Domain:"
 msgstr "অবস্থান :(_L)"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:576
 #, fuzzy
 msgid "_Password:"
 msgstr "প্রেসার(_P):"
 
-#: gtk/gtkmountoperation.c:590
+#: gtk/gtkmountoperation.c:591
 msgid "Forget password _immediately"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:598
+#: gtk/gtkmountoperation.c:599
 msgid "Remember password until you _logout"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:606
+#: gtk/gtkmountoperation.c:607
 msgid "Remember _forever"
 msgstr ""
 
@@ -2300,7 +2300,7 @@ msgstr "কাগজের মাপ:(_P)"
 msgid "_Orientation:"
 msgstr "দিশা:(_O)"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2665
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2680
 msgid "Page Setup"
 msgstr "পৃষ্ঠার বৈশিষ্ট্য"
 
@@ -2520,227 +2520,227 @@ msgstr "PrintDlgEx'র জন্য অবৈধ হ্যান্ডেল"
 msgid "Unspecified error"
 msgstr "অনির্ধারিত ত্রুটি"
 
-#: gtk/gtkprintunixdialog.c:1749
+#: gtk/gtkprintunixdialog.c:1762
 msgid "Printer"
 msgstr "প্রিন্টার"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1759
+#: gtk/gtkprintunixdialog.c:1772
 msgid "Location"
 msgstr "অবস্থান"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1770
+#: gtk/gtkprintunixdialog.c:1783
 msgid "Status"
 msgstr "অবস্থা"
 
-#: gtk/gtkprintunixdialog.c:1793
+#: gtk/gtkprintunixdialog.c:1808
 #, fuzzy
 msgid "Range"
 msgstr "পৃষ্ঠার সুনির্দিষ্ট সীমা: (_n)"
 
-#: gtk/gtkprintunixdialog.c:1797
+#: gtk/gtkprintunixdialog.c:1812
 #, fuzzy
 msgid "_All Pages"
 msgstr "সমস্ত পাতা"
 
-#: gtk/gtkprintunixdialog.c:1804
+#: gtk/gtkprintunixdialog.c:1819
 #, fuzzy
 msgid "C_urrent Page"
 msgstr "বর্তমান (_u)"
 
-#: gtk/gtkprintunixdialog.c:1813
+#: gtk/gtkprintunixdialog.c:1828
 #, fuzzy
 msgid "Pag_es:"
 msgstr "অবস্থান"
 
-#: gtk/gtkprintunixdialog.c:1814
+#: gtk/gtkprintunixdialog.c:1829
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1835
+#: gtk/gtkprintunixdialog.c:1850
 msgid "Copies"
 msgstr "প্রতিলিপি"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1840
+#: gtk/gtkprintunixdialog.c:1855
 msgid "Copie_s:"
 msgstr "প্রতিলিপি :(_s)"
 
-#: gtk/gtkprintunixdialog.c:1858
+#: gtk/gtkprintunixdialog.c:1873
 msgid "C_ollate"
 msgstr "একত্রিত করুন (_o)"
 
-#: gtk/gtkprintunixdialog.c:1866
+#: gtk/gtkprintunixdialog.c:1881
 msgid "_Reverse"
 msgstr "বিপরীত দিশা (_R)"
 
-#: gtk/gtkprintunixdialog.c:1886
+#: gtk/gtkprintunixdialog.c:1901
 msgid "General"
 msgstr "সাধারণ"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2426
+#: gtk/gtkprintunixdialog.c:2441
 #: modules/printbackends/cups/gtkprintbackendcups.c:2813
 #, fuzzy
 msgid "Page Ordering"
 msgstr "প্রস্তুতি"
 
-#: gtk/gtkprintunixdialog.c:2432
+#: gtk/gtkprintunixdialog.c:2447
 #, fuzzy
 msgid "Left to right"
 msgstr "LRM বাঁদিক-থেকে-ডানদিকের চিহ্ন (_L)"
 
-#: gtk/gtkprintunixdialog.c:2433
+#: gtk/gtkprintunixdialog.c:2448
 #, fuzzy
 msgid "Right to left"
 msgstr "ফাইলে প্রিন্ট করুন"
 
-#: gtk/gtkprintunixdialog.c:2502
+#: gtk/gtkprintunixdialog.c:2517
 msgid "Layout"
 msgstr "বিন্যাস"
 
-#: gtk/gtkprintunixdialog.c:2506
+#: gtk/gtkprintunixdialog.c:2521
 msgid "T_wo-sided:"
 msgstr "উভয় পৃষ্ঠ: (_w)"
 
-#: gtk/gtkprintunixdialog.c:2521
+#: gtk/gtkprintunixdialog.c:2536
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "প্রতি পাতায় পৃষ্ঠার সংখ্যা:(_s)"
 
-#: gtk/gtkprintunixdialog.c:2539
+#: gtk/gtkprintunixdialog.c:2554
 #, fuzzy
 msgid "Page or_dering:"
 msgstr "প্রতি পাতায় পৃষ্ঠার সংখ্যা:(_s)"
 
-#: gtk/gtkprintunixdialog.c:2555
+#: gtk/gtkprintunixdialog.c:2570
 msgid "_Only print:"
 msgstr "শুধুমাত্র প্রিন্ট করা হবে:(_O)"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2570
+#: gtk/gtkprintunixdialog.c:2585
 msgid "All sheets"
 msgstr "সমস্ত পাতা"
 
-#: gtk/gtkprintunixdialog.c:2571
+#: gtk/gtkprintunixdialog.c:2586
 msgid "Even sheets"
 msgstr "শুধুমাত্র জোড় সংখ্যক পাতায়"
 
-#: gtk/gtkprintunixdialog.c:2572
+#: gtk/gtkprintunixdialog.c:2587
 msgid "Odd sheets"
 msgstr "শুধুমাত্র বেজোড় সংখ্যক পাতায়"
 
-#: gtk/gtkprintunixdialog.c:2575
+#: gtk/gtkprintunixdialog.c:2590
 msgid "Sc_ale:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2602
+#: gtk/gtkprintunixdialog.c:2617
 msgid "Paper"
 msgstr "কাগজ"
 
-#: gtk/gtkprintunixdialog.c:2606
+#: gtk/gtkprintunixdialog.c:2621
 msgid "Paper _type:"
 msgstr "কাগজের বিন্যাস:(_t)"
 
-#: gtk/gtkprintunixdialog.c:2621
+#: gtk/gtkprintunixdialog.c:2636
 msgid "Paper _source:"
 msgstr "কাগজ সংগ্রহস্থল:(_s)"
 
-#: gtk/gtkprintunixdialog.c:2636
+#: gtk/gtkprintunixdialog.c:2651
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2688
+#: gtk/gtkprintunixdialog.c:2703
 msgid "Job Details"
 msgstr "কর্ম সংক্রান্ত বিবরণ"
 
-#: gtk/gtkprintunixdialog.c:2694
+#: gtk/gtkprintunixdialog.c:2709
 msgid "Pri_ority:"
 msgstr "গুরুত্ব:(_o)"
 
-#: gtk/gtkprintunixdialog.c:2709
+#: gtk/gtkprintunixdialog.c:2724
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2727
+#: gtk/gtkprintunixdialog.c:2742
 msgid "Print Document"
 msgstr "নথি প্রিন্ট করুন"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2736
+#: gtk/gtkprintunixdialog.c:2751
 msgid "_Now"
 msgstr "এই মুহূর্তে(_N)"
 
-#: gtk/gtkprintunixdialog.c:2747
+#: gtk/gtkprintunixdialog.c:2762
 msgid "A_t:"
 msgstr "চিহ্নিত সময়ে:(_t)"
 
-#: gtk/gtkprintunixdialog.c:2766
+#: gtk/gtkprintunixdialog.c:2781
 msgid "On _hold"
 msgstr "অপেক্ষারত:(_h)"
 
-#: gtk/gtkprintunixdialog.c:2785
+#: gtk/gtkprintunixdialog.c:2800
 msgid "Add Cover Page"
 msgstr "প্রচ্ছদ পৃষ্ঠা সন্নিবেশ করা হবে"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2794
+#: gtk/gtkprintunixdialog.c:2809
 msgid "Be_fore:"
 msgstr "চিহ্নিত পৃষ্ঠার পূর্বে:(_f)"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2812
+#: gtk/gtkprintunixdialog.c:2827
 msgid "_After:"
 msgstr "চিহ্নিত পৃষ্ঠার পরে:(_A)"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2830
+#: gtk/gtkprintunixdialog.c:2845
 msgid "Job"
 msgstr "কর্ম"
 
-#: gtk/gtkprintunixdialog.c:2896
+#: gtk/gtkprintunixdialog.c:2911
 msgid "Advanced"
 msgstr "উন্নত বৈশিষ্ট্য"
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2946
 msgid "Image Quality"
 msgstr "ছবির গুণমান"
 
-#: gtk/gtkprintunixdialog.c:2934
+#: gtk/gtkprintunixdialog.c:2949
 msgid "Color"
 msgstr "রং"
 
-#: gtk/gtkprintunixdialog.c:2937
+#: gtk/gtkprintunixdialog.c:2952
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2947
+#: gtk/gtkprintunixdialog.c:2962
 msgid "Some of the settings in the dialog conflict"
 msgstr "ডায়লগ বক্সে নির্বাচিত কিছু মান পারস্পরবিরোধী"
 
-#: gtk/gtkprintunixdialog.c:2970
+#: gtk/gtkprintunixdialog.c:2985
 msgid "Print"
 msgstr "প্রিন্ট করুন"
 
-#: gtk/gtkrc.c:2872
+#: gtk/gtkrc.c:2874
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "include ফাইল সনাক্ত করতে ব্যর্থ: \"%s\""
 
-#: gtk/gtkrc.c:3500 gtk/gtkrc.c:3503
+#: gtk/gtkrc.c:3502 gtk/gtkrc.c:3505
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path'এ ছবির ফাইল সনাক্ত করতে ব্যর্থ: \"%s\""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2005-02-08 08:59+0200\n"
 "Last-Translator: Canonical Ltd <translations@canonical.com>\n"
 "Language-Team: Xhosa <xh-translate@ubuntu.com>\n"
@@ -843,7 +843,7 @@ msgstr ""
 "Ukuba ngaba imiselwe, ilebhile isetyenziselwa ukukhetha okuqulathwe kwi-"
 "stock endaweni yokubonakaliswa"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:788 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Gxila ekucofeni"
 
@@ -1603,7 +1603,7 @@ msgstr ""
 "i-cell yonikezelo ayinaso isithuba esaneleyo sokubonisa uluhlu lwamagama "
 "onke, ukuba inako phofu"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:677
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
 msgid "Wrap width"
 msgstr "Ububanzi boqhubekeko-magama"
 
@@ -1999,126 +1999,126 @@ msgstr "Ixabiso eluhlwini"
 msgid "Whether entered values must already be present in the list"
 msgstr "Nokuba ngaba amaxabiso afakiweyo kufuneka esoloko ekhona na eluhlwini"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:661
 msgid "ComboBox model"
 msgstr "Imodeli yebhokisi enoludwe onokukhetha kulo"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:662
 msgid "The model for the combo box"
 msgstr "Imodeli yebhokisi enoludwe onokukhetha kulo"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:679
 #, fuzzy
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Ububanzi boqhubekeko-magama xa kwendlalwa ulwazi kwigridi"
 
-#: gtk/gtkcombobox.c:700
+#: gtk/gtkcombobox.c:701
 msgid "Row span column"
 msgstr "Umgama ophakathi komgca nekholam"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:702
 msgid "TreeModel column containing the row span values"
 msgstr "Ikholam i-TreeModel equlathe amaxabiso omgama ophakathi kwemigca"
 
-#: gtk/gtkcombobox.c:722
+#: gtk/gtkcombobox.c:723
 msgid "Column span column"
 msgstr "Umgama ophakathi kwekholam nekholam"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:724
 msgid "TreeModel column containing the column span values"
 msgstr "Ikholam i-TreeModel equlathe amaxabiso omgama ophakathi kweekholam"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:745
 msgid "Active item"
 msgstr "Into esebenza ngoku"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:746
 msgid "The item which is currently active"
 msgstr "Into esebenzayo ngelo xesha"
 
-#: gtk/gtkcombobox.c:764 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Fakela okususwayo kwiimenyu"
 
-#: gtk/gtkcombobox.c:765
+#: gtk/gtkcombobox.c:766
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr ""
 "Nokuba ngaba uluhlu oluneziqulatho ezehlayo kufanele lube nokukhethwayo "
 "okususwayo na"
 
-#: gtk/gtkcombobox.c:780 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "Ine-Frame"
 
-#: gtk/gtkcombobox.c:781
+#: gtk/gtkcombobox.c:782
 msgid "Whether the combo box draws a frame around the child"
 msgstr ""
 "Nokuba ngaba ibhokisi enoludwe onokukhetha kulo iyayizoba i-frame ejikeleze "
 "inkqubo engumntwana"
 
-#: gtk/gtkcombobox.c:789
+#: gtk/gtkcombobox.c:790
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Nokuba ngaba ibhokisi enoludwe onokukhetha kulo iyalubamba na ugxininiso xa "
 "icofwe nge-mouse"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
+#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "Isihloko Sokususwayo"
 
-#: gtk/gtkcombobox.c:805
+#: gtk/gtkcombobox.c:806
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "Isihloko esinokuboniswa ngumlawuli wefestile xa isusiwe imenyu"
 
-#: gtk/gtkcombobox.c:822
+#: gtk/gtkcombobox.c:823
 #, fuzzy
 msgid "Popup shown"
 msgstr "Gxila kububanzi bomgca"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:824
 #, fuzzy
 msgid "Whether the combo's dropdown is shown"
 msgstr "Nokuba ngaba umda kumele uboniswe okanye hayi"
 
-#: gtk/gtkcombobox.c:839
+#: gtk/gtkcombobox.c:840
 msgid "Button Sensitivity"
 msgstr ""
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:841
 #, fuzzy
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Nokuba ngaba iqhosha luyalubamba na uxinzelelo xa licofwe nge-mouse"
 
-#: gtk/gtkcombobox.c:847
+#: gtk/gtkcombobox.c:848
 msgid "Appears as list"
 msgstr "Ivela njengoluhlu"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:849
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Nokuba ngaba uluhlu oluneziqulatho ezehlayo lumele lukhangeleke njengezintlu "
 "na kunokuba lube njengeemenyu"
 
-#: gtk/gtkcombobox.c:864
+#: gtk/gtkcombobox.c:865
 #, fuzzy
 msgid "Arrow Size"
 msgstr "Icala lesalathisi"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:866
 #, fuzzy
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Imodeli yebhokisi enoludwe onokukhetha kulo"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Isimbo sesithunzi"
 
-#: gtk/gtkcombobox.c:881
+#: gtk/gtkcombobox.c:882
 #, fuzzy
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Ububanzi bomda ojikeleze iilebhile zika-tab"

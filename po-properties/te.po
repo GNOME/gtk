@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: te\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2008-09-12 19:23+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
@@ -795,7 +795,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "అమర్చినట్లైతే, లేబుల్, స్టాక్ అంశమును ప్రదర్శించుటకు బదులుగా దాని ఏరివేతకు ఉపయోగించబడును"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:788 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "నొక్కుటపై కేంద్రము"
 
@@ -1507,7 +1507,7 @@ msgstr ""
 "ఒకవేళ పూర్తి పదబంధమును ప్రదర్శించుటకు అరను సమర్పించుదానివద్ద తగిన స్థలము లేనిచో, పదబంధమును "
 "బహుళ వరుసలలోనికి ఎలా విడగొట్టాలి"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:677
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
 msgid "Wrap width"
 msgstr "వెడల్పును పొట్లంకట్టు"
 
@@ -1874,111 +1874,111 @@ msgstr "జాబితాలోని విలువ"
 msgid "Whether entered values must already be present in the list"
 msgstr "ప్రవేశపెట్టిన విలువలు తప్పక ఇంతకు ముందుగానే జాబితాలో ఉండవలెనా"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:661
 msgid "ComboBox model"
 msgstr "కాంబోపెట్టె నమూనా"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:662
 msgid "The model for the combo box"
 msgstr "కాంబోపెట్టె కొరకు నమూనా"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:679
 msgid "Wrap width for laying out the items in a grid"
 msgstr "ఒక గ్రిడ్‌లో అంశములను కూర్చుట కొరకు పొట్లంకట్టవలసిన వెడల్పు"
 
-#: gtk/gtkcombobox.c:700
+#: gtk/gtkcombobox.c:701
 msgid "Row span column"
 msgstr "అడ్డువరుస స్పాన్ నిలువువరుస"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:702
 msgid "TreeModel column containing the row span values"
 msgstr "ట్రీరీతి నిలువువరుస అడ్డువరుస స్పాన్ విలువులను కలిగివుంటుంది"
 
-#: gtk/gtkcombobox.c:722
+#: gtk/gtkcombobox.c:723
 msgid "Column span column"
 msgstr "నిలువువరుస స్పాన్ నిలువువరుస"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:724
 msgid "TreeModel column containing the column span values"
 msgstr "నిలువువరుస స్పాన్ విలువులను ట్రీరీతి నిలువువరుస కలిగివుంటుంది"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:745
 msgid "Active item"
 msgstr "చైతన్యవంత అంశము"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:746
 msgid "The item which is currently active"
 msgstr "ప్రస్తుతము చైతన్యవంతంగానున్నఅంశము"
 
-#: gtk/gtkcombobox.c:764 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "మెనూలకు కత్తిరిగీతలను జతచేయుము"
 
-#: gtk/gtkcombobox.c:765
+#: gtk/gtkcombobox.c:766
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "డ్రాప్‌డౌన్‌లు కత్తరింపుగీత మెనూ అంశమును కలగివుండాలా"
 
-#: gtk/gtkcombobox.c:780 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "చట్రమును కలిగిఉన్నది"
 
-#: gtk/gtkcombobox.c:781
+#: gtk/gtkcombobox.c:782
 msgid "Whether the combo box draws a frame around the child"
 msgstr "కాంబో పెట్టె శిశువు చుట్టూ ఒక చట్రమును గీయునా"
 
-#: gtk/gtkcombobox.c:789
+#: gtk/gtkcombobox.c:790
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "కాంబో పెట్టెను చుంచుతో నొక్కినపుడు అది కేంద్రమును లాక్కొంటుందా"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
+#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "కత్తిరింపుగీత శీర్షిక"
 
-#: gtk/gtkcombobox.c:805
+#: gtk/gtkcombobox.c:806
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "పాప్అప్ పోయినప్పుడు విండో నిర్వాహికచేత ప్రదర్శించబడే అవకాశమున్న శీర్షిక"
 
-#: gtk/gtkcombobox.c:822
+#: gtk/gtkcombobox.c:823
 msgid "Popup shown"
 msgstr "పాప్అప్ చూపబడింది"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:824
 msgid "Whether the combo's dropdown is shown"
 msgstr "కాంబోయొక్క డ్రాప్‌డౌన్ చూపబడాలా"
 
-#: gtk/gtkcombobox.c:839
+#: gtk/gtkcombobox.c:840
 msgid "Button Sensitivity"
 msgstr "బటన్ సున్నితత్వము"
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:841
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "రీతి ఖాళీగా వున్నప్పుడు డ్రాప్‌డౌన్ బటన్ సున్నితంగా వుండాలా"
 
-#: gtk/gtkcombobox.c:847
+#: gtk/gtkcombobox.c:848
 msgid "Appears as list"
 msgstr "జాబితా వలె కనిపించును"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:849
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "డ్రాప్‌డౌన్‌లు మెనూలవలే కాక జాబితాలవలె వుండాలా"
 
-#: gtk/gtkcombobox.c:864
+#: gtk/gtkcombobox.c:865
 msgid "Arrow Size"
 msgstr "బాణపు పరిమాణము"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:866
 msgid "The minimum size of the arrow in the combo box"
 msgstr "కాంబోపెట్టెలో బాణముయొక్క గరిష్ఠ పరిమాణము"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "నీడ రకము"
 
-#: gtk/gtkcombobox.c:881
+#: gtk/gtkcombobox.c:882
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "కాంబోపెట్టె చూట్టూ యెటువంటి నీడను చిత్రించాలి"
 

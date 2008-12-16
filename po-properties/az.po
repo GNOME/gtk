@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2004-03-07 18:05+0200\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
 "Language-Team: Azerbaijani Turkish <translation-team-az@lists.sourceforge."
@@ -845,7 +845,7 @@ msgid ""
 msgstr ""
 "Seçili isə, etiket göstərilmək yerinə ambar vahidi almaq üçün işlədilir"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:788 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Tıqlamada fokusa al"
 
@@ -1588,7 +1588,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:677
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
 msgid "Wrap width"
 msgstr "Qırma eni"
 
@@ -1971,71 +1971,71 @@ msgstr "Siyahıdakı qiymət"
 msgid "Whether entered values must already be present in the list"
 msgstr "Girilən qiymətin hazırda da siyahıda olması lazımdırsa"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:661
 msgid "ComboBox model"
 msgstr "ComboBox modeli"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:662
 msgid "The model for the combo box"
 msgstr "Kombo qutusunun modeli"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:679
 #, fuzzy
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Üzvlərin qəfəsdə düzülüşü üçün qırma eni"
 
-#: gtk/gtkcombobox.c:700
+#: gtk/gtkcombobox.c:701
 msgid "Row span column"
 msgstr "Sətir span sütunu"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:702
 msgid "TreeModel column containing the row span values"
 msgstr "Sətir span qiymətlərini daxil edən TreeModel sütünu"
 
-#: gtk/gtkcombobox.c:722
+#: gtk/gtkcombobox.c:723
 msgid "Column span column"
 msgstr "Sütun span sütunu"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:724
 msgid "TreeModel column containing the column span values"
 msgstr "Sütun span qiymətlərini daxil edən TreeModel sütünu"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:745
 msgid "Active item"
 msgstr "Fəal üzv"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:746
 msgid "The item which is currently active"
 msgstr "Hazırda fəal olan üzv"
 
-#: gtk/gtkcombobox.c:764 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Menyuları ayırma qulplarını əlavə et"
 
-#: gtk/gtkcombobox.c:765
+#: gtk/gtkcombobox.c:766
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Səkmələrin harda homojen böyüklükləri olacağı"
 
-#: gtk/gtkcombobox.c:780 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "Çərçivəyə Malikdir"
 
-#: gtk/gtkcombobox.c:781
+#: gtk/gtkcombobox.c:782
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Sütünün başlıqlar ətrafında yenidən sıralanıb sıralanamayacağı"
 
-#: gtk/gtkcombobox.c:789
+#: gtk/gtkcombobox.c:790
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Mətnin siçanla tıqlandığında fokusu alması"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
+#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "Etiketi Qopart"
 
-#: gtk/gtkcombobox.c:805
+#: gtk/gtkcombobox.c:806
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
@@ -2043,51 +2043,51 @@ msgid ""
 msgstr ""
 "Bu menyu qoparılmış vəziyyətdə olanda pəncərə idarəçisinin göstərəcəyi etiket"
 
-#: gtk/gtkcombobox.c:822
+#: gtk/gtkcombobox.c:823
 #, fuzzy
 msgid "Popup shown"
 msgstr "Fokus uzunluğu"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:824
 #, fuzzy
 msgid "Whether the combo's dropdown is shown"
 msgstr "Kənarın harda göstərilib göstərilməyəcəyi"
 
-#: gtk/gtkcombobox.c:839
+#: gtk/gtkcombobox.c:840
 msgid "Button Sensitivity"
 msgstr ""
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:841
 #, fuzzy
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Mətnin siçanla tıqlandığında fokusu alması"
 
-#: gtk/gtkcombobox.c:847
+#: gtk/gtkcombobox.c:848
 msgid "Appears as list"
 msgstr "Siyahı olaraq görünür"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:849
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Combobox açılışlarının menyu yerinə siyahı olaraq göstərilməsi"
 
-#: gtk/gtkcombobox.c:864
+#: gtk/gtkcombobox.c:865
 #, fuzzy
 msgid "Arrow Size"
 msgstr "Oxun istiqaməti"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:866
 #, fuzzy
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Kombo qutusunun modeli"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Kölgələmə növü"
 
-#: gtk/gtkcombobox.c:881
+#: gtk/gtkcombobox.c:882
 #, fuzzy
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Səkmə etiketləri ətrafındakı kənar eni"

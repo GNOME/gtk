@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-24 10:30-0500\n"
+"POT-Creation-Date: 2008-12-15 23:23-0500\n"
 "PO-Revision-Date: 2002-12-19 16:10+0200\n"
 "Last-Translator: Artis Trops <hornet@navigator.lv>\n"
 "Language-Team: Latvian <ll10nt@os.lv>\n"
@@ -845,7 +845,7 @@ msgstr ""
 "Ja iestatīts, iezīme tiek lietota, lai izvēlētos krājuma priekšmetu tā "
 "vietā, lai parādītu"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:788 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr ""
 
@@ -1595,7 +1595,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:677
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
 #, fuzzy
 msgid "Wrap width"
 msgstr "Platums"
@@ -1988,75 +1988,75 @@ msgstr "Vērtība sarakstā"
 msgid "Whether entered values must already be present in the list"
 msgstr "Vai ievadītajai vērtībai jau jābūt pašreizējaja sarakstā"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:661
 msgid "ComboBox model"
 msgstr ""
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:662
 #, fuzzy
 msgid "The model for the combo box"
 msgstr "Koka skata modelis"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:679
 msgid "Wrap width for laying out the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:700
+#: gtk/gtkcombobox.c:701
 #, fuzzy
 msgid "Row span column"
 msgstr "Rindu atstarpe"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:702
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:722
+#: gtk/gtkcombobox.c:723
 #, fuzzy
 msgid "Column span column"
 msgstr "Kolonnu atstarpe"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:724
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:745
 #, fuzzy
 msgid "Active item"
 msgstr "Aktīvs"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:746
 #, fuzzy
 msgid "The item which is currently active"
 msgstr "GdkFont, kas šobrīd ir izvēlēts"
 
-#: gtk/gtkcombobox.c:764 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr ""
 
-#: gtk/gtkcombobox.c:765
+#: gtk/gtkcombobox.c:766
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Vai sadaļām jābūt pēc vienādiem izmēriem"
 
-#: gtk/gtkcombobox.c:780 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:531
 msgid "Has Frame"
 msgstr "Ir Rāmis"
 
-#: gtk/gtkcombobox.c:781
+#: gtk/gtkcombobox.c:782
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Vai kolonna var tikt pārkārtota ap galvenēm"
 
-#: gtk/gtkcombobox.c:789
+#: gtk/gtkcombobox.c:790
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Vai iezīmes teksts var tikt izvēlēts ar peli"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:553
+#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:553
 msgid "Tearoff Title"
 msgstr "Izslēgšanas Virsraksts"
 
-#: gtk/gtkcombobox.c:805
+#: gtk/gtkcombobox.c:806
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
@@ -2064,51 +2064,51 @@ msgid ""
 msgstr ""
 "Virsraksts, ko var parādīt logu pārvaldnieks, kad šī izvēlne ir izslēgta"
 
-#: gtk/gtkcombobox.c:822
+#: gtk/gtkcombobox.c:823
 #, fuzzy
 msgid "Popup shown"
 msgstr "Fokusa līnijas platums"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:824
 #, fuzzy
 msgid "Whether the combo's dropdown is shown"
 msgstr "Vai ietvaram ir vai nav jābūt parādītam"
 
-#: gtk/gtkcombobox.c:839
+#: gtk/gtkcombobox.c:840
 msgid "Button Sensitivity"
 msgstr ""
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:841
 #, fuzzy
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Vai iezīmes teksts var tikt izvēlēts ar peli"
 
-#: gtk/gtkcombobox.c:847
+#: gtk/gtkcombobox.c:848
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:849
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Vai progress tiek parādīts kā teksts"
 
-#: gtk/gtkcombobox.c:864
+#: gtk/gtkcombobox.c:865
 #, fuzzy
 msgid "Arrow Size"
 msgstr "Bultas virziens"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:866
 #, fuzzy
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Koka skata modelis"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Ēnas tips"
 
-#: gtk/gtkcombobox.c:881
+#: gtk/gtkcombobox.c:882
 #, fuzzy
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Ietvara platums ap sadaļu iezīmēm"

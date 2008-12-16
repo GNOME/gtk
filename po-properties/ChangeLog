@@ -1,3 +1,7 @@
+2008-12-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.14.6 ===
+
 2008-12-14  Tor Lillqvist  <tml@novell.com>
 
 	* ast.po: Use charset=UTF-8 to avoid error with some versions of
