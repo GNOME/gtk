@@ -90,8 +90,10 @@ struct _GdkWindowImplIface
                                          const GdkRegion *shape_region,
                                          gint             offset_x,
                                          gint             offset_y);
-  void         (* set_child_shapes)     (GdkWindow       *window);
-  void         (* merge_child_shapes)   (GdkWindow       *window);
+  void         (* input_shape_combine_region) (GdkWindow       *window,
+					       const GdkRegion *shape_region,
+					       gint             offset_x,
+					       gint             offset_y);
 
   gboolean     (* set_static_gravities) (GdkWindow       *window,
 				         gboolean         use_static);

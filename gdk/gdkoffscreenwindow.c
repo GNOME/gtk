@@ -1010,12 +1010,10 @@ gdk_offscreen_window_shape_combine_region (GdkWindow       *window,
 }
 
 static void
-gdk_offscreen_window_set_child_shapes (GdkWindow *window)
-{
-}
-
-static void
-gdk_offscreen_window_merge_child_shapes (GdkWindow *window)
+gdk_offscreen_window_input_shape_combine_region (GdkWindow       *window,
+						 const GdkRegion *shape_region,
+						 gint             offset_x,
+						 gint             offset_y)
 {
 }
 
@@ -1170,8 +1168,7 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->set_cursor = gdk_offscreen_window_set_cursor;
   iface->get_geometry = gdk_offscreen_window_get_geometry;
   iface->shape_combine_region = gdk_offscreen_window_shape_combine_region;
-  iface->set_child_shapes = gdk_offscreen_window_set_child_shapes;
-  iface->merge_child_shapes = gdk_offscreen_window_merge_child_shapes;
+  iface->input_shape_combine_region = gdk_offscreen_window_input_shape_combine_region;
   iface->set_static_gravities = gdk_offscreen_window_set_static_gravities;
   iface->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
   iface->queue_translation = gdk_offscreen_window_queue_translation;

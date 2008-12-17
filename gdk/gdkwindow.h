@@ -339,6 +339,7 @@ struct _GdkWindowObject
   GList *outstanding_moves;
 
   GdkRegion *shape;
+  GdkRegion *input_shape;
   
   cairo_surface_t *cairo_surface;
 };

@@ -3375,44 +3375,6 @@ gdk_window_add_colormap_windows (GdkWindow *window)
     XFree (old_windows);
 }
 
-/**
- * gdk_window_input_shape_combine_mask:
- * @window: a #GdkWindow
- * @mask: shape mask
- * @x: X position of shape mask with respect to @window
- * @y: Y position of shape mask with respect to @window
- * 
- * Like gdk_window_shape_combine_mask(), but the shape applies
- * only to event handling. Mouse events which happen while
- * the pointer position corresponds to an unset bit in the 
- * mask will be passed on the window below @window.
- *
- * An input shape is typically used with RGBA windows.
- * The alpha channel of the window defines which pixels are 
- * invisible and allows for nicely antialiased borders,
- * and the input shape controls where the window is
- * "clickable".
- *
- * On the X11 platform, this requires version 1.1 of the
- * shape extension.
- *
- * On the Win32 platform, this functionality is not present and the
- * function does nothing.
- *
- * Since: 2.10
- */
-void 
-gdk_window_input_shape_combine_mask (GdkWindow *window,
-				     GdkBitmap *mask,
-				     gint       x,
-				     gint       y)
-{
-#ifdef ShapeInput
-  do_shape_combine_mask (window, mask, x, y, ShapeInput);
-#endif
-}
-
-
 static inline void
 do_shape_combine_region (GdkWindow       *window,
 			 const GdkRegion *shape_region,
@@ -3479,37 +3441,11 @@ gdk_window_x11_shape_combine_region (GdkWindow       *window,
   do_shape_combine_region (window, shape_region, offset_x, offset_y, ShapeBounding);
 }
 
-/**
- * gdk_window_input_shape_combine_region:
- * @window: a #GdkWindow
- * @shape_region: region of window to be non-transparent
- * @offset_x: X position of @shape_region in @window coordinates
- * @offset_y: Y position of @shape_region in @window coordinates
- * 
- * Like gdk_window_shape_combine_region(), but the shape applies
- * only to event handling. Mouse events which happen while
- * the pointer position corresponds to an unset bit in the 
- * mask will be passed on the window below @window.
- *
- * An input shape is typically used with RGBA windows.
- * The alpha channel of the window defines which pixels are 
- * invisible and allows for nicely antialiased borders,
- * and the input shape controls where the window is
- * "clickable".
- *
- * On the X11 platform, this requires version 1.1 of the
- * shape extension.
- *
- * On the Win32 platform, this functionality is not present and the
- * function does nothing.
- *
- * Since: 2.10
- */
-void 
-gdk_window_input_shape_combine_region (GdkWindow       *window,
-				       const GdkRegion *shape_region,
-				       gint             offset_x,
-				       gint             offset_y)
+static void 
+gdk_window_x11_input_shape_combine_region (GdkWindow       *window,
+					   const GdkRegion *shape_region,
+					   gint             offset_x,
+					   gint             offset_y)
 {
 #ifdef ShapeInput
   do_shape_combine_region (window, shape_region, offset_x, offset_y, ShapeInput);
@@ -4568,152 +4504,10 @@ gdk_window_set_functions (GdkWindow    *window,
   gdk_window_set_mwm_hints (window, &hints);
 }
 
-#ifdef HAVE_SHAPE_EXT
-
-/* 
- * propagate the shapes from all child windows of a GDK window to the parent 
- * window. Shamelessly ripped from Enlightenment's code
- * 
- * - Raster
- */
-struct _gdk_span
-{
-  gint                start;
-  gint                end;
-  struct _gdk_span    *next;
-};
-
-static void
-gdk_add_to_span (struct _gdk_span **s,
-		 gint               x,
-		 gint               xx)
-{
-  struct _gdk_span *ptr1, *ptr2, *noo, *ss;
-  gchar             spanning;
-  
-  ptr2 = NULL;
-  ptr1 = *s;
-  spanning = 0;
-  ss = NULL;
-  /* scan the spans for this line */
-  while (ptr1)
-    {
-      /* -- -> new span */
-      /* == -> existing span */
-      /* ## -> spans intersect */
-      /* if we are in the middle of spanning the span into the line */
-      if (spanning)
-	{
-	  /* case: ---- ==== */
-	  if (xx < ptr1->start - 1)
-	    {
-	      /* ends before next span - extend to here */
-	      ss->end = xx;
-	      return;
-	    }
-	  /* case: ----##=== */
-	  else if (xx <= ptr1->end)
-	    {
-	      /* crosses into next span - delete next span and append */
-	      ss->end = ptr1->end;
-	      ss->next = ptr1->next;
-	      g_free (ptr1);
-	      return;
-	    }
-	  /* case: ---###--- */
-	  else
-	    {
-	      /* overlaps next span - delete and keep checking */
-	      ss->next = ptr1->next;
-	      g_free (ptr1);
-	      ptr1 = ss;
-	    }
-	}
-      /* otherwise havent started spanning it in yet */
-      else
-	{
-	  /* case: ---- ==== */
-	  if (xx < ptr1->start - 1)
-	    {
-	      /* insert span here in list */
-	      noo = g_malloc (sizeof (struct _gdk_span));
-	      
-	      if (noo)
-		{
-		  noo->start = x;
-		  noo->end = xx;
-		  noo->next = ptr1;
-		  if (ptr2)
-		    ptr2->next = noo;
-		  else
-		    *s = noo;
-		}
-	      return;
-	    }
-	  /* case: ----##=== */
-	  else if ((x < ptr1->start) && (xx <= ptr1->end))
-	    {
-	      /* expand this span to the left point of the new one */
-	      ptr1->start = x;
-	      return;
-	    }
-	  /* case: ===###=== */
-	  else if ((x >= ptr1->start) && (xx <= ptr1->end))
-	    {
-	      /* throw the span away */
-	      return;
-	    }
-	  /* case: ---###--- */
-	  else if ((x < ptr1->start) && (xx > ptr1->end))
-	    {
-	      ss = ptr1;
-	      spanning = 1;
-	      ptr1->start = x;
-	      ptr1->end = xx;
-	    }
-	  /* case: ===##---- */
-	  else if ((x >= ptr1->start) && (x <= ptr1->end + 1) && (xx > ptr1->end))
-	    {
-	      ss = ptr1;
-	      spanning = 1;
-	      ptr1->end = xx;
-	    }
-	  /* case: ==== ---- */
-	  /* case handled by next loop iteration - first case */
-	}
-      ptr2 = ptr1;
-      ptr1 = ptr1->next;
-    }
-  /* it started in the middle but spans beyond your current list */
-  if (spanning)
-    {
-      ptr2->end = xx;
-      return;
-    }
-  /* it does not start inside a span or in the middle, so add it to the end */
-  noo = g_malloc (sizeof (struct _gdk_span));
-  
-  if (noo)
-    {
-      noo->start = x;
-      noo->end = xx;
-      if (ptr2)
-	{
-	  noo->next = ptr2->next;
-	  ptr2->next = noo;
-	}
-      else
-	{
-	  noo->next = NULL;
-	  *s = noo;
-	}
-    }
-  return;
-}
-
 static GdkRegion *
 xwindow_get_shape (Display *xdisplay,
-		   Window window)
+		   Window window,
+		   gint shape_type)
 {
   GdkRegion *shape;
   GdkRectangle *rl;
@@ -4725,8 +4519,8 @@ xwindow_get_shape (Display *xdisplay,
 #if defined(HAVE_SHAPE_EXT)
   xrl = XShapeGetRectangles (xdisplay,
 			     window,
-			     ShapeBounding, &rn, &ord);
-
+			     shape_type, &rn, &ord);
+  
   if (rn == 0)
     return gdk_region_new (); /* Empty */
   
@@ -4778,7 +4572,7 @@ _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
 		     ShapeSet);
   
   region = xwindow_get_shape (GDK_DISPLAY_XDISPLAY (display),
-			      window);
+			      window, ShapeBounding);
 
   XDestroyWindow (GDK_DISPLAY_XDISPLAY (display),
 		  window);
@@ -4793,272 +4587,25 @@ _gdk_windowing_window_get_shape (GdkWindow *window)
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
     return xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
-			      GDK_WINDOW_XID (window));
+			      GDK_WINDOW_XID (window), ShapeBounding);
 #endif
 
   return NULL;
 }
 
-static void
-gdk_add_rectangles (Display           *disp,
-		    Window             win,
-		    struct _gdk_span **spans,
-		    gint               basew,
-		    gint               baseh,
-		    gint               x,
-		    gint               y)
+GdkRegion *
+_gdk_windowing_window_get_input_shape (GdkWindow *window)
 {
-  gint a, k;
-  gint x1, y1, x2, y2;
-  gint rn, ord;
-  XRectangle *rl;
-  
-  rl = XShapeGetRectangles (disp, win, ShapeBounding, &rn, &ord);
-  if (rl)
-    {
-      /* go through all clip rects in this window's shape */
-      for (k = 0; k < rn; k++)
-	{
-	  /* for each clip rect, add it to each line's spans */
-	  x1 = x + rl[k].x;
-	  x2 = x + rl[k].x + (rl[k].width - 1);
-	  y1 = y + rl[k].y;
-	  y2 = y + rl[k].y + (rl[k].height - 1);
-	  if (x1 < 0)
-	    x1 = 0;
-	  if (y1 < 0)
-	    y1 = 0;
-	  if (x2 >= basew)
-	    x2 = basew - 1;
-	  if (y2 >= baseh)
-	    y2 = baseh - 1;
-	  for (a = y1; a <= y2; a++)
-	    {
-	      if ((x2 - x1) >= 0)
-		gdk_add_to_span (&spans[a], x1, x2);
-	    }
-	}
-      XFree (rl);
-    }
-}
-
-static void
-gdk_propagate_shapes (Display *disp,
-		      Window   win,
-		      gboolean merge,
-		      int      shape)
-{
-  Window              rt, par, *list = NULL;
-  gint                i, j, num = 0, num_rects = 0;
-  gint                x, y, contig;
-  guint               w, h, d;
-  gint                baseh, basew;
-  XRectangle         *rects = NULL;
-  struct _gdk_span  **spans = NULL, *ptr1, *ptr2, *ptr3;
-  XWindowAttributes   xatt;
-  
-  XGetGeometry (disp, win, &rt, &x, &y, &w, &h, &d, &d);
-  if (h <= 0)
-    return;
-  basew = w;
-  baseh = h;
-  spans = g_malloc (sizeof (struct _gdk_span *) * h);
-  
-  for (i = 0; i < h; i++)
-    spans[i] = NULL;
-  XQueryTree (disp, win, &rt, &par, &list, (unsigned int *)&num);
-  if (list)
-    {
-      /* go through all child windows and create/insert spans */
-      for (i = 0; i < num; i++)
-	{
-	  if (XGetWindowAttributes (disp, list[i], &xatt) && (xatt.map_state != IsUnmapped))
-	    if (XGetGeometry (disp, list[i], &rt, &x, &y, &w, &h, &d, &d))
-	      gdk_add_rectangles (disp, list[i], spans, basew, baseh, x, y);
-	}
-      if (merge)
-	gdk_add_rectangles (disp, win, spans, basew, baseh, x, y);
-      
-      /* go through the spans list and build a list of rects */
-      rects = g_malloc (sizeof (XRectangle) * 256);
-      num_rects = 0;
-      for (i = 0; i < baseh; i++)
-	{
-	  ptr1 = spans[i];
-	  /* go through the line for all spans */
-	  while (ptr1)
-	    {
-	      rects[num_rects].x = ptr1->start;
-	      rects[num_rects].y = i;
-	      rects[num_rects].width = ptr1->end - ptr1->start + 1;
-	      rects[num_rects].height = 1;
-	      j = i + 1;
-	      /* if there are more lines */
-	      contig = 1;
-	      /* while contigous rects (same start/end coords) exist */
-	      while ((contig) && (j < baseh))
-		{
-		  /* search next line for spans matching this one */
-		  contig = 0;
-		  ptr2 = spans[j];
-		  ptr3 = NULL;
-		  while (ptr2)
-		    {
-		      /* if we have an exact span match set contig */
-		      if ((ptr2->start == ptr1->start) &&
-			  (ptr2->end == ptr1->end))
-			{
-			  contig = 1;
-			  /* remove the span - not needed */
-			  if (ptr3)
-			    {
-			      ptr3->next = ptr2->next;
-			      g_free (ptr2);
-			      ptr2 = NULL;
-			    }
-			  else
-			    {
-			      spans[j] = ptr2->next;
-			      g_free (ptr2);
-			      ptr2 = NULL;
-			    }
-			  break;
-			}
-		      /* gone past the span point no point looking */
-		      else if (ptr2->start < ptr1->start)
-			break;
-		      if (ptr2)
-			{
-			  ptr3 = ptr2;
-			  ptr2 = ptr2->next;
-			}
-		    }
-		  /* if a contiguous span was found increase the rect h */
-		  if (contig)
-		    {
-		      rects[num_rects].height++;
-		      j++;
-		    }
-		}
-	      /* up the rect count */
-	      num_rects++;
-	      /* every 256 new rects increase the rect array */
-	      if ((num_rects % 256) == 0)
-		rects = g_realloc (rects, sizeof (XRectangle) * (num_rects + 256));
-	      ptr1 = ptr1->next;
-	    }
-	}
-      /* set the rects as the shape mask */
-      if (rects)
-	{
-	  XShapeCombineRectangles (disp, win, shape, 0, 0, rects, num_rects,
-				   ShapeSet, YXSorted);
-	  g_free (rects);
-	}
-      XFree (list);
-    }
-  /* free up all the spans we made */
-  for (i = 0; i < baseh; i++)
-    {
-      ptr1 = spans[i];
-      while (ptr1)
-	{
-	  ptr2 = ptr1;
-	  ptr1 = ptr1->next;
-	  g_free (ptr2);
-	}
-    }
-  g_free (spans);
-}
-
-#endif /* HAVE_SHAPE_EXT */
-
-static inline void
-do_child_shapes (GdkWindow *window,
-                 gboolean   merge)
-{
-#ifdef HAVE_SHAPE_EXT
+#if defined(HAVE_SHAPE_EXT)
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
-    {
-      gdk_propagate_shapes (GDK_WINDOW_XDISPLAY (window),
-                            GDK_WINDOW_XID (window),
-                            merge,
-                            ShapeBounding);
-    }
+    return xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
+			      GDK_WINDOW_XID (window),
+			      ShapeInput);
 #endif
-}
 
-static void
-gdk_window_x11_set_child_shapes (GdkWindow *window)
-{
-  do_child_shapes (window, FALSE);
+  return NULL;
 }
-
-static void
-gdk_window_x11_merge_child_shapes (GdkWindow *window)
-{
-  do_child_shapes (window, TRUE);
-}
-
-static inline void
-do_child_input_shapes (GdkWindow *window,
-                       gboolean   merge)
-{
-#if defined(HAVE_SHAPE_EXT) && defined(ShapeInput)
-  if (!GDK_WINDOW_DESTROYED (window) &&
-      gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
-    {
-      gdk_propagate_shapes (GDK_WINDOW_XDISPLAY (window),
-                            GDK_WINDOW_XID (window),
-                            merge,
-                            ShapeInput);
-    }
-#endif
-}
-
-/**
- * gdk_window_set_child_input_shapes:
- * @window: a #GdkWindow
- * 
- * Sets the input shape mask of @window to the union of input shape masks
- * for all children of @window, ignoring the input shape mask of @window
- * itself. Contrast with gdk_window_merge_child_input_shapes() which includes
- * the input shape mask of @window in the masks to be merged.
- *
- * Since: 2.10
- **/
-void 
-gdk_window_set_child_input_shapes (GdkWindow *window)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  do_child_input_shapes (window, FALSE);
-}
-
-/**
- * gdk_window_merge_child_input_shapes:
- * @window: a #GdkWindow
- * 
- * Merges the input shape masks for any child windows into the
- * input shape mask for @window. i.e. the union of all input masks
- * for @window and its children will become the new input mask
- * for @window. See gdk_window_input_shape_combine_mask().
- *
- * This function is distinct from gdk_window_set_child_input_shapes()
- * because it includes @window's input shape mask in the set of 
- * shapes to be merged.
- *
- * Since: 2.10
- **/
-void 
-gdk_window_merge_child_input_shapes (GdkWindow *window)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  do_child_input_shapes (window, TRUE);
-}
-
 
 static void
 gdk_window_set_static_bit_gravity (GdkWindow *window,
@@ -5962,8 +5509,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->get_origin = gdk_window_x11_get_origin;
   iface->get_deskrelative_origin = gdk_window_x11_get_deskrelative_origin;
   iface->shape_combine_region = gdk_window_x11_shape_combine_region;
-  iface->set_child_shapes = gdk_window_x11_set_child_shapes;
-  iface->merge_child_shapes = gdk_window_x11_merge_child_shapes;
+  iface->input_shape_combine_region = gdk_window_x11_input_shape_combine_region;
   iface->set_static_gravities = gdk_window_x11_set_static_gravities;
   iface->queue_antiexpose = _gdk_x11_window_queue_antiexpose;
   iface->queue_translation = _gdk_x11_window_queue_translation;

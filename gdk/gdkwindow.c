@@ -383,6 +383,12 @@ gdk_window_finalize (GObject *object)
       obj->impl = NULL;
     }
 
+  if (obj->shape)
+    gdk_region_destroy (obj->shape);
+
+  if (obj->input_shape)
+    gdk_region_destroy (obj->input_shape);
+
   if (obj->cursor)
     gdk_cursor_unref (obj->cursor);
 
@@ -431,12 +437,14 @@ gdk_window_has_no_impl (GdkWindowObject *window)
 static void
 remove_child_area (GdkWindowObject *private,
 		   GdkWindowObject *until,
+		   gboolean for_input,
 		   GdkRegion *region)
 {
   GdkWindowObject *child;
   GdkRegion *child_region;
   GdkRectangle r;
   GList *l;
+  GdkRegion *shape;
   
   for (l = private->children; l; l = l->next)
     {
@@ -464,12 +472,26 @@ remove_child_area (GdkWindowObject *private,
 	gdk_region_intersect (child_region, child->shape);
       else if (private->window_type == GDK_WINDOW_FOREIGN)
 	{
-	  GdkRegion *shape;
 	  shape = _gdk_windowing_window_get_shape ((GdkWindow *)child);
 	  if (shape)
 	    {
 	      gdk_region_intersect (child_region, shape);
 	      gdk_region_destroy (shape);
+	    }
+	}
+
+      if (for_input)
+	{
+	  if (child->input_shape)
+	    gdk_region_intersect (child_region, child->input_shape);
+	  else if (private->window_type == GDK_WINDOW_FOREIGN)
+	    {
+	      shape = _gdk_windowing_window_get_input_shape ((GdkWindow *)child);
+	      if (shape)
+		{
+		  gdk_region_intersect (child_region, shape);
+		  gdk_region_destroy (shape);
+		}
 	    }
 	}
       
@@ -533,7 +555,7 @@ recompute_visible_regions_internal (GdkWindowObject *private,
 	  gdk_region_intersect (new_clip, private->parent->clip_region);
 	  
 	  /* Remove all overlapping children from parent */
-	  remove_child_area (private->parent, private, new_clip);
+	  remove_child_area (private->parent, private, FALSE, new_clip);
 	}
       
       /* Convert from parent coords to window coords */
@@ -552,7 +574,7 @@ recompute_visible_regions_internal (GdkWindowObject *private,
 
       old_clip_region_with_children = private->clip_region_with_children;
       private->clip_region_with_children = gdk_region_copy (private->clip_region);
-      remove_child_area (private, NULL, private->clip_region_with_children);
+      remove_child_area (private, NULL, FALSE, private->clip_region_with_children);
 
       if (clip_region_changed ||
 	  !gdk_region_equal (private->clip_region_with_children, old_clip_region_with_children))
@@ -590,8 +612,7 @@ recompute_visible_regions_internal (GdkWindowObject *private,
     {
       GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_region ((GdkWindow *)private, private->clip_region, 0, 0);
     }
-      
-  
+
   if (recalculate_siblings &&
       private->parent != NULL &&
       GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
@@ -1119,6 +1140,8 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
       
       private->impl = old_impl;
       change_impl (private, new_impl);
+
+      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->input_shape_combine_region ((GdkWindow *)private, private->input_shape, 0, 0);
     }
   else
     {
@@ -6275,7 +6298,7 @@ do_child_shapes (GdkWindow *window,
   r.height = private->height;
   
   region = gdk_region_rectangle (&r);
-  remove_child_area (private, NULL, region);
+  remove_child_area (private, NULL, FALSE, region);
 
   if (merge && private->shape)
     gdk_region_subtract (region, private->shape);
@@ -6319,6 +6342,182 @@ gdk_window_merge_child_shapes (GdkWindow *window)
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   do_child_shapes (window, TRUE);
+}
+
+/**
+ * gdk_window_input_shape_combine_mask:
+ * @window: a #GdkWindow
+ * @mask: shape mask
+ * @x: X position of shape mask with respect to @window
+ * @y: Y position of shape mask with respect to @window
+ * 
+ * Like gdk_window_shape_combine_mask(), but the shape applies
+ * only to event handling. Mouse events which happen while
+ * the pointer position corresponds to an unset bit in the 
+ * mask will be passed on the window below @window.
+ *
+ * An input shape is typically used with RGBA windows.
+ * The alpha channel of the window defines which pixels are 
+ * invisible and allows for nicely antialiased borders,
+ * and the input shape controls where the window is
+ * "clickable".
+ *
+ * On the X11 platform, this requires version 1.1 of the
+ * shape extension.
+ *
+ * On the Win32 platform, this functionality is not present and the
+ * function does nothing.
+ *
+ * Since: 2.10
+ */
+void 
+gdk_window_input_shape_combine_mask (GdkWindow *window,
+				     GdkBitmap *mask,
+				     gint       x,
+				     gint       y)
+{
+  GdkWindowObject *private;
+  GdkRegion *region;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+
+  region = _gdk_windowing_get_shape_for_mask (mask);
+
+  gdk_window_input_shape_combine_region (window,
+					 region,
+					 x, y);
+  
+  gdk_region_destroy (region);
+}
+
+/**
+ * gdk_window_input_shape_combine_region:
+ * @window: a #GdkWindow
+ * @shape_region: region of window to be non-transparent
+ * @offset_x: X position of @shape_region in @window coordinates
+ * @offset_y: Y position of @shape_region in @window coordinates
+ * 
+ * Like gdk_window_shape_combine_region(), but the shape applies
+ * only to event handling. Mouse events which happen while
+ * the pointer position corresponds to an unset bit in the 
+ * mask will be passed on the window below @window.
+ *
+ * An input shape is typically used with RGBA windows.
+ * The alpha channel of the window defines which pixels are 
+ * invisible and allows for nicely antialiased borders,
+ * and the input shape controls where the window is
+ * "clickable".
+ *
+ * On the X11 platform, this requires version 1.1 of the
+ * shape extension.
+ *
+ * On the Win32 platform, this functionality is not present and the
+ * function does nothing.
+ *
+ * Since: 2.10
+ */
+void 
+gdk_window_input_shape_combine_region (GdkWindow       *window,
+				       const GdkRegion *shape_region,
+				       gint             offset_x,
+				       gint             offset_y)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (private->input_shape)
+    gdk_region_destroy (private->input_shape);
+
+  if (shape_region)
+    {
+      private->input_shape = gdk_region_copy (shape_region);
+      gdk_region_offset (private->shape, offset_x, offset_y);      
+    }
+  else
+    private->input_shape = NULL;
+
+  if (gdk_window_has_impl (private))
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->input_shape_combine_region ((GdkWindow *)private, private->input_shape, 0, 0);
+
+  /* Pointer may have e.g. moved outside window due to the input mask change */
+  _gdk_syntesize_crossing_events_for_geometry_change (window);
+}
+
+static void
+do_child_input_shapes (GdkWindow *window,
+		       gboolean merge)
+{
+  GdkWindowObject *private;
+  GdkRectangle r;
+  GdkRegion *region;
+
+  private = (GdkWindowObject *) window;
+  
+  r.x = 0;
+  r.y = 0;
+  r.width = private->width;
+  r.height = private->height;
+  
+  region = gdk_region_rectangle (&r);
+  remove_child_area (private, NULL, TRUE, region);
+
+  if (merge && private->shape)
+    gdk_region_subtract (region, private->shape);
+  if (merge && private->input_shape)
+    gdk_region_subtract (region, private->input_shape);
+  
+  gdk_window_input_shape_combine_region (window, region, 0, 0);
+}
+
+
+/**
+ * gdk_window_set_child_input_shapes:
+ * @window: a #GdkWindow
+ * 
+ * Sets the input shape mask of @window to the union of input shape masks
+ * for all children of @window, ignoring the input shape mask of @window
+ * itself. Contrast with gdk_window_merge_child_input_shapes() which includes
+ * the input shape mask of @window in the masks to be merged.
+ *
+ * Since: 2.10
+ **/
+void 
+gdk_window_set_child_input_shapes (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  do_child_input_shapes (window, FALSE);
+}
+
+/**
+ * gdk_window_merge_child_input_shapes:
+ * @window: a #GdkWindow
+ * 
+ * Merges the input shape masks for any child windows into the
+ * input shape mask for @window. i.e. the union of all input masks
+ * for @window and its children will become the new input mask
+ * for @window. See gdk_window_input_shape_combine_mask().
+ *
+ * This function is distinct from gdk_window_set_child_input_shapes()
+ * because it includes @window's input shape mask in the set of 
+ * shapes to be merged.
+ *
+ * Since: 2.10
+ **/
+void 
+gdk_window_merge_child_input_shapes (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  do_child_input_shapes (window, TRUE);
 }
 
 
@@ -6713,6 +6912,9 @@ point_in_window (GdkWindowObject *window,
     y >= 0 && y < window->height &&
     (window->shape == NULL ||
      gdk_region_point_in (window->shape,
+			  x, y)) &&
+    (window->input_shape == NULL ||
+     gdk_region_point_in (window->input_shape,
 			  x, y));
 }
 
