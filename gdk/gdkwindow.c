@@ -3986,6 +3986,8 @@ gdk_window_set_cairo_clip (GdkDrawable *drawable,
     {
       cairo_save (cr);
       cairo_identity_matrix (cr);
+
+      cairo_reset_clip (cr);
       
       cairo_new_path (cr);
       gdk_cairo_region (cr, private->clip_region);
@@ -4003,6 +4005,8 @@ gdk_window_set_cairo_clip (GdkDrawable *drawable,
 	{
 	  cairo_save (cr);
 	  cairo_identity_matrix (cr);
+	  
+	  cairo_reset_clip (cr);
 	  
 	  cairo_new_path (cr);
 	  gdk_cairo_region (cr, paint->region);
@@ -4166,7 +4170,7 @@ gdk_window_process_updates_recurse (GdkWindow *window,
     {
       child = l->data;
       
-      if (!GDK_WINDOW_IS_MAPPED (child) || child->input_only)
+      if (!GDK_WINDOW_IS_MAPPED (child) || child->input_only || child->composited)
 	continue;
 
       /* Ignore offscreen children, as they don't draw in their parent and
@@ -4180,7 +4184,9 @@ gdk_window_process_updates_recurse (GdkWindow *window,
       r.height = child->height;
       
       child_region = gdk_region_rectangle (&r);
-      
+      if (child->shape)
+	gdk_region_intersect (child_region, child->shape);
+	
       if (child->impl == private->impl) 
 	{
 	  /* Client side child, expose */
