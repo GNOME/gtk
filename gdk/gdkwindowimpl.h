@@ -86,10 +86,6 @@ struct _GdkWindowImplIface
                                          gint            *x,
                                          gint            *y);
 
-  void         (* shape_combine_mask)   (GdkWindow       *window,
-                                         GdkBitmap       *mask,
-                                         gint             x,
-                                         gint             y);
   void         (* shape_combine_region) (GdkWindow       *window,
                                          const GdkRegion *shape_region,
                                          gint             offset_x,

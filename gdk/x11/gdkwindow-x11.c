@@ -3375,63 +3375,6 @@ gdk_window_add_colormap_windows (GdkWindow *window)
     XFree (old_windows);
 }
 
-/*
- * This needs the X11 shape extension.
- * If not available, shaped windows will look
- * ugly, but programs still work.    Stefan Wille
- */
-static inline void
-do_shape_combine_mask (GdkWindow *window,
-		       GdkBitmap *mask,
-		       gint       x,
-		       gint       y,
-		       gint       shape)
-{
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  Pixmap pixmap;
-  
-#ifdef HAVE_SHAPE_EXT
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  if (shape == ShapeBounding
-      ? gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window))
-      : gdk_display_supports_input_shapes (GDK_WINDOW_DISPLAY (window)))
-    {
-      if (mask)
-	{
-	  pixmap = GDK_PIXMAP_XID (mask);
-	  
-	  private->shaped = (shape == ShapeBounding);
-	}
-      else
-	{
-	  x = 0;
-	  y = 0;
-	  pixmap = None;
-
-	  private->shaped = FALSE;
-	}
-      
-      XShapeCombineMask (GDK_WINDOW_XDISPLAY (window),
-			 GDK_WINDOW_XID (window),
-			 shape,
-			 x, y,
-			 pixmap,
-			 ShapeSet);
-    }
-#endif /* HAVE_SHAPE_EXT */
-}
-
-static void
-gdk_window_x11_shape_combine_mask (GdkWindow *window,
-                                   GdkBitmap *mask,
-                                   gint       x,
-                                   gint       y)
-{
-  do_shape_combine_mask (window, mask, x, y, ShapeBounding);
-}
-
 /**
  * gdk_window_input_shape_combine_mask:
  * @window: a #GdkWindow
@@ -3486,7 +3429,18 @@ do_shape_combine_region (GdkWindow       *window,
   if (shape_region == NULL)
     {
       /* Use NULL mask to unset the shape */
-      gdk_window_shape_combine_mask (window, NULL, 0, 0);
+      if (shape == ShapeBounding
+	  ? gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window))
+	  : gdk_display_supports_input_shapes (GDK_WINDOW_DISPLAY (window)))
+	{
+	  private->shaped = FALSE;
+	  XShapeCombineMask (GDK_WINDOW_XDISPLAY (window),
+			     GDK_WINDOW_XID (window),
+			     shape,
+			     0, 0,
+			     None,
+			     ShapeSet);
+	}
       return;
     }
   
@@ -4774,7 +4728,7 @@ xwindow_get_shape (Display *xdisplay,
 			     ShapeBounding, &rn, &ord);
 
   if (rn == 0)
-    return NULL;
+    return gdk_region_new (); /* Empty */
   
   if (ord != YXBanded)
     {
@@ -6007,7 +5961,6 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->get_geometry = gdk_window_x11_get_geometry;
   iface->get_origin = gdk_window_x11_get_origin;
   iface->get_deskrelative_origin = gdk_window_x11_get_deskrelative_origin;
-  iface->shape_combine_mask = gdk_window_x11_shape_combine_mask;
   iface->shape_combine_region = gdk_window_x11_shape_combine_region;
   iface->set_child_shapes = gdk_window_x11_set_child_shapes;
   iface->merge_child_shapes = gdk_window_x11_merge_child_shapes;

@@ -1002,14 +1002,6 @@ gdk_offscreen_window_set_back_pixmap (GdkWindow *window,
 }
 
 static void
-gdk_offscreen_window_shape_combine_mask (GdkWindow *window,
-                                         GdkBitmap *mask,
-                                         gint       x,
-                                         gint       y)
-{
-}
-
-static void
 gdk_offscreen_window_shape_combine_region (GdkWindow       *window,
                                            const GdkRegion *shape_region,
                                            gint             offset_x,
@@ -1177,7 +1169,6 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->reparent = gdk_offscreen_window_reparent;
   iface->set_cursor = gdk_offscreen_window_set_cursor;
   iface->get_geometry = gdk_offscreen_window_get_geometry;
-  iface->shape_combine_mask = gdk_offscreen_window_shape_combine_mask;
   iface->shape_combine_region = gdk_offscreen_window_shape_combine_region;
   iface->set_child_shapes = gdk_offscreen_window_set_child_shapes;
   iface->merge_child_shapes = gdk_offscreen_window_merge_child_shapes;
