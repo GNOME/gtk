@@ -6219,7 +6219,10 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 
   private = (GdkWindowObject *) window;
 
-  region = _gdk_windowing_get_shape_for_mask (mask);
+  if (mask)
+    region = _gdk_windowing_get_shape_for_mask (mask);
+  else
+    region = NULL;
 
   gdk_window_shape_combine_region (window,
 				   region,
@@ -6383,7 +6386,10 @@ gdk_window_input_shape_combine_mask (GdkWindow *window,
 
   private = (GdkWindowObject *) window;
 
-  region = _gdk_windowing_get_shape_for_mask (mask);
+  if (mask)
+    region = _gdk_windowing_get_shape_for_mask (mask);
+  else
+    region = NULL;
 
   gdk_window_input_shape_combine_region (window,
 					 region,
