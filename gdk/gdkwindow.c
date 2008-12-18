@@ -248,7 +248,7 @@ static void do_move_region_bits_on_impl (GdkWindowObject *private,
 					 GdkRegion *region, /* In impl window coords */
 					 int dx, int dy);
 static void gdk_window_invalidate_in_parent (GdkWindowObject *private);
-static void show_all_visible_impls (GdkWindowObject *private);
+static void move_native_children (GdkWindowObject *private);
   
 static gpointer parent_class = NULL;
 
@@ -909,7 +909,6 @@ change_impl (GdkWindowObject *private,
 {
   GList *l;
   GdkWindowObject *child;
-  gboolean show;
   GdkDrawable *old_impl;
 
   old_impl = private->impl;
@@ -921,6 +920,24 @@ change_impl (GdkWindowObject *private,
 
       if (child->impl == old_impl)
 	change_impl (child, new);
+    }
+}
+
+static void
+reparent_to_impl (GdkWindowObject *private)
+{
+  GList *l;
+  GdkWindowObject *child;
+  gboolean show;
+
+  /* Enumerate in reverse order so we get the right order for the native
+     windows (first in childrens list is topmost, and reparent places on top) */
+  for (l = g_list_last (private->children); l != NULL; l = l->prev)
+    {
+      child = l->data;
+
+      if (child->impl == private->impl)
+	reparent_to_impl (child);
       else
 	{
 	  show = GDK_WINDOW_IMPL_GET_IFACE (private->impl)->reparent ((GdkWindow *)child,
@@ -930,8 +947,8 @@ change_impl (GdkWindowObject *private,
 	    gdk_window_show_unraised ((GdkWindow *)child);
 	}
     }
-
 }
+
 
 /**
  * gdk_window_reparent:
@@ -954,6 +971,7 @@ gdk_window_reparent (GdkWindow *window,
   GdkWindowObject *new_parent_private;
   GdkWindowObject *old_parent;
   gboolean show, was_toplevel, was_mapped;
+  gboolean do_reparent_to_impl;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
@@ -1003,7 +1021,8 @@ gdk_window_reparent (GdkWindow *window,
   if (new_parent_private->window_type == GDK_WINDOW_ROOT ||
       new_parent_private->window_type == GDK_WINDOW_FOREIGN)
     gdk_window_set_has_native (window, TRUE);
-  
+
+  do_reparent_to_impl = FALSE;
   if (gdk_window_has_impl (private))
     {
       /* Native window */
@@ -1018,6 +1037,7 @@ gdk_window_reparent (GdkWindow *window,
       show = was_mapped;
       gdk_window_hide (window);
 
+      do_reparent_to_impl = TRUE;
       change_impl (private, new_parent_private->impl);
     }
 
@@ -1081,6 +1101,9 @@ gdk_window_reparent (GdkWindow *window,
   recompute_visible_regions (private, TRUE, FALSE);
   if (old_parent && GDK_WINDOW_TYPE (old_parent) != GDK_WINDOW_ROOT)
     recompute_visible_regions (old_parent, FALSE, TRUE);
+
+  if (do_reparent_to_impl)
+    reparent_to_impl (private);
   
   if (show)
     gdk_window_show_unraised (window);
@@ -1142,15 +1165,17 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
 			    get_native_event_mask (private), &attributes, GDK_WA_COLORMAP);
       new_impl = private->impl;
 
-      recompute_visible_regions (private, FALSE, FALSE);
-      
       private->impl = old_impl;
       change_impl (private, new_impl);
+      
+      recompute_visible_regions (private, FALSE, FALSE);
 
+      reparent_to_impl (private);
+      
       GDK_WINDOW_IMPL_GET_IFACE (private->impl)->input_shape_combine_region ((GdkWindow *)private, private->input_shape, 0, 0);
 
       if (gdk_window_is_viewable (window))
-	show_all_visible_impls (private);
+	GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show (window);
     }
   else
     {
