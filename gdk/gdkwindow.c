@@ -1141,6 +1141,8 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
       _gdk_window_impl_new (window, (GdkWindow *)private->parent, screen, visual,
 			    get_native_event_mask (private), &attributes, GDK_WA_COLORMAP);
       new_impl = private->impl;
+
+      recompute_visible_regions (private, FALSE, FALSE);
       
       private->impl = old_impl;
       change_impl (private, new_impl);
