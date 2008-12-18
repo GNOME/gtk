@@ -6311,7 +6311,8 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 				   region,
 				   x, y);
 
-  gdk_region_destroy (region);
+  if (region)
+    gdk_region_destroy (region);
 }
 
 /**
