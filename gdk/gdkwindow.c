@@ -5814,20 +5814,14 @@ gdk_window_scroll (GdkWindow *window,
       GdkWindow *child = GDK_WINDOW (tmp_list->data);
       GdkWindowObject *child_obj = GDK_WINDOW_OBJECT (child);
       
-      if (child_obj->impl == private->impl)
-	{
-	  /* Just update the positions, the bits will move with the copy */
-	  child_obj->x += dx;
-	  child_obj->y += dy;
-	}
-      else
-	{
-	  /* Native window, need to move it */
-	  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->move_resize (window, TRUE, child_obj->x + dx, child_obj->y + dy, -1, -1);
-	}
+      /* Just update the positions, the bits will move with the copy */
+      child_obj->x += dx;
+      child_obj->y += dy;
       
       tmp_list = tmp_list->next;
     }
+
+  move_native_children (private);
   
   recompute_visible_regions (private, FALSE, TRUE);
 

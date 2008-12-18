@@ -201,17 +201,6 @@ _gdk_window_move_resize_child (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
   obj = GDK_WINDOW_OBJECT (window);
 
-  dx = x - obj->x;
-  dy = y - obj->y;
-  
-  is_move = dx != 0 || dy != 0;
-  is_resize = obj->width != width || obj->height != height;
-
-#if 0 /* Not right, doesn't take abs_x/y into consideration */
-  if (!is_move && !is_resize)
-    return;
-#endif
-  
   obj->x = x;
   obj->y = y;
   obj->width = width;
