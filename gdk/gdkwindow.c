@@ -247,6 +247,7 @@ static void do_move_region_bits_on_impl (GdkWindowObject *private,
 					 int dest_off_x, int dest_off_y,
 					 GdkRegion *region, /* In impl window coords */
 					 int dx, int dy);
+static void gdk_window_invalidate_in_parent (GdkWindowObject *private);
   
 static gpointer parent_class = NULL;
 
@@ -1263,8 +1264,16 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	  if (private->parent)
 	    {
 	      GdkWindowObject *parent_private = (GdkWindowObject *)private->parent;
+
 	      if (parent_private->children)
 		parent_private->children = g_list_remove (parent_private->children, window);
+
+	      if (!recursing &&
+		  GDK_WINDOW_IS_MAPPED (window))
+		{
+		  recompute_visible_regions (private, TRUE, FALSE);
+		  gdk_window_invalidate_in_parent (private);
+		}
 	    }
 
 	  gdk_window_free_paint_stack (window);
@@ -4286,6 +4295,13 @@ gdk_window_process_updates_internal (GdkWindow *window)
       if (!save_region)
 	gdk_region_destroy (update_area);
     }
+  
+  if (private->outstanding_moves)
+    {
+      /* Flush any outstanding moves, may happen if we moved a window but got
+	 no actual invalid area */
+      gdk_window_flush (window);
+    }
 }
 
 static void
@@ -4388,7 +4404,8 @@ gdk_window_process_updates (GdkWindow *window,
     }
 
   impl_window = gdk_window_get_impl_window (private);
-  if (impl_window->update_area &&
+  if ((impl_window->update_area ||
+       impl_window->outstanding_moves) &&
       !impl_window->update_freeze_count &&
       !gdk_window_is_toplevel_frozen (window))
     {      
@@ -4717,7 +4734,8 @@ gdk_window_get_update_area (GdkWindow *window)
 	{
 	  gdk_region_subtract (impl_window->update_area, tmp_region);
 
-	  if (gdk_region_empty (impl_window->update_area))
+	  if (gdk_region_empty (impl_window->update_area) &&
+	      impl_window->outstanding_moves == NULL)
 	    {
 	      gdk_region_destroy (impl_window->update_area);
 	      impl_window->update_area = NULL;
@@ -5181,27 +5199,17 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
 
   if (gdk_window_has_impl (private))
     {
-      if (!GDK_WINDOW_IS_MAPPED (window))
+      if (!was_mapped)
 	gdk_synthesize_window_state (window,
 				     GDK_WINDOW_STATE_WITHDRAWN,
 				     0);
       
-      if (gdk_window_is_viewable (window))
+      if (!was_mapped && gdk_window_is_viewable (window))
 	show_all_visible_impls (private);
     }
   else
     {
-      if (GDK_WINDOW_IS_MAPPED (window))
-	{
-	  /* If we're raising, need to invalidate even if we're already shown */
-	  if (raise && gdk_window_is_viewable (window) && !private->input_only)
-	    gdk_window_invalidate_rect (window, NULL, TRUE);
-	}
-      else
-	{
-	  /* Wasn't visible already */
-	  private->state = 0;
-	}
+      private->state = 0;
     }
 
   if (!was_mapped)
@@ -5215,14 +5223,14 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
   
   if (!was_mapped || raise)
     {
-      if (gdk_window_is_viewable (window))
-	_gdk_syntesize_crossing_events_for_geometry_change (window);
-      
       recompute_visible_regions (private, TRUE, FALSE);
+      
+      if (gdk_window_is_viewable (window))
+	{
+	  _gdk_syntesize_crossing_events_for_geometry_change (window);
+	  gdk_window_invalidate_rect (window, NULL, TRUE);
+	}
     }
-  
-  if (!was_mapped && gdk_window_is_viewable (window))
-    gdk_window_invalidate_rect (window, NULL, TRUE);
 }
   
 /**
@@ -5269,9 +5277,12 @@ gdk_window_raise (GdkWindow *window)
   /* Keep children in (reverse) stacking order */
   gdk_window_raise_internal (window);
 
-  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->raise (window);
+  if (gdk_window_has_impl (private))
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->raise (window);
 
   recompute_visible_regions (private, TRUE, FALSE);
+
+  gdk_window_invalidate_rect (window, NULL, TRUE);
 }
 
 static void
@@ -5340,15 +5351,13 @@ gdk_window_lower (GdkWindow *window)
   /* Keep children in (reverse) stacking order */
   gdk_window_lower_internal (window);
 
+  recompute_visible_regions (private, TRUE, FALSE);
+  
   if (gdk_window_has_impl (private))
     GDK_WINDOW_IMPL_GET_IFACE (private->impl)->lower (window);
-  else
-    {
-      gdk_window_invalidate_in_parent (private);
-      _gdk_syntesize_crossing_events_for_geometry_change (window);
-    }
 
-  recompute_visible_regions (private, TRUE, FALSE);
+  _gdk_syntesize_crossing_events_for_geometry_change (window);
+  gdk_window_invalidate_in_parent (private);
 }
 
 /**
@@ -5448,11 +5457,10 @@ gdk_window_hide (GdkWindow *window)
 	}
 
       private->state = GDK_WINDOW_STATE_WITHDRAWN;
-      
-      /* Invalidate the rect */
-      gdk_window_invalidate_in_parent (private);
     }
 
+  recompute_visible_regions (private, TRUE, FALSE);
+  
   if (was_mapped)
     {
       if (private->event_mask & GDK_STRUCTURE_MASK)
@@ -5464,7 +5472,8 @@ gdk_window_hide (GdkWindow *window)
       _gdk_syntesize_crossing_events_for_geometry_change (GDK_WINDOW (private->parent));
     }
   
-  recompute_visible_regions (private, TRUE, FALSE);
+  /* Invalidate the rect */
+  gdk_window_invalidate_in_parent (private);
 }
 
 /**
@@ -6685,7 +6694,10 @@ gdk_window_set_composited (GdkWindow *window,
   _gdk_windowing_window_set_composited (window, composited);
 
   recompute_visible_regions (private, TRUE, FALSE);
-			     
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    gdk_window_invalidate_in_parent (private);
+  
   private->composited = composited;
 }
 
