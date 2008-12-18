@@ -2809,9 +2809,6 @@ gdk_window_get_root_origin (GdkWindow *window,
 {
   GdkRectangle rect;
 
-  if (!WINDOW_IS_TOPLEVEL (window))
-    return;
-  
   gdk_window_get_frame_extents (window, &rect);
 
   if (x)
@@ -2864,10 +2861,6 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   rect->y = 0;
   rect->width = 1;
   rect->height = 1;
-  
-  if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
-    return;
   
   while (private->parent && ((GdkWindowObject*) private->parent)->parent)
     private = (GdkWindowObject*) private->parent;
