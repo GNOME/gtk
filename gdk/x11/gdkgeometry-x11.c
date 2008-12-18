@@ -190,17 +190,18 @@ _gdk_window_move_resize_child (GdkWindow *window,
   GdkWindowImplX11 *impl;
   GdkWindowObject *obj;
   GdkRectangle new_info;
-  
-  gint dx, dy;
-  gboolean is_move;
   gboolean is_resize;
-
+  
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window)); 
 
   impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
   obj = GDK_WINDOW_OBJECT (window);
 
+  is_resize =
+    width != obj->width ||
+    height != obj->height;
+    
   obj->x = x;
   obj->y = y;
   obj->width = width;
@@ -210,11 +211,15 @@ _gdk_window_move_resize_child (GdkWindow *window,
   new_info.y = obj->y + obj->parent->abs_y;
   new_info.width = obj->width;
   new_info.height = obj->height;
-  
+
+  _gdk_x11_window_tmp_unset_bg (window, TRUE);
+  _gdk_x11_window_tmp_unset_bg (obj->parent, FALSE);
   if (is_resize)
     move_resize (window, &new_info);
   else
     move (window, &new_info);
+  _gdk_x11_window_tmp_reset_bg (obj->parent, FALSE);
+  _gdk_x11_window_tmp_reset_bg (window, TRUE);
 }
 
 static Bool

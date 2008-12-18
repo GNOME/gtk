@@ -2382,6 +2382,12 @@ move_region_on_impl (GdkWindowObject *private,
   GdkWindowObject *impl_window;
   gboolean free_region;
 
+  if (dx == 0 && dy == 0)
+    {
+      gdk_region_destroy (region);
+      return;
+    }
+  
   free_region = TRUE;
   impl_window = gdk_window_get_impl_window (private);
 
@@ -4567,14 +4573,19 @@ gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
 
       tmp_list = tmp_list->next;
     }
+
+  impl_window = gdk_window_get_impl_window (private);
   
-  if (!gdk_region_empty (visible_region))
+  if (!gdk_region_empty (visible_region)  ||
+      /* Even if we're not exposing anything, make sure we process
+	 idles for windows with outstanding moves */
+      (impl_window->outstanding_moves != NULL &&
+       impl_window->update_area == NULL))
     {
       if (debug_updates)
         draw_ugly_color (window, region);
       
       /* Convert to impl coords */
-      impl_window = gdk_window_get_impl_window (private);
       gdk_region_offset (visible_region, private->abs_x, private->abs_y);
       if (impl_window->update_area)
 	{

@@ -290,18 +290,15 @@ _gdk_x11_window_tmp_unset_bg (GdkWindow *window,
 
   if (private->input_only || private->destroyed ||
       (private->window_type != GDK_WINDOW_ROOT &&
-       !GDK_WINDOW_IS_MAPPED (window)) ||
-      !_gdk_window_has_impl (window) ||
-      !GDK_WINDOW_IS_X11 (window))
-    {
-      return;
-    }
-
-  if (private->window_type != GDK_WINDOW_ROOT &&
+       !GDK_WINDOW_IS_MAPPED (window)))
+    return;
+  
+  
+  if (_gdk_window_has_impl (window) &&
+      GDK_WINDOW_IS_X11 (window) &&
+      private->window_type != GDK_WINDOW_ROOT &&
       private->window_type != GDK_WINDOW_FOREIGN)
-    {
-      tmp_unset_bg (window);
-    }
+    tmp_unset_bg (window);
 
   if (recurse)
     {
@@ -324,18 +321,15 @@ _gdk_x11_window_tmp_reset_bg (GdkWindow *window,
 
   if (private->input_only || private->destroyed ||
       (private->window_type != GDK_WINDOW_ROOT &&
-       !GDK_WINDOW_IS_MAPPED (window)) ||
-      !_gdk_window_has_impl (window) ||
-      !GDK_WINDOW_IS_X11 (window))
-    {
-      return;
-    }
+       !GDK_WINDOW_IS_MAPPED (window)))
+    return;
 
-  if (private->window_type != GDK_WINDOW_ROOT &&
+  
+  if (_gdk_window_has_impl (window) &&
+      GDK_WINDOW_IS_X11 (window) &&
+      private->window_type != GDK_WINDOW_ROOT &&
       private->window_type != GDK_WINDOW_FOREIGN)
-    {
-      tmp_reset_bg (window);
-    }
+    tmp_reset_bg (window);
 
   if (recurse)
     {
