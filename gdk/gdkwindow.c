@@ -35,6 +35,8 @@
 #include "gdkscreen.h"
 #include "gdkalias.h"
 
+#undef DEBUG_WINDOW_PRINTING
+
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"           /* For workaround */
 #endif
@@ -5127,6 +5129,23 @@ gdk_window_raise_internal (GdkWindow *window)
 }
 
 static void
+show_all_visible_impls (GdkWindowObject *private)
+{
+  GdkWindowObject *child;
+  GList *l;
+  
+  for (l = private->children; l != NULL; l = l->next)
+    {
+      child = l->data;
+      if (GDK_WINDOW_IS_MAPPED (child))
+	show_all_visible_impls (child);
+    }
+  
+  if (gdk_window_has_impl (private))
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show ((GdkWindow *)private);
+}
+
+static void
 gdk_window_show_internal (GdkWindow *window, gboolean raise)
 {
   GdkWindowObject *private;
@@ -5144,10 +5163,21 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
     {
       /* Keep children in (reverse) stacking order */
       gdk_window_raise_internal (window);
+      
+      if (gdk_window_has_impl (private))
+	GDK_WINDOW_IMPL_GET_IFACE (private->impl)->raise (window);
     }
 
   if (gdk_window_has_impl (private))
-    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show (window, raise);
+    {
+      if (!GDK_WINDOW_IS_MAPPED (window))
+	gdk_synthesize_window_state (window,
+				     GDK_WINDOW_STATE_WITHDRAWN,
+				     0);
+      
+      if (gdk_window_is_viewable (window))
+	show_all_visible_impls (private);
+    }
   else
     {
       if (GDK_WINDOW_IS_MAPPED (window))
@@ -5330,6 +5360,25 @@ gdk_window_show (GdkWindow *window)
   gdk_window_show_internal (window, TRUE);
 }
 
+static void
+hide_all_visible_impls (GdkWindowObject *private)
+{
+  GdkWindowObject *child;
+  GList *l;
+  
+  for (l = private->children; l != NULL; l = l->next)
+    {
+      child = l->data;
+      
+      if (GDK_WINDOW_IS_MAPPED (child))
+	hide_all_visible_impls (child);
+    }
+  
+  if (gdk_window_has_impl (private))
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->hide ((GdkWindow *)private);
+}
+
+
 /**
  * gdk_window_hide:
  * @window: a #GdkWindow
@@ -5343,7 +5392,7 @@ void
 gdk_window_hide (GdkWindow *window)
 {
   GdkWindowObject *private;
-  gboolean was_mapped;
+  gboolean was_mapped, was_viewable;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -5354,7 +5403,17 @@ gdk_window_hide (GdkWindow *window)
   was_mapped = GDK_WINDOW_IS_MAPPED (private);
   
   if (gdk_window_has_impl (private))
-    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->hide (window);
+    {
+      was_viewable = gdk_window_is_viewable (window);
+
+      if (GDK_WINDOW_IS_MAPPED (window))
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_WITHDRAWN);
+
+      if (was_viewable)
+	hide_all_visible_impls (private);
+    }
   else if (was_mapped)
     {
       GdkDisplay *display;
@@ -7751,6 +7810,64 @@ proxy_button_event (GdkEvent *source_event)
   return TRUE; /* Always unlink original, we want to obey the emulated event mask */
 }
 
+#ifdef DEBUG_WINDOW_PRINTING
+static void
+gdk_window_print (GdkWindowObject *window,
+		  int indent)
+{
+  GdkRectangle r;
+  
+  g_print ("%*s%p: [%s] %d,%d %dx%d", indent, "", window,
+	   window->user_data ? g_type_name_from_instance (window->user_data) : "no widget",
+	   window->x, window->y,
+	   window->width, window->height
+	   );
+
+  if (gdk_window_has_impl (window))
+    {
+      g_print (" impl(0x%lx)", gdk_x11_drawable_get_xid (GDK_DRAWABLE (window)));
+    }
+  
+  if (window->input_only)
+    g_print (" input-only");
+
+  if (!gdk_window_is_visible ((GdkWindow *)window))
+    g_print (" hidden");
+    
+  g_print (" abs[%d,%d]",
+	   window->abs_x, window->abs_y);
+  
+  gdk_region_get_clipbox (window->clip_region, &r);
+  if (gdk_region_empty (window->clip_region))
+    g_print (" clipbox[empty]");
+  else
+    g_print (" clipbox[%d,%d %dx%d]", r.x, r.y, r.width, r.height);
+  
+  g_print ("\n");
+}
+
+
+static void
+gdk_window_print_tree (GdkWindow *window,
+		       int indent,
+		       gboolean include_input_only)
+{
+  GdkWindowObject *private;
+  GList *l;
+
+  private = (GdkWindowObject *)window;
+
+  if (private->input_only && !include_input_only)
+    return;
+  
+  gdk_window_print (private, indent);
+
+  for (l = private->children; l != NULL; l = l->next)
+    gdk_window_print_tree (l->data, indent + 4, include_input_only);
+}
+
+#endif /* DEBUG_WINDOW_PRINTING */
+
 void
 _gdk_windowing_got_event (GdkDisplay *display,
 			  GList      *event_link,
@@ -7767,6 +7884,16 @@ _gdk_windowing_got_event (GdkDisplay *display,
   
   event_private = GDK_WINDOW_OBJECT (event_window);
 
+#ifdef DEBUG_WINDOW_PRINTING  
+  if (event->type == GDK_KEY_PRESS &&
+      (event->key.keyval == 0xa7 ||
+       event->key.keyval == 0xbd))
+    {
+      gdk_window_print_tree (event_window, 0,
+			     event->key.keyval == 0xbd);
+    }
+#endif
+  
   if (!(is_button_type (event->type) ||
 	is_motion_type (event->type)))
     return;

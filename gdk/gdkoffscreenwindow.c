@@ -828,29 +828,10 @@ gdk_offscreen_window_move_resize (GdkWindow *window,
 }
 
 static void
-gdk_offscreen_window_show (GdkWindow *window, gboolean raise)
+gdk_offscreen_window_show (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkOffscreenWindow *offscreen;
 
-  if (GDK_WINDOW_IS_MAPPED (window))
-    return;
-
-  offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
-
-  private->state = 0;
-
-  /* gdk_window_show already changed the stacking order if needed */
-
-  if (private->event_mask & GDK_STRUCTURE_MASK)
-    _gdk_make_event (GDK_WINDOW (private), GDK_MAP, NULL, FALSE);
-  
-  if (private->parent && private->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
-    _gdk_make_event (GDK_WINDOW (private), GDK_MAP, NULL, FALSE);
-
-  if (gdk_window_is_viewable (window))
-    _gdk_syntesize_crossing_events_for_geometry_change (window);
-  
   gdk_window_clear_area_e (window, 0, 0,
 			   private->width, private->height);
 }
@@ -868,9 +849,6 @@ gdk_offscreen_window_hide (GdkWindow *window)
   private = (GdkWindowObject*) window;
   offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
 
-  if (!GDK_WINDOW_IS_MAPPED (private))
-    return;
-  
   /* May need to break grabs on children */
   display = gdk_drawable_get_display (window);
   
@@ -888,16 +866,6 @@ gdk_offscreen_window_hide (GdkWindow *window)
 	  gdk_display_pointer_ungrab (display, GDK_CURRENT_TIME);
 	}
     }
-
-  if (private->event_mask & GDK_STRUCTURE_MASK)
-    _gdk_make_event (GDK_WINDOW (private), GDK_UNMAP, NULL, FALSE);
-  
-  if (private->parent && private->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
-    _gdk_make_event (GDK_WINDOW (private), GDK_UNMAP, NULL, FALSE);
-  
-  private->state = GDK_WINDOW_STATE_WITHDRAWN;
-  
-  _gdk_syntesize_crossing_events_for_geometry_change (window);
 }
 
 static void
@@ -915,44 +883,6 @@ static void
 gdk_offscreen_window_set_events (GdkWindow       *window,
 				 GdkEventMask     event_mask)
 {
-}
-
-static GdkGC *
-setup_backing_rect_gc (GdkWindow *window, int x_offset, int y_offset)
-{
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkGC *gc;
-
-  if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG && private->parent)
-    {
-      x_offset += private->x;
-      y_offset += private->y;
-      
-      return setup_backing_rect_gc (GDK_WINDOW (private->parent), x_offset, y_offset);
-    }
-  else if (private->bg_pixmap &&
-	   private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-	   private->bg_pixmap != GDK_NO_BG)
-    {
-      guint gc_mask;
-      GdkGCValues gc_values;
-
-      gc_values.fill = GDK_TILED;
-      gc_values.tile = private->bg_pixmap;
-      gc_values.ts_x_origin = -x_offset;
-      gc_values.ts_y_origin = -y_offset;
-
-      gc_mask = GDK_GC_FILL | GDK_GC_TILE | GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN;
-
-      return gdk_gc_new_with_values (window, &gc_values, gc_mask);
-    }
-  else
-    {
-      gc = _gdk_drawable_get_scratch_gc (window, FALSE);
-      g_object_ref (gc);
-      gdk_gc_set_foreground (gc, &private->bg_color);
-      return gc;
-    }
 }
 
 static void

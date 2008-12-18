@@ -1278,63 +1278,45 @@ set_initial_hints (GdkWindow *window)
 }
 
 static void
-gdk_window_x11_show (GdkWindow *window,
-                     gboolean   raise)
+gdk_window_x11_show (GdkWindow *window)
 {
-  GdkWindowObject *private;
+  GdkWindowObject *private = (GdkWindowObject*) window;
   GdkDisplay *display;
   GdkDisplayX11 *display_x11;
   GdkToplevelX11 *toplevel;
-  
-  private = (GdkWindowObject*) window;
-  if (!private->destroyed)
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (private->impl);
+  Display *xdisplay = GDK_WINDOW_XDISPLAY (window);
+  Window xwindow = GDK_WINDOW_XID (window);
+  gboolean unset_bg;
+      
+  set_initial_hints (window);
+      
+  if (WINDOW_IS_TOPLEVEL (window))
     {
-      GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (private->impl);
-      Display *xdisplay = GDK_WINDOW_XDISPLAY (window);
-      Window xwindow = GDK_WINDOW_XID (window);
-      gboolean unset_bg;
+      display = gdk_drawable_get_display (window);
+      display_x11 = GDK_DISPLAY_X11 (display);
+      toplevel = _gdk_x11_window_get_toplevel (window);
       
-      if (raise)
-        XRaiseWindow (xdisplay, xwindow);
-
-      if (!GDK_WINDOW_IS_MAPPED (window))
-        {
-          set_initial_hints (window);
-          
-          gdk_synthesize_window_state (window,
-                                       GDK_WINDOW_STATE_WITHDRAWN,
-                                       0);
-        }
-      
-      g_assert (GDK_WINDOW_IS_MAPPED (window));
-
-      if (WINDOW_IS_TOPLEVEL (window))
-	{
-	  display = gdk_drawable_get_display (window);
-	  display_x11 = GDK_DISPLAY_X11 (display);
-	  toplevel = _gdk_x11_window_get_toplevel (window);
-
-          if (toplevel->user_time != 0 &&
+      if (toplevel->user_time != 0 &&
 	      display_x11->user_time != 0 &&
-	      XSERVER_TIME_IS_LATER (display_x11->user_time, toplevel->user_time))
-	    gdk_x11_window_set_user_time (window, display_x11->user_time);
-	}
-
-      unset_bg = !private->input_only &&
-	(private->window_type == GDK_WINDOW_CHILD ||
-	 impl->override_redirect) &&
-	gdk_window_is_viewable (window);
-      
-      if (unset_bg)
-	_gdk_x11_window_tmp_unset_bg (window, TRUE);
-      
-      XMapWindow (xdisplay, xwindow);
-      
-      if (unset_bg)
-	{
-	  _gdk_x11_window_tmp_reset_bg (window, TRUE);
-	  gdk_window_invalidate_rect (window, NULL, TRUE);
-	}
+	  XSERVER_TIME_IS_LATER (display_x11->user_time, toplevel->user_time))
+	gdk_x11_window_set_user_time (window, display_x11->user_time);
+    }
+  
+  unset_bg = !private->input_only &&
+    (private->window_type == GDK_WINDOW_CHILD ||
+     impl->override_redirect) &&
+    gdk_window_is_viewable (window);
+  
+  if (unset_bg)
+    _gdk_x11_window_tmp_unset_bg (window, TRUE);
+  
+  XMapWindow (xdisplay, xwindow);
+  
+  if (unset_bg)
+    {
+      _gdk_x11_window_tmp_reset_bg (window, TRUE);
+      gdk_window_invalidate_rect (window, NULL, TRUE);
     }
 }
 
@@ -1416,24 +1398,12 @@ gdk_window_x11_hide (GdkWindow *window)
       break;
     }
   
-  if (!private->destroyed)
-    {
-      if (GDK_WINDOW_IS_MAPPED (window))
-        gdk_synthesize_window_state (window,
-                                     0,
-                                     GDK_WINDOW_STATE_WITHDRAWN);
-
-      g_assert (!GDK_WINDOW_IS_MAPPED (window));
-      
-      _gdk_window_clear_update_area (window);
-
-      pre_unmap (window);
-      
-      XUnmapWindow (GDK_WINDOW_XDISPLAY (window),
-                    GDK_WINDOW_XID (window));
-
-      post_unmap (window);
-    }
+  _gdk_window_clear_update_area (window);
+  
+  pre_unmap (window);
+  XUnmapWindow (GDK_WINDOW_XDISPLAY (window),
+		GDK_WINDOW_XID (window));
+  post_unmap (window);
 }
 
 static void
