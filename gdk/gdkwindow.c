@@ -248,6 +248,7 @@ static void do_move_region_bits_on_impl (GdkWindowObject *private,
 					 GdkRegion *region, /* In impl window coords */
 					 int dx, int dy);
 static void gdk_window_invalidate_in_parent (GdkWindowObject *private);
+static void show_all_visible_impls (GdkWindowObject *private);
   
 static gpointer parent_class = NULL;
 
@@ -1145,6 +1146,9 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
       change_impl (private, new_impl);
 
       GDK_WINDOW_IMPL_GET_IFACE (private->impl)->input_shape_combine_region ((GdkWindow *)private, private->input_shape, 0, 0);
+
+      if (gdk_window_is_viewable (window))
+	show_all_visible_impls (private);
     }
   else
     {
@@ -5209,7 +5213,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
       private->state = 0;
     }
 
-  if (gdk_window_is_viewable (window))
+  if (!was_mapped && gdk_window_is_viewable (window))
     show_all_visible_impls (private);
   
   if (!was_mapped)
