@@ -5203,15 +5203,15 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
 	gdk_synthesize_window_state (window,
 				     GDK_WINDOW_STATE_WITHDRAWN,
 				     0);
-      
-      if (!was_mapped && gdk_window_is_viewable (window))
-	show_all_visible_impls (private);
     }
   else
     {
       private->state = 0;
     }
 
+  if (gdk_window_is_viewable (window))
+    show_all_visible_impls (private);
+  
   if (!was_mapped)
     {
       if (private->event_mask & GDK_STRUCTURE_MASK)
@@ -5421,18 +5421,15 @@ gdk_window_hide (GdkWindow *window)
     return;
 
   was_mapped = GDK_WINDOW_IS_MAPPED (private);
+  was_viewable = gdk_window_is_viewable (window);
   
   if (gdk_window_has_impl (private))
     {
-      was_viewable = gdk_window_is_viewable (window);
 
       if (GDK_WINDOW_IS_MAPPED (window))
         gdk_synthesize_window_state (window,
                                      0,
                                      GDK_WINDOW_STATE_WITHDRAWN);
-
-      if (was_viewable)
-	hide_all_visible_impls (private);
     }
   else if (was_mapped)
     {
@@ -5459,6 +5456,9 @@ gdk_window_hide (GdkWindow *window)
       private->state = GDK_WINDOW_STATE_WITHDRAWN;
     }
 
+  if (was_viewable)
+    hide_all_visible_impls (private);
+  
   recompute_visible_regions (private, TRUE, FALSE);
   
   if (was_mapped)
