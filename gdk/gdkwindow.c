@@ -5821,10 +5821,10 @@ gdk_window_scroll (GdkWindow *window,
       tmp_list = tmp_list->next;
     }
 
-  move_native_children (private);
-  
   recompute_visible_regions (private, FALSE, TRUE);
 
+  move_native_children (private);
+  
   /* Then copy the actual bits of the window w/ child windows */
   
   impl_window = gdk_window_get_impl_window (private);
