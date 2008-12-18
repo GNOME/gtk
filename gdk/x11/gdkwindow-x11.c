@@ -1308,10 +1308,7 @@ gdk_window_x11_show (GdkWindow *window)
   XMapWindow (xdisplay, xwindow);
   
   if (unset_bg)
-    {
-      _gdk_x11_window_tmp_reset_bg (window, TRUE);
-      gdk_window_invalidate_rect (window, NULL, TRUE);
-    }
+    _gdk_x11_window_tmp_reset_bg (window, TRUE);
 }
 
 static void
@@ -1576,15 +1573,19 @@ gdk_window_x11_reparent (GdkWindow *window,
   parent_private = (GdkWindowObject*) new_parent;
   impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
 
+  _gdk_x11_window_tmp_unset_bg (window, TRUE);
+  _gdk_x11_window_tmp_unset_bg ((GdkWindow *)old_parent_private, FALSE);
   XReparentWindow (GDK_WINDOW_XDISPLAY (window),
 		   GDK_WINDOW_XID (window),
 		   GDK_WINDOW_XID (new_parent),
-		   window_private->abs_x + x, window_private->abs_y + y);
+		   parent_private->abs_x + x, parent_private->abs_y + y);
+  _gdk_x11_window_tmp_reset_bg ((GdkWindow *)old_parent_private, FALSE);
+  _gdk_x11_window_tmp_reset_bg (window, TRUE);
 
   if (GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
     new_parent = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (window));
 
-  window_private->parent = (GdkWindowObject *)new_parent;
+  window_private->parent = parent_private;
 
   /* Switch the window type as appropriate */
 
