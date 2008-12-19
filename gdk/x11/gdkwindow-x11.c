@@ -4243,8 +4243,9 @@ gdk_window_set_group (GdkWindow *window,
 {
   GdkToplevelX11 *toplevel;
   
+  g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
-  g_return_if_fail (leader == NULL);
+  g_return_if_fail (leader == NULL || GDK_IS_WINDOW (leader));
 
   if (GDK_WINDOW_DESTROYED (window) ||
       (leader != NULL && GDK_WINDOW_DESTROYED (leader)) ||
