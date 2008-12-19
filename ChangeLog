@@ -1,3 +1,13 @@
+2008-12-19  Cody Russell  <bratsche@gnome.org>
+
+	Bug 85292 – add an icon to gtkentry
+
+	* gtk/gtkmarshalers.list: Add VOID:INT,BOXED
+	* tests/testentryicons.c: Initial icon entry test
+	* tests/Makefile.am: Add testentryicons
+	* gtk/gtkentry.[ch]: Add API for setting primary/secondary icons
+	and other features related to them.
+	
 2008-12-19  Marek Kasik  <mkasik@redhat.com>
 
 	Bug 339318 - Allow page rendering to (optionally) happen in a thread

@@ -39,6 +39,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testdnd				\
 	testellipsise			\
 	testentrycompletion 		\
+	testentryicons			\
 	testfilechooser			\
 	testfilechooserbutton		\
 	testframe			\
@@ -118,6 +119,7 @@ testclientmessage_DEPENDENCIES = $(TEST_DEPS)
 testdnd_DEPENDENCIES = $(TEST_DEPS)
 testellipsise_DEPENDENCIES = $(TEST_DEPS)
 testentrycompletion_DEPENDENCIES = $(TEST_DEPS)
+testentryicons_DEPENDENCIES = $(TEST_DEPS)
 testfilechooser_DEPENDENCIES = $(TEST_DEPS)
 testfilechooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
@@ -172,6 +174,7 @@ testclientmessage_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)
 testellipsise_LDADD = $(LDADDS)
 testentrycompletion_LDADD = $(LDADDS)
+testentryicons_LDADD = $(LDADDS)
 testfilechooser_LDADD = $(LDADDS)
 testfilechooserbutton_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
@@ -224,6 +227,9 @@ testvolumebutton_LDADD = $(LDADDS)
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\
 	testentrycompletion.c
+
+testentryicons_SOURCES =	\
+	testentryicons.c
 
 testfilechooser_SOURCES = 	\
 	prop-editor.c		\
