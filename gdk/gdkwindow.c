@@ -1171,6 +1171,10 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
       recompute_visible_regions (private, FALSE, FALSE);
 
       reparent_to_impl (private);
+
+      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_background (window, &private->bg_color);
+      if (private->bg_pixmap != NULL)
+	GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_back_pixmap (window, private->bg_pixmap);
       
       GDK_WINDOW_IMPL_GET_IFACE (private->impl)->input_shape_combine_region ((GdkWindow *)private, private->input_shape, 0, 0);
 
