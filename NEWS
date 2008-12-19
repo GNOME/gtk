@@ -1,3 +1,248 @@
+Overview of Changes from GTK+ 2.14.x to 2.15.0
+==============================================
+
+* GtkFileChooser
+ - Optionally shows file sizes
+ - Mounts volumes when necessary
+ - Picks better mime icons
+
+* GtkEntry
+ - Can show icons at either side of the entry, which can be made
+   clickable, drag sources, etc
+ - Can show progress information
+ - Picks the best available placeholder character for invisible entries 
+   unless it is explicitly set. See the invisible-char-set property
+ - Input methods work again in invisible entries
+ - Invisible entries can optionally display a caps-lock warning. This
+   can be turned off with the caps-lock-warning property
+
+* GtkStatusIcon
+ - Uses an extension of the tray icon spec to negotiate RGBA support.
+   This is also supported by the GNOME panel. For details, see 
+   http://lists.freedesktop.org/archives/xdg/2008-September/009934.html 
+ - Supports scroll events, middle clicks and rich tooltips
+
+* GtkLinkButton
+ - Respects user-defined tooltips 
+ - Has a default url hook
+
+* GtkBuilder
+ - Can construct menus
+ - Can associate accel groups with windows
+ - Child properties can now be translatable, e.g. GtkAssistant::page-title
+
+* GtkOrientable
+ - A new interface implemented by all widgets that have horizontal and
+   vertical variants
+
+* Printing support
+ - Print-to-file can save to non-local files
+ - Page rendering can be deferred to a thread to avoid blocking the mainloop
+
+* GDK
+ - GdkKeymap emits a ::state-changed signal when the caps lock state changes
+
+* Newly deprecated functions:
+  gdk_window_get_toplevels(),
+  gtk_font_selection_dialog_get_apply_button(),
+  gtk_status_icon_set_tooltip(),
+  gtk_toolbar_set_orientation()
+
+* Changes that are relevant for theme authors
+ - The GtkMenu::arrow-placement style property allow more space efficient
+   layout of scrolling menus
+ - Submenu arrows can be scaled relative to the font size, with the
+   GtkMenuItem::arrow-scaling style property
+ - Themes can set the GtkDialog::content-area-spacing style property to 
+   change the spacing between elements of the content area
+ - The GtkEntry::state-hint style property can be used to request that
+   GTK+ should pass the correct state when drawing the background of entries
+ 
+* Changes that are relevant for translators
+ - GTK+ has been switched to use the two-argument C_() macro
+   instead of Q_() for messages with context
+
+* Bugs fixed:
+ 434987 MS Windows style should use pango_win32_font_description_from_logfont
+ 325095 show a 'size' column
+ 552837 mem leak in gtkimmulticontext
+  83935 GtkEntry's default invisible char should be U+25CF
+ 553000 incorrect i18n header in gtkfilesystem.c
+ 552789 Show size column in the search and recently used files modes
+ 553135 eog crash: assertion failed. 
+ 382544 GtkIconView: Selection/focus should be painted around the items
+ 541391 Unfocussable Treeview swallows focus
+ 408244 add GtkDialog::content-area-spacing
+ 538782 Make GtkMenu's arrow size themable
+ 553385 gtk-builder-convert creates untranslated combobox models
+ 553241 double freed pointer in lpr_write cause firefox3 crash
+ 553917 Typo in gdkwindow-win32.c
+ 553133 GtkFileChooser won't ask to mount a volume
+ 553211 GtkFileChooserButton unsets filter after first use
+ 553578 tabs are not drawn correctly
+ 553803 eventually call XCloseDevice on XOpenDevice results
+ 552956 Should check composite extension version
+ 552959 GtkTrayIcon: _NET_SYSTEM_TRAY_VISUAL and real transparency
+ 553575 Only draw focus when navigating with the keyboard
+ 339367 Incorrect spotlocation
+ 554141 uninitialized data use/free in gtkclipboard-quartz.c
+ 371908 Password Entry broken
+ 317002 Disable input method completely in GtkEntry when it...
+ 487624 Tooltips doesn't get updated if ther's no mouse motion...
+ 107000 Add signals to GdkKeymap for monitoring caps_lock, etc
+ 530568 Entries with visibility=FALSE should warn for caps-lock on
+ 553086 hard to see current immodule
+ 541009 Get rid of separate subclasses for horizontal and vertical...
+ 344522 support non-local destination files (GtkPrint)
+ 553582 Add orientation API to GtkSeparator
+ 554506 combining diacritics broken, became deadkeys
+ 553585 Add orientation API to GtkRuler
+ 554690 mem leak in filechooser
+ 554691 mem leak in filechooser
+ 554696 invalid free function used
+ 554698 mem leak in filechooser
+ 554701 filechooser spams console with useless warnings
+ 554704 gtkfilesystemmodel does too much work
+ 530575 GtkEntry with invisible chars has a confused cursor in overwrite mode
+  96431 Can't cut and paste / DND within invisible entry
+ 132501 Make utility window translate to tool window in win32
+ 539464 gtk_cell_view_get_model is missing in GtkCellView
+ 553573 Add orientation API to GtkBox
+ 555387 Changing the sensitivity of a statusbar mistakenly requires a display
+ 436533 Allow more space efficient scroll arrows placement
+ 555270 Allow unsetting a MessageDialog's image
+ 554702 gtkfilesystem leaks GError
+ 554192 double press on the "circumflex" dead key...
+ 516425 Optionally display accelerators in popups
+ 550342 Splash screens have a caption
+ 555578 GtkTable propertiy maxima are wrong
+ 555523 gtk_scale_button_set_adjustment should accept NULL
+ 555573 gtk_font_selection_set_font_name shouldn't require a screen
+ 555676 gtk_widget_real_grab_focus assumes toplevel == window
+ 555000 Wrong treatment on non-spacing marks dead keys in GtkIMContextSimple
+ 551355 Make glib build with libtool 2.2
+ 555186 Setting gtk-toolbar-icon-size with custom icon_size
+ 555625 Updated gtk_compose_seqs_compact table
+ 555386 format not a string literal and no format arguments
+ 552318 menubar mnemonics consumed even when gtk-enable-mnemonics=false
+ 555779 GtkCellRendererPixbuf crashed on failed GIcon lookup
+ 556150 gtk 'object' property test fixing
+ 556527 The current page property is not passed to GtkPrintUnixDialog
+ 556578 GIMP windows stay on top of other windows
+ 557059 crash when compositing emblems with icon
+ 557266 Window Management Problem
+ 555920 gtkentry.c passes wrong enum to pango_layout_set_alignment
+ 528320 Incorrect icons displayed for files with custom mimetype icons
+ 557524 "va_end(args);" should be added into gtk_text_buffer_insert_with_...
+ 556835 gtkentry.c: variable is declared at middle of block
+ 556954 gtk+/gtk/gtkrecentchooserdefault.c: mismatching allocation...
+ 557315 stale clipboard target cache
+ 530454 Clarify page_nr when printing
+ 557065 gtkcellrendererpixbuf spams console over and over...
+ 557894 Wrong return value for gdk_pointer_grab_info_libgtk_only
+ 558397 gtk_widget_error_bell undefined without a screen
+ 557762 Misleading error message in GDK DirectFB
+ 557316 GtkLinkButton should consider user-defined tooltip
+ 339714 Set printer dpi on cairo ps/pdf surfaces when printing
+ 558522 scroll arrow painted insensitive even though there are pages...
+ 347230 testicontheme shortcomings
+ 558323 glitches when popping up combos in treeviews
+ 558667 gtk_font_selection_dialog_get_apply_button - deprecate
+ 412134 Add API to query style properties from the style
+ 322934 Replace menu's proxy icons with empty space hiding icons
+ 409435 GtkStatusIcon enhancements: scroll events, middle click, rich tooltips
+ 558278 Crash when calling a callback set by gdk_add_client_message_filter()
+ 558929 gtkstatusicon.c: 'event' is a member of the structure
+ 558001 gtk_icon_view_enable_model_drag_[source|dest] problem
+ 557212 Problem with which window gains focus and is visible
+ 559404 gtk_editable_insert_text counts length in bytes
+ 558586 handling of keyboard under darwin (quartz)
+ 558409 GtkLabel::use-underline doesnt work with GtkLabel::attributes
+ 553586 Add orientation API to GtkPaned
+ 560135 Print when the user double clicks a printer
+ 553765 Add orientation API to GtkRange
+ 550942 Rework of gdkeventloop-quartz.c
+ 525550 GTK+ 2.13.0 GtkCurve test fails
+ 559619 invisible-char default cannot be tested
+ 560139 GtkEntry doesn't paint with the right state
+ 560602 Wrong GtkMenuItem default value (test fails)
+ 377699 realizing gtk.Progress() causes SEGV
+ 561335 Fix typos in GtkToolItem documentation
+ 561539 Alignments miscalculate dimensions when allocated less...
+ 559947 Unchecked dependency on python>=2.4
+ 561504 testgtk should load rc file from sub folder
+ 539263 Deprecate gdk_window_get_toplevels
+ 554076 eventually release g_new-ed supported_atoms
+ 559622 GdkDevice test segfaults
+ 554453 "typeahead find" widget of GtkTreeView appears on wrong monitor...
+ 562817 GtkDialog: typo
+ 555334 connected server feature
+ 562878 password save incorrectly set in gtkmountoperation
+ 559914 eog doesn't apply paper setup
+ 562998 GtkFontButton documentation improvements
+ 557420 Some compose sequences don't work anymore (or only in specific order)
+ 546285 Allow GtkEntry to draw progress
+ 563547 Update gdkx11 atom precache table
+ 563285 test print backend does not compile
+ 559325 documentation for gdk_display_get_window_at_pointer() is wrong
+ 554274 Add default hook for GtkLinkButton
+ 546378 GtkAssistant page title is not translatable
+ 563991 gtk_file_chooser_button_new_with_backend is deprecated...
+ 563994 Input method module interface not documented
+ 564066 Crash in gtk_rc_parse_default_files
+ 563835 Typo in gtk_widget_has_screen() docs
+ 564212 gtk_icon_view_accessible_model_rows_reordered explain new_order...
+ 563751 xatom cache is prefilled too late
+ 556839 Crash when opening a link
+ 549251 GTK icon view accessible issue
+ 558306 Cannot build gdk (gtk+ 2.14.4) on Solaris 8
+ 555560 gtk_combo_box_set_active fails with no model
+ 563158 CellRendererProgress pulsing and progressing rows can not...
+ 556233 local-only causes G_IS_FILE warning
+ 562579 Remove error dialog when directory does not exist
+ 561494 FileChooser network browsing and authentication support
+ 339318 Allow page rendering to (optionally) happen in a thread
+  85292 add an icon to gtkentry
+ 564881 gtkstatusicon.c: 'event' bug again
+ 552545 leaks GpImage
+ 553374 gdk_pixdata_from_pixbuf fails for some images with use_rle set to TRUE
+ 555791 Natuilus Crashes when opening USB MP3 Player Contents
+ 561186 GdkPixbuf API type checking needs cleanup
+ 559009 gtk_radio_button_get_group documentation needs to say...
+ 523264 Update GTK+ reference documentation screenshots
+ 563876 [Regression] GTK_MODULES env var is no longer relevant
+ 554950 gail must make itself resident
+ 555953 libferret missing link against libgtk-x11
+ 554002 Orca App-Preferences dialog page tabs are "off" by one...
+ 353088 gtk_expander_get_label should return the full label text
+ 512743 Applications with lists crash in libgail
+ 564555 synaptic cannot be started...
+
+* New and updated translations:
+ Arabic (ar)
+ Asturian (ast)
+ Catalan (ca)
+ Danish (da)
+ German (de)
+ British English (en_GB)
+ Spanish (es)
+ Finnish (fi)
+ Galician (gl)
+ Hebrew (he)
+ Japanese (ja)
+ Georgian (ka)
+ Malayalam (ml)
+ Marathi (mr)
+ Portugese (pt)
+ Brazilian Portugese (pt_BR)
+ Romanian (ro)
+ Russian (ru)
+ Slovak (sk)
+ Serbian (sr, sr@latin)
+ Swedish (sv)
+ Thai (th)
+
+
 Overview of Changes from GTK+ 2.14.1 to 2.14.2
 ==============================================
 

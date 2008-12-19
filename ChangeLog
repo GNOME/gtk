@@ -1,5 +1,9 @@
 2008-12-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Update
+
+2008-12-19  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 564881 – gtkstatusicon.c: 'event' bug again
 
 	* gtk/gtkstatusicon.c (button_callback): Fix the build.
