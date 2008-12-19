@@ -1,3 +1,10 @@
+2008-12-19  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 564881 – gtkstatusicon.c: 'event' bug again
+
+	* gtk/gtkstatusicon.c (button_callback): Fix the build.
+	Patch by Christian Dywan.
+
 2008-12-19  Cody Russell  <bratsche@gnome.org>
 
 	Bug 85292 – add an icon to gtkentry
