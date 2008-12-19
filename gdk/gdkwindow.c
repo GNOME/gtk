@@ -871,7 +871,7 @@ gdk_window_new (GdkWindow     *parent,
     }
   else
     {
-      private->impl = private->parent->impl;
+      private->impl = g_object_ref (private->parent->impl);
     }
 
   recompute_visible_regions (private, TRUE, FALSE);
@@ -912,7 +912,8 @@ change_impl (GdkWindowObject *private,
   GdkDrawable *old_impl;
 
   old_impl = private->impl;
-  private->impl = new;
+  private->impl = g_object_ref (new);
+  g_object_unref (old_impl);
   
   for (l = private->children; l != NULL; l = l->next)
     {
@@ -1359,8 +1360,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	    {
 	      /* hide to make sure we repaint and break grabs */
 	      gdk_window_hide (window);
-	      /* NULL out impl so we don't double free it on finalize */
-	      private->impl = NULL;
 	    }
 
 	  private->state |= GDK_WINDOW_STATE_WITHDRAWN;
