@@ -160,6 +160,8 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   priv->track_print_status = FALSE;
   priv->is_sync = FALSE;
 
+  priv->page_drawing_state = GTK_PAGE_DRAWING_STATE_READY;
+
   priv->rloop = NULL;
   priv->unit = GTK_UNIT_PIXEL;
 
@@ -417,19 +419,31 @@ preview_print_idle (gpointer data)
   GtkPrintOperation *op;
   gboolean retval = TRUE;
   cairo_t *cr;
+  GtkPrintOperationPrivate *priv; 
 
   pop = (PreviewOp *) data;
   op = GTK_PRINT_OPERATION (pop->preview);
+  priv = op->priv;
 
-  gtk_print_operation_preview_render_page (pop->preview, pop->page_nr);
-  
-  cr = gtk_print_context_get_cairo_context (pop->print_context);
-  _gtk_print_operation_platform_backend_preview_end_page (op, pop->surface, cr);
-  
-  /* TODO: print out sheets not pages and follow ranges */
-  pop->page_nr++;
-  if (op->priv->nr_of_pages <= pop->page_nr)
-    retval = FALSE;
+
+  if (priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_READY)
+    {
+      /* TODO: print out sheets not pages and follow ranges */
+      if (pop->page_nr >= op->priv->nr_of_pages)
+        retval = FALSE;
+
+      if (pop->page_nr > 0)
+        {
+          cr = gtk_print_context_get_cairo_context (pop->print_context);
+          _gtk_print_operation_platform_backend_preview_end_page (op, pop->surface, cr);
+        }
+
+      if (retval)
+        {
+          gtk_print_operation_preview_render_page (pop->preview, pop->page_nr);
+          pop->page_nr++;
+        }
+    }
 
   return retval;
 }
@@ -2046,6 +2060,64 @@ update_progress (PrintPagesData *data)
     }
  }
 
+/**
+ * gtk_print_operation_set_defer_drawing:
+ * @op: a #GtkPrintOperation
+ * 
+ * Sets up the #GtkPrintOperation to wait for calling of
+ * gtk_print_operation_draw_page_finish() from application. It can
+ * be used for drawing page in another thread.
+ *
+ * This function must be called in the callback of "draw-page" signal.
+ *
+ * Since: 2.16
+ **/
+void
+gtk_print_operation_set_defer_drawing (GtkPrintOperation *op)
+{
+  GtkPrintOperationPrivate *priv = op->priv;
+
+  g_return_if_fail (priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_DRAWING);
+
+  priv->page_drawing_state = GTK_PAGE_DRAWING_STATE_DEFERRED_DRAWING;
+}
+
+/**
+ * gtk_print_operation_draw_page_finish:
+ * @op: a #GtkPrintOperation
+ * 
+ * Signalize that drawing of particular page is complete.
+ *
+ * It is called after completion of page drawing (e.g. drawing in another
+ * thread).
+ * If gtk_print_operation_set_defer_drawing() was called before, then this function
+ * has to be called by application. In another case it is called by the library
+ * itself.
+ *
+ * Since: 2.16
+ **/
+void
+gtk_print_operation_draw_page_finish (GtkPrintOperation *op)
+{
+  GtkPrintOperationPrivate *priv = op->priv;
+  GtkPageSetup *page_setup;
+  GtkPrintContext *print_context;
+  cairo_t *cr;
+  
+  print_context = priv->print_context;
+  page_setup = gtk_print_context_get_page_setup (print_context);
+
+  cr = gtk_print_context_get_cairo_context (print_context);
+
+  priv->end_page (op, print_context);
+  
+  cairo_restore (cr);
+
+  g_object_unref (page_setup);
+
+  priv->page_drawing_state = GTK_PAGE_DRAWING_STATE_READY;
+}
+
 static void
 common_render_page (GtkPrintOperation *op,
 		    gint               page_nr)
@@ -2080,14 +2152,117 @@ common_render_page (GtkPrintOperation *op,
   if (!priv->use_full_page)
     _gtk_print_context_translate_into_margin (print_context);
   
+  priv->page_drawing_state = GTK_PAGE_DRAWING_STATE_DRAWING;
+
   g_signal_emit (op, signals[DRAW_PAGE], 0, 
 		 print_context, page_nr);
 
-  priv->end_page (op, print_context);
-  
-  cairo_restore (cr);
+  if (priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_DRAWING)
+    gtk_print_operation_draw_page_finish (op);
+}
 
-  g_object_unref (page_setup);
+void
+prepare_data (PrintPagesData *data)
+{
+  GtkPrintOperationPrivate *priv;
+  GtkPageSetup             *page_setup;
+  gint                      i;
+
+  priv = data->op->priv;
+
+  if (!data->initialized)
+    {
+      data->initialized = TRUE;
+      page_setup = create_page_setup (data->op);
+      _gtk_print_context_set_page_setup (priv->print_context, 
+                                 page_setup);
+      g_object_unref (page_setup);
+
+      g_signal_emit (data->op, signals[BEGIN_PRINT], 0, priv->print_context);
+
+      if (priv->manual_collation)
+        {
+          data->uncollated_copies = priv->manual_num_copies;
+          data->collated_copies = 1;
+        }
+      else
+        {
+          data->uncollated_copies = 1;
+          data->collated_copies = priv->manual_num_copies;
+        }
+
+      return;
+    }
+
+  if (g_signal_has_handler_pending (data->op, signals[PAGINATE], 0, FALSE))
+    {
+      gboolean paginated = FALSE;
+
+      g_signal_emit (data->op, signals[PAGINATE], 0, priv->print_context, &paginated);
+      if (!paginated)
+        return;
+    }
+
+  /* Initialize parts of PrintPagesData that depend on nr_of_pages
+   */
+  if (priv->print_pages == GTK_PRINT_PAGES_RANGES)
+    {
+      if (priv->page_ranges == NULL) 
+        {
+          g_warning ("no pages to print");
+          priv->cancelled = TRUE;
+          return;
+        }
+      data->ranges = priv->page_ranges;
+      data->num_ranges = priv->num_page_ranges;
+      for (i = 0; i < data->num_ranges; i++)
+        if (data->ranges[i].end == -1 || 
+            data->ranges[i].end >= priv->nr_of_pages)
+          data->ranges[i].end = priv->nr_of_pages - 1;
+    }
+  else if (priv->print_pages == GTK_PRINT_PAGES_CURRENT &&
+   priv->current_page != -1)
+    {
+      data->ranges = &data->one_range;
+      data->num_ranges = 1;
+      data->ranges[0].start = priv->current_page;
+      data->ranges[0].end = priv->current_page;
+    }
+  else
+    {
+      data->ranges = &data->one_range;
+      data->num_ranges = 1;
+      data->ranges[0].start = 0;
+      data->ranges[0].end = priv->nr_of_pages - 1;
+    }
+
+  clamp_page_ranges (data);
+
+  if (data->num_ranges < 1) 
+    {
+      priv->cancelled = TRUE;
+      return;
+    }
+
+  if (priv->manual_reverse)
+    {
+      data->range = data->num_ranges - 1;
+      data->inc = -1;      
+    }
+  else
+    {
+      data->range = 0;
+      data->inc = 1;      
+    }
+  find_range (data);
+
+  /* go back one page, since we preincrement below */
+  data->page = data->start - data->inc;
+  data->collated = data->collated_copies - 1;
+
+  _gtk_print_operation_set_status (data->op, 
+                                   GTK_PRINT_STATUS_GENERATING_DATA, 
+                                   NULL);
 }
 
 static gboolean
@@ -2095,146 +2270,60 @@ print_pages_idle (gpointer user_data)
 {
   PrintPagesData *data; 
   GtkPrintOperationPrivate *priv; 
-  GtkPageSetup *page_setup;
   gboolean done = FALSE;
-  gint i;
 
   data = (PrintPagesData*)user_data;
   priv = data->op->priv;
 
-  if (priv->status == GTK_PRINT_STATUS_PREPARING)
+  if (priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_READY)
     {
-      if (!data->initialized)
-	{
-	  data->initialized = TRUE;
-	  page_setup = create_page_setup (data->op);
-	  _gtk_print_context_set_page_setup (priv->print_context, 
-					     page_setup);
-	  g_object_unref (page_setup);
-      
-	  g_signal_emit (data->op, signals[BEGIN_PRINT], 0, priv->print_context);
-      
-	  if (priv->manual_collation)
-	    {
-	      data->uncollated_copies = priv->manual_num_copies;
-	      data->collated_copies = 1;
-	    }
-	  else
-	    {
-	      data->uncollated_copies = 1;
-	      data->collated_copies = priv->manual_num_copies;
-	    }
+      if (priv->status == GTK_PRINT_STATUS_PREPARING)
+        {
+          prepare_data (data);
+          goto out;
+        }
 
-	  goto out;
-	}
-      
-      if (g_signal_has_handler_pending (data->op, signals[PAGINATE], 0, FALSE))
-	{
-	  gboolean paginated = FALSE;
-
-	  g_signal_emit (data->op, signals[PAGINATE], 0, priv->print_context, &paginated);
-	  if (!paginated)
-	    goto out;
-	}
-
-      /* Initialize parts of PrintPagesData that depend on nr_of_pages
-       */
-      if (priv->print_pages == GTK_PRINT_PAGES_RANGES)
-	{
-          if (priv->page_ranges == NULL) 
+      data->total++;
+      data->collated++;
+      if (data->collated == data->collated_copies)
+        {
+          data->collated = 0;
+          if (!increment_page_sequence (data))
             {
-              g_warning ("no pages to print");
-              priv->cancelled = TRUE;
+              done = TRUE;
+
               goto out;
-	  }
-	  data->ranges = priv->page_ranges;
-	  data->num_ranges = priv->num_page_ranges;
-          for (i = 0; i < data->num_ranges; i++)
-            if (data->ranges[i].end == -1 || 
-                data->ranges[i].end >= priv->nr_of_pages)
-              data->ranges[i].end = priv->nr_of_pages - 1;
-	}
-      else if (priv->print_pages == GTK_PRINT_PAGES_CURRENT &&
-	       priv->current_page != -1)
-	{
-	  data->ranges = &data->one_range;
-	  data->num_ranges = 1;
-	  data->ranges[0].start = priv->current_page;
-	  data->ranges[0].end = priv->current_page;
-	}
-      else
-	{
-	  data->ranges = &data->one_range;
-	  data->num_ranges = 1;
-	  data->ranges[0].start = 0;
-	  data->ranges[0].end = priv->nr_of_pages - 1;
-	}
-      
-      clamp_page_ranges (data);
+            }
+        }
 
-      if (priv->manual_reverse)
-	{
-	  data->range = data->num_ranges - 1;
-	  data->inc = -1;      
-	}
-      else
-	{
-	  data->range = 0;
-	  data->inc = 1;      
-	}
-      find_range (data);
-     
-      /* go back one page, since we preincrement below */
-      data->page = data->start - data->inc;
-      data->collated = data->collated_copies - 1;
+      if (data->is_preview && !priv->cancelled)
+        {
+          done = TRUE;
 
-      _gtk_print_operation_set_status (data->op, 
-				       GTK_PRINT_STATUS_GENERATING_DATA, 
-				       NULL);
+          g_signal_emit_by_name (data->op, "ready", priv->print_context);
+          goto out;
+        }
 
-      goto out;
-    }
-
-  data->total++;
-  data->collated++;
-  if (data->collated == data->collated_copies)
-    {
-      data->collated = 0;
-      if (!increment_page_sequence (data))
-	{
-	  done = TRUE;
-
-	  goto out;
-	}
-    }
- 
-  if (data->is_preview && !priv->cancelled)
-    {
-      done = TRUE;
-
-      g_signal_emit_by_name (data->op, "ready", priv->print_context);
-      goto out;
-    }
-
-  common_render_page (data->op, data->page);
+      common_render_page (data->op, data->page);
 
  out:
 
-  if (priv->cancelled)
-    {
-      _gtk_print_operation_set_status (data->op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
-      
-      data->is_preview = FALSE;
-      done = TRUE;
-    }
+      if (priv->cancelled)
+        {
+          _gtk_print_operation_set_status (data->op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
 
-  if (done && !data->is_preview)
-    {
-      g_signal_emit (data->op, signals[END_PRINT], 0, priv->print_context);
-      priv->end_run (data->op, priv->is_sync, priv->cancelled);
-    }
+          data->is_preview = FALSE;
+          done = TRUE;
+        }
 
-  update_progress (data);
+      if (done && !data->is_preview)
+        {
+          g_signal_emit (data->op, signals[END_PRINT], 0, priv->print_context);
+          priv->end_run (data->op, priv->is_sync, priv->cancelled);
+        }
+
+      update_progress (data);
+    }
 
   return !done;
 }

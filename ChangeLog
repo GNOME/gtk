@@ -1,3 +1,26 @@
+2008-12-19  Marek Kasik  <mkasik@redhat.com>
+
+	Bug 339318 - Allow page rendering to (optionally) happen in a thread
+
+	* gtk/gtk.symbols: API change
+	* doc/reference/gtk/gtk-sections.txt: API change
+	* gtk/gtkprintoperation-private.h
+	* gtk/gtkprintoperation.h
+	* gtk/gtkprintoperation.c: Adds 2 new functions
+	   gtk_print_operation_set_defer_drawing()
+	     - Sets up the GtkPrintOperation to wait for calling of
+	       gtk_print_operation_draw_page_finish() from application. It can
+	       be used for drawing page in another thread.
+	       This function must be called in the callback of "draw-page"
+	       signal.
+	   gtk_print_operation_draw_page_finish()
+	     - Signalize that drawing of particular page is complete.
+	       It is called after completion of page drawing (e.g. drawing
+	       in another thread).
+	       If gtk_print_operation_set_defer_drawing() was called before,
+	       then this function has to be called by application. In another
+	       case it is called by the library itself.
+
 2008-12-15  Matthias Clasen  <mclasen@redhat.com>
 
         * gtk/gtkprintunixdialog.c: Don't export emit_ok_response

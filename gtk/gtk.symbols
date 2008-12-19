@@ -2909,6 +2909,8 @@ gtk_print_operation_get_status
 gtk_print_operation_get_status_string
 gtk_print_operation_is_finished
 gtk_print_operation_cancel
+gtk_print_operation_draw_page_finish
+gtk_print_operation_set_defer_drawing
 #endif
 #endif
 

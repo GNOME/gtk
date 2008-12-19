@@ -25,6 +25,14 @@
 
 G_BEGIN_DECLS
 
+/* Page drawing states */
+typedef enum
+{
+  GTK_PAGE_DRAWING_STATE_READY,
+  GTK_PAGE_DRAWING_STATE_DRAWING,
+  GTK_PAGE_DRAWING_STATE_DEFERRED_DRAWING
+} GtkPageDrawingState;
+
 struct _GtkPrintOperationPrivate
 {
   GtkPrintOperationAction action;
@@ -44,6 +52,8 @@ struct _GtkPrintOperationPrivate
   guint cancelled          : 1;
   guint allow_async        : 1;
   guint is_sync            : 1;
+
+  GtkPageDrawingState      page_drawing_state;
 
   guint print_pages_idle_id;
   guint show_progress_timeout_id;
