@@ -2566,7 +2566,7 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view,
       current_width += icon_view->priv->column_spacing + 2 * focus_width;
 
       item->y = *y + focus_width;
-      item->x = rtl ? GTK_WIDGET (icon_view)->allocation.width - item->width - x : x;
+      item->x = x;
 
       x = current_width - (icon_view->priv->margin + focus_width); 
 
@@ -2590,14 +2590,17 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view,
     {
       GtkIconViewItem *item = items->data;
 
+      if (rtl)
+	{
+	  item->x = *maximum_width - item->width - item->x;
+	  item->col = col - 1 - item->col;
+	}
+
       gtk_icon_view_calculate_item_size2 (icon_view, item, max_height);
 
       /* We may want to readjust the new y coordinate. */
       if (item->y + item->height + focus_width + icon_view->priv->row_spacing > *y)
 	*y = item->y + item->height + focus_width + icon_view->priv->row_spacing;
-
-      if (rtl)
-	item->col = col - 1 - item->col;
     }
 
   g_free (max_height);

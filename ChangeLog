@@ -1,3 +1,11 @@
+2008-12-21  Yair Hershkovitz  <yairhr@gmail.com>
+
+        Bug 565203: RTL locales: icons are misplaced when horizontal 
+                    gtkiconview is contained in a gtkscrolledwindow.
+
+        * gtk/gtkiconview.c (gtk_icon_view_layout_single_row):
+        Fix horizontal icon positions when in RTL locale.
+
 2008-12-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
