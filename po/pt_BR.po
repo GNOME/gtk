@@ -11,19 +11,19 @@
 # Pedro Vaz Mello de Medeiros <pedrovmm@gmail.com>, 2007.
 # Henrique P Machado <zehrique@gmail.com>, 2008.
 # Fábio Nogueira <deb-user-ba@ubuntu.com>, 2008.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-10-14 11:45-0400\n"
-"PO-Revision-Date: 2008-10-14 23:06-0300\n"
+"PO-Revision-Date: 2008-12-21 13:00-0200\n"
 "Last-Translator: Leonardo Ferreira Fontenelle <leonardof@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Virtaal 0.2\n"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
@@ -1545,14 +1545,16 @@ msgid ""
 "You have the Caps Lock key on\n"
 "and an active input method"
 msgstr ""
+"Você está com a tecla Caps Lock ativada\n"
+"e um método de entrada ativo"
 
 #: ../gtk/gtkentry.c:6758
 msgid "You have the Caps Lock key on"
-msgstr ""
+msgstr "Você está com a tecla Caps Lock ativada"
 
 #: ../gtk/gtkentry.c:6760
 msgid "You have an active input method"
-msgstr ""
+msgstr "Você tem um método de entrada ativo"
 
 #: ../gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
@@ -1692,7 +1694,7 @@ msgstr "Mostrar arquivos _ocultos"
 
 #: ../gtk/gtkfilechooserdefault.c:4322
 msgid "Show _Size Column"
-msgstr ""
+msgstr "Mostrar coluna _Tamanho"
 
 #: ../gtk/gtkfilechooserdefault.c:4577 ../gtk/gtkfilesel.c:730
 msgid "Files"
@@ -1730,7 +1732,7 @@ msgstr "Criar _pasta"
 
 #: ../gtk/gtkfilechooserdefault.c:5244
 msgid "_Location:"
-msgstr "_Localização"
+msgstr "Locali_zação:"
 
 #: ../gtk/gtkfilechooserdefault.c:5444
 msgid "Save in _folder:"
@@ -2090,9 +2092,9 @@ msgid "input method menu|System"
 msgstr "Sistema"
 
 #: ../gtk/gtkimmulticontext.c:629
-#, fuzzy, c-format
+#, c-format
 msgid "input method menu|System (%s)"
-msgstr "Sistema"
+msgstr "Sistema (%s)"
 
 #: ../gtk/gtkinputdialog.c:192
 msgid "Input"
