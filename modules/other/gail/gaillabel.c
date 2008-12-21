@@ -20,6 +20,9 @@
 #include "config.h"
 
 #include <string.h>
+
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 #include "gaillabel.h"
 #include "gailwindow.h"
