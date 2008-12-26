@@ -650,7 +650,7 @@ on the current theme. If you need an editable text entry, use #GtkComboBoxEntry.
 
 </qandadiv>
 
-<qandadiv><title>#GtkWidget</title>
+<qandadiv><title>GtkWidget</title>
 
 <qandaentry>
 <question><para>
@@ -724,7 +724,7 @@ gtk_widget_set_sensitive().
 </qandadiv>
 
 
-<qandadiv><title>#GtkTextView</title>
+<qandadiv><title>GtkTextView</title>
 
 <qandaentry>
 <question><para>
@@ -963,7 +963,7 @@ How do I use cairo to draw in GTK+ applications ?
 </para></question>
 
 <answer><para>
-USe gdk_cairo_create() to obtain a cairo context for drawing
+Use gdk_cairo_create() to obtain a cairo context for drawing
 on a GDK window or pixmap. See <link linkend="gdk-Cairo-Interaction">Cairo 
 Interaction</link> for some more useful functions.
 </para></answer>
