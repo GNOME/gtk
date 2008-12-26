@@ -12,6 +12,19 @@ by default. If the entered text is longer than the allocation
 of the widget, the widget will scroll so that the cursor
 position is visible. 
 </para>
+<para>
+Since 2.16, GtkEntry has the ability to display progress or activity 
+information behind the text. To make an entry display progress or activity
+information, use gtk_entry_set_progress_fraction() or
+gtk_entry_set_progress_pulse_step().
+</para>
+<para>
+Additionally, GtkEntry can show icons at either side of the entry. These
+icons can be activatable by clicking, can be set up as drag source and
+can have tooltips. To add an icon, use gtk_entry_set_icon_from_gicon() or
+one of the various other functions that set an icon from a stock id, an
+icon name or a pixbuf. 
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -20,6 +33,11 @@ position is visible.
 <varlistentry>
 <term>#GtkTextView</term>
 <listitem><para>a widget for handling multi-line text entry.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GtkEntryCompletion</term>
+<listitem><para>adds completion functionality to GtkEntry.</para></listitem>
 </varlistentry>
 
 </variablelist>
@@ -71,6 +89,24 @@ The #GtkEntry-struct struct contains only private data.
 @arg1: 
 @arg2: 
 
+<!-- ##### SIGNAL GtkEntry::icon-pressed ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+@event: 
+
+<!-- ##### SIGNAL GtkEntry::icon-released ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+@event: 
+
 <!-- ##### SIGNAL GtkEntry::insert-at-cursor ##### -->
 <para>
 
@@ -111,7 +147,22 @@ The #GtkEntry-struct struct contains only private data.
 
 @entry: the object which received the signal.
 
+<!-- ##### ARG GtkEntry:activatable-primary ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:activatable-secondary ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:activates-default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:caps-lock-warning ##### -->
 <para>
 
 </para>
@@ -126,7 +177,27 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+<!-- ##### ARG GtkEntry:gicon-primary ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:gicon-secondary ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:has-frame ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:icon-name-primary ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:icon-name-secondary ##### -->
 <para>
 
 </para>
@@ -141,12 +212,37 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+<!-- ##### ARG GtkEntry:invisible-char-set ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:max-length ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkEntry:overwrite-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:pixbuf-primary ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:pixbuf-secondary ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:progress-fraction ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:progress-pulse-step ##### -->
 <para>
 
 </para>
@@ -161,7 +257,37 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+<!-- ##### ARG GtkEntry:sensitive-primary ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:sensitive-secondary ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:stock-primary ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:stock-secondary ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:storage-type-primary ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:storage-type-secondary ##### -->
 <para>
 
 </para>
@@ -197,6 +323,16 @@ The #GtkEntry-struct struct contains only private data.
 </para>
 
 <!-- ##### ARG GtkEntry:inner-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:prelight ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:state-hint ##### -->
 <para>
 
 </para>
@@ -297,6 +433,14 @@ The #GtkEntry-struct struct contains only private data.
 
 @entry: 
 @ch: 
+
+
+<!-- ##### FUNCTION gtk_entry_unset_invisible_char ##### -->
+<para>
+
+</para>
+
+@entry: 
 
 
 <!-- ##### FUNCTION gtk_entry_set_editable ##### -->

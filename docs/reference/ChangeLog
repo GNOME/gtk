@@ -1,5 +1,7 @@
 2008-12-26  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkentry.sgml: Mention new functionality
+
 	* gtk/gtk-sections.txt: Add new api
 
 2008-12-26  Matthias Clasen <mclasen@redhat.com>
