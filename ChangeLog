@@ -1,3 +1,8 @@
+2008-12-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* demos/gtk-demo/search_entry.c: Add a demo for new entry features.
+	* demos/gtk-demo/Makefile.am: Glue
+
 2008-12-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkapplaunchcontext.c:

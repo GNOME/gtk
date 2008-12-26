@@ -7,7 +7,7 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
-#include <demos.h>
+#include "demos.h"
 
 static GtkTextBuffer *info_buffer;
 static GtkTextBuffer *source_buffer;

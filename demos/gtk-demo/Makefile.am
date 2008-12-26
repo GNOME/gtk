@@ -30,6 +30,7 @@ demos =						\
 	pixbufs.c				\
 	printing.c				\
 	rotated_text.c				\
+	search_entry.c				\
 	sizegroup.c				\
 	stock_browser.c				\
 	textview.c				\
