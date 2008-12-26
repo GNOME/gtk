@@ -19,7 +19,9 @@
     If your code uses the @root parameter of glade_xml_new(), you 
     may want to split your glade file into multiple GtkBuilder files
     by using the <option>--root</option> option of 
-    <application>gtk-builder-convert</application>.
+    <application>gtk-builder-convert</application>. Alternatively, you
+    can use gtk_builder_add_objects_from_file() to construct only certain
+    objects from a GtkBuilder file.
   </para>
 
   <para>
@@ -28,26 +30,6 @@
     still behind libglade:
     <itemizedlist>
 
-      <listitem><para>
-        GtkBuilder can not construct partial trees, it lacks
-        the equivalent of the @root parameter of glade_xml_new().
-        Due to the way GtkBuilder parses its input, this is difficult 
-        to implement, see 
-        <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=447998">bug 
-        447998</ulink>. As a workaround, you can split your glade file 
-        into multiple GtkBuilder input files using the <option>--root</option>
-        that was mentioned above.
-      </para></listitem>
-
-      <listitem><para>
-        GtkBuilder does not yet implement support for accessibility 
-        properties. It parses the same &lt;accessibility&gt; elements 
-        as libglade, but ignores them. See 
-        <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=454653">bug 
-        454983</ulink> for the current status of accessibility support 
-        in GtkBuilder.
-      </para></listitem>
- 
       <listitem><para>
         GtkBuilder supports context information in translatable
         properties in a slightly different way than libglade. 
