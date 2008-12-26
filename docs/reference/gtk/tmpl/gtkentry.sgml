@@ -13,6 +13,17 @@ of the widget, the widget will scroll so that the cursor
 position is visible. 
 </para>
 <para>
+When using an entry for passwords and other sensitive information,
+it can be put into "password mode" using gtk_entry_set_visibility(). 
+In this mode, entered text is displayed using a 'invisible' character.
+By default, GTK+ picks the best invisible character that is available
+in the current font, but it can be changed with 
+gtk_entry_set_invisible_char(). Since 2.16, GTK+ displays a warning
+when Caps Lock or input methods might interfere with entering text in
+a password entry. The warning can be turned of with the 
+#GtkEntry::caps-lock-warning property.
+</para>
+<para>
 Since 2.16, GtkEntry has the ability to display progress or activity 
 information behind the text. To make an entry display progress or activity
 information, use gtk_entry_set_progress_fraction() or
@@ -23,7 +34,7 @@ Additionally, GtkEntry can show icons at either side of the entry. These
 icons can be activatable by clicking, can be set up as drag source and
 can have tooltips. To add an icon, use gtk_entry_set_icon_from_gicon() or
 one of the various other functions that set an icon from a stock id, an
-icon name or a pixbuf. 
+icon name or a pixbuf.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -662,6 +673,231 @@ The #GtkEntry-struct struct contains only private data.
 
 
 <!-- ##### FUNCTION gtk_entry_get_cursor_hadjustment ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_progress_fraction ##### -->
+<para>
+
+</para>
+
+@entry: 
+@fraction: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_progress_fraction ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_progress_pulse_step ##### -->
+<para>
+
+</para>
+
+@entry: 
+@fraction: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_progress_pulse_step ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_progress_pulse ##### -->
+<para>
+
+</para>
+
+@entry: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_icon_from_pixbuf ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@pixbuf: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_icon_from_stock ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@stock_id: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_icon_from_icon_name ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@icon_name: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_icon_from_gicon ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@icon: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_storage_type ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_pixbuf ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_stock ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_icon_name ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_gicon ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_icon_activatable ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@activatable: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_icon_activatable ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_icon_sensitive ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@sensitive: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_icon_sensitive ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_icon_at_pos ##### -->
+<para>
+
+</para>
+
+@entry: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_icon_tooltip_text ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@tooltip: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_icon_tooltip_markup ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@tooltip: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_icon_drag_source ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@target_list: 
+@actions: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_current_icon_drag_source ##### -->
 <para>
 
 </para>
