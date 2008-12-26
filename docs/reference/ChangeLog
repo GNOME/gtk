@@ -1,5 +1,9 @@
 2008-12-26  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Add new api
+
+2008-12-26  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/migrating-GtkBuilder.xml: Update
 
 2008-12-26  Matthias Clasen <mclasen@redhat.com>
