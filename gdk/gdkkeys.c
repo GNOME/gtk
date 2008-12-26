@@ -88,8 +88,8 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    * @keymap: the object on which the signal is emitted
    *
    * The ::state-changed signal is emitted when the state of the
-   * keyboard changes, e.g when the Caps Lock is turned on or off.
-   * See gdk_keyboard_get_caps_lock_state().
+   * keyboard changes, e.g when Caps Lock is turned on or off.
+   * See gdk_keymap_get_caps_lock_state().
    *
    * Since: 2.16
    */

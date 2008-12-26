@@ -3807,7 +3807,7 @@ gdk_drag_get_selection (GdkDragContext *context)
  * gdk_drag_drop_succeeded:
  * @context: a #GdkDragContext
  * 
- * Returns wether the dropped data has been successfully 
+ * Returns whether the dropped data has been successfully 
  * transferred. This function is intended to be used while 
  * handling a %GDK_DROP_FINISHED event, its return value is
  * meaningless at other times.

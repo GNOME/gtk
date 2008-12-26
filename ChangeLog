@@ -1,3 +1,12 @@
+2008-12-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkapplaunchcontext.c:
+	* gdk/gdkkeys.c:
+	* gdk/x11/gdkdnd-x11.c:
+	* gdk/x11/gdkkeyx-x11.c:
+	* gdk/x11/gdktestutils-x11.c: Typo fixes and other small
+	doc improvements.
+
 2008-12-23  Li Yuan  <li.yuan@sun.com>
 
 	* gtk/gtkiconview.c: (gtk_icon_view_accessible_model_row_changed):

@@ -813,7 +813,7 @@ gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
  * gdk_keymap_get_caps_lock_state:
  * @keymap: a #GdkKeymap
  *
- * Returns wether the Caps Lock modifer is locked. 
+ * Returns whether the Caps Lock modifer is locked. 
  *
  * Returns: %TRUE if Caps Lock is on
  *

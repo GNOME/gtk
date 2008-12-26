@@ -221,7 +221,12 @@ gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
  * @icon: a #GIcon, or %NULL
  *
  * Sets the icon for applications that are launched with this
- * context. See also gdk_app_launch_context_set_icon_name().
+ * context.
+ *
+ * Window Managers can use this information when displaying startup
+ * notification.
+ *
+ * See also gdk_app_launch_context_set_icon_name().
  *
  * Since: 2.14
  */

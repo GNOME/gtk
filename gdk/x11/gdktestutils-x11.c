@@ -71,7 +71,7 @@ gdk_test_render_sync (GdkWindow *window)
  * right function to call which will generate a key press event
  * followed by its accompanying key release event.
  *
- * Returns: wether all actions neccessary for a key event simulation 
+ * Returns: whether all actions neccessary for a key event simulation 
  *     were carried out successfully.
  *
  * Since: 2.14
@@ -170,7 +170,7 @@ gdk_test_simulate_key (GdkWindow      *window,
  * function to call which will generate a button press event followed
  * by its accompanying button release event.
  *
- * Returns: wether all actions neccessary for a button event simulation 
+ * Returns: whether all actions neccessary for a button event simulation 
  *     were carried out successfully.
  *
  * Since: 2.14
