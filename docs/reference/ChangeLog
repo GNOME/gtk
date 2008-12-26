@@ -1,3 +1,8 @@
+2008-12-26  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/drawing-model.sgml: Turn into a refentry to fit better in 
+	the overall formatting.
+
 2008-12-25  Matthias Clasen <mclasen@redhat.com>
 
 	* gdk/gdk-docs.sgml: Add a "Since 2.16" index

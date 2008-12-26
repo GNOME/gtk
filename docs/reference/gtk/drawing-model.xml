@@ -2,21 +2,33 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
-<chapter id="chap-drawing-model">
-  <title>The GTK+ Drawing Model</title>
+<refentry id="chap-drawing-model">
+<refmeta>
+<refentrytitle>The GTK+ Drawing Model</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
 
-  <para>
-    This chapter describes the GTK+ drawing model in detail.  If you
-    are interested in the procedure which GTK+ follows to draw its
-    widgets and windows, you should read this chapter; this will be
-    useful to know if you decide to implement your own widgets.  This
-    chapter will also clarify the reasons behind the ways certain
-    things are done in GTK+; for example, why you cannot change the
-    background color of all widgets with the same method.
-  </para>
+<refnamediv>
+<refname>The GTK+ Drawing Model</refname>
+<refpurpose>
+    The GTK+ drawing model in detail
+</refpurpose>
+</refnamediv>
 
-  <section id="drawing-overview">
+
+  <refsect1 id="drawing-overview">
     <title>Overview of the drawing model</title>
+
+    <para>
+      This chapter describes the GTK+ drawing model in detail.  If you
+      are interested in the procedure which GTK+ follows to draw its
+      widgets and windows, you should read this chapter; this will be
+      useful to know if you decide to implement your own widgets.  This
+      chapter will also clarify the reasons behind the ways certain
+      things are done in GTK+; for example, why you cannot change the
+      background color of all widgets with the same method.
+    </para>
 
     <para>
       Programs that run in a windowing system generally create
@@ -66,7 +78,7 @@
       of the resources they use from the windowing system.
     </para>
 
-    <section id="window-no-window-widgets">
+    <refsect2 id="window-no-window-widgets">
       <title>Window and no-window widgets</title>
 
       <para>
@@ -159,9 +171,9 @@
 	well.  Widgets may have more than one window if they want to
 	define different regions for capturing events.
       </para>
-    </section>
+    </refsect2>
 
-    <section id="hierarchical-drawing">
+    <refsect2 id="hierarchical-drawing">
       <title>Hierarchical drawing</title>
 
       <para>
@@ -288,9 +300,9 @@
 	itself in turn, GTK+ uses a double-buffering mechanism.  The following
 	sections describe this mechanism in detail.
       </para>
-    </section>
+    </refsect2>
 
-    <section id="notes-on-drawing-no-window-widgets">
+    <refsect2 id="notes-on-drawing-no-window-widgets">
       <title>Notes on drawing no-window widgets</title>
 
       <para>
@@ -315,9 +327,9 @@
 	then your drawing origin should be at (5,&nbsp;6), not at
 	(0,&nbsp;0).
       </para>
-    </section>
+    </refsect2>
 
-    <section id="include-inferiors">
+    <refsect2 id="include-inferiors">
       <title>Drawing over child windows</title>
 
       <para>
@@ -331,10 +343,10 @@
 	linkend="gdk-Graphics-Contexts">GdkGC</link> which you use for
 	drawing.
       </para>
-    </section>
-  </section>
+    </refsect2>
+  </refsect1>
 
-  <section id="double-buffering">
+  <refsect1 id="double-buffering">
     <title>Double buffering</title>
 
     <para>
@@ -392,7 +404,7 @@
       the buffer onto the on-screen window, and frees the buffer.
     </para>
 
-    <section id="automatic-double-buffering">
+    <refsect2 id="automatic-double-buffering">
       <title>Automatic double buffering</title>
 
       <para>
@@ -459,10 +471,10 @@ my_widget_init (MyWidget *widget)
 	<function>gdk_window_end_paint()</function> by hand to use
 	temporary drawing buffers.
       </para>
-    </section>
-  </section>
+    </refsect2>
+  </refsect1>
 
-  <section id="app-paintable-widgets">
+  <refsect1 id="app-paintable-widgets">
     <title>App-paintable widgets</title>
 
     <para>
@@ -563,29 +575,12 @@ gtk_window_expose (GtkWidget      *widget,
 	<emphasis>is</emphasis> intended to be drawn on.
       </para>
     </formalpara>
-  </section>
-
-  <section>
-    <title>TODO</title>
-
-    <itemizedlist>
-      <listitem>
-	<para>
-	  APP_PAINTABLE: link the flag's documentation to this document.
-	</para>
-      </listitem>
-      <listitem>
-	<para>
-	  DOUBLE_BUFFERED: link the flag's documentation to this document.
-	</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-</chapter>
+  </refsect1>
+</refentry>
 
 <!--
 Local variables:
 mode: xml
-sgml-parent-document: ("gtk-docs.sgml" "book" "part" "chapter")
+sgml-parent-document: ("gtk-docs.sgml" "book" "part" "refentry")
 End:
 -->
