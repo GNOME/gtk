@@ -11,7 +11,7 @@ They appear in the <structfield>keyval</structfield> field of the
 #GdkEventKey structure, which is passed to signal handlers for the
 "key-press-event" and "key-release-event" signals.
 The complete list of key values can be found in the <filename>&lt;gdk/gdkkeysyms.h&gt;</filename>
-header file. <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> is not included in <filename>&lt;gtk/gtk.h&gt;</filename>, 
+header file. <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> is not included in <filename>&lt;gdk/gdk.h&gt;</filename>, 
 it must be included independently, because the file is quite large.
 </para>
 <para>
@@ -107,6 +107,13 @@ in the keymap and see what keyval it corresponds to.
 </para>
 
 @keymap: the object which received the signal.
+
+<!-- ##### SIGNAL GdkKeymap::state-changed ##### -->
+<para>
+
+</para>
+
+@gdkkeymap: the object which received the signal.
 
 <!-- ##### STRUCT GdkKeymapKey ##### -->
 <para>
@@ -205,6 +212,15 @@ Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL.
 
 
 <!-- ##### FUNCTION gdk_keymap_have_bidi_layouts ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_keymap_get_caps_lock_state ##### -->
 <para>
 
 </para>
