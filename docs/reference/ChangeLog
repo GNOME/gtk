@@ -1,5 +1,9 @@
 2008-12-27  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/migrating-GtkLinkButton.sgml: Mention default hook
+
+2008-12-27  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtk-sections.txt: Add GtkEntryIconPosition
 
 	* gtk/tmpl/gtkentry.sgml: Add note about a11y concerns.
