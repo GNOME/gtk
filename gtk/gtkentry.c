@@ -6006,9 +6006,14 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
 
           info = gtk_icon_theme_lookup_by_gicon (icon_theme,
                                                  icon_info->gicon,
-                                                 MIN (width, height), 0);
+                                                 MIN (width, height), 
+                                                 GTK_ICON_LOOKUP_USE_BUILTIN);
+          if (info)
+            {
+              icon_info->pixbuf = gtk_icon_info_load_icon (info, NULL);
+              gtk_icon_info_free (info);
+            }
 
-          icon_info->pixbuf = gtk_icon_info_load_icon (info, NULL);
           if (icon_info->pixbuf == NULL)
             icon_info->pixbuf = gtk_widget_render_icon (GTK_WIDGET (entry),
                                                         GTK_STOCK_MISSING_IMAGE,

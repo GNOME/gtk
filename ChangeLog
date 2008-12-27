@@ -1,5 +1,10 @@
 2008-12-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c: Allow builtin icons when loading themed icons,
+	and don't leak a GtkIconInfo.
+
+2008-12-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c: Emit ::icon-pressed regardless which button was
 	pressed. Also make it explicit in the signal signature that the
 	position parameter is a GtkEntryIconPosition.
