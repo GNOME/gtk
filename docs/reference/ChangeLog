@@ -1,6 +1,8 @@
 2008-12-27  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/migrating-GtkLinkButton.sgml: Mention default hook
+	* gtk/migrating-GtkEntry-icons.sgml: Migration chapter 
+	SexyIconEntry -> GtkEntry
 
 2008-12-27  Matthias Clasen <mclasen@redhat.com>
 
