@@ -1,3 +1,9 @@
+2008-12-27  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add GtkEntryIconPosition
+
+	* gtk/tmpl/gtkentry.sgml: Add note about a11y concerns.
+
 2008-12-26  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkentry.sgml: Mention new functionality
