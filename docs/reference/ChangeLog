@@ -1,5 +1,10 @@
 2008-12-27  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/Makefile.am: Add migrating-GtkEntry-icons.sgml to
+	content_files and expand_content_files.
+
+2008-12-27  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/migrating-GtkLinkButton.sgml: Mention default hook
 	* gtk/migrating-GtkEntry-icons.sgml: Migration chapter 
 	SexyIconEntry -> GtkEntry
