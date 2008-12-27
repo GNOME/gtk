@@ -998,9 +998,11 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Whether the primary icon is activatable.
    *
-   * GTK+ emits the #GtkEntry::icon-pressed and
-   * #GtkEntry::icon-released signals only on
-   * sensitive, activatable icons.
+   * GTK+ emits the #GtkEntry::icon-pressed and #GtkEntry::icon-released 
+   * signals only on sensitive, activatable icons. 
+   *
+   * Sensitive, but non-activatable icons can be used for purely 
+   * informational purposes.
    *
    * Since: 2.16
    */
@@ -1017,9 +1019,11 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Whether the secondary icon is activatable.
    *
-   * GTK+ emits the #GtkEntry::icon-pressed and
-   * #GtkEntry::icon-released signals only on
-   * sensitive, activatable icons.
+   * GTK+ emits the #GtkEntry::icon-pressed and #GtkEntry::icon-released 
+   * signals only on sensitive, activatable icons.
+   *
+   * Sensitive, but non-activatable icons can be used for purely 
+   * informational purposes.
    *
    * Since: 2.16
    */
@@ -1037,9 +1041,13 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Whether the primary icon is sensitive.
    *
-   * An insensitive icon will appear grayed out, it will not emit
-   * #GtkEntry::icon-pressed signal, not allow DND and not change the cursor.
+   * An insensitive icon appears grayed out. GTK+ does not emit the 
+   * #GtkEntry::icon-pressed and #GtkEntry::icon-released signals and 
+   * does not allow DND from insensitive icons.
    *
+   * An icon should be set insensitive if the action that would trigger
+   * when clicked is currently not available.
+   * 
    * Since: 2.16
    */
   g_object_class_install_property (gobject_class,
@@ -1055,8 +1063,12 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Whether the secondary icon is sensitive.
    *
-   * An insensitive icon will appear grayed out, it will not emit
-   * #GtkEntry::icon-pressed signal, not allow DND and not change the cursor.
+   * An insensitive icon appears grayed out. GTK+ does not emit the 
+   * #GtkEntry::icon-pressed and #GtkEntry::icon-released signals and 
+   * does not allow DND from insensitive icons.
+   *
+   * An icon should be set insensitive if the action that would trigger
+   * when clicked is currently not available.
    *
    * Since: 2.16
    */
@@ -1189,7 +1201,8 @@ gtk_entry_class_init (GtkEntryClass *class)
    * @icon_pos: The position of the clicked icon
    * @event: the button press event
    *
-   * The ::icon-pressed signal is emitted when an icon is clicked.
+   * The ::icon-pressed signal is emitted when an activatable icon 
+   * is clicked.
    *
    * Since: 2.16
    */
@@ -1211,7 +1224,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * @event: the button release event
    *
    * The ::icon-released signal is emitted on the button release from a
-   * mouse click.
+   * mouse click over an activatable icon.
    *
    * Since: 2.16
    */
@@ -7595,7 +7608,8 @@ ensure_has_tooltip (GtkEntry *entry)
  *
  * Use %NULL for @tooltip to remove an existing tooltip.
  *
- * See also gtk_widget_set_tooltip_text().
+ * See also gtk_widget_set_tooltip_text() and 
+ * gtk_entry_set_icon_tooltip_markup().
  *
  * Since: 2.16
  */
@@ -7635,7 +7649,8 @@ gtk_entry_set_icon_tooltip_text (GtkEntry             *entry,
  *
  * Use %NULL for @tooltip to remove an existing tooltip.
  *
- * See also gtk_widget_set_tooltip_markup().
+ * See also gtk_widget_set_tooltip_markup() and 
+ * gtk_enty_set_icon_tooltip_text().
  *
  * Since: 2.16
  */
@@ -7665,10 +7680,10 @@ gtk_entry_set_icon_tooltip_markup (GtkEntry             *entry,
 
 static gboolean
 gtk_entry_query_tooltip (GtkWidget  *widget,
-                              gint        x,
-                              gint        y,
-                              gboolean    keyboard_tip,
-                              GtkTooltip *tooltip)
+                         gint        x,
+                         gint        y,
+                         gboolean    keyboard_tip,
+                         GtkTooltip *tooltip)
 {
   GtkEntry *entry;
   GtkEntryPrivate *priv;

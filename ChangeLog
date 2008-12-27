@@ -1,3 +1,7 @@
+2008-12-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c: Expand the docs some more.
+
 2008-12-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c: Don't emit ::icon-pressed on nonactivatable
