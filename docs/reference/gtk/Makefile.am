@@ -132,6 +132,7 @@ content_files =					\
 	migrating-checklist.sgml		\
 	migrating-GtkAction.sgml		\
 	migrating-GtkComboBox.sgml		\
+	migrating-GtkEntry-icons.sgml		\
 	migrating-GtkFileChooser.sgml		\
 	migrating-GtkIconView.sgml		\
 	migrating-GtkAboutDialog.sgml		\
