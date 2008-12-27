@@ -20,7 +20,7 @@ By default, GTK+ picks the best invisible character that is available
 in the current font, but it can be changed with 
 gtk_entry_set_invisible_char(). Since 2.16, GTK+ displays a warning
 when Caps Lock or input methods might interfere with entering text in
-a password entry. The warning can be turned of with the 
+a password entry. The warning can be turned off with the 
 #GtkEntry::caps-lock-warning property.
 </para>
 <para>
@@ -35,7 +35,7 @@ can have tooltips. To add an icon, use gtk_entry_set_icon_from_gicon() or
 one of the various other functions that set an icon from a stock id, an
 icon name or a pixbuf. To trigger an action when the user clicks an icon,
 connect to the #GtkEntry::icon-pressed signal. To allow DND operations
-from an icon, use gtk_entry_icon_set_drag_source(). To set a tooltip on 
+from an icon, use gtk_entry_set_icon_drag_source(). To set a tooltip on 
 an icon, use gtk_entry_set_icon_tooltip_text() or the corresponding function
 for markup.
 </para>
@@ -734,6 +734,14 @@ The #GtkEntry-struct struct contains only private data.
 
 @entry: 
 
+
+<!-- ##### ENUM GtkEntryIconPosition ##### -->
+<para>
+
+</para>
+
+@GTK_ENTRY_ICON_PRIMARY: 
+@GTK_ENTRY_ICON_SECONDARY: 
 
 <!-- ##### FUNCTION gtk_entry_set_icon_from_pixbuf ##### -->
 <para>
