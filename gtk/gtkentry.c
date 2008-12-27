@@ -1187,7 +1187,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry::icon-pressed:
    * @entry: The entry on which the signal is emitted
    * @icon_pos: The position of the clicked icon
-   * @buttomotione mouse button clicked
+   * @event: the button press event
    *
    * The ::icon-pressed signal is emitted when an icon is clicked.
    *
@@ -1208,7 +1208,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry::icon-released:
    * @entry: The entry on which the signal is emitted
    * @icon_pos: The position of the clicked icon
-   * @button: The mouse button clicked
+   * @event: the button release event
    *
    * The ::icon-released signal is emitted on the button release from a
    * mouse click.
@@ -4115,6 +4115,7 @@ gtk_entry_real_insert_text (GtkEditable *editable,
 
   emit_changed (entry);
   g_object_notify (G_OBJECT (editable), "text");
+  g_object_notify (G_OBJECT (editable), "text-length");
 }
 
 static void
@@ -4165,6 +4166,7 @@ gtk_entry_real_delete_text (GtkEditable *editable,
 
       emit_changed (entry);
       g_object_notify (G_OBJECT (editable), "text");
+      g_object_notify (G_OBJECT (editable), "text-length");
     }
 }
 

@@ -1,5 +1,10 @@
 2008-12-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c: Emit property notification for the text-length
+	property.
+
+2008-12-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* demos/gtk-demo/search_entry.c: Add a demo for new entry features.
 	* demos/gtk-demo/Makefile.am: Glue
 
