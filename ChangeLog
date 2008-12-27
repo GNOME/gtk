@@ -1,5 +1,13 @@
 2008-12-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c: Fix interaction between icons and widget sensitivity.
+	Also fix a few typos.
+
+	* tests/testentryicons.c: Add property editors.
+	* tests/Makefile.am: Glue
+
+2008-12-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c: Allow builtin icons when loading themed icons,
 	and don't leak a GtkIconInfo.
 

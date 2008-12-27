@@ -229,6 +229,7 @@ testentrycompletion_SOURCES = 	\
 	testentrycompletion.c
 
 testentryicons_SOURCES =	\
+	prop-editor.c		\
 	testentryicons.c
 
 testfilechooser_SOURCES = 	\

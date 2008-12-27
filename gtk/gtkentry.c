@@ -1045,7 +1045,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_SENSITIVE_PRIMARY,
                                    g_param_spec_boolean ("sensitive-primary",
-                                                         P_("Primary icon sensitvitiy"),
+                                                         P_("Primary icon sensitive"),
                                                          P_("Whether the primary icon is sensitive"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
@@ -1063,7 +1063,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_SENSITIVE_SECONDARY,
                                    g_param_spec_boolean ("sensitive-secondary",
-                                                         P_("Secondary icon sensitivity"),
+                                                         P_("Secondary icon sensitive"),
                                                          P_("Whether the secondary icon is sensitive"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
@@ -2124,8 +2124,9 @@ update_cursors (GtkWidget *widget)
           if (icon_info->pixbuf != NULL)
             gdk_window_show (icon_info->window);
 
-          if (icon_info->insensitive || 
-              (icon_info->nonactivatable && icon_info->target_list == NULL))
+          if (GTK_WIDGET_IS_SENSITIVE (widget) && 
+              (icon_info->insensitive || 
+               (icon_info->nonactivatable && icon_info->target_list == NULL)))
             {
               display = gtk_widget_get_display (widget);
               cursor = gdk_cursor_new_for_display (display, GDK_XTERM);
@@ -2756,7 +2757,8 @@ draw_icon (GtkWidget            *widget,
   x = (width  - gdk_pixbuf_get_width (pixbuf)) / 2;
   y = (height - gdk_pixbuf_get_height (pixbuf)) / 2;
 
-  if (icon_info->insensitive)
+  if (!GTK_WIDGET_IS_SENSITIVE (widget) ||
+      icon_info->insensitive)
     {
       GdkPixbuf *temp_pixbuf;
 
@@ -3720,6 +3722,8 @@ gtk_entry_state_changed (GtkWidget      *widget,
         gdk_cursor_unref (cursor);
 
       entry->mouse_cursor_obscured = FALSE;
+
+      update_cursors (widget);
     }
 
   if (!GTK_WIDGET_IS_SENSITIVE (widget))

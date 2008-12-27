@@ -1,5 +1,45 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
+#include "prop-editor.h"
+
+static void
+clear_pressed (GtkEntry *entry, gint icon, GdkEvent *event, gpointer data)
+{
+   if (icon == GTK_ENTRY_ICON_SECONDARY)
+     gtk_entry_set_text (entry, "");
+}
+
+static gboolean
+delete_event_cb (GtkWidget *editor,
+                 gint       response,
+                 gpointer   user_data)
+{
+  gtk_widget_hide (editor);
+
+  return TRUE;
+}
+
+static void
+properties_cb (GtkWidget *button,
+               GObject   *entry)
+{
+  GtkWidget *editor;
+
+  editor = g_object_get_data (entry, "properties-dialog");
+
+  if (editor == NULL)
+    {
+      editor = create_prop_editor (G_OBJECT (entry), G_TYPE_INVALID);
+      gtk_container_set_border_width (GTK_CONTAINER (editor), 12);
+      gtk_window_set_transient_for (GTK_WINDOW (editor),
+                                    GTK_WINDOW (gtk_widget_get_toplevel (button)));
+      g_signal_connect (editor, "delete-event", G_CALLBACK (delete_event_cb), NULL);
+      g_object_set_data (entry, "properties-dialog", editor);
+    }
+
+  gtk_window_present (GTK_WINDOW (editor));
+}
+
 
 int
 main (int argc, char **argv)
@@ -8,6 +48,7 @@ main (int argc, char **argv)
   GtkWidget *table;
   GtkWidget *label;
   GtkWidget *entry;
+  GtkWidget *button;
   GIcon *icon;
 
   gtk_init (&argc, &argv);
@@ -36,7 +77,9 @@ main (int argc, char **argv)
   gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
 		    GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
 
-  icon = g_themed_icon_new_with_default_fallbacks ("folder");
+  icon = g_themed_icon_new ("folder");
+  g_themed_icon_append_name (G_THEMED_ICON (icon), "gtk-directory");
+
   gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
 				 GTK_ENTRY_ICON_PRIMARY,
 				 icon);
@@ -48,6 +91,13 @@ main (int argc, char **argv)
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Open a file");
 
+  button = gtk_button_new_with_label ("Properties");
+  gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
+		    GTK_FILL, GTK_FILL, 0, 0);
+  g_signal_connect (button, "clicked", 
+                    G_CALLBACK (properties_cb), entry);                    
+
+  
   /*
    * Save File - sets the icon using a stock id.
    */
@@ -61,13 +111,19 @@ main (int argc, char **argv)
 		    GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
   gtk_entry_set_text (GTK_ENTRY (entry), "‏Right-to-left");
   gtk_widget_set_direction (entry, GTK_TEXT_DIR_RTL);
-
+  
   gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
 				 GTK_ENTRY_ICON_PRIMARY,
 				 GTK_STOCK_SAVE);
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Save a file");
+
+  button = gtk_button_new_with_label ("Properties");
+  gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
+		    GTK_FILL, GTK_FILL, 0, 0);
+  g_signal_connect (button, "clicked", 
+                    G_CALLBACK (properties_cb), entry);                    
 
   /*
    * Search - Uses a helper function
@@ -88,6 +144,17 @@ main (int argc, char **argv)
   gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
 				 GTK_ENTRY_ICON_SECONDARY,
 				 GTK_STOCK_CLEAR);
+  gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
+				  GTK_ENTRY_ICON_SECONDARY,
+                                  FALSE);
+
+  g_signal_connect (entry, "icon-pressed", G_CALLBACK (clear_pressed), NULL);
+
+  button = gtk_button_new_with_label ("Properties");
+  gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3,
+		    GTK_FILL, GTK_FILL, 0, 0);
+  g_signal_connect (button, "clicked", 
+                    G_CALLBACK (properties_cb), entry);                    
 
   /*
    * Password - Sets the icon using a stock id
@@ -106,6 +173,12 @@ main (int argc, char **argv)
 				 GTK_ENTRY_ICON_PRIMARY,
 				 GTK_STOCK_DIALOG_AUTHENTICATION);
 
+  button = gtk_button_new_with_label ("Properties");
+  gtk_table_attach (GTK_TABLE (table), button, 2, 3, 3, 4,
+		    GTK_FILL, GTK_FILL, 0, 0);
+  g_signal_connect (button, "clicked", 
+                    G_CALLBACK (properties_cb), entry);                    
+
   /* Name - Does not set any icons. */
   label = gtk_label_new ("Name:");
   gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
@@ -115,6 +188,12 @@ main (int argc, char **argv)
   entry = gtk_entry_new ();
   gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 4, 5,
 		    GTK_FILL | GTK_EXPAND, GTK_FILL, 0, 0);
+
+  button = gtk_button_new_with_label ("Properties");
+  gtk_table_attach (GTK_TABLE (table), button, 2, 3, 4, 5,
+		    GTK_FILL, GTK_FILL, 0, 0);
+  g_signal_connect (button, "clicked", 
+                    G_CALLBACK (properties_cb), entry);                    
 
   gtk_widget_show_all (window);
 
