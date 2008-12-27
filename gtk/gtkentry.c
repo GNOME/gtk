@@ -1038,7 +1038,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Whether the primary icon is sensitive.
    *
    * An insensitive icon will appear grayed out, it will not emit
-   * #GtkEntry::icon-pressed signal and not change the cursor.
+   * #GtkEntry::icon-pressed signal, not allow DND and not change the cursor.
    *
    * Since: 2.16
    */
@@ -1056,7 +1056,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Whether the secondary icon is sensitive.
    *
    * An insensitive icon will appear grayed out, it will not emit
-   * #GtkEntry::icon-pressed signal and not change the cursor.
+   * #GtkEntry::icon-pressed signal, not allow DND and not change the cursor.
    *
    * Since: 2.16
    */
@@ -1199,9 +1199,9 @@ gtk_entry_class_init (GtkEntryClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   0,
                   NULL, NULL,
-                  _gtk_marshal_VOID__INT_BOXED,
+                  _gtk_marshal_VOID__ENUM_BOXED,
                   G_TYPE_NONE, 2,
-                  G_TYPE_INT,
+                  GTK_TYPE_ENTRY_ICON_POSITION,
                   GDK_TYPE_EVENT);
   
   /**
@@ -1221,9 +1221,9 @@ gtk_entry_class_init (GtkEntryClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   0,
                   NULL, NULL,
-                  _gtk_marshal_VOID__INT_BOXED,
+                  _gtk_marshal_VOID__ENUM_BOXED,
                   G_TYPE_NONE, 2,
-                  G_TYPE_INT,
+                  GTK_TYPE_ENTRY_ICON_POSITION,
                   GDK_TYPE_EVENT);
 
 
@@ -2703,7 +2703,7 @@ should_prelight (GtkEntry             *entry,
   if (icon_info->nonactivatable && icon_info->target_list == NULL)
     return FALSE;
 
-  if (icon_info->pressed == TRUE)
+  if (icon_info->pressed)
     return FALSE;
 
   gtk_widget_style_get (GTK_WIDGET (entry),
@@ -3106,26 +3106,23 @@ gtk_entry_button_press (GtkWidget      *widget,
 
       if (event->window == icon_info->window)
         {
-          if (event->button == 1)
+          if (should_prelight (entry, i))
             {
-              if (should_prelight (entry, i))
-                {
-                  icon_info->prelight = FALSE;
-                  gtk_widget_queue_draw (widget);
-                }
-
-              if (icon_info->target_list != NULL)
-                {
-                  priv->start_x = event->x;
-                  priv->start_y = event->y;
-
-                  icon_info->pressed = TRUE;
-                }
-
-              g_signal_emit (entry, signals[ICON_PRESSED], 0, i, event);
-
-              return TRUE;
+              icon_info->prelight = FALSE;
+              gtk_widget_queue_draw (widget);
             }
+
+          if (icon_info->target_list != NULL)
+            {
+              priv->start_x = event->x;
+              priv->start_y = event->y;
+
+              icon_info->pressed = TRUE;
+            }
+
+          g_signal_emit (entry, signals[ICON_PRESSED], 0, i, event);
+
+          return TRUE;
         }
     }
 
