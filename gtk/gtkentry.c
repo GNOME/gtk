@@ -2124,6 +2124,11 @@ update_cursors (GtkWidget *widget)
           if (icon_info->pixbuf != NULL)
             gdk_window_show (icon_info->window);
 
+          /* The icon windows are not children of the visible entry window,
+           * thus we can't just inherit the xterm cursor. Slight complication 
+           * here is that for the entry, insensitive => arrow cursor, but for 
+           * an icon in a sensitive entry, insensitive => xterm cursor.
+           */
           if (GTK_WIDGET_IS_SENSITIVE (widget) && 
               (icon_info->insensitive || 
                (icon_info->nonactivatable && icon_info->target_list == NULL)))
@@ -3114,15 +3119,12 @@ gtk_entry_button_press (GtkWidget      *widget,
               gtk_widget_queue_draw (widget);
             }
 
-          if (icon_info->target_list != NULL)
-            {
-              priv->start_x = event->x;
-              priv->start_y = event->y;
+          priv->start_x = event->x;
+          priv->start_y = event->y;
+          icon_info->pressed = TRUE;
 
-              icon_info->pressed = TRUE;
-            }
-
-          g_signal_emit (entry, signals[ICON_PRESSED], 0, i, event);
+          if (!icon_info->nonactivatable)
+            g_signal_emit (entry, signals[ICON_PRESSED], 0, i, event);
 
           return TRUE;
         }
@@ -3288,33 +3290,31 @@ gtk_entry_button_release (GtkWidget      *widget,
 
   for (i = 0; i < MAX_ICONS; i++)
     {
-      if ((icon_info = priv->icons[i]) != NULL)
+      icon_info = priv->icons[i];
+
+      if (!icon_info || icon_info->insensitive)
+        continue;
+
+      if (event->window == icon_info->window)
         {
-          GdkWindow *icon_window = icon_info->window;
+          gint width, height;
 
-          if (icon_info->insensitive)
-            continue;
+          gdk_drawable_get_size (icon_info->window, &width, &height);
 
-          if (event->window == icon_window)
+          icon_info->pressed = FALSE;
+
+          if (should_prelight (entry, i) &&
+              event->x >= 0 && event->y >= 0 &&
+              event->x < width && event->y < height)
             {
-              gint width, height;
-
-              gdk_drawable_get_size (icon_window, &width, &height);
-
-              icon_info->pressed = FALSE;
-
-              if (should_prelight (entry, i) &&
-                  event->x >= 0 && event->y >= 0 &&
-                  event->x < width && event->y < height)
-                {
-                  icon_info->prelight = TRUE;
-                  gtk_widget_queue_draw (widget);
-                }
-
-              g_signal_emit (entry, signals[ICON_RELEASED], 0, i, event);
-
-              return TRUE;
+              icon_info->prelight = TRUE;
+              gtk_widget_queue_draw (widget);
             }
+
+          if (!icon_info->nonactivatable)
+            g_signal_emit (entry, signals[ICON_RELEASED], 0, i, event);
+
+          return TRUE;
         }
     }
 
@@ -7482,7 +7482,7 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
 }
 
 /**
- * gtk_icon_entry_set_icon_drag_source:
+ * gtk_entry_set_icon_drag_source:
  * @entry: a #GtkIconEntry
  * @icon_pos: icon position
  * @target_list: the targets (data formats) in which the data can be provided
@@ -7524,7 +7524,7 @@ gtk_entry_set_icon_drag_source (GtkEntry             *entry,
 }
 
 /**
- * gtk_icon_entry_get_current_icon_drag_source:
+ * gtk_entry_get_current_icon_drag_source:
  * @entry: a #GtkIconEntry
  *
  * Returns the index of the icon which is the source of the current

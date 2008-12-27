@@ -2,13 +2,6 @@
 #include <stdio.h>
 #include "prop-editor.h"
 
-static void
-clear_pressed (GtkEntry *entry, gint icon, GdkEvent *event, gpointer data)
-{
-   if (icon == GTK_ENTRY_ICON_SECONDARY)
-     gtk_entry_set_text (entry, "");
-}
-
 static gboolean
 delete_event_cb (GtkWidget *editor,
                  gint       response,
@@ -40,6 +33,43 @@ properties_cb (GtkWidget *button,
   gtk_window_present (GTK_WINDOW (editor));
 }
 
+static void
+clear_pressed (GtkEntry *entry, gint icon, GdkEvent *event, gpointer data)
+{
+   if (icon == GTK_ENTRY_ICON_SECONDARY)
+     gtk_entry_set_text (entry, "");
+}
+
+static void
+drag_data_get_cb (GtkWidget        *widget,
+                  GdkDragContext   *context,
+                  GtkSelectionData *data,
+                  guint             info,
+                  guint             time,
+                  gpointer          user_data)
+{
+  gint pos;
+
+  pos = gtk_entry_get_current_icon_drag_source (GTK_ENTRY (widget));
+
+  if (pos == GTK_ENTRY_ICON_PRIMARY)
+    {
+#if 0
+      gint start, end;
+      
+      if (gtk_editable_get_selection_bounds (GTK_EDITABLE (widget), &start, &end))
+        {
+          gchar *str;
+          
+          str = gtk_editable_get_chars (GTK_EDITABLE (widget), start, end);
+          gtk_selection_data_set_text (data, str, -1);
+          g_free (str);
+        }
+#else
+      gtk_selection_data_set_text (data, "XXX", -1);
+#endif
+    }
+}
 
 int
 main (int argc, char **argv)
@@ -50,6 +80,7 @@ main (int argc, char **argv)
   GtkWidget *entry;
   GtkWidget *button;
   GIcon *icon;
+  GtkTargetList *tlist;
 
   gtk_init (&argc, &argv);
 
@@ -84,7 +115,7 @@ main (int argc, char **argv)
 				 GTK_ENTRY_ICON_PRIMARY,
 				 icon);
   gtk_entry_set_icon_sensitive (GTK_ENTRY (entry),
-				GTK_ENTRY_ICON_PRIMARY,
+			        GTK_ENTRY_ICON_PRIMARY,
 				FALSE);
 
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
@@ -118,6 +149,14 @@ main (int argc, char **argv)
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Save a file");
+  tlist = gtk_target_list_new (NULL, 0);
+  gtk_target_list_add_text_targets (tlist, 0);
+  gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
+                                  GTK_ENTRY_ICON_PRIMARY,
+                                  tlist, GDK_ACTION_COPY); 
+  g_signal_connect (entry, "drag-data-get", 
+                    G_CALLBACK (drag_data_get_cb), NULL);
+  gtk_target_list_unref (tlist);
 
   button = gtk_button_new_with_label ("Properties");
   gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
@@ -144,9 +183,6 @@ main (int argc, char **argv)
   gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
 				 GTK_ENTRY_ICON_SECONDARY,
 				 GTK_STOCK_CLEAR);
-  gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
-				  GTK_ENTRY_ICON_SECONDARY,
-                                  FALSE);
 
   g_signal_connect (entry, "icon-pressed", G_CALLBACK (clear_pressed), NULL);
 
@@ -172,6 +208,10 @@ main (int argc, char **argv)
   gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
 				 GTK_ENTRY_ICON_PRIMARY,
 				 GTK_STOCK_DIALOG_AUTHENTICATION);
+
+  gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
+				  GTK_ENTRY_ICON_PRIMARY,
+				  FALSE);
 
   button = gtk_button_new_with_label ("Properties");
   gtk_table_attach (GTK_TABLE (table), button, 2, 3, 3, 4,

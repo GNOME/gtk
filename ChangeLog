@@ -1,5 +1,12 @@
 2008-12-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c: Don't emit ::icon-pressed on nonactivatable
+	icons. Fix up docs to match actual api.
+
+	* tests/testentryicons.c: Reshuffle tests a bit. Add a DND test.
+
+2008-12-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c: Fix interaction between icons and widget sensitivity.
 	Also fix a few typos.
 
