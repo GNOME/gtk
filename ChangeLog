@@ -1,5 +1,9 @@
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkeditable.c: Merge docs inline.
+
+2008-12-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkhsv.c:
 	* gtk/gtkwidget.c: 
 	* gtk/gtkaccelgroup.c: Documentation fixes
