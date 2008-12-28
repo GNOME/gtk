@@ -834,7 +834,6 @@ gtk_accel_group_from_accel_closure (GClosure *closure)
  *                 to activate the accelerator.
  * @accel_key:     accelerator keyval from a key event
  * @accel_mods:    keyboard state mask from a key event
- * @returns:       %TRUE if the accelerator was handled, %FALSE otherwise
  * 
  * Finds the first accelerator in @accel_group 
  * that matches @accel_key and @accel_mods, and
@@ -867,7 +866,6 @@ gtk_accel_group_activate (GtkAccelGroup   *accel_group,
  *                 to activate the accelerator.
  * @accel_key:     accelerator keyval from a key event
  * @accel_mods:    keyboard state mask from a key event
- * @returns:       %TRUE if the accelerator was handled, %FALSE otherwise
  * 
  * Finds the first accelerator in any #GtkAccelGroup attached
  * to @object that matches @accel_key and @accel_mods, and

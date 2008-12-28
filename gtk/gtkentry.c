@@ -6180,7 +6180,7 @@ gtk_entry_prepend_text (GtkEntry *entry,
 /**
  * gtk_entry_set_position:
  * @entry: a #GtkEntry
- * @position:  the position of the cursor. The cursor is displayed
+ * @position: the position of the cursor. The cursor is displayed
  *    before the character with the given (base 0) index in the widget. 
  *    The value must be less than or equal to the number of characters 
  *    in the widget. A value of -1 indicates that the position should
@@ -6193,7 +6193,7 @@ gtk_entry_prepend_text (GtkEntry *entry,
  */
 void
 gtk_entry_set_position (GtkEntry *entry,
-			gint       position)
+			gint      position)
 {
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
@@ -6892,7 +6892,7 @@ gtk_entry_get_alignment (GtkEntry *entry)
 /**
  * gtk_entry_set_icon_from_pixbuf:
  * @entry: a #GtkEntry
- * @position: Icon position
+ * @icon_pos: Icon position
  * @pixbuf: A #GdkPixbuf, or %NULL
  *
  * Sets the icon shown in the specified position using a pixbuf.
@@ -6949,7 +6949,7 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
 /**
  * gtk_entry_set_icon_from_stock:
  * @entry: A #GtkEntry
- * @position: Icon position
+ * @icon_pos: Icon position
  * @stock_id: The name of the stock item, or %NULL
  *
  * Sets the icon shown in the entry at the specified position from
@@ -7135,7 +7135,7 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
 /**
  * gtk_entry_set_icon_activatable:
  * @entry: A #GtkEntry
- * @position: Icon position
+ * @icon_pos: Icon position
  * @activatable: %TRUE if the icon should be activatable
  *
  * Sets whether the icon is activatable.
@@ -7202,7 +7202,7 @@ gtk_entry_get_icon_activatable (GtkEntry             *entry,
 /**
  * gtk_entry_get_pixbuf:
  * @entry: A #GtkEntry
- * @position: Icon position
+ * @icon_pos: Icon position
  *
  * Retrieves the image used for the icon.
  *
@@ -7238,7 +7238,7 @@ gtk_entry_get_pixbuf (GtkEntry             *entry,
 /**
  * gtk_entry_get_gicon:
  * @entry: A #GtkEntry
- * @position: Icon position
+ * @icon_pos: Icon position
  *
  * Retrieves the #GIcon used for the icon, or %NULL if there is
  * no icon or if the icon was set by some other method (e.g., by
@@ -7271,7 +7271,7 @@ gtk_entry_get_gicon (GtkEntry             *entry,
 /**
  * gtk_entry_get_stock:
  * @entry: A #GtkEntry
- * @position: Icon position
+ * @icon_pos: Icon position
  *
  * Retrieves the stock id used for the icon, or %NULL if there is
  * no icon or if the icon was set by some other method (e.g., by
@@ -7304,7 +7304,7 @@ gtk_entry_get_stock (GtkEntry             *entry,
 /**
  * gtk_entry_get_icon_name:
  * @entry: A #GtkEntry
- * @position: Icon position
+ * @icon_pos: Icon position
  *
  * Retrieves the icon name used for the icon, or %NULL if there is
  * no icon or if the icon was set by some other method (e.g., by
@@ -7337,7 +7337,7 @@ gtk_entry_get_icon_name (GtkEntry             *entry,
 /**
  * gtk_entry_set_icon_sensitive:
  * @entry: A #GtkEntry
- * @position: Icon position
+ * @icon_pos: Icon position
  * @sensitive: Specifies whether the icon should appear
  *             sensitive or insensitive
  *

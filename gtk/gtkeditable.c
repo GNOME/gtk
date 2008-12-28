@@ -142,10 +142,10 @@ gtk_editable_delete_text (GtkEditable *editable,
 /**
  * gtk_editable_get_chars:
  * @editable: a #GtkEditable
- * @start: start of text
- * @end: end of text
+ * @start_pos: start of text
+ * @end_pos: end of text
  *
- * Retreives the content of the editable between @start and @end.
+ * Retreives the content of the editable between @start_pos and @end_pos.
  * Note that positions are specified in characters, not bytes.
  *
  * Return value: a pointer to the contents of the widget as a
@@ -154,12 +154,12 @@ gtk_editable_delete_text (GtkEditable *editable,
  **/
 gchar *    
 gtk_editable_get_chars (GtkEditable *editable,
-			gint         start,
-			gint         end)
+			gint         start_pos,
+			gint         end_pos)
 {
   g_return_val_if_fail (GTK_IS_EDITABLE (editable), NULL);
 
-  return GTK_EDITABLE_GET_CLASS (editable)->get_chars (editable, start, end);
+  return GTK_EDITABLE_GET_CLASS (editable)->get_chars (editable, start_pos, end_pos);
 }
 
 /**
@@ -256,21 +256,21 @@ gtk_editable_delete_selection (GtkEditable *editable)
 /**
  * gtk_editable_select_region:
  * @editable: a #GtkEditable
- * @start: start of region
- * @end: end of region
+ * @start_pos: start of region
+ * @end_pos: end of region
  *
- * Selects the text between @start and @end. Both @start and @end are
- * relative to the start of the content. Note that positions are specified
- * in characters, not bytes.
+ * Selects the text between @start_pos and @end_pos. Both @start_pos and 
+ * @end_pos are relative to the start of the content. Note that positions 
+ * are specified in characters, not bytes.
  **/
 void
 gtk_editable_select_region (GtkEditable *editable,
-			    gint         start,
-			    gint         end)
+			    gint         start_pos,
+			    gint         end_pos)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   
-  GTK_EDITABLE_GET_CLASS (editable)->set_selection_bounds (editable,  start, end);
+  GTK_EDITABLE_GET_CLASS (editable)->set_selection_bounds (editable, start_pos, end_pos);
 }
 
 /**

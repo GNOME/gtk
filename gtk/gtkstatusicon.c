@@ -2640,9 +2640,9 @@ gtk_status_icon_get_has_tooltip (GtkStatusIcon *status_icon)
 /**
  * gtk_status_icon_set_tooltip_text:
  * @status_icon: a #GtkStatusIcon
- * @tooltip_text: the contents of the tooltip for @status_icon
+ * @text: the contents of the tooltip for @status_icon
  *
- * Sets @tooltip_text as the contents of the tooltip.
+ * Sets @text as the contents of the tooltip.
  *
  * This function will take care of setting #GtkStatusIcon:has-tooltip to
  * %TRUE and of the default handler for the #GtkStatusIcon::query-tooltip
@@ -2655,7 +2655,7 @@ gtk_status_icon_get_has_tooltip (GtkStatusIcon *status_icon)
  */
 void
 gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,
-				  const gchar   *tooltip_text)
+				  const gchar   *text)
 {
   GtkStatusIconPrivate *priv;
 
@@ -2665,15 +2665,15 @@ gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,
 
 #ifdef GDK_WINDOWING_X11
 
-  gtk_widget_set_tooltip_text (priv->tray_icon, tooltip_text);
+  gtk_widget_set_tooltip_text (priv->tray_icon, text);
 
 #endif
 #ifdef GDK_WINDOWING_WIN32
-  if (tooltip_text == NULL)
+  if (text == NULL)
     priv->nid.uFlags &= ~NIF_TIP;
   else
     {
-      WCHAR *wcs = g_utf8_to_utf16 (tooltip_text, -1, NULL, NULL, NULL);
+      WCHAR *wcs = g_utf8_to_utf16 (text, -1, NULL, NULL, NULL);
 
       priv->nid.uFlags |= NIF_TIP;
       wcsncpy (priv->nid.szTip, wcs, G_N_ELEMENTS (priv->nid.szTip) - 1);
@@ -2685,7 +2685,7 @@ gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,
       g_warning ("%s:%d:Shell_NotifyIconW(NIM_MODIFY) failed", __FILE__, __LINE__-1);
 
   g_free (priv->tooltip_text);
-  priv->tooltip_text = g_strdup (tooltip_text);
+  priv->tooltip_text = g_strdup (text);
 #endif
 #ifdef GDK_WINDOWING_QUARTZ
   QUARTZ_POOL_ALLOC;
@@ -2693,7 +2693,7 @@ gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,
   QUARTZ_POOL_RELEASE;
 
   g_free (priv->tooltip_text);
-  priv->tooltip_text = g_strdup (tooltip_text);
+  priv->tooltip_text = g_strdup (text);
 #endif
 }
 

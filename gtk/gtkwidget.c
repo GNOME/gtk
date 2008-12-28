@@ -8147,12 +8147,11 @@ synth_crossing (GtkWidget      *widget,
   gdk_event_free (event);
 }
 
-/**
+/*
  * _gtk_widget_is_pointer_widget:
  * @widget: a #GtkWidget
  *
  * Returns %TRUE if the pointer window belongs to @widget.
- *
  */
 gboolean
 _gtk_widget_is_pointer_widget (GtkWidget *widget)
@@ -8174,7 +8173,7 @@ _gtk_widget_is_pointer_widget (GtkWidget *widget)
   return FALSE;
 }
 
-/**
+/*
  * _gtk_widget_synthesize_crossing:
  * @from: the #GtkWidget the virtual pointer is leaving.
  * @to: the #GtkWidget the virtual pointer is moving to.
@@ -8439,7 +8438,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
     }
 }
 
-/**
+/*
  * _gtk_widget_get_aux_info:
  * @widget: a #GtkWidget
  * @create: if %TRUE, create the structure if it doesn't exist
@@ -8448,7 +8447,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
  * 
  * Return value: the #GtkAuxInfo structure for the widget, or
  *    %NULL if @create is %FALSE and one doesn't already exist.
- **/
+ */
 GtkWidgetAuxInfo*
 _gtk_widget_get_aux_info (GtkWidget *widget,
 			  gboolean   create)

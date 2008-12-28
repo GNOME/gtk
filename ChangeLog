@@ -1,3 +1,14 @@
+2008-12-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkhsv.c:
+	* gtk/gtkwidget.c: 
+	* gtk/gtkaccelgroup.c: Documentation fixes
+
+	* gtk/gtkstatusicon.c:
+	* gtk/gtkentry.c:
+	* gtk/gtkeditable.[hc]: Make parameter names match to make gtk-doc
+	happy.
+
 2008-12-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c: Expand the docs some more.
