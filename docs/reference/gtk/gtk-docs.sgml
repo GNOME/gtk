@@ -252,8 +252,9 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <chapter id="SelectorWidgets">
       <title>Selectors (File/Font/Color/Input Devices)</title>
       <xi:include href="xml/gtkcolorbutton.xml" />
-      <xi:include href="xml/gtkcolorsel.xml" />
       <xi:include href="xml/gtkcolorseldlg.xml" />
+      <xi:include href="xml/gtkcolorsel.xml" />
+      <xi:include href="xml/gtkhsv.xml" />
       <xi:include href="xml/gtkfilechooser.xml" />
       <xi:include href="xml/gtkfilechooserbutton.xml" />
       <xi:include href="xml/gtkfilechooserdialog.xml" />

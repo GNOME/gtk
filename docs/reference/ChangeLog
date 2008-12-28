@@ -1,4 +1,15 @@
 2008-12-27  Matthias Clasen <mclasen@redhat.com>
+	
+	* gtk/tmpl/gtkmessagedialog.sgml:
+	* gtk/tmpl/gtkmenushell.sgml:
+	* gtk/tmpl/gtklinkbutton.sgml: 
+	* gtk/tmpl/gtkimage.sgml: Additions
+
+	* gtk/gtk-sections.txt:
+	* gtk/gtk-docs.sgml: Add GtkHSV
+	* gtk/Makefile.am: Don't ignore gtkhsv.h
+
+2008-12-27  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Remove nonexisting api
 	* gtk/migrating-GtkEntry-icons.sgml: Formatting fixes

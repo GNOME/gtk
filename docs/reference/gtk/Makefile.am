@@ -41,7 +41,6 @@ IGNORE_HFILES=				\
 	gtkfilesystemmodel.h		\
 	gtkfilesystemunix.h		\
 	gtkfilesystemwin32.h		\
-	gtkhsv.h			\
 	gtkiconcache.h			\
         gtkiconcachevalidator.h         \
 	gtkiconthemeparser.h		\

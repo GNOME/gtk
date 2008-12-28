@@ -794,6 +794,29 @@ GtkColorButtonPrivate
 </SECTION>
 
 <SECTION>
+<FILE>gtkhsv</FILE>
+<TITLE>GtkHSV</TITLE>
+GtkHSV
+gtk_hsv_new
+gtk_hsv_set_color
+gtk_hsv_get_color
+gtk_hsv_set_metrics
+gtk_hsv_get_metrics
+gtk_hsv_is_adjusting
+gtk_hsv_to_rgb
+gtk_rgb_to_hsv
+<SUBSECTION Standard>
+GTK_TYPE_HSV
+GTK_HSV
+GTK_HSV_CLASS
+GTK_IS_HSV
+GTK_IS_HSV_CLASS
+GTK_HSV_GET_CLASS
+<SUBSECTION Private>
+gtk_hsv_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkcolorsel</FILE>
 <TITLE>GtkColorSelection</TITLE>
 GtkColorSelection
