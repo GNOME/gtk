@@ -1,5 +1,6 @@
 2008-12-27  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Remove nonexisting api
 	* gtk/migrating-GtkEntry-icons.sgml: Formatting fixes
 
 2008-12-27  Matthias Clasen <mclasen@redhat.com>

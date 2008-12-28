@@ -422,7 +422,6 @@ gtk_bin_get_type
 <TITLE>GtkBox</TITLE>
 GtkBox
 GtkBoxChild
-gtk_box_new
 gtk_box_pack_start
 gtk_box_pack_end
 gtk_box_pack_start_defaults
@@ -5446,7 +5445,6 @@ gtk_widget_set_has_tooltip
 gtk_widget_trigger_tooltip_query
 gtk_widget_get_snapshot
 gtk_widget_get_window
-gtk_widget_get_allocation
 <SUBSECTION>
 gtk_requisition_copy
 gtk_requisition_free
