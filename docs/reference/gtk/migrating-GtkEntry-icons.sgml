@@ -31,15 +31,16 @@ gtk_entry_set_icon_from_stock (entry, GTK_ICON_ENTRY_PRIMARY, GTK_STOCK_NEW);
     whether the icon is activatable and sensitive. You should make
     sure that your icons are properly marked as activatable or nonactivatable
     and sensitive or insensitive:
-    <varlist>
-      <varlistentry>
-        <listitem><para>Sensitive, but non-activatable icons are
-        good for purely informational purposes.</para></listitem>
-      </varlistentry>
-      <varlistentry>
-        <listitem><para>Icons should be marked as insensitive if the
-        function that they trigger is currently not available.</para></listitem>
-      </varlistentry>
+    <itemizedlist>
+      <listitem><para>
+        Sensitive, but non-activatable icons are
+        good for purely informational purposes.
+      </para></listitem>
+      <listitem><para>
+        Icons should be marked as insensitive if the
+        function that they trigger is currently not available.
+      </para></listitem>
+    </itemizedlist>
   </para>
 
   <para>
