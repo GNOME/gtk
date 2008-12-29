@@ -1,5 +1,9 @@
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprogress.h: Fix a typo
+
+2008-12-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkhsv.c:
 	* gtk/gtkentry.c: Doc fixes
 

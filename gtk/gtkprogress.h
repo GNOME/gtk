@@ -97,7 +97,7 @@ void       gtk_progress_set_adjustment      (GtkProgress   *progress,
 					     GtkAdjustment *adjustment);
 void       gtk_progress_configure           (GtkProgress   *progress,
 					     gdouble        value,
-					     gdouble        hmin,
+					     gdouble        min,
 					     gdouble        max);
 void       gtk_progress_set_percentage      (GtkProgress   *progress,
 					     gdouble        percentage);
