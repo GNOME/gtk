@@ -2028,7 +2028,6 @@ gtk_image_menu_item_get_type
 </SECTION>
 
 <SECTION>
-<INCLUDE>gtk/gtkimmodule.h</INCLUDE>
 <FILE>gtkimcontext</FILE>
 <TITLE>GtkIMContext</TITLE>
 GtkIMContext
