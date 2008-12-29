@@ -1,5 +1,6 @@
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkbindings.c:
 	* gtk/gtkstyle.c: Doc fixes
 
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
