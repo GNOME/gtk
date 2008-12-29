@@ -1,32 +1,32 @@
-# translation of gtk+.gtk-2-4.po to Uzbek
-# Copyright (C) 1998-2003, 2004 Free Software Foundation, Inc.
-# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003, 2004.
+# translation of uz@cyrillic.po to Uzbek
+# Copyright (C) 1998-2003, 2004, 2008 Free Software Foundation, Inc.
 #
+# Mashrab Kuvatov <kmashrab@uni-bremen.de>, 2003, 2004.
+# Nurali Abdurahmonov <mavnur@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.gtk-2-4\n"
+"Project-Id-Version: uz@cyrillic\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-12-21 20:51+0500\n"
-"PO-Revision-Date: 2004-07-19 18:54+0200\n"
-"Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
-"Language-Team: Uzbek <kmashrab@uni-bremen.de>\n"
+"PO-Revision-Date: 2008-12-29 08:08+0500\n"
+"Last-Translator: Nurali Abdurahmonov <mavnur@gmail.com>\n"
+"Language-Team: Uzbek\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0.2\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
-msgstr ""
+msgstr "Kanallar soni"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:90
 msgid "The number of samples per pixel"
 msgstr ""
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:99
-#, fuzzy
 msgid "Colorspace"
-msgstr "_Yopish"
+msgstr ""
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:100
 msgid "The colorspace in which the samples are interpreted"
@@ -34,7 +34,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:108
 msgid "Has Alpha"
-msgstr ""
+msgstr "Alfa-kanal bor"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:109
 msgid "Whether the pixbuf has an alpha channel"
@@ -51,16 +51,15 @@ msgstr ""
 #: ../gdk-pixbuf/gdk-pixbuf.c:132 ../gtk/gtklayout.c:632
 #: ../gtk/gtktreeviewcolumn.c:207
 msgid "Width"
-msgstr ""
+msgstr "Kengligi"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:133
 msgid "The number of columns of the pixbuf"
 msgstr ""
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:142 ../gtk/gtklayout.c:641
-#, fuzzy
 msgid "Height"
-msgstr "Oʻ_ng"
+msgstr "Balandligi"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:143
 msgid "The number of rows of the pixbuf"
@@ -76,7 +75,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:169
 msgid "Pixels"
-msgstr ""
+msgstr "Piksellar"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:170
 msgid "A pointer to the pixel data of the pixbuf"
@@ -84,41 +83,41 @@ msgstr ""
 
 #: ../gdk/gdkdisplaymanager.c:103
 msgid "Default Display"
-msgstr ""
+msgstr "Andoza displey"
 
 #: ../gdk/gdkdisplaymanager.c:104
 msgid "The default display for GDK"
-msgstr ""
+msgstr "GDK uchun andoza displey"
 
 #: ../gdk/gdkpango.c:490 ../gtk/gtkinvisible.c:86
 #: ../gtk/gtkmountoperation.c:176 ../gtk/gtkstatusicon.c:277
 #: ../gtk/gtkwindow.c:613
 msgid "Screen"
-msgstr ""
+msgstr "Ekran"
 
 #: ../gdk/gdkpango.c:491
 msgid "the GdkScreen for the renderer"
-msgstr ""
+msgstr "Renderer uchun GdkScreen"
 
 #: ../gdk/gdkscreen.c:75
 msgid "Font options"
-msgstr ""
+msgstr "Shrift parametrlari"
 
 #: ../gdk/gdkscreen.c:76
 msgid "The default font options for the screen"
-msgstr ""
+msgstr "Ekran uchun andoza shrift parametrlari"
 
 #: ../gdk/gdkscreen.c:83
 msgid "Font resolution"
-msgstr ""
+msgstr "Shrift oʻlchami"
 
 #: ../gdk/gdkscreen.c:84
 msgid "The resolution for fonts on the screen"
-msgstr ""
+msgstr "Ekrandagi shrift oʻlchami"
 
 #: ../gtk/gtkaboutdialog.c:197
 msgid "Program name"
-msgstr ""
+msgstr "Dastur nomi"
 
 #: ../gtk/gtkaboutdialog.c:198
 msgid "The name of the program. If this is not set, it defaults to g_get_application_name()"
@@ -126,11 +125,11 @@ msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:212
 msgid "Program version"
-msgstr ""
+msgstr "Dastur versiyasi"
 
 #: ../gtk/gtkaboutdialog.c:213
 msgid "The version of the program"
-msgstr ""
+msgstr "Dasturning versiyasi"
 
 #: ../gtk/gtkaboutdialog.c:227
 msgid "Copyright string"
@@ -138,7 +137,7 @@ msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:228
 msgid "Copyright information for the program"
-msgstr ""
+msgstr "Dastur uchun mualliflik huquqi maʼlumoti"
 
 #: ../gtk/gtkaboutdialog.c:245
 msgid "Comments string"
@@ -146,11 +145,11 @@ msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:246
 msgid "Comments about the program"
-msgstr ""
+msgstr "Dastur haqida izohlar"
 
 #: ../gtk/gtkaboutdialog.c:280
 msgid "Website URL"
-msgstr ""
+msgstr "Veb sahifa URL manzili"
 
 #: ../gtk/gtkaboutdialog.c:281
 msgid "The URL for the link to the website of the program"
@@ -166,19 +165,19 @@ msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:314
 msgid "Authors"
-msgstr ""
+msgstr "Mualliflar"
 
 #: ../gtk/gtkaboutdialog.c:315
 msgid "List of authors of the program"
-msgstr ""
+msgstr "Dastur mualliflari roʻyxati"
 
 #: ../gtk/gtkaboutdialog.c:331
 msgid "Documenters"
-msgstr ""
+msgstr "Qoʻllanma mualliflari"
 
 #: ../gtk/gtkaboutdialog.c:332
 msgid "List of people documenting the program"
-msgstr ""
+msgstr "Dastur qoʻllanmasi mualliflari"
 
 #: ../gtk/gtkaboutdialog.c:348
 msgid "Artists"
@@ -190,24 +189,23 @@ msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:366
 msgid "Translator credits"
-msgstr ""
+msgstr "Tarjimonlar"
 
 #: ../gtk/gtkaboutdialog.c:367
 msgid "Credits to the translators. This string should be marked as translatable"
-msgstr ""
+msgstr "Dastur tarjimonlari. Ushbu satr tarjima qilinadigan qilib belgilanishi kerak"
 
 #: ../gtk/gtkaboutdialog.c:382
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: ../gtk/gtkaboutdialog.c:383
 msgid "A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"
 msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:398
-#, fuzzy
 msgid "Logo Icon Name"
-msgstr "Nomi"
+msgstr "Logotip nishonchasi nomi"
 
 #: ../gtk/gtkaboutdialog.c:399
 msgid "A named icon to use as the logo for the about box."
@@ -231,7 +229,7 @@ msgstr ""
 
 #: ../gtk/gtkaccellabel.c:130
 msgid "Accelerator Widget"
-msgstr ""
+msgstr "Akselerator vidjeti"
 
 #: ../gtk/gtkaccellabel.c:131
 msgid "The widget to be monitored for accelerator changes"
@@ -283,9 +281,8 @@ msgstr ""
 #: ../gtk/gtkaction.c:255 ../gtk/gtkcellrendererpixbuf.c:171
 #: ../gtk/gtkimage.c:230 ../gtk/gtkprinter.c:172 ../gtk/gtkstatusicon.c:234
 #: ../gtk/gtkwindow.c:605
-#, fuzzy
 msgid "Icon Name"
-msgstr "Nomi"
+msgstr "Nishoncha nomi"
 
 #: ../gtk/gtkaction.c:256 ../gtk/gtkcellrendererpixbuf.c:172
 #: ../gtk/gtkimage.c:231 ../gtk/gtkstatusicon.c:235
@@ -294,11 +291,11 @@ msgstr ""
 
 #: ../gtk/gtkaction.c:262 ../gtk/gtktoolitem.c:156
 msgid "Visible when horizontal"
-msgstr ""
+msgstr "Gorizontal boʻlganda koʻrinadigan"
 
 #: ../gtk/gtkaction.c:263 ../gtk/gtktoolitem.c:157
 msgid "Whether the toolbar item is visible when the toolbar is in a horizontal orientation."
-msgstr ""
+msgstr "Asboblar paneli gorizontal boʻlganda uni koʻrsatilishi yoki koʻrsatilmasligi."
 
 #: ../gtk/gtkaction.c:278
 msgid "Visible when overflown"
@@ -310,15 +307,15 @@ msgstr ""
 
 #: ../gtk/gtkaction.c:286 ../gtk/gtktoolitem.c:163
 msgid "Visible when vertical"
-msgstr ""
+msgstr "Vertikal boʻlganda koʻrinadigan"
 
 #: ../gtk/gtkaction.c:287 ../gtk/gtktoolitem.c:164
 msgid "Whether the toolbar item is visible when the toolbar is in a vertical orientation."
-msgstr ""
+msgstr "Asboblar paneli vertikal boʻlganda uni koʻrsatilishi yoki koʻrsatilmasligi."
 
 #: ../gtk/gtkaction.c:294 ../gtk/gtktoolitem.c:170
 msgid "Is important"
-msgstr ""
+msgstr "Muhim"
 
 #: ../gtk/gtkaction.c:295
 msgid "Whether the action is considered important. When TRUE, toolitem proxies for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -326,7 +323,7 @@ msgstr ""
 
 #: ../gtk/gtkaction.c:303
 msgid "Hide if empty"
-msgstr ""
+msgstr "Boʻsh boʻlsa bekitish"
 
 #: ../gtk/gtkaction.c:304
 msgid "When TRUE, empty menu proxies for this action are hidden."
@@ -345,7 +342,7 @@ msgstr ""
 #: ../gtk/gtkstatusicon.c:293 ../gtk/gtktreeviewcolumn.c:191
 #: ../gtk/gtkwidget.c:516
 msgid "Visible"
-msgstr ""
+msgstr "Koʻrinadigan"
 
 #: ../gtk/gtkaction.c:318
 msgid "Whether the action is visible."
@@ -353,7 +350,7 @@ msgstr ""
 
 #: ../gtk/gtkaction.c:324
 msgid "Action Group"
-msgstr ""
+msgstr "Amal guruhi"
 
 #: ../gtk/gtkaction.c:325
 msgid "The GtkActionGroup this GtkAction is associated with, or NULL (for internal use)."
@@ -361,7 +358,7 @@ msgstr ""
 
 #: ../gtk/gtkactiongroup.c:171
 msgid "A name for the action group."
-msgstr ""
+msgstr "Amal guruhi nomi."
 
 #: ../gtk/gtkactiongroup.c:178
 msgid "Whether the action group is enabled."
@@ -374,7 +371,7 @@ msgstr ""
 #: ../gtk/gtkadjustment.c:93 ../gtk/gtkcellrendererprogress.c:128
 #: ../gtk/gtkscalebutton.c:202 ../gtk/gtkspinbutton.c:269
 msgid "Value"
-msgstr ""
+msgstr "Qiymat"
 
 #: ../gtk/gtkadjustment.c:94
 msgid "The value of the adjustment"
@@ -382,7 +379,7 @@ msgstr ""
 
 #: ../gtk/gtkadjustment.c:110
 msgid "Minimum Value"
-msgstr ""
+msgstr "Minimal qiymat"
 
 #: ../gtk/gtkadjustment.c:111
 msgid "The minimum value of the adjustment"
@@ -390,7 +387,7 @@ msgstr ""
 
 #: ../gtk/gtkadjustment.c:130
 msgid "Maximum Value"
-msgstr ""
+msgstr "Maksimal qiymat"
 
 #: ../gtk/gtkadjustment.c:131
 msgid "The maximum value of the adjustment"
@@ -414,7 +411,7 @@ msgstr ""
 
 #: ../gtk/gtkadjustment.c:184
 msgid "Page Size"
-msgstr ""
+msgstr "Sahifaning oʻlchami"
 
 #: ../gtk/gtkadjustment.c:185
 msgid "The page size of the adjustment"
@@ -422,7 +419,7 @@ msgstr ""
 
 #: ../gtk/gtkalignment.c:90
 msgid "Horizontal alignment"
-msgstr ""
+msgstr "Eniga tekislash"
 
 #: ../gtk/gtkalignment.c:91 ../gtk/gtkbutton.c:250
 msgid "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned"
@@ -430,7 +427,7 @@ msgstr ""
 
 #: ../gtk/gtkalignment.c:100
 msgid "Vertical alignment"
-msgstr ""
+msgstr "Boʻyiga tekislash"
 
 #: ../gtk/gtkalignment.c:101 ../gtk/gtkbutton.c:269
 msgid "Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned"
@@ -486,7 +483,7 @@ msgstr ""
 
 #: ../gtk/gtkarrow.c:75
 msgid "Arrow direction"
-msgstr ""
+msgstr "Koʻrsatgich yoʻnalishi"
 
 #: ../gtk/gtkarrow.c:76
 msgid "The direction the arrow should point"
@@ -494,7 +491,7 @@ msgstr ""
 
 #: ../gtk/gtkarrow.c:84
 msgid "Arrow shadow"
-msgstr ""
+msgstr "Koʻrsatgich soyasi"
 
 #: ../gtk/gtkarrow.c:85
 msgid "Appearance of the shadow surrounding the arrow"
@@ -510,7 +507,7 @@ msgstr ""
 
 #: ../gtk/gtkaspectframe.c:79
 msgid "Horizontal Alignment"
-msgstr ""
+msgstr "Eniga tekislash"
 
 #: ../gtk/gtkaspectframe.c:80
 msgid "X alignment of the child"
@@ -518,7 +515,7 @@ msgstr ""
 
 #: ../gtk/gtkaspectframe.c:86
 msgid "Vertical Alignment"
-msgstr ""
+msgstr "Boʻyiga tekislash"
 
 #: ../gtk/gtkaspectframe.c:87
 msgid "Y alignment of the child"
@@ -526,7 +523,7 @@ msgstr ""
 
 #: ../gtk/gtkaspectframe.c:93
 msgid "Ratio"
-msgstr ""
+msgstr "Nisbat"
 
 #: ../gtk/gtkaspectframe.c:94
 msgid "Aspect ratio if obey_child is FALSE"
@@ -546,7 +543,7 @@ msgstr ""
 
 #: ../gtk/gtkassistant.c:262
 msgid "Number of pixels around the header."
-msgstr ""
+msgstr "Sarlavha atrofidagi piksellar soni."
 
 #: ../gtk/gtkassistant.c:269
 msgid "Content Padding"
@@ -557,45 +554,44 @@ msgid "Number of pixels around the content pages."
 msgstr ""
 
 #: ../gtk/gtkassistant.c:286
-#, fuzzy
 msgid "Page type"
-msgstr "Qoʻy_ish"
+msgstr "Sahifa turi"
 
 #: ../gtk/gtkassistant.c:287
 msgid "The type of the assistant page"
-msgstr ""
+msgstr "Yordamchi sahifasi turi"
 
 #: ../gtk/gtkassistant.c:304
 msgid "Page title"
-msgstr ""
+msgstr "Sahifa nomi"
 
 #: ../gtk/gtkassistant.c:305
 msgid "The title of the assistant page"
-msgstr ""
+msgstr "Yordamchi sahifasi nomi"
 
 #: ../gtk/gtkassistant.c:321
 msgid "Header image"
-msgstr ""
+msgstr "Sarlavha rasmi"
 
 #: ../gtk/gtkassistant.c:322
 msgid "Header image for the assistant page"
-msgstr ""
+msgstr "Yordamchi sahifasi sarlavhasi rasmi"
 
 #: ../gtk/gtkassistant.c:338
 msgid "Sidebar image"
-msgstr ""
+msgstr "Yon panel rasmi"
 
 #: ../gtk/gtkassistant.c:339
 msgid "Sidebar image for the assistant page"
-msgstr ""
+msgstr "Yordamchi sahifasi uchun yon panel rasmi"
 
 #: ../gtk/gtkassistant.c:354
 msgid "Page complete"
-msgstr ""
+msgstr "Sahifa toʻldirildi"
 
 #: ../gtk/gtkassistant.c:355
 msgid "Whether all required fields on the page have been filled out"
-msgstr ""
+msgstr "Sahifadagi barcha kerakli maydonlarning toʻldirilganligi"
 
 #: ../gtk/gtkbbox.c:91
 msgid "Minimum child width"
@@ -639,7 +635,7 @@ msgstr ""
 
 #: ../gtk/gtkbbox.c:136
 msgid "Secondary"
-msgstr ""
+msgstr "Ikkilamchi"
 
 #: ../gtk/gtkbbox.c:137
 msgid "If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons"
@@ -648,7 +644,7 @@ msgstr ""
 #: ../gtk/gtkbox.c:130 ../gtk/gtkexpander.c:219 ../gtk/gtkiconview.c:664
 #: ../gtk/gtktreeviewcolumn.c:216
 msgid "Spacing"
-msgstr ""
+msgstr "Oraliq"
 
 #: ../gtk/gtkbox.c:131
 msgid "The amount of space between children"
@@ -666,16 +662,15 @@ msgstr ""
 #: ../gtk/gtkbox.c:148 ../gtk/gtkpreview.c:101 ../gtk/gtktoolbar.c:566
 #: ../gtk/gtktreeviewcolumn.c:272
 msgid "Expand"
-msgstr ""
+msgstr "Yoyish"
 
 #: ../gtk/gtkbox.c:149
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr ""
 
 #: ../gtk/gtkbox.c:155
-#, fuzzy
 msgid "Fill"
-msgstr "Fayllar"
+msgstr "Toʻldirish"
 
 #: ../gtk/gtkbox.c:156
 msgid "Whether extra space given to the child should be allocated to the child or used as padding"
@@ -699,9 +694,8 @@ msgstr ""
 
 #: ../gtk/gtkbox.c:176 ../gtk/gtknotebook.c:694 ../gtk/gtkpaned.c:241
 #: ../gtk/gtkruler.c:148
-#, fuzzy
 msgid "Position"
-msgstr "Soʻroq"
+msgstr "Oʻrni"
 
 #: ../gtk/gtkbox.c:177 ../gtk/gtknotebook.c:695
 msgid "The index of the child in the parent"
@@ -764,16 +758,15 @@ msgstr ""
 
 #: ../gtk/gtkbutton.c:285 ../gtk/gtkimagemenuitem.c:121
 msgid "Image widget"
-msgstr ""
+msgstr "Rasm vidjeti"
 
 #: ../gtk/gtkbutton.c:286
 msgid "Child widget to appear next to the button text"
 msgstr ""
 
 #: ../gtk/gtkbutton.c:300
-#, fuzzy
 msgid "Image position"
-msgstr "Soʻroq"
+msgstr "Rasm oʻrni"
 
 #: ../gtk/gtkbutton.c:301
 msgid "The position of the image relative to the text"
@@ -781,7 +774,7 @@ msgstr ""
 
 #: ../gtk/gtkbutton.c:410
 msgid "Default Spacing"
-msgstr ""
+msgstr "Andoza oraliq"
 
 #: ../gtk/gtkbutton.c:411
 msgid "Extra space to add for CAN_DEFAULT buttons"
@@ -837,37 +830,35 @@ msgstr ""
 
 #: ../gtk/gtkbutton.c:491
 msgid "Show button images"
-msgstr ""
+msgstr "Tugma rasmlarini koʻrsatish"
 
 #: ../gtk/gtkbutton.c:492
 msgid "Whether images should be shown on buttons"
 msgstr ""
 
 #: ../gtk/gtkcalendar.c:440
-#, fuzzy
 msgid "Year"
-msgstr "tozalash"
+msgstr "Yil"
 
 #: ../gtk/gtkcalendar.c:441
 msgid "The selected year"
-msgstr ""
+msgstr "Tanlangan yil"
 
 #: ../gtk/gtkcalendar.c:454
-#, fuzzy
 msgid "Month"
-msgstr "_Shrift"
+msgstr "Oy"
 
 #: ../gtk/gtkcalendar.c:455
 msgid "The selected month (as a number between 0 and 11)"
-msgstr ""
+msgstr "Tanlangan oy (0 va 11 raqamlari orasida)"
 
 #: ../gtk/gtkcalendar.c:469
 msgid "Day"
-msgstr ""
+msgstr "Kun"
 
 #: ../gtk/gtkcalendar.c:470
 msgid "The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)"
-msgstr ""
+msgstr "Tanlangan kun (1 va 31 raqamlari orasida yoki joriy kunni tanlashni bekor qilish uchun 0 )"
 
 #: ../gtk/gtkcalendar.c:484
 msgid "Show Heading"
@@ -879,7 +870,7 @@ msgstr ""
 
 #: ../gtk/gtkcalendar.c:499
 msgid "Show Day Names"
-msgstr ""
+msgstr "Kun nomlarini koʻrsatish"
 
 #: ../gtk/gtkcalendar.c:500
 msgid "If TRUE, day names are displayed"
@@ -895,7 +886,7 @@ msgstr ""
 
 #: ../gtk/gtkcalendar.c:528
 msgid "Show Week Numbers"
-msgstr ""
+msgstr "Hafta raqamlarini koʻrsatish"
 
 #: ../gtk/gtkcalendar.c:529
 msgid "If TRUE, week numbers are displayed"
@@ -903,33 +894,31 @@ msgstr ""
 
 #: ../gtk/gtkcalendar.c:544
 msgid "Details Width"
-msgstr ""
+msgstr "Tafsilotlar kengligi"
 
 #: ../gtk/gtkcalendar.c:545
 msgid "Details width in characters"
-msgstr ""
+msgstr "Tafsilotlar kengligi belgilarda"
 
 #: ../gtk/gtkcalendar.c:560
-#, fuzzy
 msgid "Details Height"
-msgstr "Oʻ_ng"
+msgstr "Tafsilotlar balandligi"
 
 #: ../gtk/gtkcalendar.c:561
 msgid "Details height in rows"
-msgstr ""
+msgstr "Tafsilotlar balandligi satrlarda"
 
 #: ../gtk/gtkcalendar.c:577
 msgid "Show Details"
-msgstr ""
+msgstr "Tafsilotlarni koʻrsatish"
 
 #: ../gtk/gtkcalendar.c:578
 msgid "If TRUE, details are shown"
-msgstr ""
+msgstr "Agar TRUE boʻlsa tafsilotlar koʻrsatiladi"
 
 #: ../gtk/gtkcellrenderer.c:177
-#, fuzzy
 msgid "mode"
-msgstr "Olib _tashlash"
+msgstr "usul"
 
 #: ../gtk/gtkcellrenderer.c:178
 msgid "Editable mode of the CellRenderer"
@@ -937,11 +926,11 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderer.c:186
 msgid "visible"
-msgstr ""
+msgstr "koʻrinadigan"
 
 #: ../gtk/gtkcellrenderer.c:187
 msgid "Display the cell"
-msgstr ""
+msgstr "Katakni koʻrsatish"
 
 #: ../gtk/gtkcellrenderer.c:194
 msgid "Display the cell sensitive"
@@ -981,20 +970,19 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderer.c:241
 msgid "width"
-msgstr ""
+msgstr "kenglik"
 
 #: ../gtk/gtkcellrenderer.c:242
 msgid "The fixed width"
-msgstr ""
+msgstr "Oʻzgarmaydigan kenglik"
 
 #: ../gtk/gtkcellrenderer.c:251
-#, fuzzy
 msgid "height"
-msgstr "Oʻ_ng"
+msgstr "balandligi"
 
 #: ../gtk/gtkcellrenderer.c:252
 msgid "The fixed height"
-msgstr ""
+msgstr "Oʻzgarmaydigan balandlik"
 
 #: ../gtk/gtkcellrenderer.c:261
 msgid "Is Expander"
@@ -3737,12 +3725,11 @@ msgstr ""
 
 #: ../gtk/gtkprinter.c:124
 msgid "Name of the printer"
-msgstr ""
+msgstr "Printerning nomi"
 
 #: ../gtk/gtkprinter.c:130
-#, fuzzy
 msgid "Backend"
-msgstr "_Orqaga"
+msgstr ""
 
 #: ../gtk/gtkprinter.c:131
 msgid "Backend for the printer"
@@ -4032,9 +4019,8 @@ msgid "The number of discrete blocks in a progress bar (when shown in the discre
 msgstr ""
 
 #: ../gtk/gtkprogressbar.c:168
-#, fuzzy
 msgid "Fraction"
-msgstr "Maʼlumot"
+msgstr ""
 
 #: ../gtk/gtkprogressbar.c:169
 msgid "The fraction of total work that has been completed"
@@ -6675,176 +6661,3 @@ msgstr ""
 msgid "How to draw the input method statusbar"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Cancelled"
-#~ msgstr "_Bekor qilish"
-
-#~ msgid "Home"
-#~ msgstr "Uy"
-
-#~ msgid "_Add"
-#~ msgstr "Qoʻ_shish"
-
-#~ msgid "_Remove"
-#~ msgstr "Olib _tashlash"
-
-#~ msgid "Create Fo_lder"
-#~ msgstr "_Jild yaratish"
-
-#~ msgid "_Name:"
-#~ msgstr "_Nomi:"
-
-#~ msgid "Save in _folder:"
-#~ msgstr "J_ildga saqlash:"
-
-#~ msgid "Create in _folder:"
-#~ msgstr "J_ildda yaratish:"
-
-#~ msgid "Folders"
-#~ msgstr "Jildlar"
-
-#~ msgid "Fol_ders"
-#~ msgstr "Ji_ldlar"
-
-#~ msgid "_Files"
-#~ msgstr "_Fayllar"
-
-#~ msgid "De_lete File"
-#~ msgstr "Fayllni _oʻchirish"
-
-#~ msgid "_Rename File"
-#~ msgstr "Faylning no_mini oʻzgartirish"
-
-#~ msgid "_Folder name:"
-#~ msgstr "_Jildning nomi:"
-
-#~ msgid "Rename File"
-#~ msgstr "Faylning nomini oʻzgartirish"
-
-#~ msgid "_Rename"
-#~ msgstr "_Nomini oʻzgartirish"
-
-#~ msgid "_Apply"
-#~ msgstr "Qoʻ_llash"
-
-#~ msgid "_Bold"
-#~ msgstr "Qal_in"
-
-#~ msgid "_CD-Rom"
-#~ msgstr "K_ompakt-disk"
-
-#~ msgid "_Clear"
-#~ msgstr "_Tozalash"
-
-#~ msgid "_Copy"
-#~ msgstr "_Nusxa koʻchirish"
-
-#~ msgid "Cu_t"
-#~ msgstr "_Kesish"
-
-#~ msgid "_Execute"
-#~ msgstr "Ba_jarish"
-
-#~ msgid "_Find"
-#~ msgstr "Q_idirish"
-
-#~ msgid "Find and _Replace"
-#~ msgstr "Qidirish va a_lmashtirish"
-
-#~ msgid "_Floppy"
-#~ msgstr "_Disket"
-
-#~ msgid "_First"
-#~ msgstr "_Birinchi"
-
-#~ msgid "_Last"
-#~ msgstr "_Oxirgi"
-
-#~ msgid "_Top"
-#~ msgstr "_Yuqoriga"
-
-#~ msgid "_Down"
-#~ msgstr "_Pastga"
-
-#~ msgid "_Up"
-#~ msgstr "_Yuqoriga"
-
-#~ msgid "_Help"
-#~ msgstr "_Yordam"
-
-#~ msgid "_Home"
-#~ msgstr "_Uy"
-
-#~ msgid "_Italic"
-#~ msgstr "Q_iya"
-
-#~ msgid "_Jump to"
-#~ msgstr "Oʻ_tish"
-
-#~ msgid "_Center"
-#~ msgstr "_Markaz"
-
-#~ msgid "_Left"
-#~ msgstr "_Chap"
-
-#~ msgid "_Network"
-#~ msgstr "_Tarmoq"
-
-#~ msgid "_New"
-#~ msgstr "_Yangi"
-
-#~ msgid "_No"
-#~ msgstr "_Yoʻq"
-
-#~ msgid "_OK"
-#~ msgstr "_Ok"
-
-#~ msgid "_Open"
-#~ msgstr "_Ochish"
-
-#~ msgid "_Preferences"
-#~ msgstr "_Moslash"
-
-#~ msgid "_Properties"
-#~ msgstr "Xo_ssalari"
-
-#~ msgid "_Quit"
-#~ msgstr "_Chiqish"
-
-#~ msgid "_Redo"
-#~ msgstr "Q_aytarish"
-
-#~ msgid "_Refresh"
-#~ msgstr "_Yangilash"
-
-#~ msgid "_Save"
-#~ msgstr "_Saqlash"
-
-#~ msgid "Save _As"
-#~ msgstr "...sif_atida saqlash"
-
-#~ msgid "_Spell Check"
-#~ msgstr "Imloni _tekshirish"
-
-#~ msgid "_Stop"
-#~ msgstr "_Toʻxtatish"
-
-#~ msgid "_Undo"
-#~ msgstr "_Bekor qilish"
-
-#~ msgid "_Yes"
-#~ msgstr "H_a"
-
-#~ msgid "Zoom _In"
-#~ msgstr "K_attalashtirish"
-
-#~ msgid "Zoom _Out"
-#~ msgstr "K_ichiklashtirish"
-
-#, fuzzy
-#~ msgid "Add"
-#~ msgstr "_Qo'shish"
-
-#, fuzzy
-#~ msgid "Up"
-#~ msgstr "_Yuqoriga"
