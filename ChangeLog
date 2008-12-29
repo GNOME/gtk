@@ -1,3 +1,7 @@
+2008-12-29  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtk.symbols: Add missing symbols from gtkentry.c.
+
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwindow.c: 
