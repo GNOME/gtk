@@ -1,6 +1,7 @@
 2008-12-28  Matthias Clasen <mclasen@redhat.com>
 
-	* gtk/gtk-sections.txt: Move GtkFixedChild to Private
+	* gtk/gtk-sections.txt: Move GtkFixedChild, GtkTableChild and
+	GtkTableRowCol to Private
 
 2008-12-28  Matthias Clasen <mclasen@redhat.com>
 

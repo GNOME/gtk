@@ -3554,8 +3554,6 @@ gtk_status_icon_get_type
 <FILE>gtktable</FILE>
 <TITLE>GtkTable</TITLE>
 GtkTable
-GtkTableChild
-GtkTableRowCol
 gtk_table_new
 gtk_table_resize
 gtk_table_attach
@@ -3578,6 +3576,8 @@ GTK_TABLE_CLASS
 GTK_IS_TABLE_CLASS
 GTK_TABLE_GET_CLASS
 <SUBSECTION Private>
+GtkTableChild
+GtkTableRowCol
 gtk_table_get_type
 </SECTION>
 
