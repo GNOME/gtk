@@ -1754,7 +1754,7 @@ gtk_style_get_property (GtkStyle     *style,
  * @style: a #GtkStyle
  * @widget_type: the #GType of a descendant of #GtkWidget
  * @first_property_name: the name of the first style property to get
- * @var_list: a <type>va_list</type> of pairs of property names and
+ * @var_args: a <type>va_list</type> of pairs of property names and
  *     locations to return the property values, starting with the
  *     location for @first_property_name.
  *

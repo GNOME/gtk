@@ -1,5 +1,9 @@
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstyle.c: Doc fixes
+
+2008-12-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkscrolledwindow.c: 
 	* gtk/gtkscale.c: Merge docs inline.
 
