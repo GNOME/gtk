@@ -163,7 +163,6 @@ Does the same as gtk_style_apply_default_background().
 @Deprecated: Use gtk_style_apply_default_background() instead.
 
 
-
 <!-- ##### FUNCTION gtk_style_lookup_color ##### -->
 <para>
 
@@ -959,13 +958,15 @@ Does the same as gtk_style_apply_default_background().
 
 <!-- ##### STRUCT GtkBorder ##### -->
 <para>
-
+A struct that specifies a border around a rectangular area that can
+be of different width on each side.
 </para>
 
-@left: 
-@right: 
-@top: 
-@bottom: 
+@left: The width of the left border.
+@right: The width of the right border.
+@top: The width of the top border.
+@bottom: The width of the bottom border.
+
 
 <!-- ##### FUNCTION gtk_border_new ##### -->
 <para>
