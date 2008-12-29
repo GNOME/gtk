@@ -31,10 +31,10 @@ using the functions below.
 
 <!-- ##### FUNCTION gtk_hscrollbar_new ##### -->
 <para>
-Creates a new horizontal scrollbar.
+
 </para>
 
-@adjustment: the #GtkAdjustment to use, or %NULL to create a new adjustment.
-@Returns: the new #GtkHScrollbar.
+@adjustment: 
+@Returns: 
 
 
