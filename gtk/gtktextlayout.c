@@ -404,7 +404,7 @@ gtk_text_layout_set_contexts (GtkTextLayout *layout,
  * @overwrite: overwrite mode
  *
  * Sets overwrite mode
- **/
+ */
 void
 gtk_text_layout_set_overwrite_mode (GtkTextLayout *layout,
 				    gboolean       overwrite)
@@ -429,7 +429,7 @@ gtk_text_layout_set_overwrite_mode (GtkTextLayout *layout,
  * point at which new text is inserted depends on whether the new
  * text is right-to-left or left-to-right, so it may be desired to
  * make the drawn position of the cursor depend on the keyboard state.
- **/
+ */
 void
 gtk_text_layout_set_cursor_direction (GtkTextLayout   *layout,
 				      GtkTextDirection direction)
@@ -448,7 +448,7 @@ gtk_text_layout_set_cursor_direction (GtkTextLayout   *layout,
  * Sets the keyboard direction; this is used as for the bidirectional
  * base direction for the line with the cursor if the line contains
  * only neutral characters.
- **/
+ */
 void
 gtk_text_layout_set_keyboard_direction (GtkTextLayout   *layout,
 					GtkTextDirection keyboard_dir)
@@ -468,7 +468,7 @@ gtk_text_layout_set_keyboard_direction (GtkTextLayout   *layout,
  * gtk_text_layout_set_buffer().
  *
  * Return value: the text buffer used by the layout.
- **/
+ */
 GtkTextBuffer *
 gtk_text_layout_get_buffer (GtkTextLayout *layout)
 {
@@ -502,7 +502,7 @@ gtk_text_layout_set_screen_width (GtkTextLayout *layout, gint width)
  * Sets whether the insertion cursor should be shown. Generally,
  * widgets using #GtkTextLayout will hide the cursor when the
  * widget does not have the input focus.
- **/
+ */
 void
 gtk_text_layout_set_cursor_visible (GtkTextLayout *layout,
                                     gboolean       cursor_visible)
@@ -535,8 +535,8 @@ gtk_text_layout_set_cursor_visible (GtkTextLayout *layout,
  * Returns whether the insertion cursor will be shown.
  *
  * Return value: if %FALSE, the insertion cursor will not be
-    shown, even if the text is editable.
- **/
+ *     shown, even if the text is editable.
+ */
 gboolean
 gtk_text_layout_get_cursor_visible (GtkTextLayout *layout)
 {
@@ -553,7 +553,7 @@ gtk_text_layout_get_cursor_visible (GtkTextLayout *layout)
  * Set the preedit string and attributes. The preedit string is a
  * string showing text that is currently being edited and not
  * yet committed into the buffer.
- **/
+ */
 void
 gtk_text_layout_set_preedit_string (GtkTextLayout *layout,
 				    const gchar   *preedit_string,
@@ -958,7 +958,7 @@ gtk_text_layout_real_free_line_data (GtkTextLayout     *layout,
  * Check if there are any invalid regions in a #GtkTextLayout's buffer
  *
  * Return value: %TRUE if any invalid regions were found
- **/
+ */
 gboolean
 gtk_text_layout_is_valid (GtkTextLayout *layout)
 {
@@ -990,7 +990,7 @@ update_layout_size (GtkTextLayout *layout)
  *
  * Ensure that a region of a #GtkTextLayout is valid. The ::changed
  * signal will be emitted if any lines are validated.
- **/
+ */
 void
 gtk_text_layout_validate_yrange (GtkTextLayout *layout,
                                  GtkTextIter   *anchor,
@@ -1429,7 +1429,7 @@ gtk_text_attr_appearance_compare (const PangoAttribute *attr1,
           appearance1->draw_bg == appearance2->draw_bg);
 }
 
-/**
+/*
  * gtk_text_attr_appearance_new:
  * @desc:
  *
@@ -1438,7 +1438,7 @@ gtk_text_attr_appearance_compare (const PangoAttribute *attr1,
  * and size simultaneously.)
  *
  * Return value:
- **/
+ */
 static PangoAttribute *
 gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
 {
@@ -1650,7 +1650,7 @@ add_child_attrs (GtkTextLayout      *layout,
   pango_attr_list_insert (attrs, attr);
 }
 
-/**
+/*
  * get_block_cursor:
  * @layout: a #GtkTextLayout
  * @display: a #GtkTextLineDisplay
@@ -1664,7 +1664,7 @@ add_child_attrs (GtkTextLayout      *layout,
  * Checks whether layout should display block cursor at given position.
  * For this layout must be in overwrite mode and text at @insert_iter 
  * must be editable.
- **/
+ */
 static gboolean
 get_block_cursor (GtkTextLayout      *layout,
 		  GtkTextLineDisplay *display,
@@ -2593,11 +2593,11 @@ get_line_at_y (GtkTextLayout *layout,
  * @target_iter: the iterator in which the result is stored
  * @y: the y positition
  * @line_top: location to store the y coordinate of the
- *            top of the line. (Can by %NULL.)
+ *            top of the line. (Can by %NULL)
  *
  * Get the iter at the beginning of the line which is displayed
  * at the given y.
- **/
+ */
 void
 gtk_text_layout_get_line_at_y (GtkTextLayout *layout,
                                GtkTextIter   *target_iter,
