@@ -176,7 +176,7 @@ key binding signal emission as stored in #GtkBindingSignal.
 
 <!-- ##### MACRO gtk_binding_entry_add ##### -->
 <para>
-Deprecated.
+
 </para>
 
 
