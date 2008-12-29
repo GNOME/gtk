@@ -764,6 +764,18 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                 GTK_TYPE_SCROLL_STEP,
                                 G_TYPE_INT);
 
+  /**
+   * GtkTextView::set-anchor:
+   * @text_view: the object which received the signal
+   *
+   * The ::set-anchor signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user initiates setting the "anchor" 
+   * mark. The "anchor" mark gets placed at the same position as the
+   * "insert" mark.
+   *
+   * This signal has no default bindings.
+   */   
   signals[SET_ANCHOR] =
     g_signal_new (I_("set-anchor"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -773,6 +785,18 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkTextView::insert-at-cursor:
+   * @text_view: the object which received the signal
+   * @string: the string to insert
+   *
+   * The ::insert-at-cursor signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user initiates the insertion of a 
+   * fixed string at the cursor.
+   *
+   * This signal has no default bindings.
+   */
   signals[INSERT_AT_CURSOR] =
     g_signal_new (I_("insert-at-cursor"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -900,7 +924,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    *
    * The ::toggle-overwrite signal is a 
    * <link linkend="keybinding-signals">keybinding signal</link> 
-   * which gets emitted to change the editability of the text view.
+   * which gets emitted to toggle the overwrite mode of the text view.
    * 
    * The default bindings for this signal is Insert.
    */ 
@@ -934,6 +958,17 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  GTK_TYPE_ADJUSTMENT);
   widget_class->set_scroll_adjustments_signal = signals[SET_SCROLL_ADJUSTMENTS];
 
+  /**
+   * GtkTextView::populate-popup:
+   * @entry: The text view on which the signal is emitted
+   * @menu: the menu that is being populated
+   *
+   * The ::populate-popup signal gets emitted before showing the 
+   * context menu of the text view.
+   *
+   * If you need to add items to the context menu, connect
+   * to this signal and append your menuitems to the @menu.
+   */
   signals[POPULATE_POPUP] =
     g_signal_new (I_("populate-popup"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -1140,17 +1175,17 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 				G_TYPE_INT, -1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-				"delete_from_cursor", 2,
+				"delete-from-cursor", 2,
 				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
 				G_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-				"delete_from_cursor", 2,
+				"delete-from-cursor", 2,
 				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
 				G_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-				"delete_from_cursor", 2,
+				"delete-from-cursor", 2,
 				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
 				G_TYPE_INT, -1);
 

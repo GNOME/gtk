@@ -1095,6 +1095,17 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                  TRUE,
                                                                  GTK_PARAM_READABLE));
   
+  /**
+   * GtkEntry::populate-popup:
+   * @entry: The entry on which the signal is emitted
+   * @menu: the menu that is being populated
+   *
+   * The ::populate-popup signal gets emitted before showing the 
+   * context menu of the entry. 
+   *
+   * If you need to add items to the context menu, connect
+   * to this signal and append your menuitems to the @menu.
+   */
   signals[POPULATE_POPUP] =
     g_signal_new (I_("populate-popup"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -1107,6 +1118,19 @@ gtk_entry_class_init (GtkEntryClass *class)
   
  /* Action signals */
   
+  /**
+   * GtkEntry::activate:
+   * @entry: The entry on which the signal is emitted
+   *
+   * A  <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user activates the entry.
+   * 
+   * Applications should not connect to it, but may emit it with
+   * g_signal_emit_by_name() if they need to control scrolling
+   * programmatically.
+   *
+   * The default bindings for this signal are all forms of the Enter key.
+   */
   signals[ACTIVATE] =
     g_signal_new (I_("activate"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -1129,6 +1153,18 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_TYPE_INT,
 		  G_TYPE_BOOLEAN);
 
+  /**
+   * GtkEntry::insert-at-cursor:
+   * @entry: the object which received the signal
+   * @string: the string to insert
+   *
+   * The ::insert-at-cursor signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user initiates the insertion of a
+   * fixed string at the cursor.
+   *
+   * This signal has no default bindings.
+   */
   signals[INSERT_AT_CURSOR] = 
     g_signal_new (I_("insert-at-cursor"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -1139,6 +1175,24 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_TYPE_NONE, 1,
 		  G_TYPE_STRING);
 
+  /**
+   * GtkEntry::delete-from-cursor:
+   * @entry: the object which received the signal
+   * @type: the granularity of the deletion, as a #GtkDeleteType
+   * @count: the number of @type units to delete
+   *
+   * The ::delete-from-cursor signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user initiates a text deletion.
+   *
+   * If the @type is %GTK_DELETE_CHARS, GTK+ deletes the selection
+   * if there is one, otherwise it deletes the requested number
+   * of characters.
+   *
+   * The default bindings for this signal are
+   * Delete for deleting a character and Ctrl-Delete for
+   * deleting a word.
+   */
   signals[DELETE_FROM_CURSOR] = 
     g_signal_new (I_("delete-from-cursor"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -1150,6 +1204,17 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  GTK_TYPE_DELETE_TYPE,
 		  G_TYPE_INT);
 
+  /**
+   * GtkEntry::backspace:
+   * @entry: the object which received the signal
+   *
+   * The ::backspace signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user asks for it.
+   *
+   * The default bindings for this signal are
+   * Backspace and Shift-Backspace.
+   */
   signals[BACKSPACE] =
     g_signal_new (I_("backspace"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -1159,6 +1224,17 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkEntry::cut-clipboard:
+   * @entry: the object which received the signal
+   *
+   * The ::cut-clipboard signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted to cut the selection to the clipboard.
+   *
+   * The default bindings for this signal are
+   * Ctrl-x and Shift-Delete.
+   */
   signals[CUT_CLIPBOARD] =
     g_signal_new (I_("cut-clipboard"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -1168,6 +1244,17 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkEntry::copy-clipboard:
+   * @entry: the object which received the signal
+   *
+   * The ::copy-clipboard signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted to copy the selection to the clipboard.
+   *
+   * The default bindings for this signal are
+   * Ctrl-c and Ctrl-Insert.
+   */
   signals[COPY_CLIPBOARD] =
     g_signal_new (I_("copy-clipboard"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -1177,6 +1264,18 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkEntry::paste-clipboard:
+   * @entry: the object which received the signal
+   *
+   * The ::paste-clipboard signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted to paste the contents of the clipboard
+   * into the text view.
+   *
+   * The default bindings for this signal are
+   * Ctrl-v and Shift-Insert.
+   */
   signals[PASTE_CLIPBOARD] =
     g_signal_new (I_("paste-clipboard"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -1186,6 +1285,16 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkEntry::toggle-overwrite:
+   * @entry: the object which received the signal
+   *
+   * The ::toggle-overwrite signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted to toggle the overwrite mode of the entry.
+   *
+   * The default bindings for this signal is Insert.
+   */
   signals[TOGGLE_OVERWRITE] =
     g_signal_new (I_("toggle-overwrite"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),

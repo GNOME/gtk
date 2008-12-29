@@ -560,7 +560,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * @textbuffer: the object which received the signal
    * 
    * The ::end-user-action signal is emitted at the end of a single
-   * user-visible operation #GtkTextBuffer.
+   * user-visible operation on the #GtkTextBuffer.
    * 
    * See also: 
    * gtk_text_buffer_end_user_action(),

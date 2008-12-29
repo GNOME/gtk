@@ -119,6 +119,19 @@ gtk_editable_base_init (gpointer g_class)
 		    G_TYPE_NONE, 2,
 		    G_TYPE_INT,
 		    G_TYPE_INT);
+      /**
+       * GtkEditable::changed:
+       * @editable: the object which received the signal
+       *
+       * The ::changed signal is emitted at the end of a single
+       * user-visible operation on the contents of the #GtkEditable.
+       *
+       * E.g., a paste operation that replaces the contents of the
+       * selection will cause only one signal emission (even though it
+       * is implemented by first deleting the selection, then inserting
+       * the new content, and may cause multiple ::notify::text signals
+       * to be emitted).
+       */ 
       g_signal_new (I_("changed"),
 		    GTK_TYPE_EDITABLE,
 		    G_SIGNAL_RUN_LAST,

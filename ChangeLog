@@ -1,3 +1,10 @@
+2008-12-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c:
+	* gtk/gtktextview.c:
+	* gtk/gtkeditable.c: 
+	* gtk/gtktextbuffer.c: Doc additions.
+
 2008-12-29  Tor Lillqvist  <tml@novell.com>
 
 	* gtk/gtk.symbols: Add missing symbols from gtkentry.c.
