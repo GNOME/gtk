@@ -1,5 +1,9 @@
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkimmodule.c:
+	* gtk/gtkseparatortoolitem.c: Doc fixes
+
+	* gtk/gtkfontsel.c:
 	* gtk/gtkeditable.c: Merge docs inline.
 
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
