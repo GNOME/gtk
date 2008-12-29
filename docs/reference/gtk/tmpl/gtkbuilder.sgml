@@ -436,11 +436,12 @@ using #GtkBuilder.
 
 <!-- ##### MACRO GTK_BUILDER_WARN_INVALID_CHILD_TYPE ##### -->
 <para>
-
+This macro should be used to emit a warning about and unexpected 
+@type value in a #GtkBuildable add_child implementation.
 </para>
 
-@object: 
-@type: 
+@object: the #GtkBuildable on which the warning ocurred
+@type: the unexpected type value
 
 
 <!-- ##### MACRO GTK_BUILDER_ERROR ##### -->
