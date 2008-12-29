@@ -47,6 +47,14 @@ gtk_vscrollbar_init (GtkVScrollbar *vscrollbar)
                                   GTK_ORIENTATION_VERTICAL);
 }
 
+/**
+ * gtk_vscrollbar_new:
+ * @adjustment: the #GtkAdjustment to use, or %NULL to create a new adjustment
+ *
+ * Creates a new vertical scrollbar.
+ *
+ * Returns: the new #GtkVScrollbar
+ */
 GtkWidget *
 gtk_vscrollbar_new (GtkAdjustment *adjustment)
 {
