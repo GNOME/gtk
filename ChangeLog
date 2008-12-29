@@ -1,5 +1,11 @@
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c:
+	* gtk/gtktextutil.c: Un-doc-commentize non-exported functions
+	to make gtk-doc happy.
+
+2008-12-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkscale.c:
 	* gtk/gtkimagemenuitem.c: Doc fixes
 

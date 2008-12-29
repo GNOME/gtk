@@ -8071,14 +8071,14 @@ _gtk_widget_peek_colormap (void)
   return NULL;
 }
 
-/**
+/*
  * _gtk_widget_set_pointer_window:
  * @widget: a #GtkWidget.
  * @pointer_window: the new pointer window.
  *
  * Sets pointer window for @widget.  Does not ref @pointer_window.
  * Actually stores it on the #GdkScreen, but you don't need to know that.
- **/
+ */
 void
 _gtk_widget_set_pointer_window (GtkWidget *widget,
                                 GdkWindow *pointer_window)
@@ -8094,13 +8094,13 @@ _gtk_widget_set_pointer_window (GtkWidget *widget,
     }
 }
 
-/**
+/*
  * _gtk_widget_get_pointer_window:
  * @widget: a #GtkWidget.
  *
  * Return value: the pointer window set on the #GdkScreen @widget is attached
  * to, or %NULL.
- **/
+ */
 GdkWindow *
 _gtk_widget_get_pointer_window (GtkWidget *widget)
 {

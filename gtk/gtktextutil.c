@@ -105,7 +105,7 @@ activate_cb (GtkWidget *menu_item,
   (* info->func) (buf, info->data);
 }
 
-/**
+/*
  * _gtk_text_util_append_special_char_menuitems
  * @menushell: a #GtkMenuShell
  * @callback:  call this when an item is chosen
@@ -119,7 +119,7 @@ activate_cb (GtkWidget *menu_item,
  * become public sometime, but it probably needs more thought first.
  * e.g. maybe there should be a way to just get the list of items,
  * instead of requiring the menu items to be created.
- **/
+ */
 void
 _gtk_text_util_append_special_char_menuitems (GtkMenuShell              *menushell,
                                               GtkTextUtilCharChosenFunc  func,
@@ -194,14 +194,16 @@ limit_layout_lines (PangoLayout *layout)
     }
 }
 
-/**
+/*
  * _gtk_text_util_create_drag_icon
  * @widget: #GtkWidget to extract the pango context
  * @text: a #gchar to render the icon
  * @len: length of @text, or -1 for NUL-terminated text
  *
  * Creates a drag and drop icon from @text.
- **/
+ *
+ * Returns: a #GdkPixmap to use as DND icon
+ */
 GdkPixmap *
 _gtk_text_util_create_drag_icon (GtkWidget *widget, 
                                  gchar     *text,
@@ -401,7 +403,7 @@ layout_get_char_width (PangoLayout *layout)
   return width;
 }
 
-/**
+/*
  * _gtk_text_util_get_block_cursor_location
  * @layout: a #PangoLayout
  * @index: index at which cursor is located
@@ -410,8 +412,8 @@ layout_get_char_width (PangoLayout *layout)
  * character
  *
  * Returns: whether cursor should actually be drawn as a rectangle.
- * It may not be the case if character at index is invisible.
- **/
+ *     It may not be the case if character at index is invisible.
+ */
 gboolean
 _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
 					  gint            index,
