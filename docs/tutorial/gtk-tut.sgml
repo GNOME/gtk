@@ -6932,8 +6932,7 @@ static GtkWidget *create_list( void )
    
     model = gtk_list_store_new (1, G_TYPE_STRING);
     tree_view = gtk_tree_view_new ();
-    gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window), 
-                                           tree_view);
+    gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
     gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), GTK_TREE_MODEL (model));
     gtk_widget_show (tree_view);
    

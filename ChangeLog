@@ -1,3 +1,12 @@
+2008-12-28  Ryan Lortie  <desrt@desrt.ca>
+
+	small fix for "Paned Window Widgets" example
+
+	* docs/tutorial/gtk-tut.sgml: use gtk_container_add rather than
+	add_with_viewport for putting a GtkTreeView into a ScrolledWindow
+
+	Spotted by Benjamin Herrenschmidt
+
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkimmodule.c:
