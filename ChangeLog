@@ -1,5 +1,13 @@
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkeditable.h: Match parameter names to make gtk-doc happy.
+
+2008-12-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfontsel.c: Merge docs inline.
+
+2008-12-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkprintsettings.c:
 	* gtk/gtkbindings.c:
 	* gtk/gtkstyle.c: Doc fixes
