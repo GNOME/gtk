@@ -1,5 +1,10 @@
 2008-12-28  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Remove duplicate vscrollbar section.
+	Merge accident ?
+
+2008-12-28  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/tmpl/gtktreesortable.sgml: Small addition
 
 2008-12-28  Matthias Clasen <mclasen@redhat.com>

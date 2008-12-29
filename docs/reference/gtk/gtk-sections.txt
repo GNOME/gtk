@@ -445,21 +445,6 @@ gtk_box_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkvscrollbar</FILE>
-<TITLE>GtkVScrollbar</TITLE>
-GtkVScrollbar
-gtk_vscrollbar_new
-<SUBSECTION Standard>
-GTK_VSCROLLBAR
-GTK_IS_VSCROLLBAR
-GTK_TYPE_VSCROLLBAR
-gtk_vscrollbar_get_type
-GTK_VSCROLLBAR_CLASS
-GTK_IS_VSCROLLBAR_CLASS
-GTK_VSCROLLBAR_GET_CLASS
-</SECTION>
-
-<SECTION>
 <FILE>gtkbuildable</FILE>
 GtkBuildable
 GtkBuildableIface
