@@ -1,5 +1,6 @@
 2008-12-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c:
 	* gtk/gtkentry.c:
 	* gtk/gtktextview.c:
 	* gtk/gtkeditable.c: 

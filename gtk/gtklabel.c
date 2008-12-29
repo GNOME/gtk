@@ -280,6 +280,33 @@ gtk_label_class_init (GtkLabelClass *class)
   class->move_cursor = gtk_label_move_cursor;
   class->copy_clipboard = gtk_label_copy_clipboard;
   
+  /**
+   * GtkLabel::move-cursor:
+   * @entry: the object which received the signal
+   * @step: the granularity of the move, as a #GtkMovementStep
+   * @count: the number of @step units to move
+   * @extend_selection: %TRUE if the move should extend the selection
+   *
+   * The ::move-cursor signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user initiates a cursor movement.
+   * If the cursor is not visible in @entry, this signal causes
+   * the viewport to be moved instead.
+   *
+   * Applications should not connect to it, but may emit it with
+   * g_signal_emit_by_name() if they need to control scrolling
+   * programmatically.
+   *
+   * The default bindings for this signal come in two variants,
+   * the variant with the Shift modifier extends the selection,
+   * the variant without the Shift modifer does not.
+   * There are too many key combinations to list them all here.
+   * <itemizedlist>
+   * <listitem>Arrow keys move by individual characters/lines</listitem>
+   * <listitem>Ctrl-arrow key combinations move by words/paragraphs</listitem>
+   * <listitem>Home/End keys move to the ends of the buffer</listitem>
+   * </itemizedlist>
+   */
   signals[MOVE_CURSOR] = 
     g_signal_new (I_("move-cursor"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -291,7 +318,17 @@ gtk_label_class_init (GtkLabelClass *class)
 		  GTK_TYPE_MOVEMENT_STEP,
 		  G_TYPE_INT,
 		  G_TYPE_BOOLEAN);
-  
+
+   /**
+   * GtkLabel::copy-clipboard:
+   * @label: the object which received the signal
+   *
+   * The ::copy-clipboard signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted to copy the selection to the clipboard.
+   *
+   * The default binding for this signal is Ctrl-c.
+   */ 
   signals[COPY_CLIPBOARD] =
     g_signal_new (I_("copy-clipboard"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -301,6 +338,18 @@ gtk_label_class_init (GtkLabelClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   
+  /**
+   * GtkLabel::populate-popup:
+   * @label: The label on which the signal is emitted
+   * @menu: the menu that is being populated
+   *
+   * The ::populate-popup signal gets emitted before showing the
+   * context menu of the label. Note that only selectable labels
+   * have context menus.
+   *
+   * If you need to add items to the context menu, connect
+   * to this signal and append your menuitems to the @menu.
+   */
   signals[POPULATE_POPUP] =
     g_signal_new (I_("populate-popup"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
