@@ -5519,7 +5519,6 @@ gtk_window_set_deletable
 gtk_window_set_frame_dimensions
 gtk_window_set_has_frame
 gtk_window_set_mnemonic_modifier
-gtk_window_set_role
 gtk_window_set_type_hint
 gtk_window_set_skip_taskbar_hint
 gtk_window_set_skip_pager_hint
