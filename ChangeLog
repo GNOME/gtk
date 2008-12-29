@@ -1,5 +1,6 @@
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprintsettings.c:
 	* gtk/gtkbindings.c:
 	* gtk/gtkstyle.c: Doc fixes
 

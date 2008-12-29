@@ -1287,9 +1287,9 @@ gtk_print_settings_get_printer_lpi (GtkPrintSettings *settings)
 /**
  * gtk_print_settings_set_printer_lpi:
  * @settings: a #GtkPrintSettings
- * @resolution: the resolution in lpi (lines per inch)
+ * @lpi: the resolution in lpi (lines per inch)
  * 
- * Sets the value of %GTK_PRINT_SETTINGS_PRINTER_LPI
+ * Sets the value of %GTK_PRINT_SETTINGS_PRINTER_LPI.
  * 
  * Since: 2.16
  */
