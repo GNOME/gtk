@@ -7173,7 +7173,7 @@ gtk_entry_set_icon_activatable (GtkEntry             *entry,
 }
 
 /**
- * gtk_entry_get_icon_activtable:
+ * gtk_entry_get_icon_activatable:
  * @entry: a #GtkEntry
  * @icon_pos: Icon position
  *
@@ -7402,7 +7402,8 @@ gtk_entry_get_icon_sensitive (GtkEntry             *entry,
 
 /**
  * gtk_entry_get_storage_type:
- * @image: a #GtkImage
+ * @entry: a #GtkEntry
+ * @icon_pos: Icon position
  *
  * Gets the type of representation being used by the icon
  * to store image data. If the icon has no image data,
