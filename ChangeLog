@@ -1,5 +1,6 @@
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkhsv.c:
 	* gtk/gtkentry.c: Doc fixes
 
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
@@ -19,7 +20,7 @@
 
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtkfontsel.c: Merge docs inline.
+	* tk/gtkfontsel.c: Merge docs inline.
 
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 

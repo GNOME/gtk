@@ -1578,7 +1578,7 @@ gtk_hsv_to_rgb (gdouble  h,
 }
 
 /**
- * gtk_hsv_to_rgb:
+ * gtk_rgb_to_hsv:
  * @r: Red
  * @g: Green
  * @b: Blue
