@@ -1,5 +1,6 @@
 2008-12-28  Matthias Clasen <mclasen@redhat.com>
-
+	
+	* gtk/tmpl/gtkmenubar.sgml: Document GtkPackDirection.
 	* gtk/tmpl/gtkenums.sgml: Document GtkArrowPlacement
 	* gtk/tmpl/gtkbuilder.sgml: Document GtkBuilderError
 
