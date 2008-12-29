@@ -49,6 +49,15 @@ Public enumerated types used throughout GTK+
 @GTK_ANCHOR_W: 
 @GTK_ANCHOR_E: 
 
+<!-- ##### ENUM GtkArrowPlacement ##### -->
+<para>
+Used to specify the placement of scroll arrows in scrolling menus.
+</para>
+
+@GTK_ARROWS_BOTH: Place one arrow on each end of the menu.
+@GTK_ARROWS_START: Place both arrows at the top of the menu.
+@GTK_ARROWS_END: Place both arrows at the bottom of the menu.
+
 <!-- ##### ENUM GtkArrowType ##### -->
 <para>
 Used to indicate the direction in which a #GtkArrow should point.
