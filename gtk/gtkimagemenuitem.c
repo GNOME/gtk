@@ -612,13 +612,12 @@ gtk_image_menu_item_set_use_stock (GtkImageMenuItem *image_menu_item,
 /**
  * gtk_image_menu_item_get_use_stock:
  * @image_menu_item: a #GtkImageMenuItem
- * @use_stock: %TRUE if the menuitem should use a stock item
  *
  * Checks whether the label set in the menuitem is used as a
  * stock id to select the stock item for the item.
  *
  * Returns: %TRUE if the label set in the menuitem is used as a
- * stock id to select the stock item for the item
+ *     stock id to select the stock item for the item
  *
  * Since: 2.16
  */
@@ -647,8 +646,6 @@ gtk_image_menu_item_get_use_stock (GtkImageMenuItem *image_menu_item)
  *
  * If you want this menu item to have changeable accelerators then
  * you shouldnt need this (see gtk_image_menu_item_new_from_stock()).
- *
- * Returns: whether an accelerator from the stock was successfully added.
  *
  * Since: 2.16
  */
