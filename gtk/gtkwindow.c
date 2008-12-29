@@ -758,6 +758,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 							P_("The transient parent of the dialog"),
 							GTK_TYPE_WINDOW,
 							GTK_PARAM_READWRITE| G_PARAM_CONSTRUCT));
+
   /**
    * GtkWindow:opacity:
    *
@@ -796,6 +797,15 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT);
 
+  /**
+   * GtkWindow::activate-focus:
+   * @window: the window which received the signal
+   *
+   * The ::activate-default signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user activates the currently
+   * focused widget of @window.
+   */
   window_signals[ACTIVATE_FOCUS] =
     g_signal_new (I_("activate-focus"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -806,6 +816,15 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  /**
+   * GtkWindow::activate-default:
+   * @window: the window which received the signal
+   *
+   * The ::activate-default signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user activates the default widget
+   * of @window.
+   */
   window_signals[ACTIVATE_DEFAULT] =
     g_signal_new (I_("activate-default"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -816,6 +835,13 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  /**
+   * GtkWindow::keys-changed:
+   * @window: the window which received the signal
+   *
+   * The ::keys-changed signal gets emitted when the set of accelerators
+   * or mnemonics that are associated with @window changes.
+   */
   window_signals[KEYS_CHANGED] =
     g_signal_new (I_("keys-changed"),
                   G_TYPE_FROM_CLASS (gobject_class),
