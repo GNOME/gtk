@@ -210,8 +210,8 @@ only be accessed using the functions below.
 
 </para>
 
-@scrolled_window:
-@window_placement:
+@scrolled_window: 
+@window_placement: 
 
 
 <!-- ##### FUNCTION gtk_scrolled_window_unset_placement ##### -->
@@ -236,8 +236,8 @@ only be accessed using the functions below.
 
 </para>
 
-@scrolled_window:
-@hadjustment:
+@scrolled_window: 
+@hadjustment: 
 
 
 <!-- ##### FUNCTION gtk_scrolled_window_set_vadjustment ##### -->
@@ -245,7 +245,7 @@ only be accessed using the functions below.
 
 </para>
 
-@scrolled_window:
+@scrolled_window: 
 @vadjustment: 
 
 
