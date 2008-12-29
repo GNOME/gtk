@@ -1141,6 +1141,33 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_TYPE_NONE, 0);
   widget_class->activate_signal = signals[ACTIVATE];
 
+  /**
+   * GtkEntry::move-cursor:
+   * @entry: the object which received the signal
+   * @step: the granularity of the move, as a #GtkMovementStep
+   * @count: the number of @step units to move
+   * @extend_selection: %TRUE if the move should extend the selection
+   *
+   * The ::move-cursor signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user initiates a cursor movement.
+   * If the cursor is not visible in @entry, this signal causes
+   * the viewport to be moved instead.
+   *
+   * Applications should not connect to it, but may emit it with
+   * g_signal_emit_by_name() if they need to control scrolling
+   * programmatically.
+   *
+   * The default bindings for this signal come in two variants,
+   * the variant with the Shift modifier extends the selection,
+   * the variant without the Shift modifer does not.
+   * There are too many key combinations to list them all here.
+   * <itemizedlist>
+   * <listitem>Arrow keys move by individual characters/lines</listitem>
+   * <listitem>Ctrl-arrow key combinations move by words/paragraphs</listitem>
+   * <listitem>Home/End keys move to the ends of the buffer</listitem>
+   * </itemizedlist>
+   */
   signals[MOVE_CURSOR] = 
     g_signal_new (I_("move-cursor"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
