@@ -1,5 +1,9 @@
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwidget.c: Document gtk_mnemonic_activate.
+
+2008-12-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtktextlayout.c: Un-doc-commentize non-public api
 
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>

@@ -4434,6 +4434,19 @@ _gtk_widget_get_accel_path (GtkWidget *widget,
   return apath ? g_quark_to_string (apath->path_quark) : NULL;
 }
 
+/**
+ * gtk_widget_mnemonic_activate:
+ * @widget: a #GtkWidget
+ * @group_cycling:  %TRUE if there are other widgets with the same mnemonic
+ *
+ * Emits the #GtkWidget::mnemonic-activate signal.
+ * 
+ * The default handler for this signal activates the @widget if
+ * @group_cycling is %FALSE, and just grabs the focus if @group_cycling
+ * is %TRUE.
+ *
+ * Returns: %TRUE if the signal has been handled
+ */
 gboolean
 gtk_widget_mnemonic_activate (GtkWidget *widget,
                               gboolean   group_cycling)
