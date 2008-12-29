@@ -1,5 +1,6 @@
 2008-12-28  Matthias Clasen <mclasen@redhat.com>
 	
+	* gtk/tmpl/gtkprintunixdialog.sgml: Document capabilities	
 	* gtk/tmpl/gtkstyle.sgml: Document GtkBorder
 	* gtk/tmpl/gtkmenubar.sgml: Document GtkPackDirection
 	* gtk/tmpl/gtkenums.sgml: Document GtkArrowPlacement
