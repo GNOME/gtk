@@ -1,5 +1,9 @@
 2008-12-28  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Move GtkFixedChild to Private
+
+2008-12-28  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/tmpl/gtkfontseldlg.sgml: Merge docs inline.
 
 2008-12-28  Matthias Clasen <mclasen@redhat.com>

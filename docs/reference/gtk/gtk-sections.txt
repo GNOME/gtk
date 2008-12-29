@@ -1591,7 +1591,6 @@ gtk_file_selection_get_type
 <FILE>gtkfixed</FILE>
 <TITLE>GtkFixed</TITLE>
 GtkFixed
-GtkFixedChild
 gtk_fixed_new
 gtk_fixed_put
 gtk_fixed_move
@@ -1605,6 +1604,7 @@ GTK_FIXED_CLASS
 GTK_IS_FIXED_CLASS
 GTK_FIXED_GET_CLASS
 <SUBSECTION Private>
+GtkFixedChild
 gtk_fixed_get_type
 </SECTION>
 
