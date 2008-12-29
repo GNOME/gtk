@@ -5906,7 +5906,6 @@ gtk_selection_data_free
 GTK_TYPE_SELECTION_DATA
 GTK_TYPE_TARGET_LIST
 <SUBSECTION Private>
-gtk_selection_data_copy
 gtk_selection_data_get_type
 gtk_target_list_get_type
 </SECTION>
