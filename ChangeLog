@@ -1,5 +1,6 @@
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkscale.c:
 	* gtk/gtkimagemenuitem.c: Doc fixes
 
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>

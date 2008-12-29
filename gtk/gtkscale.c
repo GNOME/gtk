@@ -554,7 +554,7 @@ gtk_scale_get_digits (GtkScale *scale)
 /**
  * gtk_scale_set_draw_value:
  * @scale: a #GtkScale
- * draw_value: %TRUE to draw the value
+ * @draw_value: %TRUE to draw the value
  * 
  * Specifies whether the current value is displayed as a string next 
  * to the slider.
