@@ -2,7 +2,7 @@
 
 	* gtk/building.sgml: It's <envar>, not <envvar>
 
-	* gtk/gtk-sections.txt: Remove duplicates
+	* gtk/gtk-sections.txt: Remove duplicates, pick up misc new api
 
 2008-12-28  Matthias Clasen <mclasen@redhat.com>
 

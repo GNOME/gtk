@@ -2003,6 +2003,7 @@ GtkImagePixmapData
 GtkImageStockData
 GtkImageAnimationData
 GtkImageIconNameData
+GtkImageGIconData
 </SECTION>
 
 <SECTION>
@@ -2015,6 +2016,9 @@ gtk_image_menu_item_new
 gtk_image_menu_item_new_from_stock
 gtk_image_menu_item_new_with_label
 gtk_image_menu_item_new_with_mnemonic
+gtk_image_menu_item_get_use_stock
+gtk_image_menu_item_set_use_stock
+gtk_image_menu_item_set_accel_group
 <SUBSECTION Standard>
 GtkImageMenuItemClass
 GTK_IMAGE_MENU_ITEM
@@ -2439,11 +2443,15 @@ gtk_menu_item_new_with_label
 gtk_menu_item_new_with_mnemonic
 gtk_menu_item_set_right_justified
 gtk_menu_item_get_right_justified
+gtk_menu_item_get_label
+gtk_menu_item_set_label
+gtk_menu_item_get_use_underline
+gtk_menu_item_set_use_underline
 gtk_menu_item_set_submenu
 gtk_menu_item_get_submenu
+gtk_menu_item_remove_submenu
 gtk_menu_item_set_accel_path  
 gtk_menu_item_get_accel_path  
-gtk_menu_item_remove_submenu
 gtk_menu_item_select
 gtk_menu_item_deselect
 gtk_menu_item_activate
@@ -2709,6 +2717,7 @@ gtk_option_menu_get_type
 <FILE>gtkpaned</FILE>
 <TITLE>GtkPaned</TITLE>
 GtkPaned
+gtk_paned_new
 gtk_paned_add1
 gtk_paned_add2
 gtk_paned_gutter_size
@@ -3223,6 +3232,8 @@ gtk_ruler_draw_pos
 <FILE>gtkscale</FILE>
 <TITLE>GtkScale</TITLE>
 GtkScale
+gtk_scale_new
+gtk_scale_new_with_range
 gtk_scale_set_digits
 gtk_scale_set_draw_value
 gtk_scale_set_value_pos
@@ -3265,6 +3276,7 @@ GTK_SCALE_BUTTON_CLASS
 GTK_IS_SCALE_BUTTON_CLASS
 GTK_SCALE_BUTTON_GET_CLASS
 <SUBSECTION Private>
+GtkScaleButtonPrivate
 gtk_scale_button_get_type
 </SECTION>
 
@@ -3272,6 +3284,7 @@ gtk_scale_button_get_type
 <FILE>gtkscrollbar</FILE>
 <TITLE>GtkScrollbar</TITLE>
 GtkScrollbar
+gtk_scrollbar_new
 <SUBSECTION Standard>
 GTK_SCROLLBAR
 GTK_IS_SCROLLBAR
@@ -5800,6 +5813,7 @@ GTK_TYPE_BORDER
 <SUBSECTION Private>
 gtk_style_get_type
 gtk_border_get_type
+GtkThemeEngine
 </SECTION>
 
 <SECTION>
@@ -6166,6 +6180,7 @@ gtk_binding_set_add_path
 <TITLE>Standard Enumerations</TITLE>
 GtkAccelFlags
 GtkAnchorType
+GtkArrowPlacement
 GtkArrowType
 GtkAttachOptions
 GtkButtonBoxStyle
@@ -6647,6 +6662,7 @@ gtk_print_settings_set_n_copies
 GTK_PRINT_SETTINGS_NUMBER_UP
 gtk_print_settings_get_number_up
 gtk_print_settings_set_number_up
+GtkNumberUpLayout
 GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT
 gtk_print_settings_get_number_up_layout
 gtk_print_settings_set_number_up_layout
