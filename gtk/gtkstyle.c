@@ -821,8 +821,10 @@ gtk_style_detach (GtkStyle *style)
  * @style: a #GtkStyle.
  * @returns: @style.
  *
+ * Increase the reference count of @style.
+ * 
  * Deprecated: 2.0: use g_object_ref() instead.
- **/
+ */
 GtkStyle*
 gtk_style_ref (GtkStyle *style)
 {
@@ -833,8 +835,10 @@ gtk_style_ref (GtkStyle *style)
  * gtk_style_unref:
  * @style: a #GtkStyle.
  *
+ * Decrease the reference count of @style.
+ * 
  * Deprecated: 2.0: use g_object_unref() instead.
- **/
+ */
 void
 gtk_style_unref (GtkStyle *style)
 {
