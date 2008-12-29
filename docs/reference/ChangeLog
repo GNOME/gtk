@@ -1,5 +1,9 @@
 2008-12-28  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/tmpl/gtktreesortable.sgml: Small addition
+
+2008-12-28  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/gtk-sections.txt: Move GtkFixedChild, GtkTableChild and
 	GtkTableRowCol to Private
 
