@@ -588,12 +588,14 @@ gtk_scrolled_window_set_policy (GtkScrolledWindow *scrolled_window,
 /**
  * gtk_scrolled_window_get_policy:
  * @scrolled_window: a #GtkScrolledWindow
- * @hscrollbar_policy: location to store the policy for the horizontal scrollbar, or %NULL.
- * @vscrollbar_policy: location to store the policy for the horizontal scrollbar, or %NULL.
+ * @hscrollbar_policy: location to store the policy for the horizontal 
+ *     scrollbar, or %NULL.
+ * @vscrollbar_policy: location to store the policy for the vertical
+ *     scrollbar, or %NULL.
  * 
  * Retrieves the current policy values for the horizontal and vertical
  * scrollbars. See gtk_scrolled_window_set_policy().
- **/
+ */
 void
 gtk_scrolled_window_get_policy (GtkScrolledWindow *scrolled_window,
 				GtkPolicyType     *hscrollbar_policy,
@@ -665,6 +667,7 @@ gtk_scrolled_window_set_placement_set (GtkScrolledWindow *scrolled_window,
  *
  * Sets the placement of the contents with respect to the scrollbars
  * for the scrolled window.
+ * 
  * The default is %GTK_CORNER_TOP_LEFT, meaning the child is
  * in the top left, with the scrollbars underneath and to the right.
  * Other values in #GtkCornerType are %GTK_CORNER_TOP_RIGHT,
@@ -672,7 +675,7 @@ gtk_scrolled_window_set_placement_set (GtkScrolledWindow *scrolled_window,
  *
  * See also gtk_scrolled_window_get_placement() and
  * gtk_scrolled_window_unset_placement().
- **/
+ */
 void
 gtk_scrolled_window_set_placement (GtkScrolledWindow *scrolled_window,
 				   GtkCornerType      window_placement)
