@@ -1,5 +1,7 @@
 2008-12-28  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/building.sgml: It's <envar>, not <envvar>
+
 	* gtk/gtk-sections.txt: Remove duplicates
 
 2008-12-28  Matthias Clasen <mclasen@redhat.com>

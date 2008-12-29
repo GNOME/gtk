@@ -262,7 +262,7 @@ How to compile GTK+ itself
           for mime types that are used by GIO and, indirectly, by GTK+. 
           gdk-pixbuf will use GIO for mime type detection if possible. For this 
           to work, shared-mime-info needs to be installed and 
-          <envvar>XDG_DATA_DIRS</envvar> set accordingly at configure time. 
+          <envar>XDG_DATA_DIRS</envar> set accordingly at configure time. 
           Otherwise, gdk-pixbuf falls back to its built-in mime type detection.
         </para>
       </listitem>
