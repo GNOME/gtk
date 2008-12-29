@@ -3608,16 +3608,9 @@ GTK_TEXT_INDEX
 GTK_TEXT
 GTK_IS_TEXT
 GTK_TYPE_TEXT
-gtk_text_get_type
 GTK_TEXT_CLASS
 GTK_IS_TEXT_CLASS
 GTK_TEXT_GET_CLASS
-<SUBSECTION Standard>
-GTK_TEXT
-GTK_IS_TEXT
-GTK_TYPE_TEXT
-GTK_TEXT_CLASS
-GTK_IS_TEXT_CLASS
 <SUBSECTION Private>
 gtk_text_get_type
 </SECTION>
@@ -3706,20 +3699,6 @@ gtk_text_buffer_unregister_deserialize_format
 gtk_text_buffer_unregister_serialize_format
 
 <SUBSECTION Standard>
-gtk_text_buffer_deserialize
-gtk_text_buffer_deserialize_get_can_create_tags
-gtk_text_buffer_deserialize_set_can_create_tags
-gtk_text_buffer_get_copy_target_list
-gtk_text_buffer_get_deserialize_formats
-gtk_text_buffer_get_paste_target_list
-gtk_text_buffer_get_serialize_formats
-gtk_text_buffer_register_deserialize_format
-gtk_text_buffer_register_deserialize_tagset
-gtk_text_buffer_register_serialize_format
-gtk_text_buffer_register_serialize_tagset
-gtk_text_buffer_serialize
-gtk_text_buffer_unregister_deserialize_format
-gtk_text_buffer_unregister_serialize_format
 GTK_TEXT_BUFFER
 GTK_IS_TEXT_BUFFER
 GTK_TYPE_TEXT_BUFFER
