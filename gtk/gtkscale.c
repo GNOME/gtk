@@ -138,6 +138,29 @@ gtk_scale_class_init (GtkScaleClass *class)
 
   class->get_layout_offsets = gtk_scale_real_get_layout_offsets;
 
+  /**
+   * GtkScale::format-value:
+   * @scale: the object which received the signal
+   * @value: the value to format
+   *
+   * Signal which allows you to change how the scale value is displayed.
+   * Connect a signal handler which returns an allocated string representing 
+   * @value. That string will then be used to display the scale's value.
+   *
+   * Here's an example signal handler which displays a value 1.0 as
+   * with "--&gt;1.0&lt;--".
+   * |[
+   * static gchar*
+   * format_value_callback (GtkScale *scale,
+   *                        gdouble   value)
+   * {
+   *   return g_strdup_printf ("--&gt;&percnt;0.*g&lt;--",
+   *                           gtk_scale_get_digits (scale), value);
+   *  }
+   * ]|
+   *
+   * Return value: allocated string representing @value
+   */
   signals[FORMAT_VALUE] =
     g_signal_new (I_("format-value"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -477,6 +500,16 @@ gtk_scale_new_with_range (GtkOrientation orientation,
                        NULL);
 }
 
+/**
+ * gtk_scale_set_digits:
+ * @scale: a #GtkScale
+ * @digits: the number of decimal places to display, 
+ *     e.g. use 1 to display 1.0, 2 to display 1.00, etc
+ * 
+ * Sets the number of decimal places that are displayed in the value.
+ * Also causes the value of the adjustment to be rounded off to this
+ * number of digits, so the retrieved value matches the value the user saw.
+ */
 void
 gtk_scale_set_digits (GtkScale *scale,
 		      gint      digits)
@@ -502,6 +535,14 @@ gtk_scale_set_digits (GtkScale *scale,
     }
 }
 
+/**
+ * gtk_scale_get_digits:
+ * @scale: a #GtkScale
+ *
+ * Gets the number of decimal places that are displayed in the value.
+ *
+ * Returns: the number of decimal places that are displayed
+ */
 gint
 gtk_scale_get_digits (GtkScale *scale)
 {
@@ -510,6 +551,14 @@ gtk_scale_get_digits (GtkScale *scale)
   return scale->digits;
 }
 
+/**
+ * gtk_scale_set_draw_value:
+ * @scale: a #GtkScale
+ * draw_value: %TRUE to draw the value
+ * 
+ * Specifies whether the current value is displayed as a string next 
+ * to the slider.
+ */
 void
 gtk_scale_set_draw_value (GtkScale *scale,
 			  gboolean  draw_value)
@@ -534,6 +583,15 @@ gtk_scale_set_draw_value (GtkScale *scale,
     }
 }
 
+/**
+ * gtk_scale_get_draw_value:
+ * @scale: a #GtkScale
+ *
+ * Returns whether the current value is displayed as a string 
+ * next to the slider.
+ *
+ * Returns: whether the current value is displayed as a string
+ */
 gboolean
 gtk_scale_get_draw_value (GtkScale *scale)
 {
@@ -542,6 +600,13 @@ gtk_scale_get_draw_value (GtkScale *scale)
   return scale->draw_value;
 }
 
+/**
+ * gtk_scale_set_value_pos:
+ * @scale: a #GtkScale
+ * @pos: the position in which the current value is displayed
+ * 
+ * Sets the position in which the current value is displayed.
+ */
 void
 gtk_scale_set_value_pos (GtkScale        *scale,
 			 GtkPositionType  pos)
@@ -560,6 +625,14 @@ gtk_scale_set_value_pos (GtkScale        *scale,
     }
 }
 
+/**
+ * gtk_scale_get_value_pos:
+ * @scale: a #GtkScale
+ *
+ * Gets the position in which the current value is displayed.
+ *
+ * Returns: the position in which the current value is displayed
+ */
 GtkPositionType
 gtk_scale_get_value_pos (GtkScale *scale)
 {
@@ -831,7 +904,7 @@ gtk_scale_real_get_layout_offsets (GtkScale *scale,
  * if no user signal handlers, falls back to a default format.
  * 
  * Return value: formatted value
- **/
+ */
 gchar*
 _gtk_scale_format_value (GtkScale *scale,
                          gdouble   value)
@@ -873,7 +946,7 @@ gtk_scale_finalize (GObject *object)
  *    if the #GtkScale:draw-value property is %FALSE.
  *   
  * Since: 2.4
- **/
+ */
 PangoLayout *
 gtk_scale_get_layout (GtkScale *scale)
 {
@@ -914,7 +987,7 @@ gtk_scale_get_layout (GtkScale *scale)
  * values are undefined.
  *
  * Since: 2.4
- **/
+ */
 void 
 gtk_scale_get_layout_offsets (GtkScale *scale,
                               gint     *x,

@@ -1,6 +1,10 @@
 2008-12-28  Matthias Clasen <mclasen@redhat.com>
 
-	* docs/reference/gtk/gtk-sections.txt: Remove overridden INCLUDEs
+	* gtk/tmpl/gtkscale.sgml: Merge docs inline.
+
+2008-12-28  Matthias Clasen <mclasen@redhat.com>
+
+	* docs/reference/gtk/gtk-sections.txt: Remove overridden INCLUDE
 
 	* gtk/tmpl/gtkfontsel.sgml:
 	* gtk/tmpl/gtkeditable.sgml: Merge docs inline.
