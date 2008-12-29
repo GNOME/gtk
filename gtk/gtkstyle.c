@@ -1430,6 +1430,21 @@ gtk_draw_focus (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_focus (style, window, GTK_STATE_NORMAL, NULL, NULL, NULL, x, y, width, height);
 }
 
+/**
+ * gtk_draw_slider:
+ * @style: a #GtkStyle
+  @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: a shadow
+ * @x: the x origin of the rectangle in which to draw a slider
+ * @y: the y origin of the rectangle in which to draw a slider
+ * @width: the width of the rectangle in which to draw a slider
+ * @height: the height of the rectangle in which to draw a slider
+ * @orientation: the orientation to be used
+ *
+ * Draws a slider in the given rectangle on @window using the
+ * given style and orientation.
+ */
 void 
 gtk_draw_slider (GtkStyle      *style,
 		 GdkWindow     *window,
@@ -1509,6 +1524,19 @@ gtk_draw_expander (GtkStyle        *style,
                                               x, y, expander_style);
 }
 
+/**
+ * gtk_draw_layout:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @use_text: whether to use the text or foreground
+ *            graphics context of @style
+ * @x: x origin
+ * @y: y origin
+ * @layout: the layout to draw
+ * 
+ * Draws a layout on @window using the given parameters.
+ */
 void
 gtk_draw_layout (GtkStyle        *style,
                  GdkWindow       *window,

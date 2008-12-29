@@ -1,5 +1,9 @@
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkstyle.c: Doc additions
+
+2008-12-28  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk[hv]scrollbar.c: Document gtk_[hv]scrollbar_new.
 
 2008-12-28  Matthias Clasen  <mclasen@redhat.com>
