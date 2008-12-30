@@ -297,13 +297,15 @@ A value of this type is returned by gtk_print_operation_run().
 
 <!-- ##### ENUM GtkPrintError ##### -->
 <para>
-
+Error codes that identify various errors that can occur while
+using the GTK+ printing support.
 </para>
 
-@GTK_PRINT_ERROR_GENERAL: 
-@GTK_PRINT_ERROR_INTERNAL_ERROR: 
-@GTK_PRINT_ERROR_NOMEM: 
-@GTK_PRINT_ERROR_INVALID_FILE: 
+@GTK_PRINT_ERROR_GENERAL: An unspecified error occurred.
+@GTK_PRINT_ERROR_INTERNAL_ERROR: An internal error occurred.
+@GTK_PRINT_ERROR_NOMEM: A memory allocation failed.
+@GTK_PRINT_ERROR_INVALID_FILE: An error occurred while loading a page setup
+    or paper size from a key file.
 
 <!-- ##### MACRO GTK_PRINT_ERROR ##### -->
 <para>
@@ -468,6 +470,22 @@ The #GQuark used for #GtkPrintError errors.
 
 
 <!-- ##### FUNCTION gtk_print_operation_cancel ##### -->
+<para>
+
+</para>
+
+@op: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_draw_page_finish ##### -->
+<para>
+
+</para>
+
+@op: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_set_defer_drawing ##### -->
 <para>
 
 </para>
