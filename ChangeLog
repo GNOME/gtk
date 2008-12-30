@@ -1,5 +1,10 @@
+2008-12-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprintoperationpreview.c: Doc additions
+
 2008-12-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c:
 	* gtk/gtklabel.c:
 	* gtk/gtkentry.c:
 	* gtk/gtktextview.c:
