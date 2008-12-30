@@ -1,5 +1,6 @@
 2008-12-30  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkwidget.sgml:
 	* gtk/tmpl/gtkprintoperation.sgml: Additions
 
 	* gtk/tmpl/gtkprintunixdialog.sgml: Document the preview

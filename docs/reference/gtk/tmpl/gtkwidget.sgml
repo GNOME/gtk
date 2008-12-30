@@ -2409,7 +2409,7 @@ This function is deprecated; it does nothing.
 This function is deprecated; it does nothing.
 </para>
 
-@visual: 
+@visual: a visual
 
 
 <!-- ##### FUNCTION gtk_widget_set_child_visible ##### -->
@@ -2426,7 +2426,7 @@ This function is deprecated; it does nothing.
 This function is deprecated; it does nothing.
 </para>
 
-@visual: 
+@visual: a visual
 
 
 <!-- ##### FUNCTION gtk_widget_set_size_request ##### -->
@@ -2444,8 +2444,8 @@ This function is deprecated; it does nothing.
 This function is deprecated; it does nothing.
 </para>
 
-@widget: 
-@visual: 
+@widget: a #GtkWidget
+@visual: a visual
 
 
 <!-- ##### FUNCTION gtk_widget_thaw_child_notify ##### -->
