@@ -174,7 +174,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   /**
    * GtkMenuBar:child-pack-direction:
    *
-   * The pack direction of the menubar. It determines how
+   * The child pack direction of the menubar. It determines how
    * the widgets contained in child menuitems are arranged.
    *
    * Since: 2.8
@@ -828,13 +828,13 @@ gtk_menu_bar_move_current (GtkMenuShell         *menu_shell,
  * gtk_menu_bar_get_pack_direction:
  * @menubar: a #GtkMenuBar
  * 
- * Retrieves the current pack direction of the menubar. See
- * gtk_menu_bar_set_pack_direction().
+ * Retrieves the current pack direction of the menubar. 
+ * See gtk_menu_bar_set_pack_direction().
  *
  * Return value: the pack direction
  *
  * Since: 2.8
- **/
+ */
 GtkPackDirection
 gtk_menu_bar_get_pack_direction (GtkMenuBar *menubar)
 {
@@ -850,13 +850,13 @@ gtk_menu_bar_get_pack_direction (GtkMenuBar *menubar)
 
 /**
  * gtk_menu_bar_set_pack_direction:
- * @menubar: a #GtkMenuBar.
- * @pack_dir: a new #GtkPackDirection.
+ * @menubar: a #GtkMenuBar
+ * @pack_dir: a new #GtkPackDirection
  * 
  * Sets how items should be packed inside a menubar.
  * 
  * Since: 2.8
- **/
+ */
 void
 gtk_menu_bar_set_pack_direction (GtkMenuBar       *menubar,
                                  GtkPackDirection  pack_dir)
@@ -885,13 +885,13 @@ gtk_menu_bar_set_pack_direction (GtkMenuBar       *menubar,
  * gtk_menu_bar_get_child_pack_direction:
  * @menubar: a #GtkMenuBar
  * 
- * Retrieves the current child pack direction of the menubar. See
- * gtk_menu_bar_set_child_pack_direction().
+ * Retrieves the current child pack direction of the menubar.
+ * See gtk_menu_bar_set_child_pack_direction().
  *
  * Return value: the child pack direction
  *
  * Since: 2.8
- **/
+ */
 GtkPackDirection
 gtk_menu_bar_get_child_pack_direction (GtkMenuBar *menubar)
 {
@@ -907,13 +907,13 @@ gtk_menu_bar_get_child_pack_direction (GtkMenuBar *menubar)
 
 /**
  * gtk_menu_bar_set_child_pack_direction:
- * @menubar: a #GtkMenuBar.
- * @child_pack_dir: a new #GtkPackDirection.
+ * @menubar: a #GtkMenuBar
+ * @child_pack_dir: a new #GtkPackDirection
  * 
  * Sets how widgets should be packed inside the children of a menubar.
  * 
  * Since: 2.8
- **/
+ */
 void
 gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menubar,
                                        GtkPackDirection  child_pack_dir)

@@ -1566,13 +1566,11 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 
 /**
  * gtk_font_selection_dialog_new:
- * @title: a pointer to a string
+ * @title: the title of the dialog window 
  *
- * The @title is used to set the title of the #GtkFontSelectionDialog
- * returned. This #GtkDialog is specifically catered with widgets for
- * selecting a font from those installed. 
+ * Creates a new #GtkFontSelectionDialog.
  *
- * Return value: a new #GtkFontSelectionDialog.
+ * Return value: a new #GtkFontSelectionDialog
  */
 GtkWidget*
 gtk_font_selection_dialog_new (const gchar *title)
@@ -1695,8 +1693,10 @@ gtk_font_selection_dialog_get_font_name (GtkFontSelectionDialog *fsd)
  * gtk_font_selection_dialog_get_font:
  * @fsd: a #GtkFontSelectionDialog
  *
+ * Gets the currently-selected font.
+ *
  * Return value: the #GdkFont from the #GtkFontSelection for the
- * currently selected font in the dialog.
+ *     currently selected font in the dialog, or %NULL if no font is selected
  *
  * Deprecated: 2.0: Use gtk_font_selection_dialog_get_font_name() instead.
  */
@@ -1711,7 +1711,7 @@ gtk_font_selection_dialog_get_font (GtkFontSelectionDialog *fsd)
 /**
  * gtk_font_selection_dialog_set_font_name:
  * @fsd: a #GtkFontSelectionDialog
- * @fontname: a pointer to a string
+ * @fontname: a font name like "Helvetica 12" or "Times Bold 18"
  *
  * Sets the currently selected font. 
  * 
@@ -1732,12 +1732,11 @@ gtk_font_selection_dialog_set_font_name (GtkFontSelectionDialog *fsd,
  * gtk_font_selection_dialog_get_preview_text:
  * @fsd: a #GtkFontSelectionDialog
  *
- * The text returned is the preview text used to show how the selected
- * font looks.  
- *
- * Return value: pointer to the preview text string. This string
- *     points to internally allocated storage in the widget and must not
- *     be freed, modified or stored. 
+ * Gets the text displayed in the preview area.
+ * 
+ * Return value: the text displayed in the preview area. 
+ *     This string is owned by the widget and should not be 
+ *     modified or freed 
  */
 G_CONST_RETURN gchar*
 gtk_font_selection_dialog_get_preview_text (GtkFontSelectionDialog *fsd)
@@ -1750,9 +1749,9 @@ gtk_font_selection_dialog_get_preview_text (GtkFontSelectionDialog *fsd)
 /**
  * gtk_font_selection_dialog_set_preview_text:
  * @fsd: a #GtkFontSelectionDialog
- * @text: a pointer to a string
+ * @text: the text to display in the preview area
  *
- * The @text is used to show how the selected font looks.
+ * Sets the text displayed in the preview area. 
  */
 void
 gtk_font_selection_dialog_set_preview_text (GtkFontSelectionDialog *fsd,

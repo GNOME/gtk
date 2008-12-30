@@ -47,6 +47,14 @@ gtk_hscrollbar_init (GtkHScrollbar *hscrollbar)
                                   GTK_ORIENTATION_HORIZONTAL);
 }
 
+/**
+ * gtk_hscrollbar_new:
+ * @adjustment: the #GtkAdjustment to use, or %NULL to create a new adjustment
+ *
+ * Creates a new horizontal scrollbar.
+ *
+ * Returns: the new #GtkHScrollbar
+ */
 GtkWidget *
 gtk_hscrollbar_new (GtkAdjustment *adjustment)
 {
