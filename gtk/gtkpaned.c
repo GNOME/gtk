@@ -1888,6 +1888,9 @@ static void
 get_child_panes (GtkWidget  *widget,
 		 GList     **panes)
 {
+  if (!GTK_WIDGET_REALIZED (widget))
+    return;
+
   if (GTK_IS_PANED (widget))
     {
       GtkPaned *paned = GTK_PANED (widget);
@@ -1899,7 +1902,7 @@ get_child_panes (GtkWidget  *widget,
   else if (GTK_IS_CONTAINER (widget))
     {
       gtk_container_forall (GTK_CONTAINER (widget),
-			     (GtkCallback)get_child_panes, panes);
+                            (GtkCallback)get_child_panes, panes);
     }
 }
 

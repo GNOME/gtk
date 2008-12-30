@@ -1,5 +1,12 @@
 2008-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 558694 – Paned window splitter keynav broken
+
+	* gtk/gtkpaned.c (get_child_panes): Don't add unrealized
+	widgets.
+
+2008-12-30  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkstyle.c:
 	* gtk/gtkmenutooltbutton.c:
 	* gtk/gtkprintoperationpreview.c: Doc additions
