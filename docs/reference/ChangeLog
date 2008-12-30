@@ -1,5 +1,11 @@
 2008-12-30  Matthias Clasen <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkorientable.sgml:
+	* gtk/tmpl/gtkvscrollbar.sgml:
+	* gtk/tmpl/gtkhsv.sgml: Add short/long description.
+
+2008-12-30  Matthias Clasen <mclasen@redhat.com>
+
 	* gtk/tmpl/gtkwidget.sgml:
 	* gtk/tmpl/gtkprintoperation.sgml: Additions
 
