@@ -855,6 +855,17 @@ gtk_style_realize (GtkStyle    *style,
   g_signal_emit (style, realize_signal, 0);
 }
 
+/**
+ * gtk_style_lookup_icon_set:
+ * @style: a #GtkStyle
+ * @stock_id: an icon name
+ *
+ * Looks up @stock_id in the icon factories associated with @style
+ * and the default icon factory, returning an icon set if found,
+ * otherwise %NULL.
+ *
+ * Return value: icon set of @stock_id
+ */
 GtkIconSet*
 gtk_style_lookup_icon_set (GtkStyle   *style,
                            const char *stock_id)
