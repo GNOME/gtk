@@ -796,6 +796,17 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 
+  /**
+   * GtkIconView::item-activated:
+   * @iconview: the object on which the signal is emitted
+   * @path: the #GtkTreePath for the activated item
+   *
+   * The ::item-activated signal is emitted when the method
+   * gtk_icon_view_item_activated() is called or the user double 
+   * clicks an item. It is also emitted when a non-editable item
+   * is selected and one of the keys: Space, Return or Enter is
+   * pressed.
+   */
   icon_view_signals[ITEM_ACTIVATED] =
     g_signal_new (I_("item-activated"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -806,6 +817,13 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_TREE_PATH);
 
+  /**
+   * GtkIconView::selection-changed:
+   * @iconview: the object on which the signal is emitted
+   *
+   * The ::selection-changed signal is emitted when the selection
+   * (i.e. the set of selected items) changes.
+   */
   icon_view_signals[SELECTION_CHANGED] =
     g_signal_new (I_("selection-changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -815,6 +833,19 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   
+  /**
+   * GtkIconView::select-all:
+   * @iconview: the object on which the signal is emitted
+   *
+   * A <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user selects all items.
+   *
+   * Applications should not connect to it, but may emit it with
+   * g_signal_emit_by_name() if they need to control selection
+   * programmatically.
+   * 
+   * The default binding for this signal is Ctrl-a.
+   */
   icon_view_signals[SELECT_ALL] =
     g_signal_new (I_("select-all"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -824,6 +855,19 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
   
+  /**
+   * GtkIconView::unselect-all:
+   * @iconview: the object on which the signal is emitted
+   *
+   * A <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user unselects all items.
+   *
+   * Applications should not connect to it, but may emit it with
+   * g_signal_emit_by_name() if they need to control selection
+   * programmatically.
+   * 
+   * The default binding for this signal is Ctrl-Shift-a. 
+   */
   icon_view_signals[UNSELECT_ALL] =
     g_signal_new (I_("unselect-all"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -833,6 +877,20 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkIconView::select-cursor-item:
+   * @iconview: the object on which the signal is emitted
+   *
+   * A <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user selects the item that is currently
+   * focused.
+   *
+   * Applications should not connect to it, but may emit it with
+   * g_signal_emit_by_name() if they need to control selection
+   * programmatically.
+   * 
+   * There is no default binding for this signal.
+   */
   icon_view_signals[SELECT_CURSOR_ITEM] =
     g_signal_new (I_("select-cursor-item"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -842,6 +900,21 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkIconView::toggle-cursor-item:
+   * @iconview: the object on which the signal is emitted
+   *
+   * A <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user toggles whether the currently
+   * focused item is selected or not. The exact effect of this 
+   * depend on the selection mode.
+   *
+   * Applications should not connect to it, but may emit it with
+   * g_signal_emit_by_name() if they need to control selection
+   * programmatically.
+   * 
+   * There is no default binding for this signal is Ctrl-Space.
+   */
   icon_view_signals[TOGGLE_CURSOR_ITEM] =
     g_signal_new (I_("toggle-cursor-item"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -851,6 +924,20 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkIconView::activate-cursor-item:
+   * @iconview: the object on which the signal is emitted
+   *
+   * A <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user activates the currently 
+   * focused item. 
+   *
+   * Applications should not connect to it, but may emit it with
+   * g_signal_emit_by_name() if they need to control activation
+   * programmatically.
+   * 
+   * The default bindings for this signal are Space, Return and Enter.
+   */
   icon_view_signals[ACTIVATE_CURSOR_ITEM] =
     g_signal_new (I_("activate-cursor-item"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -860,6 +947,30 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
   
+  /**
+   * GtkIconView::move-cursor:
+   * @iconview: the object which received the signal
+   * @step: the granularity of the move, as a #GtkMovementStep
+   * @count: the number of @step units to move
+   *
+   * The ::move-cursor signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when the user initiates a cursor movement.
+   *
+   * Applications should not connect to it, but may emit it with
+   * g_signal_emit_by_name() if they need to control the cursor
+   * programmatically.
+   *
+   * The default bindings for this signal include
+   * <itemizedlist>
+   * <listitem>Arrow keys which move by individual steps</listitem>
+   * <listitem>Home/End keys which move to the first/last item</listitem>
+   * <listitem>PageUp/PageDown which move by "pages"</listitem>
+   * </itemizedlist>
+   *
+   * All of these will extend the selection when combined with
+   * the Shift modifier.
+   */
   icon_view_signals[MOVE_CURSOR] =
     g_signal_new (I_("move-cursor"),
 		  G_TYPE_FROM_CLASS (gobject_class),
