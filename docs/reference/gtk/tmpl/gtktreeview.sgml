@@ -1392,13 +1392,14 @@ returns.
 
 <!-- ##### ENUM GtkTreeViewGridLines ##### -->
 <para>
-
+Used to indicate which grid lines to draw in a tree view.
 </para>
 
-@GTK_TREE_VIEW_GRID_LINES_NONE: 
-@GTK_TREE_VIEW_GRID_LINES_HORIZONTAL: 
-@GTK_TREE_VIEW_GRID_LINES_VERTICAL: 
-@GTK_TREE_VIEW_GRID_LINES_BOTH: 
+@GTK_TREE_VIEW_GRID_LINES_NONE: No grid lines.
+@GTK_TREE_VIEW_GRID_LINES_HORIZONTAL: Horizontal grid lines.
+@GTK_TREE_VIEW_GRID_LINES_VERTICAL: Vertical grid lines.
+@GTK_TREE_VIEW_GRID_LINES_BOTH: Horizontal and vertical grid lines.
+
 
 <!-- ##### FUNCTION gtk_tree_view_get_grid_lines ##### -->
 <para>

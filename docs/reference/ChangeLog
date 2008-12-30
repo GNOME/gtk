@@ -1,3 +1,19 @@
+2008-12-29  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/tmpl/gtktreeview.sgml: Document GtkTreeViewGridLines
+
+2008-12-29  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkprintsettings.sgml: Document NumberUpLayout
+	* gtk/images/layout-*.png: n-up page layout images
+	* gtk/Makefile.am: Glue
+
+2008-12-29  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkenums.sgml:
+	* gtk/tmpl/gtkmain.sgml:
+	* gtk/tmpl/gtktypeutils.sgml: Additions
+
 2008-12-28  Matthias Clasen <mclasen@redhat.com>
 	
 	* gtk/tmpl/gtkprintunixdialog.sgml: Document capabilities	
