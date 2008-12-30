@@ -217,6 +217,19 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
   widget_class->state_changed = gtk_menu_tool_button_state_changed;
   toolitem_class->toolbar_reconfigured = gtk_menu_tool_button_toolbar_reconfigured;
 
+  /**
+   * GtkMenuToolButton::show-menu:
+   * @button: the object on which the signal is emitted
+   *
+   * The ::show-menu signal is emitted before the menu is shown.
+   *
+   * It can be used to populate the menu on demand, using 
+   * gtk_menu_tool_button_get_menu(). 
+
+   * Note that even if you populate the menu dynamically in this way, 
+   * you must set an empty menu on the #GtkMenuToolButton beforehand,
+   * since the arrow is made insensitive if the menu is not set.
+   */
   signals[SHOW_MENU] =
     g_signal_new (I_("show-menu"),
                   G_OBJECT_CLASS_TYPE (klass),

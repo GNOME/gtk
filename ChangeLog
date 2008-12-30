@@ -1,5 +1,6 @@
 2008-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenutooltbutton.c:
 	* gtk/gtkprintoperationpreview.c: Doc additions
 
 2008-12-29  Matthias Clasen  <mclasen@redhat.com>
