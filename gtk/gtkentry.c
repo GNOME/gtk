@@ -7609,7 +7609,7 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
  *
  * To handle the drag operation, you need to connect to the usual
  * #GtkWidget::drag-data-get (or possibly #GtkWidget::drag-data-delete)
- * signal, and use gtk_icon_entry_get_current_icon_drag_source() in
+ * signal, and use gtk_entry_get_current_icon_drag_source() in
  * your signal handler to find out if the drag was started from
  * an icon.
  */
