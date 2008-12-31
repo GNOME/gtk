@@ -1,6 +1,11 @@
 2008-12-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:
+	* gtk/gtkruler.[hc]: Some more
+
+2008-12-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
 	* gtk/gtkpaned.[hc]:
 	* gtk/gtkscale.[hc]:
 	* gtk/gtkscrollbar.[hc]: 

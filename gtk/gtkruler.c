@@ -278,6 +278,7 @@ gtk_ruler_get_property (GObject      *object,
     }
 }
 
+#if 0
 /**
  * gtk_ruler_new:
  * @orientation: the ruler's orientation.
@@ -295,6 +296,7 @@ gtk_ruler_new (GtkOrientation orientation)
                        "orientation", orientation,
                        NULL);
 }
+#endif
 
 void
 gtk_ruler_set_metric (GtkRuler      *ruler,
