@@ -2488,8 +2488,6 @@ gtk_entry_realize (GtkWidget *widget)
             realize_icon_info (widget, i);
         }
     }
-
-  gtk_widget_queue_resize (widget);
 }
 
 static void
@@ -6191,8 +6189,6 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
 
   if (GDK_IS_WINDOW (icon_info->window))
     gdk_window_show (icon_info->window);
-
-  gtk_widget_queue_resize (GTK_WIDGET (entry));
 }
 
 
@@ -7088,6 +7084,9 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
   
+  if (GTK_WIDGET_VISIBLE (entry))
+    gtk_widget_queue_resize (GTK_WIDGET (entry));
+
   g_object_thaw_notify (G_OBJECT (entry));
 }
 
@@ -7148,6 +7147,9 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
     }
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
+
+  if (GTK_WIDGET_VISIBLE (entry))
+    gtk_widget_queue_resize (GTK_WIDGET (entry));
 
   g_object_thaw_notify (G_OBJECT (entry));
 }
@@ -7213,6 +7215,9 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
 
+  if (GTK_WIDGET_VISIBLE (entry))
+    gtk_widget_queue_resize (GTK_WIDGET (entry));
+
   g_object_thaw_notify (G_OBJECT (entry));
 }
 
@@ -7273,6 +7278,9 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
     }
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
+
+  if (GTK_WIDGET_VISIBLE (entry))
+    gtk_widget_queue_resize (GTK_WIDGET (entry));
 
   g_object_thaw_notify (G_OBJECT (entry));
 }

@@ -1,5 +1,9 @@
 2008-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c: Avoid size allocation loops.
+
+2008-12-30  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c: Fix errors in property definitions and
 	get_property implementation.
 
