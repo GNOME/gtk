@@ -77,10 +77,10 @@ stop_search (GtkButton *button,
 }
 
 static void
-icon_pressed_cb (GtkEntry       *entry, 
-                 gint            position,
-                 GdkEventButton *event,
-                 gpointer        data)
+icon_press_cb (GtkEntry       *entry, 
+               gint            position,
+               GdkEventButton *event,
+               gpointer        data)
 {
   if (position == GTK_ENTRY_ICON_PRIMARY)
     gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 
@@ -223,8 +223,8 @@ do_search_entry (GtkWidget *do_widget)
                                      GTK_STOCK_CLEAR);
       text_changed_cb (GTK_ENTRY (entry), NULL, find_button);
 
-      g_signal_connect (entry, "icon-pressed", 
-                        G_CALLBACK (icon_pressed_cb), NULL);
+      g_signal_connect (entry, "icon-press", 
+                        G_CALLBACK (icon_press_cb), NULL);
       g_signal_connect (entry, "notify::text", 
                         G_CALLBACK (text_changed_cb), find_button);
       g_signal_connect (entry, "activate", 

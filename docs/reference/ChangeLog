@@ -1,3 +1,10 @@
+2008-12-31  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/migrating-GtkEntry-icons.sgml: Add a section about
+	signals.
+
+	* gtk/tmpl/gtkentry.sgml: Update to new signal names
+
 2008-12-30  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkorientable.sgml:

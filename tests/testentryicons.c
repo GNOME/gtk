@@ -41,6 +41,20 @@ clear_pressed (GtkEntry *entry, gint icon, GdkEvent *event, gpointer data)
 }
 
 static void
+drag_begin_cb (GtkWidget      *widget,
+               GdkDragContext *context,
+               gpointer        user_data)
+{
+  gint pos;
+
+  pos = gtk_entry_get_current_icon_drag_source (GTK_ENTRY (widget));
+  if (pos != -1)
+    gtk_drag_set_icon_stock (context, GTK_STOCK_INFO, 2, 2);
+
+  g_print ("drag begin %d\n", pos);
+}
+
+static void
 drag_data_get_cb (GtkWidget        *widget,
                   GdkDragContext   *context,
                   GtkSelectionData *data,
@@ -154,6 +168,8 @@ main (int argc, char **argv)
   gtk_entry_set_icon_drag_source (GTK_ENTRY (entry),
                                   GTK_ENTRY_ICON_PRIMARY,
                                   tlist, GDK_ACTION_COPY); 
+  g_signal_connect_after (entry, "drag-begin", 
+                          G_CALLBACK (drag_begin_cb), NULL);
   g_signal_connect (entry, "drag-data-get", 
                     G_CALLBACK (drag_data_get_cb), NULL);
   gtk_target_list_unref (tlist);
@@ -184,7 +200,7 @@ main (int argc, char **argv)
 				 GTK_ENTRY_ICON_SECONDARY,
 				 GTK_STOCK_CLEAR);
 
-  g_signal_connect (entry, "icon-pressed", G_CALLBACK (clear_pressed), NULL);
+  g_signal_connect (entry, "icon-press", G_CALLBACK (clear_pressed), NULL);
 
   button = gtk_button_new_with_label ("Properties");
   gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3,

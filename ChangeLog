@@ -1,5 +1,14 @@
 2008-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c: Rename the icon signals to ::icon-press and
+	::icon-release to avoid clashes with the existing SexyIconEntry
+	signals. Also annotate the GdkEvent parameters as static-scope.
+
+	* tests/testentryicons.c: Adapt
+	* demos/gtk-demo/search-entry.c: Adapt
+	
+2008-12-30  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 565846 – "va_end(args);" should be added into gtk_tree_store_new
 
 	* gtk/gtktreestore.c (gtk_tree_store_new): Add a missing

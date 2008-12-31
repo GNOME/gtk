@@ -34,7 +34,7 @@ icons can be activatable by clicking, can be set up as drag source and
 can have tooltips. To add an icon, use gtk_entry_set_icon_from_gicon() or
 one of the various other functions that set an icon from a stock id, an
 icon name or a pixbuf. To trigger an action when the user clicks an icon,
-connect to the #GtkEntry::icon-pressed signal. To allow DND operations
+connect to the #GtkEntry::icon-press signal. To allow DND operations
 from an icon, use gtk_entry_set_icon_drag_source(). To set a tooltip on 
 an icon, use gtk_entry_set_icon_tooltip_text() or the corresponding function
 for markup.
@@ -737,11 +737,11 @@ The #GtkEntry-struct struct contains only private data.
 
 <!-- ##### ENUM GtkEntryIconPosition ##### -->
 <para>
-
+Specifies the side of the entry at which an icon is placed.
 </para>
 
-@GTK_ENTRY_ICON_PRIMARY: 
-@GTK_ENTRY_ICON_SECONDARY: 
+@GTK_ENTRY_ICON_PRIMARY: At the beginning of the entry (depending on the text direction).
+@GTK_ENTRY_ICON_SECONDARY: At the end of the entry (depending on the text direction).
 
 <!-- ##### FUNCTION gtk_entry_set_icon_from_pixbuf ##### -->
 <para>

@@ -25,6 +25,58 @@ gtk_entry_set_icon_from_stock (entry, GTK_ICON_ENTRY_PRIMARY, GTK_STOCK_NEW);
   </para>
 
   <para>
+    The signals SexyIconEntry::icon-pressed and SexyIconEntry::icon-released
+    have been renamed to #GtkEntry::icon-press and #GtkEntry::icon-release
+    to avoid problems due to signal name clashes. Also, the signature of the
+    signals has changed from
+<informalexample><programlisting>
+void (*icon_pressed) (SexyIconEntry         *entry, 
+                      SexyIconEntryPosition  icon_pos,
+                      int                    button)
+</programlisting></informalexample>
+to
+<informalexample><programlisting>
+void (*icon_press) (GtkEntry              *entry, 
+                    GtkEntryIconPosition  icon_pos,
+                    GdkEventButton       *event)
+</programlisting></informalexample>
+    The new signature has the advantage that the signal handler can use
+    the timestamp of the event, e.g. for passing it to gtk_menu_popup().
+    When adapting an existing signal handler to the new signature, you 
+    should note that the button number is easily available as @event->button,
+    as shown in the following example:
+<informalexample><programlisting>
+static void
+icon_pressed_cb (SexyIconEntry         *entry,
+                 SexyIconEntryPosition  position,
+                 int                    button,
+                 gpointer               data)
+{
+  GtkMenu *menu = data;
+
+  if (position == SEXY_ICON_ENTRY_PRIMARY)
+    gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+                    button, GDK_CURRENT_TIME);
+} 
+</programlisting></informalexample>
+    can be ported as:
+<informalexample><programlisting>
+static void
+icon_press_cb (GtkEntry             *entry,
+               GtkEntryIconPosition  position,
+               GdkEventButton       *event,
+               gpointer              data)
+{
+  GtkMenu *menu = data;
+
+  if (position == GTK_ENTRY_ICON_PRIMARY)
+    gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+                    event->button, event->time);
+} 
+</programlisting></informalexample>
+  </para>
+
+  <para>
     Another difference is that SexyIconEntry offers manual control of
     the icon prelighting, via sexy_icon_entry_set_icon_highlight(). 
     #GtkEntry prelights automatically when appropriate, depending on 

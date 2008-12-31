@@ -172,8 +172,8 @@ enum {
   COPY_CLIPBOARD,
   PASTE_CLIPBOARD,
   TOGGLE_OVERWRITE,
-  ICON_PRESSED,
-  ICON_RELEASED,
+  ICON_PRESS,
+  ICON_RELEASE,
   LAST_SIGNAL
 };
 
@@ -1001,7 +1001,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Whether the primary icon is activatable.
    *
-   * GTK+ emits the #GtkEntry::icon-pressed and #GtkEntry::icon-released 
+   * GTK+ emits the #GtkEntry::icon-press and #GtkEntry::icon-release 
    * signals only on sensitive, activatable icons. 
    *
    * Sensitive, but non-activatable icons can be used for purely 
@@ -1022,7 +1022,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Whether the secondary icon is activatable.
    *
-   * GTK+ emits the #GtkEntry::icon-pressed and #GtkEntry::icon-released 
+   * GTK+ emits the #GtkEntry::icon-press and #GtkEntry::icon-release 
    * signals only on sensitive, activatable icons.
    *
    * Sensitive, but non-activatable icons can be used for purely 
@@ -1045,7 +1045,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Whether the primary icon is sensitive.
    *
    * An insensitive icon appears grayed out. GTK+ does not emit the 
-   * #GtkEntry::icon-pressed and #GtkEntry::icon-released signals and 
+   * #GtkEntry::icon-press and #GtkEntry::icon-release signals and 
    * does not allow DND from insensitive icons.
    *
    * An icon should be set insensitive if the action that would trigger
@@ -1067,7 +1067,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Whether the secondary icon is sensitive.
    *
    * An insensitive icon appears grayed out. GTK+ does not emit the 
-   * #GtkEntry::icon-pressed and #GtkEntry::icon-released signals and 
+   * #GtkEntry::icon-press and #GtkEntry::icon-release signals and 
    * does not allow DND from insensitive icons.
    *
    * An icon should be set insensitive if the action that would trigger
@@ -1335,18 +1335,18 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_TYPE_NONE, 0);
 
   /**
-   * GtkEntry::icon-pressed:
+   * GtkEntry::icon-press:
    * @entry: The entry on which the signal is emitted
    * @icon_pos: The position of the clicked icon
    * @event: the button press event
    *
-   * The ::icon-pressed signal is emitted when an activatable icon 
+   * The ::icon-press signal is emitted when an activatable icon 
    * is clicked.
    *
    * Since: 2.16
    */
-  signals[ICON_PRESSED] =
-    g_signal_new (I_("icon-pressed"),
+  signals[ICON_PRESS] =
+    g_signal_new (I_("icon-press"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   0,
@@ -1354,21 +1354,21 @@ gtk_entry_class_init (GtkEntryClass *class)
                   _gtk_marshal_VOID__ENUM_BOXED,
                   G_TYPE_NONE, 2,
                   GTK_TYPE_ENTRY_ICON_POSITION,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   
   /**
-   * GtkEntry::icon-released:
+   * GtkEntry::icon-release:
    * @entry: The entry on which the signal is emitted
    * @icon_pos: The position of the clicked icon
    * @event: the button release event
    *
-   * The ::icon-released signal is emitted on the button release from a
+   * The ::icon-release signal is emitted on the button release from a
    * mouse click over an activatable icon.
    *
    * Since: 2.16
    */
-  signals[ICON_RELEASED] =
-    g_signal_new (I_("icon-released"),
+  signals[ICON_RELEASE] =
+    g_signal_new (I_("icon-release"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   0,
@@ -1376,7 +1376,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                   _gtk_marshal_VOID__ENUM_BOXED,
                   G_TYPE_NONE, 2,
                   GTK_TYPE_ENTRY_ICON_POSITION,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
 
   /*
@@ -3239,7 +3239,7 @@ gtk_entry_button_press (GtkWidget      *widget,
           icon_info->pressed = TRUE;
 
           if (!icon_info->nonactivatable)
-            g_signal_emit (entry, signals[ICON_PRESSED], 0, i, event);
+            g_signal_emit (entry, signals[ICON_PRESS], 0, i, event);
 
           return TRUE;
         }
@@ -3427,7 +3427,7 @@ gtk_entry_button_release (GtkWidget      *widget,
             }
 
           if (!icon_info->nonactivatable)
-            g_signal_emit (entry, signals[ICON_RELEASED], 0, i, event);
+            g_signal_emit (entry, signals[ICON_RELEASE], 0, i, event);
 
           return TRUE;
         }
