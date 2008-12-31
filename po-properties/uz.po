@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: uz@cyrillic\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-12-21 20:51+0500\n"
-"PO-Revision-Date: 2008-12-29 08:08+0500\n"
+"PO-Revision-Date: 2008-12-30 22:10+0500\n"
 "Last-Translator: Nurali Abdurahmonov <mavnur@gmail.com>\n"
 "Language-Team: Uzbek\n"
 "MIME-Version: 1.0\n"
@@ -1002,7 +1002,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderer.c:278
 msgid "Cell background color name"
-msgstr ""
+msgstr "Katakning orqa fon rangi nomi"
 
 #: ../gtk/gtkcellrenderer.c:279
 msgid "Cell background color as a string"
@@ -1010,15 +1010,15 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderer.c:286
 msgid "Cell background color"
-msgstr ""
+msgstr "Katakning orqa fon rangi"
 
 #: ../gtk/gtkcellrenderer.c:287
 msgid "Cell background color as a GdkColor"
-msgstr ""
+msgstr "Katak orqa fon rangi GdkColor sifatida"
 
 #: ../gtk/gtkcellrenderer.c:294
 msgid "Editing"
-msgstr ""
+msgstr "Tahrirlash"
 
 #: ../gtk/gtkcellrenderer.c:295
 msgid "Whether the cell renderer is currently in editing mode"
@@ -1034,7 +1034,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrendereraccel.c:113
 msgid "Accelerator key"
-msgstr ""
+msgstr "Akselerator tugmasi"
 
 #: ../gtk/gtkcellrendereraccel.c:114
 msgid "The keyval of the accelerator"
@@ -1057,18 +1057,16 @@ msgid "The hardware keycode of the accelerator"
 msgstr ""
 
 #: ../gtk/gtkcellrendereraccel.c:168
-#, fuzzy
 msgid "Accelerator Mode"
-msgstr "Fayllni oʻchirish"
+msgstr "Akselerator usuli"
 
 #: ../gtk/gtkcellrendereraccel.c:169
 msgid "The type of accelerators"
-msgstr ""
+msgstr "Akselerator turi"
 
 #: ../gtk/gtkcellrenderercombo.c:107
-#, fuzzy
 msgid "Model"
-msgstr "Jild"
+msgstr ""
 
 #: ../gtk/gtkcellrenderercombo.c:108
 msgid "The model containing the possible values for the combo box"
@@ -1076,7 +1074,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderercombo.c:130 ../gtk/gtkcomboboxentry.c:106
 msgid "Text Column"
-msgstr ""
+msgstr "Matn ustuni"
 
 #: ../gtk/gtkcellrenderercombo.c:131 ../gtk/gtkcomboboxentry.c:107
 msgid "A column in the data source model to get the strings from"
@@ -1126,7 +1124,7 @@ msgstr ""
 #: ../gtk/gtkcellrendererpixbuf.c:143 ../gtk/gtkrecentmanager.c:245
 #: ../gtk/gtkstatusicon.c:267
 msgid "Size"
-msgstr ""
+msgstr "Oʻlchami"
 
 #: ../gtk/gtkcellrendererpixbuf.c:144
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
@@ -1134,7 +1132,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrendererpixbuf.c:153
 msgid "Detail"
-msgstr ""
+msgstr "Tafsilot"
 
 #: ../gtk/gtkcellrendererpixbuf.c:154
 msgid "Render detail to pass to the theme engine"
@@ -1151,7 +1149,7 @@ msgstr ""
 #: ../gtk/gtkcellrendererpixbuf.c:205 ../gtk/gtkimage.c:247
 #: ../gtk/gtkwindow.c:589
 msgid "Icon"
-msgstr ""
+msgstr "Nishoncha"
 
 #: ../gtk/gtkcellrendererpixbuf.c:206 ../gtk/gtkimage.c:248
 #: ../gtk/gtkstatusicon.c:251
@@ -1160,17 +1158,17 @@ msgstr ""
 
 #: ../gtk/gtkcellrendererprogress.c:129
 msgid "Value of the progress bar"
-msgstr ""
+msgstr "Jarayon paneli qiymati"
 
 #: ../gtk/gtkcellrendererprogress.c:146 ../gtk/gtkcellrenderertext.c:195
 #: ../gtk/gtkentry.c:692 ../gtk/gtkmessagedialog.c:153
 #: ../gtk/gtkprogressbar.c:184 ../gtk/gtktextbuffer.c:197
 msgid "Text"
-msgstr ""
+msgstr "Matn"
 
 #: ../gtk/gtkcellrendererprogress.c:147
 msgid "Text on the progress bar"
-msgstr ""
+msgstr "Jarayon panelidagi matn"
 
 #: ../gtk/gtkcellrendererprogress.c:170
 msgid "Pulse"
@@ -1227,7 +1225,7 @@ msgstr ""
 #: ../gtk/gtkcellrendererspin.c:123 ../gtk/gtkscale.c:154
 #: ../gtk/gtkspinbutton.c:226
 msgid "Digits"
-msgstr ""
+msgstr "Raqamlar"
 
 #: ../gtk/gtkcellrendererspin.c:124 ../gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
@@ -1247,7 +1245,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderertext.c:211 ../gtk/gtklabel.c:324
 msgid "Attributes"
-msgstr ""
+msgstr "Atributlar"
 
 #: ../gtk/gtkcellrenderertext.c:212
 msgid "A list of style attributes to apply to the text of the renderer"
@@ -1264,7 +1262,7 @@ msgstr ""
 #: ../gtk/gtkcellrenderertext.c:228 ../gtk/gtkcellview.c:160
 #: ../gtk/gtktexttag.c:183
 msgid "Background color name"
-msgstr ""
+msgstr "Orqa fon rangi nomi"
 
 #: ../gtk/gtkcellrenderertext.c:229 ../gtk/gtkcellview.c:161
 #: ../gtk/gtktexttag.c:184
@@ -1274,15 +1272,15 @@ msgstr ""
 #: ../gtk/gtkcellrenderertext.c:236 ../gtk/gtkcellview.c:167
 #: ../gtk/gtktexttag.c:191
 msgid "Background color"
-msgstr ""
+msgstr "Orqa fon rangi"
 
 #: ../gtk/gtkcellrenderertext.c:237 ../gtk/gtkcellview.c:168
 msgid "Background color as a GdkColor"
-msgstr ""
+msgstr "GdkColor formatidagi orqa fon rangi"
 
 #: ../gtk/gtkcellrenderertext.c:244 ../gtk/gtktexttag.c:217
 msgid "Foreground color name"
-msgstr ""
+msgstr "Old fon rangi nomi"
 
 #: ../gtk/gtkcellrenderertext.c:245 ../gtk/gtktexttag.c:218
 msgid "Foreground color as a string"
@@ -1290,16 +1288,16 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderertext.c:252 ../gtk/gtktexttag.c:225
 msgid "Foreground color"
-msgstr ""
+msgstr "Old fon rangi"
 
 #: ../gtk/gtkcellrenderertext.c:253
 msgid "Foreground color as a GdkColor"
-msgstr ""
+msgstr "GdkColor formatidagi old fon rangi"
 
 #: ../gtk/gtkcellrenderertext.c:261 ../gtk/gtkentry.c:616
 #: ../gtk/gtktexttag.c:251 ../gtk/gtktextview.c:568
 msgid "Editable"
-msgstr ""
+msgstr "Tahrirlab boʻladigan"
 
 #: ../gtk/gtkcellrenderertext.c:262 ../gtk/gtktexttag.c:252
 #: ../gtk/gtktextview.c:569
@@ -1309,7 +1307,7 @@ msgstr ""
 #: ../gtk/gtkcellrenderertext.c:269 ../gtk/gtkcellrenderertext.c:277
 #: ../gtk/gtkfontsel.c:188 ../gtk/gtktexttag.c:267 ../gtk/gtktexttag.c:275
 msgid "Font"
-msgstr ""
+msgstr "Shrift"
 
 #: ../gtk/gtkcellrenderertext.c:270 ../gtk/gtktexttag.c:268
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
@@ -1321,7 +1319,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderertext.c:286 ../gtk/gtktexttag.c:283
 msgid "Font family"
-msgstr ""
+msgstr "Shrift oilasi"
 
 #: ../gtk/gtkcellrenderertext.c:287 ../gtk/gtktexttag.c:284
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
@@ -1330,7 +1328,7 @@ msgstr ""
 #: ../gtk/gtkcellrenderertext.c:294 ../gtk/gtkcellrenderertext.c:295
 #: ../gtk/gtktexttag.c:291
 msgid "Font style"
-msgstr ""
+msgstr "Shriftning uslubi"
 
 #: ../gtk/gtkcellrenderertext.c:303 ../gtk/gtkcellrenderertext.c:304
 #: ../gtk/gtktexttag.c:300
@@ -1340,7 +1338,7 @@ msgstr ""
 #: ../gtk/gtkcellrenderertext.c:312 ../gtk/gtkcellrenderertext.c:313
 #: ../gtk/gtktexttag.c:309
 msgid "Font weight"
-msgstr ""
+msgstr "Shriftning qalinligi"
 
 #: ../gtk/gtkcellrenderertext.c:322 ../gtk/gtkcellrenderertext.c:323
 #: ../gtk/gtktexttag.c:320
@@ -1350,7 +1348,7 @@ msgstr ""
 #: ../gtk/gtkcellrenderertext.c:331 ../gtk/gtkcellrenderertext.c:332
 #: ../gtk/gtktexttag.c:329
 msgid "Font size"
-msgstr ""
+msgstr "Shriftning oʻlchami"
 
 #: ../gtk/gtkcellrenderertext.c:341 ../gtk/gtktexttag.c:349
 msgid "Font points"
@@ -1386,15 +1384,15 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderertext.c:381 ../gtk/gtktexttag.c:466
 msgid "Underline"
-msgstr ""
+msgstr "Tagi chizilgan"
 
 #: ../gtk/gtkcellrenderertext.c:382 ../gtk/gtktexttag.c:467
 msgid "Style of underline for this text"
-msgstr ""
+msgstr "Ushbu tan uchun tagini chizish uslubi"
 
 #: ../gtk/gtkcellrenderertext.c:390 ../gtk/gtktexttag.c:378
 msgid "Language"
-msgstr ""
+msgstr "Til"
 
 #: ../gtk/gtkcellrenderertext.c:391
 msgid "The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If you don't understand this parameter, you probably don't need it"
@@ -1436,11 +1434,11 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderertext.c:491 ../gtk/gtktreeviewcolumn.c:297
 msgid "Alignment"
-msgstr ""
+msgstr "Tekislash"
 
 #: ../gtk/gtkcellrenderertext.c:492
 msgid "How to align the lines"
-msgstr ""
+msgstr "Satrlarni qanday tekislanishi"
 
 #: ../gtk/gtkcellrenderertext.c:502 ../gtk/gtkcellview.c:190
 #: ../gtk/gtktexttag.c:564
@@ -1590,7 +1588,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderertoggle.c:142
 msgid "Activatable"
-msgstr ""
+msgstr "Aktivlashtirib boʻladigan"
 
 #: ../gtk/gtkcellrenderertoggle.c:143
 msgid "The toggle button can be activated"
@@ -1615,7 +1613,7 @@ msgstr ""
 
 #: ../gtk/gtkcellview.c:182
 msgid "CellView model"
-msgstr ""
+msgstr "CellView modeli"
 
 #: ../gtk/gtkcellview.c:183
 msgid "The model for cell view"
@@ -1639,7 +1637,7 @@ msgstr ""
 #: ../gtk/gtktoggleaction.c:118 ../gtk/gtktogglebutton.c:102
 #: ../gtk/gtktoggletoolbutton.c:101
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #: ../gtk/gtkcheckmenuitem.c:88
 msgid "Whether the menu item is checked"
@@ -1663,7 +1661,7 @@ msgstr ""
 
 #: ../gtk/gtkcolorbutton.c:171
 msgid "Use alpha"
-msgstr ""
+msgstr "Alfadan foydalanish"
 
 #: ../gtk/gtkcolorbutton.c:172
 msgid "Whether or not to give the color an alpha value"
@@ -1672,29 +1670,28 @@ msgstr ""
 #: ../gtk/gtkcolorbutton.c:186 ../gtk/gtkfilechooserbutton.c:407
 #: ../gtk/gtkfontbutton.c:142 ../gtk/gtkprintjob.c:116
 #: ../gtk/gtktreeviewcolumn.c:264
-#, fuzzy
 msgid "Title"
-msgstr "Fayllar"
+msgstr "Sarlavha"
 
 #: ../gtk/gtkcolorbutton.c:187
 msgid "The title of the color selection dialog"
-msgstr ""
+msgstr "Rang tanlash dialogi sarlavhasi"
 
 #: ../gtk/gtkcolorbutton.c:201 ../gtk/gtkcolorsel.c:293
 msgid "Current Color"
-msgstr ""
+msgstr "Joriy rang"
 
 #: ../gtk/gtkcolorbutton.c:202
 msgid "The selected color"
-msgstr ""
+msgstr "Tanlangan rang"
 
 #: ../gtk/gtkcolorbutton.c:216 ../gtk/gtkcolorsel.c:300
 msgid "Current Alpha"
-msgstr ""
+msgstr "Joriy alfa"
 
 #: ../gtk/gtkcolorbutton.c:217
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr ""
+msgstr "Tanlangan xiralik qiymati (0 toʻliq shaffof, 65535 toʻliq xiralik)"
 
 #: ../gtk/gtkcolorsel.c:279
 msgid "Has Opacity Control"
@@ -1706,15 +1703,15 @@ msgstr ""
 
 #: ../gtk/gtkcolorsel.c:286
 msgid "Has palette"
-msgstr ""
+msgstr "Palitrali"
 
 #: ../gtk/gtkcolorsel.c:287
 msgid "Whether a palette should be used"
-msgstr ""
+msgstr "Palitradan foydalanishlik"
 
 #: ../gtk/gtkcolorsel.c:294
 msgid "The current color"
-msgstr ""
+msgstr "Joriy rang"
 
 #: ../gtk/gtkcolorsel.c:301
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
@@ -1722,16 +1719,15 @@ msgstr ""
 
 #: ../gtk/gtkcolorsel.c:315
 msgid "Custom palette"
-msgstr ""
+msgstr "Boshqacha palitra"
 
 #: ../gtk/gtkcolorsel.c:316
 msgid "Palette to use in the color selector"
-msgstr ""
+msgstr "Rang tanlagichda ishlatiladigan palitra"
 
 #: ../gtk/gtkcolorseldialog.c:102
-#, fuzzy
 msgid "Color Selection"
-msgstr "Fayllni oʻchirish"
+msgstr "Rang tanlash"
 
 #: ../gtk/gtkcolorseldialog.c:103
 msgid "The color selection embedded in the dialog."
@@ -1739,27 +1735,27 @@ msgstr ""
 
 #: ../gtk/gtkcolorseldialog.c:109
 msgid "OK Button"
-msgstr ""
+msgstr "OK tugmasi"
 
 #: ../gtk/gtkcolorseldialog.c:110
 msgid "The OK button of the dialog."
-msgstr ""
+msgstr "Dialogning OK tugmasi."
 
 #: ../gtk/gtkcolorseldialog.c:116
 msgid "Cancel Button"
-msgstr ""
+msgstr "Bekor qilish tugmasi"
 
 #: ../gtk/gtkcolorseldialog.c:117
 msgid "The cancel button of the dialog."
-msgstr ""
+msgstr "Dialogning bekor qilish tugmasi."
 
 #: ../gtk/gtkcolorseldialog.c:123
 msgid "Help Button"
-msgstr ""
+msgstr "Yordam tugmasi"
 
 #: ../gtk/gtkcolorseldialog.c:124
 msgid "The help button of the dialog."
-msgstr ""
+msgstr "Dialogning yordam tugmasi."
 
 #: ../gtk/gtkcombo.c:145
 msgid "Enable arrow keys"
@@ -1779,7 +1775,7 @@ msgstr ""
 
 #: ../gtk/gtkcombo.c:159
 msgid "Case sensitive"
-msgstr ""
+msgstr "Katta-kichik harfni farqlash"
 
 #: ../gtk/gtkcombo.c:160
 msgid "Whether list item matching is case sensitive"
@@ -1791,11 +1787,11 @@ msgstr ""
 
 #: ../gtk/gtkcombo.c:168
 msgid "Whether an empty value may be entered in this field"
-msgstr ""
+msgstr "Ushbu maydonga boʻsh joy kiritishga ruxsat berish yoki bermaslik"
 
 #: ../gtk/gtkcombo.c:175
 msgid "Value in list"
-msgstr ""
+msgstr "Roʻyxatdagi qiymat"
 
 #: ../gtk/gtkcombo.c:176
 msgid "Whether entered values must already be present in the list"
@@ -1803,11 +1799,11 @@ msgstr ""
 
 #: ../gtk/gtkcombobox.c:661
 msgid "ComboBox model"
-msgstr ""
+msgstr "ComboBox modeli"
 
 #: ../gtk/gtkcombobox.c:662
 msgid "The model for the combo box"
-msgstr ""
+msgstr "Kombo qutisi modeli"
 
 #: ../gtk/gtkcombobox.c:679
 msgid "Wrap width for laying out the items in a grid"
@@ -1831,11 +1827,11 @@ msgstr ""
 
 #: ../gtk/gtkcombobox.c:745
 msgid "Active item"
-msgstr ""
+msgstr "Aktiv element"
 
 #: ../gtk/gtkcombobox.c:746
 msgid "The item which is currently active"
-msgstr ""
+msgstr "Joriy aktiv element"
 
 #: ../gtk/gtkcombobox.c:765 ../gtk/gtkuimanager.c:221
 msgid "Add tearoffs to menus"
@@ -1847,7 +1843,7 @@ msgstr ""
 
 #: ../gtk/gtkcombobox.c:781 ../gtk/gtkentry.c:641
 msgid "Has Frame"
-msgstr ""
+msgstr "Freymli"
 
 #: ../gtk/gtkcombobox.c:782
 msgid "Whether the combo box draws a frame around the child"
@@ -1875,7 +1871,7 @@ msgstr ""
 
 #: ../gtk/gtkcombobox.c:840
 msgid "Button Sensitivity"
-msgstr ""
+msgstr "Tugma sezgirligi"
 
 #: ../gtk/gtkcombobox.c:841
 msgid "Whether the dropdown button is sensitive when the model is empty"
@@ -1883,7 +1879,7 @@ msgstr ""
 
 #: ../gtk/gtkcombobox.c:848
 msgid "Appears as list"
-msgstr ""
+msgstr "Roʻyxat sifatida koʻrinadi"
 
 #: ../gtk/gtkcombobox.c:849
 msgid "Whether dropdowns should look like lists rather than menus"
@@ -1901,7 +1897,7 @@ msgstr ""
 #: ../gtk/gtkmenubar.c:194 ../gtk/gtkstatusbar.c:186 ../gtk/gtktoolbar.c:624
 #: ../gtk/gtkviewport.c:122
 msgid "Shadow type"
-msgstr ""
+msgstr "Soya turi"
 
 #: ../gtk/gtkcombobox.c:882
 msgid "Which kind of shadow to draw around the combo box"
@@ -1909,7 +1905,7 @@ msgstr ""
 
 #: ../gtk/gtkcontainer.c:238
 msgid "Resize mode"
-msgstr ""
+msgstr "Oʻlchamini oʻzgartirish usuli"
 
 #: ../gtk/gtkcontainer.c:239
 msgid "Specify how resize events are handled"
@@ -1917,7 +1913,7 @@ msgstr ""
 
 #: ../gtk/gtkcontainer.c:246
 msgid "Border width"
-msgstr ""
+msgstr "Chegara eni"
 
 #: ../gtk/gtkcontainer.c:247
 msgid "The width of the empty border outside the containers children"
@@ -1997,15 +1993,15 @@ msgstr ""
 
 #: ../gtk/gtkdialog.c:217
 msgid "Button spacing"
-msgstr ""
+msgstr "Tugma oraligʻi"
 
 #: ../gtk/gtkdialog.c:218
 msgid "Spacing between buttons"
-msgstr ""
+msgstr "Tugmalar orasidagi oraliq"
 
 #: ../gtk/gtkdialog.c:226
 msgid "Action area border"
-msgstr ""
+msgstr "Amal hududi chegarasi"
 
 #: ../gtk/gtkdialog.c:227
 msgid "Width of border around the button area at the bottom of the dialog"
@@ -2013,7 +2009,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:596 ../gtk/gtklabel.c:412
 msgid "Cursor Position"
-msgstr ""
+msgstr "Kursor oʻrni"
 
 #: ../gtk/gtkentry.c:597 ../gtk/gtklabel.c:413
 msgid "The current position of the insertion cursor in chars"
@@ -2033,7 +2029,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:624
 msgid "Maximum length"
-msgstr ""
+msgstr "Maksimal uzunlik"
 
 #: ../gtk/gtkentry.c:625
 msgid "Maximum number of characters for this entry. Zero if no maximum"
@@ -2041,7 +2037,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:633
 msgid "Visibility"
-msgstr ""
+msgstr "Koʻrinishi"
 
 #: ../gtk/gtkentry.c:634
 msgid "FALSE displays the \"invisible char\" instead of the actual text (password mode)"
@@ -2057,7 +2053,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:657
 msgid "Invisible character"
-msgstr ""
+msgstr "Koʻrinmaydigan belgi"
 
 #: ../gtk/gtkentry.c:658
 msgid "The character to use when masking entry contents (in \"password mode\")"
@@ -2081,7 +2077,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:682
 msgid "Scroll offset"
-msgstr ""
+msgstr "Aylantirish ofseti"
 
 #: ../gtk/gtkentry.c:683
 msgid "Number of pixels of the entry scrolled off the screen to the left"
@@ -2093,16 +2089,15 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:708 ../gtk/gtkmisc.c:73
 msgid "X align"
-msgstr ""
+msgstr "X boʻyicha tekislash"
 
 #: ../gtk/gtkentry.c:709 ../gtk/gtkmisc.c:74
 msgid "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."
 msgstr ""
 
 #: ../gtk/gtkentry.c:725
-#, fuzzy
 msgid "Truncate multiline"
-msgstr "Fayllni oʻchirish"
+msgstr ""
 
 #: ../gtk/gtkentry.c:726
 msgid "Whether to truncate multiline pastes to one line."
@@ -2114,19 +2109,19 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:757 ../gtk/gtktextview.c:648
 msgid "Overwrite mode"
-msgstr ""
+msgstr "Ustidan yozish usuli"
 
 #: ../gtk/gtkentry.c:758
 msgid "Whether new text overwrites existing text"
-msgstr ""
+msgstr "Yangi matnni eskisini ustidan yozilishi"
 
 #: ../gtk/gtkentry.c:772
 msgid "Text length"
-msgstr ""
+msgstr "Matn uzunligi"
 
 #: ../gtk/gtkentry.c:773
 msgid "Length of the text currently in the entry"
-msgstr ""
+msgstr "Kiritish maydonidagi matnning uzunligi"
 
 #: ../gtk/gtkentry.c:788
 msgid "Invisible char set"
@@ -2138,7 +2133,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:804
 msgid "Caps Lock warning"
-msgstr ""
+msgstr "Caps Lock ogohlantirishi"
 
 #: ../gtk/gtkentry.c:805
 msgid "Whether password entries will show a warning when Caps Lock is on or an input method is active"
@@ -2194,35 +2189,35 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:914
 msgid "Primary icon name"
-msgstr ""
+msgstr "Birlamchi nishoncha nomi"
 
 #: ../gtk/gtkentry.c:915
 msgid "Icon name for primary icon"
-msgstr ""
+msgstr "Birlamchi nishonchaning nomi"
 
 #: ../gtk/gtkentry.c:929
 msgid "Secondary icon name"
-msgstr ""
+msgstr "Ikkilamchi nishoncha nomi"
 
 #: ../gtk/gtkentry.c:930
 msgid "Icon name for secondary icon"
-msgstr ""
+msgstr "Ikkilamchi nishonchaning nomi"
 
 #: ../gtk/gtkentry.c:944
 msgid "Primary GIcon"
-msgstr ""
+msgstr "Birlamchi GIcon"
 
 #: ../gtk/gtkentry.c:945
 msgid "GIcon for primary icon"
-msgstr ""
+msgstr "Birlamchi nishoncha uchun GIcon"
 
 #: ../gtk/gtkentry.c:959
 msgid "Secondary GIcon"
-msgstr ""
+msgstr "Ikkilamchi GIcon"
 
 #: ../gtk/gtkentry.c:960
 msgid "GIcon for secondary icon"
-msgstr ""
+msgstr "Ikkilamchi nishoncha uchun GIcon"
 
 #: ../gtk/gtkentry.c:974
 msgid "Primary storage type"
@@ -2258,19 +2253,19 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:1048
 msgid "Primary icon sensitvitiy"
-msgstr ""
+msgstr "Birlamchi nishoncha sezgirligi"
 
 #: ../gtk/gtkentry.c:1049
 msgid "Whether the primary icon is sensitive"
-msgstr ""
+msgstr "Birlamchi nishonchaning sezgirligi"
 
 #: ../gtk/gtkentry.c:1066
 msgid "Secondary icon sensitivity"
-msgstr ""
+msgstr "Ikkilamchi nishoncha sezgirligi"
 
 #: ../gtk/gtkentry.c:1067
 msgid "Whether the secondary icon is sensitive"
-msgstr ""
+msgstr "Ikkilamchi nishonchaning sezgirligi"
 
 #: ../gtk/gtkentry.c:1081
 msgid "Prelight"
@@ -2282,7 +2277,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:1395
 msgid "Border between text and frame."
-msgstr ""
+msgstr "Matn va freym orasidagi chegara."
 
 #: ../gtk/gtkentry.c:1409
 msgid "State Hint"
@@ -2294,7 +2289,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:1415 ../gtk/gtklabel.c:645
 msgid "Select on focus"
-msgstr ""
+msgstr "Fokuslanganda tanlash"
 
 #: ../gtk/gtkentry.c:1416
 msgid "Whether to select the contents of an entry when it is focused"
@@ -2318,7 +2313,7 @@ msgstr ""
 
 #: ../gtk/gtkentrycompletion.c:286
 msgid "Minimum Key Length"
-msgstr ""
+msgstr "Kalitning minimal uzunligi"
 
 #: ../gtk/gtkentrycompletion.c:287
 msgid "Minimum length of the search key in order to look up matches"
@@ -2326,7 +2321,7 @@ msgstr ""
 
 #: ../gtk/gtkentrycompletion.c:303 ../gtk/gtkiconview.c:585
 msgid "Text column"
-msgstr ""
+msgstr "Matn ustuni"
 
 #: ../gtk/gtkentrycompletion.c:304
 msgid "The column of the model containing the strings."
@@ -2374,7 +2369,7 @@ msgstr ""
 
 #: ../gtk/gtkeventbox.c:91
 msgid "Visible Window"
-msgstr ""
+msgstr "Koʻrinadigan oyna"
 
 #: ../gtk/gtkeventbox.c:92
 msgid "Whether the event box is visible, as opposed to invisible and only used to trap events."
@@ -2390,7 +2385,7 @@ msgstr ""
 
 #: ../gtk/gtkexpander.c:187
 msgid "Expanded"
-msgstr ""
+msgstr "Yoyilgan"
 
 #: ../gtk/gtkexpander.c:188
 msgid "Whether the expander has been opened to reveal the child widget"
@@ -2414,7 +2409,7 @@ msgstr ""
 
 #: ../gtk/gtkexpander.c:229 ../gtk/gtkframe.c:147 ../gtk/gtktoolbutton.c:194
 msgid "Label widget"
-msgstr ""
+msgstr "Yorliq vidjeti"
 
 #: ../gtk/gtkexpander.c:230
 msgid "A widget to display in place of the usual expander label"
@@ -2434,25 +2429,23 @@ msgstr ""
 
 #: ../gtk/gtkfilechooser.c:194
 msgid "Action"
-msgstr ""
+msgstr "Amal"
 
 #: ../gtk/gtkfilechooser.c:195
 msgid "The type of operation that the file selector is performing"
 msgstr ""
 
 #: ../gtk/gtkfilechooser.c:201
-#, fuzzy
 msgid "File System Backend"
-msgstr "Fayl tizimi"
+msgstr ""
 
 #: ../gtk/gtkfilechooser.c:202
 msgid "Name of file system backend to use"
 msgstr ""
 
 #: ../gtk/gtkfilechooser.c:207 ../gtk/gtkrecentchooser.c:252
-#, fuzzy
 msgid "Filter"
-msgstr "Fayllar"
+msgstr "Filtr"
 
 #: ../gtk/gtkfilechooser.c:208
 msgid "The current filter for selecting which files are displayed"
@@ -2460,7 +2453,7 @@ msgstr ""
 
 #: ../gtk/gtkfilechooser.c:213
 msgid "Local Only"
-msgstr ""
+msgstr "Faqat lokal"
 
 #: ../gtk/gtkfilechooser.c:214
 msgid "Whether the selected file(s) should be limited to local file: URLs"
@@ -2492,7 +2485,7 @@ msgstr ""
 
 #: ../gtk/gtkfilechooser.c:237
 msgid "Extra widget"
-msgstr ""
+msgstr "Qoʻshimcha vidjet"
 
 #: ../gtk/gtkfilechooser.c:238
 msgid "Application supplied widget for extra options."
@@ -2500,9 +2493,8 @@ msgstr ""
 
 #: ../gtk/gtkfilechooser.c:243 ../gtk/gtkfilesel.c:540
 #: ../gtk/gtkrecentchooser.c:191
-#, fuzzy
 msgid "Select Multiple"
-msgstr "Fayllni oʻchirish"
+msgstr ""
 
 #: ../gtk/gtkfilechooser.c:244 ../gtk/gtkfilesel.c:541
 msgid "Whether to allow multiple files to be selected"
@@ -2510,15 +2502,15 @@ msgstr ""
 
 #: ../gtk/gtkfilechooser.c:250
 msgid "Show Hidden"
-msgstr ""
+msgstr "Yashirilganlarni koʻrsatish"
 
 #: ../gtk/gtkfilechooser.c:251
 msgid "Whether the hidden files and folders should be displayed"
-msgstr ""
+msgstr "Yashirilgan fayl va jildlarni koʻrsatilishi"
 
 #: ../gtk/gtkfilechooser.c:266
 msgid "Do overwrite confirmation"
-msgstr ""
+msgstr "Almashtirishni tasdiqlashni soʻrash"
 
 #: ../gtk/gtkfilechooser.c:267
 msgid "Whether a file chooser in save mode will present an overwrite confirmation dialog if necessary."
@@ -2526,15 +2518,15 @@ msgstr ""
 
 #: ../gtk/gtkfilechooserbutton.c:376
 msgid "Dialog"
-msgstr ""
+msgstr "Dialog"
 
 #: ../gtk/gtkfilechooserbutton.c:377
 msgid "The file chooser dialog to use."
-msgstr ""
+msgstr "Foydalaniladigan fayl tanlash dialogi."
 
 #: ../gtk/gtkfilechooserbutton.c:408
 msgid "The title of the file chooser dialog."
-msgstr ""
+msgstr "Fayl tanlash dialogi sarlavhasi."
 
 #: ../gtk/gtkfilechooserbutton.c:422
 msgid "The desired width of the button widget, in characters."
@@ -2542,17 +2534,16 @@ msgstr ""
 
 #: ../gtk/gtkfilesel.c:526 ../gtk/gtkimage.c:163 ../gtk/gtkrecentmanager.c:214
 #: ../gtk/gtkstatusicon.c:218
-#, fuzzy
 msgid "Filename"
 msgstr "Fayl nomi"
 
 #: ../gtk/gtkfilesel.c:527
 msgid "The currently selected filename"
-msgstr ""
+msgstr "Joriy tanlangan fayl nomi"
 
 #: ../gtk/gtkfilesel.c:533
 msgid "Show file operations"
-msgstr ""
+msgstr "Fayl operatsiyalarini koʻrsatish"
 
 #: ../gtk/gtkfilesel.c:534
 msgid "Whether buttons for creating/manipulating files should be displayed"
@@ -2576,24 +2567,23 @@ msgstr ""
 
 #: ../gtk/gtkfontbutton.c:143
 msgid "The title of the font selection dialog"
-msgstr ""
+msgstr "Shrift tanlash dialogi sarlavhasi"
 
 #: ../gtk/gtkfontbutton.c:158 ../gtk/gtkfontsel.c:181
-#, fuzzy
 msgid "Font name"
-msgstr "Fayl nomi"
+msgstr "Shrift nomi"
 
 #: ../gtk/gtkfontbutton.c:159
 msgid "The name of the selected font"
-msgstr ""
+msgstr "Tanlangan shriftning nomi"
 
 #: ../gtk/gtkfontbutton.c:160
 msgid "Sans 12"
-msgstr ""
+msgstr "Sans 12"
 
 #: ../gtk/gtkfontbutton.c:175
 msgid "Use font in label"
-msgstr ""
+msgstr "Yorliqda shriftdan foydalanish"
 
 #: ../gtk/gtkfontbutton.c:176
 msgid "Whether the label is drawn in the selected font"
@@ -2609,55 +2599,55 @@ msgstr ""
 
 #: ../gtk/gtkfontbutton.c:208
 msgid "Show style"
-msgstr ""
+msgstr "Uslubni koʻrsatish"
 
 #: ../gtk/gtkfontbutton.c:209
 msgid "Whether the selected font style is shown in the label"
-msgstr ""
+msgstr "Yorliqda tanlangan shrift uslubining koʻrsatilishi"
 
 #: ../gtk/gtkfontbutton.c:224
 msgid "Show size"
-msgstr ""
+msgstr "Oʻlchamini koʻrsatish"
 
 #: ../gtk/gtkfontbutton.c:225
 msgid "Whether selected font size is shown in the label"
-msgstr ""
+msgstr "Yorliqda tanlangan shrift oʻlchamini koʻrsatilishi"
 
 #: ../gtk/gtkfontsel.c:182
 msgid "The string that represents this font"
-msgstr ""
+msgstr "Ushbu shriftni aks ettiradigan qator"
 
 #: ../gtk/gtkfontsel.c:189
 msgid "The GdkFont that is currently selected"
-msgstr ""
+msgstr "Joriy tanlangan GdkFont"
 
 #: ../gtk/gtkfontsel.c:195
 msgid "Preview text"
-msgstr ""
+msgstr "Matn namunasi"
 
 #: ../gtk/gtkfontsel.c:196
 msgid "The text to display in order to demonstrate the selected font"
-msgstr ""
+msgstr "Tanlangan shriftni koʻrsatadigan matn"
 
 #: ../gtk/gtkframe.c:106
 msgid "Text of the frame's label"
-msgstr ""
+msgstr "Freym yorligʻining matni"
 
 #: ../gtk/gtkframe.c:113
 msgid "Label xalign"
-msgstr ""
+msgstr "Yorliqning x boʻyicha tekislanishi"
 
 #: ../gtk/gtkframe.c:114
 msgid "The horizontal alignment of the label"
-msgstr ""
+msgstr "Yorliqning eniga tekislanishi"
 
 #: ../gtk/gtkframe.c:122
 msgid "Label yalign"
-msgstr ""
+msgstr "Yorliqni y boʻyicha tekislash"
 
 #: ../gtk/gtkframe.c:123
 msgid "The vertical alignment of the label"
-msgstr ""
+msgstr "Yorliqning boʻyiga tekislanishi"
 
 #: ../gtk/gtkframe.c:131 ../gtk/gtkhandlebox.c:167
 msgid "Deprecated property, use shadow_type instead"
@@ -2665,11 +2655,11 @@ msgstr ""
 
 #: ../gtk/gtkframe.c:138
 msgid "Frame shadow"
-msgstr ""
+msgstr "Freym soyasi"
 
 #: ../gtk/gtkframe.c:139
 msgid "Appearance of the frame border"
-msgstr ""
+msgstr "Freym chegarasining koʻrinishi"
 
 #: ../gtk/gtkframe.c:148
 msgid "A widget to display in place of the usual frame label"
@@ -2712,13 +2702,12 @@ msgid "A boolean value indicating whether the handlebox's child is attached or d
 msgstr ""
 
 #: ../gtk/gtkiconview.c:548
-#, fuzzy
 msgid "Selection mode"
-msgstr "Fayllni oʻchirish"
+msgstr "Tanlash usuli"
 
 #: ../gtk/gtkiconview.c:549
 msgid "The selection mode"
-msgstr ""
+msgstr "Tanlash usuli"
 
 #: ../gtk/gtkiconview.c:567
 msgid "Pixbuf column"
@@ -2750,19 +2739,19 @@ msgstr ""
 
 #: ../gtk/gtkiconview.c:630
 msgid "Number of columns"
-msgstr ""
+msgstr "Ustunlar soni"
 
 #: ../gtk/gtkiconview.c:631
 msgid "Number of columns to display"
-msgstr ""
+msgstr "Koʻrsatiladigan ustunlar soni"
 
 #: ../gtk/gtkiconview.c:648
 msgid "Width for each item"
-msgstr ""
+msgstr "Har bir elementning kengligi"
 
 #: ../gtk/gtkiconview.c:649
 msgid "The width used for each item"
-msgstr ""
+msgstr "Har bir elementga qoʻllaniladigan kenglik"
 
 #: ../gtk/gtkiconview.c:665
 msgid "Space which is inserted between cells of an item"
@@ -2770,7 +2759,7 @@ msgstr ""
 
 #: ../gtk/gtkiconview.c:680
 msgid "Row Spacing"
-msgstr ""
+msgstr "Qatorlar oraligʻi"
 
 #: ../gtk/gtkiconview.c:681
 msgid "Space which is inserted between grid rows"
@@ -2778,16 +2767,15 @@ msgstr ""
 
 #: ../gtk/gtkiconview.c:696
 msgid "Column Spacing"
-msgstr ""
+msgstr "Ustun oraligʻi"
 
 #: ../gtk/gtkiconview.c:697
 msgid "Space which is inserted between grid columns"
 msgstr ""
 
 #: ../gtk/gtkiconview.c:712
-#, fuzzy
 msgid "Margin"
-msgstr "Diqqat"
+msgstr ""
 
 #: ../gtk/gtkiconview.c:713
 msgid "Space which is inserted at the edges of the icon view"
@@ -2800,7 +2788,7 @@ msgstr ""
 #: ../gtk/gtkiconview.c:746 ../gtk/gtktreeview.c:618
 #: ../gtk/gtktreeviewcolumn.c:307
 msgid "Reorderable"
-msgstr ""
+msgstr "Qayta tartiblab boʻladigan"
 
 #: ../gtk/gtkiconview.c:747 ../gtk/gtktreeview.c:619
 msgid "View is reorderable"
@@ -2816,15 +2804,15 @@ msgstr ""
 
 #: ../gtk/gtkiconview.c:766
 msgid "Selection Box Color"
-msgstr ""
+msgstr "Tanlash qutisi rangi"
 
 #: ../gtk/gtkiconview.c:767
 msgid "Color of the selection box"
-msgstr ""
+msgstr "Tanlash qutisining rangi"
 
 #: ../gtk/gtkiconview.c:773
 msgid "Selection Box Alpha"
-msgstr ""
+msgstr "Tanlash qutisi shaffofligi"
 
 #: ../gtk/gtkiconview.c:774
 msgid "Opacity of the selection box"
@@ -2848,7 +2836,7 @@ msgstr ""
 
 #: ../gtk/gtkimage.c:147 ../gtk/gtkmessagedialog.c:215
 msgid "Image"
-msgstr ""
+msgstr "Rasm"
 
 #: ../gtk/gtkimage.c:148
 msgid "A GdkImage to display"
@@ -2864,7 +2852,7 @@ msgstr ""
 
 #: ../gtk/gtkimage.c:164 ../gtk/gtkstatusicon.c:219
 msgid "Filename to load and display"
-msgstr ""
+msgstr "Yuklanadigan va koʻrsatiladigan fayl nomi"
 
 #: ../gtk/gtkimage.c:173 ../gtk/gtkstatusicon.c:227
 msgid "Stock ID for a stock image to display"
@@ -2872,15 +2860,15 @@ msgstr ""
 
 #: ../gtk/gtkimage.c:180
 msgid "Icon set"
-msgstr ""
+msgstr "Nishonchalar toʻplami"
 
 #: ../gtk/gtkimage.c:181
 msgid "Icon set to display"
-msgstr ""
+msgstr "Koʻrsatiladigan nishonchalar toʻplami"
 
 #: ../gtk/gtkimage.c:188 ../gtk/gtkscalebutton.c:212 ../gtk/gtktoolbar.c:541
 msgid "Icon size"
-msgstr ""
+msgstr "Nishoncha oʻlchami"
 
 #: ../gtk/gtkimage.c:189
 msgid "Symbolic size to use for stock icon, icon set or named icon"
@@ -2895,13 +2883,12 @@ msgid "Pixel size to use for named icon"
 msgstr ""
 
 #: ../gtk/gtkimage.c:214
-#, fuzzy
 msgid "Animation"
-msgstr "Maʼlumot"
+msgstr "Animatsiya"
 
 #: ../gtk/gtkimage.c:215
 msgid "GdkPixbufAnimation to display"
-msgstr ""
+msgstr "Koʻrsatiladigan GdkPixbufAnimation"
 
 #: ../gtk/gtkimage.c:255 ../gtk/gtkstatusicon.c:258
 msgid "Storage type"
@@ -2921,7 +2908,7 @@ msgstr ""
 
 #: ../gtk/gtkimagemenuitem.c:151 ../gtk/gtkmenu.c:515
 msgid "Accel Group"
-msgstr ""
+msgstr "Akselerator guruhi"
 
 #: ../gtk/gtkimagemenuitem.c:152
 msgid "The Accel Group to use for stock accelerator keys"
@@ -2929,19 +2916,19 @@ msgstr ""
 
 #: ../gtk/gtkimagemenuitem.c:157
 msgid "Show menu images"
-msgstr ""
+msgstr "Menyu rasmlarini koʻrsatish"
 
 #: ../gtk/gtkimagemenuitem.c:158
 msgid "Whether images should be shown in menus"
-msgstr ""
+msgstr "Menyularda rasmlarni koʻrsatilishi"
 
 #: ../gtk/gtkinvisible.c:87 ../gtk/gtkwindow.c:614
 msgid "The screen where this window will be displayed"
-msgstr ""
+msgstr "Ushbu oyna koʻrsatiladigan ekran"
 
 #: ../gtk/gtklabel.c:318
 msgid "The text of the label"
-msgstr ""
+msgstr "Yorliqning matni"
 
 #: ../gtk/gtklabel.c:325
 msgid "A list of style attributes to apply to the text of the label"
@@ -2956,9 +2943,8 @@ msgid "The alignment of the lines in the text of the label relative to each othe
 msgstr ""
 
 #: ../gtk/gtklabel.c:355
-#, fuzzy
 msgid "Pattern"
-msgstr "Qoʻy_ish"
+msgstr "Namuna"
 
 #: ../gtk/gtklabel.c:356
 msgid "A string with _ characters in positions correspond to characters in the text to underline"
@@ -2982,11 +2968,11 @@ msgstr ""
 
 #: ../gtk/gtklabel.c:387
 msgid "Selectable"
-msgstr ""
+msgstr "Tanlanadigan"
 
 #: ../gtk/gtklabel.c:388
 msgid "Whether the label text can be selected with the mouse"
-msgstr ""
+msgstr "Yorliq matnining sichqoncha yordamida tanlanishi"
 
 #: ../gtk/gtklabel.c:394
 msgid "Mnemonic key"
@@ -3009,9 +2995,8 @@ msgid "The preferred place to ellipsize the string, if the label does not have e
 msgstr ""
 
 #: ../gtk/gtklabel.c:490
-#, fuzzy
 msgid "Single Line Mode"
-msgstr "Fayllni oʻchirish"
+msgstr "Bitta qator usuli"
 
 #: ../gtk/gtklabel.c:491
 msgid "Whether the label is in single line mode"
@@ -3019,11 +3004,11 @@ msgstr ""
 
 #: ../gtk/gtklabel.c:508
 msgid "Angle"
-msgstr ""
+msgstr "Burchak"
 
 #: ../gtk/gtklabel.c:509
 msgid "Angle at which the label is rotated"
-msgstr ""
+msgstr "Yorliqning aylantiriladigan burchagi"
 
 #: ../gtk/gtklabel.c:529
 msgid "Maximum Width In Characters"
@@ -3039,7 +3024,7 @@ msgstr ""
 
 #: ../gtk/gtklayout.c:616 ../gtk/gtkviewport.c:106
 msgid "Horizontal adjustment"
-msgstr ""
+msgstr "Eniga tekislash"
 
 #: ../gtk/gtklayout.c:617 ../gtk/gtkscrolledwindow.c:219
 msgid "The GtkAdjustment for the horizontal position"
@@ -3047,7 +3032,7 @@ msgstr ""
 
 #: ../gtk/gtklayout.c:624 ../gtk/gtkviewport.c:114
 msgid "Vertical adjustment"
-msgstr ""
+msgstr "Boʻyiga tekislash"
 
 #: ../gtk/gtklayout.c:625 ../gtk/gtkscrolledwindow.c:226
 msgid "The GtkAdjustment for the vertical position"
@@ -3063,23 +3048,23 @@ msgstr ""
 
 #: ../gtk/gtklinkbutton.c:145
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: ../gtk/gtklinkbutton.c:146
 msgid "The URI bound to this button"
-msgstr ""
+msgstr "Ushbu tugmaga bogʻliq URI"
 
 #: ../gtk/gtklinkbutton.c:160
 msgid "Visited"
-msgstr ""
+msgstr "Koʻrilgan"
 
 #: ../gtk/gtklinkbutton.c:161
 msgid "Whether this link has been visited."
-msgstr ""
+msgstr "Ushbu bogʻlamaning koʻrilganligi."
 
 #: ../gtk/gtkmenu.c:501
 msgid "The currently selected menu item"
-msgstr ""
+msgstr "Joriy tanlangan menyu elementi"
 
 #: ../gtk/gtkmenu.c:516
 msgid "The accel group holding accelerators for the menu"
@@ -3087,7 +3072,7 @@ msgstr ""
 
 #: ../gtk/gtkmenu.c:530 ../gtk/gtkmenuitem.c:254
 msgid "Accel Path"
-msgstr ""
+msgstr "Akselerator yoʻli"
 
 #: ../gtk/gtkmenu.c:531
 msgid "An accel path used to conveniently construct accel paths of child items"
@@ -3114,9 +3099,8 @@ msgid "A boolean that indicates whether the menu is torn-off"
 msgstr ""
 
 #: ../gtk/gtkmenu.c:585
-#, fuzzy
 msgid "Monitor"
-msgstr "_Shrift"
+msgstr "Monitor"
 
 #: ../gtk/gtkmenu.c:586
 msgid "The monitor the menu will be popped up on"
@@ -3124,23 +3108,23 @@ msgstr ""
 
 #: ../gtk/gtkmenu.c:592
 msgid "Vertical Padding"
-msgstr ""
+msgstr "Vertikal toʻldirish"
 
 #: ../gtk/gtkmenu.c:593
 msgid "Extra space at the top and bottom of the menu"
-msgstr ""
+msgstr "Menyuning yuqori va pastki qismidan qoʻshiladigan boʻshliq"
 
 #: ../gtk/gtkmenu.c:601
 msgid "Horizontal Padding"
-msgstr ""
+msgstr "Gorizontal toʻldirish"
 
 #: ../gtk/gtkmenu.c:602
 msgid "Extra space at the left and right edges of the menu"
-msgstr ""
+msgstr "Menyuning chap va oʻng qismidan qoʻshiladigan boʻshliq"
 
 #: ../gtk/gtkmenu.c:610
 msgid "Vertical Offset"
-msgstr ""
+msgstr "Vertikal ofset"
 
 #: ../gtk/gtkmenu.c:611
 msgid "When the menu is a submenu, position it this number of pixels offset vertically"
@@ -3148,7 +3132,7 @@ msgstr ""
 
 #: ../gtk/gtkmenu.c:619
 msgid "Horizontal Offset"
-msgstr ""
+msgstr "Gorizontal ofset"
 
 #: ../gtk/gtkmenu.c:620
 msgid "When the menu is a submenu, position it this number of pixels offset horizontally"
@@ -3252,7 +3236,7 @@ msgstr ""
 
 #: ../gtk/gtkmenubar.c:202 ../gtk/gtktoolbar.c:591
 msgid "Internal padding"
-msgstr ""
+msgstr "Ichki toʻldirish"
 
 #: ../gtk/gtkmenubar.c:203
 msgid "Amount of border space between the menubar shadow and the menu items"
@@ -3276,7 +3260,7 @@ msgstr ""
 
 #: ../gtk/gtkmenuitem.c:236
 msgid "Submenu"
-msgstr ""
+msgstr "Quyi menyu"
 
 #: ../gtk/gtkmenuitem.c:237
 msgid "The submenu attached to the menu item, or NULL if it has none"
@@ -3312,15 +3296,15 @@ msgstr ""
 
 #: ../gtk/gtkmenutoolbutton.c:232 ../gtk/gtkoptionmenu.c:161
 msgid "Menu"
-msgstr ""
+msgstr "Menyu"
 
 #: ../gtk/gtkmenutoolbutton.c:233
 msgid "The dropdown menu"
-msgstr ""
+msgstr "Ochiladigan menyu"
 
 #: ../gtk/gtkmessagedialog.c:98
 msgid "Image/label border"
-msgstr ""
+msgstr "Rasm/yorliq chegarasi"
 
 #: ../gtk/gtkmessagedialog.c:99
 msgid "Width of border around the label and image in the message dialog"
@@ -3328,7 +3312,7 @@ msgstr ""
 
 #: ../gtk/gtkmessagedialog.c:114
 msgid "Use separator"
-msgstr ""
+msgstr "Ajratuvchidan foydalanish"
 
 #: ../gtk/gtkmessagedialog.c:115
 msgid "Whether to put a separator between the message dialog's text and the buttons"
@@ -3336,23 +3320,23 @@ msgstr ""
 
 #: ../gtk/gtkmessagedialog.c:128
 msgid "Message Type"
-msgstr ""
+msgstr "Xabar turi"
 
 #: ../gtk/gtkmessagedialog.c:129
 msgid "The type of message"
-msgstr ""
+msgstr "Xabarning turi"
 
 #: ../gtk/gtkmessagedialog.c:136
 msgid "Message Buttons"
-msgstr ""
+msgstr "Xabar tugmalari"
 
 #: ../gtk/gtkmessagedialog.c:137
 msgid "The buttons shown in the message dialog"
-msgstr ""
+msgstr "Xabar dialogida koʻrsatiladigan tugmalar"
 
 #: ../gtk/gtkmessagedialog.c:154
 msgid "The primary text of the message dialog"
-msgstr ""
+msgstr "Xabar dialogining birlamchi matni"
 
 #: ../gtk/gtkmessagedialog.c:169
 msgid "Use Markup"
@@ -3364,11 +3348,11 @@ msgstr ""
 
 #: ../gtk/gtkmessagedialog.c:184
 msgid "Secondary Text"
-msgstr ""
+msgstr "Ikkilamchi matn"
 
 #: ../gtk/gtkmessagedialog.c:185
 msgid "The secondary text of the message dialog"
-msgstr ""
+msgstr "Xabar dialogining ikkilamchi matni"
 
 #: ../gtk/gtkmessagedialog.c:200
 msgid "Use Markup in secondary"
@@ -3380,15 +3364,15 @@ msgstr ""
 
 #: ../gtk/gtkmessagedialog.c:216
 msgid "The image"
-msgstr ""
+msgstr "Rasm"
 
 #: ../gtk/gtkmisc.c:83
 msgid "Y align"
-msgstr ""
+msgstr "Y tekislash"
 
 #: ../gtk/gtkmisc.c:84
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
-msgstr ""
+msgstr "Vertikal tekislash, 0 dan (yuqori) 1 gacha (past)"
 
 #: ../gtk/gtkmisc.c:93
 msgid "X pad"
@@ -3407,9 +3391,8 @@ msgid "The amount of space to add on the top and bottom of the widget, in pixels
 msgstr ""
 
 #: ../gtk/gtkmountoperation.c:160
-#, fuzzy
 msgid "Parent"
-msgstr "Qoʻy_ish"
+msgstr ""
 
 #: ../gtk/gtkmountoperation.c:161
 msgid "The parent window"
@@ -3425,16 +3408,15 @@ msgstr ""
 
 #: ../gtk/gtkmountoperation.c:177
 msgid "The screen where this window will be displayed."
-msgstr ""
+msgstr "Ushbu oyna koʻrsatiladigan ekran."
 
 #: ../gtk/gtknotebook.c:577
-#, fuzzy
 msgid "Page"
-msgstr "Qoʻy_ish"
+msgstr "Sahifa"
 
 #: ../gtk/gtknotebook.c:578
 msgid "The index of the current page"
-msgstr ""
+msgstr "Joriy sahifa indeksi"
 
 #: ../gtk/gtknotebook.c:586
 msgid "Tab Position"
@@ -3478,7 +3460,7 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:628
 msgid "Show Border"
-msgstr ""
+msgstr "Chegarani koʻrsatish"
 
 #: ../gtk/gtknotebook.c:629
 msgid "Whether the border should be shown or not"
@@ -3516,7 +3498,7 @@ msgstr ""
 #: ../gtk/gtkradiobutton.c:82 ../gtk/gtkradiomenuitem.c:342
 #: ../gtk/gtkradiotoolbutton.c:65
 msgid "Group"
-msgstr ""
+msgstr "Guruh"
 
 #: ../gtk/gtknotebook.c:674
 msgid "Group for tabs drag and drop"
@@ -3532,7 +3514,7 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:687
 msgid "Menu label"
-msgstr ""
+msgstr "Menyu yorligʻi"
 
 #: ../gtk/gtknotebook.c:688
 msgid "The string displayed in the child's menu entry"
@@ -3599,9 +3581,8 @@ msgid "Display the standard backward arrow button"
 msgstr ""
 
 #: ../gtk/gtknotebook.c:791 ../gtk/gtkscrollbar.c:74
-#, fuzzy
 msgid "Forward stepper"
-msgstr "_Oldinga"
+msgstr ""
 
 #: ../gtk/gtknotebook.c:792 ../gtk/gtkscrollbar.c:75
 msgid "Display the standard forward arrow button"
@@ -3633,7 +3614,7 @@ msgstr ""
 
 #: ../gtk/gtkobject.c:370
 msgid "User Data"
-msgstr ""
+msgstr "Foydalanuvchi maʼlumoti"
 
 #: ../gtk/gtkobject.c:371
 msgid "Anonymous User Data Pointer"
@@ -3641,7 +3622,7 @@ msgstr ""
 
 #: ../gtk/gtkoptionmenu.c:162
 msgid "The menu of options"
-msgstr ""
+msgstr "Parametrlar menyusi"
 
 #: ../gtk/gtkoptionmenu.c:169
 msgid "Size of dropdown indicator"
@@ -3689,7 +3670,7 @@ msgstr ""
 
 #: ../gtk/gtkpaned.c:311
 msgid "Resize"
-msgstr ""
+msgstr "Oʻlchamini oʻzgartirish"
 
 #: ../gtk/gtkpaned.c:312
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
@@ -3745,7 +3726,7 @@ msgstr ""
 
 #: ../gtk/gtkprinter.c:144
 msgid "Accepts PDF"
-msgstr ""
+msgstr "PDF qabul qiladi"
 
 #: ../gtk/gtkprinter.c:145
 msgid "TRUE if this printer can accept PDF"
@@ -3753,7 +3734,7 @@ msgstr ""
 
 #: ../gtk/gtkprinter.c:151
 msgid "Accepts PostScript"
-msgstr ""
+msgstr "PostScript qabul qiladi"
 
 #: ../gtk/gtkprinter.c:152
 msgid "TRUE if this printer can accept PostScript"
@@ -3761,37 +3742,35 @@ msgstr ""
 
 #: ../gtk/gtkprinter.c:158
 msgid "State Message"
-msgstr ""
+msgstr "Holat xabari"
 
 #: ../gtk/gtkprinter.c:159
 msgid "String giving the current state of the printer"
-msgstr ""
+msgstr "Printerning joriy holatidan xabar beradi"
 
 #: ../gtk/gtkprinter.c:165
-#, fuzzy
 msgid "Location"
-msgstr "Soʻroq"
+msgstr "Manzili"
 
 #: ../gtk/gtkprinter.c:166
 msgid "The location of the printer"
-msgstr ""
+msgstr "Printer manzili"
 
 #: ../gtk/gtkprinter.c:173
 msgid "The icon name to use for the printer"
-msgstr ""
+msgstr "Printer uchun qoʻllaniladigan nishoncha nomi"
 
 #: ../gtk/gtkprinter.c:179
 msgid "Job Count"
-msgstr ""
+msgstr "Vazifa hisoblagich"
 
 #: ../gtk/gtkprinter.c:180
 msgid "Number of jobs queued in the printer"
-msgstr ""
+msgstr "Printerda navbatda turgan vazifalar soni"
 
 #: ../gtk/gtkprinter.c:198
-#, fuzzy
 msgid "Paused Printer"
-msgstr "_Bosib chiqarish"
+msgstr "Printer vaqtincha toʻxtatilgan"
 
 #: ../gtk/gtkprinter.c:199
 msgid "TRUE if this printer is paused"
@@ -3799,7 +3778,7 @@ msgstr ""
 
 #: ../gtk/gtkprinter.c:212
 msgid "Accepting Jobs"
-msgstr ""
+msgstr "Vazifalar qabul qilinmoqda"
 
 #: ../gtk/gtkprinter.c:213
 msgid "TRUE if this printer is accepting new jobs"
@@ -3815,12 +3794,11 @@ msgstr ""
 
 #: ../gtk/gtkprintjob.c:117
 msgid "Title of the print job"
-msgstr ""
+msgstr "Printer vazifasi nomi"
 
 #: ../gtk/gtkprintjob.c:125
-#, fuzzy
 msgid "Printer"
-msgstr "_Bosib chiqarish"
+msgstr "Printer"
 
 #: ../gtk/gtkprintjob.c:126
 msgid "Printer to print the job to"
@@ -3828,20 +3806,20 @@ msgstr ""
 
 #: ../gtk/gtkprintjob.c:134
 msgid "Settings"
-msgstr ""
+msgstr "Moslamalar"
 
 #: ../gtk/gtkprintjob.c:135
 msgid "Printer settings"
-msgstr ""
+msgstr "Printer moslamalari"
 
 #: ../gtk/gtkprintjob.c:143 ../gtk/gtkprintjob.c:144
 #: ../gtk/gtkprintunixdialog.c:258
 msgid "Page Setup"
-msgstr ""
+msgstr "Sahifa moslamalari"
 
 #: ../gtk/gtkprintjob.c:152 ../gtk/gtkprintoperation.c:1027
 msgid "Track Print Status"
-msgstr ""
+msgstr "Printer holatini kuzatish"
 
 #: ../gtk/gtkprintjob.c:153
 msgid "TRUE if the print job will continue to emit status-changed signals after the print data has been sent to the printer or print server."
@@ -3849,7 +3827,7 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation.c:899
 msgid "Default Page Setup"
-msgstr ""
+msgstr "Andoxa sahifa moslamasi"
 
 #: ../gtk/gtkprintoperation.c:900
 msgid "The GtkPageSetup used by default"
@@ -3857,16 +3835,15 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation.c:918 ../gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
-msgstr ""
+msgstr "Bosib chiqarish moslamalari"
 
 #: ../gtk/gtkprintoperation.c:919 ../gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
 #: ../gtk/gtkprintoperation.c:937
-#, fuzzy
 msgid "Job Name"
-msgstr "Nomi"
+msgstr "Vazifa nomi"
 
 #: ../gtk/gtkprintoperation.c:938
 msgid "A string used for identifying the print job."
@@ -3874,19 +3851,19 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation.c:962
 msgid "Number of Pages"
-msgstr ""
+msgstr "Sahifalar soni"
 
 #: ../gtk/gtkprintoperation.c:963
 msgid "The number of pages in the document."
-msgstr ""
+msgstr "Hujjatdagi sahifalar soni."
 
 #: ../gtk/gtkprintoperation.c:984 ../gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
-msgstr ""
+msgstr "Joriy sahifa"
 
 #: ../gtk/gtkprintoperation.c:985 ../gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
-msgstr ""
+msgstr "Hujjatdagi joriy sahifa"
 
 #: ../gtk/gtkprintoperation.c:1006
 msgid "Use full page"
@@ -3902,7 +3879,7 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation.c:1045
 msgid "Unit"
-msgstr ""
+msgstr "Birlik"
 
 #: ../gtk/gtkprintoperation.c:1046
 msgid "The unit in which distances can be measured in the context"
@@ -3910,7 +3887,7 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation.c:1063
 msgid "Show Dialog"
-msgstr ""
+msgstr "Dialogni koʻrsatish"
 
 #: ../gtk/gtkprintoperation.c:1064
 msgid "TRUE if a progress dialog is shown while printing."
@@ -3925,17 +3902,16 @@ msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
 #: ../gtk/gtkprintoperation.c:1110 ../gtk/gtkprintoperation.c:1111
-#, fuzzy
 msgid "Export filename"
-msgstr "Fayl nomi"
+msgstr ""
 
 #: ../gtk/gtkprintoperation.c:1125
 msgid "Status"
-msgstr ""
+msgstr "Holati"
 
 #: ../gtk/gtkprintoperation.c:1126
 msgid "The status of the print operation"
-msgstr ""
+msgstr "Printer operatsiyasi holati"
 
 #: ../gtk/gtkprintoperation.c:1146
 msgid "Status String"
@@ -3958,9 +3934,8 @@ msgid "The GtkPageSetup to use"
 msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:284
-#, fuzzy
 msgid "Selected Printer"
-msgstr "Fayllni oʻchirish"
+msgstr "Tanlangan printer"
 
 #: ../gtk/gtkprintunixdialog.c:285
 msgid "The GtkPrinter which is selected"
@@ -3976,11 +3951,11 @@ msgstr ""
 
 #: ../gtk/gtkprogress.c:111
 msgid "Show text"
-msgstr ""
+msgstr "Matnni koʻrsatish"
 
 #: ../gtk/gtkprogress.c:112
 msgid "Whether the progress is shown as text."
-msgstr ""
+msgstr "Jarayonni matn sifatida koʻrsatilishi."
 
 #: ../gtk/gtkprogressbar.c:119
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
@@ -4036,7 +4011,7 @@ msgstr ""
 
 #: ../gtk/gtkprogressbar.c:185
 msgid "Text to be displayed in the progress bar"
-msgstr ""
+msgstr "Jarayon panelida koʻrsatiladigan matn"
 
 #: ../gtk/gtkprogressbar.c:207
 msgid "The preferred place to ellipsize the string, if the progress bar does not have enough room to display the entire string, if at all."
@@ -4068,31 +4043,31 @@ msgstr ""
 
 #: ../gtk/gtkprogressbar.c:247
 msgid "Min horizontal bar height"
-msgstr ""
+msgstr "Gorizontal panelning minimal balandligi"
 
 #: ../gtk/gtkprogressbar.c:248
 msgid "Minimum horizontal height of the progress bar"
-msgstr ""
+msgstr "Jarayon panelining minimal gorizontal balandligi"
 
 #: ../gtk/gtkprogressbar.c:260
 msgid "Min vertical bar width"
-msgstr ""
+msgstr "Vertikal panelning minimal kengligi"
 
 #: ../gtk/gtkprogressbar.c:261
 msgid "The minimum vertical width of the progress bar"
-msgstr ""
+msgstr "Jarayon panelining minimal vertikal kengligi"
 
 #: ../gtk/gtkprogressbar.c:273
 msgid "Min vertical bar height"
-msgstr ""
+msgstr "Vertikal panelning minimal balandligi"
 
 #: ../gtk/gtkprogressbar.c:274
 msgid "The minimum vertical height of the progress bar"
-msgstr ""
+msgstr "Jarayon panelining minimal vertikal balandligi"
 
 #: ../gtk/gtkradioaction.c:111
 msgid "The value"
-msgstr ""
+msgstr "Qiymat"
 
 #: ../gtk/gtkradioaction.c:112
 msgid "The value returned by gtk_radio_action_get_current_value() when this action is the current action of its group."
@@ -4104,7 +4079,7 @@ msgstr ""
 
 #: ../gtk/gtkradioaction.c:144
 msgid "The current value"
-msgstr ""
+msgstr "Joriy qiymat"
 
 #: ../gtk/gtkradioaction.c:145
 msgid "The value property of the currently active member of the group to which this action belongs."
@@ -4135,9 +4110,8 @@ msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 
 #: ../gtk/gtkrange.c:369
-#, fuzzy
 msgid "Inverted"
-msgstr "Ay_lantirish"
+msgstr ""
 
 #: ../gtk/gtkrange.c:370
 msgid "Invert direction slider moves to increase range value"
@@ -4265,7 +4239,7 @@ msgstr ""
 
 #: ../gtk/gtkrecentaction.c:679 ../gtk/gtkrecentchoosermenu.c:206
 msgid "Show Numbers"
-msgstr ""
+msgstr "Raqamlarni koʻrsatish"
 
 #: ../gtk/gtkrecentaction.c:680 ../gtk/gtkrecentchoosermenu.c:207
 msgid "Whether the items should be displayed with a number"
@@ -4297,7 +4271,7 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:162
 msgid "Show Icons"
-msgstr ""
+msgstr "Nishonchalarni koʻrsatish"
 
 #: ../gtk/gtkrecentchooser.c:163
 msgid "Whether there should be an icon near the item"
@@ -4317,7 +4291,7 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:205
 msgid "Local only"
-msgstr ""
+msgstr "Faqat lokal"
 
 #: ../gtk/gtkrecentchooser.c:206
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
@@ -4329,11 +4303,11 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:223
 msgid "The maximum number of items to be displayed"
-msgstr ""
+msgstr "Koʻrsatiladigan elementlarning maksimal soni"
 
 #: ../gtk/gtkrecentchooser.c:237
 msgid "Sort Type"
-msgstr ""
+msgstr "Saralash turi"
 
 #: ../gtk/gtkrecentchooser.c:238
 msgid "The sorting order of the items displayed"
@@ -4377,11 +4351,11 @@ msgstr ""
 
 #: ../gtk/gtkruler.c:158
 msgid "Max Size"
-msgstr ""
+msgstr "Maksimal oʻlcham"
 
 #: ../gtk/gtkruler.c:159
 msgid "Maximum size of the ruler"
-msgstr ""
+msgstr "Jadvalning maksimal oʻlchami"
 
 #: ../gtk/gtkruler.c:174
 msgid "Metric"
@@ -4404,9 +4378,8 @@ msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 
 #: ../gtk/gtkscale.c:172
-#, fuzzy
 msgid "Value Position"
-msgstr "Soʻroq"
+msgstr ""
 
 #: ../gtk/gtkscale.c:173
 msgid "The position in which the current value is displayed"
@@ -4438,7 +4411,7 @@ msgstr ""
 
 #: ../gtk/gtkscalebutton.c:213
 msgid "The icon size"
-msgstr ""
+msgstr "Nishoncha oʻlchami"
 
 #: ../gtk/gtkscalebutton.c:222
 msgid "The GtkAdjustment that contains the current value of this scale button object"
@@ -4446,12 +4419,11 @@ msgstr ""
 
 #: ../gtk/gtkscalebutton.c:250
 msgid "Icons"
-msgstr ""
+msgstr "Nishonchalar"
 
 #: ../gtk/gtkscalebutton.c:251
-#, fuzzy
 msgid "List of icon names"
-msgstr "Nomi"
+msgstr "Nishoncha nomlari roʻyxati"
 
 #: ../gtk/gtkscrollbar.c:51
 msgid "Minimum Slider Length"
@@ -4480,12 +4452,12 @@ msgstr ""
 #: ../gtk/gtkscrolledwindow.c:218 ../gtk/gtktext.c:545
 #: ../gtk/gtktreeview.c:578
 msgid "Horizontal Adjustment"
-msgstr ""
+msgstr "Eniga tekislash"
 
 #: ../gtk/gtkscrolledwindow.c:225 ../gtk/gtktext.c:553
 #: ../gtk/gtktreeview.c:586
 msgid "Vertical Adjustment"
-msgstr ""
+msgstr "Boʻyiga tekislash"
 
 #: ../gtk/gtkscrolledwindow.c:232
 msgid "Horizontal Scrollbar Policy"
@@ -4521,7 +4493,7 @@ msgstr ""
 
 #: ../gtk/gtkscrolledwindow.c:274
 msgid "Shadow Type"
-msgstr ""
+msgstr "Soya turi"
 
 #: ../gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
@@ -4537,7 +4509,7 @@ msgstr ""
 
 #: ../gtk/gtkscrolledwindow.c:296
 msgid "Scrollbar spacing"
-msgstr ""
+msgstr "Varaqlash paneli oraligʻi"
 
 #: ../gtk/gtkscrolledwindow.c:297
 msgid "Number of pixels between the scrollbars and the scrolled window"
@@ -4561,7 +4533,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:215
 msgid "Double Click Time"
-msgstr ""
+msgstr "Ikki marta bosish vaqti"
 
 #: ../gtk/gtksettings.c:216
 msgid "Maximum time allowed between two clicks for them to be considered a double click (in milliseconds)"
@@ -4577,15 +4549,15 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:240
 msgid "Cursor Blink"
-msgstr ""
+msgstr "Kursor oʻchib-yonishi"
 
 #: ../gtk/gtksettings.c:241
 msgid "Whether the cursor should blink"
-msgstr ""
+msgstr "Kursorning oʻchib-yonishi"
 
 #: ../gtk/gtksettings.c:248
 msgid "Cursor Blink Time"
-msgstr ""
+msgstr "Kursor oʻchib-yonish vaqti"
 
 #: ../gtk/gtksettings.c:249
 msgid "Length of the cursor blink cycle, in milliseconds"
@@ -4609,7 +4581,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:284
 msgid "Theme Name"
-msgstr ""
+msgstr "Mavzu nomi"
 
 #: ../gtk/gtksettings.c:285
 msgid "Name of theme RC file to load"
@@ -4617,11 +4589,11 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:293
 msgid "Icon Theme Name"
-msgstr ""
+msgstr "Nishoncha mavzusi nomi"
 
 #: ../gtk/gtksettings.c:294
 msgid "Name of icon theme to use"
-msgstr ""
+msgstr "Foydalaniladigan nishoncha mavzusi nomi"
 
 #: ../gtk/gtksettings.c:302
 msgid "Fallback Icon Theme Name"
@@ -4641,7 +4613,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:320
 msgid "Menu bar accelerator"
-msgstr ""
+msgstr "Menyu paneli akseleratori"
 
 #: ../gtk/gtksettings.c:321
 msgid "Keybinding to activate the menu bar"
@@ -4656,29 +4628,28 @@ msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 
 #: ../gtk/gtksettings.c:338
-#, fuzzy
 msgid "Font Name"
-msgstr "Nomi"
+msgstr "Shriftning nomi"
 
 #: ../gtk/gtksettings.c:339
 msgid "Name of default font to use"
-msgstr ""
+msgstr "Foydalaniladigan andoza shriftning nomi"
 
 #: ../gtk/gtksettings.c:361
 msgid "Icon Sizes"
-msgstr ""
+msgstr "Nishoncha oʻlchamlari"
 
 #: ../gtk/gtksettings.c:362
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
-msgstr ""
+msgstr "Nishoncha oʻlchamlari roʻyxati (gtk-menu=16,16:gtk-button=20,20..."
 
 #: ../gtk/gtksettings.c:370
 msgid "GTK Modules"
-msgstr ""
+msgstr "GTK modullari"
 
 #: ../gtk/gtksettings.c:371
 msgid "List of currently active GTK modules"
-msgstr ""
+msgstr "Joriy aktiv GTK modullari roʻyxati"
 
 #: ../gtk/gtksettings.c:380
 msgid "Xft Antialias"
@@ -4706,7 +4677,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:410
 msgid "Xft RGBA"
-msgstr ""
+msgstr "Xft RGBA"
 
 #: ../gtk/gtksettings.c:411
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
@@ -4714,15 +4685,15 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:420
 msgid "Xft DPI"
-msgstr ""
+msgstr "Xft DPI"
 
 #: ../gtk/gtksettings.c:421
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
-msgstr ""
+msgstr "n"
 
 #: ../gtk/gtksettings.c:430
 msgid "Cursor theme name"
-msgstr ""
+msgstr "Kursor mavzusi nomi"
 
 #: ../gtk/gtksettings.c:431
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
@@ -4730,7 +4701,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:439
 msgid "Cursor theme size"
-msgstr ""
+msgstr "Kursor mavzusi oʻlchami"
 
 #: ../gtk/gtksettings.c:440
 msgid "Size to use for cursors, or 0 to use the default size"
@@ -4793,18 +4764,16 @@ msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr ""
 
 #: ../gtk/gtksettings.c:551
-#, fuzzy
 msgid "Color scheme"
-msgstr "_Yopish"
+msgstr "Rang qolipi"
 
 #: ../gtk/gtksettings.c:552
 msgid "A palette of named colors for use in themes"
 msgstr ""
 
 #: ../gtk/gtksettings.c:561
-#, fuzzy
 msgid "Enable Animations"
-msgstr "Maʼlumot"
+msgstr "Animatsiyalarni yoqish"
 
 #: ../gtk/gtksettings.c:562
 msgid "Whether to enable toolkit-wide animations."
@@ -4859,18 +4828,16 @@ msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr ""
 
 #: ../gtk/gtksettings.c:705
-#, fuzzy
 msgid "Error Bell"
-msgstr "Xato"
+msgstr "Xatolik signali"
 
 #: ../gtk/gtksettings.c:706
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
 
 #: ../gtk/gtksettings.c:723
-#, fuzzy
 msgid "Color Hash"
-msgstr "_Yopish"
+msgstr ""
 
 #: ../gtk/gtksettings.c:724
 msgid "A hash table representation of the color scheme."
@@ -4901,18 +4868,16 @@ msgid "Command to run when displaying a print preview"
 msgstr ""
 
 #: ../gtk/gtksettings.c:791
-#, fuzzy
 msgid "Enable Mnemonics"
-msgstr "Maʼlumot"
+msgstr ""
 
 #: ../gtk/gtksettings.c:792
 msgid "Whether labels should have mnemonics"
 msgstr ""
 
 #: ../gtk/gtksettings.c:808
-#, fuzzy
 msgid "Enable Accelerators"
-msgstr "Maʼlumot"
+msgstr "Akseleratorlarni yoqish"
 
 #: ../gtk/gtksettings.c:809
 msgid "Whether menu items should have accelerators"
@@ -4968,27 +4933,24 @@ msgid "Whether to play event sounds as feedback to user input"
 msgstr ""
 
 #: ../gtk/gtksettings.c:938
-#, fuzzy
 msgid "Enable Event Sounds"
-msgstr "Maʼlumot"
+msgstr "Tovushli ogohlantirishlarni yoqish"
 
 #: ../gtk/gtksettings.c:939
 msgid "Whether to play any event sounds at all"
 msgstr ""
 
 #: ../gtk/gtksettings.c:954
-#, fuzzy
 msgid "Enable Tooltips"
-msgstr "Maʼlumot"
+msgstr ""
 
 #: ../gtk/gtksettings.c:955
 msgid "Whether tooltips should be shown on widgets"
 msgstr ""
 
 #: ../gtk/gtksizegroup.c:293
-#, fuzzy
 msgid "Mode"
-msgstr "Jild"
+msgstr "Usul"
 
 #: ../gtk/gtksizegroup.c:294
 msgid "The directions in which the size group affects the requested sizes of its component widgets"
@@ -5255,9 +5217,8 @@ msgid "Whether the buffer has some text currently selected"
 msgstr ""
 
 #: ../gtk/gtktextbuffer.c:229
-#, fuzzy
 msgid "Cursor position"
-msgstr "Soʻroq"
+msgstr "Kursor oʻrni"
 
 #: ../gtk/gtktextbuffer.c:230
 msgid "The position of the insert mark (as offset from the beginning of the buffer)"
@@ -5388,9 +5349,8 @@ msgid "Width of the right margin in pixels"
 msgstr ""
 
 #: ../gtk/gtktexttag.c:407 ../gtk/gtktextview.c:614
-#, fuzzy
 msgid "Indent"
-msgstr "_Indeks"
+msgstr ""
 
 #: ../gtk/gtktexttag.c:408 ../gtk/gtktextview.c:615
 msgid "Amount to indent the paragraph, in pixels"
@@ -5785,9 +5745,8 @@ msgid "The stock icon displayed on the item"
 msgstr ""
 
 #: ../gtk/gtktoolbutton.c:218
-#, fuzzy
 msgid "Icon name"
-msgstr "Nomi"
+msgstr "Nishoncha nomi"
 
 #: ../gtk/gtktoolbutton.c:219
 msgid "The name of the themed icon displayed on the item"
@@ -5934,9 +5893,8 @@ msgid "Whether to enable selection of multiple items by dragging the mouse point
 msgstr ""
 
 #: ../gtk/gtktreeview.c:752
-#, fuzzy
 msgid "Enable Grid Lines"
-msgstr "Maʼlumot"
+msgstr ""
 
 #: ../gtk/gtktreeview.c:753
 msgid "Whether grid lines should be drawn in the tree view"
@@ -6167,9 +6125,8 @@ msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 
 #: ../gtk/gtkwidget.c:483
-#, fuzzy
 msgid "Widget name"
-msgstr "Fayl nomi"
+msgstr "Vidjet nomi"
 
 #: ../gtk/gtkwidget.c:484
 msgid "The name of the widget"
@@ -6240,18 +6197,16 @@ msgid "Whether the widget is the focus widget within the toplevel"
 msgstr ""
 
 #: ../gtk/gtkwidget.c:558
-#, fuzzy
 msgid "Can default"
-msgstr "default:LTR"
+msgstr ""
 
 #: ../gtk/gtkwidget.c:559
 msgid "Whether the widget can be the default widget"
 msgstr ""
 
 #: ../gtk/gtkwidget.c:565
-#, fuzzy
 msgid "Has default"
-msgstr "default:LTR"
+msgstr ""
 
 #: ../gtk/gtkwidget.c:566
 msgid "Whether the widget is the default widget"
@@ -6275,7 +6230,7 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:586
 msgid "Style"
-msgstr ""
+msgstr "Uslub"
 
 #: ../gtk/gtkwidget.c:587
 msgid "The style of the widget, which contains information about how it will look (colors etc)"
@@ -6283,7 +6238,7 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:593
 msgid "Events"
-msgstr ""
+msgstr "Hodisalar"
 
 #: ../gtk/gtkwidget.c:594
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
@@ -6382,18 +6337,16 @@ msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
 #: ../gtk/gtkwidget.c:2275
-#, fuzzy
 msgid "Unvisited Link Color"
-msgstr "_Rang"
+msgstr "Koʻrilmagan bogʻlamalar rangi"
 
 #: ../gtk/gtkwidget.c:2276
 msgid "Color of unvisited links"
 msgstr ""
 
 #: ../gtk/gtkwidget.c:2289
-#, fuzzy
 msgid "Visited Link Color"
-msgstr "_Rang"
+msgstr "Koʻrilgan bogʻlamalar  rangi"
 
 #: ../gtk/gtkwidget.c:2290
 msgid "Color of visited links"
@@ -6510,7 +6463,7 @@ msgstr ""
 
 #: ../gtk/gtkwindow.c:561
 msgid "Default Width"
-msgstr ""
+msgstr "Andoza kenglik"
 
 #: ../gtk/gtkwindow.c:562
 msgid "The default width of the window, used when initially showing the window"
@@ -6518,7 +6471,7 @@ msgstr ""
 
 #: ../gtk/gtkwindow.c:571
 msgid "Default Height"
-msgstr ""
+msgstr "Andoza balandlik"
 
 #: ../gtk/gtkwindow.c:572
 msgid "The default height of the window, used when initially showing the window"
@@ -6582,7 +6535,7 @@ msgstr ""
 
 #: ../gtk/gtkwindow.c:662
 msgid "Urgent"
-msgstr ""
+msgstr "Muhim"
 
 #: ../gtk/gtkwindow.c:663
 msgid "TRUE if the window should be brought to the user's attention."
@@ -6613,9 +6566,8 @@ msgid "Whether the window should be decorated by the window manager"
 msgstr ""
 
 #: ../gtk/gtkwindow.c:722
-#, fuzzy
 msgid "Deletable"
-msgstr "Oʻ_chirish"
+msgstr "Olib tashlab boʻladigan"
 
 #: ../gtk/gtkwindow.c:723
 msgid "Whether the window frame should have a close button"
