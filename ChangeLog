@@ -1,5 +1,9 @@
 2008-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c: Redo the Caps Lock warning using an icon.
+
+2008-12-30  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 558694 – Paned window splitter keynav broken
 
 	* gtk/gtkpaned.c (get_child_panes): Don't add unrealized

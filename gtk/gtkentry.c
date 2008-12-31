@@ -124,6 +124,7 @@ struct _GtkEntryPrivate
   guint real_changed            : 1;
   guint invisible_char_set      : 1;
   guint caps_lock_warning       : 1;
+  guint caps_lock_warning_shown : 1;
   guint change_count            : 8;
   guint progress_pulse_mode     : 1;
   guint progress_pulse_way_back : 1;
@@ -2029,6 +2030,7 @@ gtk_entry_init (GtkEntry *entry)
   priv->shadow_type = GTK_SHADOW_IN;
   priv->xalign = 0.0;
   priv->caps_lock_warning = TRUE;
+  priv->caps_lock_warning_shown = FALSE;
   priv->progress_fraction = 0.0;
   priv->progress_pulse_fraction = 0.1;
 
@@ -9357,138 +9359,34 @@ gtk_entry_progress_pulse (GtkEntry *entry)
 /* Caps Lock warning for password entries */
 
 static void
-capslock_feedback_free (GtkEntryCapslockFeedback *feedback)
+show_capslock_feedback (GtkEntry    *entry,
+                        const gchar *text)
 {
-  if (feedback->window)
-    gtk_widget_destroy (feedback->window);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
-  g_slice_free (GtkEntryCapslockFeedback, feedback);
-}
-
-static gboolean
-capslock_feedback_expose_event_cb (GtkWidget                *widget,
-                                   GdkEventExpose           *event,
-                                   GtkEntryCapslockFeedback *feedback)
-{
-  gtk_paint_flat_box (feedback->window->style,
-                      feedback->window->window,
-                      GTK_STATE_NORMAL,
-                      GTK_SHADOW_OUT,
-                      NULL,
-                      feedback->window,
-                      "tooltip",
-                      0, 0,
-                      feedback->window->allocation.width,
-                      feedback->window->allocation.height);
-  return FALSE;
-}
-
-static gboolean
-capslock_feedback_enter_notify (GtkWidget                *widget,
-                                GdkEventCrossing         *event,
-                                GtkEntryCapslockFeedback *feedback)
-{
-  remove_capslock_feedback (GTK_ENTRY (feedback->entry));
-  return TRUE;
-}
-
-static void
-create_capslock_feedback_window (GtkEntryCapslockFeedback *feedback)
-{
-  GtkWidget *window;
-  GtkWidget *alignment;
-  GtkWidget *label;
-  
-  /* Keep in sync with gtk_tooltip_init() */
-  window = feedback->window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_TOOLTIP);
-  gtk_widget_set_app_paintable (window, TRUE);
-  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-  gtk_widget_set_name (window, "gtk-tooltip");
-
-  alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
-                             window->style->ythickness, 
-                             window->style->ythickness,
-                             window->style->xthickness,
-                             window->style->xthickness);
-  gtk_container_add (GTK_CONTAINER (window), alignment);
-  gtk_widget_show (alignment);
-
-  g_signal_connect (window, "expose-event",
-                    G_CALLBACK (capslock_feedback_expose_event_cb), feedback);
-  g_signal_connect (window, "enter-notify-event",
-                    G_CALLBACK (capslock_feedback_enter_notify), feedback);
-
-  label = feedback->label = gtk_label_new (NULL);
-  gtk_container_add (GTK_CONTAINER (alignment), label);
-  gtk_widget_show (label);
-}
-
-static void
-show_capslock_feedback_window (GtkEntryCapslockFeedback *feedback)
-{
-  GtkRequisition feedback_req;
-  gint entry_x, entry_y;
-  GtkAllocation *entry_allocation;
-  int feedback_x, feedback_y;
-  GdkScreen *screen;
-  gint monitor_num;
-  GdkRectangle monitor;
-  GtkWidget *entry;
-
-  entry = feedback->entry;
-  screen = gtk_widget_get_screen (entry);
-  monitor_num = gdk_screen_get_monitor_at_window (screen, entry->window);
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
-
-  feedback = g_object_get_qdata (G_OBJECT (entry), quark_capslock_feedback);
-
-  gtk_widget_size_request (feedback->window, &feedback_req);
-
-  gdk_window_get_origin (entry->window, &entry_x, &entry_y);
-  entry_allocation = &(entry->allocation);
-
-  if (entry_x + feedback_req.width <= monitor.x + monitor.width)
-      feedback_x = MAX (entry_x, monitor.x);
-  else
-    feedback_x = monitor.x + monitor.width - feedback_req.width;
-
-  if (entry_y + entry_allocation->height + feedback_req.height <= monitor.y + monitor.height)
-    feedback_y = entry_y + entry_allocation->height;
-  else
-    feedback_y = MAX (entry_y - feedback_req.height, monitor.y);
-
-  gtk_window_move (GTK_WINDOW (feedback->window), feedback_x, feedback_y);
-  gtk_widget_show (feedback->window);
-}
-
-static void
-pop_up_capslock_feedback (GtkEntry    *entry,
-                          const gchar *text)
-{
-  GtkEntryCapslockFeedback *feedback;
-
-  feedback = g_object_get_qdata (G_OBJECT (entry), quark_capslock_feedback);
-
-  if (feedback == NULL)
+  if (gtk_entry_get_storage_type (entry, GTK_ENTRY_ICON_SECONDARY) == GTK_IMAGE_EMPTY)
     {
-      feedback = g_slice_new0 (GtkEntryCapslockFeedback);
-      feedback->entry = GTK_WIDGET (entry);
-      g_object_set_qdata_full (G_OBJECT (entry), quark_capslock_feedback,
-                               feedback,
-                               (GDestroyNotify) capslock_feedback_free);
-      create_capslock_feedback_window (feedback);
+      gtk_entry_set_icon_from_stock (entry, GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_INFO);
+      gtk_entry_set_icon_activatable (entry, GTK_ENTRY_ICON_SECONDARY, FALSE);
+      priv->caps_lock_warning_shown = TRUE;
     }
 
-  gtk_label_set_text (GTK_LABEL (feedback->label), text);
-  show_capslock_feedback_window (feedback);
+  if (priv->caps_lock_warning_shown)
+    gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, text);
+  else
+    g_warning ("Can't show Caps Lock warning, since secondary icon is set");
 }
 
 static void
 remove_capslock_feedback (GtkEntry *entry)
 {
-  g_object_set_qdata (G_OBJECT (entry), quark_capslock_feedback, NULL);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
+
+  if (priv->caps_lock_warning_shown)
+    {
+      gtk_entry_set_icon_from_stock (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+      priv->caps_lock_warning_shown = FALSE;
+    } 
 }
 
 static void
@@ -9514,7 +9412,7 @@ keymap_state_changed (GdkKeymap *keymap,
     }
 
   if (text)
-    pop_up_capslock_feedback (entry, text);
+    show_capslock_feedback (entry, text);
   else
     remove_capslock_feedback (entry);
 }
