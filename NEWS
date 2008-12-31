@@ -40,7 +40,7 @@ Overview of Changes from GTK+ 2.14.x to 2.15.0
  - Page rendering can be deferred to a thread to avoid blocking the mainloop
 
 * GDK
- - GdkKeymap emits a ::state-changed signal when the caps lock state changes
+ - GdkKeymap emits a state-changed signal when the caps lock state changes
 
 * Newly deprecated functions:
   gdk_window_get_toplevels(),
@@ -57,6 +57,8 @@ Overview of Changes from GTK+ 2.14.x to 2.15.0
    change the spacing between elements of the content area
  - The GtkEntry::state-hint style property can be used to request that
    GTK+ should pass the correct state when drawing the background of entries
+ - The GtkEntry::prelight style property can be used to suppress prelighting
+   of icons in entries on mouseover
  
 * Changes that are relevant for translators
  - GTK+ has been switched to use the two-argument C_() macro
@@ -217,6 +219,10 @@ Overview of Changes from GTK+ 2.14.x to 2.15.0
  353088 gtk_expander_get_label should return the full label text
  512743 Applications with lists crash in libgail
  564555 synaptic cannot be started...
+ 565203 icons are misplaced when horizontal gtkiconview is...
+ 549251 GTK icon view accessible issue 
+ 558694 Paned window splitter keynav broken
+ 565846 va_end(args) should be added into gtk_tree_store_new
 
 * New and updated translations:
  Arabic (ar)

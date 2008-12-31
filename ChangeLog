@@ -1,5 +1,9 @@
 2008-12-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2008-12-31  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols:
 	* gtk/gtkruler.[hc]: Some more
 
