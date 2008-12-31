@@ -889,7 +889,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Primary stock ID"),
                                                         P_("Stock ID for primary icon"),
                                                         NULL,
-                                                        GTK_PARAM_WRITABLE));
+                                                        GTK_PARAM_READWRITE));
 
   /**
    * GtkEntry:stock-secondary:
@@ -904,7 +904,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Secondary stock ID"),
                                                         P_("Stock ID for secondary icon"),
                                                         NULL,
-                                                        GTK_PARAM_WRITABLE));
+                                                        GTK_PARAM_READWRITE));
   
   /**
    * GtkEntry:icon-name-primary:
@@ -919,7 +919,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Primary icon name"),
                                                         P_("Icon name for primary icon"),
                                                         NULL,
-                                                        GTK_PARAM_WRITABLE));
+                                                        GTK_PARAM_READWRITE));
   
   /**
    * GtkEntry:icon-name-secondary:
@@ -934,7 +934,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Secondary icon name"),
                                                         P_("Icon name for secondary icon"),
                                                         NULL,
-                                                        GTK_PARAM_WRITABLE));
+                                                        GTK_PARAM_READWRITE));
   
   /**
    * GtkEntry:gicon-primary:
@@ -1711,6 +1711,7 @@ gtk_entry_set_property (GObject         *object,
 
     case PROP_PROGRESS_PULSE_STEP:
       gtk_entry_set_progress_pulse_step (entry, g_value_get_double (value));
+      break;
 
     case PROP_PIXBUF_PRIMARY:
       gtk_entry_set_icon_from_pixbuf (entry,
@@ -1885,6 +1886,7 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_PROGRESS_PULSE_STEP:
       g_value_set_double (value, priv->progress_pulse_fraction);
+      break;
 
     case PROP_PIXBUF_PRIMARY:
       g_value_set_object (value,
@@ -1932,6 +1934,7 @@ gtk_entry_get_property (GObject         *object,
       g_value_set_object (value,
                           gtk_entry_get_gicon (entry,
                                                GTK_ENTRY_ICON_SECONDARY));
+      break;
 
     case PROP_STORAGE_TYPE_PRIMARY:
       g_value_set_enum (value,

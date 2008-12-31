@@ -1,5 +1,10 @@
 2008-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c: Fix errors in property definitions and
+	get_property implementation.
+
+2008-12-30  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c: Redo the Caps Lock warning using an icon.
 
 2008-12-30  Matthias Clasen  <mclasen@redhat.com>
