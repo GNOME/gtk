@@ -153,9 +153,9 @@ struct _GtkPanedPrivate
 };
 
 
-G_DEFINE_TYPE_WITH_CODE (GtkPaned, gtk_paned, GTK_TYPE_CONTAINER,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
-                                                NULL))
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkPaned, gtk_paned, GTK_TYPE_CONTAINER,
+                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
+                                                         NULL))
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -1324,6 +1324,7 @@ gtk_paned_motion (GtkWidget      *widget,
   return FALSE;
 }
 
+#if 0
 /**
  * gtk_paned_new:
  * @orientation: the paned's orientation.
@@ -1341,6 +1342,7 @@ gtk_paned_new (GtkOrientation orientation)
                        "orientation", orientation,
                        NULL);
 }
+#endif
 
 void
 gtk_paned_add1 (GtkPaned  *paned,

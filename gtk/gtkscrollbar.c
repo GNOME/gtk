@@ -35,7 +35,7 @@
 static void gtk_scrollbar_style_set (GtkWidget *widget,
                                      GtkStyle  *previous);
 
-G_DEFINE_TYPE (GtkScrollbar, gtk_scrollbar, GTK_TYPE_RANGE)
+G_DEFINE_ABSTRACT_TYPE (GtkScrollbar, gtk_scrollbar, GTK_TYPE_RANGE)
 
 static void
 gtk_scrollbar_class_init (GtkScrollbarClass *class)
@@ -125,6 +125,7 @@ gtk_scrollbar_style_set (GtkWidget *widget,
   GTK_WIDGET_CLASS (gtk_scrollbar_parent_class)->style_set (widget, previous);
 }
 
+#if 0
 /**
  * gtk_scrollbar_new:
  * @orientation: the scrollbar's orientation.
@@ -148,6 +149,8 @@ gtk_scrollbar_new (GtkOrientation  orientation,
                        "adjustment",  adjustment,
                        NULL);
 }
+#endif
+
 
 #define __GTK_SCROLLBAR_C__
 #include "gtkaliasdef.c"

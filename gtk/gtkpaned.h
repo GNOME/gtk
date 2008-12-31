@@ -107,8 +107,6 @@ struct _GtkPanedClass
 
 
 GType       gtk_paned_get_type     (void) G_GNUC_CONST;
-GtkWidget * gtk_paned_new          (GtkOrientation  orientation);
-
 void        gtk_paned_add1         (GtkPaned       *paned,
                                     GtkWidget      *child);
 void        gtk_paned_add2         (GtkPaned       *paned,

@@ -1,3 +1,11 @@
+2008-12-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkpaned.[hc]:
+	* gtk/gtkscale.[hc]:
+	* gtk/gtkscrollbar.[hc]: 
+	* gtk/gtkseparator.[hc]: Keep these all abstract for now.
+
 2008-12-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c: Rename the icon signals to ::icon-press and

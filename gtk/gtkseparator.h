@@ -60,7 +60,6 @@ struct _GtkSeparatorClass
 
 
 GType       gtk_separator_get_type (void) G_GNUC_CONST;
-GtkWidget * gtk_separator_new      (GtkOrientation  orientation);
 
 G_END_DECLS
 

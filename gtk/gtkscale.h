@@ -77,13 +77,6 @@ struct _GtkScaleClass
 };
 
 GType             gtk_scale_get_type           (void) G_GNUC_CONST;
-GtkWidget       * gtk_scale_new                (GtkOrientation   orientation,
-                                                GtkAdjustment   *adjustment);
-GtkWidget       * gtk_scale_new_with_range     (GtkOrientation   orientation,
-                                                gdouble          min,
-                                                gdouble          max,
-                                                gdouble          step);
-
 void              gtk_scale_set_digits         (GtkScale        *scale,
                                                 gint             digits);
 gint              gtk_scale_get_digits         (GtkScale        *scale);

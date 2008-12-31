@@ -89,7 +89,7 @@ static void     gtk_scale_real_get_layout_offsets (GtkScale       *scale,
                                                    gint           *x,
                                                    gint           *y);
 
-G_DEFINE_TYPE (GtkScale, gtk_scale, GTK_TYPE_RANGE)
+G_DEFINE_ABSTRACT_TYPE (GtkScale, gtk_scale, GTK_TYPE_RANGE)
 
 static gboolean
 single_string_accumulator (GSignalInvocationHint *ihint,
@@ -422,6 +422,7 @@ gtk_scale_get_property (GObject      *object,
     }
 }
 
+#if 0
 /**
  * gtk_scale_new:
  * @orientation: the scale's orientation.
@@ -499,6 +500,7 @@ gtk_scale_new_with_range (GtkOrientation orientation,
                        "digits",      digits,
                        NULL);
 }
+#endif
 
 /**
  * gtk_scale_set_digits:
