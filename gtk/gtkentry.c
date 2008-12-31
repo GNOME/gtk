@@ -795,7 +795,11 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:caps-lock-warning
    *
    * Whether password entries will show a warning when Caps Lock is on
-   * or an input method is active.
+   * or an input method is active. 
+   *
+   * Note that the warning is shown using a secondary icon, and thus
+   * does not work if you are using the secondary icon position for some 
+   * other purpose.
    *
    * Since: 2.16
    */
