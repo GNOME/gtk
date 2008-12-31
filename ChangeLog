@@ -1,5 +1,12 @@
 2008-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c: Code cleanups; get rid of get_text_area_size,
+	replace get_icon_allocation by get_icon_allocations, don't
+	pass allocation to place_windows; other stylistic changes to 
+	the icon-related code.
+
+2008-12-30  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c: Avoid size allocation loops.
 
 2008-12-30  Matthias Clasen  <mclasen@redhat.com>
