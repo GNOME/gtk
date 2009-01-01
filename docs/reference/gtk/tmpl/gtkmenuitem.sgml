@@ -96,12 +96,22 @@ submenu. For normal applications, the relevant signal is "activate".
 
 </para>
 
+<!-- ##### ARG GtkMenuItem:label ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkMenuItem:right-justified ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkMenuItem:submenu ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenuItem:use-underline ##### -->
 <para>
 
 </para>
@@ -180,6 +190,42 @@ Creates a new #GtkMenuItem whose child is a #GtkLabel.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_menu_item_get_label ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_set_label ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@label: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_get_use_underline ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_set_use_underline ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@setting: 
+
+
 <!-- ##### FUNCTION gtk_menu_item_set_submenu ##### -->
 <para>
 
@@ -198,6 +244,14 @@ Creates a new #GtkMenuItem whose child is a #GtkLabel.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_menu_item_remove_submenu ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+
+
 <!-- ##### FUNCTION gtk_menu_item_set_accel_path ##### -->
 <para>
 
@@ -214,14 +268,6 @@ Creates a new #GtkMenuItem whose child is a #GtkLabel.
 
 @menu_item: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_menu_item_remove_submenu ##### -->
-<para>
-
-</para>
-
-@menu_item: 
 
 
 <!-- ##### FUNCTION gtk_menu_item_select ##### -->

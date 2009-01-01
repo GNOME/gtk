@@ -1400,7 +1400,6 @@ Used to indicate which grid lines to draw in a tree view.
 @GTK_TREE_VIEW_GRID_LINES_VERTICAL: Vertical grid lines.
 @GTK_TREE_VIEW_GRID_LINES_BOTH: Horizontal and vertical grid lines.
 
-
 <!-- ##### FUNCTION gtk_tree_view_get_grid_lines ##### -->
 <para>
 

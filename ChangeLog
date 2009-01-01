@@ -1,5 +1,9 @@
 2009-01-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.15.0 ===
+
+2009-01-01  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentry.c (gtk_entry_set_icon_sensitive): Fix default
 	value
 

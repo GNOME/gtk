@@ -376,7 +376,6 @@ Deprecated alias for gtk_window_set_position().
 @Deprecated: Use gtk_window_set_position() instead.
 
 
-
 <!-- ##### FUNCTION gtk_window_activate_focus ##### -->
 <para>
 
@@ -771,15 +770,6 @@ Deprecated alias for gtk_window_set_position().
 
 @window: 
 @modifier: 
-
-
-<!-- ##### FUNCTION gtk_window_set_role ##### -->
-<para>
-
-</para>
-
-@window: 
-@role: 
 
 
 <!-- ##### FUNCTION gtk_window_set_type_hint ##### -->

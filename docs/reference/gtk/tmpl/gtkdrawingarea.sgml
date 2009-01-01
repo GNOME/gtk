@@ -136,3 +136,4 @@ within the enclosing containers.
 @height: the height to request
 @Deprecated: Use gtk_widget_set_size_request() instead.
 
+

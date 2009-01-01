@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-17 23:14-0400\n"
+"POT-Creation-Date: 2009-01-01 16:28-0500\n"
 "PO-Revision-Date: 2005-02-14 18:03+0330\n"
 "Last-Translator: Roozbeh Pournader <roozbeh@farsiweb.info>\n"
 "Language-Team: Persian <farsi@lists.sharif.edu>\n"
@@ -25,47 +25,47 @@ msgid "sdl|system"
 msgstr ""
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:126
+#: gdk/gdk.c:127
 msgid "Program class as used by the window manager"
 msgstr "رده‌ی برنامه، به شکل مورد استفاده‌ی مدیر پنجره‌ها"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:127
+#: gdk/gdk.c:128
 msgid "CLASS"
 msgstr "رده"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:129
+#: gdk/gdk.c:130
 msgid "Program name as used by the window manager"
 msgstr "نام برنامه، به شکل مورد استفاده‌ی مدیر پنجره‌ها"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:130
+#: gdk/gdk.c:131
 msgid "NAME"
 msgstr "نام"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:132
+#: gdk/gdk.c:133
 msgid "X display to use"
 msgstr "نمایش‌گر X مورد استفاده"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:133
+#: gdk/gdk.c:134
 msgid "DISPLAY"
 msgstr "نمایش"
 
 #. Description of --screen=SCREEN in --help output
-#: gdk/gdk.c:135
+#: gdk/gdk.c:136
 msgid "X screen to use"
 msgstr "صفحه‌ی X مورد استفاده"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: gdk/gdk.c:136
+#: gdk/gdk.c:137
 msgid "SCREEN"
 msgstr "صفحه"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:139
+#: gdk/gdk.c:140
 msgid "Gdk debugging flags to set"
 msgstr "پرچم‌های اشکال‌زدایی Gdk که باید یک شوند"
 
@@ -73,176 +73,28 @@ msgstr "پرچم‌های اشکال‌زدایی Gdk که باید یک شون�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:452 gtk/gtkmain.c:455
+#: gdk/gdk.c:141 gdk/gdk.c:144 gtk/gtkmain.c:452 gtk/gtkmain.c:455
 msgid "FLAGS"
 msgstr "پرچم‌ها"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:142
+#: gdk/gdk.c:143
 msgid "Gdk debugging flags to unset"
 msgstr "پرچم‌های اشکال‌زدایی Gdk که باید صفر شوند"
 
-#: gdk/keyname-table.h:3940
-msgid "keyboard label|BackSpace"
-msgstr ""
-
-#: gdk/keyname-table.h:3941
-msgid "keyboard label|Tab"
-msgstr ""
-
-#: gdk/keyname-table.h:3942
-msgid "keyboard label|Return"
-msgstr ""
-
-#: gdk/keyname-table.h:3943
-msgid "keyboard label|Pause"
-msgstr ""
-
-#: gdk/keyname-table.h:3944
-msgid "keyboard label|Scroll_Lock"
-msgstr ""
-
-#: gdk/keyname-table.h:3945
-msgid "keyboard label|Sys_Req"
-msgstr ""
-
-#: gdk/keyname-table.h:3946
-msgid "keyboard label|Escape"
-msgstr ""
-
-#: gdk/keyname-table.h:3947
-msgid "keyboard label|Multi_key"
-msgstr ""
-
-#: gdk/keyname-table.h:3948
-msgid "keyboard label|Home"
-msgstr ""
-
-#: gdk/keyname-table.h:3949
-msgid "keyboard label|Left"
-msgstr ""
-
-#: gdk/keyname-table.h:3950
-msgid "keyboard label|Up"
-msgstr ""
-
-#: gdk/keyname-table.h:3951
-msgid "keyboard label|Right"
-msgstr ""
-
-#: gdk/keyname-table.h:3952
-msgid "keyboard label|Down"
-msgstr ""
-
-#: gdk/keyname-table.h:3953
-msgid "keyboard label|Page_Up"
-msgstr ""
-
-#: gdk/keyname-table.h:3954
-msgid "keyboard label|Page_Down"
-msgstr ""
-
-#: gdk/keyname-table.h:3955
-msgid "keyboard label|End"
-msgstr ""
-
-#: gdk/keyname-table.h:3956
-msgid "keyboard label|Begin"
-msgstr ""
-
-#: gdk/keyname-table.h:3957
-msgid "keyboard label|Print"
-msgstr ""
-
-#: gdk/keyname-table.h:3958
-msgid "keyboard label|Insert"
-msgstr ""
-
-#: gdk/keyname-table.h:3959
-msgid "keyboard label|Num_Lock"
-msgstr ""
-
-#: gdk/keyname-table.h:3960
-msgid "keyboard label|KP_Space"
-msgstr ""
-
-#: gdk/keyname-table.h:3961
-msgid "keyboard label|KP_Tab"
-msgstr ""
-
-#: gdk/keyname-table.h:3962
-msgid "keyboard label|KP_Enter"
-msgstr ""
-
-#: gdk/keyname-table.h:3963
-msgid "keyboard label|KP_Home"
-msgstr ""
-
-#: gdk/keyname-table.h:3964
-msgid "keyboard label|KP_Left"
-msgstr ""
-
-#: gdk/keyname-table.h:3965
-msgid "keyboard label|KP_Up"
-msgstr ""
-
-#: gdk/keyname-table.h:3966
-msgid "keyboard label|KP_Right"
-msgstr ""
-
-#: gdk/keyname-table.h:3967
-msgid "keyboard label|KP_Down"
-msgstr ""
-
-#: gdk/keyname-table.h:3968
-msgid "keyboard label|KP_Page_Up"
-msgstr ""
-
-#: gdk/keyname-table.h:3969
-msgid "keyboard label|KP_Prior"
-msgstr ""
-
-#: gdk/keyname-table.h:3970
-msgid "keyboard label|KP_Page_Down"
-msgstr ""
-
-#: gdk/keyname-table.h:3971
-msgid "keyboard label|KP_Next"
-msgstr ""
-
-#: gdk/keyname-table.h:3972
-msgid "keyboard label|KP_End"
-msgstr ""
-
-#: gdk/keyname-table.h:3973
-msgid "keyboard label|KP_Begin"
-msgstr ""
-
-#: gdk/keyname-table.h:3974
-msgid "keyboard label|KP_Insert"
-msgstr ""
-
-#: gdk/keyname-table.h:3975
-msgid "keyboard label|KP_Delete"
-msgstr ""
-
-#: gdk/keyname-table.h:3976
-msgid "keyboard label|Delete"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:964
-#: gdk-pixbuf/gdk-pixbuf-io.c:1224 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:965
+#: gdk-pixbuf/gdk-pixbuf-io.c:1225 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "باز کردن پرونده‌ی «%s» شکست خورد: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:976
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:977
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "پرونده‌ی تصویری «%s» هیچ داده‌ای ندارد"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1012
-#: gdk-pixbuf/gdk-pixbuf-io.c:1276 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1013
+#: gdk-pixbuf/gdk-pixbuf-io.c:1277 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -259,12 +111,12 @@ msgstr ""
 "بار کردن پویانمایی «%s» شکست خورد: دلیل آن معلوم نیست، احتمالاً پرونده‌ی "
 "پویانمایی خراب است"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:700
+#: gdk-pixbuf/gdk-pixbuf-io.c:701
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "نمی‌توان پیمانه‌ی تصویربارکن را بار کرد: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
+#: gdk-pixbuf/gdk-pixbuf-io.c:716
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -273,53 +125,53 @@ msgstr ""
 "پیمانه‌ی بار کردن پرونده %s رابط مناسب را صادر نمی‌کند؛ شاید از نسخه‌ی دیگری از "
 "GTK است؟"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:724 gdk-pixbuf/gdk-pixbuf-io.c:775
+#: gdk-pixbuf/gdk-pixbuf-io.c:725 gdk-pixbuf/gdk-pixbuf-io.c:776
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "تصویر نوع «%s» پشتیبانی نمی‌شود"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:845
+#: gdk-pixbuf/gdk-pixbuf-io.c:846
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "قالب پرونده‌ی تصویر برای پرونده‌ی «%s» تشخیص داده نشد"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:853
+#: gdk-pixbuf/gdk-pixbuf-io.c:854
 msgid "Unrecognized image file format"
 msgstr "قالب پرونده‌ی تصویری ناشناخته"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1021
+#: gdk-pixbuf/gdk-pixbuf-io.c:1022
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "بار کردن تصویر «%s» شکست خورد: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1655 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1656 gdk-pixbuf/io-gdip-utils.c:952
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "خطا در نوشتن در پرونده‌ی تصویر: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1700 gdk-pixbuf/gdk-pixbuf-io.c:1830
+#: gdk-pixbuf/gdk-pixbuf-io.c:1701 gdk-pixbuf/gdk-pixbuf-io.c:1831
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "این ساخت gdk-pixbuf از ذخیره‌ی این قالب تصویری پشتیبانی نمی‌کند: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1734
+#: gdk-pixbuf/gdk-pixbuf-io.c:1735
 msgid "Insufficient memory to save image to callback"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1747
+#: gdk-pixbuf/gdk-pixbuf-io.c:1748
 msgid "Failed to open temporary file"
 msgstr "باز کردن پرونده‌ی موقت شکست خورد"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1773
+#: gdk-pixbuf/gdk-pixbuf-io.c:1774
 msgid "Failed to read from temporary file"
 msgstr "خواندن از پرونده‌ی موقت شکست خورد"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2007
+#: gdk-pixbuf/gdk-pixbuf-io.c:2008
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "نمی‌توان «%s» را برای نوشتن باز کرد: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2032
+#: gdk-pixbuf/gdk-pixbuf-io.c:2033
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -328,11 +180,11 @@ msgstr ""
 "بستن «%s» هنگام نوشتن تصویر شکست خورد، ممکن است همه‌ی داده‌ها ذخیره نشده باشند: "
 "%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2252 gdk-pixbuf/gdk-pixbuf-io.c:2303
+#: gdk-pixbuf/gdk-pixbuf-io.c:2253 gdk-pixbuf/gdk-pixbuf-io.c:2304
 msgid "Insufficient memory to save image into a buffer"
 msgstr "حافظه برای ذخیره کردن تصویر در میان‌گیر کافی نیست"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2349
+#: gdk-pixbuf/gdk-pixbuf-io.c:2350
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "خطا در نوشتن در پرونده‌ی تصویر: %s"
@@ -547,17 +399,17 @@ msgstr "عمق پشتیبانی‌نشده برای پرونده‌ی ICO: %Id"
 msgid "The ICO image format"
 msgstr "قالب تصویر ICO"
 
-#: gdk-pixbuf/io-icns.c:345
+#: gdk-pixbuf/io-icns.c:347
 #, fuzzy, c-format
 msgid "Error reading ICNS image: %s"
 msgstr "خطای مهلک در خواندن پرونده‌ی تصویری PNG‏: %s"
 
-#: gdk-pixbuf/io-icns.c:362
+#: gdk-pixbuf/io-icns.c:364
 #, fuzzy
 msgid "Could not decode ICNS file"
 msgstr "نمی‌توان مورد را انتخاب کرد"
 
-#: gdk-pixbuf/io-icns.c:395
+#: gdk-pixbuf/io-icns.c:397
 #, fuzzy
 msgid "The ICNS image format"
 msgstr "قالب تصویر ICO"
@@ -905,7 +757,7 @@ msgstr "نمی‌توان برای ساختار زمینه‌ی TGA حافظه �
 msgid "Excess data in file"
 msgstr "داده‌های اضافی در پرونده"
 
-#: gdk-pixbuf/io-tga.c:1000
+#: gdk-pixbuf/io-tga.c:1002
 msgid "The Targa image format"
 msgstr "قالب تصویر تارگا"
 
@@ -1046,48 +898,43 @@ msgstr "قالب تصویر XPM"
 msgid "The EMF image format"
 msgstr "قالب تصویر BMP"
 
-#: gdk-pixbuf/io-gdip-utils.c:212
+#: gdk-pixbuf/io-gdip-utils.c:220
 #, fuzzy, c-format
 msgid "Could not allocate memory: %s"
 msgstr "نمی‌توان برای سرصفحه حافظه تخصیص داد"
 
-#: gdk-pixbuf/io-gdip-utils.c:237 gdk-pixbuf/io-gdip-utils.c:350
-#: gdk-pixbuf/io-gdip-utils.c:383
+#: gdk-pixbuf/io-gdip-utils.c:245 gdk-pixbuf/io-gdip-utils.c:360
+#: gdk-pixbuf/io-gdip-utils.c:394
 #, fuzzy, c-format
 msgid "Could not create stream: %s"
 msgstr "خطا در ایجاد شاخه‌ی «%s»: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:251
+#: gdk-pixbuf/io-gdip-utils.c:259
 #, fuzzy, c-format
 msgid "Could not seek stream: %s"
 msgstr "نمی‌توان مورد را انتخاب کرد"
 
-#: gdk-pixbuf/io-gdip-utils.c:263
+#: gdk-pixbuf/io-gdip-utils.c:271
 #, fuzzy, c-format
 msgid "Could not read from stream: %s"
 msgstr "خطا در ایجاد شاخه‌ی «%s»: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:736
-#, fuzzy
-msgid "Couldn't create pixbuf"
-msgstr "نمی‌توان pixbuf ایجاد کرد"
-
-#: gdk-pixbuf/io-gdip-utils.c:798
+#: gdk-pixbuf/io-gdip-utils.c:683 gdk-pixbuf/io-gdip-utils.c:815
 #, fuzzy
 msgid "Couldn't load bitmap"
 msgstr "نمی‌توان نام پرونده را تبدیل کرد"
 
-#: gdk-pixbuf/io-gdip-utils.c:821
+#: gdk-pixbuf/io-gdip-utils.c:838
 #, fuzzy
 msgid "Couldn't load metafile"
 msgstr "نمی‌توان نام پرونده را تبدیل کرد"
 
-#: gdk-pixbuf/io-gdip-utils.c:980
+#: gdk-pixbuf/io-gdip-utils.c:997
 #, fuzzy
 msgid "Unsupported image format for GDI+"
 msgstr "این شکل از تصاویر RAS پشتیبانی نمی‌شوند"
 
-#: gdk-pixbuf/io-gdip-utils.c:987
+#: gdk-pixbuf/io-gdip-utils.c:1004
 #, fuzzy
 msgid "Couldn't save"
 msgstr "نمی‌توان بقیه را ذخیره کرد"
@@ -1196,73 +1043,74 @@ msgstr "طرح‌ها و تصاویر از"
 #. * that use the shift key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. *
-#. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: gtk/gtkaccellabel.c:93
-msgid "keyboard label|Shift"
-msgstr ""
+#: gtk/gtkaccellabel.c:91
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Shift"
+msgstr "تبدیل"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. *
-#. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: gtk/gtkaccellabel.c:101
-msgid "keyboard label|Ctrl"
-msgstr ""
+#: gtk/gtkaccellabel.c:97
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Ctrl"
+msgstr "مهار"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. *
-#. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: gtk/gtkaccellabel.c:109
-msgid "keyboard label|Alt"
-msgstr ""
+#: gtk/gtkaccellabel.c:103
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Alt"
+msgstr "دگرساز"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:678
-msgid "keyboard label|Super"
+#: gtk/gtkaccellabel.c:671
+msgctxt "keyboard label"
+msgid "Super"
 msgstr ""
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:692
-msgid "keyboard label|Hyper"
+#: gtk/gtkaccellabel.c:684
+msgctxt "keyboard label"
+msgid "Hyper"
 msgstr ""
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:707
-msgid "keyboard label|Meta"
+#: gtk/gtkaccellabel.c:698
+msgctxt "keyboard label"
+msgid "Meta"
 msgstr ""
 
-#. do not translate the part before the |
-#: gtk/gtkaccellabel.c:725
-msgid "keyboard label|Space"
-msgstr ""
+#: gtk/gtkaccellabel.c:715
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Space"
+msgstr "_تغییر نام"
 
-#. do not translate the part before the |
-#: gtk/gtkaccellabel.c:729
-msgid "keyboard label|Backslash"
+#: gtk/gtkaccellabel.c:718
+msgctxt "keyboard label"
+msgid "Backslash"
 msgstr ""
 
 #: gtk/gtkbuilderparser.c:340
@@ -1270,12 +1118,12 @@ msgstr ""
 msgid "Invalid type function: `%s'"
 msgstr "نام پرونده‌ی نامعتبر: %s"
 
-#: gtk/gtkbuilderparser.c:823
+#: gtk/gtkbuilderparser.c:837
 #, fuzzy, c-format
 msgid "Invalid root element: '%s'"
 msgstr "نام پرونده‌ی نامعتبر: %s"
 
-#: gtk/gtkbuilderparser.c:862
+#: gtk/gtkbuilderparser.c:876
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr ""
@@ -1302,85 +1150,85 @@ msgid "calendar:week_start:0"
 msgstr "calendar:week_start:6"
 
 #. Translators:  This is a text measurement template.
-#. * Translate it to the widest year text.
-#. *
-#. * Don't include the prefix "year measurement template|"
-#. * in the translation.
+#. * Translate it to the widest year text
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1806
-msgid "year measurement template|2000"
+#: gtk/gtkcalendar.c:1803
+msgctxt "year measurement template"
+msgid "2000"
 msgstr ""
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
 #. *
 #. * Translate to "%Id" if you want to use localized digits, or
-#. * translate to "%d" otherwise.  Don't include the "calendar:day:digits|"
-#. * part in the translation.
+#. * translate to "%d" otherwise.
 #. *
 #. * Note that translating this doesn't guarantee that you get localized
-#. * digits.  That needs support from your system and locale definition
+#. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1837 gtk/gtkcalendar.c:2498
+#: gtk/gtkcalendar.c:1834 gtk/gtkcalendar.c:2492
 #, c-format
-msgid "calendar:day:digits|%d"
+msgctxt "calendar:day:digits"
+msgid "%d"
 msgstr ""
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
 #. *
 #. * Translate to "%Id" if you want to use localized digits, or
-#. * translate to "%d" otherwise.  Don't include the
-#. * "calendar:week:digits|" part in the translation.
+#. * translate to "%d" otherwise.
 #. *
 #. * Note that translating this doesn't guarantee that you get localized
-#. * digits.  That needs support from your system and locale definition
+#. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1869 gtk/gtkcalendar.c:2360
-#, fuzzy, c-format
-msgid "calendar:week:digits|%d"
-msgstr "calendar:week_start:6"
+#: gtk/gtkcalendar.c:1866 gtk/gtkcalendar.c:2355
+#, c-format
+msgctxt "calendar:week:digits"
+msgid "%d"
+msgstr ""
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
 #. * Use only ASCII in the translation.
 #. *
-#. * Also look for the msgid "year measurement template|2000".
+#. * Also look for the msgid "2000".
 #. * Translate that entry to a year with the widest output of this
 #. * msgid.
 #. *
-#. * Don't include the prefix "calendar year format|" in the
-#. * translation. "%Y" is appropriate for most locales.
+#. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2150
-msgid "calendar year format|%Y"
-msgstr ""
+#: gtk/gtkcalendar.c:2146
+#, fuzzy
+msgctxt "calendar year format"
+msgid "%Y"
+msgstr "Y"
 
 #. This label is displayed in a treeview cell displaying
-#. * a disabled accelerator key combination. Only include
-#. * the text after the | in the translation.
+#. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:235
-msgid "Accelerator|Disabled"
-msgstr ""
+#: gtk/gtkcellrendereraccel.c:243
+#, fuzzy
+msgctxt "Accelerator"
+msgid "Disabled"
+msgstr "از کار افتاده"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:368 gtk/gtkcellrendereraccel.c:580
+#: gtk/gtkcellrendereraccel.c:376 gtk/gtkcellrendereraccel.c:588
 msgid "New accelerator..."
 msgstr ""
 
-#. do not translate the part before the |
-#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
+#: gtk/gtkcellrendererprogress.c:361 gtk/gtkcellrendererprogress.c:448
 #, c-format
-msgid "progress bar label|%d %%"
-msgstr "‪٪%Id‬"
+msgctxt "progress bar label"
+msgid "%d %%"
+msgstr ""
 
 #: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
@@ -1520,19 +1368,33 @@ msgstr ""
 msgid "Color Selection"
 msgstr "انتخاب رنگ"
 
-#: gtk/gtkentry.c:5380 gtk/gtktextview.c:7686
+#: gtk/gtkentry.c:7998 gtk/gtktextview.c:7730
 msgid "Input _Methods"
 msgstr "روش‌های ورودی"
 
-#: gtk/gtkentry.c:5394 gtk/gtktextview.c:7700
+#: gtk/gtkentry.c:8012 gtk/gtktextview.c:7744
 msgid "_Insert Unicode Control Character"
 msgstr "_درج نویسه‌ی کنترلی یونی‌کد"
+
+#: gtk/gtkentry.c:9375
+msgid ""
+"You have the Caps Lock key on\n"
+"and an active input method"
+msgstr ""
+
+#: gtk/gtkentry.c:9377
+msgid "You have the Caps Lock key on"
+msgstr ""
+
+#: gtk/gtkentry.c:9379
+msgid "You have an active input method"
+msgstr ""
 
 #: gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
 msgstr "یک پرونده انتخاب کنید"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1922
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1923
 msgid "Desktop"
 msgstr "رومیزی"
 
@@ -1545,33 +1407,33 @@ msgstr "(هیچ‌کدام)"
 msgid "Other..."
 msgstr "غیره..."
 
-#: gtk/gtkfilechooserdefault.c:1055
+#: gtk/gtkfilechooserdefault.c:1056
 msgid "Could not retrieve information about the file"
 msgstr "نمی‌توان اطلاعاتی درباره‌ی پرونده بازیابی کرد"
 
-#: gtk/gtkfilechooserdefault.c:1066
+#: gtk/gtkfilechooserdefault.c:1067
 msgid "Could not add a bookmark"
 msgstr "نمی‌توان چوب‌الفی اضافه کرد"
 
-#: gtk/gtkfilechooserdefault.c:1077
+#: gtk/gtkfilechooserdefault.c:1078
 msgid "Could not remove bookmark"
 msgstr "نمی‌توان چوب‌الف را حذف کرد"
 
-#: gtk/gtkfilechooserdefault.c:1088
+#: gtk/gtkfilechooserdefault.c:1089
 msgid "The folder could not be created"
 msgstr "نمی‌توان پوشه را ایجاد کرد"
 
-#: gtk/gtkfilechooserdefault.c:1101
+#: gtk/gtkfilechooserdefault.c:1102
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1112
+#: gtk/gtkfilechooserdefault.c:1113
 msgid "Invalid file name"
 msgstr "نام پرونده‌ی نامعتبر"
 
-#: gtk/gtkfilechooserdefault.c:1122
+#: gtk/gtkfilechooserdefault.c:1123
 msgid "The folder contents could not be displayed"
 msgstr "نمی‌توان محتویات پوشه را نمایش داد"
 
@@ -1579,228 +1441,217 @@ msgstr "نمی‌توان محتویات پوشه را نمایش داد"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1674
+#: gtk/gtkfilechooserdefault.c:1675
 #, c-format
 msgid "%1$s on %2$s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1850
+#: gtk/gtkfilechooserdefault.c:1851
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1874
+#: gtk/gtkfilechooserdefault.c:1875
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2491
+#: gtk/gtkfilechooserdefault.c:2500
 msgid "Select which types of files are shown"
 msgstr "انتخاب این که کدام نوع پرونده‌ها نمایش داده شوند"
 
-#: gtk/gtkfilechooserdefault.c:2920
+#: gtk/gtkfilechooserdefault.c:2929
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "اضافه کردن پوشه‌ی «%s» به چوب‌الفها"
 
-#: gtk/gtkfilechooserdefault.c:2961
+#: gtk/gtkfilechooserdefault.c:2970
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "اضافه کردن پوشه‌ی فعلی به چوب‌الفها"
 
-#: gtk/gtkfilechooserdefault.c:2963
+#: gtk/gtkfilechooserdefault.c:2972
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "اضافه کردن پوشه‌های انتخاب‌شده به چوب‌الفها"
 
-#: gtk/gtkfilechooserdefault.c:3003
+#: gtk/gtkfilechooserdefault.c:3012
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "حذف چوب‌الف «%s»"
 
-#: gtk/gtkfilechooserdefault.c:3721
+#: gtk/gtkfilechooserdefault.c:3730
 #, fuzzy
 msgid "Remove"
 msgstr "حذف"
 
-#: gtk/gtkfilechooserdefault.c:3730
+#: gtk/gtkfilechooserdefault.c:3739
 #, fuzzy
 msgid "Rename..."
 msgstr "_تغییر نام"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3876
+#: gtk/gtkfilechooserdefault.c:3885
 msgid "Places"
 msgstr ""
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3933
+#: gtk/gtkfilechooserdefault.c:3942
 #, fuzzy
 msgid "_Places"
 msgstr "_تغییر نام"
 
-#: gtk/gtkfilechooserdefault.c:3988 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3997
 msgid "_Add"
 msgstr "_افزودن"
 
-#: gtk/gtkfilechooserdefault.c:3995
+#: gtk/gtkfilechooserdefault.c:4004
 #, fuzzy
 msgid "Add the selected folder to the Bookmarks"
 msgstr "افزودن پوشه‌ی انتخاب‌شده به چوب‌الفها"
 
-#: gtk/gtkfilechooserdefault.c:4000 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:4009
 msgid "_Remove"
 msgstr "_حذف"
 
-#: gtk/gtkfilechooserdefault.c:4007
+#: gtk/gtkfilechooserdefault.c:4016
 msgid "Remove the selected bookmark"
 msgstr "حذف پوشه‌های انتخاب‌شده"
 
-#: gtk/gtkfilechooserdefault.c:4104
+#: gtk/gtkfilechooserdefault.c:4125
 #, fuzzy
 msgid "Could not select file"
 msgstr "نمی‌توان مورد را انتخاب کرد"
 
-#: gtk/gtkfilechooserdefault.c:4280
+#: gtk/gtkfilechooserdefault.c:4300
 #, fuzzy
 msgid "_Add to Bookmarks"
 msgstr "_افزودن به میانبرها"
 
-#: gtk/gtkfilechooserdefault.c:4294
+#: gtk/gtkfilechooserdefault.c:4314
 msgid "Show _Hidden Files"
 msgstr "نمایش پرونده‌های _مخفی"
 
-#: gtk/gtkfilechooserdefault.c:4537 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4321
+msgid "Show _Size Column"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:4576 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "پرونده‌ها"
 
-#: gtk/gtkfilechooserdefault.c:4586
+#: gtk/gtkfilechooserdefault.c:4625
 msgid "Name"
 msgstr "_نام:"
 
-#: gtk/gtkfilechooserdefault.c:4611
+#: gtk/gtkfilechooserdefault.c:4650
 msgid "Size"
 msgstr "اندازه"
 
-#: gtk/gtkfilechooserdefault.c:4625
+#: gtk/gtkfilechooserdefault.c:4664
 msgid "Modified"
 msgstr "تغییریافته"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4845 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4884 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "_نام:"
 
-#: gtk/gtkfilechooserdefault.c:4887
+#: gtk/gtkfilechooserdefault.c:4926
 msgid "_Browse for other folders"
 msgstr "_مرور برای سایر پوشه‌ها"
 
-#: gtk/gtkfilechooserdefault.c:5157
+#: gtk/gtkfilechooserdefault.c:5196
 #, fuzzy
 msgid "Type a file name"
 msgstr "نام پرونده‌ی نامعتبر"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5194
+#: gtk/gtkfilechooserdefault.c:5233
 msgid "Create Fo_lder"
 msgstr "ایجاد پو_شه"
 
-#: gtk/gtkfilechooserdefault.c:5204
+#: gtk/gtkfilechooserdefault.c:5243
 #, fuzzy
 msgid "_Location:"
 msgstr "_مکان:"
 
-#: gtk/gtkfilechooserdefault.c:5393
+#: gtk/gtkfilechooserdefault.c:5444
 msgid "Save in _folder:"
 msgstr "ذخیره در پو_شه‌ی:"
 
-#: gtk/gtkfilechooserdefault.c:5395
+#: gtk/gtkfilechooserdefault.c:5446
 msgid "Create in _folder:"
 msgstr "ایجاد در پو_شه‌ی:"
 
-#: gtk/gtkfilechooserdefault.c:6976
+#: gtk/gtkfilechooserdefault.c:7097
 msgid "Cannot change to folder because it is not local"
 msgstr "نمی‌توان به پوشه رفت چون محلی نیست"
 
-#: gtk/gtkfilechooserdefault.c:7601 gtk/gtkfilechooserdefault.c:7622
+#: gtk/gtkfilechooserdefault.c:7722 gtk/gtkfilechooserdefault.c:7743
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "میانبر %s وجود ندارد"
 
-#: gtk/gtkfilechooserdefault.c:7712
+#: gtk/gtkfilechooserdefault.c:7833
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "میانبر %s وجود ندارد"
 
-#: gtk/gtkfilechooserdefault.c:7960 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8081 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7963 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8084 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7968 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8089 gtk/gtkprintunixdialog.c:381
 #, fuzzy
 msgid "_Replace"
 msgstr "_تغییر نام"
 
-#: gtk/gtkfilechooserdefault.c:8729
+#: gtk/gtkfilechooserdefault.c:8846
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "نمی‌توان بقیه را ذخیره کرد"
 
-#: gtk/gtkfilechooserdefault.c:8730
+#: gtk/gtkfilechooserdefault.c:8847
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8744
+#: gtk/gtkfilechooserdefault.c:8861
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "نمی‌توان بقیه را ذخیره کرد"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9184
+#: gtk/gtkfilechooserdefault.c:9328
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10131
+#: gtk/gtkfilechooserdefault.c:10281
 #, c-format
 msgid "Could not mount %s"
 msgstr "نمی‌توان %s را سوار کرد"
 
-#: gtk/gtkfilechooserdefault.c:10785
+#: gtk/gtkfilechooserdefault.c:10956
 msgid "Type name of new folder"
 msgstr "نام پوشه‌ی جدید را وارد کنید"
 
-#: gtk/gtkfilechooserdefault.c:10835
-#, fuzzy, c-format
-msgid "%.1f KB"
-msgstr "%I.1f کیلو"
-
-#: gtk/gtkfilechooserdefault.c:10837
-#, fuzzy, c-format
-msgid "%.1f MB"
-msgstr "%I.1f مگا"
-
-#: gtk/gtkfilechooserdefault.c:10839
-#, fuzzy, c-format
-msgid "%.1f GB"
-msgstr "%I.1f گیگا"
-
-#: gtk/gtkfilechooserdefault.c:10942 gtk/gtkfilechooserdefault.c:10964
-#: gtk/gtkfilechooserdefault.c:11035
+#: gtk/gtkfilechooserdefault.c:11134 gtk/gtkfilechooserdefault.c:11156
+#: gtk/gtkfilechooserdefault.c:11227
 msgid "Unknown"
 msgstr "نامعلوم"
 
-#: gtk/gtkfilechooserdefault.c:10982
+#: gtk/gtkfilechooserdefault.c:11174
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10984
+#: gtk/gtkfilechooserdefault.c:11176
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "دیروز"
@@ -1840,7 +1691,7 @@ msgstr ""
 msgid "Completing..."
 msgstr ""
 
-#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1349
+#: gtk/gtkfilechoosersettings.c:295 gtk/gtkfilesel.c:1349
 #: gtk/gtkfilesel.c:1358
 #, fuzzy, c-format
 msgid "Error creating folder '%s': %s"
@@ -1997,7 +1848,7 @@ msgstr ""
 "خطا در ایجاد پوشه‌ی \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesystemmodel.c:1299
+#: gtk/gtkfilesystemmodel.c:1301
 msgid "(Empty)"
 msgstr "(خالی)"
 
@@ -2010,7 +1861,7 @@ msgstr "یک قلم بردارید"
 msgid "Sans 12"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:780
+#: gtk/gtkfontbutton.c:785
 msgid "Font"
 msgstr "قلم"
 
@@ -2037,7 +1888,7 @@ msgstr "_اندازه:"
 msgid "_Preview:"
 msgstr "_پیش‌نمایش:"
 
-#: gtk/gtkfontsel.c:1542
+#: gtk/gtkfontsel.c:1560
 msgid "Font Selection"
 msgstr "انتخاب قلم"
 
@@ -2075,18 +1926,26 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "شمایل «%s» در تم وجود ندارد"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "بار کردن پرونده‌ی TIFF شکست خورد"
 
-#: gtk/gtkimmodule.c:515
+#: gtk/gtkimmodule.c:527
 #, fuzzy
 msgid "Simple"
 msgstr "اندازه"
 
-#: gtk/gtkimmulticontext.c:542
-msgid "input method menu|System"
+#: gtk/gtkimmulticontext.c:545
+#, fuzzy
+msgctxt "input method menu"
+msgid "System"
+msgstr "سیستم پرونده‌ها"
+
+#: gtk/gtkimmulticontext.c:629
+#, c-format
+msgctxt "input method menu"
+msgid "System (%s)"
 msgstr ""
 
 #: gtk/gtkinputdialog.c:192
@@ -2176,12 +2035,12 @@ msgstr "(نامعلوم)"
 msgid "Cl_ear"
 msgstr "_پاک کردن"
 
-#: gtk/gtklinkbutton.c:427
+#: gtk/gtklinkbutton.c:428
 #, fuzzy
 msgid "Copy URL"
 msgstr "_نسخه‌برداری"
 
-#: gtk/gtklinkbutton.c:565
+#: gtk/gtklinkbutton.c:586
 #, fuzzy
 msgid "Invalid URI"
 msgstr "‏UTF-8 نامعتبر"
@@ -2233,52 +2092,52 @@ msgstr "گزینه‌های GTK+"
 msgid "Show GTK+ Options"
 msgstr "نشان دادن گزینه‌های GTK+"
 
-#: gtk/gtkmountoperation.c:476
+#: gtk/gtkmountoperation.c:481
 #, fuzzy
 msgid "Co_nnect"
 msgstr "_تبدیل"
 
-#: gtk/gtkmountoperation.c:520
+#: gtk/gtkmountoperation.c:525
 msgid "Connect _anonymously"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:534
 msgid "Connect as u_ser:"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:566
+#: gtk/gtkmountoperation.c:571
 #, fuzzy
 msgid "_Username:"
 msgstr "_تغییر نام"
 
-#: gtk/gtkmountoperation.c:570
+#: gtk/gtkmountoperation.c:575
 #, fuzzy
 msgid "_Domain:"
 msgstr "_مکان:"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:580
 #, fuzzy
 msgid "_Password:"
 msgstr "فشار"
 
-#: gtk/gtkmountoperation.c:590
+#: gtk/gtkmountoperation.c:598
 msgid "Forget password _immediately"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:598
+#: gtk/gtkmountoperation.c:608
 msgid "Remember password until you _logout"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:606
+#: gtk/gtkmountoperation.c:618
 msgid "Remember _forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:4417 gtk/gtknotebook.c:6924
+#: gtk/gtknotebook.c:4425 gtk/gtknotebook.c:6944
 #, c-format
 msgid "Page %u"
 msgstr "صفحه‌ی %Iu"
 
-#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
+#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:867
 msgid "Not a valid page setup file"
 msgstr ""
 
@@ -2335,7 +2194,7 @@ msgstr "_ویژگی‌ها"
 msgid "_Orientation:"
 msgstr "_غلظت:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2662
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2681
 #, fuzzy
 msgid "Page Setup"
 msgstr "صفحه‌ی %Iu"
@@ -2402,11 +2261,11 @@ msgstr ""
 msgid "File System Root"
 msgstr "سیستم پرونده‌ها"
 
-#: gtk/gtkprinteroptionwidget.c:685
+#: gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
 msgstr ""
 
-#: gtk/gtkprinteroptionwidget.c:798
+#: gtk/gtkprinteroptionwidget.c:808
 #, fuzzy
 msgid "_Save in folder:"
 msgstr "ذخیره در پو_شه‌ی:"
@@ -2415,77 +2274,32 @@ msgstr "ذخیره در پو_شه‌ی:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:173
+#: gtk/gtkprintoperation.c:175
 #, c-format
 msgid "%s job #%d"
 msgstr ""
 
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1504
-msgid "print operation status|Initial state"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1506
-msgid "print operation status|Preparing to print"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1508
-msgid "print operation status|Generating data"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1510
-msgid "print operation status|Sending data"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1512
-msgid "print operation status|Waiting"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1514
-msgid "print operation status|Blocking on issue"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1516
-msgid "print operation status|Printing"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1518
-msgid "print operation status|Finished"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1520
-msgid "print operation status|Finished with error"
-msgstr ""
-
-#: gtk/gtkprintoperation.c:2043
+#: gtk/gtkprintoperation.c:2048
 #, c-format
 msgid "Preparing %d"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:2045 gtk/gtkprintoperation.c:2301
+#: gtk/gtkprintoperation.c:2050 gtk/gtkprintoperation.c:2381
 #, fuzzy, c-format
 msgid "Preparing"
 msgstr "اخطار"
 
-#: gtk/gtkprintoperation.c:2048
+#: gtk/gtkprintoperation.c:2053
 #, fuzzy, c-format
 msgid "Printing %d"
 msgstr "_چاپ"
 
-#: gtk/gtkprintoperation.c:2331
+#: gtk/gtkprintoperation.c:2411
 #, c-format
 msgid "Error creating print preview"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:2334
+#: gtk/gtkprintoperation.c:2414
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
@@ -2500,7 +2314,7 @@ msgstr ""
 msgid "Error printing"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:381 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:384 gtk/gtkprintoperation-win32.c:1425
 #, fuzzy
 msgid "Application"
 msgstr "_مکان:"
@@ -2515,7 +2329,7 @@ msgstr ""
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1413
+#: modules/printbackends/cups/gtkprintbackendcups.c:1469
 #, fuzzy
 msgid "Paused"
 msgstr "_چسباندن"
@@ -2565,236 +2379,236 @@ msgstr "سرصفحه‌ی نامعتبر در شمایل"
 msgid "Unspecified error"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1748
+#: gtk/gtkprintunixdialog.c:1763
 #, fuzzy
 msgid "Printer"
 msgstr "_چاپ"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1758
+#: gtk/gtkprintunixdialog.c:1773
 #, fuzzy
 msgid "Location"
 msgstr "_مکان:"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1769
+#: gtk/gtkprintunixdialog.c:1784
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1792
+#: gtk/gtkprintunixdialog.c:1809
 msgid "Range"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1796
+#: gtk/gtkprintunixdialog.c:1813
 msgid "_All Pages"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1803
+#: gtk/gtkprintunixdialog.c:1820
 #, fuzzy
 msgid "C_urrent Page"
 msgstr "_ایجاد"
 
-#: gtk/gtkprintunixdialog.c:1812
+#: gtk/gtkprintunixdialog.c:1829
 msgid "Pag_es:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1813
+#: gtk/gtkprintunixdialog.c:1830
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1832
+#: gtk/gtkprintunixdialog.c:1851
 msgid "Copies"
 msgstr ""
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1837
+#: gtk/gtkprintunixdialog.c:1856
 msgid "Copie_s:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1855
+#: gtk/gtkprintunixdialog.c:1874
 #, fuzzy
 msgid "C_ollate"
 msgstr "_ایجاد"
 
-#: gtk/gtkprintunixdialog.c:1863
+#: gtk/gtkprintunixdialog.c:1882
 #, fuzzy
 msgid "_Reverse"
 msgstr "باز_گشت"
 
-#: gtk/gtkprintunixdialog.c:1883
+#: gtk/gtkprintunixdialog.c:1902
 msgid "General"
 msgstr ""
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2423
-#: modules/printbackends/cups/gtkprintbackendcups.c:2813
+#: gtk/gtkprintunixdialog.c:2442
+#: modules/printbackends/cups/gtkprintbackendcups.c:2869
 #, fuzzy
 msgid "Page Ordering"
 msgstr "اخطار"
 
-#: gtk/gtkprintunixdialog.c:2429
+#: gtk/gtkprintunixdialog.c:2448
 #, fuzzy
 msgid "Left to right"
 msgstr "نشانه‌ی _چپ‌به‌راست"
 
-#: gtk/gtkprintunixdialog.c:2430
+#: gtk/gtkprintunixdialog.c:2449
 #, fuzzy
 msgid "Right to left"
 msgstr "_چاپ"
 
-#: gtk/gtkprintunixdialog.c:2499
+#: gtk/gtkprintunixdialog.c:2518
 msgid "Layout"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2503
+#: gtk/gtkprintunixdialog.c:2522
 msgid "T_wo-sided:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2518
+#: gtk/gtkprintunixdialog.c:2537
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "_ویژگی‌ها"
 
-#: gtk/gtkprintunixdialog.c:2536
+#: gtk/gtkprintunixdialog.c:2555
 #, fuzzy
 msgid "Page or_dering:"
 msgstr "_ویژگی‌ها"
 
-#: gtk/gtkprintunixdialog.c:2552
+#: gtk/gtkprintunixdialog.c:2571
 #, fuzzy
 msgid "_Only print:"
 msgstr "_چاپ"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2567
+#: gtk/gtkprintunixdialog.c:2586
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2568
+#: gtk/gtkprintunixdialog.c:2587
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2569
+#: gtk/gtkprintunixdialog.c:2588
 msgid "Odd sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2572
+#: gtk/gtkprintunixdialog.c:2591
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "_روشنایی:"
 
-#: gtk/gtkprintunixdialog.c:2599
+#: gtk/gtkprintunixdialog.c:2618
 msgid "Paper"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2603
+#: gtk/gtkprintunixdialog.c:2622
 #, fuzzy
 msgid "Paper _type:"
 msgstr "_ویژگی‌ها"
 
-#: gtk/gtkprintunixdialog.c:2618
+#: gtk/gtkprintunixdialog.c:2637
 #, fuzzy
 msgid "Paper _source:"
 msgstr "_ویژگی‌ها"
 
-#: gtk/gtkprintunixdialog.c:2633
+#: gtk/gtkprintunixdialog.c:2652
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2685
+#: gtk/gtkprintunixdialog.c:2704
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2691
+#: gtk/gtkprintunixdialog.c:2710
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2706
+#: gtk/gtkprintunixdialog.c:2725
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2724
+#: gtk/gtkprintunixdialog.c:2743
 msgid "Print Document"
 msgstr ""
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2733
+#: gtk/gtkprintunixdialog.c:2752
 #, fuzzy
 msgid "_Now"
 msgstr "_نه"
 
-#: gtk/gtkprintunixdialog.c:2744
+#: gtk/gtkprintunixdialog.c:2763
 msgid "A_t:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2763
+#: gtk/gtkprintunixdialog.c:2782
 #, fuzzy
 msgid "On _hold"
 msgstr "_سیاه"
 
-#: gtk/gtkprintunixdialog.c:2782
+#: gtk/gtkprintunixdialog.c:2801
 msgid "Add Cover Page"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2791
+#: gtk/gtkprintunixdialog.c:2810
 msgid "Be_fore:"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2809
+#: gtk/gtkprintunixdialog.c:2828
 msgid "_After:"
 msgstr ""
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2827
+#: gtk/gtkprintunixdialog.c:2846
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2893
+#: gtk/gtkprintunixdialog.c:2912
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2928
+#: gtk/gtkprintunixdialog.c:2947
 msgid "Image Quality"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2950
 #, fuzzy
 msgid "Color"
 msgstr "_رنگ"
 
-#: gtk/gtkprintunixdialog.c:2934
+#: gtk/gtkprintunixdialog.c:2953
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2944
+#: gtk/gtkprintunixdialog.c:2963
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2967
+#: gtk/gtkprintunixdialog.c:2986
 #, fuzzy
 msgid "Print"
 msgstr "_چاپ"
 
-#: gtk/gtkrc.c:2872
+#: gtk/gtkrc.c:2868
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "نمی‌توان پرونده‌ی درجی را یافت: «%s»"
 
-#: gtk/gtkrc.c:3500 gtk/gtkrc.c:3503
+#: gtk/gtkrc.c:3496 gtk/gtkrc.c:3499
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "نمی‌توان پرونده‌ی تصویر را در pixmap_path یافت: «%s»"
@@ -2881,22 +2695,20 @@ msgstr "نامعلوم"
 #. * in a recent files menu. The %d is the number of the item,
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
-#. *
-#. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:781
+#: gtk/gtkrecentchoosermenu.c:779
 #, c-format
-msgid "recent menu label|_%d. %s"
+msgctxt "recent menu label"
+msgid "_%d. %s"
 msgstr ""
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
-#. *
-#. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:788
+#: gtk/gtkrecentchoosermenu.c:784
 #, c-format
-msgid "recent menu label|%d. %s"
+msgctxt "recent menu label"
+msgid "%d. %s"
 msgstr ""
 
 #: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
@@ -2906,409 +2718,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "نمی‌توان پرونده‌ی درجی را یافت: «%s»"
-
-#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:288
-msgid "Information"
-msgstr "اطلاعات"
-
-#: gtk/gtkstock.c:289
-msgid "Warning"
-msgstr "اخطار"
-
-#: gtk/gtkstock.c:290
-msgid "Error"
-msgstr "خطا"
-
-#: gtk/gtkstock.c:291
-msgid "Question"
-msgstr "سؤال"
-
-#. FIXME these need accelerators when appropriate, and
-#. * need the mnemonics to be rationalized
-#.
-#: gtk/gtkstock.c:296
-msgid "_About"
-msgstr "_درباره"
-
-#: gtk/gtkstock.c:298
-msgid "_Apply"
-msgstr "اِ_عمال"
-
-#: gtk/gtkstock.c:299
-msgid "_Bold"
-msgstr "_سیاه"
-
-#: gtk/gtkstock.c:300
-msgid "_Cancel"
-msgstr "ان_صراف"
-
-#: gtk/gtkstock.c:301
-msgid "_CD-Rom"
-msgstr "_سی‌دی"
-
-#: gtk/gtkstock.c:302
-msgid "_Clear"
-msgstr "_پاک کردن"
-
-#: gtk/gtkstock.c:303
-msgid "_Close"
-msgstr "_بستن"
-
-#: gtk/gtkstock.c:304
-#, fuzzy
-msgid "C_onnect"
-msgstr "_تبدیل"
-
-#: gtk/gtkstock.c:305
-msgid "_Convert"
-msgstr "_تبدیل"
-
-#: gtk/gtkstock.c:306
-msgid "_Copy"
-msgstr "_نسخه‌برداری"
-
-#: gtk/gtkstock.c:307
-msgid "Cu_t"
-msgstr "_برش"
-
-#: gtk/gtkstock.c:308
-msgid "_Delete"
-msgstr "_حذف"
-
-#: gtk/gtkstock.c:309
-#, fuzzy
-msgid "_Discard"
-msgstr "از کار افتاده"
-
-#: gtk/gtkstock.c:310
-msgid "_Disconnect"
-msgstr ""
-
-#: gtk/gtkstock.c:311
-msgid "_Execute"
-msgstr "ا_جرا"
-
-#: gtk/gtkstock.c:312
-msgid "_Edit"
-msgstr "_ویرایش"
-
-#: gtk/gtkstock.c:313
-msgid "_Find"
-msgstr "_یافتن"
-
-#: gtk/gtkstock.c:314
-msgid "Find and _Replace"
-msgstr "یافتن و _جای‌گزینی"
-
-#: gtk/gtkstock.c:315
-msgid "_Floppy"
-msgstr "دیسک _نرم"
-
-#: gtk/gtkstock.c:316
-msgid "_Fullscreen"
-msgstr ""
-
-#: gtk/gtkstock.c:317
-msgid "_Leave Fullscreen"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:319
-msgid "Navigation|_Bottom"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:321
-msgid "Navigation|_First"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:323
-msgid "Navigation|_Last"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:325
-msgid "Navigation|_Top"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:327
-msgid "Navigation|_Back"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:329
-msgid "Navigation|_Down"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:331
-msgid "Navigation|_Forward"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:333
-msgid "Navigation|_Up"
-msgstr ""
-
-#: gtk/gtkstock.c:334
-msgid "_Harddisk"
-msgstr "دیسک _سخت"
-
-#: gtk/gtkstock.c:335
-msgid "_Help"
-msgstr "_راهنما"
-
-#: gtk/gtkstock.c:336
-msgid "_Home"
-msgstr "آ_غازه"
-
-#: gtk/gtkstock.c:337
-msgid "Increase Indent"
-msgstr "افزایش تورفتگی"
-
-#: gtk/gtkstock.c:338
-msgid "Decrease Indent"
-msgstr "کاهش تورفتگی"
-
-#: gtk/gtkstock.c:339
-msgid "_Index"
-msgstr "_نمایه"
-
-#: gtk/gtkstock.c:340
-#, fuzzy
-msgid "_Information"
-msgstr "اطلاعات"
-
-#: gtk/gtkstock.c:341
-msgid "_Italic"
-msgstr "ای_تالیک"
-
-#: gtk/gtkstock.c:342
-msgid "_Jump to"
-msgstr "_پرش به"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:344
-#, fuzzy
-msgid "Justify|_Center"
-msgstr "_مرکز"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:346
-msgid "Justify|_Fill"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:348
-msgid "Justify|_Left"
-msgstr ""
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:350
-#, fuzzy
-msgid "Justify|_Right"
-msgstr "_راست"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:353
-#, fuzzy
-msgid "Media|_Forward"
-msgstr "_جلو"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:355
-#, fuzzy
-msgid "Media|_Next"
-msgstr "_بعدی"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:357
-#, fuzzy
-msgid "Media|P_ause"
-msgstr "مک_ث"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:359
-#, fuzzy
-msgid "Media|_Play"
-msgstr "پ_خش"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:361
-#, fuzzy
-msgid "Media|Pre_vious"
-msgstr "_قبلی"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:363
-#, fuzzy
-msgid "Media|_Record"
-msgstr "_ضبط:"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:365
-#, fuzzy
-msgid "Media|R_ewind"
-msgstr "_عقب بردن"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:367
-#, fuzzy
-msgid "Media|_Stop"
-msgstr "_توقف"
-
-#: gtk/gtkstock.c:368
-msgid "_Network"
-msgstr "_شبکه"
-
-#: gtk/gtkstock.c:369
-msgid "_New"
-msgstr "_جدید"
-
-#: gtk/gtkstock.c:370
-msgid "_No"
-msgstr "_نه"
-
-#: gtk/gtkstock.c:371
-msgid "_OK"
-msgstr "_تأیید"
-
-#: gtk/gtkstock.c:372
-msgid "_Open"
-msgstr "_باز کردن"
-
-#: gtk/gtkstock.c:373
-msgid "Landscape"
-msgstr ""
-
-#: gtk/gtkstock.c:374
-#, fuzzy
-msgid "Portrait"
-msgstr "_چاپ"
-
-#: gtk/gtkstock.c:375
-msgid "Reverse landscape"
-msgstr ""
-
-#: gtk/gtkstock.c:376
-msgid "Reverse portrait"
-msgstr ""
-
-#: gtk/gtkstock.c:377
-#, fuzzy
-msgid "Page Set_up"
-msgstr "صفحه‌ی %Iu"
-
-#: gtk/gtkstock.c:378
-msgid "_Paste"
-msgstr "_چسباندن"
-
-#: gtk/gtkstock.c:379
-msgid "_Preferences"
-msgstr "_ترجیحات"
-
-#: gtk/gtkstock.c:380
-msgid "_Print"
-msgstr "_چاپ"
-
-#: gtk/gtkstock.c:381
-msgid "Print Pre_view"
-msgstr "پی_ش‌نمایش چاپ"
-
-#: gtk/gtkstock.c:382
-msgid "_Properties"
-msgstr "_ویژگی‌ها"
-
-#: gtk/gtkstock.c:383
-msgid "_Quit"
-msgstr "_خروج"
-
-#: gtk/gtkstock.c:384
-msgid "_Redo"
-msgstr "_دوباره"
-
-#: gtk/gtkstock.c:385
-msgid "_Refresh"
-msgstr "_نوسازی"
-
-#: gtk/gtkstock.c:387
-msgid "_Revert"
-msgstr "باز_گشت"
-
-#: gtk/gtkstock.c:388
-msgid "_Save"
-msgstr "_ذخیره"
-
-#: gtk/gtkstock.c:389
-msgid "Save _As"
-msgstr "ذخیره با _نام"
-
-#: gtk/gtkstock.c:390
-msgid "Select _All"
-msgstr "انتخاب _همه"
-
-#: gtk/gtkstock.c:391
-msgid "_Color"
-msgstr "_رنگ"
-
-#: gtk/gtkstock.c:392
-msgid "_Font"
-msgstr "_قلم"
-
-#: gtk/gtkstock.c:393
-msgid "_Ascending"
-msgstr "_صعودی"
-
-#: gtk/gtkstock.c:394
-msgid "_Descending"
-msgstr "_نزولی"
-
-#: gtk/gtkstock.c:395
-msgid "_Spell Check"
-msgstr "_غلطیابی املایی"
-
-#: gtk/gtkstock.c:396
-msgid "_Stop"
-msgstr "_توقف"
-
-#: gtk/gtkstock.c:397
-msgid "_Strikethrough"
-msgstr "_خط‌خورده"
-
-#: gtk/gtkstock.c:398
-msgid "_Undelete"
-msgstr "احیا"
-
-#: gtk/gtkstock.c:399
-msgid "_Underline"
-msgstr "_زیرخط‌دار"
-
-#: gtk/gtkstock.c:400
-msgid "_Undo"
-msgstr "_برگشت حرکت"
-
-#: gtk/gtkstock.c:401
-msgid "_Yes"
-msgstr "_بله"
-
-#: gtk/gtkstock.c:402
-msgid "_Normal Size"
-msgstr "اندازه‌ی _عادی"
-
-#: gtk/gtkstock.c:403
-msgid "Best _Fit"
-msgstr "بهترین اندازه"
-
-#: gtk/gtkstock.c:404
-msgid "Zoom _In"
-msgstr "زوم به _داخل"
-
-#: gtk/gtkstock.c:405
-msgid "Zoom _Out"
-msgstr "زوم به _خارج"
 
 #: gtk/gtktextbufferrichtext.c:651
 #, c-format
@@ -3473,17 +2882,17 @@ msgstr "نمی‌توان موتور تم را در module_path یافت: «%s»
 msgid "--- No Tip ---"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1453
+#: gtk/gtkuimanager.c:1462
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "برچسب شروع غیرمنتظره «%s» در سطر %Id نویسه‌ی %Id"
 
-#: gtk/gtkuimanager.c:1543
+#: gtk/gtkuimanager.c:1552
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "داده‌ی نویسه‌ای غیرمنتظره در سطر %Id نویسه‌ی %Id"
 
-#: gtk/gtkuimanager.c:2366
+#: gtk/gtkuimanager.c:2384
 msgid "Empty"
 msgstr "خالی"
 
@@ -3528,827 +2937,11 @@ msgstr ""
 #. * as used in the tooltip, eg. "49 %".
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
-#. * Do not translate and do not include the "volume percentage|"
-#. * part in the translation!
 #.
-#: gtk/gtkvolumebutton.c:170
+#: gtk/gtkvolumebutton.c:168
 #, c-format
-msgid "volume percentage|%d %%"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:5
-msgid "paper size|asme_f"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:7
-msgid "paper size|A0x2"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:9
-msgid "paper size|A0"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:11
-msgid "paper size|A0x3"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:13
-msgid "paper size|A1"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:15
-msgid "paper size|A10"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:17
-msgid "paper size|A1x3"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:19
-msgid "paper size|A1x4"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:21
-msgid "paper size|A2"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:23
-msgid "paper size|A2x3"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:25
-msgid "paper size|A2x4"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:27
-msgid "paper size|A2x5"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:29
-msgid "paper size|A3"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:31
-msgid "paper size|A3 Extra"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:33
-msgid "paper size|A3x3"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:35
-msgid "paper size|A3x4"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:37
-msgid "paper size|A3x5"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:39
-msgid "paper size|A3x6"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:41
-msgid "paper size|A3x7"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:43
-msgid "paper size|A4"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:45
-msgid "paper size|A4 Extra"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:47
-msgid "paper size|A4 Tab"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:49
-msgid "paper size|A4x3"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:51
-msgid "paper size|A4x4"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:53
-msgid "paper size|A4x5"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:55
-msgid "paper size|A4x6"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:57
-msgid "paper size|A4x7"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:59
-msgid "paper size|A4x8"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:61
-msgid "paper size|A4x9"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:63
-msgid "paper size|A5"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:65
-msgid "paper size|A5 Extra"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:67
-msgid "paper size|A6"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:69
-msgid "paper size|A7"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:71
-msgid "paper size|A8"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:73
-msgid "paper size|A9"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:75
-msgid "paper size|B0"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:77
-msgid "paper size|B1"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:79
-msgid "paper size|B10"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:81
-msgid "paper size|B2"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:83
-msgid "paper size|B3"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:85
-msgid "paper size|B4"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:87
-msgid "paper size|B5"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:89
-msgid "paper size|B5 Extra"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:91
-msgid "paper size|B6"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:93
-msgid "paper size|B6/C4"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:95
-msgid "paper size|B7"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:97
-msgid "paper size|B8"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:99
-msgid "paper size|B9"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:101
-msgid "paper size|C0"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:103
-msgid "paper size|C1"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:105
-msgid "paper size|C10"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:107
-msgid "paper size|C2"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:109
-msgid "paper size|C3"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:111
-msgid "paper size|C4"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:113
-msgid "paper size|C5"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:115
-msgid "paper size|C6"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:117
-msgid "paper size|C6/C5"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:119
-msgid "paper size|C7"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:121
-msgid "paper size|C7/C6"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:123
-msgid "paper size|C8"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:125
-msgid "paper size|C9"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:127
-msgid "paper size|DL Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:129
-msgid "paper size|RA0"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:131
-msgid "paper size|RA1"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:133
-msgid "paper size|RA2"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:135
-msgid "paper size|SRA0"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:137
-msgid "paper size|SRA1"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:139
-msgid "paper size|SRA2"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:141
-msgid "paper size|JB0"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:143
-msgid "paper size|JB1"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:145
-msgid "paper size|JB10"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:147
-msgid "paper size|JB2"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:149
-msgid "paper size|JB3"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:151
-msgid "paper size|JB4"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:153
-msgid "paper size|JB5"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:155
-msgid "paper size|JB6"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:157
-msgid "paper size|JB7"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:159
-msgid "paper size|JB8"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:161
-msgid "paper size|JB9"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:163
-msgid "paper size|jis exec"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:165
-msgid "paper size|Choukei 2 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:167
-msgid "paper size|Choukei 3 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:169
-msgid "paper size|Choukei 4 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:171
-msgid "paper size|hagaki (postcard)"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:173
-msgid "paper size|kahu Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:175
-msgid "paper size|kaku2 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:177
-msgid "paper size|oufuku (reply postcard)"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:179
-msgid "paper size|you4 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:181
-msgid "paper size|10x11"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:183
-msgid "paper size|10x13"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:185
-msgid "paper size|10x14"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:187 gtk/paper_names_offsets.c:189
-msgid "paper size|10x15"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:191
-msgid "paper size|11x12"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:193
-msgid "paper size|11x15"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:195
-msgid "paper size|12x19"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:197
-msgid "paper size|5x7"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:199
-msgid "paper size|6x9 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:201
-msgid "paper size|7x9 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:203
-msgid "paper size|9x11 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:205
-msgid "paper size|a2 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:207
-msgid "paper size|Arch A"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:209
-msgid "paper size|Arch B"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:211
-msgid "paper size|Arch C"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:213
-msgid "paper size|Arch D"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:215
-msgid "paper size|Arch E"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:217
-msgid "paper size|b-plus"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:219
-msgid "paper size|c"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:221
-msgid "paper size|c5 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:223
-msgid "paper size|d"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:225
-msgid "paper size|e"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:227
-msgid "paper size|edp"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:229
-msgid "paper size|European edp"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:231
-msgid "paper size|Executive"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:233
-msgid "paper size|f"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:235
-msgid "paper size|FanFold European"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:237
-msgid "paper size|FanFold US"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:239
-msgid "paper size|FanFold German Legal"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:241
-msgid "paper size|Government Legal"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:243
-msgid "paper size|Government Letter"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:245
-msgid "paper size|Index 3x5"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:247
-msgid "paper size|Index 4x6 (postcard)"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:249
-msgid "paper size|Index 4x6 ext"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:251
-msgid "paper size|Index 5x8"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:253
-msgid "paper size|Invoice"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:255
-msgid "paper size|Tabloid"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:257
-msgid "paper size|US Legal"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:259
-msgid "paper size|US Legal Extra"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:261
-msgid "paper size|US Letter"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:263
-msgid "paper size|US Letter Extra"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:265
-msgid "paper size|US Letter Plus"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:267
-msgid "paper size|Monarch Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:269
-msgid "paper size|#10 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:271
-msgid "paper size|#11 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:273
-msgid "paper size|#12 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:275
-msgid "paper size|#14 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:277
-msgid "paper size|#9 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:279
-msgid "paper size|Personal Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:281
-msgid "paper size|Quarto"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:283
-msgid "paper size|Super A"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:285
-msgid "paper size|Super B"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:287
-msgid "paper size|Wide Format"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:289
-msgid "paper size|Dai-pa-kai"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:291
-msgid "paper size|Folio"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:293
-msgid "paper size|Folio sp"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:295
-msgid "paper size|Invite Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:297
-msgid "paper size|Italian Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:299
-msgid "paper size|juuro-ku-kai"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:301
-msgid "paper size|pa-kai"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:303
-msgid "paper size|Postfix Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:305
-msgid "paper size|Small Photo"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:307
-msgid "paper size|prc1 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:309
-msgid "paper size|prc10 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:311
-msgid "paper size|prc 16k"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:313
-msgid "paper size|prc2 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:315
-msgid "paper size|prc3 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:317
-msgid "paper size|prc 32k"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:319
-msgid "paper size|prc4 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:321
-msgid "paper size|prc5 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:323
-msgid "paper size|prc6 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:325
-msgid "paper size|prc7 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:327
-msgid "paper size|prc8 Envelope"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:329
-msgid "paper size|ROC 16k"
-msgstr ""
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:331
-msgid "paper size|ROC 8k"
+msgctxt "volume percentage"
+msgid "%d %%"
 msgstr ""
 
 #: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
@@ -4512,118 +3105,118 @@ msgstr "ویتنامی (VIQR)"
 msgid "X Input Method"
 msgstr "شیوه‌ی ورودی X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1115
+#: modules/printbackends/cups/gtkprintbackendcups.c:1171
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1116
+#: modules/printbackends/cups/gtkprintbackendcups.c:1172
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1118
+#: modules/printbackends/cups/gtkprintbackendcups.c:1174
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1120
+#: modules/printbackends/cups/gtkprintbackendcups.c:1176
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1122
+#: modules/printbackends/cups/gtkprintbackendcups.c:1178
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1124
+#: modules/printbackends/cups/gtkprintbackendcups.c:1180
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1125
+#: modules/printbackends/cups/gtkprintbackendcups.c:1181
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1126
+#: modules/printbackends/cups/gtkprintbackendcups.c:1182
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1127
+#: modules/printbackends/cups/gtkprintbackendcups.c:1183
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1128
+#: modules/printbackends/cups/gtkprintbackendcups.c:1184
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1129
+#: modules/printbackends/cups/gtkprintbackendcups.c:1185
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1130
+#: modules/printbackends/cups/gtkprintbackendcups.c:1186
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1131
+#: modules/printbackends/cups/gtkprintbackendcups.c:1187
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1410
+#: modules/printbackends/cups/gtkprintbackendcups.c:1466
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1416
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2084
+#: modules/printbackends/cups/gtkprintbackendcups.c:2140
 msgid "Two Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2085
+#: modules/printbackends/cups/gtkprintbackendcups.c:2141
 msgid "Paper Type"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2086
+#: modules/printbackends/cups/gtkprintbackendcups.c:2142
 msgid "Paper Source"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2087
+#: modules/printbackends/cups/gtkprintbackendcups.c:2143
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2096
+#: modules/printbackends/cups/gtkprintbackendcups.c:2152
 msgid "One Sided"
 msgstr ""
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2098
-#: modules/printbackends/cups/gtkprintbackendcups.c:2100
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2154
+#: modules/printbackends/cups/gtkprintbackendcups.c:2156
+#: modules/printbackends/cups/gtkprintbackendcups.c:2164
 #, fuzzy
 msgid "Auto Select"
 msgstr "انتخاب قلم"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2102
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
-#: modules/printbackends/cups/gtkprintbackendcups.c:2577
+#: modules/printbackends/cups/gtkprintbackendcups.c:2158
+#: modules/printbackends/cups/gtkprintbackendcups.c:2160
+#: modules/printbackends/cups/gtkprintbackendcups.c:2162
+#: modules/printbackends/cups/gtkprintbackendcups.c:2633
 #, fuzzy
 msgid "Printer Default"
 msgstr "پیش‌فرض"
@@ -4631,54 +3224,54 @@ msgstr "پیش‌فرض"
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "Urgent"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "High"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "Medium"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "Low"
 msgstr ""
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "Left to right, top to bottom"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "Left to right, bottom to top"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2836
 msgid "Right to left, top to bottom"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2836
 msgid "Right to left, bottom to top"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2837
 msgid "Top to bottom, left to right"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2837
 msgid "Top to bottom, right to left"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2838
 msgid "Bottom to top, left to right"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2838
 msgid "Bottom to top, right to left"
 msgstr ""
 
@@ -4686,7 +3279,7 @@ msgstr ""
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2853
 #, fuzzy
 msgid "Pages per Sheet"
 msgstr "ارتفاع تصویر صفر است"
@@ -4694,14 +3287,14 @@ msgstr "ارتفاع تصویر صفر است"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2834
+#: modules/printbackends/cups/gtkprintbackendcups.c:2890
 msgid "Job Priority"
 msgstr ""
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2845
+#: modules/printbackends/cups/gtkprintbackendcups.c:2901
 msgid "Billing Info"
 msgstr ""
 
@@ -4709,47 +3302,47 @@ msgstr ""
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 #, fuzzy
 msgid "None"
 msgstr "(هیچ‌کدام)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Classified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Confidential"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 #, fuzzy
 msgid "Secret"
 msgstr "صفحه‌نمایش"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Standard"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Top Secret"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Unclassified"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2894
+#: modules/printbackends/cups/gtkprintbackendcups.c:2950
 msgid "Before"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2909
+#: modules/printbackends/cups/gtkprintbackendcups.c:2965
 msgid "After"
 msgstr ""
 
@@ -4757,7 +3350,7 @@ msgstr ""
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2929
+#: modules/printbackends/cups/gtkprintbackendcups.c:2985
 #, fuzzy
 msgid "Print at"
 msgstr "_چاپ"
@@ -4765,7 +3358,7 @@ msgstr "_چاپ"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2940
+#: modules/printbackends/cups/gtkprintbackendcups.c:2996
 #, fuzzy
 msgid "Print at time"
 msgstr "_چاپ"
@@ -4774,7 +3367,7 @@ msgstr "_چاپ"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2975
+#: modules/printbackends/cups/gtkprintbackendcups.c:3031
 #, c-format
 msgid "Custom %sx%s"
 msgstr ""
@@ -4785,54 +3378,54 @@ msgstr ""
 msgid "output.%s"
 msgstr ""
 
-#: modules/printbackends/file/gtkprintbackendfile.c:466
+#: modules/printbackends/file/gtkprintbackendfile.c:469
 #, fuzzy
 msgid "Print to File"
 msgstr "_چاپ"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:543
+#: modules/printbackends/file/gtkprintbackendfile.c:546
 msgid "PDF"
 msgstr ""
 
-#: modules/printbackends/file/gtkprintbackendfile.c:543
+#: modules/printbackends/file/gtkprintbackendfile.c:546
 #, fuzzy
 msgid "Postscript"
 msgstr "_چاپ"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:555
-#: modules/printbackends/test/gtkprintbackendtest.c:503
+#: modules/printbackends/file/gtkprintbackendfile.c:558
+#: modules/printbackends/test/gtkprintbackendtest.c:506
 msgid "Pages per _sheet:"
 msgstr ""
 
-#: modules/printbackends/file/gtkprintbackendfile.c:601
+#: modules/printbackends/file/gtkprintbackendfile.c:604
 #, fuzzy
 msgid "File"
 msgstr "پرونده‌ها"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:610
+#: modules/printbackends/file/gtkprintbackendfile.c:613
 msgid "_Output format"
 msgstr ""
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:398
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:400
 msgid "Print to LPR"
 msgstr ""
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:424
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:426
 #, fuzzy
 msgid "Pages Per Sheet"
 msgstr "ارتفاع تصویر صفر است"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:431
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:433
 msgid "Command Line"
 msgstr ""
 
 #. default filename used for print-to-test
-#: modules/printbackends/test/gtkprintbackendtest.c:235
+#: modules/printbackends/test/gtkprintbackendtest.c:234
 #, c-format
 msgid "test-output.%s"
 msgstr ""
 
-#: modules/printbackends/test/gtkprintbackendtest.c:467
+#: modules/printbackends/test/gtkprintbackendtest.c:470
 #, fuzzy
 msgid "Print to Test Printer"
 msgstr "_چاپ"
@@ -4841,6 +3434,269 @@ msgstr "_چاپ"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "نمی‌توان برای پرونده‌ی «%s» اطلاعات گرفت: %s"
+
+#, fuzzy
+#~ msgid "Couldn't create pixbuf"
+#~ msgstr "نمی‌توان pixbuf ایجاد کرد"
+
+#, fuzzy
+#~ msgid "calendar:week:digits|%d"
+#~ msgstr "calendar:week_start:6"
+
+#~ msgid "progress bar label|%d %%"
+#~ msgstr "‪٪%Id‬"
+
+#, fuzzy
+#~ msgid "%.1f KB"
+#~ msgstr "%I.1f کیلو"
+
+#, fuzzy
+#~ msgid "%.1f MB"
+#~ msgstr "%I.1f مگا"
+
+#, fuzzy
+#~ msgid "%.1f GB"
+#~ msgstr "%I.1f گیگا"
+
+#~ msgid "Information"
+#~ msgstr "اطلاعات"
+
+#~ msgid "Warning"
+#~ msgstr "اخطار"
+
+#~ msgid "Error"
+#~ msgstr "خطا"
+
+#~ msgid "Question"
+#~ msgstr "سؤال"
+
+#~ msgid "_About"
+#~ msgstr "_درباره"
+
+#~ msgid "_Apply"
+#~ msgstr "اِ_عمال"
+
+#~ msgid "_Bold"
+#~ msgstr "_سیاه"
+
+#~ msgid "_Cancel"
+#~ msgstr "ان_صراف"
+
+#~ msgid "_CD-Rom"
+#~ msgstr "_سی‌دی"
+
+#~ msgid "_Clear"
+#~ msgstr "_پاک کردن"
+
+#~ msgid "_Close"
+#~ msgstr "_بستن"
+
+#, fuzzy
+#~ msgid "C_onnect"
+#~ msgstr "_تبدیل"
+
+#~ msgid "_Convert"
+#~ msgstr "_تبدیل"
+
+#~ msgid "_Copy"
+#~ msgstr "_نسخه‌برداری"
+
+#~ msgid "Cu_t"
+#~ msgstr "_برش"
+
+#~ msgid "_Delete"
+#~ msgstr "_حذف"
+
+#, fuzzy
+#~ msgid "_Discard"
+#~ msgstr "از کار افتاده"
+
+#~ msgid "_Execute"
+#~ msgstr "ا_جرا"
+
+#~ msgid "_Edit"
+#~ msgstr "_ویرایش"
+
+#~ msgid "_Find"
+#~ msgstr "_یافتن"
+
+#~ msgid "Find and _Replace"
+#~ msgstr "یافتن و _جای‌گزینی"
+
+#~ msgid "_Floppy"
+#~ msgstr "دیسک _نرم"
+
+#~ msgid "_Harddisk"
+#~ msgstr "دیسک _سخت"
+
+#~ msgid "_Help"
+#~ msgstr "_راهنما"
+
+#~ msgid "_Home"
+#~ msgstr "آ_غازه"
+
+#~ msgid "Increase Indent"
+#~ msgstr "افزایش تورفتگی"
+
+#~ msgid "Decrease Indent"
+#~ msgstr "کاهش تورفتگی"
+
+#~ msgid "_Index"
+#~ msgstr "_نمایه"
+
+#, fuzzy
+#~ msgid "_Information"
+#~ msgstr "اطلاعات"
+
+#~ msgid "_Italic"
+#~ msgstr "ای_تالیک"
+
+#~ msgid "_Jump to"
+#~ msgstr "_پرش به"
+
+#, fuzzy
+#~ msgid "Justify|_Center"
+#~ msgstr "_مرکز"
+
+#, fuzzy
+#~ msgid "Justify|_Right"
+#~ msgstr "_راست"
+
+#, fuzzy
+#~ msgid "Media|_Forward"
+#~ msgstr "_جلو"
+
+#, fuzzy
+#~ msgid "Media|_Next"
+#~ msgstr "_بعدی"
+
+#, fuzzy
+#~ msgid "Media|P_ause"
+#~ msgstr "مک_ث"
+
+#, fuzzy
+#~ msgid "Media|_Play"
+#~ msgstr "پ_خش"
+
+#, fuzzy
+#~ msgid "Media|Pre_vious"
+#~ msgstr "_قبلی"
+
+#, fuzzy
+#~ msgid "Media|_Record"
+#~ msgstr "_ضبط:"
+
+#, fuzzy
+#~ msgid "Media|R_ewind"
+#~ msgstr "_عقب بردن"
+
+#, fuzzy
+#~ msgid "Media|_Stop"
+#~ msgstr "_توقف"
+
+#~ msgid "_Network"
+#~ msgstr "_شبکه"
+
+#~ msgid "_New"
+#~ msgstr "_جدید"
+
+#~ msgid "_No"
+#~ msgstr "_نه"
+
+#~ msgid "_OK"
+#~ msgstr "_تأیید"
+
+#~ msgid "_Open"
+#~ msgstr "_باز کردن"
+
+#, fuzzy
+#~ msgid "Portrait"
+#~ msgstr "_چاپ"
+
+#, fuzzy
+#~ msgid "Page Set_up"
+#~ msgstr "صفحه‌ی %Iu"
+
+#~ msgid "_Paste"
+#~ msgstr "_چسباندن"
+
+#~ msgid "_Preferences"
+#~ msgstr "_ترجیحات"
+
+#~ msgid "_Print"
+#~ msgstr "_چاپ"
+
+#~ msgid "Print Pre_view"
+#~ msgstr "پی_ش‌نمایش چاپ"
+
+#~ msgid "_Properties"
+#~ msgstr "_ویژگی‌ها"
+
+#~ msgid "_Quit"
+#~ msgstr "_خروج"
+
+#~ msgid "_Redo"
+#~ msgstr "_دوباره"
+
+#~ msgid "_Refresh"
+#~ msgstr "_نوسازی"
+
+#~ msgid "_Revert"
+#~ msgstr "باز_گشت"
+
+#~ msgid "_Save"
+#~ msgstr "_ذخیره"
+
+#~ msgid "Save _As"
+#~ msgstr "ذخیره با _نام"
+
+#~ msgid "Select _All"
+#~ msgstr "انتخاب _همه"
+
+#~ msgid "_Color"
+#~ msgstr "_رنگ"
+
+#~ msgid "_Font"
+#~ msgstr "_قلم"
+
+#~ msgid "_Ascending"
+#~ msgstr "_صعودی"
+
+#~ msgid "_Descending"
+#~ msgstr "_نزولی"
+
+#~ msgid "_Spell Check"
+#~ msgstr "_غلطیابی املایی"
+
+#~ msgid "_Stop"
+#~ msgstr "_توقف"
+
+#~ msgid "_Strikethrough"
+#~ msgstr "_خط‌خورده"
+
+#~ msgid "_Undelete"
+#~ msgstr "احیا"
+
+#~ msgid "_Underline"
+#~ msgstr "_زیرخط‌دار"
+
+#~ msgid "_Undo"
+#~ msgstr "_برگشت حرکت"
+
+#~ msgid "_Yes"
+#~ msgstr "_بله"
+
+#~ msgid "_Normal Size"
+#~ msgstr "اندازه‌ی _عادی"
+
+#~ msgid "Best _Fit"
+#~ msgstr "بهترین اندازه"
+
+#~ msgid "Zoom _In"
+#~ msgstr "زوم به _داخل"
+
+#~ msgid "Zoom _Out"
+#~ msgstr "زوم به _خارج"
 
 #~ msgid "Group"
 #~ msgstr "گروه"
@@ -5003,9 +3859,6 @@ msgstr "نمی‌توان برای پرونده‌ی «%s» اطلاعات گر�
 #~ msgid "X"
 #~ msgstr "X"
 
-#~ msgid "Y"
-#~ msgstr "Y"
-
 #~ msgid "clear"
 #~ msgstr "پاک شود"
 
@@ -5015,15 +3868,6 @@ msgstr "نمی‌توان برای پرونده‌ی «%s» اطلاعات گر�
 
 #~ msgid "_Credits"
 #~ msgstr "_دست‌اندرکاران"
-
-#~ msgid "Shift"
-#~ msgstr "تبدیل"
-
-#~ msgid "Ctrl"
-#~ msgstr "مهار"
-
-#~ msgid "Alt"
-#~ msgstr "دگرساز"
 
 #~ msgid "_First"
 #~ msgstr "_اولین"

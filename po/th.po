@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-19 10:35+0700\n"
+"POT-Creation-Date: 2009-01-01 16:28-0500\n"
 "PO-Revision-Date: 2008-10-19 11:00+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -26,47 +26,47 @@ msgid "sdl|system"
 msgstr "system"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:126
+#: gdk/gdk.c:127
 msgid "Program class as used by the window manager"
 msgstr "คลาสของโปรแกรมที่ใช้อ้างโดยโปรแกรมจัดการหน้าต่าง"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:127
+#: gdk/gdk.c:128
 msgid "CLASS"
 msgstr "CLASS"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:129
+#: gdk/gdk.c:130
 msgid "Program name as used by the window manager"
 msgstr "ชื่อของโปรแกรมที่ใช้เรียกโดยโปรแกรมจัดการหน้าต่าง"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:130
+#: gdk/gdk.c:131
 msgid "NAME"
 msgstr "NAME"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:132
+#: gdk/gdk.c:133
 msgid "X display to use"
 msgstr "ดิสเพลย์ของ X ที่จะใช้"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:133
+#: gdk/gdk.c:134
 msgid "DISPLAY"
 msgstr "DISPLAY"
 
 #. Description of --screen=SCREEN in --help output
-#: gdk/gdk.c:135
+#: gdk/gdk.c:136
 msgid "X screen to use"
 msgstr "สกรีนของ X ที่จะใช้"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: gdk/gdk.c:136
+#: gdk/gdk.c:137
 msgid "SCREEN"
 msgstr "SCREEN"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:139
+#: gdk/gdk.c:140
 msgid "Gdk debugging flags to set"
 msgstr "แฟล็กการดีบักของ GDK ที่จะเปิดใช้"
 
@@ -74,162 +74,14 @@ msgstr "แฟล็กการดีบักของ GDK ที่จะเ�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:452 gtk/gtkmain.c:455
+#: gdk/gdk.c:141 gdk/gdk.c:144 gtk/gtkmain.c:452 gtk/gtkmain.c:455
 msgid "FLAGS"
 msgstr "FLAGS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:142
+#: gdk/gdk.c:143
 msgid "Gdk debugging flags to unset"
 msgstr "แฟล็กการดีบักของ GDK ที่จะปิด"
-
-#: gdk/keyname-table.h:3940
-msgid "keyboard label|BackSpace"
-msgstr "BackSpace"
-
-#: gdk/keyname-table.h:3941
-msgid "keyboard label|Tab"
-msgstr "Tab"
-
-#: gdk/keyname-table.h:3942
-msgid "keyboard label|Return"
-msgstr "Return"
-
-#: gdk/keyname-table.h:3943
-msgid "keyboard label|Pause"
-msgstr "Pause"
-
-#: gdk/keyname-table.h:3944
-msgid "keyboard label|Scroll_Lock"
-msgstr "Scroll_Lock"
-
-#: gdk/keyname-table.h:3945
-msgid "keyboard label|Sys_Req"
-msgstr "Sys_Req"
-
-#: gdk/keyname-table.h:3946
-msgid "keyboard label|Escape"
-msgstr "Escape"
-
-#: gdk/keyname-table.h:3947
-msgid "keyboard label|Multi_key"
-msgstr "Multi_key"
-
-#: gdk/keyname-table.h:3948
-msgid "keyboard label|Home"
-msgstr "Home"
-
-#: gdk/keyname-table.h:3949
-msgid "keyboard label|Left"
-msgstr "Left"
-
-#: gdk/keyname-table.h:3950
-msgid "keyboard label|Up"
-msgstr "Up"
-
-#: gdk/keyname-table.h:3951
-msgid "keyboard label|Right"
-msgstr "Right"
-
-#: gdk/keyname-table.h:3952
-msgid "keyboard label|Down"
-msgstr "Down"
-
-#: gdk/keyname-table.h:3953
-msgid "keyboard label|Page_Up"
-msgstr "Page_Up"
-
-#: gdk/keyname-table.h:3954
-msgid "keyboard label|Page_Down"
-msgstr "Page_Down"
-
-#: gdk/keyname-table.h:3955
-msgid "keyboard label|End"
-msgstr "End"
-
-#: gdk/keyname-table.h:3956
-msgid "keyboard label|Begin"
-msgstr "Begin"
-
-#: gdk/keyname-table.h:3957
-msgid "keyboard label|Print"
-msgstr "Print"
-
-#: gdk/keyname-table.h:3958
-msgid "keyboard label|Insert"
-msgstr "Insert"
-
-#: gdk/keyname-table.h:3959
-msgid "keyboard label|Num_Lock"
-msgstr "Num_Lock"
-
-#: gdk/keyname-table.h:3960
-msgid "keyboard label|KP_Space"
-msgstr "KP_Space"
-
-#: gdk/keyname-table.h:3961
-msgid "keyboard label|KP_Tab"
-msgstr "KP_Tab"
-
-#: gdk/keyname-table.h:3962
-msgid "keyboard label|KP_Enter"
-msgstr "KP_Enter"
-
-#: gdk/keyname-table.h:3963
-msgid "keyboard label|KP_Home"
-msgstr "KP_Home"
-
-#: gdk/keyname-table.h:3964
-msgid "keyboard label|KP_Left"
-msgstr "KP_Left"
-
-#: gdk/keyname-table.h:3965
-msgid "keyboard label|KP_Up"
-msgstr "KP_Up"
-
-#: gdk/keyname-table.h:3966
-msgid "keyboard label|KP_Right"
-msgstr "KP_Right"
-
-#: gdk/keyname-table.h:3967
-msgid "keyboard label|KP_Down"
-msgstr "KP_Down"
-
-#: gdk/keyname-table.h:3968
-msgid "keyboard label|KP_Page_Up"
-msgstr "KP_Page_Up"
-
-#: gdk/keyname-table.h:3969
-msgid "keyboard label|KP_Prior"
-msgstr "KP_Prior"
-
-#: gdk/keyname-table.h:3970
-msgid "keyboard label|KP_Page_Down"
-msgstr "KP_Page_Down"
-
-#: gdk/keyname-table.h:3971
-msgid "keyboard label|KP_Next"
-msgstr "KP_Next"
-
-#: gdk/keyname-table.h:3972
-msgid "keyboard label|KP_End"
-msgstr "KP_End"
-
-#: gdk/keyname-table.h:3973
-msgid "keyboard label|KP_Begin"
-msgstr "KP_Begin"
-
-#: gdk/keyname-table.h:3974
-msgid "keyboard label|KP_Insert"
-msgstr "KP_Insert"
-
-#: gdk/keyname-table.h:3975
-msgid "keyboard label|KP_Delete"
-msgstr "KP_Delete"
-
-#: gdk/keyname-table.h:3976
-msgid "keyboard label|Delete"
-msgstr "Delete"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:965
 #: gdk-pixbuf/gdk-pixbuf-io.c:1225 tests/testfilechooser.c:222
@@ -369,20 +221,17 @@ msgstr "พบชิ้นไอคอนเกินมาในภาพเค
 msgid "Unsupported animation type"
 msgstr "ไม่รู้จักชนิดของภาพเคลื่อนไหว"
 
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406
-#: gdk-pixbuf/io-ani.c:432 gdk-pixbuf/io-ani.c:455
-#: gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
+#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
+#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
 msgid "Invalid header in animation"
 msgstr "ข้อมูลส่วนหัวของภาพเคลื่อนไหวเสีย"
 
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380
-#: gdk-pixbuf/io-ani.c:464 gdk-pixbuf/io-ani.c:491
-#: gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
+#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
 msgid "Not enough memory to load animation"
 msgstr "หน่วยความจำไม่พอที่จะอ่านภาพเคลื่อนไหว"
 
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424
-#: gdk-pixbuf/io-ani.c:443
+#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
 msgid "Malformed chunk in animation"
 msgstr "ส่วนของภาพเคลื่อนไหวเสีย"
 
@@ -390,9 +239,8 @@ msgstr "ส่วนของภาพเคลื่อนไหวเสีย
 msgid "The ANI image format"
 msgstr "แฟ้มรูปชนิด ANI"
 
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267
-#: gdk-pixbuf/io-bmp.c:338 gdk-pixbuf/io-bmp.c:370
-#: gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
+#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
+#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
 msgid "BMP image has bogus header data"
 msgstr "รูป BMP นี้มีข้อมูลส่วนหัวที่ใช้ไม่ได้"
 
@@ -429,8 +277,7 @@ msgstr "แฟ้มรูปชนิด BMP"
 msgid "Failure reading GIF: %s"
 msgstr "อ่านรูป GIF ไม่สำเร็จ: %s"
 
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481
-#: gdk-pixbuf/io-gif.c:1642
+#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "แฟ้ม GIF นี้ขาดข้อมูลบางส่วน (อาจจะคัดลอกแฟ้มมาไม่ครบแฟ้ม)"
 
@@ -455,8 +302,8 @@ msgstr "พบโค้ดเสีย"
 msgid "Circular table entry in GIF file"
 msgstr "ตารางในแฟ้ม GIF มีรายการที่อ้างวกหลับมาถึงตัวเอง"
 
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468
-#: gdk-pixbuf/io-gif.c:1515 gdk-pixbuf/io-gif.c:1630
+#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
+#: gdk-pixbuf/io-gif.c:1630
 msgid "Not enough memory to load GIF file"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูป GIF"
 
@@ -491,15 +338,13 @@ msgstr "แฟ้ม GIF ไม่สมบูรณ์"
 msgid "The GIF image format"
 msgstr "แฟ้มรูปชนิด GIF"
 
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225
-#: gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:290
-#: gdk-pixbuf/io-ico.c:359
+#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
+#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
 msgid "Invalid header in icon"
 msgstr "ข้อมูลส่วนหัวของไอคอนเสีย"
 
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300
-#: gdk-pixbuf/io-ico.c:369 gdk-pixbuf/io-ico.c:432
-#: gdk-pixbuf/io-ico.c:462
+#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
+#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
 msgid "Not enough memory to load icon"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูปไอคอน"
 
@@ -601,8 +446,8 @@ msgstr "หน่วยความจำไม่พอสำหรับอ่
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ไม่รองรับห้วงสีนี้สำหรับ JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944
-#: gdk-pixbuf/io-jpeg.c:1177 gdk-pixbuf/io-jpeg.c:1186
+#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป JPEG นี้"
 
@@ -779,8 +624,7 @@ msgstr "แฟ้ม PNM มีค่าจำนวนสีมากสุด�
 msgid "Maximum color value in PNM file is too large"
 msgstr "แฟ้ม PNM มีค่าจำนวนสีมากสุดที่ใหญ่เกินไป"
 
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459
-#: gdk-pixbuf/io-pnm.c:504
+#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
 msgid "Raw PNM image type is invalid"
 msgstr "รูป Raw PNM เสีย"
 
@@ -873,9 +717,8 @@ msgstr "หน่วยความจำไม่พอสำหรับข้
 msgid "TGA image has invalid dimensions"
 msgstr "รูป TGA มีขนาดกว้างยาวที่ไม่ถูกต้อง"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782
-#: gdk-pixbuf/io-tga.c:792 gdk-pixbuf/io-tga.c:802
-#: gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
+#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
 msgid "TGA image type not supported"
 msgstr "ไม่รองรับรูปชนิด TGA"
 
@@ -907,8 +750,7 @@ msgstr "ความกว้างหรือสูงของรูปชน
 msgid "Dimensions of TIFF image too large"
 msgstr "รูป TIFF มีขนาดกว้างยาวที่ใหญ่เกินไป"
 
-#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229
-#: gdk-pixbuf/io-tiff.c:541
+#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
 msgid "Insufficient memory to open TIFF file"
 msgstr "หน่วยความจำไม่พอจะเปิดแฟ้ม TIFF"
 
@@ -1004,8 +846,7 @@ msgstr "แฟ้ม XPM ตั้งค่าไบต์ต่อพิกเ�
 msgid "XPM file has invalid number of colors"
 msgstr "แฟ้ม XPM ตั้งค่าจำนวนสีที่ใช้ไม่ได้"
 
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531
-#: gdk-pixbuf/io-xpm.c:583
+#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป XPM"
 
@@ -1164,86 +1005,89 @@ msgstr "งานศิลป์โดย"
 #. * that use the shift key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. *
-#. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: gtk/gtkaccellabel.c:93
-msgid "keyboard label|Shift"
+#: gtk/gtkaccellabel.c:91
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Shift"
 msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. *
-#. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: gtk/gtkaccellabel.c:101
-msgid "keyboard label|Ctrl"
+#: gtk/gtkaccellabel.c:97
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Ctrl"
 msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. *
-#. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: gtk/gtkaccellabel.c:109
-msgid "keyboard label|Alt"
+#: gtk/gtkaccellabel.c:103
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Alt"
 msgstr "Alt"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:678
-msgid "keyboard label|Super"
-msgstr "Super"
+#: gtk/gtkaccellabel.c:671
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Super"
+msgstr "Super A"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:692
-msgid "keyboard label|Hyper"
-msgstr "Hyper"
+#: gtk/gtkaccellabel.c:684
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Hyper"
+msgstr "กระดาษ"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:707
-msgid "keyboard label|Meta"
-msgstr "Meta"
+#: gtk/gtkaccellabel.c:698
+msgctxt "keyboard label"
+msgid "Meta"
+msgstr ""
 
-#. do not translate the part before the |
-#: gtk/gtkaccellabel.c:725
-msgid "keyboard label|Space"
-msgstr "Space"
+#: gtk/gtkaccellabel.c:715
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Space"
+msgstr "แ_ทนที่"
 
-#. do not translate the part before the |
-#: gtk/gtkaccellabel.c:729
-msgid "keyboard label|Backslash"
-msgstr "Backslash"
+#: gtk/gtkaccellabel.c:718
+msgctxt "keyboard label"
+msgid "Backslash"
+msgstr ""
 
 #: gtk/gtkbuilderparser.c:340
 #, c-format
 msgid "Invalid type function: `%s'"
 msgstr "ฟังก์ชันถามชนิดใช้ไม่ได้: `%s'"
 
-#: gtk/gtkbuilderparser.c:823
+#: gtk/gtkbuilderparser.c:837
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "อิลิเมนต์รากใช้ไม่ได้: '%s'"
 
-#: gtk/gtkbuilderparser.c:862
+#: gtk/gtkbuilderparser.c:876
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "แท็กไม่ถูกดำเนินการ: '%s'"
@@ -1270,90 +1114,85 @@ msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
-#. * Translate it to the widest year text.
-#. *
-#. * Don't include the prefix "year measurement template|"
-#. * in the translation.
+#. * Translate it to the widest year text
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1806
-msgid "year measurement template|2000"
-msgstr "2000"
+#: gtk/gtkcalendar.c:1803
+msgctxt "year measurement template"
+msgid "2000"
+msgstr ""
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
 #. *
 #. * Translate to "%Id" if you want to use localized digits, or
-#. * translate to "%d" otherwise.  Don't include the "calendar:day:digits|"
-#. * part in the translation.
+#. * translate to "%d" otherwise.
 #. *
 #. * Note that translating this doesn't guarantee that you get localized
-#. * digits.  That needs support from your system and locale definition
+#. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1837 gtk/gtkcalendar.c:2498
-#, c-format
-msgid "calendar:day:digits|%d"
-msgstr "%d"
+#: gtk/gtkcalendar.c:1834 gtk/gtkcalendar.c:2492
+#, fuzzy, c-format
+msgctxt "calendar:day:digits"
+msgid "%d"
+msgstr "d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
 #. *
 #. * Translate to "%Id" if you want to use localized digits, or
-#. * translate to "%d" otherwise.  Don't include the
-#. * "calendar:week:digits|" part in the translation.
+#. * translate to "%d" otherwise.
 #. *
 #. * Note that translating this doesn't guarantee that you get localized
-#. * digits.  That needs support from your system and locale definition
+#. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1869 gtk/gtkcalendar.c:2360
-#, c-format
-msgid "calendar:week:digits|%d"
-msgstr "%d"
+#: gtk/gtkcalendar.c:1866 gtk/gtkcalendar.c:2355
+#, fuzzy, c-format
+msgctxt "calendar:week:digits"
+msgid "%d"
+msgstr "d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
 #. * Use only ASCII in the translation.
 #. *
-#. * Also look for the msgid "year measurement template|2000".
+#. * Also look for the msgid "2000".
 #. * Translate that entry to a year with the widest output of this
 #. * msgid.
 #. *
-#. * Don't include the prefix "calendar year format|" in the
-#. * translation. "%Y" is appropriate for most locales.
+#. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2150
-msgid "calendar year format|%Y"
-msgstr "%Ey"
+#: gtk/gtkcalendar.c:2146
+#, fuzzy
+msgctxt "calendar year format"
+msgid "%Y"
+msgstr "Y"
 
 #. This label is displayed in a treeview cell displaying
-#. * a disabled accelerator key combination. Only include
-#. * the text after the | in the translation.
+#. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:244
-msgid "Accelerator|Disabled"
-msgstr "ปิดใช้งาน"
+#: gtk/gtkcellrendereraccel.c:243
+#, fuzzy
+msgctxt "Accelerator"
+msgid "Disabled"
+msgstr "ไม่ใช้"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:377 gtk/gtkcellrendereraccel.c:589
+#: gtk/gtkcellrendereraccel.c:376 gtk/gtkcellrendereraccel.c:588
 msgid "New accelerator..."
 msgstr "กำหนดคีย์ด่วนใหม่..."
 
-#: gtk/gtkcellrendererpixbuf.c:460
-#, c-format
-msgid "Icon not present in theme"
-msgstr "ชุดตกแต่งไม่มีไอคอน"
-
-#. do not translate the part before the |
-#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
-#, c-format
-msgid "progress bar label|%d %%"
-msgstr "%d %%"
+#: gtk/gtkcellrendererprogress.c:361 gtk/gtkcellrendererprogress.c:448
+#, fuzzy, c-format
+msgctxt "progress bar label"
+msgid "%d %%"
+msgstr "%d %b %Ey"
 
 #: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
@@ -1480,15 +1319,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "เลือกสี"
 
-#: gtk/gtkentry.c:5530 gtk/gtktextview.c:7686
+#: gtk/gtkentry.c:7998 gtk/gtktextview.c:7730
 msgid "Input _Methods"
 msgstr "_วิธีป้อนข้อความ"
 
-#: gtk/gtkentry.c:5544 gtk/gtktextview.c:7700
+#: gtk/gtkentry.c:8012 gtk/gtktextview.c:7744
 msgid "_Insert Unicode Control Character"
 msgstr "แ_ทรกอักขระควบคุมของยูนิโค้ด"
 
-#: gtk/gtkentry.c:6756
+#: gtk/gtkentry.c:9375
 msgid ""
 "You have the Caps Lock key on\n"
 "and an active input method"
@@ -1496,11 +1335,11 @@ msgstr ""
 "ปุ่ม Caps Lock ติดอยู่\n"
 "และมีวิธีป้อนข้อความทำงานอยู่"
 
-#: gtk/gtkentry.c:6758
+#: gtk/gtkentry.c:9377
 msgid "You have the Caps Lock key on"
 msgstr "ปุ่ม Caps Lock ติดอยู่"
 
-#: gtk/gtkentry.c:6760
+#: gtk/gtkentry.c:9379
 msgid "You have an active input method"
 msgstr "มีวิธีป้อนข้อความทำงานอยู่"
 
@@ -1611,7 +1450,7 @@ msgstr "ที่หลักๆ"
 msgid "_Places"
 msgstr "_ที่หลักๆ"
 
-#: gtk/gtkfilechooserdefault.c:3997 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3997
 msgid "_Add"
 msgstr "เ_พิ่ม"
 
@@ -1619,7 +1458,7 @@ msgstr "เ_พิ่ม"
 msgid "Add the selected folder to the Bookmarks"
 msgstr "เพิ่มโฟลเดอร์ที่เลือกอยู่ลงในที่คั่นหน้า"
 
-#: gtk/gtkfilechooserdefault.c:4009 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:4009
 msgid "_Remove"
 msgstr "เ_อาออก"
 
@@ -1631,53 +1470,53 @@ msgstr "ลบที่คั่นหน้าที่เลือกอยู
 msgid "Could not select file"
 msgstr "เลือกแฟ้มไม่สำเร็จ"
 
-#: gtk/gtkfilechooserdefault.c:4301
+#: gtk/gtkfilechooserdefault.c:4300
 msgid "_Add to Bookmarks"
 msgstr "เ_พิ่มลงในที่คั่นหน้า"
 
-#: gtk/gtkfilechooserdefault.c:4315
+#: gtk/gtkfilechooserdefault.c:4314
 msgid "Show _Hidden Files"
 msgstr "แสดงแฟ้มซ่อ_น"
 
-#: gtk/gtkfilechooserdefault.c:4322
+#: gtk/gtkfilechooserdefault.c:4321
 msgid "Show _Size Column"
 msgstr "แสดงคอลัมน์_ขนาด"
 
-#: gtk/gtkfilechooserdefault.c:4577 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4576 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "แฟ้ม"
 
-#: gtk/gtkfilechooserdefault.c:4626
+#: gtk/gtkfilechooserdefault.c:4625
 msgid "Name"
 msgstr "ชื่อ"
 
-#: gtk/gtkfilechooserdefault.c:4651
+#: gtk/gtkfilechooserdefault.c:4650
 msgid "Size"
 msgstr "ขนาด"
 
-#: gtk/gtkfilechooserdefault.c:4665
+#: gtk/gtkfilechooserdefault.c:4664
 msgid "Modified"
 msgstr "แก้ไขเมื่อ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4885 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4884 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "_ชื่อ:"
 
-#: gtk/gtkfilechooserdefault.c:4927
+#: gtk/gtkfilechooserdefault.c:4926
 msgid "_Browse for other folders"
 msgstr "เ_รียกดูโฟลเดอร์อื่น"
 
-#: gtk/gtkfilechooserdefault.c:5197
+#: gtk/gtkfilechooserdefault.c:5196
 msgid "Type a file name"
 msgstr "ป้อนชื่อแฟ้ม"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5234
+#: gtk/gtkfilechooserdefault.c:5233
 msgid "Create Fo_lder"
 msgstr "สร้างโฟ_ลเดอร์"
 
-#: gtk/gtkfilechooserdefault.c:5244
+#: gtk/gtkfilechooserdefault.c:5243
 msgid "_Location:"
 msgstr "_ตำแหน่ง:"
 
@@ -1689,73 +1528,73 @@ msgstr "บันทึกในโ_ฟลเดอร์:"
 msgid "Create in _folder:"
 msgstr "สร้างในโ_ฟลเดอร์:"
 
-#: gtk/gtkfilechooserdefault.c:7036
+#: gtk/gtkfilechooserdefault.c:7097
 msgid "Cannot change to folder because it is not local"
 msgstr "ไปโฟลเดอร์ที่กำหนดไม่สำเร็จ เพราะไม่ใช่โฟลเดอร์ในเครื่องนี้"
 
-#: gtk/gtkfilechooserdefault.c:7661 gtk/gtkfilechooserdefault.c:7682
+#: gtk/gtkfilechooserdefault.c:7722 gtk/gtkfilechooserdefault.c:7743
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "จุดเชื่อม %s มีอยู่ก่อนแล้ว"
 
-#: gtk/gtkfilechooserdefault.c:7772
+#: gtk/gtkfilechooserdefault.c:7833
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "จุดเชื่อม %s ไม่มีอยู่จริง"
 
-#: gtk/gtkfilechooserdefault.c:8020 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8081 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "มีแฟ้มชื่อ \"%s\" อยู่ก่อนแล้ว คุณต้องการจะแทนที่แฟ้มหรือไม่?"
 
-#: gtk/gtkfilechooserdefault.c:8023 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8084 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "มีแฟ้มดังกล่าวอยู่แล้วใน \"%s\" หากสั่งแทนที่ก็จะเขียนทับเนื้อหาแฟ้มเดิม"
 
-#: gtk/gtkfilechooserdefault.c:8028 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8089 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "แ_ทนที่"
 
-#: gtk/gtkfilechooserdefault.c:8785
+#: gtk/gtkfilechooserdefault.c:8846
 msgid "Could not start the search process"
 msgstr "เรียกโพรเซสค้นหาไม่สำเร็จ"
 
-#: gtk/gtkfilechooserdefault.c:8786
+#: gtk/gtkfilechooserdefault.c:8847
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "โปรแกรมไม่สามารถเชื่อมต่อไปยังดีมอนผู้ทำดัชนีได้ กรุณาตรวจสอบให้แน่ใจว่าดีมอนทำงานอยู่"
 
-#: gtk/gtkfilechooserdefault.c:8800
+#: gtk/gtkfilechooserdefault.c:8861
 msgid "Could not send the search request"
 msgstr "ส่งคำขอค้นหาไม่สำเร็จ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9267
+#: gtk/gtkfilechooserdefault.c:9328
 msgid "_Search:"
 msgstr "_ค้นหา:"
 
-#: gtk/gtkfilechooserdefault.c:10220
+#: gtk/gtkfilechooserdefault.c:10281
 #, c-format
 msgid "Could not mount %s"
 msgstr "เมานท์ %s ไม่สำเร็จ"
 
-#: gtk/gtkfilechooserdefault.c:10878
+#: gtk/gtkfilechooserdefault.c:10956
 msgid "Type name of new folder"
 msgstr "พิมพ์ชื่อของโฟลเดอร์ใหม่"
 
-#: gtk/gtkfilechooserdefault.c:11056 gtk/gtkfilechooserdefault.c:11078
-#: gtk/gtkfilechooserdefault.c:11149
+#: gtk/gtkfilechooserdefault.c:11134 gtk/gtkfilechooserdefault.c:11156
+#: gtk/gtkfilechooserdefault.c:11227
 msgid "Unknown"
 msgstr "ไม่ทราบ"
 
-#: gtk/gtkfilechooserdefault.c:11096
+#: gtk/gtkfilechooserdefault.c:11174
 msgid "%H:%M"
 msgstr "%H:%M น."
 
-#: gtk/gtkfilechooserdefault.c:11098
+#: gtk/gtkfilechooserdefault.c:11176
 msgid "Yesterday at %H:%M"
 msgstr "เมื่อวาน %H:%M น."
 
@@ -1953,7 +1792,7 @@ msgstr "เลือกแบบอักษร"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:780
+#: gtk/gtkfontbutton.c:785
 msgid "Font"
 msgstr "แบบอักษร"
 
@@ -1980,7 +1819,7 @@ msgstr "_ขนาด:"
 msgid "_Preview:"
 msgstr "ตัว_อย่าง:"
 
-#: gtk/gtkfontsel.c:1544
+#: gtk/gtkfontsel.c:1560
 msgid "Font Selection"
 msgstr "เลือกแบบอักษร"
 
@@ -2017,22 +1856,25 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "ชุดตกแต่งไม่มีไอคอน '%s'"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "โหลดไอคอนไม่สำเร็จ"
 
-#: gtk/gtkimmodule.c:515
+#: gtk/gtkimmodule.c:527
 msgid "Simple"
 msgstr "อย่างง่าย"
 
 #: gtk/gtkimmulticontext.c:545
-msgid "input method menu|System"
-msgstr "ระบบ"
+#, fuzzy
+msgctxt "input method menu"
+msgid "System"
+msgstr "ระบบแฟ้ม"
 
 #: gtk/gtkimmulticontext.c:629
-#, c-format
-msgid "input method menu|System (%s)"
-msgstr "ระบบ (%s)"
+#, fuzzy, c-format
+msgctxt "input method menu"
+msgid "System (%s)"
+msgstr "%s (%s)"
 
 #: gtk/gtkinputdialog.c:192
 msgid "Input"
@@ -2113,11 +1955,11 @@ msgstr "(ไม่รู้จัก)"
 msgid "Cl_ear"
 msgstr "_ล้าง"
 
-#: gtk/gtklinkbutton.c:427
+#: gtk/gtklinkbutton.c:428
 msgid "Copy URL"
 msgstr "_คัดลอก URL"
 
-#: gtk/gtklinkbutton.c:565
+#: gtk/gtklinkbutton.c:586
 msgid "Invalid URI"
 msgstr "URI ไม่ถูกต้อง"
 
@@ -2168,49 +2010,48 @@ msgstr "ตัวเลือกของ GTK+"
 msgid "Show GTK+ Options"
 msgstr "แสดงตัวเลือกของ GTK+"
 
-#: gtk/gtkmountoperation.c:476
+#: gtk/gtkmountoperation.c:481
 msgid "Co_nnect"
 msgstr "เ_ชื่อมต่อ"
 
-#: gtk/gtkmountoperation.c:520
+#: gtk/gtkmountoperation.c:525
 msgid "Connect _anonymously"
 msgstr "เชื่อมต่อแบบ_นิรนาม"
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:534
 msgid "Connect as u_ser:"
 msgstr "เชื่อมต่อในนา_มผู้ใช้:"
 
-#: gtk/gtkmountoperation.c:566
+#: gtk/gtkmountoperation.c:571
 msgid "_Username:"
 msgstr "ชื่_อผู้ใช้:"
 
-#: gtk/gtkmountoperation.c:570
+#: gtk/gtkmountoperation.c:575
 msgid "_Domain:"
 msgstr "โ_ดเมน:"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:580
 msgid "_Password:"
 msgstr "_รหัสผ่าน::"
 
-#: gtk/gtkmountoperation.c:590
+#: gtk/gtkmountoperation.c:598
 msgid "Forget password _immediately"
 msgstr "_ทิ้งรหัสผ่านทันที"
 
-#: gtk/gtkmountoperation.c:598
+#: gtk/gtkmountoperation.c:608
 msgid "Remember password until you _logout"
 msgstr "_จำรหัสผ่านไว้จนกว่าจะออก"
 
-#: gtk/gtkmountoperation.c:606
+#: gtk/gtkmountoperation.c:618
 msgid "Remember _forever"
 msgstr "จำรหัสผ่านไว้_ตลอดไป"
 
-#: gtk/gtknotebook.c:4422 gtk/gtknotebook.c:6941
+#: gtk/gtknotebook.c:4425 gtk/gtknotebook.c:6944
 #, c-format
 msgid "Page %u"
 msgstr "หน้า %u"
 
-#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825
-#: gtk/gtkpapersize.c:865
+#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:867
 msgid "Not a valid page setup file"
 msgstr "ไม่ใช่แฟ้มค่าตั้งหน้ากระดาษที่ใช้การได้"
 
@@ -2271,7 +2112,7 @@ msgstr "_ขนาดกระดาษ:"
 msgid "_Orientation:"
 msgstr "แ_นววาง:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2666
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2681
 msgid "Page Setup"
 msgstr "ตั้งหน้ากระดาษ"
 
@@ -2344,83 +2185,43 @@ msgstr "บันทึกในโ_ฟลเดอร์:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:173
+#: gtk/gtkprintoperation.c:175
 #, c-format
 msgid "%s job #%d"
 msgstr "งานพิมพ์ %s #%d"
 
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1504
-msgid "print operation status|Initial state"
-msgstr "ขั้นแรก"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1506
-msgid "print operation status|Preparing to print"
-msgstr "กำลังเตรียมพิมพ์"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1508
-msgid "print operation status|Generating data"
-msgstr "กำลังสร้างข้อมูล"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1510
-msgid "print operation status|Sending data"
-msgstr "กำลังส่งข้อมูล"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1512
-msgid "print operation status|Waiting"
-msgstr "กำลังรอ"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1514
-msgid "print operation status|Blocking on issue"
-msgstr "ติดขัดด้วยเหตุขัดข้อง"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1516
-msgid "print operation status|Printing"
-msgstr "กำลังพิมพ์"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1518
-msgid "print operation status|Finished"
-msgstr "เสร็จสิ้น"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1520
-msgid "print operation status|Finished with error"
-msgstr "เสร็จสิ้นโดยมีข้อผิดพลาด"
-
-#: gtk/gtkprintoperation.c:2043
+#: gtk/gtkprintoperation.c:2048
 #, c-format
 msgid "Preparing %d"
 msgstr "กำลังเตรียมพิมพ์ %d"
 
-#: gtk/gtkprintoperation.c:2045 gtk/gtkprintoperation.c:2301
+#: gtk/gtkprintoperation.c:2050 gtk/gtkprintoperation.c:2381
+#, c-format
 msgid "Preparing"
 msgstr "กำลังเตรียมพิมพ์"
 
-#: gtk/gtkprintoperation.c:2048
+#: gtk/gtkprintoperation.c:2053
 #, c-format
 msgid "Printing %d"
 msgstr "กำลังพิมพ์ %d"
 
-#: gtk/gtkprintoperation.c:2331
+#: gtk/gtkprintoperation.c:2411
+#, c-format
 msgid "Error creating print preview"
 msgstr "เกิดข้อผิดพลาดขณะสร้างตัวอย่างก่อนพิมพ์"
 
-#: gtk/gtkprintoperation.c:2334
+#: gtk/gtkprintoperation.c:2414
+#, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "สาเหตุที่น่าจะเป็นไปได้มากที่สุด คือไม่สามารถสร้างแฟ้มชั่วคราวได้"
 
 #: gtk/gtkprintoperation-unix.c:242
+#, c-format
 msgid "Error launching preview"
 msgstr "เกิดข้อผิดพลาดขณะเรียกแสดงตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation-unix.c:280
+#, c-format
 msgid "Error printing"
 msgstr "เกิดข้อผิดพลาดขณะพิมพ์"
 
@@ -2438,7 +2239,7 @@ msgstr "กระดาษหมด"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1413
+#: modules/printbackends/cups/gtkprintbackendcups.c:1469
 msgid "Paused"
 msgstr "หยุดพัก"
 
@@ -2483,37 +2284,37 @@ msgstr "แฮนเดิลไปยัง PrintDlgEx ผิดพลาด"
 msgid "Unspecified error"
 msgstr "ข้อผิดพลาดไม่ปรากฏสาเหตุ"
 
-#: gtk/gtkprintunixdialog.c:1750
+#: gtk/gtkprintunixdialog.c:1763
 msgid "Printer"
 msgstr "เครื่องพิมพ์"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1760
+#: gtk/gtkprintunixdialog.c:1773
 msgid "Location"
 msgstr "ตำแหน่ง"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1771
+#: gtk/gtkprintunixdialog.c:1784
 msgid "Status"
 msgstr "สถานะ"
 
-#: gtk/gtkprintunixdialog.c:1794
+#: gtk/gtkprintunixdialog.c:1809
 msgid "Range"
 msgstr "ช่วง"
 
-#: gtk/gtkprintunixdialog.c:1798
+#: gtk/gtkprintunixdialog.c:1813
 msgid "_All Pages"
 msgstr "ทุ_กหน้า"
 
-#: gtk/gtkprintunixdialog.c:1805
+#: gtk/gtkprintunixdialog.c:1820
 msgid "C_urrent Page"
 msgstr "หน้า_ปัจจุบัน"
 
-#: gtk/gtkprintunixdialog.c:1814
+#: gtk/gtkprintunixdialog.c:1829
 msgid "Pag_es:"
 msgstr "_หน้า:"
 
-#: gtk/gtkprintunixdialog.c:1815
+#: gtk/gtkprintunixdialog.c:1830
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2521,182 +2322,182 @@ msgstr ""
 "ระบุช่วงของหน้าตั้งแต่หนึ่งช่วงขึ้นไป\n"
 " เช่น 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1836
+#: gtk/gtkprintunixdialog.c:1851
 msgid "Copies"
 msgstr "สำเนา"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1841
+#: gtk/gtkprintunixdialog.c:1856
 msgid "Copie_s:"
 msgstr "จำ_นวนสำเนา:"
 
-#: gtk/gtkprintunixdialog.c:1859
+#: gtk/gtkprintunixdialog.c:1874
 msgid "C_ollate"
 msgstr "_ทีละชุด"
 
-#: gtk/gtkprintunixdialog.c:1867
+#: gtk/gtkprintunixdialog.c:1882
 msgid "_Reverse"
 msgstr "_จากหลังมาหน้า"
 
-#: gtk/gtkprintunixdialog.c:1887
+#: gtk/gtkprintunixdialog.c:1902
 msgid "General"
 msgstr "ทั่วไป"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2427
-#: modules/printbackends/cups/gtkprintbackendcups.c:2813
+#: gtk/gtkprintunixdialog.c:2442
+#: modules/printbackends/cups/gtkprintbackendcups.c:2869
 msgid "Page Ordering"
 msgstr "การเรียงหน้า"
 
-#: gtk/gtkprintunixdialog.c:2433
+#: gtk/gtkprintunixdialog.c:2448
 msgid "Left to right"
 msgstr "ซ้ายไปขวา"
 
-#: gtk/gtkprintunixdialog.c:2434
+#: gtk/gtkprintunixdialog.c:2449
 msgid "Right to left"
 msgstr "ขวามาซ้าย"
 
-#: gtk/gtkprintunixdialog.c:2503
+#: gtk/gtkprintunixdialog.c:2518
 msgid "Layout"
 msgstr "การจัดเรียง"
 
-#: gtk/gtkprintunixdialog.c:2507
+#: gtk/gtkprintunixdialog.c:2522
 msgid "T_wo-sided:"
 msgstr "พิมพ์_สองหน้า:"
 
-#: gtk/gtkprintunixdialog.c:2522
+#: gtk/gtkprintunixdialog.c:2537
 msgid "Pages per _side:"
 msgstr "จำนวนหน้าต่อห_น้ากระดาษ:"
 
-#: gtk/gtkprintunixdialog.c:2540
+#: gtk/gtkprintunixdialog.c:2555
 msgid "Page or_dering:"
 msgstr "การเ_รียงหน้า:"
 
-#: gtk/gtkprintunixdialog.c:2556
+#: gtk/gtkprintunixdialog.c:2571
 msgid "_Only print:"
 msgstr "พิ_มพ์เฉพาะ:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2571
+#: gtk/gtkprintunixdialog.c:2586
 msgid "All sheets"
 msgstr "ทุกหน้า"
 
-#: gtk/gtkprintunixdialog.c:2572
+#: gtk/gtkprintunixdialog.c:2587
 msgid "Even sheets"
 msgstr "หน้าคู่"
 
-#: gtk/gtkprintunixdialog.c:2573
+#: gtk/gtkprintunixdialog.c:2588
 msgid "Odd sheets"
 msgstr "หน้าคี่"
 
-#: gtk/gtkprintunixdialog.c:2576
+#: gtk/gtkprintunixdialog.c:2591
 msgid "Sc_ale:"
 msgstr "อัตรา_ขยาย:"
 
-#: gtk/gtkprintunixdialog.c:2603
+#: gtk/gtkprintunixdialog.c:2618
 msgid "Paper"
 msgstr "กระดาษ"
 
-#: gtk/gtkprintunixdialog.c:2607
+#: gtk/gtkprintunixdialog.c:2622
 msgid "Paper _type:"
 msgstr "_ชนิดกระดาษ:"
 
-#: gtk/gtkprintunixdialog.c:2622
+#: gtk/gtkprintunixdialog.c:2637
 msgid "Paper _source:"
 msgstr "แหล่ง_ป้อนกระดาษ:"
 
-#: gtk/gtkprintunixdialog.c:2637
+#: gtk/gtkprintunixdialog.c:2652
 msgid "Output t_ray:"
 msgstr "ถาดกระดาษ_ออก:"
 
-#: gtk/gtkprintunixdialog.c:2689
+#: gtk/gtkprintunixdialog.c:2704
 msgid "Job Details"
 msgstr "รายละเอียดงานพิมพ์"
 
-#: gtk/gtkprintunixdialog.c:2695
+#: gtk/gtkprintunixdialog.c:2710
 msgid "Pri_ority:"
 msgstr "_ลำดับความสำคัญ:"
 
-#: gtk/gtkprintunixdialog.c:2710
+#: gtk/gtkprintunixdialog.c:2725
 msgid "_Billing info:"
 msgstr "ข้อมูล_สรุป:"
 
-#: gtk/gtkprintunixdialog.c:2728
+#: gtk/gtkprintunixdialog.c:2743
 msgid "Print Document"
 msgstr "พิมพ์เอกสาร"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2737
+#: gtk/gtkprintunixdialog.c:2752
 msgid "_Now"
 msgstr "เ_ดี๋ยวนี้"
 
-#: gtk/gtkprintunixdialog.c:2748
+#: gtk/gtkprintunixdialog.c:2763
 msgid "A_t:"
 msgstr "เ_มื่อ:"
 
-#: gtk/gtkprintunixdialog.c:2767
+#: gtk/gtkprintunixdialog.c:2782
 msgid "On _hold"
 msgstr "_รอไว้"
 
-#: gtk/gtkprintunixdialog.c:2786
+#: gtk/gtkprintunixdialog.c:2801
 msgid "Add Cover Page"
 msgstr "เพิ่มหน้าปก"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2795
+#: gtk/gtkprintunixdialog.c:2810
 msgid "Be_fore:"
 msgstr "ปก_หน้า:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2813
+#: gtk/gtkprintunixdialog.c:2828
 msgid "_After:"
 msgstr "ปกหลั_ง:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2831
+#: gtk/gtkprintunixdialog.c:2846
 msgid "Job"
 msgstr "งานพิมพ์"
 
-#: gtk/gtkprintunixdialog.c:2897
+#: gtk/gtkprintunixdialog.c:2912
 msgid "Advanced"
 msgstr "ขั้นสูง"
 
-#: gtk/gtkprintunixdialog.c:2932
+#: gtk/gtkprintunixdialog.c:2947
 msgid "Image Quality"
 msgstr "คุณภาพของรูป"
 
-#: gtk/gtkprintunixdialog.c:2935
+#: gtk/gtkprintunixdialog.c:2950
 msgid "Color"
 msgstr "สี"
 
-#: gtk/gtkprintunixdialog.c:2938
+#: gtk/gtkprintunixdialog.c:2953
 msgid "Finishing"
 msgstr "กำลังเสร็จสิ้น"
 
-#: gtk/gtkprintunixdialog.c:2948
+#: gtk/gtkprintunixdialog.c:2963
 msgid "Some of the settings in the dialog conflict"
 msgstr "ค่าตั้งบางค่าในกล่องโต้ตอบขัดแย้งกัน"
 
-#: gtk/gtkprintunixdialog.c:2971
+#: gtk/gtkprintunixdialog.c:2986
 msgid "Print"
 msgstr "พิมพ์"
 
-#: gtk/gtkrc.c:2866
+#: gtk/gtkrc.c:2868
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "ไม่พบแฟ้ม include: \"%s\""
 
-#: gtk/gtkrc.c:3494 gtk/gtkrc.c:3497
+#: gtk/gtkrc.c:3496 gtk/gtkrc.c:3499
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "ไม่พบแฟ้มรูปใน pixmap_path: \"%s\""
@@ -2776,23 +2577,21 @@ msgstr "รายการไม่รู้จัก"
 #. * in a recent files menu. The %d is the number of the item,
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
-#. *
-#. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:781
+#: gtk/gtkrecentchoosermenu.c:779
 #, c-format
-msgid "recent menu label|_%d. %s"
-msgstr "_%d. %s"
+msgctxt "recent menu label"
+msgid "_%d. %s"
+msgstr ""
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
-#. *
-#. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:788
-#, c-format
-msgid "recent menu label|%d. %s"
-msgstr "%d. %s"
+#: gtk/gtkrecentchoosermenu.c:784
+#, fuzzy, c-format
+msgctxt "recent menu label"
+msgid "%d. %s"
+msgstr "%s (%s)"
 
 #: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
 #: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
@@ -2801,394 +2600,6 @@ msgstr "%d. %s"
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "ไม่พบรายการที่ URI '%s'"
-
-#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:288
-msgid "Information"
-msgstr "ข้อมูล"
-
-#: gtk/gtkstock.c:289
-msgid "Warning"
-msgstr "คำเตือน"
-
-#: gtk/gtkstock.c:290
-msgid "Error"
-msgstr "ผิดพลาด"
-
-#: gtk/gtkstock.c:291
-msgid "Question"
-msgstr "คำถาม"
-
-#. FIXME these need accelerators when appropriate, and
-#. * need the mnemonics to be rationalized
-#.
-#: gtk/gtkstock.c:296
-msgid "_About"
-msgstr "เ_กี่ยวกับ"
-
-#: gtk/gtkstock.c:298
-msgid "_Apply"
-msgstr "เริ่มใ_ช้"
-
-#: gtk/gtkstock.c:299
-msgid "_Bold"
-msgstr "ตัวห_นา"
-
-#: gtk/gtkstock.c:300
-msgid "_Cancel"
-msgstr "_ยกเลิก"
-
-#: gtk/gtkstock.c:301
-msgid "_CD-Rom"
-msgstr "_ซีดีรอม"
-
-#: gtk/gtkstock.c:302
-msgid "_Clear"
-msgstr "_ล้าง"
-
-#: gtk/gtkstock.c:303
-msgid "_Close"
-msgstr "ปิ_ด"
-
-#: gtk/gtkstock.c:304
-msgid "C_onnect"
-msgstr "เ_ชื่อมต่อ"
-
-#: gtk/gtkstock.c:305
-msgid "_Convert"
-msgstr "แปล_ง"
-
-#: gtk/gtkstock.c:306
-msgid "_Copy"
-msgstr "_คัดลอก"
-
-#: gtk/gtkstock.c:307
-msgid "Cu_t"
-msgstr "_ตัด"
-
-#: gtk/gtkstock.c:308
-msgid "_Delete"
-msgstr "_ลบ"
-
-#: gtk/gtkstock.c:309
-msgid "_Discard"
-msgstr "_ละทิ้ง"
-
-#: gtk/gtkstock.c:310
-msgid "_Disconnect"
-msgstr "เลิ_กเชื่อมต่อ"
-
-#: gtk/gtkstock.c:311
-msgid "_Execute"
-msgstr "เ_รียกใช้"
-
-#: gtk/gtkstock.c:312
-msgid "_Edit"
-msgstr "แ_ก้ไข"
-
-#: gtk/gtkstock.c:313
-msgid "_Find"
-msgstr "_หา"
-
-#: gtk/gtkstock.c:314
-msgid "Find and _Replace"
-msgstr "หาและแ_ทนที่"
-
-#: gtk/gtkstock.c:315
-msgid "_Floppy"
-msgstr "_ฟลอปปี"
-
-#: gtk/gtkstock.c:316
-msgid "_Fullscreen"
-msgstr "เ_ต็มจอ"
-
-#: gtk/gtkstock.c:317
-msgid "_Leave Fullscreen"
-msgstr "เ_ลิกแสดงเต็มจอ"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:319
-msgid "Navigation|_Bottom"
-msgstr "ล่า_งสุด"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:321
-msgid "Navigation|_First"
-msgstr "แ_รกสุด"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:323
-msgid "Navigation|_Last"
-msgstr "_ท้ายสุด"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:325
-msgid "Navigation|_Top"
-msgstr "_บนสุด"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:327
-msgid "Navigation|_Back"
-msgstr "_ถอยกลับ"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:329
-msgid "Navigation|_Down"
-msgstr "_ลง"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:331
-msgid "Navigation|_Forward"
-msgstr "ถั_ดไป"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:333
-msgid "Navigation|_Up"
-msgstr "_ขึ้น"
-
-#: gtk/gtkstock.c:334
-msgid "_Harddisk"
-msgstr "ฮาร์_ดดิสก์"
-
-#: gtk/gtkstock.c:335
-msgid "_Help"
-msgstr "_วิธีใช้"
-
-#: gtk/gtkstock.c:336
-msgid "_Home"
-msgstr "_บ้าน"
-
-#: gtk/gtkstock.c:337
-msgid "Increase Indent"
-msgstr "เพิ่มย่อหน้า"
-
-#: gtk/gtkstock.c:338
-msgid "Decrease Indent"
-msgstr "ลดย่อหน้า"
-
-#: gtk/gtkstock.c:339
-msgid "_Index"
-msgstr "_ดัชนี"
-
-#: gtk/gtkstock.c:340
-msgid "_Information"
-msgstr "_ข้อมูล"
-
-#: gtk/gtkstock.c:341
-msgid "_Italic"
-msgstr "ตัวเ_อียง"
-
-#: gtk/gtkstock.c:342
-msgid "_Jump to"
-msgstr "_กระโดดไป"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:344
-msgid "Justify|_Center"
-msgstr "กึ่ง_กลาง"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:346
-msgid "Justify|_Fill"
-msgstr "เ_ต็มกรอบ"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:348
-msgid "Justify|_Left"
-msgstr "ชิด_ซ้าย"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:350
-msgid "Justify|_Right"
-msgstr "ชิด_ขวา"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:353
-msgid "Media|_Forward"
-msgstr "กรอไ_ป"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:355
-msgid "Media|_Next"
-msgstr "_ถัดไป"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:357
-msgid "Media|P_ause"
-msgstr "_พัก"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:359
-msgid "Media|_Play"
-msgstr "เ_ล่น"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:361
-msgid "Media|Pre_vious"
-msgstr "ก่อ_นหน้า"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:363
-msgid "Media|_Record"
-msgstr "_อัด"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:365
-msgid "Media|R_ewind"
-msgstr "ถอย_กลับ"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:367
-msgid "Media|_Stop"
-msgstr "_หยุด"
-
-#: gtk/gtkstock.c:368
-msgid "_Network"
-msgstr "เค_รือข่าย"
-
-#: gtk/gtkstock.c:369
-msgid "_New"
-msgstr "ใ_หม่"
-
-#: gtk/gtkstock.c:370
-msgid "_No"
-msgstr "ไ_ม่"
-
-#: gtk/gtkstock.c:371
-msgid "_OK"
-msgstr "_ตกลง"
-
-#: gtk/gtkstock.c:372
-msgid "_Open"
-msgstr "_เปิด"
-
-#: gtk/gtkstock.c:373
-msgid "Landscape"
-msgstr "แนวนอน"
-
-#: gtk/gtkstock.c:374
-msgid "Portrait"
-msgstr "แนวตั้ง"
-
-#: gtk/gtkstock.c:375
-msgid "Reverse landscape"
-msgstr "แนวนอนกลับด้าน"
-
-#: gtk/gtkstock.c:376
-msgid "Reverse portrait"
-msgstr "แนวตั้งกลับด้าน"
-
-#: gtk/gtkstock.c:377
-msgid "Page Set_up"
-msgstr "ตั้ง_หน้ากระดาษ"
-
-#: gtk/gtkstock.c:378
-msgid "_Paste"
-msgstr "_แปะ"
-
-#: gtk/gtkstock.c:379
-msgid "_Preferences"
-msgstr "_ปรับแต่ง"
-
-#: gtk/gtkstock.c:380
-msgid "_Print"
-msgstr "_พิมพ์"
-
-#: gtk/gtkstock.c:381
-msgid "Print Pre_view"
-msgstr "_ตัวอย่างก่อนพิมพ์"
-
-#: gtk/gtkstock.c:382
-msgid "_Properties"
-msgstr "คุณ_สมบัติ"
-
-#: gtk/gtkstock.c:383
-msgid "_Quit"
-msgstr "_ออก"
-
-#: gtk/gtkstock.c:384
-msgid "_Redo"
-msgstr "_ทำซ้ำ"
-
-#: gtk/gtkstock.c:385
-msgid "_Refresh"
-msgstr "เ_รียกใหม่"
-
-#: gtk/gtkstock.c:387
-msgid "_Revert"
-msgstr "คืน_กลับ"
-
-#: gtk/gtkstock.c:388
-msgid "_Save"
-msgstr "_บันทึก"
-
-#: gtk/gtkstock.c:389
-msgid "Save _As"
-msgstr "บันทึกเป็_น"
-
-#: gtk/gtkstock.c:390
-msgid "Select _All"
-msgstr "เลือกทั้ง_หมด"
-
-#: gtk/gtkstock.c:391
-msgid "_Color"
-msgstr "_สี"
-
-#: gtk/gtkstock.c:392
-msgid "_Font"
-msgstr "_แบบอักษร"
-
-#: gtk/gtkstock.c:393
-msgid "_Ascending"
-msgstr "_น้อยไปมาก"
-
-#: gtk/gtkstock.c:394
-msgid "_Descending"
-msgstr "_มากไปน้อย"
-
-#: gtk/gtkstock.c:395
-msgid "_Spell Check"
-msgstr "ต_รวจตัวสะกด"
-
-#: gtk/gtkstock.c:396
-msgid "_Stop"
-msgstr "_หยุด"
-
-#: gtk/gtkstock.c:397
-msgid "_Strikethrough"
-msgstr "ขีด_ทับ"
-
-#: gtk/gtkstock.c:398
-msgid "_Undelete"
-msgstr "เลิ_กลบ"
-
-#: gtk/gtkstock.c:399
-msgid "_Underline"
-msgstr "_ขีดเส้นใต้"
-
-#: gtk/gtkstock.c:400
-msgid "_Undo"
-msgstr "เรี_ยกคืน"
-
-#: gtk/gtkstock.c:401
-msgid "_Yes"
-msgstr "_ใช่"
-
-#: gtk/gtkstock.c:402
-msgid "_Normal Size"
-msgstr "ขนาด_ปกติ"
-
-#: gtk/gtkstock.c:403
-msgid "Best _Fit"
-msgstr "ขนาด_พอดี"
-
-#: gtk/gtkstock.c:404
-msgid "Zoom _In"
-msgstr "ขย_าย"
-
-#: gtk/gtkstock.c:405
-msgid "Zoom _Out"
-msgstr "_ย่อ"
 
 #: gtk/gtktextbufferrichtext.c:651
 #, c-format
@@ -3410,828 +2821,12 @@ msgstr "ดังสุด"
 #. * as used in the tooltip, eg. "49 %".
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
-#. * Do not translate and do not include the "volume percentage|"
-#. * part in the translation!
 #.
-#: gtk/gtkvolumebutton.c:170
-#, c-format
-msgid "volume percentage|%d %%"
-msgstr "%d %%"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:5
-msgid "paper size|asme_f"
-msgstr "asme_f"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:7
-msgid "paper size|A0x2"
-msgstr "A0x2"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:9
-msgid "paper size|A0"
-msgstr "A0"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:11
-msgid "paper size|A0x3"
-msgstr "A0x3"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:13
-msgid "paper size|A1"
-msgstr "A1"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:15
-msgid "paper size|A10"
-msgstr "A10"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:17
-msgid "paper size|A1x3"
-msgstr "A1x3"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:19
-msgid "paper size|A1x4"
-msgstr "A1x4"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:21
-msgid "paper size|A2"
-msgstr "A2"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:23
-msgid "paper size|A2x3"
-msgstr "A2x3"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:25
-msgid "paper size|A2x4"
-msgstr "A2x4"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:27
-msgid "paper size|A2x5"
-msgstr "A2x5"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:29
-msgid "paper size|A3"
-msgstr "A3"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:31
-msgid "paper size|A3 Extra"
-msgstr "A3 พิเศษ"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:33
-msgid "paper size|A3x3"
-msgstr "A3x3"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:35
-msgid "paper size|A3x4"
-msgstr "A3x4"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:37
-msgid "paper size|A3x5"
-msgstr "A3x5"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:39
-msgid "paper size|A3x6"
-msgstr "A3x6"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:41
-msgid "paper size|A3x7"
-msgstr "A3x7"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:43
-msgid "paper size|A4"
-msgstr "A4"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:45
-msgid "paper size|A4 Extra"
-msgstr "A4 พิเศษ"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:47
-msgid "paper size|A4 Tab"
-msgstr "A4 Tab"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:49
-msgid "paper size|A4x3"
-msgstr "A4x3"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:51
-msgid "paper size|A4x4"
-msgstr "A4x4"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:53
-msgid "paper size|A4x5"
-msgstr "A4x5"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:55
-msgid "paper size|A4x6"
-msgstr "A4x6"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:57
-msgid "paper size|A4x7"
-msgstr "A4x7"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:59
-msgid "paper size|A4x8"
-msgstr "A4x8"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:61
-msgid "paper size|A4x9"
-msgstr "A4x9"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:63
-msgid "paper size|A5"
-msgstr "A5"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:65
-msgid "paper size|A5 Extra"
-msgstr "A5 พิเศษ"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:67
-msgid "paper size|A6"
-msgstr "A6"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:69
-msgid "paper size|A7"
-msgstr "A7"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:71
-msgid "paper size|A8"
-msgstr "A8"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:73
-msgid "paper size|A9"
-msgstr "A9"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:75
-msgid "paper size|B0"
-msgstr "B0"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:77
-msgid "paper size|B1"
-msgstr "B1"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:79
-msgid "paper size|B10"
-msgstr "B10"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:81
-msgid "paper size|B2"
-msgstr "B2"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:83
-msgid "paper size|B3"
-msgstr "B3"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:85
-msgid "paper size|B4"
-msgstr "B4"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:87
-msgid "paper size|B5"
-msgstr "B5"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:89
-msgid "paper size|B5 Extra"
-msgstr "B5 พิเศษ"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:91
-msgid "paper size|B6"
-msgstr "B6"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:93
-msgid "paper size|B6/C4"
-msgstr "B6/C4"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:95
-msgid "paper size|B7"
-msgstr "B7"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:97
-msgid "paper size|B8"
-msgstr "B8"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:99
-msgid "paper size|B9"
-msgstr "B9"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:101
-msgid "paper size|C0"
-msgstr "C0"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:103
-msgid "paper size|C1"
-msgstr "C1"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:105
-msgid "paper size|C10"
-msgstr "C10"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:107
-msgid "paper size|C2"
-msgstr "C2"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:109
-msgid "paper size|C3"
-msgstr "C3"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:111
-msgid "paper size|C4"
-msgstr "C4"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:113
-msgid "paper size|C5"
-msgstr "C5"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:115
-msgid "paper size|C6"
-msgstr "C6"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:117
-msgid "paper size|C6/C5"
-msgstr "C6/C5"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:119
-msgid "paper size|C7"
-msgstr "C7"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:121
-msgid "paper size|C7/C6"
-msgstr "C7/C6"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:123
-msgid "paper size|C8"
-msgstr "C8"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:125
-msgid "paper size|C9"
-msgstr "C9"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:127
-msgid "paper size|DL Envelope"
-msgstr "DL ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:129
-msgid "paper size|RA0"
-msgstr "RA0"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:131
-msgid "paper size|RA1"
-msgstr "RA1"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:133
-msgid "paper size|RA2"
-msgstr "RA2"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:135
-msgid "paper size|SRA0"
-msgstr "SRA0"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:137
-msgid "paper size|SRA1"
-msgstr "SRA1"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:139
-msgid "paper size|SRA2"
-msgstr "SRA2"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:141
-msgid "paper size|JB0"
-msgstr "JB0"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:143
-msgid "paper size|JB1"
-msgstr "JB1"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:145
-msgid "paper size|JB10"
-msgstr "JB10"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:147
-msgid "paper size|JB2"
-msgstr "JB2"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:149
-msgid "paper size|JB3"
-msgstr "JB3"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:151
-msgid "paper size|JB4"
-msgstr "JB4"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:153
-msgid "paper size|JB5"
-msgstr "JB5"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:155
-msgid "paper size|JB6"
-msgstr "JB6"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:157
-msgid "paper size|JB7"
-msgstr "JB7"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:159
-msgid "paper size|JB8"
-msgstr "JB8"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:161
-msgid "paper size|JB9"
-msgstr "JB9"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:163
-msgid "paper size|jis exec"
-msgstr "jis exec"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:165
-msgid "paper size|Choukei 2 Envelope"
-msgstr "Choukei 2 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:167
-msgid "paper size|Choukei 3 Envelope"
-msgstr "Choukei 3 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:169
-msgid "paper size|Choukei 4 Envelope"
-msgstr "Choukei 4 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:171
-msgid "paper size|hagaki (postcard)"
-msgstr "hagaki (ไปรษณียบัตร)"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:173
-msgid "paper size|kahu Envelope"
-msgstr "kahu ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:175
-msgid "paper size|kaku2 Envelope"
-msgstr "kahu2 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:177
-msgid "paper size|oufuku (reply postcard)"
-msgstr "oufuku (ไปรษณียบัตรตอบ)"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:179
-msgid "paper size|you4 Envelope"
-msgstr "you4 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:181
-msgid "paper size|10x11"
-msgstr "10x11"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:183
-msgid "paper size|10x13"
-msgstr "10x13"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:185
-msgid "paper size|10x14"
-msgstr "10x14"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:187 gtk/paper_names_offsets.c:189
-msgid "paper size|10x15"
-msgstr "10x15"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:191
-msgid "paper size|11x12"
-msgstr "11x12"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:193
-msgid "paper size|11x15"
-msgstr "11x15"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:195
-msgid "paper size|12x19"
-msgstr "12x19"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:197
-msgid "paper size|5x7"
-msgstr "5x7"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:199
-msgid "paper size|6x9 Envelope"
-msgstr "6x9 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:201
-msgid "paper size|7x9 Envelope"
-msgstr "7x9 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:203
-msgid "paper size|9x11 Envelope"
-msgstr "9x11 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:205
-msgid "paper size|a2 Envelope"
-msgstr "a2 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:207
-msgid "paper size|Arch A"
-msgstr "Arch A"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:209
-msgid "paper size|Arch B"
-msgstr "Arch B"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:211
-msgid "paper size|Arch C"
-msgstr "Arch C"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:213
-msgid "paper size|Arch D"
-msgstr "Arch D"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:215
-msgid "paper size|Arch E"
-msgstr "Arch E"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:217
-msgid "paper size|b-plus"
-msgstr "b-plus"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:219
-msgid "paper size|c"
-msgstr "c"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:221
-msgid "paper size|c5 Envelope"
-msgstr "c5 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:223
-msgid "paper size|d"
-msgstr "d"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:225
-msgid "paper size|e"
-msgstr "e"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:227
-msgid "paper size|edp"
-msgstr "edp"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:229
-msgid "paper size|European edp"
-msgstr "edp ยุโรป"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:231
-msgid "paper size|Executive"
-msgstr "Executive"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:233
-msgid "paper size|f"
-msgstr "f"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:235
-msgid "paper size|FanFold European"
-msgstr "FanFold ยุโรป"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:237
-msgid "paper size|FanFold US"
-msgstr "FanFold อเมริกัน"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:239
-msgid "paper size|FanFold German Legal"
-msgstr "FanFold เยอรมัน Legal"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:241
-msgid "paper size|Government Legal"
-msgstr "Government Legal"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:243
-msgid "paper size|Government Letter"
-msgstr "Government Letter"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:245
-msgid "paper size|Index 3x5"
-msgstr "Index 3x5"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:247
-msgid "paper size|Index 4x6 (postcard)"
-msgstr "Index 4x6 (ไปรษณียบัตร)"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:249
-msgid "paper size|Index 4x6 ext"
-msgstr "Index 4x6 ext"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:251
-msgid "paper size|Index 5x8"
-msgstr "Index 5x8"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:253
-msgid "paper size|Invoice"
-msgstr "ใบส่งของ"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:255
-msgid "paper size|Tabloid"
-msgstr "จุลสาร"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:257
-msgid "paper size|US Legal"
-msgstr "US Legal"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:259
-msgid "paper size|US Legal Extra"
-msgstr "US Legal Extra"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:261
-msgid "paper size|US Letter"
-msgstr "US Letter"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:263
-msgid "paper size|US Letter Extra"
-msgstr "US Letter Extra"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:265
-msgid "paper size|US Letter Plus"
-msgstr "US Letter Plus"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:267
-msgid "paper size|Monarch Envelope"
-msgstr "Monarch ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:269
-msgid "paper size|#10 Envelope"
-msgstr "#10 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:271
-msgid "paper size|#11 Envelope"
-msgstr "#11 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:273
-msgid "paper size|#12 Envelope"
-msgstr "#12 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:275
-msgid "paper size|#14 Envelope"
-msgstr "#14 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:277
-msgid "paper size|#9 Envelope"
-msgstr "#9 ซองจดหมาย"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:279
-msgid "paper size|Personal Envelope"
-msgstr "Personal Envelope"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:281
-msgid "paper size|Quarto"
-msgstr "Quarto"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:283
-msgid "paper size|Super A"
-msgstr "Super A"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:285
-msgid "paper size|Super B"
-msgstr "Super B"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:287
-msgid "paper size|Wide Format"
-msgstr "Wide Format"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:289
-msgid "paper size|Dai-pa-kai"
-msgstr "Dai-pa-kai"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:291
-msgid "paper size|Folio"
-msgstr "Folio"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:293
-msgid "paper size|Folio sp"
-msgstr "Folio sp"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:295
-msgid "paper size|Invite Envelope"
-msgstr "Invite Envelope"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:297
-msgid "paper size|Italian Envelope"
-msgstr "Italian Envelope"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:299
-msgid "paper size|juuro-ku-kai"
-msgstr "juuro-ku-kai"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:301
-msgid "paper size|pa-kai"
-msgstr "pa-kai"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:303
-msgid "paper size|Postfix Envelope"
-msgstr "Postfix Envelope"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:305
-msgid "paper size|Small Photo"
-msgstr "Small Photo"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:307
-msgid "paper size|prc1 Envelope"
-msgstr "prc1 Envelope"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:309
-msgid "paper size|prc10 Envelope"
-msgstr "prc10 Envelope"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:311
-msgid "paper size|prc 16k"
-msgstr "prc 16k"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:313
-msgid "paper size|prc2 Envelope"
-msgstr "prc2 Envelope"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:315
-msgid "paper size|prc3 Envelope"
-msgstr "prc3 Envelope"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:317
-msgid "paper size|prc 32k"
-msgstr "prc 32k"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:319
-msgid "paper size|prc4 Envelope"
-msgstr "prc4 Envelope"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:321
-msgid "paper size|prc5 Envelope"
-msgstr "prc5 Envelope"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:323
-msgid "paper size|prc6 Envelope"
-msgstr "prc6 Envelope"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:325
-msgid "paper size|prc7 Envelope"
-msgstr "prc7 Envelope"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:327
-msgid "paper size|prc8 Envelope"
-msgstr "prc8 Envelope"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:329
-msgid "paper size|ROC 16k"
-msgstr "ROC 16k"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:331
-msgid "paper size|ROC 8k"
-msgstr "ROC 8k"
+#: gtk/gtkvolumebutton.c:168
+#, fuzzy, c-format
+msgctxt "volume percentage"
+msgid "%d %%"
+msgstr "%d %b %Ey"
 
 #: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
 #, c-format
@@ -4396,171 +2991,171 @@ msgstr "เวียดนาม (VIQR)"
 msgid "X Input Method"
 msgstr "X Input Method"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1115
+#: modules/printbackends/cups/gtkprintbackendcups.c:1171
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "เครื่องพิมพ์ '%s' หมึกเหลือน้อย"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1116
+#: modules/printbackends/cups/gtkprintbackendcups.c:1172
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "เครื่องพิมพ์ '%s' หมึกหมด"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1118
+#: modules/printbackends/cups/gtkprintbackendcups.c:1174
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "เครื่องพิมพ์ '%s' ตัว develop เหลือน้อย"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1120
+#: modules/printbackends/cups/gtkprintbackendcups.c:1176
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "เครื่องพิมพ์ '%s' ตัว develop หมด"
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1122
+#: modules/printbackends/cups/gtkprintbackendcups.c:1178
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "เครื่องพิมพ์ '%s' วัสดุพิมพ์บางอย่างเหลือน้อย"
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1124
+#: modules/printbackends/cups/gtkprintbackendcups.c:1180
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "เครื่องพิมพ์ '%s' วัสดุพิมพ์บางอย่างหมด"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1125
+#: modules/printbackends/cups/gtkprintbackendcups.c:1181
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "ฝาเครื่องเปิดอยู่ที่เครื่องพิมพ์ '%s'"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1126
+#: modules/printbackends/cups/gtkprintbackendcups.c:1182
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "ประตูเปิดอยู่ที่เครื่องพิมพ์ '%s'"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1127
+#: modules/printbackends/cups/gtkprintbackendcups.c:1183
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "เครื่องพิมพ์ '%s' เหลือกระดาษน้อย"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1128
+#: modules/printbackends/cups/gtkprintbackendcups.c:1184
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "เครื่องพิมพ์ '%s' กระดาษหมด"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1129
+#: modules/printbackends/cups/gtkprintbackendcups.c:1185
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "เครื่องพิมพ์ '%s' ออฟไลน์อยู่"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1130
+#: modules/printbackends/cups/gtkprintbackendcups.c:1186
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "เครื่องพิมพ์ '%s' อาจไม่ได้เชื่อมต่อ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1131
+#: modules/printbackends/cups/gtkprintbackendcups.c:1187
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "มีปัญหากับเครื่องพิมพ์ '%s'"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1410
+#: modules/printbackends/cups/gtkprintbackendcups.c:1466
 msgid "Paused ; Rejecting Jobs"
 msgstr "หยุดพัก ; ไม่รับงานพิมพ์"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1416
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
 msgid "Rejecting Jobs"
 msgstr "ไม่รับงานพิมพ์"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2084
+#: modules/printbackends/cups/gtkprintbackendcups.c:2140
 msgid "Two Sided"
 msgstr "สองหน้า"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2085
+#: modules/printbackends/cups/gtkprintbackendcups.c:2141
 msgid "Paper Type"
 msgstr "ชนิดกระดาษ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2086
+#: modules/printbackends/cups/gtkprintbackendcups.c:2142
 msgid "Paper Source"
 msgstr "แหล่งป้อนกระดาษ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2087
+#: modules/printbackends/cups/gtkprintbackendcups.c:2143
 msgid "Output Tray"
 msgstr "ถาดกระดาษออก"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2096
+#: modules/printbackends/cups/gtkprintbackendcups.c:2152
 msgid "One Sided"
 msgstr "หน้าเดียว"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2098
-#: modules/printbackends/cups/gtkprintbackendcups.c:2100
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2154
+#: modules/printbackends/cups/gtkprintbackendcups.c:2156
+#: modules/printbackends/cups/gtkprintbackendcups.c:2164
 msgid "Auto Select"
 msgstr "เลือกโดยอัตโนมัติ"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2102
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
-#: modules/printbackends/cups/gtkprintbackendcups.c:2577
+#: modules/printbackends/cups/gtkprintbackendcups.c:2158
+#: modules/printbackends/cups/gtkprintbackendcups.c:2160
+#: modules/printbackends/cups/gtkprintbackendcups.c:2162
+#: modules/printbackends/cups/gtkprintbackendcups.c:2633
 msgid "Printer Default"
 msgstr "ค่าปริยายเครื่องพิมพ์"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "Urgent"
 msgstr "ด่วน"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "High"
 msgstr "สูง"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "Medium"
 msgstr "ปานกลาง"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "Low"
 msgstr "ต่ำ"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "Left to right, top to bottom"
 msgstr "ซ้ายไปขวา, บนลงล่าง"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "Left to right, bottom to top"
 msgstr "ซ้ายไปขวา, ล่างขึ้นบน"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2836
 msgid "Right to left, top to bottom"
 msgstr "ขวามาซ้าย, บนลงล่าง"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2836
 msgid "Right to left, bottom to top"
 msgstr "ขวามาซ้าย, ล่างขึ้นบน"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2837
 msgid "Top to bottom, left to right"
 msgstr "บนลงล่าง, ซ้ายไปขวา"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2837
 msgid "Top to bottom, right to left"
 msgstr "บนลงล่าง, ขวามาซ้าย"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2838
 msgid "Bottom to top, left to right"
 msgstr "ล่างขึ้นบน, ซ้ายไปขวา"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2838
 msgid "Bottom to top, right to left"
 msgstr "ล่างขึ้นบน, ขวามาซ้าย"
 
@@ -4568,66 +3163,66 @@ msgstr "ล่างขึ้นบน, ขวามาซ้าย"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2853
 msgid "Pages per Sheet"
 msgstr "จำนวนหน้าต่อแผ่น"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2834
+#: modules/printbackends/cups/gtkprintbackendcups.c:2890
 msgid "Job Priority"
 msgstr "ลำดับความสำคัญของงานพิมพ์"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2845
+#: modules/printbackends/cups/gtkprintbackendcups.c:2901
 msgid "Billing Info"
 msgstr "ข้อมูลสรุป"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "None"
 msgstr "ไม่มี"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Classified"
 msgstr "คัดแยกแล้ว"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Confidential"
 msgstr "ปกปิด"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Secret"
 msgstr "ลับ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Standard"
 msgstr "มาตรฐาน"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Top Secret"
 msgstr "ลับสุดยอด"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Unclassified"
 msgstr "ยังไม่คัดแยก"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2894
+#: modules/printbackends/cups/gtkprintbackendcups.c:2950
 msgid "Before"
 msgstr "ปกหน้า"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2909
+#: modules/printbackends/cups/gtkprintbackendcups.c:2965
 msgid "After"
 msgstr "ปกหลัง"
 
@@ -4635,14 +3230,14 @@ msgstr "ปกหลัง"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2929
+#: modules/printbackends/cups/gtkprintbackendcups.c:2985
 msgid "Print at"
 msgstr "พิมพ์เมื่อ"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2940
+#: modules/printbackends/cups/gtkprintbackendcups.c:2996
 msgid "Print at time"
 msgstr "พิมพ์เมื่อเวลา"
 
@@ -4650,7 +3245,7 @@ msgstr "พิมพ์เมื่อเวลา"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2975
+#: modules/printbackends/cups/gtkprintbackendcups.c:3031
 #, c-format
 msgid "Custom %sx%s"
 msgstr "กำหนดเอง %sx%s"
@@ -4661,50 +3256,50 @@ msgstr "กำหนดเอง %sx%s"
 msgid "output.%s"
 msgstr "output.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:465
+#: modules/printbackends/file/gtkprintbackendfile.c:469
 msgid "Print to File"
 msgstr "พิมพ์ลงแฟ้ม"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:542
+#: modules/printbackends/file/gtkprintbackendfile.c:546
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:542
+#: modules/printbackends/file/gtkprintbackendfile.c:546
 msgid "Postscript"
 msgstr "โพสต์สคริปต์"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:554
-#: modules/printbackends/test/gtkprintbackendtest.c:503
+#: modules/printbackends/file/gtkprintbackendfile.c:558
+#: modules/printbackends/test/gtkprintbackendtest.c:506
 msgid "Pages per _sheet:"
 msgstr "จำนวนหน้าต่อแ_ผ่น:"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:600
+#: modules/printbackends/file/gtkprintbackendfile.c:604
 msgid "File"
 msgstr "แฟ้ม"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:609
+#: modules/printbackends/file/gtkprintbackendfile.c:613
 msgid "_Output format"
 msgstr "รูปแ_บบผลลัพธ์"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:396
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:400
 msgid "Print to LPR"
 msgstr "พิมพ์ออกทาง LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:422
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:426
 msgid "Pages Per Sheet"
 msgstr "จำนวนหน้าต่อแผ่น"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:429
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:433
 msgid "Command Line"
 msgstr "บรรทัดคำสั่ง"
 
 #. default filename used for print-to-test
-#: modules/printbackends/test/gtkprintbackendtest.c:235
+#: modules/printbackends/test/gtkprintbackendtest.c:234
 #, c-format
 msgid "test-output.%s"
 msgstr "test-output.%s"
 
-#: modules/printbackends/test/gtkprintbackendtest.c:467
+#: modules/printbackends/test/gtkprintbackendtest.c:470
 msgid "Print to Test Printer"
 msgstr "พิมพ์ออกยังเครื่องพิมพ์ทดสอบ"
 
@@ -4712,6 +3307,966 @@ msgstr "พิมพ์ออกยังเครื่องพิมพ์ท
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ไม่สามารถเรียกข้อมูลสำหรับแฟ้ม '%s': %s"
+
+#~ msgid "keyboard label|BackSpace"
+#~ msgstr "BackSpace"
+
+#~ msgid "keyboard label|Tab"
+#~ msgstr "Tab"
+
+#~ msgid "keyboard label|Return"
+#~ msgstr "Return"
+
+#~ msgid "keyboard label|Pause"
+#~ msgstr "Pause"
+
+#~ msgid "keyboard label|Scroll_Lock"
+#~ msgstr "Scroll_Lock"
+
+#~ msgid "keyboard label|Sys_Req"
+#~ msgstr "Sys_Req"
+
+#~ msgid "keyboard label|Escape"
+#~ msgstr "Escape"
+
+#~ msgid "keyboard label|Multi_key"
+#~ msgstr "Multi_key"
+
+#~ msgid "keyboard label|Home"
+#~ msgstr "Home"
+
+#~ msgid "keyboard label|Left"
+#~ msgstr "Left"
+
+#~ msgid "keyboard label|Up"
+#~ msgstr "Up"
+
+#~ msgid "keyboard label|Right"
+#~ msgstr "Right"
+
+#~ msgid "keyboard label|Down"
+#~ msgstr "Down"
+
+#~ msgid "keyboard label|Page_Up"
+#~ msgstr "Page_Up"
+
+#~ msgid "keyboard label|Page_Down"
+#~ msgstr "Page_Down"
+
+#~ msgid "keyboard label|End"
+#~ msgstr "End"
+
+#~ msgid "keyboard label|Begin"
+#~ msgstr "Begin"
+
+#~ msgid "keyboard label|Print"
+#~ msgstr "Print"
+
+#~ msgid "keyboard label|Insert"
+#~ msgstr "Insert"
+
+#~ msgid "keyboard label|Num_Lock"
+#~ msgstr "Num_Lock"
+
+#~ msgid "keyboard label|KP_Space"
+#~ msgstr "KP_Space"
+
+#~ msgid "keyboard label|KP_Tab"
+#~ msgstr "KP_Tab"
+
+#~ msgid "keyboard label|KP_Enter"
+#~ msgstr "KP_Enter"
+
+#~ msgid "keyboard label|KP_Home"
+#~ msgstr "KP_Home"
+
+#~ msgid "keyboard label|KP_Left"
+#~ msgstr "KP_Left"
+
+#~ msgid "keyboard label|KP_Up"
+#~ msgstr "KP_Up"
+
+#~ msgid "keyboard label|KP_Right"
+#~ msgstr "KP_Right"
+
+#~ msgid "keyboard label|KP_Down"
+#~ msgstr "KP_Down"
+
+#~ msgid "keyboard label|KP_Page_Up"
+#~ msgstr "KP_Page_Up"
+
+#~ msgid "keyboard label|KP_Prior"
+#~ msgstr "KP_Prior"
+
+#~ msgid "keyboard label|KP_Page_Down"
+#~ msgstr "KP_Page_Down"
+
+#~ msgid "keyboard label|KP_Next"
+#~ msgstr "KP_Next"
+
+#~ msgid "keyboard label|KP_End"
+#~ msgstr "KP_End"
+
+#~ msgid "keyboard label|KP_Begin"
+#~ msgstr "KP_Begin"
+
+#~ msgid "keyboard label|KP_Insert"
+#~ msgstr "KP_Insert"
+
+#~ msgid "keyboard label|KP_Delete"
+#~ msgstr "KP_Delete"
+
+#~ msgid "keyboard label|Delete"
+#~ msgstr "Delete"
+
+#~ msgid "keyboard label|Shift"
+#~ msgstr "Shift"
+
+#~ msgid "keyboard label|Ctrl"
+#~ msgstr "Ctrl"
+
+#~ msgid "keyboard label|Alt"
+#~ msgstr "Alt"
+
+#~ msgid "keyboard label|Super"
+#~ msgstr "Super"
+
+#~ msgid "keyboard label|Hyper"
+#~ msgstr "Hyper"
+
+#~ msgid "keyboard label|Meta"
+#~ msgstr "Meta"
+
+#~ msgid "keyboard label|Space"
+#~ msgstr "Space"
+
+#~ msgid "keyboard label|Backslash"
+#~ msgstr "Backslash"
+
+#~ msgid "year measurement template|2000"
+#~ msgstr "2000"
+
+#~ msgid "calendar:day:digits|%d"
+#~ msgstr "%d"
+
+#~ msgid "calendar:week:digits|%d"
+#~ msgstr "%d"
+
+#~ msgid "calendar year format|%Y"
+#~ msgstr "%Ey"
+
+#~ msgid "Accelerator|Disabled"
+#~ msgstr "ปิดใช้งาน"
+
+#~ msgid "Icon not present in theme"
+#~ msgstr "ชุดตกแต่งไม่มีไอคอน"
+
+#~ msgid "progress bar label|%d %%"
+#~ msgstr "%d %%"
+
+#~ msgid "input method menu|System"
+#~ msgstr "ระบบ"
+
+#~ msgid "input method menu|System (%s)"
+#~ msgstr "ระบบ (%s)"
+
+#~ msgid "print operation status|Initial state"
+#~ msgstr "ขั้นแรก"
+
+#~ msgid "print operation status|Preparing to print"
+#~ msgstr "กำลังเตรียมพิมพ์"
+
+#~ msgid "print operation status|Generating data"
+#~ msgstr "กำลังสร้างข้อมูล"
+
+#~ msgid "print operation status|Sending data"
+#~ msgstr "กำลังส่งข้อมูล"
+
+#~ msgid "print operation status|Waiting"
+#~ msgstr "กำลังรอ"
+
+#~ msgid "print operation status|Blocking on issue"
+#~ msgstr "ติดขัดด้วยเหตุขัดข้อง"
+
+#~ msgid "print operation status|Printing"
+#~ msgstr "กำลังพิมพ์"
+
+#~ msgid "print operation status|Finished"
+#~ msgstr "เสร็จสิ้น"
+
+#~ msgid "print operation status|Finished with error"
+#~ msgstr "เสร็จสิ้นโดยมีข้อผิดพลาด"
+
+#~ msgid "recent menu label|_%d. %s"
+#~ msgstr "_%d. %s"
+
+#~ msgid "recent menu label|%d. %s"
+#~ msgstr "%d. %s"
+
+#~ msgid "Information"
+#~ msgstr "ข้อมูล"
+
+#~ msgid "Warning"
+#~ msgstr "คำเตือน"
+
+#~ msgid "Error"
+#~ msgstr "ผิดพลาด"
+
+#~ msgid "Question"
+#~ msgstr "คำถาม"
+
+#~ msgid "_About"
+#~ msgstr "เ_กี่ยวกับ"
+
+#~ msgid "_Apply"
+#~ msgstr "เริ่มใ_ช้"
+
+#~ msgid "_Bold"
+#~ msgstr "ตัวห_นา"
+
+#~ msgid "_Cancel"
+#~ msgstr "_ยกเลิก"
+
+#~ msgid "_CD-Rom"
+#~ msgstr "_ซีดีรอม"
+
+#~ msgid "_Clear"
+#~ msgstr "_ล้าง"
+
+#~ msgid "_Close"
+#~ msgstr "ปิ_ด"
+
+#~ msgid "C_onnect"
+#~ msgstr "เ_ชื่อมต่อ"
+
+#~ msgid "_Convert"
+#~ msgstr "แปล_ง"
+
+#~ msgid "_Copy"
+#~ msgstr "_คัดลอก"
+
+#~ msgid "Cu_t"
+#~ msgstr "_ตัด"
+
+#~ msgid "_Delete"
+#~ msgstr "_ลบ"
+
+#~ msgid "_Discard"
+#~ msgstr "_ละทิ้ง"
+
+#~ msgid "_Disconnect"
+#~ msgstr "เลิ_กเชื่อมต่อ"
+
+#~ msgid "_Execute"
+#~ msgstr "เ_รียกใช้"
+
+#~ msgid "_Edit"
+#~ msgstr "แ_ก้ไข"
+
+#~ msgid "_Find"
+#~ msgstr "_หา"
+
+#~ msgid "Find and _Replace"
+#~ msgstr "หาและแ_ทนที่"
+
+#~ msgid "_Floppy"
+#~ msgstr "_ฟลอปปี"
+
+#~ msgid "_Fullscreen"
+#~ msgstr "เ_ต็มจอ"
+
+#~ msgid "_Leave Fullscreen"
+#~ msgstr "เ_ลิกแสดงเต็มจอ"
+
+#~ msgid "Navigation|_Bottom"
+#~ msgstr "ล่า_งสุด"
+
+#~ msgid "Navigation|_First"
+#~ msgstr "แ_รกสุด"
+
+#~ msgid "Navigation|_Last"
+#~ msgstr "_ท้ายสุด"
+
+#~ msgid "Navigation|_Top"
+#~ msgstr "_บนสุด"
+
+#~ msgid "Navigation|_Back"
+#~ msgstr "_ถอยกลับ"
+
+#~ msgid "Navigation|_Down"
+#~ msgstr "_ลง"
+
+#~ msgid "Navigation|_Forward"
+#~ msgstr "ถั_ดไป"
+
+#~ msgid "Navigation|_Up"
+#~ msgstr "_ขึ้น"
+
+#~ msgid "_Harddisk"
+#~ msgstr "ฮาร์_ดดิสก์"
+
+#~ msgid "_Help"
+#~ msgstr "_วิธีใช้"
+
+#~ msgid "_Home"
+#~ msgstr "_บ้าน"
+
+#~ msgid "Increase Indent"
+#~ msgstr "เพิ่มย่อหน้า"
+
+#~ msgid "Decrease Indent"
+#~ msgstr "ลดย่อหน้า"
+
+#~ msgid "_Index"
+#~ msgstr "_ดัชนี"
+
+#~ msgid "_Information"
+#~ msgstr "_ข้อมูล"
+
+#~ msgid "_Italic"
+#~ msgstr "ตัวเ_อียง"
+
+#~ msgid "_Jump to"
+#~ msgstr "_กระโดดไป"
+
+#~ msgid "Justify|_Center"
+#~ msgstr "กึ่ง_กลาง"
+
+#~ msgid "Justify|_Fill"
+#~ msgstr "เ_ต็มกรอบ"
+
+#~ msgid "Justify|_Left"
+#~ msgstr "ชิด_ซ้าย"
+
+#~ msgid "Justify|_Right"
+#~ msgstr "ชิด_ขวา"
+
+#~ msgid "Media|_Forward"
+#~ msgstr "กรอไ_ป"
+
+#~ msgid "Media|_Next"
+#~ msgstr "_ถัดไป"
+
+#~ msgid "Media|P_ause"
+#~ msgstr "_พัก"
+
+#~ msgid "Media|_Play"
+#~ msgstr "เ_ล่น"
+
+#~ msgid "Media|Pre_vious"
+#~ msgstr "ก่อ_นหน้า"
+
+#~ msgid "Media|_Record"
+#~ msgstr "_อัด"
+
+#~ msgid "Media|R_ewind"
+#~ msgstr "ถอย_กลับ"
+
+#~ msgid "Media|_Stop"
+#~ msgstr "_หยุด"
+
+#~ msgid "_Network"
+#~ msgstr "เค_รือข่าย"
+
+#~ msgid "_New"
+#~ msgstr "ใ_หม่"
+
+#~ msgid "_No"
+#~ msgstr "ไ_ม่"
+
+#~ msgid "_OK"
+#~ msgstr "_ตกลง"
+
+#~ msgid "_Open"
+#~ msgstr "_เปิด"
+
+#~ msgid "Landscape"
+#~ msgstr "แนวนอน"
+
+#~ msgid "Portrait"
+#~ msgstr "แนวตั้ง"
+
+#~ msgid "Reverse landscape"
+#~ msgstr "แนวนอนกลับด้าน"
+
+#~ msgid "Reverse portrait"
+#~ msgstr "แนวตั้งกลับด้าน"
+
+#~ msgid "Page Set_up"
+#~ msgstr "ตั้ง_หน้ากระดาษ"
+
+#~ msgid "_Paste"
+#~ msgstr "_แปะ"
+
+#~ msgid "_Preferences"
+#~ msgstr "_ปรับแต่ง"
+
+#~ msgid "_Print"
+#~ msgstr "_พิมพ์"
+
+#~ msgid "Print Pre_view"
+#~ msgstr "_ตัวอย่างก่อนพิมพ์"
+
+#~ msgid "_Properties"
+#~ msgstr "คุณ_สมบัติ"
+
+#~ msgid "_Quit"
+#~ msgstr "_ออก"
+
+#~ msgid "_Redo"
+#~ msgstr "_ทำซ้ำ"
+
+#~ msgid "_Refresh"
+#~ msgstr "เ_รียกใหม่"
+
+#~ msgid "_Revert"
+#~ msgstr "คืน_กลับ"
+
+#~ msgid "_Save"
+#~ msgstr "_บันทึก"
+
+#~ msgid "Save _As"
+#~ msgstr "บันทึกเป็_น"
+
+#~ msgid "Select _All"
+#~ msgstr "เลือกทั้ง_หมด"
+
+#~ msgid "_Color"
+#~ msgstr "_สี"
+
+#~ msgid "_Font"
+#~ msgstr "_แบบอักษร"
+
+#~ msgid "_Ascending"
+#~ msgstr "_น้อยไปมาก"
+
+#~ msgid "_Descending"
+#~ msgstr "_มากไปน้อย"
+
+#~ msgid "_Spell Check"
+#~ msgstr "ต_รวจตัวสะกด"
+
+#~ msgid "_Stop"
+#~ msgstr "_หยุด"
+
+#~ msgid "_Strikethrough"
+#~ msgstr "ขีด_ทับ"
+
+#~ msgid "_Undelete"
+#~ msgstr "เลิ_กลบ"
+
+#~ msgid "_Underline"
+#~ msgstr "_ขีดเส้นใต้"
+
+#~ msgid "_Undo"
+#~ msgstr "เรี_ยกคืน"
+
+#~ msgid "_Yes"
+#~ msgstr "_ใช่"
+
+#~ msgid "_Normal Size"
+#~ msgstr "ขนาด_ปกติ"
+
+#~ msgid "Best _Fit"
+#~ msgstr "ขนาด_พอดี"
+
+#~ msgid "Zoom _In"
+#~ msgstr "ขย_าย"
+
+#~ msgid "Zoom _Out"
+#~ msgstr "_ย่อ"
+
+#~ msgid "volume percentage|%d %%"
+#~ msgstr "%d %%"
+
+#~ msgid "paper size|asme_f"
+#~ msgstr "asme_f"
+
+#~ msgid "paper size|A0x2"
+#~ msgstr "A0x2"
+
+#~ msgid "paper size|A0"
+#~ msgstr "A0"
+
+#~ msgid "paper size|A0x3"
+#~ msgstr "A0x3"
+
+#~ msgid "paper size|A1"
+#~ msgstr "A1"
+
+#~ msgid "paper size|A10"
+#~ msgstr "A10"
+
+#~ msgid "paper size|A1x3"
+#~ msgstr "A1x3"
+
+#~ msgid "paper size|A1x4"
+#~ msgstr "A1x4"
+
+#~ msgid "paper size|A2"
+#~ msgstr "A2"
+
+#~ msgid "paper size|A2x3"
+#~ msgstr "A2x3"
+
+#~ msgid "paper size|A2x4"
+#~ msgstr "A2x4"
+
+#~ msgid "paper size|A2x5"
+#~ msgstr "A2x5"
+
+#~ msgid "paper size|A3"
+#~ msgstr "A3"
+
+#~ msgid "paper size|A3 Extra"
+#~ msgstr "A3 พิเศษ"
+
+#~ msgid "paper size|A3x3"
+#~ msgstr "A3x3"
+
+#~ msgid "paper size|A3x4"
+#~ msgstr "A3x4"
+
+#~ msgid "paper size|A3x5"
+#~ msgstr "A3x5"
+
+#~ msgid "paper size|A3x6"
+#~ msgstr "A3x6"
+
+#~ msgid "paper size|A3x7"
+#~ msgstr "A3x7"
+
+#~ msgid "paper size|A4"
+#~ msgstr "A4"
+
+#~ msgid "paper size|A4 Extra"
+#~ msgstr "A4 พิเศษ"
+
+#~ msgid "paper size|A4 Tab"
+#~ msgstr "A4 Tab"
+
+#~ msgid "paper size|A4x3"
+#~ msgstr "A4x3"
+
+#~ msgid "paper size|A4x4"
+#~ msgstr "A4x4"
+
+#~ msgid "paper size|A4x5"
+#~ msgstr "A4x5"
+
+#~ msgid "paper size|A4x6"
+#~ msgstr "A4x6"
+
+#~ msgid "paper size|A4x7"
+#~ msgstr "A4x7"
+
+#~ msgid "paper size|A4x8"
+#~ msgstr "A4x8"
+
+#~ msgid "paper size|A4x9"
+#~ msgstr "A4x9"
+
+#~ msgid "paper size|A5"
+#~ msgstr "A5"
+
+#~ msgid "paper size|A5 Extra"
+#~ msgstr "A5 พิเศษ"
+
+#~ msgid "paper size|A6"
+#~ msgstr "A6"
+
+#~ msgid "paper size|A7"
+#~ msgstr "A7"
+
+#~ msgid "paper size|A8"
+#~ msgstr "A8"
+
+#~ msgid "paper size|A9"
+#~ msgstr "A9"
+
+#~ msgid "paper size|B0"
+#~ msgstr "B0"
+
+#~ msgid "paper size|B1"
+#~ msgstr "B1"
+
+#~ msgid "paper size|B10"
+#~ msgstr "B10"
+
+#~ msgid "paper size|B2"
+#~ msgstr "B2"
+
+#~ msgid "paper size|B3"
+#~ msgstr "B3"
+
+#~ msgid "paper size|B4"
+#~ msgstr "B4"
+
+#~ msgid "paper size|B5"
+#~ msgstr "B5"
+
+#~ msgid "paper size|B5 Extra"
+#~ msgstr "B5 พิเศษ"
+
+#~ msgid "paper size|B6"
+#~ msgstr "B6"
+
+#~ msgid "paper size|B6/C4"
+#~ msgstr "B6/C4"
+
+#~ msgid "paper size|B7"
+#~ msgstr "B7"
+
+#~ msgid "paper size|B8"
+#~ msgstr "B8"
+
+#~ msgid "paper size|B9"
+#~ msgstr "B9"
+
+#~ msgid "paper size|C0"
+#~ msgstr "C0"
+
+#~ msgid "paper size|C1"
+#~ msgstr "C1"
+
+#~ msgid "paper size|C10"
+#~ msgstr "C10"
+
+#~ msgid "paper size|C2"
+#~ msgstr "C2"
+
+#~ msgid "paper size|C3"
+#~ msgstr "C3"
+
+#~ msgid "paper size|C4"
+#~ msgstr "C4"
+
+#~ msgid "paper size|C5"
+#~ msgstr "C5"
+
+#~ msgid "paper size|C6"
+#~ msgstr "C6"
+
+#~ msgid "paper size|C6/C5"
+#~ msgstr "C6/C5"
+
+#~ msgid "paper size|C7"
+#~ msgstr "C7"
+
+#~ msgid "paper size|C7/C6"
+#~ msgstr "C7/C6"
+
+#~ msgid "paper size|C8"
+#~ msgstr "C8"
+
+#~ msgid "paper size|C9"
+#~ msgstr "C9"
+
+#~ msgid "paper size|DL Envelope"
+#~ msgstr "DL ซองจดหมาย"
+
+#~ msgid "paper size|RA0"
+#~ msgstr "RA0"
+
+#~ msgid "paper size|RA1"
+#~ msgstr "RA1"
+
+#~ msgid "paper size|RA2"
+#~ msgstr "RA2"
+
+#~ msgid "paper size|SRA0"
+#~ msgstr "SRA0"
+
+#~ msgid "paper size|SRA1"
+#~ msgstr "SRA1"
+
+#~ msgid "paper size|SRA2"
+#~ msgstr "SRA2"
+
+#~ msgid "paper size|JB0"
+#~ msgstr "JB0"
+
+#~ msgid "paper size|JB1"
+#~ msgstr "JB1"
+
+#~ msgid "paper size|JB10"
+#~ msgstr "JB10"
+
+#~ msgid "paper size|JB2"
+#~ msgstr "JB2"
+
+#~ msgid "paper size|JB3"
+#~ msgstr "JB3"
+
+#~ msgid "paper size|JB4"
+#~ msgstr "JB4"
+
+#~ msgid "paper size|JB5"
+#~ msgstr "JB5"
+
+#~ msgid "paper size|JB6"
+#~ msgstr "JB6"
+
+#~ msgid "paper size|JB7"
+#~ msgstr "JB7"
+
+#~ msgid "paper size|JB8"
+#~ msgstr "JB8"
+
+#~ msgid "paper size|JB9"
+#~ msgstr "JB9"
+
+#~ msgid "paper size|jis exec"
+#~ msgstr "jis exec"
+
+#~ msgid "paper size|Choukei 2 Envelope"
+#~ msgstr "Choukei 2 ซองจดหมาย"
+
+#~ msgid "paper size|Choukei 3 Envelope"
+#~ msgstr "Choukei 3 ซองจดหมาย"
+
+#~ msgid "paper size|Choukei 4 Envelope"
+#~ msgstr "Choukei 4 ซองจดหมาย"
+
+#~ msgid "paper size|hagaki (postcard)"
+#~ msgstr "hagaki (ไปรษณียบัตร)"
+
+#~ msgid "paper size|kahu Envelope"
+#~ msgstr "kahu ซองจดหมาย"
+
+#~ msgid "paper size|kaku2 Envelope"
+#~ msgstr "kahu2 ซองจดหมาย"
+
+#~ msgid "paper size|oufuku (reply postcard)"
+#~ msgstr "oufuku (ไปรษณียบัตรตอบ)"
+
+#~ msgid "paper size|you4 Envelope"
+#~ msgstr "you4 ซองจดหมาย"
+
+#~ msgid "paper size|10x11"
+#~ msgstr "10x11"
+
+#~ msgid "paper size|10x13"
+#~ msgstr "10x13"
+
+#~ msgid "paper size|10x14"
+#~ msgstr "10x14"
+
+#~ msgid "paper size|10x15"
+#~ msgstr "10x15"
+
+#~ msgid "paper size|11x12"
+#~ msgstr "11x12"
+
+#~ msgid "paper size|11x15"
+#~ msgstr "11x15"
+
+#~ msgid "paper size|12x19"
+#~ msgstr "12x19"
+
+#~ msgid "paper size|5x7"
+#~ msgstr "5x7"
+
+#~ msgid "paper size|6x9 Envelope"
+#~ msgstr "6x9 ซองจดหมาย"
+
+#~ msgid "paper size|7x9 Envelope"
+#~ msgstr "7x9 ซองจดหมาย"
+
+#~ msgid "paper size|9x11 Envelope"
+#~ msgstr "9x11 ซองจดหมาย"
+
+#~ msgid "paper size|a2 Envelope"
+#~ msgstr "a2 ซองจดหมาย"
+
+#~ msgid "paper size|Arch A"
+#~ msgstr "Arch A"
+
+#~ msgid "paper size|Arch B"
+#~ msgstr "Arch B"
+
+#~ msgid "paper size|Arch C"
+#~ msgstr "Arch C"
+
+#~ msgid "paper size|Arch D"
+#~ msgstr "Arch D"
+
+#~ msgid "paper size|Arch E"
+#~ msgstr "Arch E"
+
+#~ msgid "paper size|b-plus"
+#~ msgstr "b-plus"
+
+#~ msgid "paper size|c"
+#~ msgstr "c"
+
+#~ msgid "paper size|c5 Envelope"
+#~ msgstr "c5 ซองจดหมาย"
+
+#~ msgid "paper size|d"
+#~ msgstr "d"
+
+#~ msgid "paper size|e"
+#~ msgstr "e"
+
+#~ msgid "paper size|edp"
+#~ msgstr "edp"
+
+#~ msgid "paper size|European edp"
+#~ msgstr "edp ยุโรป"
+
+#~ msgid "paper size|Executive"
+#~ msgstr "Executive"
+
+#~ msgid "paper size|f"
+#~ msgstr "f"
+
+#~ msgid "paper size|FanFold European"
+#~ msgstr "FanFold ยุโรป"
+
+#~ msgid "paper size|FanFold US"
+#~ msgstr "FanFold อเมริกัน"
+
+#~ msgid "paper size|FanFold German Legal"
+#~ msgstr "FanFold เยอรมัน Legal"
+
+#~ msgid "paper size|Government Legal"
+#~ msgstr "Government Legal"
+
+#~ msgid "paper size|Government Letter"
+#~ msgstr "Government Letter"
+
+#~ msgid "paper size|Index 3x5"
+#~ msgstr "Index 3x5"
+
+#~ msgid "paper size|Index 4x6 (postcard)"
+#~ msgstr "Index 4x6 (ไปรษณียบัตร)"
+
+#~ msgid "paper size|Index 4x6 ext"
+#~ msgstr "Index 4x6 ext"
+
+#~ msgid "paper size|Index 5x8"
+#~ msgstr "Index 5x8"
+
+#~ msgid "paper size|Invoice"
+#~ msgstr "ใบส่งของ"
+
+#~ msgid "paper size|Tabloid"
+#~ msgstr "จุลสาร"
+
+#~ msgid "paper size|US Legal"
+#~ msgstr "US Legal"
+
+#~ msgid "paper size|US Legal Extra"
+#~ msgstr "US Legal Extra"
+
+#~ msgid "paper size|US Letter"
+#~ msgstr "US Letter"
+
+#~ msgid "paper size|US Letter Extra"
+#~ msgstr "US Letter Extra"
+
+#~ msgid "paper size|US Letter Plus"
+#~ msgstr "US Letter Plus"
+
+#~ msgid "paper size|Monarch Envelope"
+#~ msgstr "Monarch ซองจดหมาย"
+
+#~ msgid "paper size|#10 Envelope"
+#~ msgstr "#10 ซองจดหมาย"
+
+#~ msgid "paper size|#11 Envelope"
+#~ msgstr "#11 ซองจดหมาย"
+
+#~ msgid "paper size|#12 Envelope"
+#~ msgstr "#12 ซองจดหมาย"
+
+#~ msgid "paper size|#14 Envelope"
+#~ msgstr "#14 ซองจดหมาย"
+
+#~ msgid "paper size|#9 Envelope"
+#~ msgstr "#9 ซองจดหมาย"
+
+#~ msgid "paper size|Personal Envelope"
+#~ msgstr "Personal Envelope"
+
+#~ msgid "paper size|Quarto"
+#~ msgstr "Quarto"
+
+#~ msgid "paper size|Super A"
+#~ msgstr "Super A"
+
+#~ msgid "paper size|Super B"
+#~ msgstr "Super B"
+
+#~ msgid "paper size|Wide Format"
+#~ msgstr "Wide Format"
+
+#~ msgid "paper size|Dai-pa-kai"
+#~ msgstr "Dai-pa-kai"
+
+#~ msgid "paper size|Folio"
+#~ msgstr "Folio"
+
+#~ msgid "paper size|Folio sp"
+#~ msgstr "Folio sp"
+
+#~ msgid "paper size|Invite Envelope"
+#~ msgstr "Invite Envelope"
+
+#~ msgid "paper size|Italian Envelope"
+#~ msgstr "Italian Envelope"
+
+#~ msgid "paper size|juuro-ku-kai"
+#~ msgstr "juuro-ku-kai"
+
+#~ msgid "paper size|pa-kai"
+#~ msgstr "pa-kai"
+
+#~ msgid "paper size|Postfix Envelope"
+#~ msgstr "Postfix Envelope"
+
+#~ msgid "paper size|Small Photo"
+#~ msgstr "Small Photo"
+
+#~ msgid "paper size|prc1 Envelope"
+#~ msgstr "prc1 Envelope"
+
+#~ msgid "paper size|prc10 Envelope"
+#~ msgstr "prc10 Envelope"
+
+#~ msgid "paper size|prc 16k"
+#~ msgstr "prc 16k"
+
+#~ msgid "paper size|prc2 Envelope"
+#~ msgstr "prc2 Envelope"
+
+#~ msgid "paper size|prc3 Envelope"
+#~ msgstr "prc3 Envelope"
+
+#~ msgid "paper size|prc 32k"
+#~ msgstr "prc 32k"
+
+#~ msgid "paper size|prc4 Envelope"
+#~ msgstr "prc4 Envelope"
+
+#~ msgid "paper size|prc5 Envelope"
+#~ msgstr "prc5 Envelope"
+
+#~ msgid "paper size|prc6 Envelope"
+#~ msgstr "prc6 Envelope"
+
+#~ msgid "paper size|prc7 Envelope"
+#~ msgstr "prc7 Envelope"
+
+#~ msgid "paper size|prc8 Envelope"
+#~ msgstr "prc8 Envelope"
+
+#~ msgid "paper size|ROC 16k"
+#~ msgstr "ROC 16k"
+
+#~ msgid "paper size|ROC 8k"
+#~ msgstr "ROC 8k"
 
 #~ msgid "%.1f KB"
 #~ msgstr "%.1f KB"
@@ -4785,9 +4340,6 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 
 #~ msgid "Network Drive (%s)"
 #~ msgstr "ไดรว์เครือข่าย (%s)"
-
-#~ msgid "%s (%s)"
-#~ msgstr "%s (%s)"
 
 #~ msgid "Unknown attribute '%s' on line %d char %d"
 #~ msgstr "ไม่รู้จักแอตทริบิวต์ '%s' ที่บรรทัดที่ %d ตัวอักษรที่ %d"
@@ -5164,9 +4716,6 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 #~ msgid "c5 Envelope"
 #~ msgstr "c5 ซองจดหมาย"
 
-#~ msgid "d"
-#~ msgstr "d"
-
 #~ msgid "e"
 #~ msgstr "e"
 
@@ -5253,9 +4802,6 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 
 #~ msgid "Quarto"
 #~ msgstr "Quarto"
-
-#~ msgid "Super A"
-#~ msgstr "Super A"
 
 #~ msgid "Super B"
 #~ msgstr "Super B"
@@ -5401,9 +4947,6 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 #~ msgid "X"
 #~ msgstr "X"
 
-#~ msgid "Y"
-#~ msgstr "Y"
-
 #~ msgid "clear"
 #~ msgstr "ล้างออก"
 
@@ -5412,15 +4955,6 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 
 #~ msgid "Writing %s failed: %s"
 #~ msgstr "บันทึก %s ไม่สำเร็จ: %s"
-
-#~ msgid "Shift"
-#~ msgstr "Shift"
-
-#~ msgid "Ctrl"
-#~ msgstr "Ctrl"
-
-#~ msgid "Alt"
-#~ msgstr "Alt"
 
 #, fuzzy
 #~ msgid "Error getting information for '%s'"
@@ -5464,9 +4998,6 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 
 #~ msgid "Unsupported TIFF variant"
 #~ msgstr "ไม่รองรับชนิดย่อยนี้ของ TIFF"
-
-#~ msgid "%d/%b/%Y"
-#~ msgstr "%d %b %Ey"
 
 #~ msgid "File name"
 #~ msgstr "ชื่อแฟ้ม"

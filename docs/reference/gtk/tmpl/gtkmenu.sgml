@@ -149,6 +149,16 @@ should be accessed using the functions below.
 
 </para>
 
+<!-- ##### ARG GtkMenu:arrow-placement ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:arrow-scaling ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkMenu:double-arrows ##### -->
 <para>
 

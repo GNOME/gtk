@@ -411,6 +411,7 @@ probably only used within the GTK+ library itself for menu items and such.
 @Returns: The lowercase keyval of the last character underlined.
 @Deprecated: Use gtk_label_set_use_underline() instead.
 
+
 <!-- ##### FUNCTION gtk_label_set_line_wrap ##### -->
 <para>
 

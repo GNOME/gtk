@@ -1,3 +1,7 @@
+2009-01-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.15.0 ===
+
 2008-12-21  Tor Lillqvist  <tml@novell.com>
 
 	* gaillabel.c: #undef GTK_DISABLE_DEPRECATED here, too, to get

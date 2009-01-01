@@ -123,49 +123,6 @@ The <structname>GtkTable</structname> structure holds the data for the actual ta
 
 </para>
 
-<!-- ##### STRUCT GtkTableChild ##### -->
-<para>
-The <structfield>widget</structfield> field is a pointer to the widget that 
-this %GtkTableChild structure is keeping track of.
-The <structfield>left_attach</structfield>,
-<structfield>right_attach</structfield>,
-<structfield>top_attach</structfield>, and
-<structfield>bottom_attach</structfield> fields specify the row and column
-numbers which make up the invisible rectangle that the child widget is packed into.
-</para>
-<para>
-<structfield>xpadding</structfield> and <structfield>ypadding</structfield>
-specify the space between this widget and the surrounding table cells.
-</para>
-
-@widget: 
-@left_attach: 
-@right_attach: 
-@top_attach: 
-@bottom_attach: 
-@xpadding: 
-@ypadding: 
-@xexpand: 
-@yexpand: 
-@xshrink: 
-@yshrink: 
-@xfill: 
-@yfill: 
-
-<!-- ##### STRUCT GtkTableRowCol ##### -->
-<para>
-These fields should be considered read-only and not be modified directly.
-</para>
-
-@requisition: 
-@allocation: 
-@spacing: 
-@need_expand: 
-@need_shrink: 
-@expand: 
-@shrink: 
-@empty: 
-
 <!-- ##### FUNCTION gtk_table_new ##### -->
 <para>
 Used to create a new table widget. An initial size must be given by

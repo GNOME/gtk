@@ -213,6 +213,11 @@ as any other #GtkHButtonBox.
 
 </para>
 
+<!-- ##### ARG GtkDialog:content-area-spacing ##### -->
+<para>
+
+</para>
+
 <!-- ##### ENUM GtkDialogFlags ##### -->
 <para>
 Flags used to influence dialog construction.

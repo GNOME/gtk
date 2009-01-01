@@ -40,3 +40,12 @@ An input method context supporting multiple, loadable input methods
 @menushell: 
 
 
+<!-- ##### FUNCTION gtk_im_multicontext_get_context_id ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+

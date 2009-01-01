@@ -110,7 +110,7 @@ The #GtkEntry-struct struct contains only private data.
 @arg1: 
 @arg2: 
 
-<!-- ##### SIGNAL GtkEntry::icon-pressed ##### -->
+<!-- ##### SIGNAL GtkEntry::icon-press ##### -->
 <para>
 
 </para>
@@ -119,7 +119,7 @@ The #GtkEntry-struct struct contains only private data.
 @arg1: 
 @event: 
 
-<!-- ##### SIGNAL GtkEntry::icon-released ##### -->
+<!-- ##### SIGNAL GtkEntry::icon-release ##### -->
 <para>
 
 </para>

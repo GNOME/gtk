@@ -329,9 +329,10 @@ Creates a new #GtkSpinButton.
 Gets the value in the @spin_button. 
 </para>
 
-@spin_button: a #GtkSpinButton
 @Returns: the value of @spin_button
 @Deprecated: Use gtk_spin_button_get_value() instead.
+<!-- # Unused Parameters # -->
+@spin_button: a #GtkSpinButton
 
 
 <!-- ##### FUNCTION gtk_spin_button_get_value_as_int ##### -->

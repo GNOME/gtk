@@ -55,6 +55,24 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 @statusicon: the object which received the signal.
 
+<!-- ##### SIGNAL GtkStatusIcon::button-press-event ##### -->
+<para>
+
+</para>
+
+@statusicon: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkStatusIcon::button-release-event ##### -->
+<para>
+
+</para>
+
+@statusicon: the object which received the signal.
+@event: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkStatusIcon::popup-menu ##### -->
 <para>
 
@@ -63,6 +81,27 @@ on Win32 doesn't allow to embed arbitrary widgets.
 @statusicon: the object which received the signal.
 @arg1: 
 @arg2: 
+
+<!-- ##### SIGNAL GtkStatusIcon::query-tooltip ##### -->
+<para>
+
+</para>
+
+@statusicon: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkStatusIcon::scroll-event ##### -->
+<para>
+
+</para>
+
+@statusicon: the object which received the signal.
+@event: 
+@Returns: 
 
 <!-- ##### SIGNAL GtkStatusIcon::size-changed ##### -->
 <para>
@@ -89,6 +128,11 @@ on Win32 doesn't allow to embed arbitrary widgets.
 </para>
 
 <!-- ##### ARG GtkStatusIcon:gicon ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkStatusIcon:has-tooltip ##### -->
 <para>
 
 </para>
@@ -124,6 +168,16 @@ on Win32 doesn't allow to embed arbitrary widgets.
 </para>
 
 <!-- ##### ARG GtkStatusIcon:storage-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkStatusIcon:tooltip-markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkStatusIcon:tooltip-text ##### -->
 <para>
 
 </para>
@@ -310,6 +364,60 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 @status_icon: 
 @tooltip_text: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_set_tooltip_text ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_get_tooltip_text ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_set_tooltip_markup ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@markup: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_get_tooltip_markup ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_set_has_tooltip ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@has_tooltip: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_get_has_tooltip ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_status_icon_set_visible ##### -->

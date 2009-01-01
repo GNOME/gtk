@@ -61,6 +61,12 @@ The #GtkEditable structure is an opaque structure whose members
 cannot be directly accessed.
 </para>
 
+
+<!-- ##### SIGNAL GtkEditable::changed ##### -->
+<para>
+
+</para>
+
 @editable: the object which received the signal.
 
 <!-- ##### SIGNAL GtkEditable::delete-text ##### -->
@@ -78,10 +84,9 @@ cannot be directly accessed.
 </para>
 
 @editable: 
-@new_text:
-@new_text_length:
-@position:
-
+@new_text: 
+@new_text_length: 
+@position: 
 
 <!-- ##### FUNCTION gtk_editable_select_region ##### -->
 <para>
@@ -89,8 +94,8 @@ cannot be directly accessed.
 </para>
 
 @editable: 
-@start: 
-@end: 
+@start_pos: 
+@end_pos: 
 
 
 <!-- ##### FUNCTION gtk_editable_get_selection_bounds ##### -->
@@ -98,10 +103,10 @@ cannot be directly accessed.
 
 </para>
 
-@editable:
-@start:
-@end:
-@Returns:
+@editable: 
+@start_pos: 
+@end_pos: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_editable_insert_text ##### -->
@@ -141,7 +146,7 @@ cannot be directly accessed.
 
 </para>
 
-@editable:
+@editable: 
 
 
 <!-- ##### FUNCTION gtk_editable_copy_clipboard ##### -->
@@ -192,7 +197,7 @@ cannot be directly accessed.
 </para>
 
 @editable: 
-@is_editable:
+@is_editable: 
 
 
 <!-- ##### FUNCTION gtk_editable_get_editable ##### -->

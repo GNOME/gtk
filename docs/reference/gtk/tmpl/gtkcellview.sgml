@@ -96,7 +96,7 @@ and drag and drop.
 </para>
 
 @cell_view: 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_cell_view_set_displayed_row ##### -->

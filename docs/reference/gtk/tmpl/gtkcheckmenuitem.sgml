@@ -110,7 +110,6 @@ Sets the active state of the menu item's check box.
 @Deprecated: Use gtk_check_menu_item_set_active() instead.
 
 
-
 <!-- ##### FUNCTION gtk_check_menu_item_get_active ##### -->
 <para>
 

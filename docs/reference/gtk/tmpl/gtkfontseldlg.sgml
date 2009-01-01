@@ -57,8 +57,8 @@ fonts.</para></listitem>
 
 </para>
 
-@title:
-@Returns:
+@title: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_get_font ##### -->
@@ -67,7 +67,7 @@ fonts.</para></listitem>
 </para>
 
 @fsd: 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_get_font_name ##### -->
@@ -85,7 +85,7 @@ fonts.</para></listitem>
 
 @fsd: 
 @fontname: 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_get_preview_text ##### -->
@@ -93,7 +93,7 @@ fonts.</para></listitem>
 
 </para>
 
-@fsd:
+@fsd: 
 @Returns: 
 
 
@@ -102,8 +102,8 @@ fonts.</para></listitem>
 
 </para>
 
-@fsd:
-@text:
+@fsd: 
+@text: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_get_apply_button ##### -->

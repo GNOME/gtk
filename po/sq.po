@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-17 23:14-0400\n"
+"POT-Creation-Date: 2009-01-01 16:28-0500\n"
 "PO-Revision-Date: 2008-08-22 11:57+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -27,54 +27,54 @@ msgid "sdl|system"
 msgstr "sdl|system"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:126
+#: gdk/gdk.c:127
 msgid "Program class as used by the window manager"
 msgstr "Klasa e programit që përdoret nga manazhuesi i dritareve"
 
 # (pofilter) acronyms: acronyms should not be translated: CLASS
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:127
+#: gdk/gdk.c:128
 msgid "CLASS"
 msgstr "KLASA"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:129
+#: gdk/gdk.c:130
 msgid "Program name as used by the window manager"
 msgstr "Emri i programit që përdoret nga manazhuesi i dritareve"
 
 # (pofilter) acronyms: acronyms should not be translated: NAME
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:130
+#: gdk/gdk.c:131
 msgid "NAME"
 msgstr "EMRI"
 
 # (pofilter) simplecaps: checks the capitalisation of two strings isn't wildly different
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:132
+#: gdk/gdk.c:133
 msgid "X display to use"
 msgstr "Monitori X që duhet përdorur"
 
 # (pofilter) acronyms: acronyms should not be translated: DISPLAY
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:133
+#: gdk/gdk.c:134
 msgid "DISPLAY"
 msgstr "MONITORI"
 
 # (pofilter) simplecaps: checks the capitalisation of two strings isn't wildly different
 #. Description of --screen=SCREEN in --help output
-#: gdk/gdk.c:135
+#: gdk/gdk.c:136
 msgid "X screen to use"
 msgstr "Ekrani X që duhet përdorur"
 
 # (pofilter) acronyms: acronyms should not be translated: SCREEN
 #. Placeholder in --screen=SCREEN in --help output
-#: gdk/gdk.c:136
+#: gdk/gdk.c:137
 msgid "SCREEN"
 msgstr "EKRANI"
 
 # (pofilter) simplecaps: checks the capitalisation of two strings isn't wildly different
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:139
+#: gdk/gdk.c:140
 msgid "Gdk debugging flags to set"
 msgstr "Flag e debug të Gdk për tu caktuar"
 
@@ -82,215 +82,30 @@ msgstr "Flag e debug të Gdk për tu caktuar"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:140 gdk/gdk.c:143 gtk/gtkmain.c:452 gtk/gtkmain.c:455
+#: gdk/gdk.c:141 gdk/gdk.c:144 gtk/gtkmain.c:452 gtk/gtkmain.c:455
 msgid "FLAGS"
 msgstr "FLAGS"
 
 # (pofilter) simplecaps: checks the capitalisation of two strings isn't wildly different
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:142
+#: gdk/gdk.c:143
 msgid "Gdk debugging flags to unset"
 msgstr "Flag të debug të Gdk që duhen anulluar"
 
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3940
-msgid "keyboard label|BackSpace"
-msgstr "Mbrapsht"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3941
-msgid "keyboard label|Tab"
-msgstr "Tab"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3942
-msgid "keyboard label|Return"
-msgstr "Zbato"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3943
-msgid "keyboard label|Pause"
-msgstr "Pauzë"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3944
-msgid "keyboard label|Scroll_Lock"
-msgstr "Scroll_Lock"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3945
-msgid "keyboard label|Sys_Req"
-msgstr "Sys_Req"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3946
-msgid "keyboard label|Escape"
-msgstr "Escape"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3947
-msgid "keyboard label|Multi_key"
-msgstr "Multi_key"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3948
-msgid "keyboard label|Home"
-msgstr "Shtëpia"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3949
-msgid "keyboard label|Left"
-msgstr "Majtas"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3950
-msgid "keyboard label|Up"
-msgstr "Sipër"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3951
-msgid "keyboard label|Right"
-msgstr "Djathtas"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3952
-msgid "keyboard label|Down"
-msgstr "Poshtë"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3953
-msgid "keyboard label|Page_Up"
-msgstr "Faqja_sipër"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3954
-msgid "keyboard label|Page_Down"
-msgstr "Faqja_Poshtë"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3955
-msgid "keyboard label|End"
-msgstr "Fundi"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3956
-msgid "keyboard label|Begin"
-msgstr "Fillimi"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3957
-msgid "keyboard label|Print"
-msgstr "Printo"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3958
-msgid "keyboard label|Insert"
-msgstr "Shto"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3959
-msgid "keyboard label|Num_Lock"
-msgstr "Num_Lock"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3960
-msgid "keyboard label|KP_Space"
-msgstr "KP_Space"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3961
-msgid "keyboard label|KP_Tab"
-msgstr "KP_Tab"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3962
-msgid "keyboard label|KP_Enter"
-msgstr "KP_Enter"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3963
-msgid "keyboard label|KP_Home"
-msgstr "KP_Home"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3964
-msgid "keyboard label|KP_Left"
-msgstr "KP_Left"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3965
-msgid "keyboard label|KP_Up"
-msgstr "KP_Up"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3966
-msgid "keyboard label|KP_Right"
-msgstr "KP_Right"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3967
-msgid "keyboard label|KP_Down"
-msgstr "KP_Down"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3968
-msgid "keyboard label|KP_Page_Up"
-msgstr "KP_Page_Up"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3969
-msgid "keyboard label|KP_Prior"
-msgstr "KP_Prior"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3970
-msgid "keyboard label|KP_Page_Down"
-msgstr "KP_Page_Down"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3971
-msgid "keyboard label|KP_Next"
-msgstr "KP_Next"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3972
-msgid "keyboard label|KP_End"
-msgstr "KP_End"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3973
-msgid "keyboard label|KP_Begin"
-msgstr "KP_Begin"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3974
-msgid "keyboard label|KP_Insert"
-msgstr "KP_Insert"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3975
-msgid "keyboard label|KP_Delete"
-msgstr "KP_Delete"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk/keyname-table.h:3976
-msgid "keyboard label|Delete"
-msgstr "Delete"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:964
-#: gdk-pixbuf/gdk-pixbuf-io.c:1224 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:965
+#: gdk-pixbuf/gdk-pixbuf-io.c:1225 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "E pamundur hapja e file '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:976
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:977
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "File '%s' nuk përmban të dhëna"
 
 # (pofilter) puncspacing: checks for bad spacing after punctuation
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1012
-#: gdk-pixbuf/gdk-pixbuf-io.c:1276 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1013
+#: gdk-pixbuf/gdk-pixbuf-io.c:1277 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -306,12 +121,12 @@ msgstr ""
 "Dështova në ngarkimin e animacionit '%s': arsye e panjohur, ka mundësi që "
 "file të jetë i dëmtuar"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:700
+#: gdk-pixbuf/gdk-pixbuf-io.c:701
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "I pamundur ngarkimi i modulit ngarkues të figurave: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
+#: gdk-pixbuf/gdk-pixbuf-io.c:716
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -320,54 +135,54 @@ msgstr ""
 "Moduli i ngarkimit të figurave %s nuk eksporton interfaqen e duhur; mbase "
 "është për një version tjetër të GTK?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:724 gdk-pixbuf/gdk-pixbuf-io.c:775
+#: gdk-pixbuf/gdk-pixbuf-io.c:725 gdk-pixbuf/gdk-pixbuf-io.c:776
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Figurat e llojit '%s' nuk suportohen"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:845
+#: gdk-pixbuf/gdk-pixbuf-io.c:846
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Nuk munda të njoh formatin e figurës për file '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:853
+#: gdk-pixbuf/gdk-pixbuf-io.c:854
 msgid "Unrecognized image file format"
 msgstr "Format i panjohur figure"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1021
+#: gdk-pixbuf/gdk-pixbuf-io.c:1022
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "I pamundur ngarkimi i figurës '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1655 gdk-pixbuf/io-gdip-utils.c:935
+#: gdk-pixbuf/gdk-pixbuf-io.c:1656 gdk-pixbuf/io-gdip-utils.c:952
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Gabim gjatë shkrimit tek file i figurës: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1700 gdk-pixbuf/gdk-pixbuf-io.c:1830
+#: gdk-pixbuf/gdk-pixbuf-io.c:1701 gdk-pixbuf/gdk-pixbuf-io.c:1831
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1734
+#: gdk-pixbuf/gdk-pixbuf-io.c:1735
 msgid "Insufficient memory to save image to callback"
 msgstr "Kujtesë e pamjaftueshme për të ruajtur figurën që duhet rithirrur"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1747
+#: gdk-pixbuf/gdk-pixbuf-io.c:1748
 msgid "Failed to open temporary file"
 msgstr "Dështova në hapjen e file të përkohshëm"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1773
+#: gdk-pixbuf/gdk-pixbuf-io.c:1774
 msgid "Failed to read from temporary file"
 msgstr "I pamundur leximi i file të përkohshëm"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2007
+#: gdk-pixbuf/gdk-pixbuf-io.c:2008
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "E pamundur hapja e '%s' për të shkruar: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2032
+#: gdk-pixbuf/gdk-pixbuf-io.c:2033
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -376,11 +191,11 @@ msgstr ""
 "E pamundur mbyllja e '%s' gjatë shkrimit të figurës, ka mundësi që asnjë nga "
 "të dhënat të jetë ruajtur: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2252 gdk-pixbuf/gdk-pixbuf-io.c:2303
+#: gdk-pixbuf/gdk-pixbuf-io.c:2253 gdk-pixbuf/gdk-pixbuf-io.c:2304
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Kujtesë e pamjaftueshme për të ruajtur figurën në një buffer"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2349
+#: gdk-pixbuf/gdk-pixbuf-io.c:2350
 msgid "Error writing to image stream"
 msgstr "Gabim gjatë shkrimit tek stream i figurës"
 
@@ -592,16 +407,16 @@ msgstr "Intensitet i pasuportuar për file ICO: %d"
 msgid "The ICO image format"
 msgstr "Formati i figurës ICO"
 
-#: gdk-pixbuf/io-icns.c:345
+#: gdk-pixbuf/io-icns.c:347
 #, c-format
 msgid "Error reading ICNS image: %s"
 msgstr "Gabim gjatë leximit të figurës ICNS: %s"
 
-#: gdk-pixbuf/io-icns.c:362
+#: gdk-pixbuf/io-icns.c:364
 msgid "Could not decode ICNS file"
 msgstr "I pamundur dekodifikimi i file ICNS"
 
-#: gdk-pixbuf/io-icns.c:395
+#: gdk-pixbuf/io-icns.c:397
 msgid "The ICNS image format"
 msgstr "Formati ICNS i figurave"
 
@@ -959,7 +774,7 @@ msgstr "I pamundur sigurimi i kujtesës për strukturën kontekste TGA"
 msgid "Excess data in file"
 msgstr "Tepri të dhënash në file"
 
-#: gdk-pixbuf/io-tga.c:1000
+#: gdk-pixbuf/io-tga.c:1002
 msgid "The Targa image format"
 msgstr "Formati Targa"
 
@@ -1097,46 +912,41 @@ msgstr "Formati i figurës XPM"
 msgid "The EMF image format"
 msgstr "Formati EMF"
 
-#: gdk-pixbuf/io-gdip-utils.c:212
+#: gdk-pixbuf/io-gdip-utils.c:220
 #, c-format
 msgid "Could not allocate memory: %s"
 msgstr "I pamundur sigurimi i memorjes: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:237 gdk-pixbuf/io-gdip-utils.c:350
-#: gdk-pixbuf/io-gdip-utils.c:383
+#: gdk-pixbuf/io-gdip-utils.c:245 gdk-pixbuf/io-gdip-utils.c:360
+#: gdk-pixbuf/io-gdip-utils.c:394
 #, c-format
 msgid "Could not create stream: %s"
 msgstr "I pamundur krijimi i fluksit: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:251
+#: gdk-pixbuf/io-gdip-utils.c:259
 #, c-format
 msgid "Could not seek stream: %s"
 msgstr "I pamundur kërkimi i fluksit: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:263
+#: gdk-pixbuf/io-gdip-utils.c:271
 #, c-format
 msgid "Could not read from stream: %s"
 msgstr "I pamundur leximi nga fluksi: %s"
 
-# (pofilter) doublequoting: checks whether doublequoting is consistent between the two strings
-#: gdk-pixbuf/io-gdip-utils.c:736
-msgid "Couldn't create pixbuf"
-msgstr "I pamundur krijimi i \"pixbuf\""
-
-#: gdk-pixbuf/io-gdip-utils.c:798
+#: gdk-pixbuf/io-gdip-utils.c:683 gdk-pixbuf/io-gdip-utils.c:815
 msgid "Couldn't load bitmap"
 msgstr "I pamundur ngarkimi i bitmap"
 
-#: gdk-pixbuf/io-gdip-utils.c:821
+#: gdk-pixbuf/io-gdip-utils.c:838
 msgid "Couldn't load metafile"
 msgstr "I pamundur ngarkimi i metafile"
 
 # (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#: gdk-pixbuf/io-gdip-utils.c:980
+#: gdk-pixbuf/io-gdip-utils.c:997
 msgid "Unsupported image format for GDI+"
 msgstr "Format figure i pasuportuar për GDI+"
 
-#: gdk-pixbuf/io-gdip-utils.c:987
+#: gdk-pixbuf/io-gdip-utils.c:1004
 msgid "Couldn't save"
 msgstr "E pamundur ruajtja"
 
@@ -1240,98 +1050,90 @@ msgstr "Përkthyer nga"
 msgid "Artwork by"
 msgstr "Grafika nga"
 
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. *
-#. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: gtk/gtkaccellabel.c:93
-msgid "keyboard label|Shift"
-msgstr "Shift"
+#: gtk/gtkaccellabel.c:91
+msgctxt "keyboard label"
+msgid "Shift"
+msgstr ""
 
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. *
-#. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: gtk/gtkaccellabel.c:101
-msgid "keyboard label|Ctrl"
-msgstr "Ctrl"
+#: gtk/gtkaccellabel.c:97
+msgctxt "keyboard label"
+msgid "Ctrl"
+msgstr ""
 
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. *
-#. * Don't include the prefix "keyboard label|" in the translation.
 #.
-#: gtk/gtkaccellabel.c:109
-msgid "keyboard label|Alt"
-msgstr "Alt"
+#: gtk/gtkaccellabel.c:103
+msgctxt "keyboard label"
+msgid "Alt"
+msgstr ""
 
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:678
-msgid "keyboard label|Super"
-msgstr "Super"
+#: gtk/gtkaccellabel.c:671
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Super"
+msgstr "Letra"
 
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:692
-msgid "keyboard label|Hyper"
-msgstr "Hyper"
+#: gtk/gtkaccellabel.c:684
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Hyper"
+msgstr "Letra"
 
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
-#. * And do not translate the part before the |.
 #.
-#: gtk/gtkaccellabel.c:707
-msgid "keyboard label|Meta"
-msgstr "Meta"
+#: gtk/gtkaccellabel.c:698
+msgctxt "keyboard label"
+msgid "Meta"
+msgstr ""
 
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. do not translate the part before the |
-#: gtk/gtkaccellabel.c:725
-msgid "keyboard label|Space"
-msgstr "Space"
+#: gtk/gtkaccellabel.c:715
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Space"
+msgstr "_Zëvendëso"
 
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. do not translate the part before the |
-#: gtk/gtkaccellabel.c:729
-msgid "keyboard label|Backslash"
-msgstr "Mbrapsht"
+#: gtk/gtkaccellabel.c:718
+msgctxt "keyboard label"
+msgid "Backslash"
+msgstr ""
 
 #: gtk/gtkbuilderparser.c:340
 #, c-format
 msgid "Invalid type function: `%s'"
 msgstr "Lloj jo korrekt funksioni: `%s'"
 
-#: gtk/gtkbuilderparser.c:823
+#: gtk/gtkbuilderparser.c:837
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Element bazë jo korrekt: '%s'"
 
-#: gtk/gtkbuilderparser.c:862
+#: gtk/gtkbuilderparser.c:876
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Tag i patrajtuar: '%s'"
@@ -1358,91 +1160,85 @@ msgstr "calendar:MY"
 msgid "calendar:week_start:0"
 msgstr "kalendari:week_start:0"
 
-# (pofilter) purepunc: checks that strings that are purely punctuation are not changed
 #. Translators:  This is a text measurement template.
-#. * Translate it to the widest year text.
-#. *
-#. * Don't include the prefix "year measurement template|"
-#. * in the translation.
+#. * Translate it to the widest year text
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1806
-msgid "year measurement template|2000"
-msgstr "2000"
+#: gtk/gtkcalendar.c:1803
+msgctxt "year measurement template"
+msgid "2000"
+msgstr ""
 
-# (pofilter) short: checks whether a translation is much shorter than the original string
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
 #. *
 #. * Translate to "%Id" if you want to use localized digits, or
-#. * translate to "%d" otherwise.  Don't include the "calendar:day:digits|"
-#. * part in the translation.
+#. * translate to "%d" otherwise.
 #. *
 #. * Note that translating this doesn't guarantee that you get localized
-#. * digits.  That needs support from your system and locale definition
+#. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1837 gtk/gtkcalendar.c:2498
+#: gtk/gtkcalendar.c:1834 gtk/gtkcalendar.c:2492
 #, c-format
-msgid "calendar:day:digits|%d"
-msgstr "%d"
+msgctxt "calendar:day:digits"
+msgid "%d"
+msgstr ""
 
-# (pofilter) short: checks whether a translation is much shorter than the original string
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
 #. *
 #. * Translate to "%Id" if you want to use localized digits, or
-#. * translate to "%d" otherwise.  Don't include the
-#. * "calendar:week:digits|" part in the translation.
+#. * translate to "%d" otherwise.
 #. *
 #. * Note that translating this doesn't guarantee that you get localized
-#. * digits.  That needs support from your system and locale definition
+#. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1869 gtk/gtkcalendar.c:2360
+#: gtk/gtkcalendar.c:1866 gtk/gtkcalendar.c:2355
 #, c-format
-msgid "calendar:week:digits|%d"
-msgstr "%d"
+msgctxt "calendar:week:digits"
+msgid "%d"
+msgstr ""
 
-# (pofilter) short: checks whether a translation is much shorter than the original string
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
 #. * Use only ASCII in the translation.
 #. *
-#. * Also look for the msgid "year measurement template|2000".
+#. * Also look for the msgid "2000".
 #. * Translate that entry to a year with the widest output of this
 #. * msgid.
 #. *
-#. * Don't include the prefix "calendar year format|" in the
-#. * translation. "%Y" is appropriate for most locales.
+#. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2150
-msgid "calendar year format|%Y"
-msgstr "%Y"
+#: gtk/gtkcalendar.c:2146
+msgctxt "calendar year format"
+msgid "%Y"
+msgstr ""
 
 #. This label is displayed in a treeview cell displaying
-#. * a disabled accelerator key combination. Only include
-#. * the text after the | in the translation.
+#. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:235
-msgid "Accelerator|Disabled"
-msgstr "Ja aktiv"
+#: gtk/gtkcellrendereraccel.c:243
+#, fuzzy
+msgctxt "Accelerator"
+msgid "Disabled"
+msgstr "Jo aktiv"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:368 gtk/gtkcellrendereraccel.c:580
+#: gtk/gtkcellrendereraccel.c:376 gtk/gtkcellrendereraccel.c:588
 msgid "New accelerator..."
 msgstr "Përshpejtues i ri..."
 
-#. do not translate the part before the |
-#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:449
+#: gtk/gtkcellrendererprogress.c:361 gtk/gtkcellrendererprogress.c:448
 #, c-format
-msgid "progress bar label|%d %%"
-msgstr "%d %%"
+msgctxt "progress bar label"
+msgid "%d %%"
+msgstr ""
 
 #: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
@@ -1582,19 +1378,33 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Zgjedhja e ngjyrës"
 
-#: gtk/gtkentry.c:5380 gtk/gtktextview.c:7686
+#: gtk/gtkentry.c:7998 gtk/gtktextview.c:7730
 msgid "Input _Methods"
 msgstr "_Metodat e Dhënies"
 
-#: gtk/gtkentry.c:5394 gtk/gtktextview.c:7700
+#: gtk/gtkentry.c:8012 gtk/gtktextview.c:7744
 msgid "_Insert Unicode Control Character"
 msgstr "_Shkruaj simbolin Unicode të kontrollit"
+
+#: gtk/gtkentry.c:9375
+msgid ""
+"You have the Caps Lock key on\n"
+"and an active input method"
+msgstr ""
+
+#: gtk/gtkentry.c:9377
+msgid "You have the Caps Lock key on"
+msgstr ""
+
+#: gtk/gtkentry.c:9379
+msgid "You have an active input method"
+msgstr ""
 
 #: gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
 msgstr "Zgjidh një file"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1922
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1923
 msgid "Desktop"
 msgstr "Hapësira e punës"
 
@@ -1606,23 +1416,23 @@ msgstr "(Asnjë)"
 msgid "Other..."
 msgstr "Tjetër..."
 
-#: gtk/gtkfilechooserdefault.c:1055
+#: gtk/gtkfilechooserdefault.c:1056
 msgid "Could not retrieve information about the file"
 msgstr "E pamundur marrja e informacioneve në lidhje me file"
 
-#: gtk/gtkfilechooserdefault.c:1066
+#: gtk/gtkfilechooserdefault.c:1067
 msgid "Could not add a bookmark"
 msgstr "I pamundur shtimi i një libërshënuesi"
 
-#: gtk/gtkfilechooserdefault.c:1077
+#: gtk/gtkfilechooserdefault.c:1078
 msgid "Could not remove bookmark"
 msgstr "E pamundur fshirja e libërshënuesit"
 
-#: gtk/gtkfilechooserdefault.c:1088
+#: gtk/gtkfilechooserdefault.c:1089
 msgid "The folder could not be created"
 msgstr "I pamundur krijimi i kartelës"
 
-#: gtk/gtkfilechooserdefault.c:1101
+#: gtk/gtkfilechooserdefault.c:1102
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1631,11 +1441,11 @@ msgstr ""
 "Përdor një emër tjetër për kartelën, ose ndrysho fillimisht emrin e file "
 "ekzistues."
 
-#: gtk/gtkfilechooserdefault.c:1112
+#: gtk/gtkfilechooserdefault.c:1113
 msgid "Invalid file name"
 msgstr "Emër i pavlefshëm file"
 
-#: gtk/gtkfilechooserdefault.c:1122
+#: gtk/gtkfilechooserdefault.c:1123
 msgid "The folder contents could not be displayed"
 msgstr "E pamundur shfaqja e pëmbajtjes së kartelës"
 
@@ -1643,172 +1453,176 @@ msgstr "E pamundur shfaqja e pëmbajtjes së kartelës"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1674
+#: gtk/gtkfilechooserdefault.c:1675
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s mbi %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1850
+#: gtk/gtkfilechooserdefault.c:1851
 msgid "Search"
 msgstr "Kërko"
 
-#: gtk/gtkfilechooserdefault.c:1874
+#: gtk/gtkfilechooserdefault.c:1875
 msgid "Recently Used"
 msgstr "Përdorur së fundmi"
 
-#: gtk/gtkfilechooserdefault.c:2491
+#: gtk/gtkfilechooserdefault.c:2500
 msgid "Select which types of files are shown"
 msgstr "Zgjidh llojet e files që duhen shfaqur"
 
-#: gtk/gtkfilechooserdefault.c:2920
+#: gtk/gtkfilechooserdefault.c:2929
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Shto në libërshënues kartelën '%s'"
 
-#: gtk/gtkfilechooserdefault.c:2961
+#: gtk/gtkfilechooserdefault.c:2970
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Shto në libërshënues kartelën aktuale"
 
-#: gtk/gtkfilechooserdefault.c:2963
+#: gtk/gtkfilechooserdefault.c:2972
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Shto në libërshënues kartelat e zgjedhura"
 
-#: gtk/gtkfilechooserdefault.c:3003
+#: gtk/gtkfilechooserdefault.c:3012
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Hiq libërshënuesin '%s'"
 
-#: gtk/gtkfilechooserdefault.c:3721
+#: gtk/gtkfilechooserdefault.c:3730
 msgid "Remove"
 msgstr "Hiq"
 
-#: gtk/gtkfilechooserdefault.c:3730
+#: gtk/gtkfilechooserdefault.c:3739
 msgid "Rename..."
 msgstr "Riemërto..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3876
+#: gtk/gtkfilechooserdefault.c:3885
 msgid "Places"
 msgstr "Rezervat"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3933
+#: gtk/gtkfilechooserdefault.c:3942
 msgid "_Places"
 msgstr "_Rezervat"
 
-#: gtk/gtkfilechooserdefault.c:3988 gtk/gtkstock.c:297
+#: gtk/gtkfilechooserdefault.c:3997
 msgid "_Add"
 msgstr "_Shto"
 
-#: gtk/gtkfilechooserdefault.c:3995
+#: gtk/gtkfilechooserdefault.c:4004
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Shto në libërshënues kartelën e zgjedhur"
 
-#: gtk/gtkfilechooserdefault.c:4000 gtk/gtkstock.c:386
+#: gtk/gtkfilechooserdefault.c:4009
 msgid "_Remove"
 msgstr "_Hiq"
 
-#: gtk/gtkfilechooserdefault.c:4007
+#: gtk/gtkfilechooserdefault.c:4016
 msgid "Remove the selected bookmark"
 msgstr "Hiq libërshënuesin e zgjedhur"
 
-#: gtk/gtkfilechooserdefault.c:4104
+#: gtk/gtkfilechooserdefault.c:4125
 msgid "Could not select file"
 msgstr "E pamundur zgjedhja e file"
 
-#: gtk/gtkfilechooserdefault.c:4280
+#: gtk/gtkfilechooserdefault.c:4300
 msgid "_Add to Bookmarks"
 msgstr "_Shto në libërshënues"
 
-#: gtk/gtkfilechooserdefault.c:4294
+#: gtk/gtkfilechooserdefault.c:4314
 msgid "Show _Hidden Files"
 msgstr "Shfaq Files e _Padukshëm"
 
+#: gtk/gtkfilechooserdefault.c:4321
+msgid "Show _Size Column"
+msgstr ""
+
 # (pofilter) unchanged: please translate
-#: gtk/gtkfilechooserdefault.c:4537 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4576 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "File"
 
-#: gtk/gtkfilechooserdefault.c:4586
+#: gtk/gtkfilechooserdefault.c:4625
 msgid "Name"
 msgstr "Emri"
 
-#: gtk/gtkfilechooserdefault.c:4611
+#: gtk/gtkfilechooserdefault.c:4650
 msgid "Size"
 msgstr "Madhësia"
 
-#: gtk/gtkfilechooserdefault.c:4625
+#: gtk/gtkfilechooserdefault.c:4664
 msgid "Modified"
 msgstr "Ndryshuar"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4845 gtk/gtkprinteroptionwidget.c:786
+#: gtk/gtkfilechooserdefault.c:4884 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "_Emri:"
 
-#: gtk/gtkfilechooserdefault.c:4887
+#: gtk/gtkfilechooserdefault.c:4926
 msgid "_Browse for other folders"
 msgstr "_Shfleto për kartelat e tjera"
 
-#: gtk/gtkfilechooserdefault.c:5157
+#: gtk/gtkfilechooserdefault.c:5196
 msgid "Type a file name"
 msgstr "Shkruaj emrin e një file"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5194
+#: gtk/gtkfilechooserdefault.c:5233
 msgid "Create Fo_lder"
 msgstr "Krijo Karte_lë"
 
-#: gtk/gtkfilechooserdefault.c:5204
+#: gtk/gtkfilechooserdefault.c:5243
 msgid "_Location:"
 msgstr "_Pozicioni:"
 
-#: gtk/gtkfilechooserdefault.c:5393
+#: gtk/gtkfilechooserdefault.c:5444
 msgid "Save in _folder:"
 msgstr "Ruaj tek _kartela:"
 
-#: gtk/gtkfilechooserdefault.c:5395
+#: gtk/gtkfilechooserdefault.c:5446
 msgid "Create in _folder:"
 msgstr "Krijoje tek _kartela:"
 
-#: gtk/gtkfilechooserdefault.c:6976
+#: gtk/gtkfilechooserdefault.c:7097
 msgid "Cannot change to folder because it is not local"
 msgstr "I pamundur kalimi tek kartela pasi nuk është lokale"
 
-#: gtk/gtkfilechooserdefault.c:7601 gtk/gtkfilechooserdefault.c:7622
+#: gtk/gtkfilechooserdefault.c:7722 gtk/gtkfilechooserdefault.c:7743
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Shtegu %s ekziston rregullisht"
 
-#: gtk/gtkfilechooserdefault.c:7712
+#: gtk/gtkfilechooserdefault.c:7833
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Shtegu %s nuk ekziston"
 
-#: gtk/gtkfilechooserdefault.c:7960 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8081 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Një file i quajtur \"%s\" ekziston.  Dëshiron t'a zëvendësosh?"
 
-#: gtk/gtkfilechooserdefault.c:7963 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8084 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "File ekziston në \"%s\".  Zëvendësimi do të mbishkruaj përmbajtjen e tij."
 
-#: gtk/gtkfilechooserdefault.c:7968 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8089 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "_Zëvendëso"
 
-#: gtk/gtkfilechooserdefault.c:8729
+#: gtk/gtkfilechooserdefault.c:8846
 msgid "Could not start the search process"
 msgstr "E pamundur nisja e proçesit të kërkimit"
 
 # (pofilter) doublespacing: checks for bad double-spaces by comparing to original
-#: gtk/gtkfilechooserdefault.c:8730
+#: gtk/gtkfilechooserdefault.c:8847
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1816,52 +1630,34 @@ msgstr ""
 "Programi nuk mundi të krijojë një lidhje me daemon e indeksimit. Sigurohu që "
 "është duke funksionuar."
 
-#: gtk/gtkfilechooserdefault.c:8744
+#: gtk/gtkfilechooserdefault.c:8861
 msgid "Could not send the search request"
 msgstr "I pamundur dërgimi i kërkesës së kërkimit"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9184
+#: gtk/gtkfilechooserdefault.c:9328
 msgid "_Search:"
 msgstr "_Kërko:"
 
-#: gtk/gtkfilechooserdefault.c:10131
+#: gtk/gtkfilechooserdefault.c:10281
 #, c-format
 msgid "Could not mount %s"
 msgstr "I pamundur montimi i %s"
 
-#: gtk/gtkfilechooserdefault.c:10785
+#: gtk/gtkfilechooserdefault.c:10956
 msgid "Type name of new folder"
 msgstr "Shkruaj emrin e kartelës së re"
 
-# (pofilter) unchanged: please translate
-#: gtk/gtkfilechooserdefault.c:10835
-#, c-format
-msgid "%.1f KB"
-msgstr "%.1f KB"
-
-# (pofilter) unchanged: please translate
-#: gtk/gtkfilechooserdefault.c:10837
-#, c-format
-msgid "%.1f MB"
-msgstr "%.1f MB"
-
-# (pofilter) unchanged: please translate
-#: gtk/gtkfilechooserdefault.c:10839
-#, c-format
-msgid "%.1f GB"
-msgstr "%.1f GB"
-
-#: gtk/gtkfilechooserdefault.c:10942 gtk/gtkfilechooserdefault.c:10964
-#: gtk/gtkfilechooserdefault.c:11035
+#: gtk/gtkfilechooserdefault.c:11134 gtk/gtkfilechooserdefault.c:11156
+#: gtk/gtkfilechooserdefault.c:11227
 msgid "Unknown"
 msgstr "Nuk njihet"
 
-#: gtk/gtkfilechooserdefault.c:10982
+#: gtk/gtkfilechooserdefault.c:11174
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:10984
+#: gtk/gtkfilechooserdefault.c:11176
 msgid "Yesterday at %H:%M"
 msgstr "Dje në orën %H:%M"
 
@@ -1899,7 +1695,7 @@ msgstr "Plotësuar, por jo e vetme"
 msgid "Completing..."
 msgstr "Duke plotësuar..."
 
-#: gtk/gtkfilechoosersettings.c:262 gtk/gtkfilesel.c:1349
+#: gtk/gtkfilechoosersettings.c:295 gtk/gtkfilesel.c:1349
 #: gtk/gtkfilesel.c:1358
 #, c-format
 msgid "Error creating folder '%s': %s"
@@ -2051,7 +1847,7 @@ msgstr "File i sistemit"
 msgid "Could not obtain root folder"
 msgstr "E pamundur marrja kartelës bazë"
 
-#: gtk/gtkfilesystemmodel.c:1299
+#: gtk/gtkfilesystemmodel.c:1301
 msgid "(Empty)"
 msgstr "(Bosh)"
 
@@ -2065,7 +1861,7 @@ msgstr "Zgjidh një gërmë"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:780
+#: gtk/gtkfontbutton.c:785
 msgid "Font"
 msgstr "Gërmat"
 
@@ -2093,7 +1889,7 @@ msgstr "Madhë_sia:"
 msgid "_Preview:"
 msgstr "_Pamja e parë:"
 
-#: gtk/gtkfontsel.c:1542
+#: gtk/gtkfontsel.c:1560
 msgid "Font Selection"
 msgstr "Zgjedhja e gërmave"
 
@@ -2132,17 +1928,25 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "Ikonë '%s' jo e pranishme në temë"
 
-#: gtk/gtkicontheme.c:3058
+#: gtk/gtkicontheme.c:3073
 msgid "Failed to load icon"
 msgstr "Ngarkimi i ikonës dështoi"
 
-#: gtk/gtkimmodule.c:515
+#: gtk/gtkimmodule.c:527
 msgid "Simple"
 msgstr "Thjesht"
 
-#: gtk/gtkimmulticontext.c:542
-msgid "input method menu|System"
-msgstr "Sistemi"
+#: gtk/gtkimmulticontext.c:545
+#, fuzzy
+msgctxt "input method menu"
+msgid "System"
+msgstr "File i sistemit"
+
+#: gtk/gtkimmulticontext.c:629
+#, c-format
+msgctxt "input method menu"
+msgid "System (%s)"
+msgstr ""
 
 # (pofilter) unchanged: please translate
 #: gtk/gtkinputdialog.c:192
@@ -2226,12 +2030,12 @@ msgstr "(nuk njihet)"
 msgid "Cl_ear"
 msgstr "P_astro"
 
-#: gtk/gtklinkbutton.c:427
+#: gtk/gtklinkbutton.c:428
 msgid "Copy URL"
 msgstr "Kopjo URL"
 
 # (pofilter) acronyms: acronyms should not be translated: URI
-#: gtk/gtklinkbutton.c:565
+#: gtk/gtklinkbutton.c:586
 msgid "Invalid URI"
 msgstr "URI e pavlefshme"
 
@@ -2284,48 +2088,48 @@ msgstr "Opcionet e GTK+"
 msgid "Show GTK+ Options"
 msgstr "Shfaq opcionet GTK+"
 
-#: gtk/gtkmountoperation.c:476
+#: gtk/gtkmountoperation.c:481
 msgid "Co_nnect"
 msgstr "L_idhu"
 
-#: gtk/gtkmountoperation.c:520
+#: gtk/gtkmountoperation.c:525
 msgid "Connect _anonymously"
 msgstr "Lidhu në menyrë _anonime"
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:534
 msgid "Connect as u_ser:"
 msgstr "Lidhu si përdorue_si:"
 
-#: gtk/gtkmountoperation.c:566
+#: gtk/gtkmountoperation.c:571
 msgid "_Username:"
 msgstr "Përdor_uesi:"
 
-#: gtk/gtkmountoperation.c:570
+#: gtk/gtkmountoperation.c:575
 msgid "_Domain:"
 msgstr "_Domain:"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:580
 msgid "_Password:"
 msgstr "_Fjalëkalimi:"
 
-#: gtk/gtkmountoperation.c:590
+#: gtk/gtkmountoperation.c:598
 msgid "Forget password _immediately"
 msgstr "Harro _menjëherë fjalëkalimin"
 
-#: gtk/gtkmountoperation.c:598
+#: gtk/gtkmountoperation.c:608
 msgid "Remember password until you _logout"
 msgstr "Kujto fjalëkalimin derisa të da_lësh"
 
-#: gtk/gtkmountoperation.c:606
+#: gtk/gtkmountoperation.c:618
 msgid "Remember _forever"
 msgstr "Kujto _përgjithmonë"
 
-#: gtk/gtknotebook.c:4417 gtk/gtknotebook.c:6924
+#: gtk/gtknotebook.c:4425 gtk/gtknotebook.c:6944
 #, c-format
 msgid "Page %u"
 msgstr "Faqja %u"
 
-#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:865
+#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:867
 msgid "Not a valid page setup file"
 msgstr "File i pavlefshëm konfigurimi faqeje"
 
@@ -2389,7 +2193,7 @@ msgstr "_Përmasat e fletës:"
 msgid "_Orientation:"
 msgstr "_Orientimi:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2662
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2681
 msgid "Page Setup"
 msgstr "Rregullimet e faqes"
 
@@ -2450,11 +2254,11 @@ msgstr "Pozicioni poshtë"
 msgid "File System Root"
 msgstr "Root i file të sistemit"
 
-#: gtk/gtkprinteroptionwidget.c:685
+#: gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
 msgstr "Jo në dispozicion"
 
-#: gtk/gtkprinteroptionwidget.c:798
+#: gtk/gtkprinteroptionwidget.c:808
 msgid "_Save in folder:"
 msgstr "_Ruaj tek kartela:"
 
@@ -2463,86 +2267,32 @@ msgstr "_Ruaj tek kartela:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:173
+#: gtk/gtkprintoperation.c:175
 #, c-format
 msgid "%s job #%d"
 msgstr "Puna e %s #%d"
 
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1504
-msgid "print operation status|Initial state"
-msgstr "Faza e nisjes"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1506
-msgid "print operation status|Preparing to print"
-msgstr "Përgatitje për printim"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1508
-msgid "print operation status|Generating data"
-msgstr "Gjenerimi i të dhënave"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1510
-msgid "print operation status|Sending data"
-msgstr "Duke dërguar të dhënat"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1512
-msgid "print operation status|Waiting"
-msgstr "Në pritje"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1514
-msgid "print operation status|Blocking on issue"
-msgstr "Bllokuar për shkak të një problemi"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1516
-msgid "print operation status|Printing"
-msgstr "Duke shtypur"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1518
-msgid "print operation status|Finished"
-msgstr "U përfundua"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkprintoperation.c:1520
-msgid "print operation status|Finished with error"
-msgstr "Përfundoi me gabim"
-
-#: gtk/gtkprintoperation.c:2043
+#: gtk/gtkprintoperation.c:2048
 #, c-format
 msgid "Preparing %d"
 msgstr "Duke përgatitur %d"
 
-#: gtk/gtkprintoperation.c:2045 gtk/gtkprintoperation.c:2301
+#: gtk/gtkprintoperation.c:2050 gtk/gtkprintoperation.c:2381
 #, c-format
 msgid "Preparing"
 msgstr "Duke përgatitur"
 
-#: gtk/gtkprintoperation.c:2048
+#: gtk/gtkprintoperation.c:2053
 #, c-format
 msgid "Printing %d"
 msgstr "Duke printuar %d"
 
-#: gtk/gtkprintoperation.c:2331
+#: gtk/gtkprintoperation.c:2411
 #, c-format
 msgid "Error creating print preview"
 msgstr "Gabim gjatë krijimit të pamjes së parë së printimit"
 
-#: gtk/gtkprintoperation.c:2334
+#: gtk/gtkprintoperation.c:2414
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
@@ -2558,7 +2308,7 @@ msgstr "Gabim gjatë hapjes së pamjes së parë"
 msgid "Error printing"
 msgstr "Gabim në printim"
 
-#: gtk/gtkprintoperation-unix.c:381 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:384 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "Aplikativi"
 
@@ -2572,7 +2322,7 @@ msgstr "Kanë mbaruar letrat"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1413
+#: modules/printbackends/cups/gtkprintbackendcups.c:1469
 msgid "Paused"
 msgstr "Pezulluar"
 
@@ -2617,37 +2367,37 @@ msgstr "Trajtues jo korrekt për PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Gabim i papërcaktuar"
 
-#: gtk/gtkprintunixdialog.c:1748
+#: gtk/gtkprintunixdialog.c:1763
 msgid "Printer"
 msgstr "Printuesi"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1758
+#: gtk/gtkprintunixdialog.c:1773
 msgid "Location"
 msgstr "Vendndodhja"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1769
+#: gtk/gtkprintunixdialog.c:1784
 msgid "Status"
 msgstr "Gjendja"
 
-#: gtk/gtkprintunixdialog.c:1792
+#: gtk/gtkprintunixdialog.c:1809
 msgid "Range"
 msgstr "Intervali"
 
-#: gtk/gtkprintunixdialog.c:1796
+#: gtk/gtkprintunixdialog.c:1813
 msgid "_All Pages"
 msgstr "Të gjith_a faqet"
 
-#: gtk/gtkprintunixdialog.c:1803
+#: gtk/gtkprintunixdialog.c:1820
 msgid "C_urrent Page"
 msgstr "Faqja akt_uale"
 
-#: gtk/gtkprintunixdialog.c:1812
+#: gtk/gtkprintunixdialog.c:1829
 msgid "Pag_es:"
 msgstr "Faq_et:"
 
-#: gtk/gtkprintunixdialog.c:1813
+#: gtk/gtkprintunixdialog.c:1830
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2655,184 +2405,184 @@ msgstr ""
 "Përcakto një apo më shumë intervale faqesh,\n"
 " p.sh. 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1832
+#: gtk/gtkprintunixdialog.c:1851
 msgid "Copies"
 msgstr "Kopjet"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1837
+#: gtk/gtkprintunixdialog.c:1856
 msgid "Copie_s:"
 msgstr "Kopj_e:"
 
-#: gtk/gtkprintunixdialog.c:1855
+#: gtk/gtkprintunixdialog.c:1874
 msgid "C_ollate"
 msgstr "Grup_o"
 
-#: gtk/gtkprintunixdialog.c:1863
+#: gtk/gtkprintunixdialog.c:1882
 msgid "_Reverse"
 msgstr "Pë_rmbys"
 
-#: gtk/gtkprintunixdialog.c:1883
+#: gtk/gtkprintunixdialog.c:1902
 msgid "General"
 msgstr "Të përgjithshme"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2423
-#: modules/printbackends/cups/gtkprintbackendcups.c:2813
+#: gtk/gtkprintunixdialog.c:2442
+#: modules/printbackends/cups/gtkprintbackendcups.c:2869
 msgid "Page Ordering"
 msgstr "Renditja e faqeve"
 
 # (pofilter) acronyms: acronyms should not be translated: LRM
-#: gtk/gtkprintunixdialog.c:2429
+#: gtk/gtkprintunixdialog.c:2448
 msgid "Left to right"
 msgstr "Nga e majta në të djathtë"
 
-#: gtk/gtkprintunixdialog.c:2430
+#: gtk/gtkprintunixdialog.c:2449
 msgid "Right to left"
 msgstr "Nga e djathta në të majtë"
 
-#: gtk/gtkprintunixdialog.c:2499
+#: gtk/gtkprintunixdialog.c:2518
 msgid "Layout"
 msgstr "Faqosja"
 
-#: gtk/gtkprintunixdialog.c:2503
+#: gtk/gtkprintunixdialog.c:2522
 msgid "T_wo-sided:"
 msgstr "P_ara-mbrapa:"
 
-#: gtk/gtkprintunixdialog.c:2518
+#: gtk/gtkprintunixdialog.c:2537
 msgid "Pages per _side:"
 msgstr "Faqe _për fletë:"
 
-#: gtk/gtkprintunixdialog.c:2536
+#: gtk/gtkprintunixdialog.c:2555
 msgid "Page or_dering:"
 msgstr "Ren_ditja e faqeve:"
 
-#: gtk/gtkprintunixdialog.c:2552
+#: gtk/gtkprintunixdialog.c:2571
 msgid "_Only print:"
 msgstr "Print_o vetëm:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2567
+#: gtk/gtkprintunixdialog.c:2586
 msgid "All sheets"
 msgstr "Të gjitha faqet"
 
-#: gtk/gtkprintunixdialog.c:2568
+#: gtk/gtkprintunixdialog.c:2587
 msgid "Even sheets"
 msgstr "Faqet çifte"
 
-#: gtk/gtkprintunixdialog.c:2569
+#: gtk/gtkprintunixdialog.c:2588
 msgid "Odd sheets"
 msgstr "Faqet teke"
 
-#: gtk/gtkprintunixdialog.c:2572
+#: gtk/gtkprintunixdialog.c:2591
 msgid "Sc_ale:"
 msgstr "Shk_alla:"
 
-#: gtk/gtkprintunixdialog.c:2599
+#: gtk/gtkprintunixdialog.c:2618
 msgid "Paper"
 msgstr "Letra"
 
-#: gtk/gtkprintunixdialog.c:2603
+#: gtk/gtkprintunixdialog.c:2622
 msgid "Paper _type:"
 msgstr "Lloji i le_trës:"
 
-#: gtk/gtkprintunixdialog.c:2618
+#: gtk/gtkprintunixdialog.c:2637
 msgid "Paper _source:"
 msgstr "Burimi i letrë_s:"
 
-#: gtk/gtkprintunixdialog.c:2633
+#: gtk/gtkprintunixdialog.c:2652
 msgid "Output t_ray:"
 msgstr "Sirta_ri i daljes:"
 
-#: gtk/gtkprintunixdialog.c:2685
+#: gtk/gtkprintunixdialog.c:2704
 msgid "Job Details"
 msgstr "Hollësitë e punës"
 
-#: gtk/gtkprintunixdialog.c:2691
+#: gtk/gtkprintunixdialog.c:2710
 msgid "Pri_ority:"
 msgstr "Pri_oriteti:"
 
-#: gtk/gtkprintunixdialog.c:2706
+#: gtk/gtkprintunixdialog.c:2725
 msgid "_Billing info:"
 msgstr "Informacione m_bi faturimin:"
 
-#: gtk/gtkprintunixdialog.c:2724
+#: gtk/gtkprintunixdialog.c:2743
 msgid "Print Document"
 msgstr "Printo dokumentin"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2733
+#: gtk/gtkprintunixdialog.c:2752
 msgid "_Now"
 msgstr "Ta_ni"
 
 # (pofilter) accelerators: accelerator _ appears before an invalid accelerator character 'ë' (eg. space)
-#: gtk/gtkprintunixdialog.c:2744
+#: gtk/gtkprintunixdialog.c:2763
 msgid "A_t:"
 msgstr "_Në:"
 
-#: gtk/gtkprintunixdialog.c:2763
+#: gtk/gtkprintunixdialog.c:2782
 msgid "On _hold"
 msgstr "_Në pritje"
 
-#: gtk/gtkprintunixdialog.c:2782
+#: gtk/gtkprintunixdialog.c:2801
 msgid "Add Cover Page"
 msgstr "Shto faqe kapak"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2791
+#: gtk/gtkprintunixdialog.c:2810
 msgid "Be_fore:"
 msgstr "Pa_ra:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2809
+#: gtk/gtkprintunixdialog.c:2828
 msgid "_After:"
 msgstr "Mb_as:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2827
+#: gtk/gtkprintunixdialog.c:2846
 msgid "Job"
 msgstr "Puna e printimit"
 
-#: gtk/gtkprintunixdialog.c:2893
+#: gtk/gtkprintunixdialog.c:2912
 msgid "Advanced"
 msgstr "Detajuar"
 
-#: gtk/gtkprintunixdialog.c:2928
+#: gtk/gtkprintunixdialog.c:2947
 msgid "Image Quality"
 msgstr "Cilësia e figurës"
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2950
 msgid "Color"
 msgstr "Ngjyra"
 
-#: gtk/gtkprintunixdialog.c:2934
+#: gtk/gtkprintunixdialog.c:2953
 msgid "Finishing"
 msgstr "Duke përfunduar"
 
-#: gtk/gtkprintunixdialog.c:2944
+#: gtk/gtkprintunixdialog.c:2963
 msgid "Some of the settings in the dialog conflict"
 msgstr "Disa nga rregullimet në dritaren e dialogut janë në konflikt"
 
-#: gtk/gtkprintunixdialog.c:2967
+#: gtk/gtkprintunixdialog.c:2986
 msgid "Print"
 msgstr "Printo"
 
-#: gtk/gtkrc.c:2872
+#: gtk/gtkrc.c:2868
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "E pamundur gjetja e file që duhet përfshirë: \"%s\""
 
-#: gtk/gtkrc.c:3500 gtk/gtkrc.c:3503
+#: gtk/gtkrc.c:3496 gtk/gtkrc.c:3499
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "E pamundur gjetja e file së figurës në pixmap_path: \"%s\""
@@ -2912,23 +2662,21 @@ msgstr "Element i panjohur"
 #. * in a recent files menu. The %d is the number of the item,
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
-#. *
-#. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:781
+#: gtk/gtkrecentchoosermenu.c:779
 #, c-format
-msgid "recent menu label|_%d. %s"
-msgstr "_%d. %s"
+msgctxt "recent menu label"
+msgid "_%d. %s"
+msgstr ""
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
-#. *
-#. * Don't include the prefix "recent menu label|" in the translation.
 #.
-#: gtk/gtkrecentchoosermenu.c:788
+#: gtk/gtkrecentchoosermenu.c:784
 #, c-format
-msgid "recent menu label|%d. %s"
-msgstr "%d. %s"
+msgctxt "recent menu label"
+msgid "%d. %s"
+msgstr ""
 
 #: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
 #: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
@@ -2937,396 +2685,6 @@ msgstr "%d. %s"
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Nuk u gjet asnjë element me URI '%s'"
-
-#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:288
-msgid "Information"
-msgstr "Informacione"
-
-#: gtk/gtkstock.c:289
-msgid "Warning"
-msgstr "Paralajmërim"
-
-#: gtk/gtkstock.c:290
-msgid "Error"
-msgstr "Gabim"
-
-#: gtk/gtkstock.c:291
-msgid "Question"
-msgstr "Pyetje"
-
-#. FIXME these need accelerators when appropriate, and
-#. * need the mnemonics to be rationalized
-#.
-#: gtk/gtkstock.c:296
-msgid "_About"
-msgstr "_Informacione"
-
-#: gtk/gtkstock.c:298
-msgid "_Apply"
-msgstr "_Apliko"
-
-#: gtk/gtkstock.c:299
-msgid "_Bold"
-msgstr "_Me të trasha"
-
-#: gtk/gtkstock.c:300
-msgid "_Cancel"
-msgstr "_Anullo"
-
-# (pofilter) unchanged: please translate
-#: gtk/gtkstock.c:301
-msgid "_CD-Rom"
-msgstr "_CD-Rom"
-
-#: gtk/gtkstock.c:302
-msgid "_Clear"
-msgstr "_Pastro"
-
-#: gtk/gtkstock.c:303
-msgid "_Close"
-msgstr "_Mbyll"
-
-#: gtk/gtkstock.c:304
-msgid "C_onnect"
-msgstr "L_idhu"
-
-#: gtk/gtkstock.c:305
-msgid "_Convert"
-msgstr "_Konverto"
-
-#: gtk/gtkstock.c:306
-msgid "_Copy"
-msgstr "_Kopjo"
-
-#: gtk/gtkstock.c:307
-msgid "Cu_t"
-msgstr "Pre_je"
-
-#: gtk/gtkstock.c:308
-msgid "_Delete"
-msgstr "_Elemino"
-
-#: gtk/gtkstock.c:309
-msgid "_Discard"
-msgstr "_Kapërce"
-
-#: gtk/gtkstock.c:310
-msgid "_Disconnect"
-msgstr "_Shkëputu"
-
-#: gtk/gtkstock.c:311
-msgid "_Execute"
-msgstr "_Zbato"
-
-#: gtk/gtkstock.c:312
-msgid "_Edit"
-msgstr "_Ndrysho"
-
-#: gtk/gtkstock.c:313
-msgid "_Find"
-msgstr "_Gjej"
-
-#: gtk/gtkstock.c:314
-msgid "Find and _Replace"
-msgstr "Gjej dhe _Zëvendëso"
-
-#: gtk/gtkstock.c:315
-msgid "_Floppy"
-msgstr "_Disketë"
-
-#: gtk/gtkstock.c:316
-msgid "_Fullscreen"
-msgstr "_Ekran i plotë"
-
-#: gtk/gtkstock.c:317
-msgid "_Leave Fullscreen"
-msgstr "_Dil nga modaliteti me ekran të plotë"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:319
-msgid "Navigation|_Bottom"
-msgstr "_Poshtë"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:321
-msgid "Navigation|_First"
-msgstr "_E Para"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:323
-msgid "Navigation|_Last"
-msgstr "_E fundit"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:325
-msgid "Navigation|_Top"
-msgstr "_Në majë"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:327
-msgid "Navigation|_Back"
-msgstr "_Mbrapa"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:329
-msgid "Navigation|_Down"
-msgstr "_Poshtë"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:331
-msgid "Navigation|_Forward"
-msgstr "_Vazhdo"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:333
-msgid "Navigation|_Up"
-msgstr "_Sipër"
-
-#: gtk/gtkstock.c:334
-msgid "_Harddisk"
-msgstr "_Diskfiks"
-
-#: gtk/gtkstock.c:335
-msgid "_Help"
-msgstr "_Ndihmë"
-
-#: gtk/gtkstock.c:336
-msgid "_Home"
-msgstr "_Shtëpia"
-
-#: gtk/gtkstock.c:337
-msgid "Increase Indent"
-msgstr "Shto ngushtimin"
-
-#: gtk/gtkstock.c:338
-msgid "Decrease Indent"
-msgstr "Zvogëlo ngushtimin"
-
-#: gtk/gtkstock.c:339
-msgid "_Index"
-msgstr "_Treguesi"
-
-#: gtk/gtkstock.c:340
-msgid "_Information"
-msgstr "_Informacione"
-
-# (pofilter) unchanged: please translate
-#: gtk/gtkstock.c:341
-msgid "_Italic"
-msgstr "_Italic"
-
-#: gtk/gtkstock.c:342
-msgid "_Jump to"
-msgstr "_Kalo tek"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:344
-msgid "Justify|_Center"
-msgstr "_Në qendër"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:346
-msgid "Justify|_Fill"
-msgstr "_Përshtat"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:348
-msgid "Justify|_Left"
-msgstr "_Majtas"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:350
-msgid "Justify|_Right"
-msgstr "_Djathtas"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:353
-msgid "Media|_Forward"
-msgstr "_Vazhdo"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:355
-msgid "Media|_Next"
-msgstr "_Në vazhdim"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:357
-msgid "Media|P_ause"
-msgstr "P_ezullo"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:359
-msgid "Media|_Play"
-msgstr "_Luaj"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:361
-msgid "Media|Pre_vious"
-msgstr "Par_aardhësi"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:363
-msgid "Media|_Record"
-msgstr "_Regjistrim"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:365
-msgid "Media|R_ewind"
-msgstr "R_ikthe"
-
-#. translators, strip the prefix up to and including the first |
-#: gtk/gtkstock.c:367
-msgid "Media|_Stop"
-msgstr "_Ndalo"
-
-#: gtk/gtkstock.c:368
-msgid "_Network"
-msgstr "_Rrjeti"
-
-#: gtk/gtkstock.c:369
-msgid "_New"
-msgstr "_E re"
-
-#: gtk/gtkstock.c:370
-msgid "_No"
-msgstr "_Jo"
-
-#: gtk/gtkstock.c:371
-msgid "_OK"
-msgstr "_OK"
-
-#: gtk/gtkstock.c:372
-msgid "_Open"
-msgstr "_Hap"
-
-#: gtk/gtkstock.c:373
-msgid "Landscape"
-msgstr "Horizontale"
-
-#: gtk/gtkstock.c:374
-msgid "Portrait"
-msgstr "Vertikale"
-
-#: gtk/gtkstock.c:375
-msgid "Reverse landscape"
-msgstr "Horizontale e përmbysur"
-
-#: gtk/gtkstock.c:376
-msgid "Reverse portrait"
-msgstr "Vertikale e përmbysur"
-
-#: gtk/gtkstock.c:377
-msgid "Page Set_up"
-msgstr "Rreg_ullimet e faqes"
-
-#: gtk/gtkstock.c:378
-msgid "_Paste"
-msgstr "_Ngjite"
-
-#: gtk/gtkstock.c:379
-msgid "_Preferences"
-msgstr "_Preferimet"
-
-#: gtk/gtkstock.c:380
-msgid "_Print"
-msgstr "_Printo"
-
-#: gtk/gtkstock.c:381
-msgid "Print Pre_view"
-msgstr "Pamja e _parë e printimit"
-
-#: gtk/gtkstock.c:382
-msgid "_Properties"
-msgstr "_Pronësitë"
-
-#: gtk/gtkstock.c:383
-msgid "_Quit"
-msgstr "_Dalja"
-
-#: gtk/gtkstock.c:384
-msgid "_Redo"
-msgstr "_Përsërit"
-
-#: gtk/gtkstock.c:385
-msgid "_Refresh"
-msgstr "_Rifreskim"
-
-#: gtk/gtkstock.c:387
-msgid "_Revert"
-msgstr "_Rikthe"
-
-#: gtk/gtkstock.c:388
-msgid "_Save"
-msgstr "_Ruaj"
-
-#: gtk/gtkstock.c:389
-msgid "Save _As"
-msgstr "Ruaj _si"
-
-#: gtk/gtkstock.c:390
-msgid "Select _All"
-msgstr "Zgjidh _gjithçka"
-
-#: gtk/gtkstock.c:391
-msgid "_Color"
-msgstr "_Ngjyra"
-
-#: gtk/gtkstock.c:392
-msgid "_Font"
-msgstr "_Gërmat"
-
-#: gtk/gtkstock.c:393
-msgid "_Ascending"
-msgstr "_Në ngjitje"
-
-#: gtk/gtkstock.c:394
-msgid "_Descending"
-msgstr "_Në zbritje"
-
-#: gtk/gtkstock.c:395
-msgid "_Spell Check"
-msgstr "Kontrolli drejt_shkrimor"
-
-#: gtk/gtkstock.c:396
-msgid "_Stop"
-msgstr "_Ndalo"
-
-#: gtk/gtkstock.c:397
-msgid "_Strikethrough"
-msgstr "_Vizuar"
-
-#: gtk/gtkstock.c:398
-msgid "_Undelete"
-msgstr "_Anullo eleminimin"
-
-#: gtk/gtkstock.c:399
-msgid "_Underline"
-msgstr "_Nënvizimi"
-
-#: gtk/gtkstock.c:400
-msgid "_Undo"
-msgstr "_Anullo"
-
-#: gtk/gtkstock.c:401
-msgid "_Yes"
-msgstr "_Po"
-
-#: gtk/gtkstock.c:402
-msgid "_Normal Size"
-msgstr "Madhësi _normale"
-
-#: gtk/gtkstock.c:403
-msgid "Best _Fit"
-msgstr "Për_shtate"
-
-#: gtk/gtkstock.c:404
-msgid "Zoom _In"
-msgstr "Z_madhim"
-
-#: gtk/gtkstock.c:405
-msgid "Zoom _Out"
-msgstr "Z_vogëlim"
 
 #: gtk/gtktextbufferrichtext.c:651
 #, c-format
@@ -3515,17 +2873,17 @@ msgstr "E pamundur gjetja e motorrit të temës tek module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "-- Asnjë këshillë --"
 
-#: gtk/gtkuimanager.c:1453
+#: gtk/gtkuimanager.c:1462
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Etiketë hapëse e papritur '%s' në rreshtin %d gërma %d"
 
-#: gtk/gtkuimanager.c:1543
+#: gtk/gtkuimanager.c:1552
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "E dhënë e papritur në rreshtin %d gërma %d"
 
-#: gtk/gtkuimanager.c:2366
+#: gtk/gtkuimanager.c:2384
 msgid "Empty"
 msgstr "Bosh"
 
@@ -3569,974 +2927,12 @@ msgstr "Zëri në maksimum"
 #. * as used in the tooltip, eg. "49 %".
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
-#. * Do not translate and do not include the "volume percentage|"
-#. * part in the translation!
 #.
-#: gtk/gtkvolumebutton.c:170
+#: gtk/gtkvolumebutton.c:168
 #, c-format
-msgid "volume percentage|%d %%"
-msgstr "%d %%"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:5
-msgid "paper size|asme_f"
-msgstr "asme_f"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:7
-msgid "paper size|A0x2"
-msgstr "A0x2"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:9
-msgid "paper size|A0"
-msgstr "A0"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:11
-msgid "paper size|A0x3"
-msgstr "A0x3"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:13
-msgid "paper size|A1"
-msgstr "A1"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:15
-msgid "paper size|A10"
-msgstr "A10"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:17
-msgid "paper size|A1x3"
-msgstr "A1x3"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:19
-msgid "paper size|A1x4"
-msgstr "A1x4"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:21
-msgid "paper size|A2"
-msgstr "A2"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:23
-msgid "paper size|A2x3"
-msgstr "A2x3"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:25
-msgid "paper size|A2x4"
-msgstr "A2x4"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:27
-msgid "paper size|A2x5"
-msgstr "A2x5"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:29
-msgid "paper size|A3"
-msgstr "A3"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:31
-msgid "paper size|A3 Extra"
-msgstr "A3 Extra"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:33
-msgid "paper size|A3x3"
-msgstr "A3x3"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:35
-msgid "paper size|A3x4"
-msgstr "A3x4"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:37
-msgid "paper size|A3x5"
-msgstr "A3x5"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:39
-msgid "paper size|A3x6"
-msgstr "A3x6"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:41
-msgid "paper size|A3x7"
-msgstr "A3x7"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:43
-msgid "paper size|A4"
-msgstr "A4"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:45
-msgid "paper size|A4 Extra"
-msgstr "A4 Extra"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:47
-msgid "paper size|A4 Tab"
-msgstr "A4 Tab"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:49
-msgid "paper size|A4x3"
-msgstr "A4x3"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:51
-msgid "paper size|A4x4"
-msgstr "A4x4"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:53
-msgid "paper size|A4x5"
-msgstr "A4x5"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:55
-msgid "paper size|A4x6"
-msgstr "A4x6"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:57
-msgid "paper size|A4x7"
-msgstr "A4x7"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:59
-msgid "paper size|A4x8"
-msgstr "A4x8"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:61
-msgid "paper size|A4x9"
-msgstr "A4x9"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:63
-msgid "paper size|A5"
-msgstr "A5"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:65
-msgid "paper size|A5 Extra"
-msgstr "A5 Extra"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:67
-msgid "paper size|A6"
-msgstr "A6"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:69
-msgid "paper size|A7"
-msgstr "A7"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:71
-msgid "paper size|A8"
-msgstr "A8"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:73
-msgid "paper size|A9"
-msgstr "A9"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:75
-msgid "paper size|B0"
-msgstr "B0"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:77
-msgid "paper size|B1"
-msgstr "B1"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:79
-msgid "paper size|B10"
-msgstr "B10"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:81
-msgid "paper size|B2"
-msgstr "B2"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:83
-msgid "paper size|B3"
-msgstr "B3"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:85
-msgid "paper size|B4"
-msgstr "B4"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:87
-msgid "paper size|B5"
-msgstr "B5"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:89
-msgid "paper size|B5 Extra"
-msgstr "B5 Extra"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:91
-msgid "paper size|B6"
-msgstr "B6"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:93
-msgid "paper size|B6/C4"
-msgstr "B6/C4"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:95
-msgid "paper size|B7"
-msgstr "B7"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:97
-msgid "paper size|B8"
-msgstr "B8"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:99
-msgid "paper size|B9"
-msgstr "B9"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:101
-msgid "paper size|C0"
-msgstr "C0"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:103
-msgid "paper size|C1"
-msgstr "C1"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:105
-msgid "paper size|C10"
-msgstr "C10"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:107
-msgid "paper size|C2"
-msgstr "C2"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:109
-msgid "paper size|C3"
-msgstr "C3"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:111
-msgid "paper size|C4"
-msgstr "C4"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:113
-msgid "paper size|C5"
-msgstr "C5"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:115
-msgid "paper size|C6"
-msgstr "C6"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:117
-msgid "paper size|C6/C5"
-msgstr "C6/C5"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:119
-msgid "paper size|C7"
-msgstr "C7"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:121
-msgid "paper size|C7/C6"
-msgstr "C7/C6"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:123
-msgid "paper size|C8"
-msgstr "C8"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:125
-msgid "paper size|C9"
-msgstr "C9"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:127
-msgid "paper size|DL Envelope"
-msgstr "Zarf DL"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:129
-msgid "paper size|RA0"
-msgstr "RA0"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:131
-msgid "paper size|RA1"
-msgstr "RA1"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:133
-msgid "paper size|RA2"
-msgstr "RA2"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:135
-msgid "paper size|SRA0"
-msgstr "SRA0"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:137
-msgid "paper size|SRA1"
-msgstr "SRA1"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:139
-msgid "paper size|SRA2"
-msgstr "SRA2"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:141
-msgid "paper size|JB0"
-msgstr "JB0"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:143
-msgid "paper size|JB1"
-msgstr "JB1"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:145
-msgid "paper size|JB10"
-msgstr "JB10"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:147
-msgid "paper size|JB2"
-msgstr "JB2"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:149
-msgid "paper size|JB3"
-msgstr "JB3"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:151
-msgid "paper size|JB4"
-msgstr "JB4"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:153
-msgid "paper size|JB5"
-msgstr "JB5"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:155
-msgid "paper size|JB6"
-msgstr "JB6"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:157
-msgid "paper size|JB7"
-msgstr "JB7"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:159
-msgid "paper size|JB8"
-msgstr "JB8"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:161
-msgid "paper size|JB9"
-msgstr "JB9"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:163
-msgid "paper size|jis exec"
-msgstr "jis exec"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:165
-msgid "paper size|Choukei 2 Envelope"
-msgstr "Zarf Choukei 2"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:167
-msgid "paper size|Choukei 3 Envelope"
-msgstr "Zarf Choukei 3"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:169
-msgid "paper size|Choukei 4 Envelope"
-msgstr "Zarf Choukei 4"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:171
-msgid "paper size|hagaki (postcard)"
-msgstr "hagaki (kartolinë)"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:173
-msgid "paper size|kahu Envelope"
-msgstr "Zarf kahu"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:175
-msgid "paper size|kaku2 Envelope"
-msgstr "Zarf kaku2"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:177
-msgid "paper size|oufuku (reply postcard)"
-msgstr "oufuku (kartolinë përgjigje)"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:179
-msgid "paper size|you4 Envelope"
-msgstr "Zarf you4"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:181
-msgid "paper size|10x11"
-msgstr "10x11"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:183
-msgid "paper size|10x13"
-msgstr "10x13"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:185
-msgid "paper size|10x14"
-msgstr "10x14"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:187 gtk/paper_names_offsets.c:189
-msgid "paper size|10x15"
-msgstr "10x15"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:191
-msgid "paper size|11x12"
-msgstr "11x12"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:193
-msgid "paper size|11x15"
-msgstr "11x15"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:195
-msgid "paper size|12x19"
-msgstr "12x19"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:197
-msgid "paper size|5x7"
-msgstr "5x7"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:199
-msgid "paper size|6x9 Envelope"
-msgstr "Zarf 6x9"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:201
-msgid "paper size|7x9 Envelope"
-msgstr "Zarf 7x9"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:203
-msgid "paper size|9x11 Envelope"
-msgstr "Zarf 9x11"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:205
-msgid "paper size|a2 Envelope"
-msgstr "Zarf a2"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:207
-msgid "paper size|Arch A"
-msgstr "Arch A"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:209
-msgid "paper size|Arch B"
-msgstr "Arch B"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:211
-msgid "paper size|Arch C"
-msgstr "Arch C"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:213
-msgid "paper size|Arch D"
-msgstr "Arch D"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:215
-msgid "paper size|Arch E"
-msgstr "Arch E"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:217
-msgid "paper size|b-plus"
-msgstr "b-plus"
-
-# (pofilter) short: checks whether a translation is much shorter than the original string
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:219
-msgid "paper size|c"
-msgstr "c"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:221
-msgid "paper size|c5 Envelope"
-msgstr "Zarf c5"
-
-# (pofilter) short: checks whether a translation is much shorter than the original string
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:223
-msgid "paper size|d"
-msgstr "d"
-
-# (pofilter) short: checks whether a translation is much shorter than the original string
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:225
-msgid "paper size|e"
-msgstr "e"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:227
-msgid "paper size|edp"
-msgstr "edp"
-
-# (pofilter) simplecaps: checks the capitalisation of two strings isn't wildly different
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:229
-msgid "paper size|European edp"
-msgstr "edp evropian"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:231
-msgid "paper size|Executive"
-msgstr "Executive"
-
-# (pofilter) short: checks whether a translation is much shorter than the original string
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:233
-msgid "paper size|f"
-msgstr "f"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:235
-msgid "paper size|FanFold European"
-msgstr "Modul i vazhdueshëm evropian"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-# (pofilter) acronyms: acronyms should not be translated: US
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:237
-msgid "paper size|FanFold US"
-msgstr "Modul i vazhdueshëm SHB"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:239
-msgid "paper size|FanFold German Legal"
-msgstr "Modul i vazhdueshëm legal gjerman"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:241
-msgid "paper size|Government Legal"
-msgstr "Legal qeveritare"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:243
-msgid "paper size|Government Letter"
-msgstr "Letter qeveritare"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:245
-msgid "paper size|Index 3x5"
-msgstr "Biletë 3x5"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:247
-msgid "paper size|Index 4x6 (postcard)"
-msgstr "Biletë 4x6 (kartolinë)"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:249
-msgid "paper size|Index 4x6 ext"
-msgstr "Biletë 4x6 ext"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:251
-msgid "paper size|Index 5x8"
-msgstr "Biletë 5x8"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:253
-msgid "paper size|Invoice"
-msgstr "Faturë"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:255
-msgid "paper size|Tabloid"
-msgstr "Tabloid"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:257
-msgid "paper size|US Legal"
-msgstr "US Legal"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:259
-msgid "paper size|US Legal Extra"
-msgstr "US Legal Extra"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:261
-msgid "paper size|US Letter"
-msgstr "US Letter"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:263
-msgid "paper size|US Letter Extra"
-msgstr "US Letter Extra"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:265
-msgid "paper size|US Letter Plus"
-msgstr "US Letter Plus"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:267
-msgid "paper size|Monarch Envelope"
-msgstr "Zarf Monarch"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:269
-msgid "paper size|#10 Envelope"
-msgstr "Zarf #10"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:271
-msgid "paper size|#11 Envelope"
-msgstr "Zarf #11"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:273
-msgid "paper size|#12 Envelope"
-msgstr "Zarf #12"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:275
-msgid "paper size|#14 Envelope"
-msgstr "Zarf #14"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:277
-msgid "paper size|#9 Envelope"
-msgstr "Zarf #9"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:279
-msgid "paper size|Personal Envelope"
-msgstr "Zarf personal"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:281
-msgid "paper size|Quarto"
-msgstr "Quarto"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:283
-msgid "paper size|Super A"
-msgstr "Super A"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:285
-msgid "paper size|Super B"
-msgstr "Super B"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:287
-msgid "paper size|Wide Format"
-msgstr "Format i gjërë"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:289
-msgid "paper size|Dai-pa-kai"
-msgstr "Dai-pa-kai"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:291
-msgid "paper size|Folio"
-msgstr "Folio"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:293
-msgid "paper size|Folio sp"
-msgstr "Folio sp"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:295
-msgid "paper size|Invite Envelope"
-msgstr "Zarf ftese"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:297
-msgid "paper size|Italian Envelope"
-msgstr "Zarf italian"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:299
-msgid "paper size|juuro-ku-kai"
-msgstr "juuro-ku-kai"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:301
-msgid "paper size|pa-kai"
-msgstr "pa-kai"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:303
-msgid "paper size|Postfix Envelope"
-msgstr "Zarf Postfix"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:305
-msgid "paper size|Small Photo"
-msgstr "Foto e vogël"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:307
-msgid "paper size|prc1 Envelope"
-msgstr "Zarf prc1"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:309
-msgid "paper size|prc10 Envelope"
-msgstr "Zarf prc10"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:311
-msgid "paper size|prc 16k"
-msgstr "prc 16k"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:313
-msgid "paper size|prc2 Envelope"
-msgstr "Zarf prc2"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:315
-msgid "paper size|prc3 Envelope"
-msgstr "Zarf prc3"
-
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:317
-msgid "paper size|prc 32k"
-msgstr "prc 32k"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:319
-msgid "paper size|prc4 Envelope"
-msgstr "Zarf prc4"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:321
-msgid "paper size|prc5 Envelope"
-msgstr "Zarf prc5"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:323
-msgid "paper size|prc6 Envelope"
-msgstr "Zarf prc6"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:325
-msgid "paper size|prc7 Envelope"
-msgstr "Zarf prc7"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:327
-msgid "paper size|prc8 Envelope"
-msgstr "Zarf prc8"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:329
-msgid "paper size|ROC 16k"
-msgstr "ROC 16k"
-
-# (pofilter) startcaps: checks that the message starts with the correct capitalisation
-#. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:331
-msgid "paper size|ROC 8k"
-msgstr "ROC 8k"
+msgctxt "volume percentage"
+msgid "%d %%"
+msgstr ""
 
 # (pofilter) startcaps: checks that the message starts with the correct capitalisation
 #: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
@@ -4708,171 +3104,171 @@ msgstr "Vietnameze (VIQR)"
 msgid "X Input Method"
 msgstr "Metodë Futjeje për X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1115
+#: modules/printbackends/cups/gtkprintbackendcups.c:1171
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "Printuesi '%s' është duke mbaruar bojën."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1116
+#: modules/printbackends/cups/gtkprintbackendcups.c:1172
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "Printuesi '%s' nuk ka më bojë."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1118
+#: modules/printbackends/cups/gtkprintbackendcups.c:1174
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "Printuesi '%s' është mbrapa në zhvillim."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1120
+#: modules/printbackends/cups/gtkprintbackendcups.c:1176
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "Printuesi '%s' nuk suportohet më."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1122
+#: modules/printbackends/cups/gtkprintbackendcups.c:1178
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "Printeri '%s' është duke mbaruar të paktën një nga ngjyrat."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1124
+#: modules/printbackends/cups/gtkprintbackendcups.c:1180
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "Printeri '%s' ka mbaruar të paktën një nga ngjyrat."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1125
+#: modules/printbackends/cups/gtkprintbackendcups.c:1181
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "Kapaku është i hapur tek printeri '%s'."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1126
+#: modules/printbackends/cups/gtkprintbackendcups.c:1182
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "Porta është e hapur tek printeri '%s'."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1127
+#: modules/printbackends/cups/gtkprintbackendcups.c:1183
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "Printri '%s' është duke mbaruar letrat."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1128
+#: modules/printbackends/cups/gtkprintbackendcups.c:1184
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "Printeri '%s' nuk ka më letra."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1129
+#: modules/printbackends/cups/gtkprintbackendcups.c:1185
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "Printeri '%s' është aktualisht jashtë linje."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1130
+#: modules/printbackends/cups/gtkprintbackendcups.c:1186
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "Printeri '%s' mund të jetë i palidhur."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1131
+#: modules/printbackends/cups/gtkprintbackendcups.c:1187
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Ka një problem me printerin '%s'."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1410
+#: modules/printbackends/cups/gtkprintbackendcups.c:1466
 msgid "Paused ; Rejecting Jobs"
 msgstr "Pezulluar ; Duke refuzuar punët"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1416
+#: modules/printbackends/cups/gtkprintbackendcups.c:1472
 msgid "Rejecting Jobs"
 msgstr "Duke refuzuar punët"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2084
+#: modules/printbackends/cups/gtkprintbackendcups.c:2140
 msgid "Two Sided"
 msgstr "Para-mbrapa"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2085
+#: modules/printbackends/cups/gtkprintbackendcups.c:2141
 msgid "Paper Type"
 msgstr "Lloji i letrës"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2086
+#: modules/printbackends/cups/gtkprintbackendcups.c:2142
 msgid "Paper Source"
 msgstr "Burimi i letrës"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2087
+#: modules/printbackends/cups/gtkprintbackendcups.c:2143
 msgid "Output Tray"
 msgstr "Sirtari i daljes"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2096
+#: modules/printbackends/cups/gtkprintbackendcups.c:2152
 msgid "One Sided"
 msgstr "Faqe njëshe"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2098
-#: modules/printbackends/cups/gtkprintbackendcups.c:2100
-#: modules/printbackends/cups/gtkprintbackendcups.c:2108
+#: modules/printbackends/cups/gtkprintbackendcups.c:2154
+#: modules/printbackends/cups/gtkprintbackendcups.c:2156
+#: modules/printbackends/cups/gtkprintbackendcups.c:2164
 msgid "Auto Select"
 msgstr "Zgjedhje automatike"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2102
-#: modules/printbackends/cups/gtkprintbackendcups.c:2104
-#: modules/printbackends/cups/gtkprintbackendcups.c:2106
-#: modules/printbackends/cups/gtkprintbackendcups.c:2577
+#: modules/printbackends/cups/gtkprintbackendcups.c:2158
+#: modules/printbackends/cups/gtkprintbackendcups.c:2160
+#: modules/printbackends/cups/gtkprintbackendcups.c:2162
+#: modules/printbackends/cups/gtkprintbackendcups.c:2633
 msgid "Printer Default"
 msgstr "Rregullimet e prezgjedhura të printuesit"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "Urgent"
 msgstr "Urgjente"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "High"
 msgstr "E lartë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "Medium"
 msgstr "Mesatare"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2830
 msgid "Low"
 msgstr "E ulët"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "Left to right, top to bottom"
 msgstr "Nga e majta në të djathtë, nga sipër poshtë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "Left to right, bottom to top"
 msgstr "Nga e majta në të djathtë, nga poshtë lart"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2836
 msgid "Right to left, top to bottom"
 msgstr "Nga e djathta në të majtë, nga sipër poshtë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2836
 msgid "Right to left, bottom to top"
 msgstr "Nga e djathta në të majtë, nga poshtë lart"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2837
 msgid "Top to bottom, left to right"
 msgstr "Nga sipër poshtë, nga e majta në të djathtë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: modules/printbackends/cups/gtkprintbackendcups.c:2837
 msgid "Top to bottom, right to left"
 msgstr "Nga sipër poshtë, nga e djathta në të majtë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2838
 msgid "Bottom to top, left to right"
 msgstr "Nga poshtë sipër, nga e majta në të djathtë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: modules/printbackends/cups/gtkprintbackendcups.c:2838
 msgid "Bottom to top, right to left"
 msgstr "Nga poshtë sipër, nga e djathta në të majtë"
 
@@ -4880,7 +3276,7 @@ msgstr "Nga poshtë sipër, nga e djathta në të majtë"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: modules/printbackends/cups/gtkprintbackendcups.c:2853
 #, fuzzy
 msgid "Pages per Sheet"
 msgstr "Faqe për fletë"
@@ -4888,59 +3284,59 @@ msgstr "Faqe për fletë"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2834
+#: modules/printbackends/cups/gtkprintbackendcups.c:2890
 msgid "Job Priority"
 msgstr "Prioriteti i punës"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2845
+#: modules/printbackends/cups/gtkprintbackendcups.c:2901
 msgid "Billing Info"
 msgstr "Informacione mbi faturimin"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "None"
 msgstr "Asnjë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Classified"
 msgstr "Klasifikimi"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Confidential"
 msgstr "Në konfidencë"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Secret"
 msgstr "Sekrete"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Standard"
 msgstr "Standart"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Top Secret"
 msgstr "Top sekret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2859
+#: modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Unclassified"
 msgstr "Pa klasifikim"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2894
+#: modules/printbackends/cups/gtkprintbackendcups.c:2950
 msgid "Before"
 msgstr "Para"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2909
+#: modules/printbackends/cups/gtkprintbackendcups.c:2965
 msgid "After"
 msgstr "Mbas"
 
@@ -4948,14 +3344,14 @@ msgstr "Mbas"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2929
+#: modules/printbackends/cups/gtkprintbackendcups.c:2985
 msgid "Print at"
 msgstr "Printo në"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2940
+#: modules/printbackends/cups/gtkprintbackendcups.c:2996
 msgid "Print at time"
 msgstr "Printo në orën"
 
@@ -4966,7 +3362,7 @@ msgstr "Printo në orën"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2975
+#: modules/printbackends/cups/gtkprintbackendcups.c:3031
 #, c-format
 msgid "Custom %sx%s"
 msgstr "E personalizuar %sx%s"
@@ -4978,53 +3374,53 @@ msgstr "E personalizuar %sx%s"
 msgid "output.%s"
 msgstr "output.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:466
+#: modules/printbackends/file/gtkprintbackendfile.c:469
 msgid "Print to File"
 msgstr "Printo në file"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:543
+#: modules/printbackends/file/gtkprintbackendfile.c:546
 msgid "PDF"
 msgstr "PDF"
 
 # (pofilter) unchanged: please translate
-#: modules/printbackends/file/gtkprintbackendfile.c:543
+#: modules/printbackends/file/gtkprintbackendfile.c:546
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:555
-#: modules/printbackends/test/gtkprintbackendtest.c:503
+#: modules/printbackends/file/gtkprintbackendfile.c:558
+#: modules/printbackends/test/gtkprintbackendtest.c:506
 msgid "Pages per _sheet:"
 msgstr "Faqe për _fletë:"
 
 # (pofilter) unchanged: please translate
-#: modules/printbackends/file/gtkprintbackendfile.c:601
+#: modules/printbackends/file/gtkprintbackendfile.c:604
 msgid "File"
 msgstr "File"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:610
+#: modules/printbackends/file/gtkprintbackendfile.c:613
 msgid "_Output format"
 msgstr "Formati i _output"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:398
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:400
 msgid "Print to LPR"
 msgstr "Printo në LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:424
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:426
 msgid "Pages Per Sheet"
 msgstr "Faqe për fletë"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:431
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:433
 msgid "Command Line"
 msgstr "Rreshti i komandës"
 
 # (pofilter) unchanged: please translate
 #. default filename used for print-to-test
-#: modules/printbackends/test/gtkprintbackendtest.c:235
+#: modules/printbackends/test/gtkprintbackendtest.c:234
 #, c-format
 msgid "test-output.%s"
 msgstr "test-output.%s"
 
-#: modules/printbackends/test/gtkprintbackendtest.c:467
+#: modules/printbackends/test/gtkprintbackendtest.c:470
 msgid "Print to Test Printer"
 msgstr "Printo në Test Printer"
 
@@ -5032,3 +3428,1180 @@ msgstr "Printo në Test Printer"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "E pamundur marrja e informacioneve për file '%s': %s"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|BackSpace"
+#~ msgstr "Mbrapsht"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Tab"
+#~ msgstr "Tab"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Return"
+#~ msgstr "Zbato"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Pause"
+#~ msgstr "Pauzë"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Scroll_Lock"
+#~ msgstr "Scroll_Lock"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Sys_Req"
+#~ msgstr "Sys_Req"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Escape"
+#~ msgstr "Escape"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Multi_key"
+#~ msgstr "Multi_key"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Home"
+#~ msgstr "Shtëpia"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Left"
+#~ msgstr "Majtas"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Up"
+#~ msgstr "Sipër"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Right"
+#~ msgstr "Djathtas"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Down"
+#~ msgstr "Poshtë"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Page_Up"
+#~ msgstr "Faqja_sipër"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Page_Down"
+#~ msgstr "Faqja_Poshtë"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|End"
+#~ msgstr "Fundi"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Begin"
+#~ msgstr "Fillimi"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Print"
+#~ msgstr "Printo"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Insert"
+#~ msgstr "Shto"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Num_Lock"
+#~ msgstr "Num_Lock"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Space"
+#~ msgstr "KP_Space"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Tab"
+#~ msgstr "KP_Tab"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Enter"
+#~ msgstr "KP_Enter"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Home"
+#~ msgstr "KP_Home"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Left"
+#~ msgstr "KP_Left"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Up"
+#~ msgstr "KP_Up"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Right"
+#~ msgstr "KP_Right"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Down"
+#~ msgstr "KP_Down"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Page_Up"
+#~ msgstr "KP_Page_Up"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Prior"
+#~ msgstr "KP_Prior"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Page_Down"
+#~ msgstr "KP_Page_Down"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Next"
+#~ msgstr "KP_Next"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_End"
+#~ msgstr "KP_End"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Begin"
+#~ msgstr "KP_Begin"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Insert"
+#~ msgstr "KP_Insert"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|KP_Delete"
+#~ msgstr "KP_Delete"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Delete"
+#~ msgstr "Delete"
+
+# (pofilter) doublequoting: checks whether doublequoting is consistent between the two strings
+#~ msgid "Couldn't create pixbuf"
+#~ msgstr "I pamundur krijimi i \"pixbuf\""
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Shift"
+#~ msgstr "Shift"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Ctrl"
+#~ msgstr "Ctrl"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Alt"
+#~ msgstr "Alt"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Super"
+#~ msgstr "Super"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Hyper"
+#~ msgstr "Hyper"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Meta"
+#~ msgstr "Meta"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Space"
+#~ msgstr "Space"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "keyboard label|Backslash"
+#~ msgstr "Mbrapsht"
+
+# (pofilter) purepunc: checks that strings that are purely punctuation are not changed
+#~ msgid "year measurement template|2000"
+#~ msgstr "2000"
+
+# (pofilter) short: checks whether a translation is much shorter than the original string
+#~ msgid "calendar:day:digits|%d"
+#~ msgstr "%d"
+
+# (pofilter) short: checks whether a translation is much shorter than the original string
+#~ msgid "calendar:week:digits|%d"
+#~ msgstr "%d"
+
+# (pofilter) short: checks whether a translation is much shorter than the original string
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "calendar year format|%Y"
+#~ msgstr "%Y"
+
+#~ msgid "Accelerator|Disabled"
+#~ msgstr "Ja aktiv"
+
+#~ msgid "progress bar label|%d %%"
+#~ msgstr "%d %%"
+
+# (pofilter) unchanged: please translate
+#~ msgid "%.1f KB"
+#~ msgstr "%.1f KB"
+
+# (pofilter) unchanged: please translate
+#~ msgid "%.1f MB"
+#~ msgstr "%.1f MB"
+
+# (pofilter) unchanged: please translate
+#~ msgid "%.1f GB"
+#~ msgstr "%.1f GB"
+
+#~ msgid "input method menu|System"
+#~ msgstr "Sistemi"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "print operation status|Initial state"
+#~ msgstr "Faza e nisjes"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "print operation status|Preparing to print"
+#~ msgstr "Përgatitje për printim"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "print operation status|Generating data"
+#~ msgstr "Gjenerimi i të dhënave"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "print operation status|Sending data"
+#~ msgstr "Duke dërguar të dhënat"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "print operation status|Waiting"
+#~ msgstr "Në pritje"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "print operation status|Blocking on issue"
+#~ msgstr "Bllokuar për shkak të një problemi"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "print operation status|Printing"
+#~ msgstr "Duke shtypur"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "print operation status|Finished"
+#~ msgstr "U përfundua"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "print operation status|Finished with error"
+#~ msgstr "Përfundoi me gabim"
+
+#~ msgid "recent menu label|_%d. %s"
+#~ msgstr "_%d. %s"
+
+#~ msgid "recent menu label|%d. %s"
+#~ msgstr "%d. %s"
+
+#~ msgid "Information"
+#~ msgstr "Informacione"
+
+#~ msgid "Warning"
+#~ msgstr "Paralajmërim"
+
+#~ msgid "Error"
+#~ msgstr "Gabim"
+
+#~ msgid "Question"
+#~ msgstr "Pyetje"
+
+#~ msgid "_About"
+#~ msgstr "_Informacione"
+
+#~ msgid "_Apply"
+#~ msgstr "_Apliko"
+
+#~ msgid "_Bold"
+#~ msgstr "_Me të trasha"
+
+#~ msgid "_Cancel"
+#~ msgstr "_Anullo"
+
+# (pofilter) unchanged: please translate
+#~ msgid "_CD-Rom"
+#~ msgstr "_CD-Rom"
+
+#~ msgid "_Clear"
+#~ msgstr "_Pastro"
+
+#~ msgid "_Close"
+#~ msgstr "_Mbyll"
+
+#~ msgid "C_onnect"
+#~ msgstr "L_idhu"
+
+#~ msgid "_Convert"
+#~ msgstr "_Konverto"
+
+#~ msgid "_Copy"
+#~ msgstr "_Kopjo"
+
+#~ msgid "Cu_t"
+#~ msgstr "Pre_je"
+
+#~ msgid "_Delete"
+#~ msgstr "_Elemino"
+
+#~ msgid "_Discard"
+#~ msgstr "_Kapërce"
+
+#~ msgid "_Disconnect"
+#~ msgstr "_Shkëputu"
+
+#~ msgid "_Execute"
+#~ msgstr "_Zbato"
+
+#~ msgid "_Edit"
+#~ msgstr "_Ndrysho"
+
+#~ msgid "_Find"
+#~ msgstr "_Gjej"
+
+#~ msgid "Find and _Replace"
+#~ msgstr "Gjej dhe _Zëvendëso"
+
+#~ msgid "_Floppy"
+#~ msgstr "_Disketë"
+
+#~ msgid "_Fullscreen"
+#~ msgstr "_Ekran i plotë"
+
+#~ msgid "_Leave Fullscreen"
+#~ msgstr "_Dil nga modaliteti me ekran të plotë"
+
+#~ msgid "Navigation|_Bottom"
+#~ msgstr "_Poshtë"
+
+#~ msgid "Navigation|_First"
+#~ msgstr "_E Para"
+
+#~ msgid "Navigation|_Last"
+#~ msgstr "_E fundit"
+
+#~ msgid "Navigation|_Top"
+#~ msgstr "_Në majë"
+
+#~ msgid "Navigation|_Back"
+#~ msgstr "_Mbrapa"
+
+#~ msgid "Navigation|_Down"
+#~ msgstr "_Poshtë"
+
+#~ msgid "Navigation|_Forward"
+#~ msgstr "_Vazhdo"
+
+#~ msgid "Navigation|_Up"
+#~ msgstr "_Sipër"
+
+#~ msgid "_Harddisk"
+#~ msgstr "_Diskfiks"
+
+#~ msgid "_Help"
+#~ msgstr "_Ndihmë"
+
+#~ msgid "_Home"
+#~ msgstr "_Shtëpia"
+
+#~ msgid "Increase Indent"
+#~ msgstr "Shto ngushtimin"
+
+#~ msgid "Decrease Indent"
+#~ msgstr "Zvogëlo ngushtimin"
+
+#~ msgid "_Index"
+#~ msgstr "_Treguesi"
+
+#~ msgid "_Information"
+#~ msgstr "_Informacione"
+
+# (pofilter) unchanged: please translate
+#~ msgid "_Italic"
+#~ msgstr "_Italic"
+
+#~ msgid "_Jump to"
+#~ msgstr "_Kalo tek"
+
+#~ msgid "Justify|_Center"
+#~ msgstr "_Në qendër"
+
+#~ msgid "Justify|_Fill"
+#~ msgstr "_Përshtat"
+
+#~ msgid "Justify|_Left"
+#~ msgstr "_Majtas"
+
+#~ msgid "Justify|_Right"
+#~ msgstr "_Djathtas"
+
+#~ msgid "Media|_Forward"
+#~ msgstr "_Vazhdo"
+
+#~ msgid "Media|_Next"
+#~ msgstr "_Në vazhdim"
+
+#~ msgid "Media|P_ause"
+#~ msgstr "P_ezullo"
+
+#~ msgid "Media|_Play"
+#~ msgstr "_Luaj"
+
+#~ msgid "Media|Pre_vious"
+#~ msgstr "Par_aardhësi"
+
+#~ msgid "Media|_Record"
+#~ msgstr "_Regjistrim"
+
+#~ msgid "Media|R_ewind"
+#~ msgstr "R_ikthe"
+
+#~ msgid "Media|_Stop"
+#~ msgstr "_Ndalo"
+
+#~ msgid "_Network"
+#~ msgstr "_Rrjeti"
+
+#~ msgid "_New"
+#~ msgstr "_E re"
+
+#~ msgid "_No"
+#~ msgstr "_Jo"
+
+#~ msgid "_OK"
+#~ msgstr "_OK"
+
+#~ msgid "_Open"
+#~ msgstr "_Hap"
+
+#~ msgid "Landscape"
+#~ msgstr "Horizontale"
+
+#~ msgid "Portrait"
+#~ msgstr "Vertikale"
+
+#~ msgid "Reverse landscape"
+#~ msgstr "Horizontale e përmbysur"
+
+#~ msgid "Reverse portrait"
+#~ msgstr "Vertikale e përmbysur"
+
+#~ msgid "Page Set_up"
+#~ msgstr "Rreg_ullimet e faqes"
+
+#~ msgid "_Paste"
+#~ msgstr "_Ngjite"
+
+#~ msgid "_Preferences"
+#~ msgstr "_Preferimet"
+
+#~ msgid "_Print"
+#~ msgstr "_Printo"
+
+#~ msgid "Print Pre_view"
+#~ msgstr "Pamja e _parë e printimit"
+
+#~ msgid "_Properties"
+#~ msgstr "_Pronësitë"
+
+#~ msgid "_Quit"
+#~ msgstr "_Dalja"
+
+#~ msgid "_Redo"
+#~ msgstr "_Përsërit"
+
+#~ msgid "_Refresh"
+#~ msgstr "_Rifreskim"
+
+#~ msgid "_Revert"
+#~ msgstr "_Rikthe"
+
+#~ msgid "_Save"
+#~ msgstr "_Ruaj"
+
+#~ msgid "Save _As"
+#~ msgstr "Ruaj _si"
+
+#~ msgid "Select _All"
+#~ msgstr "Zgjidh _gjithçka"
+
+#~ msgid "_Color"
+#~ msgstr "_Ngjyra"
+
+#~ msgid "_Font"
+#~ msgstr "_Gërmat"
+
+#~ msgid "_Ascending"
+#~ msgstr "_Në ngjitje"
+
+#~ msgid "_Descending"
+#~ msgstr "_Në zbritje"
+
+#~ msgid "_Spell Check"
+#~ msgstr "Kontrolli drejt_shkrimor"
+
+#~ msgid "_Stop"
+#~ msgstr "_Ndalo"
+
+#~ msgid "_Strikethrough"
+#~ msgstr "_Vizuar"
+
+#~ msgid "_Undelete"
+#~ msgstr "_Anullo eleminimin"
+
+#~ msgid "_Underline"
+#~ msgstr "_Nënvizimi"
+
+#~ msgid "_Undo"
+#~ msgstr "_Anullo"
+
+#~ msgid "_Yes"
+#~ msgstr "_Po"
+
+#~ msgid "_Normal Size"
+#~ msgstr "Madhësi _normale"
+
+#~ msgid "Best _Fit"
+#~ msgstr "Për_shtate"
+
+#~ msgid "Zoom _In"
+#~ msgstr "Z_madhim"
+
+#~ msgid "Zoom _Out"
+#~ msgstr "Z_vogëlim"
+
+#~ msgid "volume percentage|%d %%"
+#~ msgstr "%d %%"
+
+#~ msgid "paper size|asme_f"
+#~ msgstr "asme_f"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A0x2"
+#~ msgstr "A0x2"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A0"
+#~ msgstr "A0"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A0x3"
+#~ msgstr "A0x3"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A1"
+#~ msgstr "A1"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A10"
+#~ msgstr "A10"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A1x3"
+#~ msgstr "A1x3"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A1x4"
+#~ msgstr "A1x4"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A2"
+#~ msgstr "A2"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A2x3"
+#~ msgstr "A2x3"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A2x4"
+#~ msgstr "A2x4"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A2x5"
+#~ msgstr "A2x5"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A3"
+#~ msgstr "A3"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A3 Extra"
+#~ msgstr "A3 Extra"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A3x3"
+#~ msgstr "A3x3"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A3x4"
+#~ msgstr "A3x4"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A3x5"
+#~ msgstr "A3x5"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A3x6"
+#~ msgstr "A3x6"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A3x7"
+#~ msgstr "A3x7"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A4"
+#~ msgstr "A4"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A4 Extra"
+#~ msgstr "A4 Extra"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A4 Tab"
+#~ msgstr "A4 Tab"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A4x3"
+#~ msgstr "A4x3"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A4x4"
+#~ msgstr "A4x4"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A4x5"
+#~ msgstr "A4x5"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A4x6"
+#~ msgstr "A4x6"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A4x7"
+#~ msgstr "A4x7"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A4x8"
+#~ msgstr "A4x8"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A4x9"
+#~ msgstr "A4x9"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A5"
+#~ msgstr "A5"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A5 Extra"
+#~ msgstr "A5 Extra"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A6"
+#~ msgstr "A6"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A7"
+#~ msgstr "A7"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A8"
+#~ msgstr "A8"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|A9"
+#~ msgstr "A9"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|B0"
+#~ msgstr "B0"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|B1"
+#~ msgstr "B1"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|B10"
+#~ msgstr "B10"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|B2"
+#~ msgstr "B2"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|B3"
+#~ msgstr "B3"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|B4"
+#~ msgstr "B4"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|B5"
+#~ msgstr "B5"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|B5 Extra"
+#~ msgstr "B5 Extra"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|B6"
+#~ msgstr "B6"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|B6/C4"
+#~ msgstr "B6/C4"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|B7"
+#~ msgstr "B7"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|B8"
+#~ msgstr "B8"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|B9"
+#~ msgstr "B9"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|C0"
+#~ msgstr "C0"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|C1"
+#~ msgstr "C1"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|C10"
+#~ msgstr "C10"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|C2"
+#~ msgstr "C2"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|C3"
+#~ msgstr "C3"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|C4"
+#~ msgstr "C4"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|C5"
+#~ msgstr "C5"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|C6"
+#~ msgstr "C6"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|C6/C5"
+#~ msgstr "C6/C5"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|C7"
+#~ msgstr "C7"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|C7/C6"
+#~ msgstr "C7/C6"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|C8"
+#~ msgstr "C8"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|C9"
+#~ msgstr "C9"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|DL Envelope"
+#~ msgstr "Zarf DL"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|RA0"
+#~ msgstr "RA0"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|RA1"
+#~ msgstr "RA1"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|RA2"
+#~ msgstr "RA2"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|SRA0"
+#~ msgstr "SRA0"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|SRA1"
+#~ msgstr "SRA1"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|SRA2"
+#~ msgstr "SRA2"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|JB0"
+#~ msgstr "JB0"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|JB1"
+#~ msgstr "JB1"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|JB10"
+#~ msgstr "JB10"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|JB2"
+#~ msgstr "JB2"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|JB3"
+#~ msgstr "JB3"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|JB4"
+#~ msgstr "JB4"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|JB5"
+#~ msgstr "JB5"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|JB6"
+#~ msgstr "JB6"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|JB7"
+#~ msgstr "JB7"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|JB8"
+#~ msgstr "JB8"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|JB9"
+#~ msgstr "JB9"
+
+#~ msgid "paper size|jis exec"
+#~ msgstr "jis exec"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Choukei 2 Envelope"
+#~ msgstr "Zarf Choukei 2"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Choukei 3 Envelope"
+#~ msgstr "Zarf Choukei 3"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Choukei 4 Envelope"
+#~ msgstr "Zarf Choukei 4"
+
+#~ msgid "paper size|hagaki (postcard)"
+#~ msgstr "hagaki (kartolinë)"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|kahu Envelope"
+#~ msgstr "Zarf kahu"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|kaku2 Envelope"
+#~ msgstr "Zarf kaku2"
+
+#~ msgid "paper size|oufuku (reply postcard)"
+#~ msgstr "oufuku (kartolinë përgjigje)"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|you4 Envelope"
+#~ msgstr "Zarf you4"
+
+#~ msgid "paper size|10x11"
+#~ msgstr "10x11"
+
+#~ msgid "paper size|10x13"
+#~ msgstr "10x13"
+
+#~ msgid "paper size|10x14"
+#~ msgstr "10x14"
+
+#~ msgid "paper size|10x15"
+#~ msgstr "10x15"
+
+#~ msgid "paper size|11x12"
+#~ msgstr "11x12"
+
+#~ msgid "paper size|11x15"
+#~ msgstr "11x15"
+
+#~ msgid "paper size|12x19"
+#~ msgstr "12x19"
+
+#~ msgid "paper size|5x7"
+#~ msgstr "5x7"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|6x9 Envelope"
+#~ msgstr "Zarf 6x9"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|7x9 Envelope"
+#~ msgstr "Zarf 7x9"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|9x11 Envelope"
+#~ msgstr "Zarf 9x11"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|a2 Envelope"
+#~ msgstr "Zarf a2"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Arch A"
+#~ msgstr "Arch A"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Arch B"
+#~ msgstr "Arch B"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Arch C"
+#~ msgstr "Arch C"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Arch D"
+#~ msgstr "Arch D"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Arch E"
+#~ msgstr "Arch E"
+
+#~ msgid "paper size|b-plus"
+#~ msgstr "b-plus"
+
+# (pofilter) short: checks whether a translation is much shorter than the original string
+#~ msgid "paper size|c"
+#~ msgstr "c"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|c5 Envelope"
+#~ msgstr "Zarf c5"
+
+# (pofilter) short: checks whether a translation is much shorter than the original string
+#~ msgid "paper size|d"
+#~ msgstr "d"
+
+# (pofilter) short: checks whether a translation is much shorter than the original string
+#~ msgid "paper size|e"
+#~ msgstr "e"
+
+#~ msgid "paper size|edp"
+#~ msgstr "edp"
+
+# (pofilter) simplecaps: checks the capitalisation of two strings isn't wildly different
+#~ msgid "paper size|European edp"
+#~ msgstr "edp evropian"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Executive"
+#~ msgstr "Executive"
+
+# (pofilter) short: checks whether a translation is much shorter than the original string
+#~ msgid "paper size|f"
+#~ msgstr "f"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|FanFold European"
+#~ msgstr "Modul i vazhdueshëm evropian"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+# (pofilter) acronyms: acronyms should not be translated: US
+#~ msgid "paper size|FanFold US"
+#~ msgstr "Modul i vazhdueshëm SHB"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|FanFold German Legal"
+#~ msgstr "Modul i vazhdueshëm legal gjerman"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Government Legal"
+#~ msgstr "Legal qeveritare"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Government Letter"
+#~ msgstr "Letter qeveritare"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Index 3x5"
+#~ msgstr "Biletë 3x5"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Index 4x6 (postcard)"
+#~ msgstr "Biletë 4x6 (kartolinë)"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Index 4x6 ext"
+#~ msgstr "Biletë 4x6 ext"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Index 5x8"
+#~ msgstr "Biletë 5x8"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Invoice"
+#~ msgstr "Faturë"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Tabloid"
+#~ msgstr "Tabloid"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|US Legal"
+#~ msgstr "US Legal"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|US Legal Extra"
+#~ msgstr "US Legal Extra"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|US Letter"
+#~ msgstr "US Letter"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|US Letter Extra"
+#~ msgstr "US Letter Extra"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|US Letter Plus"
+#~ msgstr "US Letter Plus"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Monarch Envelope"
+#~ msgstr "Zarf Monarch"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|#10 Envelope"
+#~ msgstr "Zarf #10"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|#11 Envelope"
+#~ msgstr "Zarf #11"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|#12 Envelope"
+#~ msgstr "Zarf #12"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|#14 Envelope"
+#~ msgstr "Zarf #14"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|#9 Envelope"
+#~ msgstr "Zarf #9"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Personal Envelope"
+#~ msgstr "Zarf personal"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Quarto"
+#~ msgstr "Quarto"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Super A"
+#~ msgstr "Super A"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Super B"
+#~ msgstr "Super B"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Wide Format"
+#~ msgstr "Format i gjërë"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Dai-pa-kai"
+#~ msgstr "Dai-pa-kai"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Folio"
+#~ msgstr "Folio"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Folio sp"
+#~ msgstr "Folio sp"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Invite Envelope"
+#~ msgstr "Zarf ftese"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Italian Envelope"
+#~ msgstr "Zarf italian"
+
+#~ msgid "paper size|juuro-ku-kai"
+#~ msgstr "juuro-ku-kai"
+
+#~ msgid "paper size|pa-kai"
+#~ msgstr "pa-kai"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Postfix Envelope"
+#~ msgstr "Zarf Postfix"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|Small Photo"
+#~ msgstr "Foto e vogël"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|prc1 Envelope"
+#~ msgstr "Zarf prc1"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|prc10 Envelope"
+#~ msgstr "Zarf prc10"
+
+#~ msgid "paper size|prc 16k"
+#~ msgstr "prc 16k"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|prc2 Envelope"
+#~ msgstr "Zarf prc2"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|prc3 Envelope"
+#~ msgstr "Zarf prc3"
+
+#~ msgid "paper size|prc 32k"
+#~ msgstr "prc 32k"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|prc4 Envelope"
+#~ msgstr "Zarf prc4"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|prc5 Envelope"
+#~ msgstr "Zarf prc5"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|prc6 Envelope"
+#~ msgstr "Zarf prc6"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|prc7 Envelope"
+#~ msgstr "Zarf prc7"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|prc8 Envelope"
+#~ msgstr "Zarf prc8"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|ROC 16k"
+#~ msgstr "ROC 16k"
+
+# (pofilter) startcaps: checks that the message starts with the correct capitalisation
+#~ msgid "paper size|ROC 8k"
+#~ msgstr "ROC 8k"

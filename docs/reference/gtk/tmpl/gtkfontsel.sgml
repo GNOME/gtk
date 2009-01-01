@@ -65,7 +65,7 @@ only be accessed using the functions below.
 
 </para>
 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_get_font ##### -->
@@ -99,8 +99,8 @@ only be accessed using the functions below.
 
 </para>
 
-@fontsel:
-@Returns:
+@fontsel: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_set_preview_text ##### -->

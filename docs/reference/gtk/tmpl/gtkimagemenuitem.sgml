@@ -27,7 +27,17 @@ fill in the text label.
 </para>
 
 
+<!-- ##### ARG GtkImageMenuItem:accel-group ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkImageMenuItem:image ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImageMenuItem:use-stock ##### -->
 <para>
 
 </para>
@@ -84,5 +94,32 @@ fill in the text label.
 
 @label: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_get_use_stock ##### -->
+<para>
+
+</para>
+
+@image_menu_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_set_use_stock ##### -->
+<para>
+
+</para>
+
+@image_menu_item: 
+@use_stock: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_set_accel_group ##### -->
+<para>
+
+</para>
+
+@image_menu_item: 
+@accel_group: 
 
 

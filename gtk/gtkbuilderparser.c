@@ -634,7 +634,6 @@ parse_interface (ParserData   *data,
     {
       if (strcmp (names[i], "domain") == 0)
 	{
-
 	  if (data->domain)
 	    {
 	      if (strcmp (data->domain, values[i]) == 0)

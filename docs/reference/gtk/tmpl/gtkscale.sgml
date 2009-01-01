@@ -43,7 +43,6 @@ the accessor functions.
 @value: 
 @Returns: 
 
-
 <!-- ##### ARG GtkScale:digits ##### -->
 <para>
 
@@ -84,7 +83,7 @@ the accessor functions.
 </para>
 
 @scale: 
-@draw_value:
+@draw_value: 
 
 
 <!-- ##### FUNCTION gtk_scale_set_value_pos ##### -->
@@ -92,7 +91,7 @@ the accessor functions.
 
 </para>
 
-@scale:
+@scale: 
 @pos: 
 
 
@@ -101,8 +100,8 @@ the accessor functions.
 
 </para>
 
-@scale:
-@Returns:
+@scale: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_scale_get_draw_value ##### -->
@@ -119,8 +118,8 @@ the accessor functions.
 
 </para>
 
-@scale:
-@Returns:
+@scale: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_scale_get_layout ##### -->

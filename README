@@ -1,7 +1,7 @@
 General Information
 ===================
 
-This is GTK+ version 2.14.2. GTK+ is a multi-platform toolkit for
+This is GTK+ version 2.15.0. GTK+ is a multi-platform toolkit for
 creating graphical user interfaces. Offering a complete set of widgets,
 GTK+ is suitable for projects ranging from small one-off projects to
 complete application suites.
@@ -26,14 +26,6 @@ Installation
 
 See the file 'INSTALL'
 
-Release notes for 2.16
-======================
-* The attributes set with gtk_label_set_attributes will now be applied
-  and merged with any other attributes previously effected by way
-  of the GtkLabel:use-underline or GtkLabel:use-markup properties.
-  While it is not recommended to mix markup strings with manually set
-  attributes, if you must; know that the attributes will be applied
-  to the label after the markup string is parsed.
 
 Release notes for 2.14
 ======================
