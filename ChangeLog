@@ -1,3 +1,9 @@
+2009-01-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols: Add a few forgotten symbols
+	* gtk/gtkprintoperation.c:
+	* gtk/gtktrayicon-x11.c: Make some functions static
+
 2008-12-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates

@@ -2161,7 +2161,7 @@ common_render_page (GtkPrintOperation *op,
     gtk_print_operation_draw_page_finish (op);
 }
 
-void
+static void
 prepare_data (PrintPagesData *data)
 {
   GtkPrintOperationPrivate *priv;

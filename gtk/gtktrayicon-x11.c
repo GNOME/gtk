@@ -320,7 +320,7 @@ gtk_tray_icon_get_orientation_property (GtkTrayIcon *icon)
     XFree (prop.prop);
 }
 
-void
+static void
 gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
 {
   GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (icon));
