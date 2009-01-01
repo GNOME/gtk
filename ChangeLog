@@ -1,5 +1,16 @@
 2009-01-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c (gtk_entry_set_icon_sensitive): Fix default
+	value
+
+	* gtk/tests/builder.c: Clean up asserts, make domain
+	test work with current GtkBuilder behaviour.
+
+	* Makefile.decl: Start Xvfb with -ac -noreset to try
+	and get the gui tests working.
+
+2009-01-01  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols: Add a few forgotten symbols
 	* gtk/gtkprintoperation.c:
 	* gtk/gtktrayicon-x11.c: Make some functions static

@@ -7524,7 +7524,8 @@ gtk_entry_get_icon_sensitive (GtkEntry             *entry,
   priv = GTK_ENTRY_GET_PRIVATE (entry);
   icon_info = priv->icons[icon_pos];
 
-  return (icon_info != NULL && !icon_info->insensitive);
+  return (!icon_info || !icon_info->insensitive);
+
 }
 
 /**
