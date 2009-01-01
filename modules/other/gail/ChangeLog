@@ -1,6 +1,6 @@
 2008-12-21  Tor Lillqvist  <tml@novell.com>
 
-	* gaillabel.c: #undef GTK_DISABLE_DEPRECATED here, to get
+	* gaillabel.c: #undef GTK_DISABLE_DEPRECATED here, too, to get
 	GTK_IS_COMBO.
 
 2008-12-15  Li Yuan  <li.yuan@sun.com>
