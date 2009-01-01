@@ -334,7 +334,15 @@ HTML_IMAGES = \
 	$(srcdir)/images/toolbar.png					\
 	$(srcdir)/images/tree-view-coordinates.png			\
 	$(srcdir)/images/volumebutton.png				\
-	$(srcdir)/images/window.png
+	$(srcdir)/images/window.png					\
+	$(srcdir)/images/layout-btlr.png				\
+	$(srcdir)/images/layout-btrl.png				\
+	$(srcdir)/images/layout-lrbt.png				\
+	$(srcdir)/images/layout-lrtb.png				\
+	$(srcdir)/images/layout-rlbt.png				\
+	$(srcdir)/images/layout-rltb.png				\
+	$(srcdir)/images/layout-tblr.png				\
+	$(srcdir)/images/layout-tbrl.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html \
