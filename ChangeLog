@@ -1,5 +1,12 @@
 2009-01-02  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 565998 – configure script doesn't check for cairo-xlib.pc
+
+	* configure.in: Check for cairo-xlib when looking for
+	gdk dependencies. Requested by Alberto Ruiz
+
+2009-01-02  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 566334 – compile failure for gtk+ on Mac OS X
 
 	* gtk/gtkstatusicon.c: Fix the build on OS X. 
