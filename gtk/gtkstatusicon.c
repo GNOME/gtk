@@ -2689,7 +2689,7 @@ gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,
 #endif
 #ifdef GDK_WINDOWING_QUARTZ
   QUARTZ_POOL_ALLOC;
-  [priv->status_item setToolTip:tooltip_text];
+  [priv->status_item setToolTip:text];
   QUARTZ_POOL_RELEASE;
 
   g_free (priv->tooltip_text);

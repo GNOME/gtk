@@ -1,5 +1,12 @@
 2009-01-02  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 566334 – compile failure for gtk+ on Mac OS X
+
+	* gtk/gtkstatusicon.c: Fix the build on OS X. 
+	Reported by Bart Cortooms.
+
+2009-01-02  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 566083 – Icon pixmap hardcoded during DnD
 
 	* gtk/gtkwidget.c:
