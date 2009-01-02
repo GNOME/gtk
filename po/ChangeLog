@@ -1,3 +1,7 @@
+2009-01-03  Daniel Nylander <po@danielnylander.se>
+
+	* sv.po: Updated Swedish translation.
+
 2009-01-02  Luca Ferretti  <elle.uca@libero.it>
 
 	* it.po: Unfuzzy/Copy yet translated stuff after C_() migration.
