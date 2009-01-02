@@ -1,8 +1,10 @@
 2009-01-02  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 566083 – Icon pixmap hardcoded during DnD
+
 	* gtk/gtkwidget.c:
 	* gtk/gtkentry.c: Add docs about using ::drag-begin for setting
-	a custom drag icon.
+	a custom drag icon. Reported by Xan Lopez
 
 2009-01-01  Matthias Clasen  <mclasen@redhat.com>
 
