@@ -1,3 +1,7 @@
+2009-01-02  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
+
+	* es.po: Updated Spanish translation
+
 2009-01-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.15.0 ===
@@ -68,7 +72,6 @@
 2008-10-13  Takeshi AIHANA <takeshi.aihana@gmail.com>
 
 	* ja.po: Fixed wrong translations (Bug #556017).
-
 
 2008-10-12  Jorge Gonzalez  <jorgegonz@svn.gnome.org>   
 
