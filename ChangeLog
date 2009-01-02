@@ -1,3 +1,9 @@
+2009-01-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c:
+	* gtk/gtkentry.c: Add docs about using ::drag-begin for setting
+	a custom drag icon.
+
 2009-01-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version

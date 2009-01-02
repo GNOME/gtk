@@ -7613,6 +7613,11 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
  * signal, and use gtk_entry_get_current_icon_drag_source() in
  * your signal handler to find out if the drag was started from
  * an icon.
+ *
+ * By default, GTK+ uses the icon as the drag icon. You can use the 
+ * #GtkWidget::drag-begin signal to set a different icon. Note that you 
+ * have to use g_signal_connect_after() to ensure that your signal handler
+ * gets executed after the default handler.
  */
 void
 gtk_entry_set_icon_drag_source (GtkEntry             *entry,
