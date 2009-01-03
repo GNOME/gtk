@@ -2,6 +2,15 @@
 
 	Merged from trunk:
 
+        Bug 558694 – Paned window splitter keynav broken
+
+        * gtk/gtkpaned.c (get_child_panes): Don't add unrealized
+        widgets.
+
+2009-01-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
         * Makefile.decl: Start Xvfb with -ac -noreset to try
         and get the gui tests working.
 
