@@ -276,6 +276,7 @@ gtk_tree_store_new (gint n_columns,
 	{
 	  g_warning ("%s: Invalid type %s\n", G_STRLOC, g_type_name (type));
 	  g_object_unref (retval);
+          va_end (args);
 	  return NULL;
 	}
       gtk_tree_store_set_column_type (retval, i, type);
@@ -284,6 +285,7 @@ gtk_tree_store_new (gint n_columns,
 
   return retval;
 }
+
 /**
  * gtk_tree_store_newv:
  * @n_columns: number of columns in the tree store

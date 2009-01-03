@@ -2,6 +2,15 @@
 
 	Merged from trunk:
 
+        Bug 565846 – "va_end(args);" should be added into gtk_tree_store_new
+
+        * gtk/gtktreestore.c (gtk_tree_store_new): Add a missing
+        va_end() call. Pointed out by Jiwon Lee.
+
+2009-01-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
 	* gtk/gtkiconview.c: (gtk_icon_view_accessible_model_row_changed):
         Bug #549251. No need to set name if there is no a11y item object.
 
