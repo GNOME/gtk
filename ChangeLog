@@ -1,3 +1,10 @@
+2009-01-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreesortable.c: Improve the docs
+
+	* gtk/gtktreemodelsort.c: Don't assert when using the "unsorted"
+	sort column id.
+
 2009-01-02  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 565998 – configure script doesn't check for cairo-xlib.pc
