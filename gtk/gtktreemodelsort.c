@@ -1318,29 +1318,32 @@ gtk_tree_model_sort_set_sort_column_id (GtkTreeSortable *sortable,
 {
   GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *)sortable;
 
-  if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
-    {
-      GtkTreeDataSortHeader *header = NULL;
-
-      header = _gtk_tree_data_list_get_header (tree_model_sort->sort_list,
-					       sort_column_id);
-
-      /* we want to make sure that we have a function */
-      g_return_if_fail (header != NULL);
-      g_return_if_fail (header->func != NULL);
-    }
-  else
-    g_return_if_fail (tree_model_sort->default_sort_func != NULL);
-
-  if (tree_model_sort->sort_column_id == sort_column_id)
+  if (sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
     {
       if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
-	{
-	  if (tree_model_sort->order == order)
-	    return;
-	}
+        {
+          GtkTreeDataSortHeader *header = NULL;
+
+          header = _gtk_tree_data_list_get_header (tree_model_sort->sort_list,
+	  				           sort_column_id);
+
+          /* we want to make sure that we have a function */
+          g_return_if_fail (header != NULL);
+          g_return_if_fail (header->func != NULL);
+        }
       else
-	return;
+        g_return_if_fail (tree_model_sort->default_sort_func != NULL);
+
+      if (tree_model_sort->sort_column_id == sort_column_id)
+        {
+          if (sort_column_id != GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
+	    {
+	      if (tree_model_sort->order == order)
+	        return;
+	    }
+          else
+	    return;
+        }
     }
 
   tree_model_sort->sort_column_id = sort_column_id;
@@ -1696,6 +1699,9 @@ gtk_tree_model_sort_sort_level (GtkTreeModelSort *tree_model_sort,
 static void
 gtk_tree_model_sort_sort (GtkTreeModelSort *tree_model_sort)
 {
+  if (tree_model_sort->sort_column_id == GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
+    return;
+
   if (!tree_model_sort->root)
     return;
 

@@ -1,6 +1,13 @@
 2009-01-03  Matthias Clasen  <mclasen@redhat.com>
 
-	Merged from trunk:
+`	Merged from trunk:
+
+        * gtk/gtktreemodelsort.c: Don't assert when using the "unsorted"
+        sort column id.
+
+2009-01-03  Matthias Clasen  <mclasen@redhat.com>
+
+`	Merged from trunk:
 
         Bug 558694 – Paned window splitter keynav broken
 
