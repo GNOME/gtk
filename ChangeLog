@@ -1,3 +1,10 @@
+2009-01-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+	* gtk/gtkiconview.c: (gtk_icon_view_accessible_model_row_changed):
+        Bug #549251. No need to set name if there is no a11y item object.
+
 2008-12-21  Yair Hershkovitz  <yairhr@gmail.com>
 
         Bug 565203: RTL locales: icons are misplaced when horizontal 
