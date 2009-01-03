@@ -2,6 +2,13 @@
 
 	Merged from trunk:
 
+        * Makefile.decl: Start Xvfb with -ac -noreset to try
+        and get the gui tests working.
+
+2009-01-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
         Bug 565846 – "va_end(args);" should be added into gtk_tree_store_new
 
         * gtk/gtktreestore.c (gtk_tree_store_new): Add a missing
