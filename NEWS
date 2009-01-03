@@ -1,3 +1,17 @@
+Overview of Changes from GTK+ 2.14.6 to 2.14.7
+==============================================
+
+* Bugs fixed:
+ 565203 RTL: icons are misplaced when horizontal gtkiconview is ...
+ 549251 GTK icon view accessible issue
+ 565846 va_end(args) should be added into gtk_tree_store_new
+ 558694 Paned window splitter keynav broken
+
+* Updated translations:
+ Belarusian Latin (be@latin)
+ Brazilian Portugese (pt_BR)
+
+
 Overview of Changes from GTK+ 2.14.5 to 2.14.6
 ==============================================
 

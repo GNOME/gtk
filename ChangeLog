@@ -1,6 +1,10 @@
 2009-01-03  Matthias Clasen  <mclasen@redhat.com>
 
-`	Merged from trunk:
+	* NEWS: Updates
+
+2009-01-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
 
         * gtk/gtktreemodelsort.c: Don't assert when using the "unsorted"
         sort column id.
