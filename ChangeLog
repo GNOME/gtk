@@ -1,5 +1,13 @@
 2009-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkscreen-x11.h:
+	* gdk/x11/gdkevents-x11.c (fetch_net_wm_check_window): Recheck
+	_NET_SUPPORTING_WM_CHECK every now and then to avoid getting
+	stuck on the id of a former wmcheck window that got reused by
+	another client (see RH bug 471927)
+
+2009-01-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* NEWS: Updates
 
 2009-01-03  Matthias Clasen  <mclasen@redhat.com>

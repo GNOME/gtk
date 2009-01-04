@@ -2614,23 +2614,20 @@ fetch_net_wm_check_window (GdkScreen *screen)
   gulong bytes_after;
   guchar *data;
   Window *xwindow;
-  
-  /* This function is very slow on every call if you are not running a
-   * spec-supporting WM. For now not optimized, because it isn't in
-   * any critical code paths, but if you used it somewhere that had to
-   * be fast you want to avoid "GTK is slow with old WMs" complaints.
-   * Probably at that point the function should be changed to query
-   * _NET_SUPPORTING_WM_CHECK only once every 10 seconds or something.
-   */
+  GTimeVal tv;
   
   screen_x11 = GDK_SCREEN_X11 (screen);
   display = screen_x11->display;
 
   g_return_if_fail (GDK_DISPLAY_X11 (display)->trusted_client);
   
-  if (screen_x11->wmspec_check_window != None)
-    return; /* already have it */
-  
+  g_get_current_time (&tv);
+      
+  if (ABS  (tv.tv_sec - screen_x11->last_wmspec_check_time) < 15)
+    return; /* we've checked recently */
+
+  screen_x11->last_wmspec_check_time = tv.tv_sec;
+
   data = NULL;
   XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), screen_x11->xroot_window,
 		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTING_WM_CHECK"),
@@ -2645,6 +2642,12 @@ fetch_net_wm_check_window (GdkScreen *screen)
     }
 
   xwindow = (Window *)data;
+
+  if (screen_x11->wmspec_check_window == *xwindow)
+    {
+      XFree (xwindow);
+      return;
+    }
 
   gdk_error_trap_push ();
   
