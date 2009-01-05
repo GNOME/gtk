@@ -983,10 +983,10 @@ _gdk_windowing_window_init (void)
   g_object_ref (drawable_impl->colormap);
 }
 
-void
-_gdk_windowing_window_destroy (GdkWindow *window,
-			       gboolean   recursing,
-			       gboolean   foreign_destroy)
+static void
+_gdk_quartz_window_destroy (GdkWindow *window,
+                            gboolean   recursing,
+                            gboolean   foreign_destroy)
 {
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
@@ -3075,4 +3075,5 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->merge_child_shapes = gdk_window_quartz_merge_child_shapes;
   iface->set_static_gravities = gdk_window_quartz_set_static_gravities;
   iface->get_offsets = gdk_window_quartz_get_offsets;
+  iface->destroy = _gdk_quartz_window_destroy;
 }
