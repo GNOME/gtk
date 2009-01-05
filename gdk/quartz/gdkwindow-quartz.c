@@ -1903,18 +1903,18 @@ gdk_display_warp_pointer (GdkDisplay *display,
 
 /* Returns coordinates relative to the found window. */
 GdkWindow *
-_gdk_windowing_window_at_pointer (GdkDisplay *display,
-				  gint       *win_x,
-				  gint       *win_y)
+_gdk_windowing_window_at_pointer (GdkDisplay      *display,
+				  gint            *win_x,
+				  gint            *win_y,
+                                  GdkModifierType *mask)
 {
-  GdkModifierType mask;
   GdkWindow *found_window;
   gint x, y;
 
   found_window = _gdk_windowing_window_get_pointer (display,
 						    _gdk_root,
 						    &x, &y,
-						    &mask);
+						    mask);
   if (found_window)
     {
       GdkWindowObject *private;
@@ -1957,10 +1957,7 @@ static void
 gdk_window_quartz_set_events (GdkWindow       *window,
                               GdkEventMask     event_mask)
 {
-  if (!GDK_WINDOW_DESTROYED (window))
-    {
-      GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
-    }
+  /* The mask is set in the common code. */
 }
 
 void
@@ -2147,28 +2144,10 @@ gdk_window_quartz_shape_combine_region (GdkWindow       *window,
 }
 
 static void
-gdk_window_quartz_shape_combine_mask (GdkWindow *window,
-                                      GdkBitmap *mask,
-                                      gint       x,
-                                      gint       y)
-{
-  /* FIXME: Implement */
-}
-
-void
-gdk_window_input_shape_combine_mask (GdkWindow *window,
-				     GdkBitmap *mask,
-				     gint       x,
-				     gint       y)
-{
-  /* FIXME: Implement */
-}
-
-void
-gdk_window_input_shape_combine_region (GdkWindow       *window,
-                                       const GdkRegion *shape_region,
-                                       gint             offset_x,
-                                       gint             offset_y)
+gdk_window_quartz_input_shape_combine_region (GdkWindow       *window,
+                                              const GdkRegion *shape_region,
+                                              gint             offset_x,
+                                              gint             offset_y)
 {
   /* FIXME: Implement */
 }
@@ -2191,8 +2170,6 @@ gdk_window_set_accept_focus (GdkWindow *window,
 			     gboolean accept_focus)
 {
   GdkWindowObject *private;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
 
   private = (GdkWindowObject *)window;  
 
@@ -2231,8 +2208,6 @@ gdk_window_set_focus_on_map (GdkWindow *window,
 {
   GdkWindowObject *private;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
   private = (GdkWindowObject *)window;  
   
   private->focus_on_map = focus_on_map != FALSE;
@@ -2244,8 +2219,6 @@ gdk_window_set_icon (GdkWindow *window,
 		     GdkPixmap *pixmap,
 		     GdkBitmap *mask)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
   /* FIXME: Implement */
 }
 
@@ -2253,8 +2226,6 @@ void
 gdk_window_set_icon_name (GdkWindow   *window, 
 			  const gchar *name)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
   /* FIXME: Implement */
 }
 
