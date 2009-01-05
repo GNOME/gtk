@@ -1,3 +1,10 @@
+2009-01-04  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 566045 – GtkViewport is lacking a description
+
+	* gtk/tmpl/gtkviewport.sgml: Add some descriptive text, shamelessly
+	copied from gtkscrolledwindow.sgml. Requested by Andrew Cowie.
+
 2009-01-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.15.0 ===
