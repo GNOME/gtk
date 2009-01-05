@@ -2400,9 +2400,8 @@ gdk_window_set_type_hint (GdkWindow        *window,
 {
   GdkWindowImplQuartz *impl;
   
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (((GdkWindowObject *) window)->impl);
@@ -2420,7 +2419,8 @@ gdk_window_set_type_hint (GdkWindow        *window,
 GdkWindowTypeHint
 gdk_window_get_type_hint (GdkWindow *window)
 {
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return GDK_WINDOW_TYPE_HINT_NORMAL;
   
   return GDK_WINDOW_IMPL_QUARTZ (((GdkWindowObject *) window)->impl)->type_hint;
