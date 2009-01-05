@@ -48,9 +48,10 @@ static void clear_toplevel_order  (void);
 
 static FullscreenSavedGeometry *get_fullscreen_geometry (GdkWindow *window);
 
-#define WINDOW_IS_TOPLEVEL(window)		   \
-  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD && \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+#define WINDOW_IS_TOPLEVEL(window)		     \
+  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
+   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
+   GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
 
 static void gdk_window_impl_iface_init (GdkWindowImplIface *iface);
 
