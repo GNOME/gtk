@@ -77,19 +77,6 @@ gdk_quartz_window_get_nswindow (GdkWindow *window)
   return ((GdkWindowImplQuartz *)private->impl)->toplevel;
 }
 
-static void
-gdk_window_impl_quartz_get_size (GdkDrawable *drawable,
-				 gint        *width,
-				 gint        *height)
-{
-  g_return_if_fail (GDK_IS_WINDOW_IMPL_QUARTZ (drawable));
-
-  if (width)
-    *width = GDK_WINDOW_IMPL_QUARTZ (drawable)->width;
-  if (height)
-    *height = GDK_WINDOW_IMPL_QUARTZ (drawable)->height;
-}
-
 static CGContextRef
 gdk_window_impl_quartz_get_context (GdkDrawable *drawable,
 				    gboolean     antialias)
@@ -151,56 +138,6 @@ gdk_window_impl_quartz_get_context (GdkDrawable *drawable,
   return cg_context;
 }
 
-static GdkRegion*
-gdk_window_impl_quartz_get_visible_region (GdkDrawable *drawable)
-{
-  GdkWindowObject *private = GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_QUARTZ (drawable)->wrapper);
-  GdkRectangle rect;
-  GdkWindowImplQuartz *impl;
-  GList *windows = NULL, *l;
-
-  /* FIXME: The clip rectangle should really be cached
-   * and recalculated when the window rectangle changes.
-   */
-  while (private)
-    {
-      windows = g_list_prepend (windows, private);
-
-      if (private->parent == GDK_WINDOW_OBJECT (_gdk_root))
-	break;
-
-      private = private->parent;
-    }
-
-  /* Get rectangle for toplevel window */
-  private = GDK_WINDOW_OBJECT (windows->data);
-  impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-  
-  rect.x = 0;
-  rect.y = 0;
-  rect.width = impl->width;
-  rect.height = impl->height;
-
-  /* Skip toplevel window since we have its rect */
-  for (l = windows->next; l; l = l->next)
-    {
-      private = GDK_WINDOW_OBJECT (l->data);
-      impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-      GdkRectangle tmp_rect;
-
-      tmp_rect.x = -MIN (0, private->x - rect.x);
-      tmp_rect.y = -MIN (0, private->y - rect.y);
-      tmp_rect.width = MIN (rect.width, impl->width + private->x - rect.x) - MAX (0, private->x - rect.x);
-      tmp_rect.height = MIN (rect.height, impl->height + private->y - rect.y) - MAX (0, private->y - rect.y);
-
-      rect = tmp_rect;
-    }
-  
-  g_list_free (windows);
-  
-  return gdk_region_rectangle (&rect);
-}
-
 static void
 gdk_window_impl_quartz_finalize (GObject *object)
 {
@@ -221,21 +158,14 @@ gdk_window_impl_quartz_finalize (GObject *object)
 static void
 gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
 {
-  GdkDrawableImplQuartzClass *drawable_quartz_class = GDK_DRAWABLE_IMPL_QUARTZ_CLASS (klass);
-  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkDrawableImplQuartzClass *drawable_quartz_class = GDK_DRAWABLE_IMPL_QUARTZ_CLASS (klass);
 
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_window_impl_quartz_finalize;
 
-  drawable_class->get_size = gdk_window_impl_quartz_get_size;
-
   drawable_quartz_class->get_context = gdk_window_impl_quartz_get_context;
-
-  /* Visible and clip regions are the same */
-  drawable_class->get_clip_region = gdk_window_impl_quartz_get_visible_region;
-  drawable_class->get_visible_region = gdk_window_impl_quartz_get_visible_region;
 }
 
 static void
