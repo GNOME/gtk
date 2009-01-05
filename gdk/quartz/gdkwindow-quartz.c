@@ -1609,8 +1609,7 @@ gdk_window_quartz_set_background (GdkWindow      *window,
 
 static void
 gdk_window_quartz_set_back_pixmap (GdkWindow *window,
-                                   GdkPixmap *pixmap,
-                                   gboolean   parent_relative)
+                                   GdkPixmap *pixmap)
 {
   /* FIXME: Could theoretically set some background image here. (Currently
    * the back pixmap is drawn before emitting expose events.
@@ -1781,10 +1780,10 @@ gdk_window_quartz_get_origin (GdkWindow *window,
   return TRUE;
 }
 
-gboolean
-gdk_window_get_deskrelative_origin (GdkWindow *window,
-				    gint      *x,
-				    gint      *y)
+static gboolean
+gdk_window_quartz_get_deskrelative_origin (GdkWindow *window,
+                                           gint      *x,
+                                           gint      *y)
 {
   return gdk_window_get_origin (window, x, y);
 }
@@ -1861,6 +1860,7 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
       NSWindow *nswindow;
 
       impl = GDK_WINDOW_IMPL_QUARTZ (toplevel->impl);
+      private = GDK_WINDOW_OBJECT (toplevel);
       nswindow = impl->toplevel;
 
       point = [nswindow mouseLocationOutsideOfEventStream];
@@ -2091,6 +2091,7 @@ gdk_window_set_transient_for (GdkWindow *window,
 
   if (!GDK_WINDOW_DESTROYED (window) && !GDK_WINDOW_DESTROYED (parent) &&
       WINDOW_IS_TOPLEVEL (window))
+    return;
 
   window_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
   if (!window_impl->toplevel)
@@ -2176,28 +2177,14 @@ gdk_window_set_accept_focus (GdkWindow *window,
   private->accept_focus = accept_focus != FALSE;
 }
 
-static void
-gdk_window_quartz_set_child_shapes (GdkWindow *window)
-{
-  /* FIXME: Implement */
-}
-
-static void
-gdk_window_quartz_merge_child_shapes (GdkWindow *window)
-{
-  /* FIXME: Implement */
-}
-
-void 
-gdk_window_merge_child_input_shapes (GdkWindow *window)
-{
-  /* FIXME: Implement */
-}
-
 static gboolean 
 gdk_window_quartz_set_static_gravities (GdkWindow *window,
                                         gboolean   use_static)
 {
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return FALSE;
+
   /* FIXME: Implement */
   return FALSE;
 }
@@ -2441,9 +2428,8 @@ gdk_window_begin_move_drag (GdkWindow *window,
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   private = GDK_WINDOW_OBJECT (window);
@@ -2502,10 +2488,8 @@ gdk_window_set_decorations (GdkWindow       *window,
   int old_mask, new_mask;
   NSView *old_view;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
@@ -2580,10 +2564,8 @@ gdk_window_get_decorations (GdkWindow       *window,
 {
   GdkWindowImplQuartz *impl;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-  g_return_val_if_fail (WINDOW_IS_TOPLEVEL (window), FALSE);
-
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return FALSE;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
@@ -2614,14 +2596,6 @@ gdk_window_set_functions (GdkWindow    *window,
   /* FIXME: Implement */
 }
 
-static void
-gdk_window_quartz_get_offsets (GdkWindow  *window,
-                               gint       *x_offset,
-                               gint       *y_offset)
-{
-  *x_offset = *y_offset = 0;
-}
-
 gboolean
 _gdk_windowing_window_queue_antiexpose (GdkWindow  *window,
 					GdkRegion  *area)
@@ -2632,13 +2606,17 @@ _gdk_windowing_window_queue_antiexpose (GdkWindow  *window,
 void
 gdk_window_stick (GdkWindow *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return;
 }
 
 void
 gdk_window_unstick (GdkWindow *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return;
 }
 
 void
@@ -2646,9 +2624,8 @@ gdk_window_maximize (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
@@ -2675,9 +2652,8 @@ gdk_window_unmaximize (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
@@ -2704,11 +2680,10 @@ gdk_window_iconify (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return;
-  
+
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
 
   if (GDK_WINDOW_IS_MAPPED (window))
@@ -2733,9 +2708,8 @@ gdk_window_deiconify (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
@@ -2768,11 +2742,11 @@ gdk_window_fullscreen (GdkWindow *window)
 {
   FullscreenSavedGeometry *geometry;
   GdkWindowObject *private = (GdkWindowObject *) window;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   NSRect frame;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return;
 
   geometry = get_fullscreen_geometry (window);
   if (!geometry)
@@ -2809,8 +2783,9 @@ gdk_window_unfullscreen (GdkWindow *window)
 {
   FullscreenSavedGeometry *geometry;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return;
 
   geometry = get_fullscreen_geometry (window);
   if (geometry)
@@ -2839,9 +2814,9 @@ gdk_window_set_keep_above (GdkWindow *window, gboolean setting)
   gint level;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   level = window_type_hint_to_level (gdk_window_get_type_hint (window));
@@ -2858,9 +2833,9 @@ gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
   gint level;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return;
   
   level = window_type_hint_to_level (gdk_window_get_type_hint (window));
@@ -2872,8 +2847,11 @@ gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
 GdkWindow *
 gdk_window_get_group (GdkWindow *window)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD, NULL);
+
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return NULL;
 
   /* FIXME: Implement */
 
@@ -2927,6 +2905,11 @@ gdk_window_destroy_notify (GdkWindow *window)
 void 
 gdk_window_beep (GdkWindow *window)
 {
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
   gdk_display_beep (_gdk_display);
 }
 
@@ -2940,7 +2923,8 @@ gdk_window_set_opacity (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   if (opacity < 0)
@@ -2964,23 +2948,20 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->withdraw = gdk_window_quartz_withdraw;
   iface->set_events = gdk_window_quartz_set_events;
   iface->get_events = gdk_window_quartz_get_events;
-  iface->clear_area = gdk_window_quartz_clear_area;
   iface->raise = gdk_window_quartz_raise;
   iface->lower = gdk_window_quartz_lower;
   iface->move_resize = gdk_window_quartz_move_resize;
-  iface->scroll = _gdk_quartz_window_scroll;
-  iface->move_region = _gdk_quartz_window_move_region;
   iface->set_background = gdk_window_quartz_set_background;
   iface->set_back_pixmap = gdk_window_quartz_set_back_pixmap;
   iface->reparent = gdk_window_quartz_reparent;
   iface->set_cursor = gdk_window_quartz_set_cursor;
   iface->get_geometry = gdk_window_quartz_get_geometry;
   iface->get_origin = gdk_window_quartz_get_origin;
-  iface->shape_combine_mask = gdk_window_quartz_shape_combine_mask;
+  iface->get_deskrelative_origin = gdk_window_quartz_get_deskrelative_origin;
   iface->shape_combine_region = gdk_window_quartz_shape_combine_region;
-  iface->set_child_shapes = gdk_window_quartz_set_child_shapes;
-  iface->merge_child_shapes = gdk_window_quartz_merge_child_shapes;
+  iface->input_shape_combine_region = gdk_window_quartz_input_shape_combine_region;
   iface->set_static_gravities = gdk_window_quartz_set_static_gravities;
-  iface->get_offsets = gdk_window_quartz_get_offsets;
+  /*iface->queue_antiexpose = _gdk_x11_window_queue_antiexpose;*/
+  /*iface->queue_translation = _gdk_x11_window_queue_translation;*/
   iface->destroy = _gdk_quartz_window_destroy;
 }
