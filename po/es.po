@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-07 14:15+0100\n"
-"PO-Revision-Date: 2009-01-02 11:07+0100\n"
+"PO-Revision-Date: 2009-01-05 16:59+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -192,91 +192,84 @@ msgid "Num_Lock"
 msgstr "Bloq Num"
 
 #: ../gdk/keyname-table.h:3960
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "_Reemplazar"
+msgstr "TN Espacio"
 
 #: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr ""
+msgstr "TN Tabulador"
 
 #: ../gdk/keyname-table.h:3962
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "Impresora"
+msgstr "TN Intro"
 
 #: ../gdk/keyname-table.h:3963
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "_Inicio"
+msgstr "TN Inicio"
 
 #: ../gdk/keyname-table.h:3964
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "_Izquierdo:"
+msgstr "TN ←"
 
 #: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr ""
+msgstr "TN ↑"
 
 #: ../gdk/keyname-table.h:3966
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "_Derecho:"
+msgstr "TN →"
 
 #: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr ""
+msgstr "TN ↓"
 
 #: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr ""
+msgstr "TN Re Pág"
 
 #: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr ""
+msgstr "TN Anterior"
 
 #: ../gdk/keyname-table.h:3970
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "TN AvPág"
+msgstr "TN Av Pág"
 
 #: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr ""
+msgstr "TN Siguiente"
 
 #: ../gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr ""
+msgstr "TN Fin"
 
 #: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr ""
+msgstr "TN Inicio"
 
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr ""
+msgstr "TN Ins"
 
 #: ../gdk/keyname-table.h:3975
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "_Borrar"
+msgstr "TN Supr"
 
 #: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
@@ -2485,7 +2478,7 @@ msgstr "Esperando"
 #: ../gtk/gtkprintoperation.c:1508
 msgctxt "print operation status"
 msgid "Blocking on issue"
-msgstr ""
+msgstr "Bloqueado en una hoja"
 
 #: ../gtk/gtkprintoperation.c:1509
 msgctxt "print operation status"
@@ -2915,19 +2908,16 @@ msgid "Information"
 msgstr "Información"
 
 #: ../gtk/gtkstock.c:289
-#, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Advertencia"
 
 #: ../gtk/gtkstock.c:290
-#, fuzzy
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Error"
 
 #: ../gtk/gtkstock.c:291
-#, fuzzy
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Pregunta"
@@ -3100,55 +3090,48 @@ msgstr "_Superior:"
 #: ../gtk/gtkstock.c:327
 msgctxt "Stock label"
 msgid "_Back"
-msgstr ""
+msgstr "A_trás"
 
 #. This is a navigation label as in "go down"
 #: ../gtk/gtkstock.c:329
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Down"
-msgstr "_Ahora"
+msgstr "_Bajar"
 
 #. This is a navigation label as in "go forward"
 #. Media label, as in "fast forward"
 #: ../gtk/gtkstock.c:331 ../gtk/gtkstock.c:353
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Forward"
-msgstr "_Adelantar"
+msgstr "A_delante"
 
 #. This is a navigation label as in "go up"
 #: ../gtk/gtkstock.c:333
 msgctxt "Stock label"
 msgid "_Up"
-msgstr ""
+msgstr "_Subir"
 
 #: ../gtk/gtkstock.c:334
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "_Disco duro"
 
 #: ../gtk/gtkstock.c:335
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "Ay_uda"
 
 #: ../gtk/gtkstock.c:336
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Inicio"
 
 #: ../gtk/gtkstock.c:337
-#, fuzzy
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Aumentar sangría"
 
 #: ../gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Disminuir sangría"
@@ -3476,13 +3459,11 @@ msgid "Best _Fit"
 msgstr "Ajuste _óptimo"
 
 #: ../gtk/gtkstock.c:414
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "_Ampliar"
 
 #: ../gtk/gtkstock.c:415
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "_Reducir"
@@ -3718,10 +3699,9 @@ msgid "%d %%"
 msgstr "%d %%"
 
 #: ../gtk/paper_names_offsets.c:4
-#, fuzzy
 msgctxt "paper size"
 msgid "asme_f"
-msgstr "Nombre"
+msgstr "asme_f"
 
 #: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
@@ -4299,76 +4279,66 @@ msgid "FanFold US"
 msgstr "FanFold EE. UU."
 
 #: ../gtk/paper_names_offsets.c:121
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold German Legal"
-msgstr "FanFold alemán Legal"
+msgstr "FanFold alemán legal"
 
 #: ../gtk/paper_names_offsets.c:122
-#, fuzzy
 msgctxt "paper size"
 msgid "Government Legal"
 msgstr "Legal gubernamental"
 
 #: ../gtk/paper_names_offsets.c:123
-#, fuzzy
 msgctxt "paper size"
 msgid "Government Letter"
 msgstr "Carta oficial"
 
 #: ../gtk/paper_names_offsets.c:124
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 3x5"
-msgstr "_Índice"
+msgstr "Index 3x5"
 
 #: ../gtk/paper_names_offsets.c:125
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
 msgstr "Index 4x6 (postal)"
 
 #: ../gtk/paper_names_offsets.c:126
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 4x6 ext"
 msgstr "Index 4x6 ext"
 
 #: ../gtk/paper_names_offsets.c:127
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 5x8"
-msgstr "_Índice"
+msgstr "Index 5x8"
 
 #: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "Invoice"
-msgstr ""
+msgstr "Invoice"
 
 #: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloide"
 
 #: ../gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "US Legal"
-msgstr ""
+msgstr "US Legal"
 
 #: ../gtk/paper_names_offsets.c:131
-#, fuzzy
 msgctxt "paper size"
 msgid "US Legal Extra"
 msgstr "US Legal Extra"
 
 #: ../gtk/paper_names_offsets.c:132
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter"
 msgstr "US Letter"
 
 #: ../gtk/paper_names_offsets.c:133
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter Extra"
 msgstr "US Letter Extra"
@@ -4424,17 +4394,17 @@ msgstr "Sobre personal"
 #: ../gtk/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "Quarto"
-msgstr ""
+msgstr "Quarto"
 
 #: ../gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "Super A"
-msgstr ""
+msgstr "Super A"
 
 #: ../gtk/paper_names_offsets.c:144
 msgctxt "paper size"
 msgid "Super B"
-msgstr ""
+msgstr "Super B"
 
 #: ../gtk/paper_names_offsets.c:145
 #, fuzzy
@@ -4457,7 +4427,7 @@ msgstr "Color"
 #: ../gtk/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "Folio sp"
-msgstr ""
+msgstr "Folio sp"
 
 #: ../gtk/paper_names_offsets.c:149
 #, fuzzy
@@ -4480,7 +4450,7 @@ msgstr "juuro-ku-kai"
 #: ../gtk/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "pa-kai"
-msgstr ""
+msgstr "pa-kai"
 
 #: ../gtk/paper_names_offsets.c:153
 #, fuzzy
