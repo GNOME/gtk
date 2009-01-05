@@ -2099,10 +2099,10 @@ gdk_window_set_title (GdkWindow   *window,
 {
   GdkWindowImplQuartz *impl;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (title != NULL);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (((GdkWindowObject *)window)->impl);
@@ -2119,6 +2119,10 @@ void
 gdk_window_set_role (GdkWindow   *window,
 		     const gchar *role)
 {
+  if (GDK_WINDOW_DESTROYED (window) ||
+      WINDOW_IS_TOPLEVEL (window))
+    return;
+
   /* FIXME: Implement */
 }
 
@@ -2129,8 +2133,8 @@ gdk_window_set_transient_for (GdkWindow *window,
   GdkWindowImplQuartz *window_impl;
   GdkWindowImplQuartz *parent_impl;
 
-  if (GDK_WINDOW_DESTROYED (window) || GDK_WINDOW_DESTROYED (parent))
-    return;
+  if (!GDK_WINDOW_DESTROYED (window) && !GDK_WINDOW_DESTROYED (parent) &&
+      WINDOW_IS_TOPLEVEL (window))
 
   window_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
   if (!window_impl->toplevel)
