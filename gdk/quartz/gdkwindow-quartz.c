@@ -241,8 +241,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
 static void
 gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
 {
-  impl->width = 1;
-  impl->height = 1;
   impl->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
 }
 
