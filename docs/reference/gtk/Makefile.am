@@ -181,6 +181,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/20/gtk-apply.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-bold.png			\
 	$(top_srcdir)/gtk/stock-icons/20/gtk-cancel.png			\
+	$(top_srcdir)/gtk/stock-icons/24/gtk-caps-lock-warning.png	\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-cdrom.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-clear.png			\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-close.png			\

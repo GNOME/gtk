@@ -151,6 +151,15 @@ The "Cancel" item.
 
 
 
+<!-- ##### MACRO GTK_STOCK_CAPS_LOCK_WARNING ##### -->
+<para>
+The "Caps Lock Warning" icon.
+<inlinegraphic fileref="gtk-caps-lock-warning.png" format="PNG"></inlinegraphic>
+</para>
+
+@Since: 2.16
+
+
 <!-- ##### MACRO GTK_STOCK_CDROM ##### -->
 <para>
 The "CD-Rom" item.

@@ -1,3 +1,10 @@
+2009-01-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/stock-icons/{16,24}/gtk-caps-lock-warning.png: New icons
+	* gtk/gtkstock.h: Add GTK_STOCK_CAPS_LOCK_WARNING.
+	* gtk/gtkiconfactory.c (get_default_icons): Register the stock icon.
+	* gtk/gtkentry.c (show_capslock_feedback): Use the new stock icon.
+
 2009-01-05  Tor Lillqvist  <tml@novell.com>
 
 	Bug 566628 - gdk_display_close always asserts on win32

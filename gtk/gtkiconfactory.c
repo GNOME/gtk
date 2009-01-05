@@ -509,6 +509,7 @@ get_default_icons (GtkIconFactory *factory)
   register_stock_icon (factory, GTK_STOCK_CONNECT);
   register_stock_icon (factory, GTK_STOCK_DISCONNECT);
   register_stock_icon (factory, GTK_STOCK_EDIT);
+  register_stock_icon (factory, GTK_STOCK_CAPS_LOCK_WARNING);
   register_bidi_stock_icon (factory, 
 			    GTK_STOCK_MEDIA_FORWARD,
 			    GTK_STOCK_MEDIA_FORWARD "-ltr",

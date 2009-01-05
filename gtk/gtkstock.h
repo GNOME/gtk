@@ -84,6 +84,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
 #define GTK_STOCK_APPLY            "gtk-apply"
 #define GTK_STOCK_BOLD             "gtk-bold"
 #define GTK_STOCK_CANCEL           "gtk-cancel"
+#define GTK_STOCK_CAPS_LOCK_WARNING "gtk-caps-lock-warning"
 #define GTK_STOCK_CDROM            "gtk-cdrom"
 #define GTK_STOCK_CLEAR            "gtk-clear"
 #define GTK_STOCK_CLOSE            "gtk-close"
