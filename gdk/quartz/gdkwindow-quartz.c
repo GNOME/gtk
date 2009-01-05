@@ -1786,8 +1786,6 @@ gdk_window_get_deskrelative_origin (GdkWindow *window,
 				    gint      *x,
 				    gint      *y)
 {
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-
   return gdk_window_get_origin (window, x, y);
 }
 
@@ -1797,8 +1795,6 @@ gdk_window_get_root_origin (GdkWindow *window,
 			    gint      *y)
 {
   GdkRectangle rect;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
 
   rect.x = 0;
   rect.y = 0;
@@ -2507,7 +2503,6 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   GdkWindowImplQuartz *impl;
   NSRect ns_rect;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (rect != NULL);
 
   private = GDK_WINDOW_OBJECT (window);
@@ -2517,9 +2512,6 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   rect->width = 1;
   rect->height = 1;
   
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
   toplevel = gdk_window_get_toplevel (window);
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
 
