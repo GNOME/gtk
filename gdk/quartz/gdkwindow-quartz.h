@@ -45,9 +45,6 @@ struct _GdkWindowImplQuartz
 {
   GdkDrawableImplQuartz parent_instance;
 
-  gint width;
-  gint height;
-
   NSWindow *toplevel;
   NSTrackingRectTag tracking_rect;
   GdkQuartzView *view;

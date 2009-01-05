@@ -639,6 +639,7 @@ create_crossing_event (GdkWindow      *window,
     NSWindow *nswindow;
     GdkWindow *toplevel;
     GdkWindowImplQuartz *impl;
+    GdkWindowObject *private;
     NSPoint point;
 
     nswindow = [nsevent window];
@@ -647,9 +648,10 @@ create_crossing_event (GdkWindow      *window,
     toplevel = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
 
     impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
+    private = GDK_WINDOW_OBJECT (toplevel);
 
     x_tmp = point.x;
-    y_tmp = impl->height - point.y;
+    y_tmp = private->height - point.y;
 
     get_converted_window_coordinates (toplevel,
                                       x_tmp, y_tmp,
@@ -1035,6 +1037,7 @@ find_mouse_window_for_ns_event (NSEvent *nsevent,
 {
   GdkWindow *event_toplevel;
   GdkWindowImplQuartz *impl;
+  GdkWindowObject *private;
   GdkWindow *mouse_toplevel;
   GdkWindow *mouse_window;
   NSPoint point;
@@ -1042,10 +1045,11 @@ find_mouse_window_for_ns_event (NSEvent *nsevent,
 
   event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
+  private = GDK_WINDOW_OBJECT (event_toplevel);
   point = [nsevent locationInWindow];
 
   x_tmp = point.x;
-  y_tmp = impl->height - point.y;
+  y_tmp = private->height - point.y;
 
   mouse_toplevel = gdk_window_get_toplevel (current_mouse_window);
 
@@ -1095,6 +1099,7 @@ _gdk_quartz_events_trigger_crossing_events (gboolean defer_to_mainloop)
   GdkWindow *mouse_window;
   GdkWindow *toplevel;
   GdkWindowImplQuartz *impl;
+  GdkWindowObject *private;
   guint flags = 0;
   NSTimeInterval timestamp = 0;
   NSEvent *current_event;
@@ -1153,8 +1158,9 @@ _gdk_quartz_events_trigger_crossing_events (gboolean defer_to_mainloop)
     timestamp = GetCurrentEventTime ();
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
+  private = GDK_WINDOW_OBJECT (impl);
   nsevent = [NSEvent otherEventWithType:NSApplicationDefined
-                               location:NSMakePoint (x_toplevel, impl->height - y_toplevel)
+                               location:NSMakePoint (x_toplevel, private->height - y_toplevel)
                           modifierFlags:flags
                               timestamp:timestamp
                            windowNumber:[impl->toplevel windowNumber]
@@ -1205,6 +1211,7 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
       {
 	GdkWindow *event_toplevel;
         GdkWindowImplQuartz *impl;
+        GdkWindowObject *private;
         NSPoint point;
 
         /* This is the only case where we actually use the window from
@@ -1213,11 +1220,12 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
          */
         event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
         impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
+        private = GDK_WINDOW_OBJECT (event_toplevel);
 
         point = [nsevent locationInWindow];
 
         x = point.x;
-        y = impl->height - point.y;
+        y = private->height - point.y;
 
 	mouse_window = _gdk_quartz_window_find_child (event_toplevel, x, y);
 
@@ -1241,6 +1249,7 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
       {
 	GdkWindow *event_toplevel;
         GdkWindowImplQuartz *impl;
+        GdkWindowObject *private;
         NSPoint point;
 
         /* We only use NSMouseExited when leaving to the root
@@ -1253,10 +1262,11 @@ synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
          */
         event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
         impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
+        private = GDK_WINDOW_OBJECT (event_toplevel);
         point = [nsevent locationInWindow];
 
         x = point.x;
-        y = impl->height - point.y;
+        y = private->height - point.y;
 
         x += GDK_WINDOW_OBJECT (event_toplevel)->x;
         y += GDK_WINDOW_OBJECT (event_toplevel)->y;
@@ -1362,7 +1372,7 @@ find_window_for_ns_event (NSEvent *nsevent,
 		point = [nsevent locationInWindow];
 
 		x_tmp = point.x;
-		y_tmp = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (grab_toplevel)->impl)->height - point.y;
+		y_tmp = GDK_WINDOW_OBJECT (grab_toplevel)->height - point.y;
 
                 /* Translate the coordinates so they are relative to
                  * the grab window instead of the event toplevel for

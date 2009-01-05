@@ -581,8 +581,8 @@ _gdk_quartz_window_debug_highlight (GdkWindow *window, gint number)
   y += ty;
 
   rect = NSMakeRect (x,
-                     _gdk_quartz_window_get_inverted_screen_y (y + impl->height),
-                     impl->width, impl->height);
+                     _gdk_quartz_window_get_inverted_screen_y (y + private->height),
+                     private->width, private->height);
 
   if (debug_window[number] && NSEqualRects (rect, old_rect[number]))
     return;
@@ -704,7 +704,7 @@ find_child_window_helper (GdkWindow *window,
 
           if (titlebar_height > 0 &&
               x >= temp_x && y >= temp_y - titlebar_height &&
-              x < temp_x + child_impl->width && y < temp_y)
+              x < temp_x + child_private->width && y < temp_y)
             {
               /* The root means "unknown" i.e. a window not managed by
                * GDK.
@@ -714,7 +714,7 @@ find_child_window_helper (GdkWindow *window,
         }
 
       if (x >= temp_x && y >= temp_y &&
-	  x < temp_x + child_impl->width && y < temp_y + child_impl->height)
+	  x < temp_x + child_private->width && y < temp_y + child_private->height)
 	{
 	  /* Look for child windows. */
 	  return find_child_window_helper (l->data,
@@ -738,7 +738,7 @@ _gdk_quartz_window_find_child (GdkWindow *window,
   GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
-  if (x >= 0 && y >= 0 && x < impl->width && y < impl->height)
+  if (x >= 0 && y >= 0 && x < private->width && y < private->height)
     return find_child_window_helper (window, x, y, 0, 0);
 
   return NULL;
@@ -835,8 +835,8 @@ _gdk_window_new (GdkWindow     *parent,
 
   private->event_mask = attributes->event_mask;
 
-  impl->width = attributes->width > 1 ? attributes->width : 1;
-  impl->height = attributes->height > 1 ? attributes->height : 1;
+  private->width = attributes->width > 1 ? attributes->width : 1;
+  private->height = attributes->height > 1 ? attributes->height : 1;
 
   if (attributes_mask & GDK_WA_VISUAL)
     visual = attributes->visual;
@@ -942,8 +942,8 @@ _gdk_window_new (GdkWindow     *parent,
          * MouseEntered event work if the window ends up right under
          * the mouse pointer, bad quartz.
          */
-        content_rect = NSMakeRect (-500 - impl->width, -500 - impl->height,
-                                   impl->width, impl->height);
+        content_rect = NSMakeRect (-500 - private->width, -500 - private->height,
+                                   private->width, private->height);
 
         if (attributes->window_type == GDK_WINDOW_TEMP ||
             attributes->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN)
@@ -988,7 +988,7 @@ _gdk_window_new (GdkWindow     *parent,
 
 	if (attributes->wclass == GDK_INPUT_OUTPUT)
 	  {
-	    NSRect frame_rect = NSMakeRect (private->x, private->y, impl->width, impl->height);
+	    NSRect frame_rect = NSMakeRect (private->x, private->y, private->width, private->height);
 	
 	    impl->view = [[GdkQuartzView alloc] initWithFrame:frame_rect];
 	    
@@ -1031,8 +1031,13 @@ _gdk_windowing_window_init (void)
   /* Note: This needs to be reworked for multi-screen support. */
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (_gdk_root)->impl);
   rect = [[NSScreen mainScreen] frame];
-  impl->width = rect.size.width;
-  impl->height = rect.size.height;
+
+  private->x = 0;
+  private->y = 0;
+  private->abs_x = 0;
+  private->abs_y = 0;
+  private->width = rect.size.width;
+  private->height = rect.size.height;
 
   private->state = 0; /* We don't want GDK_WINDOW_STATE_WITHDRAWN here */
   private->window_type = GDK_WINDOW_ROOT;
@@ -1315,8 +1320,8 @@ move_resize_window_internal (GdkWindow *window,
 
   if ((x == -1 || (x == private->x)) &&
       (y == -1 || (y == private->y)) &&
-      (width == -1 || (width == impl->width)) &&
-      (height == -1 || (height == impl->height)))
+      (width == -1 || (width == private->width)) &&
+      (height == -1 || (height == private->height)))
     {
       return;
     }
@@ -1355,10 +1360,10 @@ move_resize_window_internal (GdkWindow *window,
     }
 
   if (width != -1)
-    impl->width = width;
+    private->width = width;
 
   if (height != -1)
-    impl->height = height;
+    private->height = height;
 
   GDK_QUARTZ_ALLOC_POOL;
 
@@ -1374,8 +1379,8 @@ move_resize_window_internal (GdkWindow *window,
       if (GDK_WINDOW_IS_MAPPED (window))
         {
           content_rect =  NSMakeRect (private->x,
-                                      _gdk_quartz_window_get_inverted_screen_y (private->y + impl->height),
-                                      impl->width, impl->height);
+                                      _gdk_quartz_window_get_inverted_screen_y (private->y + private->height),
+                                      private->width, private->height);
 
           frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
           [impl->toplevel setFrame:frame_rect display:YES];
@@ -1387,7 +1392,7 @@ move_resize_window_internal (GdkWindow *window,
         {
           NSRect nsrect;
 
-          nsrect = NSMakeRect (private->x, private->y, impl->width, impl->height);
+          nsrect = NSMakeRect (private->x, private->y, private->width, private->height);
 
           /* The newly visible area of this window in a coordinate
            * system rooted at the origin of this window.
@@ -1802,9 +1807,9 @@ gdk_window_quartz_get_geometry (GdkWindow *window,
         *y = 0;
 
       if (width) 
-        *width = impl->width;
+        *width = private->width;
       if (height)
-        *height = impl->height;
+        *height = private->height;
     }
   else if (WINDOW_IS_TOPLEVEL (window))
     {
@@ -1998,7 +2003,7 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
 
       point = [nswindow mouseLocationOutsideOfEventStream];
       x_tmp = point.x;
-      y_tmp = impl->height - point.y;
+      y_tmp = private->height - point.y;
     }
 
   /* The coords are relative to the toplevel of the passed in window
@@ -2934,8 +2939,8 @@ gdk_window_fullscreen (GdkWindow *window)
 
       geometry->x = private->x;
       geometry->y = private->y;
-      geometry->width = impl->width;
-      geometry->height = impl->height;
+      geometry->width = private->width;
+      geometry->height = private->height;
 
       if (!gdk_window_get_decorations (window, &geometry->decor))
         geometry->decor = GDK_DECOR_ALL;

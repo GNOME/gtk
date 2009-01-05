@@ -161,8 +161,8 @@
   event->configure.window = g_object_ref (window);
   event->configure.x = private->x;
   event->configure.y = private->y;
-  event->configure.width = impl->width;
-  event->configure.height = impl->height;
+  event->configure.width = private->width;
+  event->configure.height = private->height;
 
   _gdk_event_queue_append (gdk_display_get_default (), event);
 }
@@ -175,18 +175,18 @@
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   GdkEvent *event;
 
-  impl->width = content_rect.size.width;
-  impl->height = content_rect.size.height;
+  private->width = content_rect.size.width;
+  private->height = content_rect.size.height;
 
-  [[self contentView] setFrame:NSMakeRect (0, 0, impl->width, impl->height)];
+  [[self contentView] setFrame:NSMakeRect (0, 0, private->width, private->height)];
 
   /* Synthesize a configure event */
   event = gdk_event_new (GDK_CONFIGURE);
   event->configure.window = g_object_ref (window);
   event->configure.x = private->x;
   event->configure.y = private->y;
-  event->configure.width = impl->width;
-  event->configure.height = impl->height;
+  event->configure.width = private->width;
+  event->configure.height = private->height;
 
   _gdk_event_queue_append (gdk_display_get_default (), event);
 }
@@ -297,8 +297,8 @@
        */
       content_rect =
         NSMakeRect (private->x,
-                    _gdk_quartz_window_get_inverted_screen_y (private->y) - impl->height,
-                    impl->width, impl->height);
+                    _gdk_quartz_window_get_inverted_screen_y (private->y) - private->height,
+                    private->width, private->height);
       frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
       [impl->toplevel setFrame:frame_rect display:NO];
 
@@ -343,8 +343,8 @@
    * to generate crossing events). We have to do this, probably a bug in
    * quartz.
    */
-  content_rect = NSMakeRect (-500 - impl->width, -500 - impl->height,
-                             impl->width, impl->height);
+  content_rect = NSMakeRect (-500 - private->width, -500 - private->height,
+                             private->width, private->height);
   frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
   [impl->toplevel setFrame:frame_rect display:NO];
 
