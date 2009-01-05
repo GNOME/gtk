@@ -2298,20 +2298,19 @@ gdk_window_focus (GdkWindow *window,
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
 	
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
   private = (GdkWindowObject*) window;
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
-  if (impl->toplevel)
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return;
+
+  if (private->accept_focus && private->window_type != GDK_WINDOW_TEMP)
     {
-      if (private->accept_focus && private->window_type != GDK_WINDOW_TEMP) 
-        {
-          GDK_QUARTZ_ALLOC_POOL;
-          [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
-          clear_toplevel_order ();
-          GDK_QUARTZ_RELEASE_POOL;
-        }
+      GDK_QUARTZ_ALLOC_POOL;
+      [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
+      clear_toplevel_order ();
+      GDK_QUARTZ_RELEASE_POOL;
     }
 }
 
