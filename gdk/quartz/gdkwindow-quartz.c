@@ -1435,6 +1435,9 @@ gdk_window_quartz_move_resize (GdkWindow *window,
     }
 }
 
+/* FIXME: This might need fixing (reparenting didn't work before client-side
+ * windows either).
+ */
 static gboolean
 gdk_window_quartz_reparent (GdkWindow *window,
                             GdkWindow *new_parent,
@@ -1445,7 +1448,7 @@ gdk_window_quartz_reparent (GdkWindow *window,
   GdkWindowImplQuartz *impl, *old_parent_impl, *new_parent_impl;
   NSView *view, *new_parent_view;
 
-  if (!new_parent || new_parent == _gdk_root)
+  if (new_parent == _gdk_root)
     {
       /* Could be added, just needs implementing. */
       g_warning ("Reparenting to root window is not supported yet in the Mac OS X backend");
@@ -1470,20 +1473,16 @@ gdk_window_quartz_reparent (GdkWindow *window,
 
   [view release];
 
-  private->x = x;
-  private->y = y;
-  private->parent = (GdkWindowObject *)new_parent;
+  private->parent = new_parent_private;
 
   if (old_parent_private)
     {
-      old_parent_private->children = g_list_remove (old_parent_private->children, window);
       old_parent_impl->sorted_children = g_list_remove (old_parent_impl->sorted_children, window);
     }
 
-  new_parent_private->children = g_list_prepend (new_parent_private->children, window);
   new_parent_impl->sorted_children = g_list_prepend (new_parent_impl->sorted_children, window);
 
-  return TRUE;
+  return FALSE;
 }
 
 static void
