@@ -1,4 +1,11 @@
-2009-01-03  Matthias Clasen  <mclasen@redhat.com>
+2009-01-04  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 566568 – gtk_tree_model_get_value docs typo
+
+	* gtk/gtktreemodel.c (gtk_tree_model_get_value): Fix a typo
+	in the docs, pointed out by Christian Persch.
+
+2009-01-04  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 566391 – gtk_about_dialog_set_url_hook should activate 
 	pre-existing website links

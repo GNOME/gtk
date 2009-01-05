@@ -1122,9 +1122,10 @@ gtk_tree_model_get_path (GtkTreeModel *tree_model,
  * @column: The column to lookup the value at.
  * @value: An empty #GValue to set.
  *
- * Sets initializes and sets @value to that at @column.  When done with @value,
- * g_value_unset() needs to be called to free any allocated memory.
- **/
+ * Initializes and sets @value to that at @column.
+ * When done with @value, g_value_unset() needs to be called 
+ * to free any allocated memory.
+ */
 void
 gtk_tree_model_get_value (GtkTreeModel *tree_model,
 			  GtkTreeIter  *iter,
