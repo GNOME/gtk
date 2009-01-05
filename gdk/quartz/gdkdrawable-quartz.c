@@ -31,6 +31,28 @@ typedef struct {
   CGContextRef  cg_context;
 } GdkQuartzCairoSurfaceData;
 
+void
+_gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
+				       int              width,
+				       int              height)
+{
+  /* FIXME: we must recreate the surface here. */
+}
+
+cairo_surface_t *
+_gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
+				     int          width,
+				     int          height)
+{
+      CGContextRef cg_context;
+
+      cg_context = gdk_quartz_drawable_get_context (drawable, TRUE);
+      if (!cg_context)
+	return NULL;
+
+      return cairo_quartz_surface_create_for_cg_context (cg_context, width, height);
+}
+
 static void
 gdk_quartz_cairo_surface_destroy (void *data)
 {
@@ -56,24 +78,23 @@ gdk_quartz_ref_cairo_surface (GdkDrawable *drawable)
 
   if (!impl->cairo_surface)
     {
-      CGContextRef cg_context;
       int width, height;
-      GdkQuartzCairoSurfaceData *surface_data;
-
-      cg_context = gdk_quartz_drawable_get_context (drawable, TRUE);
-      if (!cg_context)
-	return NULL;
 
       gdk_drawable_get_size (drawable, &width, &height);
 
-      impl->cairo_surface = cairo_quartz_surface_create_for_cg_context (cg_context, width, height);
+      impl->cairo_surface = _gdk_windowing_create_cairo_surface (drawable, width, height);
 
-      surface_data = g_new (GdkQuartzCairoSurfaceData, 1);
-      surface_data->drawable = drawable;
-      surface_data->cg_context = cg_context;
+      if (impl->cairo_surface)
+        {
+          GdkQuartzCairoSurfaceData *surface_data;
 
-      cairo_surface_set_user_data (impl->cairo_surface, &gdk_quartz_cairo_key,
-				   surface_data, gdk_quartz_cairo_surface_destroy);
+          surface_data = g_new (GdkQuartzCairoSurfaceData, 1);
+          surface_data->drawable = drawable;
+          surface_data->cg_context = cairo_quartz_surface_get_cg_context (impl->cairo_surface);
+
+          cairo_surface_set_user_data (impl->cairo_surface, &gdk_quartz_cairo_key,
+                                       surface_data, gdk_quartz_cairo_surface_destroy);
+        }
     }
   else
     cairo_surface_reference (impl->cairo_surface);
