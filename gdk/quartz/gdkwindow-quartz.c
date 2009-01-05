@@ -1171,18 +1171,10 @@ gdk_window_quartz_hide (GdkWindow *window)
   if (get_fullscreen_geometry (window))
     SetSystemUIMode (kUIModeNormal, 0);
 
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
   mouse_window = _gdk_quartz_events_get_mouse_window (FALSE);
   if (window == mouse_window || 
       _gdk_quartz_window_is_ancestor (window, mouse_window))
     _gdk_quartz_events_update_mouse_window (_gdk_root);
-
-  if (GDK_WINDOW_IS_MAPPED (window))
-    gdk_synthesize_window_state (window,
-				 0,
-				 GDK_WINDOW_STATE_WITHDRAWN);
 
   _gdk_window_clear_update_area (window);
 
