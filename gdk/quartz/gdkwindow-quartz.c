@@ -2008,6 +2008,10 @@ void
 gdk_window_set_urgency_hint (GdkWindow *window,
 			     gboolean   urgent)
 {
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return;
+
   /* FIXME: Implement */
 }
 
@@ -2018,10 +2022,10 @@ gdk_window_set_geometry_hints (GdkWindow         *window,
 {
   GdkWindowImplQuartz *impl;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (geometry != NULL);
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return;
   
   impl = GDK_WINDOW_IMPL_QUARTZ (((GdkWindowObject *) window)->impl);
@@ -2430,7 +2434,9 @@ void
 gdk_window_set_modal_hint (GdkWindow *window,
 			   gboolean   modal)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return;
 
   /* FIXME: Implement */
 }
@@ -2439,7 +2445,9 @@ void
 gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 				  gboolean   skips_taskbar)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return;
 
   /* FIXME: Implement */
 }
@@ -2448,7 +2456,9 @@ void
 gdk_window_set_skip_pager_hint (GdkWindow *window,
 				gboolean   skips_pager)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return;
 
   /* FIXME: Implement */
 }
