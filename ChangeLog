@@ -1,3 +1,12 @@
+2009-01-05  Tor Lillqvist  <tml@novell.com>
+
+	Bug 566628 - gdk_display_close always asserts on win32
+
+	* gdk/win32/gdkdisplay-win32.c
+	(_gdk_windowing_set_default_display): Allow also a NULL parameter
+	in the g_assert(). Still don't actually do anything in this
+	function, though.
+
 2009-01-04  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 566568 – gtk_tree_model_get_value docs typo
