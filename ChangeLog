@@ -1,5 +1,14 @@
 2009-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 566391 – gtk_about_dialog_set_url_hook should activate 
+	pre-existing website links
+
+	* gtk/gtkaboutdialog.c: Make setting website, website-label and
+	url hook work independent of their order. Reported by Steven
+	Sheehy.
+
+2009-01-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/x11/gdkscreen-x11.h:
 	* gdk/x11/gdkevents-x11.c (fetch_net_wm_check_window): Recheck
 	_NET_SUPPORTING_WM_CHECK every now and then to avoid getting

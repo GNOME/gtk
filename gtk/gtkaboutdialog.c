@@ -64,8 +64,8 @@ struct _GtkAboutDialogPrivate
   gchar *version;
   gchar *copyright;
   gchar *comments;
-  gchar *website;
-  gchar *website_label;
+  gchar *website_url;
+  gchar *website_text;
   gchar *translator_credits;
   gchar *license;
   
@@ -78,6 +78,7 @@ struct _GtkAboutDialogPrivate
   GtkWidget *comments_label;
   GtkWidget *copyright_label;
   GtkWidget *website_button;
+  GtkWidget *website_label;
 
   GtkWidget *credits_button;
   GtkWidget *credits_dialog;
@@ -124,6 +125,7 @@ static void                 gtk_about_dialog_set_property   (GObject            
 							     guint               prop_id,
 							     const GValue       *value,
 							     GParamSpec         *pspec);
+static void                 gtk_about_dialog_show           (GtkWidget          *widge);
 static void                 update_name_version             (GtkAboutDialog     *about);
 static GtkIconSet *         icon_set_new_from_pixbufs       (GList              *pixbufs);
 static void                 activate_url                    (GtkWidget          *widget,
@@ -182,6 +184,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 
   object_class->finalize = gtk_about_dialog_finalize;
 
+  widget_class->show = gtk_about_dialog_show;
 
   /**
    * GtkAboutDialog:program-name:
@@ -433,8 +436,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   priv->version = NULL;
   priv->copyright = NULL;
   priv->comments = NULL;
-  priv->website = NULL;
-  priv->website_label = NULL;
+  priv->website_url = NULL;
+  priv->website_text = NULL;
   priv->translator_credits = NULL;
   priv->license = NULL;
   priv->authors = NULL;
@@ -477,14 +480,19 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_label_set_justify (GTK_LABEL (priv->copyright_label), GTK_JUSTIFY_CENTER);
   gtk_box_pack_start (GTK_BOX (vbox), priv->copyright_label, FALSE, FALSE, 0);
 
-  button = gtk_link_button_new (""); 
+  hbox = gtk_hbox_new (TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, FALSE, 0); 
+
+  priv->website_button = button = gtk_link_button_new (""); 
+  gtk_widget_set_no_show_all (button, TRUE);
   g_signal_connect (G_OBJECT (button), "clicked",
 		    G_CALLBACK (activate_url), about);
-
-  hbox = gtk_hbox_new (TRUE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, FALSE, 0); 
-  priv->website_button = button;
+  
+  priv->website_label = button = gtk_label_new ("");
+  gtk_widget_set_no_show_all (button, TRUE);
+  gtk_label_set_selectable (GTK_LABEL (button), TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
   
   gtk_widget_show (vbox);
   gtk_widget_show (priv->logo_image);
@@ -545,8 +553,8 @@ gtk_about_dialog_finalize (GObject *object)
   g_free (priv->copyright);
   g_free (priv->comments);
   g_free (priv->license);
-  g_free (priv->website);
-  g_free (priv->website_label);
+  g_free (priv->website_url);
+  g_free (priv->website_text);
   g_free (priv->translator_credits);
 
   g_strfreev (priv->authors);
@@ -645,10 +653,10 @@ gtk_about_dialog_get_property (GObject    *object,
       g_value_set_string (value, priv->comments);
       break;
     case PROP_WEBSITE:
-      g_value_set_string (value, priv->website);
+      g_value_set_string (value, priv->website_url);
       break;
     case PROP_WEBSITE_LABEL:
-      g_value_set_string (value, priv->website_label);
+      g_value_set_string (value, priv->website_text);
       break;
     case PROP_LICENSE:
       g_value_set_string (value, priv->license);
@@ -689,6 +697,44 @@ gtk_about_dialog_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+update_website (GtkAboutDialog *about)
+{
+  GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
+
+  if (priv->website_url && activate_url_hook)
+    {
+      gtk_widget_show (priv->website_button);
+      gtk_widget_hide (priv->website_label);
+
+      gtk_link_button_set_uri (GTK_LINK_BUTTON (priv->website_button), priv->website_url);
+      if (priv->website_text)
+        gtk_button_set_label (GTK_BUTTON (priv->website_button), priv->website_text);
+      else 
+        gtk_button_set_label (GTK_BUTTON (priv->website_button), priv->website_url);
+    }
+  else
+    {
+      gtk_widget_show (priv->website_label);
+      gtk_widget_hide (priv->website_button);
+
+      if (priv->website_url)
+        gtk_label_set_text (GTK_LABEL (priv->website_label), priv->website_url);
+      else if (priv->website_text)
+        gtk_label_set_text (GTK_LABEL (priv->website_label), priv->website_text);
+      else
+        gtk_widget_hide (priv->website_label);
+    }
+}
+
+static void
+gtk_about_dialog_show (GtkWidget *widget)
+{
+  update_website (GTK_ABOUT_DIALOG (widget));
+  
+  GTK_WIDGET_CLASS (gtk_about_dialog_parent_class)->show (widget);
 }
 
 /**
@@ -1117,7 +1163,7 @@ gtk_about_dialog_get_website (GtkAboutDialog *about)
 
   priv = (GtkAboutDialogPrivate *)about->private_data;
 
-  return priv->website;
+  return priv->website_url;
 }
 
 /**
@@ -1143,32 +1189,11 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
 
   priv = (GtkAboutDialogPrivate *)about->private_data;
   
-  tmp = priv->website;
-  if (website != NULL)
-    {
-      priv->website = g_strdup (website);
-      if (activate_url_hook != NULL)
-	{
-	  gtk_link_button_set_uri (GTK_LINK_BUTTON (priv->website_button), website);  
-	  if (priv->website_label == NULL) 
-	    gtk_about_dialog_set_website_label (about, website);
-	}
-      else 
-	{
-	  GtkWidget *hbox = priv->website_button->parent;
-	  gtk_widget_destroy (priv->website_button);
-	  priv->website_button = gtk_label_new (website);
-	  gtk_label_set_selectable (GTK_LABEL (priv->website_button), TRUE);
-	  gtk_container_add (GTK_CONTAINER (hbox), priv->website_button);
-	  gtk_widget_show (priv->website_button);
-	}
-    }
-  else 
-    {
-      priv->website = NULL;
-      gtk_widget_hide (priv->website_button);
-    }
-  g_free (tmp);
+  tmp = priv->website_url;
+  priv->website_url = g_strdup (website);
+  g_free (tmp); 
+
+  update_website (about);
 
   g_object_notify (G_OBJECT (about), "website");
 }
@@ -1193,7 +1218,7 @@ gtk_about_dialog_get_website_label (GtkAboutDialog *about)
 
   priv = (GtkAboutDialogPrivate *)about->private_data;
 
-  return priv->website_label;
+  return priv->website_text;
 }
 
 /**
@@ -1217,23 +1242,11 @@ gtk_about_dialog_set_website_label (GtkAboutDialog *about,
 
   priv = (GtkAboutDialogPrivate *)about->private_data;
 
-  tmp = priv->website_label;
-  if (activate_url_hook != NULL)
-    {
-      if (website_label != NULL) 
-	{
-	  priv->website_label = g_strdup (website_label);
-	  gtk_button_set_label (GTK_BUTTON (priv->website_button),
-				priv->website_label);
-	  gtk_widget_show (priv->website_button);
-	}
-      else 
-	{
-	  priv->website_label = NULL;
-	  gtk_widget_hide (priv->website_button);
-	}
-    }
+  tmp = priv->website_text;
+  priv->website_text = g_strdup (website_label);
   g_free (tmp);
+
+  update_website (about);
 
   g_object_notify (G_OBJECT (about), "website-label");
 }
