@@ -1602,22 +1602,9 @@ static void
 gdk_window_quartz_set_background (GdkWindow      *window,
                                   const GdkColor *color)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImplQuartz *impl;
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-
-  private->bg_color = *color;
-
-  if (private->bg_pixmap &&
-      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-      private->bg_pixmap != GDK_NO_BG)
-    g_object_unref (private->bg_pixmap);
-  
-  private->bg_pixmap = NULL;
+  /* FIXME: We could theoretically set the background color for toplevels
+   * here. (Currently we draw the background before emitting expose events)
+   */
 }
 
 static void
@@ -1625,33 +1612,9 @@ gdk_window_quartz_set_back_pixmap (GdkWindow *window,
                                    GdkPixmap *pixmap,
                                    gboolean   parent_relative)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  if (private->bg_pixmap &&
-      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-      private->bg_pixmap != GDK_NO_BG)
-    g_object_unref (private->bg_pixmap);
-
-  if (parent_relative)
-    {
-      private->bg_pixmap = GDK_PARENT_RELATIVE_BG;
-      GDK_NOTE (MISC, g_print (G_STRLOC ": setting background pixmap to parent_relative\n"));
-    }
-  else
-    {
-      if (pixmap)
-	{
-	  g_object_ref (pixmap);
-	  private->bg_pixmap = pixmap;
-	}
-      else
-	{
-	  private->bg_pixmap = GDK_NO_BG;
-	}
-    }
+  /* FIXME: Could theoretically set some background image here. (Currently
+   * the back pixmap is drawn before emitting expose events.
+   */
 }
 
 static void
