@@ -1485,17 +1485,6 @@ gdk_window_quartz_reparent (GdkWindow *window,
   return FALSE;
 }
 
-static void
-gdk_window_quartz_clear_area (GdkWindow *window,
-                              gint       x,
-                              gint       y,
-                              gint       width,
-                              gint       height,
-                              gboolean   send_expose)
-{
-  /* FIXME: Implement */
-}
-
 /* Get the toplevel ordering from NSApp and update our own list. We do
  * this on demand since the NSApp's list is not up to date directly
  * after we get windowDidBecomeMain.
