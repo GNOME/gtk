@@ -2153,12 +2153,6 @@ gdk_window_quartz_input_shape_combine_region (GdkWindow       *window,
   /* FIXME: Implement */
 }
 
-void 
-gdk_window_set_child_input_shapes (GdkWindow *window)
-{
-  /* FIXME: IMplement */
-}
-
 void
 gdk_window_set_override_redirect (GdkWindow *window,
 				  gboolean override_redirect)
