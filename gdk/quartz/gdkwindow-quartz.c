@@ -550,7 +550,6 @@ void
 _gdk_quartz_window_debug_highlight (GdkWindow *window, gint number)
 {
   GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   gint x, y;
   GdkWindow *toplevel;
   gint tx, ty;
@@ -736,7 +735,6 @@ _gdk_quartz_window_find_child (GdkWindow *window,
 			       gint       y)
 {
   GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
   if (x >= 0 && y >= 0 && x < private->width && y < private->height)
     return find_child_window_helper (window, x, y, 0, 0);
@@ -786,101 +784,45 @@ _gdk_quartz_window_did_resign_main (GdkWindow *window)
   clear_toplevel_order ();
 }
 
-GdkWindow *
-_gdk_window_new (GdkWindow     *parent,
-                 GdkWindowAttr *attributes,
-                 gint           attributes_mask)
+void
+_gdk_window_impl_new (GdkWindow     *window,
+		      GdkWindow     *real_parent,
+		      GdkScreen     *screen,
+		      GdkVisual     *visual,
+		      GdkEventMask   event_mask,
+		      GdkWindowAttr *attributes,
+		      gint           attributes_mask)
 {
-  GdkWindow *window;
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
   GdkDrawableImplQuartz *draw_impl;
-  GdkVisual *visual;
   GdkWindowImplQuartz *parent_impl;
-
-  if (parent && GDK_WINDOW_DESTROYED (parent))
-    return NULL;
 
   GDK_QUARTZ_ALLOC_POOL;
 
-  if (!parent)
-    parent = _gdk_root;
-
-  window = g_object_new (GDK_TYPE_WINDOW, NULL);
-
   private = (GdkWindowObject *)window;
-  private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
 
-  impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-  draw_impl = GDK_DRAWABLE_IMPL_QUARTZ (private->impl);
+  impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  private->impl = (GdkDrawable *)impl;
+  draw_impl = GDK_DRAWABLE_IMPL_QUARTZ (impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
 
-  private->parent = (GdkWindowObject *)parent;
   parent_impl = GDK_WINDOW_IMPL_QUARTZ (private->parent->impl);
 
-  private->accept_focus = TRUE;
-  private->focus_on_map = TRUE;
-
-  if (attributes_mask & GDK_WA_X)
-    private->x = attributes->x;
-  else
-    private->x = 0;
-  
-  if (attributes_mask & GDK_WA_Y)
-    private->y = attributes->y;
-  else if (attributes_mask & GDK_WA_X)
-    private->y = 100;
-  else
-    private->y = 0;
-
-  private->event_mask = attributes->event_mask;
-
-  private->width = attributes->width > 1 ? attributes->width : 1;
-  private->height = attributes->height > 1 ? attributes->height : 1;
-
-  if (attributes_mask & GDK_WA_VISUAL)
-    visual = attributes->visual;
-  else
-    visual = gdk_screen_get_system_visual (_gdk_screen);
-
-  if (attributes->wclass == GDK_INPUT_ONLY)
-    {
-      /* Backwards compatiblity - we've always ignored
-       * attributes->window_type for input-only windows
-       * before
-       */
-      if (parent == _gdk_root)
-	private->window_type = GDK_WINDOW_TEMP;
-      else
-	private->window_type = GDK_WINDOW_CHILD;
-    }
-  else
-    private->window_type = attributes->window_type;
-
-  /* Sanity checks */
   switch (private->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
-      if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT)
+      if (GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
 	{
-	  g_warning (G_STRLOC "Toplevel windows must be created as children of\n"
-		     "of a window of type GDK_WINDOW_ROOT or GDK_WINDOW_FOREIGN");
+	  /* The common code warns for this case */
+          parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (_gdk_root)->impl);
 	}
-    case GDK_WINDOW_CHILD:
-      break;
-    default:
-      g_warning (G_STRLOC "cannot make windows of type %d", private->window_type);
-      GDK_QUARTZ_RELEASE_POOL;
-      return NULL;
     }
 
-  if (attributes->wclass == GDK_INPUT_OUTPUT)
+  if (!private->input_only)
     {
-      private->input_only = FALSE;
-      private->depth = visual->depth;
-
       if (attributes_mask & GDK_WA_COLORMAP)
 	{
 	  draw_impl->colormap = attributes->colormap;
@@ -903,22 +845,15 @@ _gdk_window_new (GdkWindow     *parent,
 	      draw_impl->colormap = gdk_colormap_new (visual, FALSE);
 	    }
 	}
-
-      private->bg_color.pixel = 0;
-      private->bg_color.red = private->bg_color.green = private->bg_color.blue = 0;
     }
   else
     {
-      private->depth = 0;
-      private->input_only = TRUE;
       draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
       g_object_ref (draw_impl->colormap);
     }
 
-  private->parent->children = g_list_prepend (private->parent->children, window);
-
   /* Maintain the z-ordered list of children. */
-  if (parent != _gdk_root)
+  if (private->parent != (GdkWindowObject *)_gdk_root)
     parent_impl->sorted_children = g_list_prepend (parent_impl->sorted_children, window);
   else
     clear_toplevel_order ();
@@ -984,9 +919,9 @@ _gdk_window_new (GdkWindow     *parent,
 
     case GDK_WINDOW_CHILD:
       {
-	GdkWindowImplQuartz *parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (parent)->impl);
+	GdkWindowImplQuartz *parent_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (private->parent)->impl);
 
-	if (attributes->wclass == GDK_INPUT_OUTPUT)
+	if (!private->input_only)
 	  {
 	    NSRect frame_rect = NSMakeRect (private->x, private->y, private->width, private->height);
 	
@@ -1009,8 +944,6 @@ _gdk_window_new (GdkWindow     *parent,
 
   if (attributes_mask & GDK_WA_TYPE_HINT)
     gdk_window_set_type_hint (window, attributes->type_hint);
-
-  return window;
 }
 
 void
@@ -1793,12 +1726,14 @@ gdk_window_quartz_get_geometry (GdkWindow *window,
                                 gint      *depth)
 {
   GdkWindowImplQuartz *impl;
+  GdkWindowObject *private;
   NSRect ns_rect;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+  private = GDK_WINDOW_OBJECT (window);
   if (window == _gdk_root)
     {
       if (x) 
