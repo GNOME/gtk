@@ -1059,24 +1059,15 @@ all_parents_shown (GdkWindowObject *private)
   return FALSE;
 }
 
-/* Note: the raise argument is not really used, it doesn't seem
- * possible to show a window without raising it?
- */
+/* FIXME: This might be possible to simplify with client-side windows. */
 static void
-gdk_window_quartz_show (GdkWindow *window,
-                        gboolean   raise)
+gdk_window_quartz_show (GdkWindow *window)
 {
-  GdkWindowObject *private;
-  GdkWindowImplQuartz *impl;
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   gboolean focus_on_map;
 
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
   GDK_QUARTZ_ALLOC_POOL;
-
-  private = (GdkWindowObject *)window;
-  impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
   if (!GDK_WINDOW_IS_MAPPED (window))
     focus_on_map = private->focus_on_map;
@@ -1087,10 +1078,7 @@ gdk_window_quartz_show (GdkWindow *window,
     {
       gboolean make_key;
 
-      /* Move the window into place, to guarantee that we get the
-       * initial MouseEntered event.
-       */
-      make_key = (private->accept_focus && focus_on_map && raise && 
+      make_key = (private->accept_focus && focus_on_map &&
                   private->window_type != GDK_WINDOW_TEMP);
 
       [(GdkQuartzWindow*)impl->toplevel showAndMakeKey:make_key];
