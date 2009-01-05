@@ -33,7 +33,7 @@
 void
 _gdk_windowing_set_default_display (GdkDisplay *display)
 {
-  g_assert (display == NULL ||_gdk_display == display);
+  g_assert (display == NULL || _gdk_display == display);
 }
 
 #ifdef HAVE_MONITOR_INFO
