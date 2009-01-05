@@ -224,30 +224,6 @@ pointer_ungrab_internal (gboolean only_if_implicit)
   /* FIXME: Send crossing events */
 }
 
-gboolean
-gdk_display_pointer_is_grabbed (GdkDisplay *display)
-{
-  return (_gdk_quartz_pointer_grab_window != NULL && 
-          !pointer_grab_implicit);
-}
-
-gboolean
-gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
-				   GdkWindow **grab_window,
-				   gboolean   *owner_events)
-{
-  if (!_gdk_quartz_pointer_grab_window)
-    return FALSE;
-
-  if (grab_window)
-    *grab_window = _gdk_quartz_pointer_grab_window;
-
-  if (owner_events)
-    *owner_events = pointer_grab_owner_events;
-
-  return TRUE;
-}
-
 void
 gdk_display_pointer_ungrab (GdkDisplay *display,
 			    guint32     time)
