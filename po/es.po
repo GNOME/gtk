@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-07 14:15+0100\n"
-"PO-Revision-Date: 2009-01-05 16:59+0100\n"
+"PO-Revision-Date: 2009-01-06 11:32+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -126,10 +126,9 @@ msgid "Escape"
 msgstr "Escape"
 
 #: ../gdk/keyname-table.h:3947
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Pulsación múltiple"
+msgstr "MultiKey"
 
 #: ../gdk/keyname-table.h:3948
 msgctxt "keyboard label"
@@ -2926,165 +2925,139 @@ msgstr "Pregunta"
 #. * need the mnemonics to be rationalized
 #.
 #: ../gtk/gtkstock.c:296
-#, fuzzy
 msgctxt "Stock label"
 msgid "_About"
 msgstr "Acerca _de"
 
 #: ../gtk/gtkstock.c:297
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Añadir"
 
 #: ../gtk/gtkstock.c:298
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Aplicar"
 
 #: ../gtk/gtkstock.c:299
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_Negrita"
 
 #: ../gtk/gtkstock.c:300
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_Cancelar"
 
 #: ../gtk/gtkstock.c:301
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "_CD-Rom"
 
 #: ../gtk/gtkstock.c:302
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Limpiar"
 
 #: ../gtk/gtkstock.c:303
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Cerrar"
 
 #: ../gtk/gtkstock.c:304
-#, fuzzy
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "_Conectar"
 
 #: ../gtk/gtkstock.c:305
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_Convertir"
 
 #: ../gtk/gtkstock.c:306
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_Copiar"
 
 #: ../gtk/gtkstock.c:307
-#, fuzzy
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "Cor_tar"
 
 #: ../gtk/gtkstock.c:308
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Borrar"
 
 #: ../gtk/gtkstock.c:309
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_Descartar"
 
 #: ../gtk/gtkstock.c:310
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
 #: ../gtk/gtkstock.c:311
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_Ejecutar"
 
 #: ../gtk/gtkstock.c:312
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Editar"
 
 # src/nautilus-first-time-druid.c:290
 #: ../gtk/gtkstock.c:313
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Buscar"
 
 #: ../gtk/gtkstock.c:314
-#, fuzzy
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Buscar y _reemplazar"
 
 #: ../gtk/gtkstock.c:315
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Disquete"
 
 #: ../gtk/gtkstock.c:316
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "Pantalla _completa"
 
 #: ../gtk/gtkstock.c:317
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "_Salir de pantalla completa"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: ../gtk/gtkstock.c:319
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Bottom"
-msgstr "In_ferior:"
+msgstr "_Inferior"
 
 #. This is a navigation label as in "go to the first page"
 #: ../gtk/gtkstock.c:321
-#, fuzzy
 msgctxt "Stock label"
 msgid "_First"
-msgstr "_Archivos"
+msgstr "_Primero"
 
 #. This is a navigation label as in "go to the last page"
 #: ../gtk/gtkstock.c:323
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Last"
-msgstr "_Pegar"
+msgstr "_Último"
 
 #. This is a navigation label as in "go to the top of the page"
 #: ../gtk/gtkstock.c:325
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Top"
-msgstr "_Superior:"
+msgstr "_Superior"
 
 #. This is a navigation label as in "go back"
 #: ../gtk/gtkstock.c:327
@@ -3137,88 +3110,75 @@ msgid "Decrease Indent"
 msgstr "Disminuir sangría"
 
 #: ../gtk/gtkstock.c:339
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Índice"
 
 #: ../gtk/gtkstock.c:340
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_Información"
 
 #: ../gtk/gtkstock.c:341
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Italic"
-msgstr "_Itálica"
+msgstr "_Cursiva"
 
 #: ../gtk/gtkstock.c:342
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Ir a"
 
 #. This is about text justification, "centered text"
 #: ../gtk/gtkstock.c:344
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
-msgstr "_Convertir"
+msgstr "_Centro"
 
 #. This is about text justification
 #: ../gtk/gtkstock.c:346
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fill"
-msgstr "_Archivos"
+msgstr "_Rellenar"
 
 #. This is about text justification, "left-justified text"
 #: ../gtk/gtkstock.c:348
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Left"
-msgstr "_Izquierdo:"
+msgstr "_Izquierda"
 
 #. This is about text justification, "right-justified text"
 #: ../gtk/gtkstock.c:350
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Right"
-msgstr "_Derecho:"
+msgstr "_Derecha"
 
 #. Media label, as in "next song"
 #: ../gtk/gtkstock.c:355
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Next"
-msgstr "_Nuevo"
+msgstr "_Siguiente"
 
 #. Media label, as in "pause music"
 #: ../gtk/gtkstock.c:357
-#, fuzzy
 msgctxt "Stock label"
 msgid "P_ause"
-msgstr "Pausada"
+msgstr "_Pausa"
 
 #. Media label, as in "play music"
 #: ../gtk/gtkstock.c:359
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Play"
-msgstr "_Lugares"
+msgstr "_Reproducir"
 
 #. Media label, as in  "previous song"
 #: ../gtk/gtkstock.c:361
-#, fuzzy
 msgctxt "Stock label"
 msgid "Pre_vious"
 msgstr "_Anterior"
 
 #. Media label
 #: ../gtk/gtkstock.c:363
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Record"
 msgstr "_Grabar"
@@ -3226,234 +3186,197 @@ msgstr "_Grabar"
 # src/nautilus-first-time-druid.c:290
 #. Media label
 #: ../gtk/gtkstock.c:365
-#, fuzzy
 msgctxt "Stock label"
 msgid "R_ewind"
 msgstr "_Rebobinar"
 
 #. Media label
 #: ../gtk/gtkstock.c:367 ../gtk/gtkstock.c:402
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Detener"
 
 #: ../gtk/gtkstock.c:368
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Red"
 
 #: ../gtk/gtkstock.c:369
-#, fuzzy
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Nuevo"
 
 #: ../gtk/gtkstock.c:370
-#, fuzzy
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_No"
 
 #: ../gtk/gtkstock.c:371
-#, fuzzy
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_Aceptar"
 
 #: ../gtk/gtkstock.c:372
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Abrir"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:374
-#, fuzzy
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Apaisado"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:376
-#, fuzzy
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Vertical"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:378
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Apaisado invertido"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:380
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Vertical invertido"
 
 #: ../gtk/gtkstock.c:381
-#, fuzzy
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "_Configuración de página"
 
 #: ../gtk/gtkstock.c:382
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "_Pegar"
 
 #: ../gtk/gtkstock.c:383
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Preferencias"
 
 #: ../gtk/gtkstock.c:384
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Print"
-msgstr "Im_primir"
+msgstr "_Imprimir"
 
 #: ../gtk/gtkstock.c:385
-#, fuzzy
 msgctxt "Stock label"
 msgid "Print Pre_view"
-msgstr "Vista pre_via de impresión"
+msgstr "_Vista previa de impresión"
 
 #: ../gtk/gtkstock.c:386
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Propiedades"
 
 #: ../gtk/gtkstock.c:387
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Salir"
 
 #: ../gtk/gtkstock.c:388
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_Rehacer"
 
 #: ../gtk/gtkstock.c:389
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Refresh"
-msgstr "_Refrescar"
+msgstr "_Actualizar"
 
 #: ../gtk/gtkstock.c:390
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Quitar"
 
 #: ../gtk/gtkstock.c:391
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Revertir"
 
 #: ../gtk/gtkstock.c:392
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Guardar"
 
 #: ../gtk/gtkstock.c:393
-#, fuzzy
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Guardar _como"
 
 #: ../gtk/gtkstock.c:394
-#, fuzzy
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
 #: ../gtk/gtkstock.c:395
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Color"
 
 #: ../gtk/gtkstock.c:396
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Tipografía"
 
 #. Sorting direction
 #: ../gtk/gtkstock.c:398
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Ascendente"
 
 #. Sorting direction
 #: ../gtk/gtkstock.c:400
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_Descendente"
 
 #: ../gtk/gtkstock.c:401
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "Comprobar _ortografía"
 
 #. Font variant
 #: ../gtk/gtkstock.c:404
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Tachar"
 
 #: ../gtk/gtkstock.c:405
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_Recuperar"
 
 #. Font variant
 #: ../gtk/gtkstock.c:407
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_Subrayar"
 
 #: ../gtk/gtkstock.c:408
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Deshacer"
 
 #: ../gtk/gtkstock.c:409
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Sí"
 
 #. Zoom
 #: ../gtk/gtkstock.c:411
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "Tamaño _normal"
 
 #. Zoom
 #: ../gtk/gtkstock.c:413
-#, fuzzy
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "Ajuste _óptimo"
@@ -4344,49 +4267,41 @@ msgid "US Letter Extra"
 msgstr "US Letter Extra"
 
 #: ../gtk/paper_names_offsets.c:134
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter Plus"
 msgstr "US Letter Plus"
 
 #: ../gtk/paper_names_offsets.c:135
-#, fuzzy
 msgctxt "paper size"
 msgid "Monarch Envelope"
 msgstr "Sobre Monarch"
 
 #: ../gtk/paper_names_offsets.c:136
-#, fuzzy
 msgctxt "paper size"
 msgid "#10 Envelope"
 msgstr "Sobre nº10"
 
 #: ../gtk/paper_names_offsets.c:137
-#, fuzzy
 msgctxt "paper size"
 msgid "#11 Envelope"
 msgstr "Sobre nº11"
 
 #: ../gtk/paper_names_offsets.c:138
-#, fuzzy
 msgctxt "paper size"
 msgid "#12 Envelope"
 msgstr "Sobre nº12"
 
 #: ../gtk/paper_names_offsets.c:139
-#, fuzzy
 msgctxt "paper size"
 msgid "#14 Envelope"
 msgstr "Sobre nº14"
 
 #: ../gtk/paper_names_offsets.c:140
-#, fuzzy
 msgctxt "paper size"
 msgid "#9 Envelope"
 msgstr "Sobre nº9"
 
 #: ../gtk/paper_names_offsets.c:141
-#, fuzzy
 msgctxt "paper size"
 msgid "Personal Envelope"
 msgstr "Sobre personal"
@@ -4407,22 +4322,19 @@ msgid "Super B"
 msgstr "Super B"
 
 #: ../gtk/paper_names_offsets.c:145
-#, fuzzy
 msgctxt "paper size"
 msgid "Wide Format"
 msgstr "Formato ancho"
 
 #: ../gtk/paper_names_offsets.c:146
-#, fuzzy
 msgctxt "paper size"
 msgid "Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
 #: ../gtk/paper_names_offsets.c:147
-#, fuzzy
 msgctxt "paper size"
 msgid "Folio"
-msgstr "Color"
+msgstr "Folio"
 
 #: ../gtk/paper_names_offsets.c:148
 msgctxt "paper size"
@@ -4430,19 +4342,16 @@ msgid "Folio sp"
 msgstr "Folio sp"
 
 #: ../gtk/paper_names_offsets.c:149
-#, fuzzy
 msgctxt "paper size"
 msgid "Invite Envelope"
 msgstr "Sobre de invitación"
 
 #: ../gtk/paper_names_offsets.c:150
-#, fuzzy
 msgctxt "paper size"
 msgid "Italian Envelope"
 msgstr "Sobre italiano"
 
 #: ../gtk/paper_names_offsets.c:151
-#, fuzzy
 msgctxt "paper size"
 msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
@@ -4453,25 +4362,21 @@ msgid "pa-kai"
 msgstr "pa-kai"
 
 #: ../gtk/paper_names_offsets.c:153
-#, fuzzy
 msgctxt "paper size"
 msgid "Postfix Envelope"
 msgstr "Sobre Postfix"
 
 #: ../gtk/paper_names_offsets.c:154
-#, fuzzy
 msgctxt "paper size"
 msgid "Small Photo"
 msgstr "Foto pequeña"
 
 #: ../gtk/paper_names_offsets.c:155
-#, fuzzy
 msgctxt "paper size"
 msgid "prc1 Envelope"
 msgstr "Sobre prc1"
 
 #: ../gtk/paper_names_offsets.c:156
-#, fuzzy
 msgctxt "paper size"
 msgid "prc10 Envelope"
 msgstr "Sobre prc10"
@@ -4482,13 +4387,11 @@ msgid "prc 16k"
 msgstr "prc 16k"
 
 #: ../gtk/paper_names_offsets.c:158
-#, fuzzy
 msgctxt "paper size"
 msgid "prc2 Envelope"
 msgstr "Sobre prc2"
 
 #: ../gtk/paper_names_offsets.c:159
-#, fuzzy
 msgctxt "paper size"
 msgid "prc3 Envelope"
 msgstr "Sobre prc3"
@@ -4499,19 +4402,16 @@ msgid "prc 32k"
 msgstr "prc 32k"
 
 #: ../gtk/paper_names_offsets.c:161
-#, fuzzy
 msgctxt "paper size"
 msgid "prc4 Envelope"
 msgstr "Sobre prc4"
 
 #: ../gtk/paper_names_offsets.c:162
-#, fuzzy
 msgctxt "paper size"
 msgid "prc5 Envelope"
-msgstr "Sobre c5"
+msgstr "Sobre prc5"
 
 #: ../gtk/paper_names_offsets.c:163
-#, fuzzy
 msgctxt "paper size"
 msgid "prc6 Envelope"
 msgstr "Sobre prc6"
