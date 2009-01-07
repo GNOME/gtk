@@ -1,3 +1,13 @@
+2009-01-07  Matthias Clasen  <mclasen@redhat.com>
+
+	Merge from trunk:
+
+        Bug 566862 – pixbuf_new_from_file does not autodetect format
+
+        * gdk-pixbuf-io.c (_gdk_pixbuf_get_module): Go back to sniffing
+        without looking at the filename, to avoid breaking expected
+        functionality.
+
 2008-12-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.14.6 ===

@@ -794,7 +794,7 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
 	gchar *type;
 	gint j;
 
-	mime_type = g_content_type_guess (filename, buffer, size, NULL);
+	mime_type = g_content_type_guess (NULL, buffer, size, NULL);
 
 	for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
 		GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
