@@ -170,6 +170,8 @@
 
   [[self contentView] setFrame:NSMakeRect (0, 0, private->width, private->height)];
 
+  _gdk_window_update_size (window);
+
   /* Synthesize a configure event */
   event = gdk_event_new (GDK_CONFIGURE);
   event->configure.window = g_object_ref (window);
