@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 23:23-0500\n"
+"POT-Creation-Date: 2009-01-07 12:13-0500\n"
 "PO-Revision-Date: 2007-12-09 14:44+0200\n"
 "Last-Translator: Alaksandar Navicki <zolak@lacinka.org>\n"
 "Language-Team: i18n@mova.org <i18n@mova.org>\n"
@@ -115,11 +115,11 @@ msgstr "Pamier šryftu"
 msgid "The resolution for fonts on the screen"
 msgstr "Pamier šryftoŭ na ekranie"
 
-#: gtk/gtkaboutdialog.c:197
+#: gtk/gtkaboutdialog.c:200
 msgid "Program name"
 msgstr "Nazva prahramy"
 
-#: gtk/gtkaboutdialog.c:198
+#: gtk/gtkaboutdialog.c:201
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -127,43 +127,43 @@ msgstr ""
 "Nazva prahramy. Kali jana nie akreślenaja, zmoŭčana budzie vykarystanaja "
 "funkcyja g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:212
+#: gtk/gtkaboutdialog.c:215
 msgid "Program version"
 msgstr "Versija prahramy"
 
-#: gtk/gtkaboutdialog.c:213
+#: gtk/gtkaboutdialog.c:216
 msgid "The version of the program"
 msgstr "Versija prahramy"
 
-#: gtk/gtkaboutdialog.c:227
+#: gtk/gtkaboutdialog.c:230
 msgid "Copyright string"
 msgstr "Aŭtarskija pravy"
 
-#: gtk/gtkaboutdialog.c:228
+#: gtk/gtkaboutdialog.c:231
 msgid "Copyright information for the program"
 msgstr "Infarmacyja pra aŭtarskija pravy na prahramu"
 
-#: gtk/gtkaboutdialog.c:245
+#: gtk/gtkaboutdialog.c:248
 msgid "Comments string"
 msgstr "Apisalny tekst"
 
-#: gtk/gtkaboutdialog.c:246
+#: gtk/gtkaboutdialog.c:249
 msgid "Comments about the program"
 msgstr "Apisańnie prahramy"
 
-#: gtk/gtkaboutdialog.c:280
+#: gtk/gtkaboutdialog.c:283
 msgid "Website URL"
 msgstr "Adras chatniaj staronki"
 
-#: gtk/gtkaboutdialog.c:281
+#: gtk/gtkaboutdialog.c:284
 msgid "The URL for the link to the website of the program"
 msgstr "Adras spasyłki da chatniaj staronki prahramy"
 
-#: gtk/gtkaboutdialog.c:297
+#: gtk/gtkaboutdialog.c:300
 msgid "Website label"
 msgstr "Etykietka chatniaj staronki"
 
-#: gtk/gtkaboutdialog.c:298
+#: gtk/gtkaboutdialog.c:301
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -171,46 +171,46 @@ msgstr ""
 "Etykietka spasyłki da chatniaj staronki prahramy. Kali jana nie akreślenaja, "
 "jana zmoŭčana ŭjaŭlaje saboj URL"
 
-#: gtk/gtkaboutdialog.c:314
+#: gtk/gtkaboutdialog.c:317
 msgid "Authors"
 msgstr "Aŭtary"
 
-#: gtk/gtkaboutdialog.c:315
+#: gtk/gtkaboutdialog.c:318
 msgid "List of authors of the program"
 msgstr "Śpis aŭtaraŭ prahramy"
 
-#: gtk/gtkaboutdialog.c:331
+#: gtk/gtkaboutdialog.c:334
 msgid "Documenters"
 msgstr "Aŭtary dakumentacyi"
 
-#: gtk/gtkaboutdialog.c:332
+#: gtk/gtkaboutdialog.c:335
 msgid "List of people documenting the program"
 msgstr "Śpis asobaŭ, jakija stvarajuć dakumentacyju prahramy"
 
-#: gtk/gtkaboutdialog.c:348
+#: gtk/gtkaboutdialog.c:351
 msgid "Artists"
 msgstr "Mastaki"
 
-#: gtk/gtkaboutdialog.c:349
+#: gtk/gtkaboutdialog.c:352
 msgid "List of people who have contributed artwork to the program"
 msgstr "Śpis mastakoŭ, jakija pracujuć nad vyhladam prahramy"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:369
 msgid "Translator credits"
 msgstr "Zasłuhi pierakładčykaŭ"
 
-#: gtk/gtkaboutdialog.c:367
+#: gtk/gtkaboutdialog.c:370
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Zasłuhi pierakładčykaŭ. Pavinna być paznačana, što hety radok možna "
 "pierakłaści"
 
-#: gtk/gtkaboutdialog.c:382
+#: gtk/gtkaboutdialog.c:385
 msgid "Logo"
 msgstr "Lahatyp"
 
-#: gtk/gtkaboutdialog.c:383
+#: gtk/gtkaboutdialog.c:386
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -218,21 +218,21 @@ msgstr ""
 "Lahatyp dla vakna z infarmacyjaj ab prahramie. Kali nie akreśleny, zmoŭčana "
 "pryjmaje vartaść gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:398
+#: gtk/gtkaboutdialog.c:401
 msgid "Logo Icon Name"
 msgstr "Nazva ikony lahatypu"
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:402
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "Ikona, jakaja vykarystoŭvajecca jak lahatyp u vaknie z infarmacyjaj ab "
 "prahramie."
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:415
 msgid "Wrap license"
 msgstr "Pieranos radkoŭ u licenzii"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:416
 msgid "Whether to wrap the license text."
 msgstr "Akreślivaje, ci radki ŭ tekście licenzii pavinny pieranosicca."
 

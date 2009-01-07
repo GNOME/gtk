@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ast\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 23:23-0500\n"
+"POT-Creation-Date: 2009-01-07 12:12-0500\n"
 "PO-Revision-Date: 2008-10-17 20:25+0000\n"
 "Last-Translator: Esbardu <esguil@terra.es>\n"
 "Language-Team: Asturian <xspuente@gmail.com>\n"
@@ -1138,46 +1138,46 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Abriendo %d elementu"
 msgstr[1] "Abriendo %d elementos"
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
+#: gtk/gtkaboutdialog.c:267 gtk/gtkaboutdialog.c:2121
 msgid "License"
 msgstr "Llicencia"
 
-#: gtk/gtkaboutdialog.c:265
+#: gtk/gtkaboutdialog.c:268
 msgid "The license of the program"
 msgstr "La llicencia del programa"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:508
 msgid "C_redits"
 msgstr "C_réitos"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:514
+#: gtk/gtkaboutdialog.c:522
 msgid "_License"
 msgstr "_Llicencia"
 
-#: gtk/gtkaboutdialog.c:744
+#: gtk/gtkaboutdialog.c:790
 #, c-format
 msgid "About %s"
 msgstr "Tocante a %s"
 
-#: gtk/gtkaboutdialog.c:2032
+#: gtk/gtkaboutdialog.c:2045
 msgid "Credits"
 msgstr "Créitos"
 
-#: gtk/gtkaboutdialog.c:2061
+#: gtk/gtkaboutdialog.c:2074
 msgid "Written by"
 msgstr "Escritu por"
 
-#: gtk/gtkaboutdialog.c:2064
+#: gtk/gtkaboutdialog.c:2077
 msgid "Documented by"
 msgstr "Documentáu por"
 
-#: gtk/gtkaboutdialog.c:2076
+#: gtk/gtkaboutdialog.c:2089
 msgid "Translated by"
 msgstr "Tornáu por"
 
-#: gtk/gtkaboutdialog.c:2080
+#: gtk/gtkaboutdialog.c:2093
 msgid "Artwork by"
 msgstr "Diseñu gráficu por"
 

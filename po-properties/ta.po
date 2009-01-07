@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 23:23-0500\n"
+"POT-Creation-Date: 2009-01-07 12:13-0500\n"
 "PO-Revision-Date: 2008-09-19 17:32+0530\n"
 "Last-Translator: I. Felix <ifelix@redhat.com>\n"
 "Language-Team: Tamil <fedora-trans-ta@redhat.com>\n"
@@ -122,97 +122,97 @@ msgstr "எழுத்துரு திரைத்திறன்"
 msgid "The resolution for fonts on the screen"
 msgstr "திரையில் எழுத்துருக்களின் திரைத்திறன்"
 
-#: gtk/gtkaboutdialog.c:197
+#: gtk/gtkaboutdialog.c:200
 msgid "Program name"
 msgstr "நிரல் பெயர்"
 
-#: gtk/gtkaboutdialog.c:198
+#: gtk/gtkaboutdialog.c:201
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 "நிரலின் பெயர். இது அமைக்கப்படவில்லை எனில், அதன் முன்னிருப்பு g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:212
+#: gtk/gtkaboutdialog.c:215
 msgid "Program version"
 msgstr "நிரல் பதிப்பு"
 
-#: gtk/gtkaboutdialog.c:213
+#: gtk/gtkaboutdialog.c:216
 msgid "The version of the program"
 msgstr "நிரலின் பதிப்பு"
 
-#: gtk/gtkaboutdialog.c:227
+#: gtk/gtkaboutdialog.c:230
 msgid "Copyright string"
 msgstr "காப்புரிமை சரம்"
 
-#: gtk/gtkaboutdialog.c:228
+#: gtk/gtkaboutdialog.c:231
 msgid "Copyright information for the program"
 msgstr "நிரலுக்கான காப்புரிமை தகவல்"
 
-#: gtk/gtkaboutdialog.c:245
+#: gtk/gtkaboutdialog.c:248
 msgid "Comments string"
 msgstr "குறிப்புகள் சரம்"
 
-#: gtk/gtkaboutdialog.c:246
+#: gtk/gtkaboutdialog.c:249
 msgid "Comments about the program"
 msgstr "நிரல் பற்றிய விளக்கங்கள்"
 
-#: gtk/gtkaboutdialog.c:280
+#: gtk/gtkaboutdialog.c:283
 msgid "Website URL"
 msgstr "இணைய தள URL"
 
-#: gtk/gtkaboutdialog.c:281
+#: gtk/gtkaboutdialog.c:284
 msgid "The URL for the link to the website of the program"
 msgstr "நிரலின் இணைய தளத்திற்கான இணைய முகவரியின் இணைப்பு"
 
-#: gtk/gtkaboutdialog.c:297
+#: gtk/gtkaboutdialog.c:300
 msgid "Website label"
 msgstr "இணைய தள பெயர்"
 
-#: gtk/gtkaboutdialog.c:298
+#: gtk/gtkaboutdialog.c:301
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:314
+#: gtk/gtkaboutdialog.c:317
 msgid "Authors"
 msgstr "ஆசிரியர்கள்"
 
-#: gtk/gtkaboutdialog.c:315
+#: gtk/gtkaboutdialog.c:318
 msgid "List of authors of the program"
 msgstr "நிரலின் ஆசிரியர்கள் பட்டியல்"
 
-#: gtk/gtkaboutdialog.c:331
+#: gtk/gtkaboutdialog.c:334
 msgid "Documenters"
 msgstr "ஆவணமாக்குபவர்கள்"
 
-#: gtk/gtkaboutdialog.c:332
+#: gtk/gtkaboutdialog.c:335
 msgid "List of people documenting the program"
 msgstr "நிரலை ஆவணப்படுத்தும் நபர்களின் பட்டியல்"
 
-#: gtk/gtkaboutdialog.c:348
+#: gtk/gtkaboutdialog.c:351
 msgid "Artists"
 msgstr "கலைஞர்கள்"
 
-#: gtk/gtkaboutdialog.c:349
+#: gtk/gtkaboutdialog.c:352
 msgid "List of people who have contributed artwork to the program"
 msgstr "நிரலுக்கு கலை வேலைகளை வழங்கிய நபர்களின் பட்டியல்"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:369
 msgid "Translator credits"
 msgstr "மொழிப்பெயர்ப்பாளர் சன்மானம்"
 
-#: gtk/gtkaboutdialog.c:367
+#: gtk/gtkaboutdialog.c:370
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "மொழிபெயர்ப்பாளருக்கான சன்மானம். இந்த சரம் மொழிபெயர்க்க வேண்டும் என குறிக்க வேண்டும்"
 
-#: gtk/gtkaboutdialog.c:382
+#: gtk/gtkaboutdialog.c:385
 msgid "Logo"
 msgstr "சின்னம்"
 
-#: gtk/gtkaboutdialog.c:383
+#: gtk/gtkaboutdialog.c:386
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -220,19 +220,19 @@ msgstr ""
 "இதனை பற்றிய பெட்டிக்கான சின்னம். இது அமைக்கப்படவில்லை எனில், அதன் முன்னிருப்பு "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:398
+#: gtk/gtkaboutdialog.c:401
 msgid "Logo Icon Name"
 msgstr "சின்ன சிறுபட பெயர்"
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:402
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:415
 msgid "Wrap license"
 msgstr "மடிப்பு அங்கீகாரம்"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:416
 msgid "Whether to wrap the license text."
 msgstr "அங்கீகார உரையை மடிக்க வேண்டுமா."
 

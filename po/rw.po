@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 23:23-0500\n"
+"POT-Creation-Date: 2009-01-07 12:12-0500\n"
 "PO-Revision-Date: 2004-11-16 14:57-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -1272,51 +1272,51 @@ msgid_plural "Opening %d Items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
+#: gtk/gtkaboutdialog.c:267 gtk/gtkaboutdialog.c:2121
 msgid "License"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:265
+#: gtk/gtkaboutdialog.c:268
 #, fuzzy
 msgid "The license of the program"
 msgstr "Bya Porogaramu"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:508
 msgid "C_redits"
 msgstr ""
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:514
+#: gtk/gtkaboutdialog.c:522
 msgid "_License"
 msgstr ""
 
 # offmgr/source\offapp\intro\intro.hrc:TEXT_DEFAULTABOUT.text
-#: gtk/gtkaboutdialog.c:744
+#: gtk/gtkaboutdialog.c:790
 #, fuzzy, c-format
 msgid "About %s"
 msgstr "Ibyerekeye"
 
-#: gtk/gtkaboutdialog.c:2032
+#: gtk/gtkaboutdialog.c:2045
 msgid "Credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2061
+#: gtk/gtkaboutdialog.c:2074
 #, fuzzy
 msgid "Written by"
 msgstr "ku"
 
-#: gtk/gtkaboutdialog.c:2064
+#: gtk/gtkaboutdialog.c:2077
 #, fuzzy
 msgid "Documented by"
 msgstr "ku"
 
-#: gtk/gtkaboutdialog.c:2076
+#: gtk/gtkaboutdialog.c:2089
 #, fuzzy
 msgid "Translated by"
 msgstr "ku"
 
-#: gtk/gtkaboutdialog.c:2080
+#: gtk/gtkaboutdialog.c:2093
 #, fuzzy
 msgid "Artwork by"
 msgstr "ku"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 23:23-0500\n"
+"POT-Creation-Date: 2009-01-07 12:13-0500\n"
 "PO-Revision-Date: 2008-09-21 13:54+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
@@ -118,11 +118,11 @@ msgstr "Betűfelbontás"
 msgid "The resolution for fonts on the screen"
 msgstr "A képernyő betűinek felbontása"
 
-#: gtk/gtkaboutdialog.c:197
+#: gtk/gtkaboutdialog.c:200
 msgid "Program name"
 msgstr "Programnév"
 
-#: gtk/gtkaboutdialog.c:198
+#: gtk/gtkaboutdialog.c:201
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -130,43 +130,43 @@ msgstr ""
 "A program neve. Ha nincs beállítva, akkor alapértelmezés szerint "
 "g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:212
+#: gtk/gtkaboutdialog.c:215
 msgid "Program version"
 msgstr "Programverzió"
 
-#: gtk/gtkaboutdialog.c:213
+#: gtk/gtkaboutdialog.c:216
 msgid "The version of the program"
 msgstr "A program verziója"
 
-#: gtk/gtkaboutdialog.c:227
+#: gtk/gtkaboutdialog.c:230
 msgid "Copyright string"
 msgstr "Copyright szöveg"
 
-#: gtk/gtkaboutdialog.c:228
+#: gtk/gtkaboutdialog.c:231
 msgid "Copyright information for the program"
 msgstr "Copyright-információ a programról"
 
-#: gtk/gtkaboutdialog.c:245
+#: gtk/gtkaboutdialog.c:248
 msgid "Comments string"
 msgstr "Megjegyzések"
 
-#: gtk/gtkaboutdialog.c:246
+#: gtk/gtkaboutdialog.c:249
 msgid "Comments about the program"
 msgstr "Megjegyzések a programról"
 
-#: gtk/gtkaboutdialog.c:280
+#: gtk/gtkaboutdialog.c:283
 msgid "Website URL"
 msgstr "Webhely URL"
 
-#: gtk/gtkaboutdialog.c:281
+#: gtk/gtkaboutdialog.c:284
 msgid "The URL for the link to the website of the program"
 msgstr "A program webhelyére mutató hivatkozás URL-je"
 
-#: gtk/gtkaboutdialog.c:297
+#: gtk/gtkaboutdialog.c:300
 msgid "Website label"
 msgstr "Webhely címke"
 
-#: gtk/gtkaboutdialog.c:298
+#: gtk/gtkaboutdialog.c:301
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -174,44 +174,44 @@ msgstr ""
 "A program webhelyére mutató hivatkozás címkéje. Ha nincs beállítva, "
 "alapértelmezett értéke az URL"
 
-#: gtk/gtkaboutdialog.c:314
+#: gtk/gtkaboutdialog.c:317
 msgid "Authors"
 msgstr "Szerzők"
 
-#: gtk/gtkaboutdialog.c:315
+#: gtk/gtkaboutdialog.c:318
 msgid "List of authors of the program"
 msgstr "A program szerzőinek listája"
 
-#: gtk/gtkaboutdialog.c:331
+#: gtk/gtkaboutdialog.c:334
 msgid "Documenters"
 msgstr "Dokumentáció írói"
 
-#: gtk/gtkaboutdialog.c:332
+#: gtk/gtkaboutdialog.c:335
 msgid "List of people documenting the program"
 msgstr "A program dokumentációját író emberek listája"
 
-#: gtk/gtkaboutdialog.c:348
+#: gtk/gtkaboutdialog.c:351
 msgid "Artists"
 msgstr "Művészek"
 
-#: gtk/gtkaboutdialog.c:349
+#: gtk/gtkaboutdialog.c:352
 msgid "List of people who have contributed artwork to the program"
 msgstr "Azon emberek listája, akik alkotásaikat adták a programhoz"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:369
 msgid "Translator credits"
 msgstr "Fordítók"
 
-#: gtk/gtkaboutdialog.c:367
+#: gtk/gtkaboutdialog.c:370
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "A fordítók listája. Ezt a karakterláncot fordítandónak kell jelölni"
 
-#: gtk/gtkaboutdialog.c:382
+#: gtk/gtkaboutdialog.c:385
 msgid "Logo"
 msgstr "Logó"
 
-#: gtk/gtkaboutdialog.c:383
+#: gtk/gtkaboutdialog.c:386
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -219,19 +219,19 @@ msgstr ""
 "Logó a névjegy mezőhöz. Ha nincs beállítva, alapértelmezett értéke a "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:398
+#: gtk/gtkaboutdialog.c:401
 msgid "Logo Icon Name"
 msgstr "Logóikon neve"
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:402
 msgid "A named icon to use as the logo for the about box."
 msgstr "Egy megnevezett ikon a névjegy mező logójának."
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:415
 msgid "Wrap license"
 msgstr "Licenc tördelése"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:416
 msgid "Whether to wrap the license text."
 msgstr "Tördelje-e a licenc szövegét?"
 

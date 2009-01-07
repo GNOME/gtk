@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 23:23-0500\n"
+"POT-Creation-Date: 2009-01-07 12:12-0500\n"
 "PO-Revision-Date: 2008-09-19 20:36+0200\n"
 "Last-Translator: Горан Ракић <grakic@devbase.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -1158,46 +1158,46 @@ msgstr[0] "Отварам %d ставку"
 msgstr[1] "Отварам %d ставке"
 msgstr[2] "Отварам %d ставки"
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
+#: gtk/gtkaboutdialog.c:267 gtk/gtkaboutdialog.c:2121
 msgid "License"
 msgstr "Лиценца"
 
-#: gtk/gtkaboutdialog.c:265
+#: gtk/gtkaboutdialog.c:268
 msgid "The license of the program"
 msgstr "Лиценца програма"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:508
 msgid "C_redits"
 msgstr "_Заслуге"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:514
+#: gtk/gtkaboutdialog.c:522
 msgid "_License"
 msgstr "_Лиценца"
 
-#: gtk/gtkaboutdialog.c:744
+#: gtk/gtkaboutdialog.c:790
 #, c-format
 msgid "About %s"
 msgstr "О %s"
 
-#: gtk/gtkaboutdialog.c:2032
+#: gtk/gtkaboutdialog.c:2045
 msgid "Credits"
 msgstr "Заслуге"
 
-#: gtk/gtkaboutdialog.c:2061
+#: gtk/gtkaboutdialog.c:2074
 msgid "Written by"
 msgstr "Аутори"
 
-#: gtk/gtkaboutdialog.c:2064
+#: gtk/gtkaboutdialog.c:2077
 msgid "Documented by"
 msgstr "Документација"
 
-#: gtk/gtkaboutdialog.c:2076
+#: gtk/gtkaboutdialog.c:2089
 msgid "Translated by"
 msgstr "Превод"
 
-#: gtk/gtkaboutdialog.c:2080
+#: gtk/gtkaboutdialog.c:2093
 msgid "Artwork by"
 msgstr "Графика"
 

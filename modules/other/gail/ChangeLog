@@ -1,3 +1,15 @@
+2009-01-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.14.7 ===
+
+2009-01-07  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk:
+
+        Bug #565110 – Add an env variable to disable Gail.
+
+        * gail.c (gtk_module_init): Bail out if NO_GAIL env var is set
+
 2008-12-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.14.6 ===

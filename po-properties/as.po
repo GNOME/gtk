@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 23:23-0500\n"
+"POT-Creation-Date: 2009-01-07 12:13-0500\n"
 "PO-Revision-Date: 2008-09-16 17:42+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@redhat.com>\n"
 "Language-Team: American English <>\n"
@@ -116,54 +116,54 @@ msgstr "ফন্টৰ বিভাজন"
 msgid "The resolution for fonts on the screen"
 msgstr "পৰ্দ্দাৰ ফন্টৰ বিভাজন"
 
-#: gtk/gtkaboutdialog.c:197
+#: gtk/gtkaboutdialog.c:200
 msgid "Program name"
 msgstr "অনুপ্ৰয়োগৰ নাম"
 
-#: gtk/gtkaboutdialog.c:198
+#: gtk/gtkaboutdialog.c:201
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 "অনুপ্ৰয়োগৰ নাম ।  কোন নাম নিদিলে অবিকল্পিতৰূপে g_get_application_name() ব্যৱহৃত হয়।"
 
-#: gtk/gtkaboutdialog.c:212
+#: gtk/gtkaboutdialog.c:215
 msgid "Program version"
 msgstr "অনুপ্ৰয়োগৰ সংস্কৰণ"
 
-#: gtk/gtkaboutdialog.c:213
+#: gtk/gtkaboutdialog.c:216
 msgid "The version of the program"
 msgstr "অনুপ্ৰয়োগৰ সংস্কৰণ"
 
-#: gtk/gtkaboutdialog.c:227
+#: gtk/gtkaboutdialog.c:230
 msgid "Copyright string"
 msgstr "প্ৰতিলিপিস্বত্বৰ শব্দ"
 
-#: gtk/gtkaboutdialog.c:228
+#: gtk/gtkaboutdialog.c:231
 msgid "Copyright information for the program"
 msgstr "অনুপ্ৰয়োগৰ প্ৰতিলিপি স্বত্ব সংক্ৰান্ত তথ্য"
 
-#: gtk/gtkaboutdialog.c:245
+#: gtk/gtkaboutdialog.c:248
 msgid "Comments string"
 msgstr "মন্তব্য শব্দ"
 
-#: gtk/gtkaboutdialog.c:246
+#: gtk/gtkaboutdialog.c:249
 msgid "Comments about the program"
 msgstr "অনুপ্ৰয়োগ সম্পৰ্কিত মন্তব্য"
 
-#: gtk/gtkaboutdialog.c:280
+#: gtk/gtkaboutdialog.c:283
 msgid "Website URL"
 msgstr "ৱেবছাইটৰ URL"
 
-#: gtk/gtkaboutdialog.c:281
+#: gtk/gtkaboutdialog.c:284
 msgid "The URL for the link to the website of the program"
 msgstr "অনুপ্ৰয়োগৰ ৱেবছাইট নিৰ্দেশক সংযোগৰ URL"
 
-#: gtk/gtkaboutdialog.c:297
+#: gtk/gtkaboutdialog.c:300
 msgid "Website label"
 msgstr "ৱেবছাইট লেবেল"
 
-#: gtk/gtkaboutdialog.c:298
+#: gtk/gtkaboutdialog.c:301
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -171,44 +171,44 @@ msgstr ""
 "অনুপ্ৰয়োগৰ ৱেবছাইট নিৰ্দেশক সংযোগৰ লেবেল । ইয়াক নিৰ্ধাৰণ নকৰিলে অবিকল্পিতৰূপে URL "
 "ব্যৱহৃত হয়।"
 
-#: gtk/gtkaboutdialog.c:314
+#: gtk/gtkaboutdialog.c:317
 msgid "Authors"
 msgstr "লেখক"
 
-#: gtk/gtkaboutdialog.c:315
+#: gtk/gtkaboutdialog.c:318
 msgid "List of authors of the program"
 msgstr "অনুপ্ৰয়োগৰ লেখকসকলৰ তালিকা"
 
-#: gtk/gtkaboutdialog.c:331
+#: gtk/gtkaboutdialog.c:334
 msgid "Documenters"
 msgstr "আলেখ্যনৰ প্ৰস্তুতকাৰক"
 
-#: gtk/gtkaboutdialog.c:332
+#: gtk/gtkaboutdialog.c:335
 msgid "List of people documenting the program"
 msgstr "অনুপ্ৰয়োগৰ আলেখ্যন তৈয়াৰ কৰা প্ৰস্তুতকাৰকসকলৰ তালিকা"
 
-#: gtk/gtkaboutdialog.c:348
+#: gtk/gtkaboutdialog.c:351
 msgid "Artists"
 msgstr "শিল্পী"
 
-#: gtk/gtkaboutdialog.c:349
+#: gtk/gtkaboutdialog.c:352
 msgid "List of people who have contributed artwork to the program"
 msgstr "যি সকল ব্যক্তি এই অনুপ্ৰয়োগৰ বাবে শিল্পকৰ্মত সহায় আগবঢ়াইছে"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:369
 msgid "Translator credits"
 msgstr "অমিতাক্ষ ফুকন (aphukan@fedoraproject.org)"
 
-#: gtk/gtkaboutdialog.c:367
+#: gtk/gtkaboutdialog.c:370
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:382
+#: gtk/gtkaboutdialog.c:385
 msgid "Logo"
 msgstr "প্ৰতীকচিহ্ন"
 
-#: gtk/gtkaboutdialog.c:383
+#: gtk/gtkaboutdialog.c:386
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -216,19 +216,19 @@ msgstr ""
 "বিষয়ক প্ৰদৰ্শক বক্সৰ লোগো । ইয়াক নিৰ্দিষ্ট নকৰিলে অবিকল্পিত হিচাপে "
 "gtk_window_get_default_icon_list() ব্যৱহৃত হয় ।"
 
-#: gtk/gtkaboutdialog.c:398
+#: gtk/gtkaboutdialog.c:401
 msgid "Logo Icon Name"
 msgstr "লোগো আইকনৰ নাম"
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:402
 msgid "A named icon to use as the logo for the about box."
 msgstr "পৰিচিতি প্ৰদৰ্শক বক্সৰ লোগো হিচাপে এটা নামযুক্ত আইকন ব্যৱহাৰ কৰা হ'ব।"
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:415
 msgid "Wrap license"
 msgstr "লাইছেঞ্চ মেৰাই দিয়ক"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:416
 msgid "Whether to wrap the license text."
 msgstr "লাইছেঞ্চৰ শব্দক মেৰোৱা হ'ব নে নাই ।"
 

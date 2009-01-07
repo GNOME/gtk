@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 23:23-0500\n"
+"POT-Creation-Date: 2009-01-07 12:12-0500\n"
 "PO-Revision-Date: 2008-09-18 03:13+0300\n"
 "Last-Translator: Anas Afif Emad <anas.e87@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -1129,46 +1129,46 @@ msgstr[3] "يجري فتح %Id عناصر"
 msgstr[4] "يجري فتح %Id عنصرا"
 msgstr[5] "يجري فتح %Id عنصر"
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
+#: gtk/gtkaboutdialog.c:267 gtk/gtkaboutdialog.c:2121
 msgid "License"
 msgstr "الترخيص"
 
-#: gtk/gtkaboutdialog.c:265
+#: gtk/gtkaboutdialog.c:268
 msgid "The license of the program"
 msgstr "ترخيص البرنامج"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:508
 msgid "C_redits"
 msgstr "_شكْر"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:514
+#: gtk/gtkaboutdialog.c:522
 msgid "_License"
 msgstr "ال_ترخيص"
 
-#: gtk/gtkaboutdialog.c:744
+#: gtk/gtkaboutdialog.c:790
 #, c-format
 msgid "About %s"
 msgstr "عنْ %s"
 
-#: gtk/gtkaboutdialog.c:2032
+#: gtk/gtkaboutdialog.c:2045
 msgid "Credits"
 msgstr "شكْر"
 
-#: gtk/gtkaboutdialog.c:2061
+#: gtk/gtkaboutdialog.c:2074
 msgid "Written by"
 msgstr "كتَبَهُ"
 
-#: gtk/gtkaboutdialog.c:2064
+#: gtk/gtkaboutdialog.c:2077
 msgid "Documented by"
 msgstr "وثّقه"
 
-#: gtk/gtkaboutdialog.c:2076
+#: gtk/gtkaboutdialog.c:2089
 msgid "Translated by"
 msgstr "ترجَمَهُ"
 
-#: gtk/gtkaboutdialog.c:2080
+#: gtk/gtkaboutdialog.c:2093
 msgid "Artwork by"
 msgstr "جمَّلَهُ"
 

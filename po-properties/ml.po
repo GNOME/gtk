@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 23:23-0500\n"
+"POT-Creation-Date: 2009-01-07 12:13-0500\n"
 "PO-Revision-Date: 2007-09-06 18:05+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com>\n"
 "Language-Team: Malayalam\n"
@@ -119,11 +119,11 @@ msgstr "ലിപിയുടെ സാന്ദ്രത"
 msgid "The resolution for fonts on the screen"
 msgstr "സ്ക്രീനില്‍ ലിപികളുടെ സാന്ദ്രത"
 
-#: gtk/gtkaboutdialog.c:197
+#: gtk/gtkaboutdialog.c:200
 msgid "Program name"
 msgstr "പ്രോഗ്രാമിന്‍റെ പേര്"
 
-#: gtk/gtkaboutdialog.c:198
+#: gtk/gtkaboutdialog.c:201
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -131,43 +131,43 @@ msgstr ""
 "പ്രോഗ്രാമിന്‍റെ പേര്. ഇത് സെറ്റ് ചെയ്തിട്ടില്ലായെങ്കില്‍, ഡീഫോള്‍ട്ടായി g_get_application_name"
 "() എന്ന പേരാകും"
 
-#: gtk/gtkaboutdialog.c:212
+#: gtk/gtkaboutdialog.c:215
 msgid "Program version"
 msgstr "പ്രോഗ്രാമിന്‍റെ വേര്‍ഷന്‍"
 
-#: gtk/gtkaboutdialog.c:213
+#: gtk/gtkaboutdialog.c:216
 msgid "The version of the program"
 msgstr "പ്രോഗ്രാമിന്‍റെ വേര്‍ഷന്‍"
 
-#: gtk/gtkaboutdialog.c:227
+#: gtk/gtkaboutdialog.c:230
 msgid "Copyright string"
 msgstr "Copyright സ്ട്രിങ്"
 
-#: gtk/gtkaboutdialog.c:228
+#: gtk/gtkaboutdialog.c:231
 msgid "Copyright information for the program"
 msgstr "പ്രോഗ്രാമിനുളള Copyright വിവരങ്ങള്‍"
 
-#: gtk/gtkaboutdialog.c:245
+#: gtk/gtkaboutdialog.c:248
 msgid "Comments string"
 msgstr "Comments സ്ട്രിങ്"
 
-#: gtk/gtkaboutdialog.c:246
+#: gtk/gtkaboutdialog.c:249
 msgid "Comments about the program"
 msgstr "പ്രോഗ്രാമിനെ സംബന്ധിച്ചുളള അഭിപ്രായങ്ങള്‍"
 
-#: gtk/gtkaboutdialog.c:280
+#: gtk/gtkaboutdialog.c:283
 msgid "Website URL"
 msgstr "Website URL"
 
-#: gtk/gtkaboutdialog.c:281
+#: gtk/gtkaboutdialog.c:284
 msgid "The URL for the link to the website of the program"
 msgstr "പ്രോഗ്രാമിന്‍റെ വെബ്സൈറ്റിനുളള URL"
 
-#: gtk/gtkaboutdialog.c:297
+#: gtk/gtkaboutdialog.c:300
 msgid "Website label"
 msgstr "Website ലേബല്‍"
 
-#: gtk/gtkaboutdialog.c:298
+#: gtk/gtkaboutdialog.c:301
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -175,44 +175,44 @@ msgstr ""
 "പ്രോഗ്രാമിന്‍റെ വെബ്സൈറ്റിനുളള ലിങ്കിന്‍റെ ലേബല്‍. ഇത് സെറ്റ് ചെയ്തിട്ടില്ലായെങ്കില്‍, അത് "
 "ഡീഫോള്‍ട്ടായി URL ആകുന്നതാണ്"
 
-#: gtk/gtkaboutdialog.c:314
+#: gtk/gtkaboutdialog.c:317
 msgid "Authors"
 msgstr "രചയിതാക്കള്‍"
 
-#: gtk/gtkaboutdialog.c:315
+#: gtk/gtkaboutdialog.c:318
 msgid "List of authors of the program"
 msgstr "പ്രോഗ്രാമിന്‍റെ രചയിതാക്കളുടെ പട്ടിക"
 
-#: gtk/gtkaboutdialog.c:331
+#: gtk/gtkaboutdialog.c:334
 msgid "Documenters"
 msgstr "എഴുത്തുകാര്‍"
 
-#: gtk/gtkaboutdialog.c:332
+#: gtk/gtkaboutdialog.c:335
 msgid "List of people documenting the program"
 msgstr "പ്രോഗ്രാമിന്‍റെ എഴുത്തുകാരുടെ പട്ടിക"
 
-#: gtk/gtkaboutdialog.c:348
+#: gtk/gtkaboutdialog.c:351
 msgid "Artists"
 msgstr "കലാകാരന്‍മാര്‍"
 
-#: gtk/gtkaboutdialog.c:349
+#: gtk/gtkaboutdialog.c:352
 msgid "List of people who have contributed artwork to the program"
 msgstr "പ്രോഗ്രാമിന് കലാസംഭാവന ചെയ്ത ആളുകളുടെ പട്ടിക"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:369
 msgid "Translator credits"
 msgstr "അനി പീറ്റര്‍ <peter.ani@gmail.com>"
 
-#: gtk/gtkaboutdialog.c:367
+#: gtk/gtkaboutdialog.c:370
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "തര്‍ജ്ജിമ ചെയ്യുന്നവര്‍ക്കുളള അംഗീകാരം. ഈ സ്ട്രിങ് തര്‍ജിമ ചെയ്യണം എന്നടയാളപ്പെടുത്തുക"
 
-#: gtk/gtkaboutdialog.c:382
+#: gtk/gtkaboutdialog.c:385
 msgid "Logo"
 msgstr "ലോഗോ"
 
-#: gtk/gtkaboutdialog.c:383
+#: gtk/gtkaboutdialog.c:386
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -220,19 +220,19 @@ msgstr ""
 "വിശദീകരണങ്ങള്‍ എഴുതുന്ന പെട്ടിയ്ക്കുളള ലോഗോ. ഇത് സെറ്റ് ചെയ്തിട്ടില്ലായെങ്കില്‍, ഡീഫോള്‍ട്ടായി "
 "gtk_window_get_default_icon_list() എന്നത് ആകും."
 
-#: gtk/gtkaboutdialog.c:398
+#: gtk/gtkaboutdialog.c:401
 msgid "Logo Icon Name"
 msgstr "ലോഗോ ഐക്കണ്‍ന്‍റെ നാമം"
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:402
 msgid "A named icon to use as the logo for the about box."
 msgstr "വിശദീകരണങ്ങള്‍ എഴുതുന്ന പെട്ടിയ്ക്കുളള ലോഗോ ആയി ഉപയോഗിക്കുന്നതിനുളള ഐക്കണ്‍."
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:415
 msgid "Wrap license"
 msgstr "ലൈസന്‍സ് ആവരണം ചെയ്യുക"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:416
 msgid "Whether to wrap the license text."
 msgstr "ലൈസന്‍സ് വാചകങ്ങള്‍ ആവരണം ചെയ്യുമോ എന്ന്."
 

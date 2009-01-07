@@ -1,5 +1,9 @@
 2009-01-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.14.7 ===
+
+2009-01-07  Matthias Clasen  <mclasen@redhat.com>
+
 	Merge from trunk:
 
         Bug 566862 – pixbuf_new_from_file does not autodetect format

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 317\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 23:23-0500\n"
+"POT-Creation-Date: 2009-01-07 12:13-0500\n"
 "PO-Revision-Date: 2004-11-17 21:21-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <en@li.org>\n"
@@ -137,63 +137,63 @@ msgstr "Utudomo"
 msgid "The resolution for fonts on the screen"
 msgstr "i Urutonde ku i Mugaragaza"
 
-#: gtk/gtkaboutdialog.c:197
+#: gtk/gtkaboutdialog.c:200
 #, fuzzy
 msgid "Program name"
 msgstr "Izina:"
 
-#: gtk/gtkaboutdialog.c:198
+#: gtk/gtkaboutdialog.c:201
 #, fuzzy
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr "Izina: Bya i Porogaramu iyi ni OYA Gushyiraho Kuri"
 
-#: gtk/gtkaboutdialog.c:212
+#: gtk/gtkaboutdialog.c:215
 #, fuzzy
 msgid "Program version"
 msgstr "Verisiyo"
 
-#: gtk/gtkaboutdialog.c:213
+#: gtk/gtkaboutdialog.c:216
 #, fuzzy
 msgid "The version of the program"
 msgstr "Verisiyo Bya i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:227
+#: gtk/gtkaboutdialog.c:230
 #, fuzzy
 msgid "Copyright string"
 msgstr "Ikurikiranyanyuguti"
 
-#: gtk/gtkaboutdialog.c:228
+#: gtk/gtkaboutdialog.c:231
 #, fuzzy
 msgid "Copyright information for the program"
 msgstr "Ibisobanuro kugirango i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:245
+#: gtk/gtkaboutdialog.c:248
 #, fuzzy
 msgid "Comments string"
 msgstr "Ikurikiranyanyuguti"
 
-#: gtk/gtkaboutdialog.c:246
+#: gtk/gtkaboutdialog.c:249
 #, fuzzy
 msgid "Comments about the program"
 msgstr "Ibyerekeye i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:280
+#: gtk/gtkaboutdialog.c:283
 msgid "Website URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:281
+#: gtk/gtkaboutdialog.c:284
 #, fuzzy
 msgid "The URL for the link to the website of the program"
 msgstr "kugirango i Ihuza Kuri i Webu Bya i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:297
+#: gtk/gtkaboutdialog.c:300
 #, fuzzy
 msgid "Website label"
 msgstr "Akarango"
 
-#: gtk/gtkaboutdialog.c:298
+#: gtk/gtkaboutdialog.c:301
 #, fuzzy
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
@@ -202,48 +202,48 @@ msgstr ""
 "Akarango kugirango i Ihuza Kuri i Webu Bya i Porogaramu iyi ni OYA "
 "Gushyiraho Kuri i"
 
-#: gtk/gtkaboutdialog.c:314
+#: gtk/gtkaboutdialog.c:317
 msgid "Authors"
 msgstr "Abahanzi"
 
-#: gtk/gtkaboutdialog.c:315
+#: gtk/gtkaboutdialog.c:318
 #, fuzzy
 msgid "List of authors of the program"
 msgstr "Bya Abahanzi Bya i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:331
+#: gtk/gtkaboutdialog.c:334
 msgid "Documenters"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:332
+#: gtk/gtkaboutdialog.c:335
 #, fuzzy
 msgid "List of people documenting the program"
 msgstr "Bya Abantu i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:348
+#: gtk/gtkaboutdialog.c:351
 msgid "Artists"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:349
+#: gtk/gtkaboutdialog.c:352
 #, fuzzy
 msgid "List of people who have contributed artwork to the program"
 msgstr "Bya Abantu Kuri i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:369
 msgid "Translator credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:367
+#: gtk/gtkaboutdialog.c:370
 #, fuzzy
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Kuri i Ikurikiranyanyuguti cy/ byagarajwe Nka"
 
-#: gtk/gtkaboutdialog.c:382
+#: gtk/gtkaboutdialog.c:385
 msgid "Logo"
 msgstr "ikirango"
 
-#: gtk/gtkaboutdialog.c:383
+#: gtk/gtkaboutdialog.c:386
 #, fuzzy
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
@@ -251,23 +251,23 @@ msgid ""
 msgstr ""
 "A ikirango kugirango i Ibyerekeye Agasanduku iyi ni OYA Gushyiraho Kuri"
 
-#: gtk/gtkaboutdialog.c:398
+#: gtk/gtkaboutdialog.c:401
 msgid "Logo Icon Name"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:402
 #, fuzzy
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "A Agashushondanga Kuri Gukoresha Nka i ikirango kugirango i Ibyerekeye "
 "Agasanduku"
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:415
 #, fuzzy
 msgid "Wrap license"
 msgstr "Ubwoko Gushyiraho"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:416
 #, fuzzy
 msgid "Whether to wrap the license text."
 msgstr "Kuri Gihinguranya i Umwandiko"

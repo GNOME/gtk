@@ -27,6 +27,7 @@
 #include "gailfactory.h"
 
 #define GNOME_ACCESSIBILITY_ENV "GNOME_ACCESSIBILITY"
+#define NO_GAIL_ENV "NO_GAIL"
 
 static gboolean gail_focus_watcher      (GSignalInvocationHint *ihint,
                                          guint                  n_param_values,
@@ -976,6 +977,16 @@ gnome_accessibility_module_shutdown (void)
 int
 gtk_module_init (gint *argc, char** argv[])
 {
+  const char* env_no_gail;
+  gboolean no_gail = FALSE;
+
+  env_no_gail = g_getenv (NO_GAIL_ENV);
+  if (env_no_gail)
+      no_gail = atoi (env_no_gail);
+
+  if (no_gail)
+      return 0;
+
   gail_accessibility_module_init ();
 
   return 0;

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 23:23-0500\n"
+"POT-Creation-Date: 2009-01-07 12:13-0500\n"
 "PO-Revision-Date: 2006-07-18 17:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -116,11 +116,11 @@ msgstr "ཡིག་གཟུགས་ཧུམ་ཆ།"
 msgid "The resolution for fonts on the screen"
 msgstr "གསལ་གཞི་གུ་ཡིག་གཟུགས་ཀྱི་ཧུམ་ཆ།"
 
-#: gtk/gtkaboutdialog.c:197
+#: gtk/gtkaboutdialog.c:200
 msgid "Program name"
 msgstr "ལས་རིམ་གྱི་མིང༌།"
 
-#: gtk/gtkaboutdialog.c:198
+#: gtk/gtkaboutdialog.c:201
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -128,43 +128,43 @@ msgstr ""
 "ལས་རིམ་གྱི་མིང༌། གལ་སྲིད་འདི་ གཞི་སྒྲིག་མེད་པ་ཅིན་ དེ་གིས་g_get_application_name() ལུ་སྔོན་སྒྲིག་"
 "འབདཝ་ཨིན།"
 
-#: gtk/gtkaboutdialog.c:212
+#: gtk/gtkaboutdialog.c:215
 msgid "Program version"
 msgstr "ལས་རིམ་གྱི་ ཐོན་རིམ།"
 
-#: gtk/gtkaboutdialog.c:213
+#: gtk/gtkaboutdialog.c:216
 msgid "The version of the program"
 msgstr "ལས་རིམ་གྱི་ ཐོན་རིམདེ།"
 
-#: gtk/gtkaboutdialog.c:227
+#: gtk/gtkaboutdialog.c:230
 msgid "Copyright string"
 msgstr "འདྲ་བཤུས་དབང་ཆའི་ཡིག་རྒྱུན།"
 
-#: gtk/gtkaboutdialog.c:228
+#: gtk/gtkaboutdialog.c:231
 msgid "Copyright information for the program"
 msgstr "ལས་རིམ་གྱི་ འདྲ་བཤུས་དབང་ཆའི་བརྡ་དོན།"
 
-#: gtk/gtkaboutdialog.c:245
+#: gtk/gtkaboutdialog.c:248
 msgid "Comments string"
 msgstr "བསམ་བཀོད་ཡིག་རྒྱུན།"
 
-#: gtk/gtkaboutdialog.c:246
+#: gtk/gtkaboutdialog.c:249
 msgid "Comments about the program"
 msgstr "ལས་རིམ་སྐོར་གྱི་བསམ་བཀོད།"
 
-#: gtk/gtkaboutdialog.c:280
+#: gtk/gtkaboutdialog.c:283
 msgid "Website URL"
 msgstr "ཝེབ་ས་ཡིཊི་གི་ ཡུ་ཨར་ཨེལ།"
 
-#: gtk/gtkaboutdialog.c:281
+#: gtk/gtkaboutdialog.c:284
 msgid "The URL for the link to the website of the program"
 msgstr "ལས་རིམ་གྱི་ ཝེབ་ས་ཡིཊི་ལུ་ འབྲེལ་མཐུད་འབད་ནིའི་ ཡུ་ཨར་ཨེལ།"
 
-#: gtk/gtkaboutdialog.c:297
+#: gtk/gtkaboutdialog.c:300
 msgid "Website label"
 msgstr "ཝེབ་ས་ཡིཊི་གི་ ཁ་ཡིག"
 
-#: gtk/gtkaboutdialog.c:298
+#: gtk/gtkaboutdialog.c:301
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -172,46 +172,46 @@ msgstr ""
 "ལས་རིམ་གྱི་ ཝེབ་ས་ཡིཊི་ལུ་ འབྲེལ་མཐུད་འབད་ནིའི་ཁ་ཡིག གལ་སྲིད་འདི་ གཞི་སྒྲིག་མེད་པ་ཅིན་ དེ་གིས་ ཡུ་ཨར་"
 "ཨེལ་ལུ་ སྔོན་སྒྲིག་འབདཝ་ཨིན།"
 
-#: gtk/gtkaboutdialog.c:314
+#: gtk/gtkaboutdialog.c:317
 msgid "Authors"
 msgstr "རྩོམ་པ་པོ།"
 
-#: gtk/gtkaboutdialog.c:315
+#: gtk/gtkaboutdialog.c:318
 msgid "List of authors of the program"
 msgstr "ལས་རིམ་རྩོམ་པ་པོ་ཚུ་གི་ཐོ་ཡིག"
 
-#: gtk/gtkaboutdialog.c:331
+#: gtk/gtkaboutdialog.c:334
 msgid "Documenters"
 msgstr "ཡིག་བཀོདཔ།"
 
-#: gtk/gtkaboutdialog.c:332
+#: gtk/gtkaboutdialog.c:335
 msgid "List of people documenting the program"
 msgstr "ལས་རིམ་ཡིག་བཀོད་མི་ མི་ཚུ་གི་ཐོ་ཡིག"
 
-#: gtk/gtkaboutdialog.c:348
+#: gtk/gtkaboutdialog.c:351
 msgid "Artists"
 msgstr "རི་མོ་མཁན།"
 
-#: gtk/gtkaboutdialog.c:349
+#: gtk/gtkaboutdialog.c:352
 msgid "List of people who have contributed artwork to the program"
 msgstr "ལས་རིམ་ལུ་ རི་མོའི་ལཱ་གི་ ཕན་འདེབས་་འབད་མི་ཚུ་གི་ཐོ་ཡིག"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:369
 msgid "Translator credits"
 msgstr ""
 "ཨའི་ཌི་ཨར་སི་གི་མ་དངུལ་རྒྱབ་སྐྱོར་ཐོག་ལས་ བརྡ་དོན་འཕྲུལ་རིག་ལས་ཁུངས་ནང་ སྐད་བསྒྱུར་འབད་ཡི། ཁ་གསལ་གྱི་"
 "དོན་ལུ་ འབྲེལ་བ་འཐབ་ས་: <pema_geyleg@druknet.bt>/<pgeyleg@dit.gov.bt>"
 
-#: gtk/gtkaboutdialog.c:367
+#: gtk/gtkaboutdialog.c:370
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "སྐད་བསྒྱུརཔ་ཚུ་ལུ་ངོ་བསྟོད། ཡིག་རྒྱུན་འདི་ལུ་ སྐད་བསྒྱུར་འབད་བཏུབ་པའི་ རྟགས་མཚན་བཀལ་དགོ"
 
-#: gtk/gtkaboutdialog.c:382
+#: gtk/gtkaboutdialog.c:385
 msgid "Logo"
 msgstr "ལས་རྟགས།"
 
-#: gtk/gtkaboutdialog.c:383
+#: gtk/gtkaboutdialog.c:386
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -219,21 +219,21 @@ msgstr ""
 "སྐོར་ལས་སྒྲོམ་གྱི་ ལས་རྟགས་ཅིག གལ་སྲིད་འདི་ གཞི་སྒྲིག་མེད་པ་ཅིན་ དེ་གིས་ "
 "gtk_window_get_default_icon_list() ལུ་སྔོན་སྒྲིག་འབདཝ་ཨིན།"
 
-#: gtk/gtkaboutdialog.c:398
+#: gtk/gtkaboutdialog.c:401
 msgid "Logo Icon Name"
 msgstr "ལས་རྟགས་ངོས་དཔར་གྱི་མིང༌།"
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:402
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "སྐོར་ལས་ཀྱི་སྒྲོམ་གྱི་དོན་ལུ་ ལས་རྟགས་བཟུམ་ཅིག་སྦེ་ ལག་ལེན་འཐབ་ནིའི་དོན་ལུ་ མིང་བཏགས་ཡོད་པའི་ངོས་དཔར་"
 "ཅིག"
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:415
 msgid "Wrap license"
 msgstr "ཆོག་ཐམ་ལོག་མཚམས་བཟོ།"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:416
 msgid "Whether to wrap the license text."
 msgstr "ཆོག་ཐམ་ཚིག་ཡིག་དེ་ ལོག་མཚམས་བཟོ་ནི་ཨིན་ན་མེན།"
 

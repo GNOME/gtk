@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-15 23:23-0500\n"
+"POT-Creation-Date: 2009-01-07 12:13-0500\n"
 "PO-Revision-Date: 2007-09-07 19:28+0530\n"
 "Last-Translator: Subhransu Behera <arya_subhransu@yahoo.co.in>\n"
 "Language-Team: Oriya <oriya-group@lists.sarovar.org>\n"
@@ -123,11 +123,11 @@ msgstr "ଅକ୍ଷରରୂପ ବିଭେଦନ"
 msgid "The resolution for fonts on the screen"
 msgstr "ପରଦାରେ ଅକ୍ଷରରୂପ ପାଇଁ ବିଭେଦନ"
 
-#: gtk/gtkaboutdialog.c:197
+#: gtk/gtkaboutdialog.c:200
 msgid "Program name"
 msgstr "ପ୍ରୋଗ୍ରାମ ର ନାମ"
 
-#: gtk/gtkaboutdialog.c:198
+#: gtk/gtkaboutdialog.c:201
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -135,43 +135,43 @@ msgstr ""
 "ପ୍ରୋଗ୍ରାମର ନାମ। ଏହାକୁ ବିନ୍ଯାସ କରାଯାଇ ନ ଥିଲେ, g_get_application_name() ପୂର୍ବନିର୍ଦ୍ଧାରିତ "
 "ନାମ ହୋଇଥାଏ।"
 
-#: gtk/gtkaboutdialog.c:212
+#: gtk/gtkaboutdialog.c:215
 msgid "Program version"
 msgstr "ପ୍ରୋଗ୍ରାମ ର ସଂସ୍କରଣ"
 
-#: gtk/gtkaboutdialog.c:213
+#: gtk/gtkaboutdialog.c:216
 msgid "The version of the program"
 msgstr "ପ୍ରୋଗ୍ରାମ ର ସଂସ୍କରଣ"
 
-#: gtk/gtkaboutdialog.c:227
+#: gtk/gtkaboutdialog.c:230
 msgid "Copyright string"
 msgstr "ସ୍ବତ୍ତ୍ବାଧୀକାର ବାକ୍ଯଖଣ୍ଡ"
 
-#: gtk/gtkaboutdialog.c:228
+#: gtk/gtkaboutdialog.c:231
 msgid "Copyright information for the program"
 msgstr "ପ୍ରୋଗ୍ରାମ ପାଇଁ ସ୍ବତ୍ତ୍ବାଧୀକାର ସୂଚନା"
 
-#: gtk/gtkaboutdialog.c:245
+#: gtk/gtkaboutdialog.c:248
 msgid "Comments string"
 msgstr "ଟିପ୍ପଣୀ ବାକ୍ଯଖଣ୍ଡ"
 
-#: gtk/gtkaboutdialog.c:246
+#: gtk/gtkaboutdialog.c:249
 msgid "Comments about the program"
 msgstr "ପ୍ରୋଗ୍ରାମ ବିଷୟରେ ଟିପ୍ପଣୀ"
 
-#: gtk/gtkaboutdialog.c:280
+#: gtk/gtkaboutdialog.c:283
 msgid "Website URL"
 msgstr "ୱେବସାଇଟ ୟୁ.ଆର.ଏଲ."
 
-#: gtk/gtkaboutdialog.c:281
+#: gtk/gtkaboutdialog.c:284
 msgid "The URL for the link to the website of the program"
 msgstr "ପ୍ରୋଗ୍ରାମର ୱେବସାଇଟ ସଂଯୋଗ ପାଇଁ ୟୁ.ଆର.ଏଲ."
 
-#: gtk/gtkaboutdialog.c:297
+#: gtk/gtkaboutdialog.c:300
 msgid "Website label"
 msgstr "ୱେବସାଇଟ ସୂଚକ"
 
-#: gtk/gtkaboutdialog.c:298
+#: gtk/gtkaboutdialog.c:301
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -179,44 +179,44 @@ msgstr ""
 "ପ୍ରୋଗ୍ରାମର ୱେବସାଇଟ ସଂଯୋଗ ପାଇଁ ସୂଚକ। ଏହାକୁ ବିନ୍ଯାସ କରାଯାଇ ନ ଥିଲେ, ୟୁ.ଆର.ଏଲ. ପୂର୍ବନିର୍ଦ୍ଧାରିତ "
 "ସୂଚକ ହୋଇଥାଏ"
 
-#: gtk/gtkaboutdialog.c:314
+#: gtk/gtkaboutdialog.c:317
 msgid "Authors"
 msgstr "ଲେଖକ ମାନେ"
 
-#: gtk/gtkaboutdialog.c:315
+#: gtk/gtkaboutdialog.c:318
 msgid "List of authors of the program"
 msgstr "ପ୍ରୋଗ୍ରାମ ଲେଖକ ମାନଙ୍କର ତାଲିକା"
 
-#: gtk/gtkaboutdialog.c:331
+#: gtk/gtkaboutdialog.c:334
 msgid "Documenters"
 msgstr "ଦସ୍ତାବେଜକର୍ତା"
 
-#: gtk/gtkaboutdialog.c:332
+#: gtk/gtkaboutdialog.c:335
 msgid "List of people documenting the program"
 msgstr "ଏହି ପ୍ରୋଗ୍ରାମର ଦସ୍ତାବେଜୀକରଣ କରୁଥିବା ବ୍ଯକ୍ତି ମାନଙ୍କ ସୂଚୀ"
 
-#: gtk/gtkaboutdialog.c:348
+#: gtk/gtkaboutdialog.c:351
 msgid "Artists"
 msgstr "ଚିତ୍ରକାର"
 
-#: gtk/gtkaboutdialog.c:349
+#: gtk/gtkaboutdialog.c:352
 msgid "List of people who have contributed artwork to the program"
 msgstr "ପ୍ରୋଗ୍ରାମର ଚତ୍ରକଳା ପାଇଁ ଅଂଶଦାନ କରିଥିବା ବ୍ଯକ୍ତି ମାନଙ୍କ ନାମ"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:369
 msgid "Translator credits"
 msgstr "ଶୁଭ୍ରାଂଶୁ ବେହେରା <arya_subhransu@yahoo.co.in>"
 
-#: gtk/gtkaboutdialog.c:367
+#: gtk/gtkaboutdialog.c:370
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "ଅନୁବାଦକ ମାନଙ୍କୁ ଶ୍ରେୟ। ଏହି ବାକ୍ଯଖଣ୍ଡକୁ ଅନୁବାଦ ଯୋଗ୍ଯ ବୋଲି ଚିହ୍ନିତ କରାଯିବା ଉଚିତ"
 
-#: gtk/gtkaboutdialog.c:382
+#: gtk/gtkaboutdialog.c:385
 msgid "Logo"
 msgstr "ପ୍ରତୀକ"
 
-#: gtk/gtkaboutdialog.c:383
+#: gtk/gtkaboutdialog.c:386
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -224,19 +224,19 @@ msgstr ""
 "ବିବରଣୀ ବାକ୍ସ ପାଇଁ ଗୋଟିଏ ପ୍ରତୀକ। ଏହାକୁ ବିନ୍ଯାସ କରାଯାଇ ନ ଥିଲେ, "
 "gtk_window_get_default_icon_list() ପୂର୍ବନିର୍ଦ୍ଧାରିତ ହୋଇଥାଏ।"
 
-#: gtk/gtkaboutdialog.c:398
+#: gtk/gtkaboutdialog.c:401
 msgid "Logo Icon Name"
 msgstr "ପ୍ରତୀକ ଚିତ୍ରସଙ୍କେତ ନାମ"
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:402
 msgid "A named icon to use as the logo for the about box."
 msgstr "ବିବରଣୀ ବାକ୍ସରେ ପ୍ରତୀକ ଭାବରେ ବ୍ଯବହାର କରିବା ପାଇଁ ଗୋଟିଏ ନାମିତ ଚିତ୍ରସଙ୍କେତ"
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:415
 msgid "Wrap license"
 msgstr "ଲାଇସେନ୍ସକୁ ପରିବେଷ୍ଟିତ କରନ୍ତୁ"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:416
 msgid "Whether to wrap the license text."
 msgstr "ଲାଇସେନ୍ସ ପାଠ୍ଯକୁ ପରିବେଷ୍ଟିତ କରାଯିବ କି ନାହିଁ"
 
