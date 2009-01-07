@@ -923,7 +923,10 @@ _gdk_window_impl_new (GdkWindow     *window,
 
 	if (!private->input_only)
 	  {
-	    NSRect frame_rect = NSMakeRect (private->x, private->y, private->width, private->height);
+	    NSRect frame_rect = NSMakeRect (private->x + private->parent->abs_x,
+                                            private->y + private->parent->abs_y,
+                                            private->width,
+                                            private->height);
 	
 	    impl->view = [[GdkQuartzView alloc] initWithFrame:frame_rect];
 	    
@@ -1834,6 +1837,8 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
   NSPoint point;
   gint x_tmp, y_tmp;
   GdkWindow *found_window;
+
+  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
 
   if (GDK_WINDOW_DESTROYED (window))
     {
