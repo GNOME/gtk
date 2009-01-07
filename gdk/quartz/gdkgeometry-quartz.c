@@ -88,3 +88,18 @@ _gdk_quartz_window_move_region (GdkWindow       *window,
 {
   /* FIXME: Implement */
 }
+
+void
+_gdk_quartz_window_queue_translation (GdkWindow *window,
+                                      GdkRegion *area,
+                                      gint       dx,
+                                      gint       dy)
+{
+}
+
+gboolean
+_gdk_quartz_window_queue_antiexpose (GdkWindow *window,
+                                     GdkRegion *area)
+{
+  return FALSE;
+}
