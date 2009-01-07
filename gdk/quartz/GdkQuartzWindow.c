@@ -142,16 +142,7 @@
   NSRect content_rect = [self contentRectForFrameRect:[self frame]];
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   GdkEvent *event;
-
-  /* Ignore new position during showing/hiding the window, otherwise we
-   * would get the off-screen position that is used for hidden windows to
-   * get reliable MouseEntered events when showing them again. See comments
-   * in show() and hide().
-   */
-  if (inShowOrHide)
-    return;
 
   private->x = content_rect.origin.x;
   private->y = _gdk_quartz_window_get_inverted_screen_y (content_rect.origin.y + content_rect.size.height);
@@ -172,7 +163,6 @@
   NSRect content_rect = [self contentRectForFrameRect:[self frame]];
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   GdkEvent *event;
 
   private->width = content_rect.size.width;
@@ -279,32 +269,8 @@
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-  gboolean was_hidden;
-  int requested_x = 0, requested_y = 0;
 
   inShowOrHide = YES;
-  was_hidden = FALSE;
-
-  if (!GDK_WINDOW_IS_MAPPED (window))
-    {
-      NSRect content_rect;
-      NSRect frame_rect;
-
-      was_hidden = TRUE;
-
-      /* We move the window in place if it's not mapped. See comment in
-       * hide().
-       */
-      content_rect =
-        NSMakeRect (private->x,
-                    _gdk_quartz_window_get_inverted_screen_y (private->y) - private->height,
-                    private->width, private->height);
-      frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
-      [impl->toplevel setFrame:frame_rect display:NO];
-
-      requested_x = frame_rect.origin.x;
-      requested_y = frame_rect.origin.y;
-    }
 
   if (makeKey)
     [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
@@ -312,20 +278,6 @@
     [impl->toplevel orderFront:nil];
 
   inShowOrHide = NO;
-
-  /* When the window manager didn't allow our request, update the position
-   * to what it really ended up as.
-   */
-  if (was_hidden)
-    {
-      NSRect frame_rect;
-
-      frame_rect = [impl->toplevel frame];
-      if (requested_x != frame_rect.origin.x || requested_y != frame_rect.origin.y)
-        {
-          [self windowDidMove:nil];
-        }
-    }
 }
 
 - (void)hide
@@ -333,23 +285,9 @@
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-  NSRect content_rect;
-  NSRect frame_rect;
 
   inShowOrHide = YES;
-
-  /* We move the window away when hiding, to make it possible to move it in
-   * place when showing to get reliable tracking rect events (which are used
-   * to generate crossing events). We have to do this, probably a bug in
-   * quartz.
-   */
-  content_rect = NSMakeRect (-500 - private->width, -500 - private->height,
-                             private->width, private->height);
-  frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
-  [impl->toplevel setFrame:frame_rect display:NO];
-
   [impl->toplevel orderOut:nil];
-
   inShowOrHide = NO;
 }
 

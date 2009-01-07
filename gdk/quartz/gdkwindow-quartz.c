@@ -872,13 +872,10 @@ _gdk_window_impl_new (GdkWindow     *window,
         int style_mask;
         const char *title;
 
-        /* Big hack: We start out outside the screen and move the
-         * window in before showing it. This makes the initial
-         * MouseEntered event work if the window ends up right under
-         * the mouse pointer, bad quartz.
-         */
-        content_rect = NSMakeRect (-500 - private->width, -500 - private->height,
-                                   private->width, private->height);
+        content_rect = NSMakeRect (private->x,
+                                   _gdk_quartz_window_get_inverted_screen_y (private->y) - private->height,
+                                   private->width,
+                                   private->height);
 
         if (attributes->window_type == GDK_WINDOW_TEMP ||
             attributes->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN)
@@ -910,6 +907,9 @@ _gdk_window_impl_new (GdkWindow     *window,
 	    [impl->toplevel setOpaque:NO];
 	    [impl->toplevel setBackgroundColor:[NSColor clearColor]];
 	  }
+
+        content_rect.origin.x = 0;
+        content_rect.origin.y = 0;
 
 	impl->view = [[GdkQuartzView alloc] initWithFrame:content_rect];
 	[impl->view setGdkWindow:window];
@@ -1288,19 +1288,12 @@ move_resize_window_internal (GdkWindow *window,
       NSRect content_rect;
       NSRect frame_rect;
 
-      /* We don't update the NSWindow while unmapped, since we move windows
-       * off-screen when hiding in order for MouseEntered to be triggered
-       * reliably when showing windows and they appear under the mouse.
-       */
-      if (GDK_WINDOW_IS_MAPPED (window))
-        {
-          content_rect =  NSMakeRect (private->x,
-                                      _gdk_quartz_window_get_inverted_screen_y (private->y + private->height),
-                                      private->width, private->height);
+      content_rect =  NSMakeRect (private->x,
+                                  _gdk_quartz_window_get_inverted_screen_y (private->y + private->height),
+                                  private->width, private->height);
 
-          frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
-          [impl->toplevel setFrame:frame_rect display:YES];
-        }
+      frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
+      [impl->toplevel setFrame:frame_rect display:YES];
     }
   else 
     {
