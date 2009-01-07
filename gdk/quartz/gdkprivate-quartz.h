@@ -102,6 +102,8 @@ extern GdkWindow *_gdk_root;
 
 extern GdkDragContext *_gdk_quartz_drag_source_context;
 
+#define GDK_WINDOW_IS_QUARTZ(win)        (GDK_IS_WINDOW_IMPL_QUARTZ (((GdkWindowObject *)win)->impl))
+
 /* Initialization */
 void _gdk_windowing_window_init  (void);
 void _gdk_events_init            (void);
@@ -195,5 +197,11 @@ void        _gdk_quartz_window_move_region (GdkWindow       *window,
                                             const GdkRegion *region,
                                             gint             dx,
                                             gint             dy);
+void        _gdk_quartz_window_queue_translation (GdkWindow *window,
+                                                  GdkRegion *area,
+                                                  gint       dx,
+                                                  gint       dy);
+gboolean    _gdk_quartz_window_queue_antiexpose  (GdkWindow *window,
+                                                  GdkRegion *area);
 
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */
