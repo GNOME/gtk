@@ -1134,7 +1134,7 @@ _gdk_quartz_events_trigger_crossing_events (gboolean defer_to_mainloop)
     timestamp = GetCurrentEventTime ();
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
-  private = GDK_WINDOW_OBJECT (impl);
+  private = GDK_WINDOW_OBJECT (toplevel);
   nsevent = [NSEvent otherEventWithType:NSApplicationDefined
                                location:NSMakePoint (x_toplevel, private->height - y_toplevel)
                           modifierFlags:flags
