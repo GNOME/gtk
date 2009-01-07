@@ -1915,11 +1915,12 @@ _gdk_windowing_window_at_pointer (GdkDisplay      *display,
 {
   GdkWindow *found_window;
   gint x, y;
+  GdkModifierType tmp_mask = 0;
 
   found_window = _gdk_windowing_window_get_pointer (display,
 						    _gdk_root,
 						    &x, &y,
-						    mask);
+						    &tmp_mask);
   if (found_window)
     {
       GdkWindowObject *private;
@@ -1945,6 +1946,9 @@ _gdk_windowing_window_at_pointer (GdkDisplay      *display,
       *win_x = -1;
       *win_y = -1;
     }
+
+  if (mask)
+    *mask = tmp_mask;
 
   return found_window;
 }
