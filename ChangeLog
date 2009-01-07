@@ -1,5 +1,9 @@
 2009-01-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version
+
+2009-01-07  Matthias Clasen  <mclasen@redhat.com>
+
 	* === Released 2.14.7 ===
 
 	* NEWS: Updates
