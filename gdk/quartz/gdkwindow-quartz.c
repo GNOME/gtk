@@ -2955,7 +2955,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->shape_combine_region = gdk_window_quartz_shape_combine_region;
   iface->input_shape_combine_region = gdk_window_quartz_input_shape_combine_region;
   iface->set_static_gravities = gdk_window_quartz_set_static_gravities;
-  /*iface->queue_antiexpose = _gdk_x11_window_queue_antiexpose;*/
-  /*iface->queue_translation = _gdk_x11_window_queue_translation;*/
+  iface->queue_antiexpose = _gdk_quartz_window_queue_antiexpose;
+  iface->queue_translation = _gdk_quartz_window_queue_translation;
   iface->destroy = _gdk_quartz_window_destroy;
 }
