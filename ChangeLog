@@ -1,3 +1,11 @@
+2009-01-08  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 566733 – Add GIcon to GtkAction, GtkToolButton
+
+	* gtk/gtkaction.c: Add a ::gicon property to GtkAction and set the 
+	icon from it if specified. The stock icon is preferred if a stock id 
+	is given. Based on a patch by A. Walton
+
 2009-01-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/stock-icons/{16,24}/gtk-caps-lock-warning.png: New icons
