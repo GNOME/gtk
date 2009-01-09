@@ -373,6 +373,7 @@ gdk_window_new (GdkWindow     *parent,
   g_return_val_if_fail (attributes != NULL, NULL);
 
   window = _gdk_window_new (parent, attributes, attributes_mask);
+  g_return_val_if_fail (window != NULL, window);
 
   /* Inherit redirection from parent */
   if (parent != NULL)
