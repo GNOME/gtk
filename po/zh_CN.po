@@ -8,15 +8,16 @@
 # Funda Wang <fundawang@linux.net.cn>, 2003,2004
 # Yang Zhang <zyangmath@gmail.com>, 2007.
 # Deng Xiyue <manphiz@gmail.com>, 2008.
+# Funda Wang <fundawang@gmail.com>, 2008,2009
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2009-01-08 05:37+0000\n"
+"POT-Creation-Date: 2009-01-09 02:50+0000\n"
 "PO-Revision-Date: 2008-03-13 10:25+0800\n"
-"Last-Translator: Deng Xiyue <manphiz@gmail.com>\n"
+"Last-Translator: Funda Wang <fundawang@gmail.com>\n"
 "Language-Team: i18n-zh <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,14 +29,13 @@ msgid "directfb arg"
 msgstr "directfb 参数"
 
 #: ../gdk/directfb/gdkdisplay-directfb.c:55
-#, fuzzy
 msgid "sdl|system"
 msgstr "系统"
 
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:127
 msgid "Program class as used by the window manager"
-msgstr "窗口管理其所使用的程序类"
+msgstr "窗口管理器所使用的程序类"
 
 #. Placeholder in --class=CLASS in --help output
 #: ../gdk/gdk.c:128
@@ -523,7 +523,7 @@ msgstr "不支持 %s 版本的 GIF 文件格式"
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr "GIF 图像没有全局色彩表表，它其中的一帧也没有局部色彩表表。"
+msgstr "GIF 图像没有全局色彩表，它其中的一帧也没有局部色彩表。"
 
 #: ../gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
@@ -605,7 +605,7 @@ msgstr "无法解码图像"
 
 #: ../gdk-pixbuf/io-jasper.c:123
 msgid "Transformed JPEG2000 has zero width or height"
-msgstr "已转换的 JPEG2000 的宽度或高度为零。"
+msgstr "已转换的 JPEG2000 的宽度或高度为零"
 
 #: ../gdk-pixbuf/io-jasper.c:137
 msgid "Image type currently not supported"
@@ -613,7 +613,7 @@ msgstr "目前不支持该图像类型"
 
 #: ../gdk-pixbuf/io-jasper.c:149 ../gdk-pixbuf/io-jasper.c:157
 msgid "Couldn't allocate memory for color profile"
-msgstr "无法为颜色配置分配内存"
+msgstr "无法为色彩配置分配内存"
 
 #: ../gdk-pixbuf/io-jasper.c:182
 msgid "Insufficient memory to open JPEG 2000 file"
@@ -641,7 +641,7 @@ msgstr "内存不足以载入图像，试试关闭其它应用程序来释放内
 #: ../gdk-pixbuf/io-jpeg.c:570 ../gdk-pixbuf/io-jpeg.c:776
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
-msgstr "不支持的 JPEG 颜色空间(%s)"
+msgstr "不支持的 JPEG 色彩空间(%s)"
 
 #: ../gdk-pixbuf/io-jpeg.c:668 ../gdk-pixbuf/io-jpeg.c:944
 #: ../gdk-pixbuf/io-jpeg.c:1177 ../gdk-pixbuf/io-jpeg.c:1186
@@ -1062,55 +1062,49 @@ msgid "The XPM image format"
 msgstr "XPM 图像格式"
 
 #: ../gdk-pixbuf/io-gdip-emf.c:59
-#, fuzzy
 msgid "The EMF image format"
-msgstr "BMP 图像格式"
+msgstr "EMF 图像格式"
 
 #: ../gdk-pixbuf/io-gdip-utils.c:220
-#, fuzzy, c-format
+#, c-format
 msgid "Could not allocate memory: %s"
-msgstr "无法为流分配内存"
+msgstr "无法分配内存：%s"
 
 #: ../gdk-pixbuf/io-gdip-utils.c:245 ../gdk-pixbuf/io-gdip-utils.c:360
 #: ../gdk-pixbuf/io-gdip-utils.c:394
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create stream: %s"
-msgstr "无法创建目录：%s"
+msgstr "无法创建流：%s"
 
 #: ../gdk-pixbuf/io-gdip-utils.c:259
-#, fuzzy, c-format
+#, c-format
 msgid "Could not seek stream: %s"
-msgstr "无法删除项目"
+msgstr "无法搜索流：%s"
 
 #: ../gdk-pixbuf/io-gdip-utils.c:271
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read from stream: %s"
-msgstr "无法将 %s 重命名为 %s：%s\n"
+msgstr "无法从流中读取：%s"
 
 #: ../gdk-pixbuf/io-gdip-utils.c:683 ../gdk-pixbuf/io-gdip-utils.c:815
-#, fuzzy
 msgid "Couldn't load bitmap"
-msgstr "无法解码图像"
+msgstr "无法装入位图"
 
 #: ../gdk-pixbuf/io-gdip-utils.c:838
-#, fuzzy
 msgid "Couldn't load metafile"
-msgstr "无法解码图像"
+msgstr "无法装入元文件"
 
 #: ../gdk-pixbuf/io-gdip-utils.c:997
-#, fuzzy
 msgid "Unsupported image format for GDI+"
-msgstr "不支持的 RAS 图像变种"
+msgstr "不支持的 GDI+ 图像格式"
 
 #: ../gdk-pixbuf/io-gdip-utils.c:1004
-#, fuzzy
 msgid "Couldn't save"
-msgstr "无法保存剩余部分"
+msgstr "无法保存"
 
 #: ../gdk-pixbuf/io-gdip-wmf.c:58
-#, fuzzy
 msgid "The WMF image format"
-msgstr "WBMP 图像格式"
+msgstr "WMF 图像格式"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:54
@@ -1148,20 +1142,20 @@ msgid "Make X calls synchronous"
 msgstr "同步调用 X"
 
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:311
-#, fuzzy, c-format
+#, c-format
 msgid "Starting %s"
-msgstr "正在打印 %d"
+msgstr "正在启动 %s"
 
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:313
-#, fuzzy, c-format
+#, c-format
 msgid "Opening %s"
-msgstr "打开“%s”"
+msgstr "打开 %s"
 
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:316
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] ""
+msgstr[0] "打开 %d 项"
 
 #: ../gtk/gtkaboutdialog.c:267 ../gtk/gtkaboutdialog.c:2121
 msgid "License"
@@ -1279,17 +1273,17 @@ msgstr "\\"
 #: ../gtk/gtkbuilderparser.c:340
 #, c-format
 msgid "Invalid type function: `%s'"
-msgstr "无效的类型函数：%s"
+msgstr "无效的类型函数：“%s”"
 
 #: ../gtk/gtkbuilderparser.c:837
 #, c-format
 msgid "Invalid root element: '%s'"
-msgstr "无效的根元素：%s"
+msgstr "无效的根元素：“%s”"
 
 #: ../gtk/gtkbuilderparser.c:876
 #, c-format
 msgid "Unhandled tag: '%s'"
-msgstr "未处理的标记：%s"
+msgstr "未处理的标记：“%s”"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1461,7 +1455,7 @@ msgstr "颜色中的蓝色分量。"
 
 #: ../gtk/gtkcolorsel.c:402
 msgid "Op_acity:"
-msgstr "不透明度(_A)："
+msgstr "透明度(_A)："
 
 #: ../gtk/gtkcolorsel.c:409 ../gtk/gtkcolorsel.c:419
 msgid "Transparency of the color."
@@ -1476,7 +1470,7 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"您可以在此栏输入 HTML 方式的十六进制颜色值，或是像“orange”这样的颜色名称。"
+"您可以在此栏输入 HTML 风格的十六进制颜色值，或是像“orange”这样的颜色名称。"
 
 #: ../gtk/gtkcolorsel.c:470
 msgid "_Palette:"
@@ -1484,7 +1478,7 @@ msgstr "调色板(_P)："
 
 #: ../gtk/gtkcolorsel.c:499
 msgid "Color Wheel"
-msgstr "着色轮"
+msgstr "色相环"
 
 #: ../gtk/gtkcolorsel.c:976
 msgid ""
@@ -1530,14 +1524,16 @@ msgid ""
 "You have the Caps Lock key on\n"
 "and an active input method"
 msgstr ""
+"您开启了 Caps Lock 键\n"
+"并激活了输入法"
 
 #: ../gtk/gtkentry.c:9382
 msgid "You have the Caps Lock key on"
-msgstr ""
+msgstr "您开启了 Caps Lock 键"
 
 #: ../gtk/gtkentry.c:9384
 msgid "You have an active input method"
-msgstr ""
+msgstr "您有活动的输入法"
 
 #: ../gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
@@ -1675,9 +1671,8 @@ msgid "Show _Hidden Files"
 msgstr "显示隐藏文件(_H)"
 
 #: ../gtk/gtkfilechooserdefault.c:4321
-#, fuzzy
 msgid "Show _Size Column"
-msgstr "显示大小"
+msgstr "显示大小列(_S)"
 
 #: ../gtk/gtkfilechooserdefault.c:4576 ../gtk/gtkfilesel.c:730
 msgid "Files"
@@ -1819,7 +1814,7 @@ msgstr "唯一补全"
 #.
 #: ../gtk/gtkfilechooserentry.c:1097
 msgid "Complete, but not unique"
-msgstr "完成补全，但不唯一"
+msgstr "进行补全，但不唯一"
 
 #. translators: this text is shown while the system is searching
 #. * for possible completions for text in a file chooser entry
@@ -1923,7 +1918,7 @@ msgstr "重命名文件“%s”时出错：%s"
 #: ../gtk/gtkfilesel.c:1605
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "将重命名文件“%s”为“%s”时出错：%s"
+msgstr "将文件“%s”重命名为“%s”时出错：%s"
 
 #: ../gtk/gtkfilesel.c:1652
 msgid "Rename File"
@@ -1948,7 +1943,7 @@ msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
-"文件名“%s”无法转换为 UTF-8。(请尝试设置环境变量 G_BROKEN_FILENAMES)：%s"
+"文件名“%s”无法转换为 UTF-8。(请尝试设置环境变量 G_FILENAME_ENCODING)：%s"
 
 #: ../gtk/gtkfilesel.c:3051
 msgid "Invalid UTF-8"
@@ -2063,13 +2058,13 @@ msgstr "简单"
 #: ../gtk/gtkimmulticontext.c:545
 msgctxt "input method menu"
 msgid "System"
-msgstr "输入法菜单|系统"
+msgstr "系统"
 
 #: ../gtk/gtkimmulticontext.c:629
-#, fuzzy, c-format
+#, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
-msgstr "输入法菜单|系统"
+msgstr "系统(%s)"
 
 #: ../gtk/gtkinputdialog.c:192
 msgid "Input"
@@ -2195,7 +2190,7 @@ msgstr "default:LTR"
 #: ../gtk/gtkmain.c:768
 #, c-format
 msgid "Cannot open display: %s"
-msgstr ""
+msgstr "无法打开显示：%s"
 
 #: ../gtk/gtkmain.c:805
 msgid "GTK+ Options"
@@ -2206,44 +2201,40 @@ msgid "Show GTK+ Options"
 msgstr "显示 GTK+ 选项"
 
 #: ../gtk/gtkmountoperation.c:481
-#, fuzzy
 msgid "Co_nnect"
-msgstr "连接(_O)"
+msgstr "连接(_N)"
 
 #: ../gtk/gtkmountoperation.c:525
 msgid "Connect _anonymously"
-msgstr ""
+msgstr "匿名连接(_A)"
 
 #: ../gtk/gtkmountoperation.c:534
 msgid "Connect as u_ser:"
-msgstr ""
+msgstr "连接为用户(_S)："
 
 #: ../gtk/gtkmountoperation.c:571
-#, fuzzy
 msgid "_Username:"
-msgstr "重命名(_R)"
+msgstr "用户名(_U)："
 
 #: ../gtk/gtkmountoperation.c:575
-#, fuzzy
 msgid "_Domain:"
-msgstr "位置(_L)："
+msgstr "域(_D)："
 
 #: ../gtk/gtkmountoperation.c:580
-#, fuzzy
 msgid "_Password:"
-msgstr "力度(_P)："
+msgstr "密码(_P)："
 
 #: ../gtk/gtkmountoperation.c:598
 msgid "Forget password _immediately"
-msgstr ""
+msgstr "立即忘记密码(_I)"
 
 #: ../gtk/gtkmountoperation.c:608
 msgid "Remember password until you _logout"
-msgstr ""
+msgstr "记到注销之前(_L)"
 
 #: ../gtk/gtkmountoperation.c:618
 msgid "Remember _forever"
-msgstr ""
+msgstr "永远记住(_F)"
 
 #: ../gtk/gtknotebook.c:4425 ../gtk/gtknotebook.c:6944
 #, c-format
@@ -2271,11 +2262,11 @@ msgid ""
 "For portable documents"
 msgstr ""
 "<b>任意打印机</b>\n"
-"对于便携文档"
+"用于便携文档"
 
 #: ../gtk/gtkpagesetupunixdialog.c:894 ../gtk/gtkpagesetupunixdialog.c:1403
 msgid "mm"
-msgstr "mm"
+msgstr "毫米"
 
 #: ../gtk/gtkpagesetupunixdialog.c:896 ../gtk/gtkpagesetupunixdialog.c:1401
 msgid "inch"
@@ -2323,7 +2314,7 @@ msgstr "打印机边距..."
 #: ../gtk/gtkpagesetupunixdialog.c:1608
 #, c-format
 msgid "Custom Size %d"
-msgstr "自定义大小%d"
+msgstr "自定义大小 %d"
 
 #: ../gtk/gtkpagesetupunixdialog.c:1837
 msgid "Manage Custom Sizes"
@@ -2450,13 +2441,12 @@ msgid "Printing %d"
 msgstr "正在打印 %d"
 
 #: ../gtk/gtkprintoperation.c:2411
-#, fuzzy
 msgid "Error creating print preview"
-msgstr "调用预览出错"
+msgstr "创建打印预览时出错"
 
 #: ../gtk/gtkprintoperation.c:2414
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr ""
+msgstr "最可能的原因是无法创建临时文件。"
 
 #: ../gtk/gtkprintoperation-unix.c:242
 msgid "Error launching preview"
@@ -2493,14 +2483,12 @@ msgid "Custom size"
 msgstr "自定义大小"
 
 #: ../gtk/gtkprintoperation-win32.c:1517
-#, fuzzy
 msgid "No printer found"
-msgstr "未找到项目"
+msgstr "未找到打印机"
 
 #: ../gtk/gtkprintoperation-win32.c:1544
-#, fuzzy
 msgid "Invalid argument to CreateDC"
-msgstr "PrintDlgEx 的参数无效"
+msgstr "CreateDC 的参数无效"
 
 #: ../gtk/gtkprintoperation-win32.c:1578 ../gtk/gtkprintoperation-win32.c:1801
 msgid "Error from StartDoc"
@@ -2591,19 +2579,16 @@ msgstr "常规"
 #.
 #: ../gtk/gtkprintunixdialog.c:2442
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2869
-#, fuzzy
 msgid "Page Ordering"
-msgstr "正在准备"
+msgstr "页面顺序"
 
 #: ../gtk/gtkprintunixdialog.c:2448
-#, fuzzy
 msgid "Left to right"
-msgstr "LRM 从左至右记号(_L)"
+msgstr "从左至右"
 
 #: ../gtk/gtkprintunixdialog.c:2449
-#, fuzzy
 msgid "Right to left"
-msgstr "打印到文件"
+msgstr "从右至左"
 
 #: ../gtk/gtkprintunixdialog.c:2518
 msgid "Layout"
@@ -2618,9 +2603,8 @@ msgid "Pages per _side:"
 msgstr "每面页数(_S)："
 
 #: ../gtk/gtkprintunixdialog.c:2555
-#, fuzzy
 msgid "Page or_dering:"
-msgstr "每面页数(_S)："
+msgstr "页面顺序(_D)："
 
 #: ../gtk/gtkprintunixdialog.c:2571
 msgid "_Only print:"
@@ -2699,14 +2683,14 @@ msgstr "添加封面页"
 #.
 #: ../gtk/gtkprintunixdialog.c:2810
 msgid "Be_fore:"
-msgstr "前(_F)："
+msgstr "封面(_F)："
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
 #: ../gtk/gtkprintunixdialog.c:2828
 msgid "_After:"
-msgstr "后(_A)："
+msgstr "封底(_A)："
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
@@ -2850,25 +2834,21 @@ msgstr "找不到 URI 为“%s”的一项"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:288
-#, fuzzy
 msgctxt "Stock label"
 msgid "Information"
 msgstr "信息"
 
 #: ../gtk/gtkstock.c:289
-#, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "警告"
 
 #: ../gtk/gtkstock.c:290
-#, fuzzy
 msgctxt "Stock label"
 msgid "Error"
 msgstr "错误"
 
 #: ../gtk/gtkstock.c:291
-#, fuzzy
 msgctxt "Stock label"
 msgid "Question"
 msgstr "问题"
@@ -2877,175 +2857,147 @@ msgstr "问题"
 #. * need the mnemonics to be rationalized
 #.
 #: ../gtk/gtkstock.c:296
-#, fuzzy
 msgctxt "Stock label"
 msgid "_About"
 msgstr "关于(_A)"
 
 #: ../gtk/gtkstock.c:297
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "添加(_A)"
 
 #: ../gtk/gtkstock.c:298
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "应用(_A)"
 
 #: ../gtk/gtkstock.c:299
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "粗体(_B)"
 
 #: ../gtk/gtkstock.c:300
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "取消(_C)"
 
 #: ../gtk/gtkstock.c:301
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "CD-ROM(_C)"
 
 #: ../gtk/gtkstock.c:302
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "清除(_C)"
 
 #: ../gtk/gtkstock.c:303
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "关闭(_C)"
 
 #: ../gtk/gtkstock.c:304
-#, fuzzy
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "连接(_O)"
 
 #: ../gtk/gtkstock.c:305
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "转换(_C)"
 
 #: ../gtk/gtkstock.c:306
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "复制(_C)"
 
 #: ../gtk/gtkstock.c:307
-#, fuzzy
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
 #: ../gtk/gtkstock.c:308
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "删除(_D)"
 
 #: ../gtk/gtkstock.c:309
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "放弃(_D)"
 
 #: ../gtk/gtkstock.c:310
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "断开连接(_D)"
 
 #: ../gtk/gtkstock.c:311
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "执行(_E)"
 
 #: ../gtk/gtkstock.c:312
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "编辑(_E)"
 
 #: ../gtk/gtkstock.c:313
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "查找(_F)"
 
 #: ../gtk/gtkstock.c:314
-#, fuzzy
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "查找并替换(_R)"
 
 #: ../gtk/gtkstock.c:315
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "软盘(_F)"
 
 #: ../gtk/gtkstock.c:316
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "全屏(_F)"
 
 #: ../gtk/gtkstock.c:317
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "离开全屏(_L)"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: ../gtk/gtkstock.c:319
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Bottom"
 msgstr "底部(_B)"
 
 #. This is a navigation label as in "go to the first page"
 #: ../gtk/gtkstock.c:321
-#, fuzzy
 msgctxt "Stock label"
 msgid "_First"
 msgstr "第一个(_F)"
 
 #. This is a navigation label as in "go to the last page"
 #: ../gtk/gtkstock.c:323
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Last"
 msgstr "最后一个(_L)"
 
 #. This is a navigation label as in "go to the top of the page"
 #: ../gtk/gtkstock.c:325
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Top"
 msgstr "顶部(_T)"
 
 #. This is a navigation label as in "go back"
 #: ../gtk/gtkstock.c:327
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Back"
 msgstr "后退(_B)"
 
 #. This is a navigation label as in "go down"
 #: ../gtk/gtkstock.c:329
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Down"
 msgstr "向下(_D)"
@@ -3053,377 +3005,318 @@ msgstr "向下(_D)"
 #. This is a navigation label as in "go forward"
 #. Media label, as in "fast forward"
 #: ../gtk/gtkstock.c:331 ../gtk/gtkstock.c:353
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Forward"
 msgstr "前进(_F)"
 
 #. This is a navigation label as in "go up"
 #: ../gtk/gtkstock.c:333
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Up"
 msgstr "向上(_U)"
 
 #: ../gtk/gtkstock.c:334
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "硬盘(_H)"
 
 #: ../gtk/gtkstock.c:335
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "帮助(_H)"
 
 #: ../gtk/gtkstock.c:336
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "主文件夹(_H)"
 
 #: ../gtk/gtkstock.c:337
-#, fuzzy
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "增加缩进"
 
 #: ../gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "减少缩进"
 
 #: ../gtk/gtkstock.c:339
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "索引(_I)"
 
 #: ../gtk/gtkstock.c:340
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "信息(_I)"
 
 #: ../gtk/gtkstock.c:341
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "斜体(_I)"
 
 #: ../gtk/gtkstock.c:342
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "跳至(_J)"
 
 #. This is about text justification, "centered text"
 #: ../gtk/gtkstock.c:344
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "居中(_C)"
 
 #. This is about text justification
 #: ../gtk/gtkstock.c:346
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "两端对齐(_F)"
 
 #. This is about text justification, "left-justified text"
 #: ../gtk/gtkstock.c:348
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "左对齐(_L)"
 
 #. This is about text justification, "right-justified text"
 #: ../gtk/gtkstock.c:350
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "右对齐(_R)"
 
 #. Media label, as in "next song"
 #: ../gtk/gtkstock.c:355
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Next"
 msgstr "下首(_N)"
 
 #. Media label, as in "pause music"
 #: ../gtk/gtkstock.c:357
-#, fuzzy
 msgctxt "Stock label"
 msgid "P_ause"
 msgstr "暂停(_A)"
 
 #. Media label, as in "play music"
 #: ../gtk/gtkstock.c:359
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Play"
 msgstr "播放(_P)"
 
 #. Media label, as in  "previous song"
 #: ../gtk/gtkstock.c:361
-#, fuzzy
 msgctxt "Stock label"
 msgid "Pre_vious"
 msgstr "上首(_V)"
 
 #. Media label
 #: ../gtk/gtkstock.c:363
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Record"
 msgstr "录制(_R)"
 
 #. Media label
 #: ../gtk/gtkstock.c:365
-#, fuzzy
 msgctxt "Stock label"
 msgid "R_ewind"
 msgstr "快退(_E)"
 
 #. Media label
 #: ../gtk/gtkstock.c:367 ../gtk/gtkstock.c:402
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "停止(_S)"
 
 #: ../gtk/gtkstock.c:368
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "网络(_N)"
 
 #: ../gtk/gtkstock.c:369
-#, fuzzy
 msgctxt "Stock label"
 msgid "_New"
 msgstr "新建(_N)"
 
 #: ../gtk/gtkstock.c:370
-#, fuzzy
 msgctxt "Stock label"
 msgid "_No"
 msgstr "否(_N)"
 
 #: ../gtk/gtkstock.c:371
-#, fuzzy
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "确定(_O)"
 
 #: ../gtk/gtkstock.c:372
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "打开(_O)"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:374
-#, fuzzy
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "横向"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:376
-#, fuzzy
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "纵向"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:378
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse landscape"
-msgstr "反向横向"
+msgstr "横向翻转"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:380
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse portrait"
-msgstr "反向纵向"
+msgstr "纵向翻转"
 
 #: ../gtk/gtkstock.c:381
-#, fuzzy
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "页面设置(_U)"
 
 #: ../gtk/gtkstock.c:382
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
 #: ../gtk/gtkstock.c:383
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "首选项(_P)"
 
 #: ../gtk/gtkstock.c:384
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "打印(_P)"
 
 #: ../gtk/gtkstock.c:385
-#, fuzzy
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "打印预览(_V)"
 
 #: ../gtk/gtkstock.c:386
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "属性(_P)"
 
 #: ../gtk/gtkstock.c:387
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "退出(_Q)"
 
 #: ../gtk/gtkstock.c:388
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "重做(_R)"
 
 #: ../gtk/gtkstock.c:389
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "刷新(_R)"
 
 #: ../gtk/gtkstock.c:390
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "删除(_R)"
 
 #: ../gtk/gtkstock.c:391
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "还原(_R)"
 
 #: ../gtk/gtkstock.c:392
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "保存(_S)"
 
 #: ../gtk/gtkstock.c:393
-#, fuzzy
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "另存为(_A)"
 
 #: ../gtk/gtkstock.c:394
-#, fuzzy
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "全选(_A)"
 
 #: ../gtk/gtkstock.c:395
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "颜色(_C)"
 
 #: ../gtk/gtkstock.c:396
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "字体(_F)"
 
 #. Sorting direction
 #: ../gtk/gtkstock.c:398
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "升序(_A)"
 
 #. Sorting direction
 #: ../gtk/gtkstock.c:400
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "降序(_D)"
 
 #: ../gtk/gtkstock.c:401
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "拼写检查(_S)"
 
 #. Font variant
 #: ../gtk/gtkstock.c:404
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "删除线(_S)"
 
 #: ../gtk/gtkstock.c:405
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "取消删除(_U)"
 
 #. Font variant
 #: ../gtk/gtkstock.c:407
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "下划线(_U)"
 
 #: ../gtk/gtkstock.c:408
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "撤消(_U)"
 
 #: ../gtk/gtkstock.c:409
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "是(_Y)"
 
 #. Zoom
 #: ../gtk/gtkstock.c:411
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "普通大小(_N)"
 
 #. Zoom
 #: ../gtk/gtkstock.c:413
-#, fuzzy
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "最适合(_F)"
 
 #: ../gtk/gtkstock.c:414
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "放大(_I)"
 
 #: ../gtk/gtkstock.c:415
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "缩小(_O)"
@@ -3466,7 +3359,7 @@ msgstr "在同一个 <%2$s> 元素中重复了两次“%1$s”属性"
 #: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr "此上下文中 <%2$s>的属性“%1$s”非法"
+msgstr "此上下文中 <%2$s> 元素的属性“%1$s”非法"
 
 #: ../gtk/gtktextbufferserialize.c:1022
 #, c-format
@@ -3611,11 +3504,11 @@ msgstr "卷"
 
 #: ../gtk/gtkvolumebutton.c:79
 msgid "Turns volume down or up"
-msgstr ""
+msgstr "打开或关闭音量"
 
 #: ../gtk/gtkvolumebutton.c:82
 msgid "Adjusts the volume"
-msgstr ""
+msgstr "调整音量"
 
 #: ../gtk/gtkvolumebutton.c:85 ../gtk/gtkvolumebutton.c:88
 msgid "Volume Down"
@@ -3623,7 +3516,7 @@ msgstr "降低音量"
 
 #: ../gtk/gtkvolumebutton.c:87
 msgid "Decreases the volume"
-msgstr ""
+msgstr "减少音量"
 
 #: ../gtk/gtkvolumebutton.c:91 ../gtk/gtkvolumebutton.c:94
 msgid "Volume Up"
@@ -3631,7 +3524,7 @@ msgstr "提高音量"
 
 #: ../gtk/gtkvolumebutton.c:93
 msgid "Increases the volume"
-msgstr ""
+msgstr "增加音量"
 
 #: ../gtk/gtkvolumebutton.c:151
 msgid "Muted"
@@ -4480,7 +4373,7 @@ msgstr "写入头失败\n"
 #: ../gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write hash table\n"
-msgstr "写入头哈希表失败\n"
+msgstr "写入哈希表失败\n"
 
 #: ../gtk/updateiconcache.c:1386
 #, c-format
@@ -4493,9 +4386,9 @@ msgid "Failed to rewrite header\n"
 msgstr "重写头失败\n"
 
 #: ../gtk/updateiconcache.c:1455
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr "打开文件“%s”失败：%s"
+msgstr "打开文件 %s 失败：%s\n"
 
 #: ../gtk/updateiconcache.c:1463
 #, c-format
@@ -4554,7 +4447,7 @@ msgstr "验证已有的图标缓存"
 #: ../gtk/updateiconcache.c:1663
 #, c-format
 msgid "File not found: %s\n"
-msgstr "文件未找到： %s\n"
+msgstr "文件未找到：%s\n"
 
 #: ../gtk/updateiconcache.c:1669
 #, c-format
@@ -4564,7 +4457,7 @@ msgstr "非法图标缓存：%s\n"
 #: ../gtk/updateiconcache.c:1682
 #, c-format
 msgid "No theme index file."
-msgstr ""
+msgstr "无主题索引文件。"
 
 #: ../gtk/updateiconcache.c:1686
 #, c-format
@@ -4667,7 +4560,7 @@ msgstr ""
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1181
 #, c-format
 msgid "The cover is open on printer '%s'."
-msgstr ""
+msgstr "打印机“%s”的盖子未关。"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1182
 #, c-format
@@ -4682,32 +4575,32 @@ msgstr ""
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1184
 #, c-format
 msgid "Printer '%s' is out of paper."
-msgstr ""
+msgstr "打印机“%s”缺纸。"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1185
-#, fuzzy, c-format
+#, c-format
 msgid "Printer '%s' is currently off-line."
-msgstr "打印机脱机"
+msgstr "打印机“%s”目前脱机。"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1186
 #, c-format
 msgid "Printer '%s' may not be connected."
-msgstr ""
+msgstr "打印机“%s”可能无法连接。"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1187
 #, c-format
 msgid "There is a problem on printer '%s'."
-msgstr ""
+msgstr "打印机“%s”可能有问题。"
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1466
 msgid "Paused ; Rejecting Jobs"
-msgstr ""
+msgstr "暂停；拒绝任务"
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1472
 msgid "Rejecting Jobs"
-msgstr ""
+msgstr "拒绝任务"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2140
 msgid "Two Sided"
@@ -4803,7 +4696,6 @@ msgstr ""
 #. * in the print dialog
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2853
-#, fuzzy
 msgid "Pages per Sheet"
 msgstr "每张页数"
 
@@ -4811,17 +4703,15 @@ msgstr "每张页数"
 #. * in the print dialog
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2890
-#, fuzzy
 msgid "Job Priority"
-msgstr "优先级(_O)："
+msgstr "任务优先级"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2901
-#, fuzzy
 msgid "Billing Info"
-msgstr "计费信息(_B)："
+msgstr "计费信息"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
@@ -4858,34 +4748,30 @@ msgstr "未分类"
 #. * dialog that controls the front cover page.
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2950
-#, fuzzy
 msgid "Before"
-msgstr "前(_F)："
+msgstr "封面"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2965
-#, fuzzy
 msgid "After"
-msgstr "后(_A)："
+msgstr "封底"
 
 #. Translators: this is the name of the option that controls when
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2985
-#, fuzzy
 msgid "Print at"
-msgstr "打印"
+msgstr "打印于"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2996
-#, fuzzy
 msgid "Print at time"
-msgstr "打印到文件"
+msgstr "在指定时间打印"
 
 #. Translators: this format is used to display a custom paper
 #. * size. The two placeholders are replaced with the width and height
@@ -4953,139 +4839,3 @@ msgstr "打印到测试打印机"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "无法获得文件“%s”的信息：%s"
-
-#, fuzzy
-#~ msgid "Icon not present in theme"
-#~ msgstr "图标“%s”未出现在主题中"
-
-#~ msgid "%.1f KB"
-#~ msgstr "%.1f KB"
-
-#~ msgid "%.1f MB"
-#~ msgstr "%.1f MB"
-
-#~ msgid "%.1f GB"
-#~ msgstr "%.1f GB"
-
-#~ msgctxt "Media"
-#~ msgid "_Forward"
-#~ msgstr "快进(_F)"
-
-#~ msgctxt "Media"
-#~ msgid "_Stop"
-#~ msgstr "停止(_S)"
-
-#, fuzzy
-#~ msgid "Couldn't create pixbuf"
-#~ msgstr "无法创建新像素缓冲"
-
-#~ msgid "URI"
-#~ msgstr "URI"
-
-#~ msgid "The URI bound to this button"
-#~ msgstr "绑定到此按钮的 URI"
-
-#~ msgid "Arrow spacing"
-#~ msgstr "箭头间距"
-
-#~ msgid "Scroll arrow spacing"
-#~ msgstr "滚动箭头间距"
-
-#~ msgid "Group"
-#~ msgstr "组"
-
-#~ msgid "The radio tool button whose group this button belongs to."
-#~ msgstr "此按钮所属的单选钮组。"
-
-#~ msgid "Invalid filename: %s"
-#~ msgstr "无效的文件名：%s"
-
-#~ msgid ""
-#~ "Could not add a bookmark for '%s' because it is an invalid path name."
-#~ msgstr "无法为“%s”添加书签，因为其路径名称无效。"
-
-#~ msgid "Could not select file '%s' because it is an invalid path name."
-#~ msgstr "无法选择文件“%s”，因为其路径名称无效。"
-
-#~ msgid "%d byte"
-#~ msgid_plural "%d bytes"
-#~ msgstr[0] "%d 字节"
-
-#~ msgid "Could not get a stock icon for %s\n"
-#~ msgstr "无法获得 %s 的图标\n"
-
-#~ msgid "Error getting information for '%s': %s"
-#~ msgstr "获取“%s”的信息时出错：%s"
-
-#~ msgid "This file system does not support mounting"
-#~ msgstr "文件系统不支持挂载"
-
-#~ msgid ""
-#~ "The name \"%s\" is not valid because it contains the character \"%s\". "
-#~ "Please use a different name."
-#~ msgstr "名称“%s”无效，因为其中包含字符“%s”。请使用不同的名称。"
-
-#~ msgid "Bookmark saving failed: %s"
-#~ msgstr "书签保存失败：%s"
-
-#~ msgid "'%s' already exists in the bookmarks list"
-#~ msgstr "“%s”已经存在于书签列表中"
-
-#~ msgid "'%s' does not exist in the bookmarks list"
-#~ msgstr "“%s”不在书签列表中存在"
-
-#~ msgid "Path is not a folder: '%s'"
-#~ msgstr "路径不是文件夹：“%s”"
-
-#~ msgid "Network Drive (%s)"
-#~ msgstr "网络驱动器(%s)"
-
-#~ msgid "%s (%s)"
-#~ msgstr "%s (%s)"
-
-#~ msgid "Unknown attribute '%s' on line %d char %d"
-#~ msgstr "在第%2$d行第%3$d个字符处有未知属性“%1$s”"
-
-#~ msgid "Today at %H:%M"
-#~ msgstr "今天于 %H:%M"
-
-#~ msgid "Default"
-#~ msgstr "默认"
-
-#~ msgid "Print Pages"
-#~ msgstr "打印页面"
-
-#~ msgid "_All"
-#~ msgstr "全部(_A)"
-
-#~ msgid "Today"
-#~ msgstr "今天"
-
-#~ msgid "Location:"
-#~ msgstr "位置："
-
-#~ msgid "PNM image format is invalid"
-#~ msgstr "PNM 图像格式非法"
-
-#~ msgid "Line %d, column %d: missing attribute \"%s\""
-#~ msgstr "第%d行，第%d列：缺少属性“%s”"
-
-#~ msgid "Line %d, column %d: unexpected element \"%s\""
-#~ msgstr "第%d行，第%d列：意外元素“%s”"
-
-#~ msgid ""
-#~ "Line %d, column %d: expected end of element \"%s\", but got element for "
-#~ "\"%s\" instead"
-#~ msgstr "第%d行，第%d列：元素“%s”意外结束，却得到了“%s”元素"
-
-#~ msgid ""
-#~ "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" "
-#~ "instead"
-#~ msgstr "第%d行，第%d列：顶级应为“%s”，但却是“%s”"
-
-#~ msgid ""
-#~ "Line %d, column %d: expected \"%s\" or \"%s\", but found \"%s\" instead"
-#~ msgstr "第%d行，第%d列：应该是“%s”或“%s”，但却是“%s”"
-
-#~ msgid "Thai (Broken)"
-#~ msgstr "泰语(不可用)"
