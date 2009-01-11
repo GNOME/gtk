@@ -1,3 +1,8 @@
+2009-01-11  Claude Paroz  <claude@2xlibre.net>
+
+	* LINGUAS: Added crh
+	* crh.po: Updated Crimean Tatar translation on behalf of Reşat SABIQ.
+
 2009-01-10  Funda Wang  <fundawang@gmail.com>
 
 	* zh_CN.po: Updated zh_CN translation.
