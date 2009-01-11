@@ -4,8 +4,8 @@
 
 	* gdk/win32/gdkselection-win32.c
 	(_gdk_win32_selection_convert_to_dib): The DIB stored in the
-	clipboard was for some unknown reason truncated by one byte. Don't
-	do that.
+	Windows Clipboard was for some unknown reason truncated by one
+	byte. Don't do that.
 
 2009-01-07  Matthias Clasen  <mclasen@redhat.com>
 
