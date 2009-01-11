@@ -1,3 +1,12 @@
+2009-01-11  Tor Lillqvist  <tml@iki.fi>
+
+	Bug 523554 - Copy from GIMP to Word broken
+
+	* gdk/win32/gdkselection-win32.c
+	(_gdk_win32_selection_convert_to_dib): The DIB stored in the
+	clipboard was for some unknown reason truncated by one byte. Don't
+	do that.
+
 2009-01-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version

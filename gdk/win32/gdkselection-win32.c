@@ -1175,7 +1175,7 @@ _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
       HGLOBAL hdatanew;
 
       g_free (target_name);
-      size = GlobalSize (hdata) - 1 - sizeof (BITMAPFILEHEADER);
+      size = GlobalSize (hdata) - sizeof (BITMAPFILEHEADER);
       ptr = GlobalLock (hdata);
       memmove (ptr, ptr + sizeof (BITMAPFILEHEADER), size);
       GlobalUnlock (hdata);
