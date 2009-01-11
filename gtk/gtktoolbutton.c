@@ -579,6 +579,12 @@ clone_image_menu_size (GtkImage *image, GtkSettings *settings)
       gtk_image_get_icon_set (image, &icon_set, NULL);
       return gtk_image_new_from_icon_set (icon_set, GTK_ICON_SIZE_MENU);
     }
+  else if (storage_type == GTK_IMAGE_GICON)
+    {
+      GIcon *icon;
+      gtk_image_get_gicon (image, &icon, NULL);
+      return gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
+    }
   else if (storage_type == GTK_IMAGE_PIXBUF)
     {
       gint width, height;

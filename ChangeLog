@@ -1,3 +1,13 @@
+2009-01-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 567024 – gtktoolbutton doesn't create right proxy menu item 
+	image with GIcon
+
+	* gtk/gtktoolbutton.c: Properly create a menu proxy from a GIcon.
+	Patch by Christian Persch
+
+	* tests/testtoolbar.c: Add an example with a GIcon
+
 2009-01-09  Christian Dywan  <christian@imendio.com>
 
 	Fail in gdk_window_new if _gdk_window_new failed

@@ -511,6 +511,7 @@ main (gint argc, gchar **argv)
   GtkWidget *menuitem;
   GtkWidget *button;
   GtkWidget *label;
+  GIcon *gicon;
   GSList *group;
   
   gtk_init (&argc, &argv);
@@ -706,7 +707,14 @@ main (gint argc, gchar **argv)
   add_item_to_list (store, item, "Apple");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON (item), TRUE);
-  
+
+  gicon = g_content_type_get_icon ("video/ogg");
+  image = gtk_image_new_from_gicon (gicon, GTK_ICON_SIZE_LARGE_TOOLBAR);
+  g_object_unref (gicon);
+  item = gtk_tool_button_new (image, "Video");
+  add_item_to_list (store, item, "Video");
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
   hbox = gtk_hbox_new (FALSE, 5);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_table_attach (GTK_TABLE (table), hbox,
