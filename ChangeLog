@@ -1,3 +1,12 @@
+2009-01-11  Tor Lillqvist  <tml@iki.fi>
+
+	Bug 523554 - Copy from GIMP to Word broken
+
+	* gdk/win32/gdkselection-win32.c
+	(_gdk_win32_selection_convert_to_dib): The DIB stored in the
+	Windows Clipboard was for some unknown reason truncated by one
+	byte. Don't do that.
+
 2009-01-11  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 567024 – gtktoolbutton doesn't create right proxy menu item 
