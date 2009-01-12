@@ -1465,7 +1465,7 @@ gtk_text_view_get_iter_at_location (GtkTextView *text_view,
  * gtk_text_view_get_iter_at_position:
  * @text_view: a #GtkTextView
  * @iter: a #GtkTextIter
- * @trailing: location to store an integer indicating where
+ * @trailing: if non-%NULL, location to store an integer indicating where
  *    in the grapheme the user clicked. It will either be
  *    zero, or the number of characters in the grapheme. 
  *    0 represents the trailing edge of the grapheme.

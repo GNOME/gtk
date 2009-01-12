@@ -1,3 +1,13 @@
+2009-01-12  Claudio Saavedra  <csaavedra@igalia.com>
+
+	Bug 567468 – no check for trailing != NULL in
+	gtk_text_layout_get_iter_at_position()
+
+	* gtk/gtktextlayout.c: (gtk_text_layout_get_iter_at_position):
+	Check for trailing to be non-NULL.
+	* gtk/gtktextview.c: (gtk_text_view_get_iter_at_position): document
+	that trailing may be NULL.
+
 2009-01-11  Tor Lillqvist  <tml@iki.fi>
 
 	Bug 523554 - Copy from GIMP to Word broken
