@@ -236,14 +236,27 @@ int main (int argc, char **argv)
 		slash = strrchr (runtime_prefix, '\\');
 		*slash = '\0';
 		slash = strrchr (runtime_prefix, '\\');
-		if (slash != NULL && g_ascii_strcasecmp (slash + 1, "bin") == 0) {
-			*slash = '\0';
+		/* If running from some weird location, or from the
+		 * build directory (either in the .libs folder where
+		 * libtool places the real executable when using a
+		 * wrapper, or directly from the gdk-pixbuf folder),
+		 * use the compile-time libdir.
+		 */
+		if (slash == NULL ||
+		    g_ascii_strcasecmp (slash + 1, ".libs") == 0 ||
+		    g_ascii_strcasecmp (slash + 1, "gdk-pixbuf") == 0) {
+			libdir = PIXBUF_LIBDIR;
 		}
+		else {
+			if (slash != NULL && g_ascii_strcasecmp (slash + 1, "bin") == 0) {
+				*slash = '\0';
+			}
 		
-		libdir = g_strconcat (runtime_prefix,
-				      "/",
-				      PIXBUF_LIBDIR + strlen (GTK_PREFIX) + 1,
-				      NULL);
+			libdir = g_strconcat (runtime_prefix,
+					      "/",
+					      PIXBUF_LIBDIR + strlen (GTK_PREFIX) + 1,
+					      NULL);
+		}
 	}
 	else {
 		libdir = PIXBUF_LIBDIR;
