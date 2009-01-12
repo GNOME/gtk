@@ -89,20 +89,44 @@ static const int gdk_ndebug_keys = G_N_ELEMENTS (gdk_debug_keys);
 #endif /* G_ENABLE_DEBUG */
 
 #ifdef G_ENABLE_DEBUG
-static void
-gdk_arg_debug_cb (const char *key, const char *value, gpointer user_data)
+static gboolean
+gdk_arg_debug_cb (const char *key, const char *value, gpointer user_data, GError **error)
 {
-  _gdk_debug_flags |= g_parse_debug_string (value,
+  guint debug_value = g_parse_debug_string (value,
 					    (GDebugKey *) gdk_debug_keys,
 					    gdk_ndebug_keys);
+
+  if (debug_value == 0 && value != NULL && strcmp (value, "") != 0)
+    {
+      g_set_error (error, 
+		   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
+		   _("Error parsing option --gdk-debug"));
+      return FALSE;
+    }
+
+  _gdk_debug_flags |= debug_value;
+
+  return TRUE;
 }
 
-static void
-gdk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data)
+static gboolean
+gdk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data, GError **error)
 {
-  _gdk_debug_flags &= ~g_parse_debug_string (value,
-					     (GDebugKey *) gdk_debug_keys,
-					     gdk_ndebug_keys);
+  guint debug_value = g_parse_debug_string (value,
+					    (GDebugKey *) gdk_debug_keys,
+					    gdk_ndebug_keys);
+
+  if (debug_value == 0 && value != NULL && strcmp (value, "") != 0)
+    {
+      g_set_error (error, 
+		   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
+		   _("Error parsing option --gdk-no-debug"));
+      return FALSE;
+    }
+
+  _gdk_debug_flags &= ~debug_value;
+
+  return TRUE;
 }
 #endif /* G_ENABLE_DEBUG */
 

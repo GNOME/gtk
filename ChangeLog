@@ -1,3 +1,13 @@
+2009-01-12  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdk.c (gdk_arg_debug_cb) (gdk_arg_no_debug_cb): A
+	GOptionArgFunc should return gboolean and take also a GError
+	pointer parameter, so make these two functions do that. Return
+	FALSE (and set the GError) if the parsing of the debug string
+	failed completely. Note that g_parse_debug_string() doesn't really
+	have any way to return parsing status, and accepts partially
+	incorrect strings, though.
+
 2009-01-12  Claudio Saavedra  <csaavedra@igalia.com>
 
 	Bug 567468 – no check for trailing != NULL in
