@@ -2654,7 +2654,8 @@ void gtk_text_layout_get_iter_at_position (GtkTextLayout     *layout,
   if (y > display->height - display->top_margin - display->bottom_margin)
     {
       byte_index = _gtk_text_line_byte_count (line);
-      *trailing = 0;
+      if (trailing)
+        *trailing = 0;
     }
   else
     {
