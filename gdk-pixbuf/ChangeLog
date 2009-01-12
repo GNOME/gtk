@@ -1,3 +1,9 @@
+2009-01-12  Tor Lillqvist  <tml@novell.com>
+
+	* queryloaders.c (main): Remove the Win9x code path. It had been
+	left by mistake. Win9x code is gone from the rest of GTK+ since
+	2.12.
+
 2009-01-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.14.7 ===

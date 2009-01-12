@@ -230,16 +230,9 @@ int main (int argc, char **argv)
 		 * subdirectory of the installation directory, or in
 		 * the installation directory itself.
 		 */
-		if (G_WIN32_HAVE_WIDECHAR_API ()) {
-			wchar_t fn[1000];
-			GetModuleFileNameW (NULL, fn, G_N_ELEMENTS (fn));
-			runtime_prefix = g_utf16_to_utf8 (fn, -1, NULL, NULL, NULL);
-		}
-		else {
-			char fn[1000];
-			GetModuleFileNameA (NULL, fn, G_N_ELEMENTS (fn));
-			runtime_prefix = g_locale_to_utf8 (fn, -1, NULL, NULL, NULL);
-		}
+		wchar_t fn[1000];
+		GetModuleFileNameW (NULL, fn, G_N_ELEMENTS (fn));
+		runtime_prefix = g_utf16_to_utf8 (fn, -1, NULL, NULL, NULL);
 		slash = strrchr (runtime_prefix, '\\');
 		*slash = '\0';
 		slash = strrchr (runtime_prefix, '\\');
