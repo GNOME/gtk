@@ -89,6 +89,24 @@ DllMain (HINSTANCE hinstDLL,
  * original GTK_LOCALEDIR definition. Yeah, this is a bit sucky.
  */
 const gchar *
+_gtk_get_libdir (void)
+{
+  static char *gtk_libdir = NULL;
+  if (gtk_libdir == NULL)
+    {
+      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      gchar *slash = strrchr (root, '\\');
+      if (g_ascii_strcasecmp (slash + 1, ".libs") == 0)
+	gtk_libdir = GTK_LIBDIR;
+      else
+	gtk_libdir = g_build_filename (root, "lib", NULL);
+      g_free (root);
+    }
+
+  return gtk_libdir;
+}
+
+const gchar *
 _gtk_get_localedir (void)
 {
   static char *gtk_localedir = NULL;
@@ -330,20 +348,6 @@ _gtk_get_datadir (void)
     }
 
   return gtk_datadir;
-}
-
-const gchar *
-_gtk_get_libdir (void)
-{
-  static char *gtk_libdir = NULL;
-  if (gtk_libdir == NULL)
-    {
-      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
-      gtk_libdir = g_build_filename (root, "lib", NULL);
-      g_free (root);
-    }
-
-  return gtk_libdir;
 }
 
 const gchar *
