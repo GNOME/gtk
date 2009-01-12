@@ -83,6 +83,7 @@ enum {
   REMOVE_TAG,
   BEGIN_USER_ACTION,
   END_USER_ACTION,
+  PASTE_DONE,
   LAST_SIGNAL
 };
 
@@ -580,6 +581,27 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+
+   /**
+   * GtkTextBuffer::paste-done:
+   * @textbuffer: the object which received the signal
+   * 
+   * The paste-done signal is emitted after paste operation has been completed.
+   * This is useful to properly scroll the view to the end of the pasted text.
+   * See gtk_text_buffer_paste_clipboard() for more details.
+   * 
+   * Since: 2.16
+   */ 
+  signals[PASTE_DONE] =
+    g_signal_new (I_("paste_done"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextBufferClass, paste_done),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_CLIPBOARD);
 
   g_type_class_add_private (object_class, sizeof (GtkTextBufferPrivate));
 }
@@ -3302,6 +3324,13 @@ post_paste_cleanup (ClipboardRequest *request_data)
 }
 
 static void
+emit_paste_done (GtkTextBuffer *buffer,
+                 GtkClipboard  *clipboard)
+{
+  g_signal_emit (buffer, signals[PASTE_DONE], 0, clipboard);
+}
+
+static void
 free_clipboard_request (ClipboardRequest *request_data)
 {
   g_object_unref (request_data->buffer);
@@ -3338,6 +3367,8 @@ clipboard_text_received (GtkClipboard *clipboard,
       
       if (request_data->interactive) 
 	gtk_text_buffer_end_user_action (buffer);
+
+      emit_paste_done (buffer, clipboard);
     }
 
   free_clipboard_request (request_data);
@@ -3448,6 +3479,8 @@ clipboard_rich_text_received (GtkClipboard *clipboard,
       if (request_data->interactive)
         gtk_text_buffer_end_user_action (request_data->buffer);
 
+      emit_paste_done (request_data->buffer, clipboard);
+
       if (retval)
         {
           post_paste_cleanup (request_data);
@@ -3462,7 +3495,8 @@ clipboard_rich_text_received (GtkClipboard *clipboard,
 }
 
 static void
-paste_from_buffer (ClipboardRequest  *request_data,
+paste_from_buffer (GtkClipboard      *clipboard,
+                   ClipboardRequest  *request_data,
                    GtkTextBuffer     *src_buffer,
                    const GtkTextIter *start,
                    const GtkTextIter *end)
@@ -3495,6 +3529,8 @@ paste_from_buffer (ClipboardRequest  *request_data,
   if (request_data->interactive) 
     gtk_text_buffer_end_user_action (buffer);
 
+  emit_paste_done (buffer, clipboard);
+
   g_object_unref (src_buffer);
 
   free_clipboard_request (request_data);
@@ -3518,13 +3554,13 @@ clipboard_clipboard_buffer_received (GtkClipboard     *clipboard,
 	{
 	  gtk_text_buffer_get_bounds (src_buffer, &start, &end);
 
-	  paste_from_buffer (request_data, src_buffer,
+	  paste_from_buffer (clipboard, request_data, src_buffer,
 			     &start, &end);
 	}
       else
 	{
 	  if (gtk_text_buffer_get_selection_bounds (src_buffer, &start, &end))
-	    paste_from_buffer (request_data, src_buffer,
+	    paste_from_buffer (clipboard, request_data, src_buffer,
 			       &start, &end);
 	}
     }

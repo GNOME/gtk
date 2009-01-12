@@ -329,6 +329,9 @@ static void gtk_text_view_mark_set_handler       (GtkTextBuffer     *buffer,
 static void gtk_text_view_target_list_notify     (GtkTextBuffer     *buffer,
                                                   const GParamSpec  *pspec,
                                                   gpointer           data);
+static void gtk_text_view_paste_done_handler     (GtkTextBuffer     *buffer,
+                                                  GtkClipboard      *clipboard,
+                                                  gpointer           data);
 static void gtk_text_view_get_cursor_location    (GtkTextView       *text_view,
 						  GdkRectangle      *pos);
 static void gtk_text_view_get_virtual_cursor_pos (GtkTextView       *text_view,
@@ -1384,6 +1387,9 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       g_signal_handlers_disconnect_by_func (text_view->buffer,
                                             gtk_text_view_target_list_notify,
                                             text_view);
+      g_signal_handlers_disconnect_by_func (text_view->buffer,
+                                            gtk_text_view_paste_done_handler,
+                                            text_view);
       g_object_unref (text_view->buffer);
       text_view->dnd_mark = NULL;
       text_view->first_para_mark = NULL;
@@ -1424,6 +1430,9 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
                         text_view);
       g_signal_connect (text_view->buffer, "notify::paste-target-list",
 			G_CALLBACK (gtk_text_view_target_list_notify),
+                        text_view);
+      g_signal_connect (text_view->buffer, "paste-done",
+			G_CALLBACK (gtk_text_view_paste_done_handler),
                         text_view);
 
       gtk_text_view_target_list_notify (text_view->buffer, NULL, text_view);
@@ -5702,9 +5711,16 @@ gtk_text_view_paste_clipboard (GtkTextView *text_view)
 				   clipboard,
 				   NULL,
 				   text_view->editable);
+}
+
+static void
+gtk_text_view_paste_done_handler (GtkTextBuffer *buffer,
+                                  GtkClipboard  *clipboard,
+                                  gpointer       data)
+{
+  GtkTextView *text_view = data;
   DV(g_print (G_STRLOC": scrolling onscreen\n"));
-  gtk_text_view_scroll_mark_onscreen (text_view,
-                                      gtk_text_buffer_get_insert (get_buffer (text_view)));
+  gtk_text_view_scroll_mark_onscreen (text_view, gtk_text_buffer_get_insert (buffer));
 }
 
 static void

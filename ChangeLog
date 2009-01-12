@@ -1,3 +1,15 @@
+2009-01-12  Paolo Borelli  <pborelli@katamail.com>
+
+	Bug 492794 – Pasting external text at end of view yields wrong
+	scrolling to mark
+
+	* gtk/gtktextbuffer.[ch]:
+	* gtk/gtktextview.c:
+	Add a "paste-done" signal and use it to propelry scroll the
+	view at the end of the pasted text in the case of an async
+	paste. Patch by Ignacio Casal Quintero based on a patch by
+	Yevgen Muntyan.
+
 2009-01-12  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdk.c (gdk_arg_debug_cb) (gdk_arg_no_debug_cb): A

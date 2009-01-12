@@ -143,13 +143,15 @@ struct _GtkTextBufferClass
   void (* begin_user_action)  (GtkTextBuffer *buffer);
   void (* end_user_action)    (GtkTextBuffer *buffer);
 
+  void (* paste_done)         (GtkTextBuffer *buffer,
+                               GtkClipboard  *clipboard);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
 };
 
 GType        gtk_text_buffer_get_type       (void) G_GNUC_CONST;
