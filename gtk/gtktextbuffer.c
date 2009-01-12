@@ -593,7 +593,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * Since: 2.16
    */ 
   signals[PASTE_DONE] =
-    g_signal_new (I_("paste_done"),
+    g_signal_new (I_("paste-done"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, paste_done),
