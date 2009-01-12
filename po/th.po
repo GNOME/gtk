@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-01 16:28-0500\n"
-"PO-Revision-Date: 2009-01-12 17:29+0700\n"
+"POT-Creation-Date: 2009-01-12 17:33+0700\n"
+"PO-Revision-Date: 2009-01-12 18:07+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -82,6 +82,191 @@ msgstr "FLAGS"
 #: gdk/gdk.c:143
 msgid "Gdk debugging flags to unset"
 msgstr "แฟล็กการดีบักของ GDK ที่จะปิด"
+
+#: gdk/keyname-table.h:3940
+msgctxt "keyboard label"
+msgid "BackSpace"
+msgstr "BackSpace"
+
+#: gdk/keyname-table.h:3941
+msgctxt "keyboard label"
+msgid "Tab"
+msgstr "Tab"
+
+#: gdk/keyname-table.h:3942
+msgctxt "keyboard label"
+msgid "Return"
+msgstr "Return"
+
+#: gdk/keyname-table.h:3943
+msgctxt "keyboard label"
+msgid "Pause"
+msgstr "Pause"
+
+#: gdk/keyname-table.h:3944
+msgctxt "keyboard label"
+msgid "Scroll_Lock"
+msgstr "Scroll_Lock"
+
+#: gdk/keyname-table.h:3945
+msgctxt "keyboard label"
+msgid "Sys_Req"
+msgstr "Sys_Req"
+
+#: gdk/keyname-table.h:3946
+msgctxt "keyboard label"
+msgid "Escape"
+msgstr "Escape"
+
+#: gdk/keyname-table.h:3947
+msgctxt "keyboard label"
+msgid "Multi_key"
+msgstr "Multi_key"
+
+#: gdk/keyname-table.h:3948
+msgctxt "keyboard label"
+msgid "Home"
+msgstr "Home"
+
+#: gdk/keyname-table.h:3949
+msgctxt "keyboard label"
+msgid "Left"
+msgstr "Left"
+
+#: gdk/keyname-table.h:3950
+msgctxt "keyboard label"
+msgid "Up"
+msgstr "Up"
+
+#: gdk/keyname-table.h:3951
+msgctxt "keyboard label"
+msgid "Right"
+msgstr "Right"
+
+#: gdk/keyname-table.h:3952
+msgctxt "keyboard label"
+msgid "Down"
+msgstr "Down"
+
+#: gdk/keyname-table.h:3953
+msgctxt "keyboard label"
+msgid "Page_Up"
+msgstr "Page_Up"
+
+#: gdk/keyname-table.h:3954
+msgctxt "keyboard label"
+msgid "Page_Down"
+msgstr "Page_Down"
+
+#: gdk/keyname-table.h:3955
+msgctxt "keyboard label"
+msgid "End"
+msgstr "End"
+
+#: gdk/keyname-table.h:3956
+msgctxt "keyboard label"
+msgid "Begin"
+msgstr "Begin"
+
+#: gdk/keyname-table.h:3957
+msgctxt "keyboard label"
+msgid "Print"
+msgstr "Print"
+
+#: gdk/keyname-table.h:3958
+msgctxt "keyboard label"
+msgid "Insert"
+msgstr "Insert"
+
+#: gdk/keyname-table.h:3959
+msgctxt "keyboard label"
+msgid "Num_Lock"
+msgstr "Num_Lock"
+
+#: gdk/keyname-table.h:3960
+msgctxt "keyboard label"
+msgid "KP_Space"
+msgstr "KP_Space"
+
+#: gdk/keyname-table.h:3961
+msgctxt "keyboard label"
+msgid "KP_Tab"
+msgstr "KP_Tab"
+
+#: gdk/keyname-table.h:3962
+msgctxt "keyboard label"
+msgid "KP_Enter"
+msgstr "KP_Enter"
+
+#: gdk/keyname-table.h:3963
+msgctxt "keyboard label"
+msgid "KP_Home"
+msgstr "KP_Home"
+
+#: gdk/keyname-table.h:3964
+msgctxt "keyboard label"
+msgid "KP_Left"
+msgstr "KP_Left"
+
+#: gdk/keyname-table.h:3965
+msgctxt "keyboard label"
+msgid "KP_Up"
+msgstr "KP_Up"
+
+#: gdk/keyname-table.h:3966
+msgctxt "keyboard label"
+msgid "KP_Right"
+msgstr "KP_Right"
+
+#: gdk/keyname-table.h:3967
+msgctxt "keyboard label"
+msgid "KP_Down"
+msgstr "KP_Down"
+
+#: gdk/keyname-table.h:3968
+msgctxt "keyboard label"
+msgid "KP_Page_Up"
+msgstr "KP_Page_Up"
+
+#: gdk/keyname-table.h:3969
+msgctxt "keyboard label"
+msgid "KP_Prior"
+msgstr "KP_Prior"
+
+#: gdk/keyname-table.h:3970
+msgctxt "keyboard label"
+msgid "KP_Page_Down"
+msgstr "KP_Page_Down"
+
+#: gdk/keyname-table.h:3971
+msgctxt "keyboard label"
+msgid "KP_Next"
+msgstr "KP_Next"
+
+#: gdk/keyname-table.h:3972
+msgctxt "keyboard label"
+msgid "KP_End"
+msgstr "KP_End"
+
+#: gdk/keyname-table.h:3973
+msgctxt "keyboard label"
+msgid "KP_Begin"
+msgstr "KP_Begin"
+
+#: gdk/keyname-table.h:3974
+msgctxt "keyboard label"
+msgid "KP_Insert"
+msgstr "KP_Insert"
+
+#: gdk/keyname-table.h:3975
+msgctxt "keyboard label"
+msgid "KP_Delete"
+msgstr "KP_Delete"
+
+#: gdk/keyname-table.h:3976
+msgctxt "keyboard label"
+msgid "Delete"
+msgstr "Delete"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:965
 #: gdk-pixbuf/gdk-pixbuf-io.c:1225 tests/testfilechooser.c:222
@@ -958,46 +1143,46 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "กำลังเปิด %d รายการ"
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
+#: gtk/gtkaboutdialog.c:267 gtk/gtkaboutdialog.c:2121
 msgid "License"
 msgstr "สัญญาอนุญาต"
 
-#: gtk/gtkaboutdialog.c:265
+#: gtk/gtkaboutdialog.c:268
 msgid "The license of the program"
 msgstr "สัญญาอนุญาตใช้งานของโปรแกรม"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:508
 msgid "C_redits"
 msgstr "เ_ครดิต"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:514
+#: gtk/gtkaboutdialog.c:522
 msgid "_License"
 msgstr "สัญญา_อนุญาต"
 
-#: gtk/gtkaboutdialog.c:744
+#: gtk/gtkaboutdialog.c:790
 #, c-format
 msgid "About %s"
 msgstr "เกี่ยวกับ %s"
 
-#: gtk/gtkaboutdialog.c:2032
+#: gtk/gtkaboutdialog.c:2045
 msgid "Credits"
 msgstr "เครดิต"
 
-#: gtk/gtkaboutdialog.c:2061
+#: gtk/gtkaboutdialog.c:2074
 msgid "Written by"
 msgstr "เขียนโดย"
 
-#: gtk/gtkaboutdialog.c:2064
+#: gtk/gtkaboutdialog.c:2077
 msgid "Documented by"
 msgstr "เอกสารโดย"
 
-#: gtk/gtkaboutdialog.c:2076
+#: gtk/gtkaboutdialog.c:2089
 msgid "Translated by"
 msgstr "แปลโดย"
 
-#: gtk/gtkaboutdialog.c:2080
+#: gtk/gtkaboutdialog.c:2093
 msgid "Artwork by"
 msgstr "งานศิลป์โดย"
 
@@ -1311,15 +1496,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "เลือกสี"
 
-#: gtk/gtkentry.c:7998 gtk/gtktextview.c:7730
+#: gtk/gtkentry.c:8003 gtk/gtktextview.c:7730
 msgid "Input _Methods"
 msgstr "_วิธีป้อนข้อความ"
 
-#: gtk/gtkentry.c:8012 gtk/gtktextview.c:7744
+#: gtk/gtkentry.c:8017 gtk/gtktextview.c:7744
 msgid "_Insert Unicode Control Character"
 msgstr "แ_ทรกอักขระควบคุมของยูนิโค้ด"
 
-#: gtk/gtkentry.c:9375
+#: gtk/gtkentry.c:9380
 msgid ""
 "You have the Caps Lock key on\n"
 "and an active input method"
@@ -1327,11 +1512,11 @@ msgstr ""
 "ปุ่ม Caps Lock ติดอยู่\n"
 "และมีวิธีป้อนข้อความทำงานอยู่"
 
-#: gtk/gtkentry.c:9377
+#: gtk/gtkentry.c:9382
 msgid "You have the Caps Lock key on"
 msgstr "ปุ่ม Caps Lock ติดอยู่"
 
-#: gtk/gtkentry.c:9379
+#: gtk/gtkentry.c:9384
 msgid "You have an active input method"
 msgstr "มีวิธีป้อนข้อความทำงานอยู่"
 
@@ -1826,7 +2011,7 @@ msgstr "ค่าแ_กมมา"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1403
+#: gtk/gtkiconfactory.c:1404
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "ไม่สามารถโหลดไอคอน: %s"
@@ -2181,13 +2366,57 @@ msgstr "บันทึกในโ_ฟลเดอร์:"
 msgid "%s job #%d"
 msgstr "งานพิมพ์ %s #%d"
 
+#: gtk/gtkprintoperation.c:1517
+msgctxt "print operation status"
+msgid "Initial state"
+msgstr "ขั้นแรก"
+
+#: gtk/gtkprintoperation.c:1518
+msgctxt "print operation status"
+msgid "Preparing to print"
+msgstr "กำลังเตรียมพิมพ์"
+
+#: gtk/gtkprintoperation.c:1519
+msgctxt "print operation status"
+msgid "Generating data"
+msgstr "กำลังสร้างข้อมูล"
+
+#: gtk/gtkprintoperation.c:1520
+msgctxt "print operation status"
+msgid "Sending data"
+msgstr "กำลังส่งข้อมูล"
+
+#: gtk/gtkprintoperation.c:1521
+msgctxt "print operation status"
+msgid "Waiting"
+msgstr "กำลังรอ"
+
+#: gtk/gtkprintoperation.c:1522
+msgctxt "print operation status"
+msgid "Blocking on issue"
+msgstr "ติดขัดด้วยเหตุขัดข้อง"
+
+#: gtk/gtkprintoperation.c:1523
+msgctxt "print operation status"
+msgid "Printing"
+msgstr "กำลังพิมพ์"
+
+#: gtk/gtkprintoperation.c:1524
+msgctxt "print operation status"
+msgid "Finished"
+msgstr "เสร็จสิ้น"
+
+#: gtk/gtkprintoperation.c:1525
+msgctxt "print operation status"
+msgid "Finished with error"
+msgstr "เสร็จสิ้นโดยมีข้อผิดพลาด"
+
 #: gtk/gtkprintoperation.c:2048
 #, c-format
 msgid "Preparing %d"
 msgstr "กำลังเตรียมพิมพ์ %d"
 
 #: gtk/gtkprintoperation.c:2050 gtk/gtkprintoperation.c:2381
-#, c-format
 msgid "Preparing"
 msgstr "กำลังเตรียมพิมพ์"
 
@@ -2197,22 +2426,18 @@ msgid "Printing %d"
 msgstr "กำลังพิมพ์ %d"
 
 #: gtk/gtkprintoperation.c:2411
-#, c-format
 msgid "Error creating print preview"
 msgstr "เกิดข้อผิดพลาดขณะสร้างตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation.c:2414
-#, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "สาเหตุที่น่าจะเป็นไปได้มากที่สุด คือไม่สามารถสร้างแฟ้มชั่วคราวได้"
 
 #: gtk/gtkprintoperation-unix.c:242
-#, c-format
 msgid "Error launching preview"
 msgstr "เกิดข้อผิดพลาดขณะเรียกแสดงตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation-unix.c:280
-#, c-format
 msgid "Error printing"
 msgstr "เกิดข้อผิดพลาดขณะพิมพ์"
 
@@ -2592,6 +2817,495 @@ msgstr "%d. %s"
 msgid "Unable to find an item with URI '%s'"
 msgstr "ไม่พบรายการที่ URI '%s'"
 
+#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
+#: gtk/gtkstock.c:288
+msgctxt "Stock label"
+msgid "Information"
+msgstr "ข้อมูล"
+
+#: gtk/gtkstock.c:289
+msgctxt "Stock label"
+msgid "Warning"
+msgstr "คำเตือน"
+
+#: gtk/gtkstock.c:290
+msgctxt "Stock label"
+msgid "Error"
+msgstr "ผิดพลาด"
+
+#: gtk/gtkstock.c:291
+msgctxt "Stock label"
+msgid "Question"
+msgstr "คำถาม"
+
+#. FIXME these need accelerators when appropriate, and
+#. * need the mnemonics to be rationalized
+#.
+#: gtk/gtkstock.c:296
+msgctxt "Stock label"
+msgid "_About"
+msgstr "เ_กี่ยวกับ"
+
+#: gtk/gtkstock.c:297
+msgctxt "Stock label"
+msgid "_Add"
+msgstr "เ_พิ่ม"
+
+#: gtk/gtkstock.c:298
+msgctxt "Stock label"
+msgid "_Apply"
+msgstr "เริ่มใ_ช้"
+
+#: gtk/gtkstock.c:299
+msgctxt "Stock label"
+msgid "_Bold"
+msgstr "ตัวห_นา"
+
+#: gtk/gtkstock.c:300
+msgctxt "Stock label"
+msgid "_Cancel"
+msgstr "_ยกเลิก"
+
+#: gtk/gtkstock.c:301
+msgctxt "Stock label"
+msgid "_CD-Rom"
+msgstr "_ซีดีรอม"
+
+#: gtk/gtkstock.c:302
+msgctxt "Stock label"
+msgid "_Clear"
+msgstr "_ล้าง"
+
+#: gtk/gtkstock.c:303
+msgctxt "Stock label"
+msgid "_Close"
+msgstr "ปิ_ด"
+
+#: gtk/gtkstock.c:304
+msgctxt "Stock label"
+msgid "C_onnect"
+msgstr "เ_ชื่อมต่อ"
+
+#: gtk/gtkstock.c:305
+msgctxt "Stock label"
+msgid "_Convert"
+msgstr "แปล_ง"
+
+#: gtk/gtkstock.c:306
+msgctxt "Stock label"
+msgid "_Copy"
+msgstr "_คัดลอก"
+
+#: gtk/gtkstock.c:307
+msgctxt "Stock label"
+msgid "Cu_t"
+msgstr "_ตัด"
+
+#: gtk/gtkstock.c:308
+msgctxt "Stock label"
+msgid "_Delete"
+msgstr "_ลบ"
+
+#: gtk/gtkstock.c:309
+msgctxt "Stock label"
+msgid "_Discard"
+msgstr "_ละทิ้ง"
+
+#: gtk/gtkstock.c:310
+msgctxt "Stock label"
+msgid "_Disconnect"
+msgstr "เลิ_กเชื่อมต่อ"
+
+#: gtk/gtkstock.c:311
+msgctxt "Stock label"
+msgid "_Execute"
+msgstr "เ_รียกใช้"
+
+#: gtk/gtkstock.c:312
+msgctxt "Stock label"
+msgid "_Edit"
+msgstr "แ_ก้ไข"
+
+#: gtk/gtkstock.c:313
+msgctxt "Stock label"
+msgid "_Find"
+msgstr "_หา"
+
+#: gtk/gtkstock.c:314
+msgctxt "Stock label"
+msgid "Find and _Replace"
+msgstr "หาและแ_ทนที่"
+
+#: gtk/gtkstock.c:315
+msgctxt "Stock label"
+msgid "_Floppy"
+msgstr "_ฟลอปปี้"
+
+#: gtk/gtkstock.c:316
+msgctxt "Stock label"
+msgid "_Fullscreen"
+msgstr "เ_ต็มจอ"
+
+#: gtk/gtkstock.c:317
+msgctxt "Stock label"
+msgid "_Leave Fullscreen"
+msgstr "เ_ลิกแสดงเต็มจอ"
+
+#. This is a navigation label as in "go to the bottom of the page"
+#: gtk/gtkstock.c:319
+msgctxt "Stock label"
+msgid "_Bottom"
+msgstr "ล่า_งสุด"
+
+#. This is a navigation label as in "go to the first page"
+#: gtk/gtkstock.c:321
+msgctxt "Stock label"
+msgid "_First"
+msgstr "แ_รกสุด"
+
+#. This is a navigation label as in "go to the last page"
+#: gtk/gtkstock.c:323
+msgctxt "Stock label"
+msgid "_Last"
+msgstr "_ท้ายสุด"
+
+#. This is a navigation label as in "go to the top of the page"
+#: gtk/gtkstock.c:325
+msgctxt "Stock label"
+msgid "_Top"
+msgstr "_บนสุด"
+
+#. This is a navigation label as in "go back"
+#: gtk/gtkstock.c:327
+msgctxt "Stock label"
+msgid "_Back"
+msgstr "_ถอยกลับ"
+
+#. This is a navigation label as in "go down"
+#: gtk/gtkstock.c:329
+msgctxt "Stock label"
+msgid "_Down"
+msgstr "_ลง"
+
+#. This is a navigation label as in "go forward"
+#. Media label, as in "fast forward"
+#: gtk/gtkstock.c:331 gtk/gtkstock.c:353
+msgctxt "Stock label"
+msgid "_Forward"
+msgstr "ถั_ดไป"
+
+#. This is a navigation label as in "go up"
+#: gtk/gtkstock.c:333
+msgctxt "Stock label"
+msgid "_Up"
+msgstr "_ขึ้น"
+
+#: gtk/gtkstock.c:334
+msgctxt "Stock label"
+msgid "_Harddisk"
+msgstr "ฮาร์_ดดิสก์"
+
+#: gtk/gtkstock.c:335
+msgctxt "Stock label"
+msgid "_Help"
+msgstr "_วิธีใช้"
+
+#: gtk/gtkstock.c:336
+msgctxt "Stock label"
+msgid "_Home"
+msgstr "_บ้าน"
+
+#: gtk/gtkstock.c:337
+msgctxt "Stock label"
+msgid "Increase Indent"
+msgstr "เพิ่มระยะร่น"
+
+#: gtk/gtkstock.c:338
+msgctxt "Stock label"
+msgid "Decrease Indent"
+msgstr "ลดระยะร่น"
+
+#: gtk/gtkstock.c:339
+msgctxt "Stock label"
+msgid "_Index"
+msgstr "_ดัชนี"
+
+#: gtk/gtkstock.c:340
+msgctxt "Stock label"
+msgid "_Information"
+msgstr "_ข้อมูล"
+
+#: gtk/gtkstock.c:341
+msgctxt "Stock label"
+msgid "_Italic"
+msgstr "ตัวเ_อียง"
+
+#: gtk/gtkstock.c:342
+msgctxt "Stock label"
+msgid "_Jump to"
+msgstr "_กระโดดไป"
+
+#. This is about text justification, "centered text"
+#: gtk/gtkstock.c:344
+msgctxt "Stock label"
+msgid "_Center"
+msgstr "_กึ่งกลาง"
+
+#. This is about text justification
+#: gtk/gtkstock.c:346
+msgctxt "Stock label"
+msgid "_Fill"
+msgstr "เ_ต็มกรอบ"
+
+#. This is about text justification, "left-justified text"
+#: gtk/gtkstock.c:348
+msgctxt "Stock label"
+msgid "_Left"
+msgstr "ชิด_ซ้าย"
+
+#. This is about text justification, "right-justified text"
+#: gtk/gtkstock.c:350
+msgctxt "Stock label"
+msgid "_Right"
+msgstr "ชิด_ขวา"
+
+#. Media label, as in "next song"
+#: gtk/gtkstock.c:355
+msgctxt "Stock label"
+msgid "_Next"
+msgstr "_ถัดไป"
+
+#. Media label, as in "pause music"
+#: gtk/gtkstock.c:357
+msgctxt "Stock label"
+msgid "P_ause"
+msgstr "_พัก"
+
+#. Media label, as in "play music"
+#: gtk/gtkstock.c:359
+msgctxt "Stock label"
+msgid "_Play"
+msgstr "เ_ล่น"
+
+#. Media label, as in  "previous song"
+#: gtk/gtkstock.c:361
+msgctxt "Stock label"
+msgid "Pre_vious"
+msgstr "ก่อ_นหน้า"
+
+#. Media label
+#: gtk/gtkstock.c:363
+msgctxt "Stock label"
+msgid "_Record"
+msgstr "_อัด"
+
+#. Media label
+#: gtk/gtkstock.c:365
+msgctxt "Stock label"
+msgid "R_ewind"
+msgstr "ถอย_กลับ"
+
+#. Media label
+#: gtk/gtkstock.c:367 gtk/gtkstock.c:402
+msgctxt "Stock label"
+msgid "_Stop"
+msgstr "_หยุด"
+
+#: gtk/gtkstock.c:368
+msgctxt "Stock label"
+msgid "_Network"
+msgstr "เค_รือข่าย"
+
+#: gtk/gtkstock.c:369
+msgctxt "Stock label"
+msgid "_New"
+msgstr "ใ_หม่"
+
+#: gtk/gtkstock.c:370
+msgctxt "Stock label"
+msgid "_No"
+msgstr "ไ_ม่"
+
+#: gtk/gtkstock.c:371
+msgctxt "Stock label"
+msgid "_OK"
+msgstr "_ตกลง"
+
+#: gtk/gtkstock.c:372
+msgctxt "Stock label"
+msgid "_Open"
+msgstr "_เปิด"
+
+#. Page orientation
+#: gtk/gtkstock.c:374
+msgctxt "Stock label"
+msgid "Landscape"
+msgstr "แนวนอน"
+
+#. Page orientation
+#: gtk/gtkstock.c:376
+msgctxt "Stock label"
+msgid "Portrait"
+msgstr "แนวตั้ง"
+
+#. Page orientation
+#: gtk/gtkstock.c:378
+msgctxt "Stock label"
+msgid "Reverse landscape"
+msgstr "แนวนอนกลับด้าน"
+
+#. Page orientation
+#: gtk/gtkstock.c:380
+msgctxt "Stock label"
+msgid "Reverse portrait"
+msgstr "แนวตั้งกลับด้าน"
+
+#: gtk/gtkstock.c:381
+msgctxt "Stock label"
+msgid "Page Set_up"
+msgstr "ตั้ง_หน้ากระดาษ"
+
+#: gtk/gtkstock.c:382
+msgctxt "Stock label"
+msgid "_Paste"
+msgstr "_แปะ"
+
+#: gtk/gtkstock.c:383
+msgctxt "Stock label"
+msgid "_Preferences"
+msgstr "_ปรับแต่ง"
+
+#: gtk/gtkstock.c:384
+msgctxt "Stock label"
+msgid "_Print"
+msgstr "_พิมพ์"
+
+#: gtk/gtkstock.c:385
+msgctxt "Stock label"
+msgid "Print Pre_view"
+msgstr "_ตัวอย่างก่อนพิมพ์"
+
+#: gtk/gtkstock.c:386
+msgctxt "Stock label"
+msgid "_Properties"
+msgstr "คุณ_สมบัติ"
+
+#: gtk/gtkstock.c:387
+msgctxt "Stock label"
+msgid "_Quit"
+msgstr "_ออก"
+
+#: gtk/gtkstock.c:388
+msgctxt "Stock label"
+msgid "_Redo"
+msgstr "_ทำซ้ำ"
+
+#: gtk/gtkstock.c:389
+msgctxt "Stock label"
+msgid "_Refresh"
+msgstr "เ_รียกใหม่"
+
+#: gtk/gtkstock.c:390
+msgctxt "Stock label"
+msgid "_Remove"
+msgstr "เ_อาออก"
+
+#: gtk/gtkstock.c:391
+msgctxt "Stock label"
+msgid "_Revert"
+msgstr "คืน_กลับ"
+
+#: gtk/gtkstock.c:392
+msgctxt "Stock label"
+msgid "_Save"
+msgstr "_บันทึก"
+
+#: gtk/gtkstock.c:393
+msgctxt "Stock label"
+msgid "Save _As"
+msgstr "บันทึกเป็_น"
+
+#: gtk/gtkstock.c:394
+msgctxt "Stock label"
+msgid "Select _All"
+msgstr "เลือกทั้ง_หมด"
+
+#: gtk/gtkstock.c:395
+msgctxt "Stock label"
+msgid "_Color"
+msgstr "_สี"
+
+#: gtk/gtkstock.c:396
+msgctxt "Stock label"
+msgid "_Font"
+msgstr "_แบบอักษร"
+
+#. Sorting direction
+#: gtk/gtkstock.c:398
+msgctxt "Stock label"
+msgid "_Ascending"
+msgstr "_น้อยไปมาก"
+
+#. Sorting direction
+#: gtk/gtkstock.c:400
+msgctxt "Stock label"
+msgid "_Descending"
+msgstr "_มากไปน้อย"
+
+#: gtk/gtkstock.c:401
+msgctxt "Stock label"
+msgid "_Spell Check"
+msgstr "ต_รวจตัวสะกด"
+
+#. Font variant
+#: gtk/gtkstock.c:404
+msgctxt "Stock label"
+msgid "_Strikethrough"
+msgstr "ขีด_ทับ"
+
+#: gtk/gtkstock.c:405
+msgctxt "Stock label"
+msgid "_Undelete"
+msgstr "เลิ_กลบ"
+
+#. Font variant
+#: gtk/gtkstock.c:407
+msgctxt "Stock label"
+msgid "_Underline"
+msgstr "_ขีดเส้นใต้"
+
+#: gtk/gtkstock.c:408
+msgctxt "Stock label"
+msgid "_Undo"
+msgstr "เรี_ยกคืน"
+
+#: gtk/gtkstock.c:409
+msgctxt "Stock label"
+msgid "_Yes"
+msgstr "ใ_ช่"
+
+#. Zoom
+#: gtk/gtkstock.c:411
+msgctxt "Stock label"
+msgid "_Normal Size"
+msgstr "ขนาด_ปกติ"
+
+#. Zoom
+#: gtk/gtkstock.c:413
+msgctxt "Stock label"
+msgid "Best _Fit"
+msgstr "ขนาด_พอดี"
+
+#: gtk/gtkstock.c:414
+msgctxt "Stock label"
+msgid "Zoom _In"
+msgstr "แสดงขย_าย"
+
+#: gtk/gtkstock.c:415
+msgctxt "Stock label"
+msgid "Zoom _Out"
+msgstr "แสดง_ย่อ"
+
 #: gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
@@ -2818,6 +3532,821 @@ msgstr "ดังสุด"
 msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
+
+#: gtk/paper_names_offsets.c:4
+msgctxt "paper size"
+msgid "asme_f"
+msgstr "asme_f"
+
+#: gtk/paper_names_offsets.c:5
+msgctxt "paper size"
+msgid "A0x2"
+msgstr "A0x2"
+
+#: gtk/paper_names_offsets.c:6
+msgctxt "paper size"
+msgid "A0"
+msgstr "A0"
+
+#: gtk/paper_names_offsets.c:7
+msgctxt "paper size"
+msgid "A0x3"
+msgstr "A0x3"
+
+#: gtk/paper_names_offsets.c:8
+msgctxt "paper size"
+msgid "A1"
+msgstr "A1"
+
+#: gtk/paper_names_offsets.c:9
+msgctxt "paper size"
+msgid "A10"
+msgstr "A10"
+
+#: gtk/paper_names_offsets.c:10
+msgctxt "paper size"
+msgid "A1x3"
+msgstr "A1x3"
+
+#: gtk/paper_names_offsets.c:11
+msgctxt "paper size"
+msgid "A1x4"
+msgstr "A1x4"
+
+#: gtk/paper_names_offsets.c:12
+msgctxt "paper size"
+msgid "A2"
+msgstr "A2"
+
+#: gtk/paper_names_offsets.c:13
+msgctxt "paper size"
+msgid "A2x3"
+msgstr "A2x3"
+
+#: gtk/paper_names_offsets.c:14
+msgctxt "paper size"
+msgid "A2x4"
+msgstr "A2x4"
+
+#: gtk/paper_names_offsets.c:15
+msgctxt "paper size"
+msgid "A2x5"
+msgstr "A2x5"
+
+#: gtk/paper_names_offsets.c:16
+msgctxt "paper size"
+msgid "A3"
+msgstr "A3"
+
+#: gtk/paper_names_offsets.c:17
+msgctxt "paper size"
+msgid "A3 Extra"
+msgstr "A3 พิเศษ"
+
+#: gtk/paper_names_offsets.c:18
+msgctxt "paper size"
+msgid "A3x3"
+msgstr "A3x3"
+
+#: gtk/paper_names_offsets.c:19
+msgctxt "paper size"
+msgid "A3x4"
+msgstr "A3x4"
+
+#: gtk/paper_names_offsets.c:20
+msgctxt "paper size"
+msgid "A3x5"
+msgstr "A3x5"
+
+#: gtk/paper_names_offsets.c:21
+msgctxt "paper size"
+msgid "A3x6"
+msgstr "A3x6"
+
+#: gtk/paper_names_offsets.c:22
+msgctxt "paper size"
+msgid "A3x7"
+msgstr "A3x7"
+
+#: gtk/paper_names_offsets.c:23
+msgctxt "paper size"
+msgid "A4"
+msgstr "A4"
+
+#: gtk/paper_names_offsets.c:24
+msgctxt "paper size"
+msgid "A4 Extra"
+msgstr "A4 พิเศษ"
+
+#: gtk/paper_names_offsets.c:25
+msgctxt "paper size"
+msgid "A4 Tab"
+msgstr "A4 Tab"
+
+#: gtk/paper_names_offsets.c:26
+msgctxt "paper size"
+msgid "A4x3"
+msgstr "A4x3"
+
+#: gtk/paper_names_offsets.c:27
+msgctxt "paper size"
+msgid "A4x4"
+msgstr "A4x4"
+
+#: gtk/paper_names_offsets.c:28
+msgctxt "paper size"
+msgid "A4x5"
+msgstr "A4x5"
+
+#: gtk/paper_names_offsets.c:29
+msgctxt "paper size"
+msgid "A4x6"
+msgstr "A4x6"
+
+#: gtk/paper_names_offsets.c:30
+msgctxt "paper size"
+msgid "A4x7"
+msgstr "A4x7"
+
+#: gtk/paper_names_offsets.c:31
+msgctxt "paper size"
+msgid "A4x8"
+msgstr "A4x8"
+
+#: gtk/paper_names_offsets.c:32
+msgctxt "paper size"
+msgid "A4x9"
+msgstr "A4x9"
+
+#: gtk/paper_names_offsets.c:33
+msgctxt "paper size"
+msgid "A5"
+msgstr "A5"
+
+#: gtk/paper_names_offsets.c:34
+msgctxt "paper size"
+msgid "A5 Extra"
+msgstr "A5 พิเศษ"
+
+#: gtk/paper_names_offsets.c:35
+msgctxt "paper size"
+msgid "A6"
+msgstr "A6"
+
+#: gtk/paper_names_offsets.c:36
+msgctxt "paper size"
+msgid "A7"
+msgstr "A7"
+
+#: gtk/paper_names_offsets.c:37
+msgctxt "paper size"
+msgid "A8"
+msgstr "A8"
+
+#: gtk/paper_names_offsets.c:38
+msgctxt "paper size"
+msgid "A9"
+msgstr "A9"
+
+#: gtk/paper_names_offsets.c:39
+msgctxt "paper size"
+msgid "B0"
+msgstr "B0"
+
+#: gtk/paper_names_offsets.c:40
+msgctxt "paper size"
+msgid "B1"
+msgstr "B1"
+
+#: gtk/paper_names_offsets.c:41
+msgctxt "paper size"
+msgid "B10"
+msgstr "B10"
+
+#: gtk/paper_names_offsets.c:42
+msgctxt "paper size"
+msgid "B2"
+msgstr "B2"
+
+#: gtk/paper_names_offsets.c:43
+msgctxt "paper size"
+msgid "B3"
+msgstr "B3"
+
+#: gtk/paper_names_offsets.c:44
+msgctxt "paper size"
+msgid "B4"
+msgstr "B4"
+
+#: gtk/paper_names_offsets.c:45
+msgctxt "paper size"
+msgid "B5"
+msgstr "B5"
+
+#: gtk/paper_names_offsets.c:46
+msgctxt "paper size"
+msgid "B5 Extra"
+msgstr "B5 พิเศษ"
+
+#: gtk/paper_names_offsets.c:47
+msgctxt "paper size"
+msgid "B6"
+msgstr "B6"
+
+#: gtk/paper_names_offsets.c:48
+msgctxt "paper size"
+msgid "B6/C4"
+msgstr "B6/C4"
+
+#: gtk/paper_names_offsets.c:49
+msgctxt "paper size"
+msgid "B7"
+msgstr "B7"
+
+#: gtk/paper_names_offsets.c:50
+msgctxt "paper size"
+msgid "B8"
+msgstr "B8"
+
+#: gtk/paper_names_offsets.c:51
+msgctxt "paper size"
+msgid "B9"
+msgstr "B9"
+
+#: gtk/paper_names_offsets.c:52
+msgctxt "paper size"
+msgid "C0"
+msgstr "C0"
+
+#: gtk/paper_names_offsets.c:53
+msgctxt "paper size"
+msgid "C1"
+msgstr "C1"
+
+#: gtk/paper_names_offsets.c:54
+msgctxt "paper size"
+msgid "C10"
+msgstr "C10"
+
+#: gtk/paper_names_offsets.c:55
+msgctxt "paper size"
+msgid "C2"
+msgstr "C2"
+
+#: gtk/paper_names_offsets.c:56
+msgctxt "paper size"
+msgid "C3"
+msgstr "C3"
+
+#: gtk/paper_names_offsets.c:57
+msgctxt "paper size"
+msgid "C4"
+msgstr "C4"
+
+#: gtk/paper_names_offsets.c:58
+msgctxt "paper size"
+msgid "C5"
+msgstr "C5"
+
+#: gtk/paper_names_offsets.c:59
+msgctxt "paper size"
+msgid "C6"
+msgstr "C6"
+
+#: gtk/paper_names_offsets.c:60
+msgctxt "paper size"
+msgid "C6/C5"
+msgstr "C6/C5"
+
+#: gtk/paper_names_offsets.c:61
+msgctxt "paper size"
+msgid "C7"
+msgstr "C7"
+
+#: gtk/paper_names_offsets.c:62
+msgctxt "paper size"
+msgid "C7/C6"
+msgstr "C7/C6"
+
+#: gtk/paper_names_offsets.c:63
+msgctxt "paper size"
+msgid "C8"
+msgstr "C8"
+
+#: gtk/paper_names_offsets.c:64
+msgctxt "paper size"
+msgid "C9"
+msgstr "C9"
+
+#: gtk/paper_names_offsets.c:65
+msgctxt "paper size"
+msgid "DL Envelope"
+msgstr "DL ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:66
+msgctxt "paper size"
+msgid "RA0"
+msgstr "RA0"
+
+#: gtk/paper_names_offsets.c:67
+msgctxt "paper size"
+msgid "RA1"
+msgstr "RA1"
+
+#: gtk/paper_names_offsets.c:68
+msgctxt "paper size"
+msgid "RA2"
+msgstr "RA2"
+
+#: gtk/paper_names_offsets.c:69
+msgctxt "paper size"
+msgid "SRA0"
+msgstr "SRA0"
+
+#: gtk/paper_names_offsets.c:70
+msgctxt "paper size"
+msgid "SRA1"
+msgstr "SRA1"
+
+#: gtk/paper_names_offsets.c:71
+msgctxt "paper size"
+msgid "SRA2"
+msgstr "SRA2"
+
+#: gtk/paper_names_offsets.c:72
+msgctxt "paper size"
+msgid "JB0"
+msgstr "JB0"
+
+#: gtk/paper_names_offsets.c:73
+msgctxt "paper size"
+msgid "JB1"
+msgstr "JB1"
+
+#: gtk/paper_names_offsets.c:74
+msgctxt "paper size"
+msgid "JB10"
+msgstr "JB10"
+
+#: gtk/paper_names_offsets.c:75
+msgctxt "paper size"
+msgid "JB2"
+msgstr "JB2"
+
+#: gtk/paper_names_offsets.c:76
+msgctxt "paper size"
+msgid "JB3"
+msgstr "JB3"
+
+#: gtk/paper_names_offsets.c:77
+msgctxt "paper size"
+msgid "JB4"
+msgstr "JB4"
+
+#: gtk/paper_names_offsets.c:78
+msgctxt "paper size"
+msgid "JB5"
+msgstr "JB5"
+
+#: gtk/paper_names_offsets.c:79
+msgctxt "paper size"
+msgid "JB6"
+msgstr "JB6"
+
+#: gtk/paper_names_offsets.c:80
+msgctxt "paper size"
+msgid "JB7"
+msgstr "JB7"
+
+#: gtk/paper_names_offsets.c:81
+msgctxt "paper size"
+msgid "JB8"
+msgstr "JB8"
+
+#: gtk/paper_names_offsets.c:82
+msgctxt "paper size"
+msgid "JB9"
+msgstr "JB9"
+
+#: gtk/paper_names_offsets.c:83
+msgctxt "paper size"
+msgid "jis exec"
+msgstr "jis exec"
+
+#: gtk/paper_names_offsets.c:84
+msgctxt "paper size"
+msgid "Choukei 2 Envelope"
+msgstr "Choukei 2 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:85
+msgctxt "paper size"
+msgid "Choukei 3 Envelope"
+msgstr "Choukei 3 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:86
+msgctxt "paper size"
+msgid "Choukei 4 Envelope"
+msgstr "Choukei 4 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:87
+msgctxt "paper size"
+msgid "hagaki (postcard)"
+msgstr "hagaki (ไปรษณียบัตร)"
+
+#: gtk/paper_names_offsets.c:88
+msgctxt "paper size"
+msgid "kahu Envelope"
+msgstr "kahu ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:89
+msgctxt "paper size"
+msgid "kaku2 Envelope"
+msgstr "kahu2 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:90
+msgctxt "paper size"
+msgid "oufuku (reply postcard)"
+msgstr "oufuku (ไปรษณียบัตรตอบ)"
+
+#: gtk/paper_names_offsets.c:91
+msgctxt "paper size"
+msgid "you4 Envelope"
+msgstr "you4 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:92
+msgctxt "paper size"
+msgid "10x11"
+msgstr "10x11"
+
+#: gtk/paper_names_offsets.c:93
+msgctxt "paper size"
+msgid "10x13"
+msgstr "10x13"
+
+#: gtk/paper_names_offsets.c:94
+msgctxt "paper size"
+msgid "10x14"
+msgstr "10x14"
+
+#: gtk/paper_names_offsets.c:95 gtk/paper_names_offsets.c:96
+msgctxt "paper size"
+msgid "10x15"
+msgstr "10x15"
+
+#: gtk/paper_names_offsets.c:97
+msgctxt "paper size"
+msgid "11x12"
+msgstr "11x12"
+
+#: gtk/paper_names_offsets.c:98
+msgctxt "paper size"
+msgid "11x15"
+msgstr "11x15"
+
+#: gtk/paper_names_offsets.c:99
+msgctxt "paper size"
+msgid "12x19"
+msgstr "12x19"
+
+#: gtk/paper_names_offsets.c:100
+msgctxt "paper size"
+msgid "5x7"
+msgstr "5x7"
+
+#: gtk/paper_names_offsets.c:101
+msgctxt "paper size"
+msgid "6x9 Envelope"
+msgstr "6x9 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:102
+msgctxt "paper size"
+msgid "7x9 Envelope"
+msgstr "7x9 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:103
+msgctxt "paper size"
+msgid "9x11 Envelope"
+msgstr "9x11 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:104
+msgctxt "paper size"
+msgid "a2 Envelope"
+msgstr "a2 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:105
+msgctxt "paper size"
+msgid "Arch A"
+msgstr "Arch A"
+
+#: gtk/paper_names_offsets.c:106
+msgctxt "paper size"
+msgid "Arch B"
+msgstr "Arch B"
+
+#: gtk/paper_names_offsets.c:107
+msgctxt "paper size"
+msgid "Arch C"
+msgstr "Arch C"
+
+#: gtk/paper_names_offsets.c:108
+msgctxt "paper size"
+msgid "Arch D"
+msgstr "Arch D"
+
+#: gtk/paper_names_offsets.c:109
+msgctxt "paper size"
+msgid "Arch E"
+msgstr "Arch E"
+
+#: gtk/paper_names_offsets.c:110
+msgctxt "paper size"
+msgid "b-plus"
+msgstr "b-plus"
+
+#: gtk/paper_names_offsets.c:111
+msgctxt "paper size"
+msgid "c"
+msgstr "c"
+
+#: gtk/paper_names_offsets.c:112
+msgctxt "paper size"
+msgid "c5 Envelope"
+msgstr "c5 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:113
+msgctxt "paper size"
+msgid "d"
+msgstr "d"
+
+#: gtk/paper_names_offsets.c:114
+msgctxt "paper size"
+msgid "e"
+msgstr "e"
+
+#: gtk/paper_names_offsets.c:115
+msgctxt "paper size"
+msgid "edp"
+msgstr "edp"
+
+#: gtk/paper_names_offsets.c:116
+msgctxt "paper size"
+msgid "European edp"
+msgstr "edp ยุโรป"
+
+#: gtk/paper_names_offsets.c:117
+msgctxt "paper size"
+msgid "Executive"
+msgstr "Executive"
+
+#: gtk/paper_names_offsets.c:118
+msgctxt "paper size"
+msgid "f"
+msgstr "f"
+
+#: gtk/paper_names_offsets.c:119
+msgctxt "paper size"
+msgid "FanFold European"
+msgstr "FanFold ยุโรป"
+
+#: gtk/paper_names_offsets.c:120
+msgctxt "paper size"
+msgid "FanFold US"
+msgstr "FanFold อเมริกัน"
+
+#: gtk/paper_names_offsets.c:121
+msgctxt "paper size"
+msgid "FanFold German Legal"
+msgstr "FanFold เยอรมัน Legal"
+
+#: gtk/paper_names_offsets.c:122
+msgctxt "paper size"
+msgid "Government Legal"
+msgstr "Government Legal"
+
+#: gtk/paper_names_offsets.c:123
+msgctxt "paper size"
+msgid "Government Letter"
+msgstr "Government Letter"
+
+#: gtk/paper_names_offsets.c:124
+msgctxt "paper size"
+msgid "Index 3x5"
+msgstr "Index 3x5"
+
+#: gtk/paper_names_offsets.c:125
+msgctxt "paper size"
+msgid "Index 4x6 (postcard)"
+msgstr "Index 4x6 (ไปรษณียบัตร)"
+
+#: gtk/paper_names_offsets.c:126
+msgctxt "paper size"
+msgid "Index 4x6 ext"
+msgstr "Index 4x6 ext"
+
+#: gtk/paper_names_offsets.c:127
+msgctxt "paper size"
+msgid "Index 5x8"
+msgstr "Index 5x8"
+
+#: gtk/paper_names_offsets.c:128
+msgctxt "paper size"
+msgid "Invoice"
+msgstr "ใบส่งของ"
+
+#: gtk/paper_names_offsets.c:129
+msgctxt "paper size"
+msgid "Tabloid"
+msgstr "จุลสาร"
+
+#: gtk/paper_names_offsets.c:130
+msgctxt "paper size"
+msgid "US Legal"
+msgstr "US Legal"
+
+#: gtk/paper_names_offsets.c:131
+msgctxt "paper size"
+msgid "US Legal Extra"
+msgstr "US Legal Extra"
+
+#: gtk/paper_names_offsets.c:132
+msgctxt "paper size"
+msgid "US Letter"
+msgstr "US Letter"
+
+#: gtk/paper_names_offsets.c:133
+msgctxt "paper size"
+msgid "US Letter Extra"
+msgstr "US Letter Extra"
+
+#: gtk/paper_names_offsets.c:134
+msgctxt "paper size"
+msgid "US Letter Plus"
+msgstr "US Letter Plus"
+
+#: gtk/paper_names_offsets.c:135
+msgctxt "paper size"
+msgid "Monarch Envelope"
+msgstr "Monarch ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:136
+msgctxt "paper size"
+msgid "#10 Envelope"
+msgstr "#10 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:137
+msgctxt "paper size"
+msgid "#11 Envelope"
+msgstr "#11 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:138
+msgctxt "paper size"
+msgid "#12 Envelope"
+msgstr "#12 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:139
+msgctxt "paper size"
+msgid "#14 Envelope"
+msgstr "#14 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:140
+msgctxt "paper size"
+msgid "#9 Envelope"
+msgstr "#9 ซองจดหมาย"
+
+#: gtk/paper_names_offsets.c:141
+msgctxt "paper size"
+msgid "Personal Envelope"
+msgstr "Personal Envelope"
+
+#: gtk/paper_names_offsets.c:142
+msgctxt "paper size"
+msgid "Quarto"
+msgstr "Quarto"
+
+#: gtk/paper_names_offsets.c:143
+msgctxt "paper size"
+msgid "Super A"
+msgstr "Super A"
+
+#: gtk/paper_names_offsets.c:144
+msgctxt "paper size"
+msgid "Super B"
+msgstr "Super B"
+
+#: gtk/paper_names_offsets.c:145
+msgctxt "paper size"
+msgid "Wide Format"
+msgstr "Wide Format"
+
+#: gtk/paper_names_offsets.c:146
+msgctxt "paper size"
+msgid "Dai-pa-kai"
+msgstr "Dai-pa-kai"
+
+#: gtk/paper_names_offsets.c:147
+msgctxt "paper size"
+msgid "Folio"
+msgstr "Folio"
+
+#: gtk/paper_names_offsets.c:148
+msgctxt "paper size"
+msgid "Folio sp"
+msgstr "Folio sp"
+
+#: gtk/paper_names_offsets.c:149
+msgctxt "paper size"
+msgid "Invite Envelope"
+msgstr "Invite Envelope"
+
+#: gtk/paper_names_offsets.c:150
+msgctxt "paper size"
+msgid "Italian Envelope"
+msgstr "Italian Envelope"
+
+#: gtk/paper_names_offsets.c:151
+msgctxt "paper size"
+msgid "juuro-ku-kai"
+msgstr "juuro-ku-kai"
+
+#: gtk/paper_names_offsets.c:152
+msgctxt "paper size"
+msgid "pa-kai"
+msgstr "pa-kai"
+
+#: gtk/paper_names_offsets.c:153
+msgctxt "paper size"
+msgid "Postfix Envelope"
+msgstr "Postfix Envelope"
+
+#: gtk/paper_names_offsets.c:154
+msgctxt "paper size"
+msgid "Small Photo"
+msgstr "Small Photo"
+
+#: gtk/paper_names_offsets.c:155
+msgctxt "paper size"
+msgid "prc1 Envelope"
+msgstr "prc1 Envelope"
+
+#: gtk/paper_names_offsets.c:156
+msgctxt "paper size"
+msgid "prc10 Envelope"
+msgstr "prc10 Envelope"
+
+#: gtk/paper_names_offsets.c:157
+msgctxt "paper size"
+msgid "prc 16k"
+msgstr "prc 16k"
+
+#: gtk/paper_names_offsets.c:158
+msgctxt "paper size"
+msgid "prc2 Envelope"
+msgstr "prc2 Envelope"
+
+#: gtk/paper_names_offsets.c:159
+msgctxt "paper size"
+msgid "prc3 Envelope"
+msgstr "prc3 Envelope"
+
+#: gtk/paper_names_offsets.c:160
+msgctxt "paper size"
+msgid "prc 32k"
+msgstr "prc 32k"
+
+#: gtk/paper_names_offsets.c:161
+msgctxt "paper size"
+msgid "prc4 Envelope"
+msgstr "prc4 Envelope"
+
+#: gtk/paper_names_offsets.c:162
+msgctxt "paper size"
+msgid "prc5 Envelope"
+msgstr "prc5 Envelope"
+
+#: gtk/paper_names_offsets.c:163
+msgctxt "paper size"
+msgid "prc6 Envelope"
+msgstr "prc6 Envelope"
+
+#: gtk/paper_names_offsets.c:164
+msgctxt "paper size"
+msgid "prc7 Envelope"
+msgstr "prc7 Envelope"
+
+#: gtk/paper_names_offsets.c:165
+msgctxt "paper size"
+msgid "prc8 Envelope"
+msgstr "prc8 Envelope"
+
+#: gtk/paper_names_offsets.c:166
+msgctxt "paper size"
+msgid "ROC 16k"
+msgstr "ROC 16k"
+
+#: gtk/paper_names_offsets.c:167
+msgctxt "paper size"
+msgid "ROC 8k"
+msgstr "ROC 8k"
 
 #: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
 #, c-format
@@ -3302,219 +4831,6 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 #~ msgid "Icon not present in theme"
 #~ msgstr "ชุดตกแต่งไม่มีไอคอน"
 
-#~ msgid "Information"
-#~ msgstr "ข้อมูล"
-
-#~ msgid "Warning"
-#~ msgstr "คำเตือน"
-
-#~ msgid "Error"
-#~ msgstr "ผิดพลาด"
-
-#~ msgid "Question"
-#~ msgstr "คำถาม"
-
-#~ msgid "_About"
-#~ msgstr "เ_กี่ยวกับ"
-
-#~ msgid "_Apply"
-#~ msgstr "เริ่มใ_ช้"
-
-#~ msgid "_Bold"
-#~ msgstr "ตัวห_นา"
-
-#~ msgid "_Cancel"
-#~ msgstr "_ยกเลิก"
-
-#~ msgid "_CD-Rom"
-#~ msgstr "_ซีดีรอม"
-
-#~ msgid "_Clear"
-#~ msgstr "_ล้าง"
-
-#~ msgid "_Close"
-#~ msgstr "ปิ_ด"
-
-#~ msgid "C_onnect"
-#~ msgstr "เ_ชื่อมต่อ"
-
-#~ msgid "_Convert"
-#~ msgstr "แปล_ง"
-
-#~ msgid "_Copy"
-#~ msgstr "_คัดลอก"
-
-#~ msgid "Cu_t"
-#~ msgstr "_ตัด"
-
-#~ msgid "_Delete"
-#~ msgstr "_ลบ"
-
-#~ msgid "_Discard"
-#~ msgstr "_ละทิ้ง"
-
-#~ msgid "_Disconnect"
-#~ msgstr "เลิ_กเชื่อมต่อ"
-
-#~ msgid "_Execute"
-#~ msgstr "เ_รียกใช้"
-
-#~ msgid "_Edit"
-#~ msgstr "แ_ก้ไข"
-
-#~ msgid "_Find"
-#~ msgstr "_หา"
-
-#~ msgid "Find and _Replace"
-#~ msgstr "หาและแ_ทนที่"
-
-#~ msgid "_Floppy"
-#~ msgstr "_ฟลอปปี"
-
-#~ msgid "_Fullscreen"
-#~ msgstr "เ_ต็มจอ"
-
-#~ msgid "_Leave Fullscreen"
-#~ msgstr "เ_ลิกแสดงเต็มจอ"
-
-#~ msgid "_Harddisk"
-#~ msgstr "ฮาร์_ดดิสก์"
-
-#~ msgid "_Help"
-#~ msgstr "_วิธีใช้"
-
-#~ msgid "_Home"
-#~ msgstr "_บ้าน"
-
-#~ msgid "Increase Indent"
-#~ msgstr "เพิ่มย่อหน้า"
-
-#~ msgid "Decrease Indent"
-#~ msgstr "ลดย่อหน้า"
-
-#~ msgid "_Index"
-#~ msgstr "_ดัชนี"
-
-#~ msgid "_Information"
-#~ msgstr "_ข้อมูล"
-
-#~ msgid "_Italic"
-#~ msgstr "ตัวเ_อียง"
-
-#~ msgid "_Jump to"
-#~ msgstr "_กระโดดไป"
-
-#~ msgid "_Network"
-#~ msgstr "เค_รือข่าย"
-
-#~ msgid "_New"
-#~ msgstr "ใ_หม่"
-
-#~ msgid "_No"
-#~ msgstr "ไ_ม่"
-
-#~ msgid "_OK"
-#~ msgstr "_ตกลง"
-
-#~ msgid "_Open"
-#~ msgstr "_เปิด"
-
-#~ msgid "Landscape"
-#~ msgstr "แนวนอน"
-
-#~ msgid "Portrait"
-#~ msgstr "แนวตั้ง"
-
-#~ msgid "Reverse landscape"
-#~ msgstr "แนวนอนกลับด้าน"
-
-#~ msgid "Reverse portrait"
-#~ msgstr "แนวตั้งกลับด้าน"
-
-#~ msgid "Page Set_up"
-#~ msgstr "ตั้ง_หน้ากระดาษ"
-
-#~ msgid "_Paste"
-#~ msgstr "_แปะ"
-
-#~ msgid "_Preferences"
-#~ msgstr "_ปรับแต่ง"
-
-#~ msgid "_Print"
-#~ msgstr "_พิมพ์"
-
-#~ msgid "Print Pre_view"
-#~ msgstr "_ตัวอย่างก่อนพิมพ์"
-
-#~ msgid "_Properties"
-#~ msgstr "คุณ_สมบัติ"
-
-#~ msgid "_Quit"
-#~ msgstr "_ออก"
-
-#~ msgid "_Redo"
-#~ msgstr "_ทำซ้ำ"
-
-#~ msgid "_Refresh"
-#~ msgstr "เ_รียกใหม่"
-
-#~ msgid "_Revert"
-#~ msgstr "คืน_กลับ"
-
-#~ msgid "_Save"
-#~ msgstr "_บันทึก"
-
-#~ msgid "Save _As"
-#~ msgstr "บันทึกเป็_น"
-
-#~ msgid "Select _All"
-#~ msgstr "เลือกทั้ง_หมด"
-
-#~ msgid "_Color"
-#~ msgstr "_สี"
-
-#~ msgid "_Font"
-#~ msgstr "_แบบอักษร"
-
-#~ msgid "_Ascending"
-#~ msgstr "_น้อยไปมาก"
-
-#~ msgid "_Descending"
-#~ msgstr "_มากไปน้อย"
-
-#~ msgid "_Spell Check"
-#~ msgstr "ต_รวจตัวสะกด"
-
-#~ msgid "_Stop"
-#~ msgstr "_หยุด"
-
-#~ msgid "_Strikethrough"
-#~ msgstr "ขีด_ทับ"
-
-#~ msgid "_Undelete"
-#~ msgstr "เลิ_กลบ"
-
-#~ msgid "_Underline"
-#~ msgstr "_ขีดเส้นใต้"
-
-#~ msgid "_Undo"
-#~ msgstr "เรี_ยกคืน"
-
-#~ msgid "_Yes"
-#~ msgstr "_ใช่"
-
-#~ msgid "_Normal Size"
-#~ msgstr "ขนาด_ปกติ"
-
-#~ msgid "Best _Fit"
-#~ msgstr "ขนาด_พอดี"
-
-#~ msgid "Zoom _In"
-#~ msgstr "ขย_าย"
-
-#~ msgid "Zoom _Out"
-#~ msgstr "_ย่อ"
-
 #~ msgid "%.1f KB"
 #~ msgstr "%.1f KB"
 
@@ -3638,6 +4954,138 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 
 #~ msgid "Thai (Broken)"
 #~ msgstr "ไทย (เสียอยู่)"
+
+#~ msgid ""
+#~ "Error creating folder \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "เกิดข้อผิดพลาดขณะสร้างโฟลเดอร์ \"%s\": %s\n"
+#~ "%s"
+
+#~ msgid "You probably used symbols not allowed in filenames."
+#~ msgstr "คุณคงจะใช้เครื่องหมายที่ใช้ในชื่อแฟ้มไม่ได้"
+
+#~ msgid ""
+#~ "Error deleting file \"%s\": %s\n"
+#~ "%s"
+#~ msgstr ""
+#~ "เกิดข้อผิดพลาดขณะลบแฟ้ม \"%s\": %s\n"
+#~ "%s"
+
+#~ msgid "It probably contains symbols not allowed in filenames."
+#~ msgstr "มันคงมีเครื่องหมายที่ใช้ในชื่อแฟ้มไม่ได้"
+
+#~ msgid ""
+#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr "ชื่อแฟ้ม \"%s\" มีเครื่องหมายที่ใช้ในชื่อแฟ้มไม่ได้"
+
+#~ msgid "Error getting information for '/': %s"
+#~ msgstr "เกิดข้อผิดพลาดขณะเรียกข้อมูลสำหรับ '/': %s"
+
+#~ msgid "Select All"
+#~ msgstr "เลือกทั้งหมด"
+
+#~ msgid "A <text> element has already been specified"
+#~ msgstr "อิลิเมนต์ <text> ถูกกำหนดไว้แล้ว"
+
+#~ msgid "shortcut %s already exists"
+#~ msgstr "จุดเชื่อม %s มีอยู่ก่อนแล้ว"
+
+#~ msgid "This function is not implemented for widgets of class '%s'."
+#~ msgstr "ฟังก์ชันนี้ยังไม่มีสำหรับวิดเจ็ตในคลาส '%s'"
+
+#~ msgid "Cannot handle PNM files with maximum color values greater than 255"
+#~ msgstr "ไม่รองรับแฟ้ม PNM มีค่าจำนวนสีมากสุดเกิน 255"
+
+#~ msgid "Could not get information about '%s': %s"
+#~ msgstr "ไม่สามารถอ่านข้อมูลเกี่ยวกับ '%s': %s"
+
+#~ msgid "Shortcuts"
+#~ msgstr "จุดเชื่อม"
+
+#~ msgid "Folder"
+#~ msgstr "โฟลเดอร์"
+
+#~ msgid "Cannot change folder"
+#~ msgstr "เปลี่ยนโฟลเดอร์ไม่สำเร็จ"
+
+#~ msgid "The folder you specified is an invalid path."
+#~ msgstr "โฟลเดอร์ที่กำหนด เป็นพาธที่ใช้ไม่ได้"
+
+#~ msgid "Could not build file name from '%s' and '%s'"
+#~ msgstr "ไม่สามารถสร้างชื่อแฟ้มจาก '%s' และ '%s'"
+
+#~ msgid "Open Location"
+#~ msgstr "เปิดตำแหน่ง"
+
+#~ msgid "Save in Location"
+#~ msgstr "บันทึกลงในตำแหน่ง"
+
+#~ msgid "X"
+#~ msgstr "X"
+
+#~ msgid "clear"
+#~ msgstr "ล้างออก"
+
+#~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+#~ msgstr "รายการในพาธของพิกซ์แมป: \"%s\" ต้องเป็นที่อยู่เต็ม, %s บรรทัด %d"
+
+#~ msgid "Writing %s failed: %s"
+#~ msgstr "บันทึก %s ไม่สำเร็จ: %s"
+
+#~ msgid "Could not add bookmark for %s because it is not a folder."
+#~ msgstr "%s ไม่ใช่โฟลเดอร์ จึงเพิ่มลงในที่คั่นหน้าไม่ได้"
+
+#~ msgid "This file system does not support icons for everything"
+#~ msgstr "ระบบแฟ้มนี้ไม่รองรับไอคอนสำหรับทุกอย่าง"
+
+#~ msgid "Input Methods"
+#~ msgstr "Input Methods"
+
+#~ msgid "Unsupported TIFF variant"
+#~ msgstr "ไม่รองรับชนิดย่อยนี้ของ TIFF"
+
+#~ msgid "File name"
+#~ msgstr "ชื่อแฟ้ม"
+
+#~ msgid "Add"
+#~ msgstr "เ_พิ่ม"
+
+#~ msgid "_Filename:"
+#~ msgstr "_ชื่อแฟ้ม"
+
+#~ msgid "Current folder: %s"
+#~ msgstr "โฟลเดอร์ปัจจุบัน: %s"
+
+#~ msgid "This file system does not support icons"
+#~ msgstr "ระบบแฟ้มนี้ไม่รองรับสัญลักษณ์"
+
+#~ msgid "This file system does not support bookmarks"
+#~ msgstr "ระบบแฟ้มนี้ไม่รองรับที่คั่นหน้า"
+
+#~ msgid "Zoom _100%"
+#~ msgstr "ขนาดปกติ (_1)"
+
+#~ msgid "Zoom to _Fit"
+#~ msgstr "ขยายให้พอดี (_F)"
+
+#~ msgid "%s (%s)"
+#~ msgstr "%s (%s)"
+
+#~ msgid "Y"
+#~ msgstr "Y"
+
+#~ msgid "Shift"
+#~ msgstr "Shift"
+
+#~ msgid "Ctrl"
+#~ msgstr "Ctrl"
+
+#~ msgid "Alt"
+#~ msgstr "Alt"
+
+#~ msgid "%d/%b/%Y"
+#~ msgstr "%d %b %Ey"
 
 #~ msgid "asme_f"
 #~ msgstr "asme_f"
@@ -3963,6 +5411,9 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 #~ msgid "c5 Envelope"
 #~ msgstr "c5 ซองจดหมาย"
 
+#~ msgid "d"
+#~ msgstr "d"
+
 #~ msgid "e"
 #~ msgstr "e"
 
@@ -4050,6 +5501,9 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 #~ msgid "Quarto"
 #~ msgstr "Quarto"
 
+#~ msgid "Super A"
+#~ msgstr "Super A"
+
 #~ msgid "Super B"
 #~ msgstr "Super B"
 
@@ -4122,162 +5576,32 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 #~ msgid "ROC 8k"
 #~ msgstr "ROC 8k"
 
-#~ msgid ""
-#~ "Error creating folder \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "เกิดข้อผิดพลาดขณะสร้างโฟลเดอร์ \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "You probably used symbols not allowed in filenames."
-#~ msgstr "คุณคงจะใช้เครื่องหมายที่ใช้ในชื่อแฟ้มไม่ได้"
-
-#~ msgid ""
-#~ "Error deleting file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "เกิดข้อผิดพลาดขณะลบแฟ้ม \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "It probably contains symbols not allowed in filenames."
-#~ msgstr "มันคงมีเครื่องหมายที่ใช้ในชื่อแฟ้มไม่ได้"
-
-#~ msgid ""
-#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "ชื่อแฟ้ม \"%s\" มีเครื่องหมายที่ใช้ในชื่อแฟ้มไม่ได้"
-
-#~ msgid "Error getting information for '/': %s"
-#~ msgstr "เกิดข้อผิดพลาดขณะเรียกข้อมูลสำหรับ '/': %s"
-
-#~ msgid "Select All"
-#~ msgstr "เลือกทั้งหมด"
-
-#~ msgid "A <text> element has already been specified"
-#~ msgstr "อิลิเมนต์ <text> ถูกกำหนดไว้แล้ว"
-
-#~ msgid "shortcut %s already exists"
-#~ msgstr "จุดเชื่อม %s มีอยู่ก่อนแล้ว"
-
-#~ msgid "This function is not implemented for widgets of class '%s'."
-#~ msgstr "ฟังก์ชันนี้ยังไม่มีสำหรับวิดเจ็ตในคลาส '%s'"
-
-#~ msgid "Cannot handle PNM files with maximum color values greater than 255"
-#~ msgstr "ไม่รองรับแฟ้ม PNM มีค่าจำนวนสีมากสุดเกิน 255"
-
 #~ msgid "Home"
 #~ msgstr "บ้าน"
-
-#~ msgid "Could not get information about '%s': %s"
-#~ msgstr "ไม่สามารถอ่านข้อมูลเกี่ยวกับ '%s': %s"
-
-#~ msgid "Shortcuts"
-#~ msgstr "จุดเชื่อม"
-
-#~ msgid "Folder"
-#~ msgstr "โฟลเดอร์"
-
-#~ msgid "Cannot change folder"
-#~ msgstr "เปลี่ยนโฟลเดอร์ไม่สำเร็จ"
-
-#~ msgid "The folder you specified is an invalid path."
-#~ msgstr "โฟลเดอร์ที่กำหนด เป็นพาธที่ใช้ไม่ได้"
-
-#~ msgid "Could not build file name from '%s' and '%s'"
-#~ msgstr "ไม่สามารถสร้างชื่อแฟ้มจาก '%s' และ '%s'"
-
-#~ msgid "Open Location"
-#~ msgstr "เปิดตำแหน่ง"
-
-#~ msgid "Save in Location"
-#~ msgstr "บันทึกลงในตำแหน่ง"
-
-#~ msgid "X"
-#~ msgstr "X"
-
-#~ msgid "clear"
-#~ msgstr "ล้างออก"
-
-#~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-#~ msgstr "รายการในพาธของพิกซ์แมป: \"%s\" ต้องเป็นที่อยู่เต็ม, %s บรรทัด %d"
-
-#~ msgid "Writing %s failed: %s"
-#~ msgstr "บันทึก %s ไม่สำเร็จ: %s"
-
-#~ msgid "_First"
-#~ msgstr "_แรกสุด"
-
-#~ msgid "_Last"
-#~ msgstr "หลั_งสุด"
-
-#~ msgid "_Back"
-#~ msgstr "ถอ_ยกลับ"
-
-#~ msgid "_Down"
-#~ msgstr "ล_ง"
-
-#~ msgid "_Up"
-#~ msgstr "ขึ้_น"
-
-#~ msgid "Could not add bookmark for %s because it is not a folder."
-#~ msgstr "%s ไม่ใช่โฟลเดอร์ จึงเพิ่มลงในที่คั่นหน้าไม่ได้"
-
-#~ msgid "This file system does not support icons for everything"
-#~ msgstr "ระบบแฟ้มนี้ไม่รองรับไอคอนสำหรับทุกอย่าง"
-
-#~ msgid "Input Methods"
-#~ msgstr "Input Methods"
-
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "ไม่รองรับชนิดย่อยนี้ของ TIFF"
-
-#~ msgid "File name"
-#~ msgstr "ชื่อแฟ้ม"
-
-#~ msgid "Add"
-#~ msgstr "เ_พิ่ม"
 
 #~ msgid "Up"
 #~ msgstr "_ขึ้น"
 
-#~ msgid "_Filename:"
-#~ msgstr "_ชื่อแฟ้ม"
+#~ msgctxt "Navigation"
+#~ msgid "_First"
+#~ msgstr "แ_รกสุด"
 
-#~ msgid "Current folder: %s"
-#~ msgstr "โฟลเดอร์ปัจจุบัน: %s"
+#~ msgctxt "Navigation"
+#~ msgid "_Last"
+#~ msgstr "_ท้ายสุด"
 
-#~ msgid "This file system does not support icons"
-#~ msgstr "ระบบแฟ้มนี้ไม่รองรับสัญลักษณ์"
+#~ msgctxt "Navigation"
+#~ msgid "_Back"
+#~ msgstr "_ถอยกลับ"
 
-#~ msgid "This file system does not support bookmarks"
-#~ msgstr "ระบบแฟ้มนี้ไม่รองรับที่คั่นหน้า"
+#~ msgctxt "Navigation"
+#~ msgid "_Down"
+#~ msgstr "_ลง"
 
-#~ msgid "Zoom _100%"
-#~ msgstr "ขนาดปกติ (_1)"
+#~ msgctxt "Navigation"
+#~ msgid "_Up"
+#~ msgstr "_ขึ้น"
 
-#~ msgid "Zoom to _Fit"
-#~ msgstr "ขยายให้พอดี (_F)"
-
-#~ msgid "%s (%s)"
-#~ msgstr "%s (%s)"
-
-#~ msgid "d"
-#~ msgstr "d"
-
-#~ msgid "Super A"
-#~ msgstr "Super A"
-
-#~ msgid "Y"
-#~ msgstr "Y"
-
-#~ msgid "Shift"
-#~ msgstr "Shift"
-
-#~ msgid "Ctrl"
-#~ msgstr "Ctrl"
-
-#~ msgid "Alt"
-#~ msgstr "Alt"
-
-#~ msgid "%d/%b/%Y"
-#~ msgstr "%d %b %Ey"
-
+#~ msgctxt "Media"
+#~ msgid "_Stop"
+#~ msgstr "_หยุด"
