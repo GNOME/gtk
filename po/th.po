@@ -1,15 +1,15 @@
 # Thai translation for gtk+.
-# Copyright (C) 2003-2008 Free Software Foundation, Inc.
+# Copyright (C) 2003-2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 # Paisa Seeluangsawat <paisa@users.sf.net>, 2003, 2004.
-# Theppitak Karoonboonyanan <thep@linux.thai.net>, 2005-2008.
+# Theppitak Karoonboonyanan <thep@linux.thai.net>, 2005-2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-01 16:28-0500\n"
-"PO-Revision-Date: 2008-10-19 11:00+0700\n"
+"PO-Revision-Date: 2009-01-12 17:29+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1007,7 +1007,6 @@ msgstr "งานศิลป์โดย"
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:91
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1018,7 +1017,6 @@ msgstr "Shift"
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:97
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1029,7 +1027,6 @@ msgstr "Ctrl"
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:103
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1040,10 +1037,9 @@ msgstr "Alt"
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:671
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Super"
-msgstr "Super A"
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1051,10 +1047,9 @@ msgstr "Super A"
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:684
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Hyper"
-msgstr "กระดาษ"
+msgstr "Hyper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1064,18 +1059,17 @@ msgstr "กระดาษ"
 #: gtk/gtkaccellabel.c:698
 msgctxt "keyboard label"
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: gtk/gtkaccellabel.c:715
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Space"
-msgstr "แ_ทนที่"
+msgstr "Space"
 
 #: gtk/gtkaccellabel.c:718
 msgctxt "keyboard label"
 msgid "Backslash"
-msgstr ""
+msgstr "Backslash"
 
 #: gtk/gtkbuilderparser.c:340
 #, c-format
@@ -1121,7 +1115,7 @@ msgstr "calendar:week_start:0"
 #: gtk/gtkcalendar.c:1803
 msgctxt "year measurement template"
 msgid "2000"
-msgstr ""
+msgstr "2000"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1134,10 +1128,10 @@ msgstr ""
 #. * too.
 #.
 #: gtk/gtkcalendar.c:1834 gtk/gtkcalendar.c:2492
-#, fuzzy, c-format
+#, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
-msgstr "d"
+msgstr "%d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1150,10 +1144,10 @@ msgstr "d"
 #. * too.
 #.
 #: gtk/gtkcalendar.c:1866 gtk/gtkcalendar.c:2355
-#, fuzzy, c-format
+#, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
-msgstr "d"
+msgstr "%d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1166,19 +1160,17 @@ msgstr "d"
 #. * "%Y" is appropriate for most locales.
 #.
 #: gtk/gtkcalendar.c:2146
-#, fuzzy
 msgctxt "calendar year format"
 msgid "%Y"
-msgstr "Y"
+msgstr "%Ey"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
 #: gtk/gtkcellrendereraccel.c:243
-#, fuzzy
 msgctxt "Accelerator"
 msgid "Disabled"
-msgstr "ไม่ใช้"
+msgstr "ปิดใช้งาน"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
@@ -1189,10 +1181,10 @@ msgid "New accelerator..."
 msgstr "กำหนดคีย์ด่วนใหม่..."
 
 #: gtk/gtkcellrendererprogress.c:361 gtk/gtkcellrendererprogress.c:448
-#, fuzzy, c-format
+#, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr "%d %b %Ey"
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
@@ -1865,16 +1857,15 @@ msgid "Simple"
 msgstr "อย่างง่าย"
 
 #: gtk/gtkimmulticontext.c:545
-#, fuzzy
 msgctxt "input method menu"
 msgid "System"
-msgstr "ระบบแฟ้ม"
+msgstr "ระบบ"
 
 #: gtk/gtkimmulticontext.c:629
-#, fuzzy, c-format
+#, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
-msgstr "%s (%s)"
+msgstr "ระบบ (%s)"
 
 #: gtk/gtkinputdialog.c:192
 msgid "Input"
@@ -2582,16 +2573,16 @@ msgstr "รายการไม่รู้จัก"
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
-msgstr ""
+msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
 #: gtk/gtkrecentchoosermenu.c:784
-#, fuzzy, c-format
+#, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
-msgstr "%s (%s)"
+msgstr "%d. %s"
 
 #: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
 #: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
@@ -2823,10 +2814,10 @@ msgstr "ดังสุด"
 #. * or otherwise translate the "%d" to "%d".
 #.
 #: gtk/gtkvolumebutton.c:168
-#, fuzzy, c-format
+#, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
-msgstr "%d %b %Ey"
+msgstr "%d %%"
 
 #: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
 #, c-format
@@ -3308,200 +3299,8 @@ msgstr "พิมพ์ออกยังเครื่องพิมพ์ท
 msgid "Could not get information for file '%s': %s"
 msgstr "ไม่สามารถเรียกข้อมูลสำหรับแฟ้ม '%s': %s"
 
-#~ msgid "keyboard label|BackSpace"
-#~ msgstr "BackSpace"
-
-#~ msgid "keyboard label|Tab"
-#~ msgstr "Tab"
-
-#~ msgid "keyboard label|Return"
-#~ msgstr "Return"
-
-#~ msgid "keyboard label|Pause"
-#~ msgstr "Pause"
-
-#~ msgid "keyboard label|Scroll_Lock"
-#~ msgstr "Scroll_Lock"
-
-#~ msgid "keyboard label|Sys_Req"
-#~ msgstr "Sys_Req"
-
-#~ msgid "keyboard label|Escape"
-#~ msgstr "Escape"
-
-#~ msgid "keyboard label|Multi_key"
-#~ msgstr "Multi_key"
-
-#~ msgid "keyboard label|Home"
-#~ msgstr "Home"
-
-#~ msgid "keyboard label|Left"
-#~ msgstr "Left"
-
-#~ msgid "keyboard label|Up"
-#~ msgstr "Up"
-
-#~ msgid "keyboard label|Right"
-#~ msgstr "Right"
-
-#~ msgid "keyboard label|Down"
-#~ msgstr "Down"
-
-#~ msgid "keyboard label|Page_Up"
-#~ msgstr "Page_Up"
-
-#~ msgid "keyboard label|Page_Down"
-#~ msgstr "Page_Down"
-
-#~ msgid "keyboard label|End"
-#~ msgstr "End"
-
-#~ msgid "keyboard label|Begin"
-#~ msgstr "Begin"
-
-#~ msgid "keyboard label|Print"
-#~ msgstr "Print"
-
-#~ msgid "keyboard label|Insert"
-#~ msgstr "Insert"
-
-#~ msgid "keyboard label|Num_Lock"
-#~ msgstr "Num_Lock"
-
-#~ msgid "keyboard label|KP_Space"
-#~ msgstr "KP_Space"
-
-#~ msgid "keyboard label|KP_Tab"
-#~ msgstr "KP_Tab"
-
-#~ msgid "keyboard label|KP_Enter"
-#~ msgstr "KP_Enter"
-
-#~ msgid "keyboard label|KP_Home"
-#~ msgstr "KP_Home"
-
-#~ msgid "keyboard label|KP_Left"
-#~ msgstr "KP_Left"
-
-#~ msgid "keyboard label|KP_Up"
-#~ msgstr "KP_Up"
-
-#~ msgid "keyboard label|KP_Right"
-#~ msgstr "KP_Right"
-
-#~ msgid "keyboard label|KP_Down"
-#~ msgstr "KP_Down"
-
-#~ msgid "keyboard label|KP_Page_Up"
-#~ msgstr "KP_Page_Up"
-
-#~ msgid "keyboard label|KP_Prior"
-#~ msgstr "KP_Prior"
-
-#~ msgid "keyboard label|KP_Page_Down"
-#~ msgstr "KP_Page_Down"
-
-#~ msgid "keyboard label|KP_Next"
-#~ msgstr "KP_Next"
-
-#~ msgid "keyboard label|KP_End"
-#~ msgstr "KP_End"
-
-#~ msgid "keyboard label|KP_Begin"
-#~ msgstr "KP_Begin"
-
-#~ msgid "keyboard label|KP_Insert"
-#~ msgstr "KP_Insert"
-
-#~ msgid "keyboard label|KP_Delete"
-#~ msgstr "KP_Delete"
-
-#~ msgid "keyboard label|Delete"
-#~ msgstr "Delete"
-
-#~ msgid "keyboard label|Shift"
-#~ msgstr "Shift"
-
-#~ msgid "keyboard label|Ctrl"
-#~ msgstr "Ctrl"
-
-#~ msgid "keyboard label|Alt"
-#~ msgstr "Alt"
-
-#~ msgid "keyboard label|Super"
-#~ msgstr "Super"
-
-#~ msgid "keyboard label|Hyper"
-#~ msgstr "Hyper"
-
-#~ msgid "keyboard label|Meta"
-#~ msgstr "Meta"
-
-#~ msgid "keyboard label|Space"
-#~ msgstr "Space"
-
-#~ msgid "keyboard label|Backslash"
-#~ msgstr "Backslash"
-
-#~ msgid "year measurement template|2000"
-#~ msgstr "2000"
-
-#~ msgid "calendar:day:digits|%d"
-#~ msgstr "%d"
-
-#~ msgid "calendar:week:digits|%d"
-#~ msgstr "%d"
-
-#~ msgid "calendar year format|%Y"
-#~ msgstr "%Ey"
-
-#~ msgid "Accelerator|Disabled"
-#~ msgstr "ปิดใช้งาน"
-
 #~ msgid "Icon not present in theme"
 #~ msgstr "ชุดตกแต่งไม่มีไอคอน"
-
-#~ msgid "progress bar label|%d %%"
-#~ msgstr "%d %%"
-
-#~ msgid "input method menu|System"
-#~ msgstr "ระบบ"
-
-#~ msgid "input method menu|System (%s)"
-#~ msgstr "ระบบ (%s)"
-
-#~ msgid "print operation status|Initial state"
-#~ msgstr "ขั้นแรก"
-
-#~ msgid "print operation status|Preparing to print"
-#~ msgstr "กำลังเตรียมพิมพ์"
-
-#~ msgid "print operation status|Generating data"
-#~ msgstr "กำลังสร้างข้อมูล"
-
-#~ msgid "print operation status|Sending data"
-#~ msgstr "กำลังส่งข้อมูล"
-
-#~ msgid "print operation status|Waiting"
-#~ msgstr "กำลังรอ"
-
-#~ msgid "print operation status|Blocking on issue"
-#~ msgstr "ติดขัดด้วยเหตุขัดข้อง"
-
-#~ msgid "print operation status|Printing"
-#~ msgstr "กำลังพิมพ์"
-
-#~ msgid "print operation status|Finished"
-#~ msgstr "เสร็จสิ้น"
-
-#~ msgid "print operation status|Finished with error"
-#~ msgstr "เสร็จสิ้นโดยมีข้อผิดพลาด"
-
-#~ msgid "recent menu label|_%d. %s"
-#~ msgstr "_%d. %s"
-
-#~ msgid "recent menu label|%d. %s"
-#~ msgstr "%d. %s"
 
 #~ msgid "Information"
 #~ msgstr "ข้อมูล"
@@ -3578,30 +3377,6 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 #~ msgid "_Leave Fullscreen"
 #~ msgstr "เ_ลิกแสดงเต็มจอ"
 
-#~ msgid "Navigation|_Bottom"
-#~ msgstr "ล่า_งสุด"
-
-#~ msgid "Navigation|_First"
-#~ msgstr "แ_รกสุด"
-
-#~ msgid "Navigation|_Last"
-#~ msgstr "_ท้ายสุด"
-
-#~ msgid "Navigation|_Top"
-#~ msgstr "_บนสุด"
-
-#~ msgid "Navigation|_Back"
-#~ msgstr "_ถอยกลับ"
-
-#~ msgid "Navigation|_Down"
-#~ msgstr "_ลง"
-
-#~ msgid "Navigation|_Forward"
-#~ msgstr "ถั_ดไป"
-
-#~ msgid "Navigation|_Up"
-#~ msgstr "_ขึ้น"
-
 #~ msgid "_Harddisk"
 #~ msgstr "ฮาร์_ดดิสก์"
 
@@ -3628,42 +3403,6 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 
 #~ msgid "_Jump to"
 #~ msgstr "_กระโดดไป"
-
-#~ msgid "Justify|_Center"
-#~ msgstr "กึ่ง_กลาง"
-
-#~ msgid "Justify|_Fill"
-#~ msgstr "เ_ต็มกรอบ"
-
-#~ msgid "Justify|_Left"
-#~ msgstr "ชิด_ซ้าย"
-
-#~ msgid "Justify|_Right"
-#~ msgstr "ชิด_ขวา"
-
-#~ msgid "Media|_Forward"
-#~ msgstr "กรอไ_ป"
-
-#~ msgid "Media|_Next"
-#~ msgstr "_ถัดไป"
-
-#~ msgid "Media|P_ause"
-#~ msgstr "_พัก"
-
-#~ msgid "Media|_Play"
-#~ msgstr "เ_ล่น"
-
-#~ msgid "Media|Pre_vious"
-#~ msgstr "ก่อ_นหน้า"
-
-#~ msgid "Media|_Record"
-#~ msgstr "_อัด"
-
-#~ msgid "Media|R_ewind"
-#~ msgstr "ถอย_กลับ"
-
-#~ msgid "Media|_Stop"
-#~ msgstr "_หยุด"
 
 #~ msgid "_Network"
 #~ msgstr "เค_รือข่าย"
@@ -3775,498 +3514,6 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 
 #~ msgid "Zoom _Out"
 #~ msgstr "_ย่อ"
-
-#~ msgid "volume percentage|%d %%"
-#~ msgstr "%d %%"
-
-#~ msgid "paper size|asme_f"
-#~ msgstr "asme_f"
-
-#~ msgid "paper size|A0x2"
-#~ msgstr "A0x2"
-
-#~ msgid "paper size|A0"
-#~ msgstr "A0"
-
-#~ msgid "paper size|A0x3"
-#~ msgstr "A0x3"
-
-#~ msgid "paper size|A1"
-#~ msgstr "A1"
-
-#~ msgid "paper size|A10"
-#~ msgstr "A10"
-
-#~ msgid "paper size|A1x3"
-#~ msgstr "A1x3"
-
-#~ msgid "paper size|A1x4"
-#~ msgstr "A1x4"
-
-#~ msgid "paper size|A2"
-#~ msgstr "A2"
-
-#~ msgid "paper size|A2x3"
-#~ msgstr "A2x3"
-
-#~ msgid "paper size|A2x4"
-#~ msgstr "A2x4"
-
-#~ msgid "paper size|A2x5"
-#~ msgstr "A2x5"
-
-#~ msgid "paper size|A3"
-#~ msgstr "A3"
-
-#~ msgid "paper size|A3 Extra"
-#~ msgstr "A3 พิเศษ"
-
-#~ msgid "paper size|A3x3"
-#~ msgstr "A3x3"
-
-#~ msgid "paper size|A3x4"
-#~ msgstr "A3x4"
-
-#~ msgid "paper size|A3x5"
-#~ msgstr "A3x5"
-
-#~ msgid "paper size|A3x6"
-#~ msgstr "A3x6"
-
-#~ msgid "paper size|A3x7"
-#~ msgstr "A3x7"
-
-#~ msgid "paper size|A4"
-#~ msgstr "A4"
-
-#~ msgid "paper size|A4 Extra"
-#~ msgstr "A4 พิเศษ"
-
-#~ msgid "paper size|A4 Tab"
-#~ msgstr "A4 Tab"
-
-#~ msgid "paper size|A4x3"
-#~ msgstr "A4x3"
-
-#~ msgid "paper size|A4x4"
-#~ msgstr "A4x4"
-
-#~ msgid "paper size|A4x5"
-#~ msgstr "A4x5"
-
-#~ msgid "paper size|A4x6"
-#~ msgstr "A4x6"
-
-#~ msgid "paper size|A4x7"
-#~ msgstr "A4x7"
-
-#~ msgid "paper size|A4x8"
-#~ msgstr "A4x8"
-
-#~ msgid "paper size|A4x9"
-#~ msgstr "A4x9"
-
-#~ msgid "paper size|A5"
-#~ msgstr "A5"
-
-#~ msgid "paper size|A5 Extra"
-#~ msgstr "A5 พิเศษ"
-
-#~ msgid "paper size|A6"
-#~ msgstr "A6"
-
-#~ msgid "paper size|A7"
-#~ msgstr "A7"
-
-#~ msgid "paper size|A8"
-#~ msgstr "A8"
-
-#~ msgid "paper size|A9"
-#~ msgstr "A9"
-
-#~ msgid "paper size|B0"
-#~ msgstr "B0"
-
-#~ msgid "paper size|B1"
-#~ msgstr "B1"
-
-#~ msgid "paper size|B10"
-#~ msgstr "B10"
-
-#~ msgid "paper size|B2"
-#~ msgstr "B2"
-
-#~ msgid "paper size|B3"
-#~ msgstr "B3"
-
-#~ msgid "paper size|B4"
-#~ msgstr "B4"
-
-#~ msgid "paper size|B5"
-#~ msgstr "B5"
-
-#~ msgid "paper size|B5 Extra"
-#~ msgstr "B5 พิเศษ"
-
-#~ msgid "paper size|B6"
-#~ msgstr "B6"
-
-#~ msgid "paper size|B6/C4"
-#~ msgstr "B6/C4"
-
-#~ msgid "paper size|B7"
-#~ msgstr "B7"
-
-#~ msgid "paper size|B8"
-#~ msgstr "B8"
-
-#~ msgid "paper size|B9"
-#~ msgstr "B9"
-
-#~ msgid "paper size|C0"
-#~ msgstr "C0"
-
-#~ msgid "paper size|C1"
-#~ msgstr "C1"
-
-#~ msgid "paper size|C10"
-#~ msgstr "C10"
-
-#~ msgid "paper size|C2"
-#~ msgstr "C2"
-
-#~ msgid "paper size|C3"
-#~ msgstr "C3"
-
-#~ msgid "paper size|C4"
-#~ msgstr "C4"
-
-#~ msgid "paper size|C5"
-#~ msgstr "C5"
-
-#~ msgid "paper size|C6"
-#~ msgstr "C6"
-
-#~ msgid "paper size|C6/C5"
-#~ msgstr "C6/C5"
-
-#~ msgid "paper size|C7"
-#~ msgstr "C7"
-
-#~ msgid "paper size|C7/C6"
-#~ msgstr "C7/C6"
-
-#~ msgid "paper size|C8"
-#~ msgstr "C8"
-
-#~ msgid "paper size|C9"
-#~ msgstr "C9"
-
-#~ msgid "paper size|DL Envelope"
-#~ msgstr "DL ซองจดหมาย"
-
-#~ msgid "paper size|RA0"
-#~ msgstr "RA0"
-
-#~ msgid "paper size|RA1"
-#~ msgstr "RA1"
-
-#~ msgid "paper size|RA2"
-#~ msgstr "RA2"
-
-#~ msgid "paper size|SRA0"
-#~ msgstr "SRA0"
-
-#~ msgid "paper size|SRA1"
-#~ msgstr "SRA1"
-
-#~ msgid "paper size|SRA2"
-#~ msgstr "SRA2"
-
-#~ msgid "paper size|JB0"
-#~ msgstr "JB0"
-
-#~ msgid "paper size|JB1"
-#~ msgstr "JB1"
-
-#~ msgid "paper size|JB10"
-#~ msgstr "JB10"
-
-#~ msgid "paper size|JB2"
-#~ msgstr "JB2"
-
-#~ msgid "paper size|JB3"
-#~ msgstr "JB3"
-
-#~ msgid "paper size|JB4"
-#~ msgstr "JB4"
-
-#~ msgid "paper size|JB5"
-#~ msgstr "JB5"
-
-#~ msgid "paper size|JB6"
-#~ msgstr "JB6"
-
-#~ msgid "paper size|JB7"
-#~ msgstr "JB7"
-
-#~ msgid "paper size|JB8"
-#~ msgstr "JB8"
-
-#~ msgid "paper size|JB9"
-#~ msgstr "JB9"
-
-#~ msgid "paper size|jis exec"
-#~ msgstr "jis exec"
-
-#~ msgid "paper size|Choukei 2 Envelope"
-#~ msgstr "Choukei 2 ซองจดหมาย"
-
-#~ msgid "paper size|Choukei 3 Envelope"
-#~ msgstr "Choukei 3 ซองจดหมาย"
-
-#~ msgid "paper size|Choukei 4 Envelope"
-#~ msgstr "Choukei 4 ซองจดหมาย"
-
-#~ msgid "paper size|hagaki (postcard)"
-#~ msgstr "hagaki (ไปรษณียบัตร)"
-
-#~ msgid "paper size|kahu Envelope"
-#~ msgstr "kahu ซองจดหมาย"
-
-#~ msgid "paper size|kaku2 Envelope"
-#~ msgstr "kahu2 ซองจดหมาย"
-
-#~ msgid "paper size|oufuku (reply postcard)"
-#~ msgstr "oufuku (ไปรษณียบัตรตอบ)"
-
-#~ msgid "paper size|you4 Envelope"
-#~ msgstr "you4 ซองจดหมาย"
-
-#~ msgid "paper size|10x11"
-#~ msgstr "10x11"
-
-#~ msgid "paper size|10x13"
-#~ msgstr "10x13"
-
-#~ msgid "paper size|10x14"
-#~ msgstr "10x14"
-
-#~ msgid "paper size|10x15"
-#~ msgstr "10x15"
-
-#~ msgid "paper size|11x12"
-#~ msgstr "11x12"
-
-#~ msgid "paper size|11x15"
-#~ msgstr "11x15"
-
-#~ msgid "paper size|12x19"
-#~ msgstr "12x19"
-
-#~ msgid "paper size|5x7"
-#~ msgstr "5x7"
-
-#~ msgid "paper size|6x9 Envelope"
-#~ msgstr "6x9 ซองจดหมาย"
-
-#~ msgid "paper size|7x9 Envelope"
-#~ msgstr "7x9 ซองจดหมาย"
-
-#~ msgid "paper size|9x11 Envelope"
-#~ msgstr "9x11 ซองจดหมาย"
-
-#~ msgid "paper size|a2 Envelope"
-#~ msgstr "a2 ซองจดหมาย"
-
-#~ msgid "paper size|Arch A"
-#~ msgstr "Arch A"
-
-#~ msgid "paper size|Arch B"
-#~ msgstr "Arch B"
-
-#~ msgid "paper size|Arch C"
-#~ msgstr "Arch C"
-
-#~ msgid "paper size|Arch D"
-#~ msgstr "Arch D"
-
-#~ msgid "paper size|Arch E"
-#~ msgstr "Arch E"
-
-#~ msgid "paper size|b-plus"
-#~ msgstr "b-plus"
-
-#~ msgid "paper size|c"
-#~ msgstr "c"
-
-#~ msgid "paper size|c5 Envelope"
-#~ msgstr "c5 ซองจดหมาย"
-
-#~ msgid "paper size|d"
-#~ msgstr "d"
-
-#~ msgid "paper size|e"
-#~ msgstr "e"
-
-#~ msgid "paper size|edp"
-#~ msgstr "edp"
-
-#~ msgid "paper size|European edp"
-#~ msgstr "edp ยุโรป"
-
-#~ msgid "paper size|Executive"
-#~ msgstr "Executive"
-
-#~ msgid "paper size|f"
-#~ msgstr "f"
-
-#~ msgid "paper size|FanFold European"
-#~ msgstr "FanFold ยุโรป"
-
-#~ msgid "paper size|FanFold US"
-#~ msgstr "FanFold อเมริกัน"
-
-#~ msgid "paper size|FanFold German Legal"
-#~ msgstr "FanFold เยอรมัน Legal"
-
-#~ msgid "paper size|Government Legal"
-#~ msgstr "Government Legal"
-
-#~ msgid "paper size|Government Letter"
-#~ msgstr "Government Letter"
-
-#~ msgid "paper size|Index 3x5"
-#~ msgstr "Index 3x5"
-
-#~ msgid "paper size|Index 4x6 (postcard)"
-#~ msgstr "Index 4x6 (ไปรษณียบัตร)"
-
-#~ msgid "paper size|Index 4x6 ext"
-#~ msgstr "Index 4x6 ext"
-
-#~ msgid "paper size|Index 5x8"
-#~ msgstr "Index 5x8"
-
-#~ msgid "paper size|Invoice"
-#~ msgstr "ใบส่งของ"
-
-#~ msgid "paper size|Tabloid"
-#~ msgstr "จุลสาร"
-
-#~ msgid "paper size|US Legal"
-#~ msgstr "US Legal"
-
-#~ msgid "paper size|US Legal Extra"
-#~ msgstr "US Legal Extra"
-
-#~ msgid "paper size|US Letter"
-#~ msgstr "US Letter"
-
-#~ msgid "paper size|US Letter Extra"
-#~ msgstr "US Letter Extra"
-
-#~ msgid "paper size|US Letter Plus"
-#~ msgstr "US Letter Plus"
-
-#~ msgid "paper size|Monarch Envelope"
-#~ msgstr "Monarch ซองจดหมาย"
-
-#~ msgid "paper size|#10 Envelope"
-#~ msgstr "#10 ซองจดหมาย"
-
-#~ msgid "paper size|#11 Envelope"
-#~ msgstr "#11 ซองจดหมาย"
-
-#~ msgid "paper size|#12 Envelope"
-#~ msgstr "#12 ซองจดหมาย"
-
-#~ msgid "paper size|#14 Envelope"
-#~ msgstr "#14 ซองจดหมาย"
-
-#~ msgid "paper size|#9 Envelope"
-#~ msgstr "#9 ซองจดหมาย"
-
-#~ msgid "paper size|Personal Envelope"
-#~ msgstr "Personal Envelope"
-
-#~ msgid "paper size|Quarto"
-#~ msgstr "Quarto"
-
-#~ msgid "paper size|Super A"
-#~ msgstr "Super A"
-
-#~ msgid "paper size|Super B"
-#~ msgstr "Super B"
-
-#~ msgid "paper size|Wide Format"
-#~ msgstr "Wide Format"
-
-#~ msgid "paper size|Dai-pa-kai"
-#~ msgstr "Dai-pa-kai"
-
-#~ msgid "paper size|Folio"
-#~ msgstr "Folio"
-
-#~ msgid "paper size|Folio sp"
-#~ msgstr "Folio sp"
-
-#~ msgid "paper size|Invite Envelope"
-#~ msgstr "Invite Envelope"
-
-#~ msgid "paper size|Italian Envelope"
-#~ msgstr "Italian Envelope"
-
-#~ msgid "paper size|juuro-ku-kai"
-#~ msgstr "juuro-ku-kai"
-
-#~ msgid "paper size|pa-kai"
-#~ msgstr "pa-kai"
-
-#~ msgid "paper size|Postfix Envelope"
-#~ msgstr "Postfix Envelope"
-
-#~ msgid "paper size|Small Photo"
-#~ msgstr "Small Photo"
-
-#~ msgid "paper size|prc1 Envelope"
-#~ msgstr "prc1 Envelope"
-
-#~ msgid "paper size|prc10 Envelope"
-#~ msgstr "prc10 Envelope"
-
-#~ msgid "paper size|prc 16k"
-#~ msgstr "prc 16k"
-
-#~ msgid "paper size|prc2 Envelope"
-#~ msgstr "prc2 Envelope"
-
-#~ msgid "paper size|prc3 Envelope"
-#~ msgstr "prc3 Envelope"
-
-#~ msgid "paper size|prc 32k"
-#~ msgstr "prc 32k"
-
-#~ msgid "paper size|prc4 Envelope"
-#~ msgstr "prc4 Envelope"
-
-#~ msgid "paper size|prc5 Envelope"
-#~ msgstr "prc5 Envelope"
-
-#~ msgid "paper size|prc6 Envelope"
-#~ msgstr "prc6 Envelope"
-
-#~ msgid "paper size|prc7 Envelope"
-#~ msgstr "prc7 Envelope"
-
-#~ msgid "paper size|prc8 Envelope"
-#~ msgstr "prc8 Envelope"
-
-#~ msgid "paper size|ROC 16k"
-#~ msgstr "ROC 16k"
-
-#~ msgid "paper size|ROC 8k"
-#~ msgstr "ROC 8k"
 
 #~ msgid "%.1f KB"
 #~ msgstr "%.1f KB"
@@ -4956,10 +4203,6 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 #~ msgid "Writing %s failed: %s"
 #~ msgstr "บันทึก %s ไม่สำเร็จ: %s"
 
-#, fuzzy
-#~ msgid "Error getting information for '%s'"
-#~ msgstr "เกิดข้อผิดพลาดขณะเรียกข้อมูลสำหรับ '%s': %s"
-
 #~ msgid "_First"
 #~ msgstr "_แรกสุด"
 
@@ -4975,23 +4218,11 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 #~ msgid "_Up"
 #~ msgstr "ขึ้_น"
 
-#, fuzzy
-#~ msgid ""
-#~ "Could not change the current folder to %s:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "ไม่สามารถไปที่โฟลเดอร์แม่ของ %s:\n"
-#~ "%s"
-
 #~ msgid "Could not add bookmark for %s because it is not a folder."
 #~ msgstr "%s ไม่ใช่โฟลเดอร์ จึงเพิ่มลงในที่คั่นหน้าไม่ได้"
 
 #~ msgid "This file system does not support icons for everything"
 #~ msgstr "ระบบแฟ้มนี้ไม่รองรับไอคอนสำหรับทุกอย่าง"
-
-#, fuzzy
-#~ msgid "Could not find the path"
-#~ msgstr "บันทึกที่เหลือไม่สำเร็จ"
 
 #~ msgid "Input Methods"
 #~ msgstr "Input Methods"
@@ -5025,3 +4256,28 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 
 #~ msgid "Zoom to _Fit"
 #~ msgstr "ขยายให้พอดี (_F)"
+
+#~ msgid "%s (%s)"
+#~ msgstr "%s (%s)"
+
+#~ msgid "d"
+#~ msgstr "d"
+
+#~ msgid "Super A"
+#~ msgstr "Super A"
+
+#~ msgid "Y"
+#~ msgstr "Y"
+
+#~ msgid "Shift"
+#~ msgstr "Shift"
+
+#~ msgid "Ctrl"
+#~ msgstr "Ctrl"
+
+#~ msgid "Alt"
+#~ msgstr "Alt"
+
+#~ msgid "%d/%b/%Y"
+#~ msgstr "%d %b %Ey"
+
