@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.13.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-05 01:28+0100\n"
-"PO-Revision-Date: 2009-01-05 15:27+0100\n"
+"POT-Creation-Date: 2009-01-12 13:46+0100\n"
+"PO-Revision-Date: 2009-01-12 13:47+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -24,48 +24,58 @@ msgstr "directfb argument"
 msgid "sdl|system"
 msgstr "sdl|system"
 
+#: ../gdk/gdk.c:103
+#, c-format
+msgid "Error parsing option --gdk-debug"
+msgstr "Feil ved lesing av flagg --gdk-debug"
+
+#: ../gdk/gdk.c:123
+#, c-format
+msgid "Error parsing option --gdk-no-debug"
+msgstr "Feil ved lesing av flagg --gdk-no-debug"
+
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:127
+#: ../gdk/gdk.c:151
 msgid "Program class as used by the window manager"
 msgstr "Programklasse som brukes av vindushåndtereren"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:128
+#: ../gdk/gdk.c:152
 msgid "CLASS"
 msgstr "KLASSE"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:130
+#: ../gdk/gdk.c:154
 msgid "Program name as used by the window manager"
 msgstr "Programnavn som brukes av vindushåndtereren"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:131
+#: ../gdk/gdk.c:155
 msgid "NAME"
 msgstr "NAVN"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:133
+#: ../gdk/gdk.c:157
 msgid "X display to use"
 msgstr "X-skjerm som skal brukes"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:134
+#: ../gdk/gdk.c:158
 msgid "DISPLAY"
 msgstr "SKJERM"
 
 #. Description of --screen=SCREEN in --help output
-#: ../gdk/gdk.c:136
+#: ../gdk/gdk.c:160
 msgid "X screen to use"
 msgstr "X-skjerm som skal brukes"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: ../gdk/gdk.c:137
+#: ../gdk/gdk.c:161
 msgid "SCREEN"
 msgstr "SKJERM"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:140
+#: ../gdk/gdk.c:164
 msgid "Gdk debugging flags to set"
 msgstr "Feilsøkingsflagg som skal settes for Gdk"
 
@@ -73,12 +83,12 @@ msgstr "Feilsøkingsflagg som skal settes for Gdk"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:141 ../gdk/gdk.c:144 ../gtk/gtkmain.c:452 ../gtk/gtkmain.c:455
+#: ../gdk/gdk.c:165 ../gdk/gdk.c:168 ../gtk/gtkmain.c:452 ../gtk/gtkmain.c:455
 msgid "FLAGS"
 msgstr "FLAGG"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:143
+#: ../gdk/gdk.c:167
 msgid "Gdk debugging flags to unset"
 msgstr "Feilsøkingsflagg for Gdk som skal fjernes"
 
@@ -1176,46 +1186,46 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Åpner %d oppføring"
 msgstr[1] "Åpner %d oppføringer"
 
-#: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2108
+#: ../gtk/gtkaboutdialog.c:267 ../gtk/gtkaboutdialog.c:2121
 msgid "License"
 msgstr "Lisens"
 
-#: ../gtk/gtkaboutdialog.c:265
+#: ../gtk/gtkaboutdialog.c:268
 msgid "The license of the program"
 msgstr "Programmets lisens"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:500
+#: ../gtk/gtkaboutdialog.c:508
 msgid "C_redits"
 msgstr "Bid_ragsytere"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:514
+#: ../gtk/gtkaboutdialog.c:522
 msgid "_License"
 msgstr "_Lisens"
 
-#: ../gtk/gtkaboutdialog.c:744
+#: ../gtk/gtkaboutdialog.c:790
 #, c-format
 msgid "About %s"
 msgstr "Om %s"
 
-#: ../gtk/gtkaboutdialog.c:2032
+#: ../gtk/gtkaboutdialog.c:2045
 msgid "Credits"
 msgstr "Bidragsytere"
 
-#: ../gtk/gtkaboutdialog.c:2061
+#: ../gtk/gtkaboutdialog.c:2074
 msgid "Written by"
 msgstr "Skrevet av"
 
-#: ../gtk/gtkaboutdialog.c:2064
+#: ../gtk/gtkaboutdialog.c:2077
 msgid "Documented by"
 msgstr "Dokumentert av"
 
-#: ../gtk/gtkaboutdialog.c:2076
+#: ../gtk/gtkaboutdialog.c:2089
 msgid "Translated by"
 msgstr "Oversatt av"
 
-#: ../gtk/gtkaboutdialog.c:2080
+#: ../gtk/gtkaboutdialog.c:2093
 msgid "Artwork by"
 msgstr "Grafikk av"
 
@@ -1539,15 +1549,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Fargevalg"
 
-#: ../gtk/gtkentry.c:7998 ../gtk/gtktextview.c:7730
+#: ../gtk/gtkentry.c:8003 ../gtk/gtktextview.c:7730
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: ../gtk/gtkentry.c:8012 ../gtk/gtktextview.c:7744
+#: ../gtk/gtkentry.c:8017 ../gtk/gtktextview.c:7744
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
-#: ../gtk/gtkentry.c:9375
+#: ../gtk/gtkentry.c:9380
 msgid ""
 "You have the Caps Lock key on\n"
 "and an active input method"
@@ -1555,11 +1565,11 @@ msgstr ""
 "Du har Caps Lock-tasten på\n"
 "og en aktiv inndatametode"
 
-#: ../gtk/gtkentry.c:9377
+#: ../gtk/gtkentry.c:9382
 msgid "You have the Caps Lock key on"
 msgstr "Du har Caps Lock slått på"
 
-#: ../gtk/gtkentry.c:9379
+#: ../gtk/gtkentry.c:9384
 msgid "You have an active input method"
 msgstr "Du har en aktiv inndatametode"
 
@@ -2059,7 +2069,7 @@ msgstr "_Gammaverdi"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1403
+#: ../gtk/gtkiconfactory.c:1404
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
