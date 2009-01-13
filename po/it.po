@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-30 16:15+0100\n"
-"PO-Revision-Date: 2008-12-30 16:55+0100\n"
+"POT-Creation-Date: 2009-01-13 14:00+0100\n"
+"PO-Revision-Date: 2009-01-13 14:14+0100\n"
 "Last-Translator: Luca Ferretti <elle.uca@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
@@ -26,48 +26,59 @@ msgstr "argomento direcfb"
 msgid "sdl|system"
 msgstr "sdl|system"
 
+# GTK-2-12
+#: ../gdk/gdk.c:103
+#, fuzzy, c-format
+msgid "Error parsing option --gdk-debug"
+msgstr "Errore nello stampare"
+
+#: ../gdk/gdk.c:123
+#, c-format
+msgid "Error parsing option --gdk-no-debug"
+msgstr ""
+
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:127
+#: ../gdk/gdk.c:151
 msgid "Program class as used by the window manager"
 msgstr "Classe del programma come usato dal window manager"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:128
+#: ../gdk/gdk.c:152
 msgid "CLASS"
 msgstr "CLASSE"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:130
+#: ../gdk/gdk.c:154
 msgid "Program name as used by the window manager"
 msgstr "Nome del programma come usato dal window manager"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:131
+#: ../gdk/gdk.c:155
 msgid "NAME"
 msgstr "NOME"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:133
+#: ../gdk/gdk.c:157
 msgid "X display to use"
 msgstr "Display X da usare"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:134
+#: ../gdk/gdk.c:158
 msgid "DISPLAY"
 msgstr "DISPLAY"
 
 #. Description of --screen=SCREEN in --help output
-#: ../gdk/gdk.c:136
+#: ../gdk/gdk.c:160
 msgid "X screen to use"
 msgstr "Schermo X da usare"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: ../gdk/gdk.c:137
+#: ../gdk/gdk.c:161
 msgid "SCREEN"
 msgstr "SCHERMO"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:140
+#: ../gdk/gdk.c:164
 msgid "Gdk debugging flags to set"
 msgstr "Flag per il debug di Gdk da attivare"
 
@@ -75,12 +86,12 @@ msgstr "Flag per il debug di Gdk da attivare"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:141 ../gdk/gdk.c:144 ../gtk/gtkmain.c:452 ../gtk/gtkmain.c:455
+#: ../gdk/gdk.c:165 ../gdk/gdk.c:168 ../gtk/gtkmain.c:452 ../gtk/gtkmain.c:455
 msgid "FLAGS"
 msgstr "FLAG"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:143
+#: ../gdk/gdk.c:167
 msgid "Gdk debugging flags to unset"
 msgstr "Flag per il debug di Gdk da disattivare"
 
@@ -1284,54 +1295,54 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Apertura di %d oggetto"
 msgstr[1] "Apertura di %d oggetti"
 
-#: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2108
+#: ../gtk/gtkaboutdialog.c:267 ../gtk/gtkaboutdialog.c:2121
 msgid "License"
 msgstr "Licenza"
 
-#: ../gtk/gtkaboutdialog.c:265
+#: ../gtk/gtkaboutdialog.c:268
 msgid "The license of the program"
 msgstr "La licenza del programma"
 
 # GTK-2-12
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:500
+#: ../gtk/gtkaboutdialog.c:508
 msgid "C_redits"
 msgstr "_Riconoscimenti"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:514
+#: ../gtk/gtkaboutdialog.c:522
 msgid "_License"
 msgstr "_Licenza"
 
-#: ../gtk/gtkaboutdialog.c:744
+#: ../gtk/gtkaboutdialog.c:790
 #, c-format
 msgid "About %s"
 msgstr "Informazioni su %s"
 
 # GTK-2-12
-#: ../gtk/gtkaboutdialog.c:2032
+#: ../gtk/gtkaboutdialog.c:2045
 msgid "Credits"
 msgstr "Riconoscimenti"
 
 # GTK-2-12
-#: ../gtk/gtkaboutdialog.c:2061
+#: ../gtk/gtkaboutdialog.c:2074
 msgid "Written by"
 msgstr "Codice"
 
 # GTK-2-12
-#: ../gtk/gtkaboutdialog.c:2064
+#: ../gtk/gtkaboutdialog.c:2077
 msgid "Documented by"
 msgstr "Documentazione"
 
 # GTK-2-12
-#: ../gtk/gtkaboutdialog.c:2076
+#: ../gtk/gtkaboutdialog.c:2089
 msgid "Translated by"
 msgstr "Traduzione"
 
 # GTK-2-12
 #
 # Nota: "art work" --> grafica (da garzantilinguistica.it)
-#: ../gtk/gtkaboutdialog.c:2080
+#: ../gtk/gtkaboutdialog.c:2093
 msgid "Artwork by"
 msgstr "Grafica"
 
@@ -1412,13 +1423,13 @@ msgid "Invalid type function: `%s'"
 msgstr "Funzione tipo non valida: \"%s\""
 
 # GTK-2-12
-#: ../gtk/gtkbuilderparser.c:838
+#: ../gtk/gtkbuilderparser.c:837
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Elemento radice non valido: \"%s\""
 
 # GTK-2-12
-#: ../gtk/gtkbuilderparser.c:877
+#: ../gtk/gtkbuilderparser.c:876
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Tag non gestito: \"%s\""
@@ -1666,25 +1677,25 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Selezione colore"
 
-#: ../gtk/gtkentry.c:8031 ../gtk/gtktextview.c:7730
+#: ../gtk/gtkentry.c:8003 ../gtk/gtktextview.c:7730
 msgid "Input _Methods"
 msgstr "_Metodi di input"
 
-#: ../gtk/gtkentry.c:8045 ../gtk/gtktextview.c:7744
+#: ../gtk/gtkentry.c:8017 ../gtk/gtktextview.c:7744
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserisci carattere di controllo unicode"
 
-#: ../gtk/gtkentry.c:9509
+#: ../gtk/gtkentry.c:9380
 msgid ""
 "You have the Caps Lock key on\n"
 "and an active input method"
 msgstr ""
 
-#: ../gtk/gtkentry.c:9511
+#: ../gtk/gtkentry.c:9382
 msgid "You have the Caps Lock key on"
 msgstr ""
 
-#: ../gtk/gtkentry.c:9513
+#: ../gtk/gtkentry.c:9384
 msgid "You have an active input method"
 msgstr ""
 
@@ -2215,10 +2226,11 @@ msgstr "_Stile:"
 msgid "Si_ze:"
 msgstr "_Dimensione:"
 
+# GTK-2-16 cambiato acceleratore per collisione con A_nnulla
 #. create the text entry widget
 #: ../gtk/gtkfontsel.c:517
 msgid "_Preview:"
-msgstr "A_nteprima:"
+msgstr "_Anteprima:"
 
 #: ../gtk/gtkfontsel.c:1560
 msgid "Font Selection"
@@ -2235,7 +2247,7 @@ msgstr "Valore _gamma"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1403
+#: ../gtk/gtkiconfactory.c:1404
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Errore nel caricare l'icona: %s"
@@ -3207,10 +3219,13 @@ msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_Esegui"
 
+# GTK-2-16
+# cambiato accelerato da _m a _d per possibili collisioni
+# con eli_mina 
 #: ../gtk/gtkstock.c:312
 msgctxt "Stock label"
 msgid "_Edit"
-msgstr "_Modifica"
+msgstr "Mo_difica"
 
 #: ../gtk/gtkstock.c:313
 msgctxt "Stock label"
