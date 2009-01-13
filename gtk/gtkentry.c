@@ -140,6 +140,8 @@ struct _GtkEntryPrivate
   gint icon_margin;
   gint start_x;
   gint start_y;
+
+  gchar *im_module;
 };
 
 typedef struct _GtkEntryPasswordHint GtkEntryPasswordHint;
@@ -213,7 +215,8 @@ enum {
   PROP_ACTIVATABLE_PRIMARY,
   PROP_ACTIVATABLE_SECONDARY,
   PROP_SENSITIVE_PRIMARY,
-  PROP_SENSITIVE_SECONDARY
+  PROP_SENSITIVE_SECONDARY,
+  PROP_IM_MODULE
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -1084,6 +1087,24 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          GTK_PARAM_READWRITE));
   
   /**
+   * GtkEntry:im-module:
+   *
+   * Which IM module should be used for this entry.
+   * 
+   * Setting this to a non-%NULL value overrides the
+   * system-wide IM module setting. See #GtkSettings:gtk-im-module
+   *
+   * Since: 2.16
+   */  
+  g_object_class_install_property (gobject_class,
+                                   PROP_IM_MODULE,
+                                   g_param_spec_string ("im-module",
+                                                        P_("IM module"),
+                                                        P_("Which IM module should be used"),
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
+
+  /**
    * GtkEntry:prelight:
    *
    * The prelight style property determines whether activatable
@@ -1783,6 +1804,13 @@ gtk_entry_set_property (GObject         *object,
                                     g_value_get_boolean (value));
       break;
 
+    case PROP_IM_MODULE:
+      g_free (priv->im_module);
+      priv->im_module = g_strdup (g_value_get_string (value));
+      if (GTK_IS_IM_MULTICONTEXT (entry->im_context))
+        gtk_im_multicontext_set_context_id (GTK_IM_MULTICONTEXT (entry->im_context), priv->im_module);
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -1872,6 +1900,10 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_INVISIBLE_CHAR_SET:
       g_value_set_boolean (value, priv->invisible_char_set);
+      break;
+
+    case PROP_IM_MODULE:
+      g_value_set_string (value, priv->im_module);
       break;
 
     case PROP_CAPS_LOCK_WARNING:
@@ -2258,6 +2290,8 @@ gtk_entry_finalize (GObject *object)
       g_free (entry->text);
       entry->text = NULL;
     }
+
+  g_free (priv->im_module);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->finalize (object);
 }

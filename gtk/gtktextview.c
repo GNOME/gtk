@@ -108,6 +108,7 @@ struct _GtkTextViewPrivate
 {
   guint blink_time;  /* time in msec the cursor has blinked since last user event */
   guint im_spot_idle;
+  gchar *im_module;
 };
 
 
@@ -156,7 +157,8 @@ enum
   PROP_CURSOR_VISIBLE,
   PROP_BUFFER,
   PROP_OVERWRITE,
-  PROP_ACCEPTS_TAB
+  PROP_ACCEPTS_TAB,
+  PROP_IM_MODULE
 };
 
 static void gtk_text_view_destroy              (GtkObject        *object);
@@ -660,6 +662,24 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 							 P_("Whether Tab will result in a tab character being entered"),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
+
+   /**
+    * GtkTextView:im-module:
+    *
+    * Which IM module should be used for this widget.
+    *
+    * Setting this to a non-%NULL value overrides the
+    * system-wide IM module setting. See #GtkSettings:gtk-im-module
+    *
+    * Since: 2.16
+    */
+   g_object_class_install_property (gobject_class,
+                                    PROP_IM_MODULE,
+                                    g_param_spec_string ("im-module",
+                                                         P_("IM module"),
+                                                         P_("Which IM module should be used"),
+                                                         NULL,
+                                                         GTK_PARAM_READWRITE));
 
   /*
    * Style properties
@@ -2845,8 +2865,10 @@ static void
 gtk_text_view_finalize (GObject *object)
 {
   GtkTextView *text_view;
+  GtkTextViewPrivate *priv;
 
   text_view = GTK_TEXT_VIEW (object);
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
 
   g_assert (text_view->buffer == NULL);
 
@@ -2879,6 +2901,8 @@ gtk_text_view_finalize (GObject *object)
 
   g_object_unref (text_view->im_context);
 
+  g_free (priv->im_module);
+
   G_OBJECT_CLASS (gtk_text_view_parent_class)->finalize (object);
 }
 
@@ -2889,8 +2913,10 @@ gtk_text_view_set_property (GObject         *object,
 			    GParamSpec      *pspec)
 {
   GtkTextView *text_view;
+  GtkTextViewPrivate *priv;
 
   text_view = GTK_TEXT_VIEW (object);
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
 
   switch (prop_id)
     {
@@ -2950,6 +2976,13 @@ gtk_text_view_set_property (GObject         *object,
       gtk_text_view_set_accepts_tab (text_view, g_value_get_boolean (value));
       break;
       
+    case PROP_IM_MODULE:
+      g_free (priv->im_module);
+      priv->im_module = g_strdup (g_value_get_string (value));
+      if (GTK_IS_IM_MULTICONTEXT (text_view->im_context))
+        gtk_im_multicontext_set_context_id (GTK_IM_MULTICONTEXT (text_view->im_context), priv->im_module);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2963,8 +2996,10 @@ gtk_text_view_get_property (GObject         *object,
 			    GParamSpec      *pspec)
 {
   GtkTextView *text_view;
+  GtkTextViewPrivate *priv;
 
   text_view = GTK_TEXT_VIEW (object);
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
 
   switch (prop_id)
     {
@@ -3024,6 +3059,10 @@ gtk_text_view_get_property (GObject         *object,
       g_value_set_boolean (value, text_view->accepts_tab);
       break;
       
+    case PROP_IM_MODULE:
+      g_value_set_string (value, priv->im_module);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;

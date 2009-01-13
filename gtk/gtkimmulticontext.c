@@ -34,6 +34,7 @@ struct _GtkIMMulticontextPrivate
 {
   GdkWindow *client_window;
   GdkRectangle cursor_location;
+  gchar *context_id;
 
   guint use_preedit : 1;
   guint have_cursor_location : 1;
@@ -85,7 +86,6 @@ static gboolean gtk_im_multicontext_delete_surrounding_cb   (GtkIMContext      *
 							     gint               n_chars,
 							     GtkIMMulticontext *multicontext);
 
-static const gchar *user_context_id = NULL;
 static const gchar *global_context_id = NULL;
 
 G_DEFINE_TYPE (GtkIMMulticontext, gtk_im_multicontext, GTK_TYPE_IM_CONTEXT)
@@ -143,6 +143,7 @@ gtk_im_multicontext_finalize (GObject *object)
   
   gtk_im_multicontext_set_slave (multicontext, NULL, TRUE);
   g_free (multicontext->context_id);
+  g_free (multicontext->priv->context_id);
 
   G_OBJECT_CLASS (gtk_im_multicontext_parent_class)->finalize (object);
 }
@@ -226,19 +227,19 @@ gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
     {
       GtkIMContext *slave;
 
-      if (!global_context_id) 
+      g_free (multicontext->context_id);
+       
+      if (multicontext->priv->context_id)
+        multicontext->context_id = g_strdup (multicontext->priv->context_id);
+      else 
         {
-          if (user_context_id)
-            global_context_id = user_context_id;
-          else
+          if (!global_context_id)
             global_context_id = _gtk_im_module_get_default_context_id (multicontext->priv->client_window);
+          multicontext->context_id = g_strdup (global_context_id);
         }
-      slave = _gtk_im_module_create (global_context_id);
+      slave = _gtk_im_module_create (multicontext->context_id);
       gtk_im_multicontext_set_slave (multicontext, slave, FALSE);
       g_object_unref (slave);
-
-      g_free (multicontext->context_id);
-      multicontext->context_id = g_strdup (global_context_id);
     }
 
   return multicontext->slave;
@@ -335,8 +336,11 @@ gtk_im_multicontext_focus_in (GtkIMContext   *context)
    * for the new global context type.
    */
   if (multicontext->context_id == NULL || 
-      global_context_id == NULL ||
-      strcmp (global_context_id, multicontext->context_id) != 0)
+      (multicontext->priv->context_id != NULL &&
+       strcmp (multicontext->priv->context_id, multicontext->context_id) != 0) ||
+      (multicontext->priv->context_id == NULL &&
+       (global_context_id == NULL ||
+        strcmp (global_context_id, multicontext->context_id) != 0)))
     gtk_im_multicontext_set_slave (multicontext, NULL, FALSE);
 
   slave = gtk_im_multicontext_get_slave (multicontext);
@@ -494,11 +498,7 @@ activate_cb (GtkWidget         *menuitem,
     {
       const gchar *id = g_object_get_data (G_OBJECT (menuitem), "gtk-context-id");
 
-      gtk_im_context_reset (GTK_IM_CONTEXT (context));
-      
-      user_context_id = id;
-      global_context_id = NULL;
-      gtk_im_multicontext_set_slave (context, NULL, FALSE);
+      gtk_im_multicontext_set_context_id (context, id);
     }
 }
 
@@ -543,7 +543,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
   
   system_context_id = _gtk_im_module_get_default_context_id (context->priv->client_window);
   system_menuitem = menuitem = gtk_radio_menu_item_new_with_label (group, C_("input method menu", "System"));
-  if (!user_context_id)
+  if (!context->priv->context_id)
     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
   group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
   g_object_set_data (G_OBJECT (menuitem), I_("gtk-context-id"), NULL);
@@ -616,8 +616,8 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
       menuitem = gtk_radio_menu_item_new_with_label (group,
 						     translated_name);
       
-      if ((user_context_id &&
-           strcmp (contexts[i]->context_id, user_context_id) == 0))
+      if ((context->priv->context_id &&
+           strcmp (contexts[i]->context_id, context->priv->context_id) == 0))
         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
 
       if (strcmp (contexts[i]->context_id, system_context_id) == 0)
@@ -659,6 +659,28 @@ const char *
 gtk_im_multicontext_get_context_id (GtkIMMulticontext *context)
 {
   return context->context_id;
+}
+
+/**
+ * gtk_im_multicontext_set_context_id:
+ * @context: a #GtkIMMulticontext
+ * @context_id: the id to use 
+ *
+ * Sets the context id for @context.
+ *
+ * This causes the currently active slave of @context to be
+ * replaced by the slave corresponding to the new context id.
+ *
+ * Since: 2.16
+ */
+void
+gtk_im_multicontext_set_context_id (GtkIMMulticontext *context,
+                                    const char        *context_id)
+{
+  gtk_im_context_reset (GTK_IM_CONTEXT (context));
+  g_free (context->priv->context_id);
+  context->priv->context_id = g_strdup (context_id);
+  gtk_im_multicontext_set_slave (context, NULL, FALSE);
 }
 
 

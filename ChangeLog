@@ -1,3 +1,17 @@
+2009-01-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 450716 – New API to change global IM
+
+	Requested by Daniel Elstner.
+
+	* gtk/gtk.symbols:
+	* gtk/gtkimmulticontext.[hc] (gtk_im_multicontext_set_context_id):
+	New function to set the context id on a GtkIMMulticontext.
+
+	* gtk/gtkentry.c:
+	* gtk/gtktextview.c: Add a ::im-module property that can be
+	set to override the global setting for the im module to be used.
+
 2009-01-13  Christian Dywan  <christian@imendio.com>
 
 	Bug 566532 – GtkScaleButton implementation of GtkOrientable
