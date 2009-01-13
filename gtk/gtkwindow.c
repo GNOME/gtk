@@ -3507,6 +3507,9 @@ gtk_window_set_icon_name (GtkWindow   *window,
 
   info = ensure_icon_info (window);
 
+  if (g_strcmp0 (info->icon_name, name) == 0)
+    return;
+
   tmp = info->icon_name;
   info->icon_name = g_strdup (name);
   g_free (tmp);

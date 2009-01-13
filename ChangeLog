@@ -1,3 +1,10 @@
+2009-01-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_set_icon_name): Don't cause lots
+	of X traffic when the icon name doesn't actually change. Some
+	apps like to reset their window icon frequently, without actually
+	changing the icon name...
+
 2009-01-12  Paolo Borelli  <pborelli@katamail.com>
 
 	Bug 492794 – Pasting external text at end of view yields wrong
