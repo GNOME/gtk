@@ -154,6 +154,7 @@ gtk/gtknotebook.c
 gtk/gtkobject.c
 gtk/gtkoldeditable.c
 gtk/gtkoptionmenu.c
+gtk/gtkorientable.c
 gtk/gtkpagesetup.c
 gtk/gtkpagesetupunixdialog.c
 gtk/gtkpaned.c
