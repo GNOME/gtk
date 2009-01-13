@@ -51,6 +51,7 @@
 #include "gtkhscale.h"
 #include "gtkvscale.h"
 #include "gtkframe.h"
+#include "gtkorientable.h"
 #include "gtkhbox.h"
 #include "gtkvbox.h"
 #include "gtkwindow.h"
@@ -156,9 +157,11 @@ static void gtk_scale_button_scale_value_changed(GtkRange            *range);
 /* see below for scale definitions */
 static GtkWidget *gtk_scale_button_scale_box_new(GtkScaleButton      *button);
 
-static guint signals[LAST_SIGNAL] = { 0, };
+G_DEFINE_TYPE_WITH_CODE (GtkScaleButton, gtk_scale_button, GTK_TYPE_BUTTON,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
+                                                NULL))
 
-G_DEFINE_TYPE (GtkScaleButton, gtk_scale_button, GTK_TYPE_BUTTON)
+static guint signals[LAST_SIGNAL] = { 0, };
 
 static void
 gtk_scale_button_class_init (GtkScaleButtonClass *klass)
@@ -187,14 +190,9 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    *
    * Since: 2.14
    **/
-  g_object_class_install_property (gobject_class,
-				   PROP_ORIENTATION,
-				   g_param_spec_enum ("orientation",
-                                                      P_("Orientation"),
-                                                      P_("The orientation of the scale"),
-                                                      GTK_TYPE_ORIENTATION,
-                                                      GTK_ORIENTATION_VERTICAL,
-                                                      GTK_PARAM_READWRITE));
+  g_object_class_override_property (gobject_class,
+				    PROP_ORIENTATION,
+				    "orientation");
 
   g_object_class_install_property (gobject_class,
 				   PROP_VALUE,
@@ -426,7 +424,7 @@ gtk_scale_button_set_property (GObject       *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      gtk_scale_button_set_orientation (button, g_value_get_enum (value));
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (button), g_value_get_enum (value));
       break;
     case PROP_VALUE:
       gtk_scale_button_set_value (button, g_value_get_double (value));
@@ -705,6 +703,8 @@ gtk_scale_button_set_adjustment	(GtkScaleButton *button,
  * Returns: the #GtkScaleButton's orientation.
  *
  * Since: 2.14
+ *
+ * Deprecated: 2.16: Use gtk_orientable_get_orientation() instead.
  **/
 GtkOrientation
 gtk_scale_button_get_orientation (GtkScaleButton *button)
@@ -722,6 +722,8 @@ gtk_scale_button_get_orientation (GtkScaleButton *button)
  * Sets the orientation of the #GtkScaleButton's popup window.
  *
  * Since: 2.14
+ *
+ * Deprecated: 2.16: Use gtk_orientable_set_orientation() instead.
  **/
 void
 gtk_scale_button_set_orientation (GtkScaleButton *button,

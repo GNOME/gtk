@@ -3469,8 +3469,10 @@ gtk_scale_button_set_icons
 gtk_scale_button_set_value
 gtk_scale_button_get_adjustment
 gtk_scale_button_set_adjustment
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_scale_button_get_orientation
 gtk_scale_button_set_orientation
+#endif
 gtk_scale_button_get_plus_button
 gtk_scale_button_get_minus_button
 gtk_scale_button_get_popup

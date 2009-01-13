@@ -1,3 +1,13 @@
+2009-01-13  Christian Dywan  <christian@imendio.com>
+
+	Bug 566532 – GtkScaleButton implementation of GtkOrientable
+
+	* gtk/gtk.symbols:
+	* gtk/gtkscalebutton.c (gtk_scale_button_class_init),
+	(gtk_scale_button_set_property):
+	* gtk/gtkscalebutton.h: Deprecate gtk_scale_button_get_orientation
+        in favour of implementing GtkOrientable. Patch by Bruce Cowan.
+
 2009-01-13  Tor Lillqvist  <tml@iki.fi>
 
 	Bug 164002 - query scripts don't work uninstalled on windows
