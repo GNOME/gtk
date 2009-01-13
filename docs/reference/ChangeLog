@@ -1,3 +1,10 @@
+2009-01-13  Christian Dywan  <christian@imendio.com>
+
+	Bug 567569 – Typo in GtkFileChooser example in GTK+ documentation
+
+	* gtk/tmpl/gtkfilechooser.sgml: s/gobject_unref/g_object_unref.
+        Patch by Priyank Gosalia.
+
 2009-01-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkstock.sgml: Add GTK_STOCK_CAPS_LOCK_WARNING
