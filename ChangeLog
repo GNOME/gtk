@@ -1,3 +1,11 @@
+2009-01-13  Tor Lillqvist  <tml@iki.fi>
+
+	Bug 164002 - query scripts don't work uninstalled on windows
+
+	* gtk/gtkmain.c (_gtk_get_libdir): If the gtk DLL is in a ".libs"
+	folder, assume we are running uninstalled, and use the
+	configure-time GTK_LIBDIR.
+
 2009-01-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Refer to tray icon spec, instead of a random email.
