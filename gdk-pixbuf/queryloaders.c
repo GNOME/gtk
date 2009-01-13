@@ -230,27 +230,33 @@ int main (int argc, char **argv)
 		 * subdirectory of the installation directory, or in
 		 * the installation directory itself.
 		 */
-		if (G_WIN32_HAVE_WIDECHAR_API ()) {
-			wchar_t fn[1000];
-			GetModuleFileNameW (NULL, fn, G_N_ELEMENTS (fn));
-			runtime_prefix = g_utf16_to_utf8 (fn, -1, NULL, NULL, NULL);
-		}
-		else {
-			char fn[1000];
-			GetModuleFileNameA (NULL, fn, G_N_ELEMENTS (fn));
-			runtime_prefix = g_locale_to_utf8 (fn, -1, NULL, NULL, NULL);
-		}
+		wchar_t fn[1000];
+		GetModuleFileNameW (NULL, fn, G_N_ELEMENTS (fn));
+		runtime_prefix = g_utf16_to_utf8 (fn, -1, NULL, NULL, NULL);
 		slash = strrchr (runtime_prefix, '\\');
 		*slash = '\0';
 		slash = strrchr (runtime_prefix, '\\');
-		if (slash != NULL && g_ascii_strcasecmp (slash + 1, "bin") == 0) {
-			*slash = '\0';
+		/* If running from some weird location, or from the
+		 * build directory (either in the .libs folder where
+		 * libtool places the real executable when using a
+		 * wrapper, or directly from the gdk-pixbuf folder),
+		 * use the compile-time libdir.
+		 */
+		if (slash == NULL ||
+		    g_ascii_strcasecmp (slash + 1, ".libs") == 0 ||
+		    g_ascii_strcasecmp (slash + 1, "gdk-pixbuf") == 0) {
+			libdir = PIXBUF_LIBDIR;
 		}
+		else {
+			if (slash != NULL && g_ascii_strcasecmp (slash + 1, "bin") == 0) {
+				*slash = '\0';
+			}
 		
-		libdir = g_strconcat (runtime_prefix,
-				      "/",
-				      PIXBUF_LIBDIR + strlen (GTK_PREFIX) + 1,
-				      NULL);
+			libdir = g_strconcat (runtime_prefix,
+					      "/",
+					      PIXBUF_LIBDIR + strlen (GTK_PREFIX) + 1,
+					      NULL);
+		}
 	}
 	else {
 		libdir = PIXBUF_LIBDIR;

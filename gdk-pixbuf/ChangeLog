@@ -1,3 +1,19 @@
+2009-01-12  Tor Lillqvist  <tml@iki.fi>
+
+	Bug 164002 - query scripts don't work uninstalled on windows
+
+	* queryloaders.c (main): Use the configure-time PIXBUF_LIBDIR if
+	the exe is located in a .libs folder, i.e. run in the build
+	directory through a libtool wrapper script or wrapper executable,
+	or in the source folder itself. Otherwise continue to infer the
+	runtime prefix from the exe's location.
+
+2009-01-12  Tor Lillqvist  <tml@iki.fi>
+
+	* queryloaders.c (main): Remove the Win9x code path. It had been
+	left by mistake. Win9x code is gone from the rest of GTK+ since
+	2.12.
+
 2009-01-07  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 566862 – pixbuf_new_from_file does not autodetect format
