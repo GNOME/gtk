@@ -1,5 +1,9 @@
 2009-01-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Refer to tray icon spec, instead of a random email.
+
+2009-01-12  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkwindow.c (gtk_window_set_icon_name): Don't cause lots
 	of X traffic when the icon name doesn't actually change. Some
 	apps like to reset their window icon frequently, without actually

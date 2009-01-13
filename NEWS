@@ -18,8 +18,9 @@ Overview of Changes from GTK+ 2.14.x to 2.15.0
 
 * GtkStatusIcon
  - Uses an extension of the tray icon spec to negotiate RGBA support.
-   This is also supported by the GNOME panel. For details, see 
-   http://lists.freedesktop.org/archives/xdg/2008-September/009934.html 
+   This is also supported by the GNOME panel. For details, see the
+   section on "Visual and bckground pixmap handling" in the System
+   Tray Protocol Specification.
  - Supports scroll events, middle clicks and rich tooltips
 
 * GtkLinkButton
