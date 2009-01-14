@@ -1785,6 +1785,52 @@ _gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
 }
 
 /**
+ * _gdk_drawable_get_subwindow_scratch_gc:
+ * @drawable: A #GdkDrawable
+ * 
+ * Returns a #GdkGC suitable for drawing on @drawable. The #GdkGC has
+ * the standard values for @drawable, except for the graphics_exposures
+ * field which is %TRUE and the subwindow mode which is %GDK_INCLUDE_INFERIORS.
+ *
+ * The foreground color of the returned #GdkGC is undefined. The #GdkGC
+ * must not be altered in any way, except to change its foreground color.
+ * 
+ * Return value: A #GdkGC suitable for drawing on @drawable
+ * 
+ * Since: 2.18
+ **/
+GdkGC *
+_gdk_drawable_get_subwindow_scratch_gc (GdkDrawable *drawable)
+{
+  GdkScreen *screen;
+  gint depth;
+
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+
+  screen = gdk_drawable_get_screen (drawable);
+
+  g_return_val_if_fail (!screen->closed, NULL);
+
+  depth = gdk_drawable_get_depth (drawable) - 1;
+
+  if (!screen->subwindow_gcs[depth])
+    {
+      GdkGCValues values;
+      GdkGCValuesMask mask;
+      
+      values.graphics_exposures = TRUE;
+      values.subwindow_mode = GDK_INCLUDE_INFERIORS;
+      mask = GDK_GC_EXPOSURES | GDK_GC_SUBWINDOW;  
+      
+      screen->subwindow_gcs[depth] =
+	gdk_gc_new_with_values (drawable, &values, mask);
+    }
+  
+  return screen->subwindow_gcs[depth];
+}
+
+
+/**
  * _gdk_drawable_get_source_drawable:
  * @drawable: a #GdkDrawable
  *

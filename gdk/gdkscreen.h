@@ -51,6 +51,7 @@ struct _GdkScreen
 
   GdkGC *normal_gcs[32];
   GdkGC *exposure_gcs[32];
+  GdkGC *subwindow_gcs[32];
 
   cairo_font_options_t *font_options;
   double resolution;		/* pixels/points scale factor for fonts */

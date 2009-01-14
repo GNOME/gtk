@@ -241,6 +241,7 @@ cairo_surface_t * _gdk_drawable_create_cairo_surface (GdkDrawable *drawable,
 /* GC caching */
 GdkGC *_gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
 				     gboolean     graphics_exposures);
+GdkGC *_gdk_drawable_get_subwindow_scratch_gc (GdkDrawable *drawable);
 
 void _gdk_gc_update_context (GdkGC          *gc,
 			     cairo_t        *cr,
