@@ -34,6 +34,7 @@
 #include "gtkexpander.h"
 #include "gtkfilechooserprivate.h"
 #include "gtkfilechooserdefault.h"
+#include "gtkfilechooserdialog.h"
 #include "gtkfilechooserembed.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilechoosersettings.h"
@@ -6025,6 +6026,31 @@ settings_load (GtkFileChooserDefault *impl)
 }
 
 static void
+save_dialog_geometry (GtkFileChooserDefault *impl, GtkFileChooserSettings *settings)
+{
+  GtkWindow *toplevel;
+  int x, y, width, height;
+
+  /* We don't save the geometry in non-expanded "save" mode, so that the "little
+   * dialog" won't make future Open dialogs too small.
+   */
+  if (!(impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+	|| impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
+	|| impl->expand_folders))
+    return;
+
+  toplevel = get_toplevel (GTK_WIDGET (impl));
+
+  if (!(toplevel && GTK_IS_FILE_CHOOSER_DIALOG (toplevel)))
+    return;
+
+  gtk_window_get_position (toplevel, &x, &y);
+  gtk_window_get_size (toplevel, &width, &height);
+
+  _gtk_file_chooser_settings_set_geometry (settings, x, y, width, height);
+}
+
+static void
 settings_save (GtkFileChooserDefault *impl)
 {
   GtkFileChooserSettings *settings;
@@ -6035,6 +6061,8 @@ settings_save (GtkFileChooserDefault *impl)
   _gtk_file_chooser_settings_set_show_hidden (settings, gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (impl)));
   _gtk_file_chooser_settings_set_expand_folders (settings, impl->expand_folders);
   _gtk_file_chooser_settings_set_show_size_column (settings, impl->show_size_column);
+
+  save_dialog_geometry (impl, settings);
 
   /* NULL GError */
   _gtk_file_chooser_settings_save (settings, NULL);
@@ -7938,6 +7966,20 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
       || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
       || impl->expand_folders)
     {
+      GtkFileChooserSettings *settings;
+      int x, y, width, height;
+
+      settings = _gtk_file_chooser_settings_new ();
+      _gtk_file_chooser_settings_get_geometry (settings, &x, &y, &width, &height);
+      g_object_unref (settings);
+
+      if (x >= 0 && y >= 0 && width > 0 && height > 0)
+	{
+	  *default_width = width;
+	  *default_height = height;
+	  return;
+	}
+
       find_good_size_from_style (GTK_WIDGET (chooser_embed), default_width, default_height);
 
       if (impl->preview_widget_active &&

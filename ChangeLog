@@ -36,6 +36,12 @@
 	position doesn't quite work yet, but we'll leave it in as a
 	reference.
 
+	* gtk/gtkfilechooserdefault.c (save_dialog_geometry): New function.
+	(settings_save): Save the dialog's geometry.
+	(gtk_file_chooser_default_get_default_size): Load the geometry
+	from the settings.  If it was already saved, return that instead
+	of computing an ad-hoc size.
+
 2009-01-13  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 450716 – New API to change global IM
