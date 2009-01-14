@@ -80,6 +80,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testtreesort			\
 	treestoretest			\
 	testxinerama			\
+	testwindows			\
 	pixbuf-read			\
 	pixbuf-lowmem			\
 	pixbuf-randomly-modified	\
@@ -164,6 +165,7 @@ testactions_DEPENDENCIES = $(TEST_DEPS)
 testgrouping_DEPENDENCIES = $(TEST_DEPS)
 testtooltips_DEPENDENCIES = $(TEST_DEPS)
 testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
+testwindows_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -231,6 +233,7 @@ testactions_LDADD = $(LDADDS)
 testgrouping_LDADD = $(LDADDS)
 testtooltips_LDADD = $(LDADDS)
 testvolumebutton_LDADD = $(LDADDS)
+testwindows_LDADD = $(LDADDS)
 
 
 testentrycompletion_SOURCES = 	\
@@ -327,6 +330,9 @@ testoffscreen_SOURCES = 	\
 	gtkoffscreenbox.c	\
 	gtkoffscreenbox.h	\
 	testoffscreen.c
+
+testwindow_SOURCES = 	\
+	testwindows.c
 
 EXTRA_DIST += 			\
 	prop-editor.h		\
