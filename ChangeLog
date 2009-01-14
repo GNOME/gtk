@@ -28,6 +28,14 @@
 	if the widget is not mapped, to avoid resizing the dialog while it
 	is visible.
 
+	* gtk/gtkfilechooserdialog.c
+	(file_chooser_widget_default_size_changed): Simply resize the
+	dialog to the default size without any fancy clamping.  Also,
+	leave in place ifdef-ed out code to restore the file chooser's
+	position in addition to its size.  The code to restore the
+	position doesn't quite work yet, but we'll leave it in as a
+	reference.
+
 2009-01-13  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 450716 – New API to change global IM
