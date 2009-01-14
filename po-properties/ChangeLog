@@ -1,3 +1,7 @@
+2009-01-14  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
+
+	* es.po: Updated Spanish translation.
+
 2009-01-13  Luca Ferretti  <elle.uca@libero.it>
 
 	* POTFILES.in: added missing gtk/gtkorientable.c 
