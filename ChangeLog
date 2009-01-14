@@ -16,6 +16,18 @@
 	(_gtk_file_chooser_settings_get_geometry): New public function.
 	(_gtk_file_chooser_settings_set_geometry): New public function.
 
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_map):
+	Don't change the default size in ::map() so we don't flicker...
+	(gtk_file_chooser_default_realize): ... so do it in ::realize()
+	instead, when the window is not yet visible.  This avoids a
+	dialog-that-resizes when you first pop up the file chooser.
+	(emit_default_size_changed): Just emit the signal; don't check for
+	the widget's state so we can be emitted during the initial
+	::realize() when we are not mapped yet.
+	(update_preview_widget_visibility): Only emit default_size_changed
+	if the widget is not mapped, to avoid resizing the dialog while it
+	is visible.
+
 2009-01-13  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 450716 – New API to change global IM

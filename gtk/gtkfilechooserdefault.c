@@ -274,6 +274,7 @@ static void     gtk_file_chooser_default_get_property (GObject               *ob
 						       GParamSpec            *pspec);
 static void     gtk_file_chooser_default_dispose      (GObject               *object);
 static void     gtk_file_chooser_default_show_all       (GtkWidget             *widget);
+static void     gtk_file_chooser_default_realize        (GtkWidget             *widget);
 static void     gtk_file_chooser_default_map            (GtkWidget             *widget);
 static void     gtk_file_chooser_default_unmap          (GtkWidget             *widget);
 static void     gtk_file_chooser_default_hierarchy_changed (GtkWidget          *widget,
@@ -564,6 +565,7 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   gobject_class->dispose = gtk_file_chooser_default_dispose;
 
   widget_class->show_all = gtk_file_chooser_default_show_all;
+  widget_class->realize = gtk_file_chooser_default_realize;
   widget_class->map = gtk_file_chooser_default_map;
   widget_class->unmap = gtk_file_chooser_default_unmap;
   widget_class->hierarchy_changed = gtk_file_chooser_default_hierarchy_changed;
@@ -1156,9 +1158,6 @@ change_folder_and_display_error (GtkFileChooserDefault *impl,
 static void
 emit_default_size_changed (GtkFileChooserDefault *impl)
 {
-  if (!GTK_WIDGET_MAPPED (impl))
-    return;
-
   profile_msg ("    emit default-size-changed start", NULL);
   g_signal_emit_by_name (impl, "default-size-changed");
   profile_msg ("    emit default-size-changed end", NULL);
@@ -1192,7 +1191,8 @@ update_preview_widget_visibility (GtkFileChooserDefault *impl)
   else
     gtk_widget_hide (impl->preview_box);
 
-  emit_default_size_changed (impl);
+  if (!GTK_WIDGET_MAPPED (impl))
+    emit_default_size_changed (impl);
 }
 
 static void
@@ -6042,6 +6042,20 @@ settings_save (GtkFileChooserDefault *impl)
   g_object_unref (settings);
 }
 
+/* GtkWidget::realize method */
+static void
+gtk_file_chooser_default_realize (GtkWidget *widget)
+{
+  GtkFileChooserDefault *impl;
+  char *current_working_dir;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (widget);
+
+  GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->realize (widget);
+
+  emit_default_size_changed (impl);
+}
+
 /* GtkWidget::map method */
 static void
 gtk_file_chooser_default_map (GtkWidget *widget)
@@ -6094,8 +6108,6 @@ gtk_file_chooser_default_map (GtkWidget *widget)
   volumes_bookmarks_changed_cb (impl->file_system, impl);
 
   settings_load (impl);
-
-  emit_default_size_changed (impl);
 
   profile_end ("end", NULL);
 }
