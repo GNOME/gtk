@@ -42,6 +42,10 @@
 #define SHOW_HIDDEN_KEY		"ShowHidden"
 #define EXPAND_FOLDERS_KEY	"ExpandFolders"
 #define SHOW_SIZE_COLUMN_KEY    "ShowSizeColumn"
+#define GEOMETRY_X_KEY		"GeometryX"
+#define GEOMETRY_Y_KEY		"GeometryY"
+#define GEOMETRY_WIDTH_KEY	"GeometryWidth"
+#define GEOMETRY_HEIGHT_KEY	"GeometryHeight"
 
 #define MODE_PATH_BAR          "path-bar"
 #define MODE_FILENAME_ENTRY    "filename-entry"
@@ -74,6 +78,24 @@ warn_if_invalid_key_and_clear_error (const gchar  *key,
 
       g_clear_error (error);
     }
+}
+
+static void
+get_int_key (GKeyFile *key_file, const char *group, const char *key, int *out_value)
+{
+  GError *error;
+  int val;
+
+  error = NULL;
+  val = g_key_file_get_integer (key_file, group, key, &error);
+
+  if (val == 0 && error != NULL)
+    {
+      *out_value = -1;
+      g_error_free (error);
+    }
+  else
+    *out_value = val;
 }
 
 static void
@@ -143,6 +165,11 @@ ensure_settings_read (GtkFileChooserSettings *settings)
   else
     settings->show_size_column = value != FALSE;
 
+  get_int_key (key_file, SETTINGS_GROUP, GEOMETRY_X_KEY, &settings->geometry_x);
+  get_int_key (key_file, SETTINGS_GROUP, GEOMETRY_Y_KEY, &settings->geometry_y);
+  get_int_key (key_file, SETTINGS_GROUP, GEOMETRY_WIDTH_KEY, &settings->geometry_width);
+  get_int_key (key_file, SETTINGS_GROUP, GEOMETRY_HEIGHT_KEY, &settings->geometry_height);
+
  out:
 
   g_key_file_free (key_file);
@@ -165,6 +192,10 @@ _gtk_file_chooser_settings_init (GtkFileChooserSettings *settings)
   settings->show_hidden = FALSE;
   settings->expand_folders = FALSE;
   settings->show_size_column = FALSE;
+  settings->geometry_x	    = -1;
+  settings->geometry_y	    = -1;
+  settings->geometry_width  = -1;
+  settings->geometry_height = -1;
 }
 
 GtkFileChooserSettings *
@@ -229,6 +260,34 @@ _gtk_file_chooser_settings_set_expand_folders (GtkFileChooserSettings *settings,
   settings->expand_folders = expand_folders != FALSE;
 }
 
+void
+_gtk_file_chooser_settings_get_geometry (GtkFileChooserSettings *settings,
+					 int                    *out_x,
+					 int                    *out_y,
+					 int                    *out_width,
+					 int                    *out_height)
+{
+  ensure_settings_read (settings);
+
+  *out_x      = settings->geometry_x;
+  *out_y      = settings->geometry_y;
+  *out_width  = settings->geometry_width;
+  *out_height = settings->geometry_height;
+}
+
+void
+_gtk_file_chooser_settings_set_geometry (GtkFileChooserSettings *settings,
+					 int                     x,
+					 int                     y,
+					 int                     width,
+					 int                     height)
+{
+  settings->geometry_x	    = x;
+  settings->geometry_y	    = y;
+  settings->geometry_width  = width;
+  settings->geometry_height = height;
+}
+
 gboolean
 _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
 				 GError                **error)
@@ -271,6 +330,14 @@ _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
 			  EXPAND_FOLDERS_KEY, settings->expand_folders);
   g_key_file_set_boolean (key_file, SETTINGS_GROUP,
 			  SHOW_SIZE_COLUMN_KEY, settings->show_size_column);
+  g_key_file_set_integer (key_file, SETTINGS_GROUP,
+			  GEOMETRY_X_KEY, settings->geometry_x);
+  g_key_file_set_integer (key_file, SETTINGS_GROUP,
+			  GEOMETRY_Y_KEY, settings->geometry_y);
+  g_key_file_set_integer (key_file, SETTINGS_GROUP,
+			  GEOMETRY_WIDTH_KEY, settings->geometry_width);
+  g_key_file_set_integer (key_file, SETTINGS_GROUP,
+			  GEOMETRY_HEIGHT_KEY, settings->geometry_height);
 
   contents = g_key_file_to_data (key_file, &len, error);
   g_key_file_free (key_file);

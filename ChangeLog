@@ -1,3 +1,21 @@
+2009-01-14  Federico Mena Quintero  <federico@novell.com>
+
+	Remember the file chooser's geometry across invocations.
+
+	* gtk/gtkfilechoosersettings.h (struct _GtkFileChooserSettings):
+	New fields geometry_x, geometry_y, geometry_width, geometry_height.
+	(_gtk_file_chooser_settings_get_geometry): New prototype.
+	(_gtk_file_chooser_settings_set_geometry): New prototype.
+
+	* gtk/gtkfilechoosersettings.c (GEOMETRY_X_KEY, GEOMETRY_Y_KEY,
+	GEOMETRY_WIDTH_KEY, GEOMETRY_HEIGTH_KEY): New key names.
+	(ensure_settings_read): Read the geometry keys.
+	(_gtk_file_chooser_settings_save): Save the geometry keys.
+	(_gtk_file_chooser_settings_init): Initialize the geometry keys to
+	"don't have this value".
+	(_gtk_file_chooser_settings_get_geometry): New public function.
+	(_gtk_file_chooser_settings_set_geometry): New public function.
+
 2009-01-13  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 450716 – New API to change global IM

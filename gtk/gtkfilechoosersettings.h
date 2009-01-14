@@ -38,6 +38,11 @@ struct _GtkFileChooserSettings
 
   LocationMode location_mode;
 
+  int geometry_x;
+  int geometry_y;
+  int geometry_width;
+  int geometry_height;
+
   guint settings_read    : 1;
   guint show_hidden      : 1;
   guint show_size_column : 1;
@@ -68,6 +73,17 @@ void     _gtk_file_chooser_settings_set_expand_folders (GtkFileChooserSettings *
 gboolean _gtk_file_chooser_settings_get_show_size_column (GtkFileChooserSettings *settings);
 void     _gtk_file_chooser_settings_set_show_size_column (GtkFileChooserSettings *settings,
                                                           gboolean                show_column);
+
+void _gtk_file_chooser_settings_get_geometry (GtkFileChooserSettings *settings,
+					      int                    *out_x,
+					      int                    *out_y,
+					      int                    *out_width,
+					      int                    *out_heigth);
+void _gtk_file_chooser_settings_set_geometry (GtkFileChooserSettings *settings,
+					      int                     x,
+					      int                     y,
+					      int                     width,
+					      int                     heigth);
 
 gboolean _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
 					  GError                **error);
