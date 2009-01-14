@@ -3377,6 +3377,9 @@ do_shape_combine_region (GdkWindow       *window,
                                    0, 0,
                                    &xrects, &n_rects);
       
+
+      _gdk_x11_window_tmp_unset_bg ((GdkWindow *)private->parent, TRUE);
+
       XShapeCombineRectangles (GDK_WINDOW_XDISPLAY (window),
                                GDK_WINDOW_XID (window),
                                shape,
@@ -3385,6 +3388,8 @@ do_shape_combine_region (GdkWindow       *window,
                                ShapeSet,
                                YXBanded);
 
+      _gdk_x11_window_tmp_reset_bg ((GdkWindow *)private->parent, TRUE);
+      
       g_free (xrects);
     }
 #endif /* HAVE_SHAPE_EXT */
