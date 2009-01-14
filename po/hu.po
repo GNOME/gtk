@@ -2923,7 +2923,7 @@ msgstr "_Félkövér"
 #: ../gtk/gtkstock.c:300
 msgctxt "Stock label"
 msgid "_Cancel"
-msgstr "_Mégsem"
+msgstr "Mé_gsem"
 
 #: ../gtk/gtkstock.c:301
 msgctxt "Stock label"
