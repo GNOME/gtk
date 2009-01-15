@@ -763,10 +763,6 @@ _gdk_window_impl_new (GdkWindow     *window,
   g_object_ref (window);
   _gdk_xid_table_insert (screen_x11->display, &draw_impl->xid, window);
 
-  gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
-				  (attributes->cursor) :
-				  NULL));
-  
   switch (GDK_WINDOW_TYPE (private))
     {
     case GDK_WINDOW_DIALOG:

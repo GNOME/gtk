@@ -882,6 +882,10 @@ gdk_window_new (GdkWindow     *parent,
       private->redirect = private->parent->redirect;
     }
     
+  gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
+				  (attributes->cursor) :
+				  NULL));
+
   return window;
 }
 
