@@ -1375,6 +1375,8 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GtkTreePath *path;
   gboolean above;
   gint width;
+  GtkTreeViewColumn *action_column;
+  gint action_height;
 
   if (!completion->priv->entry->window)
     return FALSE;
@@ -1384,9 +1386,12 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
   actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
+  action_column  = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
 
   gtk_tree_view_column_cell_get_size (completion->priv->column, NULL,
                                       NULL, NULL, NULL, &height);
+  gtk_tree_view_column_cell_get_size (action_column, NULL,
+                                      NULL, NULL, NULL, &action_height);
 
   gtk_widget_style_get (GTK_WIDGET (completion->priv->tree_view),
                         "vertical-separator", &vertical_separator,
@@ -1404,9 +1409,9 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   
 
   if (y > monitor.height / 2)
-    items = MIN (matches, (monitor.y + y) / height - actions);
+    items = MIN (matches, (((monitor.y + y) - (actions * action_height)) / height) - 1);
   else
-    items = MIN (matches, (monitor.height - y) / height - 1  - actions);
+    items = MIN (matches, (((monitor.height - y) - (actions * action_height)) / height) - 1);
 
   if (items <= 0)
     gtk_widget_hide (completion->priv->scrolled_window);

@@ -1,3 +1,15 @@
+2009-01-15  Diego Escalante Urrelo  <diegoe@gnome.org>
+
+	Bug 562701 – GtkEntryCompletion popup sizes its rows wrong
+	when they span for more than one line.
+
+	Don't assume actions and results have equal height, this causes
+	negative size requisitions when results are more than one
+	line tall.
+
+	* gtk/gtkentrycompletion.c: change the formula used to calculate
+	the size of the completion popup.
+
 2009-01-14  Federico Mena Quintero  <federico@novell.com>
 
 	Remember the file chooser's geometry across invocations.
