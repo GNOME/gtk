@@ -1,3 +1,12 @@
+2009-01-15  Murray Cumming  <murrayc@murrayc.com>
+
+	* gtk/gtkimcontext.c: documentation description: Mention the various 
+	properties and the environment variable, with links to their 
+ 	documentation.
+	* gtk/gtksettings.c:
+	* gtk/gtktextview.c: Make the im-module property documentation more 
+	expansive.
+
 2009-01-15  Diego Escalante Urrelo  <diegoe@gnome.org>
 
 	Bug 562701 – GtkEntryCompletion popup sizes its rows wrong

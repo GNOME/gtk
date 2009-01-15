@@ -666,10 +666,12 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    /**
     * GtkTextView:im-module:
     *
-    * Which IM module should be used for this widget.
+    * Which IM (input method) module should be used for this entry. 
+    * See #GtkIMContext.
     *
     * Setting this to a non-%NULL value overrides the
-    * system-wide IM module setting. See #GtkSettings:gtk-im-module
+    * system-wide IM module setting. See the GtkSettings 
+    * #GtkSettings:gtk-im-module property.
     *
     * Since: 2.16
     */

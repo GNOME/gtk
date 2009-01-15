@@ -834,7 +834,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-im-module:
    *
-   * Which IM module should be used by default.
+   * Which IM (input method) module should be used by default. This is the 
+   * input method that will be used if the user has not explicitly chosen 
+   * another input method from the IM context menu.  
+   *
+   * See #GtkIMContext and see the #GtkSettings:gtk-show-input-method-menu property.
    */
   result = settings_install_property_parser (class,
 					     g_param_spec_string ("gtk-im-module",
