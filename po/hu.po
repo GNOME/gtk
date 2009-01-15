@@ -10,9 +10,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hu\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
-"POT-Creation-Date: 2009-01-01 22:25+0000\n"
-"PO-Revision-Date: 2009-01-13 15:45+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-01-15 20:12+0100\n"
+"PO-Revision-Date: 2009-01-14 16:52+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
@@ -29,48 +29,58 @@ msgstr "directfb paraméter"
 msgid "sdl|system"
 msgstr "rendszer"
 
+#: ../gdk/gdk.c:103
+#, c-format
+msgid "Error parsing option --gdk-debug"
+msgstr "Hiba a --gdk-debug kapcsoló feldolgozásakor"
+
+#: ../gdk/gdk.c:123
+#, c-format
+msgid "Error parsing option --gdk-no-debug"
+msgstr "Hiba a --gdk-no-debug kapcsoló feldolgozásakor"
+
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:127
+#: ../gdk/gdk.c:151
 msgid "Program class as used by the window manager"
 msgstr "A program osztálya, ahogy az ablakkezelő használja"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:128
+#: ../gdk/gdk.c:152
 msgid "CLASS"
 msgstr "OSZTÁLY"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:130
+#: ../gdk/gdk.c:154
 msgid "Program name as used by the window manager"
 msgstr "A programnév, ahogy az ablakkezelő használja"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:131
+#: ../gdk/gdk.c:155
 msgid "NAME"
 msgstr "NÉV"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:133
+#: ../gdk/gdk.c:157
 msgid "X display to use"
 msgstr "Használandó X-megjelenítő"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:134
+#: ../gdk/gdk.c:158
 msgid "DISPLAY"
 msgstr "MEGJELENÍTŐ"
 
 #. Description of --screen=SCREEN in --help output
-#: ../gdk/gdk.c:136
+#: ../gdk/gdk.c:160
 msgid "X screen to use"
 msgstr "Használandó X-képernyő"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: ../gdk/gdk.c:137
+#: ../gdk/gdk.c:161
 msgid "SCREEN"
 msgstr "KÉPERNYŐ"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:140
+#: ../gdk/gdk.c:164
 msgid "Gdk debugging flags to set"
 msgstr "Beállítandó Gdk debug jelzőbitek"
 
@@ -78,12 +88,12 @@ msgstr "Beállítandó Gdk debug jelzőbitek"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:141 ../gdk/gdk.c:144 ../gtk/gtkmain.c:452 ../gtk/gtkmain.c:455
+#: ../gdk/gdk.c:165 ../gdk/gdk.c:168 ../gtk/gtkmain.c:457 ../gtk/gtkmain.c:460
 msgid "FLAGS"
 msgstr "JELZŐK"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:143
+#: ../gdk/gdk.c:167
 msgid "Gdk debugging flags to unset"
 msgstr "Kikapcsolandó Gdk debug jelzőbitek"
 
@@ -286,7 +296,8 @@ msgstr "A(z) „%s” képfájl nem tartalmaz adatokat"
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:1013
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1277 ../tests/testfilechooser.c:267
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Nem sikerült betölteni a(z) „%s” képet: ok ismeretlen, valószínűleg sérült a "
 "képfájl"
@@ -676,7 +687,8 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-jpeg.c:1148 ../gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "A JPEG-minőség értékének 0 és 100 között kell lennie, a(z) „%d” érték nem "
 "megengedett."
@@ -780,7 +792,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Végzetes hiba a PNG képfájl olvasásakor: %s"
 
 #: ../gdk-pixbuf/io-png.c:825
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "A PNG szöveges darabok kulcsainak legalább 1 és legfeljebb 79 karakterből "
 "kell állniuk."
@@ -1184,46 +1197,46 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d elem megnyitása"
 msgstr[1] "%d elem megnyitása"
 
-#: ../gtk/gtkaboutdialog.c:264 ../gtk/gtkaboutdialog.c:2108
+#: ../gtk/gtkaboutdialog.c:267 ../gtk/gtkaboutdialog.c:2121
 msgid "License"
 msgstr "Licenc"
 
-#: ../gtk/gtkaboutdialog.c:265
+#: ../gtk/gtkaboutdialog.c:268
 msgid "The license of the program"
 msgstr "A program licence"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:500
+#: ../gtk/gtkaboutdialog.c:508
 msgid "C_redits"
 msgstr "_Köszönet"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:514
+#: ../gtk/gtkaboutdialog.c:522
 msgid "_License"
 msgstr "_Licenc"
 
-#: ../gtk/gtkaboutdialog.c:744
+#: ../gtk/gtkaboutdialog.c:790
 #, c-format
 msgid "About %s"
 msgstr "%s névjegye"
 
-#: ../gtk/gtkaboutdialog.c:2032
+#: ../gtk/gtkaboutdialog.c:2045
 msgid "Credits"
 msgstr "Köszönet"
 
-#: ../gtk/gtkaboutdialog.c:2061
+#: ../gtk/gtkaboutdialog.c:2074
 msgid "Written by"
 msgstr "Írta"
 
-#: ../gtk/gtkaboutdialog.c:2064
+#: ../gtk/gtkaboutdialog.c:2077
 msgid "Documented by"
 msgstr "Dokumentáció"
 
-#: ../gtk/gtkaboutdialog.c:2076
+#: ../gtk/gtkaboutdialog.c:2089
 msgid "Translated by"
 msgstr "Fordította"
 
-#: ../gtk/gtkaboutdialog.c:2080
+#: ../gtk/gtkaboutdialog.c:2093
 msgid "Artwork by"
 msgstr "Grafika"
 
@@ -1549,15 +1562,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Szín kiválasztása"
 
-#: ../gtk/gtkentry.c:7998 ../gtk/gtktextview.c:7730
+#: ../gtk/gtkentry.c:8039 ../gtk/gtktextview.c:7787
 msgid "Input _Methods"
 msgstr "Beviteli mó_dok"
 
-#: ../gtk/gtkentry.c:8012 ../gtk/gtktextview.c:7744
+#: ../gtk/gtkentry.c:8053 ../gtk/gtktextview.c:7801
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode vezérlőkarakter beszúrása"
 
-#: ../gtk/gtkentry.c:9375
+#: ../gtk/gtkentry.c:9416
 msgid ""
 "You have the Caps Lock key on\n"
 "and an active input method"
@@ -1565,11 +1578,11 @@ msgstr ""
 "A Caps Lock le van nyomva\n"
 "és egy bemeneti mód aktív"
 
-#: ../gtk/gtkentry.c:9377
+#: ../gtk/gtkentry.c:9418
 msgid "You have the Caps Lock key on"
 msgstr "A Caps Lock le van nyomva"
 
-#: ../gtk/gtkentry.c:9379
+#: ../gtk/gtkentry.c:9420
 msgid "You have an active input method"
 msgstr "Egy bemeneti mód aktív"
 
@@ -1577,7 +1590,7 @@ msgstr "Egy bemeneti mód aktív"
 msgid "Select A File"
 msgstr "Válasszon ki egy fájlt"
 
-#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1923
+#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1924
 msgid "Desktop"
 msgstr "Munkaasztal"
 
@@ -1589,23 +1602,23 @@ msgstr "(Nincs)"
 msgid "Other..."
 msgstr "Egyéb…"
 
-#: ../gtk/gtkfilechooserdefault.c:1056
+#: ../gtk/gtkfilechooserdefault.c:1059
 msgid "Could not retrieve information about the file"
 msgstr "Nem érhető el információ a fájlról"
 
-#: ../gtk/gtkfilechooserdefault.c:1067
+#: ../gtk/gtkfilechooserdefault.c:1070
 msgid "Could not add a bookmark"
 msgstr "Nem adható hozzá könyvjelző"
 
-#: ../gtk/gtkfilechooserdefault.c:1078
+#: ../gtk/gtkfilechooserdefault.c:1081
 msgid "Could not remove bookmark"
 msgstr "Nem lehet eltávolítani a könyvjelzőt"
 
-#: ../gtk/gtkfilechooserdefault.c:1089
+#: ../gtk/gtkfilechooserdefault.c:1092
 msgid "The folder could not be created"
 msgstr "A mappa nem hozható létre"
 
-#: ../gtk/gtkfilechooserdefault.c:1102
+#: ../gtk/gtkfilechooserdefault.c:1105
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1613,11 +1626,11 @@ msgstr ""
 "A mappát nem lehet létrehozni, mivel már létezik egy fájl ugyanezen a néven. "
 "Próbáljon más nevet adni a mappának vagy nevezze át a fájlt."
 
-#: ../gtk/gtkfilechooserdefault.c:1113
+#: ../gtk/gtkfilechooserdefault.c:1116
 msgid "Invalid file name"
 msgstr "Érvénytelen fájlnév"
 
-#: ../gtk/gtkfilechooserdefault.c:1123
+#: ../gtk/gtkfilechooserdefault.c:1126
 msgid "The folder contents could not be displayed"
 msgstr "A mappa tartalma nem jeleníthető meg"
 
@@ -1625,174 +1638,175 @@ msgstr "A mappa tartalma nem jeleníthető meg"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1675
+#: ../gtk/gtkfilechooserdefault.c:1676
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s ezen: %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1851
+#: ../gtk/gtkfilechooserdefault.c:1852
 msgid "Search"
 msgstr "Keresés"
 
-#: ../gtk/gtkfilechooserdefault.c:1875
+#: ../gtk/gtkfilechooserdefault.c:1876
 msgid "Recently Used"
 msgstr "Nemrég használt"
 
-#: ../gtk/gtkfilechooserdefault.c:2500
+#: ../gtk/gtkfilechooserdefault.c:2501
 msgid "Select which types of files are shown"
 msgstr "Válassza ki, hogy milyen típusú fájlok jelenjenek meg"
 
-#: ../gtk/gtkfilechooserdefault.c:2929
+#: ../gtk/gtkfilechooserdefault.c:2930
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "A(z) „%s” mappa hozzáadása a könyvjelzőkhöz"
 
-#: ../gtk/gtkfilechooserdefault.c:2970
+#: ../gtk/gtkfilechooserdefault.c:2971
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "A jelenlegi mappa hozzáadása a könyvjelzőkhöz"
 
-#: ../gtk/gtkfilechooserdefault.c:2972
+#: ../gtk/gtkfilechooserdefault.c:2973
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "A kijelölt mappák hozzáadása a könyvjelzőkhöz"
 
-#: ../gtk/gtkfilechooserdefault.c:3012
+#: ../gtk/gtkfilechooserdefault.c:3013
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "A(z) „%s” könyvjelző eltávolítása"
 
-#: ../gtk/gtkfilechooserdefault.c:3730
+#: ../gtk/gtkfilechooserdefault.c:3731
 msgid "Remove"
 msgstr "Eltávolítás"
 
-#: ../gtk/gtkfilechooserdefault.c:3739
+#: ../gtk/gtkfilechooserdefault.c:3740
 msgid "Rename..."
 msgstr "Átnevezés…"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3885
+#: ../gtk/gtkfilechooserdefault.c:3886
 msgid "Places"
 msgstr "Helyek"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3942
+#: ../gtk/gtkfilechooserdefault.c:3943
 msgid "_Places"
 msgstr "_Helyek"
 
-#: ../gtk/gtkfilechooserdefault.c:3997
+#: ../gtk/gtkfilechooserdefault.c:3998
 msgid "_Add"
 msgstr "Hozzá_adás"
 
-#: ../gtk/gtkfilechooserdefault.c:4004
+#: ../gtk/gtkfilechooserdefault.c:4005
 msgid "Add the selected folder to the Bookmarks"
 msgstr "A kijelölt mappa hozzáadása a könyvjelzőkhöz"
 
-#: ../gtk/gtkfilechooserdefault.c:4009
+#: ../gtk/gtkfilechooserdefault.c:4010
 msgid "_Remove"
 msgstr "_Eltávolítás"
 
-#: ../gtk/gtkfilechooserdefault.c:4016
+#: ../gtk/gtkfilechooserdefault.c:4017
 msgid "Remove the selected bookmark"
 msgstr "A kijelölt könyvjelző eltávolítása"
 
-#: ../gtk/gtkfilechooserdefault.c:4125
+#: ../gtk/gtkfilechooserdefault.c:4126
 msgid "Could not select file"
 msgstr "Nem sikerült kijelölni a fájlt"
 
-#: ../gtk/gtkfilechooserdefault.c:4300
+#: ../gtk/gtkfilechooserdefault.c:4301
 msgid "_Add to Bookmarks"
 msgstr "Hozzá_adás a könyvjelzőkhöz"
 
-#: ../gtk/gtkfilechooserdefault.c:4314
+#: ../gtk/gtkfilechooserdefault.c:4315
 msgid "Show _Hidden Files"
 msgstr "_Rejtett fájlok megjelenítése"
 
-#: ../gtk/gtkfilechooserdefault.c:4321
+#: ../gtk/gtkfilechooserdefault.c:4322
 msgid "Show _Size Column"
 msgstr "_Méret oszlop megjelenítése"
 
-#: ../gtk/gtkfilechooserdefault.c:4576 ../gtk/gtkfilesel.c:730
+#: ../gtk/gtkfilechooserdefault.c:4577 ../gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Fájlok"
 
-#: ../gtk/gtkfilechooserdefault.c:4625
+#: ../gtk/gtkfilechooserdefault.c:4626
 msgid "Name"
 msgstr "Név"
 
-#: ../gtk/gtkfilechooserdefault.c:4650
+#: ../gtk/gtkfilechooserdefault.c:4651
 msgid "Size"
 msgstr "Méret"
 
-#: ../gtk/gtkfilechooserdefault.c:4664
+#: ../gtk/gtkfilechooserdefault.c:4665
 msgid "Modified"
 msgstr "Módosítva"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4884 ../gtk/gtkprinteroptionwidget.c:796
+#: ../gtk/gtkfilechooserdefault.c:4885 ../gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "_Név:"
 
-#: ../gtk/gtkfilechooserdefault.c:4926
+#: ../gtk/gtkfilechooserdefault.c:4927
 msgid "_Browse for other folders"
 msgstr "Egyéb mappák _böngészése"
 
-#: ../gtk/gtkfilechooserdefault.c:5196
+#: ../gtk/gtkfilechooserdefault.c:5197
 msgid "Type a file name"
 msgstr "Írjon be egy fájlnevet"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5233
+#: ../gtk/gtkfilechooserdefault.c:5234
 msgid "Create Fo_lder"
 msgstr "M_appa létrehozása"
 
-#: ../gtk/gtkfilechooserdefault.c:5243
+#: ../gtk/gtkfilechooserdefault.c:5244
 msgid "_Location:"
 msgstr "Hel_y:"
 
-#: ../gtk/gtkfilechooserdefault.c:5444
+#: ../gtk/gtkfilechooserdefault.c:5445
 msgid "Save in _folder:"
 msgstr "Mentés _mappába:"
 
-#: ../gtk/gtkfilechooserdefault.c:5446
+#: ../gtk/gtkfilechooserdefault.c:5447
 msgid "Create in _folder:"
 msgstr "Létrehozás _mappában:"
 
-#: ../gtk/gtkfilechooserdefault.c:7097
+#: ../gtk/gtkfilechooserdefault.c:7137
 msgid "Cannot change to folder because it is not local"
 msgstr "Nem lehet megváltoztatni a mappát, mert az nem helyi"
 
-#: ../gtk/gtkfilechooserdefault.c:7722 ../gtk/gtkfilechooserdefault.c:7743
+#: ../gtk/gtkfilechooserdefault.c:7762 ../gtk/gtkfilechooserdefault.c:7783
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Már létezik %s gyorsbillentyű"
 
-#: ../gtk/gtkfilechooserdefault.c:7833
+#: ../gtk/gtkfilechooserdefault.c:7873
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s gyorsbillentyű nem létezik"
 
-#: ../gtk/gtkfilechooserdefault.c:8081 ../gtk/gtkprintunixdialog.c:370
+#: ../gtk/gtkfilechooserdefault.c:8135 ../gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "A(z) „%s” nevű fájl már létezik. Le akarja cserélni?"
 
-#: ../gtk/gtkfilechooserdefault.c:8084 ../gtk/gtkprintunixdialog.c:374
+#: ../gtk/gtkfilechooserdefault.c:8138 ../gtk/gtkprintunixdialog.c:374
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "A fájl már létezik a(z) „%s” helyen. Lecserélésével a tartalma felül lesz "
 "írva."
 
-#: ../gtk/gtkfilechooserdefault.c:8089 ../gtk/gtkprintunixdialog.c:381
+#: ../gtk/gtkfilechooserdefault.c:8143 ../gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "_Csere"
 
-#: ../gtk/gtkfilechooserdefault.c:8846
+#: ../gtk/gtkfilechooserdefault.c:8900
 msgid "Could not start the search process"
 msgstr "Nem lehet elindítani a keresési folyamatot"
 
-#: ../gtk/gtkfilechooserdefault.c:8847
+#: ../gtk/gtkfilechooserdefault.c:8901
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1800,34 +1814,34 @@ msgstr ""
 "A program nem volt képes kapcsolatot létrehozni az indexelő démonhoz. "
 "Győződjön meg róla, hogy az fut."
 
-#: ../gtk/gtkfilechooserdefault.c:8861
+#: ../gtk/gtkfilechooserdefault.c:8915
 msgid "Could not send the search request"
 msgstr "Nem lehet elküldeni a keresési kérést"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9328
+#: ../gtk/gtkfilechooserdefault.c:9382
 msgid "_Search:"
 msgstr "_Keresés:"
 
-#: ../gtk/gtkfilechooserdefault.c:10281
+#: ../gtk/gtkfilechooserdefault.c:10335
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s nem csatolható"
 
-#: ../gtk/gtkfilechooserdefault.c:10956
+#: ../gtk/gtkfilechooserdefault.c:11010
 msgid "Type name of new folder"
 msgstr "Adja meg az új mappa nevét"
 
-#: ../gtk/gtkfilechooserdefault.c:11134 ../gtk/gtkfilechooserdefault.c:11156
-#: ../gtk/gtkfilechooserdefault.c:11227
+#: ../gtk/gtkfilechooserdefault.c:11188 ../gtk/gtkfilechooserdefault.c:11210
+#: ../gtk/gtkfilechooserdefault.c:11281
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: ../gtk/gtkfilechooserdefault.c:11174
+#: ../gtk/gtkfilechooserdefault.c:11228
 msgid "%H:%M"
 msgstr "%k.%M"
 
-#: ../gtk/gtkfilechooserdefault.c:11176
+#: ../gtk/gtkfilechooserdefault.c:11230
 msgid "Yesterday at %H:%M"
 msgstr "Tegnap %k.%M"
 
@@ -1864,7 +1878,7 @@ msgstr "Teljes, de nem egyedi"
 msgid "Completing..."
 msgstr "Kiegészítés…"
 
-#: ../gtk/gtkfilechoosersettings.c:295 ../gtk/gtkfilesel.c:1349
+#: ../gtk/gtkfilechoosersettings.c:362 ../gtk/gtkfilesel.c:1349
 #: ../gtk/gtkfilesel.c:1358
 #, c-format
 msgid "Error creating folder '%s': %s"
@@ -1912,8 +1926,10 @@ msgstr "Fájl át_nevezése"
 
 #: ../gtk/gtkfilesel.c:1347
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "A(z) „%s” mappanév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"A(z) „%s” mappanév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
 #: ../gtk/gtkfilesel.c:1392
 msgid "New Folder"
@@ -1930,7 +1946,8 @@ msgstr "Lét_rehozás"
 #: ../gtk/gtkfilesel.c:1474 ../gtk/gtkfilesel.c:1581 ../gtk/gtkfilesel.c:1594
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "A(z) „%s” fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgstr ""
+"A(z) „%s” fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
 #: ../gtk/gtkfilesel.c:1477 ../gtk/gtkfilesel.c:1487
 #, c-format
@@ -2067,7 +2084,7 @@ msgstr "_Gamma érték"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: ../gtk/gtkiconfactory.c:1403
+#: ../gtk/gtkiconfactory.c:1404
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Hiba az ikon betöltésekor: %s"
@@ -2197,27 +2214,27 @@ msgid "Invalid URI"
 msgstr "Érvénytelen URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:445
+#: ../gtk/gtkmain.c:450
 msgid "Load additional GTK+ modules"
 msgstr "További GTK+ modulok betöltése"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:446
+#: ../gtk/gtkmain.c:451
 msgid "MODULES"
 msgstr "MODULOK"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:453
 msgid "Make all warnings fatal"
 msgstr "Minden figyelmeztetés végzetes legyen"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:451
+#: ../gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to set"
 msgstr "Beállítandó Gtk+ debug jelzőbitek"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:454
+#: ../gtk/gtkmain.c:459
 msgid "GTK+ debugging flags to unset"
 msgstr "Kikapcsolandó Gtk+ jelzőbitek"
 
@@ -2226,20 +2243,20 @@ msgstr "Kikapcsolandó Gtk+ jelzőbitek"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:702
+#: ../gtk/gtkmain.c:707
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:768
+#: ../gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nem nyitható meg a megjelenítő: %s"
 
-#: ../gtk/gtkmain.c:805
+#: ../gtk/gtkmain.c:810
 msgid "GTK+ Options"
 msgstr "GTK+ beállításai"
 
-#: ../gtk/gtkmain.c:805
+#: ../gtk/gtkmain.c:810
 msgid "Show GTK+ Options"
 msgstr "GTK+ beállítások megjelenítése"
 
@@ -2923,7 +2940,7 @@ msgstr "_Félkövér"
 #: ../gtk/gtkstock.c:300
 msgctxt "Stock label"
 msgid "_Cancel"
-msgstr "Mé_gsem"
+msgstr "_Mégsem"
 
 #: ../gtk/gtkstock.c:301
 msgctxt "Stock label"
@@ -3398,12 +3415,14 @@ msgstr "A(z) <%s> elem nem rendelkezik sem „név” sem „azonosító” attr
 #: ../gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr "A(z) „%s” attribútum kétszer lett megismételve ugyanazon a(z) <%s> elemen"
+msgstr ""
+"A(z) „%s” attribútum kétszer lett megismételve ugyanazon a(z) <%s> elemen"
 
 #: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr "A(z) „%s” attribútum <%s> elemen érvénytelen ebben a szövegkörnyezetben"
+msgstr ""
+"A(z) „%s” attribútum <%s> elemen érvénytelen ebben a szövegkörnyezetben"
 
 #: ../gtk/gtktextbufferserialize.c:1022
 #, c-format
@@ -3437,7 +3456,8 @@ msgstr "A(z) „%s” nem érvényes attribútumnév"
 
 #: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "„%s” nem alakítható „%s” típusú értékké „%s” attribútumhoz"
 
 #: ../gtk/gtktextbufferserialize.c:1202
@@ -3458,7 +3478,8 @@ msgstr "A(z) „%s” címke prioritása („%s”) érvénytelen"
 #: ../gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr "A szöveg legkülső elemének <%s> helyett text_view_markup> elemnek kell lennie"
+msgstr ""
+"A szöveg legkülső elemének <%s> helyett text_view_markup> elemnek kell lennie"
 
 #: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
 #, c-format
@@ -3474,7 +3495,8 @@ msgid "Serialized data is malformed"
 msgstr "A sorba fejtett adatok rosszul formázottak"
 
 #: ../gtk/gtktextbufferserialize.c:1857
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "A sorba fejtett adatok rosszul formázottak. Az első szakasz nem "
 "GTKTEXTBUFFERCONTENTS-0001"
@@ -4407,7 +4429,8 @@ msgstr "ROC 8k"
 #: ../gtk/updateiconcache.c:492 ../gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr "eltérő idata található a szimbolikusan linkelt „%s” és „%s” elemekhez\n"
+msgstr ""
+"eltérő idata található a szimbolikusan linkelt „%s” és „%s” elemekhez\n"
 
 #: ../gtk/updateiconcache.c:1374
 #, c-format
@@ -4886,4 +4909,3 @@ msgstr "Nyomtatás tesztnyomtatóra"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nem lehet információt szerezni a(z) „%s” fájlról: %s"
-
