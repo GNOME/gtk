@@ -1,3 +1,23 @@
+2009-01-16  Daniel Elstner  <danielk@openismus.com>
+
+	* modules/input/gtkimcontextmultipress.[ch]: Remove the namespace
+	prefix from functions defined locally only.  Clean up the code and
+	change indentation to match the GTK+ coding style.
+	(_GtkImContextMultipress::key_sequences): Replace array of pointers
+	by GHashTable.  Adapt the implementation accordingly.
+	(passthrough_enabled_for_window): Remove.  The passthrough hack is
+	no longer necessary thanks to the recently introduced "im-module"
+	property of GtkEntry and GtkTextView.
+	(load_config): Rework to implement an improved configuration file
+	format.  Just fetch all keys of the group instead of expecting the
+	keys to be named a certain way.  This also allows interpreting the
+	config key itself as the GDK key name to bind the character sequence
+	to, thereby making it independent of the sequence itself.
+
+	* modules/input/im-multipress.conf: New example configuration using
+	the new syntax.  The example sequences are now bound to the numeric
+	keypad and imitate the behavior of a standard mobile phone.
+
 2009-01-15  Murray Cumming  <murrayc@murrayc.com>
 
 	* gtk/gtkimcontext.c: documentation description: Mention the various 
