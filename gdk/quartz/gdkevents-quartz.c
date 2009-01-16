@@ -803,7 +803,7 @@ synthesize_crossing_events (GdkWindow      *window,
 }
 
 void
-_gdk_quartz_events_send_map_events (GdkWindow *window)
+_gdk_quartz_events_send_map_event (GdkWindow *window)
 {
   GList *list;
   GdkWindow *interested_window;

@@ -1073,7 +1073,7 @@ gdk_window_quartz_show (GdkWindow *window)
       [(GdkQuartzWindow*)impl->toplevel showAndMakeKey:make_key];
       clear_toplevel_order ();
 
-      _gdk_quartz_events_send_map_events (window);
+      _gdk_quartz_events_send_map_event (window);
     }
   else
     {
