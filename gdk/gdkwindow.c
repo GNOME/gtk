@@ -3756,8 +3756,13 @@ gdk_window_draw_pixbuf (GdkDrawable     *drawable,
 
   if (GDK_WINDOW_DESTROYED (drawable))
     return;
-  
-  if (gc)
+
+  /* If no gc => no user clipping, but we need clipping
+     for window emulation, so use a scratch gc */
+  if (!gc)
+    gc = _gdk_drawable_get_scratch_gc (drawable, FALSE);
+
+  /* Need block to make OFFSET_GC macro to work */
     {
       OFFSET_GC (gc);
   
@@ -3782,29 +3787,6 @@ gdk_window_draw_pixbuf (GdkDrawable     *drawable,
 	}
       
       RESTORE_GC (gc);
-    }
-  else
-    {
-      gint x_offset, y_offset;
-      gdk_window_get_offsets (drawable, &x_offset, &y_offset);
-      
-      if (private->paint_stack)
-	{
-	  GdkWindowPaint *paint = private->paint_stack->data;
-	  /* TODO: Do paint clipping here... */
-	  gdk_draw_pixbuf (paint->pixmap, gc, pixbuf, src_x, src_y,
-			   dest_x - x_offset, dest_y - y_offset,
-			   width, height,
-			    dither, x_dither - x_offset, y_dither - y_offset);
-	}
-      else
-	{
-	  /* TODO: No GC passed in, but still want clipping here... */
-	  gdk_draw_pixbuf (private->impl, gc, pixbuf, src_x, src_y,
-			   dest_x - x_offset, dest_y - y_offset,
-			   width, height,
-			   dither, x_dither, y_dither);
-	}
     }
 }
 
