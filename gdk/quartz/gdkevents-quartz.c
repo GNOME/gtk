@@ -1430,7 +1430,10 @@ fill_button_event (GdkWindow *window,
   event->button.state = state;
   event->button.button = button;
   event->button.device = _gdk_display->core_pointer;
-  convert_window_coordinates_to_root (window, x, y, 
+
+  convert_window_coordinates_to_root (window,
+                                      event->button.x,
+                                      event->button.y,
 				      &event->button.x_root,
 				      &event->button.y_root);
 }
@@ -1442,26 +1445,23 @@ fill_motion_event (GdkWindow *window,
                    gint       x,
                    gint       y)
 {
-  GdkEventType type;
-  GdkModifierType state = 0;
+  GdkModifierType state;
+
+  state = get_keyboard_modifiers_from_ns_event (nsevent);
 
   switch ([nsevent type])
     {
     case NSLeftMouseDragged:
     case NSRightMouseDragged:
     case NSOtherMouseDragged:
-      state = get_mouse_button_modifiers_from_ns_event (nsevent);
-      /* Fall through */
-    case NSMouseMoved:
-      type = GDK_MOTION_NOTIFY;
+      state |= get_mouse_button_modifiers_from_ns_event (nsevent);
       break;
-    default:
-      g_assert_not_reached ();
+
+    case NSMouseMoved:
+      break;
     }
 
-  state |= get_keyboard_modifiers_from_ns_event (nsevent);
-
-  event->any.type = type;
+  event->any.type = GDK_MOTION_NOTIFY;
   event->motion.window = window;
   event->motion.time = get_time_from_ns_event (nsevent);
   event->motion.x = x;
@@ -1470,32 +1470,43 @@ fill_motion_event (GdkWindow *window,
   event->motion.state = state;
   event->motion.is_hint = FALSE;
   event->motion.device = _gdk_display->core_pointer;
-  convert_window_coordinates_to_root (window, x, y,
-				      &event->motion.x_root, &event->motion.y_root);
+
+  convert_window_coordinates_to_root (window,
+                                      event->motion.x,
+                                      event->motion.y,
+				      &event->motion.x_root,
+                                      &event->motion.y_root);
 }
 
 static void
 fill_scroll_event (GdkWindow          *window,
                    GdkEvent           *event,
                    NSEvent            *nsevent,
+                   gint                x,
+                   gint                y,
                    GdkScrollDirection  direction)
 {
+  GdkWindowObject *private;
   NSPoint point;
-  
+
+  private = GDK_WINDOW_OBJECT (window);
+
+  point = [nsevent locationInWindow];
+
   event->any.type = GDK_SCROLL;
   event->scroll.window = window;
   event->scroll.time = get_time_from_ns_event (nsevent);
-
-  point = [nsevent locationInWindow];
-  event->scroll.x = point.x;
-  event->scroll.y = point.y;
+  event->scroll.x = x;
+  event->scroll.y = y;
   event->scroll.state = get_keyboard_modifiers_from_ns_event (nsevent);
-  convert_window_coordinates_to_root (window, event->scroll.x, event->scroll.y, 
-				      &event->scroll.x_root,
-				      &event->scroll.y_root);
-
   event->scroll.direction = direction;
   event->scroll.device = _gdk_display->core_pointer;
+
+  convert_window_coordinates_to_root (window,
+                                      event->scroll.x,
+                                      event->scroll.y,
+				      &event->scroll.x_root,
+				      &event->scroll.y_root);
 }
 
 static void
@@ -1508,17 +1519,15 @@ fill_key_event (GdkWindow    *window,
   gchar buf[7];
   gunichar c = 0;
 
-  event->any.type = type;
-
   priv = (GdkEventPrivate *) event;
   priv->windowing_data = [nsevent retain];
 
+  event->any.type = type;
   event->key.window = window;
   event->key.time = get_time_from_ns_event (nsevent);
   event->key.state = get_keyboard_modifiers_from_ns_event (nsevent);
   event->key.hardware_keycode = [nsevent keyCode];
   event->key.group = ([nsevent modifierFlags] & NSAlternateKeyMask) ? 1 : 0;
-
   event->key.keyval = GDK_VoidSymbol;
   
   gdk_keymap_translate_keyboard_state (NULL,
