@@ -1398,6 +1398,42 @@ find_window_for_ns_event (NSEvent *nsevent,
 }
 
 static void
+fill_crossing_event (GdkWindow       *toplevel,
+                     GdkEvent        *event,
+                     NSEvent         *nsevent,
+                     gint             x,
+                     gint             y,
+                     GdkEventType     event_type,
+                     GdkCrossingMode  mode,
+                     GdkNotifyType    detail)
+{
+  GdkWindowObject *private;
+  NSPoint point;
+
+  private = GDK_WINDOW_OBJECT (toplevel);
+
+  point = [nsevent locationInWindow];
+
+  event->any.type = event_type;
+  event->crossing.window = toplevel;
+  event->crossing.subwindow = NULL;
+  event->crossing.time = get_time_from_ns_event (nsevent);
+  event->crossing.x = x;
+  event->crossing.y = y;
+  event->crossing.mode = mode;
+  event->crossing.detail = detail;
+  event->crossing.state = get_keyboard_modifiers_from_ns_event (nsevent);
+
+  convert_window_coordinates_to_root (toplevel,
+                                      event->crossing.x,
+                                      event->crossing.y,
+				      &event->crossing.x_root,
+				      &event->crossing.y_root);
+
+  /* FIXME: Focus and button state? */
+}
+
+static void
 fill_button_event (GdkWindow *window,
                    GdkEvent  *event,
                    NSEvent   *nsevent,
