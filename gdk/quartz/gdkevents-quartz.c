@@ -112,7 +112,7 @@ gdk_quartz_event_get_nsevent (GdkEvent *event)
   return ((GdkEventPrivate *) event)->windowing_data;
 }
 
-void 
+void
 _gdk_events_init (void)
 {
   _gdk_quartz_event_loop_init ();
@@ -802,7 +802,7 @@ synthesize_crossing_events (GdkWindow      *window,
     _gdk_quartz_events_update_cursor (window);
 }
 
-void 
+void
 _gdk_quartz_events_send_map_events (GdkWindow *window)
 {
   GList *list;
@@ -838,7 +838,7 @@ _gdk_quartz_events_get_mouse_window (gboolean consider_grabs)
 }
 
 /* Update mouse window */
-void 
+void
 _gdk_quartz_events_update_mouse_window (GdkWindow *window)
 {
   if (window == current_mouse_window)
@@ -1958,7 +1958,7 @@ gdk_flush (void)
   /* Not supported. */
 }
 
-void 
+void
 gdk_display_add_client_message_filter (GdkDisplay   *display,
 				       GdkAtom       message_type,
 				       GdkFilterFunc func,
@@ -1967,7 +1967,7 @@ gdk_display_add_client_message_filter (GdkDisplay   *display,
   /* Not supported. */
 }
 
-void 
+void
 gdk_add_client_message_filter (GdkAtom       message_type,
 			       GdkFilterFunc func,
 			       gpointer      data)
