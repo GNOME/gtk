@@ -26,6 +26,7 @@ endif
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
 	simple				\
+	flicker				\
 	print-editor			\
 	testaccel			\
 	testassistant			\
@@ -104,6 +105,7 @@ endif
 
 endif
 
+flicker_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 print_editor_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
@@ -163,6 +165,7 @@ testgrouping_DEPENDENCIES = $(TEST_DEPS)
 testtooltips_DEPENDENCIES = $(TEST_DEPS)
 testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
 
+flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 print_editor_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)
