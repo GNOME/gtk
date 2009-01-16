@@ -6382,6 +6382,7 @@ gdk_window_shape_combine_region (GdkWindow       *window,
                                  gint             offset_y)
 {
   GdkWindowObject *private;
+  GdkRegion *old_region, *new_region, *diff;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -6394,6 +6395,10 @@ gdk_window_shape_combine_region (GdkWindow       *window,
 
   if (private->shape)
     gdk_region_destroy (private->shape);
+  
+  old_region = NULL;
+  if (GDK_WINDOW_IS_MAPPED (window))
+    old_region = gdk_region_copy (private->clip_region);
 
   if (shape_region)
     {
@@ -6404,6 +6409,37 @@ gdk_window_shape_combine_region (GdkWindow       *window,
     private->shape = NULL;
   
   recompute_visible_regions (private, TRUE, FALSE);
+
+  if (old_region)
+    {
+      new_region = gdk_region_copy (private->clip_region);
+
+      /* New area in the window, needs invalidation */
+      diff = gdk_region_copy (new_region);
+      gdk_region_subtract (diff, old_region);
+
+      gdk_window_invalidate_region (window, diff, TRUE);
+
+      gdk_region_destroy (diff);
+
+      if (private->parent != NULL &&
+	  GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
+	{
+	  /* New area in the non-root parent window, needs invalidation */
+	  diff = gdk_region_copy (old_region);
+	  gdk_region_subtract (diff, new_region);
+	  
+	  /* Adjust region to parent window coords */
+	  gdk_region_offset (diff, private->x, private->y);
+	  
+	  gdk_window_invalidate_region (GDK_WINDOW (private->parent), diff, TRUE);
+	  
+	  gdk_region_destroy (diff);
+	}
+
+      gdk_region_destroy (new_region);
+      gdk_region_destroy (old_region);
+    }
 }
 
 static void
