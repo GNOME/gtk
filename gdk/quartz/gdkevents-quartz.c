@@ -317,50 +317,27 @@ append_event (GdkEvent *event)
   _gdk_event_queue_append (_gdk_display, event);
 }
 
-static GdkFilterReturn
-apply_filters (GdkWindow  *window,
-	       NSEvent    *nsevent,
-	       GList      *filters)
+static gint
+gdk_event_apply_filters (NSEvent *nsevent,
+			 GdkEvent *event,
+			 GList *filters)
 {
-  GdkFilterReturn result = GDK_FILTER_CONTINUE;
-  GdkEvent *event;
-  GList *node;
   GList *tmp_list;
-
-  event = gdk_event_new (GDK_NOTHING);
-  if (window != NULL)
-    event->any.window = g_object_ref (window);
-  ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
-
-  /* I think GdkFilterFunc semantics require the passed-in event
-   * to already be in the queue. The filter func can generate
-   * more events and append them after it if it likes.
-   */
-  node = _gdk_event_queue_append (_gdk_display, event);
+  GdkFilterReturn result;
   
   tmp_list = filters;
+
   while (tmp_list)
     {
-      GdkEventFilter *filter = (GdkEventFilter *) tmp_list->data;
+      GdkEventFilter *filter = (GdkEventFilter*) tmp_list->data;
       
       tmp_list = tmp_list->next;
       result = filter->function (nsevent, event, filter->data);
-      if (result != GDK_FILTER_CONTINUE)
-	break;
+      if (result !=  GDK_FILTER_CONTINUE)
+	return result;
     }
 
-  if (result == GDK_FILTER_CONTINUE || result == GDK_FILTER_REMOVE)
-    {
-      _gdk_event_queue_remove_link (_gdk_display, node);
-      g_list_free_1 (node);
-      gdk_event_free (event);
-    }
-  else /* GDK_FILTER_TRANSLATE */
-    {
-      ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
-      fixup_event (event);
-    }
-  return result;
+  return GDK_FILTER_CONTINUE;
 }
 
 /* Checks if the passed in window is interested in the event mask, and
@@ -1412,13 +1389,13 @@ find_window_for_ns_event (NSEvent *nsevent,
   return NULL;
 }
 
-static GdkEvent *
-create_button_event (GdkWindow *window, 
-                     NSEvent   *nsevent,
-		     gint       x,
-                     gint       y)
+static void
+fill_button_event (GdkWindow *window,
+                   GdkEvent  *event,
+                   NSEvent   *nsevent,
+                   gint       x,
+                   gint       y)
 {
-  GdkEvent *event;
   GdkEventType type;
   gint state;
   gint button;
@@ -1444,7 +1421,7 @@ create_button_event (GdkWindow *window,
   
   button = get_mouse_button_from_ns_event (nsevent);
 
-  event = gdk_event_new (type);
+  event->any.type = type;
   event->button.window = window;
   event->button.time = get_time_from_ns_event (nsevent);
   event->button.x = x;
@@ -1456,17 +1433,15 @@ create_button_event (GdkWindow *window,
   convert_window_coordinates_to_root (window, x, y, 
 				      &event->button.x_root,
 				      &event->button.y_root);
-
-  return event;
 }
 
-static GdkEvent *
-create_motion_event (GdkWindow *window, 
-                     NSEvent   *nsevent, 
-                     gint       x, 
-                     gint       y)
+static void
+fill_motion_event (GdkWindow *window,
+                   GdkEvent  *event,
+                   NSEvent   *nsevent,
+                   gint       x,
+                   gint       y)
 {
-  GdkEvent *event;
   GdkEventType type;
   GdkModifierType state = 0;
 
@@ -1486,7 +1461,7 @@ create_motion_event (GdkWindow *window,
 
   state |= get_keyboard_modifiers_from_ns_event (nsevent);
 
-  event = gdk_event_new (type);
+  event->any.type = type;
   event->motion.window = window;
   event->motion.time = get_time_from_ns_event (nsevent);
   event->motion.x = x;
@@ -1497,19 +1472,17 @@ create_motion_event (GdkWindow *window,
   event->motion.device = _gdk_display->core_pointer;
   convert_window_coordinates_to_root (window, x, y,
 				      &event->motion.x_root, &event->motion.y_root);
-  
-  return event;
 }
 
-static GdkEvent *
-create_scroll_event (GdkWindow          *window, 
-                     NSEvent            *nsevent, 
-                     GdkScrollDirection  direction)
+static void
+fill_scroll_event (GdkWindow          *window,
+                   GdkEvent           *event,
+                   NSEvent            *nsevent,
+                   GdkScrollDirection  direction)
 {
-  GdkEvent *event;
   NSPoint point;
   
-  event = gdk_event_new (GDK_SCROLL);
+  event->any.type = GDK_SCROLL;
   event->scroll.window = window;
   event->scroll.time = get_time_from_ns_event (nsevent);
 
@@ -1523,21 +1496,19 @@ create_scroll_event (GdkWindow          *window,
 
   event->scroll.direction = direction;
   event->scroll.device = _gdk_display->core_pointer;
-  
-  return event;
 }
 
-static GdkEvent *
-create_key_event (GdkWindow    *window, 
-                  NSEvent      *nsevent, 
-                  GdkEventType  type)
+static void
+fill_key_event (GdkWindow    *window,
+                GdkEvent     *event,
+                NSEvent      *nsevent,
+                GdkEventType  type)
 {
-  GdkEvent *event;
   GdkEventPrivate *priv;
   gchar buf[7];
   gunichar c = 0;
 
-  event = gdk_event_new (type);
+  event->any.type = type;
 
   priv = (GdkEventPrivate *) event;
   priv->windowing_data = [nsevent retain];
@@ -1644,7 +1615,6 @@ create_key_event (GdkWindow    *window,
 	  event->key.window,
 	  event->key.keyval ? gdk_keyval_name (event->key.keyval) : "(none)",
 	  event->key.keyval));
-  return event;
 }
 
 GdkEventMask 
@@ -1654,13 +1624,13 @@ _gdk_quartz_events_get_current_event_mask (void)
 }
 
 static gboolean
-gdk_event_translate (NSEvent *nsevent)
+gdk_event_translate (GdkEvent *event,
+                     NSEvent  *nsevent)
 {
   NSWindow *nswindow;
   GdkWindow *window;
-  GdkFilterReturn result;
-  GdkEvent *event;
   int x, y;
+  gboolean return_val;
 
   /* There is no support for real desktop wide grabs, so we break
    * grabs when the application loses focus (gets deactivated).
@@ -1705,17 +1675,17 @@ gdk_event_translate (NSEvent *nsevent)
 
   nswindow = [nsevent window];
 
-  /* Apply any global filters. */
   if (_gdk_default_filters)
     {
-      result = apply_filters (NULL, nsevent, _gdk_default_filters);
+      /* Apply global filters */
+      GdkFilterReturn result;
 
-      /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
-       * happened. If it is GDK_FILTER_REMOVE,
-       * we return TRUE and won't send the message to Quartz.
-       */
-      if (result == GDK_FILTER_REMOVE)
-	return TRUE;
+      result = gdk_event_apply_filters (nsevent, event, _gdk_default_filters);
+      if (result != GDK_FILTER_CONTINUE)
+        {
+          return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+          goto done;
+        }
     }
 
   /* Ignore events for no window or ones not created by GDK. */
@@ -1745,9 +1715,26 @@ gdk_event_translate (NSEvent *nsevent)
     return FALSE;
 
   /* Apply any window filters. */
-  result = apply_filters (window, nsevent, ((GdkWindowObject *) window)->filters);
-  if (result == GDK_FILTER_REMOVE)
-    return TRUE;
+  if (GDK_IS_WINDOW (window))
+    {
+      GdkWindowObject *filter_private = (GdkWindowObject *) window;
+      GdkFilterReturn result;
+
+      if (filter_private->filters)
+	{
+	  g_object_ref (window);
+
+	  result = gdk_event_apply_filters (nsevent, event, filter_private->filters);
+
+	  g_object_unref (window);
+
+	  if (result != GDK_FILTER_CONTINUE)
+	    {
+	      return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+	      goto done;
+	    }
+	}
+    }
 
   /* We need the appliction to be activated on clicks so that popups
    * like context menus get events routed properly. This is handled
@@ -1761,6 +1748,8 @@ gdk_event_translate (NSEvent *nsevent)
     }
 
   current_event_mask = get_event_mask_from_ns_event (nsevent);
+
+  return_val = TRUE;
 
   switch ([nsevent type])
     {
@@ -1783,17 +1772,13 @@ gdk_event_translate (NSEvent *nsevent)
 	  }
       }
       
-      event = create_button_event (window, nsevent, x, y);
-      append_event (event);
-      
-      _gdk_event_button_generate (_gdk_display, event);
+      fill_button_event (window, event, nsevent, x, y);
       break;
 
     case NSLeftMouseUp:
     case NSRightMouseUp:
     case NSOtherMouseUp:
-      event = create_button_event (window, nsevent, x, y);
-      append_event (event);
+      fill_button_event (window, event, nsevent, x, y);
       
       /* Ungrab implicit grab */
       if (_gdk_quartz_pointer_grab_window && pointer_grab_implicit)
@@ -1804,8 +1789,7 @@ gdk_event_translate (NSEvent *nsevent)
     case NSRightMouseDragged:
     case NSOtherMouseDragged:
     case NSMouseMoved:
-      event = create_motion_event (window, nsevent, x, y);
-      append_event (event);
+      fill_motion_event (window, event, nsevent, x, y);
       break;
 
     case NSScrollWheel:
@@ -1827,15 +1811,7 @@ gdk_event_translate (NSEvent *nsevent)
 	else
 	  direction = GDK_SCROLL_UP;
 
-	while (dy > 0.0)
-	  {
-	    event = create_scroll_event (window, nsevent, direction);
-	    append_event (event);
-	    dy--;
-
-            /* Ignore the delta for now, things get too slow when the events queue up. */
-            break;
-	  }
+        fill_scroll_event (window, event, nsevent, direction);
 
 	/* Now do x events */
 	if (dx < 0.0)
@@ -1846,16 +1822,7 @@ gdk_event_translate (NSEvent *nsevent)
 	else
 	  direction = GDK_SCROLL_LEFT;
 
-	while (dx > 0.0)
-	  {
-	    event = create_scroll_event (window, nsevent, direction);
-	    append_event (event);
-	    dx--;
-            
-            /* Ignore the delta for now, things get too slow when the events queue up. */
-            break;
-	  }
-
+        fill_scroll_event (window, event, nsevent, direction);
       }
       break;
 
@@ -1867,11 +1834,9 @@ gdk_event_translate (NSEvent *nsevent)
 
         type = _gdk_quartz_keys_event_type (nsevent);
         if (type == GDK_NOTHING)
-          return FALSE;
-        
-        event = create_key_event (window, nsevent, type);
-        append_event (event);
-        return TRUE;
+          return_val = FALSE;
+        else
+          fill_key_event (window, event, nsevent, type);
       }
       break;
 
@@ -1880,25 +1845,63 @@ gdk_event_translate (NSEvent *nsevent)
       break;
     }
 
-  return FALSE;
+ done:
+  if (return_val)
+    {
+      if (event->any.window)
+	g_object_ref (event->any.window);
+      if (((event->any.type == GDK_ENTER_NOTIFY) ||
+	   (event->any.type == GDK_LEAVE_NOTIFY)) &&
+	  (event->crossing.subwindow != NULL))
+	g_object_ref (event->crossing.subwindow);
+    }
+  else
+    {
+      /* Mark this event as having no resources to be freed */
+      event->any.window = NULL;
+      event->any.type = GDK_NOTHING;
+    }
+
+  return return_val;
 }
 
 void
 _gdk_events_queue (GdkDisplay *display)
 {  
-  NSEvent *event;
+  NSEvent *nsevent;
 
-  event = _gdk_quartz_event_loop_get_pending ();
-  if (event)
+  nsevent = _gdk_quartz_event_loop_get_pending ();
+  if (nsevent)
     {
-      if (!gdk_event_translate (event))
+      GdkEvent *event;
+      GList *node;
+
+      event = gdk_event_new (GDK_NOTHING);
+
+      event->any.window = NULL;
+      event->any.send_event = FALSE;
+
+      ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
+
+      node = _gdk_event_queue_append (display, event);
+
+      if (gdk_event_translate (event, nsevent))
         {
+	  ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
+          _gdk_windowing_got_event (display, node, event);
+        }
+      else
+        {
+	  _gdk_event_queue_remove_link (display, node);
+	  g_list_free_1 (node);
+	  gdk_event_free (event);
+
           GDK_THREADS_LEAVE ();
-          [NSApp sendEvent:event];
+          [NSApp sendEvent:nsevent];
           GDK_THREADS_ENTER ();
         }
 
-      _gdk_quartz_event_loop_release_event (event);
+      _gdk_quartz_event_loop_release_event (nsevent);
     }
 }
 
