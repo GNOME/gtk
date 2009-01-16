@@ -1,3 +1,13 @@
+2009-01-16  Cody Russell  <bratsche@gnome.org>
+
+        Bug 567944 – [Win32] Sorted treeview columns can be unreadable
+
+        * modules/engines/ms-windows/msw_style.c: Draw selected treeview
+        cells according to treeview focus, but ignore whether it is in
+        a sorted column or not.  Otherwise the intersection of a selected
+        row and a sorted column looks very strange if the treeview does
+        not have focus.
+
 2009-01-12  Tor Lillqvist  <tml@iki.fi>
 
 	Bug 164002 - query scripts don't work uninstalled on windows

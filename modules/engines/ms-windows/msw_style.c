@@ -2897,7 +2897,16 @@ draw_flat_box (GtkStyle *style, GdkWindow *window,
 {
   if (detail)
     {
-      if (!strcmp (detail, "checkbutton"))
+      if (state_type == GTK_STATE_SELECTED &&
+	  (!strncmp ("cell_even", detail, 9) || !strncmp ("cell_odd", detail, 8)))
+	{
+	  GdkGC *gc = GTK_WIDGET_HAS_FOCUS (widget) ? style->base_gc[state_type] : style->base_gc[GTK_STATE_ACTIVE];
+
+	  gdk_draw_rectangle (window, gc, TRUE, x, y, width, height);
+
+	  return;
+	}
+      else if (!strcmp (detail, "checkbutton"))
 	{
 	  if (state_type == GTK_STATE_PRELIGHT)
 	    {
