@@ -578,250 +578,24 @@ convert_window_coordinates_to_root (GdkWindow *window,
     }
 }
 
-/* FIXME: Refactor and share with scroll event. */
-static GdkEvent *
-create_crossing_event (GdkWindow      *window, 
-		       NSEvent        *nsevent, 
-		       GdkEventType    event_type,
-		       GdkCrossingMode mode, 
-		       GdkNotifyType   detail)
-{
-  GdkEvent *event;
-  gint x_tmp, y_tmp;
-
-  event = gdk_event_new (event_type);
-
-  event->crossing.window = window;
-  event->crossing.subwindow = NULL; /* FIXME */
-  event->crossing.time = get_time_from_ns_event (nsevent);
-
-  /* Split out this block: */
-  {
-    NSWindow *nswindow;
-    GdkWindow *toplevel;
-    GdkWindowImplQuartz *impl;
-    GdkWindowObject *private;
-    NSPoint point;
-
-    nswindow = [nsevent window];
-    point = [nsevent locationInWindow];
-
-    toplevel = [(GdkQuartzView *)[nswindow contentView] gdkWindow];
-
-    impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
-    private = GDK_WINDOW_OBJECT (toplevel);
-
-    x_tmp = point.x;
-    y_tmp = private->height - point.y;
-
-    get_converted_window_coordinates (toplevel,
-                                      x_tmp, y_tmp,
-                                      window,
-                                      &x_tmp, &y_tmp);
-    }
-
-  event->crossing.x = x_tmp;
-  event->crossing.y = y_tmp;
-
-  convert_window_coordinates_to_root (window, 
-                                      event->crossing.x, 
-                                      event->crossing.y, 
-				      &event->crossing.x_root,
-				      &event->crossing.y_root);
-
-  event->crossing.mode = mode;
-  event->crossing.detail = detail;
-  event->crossing.state = get_keyboard_modifiers_from_ns_event (nsevent);
-
-  /* FIXME: focus and button state */
-
-  return event;
-}
-
-static void
-synthesize_enter_event (GdkWindow      *window,
-			NSEvent        *nsevent,
-			GdkCrossingMode mode,
-			GdkNotifyType   detail)
-{
-  GdkEvent *event;
-
-  if (_gdk_quartz_pointer_grab_window != NULL && 
-      !pointer_grab_owner_events && 
-      !(pointer_grab_event_mask & GDK_ENTER_NOTIFY_MASK))
-    return;
-
-  if (!(GDK_WINDOW_OBJECT (window)->event_mask & GDK_ENTER_NOTIFY_MASK))
-    return;
-
-  event = create_crossing_event (window, nsevent, GDK_ENTER_NOTIFY,
-				 mode, detail);
-
-  append_event (event);
-}
-  
-static void
-synthesize_enter_events (GdkWindow      *from,
-			 GdkWindow      *to,
-			 NSEvent        *nsevent,
-			 GdkCrossingMode mode,
-			 GdkNotifyType   detail)
-{
-  GdkWindow *prev = gdk_window_get_parent (to);
-
-  if (prev != from)
-    synthesize_enter_events (from, prev, nsevent, mode, detail);
-  synthesize_enter_event (to, nsevent, mode, detail);
-}
-
-static void
-synthesize_leave_event (GdkWindow      *window,
-			NSEvent        *nsevent,
-			GdkCrossingMode mode,
-			GdkNotifyType   detail)
-{
-  GdkEvent *event;
-
-  if (_gdk_quartz_pointer_grab_window != NULL && 
-      !pointer_grab_owner_events && 
-      !(pointer_grab_event_mask & GDK_LEAVE_NOTIFY_MASK))
-    return;
-
-  if (!(GDK_WINDOW_OBJECT (window)->event_mask & GDK_LEAVE_NOTIFY_MASK))
-    return;
-
-  event = create_crossing_event (window, nsevent, GDK_LEAVE_NOTIFY,
-				 mode, detail);
-
-  append_event (event);
-}
-			 
-static void
-synthesize_leave_events (GdkWindow    	*from,
-			 GdkWindow    	*to,
-			 NSEvent        *nsevent,
-			 GdkCrossingMode mode,
-			 GdkNotifyType	 detail)
-{
-  GdkWindow *next = gdk_window_get_parent (from);
-  
-  synthesize_leave_event (from, nsevent, mode, detail);
-  if (next != to)
-    synthesize_leave_events (next, to, nsevent, mode, detail);
-}
-			 
-static void
-synthesize_crossing_events (GdkWindow      *window,
-			    GdkCrossingMode mode,
-			    NSEvent        *nsevent,
-			    gint            x,
-			    gint            y)
-{
-  GdkWindow *intermediate, *tem, *common_ancestor;
-
-  if (window == current_mouse_window)
-    return;
-
-  if (_gdk_quartz_window_is_ancestor (current_mouse_window, window))
-    {
-      /* Pointer has moved to an inferior window. */
-      synthesize_leave_event (current_mouse_window, nsevent, mode, GDK_NOTIFY_INFERIOR);
-
-      /* If there are intermediate windows, generate ENTER_NOTIFY
-       * events for them
-       */
-      intermediate = gdk_window_get_parent (window);
-
-      if (intermediate != current_mouse_window)
-	{
-	  synthesize_enter_events (current_mouse_window, intermediate, nsevent, mode, GDK_NOTIFY_VIRTUAL);
-	}
-
-      synthesize_enter_event (window, nsevent, mode, GDK_NOTIFY_ANCESTOR);
-    }
-  else if (_gdk_quartz_window_is_ancestor (window, current_mouse_window))
-    {
-      /* Pointer has moved to an ancestor window. */
-      synthesize_leave_event (current_mouse_window, nsevent, mode, GDK_NOTIFY_ANCESTOR);
-      
-      /* If there are intermediate windows, generate LEAVE_NOTIFY
-       * events for them
-       */
-      intermediate = gdk_window_get_parent (current_mouse_window);
-      if (intermediate != window)
-	{
-	  synthesize_leave_events (intermediate, window, nsevent, mode, GDK_NOTIFY_VIRTUAL);
-	}
-
-      synthesize_enter_event (window, nsevent, mode, GDK_NOTIFY_INFERIOR);
-    }
-  else if (current_mouse_window)
-    {
-      /* Find least common ancestor of current_mouse_window and window */
-      tem = current_mouse_window;
-      do {
-	common_ancestor = gdk_window_get_parent (tem);
-	tem = common_ancestor;
-      } while (common_ancestor &&
-	       !_gdk_quartz_window_is_ancestor (common_ancestor, window));
-      if (common_ancestor)
-	{
-	  synthesize_leave_event (current_mouse_window, nsevent, mode, GDK_NOTIFY_NONLINEAR);
-	  intermediate = gdk_window_get_parent (current_mouse_window);
-	  if (intermediate != common_ancestor)
-	    {
-	      synthesize_leave_events (intermediate, common_ancestor,
-				       nsevent, mode, GDK_NOTIFY_NONLINEAR_VIRTUAL);
-	    }
-	  intermediate = gdk_window_get_parent (window);
-	  if (intermediate != common_ancestor)
-	    {
-	      synthesize_enter_events (common_ancestor, intermediate,
-				       nsevent, mode, GDK_NOTIFY_NONLINEAR_VIRTUAL);
-	    }
-	  synthesize_enter_event (window, nsevent, mode, GDK_NOTIFY_NONLINEAR);
-	}
-    }
-  else
-    {
-      /* This means we have no current_mouse_window, which probably
-       * means that there is a bug somewhere, we should always have
-       * the root in we don't have another window. Does this ever
-       * happen?
-       */
-      g_warning ("Trying to create crossing event when current_mouse_window is NULL");
-    }
-
-  _gdk_quartz_events_update_mouse_window (window);
-
-  /* FIXME: This does't work when someone calls gdk_window_set_cursor
-   * during a grab. The right behavior is that the cursor doesn't
-   * change when a grab is in effect, but in that case it does.
-   */
-  if (window && !_gdk_quartz_pointer_grab_window)
-    _gdk_quartz_events_update_cursor (window);
-}
-
 void
 _gdk_quartz_events_send_map_event (GdkWindow *window)
 {
-  GList *list;
-  GdkWindow *interested_window;
   GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
-  interested_window = find_window_interested_in_event_mask (window, 
-							    GDK_STRUCTURE_MASK,
-							    TRUE);
-  
-  if (interested_window)
+  if (!impl->toplevel)
+    return;
+
+  if (private->event_mask & GDK_STRUCTURE_MASK)
     {
-      GdkEvent *event = gdk_event_new (GDK_MAP);
-      event->any.window = interested_window;
-      append_event (event);
-    }
+      GdkEvent event;
 
-  for (list = private->children; list != NULL; list = list->next)
-    _gdk_quartz_events_send_map_events ((GdkWindow *)list->data);
+      event.any.type = GDK_MAP;
+      event.any.window = window;
+  
+      gdk_event_put (&event);
+    }
 }
 
 /* Get current mouse window */
@@ -1134,130 +908,7 @@ _gdk_quartz_events_trigger_crossing_events (gboolean defer_to_mainloop)
   /*_gdk_quartz_window_debug_highlight (mouse_window, 0);*/
 #endif
 
-  synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, x, y);
-}
-
-/* Synthesizes crossing events if necessary, based on the passed in
- * NSEvent. Uses NSMouseEntered and NSMouseExisted for toplevels and
- * the mouse moved/dragged events for child windows, to see if the
- * mouse window has changed.
- */
-static void
-synthesize_crossing_events_for_ns_event (NSEvent *nsevent)
-{
-  NSEventType event_type;
-  GdkWindow *mouse_window;
-  gint x; 
-  gint y;
-
-  event_type = [nsevent type];
-
-  switch (event_type)
-    {
-    case NSMouseMoved:
-    case NSLeftMouseDragged:
-    case NSRightMouseDragged:
-    case NSOtherMouseDragged:
-      /* We only handle moving the pointer to another GDK window.
-       * Leaving to a non-GDK toplevel window (or window title bar or
-       * the desktop) is covered by NSMouseExited events.
-       */
-      mouse_window = find_mouse_window_for_ns_event (nsevent, &x, &y);
-      if (mouse_window != _gdk_root)
-        synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, x, y);
-
-      break;
-
-    case NSMouseEntered:
-      {
-	GdkWindow *event_toplevel;
-        GdkWindowImplQuartz *impl;
-        GdkWindowObject *private;
-        NSPoint point;
-
-        /* This is the only case where we actually use the window from
-         * the event since we need to know which toplevel we entered
-         * so it can be tracked properly.
-         */
-        event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
-        impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
-        private = GDK_WINDOW_OBJECT (event_toplevel);
-
-        point = [nsevent locationInWindow];
-
-        x = point.x;
-        y = private->height - point.y;
-
-	mouse_window = _gdk_quartz_window_find_child (event_toplevel, x, y);
-
-        /* Treat unknown windows (like the title bar buttons or
-         * desktop) as the root window.
-         */
-        if (!mouse_window)
-          mouse_window = _gdk_root;
-
-        if (mouse_window != event_toplevel)
-          get_converted_window_coordinates (event_toplevel,
-                                            x, y,
-                                            mouse_window,
-                                            &x, &y);
-
-        synthesize_crossing_events (mouse_window, GDK_CROSSING_NORMAL, nsevent, x, y);
-      }
-      break;
-
-    case NSMouseExited:
-      {
-	GdkWindow *event_toplevel;
-        GdkWindowImplQuartz *impl;
-        GdkWindowObject *private;
-        NSPoint point;
-
-        /* We only use NSMouseExited when leaving to the root
-         * window. The other cases are handled above by checking the
-         * motion/button events, or getting a NSMouseEntered for
-         * another GDK window. The reason we don't use NSMouseExited
-         * for other windows is that quartz first delivers the entered
-         * event and then the exited which is the opposite from what
-         * we need.
-         */
-        event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
-        impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
-        private = GDK_WINDOW_OBJECT (event_toplevel);
-        point = [nsevent locationInWindow];
-
-        x = point.x;
-        y = private->height - point.y;
-
-        x += GDK_WINDOW_OBJECT (event_toplevel)->x;
-        y += GDK_WINDOW_OBJECT (event_toplevel)->y;
-
-        /* If there is a window other than the root window at this
-         * position, it means we didn't exit to the root window and we
-         * ignore the event. (Note that we can get NULL here when swithing
-         * spaces for example.)
-         *
-         * FIXME: This is not enough, it doesn't catch the case where
-         * we leave a GDK window to a non-GDK window that has GDK
-         * windows below it.
-         */
-        mouse_window = _gdk_quartz_window_find_child (_gdk_root, x, y);
-
-        if (!mouse_window ||
-            gdk_window_get_toplevel (mouse_window) ==
-            gdk_window_get_toplevel (current_mouse_window))
-          {
-            mouse_window = _gdk_root;
-          }
-
-        if (mouse_window == _gdk_root)
-          synthesize_crossing_events (_gdk_root, GDK_CROSSING_NORMAL, nsevent, x, y);
-      }
-      break;
-
-    default:
-      break;
-    }
+  /* FIXME: create an event, fill it, put on the queue... */
 }
 
 /* This function finds the correct window to send an event to, taking
@@ -1670,6 +1321,69 @@ fill_key_event (GdkWindow    *window,
 	  event->key.keyval));
 }
 
+static gboolean
+synthesize_crossing_event (GdkWindow *window,
+                           GdkEvent  *event,
+                           NSEvent   *nsevent,
+                           gint       x,
+                           gint       y)
+{
+  GdkWindowObject *private;
+
+  private = GDK_WINDOW_OBJECT (window);
+
+  /* FIXME: Do we need to handle grabs here? */
+
+  switch ([nsevent type])
+    {
+    case NSMouseEntered:
+      {
+        /* Enter events are considered always to be from the root window as
+         * we can't know for sure from what window we enter.
+         */
+        if (!(private->event_mask & GDK_ENTER_NOTIFY_MASK))
+          return FALSE;
+
+        fill_crossing_event (window, event, nsevent,
+                             x, y,
+                             GDK_ENTER_NOTIFY,
+                             GDK_CROSSING_NORMAL,
+                             GDK_NOTIFY_ANCESTOR);
+      }
+      return TRUE;
+
+    case NSMouseExited:
+      {
+        /* Exited always is to the root window as far as we are concerned,
+         * since there is no way to reliably get information about what new
+         * window is entered when exiting one.
+         */
+        if (!(private->event_mask & GDK_LEAVE_NOTIFY_MASK))
+          return FALSE;
+
+        /*if (!mouse_window ||
+            gdk_window_get_toplevel (mouse_window) ==
+            gdk_window_get_toplevel (current_mouse_window))
+          {
+            mouse_window = _gdk_root;
+          }
+        */
+
+        fill_crossing_event (window, event, nsevent,
+                             x, y,
+                             GDK_LEAVE_NOTIFY,
+                             GDK_CROSSING_NORMAL,
+                             GDK_NOTIFY_ANCESTOR);
+      }
+      return TRUE;
+
+    default:
+      break;
+    }
+
+  return FALSE;
+}
+
 GdkEventMask 
 _gdk_quartz_events_get_current_event_mask (void)
 {
@@ -1754,11 +1468,6 @@ gdk_event_translate (GdkEvent *event,
       break_all_grabs ();
       return FALSE;
     }
-
-  /* Take care of NSMouseEntered/Exited events and mouse movements
-   * events and emit the right GDK crossing events.
-   */
-  synthesize_crossing_events_for_ns_event (nsevent);
 
   /* Find the right GDK window to send the event to, taking grabs and
    * event masks into consideration.
@@ -1871,6 +1580,11 @@ gdk_event_translate (GdkEvent *event,
             fill_scroll_event (window, event, nsevent, x, y, direction);
           }
       }
+      break;
+
+    case NSMouseEntered:
+    case NSMouseExited:
+      return_val = synthesize_crossing_event (window, event, nsevent, x, y);
       break;
 
     case NSKeyDown:
