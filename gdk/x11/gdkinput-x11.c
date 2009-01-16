@@ -416,15 +416,15 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 				 gdouble          *x_out,
 				 gdouble          *y_out)
 {
-  GdkWindowImplX11 *impl;
+  GdkWindowObject *window_private;
   int i;
   int x_axis = 0;
   int y_axis = 0;
 
   double device_width, device_height;
   double x_offset, y_offset, x_scale, y_scale;
-
-  impl = GDK_WINDOW_IMPL_X11 (((GdkWindowObject *) input_window->window)->impl);
+  
+  window_private = (GdkWindowObject *) input_window->window;
 
   for (i=0; i<gdkdev->info.num_axes; i++)
     {
@@ -476,26 +476,26 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 	}
       device_aspect = (device_height*y_resolution) /
         (device_width*x_resolution);
-      if (device_aspect * impl->width >= impl->height)
+      if (device_aspect * window_private->width >= window_private->height)
 	{
 	  /* device taller than window */
-	  x_scale = impl->width / device_width;
+	  x_scale = window_private->width / device_width;
 	  y_scale = (x_scale * x_resolution)
 	    / y_resolution;
 
 	  x_offset = 0;
 	  y_offset = -(device_height * y_scale - 
-			       impl->height)/2;
+		       window_private->height)/2;
 	}
       else
 	{
 	  /* window taller than device */
-	  y_scale = impl->height / device_height;
+	  y_scale = window_private->height / device_height;
 	  x_scale = (y_scale * y_resolution)
 	    / x_resolution;
 
 	  y_offset = 0;
-	  x_offset = - (device_width * x_scale - impl->width)/2;
+	  x_offset = - (device_width * x_scale - window_private->width)/2;
 	}
     }
 
