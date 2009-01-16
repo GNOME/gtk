@@ -493,6 +493,14 @@ get_event_mask_from_ns_event (NSEvent *nsevent)
 	    g_assert_not_reached ();
 	  }
       }
+      break;
+
+    case NSMouseEntered:
+      return GDK_ENTER_NOTIFY_MASK;
+
+    case NSMouseExited:
+      return GDK_LEAVE_NOTIFY_MASK;
+
     default:
       g_assert_not_reached ();
     }
