@@ -1807,31 +1807,25 @@ gdk_event_translate (GdkEvent *event,
 	float dy = [nsevent deltaY];
 	GdkScrollDirection direction;
 
-	/* The delta is how much the mouse wheel has moved. Since there's no such thing in GTK+
-	 * we accomodate by sending a different number of scroll wheel events.
-	 */
+        if (dy != 0)
+          {
+            if (dy < 0.0)
+              direction = GDK_SCROLL_DOWN;
+            else
+              direction = GDK_SCROLL_UP;
 
-	/* First do y events */
-	if (dy < 0.0)
-	  {
-	    dy = -dy;
-	    direction = GDK_SCROLL_DOWN;
-	  }
-	else
-	  direction = GDK_SCROLL_UP;
+            fill_scroll_event (window, event, nsevent, x, y, direction);
+          }
 
-        fill_scroll_event (window, event, nsevent, direction);
+        if (dx != 0)
+          {
+            if (dx < 0.0)
+              direction = GDK_SCROLL_RIGHT;
+            else
+              direction = GDK_SCROLL_LEFT;
 
-	/* Now do x events */
-	if (dx < 0.0)
-	  {
-	    dx = -dx;
-	    direction = GDK_SCROLL_RIGHT;
-	  }
-	else
-	  direction = GDK_SCROLL_LEFT;
-
-        fill_scroll_event (window, event, nsevent, direction);
+            fill_scroll_event (window, event, nsevent, x, y, direction);
+          }
       }
       break;
 
