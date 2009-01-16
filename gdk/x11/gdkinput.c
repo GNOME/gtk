@@ -324,6 +324,11 @@ _gdk_input_window_find(GdkWindow *window)
   GList *tmp_list;
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
 
+  /* Ensure we have a native window, or the input stuff won't work.
+     Its possible we could emulate this also, but at least this should make
+     it work. */
+  gdk_window_set_has_native (window, TRUE);
+
   for (tmp_list=display_x11->input_windows; tmp_list; tmp_list=tmp_list->next)
     if (((GdkInputWindow *)(tmp_list->data))->window == window)
       return (GdkInputWindow *)(tmp_list->data);
