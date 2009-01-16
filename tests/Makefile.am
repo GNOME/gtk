@@ -55,6 +55,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testmultiscreen			\
 	testnotebookdnd			\
 	testnouiprint			\
+	testoffscreen			\
 	testprint			\
 	testrgb				\
 	testrecentchooser 		\
@@ -133,6 +134,7 @@ testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
 testmultiscreen_DEPENDENCIES = $(TEST_DEPS)
 testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
 testnouiprint_DEPENDENCIES = $(TEST_DEPS)
+testoffscreen_DEPENDENCIES = $(TEST_DEPS)
 testprint_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
 testrecentchoosermenu_DEPENDENCIES = $(TEST_DEPS)
@@ -191,6 +193,7 @@ testmultidisplay_LDADD = $(LDADDS)
 testmultiscreen_LDADD = $(LDADDS)
 testnotebookdnd_LDADD = $(LDADDS)
 testnouiprint_LDADD = $(LDADDS)
+testoffscreen_LDADD = $(LDADDS)
 testprint_LDADD = $(LDADDS)
 testrecentchooser_LDADD = $(LDADDS)
 testrecentchoosermenu_LDADD = $(LDADDS)
@@ -316,6 +319,11 @@ testrecentchoosermenu_SOURCES =	\
 
 testvolumebutton_SOURCES =	\
 	testvolumebutton.c
+
+testoffscreen_SOURCES = 	\
+	gtkoffscreenbox.c	\
+	gtkoffscreenbox.h	\
+	testoffscreen.c
 
 EXTRA_DIST += 			\
 	prop-editor.h		\
