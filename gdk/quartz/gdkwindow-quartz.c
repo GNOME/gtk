@@ -1048,20 +1048,6 @@ _gdk_windowing_window_destroy_foreign (GdkWindow *window)
   /* Foreign windows aren't supported in OSX. */
 }
 
-static gboolean
-all_parents_shown (GdkWindowObject *private)
-{
-  while (GDK_WINDOW_IS_MAPPED (private))
-    {
-      if (private->parent)
-	private = (GdkWindowObject *)private->parent;
-      else
-	return TRUE;
-    }
-
-  return FALSE;
-}
-
 /* FIXME: This might be possible to simplify with client-side windows. */
 static void
 gdk_window_quartz_show (GdkWindow *window)
@@ -1086,6 +1072,8 @@ gdk_window_quartz_show (GdkWindow *window)
 
       [(GdkQuartzWindow*)impl->toplevel showAndMakeKey:make_key];
       clear_toplevel_order ();
+
+      _gdk_quartz_events_send_map_events (window);
     }
   else
     {
@@ -1093,9 +1081,6 @@ gdk_window_quartz_show (GdkWindow *window)
     }
 
   [impl->view setNeedsDisplay:YES];
-
-  if (all_parents_shown (private->parent))
-    _gdk_quartz_events_send_map_events (window);
 
   gdk_synthesize_window_state (window, GDK_WINDOW_STATE_WITHDRAWN, 0);
 
