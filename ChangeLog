@@ -1,3 +1,10 @@
+2009-01-18  Christian Dywan  <christian@twotoasts.de>
+
+	Remove a redundant include from gtktoolbar.c
+
+	* gtk/gtktoolbar.c: Remove second inclusion of gtktoolbar.h.
+        Patch by Enrico Tröger.
+
 2009-01-16  Cody Russell  <bratsche@gnome.org>
 
 	Bug 567944 – [Win32] Sorted treeview columns can be unreadable

@@ -53,7 +53,6 @@
 #include "gtkseparatortoolitem.h"
 #include "gtkstock.h"
 #include "gtktoolbar.h"
-#include "gtktoolbar.h"
 #include "gtktoolshell.h"
 #include "gtkvbox.h"
 #include "gtkprivate.h"
