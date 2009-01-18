@@ -1,5 +1,13 @@
 2009-01-18  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 568196 – Please change context of Forward stock label
+
+	* gtk/gtkstock.c: Reinstate separate translation contexts for
+	navigation and media labels (these were lost in the transition
+	to msgctxt. Pointed out by Gabor Kelemen.
+
+2009-01-18  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 567887 – gtk_entry_get_storage_type() should be 
 	gtk_entry_get_icon_storage_type()
 

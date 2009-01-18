@@ -316,21 +316,21 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_FULLSCREEN, NC_("Stock label", "_Fullscreen"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_LEAVE_FULLSCREEN, NC_("Stock label", "_Leave Fullscreen"), 0, 0, GETTEXT_PACKAGE },
   /* This is a navigation label as in "go to the bottom of the page" */
-  { GTK_STOCK_GOTO_BOTTOM, NC_("Stock label", "_Bottom"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_GOTO_BOTTOM, NC_("Stock label, navigation", "_Bottom"), 0, 0, GETTEXT_PACKAGE "-navigation" },
   /* This is a navigation label as in "go to the first page" */
-  { GTK_STOCK_GOTO_FIRST, NC_("Stock label", "_First"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_GOTO_FIRST, NC_("Stock label, navigation", "_First"), 0, 0, GETTEXT_PACKAGE "-navigation" },
   /* This is a navigation label as in "go to the last page" */
-  { GTK_STOCK_GOTO_LAST, NC_("Stock label", "_Last"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_GOTO_LAST, NC_("Stock label, navigation", "_Last"), 0, 0, GETTEXT_PACKAGE "-navigation" },
   /* This is a navigation label as in "go to the top of the page" */
-  { GTK_STOCK_GOTO_TOP, NC_("Stock label", "_Top"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_GOTO_TOP, NC_("Stock label, navigation", "_Top"), 0, 0, GETTEXT_PACKAGE "-navigation" },
   /* This is a navigation label as in "go back" */
-  { GTK_STOCK_GO_BACK, NC_("Stock label", "_Back"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_GO_BACK, NC_("Stock label, navigation", "_Back"), 0, 0, GETTEXT_PACKAGE "-navigation" },
   /* This is a navigation label as in "go down" */
-  { GTK_STOCK_GO_DOWN, NC_("Stock label", "_Down"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_GO_DOWN, NC_("Stock label, navigation", "_Down"), 0, 0, GETTEXT_PACKAGE "-navigation" },
   /* This is a navigation label as in "go forward" */
-  { GTK_STOCK_GO_FORWARD, NC_("Stock label", "_Forward"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_GO_FORWARD, NC_("Stock label, navigation", "_Forward"), 0, 0, GETTEXT_PACKAGE "-navigation" },
   /* This is a navigation label as in "go up" */
-  { GTK_STOCK_GO_UP, NC_("Stock label", "_Up"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_GO_UP, NC_("Stock label, navigation", "_Up"), 0, 0, GETTEXT_PACKAGE "-navigation" },
   { GTK_STOCK_HARDDISK, NC_("Stock label", "_Harddisk"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_HELP, NC_("Stock label", "_Help"), GDK_CONTROL_MASK, 'h', GETTEXT_PACKAGE },
   { GTK_STOCK_HOME, NC_("Stock label", "_Home"), 0, 0, GETTEXT_PACKAGE },
@@ -350,21 +350,21 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_JUSTIFY_RIGHT, NC_("Stock label", "_Right"), 0, 0, GETTEXT_PACKAGE },
 
   /* Media label, as in "fast forward" */
-  { GTK_STOCK_MEDIA_FORWARD, NC_("Stock label", "_Forward"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_FORWARD, NC_("Stock label, media", "_Forward"), 0, 0, GETTEXT_PACKAGE "-media" },
   /* Media label, as in "next song" */
-  { GTK_STOCK_MEDIA_NEXT, NC_("Stock label", "_Next"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_NEXT, NC_("Stock label, media", "_Next"), 0, 0, GETTEXT_PACKAGE "-media" },
   /* Media label, as in "pause music" */
-  { GTK_STOCK_MEDIA_PAUSE, NC_("Stock label", "P_ause"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_PAUSE, NC_("Stock label, media", "P_ause"), 0, 0, GETTEXT_PACKAGE "-media" },
   /* Media label, as in "play music" */
-  { GTK_STOCK_MEDIA_PLAY, NC_("Stock label", "_Play"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_PLAY, NC_("Stock label, media", "_Play"), 0, 0, GETTEXT_PACKAGE "-media" },
   /* Media label, as in  "previous song" */
-  { GTK_STOCK_MEDIA_PREVIOUS, NC_("Stock label", "Pre_vious"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_PREVIOUS, NC_("Stock label, media", "Pre_vious"), 0, 0, GETTEXT_PACKAGE "-media" },
   /* Media label */
-  { GTK_STOCK_MEDIA_RECORD, NC_("Stock label", "_Record"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_RECORD, NC_("Stock label, media", "_Record"), 0, 0, GETTEXT_PACKAGE "-media" },
   /* Media label */
-  { GTK_STOCK_MEDIA_REWIND, NC_("Stock label", "R_ewind"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_REWIND, NC_("Stock label, media", "R_ewind"), 0, 0, GETTEXT_PACKAGE "-media" },
   /* Media label */
-  { GTK_STOCK_MEDIA_STOP, NC_("Stock label", "_Stop"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_MEDIA_STOP, NC_("Stock label, media", "_Stop"), 0, 0, GETTEXT_PACKAGE "-media" },
   { GTK_STOCK_NETWORK, NC_("Stock label", "_Network"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_NEW, NC_("Stock label", "_New"), GDK_CONTROL_MASK, 'n', GETTEXT_PACKAGE },
   { GTK_STOCK_NO, NC_("Stock label", "_No"), 0, 0, GETTEXT_PACKAGE },
@@ -468,6 +468,20 @@ sgettext_swapped (const gchar *msgid,
   return (gchar *)g_dpgettext2 ((const char *)data, "Stock label", msgid);
 }
 
+static gchar *
+sgettext_swapped_navigation (const gchar *msgid, 
+		             gpointer     data)
+{
+  return (gchar *)g_dpgettext2 ((const char *)data, "Stock label, navigation", msgid);
+}
+
+static gchar *
+sgettext_swapped_media (const gchar *msgid, 
+		        gpointer     data)
+{
+  return (gchar *)g_dpgettext2 ((const char *)data, "Stock label, media", msgid);
+}
+
 
 static void
 init_stock_hash (void)
@@ -486,6 +500,14 @@ init_stock_hash (void)
 
       gtk_stock_set_translate_func (GETTEXT_PACKAGE, 
 				    sgettext_swapped,
+				    GETTEXT_PACKAGE,
+				    NULL);
+      gtk_stock_set_translate_func (GETTEXT_PACKAGE "-navigation", 
+				    sgettext_swapped_navigation,
+				    GETTEXT_PACKAGE,
+				    NULL);
+      gtk_stock_set_translate_func (GETTEXT_PACKAGE "-media", 
+				    sgettext_swapped_media,
 				    GETTEXT_PACKAGE,
 				    NULL);
     }
