@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-15 17:25+0100\n"
-"PO-Revision-Date: 2009-01-15 17:25+0100\n"
+"POT-Creation-Date: 2009-01-18 15:36+0100\n"
+"PO-Revision-Date: 2009-01-18 15:35+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@ulrik.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -1227,7 +1227,7 @@ msgstr "Programmets lisens"
 #. Add the credits button
 #: ../gtk/gtkaboutdialog.c:508
 msgid "C_redits"
-msgstr "_Bidragsytarar"
+msgstr "_Heider og ære"
 
 #
 #. Add the license button
@@ -1242,7 +1242,7 @@ msgstr "Om %s"
 
 #: ../gtk/gtkaboutdialog.c:2045
 msgid "Credits"
-msgstr "Bidragsytarar"
+msgstr "Heider og ære"
 
 #
 #: ../gtk/gtkaboutdialog.c:2074
@@ -1431,20 +1431,17 @@ msgstr "%Y"
 #. * a disabled accelerator key combination.
 #.
 #: ../gtk/gtkcellrendereraccel.c:243
-#, fuzzy
 msgctxt "Accelerator"
 msgid "Disabled"
-msgstr "Av"
+msgstr "Kopla ut"
 
-#
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
 #: ../gtk/gtkcellrendereraccel.c:376 ../gtk/gtkcellrendereraccel.c:588
-#, fuzzy
 msgid "New accelerator..."
-msgstr "Ny snøggtast …"
+msgstr "Ny snarvegstast …"
 
 #: ../gtk/gtkcellrendererprogress.c:361 ../gtk/gtkcellrendererprogress.c:448
 #, c-format
@@ -1592,15 +1589,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Fargeval"
 
-#: ../gtk/gtkentry.c:8037 ../gtk/gtktextview.c:7785
+#: ../gtk/gtkentry.c:8039 ../gtk/gtktextview.c:7787
 msgid "Input _Methods"
 msgstr "Inndata _metoder"
 
-#: ../gtk/gtkentry.c:8051 ../gtk/gtktextview.c:7799
+#: ../gtk/gtkentry.c:8053 ../gtk/gtktextview.c:7801
 msgid "_Insert Unicode Control Character"
 msgstr "Set _inn Unicode-kontrollteikn"
 
-#: ../gtk/gtkentry.c:9414
+#: ../gtk/gtkentry.c:9416
 msgid ""
 "You have the Caps Lock key on\n"
 "and an active input method"
@@ -1608,11 +1605,11 @@ msgstr ""
 "Du har Caps Lock på\n"
 "og ein aktiv inndatametode"
 
-#: ../gtk/gtkentry.c:9416
+#: ../gtk/gtkentry.c:9418
 msgid "You have the Caps Lock key on"
 msgstr "Du har Caps Lock på"
 
-#: ../gtk/gtkentry.c:9418
+#: ../gtk/gtkentry.c:9420
 msgid "You have an active input method"
 msgstr "Du har ein aktiv inndatametode"
 
@@ -2577,7 +2574,7 @@ msgstr "Ventar"
 #: ../gtk/gtkprintoperation.c:1522
 msgctxt "print operation status"
 msgid "Blocking on issue"
-msgstr ""
+msgstr "Stoppa av problem"
 
 #: ../gtk/gtkprintoperation.c:1523
 msgctxt "print operation status"
@@ -2929,7 +2926,7 @@ msgstr "Farge"
 #
 #: ../gtk/gtkprintunixdialog.c:2953
 msgid "Finishing"
-msgstr ""
+msgstr "Avsluttar"
 
 #
 #: ../gtk/gtkprintunixdialog.c:2963
@@ -4227,12 +4224,11 @@ msgctxt "paper size"
 msgid "kaku2 Envelope"
 msgstr "kaku2 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:90
 #, fuzzy
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
-msgstr "oufuku (svar postkort)"
+msgstr "oufuku (svarpostkort)"
 
 #
 #: ../gtk/paper_names_offsets.c:91
