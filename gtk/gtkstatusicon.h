@@ -117,9 +117,9 @@ void                  gtk_status_icon_set_tooltip        (GtkStatusIcon      *st
 void                  gtk_status_icon_set_has_tooltip    (GtkStatusIcon      *status_icon,
                                                           gboolean            has_tooltip);
 void                  gtk_status_icon_set_tooltip_text   (GtkStatusIcon      *status_icon,
-                                                          const char         *text);
+                                                          const gchar        *text);
 void                  gtk_status_icon_set_tooltip_markup (GtkStatusIcon      *status_icon,
-                                                          const char         *markup);
+                                                          const gchar        *markup);
 void                  gtk_status_icon_set_visible        (GtkStatusIcon      *status_icon,
 							  gboolean            visible);
 gboolean              gtk_status_icon_get_visible        (GtkStatusIcon      *status_icon);

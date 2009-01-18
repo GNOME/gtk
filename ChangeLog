@@ -1,5 +1,13 @@
 2009-01-18  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 567655 – gtk_status_icon_set_tooltip_text and 
+	gtk_status_icon_set_tooltip_markup should use gchar*
+
+	* gtk/gtkstatusicon.h: Use "const gchar*" in new tooltip api.
+	Pointed out by Torsten Schoenfeld.
+
+2009-01-18  Matthias Clasen  <mclasen@redhat.com>
+
 	* demos/gtk-demo/search_entry.c: End the search if the window
 	is closed.
 
