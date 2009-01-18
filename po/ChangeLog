@@ -1,3 +1,7 @@
+2009-01-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* Makefile.in.in: Make xgettext recognize and extract NC_()
+
 2009-01-18  Åsmund Skjæveland  <aasmunds@ulrik.uio.no>
 
 	* nn.po: Updated Norwegian Nynorsk translation.
