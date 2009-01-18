@@ -1,5 +1,28 @@
 2009-01-18  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 567887 – gtk_entry_get_storage_type() should be 
+	gtk_entry_get_icon_storage_type()
+
+	* gtk/gtk.symbols:
+	* gtk/gtkentry.[hc]: Use the last chance to get the api right,
+	and rename things for consistency, requested by Murray Cumming. 
+	In detail,
+	gtk_entry_get_stock -> gtk_entry_get_icon_stock
+	gtk_entry_get_pixbuf -> gtk_entry_get_icon_pixbuf
+	gtk_entry_get_gicon -> gtk_entry_get_icon_gicon
+	gtk_entry_get_storage_type -> gtk_entry_get_icon_storage_type
+	::prelight -> ::icon-prelight
+	::pixbuf-primary -> ::primary-icon-pixbuf
+	::stock-primary -> ::primary-icon-stock
+	::icon-name-primary -> ::primary-icon-name
+	::gicon-primary-> ::primary-icon-gicon
+	::storage-type-primary -> ::primary-icon-storage-type
+	::activatable->primary -> ::primary-icon-activatable
+	::sensitive-primary -> ::primary-icon-sensitive
+	(and similar for secondary properties)
+
+2009-01-18  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 567655 – gtk_status_icon_set_tooltip_text and 
 	gtk_status_icon_set_tooltip_markup should use gchar*
 
