@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-18 15:36+0100\n"
-"PO-Revision-Date: 2009-01-18 15:35+0100\n"
+"POT-Creation-Date: 2009-01-18 16:47+0100\n"
+"PO-Revision-Date: 2009-01-18 16:47+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@ulrik.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -198,7 +198,7 @@ msgstr ""
 #: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Print"
-msgstr ""
+msgstr "PrintScreen"
 
 #: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
@@ -1160,12 +1160,10 @@ msgstr "WMF-bileteformatet"
 msgid "Don't batch GDI requests"
 msgstr "Ikkje send fleire GDI-førespurnader saman"
 
-#
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:56
-#, fuzzy
 msgid "Don't use the Wintab API for tablet support"
-msgstr "Ikkje bruk Wintab-APIet for støtte for tablet"
+msgstr "Ikkje bruk Wintab-APIet for støtte for notatblokk-PC"
 
 #
 #. Description of --ignore-wintab in --help output
@@ -1302,7 +1300,7 @@ msgstr "Alt"
 #: ../gtk/gtkaccellabel.c:671
 msgctxt "keyboard label"
 msgid "Super"
-msgstr ""
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1312,7 +1310,7 @@ msgstr ""
 #: ../gtk/gtkaccellabel.c:684
 msgctxt "keyboard label"
 msgid "Hyper"
-msgstr ""
+msgstr "Hyper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1322,7 +1320,7 @@ msgstr ""
 #: ../gtk/gtkaccellabel.c:698
 msgctxt "keyboard label"
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: ../gtk/gtkaccellabel.c:715
 msgctxt "keyboard label"
@@ -1332,7 +1330,7 @@ msgstr "Mellomrom"
 #: ../gtk/gtkaccellabel.c:718
 msgctxt "keyboard label"
 msgid "Backslash"
-msgstr ""
+msgstr "Omvendt skråstrek"
 
 #: ../gtk/gtkbuilderparser.c:340
 #, c-format
@@ -3783,12 +3781,12 @@ msgstr "%d %%"
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
 msgid "asme_f"
-msgstr ""
+msgstr "Asme_f"
 
 #: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
 msgid "A0x2"
-msgstr ""
+msgstr "A0x2"
 
 #: ../gtk/paper_names_offsets.c:6
 msgctxt "paper size"
@@ -3798,7 +3796,7 @@ msgstr "A0"
 #: ../gtk/paper_names_offsets.c:7
 msgctxt "paper size"
 msgid "A0x3"
-msgstr ""
+msgstr "A0x3"
 
 #: ../gtk/paper_names_offsets.c:8
 msgctxt "paper size"
@@ -3813,12 +3811,12 @@ msgstr "A10"
 #: ../gtk/paper_names_offsets.c:10
 msgctxt "paper size"
 msgid "A1x3"
-msgstr ""
+msgstr "A1x3"
 
 #: ../gtk/paper_names_offsets.c:11
 msgctxt "paper size"
 msgid "A1x4"
-msgstr ""
+msgstr "A1x4"
 
 #: ../gtk/paper_names_offsets.c:12
 msgctxt "paper size"
@@ -3828,17 +3826,17 @@ msgstr "A2"
 #: ../gtk/paper_names_offsets.c:13
 msgctxt "paper size"
 msgid "A2x3"
-msgstr ""
+msgstr "A2x3"
 
 #: ../gtk/paper_names_offsets.c:14
 msgctxt "paper size"
 msgid "A2x4"
-msgstr ""
+msgstr "A2x4"
 
 #: ../gtk/paper_names_offsets.c:15
 msgctxt "paper size"
 msgid "A2x5"
-msgstr ""
+msgstr "A2x5"
 
 #: ../gtk/paper_names_offsets.c:16
 msgctxt "paper size"
@@ -3848,32 +3846,32 @@ msgstr "A3"
 #: ../gtk/paper_names_offsets.c:17
 msgctxt "paper size"
 msgid "A3 Extra"
-msgstr ""
+msgstr "A3 skiljeark"
 
 #: ../gtk/paper_names_offsets.c:18
 msgctxt "paper size"
 msgid "A3x3"
-msgstr ""
+msgstr "A3x3"
 
 #: ../gtk/paper_names_offsets.c:19
 msgctxt "paper size"
 msgid "A3x4"
-msgstr ""
+msgstr "A3x4"
 
 #: ../gtk/paper_names_offsets.c:20
 msgctxt "paper size"
 msgid "A3x5"
-msgstr ""
+msgstr "A3x5"
 
 #: ../gtk/paper_names_offsets.c:21
 msgctxt "paper size"
 msgid "A3x6"
-msgstr ""
+msgstr "A3x6"
 
 #: ../gtk/paper_names_offsets.c:22
 msgctxt "paper size"
 msgid "A3x7"
-msgstr ""
+msgstr "A3x7"
 
 #: ../gtk/paper_names_offsets.c:23
 msgctxt "paper size"
@@ -3883,47 +3881,47 @@ msgstr "A4"
 #: ../gtk/paper_names_offsets.c:24
 msgctxt "paper size"
 msgid "A4 Extra"
-msgstr ""
+msgstr "A4 Extra"
 
 #: ../gtk/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A4 Tab"
-msgstr ""
+msgstr "A4 skiljeark"
 
 #: ../gtk/paper_names_offsets.c:26
 msgctxt "paper size"
 msgid "A4x3"
-msgstr ""
+msgstr "A4x3"
 
 #: ../gtk/paper_names_offsets.c:27
 msgctxt "paper size"
 msgid "A4x4"
-msgstr ""
+msgstr "A4x4"
 
 #: ../gtk/paper_names_offsets.c:28
 msgctxt "paper size"
 msgid "A4x5"
-msgstr ""
+msgstr "A4x5"
 
 #: ../gtk/paper_names_offsets.c:29
 msgctxt "paper size"
 msgid "A4x6"
-msgstr ""
+msgstr "A4x6"
 
 #: ../gtk/paper_names_offsets.c:30
 msgctxt "paper size"
 msgid "A4x7"
-msgstr ""
+msgstr "A4x7"
 
 #: ../gtk/paper_names_offsets.c:31
 msgctxt "paper size"
 msgid "A4x8"
-msgstr ""
+msgstr "A4x8"
 
 #: ../gtk/paper_names_offsets.c:32
 msgctxt "paper size"
 msgid "A4x9"
-msgstr ""
+msgstr "A4x9"
 
 #: ../gtk/paper_names_offsets.c:33
 msgctxt "paper size"
@@ -3933,7 +3931,7 @@ msgstr "A5"
 #: ../gtk/paper_names_offsets.c:34
 msgctxt "paper size"
 msgid "A5 Extra"
-msgstr ""
+msgstr "A5 Extra"
 
 #: ../gtk/paper_names_offsets.c:35
 msgctxt "paper size"
@@ -3993,7 +3991,7 @@ msgstr "B5"
 #: ../gtk/paper_names_offsets.c:46
 msgctxt "paper size"
 msgid "B5 Extra"
-msgstr ""
+msgstr "B5 Extra"
 
 #: ../gtk/paper_names_offsets.c:47
 msgctxt "paper size"
@@ -4003,7 +4001,7 @@ msgstr "B6"
 #: ../gtk/paper_names_offsets.c:48
 msgctxt "paper size"
 msgid "B6/C4"
-msgstr ""
+msgstr "B6/C4"
 
 #: ../gtk/paper_names_offsets.c:49
 msgctxt "paper size"
@@ -4085,9 +4083,7 @@ msgctxt "paper size"
 msgid "C9"
 msgstr "C9"
 
-#
 #: ../gtk/paper_names_offsets.c:65
-#, fuzzy
 msgctxt "paper size"
 msgid "DL Envelope"
 msgstr "DL konvolutt"
@@ -4095,437 +4091,374 @@ msgstr "DL konvolutt"
 #: ../gtk/paper_names_offsets.c:66
 msgctxt "paper size"
 msgid "RA0"
-msgstr ""
+msgstr "RA0"
 
 #: ../gtk/paper_names_offsets.c:67
 msgctxt "paper size"
 msgid "RA1"
-msgstr ""
+msgstr "RA1"
 
 #: ../gtk/paper_names_offsets.c:68
 msgctxt "paper size"
 msgid "RA2"
-msgstr ""
+msgstr "RA2"
 
 #: ../gtk/paper_names_offsets.c:69
 msgctxt "paper size"
 msgid "SRA0"
-msgstr ""
+msgstr "SRA0"
 
 #: ../gtk/paper_names_offsets.c:70
 msgctxt "paper size"
 msgid "SRA1"
-msgstr ""
+msgstr "SRA1"
 
 #: ../gtk/paper_names_offsets.c:71
 msgctxt "paper size"
 msgid "SRA2"
-msgstr ""
+msgstr "SRA2"
 
 #: ../gtk/paper_names_offsets.c:72
 msgctxt "paper size"
 msgid "JB0"
-msgstr ""
+msgstr "JB0"
 
 #: ../gtk/paper_names_offsets.c:73
 msgctxt "paper size"
 msgid "JB1"
-msgstr ""
+msgstr "JB1"
 
 #: ../gtk/paper_names_offsets.c:74
 msgctxt "paper size"
 msgid "JB10"
-msgstr ""
+msgstr "JB10"
 
 #: ../gtk/paper_names_offsets.c:75
 msgctxt "paper size"
 msgid "JB2"
-msgstr ""
+msgstr "JB2"
 
 #: ../gtk/paper_names_offsets.c:76
 msgctxt "paper size"
 msgid "JB3"
-msgstr ""
+msgstr "JB3"
 
 #: ../gtk/paper_names_offsets.c:77
 msgctxt "paper size"
 msgid "JB4"
-msgstr ""
+msgstr "JB4"
 
 #: ../gtk/paper_names_offsets.c:78
 msgctxt "paper size"
 msgid "JB5"
-msgstr ""
+msgstr "JB5"
 
 #: ../gtk/paper_names_offsets.c:79
 msgctxt "paper size"
 msgid "JB6"
-msgstr ""
+msgstr "JB6"
 
 #: ../gtk/paper_names_offsets.c:80
 msgctxt "paper size"
 msgid "JB7"
-msgstr ""
+msgstr "JB7"
 
 #: ../gtk/paper_names_offsets.c:81
 msgctxt "paper size"
 msgid "JB8"
-msgstr ""
+msgstr "JB8"
 
 #: ../gtk/paper_names_offsets.c:82
 msgctxt "paper size"
 msgid "JB9"
-msgstr ""
+msgstr "JB9"
 
 #: ../gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "jis exec"
-msgstr ""
+msgstr "JIS-EXEC"
 
-#
 #: ../gtk/paper_names_offsets.c:84
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
 msgstr "Choukei 2 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:85
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
 msgstr "Choukei 3 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:86
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
 msgstr "Choukei 4 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:87
-#, fuzzy
 msgctxt "paper size"
 msgid "hagaki (postcard)"
-msgstr "hagaki (postkort)"
+msgstr "Hagaki (postkort)"
 
-#
 #: ../gtk/paper_names_offsets.c:88
-#, fuzzy
 msgctxt "paper size"
 msgid "kahu Envelope"
-msgstr "kahu konvolutt"
+msgstr "Kahu konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:89
-#, fuzzy
 msgctxt "paper size"
 msgid "kaku2 Envelope"
 msgstr "kaku2 konvolutt"
 
 #: ../gtk/paper_names_offsets.c:90
-#, fuzzy
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
-msgstr "oufuku (svarpostkort)"
+msgstr "Oufuku (svarpostkort)"
 
-#
 #: ../gtk/paper_names_offsets.c:91
-#, fuzzy
 msgctxt "paper size"
 msgid "you4 Envelope"
-msgstr "you4 konvolutt"
+msgstr "You4 konvolutt"
 
 #: ../gtk/paper_names_offsets.c:92
 msgctxt "paper size"
 msgid "10x11"
-msgstr ""
+msgstr "10x11"
 
 #: ../gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "10x13"
-msgstr ""
+msgstr "10x13"
 
 #: ../gtk/paper_names_offsets.c:94
 msgctxt "paper size"
 msgid "10x14"
-msgstr ""
+msgstr "10x14"
 
 #: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "10x15"
-msgstr ""
+msgstr "10x15"
 
 #: ../gtk/paper_names_offsets.c:97
 msgctxt "paper size"
 msgid "11x12"
-msgstr ""
+msgstr "11x12"
 
 #: ../gtk/paper_names_offsets.c:98
 msgctxt "paper size"
 msgid "11x15"
-msgstr ""
+msgstr "11x15"
 
 #: ../gtk/paper_names_offsets.c:99
 msgctxt "paper size"
 msgid "12x19"
-msgstr ""
+msgstr "12x19"
 
 #: ../gtk/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "5x7"
-msgstr ""
+msgstr "5x7"
 
-#
 #: ../gtk/paper_names_offsets.c:101
-#, fuzzy
 msgctxt "paper size"
 msgid "6x9 Envelope"
 msgstr "6x9 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:102
-#, fuzzy
 msgctxt "paper size"
 msgid "7x9 Envelope"
 msgstr "7x9 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:103
-#, fuzzy
 msgctxt "paper size"
 msgid "9x11 Envelope"
 msgstr "9x11 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:104
-#, fuzzy
 msgctxt "paper size"
 msgid "a2 Envelope"
-msgstr "a2 konvolutt"
+msgstr "A2 konvolutt"
 
 #: ../gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #: ../gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #: ../gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #: ../gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #: ../gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #: ../gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "b-plus"
-msgstr ""
+msgstr "B-Plus"
 
 #: ../gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "c"
-msgstr ""
+msgstr "C"
 
-#
 #: ../gtk/paper_names_offsets.c:112
-#, fuzzy
 msgctxt "paper size"
 msgid "c5 Envelope"
-msgstr "c5 konvolutt"
+msgstr "C5 konvolutt"
 
 #: ../gtk/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "d"
-msgstr ""
+msgstr "D"
 
 #: ../gtk/paper_names_offsets.c:114
 msgctxt "paper size"
 msgid "e"
-msgstr ""
+msgstr "E"
 
 #: ../gtk/paper_names_offsets.c:115
 msgctxt "paper size"
 msgid "edp"
-msgstr ""
+msgstr "EDP"
 
-#
 #: ../gtk/paper_names_offsets.c:116
-#, fuzzy
 msgctxt "paper size"
 msgid "European edp"
-msgstr "Europeisk edp"
+msgstr "Europeisk EDP"
 
 #: ../gtk/paper_names_offsets.c:117
 msgctxt "paper size"
 msgid "Executive"
-msgstr ""
+msgstr "Executive"
 
 #: ../gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "f"
-msgstr ""
+msgstr "F"
 
-#
 #: ../gtk/paper_names_offsets.c:119
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold European"
-msgstr "FanFold europeisk"
+msgstr "Europeisk traktorpapir"
 
-#
 #: ../gtk/paper_names_offsets.c:120
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold US"
-msgstr "FanFold US"
+msgstr "Amerikansk traktorpapir"
 
-#
 #: ../gtk/paper_names_offsets.c:121
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold German Legal"
-msgstr "FanFold Tysk juridisk"
+msgstr "Traktorpapir, German Legal"
 
-#
 #: ../gtk/paper_names_offsets.c:122
-#, fuzzy
 msgctxt "paper size"
 msgid "Government Legal"
-msgstr "Offentleg juridisk"
+msgstr "Government Legal"
 
-#
 #: ../gtk/paper_names_offsets.c:123
-#, fuzzy
 msgctxt "paper size"
 msgid "Government Letter"
-msgstr "Offentleg brev"
+msgstr "Government Letter"
 
 #: ../gtk/paper_names_offsets.c:124
 msgctxt "paper size"
 msgid "Index 3x5"
-msgstr ""
+msgstr "Kartotekkort 3x5"
 
-#
 #: ../gtk/paper_names_offsets.c:125
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
-msgstr "Indeks 4x6 (postkort)"
+msgstr "Kartotekkort 4x6 (postkort)"
 
-#
 #: ../gtk/paper_names_offsets.c:126
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 4x6 ext"
-msgstr "Indeks 4x6 ext"
+msgstr "Kartotekkort 4x6 ext"
 
 #: ../gtk/paper_names_offsets.c:127
 msgctxt "paper size"
 msgid "Index 5x8"
-msgstr ""
+msgstr "Kartotekkort 5x8"
 
 #: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "Invoice"
-msgstr ""
+msgstr "Invoice"
 
 #: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 #: ../gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "US Legal"
-msgstr ""
+msgstr "US Legal"
 
-#
 #: ../gtk/paper_names_offsets.c:131
-#, fuzzy
 msgctxt "paper size"
 msgid "US Legal Extra"
-msgstr "US juridisk ekstra"
+msgstr "US Legal Extra"
 
-#
 #: ../gtk/paper_names_offsets.c:132
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter"
-msgstr "US brev"
+msgstr "US Letter"
 
-#
 #: ../gtk/paper_names_offsets.c:133
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter Extra"
-msgstr "US brev ekstra"
+msgstr "US Letter Extra"
 
-#
 #: ../gtk/paper_names_offsets.c:134
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter Plus"
-msgstr "US brev pluss"
+msgstr "US Letter Plus"
 
-#
 #: ../gtk/paper_names_offsets.c:135
-#, fuzzy
 msgctxt "paper size"
 msgid "Monarch Envelope"
-msgstr "Monark konvolutt"
+msgstr "Monarch konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:136
-#, fuzzy
 msgctxt "paper size"
 msgid "#10 Envelope"
 msgstr "#10 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:137
-#, fuzzy
 msgctxt "paper size"
 msgid "#11 Envelope"
 msgstr "#11 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:138
-#, fuzzy
 msgctxt "paper size"
 msgid "#12 Envelope"
 msgstr "#12 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:139
-#, fuzzy
 msgctxt "paper size"
 msgid "#14 Envelope"
 msgstr "#14 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:140
-#, fuzzy
 msgctxt "paper size"
 msgid "#9 Envelope"
 msgstr "#9 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:141
-#, fuzzy
 msgctxt "paper size"
 msgid "Personal Envelope"
 msgstr "Personleg konvolutt"
@@ -4533,26 +4466,24 @@ msgstr "Personleg konvolutt"
 #: ../gtk/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "Quarto"
-msgstr ""
+msgstr "Quarto"
 
 #: ../gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "Super A"
-msgstr ""
+msgstr "Super A"
 
 #: ../gtk/paper_names_offsets.c:144
 msgctxt "paper size"
 msgid "Super B"
-msgstr ""
+msgstr "Super B"
 
 #: ../gtk/paper_names_offsets.c:145
 msgctxt "paper size"
 msgid "Wide Format"
-msgstr ""
+msgstr "Breitt format"
 
-#
 #: ../gtk/paper_names_offsets.c:146
-#, fuzzy
 msgctxt "paper size"
 msgid "Dai-pa-kai"
 msgstr "Dai-pa-kai"
@@ -4560,133 +4491,107 @@ msgstr "Dai-pa-kai"
 #: ../gtk/paper_names_offsets.c:147
 msgctxt "paper size"
 msgid "Folio"
-msgstr ""
+msgstr "Folio"
 
 #: ../gtk/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "Folio sp"
-msgstr ""
+msgstr "Folio sp"
 
-#
 #: ../gtk/paper_names_offsets.c:149
-#, fuzzy
 msgctxt "paper size"
 msgid "Invite Envelope"
 msgstr "Invitasjonskonvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:150
-#, fuzzy
 msgctxt "paper size"
 msgid "Italian Envelope"
 msgstr "Italiensk konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:151
-#, fuzzy
 msgctxt "paper size"
 msgid "juuro-ku-kai"
-msgstr "juuro-ku-kai"
+msgstr "Juuro-ku-kai"
 
 #: ../gtk/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "pa-kai"
-msgstr ""
+msgstr "Pa-kai"
 
 #: ../gtk/paper_names_offsets.c:153
 msgctxt "paper size"
 msgid "Postfix Envelope"
-msgstr ""
+msgstr "Postfix-konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:154
-#, fuzzy
 msgctxt "paper size"
 msgid "Small Photo"
 msgstr "Lite bilete"
 
-#
 #: ../gtk/paper_names_offsets.c:155
-#, fuzzy
 msgctxt "paper size"
 msgid "prc1 Envelope"
-msgstr "prc1 konvolutt"
+msgstr "Prc1 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:156
-#, fuzzy
 msgctxt "paper size"
 msgid "prc10 Envelope"
-msgstr "prc10 konvolutt"
+msgstr "Prc10 konvolutt"
 
 #: ../gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "prc 16k"
-msgstr ""
+msgstr "Prc 16k"
 
-#
 #: ../gtk/paper_names_offsets.c:158
-#, fuzzy
 msgctxt "paper size"
 msgid "prc2 Envelope"
-msgstr "prc2 konvolutt"
+msgstr "Prc2 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:159
-#, fuzzy
 msgctxt "paper size"
 msgid "prc3 Envelope"
-msgstr "prc3 konvolutt"
+msgstr "Prc3 konvolutt"
 
 #: ../gtk/paper_names_offsets.c:160
 msgctxt "paper size"
 msgid "prc 32k"
-msgstr ""
+msgstr "Prc 32k"
 
-#
 #: ../gtk/paper_names_offsets.c:161
-#, fuzzy
 msgctxt "paper size"
 msgid "prc4 Envelope"
-msgstr "prc4 konvolutt"
+msgstr "Prc4 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:162
-#, fuzzy
 msgctxt "paper size"
 msgid "prc5 Envelope"
-msgstr "c5 konvolutt"
+msgstr "Prc5 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:163
-#, fuzzy
 msgctxt "paper size"
 msgid "prc6 Envelope"
-msgstr "prc6 konvolutt"
+msgstr "Prc6 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:164
-#, fuzzy
 msgctxt "paper size"
 msgid "prc7 Envelope"
-msgstr "prc7 konvolutt"
+msgstr "Prc7 konvolutt"
 
-#
 #: ../gtk/paper_names_offsets.c:165
-#, fuzzy
 msgctxt "paper size"
 msgid "prc8 Envelope"
-msgstr "prc8 konvolutt"
+msgstr "Prc8 konvolutt"
 
 #: ../gtk/paper_names_offsets.c:166
 msgctxt "paper size"
 msgid "ROC 16k"
-msgstr ""
+msgstr "ROC 16k"
 
 #: ../gtk/paper_names_offsets.c:167
 msgctxt "paper size"
 msgid "ROC 8k"
-msgstr ""
+msgstr "ROC 8k"
 
 #: ../gtk/updateiconcache.c:492 ../gtk/updateiconcache.c:552
 #, c-format
@@ -4874,25 +4779,25 @@ msgstr "Skrivaren «%s» er tom for toner."
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1174
 #, c-format
 msgid "Printer '%s' is low on developer."
-msgstr ""
+msgstr "Det er lite framkallar i skrivaren «%s»."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1176
 #, c-format
 msgid "Printer '%s' is out of developer."
-msgstr ""
+msgstr "Skrivaren «%s» er tom for framkallar."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1178
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr ""
+msgstr "Det er lite av minst ein farge i skrivaren «%s»."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1180
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
-msgstr ""
+msgstr "Skrivaren «%s» er tom for minst ein farge."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1181
 #, c-format
