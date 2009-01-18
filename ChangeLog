@@ -1,3 +1,12 @@
+2009-01-18  Matthias Clasen  <mclasen@redhat.com>
+
+	* demos/gtk-demo/search_entry.c: End the search if the window
+	is closed.
+
+	* demos/gtk-demo/search_entry.c:
+	* demos/gtk-demo/entry_completion.c: Group the entry examples
+	under "Entry".
+
 2009-01-18  Christian Dywan  <christian@twotoasts.de>
 
 	Remove a redundant include from gtktoolbar.c

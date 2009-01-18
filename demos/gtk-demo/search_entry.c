@@ -1,4 +1,4 @@
-/* Search Entry 
+/* Entry/Search Entry 
  *
  * GtkEntry allows to display icons and progress information. 
  * This demo shows how to use these features in a search entry.
@@ -152,6 +152,19 @@ search_by_file (GtkWidget *item,
                                    "Search by file name\n"
                                    "Click here to change the search type");
 } 
+
+static void
+search_entry_destroyed (GtkWidget  *widget)
+{
+  if (finish_search_id != 0)
+    g_source_remove (finish_search_id);
+
+  if (search_progress_id != 0)
+    g_source_remove (search_progress_id);
+
+  window = NULL;
+}
+
                 
 GtkWidget *
 do_search_entry (GtkWidget *do_widget)
@@ -178,7 +191,7 @@ do_search_entry (GtkWidget *do_widget)
       g_signal_connect (window, "response",
                         G_CALLBACK (gtk_widget_destroy), NULL);
       g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+                        G_CALLBACK (search_entry_destroyed), &window);
 
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, TRUE, TRUE, 0);

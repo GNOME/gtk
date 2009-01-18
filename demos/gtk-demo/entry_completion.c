@@ -1,4 +1,4 @@
-/* Entry Completion
+/* Entry/Entry Completion
  *
  * GtkEntryCompletion provides a mechanism for adding support for
  * completion in GtkEntry.
