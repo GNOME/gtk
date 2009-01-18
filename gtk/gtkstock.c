@@ -425,12 +425,40 @@ static const GtkStockItem builtin_items [] =
  *
  * Sets a function to be used for translating the @label of 
  * a stock item.
- *
+ * 
  * If no function is registered for a translation domain,
  * g_dgettext() is used.
- *
- * Since: 2.8
  * 
+ * The function is used for all stock items whose
+ * @translation_domain matches @domain. Note that it is possible
+ * to use strings different from the actual gettext translation domain
+ * of your application for this, as long as your #GtkTranslateFunc uses
+ * the correct domain when calling dgettext(). This can be useful, e.g.
+ * when dealing with message contexts:
+ *
+ * |[
+ * GtkStockItem items[] = { 
+ *  { MY_ITEM1, NC_("odd items", "Item 1"), 0, 0, "odd-item-domain" },
+ *  { MY_ITEM2, NC_("even items", "Item 2"), 0, 0, "even-item-domain" },
+ * };
+ *
+ * gchar *
+ * my_translate_func (const gchar *msgid,
+ *                    gpointer     data)
+ * {
+ *   gchar *msgctxt = data;
+ * 
+ *   return (gchar*)g_dpgettext2 (GETTEXT_PACKAGE, msgctxt, msgid);
+ * }
+ *
+ * /&ast; ... &ast/
+ *
+ * gtk_stock_add (items, G_N_ELEMENTS (items));
+ * gtk_stock_set_translate_func ("odd-item-domain", my_translate_func, "odd-item-domain"); 
+ * gtk_stock_set_translate_func ("even-item-domain", my_translate_func, "even-item-domain"); 
+ * ]|
+ * 
+ * Since: 2.8
  */
 void
 gtk_stock_set_translate_func (const gchar      *domain,
@@ -465,23 +493,10 @@ static gchar *
 sgettext_swapped (const gchar *msgid, 
 		  gpointer     data)
 {
-  return (gchar *)g_dpgettext2 ((const char *)data, "Stock label", msgid);
-}
+  gchar *msgctxt = data;
 
-static gchar *
-sgettext_swapped_navigation (const gchar *msgid, 
-		             gpointer     data)
-{
-  return (gchar *)g_dpgettext2 ((const char *)data, "Stock label, navigation", msgid);
+  return (gchar *)g_dpgettext2 (GETTEXT_PACKAGE, msgctxt, msgid);
 }
-
-static gchar *
-sgettext_swapped_media (const gchar *msgid, 
-		        gpointer     data)
-{
-  return (gchar *)g_dpgettext2 ((const char *)data, "Stock label, media", msgid);
-}
-
 
 static void
 init_stock_hash (void)
@@ -500,15 +515,15 @@ init_stock_hash (void)
 
       gtk_stock_set_translate_func (GETTEXT_PACKAGE, 
 				    sgettext_swapped,
-				    GETTEXT_PACKAGE,
+				    "Stock label",
 				    NULL);
       gtk_stock_set_translate_func (GETTEXT_PACKAGE "-navigation", 
-				    sgettext_swapped_navigation,
-				    GETTEXT_PACKAGE,
+				    sgettext_swapped,
+				    "Stock label, navigation",
 				    NULL);
       gtk_stock_set_translate_func (GETTEXT_PACKAGE "-media", 
-				    sgettext_swapped_media,
-				    GETTEXT_PACKAGE,
+				    sgettext_swapped,
+				    "Stock label, media",
 				    NULL);
     }
 }

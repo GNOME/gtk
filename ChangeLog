@@ -1,5 +1,13 @@
 2009-01-18  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 563280 – stock items & translation context
+
+	* gtk/gtkstock.c: Solve the msgctxt problem a bit more
+	elegantly, and add some hints about this to the docs of
+	gtk_stock_set_translate_func. Proposed by Christian Persch
+
+2009-01-18  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 568196 – Please change context of Forward stock label
 
 	* gtk/gtkstock.c: Reinstate separate translation contexts for
