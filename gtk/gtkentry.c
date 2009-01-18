@@ -216,6 +216,10 @@ enum {
   PROP_ACTIVATABLE_SECONDARY,
   PROP_SENSITIVE_PRIMARY,
   PROP_SENSITIVE_SECONDARY,
+  PROP_TOOLTIP_TEXT_PRIMARY,
+  PROP_TOOLTIP_TEXT_SECONDARY,
+  PROP_TOOLTIP_MARKUP_PRIMARY,
+  PROP_TOOLTIP_MARKUP_SECONDARY,
   PROP_IM_MODULE
 };
 
@@ -1087,6 +1091,78 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          GTK_PARAM_READWRITE));
   
   /**
+   * GtkEntry:primary-icon-tooltip-text:
+   * 
+   * The contents of the tooltip on the primary icon.
+   *
+   * Also see gtk_entry_set_icon_tooltip_text().
+   *
+   * Since: 2.16
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TOOLTIP_TEXT_PRIMARY,
+                                   g_param_spec_string ("primary-icon-tooltip-text",
+                                                        P_("Primary icon tooltip text"),
+                                                        P_("The contents of the tooltip on the primary icon"),                              
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
+  
+  /**
+   * GtkEntry:secondary-icon-tooltip-text:
+   * 
+   * The contents of the tooltip on the secondary icon.
+   *
+   * Also see gtk_entry_set_icon_tooltip_text().
+   *
+   * Since: 2.16
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TOOLTIP_TEXT_SECONDARY,
+                                   g_param_spec_string ("secondary-icon-tooltip-text",
+                                                        P_("Secondary icon tooltip text"),
+                                                        P_("The contents of the tooltip on the secondary icon"),                              
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
+
+  /**
+   * GtkEntry:primary-icon-tooltip-markup:
+   * 
+   * The contents of the tooltip on the primary icon, which is marked up
+   * with the <link linkend="PangoMarkupFormat">Pango text markup 
+   * language</link>.
+   *
+   * Also see gtk_entry_set_icon_tooltip_markup().
+   *
+   * Since: 2.16
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TOOLTIP_MARKUP_PRIMARY,
+                                   g_param_spec_string ("primary-icon-tooltip-markup",
+                                                        P_("Primary icon tooltip markup"),
+                                                        P_("The contents of the tooltip on the primary icon"),                              
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
+
+  /**
+   * GtkEntry:secondary-icon-tooltip-markup:
+   * 
+   * The contents of the tooltip on the secondary icon, which is marked up
+   * with the <link linkend="PangoMarkupFormat">Pango text markup 
+   * language</link>.
+   *
+   * Also see gtk_entry_set_icon_tooltip_markup().
+   *
+   * Since: 2.16
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TOOLTIP_MARKUP_SECONDARY,
+                                   g_param_spec_string ("secondary-icon-tooltip-markup",
+                                                        P_("Secondary icon tooltip markup"),
+                                                        P_("The contents of the tooltip on the secondary icon"),                              
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
+
+  /**
    * GtkEntry:im-module:
    *
    * Which IM (input method) module should be used for this entry. 
@@ -1806,6 +1882,30 @@ gtk_entry_set_property (GObject         *object,
                                     g_value_get_boolean (value));
       break;
 
+    case PROP_TOOLTIP_TEXT_PRIMARY:
+      gtk_entry_set_icon_tooltip_text (entry,
+                                       GTK_ENTRY_ICON_PRIMARY,
+                                       g_value_get_string (value));
+      break;
+
+    case PROP_TOOLTIP_TEXT_SECONDARY:
+      gtk_entry_set_icon_tooltip_text (entry,
+                                       GTK_ENTRY_ICON_SECONDARY,
+                                       g_value_get_string (value));
+      break;
+
+    case PROP_TOOLTIP_MARKUP_PRIMARY:
+      gtk_entry_set_icon_tooltip_markup (entry,
+                                         GTK_ENTRY_ICON_PRIMARY,
+                                         g_value_get_string (value));
+      break;
+
+    case PROP_TOOLTIP_MARKUP_SECONDARY:
+      gtk_entry_set_icon_tooltip_markup (entry,
+                                         GTK_ENTRY_ICON_SECONDARY,
+                                         g_value_get_string (value));
+      break;
+
     case PROP_IM_MODULE:
       g_free (priv->im_module);
       priv->im_module = g_strdup (g_value_get_string (value));
@@ -1998,6 +2098,26 @@ gtk_entry_get_property (GObject         *object,
     case PROP_SENSITIVE_SECONDARY:
       g_value_set_boolean (value,
                            gtk_entry_get_icon_sensitive (entry, GTK_ENTRY_ICON_SECONDARY));
+      break;
+
+    case PROP_TOOLTIP_TEXT_PRIMARY:
+      g_value_take_string (value,
+                           gtk_entry_get_icon_tooltip_text (entry, GTK_ENTRY_ICON_PRIMARY));
+      break;
+
+    case PROP_TOOLTIP_TEXT_SECONDARY:
+      g_value_take_string (value,
+                           gtk_entry_get_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY));
+      break;
+
+    case PROP_TOOLTIP_MARKUP_PRIMARY:
+      g_value_take_string (value,
+                           gtk_entry_get_icon_tooltip_markup (entry, GTK_ENTRY_ICON_PRIMARY));
+      break;
+
+    case PROP_TOOLTIP_MARKUP_SECONDARY:
+      g_value_take_string (value,
+                           gtk_entry_get_icon_tooltip_markup (entry, GTK_ENTRY_ICON_SECONDARY));
       break;
 
     default:
@@ -7745,6 +7865,43 @@ ensure_has_tooltip (GtkEntry *entry)
 }
 
 /**
+ * gtk_entry_get_icon_tooltip_text:
+ * @entry: a #GtkEntry
+ * @icon_pos: the icon position
+ *
+ * Gets the contents of the tooltip on the icon at the specified 
+ * position in @entry.
+ * 
+ * Returns: the tooltip text, or %NULL. Free the returned string
+ *     with g_free() when done.
+ * 
+ * Since: 2.16
+ */
+gchar *
+gtk_entry_get_icon_tooltip_text (GtkEntry             *entry,
+                                 GtkEntryIconPosition  icon_pos)
+{
+  GtkEntryPrivate *priv;
+  EntryIconInfo *icon_info;
+  gchar *text = NULL;
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+  g_return_val_if_fail (IS_VALID_ICON_POSITION (icon_pos), NULL);
+
+  priv = GTK_ENTRY_GET_PRIVATE (entry);
+  icon_info = priv->icons[icon_pos];
+
+  if (!icon_info)
+    return NULL;
+ 
+  if (icon_info->tooltip && 
+      !pango_parse_markup (icon_info->tooltip, -1, 0, NULL, &text, NULL, NULL))
+    g_assert (NULL == text); /* text should still be NULL in case of markup errors */
+
+  return text;
+}
+
+/**
  * gtk_entry_set_icon_tooltip_text:
  * @entry: a #GtkEntry
  * @icon_pos: the icon position
@@ -7779,9 +7936,48 @@ gtk_entry_set_icon_tooltip_text (GtkEntry             *entry,
   if (icon_info->tooltip)
     g_free (icon_info->tooltip);
 
+  /* Treat an empty string as a NULL string,
+   * because an empty string would be useless for a tooltip:
+   */
+  if (tooltip && tooltip[0] == '\0')
+    tooltip = NULL;
+
   icon_info->tooltip = tooltip ? g_markup_escape_text (tooltip, -1) : NULL;
 
   ensure_has_tooltip (entry);
+}
+
+/**
+ * gtk_entry_get_icon_tooltip_markup:
+ * @entry: a #GtkEntry
+ * @icon_pos: the icon position
+ *
+ * Gets the contents of the tooltip on the icon at the specified 
+ * position in @entry.
+ * 
+ * Returns: the tooltip text, or %NULL. Free the returned string
+ *     with g_free() when done.
+ * 
+ * Since: 2.16
+ */
+gchar *
+gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
+                                   GtkEntryIconPosition  icon_pos)
+{
+  GtkEntryPrivate *priv;
+  EntryIconInfo *icon_info;
+  gchar *text = NULL;
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+  g_return_val_if_fail (IS_VALID_ICON_POSITION (icon_pos), NULL);
+
+  priv = GTK_ENTRY_GET_PRIVATE (entry);
+  icon_info = priv->icons[icon_pos];
+
+  if (!icon_info)
+    return NULL;
+ 
+  return g_strdup (icon_info->tooltip);
 }
 
 /**
@@ -7819,6 +8015,12 @@ gtk_entry_set_icon_tooltip_markup (GtkEntry             *entry,
 
   if (icon_info->tooltip)
     g_free (icon_info->tooltip);
+
+  /* Treat an empty string as a NULL string,
+   * because an empty string would be useless for a tooltip:
+   */
+  if (tooltip && tooltip[0] == '\0')
+    tooltip = NULL;
 
   icon_info->tooltip = g_strdup (tooltip);
 

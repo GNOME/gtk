@@ -275,9 +275,13 @@ gint         gtk_entry_get_icon_at_pos                   (GtkEntry             *
 void         gtk_entry_set_icon_tooltip_text             (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
 							  const gchar          *tooltip);
+gchar *      gtk_entry_get_icon_tooltip_text             (GtkEntry             *entry,
+                                                          GtkEntryIconPosition  icon_pos);
 void         gtk_entry_set_icon_tooltip_markup           (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
 							  const gchar          *tooltip);
+gchar *      gtk_entry_get_icon_tooltip_markup           (GtkEntry             *entry,
+                                                          GtkEntryIconPosition  icon_pos);
 void         gtk_entry_set_icon_drag_source              (GtkEntry             *entry,
 							  GtkEntryIconPosition  icon_pos,
 							  GtkTargetList        *target_list,

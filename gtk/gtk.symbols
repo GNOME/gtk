@@ -1288,6 +1288,8 @@ gtk_entry_get_icon_pixbuf
 gtk_entry_get_icon_sensitive
 gtk_entry_get_icon_stock
 gtk_entry_get_icon_storage_type
+gtk_entry_get_icon_tooltip_markup
+gtk_entry_get_icon_tooltip_text
 gtk_entry_get_inner_border
 gtk_entry_get_invisible_char
 gtk_entry_get_layout

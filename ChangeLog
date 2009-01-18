@@ -1,5 +1,10 @@
 2009-01-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk.symbols:
+	* gtk/gtkentry.[hc]: Add properties and getters for icon tooltips.
+
+2009-01-18  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 563280 – stock items & translation context
 
 	* gtk/gtkstock.c: Solve the msgctxt problem a bit more
