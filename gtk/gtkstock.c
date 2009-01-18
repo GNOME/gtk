@@ -454,8 +454,8 @@ static const GtkStockItem builtin_items [] =
  * /&ast; ... &ast/
  *
  * gtk_stock_add (items, G_N_ELEMENTS (items));
- * gtk_stock_set_translate_func ("odd-item-domain", my_translate_func, "odd-item-domain"); 
- * gtk_stock_set_translate_func ("even-item-domain", my_translate_func, "even-item-domain"); 
+ * gtk_stock_set_translate_func ("odd-item-domain", my_translate_func, "odd items"); 
+ * gtk_stock_set_translate_func ("even-item-domain", my_translate_func, "even items"); 
  * ]|
  * 
  * Since: 2.8
