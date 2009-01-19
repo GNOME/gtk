@@ -5438,6 +5438,9 @@ gdk_window_lower_internal (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowObject *parent = private->parent;
+  GdkWindowObject *above;
+  GList *native_children;
+  GList *l, listhead;
 
   if (parent)
     {
@@ -5445,8 +5448,48 @@ gdk_window_lower_internal (GdkWindow *window)
       parent->children = g_list_append (parent->children, window);
     }
 
-  if (gdk_window_has_impl (private))
-    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->lower (window);
+  /* Just do native lower for toplevels */
+  if (private->parent == NULL ||
+      GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT)
+    {
+      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->lower (window);
+    }
+  else if (gdk_window_has_impl (private))
+    {
+      above = find_native_sibling_above (parent, private);
+      if (above)
+	{
+	  listhead.data = window;
+	  listhead.next = NULL;
+	  listhead.prev = NULL;
+	  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->restack_under ((GdkWindow *)above,
+								    &listhead);
+	}
+      else
+	GDK_WINDOW_IMPL_GET_IFACE (private->impl)->raise (window);
+    }
+  else
+    {
+      native_children = NULL;
+      get_all_native_children (private, &native_children);
+      if (native_children != NULL)
+	{
+	  above = find_native_sibling_above (parent, private);
+
+	  if (above)
+	    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->restack_under ((GdkWindow *)above,
+								      native_children);
+	  else
+	    {
+	      /* Right order, since native_chilren is bottom-opmost first */
+	      for (l = native_children; l != NULL; l = l->next)
+		GDK_WINDOW_IMPL_GET_IFACE (private->impl)->raise (l->data);
+	    }
+	  
+	  g_list_free (native_children);
+	}
+      
+    }
 }
 
 static void
