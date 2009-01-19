@@ -1162,7 +1162,23 @@ gdk_window_reparent (GdkWindow *window,
 
   if (do_reparent_to_impl)
     reparent_to_impl (private);
-  
+  else
+    {
+      GdkWindowObject *above;
+      GList listhead = {0};
+      
+      /* The reparent will have put the native window topmost in the native parent,
+       * which may be wrong wrt other native windows in the non-native hierarchy,
+       * so restack */
+      above = find_native_sibling_above (private->parent, private);
+      if (above)
+	{
+	  listhead.data = window;
+	  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->restack_under ((GdkWindow *)above,
+								    &listhead);
+	}
+    }
+
   if (show)
     gdk_window_show_unraised (window);
   else
