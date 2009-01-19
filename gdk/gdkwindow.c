@@ -685,6 +685,46 @@ _gdk_window_update_size (GdkWindow *window)
   recompute_visible_regions ((GdkWindowObject *)window, TRUE, FALSE);
 }
 
+/* Find the native window that would be just above "child"
+ * in the native stacking order if "child" was a native window
+ * (it doesn't have to be native). If there is no such native
+ * window inside this native parent then NULL is returned.
+ * If child is NULL, find lowest native window in parent.
+ */
+static GdkWindowObject *
+find_native_sibling_above (GdkWindowObject *parent,
+			   GdkWindowObject *child)
+{
+  GdkWindowObject *w;
+  GList *l;
+
+  if (child)
+    {
+      l = g_list_find (parent->children, child);
+      g_assert (l != NULL); /* Better be a child of its parent... */
+      l = l->prev; /* Start looking at the one above the child */
+    }
+  else
+    l = g_list_last (parent->children);
+
+  for (; l != NULL; l = l->prev)
+    {
+      w = l->data;
+	
+      if (gdk_window_has_impl (w))
+	return w;
+      
+      w = find_native_sibling_above (w, NULL);
+      if (w)
+	return w;
+    }
+
+  if (gdk_window_has_impl (parent))
+    return NULL;
+  else
+    return find_native_sibling_above (parent->parent, parent);
+}
+
 static GdkEventMask
 get_native_event_mask (GdkWindowObject *private)
 {
@@ -700,7 +740,6 @@ get_native_event_mask (GdkWindowObject *private)
   else
     return GDK_EXPOSURE_MASK;
 }
-
 
 /**
  * gdk_window_new:
@@ -864,10 +903,24 @@ gdk_window_new (GdkWindow     *parent,
     }
   else if (native)
     {
+      GdkWindowObject *above;
+      GList listhead = {0};
+      
       event_mask = get_native_event_mask (private);
       
       /* Create the impl */
       _gdk_window_impl_new (window, real_parent, screen, visual, event_mask, attributes, attributes_mask);
+
+      /* This will put the native window topmost in the native parent, which may
+       * be wrong wrt other native windows in the non-native hierarchy, so restack */
+      above = find_native_sibling_above (private->parent, private);
+      if (above)
+	{
+	  listhead.data = window;
+	  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->restack_under ((GdkWindow *)above,
+								    &listhead);
+	}
+      
     }
   else
     {
@@ -1138,6 +1191,8 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
   GdkScreen *screen;
   GdkVisual *visual;
   GdkWindowAttr attributes;
+  GdkWindowObject *above;
+  GList listhead;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -1173,6 +1228,19 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
       private->impl = old_impl;
       change_impl (private, new_impl);
       
+      /* Native window creation will put the native window topmost in the
+       * native parent, which may be wrong wrt other native windows in the
+       * non-native hierarchy, so restack */
+      above = find_native_sibling_above (private->parent, private);
+      if (above)
+	{
+	  listhead.data = window;
+	  listhead.prev = NULL;
+	  listhead.next = NULL;
+	  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->restack_under ((GdkWindow *)above,
+								    &listhead);
+	}
+
       recompute_visible_regions (private, FALSE, FALSE);
 
       reparent_to_impl (private);
@@ -5167,11 +5235,33 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   return gdk_window_foreign_new_for_display (gdk_display_get_default (), anid);
 }
 
+static void
+get_all_native_children (GdkWindowObject *private,
+			 GList **native)
+{
+  GdkWindowObject *child;
+  GList *l;
+  
+  for (l = private->children; l != NULL; l = l->next)
+    {
+      child = l->data;
+
+      if (gdk_window_has_impl (child))
+	*native = g_list_prepend (*native, child);
+      else
+	get_all_native_children (child, native);
+    }
+}
+
+
 static inline void
 gdk_window_raise_internal (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowObject *parent = private->parent;
+  GdkWindowObject *above;
+  GList *native_children;
+  GList *l, listhead;
 
   if (parent)
     {
@@ -5179,8 +5269,48 @@ gdk_window_raise_internal (GdkWindow *window)
       parent->children = g_list_prepend (parent->children, window);
     }
 
-  if (gdk_window_has_impl (private))
-    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->raise (window);
+  /* Just do native raise for toplevels */
+  if (private->parent == NULL ||
+      GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT)
+    {
+      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->raise (window);
+    }
+  else if (gdk_window_has_impl (private))
+    {
+      above = find_native_sibling_above (parent, private);
+      if (above)
+	{
+	  listhead.data = window;
+	  listhead.next = NULL;
+	  listhead.prev = NULL;
+	  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->restack_under ((GdkWindow *)above,
+								    &listhead);
+	}
+      else
+	GDK_WINDOW_IMPL_GET_IFACE (private->impl)->raise (window);
+    }
+  else
+    {
+      native_children = NULL;
+      get_all_native_children (private, &native_children);
+      if (native_children != NULL)
+	{
+	  above = find_native_sibling_above (parent, private);
+
+	  if (above)
+	    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->restack_under ((GdkWindow *)above,
+								      native_children);
+	  else
+	    {
+	      /* Right order, since native_chilren is bottom-opmost first */
+	      for (l = native_children; l != NULL; l = l->next)
+		GDK_WINDOW_IMPL_GET_IFACE (private->impl)->raise (l->data);
+	    }
+	  
+	  g_list_free (native_children);
+	}
+      
+    }
 }
 
 static void
