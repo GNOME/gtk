@@ -1814,9 +1814,12 @@ gtk_selection_data_get_targets (GtkSelectionData  *selection_data,
 {
   g_return_val_if_fail (selection_data != NULL, FALSE);
 
+  /* As usual, java gets it wrong and sets the type to TARGETS, not ATOM 
+   */
   if (selection_data->length >= 0 &&
       selection_data->format == 32 &&
-      selection_data->type == GDK_SELECTION_TYPE_ATOM)
+      (selection_data->type == GDK_SELECTION_TYPE_ATOM ||
+       selection_data->type == gtk_selection_atoms[TARGETS]))
     {
       if (targets)
 	*targets = g_memdup (selection_data->data, selection_data->length);

@@ -1,5 +1,14 @@
 2009-01-18  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 568263 – gtk can't recognize the wrong X Selection TARGETS' 
+	type "TARGETS" by java applications
+
+	* gtk/gtkselection.c (gtk_selection_data_get_targets): Accept
+	a type of TARGETS instead of ATOM, too. Based on a patch by 
+	Peng Wu. 
+
+2009-01-18  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 568233 – Wrong statement about GtkEntry's "activate" signal
 
 	* gtk/gtkentry.c:
