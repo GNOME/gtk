@@ -5803,6 +5803,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
   int old_x, old_y, old_abs_x, old_abs_y;
   int dx, dy;
   gboolean do_move_native_children;
+  gboolean is_toplevel, is_resize;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -5818,29 +5819,30 @@ gdk_window_move_resize_internal (GdkWindow *window,
 
   old_x = private->x;
   old_y = private->y;
+
+  is_toplevel =
+    private->parent == NULL ||
+    GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT;
+
+  is_resize = (width != -1) || (height != -1);
+
+  if (GDK_WINDOW_IS_MAPPED (window) &&
+      (!is_toplevel || is_resize) &&
+      !private->input_only)
+    {
+      expose = TRUE;
+      
+      old_region = gdk_region_copy (private->clip_region);
+      /* Adjust region to parent window coords */
+      gdk_region_offset (old_region, private->x, private->y);
+    }
   
   if (gdk_window_has_impl (private))
     {
-      if (GDK_WINDOW_IS_MAPPED (window))
-	{
-	  expose = !private->input_only;
-	  old_region = gdk_region_copy (private->clip_region);
-	  /* Adjust region to parent window coords */
-	  gdk_region_offset (old_region, private->x, private->y);
-	}
-      
       GDK_WINDOW_IMPL_GET_IFACE (private->impl)->move_resize (window, with_move, x, y, width, height);
     }
   else
     {
-      if (GDK_WINDOW_IS_MAPPED (window))
-	{
-	  expose = !private->input_only;
-	  old_region = gdk_region_copy (private->clip_region);
-	  /* Adjust region to parent window coords */
-	  gdk_region_offset (old_region, private->x, private->y);
-	}
-
       if (with_move)
 	{
 	  private->x = x;
@@ -5861,16 +5863,18 @@ gdk_window_move_resize_internal (GdkWindow *window,
 
   dx = private->x - old_x;
   dy = private->y - old_y;
-
+  
   old_abs_x = private->abs_x;
   old_abs_y = private->abs_y;
-  
-  recompute_visible_regions (private, TRUE, FALSE);
 
+  /* Avoid recomputing for pure toplevel moves, for performance reasons */
+  if (!is_toplevel || is_resize)
+    recompute_visible_regions (private, TRUE, FALSE);
+  
   if (do_move_native_children &&
       (old_abs_x != private->abs_x ||
        old_abs_y != private->abs_y))
-      move_native_children (private);
+    move_native_children (private);
   
   if (expose)
     {
