@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-18 16:47+0100\n"
-"PO-Revision-Date: 2009-01-18 16:47+0100\n"
+"POT-Creation-Date: 2009-01-19 14:36+0100\n"
+"PO-Revision-Date: 2009-01-19 14:36+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@ulrik.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -1587,15 +1587,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Fargeval"
 
-#: ../gtk/gtkentry.c:8039 ../gtk/gtktextview.c:7787
+#: ../gtk/gtkentry.c:8243 ../gtk/gtktextview.c:7787
 msgid "Input _Methods"
 msgstr "Inndata _metoder"
 
-#: ../gtk/gtkentry.c:8053 ../gtk/gtktextview.c:7801
+#: ../gtk/gtkentry.c:8257 ../gtk/gtktextview.c:7801
 msgid "_Insert Unicode Control Character"
 msgstr "Set _inn Unicode-kontrollteikn"
 
-#: ../gtk/gtkentry.c:9416
+#: ../gtk/gtkentry.c:9620
 msgid ""
 "You have the Caps Lock key on\n"
 "and an active input method"
@@ -1603,11 +1603,11 @@ msgstr ""
 "Du har Caps Lock på\n"
 "og ein aktiv inndatametode"
 
-#: ../gtk/gtkentry.c:9418
+#: ../gtk/gtkentry.c:9622
 msgid "You have the Caps Lock key on"
 msgstr "Du har Caps Lock på"
 
-#: ../gtk/gtkentry.c:9420
+#: ../gtk/gtkentry.c:9624
 msgid "You have an active input method"
 msgstr "Du har ein aktiv inndatametode"
 
@@ -3191,50 +3191,49 @@ msgstr "For_lat fullskjerm"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: ../gtk/gtkstock.c:319
-msgctxt "Stock label"
+msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Botn"
 
 #. This is a navigation label as in "go to the first page"
 #: ../gtk/gtkstock.c:321
-msgctxt "Stock label"
+msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_Fyrste"
 
 #. This is a navigation label as in "go to the last page"
 #: ../gtk/gtkstock.c:323
-msgctxt "Stock label"
+msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "_Siste"
 
 #. This is a navigation label as in "go to the top of the page"
 #: ../gtk/gtkstock.c:325
-msgctxt "Stock label"
+msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_Topp"
 
 #. This is a navigation label as in "go back"
 #: ../gtk/gtkstock.c:327
-msgctxt "Stock label"
+msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "Til_bake"
 
 #. This is a navigation label as in "go down"
 #: ../gtk/gtkstock.c:329
-msgctxt "Stock label"
+msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "Ne_d"
 
 #. This is a navigation label as in "go forward"
-#. Media label, as in "fast forward"
-#: ../gtk/gtkstock.c:331 ../gtk/gtkstock.c:353
-msgctxt "Stock label"
+#: ../gtk/gtkstock.c:331
+msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "_Framover"
 
 #. This is a navigation label as in "go up"
 #: ../gtk/gtkstock.c:333
-msgctxt "Stock label"
+msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Opp"
 
@@ -3307,45 +3306,51 @@ msgctxt "Stock label"
 msgid "_Right"
 msgstr "_Høgre"
 
+#. Media label, as in "fast forward"
+#: ../gtk/gtkstock.c:353
+msgctxt "Stock label, media"
+msgid "_Forward"
+msgstr "_Framover"
+
 #. Media label, as in "next song"
 #: ../gtk/gtkstock.c:355
-msgctxt "Stock label"
+msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Neste"
 
 #. Media label, as in "pause music"
 #: ../gtk/gtkstock.c:357
-msgctxt "Stock label"
+msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "P_ause"
 
 #. Media label, as in "play music"
 #: ../gtk/gtkstock.c:359
-msgctxt "Stock label"
+msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Spel"
 
 #. Media label, as in  "previous song"
 #: ../gtk/gtkstock.c:361
-msgctxt "Stock label"
+msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "_Førre"
 
 #. Media label
 #: ../gtk/gtkstock.c:363
-msgctxt "Stock label"
+msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Ta opp"
 
 #. Media label
 #: ../gtk/gtkstock.c:365
-msgctxt "Stock label"
+msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "Spol tilbak_e"
 
 #. Media label
-#: ../gtk/gtkstock.c:367 ../gtk/gtkstock.c:402
-msgctxt "Stock label"
+#: ../gtk/gtkstock.c:367
+msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Stopp"
 
@@ -3494,6 +3499,11 @@ msgstr "_Minkande"
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "_Stavekontroll"
+
+#: ../gtk/gtkstock.c:402
+msgctxt "Stock label"
+msgid "_Stop"
+msgstr "_Stopp"
 
 #. Font variant
 #: ../gtk/gtkstock.c:404
