@@ -1633,15 +1633,35 @@ gdk_window_x11_reparent (GdkWindow *window,
 static void
 gdk_window_x11_raise (GdkWindow *window)
 {
-  if (!GDK_WINDOW_DESTROYED (window))
-    XRaiseWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
+  XRaiseWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
+}
+
+static void
+gdk_window_x11_restack_under (GdkWindow *window,
+			      GList *native_siblings /* in requested order, first is bottom-most */)
+{
+  Window *windows;
+  int n_windows, i;
+  GList *l;
+
+  n_windows = g_list_length (native_siblings) + 1;
+  windows = g_new (Window, n_windows);
+
+  windows[0] = GDK_WINDOW_XID (window);
+  /* Reverse order, as input order is bottom-most first */
+  i = n_windows - 1;
+  for (l = native_siblings; l != NULL; l = l->next)
+    windows[i--] = GDK_WINDOW_XID (l->data);
+ 
+  XRestackWindows (GDK_WINDOW_XDISPLAY (window), windows, n_windows);
+  
+  g_free (windows);
 }
 
 static void
 gdk_window_x11_lower (GdkWindow *window)
 {
-  if (!GDK_WINDOW_DESTROYED (window))
-    XLowerWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
+  XLowerWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
 }
 
 /**
@@ -5460,6 +5480,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->get_events = gdk_window_x11_get_events;
   iface->raise = gdk_window_x11_raise;
   iface->lower = gdk_window_x11_lower;
+  iface->restack_under = gdk_window_x11_restack_under;
   iface->move_resize = gdk_window_x11_move_resize;
   iface->set_background = gdk_window_x11_set_background;
   iface->set_back_pixmap = gdk_window_x11_set_back_pixmap;

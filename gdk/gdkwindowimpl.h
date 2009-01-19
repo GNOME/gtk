@@ -48,6 +48,8 @@ struct _GdkWindowImplIface
   void         (* withdraw)             (GdkWindow       *window);
   void         (* raise)                (GdkWindow       *window);
   void         (* lower)                (GdkWindow       *window);
+  void         (* restack_under)        (GdkWindow       *window,
+					 GList           *native_siblings);
 
   void         (* move_resize)          (GdkWindow       *window,
                                          gboolean         with_move,
