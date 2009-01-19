@@ -1,5 +1,14 @@
 2009-01-18  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 568233 – Wrong statement about GtkEntry's "activate" signal
+
+	* gtk/gtkentry.c:
+	* gtk/gtklabel.c:
+	* gtk/gtktextview.c: Correct some copy-and-paste mistakes in
+	keybinding signal docs. Pointed out by Pascal Terjan.
+
+2009-01-18  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk.symbols:
 	* gtk/gtkentry.[hc]: Add properties and getters for icon tooltips.
 

@@ -294,7 +294,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * the viewport to be moved instead.
    *
    * Applications should not connect to it, but may emit it with
-   * g_signal_emit_by_name() if they need to control scrolling
+   * g_signal_emit_by_name() if they need to control the cursor
    * programmatically.
    *
    * The default bindings for this signal come in two variants,

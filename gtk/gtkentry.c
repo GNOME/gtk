@@ -1228,7 +1228,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * which gets emitted when the user activates the entry.
    * 
    * Applications should not connect to it, but may emit it with
-   * g_signal_emit_by_name() if they need to control scrolling
+   * g_signal_emit_by_name() if they need to control activation 
    * programmatically.
    *
    * The default bindings for this signal are all forms of the Enter key.
@@ -1257,7 +1257,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * the viewport to be moved instead.
    *
    * Applications should not connect to it, but may emit it with
-   * g_signal_emit_by_name() if they need to control scrolling
+   * g_signal_emit_by_name() if they need to control the cursor
    * programmatically.
    *
    * The default bindings for this signal come in two variants,
