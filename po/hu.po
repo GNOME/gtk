@@ -10,9 +10,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hu\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-15 20:12+0100\n"
-"PO-Revision-Date: 2009-01-14 16:52+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
+"POT-Creation-Date: 2009-01-18 18:40+0000\n"
+"PO-Revision-Date: 2009-01-19 11:41+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
@@ -296,8 +296,7 @@ msgstr "A(z) „%s” képfájl nem tartalmaz adatokat"
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:1013
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1277 ../tests/testfilechooser.c:267
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Nem sikerült betölteni a(z) „%s” képet: ok ismeretlen, valószínűleg sérült a "
 "képfájl"
@@ -687,8 +686,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-jpeg.c:1148 ../gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "A JPEG-minőség értékének 0 és 100 között kell lennie, a(z) „%d” érték nem "
 "megengedett."
@@ -792,8 +790,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Végzetes hiba a PNG képfájl olvasásakor: %s"
 
 #: ../gdk-pixbuf/io-png.c:825
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "A PNG szöveges darabok kulcsainak legalább 1 és legfeljebb 79 karakterből "
 "kell állniuk."
@@ -1562,15 +1559,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Szín kiválasztása"
 
-#: ../gtk/gtkentry.c:8039 ../gtk/gtktextview.c:7787
+#: ../gtk/gtkentry.c:8041 ../gtk/gtktextview.c:7787
 msgid "Input _Methods"
 msgstr "Beviteli mó_dok"
 
-#: ../gtk/gtkentry.c:8053 ../gtk/gtktextview.c:7801
+#: ../gtk/gtkentry.c:8055 ../gtk/gtktextview.c:7801
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode vezérlőkarakter beszúrása"
 
-#: ../gtk/gtkentry.c:9416
+#: ../gtk/gtkentry.c:9418
 msgid ""
 "You have the Caps Lock key on\n"
 "and an active input method"
@@ -1578,11 +1575,11 @@ msgstr ""
 "A Caps Lock le van nyomva\n"
 "és egy bemeneti mód aktív"
 
-#: ../gtk/gtkentry.c:9418
+#: ../gtk/gtkentry.c:9420
 msgid "You have the Caps Lock key on"
 msgstr "A Caps Lock le van nyomva"
 
-#: ../gtk/gtkentry.c:9420
+#: ../gtk/gtkentry.c:9422
 msgid "You have an active input method"
 msgstr "Egy bemeneti mód aktív"
 
@@ -1792,8 +1789,7 @@ msgstr "A(z) „%s” nevű fájl már létezik. Le akarja cserélni?"
 
 #: ../gtk/gtkfilechooserdefault.c:8138 ../gtk/gtkprintunixdialog.c:374
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "A fájl már létezik a(z) „%s” helyen. Lecserélésével a tartalma felül lesz "
 "írva."
@@ -1926,10 +1922,8 @@ msgstr "Fájl át_nevezése"
 
 #: ../gtk/gtkfilesel.c:1347
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"A(z) „%s” mappanév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "A(z) „%s” mappanév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
 #: ../gtk/gtkfilesel.c:1392
 msgid "New Folder"
@@ -1946,8 +1940,7 @@ msgstr "Lét_rehozás"
 #: ../gtk/gtkfilesel.c:1474 ../gtk/gtkfilesel.c:1581 ../gtk/gtkfilesel.c:1594
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"A(z) „%s” fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
+msgstr "A(z) „%s” fájlnév fájlnevekben meg nem engedett szimbólumokat tartalmaz"
 
 #: ../gtk/gtkfilesel.c:1477 ../gtk/gtkfilesel.c:1487
 #, c-format
@@ -2940,7 +2933,7 @@ msgstr "_Félkövér"
 #: ../gtk/gtkstock.c:300
 msgctxt "Stock label"
 msgid "_Cancel"
-msgstr "_Mégsem"
+msgstr "Mé_gse"
 
 #: ../gtk/gtkstock.c:301
 msgctxt "Stock label"
@@ -3029,50 +3022,65 @@ msgstr "T_eljes képernyő elhagyása"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: ../gtk/gtkstock.c:319
-msgctxt "Stock label"
+#| msgctxt "Stock label"
+#| msgid "_Bottom"
+msgctxt "Stock label, navigation"
 msgid "_Bottom"
-msgstr "_Lent"
+msgstr "_Aljára"
 
 #. This is a navigation label as in "go to the first page"
 #: ../gtk/gtkstock.c:321
-msgctxt "Stock label"
+#| msgctxt "Stock label"
+#| msgid "_First"
+msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_Első"
 
 #. This is a navigation label as in "go to the last page"
 #: ../gtk/gtkstock.c:323
-msgctxt "Stock label"
+#| msgctxt "Stock label"
+#| msgid "_Last"
+msgctxt "Stock label, navigation"
 msgid "_Last"
-msgstr "_Legutóbbi"
+msgstr "_Utolsó"
 
 #. This is a navigation label as in "go to the top of the page"
 #: ../gtk/gtkstock.c:325
-msgctxt "Stock label"
+#| msgctxt "Stock label"
+#| msgid "_Top"
+msgctxt "Stock label, navigation"
 msgid "_Top"
-msgstr "_Fent"
+msgstr "_Tetejére"
 
 #. This is a navigation label as in "go back"
 #: ../gtk/gtkstock.c:327
-msgctxt "Stock label"
+#| msgctxt "Stock label"
+#| msgid "_Back"
+msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_Vissza"
 
 #. This is a navigation label as in "go down"
 #: ../gtk/gtkstock.c:329
-msgctxt "Stock label"
+#| msgctxt "Stock label"
+#| msgid "_Down"
+msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_Le"
 
 #. This is a navigation label as in "go forward"
-#. Media label, as in "fast forward"
-#: ../gtk/gtkstock.c:331 ../gtk/gtkstock.c:353
-msgctxt "Stock label"
+#: ../gtk/gtkstock.c:331
+#| msgctxt "Stock label"
+#| msgid "_Forward"
+msgctxt "Stock label, navigation"
 msgid "_Forward"
-msgstr "_Előre"
+msgstr "_Tovább"
 
 #. This is a navigation label as in "go up"
 #: ../gtk/gtkstock.c:333
-msgctxt "Stock label"
+#| msgctxt "Stock label"
+#| msgid "_Up"
+msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Fel"
 
@@ -3145,45 +3153,67 @@ msgctxt "Stock label"
 msgid "_Right"
 msgstr "_Jobbra"
 
+#. Media label, as in "fast forward"
+#: ../gtk/gtkstock.c:353
+#| msgctxt "Stock label"
+#| msgid "_Forward"
+msgctxt "Stock label, media"
+msgid "_Forward"
+msgstr "_Előre"
+
 #. Media label, as in "next song"
 #: ../gtk/gtkstock.c:355
-msgctxt "Stock label"
+#| msgctxt "Stock label"
+#| msgid "_Next"
+msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Következő"
 
 #. Media label, as in "pause music"
 #: ../gtk/gtkstock.c:357
-msgctxt "Stock label"
+#| msgctxt "Stock label"
+#| msgid "P_ause"
+msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "_Szünet"
 
 #. Media label, as in "play music"
 #: ../gtk/gtkstock.c:359
-msgctxt "Stock label"
+#| msgctxt "Stock label"
+#| msgid "_Play"
+msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Lejátszás"
 
 #. Media label, as in  "previous song"
 #: ../gtk/gtkstock.c:361
-msgctxt "Stock label"
+#| msgctxt "Stock label"
+#| msgid "Pre_vious"
+msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "_Előző"
 
 #. Media label
 #: ../gtk/gtkstock.c:363
-msgctxt "Stock label"
+#| msgctxt "Stock label"
+#| msgid "_Record"
+msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Felvétel"
 
 #. Media label
 #: ../gtk/gtkstock.c:365
-msgctxt "Stock label"
+#| msgctxt "Stock label"
+#| msgid "R_ewind"
+msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "_Vissza"
 
 #. Media label
-#: ../gtk/gtkstock.c:367 ../gtk/gtkstock.c:402
-msgctxt "Stock label"
+#: ../gtk/gtkstock.c:367
+#| msgctxt "Stock label"
+#| msgid "_Stop"
+msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Leállítás"
 
@@ -3333,6 +3363,11 @@ msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "_Helyesírás-ellenőrzés"
 
+#: ../gtk/gtkstock.c:402
+msgctxt "Stock label"
+msgid "_Stop"
+msgstr "_Leállítás"
+
 #. Font variant
 #: ../gtk/gtkstock.c:404
 msgctxt "Stock label"
@@ -3415,14 +3450,12 @@ msgstr "A(z) <%s> elem nem rendelkezik sem „név” sem „azonosító” attr
 #: ../gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr ""
-"A(z) „%s” attribútum kétszer lett megismételve ugyanazon a(z) <%s> elemen"
+msgstr "A(z) „%s” attribútum kétszer lett megismételve ugyanazon a(z) <%s> elemen"
 
 #: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr ""
-"A(z) „%s” attribútum <%s> elemen érvénytelen ebben a szövegkörnyezetben"
+msgstr "A(z) „%s” attribútum <%s> elemen érvénytelen ebben a szövegkörnyezetben"
 
 #: ../gtk/gtktextbufferserialize.c:1022
 #, c-format
@@ -3456,8 +3489,7 @@ msgstr "A(z) „%s” nem érvényes attribútumnév"
 
 #: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "„%s” nem alakítható „%s” típusú értékké „%s” attribútumhoz"
 
 #: ../gtk/gtktextbufferserialize.c:1202
@@ -3478,8 +3510,7 @@ msgstr "A(z) „%s” címke prioritása („%s”) érvénytelen"
 #: ../gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
-"A szöveg legkülső elemének <%s> helyett text_view_markup> elemnek kell lennie"
+msgstr "A szöveg legkülső elemének <%s> helyett text_view_markup> elemnek kell lennie"
 
 #: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
 #, c-format
@@ -3495,8 +3526,7 @@ msgid "Serialized data is malformed"
 msgstr "A sorba fejtett adatok rosszul formázottak"
 
 #: ../gtk/gtktextbufferserialize.c:1857
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "A sorba fejtett adatok rosszul formázottak. Az első szakasz nem "
 "GTKTEXTBUFFERCONTENTS-0001"
@@ -4429,8 +4459,7 @@ msgstr "ROC 8k"
 #: ../gtk/updateiconcache.c:492 ../gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
-"eltérő idata található a szimbolikusan linkelt „%s” és „%s” elemekhez\n"
+msgstr "eltérő idata található a szimbolikusan linkelt „%s” és „%s” elemekhez\n"
 
 #: ../gtk/updateiconcache.c:1374
 #, c-format
@@ -4909,3 +4938,4 @@ msgstr "Nyomtatás tesztnyomtatóra"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nem lehet információt szerezni a(z) „%s” fájlról: %s"
+
