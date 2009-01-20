@@ -6055,7 +6055,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
     {
       /* Do the actual move after recomputing things, as this will have set the shape to
 	 the now correct one, thus avoiding copying regions that should not be copied. */
-      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->move_resize (window, with_move, x, y, width, height);
+      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->move_resize (window, TRUE, private->x, private->y, private->width, private->height);
     }
   else if (old_abs_x != private->abs_x ||
 	   old_abs_y != private->abs_y)
