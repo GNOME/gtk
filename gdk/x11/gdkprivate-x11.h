@@ -191,6 +191,7 @@ PangoRenderer *_gdk_x11_renderer_get (GdkDrawable *drawable,
 				      GdkGC       *gc);
 
 void _gdk_x11_cursor_update_theme (GdkCursor *cursor);
+void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
 
 gboolean _gdk_x11_get_xft_setting (GdkScreen   *screen,
 				   const gchar *name,

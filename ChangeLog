@@ -1,3 +1,16 @@
+2009-01-19  Matthias Clasen  <mclasen@redhat.com>
+
+	Cache cursors to avoid libXcursor theme lookup overhead.
+	Patch by David Alan Gilbert.
+
+	* gdk/gdkcursor.h: Add a GDK_BLANK_CURSOR cursor type.
+
+	* gdk/x11/gdkcursor-x11.c: Cache font cursors and named cursors.
+
+	* gdk/x11/gdkprivate-x11.h:
+	* gdk/x11/gdkcdisplay-x11.c: Remove cached cursors when a 
+	display if finalized.
+
 2009-01-18  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 568263 – gtk can't recognize the wrong X Selection TARGETS' 

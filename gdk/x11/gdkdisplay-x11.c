@@ -838,6 +838,8 @@ gdk_display_x11_finalize (GObject *object)
       g_free (display_x11->motif_target_lists);
     }
 
+  _gdk_x11_cursor_display_finalize (GDK_DISPLAY_OBJECT(display_x11));
+
   /* Atom Hashtable */
   g_hash_table_destroy (display_x11->atom_from_virtual);
   g_hash_table_destroy (display_x11->atom_to_virtual);
