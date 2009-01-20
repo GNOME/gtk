@@ -88,8 +88,7 @@ gdk_cursor_unref (GdkCursor *cursor)
  * Creates a new cursor from the set of builtin cursors for the default display.
  * See gdk_cursor_new_for_display().
  *
- * To make the cursor invisible, use gdk_cursor_new_from_pixmap() to create
- * a cursor with no pixels in it.
+ * To make the cursor invisible, use %GDK_BLANK_CURSOR.
  * 
  * Return value: a new #GdkCursor
  **/
