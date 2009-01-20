@@ -45,12 +45,21 @@ _gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
 				     int          height)
 {
       CGContextRef cg_context;
+      cairo_surface_t *surface;
 
-      cg_context = gdk_quartz_drawable_get_context (drawable, TRUE);
+      /* FIXME: Can this ever be called on a non-window drawable? If so we
+       * need to check whether it's a window or pixmap and get the right
+       * kind of context, and also release it in destroy below (for bitmap
+       * context).
+       */
+
+      cg_context = [[NSGraphicsContext currentContext] graphicsPort];
       if (!cg_context)
 	return NULL;
 
-      return cairo_quartz_surface_create_for_cg_context (cg_context, width, height);
+      surface = cairo_quartz_surface_create_for_cg_context (cg_context, width, height);
+
+      return surface;
 }
 
 static void
@@ -58,9 +67,6 @@ gdk_quartz_cairo_surface_destroy (void *data)
 {
   GdkQuartzCairoSurfaceData *surface_data = data;
   GdkDrawableImplQuartz *impl = GDK_DRAWABLE_IMPL_QUARTZ (surface_data->drawable);
-
-  gdk_quartz_drawable_release_context (surface_data->drawable, 
-				       surface_data->cg_context);
 
   impl->cairo_surface = NULL;
 
@@ -204,8 +210,6 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
 				    GDK_QUARTZ_CONTEXT_FILL :
 				    GDK_QUARTZ_CONTEXT_STROKE);
 
-  CGContextSaveGState (context);
-
   start_angle = angle1 * 2.0 * G_PI / 360.0 / 64.0;
   end_angle = start_angle + angle2 * 2.0 * G_PI / 360.0 / 64.0;
 
@@ -253,8 +257,6 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
 		       clockwise);
       CGContextStrokePath (context);
     }
-
-  CGContextRestoreGState (context);
 
   gdk_quartz_drawable_release_context (drawable, context);
 }
