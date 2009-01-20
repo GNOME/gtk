@@ -1,3 +1,7 @@
+2009-01-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* gtk/gtkstyle.c: Add a "Since: 2.16" tag to gtk_style_get.
+
 2009-01-20  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 565656 – Add marks to scales

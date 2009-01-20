@@ -1867,6 +1867,8 @@ gtk_style_get_valist (GtkStyle    *style,
  *
  * Gets the values of a multiple style properties for @widget_type
  * from @style.
+ *
+ * Since: 2.16
  */
 void
 gtk_style_get (GtkStyle    *style,
