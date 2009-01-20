@@ -63,22 +63,35 @@ create_window (GdkWindow *parent,
   return window;
 }
 
-static GdkWindow *
-get_selected_window (void)
+static void
+add_window_cb (GtkTreeModel      *model,
+	       GtkTreePath       *path,
+	       GtkTreeIter       *iter,
+	       gpointer           data)
 {
-  GtkTreeSelection *sel;
-  GtkTreeIter iter;
+  GList **selected = data;
   GdkWindow *window;
-  
-  sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
-  if (!gtk_tree_selection_get_selected (sel, NULL, &iter))
-    return NULL;
 
   gtk_tree_model_get (GTK_TREE_MODEL (window_store),
-		      &iter,
+		      iter,
 		      0, &window,
 		      -1);
-  return window;
+
+  *selected = g_list_prepend (*selected, window);
+}
+
+static GList *
+get_selected_windows (void)
+{
+  GtkTreeSelection *sel;
+  GList *selected;
+
+  sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+
+  selected = NULL;
+  gtk_tree_selection_selected_foreach (sel, add_window_cb, &selected);
+  
+  return selected;
 }
 
 static gboolean
@@ -129,18 +142,62 @@ find_window (GdkWindow *window,
 }
 
 static void
+toggle_selection_window (GdkWindow *window)
+{
+  GtkTreeSelection *selection;
+  GtkTreeIter iter;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+
+  if (window != NULL &&
+      find_window (window, &iter))
+    {
+      if (gtk_tree_selection_iter_is_selected (selection, &iter))
+	gtk_tree_selection_unselect_iter (selection,  &iter);
+      else
+	gtk_tree_selection_select_iter (selection,  &iter);
+    }
+}
+
+static void
+unselect_windows (void)
+{
+  GtkTreeSelection *selection;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+  
+  gtk_tree_selection_unselect_all (selection);
+}
+
+
+static void
 select_window (GdkWindow *window)
 {
-  GtkTreeIter iter;
   GtkTreeSelection *selection;
+  GtkTreeIter iter;
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
 
   if (window != NULL &&
       find_window (window, &iter))
     gtk_tree_selection_select_iter (selection,  &iter);
-  else
-    gtk_tree_selection_unselect_all (selection);
+}
+
+static void
+select_windows (GList *windows)
+{
+  GtkTreeSelection *selection;
+  GtkTreeIter iter;
+  GList *l;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+  gtk_tree_selection_unselect_all (selection);
+  
+  for (l = windows; l != NULL; l = l->next)
+    {
+      if (find_window (l->data, &iter))
+	gtk_tree_selection_select_iter (selection,  &iter);
+    }
 }
 
 static void
@@ -148,10 +205,15 @@ add_window_clicked (GtkWidget *button,
 		    gpointer data)
 {
   GdkWindow *parent;
+  GList *l;
 
-  parent = get_selected_window ();
-  if (parent == NULL)
+  l = get_selected_windows ();
+  if (l != NULL)
+    parent = l->data;
+  else
     parent = darea->window;
+
+  g_list_free (l);
   
   create_window (parent, 10, 10, 100, 100, NULL);
   update_store ();
@@ -161,13 +223,16 @@ static void
 remove_window_clicked (GtkWidget *button, 
 		       gpointer data)
 {
-  GdkWindow *window;
+  GList *l, *selected;
 
-  window = get_selected_window ();
-  if (window == NULL)
-    return;
+  selected = get_selected_windows ();
 
-  gdk_window_destroy (window);
+  for (l = selected; l != NULL; l = l->next)
+    gdk_window_destroy (l->data);
+
+  g_list_free (selected);
+
+  update_store ();
 }
 
 static void save_children (GString *s, GdkWindow *window);
@@ -322,48 +387,60 @@ move_window_clicked (GtkWidget *button,
 {
   GdkWindow *window;
   GtkDirectionType direction;
+  GList *selected, *l;
   gint x, y;
 
   direction = GPOINTER_TO_INT (data);
     
-  window = get_selected_window ();
-  
-  if (window == NULL)
-    return;
+  selected = get_selected_windows ();
 
-  gdk_window_get_position (window, &x, &y);
+  for (l = selected; l != NULL; l = l->next)
+    {
+      window = l->data;
+      
+      gdk_window_get_position (window, &x, &y);
+      
+      switch (direction) {
+      case GTK_DIR_UP:
+	y -= 10;
+	break;
+      case GTK_DIR_DOWN:
+	y += 10;
+	break;
+      case GTK_DIR_LEFT:
+	x -= 10;
+	break;
+      case GTK_DIR_RIGHT:
+	x += 10;
+	break;
+      default:
+	break;
+      }
 
-  switch (direction) {
-  case GTK_DIR_UP:
-    y -= 10;
-    break;
-  case GTK_DIR_DOWN:
-    y += 10;
-    break;
-  case GTK_DIR_LEFT:
-    x -= 10;
-    break;
-  case GTK_DIR_RIGHT:
-    x += 10;
-    break;
-  default:
-    break;
-  }
+      gdk_window_move (window, x, y);
+    }
 
-  gdk_window_move (window, x, y);
+  g_list_free (selected);
 }
 
 static void
 raise_window_clicked (GtkWidget *button, 
 		      gpointer data)
 {
+  GList *selected, *l;
   GdkWindow *window;
     
-  window = get_selected_window ();
-  if (window == NULL)
-    return;
+  selected = get_selected_windows ();
 
-  gdk_window_raise (window);
+  for (l = selected; l != NULL; l = l->next)
+    {
+      window = l->data;
+      
+      gdk_window_raise (window);
+    }
+
+  g_list_free (selected);
+  
   update_store ();
 }
 
@@ -371,13 +448,20 @@ static void
 lower_window_clicked (GtkWidget *button, 
 		      gpointer data)
 {
+  GList *selected, *l;
   GdkWindow *window;
     
-  window = get_selected_window ();
-  if (window == NULL)
-    return;
+  selected = get_selected_windows ();
 
-  gdk_window_lower (window);
+  for (l = selected; l != NULL; l = l->next)
+    {
+      window = l->data;
+      
+      gdk_window_lower (window);
+    }
+
+  g_list_free (selected);
+  
   update_store ();
 }
 
@@ -386,55 +470,74 @@ static void
 smaller_window_clicked (GtkWidget *button, 
 			gpointer data)
 {
+  GList *selected, *l;
   GdkWindow *window;
   int w, h;
 
-  window = get_selected_window ();
-  if (window == NULL)
-    return;
+  selected = get_selected_windows ();
 
-  gdk_drawable_get_size (GDK_DRAWABLE (window), &w, &h);
+  for (l = selected; l != NULL; l = l->next)
+    {
+      window = l->data;
+      
+      gdk_drawable_get_size (GDK_DRAWABLE (window), &w, &h);
+      
+      w -= 10;
+      h -= 10;
+      if (w < 1)
+	w = 1;
+      if (h < 1)
+	h = 1;
+      
+      gdk_window_resize (window, w, h);
+    }
 
-  w -= 10;
-  h -= 10;
-  if (w < 1)
-    w = 1;
-  if (h < 1)
-    h = 1;
-
-  gdk_window_resize (window, w, h);
+  g_list_free (selected);
 }
 
 static void
 larger_window_clicked (GtkWidget *button, 
 			gpointer data)
 {
+  GList *selected, *l;
   GdkWindow *window;
   int w, h;
 
-  window = get_selected_window ();
-  if (window == NULL)
-    return;
+  selected = get_selected_windows ();
 
-  gdk_drawable_get_size (GDK_DRAWABLE (window), &w, &h);
+  for (l = selected; l != NULL; l = l->next)
+    {
+      window = l->data;
+      
+      gdk_drawable_get_size (GDK_DRAWABLE (window), &w, &h);
+      
+      w += 10;
+      h += 10;
+      
+      gdk_window_resize (window, w, h);
+    }
 
-  w += 10;
-  h += 10;
-
-  gdk_window_resize (window, w, h);
+  g_list_free (selected);
 }
 
 static void
 native_window_clicked (GtkWidget *button, 
 			gpointer data)
 {
+  GList *selected, *l;
   GdkWindow *window;
 
-  window = get_selected_window ();
-  if (window == NULL)
-    return;
+  selected = get_selected_windows ();
 
-  gdk_window_set_has_native (window, TRUE);
+  for (l = selected; l != NULL; l = l->next)
+    {
+      window = l->data;
+      
+      gdk_window_set_has_native (window, TRUE);
+    }
+  
+  g_list_free (selected);
+  
   update_store ();
 }
 
@@ -442,7 +545,16 @@ static gboolean
 darea_button_release_event (GtkWidget *widget,
 			    GdkEventButton *event)
 {
-  select_window (event->window);
+  if ((event->state & GDK_CONTROL_MASK) != 0)
+    {
+      toggle_selection_window (event->window);
+    }
+  else
+    {
+      unselect_windows ();
+      select_window (event->window);
+    }
+    
   return TRUE;
 }
 
@@ -495,16 +607,17 @@ add_children (GtkTreeStore *store,
 static void
 update_store (void)
 {
-  GdkWindow *selected;
+  GList *selected;
 
-  selected = get_selected_window ();
+  selected = get_selected_windows ();
 
   gtk_tree_store_clear (window_store);
 
   add_children (window_store, darea->window, NULL);
   gtk_tree_view_expand_all (GTK_TREE_VIEW (treeview));
 
-  select_window (selected);
+  select_windows (selected);
+  g_list_free (selected);
 }
 
 
@@ -563,7 +676,7 @@ main (int argc, char **argv)
   
   treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL (window_store));
   gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview)),
-			       GTK_SELECTION_SINGLE);
+			       GTK_SELECTION_MULTIPLE);
   column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_title (column, "Window");
   renderer = gtk_cell_renderer_text_new ();
