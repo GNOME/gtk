@@ -60,6 +60,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testrecentchooser 		\
 	testrecentchoosermenu		\
 	testrichtext			\
+	testscale			\
 	testselection			\
 	$(testsocket_programs)		\
 	testspinbutton			\
@@ -137,6 +138,7 @@ testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
 testrecentchoosermenu_DEPENDENCIES = $(TEST_DEPS)
 testrgb_DEPENDENCIES = $(TEST_DEPS)
 testrichtext_DEPENDENCIES = $(TEST_DEPS)
+testscale_DEPENDENCIES = $(TEST_DEPS)
 testselection_DEPENDENCIES = $(TEST_DEPS)
 testsocket_DEPENDENCIES = $(DEPS)
 testsocket_child_DEPENDENCIES = $(DEPS)
@@ -194,6 +196,7 @@ testrecentchooser_LDADD = $(LDADDS)
 testrecentchoosermenu_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
 testrichtext_LDADD = $(LDADDS)
+testscale_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
 testsocket_LDADD = $(LDADDS)
 testsocket_child_LDADD = $(LDADDS)

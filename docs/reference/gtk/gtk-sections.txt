@@ -3229,6 +3229,8 @@ gtk_scale_get_draw_value
 gtk_scale_get_value_pos
 gtk_scale_get_layout
 gtk_scale_get_layout_offsets
+gtk_scale_add_mark
+gtk_scale_clear_marks
 <SUBSECTION Standard>
 GTK_SCALE
 GTK_IS_SCALE

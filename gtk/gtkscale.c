@@ -32,6 +32,8 @@
 
 #include "gdk/gdkkeysyms.h"
 #include "gtkscale.h"
+#include "gtkiconfactory.h"
+#include "gtkicontheme.h"
 #include "gtkmarshalers.h"
 #include "gtkbindings.h"
 #include "gtkprivate.h"
@@ -49,9 +51,19 @@
 
 typedef struct _GtkScalePrivate GtkScalePrivate;
 
+typedef struct _GtkScaleMark GtkScaleMark;
+
+struct _GtkScaleMark
+{
+  gdouble          value;
+  const gchar     *markup;
+  GtkPositionType  position;
+};
+
 struct _GtkScalePrivate
 {
   PangoLayout *layout;
+  GSList      *marks;
 };
 
 enum {
@@ -76,10 +88,20 @@ static void     gtk_scale_get_property            (GObject        *object,
                                                    guint           prop_id,
                                                    GValue         *value,
                                                    GParamSpec     *pspec);
+static void     gtk_scale_size_request            (GtkWidget      *widget,
+                                                   GtkRequisition *requisition);
 static void     gtk_scale_style_set               (GtkWidget      *widget,
                                                    GtkStyle       *previous);
 static void     gtk_scale_get_range_border        (GtkRange       *range,
                                                    GtkBorder      *border);
+static void     gtk_scale_get_mark_label_size     (GtkScale        *scale,
+                                                   GtkPositionType  position,
+                                                   gint            *count1,
+                                                   gint            *width1,
+                                                   gint            *height1,
+                                                   gint            *count2,
+                                                   gint            *width2,
+                                                   gint            *height2);
 static void     gtk_scale_finalize                (GObject        *object);
 static void     gtk_scale_screen_changed          (GtkWidget      *widget,
                                                    GdkScreen      *old_screen);
@@ -132,6 +154,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   widget_class->style_set = gtk_scale_style_set;
   widget_class->screen_changed = gtk_scale_screen_changed;
   widget_class->expose_event = gtk_scale_expose;
+  widget_class->size_request = gtk_scale_size_request;
 
   range_class->slider_detail = "Xscale";
   range_class->get_range_border = gtk_scale_get_range_border;
@@ -647,12 +670,14 @@ static void
 gtk_scale_get_range_border (GtkRange  *range,
                             GtkBorder *border)
 {
+  GtkScalePrivate *priv;
   GtkWidget *widget;
   GtkScale *scale;
   gint w, h;
   
   widget = GTK_WIDGET (range);
   scale = GTK_SCALE (range);
+  priv = GTK_SCALE_GET_PRIVATE (scale);
 
   _gtk_scale_get_value_size (scale, &w, &h);
 
@@ -680,6 +705,36 @@ gtk_scale_get_range_border (GtkRange  *range,
         case GTK_POS_BOTTOM:
           border->bottom += h + value_spacing;
           break;
+        }
+    }
+
+  if (priv->marks)
+    {
+      gint slider_width;
+      gint value_spacing;
+      gint n1, w1, h1, n2, w2, h2;
+  
+      gtk_widget_style_get (widget, 
+                            "slider-width", &slider_width,
+                            "value-spacing", &value_spacing, 
+                            NULL);
+
+
+      if (GTK_RANGE (scale)->orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          gtk_scale_get_mark_label_size (scale, GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
+          if (n1 > 0)
+            border->top += h1 + value_spacing + slider_width / 2;
+          if (n2 > 0)
+            border->bottom += h2 + value_spacing + slider_width / 2; 
+        }
+      else
+        {
+          gtk_scale_get_mark_label_size (scale, GTK_POS_LEFT, &n1, &w1, &h1, &n2, &w2, &h2);
+          if (n1 > 0)
+            border->left += w1 + value_spacing + slider_width / 2;
+          if (n2 > 0)
+            border->right += w2 + value_spacing + slider_width / 2;
         }
     }
 }
@@ -739,6 +794,63 @@ _gtk_scale_get_value_size (GtkScale *scale,
 }
 
 static void
+gtk_scale_get_mark_label_size (GtkScale        *scale,
+                               GtkPositionType  position,
+                               gint            *count1,
+                               gint            *width1,
+                               gint            *height1,
+                               gint            *count2,
+                               gint            *width2,
+                               gint            *height2)
+{
+  GtkScalePrivate *priv = GTK_SCALE_GET_PRIVATE (scale);
+  PangoLayout *layout;
+  PangoRectangle logical_rect;
+  GSList *m;
+  gint w, h;
+
+  *count1 = *count2 = 0;
+  *width1 = *width2 = 0;
+  *height1 = *height2 = 0;
+
+  layout = gtk_widget_create_pango_layout (GTK_WIDGET (scale), NULL);
+
+  for (m = priv->marks; m; m = m->next)
+    {
+      GtkScaleMark *mark = m->data;
+
+      if (mark->markup)
+        {
+          pango_layout_set_markup (layout, mark->markup, -1);
+          pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+
+	  w = logical_rect.width;
+	  h = logical_rect.height;
+        }
+      else
+        {
+          w = 0;
+          h = 0;
+        }
+
+      if (mark->position == position)
+        {
+          (*count1)++;
+          *width1 = MAX (*width1, w);
+          *height1 = MAX (*height1, h);
+        }
+      else
+        {
+          (*count2)++;
+          *width2 = MAX (*width2, w);
+          *height2 = MAX (*height2, h);
+        }
+    }
+
+  g_object_unref (layout);
+}
+
+static void
 gtk_scale_style_set (GtkWidget *widget,
                      GtkStyle  *previous)
 {
@@ -765,30 +877,159 @@ gtk_scale_screen_changed (GtkWidget *widget,
   _gtk_scale_clear_layout (GTK_SCALE (widget));
 }
 
+static void
+gtk_scale_size_request (GtkWidget      *widget,
+                        GtkRequisition *requisition)
+{
+  GtkRange *range = GTK_RANGE (widget);
+  gint n1, w1, h1, n2, w2, h2;
+  gint slider_length;
+
+  GTK_WIDGET_CLASS (gtk_scale_parent_class)->size_request (widget, requisition);
+  
+  gtk_widget_style_get (widget, "slider-length", &slider_length, NULL);
+
+
+  if (range->orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      gtk_scale_get_mark_label_size (GTK_SCALE (widget), GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
+
+      w1 = (n1 - 1) * w1 + MAX (w1, slider_length);
+      w2 = (n2 - 1) * w2 + MAX (w2, slider_length);
+      requisition->width = MAX (requisition->width, MAX (w1, w2));
+    }
+  else
+    {
+      gtk_scale_get_mark_label_size (GTK_SCALE (widget), GTK_POS_LEFT, &n1, &w1, &h1, &n2, &w2, &h2);
+      h1 = (n1 - 1) * h1 + MAX (h1, slider_length);
+      h2 = (n2 - 1) * h1 + MAX (h2, slider_length);
+      requisition->height = MAX (requisition->height, MAX (h1, h2));
+    }
+}
+
 static gboolean
 gtk_scale_expose (GtkWidget      *widget,
                   GdkEventExpose *event)
 {
   GtkScale *scale = GTK_SCALE (widget);
+  GtkScalePrivate *priv = GTK_SCALE_GET_PRIVATE (scale);
+  GtkRange *range = GTK_RANGE (scale);
+  GtkStateType state_type;
+  gint n_marks;
+  gint *marks;
+  gint focus_padding;
+  gint slider_width;
+  gint value_spacing;
+
+  gtk_widget_style_get (widget,
+                        "focus-padding", &focus_padding,
+                        "slider-width", &slider_width, 
+                        "value-spacing", &value_spacing, 
+                        NULL);
 
   /* We need to chain up _first_ so the various geometry members of
    * GtkRange struct are updated.
    */
   GTK_WIDGET_CLASS (gtk_scale_parent_class)->expose_event (widget, event);
 
+  state_type = GTK_STATE_NORMAL;
+  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+    state_type = GTK_STATE_INSENSITIVE;
+
+  if (priv->marks)
+    {
+      gint i;
+      gint x1, x2, x3, y1, y2, y3;
+      PangoLayout *layout;
+      PangoRectangle logical_rect;
+      GSList *m;
+
+      n_marks = _gtk_range_get_stop_positions (range, &marks);
+      layout = gtk_widget_create_pango_layout (widget, NULL);
+
+      for (m = priv->marks, i = 0; m; m = m->next, i++)
+        {
+          GtkScaleMark *mark = m->data;
+    
+          if (range->orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              x1 = widget->allocation.x + marks[i];
+              if (mark->position == GTK_POS_TOP)
+                {
+                  y1 = widget->allocation.y + range->range_rect.y;
+                  y2 = y1 - slider_width / 2;
+                }
+              else
+                {
+                  y1 = widget->allocation.y + range->range_rect.y + range->range_rect.height;
+                  y2 = y1 + slider_width / 2;
+                }
+
+              gtk_paint_vline (widget->style, widget->window, state_type,
+                               NULL, widget, "scale-mark", y1, y2, x1);
+
+              if (mark->markup)
+                {
+                  pango_layout_set_markup (layout, mark->markup, -1);
+                  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+              
+                  x3 = x1 - logical_rect.width / 2;
+                  if (mark->position == GTK_POS_TOP)
+                    y3 = y2 - value_spacing - logical_rect.height;
+                  else
+                    y3 = y2 + value_spacing; 
+
+                  gtk_paint_layout (widget->style, widget->window, state_type,
+                                    FALSE, NULL, widget, "scale-mark", 
+                                    x3, y3, layout);
+                }
+            }
+          else
+            {
+              if (mark->position == GTK_POS_LEFT)
+                {
+                  x1 = widget->allocation.x + range->range_rect.x;
+                  x2 = widget->allocation.x + range->range_rect.x - slider_width / 2;
+                }
+              else
+                {
+                  x1 = widget->allocation.x + range->range_rect.x + range->range_rect.width;
+                  x2 = widget->allocation.x + range->range_rect.x + range->range_rect.width + slider_width / 2;
+                }
+              y1 = widget->allocation.y + marks[i];
+
+              gtk_paint_hline (widget->style, widget->window, state_type,
+                               NULL, widget, "range-mark", x1, x2, y1);
+
+              if (mark->markup)
+                {
+                  pango_layout_set_markup (layout, mark->markup, -1);
+                  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+              
+                  if (mark->position == GTK_POS_LEFT)
+                    x3 = x2 - value_spacing - logical_rect.width;
+                  else
+                    x3 = x2 + value_spacing; 
+                  y3 = y1 - logical_rect.height / 2;
+
+                  gtk_paint_layout (widget->style, widget->window, state_type,
+                                    FALSE, NULL, widget, "scale-mark", 
+                                    x3, y3, layout);
+                }
+            }
+        } 
+
+      g_object_unref (layout);
+      g_free (marks);
+    }
+
   if (scale->draw_value)
     {
-      GtkRange *range = GTK_RANGE (scale);
       PangoLayout *layout;
       gint x, y;
-      GtkStateType state_type;
 
       layout = gtk_scale_get_layout (scale);
       gtk_scale_get_layout_offsets (scale, &x, &y);
-
-      state_type = GTK_STATE_NORMAL;
-      if (!GTK_WIDGET_IS_SENSITIVE (scale))
-        state_type = GTK_STATE_INSENSITIVE;
 
       gtk_paint_layout (widget->style,
                         widget->window,
@@ -932,6 +1173,7 @@ gtk_scale_finalize (GObject *object)
   GtkScale *scale = GTK_SCALE (object);
 
   _gtk_scale_clear_layout (scale);
+  gtk_scale_clear_marks (scale);
 
   G_OBJECT_CLASS (gtk_scale_parent_class)->finalize (object);
 }
@@ -1023,6 +1265,92 @@ _gtk_scale_clear_layout (GtkScale *scale)
       priv->layout = NULL;
     }
 }
+
+static void
+gtk_scale_mark_free (GtkScaleMark *mark)
+{
+  g_free (mark->markup);
+  g_free (mark);
+}
+
+/**
+ * gtk_scale_clear_marks:
+ * @scale: a #GtkScale
+ * 
+ * Removes any marks that have been added with gtk_scale_add_mark().
+ *
+ * Since: 2.16
+ */
+void
+gtk_scale_clear_marks (GtkScale *scale)
+{
+  GtkScalePrivate *priv = GTK_SCALE_GET_PRIVATE (scale);
+
+  g_return_if_fail (GTK_IS_SCALE (scale));
+
+  g_slist_foreach (priv->marks, (GFunc)gtk_scale_mark_free, NULL);
+  g_slist_free (priv->marks);
+  priv->marks = NULL;
+
+  _gtk_range_set_stop_values (GTK_RANGE (scale), NULL, 0);
+}
+
+/**
+ * gtk_scale_add_mark:
+ * @scale: a #GtkScale
+ * @value: the value at which the mark is placed, must be between 
+ *   the lower and upper limits of the scales' adjustment
+ * @position: where to draw the mark. For a horizontal scale, #GTK_POS_TOP
+ *   is drawn above the scale, anything else below. For a vertical scale,
+ *   #GTK_POS_LEFT is drawn to the left of the scale, anything else to the
+ *   right.
+ * @markup: Text to be shown at the mark, using <link linkend="PangoMarkupFormat">Pango markup</link>, or %NULL
+ *
+ *
+ * Adds a mark at @value. 
+ *
+ * A mark is indicated visually by drawing a tick mark next to the scale, 
+ * and GTK+ makes it easy for the user to position the scale exactly at the 
+ * marks value.
+ *
+ * If @markup is not %NULL, text is shown next to the tick mark. 
+ *
+ * To remove marks from a scale, use gtk_scale_clear_marks().
+ *
+ * Since: 2.16
+ */
+void
+gtk_scale_add_mark (GtkScale        *scale,
+                    gdouble          value,
+                    GtkPositionType  position,
+                    const gchar     *markup)
+{
+  GtkScalePrivate *priv = GTK_SCALE_GET_PRIVATE (scale);
+  GtkScaleMark *mark;
+  GSList *m;
+  gdouble *values;
+  gint n, i;
+
+  mark = g_new (GtkScaleMark, 1);
+  mark->value = value;
+  mark->markup = g_strdup (markup);
+  mark->position = position;
+ 
+  priv->marks = g_slist_prepend (priv->marks, mark);
+
+  n = g_slist_length (priv->marks);
+  values = g_new (gdouble, n);
+  for (m = priv->marks, i = 0; m; m = m->next, i++)
+    {
+      mark = m->data;
+      values[i] = mark->value;
+    }
+  
+  _gtk_range_set_stop_values (GTK_RANGE (scale), values, n);
+
+  g_free (values);
+}
+
 
 #define __GTK_SCALE_C__
 #include "gtkaliasdef.c"

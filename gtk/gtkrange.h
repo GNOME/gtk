@@ -178,6 +178,12 @@ gdouble            gtk_range_get_fill_level                (GtkRange      *range
 gdouble            _gtk_range_get_wheel_delta              (GtkRange      *range,
                                                             GdkScrollDirection direction);
 
+void               _gtk_range_set_stop_values              (GtkRange      *range,
+                                                            gdouble       *values,
+                                                            gint           n_values);
+gint               _gtk_range_get_stop_positions           (GtkRange      *range,
+                                                            gint         **values);          
+
 
 G_END_DECLS
 

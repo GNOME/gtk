@@ -117,6 +117,11 @@ struct _GtkRangeLayout
 
   GQuark slider_detail_quark;
   GQuark stepper_detail_quark;
+ 
+  gdouble *marks;
+  gint *mark_pos;
+  gint n_marks;
+  gboolean recalc_marks;
 };
 
 
@@ -175,6 +180,7 @@ static gboolean      gtk_range_scroll                   (GtkRange      *range,
 static gboolean      gtk_range_update_mouse_location    (GtkRange      *range);
 static void          gtk_range_calc_layout              (GtkRange      *range,
 							 gdouble	adjustment_value);
+static void          gtk_range_calc_marks               (GtkRange      *range);
 static void          gtk_range_get_props                (GtkRange      *range,
                                                          gint          *slider_width,
                                                          gint          *stepper_size,
@@ -1216,6 +1222,13 @@ gtk_range_destroy (GtkObject *object)
       range->adjustment = NULL;
     }
 
+  if (range->layout->n_marks)
+    {
+      g_free (range->layout->marks);
+      g_free (range->layout->mark_pos);
+      range->layout->n_marks = 0;
+    }
+
   GTK_OBJECT_CLASS (gtk_range_parent_class)->destroy (object);
 }
 
@@ -1255,6 +1268,8 @@ gtk_range_size_allocate (GtkWidget     *widget,
 
   widget->allocation = *allocation;
   
+  range->layout->recalc_marks = TRUE;
+
   range->need_recalc = TRUE;
   gtk_range_calc_layout (range, range->adjustment->value);
 
@@ -1520,6 +1535,7 @@ gtk_range_expose (GtkWidget      *widget,
   expose_area.x -= widget->allocation.x;
   expose_area.y -= widget->allocation.y;
   
+  gtk_range_calc_marks (range);
   gtk_range_calc_layout (range, range->adjustment->value);
 
   sensitive = GTK_WIDGET_IS_SENSITIVE (widget);
@@ -2101,6 +2117,10 @@ update_slider_position (GtkRange *range,
   gint c;
   gdouble new_value;
   gboolean handled;
+  gdouble next_value;
+  gdouble mark_value;
+  gdouble mark_delta;
+  gint i;
 
   if (range->orientation == GTK_ORIENTATION_VERTICAL)
     delta = mouse_y - range->slide_initial_coordinate;
@@ -2110,7 +2130,23 @@ update_slider_position (GtkRange *range,
   c = range->slide_initial_slider_position + delta;
 
   new_value = coord_to_value (range, c);
-  
+  next_value = coord_to_value (range, c + 1);
+  mark_delta = fabs (next_value - new_value); 
+
+  for (i = 0; i < range->layout->n_marks; i++)
+    {
+      mark_value = range->layout->marks[i];
+
+      if (fabs (range->adjustment->value - mark_value) < 3 * mark_delta)
+        {
+          if (fabs (new_value - mark_value) < (range->slider_end - range->slider_start) * 0.5 * mark_delta)
+            {
+              new_value = mark_value;
+              break;
+            }
+        }
+    }  
+
   g_signal_emit (range, signals[CHANGE_VALUE], 0, GTK_SCROLL_JUMP, new_value,
                  &handled);
 }
@@ -2340,6 +2376,7 @@ gtk_range_adjustment_changed (GtkAdjustment *adjustment,
   /* create a copy of the layout */
   GtkRangeLayout layout = *range->layout;
 
+  range->layout->recalc_marks = TRUE;
   range->need_recalc = TRUE;
   gtk_range_calc_layout (range, range->adjustment->value);
   
@@ -2409,12 +2446,33 @@ gtk_range_style_set (GtkWidget *widget,
 }
 
 static void
+apply_marks (GtkRange *range, 
+             gdouble   oldval,
+             gdouble  *newval)
+{
+  gint i;
+  gdouble mark;
+
+  for (i = 0; i < range->layout->n_marks; i++)
+    {
+      mark = range->layout->marks[i];
+      if ((oldval < mark && mark < *newval) ||
+          (oldval > mark && mark > *newval))
+        {
+          *newval = mark;
+          return;
+        }
+    }
+}
+
+static void
 step_back (GtkRange *range)
 {
   gdouble newval;
   gboolean handled;
   
   newval = range->adjustment->value - range->adjustment->step_increment;
+  apply_marks (range, range->adjustment->value, &newval);
   g_signal_emit (range, signals[CHANGE_VALUE], 0,
                  GTK_SCROLL_STEP_BACKWARD, newval, &handled);
 }
@@ -2426,6 +2484,7 @@ step_forward (GtkRange *range)
   gboolean handled;
 
   newval = range->adjustment->value + range->adjustment->step_increment;
+  apply_marks (range, range->adjustment->value, &newval);
   g_signal_emit (range, signals[CHANGE_VALUE], 0,
                  GTK_SCROLL_STEP_FORWARD, newval, &handled);
 }
@@ -2438,6 +2497,7 @@ page_back (GtkRange *range)
   gboolean handled;
 
   newval = range->adjustment->value - range->adjustment->page_increment;
+  apply_marks (range, range->adjustment->value, &newval);
   g_signal_emit (range, signals[CHANGE_VALUE], 0,
                  GTK_SCROLL_PAGE_BACKWARD, newval, &handled);
 }
@@ -2449,6 +2509,7 @@ page_forward (GtkRange *range)
   gboolean handled;
 
   newval = range->adjustment->value + range->adjustment->page_increment;
+  apply_marks (range, range->adjustment->value, &newval);
   g_signal_emit (range, signals[CHANGE_VALUE], 0,
                  GTK_SCROLL_PAGE_FORWARD, newval, &handled);
 }
@@ -3337,6 +3398,29 @@ get_area (GtkRange     *range,
   return NULL;
 }
 
+static void
+gtk_range_calc_marks (GtkRange *range)
+{
+  gint i;
+  
+  if (!range->layout->recalc_marks)
+    return;
+
+  range->layout->recalc_marks = FALSE;
+
+  for (i = 0; i < range->layout->n_marks; i++)
+    {
+      range->need_recalc = TRUE;
+      gtk_range_calc_layout (range, range->layout->marks[i]);
+      if (range->orientation == GTK_ORIENTATION_HORIZONTAL)
+        range->layout->mark_pos[i] = range->layout->slider.x + range->layout->slider.width / 2;
+      else
+        range->layout->mark_pos[i] = range->layout->slider.y + range->layout->slider.height / 2;
+    }
+
+  range->need_recalc = TRUE;
+}
+
 static gboolean
 gtk_range_real_change_value (GtkRange     *range,
                              GtkScrollType scroll,
@@ -3509,6 +3593,39 @@ gtk_range_remove_update_timer (GtkRange *range)
       g_source_remove (range->update_timeout_id);
       range->update_timeout_id = 0;
     }
+}
+
+void
+_gtk_range_set_stop_values (GtkRange *range,
+                            gdouble  *values,
+                            gint      n_values)
+{
+  gint i;
+
+  g_free (range->layout->marks);
+  range->layout->marks = g_new (gdouble, n_values);
+
+  g_free (range->layout->mark_pos);
+  range->layout->mark_pos = g_new (gint, n_values);
+
+  range->layout->n_marks = n_values;
+
+  for (i = 0; i < n_values; i++) 
+    range->layout->marks[i] = values[i];
+
+  range->layout->recalc_marks = TRUE;
+}
+
+gint
+_gtk_range_get_stop_positions (GtkRange  *range,
+                               gint     **values)
+{
+  gtk_range_calc_marks (range);
+
+  if (values)
+    *values = g_memdup (range->layout->mark_pos, range->layout->n_marks * sizeof (gint));
+
+  return range->layout->n_marks;
 }
 
 #define __GTK_RANGE_C__

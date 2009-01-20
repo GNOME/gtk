@@ -1,3 +1,19 @@
+2009-01-20  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 565656 – Add marks to scales
+
+	* gtk/gtkrange.[hc]: Add internal api to define 'stop values'
+	that have a little resistance when dragging the slider over it.
+
+	* gtk/gtk.symbols:
+	* gtk/gtkscale.[hc] (gtk_scale_add_mark): New function to add
+	a 'mark' to a scale, which will draws a tick, plus optionally
+	some text, and makes the value a stop value.
+	(gtk_scale_clear_values): Removes all marks.
+
+	* tests/testscale.c: Test for marks on scales
+	* tests/Makefile.am: Integrate it
+
 2009-01-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c:

@@ -71,9 +71,9 @@ struct _GtkScaleClass
                                gint     *y);
 
   /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 GType             gtk_scale_get_type           (void) G_GNUC_CONST;
@@ -91,6 +91,12 @@ PangoLayout     * gtk_scale_get_layout         (GtkScale        *scale);
 void              gtk_scale_get_layout_offsets (GtkScale        *scale,
                                                 gint            *x,
                                                 gint            *y);
+
+void              gtk_scale_add_mark           (GtkScale        *scale,
+                                                gdouble          value,
+                                                GtkPositionType  position,
+                                                const gchar     *markup);
+void              gtk_scale_clear_marks        (GtkScale        *scale);
 
 /* internal API */
 void              _gtk_scale_clear_layout      (GtkScale        *scale);

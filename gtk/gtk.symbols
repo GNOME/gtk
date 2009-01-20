@@ -3460,6 +3460,8 @@ gtk_scale_get_value_pos
 gtk_scale_set_digits
 gtk_scale_set_draw_value
 gtk_scale_set_value_pos
+gtk_scale_add_mark
+gtk_scale_clear_marks
 #endif
 #endif
 
