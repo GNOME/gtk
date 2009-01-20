@@ -3988,28 +3988,15 @@ gtk_text_view_state_changed (GtkWidget      *widget,
 static void
 set_invisible_cursor (GdkWindow *window)
 {
-  GdkBitmap *empty_bitmap;
+  GdkDisplay *display;
   GdkCursor *cursor;
-  GdkColor useless;
-  char invisible_cursor_bits[] = { 0x0 };	
-	
-  useless.red = useless.green = useless.blue = 0;
-  useless.pixel = 0;
-  
-  empty_bitmap = gdk_bitmap_create_from_data (window,
-					      invisible_cursor_bits,
-					      1, 1);
-  
-  cursor = gdk_cursor_new_from_pixmap (empty_bitmap,
-				       empty_bitmap,
-				       &useless,
-				       &useless, 0, 0);
-  
+
+  display = gdk_drawable_get_display (window);
+  cursor = gdk_cursor_new_for_display (display, GDK_BLANK_CURSOR);
+ 
   gdk_window_set_cursor (window, cursor);
   
   gdk_cursor_unref (cursor);
-  
-  g_object_unref (empty_bitmap);
 }
 
 static void
