@@ -3370,12 +3370,14 @@ do_shape_combine_region (GdkWindow       *window,
 	  : gdk_display_supports_input_shapes (GDK_WINDOW_DISPLAY (window)))
 	{
 	  private->shaped = FALSE;
+	  _gdk_x11_window_tmp_unset_bg ((GdkWindow *)private->parent, TRUE);
 	  XShapeCombineMask (GDK_WINDOW_XDISPLAY (window),
 			     GDK_WINDOW_XID (window),
 			     shape,
 			     0, 0,
 			     None,
 			     ShapeSet);
+	  _gdk_x11_window_tmp_reset_bg ((GdkWindow *)private->parent, TRUE);
 	}
       return;
     }
