@@ -314,8 +314,11 @@ _gdk_x11_window_tmp_unset_parent_bg (GdkWindow *window,
 {
   GdkWindowObject *private;
   private = (GdkWindowObject*) window;
-  _gdk_x11_window_tmp_unset_bg (_gdk_window_get_impl_window ((GdkWindow *)private->parent),
-				recurse);
+  
+  if (GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
+    window = _gdk_window_get_impl_window ((GdkWindow *)private->parent);
+  
+  _gdk_x11_window_tmp_unset_bg (window,	recurse);
 }
 
 void
@@ -355,8 +358,11 @@ _gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window,
 {
   GdkWindowObject *private;
   private = (GdkWindowObject*) window;
-  _gdk_x11_window_tmp_reset_bg (_gdk_window_get_impl_window ((GdkWindow *)private->parent),
-				recurse);
+
+  if (GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
+    window = _gdk_window_get_impl_window ((GdkWindow *)private->parent);
+
+  _gdk_x11_window_tmp_reset_bg (window, recurse);
 }
 
 static GdkColormap*
