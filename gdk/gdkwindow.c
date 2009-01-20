@@ -238,10 +238,11 @@ static void apply_redirect_to_children    (GdkWindowObject   *private,
 static void remove_redirect_from_children (GdkWindowObject   *private,
 					   GdkWindowRedirect *redirect);
 
-static void recompute_visible_regions (GdkWindowObject *private,
-				       gboolean recalculate_siblings,
-				       gboolean recalculate_children);
-static void gdk_window_flush          (GdkWindow *window);
+static void recompute_visible_regions   (GdkWindowObject *private,
+					 gboolean recalculate_siblings,
+					 gboolean recalculate_children);
+static void gdk_window_flush            (GdkWindow *window);
+static void gdk_window_flush_recursive  (GdkWindowObject *window);
 static void do_move_region_bits_on_impl (GdkWindowObject *private,
 					 GdkDrawable *dest,
 					 int dest_off_x, int dest_off_y,
@@ -2607,6 +2608,32 @@ gdk_window_flush (GdkWindow *window)
   impl_window->outstanding_moves = NULL;
   
   gdk_window_flush_implicit_paint (window);
+}
+
+static void
+gdk_window_flush_recursive_helper (GdkWindowObject *window,
+				   GdkWindow *impl)
+{
+  GdkWindowObject *child;
+  GList *l;
+  
+  for (l = window->children; l != NULL; l = l->next)
+    {
+      child = l->data;
+
+      if (child->impl == impl)
+	/* Same impl, ignore */
+	gdk_window_flush_recursive_helper (child, impl);
+      else
+	gdk_window_flush_recursive (child);
+    }
+}
+
+static void
+gdk_window_flush_recursive (GdkWindowObject *window)
+{
+  gdk_window_flush ((GdkWindow *)window);
+  gdk_window_flush_recursive_helper (window, window->impl);
 }
 
 static void
@@ -5792,6 +5819,72 @@ gdk_window_get_events (GdkWindow *window)
 }
 
 static void
+gdk_window_move_resize_toplevel (GdkWindow *window,
+				 gboolean   with_move,
+				 gint       x,
+				 gint       y,
+				 gint       width,
+				 gint       height)
+{
+  GdkWindowObject *private;
+  GdkRegion *old_region, *new_region;
+  GdkWindowObject *impl_window;
+  gboolean expose;
+  int old_x, old_y, old_abs_x, old_abs_y;
+  int dx, dy;
+  gboolean is_resize;
+
+  private = (GdkWindowObject *) window;
+
+  expose = FALSE;
+  old_region = NULL;
+
+  impl_window = gdk_window_get_impl_window (private);
+
+  old_x = private->x;
+  old_y = private->y;
+
+  is_resize = (width != -1) || (height != -1);
+  
+  if (GDK_WINDOW_IS_MAPPED (window) &&
+      !private->input_only)
+    {
+      expose = TRUE;
+      old_region = gdk_region_copy (private->clip_region);
+    }
+  
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->move_resize (window, with_move, x, y, width, height);
+
+  dx = private->x - old_x;
+  dy = private->y - old_y;
+  
+  old_abs_x = private->abs_x;
+  old_abs_y = private->abs_y;
+
+  /* Avoid recomputing for pure toplevel moves, for performance reasons */
+  if (is_resize)
+    recompute_visible_regions (private, TRUE, FALSE);
+  
+  if (expose)
+    {
+      new_region = gdk_region_copy (private->clip_region);
+      
+      /* This is the newly exposed area (due to any resize),
+       * X will expose it, but lets do that without the
+       * roundtrip
+       */
+      gdk_region_subtract (new_region, old_region);
+      gdk_window_invalidate_region (window, new_region, TRUE);
+      
+      gdk_region_destroy (old_region);
+      gdk_region_destroy (new_region);
+    }
+
+  _gdk_syntesize_crossing_events_for_geometry_change (window);
+}
+
+
+static void
 move_native_children (GdkWindowObject *private)
 {
   GList *l;
@@ -5808,6 +5901,60 @@ move_native_children (GdkWindowObject *private)
     }
 }
 
+static gboolean
+collect_native_child_region_helper (GdkWindowObject *window,
+				    GdkWindow *impl,
+				    GdkRegion **region,
+				    int x_offset,
+				    int y_offset)
+{
+  GdkWindowObject *child;
+  GdkRegion *tmp;
+  GList *l;
+  
+  for (l = window->children; l != NULL; l = l->next)
+    {
+      child = l->data;
+
+      if (child->impl != impl)
+	{
+	  tmp = gdk_region_copy (child->clip_region);
+	  gdk_region_offset (tmp,
+			     x_offset + child->x,
+			     y_offset + child->y);
+	  if (*region == NULL)
+	    *region = tmp;
+	  else
+	    {
+	      gdk_region_union (*region, tmp);
+	      gdk_region_destroy (tmp);
+	    }
+	}
+      else
+	collect_native_child_region_helper (child, impl, region,
+					    x_offset + child->x,
+					    y_offset + child->y);
+    }
+  
+  return FALSE;
+}
+
+static GdkRegion *
+collect_native_child_region (GdkWindowObject *window)
+{
+  GdkRegion *region;
+  
+  if (gdk_window_has_impl (window))
+    return gdk_region_copy (window->clip_region);
+
+  region = NULL;
+  
+  collect_native_child_region_helper (window, window->impl, &region, 0, 0);
+  
+  return region;
+}
+
+
 static void
 gdk_window_move_resize_internal (GdkWindow *window,
 				 gboolean   with_move,
@@ -5818,12 +5965,11 @@ gdk_window_move_resize_internal (GdkWindow *window,
 {
   GdkWindowObject *private;
   GdkRegion *old_region, *new_region, *copy_area;
+  GdkRegion *old_native_child_region, *new_native_child_region;
   GdkWindowObject *impl_window;
   gboolean expose;
   int old_x, old_y, old_abs_x, old_abs_y;
   int dx, dy;
-  gboolean do_move_native_children;
-  gboolean is_toplevel, is_resize;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -5831,7 +5977,15 @@ gdk_window_move_resize_internal (GdkWindow *window,
   if (private->destroyed)
     return;
 
-  do_move_native_children = FALSE;
+  if (private->parent == NULL ||
+      GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT)
+    {
+      gdk_window_move_resize_toplevel (window, with_move, x, y, width, height);
+      return;
+    }
+
+  /* Handle child windows */
+  
   expose = FALSE;
   old_region = NULL;
 
@@ -5840,14 +5994,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
   old_x = private->x;
   old_y = private->y;
 
-  is_toplevel =
-    private->parent == NULL ||
-    GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT;
-
-  is_resize = (width != -1) || (height != -1);
-
   if (GDK_WINDOW_IS_MAPPED (window) &&
-      (!is_toplevel || is_resize) &&
       !private->input_only)
     {
       expose = TRUE;
@@ -5856,44 +6003,62 @@ gdk_window_move_resize_internal (GdkWindow *window,
       /* Adjust region to parent window coords */
       gdk_region_offset (old_region, private->x, private->y);
     }
+
+  old_native_child_region = collect_native_child_region (private);
+  if (old_native_child_region)
+    {
+      /* Adjust region to parent window coords */
+      gdk_region_offset (old_native_child_region, private->x, private->y);
+      
+      /* Any native window move will immediately copy stuff to the destination, which may overwrite a
+       * source or destination for a delayed GdkWindowRegionMove. So, we need
+       * to flush those here for the parent window and all overlapped subwindows
+       * of it. And we need to do this before setting the new clips as those will be
+       * affecting this.
+       */
+      gdk_window_flush_recursive (private->parent);
+    }
+ 
+  /* Set the new position and size */
+  if (with_move)
+    {
+      private->x = x;
+      private->y = y;
+    }
+  if (!(width < 0 && height < 0))
+    {
+      if (width < 1)
+	width = 1;
+      private->width = width;
+      if (height < 1)
+	height = 1;
+      private->height = height;
+    }
   
-  if (gdk_window_has_impl (private))
-    {
-      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->move_resize (window, with_move, x, y, width, height);
-    }
-  else
-    {
-      if (with_move)
-	{
-	  private->x = x;
-	  private->y = y;
-	}
-      if (!(width < 0 && height < 0))
-	{
-	  if (width < 1)
-	    width = 1;
-	  private->width = width;
-	  if (height < 1)
-	    height = 1;
-	  private->height = height;
-	}
-
-      do_move_native_children = TRUE;
-    }
-
   dx = private->x - old_x;
   dy = private->y - old_y;
   
   old_abs_x = private->abs_x;
   old_abs_y = private->abs_y;
 
-  /* Avoid recomputing for pure toplevel moves, for performance reasons */
-  if (!is_toplevel || is_resize)
-    recompute_visible_regions (private, TRUE, FALSE);
+  recompute_visible_regions (private, TRUE, FALSE);
+
+  new_native_child_region = NULL;
+  if (old_native_child_region)
+    {
+      new_native_child_region = collect_native_child_region (private);
+      /* Adjust region to parent window coords */
+      gdk_region_offset (new_native_child_region, private->x, private->y);
+    }
   
-  if (do_move_native_children &&
-      (old_abs_x != private->abs_x ||
-       old_abs_y != private->abs_y))
+  if (gdk_window_has_impl (private))
+    {
+      /* Do the actual move after recomputing things, as this will have set the shape to
+	 the now correct one, thus avoiding copying regions that should not be copied. */
+      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->move_resize (window, with_move, x, y, width, height);
+    }
+  else if (old_abs_x != private->abs_x ||
+	   old_abs_y != private->abs_y)
     move_native_children (private);
   
   if (expose)
@@ -5913,11 +6078,27 @@ gdk_window_move_resize_internal (GdkWindow *window,
        * invalidated (including children) as this is newly exposed 
        */
       copy_area = gdk_region_copy (new_region);
-	  
-      gdk_region_union (new_region, old_region);
       
+      gdk_region_union (new_region, old_region);
+
+      if (old_native_child_region)
+	{
+	  /* Don't copy from inside native children, as this is copied by
+	   * the native window move.
+	   */
+	  gdk_region_subtract (old_region, old_native_child_region);
+	}
       gdk_region_offset (old_region, dx, dy);
+
       gdk_region_intersect (copy_area, old_region);
+
+      if (new_native_child_region)
+	{
+	  /* Don't copy any bits that would cause a read from the moved
+	     native windows, as we can't read that data */
+	  gdk_region_offset (new_native_child_region, dx, dy);
+	  gdk_region_subtract (copy_area, new_native_child_region);
+	}
       
       gdk_region_subtract (new_region, copy_area);
 
@@ -5945,6 +6126,12 @@ gdk_window_move_resize_internal (GdkWindow *window,
       gdk_region_destroy (new_region);
     }
 
+  if (old_native_child_region)
+    {
+      gdk_region_destroy (old_native_child_region);
+      gdk_region_destroy (new_native_child_region);
+    }
+  
   _gdk_syntesize_crossing_events_for_geometry_change (window);
 }
 
