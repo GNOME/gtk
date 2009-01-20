@@ -166,13 +166,6 @@ struct _GdkWindowQueueItem
 };
 
 static void
-move (GdkWindow *window, GdkRectangle *pos)
-{
-  XMoveWindow (GDK_WINDOW_XDISPLAY (window),
-               GDK_WINDOW_XID (window), pos->x, pos->y);
-}
-
-static void
 move_resize (GdkWindow *window, GdkRectangle *pos)
 {
   XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
@@ -190,7 +183,6 @@ _gdk_window_move_resize_child (GdkWindow *window,
   GdkWindowImplX11 *impl;
   GdkWindowObject *obj;
   GdkRectangle new_info;
-  gboolean is_resize;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window)); 
@@ -198,10 +190,6 @@ _gdk_window_move_resize_child (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
   obj = GDK_WINDOW_OBJECT (window);
 
-  is_resize =
-    width != obj->width ||
-    height != obj->height;
-    
   obj->x = x;
   obj->y = y;
   obj->width = width;
@@ -213,10 +201,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
   new_info.height = obj->height;
 
   _gdk_x11_window_tmp_unset_parent_bg (window, TRUE);
-  if (is_resize)
-    move_resize (window, &new_info);
-  else
-    move (window, &new_info);
+  move_resize (window, &new_info);
   _gdk_x11_window_tmp_reset_parent_bg (window, TRUE);
 }
 
