@@ -140,15 +140,18 @@ struct _GdkToplevelX11
 
 GType gdk_window_impl_x11_get_type (void);
 
-void             gdk_x11_window_set_user_time (GdkWindow *window,
-                                               guint32    timestamp);
+void            gdk_x11_window_set_user_time        (GdkWindow *window,
+						     guint32    timestamp);
 
-GdkToplevelX11 *_gdk_x11_window_get_toplevel  (GdkWindow *window);
-void		_gdk_x11_window_tmp_unset_bg  (GdkWindow *window,
-					       gboolean   recurse);
-void            _gdk_x11_window_tmp_reset_bg  (GdkWindow *window,
-					       gboolean   recurse);
-
+GdkToplevelX11 *_gdk_x11_window_get_toplevel        (GdkWindow *window);
+void            _gdk_x11_window_tmp_unset_bg        (GdkWindow *window,
+						     gboolean   recurse);
+void            _gdk_x11_window_tmp_reset_bg        (GdkWindow *window,
+						     gboolean   recurse);
+void            _gdk_x11_window_tmp_unset_parent_bg (GdkWindow *window,
+						     gboolean   recurse);
+void            _gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window,
+						     gboolean   recurse);
 
 GdkCursor      *_gdk_x11_window_get_cursor    (GdkWindow *window);
 void            _gdk_x11_window_get_offsets   (GdkWindow *window,

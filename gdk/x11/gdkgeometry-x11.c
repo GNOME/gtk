@@ -212,14 +212,12 @@ _gdk_window_move_resize_child (GdkWindow *window,
   new_info.width = obj->width;
   new_info.height = obj->height;
 
-  _gdk_x11_window_tmp_unset_bg (window, TRUE);
-  _gdk_x11_window_tmp_unset_bg (obj->parent, FALSE);
+  _gdk_x11_window_tmp_unset_parent_bg (window, TRUE);
   if (is_resize)
     move_resize (window, &new_info);
   else
     move (window, &new_info);
-  _gdk_x11_window_tmp_reset_bg (obj->parent, FALSE);
-  _gdk_x11_window_tmp_reset_bg (window, TRUE);
+  _gdk_x11_window_tmp_reset_parent_bg (window, TRUE);
 }
 
 static Bool
