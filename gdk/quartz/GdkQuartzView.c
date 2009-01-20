@@ -67,8 +67,6 @@
   if (NSEqualRects (rect, NSZeroRect))
     return;
 
-  GDK_QUARTZ_ALLOC_POOL;
-
   [self getRectsBeingDrawn:&drawn_rects count:&count];
 
   region = gdk_region_new ();
@@ -115,8 +113,6 @@
       [[self window] invalidateShadow];
       needsInvalidateShadow = NO;
     }
-
-  GDK_QUARTZ_RELEASE_POOL;
 }
 
 -(void)setNeedsInvalidateShadow:(BOOL)invalidate
