@@ -693,8 +693,8 @@ _gdk_window_update_size (GdkWindow *window)
  * If child is NULL, find lowest native window in parent.
  */
 static GdkWindowObject *
-find_native_sibling_above (GdkWindowObject *parent,
-			   GdkWindowObject *child)
+find_native_sibling_above_helper (GdkWindowObject *parent,
+				  GdkWindowObject *child)
 {
   GdkWindowObject *w;
   GList *l;
@@ -714,11 +714,26 @@ find_native_sibling_above (GdkWindowObject *parent,
 	
       if (gdk_window_has_impl (w))
 	return w;
-      
-      w = find_native_sibling_above (w, NULL);
+
+      g_assert (parent != w);
+      w = find_native_sibling_above_helper (w, NULL);
       if (w)
 	return w;
     }
+
+  return NULL;
+}
+
+
+static GdkWindowObject *
+find_native_sibling_above (GdkWindowObject *parent,
+			   GdkWindowObject *child)
+{
+  GdkWindowObject *w;
+
+  w = find_native_sibling_above_helper (parent, child);
+  if (w)
+    return w;
 
   if (gdk_window_has_impl (parent))
     return NULL;
