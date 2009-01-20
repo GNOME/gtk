@@ -1962,8 +1962,11 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
     {
       move = l->data;
 
-      gdk_region_get_clipbox (move->region, &clipbox);
-      gdk_rectangle_union (&r, &clipbox, &r);
+      if (!gdk_region_empty (move->region))
+	{
+	  gdk_region_get_clipbox (move->region, &clipbox);
+	  gdk_rectangle_union (&r, &clipbox, &r);
+	}
     }
   
   paint = g_new (GdkWindowPaint, 1);
