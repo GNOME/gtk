@@ -2447,9 +2447,21 @@ do_move_region_bits_on_impl (GdkWindowObject *private,
   
   gdk_region_get_clipbox (region, &copy_rect);
   gdk_region_offset (region, -dest_off_x, -dest_off_y);
+
   /* We need to get data from subwindows here, because we might have
-     moved or shaped a native window over the moving region (with bg none,
-     so the pixels are still there). */
+   * shaped a native window over the moving region (with bg none,
+   * so the pixels are still there). In fact we might need to get data
+   * from overlapping native window that are not children of this window,
+   * so we copy from the toplevel with INCLUDE_INFERIORS.
+   */
+  private = gdk_window_get_impl_window (private);
+  while (private->parent != NULL &&
+	 GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
+    {
+      dx -= private->parent->abs_x + private->x;
+      dy -= private->parent->abs_y + private->y;
+      private = gdk_window_get_impl_window (private->parent);
+    }
   tmp_gc = _gdk_drawable_get_subwindow_scratch_gc ((GdkWindow *)private);
   gdk_gc_set_clip_region (tmp_gc, region);
   gdk_draw_drawable (dest,
