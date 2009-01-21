@@ -340,49 +340,70 @@ gdk_quartz_draw_drawable (GdkDrawable *drawable,
   int dest_depth = gdk_drawable_get_depth (drawable);
   GdkDrawableImplQuartz *src_impl;
 
-  if (GDK_IS_DRAWABLE_IMPL_QUARTZ (src))
+  if (GDK_IS_WINDOW_IMPL_QUARTZ (src))
+    {
+      GdkWindowImplQuartz *window_impl;
+
+      window_impl = GDK_WINDOW_IMPL_QUARTZ (src);
+
+      /* We do support moving areas on the same drawable, if it can be done
+       * by using a scroll. FIXME: We need to check that the params support
+       * this hack, and make sure it's done properly with any offsets etc?
+       */
+      if (drawable == window_impl)
+        {
+          [window_impl->view scrollRect:NSMakeRect (xsrc, ysrc, width, height)
+                                     by:NSMakeSize (xdest - xsrc, ydest - ysrc)];
+
+
+        }
+      else
+        g_warning ("Drawing with window source != dest is not supported");
+
+      return;
+    }
+  else if (GDK_IS_DRAWABLE_IMPL_QUARTZ (src))
     src_impl = GDK_DRAWABLE_IMPL_QUARTZ (src);
   else if (GDK_IS_PIXMAP (src))
     src_impl = GDK_DRAWABLE_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (src)->impl);
-  else if (GDK_IS_WINDOW (src))
+  else
     {
-      src_impl = GDK_DRAWABLE_IMPL_QUARTZ (GDK_WINDOW_OBJECT (src)->impl);
-      /* FIXME: Implement drawing a window. */
+      g_warning ("Unsupported source %s", G_OBJECT_TYPE_NAME (src));
       return;
     }
-  else
-    g_assert_not_reached ();
-  
+
+  /* Handle drawable and pixmap sources. */
   if (src_depth == 1)
     {
       /* FIXME: src depth 1 is not supported yet */
+      g_warning ("Source with depth 1 unsupported");
     }
   else if (dest_depth != 0 && src_depth == dest_depth)
     {
       CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
 
       if (!context)
-	return;
+        return;
 
       _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-					GDK_QUARTZ_CONTEXT_STROKE);
+                                        GDK_QUARTZ_CONTEXT_STROKE);
 
       CGContextClipToRect (context, CGRectMake (xdest, ydest, width, height));
       CGContextTranslateCTM (context, xdest - xsrc, ydest - ysrc +
                              GDK_PIXMAP_IMPL_QUARTZ (src_impl)->height);
       CGContextScaleCTM (context, 1.0, -1.0);
 
-      CGContextDrawImage (context, 
-			  CGRectMake(0, 0, 
-				     GDK_PIXMAP_IMPL_QUARTZ (src_impl)->width, 
-				     GDK_PIXMAP_IMPL_QUARTZ (src_impl)->height), 
-			  GDK_PIXMAP_IMPL_QUARTZ (src_impl)->image);
+      CGContextDrawImage (context,
+                          CGRectMake(0, 0,
+                                     GDK_PIXMAP_IMPL_QUARTZ (src_impl)->width,
+                                     GDK_PIXMAP_IMPL_QUARTZ (src_impl)->height),
+                          GDK_PIXMAP_IMPL_QUARTZ (src_impl)->image);
 
       gdk_quartz_drawable_release_context (drawable, context);
     }
   else
     g_warning ("Attempt to draw a drawable with depth %d to a drawable with depth %d",
-	       src_depth, dest_depth);
+               src_depth, dest_depth);
 }
 
 static void
