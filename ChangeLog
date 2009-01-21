@@ -1,3 +1,11 @@
+2009-01-21  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkcursor-win32.c: Rename static local functions and
+	variables to not have any unnecessary _ or _gdk_win32 prefix.
+
+	* gdk/win32/gdkcursor-win32.c (hcursor_from_type): Implement
+	creating a GDK_BLANK_CURSOR.
+
 2009-01-21  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 568552 – gtk_combo + gtk entry in invisible mode takes 100% cpu
