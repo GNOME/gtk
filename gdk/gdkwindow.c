@@ -5955,11 +5955,12 @@ collect_native_child_region_helper (GdkWindowObject *window,
 }
 
 static GdkRegion *
-collect_native_child_region (GdkWindowObject *window)
+collect_native_child_region (GdkWindowObject *window,
+			     gboolean include_this)
 {
   GdkRegion *region;
   
-  if (gdk_window_has_impl (window))
+  if (include_this && gdk_window_has_impl (window))
     return gdk_region_copy (window->clip_region);
 
   region = NULL;
@@ -6019,7 +6020,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
       gdk_region_offset (old_region, private->x, private->y);
     }
 
-  old_native_child_region = collect_native_child_region (private);
+  old_native_child_region = collect_native_child_region (private, TRUE);
   if (old_native_child_region)
     {
       /* Adjust region to parent window coords */
@@ -6061,7 +6062,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
   new_native_child_region = NULL;
   if (old_native_child_region)
     {
-      new_native_child_region = collect_native_child_region (private);
+      new_native_child_region = collect_native_child_region (private, TRUE);
       /* Adjust region to parent window coords */
       gdk_region_offset (new_native_child_region, private->x, private->y);
     }
@@ -6249,6 +6250,7 @@ gdk_window_scroll (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *) window;
   GdkWindowObject *impl_window;
   GdkRegion *source_area, *copy_area, *noncopy_area;
+  GdkRegion *old_native_child_region, *new_native_child_region;
   GList *tmp_list;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -6259,6 +6261,19 @@ gdk_window_scroll (GdkWindow *window,
   if (private->destroyed)
     return;
 
+  old_native_child_region = collect_native_child_region (private, FALSE);
+  if (old_native_child_region)
+    {
+      /* Any native window move will immediately copy stuff to the destination, which may overwrite a
+       * source or destination for a delayed GdkWindowRegionMove. So, we need
+       * to flush those here for the window and all overlapped subwindows
+       * of it. And we need to do this before setting the new clips as those will be
+       * affecting this.
+       */
+      gdk_window_flush_recursive (private);
+    }
+
+  
   /* First move all child windows, without causing invalidation */
   
   tmp_list = private->children;
@@ -6276,6 +6291,10 @@ gdk_window_scroll (GdkWindow *window,
 
   recompute_visible_regions (private, FALSE, TRUE);
 
+  new_native_child_region = NULL;
+  if (old_native_child_region)
+    new_native_child_region = collect_native_child_region (private, FALSE);
+  
   move_native_children (private);
   
   /* Then copy the actual bits of the window w/ child windows */
@@ -6284,6 +6303,17 @@ gdk_window_scroll (GdkWindow *window,
 
   /* Calculate the area that can be gotten by copying the old area */
   copy_area = gdk_region_copy (private->clip_region);
+  if (old_native_child_region)
+    {
+      /* Don't copy from inside native children, as this is copied by
+       * the native window move.
+       */
+      gdk_region_subtract (copy_area, old_native_child_region);
+      
+      /* Don't copy any bits that would cause a read from the moved
+	 native windows, as we can't read that data */
+      gdk_region_subtract (copy_area, new_native_child_region);
+    }
   gdk_region_offset (copy_area, dx, dy);
   gdk_region_intersect (copy_area, private->clip_region);
 
@@ -6311,6 +6341,12 @@ gdk_window_scroll (GdkWindow *window,
   gdk_window_invalidate_region (window, noncopy_area, TRUE);
 
   gdk_region_destroy (noncopy_area);
+
+  if (old_native_child_region)
+    {
+      gdk_region_destroy (old_native_child_region);
+      gdk_region_destroy (new_native_child_region);
+    }
   
   _gdk_syntesize_crossing_events_for_geometry_change (window);
 }
