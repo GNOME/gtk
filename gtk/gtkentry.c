@@ -799,8 +799,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   /**
    * GtkEntry:caps-lock-warning
    *
-   * Whether password entries will show a warning when Caps Lock is on
-   * or an input method is active. 
+   * Whether password entries will show a warning when Caps Lock is on.
    *
    * Note that the warning is shown using a secondary icon, and thus
    * does not work if you are using the secondary icon position for some 
@@ -812,7 +811,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                    PROP_CAPS_LOCK_WARNING,
                                    g_param_spec_boolean ("caps-lock-warning",
                                                          P_("Caps Lock warning"),
-                                                         P_("Whether password entries will show a warning when Caps Lock is on or an input method is active"),
+                                                         P_("Whether password entries will show a warning when Caps Lock is on"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
 
@@ -2434,7 +2433,7 @@ update_cursors (GtkWidget *widget)
       if ((icon_info = priv->icons[i]) != NULL)
         {
           if (icon_info->pixbuf != NULL)
-            gdk_window_show (icon_info->window);
+            gdk_window_show_unraised (icon_info->window);
 
           /* The icon windows are not children of the visible entry window,
            * thus we can't just inherit the xterm cursor. Slight complication 
@@ -2515,7 +2514,7 @@ construct_icon_info (GtkWidget            *widget,
     realize_icon_info (widget, icon_pos);
 
   if (GTK_WIDGET_MAPPED (widget))
-    gdk_window_show (icon_info->window);
+    gdk_window_show_unraised (icon_info->window);
 
   return icon_info;
 }
@@ -6305,9 +6304,9 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
       g_assert_not_reached ();
       break;
     }
-
-  if (GDK_IS_WINDOW (icon_info->window))
-    gdk_window_show (icon_info->window);
+    
+  if (icon_info->pixbuf != NULL)
+    gdk_window_show_unraised (icon_info->window);
 }
 
 
@@ -9598,17 +9597,8 @@ keymap_state_changed (GdkKeymap *keymap,
 
   if (!entry->visible && priv->caps_lock_warning)
     { 
-      gboolean capslock_on;
-      gboolean im_on;
-
-      capslock_on = gdk_keymap_get_caps_lock_state (keymap);
-      im_on = g_strcmp0 (gtk_im_multicontext_get_context_id (GTK_IM_MULTICONTEXT (entry->im_context)), "gtk-im-context-simple") != 0;
-      if (capslock_on && im_on)
-        text = _("You have the Caps Lock key on\nand an active input method");
-      else if (capslock_on)
+      if (gdk_keymap_get_caps_lock_state (keymap))
         text = _("You have the Caps Lock key on");
-      else if (im_on)
-        text = _("You have an active input method");    
     }
 
   if (text)

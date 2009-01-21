@@ -1,3 +1,14 @@
+2009-01-21  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 568552 – gtk_combo + gtk entry in invisible mode takes 100% cpu
+
+	* gtk/gtkentry.c: Fix an expose loop caused by raising windows out
+	of an expose handler. Also, don't show the 'Caps Lock' warning for
+	activated input methods, since that makes it permanently shown
+	for some locales. It should not be that necessary, now that we
+	do show preedit text even in password entries. Pointed out by
+	Frederic Crozat.
+
 2009-01-21  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfilechooserdefault.c (save_widgets_create): Set
@@ -6,6 +17,7 @@
 	exists.
 
 2009-01-21  Marek Kasik  <mkasik@redhat.com>
+
 	Bug 561801 - "scheduled printing" doesn't function as expected
 
 	* gtk/gtkprintunixdialog: Add tooltip.
