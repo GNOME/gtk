@@ -193,10 +193,6 @@ void        _gdk_quartz_drawable_finish (GdkDrawable *drawable);
 void        _gdk_quartz_window_scroll      (GdkWindow       *window,
                                             gint             dx,
                                             gint             dy);
-void        _gdk_quartz_window_move_region (GdkWindow       *window,
-                                            const GdkRegion *region,
-                                            gint             dx,
-                                            gint             dy);
 void        _gdk_quartz_window_queue_translation (GdkWindow *window,
                                                   GdkRegion *area,
                                                   gint       dx,
