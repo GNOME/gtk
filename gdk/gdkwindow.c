@@ -4389,7 +4389,8 @@ gdk_window_process_updates_recurse (GdkWindow *window,
       gdk_region_destroy (child_region);
     }
 
-  if (private->event_mask & GDK_EXPOSURE_MASK)
+  if (private->event_mask & GDK_EXPOSURE_MASK &&
+      !gdk_region_empty (expose_region))
     {
       GdkEvent event;
       
