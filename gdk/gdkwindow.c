@@ -8312,7 +8312,9 @@ gdk_window_print (GdkWindowObject *window,
 
   if (gdk_window_has_impl (window))
     {
+#ifdef GDK_WINDOWING_X11
       g_print (" impl(0x%lx)", gdk_x11_drawable_get_xid (GDK_DRAWABLE (window)));
+#endif
     }
   
   if (window->input_only)
