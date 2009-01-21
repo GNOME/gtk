@@ -8,6 +8,11 @@
 
 2009-01-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentry.c: Change the Caps Lock warning to the more
+	neutral "Caps Lock is on". Requested by Wouter Bolsterlee
+
+2009-01-21  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 568552 – gtk_combo + gtk entry in invisible mode takes 100% cpu
 
 	* gtk/gtkentry.c: Fix an expose loop caused by raising windows out

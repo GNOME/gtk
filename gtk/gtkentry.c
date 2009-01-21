@@ -9598,7 +9598,7 @@ keymap_state_changed (GdkKeymap *keymap,
   if (!entry->visible && priv->caps_lock_warning)
     { 
       if (gdk_keymap_get_caps_lock_state (keymap))
-        text = _("You have the Caps Lock key on");
+        text = _("Caps Lock is on");
     }
 
   if (text)
