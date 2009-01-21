@@ -4895,6 +4895,7 @@ save_widgets_create (GtkFileChooserDefault *impl)
   impl->location_entry = _gtk_file_chooser_entry_new (TRUE);
   _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
 					   impl->file_system);
+  _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->local_only);
   gtk_entry_set_width_chars (GTK_ENTRY (impl->location_entry), 45);
   gtk_entry_set_activates_default (GTK_ENTRY (impl->location_entry), TRUE);
   gtk_table_attach (GTK_TABLE (table), impl->location_entry,
@@ -5334,7 +5335,8 @@ set_local_only (GtkFileChooserDefault *impl,
     {
       impl->local_only = local_only;
 
-      _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), local_only);
+      if (impl->location_entry)
+	_gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), local_only);
 
       if (impl->shortcuts_model && impl->file_system)
 	{

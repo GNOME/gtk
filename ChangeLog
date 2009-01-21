@@ -1,3 +1,10 @@
+2009-01-21  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserdefault.c (save_widgets_create): Set
+	local_only on the location entry when we create it...
+	(set_local_only): ... and set it here only if the location entry
+	exists.
+
 2009-01-21  Marek Kasik  <mkasik@redhat.com>
 	Bug 561801 - "scheduled printing" doesn't function as expected
 
