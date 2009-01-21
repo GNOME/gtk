@@ -1,3 +1,12 @@
+2009-01-21  Cody Russell  <bratsche@gnome.org>
+
+	Bug 568592 – GailTextCell no longer implements AtkAction interface
+
+	* modules/other/gail/gailtextcell.c: Fix a regression in GailTextCell
+	from revision 19227 where G_DEFINE_TYPE_WITH_CODE was used to replace
+	hard-coded type definition but accidentally removed the registration
+	of the AtkAction interface. Patch from Peter Johanson.
+	
 2009-01-16  Cody Russell  <bratsche@gnome.org>
 
         Bug 567944 – [Win32] Sorted treeview columns can be unreadable

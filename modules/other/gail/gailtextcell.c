@@ -128,7 +128,8 @@ gchar *gail_text_cell_property_list[] = {
 };
 
 G_DEFINE_TYPE_WITH_CODE (GailTextCell, gail_text_cell, GAIL_TYPE_RENDERER_CELL,
-                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
+                         gail_cell_type_add_action_interface (g_define_type_id))
 
 static void 
 gail_text_cell_class_init (GailTextCellClass *klass)
