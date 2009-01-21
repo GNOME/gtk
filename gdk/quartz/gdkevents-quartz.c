@@ -919,7 +919,20 @@ find_window_for_ns_event (NSEvent *nsevent,
                           gint    *x, 
                           gint    *y)
 {
+  GdkWindow *toplevel;
+  GdkWindowObject *private;
+  GdkWindowImplQuartz *impl;
+  NSPoint point;
   NSEventType event_type;
+
+  toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
+  private = GDK_WINDOW_OBJECT (toplevel);
+  impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  point = [nsevent locationInWindow];
+
+  *x = point.x;
+  *y = private->height - point.y;
 
   event_type = [nsevent type];
 
@@ -953,7 +966,7 @@ find_window_for_ns_event (NSEvent *nsevent,
 	 * This means we first try the owner, then the grab window,
 	 * then give up.
 	 */
-	if (_gdk_quartz_pointer_grab_window)
+	if (0 && _gdk_quartz_pointer_grab_window) /* FIXME: Implement grabs? */
 	  {
 	    if (pointer_grab_owner_events)
 	      {
@@ -1003,40 +1016,32 @@ find_window_for_ns_event (NSEvent *nsevent,
 	else 
 	  {
 	    /* The non-grabbed case. */
-            mouse_window = find_mouse_window_for_ns_event (nsevent, x, y);
-	    event_mask = get_event_mask_from_ns_event (nsevent);
-	    real_window = find_window_interested_in_event_mask (mouse_window, event_mask, TRUE);
-	    
-	    /* We have to translate the coordinates if the actual
-	     * window is different from the mouse window.
-	     */
-	    if (mouse_window && real_window && mouse_window != real_window)
-	      get_ancestor_coordinates_from_child (mouse_window,
-						   *x, *y,
-						   real_window,
-						   x, y);
 
-	    return real_window;
+            /* Leave events above the window (e.g. possibly on the titlebar)
+             * to cocoa.
+             */
+            if (*y < 0)
+              return NULL;
+
+            /* FIXME: Also need to leave resize events to cocoa somehow? */
+
+            return toplevel;
 	  }
       }
       break;
       
     case NSMouseEntered:
     case NSMouseExited:
-      /* Already handled in synthesize_crossing_events_for_ns_event. */
-      break;
+      return toplevel;
 
     case NSKeyDown:
     case NSKeyUp:
     case NSFlagsChanged:
       {
-	GdkEventMask event_mask;
-
 	if (_gdk_quartz_keyboard_grab_window && !keyboard_grab_owner_events)
 	  return _gdk_quartz_keyboard_grab_window;
 
-	event_mask = get_event_mask_from_ns_event (nsevent);
-	return find_window_interested_in_event_mask (current_keyboard_window, event_mask, TRUE);
+        return toplevel;
       }
       break;
 
@@ -1332,7 +1337,11 @@ synthesize_crossing_event (GdkWindow *window,
 
   private = GDK_WINDOW_OBJECT (window);
 
-  /* FIXME: Do we need to handle grabs here? */
+  /* FIXME: had this before csw:
+     _gdk_quartz_events_update_mouse_window (window);
+     if (window && !_gdk_quartz_pointer_grab_window)
+       _gdk_quartz_events_update_cursor (window);
+  */
 
   switch ([nsevent type])
     {
@@ -1414,11 +1423,12 @@ gdk_event_translate (GdkEvent *event,
     }
 
   /* Handle our generated "fake" crossing events. */
-  if ([nsevent type] == NSApplicationDefined && 
+  if ([nsevent type] == NSApplicationDefined &&
       [nsevent subtype] == GDK_QUARTZ_EVENT_SUBTYPE_FAKE_CROSSING)
     {
+      /* FIXME: This needs to actually fill in the event we have... */
       _gdk_quartz_events_trigger_crossing_events (FALSE);
-      return TRUE;
+      return FALSE; /* ...and return TRUE instead. */
     }
 
   /* Keep track of button state, since we don't get that information
@@ -1440,8 +1450,6 @@ gdk_event_translate (GdkEvent *event,
       break;
     }
 
-  nswindow = [nsevent window];
-
   if (_gdk_default_filters)
     {
       /* Apply global filters */
@@ -1454,6 +1462,8 @@ gdk_event_translate (GdkEvent *event,
           goto done;
         }
     }
+
+  nswindow = [nsevent window];
 
   /* Ignore events for no window or ones not created by GDK. */
   if (!nswindow || ![[nswindow contentView] isKindOfClass:[GdkQuartzView class]])
@@ -1498,15 +1508,16 @@ gdk_event_translate (GdkEvent *event,
 	}
     }
 
-  /* We need the appliction to be activated on clicks so that popups
-   * like context menus get events routed properly. This is handled
-   * automatically for left mouse button presses but not other
-   * buttons, so we do it here.
+  /* We only activate the application on click if it's not already active,
+   * this matches most use cases of native apps (no click-through).
    */
-  if ([nsevent type] == NSRightMouseDown || [nsevent type] == NSOtherMouseDown)
+  if (([nsevent type] == NSRightMouseDown ||
+       [nsevent type] == NSOtherMouseDown ||
+       [nsevent type] == NSLeftMouseDown) && ![NSApp isActive])
     {
-      if (![NSApp isActive])
-        [NSApp activateIgnoringOtherApps:YES];
+      [NSApp activateIgnoringOtherApps:YES];
+      return_val = FALSE;
+      goto done;
     }
 
   current_event_mask = get_event_mask_from_ns_event (nsevent);
@@ -1525,7 +1536,7 @@ gdk_event_translate (GdkEvent *event,
 	 * in its mask, like X.
 	 */
 	event_mask = (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
-	if (!_gdk_quartz_pointer_grab_window &&
+	if (0 && !_gdk_quartz_pointer_grab_window && /* FIXME: add back for grabs? */
 	    (GDK_WINDOW_OBJECT (window)->event_mask & event_mask) == event_mask)
 	  {
 	    pointer_grab_internal (window, FALSE,
@@ -1543,7 +1554,7 @@ gdk_event_translate (GdkEvent *event,
       fill_button_event (window, event, nsevent, x, y);
       
       /* Ungrab implicit grab */
-      if (_gdk_quartz_pointer_grab_window && pointer_grab_implicit)
+      if (0 && _gdk_quartz_pointer_grab_window && pointer_grab_implicit) /* FIXME: add back? */
 	pointer_ungrab_internal (TRUE);
       break;
 
@@ -1603,6 +1614,7 @@ gdk_event_translate (GdkEvent *event,
 
     default:
       /* Ignore everything elsee. */
+      return_val = FALSE;
       break;
     }
 
