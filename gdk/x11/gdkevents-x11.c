@@ -1213,7 +1213,15 @@ gdk_event_translate (GdkDisplay *display,
 
       set_user_time (window, event);
 
-      _gdk_xgrab_check_button_event (window, xevent);
+      /* We treat button presses as scroll wheel events, so don't expose
+       * this grab to gtk, as it will be immediately released. If we do
+       * expose it there is a short time before we receive the Release
+       * where a client-side generated pointer motion event could be handled
+       * as if the grab was effect.
+       */
+      if (!(xevent->xbutton.button == 4 || xevent->xbutton.button == 5 ||
+	    xevent->xbutton.button == 6 || xevent->xbutton.button == 7))
+	_gdk_xgrab_check_button_event (window, xevent);
       break;
       
     case ButtonRelease:
@@ -1236,7 +1244,7 @@ gdk_event_translate (GdkDisplay *display,
           xevent->xbutton.button == 6 || xevent->xbutton.button ==7)
 	{
 	  return_val = FALSE;
-	  goto release_out;
+	  break;
 	}
 
       event->button.type = GDK_BUTTON_RELEASE;
@@ -1252,13 +1260,10 @@ gdk_event_translate (GdkDisplay *display,
       event->button.device = display->core_pointer;
 
       if (!set_screen_from_root (display, event, xevent->xbutton.root))
-	{
-	  return_val = FALSE;
-	  goto release_out;
-	}
+	return_val = FALSE;
       
-    release_out:
       _gdk_xgrab_check_button_event (window, xevent);
+      
       break;
       
     case MotionNotify:
