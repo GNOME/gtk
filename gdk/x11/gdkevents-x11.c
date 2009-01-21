@@ -952,7 +952,7 @@ gdk_event_translate (GdkDisplay *display,
 	    unref_pixmap = window;
 	  window = g_object_ref (pixmap->backing_for);
 	  exposure_x_offset = pixmap->backing_x_offset;
-	  exposure_y_offset = pixmap->backing_x_offset;
+	  exposure_y_offset = pixmap->backing_y_offset;
 	}
       else
 	window = NULL;
