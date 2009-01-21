@@ -661,7 +661,12 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
   error = NULL;
   if (!find_common_prefix (chooser_entry, &common_prefix, &unique_file, &is_complete_not_unique, &prefix_expands_the_file_part, &error))
     {
-      if (show_errors)
+      /* If the user types an incomplete hostname ("http://foo" without a slash
+       * after that), it's not an error.  We just don't want to pop up a
+       * meaningless completion window in that state.
+       */
+      if (!g_error_matches (error, GTK_FILE_CHOOSER_ERROR, GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME)
+	  && show_errors)
 	{
 	  beep (chooser_entry);
 	  pop_up_completion_feedback (chooser_entry, _("Invalid path"));
@@ -1403,7 +1408,8 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
 
   if (chooser_entry->current_folder_file)
     {
-      if ((folder_file && !g_file_equal (folder_file, chooser_entry->current_folder_file))
+      if ((folder_file && !(g_file_equal (folder_file, chooser_entry->current_folder_file)
+			    && chooser_entry->load_folder_cancellable))
 	  || force_reload)
 	{
 	  reload = TRUE;
@@ -1419,7 +1425,7 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
 
           discard_current_folder (chooser_entry);
 	  g_object_unref (chooser_entry->current_folder_file);
-	  chooser_entry->current_folder_file = g_object_ref (folder_file);
+	  chooser_entry->current_folder_file = (folder_file) ? g_object_ref (folder_file) : NULL;
 	}
     }
   else
@@ -1443,6 +1449,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   gchar *file_part;
   gsize total_len, file_part_len;
   gint file_part_pos;
+  GError *error;
 
   editable = GTK_EDITABLE (chooser_entry);
 
@@ -1462,14 +1469,22 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
     }
 
   text = gtk_editable_get_chars (editable, 0, end_pos);
-  
+
+  error = NULL;
   if (!chooser_entry->file_system ||
       !chooser_entry->base_folder ||
       !_gtk_file_system_parse (chooser_entry->file_system,
 			       chooser_entry->base_folder, text,
-			       &folder_file, &file_part, NULL)) /* NULL-GError */
+			       &folder_file, &file_part, &error))
     {
-      folder_file = (chooser_entry->base_folder) ? g_object_ref (chooser_entry->base_folder) : NULL;
+      if (g_error_matches (error, GTK_FILE_CHOOSER_ERROR, GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME))
+	folder_file = NULL;
+      else
+	folder_file = (chooser_entry->base_folder) ? g_object_ref (chooser_entry->base_folder) : NULL;
+
+      if (error)
+	g_error_free (error);
+
       file_part = g_strdup ("");
       file_part_pos = -1;
     }

@@ -40,6 +40,26 @@
 	* gtk/gtkfilechooserdefault.c (set_local_only): Set the local_only
 	property on the entry.
 
+	Fix completion so it doesn't pop up for every character in a URI
+	hostname:
+
+	* gtk/gtkfilechooser.h (GtkFileChooserError): Add a
+	GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME.
+
+	* gtk/gtkfilesystem.c (_gtk_file_system_parse): Return an
+	"incomplete hostname" error if the user has not typed a full
+	hostname yet in an URI.
+
+	* gtk/gtkfilechooserentry.c (append_common_prefix): If we get an
+	incomplete hostname, just don't pop up an error, since that is a
+	transient state and the user doesn't need to be notified about it.
+	(refresh_current_folder_and_file_part): Don't revert to showing
+	the base folder if we have an incomplete hostname.
+	(reload_current_folder): Handle the passed folder being NULL, even
+	if we must force a reload.  Also, reload the folder if we didn't
+	have a cancellable for it (i.e. we hadn't started to load it
+	before).
+
 2009-01-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:

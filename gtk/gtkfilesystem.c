@@ -672,6 +672,7 @@ _gtk_file_system_parse (GtkFileSystem     *file_system,
   gboolean result = FALSE;
   gboolean is_dir = FALSE;
   gchar *last_slash = NULL;
+  gboolean is_uri;
 
   DEBUG ("parse");
 
@@ -680,7 +681,37 @@ _gtk_file_system_parse (GtkFileSystem     *file_system,
 
   last_slash = strrchr (str, G_DIR_SEPARATOR);
 
-  if (str[0] == '~' || g_path_is_absolute (str) || has_uri_scheme (str))
+  is_uri = has_uri_scheme (str);
+
+  if (is_uri)
+    {
+      const char *colon;
+      const char *slash_after_hostname;
+
+      colon = strchr (str, ':');
+      g_assert (colon != NULL);
+      g_assert (strncmp (colon, "://", 3) == 0);
+
+      slash_after_hostname = strchr (colon + 3, '/');
+
+      if (slash_after_hostname == NULL)
+	{
+	  /* We don't have a full hostname yet.  So, don't switch the folder
+	   * until we have seen a full hostname.  Otherwise, completion will
+	   * happen for every character the user types for the hostname.
+	   */
+
+	  *folder = NULL;
+	  *file_part = NULL;
+	  g_set_error (error,
+		       GTK_FILE_CHOOSER_ERROR,
+		       GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME,
+		       "Incomplete hostname");
+	  return FALSE;
+	}
+    }
+
+  if (str[0] == '~' || g_path_is_absolute (str) || is_uri)
     file = g_file_parse_name (str);
   else
     file = g_file_resolve_relative_path (base_file, str);
