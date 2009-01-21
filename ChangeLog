@@ -1,4 +1,4 @@
-2009-01-15  Federico Mena Quintero  <federico@novell.com>
+2009-01-20  Federico Mena Quintero  <federico@novell.com>
 
 	http://bugzilla.gnome.org/show_bug.cgi?id=545980 -
 	GtkFileChooserEntry should handle URIs
@@ -20,6 +20,25 @@
 	error while loading the folder.  Also, use
 	discard_current_folder().
 	(reload_current_folder): Use discard_current_folder().
+
+	Patch by Carlos Garnacho <carlos@imendio.com> - add a local_only
+	property to GtkFileChooserEntry:
+
+	* gtk/gtkfilechooserentry.c (struct _GtkFileChooserEntry): Add a
+	local_only field.
+	(_gtk_file_chooser_entry_init): Default to local_only being true.
+	(start_explicit_completion): Don't allow completion of non-native
+	files if local_only is turned on.
+	(start_loading_current_folder): Don't start loading non-native
+	folders if local_only is turned on.
+	(_gtk_file_chooser_entry_set_local_only): New function.
+	(_gtk_file_chooser_entry_get_local_only): New function.
+
+	* gtk/gtkfilechooserentry.h (_gtk_file_chooser_entry_set_local_only,
+	_gtk_file_chooser_entry_get_local_only): New prototypes.
+
+	* gtk/gtkfilechooserdefault.c (set_local_only): Set the local_only
+	property on the entry.
 
 2009-01-20  Matthias Clasen  <mclasen@redhat.com>
 

@@ -5334,6 +5334,8 @@ set_local_only (GtkFileChooserDefault *impl,
     {
       impl->local_only = local_only;
 
+      _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), local_only);
+
       if (impl->shortcuts_model && impl->file_system)
 	{
 	  shortcuts_add_volumes (impl);

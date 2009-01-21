@@ -79,6 +79,7 @@ struct _GtkFileChooserEntry
   guint has_completion : 1;
   guint in_change      : 1;
   guint eat_tabs       : 1;
+  guint local_only     : 1;
 };
 
 enum
@@ -193,6 +194,8 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
 {
   GtkEntryCompletion *comp;
   GtkCellRenderer *cell;
+
+  chooser_entry->local_only = TRUE;
 
   g_object_set (chooser_entry, "truncate-multiline", TRUE, NULL);
 
@@ -1107,6 +1110,16 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
       return;
     }
 
+  if (chooser_entry->local_only
+      && !g_file_is_native (chooser_entry->current_folder_file))
+    {
+      beep (chooser_entry);
+      pop_up_completion_feedback (chooser_entry, _("Only local files can be selected"));
+
+      chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+      return;
+    }
+
   if (chooser_entry->current_folder
       && _gtk_folder_is_finished_loading (chooser_entry->current_folder))
     {
@@ -1364,6 +1377,10 @@ start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
 {
   if (chooser_entry->current_folder_file == NULL ||
       chooser_entry->file_system == NULL)
+    return;
+
+  if (chooser_entry->local_only
+      && !g_file_is_native (chooser_entry->current_folder_file))
     return;
 
   g_assert (chooser_entry->current_folder == NULL);
@@ -1826,3 +1843,16 @@ _gtk_file_chooser_entry_select_filename (GtkFileChooserEntry *chooser_entry)
   gtk_editable_select_region (GTK_EDITABLE (chooser_entry), 0, (gint) len);
 }
 
+void
+_gtk_file_chooser_entry_set_local_only (GtkFileChooserEntry *chooser_entry,
+                                        gboolean             local_only)
+{
+  chooser_entry->local_only = local_only;
+  clear_completions (chooser_entry);
+}
+
+gboolean
+_gtk_file_chooser_entry_get_local_only (GtkFileChooserEntry *chooser_entry)
+{
+  return chooser_entry->local_only;
+}
