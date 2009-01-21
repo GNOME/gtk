@@ -637,6 +637,29 @@ _gtk_file_system_list_bookmarks (GtkFileSystem *file_system)
   return g_slist_reverse (files);
 }
 
+static gboolean
+is_valid_scheme_character (char c)
+{
+  return g_ascii_isalnum (c) || c == '+' || c == '-' || c == '.';
+}
+
+static gboolean
+has_uri_scheme (const char *str)
+{
+  const char *p;
+
+  p = str;
+
+  if (!is_valid_scheme_character (*p))
+    return FALSE;
+
+  do
+    p++;
+  while (is_valid_scheme_character (*p));
+
+  return (strncmp (p, "://", 3) == 0);
+}
+
 gboolean
 _gtk_file_system_parse (GtkFileSystem     *file_system,
 		        GFile             *base_file,
@@ -657,7 +680,7 @@ _gtk_file_system_parse (GtkFileSystem     *file_system,
 
   last_slash = strrchr (str, G_DIR_SEPARATOR);
 
-  if (str[0] == '~')
+  if (str[0] == '~' || g_path_is_absolute (str) || has_uri_scheme (str))
     file = g_file_parse_name (str);
   else
     file = g_file_resolve_relative_path (base_file, str);

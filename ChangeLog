@@ -1,3 +1,13 @@
+2009-01-15  Federico Mena Quintero  <federico@novell.com>
+
+	http://bugzilla.gnome.org/show_bug.cgi?id=545980 -
+	GtkFileChooserEntry should handle URIs
+
+	* gtk/gtkfilesystem.c (_gtk_file_system_parse): Detect URI schemes
+	and parse the full URI.
+	(has_uri_scheme): New function, stolen from the old
+	gtkfilesystemgnomevfs.c.
+
 2009-01-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:
