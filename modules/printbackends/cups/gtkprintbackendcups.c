@@ -19,12 +19,17 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifdef __linux__
+#define _GNU_SOURCE
+#endif
+
 #include "config.h"
 #include <ctype.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include <cups/cups.h>
 #include <cups/language.h>
@@ -3476,6 +3481,83 @@ foreach_option_get_settings (GtkPrinterOption *option,
     gtk_print_settings_set (settings, option->name, value);
 }
 
+static gboolean
+supports_am_pm (void)
+{
+  struct tm tmp_tm = { 0 };
+  char   time[8];
+  int    length;
+
+  length = strftime (time, sizeof (time), "%p", &tmp_tm);
+
+  return length != 0;
+}
+
+/* Converts local time to UTC time. Local time has to be in HH:MM format or
+ * in HH:MM:SS format or in HH:MM:SS {am, pm} format or in HH:MM {am, pm} format
+ * or in HH {am, pm} format.
+ * Returns a newly allocated string holding UTC time in HH:MM:SS format
+ * or NULL.
+ */
+gchar *
+localtime_to_utctime (const char *local_time)
+{
+  const char *formats_0[] = {" %I : %M : %S %p ", " %H : %M : %S ", " %I : %M %p ", " %H : %M ", " %I %p "};
+  const char *formats_1[] = {" %H : %M : %S ", " %H : %M "};
+  const char *end = NULL;
+  struct tm  *actual_local_time;
+  struct tm  *actual_utc_time;
+  struct tm   local_print_time;
+  struct tm   utc_print_time;
+  struct tm   diff_time;
+  gchar      *utc_time = NULL;
+  int         i, n;
+
+  if (local_time == NULL || local_time[0] == '\0')
+    return NULL;
+
+  n = supports_am_pm () ? G_N_ELEMENTS (formats_0) : G_N_ELEMENTS (formats_1);
+
+  for (i = 0; i < n; i++)
+    {
+      local_print_time.tm_hour = 0;
+      local_print_time.tm_min  = 0;
+      local_print_time.tm_sec  = 0;
+
+      if (supports_am_pm ())
+        end = strptime (local_time, formats_0[i], &local_print_time);
+      else
+        end = strptime (local_time, formats_1[i], &local_print_time);
+
+      if (end != NULL && end[0] == '\0')
+        break;
+    }
+
+  if (end != NULL && end[0] == '\0')
+    {
+      time_t rawtime;
+      time (&rawtime);
+
+      actual_utc_time = g_memdup (gmtime (&rawtime), sizeof (struct tm));
+      actual_local_time = g_memdup (localtime (&rawtime), sizeof (struct tm));
+
+      diff_time.tm_hour = actual_utc_time->tm_hour - actual_local_time->tm_hour;
+      diff_time.tm_min  = actual_utc_time->tm_min  - actual_local_time->tm_min;
+      diff_time.tm_sec  = actual_utc_time->tm_sec  - actual_local_time->tm_sec;
+
+      utc_print_time.tm_hour = ((local_print_time.tm_hour + diff_time.tm_hour) + 24) % 24;
+      utc_print_time.tm_min  = ((local_print_time.tm_min  + diff_time.tm_min)  + 60) % 60;
+      utc_print_time.tm_sec  = ((local_print_time.tm_sec  + diff_time.tm_sec)  + 60) % 60;
+
+      utc_time = g_strdup_printf ("%02d:%02d:%02d",
+                                  utc_print_time.tm_hour,
+                                  utc_print_time.tm_min,
+                                  utc_print_time.tm_sec);
+    }
+
+  return utc_time;
+}
+
 static void
 cups_printer_get_settings_from_options (GtkPrinter          *printer,
 					GtkPrinterOptionSet *options,
@@ -3506,8 +3588,21 @@ cups_printer_get_settings_from_options (GtkPrinter          *printer,
 
       print_at = gtk_print_settings_get (settings, "print-at");
       print_at_time = gtk_print_settings_get (settings, "print-at-time");
+
       if (strcmp (print_at, "at") == 0)
-	gtk_print_settings_set (settings, "cups-job-hold-until", print_at_time);
+        {
+          gchar *utc_time = NULL;
+          
+          utc_time = localtime_to_utctime (print_at_time);
+
+          if (utc_time != NULL)
+            {
+              gtk_print_settings_set (settings, "cups-job-hold-until", utc_time);
+              g_free (utc_time);
+            }
+          else
+            gtk_print_settings_set (settings, "cups-job-hold-until", print_at_time);
+        }
       else if (strcmp (print_at, "on-hold") == 0)
 	gtk_print_settings_set (settings, "cups-job-hold-until", "indefinite");
     }

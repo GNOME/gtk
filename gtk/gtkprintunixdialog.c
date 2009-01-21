@@ -2692,6 +2692,8 @@ create_job_page (GtkPrintUnixDialog *dialog)
   GtkWidget *main_table, *label;
   GtkWidget *frame, *table, *radio;
   GtkWidget *entry, *widget;
+  const gchar *at_tooltip;
+  const gchar *on_hold_tooltip;
 
   main_table = gtk_table_new (2, 2, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (main_table), 12);
@@ -2761,6 +2763,12 @@ create_job_page (GtkPrintUnixDialog *dialog)
    */
   radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
 					      _("A_t:"));
+
+  /* Translators: Ability to parse the am/pm format depends on actual locale.
+   * You can remove the am/pm values below for your locale if they are not supported. 
+   */ 
+  at_tooltip = _("Specify the time of print,\n e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm");
+  gtk_widget_set_tooltip_text (radio, at_tooltip);
   priv->print_at_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
@@ -2768,6 +2776,7 @@ create_job_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
 
   entry = gtk_entry_new ();
+  gtk_widget_set_tooltip_text (entry, at_tooltip);
   priv->print_at_entry = entry;
   gtk_widget_show (entry);
   gtk_table_attach (GTK_TABLE (table), entry,
@@ -2780,6 +2789,8 @@ create_job_page (GtkPrintUnixDialog *dialog)
    */
   radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
 					      _("On _hold"));
+  on_hold_tooltip = _("Hold the job until it is explicitly released");
+  gtk_widget_set_tooltip_text (radio, on_hold_tooltip);
   priv->print_hold_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,

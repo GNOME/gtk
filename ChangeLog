@@ -1,3 +1,10 @@
+2009-01-21  Marek Kasik  <mkasik@redhat.com>
+	Bug 561801 - "scheduled printing" doesn't function as expected
+
+	* gtk/gtkprintunixdialog: Add tooltip.
+	* modules/printbackends/cups/gtkprintbackendcups.c: Add conversion
+	  from local time to utc time for scheduled printing.
+
 2009-01-20  Federico Mena Quintero  <federico@novell.com>
 
 	http://bugzilla.gnome.org/show_bug.cgi?id=545980 -
