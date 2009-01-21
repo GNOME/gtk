@@ -4845,7 +4845,8 @@ gtk_combo_box_set_active (GtkComboBox *combo_box,
     {
       /* Save index, in case the model is set after the index */
       combo_box->priv->active = index_;
-      return;
+      if (index_ != -1)
+        return;
     }
 
   if (index_ != -1)

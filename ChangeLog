@@ -1,3 +1,11 @@
+2009-01-21  Christian Dywan  <christian@twotoasts.de>
+
+	Bug 567413 – GtkComboBoxEntry doesn't emit "changed" signal
+        on entry editing
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_active): Return only if index
+        is set. Patch by Carl-Anton Ingmarsson.
+
 2009-01-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* gtk/gtkstyle.c: Add a "Since: 2.16" tag to gtk_style_get.
