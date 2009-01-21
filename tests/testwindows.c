@@ -424,6 +424,48 @@ move_window_clicked (GtkWidget *button,
 }
 
 static void
+scroll_window_clicked (GtkWidget *button, 
+		       gpointer data)
+{
+  GdkWindow *window;
+  GtkDirectionType direction;
+  GList *selected, *l;
+  gint dx, dy;
+
+  direction = GPOINTER_TO_INT (data);
+    
+  selected = get_selected_windows ();
+
+  dx = 0; dy = 0;
+  switch (direction) {
+  case GTK_DIR_UP:
+    dy = 10;
+    break;
+  case GTK_DIR_DOWN:
+    dy = -10;
+    break;
+  case GTK_DIR_LEFT:
+    dx = 10;
+    break;
+  case GTK_DIR_RIGHT:
+    dx = -10;
+    break;
+  default:
+    break;
+  }
+  
+  for (l = selected; l != NULL; l = l->next)
+    {
+      window = l->data;
+
+      gdk_window_scroll (window, dx, dy);
+    }
+
+  g_list_free (selected);
+}
+
+
+static void
 raise_window_clicked (GtkWidget *button, 
 		      gpointer data)
 {
@@ -699,7 +741,7 @@ main (int argc, char **argv)
   gtk_widget_show (scrolled);
   gtk_widget_show (treeview);
   
-  table = gtk_table_new (3, 3, TRUE);
+  table = gtk_table_new (4, 4, TRUE);
   gtk_box_pack_start (GTK_BOX (vbox),
 		      table,
 		      FALSE, FALSE,
@@ -810,6 +852,34 @@ main (int argc, char **argv)
 			     1, 2);
   gtk_widget_show (button);
 
+
+  button = gtk_button_new_with_label ("scroll");
+  gtk_button_set_image (GTK_BUTTON (button),
+			gtk_image_new_from_stock (GTK_STOCK_GO_UP,
+						  GTK_ICON_SIZE_BUTTON));
+  g_signal_connect (button, "clicked", 
+		    G_CALLBACK (scroll_window_clicked), 
+		    GINT_TO_POINTER (GTK_DIR_UP));
+  gtk_table_attach_defaults (GTK_TABLE (table),
+			     button,
+			     3, 4,
+			     0, 1);
+  gtk_widget_show (button);
+
+  button = gtk_button_new_with_label ("scroll");
+  gtk_button_set_image (GTK_BUTTON (button),
+			gtk_image_new_from_stock (GTK_STOCK_GO_DOWN,
+						  GTK_ICON_SIZE_BUTTON));
+  g_signal_connect (button, "clicked", 
+		    G_CALLBACK (scroll_window_clicked), 
+		    GINT_TO_POINTER (GTK_DIR_DOWN));
+  gtk_table_attach_defaults (GTK_TABLE (table),
+			     button,
+			     3, 4,
+			     1, 2);
+  gtk_widget_show (button);
+
+  
 
   button = gtk_button_new_with_label ("Add window");
   gtk_box_pack_start (GTK_BOX (vbox),
