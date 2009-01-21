@@ -1,3 +1,9 @@
+2009-01-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkaction.[hc]: Add setters and getters for GtkAction
+	properties, in preparation for bug 560228.
+
 2009-01-21  Christian Dywan  <christian@twotoasts.de>
 
 	Bug 567413 – GtkComboBoxEntry doesn't emit "changed" signal

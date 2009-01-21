@@ -134,6 +134,35 @@ void         _gtk_action_sync_menu_visible     (GtkAction     *action,
 						GtkWidget     *proxy,
 						gboolean       empty);
 
+void                  gtk_action_set_label              (GtkAction   *action,
+                                                         const gchar *label);
+G_CONST_RETURN gchar *gtk_action_get_label              (GtkAction   *action);
+void                  gtk_action_set_short_label        (GtkAction   *action,
+                                                         const gchar *short_label);
+G_CONST_RETURN gchar *gtk_action_get_short_label        (GtkAction   *action);
+void                  gtk_action_set_tooltip            (GtkAction   *action,
+                                                         const gchar *tooltip);
+G_CONST_RETURN gchar *gtk_action_get_tooltip            (GtkAction   *action);
+void                  gtk_action_set_stock_id           (GtkAction   *action,
+                                                         const gchar *stock_id);
+G_CONST_RETURN gchar *gtk_action_get_stock_id           (GtkAction   *action);
+void                  gtk_action_set_gicon              (GtkAction   *action,
+                                                         GIcon       *icon);
+GIcon                *gtk_action_get_gicon              (GtkAction   *action);
+void                  gtk_action_set_icon_name          (GtkAction   *action,
+                                                         const gchar *icon_name);
+G_CONST_RETURN gchar *gtk_action_get_icon_name          (GtkAction   *action);
+void                  gtk_action_set_visible_horizontal (GtkAction   *action,
+                                                         gboolean     visible_horizontal);
+gboolean              gtk_action_get_visible_horizontal (GtkAction   *action);
+void                  gtk_action_set_visible_vertical   (GtkAction   *action,
+                                                         gboolean     visible_vertical);
+gboolean              gtk_action_get_visible_vertical   (GtkAction   *action);
+void                  gtk_action_set_is_important       (GtkAction   *action,
+                                                         gboolean     is_important);
+gboolean              gtk_action_get_is_important       (GtkAction   *action);
+
+
 G_END_DECLS
 
 #endif  /* __GTK_ACTION_H__ */

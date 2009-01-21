@@ -135,26 +135,8 @@ static void gtk_action_get_property (GObject         *object,
 				     GParamSpec      *pspec);
 static void gtk_action_set_action_group (GtkAction	*action,
 					 GtkActionGroup *action_group);
-static void gtk_action_set_is_important (GtkAction	*action,
-					 gboolean        is_important);
-static void gtk_action_set_label        (GtkAction	*action,
-					 const gchar    *label);
-static void gtk_action_set_short_label  (GtkAction	*action,
-					 const gchar    *label);
-static void gtk_action_set_visible_horizontal (GtkAction *action,
-					       gboolean   visible_horizontal);
-static void gtk_action_set_visible_vertical   (GtkAction *action,
-					       gboolean   visible_vertical);
-static void gtk_action_set_tooltip      (GtkAction	*action,
-					 const gchar    *tooltip);
-static void gtk_action_set_stock_id     (GtkAction	*action,
-					 const gchar    *stock_id);
-static void gtk_action_set_icon_name     (GtkAction	*action,
-					 const gchar    *icon_name);
 static void gtk_action_sync_tooltip     (GtkAction      *action,
 					 GtkWidget      *proxy);
-static void gtk_action_set_gicon        (GtkAction *action,
-                                         GIcon     *icon);
 
 static GtkWidget *create_menu_item    (GtkAction *action);
 static GtkWidget *create_tool_item    (GtkAction *action);
@@ -221,6 +203,12 @@ gtk_action_class_init (GtkActionClass *klass)
 							   "that activate this action."),
 							NULL,
 							GTK_PARAM_READWRITE));
+
+  /**
+   * GtkAction:short-label:
+   *
+   * A shorter label that may be used on toolbar buttons.
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_SHORT_LABEL,
 				   g_param_spec_string ("short-label",
@@ -228,6 +216,8 @@ gtk_action_class_init (GtkActionClass *klass)
 							P_("A shorter label that may be used on toolbar buttons."),
 							NULL,
 							GTK_PARAM_READWRITE));
+
+
   g_object_class_install_property (gobject_class,
 				   PROP_TOOLTIP,
 				   g_param_spec_string ("tooltip",
@@ -235,6 +225,12 @@ gtk_action_class_init (GtkActionClass *klass)
 							P_("A tooltip for this action."),
 							NULL,
 							GTK_PARAM_READWRITE));
+
+  /**
+   * GtkAction:stock-id:
+   *
+   * The stock icon displayed in widgets representing this action.
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_STOCK_ID,
 				   g_param_spec_string ("stock-id",
@@ -1363,13 +1359,25 @@ gtk_action_set_visible (GtkAction *action,
       g_object_notify (G_OBJECT (action), "visible");
     }
 }
-
-static void 
+/**
+ * gtk_action_set_is_important:
+ * @action: the action object
+ * @is_important: %TRUE to make the action important
+ *
+ * Sets whether the action is important, this attribute is used
+ * primarily by toolbar items to decide whether to show a label
+ * or not.
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_is_important (GtkAction *action,
 			     gboolean   is_important)
 {
   GSList *p;
   GtkWidget *proxy;
+
+  g_return_if_fail (GTK_IS_ACTION (action));
 
   is_important = is_important != FALSE;
   
@@ -1390,13 +1398,42 @@ gtk_action_set_is_important (GtkAction *action,
     }  
 }
 
-static void 
+/**
+ * gtk_action_get_is_important:
+ * @action: a #GtkAction
+ *
+ * Checks whether @action is important or not
+ *
+ * Returns: whether @action is important
+ *
+ * Since: 2.16
+ */
+gboolean
+gtk_action_get_is_important (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+
+  return action->private_data->is_important;
+}
+
+/**
+ * gtk_action_set_label:
+ * @action: a #GtkAction
+ * @label: the label text to set
+ *
+ * Sets the label of @action.
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_label (GtkAction	  *action,
 		      const gchar *label)
 {
   GSList *p;
   GtkWidget *proxy, *child;
   gchar *tmp;
+  
+  g_return_if_fail (GTK_IS_ACTION (action));
   
   tmp = action->private_data->label;
   action->private_data->label = g_strdup (label);
@@ -1435,13 +1472,42 @@ gtk_action_set_label (GtkAction	  *action,
     }
 }
 
-static void 
+/**
+ * gtk_action_get_label:
+ * @action: a #GtkAction
+ *
+ * Gets the label text of @action.
+ *
+ * Returns: the label text
+ *
+ * Since: 2.16
+ */
+G_CONST_RETURN gchar *
+gtk_action_get_label (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  return action->private_data->label;
+}
+
+/**
+ * gtk_action_set_short_label:
+ * @action: a #GtkAction
+ * @label: the label text to set
+ *
+ * Sets a shorter label on @action.
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_short_label (GtkAction	*action,
 			    const gchar *label)
 {
   GSList *p;
   GtkWidget *proxy, *child;
   gchar *tmp;
+
+  g_return_if_fail (GTK_IS_ACTION (action));
 
   tmp = action->private_data->short_label;
   action->private_data->short_label = g_strdup (label);
@@ -1477,12 +1543,41 @@ gtk_action_set_short_label (GtkAction	*action,
   g_object_notify (G_OBJECT (action), "short-label");
 }
 
-static void 
+/**
+ * gtk_action_get_short_label:
+ * @action: a #GtkAction
+ * @label: the label text to set
+ *
+ * Sets a shorter label on @action.
+ *
+ * Since: 2.16
+ */
+G_CONST_RETURN gchar *
+gtk_action_get_short_label (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  g_object_notify (G_OBJECT (action), "short-label");
+  return action->private_data->short_label;
+}
+
+/**
+ * gtk_action_set_visible_horizontal:
+ * @action: a #GtkAction
+ * @visible_horizontal: whether the action is visible horizontally
+ *
+ * Sets whether @action is visible when horizontal
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_visible_horizontal (GtkAction *action,
 				   gboolean   visible_horizontal)
 {
   GSList *p;
   GtkWidget *proxy;
+
+  g_return_if_fail (GTK_IS_ACTION (action));
 
   visible_horizontal = visible_horizontal != FALSE;
   
@@ -1503,12 +1598,41 @@ gtk_action_set_visible_horizontal (GtkAction *action,
     }  
 }
 
-static void 
+/**
+ * gtk_action_get_visible_horizontal:
+ * @action: a #GtkAction
+ *
+ * Checks whether @action is visible when horizontal
+ *
+ * Returns: whether @action is visible when horizontal
+ *
+ * Since: 2.16
+ */
+gboolean
+gtk_action_get_visible_horizontal (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+
+  return action->private_data->visible_horizontal;
+}
+
+/**
+ * gtk_action_set_visible_vertical:
+ * @action: a #GtkAction
+ * @visible_vertical: whether the action is visible vertically
+ *
+ * Sets whether @action is visible when vertical
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_visible_vertical (GtkAction *action,
 				 gboolean   visible_vertical)
 {
   GSList *p;
   GtkWidget *proxy;
+
+  g_return_if_fail (GTK_IS_ACTION (action));
 
   visible_vertical = visible_vertical != FALSE;
   
@@ -1529,6 +1653,24 @@ gtk_action_set_visible_vertical (GtkAction *action,
     }  
 }
 
+/**
+ * gtk_action_get_visible_vertical:
+ * @action: a #GtkAction
+ *
+ * Checks whether @action is visible when horizontal
+ *
+ * Returns: whether @action is visible when horizontal
+ *
+ * Since: 2.16
+ */
+gboolean
+gtk_action_get_visible_vertical (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+
+  return action->private_data->visible_vertical;
+}
+
 static void 
 gtk_action_sync_tooltip (GtkAction *action,
 			 GtkWidget *proxy)
@@ -1537,13 +1679,24 @@ gtk_action_sync_tooltip (GtkAction *action,
 				  action->private_data->tooltip);
 }
 
-static void 
+/**
+ * gtk_action_set_tooltip:
+ * @action: a #GtkAction
+ * @tooltip: the tooltip text
+ *
+ * Sets the tooltip text on @action
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_tooltip (GtkAction   *action,
 			const gchar *tooltip)
 {
   GSList *p;
   GtkWidget *proxy;
   gchar *tmp;
+
+  g_return_if_fail (GTK_IS_ACTION (action));
 
   tmp = action->private_data->tooltip;
   action->private_data->tooltip = g_strdup (tooltip);
@@ -1560,7 +1713,34 @@ gtk_action_set_tooltip (GtkAction   *action,
   g_object_notify (G_OBJECT (action), "tooltip");
 }
 
-static void 
+/**
+ * gtk_action_get_tooltip:
+ * @action: a #GtkAction
+ *
+ * Gets the tooltip text of @action.
+ *
+* Returns: the tooltip text
+ *
+ * Since: 2.16
+ */
+G_CONST_RETURN gchar *
+gtk_action_get_tooltip (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  return action->private_data->tooltip;
+}
+
+/**
+ * gtk_action_set_stock_id:
+ * @action: a #GtkAction
+ * @tooltip: the tooltip text
+ *
+ * Sets the stock id on @action
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_stock_id (GtkAction   *action,
 			 const gchar *stock_id)
 {
@@ -1568,6 +1748,8 @@ gtk_action_set_stock_id (GtkAction   *action,
   GtkWidget *proxy, *image;
   gchar *tmp;
   
+  g_return_if_fail (GTK_IS_ACTION (action));
+
   tmp = action->private_data->stock_id;
   action->private_data->stock_id = g_strdup (stock_id);
   g_free (tmp);
@@ -1615,7 +1797,34 @@ gtk_action_set_stock_id (GtkAction   *action,
     }
 }
 
-static void 
+/**
+ * gtk_action_get_stock_id:
+ * @action: a #GtkAction
+ *
+ * Gets the stock id of @action.
+ *
+ * Returns: the stock id
+ *
+ * Since: 2.16
+ */
+G_CONST_RETURN gchar *
+gtk_action_get_stock_id (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  return action->private_data->stock_id;
+}
+
+/**
+ * gtk_action_set_icon_name:
+ * @action: a #GtkAction
+ * @tooltip: the icon name to set
+ *
+ * Sets the icon name on @action
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_icon_name (GtkAction   *action,
 			  const gchar *icon_name)
 {
@@ -1623,6 +1832,8 @@ gtk_action_set_icon_name (GtkAction   *action,
   GtkWidget *proxy, *image;
   gchar *tmp;
   
+  g_return_if_fail (GTK_IS_ACTION (action));
+
   tmp = action->private_data->icon_name;
   action->private_data->icon_name = g_strdup (icon_name);
   g_free (tmp);
@@ -1662,7 +1873,34 @@ gtk_action_set_icon_name (GtkAction   *action,
   g_object_notify (G_OBJECT (action), "icon-name");
 }
 
-static void
+/**
+ * gtk_action_get_icon_name:
+ * @action: a #GtkAction
+ *
+ * Gets the icon name of @action.
+ *
+ * Returns: the icon name
+ *
+ * Since: 2.16
+ */
+G_CONST_RETURN gchar *
+gtk_action_get_icon_name (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  return action->private_data->icon_name;
+}
+
+/**
+ * gtk_action_set_gicon:
+ * @action: a #GtkAction
+ * @icon: the #GIcon to set
+ *
+ * Sets the icon of @action.
+ *
+ * Since: 2.16
+ */
+void
 gtk_action_set_gicon (GtkAction *action,
                       GIcon     *icon)
 {
@@ -1671,6 +1909,8 @@ gtk_action_set_gicon (GtkAction *action,
   GtkIconSize icon_size;
   gboolean has_stock_icon;
   
+  g_return_if_fail (GTK_IS_ACTION (action));
+
   if (action->private_data->gicon)
     g_object_unref (action->private_data->gicon);
 
@@ -1722,6 +1962,24 @@ gtk_action_set_gicon (GtkAction *action,
     }
   
   g_object_notify (G_OBJECT (action), "gicon");
+}
+
+/**
+ * gtk_action_get_gicon:
+ * @action: a #GtkAction
+ *
+ * Gets the gicon of @action.
+ *
+ * Returns: The action's #GIcon if one is set.
+ *
+ * Since: 2.16
+ */
+GIcon *
+gtk_action_get_gicon (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  return action->private_data->gicon;
 }
 
 /**
