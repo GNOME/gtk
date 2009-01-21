@@ -145,8 +145,8 @@ typedef enum {
 
 static void refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 						  RefreshMode refresh_mode);
-static void finished_loading_cb (GFile         *file,
-				 gpointer       data);
+static void finished_loading_cb (GtkFolder *folder,
+				 gpointer   data);
 static void autocomplete (GtkFileChooserEntry *chooser_entry);
 static void install_start_autocompletion_idle (GtkFileChooserEntry *chooser_entry);
 static void remove_completion_feedback (GtkFileChooserEntry *chooser_entry);
@@ -245,11 +245,24 @@ gtk_file_chooser_entry_finalize (GObject *object)
 }
 
 static void
+discard_current_folder (GtkFileChooserEntry *chooser_entry)
+{
+  if (chooser_entry->current_folder)
+    {
+      g_signal_handlers_disconnect_by_func (chooser_entry->current_folder,
+					    G_CALLBACK (finished_loading_cb), chooser_entry);
+      g_object_unref (chooser_entry->current_folder);
+      chooser_entry->current_folder = NULL;
+    }
+}
+
+static void
 gtk_file_chooser_entry_dispose (GObject *object)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
 
   remove_completion_feedback (chooser_entry);
+  discard_current_folder (chooser_entry);
 
   if (chooser_entry->start_autocompletion_idle_id != 0)
     {
@@ -267,14 +280,6 @@ gtk_file_chooser_entry_dispose (GObject *object)
     {
       g_cancellable_cancel (chooser_entry->load_folder_cancellable);
       chooser_entry->load_folder_cancellable = NULL;
-    }
-
-  if (chooser_entry->current_folder)
-    {
-      g_signal_handlers_disconnect_by_func (chooser_entry->current_folder,
-					    G_CALLBACK (finished_loading_cb), chooser_entry);
-      g_object_unref (chooser_entry->current_folder);
-      chooser_entry->current_folder = NULL;
     }
 
   if (chooser_entry->file_system)
@@ -1292,8 +1297,8 @@ finish_folder_load (GtkFileChooserEntry *chooser_entry)
 
 /* Callback when the current folder finishes loading */
 static void
-finished_loading_cb (GFile    *file,
-		     gpointer  data)
+finished_loading_cb (GtkFolder *folder,
+		     gpointer   data)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
 
@@ -1321,6 +1326,7 @@ load_directory_get_folder_callback (GCancellable  *cancellable,
 
       old_load_complete_action = chooser_entry->load_complete_action;
 
+      discard_completion_store (chooser_entry);
       clear_completions (chooser_entry);
 
       if (old_load_complete_action == LOAD_COMPLETE_EXPLICIT_COMPLETION)
@@ -1331,11 +1337,7 @@ load_directory_get_folder_callback (GCancellable  *cancellable,
 	  pop_up_completion_feedback (chooser_entry, error->message);
 	}
 
-      if (chooser_entry->current_folder)
-	{
-	  g_object_unref (chooser_entry->current_folder);
-	  chooser_entry->current_folder = NULL;
-	}
+      discard_current_folder (chooser_entry);
     }
 
   if (cancelled || error)
@@ -1392,18 +1394,13 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
 	  /* We changed our current directory.  We need to clear out the old
 	   * directory information.
 	   */
-	  if (chooser_entry->current_folder)
-	    {
-	      if (chooser_entry->load_folder_cancellable)
-		{
-		  g_cancellable_cancel (chooser_entry->load_folder_cancellable);
-		  chooser_entry->load_folder_cancellable = NULL;
-		}
+          if (chooser_entry->load_folder_cancellable)
+            {
+              g_cancellable_cancel (chooser_entry->load_folder_cancellable);
+              chooser_entry->load_folder_cancellable = NULL;
+            }
 
-	      g_object_unref (chooser_entry->current_folder);
-	      chooser_entry->current_folder = NULL;
-	    }
-
+          discard_current_folder (chooser_entry);
 	  g_object_unref (chooser_entry->current_folder_file);
 	  chooser_entry->current_folder_file = g_object_ref (folder_file);
 	}

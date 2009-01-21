@@ -8,6 +8,19 @@
 	(has_uri_scheme): New function, stolen from the old
 	gtkfilesystemgnomevfs.c.
 
+	Patch by Carlos Garnacho <carlos@imendio.com>:
+
+	* gtk/gtkfilechooserentry.c (discard_current_folder): New
+	function, factored out for when we need to get rid of the
+	current_folder.
+	(gtk_file_chooser_entry_dispose): Use discard_current_folder().
+	(finished_loading_cb): Fix prototype.
+	(load_directory_get_folder_callback): Discard the completion
+	store, as well as clearing the completion feedback, if we find an
+	error while loading the folder.  Also, use
+	discard_current_folder().
+	(reload_current_folder): Use discard_current_folder().
+
 2009-01-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:
