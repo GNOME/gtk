@@ -2716,7 +2716,12 @@ gdk_window_get_internal_paint_info (GdkWindow    *window,
 	  *real_drawable = paint->pixmap;
 	}
       else
-	*real_drawable = window;
+	{
+	  /* This means you're probably gonna be doing some weird shit
+	     directly to the window, so we flush all outstanding stuff */
+	  gdk_window_flush (window);
+	  *real_drawable = window;
+	}
     }
 
   gdk_window_get_offsets (window, &x_off, &y_off);
