@@ -1,3 +1,11 @@
+2009-01-19  Tor Lillqvist  <tml@iki.fi>
+
+	Bug 568305 - gdk-pixbuf mishandles BI_BITFIELDS bmps
+
+	* io-bmp.c (OneLine32): Use unsigned variables so that we can
+	right-shift them without risk of sign extension. Don't "reverse"
+	the alpha value, actually storing 0xFF-alpha, but use it as such.
+
 2009-01-12  Tor Lillqvist  <tml@iki.fi>
 
 	Bug 164002 - query scripts don't work uninstalled on windows
