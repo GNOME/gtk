@@ -165,14 +165,6 @@ struct _GdkWindowQueueItem
   } u;
 };
 
-static void
-move_resize (GdkWindow *window, GdkRectangle *pos)
-{
-  XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
-                     GDK_WINDOW_XID (window),
-                     pos->x, pos->y, pos->width, pos->height);
-}
-
 void
 _gdk_window_move_resize_child (GdkWindow *window,
 			       gint       x,
@@ -182,7 +174,6 @@ _gdk_window_move_resize_child (GdkWindow *window,
 {
   GdkWindowImplX11 *impl;
   GdkWindowObject *obj;
-  GdkRectangle new_info;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window)); 
@@ -190,18 +181,32 @@ _gdk_window_move_resize_child (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
   obj = GDK_WINDOW_OBJECT (window);
 
+  if (width > 65535 ||
+      height > 65535)
+    {
+      g_warning ("Native children wider or taller than 65535 pixels are not supported");
+      
+      if (width > 65535)
+	width = 65535;
+      if (height > 65535)
+	height = 65535;
+    }
+  
   obj->x = x;
   obj->y = y;
   obj->width = width;
   obj->height = height;
 
-  new_info.x = obj->x + obj->parent->abs_x;
-  new_info.y = obj->y + obj->parent->abs_y;
-  new_info.width = obj->width;
-  new_info.height = obj->height;
+  /* We don't really care about origin overflow, because on overflow
+     the window won't be visible anyway and thus it will be shaped
+     to nothing */
 
   _gdk_x11_window_tmp_unset_parent_bg (window, TRUE);
-  move_resize (window, &new_info);
+  XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
+		     GDK_WINDOW_XID (window),
+		     obj->x + obj->parent->abs_x,
+		     obj->y + obj->parent->abs_y,
+		     width, height);
   _gdk_x11_window_tmp_reset_parent_bg (window, TRUE);
 }
 
