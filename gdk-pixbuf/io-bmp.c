@@ -762,7 +762,7 @@ static void OneLine32(struct bmp_progressive_state *context)
 		a_rshift = context->a_bits - a_lshift;
 
 		for (i = 0; i < context->Header.width; i++) {
-			int v, r, g, b, a;
+			unsigned int v, r, g, b, a;
 
 			v = src[0] | (src[1] << 8) | (src[2] << 16) | (src[3] << 24);
 
@@ -775,7 +775,7 @@ static void OneLine32(struct bmp_progressive_state *context)
 			*pixels++ = (g << g_lshift) | (g >> g_rshift);
 			*pixels++ = (b << b_lshift) | (b >> b_rshift);
                         if (context->a_bits)
-			  *pixels++ = 0xff - ((a << a_lshift) | (a >> a_rshift));
+			  *pixels++ = (a << a_lshift) | (a >> a_rshift);
                         else
                           *pixels++ = 0xff;
 
