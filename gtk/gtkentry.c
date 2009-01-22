@@ -2432,7 +2432,7 @@ update_cursors (GtkWidget *widget)
     {
       if ((icon_info = priv->icons[i]) != NULL)
         {
-          if (icon_info->pixbuf != NULL)
+          if (icon_info->pixbuf != NULL && icon_info->window != NULL)
             gdk_window_show_unraised (icon_info->window);
 
           /* The icon windows are not children of the visible entry window,
@@ -3772,7 +3772,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 	  gtk_entry_set_positions (entry, pos, bound);
 	}
       else
-      gtk_entry_set_positions (entry, tmp_pos, -1);
+        gtk_entry_set_positions (entry, tmp_pos, -1);
     }
       
   return TRUE;
@@ -6305,7 +6305,7 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
       break;
     }
     
-  if (icon_info->pixbuf != NULL)
+  if (icon_info->pixbuf != NULL && icon_info->window != NULL)
     gdk_window_show_unraised (icon_info->window);
 }
 
