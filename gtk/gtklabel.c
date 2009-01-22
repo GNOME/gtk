@@ -69,6 +69,7 @@ struct _GtkLabelSelectionInfo
   gint drag_start_y;
 
   guint in_drag : 1;
+  guint select_words : 1;
 };
 
 enum {
@@ -3335,6 +3336,8 @@ gtk_label_button_press (GtkWidget      *widget,
     return FALSE;
 
   label->select_info->in_drag = FALSE;
+  label->select_info->select_words = FALSE;
+
   if (event->button == 1)
     {
       if (!GTK_WIDGET_HAS_FOCUS (widget)) 
@@ -3352,6 +3355,7 @@ gtk_label_button_press (GtkWidget      *widget,
       
       if (event->type == GDK_2BUTTON_PRESS)
 	{
+          label->select_info->select_words = TRUE;
 	  gtk_label_select_word (label);
 	  return TRUE;
 	}
@@ -3504,7 +3508,6 @@ gtk_label_motion (GtkWidget      *widget,
   if (label->select_info == NULL)
     return FALSE;  
 
-
   if ((event->state & GDK_BUTTON1_MASK) == 0)
     return FALSE;
 
@@ -3537,9 +3540,48 @@ gtk_label_motion (GtkWidget      *widget,
     {
       get_layout_index (label, x, y, &index);
       
-      gtk_label_select_region_index (label,
-				     label->select_info->selection_anchor,
-				     index);
+      if (label->select_info->select_words)
+        {
+          gint min, max;
+          gint old_min, old_max;
+          gint anchor, end;
+
+          min = gtk_label_move_backward_word (label, index);
+          max = gtk_label_move_forward_word (label, index);
+
+          anchor = label->select_info->selection_anchor;
+          end = label->select_info->selection_end;
+
+          old_min = MIN (anchor, end);
+          old_max = MAX (anchor, end);
+
+          if (min < old_min)
+            {
+              anchor = min;
+              end = old_max;
+            }
+          else if (old_max < max)
+            {
+              anchor = max;
+              end = old_min;
+            }
+          else if (anchor == old_min)
+            {
+              if (anchor != min)
+                anchor = max;
+            }
+          else
+            {
+              if (anchor != max)
+                anchor = min;
+            }
+
+          gtk_label_select_region_index (label, anchor, end);
+        }
+      else
+        gtk_label_select_region_index (label, 
+                                       label->select_info->selection_anchor,
+                                       index);
     }
 
   return TRUE;

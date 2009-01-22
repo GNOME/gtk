@@ -1,3 +1,7 @@
+2009-01-21  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtklabel.c: Implement select-by-words for selectable labels.
+
 2009-01-21  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkcursor-win32.c: Rename static local functions and
