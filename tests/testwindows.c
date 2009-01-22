@@ -7,6 +7,8 @@ static GtkWidget *treeview;
 
 static void update_store (void);
 
+static GtkWidget *main_window;
+
 static gboolean
 window_has_impl (GdkWindow *window)
 {
@@ -424,6 +426,105 @@ move_window_clicked (GtkWidget *button,
 }
 
 static void
+manual_clicked (GtkWidget *button, 
+		gpointer data)
+{
+  GdkWindow *window;
+  GList *selected, *l;
+  int x, y, w, h;
+  GtkWidget *dialog, *table, *label, *xspin, *yspin, *wspin, *hspin;
+  
+
+  selected = get_selected_windows ();
+
+  if (selected == NULL)
+    return;
+
+  gdk_window_get_position (selected->data, &x, &y);
+  gdk_drawable_get_size (selected->data, &w, &h);
+
+  dialog = gtk_dialog_new_with_buttons ("Select new position and size",
+					GTK_WINDOW (main_window),
+					GTK_DIALOG_MODAL,
+					GTK_STOCK_OK, GTK_RESPONSE_OK,
+					NULL);
+  
+
+  table = gtk_table_new (2, 4, TRUE);
+  gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
+		      table,
+		      FALSE, FALSE,
+		      2);
+
+  
+  label = gtk_label_new ("x:");
+  gtk_table_attach_defaults (GTK_TABLE (table),
+			     label,
+			     0, 1,
+			     0, 1);
+  label = gtk_label_new ("y:");
+  gtk_table_attach_defaults (GTK_TABLE (table),
+			     label,
+			     0, 1,
+			     1, 2);
+  label = gtk_label_new ("width:");
+  gtk_table_attach_defaults (GTK_TABLE (table),
+			     label,
+			     0, 1,
+			     2, 3);
+  label = gtk_label_new ("height:");
+  gtk_table_attach_defaults (GTK_TABLE (table),
+			     label,
+			     0, 1,
+			     3, 4);
+
+  xspin = gtk_spin_button_new_with_range (G_MININT, G_MAXINT, 1);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (xspin), x);
+  gtk_table_attach_defaults (GTK_TABLE (table),
+			     xspin,
+			     1, 2,
+			     0, 1);
+  yspin = gtk_spin_button_new_with_range (G_MININT, G_MAXINT, 1);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (yspin), y);
+  gtk_table_attach_defaults (GTK_TABLE (table),
+			     yspin,
+			     1, 2,
+			     1, 2);
+  wspin = gtk_spin_button_new_with_range (G_MININT, G_MAXINT, 1);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (wspin), w);
+  gtk_table_attach_defaults (GTK_TABLE (table),
+			     wspin,
+			     1, 2,
+			     2, 3);
+  hspin = gtk_spin_button_new_with_range (G_MININT, G_MAXINT, 1);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (hspin), h);
+  gtk_table_attach_defaults (GTK_TABLE (table),
+			     hspin,
+			     1, 2,
+			     3, 4);
+  
+  gtk_widget_show_all (dialog);
+  
+  gtk_dialog_run (GTK_DIALOG (dialog));
+
+  x = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (xspin));
+  y = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (yspin));
+  w = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (wspin));
+  h = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (hspin));
+
+  gtk_widget_destroy (dialog);
+  
+  for (l = selected; l != NULL; l = l->next)
+    {
+      window = l->data;
+      
+      gdk_window_move_resize (window, x, y, w, h);
+    }
+
+  g_list_free (selected);
+}
+
+static void
 scroll_window_clicked (GtkWidget *button, 
 		       gpointer data)
 {
@@ -675,7 +776,7 @@ main (int argc, char **argv)
   
   gtk_init (&argc, &argv);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  main_window = window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
   g_signal_connect (G_OBJECT (window), "delete-event", gtk_main_quit, NULL);
@@ -879,7 +980,15 @@ main (int argc, char **argv)
 			     1, 2);
   gtk_widget_show (button);
 
-  
+  button = gtk_button_new_with_label ("Manual");
+  g_signal_connect (button, "clicked", 
+		    G_CALLBACK (manual_clicked),
+		    NULL);
+  gtk_table_attach_defaults (GTK_TABLE (table),
+			     button,
+			     3, 4,
+			     2, 3);
+  gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Add window");
   gtk_box_pack_start (GTK_BOX (vbox),
