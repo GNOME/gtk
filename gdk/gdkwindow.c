@@ -241,6 +241,7 @@ static void remove_redirect_from_children (GdkWindowObject   *private,
 static void recompute_visible_regions   (GdkWindowObject *private,
 					 gboolean recalculate_siblings,
 					 gboolean recalculate_children);
+static void gdk_window_flush_outstanding_moves (GdkWindow *window);
 static void gdk_window_flush            (GdkWindow *window);
 static void gdk_window_flush_recursive  (GdkWindowObject *window);
 static void do_move_region_bits_on_impl (GdkWindowObject *private,
@@ -2596,7 +2597,7 @@ move_region_on_impl (GdkWindowObject *private,
  * before drawing directly to the window (i.e. outside a begin/end_paint pair).
  */
 static void
-gdk_window_flush (GdkWindow *window)
+gdk_window_flush_outstanding_moves (GdkWindow *window)
 {
   GdkWindowObject *private;
   GdkWindowObject *impl_window;
@@ -2621,7 +2622,12 @@ gdk_window_flush (GdkWindow *window)
   
   g_list_free (impl_window->outstanding_moves);
   impl_window->outstanding_moves = NULL;
-  
+}
+
+static void
+gdk_window_flush (GdkWindow *window)
+{
+  gdk_window_flush_outstanding_moves (window);
   gdk_window_flush_implicit_paint (window);
 }
 
