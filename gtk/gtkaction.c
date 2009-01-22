@@ -202,7 +202,8 @@ gtk_action_class_init (GtkActionClass *klass)
 							P_("The label used for menu items and buttons "
 							   "that activate this action."),
 							NULL,
-							GTK_PARAM_READWRITE));
+							GTK_PARAM_READWRITE |
+							G_PARAM_CONSTRUCT));
 
   /**
    * GtkAction:short-label:
@@ -215,7 +216,8 @@ gtk_action_class_init (GtkActionClass *klass)
 							P_("Short label"),
 							P_("A shorter label that may be used on toolbar buttons."),
 							NULL,
-							GTK_PARAM_READWRITE));
+							GTK_PARAM_READWRITE |
+							G_PARAM_CONSTRUCT));
 
 
   g_object_class_install_property (gobject_class,
@@ -224,7 +226,8 @@ gtk_action_class_init (GtkActionClass *klass)
 							P_("Tooltip"),
 							P_("A tooltip for this action."),
 							NULL,
-							GTK_PARAM_READWRITE));
+							GTK_PARAM_READWRITE |
+							G_PARAM_CONSTRUCT));
 
   /**
    * GtkAction:stock-id:
@@ -238,7 +241,8 @@ gtk_action_class_init (GtkActionClass *klass)
 							P_("The stock icon displayed in widgets representing "
 							   "this action."),
 							NULL,
-							GTK_PARAM_READWRITE));
+							GTK_PARAM_READWRITE |
+							G_PARAM_CONSTRUCT));
   /**
    * GtkAction:gicon:
    *
@@ -255,7 +259,8 @@ gtk_action_class_init (GtkActionClass *klass)
 							P_("GIcon"),
 							P_("The GIcon being displayed"),
 							G_TYPE_ICON,
- 							GTK_PARAM_READWRITE));							
+ 							GTK_PARAM_READWRITE |
+							G_PARAM_CONSTRUCT));
   /**
    * GtkAction:icon-name:
    *
@@ -273,7 +278,8 @@ gtk_action_class_init (GtkActionClass *klass)
 							P_("Icon Name"),
 							P_("The name of the icon from the icon theme"),
 							NULL,
- 							GTK_PARAM_READWRITE));
+ 							GTK_PARAM_READWRITE |
+							G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE_HORIZONTAL,
@@ -282,7 +288,8 @@ gtk_action_class_init (GtkActionClass *klass)
 							 P_("Whether the toolbar item is visible when the toolbar "
 							    "is in a horizontal orientation."),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE |
+							 G_PARAM_CONSTRUCT));
   /**
    * GtkAction:visible-overflown:
    *
@@ -298,7 +305,8 @@ gtk_action_class_init (GtkActionClass *klass)
 							 P_("When TRUE, toolitem proxies for this action "
 							    "are represented in the toolbar overflow menu."),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE |
+							 G_PARAM_CONSTRUCT));
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE_VERTICAL,
 				   g_param_spec_boolean ("visible-vertical",
@@ -306,7 +314,8 @@ gtk_action_class_init (GtkActionClass *klass)
 							 P_("Whether the toolbar item is visible when the toolbar "
 							    "is in a vertical orientation."),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE |
+							 G_PARAM_CONSTRUCT));
   g_object_class_install_property (gobject_class,
 				   PROP_IS_IMPORTANT,
 				   g_param_spec_boolean ("is-important",
@@ -315,28 +324,32 @@ gtk_action_class_init (GtkActionClass *klass)
 							    "When TRUE, toolitem proxies for this action "
 							    "show text in GTK_TOOLBAR_BOTH_HORIZ mode."),
 							 FALSE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE |
+							 G_PARAM_CONSTRUCT));
   g_object_class_install_property (gobject_class,
 				   PROP_HIDE_IF_EMPTY,
 				   g_param_spec_boolean ("hide-if-empty",
 							 P_("Hide if empty"),
 							 P_("When TRUE, empty menu proxies for this action are hidden."),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE |
+							 G_PARAM_CONSTRUCT));
   g_object_class_install_property (gobject_class,
 				   PROP_SENSITIVE,
 				   g_param_spec_boolean ("sensitive",
 							 P_("Sensitive"),
 							 P_("Whether the action is enabled."),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE |
+							 G_PARAM_CONSTRUCT));
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
 							 P_("Visible"),
 							 P_("Whether the action is visible."),
 							 TRUE,
-							 GTK_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE |
+							 G_PARAM_CONSTRUCT));
   g_object_class_install_property (gobject_class,
 				   PROP_ACTION_GROUP,
 				   g_param_spec_object ("action-group",
