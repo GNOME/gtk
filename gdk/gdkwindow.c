@@ -1961,9 +1961,6 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowPaint *paint;
-  GdkRectangle r, clipbox;
-  GList *l;
-  GdkWindowRegionMove *move;
 
   g_assert (gdk_window_has_impl (private));
 
@@ -1974,46 +1971,15 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
       private->implicit_paint != NULL)
     return FALSE; /* Don't stack implicit paints */
 
-  r = *rect;
-  for (l = private->outstanding_moves; l != NULL; l = l->next)
-    {
-      move = l->data;
-
-      if (!gdk_region_empty (move->region))
-	{
-	  gdk_region_get_clipbox (move->region, &clipbox);
-	  gdk_rectangle_union (&r, &clipbox, &r);
-	}
-    }
-  
   paint = g_new (GdkWindowPaint, 1);
   paint->region = gdk_region_new (); /* Empty */
-  paint->x_offset = r.x;
-  paint->y_offset = r.y;
+  paint->x_offset = rect->x;
+  paint->y_offset = rect->y;
   paint->uses_implicit = FALSE;
   paint->surface = NULL;
   paint->pixmap =
     gdk_pixmap_new (window,
-		    MAX (r.width, 1), MAX (r.height, 1), -1);
-  
-  _gdk_pixmap_set_as_backing (paint->pixmap,
-			      window, r.x, r.y);
-
-  for (l = private->outstanding_moves; l != NULL; l = l->next)
-    {
-      move = l->data;
-
-      gdk_region_union (paint->region, move->region);
-      g_object_ref (paint->pixmap);
-      do_move_region_bits_on_impl (private,
-				   paint->pixmap,
-				   paint->x_offset, paint->y_offset,
-				   move->region, /* In impl window coords */
-				   move->dx, move->dy);
-      gdk_region_destroy (move->region);
-      g_slice_free (GdkWindowRegionMove, move);
-    }
-  private->outstanding_moves = NULL;
+		    MAX (rect->width, 1), MAX (rect->height, 1), -1);
 
   private->implicit_paint = paint;
   
@@ -2075,7 +2041,9 @@ gdk_window_end_implicit_paint (GdkWindow *window)
   paint = private->implicit_paint;
 
   private->implicit_paint = NULL;
-  
+
+  gdk_window_flush_outstanding_moves (window);
+
   if (!gdk_region_empty (paint->region))
     {
       /* Some regions are valid, push these to window now */
@@ -2173,6 +2141,8 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   GdkWindowPaint *paint, *implicit_paint;
   GdkWindowObject *impl_window;
   GSList *list;
+  GList *l;
+  GdkWindowRegionMove *move;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -2189,15 +2159,34 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       return;
     }
 
-  gdk_region_get_clipbox (region, &clip_box);
-
   impl_window = gdk_window_get_impl_window (private);
   implicit_paint = impl_window->implicit_paint;
 
   paint = g_new (GdkWindowPaint, 1);
   paint->region = gdk_region_copy (region);
   paint->region_tag = new_region_tag ();
-      
+
+  gdk_region_intersect (paint->region, private->clip_region_with_children);
+  gdk_region_get_clipbox (paint->region, &clip_box);
+
+  /* Convert to impl coords */
+  gdk_region_offset (paint->region, private->abs_x, private->abs_y);
+
+  /* Mark the region as valid on the implicit paint */
+  
+  if (implicit_paint)
+    gdk_region_union (implicit_paint->region, paint->region);
+
+  /* No need to do any moves that will end up over the exposed area */
+  for (l = impl_window->outstanding_moves; l != NULL; l = l->next)
+    {
+      move = l->data;
+      gdk_region_subtract (move->region, paint->region);
+    }
+  
+  /* Convert back to normal coords */
+  gdk_region_offset (paint->region, -private->abs_x, -private->abs_y);
+  
   if (implicit_paint)
     {
       int width, height;
@@ -2206,7 +2195,6 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       paint->pixmap = g_object_ref (implicit_paint->pixmap);
       paint->x_offset = -private->abs_x + implicit_paint->x_offset;
       paint->y_offset = -private->abs_y + implicit_paint->y_offset;
-      gdk_region_intersect (paint->region, private->clip_region_with_children);
       
       /* It would be nice if we had some cairo support here so we
 	 could set the clip rect on the cairo surface */
@@ -2215,10 +2203,6 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       
       paint->surface = _gdk_drawable_create_cairo_surface (paint->pixmap, width, height);
 
-      /* Mark the region as valid on the implicit paint */
-      gdk_region_offset (paint->region, private->abs_x, private->abs_y); 
-      gdk_region_union (implicit_paint->region, paint->region);
-      gdk_region_offset (paint->region, -private->abs_x, -private->abs_y); 
     }
   else
     {
@@ -2362,6 +2346,8 @@ gdk_window_end_paint (GdkWindow *window)
 
   if (!paint->uses_implicit)
     {
+      gdk_window_flush_outstanding_moves (window);
+      
       full_clip = gdk_region_copy (private->clip_region_with_children);
       gdk_region_intersect (full_clip, paint->region);
       _gdk_gc_set_clip_region_internal (tmp_gc, full_clip, TRUE); /* Takes ownership of full_clip */
