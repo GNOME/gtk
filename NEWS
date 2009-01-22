@@ -1,3 +1,61 @@
+Overview of Changes from GTK+ 2.15.0 to 2.15.1
+==============================================
+
+* GtkFileChooser:
+ - Remember the file chooser's size across invocations
+ - Handle uris that are entered in the entry
+
+* GtkEntry:
+ - New property "im-module" for selecting input methods per-widget
+ - New icon-related API got renamed for consistency
+ - Added properties and setters for icon tooltips
+
+* GtkTextView:
+ - New property "im-module" for selecting input methods per-widget
+ - New signal "paste-done" to allow better handling of async pasting
+
+* GtkScale:
+ - New api to add annotated marks: gtk_scale_add_mark.
+
+* GtkAction:
+ - Add a "gicon" property to specify the icon with a GIcon
+
+* GDK:
+ - On X11, GDK now caches cursors to avoid cursor theming overhead
+ - New cursor type for blank cursors: GDK_BLANK_CURSOR
+
+* Changes that are relevant for translators:
+ - Navigation and Media stock labels have separate message contexts now
+
+* Bugs fixed:
+ 566083 Icon pixmap hardcoded during DnD
+ 566334 compile failure for gtk+ on Mac OS X
+ 565998 configure script doesn't check for cairo-xlib.pc
+ 566391 gtk_about_dialog_set_url_hook should activate...
+ 566568 gtk_tree_model_get_value docs typo
+ 566628 gdk_display_close always asserts on win32
+ 566733 Add GIcon to GtkAction, GtkToolButton
+ 567024 gtktoolbutton doesn't create right proxy menu item...
+ 523554 Copy from GIMP to Word broke
+ 567468 no check for trailing != NULL in gtk_text_layout_get..
+ 492794 Pasting external text at end of view yields wrong...
+ 164002 query scripts don't work uninstalled on windows
+ 566532 GtkScaleButton implementation of GtkOrientable
+ 450716 New API to change global IM
+ 562701 GtkEntryCompletion popup sizes its rows wrong...
+ 567944 [Win32] Sorted treeview columns can be unreadable
+ 567655 gtk_status_icon_set_tooltip_text/markup should use...
+ 567887 gtk_entry_get_storage_type() should be...
+ 568196 Please change context of Forward stock label
+ 563280 stock items & translation context
+ 568233 Wrong statement about GtkEntry's "activate" signal
+ 568263 gtk can't recognize the wrong X Selection TARGETS...
+ 565656 Add marks to scales
+ 567413 GtkComboBoxEntry doesn't emit "changed" signal...
+ 545980 GtkFileChooserEntry should handle URIs
+ 566862 pixbuf_new_from_file does not autodetect format
+
+
 Overview of Changes from GTK+ 2.14.x to 2.15.0
 ==============================================
 
