@@ -4430,6 +4430,9 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  GdkRegion *window_region;
 	  gboolean end_implicit;
 
+	  /* Clip to part visible in toplevel */
+	  gdk_region_intersect (update_area, private->clip_region);
+	  
           if (debug_updates)
             {
               /* Make sure we see the red invalid area before redrawing. */
