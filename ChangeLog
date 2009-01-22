@@ -1,3 +1,8 @@
+2009-01-22  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkicontheme.c (gtk_icon_theme_has_icon): g_return_if_fail()
+	on icon_name != NULL so we get a warning instead of a crash here.
+
 2009-01-21  Matthias Clasen <mclasen@redhat.com>
 
 	* NEWS: Updates

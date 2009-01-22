@@ -1571,7 +1571,8 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
   GList *l;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), FALSE);
-  
+  g_return_val_if_fail (icon_name != NULL, FALSE);
+
   priv = icon_theme->priv;
   
   ensure_valid_themes (icon_theme);
