@@ -4484,7 +4484,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
     {
       /* Flush any outstanding moves, may happen if we moved a window but got
 	 no actual invalid area */
-      gdk_window_flush (window);
+      gdk_window_flush_outstanding_moves (window);
     }
 }
 
