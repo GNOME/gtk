@@ -70,6 +70,11 @@ and should not be accessed directly.
 
 </para>
 
+<!-- ##### ARG GtkAction:gicon ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkAction:hide-if-empty ##### -->
 <para>
 
@@ -298,6 +303,22 @@ and should not be accessed directly.
 @action: 
 
 
+<!-- ##### FUNCTION gtk_action_block_activate ##### -->
+<para>
+
+</para>
+
+@action: 
+
+
+<!-- ##### FUNCTION gtk_action_unblock_activate ##### -->
+<para>
+
+</para>
+
+@action: 
+
+
 <!-- ##### FUNCTION gtk_action_block_activate_from ##### -->
 <para>
 
@@ -350,5 +371,167 @@ and should not be accessed directly.
 
 @action: 
 @accel_group: 
+
+
+<!-- ##### FUNCTION gtk_action_set_label ##### -->
+<para>
+
+</para>
+
+@action: 
+@label: 
+
+
+<!-- ##### FUNCTION gtk_action_get_label ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_set_short_label ##### -->
+<para>
+
+</para>
+
+@action: 
+@short_label: 
+
+
+<!-- ##### FUNCTION gtk_action_get_short_label ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_set_tooltip ##### -->
+<para>
+
+</para>
+
+@action: 
+@tooltip: 
+
+
+<!-- ##### FUNCTION gtk_action_get_tooltip ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_set_stock_id ##### -->
+<para>
+
+</para>
+
+@action: 
+@stock_id: 
+
+
+<!-- ##### FUNCTION gtk_action_get_stock_id ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_set_gicon ##### -->
+<para>
+
+</para>
+
+@action: 
+@icon: 
+
+
+<!-- ##### FUNCTION gtk_action_get_gicon ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_set_icon_name ##### -->
+<para>
+
+</para>
+
+@action: 
+@icon_name: 
+
+
+<!-- ##### FUNCTION gtk_action_get_icon_name ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_set_visible_horizontal ##### -->
+<para>
+
+</para>
+
+@action: 
+@visible_horizontal: 
+
+
+<!-- ##### FUNCTION gtk_action_get_visible_horizontal ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_set_visible_vertical ##### -->
+<para>
+
+</para>
+
+@action: 
+@visible_vertical: 
+
+
+<!-- ##### FUNCTION gtk_action_get_visible_vertical ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_set_is_important ##### -->
+<para>
+
+</para>
+
+@action: 
+@is_important: 
+
+
+<!-- ##### FUNCTION gtk_action_get_is_important ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
 
 

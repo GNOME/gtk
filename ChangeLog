@@ -1,5 +1,9 @@
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.15.1 ===
+
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkactivatable.c: Make the section docs produce some valid
 	xml.
 

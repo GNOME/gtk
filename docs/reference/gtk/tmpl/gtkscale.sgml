@@ -141,3 +141,22 @@ the accessor functions.
 @y: 
 
 
+<!-- ##### FUNCTION gtk_scale_add_mark ##### -->
+<para>
+
+</para>
+
+@scale: 
+@value: 
+@position: 
+@markup: 
+
+
+<!-- ##### FUNCTION gtk_scale_clear_marks ##### -->
+<para>
+
+</para>
+
+@scale: 
+
+

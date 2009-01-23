@@ -39,7 +39,7 @@ Overview of Changes from GTK+ 2.15.0 to 2.15.1
 
 * GDK:
  - On X11, GDK now caches cursors to avoid cursor theming overhead
- - New cursor tye for blank cursors: GDK_BLANK_CURSOR
+ - New cursor type for blank cursors: GDK_BLANK_CURSOR
 
 * New deprecations:
    gtk_scale_Button_get_orientation()
@@ -90,6 +90,21 @@ Overview of Changes from GTK+ 2.15.0 to 2.15.1
  568744 Spellfixes in GtkTreeView's documentation
  536965 GtkPlug: crash on theme change
  567124 proposal to delay doing something related to immodule...
+ 568305 gdk-pixbuf mishandles BI_BITFIELDS bmps
+
+* New and updated translations:
+ Crimean Tatar (crh)
+ Spanish (es)
+ Hebrew (he)
+ Hungarian (hu)
+ Italian (it)
+ Korean (ko)
+ Lithuanian (lt)
+ Norwegian bokmål (nb)
+ Norwegian Nynorsk (nn)
+ Swedish (sv)
+ Thai (th)
+ Simplified Chinese (zh_CN)
 
 
 Overview of Changes from GTK+ 2.14.x to 2.15.0

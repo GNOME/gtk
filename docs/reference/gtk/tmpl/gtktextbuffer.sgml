@@ -122,6 +122,14 @@ types related to the text widget and how they work together.
 
 @textbuffer: the object which received the signal.
 
+<!-- ##### SIGNAL GtkTextBuffer::paste-done ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkTextBuffer::remove-tag ##### -->
 <para>
 

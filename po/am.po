@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-01 16:28-0500\n"
+"POT-Creation-Date: 2009-01-23 12:58-0500\n"
 "PO-Revision-Date: 2003-01-14 11:02+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
@@ -24,49 +24,59 @@ msgstr ""
 msgid "sdl|system"
 msgstr ""
 
+#: gdk/gdk.c:103
+#, c-format
+msgid "Error parsing option --gdk-debug"
+msgstr ""
+
+#: gdk/gdk.c:123
+#, c-format
+msgid "Error parsing option --gdk-no-debug"
+msgstr ""
+
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:127
+#: gdk/gdk.c:151
 msgid "Program class as used by the window manager"
 msgstr ""
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:128
+#: gdk/gdk.c:152
 msgid "CLASS"
 msgstr ""
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:130
+#: gdk/gdk.c:154
 msgid "Program name as used by the window manager"
 msgstr ""
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:131
+#: gdk/gdk.c:155
 msgid "NAME"
 msgstr ""
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:133
+#: gdk/gdk.c:157
 msgid "X display to use"
 msgstr ""
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:134
+#: gdk/gdk.c:158
 #, fuzzy
 msgid "DISPLAY"
 msgstr "IPA"
 
 #. Description of --screen=SCREEN in --help output
-#: gdk/gdk.c:136
+#: gdk/gdk.c:160
 msgid "X screen to use"
 msgstr ""
 
 #. Placeholder in --screen=SCREEN in --help output
-#: gdk/gdk.c:137
+#: gdk/gdk.c:161
 msgid "SCREEN"
 msgstr ""
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:140
+#: gdk/gdk.c:164
 msgid "Gdk debugging flags to set"
 msgstr ""
 
@@ -74,14 +84,217 @@ msgstr ""
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:141 gdk/gdk.c:144 gtk/gtkmain.c:452 gtk/gtkmain.c:455
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:457 gtk/gtkmain.c:460
 msgid "FLAGS"
 msgstr ""
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:143
+#: gdk/gdk.c:167
 msgid "Gdk debugging flags to unset"
 msgstr ""
+
+#: gdk/keyname-table.h:3940
+#, fuzzy
+msgctxt "keyboard label"
+msgid "BackSpace"
+msgstr "እንደገና _ሰይም"
+
+#: gdk/keyname-table.h:3941
+msgctxt "keyboard label"
+msgid "Tab"
+msgstr ""
+
+#: gdk/keyname-table.h:3942
+msgctxt "keyboard label"
+msgid "Return"
+msgstr ""
+
+#: gdk/keyname-table.h:3943
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Pause"
+msgstr "ለጥፍ (_P)"
+
+#: gdk/keyname-table.h:3944
+msgctxt "keyboard label"
+msgid "Scroll_Lock"
+msgstr ""
+
+#: gdk/keyname-table.h:3945
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Sys_Req"
+msgstr "ፋይሎች"
+
+#: gdk/keyname-table.h:3946
+msgctxt "keyboard label"
+msgid "Escape"
+msgstr ""
+
+#: gdk/keyname-table.h:3947
+msgctxt "keyboard label"
+msgid "Multi_key"
+msgstr ""
+
+#: gdk/keyname-table.h:3948
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Home"
+msgstr "መጀመሪያ (_H)"
+
+#: gdk/keyname-table.h:3949
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Left"
+msgstr "ግራ (_L)"
+
+#: gdk/keyname-table.h:3950
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Up"
+msgstr "ወደ ላይ (_U)"
+
+#: gdk/keyname-table.h:3951
+msgctxt "keyboard label"
+msgid "Right"
+msgstr ""
+
+#: gdk/keyname-table.h:3952
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Down"
+msgstr "ወደ ታች (_D)"
+
+#: gdk/keyname-table.h:3953
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Page_Up"
+msgstr "ገጽ %u"
+
+#: gdk/keyname-table.h:3954
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Page_Down"
+msgstr "ወደ ታች (_D)"
+
+#: gdk/keyname-table.h:3955
+msgctxt "keyboard label"
+msgid "End"
+msgstr ""
+
+#: gdk/keyname-table.h:3956
+msgctxt "keyboard label"
+msgid "Begin"
+msgstr ""
+
+#: gdk/keyname-table.h:3957
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Print"
+msgstr "አትም (_P)"
+
+#: gdk/keyname-table.h:3958
+msgctxt "keyboard label"
+msgid "Insert"
+msgstr ""
+
+#: gdk/keyname-table.h:3959
+msgctxt "keyboard label"
+msgid "Num_Lock"
+msgstr ""
+
+#: gdk/keyname-table.h:3960
+#, fuzzy
+msgctxt "keyboard label"
+msgid "KP_Space"
+msgstr "እንደገና _ሰይም"
+
+#: gdk/keyname-table.h:3961
+msgctxt "keyboard label"
+msgid "KP_Tab"
+msgstr ""
+
+#: gdk/keyname-table.h:3962
+#, fuzzy
+msgctxt "keyboard label"
+msgid "KP_Enter"
+msgstr "አትም (_P)"
+
+#: gdk/keyname-table.h:3963
+#, fuzzy
+msgctxt "keyboard label"
+msgid "KP_Home"
+msgstr "መጀመሪያ (_H)"
+
+#: gdk/keyname-table.h:3964
+#, fuzzy
+msgctxt "keyboard label"
+msgid "KP_Left"
+msgstr "ግራ (_L)"
+
+#: gdk/keyname-table.h:3965
+#, fuzzy
+msgctxt "keyboard label"
+msgid "KP_Up"
+msgstr "ወደ ላይ (_U)"
+
+#: gdk/keyname-table.h:3966
+msgctxt "keyboard label"
+msgid "KP_Right"
+msgstr ""
+
+#: gdk/keyname-table.h:3967
+#, fuzzy
+msgctxt "keyboard label"
+msgid "KP_Down"
+msgstr "ወደ ታች (_D)"
+
+#: gdk/keyname-table.h:3968
+msgctxt "keyboard label"
+msgid "KP_Page_Up"
+msgstr ""
+
+#: gdk/keyname-table.h:3969
+msgctxt "keyboard label"
+msgid "KP_Prior"
+msgstr ""
+
+#: gdk/keyname-table.h:3970
+msgctxt "keyboard label"
+msgid "KP_Page_Down"
+msgstr ""
+
+#: gdk/keyname-table.h:3971
+msgctxt "keyboard label"
+msgid "KP_Next"
+msgstr ""
+
+#: gdk/keyname-table.h:3972
+msgctxt "keyboard label"
+msgid "KP_End"
+msgstr ""
+
+#: gdk/keyname-table.h:3973
+msgctxt "keyboard label"
+msgid "KP_Begin"
+msgstr ""
+
+#: gdk/keyname-table.h:3974
+msgctxt "keyboard label"
+msgid "KP_Insert"
+msgstr ""
+
+#: gdk/keyname-table.h:3975
+#, fuzzy
+msgctxt "keyboard label"
+msgid "KP_Delete"
+msgstr "አጥፉ (_D)"
+
+#: gdk/keyname-table.h:3976
+#, fuzzy
+msgctxt "keyboard label"
+msgid "Delete"
+msgstr "አጥፉ (_D)"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:965
 #: gdk-pixbuf/gdk-pixbuf-io.c:1225 tests/testfilechooser.c:222
@@ -962,47 +1175,47 @@ msgid_plural "Opening %d Items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkaboutdialog.c:264 gtk/gtkaboutdialog.c:2108
+#: gtk/gtkaboutdialog.c:267 gtk/gtkaboutdialog.c:2121
 msgid "License"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:265
+#: gtk/gtkaboutdialog.c:268
 msgid "The license of the program"
 msgstr ""
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:508
 #, fuzzy
 msgid "C_redits"
 msgstr "_ፍጠር"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:514
+#: gtk/gtkaboutdialog.c:522
 msgid "_License"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:744
+#: gtk/gtkaboutdialog.c:790
 #, c-format
 msgid "About %s"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2032
+#: gtk/gtkaboutdialog.c:2045
 msgid "Credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2061
+#: gtk/gtkaboutdialog.c:2074
 msgid "Written by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2064
+#: gtk/gtkaboutdialog.c:2077
 msgid "Documented by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2076
+#: gtk/gtkaboutdialog.c:2089
 msgid "Translated by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2080
+#: gtk/gtkaboutdialog.c:2093
 msgid "Artwork by"
 msgstr ""
 
@@ -1323,34 +1536,25 @@ msgstr ""
 msgid "Color Selection"
 msgstr "የፊደል ቅርጽ ምርጫ"
 
-#: gtk/gtkentry.c:7998 gtk/gtktextview.c:7730
+#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7778
 msgid "Input _Methods"
 msgstr "ዘገባ የማስትገባት ዘዴዎች (_M)"
 
-#: gtk/gtkentry.c:8012 gtk/gtktextview.c:7744
+#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7792
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
-#: gtk/gtkentry.c:9375
-msgid ""
-"You have the Caps Lock key on\n"
-"and an active input method"
-msgstr ""
-
-#: gtk/gtkentry.c:9377
-msgid "You have the Caps Lock key on"
-msgstr ""
-
-#: gtk/gtkentry.c:9379
-msgid "You have an active input method"
-msgstr ""
+#: gtk/gtkentry.c:9601
+#, fuzzy
+msgid "Caps Lock is on"
+msgstr "_ምርጫ፦ "
 
 #: gtk/gtkfilechooserbutton.c:64
 #, fuzzy
 msgid "Select A File"
 msgstr "ፋይል አጥፉ"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1923
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1933
 msgid "Desktop"
 msgstr ""
 
@@ -1363,34 +1567,34 @@ msgstr "ምንም"
 msgid "Other..."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1056
+#: gtk/gtkfilechooserdefault.c:1059
 msgid "Could not retrieve information about the file"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1067
+#: gtk/gtkfilechooserdefault.c:1070
 msgid "Could not add a bookmark"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1078
+#: gtk/gtkfilechooserdefault.c:1081
 msgid "Could not remove bookmark"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1089
+#: gtk/gtkfilechooserdefault.c:1092
 msgid "The folder could not be created"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1102
+#: gtk/gtkfilechooserdefault.c:1105
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1113
+#: gtk/gtkfilechooserdefault.c:1116
 #, fuzzy
 msgid "Invalid file name"
 msgstr "የፋይል ስም"
 
-#: gtk/gtkfilechooserdefault.c:1123
+#: gtk/gtkfilechooserdefault.c:1126
 msgid "The folder contents could not be displayed"
 msgstr ""
 
@@ -1398,225 +1602,227 @@ msgstr ""
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1675
+#: gtk/gtkfilechooserdefault.c:1676
 #, c-format
 msgid "%1$s on %2$s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1851
+#: gtk/gtkfilechooserdefault.c:1852
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1875
+#: gtk/gtkfilechooserdefault.c:1876
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2500
+#: gtk/gtkfilechooserdefault.c:2510
 msgid "Select which types of files are shown"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2929
+#: gtk/gtkfilechooserdefault.c:2939
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2970
+#: gtk/gtkfilechooserdefault.c:2980
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2972
+#: gtk/gtkfilechooserdefault.c:2982
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3012
+#: gtk/gtkfilechooserdefault.c:3022
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3730
+#: gtk/gtkfilechooserdefault.c:3740
 #, fuzzy
 msgid "Remove"
 msgstr "አስወግድ (_R)"
 
-#: gtk/gtkfilechooserdefault.c:3739
+#: gtk/gtkfilechooserdefault.c:3749
 #, fuzzy
 msgid "Rename..."
 msgstr "እንደገና _ሰይም"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3885
+#: gtk/gtkfilechooserdefault.c:3895
 msgid "Places"
 msgstr ""
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3942
+#: gtk/gtkfilechooserdefault.c:3952
 #, fuzzy
 msgid "_Places"
 msgstr "እንደገና _ሰይም"
 
-#: gtk/gtkfilechooserdefault.c:3997
+#: gtk/gtkfilechooserdefault.c:4007
 msgid "_Add"
 msgstr "ጨምር (_A)"
 
-#: gtk/gtkfilechooserdefault.c:4004
+#: gtk/gtkfilechooserdefault.c:4014
 msgid "Add the selected folder to the Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4009
+#: gtk/gtkfilechooserdefault.c:4019
 msgid "_Remove"
 msgstr "አስወግድ (_R)"
 
-#: gtk/gtkfilechooserdefault.c:4016
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Remove the selected bookmark"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4125
+#: gtk/gtkfilechooserdefault.c:4135
 #, fuzzy
 msgid "Could not select file"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkfilechooserdefault.c:4300
+#: gtk/gtkfilechooserdefault.c:4310
 msgid "_Add to Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4314
+#: gtk/gtkfilechooserdefault.c:4324
 msgid "Show _Hidden Files"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4321
+#: gtk/gtkfilechooserdefault.c:4331
 msgid "Show _Size Column"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4576 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4586 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ፋይሎች"
 
-#: gtk/gtkfilechooserdefault.c:4625
+#: gtk/gtkfilechooserdefault.c:4635
 #, fuzzy
 msgid "Name"
 msgstr "የቀለሙ _ስም፦"
 
-#: gtk/gtkfilechooserdefault.c:4650
+#: gtk/gtkfilechooserdefault.c:4660
 msgid "Size"
 msgstr "መጠን"
 
-#: gtk/gtkfilechooserdefault.c:4664
+#: gtk/gtkfilechooserdefault.c:4674
 #, fuzzy
 msgid "Modified"
 msgstr "የአሠራሩ ዘዴ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4884 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4894 gtk/gtkprinteroptionwidget.c:796
 #, fuzzy
 msgid "_Name:"
 msgstr "የቀለሙ _ስም፦"
 
-#: gtk/gtkfilechooserdefault.c:4926
+#: gtk/gtkfilechooserdefault.c:4937
 msgid "_Browse for other folders"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5196
+#: gtk/gtkfilechooserdefault.c:5207
 #, fuzzy
 msgid "Type a file name"
 msgstr "የፋይል ስም"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5233
+#: gtk/gtkfilechooserdefault.c:5244
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "አዲስ ዶሴ"
 
-#: gtk/gtkfilechooserdefault.c:5243
+#: gtk/gtkfilechooserdefault.c:5254
 #, fuzzy
 msgid "_Location:"
 msgstr "_ምርጫ፦ "
 
-#: gtk/gtkfilechooserdefault.c:5444
+#: gtk/gtkfilechooserdefault.c:5458
 #, fuzzy
 msgid "Save in _folder:"
 msgstr "አዲስ ዶሴ"
 
-#: gtk/gtkfilechooserdefault.c:5446
+#: gtk/gtkfilechooserdefault.c:5460
 #, fuzzy
 msgid "Create in _folder:"
 msgstr "አዲስ ዶሴ"
 
-#: gtk/gtkfilechooserdefault.c:7097
+#: gtk/gtkfilechooserdefault.c:7150
 msgid "Cannot change to folder because it is not local"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7722 gtk/gtkfilechooserdefault.c:7743
+#: gtk/gtkfilechooserdefault.c:7775 gtk/gtkfilechooserdefault.c:7796
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7886
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8081 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8148 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8084 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8151 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8089 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8156 gtk/gtkprintunixdialog.c:381
 #, fuzzy
 msgid "_Replace"
 msgstr "እንደገና _ሰይም"
 
-#: gtk/gtkfilechooserdefault.c:8846
+#: gtk/gtkfilechooserdefault.c:8913
 msgid "Could not start the search process"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8847
+#: gtk/gtkfilechooserdefault.c:8914
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8861
+#: gtk/gtkfilechooserdefault.c:8928
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "የአሁኑን ቀለም"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9328
+#: gtk/gtkfilechooserdefault.c:9395
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10281
+#: gtk/gtkfilechooserdefault.c:10348
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkfilechooserdefault.c:10956
+#: gtk/gtkfilechooserdefault.c:11023
 msgid "Type name of new folder"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11134 gtk/gtkfilechooserdefault.c:11156
-#: gtk/gtkfilechooserdefault.c:11227
+#: gtk/gtkfilechooserdefault.c:11201 gtk/gtkfilechooserdefault.c:11223
+#: gtk/gtkfilechooserdefault.c:11294
 #, fuzzy
 msgid "Unknown"
 msgstr "(ያልታወቀ)"
 
-#: gtk/gtkfilechooserdefault.c:11174
+#: gtk/gtkfilechooserdefault.c:11241
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11176
+#: gtk/gtkfilechooserdefault.c:11243
 msgid "Yesterday at %H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserentry.c:659 gtk/gtkfilechooserentry.c:1115
+#. Translators: this is shown in the feedback for Tab-completion in a file
+#. * chooser's text entry, when the user enters an invalid path.
+#: gtk/gtkfilechooserentry.c:698 gtk/gtkfilechooserentry.c:1163
 #, fuzzy
 msgid "Invalid path"
 msgstr "Utf-8 ተቀብሏል"
@@ -1624,14 +1830,14 @@ msgstr "Utf-8 ተቀብሏል"
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1070
+#: gtk/gtkfilechooserentry.c:1095
 msgid "No match"
 msgstr ""
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1081
+#: gtk/gtkfilechooserentry.c:1106
 #, fuzzy
 msgid "Sole completion"
 msgstr "የፊደል ቅርጽ ምርጫ"
@@ -1640,18 +1846,40 @@ msgstr "የፊደል ቅርጽ ምርጫ"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: gtk/gtkfilechooserentry.c:1097
+#: gtk/gtkfilechooserentry.c:1122
 msgid "Complete, but not unique"
 msgstr ""
 
-#. translators: this text is shown while the system is searching
-#. * for possible completions for text in a file chooser entry
-#.
-#: gtk/gtkfilechooserentry.c:1133
+#. Translators: this text is shown while the system is searching
+#. * for possible completions for filenames in a file chooser entry.
+#: gtk/gtkfilechooserentry.c:1154
 msgid "Completing..."
 msgstr ""
 
-#: gtk/gtkfilechoosersettings.c:295 gtk/gtkfilesel.c:1349
+#. hostnames in a local_only file chooser?  user error
+#. Translators: this is shown in the feedback for Tab-completion in a
+#. * file chooser's text entry when the user enters something like
+#. * "sftp://blahblah" in an app that only supports local filenames.
+#: gtk/gtkfilechooserentry.c:1176 gtk/gtkfilechooserentry.c:1201
+msgid "Only local files may be selected"
+msgstr ""
+
+#. Another option is to complete the hostname based on the remote volumes that are mounted
+#. Translators: this is shown in the feedback for Tab-completion in a
+#. * file chooser's text entry when the user hasn't entered the first '/'
+#. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
+#: gtk/gtkfilechooserentry.c:1185
+msgid "Incomplete hostname; end it with '/'"
+msgstr ""
+
+#. Translators: this is shown in the feedback for Tab-completion in a file
+#. * chooser's text entry when the user enters a path that does not exist
+#. * and then hits Tab
+#: gtk/gtkfilechooserentry.c:1196
+msgid "Path does not exist"
+msgstr ""
+
+#: gtk/gtkfilechoosersettings.c:362 gtk/gtkfilesel.c:1349
 #: gtk/gtkfilesel.c:1358
 #, fuzzy, c-format
 msgid "Error creating folder '%s': %s"
@@ -1853,7 +2081,7 @@ msgstr "የ_ጋማ ዕሴት"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1403
+#: gtk/gtkiconfactory.c:1404
 #, c-format
 msgid "Error loading icon: %s"
 msgstr ""
@@ -1872,7 +2100,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr ""
 
-#: gtk/gtkicontheme.c:3073
+#: gtk/gtkicontheme.c:3074
 #, fuzzy
 msgid "Failed to load icon"
 msgstr "የአሁኑን ቀለም"
@@ -1987,27 +2215,27 @@ msgid "Invalid URI"
 msgstr "Utf-8 ተቀብሏል"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:445
+#: gtk/gtkmain.c:450
 msgid "Load additional GTK+ modules"
 msgstr ""
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:446
+#: gtk/gtkmain.c:451
 msgid "MODULES"
 msgstr ""
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:448
+#: gtk/gtkmain.c:453
 msgid "Make all warnings fatal"
 msgstr ""
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:451
+#: gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to set"
 msgstr ""
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:454
+#: gtk/gtkmain.c:459
 msgid "GTK+ debugging flags to unset"
 msgstr ""
 
@@ -2016,20 +2244,20 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:702
+#: gtk/gtkmain.c:707
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:768
+#: gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:805
+#: gtk/gtkmain.c:810
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:805
+#: gtk/gtkmain.c:810
 msgid "Show GTK+ Options"
 msgstr ""
 
@@ -2219,6 +2447,55 @@ msgstr "አዲስ ዶሴ"
 msgid "%s job #%d"
 msgstr ""
 
+#: gtk/gtkprintoperation.c:1517
+msgctxt "print operation status"
+msgid "Initial state"
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1518
+#, fuzzy
+msgctxt "print operation status"
+msgid "Preparing to print"
+msgstr "ማስጠንቀቂያ"
+
+#: gtk/gtkprintoperation.c:1519
+msgctxt "print operation status"
+msgid "Generating data"
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1520
+msgctxt "print operation status"
+msgid "Sending data"
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1521
+#, fuzzy
+msgctxt "print operation status"
+msgid "Waiting"
+msgstr "ማስጠንቀቂያ"
+
+#: gtk/gtkprintoperation.c:1522
+msgctxt "print operation status"
+msgid "Blocking on issue"
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1523
+#, fuzzy
+msgctxt "print operation status"
+msgid "Printing"
+msgstr "አትም (_P)"
+
+#: gtk/gtkprintoperation.c:1524
+#, fuzzy
+msgctxt "print operation status"
+msgid "Finished"
+msgstr "ፈልግ (_F)"
+
+#: gtk/gtkprintoperation.c:1525
+msgctxt "print operation status"
+msgid "Finished with error"
+msgstr ""
+
 #: gtk/gtkprintoperation.c:2048
 #, c-format
 msgid "Preparing %d"
@@ -2269,7 +2546,7 @@ msgstr ""
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1474
 #, fuzzy
 msgid "Paused"
 msgstr "ለጥፍ (_P)"
@@ -2381,7 +2658,7 @@ msgstr ""
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:2442
-#: modules/printbackends/cups/gtkprintbackendcups.c:2869
+#: modules/printbackends/cups/gtkprintbackendcups.c:2874
 #, fuzzy
 msgid "Page Ordering"
 msgstr "ማስጠንቀቂያ"
@@ -2454,86 +2731,99 @@ msgstr "ምርጫዎች (_P)"
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2704
+#: gtk/gtkprintunixdialog.c:2706
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2710
+#: gtk/gtkprintunixdialog.c:2712
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2725
+#: gtk/gtkprintunixdialog.c:2727
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2743
+#: gtk/gtkprintunixdialog.c:2745
 msgid "Print Document"
 msgstr ""
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2752
+#: gtk/gtkprintunixdialog.c:2754
 #, fuzzy
 msgid "_Now"
 msgstr "አይ (_N)"
 
-#: gtk/gtkprintunixdialog.c:2763
+#: gtk/gtkprintunixdialog.c:2765
 msgid "A_t:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2782
+#. Translators: Ability to parse the am/pm format depends on actual locale.
+#. * You can remove the am/pm values below for your locale if they are not supported.
+#.
+#: gtk/gtkprintunixdialog.c:2770
+msgid ""
+"Specify the time of print,\n"
+" e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2791
 #, fuzzy
 msgid "On _hold"
 msgstr "ደማቅ (_B)"
 
-#: gtk/gtkprintunixdialog.c:2801
+#: gtk/gtkprintunixdialog.c:2792
+msgid "Hold the job until it is explicitly released"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2812
 msgid "Add Cover Page"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2810
+#: gtk/gtkprintunixdialog.c:2821
 msgid "Be_fore:"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2828
+#: gtk/gtkprintunixdialog.c:2839
 msgid "_After:"
 msgstr ""
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2846
+#: gtk/gtkprintunixdialog.c:2857
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2912
+#: gtk/gtkprintunixdialog.c:2923
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2947
+#: gtk/gtkprintunixdialog.c:2958
 msgid "Image Quality"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2950
+#: gtk/gtkprintunixdialog.c:2961
 #, fuzzy
 msgid "Color"
 msgstr "ቀለም (_C)"
 
-#: gtk/gtkprintunixdialog.c:2953
+#: gtk/gtkprintunixdialog.c:2964
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2963
+#: gtk/gtkprintunixdialog.c:2974
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2986
+#: gtk/gtkprintunixdialog.c:2997
 #, fuzzy
 msgid "Print"
 msgstr "አትም (_P)"
@@ -2548,50 +2838,50 @@ msgstr ""
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
 
-#: gtk/gtkrecentaction.c:155 gtk/gtkrecentaction.c:163
-#: gtk/gtkrecentchoosermenu.c:551 gtk/gtkrecentchoosermenu.c:559
+#: gtk/gtkrecentaction.c:154 gtk/gtkrecentaction.c:162
+#: gtk/gtkrecentchoosermenu.c:589 gtk/gtkrecentchoosermenu.c:597
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:454
+#: gtk/gtkrecentchooserdefault.c:481
 msgid "Select which type of documents are shown"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1095 gtk/gtkrecentchooserdefault.c:1132
+#: gtk/gtkrecentchooserdefault.c:1134 gtk/gtkrecentchooserdefault.c:1171
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1259
+#: gtk/gtkrecentchooserdefault.c:1298
 msgid "Untitled filter"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1612
+#: gtk/gtkrecentchooserdefault.c:1651
 #, fuzzy
 msgid "Could not remove item"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkrecentchooserdefault.c:1655
+#: gtk/gtkrecentchooserdefault.c:1694
 #, fuzzy
 msgid "Could not clear list"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkrecentchooserdefault.c:1739
+#: gtk/gtkrecentchooserdefault.c:1778
 #, fuzzy
 msgid "Copy _Location"
 msgstr "_ምርጫ፦ "
 
-#: gtk/gtkrecentchooserdefault.c:1752
+#: gtk/gtkrecentchooserdefault.c:1791
 msgid "_Remove From List"
 msgstr ""
 
-#: gtk/gtkrecentchooserdefault.c:1761
+#: gtk/gtkrecentchooserdefault.c:1800
 #, fuzzy
 msgid "_Clear List"
 msgstr "ሰርዝ (_C)"
 
-#: gtk/gtkrecentchooserdefault.c:1775
+#: gtk/gtkrecentchooserdefault.c:1814
 msgid "Show _Private Resources"
 msgstr ""
 
@@ -2605,21 +2895,21 @@ msgstr ""
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:317
+#: gtk/gtkrecentchoosermenu.c:343
 msgid "No items found"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:471 gtk/gtkrecentchoosermenu.c:527
+#: gtk/gtkrecentchoosermenu.c:509 gtk/gtkrecentchoosermenu.c:565
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:738
+#: gtk/gtkrecentchoosermenu.c:776
 #, c-format
 msgid "Open '%s'"
 msgstr ""
 
-#: gtk/gtkrecentchoosermenu.c:768
+#: gtk/gtkrecentchoosermenu.c:806
 #, fuzzy
 msgid "Unknown item"
 msgstr "(ያልታወቀ)"
@@ -2629,7 +2919,7 @@ msgstr "(ያልታወቀ)"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: gtk/gtkrecentchoosermenu.c:779
+#: gtk/gtkrecentchoosermenu.c:817
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2638,7 +2928,7 @@ msgstr ""
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: gtk/gtkrecentchoosermenu.c:784
+#: gtk/gtkrecentchoosermenu.c:822
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
@@ -2651,6 +2941,584 @@ msgstr ""
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr ""
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
+#: gtk/gtkstock.c:288
+#, fuzzy
+msgctxt "Stock label"
+msgid "Information"
+msgstr "መረጃ"
+
+#: gtk/gtkstock.c:289
+#, fuzzy
+msgctxt "Stock label"
+msgid "Warning"
+msgstr "ማስጠንቀቂያ"
+
+#: gtk/gtkstock.c:290
+#, fuzzy
+msgctxt "Stock label"
+msgid "Error"
+msgstr "ስህተት"
+
+#: gtk/gtkstock.c:291
+#, fuzzy
+msgctxt "Stock label"
+msgid "Question"
+msgstr "ጥያቄ"
+
+#. FIXME these need accelerators when appropriate, and
+#. * need the mnemonics to be rationalized
+#.
+#: gtk/gtkstock.c:296
+msgctxt "Stock label"
+msgid "_About"
+msgstr ""
+
+#: gtk/gtkstock.c:297
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Add"
+msgstr "ጨምር (_A)"
+
+#: gtk/gtkstock.c:298
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Apply"
+msgstr "ተጠቀም (_A)"
+
+#: gtk/gtkstock.c:299
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Bold"
+msgstr "ደማቅ (_B)"
+
+#: gtk/gtkstock.c:300
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Cancel"
+msgstr "ተወው (_C)"
+
+#: gtk/gtkstock.c:301
+#, fuzzy
+msgctxt "Stock label"
+msgid "_CD-Rom"
+msgstr "ሲዲ-ሮም (_C)"
+
+#: gtk/gtkstock.c:302
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Clear"
+msgstr "ሰርዝ (_C)"
+
+#: gtk/gtkstock.c:303
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Close"
+msgstr "ዝጋ (_C)"
+
+#: gtk/gtkstock.c:304
+#, fuzzy
+msgctxt "Stock label"
+msgid "C_onnect"
+msgstr "ለዋጭ (_C)"
+
+#: gtk/gtkstock.c:305
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Convert"
+msgstr "ለዋጭ (_C)"
+
+#: gtk/gtkstock.c:306
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Copy"
+msgstr "ቅጂ (_C)"
+
+#: gtk/gtkstock.c:307
+#, fuzzy
+msgctxt "Stock label"
+msgid "Cu_t"
+msgstr "ቁረጥ (_t)"
+
+#: gtk/gtkstock.c:308
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Delete"
+msgstr "አጥፉ (_D)"
+
+#: gtk/gtkstock.c:309
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Discard"
+msgstr "የተበላሸ"
+
+#: gtk/gtkstock.c:310
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Disconnect"
+msgstr "ለዋጭ (_C)"
+
+#: gtk/gtkstock.c:311
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Execute"
+msgstr "አስኪድ (_E)"
+
+#: gtk/gtkstock.c:312
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Edit"
+msgstr "_ፍጠር"
+
+#: gtk/gtkstock.c:313
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Find"
+msgstr "ፈልግ (_F)"
+
+#: gtk/gtkstock.c:314
+#, fuzzy
+msgctxt "Stock label"
+msgid "Find and _Replace"
+msgstr "ፈልግ እና ተካ (_R)"
+
+#: gtk/gtkstock.c:315
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Floppy"
+msgstr "ፍሎፒ (_F)"
+
+#: gtk/gtkstock.c:316
+msgctxt "Stock label"
+msgid "_Fullscreen"
+msgstr ""
+
+#: gtk/gtkstock.c:317
+msgctxt "Stock label"
+msgid "_Leave Fullscreen"
+msgstr ""
+
+#. This is a navigation label as in "go to the bottom of the page"
+#: gtk/gtkstock.c:319
+#, fuzzy
+msgctxt "Stock label, navigation"
+msgid "_Bottom"
+msgstr "ወደ ታች (_B)"
+
+#. This is a navigation label as in "go to the first page"
+#: gtk/gtkstock.c:321
+#, fuzzy
+msgctxt "Stock label, navigation"
+msgid "_First"
+msgstr "መጀመሪያ (_F)"
+
+#. This is a navigation label as in "go to the last page"
+#: gtk/gtkstock.c:323
+#, fuzzy
+msgctxt "Stock label, navigation"
+msgid "_Last"
+msgstr "መጨረሻ (_L)"
+
+#. This is a navigation label as in "go to the top of the page"
+#: gtk/gtkstock.c:325
+#, fuzzy
+msgctxt "Stock label, navigation"
+msgid "_Top"
+msgstr "ወደ ላይ (_T)"
+
+#. This is a navigation label as in "go back"
+#: gtk/gtkstock.c:327
+#, fuzzy
+msgctxt "Stock label, navigation"
+msgid "_Back"
+msgstr "ወደኋላ (_B)"
+
+#. This is a navigation label as in "go down"
+#: gtk/gtkstock.c:329
+#, fuzzy
+msgctxt "Stock label, navigation"
+msgid "_Down"
+msgstr "ወደ ታች (_D)"
+
+#. This is a navigation label as in "go forward"
+#: gtk/gtkstock.c:331
+#, fuzzy
+msgctxt "Stock label, navigation"
+msgid "_Forward"
+msgstr "ወደፊት (_F)"
+
+#. This is a navigation label as in "go up"
+#: gtk/gtkstock.c:333
+#, fuzzy
+msgctxt "Stock label, navigation"
+msgid "_Up"
+msgstr "ወደ ላይ (_U)"
+
+#: gtk/gtkstock.c:334
+msgctxt "Stock label"
+msgid "_Harddisk"
+msgstr ""
+
+#: gtk/gtkstock.c:335
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Help"
+msgstr "መረጃ (_H)"
+
+#: gtk/gtkstock.c:336
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Home"
+msgstr "መጀመሪያ (_H)"
+
+#: gtk/gtkstock.c:337
+msgctxt "Stock label"
+msgid "Increase Indent"
+msgstr ""
+
+#: gtk/gtkstock.c:338
+msgctxt "Stock label"
+msgid "Decrease Indent"
+msgstr ""
+
+#: gtk/gtkstock.c:339
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Index"
+msgstr "ማውጫ (_I)"
+
+#: gtk/gtkstock.c:340
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Information"
+msgstr "መረጃ"
+
+#: gtk/gtkstock.c:341
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Italic"
+msgstr "አይታሊክ ማድረጊያ (_I)"
+
+#: gtk/gtkstock.c:342
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Jump to"
+msgstr "ይለፉ ወደ (_J)"
+
+#. This is about text justification, "centered text"
+#: gtk/gtkstock.c:344
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Center"
+msgstr "ለዋጭ (_C)"
+
+#. This is about text justification
+#: gtk/gtkstock.c:346
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Fill"
+msgstr "_ፋይሎች"
+
+#. This is about text justification, "left-justified text"
+#: gtk/gtkstock.c:348
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Left"
+msgstr "ግራ (_L)"
+
+#. This is about text justification, "right-justified text"
+#: gtk/gtkstock.c:350
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Right"
+msgstr "ቀኝ (_R)"
+
+#. Media label, as in "fast forward"
+#: gtk/gtkstock.c:353
+#, fuzzy
+msgctxt "Stock label, media"
+msgid "_Forward"
+msgstr "ወደፊት (_F)"
+
+#. Media label, as in "next song"
+#: gtk/gtkstock.c:355
+#, fuzzy
+msgctxt "Stock label, media"
+msgid "_Next"
+msgstr "አዲስ (_N)"
+
+#. Media label, as in "pause music"
+#: gtk/gtkstock.c:357
+#, fuzzy
+msgctxt "Stock label, media"
+msgid "P_ause"
+msgstr "ለጥፍ (_P)"
+
+#. Media label, as in "play music"
+#: gtk/gtkstock.c:359
+#, fuzzy
+msgctxt "Stock label, media"
+msgid "_Play"
+msgstr "እንደገና _ሰይም"
+
+#. Media label, as in  "previous song"
+#: gtk/gtkstock.c:361
+#, fuzzy
+msgctxt "Stock label, media"
+msgid "Pre_vious"
+msgstr "ቅድመ _ዕይታ፦"
+
+#. Media label
+#: gtk/gtkstock.c:363
+#, fuzzy
+msgctxt "Stock label, media"
+msgid "_Record"
+msgstr "_ቀይ፦"
+
+#. Media label
+#: gtk/gtkstock.c:365
+#, fuzzy
+msgctxt "Stock label, media"
+msgid "R_ewind"
+msgstr "ፈልግ (_F)"
+
+#. Media label
+#: gtk/gtkstock.c:367
+#, fuzzy
+msgctxt "Stock label, media"
+msgid "_Stop"
+msgstr "አቁም (_S)"
+
+#: gtk/gtkstock.c:368
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Network"
+msgstr "አዲስ (_N)"
+
+#: gtk/gtkstock.c:369
+#, fuzzy
+msgctxt "Stock label"
+msgid "_New"
+msgstr "አዲስ (_N)"
+
+#: gtk/gtkstock.c:370
+#, fuzzy
+msgctxt "Stock label"
+msgid "_No"
+msgstr "አይ (_N)"
+
+#: gtk/gtkstock.c:371
+#, fuzzy
+msgctxt "Stock label"
+msgid "_OK"
+msgstr "እሺ (_O)"
+
+#: gtk/gtkstock.c:372
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Open"
+msgstr "ክፈት (_O)"
+
+#. Page orientation
+#: gtk/gtkstock.c:374
+msgctxt "Stock label"
+msgid "Landscape"
+msgstr ""
+
+#. Page orientation
+#: gtk/gtkstock.c:376
+#, fuzzy
+msgctxt "Stock label"
+msgid "Portrait"
+msgstr "አትም (_P)"
+
+#. Page orientation
+#: gtk/gtkstock.c:378
+msgctxt "Stock label"
+msgid "Reverse landscape"
+msgstr ""
+
+#. Page orientation
+#: gtk/gtkstock.c:380
+msgctxt "Stock label"
+msgid "Reverse portrait"
+msgstr ""
+
+#: gtk/gtkstock.c:381
+#, fuzzy
+msgctxt "Stock label"
+msgid "Page Set_up"
+msgstr "ገጽ %u"
+
+#: gtk/gtkstock.c:382
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Paste"
+msgstr "ለጥፍ (_P)"
+
+#: gtk/gtkstock.c:383
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Preferences"
+msgstr "ምርጫዎች (_P)"
+
+#: gtk/gtkstock.c:384
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Print"
+msgstr "አትም (_P)"
+
+#: gtk/gtkstock.c:385
+#, fuzzy
+msgctxt "Stock label"
+msgid "Print Pre_view"
+msgstr "የቅድመ ህትመት ዕይታ (_v)"
+
+#: gtk/gtkstock.c:386
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Properties"
+msgstr "ምርጫዎች (_P)"
+
+#: gtk/gtkstock.c:387
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Quit"
+msgstr "ውጣ (_Q)"
+
+#: gtk/gtkstock.c:388
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Redo"
+msgstr "እንደገና አድርግ (_R)"
+
+#: gtk/gtkstock.c:389
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Refresh"
+msgstr "በድጋሚ ጀምር (_R)"
+
+#: gtk/gtkstock.c:390
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Remove"
+msgstr "አስወግድ (_R)"
+
+#: gtk/gtkstock.c:391
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Revert"
+msgstr "ወደ ነበረበት መልስ (_R)"
+
+#: gtk/gtkstock.c:392
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Save"
+msgstr "አስቀምጥ (_S)"
+
+#: gtk/gtkstock.c:393
+#, fuzzy
+msgctxt "Stock label"
+msgid "Save _As"
+msgstr "በሌላ ስም አስቀምጥ (_A)"
+
+#: gtk/gtkstock.c:394
+#, fuzzy
+msgctxt "Stock label"
+msgid "Select _All"
+msgstr "ሁሉንም ምረጡ"
+
+#: gtk/gtkstock.c:395
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Color"
+msgstr "ቀለም (_C)"
+
+#: gtk/gtkstock.c:396
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Font"
+msgstr "የፊደል ቅርጽ (_F)"
+
+#. Sorting direction
+#: gtk/gtkstock.c:398
+msgctxt "Stock label"
+msgid "_Ascending"
+msgstr ""
+
+#. Sorting direction
+#: gtk/gtkstock.c:400
+msgctxt "Stock label"
+msgid "_Descending"
+msgstr ""
+
+#: gtk/gtkstock.c:401
+msgctxt "Stock label"
+msgid "_Spell Check"
+msgstr ""
+
+#: gtk/gtkstock.c:402
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Stop"
+msgstr "አቁም (_S)"
+
+#. Font variant
+#: gtk/gtkstock.c:404
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Strikethrough"
+msgstr "ስርዝ"
+
+#: gtk/gtkstock.c:405
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Undelete"
+msgstr "አታጥፋ (_U)"
+
+#. Font variant
+#: gtk/gtkstock.c:407
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Underline"
+msgstr "የስር መስመር (_U)"
+
+#: gtk/gtkstock.c:408
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Undo"
+msgstr "ወደ ነበረበት መልስ (_U)"
+
+#: gtk/gtkstock.c:409
+#, fuzzy
+msgctxt "Stock label"
+msgid "_Yes"
+msgstr "አዎ (_Y)"
+
+#. Zoom
+#: gtk/gtkstock.c:411
+msgctxt "Stock label"
+msgid "_Normal Size"
+msgstr ""
+
+#. Zoom
+#: gtk/gtkstock.c:413
+msgctxt "Stock label"
+msgid "Best _Fit"
+msgstr ""
+
+#: gtk/gtkstock.c:414
+#, fuzzy
+msgctxt "Stock label"
+msgid "Zoom _In"
+msgstr "ከቅርበት ዕይታ (_I)"
+
+#: gtk/gtkstock.c:415
+#, fuzzy
+msgctxt "Stock label"
+msgid "Zoom _Out"
+msgstr "ከርቀት ዕይታ (_O)"
 
 #: gtk/gtktextbufferrichtext.c:651
 #, c-format
@@ -2815,17 +3683,17 @@ msgstr ""
 msgid "--- No Tip ---"
 msgstr "--- ምንም ፍንጭ የልም ---"
 
-#: gtk/gtkuimanager.c:1462
+#: gtk/gtkuimanager.c:1463
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1552
+#: gtk/gtkuimanager.c:1553
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:2384
+#: gtk/gtkuimanager.c:2385
 msgid "Empty"
 msgstr ""
 
@@ -2875,6 +3743,827 @@ msgstr ""
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:4
+#, fuzzy
+msgctxt "paper size"
+msgid "asme_f"
+msgstr "የቀለሙ _ስም፦"
+
+#: gtk/paper_names_offsets.c:5
+msgctxt "paper size"
+msgid "A0x2"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:6
+msgctxt "paper size"
+msgid "A0"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:7
+msgctxt "paper size"
+msgid "A0x3"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:8
+msgctxt "paper size"
+msgid "A1"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:9
+msgctxt "paper size"
+msgid "A10"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:10
+msgctxt "paper size"
+msgid "A1x3"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:11
+msgctxt "paper size"
+msgid "A1x4"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:12
+msgctxt "paper size"
+msgid "A2"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:13
+msgctxt "paper size"
+msgid "A2x3"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:14
+msgctxt "paper size"
+msgid "A2x4"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:15
+msgctxt "paper size"
+msgid "A2x5"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:16
+msgctxt "paper size"
+msgid "A3"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:17
+msgctxt "paper size"
+msgid "A3 Extra"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:18
+msgctxt "paper size"
+msgid "A3x3"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:19
+msgctxt "paper size"
+msgid "A3x4"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:20
+msgctxt "paper size"
+msgid "A3x5"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:21
+msgctxt "paper size"
+msgid "A3x6"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:22
+msgctxt "paper size"
+msgid "A3x7"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:23
+msgctxt "paper size"
+msgid "A4"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:24
+msgctxt "paper size"
+msgid "A4 Extra"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:25
+msgctxt "paper size"
+msgid "A4 Tab"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:26
+msgctxt "paper size"
+msgid "A4x3"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:27
+msgctxt "paper size"
+msgid "A4x4"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:28
+msgctxt "paper size"
+msgid "A4x5"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:29
+msgctxt "paper size"
+msgid "A4x6"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:30
+msgctxt "paper size"
+msgid "A4x7"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:31
+msgctxt "paper size"
+msgid "A4x8"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:32
+msgctxt "paper size"
+msgid "A4x9"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:33
+msgctxt "paper size"
+msgid "A5"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:34
+msgctxt "paper size"
+msgid "A5 Extra"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:35
+msgctxt "paper size"
+msgid "A6"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:36
+msgctxt "paper size"
+msgid "A7"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:37
+msgctxt "paper size"
+msgid "A8"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:38
+msgctxt "paper size"
+msgid "A9"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:39
+msgctxt "paper size"
+msgid "B0"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:40
+msgctxt "paper size"
+msgid "B1"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:41
+msgctxt "paper size"
+msgid "B10"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:42
+msgctxt "paper size"
+msgid "B2"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:43
+msgctxt "paper size"
+msgid "B3"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:44
+msgctxt "paper size"
+msgid "B4"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:45
+msgctxt "paper size"
+msgid "B5"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:46
+msgctxt "paper size"
+msgid "B5 Extra"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:47
+msgctxt "paper size"
+msgid "B6"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:48
+msgctxt "paper size"
+msgid "B6/C4"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:49
+msgctxt "paper size"
+msgid "B7"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:50
+msgctxt "paper size"
+msgid "B8"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:51
+msgctxt "paper size"
+msgid "B9"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:52
+msgctxt "paper size"
+msgid "C0"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:53
+msgctxt "paper size"
+msgid "C1"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:54
+msgctxt "paper size"
+msgid "C10"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:55
+msgctxt "paper size"
+msgid "C2"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:56
+msgctxt "paper size"
+msgid "C3"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:57
+msgctxt "paper size"
+msgid "C4"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:58
+msgctxt "paper size"
+msgid "C5"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:59
+msgctxt "paper size"
+msgid "C6"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:60
+msgctxt "paper size"
+msgid "C6/C5"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:61
+msgctxt "paper size"
+msgid "C7"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:62
+msgctxt "paper size"
+msgid "C7/C6"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:63
+msgctxt "paper size"
+msgid "C8"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:64
+msgctxt "paper size"
+msgid "C9"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:65
+msgctxt "paper size"
+msgid "DL Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:66
+msgctxt "paper size"
+msgid "RA0"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:67
+msgctxt "paper size"
+msgid "RA1"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:68
+msgctxt "paper size"
+msgid "RA2"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:69
+msgctxt "paper size"
+msgid "SRA0"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:70
+msgctxt "paper size"
+msgid "SRA1"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:71
+msgctxt "paper size"
+msgid "SRA2"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:72
+msgctxt "paper size"
+msgid "JB0"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:73
+msgctxt "paper size"
+msgid "JB1"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:74
+msgctxt "paper size"
+msgid "JB10"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:75
+msgctxt "paper size"
+msgid "JB2"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:76
+msgctxt "paper size"
+msgid "JB3"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:77
+msgctxt "paper size"
+msgid "JB4"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:78
+msgctxt "paper size"
+msgid "JB5"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:79
+msgctxt "paper size"
+msgid "JB6"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:80
+msgctxt "paper size"
+msgid "JB7"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:81
+msgctxt "paper size"
+msgid "JB8"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:82
+msgctxt "paper size"
+msgid "JB9"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:83
+msgctxt "paper size"
+msgid "jis exec"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:84
+msgctxt "paper size"
+msgid "Choukei 2 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:85
+msgctxt "paper size"
+msgid "Choukei 3 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:86
+msgctxt "paper size"
+msgid "Choukei 4 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:87
+msgctxt "paper size"
+msgid "hagaki (postcard)"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:88
+msgctxt "paper size"
+msgid "kahu Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:89
+msgctxt "paper size"
+msgid "kaku2 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:90
+msgctxt "paper size"
+msgid "oufuku (reply postcard)"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:91
+msgctxt "paper size"
+msgid "you4 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:92
+msgctxt "paper size"
+msgid "10x11"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:93
+msgctxt "paper size"
+msgid "10x13"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:94
+msgctxt "paper size"
+msgid "10x14"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:95 gtk/paper_names_offsets.c:96
+msgctxt "paper size"
+msgid "10x15"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:97
+msgctxt "paper size"
+msgid "11x12"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:98
+msgctxt "paper size"
+msgid "11x15"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:99
+msgctxt "paper size"
+msgid "12x19"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:100
+msgctxt "paper size"
+msgid "5x7"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:101
+msgctxt "paper size"
+msgid "6x9 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:102
+msgctxt "paper size"
+msgid "7x9 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:103
+msgctxt "paper size"
+msgid "9x11 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:104
+msgctxt "paper size"
+msgid "a2 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:105
+msgctxt "paper size"
+msgid "Arch A"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:106
+msgctxt "paper size"
+msgid "Arch B"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:107
+msgctxt "paper size"
+msgid "Arch C"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:108
+msgctxt "paper size"
+msgid "Arch D"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:109
+msgctxt "paper size"
+msgid "Arch E"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:110
+msgctxt "paper size"
+msgid "b-plus"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:111
+msgctxt "paper size"
+msgid "c"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:112
+msgctxt "paper size"
+msgid "c5 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:113
+msgctxt "paper size"
+msgid "d"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:114
+msgctxt "paper size"
+msgid "e"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:115
+msgctxt "paper size"
+msgid "edp"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:116
+msgctxt "paper size"
+msgid "European edp"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:117
+#, fuzzy
+msgctxt "paper size"
+msgid "Executive"
+msgstr "አስኪድ (_E)"
+
+#: gtk/paper_names_offsets.c:118
+msgctxt "paper size"
+msgid "f"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:119
+msgctxt "paper size"
+msgid "FanFold European"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:120
+msgctxt "paper size"
+msgid "FanFold US"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:121
+msgctxt "paper size"
+msgid "FanFold German Legal"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:122
+msgctxt "paper size"
+msgid "Government Legal"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:123
+msgctxt "paper size"
+msgid "Government Letter"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:124
+#, fuzzy
+msgctxt "paper size"
+msgid "Index 3x5"
+msgstr "ማውጫ (_I)"
+
+#: gtk/paper_names_offsets.c:125
+msgctxt "paper size"
+msgid "Index 4x6 (postcard)"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:126
+#, fuzzy
+msgctxt "paper size"
+msgid "Index 4x6 ext"
+msgstr "ማውጫ (_I)"
+
+#: gtk/paper_names_offsets.c:127
+#, fuzzy
+msgctxt "paper size"
+msgid "Index 5x8"
+msgstr "ማውጫ (_I)"
+
+#: gtk/paper_names_offsets.c:128
+msgctxt "paper size"
+msgid "Invoice"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:129
+msgctxt "paper size"
+msgid "Tabloid"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:130
+msgctxt "paper size"
+msgid "US Legal"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:131
+msgctxt "paper size"
+msgid "US Legal Extra"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:132
+msgctxt "paper size"
+msgid "US Letter"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:133
+msgctxt "paper size"
+msgid "US Letter Extra"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:134
+msgctxt "paper size"
+msgid "US Letter Plus"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:135
+msgctxt "paper size"
+msgid "Monarch Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:136
+msgctxt "paper size"
+msgid "#10 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:137
+msgctxt "paper size"
+msgid "#11 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:138
+msgctxt "paper size"
+msgid "#12 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:139
+msgctxt "paper size"
+msgid "#14 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:140
+msgctxt "paper size"
+msgid "#9 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:141
+msgctxt "paper size"
+msgid "Personal Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:142
+msgctxt "paper size"
+msgid "Quarto"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:143
+msgctxt "paper size"
+msgid "Super A"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:144
+msgctxt "paper size"
+msgid "Super B"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:145
+msgctxt "paper size"
+msgid "Wide Format"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:146
+msgctxt "paper size"
+msgid "Dai-pa-kai"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:147
+#, fuzzy
+msgctxt "paper size"
+msgid "Folio"
+msgstr "ቀለም (_C)"
+
+#: gtk/paper_names_offsets.c:148
+msgctxt "paper size"
+msgid "Folio sp"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:149
+msgctxt "paper size"
+msgid "Invite Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:150
+msgctxt "paper size"
+msgid "Italian Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:151
+msgctxt "paper size"
+msgid "juuro-ku-kai"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:152
+msgctxt "paper size"
+msgid "pa-kai"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:153
+msgctxt "paper size"
+msgid "Postfix Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:154
+msgctxt "paper size"
+msgid "Small Photo"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:155
+msgctxt "paper size"
+msgid "prc1 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:156
+msgctxt "paper size"
+msgid "prc10 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:157
+msgctxt "paper size"
+msgid "prc 16k"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:158
+msgctxt "paper size"
+msgid "prc2 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:159
+msgctxt "paper size"
+msgid "prc3 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:160
+msgctxt "paper size"
+msgid "prc 32k"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:161
+msgctxt "paper size"
+msgid "prc4 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:162
+msgctxt "paper size"
+msgid "prc5 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:163
+msgctxt "paper size"
+msgid "prc6 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:164
+msgctxt "paper size"
+msgid "prc7 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:165
+msgctxt "paper size"
+msgid "prc8 Envelope"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:166
+msgctxt "paper size"
+msgid "ROC 16k"
+msgstr ""
+
+#: gtk/paper_names_offsets.c:167
+msgctxt "paper size"
+msgid "ROC 8k"
 msgstr ""
 
 #: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
@@ -3038,118 +4727,118 @@ msgstr "ቪትናምኛ (VIQR)"
 msgid "X Input Method"
 msgstr "የX ዘገባ የማስትገባት ዘዴ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1171
+#: modules/printbackends/cups/gtkprintbackendcups.c:1176
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1172
+#: modules/printbackends/cups/gtkprintbackendcups.c:1177
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1174
+#: modules/printbackends/cups/gtkprintbackendcups.c:1179
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1176
+#: modules/printbackends/cups/gtkprintbackendcups.c:1181
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1178
+#: modules/printbackends/cups/gtkprintbackendcups.c:1183
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1180
+#: modules/printbackends/cups/gtkprintbackendcups.c:1185
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1181
+#: modules/printbackends/cups/gtkprintbackendcups.c:1186
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1182
+#: modules/printbackends/cups/gtkprintbackendcups.c:1187
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1183
+#: modules/printbackends/cups/gtkprintbackendcups.c:1188
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1184
+#: modules/printbackends/cups/gtkprintbackendcups.c:1189
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1185
+#: modules/printbackends/cups/gtkprintbackendcups.c:1190
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1186
+#: modules/printbackends/cups/gtkprintbackendcups.c:1191
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1187
+#: modules/printbackends/cups/gtkprintbackendcups.c:1192
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1466
+#: modules/printbackends/cups/gtkprintbackendcups.c:1471
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: modules/printbackends/cups/gtkprintbackendcups.c:1477
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2140
+#: modules/printbackends/cups/gtkprintbackendcups.c:2145
 msgid "Two Sided"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2141
+#: modules/printbackends/cups/gtkprintbackendcups.c:2146
 msgid "Paper Type"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2142
+#: modules/printbackends/cups/gtkprintbackendcups.c:2147
 msgid "Paper Source"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2143
+#: modules/printbackends/cups/gtkprintbackendcups.c:2148
 msgid "Output Tray"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2152
+#: modules/printbackends/cups/gtkprintbackendcups.c:2157
 msgid "One Sided"
 msgstr ""
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2154
-#: modules/printbackends/cups/gtkprintbackendcups.c:2156
-#: modules/printbackends/cups/gtkprintbackendcups.c:2164
+#: modules/printbackends/cups/gtkprintbackendcups.c:2159
+#: modules/printbackends/cups/gtkprintbackendcups.c:2161
+#: modules/printbackends/cups/gtkprintbackendcups.c:2169
 #, fuzzy
 msgid "Auto Select"
 msgstr "የፊደል ቅርጽ ምርጫ"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2158
-#: modules/printbackends/cups/gtkprintbackendcups.c:2160
-#: modules/printbackends/cups/gtkprintbackendcups.c:2162
-#: modules/printbackends/cups/gtkprintbackendcups.c:2633
+#: modules/printbackends/cups/gtkprintbackendcups.c:2163
+#: modules/printbackends/cups/gtkprintbackendcups.c:2165
+#: modules/printbackends/cups/gtkprintbackendcups.c:2167
+#: modules/printbackends/cups/gtkprintbackendcups.c:2638
 #, fuzzy
 msgid "Printer Default"
 msgstr "የነበረው ስፋት"
@@ -3157,54 +4846,54 @@ msgstr "የነበረው ስፋት"
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2830
+#: modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "Urgent"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2830
+#: modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "High"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2830
+#: modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "Medium"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2830
+#: modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "Low"
 msgstr ""
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2840
 msgid "Left to right, top to bottom"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2840
 msgid "Left to right, bottom to top"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2836
+#: modules/printbackends/cups/gtkprintbackendcups.c:2841
 msgid "Right to left, top to bottom"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2836
+#: modules/printbackends/cups/gtkprintbackendcups.c:2841
 msgid "Right to left, bottom to top"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2837
+#: modules/printbackends/cups/gtkprintbackendcups.c:2842
 msgid "Top to bottom, left to right"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2837
+#: modules/printbackends/cups/gtkprintbackendcups.c:2842
 msgid "Top to bottom, right to left"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2838
+#: modules/printbackends/cups/gtkprintbackendcups.c:2843
 msgid "Bottom to top, left to right"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2838
+#: modules/printbackends/cups/gtkprintbackendcups.c:2843
 msgid "Bottom to top, right to left"
 msgstr ""
 
@@ -3212,7 +4901,7 @@ msgstr ""
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2853
+#: modules/printbackends/cups/gtkprintbackendcups.c:2858
 #, fuzzy
 msgid "Pages per Sheet"
 msgstr "ምርጫዎች (_P)"
@@ -3220,61 +4909,61 @@ msgstr "ምርጫዎች (_P)"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2890
+#: modules/printbackends/cups/gtkprintbackendcups.c:2895
 msgid "Job Priority"
 msgstr ""
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2901
+#: modules/printbackends/cups/gtkprintbackendcups.c:2906
 msgid "Billing Info"
 msgstr ""
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: modules/printbackends/cups/gtkprintbackendcups.c:2920
 #, fuzzy
 msgid "None"
 msgstr "ምንም"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "Classified"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "Confidential"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: modules/printbackends/cups/gtkprintbackendcups.c:2920
 #, fuzzy
 msgid "Secret"
 msgstr "እስክሪን"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "Standard"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "Top Secret"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "Unclassified"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2950
+#: modules/printbackends/cups/gtkprintbackendcups.c:2955
 msgid "Before"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2965
+#: modules/printbackends/cups/gtkprintbackendcups.c:2970
 msgid "After"
 msgstr ""
 
@@ -3282,7 +4971,7 @@ msgstr ""
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2985
+#: modules/printbackends/cups/gtkprintbackendcups.c:2990
 #, fuzzy
 msgid "Print at"
 msgstr "አትም (_P)"
@@ -3290,7 +4979,7 @@ msgstr "አትም (_P)"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2996
+#: modules/printbackends/cups/gtkprintbackendcups.c:3001
 #, fuzzy
 msgid "Print at time"
 msgstr "አትም (_P)"
@@ -3299,7 +4988,7 @@ msgstr "አትም (_P)"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3031
+#: modules/printbackends/cups/gtkprintbackendcups.c:3036
 #, c-format
 msgid "Custom %sx%s"
 msgstr ""
@@ -3370,98 +5059,9 @@ msgstr ""
 #~ msgid "Couldn't create pixbuf"
 #~ msgstr "የአሁኑን ቀለም"
 
-#~ msgid "Information"
-#~ msgstr "መረጃ"
-
-#~ msgid "Warning"
-#~ msgstr "ማስጠንቀቂያ"
-
-#~ msgid "Error"
-#~ msgstr "ስህተት"
-
-#~ msgid "Question"
-#~ msgstr "ጥያቄ"
-
-#~ msgid "_Apply"
-#~ msgstr "ተጠቀም (_A)"
-
-#~ msgid "_Bold"
-#~ msgstr "ደማቅ (_B)"
-
-#~ msgid "_Cancel"
-#~ msgstr "ተወው (_C)"
-
-#~ msgid "_CD-Rom"
-#~ msgstr "ሲዲ-ሮም (_C)"
-
-#~ msgid "_Clear"
-#~ msgstr "ሰርዝ (_C)"
-
-#~ msgid "_Close"
-#~ msgstr "ዝጋ (_C)"
-
-#, fuzzy
-#~ msgid "C_onnect"
-#~ msgstr "ለዋጭ (_C)"
-
-#~ msgid "_Convert"
-#~ msgstr "ለዋጭ (_C)"
-
-#~ msgid "_Copy"
-#~ msgstr "ቅጂ (_C)"
-
-#~ msgid "Cu_t"
-#~ msgstr "ቁረጥ (_t)"
-
-#~ msgid "_Delete"
-#~ msgstr "አጥፉ (_D)"
-
-#, fuzzy
-#~ msgid "_Discard"
-#~ msgstr "የተበላሸ"
-
-#~ msgid "_Execute"
-#~ msgstr "አስኪድ (_E)"
-
-#~ msgid "_Find"
-#~ msgstr "ፈልግ (_F)"
-
-#~ msgid "Find and _Replace"
-#~ msgstr "ፈልግ እና ተካ (_R)"
-
-#~ msgid "_Floppy"
-#~ msgstr "ፍሎፒ (_F)"
-
-#~ msgid "_Help"
-#~ msgstr "መረጃ (_H)"
-
-#~ msgid "_Home"
-#~ msgstr "መጀመሪያ (_H)"
-
-#~ msgid "_Index"
-#~ msgstr "ማውጫ (_I)"
-
-#, fuzzy
-#~ msgid "_Information"
-#~ msgstr "መረጃ"
-
-#~ msgid "_Italic"
-#~ msgstr "አይታሊክ ማድረጊያ (_I)"
-
-#~ msgid "_Jump to"
-#~ msgstr "ይለፉ ወደ (_J)"
-
 #, fuzzy
 #~ msgid "Justify|_Center"
 #~ msgstr "መሀከል (_C)"
-
-#, fuzzy
-#~ msgid "Justify|_Right"
-#~ msgstr "ቀኝ (_R)"
-
-#, fuzzy
-#~ msgid "Media|_Forward"
-#~ msgstr "ወደፊት (_F)"
 
 #, fuzzy
 #~ msgid "Media|_Next"
@@ -3472,111 +5072,8 @@ msgstr ""
 #~ msgstr "ለጥፍ (_P)"
 
 #, fuzzy
-#~ msgid "Media|Pre_vious"
-#~ msgstr "ቅድመ _ዕይታ፦"
-
-#, fuzzy
-#~ msgid "Media|_Record"
-#~ msgstr "_ቀይ፦"
-
-#, fuzzy
-#~ msgid "Media|R_ewind"
-#~ msgstr "ፈልግ (_F)"
-
-#, fuzzy
 #~ msgid "Media|_Stop"
 #~ msgstr "አቁም (_S)"
-
-#, fuzzy
-#~ msgid "_Network"
-#~ msgstr "አዲስ (_N)"
-
-#~ msgid "_New"
-#~ msgstr "አዲስ (_N)"
-
-#~ msgid "_No"
-#~ msgstr "አይ (_N)"
-
-#~ msgid "_OK"
-#~ msgstr "እሺ (_O)"
-
-#~ msgid "_Open"
-#~ msgstr "ክፈት (_O)"
-
-#, fuzzy
-#~ msgid "Portrait"
-#~ msgstr "አትም (_P)"
-
-#, fuzzy
-#~ msgid "Page Set_up"
-#~ msgstr "ገጽ %u"
-
-#~ msgid "_Paste"
-#~ msgstr "ለጥፍ (_P)"
-
-#~ msgid "_Preferences"
-#~ msgstr "ምርጫዎች (_P)"
-
-#~ msgid "_Print"
-#~ msgstr "አትም (_P)"
-
-#~ msgid "Print Pre_view"
-#~ msgstr "የቅድመ ህትመት ዕይታ (_v)"
-
-#~ msgid "_Properties"
-#~ msgstr "ምርጫዎች (_P)"
-
-#~ msgid "_Quit"
-#~ msgstr "ውጣ (_Q)"
-
-#~ msgid "_Redo"
-#~ msgstr "እንደገና አድርግ (_R)"
-
-#~ msgid "_Refresh"
-#~ msgstr "በድጋሚ ጀምር (_R)"
-
-#~ msgid "_Revert"
-#~ msgstr "ወደ ነበረበት መልስ (_R)"
-
-#~ msgid "_Save"
-#~ msgstr "አስቀምጥ (_S)"
-
-#~ msgid "Save _As"
-#~ msgstr "በሌላ ስም አስቀምጥ (_A)"
-
-#, fuzzy
-#~ msgid "Select _All"
-#~ msgstr "ሁሉንም ምረጡ"
-
-#~ msgid "_Color"
-#~ msgstr "ቀለም (_C)"
-
-#~ msgid "_Font"
-#~ msgstr "የፊደል ቅርጽ (_F)"
-
-#~ msgid "_Stop"
-#~ msgstr "አቁም (_S)"
-
-#~ msgid "_Strikethrough"
-#~ msgstr "ስርዝ"
-
-#~ msgid "_Undelete"
-#~ msgstr "አታጥፋ (_U)"
-
-#~ msgid "_Underline"
-#~ msgstr "የስር መስመር (_U)"
-
-#~ msgid "_Undo"
-#~ msgstr "ወደ ነበረበት መልስ (_U)"
-
-#~ msgid "_Yes"
-#~ msgstr "አዎ (_Y)"
-
-#~ msgid "Zoom _In"
-#~ msgstr "ከቅርበት ዕይታ (_I)"
-
-#~ msgid "Zoom _Out"
-#~ msgstr "ከርቀት ዕይታ (_O)"
 
 #, fuzzy
 #~ msgid "Could not get a stock icon for %s\n"
@@ -3609,26 +5106,6 @@ msgstr ""
 #~ msgstr "ሁሉንም ምረጡ"
 
 #, fuzzy
-#~ msgid "asme_f"
-#~ msgstr "የቀለሙ _ስም፦"
-
-#, fuzzy
-#~ msgid "Executive"
-#~ msgstr "አስኪድ (_E)"
-
-#, fuzzy
-#~ msgid "Index 3x5"
-#~ msgstr "ማውጫ (_I)"
-
-#, fuzzy
-#~ msgid "Index 5x8"
-#~ msgstr "ማውጫ (_I)"
-
-#, fuzzy
-#~ msgid "Home"
-#~ msgstr "መጀመሪያ (_H)"
-
-#, fuzzy
 #~ msgid "Could not get information about '%s': %s"
 #~ msgstr "የአሁኑን ቀለም"
 
@@ -3650,21 +5127,6 @@ msgstr ""
 #~ msgid "clear"
 #~ msgstr "ሰርዝ"
 
-#~ msgid "_First"
-#~ msgstr "መጀመሪያ (_F)"
-
-#~ msgid "_Last"
-#~ msgstr "መጨረሻ (_L)"
-
-#~ msgid "_Back"
-#~ msgstr "ወደኋላ (_B)"
-
-#~ msgid "_Down"
-#~ msgstr "ወደ ታች (_D)"
-
-#~ msgid "_Up"
-#~ msgstr "ወደ ላይ (_U)"
-
 #, fuzzy
 #~ msgid ""
 #~ "Could not change the current folder to %s:\n"
@@ -3677,10 +5139,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Add"
 #~ msgstr "ጨምር (_A)"
-
-#, fuzzy
-#~ msgid "Up"
-#~ msgstr "ወደ ላይ (_U)"
 
 #, fuzzy
 #~ msgid "_Filename:"

@@ -937,6 +937,96 @@ You may not attach these to signals created with the
 @arg2: 
 @arg3: 
 
+<!-- ##### ARG GtkEntry:activatable-primary ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:activatable-secondary ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:gicon-primary ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:gicon-secondary ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:icon-name-primary ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:icon-name-secondary ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:pixbuf-primary ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:pixbuf-secondary ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:prelight ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:sensitive-primary ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:sensitive-secondary ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:stock-primary ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:stock-secondary ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:storage-type-primary ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkEntry:storage-type-secondary ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ARG GtkEntry:text-position ##### -->
 <para>
 
@@ -1259,6 +1349,12 @@ after other user handlers and the default handler.
 @PRIVATE_GTK_DIRECTION_LTR: 
 
 <!-- ##### STRUCT GtkRcStyleClass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkScaleButton:orientation ##### -->
 <para>
 
 </para>
@@ -2423,6 +2519,42 @@ Claim or disclaim ownership of the PRIMARY X selection.
 @editable: a #GtkEditable widget.
 @claim: if %TRUE, claim the selection, otherwise, disclaim it.
 @time: the timestamp for claiming the selection.
+
+<!-- ##### FUNCTION gtk_entry_get_gicon ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_entry_get_pixbuf ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_entry_get_stock ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_entry_get_storage_type ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_file_chooser_error_quark ##### -->
 <para>

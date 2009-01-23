@@ -120,11 +120,10 @@ The standard cursors available.
 @GDK_UR_ANGLE: <inlinegraphic format="PNG" fileref="ur_angle.png"></inlinegraphic>
 @GDK_WATCH: <inlinegraphic format="PNG" fileref="watch.png"></inlinegraphic>
 @GDK_XTERM: <inlinegraphic format="PNG" fileref="xterm.png"></inlinegraphic>
-@GDK_BLANK_CURSOR: Blank cursor. Since 2.16
 @GDK_LAST_CURSOR: last cursor type
+@GDK_BLANK_CURSOR: Blank cursor. Since 2.16
 @GDK_CURSOR_IS_PIXMAP: type of cursors constructed with 
   gdk_cursor_new_from_pixmap() or gdk_cursor_new_from_pixbuf()
-
 
 <!-- ##### FUNCTION gdk_cursor_new ##### -->
 <para>

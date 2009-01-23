@@ -168,16 +168,6 @@ The #GtkEntry-struct struct contains only private data.
 
 @entry: the object which received the signal.
 
-<!-- ##### ARG GtkEntry:activatable-primary ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:activatable-secondary ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkEntry:activates-default ##### -->
 <para>
 
@@ -198,27 +188,12 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
-<!-- ##### ARG GtkEntry:gicon-primary ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:gicon-secondary ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkEntry:has-frame ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkEntry:icon-name-primary ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:icon-name-secondary ##### -->
+<!-- ##### ARG GtkEntry:im-module ##### -->
 <para>
 
 </para>
@@ -248,12 +223,47 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
-<!-- ##### ARG GtkEntry:pixbuf-primary ##### -->
+<!-- ##### ARG GtkEntry:primary-icon-activatable ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkEntry:pixbuf-secondary ##### -->
+<!-- ##### ARG GtkEntry:primary-icon-gicon ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:primary-icon-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:primary-icon-pixbuf ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:primary-icon-sensitive ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:primary-icon-stock ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:primary-icon-storage-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:primary-icon-tooltip-markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:primary-icon-tooltip-text ##### -->
 <para>
 
 </para>
@@ -273,42 +283,57 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+<!-- ##### ARG GtkEntry:secondary-icon-activatable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:secondary-icon-gicon ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:secondary-icon-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:secondary-icon-pixbuf ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:secondary-icon-sensitive ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:secondary-icon-stock ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:secondary-icon-storage-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:secondary-icon-tooltip-markup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:secondary-icon-tooltip-text ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:selection-bound ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkEntry:sensitive-primary ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:sensitive-secondary ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkEntry:shadow-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:stock-primary ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:stock-secondary ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:storage-type-primary ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:storage-type-secondary ##### -->
 <para>
 
 </para>
@@ -343,12 +368,12 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
-<!-- ##### ARG GtkEntry:inner-border ##### -->
+<!-- ##### ARG GtkEntry:icon-prelight ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkEntry:prelight ##### -->
+<!-- ##### ARG GtkEntry:inner-border ##### -->
 <para>
 
 </para>
@@ -783,7 +808,7 @@ Specifies the side of the entry at which an icon is placed.
 @icon: 
 
 
-<!-- ##### FUNCTION gtk_entry_get_storage_type ##### -->
+<!-- ##### FUNCTION gtk_entry_get_icon_storage_type ##### -->
 <para>
 
 </para>
@@ -793,7 +818,7 @@ Specifies the side of the entry at which an icon is placed.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_entry_get_pixbuf ##### -->
+<!-- ##### FUNCTION gtk_entry_get_icon_pixbuf ##### -->
 <para>
 
 </para>
@@ -803,7 +828,7 @@ Specifies the side of the entry at which an icon is placed.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_entry_get_stock ##### -->
+<!-- ##### FUNCTION gtk_entry_get_icon_stock ##### -->
 <para>
 
 </para>
@@ -823,7 +848,7 @@ Specifies the side of the entry at which an icon is placed.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_entry_get_gicon ##### -->
+<!-- ##### FUNCTION gtk_entry_get_icon_gicon ##### -->
 <para>
 
 </para>
@@ -894,6 +919,16 @@ Specifies the side of the entry at which an icon is placed.
 @tooltip: 
 
 
+<!-- ##### FUNCTION gtk_entry_get_icon_tooltip_text ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_entry_set_icon_tooltip_markup ##### -->
 <para>
 
@@ -902,6 +937,16 @@ Specifies the side of the entry at which an icon is placed.
 @entry: 
 @icon_pos: 
 @tooltip: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_icon_tooltip_markup ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_entry_set_icon_drag_source ##### -->
