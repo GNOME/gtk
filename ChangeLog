@@ -26,7 +26,10 @@
 	We filter out incomplete hostnames here (typing
 	"sftp://incompl[tab]" will error out), as well as completely
 	unparsable input.
-
+	(start_explicit_completion): Process the result from
+	refresh...().  Here we present the actual feedback about only
+	being able to display local folders for local_only=TRUE.
+	
 2009-01-22  Matthew Barnes  <mbarnes@redhat.com>
 
 	Bug 568334 – Constructor properties for GtkAction

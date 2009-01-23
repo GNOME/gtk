@@ -1111,43 +1111,76 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
 static void
 start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 {
-  /* FMQ: get result from the function below */
-  refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
+  RefreshStatus status;
+  gboolean is_error;
+  char *feedback_msg;
 
-  if (!chooser_entry->current_folder_file)
+  status = refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
+
+  is_error = FALSE;
+
+  switch (status)
     {
-      /* Here, no folder path means we couldn't parse what the user typed. */
+    case REFRESH_OK:
+      g_assert (chooser_entry->current_folder_file != NULL);
 
-      beep (chooser_entry);
-      pop_up_completion_feedback (chooser_entry, _("Invalid path"));
+      if (chooser_entry->current_folder
+	  && _gtk_folder_is_finished_loading (chooser_entry->current_folder))
+	{
+	  explicitly_complete (chooser_entry);
+	}
+      else
+	{
+	  chooser_entry->load_complete_action = LOAD_COMPLETE_EXPLICIT_COMPLETION;
 
-      chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
+	  /* translators: this text is shown while the system is searching
+	   * for possible completions for text in a file chooser entry 
+	   */
+	  pop_up_completion_feedback (chooser_entry, _("Completing..."));
+	}
+
+      break;
+
+    case REFRESH_INVALID_INPUT:
+      is_error = TRUE;
+      feedback_msg = _("Invalid path");
+      break;
+
+    case REFRESH_INCOMPLETE_HOSTNAME:
+      is_error = TRUE;
+
+      if (chooser_entry->local_only)
+	feedback_msg = _("Only local files may be selected"); /* hostnames in a local_only file chooser?  user error */
+      else
+	{
+	  /* Another option is to complete the hostname based on the remote volumes that are mounted */
+	  feedback_msg = _("Incomplete hostname; end it with '/'");
+	}
+
+      break;
+
+    case REFRESH_NONEXISTENT:
+      is_error = TRUE;
+      feedback_msg = _("Path does not exist");
+      break;
+
+    case REFRESH_NOT_LOCAL:
+      is_error = TRUE;
+      feedback_msg = _("Only local files may be selected");
+      break;
+
+    default:
+      g_assert_not_reached ();
       return;
     }
 
-  if (chooser_entry->local_only
-      && !g_file_is_native (chooser_entry->current_folder_file))
+  if (is_error)
     {
+      g_assert (chooser_entry->current_folder_file == NULL);
+
       beep (chooser_entry);
-      pop_up_completion_feedback (chooser_entry, _("Only local files can be selected"));
-
+      pop_up_completion_feedback (chooser_entry, feedback_msg);
       chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
-      return;
-    }
-
-  if (chooser_entry->current_folder
-      && _gtk_folder_is_finished_loading (chooser_entry->current_folder))
-    {
-      explicitly_complete (chooser_entry);
-    }
-  else
-    {
-      chooser_entry->load_complete_action = LOAD_COMPLETE_EXPLICIT_COMPLETION;
-
-      /* translators: this text is shown while the system is searching
-       * for possible completions for text in a file chooser entry 
-       */
-      pop_up_completion_feedback (chooser_entry, _("Completing..."));
     }
 }
 
