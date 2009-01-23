@@ -1432,19 +1432,24 @@ out:
   g_object_unref (cancellable);
 }
 
-static void
+static RefreshStatus
 start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
 {
-  if (chooser_entry->current_folder_file == NULL ||
-      chooser_entry->file_system == NULL)
-    return;
+  if (chooser_entry->file_system == NULL)
+    return REFRESH_OK;
+
+  g_assert (chooser_entry->current_folder_file != NULL);
+  g_assert (chooser_entry->current_folder == NULL);
+  g_assert (chooser_entry->load_folder_cancellable == NULL);
 
   if (chooser_entry->local_only
       && !g_file_is_native (chooser_entry->current_folder_file))
-    return;
+    {
+      g_object_unref (chooser_entry->current_folder_file);
+      chooser_entry->current_folder_file = NULL;
 
-  g_assert (chooser_entry->current_folder == NULL);
-  g_assert (chooser_entry->load_folder_cancellable == NULL);
+      return REFRESH_NOT_LOCAL;
+    }
 
   chooser_entry->load_folder_cancellable =
     _gtk_file_system_get_folder (chooser_entry->file_system,
@@ -1452,19 +1457,23 @@ start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
 			 	"standard::name,standard::display-name,standard::type",
 			         load_directory_get_folder_callback,
 			         g_object_ref (chooser_entry));
+
+  return REFRESH_OK;
 }
 
-static void
+static RefreshStatus
 reload_current_folder (GtkFileChooserEntry *chooser_entry,
 		       GFile               *folder_file,
 		       gboolean             force_reload)
 {
   gboolean reload = FALSE;
 
+  g_assert (folder_file != NULL);
+
   if (chooser_entry->current_folder_file)
     {
-      if ((folder_file && !(g_file_equal (folder_file, chooser_entry->current_folder_file)
-			    && chooser_entry->load_folder_cancellable))
+      if ((!(g_file_equal (folder_file, chooser_entry->current_folder_file)
+	     && chooser_entry->load_folder_cancellable))
 	  || force_reload)
 	{
 	  reload = TRUE;
@@ -1472,17 +1481,19 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
           discard_current_folder (chooser_entry);
 	  discard_loading_and_current_folder_file (chooser_entry);
 
-	  chooser_entry->current_folder_file = (folder_file) ? g_object_ref (folder_file) : NULL;
+	  chooser_entry->current_folder_file = g_object_ref (folder_file);
 	}
     }
   else
     {
-      chooser_entry->current_folder_file = (folder_file) ? g_object_ref (folder_file) : NULL;
+      chooser_entry->current_folder_file = g_object_ref (folder_file);
       reload = TRUE;
     }
 
   if (reload)
-    start_loading_current_folder (chooser_entry);
+    return start_loading_current_folder (chooser_entry);
+  else
+    return REFRESH_OK;
 }
 
 static RefreshStatus
@@ -1548,6 +1559,8 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
     }
   else
     {
+      g_assert (folder_file != NULL);
+
       file_part_len = strlen (file_part);
       total_len = strlen (text);
       if (total_len > file_part_len)
@@ -1567,8 +1580,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 
   if (result == REFRESH_OK)
     {
-      /* FMQ: this needs to return an error if the folder is not local */
-      reload_current_folder (chooser_entry, folder_file, file_part_pos == -1);
+      result = reload_current_folder (chooser_entry, folder_file, file_part_pos == -1);
     }
   else
     {
@@ -1578,6 +1590,17 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 
   if (folder_file)
     g_object_unref (folder_file);
+
+  g_assert (/* we are OK and we have a current folder file and (loading process or folder handle)... */
+	    ((result == REFRESH_OK)
+	     && (chooser_entry->current_folder_file != NULL)
+	     && (((chooser_entry->load_folder_cancellable != NULL) && (chooser_entry->current_folder == NULL))
+		 || ((chooser_entry->load_folder_cancellable == NULL) && (chooser_entry->current_folder != NULL))))
+	    /* ... OR we have an error, and we don't have a current folder file nor a loading process nor a folder handle */
+	    || ((result != REFRESH_OK)
+		&& (chooser_entry->current_folder_file == NULL)
+		&& (chooser_entry->load_folder_cancellable == NULL)
+		&& (chooser_entry->current_folder == NULL)));
 
   return result;
 }

@@ -44,6 +44,15 @@
 	(reload_current_folder): Likewise.
 	(refresh_current_folder_and_file_part): Likewise, and ensure that
 	the error cases result in the invariant being held.
+	(start_loading_current_folder): Check if the folder to be loaded
+	is non-native for the local_only=TRUE case; if so, return an error
+	as we are configured to load only local folders.
+	(reload_current_folder): Pass on errors from
+	start_loading_current_folder().  Tighten the preconditions, as we
+	are sure that we can only receive non-NULL folder-files to load.
+	(refresh_current_folder_and_file_part): Pass on errors from
+	reload_current_folder().  At the very end, assert the invariant
+	described above.
 	
 2009-01-22  Matthew Barnes  <mbarnes@redhat.com>
 
@@ -92,6 +101,15 @@
 	for some locales. It should not be that necessary, now that we
 	do show preedit text even in password entries. Pointed out by
 	Frederic Crozat.
+	(start_loading_current_folder): Check if the folder to be loaded
+	is non-native for the local_only=TRUE case; if so, return an error
+	as we are configured to load only local folders.
+	(reload_current_folder): Pass on errors from
+	start_loading_current_folder().  Tighten the preconditions, as we
+	are sure that we can only receive non-NULL folder-files to load.
+	(refresh_current_folder_and_file_part): Pass on errors from
+	reload_current_folder().  At the very end, assert the invariant
+	described above.
 
 2009-01-21  Federico Mena Quintero  <federico@novell.com>
 
