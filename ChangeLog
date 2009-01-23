@@ -1,5 +1,22 @@
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 536965 – GtkPlug: crash on theme change
+
+	Keep GtkPlug in sync with the global list of toplevels.
+	Patch by Federico Mena Quintero
+
+	* gtk/gtkwindow.h:
+	* gtk/gtkwindow.c (_gtk_window_set_is_toplevel): New internal
+	function used when a GtkPlug parents/unparents itself by an
+	in-process GtkSocket.  This keeps the plug's GTK_TOPLEVEL flag in
+	sync with the global toplevel_list.
+
+	* gtk/gtkplug.c (gtk_plug_set_is_child): Call
+	_gtk_window_set_is_toplevel() to keep the toplevel list updated,
+	instead of just setting/unsetting the GTK_TOPLEVEL flag.
+
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 568744 – Spellfixes in GtkTreeView's documentation
 
 	* gtk/gtktreeview.c: Fix typos in the docs.

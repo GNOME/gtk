@@ -220,7 +220,7 @@ gtk_plug_set_is_child (GtkPlug  *plug,
       if (GTK_WIDGET_MAPPED (plug))
 	gtk_widget_unmap (GTK_WIDGET (plug));
       
-      GTK_WIDGET_UNSET_FLAGS (plug, GTK_TOPLEVEL);
+      _gtk_window_set_is_toplevel (GTK_WINDOW (plug), FALSE);
       gtk_container_set_resize_mode (GTK_CONTAINER (plug), GTK_RESIZE_PARENT);
 
       _gtk_widget_propagate_hierarchy_changed (GTK_WIDGET (plug), GTK_WIDGET (plug));
@@ -235,7 +235,7 @@ gtk_plug_set_is_child (GtkPlug  *plug,
       plug->modality_group = gtk_window_group_new ();
       gtk_window_group_add_window (plug->modality_group, GTK_WINDOW (plug));
       
-      GTK_WIDGET_SET_FLAGS (plug, GTK_TOPLEVEL);
+      _gtk_window_set_is_toplevel (GTK_WINDOW (plug), TRUE);
       gtk_container_set_resize_mode (GTK_CONTAINER (plug), GTK_RESIZE_QUEUE);
 
       _gtk_widget_propagate_hierarchy_changed (GTK_WIDGET (plug), NULL);
