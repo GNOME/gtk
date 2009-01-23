@@ -1,3 +1,10 @@
+2009-01-22  Federico Mena Quintero  <federico@novell.com>
+
+	* gtk/gtkfilechooserentry.c (autocomplete): Relax the assertion;
+	just do nothing if the folder is not loaded or if the cursor position
+	is not at the end of the text.  A very slow-to-load folder can get
+	us into the latter state if the user starts typing first.
+
 2008-01-22  Matthias Clasen  <mnclasen@redhat.com>
 
 	* gtk/gtkaction.c: Revert the last change, since it breaks

@@ -1630,9 +1630,10 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 static void
 autocomplete (GtkFileChooserEntry *chooser_entry)
 {
-  g_assert (chooser_entry->current_folder != NULL);
-  g_assert (_gtk_folder_is_finished_loading (chooser_entry->current_folder));
-  g_assert (gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == GTK_ENTRY (chooser_entry)->text_length);
+  if (!(chooser_entry->current_folder != NULL
+	&& _gtk_folder_is_finished_loading (chooser_entry->current_folder)
+	&& gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == GTK_ENTRY (chooser_entry)->text_length))
+    return;
 
   append_common_prefix (chooser_entry, TRUE, FALSE);
 }
