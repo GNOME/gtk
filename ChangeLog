@@ -1,3 +1,16 @@
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 566535 – gtk_widget_get_snapshot does not work if double buffered 
+	is disabled
+
+	* gtk/gtkwidget.c (gtk_widget_get_snapshot): Use a different approach
+	to snapshotting that is in line with what is done in the client-side
+	windows branch, and that works for widgets regardless if they are
+	double-buffered or not. Patch by Alex Larsson.
+
+	* gdk/gdkwindow.c (_gdk_window_calculate_full_clip_region): Clip
+	to the parent.
+
 2009-01-22  Federico Mena Quintero  <federico@novell.com>
 
 	* gtk/gtkfilechooserentry.c (autocomplete): Relax the assertion;

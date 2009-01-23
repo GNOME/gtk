@@ -4405,6 +4405,15 @@ _gdk_window_calculate_full_clip_region (GdkWindow *window,
 	  gdk_region_destroy (tmpreg);
 	}
       
+      /* Clip to the parent */
+      window_get_size_rectangle ((GdkWindow *)parentwin, &visible_rect);
+      /* Convert rect to "window" coords */
+      visible_rect.x += - x_offset;
+      visible_rect.y += - y_offset;
+      
+      tmpreg = gdk_region_rectangle (&visible_rect);
+      gdk_region_intersect (real_clip_region, tmpreg);
+      gdk_region_destroy (tmpreg);
     }
 
   if (gc)

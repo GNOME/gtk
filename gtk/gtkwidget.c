@@ -8684,6 +8684,55 @@ gtk_widget_unref (GtkWidget *widget)
   g_object_unref ((GObject*) widget);
 }
 
+static void
+expose_window (GdkWindow *window)
+{
+  GdkEvent event;
+  GList *l, *children;
+  gpointer user_data;
+  gboolean is_double_buffered;
+
+  gdk_window_get_user_data (window, &user_data);
+
+  if (user_data)
+    is_double_buffered = GTK_WIDGET_DOUBLE_BUFFERED (GTK_WIDGET (user_data));
+  else
+    is_double_buffered = FALSE;
+  
+  event.expose.type = GDK_EXPOSE;
+  event.expose.window = g_object_ref (window);
+  event.expose.send_event = FALSE;
+  event.expose.count = 0;
+  event.expose.area.x = 0;
+  event.expose.area.y = 0;
+  gdk_drawable_get_size (GDK_DRAWABLE (window),
+			 &event.expose.area.width,
+			 &event.expose.area.height);
+  event.expose.region = gdk_region_rectangle (&event.expose.area);
+
+  /* If this is not double buffered, force a double buffer so that
+     redirection works. */
+  if (!is_double_buffered)
+    gdk_window_begin_paint_region (window, event.expose.region);
+  
+  gtk_main_do_event (&event);
+
+  if (!is_double_buffered)
+    gdk_window_end_paint (window);
+  
+  children = gdk_window_peek_children (window);
+  for (l = children; l != NULL; l = l->next)
+    {
+      GdkWindow *child = l->data;
+
+      /* Don't expose input-only windows */
+      if (gdk_drawable_get_depth (GDK_DRAWABLE (child)) != 0)
+	expose_window (l->data);
+    }
+  
+  g_object_unref (window);
+}
+
 /**
  * gtk_widget_get_snapshot:
  * @widget:    a #GtkWidget
@@ -8818,22 +8867,19 @@ gtk_widget_get_snapshot (GtkWidget    *widget,
     {
       GdkWindow *subwin = list->data;
       int wx, wy;
+      if (gdk_drawable_get_depth (GDK_DRAWABLE (subwin)) == 0)
+	continue; /* Input only window */
       gdk_window_get_position (subwin, &wx, &wy);
       gdk_window_redirect_to_drawable (subwin, pixmap, MAX (0, x - wx), MAX (0, y - wy),
                                        MAX (0, wx - x), MAX (0, wy - y), width, height);
-      gdk_window_invalidate_rect (subwin, NULL, TRUE);
+
+      expose_window (subwin);
     }
   if (!windows) /* NO_WINDOW || toplevel => parent_window == NULL || parent_window == widget->window */
     {
       gdk_window_redirect_to_drawable (widget->window, pixmap, x, y, 0, 0, width, height);
-      gdk_window_invalidate_rect (widget->window, NULL, TRUE);
+      expose_window (widget->window);
     }
-  gtk_widget_queue_draw (widget);
-  if (parent_window)
-    gdk_window_process_updates (parent_window, TRUE);
-  for (list = windows; list; list = list->next)
-    gdk_window_process_updates (list->data, TRUE);
-  gdk_window_process_updates (widget->window, TRUE);
   for (list = windows; list; list = list->next)
     gdk_window_remove_redirection (list->data);
   if (!windows) /* NO_WINDOW || toplevel */
