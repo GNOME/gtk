@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2009-01-18 18:40+0000\n"
-"PO-Revision-Date: 2009-01-20 16:54+0100\n"
+"POT-Creation-Date: 2009-01-23 00:53+0000\n"
+"PO-Revision-Date: 2009-01-23 16:49+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1574,29 +1574,18 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Selección de color"
 
-#: ../gtk/gtkentry.c:8041 ../gtk/gtktextview.c:7787
+#: ../gtk/gtkentry.c:8229 ../gtk/gtktextview.c:7774
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:8055 ../gtk/gtktextview.c:7801
+#: ../gtk/gtkentry.c:8243 ../gtk/gtktextview.c:7788
 msgid "_Insert Unicode Control Character"
 msgstr "_Insertar un carácter de control Unicode"
 
-#: ../gtk/gtkentry.c:9418
-msgid ""
-"You have the Caps Lock key on\n"
-"and an active input method"
-msgstr ""
-"Tiene la tecla Bloq Mayús activada\n"
-"y un método de entrada activo"
-
-#: ../gtk/gtkentry.c:9420
-msgid "You have the Caps Lock key on"
-msgstr "Tiene la tecla Bloq Mayús activada"
-
-#: ../gtk/gtkentry.c:9422
-msgid "You have an active input method"
-msgstr "Tiene un método de entrada activo"
+#: ../gtk/gtkentry.c:9601
+#| msgid "Copy _Location"
+msgid "Caps Lock is on"
+msgstr "Bloq Mayús está activado"
 
 #: ../gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
@@ -1759,68 +1748,68 @@ msgstr "Modificado"
 msgid "_Name:"
 msgstr "_Nombre:"
 
-#: ../gtk/gtkfilechooserdefault.c:4927
+#: ../gtk/gtkfilechooserdefault.c:4928
 msgid "_Browse for other folders"
 msgstr "_Buscar otras carpetas"
 
-#: ../gtk/gtkfilechooserdefault.c:5197
+#: ../gtk/gtkfilechooserdefault.c:5198
 msgid "Type a file name"
 msgstr "Teclee un nombre de archivo"
 
 # C en conflicto con Cancelar
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5234
+#: ../gtk/gtkfilechooserdefault.c:5235
 msgid "Create Fo_lder"
 msgstr "Crear car_peta"
 
-#: ../gtk/gtkfilechooserdefault.c:5244
+#: ../gtk/gtkfilechooserdefault.c:5245
 msgid "_Location:"
 msgstr "_Lugar:"
 
 # El acelerador c entra en conflicto con cancelar
-#: ../gtk/gtkfilechooserdefault.c:5445
+#: ../gtk/gtkfilechooserdefault.c:5449
 msgid "Save in _folder:"
 msgstr "_Guardar en la carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:5447
+#: ../gtk/gtkfilechooserdefault.c:5451
 msgid "Create in _folder:"
 msgstr "Crear en la _carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:7137
+#: ../gtk/gtkfilechooserdefault.c:7141
 msgid "Cannot change to folder because it is not local"
 msgstr "No se pudo cambiar a la carpeta porque no es local"
 
-#: ../gtk/gtkfilechooserdefault.c:7762 ../gtk/gtkfilechooserdefault.c:7783
+#: ../gtk/gtkfilechooserdefault.c:7766 ../gtk/gtkfilechooserdefault.c:7787
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La combinación %s ya existe"
 
-#: ../gtk/gtkfilechooserdefault.c:7873
+#: ../gtk/gtkfilechooserdefault.c:7877
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La combinación %s no existe"
 
-#: ../gtk/gtkfilechooserdefault.c:8135 ../gtk/gtkprintunixdialog.c:370
+#: ../gtk/gtkfilechooserdefault.c:8139 ../gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ya existe un archivo llamado «%s». ¿Quiere reemplazarlo?"
 
-#: ../gtk/gtkfilechooserdefault.c:8138 ../gtk/gtkprintunixdialog.c:374
+#: ../gtk/gtkfilechooserdefault.c:8142 ../gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "El archivo ya existe en «%s». Si lo reemplaza sobreescribirá su contenido."
 
-#: ../gtk/gtkfilechooserdefault.c:8143 ../gtk/gtkprintunixdialog.c:381
+#: ../gtk/gtkfilechooserdefault.c:8147 ../gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "_Reemplazar"
 
-#: ../gtk/gtkfilechooserdefault.c:8900
+#: ../gtk/gtkfilechooserdefault.c:8904
 msgid "Could not start the search process"
 msgstr "No se ha podido iniciar el proceso de búsqueda"
 
-#: ../gtk/gtkfilechooserdefault.c:8901
+#: ../gtk/gtkfilechooserdefault.c:8905
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1828,52 +1817,52 @@ msgstr ""
 "El programa no fue capaz de crear una conexión con el demonio indexador. Por "
 "favor asegúrese de que se está ejecutando."
 
-#: ../gtk/gtkfilechooserdefault.c:8915
+#: ../gtk/gtkfilechooserdefault.c:8919
 msgid "Could not send the search request"
 msgstr "No se ha podido enviar la petición de búsqueda"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:9382
+#: ../gtk/gtkfilechooserdefault.c:9386
 msgid "_Search:"
 msgstr "_Buscar:"
 
-#: ../gtk/gtkfilechooserdefault.c:10335
+#: ../gtk/gtkfilechooserdefault.c:10339
 #, c-format
 msgid "Could not mount %s"
 msgstr "No se pudo montar %s"
 
-#: ../gtk/gtkfilechooserdefault.c:11010
+#: ../gtk/gtkfilechooserdefault.c:11014
 msgid "Type name of new folder"
 msgstr "Teclee el nombre de la carpeta nueva"
 
-#: ../gtk/gtkfilechooserdefault.c:11188 ../gtk/gtkfilechooserdefault.c:11210
-#: ../gtk/gtkfilechooserdefault.c:11281
+#: ../gtk/gtkfilechooserdefault.c:11192 ../gtk/gtkfilechooserdefault.c:11214
+#: ../gtk/gtkfilechooserdefault.c:11285
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../gtk/gtkfilechooserdefault.c:11228
+#: ../gtk/gtkfilechooserdefault.c:11232
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:11230
+#: ../gtk/gtkfilechooserdefault.c:11234
 msgid "Yesterday at %H:%M"
 msgstr "Ayer a las %H:%M"
 
-#: ../gtk/gtkfilechooserentry.c:659 ../gtk/gtkfilechooserentry.c:1115
+#: ../gtk/gtkfilechooserentry.c:681 ../gtk/gtkfilechooserentry.c:1146
 msgid "Invalid path"
 msgstr "Ruta no válida"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1070
+#: ../gtk/gtkfilechooserentry.c:1076
 msgid "No match"
 msgstr "No hay coincidencias"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1081
+#: ../gtk/gtkfilechooserentry.c:1087
 msgid "Sole completion"
 msgstr "Completado único"
 
@@ -1881,16 +1870,30 @@ msgstr "Completado único"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: ../gtk/gtkfilechooserentry.c:1097
+#: ../gtk/gtkfilechooserentry.c:1103
 msgid "Complete, but not unique"
 msgstr "Completado, pero no único"
 
 #. translators: this text is shown while the system is searching
 #. * for possible completions for text in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1133
+#: ../gtk/gtkfilechooserentry.c:1139
 msgid "Completing..."
 msgstr "Completando…"
+
+#: ../gtk/gtkfilechooserentry.c:1153 ../gtk/gtkfilechooserentry.c:1169
+msgid "Only local files may be selected"
+msgstr "Sólo se pueden seleccionar archivos locales"
+
+#. Another option is to complete the hostname based on the remote volumes that are mounted
+#: ../gtk/gtkfilechooserentry.c:1157
+msgid "Incomplete hostname; end it with '/'"
+msgstr "Nombre de equipo incompleto; termínelo con «/»"
+
+#: ../gtk/gtkfilechooserentry.c:1164
+#| msgid "Shortcut %s does not exist"
+msgid "Path does not exist"
+msgstr "La ruta no existe"
 
 #: ../gtk/gtkfilechoosersettings.c:362 ../gtk/gtkfilesel.c:1349
 #: ../gtk/gtkfilesel.c:1358
@@ -2125,7 +2128,7 @@ msgstr ""
 msgid "Icon '%s' not present in theme"
 msgstr "El icono «%s» no está presente en el tema"
 
-#: ../gtk/gtkicontheme.c:3073
+#: ../gtk/gtkicontheme.c:3074
 msgid "Failed to load icon"
 msgstr "No se pudo cargar el icono"
 
@@ -2549,7 +2552,7 @@ msgstr "Papel agotado"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:594
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1474
 msgid "Paused"
 msgstr "Pausada"
 
@@ -2657,7 +2660,7 @@ msgstr "General"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: ../gtk/gtkprintunixdialog.c:2442
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2869
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2874
 msgid "Page Ordering"
 msgstr "Orden de las hojas"
 
@@ -2722,83 +2725,98 @@ msgstr "_Fuente del papel:"
 msgid "Output t_ray:"
 msgstr "_Bandeja de salida:"
 
-#: ../gtk/gtkprintunixdialog.c:2704
+#: ../gtk/gtkprintunixdialog.c:2706
 msgid "Job Details"
 msgstr "Detalles de la tarea"
 
-#: ../gtk/gtkprintunixdialog.c:2710
+#: ../gtk/gtkprintunixdialog.c:2712
 msgid "Pri_ority:"
 msgstr "_Prioridad:"
 
-#: ../gtk/gtkprintunixdialog.c:2725
+#: ../gtk/gtkprintunixdialog.c:2727
 msgid "_Billing info:"
 msgstr "Info de _facturación:"
 
-#: ../gtk/gtkprintunixdialog.c:2743
+#: ../gtk/gtkprintunixdialog.c:2745
 msgid "Print Document"
 msgstr "Imprimir documento"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:2752
+#: ../gtk/gtkprintunixdialog.c:2754
 msgid "_Now"
 msgstr "_Ahora"
 
-#: ../gtk/gtkprintunixdialog.c:2763
+#: ../gtk/gtkprintunixdialog.c:2765
 msgid "A_t:"
 msgstr "_En:"
 
-#: ../gtk/gtkprintunixdialog.c:2782
+#. Translators: Ability to parse the am/pm format depends on actual locale.
+#. * You can remove the am/pm values below for your locale if they are not supported.
+#.
+#: ../gtk/gtkprintunixdialog.c:2770
+msgid ""
+"Specify the time of print,\n"
+" e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
+msgstr ""
+"Especifique la hora de impresión,\n"
+"ej. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
+
+#: ../gtk/gtkprintunixdialog.c:2791
 msgid "On _hold"
 msgstr "En _espera"
 
-#: ../gtk/gtkprintunixdialog.c:2801
+#: ../gtk/gtkprintunixdialog.c:2792
+msgid "Hold the job until it is explicitly released"
+msgstr "Retener el trabajo hasta que se libere explícitamente"
+
+#: ../gtk/gtkprintunixdialog.c:2812
 msgid "Add Cover Page"
 msgstr "Añadir página de cubierta"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:2810
+#: ../gtk/gtkprintunixdialog.c:2821
 msgid "Be_fore:"
 msgstr "An_tes:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:2828
+#: ../gtk/gtkprintunixdialog.c:2839
 msgid "_After:"
 msgstr "_Después:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:2846
+#: ../gtk/gtkprintunixdialog.c:2857
 msgid "Job"
 msgstr "Tarea"
 
-#: ../gtk/gtkprintunixdialog.c:2912
+#: ../gtk/gtkprintunixdialog.c:2923
 msgid "Advanced"
 msgstr "Avanzado"
 
-#: ../gtk/gtkprintunixdialog.c:2947
+#: ../gtk/gtkprintunixdialog.c:2958
 msgid "Image Quality"
 msgstr "Calidad de imagen"
 
-#: ../gtk/gtkprintunixdialog.c:2950
+#: ../gtk/gtkprintunixdialog.c:2961
 msgid "Color"
 msgstr "Color"
 
-#: ../gtk/gtkprintunixdialog.c:2953
+#: ../gtk/gtkprintunixdialog.c:2964
 msgid "Finishing"
 msgstr "Terminando"
 
-#: ../gtk/gtkprintunixdialog.c:2963
+#: ../gtk/gtkprintunixdialog.c:2974
 msgid "Some of the settings in the dialog conflict"
 msgstr "Algunos de los ajustes del diálogo están en conflicto"
 
-#: ../gtk/gtkprintunixdialog.c:2986
+#: ../gtk/gtkprintunixdialog.c:2997
 msgid "Print"
 msgstr "Imprimir"
 
@@ -3048,64 +3066,48 @@ msgstr "_Salir de pantalla completa"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: ../gtk/gtkstock.c:319
-#| msgctxt "Stock label"
-#| msgid "_Bottom"
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Inferior"
 
 #. This is a navigation label as in "go to the first page"
 #: ../gtk/gtkstock.c:321
-#| msgctxt "Stock label"
-#| msgid "_First"
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_Primero"
 
 #. This is a navigation label as in "go to the last page"
 #: ../gtk/gtkstock.c:323
-#| msgctxt "Stock label"
-#| msgid "_Last"
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "_Último"
 
 #. This is a navigation label as in "go to the top of the page"
 #: ../gtk/gtkstock.c:325
-#| msgctxt "Stock label"
-#| msgid "_Top"
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_Superior"
 
 #. This is a navigation label as in "go back"
 #: ../gtk/gtkstock.c:327
-#| msgctxt "Stock label"
-#| msgid "_Back"
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "A_trás"
 
 #. This is a navigation label as in "go down"
 #: ../gtk/gtkstock.c:329
-#| msgctxt "Stock label"
-#| msgid "_Down"
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_Bajar"
 
 #. This is a navigation label as in "go forward"
 #: ../gtk/gtkstock.c:331
-#| msgctxt "Stock label"
-#| msgid "_Forward"
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "A_delante"
 
 #. This is a navigation label as in "go up"
 #: ../gtk/gtkstock.c:333
-#| msgctxt "Stock label"
-#| msgid "_Up"
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Subir"
@@ -3181,48 +3183,36 @@ msgstr "_Derecha"
 
 #. Media label, as in "fast forward"
 #: ../gtk/gtkstock.c:353
-#| msgctxt "Stock label"
-#| msgid "_Forward"
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "A_delante"
 
 #. Media label, as in "next song"
 #: ../gtk/gtkstock.c:355
-#| msgctxt "Stock label"
-#| msgid "_Next"
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Siguiente"
 
 #. Media label, as in "pause music"
 #: ../gtk/gtkstock.c:357
-#| msgctxt "Stock label"
-#| msgid "P_ause"
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "_Pausa"
 
 #. Media label, as in "play music"
 #: ../gtk/gtkstock.c:359
-#| msgctxt "Stock label"
-#| msgid "_Play"
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Reproducir"
 
 #. Media label, as in  "previous song"
 #: ../gtk/gtkstock.c:361
-#| msgctxt "Stock label"
-#| msgid "Pre_vious"
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "_Anterior"
 
 #. Media label
 #: ../gtk/gtkstock.c:363
-#| msgctxt "Stock label"
-#| msgid "_Record"
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Grabar"
@@ -3230,16 +3220,12 @@ msgstr "_Grabar"
 # src/nautilus-first-time-druid.c:290
 #. Media label
 #: ../gtk/gtkstock.c:365
-#| msgctxt "Stock label"
-#| msgid "R_ewind"
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "_Rebobinar"
 
 #. Media label
 #: ../gtk/gtkstock.c:367
-#| msgctxt "Stock label"
-#| msgid "_Stop"
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Detener"
@@ -4654,171 +4640,171 @@ msgstr "Vietnamita (VIQR)"
 msgid "X Input Method"
 msgstr "Método de entrada X"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1171
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1176
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "A la impresora «%s» le queda poco tóner."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1172
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1177
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "A la impresora «%s» no le queda tóner."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1174
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1179
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "A la impresora «%s» le queda poco revelador."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1176
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1181
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "A la impresora «%s» no le queda revelador."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1178
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1183
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "A la impresora «%s» le queda poco de, al menos, un cartucho."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1180
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1185
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "A la impresora «%s» no le queda, al menos, un cartucho."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1181
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1186
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "La tapa de la impresora «%s» está abierta."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1182
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1187
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "La puerta de la impresora «%s» está abierta."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1183
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1188
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "La impresora «%s» tiene poco papel."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1184
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1189
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "La impresora «%s» no tiene papel."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1185
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1190
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "La impresora «%s» está actualmente desconectada."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1186
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1191
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "La impresora «%s» parece no estar conectada."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1187
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1192
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Existe un problema con la impresora «%s»."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1466
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1471
 msgid "Paused ; Rejecting Jobs"
 msgstr "Pausado; rechazando trabajos"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1472
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1477
 msgid "Rejecting Jobs"
 msgstr "Rechazando trabajos"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2140
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2145
 msgid "Two Sided"
 msgstr "Dos caras"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2141
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2146
 msgid "Paper Type"
 msgstr "Tipo de papel"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2142
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2147
 msgid "Paper Source"
 msgstr "Fuente de papel"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2143
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2148
 msgid "Output Tray"
 msgstr "Bandeja de salida"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2152
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2157
 msgid "One Sided"
 msgstr "Una cara"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2154
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2156
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2164
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2159
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2161
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2169
 msgid "Auto Select"
 msgstr "Autoseleccionar"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2158
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2160
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2162
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2633
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2163
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2165
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2167
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2638
 msgid "Printer Default"
 msgstr "Predeterminado de la impresora"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2830
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "Urgent"
 msgstr "Urgente"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2830
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "High"
 msgstr "Alta"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2830
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "Medium"
 msgstr "Media"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2830
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2835
 msgid "Low"
 msgstr "Baja"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2840
 msgid "Left to right, top to bottom"
 msgstr "De izquierda a derecha, de arriba a abajo"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2840
 msgid "Left to right, bottom to top"
 msgstr "De izquierda a derecha, de abajo a arriba"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2836
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2841
 msgid "Right to left, top to bottom"
 msgstr "De derecha a izquierda, de arriba a abajo"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2836
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2841
 msgid "Right to left, bottom to top"
 msgstr "De derecha a izquierda, de abajo a arriba"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2837
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2842
 msgid "Top to bottom, left to right"
 msgstr "De arriba a abajo, de izquierda a derecha"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2837
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2842
 msgid "Top to bottom, right to left"
 msgstr "De arriba a abajo, de derecha a izquierda"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2838
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2843
 msgid "Bottom to top, left to right"
 msgstr "De abajo a arriba, de izquierda a derecha"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2838
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2843
 msgid "Bottom to top, right to left"
 msgstr "De abajo a arriba, de derecha a izquierda"
 
@@ -4826,21 +4812,21 @@ msgstr "De abajo a arriba, de derecha a izquierda"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2853
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2858
 msgid "Pages per Sheet"
 msgstr "Páginas por hoja"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2890
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2895
 msgid "Job Priority"
 msgstr "Prioridad del trabajo"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2901
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2906
 msgid "Billing Info"
 msgstr "Información de facturación"
 
@@ -4848,45 +4834,45 @@ msgstr "Información de facturación"
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "None"
 msgstr "Ninguna"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "Classified"
 msgstr "Clasificado"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "Confidential"
 msgstr "Confidencial"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "Secret"
 msgstr "Secreto"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "Standard"
 msgstr "Estándar"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "Top Secret"
 msgstr "Alto secreto"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "Unclassified"
 msgstr "Desclasificado"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2950
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2955
 msgid "Before"
 msgstr "Antes"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2965
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2970
 msgid "After"
 msgstr "Después"
 
@@ -4894,14 +4880,14 @@ msgstr "Después"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2985
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2990
 msgid "Print at"
 msgstr "Imprimir en"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2996
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3001
 msgid "Print at time"
 msgstr "Imprimir a la hora"
 
@@ -4909,7 +4895,7 @@ msgstr "Imprimir a la hora"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3031
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3036
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Personalizado %sx%s"
@@ -4971,6 +4957,19 @@ msgstr "Imprimir a la impresora de prueba"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "No se ha podido obtener información para el archivo «%s» : %s"
+
+#~ msgid ""
+#~ "You have the Caps Lock key on\n"
+#~ "and an active input method"
+#~ msgstr ""
+#~ "Tiene la tecla Bloq Mayús activada\n"
+#~ "y un método de entrada activo"
+
+#~ msgid "You have the Caps Lock key on"
+#~ msgstr "Tiene la tecla Bloq Mayús activada"
+
+#~ msgid "You have an active input method"
+#~ msgstr "Tiene un método de entrada activo"
 
 #~ msgid "keyboard label|BackSpace"
 #~ msgstr "Retroceso"
