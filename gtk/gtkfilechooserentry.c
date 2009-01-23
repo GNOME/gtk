@@ -1246,7 +1246,7 @@ commit_completion_and_refresh (GtkFileChooserEntry *chooser_entry)
 				 GTK_ENTRY (chooser_entry)->text_length);
     }
 
-  /* FMQ: get result from the function below */
+  /* Here we ignore the result of refresh_current_folder_and_file_part(); there is nothing we can do with it */
   refresh_current_folder_and_file_part (chooser_entry, REFRESH_WHOLE_TEXT);
 }
 
@@ -1759,12 +1759,11 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
  * @chooser_entry: a #GtkFileChooserEntry
  *
  * Gets the current folder for the #GtkFileChooserEntry. If the
- * user has only entered a filename, this will be the base folder
+ * user has only entered a filename, this will be in the base folder
  * (see _gtk_file_chooser_entry_set_base_folder()), but if the
  * user has entered a relative or absolute path, then it will
- * be different. If the user has entered a relative or absolute
- * path that doesn't point to a folder in the file system, it will
- * be %NULL.
+ * be different.  If the user has entered unparsable text, or text which
+ * the entry cannot handle, this will return %NULL.
  *
  * Return value: the file for the current folder - this value is owned by the
  *  chooser entry and must not be modified or freed.
