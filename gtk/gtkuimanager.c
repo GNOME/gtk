@@ -31,6 +31,7 @@
 #include "config.h"
 
 #include <string.h>
+#include "gtkactivatable.h"
 #include "gtkbuildable.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -2351,7 +2352,7 @@ update_node (GtkUIManager *self,
 		}
 	      }
 
-	    gtk_action_disconnect_proxy (info->action, info->proxy);
+            gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), NULL);
 	    gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
 				  info->proxy);
 	    g_object_unref (info->proxy);
@@ -2416,7 +2417,7 @@ update_node (GtkUIManager *self,
 	      }
 	  }
 	else
-	  gtk_action_connect_proxy (action, info->proxy);
+          gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), action);
 	
 	if (prev_submenu)
 	  {
@@ -2559,7 +2560,7 @@ update_node (GtkUIManager *self,
 	  g_signal_handlers_disconnect_by_func (info->proxy,
 						G_CALLBACK (update_smart_separators),
 						NULL);  
-	  gtk_action_disconnect_proxy (info->action, info->proxy);
+          gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), NULL);
 	  gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
 				info->proxy);
 	  g_object_unref (info->proxy);
@@ -2587,7 +2588,7 @@ update_node (GtkUIManager *self,
 						G_CALLBACK (update_smart_separators),
 						NULL);
 	  gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), NULL);
-	  gtk_action_connect_proxy (action, info->proxy);
+          gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), action);
 	}
 
       if (info->proxy)
@@ -2611,7 +2612,7 @@ update_node (GtkUIManager *self,
 	  g_signal_handlers_disconnect_by_func (info->proxy,
 						G_CALLBACK (update_smart_separators),
 						NULL);
-	  gtk_action_disconnect_proxy (info->action, info->proxy);
+          gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), NULL);
 	  gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
 				info->proxy);
 	  g_object_unref (info->proxy);
@@ -2638,7 +2639,7 @@ update_node (GtkUIManager *self,
 	  g_signal_handlers_disconnect_by_func (info->proxy,
 						G_CALLBACK (update_smart_separators),
 						NULL);
-	  gtk_action_connect_proxy (action, info->proxy);
+	  gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), action);
 	}
 
       if (info->proxy)

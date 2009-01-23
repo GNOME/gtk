@@ -1,5 +1,10 @@
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrecentchooser.c:
+	* gtk/gtkuimanager.c: Fix issues found by pltcheck
+
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
 	* NEWS: Updates
 
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>

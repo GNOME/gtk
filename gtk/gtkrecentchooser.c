@@ -1103,8 +1103,8 @@ _gtk_recent_chooser_activatable_update (GtkActivatable *activatable,
   GtkRecentAction  *recent_action  = GTK_RECENT_ACTION (action);
 
   if (strcmp (property_name, "show-numbers") == 0 && recent_chooser_has_show_numbers (recent_chooser))
-      gtk_recent_chooser_set_show_numbers (recent_chooser, 
-					   gtk_recent_action_get_show_numbers (recent_action));
+    g_object_set (recent_chooser, "show-numbers",
+                  gtk_recent_action_get_show_numbers (recent_action), NULL);
   else if (strcmp (property_name, "show-private") == 0)
     gtk_recent_chooser_set_show_private (recent_chooser, gtk_recent_chooser_get_show_private (action_chooser));
   else if (strcmp (property_name, "show-not-found") == 0)
@@ -1134,8 +1134,9 @@ _gtk_recent_chooser_activatable_reset (GtkActivatable *activatable,
     return;
 
   if (recent_chooser_has_show_numbers (recent_chooser))
-    gtk_recent_chooser_set_show_numbers (recent_chooser, 
-					 gtk_recent_action_get_show_numbers (GTK_RECENT_ACTION (action)));
+    g_object_set (recent_chooser, "show-numbers", 
+                  gtk_recent_action_get_show_numbers (GTK_RECENT_ACTION (action)),
+                  NULL);
   gtk_recent_chooser_set_show_private (recent_chooser, gtk_recent_chooser_get_show_private (action_chooser));
   gtk_recent_chooser_set_show_not_found (recent_chooser, gtk_recent_chooser_get_show_not_found (action_chooser));
   gtk_recent_chooser_set_show_tips (recent_chooser, gtk_recent_chooser_get_show_tips (action_chooser));
