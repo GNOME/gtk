@@ -1,3 +1,8 @@
+2008-01-22  Matthias Clasen  <mnclasen@redhat.com>
+
+	* gtk/gtkaction.c: Revert the last change, since it breaks
+	epiphany.
+
 2009-01-22  Federico Mena Quintero  <federico@novell.com>
 
 	Fix the computation of "complete but unique" in
