@@ -1,5 +1,20 @@
 2009-01-22  Federico Mena Quintero  <federico@novell.com>
 
+	Fix the computation of "complete but unique" in
+	GtkFileChooserEntry.  Fix the case where "/" was not appended to a
+	unique directory name during explicit Tab completion.
+
+	* gtk/gtkfilechooserentry.c (maybe_append_separator_to_file):
+	Return whether anything was appended as well as the new string
+	itself.
+	(find_common_prefix): Oops, only turn on
+	is_complete_not_unique_ret if we had a unique match!
+	(append_common_prefix): If we appended a directory separator, we
+	*did* expand the common prefix, so we are not in the "nothing
+	inserted" case.
+
+2009-01-22  Federico Mena Quintero  <federico@novell.com>
+
 	Return an error code when refreshing the entry from the user's
 	input.  We use this in the completion code to know when completion
 	can't happen due to (for example) having a non-local URI in a file

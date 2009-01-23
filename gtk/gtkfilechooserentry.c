@@ -146,7 +146,8 @@ static gboolean completion_match_func     (GtkEntryCompletion  *comp,
 					   gpointer             data);
 static char    *maybe_append_separator_to_file (GtkFileChooserEntry *chooser_entry,
 						GFile               *file,
-						gchar               *display_name);
+						gchar               *display_name,
+						gboolean            *appended);
 
 typedef enum {
   REFRESH_UP_TO_CURSOR_POSITION,
@@ -324,6 +325,7 @@ match_selected_callback (GtkEntryCompletion  *completion,
   char *display_name;
   GFile *file;
   gint pos;
+  gboolean dummy;
   
   gtk_tree_model_get (model, iter,
 		      DISPLAY_NAME_COLUMN, &display_name,
@@ -338,7 +340,7 @@ match_selected_callback (GtkEntryCompletion  *completion,
       return FALSE;
     }
 
-  display_name = maybe_append_separator_to_file (chooser_entry, file, display_name);
+  display_name = maybe_append_separator_to_file (chooser_entry, file, display_name, &dummy);
 
   pos = chooser_entry->file_part_pos;
 
@@ -450,15 +452,18 @@ beep (GtkFileChooserEntry *chooser_entry)
  * return a new one if needed.  Otherwise, it will return the old one.
  * You should be safe calling
  *
- * display_name = maybe_append_separator_to_file (entry, file, display_name);
+ * display_name = maybe_append_separator_to_file (entry, file, display_name, &appended);
  * ...
  * g_free (display_name);
  */
 static char *
 maybe_append_separator_to_file (GtkFileChooserEntry *chooser_entry,
 				GFile               *file,
-				gchar               *display_name)
+				gchar               *display_name,
+				gboolean            *appended)
 {
+  *appended = FALSE;
+
   if (!g_str_has_suffix (display_name, G_DIR_SEPARATOR_S) && file)
     {
       GFileInfo *info;
@@ -471,6 +476,7 @@ maybe_append_separator_to_file (GtkFileChooserEntry *chooser_entry,
 	    {
 	      gchar *tmp = display_name;
 	      display_name = g_strconcat (tmp, G_DIR_SEPARATOR_S, NULL);
+	      *appended = TRUE;
 	      g_free (tmp);
 	    }
 
@@ -609,7 +615,7 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
 	  if (G_IS_DIR_SEPARATOR (display_name[len - 1]))
 	    len--;
 
-	  if (strncmp (*common_prefix_ret, display_name, len) == 0)
+	  if (*unique_file_ret == NULL && strncmp (*common_prefix_ret, display_name, len) == 0)
 	    *is_complete_not_unique_ret = TRUE;
 
 	  g_free (display_name);
@@ -702,21 +708,23 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
   if (unique_file)
     {
       if (!char_after_cursor_is_directory_separator (chooser_entry))
-	common_prefix = maybe_append_separator_to_file (chooser_entry,
-							unique_file,
-							common_prefix);
+	{
+	  gboolean appended;
+
+	  common_prefix = maybe_append_separator_to_file (chooser_entry,
+							  unique_file,
+							  common_prefix,
+							  &appended);
+	  if (appended)
+	    prefix_expands_the_file_part = TRUE;
+	}
 
       g_object_unref (unique_file);
 
-      if (common_prefix)
-	{
-	  if (prefix_expands_the_file_part)
-	    result = COMPLETED_UNIQUE;
-	  else
-	    result = NOTHING_INSERTED_UNIQUE;
-	}
+      if (prefix_expands_the_file_part)
+	result = COMPLETED_UNIQUE;
       else
-	result = INVALID_INPUT;
+	result = NOTHING_INSERTED_UNIQUE;
 
       have_result = TRUE;
     }
@@ -1322,8 +1330,9 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 	{
 	  gchar *display_name = g_strdup (g_file_info_get_display_name (info));
 	  GtkTreeIter iter;
+	  gboolean dummy;
 
-          display_name = maybe_append_separator_to_file (chooser_entry, file, display_name);
+          display_name = maybe_append_separator_to_file (chooser_entry, file, display_name, &dummy);
 
 	  gtk_list_store_append (chooser_entry->completion_store, &iter);
 	  gtk_list_store_set (chooser_entry->completion_store, &iter,
