@@ -269,12 +269,29 @@ discard_current_folder (GtkFileChooserEntry *chooser_entry)
 }
 
 static void
+discard_loading_and_current_folder_file (GtkFileChooserEntry *chooser_entry)
+{
+  if (chooser_entry->load_folder_cancellable)
+    {
+      g_cancellable_cancel (chooser_entry->load_folder_cancellable);
+      chooser_entry->load_folder_cancellable = NULL;
+    }
+
+  if (chooser_entry->current_folder_file)
+    {
+      g_object_unref (chooser_entry->current_folder_file);
+      chooser_entry->current_folder_file = NULL;
+    }
+}
+
+static void
 gtk_file_chooser_entry_dispose (GObject *object)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
 
   remove_completion_feedback (chooser_entry);
   discard_current_folder (chooser_entry);
+  discard_loading_and_current_folder_file (chooser_entry);
 
   if (chooser_entry->start_autocompletion_idle_id != 0)
     {
@@ -286,12 +303,6 @@ gtk_file_chooser_entry_dispose (GObject *object)
     {
       g_object_unref (chooser_entry->completion_store);
       chooser_entry->completion_store = NULL;
-    }
-
-  if (chooser_entry->load_folder_cancellable)
-    {
-      g_cancellable_cancel (chooser_entry->load_folder_cancellable);
-      chooser_entry->load_folder_cancellable = NULL;
     }
 
   if (chooser_entry->file_system)
@@ -1458,17 +1469,9 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
 	{
 	  reload = TRUE;
 
-	  /* We changed our current directory.  We need to clear out the old
-	   * directory information.
-	   */
-          if (chooser_entry->load_folder_cancellable)
-            {
-              g_cancellable_cancel (chooser_entry->load_folder_cancellable);
-              chooser_entry->load_folder_cancellable = NULL;
-            }
-
           discard_current_folder (chooser_entry);
-	  g_object_unref (chooser_entry->current_folder_file);
+	  discard_loading_and_current_folder_file (chooser_entry);
+
 	  chooser_entry->current_folder_file = (folder_file) ? g_object_ref (folder_file) : NULL;
 	}
     }
@@ -1562,8 +1565,16 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   chooser_entry->file_part = file_part;
   chooser_entry->file_part_pos = file_part_pos;
 
-  /* FMQ: this needs to return an error if the folder is not local */
-  reload_current_folder (chooser_entry, folder_file, file_part_pos == -1);
+  if (result == REFRESH_OK)
+    {
+      /* FMQ: this needs to return an error if the folder is not local */
+      reload_current_folder (chooser_entry, folder_file, file_part_pos == -1);
+    }
+  else
+    {
+      discard_current_folder (chooser_entry);
+      discard_loading_and_current_folder_file (chooser_entry);
+    }
 
   if (folder_file)
     g_object_unref (folder_file);

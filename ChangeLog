@@ -36,6 +36,14 @@
 	only do completion in the REFRESH_OK case.  For the error cases,
 	we don't do anything, as this is autocompletion and must not
 	result in non-asked-for errors popping up.
+	(discard_loading_and_current_folder_file): Factor out function to
+	cancel the cancellable and discard the current_folder_file,
+	i.e. to reset the invariant to the "nothing valid is loaded" case.
+	(gtk_file_chooser_entry_dispose): Use
+	discard_loading_and_current_folder_file().
+	(reload_current_folder): Likewise.
+	(refresh_current_folder_and_file_part): Likewise, and ensure that
+	the error cases result in the invariant being held.
 	
 2009-01-22  Matthew Barnes  <mbarnes@redhat.com>
 
