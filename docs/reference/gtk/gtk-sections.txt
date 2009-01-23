@@ -2090,6 +2090,7 @@ GtkIMMulticontext
 gtk_im_multicontext_new
 gtk_im_multicontext_append_menuitems
 gtk_im_multicontext_get_context_id
+gtk_im_multicontext_set_context_id
 <SUBSECTION Standard>
 GTK_IM_MULTICONTEXT
 GTK_IS_IM_MULTICONTEXT
@@ -6251,6 +6252,7 @@ GTK_STOCK_ADD
 GTK_STOCK_APPLY
 GTK_STOCK_BOLD
 GTK_STOCK_CANCEL
+GTK_STOCK_CAPS_LOCK_WARNING
 GTK_STOCK_CDROM
 GTK_STOCK_CLEAR
 GTK_STOCK_CLOSE

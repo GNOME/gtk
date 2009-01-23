@@ -1,5 +1,9 @@
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Additions
+
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/tmpl/properties.sgml: Typo fix
 
 2009-01-20  Matthias Clasen  <mclasen@redhat.com>
