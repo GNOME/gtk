@@ -316,6 +316,7 @@ gdk_keyboard_grab (GdkWindow *	   window,
 {
   gint return_val;
   unsigned long serial;
+  GdkDisplay *display;
   GdkDisplayX11 *display_x11;
   GdkWindow *native;
 
@@ -327,8 +328,9 @@ gdk_keyboard_grab (GdkWindow *	   window,
   /* TODO: What do we do for offscreens and  children? We need to proxy the grab somehow */
   if (!GDK_IS_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (native)->impl))
     return GDK_GRAB_SUCCESS;
-  
-  display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (native));
+
+  display = GDK_WINDOW_DISPLAY (native);
+  display_x11 = GDK_DISPLAY_X11 (display);
 
   serial = NextRequest (GDK_WINDOW_XDISPLAY (native));
 
@@ -354,16 +356,16 @@ gdk_keyboard_grab (GdkWindow *	   window,
 
   if (return_val == GrabSuccess)
     {
-      if (display_x11->keyboard_xgrab_window != NULL &&
-	  display_x11->keyboard_xgrab_window != (GdkWindowObject *)window)
-	generate_grab_broken_event (GDK_WINDOW (display_x11->keyboard_xgrab_window),
+      if (display->keyboard_grab.window != NULL &&
+	  display->keyboard_grab.window != window)
+	generate_grab_broken_event (GDK_WINDOW (display->keyboard_grab.window),
 				    TRUE, FALSE, window);
       
-      display_x11->keyboard_xgrab_window = (GdkWindowObject *)window;
-      display_x11->keyboard_xgrab_native_window = (GdkWindowObject *)native;
-      display_x11->keyboard_xgrab_serial = serial;
-      display_x11->keyboard_xgrab_owner_events = owner_events;
-      display_x11->keyboard_xgrab_time = time;      
+      display->keyboard_grab.window = window;
+      display->keyboard_grab.native_window = native;
+      display->keyboard_grab.serial = serial;
+      display->keyboard_grab.owner_events = owner_events;
+      display->keyboard_grab.time = time;      
     }
 
   return gdk_x11_convert_grab_status (return_val);
@@ -405,18 +407,14 @@ gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
 				    GdkWindow **grab_window,
 				    gboolean   *owner_events)
 {
-  GdkDisplayX11 *display_x11;
-  
   g_return_val_if_fail (GDK_IS_DISPLAY (display), False);
 
-  display_x11 = GDK_DISPLAY_X11 (display);
-
-  if (display_x11->keyboard_xgrab_window)
+  if (display->keyboard_grab.window)
     {
       if (grab_window)
-        *grab_window = (GdkWindow *)display_x11->keyboard_xgrab_window;
+        *grab_window = display->keyboard_grab.window;
       if (owner_events)
-        *owner_events = display_x11->keyboard_xgrab_owner_events;
+        *owner_events = display->keyboard_grab.owner_events;
 
       return TRUE;
     }
@@ -439,7 +437,6 @@ _gdk_xgrab_check_unmap (GdkWindow *window,
 			gulong     serial)
 {
   GdkDisplay *display = gdk_drawable_get_display (window);
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   
   if (display->pointer_grab.window && 
       serial >= display->pointer_grab.serial)
@@ -454,21 +451,20 @@ _gdk_xgrab_check_unmap (GdkWindow *window,
 	_gdk_display_unset_has_pointer_grab (display, TRUE, FALSE, GDK_CURRENT_TIME);
     }
 
-  if (display_x11->keyboard_xgrab_window &&
-      serial >= display_x11->keyboard_xgrab_serial)
+  if (display->keyboard_grab.window &&
+      serial >= display->keyboard_grab.serial)
     {
       GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
-      GdkWindowObject *tmp = display_x11->keyboard_xgrab_window;
-      
+      GdkWindowObject *tmp = GDK_WINDOW_OBJECT (display->keyboard_grab.window);
 
       while (tmp && tmp != private)
 	tmp = tmp->parent;
 
       if (tmp)
 	{
-	  generate_grab_broken_event (GDK_WINDOW (display_x11->keyboard_xgrab_window),
+	  generate_grab_broken_event (GDK_WINDOW (display->keyboard_grab.window),
 				      TRUE, FALSE, NULL);
-	  display_x11->keyboard_xgrab_window = NULL;  
+	  display->keyboard_grab.window = NULL;  
 	}
     }
 }
@@ -490,12 +486,12 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
       display->pointer_grab.window != NULL)
     _gdk_display_unset_has_pointer_grab (display, TRUE, FALSE, GDK_CURRENT_TIME);
 
-  if ((GdkWindowObject *)window == display_x11->keyboard_xgrab_native_window &&
-      display_x11->keyboard_xgrab_window != NULL)
+  if (window == display->keyboard_grab.native_window &&
+      display->keyboard_grab.window != NULL)
     {
-      generate_grab_broken_event (GDK_WINDOW (display_x11->keyboard_xgrab_window),
+      generate_grab_broken_event (GDK_WINDOW (display->keyboard_grab.window),
 				  TRUE, FALSE, NULL);
-      display_x11->keyboard_xgrab_window = NULL;
+      display->keyboard_grab.window = NULL;
     }
 }
 

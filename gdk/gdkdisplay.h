@@ -58,6 +58,17 @@ typedef struct
   GdkWindow *grab_one_pointer_release_event;
 } GdkPointerGrabInfo;
 
+/* Tracks information about the keyboard grab on this display */
+typedef struct
+{
+  GdkWindow *window;
+  GdkWindow *native_window;
+  gulong serial;
+  gboolean owner_events;
+  guint32 time;
+} GdkKeyboardGrabInfo;
+
+
 /* Tracks information about which window and position the pointer last was in.
  * This is useful when we need to synthesize events later.
  * Note that we track toplevel_under_pointer using enter/leave events,
@@ -102,6 +113,7 @@ struct _GdkDisplay
   gint button_y[2];
 
   GdkPointerGrabInfo pointer_grab;
+  GdkKeyboardGrabInfo keyboard_grab;
   GdkPointerWindowInfo pointer_info;
 };
 

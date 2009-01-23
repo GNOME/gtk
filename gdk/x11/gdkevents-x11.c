@@ -984,17 +984,17 @@ gdk_event_translate (GdkDisplay *display,
       if (/* Is key event */
 	  (xevent->type == KeyPress || xevent->type == KeyRelease) &&
 	  /* And we have a grab */
-	  display_x11->keyboard_xgrab_window != NULL &&
+	  display->keyboard_grab.window != NULL &&
 	  (
 	   /* The window is not a descendant of the grabbed window */
-	   !is_parent_of ((GdkWindow *)display_x11->keyboard_xgrab_window, window) ||
+	   !is_parent_of ((GdkWindow *)display->keyboard_grab.window, window) ||
 	   /* Or owner event is false */
-	   !display_x11->keyboard_xgrab_owner_events
+	   !display->keyboard_grab.owner_events
 	   )
 	  )
         {
 	  /* Report key event against grab window */
-          window_private = display_x11->keyboard_xgrab_window;
+          window_private = display->keyboard_grab.window;
           window = (GdkWindow *) window_private;
         }
 

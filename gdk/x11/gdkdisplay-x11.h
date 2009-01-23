@@ -94,18 +94,6 @@ struct _GdkDisplayX11
    * (grabs, properties etc.) Otherwise always TRUE. */
   gboolean trusted_client;
 
-  /* Information about current keyboard grabs held by this
-   * client. If gdk_keyboard_xgrab_window
-   * window is NULL, then the other associated fields are ignored
-   * Pointer grab info is stored in GdkDisplay.
-   */
-
-  GdkWindowObject *keyboard_xgrab_window;
-  GdkWindowObject *keyboard_xgrab_native_window;
-  gulong keyboard_xgrab_serial;
-  gboolean keyboard_xgrab_owner_events;
-  guint32 keyboard_xgrab_time;
-
   /* drag and drop information */
   GdkDragContext *current_dest_drag;
 
