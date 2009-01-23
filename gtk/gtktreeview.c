@@ -673,7 +673,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
      * Currently, this works only for the selection modes 
      * %GTK_SELECTION_SINGLE and %GTK_SELECTION_BROWSE.
      *
-     * This mode is primarily indended for treeviews in popups, e.g.
+     * This mode is primarily intended for treeviews in popups, e.g.
      * in #GtkComboBox or #GtkEntryCompletion.
      *
      * Since: 2.6
@@ -690,10 +690,10 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
      * GtkTreeView:hover-expand:
      * 
      * Enables of disables the hover expansion mode of @tree_view.
-     * Hover expansion makes rows expand or collaps if the pointer moves 
+     * Hover expansion makes rows expand or collapse if the pointer moves 
      * over them.
      *
-     * This mode is primarily indended for treeviews in popups, e.g.
+     * This mode is primarily intended for treeviews in popups, e.g.
      * in #GtkComboBox or #GtkEntryCompletion.
      *
      * Since: 2.6
@@ -14116,7 +14116,7 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
  * @data: user data to pass to @func, or %NULL
  * @destroy: Destroy notifier for @data, or %NULL
  *
- * Sets the function to use when positioning the seach dialog.
+ * Sets the function to use when positioning the search dialog.
  *
  * Since: 2.10
  **/
@@ -14933,7 +14933,7 @@ gtk_tree_view_get_hover_selection (GtkTreeView *tree_view)
  * @expand: %TRUE to enable hover selection mode
  *
  * Enables of disables the hover expansion mode of @tree_view.
- * Hover expansion makes rows expand or collaps if the pointer 
+ * Hover expansion makes rows expand or collapse if the pointer 
  * moves over them.
  * 
  * Since: 2.6

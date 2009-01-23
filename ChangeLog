@@ -1,5 +1,11 @@
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 568744 – Spellfixes in GtkTreeView's documentation
+
+	* gtk/gtktreeview.c: Fix typos in the docs.
+
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 567761 – Spellfixes in GTK+ documentation
 
 	* gdk/x11/gdkselection-x11.c:
