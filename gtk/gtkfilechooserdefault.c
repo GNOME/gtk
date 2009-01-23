@@ -1920,6 +1920,15 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
   profile_start ("start", NULL);
 
   name = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
+  /* "To disable a directory, point it to the homedir."
+   * See http://freedesktop.org/wiki/Software/xdg-user-dirs
+   **/
+  if (!g_strcmp0 (name, g_get_home_dir ()))
+    {
+      profile_end ("end", NULL);
+      return;
+    }
+
   file = g_file_new_for_path (name);
   shortcuts_insert_file (impl, -1, SHORTCUT_TYPE_FILE, NULL, file, _("Desktop"), FALSE, SHORTCUTS_DESKTOP);
   impl->has_desktop = TRUE;

@@ -1,5 +1,13 @@
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	Skip Desktop if it equals the home folder
+	Patch by Christian Dywan
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_append_desktop): Skip
+	Desktop if it equals the home folder.
+
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 536965 – GtkPlug: crash on theme change
 
 	Keep GtkPlug in sync with the global list of toplevels.
