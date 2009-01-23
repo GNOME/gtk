@@ -50,6 +50,15 @@ typedef enum {
   LOAD_COMPLETE_EXPLICIT_COMPLETION
 } LoadCompleteAction;
 
+typedef enum
+{
+  REFRESH_OK,
+  REFRESH_INVALID_INPUT,
+  REFRESH_INCOMPLETE_HOSTNAME,
+  REFRESH_NONEXISTENT,
+  REFRESH_NOT_LOCAL
+} RefreshStatus;
+
 struct _GtkFileChooserEntry
 {
   GtkEntry parent_instance;
@@ -144,7 +153,7 @@ typedef enum {
   REFRESH_WHOLE_TEXT
 } RefreshMode;
 
-static void refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
+static RefreshStatus refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 						  RefreshMode refresh_mode);
 static void finished_loading_cb (GtkFolder *folder,
 				 gpointer   data);
@@ -1102,6 +1111,7 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
 static void
 start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 {
+  /* FMQ: get result from the function below */
   refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
 
   if (!chooser_entry->current_folder_file)
@@ -1203,6 +1213,7 @@ commit_completion_and_refresh (GtkFileChooserEntry *chooser_entry)
 				 GTK_ENTRY (chooser_entry)->text_length);
     }
 
+  /* FMQ: get result from the function below */
   refresh_current_folder_and_file_part (chooser_entry, REFRESH_WHOLE_TEXT);
 }
 
@@ -1438,7 +1449,7 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
     start_loading_current_folder (chooser_entry);
 }
 
-static void
+static RefreshStatus
 refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 				      RefreshMode          refresh_mode)
 {
@@ -1450,6 +1461,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   gsize total_len, file_part_len;
   gint file_part_pos;
   GError *error;
+  RefreshStatus result;
 
   editable = GTK_EDITABLE (chooser_entry);
 
@@ -1465,7 +1477,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 
     default:
       g_assert_not_reached ();
-      return;
+      return REFRESH_INVALID_INPUT;
     }
 
   text = gtk_editable_get_chars (editable, 0, end_pos);
@@ -1478,9 +1490,19 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 			       &folder_file, &file_part, &error))
     {
       if (g_error_matches (error, GTK_FILE_CHOOSER_ERROR, GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME))
-	folder_file = NULL;
+	{
+	  folder_file = NULL;
+	  result = REFRESH_INCOMPLETE_HOSTNAME;
+	}
       else
-	folder_file = (chooser_entry->base_folder) ? g_object_ref (chooser_entry->base_folder) : NULL;
+	{
+	  folder_file = (chooser_entry->base_folder) ? g_object_ref (chooser_entry->base_folder) : NULL;
+
+	  if (g_error_matches (error, GTK_FILE_CHOOSER_ERROR, GTK_FILE_CHOOSER_ERROR_NONEXISTENT))
+	    result = REFRESH_NONEXISTENT;
+	  else
+	    result = REFRESH_INVALID_INPUT;
+	}
 
       if (error)
 	g_error_free (error);
@@ -1496,6 +1518,8 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 	file_part_pos = g_utf8_strlen (text, total_len - file_part_len);
       else
 	file_part_pos = 0;
+
+      result = REFRESH_OK;
     }
 
   g_free (text);
@@ -1505,10 +1529,13 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   chooser_entry->file_part = file_part;
   chooser_entry->file_part_pos = file_part_pos;
 
+  /* FMQ: this needs to return an error if the folder is not local */
   reload_current_folder (chooser_entry, folder_file, file_part_pos == -1);
 
   if (folder_file)
     g_object_unref (folder_file);
+
+  return result;
 }
 
 static void
@@ -1524,6 +1551,7 @@ autocomplete (GtkFileChooserEntry *chooser_entry)
 static void
 start_autocompletion (GtkFileChooserEntry *chooser_entry)
 {
+  /* FMQ: get result from the function below */
   refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
 
   if (!chooser_entry->current_folder)
