@@ -54,11 +54,6 @@ enum {
 G_DEFINE_TYPE (GtkToggleAction, gtk_toggle_action, GTK_TYPE_ACTION)
 
 static void gtk_toggle_action_activate     (GtkAction       *action);
-static void gtk_toggle_action_real_toggled (GtkToggleAction *action);
-static void connect_proxy                  (GtkAction       *action,
-					    GtkWidget       *proxy);
-static void disconnect_proxy               (GtkAction       *action,
-					    GtkWidget       *proxy);
 static void set_property                   (GObject         *object,
 					    guint            prop_id,
 					    const GValue    *value,
@@ -87,16 +82,22 @@ gtk_toggle_action_class_init (GtkToggleActionClass *klass)
   gobject_class->get_property = get_property;
 
   action_class->activate = gtk_toggle_action_activate;
-  action_class->connect_proxy = connect_proxy;
-  action_class->disconnect_proxy = disconnect_proxy;
 
   action_class->menu_item_type = GTK_TYPE_CHECK_MENU_ITEM;
   action_class->toolbar_item_type = GTK_TYPE_TOGGLE_TOOL_BUTTON;
 
   action_class->create_menu_item = create_menu_item;
 
-  klass->toggled = gtk_toggle_action_real_toggled;
+  klass->toggled = NULL;
 
+  /**
+   * GtkToggleAction:draw-as-radio:
+   *
+   * Whether the proxies for this action look like radio action proxies.
+   *
+   * This is an appearance property and thus only applies if 
+   * #GtkActivatable:use-action-appearance is %TRUE.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_DRAW_AS_RADIO,
                                    g_param_spec_boolean ("draw-as-radio",
@@ -230,64 +231,6 @@ gtk_toggle_action_activate (GtkAction *action)
   g_object_notify (G_OBJECT (action), "active");
 
   gtk_toggle_action_toggled (toggle_action);
-}
-
-static void
-gtk_toggle_action_real_toggled (GtkToggleAction *action)
-{
-  GSList *slist;
-
-  g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
-
-  for (slist = gtk_action_get_proxies (GTK_ACTION (action)); slist; slist = slist->next)
-    {
-      GtkWidget *proxy = slist->data;
-
-      gtk_action_block_activate_from (GTK_ACTION (action), proxy);
-      if (GTK_IS_CHECK_MENU_ITEM (proxy))
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (proxy),
-					action->private_data->active);
-      else if (GTK_IS_TOGGLE_TOOL_BUTTON (proxy))
-	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (proxy),
-					   action->private_data->active);
-      else if (GTK_IS_TOGGLE_BUTTON (proxy))
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (proxy),
-				      action->private_data->active);
-      else {
-	g_warning ("Don't know how to toggle `%s' widgets",
-		   G_OBJECT_TYPE_NAME (proxy));
-      }
-      gtk_action_unblock_activate_from (GTK_ACTION (action), proxy);
-    }
-}
-
-static void
-connect_proxy (GtkAction *action, 
-	       GtkWidget *proxy)
-{
-  GtkToggleAction *toggle_action;
-
-  toggle_action = GTK_TOGGLE_ACTION (action);
-
-  /* do this before hand, so that we don't call the "activate" handler */
-  if (GTK_IS_CHECK_MENU_ITEM (proxy))
-    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (proxy),
-				    toggle_action->private_data->active);
-  else if (GTK_IS_TOGGLE_TOOL_BUTTON (proxy))
-    gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (proxy),
-				       toggle_action->private_data->active);
-  else if (GTK_IS_TOGGLE_BUTTON (proxy))
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (proxy),
-				  toggle_action->private_data->active);
-
-  GTK_ACTION_CLASS (parent_class)->connect_proxy (action, proxy);
-}
-
-static void
-disconnect_proxy (GtkAction *action, 
-		  GtkWidget *proxy)
-{
-  GTK_ACTION_CLASS (parent_class)->disconnect_proxy (action, proxy);
 }
 
 /**

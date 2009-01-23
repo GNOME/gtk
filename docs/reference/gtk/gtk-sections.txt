@@ -188,6 +188,8 @@ gtk_action_disconnect_proxy
 gtk_action_get_proxies
 gtk_action_connect_accelerator
 gtk_action_disconnect_accelerator
+gtk_action_block_activate
+gtk_action_unblock_activate
 gtk_action_block_activate_from
 gtk_action_unblock_activate_from
 gtk_action_get_accel_path
@@ -224,6 +226,19 @@ GtkActionClass
 <SUBSECTION Private>
 gtk_action_get_type
 GtkActionPrivate
+</SECTION>
+
+<SECTION>
+<FILE>gtkactivatable</FILE>
+<TITLE>GtkActivatable</TITLE>
+gtk_activatable_do_set_related_action
+gtk_activatable_get_related_action
+gtk_activatable_get_use_action_appearance
+gtk_activatable_reset
+gtk_activatable_set_related_action
+gtk_activatable_set_use_action_appearance
+<SUBSECTION Private>
+gtk_activatable_get_type
 </SECTION>
 
 <SECTION>

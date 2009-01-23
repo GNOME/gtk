@@ -626,8 +626,8 @@ cb_set_action_sensitivity (const gchar *name,
 {
   /* Minor optimization, the action_groups state only affects actions 
    * that are themselves sensitive */
-  if (gtk_action_get_sensitive (action))
-    _gtk_action_sync_sensitive (action);
+  g_object_notify (G_OBJECT (action), "sensitive");
+
 }
 
 /**
@@ -691,8 +691,7 @@ cb_set_action_visiblity (const gchar *name,
 {
   /* Minor optimization, the action_groups state only affects actions 
    * that are themselves visible */
-  if (gtk_action_get_visible (action))
-    _gtk_action_sync_visible (action);
+  g_object_notify (G_OBJECT (action), "visible");
 }
 
 /**

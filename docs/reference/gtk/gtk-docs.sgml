@@ -247,6 +247,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtktoggleaction.xml" />
       <xi:include href="xml/gtkradioaction.xml" />
       <xi:include href="xml/gtkrecentaction.xml" />
+      <xi:include href="xml/gtkactivatable.xml" />
     </chapter>
 
     <chapter id="SelectorWidgets">

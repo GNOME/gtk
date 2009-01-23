@@ -105,22 +105,33 @@ GtkWidget *  gtk_action_create_icon            (GtkAction     *action,
 GtkWidget *  gtk_action_create_menu_item       (GtkAction     *action);
 GtkWidget *  gtk_action_create_tool_item       (GtkAction     *action);
 GtkWidget *  gtk_action_create_menu            (GtkAction     *action);
-void         gtk_action_connect_proxy          (GtkAction     *action,
-						GtkWidget     *proxy);
-void         gtk_action_disconnect_proxy       (GtkAction     *action,
-						GtkWidget     *proxy);
 GSList *     gtk_action_get_proxies            (GtkAction     *action);
-GtkAction *  gtk_widget_get_action             (GtkWidget     *widget);
 void         gtk_action_connect_accelerator    (GtkAction     *action);
 void         gtk_action_disconnect_accelerator (GtkAction     *action);
 G_CONST_RETURN gchar *gtk_action_get_accel_path (GtkAction     *action);
 GClosure    *gtk_action_get_accel_closure      (GtkAction     *action);
 
-/* protected ... for use by child actions */
+#ifndef GTK_DISABLE_DEPRECATED
+GtkAction   *gtk_widget_get_action             (GtkWidget     *widget);
+void         gtk_action_connect_proxy          (GtkAction     *action,
+						GtkWidget     *proxy);
+void         gtk_action_disconnect_proxy       (GtkAction     *action,
+						GtkWidget     *proxy);
 void         gtk_action_block_activate_from    (GtkAction     *action,
 						GtkWidget     *proxy);
 void         gtk_action_unblock_activate_from  (GtkAction     *action,
 						GtkWidget     *proxy);
+#endif /* GTK_DISABLE_DEPRECATED */
+void         gtk_action_block_activate         (GtkAction     *action);
+void         gtk_action_unblock_activate       (GtkAction     *action);
+
+
+void         _gtk_action_add_to_proxy_list     (GtkAction     *action,
+						GtkWidget     *proxy);
+void         _gtk_action_remove_from_proxy_list(GtkAction     *action,
+						GtkWidget     *proxy);
+
+/* protected ... for use by child actions */
 void         _gtk_action_emit_activate         (GtkAction     *action);
 
 /* protected ... for use by action groups */
@@ -128,8 +139,6 @@ void         gtk_action_set_accel_path         (GtkAction     *action,
 						const gchar   *accel_path);
 void         gtk_action_set_accel_group        (GtkAction     *action,
 						GtkAccelGroup *accel_group);
-void         _gtk_action_sync_sensitive        (GtkAction     *action);
-void         _gtk_action_sync_visible          (GtkAction     *action);
 void         _gtk_action_sync_menu_visible     (GtkAction     *action,
 						GtkWidget     *proxy,
 						gboolean       empty);

@@ -28,6 +28,7 @@
 #include "gtkaccellabel.h"
 #include "gtkmarshalers.h"
 #include "gtkradiomenuitem.h"
+#include "gtkactivatable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -420,8 +421,13 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
   GtkRadioMenuItem *radio_menu_item = GTK_RADIO_MENU_ITEM (menu_item);
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (menu_item);
   GtkCheckMenuItem *tmp_menu_item;
+  GtkAction        *action;
   GSList *tmp_list;
   gint toggled;
+
+  action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (menu_item));
+  if (action && gtk_menu_item_get_submenu (menu_item) == NULL)
+    gtk_action_activate (action);
 
   toggled = FALSE;
 
@@ -467,7 +473,9 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
     }
 
   if (toggled)
-    gtk_check_menu_item_toggled (check_menu_item);
+    {
+      gtk_check_menu_item_toggled (check_menu_item);
+    }
 
   gtk_widget_queue_draw (GTK_WIDGET (radio_menu_item));
 }

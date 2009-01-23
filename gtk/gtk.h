@@ -37,6 +37,7 @@
 #include <gtk/gtkaccessible.h>
 #include <gtk/gtkaction.h>
 #include <gtk/gtkactiongroup.h>
+#include <gtk/gtkactivatable.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkalignment.h>
 #include <gtk/gtkarrow.h>

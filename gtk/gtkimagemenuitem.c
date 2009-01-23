@@ -34,6 +34,7 @@
 #include "gtkmenubar.h"
 #include "gtkcontainer.h"
 #include "gtkwindow.h"
+#include "gtkactivatable.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
@@ -70,6 +71,12 @@ static void gtk_image_menu_item_screen_changed       (GtkWidget        *widget,
 
 static void gtk_image_menu_item_recalculate          (GtkImageMenuItem *image_menu_item);
 
+static void gtk_image_menu_item_activatable_interface_init (GtkActivatableIface  *iface);
+static void gtk_image_menu_item_activatable_update         (GtkActivatable       *activatable,
+							    GtkAction            *action,
+							    const gchar          *property_name);
+static void gtk_image_menu_item_activatable_reset          (GtkActivatable       *activatable,
+							    GtkAction            *action);
 
 typedef struct {
   gchar          *label;
@@ -83,7 +90,12 @@ enum {
   PROP_ACCEL_GROUP
 };
 
-G_DEFINE_TYPE (GtkImageMenuItem, gtk_image_menu_item, GTK_TYPE_MENU_ITEM)
+static GtkActivatableIface *parent_activatable_iface;
+
+
+G_DEFINE_TYPE_WITH_CODE (GtkImageMenuItem, gtk_image_menu_item, GTK_TYPE_MENU_ITEM,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
+						gtk_image_menu_item_activatable_interface_init))
 
 #define GET_PRIVATE(object)  \
   (G_TYPE_INSTANCE_GET_PRIVATE ((object), GTK_TYPE_IMAGE_MENU_ITEM, GtkImageMenuItemPrivate))
@@ -503,6 +515,134 @@ gtk_image_menu_item_forall (GtkContainer   *container,
   if (include_internals && image_menu_item->image)
     (* callback) (image_menu_item->image, callback_data);
 }
+
+
+static void 
+gtk_image_menu_item_activatable_interface_init (GtkActivatableIface  *iface)
+{
+  parent_activatable_iface = g_type_interface_peek_parent (iface);
+  iface->update = gtk_image_menu_item_activatable_update;
+  iface->reset = gtk_image_menu_item_activatable_reset;
+}
+
+static gboolean
+activatable_update_stock_id (GtkImageMenuItem *image_menu_item, GtkAction *action)
+{
+  GtkWidget   *image;
+  const gchar *stock_id  = gtk_action_get_stock_id (action);
+
+  image = gtk_image_menu_item_get_image (image_menu_item);
+	  
+  if (GTK_IS_IMAGE (image) &&
+      stock_id && gtk_icon_factory_lookup_default (stock_id))
+    {
+      gtk_image_set_from_stock (GTK_IMAGE (image), stock_id, GTK_ICON_SIZE_MENU);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+activatable_update_gicon (GtkImageMenuItem *image_menu_item, GtkAction *action)
+{
+  GtkWidget   *image;
+  GIcon       *icon = gtk_action_get_gicon (action);
+  const gchar *stock_id = gtk_action_get_stock_id (action);
+
+  image = gtk_image_menu_item_get_image (image_menu_item);
+
+  if (icon && GTK_IS_IMAGE (image) &&
+      !(stock_id && gtk_icon_factory_lookup_default (stock_id)))
+    {
+      gtk_image_set_from_gicon (GTK_IMAGE (image), icon, GTK_ICON_SIZE_MENU);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+activatable_update_icon_name (GtkImageMenuItem *image_menu_item, GtkAction *action)
+{
+  GtkWidget   *image;
+  const gchar *icon_name = gtk_action_get_icon_name (action);
+
+  image = gtk_image_menu_item_get_image (image_menu_item);
+	  
+  if (GTK_IS_IMAGE (image) && icon_name &&
+      (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_EMPTY ||
+       gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME))
+    {
+      gtk_image_set_from_icon_name (GTK_IMAGE (image), icon_name, GTK_ICON_SIZE_MENU);
+    }
+}
+
+static void 
+gtk_image_menu_item_activatable_update (GtkActivatable       *activatable,
+					GtkAction            *action,
+					const gchar          *property_name)
+{
+  GtkImageMenuItem *image_menu_item;
+  GtkWidget *image;
+  gboolean   use_appearance;
+
+  image_menu_item = GTK_IMAGE_MENU_ITEM (activatable);
+
+  parent_activatable_iface->update (activatable, action, property_name);
+
+  use_appearance = gtk_activatable_get_use_action_appearance (activatable);
+  if (!use_appearance)
+    return;
+
+  if (strcmp (property_name, "stock-id") == 0)
+    activatable_update_stock_id (image_menu_item, action);
+  else if (strcmp (property_name, "gicon") == 0)
+    activatable_update_gicon (image_menu_item, action);
+  else if (strcmp (property_name, "icon-name") == 0)
+    activatable_update_icon_name (image_menu_item, action);
+}
+
+static void 
+gtk_image_menu_item_activatable_reset (GtkActivatable       *activatable,
+				       GtkAction            *action)
+{
+  GtkImageMenuItem *image_menu_item;
+  GtkWidget *image;
+  gboolean   use_appearance;
+
+  image_menu_item = GTK_IMAGE_MENU_ITEM (activatable);
+
+  parent_activatable_iface->reset (activatable, action);
+
+  if (!action)
+    return;
+
+  use_appearance = gtk_activatable_get_use_action_appearance (activatable);
+  if (!use_appearance)
+    return;
+
+  image = gtk_image_menu_item_get_image (image_menu_item);
+  if (image && !GTK_IS_IMAGE (image))
+    {
+      gtk_image_menu_item_set_image (image_menu_item, NULL);
+      image = NULL;
+    }
+  
+  if (!image)
+    {
+      image = gtk_image_new ();
+      gtk_widget_show (image);
+      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (activatable),
+				     image);
+    }
+  
+  if (!activatable_update_stock_id (image_menu_item, action) &&
+      !activatable_update_gicon (image_menu_item, action))
+    activatable_update_icon_name (image_menu_item, action);
+
+}
+
 
 /**
  * gtk_image_menu_item_new:

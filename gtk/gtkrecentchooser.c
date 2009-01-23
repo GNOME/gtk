@@ -24,6 +24,8 @@
 #include "gtkrecentchooser.h"
 #include "gtkrecentchooserprivate.h"
 #include "gtkrecentmanager.h"
+#include "gtkrecentaction.h"
+#include "gtkactivatable.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
@@ -39,7 +41,14 @@ enum
   LAST_SIGNAL
 };
 
-static void gtk_recent_chooser_class_init (gpointer g_iface);
+static void     gtk_recent_chooser_class_init         (gpointer          g_iface);
+static gboolean recent_chooser_has_show_numbers       (GtkRecentChooser *chooser);
+
+static GQuark      quark_gtk_related_action               = 0;
+static GQuark      quark_gtk_use_action_appearance        = 0;
+static const gchar gtk_related_action_key[]               = "gtk-related-action";
+static const gchar gtk_use_action_appearance_key[]        = "gtk-use-action-appearance";
+
 
 static guint chooser_signals[LAST_SIGNAL] = { 0, };
 
@@ -66,6 +75,9 @@ static void
 gtk_recent_chooser_class_init (gpointer g_iface)
 {
   GType iface_type = G_TYPE_FROM_INTERFACE (g_iface);
+
+  quark_gtk_related_action        = g_quark_from_static_string (gtk_related_action_key);
+  quark_gtk_use_action_appearance = g_quark_from_static_string (gtk_use_action_appearance_key);
   
   /**
    * GtkRecentChooser::selection-changed
@@ -575,6 +587,25 @@ gtk_recent_chooser_get_show_tips (GtkRecentChooser *chooser)
   return show_tips;
 }
 
+static gboolean
+recent_chooser_has_show_numbers (GtkRecentChooser *chooser)
+{
+  GParamSpec *pspec;
+  
+  /* This is the result of a minor screw up: the "show-numbers" property
+   * was removed from the GtkRecentChooser interface, but the accessors
+   * remained in the interface API; now we need to check whether the
+   * implementation of the RecentChooser interface has a "show-numbers"
+   * boolean property installed before accessing it, and avoid an
+   * assertion failure using a more graceful warning.  This should really
+   * go away as soon as we can break API and remove these accessors.
+   */
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (chooser),
+		  			"show-numbers");
+
+  return (pspec && pspec->value_type == G_TYPE_BOOLEAN);
+}
+
 /**
  * gtk_recent_chooser_set_show_numbers:
  * @chooser: a #GtkRecentChooser
@@ -590,25 +621,13 @@ void
 gtk_recent_chooser_set_show_numbers (GtkRecentChooser *chooser,
 				     gboolean          show_numbers)
 {
-  GParamSpec *pspec;
-  
   g_return_if_fail (GTK_IS_RECENT_CHOOSER (chooser));
 
-  /* This is the result of a minor screw up: the "show-numbers" property
-   * was removed from the GtkRecentChooser interface, but the accessors
-   * remained in the interface API; now we need to check whether the
-   * implementation of the RecentChooser interface has a "show-numbers"
-   * boolean property installed before accessing it, and avoid an
-   * assertion failure using a more graceful warning.  This should really
-   * go away as soon as we can break API and remove these accessors.
-   */
-  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (chooser),
-		  			"show-numbers");
-  if (!pspec || pspec->value_type != G_TYPE_BOOLEAN)
+  if (!recent_chooser_has_show_numbers (chooser))
     {
       g_warning ("Choosers of type `%s' do not support showing numbers",
 		 G_OBJECT_TYPE_NAME (chooser));
-
+      
       return;
     }
   
@@ -1072,6 +1091,108 @@ _gtk_recent_chooser_selection_changed (GtkRecentChooser *chooser)
   g_return_if_fail (GTK_IS_RECENT_CHOOSER (chooser));
 
   g_signal_emit (chooser, chooser_signals[SELECTION_CHANGED], 0);
+}
+
+void
+_gtk_recent_chooser_activatable_update (GtkActivatable *activatable,
+					GtkAction      *action,
+					const gchar    *property_name)
+{
+  GtkRecentChooser *recent_chooser = GTK_RECENT_CHOOSER (activatable);
+  GtkRecentChooser *action_chooser = GTK_RECENT_CHOOSER (action);
+  GtkRecentAction  *recent_action  = GTK_RECENT_ACTION (action);
+
+  if (strcmp (property_name, "show-numbers") == 0 && recent_chooser_has_show_numbers (recent_chooser))
+      gtk_recent_chooser_set_show_numbers (recent_chooser, 
+					   gtk_recent_action_get_show_numbers (recent_action));
+  else if (strcmp (property_name, "show-private") == 0)
+    gtk_recent_chooser_set_show_private (recent_chooser, gtk_recent_chooser_get_show_private (action_chooser));
+  else if (strcmp (property_name, "show-not-found") == 0)
+    gtk_recent_chooser_set_show_not_found (recent_chooser, gtk_recent_chooser_get_show_not_found (action_chooser));
+  else if (strcmp (property_name, "show-tips") == 0)
+    gtk_recent_chooser_set_show_tips (recent_chooser, gtk_recent_chooser_get_show_tips (action_chooser));
+  else if (strcmp (property_name, "show-icons") == 0)
+    gtk_recent_chooser_set_show_icons (recent_chooser, gtk_recent_chooser_get_show_icons (action_chooser));
+  else if (strcmp (property_name, "limit") == 0)
+    gtk_recent_chooser_set_limit (recent_chooser, gtk_recent_chooser_get_limit (action_chooser));
+  else if (strcmp (property_name, "local-only") == 0)
+    gtk_recent_chooser_set_local_only (recent_chooser, gtk_recent_chooser_get_local_only (action_chooser));
+  else if (strcmp (property_name, "sort-type") == 0)
+    gtk_recent_chooser_set_sort_type (recent_chooser, gtk_recent_chooser_get_sort_type (action_chooser));
+  else if (strcmp (property_name, "filter") == 0)
+    gtk_recent_chooser_set_filter (recent_chooser, gtk_recent_chooser_get_filter (action_chooser));
+}
+
+void
+_gtk_recent_chooser_activatable_reset (GtkActivatable *activatable,
+				       GtkAction      *action)
+{
+  GtkRecentChooser *recent_chooser = GTK_RECENT_CHOOSER (activatable);
+  GtkRecentChooser *action_chooser = GTK_RECENT_CHOOSER (action);
+
+  if (!action)
+    return;
+
+  if (recent_chooser_has_show_numbers (recent_chooser))
+    gtk_recent_chooser_set_show_numbers (recent_chooser, 
+					 gtk_recent_action_get_show_numbers (GTK_RECENT_ACTION (action)));
+  gtk_recent_chooser_set_show_private (recent_chooser, gtk_recent_chooser_get_show_private (action_chooser));
+  gtk_recent_chooser_set_show_not_found (recent_chooser, gtk_recent_chooser_get_show_not_found (action_chooser));
+  gtk_recent_chooser_set_show_tips (recent_chooser, gtk_recent_chooser_get_show_tips (action_chooser));
+  gtk_recent_chooser_set_show_icons (recent_chooser, gtk_recent_chooser_get_show_icons (action_chooser));
+  gtk_recent_chooser_set_limit (recent_chooser, gtk_recent_chooser_get_limit (action_chooser));
+  gtk_recent_chooser_set_local_only (recent_chooser, gtk_recent_chooser_get_local_only (action_chooser));
+  gtk_recent_chooser_set_sort_type (recent_chooser, gtk_recent_chooser_get_sort_type (action_chooser));
+  gtk_recent_chooser_set_filter (recent_chooser, gtk_recent_chooser_get_filter (action_chooser));
+}
+
+void
+_gtk_recent_chooser_set_related_action (GtkRecentChooser *recent_chooser, 
+					GtkAction        *action)
+{
+  GtkAction *prev_action;
+
+  prev_action = g_object_get_qdata (G_OBJECT (recent_chooser), quark_gtk_related_action);
+
+  if (prev_action == action)
+    return;
+
+  gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (recent_chooser), action);
+  g_object_set_qdata (G_OBJECT (recent_chooser), quark_gtk_related_action, action);
+}
+
+GtkAction *
+_gtk_recent_chooser_get_related_action (GtkRecentChooser *recent_chooser)
+{
+  return g_object_get_qdata (G_OBJECT (recent_chooser), quark_gtk_related_action);
+}
+
+/* The default for use-action-appearance is TRUE, so we try to set the
+ * qdata backwards for this case.
+ */
+void
+_gtk_recent_chooser_set_use_action_appearance (GtkRecentChooser *recent_chooser, 
+					       gboolean          use_appearance)
+{
+  GtkAction *action;
+  gboolean   use_action_appearance;
+
+  action                = g_object_get_qdata (G_OBJECT (recent_chooser), quark_gtk_related_action);
+  use_action_appearance = !GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (recent_chooser), quark_gtk_use_action_appearance));
+
+  if (use_action_appearance != use_appearance)
+    {
+
+      g_object_set_qdata (G_OBJECT (recent_chooser), quark_gtk_use_action_appearance, !GINT_TO_POINTER (use_appearance));
+      
+      gtk_activatable_reset (GTK_ACTIVATABLE (recent_chooser), action);
+    }
+}
+
+gboolean
+_gtk_recent_chooser_get_use_action_appearance (GtkRecentChooser *recent_chooser)
+{
+  return !GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (recent_chooser), quark_gtk_use_action_appearance));
 }
 
 #define __GTK_RECENT_CHOOSER_C__

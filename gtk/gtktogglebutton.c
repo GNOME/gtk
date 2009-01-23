@@ -29,6 +29,8 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtktogglebutton.h"
+#include "gtktoggleaction.h"
+#include "gtkactivatable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -67,9 +69,20 @@ static void gtk_toggle_button_get_property  (GObject              *object,
 					     GParamSpec           *pspec);
 static void gtk_toggle_button_update_state  (GtkButton            *button);
 
-static guint toggle_button_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkToggleButton, gtk_toggle_button, GTK_TYPE_BUTTON)
+static void gtk_toggle_button_activatable_interface_init (GtkActivatableIface  *iface);
+static void gtk_toggle_button_activatable_update         (GtkActivatable       *activatable,
+							  GtkAction            *action,
+							  const gchar          *property_name);
+static void gtk_toggle_button_activatable_reset          (GtkActivatable       *activatable,
+							  GtkAction            *action);
+
+static GtkActivatableIface *parent_activatable_iface;
+static guint                toggle_button_signals[LAST_SIGNAL] = { 0 };
+
+G_DEFINE_TYPE_WITH_CODE (GtkToggleButton, gtk_toggle_button, GTK_TYPE_BUTTON,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
+						gtk_toggle_button_activatable_interface_init))
 
 static void
 gtk_toggle_button_class_init (GtkToggleButtonClass *class)
@@ -136,6 +149,53 @@ gtk_toggle_button_init (GtkToggleButton *toggle_button)
   toggle_button->active = FALSE;
   toggle_button->draw_indicator = FALSE;
   GTK_BUTTON (toggle_button)->depress_on_activate = TRUE;
+}
+
+
+static void 
+gtk_toggle_button_activatable_interface_init (GtkActivatableIface  *iface)
+{
+  parent_activatable_iface = g_type_interface_peek_parent (iface);
+  iface->update = gtk_toggle_button_activatable_update;
+  iface->reset = gtk_toggle_button_activatable_reset;
+}
+
+static void
+gtk_toggle_button_activatable_update (GtkActivatable   *activatable,
+				      GtkAction        *action,
+				      const gchar      *property_name)
+{
+  GtkToggleButton *button;
+
+  parent_activatable_iface->update (activatable, action, property_name);
+
+  button = GTK_TOGGLE_BUTTON (activatable);
+
+  if (strcmp (property_name, "active") == 0)
+    {
+      gtk_action_block_activate (action);
+      gtk_toggle_button_set_active (button, gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
+      gtk_action_unblock_activate (action);
+    }
+
+}
+
+static void
+gtk_toggle_button_activatable_reset (GtkActivatable   *activatable,
+				     GtkAction        *action)
+{
+  GtkToggleButton *button;
+
+  parent_activatable_iface->reset (activatable, action);
+
+  if (!action)
+    return;
+
+  button = GTK_TOGGLE_BUTTON (activatable);
+
+  gtk_action_block_activate (action);
+  gtk_toggle_button_set_active (button, gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
+  gtk_action_unblock_activate (action);
 }
 
 
@@ -441,6 +501,8 @@ gtk_toggle_button_clicked (GtkButton *button)
   gtk_toggle_button_update_state (button);
 
   g_object_notify (G_OBJECT (toggle_button), "active");
+
+  GTK_BUTTON_CLASS (gtk_toggle_button_parent_class)->clicked (button);
 }
 
 static void

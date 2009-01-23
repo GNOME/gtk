@@ -8,6 +8,7 @@ gtk_accel_map_get_type
 gtk_accessible_get_type
 gtk_action_get_type
 gtk_action_group_get_type
+gtk_activatable_get_type
 gtk_adjustment_get_type
 gtk_alignment_get_type
 gtk_arrow_get_type

@@ -148,6 +148,7 @@ gtk_public_h_sources =          \
 	gtkaccessible.h		\
 	gtkaction.h		\
 	gtkactiongroup.h	\
+	gtkactivatable.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
 	gtkarrow.h		\
@@ -397,6 +398,7 @@ gtk_base_c_sources =            \
 	gtkaccessible.c		\
 	gtkaction.c		\
 	gtkactiongroup.c	\
+	gtkactivatable.c	\
 	gtkadjustment.c		\
 	gtkalignment.c		\
 	gtkarrow.c		\

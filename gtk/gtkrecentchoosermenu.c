@@ -42,6 +42,7 @@
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtktooltip.h"
+#include "gtkactivatable.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
@@ -86,9 +87,13 @@ struct _GtkRecentChooserMenuPrivate
 
 enum {
   PROP_0,
+  PROP_SHOW_NUMBERS,
 
-  PROP_SHOW_NUMBERS
+  /* activatable properties */
+  PROP_ACTIVATABLE_RELATED_ACTION,
+  PROP_ACTIVATABLE_USE_ACTION_APPEARANCE
 };
+
 
 #define FALLBACK_ICON_SIZE 	32
 #define FALLBACK_ITEM_LIMIT 	10
@@ -155,11 +160,20 @@ static void     item_activate_cb   (GtkWidget        *widget,
 static void     manager_changed_cb (GtkRecentManager *manager,
 				    gpointer          user_data);
 
+static void gtk_recent_chooser_activatable_iface_init (GtkActivatableIface  *iface);
+static void gtk_recent_chooser_activatable_update     (GtkActivatable       *activatable,
+						       GtkAction            *action,
+						       const gchar          *property_name);
+static void gtk_recent_chooser_activatable_reset      (GtkActivatable       *activatable,
+						       GtkAction            *action);
+
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserMenu,
 			 gtk_recent_chooser_menu,
 			 GTK_TYPE_MENU,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
-				 		gtk_recent_chooser_iface_init))
+				 		gtk_recent_chooser_iface_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
+				 		gtk_recent_chooser_activatable_iface_init))
 
 
 static void
@@ -177,6 +191,14 @@ gtk_recent_chooser_iface_init (GtkRecentChooserIface *iface)
   iface->add_filter = gtk_recent_chooser_menu_add_filter;
   iface->remove_filter = gtk_recent_chooser_menu_remove_filter;
   iface->list_filters = gtk_recent_chooser_menu_list_filters;
+}
+
+static void 
+gtk_recent_chooser_activatable_iface_init (GtkActivatableIface  *iface)
+
+{  
+  iface->update = gtk_recent_chooser_activatable_update;
+  iface->reset = gtk_recent_chooser_activatable_reset;
 }
 
 static void
@@ -208,6 +230,10 @@ gtk_recent_chooser_menu_class_init (GtkRecentChooserMenuClass *klass)
 							 FALSE,
 							 GTK_PARAM_READWRITE));
   
+
+  g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
+  g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
+
   g_type_class_add_private (klass, sizeof (GtkRecentChooserMenuPrivate));
 }
 
@@ -376,6 +402,12 @@ gtk_recent_chooser_menu_set_property (GObject      *object,
     case GTK_RECENT_CHOOSER_PROP_FILTER:
       gtk_recent_chooser_menu_set_current_filter (menu, g_value_get_object (value));
       break;
+    case PROP_ACTIVATABLE_RELATED_ACTION:
+      _gtk_recent_chooser_set_related_action (GTK_RECENT_CHOOSER (menu), g_value_get_object (value));
+      break;
+    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE: 
+      _gtk_recent_chooser_set_use_action_appearance (GTK_RECENT_CHOOSER (menu), g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -422,6 +454,12 @@ gtk_recent_chooser_menu_get_property (GObject    *object,
       break;
     case GTK_RECENT_CHOOSER_PROP_FILTER:
       g_value_set_object (value, priv->current_filter);
+      break;
+    case PROP_ACTIVATABLE_RELATED_ACTION:
+      g_value_set_object (value, _gtk_recent_chooser_get_related_action (GTK_RECENT_CHOOSER (menu)));
+      break;
+    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE: 
+      g_value_set_boolean (value, _gtk_recent_chooser_get_use_action_appearance (GTK_RECENT_CHOOSER (menu)));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1130,6 +1168,27 @@ gtk_recent_chooser_menu_set_show_tips (GtkRecentChooserMenu *menu,
   priv->show_tips = show_tips;
   gtk_container_foreach (GTK_CONTAINER (menu), foreach_set_shot_tips, menu);
 }
+
+static void 
+gtk_recent_chooser_activatable_update (GtkActivatable       *activatable,
+				       GtkAction            *action,
+				       const gchar          *property_name)
+{
+  if (strcmp (property_name, "sensitive") == 0)
+    gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
+
+  _gtk_recent_chooser_activatable_update (activatable, action, property_name);
+}
+
+static void 
+gtk_recent_chooser_activatable_reset (GtkActivatable       *activatable,
+				      GtkAction            *action)
+{
+  gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
+
+  _gtk_recent_chooser_activatable_reset (activatable, action);
+}
+
 
 /*
  * Public API

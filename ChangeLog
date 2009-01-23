@@ -1,5 +1,49 @@
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 560228 – Add "action-controller" property to GtkWidgetClass
+
+	Rework the way actions and proxies interact, to make the
+	interaction less ad hoc, more extensible, and better suited
+	for support in GUI builders like glade. 
+
+	To be used as a proxy, a widget must now implement the 
+	GtkActivatable interface, and GtkActivatable implementations 
+	are responsible for syncing their appearance with the action 
+	and for activating the action.
+
+	All the widgets that are commonly used as proxies implement
+	GtkActivatable now.
+
+	Patch by Tristan van Berkom.
+
+	* gtk/gtkactivatable.[hc]: The GtkActivatable interface.
+
+	* gtk/gtkbutton.c:
+	* gtk/gtktogglebutton.c:
+	* gtk/gtktoolitem.c:
+	* gtk/gtktoolbutton.c:
+	* gtk/gtktoggletoolbutton.c:
+	* gtk/gtkmenuitem.c:
+	* gtk/gtkcheckmenuitem.c:
+	* gtk/gtkimagemenuitem.c:
+	* gtk/gtkradiomenuitem.c:
+	* gtk/gtkrecentchooserprivate.h:
+	* gtk/gtkrecentchooser.c:
+	* gtk/gtkrecentchooserdefault.c:
+	* gtk/gtkrecentchoosermenu.c: Implement GtkActivatable.
+	* gtk/gtkaction.[hc]: Move appearance synchronization to
+	GtkActivatable implementations.
+
+	* gtk/gtkradioaction.c:
+	* gtk/gtkrecentaction.c:
+	* gtk/gtktoggleaction.c:
+	* gtk/gtkactiongroup.c: Adapt.
+
+	* gtk/gtk.h: Include gtkactivatable.h
+	* gtk/gtk.symbols: Add new functions
+
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 567124 – proposal to delay doing something related to 
 	immodule until widgets realized
 

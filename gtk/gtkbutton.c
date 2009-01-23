@@ -36,6 +36,7 @@
 #include "gtkvbox.h"
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
+#include "gtkactivatable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -69,7 +70,11 @@ enum {
   PROP_FOCUS_ON_CLICK,
   PROP_XALIGN,
   PROP_YALIGN,
-  PROP_IMAGE_POSITION
+  PROP_IMAGE_POSITION,
+
+  /* activatable properties */
+  PROP_ACTIVATABLE_RELATED_ACTION,
+  PROP_ACTIVATABLE_USE_ACTION_APPEARANCE
 };
 
 #define GTK_BUTTON_GET_PRIVATE(o)       (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_BUTTON, GtkButtonPrivate))
@@ -80,14 +85,17 @@ struct _GtkButtonPrivate
   gfloat          xalign;
   gfloat          yalign;
   GtkWidget      *image;
-  guint           align_set      : 1;
-  guint           image_is_stock : 1;
-  guint           has_grab       : 1;
+  guint           align_set             : 1;
+  guint           image_is_stock        : 1;
+  guint           has_grab              : 1;
+  guint           use_action_appearance : 1;
   guint32         grab_time;
   GtkPositionType image_position;
+  GtkAction      *action;
 };
 
 static void gtk_button_destroy        (GtkObject          *object);
+static void gtk_button_dispose        (GObject            *object);
 static void gtk_button_set_property   (GObject            *object,
                                        guint               prop_id,
                                        const GValue       *value,
@@ -124,6 +132,7 @@ static gint gtk_button_leave_notify   (GtkWidget          *widget,
 				       GdkEventCrossing   *event);
 static void gtk_real_button_pressed   (GtkButton          *button);
 static void gtk_real_button_released  (GtkButton          *button);
+static void gtk_real_button_clicked   (GtkButton          *button);
 static void gtk_real_button_activate  (GtkButton          *button);
 static void gtk_button_update_state   (GtkButton          *button);
 static void gtk_button_add            (GtkContainer       *container,
@@ -142,9 +151,22 @@ static void gtk_button_grab_notify     (GtkWidget             *widget,
 					gboolean               was_grabbed);
 
 
+static void gtk_button_activatable_interface_init (GtkActivatableIface  *iface);
+static void gtk_button_activatable_update         (GtkActivatable       *activatable,
+						   GtkAction            *action,
+						   const gchar          *property_name);
+static void gtk_button_activatable_reset          (GtkActivatable       *activatable,
+						   GtkAction            *action);
+static void gtk_button_set_related_action         (GtkButton            *button, 
+						   GtkAction            *action);
+static void gtk_button_set_use_action_appearance  (GtkButton            *button, 
+						   gboolean              use_appearance);
+
 static guint button_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkButton, gtk_button, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_CODE (GtkButton, gtk_button, GTK_TYPE_BIN,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
+						gtk_button_activatable_interface_init))
 
 static void
 gtk_button_class_init (GtkButtonClass *klass)
@@ -159,7 +181,8 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
   
-  gobject_class->constructor = gtk_button_constructor;
+  gobject_class->constructor  = gtk_button_constructor;
+  gobject_class->dispose      = gtk_button_dispose;
   gobject_class->set_property = gtk_button_set_property;
   gobject_class->get_property = gtk_button_get_property;
 
@@ -188,7 +211,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   klass->pressed = gtk_real_button_pressed;
   klass->released = gtk_real_button_released;
-  klass->clicked = NULL;
+  klass->clicked = gtk_real_button_clicked;
   klass->enter = gtk_button_update_state;
   klass->leave = gtk_button_update_state;
   klass->activate = gtk_real_button_activate;
@@ -302,6 +325,9 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                       GTK_TYPE_POSITION_TYPE,
                                                       GTK_POS_LEFT,
                                                       GTK_PARAM_READWRITE));
+
+  g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
+  g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
 
   /**
    * GtkButton::pressed:
@@ -521,6 +547,7 @@ gtk_button_init (GtkButton *button)
   priv->align_set = 0;
   priv->image_is_stock = TRUE;
   priv->image_position = GTK_POS_LEFT;
+  priv->use_action_appearance = TRUE;
 }
 
 static void
@@ -600,6 +627,20 @@ gtk_button_add (GtkContainer *container,
   GTK_CONTAINER_CLASS (gtk_button_parent_class)->add (container, widget);
 }
 
+static void 
+gtk_button_dispose (GObject *object)
+{
+  GtkButton *button = GTK_BUTTON (object);
+  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
+
+  if (priv->action)
+    {
+      gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (button), NULL);
+      priv->action = NULL;
+    }
+  G_OBJECT_CLASS (gtk_button_parent_class)->dispose (object);
+}
+
 static void
 gtk_button_set_property (GObject         *object,
                          guint            prop_id,
@@ -637,6 +678,12 @@ gtk_button_set_property (GObject         *object,
       break;
     case PROP_IMAGE_POSITION:
       gtk_button_set_image_position (button, g_value_get_enum (value));
+      break;
+    case PROP_ACTIVATABLE_RELATED_ACTION:
+      gtk_button_set_related_action (button, g_value_get_object (value));
+      break;
+    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE:
+      gtk_button_set_use_action_appearance (button, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -682,9 +729,167 @@ gtk_button_get_property (GObject         *object,
     case PROP_IMAGE_POSITION:
       g_value_set_enum (value, priv->image_position);
       break;
+    case PROP_ACTIVATABLE_RELATED_ACTION:
+      g_value_set_object (value, priv->action);
+      break;
+    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE:
+      g_value_set_boolean (value, priv->use_action_appearance);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
+    }
+}
+
+static void 
+gtk_button_activatable_interface_init (GtkActivatableIface  *iface)
+{
+  iface->update = gtk_button_activatable_update;
+  iface->reset = gtk_button_activatable_reset;
+}
+
+static void
+activatable_update_stock_id (GtkButton *button,
+			     GtkAction *action)
+{
+  if (!gtk_button_get_use_stock (button))
+    return;
+
+  gtk_button_set_label (button, gtk_action_get_stock_id (action));
+}
+
+static void
+activatable_update_short_label (GtkButton *button,
+				GtkAction *action)
+{
+  GtkWidget *image;
+
+  if (gtk_button_get_use_stock (button))
+    return;
+
+  image = gtk_button_get_image (button);
+
+  /* Dont touch custom child... */
+  if (GTK_IS_IMAGE (image) ||
+      GTK_BIN (button)->child == NULL || 
+      GTK_IS_LABEL (GTK_BIN (button)->child))
+    {
+      gtk_button_set_label (button, gtk_action_get_short_label (action));
+      gtk_button_set_use_underline (button, TRUE);
+    }
+}
+
+static void
+activatable_update_icon_name (GtkButton *button,
+			      GtkAction *action)
+{
+  GtkWidget *image;
+	      
+  if (gtk_button_get_use_stock (button))
+    return;
+
+  image = gtk_button_get_image (button);
+
+  if (GTK_IS_IMAGE (image) &&
+      (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_EMPTY ||
+       gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME))
+    gtk_image_set_from_icon_name (GTK_IMAGE (image),
+				  gtk_action_get_icon_name (action), GTK_ICON_SIZE_MENU);
+}
+
+static void
+activatable_update_gicon (GtkButton *button,
+			  GtkAction *action)
+{
+  GtkWidget *image = gtk_button_get_image (button);
+  GIcon *icon = gtk_action_get_gicon (action);
+  
+  if (GTK_IS_IMAGE (image) &&
+      (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_EMPTY ||
+       gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_GICON))
+    gtk_image_set_from_gicon (GTK_IMAGE (image), icon, GTK_ICON_SIZE_BUTTON);
+}
+
+static void 
+gtk_button_activatable_update (GtkActivatable       *activatable,
+			       GtkAction            *action,
+			       const gchar          *property_name)
+{
+  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (activatable);
+
+  if (strcmp (property_name, "visible") == 0)
+    {
+      if (gtk_action_is_visible (action))
+	gtk_widget_show (GTK_WIDGET (activatable));
+      else
+	gtk_widget_hide (GTK_WIDGET (activatable));
+    }
+  else if (strcmp (property_name, "sensitive") == 0)
+    gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
+
+  if (!priv->use_action_appearance)
+    return;
+
+  if (strcmp (property_name, "stock-id") == 0)
+    activatable_update_stock_id (GTK_BUTTON (activatable), action);
+  else if (strcmp (property_name, "gicon") == 0)
+    activatable_update_gicon (GTK_BUTTON (activatable), action);
+  else if (strcmp (property_name, "short-label") == 0)
+    activatable_update_short_label (GTK_BUTTON (activatable), action);
+  else if (strcmp (property_name, "icon-name") == 0)
+    activatable_update_icon_name (GTK_BUTTON (activatable), action);
+}
+
+static void 
+gtk_button_activatable_reset (GtkActivatable       *activatable,
+			      GtkAction            *action)
+{
+  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (activatable);
+
+  if (!action)
+    return;
+
+  if (gtk_action_is_visible (action))
+    gtk_widget_show (GTK_WIDGET (activatable));
+  else
+    gtk_widget_hide (GTK_WIDGET (activatable));
+  
+  gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
+  
+  if (priv->use_action_appearance)
+    {
+      activatable_update_stock_id (GTK_BUTTON (activatable), action);
+      activatable_update_short_label (GTK_BUTTON (activatable), action);
+      activatable_update_gicon (GTK_BUTTON (activatable), action);
+      activatable_update_icon_name (GTK_BUTTON (activatable), action);
+    }
+}
+
+static void
+gtk_button_set_related_action (GtkButton   *button, 
+			       GtkAction   *action)
+{
+  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
+
+  if (priv->action == action)
+    return;
+
+  gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (button), action);
+
+  priv->action = action;
+}
+
+static void
+gtk_button_set_use_action_appearance (GtkButton   *button, 
+				      gboolean     use_appearance)
+{
+  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
+
+  if (priv->use_action_appearance != use_appearance)
+    {
+      priv->use_action_appearance = use_appearance;
+      
+      gtk_activatable_reset (GTK_ACTIVATABLE (button), priv->action);
     }
 }
 
@@ -1492,6 +1697,15 @@ gtk_real_button_released (GtkButton *button)
 
       gtk_button_update_state (button);
     }
+}
+
+static void 
+gtk_real_button_clicked (GtkButton  *button)
+{
+  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
+
+  if (priv->action)
+    gtk_action_activate (priv->action);
 }
 
 static gboolean
