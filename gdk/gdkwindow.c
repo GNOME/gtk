@@ -5725,6 +5725,19 @@ gdk_window_hide (GdkWindow *window)
 	    }
 	}
 
+      if (display->keyboard_grab.window != NULL)
+	{
+	  if (is_parent_of (window, display->keyboard_grab.window))
+	    {
+	      /* Call this ourselves, even though gdk_display_keyboard_ungrab
+		 does so too, since we want to pass implicit == TRUE so the
+		 broken grab event is generated */
+	      _gdk_display_unset_has_keyboard_grab (display,
+						    TRUE);
+	      gdk_display_keyboard_ungrab (display, GDK_CURRENT_TIME);
+	    }
+	}
+      
       private->state = GDK_WINDOW_STATE_WITHDRAWN;
     }
 

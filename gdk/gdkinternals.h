@@ -484,6 +484,8 @@ void _gdk_display_set_has_keyboard_grab (GdkDisplay *display,
 					 gboolean owner_events,
 					 unsigned long serial,
 					 guint32 time);
+void _gdk_display_unset_has_keyboard_grab (GdkDisplay *display,
+					   gboolean implicit);
 
 void _gdk_window_invalidate_for_expose (GdkWindow       *window,
 					const GdkRegion *region);
