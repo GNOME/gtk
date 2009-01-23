@@ -355,71 +355,12 @@ gdk_keyboard_grab (GdkWindow *	   window,
     return_val = AlreadyGrabbed;
 
   if (return_val == GrabSuccess)
-    {
-      if (display->keyboard_grab.window != NULL &&
-	  display->keyboard_grab.window != window)
-	generate_grab_broken_event (GDK_WINDOW (display->keyboard_grab.window),
-				    TRUE, FALSE, window);
-      
-      display->keyboard_grab.window = window;
-      display->keyboard_grab.native_window = native;
-      display->keyboard_grab.serial = serial;
-      display->keyboard_grab.owner_events = owner_events;
-      display->keyboard_grab.time = time;      
-    }
+    _gdk_display_set_has_keyboard_grab (display,
+					window,	native,
+					owner_events,
+					serial, time);
 
   return gdk_x11_convert_grab_status (return_val);
-}
-
-void
-_gdk_windowing_grab_broken (GdkDisplay *display)
-{
-  /* TODO: Move to common code */
-#if 0
-  GdkDisplayX11 *display_x11;
-
-  g_return_if_fail (display != NULL);
-
-  display_x11 = GDK_DISPLAY_X11 (display);
-  generate_grab_broken_event (GDK_WINDOW (display_x11->pointer_grab.window),
-                              FALSE,
-                              display_x11->pointer_grab.implicit,
-                              NULL);
-  display_x11->pointer_grab.window = NULL;
-#endif
-}
-
-/**
- * gdk_keyboard_grab_info_libgtk_only:
- * @display: the display for which to get the grab information
- * @grab_window: location to store current grab window
- * @owner_events: location to store boolean indicating whether
- *   the @owner_events flag to gdk_keyboard_grab() was %TRUE.
- * 
- * Determines information about the current keyboard grab.
- * This is not public API and must not be used by applications.
- * 
- * Return value: %TRUE if this application currently has the
- *  keyboard grabbed.
- **/
-gboolean
-gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
-				    GdkWindow **grab_window,
-				    gboolean   *owner_events)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), False);
-
-  if (display->keyboard_grab.window)
-    {
-      if (grab_window)
-        *grab_window = display->keyboard_grab.window;
-      if (owner_events)
-        *owner_events = display->keyboard_grab.owner_events;
-
-      return TRUE;
-    }
-  else
-    return FALSE;
 }
 
 /**
@@ -461,11 +402,7 @@ _gdk_xgrab_check_unmap (GdkWindow *window,
 	tmp = tmp->parent;
 
       if (tmp)
-	{
-	  generate_grab_broken_event (GDK_WINDOW (display->keyboard_grab.window),
-				      TRUE, FALSE, NULL);
-	  display->keyboard_grab.window = NULL;  
-	}
+	_gdk_display_unset_has_keyboard_grab (display, TRUE);
     }
 }
 
@@ -488,11 +425,7 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
 
   if (window == display->keyboard_grab.native_window &&
       display->keyboard_grab.window != NULL)
-    {
-      generate_grab_broken_event (GDK_WINDOW (display->keyboard_grab.window),
-				  TRUE, FALSE, NULL);
-      display->keyboard_grab.window = NULL;
-    }
+    _gdk_display_unset_has_keyboard_grab (display, TRUE);
 }
 
 #define GDK_ANY_BUTTON_MASK (GDK_BUTTON1_MASK | \

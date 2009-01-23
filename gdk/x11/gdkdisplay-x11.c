@@ -652,7 +652,7 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
   if (time == GDK_CURRENT_TIME || 
       display->keyboard_grab.time == GDK_CURRENT_TIME ||
       !XSERVER_TIME_IS_LATER (display->keyboard_grab.time, time))
-    display->keyboard_grab.window = NULL;
+    _gdk_display_unset_has_keyboard_grab (display, FALSE);
 }
 
 /**

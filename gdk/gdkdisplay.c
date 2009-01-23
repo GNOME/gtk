@@ -747,7 +747,7 @@ _gdk_display_set_has_pointer_grab (GdkDisplay *display,
 				   guint32 time,
 				   gboolean implicit)
 {
-  GdkWindow *pointer_window, *src_toplevel, *dest_toplevel, *src_window;
+  GdkWindow *src_toplevel, *dest_toplevel, *src_window;
   
   if (display->pointer_grab.window != NULL &&
       display->pointer_grab.window != window)
@@ -763,8 +763,6 @@ _gdk_display_set_has_pointer_grab (GdkDisplay *display,
    */
   if (!implicit)
     {
-      GdkScreen *screen;
-      GdkWindowObject *w;
       int x, y;
       GdkModifierType state;
 
@@ -961,9 +959,70 @@ _gdk_display_unset_has_pointer_grab (GdkDisplay *display,
     generate_grab_broken_event (old_grab_window,
 				FALSE, implicit, 
 				NULL);
-  
 }
 
+void
+_gdk_display_set_has_keyboard_grab (GdkDisplay *display,
+				    GdkWindow *window,
+				    GdkWindow *native_window,
+				    gboolean owner_events,
+				    unsigned long serial,
+				    guint32 time)
+{
+  if (display->keyboard_grab.window != NULL &&
+      display->keyboard_grab.window != window)
+    generate_grab_broken_event (display->keyboard_grab.window,
+				TRUE, FALSE, window);
+  
+  display->keyboard_grab.window = window;
+  display->keyboard_grab.native_window = native_window;
+  display->keyboard_grab.owner_events = owner_events;
+  display->keyboard_grab.serial = serial;
+  display->keyboard_grab.time = time;      
+}
+
+void
+_gdk_display_unset_has_keyboard_grab (GdkDisplay *display,
+				      gboolean implicit)
+{
+  if (implicit)
+    generate_grab_broken_event (display->keyboard_grab.window,
+				TRUE, FALSE, NULL);
+  display->keyboard_grab.window = NULL;  
+}
+
+/**
+ * gdk_keyboard_grab_info_libgtk_only:
+ * @display: the display for which to get the grab information
+ * @grab_window: location to store current grab window
+ * @owner_events: location to store boolean indicating whether
+ *   the @owner_events flag to gdk_keyboard_grab() was %TRUE.
+ * 
+ * Determines information about the current keyboard grab.
+ * This is not public API and must not be used by applications.
+ * 
+ * Return value: %TRUE if this application currently has the
+ *  keyboard grabbed.
+ **/
+gboolean
+gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
+				    GdkWindow **grab_window,
+				    gboolean   *owner_events)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  if (display->keyboard_grab.window)
+    {
+      if (grab_window)
+        *grab_window = display->keyboard_grab.window;
+      if (owner_events)
+        *owner_events = display->keyboard_grab.owner_events;
+
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
 
 /**
  * gdk_pointer_grab_info_libgtk_only:

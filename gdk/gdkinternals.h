@@ -466,8 +466,6 @@ char *_gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
 void  _gdk_windowing_launch_failed         (GAppLaunchContext *context, 
 				            const char        *startup_notify_id);
 
-void _gdk_windowing_grab_broken          (GdkDisplay *display);
-
 void _gdk_display_set_has_pointer_grab (GdkDisplay *display,
 					GdkWindow *window,
 					GdkWindow *native_window,
@@ -480,6 +478,12 @@ void _gdk_display_unset_has_pointer_grab (GdkDisplay *display,
 					  gboolean implicit,
 					  gboolean do_grab_one_pointer_release_event,
 					  guint32 time);
+void _gdk_display_set_has_keyboard_grab (GdkDisplay *display,
+					 GdkWindow *window,
+					 GdkWindow *native_window,
+					 gboolean owner_events,
+					 unsigned long serial,
+					 guint32 time);
 
 void _gdk_window_invalidate_for_expose (GdkWindow       *window,
 					const GdkRegion *region);
