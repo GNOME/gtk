@@ -22,7 +22,7 @@
  * @Short_Description: An interface for activatable widgets
  *
  * Activatable widgets can be connected to a #GtkAction and reflects
- * the state of its action - a #GtkActivatable can also provide feedback
+ * the state of its action. A #GtkActivatable can also provide feedback
  * through its action, as they are responsible for activating their 
  * related actions.
  *
@@ -38,7 +38,7 @@
  * the action pointer and boolean flag on your instance, and calling 
  * gtk_activatable_do_set_related_action() and gtk_activatable_reset() at the
  * appropriate times.
- * </para>
+ * </para> 
  * <example>
  * <title>A class fragment implementing #GtkActivatable</title>
  * <programlisting><![CDATA[
@@ -255,7 +255,7 @@
  *   ...
  * }]]></programlisting>
  * </example>
- * 
+ * </refsect2>
  */
 
 #include "config.h"
@@ -424,6 +424,8 @@ gtk_activatable_action_notify (GtkAction      *action,
  * <note><para>Be careful to call this before setting the local
  * copy of the #GtkAction property, since this function uses 
  * gtk_activatable_get_action() to retrieve the previous action</para></note>
+ *
+ * Since: 2.16
  */
 void
 gtk_activatable_do_set_related_action (GtkActivatable *activatable,

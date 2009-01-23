@@ -1,5 +1,10 @@
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkactivatable.c: Make the section docs produce some valid
+	xml.
+
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkactivatable.c: Fix the section docs so gtk-doc finds them.
 
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
