@@ -671,6 +671,9 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
   GdkScreen *screen;
   GtkSettings *settings;
       
+  /* assertion to make sure all of the unexpected invocation is really gone. */
+  g_return_val_if_fail (client_window != NULL, SIMPLE_ID);
+
   if (!contexts_hash)
     gtk_im_module_initialize ();
 
@@ -682,7 +685,7 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
 
   /* Check if the certain immodule is set in XSETTINGS.
    */
-  if (client_window != NULL && GDK_IS_DRAWABLE (client_window))
+  if (GDK_IS_DRAWABLE (client_window))
     {
       screen = gdk_drawable_get_screen (GDK_DRAWABLE (client_window));
       if (screen)

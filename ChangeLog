@@ -1,5 +1,18 @@
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 567124 – proposal to delay doing something related to 
+	immodule until widgets realized
+
+	Delay setting up immodules until the widget is realized.
+	Patch by Akira Tagoh
+	
+	* gtk/gtktextview.c: Don't set up im stuff if the widget
+	is not realized.
+
+	* gtk/gtkimmodule.c: Assert that we have a window.
+ 
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
 	Skip Desktop if it equals the home folder
 	Patch by Christian Dywan
 
