@@ -2326,7 +2326,7 @@ _gdk_events_queue (GdkDisplay *display)
   XEvent xevent;
   Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
-  while (XPending (xdisplay))
+  while (!_gdk_event_queue_find_first(display) && XPending (xdisplay))
     {
       XNextEvent (xdisplay, &xevent);
 
