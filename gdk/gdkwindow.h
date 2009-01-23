@@ -326,6 +326,10 @@ struct _GdkWindowObject
   GdkWindowRedirect *redirect;
   const GdkOffscreenChildHooks *offscreen_hooks;
 
+  /* The GdkWindowObject that has the impl, ref:ed if another window.
+   * This ref is required to keep the wrapper of the impl window alive
+   * for as long as any GdkWindow references the impl. */
+  GdkWindowObject *impl_window; 
   int abs_x, abs_y; /* Absolute offset in impl */
   gint width, height;
   guint32 clip_tag;

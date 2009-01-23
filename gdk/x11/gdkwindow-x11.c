@@ -441,6 +441,7 @@ _gdk_windowing_window_init (GdkScreen * screen)
 
   private = (GdkWindowObject *) screen_x11->root_window;
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  private->impl_window = private;
 
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
@@ -916,6 +917,7 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
 
   private = (GdkWindowObject *) window;
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  private->impl_window = private;
 
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);

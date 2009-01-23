@@ -389,6 +389,12 @@ gdk_window_finalize (GObject *object)
       obj->impl = NULL;
     }
 
+  if (obj->impl_window != obj)
+    {
+      g_object_unref (obj->impl_window);
+      obj->impl_window = NULL;
+    }
+  
   if (obj->shape)
     gdk_region_destroy (obj->shape);
 
@@ -410,10 +416,7 @@ gdk_window_is_offscreen (GdkWindowObject *window)
 static GdkWindowObject *
 gdk_window_get_impl_window (GdkWindowObject *window)
 {
-  while (window->parent != NULL && window->parent->impl == window->impl)
-    window = window->parent;
-
-  return window;
+  return window->impl_window;
 }
 
 GdkWindow *
@@ -425,7 +428,7 @@ _gdk_window_get_impl_window (GdkWindow *window)
 static gboolean
 gdk_window_has_impl (GdkWindowObject *window)
 {
-  return window->parent == NULL || window->parent->impl != window->impl;
+  return window->impl_window == window;
 }
 
 gboolean
@@ -437,7 +440,7 @@ _gdk_window_has_impl (GdkWindow *window)
 static gboolean
 gdk_window_has_no_impl (GdkWindowObject *window)
 {
-  return window->parent->impl == window->impl;
+  return window->impl_window;
 }
 
 static void
@@ -917,6 +920,7 @@ gdk_window_new (GdkWindow     *parent,
   if (private->window_type == GDK_WINDOW_OFFSCREEN)
     {
       _gdk_offscreen_window_new (window, screen, visual, attributes, attributes_mask);
+      private->impl_window = private;
     }
   else if (native)
     {
@@ -927,6 +931,7 @@ gdk_window_new (GdkWindow     *parent,
       
       /* Create the impl */
       _gdk_window_impl_new (window, real_parent, screen, visual, event_mask, attributes, attributes_mask);
+      private->impl_window = private;
 
       /* This will put the native window topmost in the native parent, which may
        * be wrong wrt other native windows in the non-native hierarchy, so restack */
@@ -941,7 +946,8 @@ gdk_window_new (GdkWindow     *parent,
     }
   else
     {
-      private->impl = g_object_ref (private->parent->impl);
+      private->impl_window = g_object_ref (private->parent->impl_window);
+      private->impl = g_object_ref (private->impl_window->impl);
     }
 
   recompute_visible_regions (private, TRUE, FALSE);
@@ -979,14 +985,23 @@ is_parent_of (GdkWindow *parent,
 
 static void
 change_impl (GdkWindowObject *private,
+	     GdkWindowObject *impl_window,
 	     GdkDrawable *new)
 {
   GList *l;
   GdkWindowObject *child;
   GdkDrawable *old_impl;
+  GdkWindowObject *old_impl_window;
 
   old_impl = private->impl;
+  old_impl_window = private->impl_window;
+  if (private != impl_window)
+    private->impl_window = g_object_ref (impl_window);
+  else
+    private->impl_window = private;
   private->impl = g_object_ref (new);
+  if (old_impl_window != private)
+    g_object_unref (old_impl_window);
   g_object_unref (old_impl);
   
   for (l = private->children; l != NULL; l = l->next)
@@ -994,7 +1009,7 @@ change_impl (GdkWindowObject *private,
       child = l->data;
 
       if (child->impl == old_impl)
-	change_impl (child, new);
+	change_impl (child, impl_window, new);
     }
 }
 
@@ -1113,7 +1128,9 @@ gdk_window_reparent (GdkWindow *window,
       gdk_window_hide (window);
 
       do_reparent_to_impl = TRUE;
-      change_impl (private, new_parent_private->impl);
+      change_impl (private,
+		   new_parent_private->impl_window,
+		   new_parent_private->impl);
     }
 
   /* From here on, we treat parents of type GDK_WINDOW_FOREIGN like
@@ -1259,7 +1276,7 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
       new_impl = private->impl;
 
       private->impl = old_impl;
-      change_impl (private, new_impl);
+      change_impl (private, private, new_impl);
       
       /* Native window creation will put the native window topmost in the
        * native parent, which may be wrong wrt other native windows in the
