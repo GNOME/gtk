@@ -1,5 +1,9 @@
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 560228 – Add "action-controller" property to GtkWidgetClass
 
 	Rework the way actions and proxies interact, to make the

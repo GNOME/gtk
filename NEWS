@@ -4,6 +4,7 @@ Overview of Changes from GTK+ 2.15.0 to 2.15.1
 * GtkFileChooser:
  - Remember the file chooser's size across invocations
  - Handle uris that are entered in the entry
+ - Improve autocompletion, in particular for uris
 
 * GtkEntry:
  - New property "im-module" for selecting input methods per-widget
@@ -18,14 +19,41 @@ Overview of Changes from GTK+ 2.15.0 to 2.15.1
  - New api to add annotated marks: gtk_scale_add_mark.
 
 * GtkAction:
+ - Rework the way actions and proxies interact, to make the
+   interaction less ad hoc, more extensible, and better suited
+   for support in GUI builders like glade.
+
+   To be used as a proxy, a widget must now implement the
+`  GtkActivatable interface, and GtkActivatable implementations
+   are responsible for syncing their appearance with the action
+   and for activating the action.
+
+   All the widgets that are commonly used as proxies implement
+   GtkActivatable now.
+
+   This is a big change, and it is not unlikely to break some
+   current users of GtkAction, so feedback about problems caused
+   by this is appreciated.
+
  - Add a "gicon" property to specify the icon with a GIcon
 
 * GDK:
  - On X11, GDK now caches cursors to avoid cursor theming overhead
- - New cursor type for blank cursors: GDK_BLANK_CURSOR
+ - New cursor tye for blank cursors: GDK_BLANK_CURSOR
+
+* New deprecations:
+   gtk_scale_Button_get_orientation()
+   gtk_scale_button_set_orientation()
+   gtk_action_connect_proxy()
+   gtk_action_disconnect_proxy()
+   gtk_widget_get_action()
+   gtk_action_block_activate_from()
+   gtk_action_unblock_activate_from()
+   direct access to "gtk-action" object data
 
 * Changes that are relevant for translators:
  - Navigation and Media stock labels have separate message contexts now
+ - The caps lock warning string has been changed
 
 * Bugs fixed:
  566083 Icon pixmap hardcoded during DnD
@@ -54,6 +82,14 @@ Overview of Changes from GTK+ 2.15.0 to 2.15.1
  567413 GtkComboBoxEntry doesn't emit "changed" signal...
  545980 GtkFileChooserEntry should handle URIs
  566862 pixbuf_new_from_file does not autodetect format
+ 568552 gtk_combo + gtk entry in invisible mode takes 100% cpu
+ 561801 "scheduled printing" doesn't function as expected
+ 566535 gtk_widget_get_snapshot does not work if double buff...
+ 567021 gtkimage accessors docs
+ 567761 Spellfixes in GTK+ documentation
+ 568744 Spellfixes in GtkTreeView's documentation
+ 536965 GtkPlug: crash on theme change
+ 567124 proposal to delay doing something related to immodule...
 
 
 Overview of Changes from GTK+ 2.14.x to 2.15.0
