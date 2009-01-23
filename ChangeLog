@@ -1,5 +1,12 @@
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 567021 – gtkimage accessors docs
+
+	* gtk/gtkimage.c: Improve docs by mentioning allowed NULL values.
+	Patch by Christian Persch
+
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 566535 – gtk_widget_get_snapshot does not work if double buffered 
 	is disabled
 
