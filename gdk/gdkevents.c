@@ -950,7 +950,7 @@ gdk_event_request_motions (const GdkEventMotion *event)
       gdk_device_get_state (event->device, event->window, NULL, NULL);
       
       display = gdk_drawable_get_display (event->window);
-      display->pointer_info.motion_hint_paused = FALSE;
+      _gdk_display_enable_motion_hints (display);
     }
 }
 

@@ -2352,7 +2352,7 @@ _gdk_events_queue (GdkDisplay *display)
       if (gdk_event_translate (display, event, &xevent, FALSE))
 	{
 	  ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
-          _gdk_windowing_got_event (display, node, event);
+          _gdk_windowing_got_event (display, node, event, xevent.xany.serial);
 	}
       else
 	{

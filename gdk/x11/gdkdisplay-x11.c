@@ -444,6 +444,13 @@ process_internal_connection (GIOChannel  *gioc,
   return TRUE;
 }
 
+gulong
+_gdk_windowing_window_get_next_serial (GdkDisplay *display)
+{
+  return NextRequest (GDK_DISPLAY_XDISPLAY (display));
+}
+
+
 static GdkInternalConnection *
 gdk_add_connection_handler (Display *display,
 			    guint    fd)

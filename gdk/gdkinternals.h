@@ -333,6 +333,7 @@ void     _gdk_windowing_set_default_display     (GdkDisplay *display);
 gchar *_gdk_windowing_substitute_screen_number (const gchar *display_name,
 					        gint         screen_number);
 
+gulong   _gdk_windowing_window_get_next_serial  (GdkDisplay *display);
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
 						 gint       *x_offset,
 						 gint       *y_offset);
@@ -357,7 +358,8 @@ GdkWindow* _gdk_windowing_window_at_pointer  (GdkDisplay       *display,
 					      GdkModifierType  *mask);
 void _gdk_windowing_got_event                (GdkDisplay       *display,
 					      GList            *event_link,
-					      GdkEvent         *event);
+					      GdkEvent         *event,
+					      gulong            serial);
 
 
 /* Return the number of bits-per-pixel for images of the specified depth. */
@@ -486,6 +488,8 @@ void _gdk_display_set_has_keyboard_grab (GdkDisplay *display,
 					 guint32 time);
 void _gdk_display_unset_has_keyboard_grab (GdkDisplay *display,
 					   gboolean implicit);
+void _gdk_display_enable_motion_hints     (GdkDisplay *display);
+
 
 void _gdk_window_invalidate_for_expose (GdkWindow       *window,
 					const GdkRegion *region);

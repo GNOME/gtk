@@ -83,7 +83,7 @@ typedef struct
   gdouble toplevel_x, toplevel_y; 
   guint32 state;
   guint32 button;
-  gboolean motion_hint_paused; /* TRUE if we've sent a motion to a window with motion hints enabled */
+  gulong motion_hint_serial; /* 0 == didn't deliver hinted motion event */
 } GdkPointerWindowInfo;
 
 struct _GdkDisplay

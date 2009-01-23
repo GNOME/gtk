@@ -5272,7 +5272,7 @@ gdk_window_get_pointer (GdkWindow	  *window,
   if (mask)
     *mask = tmp_mask;
 
-  display->pointer_info.motion_hint_paused = FALSE;
+  _gdk_display_enable_motion_hints (display);
   
   return child;
 }
@@ -5847,7 +5847,7 @@ gdk_window_set_events (GdkWindow       *window,
   display = gdk_drawable_get_display (window);
   if ((private->event_mask & GDK_POINTER_MOTION_HINT_MASK) &&
       !(event_mask & GDK_POINTER_MOTION_HINT_MASK))
-    display->pointer_info.motion_hint_paused = FALSE;
+    _gdk_display_enable_motion_hints (display);
   
   private->event_mask = event_mask;
 }
@@ -8104,7 +8104,7 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
   if (window)
     update_cursor (display);
 
-  display->pointer_info.motion_hint_paused = FALSE;
+  _gdk_display_enable_motion_hints (display);
 }
 
 void
@@ -8215,7 +8215,8 @@ get_event_window (GdkDisplay                 *display,
 
 static gboolean
 proxy_pointer_event (GdkDisplay                 *display,
-		     GdkEvent                   *source_event)
+		     GdkEvent                   *source_event,
+		     gulong                      serial)
 {
   GdkWindow *toplevel_window;
   GdkWindow *pointer_window;
@@ -8264,12 +8265,13 @@ proxy_pointer_event (GdkDisplay                 *display,
       if (event_win &&
 	  (evmask & GDK_POINTER_MOTION_HINT_MASK))
 	{
-	  if (display->pointer_info.motion_hint_paused)
+	  if (display->pointer_info.motion_hint_serial != 0 &&
+	      serial < display->pointer_info.motion_hint_serial)
 	    event_win = NULL; /* Ignore event */
 	  else
 	    {
 	      is_hint = TRUE;
-	      display->pointer_info.motion_hint_paused = TRUE;
+	      display->pointer_info.motion_hint_serial = G_MAXULONG;
 	    }
 	}
       
@@ -8468,7 +8470,8 @@ gdk_window_print_tree (GdkWindow *window,
 void
 _gdk_windowing_got_event (GdkDisplay *display,
 			  GList      *event_link,
-			  GdkEvent   *event)
+			  GdkEvent   *event,
+			  gulong      serial)
 {
   GdkWindow *event_window;
   GdkWindowObject *event_private;
@@ -8569,15 +8572,13 @@ _gdk_windowing_got_event (GdkDisplay *display,
 
   if (display->pointer_info.state != old_state ||
       display->pointer_info.button != old_button)
-    {
-      /* Enable motions for the window */
-      display->pointer_info.motion_hint_paused = FALSE;
-    }
+    _gdk_display_enable_motion_hints (display);
  
   unlink_event = FALSE;
   if (is_motion_type (event->type))
     unlink_event = proxy_pointer_event (display,
-                                        event);
+                                        event,
+					serial);
   else if (is_button_type (event->type))
     unlink_event = proxy_button_event (event);
 
