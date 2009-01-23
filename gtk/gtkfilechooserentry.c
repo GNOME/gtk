@@ -1584,21 +1584,34 @@ autocomplete (GtkFileChooserEntry *chooser_entry)
 static void
 start_autocompletion (GtkFileChooserEntry *chooser_entry)
 {
-  /* FMQ: get result from the function below */
-  refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
+  RefreshStatus status;
 
-  if (!chooser_entry->current_folder)
+  status = refresh_current_folder_and_file_part (chooser_entry, REFRESH_UP_TO_CURSOR_POSITION);
+
+  switch (status)
     {
+    case REFRESH_OK:
+      g_assert (chooser_entry->current_folder_file != NULL);
+
+      if (chooser_entry->current_folder && _gtk_folder_is_finished_loading (chooser_entry->current_folder))
+	autocomplete (chooser_entry);
+      else
+	chooser_entry->load_complete_action = LOAD_COMPLETE_AUTOCOMPLETE;
+
+      break;
+
+    case REFRESH_INVALID_INPUT:
+    case REFRESH_INCOMPLETE_HOSTNAME:
+    case REFRESH_NONEXISTENT:
+    case REFRESH_NOT_LOCAL:
       /* We don't beep or anything, since this is autocompletion - the user
        * didn't request any action explicitly.
        */
-      return;
-    }
+      break;
 
-  if (_gtk_folder_is_finished_loading (chooser_entry->current_folder))
-    autocomplete (chooser_entry);
-  else
-    chooser_entry->load_complete_action = LOAD_COMPLETE_AUTOCOMPLETE;
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 static gboolean

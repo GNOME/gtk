@@ -32,6 +32,10 @@
 	(commit_completion_and_refresh): Don't do anything with the result
 	of refresh...(), since this function doesn't get called during
 	completion-related interaction.
+	(start_autocompletion): Process the result from refresh...().  We
+	only do completion in the REFRESH_OK case.  For the error cases,
+	we don't do anything, as this is autocompletion and must not
+	result in non-asked-for errors popping up.
 	
 2009-01-22  Matthew Barnes  <mbarnes@redhat.com>
 
