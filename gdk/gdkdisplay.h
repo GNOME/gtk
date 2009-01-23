@@ -71,6 +71,8 @@ typedef struct
   GdkWindow *window_under_pointer; /* The window that last got sent a normal enter event */
   gdouble toplevel_x, toplevel_y; 
   guint32 state;
+  guint32 button;
+  gboolean motion_hint_paused; /* TRUE if we've sent a motion to a window with motion hints enabled */
 } GdkPointerWindowInfo;
 
 struct _GdkDisplay

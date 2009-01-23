@@ -5255,6 +5255,8 @@ gdk_window_get_pointer (GdkWindow	  *window,
   if (mask)
     *mask = tmp_mask;
 
+  display->pointer_info.motion_hint_paused = FALSE;
+  
   return child;
 }
 
@@ -5802,6 +5804,8 @@ gdk_window_set_events (GdkWindow       *window,
 		       GdkEventMask     event_mask)
 {
   GdkWindowObject *private;
+  GdkDisplay *display;
+  
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -5809,6 +5813,12 @@ gdk_window_set_events (GdkWindow       *window,
   if (private->destroyed)
     return;
 
+  /* If motion hint is disabled, enable motion events again */
+  display = gdk_drawable_get_display (window);
+  if ((private->event_mask & GDK_POINTER_MOTION_HINT_MASK) &&
+      !(event_mask & GDK_POINTER_MOTION_HINT_MASK))
+    display->pointer_info.motion_hint_paused = FALSE;
+  
   private->event_mask = event_mask;
 }
 
@@ -8063,6 +8073,8 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
 
   if (window)
     update_cursor (display);
+
+  display->pointer_info.motion_hint_paused = FALSE;
 }
 
 void
@@ -8103,7 +8115,8 @@ static GdkWindow *
 get_event_window (GdkDisplay                 *display,
 		  GdkWindow                  *pointer_window,
 		  GdkEventType                type,
-		  GdkModifierType             mask)
+		  GdkModifierType             mask,
+		  guint                      *evmask_out)
 {
   guint evmask;
   GdkWindow *grab_window;
@@ -8124,8 +8137,13 @@ get_event_window (GdkDisplay                 *display,
       else
 	grab_window = display->pointer_grab.window;
 
+      
       if (evmask & type_masks[type])
-	return grab_window;
+	{
+	  if (evmask_out)
+	    *evmask_out = evmask;
+	  return grab_window;
+	}
       else
 	return NULL;
     }
@@ -8137,7 +8155,11 @@ get_event_window (GdkDisplay                 *display,
       evmask = update_evmask_for_button_motion (evmask, mask);
 
       if (evmask & type_masks[type])
-	return (GdkWindow *)w;
+	{
+	  if (evmask_out)
+	    *evmask_out = evmask;
+	  return (GdkWindow *)w;
+	}
 
       w = w->parent;
     }
@@ -8149,7 +8171,11 @@ get_event_window (GdkDisplay                 *display,
       evmask = update_evmask_for_button_motion (evmask, mask);
 
       if (evmask & type_masks[type])
-	return display->pointer_grab.window;
+	{
+	  if (evmask_out)
+	    *evmask_out = evmask;
+	  return display->pointer_grab.window;
+	}
       else
 	return NULL;
     }
@@ -8164,7 +8190,6 @@ proxy_pointer_event (GdkDisplay                 *display,
   GdkWindow *toplevel_window;
   GdkWindow *pointer_window;
   GdkWindow *cursor_window;
-  gboolean sent_motion;
   GdkEvent *event;
   guint state;
   gdouble toplevel_x, toplevel_y;
@@ -8195,15 +8220,31 @@ proxy_pointer_event (GdkDisplay                 *display,
   else if (source_event->type == GDK_MOTION_NOTIFY)
     {
       GdkWindow *event_win;
+      guint evmask;
+      gboolean is_hint;
 
       event_win = get_event_window (display,
 				    pointer_window,
 				    source_event->type,
-				    state);
+				    state,
+				    &evmask);
+
+      is_hint = FALSE;
+      
+      if (event_win &&
+	  (evmask & GDK_POINTER_MOTION_HINT_MASK))
+	{
+	  if (display->pointer_info.motion_hint_paused)
+	    event_win = NULL; /* Ignore event */
+	  else
+	    {
+	      is_hint = TRUE;
+	      display->pointer_info.motion_hint_paused = TRUE;
+	    }
+	}
       
       if (event_win)
 	{
-	  sent_motion = TRUE;
 	  event = _gdk_make_event (event_win, GDK_MOTION_NOTIFY, source_event, FALSE);
 	  event->motion.time = time_;
 	  convert_toplevel_coords_to_window (event_win,
@@ -8212,10 +8253,9 @@ proxy_pointer_event (GdkDisplay                 *display,
 	  event->motion.x_root = source_event->motion.x_root;
 	  event->motion.y_root = source_event->motion.y_root;;
 	  event->motion.state = state;
-	  event->motion.is_hint = FALSE;
+	  event->motion.is_hint = is_hint;
 	  event->motion.device = NULL;
-	  if (source_event && source_event->type == GDK_MOTION_NOTIFY)
-	    event->motion.device = source_event->motion.device;
+	  event->motion.device = source_event->motion.device;
 	}
     }
 
@@ -8292,7 +8332,8 @@ proxy_button_event (GdkEvent *source_event)
   event_win = get_event_window (display,
 				pointer_window,
 				type,
-				state);
+				state,
+				NULL);
 
   if (event_win == NULL)
     return TRUE;
@@ -8403,6 +8444,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
   GdkWindowObject *event_private;
   gdouble x, y;
   gboolean unlink_event;
+  guint old_state, old_button;
 
   event_window = event->any.window;
   if (!event_window)
@@ -8484,12 +8526,24 @@ _gdk_windowing_got_event (GdkDisplay *display,
       display->pointer_info.toplevel_under_pointer = NULL;
     }
 
+  old_state = display->pointer_info.state;
+  old_button = display->pointer_info.button;
+  
   gdk_event_get_coords (event, &x, &y);
   display->pointer_info.toplevel_x = x;
   display->pointer_info.toplevel_y = y;
   gdk_event_get_state (event, &display->pointer_info.state);
+  if (event->type == GDK_BUTTON_PRESS ||
+      event->type == GDK_BUTTON_RELEASE)
+    display->pointer_info.button = event->button.button;
 
-  
+  if (display->pointer_info.state != old_state ||
+      display->pointer_info.button != old_button)
+    {
+      /* Enable motions for the window */
+      display->pointer_info.motion_hint_paused = FALSE;
+    }
+ 
   unlink_event = FALSE;
   if (is_motion_type (event->type))
     unlink_event = proxy_pointer_event (display,
