@@ -1,5 +1,9 @@
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Add GtkActivatableIface, too
+
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtk-sections.txt: Add new GtkActivatable API
 
 	* gtk/gtk-docs.sgml: Include GtkActivatable section

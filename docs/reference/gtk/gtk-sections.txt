@@ -231,6 +231,8 @@ GtkActionPrivate
 <SECTION>
 <FILE>gtkactivatable</FILE>
 <TITLE>GtkActivatable</TITLE>
+GtkActivatable
+GtkActivatableIface
 gtk_activatable_do_set_related_action
 gtk_activatable_get_related_action
 gtk_activatable_get_use_action_appearance
