@@ -1,5 +1,12 @@
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 567761 – Spellfixes in GTK+ documentation
+
+	* gdk/x11/gdkselection-x11.c:
+	* gtk/gtktestutils.c: Fix typos in the docs.
+
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 567021 – gtkimage accessors docs
 
 	* gtk/gtkimage.c: Improve docs by mentioning allowed NULL values.

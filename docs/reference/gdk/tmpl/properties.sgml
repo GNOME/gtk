@@ -305,7 +305,7 @@ is provided.
 @data: location to store a pointer to the data. The retrieved
        data should be freed with g_free() when you are finished
        using it.
-@Returns: %TRUE if data was sucessfully received and stored
+@Returns: %TRUE if data was successfully received and stored
           in @data, otherwise %FALSE.
 
 

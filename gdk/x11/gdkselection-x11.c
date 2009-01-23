@@ -676,7 +676,7 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
  * Convert a string from the encoding of the current 
  * locale into a form suitable for storing in a window property.
  * 
- * Returns: 0 upon sucess, non-zero upon failure. 
+ * Returns: 0 upon success, non-zero upon failure. 
  *
  * Since: 2.2
  **/

@@ -373,9 +373,9 @@ gtk_test_find_widget (GtkWidget    *widget,
  * @widget:     valid widget pointer.
  * @percentage: value between 0 and 100.
  *
- * This function will adjust theslider position of all GtkRange
+ * This function will adjust the slider position of all GtkRange
  * based widgets, such as scrollbars or scales, it'll also adjust
- * spin buttons. The adjustment value of tehse widgets is set to
+ * spin buttons. The adjustment value of these widgets is set to
  * a value between the lower and upper limits, according to the
  * @percentage argument.
  *
@@ -455,7 +455,7 @@ gtk_test_text_set (GtkWidget   *widget,
  * Retrive the text string of @widget if it is a GtkLabel,
  * GtkEditable (entry and text widgets) or GtkTextView.
  *
- * Returns: new 0-terminated C string, needs to be releaed with g_free().
+ * Returns: new 0-terminated C string, needs to be released with g_free().
  *
  * Since: 2.14
  **/
