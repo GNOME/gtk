@@ -26,9 +26,9 @@
 	We filter out incomplete hostnames here (typing
 	"sftp://incompl[tab]" will error out), as well as completely
 	unparsable input.
-	(start_explicit_completion): Process the result from
-	refresh...().  Here we present the actual feedback about only
-	being able to display local folders for local_only=TRUE.
+	(start_explicit_completion): Process the result from refresh...().
+	Here we present the actual feedback about only being able to
+	display local folders for local_only=TRUE.
 	(commit_completion_and_refresh): Don't do anything with the result
 	of refresh...(), since this function doesn't get called during
 	completion-related interaction.
@@ -110,6 +110,9 @@
 	(refresh_current_folder_and_file_part): Pass on errors from
 	reload_current_folder().  At the very end, assert the invariant
 	described above.
+	(start_explicit_completion): Add comments for translators, to
+	explain the purpose of the various feedback messages used during
+	completion.
 
 2009-01-21  Federico Mena Quintero  <federico@novell.com>
 

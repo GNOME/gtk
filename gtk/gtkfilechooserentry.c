@@ -1135,18 +1135,14 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
     case REFRESH_OK:
       g_assert (chooser_entry->current_folder_file != NULL);
 
-      if (chooser_entry->current_folder
-	  && _gtk_folder_is_finished_loading (chooser_entry->current_folder))
-	{
-	  explicitly_complete (chooser_entry);
-	}
+      if (chooser_entry->current_folder && _gtk_folder_is_finished_loading (chooser_entry->current_folder))
+	explicitly_complete (chooser_entry);
       else
 	{
 	  chooser_entry->load_complete_action = LOAD_COMPLETE_EXPLICIT_COMPLETION;
 
-	  /* translators: this text is shown while the system is searching
-	   * for possible completions for text in a file chooser entry 
-	   */
+	  /* Translators: this text is shown while the system is searching
+	   * for possible completions for filenames in a file chooser entry. */
 	  pop_up_completion_feedback (chooser_entry, _("Completing..."));
 	}
 
@@ -1154,6 +1150,8 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 
     case REFRESH_INVALID_INPUT:
       is_error = TRUE;
+      /* Translators: this is shown in the feedback for Tab-completion in a file
+       * chooser's text entry, when the user enters an invalid path. */
       feedback_msg = _("Invalid path");
       break;
 
@@ -1161,10 +1159,21 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
       is_error = TRUE;
 
       if (chooser_entry->local_only)
-	feedback_msg = _("Only local files may be selected"); /* hostnames in a local_only file chooser?  user error */
+	{
+	  /* hostnames in a local_only file chooser?  user error */
+
+	  /* Translators: this is shown in the feedback for Tab-completion in a
+	   * file chooser's text entry when the user enters something like
+	   * "sftp://blahblah" in an app that only supports local filenames. */
+	  feedback_msg = _("Only local files may be selected");
+	}
       else
 	{
 	  /* Another option is to complete the hostname based on the remote volumes that are mounted */
+
+	  /* Translators: this is shown in the feedback for Tab-completion in a
+	   * file chooser's text entry when the user hasn't entered the first '/'
+	   * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]") */
 	  feedback_msg = _("Incomplete hostname; end it with '/'");
 	}
 
@@ -1172,6 +1181,10 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 
     case REFRESH_NONEXISTENT:
       is_error = TRUE;
+
+      /* Translators: this is shown in the feedback for Tab-completion in a file
+       * chooser's text entry when the user enters a path that does not exist
+       * and then hits Tab */
       feedback_msg = _("Path does not exist");
       break;
 
