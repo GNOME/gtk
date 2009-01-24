@@ -1,4 +1,9 @@
-2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+2009-01-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testactions.c: Add a testcase for toolitems using
+	icon names.
+
+2009-01-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkcursor-x11.c (_gdk_x11_cursor_update_theme):
 	Don't update blank cursors.

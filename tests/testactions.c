@@ -129,6 +129,8 @@ static GtkActionEntry entries[] = {
   { "Menu2Action", NULL, "Menu _2" },
   { "Menu3Action", NULL, "_Dynamic Menu" },
 
+  { "attach", "mail-attachment", "_Attachment...", "<Control>m",
+    "Attach a file", G_CALLBACK (activate_action) },
   { "cut", GTK_STOCK_CUT, "C_ut", "<control>X",
     "Cut the selected text to the clipboard", G_CALLBACK (activate_action) },
   { "copy", GTK_STOCK_COPY, "_Copy", "<control>C",
@@ -226,6 +228,7 @@ static const gchar *ui_info =
 "    <menu name=\"DynamicMenu\" action=\"Menu3Action\" />\n"
 "  </menubar>\n"
 "  <toolbar name=\"toolbar\">\n"
+"    <toolitem name=\"attach\" action=\"attach\" />\n"
 "    <toolitem name=\"cut\" action=\"cut\" />\n"
 "    <toolitem name=\"copy\" action=\"copy\" />\n"
 "    <toolitem name=\"paste\" action=\"paste\" />\n"
