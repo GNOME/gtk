@@ -7009,8 +7009,9 @@ gtk_icon_view_drag_data_received (GtkWidget        *widget,
  * @n_targets: the number of items in @targets
  * @actions: the bitmask of possible actions for a drag from this
  *    widget
- * 
- * Turns @icon_view into a drag source for automatic DND.
+ *
+ * Turns @icon_view into a drag source for automatic DND. Calling this
+ * method sets #GtkIconView:reorderable to %FALSE.
  *
  * Since: 2.8
  **/
@@ -7040,8 +7041,9 @@ gtk_icon_view_enable_model_drag_source (GtkIconView              *icon_view,
  * @n_targets: the number of items in @targets
  * @actions: the bitmask of possible actions for a drag to this
  *    widget
- * 
- * Turns @icon_view into a drop destination for automatic DND.
+ *
+ * Turns @icon_view into a drop destination for automatic DND. Calling this
+ * method sets #GtkIconView:reorderable to %FALSE.
  *
  * Since: 2.8
  **/
@@ -7366,7 +7368,9 @@ static const GtkTargetEntry item_targets[] = {
  * #GtkTreeStore and #GtkListStore support these.  If @reorderable is %TRUE, then
  * the user can reorder the model by dragging and dropping rows.  The
  * developer can listen to these changes by connecting to the model's
- * row_inserted and row_deleted signals.
+ * row_inserted and row_deleted signals. The reordering is implemented by setting up
+ * the icon view as a drag source and destination. Therefore, drag and
+ * drop can not be used in a reorderable view for any other purpose.
  *
  * This function does not give you any degree of control over the order -- any
  * reordering is allowed.  If more control is needed, you should probably
