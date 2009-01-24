@@ -1,3 +1,8 @@
+2009-01-24  Claudio Saavedra  <csaavedra@igalia.com>
+
+	* gtk/gtktreeview.c: (gtk_tree_view_class_init): Slightly
+	improve ::search-column property description.
+
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
