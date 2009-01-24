@@ -13357,7 +13357,7 @@ unset_reorderable (GtkTreeView *tree_view)
  *    widget
  *
  * Turns @tree_view into a drag source for automatic DND. Calling this
- * method sets reorderable to %FALSE.
+ * method sets #GtkTreeView:reorderable to %FALSE.
  **/
 void
 gtk_tree_view_enable_model_drag_source (GtkTreeView              *tree_view,
@@ -13394,7 +13394,7 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView              *tree_view,
  *    widget
  * 
  * Turns @tree_view into a drop destination for automatic DND. Calling
- * this method sets reorderable to %FALSE.
+ * this method sets #GtkTreeView:reorderable to %FALSE.
  **/
 void
 gtk_tree_view_enable_model_drag_dest (GtkTreeView              *tree_view,
@@ -13424,7 +13424,7 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView              *tree_view,
  *
  * Undoes the effect of
  * gtk_tree_view_enable_model_drag_source(). Calling this method sets
- * reorderable to %FALSE.
+ * #GtkTreeView:reorderable to %FALSE.
  **/
 void
 gtk_tree_view_unset_rows_drag_source (GtkTreeView *tree_view)
@@ -13456,7 +13456,7 @@ gtk_tree_view_unset_rows_drag_source (GtkTreeView *tree_view)
  *
  * Undoes the effect of
  * gtk_tree_view_enable_model_drag_dest(). Calling this method sets
- * reorderable to %FALSE.
+ * #GtkTreeView:reorderable to %FALSE.
  **/
 void
 gtk_tree_view_unset_rows_drag_dest (GtkTreeView *tree_view)

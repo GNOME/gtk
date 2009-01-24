@@ -1,5 +1,10 @@
 2009-01-25  Claudio Saavedra  <csaavedra@igalia.com>
 
+	* gtk/gtktreeview.c: Use gtk-doc syntax to refer to properties in
+	the docstrings.
+
+2009-01-25  Claudio Saavedra  <csaavedra@igalia.com>
+
 	* gtk/gtkiconview.c: More docstrings improvements
 	regarding reorderable property.
 
