@@ -7068,7 +7068,8 @@ gtk_icon_view_enable_model_drag_dest (GtkIconView          *icon_view,
  * gtk_icon_view_unset_model_drag_source:
  * @icon_view: a #GtkIconView
  * 
- * Undoes the effect of gtk_icon_view_enable_model_drag_source().
+ * Undoes the effect of gtk_icon_view_enable_model_drag_source(). Calling this
+ * method sets #GtkIconView:reorderable to %FALSE.
  *
  * Since: 2.8
  **/
@@ -7090,7 +7091,8 @@ gtk_icon_view_unset_model_drag_source (GtkIconView *icon_view)
  * gtk_icon_view_unset_model_drag_dest:
  * @icon_view: a #GtkIconView
  * 
- * Undoes the effect of gtk_icon_view_enable_model_drag_dest().
+ * Undoes the effect of gtk_icon_view_enable_model_drag_dest(). Calling this
+ * method sets #GtkIconView:reorderable to %FALSE.
  *
  * Since: 2.8
  **/

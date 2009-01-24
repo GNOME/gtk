@@ -1,3 +1,8 @@
+2009-01-25  Claudio Saavedra  <csaavedra@igalia.com>
+
+	* gtk/gtkiconview.c: More docstrings improvements
+	regarding reorderable property.
+
 2009-01-24  Claudio Saavedra  <csaavedra@igalia.com>
 
 	Bug 559420 – gtk_icon_view_enable_model_drag_[source|dest] docs
