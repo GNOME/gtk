@@ -772,6 +772,7 @@ gtk_tool_button_activatable_update (GtkActivatable       *activatable,
 	  gtk_tool_button_set_label (button, NULL);
 	  gtk_tool_button_set_icon_name (button, NULL);
 	}
+      gtk_tool_button_set_icon_widget (button, NULL);
       gtk_tool_button_set_stock_id (button, gtk_action_get_stock_id (action));
     }
   else if (strcmp (property_name, "gicon") == 0)
@@ -812,6 +813,7 @@ gtk_tool_button_activatable_reset (GtkActivatable       *activatable,
 {
   GtkToolButton *button;
   GIcon         *icon;
+  const gchar   *stock_id;
 
   parent_activatable_iface->reset (activatable, action);
 
@@ -822,14 +824,15 @@ gtk_tool_button_activatable_reset (GtkActivatable       *activatable,
     return;
 
   button = GTK_TOOL_BUTTON (activatable);
-  
-  gtk_tool_button_set_label (button, NULL);
-  gtk_tool_button_set_stock_id (button, NULL);
-  gtk_tool_button_set_icon_name (button, NULL);
+  stock_id = gtk_action_get_stock_id (action);
+
+  gtk_tool_button_set_label (button, gtk_action_get_short_label (action));
   gtk_tool_button_set_use_underline (button, TRUE);
-  
-  if (gtk_action_get_stock_id (action))
-    gtk_tool_button_set_stock_id (button, gtk_action_get_stock_id (action));
+  gtk_tool_button_set_stock_id (button, stock_id);
+  gtk_tool_button_set_icon_name (button, gtk_action_get_icon_name (action));
+
+  if (stock_id && gtk_icon_factory_lookup_default (stock_id))
+      gtk_tool_button_set_icon_widget (button, NULL);
   else if ((icon = gtk_action_get_gicon (action)) != NULL)
     {
       GtkIconSize icon_size = gtk_tool_item_get_icon_size (GTK_TOOL_ITEM (button));

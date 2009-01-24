@@ -1,5 +1,11 @@
 2009-01-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolbutton.c (gtk_tool_button_activatable_reset):
+	Fall back from stock ids to icon names like the old code 
+	did. Patch by Tristan van Berkom.
+
+2009-01-24  Matthias Clasen  <mclasen@redhat.com>
+
 	* tests/testactions.c: Add a testcase for toolitems using
 	icon names.
 
