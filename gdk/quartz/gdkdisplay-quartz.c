@@ -178,3 +178,9 @@ gdk_display_supports_composite (GdkDisplay *display)
   /* FIXME: Implement */
   return FALSE;
 }
+
+gulong
+_gdk_windowing_window_get_next_serial (GdkDisplay *display)
+{
+  return 0;
+}
