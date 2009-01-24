@@ -187,24 +187,6 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
   _gdk_quartz_keyboard_grab_window = NULL;
 }
 
-gboolean
-gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
-				    GdkWindow **grab_window,
-				    gboolean   *owner_events)
-{
-  if (_gdk_quartz_keyboard_grab_window) 
-    {
-      if (grab_window)
-	*grab_window = _gdk_quartz_keyboard_grab_window;
-      if (owner_events)
-	*owner_events = keyboard_grab_owner_events;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 static void
 pointer_ungrab_internal (gboolean only_if_implicit)
 {
