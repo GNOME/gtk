@@ -963,6 +963,7 @@ _gdk_windowing_window_init (void)
 
   private = (GdkWindowObject *)_gdk_root;
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  private->impl_window = private;
 
   /* Note: This needs to be reworked for multi-screen support. */
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (_gdk_root)->impl);
