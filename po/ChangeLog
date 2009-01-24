@@ -1,3 +1,7 @@
+2009-01-24  Andre Klapper  <a9016009@gmx.de>
+
+	* de.po: Fix bug #568859.
+
 2009-01-23  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.15.1 ===

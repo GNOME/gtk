@@ -1590,7 +1590,7 @@ msgstr ""
 
 #: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
-msgstr "Schriftwahl"
+msgstr "Farbwahl"
 
 #: gtk/gtkentry.c:8229 gtk/gtktextview.c:7778
 msgid "Input _Methods"
