@@ -50,10 +50,10 @@
 static guint theme_serial = 0;
 
 /* cursor_cache holds a cache of non-pixmap cursors to avoid expensive 
- * libXcursor searches, cursors are added to it but never removed. We make 
- * the assumption that since there are a small number of GdkDisplay's and 
- * a small number of cursor's that this list will stay small enough
- * not to be a problem.
+ * libXcursor searches, cursors are added to it but only removed when
+ * their display is closed. We make the assumption that since there are 
+ * a small number of display's and a small number of cursor's that this 
+ * list will stay small enough not to be a problem.
  */
 static GSList* cursor_cache = NULL;
 
@@ -575,6 +575,9 @@ _gdk_x11_cursor_update_theme (GdkCursor *cursor)
 
   if (private->xcursor != None)
     {
+      if (cursor->type == GDK_BLANK_CURSOR)
+        return;
+
       if (cursor->type == GDK_CURSOR_IS_PIXMAP)
 	{
 	  if (private->name)
