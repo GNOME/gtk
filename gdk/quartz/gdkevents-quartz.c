@@ -1661,7 +1661,7 @@ _gdk_events_queue (GdkDisplay *display)
       if (gdk_event_translate (event, nsevent))
         {
 	  ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
-          _gdk_windowing_got_event (display, node, event);
+          _gdk_windowing_got_event (display, node, event, 0);
         }
       else
         {
