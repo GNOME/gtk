@@ -1,3 +1,9 @@
+2009-01-25  Claudio Saavedra  <csaavedra@igalia.com>
+
+	Bug 563576 – Dummy po files break the build
+
+	* ast.po: copy contact data from po/ast.po, patch from Adrian Bunk
+
 2009-01-25  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
 
 	* es.po: Updated Spanish translation.
