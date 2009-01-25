@@ -176,6 +176,8 @@ gtk_radio_action_init (GtkRadioAction *action)
   action->private_data = GTK_RADIO_ACTION_GET_PRIVATE (action);
   action->private_data->group = g_slist_prepend (NULL, action);
   action->private_data->value = 0;
+
+  gtk_toggle_action_set_draw_as_radio (GTK_TOGGLE_ACTION (action), TRUE);
 }
 
 /**
@@ -206,12 +208,12 @@ gtk_radio_action_new (const gchar *name,
   g_return_val_if_fail (name != NULL, NULL);
 
   return g_object_new (GTK_TYPE_RADIO_ACTION,
-		       "name", name,
-		       "label", label,
-		       "tooltip", tooltip,
-		       "stock-id", stock_id,
-		       "value", value,
-		       NULL);
+                       "name", name,
+                       "label", label,
+                       "tooltip", tooltip,
+                       "stock-id", stock_id,
+                       "value", value,
+                       NULL);
 }
 
 static void

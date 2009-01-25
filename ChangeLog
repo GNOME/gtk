@@ -1,3 +1,7 @@
+2009-01-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkradioaction.c: Set draw-as-radio to TRUE.
+
 2009-01-24  Matthias Clasen  <mclasen@redhat.com>
 
 	Revert changes for bug 567124. Instead of trying to avoid
