@@ -226,7 +226,7 @@ gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
   if (!multicontext->slave)
     {
       GtkIMContext *slave;
-
+      
       g_free (multicontext->context_id);
        
       if (multicontext->priv->context_id)
@@ -258,17 +258,13 @@ gtk_im_multicontext_set_client_window (GtkIMContext *context,
 				       GdkWindow    *window)
 {
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
-  GtkIMContext *slave; 
   GdkScreen *screen; 
   GtkSettings *settings;
   gboolean connected;
 
   multicontext->priv->client_window = window;
 
-  slave = gtk_im_multicontext_get_slave (multicontext);
-
-  if (slave)
-    gtk_im_context_set_client_window (slave, window);
+  gtk_im_multicontext_set_slave (multicontext, NULL, FALSE);
 
   if (window == NULL) 
     return;

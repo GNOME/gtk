@@ -671,9 +671,6 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
   GdkScreen *screen;
   GtkSettings *settings;
       
-  /* assertion to make sure all of the unexpected invocation is really gone. */
-  g_return_val_if_fail (client_window != NULL, SIMPLE_ID);
-
   if (!contexts_hash)
     gtk_im_module_initialize ();
 

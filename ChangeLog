@@ -1,3 +1,15 @@
+2009-01-24  Matthias Clasen  <mclasen@redhat.com>
+
+	Revert changes for bug 567124. Instead of trying to avoid
+	setting up the im context before the widget is realized, just
+	reset it when the client window is set.
+
+	* gtk/gtkimmulticontext.c: Reset the slave when a client window
+	is set.
+
+	* gtk/gtkimmodule.c
+	* gtk/gtktextview.c: Revert changes for bug 567124.
+
 2009-01-25  Claudio Saavedra  <csaavedra@igalia.com>
 
 	* gtk/gtktreeview.c: Use gtk-doc syntax to refer to properties in

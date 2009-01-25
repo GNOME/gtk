@@ -2076,8 +2076,7 @@ gtk_text_view_update_im_spot_location (GtkTextView *text_view)
    */
   area.width = 0;
 
-  if (GTK_WIDGET_REALIZED (text_view))
-    gtk_im_context_set_cursor_location (text_view->im_context, &area);
+  gtk_im_context_set_cursor_location (text_view->im_context, &area);
 }
 
 static gboolean
@@ -3840,7 +3839,7 @@ gtk_text_view_realize (GtkWidget *widget)
     }
 
   /* Ensure updating the spot location. */
-  gtk_text_view_update_im_spot_location(text_view);
+  gtk_text_view_update_im_spot_location (text_view);
 }
 
 static void
