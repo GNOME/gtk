@@ -1,3 +1,10 @@
+2009-01-26  Bastien Nocera  <hadess@hadess.net>
+
+	Bug 569240 - Crasher when using markers
+
+	* gtk/gtkrange.c (gtk_range_destroy): Avoid crashes when destroying
+	a GtkRange with markers
+
 2009-01-26  Richard Hult  <richard@imendio.com>
 
 	Bug 566628 – gdk_display_close always asserts on win32 and quartz

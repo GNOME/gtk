@@ -1225,7 +1225,9 @@ gtk_range_destroy (GtkObject *object)
   if (range->layout->n_marks)
     {
       g_free (range->layout->marks);
+      range->layout->marks = NULL;
       g_free (range->layout->mark_pos);
+      range->layout->mark_pos = NULL;
       range->layout->n_marks = 0;
     }
 
