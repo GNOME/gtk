@@ -5512,6 +5512,13 @@ _gdk_windowing_window_set_composited (GdkWindow *window,
 #endif
 }
 
+void
+_gdk_windowing_window_process_updates_recurse (GdkWindow *window,
+                                               GdkRegion *region)
+{
+  _gdk_window_process_updates_recurse (window, expose_region);
+}
+
 static void
 gdk_window_impl_iface_init (GdkWindowImplIface *iface)
 {

@@ -287,6 +287,9 @@ void       _gdk_window_destroy           (GdkWindow      *window,
 void       _gdk_window_clear_update_area (GdkWindow      *window);
 void       _gdk_window_update_size       (GdkWindow      *window);
 
+void       _gdk_window_process_updates_recurse (GdkWindow *window,
+                                                GdkRegion *expose_region);
+
 void       _gdk_screen_close             (GdkScreen      *screen);
 
 const char *_gdk_get_sm_client_id (void);
@@ -361,6 +364,8 @@ void _gdk_windowing_got_event                (GdkDisplay       *display,
 					      GdkEvent         *event,
 					      gulong            serial);
 
+void _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
+                                                    GdkRegion *expose_region);
 
 /* Return the number of bits-per-pixel for images of the specified depth. */
 gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display,

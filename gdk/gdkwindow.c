@@ -4352,9 +4352,9 @@ gdk_window_schedule_update (GdkWindow *window)
     }
 }
 
-static void
-gdk_window_process_updates_recurse (GdkWindow *window,
-				    GdkRegion *expose_region)
+void
+_gdk_window_process_updates_recurse (GdkWindow *window,
+                                     GdkRegion *expose_region)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowObject *child;
@@ -4393,7 +4393,7 @@ gdk_window_process_updates_recurse (GdkWindow *window,
 	  gdk_region_intersect (child_region, expose_region);
 	  gdk_region_subtract (expose_region, child_region);
 	  gdk_region_offset (child_region, -child->x, -child->y);
-	  gdk_window_process_updates_recurse ((GdkWindow *)child, child_region);
+	  _gdk_window_process_updates_recurse ((GdkWindow *)child, child_region);
 	}
       else 
 	{
@@ -4472,7 +4472,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 
 	  gdk_region_get_clipbox (expose_region, &clip_box);
 	  end_implicit = gdk_window_begin_implicit_paint (window, &clip_box);
-	  gdk_window_process_updates_recurse (window, expose_region);
+	  _gdk_windowing_window_process_updates_recurse (window, expose_region);
 	  if (end_implicit)
 	    gdk_window_end_implicit_paint (window);
 	  
