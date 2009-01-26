@@ -1,3 +1,11 @@
+2009-01-26  Claudio Saavedra  <csaavedra@igalia.com>
+
+	Merged from trunk:
+
+	Bug 563576 – Dummy po files break the build
+
+	* ast.po: copy contact data from po/ast.po, patch from Adrian Bunk
+
 2009-01-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.14.7 ===
