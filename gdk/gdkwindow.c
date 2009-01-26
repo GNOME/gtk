@@ -440,7 +440,7 @@ _gdk_window_has_impl (GdkWindow *window)
 static gboolean
 gdk_window_has_no_impl (GdkWindowObject *window)
 {
-  return window->impl_window;
+  return window->impl_window != window;
 }
 
 static void
