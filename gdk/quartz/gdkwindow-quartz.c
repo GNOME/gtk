@@ -28,8 +28,8 @@
 
 static gpointer parent_class;
 
-static GSList *update_windows;
-static guint   update_idle;
+static GSList   *update_nswindows;
+static gboolean  in_process_all_updates = FALSE;
 
 static GSList *main_window_stack;
 
@@ -176,29 +176,40 @@ gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
 
 static void
 gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
+                                           GdkWindow       *window,
 					   const GdkRegion *region)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
-  GdkDrawableImplQuartz *drawable_impl;
+  GdkWindowObject *private = (GdkWindowObject*)window;
   int n_rects;
-  GdkRectangle *rects;
+  GdkRectangle *rects = NULL;
   GdkPixmap *bg_pixmap;
-  GdkWindow *window;
+  GdkRegion *clipped_and_offset_region;
+  gboolean free_clipped_and_offset_region = TRUE;
 
-  drawable_impl = GDK_DRAWABLE_IMPL_QUARTZ (impl);
-  bg_pixmap = GDK_WINDOW_OBJECT (drawable_impl->wrapper)->bg_pixmap;
+  bg_pixmap = private->bg_pixmap;
+
+  clipped_and_offset_region = gdk_region_copy (region);
+
+  gdk_region_intersect (clipped_and_offset_region,
+                        private->clip_region_with_children);
+  gdk_region_offset (clipped_and_offset_region,
+                     private->abs_x, private->abs_y);
 
   if (impl->begin_paint_count == 0)
-    impl->paint_clip_region = gdk_region_copy (region);
+    {
+      impl->paint_clip_region = clipped_and_offset_region;
+      free_clipped_and_offset_region = FALSE;
+    }
   else
-    gdk_region_union (impl->paint_clip_region, region);
+    gdk_region_union (impl->paint_clip_region, clipped_and_offset_region);
 
   impl->begin_paint_count++;
 
   if (bg_pixmap == GDK_NO_BG)
-    return;
+    goto done;
 
-  gdk_region_get_rectangles (region, &rects, &n_rects);
+  gdk_region_get_rectangles (clipped_and_offset_region, &rects, &n_rects);
 
   if (bg_pixmap == NULL)
     {
@@ -207,9 +218,9 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
       gint i;
 
       cg_context = gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
-      _gdk_quartz_colormap_get_rgba_from_pixel (gdk_drawable_get_colormap (drawable_impl->wrapper),
-				      GDK_WINDOW_OBJECT (drawable_impl->wrapper)->bg_color.pixel,
-				      &r, &g, &b, &a);
+      _gdk_quartz_colormap_get_rgba_from_pixel (gdk_drawable_get_colormap (window),
+                                                private->bg_color.pixel,
+                                                &r, &g, &b, &a);
       CGContextSetRGBFillColor (cg_context, r, g, b, a);
  
       for (i = 0; i < n_rects; i++)
@@ -230,7 +241,6 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
 
       x_offset = y_offset = 0;
 
-      window = GDK_WINDOW (drawable_impl->wrapper);
       while (window && bg_pixmap == GDK_PARENT_RELATIVE_BG)
         {
           /* If this window should have the same background as the parent,
@@ -248,8 +258,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
           /* Parent relative background but the parent doesn't have a
            * pixmap.
            */ 
-          g_free (rects);
-          return;
+          goto done;
         }
 
       /* Note: There should be a CG API to draw tiled images, we might
@@ -279,6 +288,9 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
       g_object_unref (gc);
     }
 
+ done:
+  if (free_clipped_and_offset_region)
+    gdk_region_destroy (clipped_and_offset_region);
   g_free (rects);
 }
 
@@ -296,155 +308,83 @@ gdk_window_impl_quartz_end_paint (GdkPaintable *paintable)
     }
 }
 
-static void
-gdk_window_quartz_process_updates_internal (GdkWindow *window)
+void
+_gdk_windowing_window_process_updates_recurse (GdkWindow *window,
+                                               GdkRegion *region)
 {
-  GdkWindowObject *private = (GdkWindowObject *) window;
-  GdkWindowImplQuartz *impl = (GdkWindowImplQuartz *) private->impl;
-      
-  if (private->update_area)
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplQuartz *impl = (GdkWindowImplQuartz *)private->impl;
+  int i, n_rects;
+  GdkRectangle *rects;
+
+  /* Make sure to only flush each toplevel at most once if we're called
+   * from process_all_updates.
+   */
+  if (in_process_all_updates)
     {
-      int i, n_rects;
-      GdkRectangle *rects;
-
-      gdk_region_get_rectangles (private->update_area, &rects, &n_rects);
-
-      gdk_region_destroy (private->update_area);
-      private->update_area = NULL;
-
-      for (i = 0; i < n_rects; i++) 
-	{
-	  [impl->view setNeedsDisplayInRect:NSMakeRect (rects[i].x, rects[i].y,
-							rects[i].width, rects[i].height)];
-	}
-
-      [impl->view displayIfNeeded];
-
-      g_free (rects);
-    }
-}
-
-static void
-gdk_window_quartz_process_all_updates (void)
-{
-  GSList *old_update_windows = update_windows;
-  GSList *tmp_list = update_windows;
-  GSList *nswindows;
-
-  update_idle = 0;
-  update_windows = NULL;
-  nswindows = NULL;
-
-  g_slist_foreach (old_update_windows, (GFunc) g_object_ref, NULL);
-  
-  GDK_QUARTZ_ALLOC_POOL;
-
-  while (tmp_list)
-    {
-      GdkWindow *window = tmp_list->data;
       GdkWindow *toplevel;
 
-      /* Only flush each toplevel at most once. */
       toplevel = gdk_window_get_toplevel (window);
       if (toplevel)
         {
-          GdkWindowObject *private;
-          GdkWindowImplQuartz *impl;
+          GdkWindowObject *toplevel_private;
+          GdkWindowImplQuartz *toplevel_impl;
           NSWindow *nswindow;
 
-          private = (GdkWindowObject *) toplevel;
-          impl = (GdkWindowImplQuartz *) private->impl;
-          nswindow = impl->toplevel;
+          toplevel_private = (GdkWindowObject *)toplevel;
+          toplevel_impl = (GdkWindowImplQuartz *)toplevel_private->impl;
+          nswindow = toplevel_impl->toplevel;
 
           if (nswindow && ![nswindow isFlushWindowDisabled]) 
             {
+              [nswindow retain];
               [nswindow disableFlushWindow];
-              nswindows = g_slist_prepend (nswindows, nswindow);
+              update_nswindows = g_slist_prepend (update_nswindows, nswindow);
             }
         }
-
-      gdk_window_quartz_process_updates_internal (tmp_list->data);
-
-      g_object_unref (tmp_list->data);
-      tmp_list = tmp_list->next;
     }
 
-  tmp_list = nswindows;
-  while (tmp_list) 
+  gdk_region_get_rectangles (region, &rects, &n_rects);
+
+  for (i = 0; i < n_rects; i++)
+    {
+      [impl->view setNeedsDisplayInRect:NSMakeRect (rects[i].x, rects[i].y,
+                                                    rects[i].width, rects[i].height)];
+    }
+
+  g_free (rects);
+
+  [impl->view displayIfNeeded];
+}
+
+void
+_gdk_windowing_before_process_all_updates (void)
+{
+  in_process_all_updates = TRUE;
+}
+
+void
+_gdk_windowing_after_process_all_updates (void)
+{
+  GSList *old_update_nswindows = update_nswindows;
+  GSList *tmp_list = update_nswindows;
+
+  update_nswindows = NULL;
+
+  while (tmp_list)
     {
       NSWindow *nswindow = tmp_list->data;
 
       [nswindow enableFlushWindow];
       [nswindow flushWindow];
+      [nswindow release];
 
       tmp_list = tmp_list->next;
     }
-		    
-  GDK_QUARTZ_RELEASE_POOL;
 
-  g_slist_free (old_update_windows);
-  g_slist_free (nswindows);
-}
+  g_slist_free (old_update_nswindows);
 
-static gboolean
-gdk_window_quartz_update_idle (gpointer data)
-{
-  gdk_window_quartz_process_all_updates ();
-
-  return FALSE;
-}
-
-static void
-gdk_window_impl_quartz_invalidate_maybe_recurse (GdkPaintable    *paintable,
-						 const GdkRegion *region,
-						 gboolean        (*child_func) (GdkWindow *, gpointer),
-						 gpointer         user_data)
-{
-  GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
-  GdkDrawableImplQuartz *drawable_impl = (GdkDrawableImplQuartz *) window_impl;
-  GdkWindow *window = (GdkWindow *) drawable_impl->wrapper;
-  GdkWindowObject *private = (GdkWindowObject *) window;
-  GdkRegion *visible_region;
-
-  visible_region = gdk_drawable_get_visible_region (window);
-  gdk_region_intersect (visible_region, region);
-
-  if (private->update_area)
-    {
-      gdk_region_union (private->update_area, visible_region);
-      gdk_region_destroy (visible_region);
-    }
-  else
-    {
-      /* FIXME: When the update_window/update_area handling is abstracted in
-       * some way, we can remove this check. Currently it might be cleared
-       * in the generic code without us knowing, see bug #530801.
-       */
-      if (!g_slist_find (update_windows, window))
-        update_windows = g_slist_prepend (update_windows, window);
-      private->update_area = visible_region;
-
-      if (update_idle == 0)
-        update_idle = gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW,
-                                                 gdk_window_quartz_update_idle, NULL, NULL);
-    }
-}
-
-static void
-gdk_window_impl_quartz_process_updates (GdkPaintable *paintable,
-					gboolean      update_children)
-{
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
-  GdkDrawableImplQuartz *drawable_impl = (GdkDrawableImplQuartz *) impl;
-  GdkWindowObject *private = (GdkWindowObject *) drawable_impl->wrapper;
-
-  if (private->update_area)
-    {
-      GDK_QUARTZ_ALLOC_POOL;
-      gdk_window_quartz_process_updates_internal ((GdkWindow *) private);
-      update_windows = g_slist_remove (update_windows, private);
-      GDK_QUARTZ_RELEASE_POOL;
-    }
+  in_process_all_updates = FALSE;
 }
 
 static void
@@ -452,9 +392,6 @@ gdk_window_impl_quartz_paintable_init (GdkPaintableIface *iface)
 {
   iface->begin_paint_region = gdk_window_impl_quartz_begin_paint_region;
   iface->end_paint = gdk_window_impl_quartz_end_paint;
-
-  iface->invalidate_maybe_recurse = gdk_window_impl_quartz_invalidate_maybe_recurse;
-  iface->process_updates = gdk_window_impl_quartz_process_updates;
 }
 
 GType
@@ -1000,7 +937,6 @@ _gdk_quartz_window_destroy (GdkWindow *window,
   private = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
-  update_windows = g_slist_remove (update_windows, window);
   main_window_stack = g_slist_remove (main_window_stack, window);
 
   g_list_free (impl->sorted_children);
