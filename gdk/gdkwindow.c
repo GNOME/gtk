@@ -8510,32 +8510,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
       return;
     }
 
-  if ((event->type == GDK_ENTER_NOTIFY ||
-       event->type == GDK_LEAVE_NOTIFY) &&
-      (event->crossing.mode == GDK_CROSSING_GRAB ||
-       event->crossing.mode == GDK_CROSSING_UNGRAB))
-    {
-      /* We synthesize all crossing events due to grabs are synthesized,
-       * so we ignore the native ones. This is partly to get easier non-X
-       * portability, and because of problems with race conditions due to
-       * the cached state in the client and the real state in the xserver
-       * when grabbing.
-       */
-
-      /* We ended up in this window after some (perhaps other clients)
-	 grab, so update the toplevel_under_window state */
-      if (event->type == GDK_ENTER_NOTIFY &&
-	  event->crossing.mode == GDK_CROSSING_UNGRAB)
-	{
-	  if (display->pointer_info.toplevel_under_pointer)
-	    g_object_unref (display->pointer_info.toplevel_under_pointer);
-	  display->pointer_info.toplevel_under_pointer = g_object_ref (event_window);
-	}
-      
-      unlink_event = TRUE;
-      goto out;
-    }
-  
   /* Store last pointer window and position/state */
   if (event->type == GDK_ENTER_NOTIFY &&
       event->crossing.detail != GDK_NOTIFY_INFERIOR)
