@@ -2171,7 +2171,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       GdkPaintableIface *iface = GDK_PAINTABLE_GET_IFACE (private->impl);
 
       if (iface->begin_paint_region)
-        iface->begin_paint_region ((GdkPaintable*)private->impl, region);
+        iface->begin_paint_region ((GdkPaintable*)private->impl, window, region);
       
       return;
     }

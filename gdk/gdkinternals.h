@@ -396,6 +396,7 @@ struct _GdkPaintableIface
   GTypeInterface g_iface;
   
   void (* begin_paint_region)       (GdkPaintable    *paintable,
+                                     GdkWindow       *window,
                                      const GdkRegion *region);
   void (* end_paint)                (GdkPaintable    *paintable);
 
