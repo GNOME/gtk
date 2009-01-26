@@ -2,6 +2,16 @@
 
 	Merged from trunk:
 
+	Bug 559420 – gtk_icon_view_enable_model_drag_[source|dest] docs
+	wrt. reorderable property
+
+	* gtk/gtkiconview.c: Improve docstrings regarding reorderable
+        property. Based on a patch by Björn Lindqvist.
+
+2009-01-26  Claudio Saavedra  <csaavedra@igalia.com>
+
+	Merged from trunk:
+
 	* gtk/gtktreeview.c: (gtk_tree_view_class_init): Slightly
 	improve ::search-column property description.
 
