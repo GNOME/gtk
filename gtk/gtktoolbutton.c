@@ -642,6 +642,9 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
   gboolean use_mnemonic = TRUE;
   const char *label;
 
+  if (_gtk_tool_item_create_menu_proxy (item))
+    return TRUE;
+ 
   if (GTK_IS_LABEL (button->priv->label_widget))
     {
       label = gtk_label_get_label (GTK_LABEL (button->priv->label_widget));

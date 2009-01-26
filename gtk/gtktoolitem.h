@@ -128,6 +128,10 @@ void		gtk_tool_item_rebuild_menu	       (GtkToolItem *tool_item);
 
 void            gtk_tool_item_toolbar_reconfigured     (GtkToolItem *tool_item);
 
+/* private */
+
+gboolean       _gtk_tool_item_create_menu_proxy        (GtkToolItem *tool_item);
+
 G_END_DECLS
 
 #endif /* __GTK_TOOL_ITEM_H__ */

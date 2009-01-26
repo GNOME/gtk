@@ -1,5 +1,16 @@
 2009-01-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktoolitem.[hc]: Export the function to create a proxy
+	menuitem from the action for use in subclasses.
+
+	* gtk/gtktoolbutton.c:
+	* gtk/gtktoggletoolbutton.c: Use it here.
+
+	* gtk/gtkrecentchoosermenu.c: Avoid temporary empty state that
+	can lead to a recent action proxy menu being erroneously hidden.
+
+2009-01-25  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkradioaction.c: Set draw-as-radio to TRUE.
 
 2009-01-24  Matthias Clasen  <mclasen@redhat.com>

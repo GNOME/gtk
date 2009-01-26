@@ -970,6 +970,8 @@ idle_populate_func (gpointer data)
 
 	  return FALSE;
 	}
+      else
+        gtk_widget_hide (pdata->placeholder);
       
       pdata->n_items = g_list_length (pdata->items);
       pdata->loaded_items = 0;
@@ -1056,9 +1058,8 @@ gtk_recent_chooser_menu_populate (GtkRecentChooserMenu *menu)
 
   priv->icon_size = get_icon_size_for_widget (GTK_WIDGET (menu));
   
-  /* remove our menu items first and hide the placeholder */
+  /* remove our menu items first */
   gtk_recent_chooser_menu_dispose_items (menu);
-  gtk_widget_hide (priv->placeholder);
   
   priv->populate_id = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 30,
   					         idle_populate_func,

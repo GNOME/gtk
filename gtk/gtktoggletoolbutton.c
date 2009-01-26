@@ -201,10 +201,16 @@ gtk_toggle_tool_button_create_menu_proxy (GtkToolItem *item)
   GtkStockItem stock_item;
   gboolean use_mnemonic = TRUE;
   const char *label;
+  GtkWidget *label_widget;
+  const gchar *label_text;
+  const gchar *stock_id;
 
-  GtkWidget *label_widget = gtk_tool_button_get_label_widget (tool_button);
-  const gchar *label_text = gtk_tool_button_get_label (tool_button);
-  const gchar *stock_id = gtk_tool_button_get_stock_id (tool_button);
+  if (_gtk_tool_item_create_menu_proxy (item))
+    return TRUE;
+
+  label_widget = gtk_tool_button_get_label_widget (tool_button);
+  label_text = gtk_tool_button_get_label (tool_button);
+  stock_id = gtk_tool_button_get_stock_id (tool_button);
 
   if (GTK_IS_LABEL (label_widget))
     {

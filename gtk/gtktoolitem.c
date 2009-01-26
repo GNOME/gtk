@@ -127,8 +127,6 @@ static gboolean gtk_tool_item_real_set_tooltip (GtkToolItem *tool_item,
 						const gchar *tip_text,
 						const gchar *tip_private);
 
-static gboolean gtk_tool_item_create_menu_proxy (GtkToolItem *item);
-
 static void gtk_tool_item_activatable_interface_init (GtkActivatableIface  *iface);
 static void gtk_tool_item_activatable_update         (GtkActivatable       *activatable,
 						      GtkAction            *action,
@@ -169,7 +167,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
   widget_class->size_allocate = gtk_tool_item_size_allocate;
   widget_class->parent_set    = gtk_tool_item_parent_set;
 
-  klass->create_menu_proxy = gtk_tool_item_create_menu_proxy;
+  klass->create_menu_proxy = _gtk_tool_item_create_menu_proxy;
   klass->set_tooltip       = gtk_tool_item_real_set_tooltip;
   
   g_object_class_install_property (object_class,
@@ -554,8 +552,8 @@ gtk_tool_item_size_allocate (GtkWidget     *widget,
     }
 }
 
-static gboolean
-gtk_tool_item_create_menu_proxy (GtkToolItem *item)
+gboolean
+_gtk_tool_item_create_menu_proxy (GtkToolItem *item)
 {
   GtkWidget *menu_item;
   gboolean visible_overflown;
@@ -574,6 +572,8 @@ gtk_tool_item_create_menu_proxy (GtkToolItem *item)
 	}
       else
 	gtk_tool_item_set_proxy_menu_item (item, "gtk-action-menu-item", NULL);
+
+      return TRUE;
     }
 
   return FALSE;
