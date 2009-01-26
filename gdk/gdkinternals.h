@@ -366,6 +366,8 @@ void _gdk_windowing_got_event                (GdkDisplay       *display,
 
 void _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
                                                     GdkRegion *expose_region);
+void _gdk_windowing_before_process_all_updates     (void);
+void _gdk_windowing_after_process_all_updates      (void);
 
 /* Return the number of bits-per-pixel for images of the specified depth. */
 gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
@@ -404,13 +406,6 @@ struct _GdkPaintableIface
                                      GdkWindow       *window,
                                      const GdkRegion *region);
   void (* end_paint)                (GdkPaintable    *paintable);
-
-  void (* invalidate_maybe_recurse) (GdkPaintable    *paintable,
-				     const GdkRegion *region,
-				     gboolean       (*child_func) (GdkWindow *, gpointer),
-				     gpointer         user_data);
-  void (* process_updates)          (GdkPaintable    *paintable,
-				     gboolean         update_children);
 };
 
 GType _gdk_paintable_get_type (void) G_GNUC_CONST;

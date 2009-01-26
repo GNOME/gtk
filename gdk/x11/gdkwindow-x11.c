@@ -5519,6 +5519,16 @@ _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
   _gdk_window_process_updates_recurse (window, expose_region);
 }
 
+void
+_gdk_windowing_after_process_all_updates (void)
+{
+}
+
+void
+_gdk_windowing_after_process_all_updates (void)
+{
+}
+
 static void
 gdk_window_impl_iface_init (GdkWindowImplIface *iface)
 {

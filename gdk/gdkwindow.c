@@ -4525,12 +4525,20 @@ gdk_window_process_all_updates (void)
 {
   GSList *old_update_windows = update_windows;
   GSList *tmp_list = update_windows;
+  static gboolean in_process_all_updates = FALSE;
+
+  if (in_process_all_updates)
+    return;
+
+  in_process_all_updates = TRUE;
 
   if (update_idle)
     g_source_remove (update_idle);
   
   update_windows = NULL;
   update_idle = 0;
+
+  _gdk_windowing_before_process_all_updates ();
 
   g_slist_foreach (old_update_windows, (GFunc)g_object_ref, NULL);
   
@@ -4554,6 +4562,10 @@ gdk_window_process_all_updates (void)
   g_slist_free (old_update_windows);
 
   flush_all_displays ();
+
+  _gdk_windowing_after_process_all_updates ();
+
+  in_process_all_updates = FALSE;
 }
 
 /**
@@ -4579,16 +4591,6 @@ gdk_window_process_updates (GdkWindow *window,
   GdkWindowObject *impl_window;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_IS_PAINTABLE (private->impl))
-    {
-      GdkPaintableIface *iface = GDK_PAINTABLE_GET_IFACE (private->impl);
-
-      if (iface->process_updates)
-        iface->process_updates ((GdkPaintable*)private->impl, update_children);
-
-      return;
-    }
 
   impl_window = gdk_window_get_impl_window (private);
   if ((impl_window->update_area ||
@@ -4722,16 +4724,6 @@ gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
   
   if (private->input_only || !GDK_WINDOW_IS_MAPPED (window))
     return;
-
-  if (GDK_IS_PAINTABLE (private->impl))
-    {
-      GdkPaintableIface *iface = GDK_PAINTABLE_GET_IFACE (private->impl);
-
-      if (iface->invalidate_maybe_recurse)
-        iface->invalidate_maybe_recurse ((GdkPaintable*)private->impl, 
-                                         region, child_func, user_data);
-      return;
-    }
 
   visible_region = gdk_drawable_get_visible_region (window);
   gdk_region_intersect (visible_region, region);
