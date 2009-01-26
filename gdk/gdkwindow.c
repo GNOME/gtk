@@ -6575,8 +6575,10 @@ update_cursor (GdkDisplay *display)
   if (display->pointer_grab.window != NULL &&
       !is_parent_of (display->pointer_grab.window, (GdkWindow *)cursor_window))
     cursor_window = (GdkWindowObject *)display->pointer_grab.window;
-  
-  GDK_WINDOW_IMPL_GET_IFACE (pointer_window->impl)->set_cursor ((GdkWindow *)pointer_window,
+
+  /* Set all cursors on toplevel, otherwise its tricky to keep track of
+   * which native window has what cursor set. */
+  GDK_WINDOW_IMPL_GET_IFACE (pointer_window->impl)->set_cursor (gdk_window_get_toplevel ((GdkWindow *)pointer_window),
 								cursor_window->cursor);
 }
 
