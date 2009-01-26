@@ -36,7 +36,7 @@ gdk_display_get_default_group (GdkDisplay *display)
 void
 _gdk_windowing_set_default_display (GdkDisplay *display)
 {
-  g_assert (_gdk_display == display);
+  g_assert (display == NULL || _gdk_display == display);
 }
 
 GdkDisplay *

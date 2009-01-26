@@ -1,3 +1,12 @@
+2009-01-26  Richard Hult  <richard@imendio.com>
+
+	Bug 566628 – gdk_display_close always asserts on win32 and quartz
+
+	* gdk/quartz/gdkdisplay-quartz.c
+	(_gdk_windowing_set_default_display): Copy fix for bug #566628
+	from the win32 backend: Allow also a NULL parameter in the
+	g_assert().
+
 2009-01-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktoolitem.[hc]: Export the function to create a proxy
