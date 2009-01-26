@@ -31,6 +31,7 @@
 
 #include <glib.h>
 #include "gdkx.h"
+#include "gdkasync.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"
 #include "gdkscreen.h"
@@ -591,6 +592,25 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
   return FALSE;
 }
 
+struct XPointerUngrabInfo {
+  GdkDisplay *display;
+  guint32 time;
+};
+
+static void
+pointer_ungrab_callback (gpointer _data)
+{
+  struct XPointerUngrabInfo *data = _data;
+
+  _gdk_display_unset_has_pointer_grab (data->display,
+				       FALSE,
+				       FALSE,
+				       data->time);
+
+  g_free (data);
+}
+
+
 #define XSERVER_TIME_IS_LATER(time1, time2)                        \
   ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
     (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
@@ -625,10 +645,16 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
       display->pointer_grab.time == GDK_CURRENT_TIME ||
       !XSERVER_TIME_IS_LATER (display->pointer_grab.time, time_))
     {
-      _gdk_display_unset_has_pointer_grab (display,
-					   FALSE,
-					   FALSE,
-					   time_);
+      struct XPointerUngrabInfo *data;
+
+      data = g_new (struct XPointerUngrabInfo, 1);
+
+      data->display = GDK_DISPLAY_OBJECT (display_x11);
+      data->time = time_;
+
+      _gdk_x11_roundtrip_async (data->display, 
+				pointer_ungrab_callback,
+				data);
     }
 }
 

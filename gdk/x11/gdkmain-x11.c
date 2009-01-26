@@ -44,6 +44,7 @@
 #include "gdk.h"
 
 #include "gdkx.h"
+#include "gdkasync.h"
 #include "gdkdisplay-x11.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
@@ -156,6 +157,33 @@ generate_grab_broken_event (GdkWindow *window,
       event.grab_broken.grab_window = grab_window;
       gdk_event_put (&event);
     }
+}
+
+struct XPointerGrabInfo {
+  GdkDisplay *display;
+  GdkWindow *window;
+  GdkWindow *native_window;
+  gboolean owner_events;
+  gulong serial;
+  guint event_mask;
+  guint32 time;
+};
+
+static void
+has_pointer_grab_callback (gpointer _data)
+{
+  struct XPointerGrabInfo *data = _data;
+
+  _gdk_display_set_has_pointer_grab (data->display,
+				     data->window,
+				     data->native_window,
+				     data->owner_events,
+				     data->event_mask,
+				     data->serial,
+				     data->time,
+				     FALSE);
+
+  g_free (data);
 }
 
 /*
@@ -276,14 +304,21 @@ gdk_pointer_grab (GdkWindow *	  window,
   
   if (return_val == GrabSuccess)
     {
-      _gdk_display_set_has_pointer_grab (GDK_DISPLAY_OBJECT (display_x11),
-					 window,
-					 native,
-					 owner_events,
-					 event_mask,
-					 serial,
-					 time,
-					 FALSE);
+      struct XPointerGrabInfo *data;
+
+      data = g_new (struct XPointerGrabInfo, 1);
+
+      data->display = GDK_DISPLAY_OBJECT (display_x11);
+      data->window = window;
+      data->native_window = native;
+      data->owner_events = owner_events;
+      data->event_mask = event_mask;
+      data->serial = serial;
+      data->time = time;
+
+      _gdk_x11_roundtrip_async (data->display, 
+				has_pointer_grab_callback,
+				data);
     }
 
   return gdk_x11_convert_grab_status (return_val);
