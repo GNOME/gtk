@@ -640,7 +640,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 				     PROP_SEARCH_COLUMN,
 				     g_param_spec_int ("search-column",
 						       P_("Search Column"),
-						       P_("Model column to search through when searching through code"),
+						       P_("Model column to search through during interactive search"),
 						       -1,
 						       G_MAXINT,
 						       -1,

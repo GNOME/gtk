@@ -1,3 +1,10 @@
+2009-01-26  Claudio Saavedra  <csaavedra@igalia.com>
+
+	Merged from trunk:
+
+	* gtk/gtktreeview.c: (gtk_tree_view_class_init): Slightly
+	improve ::search-column property description.
+
 2009-01-21  Cody Russell  <bratsche@gnome.org>
 
 	Bug 568592 – GailTextCell no longer implements AtkAction interface
