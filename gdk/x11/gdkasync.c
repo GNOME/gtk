@@ -772,7 +772,7 @@ roundtrip_handler (Display *dpy,
 		   int      len,
 		   XPointer data)
 {
-  RoundtripState *state = (SendEventState *)data;  
+  RoundtripState *state = (RoundtripState *)data;  
   
   if (dpy->last_request_read == state->get_input_focus_req)
     {
