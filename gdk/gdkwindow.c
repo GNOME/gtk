@@ -8550,7 +8550,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
   else if (is_button_type (event->type))
     unlink_event = proxy_button_event (event);
 
- out:
   if (unlink_event)
     {
       _gdk_event_queue_remove_link (display, event_link);
