@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk.gnome-2-14.ne\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:58-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2006-07-07 14:33+0545\n"
 "Last-Translator: Mahesh subedi <submanesh@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -1568,11 +1568,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "रङ चयन"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7778
+#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
 msgid "Input _Methods"
 msgstr "आगत विधिहरू"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
 msgid "_Insert Unicode Control Character"
 msgstr "युनिकोड नियन्त्रण क्यारेक्टर घुसाउनुहोस्"
 
@@ -2144,13 +2144,13 @@ msgstr "TIFF छवि लोड गर्न असफल"
 msgid "Simple"
 msgstr "साइज"
 
-#: gtk/gtkimmulticontext.c:545
+#: gtk/gtkimmulticontext.c:541
 #, fuzzy
 msgctxt "input method menu"
 msgid "System"
 msgstr "फाइल प्रणाली"
 
-#: gtk/gtkimmulticontext.c:629
+#: gtk/gtkimmulticontext.c:625
 #, fuzzy, c-format
 msgctxt "input method menu"
 msgid "System (%s)"

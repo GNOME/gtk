@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:58-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2008-09-08 17:43+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@redhat.com>\n"
 "Language-Team: American English <kde-i18n-doc@lists.kde.org>\n"
@@ -1553,11 +1553,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "ৰঙৰ নিৰ্ব্বাচন"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7778
+#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
 msgid "Input _Methods"
 msgstr "নিবেশ পদ্ধতি (_M)"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode নিয়ন্ত্ৰণ আকৰ ভৰাওক (_I)"
 
@@ -2117,13 +2117,13 @@ msgstr "আইকণ তোলাত বিফল"
 msgid "Simple"
 msgstr "সাধাৰণ"
 
-#: gtk/gtkimmulticontext.c:545
+#: gtk/gtkimmulticontext.c:541
 #, fuzzy
 msgctxt "input method menu"
 msgid "System"
 msgstr "নথিপত্ৰৰপ্ৰণালী"
 
-#: gtk/gtkimmulticontext.c:629
+#: gtk/gtkimmulticontext.c:625
 #, fuzzy, c-format
 msgctxt "input method menu"
 msgid "System (%s)"

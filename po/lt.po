@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:58-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2009-01-09 11:45+0200\n"
 "Last-Translator: Rimas Kudelis <rq@akl.lt>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
@@ -1550,11 +1550,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Spalvos pasirinkimas"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7778
+#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
 msgid "Input _Methods"
 msgstr "Įvesties _metodai"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
 msgid "_Insert Unicode Control Character"
 msgstr "Įterpti _Unicode valdymo simbolį"
 
@@ -2115,12 +2115,12 @@ msgstr "Nepavyko įkelti piktogramos"
 msgid "Simple"
 msgstr "Paprastasis"
 
-#: gtk/gtkimmulticontext.c:545
+#: gtk/gtkimmulticontext.c:541
 msgctxt "input method menu"
 msgid "System"
 msgstr "Įvesties metodų meniu|Sistemos numatytasis"
 
-#: gtk/gtkimmulticontext.c:629
+#: gtk/gtkimmulticontext.c:625
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"

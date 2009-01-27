@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:58-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2008-09-17 20:27+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya\n"
@@ -1552,11 +1552,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "ରଙ୍ଗ ଚୟନ"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7778
+#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
 msgid "Input _Methods"
 msgstr "ନିବେଶ ପ୍ରଣାଳୀ (_M)"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
 msgid "_Insert Unicode Control Character"
 msgstr "ୟୁନିକୋଡ ନିୟନ୍ତ୍ରଣ ଅକ୍ଷର ଭର୍ତ୍ତି କରନ୍ତୁ (_I)"
 
@@ -2115,13 +2115,13 @@ msgstr "ଚିତ୍ର ସଂକେତ ଧାରଣ କରିବାରେ ଅ�
 msgid "Simple"
 msgstr "ସରଳ"
 
-#: gtk/gtkimmulticontext.c:545
+#: gtk/gtkimmulticontext.c:541
 #, fuzzy
 msgctxt "input method menu"
 msgid "System"
 msgstr "ଫାଇଲ ତନ୍ତ୍ର"
 
-#: gtk/gtkimmulticontext.c:629
+#: gtk/gtkimmulticontext.c:625
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"

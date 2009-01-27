@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:58-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2008-09-18 22:25+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
@@ -1550,11 +1550,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "फोन्ट निवडणे"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7778
+#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
 msgid "Input _Methods"
 msgstr "इनपुट पद्धती (_M)"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
 msgid "_Insert Unicode Control Character"
 msgstr "युनिकोड नियंत्रण अक्षर घाला(_I)"
 
@@ -2114,13 +2114,13 @@ msgstr "चिन्ह दाखल करू शकले नाही"
 msgid "Simple"
 msgstr "सोपे"
 
-#: gtk/gtkimmulticontext.c:545
+#: gtk/gtkimmulticontext.c:541
 #, fuzzy
 msgctxt "input method menu"
 msgid "System"
 msgstr "फाइल प्रणाली"
 
-#: gtk/gtkimmulticontext.c:629
+#: gtk/gtkimmulticontext.c:625
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"

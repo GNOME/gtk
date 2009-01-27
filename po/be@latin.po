@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-menus\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:58-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2007-12-09 14:43+0200\n"
 "Last-Translator: Alaksandar Navicki <zolak@lacinka.org>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -1584,11 +1584,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Vybar koleru"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7778
+#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
 msgid "Input _Methods"
 msgstr "_Metady ŭvodu"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
 msgid "_Insert Unicode Control Character"
 msgstr "_Ustaŭ kantrolny znak Unikodu"
 
@@ -2153,13 +2153,13 @@ msgstr "Niemahčyma zahruzić ikonu"
 msgid "Simple"
 msgstr "Pamier"
 
-#: gtk/gtkimmulticontext.c:545
+#: gtk/gtkimmulticontext.c:541
 #, fuzzy
 msgctxt "input method menu"
 msgid "System"
 msgstr "Systema fajłaŭ"
 
-#: gtk/gtkimmulticontext.c:629
+#: gtk/gtkimmulticontext.c:625
 #, fuzzy, c-format
 msgctxt "input method menu"
 msgid "System (%s)"

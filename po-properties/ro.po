@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:59-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2008-09-18 01:11+0300\n"
 "Last-Translator: Mișu Moldovan <dumol@gnome.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -257,7 +257,7 @@ msgstr "Nume"
 msgid "A unique name for the action."
 msgstr "Un nume unic pentru acțiune."
 
-#: gtk/gtkaction.c:198 gtk/gtkbutton.c:222 gtk/gtkexpander.c:195
+#: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
@@ -312,11 +312,11 @@ msgstr "Nume iconiță"
 msgid "The name of the icon from the icon theme"
 msgstr "Numele iconiței din tema de iconițe"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:178
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
 msgid "Visible when horizontal"
 msgstr "Vizibil pe orizontală"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:179
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -336,11 +336,11 @@ msgstr ""
 "Dacă elementele din bara de unelte pentru această acțiune vor fi afișați în "
 "meniul suplimentar când spațiul e insuficient."
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:185
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
 msgid "Visible when vertical"
 msgstr "Vizibil pe verticală"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:186
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -348,7 +348,7 @@ msgstr ""
 "Dacă elementul din bara cu unelte va fi vizibil când bara cu unelte este "
 "orientată pe verticală."
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:192
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
 msgid "Is important"
 msgstr "E important"
 
@@ -463,7 +463,7 @@ msgstr "Mărimea paginii la ajustare"
 msgid "Horizontal alignment"
 msgstr "Aliniere orizontală"
 
-#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:273
+#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:270
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -475,7 +475,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Aliniere verticală"
 
-#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:292
+#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:289
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -786,7 +786,7 @@ msgstr "Domeniu de traducere"
 msgid "The translation domain used by gettext"
 msgstr "Domeniul de traducere utilizat de gettext"
 
-#: gtk/gtkbutton.c:223
+#: gtk/gtkbutton.c:220
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -794,12 +794,12 @@ msgstr ""
 "Textul unui widget etichetă dinăuntrul unui buton, în caz că butonul conține "
 "un widget etichetă"
 
-#: gtk/gtkbutton.c:230 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
 #: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "Utilizează sublinieri"
 
-#: gtk/gtkbutton.c:231 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
 #: gtk/gtkmenuitem.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -808,70 +808,70 @@ msgstr ""
 "Dacă e setat, o linie de subliniere în text indică faptul că următorul "
 "caracter ar trebui să fie utilizat ca tasta de accelerare"
 
-#: gtk/gtkbutton.c:238 gtk/gtkimagemenuitem.c:148
+#: gtk/gtkbutton.c:235 gtk/gtkimagemenuitem.c:150
 msgid "Use stock"
 msgstr "Implicit"
 
-#: gtk/gtkbutton.c:239
+#: gtk/gtkbutton.c:236
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Dacă e setat, eticheta este utilizată pentru a alege un element standard în "
 "loc să fie afișată"
 
-#: gtk/gtkbutton.c:246 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Focus la click"
 
-#: gtk/gtkbutton.c:247 gtk/gtkfilechooserbutton.c:394
+#: gtk/gtkbutton.c:244 gtk/gtkfilechooserbutton.c:394
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Specifică dacă butonul primește focus la un click de maus"
 
-#: gtk/gtkbutton.c:254
+#: gtk/gtkbutton.c:251
 msgid "Border relief"
 msgstr "Umbra chenarului"
 
-#: gtk/gtkbutton.c:255
+#: gtk/gtkbutton.c:252
 msgid "The border relief style"
 msgstr "Stilul de umbrire al chenarului"
 
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:269
 msgid "Horizontal alignment for child"
 msgstr "Aliniere orizontală pentru copil"
 
-#: gtk/gtkbutton.c:291
+#: gtk/gtkbutton.c:288
 msgid "Vertical alignment for child"
 msgstr "Aliniere verticală pentru copil"
 
-#: gtk/gtkbutton.c:308 gtk/gtkimagemenuitem.c:133
+#: gtk/gtkbutton.c:305 gtk/gtkimagemenuitem.c:135
 msgid "Image widget"
 msgstr "Widget imagine"
 
-#: gtk/gtkbutton.c:309
+#: gtk/gtkbutton.c:306
 msgid "Child widget to appear next to the button text"
 msgstr "Widget copil care să apară lângă textul butonului"
 
-#: gtk/gtkbutton.c:323
+#: gtk/gtkbutton.c:320
 msgid "Image position"
 msgstr "Poziție imagine"
 
-#: gtk/gtkbutton.c:324
+#: gtk/gtkbutton.c:321
 msgid "The position of the image relative to the text"
 msgstr "Poziția imaginii relativ la text"
 
-#: gtk/gtkbutton.c:436
+#: gtk/gtkbutton.c:433
 msgid "Default Spacing"
 msgstr "Spațiere implicită"
 
-#: gtk/gtkbutton.c:437
+#: gtk/gtkbutton.c:434
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Spațiere de adăugat în plus pentru butoanele CAN_DEFAULT"
 
-#: gtk/gtkbutton.c:443
+#: gtk/gtkbutton.c:440
 msgid "Default Outside Spacing"
 msgstr "Spațiere externă implicită"
 
-#: gtk/gtkbutton.c:444
+#: gtk/gtkbutton.c:441
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -879,31 +879,31 @@ msgstr ""
 "Spațiu în plus de adăugat pentru butoanele CAN_DEFAULT și care este "
 "întotdeauna desenat în afara chenarului"
 
-#: gtk/gtkbutton.c:449
+#: gtk/gtkbutton.c:446
 msgid "Child X Displacement"
 msgstr "Deplasare X copil"
 
-#: gtk/gtkbutton.c:450
+#: gtk/gtkbutton.c:447
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Cât de mult să fie mutat copilul în direcția X cand butonul este apăsat"
 
-#: gtk/gtkbutton.c:457
+#: gtk/gtkbutton.c:454
 msgid "Child Y Displacement"
 msgstr "Deplasare Y copil"
 
-#: gtk/gtkbutton.c:458
+#: gtk/gtkbutton.c:455
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "Cât de mult să fie mutat copilul în direcția Y cand butonul este apăsat"
 
-#: gtk/gtkbutton.c:474
+#: gtk/gtkbutton.c:471
 msgid "Displace focus"
 msgstr "Deplasează focusul"
 
-#: gtk/gtkbutton.c:475
+#: gtk/gtkbutton.c:472
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
@@ -911,27 +911,27 @@ msgstr ""
 "Specifică dacă proprietățile child_displacement_x/_y ar trebui să afecteze "
 "și aria focusului"
 
-#: gtk/gtkbutton.c:488 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
 msgid "Inner Border"
 msgstr "Margine interioară"
 
-#: gtk/gtkbutton.c:489
+#: gtk/gtkbutton.c:486
 msgid "Border between button edges and child."
 msgstr "Spațiu între marginile butonului și copil."
 
-#: gtk/gtkbutton.c:502
+#: gtk/gtkbutton.c:499
 msgid "Image spacing"
 msgstr "Spațiere imagine"
 
-#: gtk/gtkbutton.c:503
+#: gtk/gtkbutton.c:500
 msgid "Spacing in pixels between the image and label"
 msgstr "Spațiere în pixeli între imagine și etichetă"
 
-#: gtk/gtkbutton.c:517
+#: gtk/gtkbutton.c:514
 msgid "Show button images"
 msgstr "Arată imaginea butonului"
 
-#: gtk/gtkbutton.c:518
+#: gtk/gtkbutton.c:515
 msgid "Whether images should be shown on buttons"
 msgstr "Specifică dacă ar trebui afișate imagini pe butoane"
 
@@ -3158,29 +3158,38 @@ msgstr "Tip stocare"
 msgid "The representation being used for image data"
 msgstr "Reprezentarea utilizată pentru datele imaginii"
 
-#: gtk/gtkimagemenuitem.c:134
+#: gtk/gtkimagemenuitem.c:136
 msgid "Child widget to appear next to the menu text"
 msgstr "Widget copil care să apară lângă textul meniului"
 
-#: gtk/gtkimagemenuitem.c:149
+#: gtk/gtkimagemenuitem.c:151
 #, fuzzy
 msgid "Whether to use the label text to create a stock menu item"
 msgstr "Specifică dacă textul etichetei poate fi selectat cu mausul"
 
-#: gtk/gtkimagemenuitem.c:163 gtk/gtkmenu.c:515
+#: gtk/gtkimagemenuitem.c:169
+msgid "Always show image"
+msgstr ""
+
+#: gtk/gtkimagemenuitem.c:170
+#, fuzzy
+msgid "Whether the image will always be shown"
+msgstr "Specifică dacă widgetul este vizibil"
+
+#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:515
 msgid "Accel Group"
 msgstr "Grup de acceleratori"
 
-#: gtk/gtkimagemenuitem.c:164
+#: gtk/gtkimagemenuitem.c:185
 #, fuzzy
 msgid "The Accel Group to use for stock accelerator keys"
 msgstr "Închiderea de monitorizat pentru schimbări ale acceleratorului"
 
-#: gtk/gtkimagemenuitem.c:169
+#: gtk/gtkimagemenuitem.c:190
 msgid "Show menu images"
 msgstr "Arată imagini în meniu"
 
-#: gtk/gtkimagemenuitem.c:170
+#: gtk/gtkimagemenuitem.c:191
 msgid "Whether images should be shown in menus"
 msgstr "Specifică dacă ar trebui afișate imaginile în meniu"
 
@@ -6303,7 +6312,7 @@ msgstr "Spațiere iconiță"
 msgid "Spacing in pixels between the icon and label"
 msgstr "Spațiu în pixeli între iconiță și etichetă"
 
-#: gtk/gtktoolitem.c:193
+#: gtk/gtktoolitem.c:191
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6381,7 +6390,8 @@ msgid "Search Column"
 msgstr "Coloană de căutare"
 
 #: gtk/gtktreeview.c:643
-msgid "Model column to search through when searching through code"
+#, fuzzy
+msgid "Model column to search through during interactive search"
 msgstr "Coloană model pentru căutare la căutarea prin cod"
 
 #: gtk/gtktreeview.c:663

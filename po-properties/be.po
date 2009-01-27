@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:59-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2003-03-31 07:40+0300\n"
 "Last-Translator: Ales Nyakhaychyk <nab@mail.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -271,7 +271,7 @@ msgstr "Назва шрыфту"
 msgid "A unique name for the action."
 msgstr ""
 
-#: gtk/gtkaction.c:198 gtk/gtkbutton.c:222 gtk/gtkexpander.c:195
+#: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
@@ -330,11 +330,11 @@ msgstr "Назва шрыфту"
 msgid "The name of the icon from the icon theme"
 msgstr "Назоў гэтага віджэту"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:178
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
 msgid "Visible when horizontal"
 msgstr ""
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:179
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -351,17 +351,17 @@ msgid ""
 "overflow menu."
 msgstr ""
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:185
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
 msgid "Visible when vertical"
 msgstr ""
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:186
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr ""
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:192
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
 msgid "Is important"
 msgstr ""
 
@@ -487,7 +487,7 @@ msgstr "Пераключыць стан кнопкі"
 msgid "Horizontal alignment"
 msgstr "Гарызантальнае выроўніваньне"
 
-#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:273
+#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:270
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -499,7 +499,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Вэртыкальнае выроўніваньне"
 
-#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:292
+#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:289
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -831,18 +831,18 @@ msgstr ""
 msgid "The translation domain used by gettext"
 msgstr ""
 
-#: gtk/gtkbutton.c:223
+#: gtk/gtkbutton.c:220
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "Тэкст адмеціны на кнопачцы, калі кнопачка зьмяшчае віджэт адмеціну."
 
-#: gtk/gtkbutton.c:230 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
 #: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "Выкарыстоўвываць падкрэсьліваньне"
 
-#: gtk/gtkbutton.c:231 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
 #: gtk/gtkmenuitem.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -851,76 +851,76 @@ msgstr ""
 "Калі ўключана, сымбаль падкрэсьліваньня ў тэксьце азначае, што наступны "
 "сымбаль павінен выкарыстоўвывацца як \"гарачая клявіша\"."
 
-#: gtk/gtkbutton.c:238 gtk/gtkimagemenuitem.c:148
+#: gtk/gtkbutton.c:235 gtk/gtkimagemenuitem.c:150
 msgid "Use stock"
 msgstr "Выкарыстоўваць убудаванае"
 
-#: gtk/gtkbutton.c:239
+#: gtk/gtkbutton.c:236
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Калі ўключана, адмеціна будзе выкарыставана для выбару ўбудаваных кнопачак "
 "замест �длюстраваньня."
 
-#: gtk/gtkbutton.c:246 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr ""
 
-#: gtk/gtkbutton.c:247 gtk/gtkfilechooserbutton.c:394
+#: gtk/gtkbutton.c:244 gtk/gtkfilechooserbutton.c:394
 #, fuzzy
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Ці можа тэкст адмеціны быць вызначаным з дапамогай мышы."
 
-#: gtk/gtkbutton.c:254
+#: gtk/gtkbutton.c:251
 msgid "Border relief"
 msgstr "Выпукласьць меж"
 
-#: gtk/gtkbutton.c:255
+#: gtk/gtkbutton.c:252
 msgid "The border relief style"
 msgstr "Выгляд выпукласьці мяжы"
 
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:269
 #, fuzzy
 msgid "Horizontal alignment for child"
 msgstr "Гарызантальнае выроўніваньне"
 
-#: gtk/gtkbutton.c:291
+#: gtk/gtkbutton.c:288
 #, fuzzy
 msgid "Vertical alignment for child"
 msgstr "Вэртыкальнае выроўніваньне"
 
-#: gtk/gtkbutton.c:308 gtk/gtkimagemenuitem.c:133
+#: gtk/gtkbutton.c:305 gtk/gtkimagemenuitem.c:135
 msgid "Image widget"
 msgstr "Віджэт-малюнак"
 
-#: gtk/gtkbutton.c:309
+#: gtk/gtkbutton.c:306
 #, fuzzy
 msgid "Child widget to appear next to the button text"
 msgstr "Віджэт-нашчадак, які зьяўляецца побач з �экстам у мэню"
 
-#: gtk/gtkbutton.c:323
+#: gtk/gtkbutton.c:320
 #, fuzzy
 msgid "Image position"
 msgstr "Становішча рэгулятару"
 
-#: gtk/gtkbutton.c:324
+#: gtk/gtkbutton.c:321
 #, fuzzy
 msgid "The position of the image relative to the text"
 msgstr "Становішча рэгулятару адносна віджэта-нашчадка."
 
-#: gtk/gtkbutton.c:436
+#: gtk/gtkbutton.c:433
 msgid "Default Spacing"
 msgstr "Пачатковая адлегласьць"
 
-#: gtk/gtkbutton.c:437
+#: gtk/gtkbutton.c:434
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Дадатковая прастора для CAN_DEFAULT кнопачак"
 
-#: gtk/gtkbutton.c:443
+#: gtk/gtkbutton.c:440
 msgid "Default Outside Spacing"
 msgstr "Пачатковая зьнешняя прастора"
 
-#: gtk/gtkbutton.c:444
+#: gtk/gtkbutton.c:441
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -928,61 +928,61 @@ msgstr ""
 "Дадатковая прастора для CAN_DEFAULT кнопачак, якая заўсёды дадаецца да "
 "зьнешніх межаў кнопачак"
 
-#: gtk/gtkbutton.c:449
+#: gtk/gtkbutton.c:446
 msgid "Child X Displacement"
 msgstr "Перамяшчэньне нашчадку па X"
 
-#: gtk/gtkbutton.c:450
+#: gtk/gtkbutton.c:447
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "Як далёка перамясьціць нашчадак па X, калі націснута гэтая кнопачка"
 
-#: gtk/gtkbutton.c:457
+#: gtk/gtkbutton.c:454
 msgid "Child Y Displacement"
 msgstr "Перамяшчэньне нашчадку па Y"
 
-#: gtk/gtkbutton.c:458
+#: gtk/gtkbutton.c:455
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "Як далёка перамясьціць нашчадак па Y, калі націснута гэтая кнопачка"
 
-#: gtk/gtkbutton.c:474
+#: gtk/gtkbutton.c:471
 #, fuzzy
 msgid "Displace focus"
 msgstr "Засяроджаньне"
 
-#: gtk/gtkbutton.c:475
+#: gtk/gtkbutton.c:472
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr ""
 
-#: gtk/gtkbutton.c:488 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
 #, fuzzy
 msgid "Inner Border"
 msgstr "Мяжы лычкі"
 
-#: gtk/gtkbutton.c:489
+#: gtk/gtkbutton.c:486
 msgid "Border between button edges and child."
 msgstr ""
 
-#: gtk/gtkbutton.c:502
+#: gtk/gtkbutton.c:499
 #, fuzzy
 msgid "Image spacing"
 msgstr "Водступ значэньня"
 
-#: gtk/gtkbutton.c:503
+#: gtk/gtkbutton.c:500
 #, fuzzy
 msgid "Spacing in pixels between the image and label"
 msgstr ""
 "Дадатковая прастора, што разьмяшчаецца паміж нашчадкам і яго асяродзьдзем; "
 "вымяраецца ў піксалях."
 
-#: gtk/gtkbutton.c:517
+#: gtk/gtkbutton.c:514
 msgid "Show button images"
 msgstr ""
 
-#: gtk/gtkbutton.c:518
+#: gtk/gtkbutton.c:515
 #, fuzzy
 msgid "Whether images should be shown on buttons"
 msgstr "Ці павінны адлюстроўвацца лычкі"
@@ -3299,31 +3299,40 @@ msgstr "Тып захоўваньня"
 msgid "The representation being used for image data"
 msgstr "Уяўленьне выкарыстоўваецца для адлюстраваньня даньнаяў"
 
-#: gtk/gtkimagemenuitem.c:134
+#: gtk/gtkimagemenuitem.c:136
 msgid "Child widget to appear next to the menu text"
 msgstr "Віджэт-нашчадак, які зьяўляецца побач з �экстам у мэню"
 
-#: gtk/gtkimagemenuitem.c:149
+#: gtk/gtkimagemenuitem.c:151
 #, fuzzy
 msgid "Whether to use the label text to create a stock menu item"
 msgstr "Ці можа тэкст адмеціны быць вызначаным з дапамогай мышы."
 
-#: gtk/gtkimagemenuitem.c:163 gtk/gtkmenu.c:515
+#: gtk/gtkimagemenuitem.c:169
+msgid "Always show image"
+msgstr ""
+
+#: gtk/gtkimagemenuitem.c:170
+#, fuzzy
+msgid "Whether the image will always be shown"
+msgstr "Ці будзе віджэт бачны"
+
+#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:515
 #, fuzzy
 msgid "Accel Group"
 msgstr "Дроб"
 
-#: gtk/gtkimagemenuitem.c:164
+#: gtk/gtkimagemenuitem.c:185
 #, fuzzy
 msgid "The Accel Group to use for stock accelerator keys"
 msgstr "Пераменная, якая будзе сачыць за зьменамі \"гарачай клявішы\"."
 
-#: gtk/gtkimagemenuitem.c:169
+#: gtk/gtkimagemenuitem.c:190
 #, fuzzy
 msgid "Show menu images"
 msgstr "Паказаць лычкі"
 
-#: gtk/gtkimagemenuitem.c:170
+#: gtk/gtkimagemenuitem.c:191
 #, fuzzy
 msgid "Whether images should be shown in menus"
 msgstr "Ці павінны адлюстроўвацца лычкі"
@@ -6612,7 +6621,7 @@ msgstr "Водступ між радкоў"
 msgid "Spacing in pixels between the icon and label"
 msgstr "Прастора паміж кнопкамі кроку й указальнікам"
 
-#: gtk/gtktoolitem.c:193
+#: gtk/gtktoolitem.c:191
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6689,7 +6698,8 @@ msgid "Search Column"
 msgstr "Слупок пошуку"
 
 #: gtk/gtktreeview.c:643
-msgid "Model column to search through when searching through code"
+#, fuzzy
+msgid "Model column to search through during interactive search"
 msgstr "Прыклад слупка для пошуку па коду"
 
 #: gtk/gtktreeview.c:663

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:59-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2004-07-19 00:47+0200\n"
 "Last-Translator: Kenan Hadžiavdić <kenan@bgnett.no>\n"
 "Language-Team: Bosnian <lokal@linux.org.ba>\n"
@@ -263,7 +263,7 @@ msgstr "Ime"
 msgid "A unique name for the action."
 msgstr "Jedinstveno ime za akciju."
 
-#: gtk/gtkaction.c:198 gtk/gtkbutton.c:222 gtk/gtkexpander.c:195
+#: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
@@ -323,11 +323,11 @@ msgstr "Ime fonta"
 msgid "The name of the icon from the icon theme"
 msgstr "Ime izabranog fonta"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:178
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
 msgid "Visible when horizontal"
 msgstr "Vidljivo kada je vodoravno"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:179
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -347,11 +347,11 @@ msgid ""
 "overflow menu."
 msgstr "Kada je TRUE, prazni proxy-ji menija za ovu akciju sa skriveni."
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:185
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
 msgid "Visible when vertical"
 msgstr "Vidljivo kada je uspravno"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:186
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -359,7 +359,7 @@ msgstr ""
 "Da li je stavka trake s alatima vidljiva kada je traka s alatima u uspravnom "
 "položaju."
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:192
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
 msgid "Is important"
 msgstr "Važno je"
 
@@ -474,7 +474,7 @@ msgstr "Veličina stranice za prilagođenost"
 msgid "Horizontal alignment"
 msgstr "Vodoravno ravnanje"
 
-#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:273
+#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:270
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -486,7 +486,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Vodoravno ravnanje"
 
-#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:292
+#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:289
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -809,7 +809,7 @@ msgstr ""
 msgid "The translation domain used by gettext"
 msgstr ""
 
-#: gtk/gtkbutton.c:223
+#: gtk/gtkbutton.c:220
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -817,12 +817,12 @@ msgstr ""
 "Tekst grafičkog elementa oznake unutar dugmeta ukoliko dugme sedrži grafički "
 "element oznaku"
 
-#: gtk/gtkbutton.c:230 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
 #: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "Koristi podvlaku"
 
-#: gtk/gtkbutton.c:231 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
 #: gtk/gtkmenuitem.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -831,136 +831,136 @@ msgstr ""
 "Ako je postavljeno, podvlaka u tekstu ukazuje da će se znak iza koristiti "
 "kao prečica s tastature"
 
-#: gtk/gtkbutton.c:238 gtk/gtkimagemenuitem.c:148
+#: gtk/gtkbutton.c:235 gtk/gtkimagemenuitem.c:150
 msgid "Use stock"
 msgstr "Koristi stock"
 
-#: gtk/gtkbutton.c:239
+#: gtk/gtkbutton.c:236
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Ukoliko je postavljeno, oznaka se ne prikazuje nego se koristi za biranje "
 "stocka"
 
-#: gtk/gtkbutton.c:246 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Fokusiraj na klik"
 
-#: gtk/gtkbutton.c:247 gtk/gtkfilechooserbutton.c:394
+#: gtk/gtkbutton.c:244 gtk/gtkfilechooserbutton.c:394
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Da li dugme preuzima fokus kada je kliknuto pomoću miša"
 
-#: gtk/gtkbutton.c:254
+#: gtk/gtkbutton.c:251
 msgid "Border relief"
 msgstr "Reljef granice"
 
-#: gtk/gtkbutton.c:255
+#: gtk/gtkbutton.c:252
 msgid "The border relief style"
 msgstr "Stil reljefa granice"
 
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:269
 msgid "Horizontal alignment for child"
 msgstr "Vodoravno ravnanje za podređeni element"
 
-#: gtk/gtkbutton.c:291
+#: gtk/gtkbutton.c:288
 msgid "Vertical alignment for child"
 msgstr "Uspravno ravnanje za podređeni element"
 
-#: gtk/gtkbutton.c:308 gtk/gtkimagemenuitem.c:133
+#: gtk/gtkbutton.c:305 gtk/gtkimagemenuitem.c:135
 msgid "Image widget"
 msgstr "Grafički element slike"
 
-#: gtk/gtkbutton.c:309
+#: gtk/gtkbutton.c:306
 #, fuzzy
 msgid "Child widget to appear next to the button text"
 msgstr "Podređeni grafički element koji će se pojaviti uz tekst menija"
 
-#: gtk/gtkbutton.c:323
+#: gtk/gtkbutton.c:320
 #, fuzzy
 msgid "Image position"
 msgstr "Pozicija ručke"
 
-#: gtk/gtkbutton.c:324
+#: gtk/gtkbutton.c:321
 #, fuzzy
 msgid "The position of the image relative to the text"
 msgstr "Pozicija ručke u odnosu na podređeni grafički element"
 
-#: gtk/gtkbutton.c:436
+#: gtk/gtkbutton.c:433
 msgid "Default Spacing"
 msgstr "Uobičajeni prostor"
 
-#: gtk/gtkbutton.c:437
+#: gtk/gtkbutton.c:434
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Dodatni prostor za CAN_DEFAULT dugmad"
 
-#: gtk/gtkbutton.c:443
+#: gtk/gtkbutton.c:440
 msgid "Default Outside Spacing"
 msgstr "Uobičajeni vanjski prostor"
 
-#: gtk/gtkbutton.c:444
+#: gtk/gtkbutton.c:441
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr ""
 "Dodatni prostor za CAN_DEFAULT dugmad koji se uvijek iscrtava izvan granica"
 
-#: gtk/gtkbutton.c:449
+#: gtk/gtkbutton.c:446
 msgid "Child X Displacement"
 msgstr "X pomjeranje podređenog elementa"
 
-#: gtk/gtkbutton.c:450
+#: gtk/gtkbutton.c:447
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Koliko daleko u x smjeru treba pomjeriti podređeni element kada je dugme "
 "pritisnuto"
 
-#: gtk/gtkbutton.c:457
+#: gtk/gtkbutton.c:454
 msgid "Child Y Displacement"
 msgstr "Y pomjeranje podređenog elementa"
 
-#: gtk/gtkbutton.c:458
+#: gtk/gtkbutton.c:455
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "Koliko daleko u y smjeru treba pomjeriti podređeni element kada je dugme "
 "pritisnuto"
 
-#: gtk/gtkbutton.c:474
+#: gtk/gtkbutton.c:471
 #, fuzzy
 msgid "Displace focus"
 msgstr "Jeste fokus"
 
-#: gtk/gtkbutton.c:475
+#: gtk/gtkbutton.c:472
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr ""
 
-#: gtk/gtkbutton.c:488 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
 #, fuzzy
 msgid "Inner Border"
 msgstr "Rub kartice"
 
-#: gtk/gtkbutton.c:489
+#: gtk/gtkbutton.c:486
 msgid "Border between button edges and child."
 msgstr ""
 
-#: gtk/gtkbutton.c:502
+#: gtk/gtkbutton.c:499
 #, fuzzy
 msgid "Image spacing"
 msgstr "Razmak vrijednosti"
 
-#: gtk/gtkbutton.c:503
+#: gtk/gtkbutton.c:500
 #, fuzzy
 msgid "Spacing in pixels between the image and label"
 msgstr "Prostor koji će se postaviti između oznake i podređenog elementa"
 
-#: gtk/gtkbutton.c:517
+#: gtk/gtkbutton.c:514
 msgid "Show button images"
 msgstr "Pokaži slike dugmadi"
 
-#: gtk/gtkbutton.c:518
+#: gtk/gtkbutton.c:515
 #, fuzzy
 msgid "Whether images should be shown on buttons"
 msgstr "Da li će se slike prikazivati u menijima"
@@ -3237,30 +3237,39 @@ msgstr "Tip spremišta"
 msgid "The representation being used for image data"
 msgstr "Reprezentacija koja se koristi za podatke slike"
 
-#: gtk/gtkimagemenuitem.c:134
+#: gtk/gtkimagemenuitem.c:136
 msgid "Child widget to appear next to the menu text"
 msgstr "Podređeni grafički element koji će se pojaviti uz tekst menija"
 
-#: gtk/gtkimagemenuitem.c:149
+#: gtk/gtkimagemenuitem.c:151
 #, fuzzy
 msgid "Whether to use the label text to create a stock menu item"
 msgstr "Da li se tekst oznake može izabrati pomoću miša"
 
-#: gtk/gtkimagemenuitem.c:163 gtk/gtkmenu.c:515
+#: gtk/gtkimagemenuitem.c:169
+msgid "Always show image"
+msgstr ""
+
+#: gtk/gtkimagemenuitem.c:170
+#, fuzzy
+msgid "Whether the image will always be shown"
+msgstr "Da li je grafički element vidljiv"
+
+#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:515
 #, fuzzy
 msgid "Accel Group"
 msgstr "Grupa akcije"
 
-#: gtk/gtkimagemenuitem.c:164
+#: gtk/gtkimagemenuitem.c:185
 #, fuzzy
 msgid "The Accel Group to use for stock accelerator keys"
 msgstr "«Closure» u kojem će se pratiti promjene akceleratora"
 
-#: gtk/gtkimagemenuitem.c:169
+#: gtk/gtkimagemenuitem.c:190
 msgid "Show menu images"
 msgstr "Pokaži slike u menijima"
 
-#: gtk/gtkimagemenuitem.c:170
+#: gtk/gtkimagemenuitem.c:191
 msgid "Whether images should be shown in menus"
 msgstr "Da li će se slike prikazivati u menijima"
 
@@ -6507,7 +6516,7 @@ msgstr "Prostor između redova"
 msgid "Spacing in pixels between the icon and label"
 msgstr "Razmak između koračnice i klizača"
 
-#: gtk/gtktoolitem.c:193
+#: gtk/gtktoolitem.c:191
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6587,7 +6596,8 @@ msgid "Search Column"
 msgstr "Kolona za pretragu"
 
 #: gtk/gtktreeview.c:643
-msgid "Model column to search through when searching through code"
+#, fuzzy
+msgid "Model column to search through during interactive search"
 msgstr "Model kolone kroz koju se pretražuje kada se pretražuje kod"
 
 #: gtk/gtktreeview.c:663

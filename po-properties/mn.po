@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:59-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -292,7 +292,7 @@ msgid "A unique name for the action."
 msgstr "Үйлдлийн давтагдашгүй нэр."
 
 # gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:280
-#: gtk/gtkaction.c:198 gtk/gtkbutton.c:222 gtk/gtkexpander.c:195
+#: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
@@ -353,11 +353,11 @@ msgstr "Бичгийн нэр"
 msgid "The name of the icon from the icon theme"
 msgstr "Сонгосон бичгийн нэр"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:178
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
 msgid "Visible when horizontal"
 msgstr "Хэвтээ бол харуулах"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:179
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -375,17 +375,17 @@ msgid ""
 "overflow menu."
 msgstr "Хэрэв ҮНЭН бол, энэ үйлдлийн хоосон цэсний итгэмжилэгчдийг далдлана."
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:185
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
 msgid "Visible when vertical"
 msgstr "Босоо бол харуулах"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:186
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr "Багаж самбарын чиглэл босоо үед самбарын элементүүд харагдах эсэх"
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:192
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
 msgid "Is important"
 msgstr "Чухал"
 
@@ -519,7 +519,7 @@ msgid "Horizontal alignment"
 msgstr "Хэвтээ зэрэгцүүлэлт "
 
 # gtk/gtkalignment.c:103
-#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:273
+#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:270
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -533,7 +533,7 @@ msgid "Vertical alignment"
 msgstr "Босоо зэрэгцүүлэлт "
 
 # gtk/gtkalignment.c:113
-#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:292
+#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:289
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -891,20 +891,20 @@ msgid "The translation domain used by gettext"
 msgstr ""
 
 # gtk/gtkbutton.c:190
-#: gtk/gtkbutton.c:223
+#: gtk/gtkbutton.c:220
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "Товч нь бичээстэй бол бичээс текст товчин дотор (дээр) байрлана."
 
 # gtk/gtkbutton.c:197 gtk/gtklabel.c:301
-#: gtk/gtkbutton.c:230 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
 #: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "Доогуур зураасыг ашиглах"
 
 # gtk/gtkbutton.c:198 gtk/gtklabel.c:302
-#: gtk/gtkbutton.c:231 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
 #: gtk/gtkmenuitem.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -914,103 +914,103 @@ msgstr ""
 "зориулалтаар ашиглана."
 
 # gtk/gtkbutton.c:205
-#: gtk/gtkbutton.c:238 gtk/gtkimagemenuitem.c:148
+#: gtk/gtkbutton.c:235 gtk/gtkimagemenuitem.c:150
 msgid "Use stock"
 msgstr "Нөөц хэрэглэх"
 
 # gtk/gtkbutton.c:206
-#: gtk/gtkbutton.c:239
+#: gtk/gtkbutton.c:236
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Хэрвээ идэвхитэй бол бичээс харагдахгүй харин стандарт эмблемийг хөтөлбөрөөс "
 "сонгоход хэрэглэгдэнэ."
 
-#: gtk/gtkbutton.c:246 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Товшиход хараалах"
 
 # gtk/gtklabel.c:334
-#: gtk/gtkbutton.c:247 gtk/gtkfilechooserbutton.c:394
+#: gtk/gtkbutton.c:244 gtk/gtkfilechooserbutton.c:394
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Хулганаар товшиход товчинд харааг шилжүүлж чадах эсэх"
 
 # gtk/gtkbutton.c:213
-#: gtk/gtkbutton.c:254
+#: gtk/gtkbutton.c:251
 msgid "Border relief"
 msgstr "Хүрээний гүдгэр"
 
 # gtk/gtkbutton.c:214
-#: gtk/gtkbutton.c:255
+#: gtk/gtkbutton.c:252
 msgid "The border relief style"
 msgstr "Хүрээний гадаргын хэлбэр"
 
 # gtk/gtkalignment.c:102
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:269
 msgid "Horizontal alignment for child"
 msgstr "Хүүгийн хэвтээ зэрэгцүүлэлт "
 
 # gtk/gtkalignment.c:112
-#: gtk/gtkbutton.c:291
+#: gtk/gtkbutton.c:288
 msgid "Vertical alignment for child"
 msgstr "Хүүгийн босоо зэрэгцүүлэлт "
 
 # gtk/gtkimagemenuitem.c:124
-#: gtk/gtkbutton.c:308 gtk/gtkimagemenuitem.c:133
+#: gtk/gtkbutton.c:305 gtk/gtkimagemenuitem.c:135
 msgid "Image widget"
 msgstr "Зурган элемент"
 
-#: gtk/gtkbutton.c:309
+#: gtk/gtkbutton.c:306
 #, fuzzy
 msgid "Child widget to appear next to the button text"
 msgstr "Цэсийн текстийн хажууд гарах удирдлагын дэд элемент."
 
-#: gtk/gtkbutton.c:323
+#: gtk/gtkbutton.c:320
 #, fuzzy
 msgid "Image position"
 msgstr "Заагчийн байрлал"
 
-#: gtk/gtkbutton.c:324
+#: gtk/gtkbutton.c:321
 #, fuzzy
 msgid "The position of the image relative to the text"
 msgstr "Дэд удирдлагын элементтэй харьцангуй заагчийн байрлал."
 
 # gtk/gtkbutton.c:265
-#: gtk/gtkbutton.c:436
+#: gtk/gtkbutton.c:433
 msgid "Default Spacing"
 msgstr "Анхдагч зай"
 
-#: gtk/gtkbutton.c:437
+#: gtk/gtkbutton.c:434
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "CAN_DEFAULT товчнуудад зориулсан нэмэлт зай."
 
 # gtk/gtkbutton.c:272
-#: gtk/gtkbutton.c:443
+#: gtk/gtkbutton.c:440
 msgid "Default Outside Spacing"
 msgstr "Анхдагч гадаад зай"
 
-#: gtk/gtkbutton.c:444
+#: gtk/gtkbutton.c:441
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr "CAN_DEFAULT товчнуудад зориулсан товчнуудыг хүрээлэх нэмэлт зай"
 
-#: gtk/gtkbutton.c:449
+#: gtk/gtkbutton.c:446
 msgid "Child X Displacement"
 msgstr "Дэд элементийн хэвтээ тэнхлэгийн дагуух шилжилт"
 
-#: gtk/gtkbutton.c:450
+#: gtk/gtkbutton.c:447
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Хэрэв товч дарагдсан бол дэд элемтентийг хэвтээ тэнхлэгийн дагуу хэр зэрэг "
 "шилжүүлэх"
 
-#: gtk/gtkbutton.c:457
+#: gtk/gtkbutton.c:454
 msgid "Child Y Displacement"
 msgstr "Дэд элементийн босоо тэнхлэгийн дагуух шилжилт"
 
-#: gtk/gtkbutton.c:458
+#: gtk/gtkbutton.c:455
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
@@ -1018,43 +1018,43 @@ msgstr ""
 "шилжүүлэх"
 
 # gtk/gtkwidget.c:451
-#: gtk/gtkbutton.c:474
+#: gtk/gtkbutton.c:471
 #, fuzzy
 msgid "Displace focus"
 msgstr "Төв байна"
 
-#: gtk/gtkbutton.c:475
+#: gtk/gtkbutton.c:472
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr ""
 
 # gtk/gtknotebook.c:379
-#: gtk/gtkbutton.c:488 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
 #, fuzzy
 msgid "Inner Border"
 msgstr "Tab хүрээ"
 
-#: gtk/gtkbutton.c:489
+#: gtk/gtkbutton.c:486
 msgid "Border between button edges and child."
 msgstr ""
 
-#: gtk/gtkbutton.c:502
+#: gtk/gtkbutton.c:499
 #, fuzzy
 msgid "Image spacing"
 msgstr "Зайн утга"
 
-#: gtk/gtkbutton.c:503
+#: gtk/gtkbutton.c:500
 #, fuzzy
 msgid "Spacing in pixels between the image and label"
 msgstr "Хүү ба бичээс хооронд тусгай зай авах"
 
-#: gtk/gtkbutton.c:517
+#: gtk/gtkbutton.c:514
 msgid "Show button images"
 msgstr "Товчны зургууд харуулах"
 
 # gtk/gtknotebook.c:407
-#: gtk/gtkbutton.c:518
+#: gtk/gtkbutton.c:515
 #, fuzzy
 msgid "Whether images should be shown on buttons"
 msgstr "Зургууд товчинд харуулах эсэх"
@@ -3612,33 +3612,43 @@ msgstr "Хадгалах төрөл"
 msgid "The representation being used for image data"
 msgstr "Зургийн өгөгдөлд хэрэглэгдэж байгаа дүрслэл."
 
-#: gtk/gtkimagemenuitem.c:134
+#: gtk/gtkimagemenuitem.c:136
 msgid "Child widget to appear next to the menu text"
 msgstr "Цэсийн текстийн хажууд гарах удирдлагын дэд элемент."
 
 # gtk/gtklabel.c:334
-#: gtk/gtkimagemenuitem.c:149
+#: gtk/gtkimagemenuitem.c:151
 #, fuzzy
 msgid "Whether to use the label text to create a stock menu item"
 msgstr "Текст хулганаар сонгогдож чадах эсэх"
 
+#: gtk/gtkimagemenuitem.c:169
+msgid "Always show image"
+msgstr ""
+
+# gtk/gtkwidget.c:424
+#: gtk/gtkimagemenuitem.c:170
+#, fuzzy
+msgid "Whether the image will always be shown"
+msgstr "Удирдлагын элемент харагдаж байна."
+
 # gtk/gtkprogressbar.c:187
-#: gtk/gtkimagemenuitem.c:163 gtk/gtkmenu.c:515
+#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:515
 #, fuzzy
 msgid "Accel Group"
 msgstr "Үйлдлийн бүлэг"
 
-#: gtk/gtkimagemenuitem.c:164
+#: gtk/gtkimagemenuitem.c:185
 #, fuzzy
 msgid "The Accel Group to use for stock accelerator keys"
 msgstr "Хурдасгуурыг өөрчлөлтийг харуулах нарийвчилал"
 
-#: gtk/gtkimagemenuitem.c:169
+#: gtk/gtkimagemenuitem.c:190
 msgid "Show menu images"
 msgstr "Цэсний зургуудыг харуулах"
 
 # gtk/gtknotebook.c:407
-#: gtk/gtkimagemenuitem.c:170
+#: gtk/gtkimagemenuitem.c:191
 msgid "Whether images should be shown in menus"
 msgstr "Зургууд товчинд харуулах эсэх"
 
@@ -7147,7 +7157,7 @@ msgstr "Мөрийн хэмжээ"
 msgid "Spacing in pixels between the icon and label"
 msgstr "Заагч ба гүйлгэгч товчны хоорондын зай"
 
-#: gtk/gtktoolitem.c:193
+#: gtk/gtktoolitem.c:191
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -7231,7 +7241,8 @@ msgid "Search Column"
 msgstr "Багана хайх"
 
 #: gtk/gtktreeview.c:643
-msgid "Model column to search through when searching through code"
+#, fuzzy
+msgid "Model column to search through during interactive search"
 msgstr "Кодоор хайх үеийн баганы загвар"
 
 # gtk/gtkcellrenderer.c:178

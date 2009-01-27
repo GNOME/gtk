@@ -1,3 +1,33 @@
+Overview of Changes from GTK+ 2.15.1 to 2.15.2
+==============================================
+
+* GtkAction:
+ - Make toolitems pick up icon names from actions
+ - Draw proxies of radio actions properly
+ - Make menu proxies of recent actions work
+ - Avoid accidental activations when changing actions on proxies
+ - Make derived button classes work as proxies
+
+* Input methods:
+ - Avoid an assertion due to early use of input methods
+
+* GtkScale:
+ - Avoid a segfault in the marker drawing code
+
+* GtkImageMenuItem:
+ - Add a property to override the show-menu-images setting
+
+* Bugs fixed:
+ 566628 gdk_display_close always asserts on win32 and quartz
+ 569240 Crasher when using markers
+ 569104 Toggle menu entries showed as check menu entries...
+ 322932 Always show icons on panel menus
+
+* Updated translations:
+ Finnish (fi)
+ German (de)
+
+
 Overview of Changes from GTK+ 2.15.0 to 2.15.1
 ==============================================
 

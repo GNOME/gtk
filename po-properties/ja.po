@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:59-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2008-08-23 15:43+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -261,7 +261,7 @@ msgstr "名前"
 msgid "A unique name for the action."
 msgstr "アクションに固有の名称です"
 
-#: gtk/gtkaction.c:198 gtk/gtkbutton.c:222 gtk/gtkexpander.c:195
+#: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
@@ -314,11 +314,11 @@ msgstr "アイコン名"
 msgid "The name of the icon from the icon theme"
 msgstr "アイコン・テーマから取得したアイコンの名前です"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:178
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
 msgid "Visible when horizontal"
 msgstr "横向きなら表示する"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:179
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -336,17 +336,17 @@ msgstr ""
 "TRUE にすると、このアクションのツールアイテムのプロキシをツールバーの中に描画"
 "します"
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:185
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
 msgid "Visible when vertical"
 msgstr "縦向きなら表示する"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:186
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr "縦向きのツールバーで項目を表示するかどうかです"
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:192
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
 msgid "Is important"
 msgstr "重要か"
 
@@ -461,7 +461,7 @@ msgstr "アジャストメントのページ・サイズです"
 msgid "Horizontal alignment"
 msgstr "水平位置"
 
-#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:273
+#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:270
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -472,7 +472,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "垂直位置"
 
-#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:292
+#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:289
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -783,7 +783,7 @@ msgstr "翻訳ドメイン"
 msgid "The translation domain used by gettext"
 msgstr "gettext で使用する翻訳ドメインです"
 
-#: gtk/gtkbutton.c:223
+#: gtk/gtkbutton.c:220
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -791,12 +791,12 @@ msgstr ""
 "ボタンがラベル・ウィジェットを含んでいる場合、そのボタン内のラベル・ウィ"
 "ジェット上の文字"
 
-#: gtk/gtkbutton.c:230 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
 #: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "下線を使用する"
 
-#: gtk/gtkbutton.c:231 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
 #: gtk/gtkmenuitem.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -805,125 +805,125 @@ msgstr ""
 "セットすると、下線の次にある文字がアクセラレータ・キーのニーモニックとして使"
 "用する"
 
-#: gtk/gtkbutton.c:238 gtk/gtkimagemenuitem.c:148
+#: gtk/gtkbutton.c:235 gtk/gtkimagemenuitem.c:150
 msgid "Use stock"
 msgstr "ストックを使用する"
 
-#: gtk/gtkbutton.c:239
+#: gtk/gtkbutton.c:236
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "セットすると、ラベルはそれ自身が表示されるのではなく、ストック・アイテムから"
 "選択するための文字列として使用する"
 
-#: gtk/gtkbutton.c:246 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "クリックでフォーカスを当てる"
 
-#: gtk/gtkbutton.c:247 gtk/gtkfilechooserbutton.c:394
+#: gtk/gtkbutton.c:244 gtk/gtkfilechooserbutton.c:394
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "マウスでクリックした時にボタンにフォーカスを当てるかどうかです"
 
-#: gtk/gtkbutton.c:254
+#: gtk/gtkbutton.c:251
 msgid "Border relief"
 msgstr "枠のスタイル"
 
-#: gtk/gtkbutton.c:255
+#: gtk/gtkbutton.c:252
 msgid "The border relief style"
 msgstr "枠の縁の外観"
 
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:269
 msgid "Horizontal alignment for child"
 msgstr "子ウィジェットの水平位置"
 
-#: gtk/gtkbutton.c:291
+#: gtk/gtkbutton.c:288
 msgid "Vertical alignment for child"
 msgstr "子ウィジェットの垂直位置"
 
-#: gtk/gtkbutton.c:308 gtk/gtkimagemenuitem.c:133
+#: gtk/gtkbutton.c:305 gtk/gtkimagemenuitem.c:135
 msgid "Image widget"
 msgstr "画像ウィジェット"
 
-#: gtk/gtkbutton.c:309
+#: gtk/gtkbutton.c:306
 msgid "Child widget to appear next to the button text"
 msgstr "ボタンのテキストの隣に表示する子ウィジェットです"
 
-#: gtk/gtkbutton.c:323
+#: gtk/gtkbutton.c:320
 msgid "Image position"
 msgstr "画像の位置"
 
-#: gtk/gtkbutton.c:324
+#: gtk/gtkbutton.c:321
 msgid "The position of the image relative to the text"
 msgstr "テキストに関連する画像の位置"
 
-#: gtk/gtkbutton.c:436
+#: gtk/gtkbutton.c:433
 msgid "Default Spacing"
 msgstr "デフォルトの間隔"
 
-#: gtk/gtkbutton.c:437
+#: gtk/gtkbutton.c:434
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "CAN_DEFAULT ボタンに加える余分な空白です"
 
-#: gtk/gtkbutton.c:443
+#: gtk/gtkbutton.c:440
 msgid "Default Outside Spacing"
 msgstr "デフォルトの外部の空白"
 
-#: gtk/gtkbutton.c:444
+#: gtk/gtkbutton.c:441
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr "ボーダーの外に常に描画する CAN_DEFAULT ボタンに加える余分な空白です"
 
-#: gtk/gtkbutton.c:449
+#: gtk/gtkbutton.c:446
 msgid "Child X Displacement"
 msgstr "子ウィジェットの X 方向のずれ"
 
-#: gtk/gtkbutton.c:450
+#: gtk/gtkbutton.c:447
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "ボタンが押された場合、子ウィジェットが X 方向にどの程度動くのか"
 
-#: gtk/gtkbutton.c:457
+#: gtk/gtkbutton.c:454
 msgid "Child Y Displacement"
 msgstr "子ウィジェットの Y 方向のずれ"
 
-#: gtk/gtkbutton.c:458
+#: gtk/gtkbutton.c:455
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "ボタンが押された場合、子ウィジェットが Y 方向にどの程度動くのか"
 
-#: gtk/gtkbutton.c:474
+#: gtk/gtkbutton.c:471
 msgid "Displace focus"
 msgstr "フォーカスの解除"
 
-#: gtk/gtkbutton.c:475
+#: gtk/gtkbutton.c:472
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr ""
 "プロパティ child_displacement_x/_y もフォーカスの範囲に影響するかどうかです"
 
-#: gtk/gtkbutton.c:488 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
 msgid "Inner Border"
 msgstr "内側の境界線"
 
-#: gtk/gtkbutton.c:489
+#: gtk/gtkbutton.c:486
 msgid "Border between button edges and child."
 msgstr "ボタンの端から子ウィジェットまでの境界線です"
 
-#: gtk/gtkbutton.c:502
+#: gtk/gtkbutton.c:499
 msgid "Image spacing"
 msgstr "画像の間隔"
 
-#: gtk/gtkbutton.c:503
+#: gtk/gtkbutton.c:500
 msgid "Spacing in pixels between the image and label"
 msgstr "画像とラベルとの間に置く間隔 (ピクセル単位) です"
 
-#: gtk/gtkbutton.c:517
+#: gtk/gtkbutton.c:514
 msgid "Show button images"
 msgstr "ボタンの画像を表示するか"
 
-#: gtk/gtkbutton.c:518
+#: gtk/gtkbutton.c:515
 msgid "Whether images should be shown on buttons"
 msgstr "メニューの中に画像を表示するかどうかです"
 
@@ -3119,29 +3119,38 @@ msgstr "保存する種類"
 msgid "The representation being used for image data"
 msgstr "画像データに使用する表現"
 
-#: gtk/gtkimagemenuitem.c:134
+#: gtk/gtkimagemenuitem.c:136
 msgid "Child widget to appear next to the menu text"
 msgstr "メニューのテキストの隣に表示する子ウィジェット"
 
-#: gtk/gtkimagemenuitem.c:149
+#: gtk/gtkimagemenuitem.c:151
 #, fuzzy
 msgid "Whether to use the label text to create a stock menu item"
 msgstr "ラベルのテキストはマウスで選択可能かどうかです"
 
-#: gtk/gtkimagemenuitem.c:163 gtk/gtkmenu.c:515
+#: gtk/gtkimagemenuitem.c:169
+msgid "Always show image"
+msgstr ""
+
+#: gtk/gtkimagemenuitem.c:170
+#, fuzzy
+msgid "Whether the image will always be shown"
+msgstr "ウィジェットが表示可能かどうかです"
+
+#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:515
 msgid "Accel Group"
 msgstr "アクセラレータのグループ"
 
-#: gtk/gtkimagemenuitem.c:164
+#: gtk/gtkimagemenuitem.c:185
 #, fuzzy
 msgid "The Accel Group to use for stock accelerator keys"
 msgstr "アクセラレータの変化を監視するためのクロージャです"
 
-#: gtk/gtkimagemenuitem.c:169
+#: gtk/gtkimagemenuitem.c:190
 msgid "Show menu images"
 msgstr "メニュー画像の表示"
 
-#: gtk/gtkimagemenuitem.c:170
+#: gtk/gtkimagemenuitem.c:191
 msgid "Whether images should be shown in menus"
 msgstr "メニューの中に画像を表示するかどうかです"
 
@@ -6192,7 +6201,7 @@ msgstr "アイコンの間隔"
 msgid "Spacing in pixels between the icon and label"
 msgstr "アイコンとラベルの間に挿入する間隔 (ピクセル単位) です"
 
-#: gtk/gtktoolitem.c:193
+#: gtk/gtktoolitem.c:191
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6269,7 +6278,8 @@ msgid "Search Column"
 msgstr "列の検索"
 
 #: gtk/gtktreeview.c:643
-msgid "Model column to search through when searching through code"
+#, fuzzy
+msgid "Model column to search through during interactive search"
 msgstr "コードを介して検索する際に検索する列のモデル"
 
 #: gtk/gtktreeview.c:663

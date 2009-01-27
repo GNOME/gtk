@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.13.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:59-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2008-08-05 20:21+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <community@linuxhall.org>\n"
@@ -253,7 +253,7 @@ msgstr "名稱"
 msgid "A unique name for the action."
 msgstr "這個指令的特定名稱。"
 
-#: gtk/gtkaction.c:198 gtk/gtkbutton.c:222 gtk/gtkexpander.c:195
+#: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
@@ -306,11 +306,11 @@ msgstr "圖示名稱"
 msgid "The name of the icon from the icon theme"
 msgstr "圖示主題的圖示名稱"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:178
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
 msgid "Visible when horizontal"
 msgstr "水平顯示時為可見"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:179
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -326,17 +326,17 @@ msgid ""
 "overflow menu."
 msgstr "當為 TRUE 時，此指令的工具選項代理會被顯示在工具列 overflow 選單。"
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:185
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
 msgid "Visible when vertical"
 msgstr "垂直顯示時為可見"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:186
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr "當工具列呈垂直顯示時工具列項目是否為可見。"
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:192
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
 msgid "Is important"
 msgstr "重要的"
 
@@ -449,7 +449,7 @@ msgstr "調整元件的分頁大小"
 msgid "Horizontal alignment"
 msgstr "水平對齊設定"
 
-#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:273
+#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:270
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -459,7 +459,7 @@ msgstr "子元件在提供的空間裡的水平對齊方式。0.0 表示靠左�
 msgid "Vertical alignment"
 msgstr "垂直對齊設定"
 
-#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:292
+#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:289
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -762,140 +762,140 @@ msgstr "翻譯網域"
 msgid "The translation domain used by gettext"
 msgstr "gettext 使用的翻譯網域"
 
-#: gtk/gtkbutton.c:223
+#: gtk/gtkbutton.c:220
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "如果按鈕中有標籤元件，指定該標籤元件中的文字"
 
-#: gtk/gtkbutton.c:230 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
 #: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "使用底線"
 
-#: gtk/gtkbutton.c:231 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
 #: gtk/gtkmenuitem.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr "若設置，在英數字母前加上底線(_)則該字母會自動被設定為快捷鍵"
 
-#: gtk/gtkbutton.c:238 gtk/gtkimagemenuitem.c:148
+#: gtk/gtkbutton.c:235 gtk/gtkimagemenuitem.c:150
 msgid "Use stock"
 msgstr "使用內建"
 
-#: gtk/gtkbutton.c:239
+#: gtk/gtkbutton.c:236
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "若設置，該標籤內容用來指定內建圖示而不會被顯示"
 
-#: gtk/gtkbutton.c:246 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "點選時聚焦"
 
-#: gtk/gtkbutton.c:247 gtk/gtkfilechooserbutton.c:394
+#: gtk/gtkbutton.c:244 gtk/gtkfilechooserbutton.c:394
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "當該按鈕被滑鼠點選時是否自動取得焦點"
 
-#: gtk/gtkbutton.c:254
+#: gtk/gtkbutton.c:251
 msgid "Border relief"
 msgstr "邊緣樣式"
 
-#: gtk/gtkbutton.c:255
+#: gtk/gtkbutton.c:252
 msgid "The border relief style"
 msgstr "邊緣的樣式"
 
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:269
 msgid "Horizontal alignment for child"
 msgstr "子元件水平對齊"
 
-#: gtk/gtkbutton.c:291
+#: gtk/gtkbutton.c:288
 msgid "Vertical alignment for child"
 msgstr "子元件垂直對齊位置"
 
-#: gtk/gtkbutton.c:308 gtk/gtkimagemenuitem.c:133
+#: gtk/gtkbutton.c:305 gtk/gtkimagemenuitem.c:135
 msgid "Image widget"
 msgstr "影像元件"
 
-#: gtk/gtkbutton.c:309
+#: gtk/gtkbutton.c:306
 msgid "Child widget to appear next to the button text"
 msgstr "按鈕文字旁邊顯示的子元件"
 
-#: gtk/gtkbutton.c:323
+#: gtk/gtkbutton.c:320
 msgid "Image position"
 msgstr "圖片位置"
 
-#: gtk/gtkbutton.c:324
+#: gtk/gtkbutton.c:321
 msgid "The position of the image relative to the text"
 msgstr "圖片相對於文字的位置"
 
-#: gtk/gtkbutton.c:436
+#: gtk/gtkbutton.c:433
 msgid "Default Spacing"
 msgstr "預設間隔"
 
-#: gtk/gtkbutton.c:437
+#: gtk/gtkbutton.c:434
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "加給 CAN_DEFAULT（預設按鈕）的額外空間"
 
-#: gtk/gtkbutton.c:443
+#: gtk/gtkbutton.c:440
 msgid "Default Outside Spacing"
 msgstr "預設外部間隔"
 
-#: gtk/gtkbutton.c:444
+#: gtk/gtkbutton.c:441
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr "加給 CAN_DEFAULT 按鈕邊緣外部的額外空間"
 
-#: gtk/gtkbutton.c:449
+#: gtk/gtkbutton.c:446
 msgid "Child X Displacement"
 msgstr "子元件的水平偏移距離"
 
-#: gtk/gtkbutton.c:450
+#: gtk/gtkbutton.c:447
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "當按鈕按下時期子元件應偏移多遠的水平距離"
 
-#: gtk/gtkbutton.c:457
+#: gtk/gtkbutton.c:454
 msgid "Child Y Displacement"
 msgstr "子元件的垂直偏移距離"
 
-#: gtk/gtkbutton.c:458
+#: gtk/gtkbutton.c:455
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "當按鈕按下時期子元件應偏移多遠的垂直距離"
 
-#: gtk/gtkbutton.c:474
+#: gtk/gtkbutton.c:471
 msgid "Displace focus"
 msgstr "焦點偏移"
 
-#: gtk/gtkbutton.c:475
+#: gtk/gtkbutton.c:472
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr "child_displacement_x/_y 屬性是否也影響焦點方塊"
 
-#: gtk/gtkbutton.c:488 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
 msgid "Inner Border"
 msgstr "內部框線"
 
-#: gtk/gtkbutton.c:489
+#: gtk/gtkbutton.c:486
 msgid "Border between button edges and child."
 msgstr "在按鈕邊緣與子項之間的框線。"
 
-#: gtk/gtkbutton.c:502
+#: gtk/gtkbutton.c:499
 msgid "Image spacing"
 msgstr "圖片間距"
 
-#: gtk/gtkbutton.c:503
+#: gtk/gtkbutton.c:500
 msgid "Spacing in pixels between the image and label"
 msgstr "圖片與文字標籤的之間的距離(像素)"
 
-#: gtk/gtkbutton.c:517
+#: gtk/gtkbutton.c:514
 msgid "Show button images"
 msgstr "顯示按鈕圖示"
 
-#: gtk/gtkbutton.c:518
+#: gtk/gtkbutton.c:515
 #, fuzzy
 msgid "Whether images should be shown on buttons"
 msgstr "應否在選單項目中顯示圖示"
@@ -3056,29 +3056,38 @@ msgstr "儲存種類"
 msgid "The representation being used for image data"
 msgstr "圖片資料所使用的資料代表"
 
-#: gtk/gtkimagemenuitem.c:134
+#: gtk/gtkimagemenuitem.c:136
 msgid "Child widget to appear next to the menu text"
 msgstr "選單文字旁邊顯示的子元件"
 
-#: gtk/gtkimagemenuitem.c:149
+#: gtk/gtkimagemenuitem.c:151
 #, fuzzy
 msgid "Whether to use the label text to create a stock menu item"
 msgstr "標籤文字可否使用滑鼠來選取"
 
-#: gtk/gtkimagemenuitem.c:163 gtk/gtkmenu.c:515
+#: gtk/gtkimagemenuitem.c:169
+msgid "Always show image"
+msgstr ""
+
+#: gtk/gtkimagemenuitem.c:170
+#, fuzzy
+msgid "Whether the image will always be shown"
+msgstr "該元件是否可見"
+
+#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:515
 msgid "Accel Group"
 msgstr "捷徑鍵群組"
 
-#: gtk/gtkimagemenuitem.c:164
+#: gtk/gtkimagemenuitem.c:185
 #, fuzzy
 msgid "The Accel Group to use for stock accelerator keys"
 msgstr "監視捷徑鍵變化的封裝"
 
-#: gtk/gtkimagemenuitem.c:169
+#: gtk/gtkimagemenuitem.c:190
 msgid "Show menu images"
 msgstr "顯示選單圖示"
 
-#: gtk/gtkimagemenuitem.c:170
+#: gtk/gtkimagemenuitem.c:191
 msgid "Whether images should be shown in menus"
 msgstr "應否在選單項目中顯示圖示"
 
@@ -6063,7 +6072,7 @@ msgstr "圖示間距"
 msgid "Spacing in pixels between the icon and label"
 msgstr "圖示與標籤間的間距(像素)"
 
-#: gtk/gtktoolitem.c:193
+#: gtk/gtktoolitem.c:191
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6140,7 +6149,8 @@ msgid "Search Column"
 msgstr "搜尋欄位"
 
 #: gtk/gtktreeview.c:643
-msgid "Model column to search through when searching through code"
+#, fuzzy
+msgid "Model column to search through during interactive search"
 msgstr "經由程式碼搜尋時指定的搜尋的模型欄位"
 
 #: gtk/gtktreeview.c:663

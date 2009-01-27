@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:59-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2006-07-18 17:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -262,7 +262,7 @@ msgstr "མིང༌།"
 msgid "A unique name for the action."
 msgstr "བྱ་བའི་དོན་ལུ་ མཐུན་མིང་གི་མིང༌།"
 
-#: gtk/gtkaction.c:198 gtk/gtkbutton.c:222 gtk/gtkexpander.c:195
+#: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
@@ -317,11 +317,11 @@ msgstr "ངོས་དཔར་གྱི་མིང༌།"
 msgid "The name of the icon from the icon theme"
 msgstr "ངོས་དཔར་བརྗོད་དོན་ནང་ལས་ ངོས་དཔར་གྱི་མིང༌།"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:178
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
 msgid "Visible when horizontal"
 msgstr "ཐད་སྙོམས་སྐབས་ མཐོང་ཚུགསཔ།"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:179
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -340,11 +340,11 @@ msgstr ""
 "ངེས་བདེན་སྐབས་ བྱ་བ་འདི་གི་ ལག་ཆས་རྣམ་གྲངས་ཀྱི་ པོརོག་སི་ཚུ་ ལག་ཆས་ཕྲ་རིང་ ཕྱིར་ལུད་དཀར་ཆག་ནང་ "
 "ངོ་ཚབ་འབད་དེ་ཡོདཔ་ཨིན།"
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:185
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
 msgid "Visible when vertical"
 msgstr "ཀེར་ཕྲང་སྐབས་ མཐོང་ཚུགས།"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:186
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -352,7 +352,7 @@ msgstr ""
 "ལག་ཆས་ཕྲ་རིང་དེ་ ཀེར་ཕྲང་གི་ཕྱོགས་ནང་ཡོད་པའི་སྐབས་ ལག་ཆས་ཕྲ་རིང་གི་རྣམ་གྲངས་དེ་ མཐོང་ཚུགས་ག་མི་"
 "ཚུགས།"
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:192
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
 msgid "Is important"
 msgstr "གལ་ཅན་ཨིན།"
 
@@ -466,7 +466,7 @@ msgstr "བདེ་སྒྲིག་གི་ཤོག་ལེབ་ཚད།
 msgid "Horizontal alignment"
 msgstr "ཐད་སྙོམས་ཕྲང་སྒྲིག"
 
-#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:273
+#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:270
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -477,7 +477,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "ཀེར་ཕྲང༌།"
 
-#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:292
+#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:289
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -799,18 +799,18 @@ msgstr ""
 msgid "The translation domain used by gettext"
 msgstr ""
 
-#: gtk/gtkbutton.c:223
+#: gtk/gtkbutton.c:220
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "ཨེབ་རྟ་ནང་ལུ་ ཁ་ཡིག་ཅིག་ཡོད་པ་ཅིན་ ཁ་ཡིག་ཝི་གེཊི་གི་ ཚིག་ཡིག་དེ་ ཨེབ་རྟ་ནང་འཁོད་འོང་དགོ"
 
-#: gtk/gtkbutton.c:230 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
 #: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "འོག་ཐིག་ལག་ལེན་འཐབ།"
 
-#: gtk/gtkbutton.c:231 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
 #: gtk/gtkmenuitem.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -819,70 +819,70 @@ msgstr ""
 "གཞི་སྒྲིག་ཨིན་པ་ཅིན་ ཚིག་ཡིག་ནང་གི་ འོག་ཐིག་དེ་གིས་ ནི་མོ་ནིཀ་ མགྱོགས་འཕྲུལ་ལྡེ་མིག་གི་དོན་ལུ་ ཤུལ་མ་ལག་"
 "ལེན་འཐབ་དགོ་པའི་ ཡིག་འབྲུའི་སྤུས་ཚད་ལེགས་བཅོས་སྟོནམ་ཨིན།"
 
-#: gtk/gtkbutton.c:238 gtk/gtkimagemenuitem.c:148
+#: gtk/gtkbutton.c:235 gtk/gtkimagemenuitem.c:150
 msgid "Use stock"
 msgstr "ཅ་མཛོད་ལག་ལེན་འཐབ།"
 
-#: gtk/gtkbutton.c:239
+#: gtk/gtkbutton.c:236
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "གཞི་སྒྲིག་འབད་བ་ཅིན་ ཁ་ཡིག་དེ་ བཀྲམ་སྟོན་འབད་ནིའི་ཚབ་ལུ་ ཅ་མཛོད་རྣམ་གྲངས་ཅིག་ འཐུ་ནི་ལུ་ལག་ལེན་"
 "འཐབ་ཨིན།"
 
-#: gtk/gtkbutton.c:246 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "ཨེབ་གཏང་ལུ་ ཆེད་དམིགས་འབད།"
 
-#: gtk/gtkbutton.c:247 gtk/gtkfilechooserbutton.c:394
+#: gtk/gtkbutton.c:244 gtk/gtkfilechooserbutton.c:394
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "ཨེབ་རྟ་གུ་ མཱའུསི་གིས་ ཨེབ་གཏང་འབདཝ་ད་ ཆེད་དམིགས་འབད་ག་མི་འབད།"
 
-#: gtk/gtkbutton.c:254
+#: gtk/gtkbutton.c:251
 msgid "Border relief"
 msgstr "མཐའ་མཚམས་ཀྱི་རི་མོ།"
 
-#: gtk/gtkbutton.c:255
+#: gtk/gtkbutton.c:252
 msgid "The border relief style"
 msgstr "མཐའ་མཚམས་རི་མོའི་བཟོ་རྣམ།"
 
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:269
 msgid "Horizontal alignment for child"
 msgstr "ཆ་ལག་གི་དོན་ལུ་ ཐད་སྙོམས་ཕྲང་སྒྲིག"
 
-#: gtk/gtkbutton.c:291
+#: gtk/gtkbutton.c:288
 msgid "Vertical alignment for child"
 msgstr "ཆ་ལག་གི་དོན་ལུ་ཀེར་ཕྲང༌།"
 
-#: gtk/gtkbutton.c:308 gtk/gtkimagemenuitem.c:133
+#: gtk/gtkbutton.c:305 gtk/gtkimagemenuitem.c:135
 msgid "Image widget"
 msgstr "གཟུགས་བརྙན་གྱི་ཝིཌི་གེཊི།"
 
-#: gtk/gtkbutton.c:309
+#: gtk/gtkbutton.c:306
 msgid "Child widget to appear next to the button text"
 msgstr "ཨེབ་རྟའི་ཚིག་ཡིག་ཤུལ་ལུ་འབྱུང་དགོ་པའི་ ཆ་ལག་ཝིཌི་གེཊི།"
 
-#: gtk/gtkbutton.c:323
+#: gtk/gtkbutton.c:320
 msgid "Image position"
 msgstr "གཟུགས་བརྙན་གྱི་གནས་ས།"
 
-#: gtk/gtkbutton.c:324
+#: gtk/gtkbutton.c:321
 msgid "The position of the image relative to the text"
 msgstr "ཚིག་ཡིག་དང་འབྲེལ་བའི་གཟུགས་བརྙན་གྱི་གནས་ས།"
 
-#: gtk/gtkbutton.c:436
+#: gtk/gtkbutton.c:433
 msgid "Default Spacing"
 msgstr "སྔོན་སྒྲིག་བར་སྟོང་བཞག་ཐངས།"
 
-#: gtk/gtkbutton.c:437
+#: gtk/gtkbutton.c:434
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "CAN_DEFAULT ཨེབ་རྟའི་དོན་ལུ་ བར་སྟོང་ཐེབས་ ཁ་སྐོང་བརྐྱབ་དགོཔ།"
 
-#: gtk/gtkbutton.c:443
+#: gtk/gtkbutton.c:440
 msgid "Default Outside Spacing"
 msgstr "སྔོན་སྒྲིག་ཕྱི་ཁའི་བར་སྟོང་བཞག་ཐངས།"
 
-#: gtk/gtkbutton.c:444
+#: gtk/gtkbutton.c:441
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -890,56 +890,56 @@ msgstr ""
 "ཨ་རྟག་ར་ མཐའ་མཚམས་ཀྱི་ཕྱི་ཁར་འབྲི་མི་ CAN_DEFAULT ཨེབ་རྟའི་དོན་ལུ་ བར་སྟོང་ཐེབས་ ཁ་སྐོང་བརྐྱབ་"
 "དགོཔ།"
 
-#: gtk/gtkbutton.c:449
+#: gtk/gtkbutton.c:446
 msgid "Child X Displacement"
 msgstr "ཆ་ལག་ ཨེགསི་གི་ གནས་སྤང༌།"
 
-#: gtk/gtkbutton.c:450
+#: gtk/gtkbutton.c:447
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "ཨེབ་རྟ་དེ་ཨེབ་པའི་སྐབས་ ཆ་ལག་དེ་ ཨེགསི་གི་ཁ་ཕྱོགས་ལུ་ ག་དེམ་ཅིག་ཚུན་ཚོད་ འགྱོ་ནི་ཨིན་ན།"
 
-#: gtk/gtkbutton.c:457
+#: gtk/gtkbutton.c:454
 msgid "Child Y Displacement"
 msgstr "ཆ་ལག་ ཝའི་གི་ གནས་སྤང༌།"
 
-#: gtk/gtkbutton.c:458
+#: gtk/gtkbutton.c:455
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "ཨེབ་རྟ་དེ་ཨེབ་པའི་སྐབས་ ཆ་ལག་དེ་ ཝའི་གི་ཁ་ཕྱོགས་ལུ་ ག་དེམ་ཅིག་ཚུན་ཚོད་ འགྱོ་ནི་ཨིན་ན།"
 
-#: gtk/gtkbutton.c:474
+#: gtk/gtkbutton.c:471
 msgid "Displace focus"
 msgstr "གནས་སྤང་ལུ་ ཆེད་དམིགས།"
 
-#: gtk/gtkbutton.c:475
+#: gtk/gtkbutton.c:472
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr ""
 "child_displacement_x/_y རྒྱུ་དངོས་ཚུ་གིས་ ཆེད་དམིགས་གྲུ་བཞི་དཀྱུས་རིང་ལུ་ ཕན་གནོད་ཡོད་ག་མེད།"
 
-#: gtk/gtkbutton.c:488 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
 msgid "Inner Border"
 msgstr "ནང་གི་མཐའ་མཚམས།"
 
-#: gtk/gtkbutton.c:489
+#: gtk/gtkbutton.c:486
 msgid "Border between button edges and child."
 msgstr "ཨེབ་རྟའི་མཐའམ་དང་ ཆ་ལག་གི་བར་ནའི་མཐའ་མཚམས།"
 
-#: gtk/gtkbutton.c:502
+#: gtk/gtkbutton.c:499
 msgid "Image spacing"
 msgstr "གཟུགས་བརྙན་གྱི་ བར་སྟོང་བཞག་ཐངས།"
 
-#: gtk/gtkbutton.c:503
+#: gtk/gtkbutton.c:500
 msgid "Spacing in pixels between the image and label"
 msgstr "གཟུགས་བརྙན་དང་ཁ་ཡིག་གི་བར་ནའི་བར་སྟོང༌ པིག་སེལ་ནང་།"
 
-#: gtk/gtkbutton.c:517
+#: gtk/gtkbutton.c:514
 msgid "Show button images"
 msgstr "ཨེབ་རྟའི་གཟུགས་བརྙན་ཚུ་སྟོན།"
 
-#: gtk/gtkbutton.c:518
+#: gtk/gtkbutton.c:515
 #, fuzzy
 msgid "Whether images should be shown on buttons"
 msgstr "གཟུགས་བརྙན་ཚུ་ དཀར་ཆག་ཚུ་ནང་ སྟོན་དགོཔ་ཨིན་ན་མེན།"
@@ -3158,30 +3158,39 @@ msgstr "བསག་མཛོད་ཀྱི་དབྱེ་བ།"
 msgid "The representation being used for image data"
 msgstr "གཟུགས་བརྙན་ གནད་སྡུད་ཀྱི་དོན་ལས་ ལག་ལེན་འཐབ་བཞིན་ཡོད་པའི་ཁྱད་ཚབ།"
 
-#: gtk/gtkimagemenuitem.c:134
+#: gtk/gtkimagemenuitem.c:136
 msgid "Child widget to appear next to the menu text"
 msgstr "ཚིག་ཡིག་དཀར་ཆག་གི་ ཤུལ་ལུ་འཐོན་དགོ་པའི་ ཆ་ལག་ཝིཌི་གེཊི།"
 
-#: gtk/gtkimagemenuitem.c:149
+#: gtk/gtkimagemenuitem.c:151
 #, fuzzy
 msgid "Whether to use the label text to create a stock menu item"
 msgstr "ཁ་ཡིག་གི་ཚིག་ཡིག་ལུ་ མཱའུསི་གིས་ སེལ་འཐུ་འབད་་ཚུགས་ག་མི་ཚུགས།"
 
-#: gtk/gtkimagemenuitem.c:163 gtk/gtkmenu.c:515
+#: gtk/gtkimagemenuitem.c:169
+msgid "Always show image"
+msgstr ""
+
+#: gtk/gtkimagemenuitem.c:170
+#, fuzzy
+msgid "Whether the image will always be shown"
+msgstr "ཝིཌི་གེཊི་དེ་ མཐོང་ཚུགས་ག་མི་ཚུགས།"
+
+#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:515
 #, fuzzy
 msgid "Accel Group"
 msgstr "བྱ་བའི་སྡེ་ཚན།"
 
-#: gtk/gtkimagemenuitem.c:164
+#: gtk/gtkimagemenuitem.c:185
 #, fuzzy
 msgid "The Accel Group to use for stock accelerator keys"
 msgstr "མགྱོགས་འཕྲུལ་བསྒྱུར་བཅོས་དོན་ལུ་ ལྟ་རྟོག་འབད་དགོ་པའི་ཁ་བསྡམ།"
 
-#: gtk/gtkimagemenuitem.c:169
+#: gtk/gtkimagemenuitem.c:190
 msgid "Show menu images"
 msgstr "དཀར་ཆག་གཟུགས་བརྙན་ཚུ་སྟོན།"
 
-#: gtk/gtkimagemenuitem.c:170
+#: gtk/gtkimagemenuitem.c:191
 msgid "Whether images should be shown in menus"
 msgstr "གཟུགས་བརྙན་ཚུ་ དཀར་ཆག་ཚུ་ནང་ སྟོན་དགོཔ་ཨིན་ན་མེན།"
 
@@ -6313,7 +6322,7 @@ msgstr "ངོས་དཔར་གྱི་བར་སྟོང་བཞག་
 msgid "Spacing in pixels between the icon and label"
 msgstr "ངོས་དཔར་དང་ ཝཁ་ཡིག་གི་བར་ན་ བར་སྟོང་བཞག་ཐངས།"
 
-#: gtk/gtktoolitem.c:193
+#: gtk/gtktoolitem.c:191
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6392,7 +6401,8 @@ msgid "Search Column"
 msgstr "ཀེར་ཐིག་འཚོལ་ཞིབ་འབད།"
 
 #: gtk/gtktreeview.c:643
-msgid "Model column to search through when searching through code"
+#, fuzzy
+msgid "Model column to search through during interactive search"
 msgstr "ཀོཌི་བརྒྱུད་དེ་ འཚོལ་ཞིབ་འབདཝ་ད་ བརྒྱུད་དེ་འཚོལ་ཞིབ་འབད་ནིའི་ ཀེར་ཐིག་གི་དཔེ།"
 
 #: gtk/gtktreeview.c:663

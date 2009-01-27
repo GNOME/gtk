@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:59-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2004-03-07 18:05+0200\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
 "Language-Team: Azerbaijani Turkish <translation-team-az@lists.sourceforge."
@@ -289,7 +289,7 @@ msgstr "Ad"
 msgid "A unique name for the action."
 msgstr "Gedişat üçün xüsusi ad."
 
-#: gtk/gtkaction.c:198 gtk/gtkbutton.c:222 gtk/gtkexpander.c:195
+#: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
@@ -346,11 +346,11 @@ msgstr "Yazı növü adı"
 msgid "The name of the icon from the icon theme"
 msgstr "Seçili yazı növünün adı"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:178
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
 msgid "Visible when horizontal"
 msgstr "Üfüqi ikən görünən"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:179
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -370,11 +370,11 @@ msgid ""
 "overflow menu."
 msgstr "TRUE olanda, bu gedişat üçün boş menyu vəkilləri gizli olacaqdır."
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:185
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
 msgid "Visible when vertical"
 msgstr "Şaquli ikən görünən"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:186
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -382,7 +382,7 @@ msgstr ""
 "Vasitə çubuğunun şaquli istiqamətdə olduğu zaman vasitə çubuğu üzvünün "
 "göstərilməsi."
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:192
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
 msgid "Is important"
 msgstr "Vacibdir"
 
@@ -497,7 +497,7 @@ msgstr "Qurğunun səhifə böyüklüyü"
 msgid "Horizontal alignment"
 msgstr "Üfüqi səviyyələmə"
 
-#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:273
+#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:270
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -508,7 +508,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Şaquli səviyyələmə"
 
-#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:292
+#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:289
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -826,7 +826,7 @@ msgstr ""
 msgid "The translation domain used by gettext"
 msgstr ""
 
-#: gtk/gtkbutton.c:223
+#: gtk/gtkbutton.c:220
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -834,12 +834,12 @@ msgstr ""
 "Düymə daxilindəki etiket pəncərəciyinin mətni, əgər etiket pəncərəciyinə "
 "malikdirsə"
 
-#: gtk/gtkbutton.c:230 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
 #: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "Alt cızıq işlət"
 
-#: gtk/gtkbutton.c:231 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
 #: gtk/gtkmenuitem.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -848,72 +848,72 @@ msgstr ""
 "Seçili isə, altı cızılı xarakterdən sonrakının mnemonik yüksəldici açarı "
 "olaraq qəbul edilməsi gərəkdiyini göstərir"
 
-#: gtk/gtkbutton.c:238 gtk/gtkimagemenuitem.c:148
+#: gtk/gtkbutton.c:235 gtk/gtkimagemenuitem.c:150
 msgid "Use stock"
 msgstr "Depo işlət"
 
-#: gtk/gtkbutton.c:239
+#: gtk/gtkbutton.c:236
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Seçili isə, etiket göstərilmək yerinə ambar vahidi almaq üçün işlədilir"
 
-#: gtk/gtkbutton.c:246 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Tıqlamada fokusa al"
 
-#: gtk/gtkbutton.c:247 gtk/gtkfilechooserbutton.c:394
+#: gtk/gtkbutton.c:244 gtk/gtkfilechooserbutton.c:394
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Mətnin siçanla tıqlandığında fokusu alması"
 
-#: gtk/gtkbutton.c:254
+#: gtk/gtkbutton.c:251
 msgid "Border relief"
 msgstr "Kənarlıq relyefi"
 
-#: gtk/gtkbutton.c:255
+#: gtk/gtkbutton.c:252
 msgid "The border relief style"
 msgstr "Kənar relyef tərzi"
 
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:269
 msgid "Horizontal alignment for child"
 msgstr "Törəmənin üfüqi səviyyələməsi"
 
-#: gtk/gtkbutton.c:291
+#: gtk/gtkbutton.c:288
 msgid "Vertical alignment for child"
 msgstr "Törəmənin şaquli səviyyələməsi"
 
-#: gtk/gtkbutton.c:308 gtk/gtkimagemenuitem.c:133
+#: gtk/gtkbutton.c:305 gtk/gtkimagemenuitem.c:135
 msgid "Image widget"
 msgstr "Rəsm pəncərəciyi"
 
-#: gtk/gtkbutton.c:309
+#: gtk/gtkbutton.c:306
 #, fuzzy
 msgid "Child widget to appear next to the button text"
 msgstr "Menyu mətninin yanında göstəriləcək törəmə pəncərəcik"
 
-#: gtk/gtkbutton.c:323
+#: gtk/gtkbutton.c:320
 #, fuzzy
 msgid "Image position"
 msgstr "Qulp yeri"
 
-#: gtk/gtkbutton.c:324
+#: gtk/gtkbutton.c:321
 #, fuzzy
 msgid "The position of the image relative to the text"
 msgstr "Törəmə pəncərəciyinə nəzarən qulpun yeri"
 
-#: gtk/gtkbutton.c:436
+#: gtk/gtkbutton.c:433
 msgid "Default Spacing"
 msgstr "Ön Qurğulu Boşluq"
 
-#: gtk/gtkbutton.c:437
+#: gtk/gtkbutton.c:434
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "CAN_DEFAULT düymələrinə əlavə ediləcək əlavə sahə"
 
-#: gtk/gtkbutton.c:443
+#: gtk/gtkbutton.c:440
 msgid "Default Outside Spacing"
 msgstr "Ön Qurğulu Xarici Boşluq"
 
-#: gtk/gtkbutton.c:444
+#: gtk/gtkbutton.c:441
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -921,59 +921,59 @@ msgstr ""
 "Kənarı həmişə xaricində göstərilən CAN_DEFAULT düymələri üçün əlavə ediləcək "
 "sahə"
 
-#: gtk/gtkbutton.c:449
+#: gtk/gtkbutton.c:446
 msgid "Child X Displacement"
 msgstr "Törəmənin X Yerdəyişdirməsi"
 
-#: gtk/gtkbutton.c:450
+#: gtk/gtkbutton.c:447
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "Düyməyə basılanda törəmənin x istiqamətində nə qədər hərəkət edəcəyi"
 
-#: gtk/gtkbutton.c:457
+#: gtk/gtkbutton.c:454
 msgid "Child Y Displacement"
 msgstr "Törəmənin Y Yerdəyişdirməsi"
 
-#: gtk/gtkbutton.c:458
+#: gtk/gtkbutton.c:455
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "Düyməyə basılanda törəmənin y istiqamətində nə qədər hərəkət edəcəyi"
 
-#: gtk/gtkbutton.c:474
+#: gtk/gtkbutton.c:471
 #, fuzzy
 msgid "Displace focus"
 msgstr "Fokusa malikdir"
 
-#: gtk/gtkbutton.c:475
+#: gtk/gtkbutton.c:472
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr ""
 
-#: gtk/gtkbutton.c:488 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
 #, fuzzy
 msgid "Inner Border"
 msgstr "Səkmə Kənarı"
 
-#: gtk/gtkbutton.c:489
+#: gtk/gtkbutton.c:486
 msgid "Border between button edges and child."
 msgstr ""
 
-#: gtk/gtkbutton.c:502
+#: gtk/gtkbutton.c:499
 #, fuzzy
 msgid "Image spacing"
 msgstr "Qiymət boşluğu"
 
-#: gtk/gtkbutton.c:503
+#: gtk/gtkbutton.c:500
 #, fuzzy
 msgid "Spacing in pixels between the image and label"
 msgstr "Etiket ilə törəmə arasındakı yer"
 
-#: gtk/gtkbutton.c:517
+#: gtk/gtkbutton.c:514
 msgid "Show button images"
 msgstr "Düymə rəsmlərini göstər"
 
-#: gtk/gtkbutton.c:518
+#: gtk/gtkbutton.c:515
 #, fuzzy
 msgid "Whether images should be shown on buttons"
 msgstr "Menyularda rəsmlərin göstərilməsi"
@@ -3235,30 +3235,39 @@ msgstr "Qövs növü"
 msgid "The representation being used for image data"
 msgstr "Rəsm verilənləri üçün istifadə ediləcək təmsil"
 
-#: gtk/gtkimagemenuitem.c:134
+#: gtk/gtkimagemenuitem.c:136
 msgid "Child widget to appear next to the menu text"
 msgstr "Menyu mətninin yanında göstəriləcək törəmə pəncərəcik"
 
-#: gtk/gtkimagemenuitem.c:149
+#: gtk/gtkimagemenuitem.c:151
 #, fuzzy
 msgid "Whether to use the label text to create a stock menu item"
 msgstr "Etiketin mətninin siçan ilə seçilə bilməsi"
 
-#: gtk/gtkimagemenuitem.c:163 gtk/gtkmenu.c:515
+#: gtk/gtkimagemenuitem.c:169
+msgid "Always show image"
+msgstr ""
+
+#: gtk/gtkimagemenuitem.c:170
+#, fuzzy
+msgid "Whether the image will always be shown"
+msgstr "Pəncərəcəyin görünməsi"
+
+#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:515
 #, fuzzy
 msgid "Accel Group"
 msgstr "Gedişat Qrupu"
 
-#: gtk/gtkimagemenuitem.c:164
+#: gtk/gtkimagemenuitem.c:185
 #, fuzzy
 msgid "The Accel Group to use for stock accelerator keys"
 msgstr "Sürə'tləndirici dəyişiklikləri izlənmə aralığı"
 
-#: gtk/gtkimagemenuitem.c:169
+#: gtk/gtkimagemenuitem.c:190
 msgid "Show menu images"
 msgstr "Menyu rəsmlərini göstər"
 
-#: gtk/gtkimagemenuitem.c:170
+#: gtk/gtkimagemenuitem.c:191
 msgid "Whether images should be shown in menus"
 msgstr "Menyularda rəsmlərin göstərilməsi"
 
@@ -6488,7 +6497,7 @@ msgstr "Sətir aralığı"
 msgid "Spacing in pixels between the icon and label"
 msgstr "Step düymələri və thumb arasındakı məsafə"
 
-#: gtk/gtktoolitem.c:193
+#: gtk/gtktoolitem.c:191
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6566,7 +6575,8 @@ msgid "Search Column"
 msgstr "Sütün Axtar"
 
 #: gtk/gtktreeview.c:643
-msgid "Model column to search through when searching through code"
+#, fuzzy
+msgid "Model column to search through during interactive search"
 msgstr "Kodun içində axtarırkən, içində axtarılacaq model sütunu"
 
 #: gtk/gtktreeview.c:663

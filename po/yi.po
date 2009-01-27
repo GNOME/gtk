@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:58-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2003-02-11\n"
 "Last-Translator: Raphael Finkel <raphael@cs.uky.edu>\n"
 "Language-Team: None <>\n"
@@ -1626,11 +1626,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "שריפֿט סעלעקציע"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7778
+#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
 msgid "Input _Methods"
 msgstr "אַרײַנשרײַב־מיטלען"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
 #, fuzzy
 msgid "_Insert Unicode Control Character"
 msgstr "לײג אַרײַן אוניקאָד קאָנטראָל־שריפֿטצײכן"
@@ -2219,13 +2219,13 @@ msgstr "דורכפֿאַל אין אַרײַנשטעלן TIFF בילד"
 msgid "Simple"
 msgstr "גרײס"
 
-#: gtk/gtkimmulticontext.c:545
+#: gtk/gtkimmulticontext.c:541
 #, fuzzy
 msgctxt "input method menu"
 msgid "System"
 msgstr "טעקעס"
 
-#: gtk/gtkimmulticontext.c:629
+#: gtk/gtkimmulticontext.c:625
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 12:58-0500\n"
+"POT-Creation-Date: 2009-01-27 00:10-0500\n"
 "PO-Revision-Date: 2006-09-12 21:04-0700\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -1575,11 +1575,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "வண்ணம் தேர்ந்தெடுத்தல்"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7778
+#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
 msgid "Input _Methods"
 msgstr "உள்ளீட்பு _முறைகள்"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
 msgid "_Insert Unicode Control Character"
 msgstr "யூனிகோட் கட்டுப்பாட்டு வரியுரு _சொருகவும்"
 
@@ -2142,13 +2142,13 @@ msgstr "TIFF உருவத்தைத் ஏற்ற முடியவி�
 msgid "Simple"
 msgstr "அளவு"
 
-#: gtk/gtkimmulticontext.c:545
+#: gtk/gtkimmulticontext.c:541
 #, fuzzy
 msgctxt "input method menu"
 msgid "System"
 msgstr "கோப்பு அமைப்பு"
 
-#: gtk/gtkimmulticontext.c:629
+#: gtk/gtkimmulticontext.c:625
 #, fuzzy, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
