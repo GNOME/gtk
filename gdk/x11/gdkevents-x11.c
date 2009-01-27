@@ -994,8 +994,8 @@ gdk_event_translate (GdkDisplay *display,
 	  )
         {
 	  /* Report key event against grab window */
-          window_private = display->keyboard_grab.window;
-          window = (GdkWindow *) window_private;
+          window = display->keyboard_grab.window;;
+          window_private = (GdkWindowObject *) window;
         }
 
       window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
