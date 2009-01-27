@@ -79,15 +79,17 @@ static void gtk_image_menu_item_activatable_reset          (GtkActivatable      
 							    GtkAction            *action);
 
 typedef struct {
-  gchar          *label;
-  gboolean        use_stock;
+  gchar *label;
+  guint  use_stock         : 1;
+  guint  always_show_image : 1;
 } GtkImageMenuItemPrivate;
 
 enum {
   PROP_0,
   PROP_IMAGE,
   PROP_USE_STOCK,
-  PROP_ACCEL_GROUP
+  PROP_ACCEL_GROUP,
+  PROP_ALWAYS_SHOW_IMAGE
 };
 
 static GtkActivatableIface *parent_activatable_iface;
@@ -147,6 +149,25 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
                                    g_param_spec_boolean ("use-stock",
 							 P_("Use stock"),
 							 P_("Whether to use the label text to create a stock menu item"),
+							 FALSE,
+							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+
+  /**
+   * GtkImageMenuItem:always-show-image:
+   *
+   * If %TRUE, the menu item will ignore the #GtkSettings:gtk-menu-images 
+   * setting and always show the image, if available.
+   *
+   * Use this property if the menuitem would be useless or hard to use
+   * without the image. 
+   *
+   * Since: 2.16
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_ALWAYS_SHOW_IMAGE,
+                                   g_param_spec_boolean ("always-show-image",
+							 P_("Always show image"),
+							 P_("Whether the image will always be shown"),
 							 FALSE,
 							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
@@ -214,6 +235,9 @@ gtk_image_menu_item_set_property (GObject         *object,
     case PROP_USE_STOCK:
       gtk_image_menu_item_set_use_stock (image_menu_item, g_value_get_boolean (value));
       break;
+    case PROP_ALWAYS_SHOW_IMAGE:
+      gtk_image_menu_item_set_always_show_image (image_menu_item, g_value_get_boolean (value));
+      break;
     case PROP_ACCEL_GROUP:
       gtk_image_menu_item_set_accel_group (image_menu_item, g_value_get_object (value));
       break;
@@ -239,6 +263,9 @@ gtk_image_menu_item_get_property (GObject         *object,
     case PROP_USE_STOCK:
       g_value_set_boolean (value, gtk_image_menu_item_get_use_stock (image_menu_item));      
       break;
+    case PROP_ALWAYS_SHOW_IMAGE:
+      g_value_set_boolean (value, gtk_image_menu_item_get_always_show_image (image_menu_item));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -248,10 +275,14 @@ gtk_image_menu_item_get_property (GObject         *object,
 static gboolean
 show_image (GtkImageMenuItem *image_menu_item)
 {
+  GtkImageMenuItemPrivate *priv = GET_PRIVATE (image_menu_item);
   GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (image_menu_item));
   gboolean show;
 
-  g_object_get (settings, "gtk-menu-images", &show, NULL);
+  if (priv->always_show_image)
+    show = TRUE;
+  else
+    g_object_get (settings, "gtk-menu-images", &show, NULL);
 
   return show;
 }
@@ -771,6 +802,69 @@ gtk_image_menu_item_get_use_stock (GtkImageMenuItem *image_menu_item)
   priv = GET_PRIVATE (image_menu_item);
 
   return priv->use_stock;
+}
+
+/**
+ * gtk_image_menu_item_set_always_show_image:
+ * @image_menu_item: a #GtkImageMenuItem
+ * @always_show: %TRUE if the menuitem should always show the image
+ *
+ * If %TRUE, the menu item will ignore the #GtkSettings:gtk-menu-images 
+ * setting and always show the image, if available.
+ *
+ * Use this property if the menuitem would be useless or hard to use
+ * without the image. 
+ * 
+ * Since: 2.16
+ */
+void
+gtk_image_menu_item_set_always_show_image (GtkImageMenuItem *image_menu_item,
+                                           gboolean          always_show)
+{
+  GtkImageMenuItemPrivate *priv;
+
+  g_return_if_fail (GTK_IS_IMAGE_MENU_ITEM (image_menu_item));
+
+  priv = GET_PRIVATE (image_menu_item);
+
+  if (priv->always_show_image != always_show)
+    {
+      priv->always_show_image = always_show;
+
+      if (image_menu_item->image)
+        {
+          if (show_image (image_menu_item))
+            gtk_widget_show (image_menu_item->image);
+          else
+            gtk_widget_hide (image_menu_item->image);
+        }
+
+      g_object_notify (G_OBJECT (image_menu_item), "always-show-image");
+    }
+}
+
+/**
+ * gtk_image_menu_item_get_always_show_image:
+ * @image_menu_item: a #GtkImageMenuItem
+ * @always_show: %TRUE if the menuitem should always show the image
+ *
+ * Returns whether the menu item will ignore the #GtkSettings:gtk-menu-images 
+ * setting and always show the image, if available.
+ * 
+ * Returns: %TRUE if the menu item will always show the image
+ *
+ * Since: 2.16
+ */
+gboolean
+gtk_image_menu_item_get_always_show_image (GtkImageMenuItem *image_menu_item)
+{
+  GtkImageMenuItemPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_IMAGE_MENU_ITEM (image_menu_item), FALSE);
+
+  priv = GET_PRIVATE (image_menu_item);
+
+  return priv->always_show_image;
 }
 
 

@@ -2062,6 +2062,7 @@ gtk_image_set_pixel_size
 
 #if IN_HEADER(__GTK_IMAGE_MENU_ITEM_H__)
 #if IN_FILE(__GTK_IMAGE_MENU_ITEM_C__)
+gtk_image_menu_item_get_always_show_image
 gtk_image_menu_item_get_image
 gtk_image_menu_item_get_type G_GNUC_CONST
 gtk_image_menu_item_get_use_stock
@@ -2070,6 +2071,7 @@ gtk_image_menu_item_new_from_stock
 gtk_image_menu_item_new_with_label
 gtk_image_menu_item_new_with_mnemonic
 gtk_image_menu_item_set_accel_group
+gtk_image_menu_item_set_always_show_image
 gtk_image_menu_item_set_image
 gtk_image_menu_item_set_use_stock
 #endif

@@ -1,5 +1,14 @@
 2009-01-26  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 322932 – Always show icons on panel menus
+
+	* gtk/gtk.symbols:
+	* gtk/gtkimagemenuitem.[hc]: Add a property to override the
+	show-menu-images setting for individual menuitems. Patch by
+	William Jon McCann.
+
+2009-01-26  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkbutton.c: Activate the action in a regular clicked
 	handler instead of the default handler, to make it work with
 	derived classes which don't chain up their clicked handler.
