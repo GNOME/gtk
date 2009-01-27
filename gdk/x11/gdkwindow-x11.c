@@ -2611,7 +2611,7 @@ gdk_window_set_startup_id (GdkWindow   *window,
 	XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
 			 gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"), 
 			 gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-			 PropModeReplace, startup_id, strlen (startup_id));
+			 PropModeReplace, (unsigned char *)startup_id, strlen (startup_id));
       else
 	XDeleteProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
 			 gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"));
