@@ -267,9 +267,7 @@ gtk_toggle_action_set_active (GtkToggleAction *action,
   is_active = is_active != FALSE;
 
   if (action->private_data->active != is_active)
-    {
-      _gtk_action_emit_activate (GTK_ACTION (action));
-    }
+    _gtk_action_emit_activate (GTK_ACTION (action));
 }
 
 /**

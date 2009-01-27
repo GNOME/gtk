@@ -750,8 +750,10 @@ gtk_action_activate (GtkAction *action)
 {
   g_return_if_fail (GTK_IS_ACTION (action));
   
-  if (action->private_data->activate_blocked == FALSE &&
-      gtk_action_is_sensitive (action))
+  if (action->private_data->activate_blocked)
+    return;
+
+  if (gtk_action_is_sensitive (action))
     _gtk_action_emit_activate (action);
 }
 

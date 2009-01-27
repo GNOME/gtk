@@ -443,12 +443,16 @@ gtk_activatable_do_set_related_action (GtkActivatable *activatable,
 	  
 	  _gtk_action_remove_from_proxy_list (prev_action, GTK_WIDGET (activatable));
 	  
-	  g_object_unref (prev_action);
-
           /* Some apps are using the object data directly...
            * so continue to set it for a bit longer
            */
           g_object_set_data (activatable, "gtk-action", NULL);
+
+          /*
+           * We don't want prev_action to be activated
+           * during the reset() call when syncing "active".
+           */ 
+          gtk_action_block_activate (prev_action);
 	}
       
       /* Some applications rely on their proxy UI to be set up
@@ -456,6 +460,12 @@ gtk_activatable_do_set_related_action (GtkActivatable *activatable,
        * need to call reset() before add_to_proxy_list().
        */
       gtk_activatable_reset (activatable, action);
+
+      if (prev_action)
+        {
+          gtk_action_unblock_activate (prev_action);
+	  g_object_unref (prev_action);
+        }
 
       if (action)
 	{

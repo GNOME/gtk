@@ -1,3 +1,14 @@
+2009-01-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkactivatable.c (gtk_activatable_do_set_related_action):
+	Block the previous action when calling reset() to prevent
+	accidental activation of the previous action.
+
+	* gtk/gtkaction.c (gtk_action_activate): Don't compare booleans.
+
+	* gtk/gtktoggleaction.c (gtk_toggle_action_set_active): Remove
+	extraneous braces.
+
 2009-01-26  Bastien Nocera  <hadess@hadess.net>
 
 	Bug 569240 - Crasher when using markers
