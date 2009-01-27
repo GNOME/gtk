@@ -502,7 +502,8 @@ gtk_toggle_button_clicked (GtkButton *button)
 
   g_object_notify (G_OBJECT (toggle_button), "active");
 
-  GTK_BUTTON_CLASS (gtk_toggle_button_parent_class)->clicked (button);
+  if (GTK_BUTTON_CLASS (gtk_toggle_button_parent_class)->clicked)
+    GTK_BUTTON_CLASS (gtk_toggle_button_parent_class)->clicked (button);
 }
 
 static void

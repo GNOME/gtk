@@ -1,4 +1,9 @@
 2009-01-27  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gtk/gtktogglebutton.c: Don't chain the clicked handler
+	up unconditionally.
+
+2009-01-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
 
