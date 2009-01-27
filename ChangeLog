@@ -1,5 +1,8 @@
 2009-01-26  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 569104 – Toggle menu entries showed as check menu entries 
+	in nautilus
+
 	* gtk/gtkactivatable.c (gtk_activatable_do_set_related_action):
 	Block the previous action when calling reset() to prevent
 	accidental activation of the previous action.
