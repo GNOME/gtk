@@ -54,9 +54,6 @@ struct _GdkPixmapObject
   GdkDrawable *impl;  /* window-system-specific delegate object */
 
   gint depth;
-  GdkWindow *backing_for;
-  int backing_x_offset;
-  int backing_y_offset;
 };
 
 struct _GdkPixmapObjectClass
