@@ -1,4 +1,9 @@
 2009-01-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c: Use the get_text_area_size vfunc to make
+	alignment and icons in spin buttons work correctly.
+
+2009-01-27  Matthias Clasen  <mclasen@redhat.com>
 	
 	Bug 569336 – change in gtkbutton klass is causing crash when 
 	activating menu item

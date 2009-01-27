@@ -449,12 +449,15 @@ static void         gtk_entry_do_popup                 (GtkEntry       *entry,
 							GdkEventButton *event);
 static gboolean     gtk_entry_mnemonic_activate        (GtkWidget      *widget,
 							gboolean        group_cycling);
-static void         gtk_entry_state_changed            (GtkWidget      *widget,
-							GtkStateType    previous_state);
 static void         gtk_entry_check_cursor_blink       (GtkEntry       *entry);
 static void         gtk_entry_pend_cursor_blink        (GtkEntry       *entry);
 static void         gtk_entry_reset_blink_time         (GtkEntry       *entry);
 static void         gtk_entry_get_text_area_size       (GtkEntry       *entry,
+							gint           *x,
+							gint           *y,
+							gint           *width,
+							gint           *height);
+static void         get_text_area_size                 (GtkEntry       *entry,
 							gint           *x,
 							gint           *y,
 							gint           *width,
@@ -2246,7 +2249,7 @@ get_icon_allocations (GtkEntry      *entry,
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   gint x, y, width, height;
 
-  gtk_entry_get_text_area_size (entry, &x, &y, &width, &height);
+  get_text_area_size (entry, &x, &y, &width, &height);
 
   primary->y = y;
   primary->height = height;
@@ -2601,7 +2604,7 @@ gtk_entry_realize (GtkWidget *widget)
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, entry);
 
-  gtk_entry_get_text_area_size (entry, &attributes.x, &attributes.y, &attributes.width, &attributes.height);
+  get_text_area_size (entry, &attributes.x, &attributes.y, &attributes.width, &attributes.height);
  
   if (GTK_WIDGET_IS_SENSITIVE (widget))
     {
@@ -2775,7 +2778,7 @@ place_windows (GtkEntry *entry)
   GtkAllocation secondary;
   EntryIconInfo *icon_info = NULL;
 
-  gtk_entry_get_text_area_size (entry, &x, &y, &width, &height);
+  get_text_area_size (entry, &x, &y, &width, &height);
 
   get_icon_allocations (entry, &primary, &secondary);
 
@@ -2834,6 +2837,24 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
   if (height)
     *height = requisition.height - yborder * 2;
 }
+
+static void
+get_text_area_size (GtkEntry *entry,
+                    gint     *x,
+                    gint     *y,
+                    gint     *width,
+                    gint     *height)
+{
+  GtkEntryClass *class;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  class = GTK_ENTRY_GET_CLASS (entry);
+
+  if (class->get_text_area_size)
+    class->get_text_area_size (entry, x, y, width, height);
+}
+
 
 static void
 get_widget_window_size (GtkEntry *entry,
