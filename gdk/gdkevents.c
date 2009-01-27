@@ -632,6 +632,7 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_SETTING:
       case GDK_OWNER_CHANGE:
       case GDK_GRAB_BROKEN:
+      case GDK_EVENT_LAST:
         /* return current time */
         break;
       }
@@ -710,6 +711,7 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_SETTING:
       case GDK_OWNER_CHANGE:
       case GDK_GRAB_BROKEN:
+      case GDK_EVENT_LAST:
         /* no state field */
         break;
       }
