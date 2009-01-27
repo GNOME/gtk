@@ -138,27 +138,6 @@ gdk_x11_convert_grab_status (gint status)
   return 0;
 }
 
-static void
-generate_grab_broken_event (GdkWindow *window,
-			    gboolean   keyboard,
-			    gboolean   implicit,
-			    GdkWindow *grab_window)
-{
-  g_return_if_fail (window != NULL);
-
-  if (!GDK_WINDOW_DESTROYED (window))
-    {
-      GdkEvent event;
-      event.type = GDK_GRAB_BROKEN;
-      event.grab_broken.window = window;
-      event.grab_broken.send_event = 0;
-      event.grab_broken.keyboard = keyboard;
-      event.grab_broken.implicit = implicit;
-      event.grab_broken.grab_window = grab_window;
-      gdk_event_put (&event);
-    }
-}
-
 struct XPointerGrabInfo {
   GdkDisplay *display;
   GdkWindow *window;
@@ -452,7 +431,6 @@ void
 _gdk_xgrab_check_destroy (GdkWindow *window)
 {
   GdkDisplay *display = gdk_drawable_get_display (window);
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   
   if (window == display->pointer_grab.native_window &&
       display->pointer_grab.window != NULL)
