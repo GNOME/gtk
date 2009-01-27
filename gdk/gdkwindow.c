@@ -245,8 +245,6 @@ static void gdk_window_flush_outstanding_moves (GdkWindow *window);
 static void gdk_window_flush            (GdkWindow *window);
 static void gdk_window_flush_recursive  (GdkWindowObject *window);
 static void do_move_region_bits_on_impl (GdkWindowObject *private,
-					 GdkDrawable *dest,
-					 int dest_off_x, int dest_off_y,
 					 GdkRegion *region, /* In impl window coords */
 					 int dx, int dy);
 static void gdk_window_invalidate_in_parent (GdkWindowObject *private);
@@ -2457,16 +2455,16 @@ gdk_window_free_paint_stack (GdkWindow *window)
 
 static void
 do_move_region_bits_on_impl (GdkWindowObject *private,
-			     GdkDrawable *dest,
-			     int dest_off_x, int dest_off_y,
 			     GdkRegion *region, /* In impl window coords */
 			     int dx, int dy)
 {
   GdkGC *tmp_gc;
   GdkRectangle copy_rect;
+  GdkDrawable *dest;
+
+  dest = private->impl;
   
   gdk_region_get_clipbox (region, &copy_rect);
-  gdk_region_offset (region, -dest_off_x, -dest_off_y);
 
   /* We need to get data from subwindows here, because we might have
    * shaped a native window over the moving region (with bg none,
@@ -2488,7 +2486,7 @@ do_move_region_bits_on_impl (GdkWindowObject *private,
 		     tmp_gc,
 		     private->impl,
 		     copy_rect.x-dx, copy_rect.y-dy,
-		     copy_rect.x - dest_off_x, copy_rect.y - dest_off_y,
+		     copy_rect.x, copy_rect.y,
 		     copy_rect.width, copy_rect.height);
   gdk_gc_set_clip_region (tmp_gc, NULL);
 }
@@ -2573,7 +2571,6 @@ move_region_on_impl (GdkWindowObject *private,
     }
   else
     do_move_region_bits_on_impl (private,
-				 private->impl, 0,0,
 				 region, dx, dy);
     
   /* Move any old invalid regions in the copy source area by dx/dy */
@@ -2616,7 +2613,6 @@ gdk_window_flush_outstanding_moves (GdkWindow *window)
       move = l->data;
 
       do_move_region_bits_on_impl (private,
-				   private->impl, 0, 0,
 				   move->region, move->dx, move->dy);
 
       gdk_region_destroy (move->region);
