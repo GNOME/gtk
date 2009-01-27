@@ -1,25 +1,25 @@
 # translation of or.po to Oriya
 # Oriya translation of gtk+.HEAD.pot.
-# Copyright (C) 2005, 2006, 2008, Free Software Foundation, Inc.
+# Copyright (C) 2005, 2006, 2008, 2009, Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 # $Id: or.po,v 1.18 2006/12/13 09:55:51 sbehera Exp $
 # $Id: or.po,v 1.18 2006/12/13 09:55:51 sbehera Exp $
 #
 # Gora Mohanty <gora_mohanty@yahoo.co.in>, 2005.
 # Subhransu Behera <arya_subhransu@yahoo.co.in>, 2006.
-# Manoj Kumar Giri <mgiri@redhat.com>, 2008.
+# Manoj Kumar Giri <mgiri@redhat.com>, 2008, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-27 00:10-0500\n"
-"PO-Revision-Date: 2008-09-17 20:27+0530\n"
+"PO-Revision-Date: 2009-01-27 17:35+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
-"Language-Team: Oriya\n"
+"Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2;plural=(n!=1)\n"
+"Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
 "\n"
 "\n"
 "\n"
@@ -34,19 +34,19 @@ msgid "sdl|system"
 msgstr "ତନ୍ତ୍ର"
 
 #: gdk/gdk.c:103
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing option --gdk-debug"
-msgstr "ମୂଦ୍ରଣ କରିବା ସମୟରେ ତୃଟି"
+msgstr "--gdk-debug କୁ ବିଶ୍ଳେଷଣ କରିବା ସମୟରେ ତୃଟି"
 
 #: gdk/gdk.c:123
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
-msgstr ""
+msgstr "--gdk-no-debug କୁ ବିଶ୍ଳେଷଣ କରିବା ସମୟରେ ତୃଟି"
 
 #. Description of --class=CLASS in --help output
 #: gdk/gdk.c:151
 msgid "Program class as used by the window manager"
-msgstr "ୱିଣ୍ଡୋ ପରିଚାଳକ ଦ୍ବାରା ବ୍ଯବହୃତ କାରିକା ଶ୍ରେଣୀ"
+msgstr "ୱିଣ୍ଡୋ ପରିଚାଳକ ଦ୍ବାରା ବ୍ଯବହୃତ ପ୍ରଗ୍ରାମ ଶ୍ରେଣୀ"
 
 #. Placeholder in --class=CLASS in --help output
 #: gdk/gdk.c:152
@@ -56,7 +56,7 @@ msgstr "ଶ୍ରେଣୀ"
 #. Description of --name=NAME in --help output
 #: gdk/gdk.c:154
 msgid "Program name as used by the window manager"
-msgstr "ୱିଣ୍ଡୋ ପରିଚାଳକ ଦ୍ବାରା ବ୍ଯବହୃତ କାରିକା ନାମ"
+msgstr "ୱିଣ୍ଡୋ ପରିଚାଳକ ଦ୍ବାରା ବ୍ଯବହୃତ ପ୍ରଗ୍ରାମ ନାମ"
 
 #. Placeholder in --name=NAME in --help output
 #: gdk/gdk.c:155
@@ -66,7 +66,7 @@ msgstr "ନାମ"
 #. Description of --display=DISPLAY in --help output
 #: gdk/gdk.c:157
 msgid "X display to use"
-msgstr "ବ୍ଯବହାର ପାଇଁ ଏକ୍ସ ପ୍ରଦର୍ଶିକା"
+msgstr "ବ୍ଯବହାର ପାଇଁ X ପ୍ରଦର୍ଶିକା"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: gdk/gdk.c:158
@@ -76,7 +76,7 @@ msgstr "ପ୍ରଦର୍ଶିକା"
 #. Description of --screen=SCREEN in --help output
 #: gdk/gdk.c:160
 msgid "X screen to use"
-msgstr "ବ୍ଯବହାର ପାଇଁ ଏକ୍ସ ପରଦା"
+msgstr "ବ୍ଯବହାର ପାଇଁ X ପରଦା"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: gdk/gdk.c:161
@@ -86,7 +86,7 @@ msgstr "ପରଦା"
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:164
 msgid "Gdk debugging flags to set"
-msgstr "ବିନ୍ଯାସ ପାଇଁ ଜିଡିକେର ତୃଟିମୁକ୍ତିକରଣ ସୂଚକଗୁଡ଼ିକ"
+msgstr "ବିନ୍ଯାସ ପାଇଁ Gdkର ତୃଟିମୁକ୍ତିକରଣ ସୂଚକଗୁଡ଼ିକ"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -99,105 +99,94 @@ msgstr "ସୂଚକ"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:167
 msgid "Gdk debugging flags to unset"
-msgstr "ଅବିନ୍ଯାସ ପାଇଁ ଜିଡିକେର ତୃଟିମୁକ୍ତିକରଣ ସୂଚକଗୁଡ଼ିକ"
+msgstr "ଅବିନ୍ଯାସ ପାଇଁ Gdkର ତୃଟିମୁକ୍ତିକରଣ ସୂଚକଗୁଡ଼ିକ"
 
 #: gdk/keyname-table.h:3940
-#, fuzzy
 msgctxt "keyboard label"
 msgid "BackSpace"
-msgstr "ବଦଳାନ୍ତୁ (_R)"
+msgstr "BackSpace"
 
 #: gdk/keyname-table.h:3941
 msgctxt "keyboard label"
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: gdk/keyname-table.h:3942
 msgctxt "keyboard label"
 msgid "Return"
-msgstr ""
+msgstr "Return"
 
 #: gdk/keyname-table.h:3943
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Pause"
-msgstr "ସାମୟିକ ବିରାମ ନେଉଛି"
+msgstr "Pause"
 
 #: gdk/keyname-table.h:3944
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr ""
+msgstr "Scroll_Lock"
 
 #: gdk/keyname-table.h:3945
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "ଫାଇଲ ତନ୍ତ୍ର"
+msgstr "Sys_Req"
 
 #: gdk/keyname-table.h:3946
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Escape"
-msgstr "ଭୂ-ଦୃଶ୍ଯ"
+msgstr "Escape"
 
 #: gdk/keyname-table.h:3947
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "ଏକାଧିକ ଚାପ"
+msgstr "Multi_key"
 
 #: gdk/keyname-table.h:3948
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Home"
-msgstr "ଘର (_H)"
+msgstr "Home"
 
 #: gdk/keyname-table.h:3949
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Left"
-msgstr "ବାମ (_L):"
+msgstr "ବାମ"
 
 #: gdk/keyname-table.h:3950
 msgctxt "keyboard label"
 msgid "Up"
-msgstr ""
+msgstr "ଉପର"
 
 #: gdk/keyname-table.h:3951
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Right"
-msgstr "ଡାହାଣ (_R):"
+msgstr "ଡାହାଣ"
 
 #: gdk/keyname-table.h:3952
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Down"
-msgstr "ତଳ ପଥ"
+msgstr "ତଳ"
 
 #: gdk/keyname-table.h:3953
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "ପୃଷ୍ଠା ବ୍ଯବସ୍ଥାପନ (_u)"
+msgstr "ପୃଷ୍ଠା ଉପରକୁ କରନ୍ତୁ (_U)"
 
 #: gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr ""
+msgstr "ପୃଷ୍ଠା ତଳକୁୁ କରନ୍ତୁ (_D)"
 
 #: gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Begin"
-msgstr ""
+msgstr "ଆରମ୍ଭ"
 
 #: gdk/keyname-table.h:3957
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "ମୁଦ୍ରଣ କରନ୍ତୁ"
@@ -205,70 +194,64 @@ msgstr "ମୁଦ୍ରଣ କରନ୍ତୁ"
 #: gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Insert"
-msgstr ""
+msgstr "ଭର୍ତ୍ତି କରନ୍ତୁ"
 
 #: gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr ""
+msgstr "Num_Lock"
 
 #: gdk/keyname-table.h:3960
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "ବଦଳାନ୍ତୁ (_R)"
+msgstr "KP_Space"
 
 #: gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr ""
+msgstr "KP_Tab"
 
 #: gdk/keyname-table.h:3962
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "ମୁଦ୍ରଣୀ"
+msgstr "KP_Enter"
 
 #: gdk/keyname-table.h:3963
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "ଘର (_H)"
+msgstr "KP_Home"
 
 #: gdk/keyname-table.h:3964
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "ବାମ (_L):"
+msgstr "KP_Left"
 
 #: gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr ""
+msgstr "KP_Up"
 
 #: gdk/keyname-table.h:3966
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "ଡାହାଣ (_R):"
+msgstr "KP_Right"
 
 #: gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr ""
+msgstr "KP_Down"
 
 #: gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr ""
+msgstr "KP_Page_Up"
 
 #: gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr ""
+msgstr "KP_Prior"
 
 #: gdk/keyname-table.h:3970
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
 msgstr "KP_Page_Down"
@@ -276,40 +259,38 @@ msgstr "KP_Page_Down"
 #: gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr ""
+msgstr "KP_Next"
 
 #: gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr ""
+msgstr "KP_End"
 
 #: gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr ""
+msgstr "KP_Begin"
 
 #: gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr ""
+msgstr "KP_Insert"
 
 #: gdk/keyname-table.h:3975
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "ଲିଭାନ୍ତୁ (_D)"
+msgstr "KP_Delete"
 
 #: gdk/keyname-table.h:3976
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Delete"
-msgstr "ଲିଭାନ୍ତୁ (_D)"
+msgstr "ଅପସାରଣ କରନ୍ତୁ"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:965
 #: gdk-pixbuf/gdk-pixbuf-io.c:1225 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "'%s' ଫାଇଲ ଖୋଲିବାରେ ଅସଫଳ: %s"
+msgstr "'%s' ଫାଇଲକୁ ଖୋଲିବାରେ ଅସଫଳ: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:977
 #, c-format
@@ -319,8 +300,7 @@ msgstr "'%s' ଚିତ୍ର ଫାଇଲରେ କୌଣସି ତଥ୍ଯ ନ
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1013
 #: gdk-pixbuf/gdk-pixbuf-io.c:1277 tests/testfilechooser.c:267
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "'%s' ଚିତ୍ର ଫାଇଲ ଧାରଣ କରିବାରେ ଅସଫଳ: କାରଣ ଜଣା ନାହିଁ, ସମ୍ଭବତଃ ଏହା ଗୋଟିଏ ତୃଟିଯୁକ୍ତ ଚିତ୍ର ଫାଇଲ "
 "ଅଟେ"
@@ -399,8 +379,7 @@ msgstr "'%s'କୁ ଲେଖିବା ପ୍ରତି ଖୋଲିବାରେ �
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr ""
-"ଚିତ୍ର ଲେଖିବା ସମୟରେ '%s'କୁ ବନ୍ଦ କରିବାରେ ଅସଫଳ, ସମ୍ପୂର୍ଣ ତଥ୍ଯ ସଂରକ୍ଷିତ ନ ହୋଇଥାଇପାରେ: %s"
+msgstr "ଚିତ୍ର ଲେଖିବା ସମୟରେ '%s'କୁ ବନ୍ଦ କରିବାରେ ଅସଫଳ, ସମ୍ପୂର୍ଣ ତଥ୍ଯ ସଂରକ୍ଷିତ ନ ହୋଇଥାଇପାରେ: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2253 gdk-pixbuf/gdk-pixbuf-io.c:2304
 msgid "Insufficient memory to save image into a buffer"
@@ -669,8 +648,7 @@ msgstr "JPEG ଚିତ୍ର ଫାଇଲ ବ୍ଯାଖ୍ଯା କରିବ�
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr ""
-"ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ, ସ୍ମୃତି ମୁକ୍ତି ପାଇଁ କିଛି ପ୍ରୟୋଗ ବନ୍ଦ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ"
+msgstr "ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ, ସ୍ମୃତି ମୁକ୍ତି ପାଇଁ କିଛି ପ୍ରୟୋଗ ବନ୍ଦ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ"
 
 #: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
 #, c-format
@@ -695,8 +673,7 @@ msgstr "JPEG ଗୁଣବତ୍ତାର ମୂଲ୍ଯ ୦ ଓ ୧୦୦ ଭ�
 
 #: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG ଗୁଣବତ୍ତାର ମୂଲ୍ଯ ୦ ଓ ୧୦୦ ଭିତରେ ଥିବା ଉଚିତ; '%d' ମୂଲ୍ଯର ଅନୁମତି ନାହିଁ."
 
 #: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
@@ -762,7 +739,7 @@ msgstr "ପରିବର୍ତ୍ତିତ PNG ର ବିଟ ପ୍ରତି ଚ�
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr "ପରିବର୍ତ୍ତିତ PNG, RGB କିମ୍ବା RGBA ନୁହେଁ"
+msgstr "ପରିବର୍ତ୍ତିତ PNG, RGB କିମ୍ବା RGBA ନୁହେଁ।"
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
@@ -796,8 +773,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ଫାଇଲ ପଢ଼ିବାରେ ମାରାତ୍ମକ ତୃଟି: %s"
 
 #: gdk-pixbuf/io-png.c:825
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ପାଠ୍ଯ ଖଣ୍ଡର ଚାବି ୧ ଓ ୭୯ ଅକ୍ଷର ଭିତରେ ହୋଇଥିବା ଆବଶ୍ଯକ."
 
 #: gdk-pixbuf/io-png.c:833
@@ -1240,7 +1216,7 @@ msgstr "ଚିତ୍ରକାର"
 #: gtk/gtkaccellabel.c:91
 msgctxt "keyboard label"
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1250,7 +1226,7 @@ msgstr ""
 #: gtk/gtkaccellabel.c:97
 msgctxt "keyboard label"
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1260,7 +1236,7 @@ msgstr ""
 #: gtk/gtkaccellabel.c:103
 msgctxt "keyboard label"
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
@@ -1268,10 +1244,9 @@ msgstr ""
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:671
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Super"
-msgstr "କାଗଜ"
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1279,10 +1254,9 @@ msgstr "କାଗଜ"
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:684
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Hyper"
-msgstr "କାଗଜ"
+msgstr "Hyper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1292,18 +1266,17 @@ msgstr "କାଗଜ"
 #: gtk/gtkaccellabel.c:698
 msgctxt "keyboard label"
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: gtk/gtkaccellabel.c:715
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Space"
-msgstr "ବଦଳାନ୍ତୁ (_R)"
+msgstr "Space"
 
 #: gtk/gtkaccellabel.c:718
 msgctxt "keyboard label"
 msgid "Backslash"
-msgstr ""
+msgstr "Backslash"
 
 #: gtk/gtkbuilderparser.c:340
 #, c-format
@@ -1349,7 +1322,7 @@ msgstr "calendar:week_start:0"
 #: gtk/gtkcalendar.c:1803
 msgctxt "year measurement template"
 msgid "2000"
-msgstr ""
+msgstr "2000"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1365,7 +1338,7 @@ msgstr ""
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1381,7 +1354,7 @@ msgstr ""
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1396,16 +1369,15 @@ msgstr ""
 #: gtk/gtkcalendar.c:2146
 msgctxt "calendar year format"
 msgid "%Y"
-msgstr ""
+msgstr "%Y"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
 #: gtk/gtkcellrendereraccel.c:243
-#, fuzzy
 msgctxt "Accelerator"
 msgid "Disabled"
-msgstr "ନିଷ୍କ୍ରିୟ"
+msgstr "ନିଷ୍କ୍ରିୟ ହୋଇଛି"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
@@ -1419,7 +1391,7 @@ msgstr "ନୂତନ ତ୍ବରକ..."
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
@@ -1439,8 +1411,7 @@ msgstr "ବାହାର ମଣ୍ଡଳରୁ ରଙ୍ଗ ବାଛନ୍ତୁ
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr ""
-"ଆଖିଡ୍ରପର ଉପରେ ମାଉସ ଚାବି ଦବାଇ, ରଙ୍ଗ ବାଛିବା ପାଇଁ ପରଦାର କୌଣସି ରଙ୍ଗ ଉପରେ ମାଉସ ଚାବି ଦବାନ୍ତୁ।"
+msgstr "ଆଖିଡ୍ରପର ଉପରେ ମାଉସ ଚାବି ଦବାଇ, ରଙ୍ଗ ବାଛିବା ପାଇଁ ପରଦାର କୌଣସି ରଙ୍ଗ ଉପରେ ମାଉସ ଚାବି ଦବାନ୍ତୁ।"
 
 #: gtk/gtkcolorsel.c:387
 msgid "_Hue:"
@@ -1507,7 +1478,7 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"ଏହି ଭରଣରେ ଆପଣ ଗୋଟିଏ ଏଚ.ତି.ଏମ.ଏଲ. ଶୈଳୀର ଷୋହଳମିକ ରଙ୍ଗ ମୂଲ୍ଯ, ବା ସରଳ ଭାବରେ ଗୋଟିଏ ରଙ୍ଗର "
+"ଏହି ଭରଣରେ ଆପଣ ଗୋଟିଏ HTML-ଶୈଳୀର ଷୋହଳମିକ ରଙ୍ଗ ମୂଲ୍ଯ, କିମ୍ବା ସରଳ ଭାବରେ ଗୋଟିଏ ରଙ୍ଗର "
 "ନାମ, ଯେପରି କି 'ନାରଙ୍ଗ' ଭରି ପାରନ୍ତି।"
 
 #: gtk/gtkcolorsel.c:470
@@ -1525,7 +1496,7 @@ msgid ""
 "current by dragging it to the other color swatch alongside."
 msgstr ""
 "ପୂର୍ବରୁ ବଛାଯାଇଥିବା ରଙ୍ଗ, ବର୍ତମାନ ବଛାଯାଇଥିବା ରଙ୍ଗ ସଙ୍ଗେ ଦୁଳନା ପାଇଁ. ଆପଣ ଏହି ରଙ୍ଗକୁ ଆଳି ଭରଣକୁ "
-"ଟାଣିପାରନ୍ତି ବା ଏହାକୁ ପାଖରେ ସ୍ଥିତ ରଙ୍ଗ ନମୁନା କ୍ଷେତ୍ରକୁ ଟାଣି ସାମ୍ପ୍ରତିକ ରଙ୍ଗ ଭାବରେ ବାଛିପାରନ୍ତି।"
+"ଟାଣିପାରନ୍ତି କିମ୍ବା ଏହାକୁ ପାଖରେ ସ୍ଥିତ ରଙ୍ଗ ନମୁନା କ୍ଷେତ୍ରକୁ ଟାଣି ସାମ୍ପ୍ରତିକ ରଙ୍ଗ ଭାବରେ ବାଛିପାରନ୍ତି।"
 
 #: gtk/gtkcolorsel.c:980
 msgid ""
@@ -1561,9 +1532,8 @@ msgid "_Insert Unicode Control Character"
 msgstr "ୟୁନିକୋଡ ନିୟନ୍ତ୍ରଣ ଅକ୍ଷର ଭର୍ତ୍ତି କରନ୍ତୁ (_I)"
 
 #: gtk/gtkentry.c:9601
-#, fuzzy
 msgid "Caps Lock is on"
-msgstr "ଅବସ୍ଥାନକୁ ନକଲ କରନ୍ତୁ (_L)"
+msgstr "Caps Lock ଅନ ଅଛି"
 
 #: gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
@@ -1698,11 +1668,11 @@ msgstr "ଚିହ୍ନିତ ସ୍ଥାନଗୁଡ଼ିକରେ ଯୋଗ�
 
 #: gtk/gtkfilechooserdefault.c:4324
 msgid "Show _Hidden Files"
-msgstr "ଲୁଚାଯାଇଥିବା ଫାଇଲଗୁଡ଼ିକ ଦେଖାନ୍ତୁ (_H)"
+msgstr "ଲୁକ୍କାୟିତ ଫାଇଲଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ (_H)"
 
 #: gtk/gtkfilechooserdefault.c:4331
 msgid "Show _Size Column"
-msgstr ""
+msgstr "ସ୍ତମ୍ଭ ଆକାର ଦର୍ଶାନ୍ତୁ (_S)"
 
 #: gtk/gtkfilechooserdefault.c:4586 gtk/gtkfilesel.c:730
 msgid "Files"
@@ -1723,7 +1693,7 @@ msgstr "ପରିବର୍ତ୍ତିତ"
 #. Label
 #: gtk/gtkfilechooserdefault.c:4894 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
-msgstr "ନାମ: (_N)"
+msgstr "ନାମ (_N):"
 
 #: gtk/gtkfilechooserdefault.c:4937
 msgid "_Browse for other folders"
@@ -1771,8 +1741,7 @@ msgstr "\"%s\" ନାମର ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଆପ
 
 #: gtk/gtkfilechooserdefault.c:8151 gtk/gtkprintunixdialog.c:374
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\"ରେ ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଏହାକୁ ବଦଳାଇଲେ, ତାହାର ସୂଚୀ ନବଲିଖିତ ହୋଇଯିବ."
 
 #: gtk/gtkfilechooserdefault.c:8156 gtk/gtkprintunixdialog.c:381
@@ -1848,7 +1817,7 @@ msgstr "ଏକମାତ୍ର ସମ୍ପୂର୍ଣ୍ଣତା"
 #.
 #: gtk/gtkfilechooserentry.c:1122
 msgid "Complete, but not unique"
-msgstr "ସମ୍ପୂର୍ଣ୍ଣ, କିନ୍ତୁ ଏନନ୍ୟ ନୁହଁ"
+msgstr "ସମ୍ପୂର୍ଣ୍ଣ, କିନ୍ତୁ ଅନନ୍ୟ ନୁହଁ"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
@@ -1862,7 +1831,7 @@ msgstr "ସମ୍ପୂର୍ଣ୍ଣ କରୁଅଛି..."
 #. * "sftp://blahblah" in an app that only supports local filenames.
 #: gtk/gtkfilechooserentry.c:1176 gtk/gtkfilechooserentry.c:1201
 msgid "Only local files may be selected"
-msgstr ""
+msgstr "କେବଳ ସ୍ଥାନୀୟ ଫାଇଲଗୁଡ଼ିକ ବଛାଯାଇପାରେ"
 
 #. Another option is to complete the hostname based on the remote volumes that are mounted
 #. Translators: this is shown in the feedback for Tab-completion in a
@@ -1870,15 +1839,14 @@ msgstr ""
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
 #: gtk/gtkfilechooserentry.c:1185
 msgid "Incomplete hostname; end it with '/'"
-msgstr ""
+msgstr "ଅସମ୍ପୂର୍ଣ୍ଣ ଆଧାର ନାମ, / ସହିତ ସମାପ୍ତ"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
 #: gtk/gtkfilechooserentry.c:1196
-#, fuzzy
 msgid "Path does not exist"
-msgstr "%s ସଂକ୍ଷିପ୍ତ ପଥ ଅବସ୍ଥିତ ନାହିଁ"
+msgstr "ପଥ ଅବସ୍ଥିତ ନାହିଁ"
 
 #: gtk/gtkfilechoosersettings.c:362 gtk/gtkfilesel.c:1349
 #: gtk/gtkfilesel.c:1358
@@ -1928,8 +1896,7 @@ msgstr "ଫାଇଲର ନାମ ବଦଳାନ୍ତୁ (_R)"
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ଫୋଲ୍ଡରର ନାମ \"%s\"ରେ କିଛି ପ୍ରତୀକ ଅଛି ଯେଉଁଗୁଡ଼ିକ ଫାଇଲ ନାମରେ ମନା"
 
 #: gtk/gtkfilesel.c:1392
@@ -2054,20 +2021,20 @@ msgstr "ଅଆଇଈଉଊକଖଗଘଞଅଆଇଈଉଊକଖଗଘଞ"
 
 #: gtk/gtkfontsel.c:328
 msgid "_Family:"
-msgstr "ଶ୍ରେଣୀ (_F)"
+msgstr "ଶ୍ରେଣୀ (_F):"
 
 #: gtk/gtkfontsel.c:334
 msgid "_Style:"
-msgstr "ଶୈଳୀ (_S)"
+msgstr "ଶୈଳୀ (_S):"
 
 #: gtk/gtkfontsel.c:340
 msgid "Si_ze:"
-msgstr "ଆକାର: (_z)"
+msgstr "ଆକାର (_z):"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:517
 msgid "_Preview:"
-msgstr "ପୂର୍ବାବଲୋକନ: (_P)"
+msgstr "ପୂର୍ବାବଲୋକନ (_P):"
 
 #: gtk/gtkfontsel.c:1560
 msgid "Font Selection"
@@ -2116,7 +2083,6 @@ msgid "Simple"
 msgstr "ସରଳ"
 
 #: gtk/gtkimmulticontext.c:541
-#, fuzzy
 msgctxt "input method menu"
 msgid "System"
 msgstr "ଫାଇଲ ତନ୍ତ୍ର"
@@ -2125,7 +2091,7 @@ msgstr "ଫାଇଲ ତନ୍ତ୍ର"
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
-msgstr ""
+msgstr "ତନ୍ତ୍ର (%s)"
 
 #: gtk/gtkinputdialog.c:192
 msgid "Input"
@@ -2137,7 +2103,7 @@ msgstr "କୌଣସି ବିସ୍ତୃତ ନିବେଶ ଯନ୍ତ୍ର
 
 #: gtk/gtkinputdialog.c:220
 msgid "_Device:"
-msgstr "ଯନ୍ତ୍ର: (_D)"
+msgstr "ଯନ୍ତ୍ର (_D):"
 
 #: gtk/gtkinputdialog.c:237
 msgid "Disabled"
@@ -2212,27 +2178,27 @@ msgstr "ୟୁ.ଆର.ଏଲ. କୁ ନକଲ କରନ୍ତୁ"
 
 #: gtk/gtklinkbutton.c:586
 msgid "Invalid URI"
-msgstr "ଅବୈଧ ୟୁ.ଆର.ଆଇ."
+msgstr "ଅବୈଧ URI"
 
 #. Description of --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:450
 msgid "Load additional GTK+ modules"
-msgstr "ଅତିରିକ୍ତ ଜି.ଟି.କେ.+ ଯନ୍ତ୍ରାଂଶ ଧାରଣ କରନ୍ତୁ"
+msgstr "ଅତିରିକ୍ତ GTK+ ଏକକାଂଶଗୁଡ଼ିକୁ ଧାରଣ କରନ୍ତୁ"
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:451
 msgid "MODULES"
-msgstr "ଯନ୍ତ୍ରାଂଶ"
+msgstr "ଏକକାଂଶଗୁଡ଼ିକ"
 
 #. Description of --g-fatal-warnings in --help output
 #: gtk/gtkmain.c:453
 msgid "Make all warnings fatal"
-msgstr "ସବୁ ଚେତାବନୀ ମାରାତ୍ମକ କରନ୍ତୁ"
+msgstr "ସମସ୍ତ ଚେତାବନୀକୁ ମାରାତ୍ମକ କରନ୍ତୁ"
 
 #. Description of --gtk-debug=FLAGS in --help output
 #: gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to set"
-msgstr "ବିନ୍ଯାସ ପାଇଁ ଜି.ଟି.କେ.+ ତୃଟିମୁକ୍ତିକରଣ ସୂଚକ"
+msgstr "ବିନ୍ଯାସ ପାଇଁ GTK+ ତୃଟିମୁକ୍ତକରଣ ସୂଚକ"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: gtk/gtkmain.c:459
@@ -2246,7 +2212,7 @@ msgstr "ଅବିନ୍ଯାସ ପାଇଁ ଜି.ଟି.କେ.+ ତୃଟ�
 #.
 #: gtk/gtkmain.c:707
 msgid "default:LTR"
-msgstr "default:LTR"
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ:LTR"
 
 #: gtk/gtkmain.c:773
 #, c-format
@@ -2271,7 +2237,7 @@ msgstr "ଅଜ୍ଞାତ ଭାବରେ ସଂଯୋଗ କରନ୍ତୁ (_
 
 #: gtk/gtkmountoperation.c:534
 msgid "Connect as u_ser:"
-msgstr "ଚାଳକ ଭାବରେ ସଂଯୋଗ କରନ୍ତୁ (_s)"
+msgstr "ଚାଳକ ଭାବରେ ସଂଯୋଗ କରନ୍ତୁ (_s):"
 
 #: gtk/gtkmountoperation.c:571
 msgid "_Username:"
@@ -2369,7 +2335,7 @@ msgstr "ପୃଷ୍ଠା ବ୍ଯବସ୍ଥାପନ"
 
 #: gtk/gtkpagesetupunixdialog.c:1448
 msgid "Margins from Printer..."
-msgstr "ମୂଦ୍ରଣୀରୁ ମାର୍ଜିନ"
+msgstr "ମୂଦ୍ରଣୀରୁ ମାର୍ଜିନ..."
 
 #: gtk/gtkpagesetupunixdialog.c:1608
 #, c-format
@@ -2444,26 +2410,24 @@ msgstr "%s job #%d"
 #: gtk/gtkprintoperation.c:1517
 msgctxt "print operation status"
 msgid "Initial state"
-msgstr ""
+msgstr "ପ୍ରାଥମିକ ଅବସ୍ଥା"
 
 #: gtk/gtkprintoperation.c:1518
-#, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
-msgstr "%dକୁ ପ୍ରସ୍ତୁତ କରୁଅଛି"
+msgstr "ମୁଦ୍ରଣ କରିବାକୁ ପ୍ରସ୍ତୁତ କରୁଅଛି"
 
 #: gtk/gtkprintoperation.c:1519
 msgctxt "print operation status"
 msgid "Generating data"
-msgstr ""
+msgstr "ତଥ୍ୟ ନିର୍ମାଣ କରୁଅଛି"
 
 #: gtk/gtkprintoperation.c:1520
 msgctxt "print operation status"
 msgid "Sending data"
-msgstr ""
+msgstr "ତଥ୍ୟ ପଠାଉଅଛି"
 
 #: gtk/gtkprintoperation.c:1521
-#, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "ଚେତାବନୀ"
@@ -2471,22 +2435,19 @@ msgstr "ଚେତାବନୀ"
 #: gtk/gtkprintoperation.c:1522
 msgctxt "print operation status"
 msgid "Blocking on issue"
-msgstr ""
+msgstr "ସମସ୍ୟା ହେତୁ ଅଟକାଉଛି"
 
 #: gtk/gtkprintoperation.c:1523
-#, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
-msgstr "%dକୁ ମୁଦ୍ରଣ କରୁଅଛି"
+msgstr "ମୁଦ୍ରଣ କରୁଅଛି"
 
 #: gtk/gtkprintoperation.c:1524
-#, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "ସମ୍ପନ୍ନ କରୁଅଛି"
 
 #: gtk/gtkprintoperation.c:1525
-#, fuzzy
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "ତୃଟି ସହିତ ସମାପ୍ତ"
@@ -2719,7 +2680,7 @@ msgstr "କାର୍ଯ୍ଯର ବିସ୍ତ୍ରୁତ ବିବରଣୀ"
 
 #: gtk/gtkprintunixdialog.c:2712
 msgid "Pri_ority:"
-msgstr "ଅଗ୍ରାଧିକାର"
+msgstr "ଅଗ୍ରାଧିକାର (_o):"
 
 #: gtk/gtkprintunixdialog.c:2727
 msgid "_Billing info:"
@@ -2748,6 +2709,8 @@ msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
+"ମୁଦ୍ରଣର ସମୟ ଉଲ୍ଲେଖ କରନ୍ତୁ,\n"
+" ଉଦାହରଣ ସ୍ୱରୂପ. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
 #: gtk/gtkprintunixdialog.c:2791
 msgid "On _hold"
@@ -2755,7 +2718,7 @@ msgstr "ଆୟତ୍ତ ରେ (_h)"
 
 #: gtk/gtkprintunixdialog.c:2792
 msgid "Hold the job until it is explicitly released"
-msgstr ""
+msgstr "କାର୍ଯ୍ୟଟି ସମ୍ପୂର୍ଣ୍ଣ ରୂପେ ପ୍ରକାଶନ ହେବା ପର୍ଯ୍ୟନ୍ତ ଧରିରଖନ୍ତୁ"
 
 #: gtk/gtkprintunixdialog.c:2812
 msgid "Add Cover Page"
@@ -2896,7 +2859,7 @@ msgstr "ଅଜଣା ବସ୍ତୁ"
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
-msgstr ""
+msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
@@ -2905,7 +2868,7 @@ msgstr ""
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
-msgstr ""
+msgstr "%d. %s"
 
 #: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
 #: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
@@ -2913,29 +2876,25 @@ msgstr ""
 #: gtk/gtkrecentmanager.c:1258
 #, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "\"%s\" ୟୁ.ଆର.ଆଇ. ବିଶିଷ୍ଟ ଗୋଟିଏ ବସ୍ତୁକୁ ଖୋଜି ପାରିଲା ନାହିଁ"
+msgstr "'%s' URI ବିଶିଷ୍ଟ ଗୋଟିଏ ବସ୍ତୁକୁ ଖୋଜି ପାରିଲା ନାହିଁ"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:288
-#, fuzzy
 msgctxt "Stock label"
 msgid "Information"
 msgstr "ସୂଚନା"
 
 #: gtk/gtkstock.c:289
-#, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "ଚେତାବନୀ"
 
 #: gtk/gtkstock.c:290
-#, fuzzy
 msgctxt "Stock label"
 msgid "Error"
 msgstr "ତୃଟି"
 
 #: gtk/gtkstock.c:291
-#, fuzzy
 msgctxt "Stock label"
 msgid "Question"
 msgstr "ପ୍ରଶ୍ନ"
@@ -2944,181 +2903,153 @@ msgstr "ପ୍ରଶ୍ନ"
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:296
-#, fuzzy
 msgctxt "Stock label"
 msgid "_About"
 msgstr "ବିବରଣୀ (_A)"
 
 #: gtk/gtkstock.c:297
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "ଯୋଗ କରନ୍ତୁ (_A)"
 
 #: gtk/gtkstock.c:298
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "ପ୍ରୟୋଗ କରନ୍ତୁ (_A)"
 
 #: gtk/gtkstock.c:299
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "ମୋଟା ଅକ୍ଷର (_B)"
 
 #: gtk/gtkstock.c:300
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "ବାତିଲ କରନ୍ତୁ (_C)"
 
 #: gtk/gtkstock.c:301
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "ସି.ଡି.-ରମ (_C)"
 
 #: gtk/gtkstock.c:302
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "ସଫା କରନ୍ତୁ (_C)"
 
 #: gtk/gtkstock.c:303
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "ବନ୍ଦ କରନ୍ତୁ (_C)"
 
 #: gtk/gtkstock.c:304
-#, fuzzy
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "ସଂଯୋଗ କରନ୍ତୁ (_o)"
 
 #: gtk/gtkstock.c:305
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "ରୂପାନ୍ତରିତ କରନ୍ତୁ (_C)"
 
 #: gtk/gtkstock.c:306
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "ନକଲ କରନ୍ତୁ (_C)"
 
 #: gtk/gtkstock.c:307
-#, fuzzy
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "କାଟନ୍ତୁ (_t)"
 
 #: gtk/gtkstock.c:308
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "ଲିଭାନ୍ତୁ (_D)"
 
 #: gtk/gtkstock.c:309
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "ପରିତ୍ୟାଗ କରନ୍ତୁ (_D)"
 
 #: gtk/gtkstock.c:310
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "ବିଚ୍ଛିନ୍ନ କରନ୍ତୁ (_D)"
 
 #: gtk/gtkstock.c:311
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "ନିଷ୍ପାଦନ କରନ୍ତୁ (_E)"
 
 #: gtk/gtkstock.c:312
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "ସମ୍ପାଦନ କରନ୍ତୁ (_E)"
 
 #: gtk/gtkstock.c:313
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "ଖୋଜନ୍ତୁ (_F)"
 
 #: gtk/gtkstock.c:314
-#, fuzzy
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "ଖୋଜି ବଦଳାନ୍ତୁ (_R)"
 
 #: gtk/gtkstock.c:315
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "ଫ୍ଲପି (_F)"
 
 #: gtk/gtkstock.c:316
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "ପୂର୍ଣ୍ଣ ପରଦା (_F)"
 
 #: gtk/gtkstock.c:317
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "ପୂର୍ଣ୍ଣ ପରଦା ଧାରା ଛାଡ଼ନ୍ତୁ (_L)"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: gtk/gtkstock.c:319
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
-msgstr "ତଳ (_B):"
+msgstr "ତଳ (_B)"
 
 #. This is a navigation label as in "go to the first page"
 #: gtk/gtkstock.c:321
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_First"
-msgstr "ଫାଇଲଗୁଡ଼ିକ (_F)"
+msgstr "ପ୍ରଥମ (_F)"
 
 #. This is a navigation label as in "go to the last page"
 #: gtk/gtkstock.c:323
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Last"
-msgstr "ଲଗାନ୍ତୁ (_P)"
+msgstr "ଅନ୍ତିମ (_L)"
 
 #. This is a navigation label as in "go to the top of the page"
 #: gtk/gtkstock.c:325
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Top"
-msgstr "ଉପର (_T):"
+msgstr "ଉପର (_T)"
 
 #. This is a navigation label as in "go back"
 #: gtk/gtkstock.c:327
 msgctxt "Stock label, navigation"
 msgid "_Back"
-msgstr ""
+msgstr "ପଛ (_B)"
 
 #. This is a navigation label as in "go down"
 #: gtk/gtkstock.c:329
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Down"
-msgstr "ବର୍ତମାନ (_N)"
+msgstr "ତଳ (_D)"
 
 #. This is a navigation label as in "go forward"
 #: gtk/gtkstock.c:331
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "ଆଗକୁ (_F)"
@@ -3127,380 +3058,321 @@ msgstr "ଆଗକୁ (_F)"
 #: gtk/gtkstock.c:333
 msgctxt "Stock label, navigation"
 msgid "_Up"
-msgstr ""
+msgstr "ଉପର (_U)"
 
 #: gtk/gtkstock.c:334
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "ହାର୍ଡ଼ ଡିସ୍କ (_H)"
 
 #: gtk/gtkstock.c:335
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "ସହାୟତା (_H)"
 
 #: gtk/gtkstock.c:336
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "ଘର (_H)"
 
 #: gtk/gtkstock.c:337
-#, fuzzy
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "ଅନୁଚ୍ଛେଦ ବ୍ଯବଧାନ ବଢ଼ାନ୍ତୁ"
 
 #: gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "ଅନୁଚ୍ଛେଦ ବ୍ଯବଧାନ କମାନ୍ତୁ"
 
 #: gtk/gtkstock.c:339
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "ଅନୁକ୍ରମଣିକା (_I)"
 
 #: gtk/gtkstock.c:340
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "ସୂଚନା (_I)"
 
 #: gtk/gtkstock.c:341
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "ତେରେଛା (_I)"
 
 #: gtk/gtkstock.c:342
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "ଏଠାକୁ ଯାଆନ୍ତୁ (_J)"
 
 #. This is about text justification, "centered text"
 #: gtk/gtkstock.c:344
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
-msgstr "ରୂପାନ୍ତରିତ କରନ୍ତୁ (_C)"
+msgstr "କେନ୍ଦ୍ର (_C)"
 
 #. This is about text justification
 #: gtk/gtkstock.c:346
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fill"
-msgstr "ଫାଇଲଗୁଡ଼ିକ (_F)"
+msgstr "ପୁରଣ କରନ୍ତୁ (_F)"
 
 #. This is about text justification, "left-justified text"
 #: gtk/gtkstock.c:348
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "ବାମ (_L):"
 
 #. This is about text justification, "right-justified text"
 #: gtk/gtkstock.c:350
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "ଡାହାଣ (_R):"
 
 #. Media label, as in "fast forward"
 #: gtk/gtkstock.c:353
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "ଆଗକୁ (_F)"
 
 #. Media label, as in "next song"
 #: gtk/gtkstock.c:355
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "ନୂତନ (_N)"
 
 #. Media label, as in "pause music"
 #: gtk/gtkstock.c:357
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "ସାମୟିକ ବିରାମ ନେଉଛି"
 
 #. Media label, as in "play music"
 #: gtk/gtkstock.c:359
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "ସ୍ଥାନ (_P)"
 
 #. Media label, as in  "previous song"
 #: gtk/gtkstock.c:361
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "ପୂର୍ବବର୍ତ୍ତୀ (_v)"
 
 #. Media label
 #: gtk/gtkstock.c:363
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "ଲିପିବଦ୍ଧ କରନ୍ତୁ (_R)"
 
 #. Media label
 #: gtk/gtkstock.c:365
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "ପଛୁଆ ଘୂରାନ୍ତୁ (_e)"
 
 #. Media label
 #: gtk/gtkstock.c:367
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "ବିରାମ କରନ୍ତୁ (_S)"
 
 #: gtk/gtkstock.c:368
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "ନେଟୱାର୍କ (_N)"
 
 #: gtk/gtkstock.c:369
-#, fuzzy
 msgctxt "Stock label"
 msgid "_New"
 msgstr "ନୂତନ (_N)"
 
 #: gtk/gtkstock.c:370
-#, fuzzy
 msgctxt "Stock label"
 msgid "_No"
 msgstr "ନାଁ (_N)"
 
 #: gtk/gtkstock.c:371
-#, fuzzy
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "ଠିକ ଅଛି (_O)"
 
 #: gtk/gtkstock.c:372
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "ଖୋଲନ୍ତୁ (_O)"
 
 #. Page orientation
 #: gtk/gtkstock.c:374
-#, fuzzy
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "ଭୂ-ଦୃଶ୍ଯ"
 
 #. Page orientation
 #: gtk/gtkstock.c:376
-#, fuzzy
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "ଚିତ୍ରପଟ"
 
 #. Page orientation
 #: gtk/gtkstock.c:378
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "ଓଲଟା ଭୂ-ଦୃଶ୍ଯ"
 
 #. Page orientation
 #: gtk/gtkstock.c:380
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "ଓଲଟା ଚିତ୍ରପଟ"
 
 #: gtk/gtkstock.c:381
-#, fuzzy
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "ପୃଷ୍ଠା ବ୍ଯବସ୍ଥାପନ (_u)"
 
 #: gtk/gtkstock.c:382
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "ଲଗାନ୍ତୁ (_P)"
 
 #: gtk/gtkstock.c:383
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "ପସନ୍ଦ (_P)"
 
 #: gtk/gtkstock.c:384
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "ମୁଦ୍ରଣ କରନ୍ତୁ (_P)"
 
 #: gtk/gtkstock.c:385
-#, fuzzy
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "ମୁଦ୍ରଣ ପୂର୍ବାବଲୋକନ (_v)"
 
 #: gtk/gtkstock.c:386
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "ଗୁଣଧର୍ମ (_P)"
 
 #: gtk/gtkstock.c:387
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "ବିଦାୟ ନିଅନ୍ତୁ (_Q)"
 
 #: gtk/gtkstock.c:388
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "ପୁଣି କରନ୍ତୁ (_R)"
 
 #: gtk/gtkstock.c:389
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "ସତେଜିତ କରନ୍ତୁ (_R)"
 
 #: gtk/gtkstock.c:390
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "କାଢ଼ନ୍ତୁ (_R)"
 
 #: gtk/gtkstock.c:391
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "ପ୍ରତ୍ଯାବୃତ କରନ୍ତୁ (_R)"
 
 #: gtk/gtkstock.c:392
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
-msgstr "ସଂରକ୍ଷଣ (_S)"
+msgstr "ସଂରକ୍ଷଣ କରନ୍ତୁ (_S)"
 
 #: gtk/gtkstock.c:393
-#, fuzzy
 msgctxt "Stock label"
 msgid "Save _As"
-msgstr "ଏହି ଭାବେ ସଂରକ୍ଷଣ (_A)"
+msgstr "ଏହି ଭାବେ ସଂରକ୍ଷଣ କରନ୍ତୁ (_A)"
 
 #: gtk/gtkstock.c:394
-#, fuzzy
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "ସବୁ ବାଛନ୍ତୁ (_A)"
 
 #: gtk/gtkstock.c:395
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "ରଙ୍ଗ (_C)"
 
 #: gtk/gtkstock.c:396
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "ଅକ୍ଷରରୂପ (_F)"
 
 #. Sorting direction
 #: gtk/gtkstock.c:398
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "ଆରୋହୀ କ୍ରମ (_A)"
 
 #. Sorting direction
 #: gtk/gtkstock.c:400
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "ଅବରୋହୀ କ୍ରମ (_D)"
 
 #: gtk/gtkstock.c:401
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "ବନାନ ଶୋଧନ କରନ୍ତୁ (_S)"
 
 #: gtk/gtkstock.c:402
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "ବିରାମ କରନ୍ତୁ (_S)"
 
 #. Font variant
 #: gtk/gtkstock.c:404
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "ମଧ୍ଯରେଖିତ କରନ୍ତୁ (_S)"
 
 #: gtk/gtkstock.c:405
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "ପୁନରୁଦ୍ଧାର କରନ୍ତୁ (_U)"
 
 #. Font variant
 #: gtk/gtkstock.c:407
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "ଅବରେଖନ କରନ୍ତୁ (_U)"
 
 #: gtk/gtkstock.c:408
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "ପଦକ୍ଷେପ ବାତିଲ କରନ୍ତୁ (_U)"
 
 #: gtk/gtkstock.c:409
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "ହଁ (_Y)"
 
 #. Zoom
 #: gtk/gtkstock.c:411
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "ସାଧାରଣ ଆକାର (_N)"
 
 #. Zoom
 #: gtk/gtkstock.c:413
-#, fuzzy
 msgctxt "Stock label"
 msgid "Best _Fit"
-msgstr "ସର୍ବୋତ୍ତମ ଭାବରେ ମେଳାନ୍ତୁ (_F)"
+msgstr "ସର୍ବୋତ୍ତମ ଭାବରେ ମେଳ (_F)"
 
 #: gtk/gtkstock.c:414
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "ବଡ଼ କରନ୍ତୁ (_I)"
 
 #: gtk/gtkstock.c:415
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "ସାନ କରନ୍ତୁ (_O)"
@@ -3577,8 +3449,7 @@ msgstr "\"%s\" ଟି ଗୋଟିଏ ବୈଧ ଗୁଣ ନାମ ନୁହେ
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" କୁ \"%s\" ପ୍ରକାରର ଗୋଟିଏ ମୂଲ୍ଯର \"%s\" ଗୁଣ ପାଇଁ ବଦଳା ଯାଇ ପାରିଲା ନାହିଁ"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3615,10 +3486,8 @@ msgid "Serialized data is malformed"
 msgstr "ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପରେ ଗଠନ କରାଯାଇଛି"
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
-"ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପରେ ଗଠନ କରାଯାଇଛି। ପ୍ରଥମ ଭାଗଟି GTKTEXTBUFFERCONTENTS-0001 ନୁହେଁ"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr "ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପରେ ଗଠନ କରାଯାଇଛି। ପ୍ରଥମ ଭାଗଟି GTKTEXTBUFFERCONTENTS-0001 ନୁହେଁ"
 
 #: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
@@ -3728,316 +3597,314 @@ msgstr "ସମ୍ପୂର୍ଣ୍ଣ ତିବ୍ରତା"
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #: gtk/paper_names_offsets.c:4
-#, fuzzy
 msgctxt "paper size"
 msgid "asme_f"
-msgstr "ନାମ"
+msgstr "asme_f"
 
 #: gtk/paper_names_offsets.c:5
 msgctxt "paper size"
 msgid "A0x2"
-msgstr ""
+msgstr "A0x2"
 
 #: gtk/paper_names_offsets.c:6
 msgctxt "paper size"
 msgid "A0"
-msgstr ""
+msgstr "A0"
 
 #: gtk/paper_names_offsets.c:7
 msgctxt "paper size"
 msgid "A0x3"
-msgstr ""
+msgstr "A0x3"
 
 #: gtk/paper_names_offsets.c:8
 msgctxt "paper size"
 msgid "A1"
-msgstr ""
+msgstr "A1"
 
 #: gtk/paper_names_offsets.c:9
 msgctxt "paper size"
 msgid "A10"
-msgstr ""
+msgstr "A10"
 
 #: gtk/paper_names_offsets.c:10
 msgctxt "paper size"
 msgid "A1x3"
-msgstr ""
+msgstr "A1x3"
 
 #: gtk/paper_names_offsets.c:11
 msgctxt "paper size"
 msgid "A1x4"
-msgstr ""
+msgstr "A1x4"
 
 #: gtk/paper_names_offsets.c:12
 msgctxt "paper size"
 msgid "A2"
-msgstr ""
+msgstr "A2"
 
 #: gtk/paper_names_offsets.c:13
 msgctxt "paper size"
 msgid "A2x3"
-msgstr ""
+msgstr "A2x3"
 
 #: gtk/paper_names_offsets.c:14
 msgctxt "paper size"
 msgid "A2x4"
-msgstr ""
+msgstr "A2x4"
 
 #: gtk/paper_names_offsets.c:15
 msgctxt "paper size"
 msgid "A2x5"
-msgstr ""
+msgstr "A2x5"
 
 #: gtk/paper_names_offsets.c:16
 msgctxt "paper size"
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 #: gtk/paper_names_offsets.c:17
 msgctxt "paper size"
 msgid "A3 Extra"
-msgstr ""
+msgstr "A3 ବଳକା"
 
 #: gtk/paper_names_offsets.c:18
 msgctxt "paper size"
 msgid "A3x3"
-msgstr ""
+msgstr "A3x3"
 
 #: gtk/paper_names_offsets.c:19
 msgctxt "paper size"
 msgid "A3x4"
-msgstr ""
+msgstr "A3x4"
 
 #: gtk/paper_names_offsets.c:20
 msgctxt "paper size"
 msgid "A3x5"
-msgstr ""
+msgstr "A3x5"
 
 #: gtk/paper_names_offsets.c:21
 msgctxt "paper size"
 msgid "A3x6"
-msgstr ""
+msgstr "A3x6"
 
 #: gtk/paper_names_offsets.c:22
 msgctxt "paper size"
 msgid "A3x7"
-msgstr ""
+msgstr "A3x7"
 
 #: gtk/paper_names_offsets.c:23
 msgctxt "paper size"
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 #: gtk/paper_names_offsets.c:24
 msgctxt "paper size"
 msgid "A4 Extra"
-msgstr ""
+msgstr "A4 ବଳକା"
 
 #: gtk/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A4 Tab"
-msgstr ""
+msgstr "A4 Tab"
 
 #: gtk/paper_names_offsets.c:26
 msgctxt "paper size"
 msgid "A4x3"
-msgstr ""
+msgstr "A4x3"
 
 #: gtk/paper_names_offsets.c:27
 msgctxt "paper size"
 msgid "A4x4"
-msgstr ""
+msgstr "A4x4"
 
 #: gtk/paper_names_offsets.c:28
 msgctxt "paper size"
 msgid "A4x5"
-msgstr ""
+msgstr "A4x5"
 
 #: gtk/paper_names_offsets.c:29
 msgctxt "paper size"
 msgid "A4x6"
-msgstr ""
+msgstr "A4x6"
 
 #: gtk/paper_names_offsets.c:30
 msgctxt "paper size"
 msgid "A4x7"
-msgstr ""
+msgstr "A4x7"
 
 #: gtk/paper_names_offsets.c:31
 msgctxt "paper size"
 msgid "A4x8"
-msgstr ""
+msgstr "A4x8"
 
 #: gtk/paper_names_offsets.c:32
 msgctxt "paper size"
 msgid "A4x9"
-msgstr ""
+msgstr "A4x9"
 
 #: gtk/paper_names_offsets.c:33
 msgctxt "paper size"
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #: gtk/paper_names_offsets.c:34
 msgctxt "paper size"
 msgid "A5 Extra"
-msgstr ""
+msgstr "A5 ବଳକା"
 
 #: gtk/paper_names_offsets.c:35
 msgctxt "paper size"
 msgid "A6"
-msgstr ""
+msgstr "A6"
 
 #: gtk/paper_names_offsets.c:36
 msgctxt "paper size"
 msgid "A7"
-msgstr ""
+msgstr "A7"
 
 #: gtk/paper_names_offsets.c:37
 msgctxt "paper size"
 msgid "A8"
-msgstr ""
+msgstr "A8"
 
 #: gtk/paper_names_offsets.c:38
 msgctxt "paper size"
 msgid "A9"
-msgstr ""
+msgstr "A9"
 
 #: gtk/paper_names_offsets.c:39
 msgctxt "paper size"
 msgid "B0"
-msgstr ""
+msgstr "B0"
 
 #: gtk/paper_names_offsets.c:40
 msgctxt "paper size"
 msgid "B1"
-msgstr ""
+msgstr "B1"
 
 #: gtk/paper_names_offsets.c:41
 msgctxt "paper size"
 msgid "B10"
-msgstr ""
+msgstr "B10"
 
 #: gtk/paper_names_offsets.c:42
 msgctxt "paper size"
 msgid "B2"
-msgstr ""
+msgstr "B2"
 
 #: gtk/paper_names_offsets.c:43
 msgctxt "paper size"
 msgid "B3"
-msgstr ""
+msgstr "B3"
 
 #: gtk/paper_names_offsets.c:44
 msgctxt "paper size"
 msgid "B4"
-msgstr ""
+msgstr "B4"
 
 #: gtk/paper_names_offsets.c:45
 msgctxt "paper size"
 msgid "B5"
-msgstr ""
+msgstr "B5"
 
 #: gtk/paper_names_offsets.c:46
 msgctxt "paper size"
 msgid "B5 Extra"
-msgstr ""
+msgstr "B5 ବଳକା"
 
 #: gtk/paper_names_offsets.c:47
 msgctxt "paper size"
 msgid "B6"
-msgstr ""
+msgstr "B6"
 
 #: gtk/paper_names_offsets.c:48
 msgctxt "paper size"
 msgid "B6/C4"
-msgstr ""
+msgstr "B6/C4"
 
 #: gtk/paper_names_offsets.c:49
 msgctxt "paper size"
 msgid "B7"
-msgstr ""
+msgstr "B7"
 
 #: gtk/paper_names_offsets.c:50
 msgctxt "paper size"
 msgid "B8"
-msgstr ""
+msgstr "B8"
 
 #: gtk/paper_names_offsets.c:51
 msgctxt "paper size"
 msgid "B9"
-msgstr ""
+msgstr "B9"
 
 #: gtk/paper_names_offsets.c:52
 msgctxt "paper size"
 msgid "C0"
-msgstr ""
+msgstr "C0"
 
 #: gtk/paper_names_offsets.c:53
 msgctxt "paper size"
 msgid "C1"
-msgstr ""
+msgstr "C1"
 
 #: gtk/paper_names_offsets.c:54
 msgctxt "paper size"
 msgid "C10"
-msgstr ""
+msgstr "C10"
 
 #: gtk/paper_names_offsets.c:55
 msgctxt "paper size"
 msgid "C2"
-msgstr ""
+msgstr "C2"
 
 #: gtk/paper_names_offsets.c:56
 msgctxt "paper size"
 msgid "C3"
-msgstr ""
+msgstr "C3"
 
 #: gtk/paper_names_offsets.c:57
 msgctxt "paper size"
 msgid "C4"
-msgstr ""
+msgstr "C4"
 
 #: gtk/paper_names_offsets.c:58
 msgctxt "paper size"
 msgid "C5"
-msgstr ""
+msgstr "C5"
 
 #: gtk/paper_names_offsets.c:59
 msgctxt "paper size"
 msgid "C6"
-msgstr ""
+msgstr "C6"
 
 #: gtk/paper_names_offsets.c:60
 msgctxt "paper size"
 msgid "C6/C5"
-msgstr ""
+msgstr "C6/C5"
 
 #: gtk/paper_names_offsets.c:61
 msgctxt "paper size"
 msgid "C7"
-msgstr ""
+msgstr "C7"
 
 #: gtk/paper_names_offsets.c:62
 msgctxt "paper size"
 msgid "C7/C6"
-msgstr ""
+msgstr "C7/C6"
 
 #: gtk/paper_names_offsets.c:63
 msgctxt "paper size"
 msgid "C8"
-msgstr ""
+msgstr "C8"
 
 #: gtk/paper_names_offsets.c:64
 msgctxt "paper size"
 msgid "C9"
-msgstr ""
+msgstr "C9"
 
 #: gtk/paper_names_offsets.c:65
-#, fuzzy
 msgctxt "paper size"
 msgid "DL Envelope"
 msgstr "DL ଲଫାପା"
@@ -4045,137 +3912,129 @@ msgstr "DL ଲଫାପା"
 #: gtk/paper_names_offsets.c:66
 msgctxt "paper size"
 msgid "RA0"
-msgstr ""
+msgstr "RA0"
 
 #: gtk/paper_names_offsets.c:67
 msgctxt "paper size"
 msgid "RA1"
-msgstr ""
+msgstr "RA1"
 
 #: gtk/paper_names_offsets.c:68
 msgctxt "paper size"
 msgid "RA2"
-msgstr ""
+msgstr "RA2"
 
 #: gtk/paper_names_offsets.c:69
 msgctxt "paper size"
 msgid "SRA0"
-msgstr ""
+msgstr "SRA0"
 
 #: gtk/paper_names_offsets.c:70
 msgctxt "paper size"
 msgid "SRA1"
-msgstr ""
+msgstr "SRA1"
 
 #: gtk/paper_names_offsets.c:71
 msgctxt "paper size"
 msgid "SRA2"
-msgstr ""
+msgstr "SRA2"
 
 #: gtk/paper_names_offsets.c:72
 msgctxt "paper size"
 msgid "JB0"
-msgstr ""
+msgstr "JB0"
 
 #: gtk/paper_names_offsets.c:73
 msgctxt "paper size"
 msgid "JB1"
-msgstr ""
+msgstr "JB1"
 
 #: gtk/paper_names_offsets.c:74
 msgctxt "paper size"
 msgid "JB10"
-msgstr ""
+msgstr "JB10"
 
 #: gtk/paper_names_offsets.c:75
 msgctxt "paper size"
 msgid "JB2"
-msgstr ""
+msgstr "JB2"
 
 #: gtk/paper_names_offsets.c:76
 msgctxt "paper size"
 msgid "JB3"
-msgstr ""
+msgstr "JB3"
 
 #: gtk/paper_names_offsets.c:77
 msgctxt "paper size"
 msgid "JB4"
-msgstr ""
+msgstr "JB4"
 
 #: gtk/paper_names_offsets.c:78
 msgctxt "paper size"
 msgid "JB5"
-msgstr ""
+msgstr "JB5"
 
 #: gtk/paper_names_offsets.c:79
 msgctxt "paper size"
 msgid "JB6"
-msgstr ""
+msgstr "JB6"
 
 #: gtk/paper_names_offsets.c:80
 msgctxt "paper size"
 msgid "JB7"
-msgstr ""
+msgstr "JB7"
 
 #: gtk/paper_names_offsets.c:81
 msgctxt "paper size"
 msgid "JB8"
-msgstr ""
+msgstr "JB8"
 
 #: gtk/paper_names_offsets.c:82
 msgctxt "paper size"
 msgid "JB9"
-msgstr ""
+msgstr "JB9"
 
 #: gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "jis exec"
-msgstr ""
+msgstr "jis exec"
 
 #: gtk/paper_names_offsets.c:84
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
 msgstr "Choukei 2 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:85
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
 msgstr "Choukei 3 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:86
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
 msgstr "Choukei 4 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:87
-#, fuzzy
 msgctxt "paper size"
 msgid "hagaki (postcard)"
 msgstr "ହଜାକି (ପୋଷ୍ଟକାର୍ଡ)"
 
 #: gtk/paper_names_offsets.c:88
-#, fuzzy
 msgctxt "paper size"
 msgid "kahu Envelope"
 msgstr "kaku ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:89
-#, fuzzy
 msgctxt "paper size"
 msgid "kaku2 Envelope"
 msgstr "kaku2 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:90
-#, fuzzy
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
 msgstr "oufuku (ଜବାବୀ ପୋଷ୍ଟକାର୍ଡ)"
 
 #: gtk/paper_names_offsets.c:91
-#, fuzzy
 msgctxt "paper size"
 msgid "you4 Envelope"
 msgstr "you4 ଲଫାପା"
@@ -4183,63 +4042,59 @@ msgstr "you4 ଲଫାପା"
 #: gtk/paper_names_offsets.c:92
 msgctxt "paper size"
 msgid "10x11"
-msgstr ""
+msgstr "10x11"
 
 #: gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "10x13"
-msgstr ""
+msgstr "10x13"
 
 #: gtk/paper_names_offsets.c:94
 msgctxt "paper size"
 msgid "10x14"
-msgstr ""
+msgstr "10x14"
 
 #: gtk/paper_names_offsets.c:95 gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "10x15"
-msgstr ""
+msgstr "10x15"
 
 #: gtk/paper_names_offsets.c:97
 msgctxt "paper size"
 msgid "11x12"
-msgstr ""
+msgstr "11x12"
 
 #: gtk/paper_names_offsets.c:98
 msgctxt "paper size"
 msgid "11x15"
-msgstr ""
+msgstr "11x15"
 
 #: gtk/paper_names_offsets.c:99
 msgctxt "paper size"
 msgid "12x19"
-msgstr ""
+msgstr "12x19"
 
 #: gtk/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "5x7"
-msgstr ""
+msgstr "5x7"
 
 #: gtk/paper_names_offsets.c:101
-#, fuzzy
 msgctxt "paper size"
 msgid "6x9 Envelope"
-msgstr "୬x୯ ଲଫାପା"
+msgstr "6x9 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:102
-#, fuzzy
 msgctxt "paper size"
 msgid "7x9 Envelope"
-msgstr "୭x୯ ଲଫାପା"
+msgstr "7x9 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:103
-#, fuzzy
 msgctxt "paper size"
 msgid "9x11 Envelope"
-msgstr "୯x୧୧ ଲଫାପା"
+msgstr "9x11 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:104
-#, fuzzy
 msgctxt "paper size"
 msgid "a2 Envelope"
 msgstr "a2 ଲଫାପା"
@@ -4247,40 +4102,39 @@ msgstr "a2 ଲଫାପା"
 #: gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #: gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #: gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #: gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #: gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #: gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "b-plus"
-msgstr ""
+msgstr "b-ପ୍ଲସ"
 
 #: gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "c"
-msgstr ""
+msgstr "c"
 
 #: gtk/paper_names_offsets.c:112
-#, fuzzy
 msgctxt "paper size"
 msgid "c5 Envelope"
 msgstr "c5 ଲଫାପା"
@@ -4288,166 +4142,144 @@ msgstr "c5 ଲଫାପା"
 #: gtk/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "d"
-msgstr ""
+msgstr "d"
 
 #: gtk/paper_names_offsets.c:114
 msgctxt "paper size"
 msgid "e"
-msgstr ""
+msgstr "e"
 
 #: gtk/paper_names_offsets.c:115
 msgctxt "paper size"
 msgid "edp"
-msgstr ""
+msgstr "edp"
 
 #: gtk/paper_names_offsets.c:116
-#, fuzzy
 msgctxt "paper size"
 msgid "European edp"
 msgstr "ୟୁରୋପୂୟାନ edp"
 
 #: gtk/paper_names_offsets.c:117
-#, fuzzy
 msgctxt "paper size"
 msgid "Executive"
-msgstr "ନିଷ୍ପାଦନ କରନ୍ତୁ (_E)"
+msgstr "କାର୍ଯ୍ୟପାଳକ"
 
 #: gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: gtk/paper_names_offsets.c:119
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold European"
 msgstr "ଫାନ-ଫୋଲ୍ଡ ୟୁରୋପୂୟାନ"
 
 #: gtk/paper_names_offsets.c:120
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold US"
 msgstr "ଫାନ-ଫୋଲ୍ଡ ୟୁ.ଏସ."
 
 #: gtk/paper_names_offsets.c:121
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold German Legal"
-msgstr "ଫାନ-ଫୋଲ୍ଡ ଜର୍ମାନ ଲିଗାଲ"
+msgstr "ଫାନ-ଫୋଲ୍ଡ ଜର୍ମାନ ନିତିଗତ"
 
 #: gtk/paper_names_offsets.c:122
-#, fuzzy
 msgctxt "paper size"
 msgid "Government Legal"
-msgstr "ଗଭର୍ନମେଣ୍ଟ ଲିଗାଲ"
+msgstr "ସରକାରୀ ନିତିଗତ"
 
 #: gtk/paper_names_offsets.c:123
-#, fuzzy
 msgctxt "paper size"
 msgid "Government Letter"
-msgstr "ଗଭର୍ନମେଣ୍ଟ ଲେଟର"
+msgstr "ସରକାରୀ ପତ୍ର"
 
 #: gtk/paper_names_offsets.c:124
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 3x5"
-msgstr "ଅନୁକ୍ରମଣିକା (_I)"
+msgstr "ଅନୁକ୍ରମଣିକା 3x5"
 
 #: gtk/paper_names_offsets.c:125
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
-msgstr "ଇଣ୍ଡେକ୍ସ ୪x୬ (ପୋଷ୍ଟକାର୍ଡ)"
+msgstr "ଅନୁକ୍ରମଣିକା 4x6 (ପୋଷ୍ଟକାର୍ଡ଼)"
 
 #: gtk/paper_names_offsets.c:126
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 4x6 ext"
-msgstr "ଇଣ୍ଡେକ୍ସ ୪x୬ ext"
+msgstr "ଅନୁକ୍ରମଣିକା 4x6 ext"
 
 #: gtk/paper_names_offsets.c:127
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 5x8"
-msgstr "ଅନୁକ୍ରମଣିକା (_I)"
+msgstr "ଅନୁକ୍ରମଣିକା 5x8"
 
 #: gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "Invoice"
-msgstr ""
+msgstr "ଚାଲାଣ"
 
 #: gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 #: gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "US Legal"
-msgstr ""
+msgstr "ୟୁ.ଏସ. ନିତିଗତ"
 
 #: gtk/paper_names_offsets.c:131
-#, fuzzy
 msgctxt "paper size"
 msgid "US Legal Extra"
-msgstr "ୟୁ.ଏସ. ଲିଗାଲ ଏକ୍ସଟ୍ରା"
+msgstr "ୟୁ.ଏସ. ନିତିଗତ ବଳକା"
 
 #: gtk/paper_names_offsets.c:132
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter"
-msgstr "ୟୁ.ଏସ. ଲେଟାର"
+msgstr "ୟୁ.ଏସ. ଅକ୍ଷର"
 
 #: gtk/paper_names_offsets.c:133
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter Extra"
-msgstr "ୟୁ.ଏସ. ଲେଟାର ଏକ୍ସଟ୍ରା"
+msgstr "ୟୁ.ଏସ. ଅକ୍ଷର ବଳକା"
 
 #: gtk/paper_names_offsets.c:134
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter Plus"
 msgstr "ୟୁ.ଏସ. ଲେଟାର ପ୍ଲସ"
 
 #: gtk/paper_names_offsets.c:135
-#, fuzzy
 msgctxt "paper size"
 msgid "Monarch Envelope"
 msgstr "ମୋନାର୍କ ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:136
-#, fuzzy
 msgctxt "paper size"
 msgid "#10 Envelope"
 msgstr "#10 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:137
-#, fuzzy
 msgctxt "paper size"
 msgid "#11 Envelope"
 msgstr "#11 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:138
-#, fuzzy
 msgctxt "paper size"
 msgid "#12 Envelope"
 msgstr "#12 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:139
-#, fuzzy
 msgctxt "paper size"
 msgid "#14 Envelope"
 msgstr "#14 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:140
-#, fuzzy
 msgctxt "paper size"
 msgid "#9 Envelope"
 msgstr "#9 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:141
-#, fuzzy
 msgctxt "paper size"
 msgid "Personal Envelope"
 msgstr "ବ୍ଯକ୍ତିଗତ ଲଫାପା"
@@ -4455,57 +4287,49 @@ msgstr "ବ୍ଯକ୍ତିଗତ ଲଫାପା"
 #: gtk/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "Quarto"
-msgstr ""
+msgstr "Quarto"
 
 #: gtk/paper_names_offsets.c:143
-#, fuzzy
 msgctxt "paper size"
 msgid "Super A"
-msgstr "କାଗଜ"
+msgstr "Super A"
 
 #: gtk/paper_names_offsets.c:144
-#, fuzzy
 msgctxt "paper size"
 msgid "Super B"
-msgstr "କାଗଜ"
+msgstr "Super B"
 
 #: gtk/paper_names_offsets.c:145
-#, fuzzy
 msgctxt "paper size"
 msgid "Wide Format"
 msgstr "ପ୍ରସାରିତ ଶୈଳୀ"
 
 #: gtk/paper_names_offsets.c:146
-#, fuzzy
 msgctxt "paper size"
 msgid "Dai-pa-kai"
 msgstr "ଡାଇ-ପା-କାଇ"
 
 #: gtk/paper_names_offsets.c:147
-#, fuzzy
 msgctxt "paper size"
 msgid "Folio"
-msgstr "ରଙ୍ଗ"
+msgstr "ପୃଷ୍ଠା"
 
 #: gtk/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "Folio sp"
-msgstr ""
+msgstr "Folio sp"
 
 #: gtk/paper_names_offsets.c:149
-#, fuzzy
 msgctxt "paper size"
 msgid "Invite Envelope"
 msgstr "ନିମନ୍ତ୍ରଣ ପତ୍ର ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:150
-#, fuzzy
 msgctxt "paper size"
 msgid "Italian Envelope"
 msgstr "ଇଟାଲୀୟ ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:151
-#, fuzzy
 msgctxt "paper size"
 msgid "juuro-ku-kai"
 msgstr "ଜୁରୋ-କୁ-କାଇ"
@@ -4513,28 +4337,24 @@ msgstr "ଜୁରୋ-କୁ-କାଇ"
 #: gtk/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "pa-kai"
-msgstr ""
+msgstr "pa-kai"
 
 #: gtk/paper_names_offsets.c:153
-#, fuzzy
 msgctxt "paper size"
 msgid "Postfix Envelope"
 msgstr "ପୋଷ୍ଟ-ଫିକ୍ସ ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:154
-#, fuzzy
 msgctxt "paper size"
 msgid "Small Photo"
 msgstr "ଛୋଟ ଫଟୋ"
 
 #: gtk/paper_names_offsets.c:155
-#, fuzzy
 msgctxt "paper size"
 msgid "prc1 Envelope"
 msgstr "prc1 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:156
-#, fuzzy
 msgctxt "paper size"
 msgid "prc10 Envelope"
 msgstr "prc10 ଲଫାପା"
@@ -4542,16 +4362,14 @@ msgstr "prc10 ଲଫାପା"
 #: gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "prc 16k"
-msgstr ""
+msgstr "prc 16k"
 
 #: gtk/paper_names_offsets.c:158
-#, fuzzy
 msgctxt "paper size"
 msgid "prc2 Envelope"
 msgstr "prc2 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:159
-#, fuzzy
 msgctxt "paper size"
 msgid "prc3 Envelope"
 msgstr "prc3 ଲଫାପା"
@@ -4559,34 +4377,29 @@ msgstr "prc3 ଲଫାପା"
 #: gtk/paper_names_offsets.c:160
 msgctxt "paper size"
 msgid "prc 32k"
-msgstr ""
+msgstr "prc 32k"
 
 #: gtk/paper_names_offsets.c:161
-#, fuzzy
 msgctxt "paper size"
 msgid "prc4 Envelope"
 msgstr "prc4 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:162
-#, fuzzy
 msgctxt "paper size"
 msgid "prc5 Envelope"
-msgstr "c5 ଲଫାପା"
+msgstr "prc5 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:163
-#, fuzzy
 msgctxt "paper size"
 msgid "prc6 Envelope"
 msgstr "prc6 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:164
-#, fuzzy
 msgctxt "paper size"
 msgid "prc7 Envelope"
 msgstr "prc7 ଲଫାପା"
 
 #: gtk/paper_names_offsets.c:165
-#, fuzzy
 msgctxt "paper size"
 msgid "prc8 Envelope"
 msgstr "prc8 ଲଫାପା"
@@ -4594,12 +4407,12 @@ msgstr "prc8 ଲଫାପା"
 #: gtk/paper_names_offsets.c:166
 msgctxt "paper size"
 msgid "ROC 16k"
-msgstr ""
+msgstr "ROC 16k"
 
 #: gtk/paper_names_offsets.c:167
 msgctxt "paper size"
 msgid "ROC 8k"
-msgstr ""
+msgstr "ROC 8k"
 
 #: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
 #, c-format
@@ -5082,593 +4895,3 @@ msgstr "ପରୀକ୍ଷା ମୁଦ୍ରଣୀରେ ମୁଦ୍ରଣ କ
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' ଫାଇଲ ପାଇଁ ସୂଚନା ଆଣିହେଲା ନାହିଁ: %s"
 
-#~ msgid "keyboard label|BackSpace"
-#~ msgstr "BackSpace"
-
-#~ msgid "keyboard label|Tab"
-#~ msgstr "Tab"
-
-#~ msgid "keyboard label|Return"
-#~ msgstr "Return"
-
-#~ msgid "keyboard label|Pause"
-#~ msgstr "Pause"
-
-#~ msgid "keyboard label|Scroll_Lock"
-#~ msgstr "Scroll_Lock"
-
-#~ msgid "keyboard label|Sys_Req"
-#~ msgstr "Sys_Req"
-
-#~ msgid "keyboard label|Escape"
-#~ msgstr "Escape"
-
-#~ msgid "keyboard label|Multi_key"
-#~ msgstr "Multi_key"
-
-#~ msgid "keyboard label|Home"
-#~ msgstr "Home"
-
-#~ msgid "keyboard label|Left"
-#~ msgstr "ବାମ"
-
-#~ msgid "keyboard label|Up"
-#~ msgstr "ଉପର"
-
-#~ msgid "keyboard label|Right"
-#~ msgstr "ଡାହାଣ"
-
-#~ msgid "keyboard label|Down"
-#~ msgstr "ତଳ"
-
-#~ msgid "keyboard label|Page_Up"
-#~ msgstr "Page_Up"
-
-#~ msgid "keyboard label|Page_Down"
-#~ msgstr "Page_Down"
-
-#~ msgid "keyboard label|End"
-#~ msgstr "End"
-
-#~ msgid "keyboard label|Begin"
-#~ msgstr "Begin"
-
-#~ msgid "keyboard label|Print"
-#~ msgstr "Print"
-
-#~ msgid "keyboard label|Insert"
-#~ msgstr "Insert"
-
-#~ msgid "keyboard label|Num_Lock"
-#~ msgstr "Num_Lock"
-
-#~ msgid "keyboard label|KP_Space"
-#~ msgstr "KP_Space"
-
-#~ msgid "keyboard label|KP_Tab"
-#~ msgstr "KP_Tab"
-
-#~ msgid "keyboard label|KP_Enter"
-#~ msgstr "KP_Enter"
-
-#~ msgid "keyboard label|KP_Home"
-#~ msgstr "KP_Home"
-
-#~ msgid "keyboard label|KP_Left"
-#~ msgstr "KP_Left"
-
-#~ msgid "keyboard label|KP_Up"
-#~ msgstr "KP_Up"
-
-#~ msgid "keyboard label|KP_Right"
-#~ msgstr "KP_Right"
-
-#~ msgid "keyboard label|KP_Down"
-#~ msgstr "KP_Down"
-
-#~ msgid "keyboard label|KP_Page_Up"
-#~ msgstr "KP_Page_Up"
-
-#~ msgid "keyboard label|KP_Prior"
-#~ msgstr "KP_Prior"
-
-#~ msgid "keyboard label|KP_Next"
-#~ msgstr "KP_Next"
-
-#~ msgid "keyboard label|KP_End"
-#~ msgstr "KP_End"
-
-#~ msgid "keyboard label|KP_Begin"
-#~ msgstr "KP_Begin"
-
-#~ msgid "keyboard label|KP_Insert"
-#~ msgstr "KP_Insert"
-
-#~ msgid "keyboard label|KP_Delete"
-#~ msgstr "KP_Delete"
-
-#~ msgid "keyboard label|Delete"
-#~ msgstr "Delete"
-
-#~ msgid "Couldn't create pixbuf"
-#~ msgstr "pixbuf ସୃଷ୍ଟି କରିହେଲା ନାହିଁ"
-
-#~ msgid "keyboard label|Shift"
-#~ msgstr "Shift"
-
-#~ msgid "keyboard label|Ctrl"
-#~ msgstr "Ctrl"
-
-#~ msgid "keyboard label|Alt"
-#~ msgstr "Alt"
-
-#~ msgid "keyboard label|Super"
-#~ msgstr "Super"
-
-#~ msgid "keyboard label|Hyper"
-#~ msgstr "Hyper"
-
-#~ msgid "keyboard label|Meta"
-#~ msgstr "Meta"
-
-#~ msgid "keyboard label|Space"
-#~ msgstr "Space"
-
-#~ msgid "keyboard label|Backslash"
-#~ msgstr "Backslash"
-
-#~ msgid "year measurement template|2000"
-#~ msgstr "2000"
-
-#~ msgid "calendar:day:digits|%d"
-#~ msgstr "%d"
-
-#~ msgid "calendar:week:digits|%d"
-#~ msgstr "%d"
-
-#~ msgid "calendar year format|%Y"
-#~ msgstr "%Y"
-
-#~ msgid "Accelerator|Disabled"
-#~ msgstr "ନିଷ୍କ୍ରିୟ"
-
-#~ msgid "progress bar label|%d %%"
-#~ msgstr "%d %%"
-
-#~ msgid "%.1f KB"
-#~ msgstr "%.1f କିଲୋ-ବାଇଟ୍"
-
-#~ msgid "%.1f MB"
-#~ msgstr "%.1f ମେଗା-ବାଇଟ୍"
-
-#~ msgid "%.1f GB"
-#~ msgstr "%.1f ଗିଗା-ବାଇଟ୍"
-
-#~ msgid "input method menu|System"
-#~ msgstr "ତନ୍ତ୍ର"
-
-#~ msgid "print operation status|Initial state"
-#~ msgstr "ପ୍ରାରମ୍ଭିକ ଅବସ୍ଥା"
-
-#~ msgid "print operation status|Preparing to print"
-#~ msgstr "ମୂଦ୍ରଣ କରିବା ପାଇଁ ପ୍ରସ୍ତୁତ ହେଉଅଛି"
-
-#~ msgid "print operation status|Generating data"
-#~ msgstr "ତଥ୍ଯ ସୃଷ୍ଟି କରୁଅଛି"
-
-#~ msgid "print operation status|Sending data"
-#~ msgstr "ତଥ୍ଯ ପଠାଉଛି"
-
-#~ msgid "print operation status|Waiting"
-#~ msgstr "ଅପେକ୍ଷା କରୁଅଛି"
-
-#~ msgid "print operation status|Blocking on issue"
-#~ msgstr "ନିର୍ଦ୍ଦିଷ୍ଟ ବିଷୟ ନେଇ ଅବରୋଧ କରୁଅଛି"
-
-#~ msgid "print operation status|Printing"
-#~ msgstr "ମୂଦ୍ରଣ କରୁଅଛି"
-
-#~ msgid "print operation status|Finished"
-#~ msgstr "ସମାପ୍ତ"
-
-#~ msgid "recent menu label|_%d. %s"
-#~ msgstr "_%d. %s"
-
-#~ msgid "recent menu label|%d. %s"
-#~ msgstr "%d. %s"
-
-#~ msgid "Navigation|_Bottom"
-#~ msgstr "ତଳକୁ (_B)"
-
-#~ msgid "Navigation|_First"
-#~ msgstr "ପ୍ରଥମ ସ୍ଥାନକୁ (_F)"
-
-#~ msgid "Navigation|_Last"
-#~ msgstr "ଶେଷ ସ୍ଥାନକୁ (_L)"
-
-#~ msgid "Navigation|_Top"
-#~ msgstr "ଉପରକୁ (_T)"
-
-#~ msgid "Navigation|_Back"
-#~ msgstr "ପଛକୁ (_B)"
-
-#~ msgid "Navigation|_Down"
-#~ msgstr "ତଳକୁ (_D)"
-
-#~ msgid "Navigation|_Forward"
-#~ msgstr "ଆଗକୁ (_F)"
-
-#~ msgid "Navigation|_Up"
-#~ msgstr "ଉପରକୁ (_U)"
-
-#~ msgid "Justify|_Center"
-#~ msgstr "କେନ୍ଦ୍ରିତ କରନ୍ତୁ (_C)"
-
-#~ msgid "Justify|_Fill"
-#~ msgstr "ପୂରଣ କରନ୍ତୁ (_F)"
-
-#~ msgid "Justify|_Left"
-#~ msgstr "ବାମକୁ (_L)"
-
-#~ msgid "Justify|_Right"
-#~ msgstr "ଡାହାଣକୁ (_R)"
-
-#~ msgid "Media|_Next"
-#~ msgstr "ପରବର୍ତ୍ତୀ (_N)"
-
-#~ msgid "Media|P_ause"
-#~ msgstr "ଅଟକାନ୍ତୁ (_a)"
-
-#~ msgid "Media|_Play"
-#~ msgstr "ବଜାନ୍ତୁ (_P)"
-
-#~ msgid "Media|_Stop"
-#~ msgstr "ବିରାମ କରନ୍ତୁ (_S)"
-
-#~ msgid "volume percentage|%d %%"
-#~ msgstr "%d %%"
-
-#~ msgid "paper size|asme_f"
-#~ msgstr "asme_f"
-
-#~ msgid "paper size|A0x2"
-#~ msgstr "A0x2"
-
-#~ msgid "paper size|A0"
-#~ msgstr "A0"
-
-#~ msgid "paper size|A0x3"
-#~ msgstr "A0x3"
-
-#~ msgid "paper size|A1"
-#~ msgstr "A1"
-
-#~ msgid "paper size|A10"
-#~ msgstr "A10"
-
-#~ msgid "paper size|A1x3"
-#~ msgstr "A1x3"
-
-#~ msgid "paper size|A1x4"
-#~ msgstr "A1x4"
-
-#~ msgid "paper size|A2"
-#~ msgstr "A2"
-
-#~ msgid "paper size|A2x3"
-#~ msgstr "A2x3"
-
-#~ msgid "paper size|A2x4"
-#~ msgstr "A2x4"
-
-#~ msgid "paper size|A2x5"
-#~ msgstr "A2x5"
-
-#~ msgid "paper size|A3"
-#~ msgstr "A3"
-
-#~ msgid "paper size|A3 Extra"
-#~ msgstr "A3 ଏକ୍ସଟ୍ରା"
-
-#~ msgid "paper size|A3x3"
-#~ msgstr "A3x3"
-
-#~ msgid "paper size|A3x4"
-#~ msgstr "A3x4"
-
-#~ msgid "paper size|A3x5"
-#~ msgstr "A3x5"
-
-#~ msgid "paper size|A3x6"
-#~ msgstr "A3x6"
-
-#~ msgid "paper size|A3x7"
-#~ msgstr "A3x7"
-
-#~ msgid "paper size|A4"
-#~ msgstr "A4"
-
-#~ msgid "paper size|A4 Extra"
-#~ msgstr "A4 ଏକ୍ସଟ୍ରା"
-
-#~ msgid "paper size|A4 Tab"
-#~ msgstr "A4 ଟ୍ଯାବ"
-
-#~ msgid "paper size|A4x3"
-#~ msgstr "A4x3"
-
-#~ msgid "paper size|A4x4"
-#~ msgstr "A4x4"
-
-#~ msgid "paper size|A4x5"
-#~ msgstr "A4x5"
-
-#~ msgid "paper size|A4x6"
-#~ msgstr "A4x6"
-
-#~ msgid "paper size|A4x7"
-#~ msgstr "A4x7"
-
-#~ msgid "paper size|A4x8"
-#~ msgstr "A4x8"
-
-#~ msgid "paper size|A4x9"
-#~ msgstr "A4x9"
-
-#~ msgid "paper size|A5"
-#~ msgstr "A5"
-
-#~ msgid "paper size|A5 Extra"
-#~ msgstr "A5 ଏକ୍ସଟ୍ରା"
-
-#~ msgid "paper size|A6"
-#~ msgstr "A6"
-
-#~ msgid "paper size|A7"
-#~ msgstr "A7"
-
-#~ msgid "paper size|A8"
-#~ msgstr "A8"
-
-#~ msgid "paper size|A9"
-#~ msgstr "A9"
-
-#~ msgid "paper size|B0"
-#~ msgstr "B0"
-
-#~ msgid "paper size|B1"
-#~ msgstr "B1"
-
-#~ msgid "paper size|B10"
-#~ msgstr "B10"
-
-#~ msgid "paper size|B2"
-#~ msgstr "B2"
-
-#~ msgid "paper size|B3"
-#~ msgstr "B3"
-
-#~ msgid "paper size|B4"
-#~ msgstr "B4"
-
-#~ msgid "paper size|B5"
-#~ msgstr "B5"
-
-#~ msgid "paper size|B5 Extra"
-#~ msgstr "B5 ଏକ୍ସଟ୍ରା"
-
-#~ msgid "paper size|B6"
-#~ msgstr "B6"
-
-#~ msgid "paper size|B6/C4"
-#~ msgstr "B6/C4"
-
-#~ msgid "paper size|B7"
-#~ msgstr "B7"
-
-#~ msgid "paper size|B8"
-#~ msgstr "B8"
-
-#~ msgid "paper size|B9"
-#~ msgstr "B9"
-
-#~ msgid "paper size|C0"
-#~ msgstr "C0"
-
-#~ msgid "paper size|C1"
-#~ msgstr "C1"
-
-#~ msgid "paper size|C10"
-#~ msgstr "C10"
-
-#~ msgid "paper size|C2"
-#~ msgstr "C2"
-
-#~ msgid "paper size|C3"
-#~ msgstr "C3"
-
-#~ msgid "paper size|C4"
-#~ msgstr "C4"
-
-#~ msgid "paper size|C5"
-#~ msgstr "C5"
-
-#~ msgid "paper size|C6"
-#~ msgstr "C6"
-
-#~ msgid "paper size|C6/C5"
-#~ msgstr "C6/C5"
-
-#~ msgid "paper size|C7"
-#~ msgstr "C7"
-
-#~ msgid "paper size|C7/C6"
-#~ msgstr "C7/C6"
-
-#~ msgid "paper size|C8"
-#~ msgstr "C8"
-
-#~ msgid "paper size|C9"
-#~ msgstr "C9"
-
-#~ msgid "paper size|RA0"
-#~ msgstr "RA0"
-
-#~ msgid "paper size|RA1"
-#~ msgstr "RA1"
-
-#~ msgid "paper size|RA2"
-#~ msgstr "RA2"
-
-#~ msgid "paper size|SRA0"
-#~ msgstr "SRA0"
-
-#~ msgid "paper size|SRA1"
-#~ msgstr "SRA1"
-
-#~ msgid "paper size|SRA2"
-#~ msgstr "SRA2"
-
-#~ msgid "paper size|JB0"
-#~ msgstr "JB0"
-
-#~ msgid "paper size|JB1"
-#~ msgstr "JB1"
-
-#~ msgid "paper size|JB10"
-#~ msgstr "JB10"
-
-#~ msgid "paper size|JB2"
-#~ msgstr "JB2"
-
-#~ msgid "paper size|JB3"
-#~ msgstr "JB3"
-
-#~ msgid "paper size|JB4"
-#~ msgstr "JB4"
-
-#~ msgid "paper size|JB5"
-#~ msgstr "JB5"
-
-#~ msgid "paper size|JB6"
-#~ msgstr "JB6"
-
-#~ msgid "paper size|JB7"
-#~ msgstr "JB7"
-
-#~ msgid "paper size|JB8"
-#~ msgstr "JB8"
-
-#~ msgid "paper size|JB9"
-#~ msgstr "JB9"
-
-#~ msgid "paper size|jis exec"
-#~ msgstr "jis exec"
-
-#~ msgid "paper size|10x11"
-#~ msgstr "୧୦x୧୧"
-
-#~ msgid "paper size|10x13"
-#~ msgstr "୧୦x୧୩"
-
-#~ msgid "paper size|10x14"
-#~ msgstr "୧୦x୧୪"
-
-#~ msgid "paper size|10x15"
-#~ msgstr "୧୦x୧୫"
-
-#~ msgid "paper size|11x12"
-#~ msgstr "୧୧x୧୨"
-
-#~ msgid "paper size|11x15"
-#~ msgstr "୧୧x୧୫"
-
-#~ msgid "paper size|12x19"
-#~ msgstr "୧୨x୧୯"
-
-#~ msgid "paper size|5x7"
-#~ msgstr "୫x୭"
-
-#~ msgid "paper size|Arch A"
-#~ msgstr "Arch A"
-
-#~ msgid "paper size|Arch B"
-#~ msgstr "Arch B"
-
-#~ msgid "paper size|Arch C"
-#~ msgstr "Arch C"
-
-#~ msgid "paper size|Arch D"
-#~ msgstr "Arch D"
-
-#~ msgid "paper size|Arch E"
-#~ msgstr "Arch E"
-
-#~ msgid "paper size|b-plus"
-#~ msgstr "b-ପ୍ଲସ"
-
-#~ msgid "paper size|c"
-#~ msgstr "c"
-
-#~ msgid "paper size|d"
-#~ msgstr "d"
-
-#~ msgid "paper size|e"
-#~ msgstr "e"
-
-#~ msgid "paper size|edp"
-#~ msgstr "edp"
-
-#~ msgid "paper size|Executive"
-#~ msgstr "ଏକ୍ଜିକ୍ଯୁଟିଭ"
-
-#~ msgid "paper size|f"
-#~ msgstr "f"
-
-#~ msgid "paper size|Index 3x5"
-#~ msgstr "ଇଣ୍ଡେକ୍ସ ୩x୫"
-
-#~ msgid "paper size|Index 5x8"
-#~ msgstr "ଇଣ୍ଡେକ୍ସ ୫x୮"
-
-#~ msgid "paper size|Invoice"
-#~ msgstr "ଇନଭୋଏସ"
-
-#~ msgid "paper size|Tabloid"
-#~ msgstr "ଟ୍ଯାବ୍ଲୋଏଡ"
-
-#~ msgid "paper size|US Legal"
-#~ msgstr "ୟୁ.ଏସ. ଲିଗାଲ"
-
-#~ msgid "paper size|Quarto"
-#~ msgstr "କ୍ବାର୍ଟୋ"
-
-#~ msgid "paper size|Super A"
-#~ msgstr "Super A"
-
-#~ msgid "paper size|Super B"
-#~ msgstr "Super B"
-
-#~ msgid "paper size|Folio"
-#~ msgstr "ଫୋଲିଓ"
-
-#~ msgid "paper size|Folio sp"
-#~ msgstr "ଫୋଲିଓ sp"
-
-#~ msgid "paper size|pa-kai"
-#~ msgstr "ପା-କାଇ"
-
-#~ msgid "paper size|prc 16k"
-#~ msgstr "prc 16k"
-
-#~ msgid "paper size|prc 32k"
-#~ msgstr "prc 32k"
-
-#~ msgid "paper size|prc5 Envelope"
-#~ msgstr "prc5 ଲଫାପା"
-
-#~ msgid "paper size|ROC 16k"
-#~ msgstr "ROC 16k"
-
-#~ msgid "paper size|ROC 8k"
-#~ msgstr "ROC 8k"
