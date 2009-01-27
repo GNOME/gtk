@@ -148,10 +148,8 @@ void            _gdk_x11_window_tmp_unset_bg        (GdkWindow *window,
 						     gboolean   recurse);
 void            _gdk_x11_window_tmp_reset_bg        (GdkWindow *window,
 						     gboolean   recurse);
-void            _gdk_x11_window_tmp_unset_parent_bg (GdkWindow *window,
-						     gboolean   recurse);
-void            _gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window,
-						     gboolean   recurse);
+void            _gdk_x11_window_tmp_unset_parent_bg (GdkWindow *window);
+void            _gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window);
 
 GdkCursor      *_gdk_x11_window_get_cursor    (GdkWindow *window);
 void            _gdk_x11_window_get_offsets   (GdkWindow *window,

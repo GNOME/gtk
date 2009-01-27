@@ -299,16 +299,16 @@ _gdk_x11_window_tmp_unset_bg (GdkWindow *window,
 }
 
 void
-_gdk_x11_window_tmp_unset_parent_bg (GdkWindow *window,
-				     gboolean   recurse)
+_gdk_x11_window_tmp_unset_parent_bg (GdkWindow *window)
 {
   GdkWindowObject *private;
   private = (GdkWindowObject*) window;
+
+  if (GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT)
+    return;
   
-  if (GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
-    window = _gdk_window_get_impl_window ((GdkWindow *)private->parent);
-  
-  _gdk_x11_window_tmp_unset_bg (window,	recurse);
+  window = _gdk_window_get_impl_window ((GdkWindow *)private->parent);
+  _gdk_x11_window_tmp_unset_bg (window,	FALSE);
 }
 
 void
@@ -343,16 +343,17 @@ _gdk_x11_window_tmp_reset_bg (GdkWindow *window,
 }
 
 void
-_gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window,
-				     gboolean   recurse)
+_gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window)
 {
   GdkWindowObject *private;
   private = (GdkWindowObject*) window;
 
-  if (GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
-    window = _gdk_window_get_impl_window ((GdkWindow *)private->parent);
+  if (GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT)
+    return;
+  
+  window = _gdk_window_get_impl_window ((GdkWindow *)private->parent);
 
-  _gdk_x11_window_tmp_reset_bg (window, recurse);
+  _gdk_x11_window_tmp_reset_bg (window, FALSE);
 }
 
 static GdkColormap*
@@ -1598,12 +1599,12 @@ gdk_window_x11_reparent (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
 
   _gdk_x11_window_tmp_unset_bg (window, TRUE);
-  _gdk_x11_window_tmp_unset_parent_bg (window, FALSE);
+  _gdk_x11_window_tmp_unset_parent_bg (window);
   XReparentWindow (GDK_WINDOW_XDISPLAY (window),
 		   GDK_WINDOW_XID (window),
 		   GDK_WINDOW_XID (new_parent),
 		   parent_private->abs_x + x, parent_private->abs_y + y);
-  _gdk_x11_window_tmp_reset_parent_bg (window, FALSE);
+  _gdk_x11_window_tmp_reset_parent_bg (window);
   _gdk_x11_window_tmp_reset_bg (window, TRUE);
 
   if (GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
@@ -3401,15 +3402,21 @@ do_shape_combine_region (GdkWindow       *window,
 	    private->shaped = FALSE;
 	  
 	  if (shape == ShapeBounding)
-	    _gdk_x11_window_tmp_unset_parent_bg (window, TRUE);
+	    {
+	      _gdk_x11_window_tmp_unset_parent_bg (window);
+	      _gdk_x11_window_tmp_unset_bg (window, TRUE);
+	    }
 	  XShapeCombineMask (GDK_WINDOW_XDISPLAY (window),
 			     GDK_WINDOW_XID (window),
 			     shape,
 			     0, 0,
 			     None,
 			     ShapeSet);
-	  if (shape == ShapeBounding)
-	    _gdk_x11_window_tmp_reset_parent_bg (window, TRUE);
+ 	  if (shape == ShapeBounding)
+	    {
+	      _gdk_x11_window_tmp_reset_parent_bg (window);
+	      _gdk_x11_window_tmp_reset_bg (window, TRUE);
+	    }
 	}
       return;
     }
@@ -3429,7 +3436,10 @@ do_shape_combine_region (GdkWindow       *window,
                                    &xrects, &n_rects);
       
       if (shape == ShapeBounding)
-	_gdk_x11_window_tmp_unset_parent_bg (window, TRUE);
+	{
+	  _gdk_x11_window_tmp_unset_parent_bg (window);
+	  _gdk_x11_window_tmp_unset_bg (window, TRUE);
+	}
       XShapeCombineRectangles (GDK_WINDOW_XDISPLAY (window),
                                GDK_WINDOW_XID (window),
                                shape,
@@ -3439,7 +3449,10 @@ do_shape_combine_region (GdkWindow       *window,
                                YXBanded);
 
       if (shape == ShapeBounding)
-	_gdk_x11_window_tmp_reset_parent_bg (window, TRUE);
+	{
+	  _gdk_x11_window_tmp_reset_parent_bg (window);
+	  _gdk_x11_window_tmp_reset_bg (window, TRUE);
+	}
       
       g_free (xrects);
     }

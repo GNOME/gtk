@@ -201,13 +201,16 @@ _gdk_window_move_resize_child (GdkWindow *window,
      the window won't be visible anyway and thus it will be shaped
      to nothing */
 
-  _gdk_x11_window_tmp_unset_parent_bg (window, TRUE);
+  
+  _gdk_x11_window_tmp_unset_parent_bg (window);
+  _gdk_x11_window_tmp_unset_bg (window, TRUE);
   XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
 		     GDK_WINDOW_XID (window),
 		     obj->x + obj->parent->abs_x,
 		     obj->y + obj->parent->abs_y,
 		     width, height);
-  _gdk_x11_window_tmp_reset_parent_bg (window, TRUE);
+  _gdk_x11_window_tmp_reset_parent_bg (window);
+  _gdk_x11_window_tmp_reset_bg (window, TRUE);
 }
 
 static Bool
