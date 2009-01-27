@@ -220,13 +220,6 @@ tmp_unset_bg (GdkWindow *window)
   obj = (GdkWindowObject *) window;
   impl = GDK_WINDOW_IMPL_X11 (obj->impl);
 
-  /* For windows without EXPOSURE_MASK, we can't do this
-   * unsetting because such windows depend on the drawing
-   * that the X server is going to do
-   */
-  if (!(obj->event_mask & GDK_EXPOSURE_MASK))
-    return;
-    
   impl->no_bg = TRUE;
 
   if (obj->bg_pixmap != GDK_NO_BG)
@@ -243,9 +236,6 @@ tmp_reset_bg (GdkWindow *window)
   obj = (GdkWindowObject *) window;
   impl = GDK_WINDOW_IMPL_X11 (obj->impl);
 
-  if (!(obj->event_mask & GDK_EXPOSURE_MASK))
-    return;
-    
   impl->no_bg = FALSE;
 
   if (obj->bg_pixmap == GDK_NO_BG)
