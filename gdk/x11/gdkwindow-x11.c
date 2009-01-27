@@ -5516,11 +5516,11 @@ void
 _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
                                                GdkRegion *region)
 {
-  _gdk_window_process_updates_recurse (window, expose_region);
+  _gdk_window_process_updates_recurse (window, region);
 }
 
 void
-_gdk_windowing_after_process_all_updates (void)
+_gdk_windowing_before_process_all_updates (void)
 {
 }
 
