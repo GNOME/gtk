@@ -3397,7 +3397,9 @@ do_shape_combine_region (GdkWindow       *window,
 	  ? gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window))
 	  : gdk_display_supports_input_shapes (GDK_WINDOW_DISPLAY (window)))
 	{
-	  private->shaped = FALSE;
+	  if (shape == ShapeBounding)
+	    private->shaped = FALSE;
+	  
 	  if (shape == ShapeBounding)
 	    _gdk_x11_window_tmp_unset_parent_bg (window, TRUE);
 	  XShapeCombineMask (GDK_WINDOW_XDISPLAY (window),
@@ -3419,7 +3421,8 @@ do_shape_combine_region (GdkWindow       *window,
       gint n_rects = 0;
       XRectangle *xrects = NULL;
 
-      private->shaped = shape == ShapeBounding;
+      if (shape == ShapeBounding)
+	private->shaped = TRUE;
 
       _gdk_region_get_xrectangles (shape_region,
                                    0, 0,
