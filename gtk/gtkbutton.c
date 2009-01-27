@@ -106,33 +106,30 @@ static void gtk_button_get_property   (GObject            *object,
                                        GParamSpec         *pspec);
 static void gtk_button_screen_changed (GtkWidget          *widget,
 				       GdkScreen          *previous_screen);
-static void gtk_button_realize        (GtkWidget          *widget);
-static void gtk_button_unrealize      (GtkWidget          *widget);
-static void gtk_button_map            (GtkWidget          *widget);
-static void gtk_button_unmap          (GtkWidget          *widget);
-static void gtk_button_style_set      (GtkWidget          *widget,
-				       GtkStyle           *prev_style);
-static void gtk_button_size_request   (GtkWidget          *widget,
-				       GtkRequisition     *requisition);
-static void gtk_button_size_allocate  (GtkWidget          *widget,
-				       GtkAllocation      *allocation);
-static gint gtk_button_expose         (GtkWidget          *widget,
-				       GdkEventExpose     *event);
-static gint gtk_button_button_press   (GtkWidget          *widget,
-				       GdkEventButton     *event);
-static gint gtk_button_button_release (GtkWidget          *widget,
-				       GdkEventButton     *event);
-static gint gtk_button_grab_broken    (GtkWidget          *widget,
-				       GdkEventGrabBroken *event);
-static gint gtk_button_key_release    (GtkWidget          *widget,
-				       GdkEventKey        *event);
-static gint gtk_button_enter_notify   (GtkWidget          *widget,
-				       GdkEventCrossing   *event);
-static gint gtk_button_leave_notify   (GtkWidget          *widget,
-				       GdkEventCrossing   *event);
-static void gtk_real_button_pressed   (GtkButton          *button);
-static void gtk_real_button_released  (GtkButton          *button);
-static void gtk_real_button_clicked   (GtkButton          *button);
+static void gtk_button_realize (GtkWidget * widget);
+static void gtk_button_unrealize (GtkWidget * widget);
+static void gtk_button_map (GtkWidget * widget);
+static void gtk_button_unmap (GtkWidget * widget);
+static void gtk_button_style_set (GtkWidget * widget, GtkStyle * prev_style);
+static void gtk_button_size_request (GtkWidget * widget,
+				     GtkRequisition * requisition);
+static void gtk_button_size_allocate (GtkWidget * widget,
+				      GtkAllocation * allocation);
+static gint gtk_button_expose (GtkWidget * widget, GdkEventExpose * event);
+static gint gtk_button_button_press (GtkWidget * widget,
+				     GdkEventButton * event);
+static gint gtk_button_button_release (GtkWidget * widget,
+				       GdkEventButton * event);
+static gint gtk_button_grab_broken (GtkWidget * widget,
+				    GdkEventGrabBroken * event);
+static gint gtk_button_key_release (GtkWidget * widget, GdkEventKey * event);
+static gint gtk_button_enter_notify (GtkWidget * widget,
+				     GdkEventCrossing * event);
+static gint gtk_button_leave_notify (GtkWidget * widget,
+				     GdkEventCrossing * event);
+static void gtk_real_button_pressed (GtkButton * button);
+static void gtk_real_button_released (GtkButton * button);
+static void gtk_real_button_clicked (GtkButton * button);
 static void gtk_real_button_activate  (GtkButton          *button);
 static void gtk_button_update_state   (GtkButton          *button);
 static void gtk_button_add            (GtkContainer       *container,
@@ -211,7 +208,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   klass->pressed = gtk_real_button_pressed;
   klass->released = gtk_real_button_released;
-  klass->clicked = gtk_real_button_clicked;
+  klass->clicked = NULL;
   klass->enter = gtk_button_update_state;
   klass->leave = gtk_button_update_state;
   klass->activate = gtk_real_button_activate;
@@ -873,6 +870,15 @@ gtk_button_set_related_action (GtkButton   *button,
 
   if (priv->action == action)
     return;
+
+  /* This should be a default handler, but for compatibility reasons
+   * we need to support derived classes that don't chain up their
+   * clicked handler.
+   */
+  g_signal_handlers_disconnect_by_func (button, gtk_real_button_clicked, NULL);
+  if (action)
+    g_signal_connect_after (button, "clicked", 
+                            G_CALLBACK (gtk_real_button_clicked), NULL);
 
   gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (button), action);
 
@@ -1700,7 +1706,7 @@ gtk_real_button_released (GtkButton *button)
 }
 
 static void 
-gtk_real_button_clicked (GtkButton  *button)
+gtk_real_button_clicked (GtkButton *button)
 {
   GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
 
