@@ -14021,7 +14021,7 @@ gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
  * gtk_tree_view_get_search_entry:
  * @tree_view: A #GtkTreeView
  *
- * Returns the GtkEntry which is currently in use as interactive search
+ * Returns the #GtkEntry which is currently in use as interactive search
  * entry for @tree_view.  In case the built-in entry is being used, %NULL
  * will be returned.
  *
