@@ -1662,6 +1662,10 @@ gdk_window_get_parent (GdkWindow *window)
  * @window: a #GdkWindow
  * 
  * Gets the toplevel window that's an ancestor of @window.
+ *
+ * Any window type but %GDK_WINDOW_CHILD is considered a
+ * toplevel window, as is a %GDK_WINDOW_CHILD window that
+ * has a root window as parent. 
  * 
  * Return value: the toplevel window containing @window
  **/
@@ -1673,8 +1677,14 @@ gdk_window_get_toplevel (GdkWindow *window)
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
   obj = (GdkWindowObject *)window;
+  
   while (GDK_WINDOW_TYPE (obj) == GDK_WINDOW_CHILD)
-    obj = (GdkWindowObject *)obj->parent;
+    {
+      if (obj->parent == NULL ||
+	  GDK_WINDOW_TYPE (obj->parent) == GDK_WINDOW_ROOT)
+	break;
+      obj = obj->parent;
+    }
   
   return GDK_WINDOW (obj);
 }
