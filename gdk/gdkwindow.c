@@ -8489,7 +8489,8 @@ _gdk_windowing_got_event (GdkDisplay *display,
 	is_motion_type (event->type)))
     return;
 
-  if (GDK_WINDOW_TYPE (event_private->parent) != GDK_WINDOW_ROOT)
+  if (event_private->parent != NULL &&
+      GDK_WINDOW_TYPE (event_private->parent) != GDK_WINDOW_ROOT)
     {
       GEnumValue *event_type_value, *window_type_value;
       
