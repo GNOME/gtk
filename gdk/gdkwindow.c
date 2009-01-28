@@ -8486,7 +8486,8 @@ _gdk_windowing_got_event (GdkDisplay *display,
 #endif
   
   if (!(is_button_type (event->type) ||
-	is_motion_type (event->type)))
+	is_motion_type (event->type)) ||
+      GDK_WINDOW_TYPE (event_private) == GDK_WINDOW_ROOT)
     return;
 
   if (event_private->parent != NULL &&
