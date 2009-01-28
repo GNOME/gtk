@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-27 00:10-0500\n"
-"PO-Revision-Date: 2009-01-27 18:46+0530\n"
+"PO-Revision-Date: 2009-01-28 18:00+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -956,107 +957,103 @@ msgstr "ସପ୍ତାହ ସଂଖ୍ୟା ଦର୍ଶାନ୍ତୁ"
 
 #: gtk/gtkcalendar.c:529
 msgid "If TRUE, week numbers are displayed"
-msgstr ""
+msgstr "ଯଦି TRUE, ତେବେ ସପ୍ତାହ କ୍ରମ ସଂଖ୍ୟାଗୁଡ଼ିକ ଦର୍ଶାଯାଇଥାଏ"
 
 #: gtk/gtkcalendar.c:544
-#, fuzzy
 msgid "Details Width"
-msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଓସାର"
+msgstr "ବିସ୍ତୃତ ବିବରଣୀ ଓସାର"
 
 #: gtk/gtkcalendar.c:545
 msgid "Details width in characters"
-msgstr ""
+msgstr "ଅକ୍ଷରରେ ବିସ୍ତୃତ ବିବରଣୀ ଓସାର"
 
 #: gtk/gtkcalendar.c:560
-#, fuzzy
 msgid "Details Height"
-msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଉଚ୍ଚତା"
+msgstr "ବିସ୍ତୃତ ବିବରଣୀ ଉଚ୍ଚତା"
 
 #: gtk/gtkcalendar.c:561
 msgid "Details height in rows"
-msgstr ""
+msgstr "ଧାଡ଼ିରେ ବିସ୍ତୃତ ବିବରଣୀ ଉଚ୍ଚତା"
 
 #: gtk/gtkcalendar.c:577
-#, fuzzy
 msgid "Show Details"
-msgstr "ଧାଡି ସମାପ୍ତି ବିବରଣୀ"
+msgstr "ବିସ୍ତୃତ ବିବରଣୀ ଦର୍ଶାନ୍ତୁ"
 
 #: gtk/gtkcalendar.c:578
-#, fuzzy
 msgid "If TRUE, details are shown"
-msgstr "ଯଦି ସତ (TRUE), ଚାଳକ ୱିଣ୍ଡୋର ଆକାରକୁ ପରିବର୍ତ୍ତନ କରିପାରିବ"
+msgstr "ଯଦି ସତ, ତେବେ ବିସ୍ତୃତ ବିବରଣୀ ଦର୍ଶାଯାଇଥାଏ"
 
 #: gtk/gtkcellrenderer.c:177
 msgid "mode"
-msgstr ""
+msgstr "ଧାରା"
 
 #: gtk/gtkcellrenderer.c:178
 msgid "Editable mode of the CellRenderer"
-msgstr ""
+msgstr "CellRendererର ସମ୍ପାଦନଯୋଗ୍ୟ ଧାରା"
 
 #: gtk/gtkcellrenderer.c:186
 msgid "visible"
-msgstr ""
+msgstr "ଦୃଶ୍ୟମାନ"
 
 #: gtk/gtkcellrenderer.c:187
 msgid "Display the cell"
-msgstr ""
+msgstr "କୋଷ ଦର୍ଶାନ୍ତୁ"
 
 #: gtk/gtkcellrenderer.c:194
 msgid "Display the cell sensitive"
-msgstr ""
+msgstr "କୋଷ ସ୍ପର୍ଷକାତର ଦର୍ଶାନ୍ତୁ"
 
 #: gtk/gtkcellrenderer.c:201
 msgid "xalign"
-msgstr ""
+msgstr "xalign"
 
 #: gtk/gtkcellrenderer.c:202
 msgid "The x-align"
-msgstr ""
+msgstr "x-align"
 
 #: gtk/gtkcellrenderer.c:211
 msgid "yalign"
-msgstr ""
+msgstr "yalign"
 
 #: gtk/gtkcellrenderer.c:212
 msgid "The y-align"
-msgstr ""
+msgstr "y-align"
 
 #: gtk/gtkcellrenderer.c:221
 msgid "xpad"
-msgstr ""
+msgstr "xpad"
 
 #: gtk/gtkcellrenderer.c:222
 msgid "The xpad"
-msgstr ""
+msgstr "xpad"
 
 #: gtk/gtkcellrenderer.c:231
 msgid "ypad"
-msgstr ""
+msgstr "ypad"
 
 #: gtk/gtkcellrenderer.c:232
 msgid "The ypad"
-msgstr ""
+msgstr "ypad"
 
 #: gtk/gtkcellrenderer.c:241
 msgid "width"
-msgstr ""
+msgstr "ଓସାର"
 
 #: gtk/gtkcellrenderer.c:242
 msgid "The fixed width"
-msgstr ""
+msgstr "ସ୍ଥିର ଓସାର"
 
 #: gtk/gtkcellrenderer.c:251
 msgid "height"
-msgstr ""
+msgstr "ଉଚ୍ଚତା"
 
 #: gtk/gtkcellrenderer.c:252
 msgid "The fixed height"
-msgstr ""
+msgstr "ସ୍ଥିର ଉଚ୍ଚତା"
 
 #: gtk/gtkcellrenderer.c:261
 msgid "Is Expander"
-msgstr ""
+msgstr "ବିସ୍ତାର କର୍ତ୍ତା"
 
 #: gtk/gtkcellrenderer.c:262
 msgid "Row has children"
@@ -1064,77 +1061,75 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:270
 msgid "Is Expanded"
-msgstr ""
+msgstr "କୁ ବିସ୍ତାର କରାଯାଇଛି"
 
 #: gtk/gtkcellrenderer.c:271
 msgid "Row is an expander row, and is expanded"
-msgstr ""
+msgstr "ଧାଡ଼ି ଗୋଟିଏ ବିସ୍ତାରକାରୀ ଧାଡ଼ି, ଏବଂ ବିସ୍ତାରଣ କରାଯାଇଛି"
 
 #: gtk/gtkcellrenderer.c:278
 msgid "Cell background color name"
-msgstr ""
+msgstr "କୋଷ ପୃଷ୍ଠଭୂମି ରଙ୍ଗ ନାମ"
 
 #: gtk/gtkcellrenderer.c:279
 msgid "Cell background color as a string"
-msgstr ""
+msgstr "କୋଷ ପୃଷ୍ଠଭୂମି ରଙ୍ଗ ବାକ୍ୟଖଣ୍ଡ ଆକାରରେ"
 
 #: gtk/gtkcellrenderer.c:286
 msgid "Cell background color"
-msgstr ""
+msgstr "କୋଷ ପୃଷ୍ଠଭୂମି ରଙ୍ଗ"
 
 #: gtk/gtkcellrenderer.c:287
 msgid "Cell background color as a GdkColor"
-msgstr ""
+msgstr "GdkColor ପରି କୋଷ ପୃଷ୍ଠଭୂମି ରଙ୍ଗ"
 
 #: gtk/gtkcellrenderer.c:294
-#, fuzzy
 msgid "Editing"
-msgstr "ସଠିକ ଆକାର ସ୍ଥିର କରୁଅଛି"
+msgstr "ସମ୍ପାଦନ କରୁଅଛି"
 
 #: gtk/gtkcellrenderer.c:295
-#, fuzzy
 msgid "Whether the cell renderer is currently in editing mode"
-msgstr "ଉଚ୍ଚ ସ୍ତରଟି ସମ୍ପ୍ରତିକ ସକ୍ରିୟଣ ୱିଣ୍ଡୋରେ ଅଛି କି ନାହିଁ"
+msgstr "କୋଷ ଚିତ୍ରଣକାରୀ ବର୍ତ୍ତମାନ ସମ୍ପାଦନ ଧାରାରେ ଅଛି କି ନାହିଁ"
 
 #: gtk/gtkcellrenderer.c:303
 msgid "Cell background set"
-msgstr ""
+msgstr "କୋଷ ପୃଷ୍ଠଭୂମି ବିନ୍ୟାସ"
 
 #: gtk/gtkcellrenderer.c:304
 msgid "Whether this tag affects the cell background color"
-msgstr ""
+msgstr "ଏହି ଟ୍ୟାଗଟି କୋଷ ପୃଷ୍ଠଭୂମି ରଙ୍ଗ ଉପରେ ପ୍ରଭାବ ପକାଏ କି ନାହିଁ"
 
 #: gtk/gtkcellrendereraccel.c:113
 msgid "Accelerator key"
-msgstr ""
+msgstr "ତ୍ୱରକ କି"
 
 #: gtk/gtkcellrendereraccel.c:114
 msgid "The keyval of the accelerator"
-msgstr ""
+msgstr "ତ୍ୱରକର କି ମୂଲ୍ୟ"
 
 #: gtk/gtkcellrendereraccel.c:130
 msgid "Accelerator modifiers"
-msgstr ""
+msgstr "ତ୍ୱରକ ପରିବର୍ତ୍ତନ କାରୀ"
 
 #: gtk/gtkcellrendereraccel.c:131
 msgid "The modifier mask of the accelerator"
-msgstr ""
+msgstr "ତ୍ୱରକର ପରିବର୍ତ୍ତନକାରୀ ମାସ୍କ"
 
 #: gtk/gtkcellrendereraccel.c:148
 msgid "Accelerator keycode"
-msgstr ""
+msgstr "ତ୍ୱରକ କି ସଂକେତ"
 
 #: gtk/gtkcellrendereraccel.c:149
 msgid "The hardware keycode of the accelerator"
-msgstr ""
+msgstr "ତ୍ୱରକର ହାର୍ଡ଼ୱେର କି ସଂକେତ"
 
 #: gtk/gtkcellrendereraccel.c:168
 msgid "Accelerator Mode"
-msgstr ""
+msgstr "ତ୍ୱରକ ଧାରା"
 
 #: gtk/gtkcellrendereraccel.c:169
 msgid "The type of accelerators"
-msgstr ""
+msgstr "ତ୍ୱରକମାନଙ୍କର ପ୍ରକାର"
 
 #: gtk/gtkcellrenderercombo.c:107
 msgid "Model"
@@ -1142,55 +1137,55 @@ msgstr "ମୋଡେଲ"
 
 #: gtk/gtkcellrenderercombo.c:108
 msgid "The model containing the possible values for the combo box"
-msgstr ""
+msgstr "ସମ୍ମିଳିତ ବାକ୍ସ ପାଇଁ ସମ୍ଭାବ୍ୟ ମୂଲ୍ୟ ଧାରଣ କରିଥିବା ମଡେଲ"
 
 #: gtk/gtkcellrenderercombo.c:130 gtk/gtkcomboboxentry.c:106
 msgid "Text Column"
-msgstr ""
+msgstr "ପାଠ୍ୟ ସ୍ତମ୍ଭ"
 
 #: gtk/gtkcellrenderercombo.c:131 gtk/gtkcomboboxentry.c:107
 msgid "A column in the data source model to get the strings from"
-msgstr ""
+msgstr "ରୁ ବାକ୍ୟଖଣ୍ଡ ପାଇବା ପାଇଁ ତଥ୍ୟ ଉତ୍ସ ମଡେଲରେ ଥିବା ଗୋଟିଏ ସ୍ତମ୍ଭ"
 
 #: gtk/gtkcellrenderercombo.c:148
 msgid "Has Entry"
-msgstr ""
+msgstr "ଭରଣ ଅଛି"
 
 #: gtk/gtkcellrenderercombo.c:149
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
+msgstr "ଯଦି FALSE, ତେବେ ବଛାହୋଇଥିବା ବାକ୍ୟଖଣ୍ଡ ବ୍ୟତିତ ଅନ୍ୟ କାହାକୁ ପ୍ରବେଶାନୁମତି ଦିଅନ୍ତୁ ନାହିଁ"
 
 #: gtk/gtkcellrendererpixbuf.c:111
 msgid "Pixbuf Object"
-msgstr ""
+msgstr "Pixbuf ବସ୍ତୁ"
 
 #: gtk/gtkcellrendererpixbuf.c:112
 msgid "The pixbuf to render"
-msgstr ""
+msgstr "ଚିତ୍ରଣ କରିବା ପାଇଁ pixbuf"
 
 #: gtk/gtkcellrendererpixbuf.c:119
 msgid "Pixbuf Expander Open"
-msgstr ""
+msgstr "Pixbuf ବିସ୍ତାରକାରୀ ଖୋଲାଅଛି"
 
 #: gtk/gtkcellrendererpixbuf.c:120
 msgid "Pixbuf for open expander"
-msgstr ""
+msgstr "ଖୋଲା ବିସ୍ତାର କାରୀ ପାଇଁ Pixbuf"
 
 #: gtk/gtkcellrendererpixbuf.c:127
 msgid "Pixbuf Expander Closed"
-msgstr ""
+msgstr "Pixbuf ବିସ୍ତାରକାରୀ ବନ୍ଦ ହୋଇଛି"
 
 #: gtk/gtkcellrendererpixbuf.c:128
 msgid "Pixbuf for closed expander"
-msgstr ""
+msgstr "ବନ୍ଦ ହୋଇଥିବା ବିସ୍ତାରକାରୀ ପାଇଁ Pixbuf"
 
 #: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:226
 msgid "Stock ID"
-msgstr ""
+msgstr "ପୁଞ୍ଜି ପରିଚୟ"
 
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "The stock ID of the stock icon to render"
-msgstr ""
+msgstr "ପୁଞ୍ଜି ଚିତ୍ରସଂକେତ ଚିତ୍ରଣ କରିବା ପାଇଁ ପୁଞ୍ଜି ପରିଚୟ"
 
 #: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
 #: gtk/gtkstatusicon.c:267
@@ -1199,19 +1194,19 @@ msgstr "ଆକାର"
 
 #: gtk/gtkcellrendererpixbuf.c:144
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
-msgstr ""
+msgstr "GtkIconSize ମୂଲ୍ୟ ଯାହାକି ଚିତ୍ରିତ ଚିତ୍ର ସଂକେତର ଆକାରକୁ ନିର୍ଦ୍ଦିଷ୍ଟ କରିଥାଏ"
 
 #: gtk/gtkcellrendererpixbuf.c:153
 msgid "Detail"
-msgstr ""
+msgstr "ବିସ୍ତୃତ ବିବରଣୀ"
 
 #: gtk/gtkcellrendererpixbuf.c:154
 msgid "Render detail to pass to the theme engine"
-msgstr ""
+msgstr "ପ୍ରସଙ୍ଗ ଯନ୍ତ୍ରକୁ ପ୍ରବେଶ କରିବା ପାଇଁ ଚିତ୍ରଣ ବିବରଣୀ"
 
 #: gtk/gtkcellrendererpixbuf.c:187
 msgid "Follow State"
-msgstr ""
+msgstr "ଅବସ୍ଥା ଅନୁସରଣ କରନ୍ତୁ"
 
 #: gtk/gtkcellrendererpixbuf.c:188
 msgid "Whether the rendered pixbuf should be colorized according to the state"
@@ -1223,7 +1218,7 @@ msgstr "ଚିତ୍ରସଙ୍କେତ"
 
 #: gtk/gtkcellrendererprogress.c:129
 msgid "Value of the progress bar"
-msgstr ""
+msgstr "ପ୍ରଗତି ସୂଚକର ମୂଲ୍ୟ"
 
 #: gtk/gtkcellrendererprogress.c:146 gtk/gtkcellrenderertext.c:195
 #: gtk/gtkentry.c:698 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:184
@@ -1233,11 +1228,11 @@ msgstr "ପାଠ୍ଯ"
 
 #: gtk/gtkcellrendererprogress.c:147
 msgid "Text on the progress bar"
-msgstr ""
+msgstr "ପ୍ରଗତି ସୂଚକରେ ଥିବା ପାଠ୍ୟ"
 
 #: gtk/gtkcellrendererprogress.c:170
 msgid "Pulse"
-msgstr ""
+msgstr "ସ୍ପନ୍ଦନ"
 
 #: gtk/gtkcellrendererprogress.c:171
 msgid ""
@@ -1247,7 +1242,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererprogress.c:187 gtk/gtkprogress.c:118
 msgid "Text x alignment"
-msgstr ""
+msgstr "ପାଠ୍ୟ x ପାର୍ଶ୍ୱୀକରଣ"
 
 #: gtk/gtkcellrendererprogress.c:188 gtk/gtkprogress.c:119
 msgid ""
@@ -1257,7 +1252,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererprogress.c:204 gtk/gtkprogress.c:125
 msgid "Text y alignment"
-msgstr ""
+msgstr "ପାଠ୍ୟ y ପାର୍ଶ୍ୱୀକରଣ"
 
 #: gtk/gtkcellrendererprogress.c:205 gtk/gtkprogress.c:126
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
@@ -1292,11 +1287,11 @@ msgstr ""
 
 #: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:200 gtk/gtkspinbutton.c:226
 msgid "Digits"
-msgstr ""
+msgstr "ଅଙ୍କଗୁଡ଼ିକ"
 
 #: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
-msgstr ""
+msgstr "ଦର୍ଶାଇବା ପାଇଁ ଦଶମିକ ସ୍ଥାନର ସଂଖ୍ୟା"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -1320,7 +1315,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:219
 msgid "Single Paragraph Mode"
-msgstr ""
+msgstr "ଏକକ ପାରା ଅବସ୍ଥା"
 
 #: gtk/gtkcellrenderertext.c:220
 msgid "Whether or not to keep all text in a single paragraph"
@@ -1328,11 +1323,11 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:228 gtk/gtkcellview.c:160 gtk/gtktexttag.c:183
 msgid "Background color name"
-msgstr ""
+msgstr "ପୃଷ୍ଠଭୂମି ରଙ୍ଗ ନାମ"
 
 #: gtk/gtkcellrenderertext.c:229 gtk/gtkcellview.c:161 gtk/gtktexttag.c:184
 msgid "Background color as a string"
-msgstr ""
+msgstr "ବାକ୍ୟଖଣ୍ଡ ଆକାରରେ ପୃଷ୍ଠଭୂମି ରଙ୍ଗ"
 
 #: gtk/gtkcellrenderertext.c:236 gtk/gtkcellview.c:167 gtk/gtktexttag.c:191
 msgid "Background color"
@@ -1344,19 +1339,19 @@ msgstr "ଗୋଟିଏ GdkColor ପରି ଶୀର୍ଷକର ପ୍ରୁଷ
 
 #: gtk/gtkcellrenderertext.c:244 gtk/gtktexttag.c:217
 msgid "Foreground color name"
-msgstr ""
+msgstr "ପୃଷ୍ଠଭୂମି ରଙ୍ଗ ନାମ"
 
 #: gtk/gtkcellrenderertext.c:245 gtk/gtktexttag.c:218
 msgid "Foreground color as a string"
-msgstr ""
+msgstr "ବାକ୍ୟଖଣ୍ଡ ଆକାରରେ ପୃଷ୍ଠଭୂମି ରଙ୍ଗ"
 
 #: gtk/gtkcellrenderertext.c:252 gtk/gtktexttag.c:225
 msgid "Foreground color"
-msgstr ""
+msgstr "ପୃଷ୍ଠଭୂମି ରଙ୍ଗ"
 
 #: gtk/gtkcellrenderertext.c:253
 msgid "Foreground color as a GdkColor"
-msgstr ""
+msgstr "ଗୋଟିଏ GdkColor ପରି ପୃଷ୍ଠଭୂମି ରଙ୍ଗଙ୍ଗ"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:622 gtk/gtktexttag.c:251
 #: gtk/gtktextview.c:573
