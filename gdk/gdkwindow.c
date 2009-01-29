@@ -7071,7 +7071,7 @@ gdk_window_input_shape_combine_region (GdkWindow       *window,
   if (shape_region)
     {
       private->input_shape = gdk_region_copy (shape_region);
-      gdk_region_offset (private->shape, offset_x, offset_y);      
+      gdk_region_offset (private->input_shape, offset_x, offset_y);      
     }
   else
     private->input_shape = NULL;
