@@ -1,3 +1,24 @@
+2009-01-29  Tor Lillqvist  <tml@novell.com>
+
+	Bug 145058 - Inputting "^^" requires four keystrokes on Win32,
+	differs from platform default behaviour
+
+	* gtk/gtkimcontextsimple.c
+	(check_win32_special_case_after_compact_match): New
+	function. Called from check_compact_table() after a table-based
+	match has committed a character. In case there was two identical
+	dead accents in the input, another copy of the spacing accent that
+	was already committed is committed. This fixes #145058.
+
+	(check_win32_special_cases): New function. Called first from
+	gtk_im_context_simple_filter_keypress(). This fixes another
+	problem: a dead accent followed by a space should commit the
+	corresponding spacing accent. The compose tables from X commit
+	another character in two cases and we want to override that on
+	Windows.
+
+	Add GTK_NOTE (MISC) debugging output to this code.
+
 2009-01-29  Claudio Saavedra  <csaavedra@igalia.com>
 
 	Merged from trunk:

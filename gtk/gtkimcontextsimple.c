@@ -270,6 +270,72 @@ check_table (GtkIMContextSimple    *context_simple,
   return FALSE;
 }
 
+/* Checks if a keysym is a dead key. Dead key keysym values are defined in
+ * ../gdk/gdkkeysyms.h and the first is GDK_dead_grave. As X.Org is updated,
+ * more dead keys are added and we need to update the upper limit.
+ * Currently, the upper limit is GDK_dead_dasia+1. The +1 has to do with 
+ * a temporary issue in the X.Org header files. 
+ * In future versions it will be just the keysym (no +1).
+ */
+#define IS_DEAD_KEY(k) \
+    ((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1))
+
+#ifdef GDK_WINDOWING_WIN32
+
+/* On Windows, user expectation is that typing a dead accent followed
+ * by space will input the corresponding spacing character. The X
+ * compose tables are different for dead acute and diaeresis, which
+ * when followed by space produce a plain ASCII apostrophe and double
+ * quote respectively. So special-case those.
+ */
+
+static gboolean
+check_win32_special_cases (GtkIMContextSimple    *context_simple,
+			   gint                   n_compose)
+{
+  if (n_compose == 2 &&
+      context_simple->compose_buffer[1] == GDK_space)
+    {
+      gunichar value = 0;
+
+      switch (context_simple->compose_buffer[0])
+	{
+	case GDK_dead_acute:
+	  value = 0x00B4; break;
+	case GDK_dead_diaeresis:
+	  value = 0x00A8; break;
+	}
+      if (value > 0)
+	{
+	  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
+	  context_simple->compose_buffer[0] = 0;
+
+	  GTK_NOTE (MISC, g_print ("win32: U+%04X\n", value));
+	  return TRUE;
+	}
+    }
+  return FALSE;
+}
+
+static void
+check_win32_special_case_after_compact_match (GtkIMContextSimple    *context_simple,
+					      gint                   n_compose,
+					      guint                  value)
+{
+  /* On Windows user expectation is that typing two dead accents will input
+   * two corresponding spacing accents.
+   */
+  if (n_compose == 2 &&
+      context_simple->compose_buffer[0] == context_simple->compose_buffer[1] &&
+      IS_DEAD_KEY (context_simple->compose_buffer[0]))
+    {
+      gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
+      GTK_NOTE (MISC, g_print ("win32: U+%04X ", value));
+    }
+}
+
+#endif
+
 static gboolean
 check_compact_table (GtkIMContextSimple    *context_simple,
 	     const GtkComposeTableCompact *table,
@@ -292,11 +358,18 @@ check_compact_table (GtkIMContextSimple    *context_simple,
 		 compare_seq_index);
 
   if (!seq_index)
-    return FALSE;
+    {
+      GTK_NOTE (MISC, g_print ("compact: no\n"));
+      return FALSE;
+    }
 
   if (seq_index && n_compose == 1)
-    return TRUE;
+    {
+      GTK_NOTE (MISC, g_print ("compact: yes\n"));
+      return TRUE;
+    }
 
+  GTK_NOTE (MISC, g_print ("compact: %d ", *seq_index));
   seq = NULL;
 
   for (i = n_compose-1; i < table->max_seq_len; i++)
@@ -317,6 +390,8 @@ check_compact_table (GtkIMContextSimple    *context_simple,
               else
                 {
                   g_signal_emit_by_name (context_simple, "preedit-changed");
+
+		  GTK_NOTE (MISC, g_print ("yes\n"));
       		  return TRUE;
                 }
              }
@@ -324,19 +399,27 @@ check_compact_table (GtkIMContextSimple    *context_simple,
     }
 
   if (!seq)
-    return FALSE;
+    {
+      GTK_NOTE (MISC, g_print ("no\n"));
+      return FALSE;
+    }
   else
     {
       gunichar value;
 
       value = seq[row_stride - 1];
-	  
+
       gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
+#ifdef G_OS_WIN32
+      check_win32_special_case_after_compact_match (context_simple, n_compose, value);
+#endif
       context_simple->compose_buffer[0] = 0;
 
+      GTK_NOTE (MISC, g_print ("U+%04X\n", value));
       return TRUE;
     }
 
+  GTK_NOTE (MISC, g_print ("no\n"));
   return FALSE;
 }
 
@@ -406,16 +489,6 @@ check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
 
   return FALSE;
 }
-
-/* Checks if a keysym is a dead key. Dead key keysym values are defined in
- * ../gdk/gdkkeysyms.h and the first is GDK_dead_grave. As X.Org is updated,
- * more dead keys are added and we need to update the upper limit.
- * Currently, the upper limit is GDK_dead_dasia+1. The +1 has to do with 
- * a temporary issue in the X.Org header files. 
- * In future versions it will be just the keysym (no +1).
- */
-#define IS_DEAD_KEY(k) \
-    ((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1))
 
 static gboolean
 check_algorithmically (GtkIMContextSimple    *context_simple,
@@ -929,6 +1002,25 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
             return TRUE;
           tmp_list = tmp_list->next;
         }
+
+      GTK_NOTE (MISC, {
+	  g_print ("[ ");
+	  for (i = 0; i < n_compose; i++)
+	    {
+	      const gchar *keyval_name = gdk_keyval_name (context_simple->compose_buffer[i]);
+	      
+	      if (keyval_name != NULL)
+		g_print ("%s ", keyval_name);
+	      else
+		g_print ("%04x ", context_simple->compose_buffer[i]);
+	    }
+	  g_print ("] ");
+	});
+
+#ifdef GDK_WINDOWING_WIN32
+      if (check_win32_special_cases (context_simple, n_compose))
+	return TRUE;
+#endif
 
       if (check_compact_table (context_simple, &gtk_compose_table_compact, n_compose))
         return TRUE;
