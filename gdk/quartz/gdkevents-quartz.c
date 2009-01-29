@@ -541,25 +541,6 @@ _gdk_quartz_events_update_focus_window (GdkWindow *window,
     }
 }
 
-static void
-convert_window_coordinates_to_root (GdkWindow *window,
-				    gdouble    x,
-				    gdouble    y,
-				    gdouble   *x_root,
-				    gdouble   *y_root)
-{
-  gint ox, oy;
-
-  *x_root = x;
-  *y_root = y;
-  
-  if (gdk_window_get_origin (window, &ox, &oy))
-    {
-      *x_root += ox;
-      *y_root += oy;
-    }
-}
-
 void
 _gdk_quartz_events_send_map_event (GdkWindow *window)
 {
@@ -899,12 +880,15 @@ _gdk_quartz_events_trigger_crossing_events (gboolean defer_to_mainloop)
 static GdkWindow *
 find_window_for_ns_event (NSEvent *nsevent, 
                           gint    *x, 
-                          gint    *y)
+                          gint    *y,
+                          gint    *x_root,
+                          gint    *y_root)
 {
   GdkWindow *toplevel;
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
   NSPoint point;
+  NSPoint base;
   NSEventType event_type;
 
   toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
@@ -912,9 +896,13 @@ find_window_for_ns_event (NSEvent *nsevent,
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
   point = [nsevent locationInWindow];
+  base = [[nsevent window] convertBaseToScreen:point];
 
   *x = point.x;
   *y = private->height - point.y;
+
+  *x_root = base.x;
+  *y_root = _gdk_quartz_window_get_inverted_screen_y (base.y);
 
   event_type = [nsevent type];
 
@@ -1041,6 +1029,8 @@ fill_crossing_event (GdkWindow       *toplevel,
                      NSEvent         *nsevent,
                      gint             x,
                      gint             y,
+                     gint             x_root,
+                     gint             y_root,
                      GdkEventType     event_type,
                      GdkCrossingMode  mode,
                      GdkNotifyType    detail)
@@ -1058,15 +1048,11 @@ fill_crossing_event (GdkWindow       *toplevel,
   event->crossing.time = get_time_from_ns_event (nsevent);
   event->crossing.x = x;
   event->crossing.y = y;
+  event->crossing.x_root = x_root;
+  event->crossing.y_root = y_root;
   event->crossing.mode = mode;
   event->crossing.detail = detail;
   event->crossing.state = get_keyboard_modifiers_from_ns_event (nsevent);
-
-  convert_window_coordinates_to_root (toplevel,
-                                      event->crossing.x,
-                                      event->crossing.y,
-				      &event->crossing.x_root,
-				      &event->crossing.y_root);
 
   /* FIXME: Focus and button state? */
 }
@@ -1076,7 +1062,9 @@ fill_button_event (GdkWindow *window,
                    GdkEvent  *event,
                    NSEvent   *nsevent,
                    gint       x,
-                   gint       y)
+                   gint       y,
+                   gint       x_root,
+                   gint       y_root)
 {
   GdkEventType type;
   gint state;
@@ -1108,16 +1096,12 @@ fill_button_event (GdkWindow *window,
   event->button.time = get_time_from_ns_event (nsevent);
   event->button.x = x;
   event->button.y = y;
+  event->button.x_root = x_root;
+  event->button.y_root = y_root;
   /* FIXME event->axes */
   event->button.state = state;
   event->button.button = button;
   event->button.device = _gdk_display->core_pointer;
-
-  convert_window_coordinates_to_root (window,
-                                      event->button.x,
-                                      event->button.y,
-				      &event->button.x_root,
-				      &event->button.y_root);
 }
 
 static void
@@ -1125,7 +1109,9 @@ fill_motion_event (GdkWindow *window,
                    GdkEvent  *event,
                    NSEvent   *nsevent,
                    gint       x,
-                   gint       y)
+                   gint       y,
+                   gint       x_root,
+                   gint       y_root)
 {
   GdkModifierType state;
 
@@ -1148,16 +1134,12 @@ fill_motion_event (GdkWindow *window,
   event->motion.time = get_time_from_ns_event (nsevent);
   event->motion.x = x;
   event->motion.y = y;
+  event->motion.x_root = x_root;
+  event->motion.y_root = y_root;
   /* FIXME event->axes */
   event->motion.state = state;
   event->motion.is_hint = FALSE;
   event->motion.device = _gdk_display->core_pointer;
-
-  convert_window_coordinates_to_root (window,
-                                      event->motion.x,
-                                      event->motion.y,
-				      &event->motion.x_root,
-                                      &event->motion.y_root);
 }
 
 static void
@@ -1166,6 +1148,8 @@ fill_scroll_event (GdkWindow          *window,
                    NSEvent            *nsevent,
                    gint                x,
                    gint                y,
+                   gint                x_root,
+                   gint                y_root,
                    GdkScrollDirection  direction)
 {
   GdkWindowObject *private;
@@ -1180,15 +1164,11 @@ fill_scroll_event (GdkWindow          *window,
   event->scroll.time = get_time_from_ns_event (nsevent);
   event->scroll.x = x;
   event->scroll.y = y;
+  event->scroll.x_root = x_root;
+  event->scroll.y_root = y_root;
   event->scroll.state = get_keyboard_modifiers_from_ns_event (nsevent);
   event->scroll.direction = direction;
   event->scroll.device = _gdk_display->core_pointer;
-
-  convert_window_coordinates_to_root (window,
-                                      event->scroll.x,
-                                      event->scroll.y,
-				      &event->scroll.x_root,
-				      &event->scroll.y_root);
 }
 
 static void
@@ -1313,7 +1293,9 @@ synthesize_crossing_event (GdkWindow *window,
                            GdkEvent  *event,
                            NSEvent   *nsevent,
                            gint       x,
-                           gint       y)
+                           gint       y,
+                           gint       x_root,
+                           gint       y_root)
 {
   GdkWindowObject *private;
 
@@ -1337,6 +1319,7 @@ synthesize_crossing_event (GdkWindow *window,
 
         fill_crossing_event (window, event, nsevent,
                              x, y,
+                             x_root, y_root,
                              GDK_ENTER_NOTIFY,
                              GDK_CROSSING_NORMAL,
                              GDK_NOTIFY_ANCESTOR);
@@ -1362,6 +1345,7 @@ synthesize_crossing_event (GdkWindow *window,
 
         fill_crossing_event (window, event, nsevent,
                              x, y,
+                             x_root, y_root,
                              GDK_LEAVE_NOTIFY,
                              GDK_CROSSING_NORMAL,
                              GDK_NOTIFY_ANCESTOR);
@@ -1385,15 +1369,18 @@ static gboolean
 gdk_event_translate (GdkEvent *event,
                      NSEvent  *nsevent)
 {
+  NSEventType event_type;
   NSWindow *nswindow;
   GdkWindow *window;
   int x, y;
+  int x_root, y_root;
   gboolean return_val;
 
   /* There is no support for real desktop wide grabs, so we break
    * grabs when the application loses focus (gets deactivated).
    */
-  if ([nsevent type] == NSAppKitDefined)
+  event_type = [nsevent type];
+  if (event_type == NSAppKitDefined)
     {
       if ([nsevent subtype] == NSApplicationDeactivatedEventType)
         break_all_grabs ();
@@ -1405,7 +1392,7 @@ gdk_event_translate (GdkEvent *event,
     }
 
   /* Handle our generated "fake" crossing events. */
-  if ([nsevent type] == NSApplicationDefined &&
+  if (event_type == NSApplicationDefined &&
       [nsevent subtype] == GDK_QUARTZ_EVENT_SUBTYPE_FAKE_CROSSING)
     {
       /* FIXME: This needs to actually fill in the event we have... */
@@ -1464,7 +1451,7 @@ gdk_event_translate (GdkEvent *event,
   /* Find the right GDK window to send the event to, taking grabs and
    * event masks into consideration.
    */
-  window = find_window_for_ns_event (nsevent, &x, &y);
+  window = find_window_for_ns_event (nsevent, &x, &y, &x_root, &y_root);
   if (!window)
     return FALSE;
 
@@ -1506,7 +1493,7 @@ gdk_event_translate (GdkEvent *event,
 
   return_val = TRUE;
 
-  switch ([nsevent type])
+  switch (event_type)
     {
     case NSLeftMouseDown:
     case NSRightMouseDown:
@@ -1527,13 +1514,13 @@ gdk_event_translate (GdkEvent *event,
 	  }
       }
       
-      fill_button_event (window, event, nsevent, x, y);
+      fill_button_event (window, event, nsevent, x, y, x_root, y_root);
       break;
 
     case NSLeftMouseUp:
     case NSRightMouseUp:
     case NSOtherMouseUp:
-      fill_button_event (window, event, nsevent, x, y);
+      fill_button_event (window, event, nsevent, x, y, x_root, y_root);
       
       /* Ungrab implicit grab */
       if (0 && _gdk_quartz_pointer_grab_window && pointer_grab_implicit) /* FIXME: add back? */
@@ -1544,7 +1531,7 @@ gdk_event_translate (GdkEvent *event,
     case NSRightMouseDragged:
     case NSOtherMouseDragged:
     case NSMouseMoved:
-      fill_motion_event (window, event, nsevent, x, y);
+      fill_motion_event (window, event, nsevent, x, y, x_root, y_root);
       break;
 
     case NSScrollWheel:
@@ -1560,7 +1547,7 @@ gdk_event_translate (GdkEvent *event,
             else
               direction = GDK_SCROLL_UP;
 
-            fill_scroll_event (window, event, nsevent, x, y, direction);
+            fill_scroll_event (window, event, nsevent, x, y, x_root, y_root, direction);
           }
 
         if (dx != 0)
@@ -1570,14 +1557,14 @@ gdk_event_translate (GdkEvent *event,
             else
               direction = GDK_SCROLL_LEFT;
 
-            fill_scroll_event (window, event, nsevent, x, y, direction);
+            fill_scroll_event (window, event, nsevent, x, y, x_root, y_root, direction);
           }
       }
       break;
 
     case NSMouseEntered:
     case NSMouseExited:
-      return_val = synthesize_crossing_event (window, event, nsevent, x, y);
+      return_val = synthesize_crossing_event (window, event, nsevent, x, y, x_root, y_root);
       break;
 
     case NSKeyDown:
