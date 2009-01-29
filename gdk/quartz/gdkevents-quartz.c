@@ -1365,6 +1365,50 @@ _gdk_quartz_events_get_current_event_mask (void)
   return current_event_mask;
 }
 
+#define GDK_ANY_BUTTON_MASK (GDK_BUTTON1_MASK | \
+                             GDK_BUTTON2_MASK | \
+                             GDK_BUTTON3_MASK | \
+                             GDK_BUTTON4_MASK | \
+                             GDK_BUTTON5_MASK)
+
+static void
+button_event_check_implicit_grab (GdkWindow *window,
+                                  GdkEvent  *event,
+                                  NSEvent   *nsevent)
+{
+  GdkDisplay *display = gdk_drawable_get_display (window);
+
+  /* track implicit grabs for button presses */
+  switch (event->type)
+    {
+    case GDK_BUTTON_PRESS:
+      if (!display->pointer_grab.window)
+	{
+	  _gdk_display_set_has_pointer_grab (display,
+					     window,
+					     window,
+					     FALSE,
+					     gdk_window_get_events (window),
+					     0, /* serial */
+					     event->button.time,
+					     TRUE);
+	}
+      break;
+
+    case GDK_BUTTON_RELEASE:
+      if (display->pointer_grab.window &&
+	  display->pointer_grab.implicit &&
+          (current_button_state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (event->button.button - 1))) == 0)
+	{
+	  _gdk_display_unset_has_pointer_grab (display, TRUE, TRUE,
+					       event->button.time);
+	}
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static gboolean
 gdk_event_translate (GdkEvent *event,
                      NSEvent  *nsevent)
@@ -1501,33 +1545,15 @@ gdk_event_translate (GdkEvent *event,
     case NSLeftMouseDown:
     case NSRightMouseDown:
     case NSOtherMouseDown:
-      {
-	GdkEventMask event_mask;
-
-	/* Emulate implicit grab, when the window has both PRESS and RELEASE
-	 * in its mask, like X.
-	 */
-	event_mask = (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
-	if (0 && !_gdk_quartz_pointer_grab_window && /* FIXME: add back for grabs? */
-	    (GDK_WINDOW_OBJECT (window)->event_mask & event_mask) == event_mask)
-	  {
-	    pointer_grab_internal (window, FALSE,
-				   GDK_WINDOW_OBJECT (window)->event_mask,
-				   NULL, NULL, TRUE);
-	  }
-      }
-      
       fill_button_event (window, event, nsevent, x, y, x_root, y_root);
+      button_event_check_implicit_grab (window, event, nsevent);
       break;
 
     case NSLeftMouseUp:
     case NSRightMouseUp:
     case NSOtherMouseUp:
       fill_button_event (window, event, nsevent, x, y, x_root, y_root);
-      
-      /* Ungrab implicit grab */
-      if (0 && _gdk_quartz_pointer_grab_window && pointer_grab_implicit) /* FIXME: add back? */
-	pointer_ungrab_internal (TRUE);
+      button_event_check_implicit_grab (window, event, nsevent);
       break;
 
     case NSLeftMouseDragged:
