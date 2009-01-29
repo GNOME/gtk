@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-27 00:10-0500\n"
-"PO-Revision-Date: 2009-01-28 18:00+0530\n"
+"PO-Revision-Date: 2009-01-29 15:49+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -350,7 +351,7 @@ msgstr "ଭୂ-ଲମ୍ବରେ ଥିବା ସମୟରେ ଦୃଶ୍ୟ�
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
-msgstr ""
+msgstr "ସାଧନ ପଟିଟି ଭୂ-ଲମ୍ବ ଅନୁସ୍ଥାପନରେ ଥିବା ସମୟରେ ସାଧନ ପଟିର ବସ୍ତୁଗୁଡ଼ିକ ଦୃଶ୍ୟମାନ ହେଉଛି କି ନାହିଁ।"
 
 #: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
 msgid "Is important"
@@ -361,6 +362,8 @@ msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
 msgstr ""
+"ଏହି କାର୍ଯ୍ୟଟିକୁ ଆବଶ୍ୟକୀୟ ମନେକରାଯିବ କି ନାହିଁ। ଯଦି TRUE, ତେବେ ଏହି କାର୍ଯ୍ୟ ପାଇଁ ସାଧନ ବସ୍ତୁ ପ୍ରକ୍ସିଗୁଡ଼ିକ "
+"GTK_TOOLBAR_BOTH_HORIZ ଧାରାରେ ପାଠ୍ୟ ଦର୍ଶାଇଥାନ୍ତି।"
 
 #: gtk/gtkaction.c:331
 msgid "Hide if empty"
@@ -396,7 +399,7 @@ msgstr "କାର୍ଯ୍ୟ ଶ୍ରେଣୀ"
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
-msgstr ""
+msgstr "GtkActionGroup ସହିତ ଏହି GtkAction ସଶ୍ଳିଷ୍ଟ, କିମ୍ବା NULL (ଆଭ୍ୟନ୍ତରୀଣ ବ୍ୟବହାର ପାଇଁ)।"
 
 #: gtk/gtkactiongroup.c:171
 msgid "A name for the action group."
@@ -417,7 +420,7 @@ msgstr "ମୂଲ୍ଯ"
 
 #: gtk/gtkadjustment.c:94
 msgid "The value of the adjustment"
-msgstr ""
+msgstr "ସମନ୍ୱୟର ମୂଲ୍ୟ"
 
 #: gtk/gtkadjustment.c:110
 msgid "Minimum Value"
@@ -425,7 +428,7 @@ msgstr "ସର୍ବନିମ୍ନ ମୂଲ୍ୟ"
 
 #: gtk/gtkadjustment.c:111
 msgid "The minimum value of the adjustment"
-msgstr ""
+msgstr "ସମନ୍ୱୟର ସର୍ବନିମ୍ନ ମୂଲ୍ୟ"
 
 #: gtk/gtkadjustment.c:130
 msgid "Maximum Value"
@@ -433,7 +436,7 @@ msgstr "ସର୍ବାଧିକ ମୂଲ୍ୟ"
 
 #: gtk/gtkadjustment.c:131
 msgid "The maximum value of the adjustment"
-msgstr ""
+msgstr "ସମନ୍ୱୟର ସର୍ବାଧିକ ମୂଲ୍ୟ"
 
 #: gtk/gtkadjustment.c:147
 msgid "Step Increment"
@@ -441,7 +444,7 @@ msgstr "ପଦକ୍ଷେପ ବୃଦ୍ଧି"
 
 #: gtk/gtkadjustment.c:148
 msgid "The step increment of the adjustment"
-msgstr ""
+msgstr "ସମନ୍ୱୟର ପଦକ୍ଷେପ ବୃଦ୍ଧି"
 
 #: gtk/gtkadjustment.c:164
 msgid "Page Increment"
@@ -449,15 +452,15 @@ msgstr "ପୃଷ୍ଠା ବୃଦ୍ଧି"
 
 #: gtk/gtkadjustment.c:165
 msgid "The page increment of the adjustment"
-msgstr ""
+msgstr "ସମନ୍ୱୟର ପୃଷ୍ଠା ବୃଦ୍ଧି"
 
 #: gtk/gtkadjustment.c:184
 msgid "Page Size"
-msgstr "ପୃଷ୍ଠା ର ଆକାର"
+msgstr "ପୃଷ୍ଠା ଆକାର"
 
 #: gtk/gtkadjustment.c:185
 msgid "The page size of the adjustment"
-msgstr ""
+msgstr "ସମନ୍ୱୟର ପୃଷ୍ଠା ଆକାର"
 
 #: gtk/gtkalignment.c:90
 msgid "Horizontal alignment"
@@ -467,7 +470,7 @@ msgstr "ଭୂ-ସମାନ୍ତର ପାର୍ଶ୍ୱୀକରଣ"
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
-msgstr ""
+msgstr "ଉପଲବ୍ଧ ସ୍ଥାନରେ ନିମ୍ନ ସ୍ଥରର ଭୂ-ସମାନ୍ତର ଅବସ୍ଥିତି। 0.0 ହେଉଛି ବାମ ପାର୍ଶ୍ୱସଜ୍ଜା, 1.0 ହେଉଛି ଡ଼ାହାଣ ପାର୍ଶ୍ୱସଜ୍ଜା"
 
 #: gtk/gtkalignment.c:100
 msgid "Vertical alignment"
@@ -477,7 +480,7 @@ msgstr "ଭୂ-ଲମ୍ବ ପାର୍ଶ୍ୱୀକରଣ"
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
-msgstr ""
+msgstr "ଉପଲବ୍ଧ ସ୍ଥାନରେ ନିମ୍ନ ସ୍ଥରର ଭୂ-ଲମ୍ବ ଅବସ୍ଥିତି। 0.0 ହେଉଛି ଉପର ପାର୍ଶ୍ୱସଜ୍ଜା, 1.0 ହେଉଛି ତଳ ପାର୍ଶ୍ୱସଜ୍ଜା"
 
 #: gtk/gtkalignment.c:109
 msgid "Horizontal scale"
@@ -501,75 +504,75 @@ msgstr ""
 
 #: gtk/gtkalignment.c:136
 msgid "Top Padding"
-msgstr ""
+msgstr "ଉପର ପ୍ୟାଡ଼ିଙ୍ଗ"
 
 #: gtk/gtkalignment.c:137
 msgid "The padding to insert at the top of the widget."
-msgstr ""
+msgstr "ୱିଜେଟର ଉପର ଭାଗରେ ପ୍ୟାଡ଼ିଙ୍ଗକୁ ଭର୍ତ୍ତି କରିବା।"
 
 #: gtk/gtkalignment.c:153
 msgid "Bottom Padding"
-msgstr ""
+msgstr "ତଳ ପ୍ୟାଡ଼ିଙ୍ଗ"
 
 #: gtk/gtkalignment.c:154
 msgid "The padding to insert at the bottom of the widget."
-msgstr ""
+msgstr "ୱିଜେଟର ତଳ ଭାଗରେ ପ୍ୟାଡ଼ିଙ୍ଗକୁ ଭର୍ତ୍ତି କରିବା।"
 
 #: gtk/gtkalignment.c:170
 msgid "Left Padding"
-msgstr ""
+msgstr "ବାମ ପ୍ୟାଡ଼ିଙ୍ଗ"
 
 #: gtk/gtkalignment.c:171
 msgid "The padding to insert at the left of the widget."
-msgstr ""
+msgstr "ୱିଜେଟର ବାମ ପାଖରେରେ ପ୍ୟାଡ଼ିଙ୍ଗକୁ ଭର୍ତ୍ତି କରିବା।"
 
 #: gtk/gtkalignment.c:187
 msgid "Right Padding"
-msgstr ""
+msgstr "ଡ଼ାହାଣ ପ୍ୟାଡ଼ିଙ୍ଗ"
 
 #: gtk/gtkalignment.c:188
 msgid "The padding to insert at the right of the widget."
-msgstr ""
+msgstr "ୱିଜେଟର ଡ଼ାହାଣ ପାଖରେ ପ୍ୟାଡ଼ିଙ୍ଗକୁ ଭର୍ତ୍ତି କରିବା।"
 
 #: gtk/gtkarrow.c:75
 msgid "Arrow direction"
-msgstr ""
+msgstr "ତୀରର ଦିଗ"
 
 #: gtk/gtkarrow.c:76
 msgid "The direction the arrow should point"
-msgstr ""
+msgstr "ତୀରର ଦିଗ ନିଦ୍ଦିଷ୍ଟ ହେବା ଉଚିତ"
 
 #: gtk/gtkarrow.c:84
 msgid "Arrow shadow"
-msgstr ""
+msgstr "ତୀର ଛାଇ"
 
 #: gtk/gtkarrow.c:85
 msgid "Appearance of the shadow surrounding the arrow"
-msgstr ""
+msgstr "ତୀର ଚତୁର୍ପାର୍ଶ୍ୱରେ ଛାୟାର ଦୃଶ୍ୟମାନ"
 
 #: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
 msgid "Arrow Scaling"
-msgstr ""
+msgstr "ତୀର ମାପ"
 
 #: gtk/gtkarrow.c:93
 msgid "Amount of space used up by arrow"
-msgstr ""
+msgstr "ତୀର ଦ୍ୱାରା ବ୍ୟବହୃତ ହୋଇଥିବା ସ୍ଥାନର ପରିମାଣ"
 
 #: gtk/gtkaspectframe.c:79
 msgid "Horizontal Alignment"
-msgstr ""
+msgstr "ଭୂ-ସମାନ୍ତର ପାର୍ଶ୍ୱସଜ୍ଜା"
 
 #: gtk/gtkaspectframe.c:80
 msgid "X alignment of the child"
-msgstr ""
+msgstr "ନିମ୍ନ ସ୍ତରର X ପାର୍ଶ୍ୱସଜ୍ଜା"
 
 #: gtk/gtkaspectframe.c:86
 msgid "Vertical Alignment"
-msgstr ""
+msgstr "ଭୂ-ଲମ୍ବ ପାର୍ଶ୍ୱସଜ୍ଜା"
 
 #: gtk/gtkaspectframe.c:87
 msgid "Y alignment of the child"
-msgstr ""
+msgstr "ନିମ୍ନ ସ୍ତରର Y ପାର୍ଶ୍ୱସଜ୍ଜା"
 
 #: gtk/gtkaspectframe.c:93
 msgid "Ratio"
@@ -577,19 +580,19 @@ msgstr "ଅନୁପାତ"
 
 #: gtk/gtkaspectframe.c:94
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr ""
+msgstr "ଯଦି obey_child FALSE ଅଟେ ତେବେ ପରିମାପ ଅନୁପାତ (_c)"
 
 #: gtk/gtkaspectframe.c:100
 msgid "Obey child"
-msgstr ""
+msgstr "Obey child"
 
 #: gtk/gtkaspectframe.c:101
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr ""
+msgstr "ଫ୍ରେମର ନିମ୍ନ ସ୍ତର ସହିତ ମେଳାଇବା ପାଇଁ ପରିମାପ ଅନୁପାତକୁ ବାଧ୍ଯ କରନ୍ତୁ"
 
 #: gtk/gtkassistant.c:261
 msgid "Header Padding"
-msgstr ""
+msgstr "ଶୀର୍ଷକ ପ୍ୟାଡିଙ୍ଗ"
 
 #: gtk/gtkassistant.c:262
 msgid "Number of pixels around the header."
@@ -597,11 +600,11 @@ msgstr "ଶୀର୍ଷକ ଚାରିପାଖେ ଥିବା ପିକ୍ସ
 
 #: gtk/gtkassistant.c:269
 msgid "Content Padding"
-msgstr ""
+msgstr "ବିଷୟ ବସ୍ତୁ ପ୍ୟାଡିଙ୍ଗ"
 
 #: gtk/gtkassistant.c:270
 msgid "Number of pixels around the content pages."
-msgstr ""
+msgstr "ସୂଚୀ ପୃଷ୍ଠାଗୁଡ଼ିକ ଚାରିପଟେ ଥିବା ପିକସେଲଗୁଡ଼ିକର ସଂଖ୍ୟା"
 
 #: gtk/gtkassistant.c:286
 msgid "Page type"
@@ -625,15 +628,15 @@ msgstr "ଶୀର୍ଷକ ପ୍ରତିଛବି"
 
 #: gtk/gtkassistant.c:322
 msgid "Header image for the assistant page"
-msgstr ""
+msgstr "ସହାୟକ ପୃଷ୍ଠା ପାଇଁ ଶୀର୍ଷକ ପ୍ରତିଛବି"
 
 #: gtk/gtkassistant.c:338
 msgid "Sidebar image"
-msgstr ""
+msgstr "ପାର୍ଶ୍ୱ ପଟି ପ୍ରତିଛବି"
 
 #: gtk/gtkassistant.c:339
 msgid "Sidebar image for the assistant page"
-msgstr ""
+msgstr "ସହାୟକ ପୃଷ୍ଠା ପାଇଁ ପାର୍ଶ୍ୱପଟି ପ୍ରତିଛବି"
 
 #: gtk/gtkassistant.c:354
 msgid "Page complete"
@@ -641,39 +644,39 @@ msgstr "ପୃଷ୍ଠା ସମ୍ପୂର୍ଣ୍ଣ"
 
 #: gtk/gtkassistant.c:355
 msgid "Whether all required fields on the page have been filled out"
-msgstr ""
+msgstr "ପୃଷ୍ଠାରେ ସମସ୍ତ ଆବଶ୍ୟକୀୟ କ୍ଷେତ୍ରଗୁଡ଼ିକ ପୁରଣ ହୋଇଛି କି ନାହିଁ"
 
 #: gtk/gtkbbox.c:91
 msgid "Minimum child width"
-msgstr ""
+msgstr "ସର୍ବନିମ୍ନ ନିମ୍ନ ସ୍ତରର ଓସାର"
 
 #: gtk/gtkbbox.c:92
 msgid "Minimum width of buttons inside the box"
-msgstr ""
+msgstr "ବାକ୍ସ ମଧ୍ଯରେ ବଟନର ସର୍ବନିମ୍ନ ଓସାର"
 
 #: gtk/gtkbbox.c:100
 msgid "Minimum child height"
-msgstr ""
+msgstr "ସର୍ବନିମ୍ନ ନିମ୍ନସ୍ତରର ଉଚ୍ଚତା"
 
 #: gtk/gtkbbox.c:101
 msgid "Minimum height of buttons inside the box"
-msgstr ""
+msgstr "ବାକ୍ସ ମଧ୍ଯରେ ବଟନଗୁଡ଼ିକର ସର୍ବନିମ୍ନ ଉଚ୍ଚତା"
 
 #: gtk/gtkbbox.c:109
 msgid "Child internal width padding"
-msgstr ""
+msgstr "ନିମ୍ନସ୍ତରର ଆଭ୍ୟନ୍ତରୀଣ ଓସାର ପ୍ୟାଡିଙ୍ଗ"
 
 #: gtk/gtkbbox.c:110
 msgid "Amount to increase child's size on either side"
-msgstr ""
+msgstr "ଉଭୟ ପାର୍ଶ୍ୱରେ ନିମ୍ନସ୍ତରର ବୃଦ୍ଧିର ପରିମାଣ"
 
 #: gtk/gtkbbox.c:118
 msgid "Child internal height padding"
-msgstr ""
+msgstr "ନିମ୍ନସ୍ତରର ଆଭ୍ୟନ୍ତରୀଣ ଉଚ୍ଚତା ପ୍ୟାଡିଙ୍ଗ"
 
 #: gtk/gtkbbox.c:119
 msgid "Amount to increase child's size on the top and bottom"
-msgstr ""
+msgstr "ଉପର ଏବଂ ତଳ ପାଖରେ ନିମ୍ନସ୍ତରର ଆକାର ବୃଦ୍ଧିର ପରିମାଣ"
 
 #: gtk/gtkbbox.c:127
 msgid "Layout style"
@@ -702,7 +705,7 @@ msgstr "ଅନ୍ତରାଳ"
 
 #: gtk/gtkbox.c:131
 msgid "The amount of space between children"
-msgstr ""
+msgstr "ନିମ୍ନସ୍ତରଗୁଡ଼ିକ ମଧ୍ୟରେ ସ୍ଥାନର ପରିମାଣ"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:649 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:573
@@ -711,7 +714,7 @@ msgstr "ଏକ ପ୍ରକାର"
 
 #: gtk/gtkbox.c:141
 msgid "Whether the children should all be the same size"
-msgstr ""
+msgstr "ସମସ୍ତ ନିମ୍ନସ୍ତରଗୁଡ଼ିକ ସମାନ ଆକାର ବିଶିଷ୍ଟ କି"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
 #: gtk/gtktreeviewcolumn.c:272
@@ -734,7 +737,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:162
 msgid "Padding"
-msgstr ""
+msgstr "ପ୍ୟାଡିଙ୍ଗ"
 
 #: gtk/gtkbox.c:163
 msgid "Extra space to put between the child and its neighbors, in pixels"
@@ -742,7 +745,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:169
 msgid "Pack type"
-msgstr ""
+msgstr "ପ୍ୟାକେଟ ପ୍ରକାର"
 
 #: gtk/gtkbox.c:170 gtk/gtknotebook.c:716
 msgid ""
@@ -795,27 +798,27 @@ msgstr ""
 
 #: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
-msgstr ""
+msgstr "କ୍ଲିକ କରିବା ମାତ୍ରେ ଫୋକସ କରନ୍ତୁ"
 
 #: gtk/gtkbutton.c:244 gtk/gtkfilechooserbutton.c:394
 msgid "Whether the button grabs focus when it is clicked with the mouse"
-msgstr ""
+msgstr "ମାଉସ ସହାୟତାରେ କ୍ଲିକ କରିବା ମାତ୍ରେ ବଟନ ଲକ୍ଷ୍ୟ ଧାରଣ କରିଥାଏ"
 
 #: gtk/gtkbutton.c:251
 msgid "Border relief"
-msgstr ""
+msgstr "ଧାର ସହାୟତା"
 
 #: gtk/gtkbutton.c:252
 msgid "The border relief style"
-msgstr ""
+msgstr "ଧାର ସହାୟତା ଶୈଳୀ"
 
 #: gtk/gtkbutton.c:269
 msgid "Horizontal alignment for child"
-msgstr ""
+msgstr "ନିମ୍ନସ୍ତର ପାଇଁ ଭୂ-ସମାନ୍ତର ପାର୍ଶ୍ୱସଜ୍ଜା"
 
 #: gtk/gtkbutton.c:288
 msgid "Vertical alignment for child"
-msgstr ""
+msgstr "ନିମ୍ନସ୍ତର ପାଇଁ ଭୂ-ଲମ୍ବ ପାର୍ଶ୍ୱସଜ୍ଜା"
 
 #: gtk/gtkbutton.c:305 gtk/gtkimagemenuitem.c:135
 msgid "Image widget"
@@ -823,7 +826,7 @@ msgstr "ପ୍ରତିଛବି ୱିଜେଟ"
 
 #: gtk/gtkbutton.c:306
 msgid "Child widget to appear next to the button text"
-msgstr ""
+msgstr "ବଟନ ପାଠ୍ୟ ପରେ ଦୃଶ୍ୟମାନ ହେଉଥିବା ନିମ୍ନସ୍ତରର ୱିଜେଟ"
 
 #: gtk/gtkbutton.c:320
 msgid "Image position"
@@ -831,7 +834,7 @@ msgstr "ପ୍ରତିଛବି ସ୍ଥାନ"
 
 #: gtk/gtkbutton.c:321
 msgid "The position of the image relative to the text"
-msgstr ""
+msgstr "ପାଠ୍ୟ ତୁଳନାରେ ପ୍ରତିଛବିର ସ୍ଥାନର"
 
 #: gtk/gtkbutton.c:433
 msgid "Default Spacing"
@@ -839,7 +842,7 @@ msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଅନ୍ତରାଳ"
 
 #: gtk/gtkbutton.c:434
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr ""
+msgstr "CAN_DEFAULT ବଟନଗୁଡ଼ିକରେ ଯୋଗ କରିବା ପାଇଁ ଅଧିକ ସ୍ଥାନ"
 
 #: gtk/gtkbutton.c:440
 msgid "Default Outside Spacing"
@@ -849,7 +852,7 @@ msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ବାହ୍ୟ ଅନ�
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr ""
+msgstr "CAN_DEFAULT ବଟନଗୁଡ଼ିକରେ ଯୋଗ କରିବା ପାଇଁ ଅଧିକ ସ୍ଥାନ ଯ।ହାକି ସର୍ବଦା ଧାର ବାହାରେ ଅଙ୍କାଯାଇଥାଏ"
 
 #: gtk/gtkbutton.c:446
 msgid "Child X Displacement"
@@ -891,7 +894,7 @@ msgstr "ପ୍ରତିଛବି ଅନ୍ତରାଳ"
 
 #: gtk/gtkbutton.c:500
 msgid "Spacing in pixels between the image and label"
-msgstr ""
+msgstr "ପ୍ରତିଛବି ଏବଂ ସ୍ତର ମଧ୍ଯରେ ବ୍ୟବଧାନ ପିକସେଲରେ"
 
 #: gtk/gtkbutton.c:514
 msgid "Show button images"
@@ -1784,9 +1787,8 @@ msgid "Palette to use in the color selector"
 msgstr ""
 
 #: gtk/gtkcolorseldialog.c:102
-#, fuzzy
 msgid "Color Selection"
-msgstr "ସଂଶୟାକୁଳ ଚୟନ"
+msgstr "ରଙ୍ଗ ଚୟନ"
 
 #: gtk/gtkcolorseldialog.c:103
 msgid "The color selection embedded in the dialog."
@@ -1797,39 +1799,36 @@ msgid "OK Button"
 msgstr ""
 
 #: gtk/gtkcolorseldialog.c:110
-#, fuzzy
 msgid "The OK button of the dialog."
-msgstr "ସଂଳାପର ଅସ୍ଥାୟୀ ମୂଳ"
+msgstr "ସଂଳାପର OK ବଟନ।"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Cancel Button"
-msgstr ""
+msgstr "ବାତିଲ କରନ୍ତୁ ବଟନ"
 
 #: gtk/gtkcolorseldialog.c:117
-#, fuzzy
 msgid "The cancel button of the dialog."
-msgstr "ସଂଳାପର ଅସ୍ଥାୟୀ ମୂଳ"
+msgstr "ସଂଳାପର ବାତିଲ କରନ୍ତୁ ବଟନ।"
 
 #: gtk/gtkcolorseldialog.c:123
 msgid "Help Button"
-msgstr ""
+msgstr "ସହାୟତା ବଟନ"
 
 #: gtk/gtkcolorseldialog.c:124
-#, fuzzy
 msgid "The help button of the dialog."
-msgstr "ସଂଳାପର ଅସ୍ଥାୟୀ ମୂଳ"
+msgstr "ସଂଳାପର ସହାୟତା ବଟନ"
 
 #: gtk/gtkcombo.c:145
 msgid "Enable arrow keys"
-msgstr ""
+msgstr "ତୀର କିକୁ ସକ୍ରିୟ କରନ୍ତୁ"
 
 #: gtk/gtkcombo.c:146
 msgid "Whether the arrow keys move through the list of items"
-msgstr ""
+msgstr "ତୀର କି ଟି ବସ୍ତୁ ତାଲିକା ମଧ୍ଯଦେଇ ଗତି କରେ କି"
 
 #: gtk/gtkcombo.c:152
 msgid "Always enable arrows"
-msgstr ""
+msgstr "ତୀରକୁ ସର୍ବଦା ସକ୍ରିୟ ରଖନ୍ତୁ"
 
 #: gtk/gtkcombo.c:153
 msgid "Obsolete property, ignored"
@@ -1841,11 +1840,11 @@ msgstr "ଅକ୍ଷର ନିର୍ଦ୍ଦିଷ୍ଟ"
 
 #: gtk/gtkcombo.c:160
 msgid "Whether list item matching is case sensitive"
-msgstr ""
+msgstr "ମେଳଖାଇଥିବା ତାଲିକାଭୁକ୍ତ ବସ୍ତୁଟି ଅକ୍ଷର ନିର୍ଦ୍ଧିଷ୍ଟ କି"
 
 #: gtk/gtkcombo.c:167
 msgid "Allow empty"
-msgstr ""
+msgstr "ଖାଲିକୁ ଅନୁମତି ଦିଅନ୍ତୁ"
 
 #: gtk/gtkcombo.c:168
 msgid "Whether an empty value may be entered in this field"
@@ -1853,7 +1852,7 @@ msgstr ""
 
 #: gtk/gtkcombo.c:175
 msgid "Value in list"
-msgstr ""
+msgstr "ତାଲିକାରେ ଥିବା ମୂଲ୍ୟ"
 
 #: gtk/gtkcombo.c:176
 msgid "Whether entered values must already be present in the list"
@@ -1861,11 +1860,11 @@ msgstr ""
 
 #: gtk/gtkcombobox.c:661
 msgid "ComboBox model"
-msgstr ""
+msgstr "ComboBox ମଡେଲ"
 
 #: gtk/gtkcombobox.c:662
 msgid "The model for the combo box"
-msgstr ""
+msgstr "କୋମ୍ବୋ ବାକ୍ସ ପାଇଁ ମଡେଲ"
 
 #: gtk/gtkcombobox.c:679
 msgid "Wrap width for laying out the items in a grid"
@@ -2048,9 +2047,8 @@ msgid "Width of border around the main dialog area"
 msgstr ""
 
 #: gtk/gtkdialog.c:209
-#, fuzzy
 msgid "Content area spacing"
-msgstr "ଚିତ୍ରସଙ୍କେତ ବ୍ଯବଧାନ"
+msgstr "ବିଷୟବସ୍ତୁ କ୍ଷେତ୍ର ବ୍ଯବଧାନ"
 
 #: gtk/gtkdialog.c:210
 msgid "Spacing between elements of the main dialog area"
