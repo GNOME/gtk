@@ -942,6 +942,10 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
   
   g_object_ref (window);
   _gdk_xid_table_insert (display, &GDK_WINDOW_XID (window), window);
+
+  /* Update the clip region, etc */
+  _gdk_window_update_size (window);
+  
   return window;
 }
 
