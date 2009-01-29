@@ -8504,6 +8504,9 @@ _gdk_windowing_got_event (GdkDisplay *display,
       GDK_WINDOW_TYPE (event_private->parent) != GDK_WINDOW_ROOT)
     {
       GEnumValue *event_type_value, *window_type_value;
+
+      if (GDK_WINDOW_TYPE (event_private) == GDK_WINDOW_FOREIGN)
+	return;
       
       event_type_value = g_enum_get_value ((GEnumClass *) g_type_class_ref (GDK_TYPE_EVENT_TYPE),
 					   event->type);
