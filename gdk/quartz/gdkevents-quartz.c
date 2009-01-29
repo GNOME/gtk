@@ -1403,7 +1403,7 @@ gdk_event_translate (GdkEvent *event,
   /* Keep track of button state, since we don't get that information
    * for key events. 
    */
-  switch ([nsevent type])
+  switch (event_type)
     {
     case NSLeftMouseDown:
     case NSRightMouseDown:
@@ -1480,9 +1480,9 @@ gdk_event_translate (GdkEvent *event,
   /* We only activate the application on click if it's not already active,
    * this matches most use cases of native apps (no click-through).
    */
-  if (([nsevent type] == NSRightMouseDown ||
-       [nsevent type] == NSOtherMouseDown ||
-       [nsevent type] == NSLeftMouseDown) && ![NSApp isActive])
+  if ((event_type == NSRightMouseDown ||
+       event_type == NSOtherMouseDown ||
+       event_type == NSLeftMouseDown) && ![NSApp isActive])
     {
       [NSApp activateIgnoringOtherApps:YES];
       return_val = FALSE;
