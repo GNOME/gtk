@@ -1389,6 +1389,9 @@ gdk_event_translate (GdkEvent *event,
        * on the title. The subtype 20 is undocumented so it's probably
        * not a good idea: else if (subtype == 20) break_all_grabs ();
        */
+
+      /* Leave all AppKit events to AppKit. */
+      return FALSE;
     }
 
   /* Handle our generated "fake" crossing events. */
