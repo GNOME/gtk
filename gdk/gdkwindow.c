@@ -1305,12 +1305,6 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
 
       if (gdk_window_is_viewable (window))
 	GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show (window);
-
-      /* We sync here to ensure the window is created in the Xserver when
-       * this function returns. This is required because the returned XID
-       * for this window must be valid immediately, even with another
-       * connection to the Xserver */
-      gdk_display_sync (gdk_drawable_get_display (window));
     }
   else
     {

@@ -875,14 +875,22 @@ gdk_x11_drawable_get_xid (GdkDrawable *drawable)
       
       /* Try to ensure the window has a native window */
       if (!_gdk_window_has_impl (window))
-	gdk_window_set_has_native (window, TRUE);
+	{
+	  gdk_window_set_has_native (window, TRUE);
+
+	  /* We sync here to ensure the window is created in the Xserver when
+	   * this function returns. This is required because the returned XID
+	   * for this window must be valid immediately, even with another
+	   * connection to the Xserver */
+	  gdk_display_sync (gdk_drawable_get_display (window));
+	}
       
       if (!GDK_WINDOW_IS_X11 (window))
         {
           g_warning (G_STRLOC " drawable is not a native X11 window");
           return None;
         }
-
+      
       impl = ((GdkWindowObject *)drawable)->impl;
     }
   else if (GDK_IS_PIXMAP (drawable))
