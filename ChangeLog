@@ -1,3 +1,12 @@
+2009-01-29  Claudio Saavedra  <csaavedra@igalia.com>
+
+	Merged from trunk:
+
+	Bug 569435 – make maintainer-clean removes non-generated sources
+
+	* gdk/Makefile.am: Do not remove gdkprivate.h and gdkwindowimpl.h
+	during make maintainer-clean, as these files are not generated.
+
 2009-01-26  Claudio Saavedra  <csaavedra@igalia.com>
 
 	Merged from trunk:

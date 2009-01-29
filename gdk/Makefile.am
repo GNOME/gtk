@@ -13,6 +13,7 @@ EXTRA_DIST +=			\
 	gdk.def 		\
 	gdkmarshalers.list	\
 	gdkmedialib.h		\
+	gdkwindowimpl.h		\
 	makeenums.pl		\
 	makefile.msc		\
 	gdk.symbols		\
@@ -97,8 +98,6 @@ gdk_built_public_sources =			\
 	gdkenumtypes.h
 
 gdk_built_private_headers =			\
-	gdkprivate.h				\
-	gdkwindowimpl.h				\
 	gdkalias.h
 
 gdk_c_sources =                 \
