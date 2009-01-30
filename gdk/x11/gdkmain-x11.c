@@ -162,6 +162,8 @@ has_pointer_grab_callback (gpointer _data)
 				     data->time,
 				     FALSE);
 
+  g_object_unref (data->window);
+  g_object_unref (data->native_window);
   g_free (data);
 }
 
@@ -288,8 +290,8 @@ gdk_pointer_grab (GdkWindow *	  window,
       data = g_new (struct XPointerGrabInfo, 1);
 
       data->display = GDK_DISPLAY_OBJECT (display_x11);
-      data->window = window;
-      data->native_window = native;
+      data->window = g_object_ref (window);
+      data->native_window = g_object_ref (native);
       data->owner_events = owner_events;
       data->event_mask = event_mask;
       data->serial = serial;
