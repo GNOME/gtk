@@ -1876,7 +1876,7 @@ gdk_event_translate (GdkDisplay *display,
 	}
 #endif
 
-    if (!window ||
+      if (!window ||
 	  xevent->xconfigure.event != xevent->xconfigure.window ||
           GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD ||
           GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
