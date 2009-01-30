@@ -58,11 +58,11 @@ struct _GdkWindowImplX11
 {
   GdkDrawableImplX11 parent_instance;
 
-  guint no_bg : 1;	        /* Set when the window background is temporarily
-				 * unset during resizing and scaling */
   GdkToplevelX11 *toplevel;	/* Toplevel-specific information */
   GdkCursor *cursor;
   gint8 toplevel_window_type;
+  guint no_bg : 1;	        /* Set when the window background is temporarily
+				 * unset during resizing and scaling */
   guint override_redirect : 1;
   guint use_synchronized_configure : 1;
 
