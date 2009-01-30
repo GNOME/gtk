@@ -694,12 +694,12 @@ gdk_keyboard_grab (GdkWindow *window,
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
-  GDK_NOTE (EVENTS, g_print ("gdk_keyboard_grab %p\n",
-			     GDK_WINDOW_HWND (window)));
+  GDK_NOTE (EVENTS, g_print ("gdk_keyboard_grab %p%s\n",
+			     GDK_WINDOW_HWND (window), owner_events ? " OWNER_EVENTS" : ""));
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
-      k_grab_owner_events = owner_events != 0;
+      k_grab_owner_events = owner_events;
       return_val = GDK_GRAB_SUCCESS;
     }
   else
@@ -746,7 +746,7 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
 
   g_return_if_fail (display == _gdk_display);
 
-  GDK_NOTE (EVENTS, g_print ("gdk_keyboard_ungrab\n"));
+  GDK_NOTE (EVENTS, g_print ("gdk_display_keyboard_ungrab\n"));
 
   if (k_grab_window && !k_grab_owner_events)
     {
@@ -955,6 +955,7 @@ static void
 print_event (GdkEvent *event)
 {
   gchar *escaped, *kvname;
+  gchar *selection_name, *target_name, *property_name;
 
   g_print ("%s%*s===> ", (debug_indent > 0 ? "\n" : ""), debug_indent, "");
   switch (event->any.type)
@@ -1064,6 +1065,18 @@ print_event (GdkEvent *event)
       break;
     case GDK_FOCUS_CHANGE:
       g_print ("%s", (event->focus_change.in ? "IN" : "OUT"));
+      break;
+    case GDK_SELECTION_REQUEST:
+    case GDK_SELECTION_NOTIFY:
+    case GDK_SELECTION_CLEAR:
+      selection_name = gdk_atom_name (event->selection.selection);
+      target_name = gdk_atom_name (event->selection.target);
+      property_name = gdk_atom_name (event->selection.property);
+      g_print ("sel:%s tgt:%s prop:%s",
+	       selection_name, target_name, property_name);
+      g_free (selection_name);
+      g_free (target_name);
+      g_free (property_name);
       break;
     case GDK_CONFIGURE:
       g_print ("x:%d y:%d w:%d h:%d",
@@ -1682,7 +1695,8 @@ translate_mouse_coords (GdkWindow *window1,
 
 /* The check_extended flag controls whether to check if the windows want
  * events from extended input devices and if the message should be skipped
- * because an extended input device is active */
+ * because an extended input device is active
+ */
 static gboolean
 propagate (GdkWindow  **window,
 	   MSG         *msg,
@@ -1693,14 +1707,13 @@ propagate (GdkWindow  **window,
 					 MSG *msg),
 	   gboolean    	check_extended)
 {
-  gboolean in_propagation = FALSE;
-
   if (grab_window != NULL && !grab_owner_events)
     {
       /* Event source is grabbed with owner_events FALSE */
 
-      /* See if the event should be ignored because an extended input device
-       * is used */
+      /* See if the event should be ignored because an extended input
+       * device is used
+       */
       if (check_extended &&
 	  ((GdkWindowObject *) grab_window)->extension_events != 0 &&
 	  _gdk_input_ignore_core)
@@ -1720,10 +1733,12 @@ propagate (GdkWindow  **window,
 	  return TRUE;
 	}
     }
+
+  /* If we come here, we know that if grab_window != NULL then
+   * grab_owner_events is TRUE
+   */
   while (TRUE)
     {
-      /* See if the event should be ignored because an extended input device
-       * is used */
       if (check_extended &&
 	  ((GdkWindowObject *) *window)->extension_events != 0 &&
 	  _gdk_input_ignore_core)
@@ -1742,8 +1757,6 @@ propagate (GdkWindow  **window,
 		{
 		  /* Event source is grabbed with owner_events TRUE */
 
-		  /* See if the event should be ignored because an extended
-		   * input device is used */
 		  if (check_extended &&
 		      ((GdkWindowObject *) grab_window)->extension_events != 0 &&
 		      _gdk_input_ignore_core)
@@ -1774,7 +1787,6 @@ propagate (GdkWindow  **window,
 	  else
 	    {
 	      assign_object (window, parent);
-	      in_propagation = TRUE;
 	      /* The only branch where we actually continue the loop */
 	    }
 	}
@@ -2867,7 +2879,7 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_MOUSEWHEEL:
-      GDK_NOTE (EVENTS, g_print (" %d", HIWORD (msg->wParam)));
+      GDK_NOTE (EVENTS, g_print (" %d", (short) HIWORD (msg->wParam)));
 
       /* WM_MOUSEWHEEL is delivered to the focus window. Work around
        * that. Also, the position is in screen coordinates, not client
@@ -2915,6 +2927,42 @@ gdk_event_translate (MSG  *msg,
       append_event (event);
       
       return_val = TRUE;
+      break;
+
+    case WM_HSCROLL:
+      GDK_NOTE (EVENTS,
+		(g_print (" %s",
+			  (LOWORD (msg->wParam) == SB_ENDSCROLL ? "ENDSCROLL" :
+			   (LOWORD (msg->wParam) == SB_LEFT ? "LEFT" :
+			    (LOWORD (msg->wParam) == SB_RIGHT ? "RIGHT" :
+			     (LOWORD (msg->wParam) == SB_LINELEFT ? "LINELEFT" :
+			      (LOWORD (msg->wParam) == SB_LINERIGHT ? "LINERIGHT" :
+			       (LOWORD (msg->wParam) == SB_PAGELEFT ? "PAGELEFT" :
+				(LOWORD (msg->wParam) == SB_PAGERIGHT ? "PAGERIGHT" :
+				 (LOWORD (msg->wParam) == SB_THUMBPOSITION ? "THUMBPOSITION" :
+				  (LOWORD (msg->wParam) == SB_THUMBTRACK ? "THUMBTRACK" :
+				   "???")))))))))),
+		 (LOWORD (msg->wParam) == SB_THUMBPOSITION ||
+		  LOWORD (msg->wParam) == SB_THUMBTRACK) ?
+		 g_print (" %d", HIWORD (msg->wParam)) : 0));
+      break;
+
+    case WM_VSCROLL:
+      GDK_NOTE (EVENTS,
+		(g_print (" %s",
+			  (LOWORD (msg->wParam) == SB_ENDSCROLL ? "ENDSCROLL" :
+			   (LOWORD (msg->wParam) == SB_BOTTOM ? "BOTTOM" :
+			    (LOWORD (msg->wParam) == SB_TOP ? "TOP" :
+			     (LOWORD (msg->wParam) == SB_LINEDOWN ? "LINDOWN" :
+			      (LOWORD (msg->wParam) == SB_LINEUP ? "LINEIP" :
+			       (LOWORD (msg->wParam) == SB_PAGEDOWN ? "PAGEDOWN" :
+				(LOWORD (msg->wParam) == SB_PAGEUP ? "PAGEUP" :
+				 (LOWORD (msg->wParam) == SB_THUMBPOSITION ? "THUMBPOSITION" :
+				  (LOWORD (msg->wParam) == SB_THUMBTRACK ? "THUMBTRACK" :
+				   "???")))))))))),
+		 (LOWORD (msg->wParam) == SB_THUMBPOSITION ||
+		  LOWORD (msg->wParam) == SB_THUMBTRACK) ?
+		 g_print (" %d", HIWORD (msg->wParam)) : 0));
       break;
 
     case WM_QUERYNEWPALETTE:
@@ -3608,7 +3656,7 @@ gdk_event_translate (MSG  *msg,
 	  event->selection.send_event = FALSE;
 	  event->selection.selection = GDK_SELECTION_CLIPBOARD;
 	  event->selection.target = target;
-	  event->selection.property = _gdk_selection_property;
+	  event->selection.property = _gdk_selection;
 	  event->selection.requestor = msg->hwnd;
 	  event->selection.time = msg->time;
 
@@ -3640,6 +3688,11 @@ gdk_event_translate (MSG  *msg,
 	      /* The requestor is holding the clipboard, no
 	       * OpenClipboard() is required/possible
 	       */
+	      GDK_NOTE (DND,
+			g_print (" SetClipboardData(%s,%p)",
+				 _gdk_win32_cf_to_string (msg->wParam),
+				 _delayed_rendering_data));
+
 	      API_CALL (SetClipboardData, (msg->wParam, _delayed_rendering_data));
 	      _delayed_rendering_data = NULL;
 	    }
@@ -3679,7 +3732,6 @@ gdk_event_translate (MSG  *msg,
       GDK_NOTE (EVENTS, g_print (" %s thread: %I64d",
 				 msg->wParam ? "YES" : "NO",
 				 (gint64) msg->lParam));
-
       if (msg->wParam && GDK_WINDOW_IS_MAPPED (window))
 	ensure_stacking_on_activate_app (msg, window);
       break;

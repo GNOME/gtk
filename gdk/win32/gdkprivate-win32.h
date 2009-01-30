@@ -93,6 +93,11 @@
 #define WM_APPCOMMAND 0x319
 #endif
 
+#ifndef CF_DIBV5
+#define CF_DIBV5 17
+#endif
+
+
 /* Define some combinations of GdkDebugFlags */
 #define GDK_DEBUG_EVENTS_OR_COLORMAP (GDK_DEBUG_EVENTS|GDK_DEBUG_COLORMAP)
 #define GDK_DEBUG_EVENTS_OR_INPUT (GDK_DEBUG_EVENTS|GDK_DEBUG_INPUT)
@@ -400,12 +405,8 @@ extern guint		 _gdk_keymap_serial;
 extern gboolean		 _gdk_keyboard_has_altgr;
 extern guint		 _scancode_rshift;
 
-/* Registered clipboard formats */
-extern WORD		 _cf_utf8_string;
-extern WORD		 _cf_image_bmp;
-
 /* GdkAtoms: properties, targets and types */
-extern GdkAtom		 _gdk_selection_property;
+extern GdkAtom		 _gdk_selection;
 extern GdkAtom		 _wm_transient_for;
 extern GdkAtom		 _targets;
 extern GdkAtom		 _save_targets;
@@ -413,7 +414,6 @@ extern GdkAtom           _utf8_string;
 extern GdkAtom		 _text;
 extern GdkAtom		 _compound_text;
 extern GdkAtom		 _text_uri_list;
-extern GdkAtom		 _image_bmp;
 
 /* DND selections */
 extern GdkAtom           _local_dnd;
