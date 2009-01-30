@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-27 00:10-0500\n"
-"PO-Revision-Date: 2009-01-12 18:07+0700\n"
+"PO-Revision-Date: 2009-01-30 12:51+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -26,14 +26,14 @@ msgid "sdl|system"
 msgstr "system"
 
 #: gdk/gdk.c:103
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing option --gdk-debug"
-msgstr "เกิดข้อผิดพลาดขณะพิมพ์"
+msgstr "เกิดข้อผิดพลาดขณะแจงตัวเลือก --gdk-debug"
 
 #: gdk/gdk.c:123
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
-msgstr ""
+msgstr "เกิดข้อผิดพลาดขณะแจงตัวเลือก --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
 #: gdk/gdk.c:151
@@ -1515,9 +1515,8 @@ msgid "_Insert Unicode Control Character"
 msgstr "แ_ทรกอักขระควบคุมของยูนิโค้ด"
 
 #: gtk/gtkentry.c:9601
-#, fuzzy
 msgid "Caps Lock is on"
-msgstr "คัดลอก_ตำแหน่ง"
+msgstr "ปุ่ม Caps Lock ติดอยู่"
 
 #: gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
@@ -1814,7 +1813,7 @@ msgstr "กำลังเติมเต็ม..."
 #. * "sftp://blahblah" in an app that only supports local filenames.
 #: gtk/gtkfilechooserentry.c:1176 gtk/gtkfilechooserentry.c:1201
 msgid "Only local files may be selected"
-msgstr ""
+msgstr "เลือกแฟ้มในเครื่องได้เท่านั้น"
 
 #. Another option is to complete the hostname based on the remote volumes that are mounted
 #. Translators: this is shown in the feedback for Tab-completion in a
@@ -1822,15 +1821,14 @@ msgstr ""
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
 #: gtk/gtkfilechooserentry.c:1185
 msgid "Incomplete hostname; end it with '/'"
-msgstr ""
+msgstr "ชื่อโฮสต์ยังไม่จบ กรุณาปิดท้ายด้วย '/'"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
 #: gtk/gtkfilechooserentry.c:1196
-#, fuzzy
 msgid "Path does not exist"
-msgstr "จุดเชื่อม %s ไม่มีอยู่จริง"
+msgstr "พาธไม่มีอยู่จริง"
 
 #: gtk/gtkfilechoosersettings.c:362 gtk/gtkfilesel.c:1349
 #: gtk/gtkfilesel.c:1358
@@ -2682,7 +2680,7 @@ msgstr "เ_ดี๋ยวนี้"
 
 #: gtk/gtkprintunixdialog.c:2765
 msgid "A_t:"
-msgstr "เ_มื่อ:"
+msgstr "เ_วลา:"
 
 #. Translators: Ability to parse the am/pm format depends on actual locale.
 #. * You can remove the am/pm values below for your locale if they are not supported.
@@ -2692,6 +2690,8 @@ msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
+"ระบุเวลาที่จะพิมพ์\n"
+" เช่น 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
 #: gtk/gtkprintunixdialog.c:2791
 msgid "On _hold"
@@ -2699,7 +2699,7 @@ msgstr "_รอไว้"
 
 #: gtk/gtkprintunixdialog.c:2792
 msgid "Hold the job until it is explicitly released"
-msgstr ""
+msgstr "พักงานพิมพ์รอไว้จนกว่าจะสั่ง"
 
 #: gtk/gtkprintunixdialog.c:2812
 msgid "Add Cover Page"
@@ -2995,56 +2995,48 @@ msgstr "เ_ลิกแสดงเต็มจอ"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: gtk/gtkstock.c:319
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "ล่า_งสุด"
 
 #. This is a navigation label as in "go to the first page"
 #: gtk/gtkstock.c:321
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "แ_รกสุด"
 
 #. This is a navigation label as in "go to the last page"
 #: gtk/gtkstock.c:323
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "_ท้ายสุด"
 
 #. This is a navigation label as in "go to the top of the page"
 #: gtk/gtkstock.c:325
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_บนสุด"
 
 #. This is a navigation label as in "go back"
 #: gtk/gtkstock.c:327
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_ถอยกลับ"
 
 #. This is a navigation label as in "go down"
 #: gtk/gtkstock.c:329
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_ลง"
 
 #. This is a navigation label as in "go forward"
 #: gtk/gtkstock.c:331
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "ถั_ดไป"
 
 #. This is a navigation label as in "go up"
 #: gtk/gtkstock.c:333
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_ขึ้น"
@@ -3120,56 +3112,48 @@ msgstr "ชิด_ขวา"
 
 #. Media label, as in "fast forward"
 #: gtk/gtkstock.c:353
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Forward"
-msgstr "ถั_ดไป"
+msgstr "กรอไ_ป"
 
 #. Media label, as in "next song"
 #: gtk/gtkstock.c:355
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_ถัดไป"
 
 #. Media label, as in "pause music"
 #: gtk/gtkstock.c:357
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "_พัก"
 
 #. Media label, as in "play music"
 #: gtk/gtkstock.c:359
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "เ_ล่น"
 
 #. Media label, as in  "previous song"
 #: gtk/gtkstock.c:361
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "ก่อ_นหน้า"
 
 #. Media label
 #: gtk/gtkstock.c:363
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_อัด"
 
 #. Media label
 #: gtk/gtkstock.c:365
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "R_ewind"
-msgstr "ถอย_กลับ"
+msgstr "กรอ_กลับ"
 
 #. Media label
 #: gtk/gtkstock.c:367
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_หยุด"
@@ -3909,7 +3893,7 @@ msgstr "C9"
 #: gtk/paper_names_offsets.c:65
 msgctxt "paper size"
 msgid "DL Envelope"
-msgstr "DL ซองจดหมาย"
+msgstr "ซอง DL"
 
 #: gtk/paper_names_offsets.c:66
 msgctxt "paper size"
@@ -4004,17 +3988,17 @@ msgstr "jis exec"
 #: gtk/paper_names_offsets.c:84
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
-msgstr "Choukei 2 ซองจดหมาย"
+msgstr "ซอง Choukei 2"
 
 #: gtk/paper_names_offsets.c:85
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
-msgstr "Choukei 3 ซองจดหมาย"
+msgstr "ซอง Choukei 3"
 
 #: gtk/paper_names_offsets.c:86
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
-msgstr "Choukei 4 ซองจดหมาย"
+msgstr "ซอง Choukei 4"
 
 #: gtk/paper_names_offsets.c:87
 msgctxt "paper size"
@@ -4024,12 +4008,12 @@ msgstr "hagaki (ไปรษณียบัตร)"
 #: gtk/paper_names_offsets.c:88
 msgctxt "paper size"
 msgid "kahu Envelope"
-msgstr "kahu ซองจดหมาย"
+msgstr "ซอง kahu"
 
 #: gtk/paper_names_offsets.c:89
 msgctxt "paper size"
 msgid "kaku2 Envelope"
-msgstr "kahu2 ซองจดหมาย"
+msgstr "ซอง kahu2"
 
 #: gtk/paper_names_offsets.c:90
 msgctxt "paper size"
@@ -4039,7 +4023,7 @@ msgstr "oufuku (ไปรษณียบัตรตอบ)"
 #: gtk/paper_names_offsets.c:91
 msgctxt "paper size"
 msgid "you4 Envelope"
-msgstr "you4 ซองจดหมาย"
+msgstr "ซอง you4"
 
 #: gtk/paper_names_offsets.c:92
 msgctxt "paper size"
@@ -4084,22 +4068,22 @@ msgstr "5x7"
 #: gtk/paper_names_offsets.c:101
 msgctxt "paper size"
 msgid "6x9 Envelope"
-msgstr "6x9 ซองจดหมาย"
+msgstr "ซอง 6x9"
 
 #: gtk/paper_names_offsets.c:102
 msgctxt "paper size"
 msgid "7x9 Envelope"
-msgstr "7x9 ซองจดหมาย"
+msgstr "ซอง 7x9"
 
 #: gtk/paper_names_offsets.c:103
 msgctxt "paper size"
 msgid "9x11 Envelope"
-msgstr "9x11 ซองจดหมาย"
+msgstr "ซอง 9x11"
 
 #: gtk/paper_names_offsets.c:104
 msgctxt "paper size"
 msgid "a2 Envelope"
-msgstr "a2 ซองจดหมาย"
+msgstr "ซอง a2"
 
 #: gtk/paper_names_offsets.c:105
 msgctxt "paper size"
@@ -4139,7 +4123,7 @@ msgstr "c"
 #: gtk/paper_names_offsets.c:112
 msgctxt "paper size"
 msgid "c5 Envelope"
-msgstr "c5 ซองจดหมาย"
+msgstr "ซอง c5"
 
 #: gtk/paper_names_offsets.c:113
 msgctxt "paper size"
@@ -4199,22 +4183,22 @@ msgstr "Government Letter"
 #: gtk/paper_names_offsets.c:124
 msgctxt "paper size"
 msgid "Index 3x5"
-msgstr "Index 3x5"
+msgstr "ดัชนี 3x5"
 
 #: gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
-msgstr "Index 4x6 (ไปรษณียบัตร)"
+msgstr "ดัชนี 4x6 (ไปรษณียบัตร)"
 
 #: gtk/paper_names_offsets.c:126
 msgctxt "paper size"
 msgid "Index 4x6 ext"
-msgstr "Index 4x6 ext"
+msgstr "ดัชนี 4x6 ext"
 
 #: gtk/paper_names_offsets.c:127
 msgctxt "paper size"
 msgid "Index 5x8"
-msgstr "Index 5x8"
+msgstr "ดัชนี 5x8"
 
 #: gtk/paper_names_offsets.c:128
 msgctxt "paper size"
@@ -4234,7 +4218,7 @@ msgstr "US Legal"
 #: gtk/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "US Legal Extra"
-msgstr "US Legal Extra"
+msgstr "US Legal พิเศษ"
 
 #: gtk/paper_names_offsets.c:132
 msgctxt "paper size"
@@ -4244,7 +4228,7 @@ msgstr "US Letter"
 #: gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "US Letter Extra"
-msgstr "US Letter Extra"
+msgstr "US Letter พิเศษ"
 
 #: gtk/paper_names_offsets.c:134
 msgctxt "paper size"
@@ -4254,37 +4238,37 @@ msgstr "US Letter Plus"
 #: gtk/paper_names_offsets.c:135
 msgctxt "paper size"
 msgid "Monarch Envelope"
-msgstr "Monarch ซองจดหมาย"
+msgstr "ซอง Monarch"
 
 #: gtk/paper_names_offsets.c:136
 msgctxt "paper size"
 msgid "#10 Envelope"
-msgstr "#10 ซองจดหมาย"
+msgstr "ซอง #10"
 
 #: gtk/paper_names_offsets.c:137
 msgctxt "paper size"
 msgid "#11 Envelope"
-msgstr "#11 ซองจดหมาย"
+msgstr "ซอง #11"
 
 #: gtk/paper_names_offsets.c:138
 msgctxt "paper size"
 msgid "#12 Envelope"
-msgstr "#12 ซองจดหมาย"
+msgstr "ซอง #12"
 
 #: gtk/paper_names_offsets.c:139
 msgctxt "paper size"
 msgid "#14 Envelope"
-msgstr "#14 ซองจดหมาย"
+msgstr "ซอง #14"
 
 #: gtk/paper_names_offsets.c:140
 msgctxt "paper size"
 msgid "#9 Envelope"
-msgstr "#9 ซองจดหมาย"
+msgstr "ซอง #9"
 
 #: gtk/paper_names_offsets.c:141
 msgctxt "paper size"
 msgid "Personal Envelope"
-msgstr "Personal Envelope"
+msgstr "ซองจดหมายส่วนตัว"
 
 #: gtk/paper_names_offsets.c:142
 msgctxt "paper size"
@@ -4294,12 +4278,12 @@ msgstr "Quarto"
 #: gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "Super A"
-msgstr "Super A"
+msgstr "ซูเปอร์ A"
 
 #: gtk/paper_names_offsets.c:144
 msgctxt "paper size"
 msgid "Super B"
-msgstr "Super B"
+msgstr "ซูเปอร์ B"
 
 #: gtk/paper_names_offsets.c:145
 msgctxt "paper size"
@@ -4324,12 +4308,12 @@ msgstr "Folio sp"
 #: gtk/paper_names_offsets.c:149
 msgctxt "paper size"
 msgid "Invite Envelope"
-msgstr "Invite Envelope"
+msgstr "ซอง Invite"
 
 #: gtk/paper_names_offsets.c:150
 msgctxt "paper size"
 msgid "Italian Envelope"
-msgstr "Italian Envelope"
+msgstr "ซองอิตาลี"
 
 #: gtk/paper_names_offsets.c:151
 msgctxt "paper size"
@@ -4344,7 +4328,7 @@ msgstr "pa-kai"
 #: gtk/paper_names_offsets.c:153
 msgctxt "paper size"
 msgid "Postfix Envelope"
-msgstr "Postfix Envelope"
+msgstr "ซอง Postfix"
 
 #: gtk/paper_names_offsets.c:154
 msgctxt "paper size"
@@ -4354,12 +4338,12 @@ msgstr "Small Photo"
 #: gtk/paper_names_offsets.c:155
 msgctxt "paper size"
 msgid "prc1 Envelope"
-msgstr "prc1 Envelope"
+msgstr "ซอง prc1"
 
 #: gtk/paper_names_offsets.c:156
 msgctxt "paper size"
 msgid "prc10 Envelope"
-msgstr "prc10 Envelope"
+msgstr "ซอง prc10"
 
 #: gtk/paper_names_offsets.c:157
 msgctxt "paper size"
@@ -4369,12 +4353,12 @@ msgstr "prc 16k"
 #: gtk/paper_names_offsets.c:158
 msgctxt "paper size"
 msgid "prc2 Envelope"
-msgstr "prc2 Envelope"
+msgstr "ซอง prc2"
 
 #: gtk/paper_names_offsets.c:159
 msgctxt "paper size"
 msgid "prc3 Envelope"
-msgstr "prc3 Envelope"
+msgstr "ซอง prc3"
 
 #: gtk/paper_names_offsets.c:160
 msgctxt "paper size"
@@ -4384,27 +4368,27 @@ msgstr "prc 32k"
 #: gtk/paper_names_offsets.c:161
 msgctxt "paper size"
 msgid "prc4 Envelope"
-msgstr "prc4 Envelope"
+msgstr "ซอง prc4"
 
 #: gtk/paper_names_offsets.c:162
 msgctxt "paper size"
 msgid "prc5 Envelope"
-msgstr "prc5 Envelope"
+msgstr "ซอง prc5"
 
 #: gtk/paper_names_offsets.c:163
 msgctxt "paper size"
 msgid "prc6 Envelope"
-msgstr "prc6 Envelope"
+msgstr "ซอง prc6"
 
 #: gtk/paper_names_offsets.c:164
 msgctxt "paper size"
 msgid "prc7 Envelope"
-msgstr "prc7 Envelope"
+msgstr "ซอง prc7"
 
 #: gtk/paper_names_offsets.c:165
 msgctxt "paper size"
 msgid "prc8 Envelope"
-msgstr "prc8 Envelope"
+msgstr "ซอง prc8"
 
 #: gtk/paper_names_offsets.c:166
 msgctxt "paper size"
@@ -5167,495 +5151,6 @@ msgstr "ไม่สามารถเรียกข้อมูลสำหร
 
 #~ msgid "%d/%b/%Y"
 #~ msgstr "%d %b %Ey"
-
-#~ msgid "asme_f"
-#~ msgstr "asme_f"
-
-#~ msgid "A0x2"
-#~ msgstr "A0x2"
-
-#~ msgid "A0"
-#~ msgstr "A0"
-
-#~ msgid "A0x3"
-#~ msgstr "A0x3"
-
-#~ msgid "A1"
-#~ msgstr "A1"
-
-#~ msgid "A10"
-#~ msgstr "A10"
-
-#~ msgid "A1x3"
-#~ msgstr "A1x3"
-
-#~ msgid "A1x4"
-#~ msgstr "A1x4"
-
-#~ msgid "A2"
-#~ msgstr "A2"
-
-#~ msgid "A2x3"
-#~ msgstr "A2x3"
-
-#~ msgid "A2x4"
-#~ msgstr "A2x4"
-
-#~ msgid "A2x5"
-#~ msgstr "A2x5"
-
-#~ msgid "A3"
-#~ msgstr "A3"
-
-#~ msgid "A3 Extra"
-#~ msgstr "A3 พิเศษ"
-
-#~ msgid "A3x3"
-#~ msgstr "A3x3"
-
-#~ msgid "A3x4"
-#~ msgstr "A3x4"
-
-#~ msgid "A3x5"
-#~ msgstr "A3x5"
-
-#~ msgid "A3x6"
-#~ msgstr "A3x6"
-
-#~ msgid "A3x7"
-#~ msgstr "A3x7"
-
-#~ msgid "A4"
-#~ msgstr "A4"
-
-#~ msgid "A4 Extra"
-#~ msgstr "A4 พิเศษ"
-
-#~ msgid "A4 Tab"
-#~ msgstr "A4 Tab"
-
-#~ msgid "A4x3"
-#~ msgstr "A4x3"
-
-#~ msgid "A4x4"
-#~ msgstr "A4x4"
-
-#~ msgid "A4x5"
-#~ msgstr "A4x5"
-
-#~ msgid "A4x6"
-#~ msgstr "A4x6"
-
-#~ msgid "A4x7"
-#~ msgstr "A4x7"
-
-#~ msgid "A4x8"
-#~ msgstr "A4x8"
-
-#~ msgid "A4x9"
-#~ msgstr "A4x9"
-
-#~ msgid "A5"
-#~ msgstr "A5"
-
-#~ msgid "A5 Extra"
-#~ msgstr "A5 พิเศษ"
-
-#~ msgid "A6"
-#~ msgstr "A6"
-
-#~ msgid "A7"
-#~ msgstr "A7"
-
-#~ msgid "A8"
-#~ msgstr "A8"
-
-#~ msgid "A9"
-#~ msgstr "A9"
-
-#~ msgid "B0"
-#~ msgstr "B0"
-
-#~ msgid "B1"
-#~ msgstr "B1"
-
-#~ msgid "B10"
-#~ msgstr "B10"
-
-#~ msgid "B2"
-#~ msgstr "B2"
-
-#~ msgid "B3"
-#~ msgstr "B3"
-
-#~ msgid "B4"
-#~ msgstr "B4"
-
-#~ msgid "B5"
-#~ msgstr "B5"
-
-#~ msgid "B5 Extra"
-#~ msgstr "B5 พิเศษ"
-
-#~ msgid "B6"
-#~ msgstr "B6"
-
-#~ msgid "B6/C4"
-#~ msgstr "B6/C4"
-
-#~ msgid "B7"
-#~ msgstr "B7"
-
-#~ msgid "B8"
-#~ msgstr "B8"
-
-#~ msgid "B9"
-#~ msgstr "B9"
-
-#~ msgid "C0"
-#~ msgstr "C0"
-
-#~ msgid "C1"
-#~ msgstr "C1"
-
-#~ msgid "C10"
-#~ msgstr "C10"
-
-#~ msgid "C2"
-#~ msgstr "C2"
-
-#~ msgid "C3"
-#~ msgstr "C3"
-
-#~ msgid "C4"
-#~ msgstr "C4"
-
-#~ msgid "C5"
-#~ msgstr "C5"
-
-#~ msgid "C6"
-#~ msgstr "C6"
-
-#~ msgid "C6/C5"
-#~ msgstr "C6/C5"
-
-#~ msgid "C7"
-#~ msgstr "C7"
-
-#~ msgid "C7/C6"
-#~ msgstr "C7/C6"
-
-#~ msgid "C8"
-#~ msgstr "C8"
-
-#~ msgid "C9"
-#~ msgstr "C9"
-
-#~ msgid "DL Envelope"
-#~ msgstr "DL ซองจดหมาย"
-
-#~ msgid "RA0"
-#~ msgstr "RA0"
-
-#~ msgid "RA1"
-#~ msgstr "RA1"
-
-#~ msgid "RA2"
-#~ msgstr "RA2"
-
-#~ msgid "SRA0"
-#~ msgstr "SRA0"
-
-#~ msgid "SRA1"
-#~ msgstr "SRA1"
-
-#~ msgid "SRA2"
-#~ msgstr "SRA2"
-
-#~ msgid "JB0"
-#~ msgstr "JB0"
-
-#~ msgid "JB1"
-#~ msgstr "JB1"
-
-#~ msgid "JB10"
-#~ msgstr "JB10"
-
-#~ msgid "JB2"
-#~ msgstr "JB2"
-
-#~ msgid "JB3"
-#~ msgstr "JB3"
-
-#~ msgid "JB4"
-#~ msgstr "JB4"
-
-#~ msgid "JB5"
-#~ msgstr "JB5"
-
-#~ msgid "JB6"
-#~ msgstr "JB6"
-
-#~ msgid "JB7"
-#~ msgstr "JB7"
-
-#~ msgid "JB8"
-#~ msgstr "JB8"
-
-#~ msgid "JB9"
-#~ msgstr "JB9"
-
-#~ msgid "jis exec"
-#~ msgstr "jis exec"
-
-#~ msgid "Choukei 2 Envelope"
-#~ msgstr "Choukei 2 ซองจดหมาย"
-
-#~ msgid "Choukei 3 Envelope"
-#~ msgstr "Choukei 3 ซองจดหมาย"
-
-#~ msgid "Choukei 4 Envelope"
-#~ msgstr "Choukei 4 ซองจดหมาย"
-
-#~ msgid "hagaki (postcard)"
-#~ msgstr "hagaki (ไปรษณียบัตร)"
-
-#~ msgid "kahu Envelope"
-#~ msgstr "kahu ซองจดหมาย"
-
-#~ msgid "kaku2 Envelope"
-#~ msgstr "kahu2 ซองจดหมาย"
-
-#~ msgid "oufuku (reply postcard)"
-#~ msgstr "oufuku (ไปรษณียบัตรตอบ)"
-
-#~ msgid "you4 Envelope"
-#~ msgstr "you4 ซองจดหมาย"
-
-#~ msgid "10x11"
-#~ msgstr "10x11"
-
-#~ msgid "10x13"
-#~ msgstr "10x13"
-
-#~ msgid "10x14"
-#~ msgstr "10x14"
-
-#~ msgid "10x15"
-#~ msgstr "10x15"
-
-#~ msgid "11x12"
-#~ msgstr "11x12"
-
-#~ msgid "11x15"
-#~ msgstr "11x15"
-
-#~ msgid "12x19"
-#~ msgstr "12x19"
-
-#~ msgid "5x7"
-#~ msgstr "5x7"
-
-#~ msgid "6x9 Envelope"
-#~ msgstr "6x9 ซองจดหมาย"
-
-#~ msgid "7x9 Envelope"
-#~ msgstr "7x9 ซองจดหมาย"
-
-#~ msgid "9x11 Envelope"
-#~ msgstr "9x11 ซองจดหมาย"
-
-#~ msgid "a2 Envelope"
-#~ msgstr "a2 ซองจดหมาย"
-
-#~ msgid "Arch A"
-#~ msgstr "Arch A"
-
-#~ msgid "Arch B"
-#~ msgstr "Arch B"
-
-#~ msgid "Arch C"
-#~ msgstr "Arch C"
-
-#~ msgid "Arch D"
-#~ msgstr "Arch D"
-
-#~ msgid "Arch E"
-#~ msgstr "Arch E"
-
-#~ msgid "b-plus"
-#~ msgstr "b-plus"
-
-#~ msgid "c"
-#~ msgstr "c"
-
-#~ msgid "c5 Envelope"
-#~ msgstr "c5 ซองจดหมาย"
-
-#~ msgid "d"
-#~ msgstr "d"
-
-#~ msgid "e"
-#~ msgstr "e"
-
-#~ msgid "edp"
-#~ msgstr "edp"
-
-#~ msgid "European edp"
-#~ msgstr "edp ยุโรป"
-
-#~ msgid "Executive"
-#~ msgstr "Executive"
-
-#~ msgid "f"
-#~ msgstr "f"
-
-#~ msgid "FanFold European"
-#~ msgstr "FanFold ยุโรป"
-
-#~ msgid "FanFold US"
-#~ msgstr "FanFold อเมริกัน"
-
-#~ msgid "FanFold German Legal"
-#~ msgstr "FanFold เยอรมัน Legal"
-
-#~ msgid "Government Legal"
-#~ msgstr "Government Legal"
-
-#~ msgid "Government Letter"
-#~ msgstr "Government Letter"
-
-#~ msgid "Index 3x5"
-#~ msgstr "Index 3x5"
-
-#~ msgid "Index 4x6 (postcard)"
-#~ msgstr "Index 4x6 (ไปรษณียบัตร)"
-
-#~ msgid "Index 4x6 ext"
-#~ msgstr "Index 4x6 ext"
-
-#~ msgid "Index 5x8"
-#~ msgstr "Index 5x8"
-
-#~ msgid "Invoice"
-#~ msgstr "ใบส่งของ"
-
-#~ msgid "Tabloid"
-#~ msgstr "จุลสาร"
-
-#~ msgid "US Legal"
-#~ msgstr "US Legal"
-
-#~ msgid "US Legal Extra"
-#~ msgstr "US Legal Extra"
-
-#~ msgid "US Letter"
-#~ msgstr "US Letter"
-
-#~ msgid "US Letter Extra"
-#~ msgstr "US Letter Extra"
-
-#~ msgid "US Letter Plus"
-#~ msgstr "US Letter Plus"
-
-#~ msgid "Monarch Envelope"
-#~ msgstr "Monarch ซองจดหมาย"
-
-#~ msgid "#10 Envelope"
-#~ msgstr "#10 ซองจดหมาย"
-
-#~ msgid "#11 Envelope"
-#~ msgstr "#11 ซองจดหมาย"
-
-#~ msgid "#12 Envelope"
-#~ msgstr "#12 ซองจดหมาย"
-
-#~ msgid "#14 Envelope"
-#~ msgstr "#14 ซองจดหมาย"
-
-#~ msgid "#9 Envelope"
-#~ msgstr "#9 ซองจดหมาย"
-
-#~ msgid "Personal Envelope"
-#~ msgstr "Personal Envelope"
-
-#~ msgid "Quarto"
-#~ msgstr "Quarto"
-
-#~ msgid "Super A"
-#~ msgstr "Super A"
-
-#~ msgid "Super B"
-#~ msgstr "Super B"
-
-#~ msgid "Wide Format"
-#~ msgstr "Wide Format"
-
-#~ msgid "Dai-pa-kai"
-#~ msgstr "Dai-pa-kai"
-
-#~ msgid "Folio"
-#~ msgstr "Folio"
-
-#~ msgid "Folio sp"
-#~ msgstr "Folio sp"
-
-#~ msgid "Invite Envelope"
-#~ msgstr "Invite Envelope"
-
-#~ msgid "Italian Envelope"
-#~ msgstr "Italian Envelope"
-
-#~ msgid "juuro-ku-kai"
-#~ msgstr "juuro-ku-kai"
-
-#~ msgid "pa-kai"
-#~ msgstr "pa-kai"
-
-#~ msgid "Postfix Envelope"
-#~ msgstr "Postfix Envelope"
-
-#~ msgid "Small Photo"
-#~ msgstr "Small Photo"
-
-#~ msgid "prc1 Envelope"
-#~ msgstr "prc1 Envelope"
-
-#~ msgid "prc10 Envelope"
-#~ msgstr "prc10 Envelope"
-
-#~ msgid "prc 16k"
-#~ msgstr "prc 16k"
-
-#~ msgid "prc2 Envelope"
-#~ msgstr "prc2 Envelope"
-
-#~ msgid "prc3 Envelope"
-#~ msgstr "prc3 Envelope"
-
-#~ msgid "prc 32k"
-#~ msgstr "prc 32k"
-
-#~ msgid "prc4 Envelope"
-#~ msgstr "prc4 Envelope"
-
-#~ msgid "prc5 Envelope"
-#~ msgstr "prc5 Envelope"
-
-#~ msgid "prc6 Envelope"
-#~ msgstr "prc6 Envelope"
-
-#~ msgid "prc7 Envelope"
-#~ msgstr "prc7 Envelope"
-
-#~ msgid "prc8 Envelope"
-#~ msgstr "prc8 Envelope"
-
-#~ msgid "ROC 16k"
-#~ msgstr "ROC 16k"
-
-#~ msgid "ROC 8k"
-#~ msgstr "ROC 8k"
 
 #~ msgid "Home"
 #~ msgstr "บ้าน"
