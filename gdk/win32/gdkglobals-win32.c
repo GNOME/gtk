@@ -46,10 +46,7 @@ HKL		  _gdk_input_locale;
 gboolean	  _gdk_input_locale_is_ime;
 UINT		  _gdk_input_codepage;
 
-WORD		  _cf_utf8_string;
-WORD		  _cf_image_bmp;
-
-GdkAtom           _gdk_selection_property;
+GdkAtom           _gdk_selection;
 GdkAtom	          _wm_transient_for;
 GdkAtom		  _targets;
 GdkAtom		  _save_targets;
@@ -57,7 +54,6 @@ GdkAtom           _utf8_string;
 GdkAtom		  _text;
 GdkAtom		  _compound_text;
 GdkAtom		  _text_uri_list;
-GdkAtom		  _image_bmp;
 
 GdkAtom		  _local_dnd;
 GdkAtom		  _gdk_win32_dropfiles;

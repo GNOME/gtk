@@ -1,5 +1,102 @@
 2009-01-29  Tor Lillqvist  <tml@novell.com>
 
+	Bug 559408 - Transparency lost when images are copied between GTK+
+	and the clipboard on Windows
+
+	The code in gdkselection-win32.c is simplified quite a lot. When
+	an image is stored on the clipboard from GTK+, only the "PNG" and
+	CF_DIB formats are advertised. PNG is our preferred format because
+	it can losslessly represent any image that gdk-pixbuf can handle,
+	even with alpha, unambiguously. CF_DIB is also advertised because
+	of its ubiquitous support in Windows software.
+
+	Delayed rendering is used as before, so for other data than text
+	nothing is actually stored on the clipboard until some app asks
+	for it.
+
+	It's pointless to advertise images formats like "image/png" or
+	"image/x-MS-bmp" that no other Windows application is going to
+	look for anyway. Likewise it's pointless to store text under
+	formats like "text/plain" or "UTF8_STRING". Just store
+	CF_UNICODETEXT. CF_TEXT will be available as a synthesized format
+	anyways.
+
+	Office 2007 offers and asks for images in PNG format using the
+	registered clipboard format name "PNG", so we do likewise. If the
+	"PNG" format is available that is preferred when copying to GTK+
+	from the clipboard.
+
+	Unfortunately Word 2007 still uses CF_DIB without handling
+	alpha. But PowerPoint 2007 uses PNG if available and handles alpha
+	correctly. Both Word and Powerpoint offer PNG with alpha nicely.
+
+	Firefox and IE7 offer images that contain alpha as 32-bit version
+	3 BI_RGB DIBs with the undocumented "extra" bytes actually being
+	alpha. Also, alpha is premultiplied into the RGB bytes, presumably
+	because that is how AlphaBlend() wants such DIBs. That is also
+	taken care of. At least for Firefox it easy to be sure that a
+	CF_DIB on the clipboard is from Firefox.
+
+	Also some general stylistic cleanup, comment improvements, and
+	improvements of debugging printout especially in the clipboard
+	handling. Those are not detailled below.
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkglobals-win32.c
+	* gdk/win32/gdkgmain-win32.c: Move some globals that were used
+	only in gdkselection-win32.c to be local to that file.
+
+	* gdk/win32/gdkproperty-win32.c (gdk_property_change): Don't
+	bother checking if text to be placed on the clipboard consists of
+	only ASCII.
+
+	* gdk/win32/gdkselection-win32.c: Add static variables for a list
+	of GdkPixbuf-supported formats, well-known registered clipboard
+	formats for images, and for GdkAtoms for well-known image and text
+	formats.
+
+	(_gdk_win32_selection_init): Initialize above static variables.
+
+	(selection_property_store) (gdk_selection_property_get)
+	(_gdk_selection_property_delete): Don't use a FIFO of GdkSelProps
+	for a window after all, it breaks testtext. See bug #163844.
+
+	(gdk_selection_convert): When converting to the TARGETS format,
+	i.e. when the caller wants to know what clipboard formats are
+	available, if PNG is available we report just that and skip
+	CF_DIB, JPEG and GIF even if advertised.
+
+	If CF_UNICODETEXT is available, report only UTF8_STRING.
+
+	When converting to the UTF8_STRING format, i.e. when the caller
+	wants text from the clipboard, try just CF_UNICODETEXT. There is
+	no point in trying CF_TEXT as Windows will synthesize
+	CF_UNICODETEXT from CF_TEXT anyway, if some app has stored just
+	CF_TEXT.
+
+	When converting to the image/bmp format, i.e. when the caller
+	wants an CF_DIB image from the clipboard, we check if the DIB is a
+	version 3 32-bit BI_RGB one that is likely to actually contain
+	alpha in the "extra" bytes. Such a DIB is likely to have
+	premultiplied alpha even, at least in the case of Firefox 3 and
+	IE7. We then edit the DIB in-place into a version 5 one in
+	BI_BITFIELDS format and undo the alpha premultiplication.
+
+	In any case, prepend a BMP file header before letting go of the
+	data which will be fed to the gdk-pixbuf bmp loader by upper
+	levels.
+
+	(gdk_win32_selection_add_targets): If some kind of pixmap image
+	format is being added, actually advertise just PNG and
+	CF_DIB. Note that alpha won't be stored on the clipboard through
+	CF_DIB. This is because gdk-pixbuf's bmp loader doesn't save
+	alpha. Furthermore, few if any non-GTK+ Windows apps seem to
+	understand a version 5 DIB with proper alpha anyway.
+
+	(_gdk_win32_selection_convert_to_dib): Simplified muchly.
+
+2009-01-29  Tor Lillqvist  <tml@novell.com>
+
 	Bug 145058 - Inputting "^^" requires four keystrokes on Win32,
 	differs from platform default behaviour
 
