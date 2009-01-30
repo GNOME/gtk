@@ -43,7 +43,6 @@ static GdkWindow   *current_keyboard_window;
 GdkWindow          *_gdk_quartz_pointer_grab_window;
 static gboolean     pointer_grab_owner_events;
 static GdkEventMask pointer_grab_event_mask;
-static gboolean     pointer_grab_implicit;
 
 /* This is the keyboard grab window */
 GdkWindow *         _gdk_quartz_keyboard_grab_window;
@@ -138,7 +137,6 @@ gdk_event_get_graphics_expose (GdkWindow *window)
 static void
 generate_grab_broken_event (GdkWindow *window,
 			    gboolean   keyboard,
-			    gboolean   implicit,
 			    GdkWindow *grab_window)
 {
   if (!GDK_WINDOW_DESTROYED (window))
@@ -148,7 +146,7 @@ generate_grab_broken_event (GdkWindow *window,
       event->grab_broken.window = window;
       event->grab_broken.send_event = 0;
       event->grab_broken.keyboard = keyboard;
-      event->grab_broken.implicit = implicit;
+      event->grab_broken.implicit = FALSE;
       event->grab_broken.grab_window = grab_window;
       
       append_event (event);
@@ -167,7 +165,7 @@ gdk_keyboard_grab (GdkWindow  *window,
     {
       if (_gdk_quartz_keyboard_grab_window != window)
 	generate_grab_broken_event (_gdk_quartz_keyboard_grab_window,
-				    TRUE, FALSE, window);
+				    TRUE, window);
       
       g_object_unref (_gdk_quartz_keyboard_grab_window);
     }
@@ -188,12 +186,9 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
 }
 
 static void
-pointer_ungrab_internal (gboolean only_if_implicit)
+pointer_ungrab_internal (void)
 {
   if (!_gdk_quartz_pointer_grab_window)
-    return;
-
-  if (only_if_implicit && !pointer_grab_implicit)
     return;
 
   g_object_unref (_gdk_quartz_pointer_grab_window);
@@ -201,7 +196,6 @@ pointer_ungrab_internal (gboolean only_if_implicit)
 
   pointer_grab_owner_events = FALSE;
   pointer_grab_event_mask = 0;
-  pointer_grab_implicit = FALSE;
 
   /* FIXME: Send crossing events */
 }
@@ -210,7 +204,7 @@ void
 gdk_display_pointer_ungrab (GdkDisplay *display,
 			    guint32     time)
 {
-  pointer_ungrab_internal (FALSE);
+  pointer_ungrab_internal ();
 }
 
 static GdkGrabStatus
@@ -218,15 +212,13 @@ pointer_grab_internal (GdkWindow    *window,
 		       gboolean	     owner_events,
 		       GdkEventMask  event_mask,
 		       GdkWindow    *confine_to,
-		       GdkCursor    *cursor,
-		       gboolean      implicit)
+		       GdkCursor    *cursor)
 {
   /* FIXME: Send crossing events */
   
   _gdk_quartz_pointer_grab_window = g_object_ref (window);
   pointer_grab_owner_events = owner_events;
   pointer_grab_event_mask = event_mask;
-  pointer_grab_implicit = implicit;
 
   return GDK_GRAB_SUCCESS;
 }
@@ -239,20 +231,29 @@ gdk_pointer_grab (GdkWindow    *window,
 		  GdkCursor    *cursor,
 		  guint32	time)
 {
+  GdkWindow *toplevel;
+
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
+
+  toplevel = gdk_window_get_toplevel (window);
+
+  /* TODO: What do we do for offscreens and their children? We need to proxy the grab somehow */
+  if (!GDK_IS_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl))
+    return GDK_GRAB_SUCCESS;
 
   if (_gdk_quartz_pointer_grab_window)
     {
       if (_gdk_quartz_pointer_grab_window != window)
         generate_grab_broken_event (_gdk_quartz_pointer_grab_window,
-                                    FALSE, pointer_grab_implicit, window);
+                                    FALSE,
+                                    window);
 
-      pointer_ungrab_internal (FALSE);
+      pointer_ungrab_internal ();
     }
 
   return pointer_grab_internal (window, owner_events, event_mask, 
-				confine_to, cursor, FALSE);
+				confine_to, cursor);
 }
 
 /* This is used to break any grabs in the case where we have to due to
@@ -265,7 +266,7 @@ break_all_grabs (void)
   if (_gdk_quartz_keyboard_grab_window)
     {
       generate_grab_broken_event (_gdk_quartz_keyboard_grab_window,
-                                  TRUE, FALSE,
+                                  TRUE,
                                   NULL);
       g_object_unref (_gdk_quartz_keyboard_grab_window);
       _gdk_quartz_keyboard_grab_window = NULL;
@@ -274,9 +275,9 @@ break_all_grabs (void)
   if (_gdk_quartz_pointer_grab_window)
     {
       generate_grab_broken_event (_gdk_quartz_pointer_grab_window,
-                                  FALSE, pointer_grab_implicit,
+                                  FALSE,
                                   NULL);
-      pointer_ungrab_internal (FALSE);
+      pointer_ungrab_internal ();
     }
 }
 
