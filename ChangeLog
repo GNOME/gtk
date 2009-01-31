@@ -1,5 +1,17 @@
 2009-01-31  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 162726 – Multiple Latin layouts in XKB break keyboard shortcuts
+
+	* gtk/gtkkeyhash.c (_gtk_key_hash_lookup): Change the handling of
+	fuzzy matches: As long there are any exact matches, only exact 
+	matches are returned. If there are no exact matches, fuzzy matches 
+	will be returned, as long as they are not shadowing a possible exact
+	match. This means that fuzzy matches won't be considered if their
+	keyval is present in the current group. Problem reported by
+	many people, patch by Simos Xenitellis.
+
+2009-01-31  Matthias Clasen  <mclasen@redhat.com>
+
 	* NEWS: Updates
 
 2009-01-30  Fridrich Strba  <fridrich.strba@bluewin.ch>

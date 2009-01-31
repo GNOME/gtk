@@ -304,6 +304,54 @@ sort_lookup_results (GSList *slist)
   return g_slist_sort (slist, lookup_result_compare);
 }
 
+static gint
+lookup_result_compare_by_keyval (gconstpointer a,
+		                 gconstpointer b)
+{
+  const GtkKeyHashEntry *entry_a = a;
+  const GtkKeyHashEntry *entry_b = b;
+
+  if (entry_a->keyval < entry_b->keyval)
+	return -1;
+  else if (entry_a->keyval > entry_b->keyval)
+	return 1;
+  else
+	return 0;
+}
+
+static GSList *
+sort_lookup_results_by_keyval (GSList *slist)
+{
+  return g_slist_sort (slist, lookup_result_compare_by_keyval);
+}
+
+/* Return true if keyval is defined in keyboard group
+ */
+static gboolean 
+keyval_in_group (GdkKeymap  *keymap,
+                 guint      keyval,
+                 gint       group)
+{                 
+  GtkKeyHashEntry entry;
+  gint i;
+
+  gdk_keymap_get_entries_for_keyval (keymap,
+				     keyval,
+				     &entry.keys, &entry.n_keys);
+
+  for (i = 0; i < entry.n_keys; i++)
+    {
+      if (entry.keys[i].group == group)
+        {
+          g_free (entry.keys);
+          return TRUE;
+        }
+    }
+
+  g_free (entry.keys);
+  return FALSE;
+}
+
 /**
  * _gtk_key_hash_lookup:
  * @key_hash: a #GtkKeyHash
@@ -317,10 +365,15 @@ sort_lookup_results (GSList *slist)
  * a given event. The results are sorted so that entries with less
  * modifiers come before entries with more modifiers.
  * 
- * Return value: A #GSList of all matching entries. If there were exact
- *  matches, they are returned, otherwise all fuzzy matches are
- *  returned. (A fuzzy match is a match in keycode and level, but not
- *  in group.)
+ * The matches returned by this function can be exact (i.e. keycode, level
+ * and group all match) or fuzzy (i.e. keycode and level match, but group
+ * does not). As long there are any exact matches, only exact matches
+ * are returned. If there are no exact matches, fuzzy matches will be
+ * returned, as long as they are not shadowing a possible exact match.
+ * This means that fuzzy matches won't be considered if their keyval is 
+ * present in the current group.
+ * 
+ * Return value: A #GSList of matching entries.
  **/
 GSList *
 _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
@@ -409,6 +462,31 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
 	}
     }
 
+  if (!have_exact && results) 
+    {
+      /* If there are fuzzy matches, check that the current group doesn't also 
+       * define these keyvals; if yes, discard results because a widget up in 
+       * the stack may have an exact match and we don't want to 'steal' it.
+       */
+      gint oldkeyval;
+      GtkKeyHashEntry *keyhashentry;
+
+      results = sort_lookup_results_by_keyval (results);
+      for (l = results; l; l = l->next)
+        {
+          keyhashentry = l->data;
+          if (l == results || oldkeyval != keyhashentry->keyval)
+            {
+              oldkeyval = keyhashentry->keyval;
+              if (keyval_in_group (key_hash->keymap, oldkeyval, group))
+                {
+       	          g_slist_free (results);
+       	          return NULL;
+                }
+            }
+        }
+    }
+    
   results = sort_lookup_results (results);
   for (l = results; l; l = l->next)
     l->data = ((GtkKeyHashEntry *)l->data)->value;
@@ -442,7 +520,7 @@ _gtk_key_hash_lookup_keyval (GtkKeyHash     *key_hash,
   if (!keyval)			/* Key without symbol */
     return NULL;
 
-  /* Find some random keycode for this keycode
+  /* Find some random keycode for this keyval
    */
   gdk_keymap_get_entries_for_keyval (key_hash->keymap, keyval,
 				     &keys, &n_keys);
