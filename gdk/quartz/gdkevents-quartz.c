@@ -1538,7 +1538,7 @@ gdk_event_translate (GdkEvent *event,
 
       if (![NSApp isActive])
         return FALSE;
-      else if (![impl->toplevel isMainWindow])
+      else if (![impl->toplevel isKeyWindow])
         return FALSE;
     }
 
