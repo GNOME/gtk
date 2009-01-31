@@ -1163,8 +1163,11 @@ if $dynworks ; then
   if echo "$included_loaders" | egrep '(^|,)png($|,)' > /dev/null; then
     STATIC_LIB_DEPS="$STATIC_LIB_DEPS $LIBPNG"
   fi
+  if echo "$included_loaders" | egrep '(^|,)jasper($|,)' > /dev/null; then
+    STATIC_LIB_DEPS="$STATIC_LIB_DEPS $LIBJASPER"
+  fi
 else
-  STATIC_LIB_DEPS="$LIBTIFF $LIBJPEG $LIBPNG"
+  STATIC_LIB_DEPS="$LIBTIFF $LIBJPEG $LIBPNG $LIBJASPER"
 fi
 
 # Checks to see whether we should include mediaLib

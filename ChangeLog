@@ -1,3 +1,8 @@
+2009-01-30  Fridrich Strba  <fridrich.strba@bluewin.ch>
+
+	* configure.in: Allow linking in static jasper gdk-pixbuf loader.
+	(reviewed by Tor Lillqvist)
+
 2009-01-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (preedit_changed_handler): Be more careful
