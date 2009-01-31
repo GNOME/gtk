@@ -1,6 +1,11 @@
 Overview of Changes from GTK+ 2.15.2 to 2.15.3
 ==============================================
 
+* Keyboard shortcut handling has been changed, to help with a longstanding
+  complaint about the way GTK+ handles multiple layouts. GTK+ now only uses
+  keys from groups other than the current group if they are not present in
+  the current group. Feedback on this change is appreciated.
+
 * Bugs fixed:
  569336 change in gtkbutton klass is causing crash...
  569435 make maintainer-clean removes non-generated sources
@@ -8,6 +13,7 @@ Overview of Changes from GTK+ 2.15.2 to 2.15.3
  559408 Transparency lost when images are copied...
  359288 Toolbar items are not shown after hiding
  569918 64bit portability issue in gtkrecentchooser.c
+ 162726 Multiple Latin layouts in XKB break keyboard shortcuts
 
 * Updated translations:
  Norwegian bokmål (nb)
