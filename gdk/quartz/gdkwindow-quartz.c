@@ -1784,20 +1784,11 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
       nswindow = impl->toplevel;
 
       point = [nswindow mouseLocationOutsideOfEventStream];
+
       x_tmp = point.x;
       y_tmp = private->height - point.y;
-    }
 
-  /* The coords are relative to the toplevel of the passed in window
-   * at this point, make them relative to the passed in window:
-   */
-  private = GDK_WINDOW_OBJECT (window);
-  while (private != toplevel)
-    {
-      x_tmp -= private->x;
-      y_tmp -= private->y;
-
-      private = private->parent;
+      window = toplevel;
     }
 
   found_window = _gdk_quartz_window_find_child (window, x_tmp, y_tmp);
