@@ -1,3 +1,23 @@
+Overview of Changes from GTK+ 2.15.2 to 2.15.3
+==============================================
+
+* Bugs fixed:
+ 569336 change in gtkbutton klass is causing crash...
+ 569435 make maintainer-clean removes non-generated sources
+ 145058 Inputting "^^" requires four keystrokes on Win32...
+ 559408 Transparency lost when images are copied...
+ 359288 Toolbar items are not shown after hiding
+ 569918 64bit portability issue in gtkrecentchooser.c
+
+* Updated translations:
+ Norwegian bokmål (nb)
+ Oriya (or)
+ Brazilian Portugese (pt_BR)
+ Thai (th)
+ Traditional Chinese (zh_HK)
+ Traditional Chinese (zh_TW)
+ 
+
 Overview of Changes from GTK+ 2.15.1 to 2.15.2
 ==============================================
 

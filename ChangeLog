@@ -1,3 +1,7 @@
+2009-01-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2009-01-30  Fridrich Strba  <fridrich.strba@bluewin.ch>
 
 	* configure.in: Allow linking in static jasper gdk-pixbuf loader.
