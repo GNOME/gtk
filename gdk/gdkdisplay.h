@@ -43,21 +43,6 @@ typedef struct _GdkDisplayPointerHooks GdkDisplayPointerHooks;
 #define GDK_IS_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY))
 #define GDK_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY, GdkDisplayClass))
 
-/* Tracks information about the pointer grab on this display */
-typedef struct
-{
-  GdkWindow *window;
-  GdkWindow *native_window;
-  gulong serial;
-  gboolean owner_events;
-  guint event_mask;
-  gboolean implicit;
-  gboolean converted_implicit;
-  guint32 time;
-
-  GdkWindow *grab_one_pointer_release_event;
-} GdkPointerGrabInfo;
-
 /* Tracks information about the keyboard grab on this display */
 typedef struct
 {
@@ -67,7 +52,6 @@ typedef struct
   gboolean owner_events;
   guint32 time;
 } GdkKeyboardGrabInfo;
-
 
 /* Tracks information about which window and position the pointer last was in.
  * This is useful when we need to synthesize events later.
@@ -112,9 +96,12 @@ struct _GdkDisplay
   gint button_x[2];             /* The last 2 button click positions. */
   gint button_y[2];
 
-  GdkPointerGrabInfo pointer_grab;
+  GList *pointer_grabs;
   GdkKeyboardGrabInfo keyboard_grab;
   GdkPointerWindowInfo pointer_info;
+
+  /* Last reported event time from server */
+  guint32 last_event_time;
 };
 
 struct _GdkDisplayClass

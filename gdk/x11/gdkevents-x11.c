@@ -2207,7 +2207,7 @@ gdk_event_translate (GdkDisplay *display,
   
   if (window)
     g_object_unref (window);
-  
+
   return return_val;
 }
 

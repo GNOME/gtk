@@ -31,8 +31,9 @@ typedef struct _GdkChildInfoX11 GdkChildInfoX11;
 typedef void (*GdkSendXEventCallback) (Window   window,
 				       gboolean success,
 				       gpointer data);
-typedef void (*GdkRoundTripCallback)  (gpointer data);
-
+typedef void (*GdkRoundTripCallback)  (GdkDisplay *display,
+				       gpointer data,
+				       gulong serial);
 
 struct _GdkChildInfoX11
 {

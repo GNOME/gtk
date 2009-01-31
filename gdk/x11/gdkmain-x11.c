@@ -149,22 +149,11 @@ struct XPointerGrabInfo {
 };
 
 static void
-has_pointer_grab_callback (gpointer _data)
+has_pointer_grab_callback (GdkDisplay *display,
+			   gpointer data,
+			   gulong serial)
 {
-  struct XPointerGrabInfo *data = _data;
-
-  _gdk_display_set_has_pointer_grab (data->display,
-				     data->window,
-				     data->native_window,
-				     data->owner_events,
-				     data->event_mask,
-				     data->serial,
-				     data->time,
-				     FALSE);
-
-  g_object_unref (data->window);
-  g_object_unref (data->native_window);
-  g_free (data);
+  _gdk_display_pointer_grab_update (display, serial);
 }
 
 /*
@@ -215,9 +204,17 @@ gdk_pointer_grab (GdkWindow *	  window,
 
   native = gdk_window_get_toplevel (window);
 
+  /* We need a native window for confine to to work, ensure we have one */
+  if (confine_to)
+    gdk_window_set_has_native (confine_to, TRUE);
+  
   /* TODO: What do we do for offscreens and  their children? We need to proxy the grab somehow */
   if (!GDK_IS_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (native)->impl))
     return GDK_GRAB_SUCCESS;
+
+  if (!_gdk_window_has_impl (window) &&
+      !gdk_window_is_viewable (window))
+    return GDK_GRAB_NOT_VIEWABLE;
   
   if (confine_to)
     confine_to = _gdk_window_get_impl_window (confine_to);
@@ -285,21 +282,18 @@ gdk_pointer_grab (GdkWindow *	  window,
   
   if (return_val == GrabSuccess)
     {
-      struct XPointerGrabInfo *data;
+      _gdk_display_add_pointer_grab (GDK_DISPLAY_OBJECT (display_x11),
+				     window,
+				     native,
+				     owner_events,
+				     event_mask,
+				     serial,
+				     time,
+				     FALSE);
 
-      data = g_new (struct XPointerGrabInfo, 1);
-
-      data->display = GDK_DISPLAY_OBJECT (display_x11);
-      data->window = g_object_ref (window);
-      data->native_window = g_object_ref (native);
-      data->owner_events = owner_events;
-      data->event_mask = event_mask;
-      data->serial = serial;
-      data->time = time;
-
-      _gdk_x11_roundtrip_async (data->display, 
+      _gdk_x11_roundtrip_async (GDK_DISPLAY_OBJECT (display_x11), 
 				has_pointer_grab_callback,
-				data);
+				NULL);
     }
 
   return gdk_x11_convert_grab_status (return_val);
@@ -394,19 +388,8 @@ _gdk_xgrab_check_unmap (GdkWindow *window,
 			gulong     serial)
 {
   GdkDisplay *display = gdk_drawable_get_display (window);
-  
-  if (display->pointer_grab.window && 
-      serial >= display->pointer_grab.serial)
-    {
-      GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
-      GdkWindowObject *tmp = GDK_WINDOW_OBJECT (display->pointer_grab.native_window);
 
-      while (tmp && tmp != private)
-	tmp = tmp->parent;
-
-      if (tmp)
-	_gdk_display_unset_has_pointer_grab (display, TRUE, FALSE, GDK_CURRENT_TIME);
-    }
+  _gdk_display_end_pointer_grab (display, serial, window, TRUE);
 
   if (display->keyboard_grab.window &&
       serial >= display->keyboard_grab.serial)
@@ -433,11 +416,21 @@ void
 _gdk_xgrab_check_destroy (GdkWindow *window)
 {
   GdkDisplay *display = gdk_drawable_get_display (window);
-  
-  if (window == display->pointer_grab.native_window &&
-      display->pointer_grab.window != NULL)
-    _gdk_display_unset_has_pointer_grab (display, TRUE, FALSE, GDK_CURRENT_TIME);
+  GdkPointerGrabInfo *grab;
 
+  /* Make sure there is no lasting grab in this native
+     window */
+  grab = _gdk_display_get_last_pointer_grab (display);
+  if (grab && grab->native_window == window)
+    {
+      /* We don't know the actual serial to end, but it
+	 doesn't really matter as this only happens
+	 after we get told of the destroy from the
+	 server so we know its ended in the server,
+	 just make sure its ended. */
+      grab->serial_end = grab->serial_start;
+    }
+  
   if (window == display->keyboard_grab.native_window &&
       display->keyboard_grab.window != NULL)
     _gdk_display_unset_has_keyboard_grab (display, TRUE);
@@ -461,31 +454,31 @@ _gdk_xgrab_check_button_event (GdkWindow *window,
 			       XEvent *xevent)
 {
   GdkDisplay *display = gdk_drawable_get_display (window);
+  gulong serial = xevent->xany.serial;
+  GdkPointerGrabInfo *grab;
   
   /* track implicit grabs for button presses */
   switch (xevent->type)
     {
     case ButtonPress:
-      if (!display->pointer_grab.window)
+      if (!_gdk_display_has_pointer_grab (display, serial))
 	{
-	  _gdk_display_set_has_pointer_grab (display,
-					     window,
-					     window,
-					     FALSE,
-					     gdk_window_get_events (window),
-					     xevent->xany.serial,
-					     xevent->xbutton.time,
-					     TRUE);
+	  _gdk_display_add_pointer_grab  (display,
+					  window,
+					  window,
+					  FALSE,
+					  gdk_window_get_events (window),
+					  serial,
+					  xevent->xbutton.time,
+					  TRUE);
 	}
       break;
     case ButtonRelease:
-      if (display->pointer_grab.window &&
-	  display->pointer_grab.implicit &&
+      serial = serial; 
+      grab = _gdk_display_has_pointer_grab (display, serial);
+      if (grab && grab->implicit &&
 	  (xevent->xbutton.state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (xevent->xbutton.button - 1))) == 0)
-	{
-	  _gdk_display_unset_has_pointer_grab (display, TRUE, TRUE,
-					       xevent->xbutton.time);
-	}
+	grab->grab_one_pointer_release_event = TRUE;
       break;
     default:
       g_assert_not_reached ();

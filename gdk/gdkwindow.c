@@ -5725,20 +5725,11 @@ gdk_window_hide (GdkWindow *window)
       /* May need to break grabs on children */
       display = gdk_drawable_get_display (window);
 
-      if (display->pointer_grab.window != NULL)
-	{
-	  if (is_parent_of (window, display->pointer_grab.window))
-	    {
-	      /* Call this ourselves, even though gdk_display_pointer_ungrab
-		 does so too, since we want to pass implicit == TRUE so the
-		 broken grab event is generated */
-	      _gdk_display_unset_has_pointer_grab (display,
-						   TRUE,
-						   FALSE,
-						   GDK_CURRENT_TIME);
-	      gdk_display_pointer_ungrab (display, GDK_CURRENT_TIME);
-	    }
-	}
+      if (_gdk_display_end_pointer_grab (display,
+					 _gdk_windowing_window_get_next_serial (display),
+					 window,
+					 TRUE))
+	gdk_display_pointer_ungrab (display, GDK_CURRENT_TIME);
 
       if (display->keyboard_grab.window != NULL)
 	{
@@ -6561,6 +6552,7 @@ static void
 update_cursor (GdkDisplay *display)
 {
   GdkWindowObject *pointer_window, *cursor_window;
+  GdkPointerGrabInfo *grab;
   
   pointer_window = (GdkWindowObject *)display->pointer_info.window_under_pointer;
   
@@ -6570,14 +6562,18 @@ update_cursor (GdkDisplay *display)
 	 cursor_window->parent->window_type != GDK_WINDOW_ROOT)
     cursor_window = cursor_window->parent;
 
-  if (display->pointer_grab.window != NULL &&
-      !is_parent_of (display->pointer_grab.window, (GdkWindow *)cursor_window))
-    cursor_window = (GdkWindowObject *)display->pointer_grab.window;
+  /* We ignore the serials here and just pick the last grab
+     we've sent, as that would shortly be used anyway. */
+  grab = _gdk_display_get_last_pointer_grab (display);
+  if (grab != NULL &&
+      !is_parent_of (grab->window, (GdkWindow *)cursor_window))
+    cursor_window = (GdkWindowObject *)grab->window;
 
   /* Set all cursors on toplevel, otherwise its tricky to keep track of
    * which native window has what cursor set. */
-  GDK_WINDOW_IMPL_GET_IFACE (pointer_window->impl)->set_cursor (gdk_window_get_toplevel ((GdkWindow *)pointer_window),
-								cursor_window->cursor);
+  GDK_WINDOW_IMPL_GET_IFACE (pointer_window->impl)->set_cursor
+      (gdk_window_get_toplevel ((GdkWindow *)pointer_window),
+       cursor_window->cursor);
 }
 
 /**
@@ -7869,14 +7865,18 @@ send_crossing_event (GdkDisplay                 *display,
 		     gint                        toplevel_y,
 		     GdkModifierType             mask,
 		     guint32                     time_,
-		     GdkEvent                   *event_in_queue)
+		     GdkEvent                   *event_in_queue,
+		     gulong                      serial)
 {
   GdkEvent *event;
   guint32 event_mask;
-
-  if (display->pointer_grab.window != NULL &&
-      !display->pointer_grab.owner_events &&
-      (GdkWindow *)window != display->pointer_grab.window)
+  GdkPointerGrabInfo *grab;
+  
+  grab = _gdk_display_has_pointer_grab (display, serial);
+  
+  if (grab != NULL &&
+      !grab->owner_events &&
+      (GdkWindow *)window != grab->window)
     return;
   
   if (type == GDK_LEAVE_NOTIFY)
@@ -7918,7 +7918,8 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 				gint                        toplevel_y,
 				GdkModifierType             mask,
 				guint32                     time_,
-				GdkEvent                   *event_in_queue)
+				GdkEvent                   *event_in_queue,
+				gulong                      serial)
 {
   GdkWindowObject *c;
   GdkWindowObject *win, *last, *next;
@@ -7958,7 +7959,8 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 			   NULL,
 			   toplevel_x, toplevel_y,
 			   mask, time_,
-			   event_in_queue);
+			   event_in_queue,
+			   serial);
      
       if (c != a)
 	{
@@ -7978,7 +7980,8 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 				   (GdkWindow *)last,
 				   toplevel_x, toplevel_y,
 				   mask, time_,
-				   event_in_queue);
+				   event_in_queue,
+				   serial);
 	      
 	      last = win;
 	      win = win->parent;
@@ -8023,7 +8026,8 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 				   (GdkWindow *)next,
 				   toplevel_x, toplevel_y,
 				   mask, time_,
-				   event_in_queue);
+				   event_in_queue,
+				   serial);
 	    }
 	  g_list_free (path);
 	}
@@ -8043,7 +8047,8 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 			   NULL,
 			   toplevel_x, toplevel_y,
 			   mask, time_,
-			   event_in_queue);
+			   event_in_queue,
+			   serial);
     }
 }
 
@@ -8067,9 +8072,11 @@ static GdkWindow *
 get_pointer_window (GdkDisplay *display,
 		    GdkWindow *event_window,
 		    gdouble toplevel_x,
-		    gdouble toplevel_y)
+		    gdouble toplevel_y,
+		    gulong serial)
 {
   GdkWindow *pointer_window;
+  GdkPointerGrabInfo *grab;
 
   if (event_window == display->pointer_info.toplevel_under_pointer)
     pointer_window =
@@ -8079,9 +8086,10 @@ get_pointer_window (GdkDisplay *display,
   else
     pointer_window = NULL;
 
-  if (display->pointer_grab.window != NULL &&
-      !display->pointer_grab.owner_events &&
-      pointer_window != display->pointer_grab.window)
+  grab = _gdk_display_has_pointer_grab (display, serial);
+  if (grab != NULL &&
+      !grab->owner_events &&
+      pointer_window != grab->window)
     pointer_window = NULL;
   
   return pointer_window;
@@ -8113,16 +8121,20 @@ _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
   GdkDisplay *display;
   GdkWindow *changed_toplevel;
   GdkWindow *new_window_under_pointer;
+  gulong serial;
 
+  display = gdk_drawable_get_display (changed_window);
+  
+  serial = _gdk_windowing_window_get_next_serial (display);
   changed_toplevel = get_toplevel (changed_window);
   
-  display = gdk_drawable_get_display (changed_window);
   if (changed_toplevel == display->pointer_info.toplevel_under_pointer)
     {
       new_window_under_pointer =
 	get_pointer_window (display, changed_toplevel,
 			    display->pointer_info.toplevel_x,
-			    display->pointer_info.toplevel_y);
+			    display->pointer_info.toplevel_y,
+			    serial);
       if (new_window_under_pointer !=
 	  display->pointer_info.window_under_pointer)
 	{
@@ -8134,7 +8146,8 @@ _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
 					  display->pointer_info.toplevel_y,
 					  display->pointer_info.state,
 					  GDK_CURRENT_TIME,
-					  NULL);
+					  NULL,
+					  serial);
 	  _gdk_display_set_window_under_pointer (display, new_window_under_pointer);
 	}
     }
@@ -8146,27 +8159,22 @@ get_event_window (GdkDisplay                 *display,
 		  GdkWindow                  *pointer_window,
 		  GdkEventType                type,
 		  GdkModifierType             mask,
-		  guint                      *evmask_out)
+		  guint                      *evmask_out,
+		  gulong                      serial)
 {
   guint evmask;
   GdkWindow *grab_window;
   GdkWindowObject *w;
+  GdkPointerGrabInfo *grab;
 
-  if ((display->pointer_grab.window != NULL && !display->pointer_grab.owner_events) ||
-      (type == GDK_BUTTON_RELEASE && display->pointer_grab.grab_one_pointer_release_event))
+  grab = _gdk_display_has_pointer_grab (display, serial);
+
+  if (grab != NULL && !grab->owner_events)
     {
-      evmask = display->pointer_grab.event_mask;
+      evmask = grab->event_mask;
       evmask = update_evmask_for_button_motion (evmask, mask);
 
-      if (type == GDK_BUTTON_RELEASE &&
-	  display->pointer_grab.grab_one_pointer_release_event)
-	{
-	  grab_window = display->pointer_grab.grab_one_pointer_release_event;
-	  display->pointer_grab.grab_one_pointer_release_event = NULL;
-	}
-      else
-	grab_window = display->pointer_grab.window;
-
+      grab_window = grab->window;
       
       if (evmask & type_masks[type])
 	{
@@ -8194,17 +8202,17 @@ get_event_window (GdkDisplay                 *display,
       w = w->parent;
     }
 
-  if (display->pointer_grab.window != NULL &&
-      display->pointer_grab.owner_events)
+  if (grab != NULL &&
+      grab->owner_events)
     {
-      evmask = display->pointer_grab.event_mask;
+      evmask = grab->event_mask;
       evmask = update_evmask_for_button_motion (evmask, mask);
 
       if (evmask & type_masks[type])
 	{
 	  if (evmask_out)
 	    *evmask_out = evmask;
-	  return display->pointer_grab.window;
+	  return grab->window;
 	}
       else
 	return NULL;
@@ -8220,7 +8228,6 @@ proxy_pointer_event (GdkDisplay                 *display,
 {
   GdkWindow *toplevel_window;
   GdkWindow *pointer_window;
-  GdkWindow *cursor_window;
   GdkEvent *event;
   guint state;
   gdouble toplevel_x, toplevel_y;
@@ -8231,7 +8238,7 @@ proxy_pointer_event (GdkDisplay                 *display,
   gdk_event_get_state (source_event, &state);
   time_ = gdk_event_get_time (source_event);
 
-  pointer_window = get_pointer_window (display, toplevel_window, toplevel_x, toplevel_y);
+  pointer_window = get_pointer_window (display, toplevel_window, toplevel_x, toplevel_y, serial);
   if (display->pointer_info.window_under_pointer != pointer_window)
     {
       /* Either a toplevel crossing notify that ended up inside a child window,
@@ -8244,7 +8251,8 @@ proxy_pointer_event (GdkDisplay                 *display,
 				      GDK_CROSSING_NORMAL,
 				      toplevel_x, toplevel_y,
 				      state, time_,
-				      source_event);
+				      source_event,
+				      serial);
 
       _gdk_display_set_window_under_pointer (display, pointer_window);
     }
@@ -8258,7 +8266,8 @@ proxy_pointer_event (GdkDisplay                 *display,
 				    pointer_window,
 				    source_event->type,
 				    state,
-				    &evmask);
+				    &evmask,
+				    serial);
 
       is_hint = FALSE;
       
@@ -8291,22 +8300,14 @@ proxy_pointer_event (GdkDisplay                 *display,
 	}
     }
 
-  /* TODO: set cursor from cursor_window, or grab cursor */
-  cursor_window = pointer_window;
-  if (display->pointer_grab.window &&
-      (pointer_window == NULL ||
-       !is_parent_of (display->pointer_grab.window, pointer_window)))
-    cursor_window = display->pointer_grab.window;
-  /* Actually, this should probably happen in synthesize crossing so it works with geometry changes */
-
-  
   /* unlink all move events from queue.
      We handle our own, including our emulated masks. */
   return TRUE;
 }
 
 static gboolean
-proxy_button_event (GdkEvent *source_event)
+proxy_button_event (GdkEvent *source_event,
+		    gulong serial)
 {
   GdkWindow *toplevel_window;
   GdkWindow *event_win;
@@ -8318,6 +8319,7 @@ proxy_button_event (GdkEvent *source_event)
   gdouble toplevel_x, toplevel_y;
   GdkDisplay *display;
   GdkWindowObject *w;
+  GdkPointerGrabInfo *grab;
 
   type = source_event->any.type;
   toplevel_window = source_event->any.window;
@@ -8326,10 +8328,11 @@ proxy_button_event (GdkEvent *source_event)
   time_ = gdk_event_get_time (source_event);
   display = gdk_drawable_get_display (source_event->any.window);
 
+  grab = _gdk_display_get_active_pointer_grab (display);
+  
   if ((type == GDK_BUTTON_PRESS || type == GDK_SCROLL) &&
-      display->pointer_grab.window == source_event->any.window &&
-      display->pointer_grab.implicit &&
-      !display->pointer_grab.converted_implicit)
+      grab && grab->window == toplevel_window &&
+      grab->implicit && !grab->converted_implicit)
     {
       pointer_window =
 	_gdk_window_find_descendant_at (toplevel_window,
@@ -8347,25 +8350,25 @@ proxy_button_event (GdkEvent *source_event)
       pointer_window = (GdkWindow *)w;
       
       if (pointer_window != NULL &&
-	  pointer_window != source_event->any.window)
-	_gdk_display_set_has_pointer_grab (display,
-					   pointer_window,
-					   display->pointer_grab.native_window,
-					   display->pointer_grab.owner_events,
-					   gdk_window_get_events (pointer_window),
-					   display->pointer_grab.serial,
-					   display->pointer_grab.time,
-					   display->pointer_grab.implicit);
-      display->pointer_grab.converted_implicit = TRUE;
+	  pointer_window != toplevel_window)
+	{
+	  g_object_ref (pointer_window);
+	  g_object_unref (grab->window);
+	  grab->window = pointer_window;
+	  grab->event_mask = gdk_window_get_events (pointer_window);
+	}
+      
+      grab->converted_implicit = TRUE;
     }
 
-  pointer_window = get_pointer_window (display, toplevel_window, toplevel_x, toplevel_y);
+  pointer_window = get_pointer_window (display, toplevel_window,
+				       toplevel_x, toplevel_y,
+				       serial);
   
   event_win = get_event_window (display,
 				pointer_window,
-				type,
-				state,
-				NULL);
+				type, state,
+				NULL, serial);
 
   if (event_win == NULL)
     return TRUE;
@@ -8478,7 +8481,14 @@ _gdk_windowing_got_event (GdkDisplay *display,
   gdouble x, y;
   gboolean unlink_event;
   guint old_state, old_button;
+  GdkPointerGrabInfo *button_release_grab;
 
+  if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
+    display->last_event_time = gdk_event_get_time (event);
+  
+  _gdk_display_pointer_grab_update (display,
+				    serial);
+  
   event_window = event->any.window;
   if (!event_window)
     return;
@@ -8559,7 +8569,22 @@ _gdk_windowing_got_event (GdkDisplay *display,
                                         event,
 					serial);
   else if (is_button_type (event->type))
-    unlink_event = proxy_button_event (event);
+    unlink_event = proxy_button_event (event,
+				       serial);
+
+  if (event->type == GDK_BUTTON_RELEASE)
+    {
+      button_release_grab =
+	_gdk_display_has_pointer_grab (display, serial);
+      if (button_release_grab &&
+	  button_release_grab->grab_one_pointer_release_event)
+	{
+	  button_release_grab->grab_one_pointer_release_event = FALSE;
+	  button_release_grab->serial_end = serial;
+	  button_release_grab->implicit_ungrab = TRUE;
+	  _gdk_display_pointer_grab_update (display, serial);
+	}
+    }
 
   if (unlink_event)
     {

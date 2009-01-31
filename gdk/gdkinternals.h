@@ -170,6 +170,24 @@ struct _GdkEventPrivate
   gpointer   windowing_data;
 };
 
+/* Tracks information about the pointer grab on this display */
+typedef struct
+{
+  GdkWindow *window;
+  GdkWindow *native_window;
+  gulong serial_start;
+  gulong serial_end; /* exclusive, i.e. not active on serial_end */
+  gboolean owner_events;
+  guint event_mask;
+  gboolean implicit;
+  gboolean converted_implicit;
+  guint32 time;
+
+  gboolean activated;
+  gboolean implicit_ungrab;
+  gboolean grab_one_pointer_release_event;
+} GdkPointerGrabInfo;
+
 extern GdkEventFunc   _gdk_event_func;    /* Callback for events */
 extern gpointer       _gdk_event_data;
 extern GDestroyNotify _gdk_event_notify;
@@ -464,18 +482,24 @@ char *_gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
 void  _gdk_windowing_launch_failed         (GAppLaunchContext *context, 
 				            const char        *startup_notify_id);
 
-void _gdk_display_set_has_pointer_grab (GdkDisplay *display,
-					GdkWindow *window,
-					GdkWindow *native_window,
-					gboolean owner_events,
-					GdkEventMask event_mask,
-					unsigned long serial,
-					guint32 time,
+GdkPointerGrabInfo *_gdk_display_get_active_pointer_grab (GdkDisplay *display);
+void _gdk_display_pointer_grab_update                    (GdkDisplay *display,
+							  gulong current_serial);
+GdkPointerGrabInfo *_gdk_display_get_last_pointer_grab (GdkDisplay *display);
+GdkPointerGrabInfo *_gdk_display_add_pointer_grab  (GdkDisplay *display,
+						    GdkWindow *window,
+						    GdkWindow *native_window,
+						    gboolean owner_events,
+						    GdkEventMask event_mask,
+						    unsigned long serial_start,
+						    guint32 time,
+						    gboolean implicit);
+GdkPointerGrabInfo * _gdk_display_has_pointer_grab (GdkDisplay *display,
+						    gulong serial);
+gboolean _gdk_display_end_pointer_grab (GdkDisplay *display,
+					gulong serial,
+					GdkWindow *if_child,
 					gboolean implicit);
-void _gdk_display_unset_has_pointer_grab (GdkDisplay *display,
-					  gboolean implicit,
-					  gboolean do_grab_one_pointer_release_event,
-					  guint32 time);
 void _gdk_display_set_has_keyboard_grab (GdkDisplay *display,
 					 GdkWindow *window,
 					 GdkWindow *native_window,
@@ -518,7 +542,8 @@ void _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 				     gint                        toplevel_y,
 				     GdkModifierType             mask,
 				     guint32                     time_,
-				     GdkEvent                   *event_in_queue);
+				     GdkEvent                   *event_in_queue,
+				     gulong                      serial);
 void _gdk_display_set_window_under_pointer (GdkDisplay *display,
 					    GdkWindow *window);
 

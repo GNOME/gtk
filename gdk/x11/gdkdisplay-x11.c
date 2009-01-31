@@ -598,16 +598,11 @@ struct XPointerUngrabInfo {
 };
 
 static void
-pointer_ungrab_callback (gpointer _data)
+pointer_ungrab_callback (GdkDisplay *display,
+			 gpointer data,
+			 gulong serial)
 {
-  struct XPointerUngrabInfo *data = _data;
-
-  _gdk_display_unset_has_pointer_grab (data->display,
-				       FALSE,
-				       FALSE,
-				       data->time);
-
-  g_free (data);
+  _gdk_display_pointer_grab_update (display, serial);
 }
 
 
@@ -631,30 +626,30 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
 {
   Display *xdisplay;
   GdkDisplayX11 *display_x11;
+  GdkPointerGrabInfo *grab;
+  unsigned long serial;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   display_x11 = GDK_DISPLAY_X11 (display);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
+
+  serial = NextRequest (xdisplay);
   
   _gdk_input_ungrab_pointer (display, time_);
   XUngrabPointer (xdisplay, time_);
   XFlush (xdisplay);
 
-  if (time_ == GDK_CURRENT_TIME ||
-      display->pointer_grab.time == GDK_CURRENT_TIME ||
-      !XSERVER_TIME_IS_LATER (display->pointer_grab.time, time_))
+  grab = _gdk_display_get_last_pointer_grab (display);
+  if (grab &&
+      (time_ == GDK_CURRENT_TIME ||
+       grab->time == GDK_CURRENT_TIME ||
+       !XSERVER_TIME_IS_LATER (grab->time, time_)))
     {
-      struct XPointerUngrabInfo *data;
-
-      data = g_new (struct XPointerUngrabInfo, 1);
-
-      data->display = GDK_DISPLAY_OBJECT (display_x11);
-      data->time = time_;
-
-      _gdk_x11_roundtrip_async (data->display, 
+      grab->serial_end = serial;
+      _gdk_x11_roundtrip_async (display, 
 				pointer_ungrab_callback,
-				data);
+				NULL);
     }
 }
 

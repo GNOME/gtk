@@ -750,228 +750,434 @@ generate_grab_broken_event (GdkWindow *window,
     }
 }
 
-void
-_gdk_display_set_has_pointer_grab (GdkDisplay *display,
-				   GdkWindow *window,
-				   GdkWindow *native_window,
-				   gboolean owner_events,
-				   GdkEventMask event_mask,
-				   unsigned long serial,
-				   guint32 time,
-				   gboolean implicit)
+/* Get the pointer grab in effects for events we just sent */
+GdkPointerGrabInfo *
+_gdk_display_get_active_pointer_grab (GdkDisplay *display)
 {
-  GdkWindow *src_toplevel, *dest_toplevel, *src_window;
+  GdkPointerGrabInfo *info;
+
+  if (display->pointer_grabs == NULL)
+    return NULL;
+
+  info = display->pointer_grabs->data;
+
+  if (info->activated)
+    return info;
   
-  if (display->pointer_grab.window != NULL &&
-      display->pointer_grab.window != window)
-    {
-      generate_grab_broken_event (GDK_WINDOW (display->pointer_grab.window),
-				  FALSE, display->pointer_grab.implicit,
-				  window);
-    }
-  
-  /* We need to generate crossing events for the grab.
-   * However, there are never any crossing events for implicit grabs
-   * TODO: ... Actually, this could happen if the pointer window doesn't have button mask so a parent gets the event... 
-   */
-  if (!implicit)
-    {
-      int x, y;
-      GdkModifierType state;
-
-      /* We send GRAB crossing events from the window under the pointer to the
-	 grab window. Except if there is an old grab then we start from that */
-      if (display->pointer_grab.window)
-	src_window = display->pointer_grab.window;
-      else
-	src_window = display->pointer_info.window_under_pointer;
-
-      /* Unset any current grab to make sure we send the events */
-      display->pointer_grab.window = NULL;
-      
-      if (src_window != window)
-	{
-	  /* _gdk_syntesize_crossing_events only works inside one toplevel, split into two calls if needed */
-	  if (src_window)
-	    src_toplevel = gdk_window_get_toplevel (src_window);
-	  else
-	    src_toplevel = NULL;
-	  dest_toplevel = gdk_window_get_toplevel (window);
-	  
-	  if (src_toplevel == NULL ||
-	      src_toplevel == dest_toplevel)
-	    {
-	      _gdk_windowing_window_get_pointer (display,
-						 dest_toplevel,
-						 &x, &y, &state);
-	      _gdk_syntesize_crossing_events (display,
-					      src_window,
-					      window,
-					      GDK_CROSSING_GRAB,
-					      x, y, state,
-					      time,
-					      NULL);
-	    }
-	  else
-	    {
-	      _gdk_windowing_window_get_pointer (display,
-						 src_toplevel,
-						 &x, &y, &state);
-	      _gdk_syntesize_crossing_events (display,
-					      src_window,
-					      NULL,
-					      GDK_CROSSING_GRAB,
-					      x, y, state,
-					      time,
-					      NULL);
-	      _gdk_windowing_window_get_pointer (display,
-						 dest_toplevel,
-						 &x, &y, &state);
-	      _gdk_syntesize_crossing_events (display,
-					      NULL,
-					      window,
-					      GDK_CROSSING_GRAB,
-					      x, y, state,
-					      time,
-					      NULL);
-	    }
-	}
-
-      /* !owner_event Grabbing a window that we're not inside, current status is
-	 now NULL (i.e. outside grabbed window) */
-      if (!owner_events && display->pointer_info.window_under_pointer != window)
-	_gdk_display_set_window_under_pointer (display, NULL);
-    }
-
-  display->pointer_grab.window = window;
-  display->pointer_grab.native_window = native_window;
-  display->pointer_grab.serial = serial;
-  display->pointer_grab.owner_events = owner_events;
-  display->pointer_grab.event_mask = event_mask;
-  display->pointer_grab.time = time;
-  display->pointer_grab.implicit = implicit;
-  display->pointer_grab.converted_implicit = FALSE;
+  return NULL;
 }
 
-void
-_gdk_display_unset_has_pointer_grab (GdkDisplay *display,
-				     gboolean implicit,
-				     gboolean do_grab_one_pointer_release_event,
-				     guint32 time)
+
+GdkPointerGrabInfo *
+_gdk_display_get_last_pointer_grab (GdkDisplay *display)
 {
-  GdkWindow *pointer_window, *src_toplevel, *dest_toplevel;
-  GdkWindow *old_grab_window;
-  GdkWindow *old_native_grab_window;
-  int x, y;
-  GdkModifierType state;
-  GdkWindowObject *w;
+  GList *l;
 
-  old_grab_window = display->pointer_grab.window;
-  old_native_grab_window = display->pointer_grab.native_window;
+  l = display->pointer_grabs;
 
-  if (old_grab_window == NULL)
-    return; /* This happens in the gdk_window_hide case */
+  if (l == NULL)
+    return NULL;
 
-  if (do_grab_one_pointer_release_event)
-    display->pointer_grab.grab_one_pointer_release_event = display->pointer_grab.window;
+  while (l->next != NULL)
+    l = l->next;
 
-  /* Set first so crossing events get sent */
-  display->pointer_grab.window = NULL;
-  
-  pointer_window = _gdk_windowing_window_at_pointer (display,  &x, &y, &state);
-	  
-  if (pointer_window != NULL &&
-      (GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_ROOT ||
-       GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_FOREIGN))
-    pointer_window = NULL;
+  return (GdkPointerGrabInfo *)l->data;
+}
 
-  /* We force checked what window we're in, so we need to
-   * update the toplevel_under_pointer info, as that won't get told of
-   * this change.
-   */
-  if (display->pointer_info.toplevel_under_pointer)
-    g_object_unref (display->pointer_info.toplevel_under_pointer);
-  display->pointer_info.toplevel_under_pointer = NULL;
-  
-  if (pointer_window)
+
+GdkPointerGrabInfo *
+_gdk_display_add_pointer_grab (GdkDisplay *display,
+			       GdkWindow *window,
+			       GdkWindow *native_window,
+			       gboolean owner_events,
+			       GdkEventMask event_mask,
+			       unsigned long serial_start,
+			       guint32 time,
+			       gboolean implicit)
+{
+  GdkPointerGrabInfo *info, *other_info;
+  GList *l;
+
+  info = g_new0 (GdkPointerGrabInfo, 1);
+
+  info->window = g_object_ref (window);
+  info->native_window = g_object_ref (native_window);
+  info->serial_start = serial_start;
+  info->serial_end = G_MAXULONG;
+  info->owner_events = owner_events;
+  info->event_mask = event_mask;
+  info->time = time;
+  info->implicit = implicit;
+  info->converted_implicit = FALSE;
+
+  /* Find the first grab that has a larger start time (if any) and insert
+   * before that. I.E we insert after already existing grabs with same
+   * start time */
+  for (l = display->pointer_grabs; l != NULL; l = l->next)
     {
-      /* Convert to toplevel */
-      w = (GdkWindowObject *)pointer_window;
-      while (w->parent->window_type != GDK_WINDOW_ROOT)
-	{
-	  x += w->x;
-	  y += w->y;
-	  w = w->parent;
-	}
-
-      /* w is now toplevel and x,y in toplevel coords */
-
-      display->pointer_info.toplevel_under_pointer = g_object_ref (w);
+      other_info = l->data;
       
-      /* Find child window */
-      pointer_window =
-	_gdk_window_find_descendant_at ((GdkWindow *)w,
-					x, y,
-					NULL, NULL);
+      if (info->serial_start < other_info->serial_start)
+	break;
+    }
+  display->pointer_grabs =
+    g_list_insert_before (display->pointer_grabs, l, info);
+
+  /* Make sure the new grab end before next grab */
+  if (l)
+    {
+      other_info = l->data;
+      info->serial_end = other_info->serial_start;
     }
   
-  
-  if (pointer_window == NULL)
+  /* Find any previous grab and update its end time */
+  l = g_list_find  (display->pointer_grabs, info);
+  l = l->prev;
+  if (l)
     {
+      other_info = l->data;
+      other_info->serial_end = serial_start;
+    }
+
+  return info;
+}
+
+static void
+free_pointer_grab (GdkPointerGrabInfo *info)
+{
+  g_object_unref (info->window);
+  g_object_unref (info->native_window);
+  g_free (info);
+}
+
+/* _gdk_syntesize_crossing_events only works inside one toplevel.
+   This function splits things into two calls if needed, converting the
+   coordinates to the right toplevel */
+static void
+synthesize_crossing_events (GdkDisplay *display,
+			    GdkWindow *src_window,
+			    GdkWindow *dest_window,
+			    GdkCrossingMode crossing_mode,
+			    guint32 time,
+			    gulong serial)
+{
+  GdkWindow *src_toplevel, *dest_toplevel;
+  GdkModifierType state;
+  int x, y;
+  
+  if (src_window)
+    src_toplevel = gdk_window_get_toplevel (src_window);
+  else
+    src_toplevel = NULL;
+  if (dest_window)
+    dest_toplevel = gdk_window_get_toplevel (dest_window);
+  else
+    dest_toplevel = NULL;
+
+  if (src_toplevel == NULL && dest_toplevel == NULL)
+    return;
+  
+  if (src_toplevel == NULL ||
+      src_toplevel == dest_toplevel)
+    {
+      /* Same toplevels */
+      _gdk_windowing_window_get_pointer (display,
+					 dest_toplevel,
+					 &x, &y, &state);
       _gdk_syntesize_crossing_events (display,
-				      old_grab_window,
-				      NULL,
-				      GDK_CROSSING_UNGRAB,
+				      src_window,
+				      dest_window,
+				      crossing_mode,
 				      x, y, state,
 				      time,
-				      NULL);
+				      NULL,
+				      serial);
+    }
+  else if (dest_toplevel == NULL)
+    {
+      _gdk_windowing_window_get_pointer (display,
+					 src_toplevel,
+					 &x, &y, &state);
+      _gdk_syntesize_crossing_events (display,
+				      src_window,
+				      NULL,
+				      crossing_mode,
+				      x, y, state,
+				      time,
+				      NULL,
+				      serial);
     }
   else
     {
-      if (pointer_window != old_grab_window)
-	{
-	  /* _gdk_syntesize_crossing_events only works inside one toplevel, split into two calls if needed */
-	  src_toplevel = gdk_window_get_toplevel (old_grab_window);
-	  dest_toplevel = gdk_window_get_toplevel (pointer_window);
+      /* Different toplevels */
+      _gdk_windowing_window_get_pointer (display,
+					 src_toplevel,
+					 &x, &y, &state);
+      _gdk_syntesize_crossing_events (display,
+				      src_window,
+				      NULL,
+				      crossing_mode,
+				      x, y, state,
+				      time,
+				      NULL,
+				      serial);
+      _gdk_windowing_window_get_pointer (display,
+					 dest_toplevel,
+					 &x, &y, &state);
+      _gdk_syntesize_crossing_events (display,
+				      NULL,
+				      dest_window,
+				      crossing_mode,
+				      x, y, state,
+				      time,
+				      NULL,
+				      serial);
+    }
+}
 
-	  if (src_toplevel == dest_toplevel)
-	    {
-	      _gdk_syntesize_crossing_events (display,
-					      display->pointer_info.window_under_pointer,
-					      pointer_window,
-					      GDK_CROSSING_UNGRAB,
-					      x, y, state,
-					      time,
-					      NULL);
-	    }
+
+static void
+switch_to_pointer_grab (GdkDisplay *display,
+			GdkPointerGrabInfo *grab,
+			GdkPointerGrabInfo *last_grab,
+			guint32 time,
+			gulong serial)
+{
+  GdkWindow *src_window, *pointer_window;
+  GdkWindowObject *w;
+  GList *old_grabs;
+  GdkModifierType state;
+  int x, y;
+
+  /* Temporarily unset pointer to make sure we send the crossing events below */
+  old_grabs = display->pointer_grabs;
+  display->pointer_grabs = NULL;
+  
+  if (grab)
+    {
+      /* New grab is in effect */
+      
+      /* We need to generate crossing events for the grab.
+       * However, there are never any crossing events for implicit grabs
+       * TODO: ... Actually, this could happen if the pointer window
+       *           doesn't have button mask so a parent gets the event... 
+       */
+      if (!grab->implicit)
+	{
+	  /* We send GRAB crossing events from the window under the pointer to the
+	     grab window. Except if there is an old grab then we start from that */
+	  if (last_grab)
+	    src_window = last_grab->window;
 	  else
+	    src_window = display->pointer_info.window_under_pointer;
+	  
+	  if (src_window != grab->window)
 	    {
-	      /* TODO: We're reporting the wrong coords here. They are in pointer_window toplevel coords */
-	      _gdk_syntesize_crossing_events (display,
-					      display->pointer_info.window_under_pointer,
-					      NULL,
-					      GDK_CROSSING_UNGRAB,
-					      x, y, state,
-					      time,
-					      NULL);
-	      _gdk_syntesize_crossing_events (display,
-					      NULL,
-					      pointer_window,
-					      GDK_CROSSING_UNGRAB,
-					      x, y, state,
-					      time,
-					      NULL);
+	      synthesize_crossing_events (display,
+					  src_window, grab->window,
+					  GDK_CROSSING_GRAB, time, serial);
 	    }
+	  
+	  /* !owner_event Grabbing a window that we're not inside, current status is
+	     now NULL (i.e. outside grabbed window) */
+	  if (!grab->owner_events && display->pointer_info.window_under_pointer != grab->window)
+	    _gdk_display_set_window_under_pointer (display, NULL);
 	}
+  
+      grab->activated = TRUE;
+    }
+  else if (last_grab)
+    {
+      pointer_window = _gdk_windowing_window_at_pointer (display,  &x, &y, &state);
+      if (pointer_window != NULL &&
+	  (GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_ROOT ||
+	   GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_FOREIGN))
+	pointer_window = NULL;
+      
+      /* We force checked what window we're in, so we need to
+       * update the toplevel_under_pointer info, as that won't get told of
+       * this change.
+       */
+      if (display->pointer_info.toplevel_under_pointer)
+	g_object_unref (display->pointer_info.toplevel_under_pointer);
+      display->pointer_info.toplevel_under_pointer = NULL;
+      
+      if (pointer_window)
+	{
+	  /* Convert to toplevel */
+	  w = (GdkWindowObject *)pointer_window;
+	  while (w->parent->window_type != GDK_WINDOW_ROOT)
+	    {
+	      x += w->x;
+	      y += w->y;
+	      w = w->parent;
+	    }
+	  
+	  /* w is now toplevel and x,y in toplevel coords */
+	  display->pointer_info.toplevel_under_pointer = g_object_ref (w);
+	  
+	  /* Find (possibly virtual) child window */
+	  pointer_window =
+	    _gdk_window_find_descendant_at ((GdkWindow *)w,
+					    x, y,
+					    NULL, NULL);
+	}
+
+      if (pointer_window != last_grab->window)
+	synthesize_crossing_events (display,
+				    last_grab->window, pointer_window,
+				    GDK_CROSSING_UNGRAB, time, serial);
+      
+      /* We're now ungrabbed, update the window_under_pointer */
+      _gdk_display_set_window_under_pointer (display, pointer_window);
+      
+      if (last_grab->implicit_ungrab)
+	generate_grab_broken_event (last_grab->window,
+				    FALSE, TRUE, 
+				    NULL);
+    }
+  
+  display->pointer_grabs = old_grabs;
+
+}
+
+void
+_gdk_display_pointer_grab_update (GdkDisplay *display,
+				  gulong current_serial)
+{
+  GdkPointerGrabInfo *current_grab, *next_grab;
+  guint32 time;
+  
+  time = display->last_event_time;
+
+  while (display->pointer_grabs != NULL)
+    {
+      current_grab = display->pointer_grabs->data;
+
+      if (current_grab->serial_start > current_serial)
+	return; /* Hasn't started yet */
+      
+      if (current_grab->serial_end > current_serial ||
+	  (current_grab->serial_end == current_serial &&
+	   current_grab->grab_one_pointer_release_event))
+	{
+	  /* This one hasn't ended yet.
+	     its the currently active one or scheduled to be active */
+
+	  if (!current_grab->activated)
+	    switch_to_pointer_grab (display, current_grab, NULL, time, current_serial);
+	  
+	  break;
+	}
+
+
+      next_grab = NULL;
+      if (display->pointer_grabs->next)
+	{
+	  /* This is the next active grab */
+	  next_grab = display->pointer_grabs->next->data;
+	  
+	  if (next_grab->serial_start > current_serial)
+	    next_grab = NULL; /* Actually its not yet active */
+	}
+
+      if (next_grab == NULL ||
+	  current_grab->window != next_grab->window)
+	generate_grab_broken_event (GDK_WINDOW (current_grab->window),
+				    FALSE, current_grab->implicit,
+				    next_grab? next_grab->window : NULL);
+
+
+      /* Remove old grab */
+      display->pointer_grabs =
+	g_list_delete_link (display->pointer_grabs,
+			    display->pointer_grabs);
+      
+      switch_to_pointer_grab (display,
+			      next_grab, current_grab,
+			      time, current_serial);
+      
+      free_pointer_grab (current_grab);
+    }
+}
+
+static gboolean
+is_parent_of (GdkWindow *parent,
+              GdkWindow *child)
+{
+  GdkWindow *w;
+
+  w = child;
+  while (w != NULL)
+    {
+      if (w == parent)
+	return TRUE;
+
+      w = gdk_window_get_parent (w);
     }
 
-  /* We're now ungrabbed, update the window_under_pointer */
-  _gdk_display_set_window_under_pointer (display, pointer_window);
+  return FALSE;
+}
+
+static GList *
+find_pointer_grab (GdkDisplay *display,
+		   gulong serial)
+{
+  GdkPointerGrabInfo *grab;
+  GList *l;
+
+  for (l = display->pointer_grabs; l != NULL; l = l->next)
+    {
+      grab = l->data;
+
+      if (serial >= grab->serial_start && serial < grab->serial_end)
+	return l;
+    }
   
-  if (implicit)
-    generate_grab_broken_event (old_grab_window,
-				FALSE, implicit, 
-				NULL);
+  return NULL;
+}
+
+
+
+GdkPointerGrabInfo *
+_gdk_display_has_pointer_grab (GdkDisplay *display,
+			       gulong serial)
+{
+  GList *l;
+
+  l = find_pointer_grab (display, serial);
+  if (l)
+    return l->data;
+  
+  return NULL;
+}
+
+/* Returns true if last grab was ended */
+gboolean
+_gdk_display_end_pointer_grab (GdkDisplay *display,
+			       gulong serial,
+			       GdkWindow *if_child,
+			       gboolean implicit)
+{
+  GdkPointerGrabInfo *grab;
+  GList *l;
+
+  l = find_pointer_grab (display, serial);
+  
+  if (l == NULL)
+    return FALSE;
+
+  grab = l->data;
+  if (grab &&
+      (if_child == NULL ||
+       is_parent_of (grab->window, if_child)))
+    {
+      grab->serial_end = serial;
+      grab->implicit_ungrab = implicit;
+      return l->next == NULL;
+    }
+  
+  return FALSE;
 }
 
 void
@@ -1055,14 +1261,18 @@ gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
 				   GdkWindow **grab_window,
 				   gboolean   *owner_events)
 {
+  GdkPointerGrabInfo *info;
+  
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
-  if (display->pointer_grab.window)
+  info = _gdk_display_get_active_pointer_grab (display);
+  
+  if (info)
     {
       if (grab_window)
-        *grab_window = (GdkWindow *)display->pointer_grab.window;
+        *grab_window = info->window;
       if (owner_events)
-        *owner_events = display->pointer_grab.owner_events;
+        *owner_events = info->owner_events;
 
       return TRUE;
     }
@@ -1084,10 +1294,13 @@ gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
+  GdkPointerGrabInfo *info;
   
-  return (display->pointer_grab.window != NULL &&
-	  !display->pointer_grab.implicit);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
+
+  info = _gdk_display_get_active_pointer_grab (display);
+  
+  return (info && !info->implicit);
 }
 
 #define __GDK_DISPLAY_C__

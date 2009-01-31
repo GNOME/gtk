@@ -118,6 +118,7 @@ struct _RoundtripState
   Display *dpy;
   _XAsyncHandler async;
   gulong get_input_focus_req;
+  GdkDisplay *display;
   GdkRoundTripCallback callback;
   gpointer data;
 };
@@ -758,7 +759,7 @@ roundtrip_callback_idle (gpointer data)
 {
   RoundtripState *state = (RoundtripState *)data;  
   
-  state->callback (state->data);
+  state->callback (state->display, state->data, state->get_input_focus_req);
 
   g_free (state);
 
@@ -790,6 +791,7 @@ roundtrip_handler (Display *dpy,
 			    True);
 	}
 
+      
       if (state->callback)
         gdk_threads_add_idle (roundtrip_callback_idle, state);
 
@@ -813,6 +815,7 @@ _gdk_x11_roundtrip_async (GdkDisplay           *display,
 
   state = g_new (RoundtripState, 1);
 
+  state->display = display;
   state->dpy = dpy;
   state->callback = callback;
   state->data = data;

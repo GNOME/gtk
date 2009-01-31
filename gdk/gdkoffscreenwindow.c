@@ -851,7 +851,9 @@ gdk_offscreen_window_hide (GdkWindow *window)
 
   /* May need to break grabs on children */
   display = gdk_drawable_get_display (window);
-  
+
+  /* TODO: This needs updating to the new grab world */
+#if 0
   if (display->pointer_grab.window != NULL)
     {
       if (is_parent_of (window, display->pointer_grab.window))
@@ -866,6 +868,7 @@ gdk_offscreen_window_hide (GdkWindow *window)
 	  gdk_display_pointer_ungrab (display, GDK_CURRENT_TIME);
 	}
     }
+#endif
 }
 
 static void
