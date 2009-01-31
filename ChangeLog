@@ -1,3 +1,8 @@
+2009-01-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrecentchoosermenu.c (gtk_recent_chooser_menu_create_item):
+	Always show images.
+
 2009-01-29  Tor Lillqvist  <tml@novell.com>
 
 	Bug 559408 - Transparency lost when images are copied between GTK+

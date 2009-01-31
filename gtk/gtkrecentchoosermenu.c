@@ -834,6 +834,9 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
 
   g_free (text);
 
+  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item),
+                                             TRUE);
+
   /* ellipsize the menu item label, in case the recent document
    * display name is huge.
    */
