@@ -1526,15 +1526,20 @@ gdk_event_translate (GdkEvent *event,
     }
 
   /* We only activate the application on click if it's not already active,
-   * this matches most use cases of native apps (no click-through).
+   * or if it's active but the window isn't focused. This matches most use
+   * cases of native apps (no click-through).
    */
   if ((event_type == NSRightMouseDown ||
        event_type == NSOtherMouseDown ||
-       event_type == NSLeftMouseDown) && ![NSApp isActive])
+       event_type == NSLeftMouseDown))
     {
-      [NSApp activateIgnoringOtherApps:YES];
-      return_val = FALSE;
-      goto done;
+      GdkWindowObject *private = (GdkWindowObject *)window;
+      GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+      if (![NSApp isActive])
+        return FALSE;
+      else if (![impl->toplevel isMainWindow])
+        return FALSE;
     }
 
   current_event_mask = get_event_mask_from_ns_event (nsevent);
