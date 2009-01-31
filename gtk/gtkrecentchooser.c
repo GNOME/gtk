@@ -1184,7 +1184,7 @@ _gtk_recent_chooser_set_use_action_appearance (GtkRecentChooser *recent_chooser,
   if (use_action_appearance != use_appearance)
     {
 
-      g_object_set_qdata (G_OBJECT (recent_chooser), quark_gtk_use_action_appearance, !GINT_TO_POINTER (use_appearance));
+      g_object_set_qdata (G_OBJECT (recent_chooser), quark_gtk_use_action_appearance, GINT_TO_POINTER (!use_appearance));
       
       gtk_activatable_reset (GTK_ACTIVATABLE (recent_chooser), action);
     }

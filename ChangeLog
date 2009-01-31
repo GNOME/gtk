@@ -1,5 +1,12 @@
 2009-01-30  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 569918 – 64bit portability issue in gtkrecentchooser.c
+
+	* gtk/gtkrecentchooser.c (gtk_recent_chooser_set_use_action_appearance):
+	Avoid a compiler warning. Patch by Magnus Boman.
+
+2009-01-30  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 359288 – Toolbar items are not shown after hiding
 
 	* gtk/gtktoolbar.c (slide_idle_handler): Make sure we queue
