@@ -1,5 +1,13 @@
 2009-01-30  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 359288 – Toolbar items are not shown after hiding
+
+	* gtk/gtktoolbar.c (slide_idle_handler): Make sure we queue
+	at least one resize. This fixes a problem with toolitems remaining
+	invisible when they shouldn't that was reported by Christian Weiske.
+
+2009-01-30  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkrecentchoosermenu.c (gtk_recent_chooser_menu_create_item):
 	Always show images.
 

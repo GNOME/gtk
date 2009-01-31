@@ -1205,6 +1205,8 @@ slide_idle_handler (gpointer data)
 	}
     }
   
+  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
+
   priv->is_sliding = FALSE;
   priv->idle_id = 0;
 
