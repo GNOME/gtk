@@ -7320,21 +7320,24 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
 
   /* Keypress events are passed to input method even if cursor position is not editable;
    * so beep here if it's multi-key input sequence, input method will be reset in 
-   * key-press-event handler. */
-  if (!gtk_text_iter_can_insert (&iter, text_view->editable))
+   * key-press-event handler. 
+   */
+  gtk_im_context_get_preedit_string (context, &str, &attrs, &cursor_pos);
+
+  if (str && str[0] && !gtk_text_iter_can_insert (&iter, text_view->editable))
     {
       gtk_widget_error_bell (GTK_WIDGET (text_view));
-      return;
+      goto out;
     }
 
-  gtk_im_context_get_preedit_string (context, &str, &attrs, &cursor_pos);
   gtk_text_layout_set_preedit_string (text_view->layout, str, attrs, cursor_pos);
-  pango_attr_list_unref (attrs);
-  g_free (str);
-
   if (GTK_WIDGET_HAS_FOCUS (text_view))
     gtk_text_view_scroll_mark_onscreen (text_view,
 					gtk_text_buffer_get_insert (get_buffer (text_view)));
+
+out:
+  pango_attr_list_unref (attrs);
+  g_free (str);
 }
 
 static gboolean
