@@ -1,3 +1,25 @@
+2009-02-01  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 569635 – fontchooser should reload list of families/styles on
+	theme change
+
+	* gtk/gtkfontsel.c (gtk_font_selection_class_init),
+	(gtk_font_selection_init), (gtk_font_selection_finalize),
+	(gtk_font_selection_ref_family), (gtk_font_selection_ref_face),
+	(gtk_font_selection_reload_fonts),
+	(gtk_font_selection_screen_changed),
+	(gtk_font_selection_style_set),
+	(gtk_font_selection_scroll_to_selection),
+	(gtk_font_selection_scroll_on_map),
+	(gtk_font_selection_select_font),
+	(gtk_font_selection_show_available_fonts),
+	(gtk_font_selection_show_available_styles),
+	(gtk_font_selection_select_style),
+	(gtk_font_selection_select_font_desc),
+	(gtk_font_selection_set_font_name):
+	Reload Pango families and faces in style_set.  Installing/uninstalling
+	fonts shows up immediately in an open font chooser now.
+
 2009-01-31  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 162726 – Multiple Latin layouts in XKB break keyboard shortcuts

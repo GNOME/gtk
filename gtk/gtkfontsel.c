@@ -124,9 +124,11 @@ static void    gtk_font_selection_get_property       (GObject         *object,
 						      guint            prop_id,
 						      GValue          *value,
 						      GParamSpec      *pspec);
-static void    gtk_font_selection_finalize	     (GObject               *object);
-static void    gtk_font_selection_screen_changed     (GtkWidget		    *widget,
-						      GdkScreen             *previous_screen);
+static void    gtk_font_selection_finalize	     (GObject         *object);
+static void    gtk_font_selection_screen_changed     (GtkWidget	      *widget,
+						      GdkScreen       *previous_screen);
+static void    gtk_font_selection_style_set          (GtkWidget      *widget,
+						      GtkStyle       *prev_style);
 
 /* These are the callbacks & related functions. */
 static void     gtk_font_selection_select_font           (GtkTreeSelection *selection,
@@ -155,12 +157,24 @@ static void     gtk_font_selection_scroll_on_map         (GtkWidget        *w,
 
 static void     gtk_font_selection_preview_changed       (GtkWidget        *entry,
 							  GtkFontSelection *fontsel);
+static void     gtk_font_selection_scroll_to_selection   (GtkFontSelection *fontsel);
+
 
 /* Misc. utility functions. */
 static void    gtk_font_selection_load_font          (GtkFontSelection *fs);
 static void    gtk_font_selection_update_preview     (GtkFontSelection *fs);
 
 static GdkFont* gtk_font_selection_get_font_internal (GtkFontSelection *fontsel);
+static PangoFontDescription *gtk_font_selection_get_font_description (GtkFontSelection *fontsel);
+static gboolean gtk_font_selection_select_font_desc  (GtkFontSelection      *fontsel,
+						      PangoFontDescription  *new_desc,
+						      PangoFontFamily      **pfamily,
+						      PangoFontFace        **pface);
+static void     gtk_font_selection_reload_fonts          (GtkFontSelection *fontsel);
+static void     gtk_font_selection_ref_family            (GtkFontSelection *fontsel,
+							  PangoFontFamily  *family);
+static void     gtk_font_selection_ref_face              (GtkFontSelection *fontsel,
+							  PangoFontFace    *face);
 
 G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_VBOX)
 
@@ -174,6 +188,7 @@ gtk_font_selection_class_init (GtkFontSelectionClass *klass)
   gobject_class->get_property = gtk_font_selection_get_property;
 
   widget_class->screen_changed = gtk_font_selection_screen_changed;
+  widget_class->style_set = gtk_font_selection_style_set;
    
   g_object_class_install_property (gobject_class,
                                    PROP_FONT_NAME,
@@ -534,7 +549,6 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 			       -1, INITIAL_PREVIEW_HEIGHT);
   gtk_box_pack_start (GTK_BOX (text_box), fontsel->preview_entry,
 		      TRUE, TRUE, 0);
-
   gtk_widget_pop_composite_child();
 }
 
@@ -567,21 +581,65 @@ gtk_font_selection_finalize (GObject *object)
   if (fontsel->font)
     gdk_font_unref (fontsel->font);
 
+  gtk_font_selection_ref_family (fontsel, NULL);
+  gtk_font_selection_ref_face (fontsel, NULL);
+
   G_OBJECT_CLASS (gtk_font_selection_parent_class)->finalize (object);
+}
+
+static void
+gtk_font_selection_ref_family (GtkFontSelection *fontsel,
+			       PangoFontFamily  *family)
+{
+  if (family)
+    family = g_object_ref (family);
+  if (fontsel->family)
+    g_object_unref (fontsel->family);
+  fontsel->family = family;
+}
+
+static void gtk_font_selection_ref_face (GtkFontSelection *fontsel,
+					 PangoFontFace    *face)
+{
+  if (face)
+    face = g_object_ref (face);
+  if (fontsel->face)
+    g_object_unref (fontsel->face);
+  fontsel->face = face;
+}
+
+static void
+gtk_font_selection_reload_fonts (GtkFontSelection *fontsel)
+{
+  if (gtk_widget_has_screen (GTK_WIDGET (fontsel)))
+    {
+      PangoFontDescription *desc;
+      desc = gtk_font_selection_get_font_description (fontsel);
+
+      gtk_font_selection_show_available_fonts (fontsel);
+      gtk_font_selection_show_available_sizes (fontsel, TRUE);
+      gtk_font_selection_show_available_styles (fontsel);
+
+      gtk_font_selection_select_font_desc (fontsel, desc, NULL, NULL);
+      gtk_font_selection_scroll_to_selection (fontsel);
+
+      pango_font_description_free (desc);
+    }
 }
 
 static void
 gtk_font_selection_screen_changed (GtkWidget *widget,
 				   GdkScreen *previous_screen)
 {
-  GtkFontSelection *fontsel = GTK_FONT_SELECTION (widget);
+  gtk_font_selection_reload_fonts (GTK_FONT_SELECTION (widget));
+}
 
-  if (gtk_widget_has_screen (GTK_WIDGET (fontsel)))
-    {
-      gtk_font_selection_show_available_fonts (fontsel);
-      gtk_font_selection_show_available_sizes (fontsel, TRUE);
-      gtk_font_selection_show_available_styles (fontsel);
-    }
+static void
+gtk_font_selection_style_set (GtkWidget *widget,
+			      GtkStyle  *prev_style)
+{
+  /* Maybe fonts where installed or removed... */
+  gtk_font_selection_reload_fonts (GTK_FONT_SELECTION (widget));
 }
 
 static void
@@ -618,19 +676,9 @@ set_cursor_to_iter (GtkTreeView *view,
   gtk_tree_path_free (path);
 }
 
-/* This is called when the list is mapped. Here we scroll to the current
-   font if necessary. */
 static void
-gtk_font_selection_scroll_on_map (GtkWidget		*widget,
-                                  gpointer		 data)
+gtk_font_selection_scroll_to_selection (GtkFontSelection *fontsel)
 {
-  GtkFontSelection *fontsel;
-  
-#ifdef FONTSEL_DEBUG
-  g_message ("In expose_list\n");
-#endif
-  fontsel = GTK_FONT_SELECTION (data);
-  
   /* Try to scroll the font family list to the selected item */
   scroll_to_selection (GTK_TREE_VIEW (fontsel->family_list));
       
@@ -639,6 +687,15 @@ gtk_font_selection_scroll_on_map (GtkWidget		*widget,
       
   /* Try to scroll the font family list to the selected item */
   scroll_to_selection (GTK_TREE_VIEW (fontsel->size_list));
+/* This is called when the list is mapped. Here we scroll to the current
+   font if necessary. */
+}
+
+static void
+gtk_font_selection_scroll_on_map (GtkWidget		*widget,
+                                  gpointer		 data)
+{
+  gtk_font_selection_scroll_to_selection (GTK_FONT_SELECTION (data));
 }
 
 /* This is called when a family is selected in the list. */
@@ -662,7 +719,7 @@ gtk_font_selection_select_font (GtkTreeSelection *selection,
       gtk_tree_model_get (model, &iter, FAMILY_COLUMN, &family, -1);
       if (fontsel->family != family)
 	{
-	  fontsel->family = family;
+	  gtk_font_selection_ref_family (fontsel, family);
 	  
 #ifdef INCLUDE_FONT_ENTRIES
 	  family_name = pango_font_family_get_name (fontsel->family);
@@ -721,7 +778,7 @@ gtk_font_selection_show_available_fonts (GtkFontSelection *fontsel)
 	}
     }
 
-  fontsel->family = match_family;
+  gtk_font_selection_ref_family (fontsel, match_family);
   if (match_family)
     {
       set_cursor_to_iter (GTK_TREE_VIEW (fontsel->family_list), &match_row);
@@ -837,7 +894,7 @@ gtk_font_selection_show_available_styles (GtkFontSelection *fontsel)
   if (old_desc)
     pango_font_description_free (old_desc);
 
-  fontsel->face = match_face;
+  gtk_font_selection_ref_face (fontsel, match_face);
   if (match_face)
     {
 #ifdef INCLUDE_FONT_ENTRIES
@@ -890,8 +947,7 @@ gtk_font_selection_select_style (GtkTreeSelection *selection,
       PangoFontFace *face;
       
       gtk_tree_model_get (model, &iter, FACE_COLUMN, &face, -1);
-      fontsel->face = face;
-
+      gtk_font_selection_ref_face (fontsel, face);
       g_object_unref (face);
     }
 
@@ -1329,12 +1385,110 @@ gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
   return result;
 }
 
-
-/* This sets the current font, selecting the appropriate list rows.
+/* This selects the appropriate list rows.
    First we check the fontname is valid and try to find the font family
    - i.e. the name in the main list. If we can't find that, then just return.
    Next we try to set each of the properties according to the fontname.
    Finally we select the font family & style in the lists. */
+static gboolean
+gtk_font_selection_select_font_desc (GtkFontSelection      *fontsel,
+				     PangoFontDescription  *new_desc,
+				     PangoFontFamily      **pfamily,
+				     PangoFontFace        **pface)
+{
+  PangoFontFamily *new_family = NULL;
+  PangoFontFace *new_face = NULL;
+  PangoFontFace *fallback_face = NULL;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GtkTreeIter match_iter;
+  gboolean valid;
+  const gchar *new_family_name;
+
+  new_family_name = pango_font_description_get_family (new_desc);
+
+  if (!new_family_name)
+    return FALSE;
+
+  /* Check to make sure that this is in the list of allowed fonts 
+   */
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (fontsel->family_list));
+  for (valid = gtk_tree_model_get_iter_first (model, &iter);
+       valid;
+       valid = gtk_tree_model_iter_next (model, &iter))
+    {
+      PangoFontFamily *family;
+      
+      gtk_tree_model_get (model, &iter, FAMILY_COLUMN, &family, -1);
+      
+      if (g_ascii_strcasecmp (pango_font_family_get_name (family),
+			      new_family_name) == 0)
+	new_family = g_object_ref (family);
+
+      g_object_unref (family);
+      
+      if (new_family)
+	break;
+    }
+
+  if (!new_family)
+    return FALSE;
+
+  if (pfamily)
+    *pfamily = new_family;
+  else
+    g_object_unref (new_family);
+  set_cursor_to_iter (GTK_TREE_VIEW (fontsel->family_list), &iter);
+  gtk_font_selection_show_available_styles (fontsel);
+
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (fontsel->face_list));
+  for (valid = gtk_tree_model_get_iter_first (model, &iter);
+       valid;
+       valid = gtk_tree_model_iter_next (model, &iter))
+    {
+      PangoFontFace *face;
+      PangoFontDescription *tmp_desc;
+      
+      gtk_tree_model_get (model, &iter, FACE_COLUMN, &face, -1);
+      tmp_desc = pango_font_face_describe (face);
+      
+      if (font_description_style_equal (tmp_desc, new_desc))
+	new_face = g_object_ref (face);
+      
+      if (!fallback_face)
+	{
+	  fallback_face = g_object_ref (face);
+	  match_iter = iter;
+	}
+      
+      pango_font_description_free (tmp_desc);
+      g_object_unref (face);
+      
+      if (new_face)
+	{
+	  match_iter = iter;
+	  break;
+	}
+    }
+
+  if (!new_face)
+    new_face = fallback_face;
+  else if (fallback_face)
+    g_object_unref (fallback_face);
+
+  if (pface)
+    *pface = new_face;
+  else if (new_face)
+    g_object_unref (new_face);
+  set_cursor_to_iter (GTK_TREE_VIEW (fontsel->face_list), &match_iter);  
+
+  gtk_font_selection_set_size (fontsel, pango_font_description_get_size (new_desc));
+
+  return TRUE;
+}
+
+
+/* This sets the current font, then selecting the appropriate list rows. */
 
 /**
  * gtk_font_selection_set_font_name:
@@ -1355,15 +1509,9 @@ gboolean
 gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
 				  const gchar      *fontname)
 {
-  PangoFontFamily *new_family = NULL;
-  PangoFontFace *new_face = NULL;
-  PangoFontFace *fallback_face = NULL;
+  PangoFontFamily *family = NULL;
+  PangoFontFace *face = NULL;
   PangoFontDescription *new_desc;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  GtkTreeIter match_iter;
-  gboolean valid;
-  const gchar *new_family_name;
   
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), FALSE);
 
@@ -1371,83 +1519,24 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
     return FALSE;
 
   new_desc = pango_font_description_from_string (fontname);
-  new_family_name = pango_font_description_get_family (new_desc);
 
-  if (!new_family_name)
-    return FALSE;
-
-  /* Check to make sure that this is in the list of allowed fonts 
-   */
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (fontsel->family_list));
-  for (valid = gtk_tree_model_get_iter_first (model, &iter);
-       valid;
-       valid = gtk_tree_model_iter_next (model, &iter))
+  if (gtk_font_selection_select_font_desc (fontsel, new_desc, &family, &face))
     {
-      PangoFontFamily *family;
-      
-      gtk_tree_model_get (model, &iter, FAMILY_COLUMN, &family, -1);
-      
-      if (g_ascii_strcasecmp (pango_font_family_get_name (family),
-			      new_family_name) == 0)
-	new_family = family;
-      
-      g_object_unref (family);
-      
-      if (new_family)
-	break;
+      gtk_font_selection_ref_family (fontsel, family);
+      if (family)
+        g_object_unref (family);
+
+      gtk_font_selection_ref_face (fontsel, face);
+      if (face)
+        g_object_unref (face);
     }
 
-  if (!new_family)
-    return FALSE;
-
-  fontsel->family = new_family;
-  set_cursor_to_iter (GTK_TREE_VIEW (fontsel->family_list), &iter);
-  gtk_font_selection_show_available_styles (fontsel);
-
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (fontsel->face_list));
-  for (valid = gtk_tree_model_get_iter_first (model, &iter);
-       valid;
-       valid = gtk_tree_model_iter_next (model, &iter))
-    {
-      PangoFontFace *face;
-      PangoFontDescription *tmp_desc;
-      
-      gtk_tree_model_get (model, &iter, FACE_COLUMN, &face, -1);
-      tmp_desc = pango_font_face_describe (face);
-      
-      if (font_description_style_equal (tmp_desc, new_desc))
-	new_face = face;
-      
-      if (!fallback_face)
-	{
-	  fallback_face = face;
-	  match_iter = iter;
-	}
-      
-      pango_font_description_free (tmp_desc);
-      g_object_unref (face);
-      
-      if (new_face)
-	{
-	  match_iter = iter;
-	  break;
-	}
-    }
-
-  if (!new_face)
-    new_face = fallback_face;
-
-  fontsel->face = new_face;
-  set_cursor_to_iter (GTK_TREE_VIEW (fontsel->face_list), &match_iter);  
-
-  gtk_font_selection_set_size (fontsel, pango_font_description_get_size (new_desc));
+  pango_font_description_free (new_desc);
   
   g_object_freeze_notify (G_OBJECT (fontsel));
   g_object_notify (G_OBJECT (fontsel), "font-name");
   g_object_notify (G_OBJECT (fontsel), "font");
   g_object_thaw_notify (G_OBJECT (fontsel));
-
-  pango_font_description_free (new_desc);
 
   return TRUE;
 }
