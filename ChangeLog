@@ -1,5 +1,11 @@
 2009-02-01  Behdad Esfahbod  <behdad@gnome.org>
 
+	* gtk/gtksettings.c (gtk_settings_class_init): Change the
+	"gtk-fontconfig-timestamp" property from int to uint.  Doesn't affect
+	anything in practice, except that  it overflows years later...
+
+2009-02-01  Behdad Esfahbod  <behdad@gnome.org>
+
 	Bug 569635 – fontchooser should reload list of families/styles on
 	theme change
 

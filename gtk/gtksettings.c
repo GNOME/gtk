@@ -870,11 +870,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_RECENT_FILES_MAX_AGE);
 
   result = settings_install_property_parser (class,
-					     g_param_spec_int ("gtk-fontconfig-timestamp",
- 							       P_("Fontconfig configuration timestamp"),
- 							       P_("Timestamp of current fontconfig configuration"),
- 							       G_MININT, G_MAXINT, 0,
- 							       GTK_PARAM_READWRITE),
+					     g_param_spec_uint ("gtk-fontconfig-timestamp",
+								P_("Fontconfig configuration timestamp"),
+								P_("Timestamp of current fontconfig configuration"),
+								0, G_MAXUINT, 0,
+								GTK_PARAM_READWRITE),
 					     NULL);
   
   g_assert (result == PROP_FONTCONFIG_TIMESTAMP);
