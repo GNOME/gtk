@@ -160,7 +160,16 @@ void
 gdk_display_pointer_ungrab (GdkDisplay *display,
 			    guint32     time)
 {
-  _gdk_display_unset_has_pointer_grab (display, FALSE, FALSE, time);
+  GdkPointerGrabInfo *grab;
+
+  grab = _gdk_display_get_last_pointer_grab (display);
+  if (grab)
+    {
+      /* Serials are always 0 in quartz, but for clarity: */
+      grab->serial_end = 0;
+    }
+
+  _gdk_display_pointer_grab_update (display, 0);
 }
 
 GdkGrabStatus
@@ -171,21 +180,29 @@ gdk_pointer_grab (GdkWindow    *window,
 		  GdkCursor    *cursor,
 		  guint32	time)
 {
-  GdkWindow *toplevel;
+  GdkWindow *native;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
 
-  toplevel = gdk_window_get_toplevel (window);
+  native = gdk_window_get_toplevel (window);
 
-  _gdk_display_set_has_pointer_grab (_gdk_display,
-                                     window,
-                                     toplevel,
-                                     owner_events,
-                                     event_mask,
-                                     0,
-                                     time,
-                                     FALSE);
+  /* TODO: What do we do for offscreens and  their children? We need to proxy the grab somehow */
+  if (!GDK_IS_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (native)->impl))
+    return GDK_GRAB_SUCCESS;
+
+  if (!_gdk_window_has_impl (window) &&
+      !gdk_window_is_viewable (window))
+    return GDK_GRAB_NOT_VIEWABLE;
+
+  _gdk_display_add_pointer_grab (_gdk_display,
+                                 window,
+                                 native,
+                                 owner_events,
+                                 event_mask,
+                                 0,
+                                 time,
+                                 FALSE);
 
   return GDK_GRAB_SUCCESS;
 }
@@ -193,14 +210,20 @@ gdk_pointer_grab (GdkWindow    *window,
 static void
 break_all_grabs (guint32 time)
 {
+  GdkPointerGrabInfo *grab;
+
   if (_gdk_display->keyboard_grab.window)
     _gdk_display_unset_has_keyboard_grab (_gdk_display, FALSE);
 
-  if (_gdk_display->pointer_grab.window)
-    _gdk_display_unset_has_pointer_grab (_gdk_display,
-                                         TRUE,
-                                         FALSE,
-                                         time);
+  grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+  if (grab)
+    {
+      /* Serials are always 0 in quartz, but for clarity: */
+      grab->serial_end = 0;
+      grab->implicit_ungrab = TRUE;
+    }
+
+  _gdk_display_pointer_grab_update (_gdk_display, 0);
 }
 
 static void
@@ -457,11 +480,14 @@ _gdk_quartz_events_send_map_event (GdkWindow *window)
 GdkWindow *
 _gdk_quartz_events_get_mouse_window (gboolean consider_grabs)
 {
+  GdkPointerGrabInfo *grab;
+
   if (!consider_grabs)
     return current_mouse_window;
 
-  if (_gdk_display->pointer_grab.window && !_gdk_display->pointer_grab.owner_events)
-    return _gdk_display->pointer_grab.window;
+  grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+  if (grab && grab->window && !grab->owner_events)
+    return grab->window;
   
   return current_mouse_window;
 }
@@ -754,6 +780,7 @@ find_window_for_ns_event (NSEvent *nsevent,
     case NSOtherMouseDragged:
       {
 	GdkDisplay *display;
+        GdkPointerGrabInfo *grab;
 
         display = gdk_drawable_get_display (toplevel);
 
@@ -769,20 +796,21 @@ find_window_for_ns_event (NSEvent *nsevent,
 	 * This means we first try the owner, then the grab window,
 	 * then give up.
 	 */
-	if (display->pointer_grab.window)
+        grab = _gdk_display_get_last_pointer_grab (display);
+	if (grab && grab->window)
 	  {
-	    if (display->pointer_grab.owner_events)
+	    if (grab->owner_events)
               return toplevel;
 
 	    /* Finally check the grab window. */
-	    if (display->pointer_grab.event_mask & get_event_mask_from_ns_event (nsevent))
+	    if (grab->event_mask & get_event_mask_from_ns_event (nsevent))
 	      {
 		GdkWindow *grab_toplevel;
                 GdkWindowObject *grab_private;
 		NSPoint point;
                 NSWindow *grab_nswindow;
 
-		grab_toplevel = gdk_window_get_toplevel (display->pointer_grab.window);
+		grab_toplevel = gdk_window_get_toplevel (grab->window);
                 grab_private = (GdkWindowObject *)grab_toplevel;
 
                 point = [[nsevent window] convertBaseToScreen:[nsevent locationInWindow]];
@@ -1182,50 +1210,6 @@ _gdk_quartz_events_get_current_event_mask (void)
   return current_event_mask;
 }
 
-#define GDK_ANY_BUTTON_MASK (GDK_BUTTON1_MASK | \
-                             GDK_BUTTON2_MASK | \
-                             GDK_BUTTON3_MASK | \
-                             GDK_BUTTON4_MASK | \
-                             GDK_BUTTON5_MASK)
-
-static void
-button_event_check_implicit_grab (GdkWindow *window,
-                                  GdkEvent  *event,
-                                  NSEvent   *nsevent)
-{
-  GdkDisplay *display = gdk_drawable_get_display (window);
-
-  /* track implicit grabs for button presses */
-  switch (event->type)
-    {
-    case GDK_BUTTON_PRESS:
-      if (!display->pointer_grab.window)
-	{
-	  _gdk_display_set_has_pointer_grab (display,
-					     window,
-					     window,
-					     FALSE,
-					     gdk_window_get_events (window),
-					     0, /* serial */
-					     event->button.time,
-					     TRUE);
-	}
-      break;
-
-    case GDK_BUTTON_RELEASE:
-      if (display->pointer_grab.window &&
-	  display->pointer_grab.implicit &&
-          (current_button_state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (event->button.button - 1))) == 0)
-	{
-	  _gdk_display_unset_has_pointer_grab (display, TRUE, TRUE,
-					       event->button.time);
-	}
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-}
-
 static gboolean
 gdk_event_translate (GdkEvent *event,
                      NSEvent  *nsevent)
@@ -1374,14 +1358,12 @@ gdk_event_translate (GdkEvent *event,
     case NSRightMouseDown:
     case NSOtherMouseDown:
       fill_button_event (window, event, nsevent, x, y, x_root, y_root);
-      button_event_check_implicit_grab (window, event, nsevent);
       break;
 
     case NSLeftMouseUp:
     case NSRightMouseUp:
     case NSOtherMouseUp:
       fill_button_event (window, event, nsevent, x, y, x_root, y_root);
-      button_event_check_implicit_grab (window, event, nsevent);
       break;
 
     case NSLeftMouseDragged:

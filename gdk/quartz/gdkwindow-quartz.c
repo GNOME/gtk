@@ -139,9 +139,51 @@ gdk_window_impl_quartz_get_context (GdkDrawable *drawable,
 }
 
 static void
+check_grab_unmap (GdkWindow *window)
+{
+  GdkDisplay *display = gdk_drawable_get_display (window);
+
+  _gdk_display_end_pointer_grab (display, 0, window, TRUE);
+
+  if (display->keyboard_grab.window)
+    {
+      GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+      GdkWindowObject *tmp = GDK_WINDOW_OBJECT (display->keyboard_grab.window);
+
+      while (tmp && tmp != private)
+	tmp = tmp->parent;
+
+      if (tmp)
+	_gdk_display_unset_has_keyboard_grab (display, TRUE);
+    }
+}
+
+static void
+check_grab_destroy (GdkWindow *window)
+{
+  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkPointerGrabInfo *grab;
+
+  /* Make sure there is no lasting grab in this native window */
+  grab = _gdk_display_get_last_pointer_grab (display);
+  if (grab && grab->native_window == window)
+    {
+      /* Serials are always 0 in quartz, but for clarity: */
+      grab->serial_end = grab->serial_start;
+      grab->implicit_ungrab = TRUE;
+    }
+
+  if (window == display->keyboard_grab.native_window &&
+      display->keyboard_grab.window != NULL)
+    _gdk_display_unset_has_keyboard_grab (display, TRUE);
+}
+
+static void
 gdk_window_impl_quartz_finalize (GObject *object)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (object);
+
+  check_grab_destroy (GDK_DRAWABLE_IMPL_QUARTZ (object)->wrapper);
 
   if (impl->nscursor)
     [impl->nscursor release];
@@ -950,15 +992,6 @@ _gdk_quartz_window_destroy (GdkWindow *window,
       parent_impl->sorted_children = g_list_remove (parent_impl->sorted_children, window);
     }
 
-  /* If the destroyed window was targeted for a pointer or keyboard
-   * grab, release the grab.
-   */
-  if (window == _gdk_display->pointer_grab.window)
-    gdk_pointer_ungrab (0);
-
-  if (window == _gdk_display->keyboard_grab.window)
-    gdk_keyboard_ungrab (0);
-
   _gdk_quartz_drawable_finish (GDK_DRAWABLE (impl));
 
   mouse_window = _gdk_quartz_events_get_mouse_window (FALSE);
@@ -1096,6 +1129,8 @@ gdk_window_quartz_hide (GdkWindow *window)
   if (get_fullscreen_geometry (window))
     SetSystemUIMode (kUIModeNormal, 0);
 
+  check_grab_unmap (window);
+
   mouse_window = _gdk_quartz_events_get_mouse_window (FALSE);
   if (window == mouse_window || 
       _gdk_quartz_window_is_ancestor (window, mouse_window))
@@ -1121,12 +1156,6 @@ gdk_window_quartz_hide (GdkWindow *window)
     {
       [impl->view setHidden:YES];
     }
-
-  if (window == _gdk_display->pointer_grab.window)
-    gdk_pointer_ungrab (0);
-
-  if (window == _gdk_display->keyboard_grab.window)
-    gdk_keyboard_ungrab (0);
 }
 
 void
@@ -2809,6 +2838,7 @@ gdk_window_configure_finished (GdkWindow *window)
 void
 gdk_window_destroy_notify (GdkWindow *window)
 {
+  check_grab_destroy (window);
 }
 
 void 
