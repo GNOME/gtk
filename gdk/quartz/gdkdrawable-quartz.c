@@ -350,7 +350,7 @@ gdk_quartz_draw_drawable (GdkDrawable *drawable,
        * by using a scroll. FIXME: We need to check that the params support
        * this hack, and make sure it's done properly with any offsets etc?
        */
-      if (drawable == window_impl)
+      if (drawable == (GdkDrawable *)window_impl)
         {
           [window_impl->view scrollRect:NSMakeRect (xsrc, ysrc, width, height)
                                      by:NSMakeSize (xdest - xsrc, ydest - ysrc)];
