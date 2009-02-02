@@ -447,13 +447,19 @@ _gdk_get_sm_client_id (void)
 void
 _gdk_display_enable_motion_hints (GdkDisplay *display)
 {
-  gulong next_serial;
+  gulong serial;
   
   if (display->pointer_info.motion_hint_serial != 0)
     {
-      next_serial = _gdk_windowing_window_get_next_serial (display);
-      if (next_serial < display->pointer_info.motion_hint_serial)
-	display->pointer_info.motion_hint_serial = next_serial;
+      serial = _gdk_windowing_window_get_next_serial (display);
+      /* We might not actually generate the next request, so
+	 make sure this triggers always, this may cause it to
+	 trigger slightly to early, but this is just a hint
+	 anyway. */
+      if (serial > 0)
+	serial--;
+      if (serial < display->pointer_info.motion_hint_serial)
+	display->pointer_info.motion_hint_serial = serial;
     }
 }
 
