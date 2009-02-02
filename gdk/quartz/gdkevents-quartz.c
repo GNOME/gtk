@@ -731,7 +731,7 @@ find_window_for_ns_event (NSEvent *nsevent,
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
   NSPoint point;
-  NSPoint base;
+  NSPoint screen_point;
   NSEventType event_type;
 
   toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
@@ -739,13 +739,13 @@ find_window_for_ns_event (NSEvent *nsevent,
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
   point = [nsevent locationInWindow];
-  base = [[nsevent window] convertBaseToScreen:point];
+  screen_point = [[nsevent window] convertBaseToScreen:point];
 
   *x = point.x;
   *y = private->height - point.y;
 
-  *x_root = base.x;
-  *y_root = _gdk_quartz_window_get_inverted_screen_y (base.y);
+  *x_root = screen_point.x;
+  *y_root = _gdk_quartz_window_get_inverted_screen_y (screen_point.y);
 
   event_type = [nsevent type];
 
@@ -788,25 +788,22 @@ find_window_for_ns_event (NSEvent *nsevent,
 	    if (display->pointer_grab.event_mask & get_event_mask_from_ns_event (nsevent))
 	      {
 		GdkWindow *grab_toplevel;
+                GdkWindowObject *grab_private;
 		NSPoint point;
-		int x_tmp, y_tmp;
+                NSWindow *grab_nswindow;
 
 		grab_toplevel = gdk_window_get_toplevel (display->pointer_grab.window);
-		point = [nsevent locationInWindow];
+                grab_private = (GdkWindowObject *)grab_toplevel;
 
-		x_tmp = point.x;
-		y_tmp = GDK_WINDOW_OBJECT (grab_toplevel)->height - point.y;
+                point = [[nsevent window] convertBaseToScreen:[nsevent locationInWindow]];
 
-                /* FIXME: Would be better and easier to use cocoa to convert. */
+                grab_nswindow = ((GdkWindowImplQuartz *)private->impl)->toplevel;
+                point = [grab_nswindow convertScreenToBase:point];
 
-                /* Translate the coordinates so they are relative to
-                 * the grab window instead of the event toplevel for
-                 * the cases where they are not the same.
-                 */
-                get_converted_window_coordinates (toplevel,
-                                                  x_tmp, y_tmp,
-                                                  grab_toplevel,
-                                                  x, y);
+                *x = point.x;
+                *y = grab_private->height - point.y;
+
+                /* Note: x_root and y_root are already right. */
 
 		return grab_toplevel;
 	      }
