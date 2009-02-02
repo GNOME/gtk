@@ -429,6 +429,7 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
 	 server so we know its ended in the server,
 	 just make sure its ended. */
       grab->serial_end = grab->serial_start;
+      grab->implicit_ungrab = TRUE;
     }
   
   if (window == display->keyboard_grab.native_window &&
