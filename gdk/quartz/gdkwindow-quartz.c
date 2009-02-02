@@ -185,9 +185,6 @@ gdk_window_impl_quartz_finalize (GObject *object)
 
   check_grab_destroy (GDK_DRAWABLE_IMPL_QUARTZ (object)->wrapper);
 
-  if (impl->nscursor)
-    [impl->nscursor release];
-
   if (impl->paint_clip_region)
     gdk_region_destroy (impl->paint_clip_region);
 
@@ -974,7 +971,6 @@ _gdk_quartz_window_destroy (GdkWindow *window,
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
   GdkWindowObject *parent;
-  GdkWindow *mouse_window;
 
   private = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
@@ -993,11 +989,6 @@ _gdk_quartz_window_destroy (GdkWindow *window,
     }
 
   _gdk_quartz_drawable_finish (GDK_DRAWABLE (impl));
-
-  mouse_window = _gdk_quartz_events_get_mouse_window (FALSE);
-  if (window == mouse_window ||
-      _gdk_quartz_window_is_ancestor (window, mouse_window))
-    _gdk_quartz_events_update_mouse_window (_gdk_root);
 
   if (!recursing && !foreign_destroy)
     {
@@ -1123,18 +1114,12 @@ gdk_window_quartz_hide (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl;
-  GdkWindow *mouse_window;
 
   /* Make sure we're not stuck in fullscreen mode. */
   if (get_fullscreen_geometry (window))
     SetSystemUIMode (kUIModeNormal, 0);
 
   check_grab_unmap (window);
-
-  mouse_window = _gdk_quartz_events_get_mouse_window (FALSE);
-  if (window == mouse_window || 
-      _gdk_quartz_window_is_ancestor (window, mouse_window))
-    _gdk_quartz_events_update_mouse_window (_gdk_root);
 
   _gdk_window_clear_update_area (window);
 
@@ -1567,31 +1552,20 @@ static void
 gdk_window_quartz_set_cursor (GdkWindow *window,
                               GdkCursor *cursor)
 {
-  GdkWindowImplQuartz *impl;
   GdkCursorPrivate *cursor_private;
   NSCursor *nscursor;
 
-  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
   cursor_private = (GdkCursorPrivate *)cursor;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  GDK_QUARTZ_ALLOC_POOL;
-
   if (!cursor)
-    nscursor = NULL;
+    nscursor = [NSCursor arrowCursor];
   else 
-    nscursor = [cursor_private->nscursor retain];
+    nscursor = cursor_private->nscursor;
 
-  if (impl->nscursor)
-    [impl->nscursor release];
-
-  impl->nscursor = nscursor;
-
-  GDK_QUARTZ_RELEASE_POOL;
-
-  _gdk_quartz_events_update_cursor (_gdk_quartz_events_get_mouse_window (TRUE));
+  [nscursor set];
 }
 
 static void

@@ -51,8 +51,6 @@ struct _GdkWindowImplQuartz
 
   GdkWindowTypeHint type_hint;
 
-  NSCursor *nscursor;
-
   GdkRegion *paint_clip_region;
   gint begin_paint_count;
   gint in_paint_rect_count;

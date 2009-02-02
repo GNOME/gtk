@@ -512,35 +512,6 @@ _gdk_quartz_events_update_mouse_window (GdkWindow *window)
   current_mouse_window = window;
 }
 
-/* Update current cursor */
-void
-_gdk_quartz_events_update_cursor (GdkWindow *window)
-{
-  GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
-  NSCursor *nscursor = nil;
-
-  while (private)
-    {
-      GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-
-      nscursor = impl->nscursor;
-      if (nscursor)
-        break;
-
-      private = private->parent;
-    }
-
-  GDK_QUARTZ_ALLOC_POOL;
-
-  if (!nscursor)
-    nscursor = [NSCursor arrowCursor];
-
-  if ([NSCursor currentCursor] != nscursor)
-    [nscursor set];
-
-  GDK_QUARTZ_RELEASE_POOL;
-}
-
 /* Translates coordinates from an ancestor window + coords, to
  * coordinates that are relative the child window.
  */
