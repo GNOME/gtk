@@ -164,9 +164,6 @@ void         _gdk_quartz_events_send_map_event         (GdkWindow *window);
 GdkEventMask _gdk_quartz_events_get_current_event_mask (void);
 void         _gdk_quartz_events_trigger_crossing_events(gboolean   defer_to_mainloop);
 
-extern GdkWindow *_gdk_quartz_keyboard_grab_window;
-extern GdkWindow *_gdk_quartz_pointer_grab_window;
-
 /* Event loop */
 gboolean   _gdk_quartz_event_loop_check_pending (void);
 NSEvent *  _gdk_quartz_event_loop_get_pending   (void);

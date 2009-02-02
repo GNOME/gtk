@@ -39,10 +39,6 @@ static GdkWindow   *current_mouse_window;
 /* This is the window corresponding to the key window */
 static GdkWindow   *current_keyboard_window;
 
-/* This is the keyboard grab window */
-GdkWindow *         _gdk_quartz_keyboard_grab_window;
-static gboolean     keyboard_grab_owner_events;
-
 /* This is the event mask and button state from the last event */
 static GdkEventMask current_event_mask;
 static int          current_button_state;
@@ -129,44 +125,26 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   return NULL;
 }
 
-static void
-generate_grab_broken_event (GdkWindow *window,
-			    gboolean   keyboard,
-			    GdkWindow *grab_window)
-{
-  if (!GDK_WINDOW_DESTROYED (window))
-    {
-      GdkEvent *event = gdk_event_new (GDK_GRAB_BROKEN);
-
-      event->grab_broken.window = window;
-      event->grab_broken.send_event = 0;
-      event->grab_broken.keyboard = keyboard;
-      event->grab_broken.implicit = FALSE;
-      event->grab_broken.grab_window = grab_window;
-      
-      append_event (event);
-    }
-}
-
 GdkGrabStatus
 gdk_keyboard_grab (GdkWindow  *window,
 		   gint        owner_events,
 		   guint32     time)
 {
+  GdkDisplay *display;
+  GdkWindow  *toplevel;
+
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
-  if (_gdk_quartz_keyboard_grab_window)
-    {
-      if (_gdk_quartz_keyboard_grab_window != window)
-	generate_grab_broken_event (_gdk_quartz_keyboard_grab_window,
-				    TRUE, window);
-      
-      g_object_unref (_gdk_quartz_keyboard_grab_window);
-    }
+  display = gdk_drawable_get_display (window);
+  toplevel = gdk_window_get_toplevel (window);
 
-  _gdk_quartz_keyboard_grab_window = g_object_ref (window);
-  keyboard_grab_owner_events = owner_events;
+  _gdk_display_set_has_keyboard_grab (display,
+                                      window,
+                                      toplevel,
+                                      owner_events,
+                                      0,
+                                      time);
 
   return GDK_GRAB_SUCCESS;
 }
@@ -175,9 +153,7 @@ void
 gdk_display_keyboard_ungrab (GdkDisplay *display,
 			     guint32     time)
 {
-  if (_gdk_quartz_keyboard_grab_window)
-    g_object_unref (_gdk_quartz_keyboard_grab_window);
-  _gdk_quartz_keyboard_grab_window = NULL;
+  _gdk_display_unset_has_keyboard_grab (display, FALSE);
 }
 
 void
@@ -862,9 +838,8 @@ find_window_for_ns_event (NSEvent *nsevent,
     case NSKeyUp:
     case NSFlagsChanged:
       {
-        /* FIXME: Use common code here instead. */
-	if (_gdk_quartz_keyboard_grab_window && !keyboard_grab_owner_events)
-	  return _gdk_quartz_keyboard_grab_window;
+	if (_gdk_display->keyboard_grab.window && !_gdk_display->keyboard_grab.owner_events)
+	  return gdk_window_get_toplevel (_gdk_display->keyboard_grab.window);
 
         return toplevel;
       }

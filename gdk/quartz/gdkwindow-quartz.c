@@ -956,7 +956,7 @@ _gdk_quartz_window_destroy (GdkWindow *window,
   if (window == _gdk_display->pointer_grab.window)
     gdk_pointer_ungrab (0);
 
-  if (window == _gdk_quartz_keyboard_grab_window)
+  if (window == _gdk_display->keyboard_grab.window)
     gdk_keyboard_ungrab (0);
 
   _gdk_quartz_drawable_finish (GDK_DRAWABLE (impl));
@@ -1125,7 +1125,7 @@ gdk_window_quartz_hide (GdkWindow *window)
   if (window == _gdk_display->pointer_grab.window)
     gdk_pointer_ungrab (0);
 
-  if (window == _gdk_quartz_keyboard_grab_window)
+  if (window == _gdk_display->keyboard_grab.window)
     gdk_keyboard_ungrab (0);
 }
 
