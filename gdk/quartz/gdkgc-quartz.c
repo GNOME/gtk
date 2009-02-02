@@ -285,7 +285,6 @@ gdk_quartz_draw_tiled_pattern (void         *info,
 			       CGContextRef  context)
 {
   GdkGC       *gc = GDK_GC (info);
-  GdkGCQuartz *private = GDK_GC_QUARTZ (gc);
   CGImageRef   pattern_image;
   size_t       width, height;
 
