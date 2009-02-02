@@ -193,24 +193,14 @@ gdk_pointer_grab (GdkWindow    *window,
 static void
 break_all_grabs (guint32 time)
 {
-  /*
-  if (_gdk_quartz_keyboard_grab_window)
-    {
-      generate_grab_broken_event (_gdk_quartz_keyboard_grab_window,
-                                  TRUE,
-                                  NULL);
-      g_object_unref (_gdk_quartz_keyboard_grab_window);
-      _gdk_quartz_keyboard_grab_window = NULL;
-    }
-  */
+  if (_gdk_display->keyboard_grab.window)
+    _gdk_display_unset_has_keyboard_grab (_gdk_display, FALSE);
+
   if (_gdk_display->pointer_grab.window)
-    {
-      g_print ("break all grabs\n");
-      _gdk_display_unset_has_pointer_grab (_gdk_display,
-                                           _gdk_display->pointer_grab.implicit,
-                                           FALSE,
-                                           time);
-    }
+    _gdk_display_unset_has_pointer_grab (_gdk_display,
+                                         _gdk_display->pointer_grab.implicit,
+                                         FALSE,
+                                         time);
 }
 
 static void
