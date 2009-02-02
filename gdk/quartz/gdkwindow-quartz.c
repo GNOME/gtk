@@ -953,7 +953,7 @@ _gdk_quartz_window_destroy (GdkWindow *window,
   /* If the destroyed window was targeted for a pointer or keyboard
    * grab, release the grab.
    */
-  if (window == _gdk_quartz_pointer_grab_window)
+  if (window == _gdk_display->pointer_grab.window)
     gdk_pointer_ungrab (0);
 
   if (window == _gdk_quartz_keyboard_grab_window)
@@ -1122,7 +1122,7 @@ gdk_window_quartz_hide (GdkWindow *window)
       [impl->view setHidden:YES];
     }
 
-  if (window == _gdk_quartz_pointer_grab_window)
+  if (window == _gdk_display->pointer_grab.window)
     gdk_pointer_ungrab (0);
 
   if (window == _gdk_quartz_keyboard_grab_window)
@@ -1788,7 +1788,7 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
       x_tmp = point.x;
       y_tmp = private->height - point.y;
 
-      window = toplevel;
+      window = (GdkWindow *)toplevel;
     }
 
   found_window = _gdk_quartz_window_find_child (window, x_tmp, y_tmp);

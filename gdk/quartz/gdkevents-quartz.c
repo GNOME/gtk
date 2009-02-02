@@ -39,11 +39,6 @@ static GdkWindow   *current_mouse_window;
 /* This is the window corresponding to the key window */
 static GdkWindow   *current_keyboard_window;
 
-/* This is the pointer grab window */
-GdkWindow          *_gdk_quartz_pointer_grab_window;
-static gboolean     pointer_grab_owner_events;
-static GdkEventMask pointer_grab_event_mask;
-
 /* This is the keyboard grab window */
 GdkWindow *         _gdk_quartz_keyboard_grab_window;
 static gboolean     keyboard_grab_owner_events;
@@ -185,42 +180,11 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
   _gdk_quartz_keyboard_grab_window = NULL;
 }
 
-static void
-pointer_ungrab_internal (void)
-{
-  if (!_gdk_quartz_pointer_grab_window)
-    return;
-
-  g_object_unref (_gdk_quartz_pointer_grab_window);
-  _gdk_quartz_pointer_grab_window = NULL;
-
-  pointer_grab_owner_events = FALSE;
-  pointer_grab_event_mask = 0;
-
-  /* FIXME: Send crossing events */
-}
-
 void
 gdk_display_pointer_ungrab (GdkDisplay *display,
 			    guint32     time)
 {
-  pointer_ungrab_internal ();
-}
-
-static GdkGrabStatus
-pointer_grab_internal (GdkWindow    *window,
-		       gboolean	     owner_events,
-		       GdkEventMask  event_mask,
-		       GdkWindow    *confine_to,
-		       GdkCursor    *cursor)
-{
-  /* FIXME: Send crossing events */
-  
-  _gdk_quartz_pointer_grab_window = g_object_ref (window);
-  pointer_grab_owner_events = owner_events;
-  pointer_grab_event_mask = event_mask;
-
-  return GDK_GRAB_SUCCESS;
+  _gdk_display_unset_has_pointer_grab (display, FALSE, FALSE, time);
 }
 
 GdkGrabStatus
@@ -238,31 +202,22 @@ gdk_pointer_grab (GdkWindow    *window,
 
   toplevel = gdk_window_get_toplevel (window);
 
-  /* TODO: What do we do for offscreens and their children? We need to proxy the grab somehow */
-  if (!GDK_IS_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl))
-    return GDK_GRAB_SUCCESS;
+  _gdk_display_set_has_pointer_grab (_gdk_display,
+                                     window,
+                                     toplevel,
+                                     owner_events,
+                                     event_mask,
+                                     0,
+                                     time,
+                                     FALSE);
 
-  if (_gdk_quartz_pointer_grab_window)
-    {
-      if (_gdk_quartz_pointer_grab_window != window)
-        generate_grab_broken_event (_gdk_quartz_pointer_grab_window,
-                                    FALSE,
-                                    window);
-
-      pointer_ungrab_internal ();
-    }
-
-  return pointer_grab_internal (window, owner_events, event_mask, 
-				confine_to, cursor);
+  return GDK_GRAB_SUCCESS;
 }
 
-/* This is used to break any grabs in the case where we have to due to
- * the grab emulation. Instead of enforcing the desktop wide grab, we
- * break it when the app loses focus for example.
- */
 static void
-break_all_grabs (void)
+break_all_grabs (guint32 time)
 {
+  /*
   if (_gdk_quartz_keyboard_grab_window)
     {
       generate_grab_broken_event (_gdk_quartz_keyboard_grab_window,
@@ -271,13 +226,14 @@ break_all_grabs (void)
       g_object_unref (_gdk_quartz_keyboard_grab_window);
       _gdk_quartz_keyboard_grab_window = NULL;
     }
-
-  if (_gdk_quartz_pointer_grab_window)
+  */
+  if (_gdk_display->pointer_grab.window)
     {
-      generate_grab_broken_event (_gdk_quartz_pointer_grab_window,
-                                  FALSE,
-                                  NULL);
-      pointer_ungrab_internal ();
+      g_print ("break all grabs\n");
+      _gdk_display_unset_has_pointer_grab (_gdk_display,
+                                           _gdk_display->pointer_grab.implicit,
+                                           FALSE,
+                                           time);
     }
 }
 
@@ -321,37 +277,6 @@ gdk_event_apply_filters (NSEvent *nsevent,
     }
 
   return GDK_FILTER_CONTINUE;
-}
-
-/* Checks if the passed in window is interested in the event mask, and
- * if so, it's returned. If not, the event can be propagated through
- * its ancestors until one with the right event mask is found, up to
- * the nearest toplevel.
- */
-static GdkWindow *
-find_window_interested_in_event_mask (GdkWindow    *window, 
-				      GdkEventMask  event_mask,
-				      gboolean      propagate)
-{
-  GdkWindowObject *private;
-
-  private = GDK_WINDOW_OBJECT (window);
-  while (private)
-    {
-      if (private->event_mask & event_mask)
-	return (GdkWindow *)private;
-
-      if (!propagate)
-	return NULL;
-
-      /* Don't traverse beyond toplevels. */
-      if (GDK_WINDOW_TYPE (private) != GDK_WINDOW_CHILD)
-	break;
-
-      private = private->parent;
-    }
-
-  return NULL;
 }
 
 static guint32
@@ -569,8 +494,8 @@ _gdk_quartz_events_get_mouse_window (gboolean consider_grabs)
   if (!consider_grabs)
     return current_mouse_window;
 
-  if (_gdk_quartz_pointer_grab_window && !pointer_grab_owner_events)
-    return _gdk_quartz_pointer_grab_window;
+  if (_gdk_display->pointer_grab.window && !_gdk_display->pointer_grab.owner_events)
+    return _gdk_display->pointer_grab.window;
   
   return current_mouse_window;
 }
@@ -724,65 +649,6 @@ get_converted_window_coordinates (GdkWindow *in_window,
                                        out_x, out_y);
 }
 
-/* Given a mouse NSEvent (must be a mouse event for a GDK window),
- * finds the subwindow over which the pointer is located. Returns
- * coordinates relative to the found window. If no window is found,
- * returns the root window, and root window coordinates.
- */
-static GdkWindow *
-find_mouse_window_for_ns_event (NSEvent *nsevent,
-                                gint    *x_ret,
-                                gint    *y_ret)
-{
-  GdkWindow *event_toplevel;
-  GdkWindowImplQuartz *impl;
-  GdkWindowObject *private;
-  GdkWindow *mouse_toplevel;
-  GdkWindow *mouse_window;
-  NSPoint point;
-  gint x_tmp, y_tmp;
-
-  event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
-  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (event_toplevel)->impl);
-  private = GDK_WINDOW_OBJECT (event_toplevel);
-  point = [nsevent locationInWindow];
-
-  x_tmp = point.x;
-  y_tmp = private->height - point.y;
-
-  mouse_toplevel = gdk_window_get_toplevel (current_mouse_window);
-
-  get_converted_window_coordinates (event_toplevel,
-                                    x_tmp, y_tmp,
-                                    mouse_toplevel,
-                                    &x_tmp, &y_tmp);
-
-  mouse_window = _gdk_quartz_window_find_child (mouse_toplevel, x_tmp, y_tmp);
-  if (mouse_window && mouse_window != mouse_toplevel)
-    {
-      get_child_coordinates_from_ancestor (mouse_toplevel,
-                                           x_tmp, y_tmp,
-                                           mouse_window,
-                                           &x_tmp, &y_tmp);
-    }
-  else if (!mouse_window)
-    {
-      /* This happens for events on the window title buttons and the
-       * desktop, treat those as being on the root window.
-       */
-      get_converted_window_coordinates (mouse_toplevel,
-                                        x_tmp, y_tmp,
-                                        _gdk_root,
-                                        &x_tmp, &y_tmp);
-      mouse_window = _gdk_root;
-    }
-
-  *x_ret = x_tmp;
-  *y_ret = y_tmp;
-
-  return mouse_window;
-}
-
 /* Trigger crossing events if necessary. This is used when showing a new
  * window, since the tracking rect API doesn't work reliably when a window
  * shows up under the mouse cursor. It's done by finding the topmost window
@@ -921,9 +787,9 @@ find_window_for_ns_event (NSEvent *nsevent,
     case NSRightMouseDragged:
     case NSOtherMouseDragged:
       {
-	GdkWindow *mouse_window;
-	GdkEventMask event_mask;
-	GdkWindow *real_window;
+	GdkDisplay *display;
+
+        display = gdk_drawable_get_display (toplevel);
 
 	/* From the docs for XGrabPointer:
 	 *
@@ -937,49 +803,36 @@ find_window_for_ns_event (NSEvent *nsevent,
 	 * This means we first try the owner, then the grab window,
 	 * then give up.
 	 */
-	if (0 && _gdk_quartz_pointer_grab_window) /* FIXME: Implement grabs? */
+	if (display->pointer_grab.window)
 	  {
-	    if (pointer_grab_owner_events)
-	      {
-                mouse_window = find_mouse_window_for_ns_event (nsevent, x, y);
-		event_mask = get_event_mask_from_ns_event (nsevent);
-		real_window = find_window_interested_in_event_mask (mouse_window, event_mask, TRUE);
-		
-		if (mouse_window && real_window && mouse_window != real_window)
-		  get_ancestor_coordinates_from_child (mouse_window,
-						       *x, *y,
-						       real_window,
-						       x, y);
-
-		if (real_window)
-		  return real_window;
-	      }
+	    if (display->pointer_grab.owner_events)
+              return toplevel;
 
 	    /* Finally check the grab window. */
-	    if (pointer_grab_event_mask & get_event_mask_from_ns_event (nsevent))
+	    if (display->pointer_grab.event_mask & get_event_mask_from_ns_event (nsevent))
 	      {
-                GdkWindow *event_toplevel;
 		GdkWindow *grab_toplevel;
 		NSPoint point;
 		int x_tmp, y_tmp;
 
-                event_toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
-		grab_toplevel = gdk_window_get_toplevel (_gdk_quartz_pointer_grab_window);
+		grab_toplevel = gdk_window_get_toplevel (display->pointer_grab.window);
 		point = [nsevent locationInWindow];
 
 		x_tmp = point.x;
 		y_tmp = GDK_WINDOW_OBJECT (grab_toplevel)->height - point.y;
 
+                /* FIXME: Would be better and easier to use cocoa to convert. */
+
                 /* Translate the coordinates so they are relative to
                  * the grab window instead of the event toplevel for
                  * the cases where they are not the same.
                  */
-                get_converted_window_coordinates (event_toplevel,
+                get_converted_window_coordinates (toplevel,
                                                   x_tmp, y_tmp,
-                                                  _gdk_quartz_pointer_grab_window,
+                                                  grab_toplevel,
                                                   x, y);
 
-		return _gdk_quartz_pointer_grab_window;
+		return grab_toplevel;
 	      }
 
 	    return NULL;
@@ -1009,6 +862,7 @@ find_window_for_ns_event (NSEvent *nsevent,
     case NSKeyUp:
     case NSFlagsChanged:
       {
+        /* FIXME: Use common code here instead. */
 	if (_gdk_quartz_keyboard_grab_window && !keyboard_grab_owner_events)
 	  return _gdk_quartz_keyboard_grab_window;
 
@@ -1428,7 +1282,7 @@ gdk_event_translate (GdkEvent *event,
   if (event_type == NSAppKitDefined)
     {
       if ([nsevent subtype] == NSApplicationDeactivatedEventType)
-        break_all_grabs ();
+        break_all_grabs (get_time_from_ns_event (nsevent));
 
       /* This could potentially be used to break grabs when clicking
        * on the title. The subtype 20 is undocumented so it's probably
@@ -1492,7 +1346,7 @@ gdk_event_translate (GdkEvent *event,
    */
   if ([(GdkQuartzWindow *)nswindow isInMove])
     {
-      break_all_grabs ();
+      break_all_grabs (get_time_from_ns_event (nsevent));
       return FALSE;
     }
 
