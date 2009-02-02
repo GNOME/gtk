@@ -1237,6 +1237,12 @@ gdk_event_translate (GdkEvent *event,
   int x_root, y_root;
   gboolean return_val;
 
+  /* Ignore events altogether when we're not active, otherwise we get
+   * tooltips etc for inactive apps.
+   */
+  if (![NSApp isActive])
+    return FALSE;
+
   /* There is no support for real desktop wide grabs, so we break
    * grabs when the application loses focus (gets deactivated).
    */
