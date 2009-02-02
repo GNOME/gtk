@@ -180,7 +180,6 @@ typedef struct
   gboolean owner_events;
   guint event_mask;
   gboolean implicit;
-  gboolean converted_implicit;
   guint32 time;
 
   gboolean activated;

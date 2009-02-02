@@ -436,55 +436,6 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
     _gdk_display_unset_has_keyboard_grab (display, TRUE);
 }
 
-#define GDK_ANY_BUTTON_MASK (GDK_BUTTON1_MASK | \
-                             GDK_BUTTON2_MASK | \
-                             GDK_BUTTON3_MASK | \
-                             GDK_BUTTON4_MASK | \
-                             GDK_BUTTON5_MASK)
-
-/**
- * _gdk_xgrab_check_button_event:
- * @window: a #GdkWindow
- * @event: an XEvent of type ButtonPress or ButtonRelease
- * 
- * Checks to see if a button event starts or ends an implicit grab.
- **/
-void
-_gdk_xgrab_check_button_event (GdkWindow *window, 
-			       XEvent *xevent)
-{
-  GdkDisplay *display = gdk_drawable_get_display (window);
-  gulong serial = xevent->xany.serial;
-  GdkPointerGrabInfo *grab;
-  
-  /* track implicit grabs for button presses */
-  switch (xevent->type)
-    {
-    case ButtonPress:
-      if (!_gdk_display_has_pointer_grab (display, serial))
-	{
-	  _gdk_display_add_pointer_grab  (display,
-					  window,
-					  window,
-					  FALSE,
-					  gdk_window_get_events (window),
-					  serial,
-					  xevent->xbutton.time,
-					  TRUE);
-	}
-      break;
-    case ButtonRelease:
-      serial = serial; 
-      grab = _gdk_display_has_pointer_grab (display, serial);
-      if (grab && grab->implicit &&
-	  (xevent->xbutton.state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (xevent->xbutton.button - 1))) == 0)
-	grab->grab_one_pointer_release_event = TRUE;
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-}
-
 void
 _gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
 					 const gchar *sm_client_id)

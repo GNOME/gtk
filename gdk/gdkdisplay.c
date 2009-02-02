@@ -808,7 +808,6 @@ _gdk_display_add_pointer_grab (GdkDisplay *display,
   info->event_mask = event_mask;
   info->time = time;
   info->implicit = implicit;
-  info->converted_implicit = FALSE;
 
   /* Find the first grab that has a larger start time (if any) and insert
    * before that. I.E we insert after already existing grabs with same
