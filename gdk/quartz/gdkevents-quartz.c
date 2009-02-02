@@ -198,7 +198,7 @@ break_all_grabs (guint32 time)
 
   if (_gdk_display->pointer_grab.window)
     _gdk_display_unset_has_pointer_grab (_gdk_display,
-                                         _gdk_display->pointer_grab.implicit,
+                                         TRUE,
                                          FALSE,
                                          time);
 }
