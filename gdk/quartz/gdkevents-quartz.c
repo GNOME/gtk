@@ -33,9 +33,6 @@
 #include "gdkkeysyms.h"
 #include "gdkprivate-quartz.h"
 
-/* This is the window the mouse is currently over */
-static GdkWindow   *current_mouse_window;
-
 /* This is the window corresponding to the key window */
 static GdkWindow   *current_keyboard_window;
 
@@ -63,38 +60,6 @@ static void get_converted_window_coordinates    (GdkWindow *in_window,
                                                  gint      *out_y);
 static void append_event                        (GdkEvent  *event);
 
-static const gchar *
-which_window_is_this (GdkWindow *window)
-{
-  static gchar buf[256];
-  const gchar *name = NULL;
-  gpointer widget;
-
-  /* Get rid of compiler warning. */
-  if (0) which_window_is_this (window);
-
-  if (window == _gdk_root)
-    name = "root";
-  else if (window == NULL)
-    name = "null";
-
-  if (window)
-    {
-      gdk_window_get_user_data (window, &widget);
-      if (widget)
-        name = G_OBJECT_TYPE_NAME (widget);
-    }
-
-  if (!name)
-    name = "unknown";
-
-  snprintf (buf, 256, "<%s (%p)%s>", 
-            name, window, 
-            window == current_mouse_window ? ", is mouse" : "");
-
-  return buf;
-}
-
 NSEvent *
 gdk_quartz_event_get_nsevent (GdkEvent *event)
 {
@@ -107,7 +72,6 @@ _gdk_events_init (void)
 {
   _gdk_quartz_event_loop_init ();
 
-  current_mouse_window = g_object_ref (_gdk_root);
   current_keyboard_window = g_object_ref (_gdk_root);
 }
 
@@ -476,42 +440,6 @@ _gdk_quartz_events_send_map_event (GdkWindow *window)
     }
 }
 
-/* Get current mouse window */
-GdkWindow *
-_gdk_quartz_events_get_mouse_window (gboolean consider_grabs)
-{
-  GdkPointerGrabInfo *grab;
-
-  if (!consider_grabs)
-    return current_mouse_window;
-
-  grab = _gdk_display_get_last_pointer_grab (_gdk_display);
-  if (grab && grab->window && !grab->owner_events)
-    return grab->window;
-  
-  return current_mouse_window;
-}
-
-/* Update mouse window */
-void
-_gdk_quartz_events_update_mouse_window (GdkWindow *window)
-{
-  if (window == current_mouse_window)
-    return;
-
-#ifdef G_ENABLE_DEBUG
-  if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
-    _gdk_quartz_window_debug_highlight (window, 0);
-#endif /* G_ENABLE_DEBUG */  
-
-  if (window)
-    g_object_ref (window);
-  if (current_mouse_window)
-    g_object_unref (current_mouse_window);
-
-  current_mouse_window = window;
-}
-
 /* Translates coordinates from an ancestor window + coords, to
  * coordinates that are relative the child window.
  */
@@ -657,12 +585,6 @@ _gdk_quartz_events_trigger_crossing_events (gboolean defer_to_mainloop)
     return;
 
   toplevel = gdk_window_get_toplevel (mouse_window);
-
-  /* We ignore crossing within the same toplevel since that is already
-   * handled elsewhere.
-   */
-  if (toplevel == gdk_window_get_toplevel (current_mouse_window))
-    return;
 
   get_converted_window_coordinates (_gdk_root,
                                     x, y,
@@ -1117,12 +1039,6 @@ synthesize_crossing_event (GdkWindow *window,
 
   private = GDK_WINDOW_OBJECT (window);
 
-  /* FIXME: had this before csw:
-     _gdk_quartz_events_update_mouse_window (window);
-     if (window && !_gdk_quartz_pointer_grab_window)
-       _gdk_quartz_events_update_cursor (window);
-  */
-
   switch ([nsevent type])
     {
     case NSMouseEntered:
@@ -1150,14 +1066,6 @@ synthesize_crossing_event (GdkWindow *window,
          */
         if (!(private->event_mask & GDK_LEAVE_NOTIFY_MASK))
           return FALSE;
-
-        /*if (!mouse_window ||
-            gdk_window_get_toplevel (mouse_window) ==
-            gdk_window_get_toplevel (current_mouse_window))
-          {
-            mouse_window = _gdk_root;
-          }
-        */
 
         fill_crossing_event (window, event, nsevent,
                              x, y,
