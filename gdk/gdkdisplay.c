@@ -750,24 +750,6 @@ generate_grab_broken_event (GdkWindow *window,
     }
 }
 
-/* Get the pointer grab in effects for events we just sent */
-GdkPointerGrabInfo *
-_gdk_display_get_active_pointer_grab (GdkDisplay *display)
-{
-  GdkPointerGrabInfo *info;
-
-  if (display->pointer_grabs == NULL)
-    return NULL;
-
-  info = display->pointer_grabs->data;
-
-  if (info->activated)
-    return info;
-  
-  return NULL;
-}
-
-
 GdkPointerGrabInfo *
 _gdk_display_get_last_pointer_grab (GdkDisplay *display)
 {
@@ -1266,7 +1248,10 @@ gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
   
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
-  info = _gdk_display_get_active_pointer_grab (display);
+  /* What we're interested in is the steady state (ie last grab),
+     because we're interested e.g. if we grabbed so that we
+     can ungrab, even if our grab is not active just yet. */
+  info = _gdk_display_get_last_pointer_grab (display);
   
   if (info)
     {
@@ -1299,7 +1284,10 @@ gdk_display_pointer_is_grabbed (GdkDisplay *display)
   
   g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
 
-  info = _gdk_display_get_active_pointer_grab (display);
+  /* What we're interested in is the steady state (ie last grab),
+     because we're interested e.g. if we grabbed so that we
+     can ungrab, even if our grab is not active just yet. */
+  info = _gdk_display_get_last_pointer_grab (display);
   
   return (info && !info->implicit);
 }
