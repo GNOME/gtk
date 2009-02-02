@@ -990,7 +990,8 @@ switch_to_pointer_grab (GdkDisplay *display,
     {
       pointer_window = _gdk_windowing_window_at_pointer (display,  &x, &y, &state);
       if (pointer_window != NULL &&
-	  (GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_ROOT ||
+	  (GDK_WINDOW_DESTROYED (pointer_window) ||
+	   GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_ROOT ||
 	   GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_FOREIGN))
 	pointer_window = NULL;
       
@@ -1006,7 +1007,8 @@ switch_to_pointer_grab (GdkDisplay *display,
 	{
 	  /* Convert to toplevel */
 	  w = (GdkWindowObject *)pointer_window;
-	  while (w->parent->window_type != GDK_WINDOW_ROOT)
+	  while (/*w->parent != NULL && */
+		 w->parent->window_type != GDK_WINDOW_ROOT)
 	    {
 	      x += w->x;
 	      y += w->y;
