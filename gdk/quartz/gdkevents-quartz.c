@@ -519,11 +519,14 @@ find_window_for_ns_event (NSEvent *nsevent,
 	  {
 	    /* The non-grabbed case. */
 
-            /* Leave events above the window (e.g. possibly on the titlebar)
-             * to cocoa.
+            /* Ignore all events but mouse moved that might be on the title
+             * bar (above the content view). The reason is that otherwise
+             * gdk gets confused about getting e.g. button presses with no
+             * window (the title bar is not known to it).
              */
-            if (*y < 0)
-              return NULL;
+            if (event_type != NSMouseMoved)
+              if (*y < 0)
+                return NULL;
 
             /* FIXME: Also need to leave resize events to cocoa somehow? */
 
