@@ -8647,6 +8647,32 @@ _gdk_windowing_got_event (GdkDisplay *display,
       return;
     }
 
+  if ((event->type == GDK_ENTER_NOTIFY ||
+       event->type == GDK_LEAVE_NOTIFY) &&
+      (event->crossing.mode == GDK_CROSSING_GRAB ||
+       event->crossing.mode == GDK_CROSSING_UNGRAB) &&
+      _gdk_display_has_pointer_grab (display, serial))
+    {
+      /* We synthesize all crossing events due to grabs outselves,
+       * so we ignore the native ones when we already have a grab.
+       * Otherwise we would send multiple events when this app grabs
+       * We want to handle grabs from other clients though. */
+
+      /* We ended up in this window after some (perhaps other clients)
+	 grab, so update the toplevel_under_window state */
+      if (is_toplevel &&
+	  event->type == GDK_ENTER_NOTIFY &&
+	  event->crossing.mode == GDK_CROSSING_UNGRAB)
+	{
+	  if (display->pointer_info.toplevel_under_pointer)
+	    g_object_unref (display->pointer_info.toplevel_under_pointer);
+	  display->pointer_info.toplevel_under_pointer = g_object_ref (event_window);
+	}
+      
+      unlink_event = TRUE;
+      goto out;
+    }
+  
   /* Track toplevel_under_pointer */
   if (is_toplevel)
     {
@@ -8707,6 +8733,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
 	}
     }
 
+ out:
   if (unlink_event)
     {
       _gdk_event_queue_remove_link (display, event_link);
