@@ -696,7 +696,6 @@ find_window_for_ns_event (NSEvent *nsevent,
 	      {
 		GdkWindow *grab_toplevel;
                 GdkWindowObject *grab_private;
-		NSPoint point;
                 NSWindow *grab_nswindow;
 
 		grab_toplevel = gdk_window_get_toplevel (grab->window);
