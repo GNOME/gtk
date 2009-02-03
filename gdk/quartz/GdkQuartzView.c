@@ -35,6 +35,11 @@
   return gdk_window;
 }
 
+-(NSTrackingRectTag)trackingRect
+{
+  return trackingRect;
+}
+
 -(BOOL)isFlipped
 {
   return YES;

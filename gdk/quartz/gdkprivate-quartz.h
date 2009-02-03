@@ -151,15 +151,13 @@ void       _gdk_quartz_window_debug_highlight       (GdkWindow *window,
 
 /* Events */
 typedef enum {
-  GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP,
-  GDK_QUARTZ_EVENT_SUBTYPE_FAKE_CROSSING
+  GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP
 } GdkQuartzEventSubType;
 
 void         _gdk_quartz_events_update_focus_window    (GdkWindow *new_window,
                                                         gboolean   got_focus);
 void         _gdk_quartz_events_send_map_event         (GdkWindow *window);
 GdkEventMask _gdk_quartz_events_get_current_event_mask (void);
-void         _gdk_quartz_events_trigger_crossing_events(gboolean   defer_to_mainloop);
 
 /* Event loop */
 gboolean   _gdk_quartz_event_loop_check_pending (void);

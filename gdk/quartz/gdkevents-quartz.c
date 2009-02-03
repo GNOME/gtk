@@ -40,24 +40,6 @@ static GdkWindow   *current_keyboard_window;
 static GdkEventMask current_event_mask;
 static int          current_button_state;
 
-static void get_child_coordinates_from_ancestor (GdkWindow *ancestor_window,
-                                                 gint       ancestor_x,
-                                                 gint       ancestor_y,
-                                                 GdkWindow *child_window, 
-                                                 gint      *child_x, 
-                                                 gint      *child_y);
-static void get_ancestor_coordinates_from_child (GdkWindow *child_window,
-                                                 gint       child_x,
-                                                 gint       child_y,
-                                                 GdkWindow *ancestor_window, 
-                                                 gint      *ancestor_x, 
-                                                 gint      *ancestor_y);
-static void get_converted_window_coordinates    (GdkWindow *in_window,
-                                                 gint       in_x,
-                                                 gint       in_y,
-                                                 GdkWindow *out_window, 
-                                                 gint      *out_x, 
-                                                 gint      *out_y);
 static void append_event                        (GdkEvent  *event);
 
 NSEvent *
@@ -436,192 +418,6 @@ _gdk_quartz_events_send_map_event (GdkWindow *window)
     }
 }
 
-/* Translates coordinates from an ancestor window + coords, to
- * coordinates that are relative the child window.
- */
-static void
-get_child_coordinates_from_ancestor (GdkWindow *ancestor_window,
-				     gint       ancestor_x,
-				     gint       ancestor_y,
-				     GdkWindow *child_window, 
-				     gint      *child_x, 
-				     gint      *child_y)
-{
-  GdkWindowObject *ancestor_private = GDK_WINDOW_OBJECT (ancestor_window);
-  GdkWindowObject *child_private = GDK_WINDOW_OBJECT (child_window);
-
-  while (child_private != ancestor_private)
-    {
-      ancestor_x -= child_private->x;
-      ancestor_y -= child_private->y;
-
-      child_private = child_private->parent;
-    }
-
-  *child_x = ancestor_x;
-  *child_y = ancestor_y;
-}
-
-/* Translates coordinates from a child window + coords, to
- * coordinates that are relative the ancestor window.
- */
-static void
-get_ancestor_coordinates_from_child (GdkWindow *child_window,
-				     gint       child_x,
-				     gint       child_y,
-				     GdkWindow *ancestor_window, 
-				     gint      *ancestor_x, 
-				     gint      *ancestor_y)
-{
-  GdkWindowObject *child_private = GDK_WINDOW_OBJECT (child_window);
-  GdkWindowObject *ancestor_private = GDK_WINDOW_OBJECT (ancestor_window);
-
-  while (child_private != ancestor_private)
-    {
-      child_x += child_private->x;
-      child_y += child_private->y;
-
-      child_private = child_private->parent;
-    }
-
-  *ancestor_x = child_x;
-  *ancestor_y = child_y;
-}
-
-/* Translates coordinates relative to one window (in_window) into
- * coordinates relative to another window (out_window).
- */
-static void
-get_converted_window_coordinates (GdkWindow *in_window,
-                                  gint       in_x,
-                                  gint       in_y,
-                                  GdkWindow *out_window, 
-                                  gint      *out_x, 
-                                  gint      *out_y)
-{
-  GdkWindow *in_toplevel;
-  GdkWindow *out_toplevel;
-  int in_origin_x, in_origin_y;
-  int out_origin_x, out_origin_y;
-
-  if (in_window == out_window)
-    {
-      *out_x = in_x;
-      *out_y = in_y;
-      return;
-    }
-
-  /* First translate to "in" toplevel coordinates, then on to "out"
-   * toplevel coordinates, and finally to "out" child (the passed in
-   * window) coordinates.
-   */
-
-  in_toplevel = gdk_window_get_toplevel (in_window);
-  out_toplevel  = gdk_window_get_toplevel (out_window);
-
-  /* Translate in_x, in_y to "in" toplevel coordinates. */
-  get_ancestor_coordinates_from_child (in_window, in_x, in_y,
-                                       in_toplevel, &in_x, &in_y);
-
-  gdk_window_get_origin (in_toplevel, &in_origin_x, &in_origin_y);
-  gdk_window_get_origin (out_toplevel, &out_origin_x, &out_origin_y);
-
-  /* Translate in_x, in_y to "out" toplevel coordinates. */
-  in_x -= out_origin_x - in_origin_x;
-  in_y -= out_origin_y - in_origin_y;
-
-  get_child_coordinates_from_ancestor (out_toplevel, 
-                                       in_x, in_y,
-                                       out_window,
-                                       out_x, out_y);
-}
-
-/* Trigger crossing events if necessary. This is used when showing a new
- * window, since the tracking rect API doesn't work reliably when a window
- * shows up under the mouse cursor. It's done by finding the topmost window
- * under the mouse pointer and synthesizing crossing events into that
- * window.
- */
-void
-_gdk_quartz_events_trigger_crossing_events (gboolean defer_to_mainloop)
-{
-  NSPoint point;
-  gint x, y; 
-  gint x_toplevel, y_toplevel;
-  GdkWindow *mouse_window;
-  GdkWindow *toplevel;
-  GdkWindowImplQuartz *impl;
-  GdkWindowObject *private;
-  guint flags = 0;
-  NSTimeInterval timestamp = 0;
-  NSEvent *current_event;
-  NSEvent *nsevent;
-
-  if (defer_to_mainloop)
-    {
-      nsevent = [NSEvent otherEventWithType:NSApplicationDefined
-                                   location:NSZeroPoint
-                              modifierFlags:0
-                                  timestamp:0
-                               windowNumber:0
-                                    context:nil
-                                    subtype:GDK_QUARTZ_EVENT_SUBTYPE_FAKE_CROSSING
-                                      data1:0
-                                      data2:0];
-      [NSApp postEvent:nsevent atStart:NO];
-      return;
-    }
-
-  point = [NSEvent mouseLocation];
-  x = point.x;
-  y = _gdk_quartz_window_get_inverted_screen_y (point.y);
-
-  mouse_window = _gdk_quartz_window_find_child (_gdk_root, x, y);
-  if (!mouse_window || mouse_window == _gdk_root)
-    return;
-
-  toplevel = gdk_window_get_toplevel (mouse_window);
-
-  get_converted_window_coordinates (_gdk_root,
-                                    x, y,
-                                    toplevel,
-                                    &x_toplevel, &y_toplevel);
-
-  get_converted_window_coordinates (_gdk_root,
-                                    x, y,
-                                    mouse_window,
-                                    &x, &y);
-
-  /* Fix up the event to be less fake if possible. */
-  current_event = [NSApp currentEvent];
-  if (current_event)
-    {
-      flags = [current_event modifierFlags];
-      timestamp = [current_event timestamp];
-    }
-
-  if (timestamp == 0)
-    timestamp = GetCurrentEventTime ();
-
-  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (toplevel)->impl);
-  private = GDK_WINDOW_OBJECT (toplevel);
-  nsevent = [NSEvent otherEventWithType:NSApplicationDefined
-                               location:NSMakePoint (x_toplevel, private->height - y_toplevel)
-                          modifierFlags:flags
-                              timestamp:timestamp
-                           windowNumber:[impl->toplevel windowNumber]
-                                context:nil
-                                subtype:GDK_QUARTZ_EVENT_SUBTYPE_FAKE_CROSSING
-                                  data1:0
-                                  data2:0];
-
-#ifdef G_ENABLE_DEBUG
-  /*_gdk_quartz_window_debug_highlight (mouse_window, 0);*/
-#endif
-
-  /* FIXME: create an event, fill it, put on the queue... */
-}
-
 /* This function finds the correct window to send an event to, taking
  * into account grabs, event propagation, and event masks.
  */
@@ -632,6 +428,7 @@ find_window_for_ns_event (NSEvent *nsevent,
                           gint    *x_root,
                           gint    *y_root)
 {
+  GdkQuartzView *view;
   GdkWindow *toplevel;
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
@@ -639,7 +436,9 @@ find_window_for_ns_event (NSEvent *nsevent,
   NSPoint screen_point;
   NSEventType event_type;
 
-  toplevel = [(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
+  view = (GdkQuartzView *)[[nsevent window] contentView];
+
+  toplevel = [view gdkWindow];
   private = GDK_WINDOW_OBJECT (toplevel);
   impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
@@ -735,7 +534,13 @@ find_window_for_ns_event (NSEvent *nsevent,
       
     case NSMouseEntered:
     case NSMouseExited:
-      return toplevel;
+      /* Only handle our own entered/exited events, not the ones for the
+       * titlebar buttons.
+       */
+      if ([view trackingRect] == [nsevent trackingNumber])
+        return toplevel;
+      else
+        return NULL;
 
     case NSKeyDown:
     case NSKeyUp:
@@ -1103,15 +908,6 @@ gdk_event_translate (GdkEvent *event,
 
       /* Leave all AppKit events to AppKit. */
       return FALSE;
-    }
-
-  /* Handle our generated "fake" crossing events. */
-  if (event_type == NSApplicationDefined &&
-      [nsevent subtype] == GDK_QUARTZ_EVENT_SUBTYPE_FAKE_CROSSING)
-    {
-      /* FIXME: This needs to actually fill in the event we have... */
-      _gdk_quartz_events_trigger_crossing_events (FALSE);
-      return FALSE; /* ...and return TRUE instead. */
     }
 
   /* Keep track of button state, since we don't get that information

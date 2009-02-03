@@ -1054,12 +1054,6 @@ gdk_window_quartz_show (GdkWindow *window)
   if (impl->transient_for && !GDK_WINDOW_DESTROYED (impl->transient_for))
     _gdk_quartz_window_attach_to_parent (window);
 
-  /* Create a crossing event for windows that pop up under the mouse. Part
-   * of the workarounds for problems with the tracking rect API.
-   */
-  if (impl->toplevel)
-    _gdk_quartz_events_trigger_crossing_events (TRUE);
-
   GDK_QUARTZ_RELEASE_POOL;
 }
 
