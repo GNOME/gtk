@@ -7549,6 +7549,32 @@ point_in_window (GdkWindowObject *window,
 			  x, y));
 }
 
+static GdkWindow *
+convert_coords_to_toplevel (GdkWindow *window,
+			    double child_x, double child_y,
+			    double *toplevel_x, double *toplevel_y)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  gdouble x, y;
+
+  x = child_x;
+  y = child_y;
+
+  while (private->parent != NULL &&
+	 (GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT))
+    {
+      x += private->x;
+      y += private->y;
+      private = private->parent;
+    }
+  
+  *toplevel_x = x;
+  *toplevel_y = y;
+  
+  return (GdkWindow *)private;
+}
+
+
 static void
 convert_toplevel_coords_to_window (GdkWindow *window,
 				   gdouble    toplevel_x,
@@ -8226,25 +8252,110 @@ proxy_pointer_event (GdkDisplay                 *display,
 		     GdkEvent                   *source_event,
 		     gulong                      serial)
 {
-  GdkWindow *toplevel_window;
+  GdkWindow *toplevel_window, *event_window;
   GdkWindow *pointer_window;
   GdkEvent *event;
   guint state;
   gdouble toplevel_x, toplevel_y;
   guint32 time_;
 
-  toplevel_window = source_event->any.window;
+  event_window = source_event->any.window;
   gdk_event_get_coords (source_event, &toplevel_x, &toplevel_y);
   gdk_event_get_state (source_event, &state);
   time_ = gdk_event_get_time (source_event);
+  toplevel_window = convert_coords_to_toplevel (event_window,
+						toplevel_x, toplevel_y,
+						&toplevel_x, &toplevel_y);
 
-  pointer_window = get_pointer_window (display, toplevel_window, toplevel_x, toplevel_y, serial);
+
+  /* If we get crossing events with subwindow unexpectedly being NULL
+     that means there is a native subwindow that gdk doesn't know about.
+     We track these and forward them, with the correct virtual window
+     events inbetween.
+     This is important to get right, as metacity uses gdk for the frame
+     windows, but gdk doesn't know about the client windows reparented
+     into the frame. */
+  if (((source_event->type == GDK_LEAVE_NOTIFY &&
+	source_event->crossing.detail == GDK_NOTIFY_INFERIOR) ||
+       (source_event->type == GDK_ENTER_NOTIFY &&
+	(source_event->crossing.detail == GDK_NOTIFY_VIRTUAL ||
+	 source_event->crossing.detail == GDK_NOTIFY_NONLINEAR_VIRTUAL))) &&
+      source_event->crossing.subwindow == NULL)
+    {
+      /* Left for an unknown (to gdk) subwindow */
+
+      /* Send leave events from window under pointer to event window
+	 that will get the subwindow == NULL window */
+      _gdk_syntesize_crossing_events (display,
+				      display->pointer_info.window_under_pointer,
+				      event_window,
+				      source_event->crossing.mode,
+				      toplevel_x, toplevel_y,
+				      state, time_,
+				      source_event,
+				      serial);
+
+      /* Send subwindow == NULL event */
+      send_crossing_event (display,
+			   (GdkWindowObject *)toplevel_window,
+			   (GdkWindowObject *)event_window,
+			   source_event->type,
+			   source_event->crossing.mode,
+			   source_event->crossing.detail,
+			   NULL,
+			   toplevel_x,   toplevel_y,
+			   state, time_,
+			   source_event,
+			   serial);
+      
+      _gdk_display_set_window_under_pointer (display, NULL);
+      return TRUE;
+    }
+      
+  pointer_window = get_pointer_window (display, toplevel_window,
+				       toplevel_x, toplevel_y, serial);
+  
+  if (((source_event->type == GDK_ENTER_NOTIFY &&
+	source_event->crossing.detail == GDK_NOTIFY_INFERIOR) ||
+       (source_event->type == GDK_LEAVE_NOTIFY &&
+	(source_event->crossing.detail == GDK_NOTIFY_VIRTUAL ||
+	 source_event->crossing.detail == GDK_NOTIFY_NONLINEAR_VIRTUAL))) &&
+      source_event->crossing.subwindow == NULL)
+    {
+      /* Entered from an unknown (to gdk) subwindow */
+
+      /* Send subwindow == NULL event */
+      send_crossing_event (display,
+			   (GdkWindowObject *)toplevel_window,
+			   (GdkWindowObject *)event_window,
+			   source_event->type,
+			   source_event->crossing.mode,
+			   source_event->crossing.detail,
+			   NULL,
+			   toplevel_x,   toplevel_y,
+			   state, time_,
+			   source_event,
+			   serial);
+      
+      /* Send enter events from event window to pointer_window */
+      _gdk_syntesize_crossing_events (display,
+				      event_window,
+				      pointer_window,
+				      source_event->crossing.mode,
+				      toplevel_x, toplevel_y,
+				      state, time_,
+				      source_event,
+				      serial);
+      _gdk_display_set_window_under_pointer (display, pointer_window);
+      return TRUE;
+    }
+
   if (display->pointer_info.window_under_pointer != pointer_window)
     {
       /* Either a toplevel crossing notify that ended up inside a child window,
 	 or a motion notify that got into another child window  */
+      
       /* Different than last time, send crossing events */
-
       _gdk_syntesize_crossing_events (display,
 				      display->pointer_info.window_under_pointer,
 				      pointer_window,
@@ -8253,10 +8364,9 @@ proxy_pointer_event (GdkDisplay                 *display,
 				      state, time_,
 				      source_event,
 				      serial);
-
       _gdk_display_set_window_under_pointer (display, pointer_window);
     }
-  else if (source_event->type == GDK_MOTION_NOTIFY)
+  else
     {
       GdkWindow *event_win;
       guint evmask;
@@ -8483,6 +8593,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
   gboolean unlink_event;
   guint old_state, old_button;
   GdkPointerGrabInfo *button_release_grab;
+  gboolean is_toplevel;
 
   if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
     display->last_event_time = gdk_event_get_time (event);
@@ -8511,8 +8622,12 @@ _gdk_windowing_got_event (GdkDisplay *display,
       GDK_WINDOW_TYPE (event_private) == GDK_WINDOW_ROOT)
     return;
 
-  if (event_private->parent != NULL &&
-      GDK_WINDOW_TYPE (event_private->parent) != GDK_WINDOW_ROOT)
+  is_toplevel =
+    event_private->parent == NULL ||
+    GDK_WINDOW_TYPE (event_private->parent) == GDK_WINDOW_ROOT;
+  
+  if (!is_toplevel &&
+      (event->type != GDK_ENTER_NOTIFY && event->type != GDK_LEAVE_NOTIFY))
     {
       GEnumValue *event_type_value, *window_type_value;
 
@@ -8532,27 +8647,32 @@ _gdk_windowing_got_event (GdkDisplay *display,
       return;
     }
 
-  /* Store last pointer window and position/state */
-  if (event->type == GDK_ENTER_NOTIFY &&
-      event->crossing.detail != GDK_NOTIFY_INFERIOR)
+  /* Track toplevel_under_pointer */
+  if (is_toplevel)
     {
-      if (display->pointer_info.toplevel_under_pointer)
-	g_object_unref (display->pointer_info.toplevel_under_pointer);
-      display->pointer_info.toplevel_under_pointer = g_object_ref (event_window);
-    }
-  else if (event->type == GDK_LEAVE_NOTIFY &&
-	   event->crossing.detail != GDK_NOTIFY_INFERIOR &&
-	   display->pointer_info.toplevel_under_pointer == event_window)
-    {
-      if (display->pointer_info.toplevel_under_pointer)
-	g_object_unref (display->pointer_info.toplevel_under_pointer);
-      display->pointer_info.toplevel_under_pointer = NULL;
+      if (event->type == GDK_ENTER_NOTIFY &&
+	  event->crossing.detail != GDK_NOTIFY_INFERIOR)
+	{
+	  if (display->pointer_info.toplevel_under_pointer)
+	    g_object_unref (display->pointer_info.toplevel_under_pointer);
+	  display->pointer_info.toplevel_under_pointer = g_object_ref (event_window);
+	}
+      else if (event->type == GDK_LEAVE_NOTIFY &&
+	       event->crossing.detail != GDK_NOTIFY_INFERIOR &&
+	       display->pointer_info.toplevel_under_pointer == event_window)
+	{
+	  if (display->pointer_info.toplevel_under_pointer)
+	    g_object_unref (display->pointer_info.toplevel_under_pointer);
+	  display->pointer_info.toplevel_under_pointer = NULL;
+	}
     }
 
+  /* Store last pointer window and position/state */
   old_state = display->pointer_info.state;
   old_button = display->pointer_info.button;
   
   gdk_event_get_coords (event, &x, &y);
+  convert_coords_to_toplevel (event_window, x, y,  &x, &y);
   display->pointer_info.toplevel_x = x;
   display->pointer_info.toplevel_y = y;
   gdk_event_get_state (event, &display->pointer_info.state);
