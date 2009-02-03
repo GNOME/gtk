@@ -1236,9 +1236,6 @@ gdk_event_translate (GdkEvent *event,
     case NSLeftMouseDown:
     case NSRightMouseDown:
     case NSOtherMouseDown:
-      fill_button_event (window, event, nsevent, x, y, x_root, y_root);
-      break;
-
     case NSLeftMouseUp:
     case NSRightMouseUp:
     case NSOtherMouseUp:
