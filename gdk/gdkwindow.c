@@ -8651,12 +8651,25 @@ _gdk_windowing_got_event (GdkDisplay *display,
        event->type == GDK_LEAVE_NOTIFY) &&
       (event->crossing.mode == GDK_CROSSING_GRAB ||
        event->crossing.mode == GDK_CROSSING_UNGRAB) &&
-      _gdk_display_has_pointer_grab (display, serial))
+      (_gdk_display_has_pointer_grab (display, serial) ||
+       event->crossing.detail == GDK_NOTIFY_INFERIOR))
     {
       /* We synthesize all crossing events due to grabs outselves,
-       * so we ignore the native ones when we already have a grab.
-       * Otherwise we would send multiple events when this app grabs
-       * We want to handle grabs from other clients though. */
+       * so we ignore the native ones caused by our native pointer_grab
+       * calls. Otherwise we would proxy these crossing event and cause
+       * multiple copies of crossing events for grabs.
+       * 
+       * We do want to handle grabs from other clients though, as for
+       * instance alt-tab in metacity causes grabs like these and
+       * we want to handle those. Thus the has_pointer_grab check.
+       * 
+       * Implicit grabs on child windows create some grabbing events
+       * that are sent before the button press. This means we can't
+       * detect these with the has_pointer_grab check (as the implicit
+       * grab is only noticed when we get button press event), so we
+       * detect these events by checking for INFERIOR enter or leave 
+       * events. These should never be a problem to filter out.
+       */
 
       /* We ended up in this window after some (perhaps other clients)
 	 grab, so update the toplevel_under_window state */
