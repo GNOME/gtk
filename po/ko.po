@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-27 00:10-0500\n"
+"POT-Creation-Date: 2009-02-02 19:45-0500\n"
 "PO-Revision-Date: 2009-01-22 01:43+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -1528,15 +1528,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "색 선택"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
+#: gtk/gtkentry.c:8250 gtk/gtktextview.c:7780
 msgid "Input _Methods"
 msgstr "입력기(_M)"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
+#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7794
 msgid "_Insert Unicode Control Character"
 msgstr "유니코드 제어 문자 넣기(_I)"
 
-#: gtk/gtkentry.c:9601
+#: gtk/gtkentry.c:9622
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "위치 복사(_L)"
@@ -2032,24 +2032,24 @@ msgstr "글꼴"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK 가나다라마바사"
 
-#: gtk/gtkfontsel.c:328
+#: gtk/gtkfontsel.c:343
 msgid "_Family:"
 msgstr "패밀리(_F):"
 
-#: gtk/gtkfontsel.c:334
+#: gtk/gtkfontsel.c:349
 msgid "_Style:"
 msgstr "유형(_S):"
 
-#: gtk/gtkfontsel.c:340
+#: gtk/gtkfontsel.c:355
 msgid "Si_ze:"
 msgstr "크기(_Z):"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:517
+#: gtk/gtkfontsel.c:532
 msgid "_Preview:"
 msgstr "미리보기(_P):"
 
-#: gtk/gtkfontsel.c:1560
+#: gtk/gtkfontsel.c:1649
 msgid "Font Selection"
 msgstr "글꼴 선택"
 

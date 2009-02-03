@@ -239,6 +239,12 @@ gtk_activatable_get_use_action_appearance
 gtk_activatable_reset
 gtk_activatable_set_related_action
 gtk_activatable_set_use_action_appearance
+<SUBSECTION Standard>
+GTK_ACTIVATABLE
+GTK_ACTIVATABLE_CLASS
+GTK_ACTIVATABLE_GET_IFACE
+GTK_IS_ACTIVATABLE
+GTK_TYPE_ACTIVATABLE
 <SUBSECTION Private>
 gtk_activatable_get_type
 </SECTION>

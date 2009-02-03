@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-27 00:10-0500\n"
+"POT-Creation-Date: 2009-02-02 19:45-0500\n"
 "PO-Revision-Date: 2006-07-27 00:37+0400\n"
 "Last-Translator: Albert Fazlí <tatarish.l10n@gmail.com>\n"
 "Language-Team: Tatarish <tatarish.l10n@gmail.com>\n"
@@ -1527,15 +1527,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Tös Saylaw"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
+#: gtk/gtkentry.c:8250 gtk/gtktextview.c:7780
 msgid "Input _Methods"
 msgstr "Kertü _Isulları"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
+#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7794
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
-#: gtk/gtkentry.c:9601
+#: gtk/gtkentry.c:9622
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "_Urınlaşu Açu"
@@ -2024,24 +2024,24 @@ msgstr "Yazu"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcçdefgğiı ABCÇDEFGĞİIJK"
 
-#: gtk/gtkfontsel.c:328
+#: gtk/gtkfontsel.c:343
 msgid "_Family:"
 msgstr "Ğäi_lä:"
 
-#: gtk/gtkfontsel.c:334
+#: gtk/gtkfontsel.c:349
 msgid "_Style:"
 msgstr "_Bizeş:"
 
-#: gtk/gtkfontsel.c:340
+#: gtk/gtkfontsel.c:355
 msgid "Si_ze:"
 msgstr "Ülçä_m:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:517
+#: gtk/gtkfontsel.c:532
 msgid "_Preview:"
 msgstr "_Küzläp alu:"
 
-#: gtk/gtkfontsel.c:1560
+#: gtk/gtkfontsel.c:1649
 msgid "Font Selection"
 msgstr "Yazu Saylaw"
 

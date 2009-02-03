@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-27 00:10-0500\n"
+"POT-Creation-Date: 2009-02-02 19:45-0500\n"
 "PO-Revision-Date: 2008-09-16 17:42+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@redhat.com>\n"
 "Language-Team: American English <>\n"
@@ -895,7 +895,7 @@ msgid ""
 msgstr ""
 "child_displacement_x/_y বৈশিষ্ট্য ফোকাসকাৰী আয়তক্ষেত্ৰকেও প্ৰভাবিত কৰবে নে নাই"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
 msgid "Inner Border"
 msgstr "Border"
 
@@ -1241,7 +1241,7 @@ msgid "Value of the progress bar"
 msgstr "প্ৰ'গ্ৰেছবাৰৰ মান"
 
 #: gtk/gtkcellrendererprogress.c:146 gtk/gtkcellrenderertext.c:195
-#: gtk/gtkentry.c:698 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:184
+#: gtk/gtkentry.c:701 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:184
 #: gtk/gtktextbuffer.c:198
 msgid "Text"
 msgstr "লিপি"
@@ -1373,7 +1373,7 @@ msgstr "পুৰোভূমিৰ ৰং"
 msgid "Foreground color as a GdkColor"
 msgstr "GdkColor হিচাপে পুৰোভূমিৰ ৰং"
 
-#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:622 gtk/gtktexttag.c:251
+#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:625 gtk/gtktexttag.c:251
 #: gtk/gtktextview.c:573
 msgid "Editable"
 msgstr "সম্পাদনযোগ্য"
@@ -1383,7 +1383,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "ব্যৱহাৰকাৰি এই টেক্সকে বদলাতে পাৰবেন নে নাই"
 
 #: gtk/gtkcellrenderertext.c:269 gtk/gtkcellrenderertext.c:277
-#: gtk/gtkfontsel.c:188 gtk/gtktexttag.c:267 gtk/gtktexttag.c:275
+#: gtk/gtkfontsel.c:203 gtk/gtktexttag.c:267 gtk/gtktexttag.c:275
 msgid "Font"
 msgstr "ফন্ট"
 
@@ -1937,7 +1937,7 @@ msgstr "মেনুতে টিয়াৰঅফ (Tearoff) যোগ কৰো"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "ড্ৰপডাউনে কোন টিয়াৰ-অফ তালিকা বস্তু থাকবে নে নাই"
 
-#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:647
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:650
 msgid "Has Frame"
 msgstr "ফ্ৰেম আছে"
 
@@ -1992,7 +1992,7 @@ msgstr "মাপ"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "সৰ্বমোট"
 
-#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:747 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:750 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2108,40 +2108,40 @@ msgstr "কৰ্মক্ষেত্ৰেৰ (Action area) প্ৰান্
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "ডায়ালগেৰ তলৰ দিকে অবস্থিত বুটামৰ চাৰপাশেৰ প্ৰস্থ"
 
-#: gtk/gtkentry.c:602 gtk/gtklabel.c:462
+#: gtk/gtkentry.c:605 gtk/gtklabel.c:462
 msgid "Cursor Position"
 msgstr "কাৰ্সাৰেৰ অবস্থান"
 
-#: gtk/gtkentry.c:603 gtk/gtklabel.c:463
+#: gtk/gtkentry.c:606 gtk/gtklabel.c:463
 msgid "The current position of the insertion cursor in chars"
 msgstr "অক্ষৰ হিচাপে লেখা ভৰোৱাৰ (Insertion) কাৰ্সাৰেৰ অবস্থান"
 
-#: gtk/gtkentry.c:612 gtk/gtklabel.c:472
+#: gtk/gtkentry.c:615 gtk/gtklabel.c:472
 msgid "Selection Bound"
 msgstr "চিহ্নিত কৰাৰ সীমানা"
 
-#: gtk/gtkentry.c:613 gtk/gtklabel.c:473
+#: gtk/gtkentry.c:616 gtk/gtklabel.c:473
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "অক্ষৰ হিচাপে চিহ্নিত অংশেৰ বিপৰীত প্ৰান্তেৰ অবস্থান"
 
-#: gtk/gtkentry.c:623
+#: gtk/gtkentry.c:626
 msgid "Whether the entry contents can be edited"
 msgstr "অন্তৰ্ভুক্তিৰ (Entry) অভ্যন্তৰীণ বস্তু (Content) এডিট কৰা যাবে নে নাই"
 
-#: gtk/gtkentry.c:630
+#: gtk/gtkentry.c:633
 msgid "Maximum length"
 msgstr "সৰ্বোচ্চ দৈৰ্ঘ্য"
 
-#: gtk/gtkentry.c:631
+#: gtk/gtkentry.c:634
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "এই অন্তৰ্ভুক্তিৰ বাবে সৰ্বোচ্চ সংখ্যক অক্ষৰ। ইয়াৰ মান শূণ্য হতে পাৰবেন না"
 
-#: gtk/gtkentry.c:639
+#: gtk/gtkentry.c:642
 msgid "Visibility"
 msgstr "দৃষ্টিগ্ৰাহ্যতা"
 
-#: gtk/gtkentry.c:640
+#: gtk/gtkentry.c:643
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2149,30 +2149,30 @@ msgstr ""
 "যদি FALSE হয় তেন্তে প্ৰকৃত টেক্সটৰ পৰিবৰ্তে \"অদৃশ্য অক্ষৰ\" দেখা যায় (পাসওয়াৰ্ডেৰ "
 "ক্ষেত্ৰে প্ৰযোজ্য)"
 
-#: gtk/gtkentry.c:648
+#: gtk/gtkentry.c:651
 msgid "FALSE removes outside bevel from entry"
 msgstr "FASLE তালিকাৰ পৰা বহিঃস্থ বেভেলকে অপসাৰণ কৰে"
 
-#: gtk/gtkentry.c:656
+#: gtk/gtkentry.c:659
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr "Border"
 
-#: gtk/gtkentry.c:663
+#: gtk/gtkentry.c:666
 msgid "Invisible character"
 msgstr "অদৃশ্য অক্ষৰ"
 
-#: gtk/gtkentry.c:664
+#: gtk/gtkentry.c:667
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "অন্তৰ্ভুক্তিৰ (Entry) বিষয়বস্তু আড়াল কৰাৰ বাবে ব্যৱহৃত অক্ষৰ (\"পাসওয়াৰ্ড মোড\" এ "
 "ব্যৱহৃত)"
 
-#: gtk/gtkentry.c:671
+#: gtk/gtkentry.c:674
 msgid "Activates default"
 msgstr "অবিকল্পিতকে সক্ৰিয় কৰে"
 
-#: gtk/gtkentry.c:672
+#: gtk/gtkentry.c:675
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2180,100 +2180,100 @@ msgstr ""
 "Enter বুটাম চাপলে অবিকল্পিতকে সক্ৰিয় কৰা হ'ব নে নাই (যিমন কোন ডায়ালগেৰ অবিকল্পিত "
 "বুটাম)"
 
-#: gtk/gtkentry.c:678
+#: gtk/gtkentry.c:681
 msgid "Width in chars"
 msgstr "অক্ষৰেৰ প্ৰস্থ"
 
-#: gtk/gtkentry.c:679
+#: gtk/gtkentry.c:682
 msgid "Number of characters to leave space for in the entry"
 msgstr "প্ৰতি অন্তৰ্ভুক্তিতে যত অক্ষৰ ৰিক্ত ৰাখিব"
 
-#: gtk/gtkentry.c:688
+#: gtk/gtkentry.c:691
 msgid "Scroll offset"
 msgstr "স্ক্ৰল অফসেট"
 
-#: gtk/gtkentry.c:689
+#: gtk/gtkentry.c:692
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "অন্তৰ্ভুক্তিৰ (Entry) যি সংখ্যক পিক্সেলকে পৰ্দ্দাৰ বামে সৰিয়ে নিয়ে যাওয়া হৈছে"
 
-#: gtk/gtkentry.c:699
+#: gtk/gtkentry.c:702
 msgid "The contents of the entry"
 msgstr "অন্তৰ্ভুক্তিৰ (Entry) অভ্যন্তৰীণ বস্তু"
 
-#: gtk/gtkentry.c:714 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:717 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "এক্স অক্ষ"
 
-#: gtk/gtkentry.c:715 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:718 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr "পথালি সংৰেখন, ০ (বাম)ৰ পৰা ১ (ডান)।  RTL নকশাৰ বাবে বিপৰীত"
 
-#: gtk/gtkentry.c:731
+#: gtk/gtkentry.c:734
 msgid "Truncate multiline"
 msgstr ""
 
-#: gtk/gtkentry.c:732
+#: gtk/gtkentry.c:735
 msgid "Whether to truncate multiline pastes to one line."
 msgstr ""
 
-#: gtk/gtkentry.c:748
+#: gtk/gtkentry.c:751
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "সৰ্বমোট হলো"
 
-#: gtk/gtkentry.c:763 gtk/gtktextview.c:653
+#: gtk/gtkentry.c:766 gtk/gtktextview.c:653
 msgid "Overwrite mode"
 msgstr "ওপৰ দিয়ে লেখাৰ মোড"
 
-#: gtk/gtkentry.c:764
+#: gtk/gtkentry.c:767
 #, fuzzy
 msgid "Whether new text overwrites existing text"
 msgstr "যি টেক্সট লেখা হ'ব তা বিদ্যমান টেক্সটৰ ওপৰ দিয়ে লেখা হ'ব নে নাই"
 
-#: gtk/gtkentry.c:778
+#: gtk/gtkentry.c:781
 #, fuzzy
 msgid "Text length"
 msgstr "টেক্সটৰ এক্স (x) সংৰেখন"
 
-#: gtk/gtkentry.c:779
+#: gtk/gtkentry.c:782
 msgid "Length of the text currently in the entry"
 msgstr ""
 
-#: gtk/gtkentry.c:794
+#: gtk/gtkentry.c:797
 #, fuzzy
 msgid "Invisible char set"
 msgstr "অদৃশ্য সেট"
 
-#: gtk/gtkentry.c:795
+#: gtk/gtkentry.c:798
 #, fuzzy
 msgid "Whether the invisible char has been set"
 msgstr "কামটো দৃশ্যমান নে নাই।"
 
-#: gtk/gtkentry.c:813
+#: gtk/gtkentry.c:816
 msgid "Caps Lock warning"
 msgstr ""
 
-#: gtk/gtkentry.c:814
+#: gtk/gtkentry.c:817
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr ""
 
-#: gtk/gtkentry.c:828
+#: gtk/gtkentry.c:831
 #, fuzzy
 msgid "Progress Fraction"
 msgstr "ভগ্নাংশ"
 
-#: gtk/gtkentry.c:829
+#: gtk/gtkentry.c:832
 #, fuzzy
 msgid "The current fraction of the task that's been completed"
 msgstr "পুৰো কাজটাৰ যি ভগ্নাংশ সম্পূৰ্ণ হৈছে"
 
-#: gtk/gtkentry.c:846
+#: gtk/gtkentry.c:849
 #, fuzzy
 msgid "Progress Pulse Step"
 msgstr "স্পন্দন ধাপ"
 
-#: gtk/gtkentry.c:847
+#: gtk/gtkentry.c:850
 #, fuzzy
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
@@ -2282,217 +2282,217 @@ msgstr ""
 "মোট কামৰ যি ভগাংশ পৰিমাণ সম্পন্ন হলে স্পন্দনেৰ ফলে লাফাতে থাকা ব্লকটিকে সৰানো "
 "যাবে "
 
-#: gtk/gtkentry.c:863
+#: gtk/gtkentry.c:866
 #, fuzzy
 msgid "Primary pixbuf"
 msgstr "পিক্সবাফ"
 
-#: gtk/gtkentry.c:864
+#: gtk/gtkentry.c:867
 #, fuzzy
 msgid "Primary pixbuf for the entry"
 msgstr "খোলা প্ৰসাৰকেৰ বাবে Pixbuf"
 
-#: gtk/gtkentry.c:878
+#: gtk/gtkentry.c:881
 #, fuzzy
 msgid "Secondary pixbuf"
 msgstr "দ্বিতীয় Text"
 
-#: gtk/gtkentry.c:879
+#: gtk/gtkentry.c:882
 #, fuzzy
 msgid "Secondary pixbuf for the entry"
 msgstr "সম্মুখগামী গৌণ স্টেপাৰ"
 
-#: gtk/gtkentry.c:893
+#: gtk/gtkentry.c:896
 msgid "Primary stock ID"
 msgstr ""
 
-#: gtk/gtkentry.c:894
+#: gtk/gtkentry.c:897
 msgid "Stock ID for primary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:908
+#: gtk/gtkentry.c:911
 #, fuzzy
 msgid "Secondary stock ID"
 msgstr "দ্বিতীয় Text"
 
-#: gtk/gtkentry.c:909
+#: gtk/gtkentry.c:912
 msgid "Stock ID for secondary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:923
+#: gtk/gtkentry.c:926
 #, fuzzy
 msgid "Primary icon name"
 msgstr "তালিকা সৰ্বমোট"
 
-#: gtk/gtkentry.c:924
+#: gtk/gtkentry.c:927
 msgid "Icon name for primary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:938
+#: gtk/gtkentry.c:941
 #, fuzzy
 msgid "Secondary icon name"
 msgstr "দ্বিতীয় Text"
 
-#: gtk/gtkentry.c:939
+#: gtk/gtkentry.c:942
 msgid "Icon name for secondary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:953
+#: gtk/gtkentry.c:956
 msgid "Primary GIcon"
 msgstr ""
 
-#: gtk/gtkentry.c:954
+#: gtk/gtkentry.c:957
 #, fuzzy
 msgid "GIcon for primary icon"
 msgstr "এই উইন্ডোৰ বাবে আইকন"
 
-#: gtk/gtkentry.c:968
+#: gtk/gtkentry.c:971
 #, fuzzy
 msgid "Secondary GIcon"
 msgstr "দ্বিতীয়"
 
-#: gtk/gtkentry.c:969
+#: gtk/gtkentry.c:972
 msgid "GIcon for secondary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:983
+#: gtk/gtkentry.c:986
 #, fuzzy
 msgid "Primary storage type"
 msgstr "ভান্ডাৰেৰ (Storage) ধৰন"
 
-#: gtk/gtkentry.c:984
+#: gtk/gtkentry.c:987
 #, fuzzy
 msgid "The representation being used for primary icon"
 msgstr "তথ্যচিত্ৰে বাবে যি উপস্থাপনা ব্যৱহাৰ কৰা হচ্ছে"
 
-#: gtk/gtkentry.c:999
+#: gtk/gtkentry.c:1002
 #, fuzzy
 msgid "Secondary storage type"
 msgstr "সম্মুখগামী গৌণ স্টেপাৰ"
 
-#: gtk/gtkentry.c:1000
+#: gtk/gtkentry.c:1003
 #, fuzzy
 msgid "The representation being used for secondary icon"
 msgstr "তথ্যচিত্ৰে বাবে যি উপস্থাপনা ব্যৱহাৰ কৰা হচ্ছে"
 
-#: gtk/gtkentry.c:1021
+#: gtk/gtkentry.c:1024
 msgid "Primary icon activatable"
 msgstr ""
 
-#: gtk/gtkentry.c:1022
+#: gtk/gtkentry.c:1025
 #, fuzzy
 msgid "Whether the primary icon is activatable"
 msgstr "কামটো সক্ৰিয় হয় নে নহয়"
 
-#: gtk/gtkentry.c:1042
+#: gtk/gtkentry.c:1045
 #, fuzzy
 msgid "Secondary icon activatable"
 msgstr "কাৰ্সাৰ আঁকায় ব্যৱহৃত দ্বিতীয় ৰং"
 
-#: gtk/gtkentry.c:1043
+#: gtk/gtkentry.c:1046
 #, fuzzy
 msgid "Whether the secondary icon is activatable"
 msgstr "কামটো সক্ৰিয় হয় নে নহয়"
 
-#: gtk/gtkentry.c:1065
+#: gtk/gtkentry.c:1068
 #, fuzzy
 msgid "Primary icon sensitive"
 msgstr "সেল sensitive প্ৰদৰ্শন কৰো"
 
-#: gtk/gtkentry.c:1066
+#: gtk/gtkentry.c:1069
 #, fuzzy
 msgid "Whether the primary icon is sensitive"
 msgstr ""
 "তালিকাৰ সদস্যদেৰ মিলিয়ে দেখাৰ সময় বড় বা ছোট হাতেৰ অক্ষৰ পৃথকভাবে বিবেচনা কৰা "
 "হ'ব নে নাই"
 
-#: gtk/gtkentry.c:1087
+#: gtk/gtkentry.c:1090
 #, fuzzy
 msgid "Secondary icon sensitive"
 msgstr "দ্বিতীয় Text"
 
-#: gtk/gtkentry.c:1088
+#: gtk/gtkentry.c:1091
 #, fuzzy
 msgid "Whether the secondary icon is sensitive"
 msgstr "কামটো সক্ৰিয় হয় নে নহয়"
 
-#: gtk/gtkentry.c:1104
+#: gtk/gtkentry.c:1107
 #, fuzzy
 msgid "Primary icon tooltip text"
 msgstr "সেল sensitive প্ৰদৰ্শন কৰো"
 
-#: gtk/gtkentry.c:1105 gtk/gtkentry.c:1141
+#: gtk/gtkentry.c:1108 gtk/gtkentry.c:1144
 #, fuzzy
 msgid "The contents of the tooltip on the primary icon"
 msgstr "সৰ্বমোট উল্লিখিত সময় অবধি"
 
-#: gtk/gtkentry.c:1121
+#: gtk/gtkentry.c:1124
 #, fuzzy
 msgid "Secondary icon tooltip text"
 msgstr "কাৰ্সাৰ আঁকায় ব্যৱহৃত দ্বিতীয় ৰং"
 
-#: gtk/gtkentry.c:1122 gtk/gtkentry.c:1160
+#: gtk/gtkentry.c:1125 gtk/gtkentry.c:1163
 #, fuzzy
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "সৰ্বমোট উল্লিখিত সময় অবধি"
 
-#: gtk/gtkentry.c:1140
+#: gtk/gtkentry.c:1143
 #, fuzzy
 msgid "Primary icon tooltip markup"
 msgstr "তালিকা সৰ্বমোট"
 
-#: gtk/gtkentry.c:1159
+#: gtk/gtkentry.c:1162
 #, fuzzy
 msgid "Secondary icon tooltip markup"
 msgstr "দ্বিতীয় Text"
 
-#: gtk/gtkentry.c:1179 gtk/gtktextview.c:681
+#: gtk/gtkentry.c:1182 gtk/gtktextview.c:681
 #, fuzzy
 msgid "IM module"
 msgstr "অবিকল্পিত প্ৰস্থ"
 
-#: gtk/gtkentry.c:1180 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1183 gtk/gtktextview.c:682
 #, fuzzy
 msgid "Which IM module should be used"
 msgstr "পেলেট ব্যৱহৃত হ'ব নে নাই"
 
-#: gtk/gtkentry.c:1194
+#: gtk/gtkentry.c:1197
 #, fuzzy
 msgid "Icon Prelight"
 msgstr "উচ্চতা"
 
-#: gtk/gtkentry.c:1195
+#: gtk/gtkentry.c:1198
 #, fuzzy
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "ট্যাব প্ৰদৰ্শন কৰা হ'ব নে নাই"
 
-#: gtk/gtkentry.c:1645
+#: gtk/gtkentry.c:1648
 msgid "Border between text and frame."
 msgstr "Border."
 
-#: gtk/gtkentry.c:1659
+#: gtk/gtkentry.c:1662
 #, fuzzy
 msgid "State Hint"
 msgstr "অবস্থা বাক্য"
 
-#: gtk/gtkentry.c:1660
+#: gtk/gtkentry.c:1663
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "টেক্সটৰ পটভূমি আঁকাৰ সময় যি বিটম্যাপকে মাস্ক হিচাপে ব্যৱহাৰ কৰা হ'ব"
 
-#: gtk/gtkentry.c:1665 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "ফোকাস কৰলে চিহ্নিত হ'ব"
 
-#: gtk/gtkentry.c:1666
+#: gtk/gtkentry.c:1669
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "কোন অন্তৰ্ভুক্তিৰ (Entry) অভ্যন্তৰীণ বস্তুকে ফ'কাচ কৰলে তা চিহ্নিত হ'ব নে নাই"
 
-#: gtk/gtkentry.c:1680
+#: gtk/gtkentry.c:1683
 msgid "Password Hint Timeout"
 msgstr "গুপ্তশব্দ"
 
-#: gtk/gtkentry.c:1681
+#: gtk/gtkentry.c:1684
 msgid "How long to show the last input character in hidden entries"
 msgstr "শেষ"
 
@@ -2774,7 +2774,7 @@ msgstr "চাইল্ড উইজেটেৰ ওয়াই অক্ষ ব�
 msgid "The title of the font selection dialog"
 msgstr "ফন্ট নিৰ্বাচক ডায়ালগেৰ শিৰোনাম"
 
-#: gtk/gtkfontbutton.c:158 gtk/gtkfontsel.c:181
+#: gtk/gtkfontbutton.c:158 gtk/gtkfontsel.c:196
 msgid "Font name"
 msgstr "ফন্টৰ নাম"
 
@@ -2818,20 +2818,20 @@ msgstr "আকাৰ প্ৰদৰ্শন কৰো"
 msgid "Whether selected font size is shown in the label"
 msgstr "নিৰ্বাচিত ফন্টৰ আকাৰ লেবেলে প্ৰদৰ্শন কৰা হ'ব নে নাই"
 
-#: gtk/gtkfontsel.c:182
+#: gtk/gtkfontsel.c:197
 #, fuzzy
 msgid "The string that represents this font"
 msgstr "যি এক্স অক্ষীয় পঙ্‌ক্তিটি এই ফন্টৰ প্ৰতিনিধিত্ব কৰে"
 
-#: gtk/gtkfontsel.c:189
+#: gtk/gtkfontsel.c:204
 msgid "The GdkFont that is currently selected"
 msgstr "বৰ্তমানে বাছাইকৃত জিডিকে-ফন্ট"
 
-#: gtk/gtkfontsel.c:195
+#: gtk/gtkfontsel.c:210
 msgid "Preview text"
 msgstr "প্ৰাকদৰ্শনে ব্যৱহৃত টেক্সট"
 
-#: gtk/gtkfontsel.c:196
+#: gtk/gtkfontsel.c:211
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "চিহ্নিত ফন্টকে প্ৰদৰ্শনীৰ উদ্দেশ্যি যি টেক্সট লেখা হ'ব"
 

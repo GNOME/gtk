@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ku\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-27 00:10-0500\n"
+"POT-Creation-Date: 2009-02-02 19:45-0500\n"
 "PO-Revision-Date: 2008-01-13 20:17+0100\n"
 "Last-Translator: Erdal Ronahi <erdal dot ronahi at gmail dot com>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
@@ -1567,15 +1567,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Hilbijartina rengan"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
+#: gtk/gtkentry.c:8250 gtk/gtktextview.c:7780
 msgid "Input _Methods"
 msgstr "Riyên_Têketinê"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
+#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7794
 msgid "_Insert Unicode Control Character"
 msgstr "_Şifreya kontrola sembolê derbas bike"
 
-#: gtk/gtkentry.c:9601
+#: gtk/gtkentry.c:9622
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "_Cih kopî bike"
@@ -2071,24 +2071,24 @@ msgstr "Cureyê nivîsê"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abçdêfghîjşû ABÇDÊFGHÎJKŞÛ"
 
-#: gtk/gtkfontsel.c:328
+#: gtk/gtkfontsel.c:343
 msgid "_Family:"
 msgstr "_Malbat:"
 
-#: gtk/gtkfontsel.c:334
+#: gtk/gtkfontsel.c:349
 msgid "_Style:"
 msgstr "_Teşe:"
 
-#: gtk/gtkfontsel.c:340
+#: gtk/gtkfontsel.c:355
 msgid "Si_ze:"
 msgstr "_Mezinahî:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:517
+#: gtk/gtkfontsel.c:532
 msgid "_Preview:"
 msgstr "_Pêşdîtin:"
 
-#: gtk/gtkfontsel.c:1560
+#: gtk/gtkfontsel.c:1649
 msgid "Font Selection"
 msgstr "Hilbijartina Curetîpan"
 

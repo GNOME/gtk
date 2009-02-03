@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-27 00:10-0500\n"
+"POT-Creation-Date: 2009-02-02 19:45-0500\n"
 "PO-Revision-Date: 2008-09-08 17:43+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@redhat.com>\n"
 "Language-Team: American English <kde-i18n-doc@lists.kde.org>\n"
@@ -1553,15 +1553,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "ৰঙৰ নিৰ্ব্বাচন"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
+#: gtk/gtkentry.c:8250 gtk/gtktextview.c:7780
 msgid "Input _Methods"
 msgstr "নিবেশ পদ্ধতি (_M)"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
+#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7794
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode নিয়ন্ত্ৰণ আকৰ ভৰাওক (_I)"
 
-#: gtk/gtkentry.c:9601
+#: gtk/gtkentry.c:9622
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "স্থান নকল কৰক (_L)"
@@ -2054,24 +2054,24 @@ msgstr "আখৰ"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: gtk/gtkfontsel.c:328
+#: gtk/gtkfontsel.c:343
 msgid "_Family:"
 msgstr "পৰিবাৰ (_F):"
 
-#: gtk/gtkfontsel.c:334
+#: gtk/gtkfontsel.c:349
 msgid "_Style:"
 msgstr "স্ৰজন-প্ৰণালী (_S):"
 
-#: gtk/gtkfontsel.c:340
+#: gtk/gtkfontsel.c:355
 msgid "Si_ze:"
 msgstr "আয়তন (_z):"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:517
+#: gtk/gtkfontsel.c:532
 msgid "_Preview:"
 msgstr "পূব‌-দৃশ্য (_P):"
 
-#: gtk/gtkfontsel.c:1560
+#: gtk/gtkfontsel.c:1649
 msgid "Font Selection"
 msgstr "আখৰৰ নিৰ্ব্বাচন"
 

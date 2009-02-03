@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-27 00:10-0500\n"
+"POT-Creation-Date: 2009-02-02 19:45-0500\n"
 "PO-Revision-Date: 2008-03-13 10:25+0800\n"
 "Last-Translator: Funda Wang <fundawang@gmail.com>\n"
 "Language-Team: i18n-zh <i18n-zh@googlegroups.com>\n"
@@ -1509,15 +1509,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "颜色选择"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
+#: gtk/gtkentry.c:8250 gtk/gtktextview.c:7780
 msgid "Input _Methods"
 msgstr "输入法(_M)"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
+#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7794
 msgid "_Insert Unicode Control Character"
 msgstr "插入 Unicode 控制字符(_I)"
 
-#: gtk/gtkentry.c:9601
+#: gtk/gtkentry.c:9622
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "复制位置(_L)"
@@ -2005,24 +2005,24 @@ msgstr "字体"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "GNOME 字体测试"
 
-#: gtk/gtkfontsel.c:328
+#: gtk/gtkfontsel.c:343
 msgid "_Family:"
 msgstr "字体族(_F)："
 
-#: gtk/gtkfontsel.c:334
+#: gtk/gtkfontsel.c:349
 msgid "_Style:"
 msgstr "样式(_S)："
 
-#: gtk/gtkfontsel.c:340
+#: gtk/gtkfontsel.c:355
 msgid "Si_ze:"
 msgstr "大小(_Z)："
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:517
+#: gtk/gtkfontsel.c:532
 msgid "_Preview:"
 msgstr "预览(_P)："
 
-#: gtk/gtkfontsel.c:1560
+#: gtk/gtkfontsel.c:1649
 msgid "Font Selection"
 msgstr "字体选择"
 

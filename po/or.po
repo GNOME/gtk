@@ -12,14 +12,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-27 00:10-0500\n"
+"POT-Creation-Date: 2009-02-02 19:45-0500\n"
 "PO-Revision-Date: 2009-01-27 17:35+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"Plural-Forms:  nplurals=2; plural=(n!=1);\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -300,7 +301,8 @@ msgstr "'%s' ଚିତ୍ର ଫାଇଲରେ କୌଣସି ତଥ୍ଯ ନ
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1013
 #: gdk-pixbuf/gdk-pixbuf-io.c:1277 tests/testfilechooser.c:267
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "'%s' ଚିତ୍ର ଫାଇଲ ଧାରଣ କରିବାରେ ଅସଫଳ: କାରଣ ଜଣା ନାହିଁ, ସମ୍ଭବତଃ ଏହା ଗୋଟିଏ ତୃଟିଯୁକ୍ତ ଚିତ୍ର ଫାଇଲ "
 "ଅଟେ"
@@ -379,7 +381,8 @@ msgstr "'%s'କୁ ଲେଖିବା ପ୍ରତି ଖୋଲିବାରେ �
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr "ଚିତ୍ର ଲେଖିବା ସମୟରେ '%s'କୁ ବନ୍ଦ କରିବାରେ ଅସଫଳ, ସମ୍ପୂର୍ଣ ତଥ୍ଯ ସଂରକ୍ଷିତ ନ ହୋଇଥାଇପାରେ: %s"
+msgstr ""
+"ଚିତ୍ର ଲେଖିବା ସମୟରେ '%s'କୁ ବନ୍ଦ କରିବାରେ ଅସଫଳ, ସମ୍ପୂର୍ଣ ତଥ୍ଯ ସଂରକ୍ଷିତ ନ ହୋଇଥାଇପାରେ: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2253 gdk-pixbuf/gdk-pixbuf-io.c:2304
 msgid "Insufficient memory to save image into a buffer"
@@ -648,7 +651,8 @@ msgstr "JPEG ଚିତ୍ର ଫାଇଲ ବ୍ଯାଖ୍ଯା କରିବ�
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr "ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ, ସ୍ମୃତି ମୁକ୍ତି ପାଇଁ କିଛି ପ୍ରୟୋଗ ବନ୍ଦ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ"
+msgstr ""
+"ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ, ସ୍ମୃତି ମୁକ୍ତି ପାଇଁ କିଛି ପ୍ରୟୋଗ ବନ୍ଦ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ"
 
 #: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
 #, c-format
@@ -673,7 +677,8 @@ msgstr "JPEG ଗୁଣବତ୍ତାର ମୂଲ୍ଯ ୦ ଓ ୧୦୦ ଭ�
 
 #: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG ଗୁଣବତ୍ତାର ମୂଲ୍ଯ ୦ ଓ ୧୦୦ ଭିତରେ ଥିବା ଉଚିତ; '%d' ମୂଲ୍ଯର ଅନୁମତି ନାହିଁ."
 
 #: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
@@ -773,7 +778,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ଫାଇଲ ପଢ଼ିବାରେ ମାରାତ୍ମକ ତୃଟି: %s"
 
 #: gdk-pixbuf/io-png.c:825
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ପାଠ୍ଯ ଖଣ୍ଡର ଚାବି ୧ ଓ ୭୯ ଅକ୍ଷର ଭିତରେ ହୋଇଥିବା ଆବଶ୍ଯକ."
 
 #: gdk-pixbuf/io-png.c:833
@@ -1411,7 +1417,8 @@ msgstr "ବାହାର ମଣ୍ଡଳରୁ ରଙ୍ଗ ବାଛନ୍ତୁ
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr "ଆଖିଡ୍ରପର ଉପରେ ମାଉସ ଚାବି ଦବାଇ, ରଙ୍ଗ ବାଛିବା ପାଇଁ ପରଦାର କୌଣସି ରଙ୍ଗ ଉପରେ ମାଉସ ଚାବି ଦବାନ୍ତୁ।"
+msgstr ""
+"ଆଖିଡ୍ରପର ଉପରେ ମାଉସ ଚାବି ଦବାଇ, ରଙ୍ଗ ବାଛିବା ପାଇଁ ପରଦାର କୌଣସି ରଙ୍ଗ ଉପରେ ମାଉସ ଚାବି ଦବାନ୍ତୁ।"
 
 #: gtk/gtkcolorsel.c:387
 msgid "_Hue:"
@@ -1478,8 +1485,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"ଏହି ଭରଣରେ ଆପଣ ଗୋଟିଏ HTML-ଶୈଳୀର ଷୋହଳମିକ ରଙ୍ଗ ମୂଲ୍ଯ, କିମ୍ବା ସରଳ ଭାବରେ ଗୋଟିଏ ରଙ୍ଗର "
-"ନାମ, ଯେପରି କି 'ନାରଙ୍ଗ' ଭରି ପାରନ୍ତି।"
+"ଏହି ଭରଣରେ ଆପଣ ଗୋଟିଏ HTML-ଶୈଳୀର ଷୋହଳମିକ ରଙ୍ଗ ମୂଲ୍ଯ, କିମ୍ବା ସରଳ ଭାବରେ ଗୋଟିଏ ରଙ୍ଗର ନାମ, "
+"ଯେପରି କି 'ନାରଙ୍ଗ' ଭରି ପାରନ୍ତି।"
 
 #: gtk/gtkcolorsel.c:470
 msgid "_Palette:"
@@ -1523,15 +1530,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "ରଙ୍ଗ ଚୟନ"
 
-#: gtk/gtkentry.c:8229 gtk/gtktextview.c:7777
+#: gtk/gtkentry.c:8250 gtk/gtktextview.c:7780
 msgid "Input _Methods"
 msgstr "ନିବେଶ ପ୍ରଣାଳୀ (_M)"
 
-#: gtk/gtkentry.c:8243 gtk/gtktextview.c:7791
+#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7794
 msgid "_Insert Unicode Control Character"
 msgstr "ୟୁନିକୋଡ ନିୟନ୍ତ୍ରଣ ଅକ୍ଷର ଭର୍ତ୍ତି କରନ୍ତୁ (_I)"
 
-#: gtk/gtkentry.c:9601
+#: gtk/gtkentry.c:9622
 msgid "Caps Lock is on"
 msgstr "Caps Lock ଅନ ଅଛି"
 
@@ -1741,7 +1748,8 @@ msgstr "\"%s\" ନାମର ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଆପ
 
 #: gtk/gtkfilechooserdefault.c:8151 gtk/gtkprintunixdialog.c:374
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\"ରେ ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଏହାକୁ ବଦଳାଇଲେ, ତାହାର ସୂଚୀ ନବଲିଖିତ ହୋଇଯିବ."
 
 #: gtk/gtkfilechooserdefault.c:8156 gtk/gtkprintunixdialog.c:381
@@ -1896,7 +1904,8 @@ msgstr "ଫାଇଲର ନାମ ବଦଳାନ୍ତୁ (_R)"
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ଫୋଲ୍ଡରର ନାମ \"%s\"ରେ କିଛି ପ୍ରତୀକ ଅଛି ଯେଉଁଗୁଡ଼ିକ ଫାଇଲ ନାମରେ ମନା"
 
 #: gtk/gtkfilesel.c:1392
@@ -2019,24 +2028,24 @@ msgstr "ଅକ୍ଷରରୂପ"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "ଅଆଇଈଉଊକଖଗଘଞଅଆଇଈଉଊକଖଗଘଞ"
 
-#: gtk/gtkfontsel.c:328
+#: gtk/gtkfontsel.c:343
 msgid "_Family:"
 msgstr "ଶ୍ରେଣୀ (_F):"
 
-#: gtk/gtkfontsel.c:334
+#: gtk/gtkfontsel.c:349
 msgid "_Style:"
 msgstr "ଶୈଳୀ (_S):"
 
-#: gtk/gtkfontsel.c:340
+#: gtk/gtkfontsel.c:355
 msgid "Si_ze:"
 msgstr "ଆକାର (_z):"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:517
+#: gtk/gtkfontsel.c:532
 msgid "_Preview:"
 msgstr "ପୂର୍ବାବଲୋକନ (_P):"
 
-#: gtk/gtkfontsel.c:1560
+#: gtk/gtkfontsel.c:1649
 msgid "Font Selection"
 msgstr "ଅକ୍ଷରରୂପ ଚୟନ"
 
@@ -3449,7 +3458,8 @@ msgstr "\"%s\" ଟି ଗୋଟିଏ ବୈଧ ଗୁଣ ନାମ ନୁହେ
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" କୁ \"%s\" ପ୍ରକାରର ଗୋଟିଏ ମୂଲ୍ଯର \"%s\" ଗୁଣ ପାଇଁ ବଦଳା ଯାଇ ପାରିଲା ନାହିଁ"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3486,8 +3496,10 @@ msgid "Serialized data is malformed"
 msgstr "ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପରେ ଗଠନ କରାଯାଇଛି"
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପରେ ଗଠନ କରାଯାଇଛି। ପ୍ରଥମ ଭାଗଟି GTKTEXTBUFFERCONTENTS-0001 ନୁହେଁ"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr ""
+"ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପରେ ଗଠନ କରାଯାଇଛି। ପ୍ରଥମ ଭାଗଟି GTKTEXTBUFFERCONTENTS-0001 ନୁହେଁ"
 
 #: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
@@ -4894,4 +4906,3 @@ msgstr "ପରୀକ୍ଷା ମୁଦ୍ରଣୀରେ ମୁଦ୍ରଣ କ
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' ଫାଇଲ ପାଇଁ ସୂଚନା ଆଣିହେଲା ନାହିଁ: %s"
-

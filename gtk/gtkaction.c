@@ -759,6 +759,7 @@ gtk_action_activate (GtkAction *action)
 
 /**
  * gtk_action_block_activate:
+ * @action: a #GtkAction
  *
  * Disable activation signals from the action 
  *
@@ -766,6 +767,8 @@ gtk_action_activate (GtkAction *action)
  * #GtkActivatable widget could result in calling gtk_action_activate(),
  * this is a convenience function to avoid recursing in those
  * cases (updating toggle state for instance).
+ *
+ * Since: 2.16
  */
 void
 gtk_action_block_activate (GtkAction *action)
@@ -777,8 +780,11 @@ gtk_action_block_activate (GtkAction *action)
 
 /**
  * gtk_action_unblock_activate:
+ * @action: a #GtkAction
  *
  * Reenable activation signals from the action 
+ *
+ * Since: 2.16
  */
 void
 gtk_action_unblock_activate (GtkAction *action)
@@ -1252,7 +1258,7 @@ gtk_action_get_label (GtkAction *action)
 /**
  * gtk_action_set_short_label:
  * @action: a #GtkAction
- * @label: the label text to set
+ * @short_label: the label text to set
  *
  * Sets a shorter label text on @action.
  *
@@ -1260,14 +1266,14 @@ gtk_action_get_label (GtkAction *action)
  */
 void 
 gtk_action_set_short_label (GtkAction   *action,
-			    const gchar *label)
+			    const gchar *short_label)
 {
   gchar *tmp;
 
   g_return_if_fail (GTK_IS_ACTION (action));
 
   tmp = action->private_data->short_label;
-  action->private_data->short_label = g_strdup (label);
+  action->private_data->short_label = g_strdup (short_label);
   g_free (tmp);
   action->private_data->short_label_set = (action->private_data->short_label != NULL);
   /* if short_label is unset, then use the value of label */
@@ -1431,7 +1437,7 @@ gtk_action_get_tooltip (GtkAction *action)
 /**
  * gtk_action_set_stock_id:
  * @action: a #GtkAction
- * @tooltip: the tooltip text
+ * @stock_id: the stock id
  *
  * Sets the stock id on @action
  *
@@ -1489,7 +1495,7 @@ gtk_action_get_stock_id (GtkAction *action)
 /**
  * gtk_action_set_icon_name:
  * @action: a #GtkAction
- * @tooltip: the icon name to set
+ * @icon_name: the icon name to set
  *
  * Sets the icon name on @action
  *

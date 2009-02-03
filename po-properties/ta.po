@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-10.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-27 00:10-0500\n"
+"POT-Creation-Date: 2009-02-02 19:45-0500\n"
 "PO-Revision-Date: 2006-08-29 18:20+0530\n"
 "Last-Translator: Felix <ifelix25@gmail.com>\n"
 "Language-Team: Tamil <ta@li.org>\n"
@@ -895,7 +895,7 @@ msgid ""
 "rectangle"
 msgstr ""
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:655 gtk/gtkentry.c:1644
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
 msgid "Inner Border"
 msgstr "உள் எல்லை"
 
@@ -1246,7 +1246,7 @@ msgid "Value of the progress bar"
 msgstr "முன்னேற்றுப்பட்டையின் மதிப்பு"
 
 #: gtk/gtkcellrendererprogress.c:146 gtk/gtkcellrenderertext.c:195
-#: gtk/gtkentry.c:698 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:184
+#: gtk/gtkentry.c:701 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:184
 #: gtk/gtktextbuffer.c:198
 msgid "Text"
 msgstr "உரை"
@@ -1382,7 +1382,7 @@ msgstr "முன்னணி வண்ணம்"
 msgid "Foreground color as a GdkColor"
 msgstr "முன்னணி வண்ணம் ஓர் GdkColorராக"
 
-#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:622 gtk/gtktexttag.c:251
+#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:625 gtk/gtktexttag.c:251
 #: gtk/gtktextview.c:573
 msgid "Editable"
 msgstr "பதிப்பிக்கக்கூடியது"
@@ -1392,7 +1392,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "பயனரால் மாற்றக்கூடிய உரையாக இருகக்கூடும்"
 
 #: gtk/gtkcellrenderertext.c:269 gtk/gtkcellrenderertext.c:277
-#: gtk/gtkfontsel.c:188 gtk/gtktexttag.c:267 gtk/gtktexttag.c:275
+#: gtk/gtkfontsel.c:203 gtk/gtktexttag.c:267 gtk/gtktexttag.c:275
 msgid "Font"
 msgstr "எழுத்து வகை"
 
@@ -1939,7 +1939,7 @@ msgstr ""
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr ""
 
-#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:647
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:650
 msgid "Has Frame"
 msgstr "சட்டம் கொன்டது"
 
@@ -1995,7 +1995,7 @@ msgstr "அம்பு திசை"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "சேர்க்கைப்பெட்டியின் மாதிரி"
 
-#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:747 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:750 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2112,40 +2112,40 @@ msgstr "செயல் பரப்பு எல்லை"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Width of border around the button area at the bottom of the dialog"
 
-#: gtk/gtkentry.c:602 gtk/gtklabel.c:462
+#: gtk/gtkentry.c:605 gtk/gtklabel.c:462
 msgid "Cursor Position"
 msgstr "இடம்-காட்டி இடம்"
 
-#: gtk/gtkentry.c:603 gtk/gtklabel.c:463
+#: gtk/gtkentry.c:606 gtk/gtklabel.c:463
 msgid "The current position of the insertion cursor in chars"
 msgstr ""
 
-#: gtk/gtkentry.c:612 gtk/gtklabel.c:472
+#: gtk/gtkentry.c:615 gtk/gtklabel.c:472
 msgid "Selection Bound"
 msgstr "தேர்வு எல்லை"
 
-#: gtk/gtkentry.c:613 gtk/gtklabel.c:473
+#: gtk/gtkentry.c:616 gtk/gtklabel.c:473
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 
-#: gtk/gtkentry.c:623
+#: gtk/gtkentry.c:626
 msgid "Whether the entry contents can be edited"
 msgstr "உள்ளீடு பொருற்களை பதிப்பிற்க முடியுமா"
 
-#: gtk/gtkentry.c:630
+#: gtk/gtkentry.c:633
 msgid "Maximum length"
 msgstr "மிகக்கூடிய நீட்டம்"
 
-#: gtk/gtkentry.c:631
+#: gtk/gtkentry.c:634
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 
-#: gtk/gtkentry.c:639
+#: gtk/gtkentry.c:642
 msgid "Visibility"
 msgstr "பார்கக்கூடியது"
 
-#: gtk/gtkentry.c:640
+#: gtk/gtkentry.c:643
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2153,341 +2153,341 @@ msgstr ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 
-#: gtk/gtkentry.c:648
+#: gtk/gtkentry.c:651
 msgid "FALSE removes outside bevel from entry"
 msgstr ""
 
-#: gtk/gtkentry.c:656
+#: gtk/gtkentry.c:659
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 
-#: gtk/gtkentry.c:663
+#: gtk/gtkentry.c:666
 msgid "Invisible character"
 msgstr "பார்க்கமுடியாத வரியுரு"
 
-#: gtk/gtkentry.c:664
+#: gtk/gtkentry.c:667
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "உள்ளீடு பொருற்களை மறைக்கும்போது பயன்படுத்த வேண்டிய வரியுரு (\"password mode\" இனுல்)"
 
-#: gtk/gtkentry.c:671
+#: gtk/gtkentry.c:674
 msgid "Activates default"
 msgstr "கொடா நிலையை தொடங்கும்"
 
-#: gtk/gtkentry.c:672
+#: gtk/gtkentry.c:675
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
 
-#: gtk/gtkentry.c:678
+#: gtk/gtkentry.c:681
 msgid "Width in chars"
 msgstr "charsஇல் அகலம்"
 
-#: gtk/gtkentry.c:679
+#: gtk/gtkentry.c:682
 msgid "Number of characters to leave space for in the entry"
 msgstr ""
 
-#: gtk/gtkentry.c:688
+#: gtk/gtkentry.c:691
 msgid "Scroll offset"
 msgstr "திரை உருளல் ஒதுக்கம்"
 
-#: gtk/gtkentry.c:689
+#: gtk/gtkentry.c:692
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Number of pixels of the entry scrolled off the screen to the left"
 
-#: gtk/gtkentry.c:699
+#: gtk/gtkentry.c:702
 msgid "The contents of the entry"
 msgstr ""
 
-#: gtk/gtkentry.c:714 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:717 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "X align"
 
-#: gtk/gtkentry.c:715 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:718 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
 
-#: gtk/gtkentry.c:731
+#: gtk/gtkentry.c:734
 msgid "Truncate multiline"
 msgstr ""
 
-#: gtk/gtkentry.c:732
+#: gtk/gtkentry.c:735
 msgid "Whether to truncate multiline pastes to one line."
 msgstr ""
 
-#: gtk/gtkentry.c:748
+#: gtk/gtkentry.c:751
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
-#: gtk/gtkentry.c:763 gtk/gtktextview.c:653
+#: gtk/gtkentry.c:766 gtk/gtktextview.c:653
 msgid "Overwrite mode"
 msgstr "மேல் எழுதும் முறைமை"
 
-#: gtk/gtkentry.c:764
+#: gtk/gtkentry.c:767
 #, fuzzy
 msgid "Whether new text overwrites existing text"
 msgstr "முன்னேற்றம் உரையைக் காண்பிக்கப்படுமோ"
 
-#: gtk/gtkentry.c:778
+#: gtk/gtkentry.c:781
 #, fuzzy
 msgid "Text length"
 msgstr "உரையின் x நேர்ப்படுத்தம்"
 
-#: gtk/gtkentry.c:779
+#: gtk/gtkentry.c:782
 msgid "Length of the text currently in the entry"
 msgstr ""
 
-#: gtk/gtkentry.c:794
+#: gtk/gtkentry.c:797
 #, fuzzy
 msgid "Invisible char set"
 msgstr "Invisible set"
 
-#: gtk/gtkentry.c:795
+#: gtk/gtkentry.c:798
 #, fuzzy
 msgid "Whether the invisible char has been set"
 msgstr "சின்னத்தின் அளவு பண்பு அமைக்கப்பட்டதா"
 
-#: gtk/gtkentry.c:813
+#: gtk/gtkentry.c:816
 msgid "Caps Lock warning"
 msgstr ""
 
-#: gtk/gtkentry.c:814
+#: gtk/gtkentry.c:817
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr ""
 
-#: gtk/gtkentry.c:828
+#: gtk/gtkentry.c:831
 #, fuzzy
 msgid "Progress Fraction"
 msgstr "பகுதி"
 
-#: gtk/gtkentry.c:829
+#: gtk/gtkentry.c:832
 #, fuzzy
 msgid "The current fraction of the task that's been completed"
 msgstr "முழு பணியில் முடிக்கப்பட்ட பகுதி"
 
-#: gtk/gtkentry.c:846
+#: gtk/gtkentry.c:849
 #, fuzzy
 msgid "Progress Pulse Step"
 msgstr "துடிப்புப் படி"
 
-#: gtk/gtkentry.c:847
+#: gtk/gtkentry.c:850
 #, fuzzy
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
 msgstr "The fraction of total progress to move the bouncing block when pulsed"
 
-#: gtk/gtkentry.c:863
+#: gtk/gtkentry.c:866
 #, fuzzy
 msgid "Primary pixbuf"
 msgstr "பிக்ஸ்பப்"
 
-#: gtk/gtkentry.c:864
+#: gtk/gtkentry.c:867
 #, fuzzy
 msgid "Primary pixbuf for the entry"
 msgstr "திறந்த விரிவாக்கத்திற்கான Pixbuf"
 
-#: gtk/gtkentry.c:878
+#: gtk/gtkentry.c:881
 #, fuzzy
 msgid "Secondary pixbuf"
 msgstr "Secondary"
 
-#: gtk/gtkentry.c:879
+#: gtk/gtkentry.c:882
 #, fuzzy
 msgid "Secondary pixbuf for the entry"
 msgstr "Secondary forward stepper"
 
-#: gtk/gtkentry.c:893
+#: gtk/gtkentry.c:896
 msgid "Primary stock ID"
 msgstr ""
 
-#: gtk/gtkentry.c:894
+#: gtk/gtkentry.c:897
 msgid "Stock ID for primary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:908
+#: gtk/gtkentry.c:911
 #, fuzzy
 msgid "Secondary stock ID"
 msgstr "Secondary"
 
-#: gtk/gtkentry.c:909
+#: gtk/gtkentry.c:912
 msgid "Stock ID for secondary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:923
+#: gtk/gtkentry.c:926
 #, fuzzy
 msgid "Primary icon name"
 msgstr "சின்ன சிறுபட பெயர்"
 
-#: gtk/gtkentry.c:924
+#: gtk/gtkentry.c:927
 msgid "Icon name for primary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:938
+#: gtk/gtkentry.c:941
 #, fuzzy
 msgid "Secondary icon name"
 msgstr "Secondary"
 
-#: gtk/gtkentry.c:939
+#: gtk/gtkentry.c:942
 msgid "Icon name for secondary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:953
+#: gtk/gtkentry.c:956
 msgid "Primary GIcon"
 msgstr ""
 
-#: gtk/gtkentry.c:954
+#: gtk/gtkentry.c:957
 #, fuzzy
 msgid "GIcon for primary icon"
 msgstr "இந்த சாளரத்தின் குறும்படம்"
 
-#: gtk/gtkentry.c:968
+#: gtk/gtkentry.c:971
 #, fuzzy
 msgid "Secondary GIcon"
 msgstr "Secondary"
 
-#: gtk/gtkentry.c:969
+#: gtk/gtkentry.c:972
 msgid "GIcon for secondary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:983
+#: gtk/gtkentry.c:986
 #, fuzzy
 msgid "Primary storage type"
 msgstr "தேக்கம் வகை"
 
-#: gtk/gtkentry.c:984
+#: gtk/gtkentry.c:987
 msgid "The representation being used for primary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:999
+#: gtk/gtkentry.c:1002
 #, fuzzy
 msgid "Secondary storage type"
 msgstr "Secondary forward stepper"
 
-#: gtk/gtkentry.c:1000
+#: gtk/gtkentry.c:1003
 msgid "The representation being used for secondary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:1021
+#: gtk/gtkentry.c:1024
 msgid "Primary icon activatable"
 msgstr ""
 
-#: gtk/gtkentry.c:1022
+#: gtk/gtkentry.c:1025
 #, fuzzy
 msgid "Whether the primary icon is activatable"
 msgstr "செயல் செயல்படுத்தப்பட்டதா."
 
-#: gtk/gtkentry.c:1042
+#: gtk/gtkentry.c:1045
 #, fuzzy
 msgid "Secondary icon activatable"
 msgstr "இரண்டாம் நிலைக்காட்டி நிறம்"
 
-#: gtk/gtkentry.c:1043
+#: gtk/gtkentry.c:1046
 #, fuzzy
 msgid "Whether the secondary icon is activatable"
 msgstr "செயல் செயல்படுத்தப்பட்டதா."
 
-#: gtk/gtkentry.c:1065
+#: gtk/gtkentry.c:1068
 #, fuzzy
 msgid "Primary icon sensitive"
 msgstr "அறை உணர்வினை காட்டவும்"
 
-#: gtk/gtkentry.c:1066
+#: gtk/gtkentry.c:1069
 #, fuzzy
 msgid "Whether the primary icon is sensitive"
 msgstr "பொருத்தமான பட்டி உருப்பு வகையுணர்வுள்ளதா"
 
-#: gtk/gtkentry.c:1087
+#: gtk/gtkentry.c:1090
 #, fuzzy
 msgid "Secondary icon sensitive"
 msgstr "Secondary forward stepper"
 
-#: gtk/gtkentry.c:1088
+#: gtk/gtkentry.c:1091
 #, fuzzy
 msgid "Whether the secondary icon is sensitive"
 msgstr "செயல் செயல்படுத்தப்பட்டதா."
 
-#: gtk/gtkentry.c:1104
+#: gtk/gtkentry.c:1107
 #, fuzzy
 msgid "Primary icon tooltip text"
 msgstr "அறை உணர்வினை காட்டவும்"
 
-#: gtk/gtkentry.c:1105 gtk/gtkentry.c:1141
+#: gtk/gtkentry.c:1108 gtk/gtkentry.c:1144
 #, fuzzy
 msgid "The contents of the tooltip on the primary icon"
 msgstr "சாளரத்தின் மேலே நுழைக்க வேண்டிய திண்டாக்கம்."
 
-#: gtk/gtkentry.c:1121
+#: gtk/gtkentry.c:1124
 #, fuzzy
 msgid "Secondary icon tooltip text"
 msgstr "இரண்டாம் நிலைக்காட்டி நிறம்"
 
-#: gtk/gtkentry.c:1122 gtk/gtkentry.c:1160
+#: gtk/gtkentry.c:1125 gtk/gtkentry.c:1163
 #, fuzzy
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "சாளரத்தின் மேலே நுழைக்க வேண்டிய திண்டாக்கம்."
 
-#: gtk/gtkentry.c:1140
+#: gtk/gtkentry.c:1143
 #, fuzzy
 msgid "Primary icon tooltip markup"
 msgstr "சின்ன சிறுபட பெயர்"
 
-#: gtk/gtkentry.c:1159
+#: gtk/gtkentry.c:1162
 #, fuzzy
 msgid "Secondary icon tooltip markup"
 msgstr "Secondary"
 
-#: gtk/gtkentry.c:1179 gtk/gtktextview.c:681
+#: gtk/gtkentry.c:1182 gtk/gtktextview.c:681
 #, fuzzy
 msgid "IM module"
 msgstr "கொடா நிலை அகளம்"
 
-#: gtk/gtkentry.c:1180 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1183 gtk/gtktextview.c:682
 #, fuzzy
 msgid "Which IM module should be used"
 msgstr "ஒரு நிறத்தட்டு பயன்படுத்த வேண்டுமா"
 
-#: gtk/gtkentry.c:1194
+#: gtk/gtkentry.c:1197
 #, fuzzy
 msgid "Icon Prelight"
 msgstr "உயரம்"
 
-#: gtk/gtkentry.c:1195
+#: gtk/gtkentry.c:1198
 #, fuzzy
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "தத்தல்கள் காண்பிப்பதா இல்லையா"
 
-#: gtk/gtkentry.c:1645
+#: gtk/gtkentry.c:1648
 msgid "Border between text and frame."
 msgstr "உரைக்கும் சட்டத்திற்கும் இடையேயான எல்லை"
 
-#: gtk/gtkentry.c:1659
+#: gtk/gtkentry.c:1662
 #, fuzzy
 msgid "State Hint"
 msgstr "நிலை சரம்"
 
-#: gtk/gtkentry.c:1660
+#: gtk/gtkentry.c:1663
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "உரை பின்னணியை வரையும்போது திரையாக பயன்படுத்தவேண்டிய பிட்-படம்"
 
-#: gtk/gtkentry.c:1665 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr ""
 
-#: gtk/gtkentry.c:1666
+#: gtk/gtkentry.c:1669
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 
-#: gtk/gtkentry.c:1680
+#: gtk/gtkentry.c:1683
 msgid "Password Hint Timeout"
 msgstr ""
 
-#: gtk/gtkentry.c:1681
+#: gtk/gtkentry.c:1684
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 
@@ -2764,7 +2764,7 @@ msgstr "சேய் விட்செட்டின் Y இடம்"
 msgid "The title of the font selection dialog"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:158 gtk/gtkfontsel.c:181
+#: gtk/gtkfontbutton.c:158 gtk/gtkfontsel.c:196
 msgid "Font name"
 msgstr "எழுத்து வகை பெயர்"
 
@@ -2808,20 +2808,20 @@ msgstr "«Ç× ¸¡ñÀ¢க்கவும்"
 msgid "Whether selected font size is shown in the label"
 msgstr ""
 
-#: gtk/gtkfontsel.c:182
+#: gtk/gtkfontsel.c:197
 #, fuzzy
 msgid "The string that represents this font"
 msgstr "இந்த எழுத்து வகையின் X சரம் வகையான பிரதிநிதி"
 
-#: gtk/gtkfontsel.c:189
+#: gtk/gtkfontsel.c:204
 msgid "The GdkFont that is currently selected"
 msgstr "தற்போது தெரிவு செய்யப்பட்டுல்ல GdkFont"
 
-#: gtk/gtkfontsel.c:195
+#: gtk/gtkfontsel.c:210
 msgid "Preview text"
 msgstr "உரை முன்-காட்சி"
 
-#: gtk/gtkfontsel.c:196
+#: gtk/gtkfontsel.c:211
 msgid "The text to display in order to demonstrate the selected font"
 msgstr ""
 
