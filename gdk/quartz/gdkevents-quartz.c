@@ -889,12 +889,6 @@ gdk_event_translate (GdkEvent *event,
   int x_root, y_root;
   gboolean return_val;
 
-  /* Ignore events altogether when we're not active, otherwise we get
-   * tooltips etc for inactive apps.
-   */
-  if (![NSApp isActive])
-    return FALSE;
-
   /* There is no support for real desktop wide grabs, so we break
    * grabs when the application loses focus (gets deactivated).
    */
@@ -990,9 +984,9 @@ gdk_event_translate (GdkEvent *event,
 	}
     }
 
-  /* We only activate the application on click if it's not already active,
-   * or if it's active but the window isn't focused. This matches most use
-   * cases of native apps (no click-through).
+  /* If the app is not active, or the window (when not grabbed) is not
+   * active, leave the event to AppKit so the window gets focused correctly
+   * and don't do click-through (so we behave like most native apps).
    */
   if ((event_type == NSRightMouseDown ||
        event_type == NSOtherMouseDown ||
@@ -1002,7 +996,10 @@ gdk_event_translate (GdkEvent *event,
       GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
       if (![NSApp isActive])
-        return FALSE;
+        {
+          [NSApp activateIgnoringOtherApps:YES];
+          return FALSE;
+        }
       else if (![impl->toplevel isKeyWindow])
         return FALSE;
     }
