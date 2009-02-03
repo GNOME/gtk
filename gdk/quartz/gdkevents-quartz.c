@@ -431,7 +431,6 @@ find_window_for_ns_event (NSEvent *nsevent,
   GdkQuartzView *view;
   GdkWindow *toplevel;
   GdkWindowObject *private;
-  GdkWindowImplQuartz *impl;
   NSPoint point;
   NSPoint screen_point;
   NSEventType event_type;
@@ -440,7 +439,6 @@ find_window_for_ns_event (NSEvent *nsevent,
 
   toplevel = [view gdkWindow];
   private = GDK_WINDOW_OBJECT (toplevel);
-  impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
 
   point = [nsevent locationInWindow];
   screen_point = [[nsevent window] convertBaseToScreen:point];
@@ -480,19 +478,41 @@ find_window_for_ns_event (NSEvent *nsevent,
 	 * the grab_window and is reported only if selected by
 	 * event_mask. For either value of owner_events, unreported
 	 * events are discarded.
-	 *
-	 * This means we first try the owner, then the grab window,
-	 * then give up.
 	 */
         grab = _gdk_display_get_last_pointer_grab (display);
-	if (grab && grab->window)
+	if (grab)
 	  {
-	    if (grab->owner_events)
-              return toplevel;
+	    if ((grab->event_mask & get_event_mask_from_ns_event (nsevent)) == 0)
+              return NULL;
 
-	    /* Finally check the grab window. */
-	    if (grab->event_mask & get_event_mask_from_ns_event (nsevent))
-	      {
+            if (grab->owner_events)
+              {
+                /* For owner events, we need to use the toplevel under the
+                 * pointer, not the window from the NSEvent, since that is
+                 * reported with respect to the key window, which could be
+                 * wrong.
+                 */
+                if (display->pointer_info.toplevel_under_pointer)
+                  {
+                    GdkWindowObject *pointer_private;
+                    NSWindow *pointer_nswindow;
+
+                    toplevel = display->pointer_info.toplevel_under_pointer;
+                    pointer_private = (GdkWindowObject *)toplevel;
+                    pointer_nswindow = ((GdkWindowImplQuartz *)pointer_private->impl)->toplevel;
+
+                    point = [pointer_nswindow convertScreenToBase:screen_point];
+
+                    /* Note: x_root and y_root are already right. */
+                    *x = point.x;
+                    *y = pointer_private->height - point.y;
+                  }
+
+                return toplevel;
+              }
+            else
+              {
+                /* Finally check the grab window. */
 		GdkWindow *grab_toplevel;
                 GdkWindowObject *grab_private;
                 NSWindow *grab_nswindow;
@@ -500,15 +520,12 @@ find_window_for_ns_event (NSEvent *nsevent,
 		grab_toplevel = gdk_window_get_toplevel (grab->window);
                 grab_private = (GdkWindowObject *)grab_toplevel;
 
-                point = [[nsevent window] convertBaseToScreen:[nsevent locationInWindow]];
-
-                grab_nswindow = ((GdkWindowImplQuartz *)private->impl)->toplevel;
-                point = [grab_nswindow convertScreenToBase:point];
-
-                *x = point.x;
-                *y = grab_private->height - point.y;
+                grab_nswindow = ((GdkWindowImplQuartz *)grab_private->impl)->toplevel;
+                point = [grab_nswindow convertScreenToBase:screen_point];
 
                 /* Note: x_root and y_root are already right. */
+                *x = point.x;
+                *y = grab_private->height - point.y;
 
 		return grab_toplevel;
 	      }
