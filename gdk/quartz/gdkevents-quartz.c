@@ -128,10 +128,7 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
 
   grab = _gdk_display_get_last_pointer_grab (display);
   if (grab)
-    {
-      /* Serials are always 0 in quartz, but for clarity: */
-      grab->serial_end = 0;
-    }
+    grab->serial_end = 0;
 
   _gdk_display_pointer_grab_update (display, 0);
 }
@@ -182,7 +179,6 @@ break_all_grabs (guint32 time)
   grab = _gdk_display_get_last_pointer_grab (_gdk_display);
   if (grab)
     {
-      /* Serials are always 0 in quartz, but for clarity: */
       grab->serial_end = 0;
       grab->implicit_ungrab = TRUE;
     }
@@ -745,13 +741,10 @@ find_window_for_ns_event (NSEvent *nsevent,
     case NSKeyDown:
     case NSKeyUp:
     case NSFlagsChanged:
-      {
-	if (_gdk_display->keyboard_grab.window && !_gdk_display->keyboard_grab.owner_events)
-	  return gdk_window_get_toplevel (_gdk_display->keyboard_grab.window);
+      if (_gdk_display->keyboard_grab.window && !_gdk_display->keyboard_grab.owner_events)
+        return gdk_window_get_toplevel (_gdk_display->keyboard_grab.window);
 
-        return toplevel;
-      }
-      break;
+      return toplevel;
 
     default:
       /* Ignore everything else. */
@@ -773,13 +766,6 @@ fill_crossing_event (GdkWindow       *toplevel,
                      GdkCrossingMode  mode,
                      GdkNotifyType    detail)
 {
-  GdkWindowObject *private;
-  NSPoint point;
-
-  private = GDK_WINDOW_OBJECT (toplevel);
-
-  point = [nsevent locationInWindow];
-
   event->any.type = event_type;
   event->crossing.window = toplevel;
   event->crossing.subwindow = NULL;
@@ -986,7 +972,7 @@ fill_key_event (GdkWindow    *window,
   if (event->key.keyval != GDK_VoidSymbol)
     c = gdk_keyval_to_unicode (event->key.keyval);
 
-    if (c)
+  if (c)
     {
       gsize bytes_written;
       gint len;
@@ -1042,38 +1028,34 @@ synthesize_crossing_event (GdkWindow *window,
   switch ([nsevent type])
     {
     case NSMouseEntered:
-      {
-        /* Enter events are considered always to be from the root window as
-         * we can't know for sure from what window we enter.
-         */
-        if (!(private->event_mask & GDK_ENTER_NOTIFY_MASK))
-          return FALSE;
+      /* Enter events are considered always to be from the root window as we
+       * can't know for sure from what window we enter.
+       */
+      if (!(private->event_mask & GDK_ENTER_NOTIFY_MASK))
+        return FALSE;
 
-        fill_crossing_event (window, event, nsevent,
-                             x, y,
-                             x_root, y_root,
-                             GDK_ENTER_NOTIFY,
-                             GDK_CROSSING_NORMAL,
-                             GDK_NOTIFY_ANCESTOR);
-      }
+      fill_crossing_event (window, event, nsevent,
+                           x, y,
+                           x_root, y_root,
+                           GDK_ENTER_NOTIFY,
+                           GDK_CROSSING_NORMAL,
+                           GDK_NOTIFY_ANCESTOR);
       return TRUE;
 
     case NSMouseExited:
-      {
-        /* Exited always is to the root window as far as we are concerned,
-         * since there is no way to reliably get information about what new
-         * window is entered when exiting one.
-         */
-        if (!(private->event_mask & GDK_LEAVE_NOTIFY_MASK))
-          return FALSE;
+      /* Exited always is to the root window as far as we are concerned,
+       * since there is no way to reliably get information about what new
+       * window is entered when exiting one.
+       */
+      if (!(private->event_mask & GDK_LEAVE_NOTIFY_MASK))
+        return FALSE;
 
-        fill_crossing_event (window, event, nsevent,
-                             x, y,
-                             x_root, y_root,
-                             GDK_LEAVE_NOTIFY,
-                             GDK_CROSSING_NORMAL,
-                             GDK_NOTIFY_ANCESTOR);
-      }
+      fill_crossing_event (window, event, nsevent,
+                           x, y,
+                           x_root, y_root,
+                           GDK_LEAVE_NOTIFY,
+                           GDK_CROSSING_NORMAL,
+                           GDK_NOTIFY_ANCESTOR);
       return TRUE;
 
     default:
