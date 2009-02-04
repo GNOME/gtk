@@ -440,6 +440,10 @@ gtk_tooltip_trigger_tooltip_query (GdkDisplay *display)
   event.motion.y = y;
   event.motion.is_hint = FALSE;
 
+  gdk_window_get_origin (window, &x, &y);
+  event.motion.x_root = event.motion.x + x;
+  event.motion.y_root = event.motion.y + y;
+
   _gtk_tooltip_handle_event (&event);
 }
 
@@ -517,6 +521,9 @@ child_location_foreach (GtkWidget *child,
   /* Ignore invisible widgets */
   if (!GTK_WIDGET_DRAWABLE (child))
     return;
+
+  x = 0;
+  y = 0;
 
   /* (child_loc->x, child_loc->y) are relative to
    * child_loc->container's allocation.

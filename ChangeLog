@@ -1,3 +1,11 @@
+2009-02-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 538439 – tooltip may appear in upper left corner instead of 
+	over widget
+
+	* gtk/gtktooltip.c (gtk_tooltip_trigger_query): Set the root 
+	coordinates in the event correctly. Patch by Kristian Rietveld.
+
 2009-02-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
