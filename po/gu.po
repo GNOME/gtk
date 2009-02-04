@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.gu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
-"POT-Creation-Date: 2009-02-03 01:56+0000\n"
-"PO-Revision-Date: 2009-02-03 17:58+0530\n"
+"POT-Creation-Date: 2009-02-03 12:30+0000\n"
+"PO-Revision-Date: 2009-02-04 11:38+0530\n"
 "Last-Translator: Sweta Kothari <swkothar@redhat.com>\n"
 "Language-Team: Gujarati\n"
 "MIME-Version: 1.0\n"
@@ -143,7 +143,7 @@ msgstr "અટકાવો"
 #: ../gdk/keyname-table.h:3944
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr ""
+msgstr "ScrollLock (_L)"
 
 #: ../gdk/keyname-table.h:3945
 msgctxt "keyboard label"
@@ -151,28 +151,24 @@ msgid "Sys_Req"
 msgstr "SysReq (_R)"
 
 #: ../gdk/keyname-table.h:3946
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Escape"
-msgstr "આડું"
+msgstr "Escape"
 
 #: ../gdk/keyname-table.h:3947
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "મલ્ટીપ્રેસ"
+msgstr "મલ્ટીકી (_k)"
 
 #: ../gdk/keyname-table.h:3948
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Home"
-msgstr "ઘર (_H)"
+msgstr "ઘર"
 
 #: ../gdk/keyname-table.h:3949
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Left"
-msgstr "ડાબું (_L):"
+msgstr "ડાબું"
 
 #: ../gdk/keyname-table.h:3950
 msgctxt "keyboard label"
@@ -180,16 +176,14 @@ msgid "Up"
 msgstr "ઉપર"
 
 #: ../gdk/keyname-table.h:3951
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Right"
-msgstr "જમણું (_R):"
+msgstr "જમણું"
 
 #: ../gdk/keyname-table.h:3952
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Down"
-msgstr "નીચે પાથ"
+msgstr "નીચે"
 
 #: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
@@ -224,7 +218,7 @@ msgstr "દાખલ કરો"
 #: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr ""
+msgstr "NumLock (_L)"
 
 #: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
@@ -360,11 +354,11 @@ msgstr "ચિત્રનો પ્રકાર '%s' આધાર આપતો 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:846
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "ફાઈલ %s માટે ચિત્રનું બંધારણ ઓળખી શકાતું નથી."
+msgstr "ફાઈલ %s માટે ચિત્રનું બંધારણ ઓળખી શકાતું નથી"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:854
 msgid "Unrecognized image file format"
-msgstr "ચિત્ર ફાઈલનું બંધારણ અજાણ્યુ છે."
+msgstr "ચિત્ર ફાઈલનું બંધારણ અજાણ્યુ છે"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1022
 #, c-format
@@ -383,7 +377,7 @@ msgstr "gdk-pixbfનું બંધારણ ચિત્રના બંધા
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1735
 msgid "Insufficient memory to save image to callback"
-msgstr "કૉલબેક માટે ચિત્ર ફાઈલને લાવવા માટે અપૂરતી મેમરી."
+msgstr "કૉલબેક માટે ચિત્ર ફાઈલને લાવવા માટે અપૂરતી મેમરી"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1748
 msgid "Failed to open temporary file"
@@ -410,9 +404,8 @@ msgid "Insufficient memory to save image into a buffer"
 msgstr "અનામત મૅમરીમાં ચિત્રનો સંગ્રહ કરવા માટે અપૂરતી મૅમરી"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:2350
-#, fuzzy
 msgid "Error writing to image stream"
-msgstr "ચિત્રની ફાઇલમાં લખવામાં ભૂલ: %s"
+msgstr "ચિત્રની સ્ટ્રીમમાં લખવામાં ભૂલ"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
@@ -465,7 +458,7 @@ msgstr "એનિમેશનમાં અયોગ્ય હેડર"
 #: ../gdk-pixbuf/io-ani.c:464 ../gdk-pixbuf/io-ani.c:491
 #: ../gdk-pixbuf/io-ani.c:542 ../gdk-pixbuf/io-ani.c:614
 msgid "Not enough memory to load animation"
-msgstr "એનિમેશન લાવવા માટે પૂરતી મેમરી નથી."
+msgstr "એનિમેશન લાવવા માટે પૂરતી મેમરી નથી"
 
 #: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:424
 #: ../gdk-pixbuf/io-ani.c:443
@@ -531,7 +524,7 @@ msgstr "સ્ટેક વધારેપડતુ ભરાઈ ગયુ છ�
 
 #: ../gdk-pixbuf/io-gif.c:639
 msgid "GIF image loader cannot understand this image."
-msgstr "GIF ચિત્ર લાવનાર આ ચિત્રને સમજી શકતુ નથી"
+msgstr "GIF ચિત્ર લાવનાર આ ચિત્રને સમજી શકતુ નથી."
 
 #: ../gdk-pixbuf/io-gif.c:668
 msgid "Bad code encountered"
@@ -573,7 +566,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
-msgstr "GIF ચિત્ર છેદાયેલ અથવા અધૂરુ છે"
+msgstr "GIF ચિત્ર છેદાયેલ અથવા અધૂરુ છે."
 
 #: ../gdk-pixbuf/io-gif.c:1693 ../gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
@@ -629,53 +622,45 @@ msgid "The ICO image format"
 msgstr "ICO ચિત્ર બંધારણ"
 
 #: ../gdk-pixbuf/io-icns.c:347
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading ICNS image: %s"
-msgstr "PNG ચિત્ર ફાઈલને વાંચવામાં ઘાતક ભૂલ: %s"
+msgstr "ICNS ચિત્ર ને વાંચવામાં ભૂલ: %s"
 
 #: ../gdk-pixbuf/io-icns.c:364
-#, fuzzy
 msgid "Could not decode ICNS file"
-msgstr "ફાઈલ પસંદી કરી શક્યા નહિં"
+msgstr "ICNS ફાઇલ ને ડિકોડ કરી શકાતી નથી"
 
 #: ../gdk-pixbuf/io-icns.c:397
 msgid "The ICNS image format"
 msgstr "ICNS ચિત્ર બંધારણ"
 
 #: ../gdk-pixbuf/io-jasper.c:75
-#, fuzzy
 msgid "Couldn't allocate memory for stream"
-msgstr "હેડર માટે મેમરી ફાળવી શકાતી નથી"
+msgstr "સ્ટ્રીમ માટે મેમરી ફાળવી શકાતી નથી"
 
 #: ../gdk-pixbuf/io-jasper.c:105
-#, fuzzy
 msgid "Couldn't decode image"
-msgstr "ફાઈલનામ રુપાંતરિત કરી શકાયુ નહિ"
+msgstr "ચિત્ર ને ડિકોડ કરી શકાતો નથી"
 
 #: ../gdk-pixbuf/io-jasper.c:123
-#, fuzzy
 msgid "Transformed JPEG2000 has zero width or height"
-msgstr "રૂપાંતરિત JPEG માટે શૂન્ય પહોળાઈ અથવા ઊંચાઈ હોય છે."
+msgstr "રૂપાંતરિત JPEG2000 પાસે શૂન્ય પહોળાઈ અથવા ઊંચાઈ હોય છે"
 
 #: ../gdk-pixbuf/io-jasper.c:137
-#, fuzzy
 msgid "Image type currently not supported"
-msgstr "ચિત્રનો પ્રકાર '%s' આધાર આપતો નથી"
+msgstr "ચિત્રનો પ્રકાર હાલમાં આધાર આપતો નથી"
 
 #: ../gdk-pixbuf/io-jasper.c:149 ../gdk-pixbuf/io-jasper.c:157
-#, fuzzy
 msgid "Couldn't allocate memory for color profile"
-msgstr "JPEG ફાઈલને લાવવા માટે કોઈ મેમરી ફાળવી શકાતી નથી"
+msgstr "રંગ પ્રોફાઇલ માટે મેમરી ફાળવી શકાતી નથી"
 
 #: ../gdk-pixbuf/io-jasper.c:182
-#, fuzzy
 msgid "Insufficient memory to open JPEG 2000 file"
-msgstr "TIFF ફાઈલ લાવવા માટે અપૂરતી મેમરી"
+msgstr "JPEG ૨૦૦૦ ફાઇલ ને ખોલવા માટે મેમરી અપૂરતી છે"
 
 #: ../gdk-pixbuf/io-jasper.c:264
-#, fuzzy
 msgid "Couldn't allocate memory to buffer image data"
-msgstr "લીટી માહિતી માટે મેમરી ફાળવી શકાતી નથી"
+msgstr "બફર ચિત્ર માહિતી ની મેમરી ને ફાળવી શકાતી નથી"
 
 #: ../gdk-pixbuf/io-jasper.c:308
 msgid "The JPEG 2000 image format"
@@ -1067,19 +1052,19 @@ msgstr "અયોગ્ય XBM ફાઈલ"
 
 #: ../gdk-pixbuf/io-xbm.c:305
 msgid "Insufficient memory to load XBM image file"
-msgstr "XBM ચિત્ર ફાઈલને લાવવા માટે અપૂરતી મેમરી."
+msgstr "XBM ચિત્ર ફાઈલને લાવવા માટે અપૂરતી મેમરી"
 
 #: ../gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr "XBM ચિત્રને લાવતી વખતે કામપૂરતી ફાઈલમાં લખવામાં નિષ્ફળ."
+msgstr "XBM ચિત્રને લાવતી વખતે કામપૂરતી ફાઈલમાં લખવામાં નિષ્ફળ"
 
 #: ../gdk-pixbuf/io-xbm.c:492
 msgid "The XBM image format"
-msgstr "XBM ચિત્ર બંધારણ."
+msgstr "XBM ચિત્ર બંધારણ"
 
 #: ../gdk-pixbuf/io-xpm.c:468
 msgid "No XPM header found"
-msgstr "કોઈ XPM હેડર મળતું નથી."
+msgstr "કોઈ XPM હેડર મળતું નથી"
 
 #: ../gdk-pixbuf/io-xpm.c:477
 msgid "Invalid XPM header"
@@ -1087,32 +1072,32 @@ msgstr "અયોગ્ય XPM હેડર"
 
 #: ../gdk-pixbuf/io-xpm.c:485
 msgid "XPM file has image width <= 0"
-msgstr "XPM ફાઈલના ચિત્રની પહોળાઈ <= 0 છે."
+msgstr "XPM ફાઈલના ચિત્રની પહોળાઈ <= 0 છે"
 
 #: ../gdk-pixbuf/io-xpm.c:493
 msgid "XPM file has image height <= 0"
-msgstr "XPM ફાઈલના ચિત્રની ઊંચાઈ <= 0 છે."
+msgstr "XPM ફાઈલના ચિત્રની ઊંચાઈ <= 0 છે"
 
 #: ../gdk-pixbuf/io-xpm.c:501
 msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM પાસે પ્રતિ પીક્સેલ અયોગ્ય શબ્દની સંખ્યા."
+msgstr "XPM પાસે પ્રતિ પીક્સેલ અયોગ્ય શબ્દની સંખ્યા"
 
 #: ../gdk-pixbuf/io-xpm.c:510
 msgid "XPM file has invalid number of colors"
-msgstr "XPM ફાઈલ પાસે અયોગ્ય રંગની સંખ્યા છે."
+msgstr "XPM ફાઈલ પાસે અયોગ્ય રંગની સંખ્યા છે"
 
 #: ../gdk-pixbuf/io-xpm.c:522 ../gdk-pixbuf/io-xpm.c:531
 #: ../gdk-pixbuf/io-xpm.c:583
 msgid "Cannot allocate memory for loading XPM image"
-msgstr "XPM ચિત્રને લાવવા માટે પૂરતી મેમરી ફાળવી શકાતી નથી."
+msgstr "XPM ચિત્રને લાવવા માટે પૂરતી મેમરી ફાળવી શકાતી નથી"
 
 #: ../gdk-pixbuf/io-xpm.c:545
 msgid "Cannot read XPM colormap"
-msgstr "XPM રંગનક્શો વાંચી શકતુ નથી."
+msgstr "XPM રંગનક્શો વાંચી શકતુ નથી"
 
 #: ../gdk-pixbuf/io-xpm.c:777
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "XPM ચિત્રને લાવતી વખતે કામપૂરતી ફાઈલમાં લખવામાં નિષ્ફળ."
+msgstr "XPM ચિત્રને લાવતી વખતે કામપૂરતી ફાઈલમાં લખવામાં નિષ્ફળ"
 
 #: ../gdk-pixbuf/io-xpm.c:816
 msgid "The XPM image format"
@@ -1123,9 +1108,9 @@ msgid "The EMF image format"
 msgstr "EMF ચિત્ર બંધારણ"
 
 #: ../gdk-pixbuf/io-gdip-utils.c:220
-#, fuzzy, c-format
+#, c-format
 msgid "Could not allocate memory: %s"
-msgstr "હેડર માટે મેમરી ફાળવી શકાતી નથી"
+msgstr "મેમરી ફાળવી શકાતી નથી: %s"
 
 #: ../gdk-pixbuf/io-gdip-utils.c:245 ../gdk-pixbuf/io-gdip-utils.c:360
 #: ../gdk-pixbuf/io-gdip-utils.c:394
@@ -1294,10 +1279,9 @@ msgstr "Alt"
 #. * this.
 #.
 #: ../gtk/gtkaccellabel.c:671
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Super"
-msgstr "કાગળ"
+msgstr "ઉત્તમ"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1305,10 +1289,9 @@ msgstr "કાગળ"
 #. * this.
 #.
 #: ../gtk/gtkaccellabel.c:684
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Hyper"
-msgstr "કાગળ"
+msgstr "હાઇપર"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1321,10 +1304,9 @@ msgid "Meta"
 msgstr "મેટા"
 
 #: ../gtk/gtkaccellabel.c:715
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Space"
-msgstr "બદલો (_R)"
+msgstr "જગ્યા"
 
 #: ../gtk/gtkaccellabel.c:718
 msgctxt "keyboard label"
@@ -1428,10 +1410,9 @@ msgstr "%Y"
 #. * a disabled accelerator key combination.
 #.
 #: ../gtk/gtkcellrendereraccel.c:243
-#, fuzzy
 msgctxt "Accelerator"
 msgid "Disabled"
-msgstr "નિષ્ક્રિય"
+msgstr "નિષ્ક્રિય થયેલ"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
@@ -1460,14 +1441,14 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"તમારે જે રંગ પસંદ કરવો હોય તે બહારની રીંંગમાંથી પસંદ કરો.અંદરના ત્રિકોણનો ઉપયોગ કરીને "
-"રંગનું ઘાટાપણું અને ઝાંખાપણું પસંદ કરો"
+"તમારે જે રંગ પસંદ કરવો હોય તે બહારની રીંગમાંથી પસંદ કરો.અંદરના ત્રિકોણનો ઉપયોગ કરીને "
+"રંગનું ઘાટાપણું અને ઝાંખાપણું પસંદ કરો."
 
 #: ../gtk/gtkcolorsel.c:378
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr "આઈડ્રોપર પર ક્લિક કરો, પછી રંગ પસંદ કરવા સ્ક્રીન પર ગમે ત્યાં એ રંગ પર ક્લિક કરો"
+msgstr "આઈડ્રોપર પર ક્લિક કરો, પછી રંગ પસંદ કરવા સ્ક્રીન પર ગમે ત્યાં એ રંગ પર ક્લિક કરો."
 
 #: ../gtk/gtkcolorsel.c:387
 msgid "_Hue:"
@@ -1535,7 +1516,7 @@ msgid ""
 "such as 'orange' in this entry."
 msgstr ""
 "તમે HTML-શૈલીની ષષ્ટાંક રંગ કિંમત આપી શકો છો, અથવા તો માત્ર રંગનુ નામ જેમકે 'નારંગી' આપી "
-"શકો છો"
+"શકો છો."
 
 #: ../gtk/gtkcolorsel.c:470
 msgid "_Palette:"
@@ -1561,7 +1542,7 @@ msgid ""
 "it for use in the future."
 msgstr ""
 "તમે જે રંગને પસંદ કર્યો છે તે. રંગનો ભવિષ્યમાં ફરીથી ઉપયોગ કરવા માટે તમે તેને પેલેટ વિગતમાં "
-"સંગ્રહી શકો છો"
+"સંગ્રહી શકો છો."
 
 #: ../gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
@@ -1588,9 +1569,8 @@ msgid "_Insert Unicode Control Character"
 msgstr "યૂનિકોડ નિયંત્રણ અક્ષર ઉમેરો (_I)"
 
 #: ../gtk/gtkentry.c:9622
-#, fuzzy
 msgid "Caps Lock is on"
-msgstr "સ્થાનની નકલ કરો (_L)"
+msgstr "Caps Lock એ ચાલુ છે"
 
 #: ../gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
@@ -1902,9 +1882,8 @@ msgstr ""
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
 #: ../gtk/gtkfilechooserentry.c:1196
-#, fuzzy
 msgid "Path does not exist"
-msgstr "ટૂંકાણ %s અસ્તિત્વમાં નથી"
+msgstr "પાથ અસ્તિત્વમાં નથી"
 
 #: ../gtk/gtkfilechoosersettings.c:362 ../gtk/gtkfilesel.c:1349
 #: ../gtk/gtkfilesel.c:1358
@@ -2018,7 +1997,7 @@ msgstr "ફરીથી નામ આપો (_R)"
 
 #: ../gtk/gtkfilesel.c:2128
 msgid "_Selection: "
-msgstr "પસંદગી (_S):"
+msgstr "પસંદગી (_S): "
 
 #: ../gtk/gtkfilesel.c:3048
 #, c-format
@@ -2141,10 +2120,9 @@ msgid "Simple"
 msgstr "સરળ"
 
 #: ../gtk/gtkimmulticontext.c:541
-#, fuzzy
 msgctxt "input method menu"
 msgid "System"
-msgstr "ફાઈલ સિસ્ટમ"
+msgstr "સિસ્ટમ"
 
 #: ../gtk/gtkimmulticontext.c:625
 #, c-format
@@ -2192,11 +2170,11 @@ msgstr "કીઓ"
 
 #: ../gtk/gtkinputdialog.c:524
 msgid "_X:"
-msgstr "_X:"
+msgstr "X (_X):"
 
 #: ../gtk/gtkinputdialog.c:525
 msgid "_Y:"
-msgstr "_Y:"
+msgstr "Y (_Y):"
 
 #: ../gtk/gtkinputdialog.c:526
 msgid "_Pressure:"
@@ -2473,10 +2451,9 @@ msgid "Initial state"
 msgstr "શરૂઆતની સ્થિતિ"
 
 #: ../gtk/gtkprintoperation.c:1518
-#, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
-msgstr "%d તૈયાર કરી રહ્યા છીએ"
+msgstr "છાપવા માટે તૈયારી કરી રહ્યા છીએ"
 
 #: ../gtk/gtkprintoperation.c:1519
 msgctxt "print operation status"
@@ -2489,10 +2466,9 @@ msgid "Sending data"
 msgstr "માહિતી ને મોકલી રહ્યા છે"
 
 #: ../gtk/gtkprintoperation.c:1521
-#, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
-msgstr "ચેતવણી"
+msgstr "રાહ જોઇ રહ્યા છે"
 
 #: ../gtk/gtkprintoperation.c:1522
 msgctxt "print operation status"
@@ -2500,19 +2476,16 @@ msgid "Blocking on issue"
 msgstr "મુદ્દા પર બ્લોક કરી રહ્યા છે"
 
 #: ../gtk/gtkprintoperation.c:1523
-#, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
-msgstr "%d છાપી રહ્યા છીએ"
+msgstr "છાપી રહ્યા છીએ"
 
 #: ../gtk/gtkprintoperation.c:1524
-#, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
-msgstr "સમાપ્ત કરી રહ્યા છીએ"
+msgstr "સમાપ્ત થયેલ છે"
 
 #: ../gtk/gtkprintoperation.c:1525
-#, fuzzy
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "ભૂલ સાથે સમાપ્ત થયેલ"
@@ -2574,14 +2547,12 @@ msgid "Custom size"
 msgstr "વૈવિધ્યપૂર્ણ માપ"
 
 #: ../gtk/gtkprintoperation-win32.c:1517
-#, fuzzy
 msgid "No printer found"
-msgstr "કોઈ વસ્તુઓ મળી નહિં"
+msgstr "પ્રિન્ટર શોધાયુ નથી"
 
 #: ../gtk/gtkprintoperation-win32.c:1544
-#, fuzzy
 msgid "Invalid argument to CreateDC"
-msgstr "PrintDlgEx માટે અયોગ્ય દલીલ"
+msgstr "CreateDC માટે અયોગ્ય દલીલ"
 
 #: ../gtk/gtkprintoperation-win32.c:1578 ../gtk/gtkprintoperation-win32.c:1801
 msgid "Error from StartDoc"
@@ -2623,24 +2594,20 @@ msgid "Status"
 msgstr "પરિસ્થિતિ"
 
 #: ../gtk/gtkprintunixdialog.c:1809
-#, fuzzy
 msgid "Range"
-msgstr "વિસ્તાર (_n)"
+msgstr "વિસ્તાર"
 
 #: ../gtk/gtkprintunixdialog.c:1813
-#, fuzzy
 msgid "_All Pages"
-msgstr "બધી શીટો"
+msgstr "બધા પાનાંઓ (_A)"
 
 #: ../gtk/gtkprintunixdialog.c:1820
-#, fuzzy
 msgid "C_urrent Page"
-msgstr "વર્તમાન (_u)"
+msgstr "વર્તમાન પાનું (_u)"
 
 #: ../gtk/gtkprintunixdialog.c:1829
-#, fuzzy
 msgid "Pag_es:"
-msgstr "જગ્યાઓ"
+msgstr "પાનાંઓ (_e):"
 
 #: ../gtk/gtkprintunixdialog.c:1830
 msgid ""
@@ -2676,19 +2643,16 @@ msgstr "સામાન્ય"
 #.
 #: ../gtk/gtkprintunixdialog.c:2442
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2874
-#, fuzzy
 msgid "Page Ordering"
-msgstr "તૈયાર કરી રહ્યા છીએ"
+msgstr "પાનાં ને ક્રમમાં કરી રહ્યા છે"
 
 #: ../gtk/gtkprintunixdialog.c:2448
-#, fuzzy
 msgid "Left to right"
-msgstr "LRM ડાબેથી-જમણાની નિશાની (_L)"
+msgstr "ડાબે થી જમણે"
 
 #: ../gtk/gtkprintunixdialog.c:2449
-#, fuzzy
 msgid "Right to left"
-msgstr "ફાઈલમાં છાપો"
+msgstr "જમણે થી ડાબે"
 
 #: ../gtk/gtkprintunixdialog.c:2518
 msgid "Layout"
@@ -2950,25 +2914,21 @@ msgstr "URI '%s' સાથેની વસ્તુ શોધવામાં અ
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:288
-#, fuzzy
 msgctxt "Stock label"
 msgid "Information"
 msgstr "જાણકારી"
 
 #: ../gtk/gtkstock.c:289
-#, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "ચેતવણી"
 
 #: ../gtk/gtkstock.c:290
-#, fuzzy
 msgctxt "Stock label"
 msgid "Error"
 msgstr "ભૂલ"
 
 #: ../gtk/gtkstock.c:291
-#, fuzzy
 msgctxt "Stock label"
 msgid "Question"
 msgstr "પ્રશ્ર્ન"
@@ -2977,164 +2937,138 @@ msgstr "પ્રશ્ર્ન"
 #. * need the mnemonics to be rationalized
 #.
 #: ../gtk/gtkstock.c:296
-#, fuzzy
 msgctxt "Stock label"
 msgid "_About"
 msgstr "વિશે (_A)"
 
 #: ../gtk/gtkstock.c:297
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "ઉમેરો (_A)"
 
 #: ../gtk/gtkstock.c:298
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "અમલમાં મૂકો (_A)"
 
 #: ../gtk/gtkstock.c:299
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "ઘટ્ટ (_B)"
 
 #: ../gtk/gtkstock.c:300
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "રદ કરો (_C)"
 
 #: ../gtk/gtkstock.c:301
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-Rom"
-msgstr "_CD-Rom"
+msgstr "CD-Rom (_C)"
 
 #: ../gtk/gtkstock.c:302
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "સાફ કરો (_C)"
 
 #: ../gtk/gtkstock.c:303
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "બંધ કરો (_C)"
 
 #: ../gtk/gtkstock.c:304
-#, fuzzy
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "જોડો (_o)"
 
 #: ../gtk/gtkstock.c:305
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "રુપાંતર કરો (_C)"
 
 #: ../gtk/gtkstock.c:306
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "નકલ કરો (_C)"
 
 #: ../gtk/gtkstock.c:307
-#, fuzzy
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "કાપો (_t)"
 
 #: ../gtk/gtkstock.c:308
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "કાઢી નાંખો (_D)"
 
 #: ../gtk/gtkstock.c:309
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "અવગણો (_D)"
 
 #: ../gtk/gtkstock.c:310
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "જોડાણ તોડો (_D)"
 
 #: ../gtk/gtkstock.c:311
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "ચલાવો (_E)"
 
 #: ../gtk/gtkstock.c:312
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "ફેરફાર કરો (_E)"
 
 #: ../gtk/gtkstock.c:313
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "શોધો (_F)"
 
 #: ../gtk/gtkstock.c:314
-#, fuzzy
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "શોધો અને બદલો (_R)"
 
 #: ../gtk/gtkstock.c:315
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "ફ્લોપી (_F)"
 
 #: ../gtk/gtkstock.c:316
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "પૂર્ણ સ્ક્રીન (_F)"
 
 #: ../gtk/gtkstock.c:317
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "પૂર્ણ સ્ક્રીન છોડો (_L)"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: ../gtk/gtkstock.c:319
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
-msgstr "તળિયું (_B):"
+msgstr "તળિયું (_B)"
 
 #. This is a navigation label as in "go to the first page"
 #: ../gtk/gtkstock.c:321
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_First"
-msgstr "ફાઈલો (_F)"
+msgstr "પહેલુ (_F)"
 
 #. This is a navigation label as in "go to the last page"
 #: ../gtk/gtkstock.c:323
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Last"
-msgstr "ચોંટાડો (_P)"
+msgstr "છેલ્લુ (_L)"
 
 #. This is a navigation label as in "go to the top of the page"
 #: ../gtk/gtkstock.c:325
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Top"
-msgstr "ટોચ (_T):"
+msgstr "ટોચ (_T)"
 
 #. This is a navigation label as in "go back"
 #: ../gtk/gtkstock.c:327
@@ -3144,14 +3078,12 @@ msgstr "પાછળ કરો (_B)"
 
 #. This is a navigation label as in "go down"
 #: ../gtk/gtkstock.c:329
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Down"
-msgstr "હમણાં (_N)"
+msgstr "નીચે (_D)"
 
 #. This is a navigation label as in "go forward"
 #: ../gtk/gtkstock.c:331
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "આગળ ધપાવો (_F)"
@@ -3163,169 +3095,143 @@ msgid "_Up"
 msgstr "ઉપર કરો (_U)"
 
 #: ../gtk/gtkstock.c:334
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "હાર્ડડિસ્ક (_H)"
 
 #: ../gtk/gtkstock.c:335
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "મદદ (_H)"
 
 #: ../gtk/gtkstock.c:336
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "ઘર (_H)"
 
 #: ../gtk/gtkstock.c:337
-#, fuzzy
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "હાંસ્યો વધારો"
 
 #: ../gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "હાંસ્યો ઘટાડો"
 
 #: ../gtk/gtkstock.c:339
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "અનુક્રમાંક (_I)"
 
 #: ../gtk/gtkstock.c:340
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "જાણકારી (_I)"
 
 #: ../gtk/gtkstock.c:341
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Italic"
-msgstr "ત્રાંસા (_I)"
+msgstr "ઇટાલિક (_I)"
 
 #: ../gtk/gtkstock.c:342
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "અહીં કૂદકો મારો (_J)"
 
 #. This is about text justification, "centered text"
 #: ../gtk/gtkstock.c:344
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
-msgstr "રુપાંતર કરો (_C)"
+msgstr "કેન્દ્ર (_C)"
 
 #. This is about text justification
 #: ../gtk/gtkstock.c:346
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fill"
-msgstr "ફાઈલો (_F)"
+msgstr "ભરો (_F)"
 
 #. This is about text justification, "left-justified text"
 #: ../gtk/gtkstock.c:348
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Left"
-msgstr "ડાબું (_L):"
+msgstr "ડાબું (_L)"
 
 #. This is about text justification, "right-justified text"
 #: ../gtk/gtkstock.c:350
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Right"
-msgstr "જમણું (_R):"
+msgstr "જમણું (_R)"
 
 #. Media label, as in "fast forward"
 #: ../gtk/gtkstock.c:353
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "આગળ ધપાવો (_F)"
 
 #. Media label, as in "next song"
 #: ../gtk/gtkstock.c:355
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Next"
-msgstr "નવું (_N)"
+msgstr "પછી (_N)"
 
 #. Media label, as in "pause music"
 #: ../gtk/gtkstock.c:357
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "P_ause"
-msgstr "અટકાવાયેલ"
+msgstr "અટકાવો (_a)"
 
 #. Media label, as in "play music"
 #: ../gtk/gtkstock.c:359
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Play"
-msgstr "જગ્યાઓ (_P)"
+msgstr "ચલાવો (_P)"
 
 #. Media label, as in  "previous song"
 #: ../gtk/gtkstock.c:361
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "પહેલાંનુ (_v)"
 
 #. Media label
 #: ../gtk/gtkstock.c:363
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "રેકોર્ડ (_R)"
 
 #. Media label
 #: ../gtk/gtkstock.c:365
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "ફરી ચલાવો (_e)"
 
 #. Media label
 #: ../gtk/gtkstock.c:367
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "થોભો (_S)"
 
 #: ../gtk/gtkstock.c:368
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "નેટવર્ક (_N)"
 
 #: ../gtk/gtkstock.c:369
-#, fuzzy
 msgctxt "Stock label"
 msgid "_New"
 msgstr "નવું (_N)"
 
 #: ../gtk/gtkstock.c:370
-#, fuzzy
 msgctxt "Stock label"
 msgid "_No"
 msgstr "ના (_N)"
 
 #: ../gtk/gtkstock.c:371
-#, fuzzy
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "બરાબર (_O)"
 
 #: ../gtk/gtkstock.c:372
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "ખોલો (_O)"
@@ -3339,10 +3245,9 @@ msgstr "આડું"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:376
-#, fuzzy
 msgctxt "Stock label"
 msgid "Portrait"
-msgstr "ઊભું"
+msgstr "છબી"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:378
@@ -3353,187 +3258,157 @@ msgstr "ઉલટું આડું"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:380
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse portrait"
-msgstr "ઉલટું ઊભું"
+msgstr "ઉલટી છબી"
 
 #: ../gtk/gtkstock.c:381
-#, fuzzy
 msgctxt "Stock label"
 msgid "Page Set_up"
-msgstr "પાનાં સુયોજન"
+msgstr "પાનાં સુયોજન (_u)"
 
 #: ../gtk/gtkstock.c:382
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "ચોંટાડો (_P)"
 
 #: ../gtk/gtkstock.c:383
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "પસંદગીઓ (_P)"
 
 #: ../gtk/gtkstock.c:384
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "છાપો (_P)"
 
 #: ../gtk/gtkstock.c:385
-#, fuzzy
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "છાપવા માટેનું પૂર્વદર્શન (_v)"
 
 #: ../gtk/gtkstock.c:386
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "ગુણધર્મો (_P)"
 
 #: ../gtk/gtkstock.c:387
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "બહાર નીકળો (_Q)"
 
 #: ../gtk/gtkstock.c:388
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "ફરીથી કરો (_R)"
 
 #: ../gtk/gtkstock.c:389
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "ફરી તાજુ કરો (_R)"
 
 #: ../gtk/gtkstock.c:390
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "દૂર કરો (_R)"
 
 #: ../gtk/gtkstock.c:391
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "ઉલટાવો (_R)"
 
 #: ../gtk/gtkstock.c:392
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "સંગ્રહ કરો (_S)"
 
 #: ../gtk/gtkstock.c:393
-#, fuzzy
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "આ રીતે સંગ્રહ કરો (_A)"
 
 #: ../gtk/gtkstock.c:394
-#, fuzzy
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "બધું પસંદ કરો (_A)"
 
 #: ../gtk/gtkstock.c:395
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "રંગ (_C)"
 
 #: ../gtk/gtkstock.c:396
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "ફોન્ટ (_F)"
 
 #. Sorting direction
 #: ../gtk/gtkstock.c:398
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "ચડતાક્રમમાં (_A)"
 
 #. Sorting direction
 #: ../gtk/gtkstock.c:400
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "ઊતરતાક્રમમાં (_D)"
 
 #: ../gtk/gtkstock.c:401
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "જોડણી ચકાસો (_S)"
 
 #: ../gtk/gtkstock.c:402
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "થોભો (_S)"
 
 #. Font variant
 #: ../gtk/gtkstock.c:404
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "ચેકી નાખો (_S)"
 
 #: ../gtk/gtkstock.c:405
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "કાઢી નાખેલું પાછુ લાવો (_U)"
 
 #. Font variant
 #: ../gtk/gtkstock.c:407
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "નીચે લીટી કરો (_U)"
 
 #: ../gtk/gtkstock.c:408
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "છેલ્લી ક્રિયા રદ કરો (_U)"
 
 #: ../gtk/gtkstock.c:409
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "હા (_Y)"
 
 #. Zoom
 #: ../gtk/gtkstock.c:411
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "સામાન્ય માપ (_N)"
 
 #. Zoom
 #: ../gtk/gtkstock.c:413
-#, fuzzy
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "શ્રેષ્ઠ રીતે બંધબેસતુ (_F)"
 
 #: ../gtk/gtkstock.c:414
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "મોટું કરો (_I)"
 
 #: ../gtk/gtkstock.c:415
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "નાનું કરો (_O)"
@@ -3761,10 +3636,9 @@ msgid "%d %%"
 msgstr "%d %%"
 
 #: ../gtk/paper_names_offsets.c:4
-#, fuzzy
 msgctxt "paper size"
 msgid "asme_f"
-msgstr "નામ"
+msgstr "asmef (_f)"
 
 #: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
@@ -4067,7 +3941,6 @@ msgid "C9"
 msgstr "C9"
 
 #: ../gtk/paper_names_offsets.c:65
-#, fuzzy
 msgctxt "paper size"
 msgid "DL Envelope"
 msgstr "DL કવર"
@@ -4163,49 +4036,41 @@ msgid "jis exec"
 msgstr "jis exec"
 
 #: ../gtk/paper_names_offsets.c:84
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
 msgstr "Choukei 2 કવર"
 
 #: ../gtk/paper_names_offsets.c:85
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
 msgstr "Choukei 3 કવર"
 
 #: ../gtk/paper_names_offsets.c:86
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
 msgstr "Choukei 4 કવર"
 
 #: ../gtk/paper_names_offsets.c:87
-#, fuzzy
 msgctxt "paper size"
 msgid "hagaki (postcard)"
-msgstr "hagaki (postcard)"
+msgstr "hagaki (પોસ્ટકાર્ડ)"
 
 #: ../gtk/paper_names_offsets.c:88
-#, fuzzy
 msgctxt "paper size"
 msgid "kahu Envelope"
 msgstr "kahu કવર"
 
 #: ../gtk/paper_names_offsets.c:89
-#, fuzzy
 msgctxt "paper size"
 msgid "kaku2 Envelope"
 msgstr "kaku2 કવર"
 
 #: ../gtk/paper_names_offsets.c:90
-#, fuzzy
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
-msgstr "oufuku (reply postcard)"
+msgstr "oufuku (પોસ્ટકાર્ડ નો જવાબ આપો)"
 
 #: ../gtk/paper_names_offsets.c:91
-#, fuzzy
 msgctxt "paper size"
 msgid "you4 Envelope"
 msgstr "you4 કવર"
@@ -4251,25 +4116,21 @@ msgid "5x7"
 msgstr "5x7"
 
 #: ../gtk/paper_names_offsets.c:101
-#, fuzzy
 msgctxt "paper size"
 msgid "6x9 Envelope"
 msgstr "6x9 કવર"
 
 #: ../gtk/paper_names_offsets.c:102
-#, fuzzy
 msgctxt "paper size"
 msgid "7x9 Envelope"
 msgstr "7x9 કવર"
 
 #: ../gtk/paper_names_offsets.c:103
-#, fuzzy
 msgctxt "paper size"
 msgid "9x11 Envelope"
 msgstr "9x11 કવર"
 
 #: ../gtk/paper_names_offsets.c:104
-#, fuzzy
 msgctxt "paper size"
 msgid "a2 Envelope"
 msgstr "a2 કવર"
@@ -4310,7 +4171,6 @@ msgid "c"
 msgstr "c"
 
 #: ../gtk/paper_names_offsets.c:112
-#, fuzzy
 msgctxt "paper size"
 msgid "c5 Envelope"
 msgstr "c5 કવર"
@@ -4331,16 +4191,14 @@ msgid "edp"
 msgstr "edp"
 
 #: ../gtk/paper_names_offsets.c:116
-#, fuzzy
 msgctxt "paper size"
 msgid "European edp"
 msgstr "યુરોપીય edp"
 
 #: ../gtk/paper_names_offsets.c:117
-#, fuzzy
 msgctxt "paper size"
 msgid "Executive"
-msgstr "ચલાવો (_E)"
+msgstr "કાર્યકારી"
 
 #: ../gtk/paper_names_offsets.c:118
 msgctxt "paper size"
@@ -4348,58 +4206,49 @@ msgid "f"
 msgstr "f"
 
 #: ../gtk/paper_names_offsets.c:119
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold European"
 msgstr "FanFold યુરોપીય"
 
 #: ../gtk/paper_names_offsets.c:120
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold US"
 msgstr "FanFold US"
 
 #: ../gtk/paper_names_offsets.c:121
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold German Legal"
 msgstr "FanFold જર્મન કાયદાકીય"
 
 #: ../gtk/paper_names_offsets.c:122
-#, fuzzy
 msgctxt "paper size"
 msgid "Government Legal"
 msgstr "સરકારી કાયદાકીય"
 
 #: ../gtk/paper_names_offsets.c:123
-#, fuzzy
 msgctxt "paper size"
 msgid "Government Letter"
 msgstr "સરકારી પત્ર"
 
 #: ../gtk/paper_names_offsets.c:124
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 3x5"
-msgstr "અનુક્રમાંક (_I)"
+msgstr "અનુક્રમાંક 3x5"
 
 #: ../gtk/paper_names_offsets.c:125
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
-msgstr "Index 4x6 (postcard)"
+msgstr "અનુક્રમાંક 4x6 (પોસ્ટકાર્ડ)"
 
 #: ../gtk/paper_names_offsets.c:126
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 4x6 ext"
-msgstr "Index 4x6 ext"
+msgstr "અનુક્રમાંક 4x6 ext"
 
 #: ../gtk/paper_names_offsets.c:127
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 5x8"
-msgstr "અનુક્રમાંક (_I)"
+msgstr "અનુક્રમાંક 5x8"
 
 #: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
@@ -4417,7 +4266,6 @@ msgid "US Legal"
 msgstr "US કાયદેસર"
 
 #: ../gtk/paper_names_offsets.c:131
-#, fuzzy
 msgctxt "paper size"
 msgid "US Legal Extra"
 msgstr "US કાયદાકીય વધારાનું"
@@ -4428,7 +4276,6 @@ msgid "US Letter"
 msgstr "US પત્ર"
 
 #: ../gtk/paper_names_offsets.c:133
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter Extra"
 msgstr "US પત્ર વધારાનું"
@@ -4439,13 +4286,11 @@ msgid "US Letter Plus"
 msgstr "US પત્ર વત્તા"
 
 #: ../gtk/paper_names_offsets.c:135
-#, fuzzy
 msgctxt "paper size"
 msgid "Monarch Envelope"
 msgstr "મોનાર્ક કવર"
 
 #: ../gtk/paper_names_offsets.c:136
-#, fuzzy
 msgctxt "paper size"
 msgid "#10 Envelope"
 msgstr "#10 કવર"
@@ -4481,34 +4326,29 @@ msgid "Quarto"
 msgstr "Quarto"
 
 #: ../gtk/paper_names_offsets.c:143
-#, fuzzy
 msgctxt "paper size"
 msgid "Super A"
-msgstr "કાગળ"
+msgstr "ઉત્તમ A"
 
 #: ../gtk/paper_names_offsets.c:144
-#, fuzzy
 msgctxt "paper size"
 msgid "Super B"
-msgstr "કાગળ"
+msgstr "ઉત્તમ B"
 
 #: ../gtk/paper_names_offsets.c:145
-#, fuzzy
 msgctxt "paper size"
 msgid "Wide Format"
 msgstr "પહોળું બંધારણ"
 
 #: ../gtk/paper_names_offsets.c:146
-#, fuzzy
 msgctxt "paper size"
 msgid "Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
 #: ../gtk/paper_names_offsets.c:147
-#, fuzzy
 msgctxt "paper size"
 msgid "Folio"
-msgstr "રંગ"
+msgstr "ફોલિઓ"
 
 #: ../gtk/paper_names_offsets.c:148
 msgctxt "paper size"
@@ -4516,19 +4356,16 @@ msgid "Folio sp"
 msgstr "Folio sp"
 
 #: ../gtk/paper_names_offsets.c:149
-#, fuzzy
 msgctxt "paper size"
 msgid "Invite Envelope"
 msgstr "આમંત્રણ કવર"
 
 #: ../gtk/paper_names_offsets.c:150
-#, fuzzy
 msgctxt "paper size"
 msgid "Italian Envelope"
 msgstr "ઈટાલિયન કવર"
 
 #: ../gtk/paper_names_offsets.c:151
-#, fuzzy
 msgctxt "paper size"
 msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
@@ -4539,25 +4376,21 @@ msgid "pa-kai"
 msgstr "pa-kai"
 
 #: ../gtk/paper_names_offsets.c:153
-#, fuzzy
 msgctxt "paper size"
 msgid "Postfix Envelope"
 msgstr "પોસ્ટફિક્સ કવર"
 
 #: ../gtk/paper_names_offsets.c:154
-#, fuzzy
 msgctxt "paper size"
 msgid "Small Photo"
 msgstr "નાનો ફોટો"
 
 #: ../gtk/paper_names_offsets.c:155
-#, fuzzy
 msgctxt "paper size"
 msgid "prc1 Envelope"
 msgstr "prc1 કવર"
 
 #: ../gtk/paper_names_offsets.c:156
-#, fuzzy
 msgctxt "paper size"
 msgid "prc10 Envelope"
 msgstr "prc10 કવર"
@@ -4568,13 +4401,11 @@ msgid "prc 16k"
 msgstr "prc 16k"
 
 #: ../gtk/paper_names_offsets.c:158
-#, fuzzy
 msgctxt "paper size"
 msgid "prc2 Envelope"
 msgstr "prc2 કવર"
 
 #: ../gtk/paper_names_offsets.c:159
-#, fuzzy
 msgctxt "paper size"
 msgid "prc3 Envelope"
 msgstr "prc3 કવર"
@@ -4585,31 +4416,26 @@ msgid "prc 32k"
 msgstr "prc 32k"
 
 #: ../gtk/paper_names_offsets.c:161
-#, fuzzy
 msgctxt "paper size"
 msgid "prc4 Envelope"
 msgstr "prc4 કવર"
 
 #: ../gtk/paper_names_offsets.c:162
-#, fuzzy
 msgctxt "paper size"
 msgid "prc5 Envelope"
-msgstr "c5 કવર"
+msgstr "prc5 કવર"
 
 #: ../gtk/paper_names_offsets.c:163
-#, fuzzy
 msgctxt "paper size"
 msgid "prc6 Envelope"
 msgstr "prc6 કવર"
 
 #: ../gtk/paper_names_offsets.c:164
-#, fuzzy
 msgctxt "paper size"
 msgid "prc7 Envelope"
 msgstr "prc7 કવર"
 
 #: ../gtk/paper_names_offsets.c:165
-#, fuzzy
 msgctxt "paper size"
 msgid "prc8 Envelope"
 msgstr "prc8 કવર"
