@@ -634,13 +634,50 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
 
   if (GDK_IS_DRAWABLE_IMPL_X11 (src))
     src_impl = GDK_DRAWABLE_IMPL_X11 (src);
+  else if (GDK_IS_WINDOW (src))
+    src_impl = GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)src)->impl);
   else
-    src_impl = NULL;
+    src_impl = GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)src)->impl);
+
+  if (GDK_IS_WINDOW_IMPL_X11 (impl) &&
+      GDK_IS_PIXMAP_IMPL_X11 (src_impl))
+    {
+      GdkPixmapImplX11 *src_pixmap = GDK_PIXMAP_IMPL_X11 (src_impl);
+      /* Work around an Xserver bug where non-visible areas from
+       * a pixmap to a window will clear the window background
+       * in destination areas that are supposed to be clipped out.
+       * This is a problem with client side windows as this means
+       * things may draw outside the virtual windows. This could
+       * also happen for window to window copies, but I don't
+       * think we generate any calls like that.
+       *
+       * See: 
+       * http://lists.freedesktop.org/archives/xorg/2009-February/043318.html
+       */
+      if (xsrc < 0)
+	{
+	  width += xsrc;
+	  xdest -= xsrc;
+	  xsrc = 0;
+	}
+      
+      if (ysrc < 0)
+	{
+	  height += ysrc;
+	  ydest -= ysrc;
+	  ysrc = 0;
+	}
+
+      if (xsrc + width > src_pixmap->width)
+	width = src_pixmap->width - xsrc;
+      if (ysrc + height > src_pixmap->height)
+	height = src_pixmap->height - ysrc;
+    }
   
   if (src_depth == 1)
     {
       XCopyArea (GDK_SCREEN_XDISPLAY (impl->screen),
-                 src_impl ? src_impl->xid : GDK_DRAWABLE_XID (src),
+                 src_impl->xid,
 		 impl->xid,
 		 GDK_GC_GET_XGC (gc),
 		 xsrc, ysrc,
@@ -650,7 +687,7 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
   else if (dest_depth != 0 && src_depth == dest_depth)
     {
       XCopyArea (GDK_SCREEN_XDISPLAY (impl->screen),
-                 src_impl ? src_impl->xid : GDK_DRAWABLE_XID (src),
+                 src_impl->xid,
 		 impl->xid,
 		 GDK_GC_GET_XGC (gc),
 		 xsrc, ysrc,
