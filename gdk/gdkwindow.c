@@ -746,17 +746,30 @@ find_native_sibling_above (GdkWindowObject *parent,
 static GdkEventMask
 get_native_event_mask (GdkWindowObject *private)
 {
-  if (GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT)
-    return
-      GDK_EXPOSURE_MASK |
-      GDK_POINTER_MOTION_MASK |
-      GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-      GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK |
-      GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
-      GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK | GDK_PROPERTY_CHANGE_MASK |
-      GDK_PROXIMITY_IN_MASK | GDK_PROXIMITY_OUT_MASK | GDK_SCROLL_MASK;
+  if (private->window_type != GDK_WINDOW_ROOT &&
+      private->window_type != GDK_WINDOW_FOREIGN)
+    {
+      return
+	/* We need thse for all native window so we can emulate
+	   events on children: */
+	GDK_EXPOSURE_MASK |
+	GDK_POINTER_MOTION_MASK |
+	GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+	GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
+	GDK_SCROLL_MASK |
+	/* Then do whatever the app asks to, since the app
+	 * may be asking for weird things for native windows,
+	 * but filter out things that override the above
+	 * requests somehow. */
+	(private->event_mask &
+	 ~(GDK_POINTER_MOTION_HINT_MASK |
+	   GDK_BUTTON_MOTION_MASK |
+	   GDK_BUTTON1_MOTION_MASK |
+	   GDK_BUTTON2_MOTION_MASK |
+	   GDK_BUTTON3_MOTION_MASK));
+    }
   else
-    return GDK_EXPOSURE_MASK;
+    return private->event_mask;
 }
 
 /**
@@ -5839,6 +5852,11 @@ gdk_window_set_events (GdkWindow       *window,
     _gdk_display_enable_motion_hints (display);
   
   private->event_mask = event_mask;
+
+  if (gdk_window_has_impl (private))
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_events (window,
+							   get_native_event_mask (private));
+  
 }
 
 /**
@@ -8425,7 +8443,7 @@ static gboolean
 proxy_button_event (GdkEvent *source_event,
 		    gulong serial)
 {
-  GdkWindow *toplevel_window;
+  GdkWindow *toplevel_window, *event_window;
   GdkWindow *event_win;
   GdkWindow *pointer_window;
   GdkEvent *event;
@@ -8437,11 +8455,14 @@ proxy_button_event (GdkEvent *source_event,
   GdkWindowObject *w;
 
   type = source_event->any.type;
-  toplevel_window = source_event->any.window;
+  event_window = source_event->any.window;
   gdk_event_get_coords (source_event, &toplevel_x, &toplevel_y);
   gdk_event_get_state (source_event, &state);
   time_ = gdk_event_get_time (source_event);
   display = gdk_drawable_get_display (source_event->any.window);
+  toplevel_window = convert_coords_to_toplevel (event_window,
+						toplevel_x, toplevel_y,
+						&toplevel_x, &toplevel_y);
 
   if (type == GDK_BUTTON_PRESS &&
       _gdk_display_has_pointer_grab (display, serial) == NULL)
@@ -8626,27 +8647,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
     event_private->parent == NULL ||
     GDK_WINDOW_TYPE (event_private->parent) == GDK_WINDOW_ROOT;
   
-  if (!is_toplevel &&
-      (event->type != GDK_ENTER_NOTIFY && event->type != GDK_LEAVE_NOTIFY))
-    {
-      GEnumValue *event_type_value, *window_type_value;
-
-      if (GDK_WINDOW_TYPE (event_private) == GDK_WINDOW_FOREIGN)
-	return;
-      
-      event_type_value = g_enum_get_value ((GEnumClass *) g_type_class_ref (GDK_TYPE_EVENT_TYPE),
-					   event->type);
-      window_type_value = g_enum_get_value ((GEnumClass *) g_type_class_ref (GDK_TYPE_WINDOW_TYPE),
-					    event_private->window_type);
-      
-     /* We should only get these events on toplevel windows */
-      g_warning ("got unexpected event of type %s on non-toplevel window (gtype %s, type %d)",
-		 event_type_value->value_name,
-		 window_type_value->value_name,
-		 GDK_WINDOW_TYPE (event_window));
-      return;
-    }
-
   if ((event->type == GDK_ENTER_NOTIFY ||
        event->type == GDK_LEAVE_NOTIFY) &&
       (event->crossing.mode == GDK_CROSSING_GRAB ||
