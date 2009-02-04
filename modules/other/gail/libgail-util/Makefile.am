@@ -2,15 +2,15 @@ include $(top_srcdir)/Makefile.decl
 
 EXTRA_DIST += gailutil.def
 if OS_WIN32
-export_symbols = -export-symbols gailutil.def
+export_symbols = -export-symbols $(srcdir)/gailutil.def
 no_undefined = -no-undefined
-install-libtool-import-lib:
-	$(INSTALL) .libs/libgailutil.dll.a $(DESTDIR)$(libdir)
-uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libgailutil.dll.a
+install-def-file: gailutil.def
+	$(INSTALL) $(srcdir)/gailutil.def $(DESTDIR)$(libdir)
+uninstall-def-file:
+	-rm $(DESTDIR)$(libdir)/gailutil.def
 else
-install-libtool-import-lib:
-uninstall-libtool-import-lib:
+install-def-file:
+uninstall-def-file:
 endif
 
 if MS_LIB_AVAILABLE
@@ -75,7 +75,6 @@ libgailutil_la_LDFLAGS = \
 gailutil.lib: libgailutil.la gailutil.def
 	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgailutil-$(GAIL_LT_CURRENT_MINUS_AGE).dll -def:gailutil.def -out:$@
 
-install-data-local: install-ms-lib install-libtool-import-lib
+install-data-local: install-ms-lib install-def-file
 
-uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
-
+uninstall-local: uninstall-ms-lib uninstall-def-file
