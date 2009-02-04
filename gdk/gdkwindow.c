@@ -1310,9 +1310,12 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
 
       reparent_to_impl (private);
 
-      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_background (window, &private->bg_color);
-      if (private->bg_pixmap != NULL)
-	GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_back_pixmap (window, private->bg_pixmap);
+      if (!private->input_only)
+	{
+	  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_background (window, &private->bg_color);
+	  if (private->bg_pixmap != NULL)
+	    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_back_pixmap (window, private->bg_pixmap);
+	}
       
       GDK_WINDOW_IMPL_GET_IFACE (private->impl)->input_shape_combine_region ((GdkWindow *)private, private->input_shape, 0, 0);
 
@@ -6502,7 +6505,9 @@ gdk_window_set_background (GdkWindow      *window,
   
   private->bg_pixmap = NULL;
 
-  if (!GDK_WINDOW_DESTROYED (window) && gdk_window_has_impl (private))
+  if (!GDK_WINDOW_DESTROYED (window) &&
+      gdk_window_has_impl (private) &&
+      !private->input_only)
     GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_background (window, &private->bg_color);
 }
 
@@ -6563,7 +6568,9 @@ gdk_window_set_back_pixmap (GdkWindow *window,
   else
     private->bg_pixmap = GDK_NO_BG;
   
-  if (!GDK_WINDOW_DESTROYED (window) && gdk_window_has_impl (private))
+  if (!GDK_WINDOW_DESTROYED (window) &&
+      gdk_window_has_impl (private) &&
+      !private->input_only)
     GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_back_pixmap (window, private->bg_pixmap);
 }
 
