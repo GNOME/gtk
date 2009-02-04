@@ -1,3 +1,13 @@
+2009-02-04  Tor Lillqvist  <tml@novell.com>
+
+	Bug 570406 - gailutil.def is in srcdir, but used from builddir
+
+	* libgail-util/Makefile.am: Use gailutil.def from srcdir. Drop
+	useless rules to install/uninstall import libraries, libtool knows
+	to install / uninstall them itself when installing / uninstalling
+	a .la file. Add rules to install / uninstall the def file like for
+	consistency, like with the other libraries in GTK+.
+
 2009-02-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.15.3 ===
