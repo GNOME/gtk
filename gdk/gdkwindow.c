@@ -5009,9 +5009,10 @@ gdk_window_thaw_updates (GdkWindow *window)
   GdkWindowObject *impl_window;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (private->update_freeze_count > 0);
 
   impl_window = gdk_window_get_impl_window (private);
+
+  g_return_if_fail (impl_window->update_freeze_count > 0);
   
   if (--impl_window->update_freeze_count == 0)
     gdk_window_schedule_update (GDK_WINDOW (impl_window));
