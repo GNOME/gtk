@@ -374,6 +374,9 @@ _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
           toplevel_impl = (GdkWindowImplQuartz *)toplevel_private->impl;
           nswindow = toplevel_impl->toplevel;
 
+          /* In theory, we could skip the flush disabling, since we only
+           * have one NSView.
+           */
           if (nswindow && ![nswindow isFlushWindowDisabled]) 
             {
               [nswindow retain];
@@ -393,7 +396,10 @@ _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
 
   g_free (rects);
 
-  [impl->view displayIfNeeded];
+  /* NOTE: I'm not sure if we should displayIfNeeded here. It slows down a
+   * lot (since it triggers the beam syncing) and things seem to work
+   * without it.
+   */
 }
 
 void
@@ -413,6 +419,8 @@ _gdk_windowing_after_process_all_updates (void)
   while (tmp_list)
     {
       NSWindow *nswindow = tmp_list->data;
+
+      [[nswindow contentView] displayIfNeeded];
 
       [nswindow enableFlushWindow];
       [nswindow flushWindow];
