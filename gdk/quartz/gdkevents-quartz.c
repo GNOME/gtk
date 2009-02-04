@@ -418,6 +418,33 @@ _gdk_quartz_events_send_map_event (GdkWindow *window)
     }
 }
 
+static GdkWindow *
+find_toplevel_under_pointer (GdkDisplay *display,
+                             NSPoint     screen_point,
+                             gint       *x,
+                             gint       *y)
+{
+  GdkWindow *toplevel;
+
+  toplevel = display->pointer_info.toplevel_under_pointer;
+  if (toplevel)
+    {
+      GdkWindowObject *private;
+      NSWindow *nswindow;
+      NSPoint point;
+
+      private = (GdkWindowObject *)toplevel;
+      nswindow = ((GdkWindowImplQuartz *)private->impl)->toplevel;
+
+      point = [nswindow convertScreenToBase:screen_point];
+
+      *x = point.x;
+      *y = private->height - point.y;
+    }
+
+  return toplevel;
+}
+
 /* This function finds the correct window to send an event to, taking
  * into account grabs, event propagation, and event masks.
  */
@@ -492,20 +519,17 @@ find_window_for_ns_event (NSEvent *nsevent,
                  * reported with respect to the key window, which could be
                  * wrong.
                  */
-                if (display->pointer_info.toplevel_under_pointer)
+                GdkWindow *toplevel_under_pointer;
+                gint x_tmp, y_tmp;
+
+                toplevel_under_pointer = find_toplevel_under_pointer (display,
+                                                                      screen_point,
+                                                                      &x_tmp, &y_tmp);
+                if (toplevel_under_pointer)
                   {
-                    GdkWindowObject *pointer_private;
-                    NSWindow *pointer_nswindow;
-
-                    toplevel = display->pointer_info.toplevel_under_pointer;
-                    pointer_private = (GdkWindowObject *)toplevel;
-                    pointer_nswindow = ((GdkWindowImplQuartz *)pointer_private->impl)->toplevel;
-
-                    point = [pointer_nswindow convertScreenToBase:screen_point];
-
-                    /* Note: x_root and y_root are already right. */
-                    *x = point.x;
-                    *y = pointer_private->height - point.y;
+                    toplevel = toplevel_under_pointer;
+                    *x = x_tmp;
+                    *y = y_tmp;
                   }
 
                 return toplevel;
@@ -535,6 +559,8 @@ find_window_for_ns_event (NSEvent *nsevent,
 	else 
 	  {
 	    /* The non-grabbed case. */
+            GdkWindow *toplevel_under_pointer;
+            gint x_tmp, y_tmp;
 
             /* Ignore all events but mouse moved that might be on the title
              * bar (above the content view). The reason is that otherwise
@@ -546,6 +572,19 @@ find_window_for_ns_event (NSEvent *nsevent,
                 return NULL;
 
             /* FIXME: Also need to leave resize events to cocoa somehow? */
+
+            /* As for owner events, we need to use the toplevel under the
+             * pointer, not the window from the NSEvent.
+             */
+            toplevel_under_pointer = find_toplevel_under_pointer (display,
+                                                                  screen_point,
+                                                                  &x_tmp, &y_tmp);
+            if (toplevel_under_pointer)
+              {
+                toplevel = toplevel_under_pointer;
+                *x = x_tmp;
+                *y = y_tmp;
+              }
 
             return toplevel;
 	  }
