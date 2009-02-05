@@ -1363,6 +1363,8 @@ window_remove_filters (GdkWindow *window)
  * _gdk_window_destroy_hierarchy:
  * @window: a #GdkWindow
  * @recursing: If TRUE, then this is being called because a parent
+ *            was destroyed. 
+ * @recursing_native: If TRUE, then this is being called because a native parent
  *            was destroyed. This generally means that the call to the 
  *            windowing system to destroy the window can be omitted, since
  *            it will be destroyed as a result of the parent being destroyed.
@@ -1378,6 +1380,7 @@ window_remove_filters (GdkWindow *window)
 static void
 _gdk_window_destroy_hierarchy (GdkWindow *window,
 			       gboolean   recursing,
+			       gboolean   recursing_native,
 			       gboolean   foreign_destroy)
 {
   GdkWindowObject *private;
@@ -1477,7 +1480,9 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 		  temp_private = (GdkWindowObject*) temp_window;
 		  if (temp_private)
 		    _gdk_window_destroy_hierarchy (temp_window,
-                                                   TRUE, foreign_destroy);
+                                                   TRUE,
+						   recursing_native || gdk_window_has_impl (private),
+						   foreign_destroy);
 		}
 	      
 	      g_list_free (children);
@@ -1494,7 +1499,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 
 	  if (gdk_window_has_impl (private))
 	    {
-	      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->destroy (window, recursing, foreign_destroy);
+	      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->destroy (window, recursing_native, foreign_destroy);
 	    }
 	  else
 	    {
@@ -1541,7 +1546,7 @@ void
 _gdk_window_destroy (GdkWindow *window,
 		     gboolean   foreign_destroy)
 {
-  _gdk_window_destroy_hierarchy (window, FALSE, foreign_destroy);
+  _gdk_window_destroy_hierarchy (window, FALSE, FALSE, foreign_destroy);
 }
 
 /**
@@ -1559,7 +1564,7 @@ _gdk_window_destroy (GdkWindow *window,
 void
 gdk_window_destroy (GdkWindow *window)
 {
-  _gdk_window_destroy_hierarchy (window, FALSE, FALSE);
+  _gdk_window_destroy_hierarchy (window, FALSE, FALSE, FALSE);
   g_object_unref (window);
 }
 
