@@ -406,6 +406,8 @@ void
 _gdk_windowing_before_process_all_updates (void)
 {
   in_process_all_updates = TRUE;
+
+  NSDisableScreenUpdates ();
 }
 
 void
@@ -432,6 +434,8 @@ _gdk_windowing_after_process_all_updates (void)
   g_slist_free (old_update_nswindows);
 
   in_process_all_updates = FALSE;
+
+  NSEnableScreenUpdates ();
 }
 
 static void
