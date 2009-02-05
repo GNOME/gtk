@@ -4460,7 +4460,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 	  
 	  g_object_unref (window);
 	}
-      else
+      else if (private->bg_pixmap != GDK_NO_BG)
 	{
 	  /* No exposure mask set, so nothing will be drawn, the
 	   * app relies on the background being what it specified
