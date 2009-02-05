@@ -4443,8 +4443,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
       gdk_region_destroy (child_region);
     }
 
-  if (!gdk_region_empty (expose_region) &&
-      private->window_type != GDK_WINDOW_FOREIGN)
+  if (!gdk_region_empty (expose_region))
     {
       if (private->event_mask & GDK_EXPOSURE_MASK)
 	{
@@ -4493,7 +4492,8 @@ gdk_window_process_updates_internal (GdkWindow *window)
       GdkRegion *update_area = private->update_area;
       private->update_area = NULL;
       
-      if (_gdk_event_func && gdk_window_is_viewable (window))
+      if (_gdk_event_func && gdk_window_is_viewable (window)  &&
+	  private->window_type != GDK_WINDOW_FOREIGN)
 	{
 	  GdkRectangle window_rect;
 	  GdkRegion *expose_region;
