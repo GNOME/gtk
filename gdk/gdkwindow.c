@@ -5497,7 +5497,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
       private->state = 0;
     }
 
-  if (!was_mapped && gdk_window_is_viewable (window))
+  if (gdk_window_is_viewable (window))
     show_all_visible_impls (private);
   
   if (!was_mapped)
