@@ -4443,21 +4443,37 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
       gdk_region_destroy (child_region);
     }
 
-  if (private->event_mask & GDK_EXPOSURE_MASK &&
-      !gdk_region_empty (expose_region))
+  if (!gdk_region_empty (expose_region) &&
+      private->window_type != GDK_WINDOW_FOREIGN)
     {
-      GdkEvent event;
-      
-      event.expose.type = GDK_EXPOSE;
-      event.expose.window = g_object_ref (window);
-      event.expose.send_event = FALSE;
-      event.expose.count = 0;
-      event.expose.region = expose_region;
-      gdk_region_get_clipbox (expose_region, &event.expose.area);
-      
-      (*_gdk_event_func) (&event, _gdk_event_data);
-      
-      g_object_unref (window);
+      if (private->event_mask & GDK_EXPOSURE_MASK)
+	{
+	  GdkEvent event;
+	  
+	  event.expose.type = GDK_EXPOSE;
+	  event.expose.window = g_object_ref (window);
+	  event.expose.send_event = FALSE;
+	  event.expose.count = 0;
+	  event.expose.region = expose_region;
+	  gdk_region_get_clipbox (expose_region, &event.expose.area);
+	  
+	  (*_gdk_event_func) (&event, _gdk_event_data);
+	  
+	  g_object_unref (window);
+	}
+      else
+	{
+	  /* No exposure mask set, so nothing will be drawn, the
+	   * app relies on the background being what it specified
+	   * for the window. So, we need to clear this manually.
+	   *
+	   * We use begin/end_paint around the clear so that we can
+	   * piggyback on the implicit paint */
+	  
+	  gdk_window_begin_paint_region (window, expose_region);
+	  gdk_window_clear_region_internal (window, expose_region, FALSE);
+	  gdk_window_end_paint (window);
+	}
     }
 }
 
