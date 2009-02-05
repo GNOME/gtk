@@ -227,11 +227,8 @@ static void gdk_window_free_paint_stack (GdkWindow *window);
 static void gdk_window_init       (GdkWindowObject      *window);
 static void gdk_window_class_init (GdkWindowObjectClass *klass);
 static void gdk_window_finalize   (GObject              *object);
-static void gdk_window_clear_backing_rect (GdkWindow *window,
-					   gint       x,
-					   gint       y,
-					   gint       width,
-					   gint       height);
+static void gdk_window_clear_backing_region (GdkWindow *window,
+					     GdkRegion *region);
 static void gdk_window_redirect_free      (GdkWindowRedirect *redirect);
 static void apply_redirect_to_children    (GdkWindowObject   *private,
 					   GdkWindowRedirect *redirect);
@@ -2274,9 +2271,8 @@ gdk_window_begin_paint_region (GdkWindow       *window,
 
   if (!gdk_region_empty (paint->region))
     {
-      gdk_window_clear_backing_rect (window,
-				     clip_box.x, clip_box.y,
-				     clip_box.width, clip_box.height);
+      gdk_window_clear_backing_region (window,
+				       paint->region);
     }
 
 #endif /* USE_BACKING_STORE */
@@ -3604,15 +3600,14 @@ setup_backing_rect_method (BackingRectMethod *method, GdkWindow *window, GdkWind
 }
 
 static void
-gdk_window_clear_backing_rect (GdkWindow *window,
-			       gint       x,
-			       gint       y,
-			       gint       width,
-			       gint       height)
+gdk_window_clear_backing_region (GdkWindow *window,
+				 GdkRegion *region)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowPaint *paint = private->paint_stack->data;
   BackingRectMethod method;
+  GdkRegion *clip;
+  GdkRectangle clipbox;
 #if 0
   GTimer *timer;
   double elapsed;
@@ -3629,14 +3624,16 @@ gdk_window_clear_backing_rect (GdkWindow *window,
   method.gc = NULL;
   setup_backing_rect_method (&method, window, paint, 0, 0);
 
+  clip = gdk_region_copy (paint->region);
+  gdk_region_intersect (clip, region);
+  gdk_region_get_clipbox (clip, &clipbox);
+      
+  
   if (method.cr)
     {
       g_assert (method.gc == NULL);
 
-      cairo_rectangle (method.cr, x, y, width, height);
-      cairo_clip (method.cr);
-
-      gdk_cairo_region (method.cr, paint->region);
+      gdk_cairo_region (method.cr, clip);
       cairo_fill (method.cr);
 
       cairo_destroy (method.cr);
@@ -3649,8 +3646,10 @@ gdk_window_clear_backing_rect (GdkWindow *window,
     {
       g_assert (method.gc != NULL);
 
-      gdk_gc_set_clip_region (method.gc, paint->region);
-      gdk_draw_rectangle (window, method.gc, TRUE, x, y, width, height);
+      gdk_gc_set_clip_region (method.gc, clip);
+      gdk_draw_rectangle (window, method.gc, TRUE,
+			  clipbox.x, clipbox.y,
+			  clipbox.width, clipbox.height);
       g_object_unref (method.gc);
 
 #if 0
@@ -3659,21 +3658,21 @@ gdk_window_clear_backing_rect (GdkWindow *window,
 #endif
     }
 
+  gdk_region_destroy (clip);
+  
 #if 0
   g_timer_destroy (timer);
 #endif
 }
 
 static void
-gdk_window_clear_backing_rect_redirect (GdkWindow *window,
-					gint       x,
-					gint       y,
-					gint       width,
-					gint       height)
+gdk_window_clear_backing_region_redirect (GdkWindow *window,
+					  GdkRegion *region)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowRedirect *redirect = private->redirect;
   GdkRegion *clip_region;
+  GdkRectangle clipbox;
   gint x_offset, y_offset;
   BackingRectMethod method;
   GdkWindowPaint paint;
@@ -3685,7 +3684,8 @@ gdk_window_clear_backing_rect_redirect (GdkWindow *window,
 							GDK_WINDOW (redirect->redirected),
 							TRUE,
 							&x_offset, &y_offset);
-  
+  gdk_region_intersect (clip_region, region);
+
   paint.x_offset = x_offset;
   paint.y_offset = y_offset;
   paint.pixmap = redirect->pixmap;
@@ -3699,9 +3699,6 @@ gdk_window_clear_backing_rect_redirect (GdkWindow *window,
     {
       g_assert (method.gc == NULL);
 
-      cairo_rectangle (method.cr, x, y, width, height);
-      cairo_clip (method.cr);
-
       gdk_cairo_region (method.cr, clip_region);
       cairo_fill (method.cr);
 
@@ -3711,8 +3708,11 @@ gdk_window_clear_backing_rect_redirect (GdkWindow *window,
     {
       g_assert (method.gc != NULL);
 
+      gdk_region_get_clipbox (clip_region, &clipbox);
       gdk_gc_set_clip_region (method.gc, clip_region);
-      gdk_draw_rectangle (window, method.gc, TRUE, x, y, width, height);
+      gdk_draw_rectangle (window, method.gc, TRUE,
+			  clipbox.x, clipbox.y,
+			  clipbox.width, clipbox.height);
       g_object_unref (method.gc);
 
     }
@@ -3722,15 +3722,14 @@ gdk_window_clear_backing_rect_redirect (GdkWindow *window,
 }
 
 static void
-gdk_window_clear_backing_rect_direct (GdkWindow *window,
-				      gint       x,
-				      gint       y,
-				      gint       width,
-				      gint       height)
+gdk_window_clear_backing_region_direct (GdkWindow *window,
+					GdkRegion *region)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   BackingRectMethod method;
   GdkWindowPaint paint;
+  GdkRegion *clip;
+  GdkRectangle clipbox;
   
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -3744,14 +3743,15 @@ gdk_window_clear_backing_rect_direct (GdkWindow *window,
   method.gc = NULL;
   setup_backing_rect_method (&method, window, &paint, 0, 0);
 
+  clip = gdk_region_copy (private->clip_region_with_children);
+  gdk_region_intersect (clip, region);
+  gdk_region_get_clipbox (clip, &clipbox);
+  
   if (method.cr)
     {
       g_assert (method.gc == NULL);
 
-      gdk_cairo_region (method.cr, private->clip_region_with_children);
-      cairo_clip (method.cr);
-      
-      cairo_rectangle (method.cr, x, y, width, height);
+      gdk_cairo_region (method.cr, clip);
       cairo_fill (method.cr);
 
       cairo_destroy (method.cr);
@@ -3760,12 +3760,15 @@ gdk_window_clear_backing_rect_direct (GdkWindow *window,
     {
       g_assert (method.gc != NULL);
 
-      gdk_gc_set_clip_region (method.gc, private->clip_region_with_children);
-      gdk_draw_rectangle (window, method.gc, TRUE, x, y, width, height);
+      gdk_gc_set_clip_region (method.gc, clip);
+      gdk_draw_rectangle (window, method.gc, TRUE,
+			  clipbox.x, clipbox.y,
+			  clipbox.width, clipbox.height);
       g_object_unref (method.gc);
 
     }
-
+  
+  gdk_region_destroy (clip);
   cairo_surface_destroy (paint.surface);
 }
 
@@ -3790,6 +3793,26 @@ gdk_window_clear (GdkWindow *window)
 }
 
 static void
+gdk_window_clear_region_internal (GdkWindow *window,
+				  GdkRegion *region,
+				  gboolean   send_expose)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+    
+  if (private->paint_stack)
+    gdk_window_clear_backing_region (window, region);
+  else
+    {
+      if (private->redirect)
+	gdk_window_clear_backing_region_redirect (window, region);
+      
+      gdk_window_clear_backing_region_direct (window, region);
+      if (send_expose)
+	gdk_window_invalidate_region (window, region, FALSE);
+    }
+}
+
+static void
 gdk_window_clear_area_internal (GdkWindow *window,
 				gint       x,
 				gint       y,
@@ -3798,38 +3821,30 @@ gdk_window_clear_area_internal (GdkWindow *window,
 				gboolean   send_expose)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkRectangle rect;
+  GdkRegion *region;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
-
+  
   /* This is what XClearArea does, and e.g. GtkCList uses it,
      so we need to duplicate that */
   if (width == 0)
     width = private->width - x;
   if (height == 0)
     height = private->height - y;
+
+  rect.x = x;
+  rect.y = x;
+  rect.width = width;
+  rect.height = height;
+
+  region = gdk_region_rectangle (&rect);
+  gdk_window_clear_region_internal (window,
+				    region,
+				    FALSE);
+  gdk_region_destroy (region);
   
-  if (private->paint_stack)
-    gdk_window_clear_backing_rect (window, x, y, width, height);
-  else
-    {
-      if (private->redirect)
-	gdk_window_clear_backing_rect_redirect (window, x, y, width, height);
-      
-      gdk_window_clear_backing_rect_direct (window, x, y, width, height);
-      if (send_expose)
-	{
-	  GdkRectangle rect;
-
-	  rect.x = x;
-	  rect.y = x;
-	  rect.width = width;
-	  rect.height = height;
-	  
-	  gdk_window_invalidate_rect (window, &rect, FALSE);
-	}
-    }
 }
-
 
 /**
  * gdk_window_clear_area:
