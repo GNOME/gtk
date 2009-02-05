@@ -2088,8 +2088,6 @@ gdk_window_end_implicit_paint (GdkWindow *window)
 
   private->implicit_paint = NULL;
 
-  gdk_window_flush_outstanding_moves (window);
-
   if (!gdk_region_empty (paint->region))
     {
       /* Some regions are valid, push these to window now */
@@ -4499,9 +4497,15 @@ gdk_window_process_updates_internal (GdkWindow *window)
 
 	  gdk_region_get_clipbox (expose_region, &clip_box);
 	  end_implicit = gdk_window_begin_implicit_paint (window, &clip_box);
+	  if (end_implicit) /* rendering is not double buffered, do moves now */
+	      gdk_window_flush_outstanding_moves (window);
 	  _gdk_windowing_window_process_updates_recurse (window, expose_region);
 	  if (end_implicit)
-	    gdk_window_end_implicit_paint (window);
+	    {
+	      /* Do moves right before exposes are rendered */
+	      gdk_window_flush_outstanding_moves (window);
+	      gdk_window_end_implicit_paint (window);
+	    }
 	  
 	  if (expose_region != update_area)
 	    gdk_region_destroy (expose_region);
