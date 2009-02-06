@@ -1,3 +1,7 @@
+2009-02-06  Matthew Barnes  <mbarnes@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_set_label): Accept a NULL string.
+
 2009-02-03  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 538439 – tooltip may appear in upper left corner instead of 
