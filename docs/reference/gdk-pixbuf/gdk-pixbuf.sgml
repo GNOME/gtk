@@ -9,8 +9,12 @@
 ]>
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
-    <title>The &gdk-pixbuf; Library</title>
-    <releaseinfo>Version &version;</releaseinfo>
+    <title>GDK-PixBuf Reference Manual</title>
+    <releaseinfo>
+      Version &version;
+      The latest version of this documentation can be found on-line at
+      <ulink role="online-location" url="http://library.gnome.org/devel/gdk-pixbuf/unstable/">http://library.gnome.org/devel/gdk-pixbuf/unstable/</ulink>.
+    </releaseinfo>
     <authorgroup>
       <author>
 	<firstname>Federico</firstname>
@@ -123,16 +127,15 @@
   <index id="api-index-2-4" role="2.4">
     <title>Index of new symbols in 2.4</title>
     <xi:include href="xml/api-index-2.4.xml"><xi:fallback /></xi:include>
-  </index>  
+  </index>
   <index id="api-index-2-6" role="2.6">
     <title>Index of new symbols in 2.6</title>
     <xi:include href="xml/api-index-2.6.xml"><xi:fallback /></xi:include>
-  </index>  
+  </index>
   <index id="api-index-2-8" role="2.8">
     <title>Index of new symbols in 2.8</title>
     <xi:include href="xml/api-index-2.8.xml"><xi:fallback /></xi:include>
   </index>
-  <!-- -->
   <index id="api-index-2-10" role="2.10">
     <title>Index of new symbols in 2.10</title>
     <xi:include href="xml/api-index-2.10.xml"><xi:fallback /></xi:include>
@@ -140,12 +143,11 @@
   <index id="api-index-2-12" role="2.12">
     <title>Index of new symbols in 2.12</title>
     <xi:include href="xml/api-index-2.12.xml"><xi:fallback /></xi:include>
-  </index>  
-  <!-- -->
+  </index>
   <index id="api-index-2-14" role="2.14">
     <title>Index of new symbols in 2.14</title>
     <xi:include href="xml/api-index-2.14.xml"><xi:fallback /></xi:include>
-  </index>  
+  </index>
 
    <xi:include href="porting-from-imlib.sgml" />
 

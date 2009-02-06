@@ -6,6 +6,11 @@
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
     <title>GAIL Reference Manual</title>
+    <releaseinfo>
+      Version &version;
+      The latest version of this documentation can be found on-line at
+      <ulink role="online-location" url="http://library.gnome.org/devel/gail-libgail-util/unstable/">http://library.gnome.org/devel/gail-libgail-util/unstable/</ulink>.
+    </releaseinfo>
   </bookinfo>
   <chapter id="libgail-util-main">
     <title>GAIL libgail-util Library</title>

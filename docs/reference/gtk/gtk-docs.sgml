@@ -8,7 +8,11 @@
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
     <title>GTK+ Reference Manual</title>
-    <releaseinfo>for GTK+ &version;</releaseinfo>
+    <releaseinfo>
+      for GTK+ &version;
+      The latest version of this documentation can be found on-line at
+      <ulink role="online-location" url="http://library.gnome.org/devel/gtk/unstable/">http://library.gnome.org/devel/gtk/unstable/</ulink>.
+    </releaseinfo>
   </bookinfo>
 
   <part id="gtk">
