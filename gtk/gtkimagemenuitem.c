@@ -601,7 +601,7 @@ activatable_update_icon_name (GtkImageMenuItem *image_menu_item, GtkAction *acti
 
   image = gtk_image_menu_item_get_image (image_menu_item);
 	  
-  if (GTK_IS_IMAGE (image) && icon_name &&
+  if (GTK_IS_IMAGE (image) && 
       (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_EMPTY ||
        gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME))
     {

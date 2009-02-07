@@ -1,3 +1,21 @@
+2009-02-06  Matthias Clasen  <mclasen@redhat.com>
+
+	Make the new GtkAction code work with PolicyKit-gnome's use of actions.
+
+	* gtk/gtkaction.c (gtk_action_[un]block_activate_from): Block
+	the action.
+
+	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_activatable_reset):
+	* gtk/gtktogglebutton. (gtk_toggle_button_activatable_reset):
+	* gtk/gtktoggletoolbutton.c (gtk_toggle_tool_button_activatable_reset):
+	Work with non-toggle actions without complaining.
+
+	* gtk/gtktoolbutton.c (gtk_tool_button_activatable_update): Updating
+	the icon-name should not remove the label.
+
+	* gtk/gtkimagemenuitem.c (activatable_update_icon_name): Also
+	update the image when the icon name is set to NULL.
+
 2009-02-06  Matthew Barnes  <mbarnes@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_set_label): Accept a NULL string.

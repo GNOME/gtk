@@ -188,7 +188,7 @@ gtk_toggle_button_activatable_reset (GtkActivatable   *activatable,
 
   parent_activatable_iface->reset (activatable, action);
 
-  if (!action)
+  if (!GTK_IS_TOGGLE_ACTION (action))
     return;
 
   button = GTK_TOGGLE_BUTTON (activatable);

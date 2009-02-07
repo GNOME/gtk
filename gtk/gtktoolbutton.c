@@ -760,24 +760,9 @@ gtk_tool_button_activatable_update (GtkActivatable       *activatable,
   button = GTK_TOOL_BUTTON (activatable);
   
   if (strcmp (property_name, "short-label") == 0)
-    {
-      if (!gtk_action_get_stock_id (action) &&
-	  !gtk_action_get_icon_name (action))
-	{
-	  gtk_tool_button_set_use_underline (button, TRUE);
-	  gtk_tool_button_set_label (button, gtk_action_get_short_label (action));
-	}
-    }
+    gtk_tool_button_set_label (button, gtk_action_get_short_label (action));
   else if (strcmp (property_name, "stock-id") == 0)
-    {
-      if (gtk_action_get_stock_id (action))
-	{	
-	  gtk_tool_button_set_label (button, NULL);
-	  gtk_tool_button_set_icon_name (button, NULL);
-	}
-      gtk_tool_button_set_icon_widget (button, NULL);
-      gtk_tool_button_set_stock_id (button, gtk_action_get_stock_id (action));
-    }
+    gtk_tool_button_set_stock_id (button, gtk_action_get_stock_id (action));
   else if (strcmp (property_name, "gicon") == 0)
     {
       const gchar *stock_id = gtk_action_get_stock_id (action);
@@ -800,14 +785,7 @@ gtk_tool_button_activatable_update (GtkActivatable       *activatable,
 
     }
   else if (strcmp (property_name, "icon-name") == 0)
-    {
-      if (gtk_action_get_icon_name (action))
-	{	
-	  gtk_tool_button_set_label (button, NULL);
-	  gtk_tool_button_set_stock_id (button, NULL);
-	}
-      gtk_tool_button_set_icon_name (button, gtk_action_get_icon_name (action));
-    }
+    gtk_tool_button_set_icon_name (button, gtk_action_get_icon_name (action));
 }
 
 static void

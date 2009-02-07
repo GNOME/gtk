@@ -188,7 +188,7 @@ gtk_check_menu_item_activatable_reset (GtkActivatable       *activatable,
 
   parent_activatable_iface->reset (activatable, action);
 
-  if (!action)
+  if (!GTK_IS_TOGGLE_ACTION (action))
     return;
 
   gtk_action_block_activate (action);

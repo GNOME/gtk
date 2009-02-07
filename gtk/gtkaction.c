@@ -1509,8 +1509,6 @@ gtk_action_set_icon_name (GtkAction   *action,
 
   g_return_if_fail (GTK_IS_ACTION (action));
 
-  g_return_if_fail (GTK_IS_ACTION (action));
-
   tmp = action->private_data->icon_name;
   action->private_data->icon_name = g_strdup (icon_name);
   g_free (tmp);
@@ -1604,6 +1602,8 @@ gtk_action_block_activate_from (GtkAction *action,
   
   g_signal_handlers_block_by_func (proxy, G_CALLBACK (gtk_action_activate),
 				   action);
+
+  gtk_action_block_activate (action);
 }
 
 /**
@@ -1630,6 +1630,8 @@ gtk_action_unblock_activate_from (GtkAction *action,
 
   g_signal_handlers_unblock_by_func (proxy, G_CALLBACK (gtk_action_activate),
 				     action);
+
+  gtk_action_unblock_activate (action);
 }
 
 static void
