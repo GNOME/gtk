@@ -2219,10 +2219,25 @@ gdk_window_begin_paint_region (GdkWindow       *window,
     gdk_region_union (implicit_paint->region, paint->region);
 
   /* No need to do any moves that will end up over the exposed area */
-  for (l = impl_window->outstanding_moves; l != NULL; l = l->next)
+  if (impl_window->outstanding_moves)
     {
-      move = l->data;
-      gdk_region_subtract (move->region, paint->region);
+      GdkRegion *remove;
+
+      remove = gdk_region_copy (paint->region);
+      for (l = g_list_last (impl_window->outstanding_moves); l != NULL; l = l->prev)
+	{
+	  move = l->data;
+	  /* Don't need this area */
+	  gdk_region_subtract (move->region, remove);
+
+	  /* However if any of the destination we do need has a source
+	     in the updated region we do need that as a destination for
+	     the earlier moves */
+	  gdk_region_offset (move->region, -move->dx, -move->dy);
+	  gdk_region_subtract (remove, move->region);
+	  gdk_region_offset (move->region, move->dx, move->dy);
+	}
+      gdk_region_destroy (remove);
     }
   
   /* Convert back to normal coords */
@@ -2521,79 +2536,33 @@ append_move_region (GdkWindowObject *impl_window,
 		    GdkRegion *region,
 		    int dx, int dy)
 {
-  GList *moves_to_add, *l, *s;
-  GdkRegion *intersection;
-  GdkWindowRegionMove *move, *new_move, *existing_move;
-  
+  GdkWindowRegionMove *move;
+      
   move = g_slice_new (GdkWindowRegionMove);
-  move->region  = region;
+  move->region  = gdk_region_copy (region);
   move->dx = dx;
   move->dy = dy;
 
-  moves_to_add = g_list_prepend (NULL, move);
-
-  for (l = impl_window->outstanding_moves; l != NULL; l = l->next)
-    {
-      existing_move = l->data;
-      
-      for (s = moves_to_add; s != NULL; s = s->next)
-	{
-	  move = s->data;
-
-	  intersection = gdk_region_copy (move->region);
-	  gdk_region_offset (intersection, -move->dx, -move->dy);
-	  gdk_region_intersect (intersection, existing_move->region);
-	  gdk_region_offset (intersection, move->dx, move->dy);
-
-	  if (!gdk_region_empty (intersection))
-	    {
-	      
-	      new_move = g_slice_new (GdkWindowRegionMove);
-	      new_move->region  = intersection;
-	      new_move->dx = move->dx + existing_move->dx;
-	      new_move->dy = move->dy + existing_move->dy;
-	      moves_to_add = g_list_prepend (moves_to_add, new_move);
-
-	      gdk_region_subtract (move->region, intersection);
-	      gdk_region_subtract (existing_move->region, intersection);
-	    }
-	  else
-	    gdk_region_destroy (intersection);
-	}
-    }
-
-  impl_window->outstanding_moves = g_list_concat (impl_window->outstanding_moves,
-						  moves_to_add);
-  
+  impl_window->outstanding_moves =
+    g_list_prepend (impl_window->outstanding_moves, move);
 }
 
-/* Moves bits and update area by dx/dy in impl window
- * Takes ownership of region.
- */
+/* Moves bits and update area by dx/dy in impl window */
 static void
 move_region_on_impl (GdkWindowObject *private,
 		     GdkRegion *region, /* In impl window coords */
 		     int dx, int dy)
 {
   GdkWindowObject *impl_window;
-  gboolean free_region;
 
   if ((dx == 0 && dy == 0) ||
       gdk_region_empty (region))
-    {
-      gdk_region_destroy (region);
-      return;
-    }
+    return;
   
-  free_region = TRUE;
   impl_window = gdk_window_get_impl_window (private);
 
   if (1) /* Enable flicker free handling of moves. */
-    {
-      free_region = FALSE;
-
-      append_move_region (impl_window, region, dx, dy);
-    }
+    append_move_region (impl_window, region, dx, dy);
   else
     do_move_region_bits_on_impl (private,
 				 region, dx, dy);
@@ -2608,14 +2577,12 @@ move_region_on_impl (GdkWindowObject *private,
       gdk_region_offset (update_area, -dx, -dy);
       gdk_region_intersect (update_area, impl_window->update_area);
       gdk_region_subtract (impl_window->update_area, update_area);
+
       /* Convert back */
       gdk_region_offset (update_area, dx, dy);
       gdk_region_union (impl_window->update_area, update_area);
       gdk_region_destroy (update_area);
     }
-
-  if (free_region)
-    gdk_region_destroy (region);
 }
 
 /* Flushes all outstanding changes to the window, call this
@@ -6221,7 +6188,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
       /* convert from parent coords to impl */
       gdk_region_offset (copy_area, private->abs_x - private->x, private->abs_y - private->y);
 
-      move_region_on_impl (private, copy_area, dx, dy); /* Takes ownership of copy_area */
+      move_region_on_impl (private, copy_area, dx, dy);
 
       /* Invalidate affected part in the parent window
        *  (no higher window should be affected)
@@ -6232,6 +6199,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
 
       gdk_region_destroy (old_region);
       gdk_region_destroy (new_region);
+      gdk_region_destroy (copy_area);
     }
 
   if (old_native_child_region)
@@ -6427,11 +6395,12 @@ gdk_window_scroll (GdkWindow *window,
   /* convert from window coords to impl */
   gdk_region_offset (copy_area, private->abs_x, private->abs_y);
 
-  move_region_on_impl (private, copy_area, dx, dy); /* Takes ownership of copy_area */
+  move_region_on_impl (private, copy_area, dx, dy);
    
   /* Invalidate not copied regions */
   gdk_window_invalidate_region (window, noncopy_area, TRUE);
 
+  gdk_region_destroy (copy_area);
   gdk_region_destroy (noncopy_area);
 
   if (old_native_child_region)
@@ -6504,8 +6473,9 @@ gdk_window_move_region (GdkWindow       *window,
   /* convert from window coords to impl */
   gdk_region_offset (copy_area, private->abs_x, private->abs_y);
   
-  move_region_on_impl (private, copy_area, dx, dy); /* Takes ownership of copy_area */
+  move_region_on_impl (private, copy_area, dx, dy);
 
+  gdk_region_destroy (copy_area);
   gdk_region_destroy (source_area);
 }
 
