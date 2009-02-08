@@ -2571,7 +2571,8 @@ append_move_region (GdkWindowObject *impl_window,
     g_list_append (impl_window->outstanding_moves, move);
 }
 
-/* Moves bits and update area by dx/dy in impl window */
+/* Moves bits and update area by dx/dy in impl window,
+   takes ownership of region */
 static void
 move_region_on_impl (GdkWindowObject *private,
 		     GdkRegion *region, /* In impl window coords */
@@ -2585,18 +2586,12 @@ move_region_on_impl (GdkWindowObject *private,
   
   impl_window = gdk_window_get_impl_window (private);
 
-  if (1) /* Enable flicker free handling of moves. */
-    append_move_region (impl_window, region, dx, dy);
-  else
-    do_move_region_bits_on_impl (impl_window,
-				 region, dx, dy);
-    
   /* Move any old invalid regions in the copy source area by dx/dy */
   if (impl_window->update_area)
     {
       GdkRegion *update_area;
-      
       update_area = gdk_region_copy (region);
+      
       /* Convert from target to source */
       gdk_region_offset (update_area, -dx, -dy);
       gdk_region_intersect (update_area, impl_window->update_area);
@@ -2605,8 +2600,21 @@ move_region_on_impl (GdkWindowObject *private,
       /* Convert back */
       gdk_region_offset (update_area, dx, dy);
       gdk_region_union (impl_window->update_area, update_area);
+
+      /* This area of the destination is now invalid,
+	 so no need to copy to it.  */
+      gdk_region_subtract (region, update_area);
+      
       gdk_region_destroy (update_area);
     }
+  
+  if (1) /* Enable flicker free handling of moves. */
+    append_move_region (impl_window, region, dx, dy);
+  else
+    do_move_region_bits_on_impl (impl_window,
+				 region, dx, dy);
+    
+  gdk_region_destroy (region);
 }
 
 /* Flushes all outstanding changes to the window, call this
@@ -6206,7 +6214,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
       /* convert from parent coords to impl */
       gdk_region_offset (copy_area, private->abs_x - private->x, private->abs_y - private->y);
 
-      move_region_on_impl (impl_window, copy_area, dx, dy);
+      move_region_on_impl (impl_window, copy_area, dx, dy); /* takes ownership of copy_area */
 
       /* Invalidate affected part in the parent window
        *  (no higher window should be affected)
@@ -6217,7 +6225,6 @@ gdk_window_move_resize_internal (GdkWindow *window,
 
       gdk_region_destroy (old_region);
       gdk_region_destroy (new_region);
-      gdk_region_destroy (copy_area);
     }
 
   if (old_native_child_region)
@@ -6402,12 +6409,11 @@ gdk_window_scroll (GdkWindow *window,
   /* convert from window coords to impl */
   gdk_region_offset (copy_area, private->abs_x, private->abs_y);
 
-  move_region_on_impl (impl_window, copy_area, dx, dy);
+  move_region_on_impl (impl_window, copy_area, dx, dy); /* takes ownership of copy_area */
    
   /* Invalidate not copied regions */
   gdk_window_invalidate_region (window, noncopy_area, TRUE);
 
-  gdk_region_destroy (copy_area);
   gdk_region_destroy (noncopy_area);
 
   if (old_native_child_region)
@@ -6474,9 +6480,7 @@ gdk_window_move_region (GdkWindow       *window,
   /* convert from window coords to impl */
   gdk_region_offset (copy_area, private->abs_x, private->abs_y);
   
-  move_region_on_impl (impl_window, copy_area, dx, dy);
-
-  gdk_region_destroy (copy_area);
+  move_region_on_impl (impl_window, copy_area, dx, dy); /* Takes ownership of copy_area */
 }
 
 /**
