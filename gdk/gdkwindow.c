@@ -2494,17 +2494,13 @@ gdk_window_free_paint_stack (GdkWindow *window)
 }
 
 static void
-do_move_region_bits_on_impl (GdkWindowObject *private,
-			     GdkRegion *region, /* In impl window coords */
+do_move_region_bits_on_impl (GdkWindowObject *impl_window,
+			     GdkRegion *dest_region, /* In impl window coords */
 			     int dx, int dy)
 {
   GdkGC *tmp_gc;
   GdkRectangle copy_rect;
-  GdkDrawable *dest;
-
-  dest = private->impl;
-  
-  gdk_region_get_clipbox (region, &copy_rect);
+  GdkWindowObject *private;
 
   /* We need to get data from subwindows here, because we might have
    * shaped a native window over the moving region (with bg none,
@@ -2512,7 +2508,7 @@ do_move_region_bits_on_impl (GdkWindowObject *private,
    * from overlapping native window that are not children of this window,
    * so we copy from the toplevel with INCLUDE_INFERIORS.
    */
-  private = gdk_window_get_impl_window (private);
+  private = impl_window;
   while (private->parent != NULL &&
 	 GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
     {
@@ -2521,8 +2517,18 @@ do_move_region_bits_on_impl (GdkWindowObject *private,
       private = gdk_window_get_impl_window (private->parent);
     }
   tmp_gc = _gdk_drawable_get_subwindow_scratch_gc ((GdkWindow *)private);
-  gdk_gc_set_clip_region (tmp_gc, region);
-  gdk_draw_drawable (dest,
+
+  /* The region area is moved and we queue translations for all expose events
+     to the source area that were sent prior to the copy */
+  gdk_region_offset (dest_region, -dx, -dy); /* Temporarily move to source area */
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->queue_translation ((GdkWindow *)impl_window,
+								dest_region, dx, dy);
+  gdk_region_offset (dest_region, dx, dy); /* back to dest area */
+
+  gdk_region_get_clipbox (dest_region, &copy_rect);
+  
+  gdk_gc_set_clip_region (tmp_gc, dest_region);
+  gdk_draw_drawable (impl_window->impl,
 		     tmp_gc,
 		     private->impl,
 		     copy_rect.x-dx, copy_rect.y-dy,
@@ -2564,7 +2570,7 @@ move_region_on_impl (GdkWindowObject *private,
   if (1) /* Enable flicker free handling of moves. */
     append_move_region (impl_window, region, dx, dy);
   else
-    do_move_region_bits_on_impl (private,
+    do_move_region_bits_on_impl (impl_window,
 				 region, dx, dy);
     
   /* Move any old invalid regions in the copy source area by dx/dy */
@@ -2604,7 +2610,7 @@ gdk_window_flush_outstanding_moves (GdkWindow *window)
     {
       move = l->data;
 
-      do_move_region_bits_on_impl (private,
+      do_move_region_bits_on_impl (impl_window,
 				   move->region, move->dx, move->dy);
 
       gdk_region_destroy (move->region);
@@ -6180,15 +6186,10 @@ gdk_window_move_resize_internal (GdkWindow *window,
       /* Convert old region to impl coords */
       gdk_region_offset (old_region, -dx + private->abs_x - private->x, -dy + private->abs_y - private->y);
 
-      /* The old_region area is moved and we queue translations for all expose events
-	 to it that will be sent before the copy operation */
-      GDK_WINDOW_IMPL_GET_IFACE (impl_window->impl)->queue_translation ((GdkWindow *)impl_window,
-									old_region, dx, dy);
-      
       /* convert from parent coords to impl */
       gdk_region_offset (copy_area, private->abs_x - private->x, private->abs_y - private->y);
 
-      move_region_on_impl (private, copy_area, dx, dy);
+      move_region_on_impl (impl_window, copy_area, dx, dy);
 
       /* Invalidate affected part in the parent window
        *  (no higher window should be affected)
@@ -6309,7 +6310,7 @@ gdk_window_scroll (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *) window;
   GdkWindowObject *impl_window;
-  GdkRegion *source_area, *copy_area, *noncopy_area;
+  GdkRegion *copy_area, *noncopy_area;
   GdkRegion *old_native_child_region, *new_native_child_region;
   GList *tmp_list;
 
@@ -6381,21 +6382,10 @@ gdk_window_scroll (GdkWindow *window,
   noncopy_area = gdk_region_copy (private->clip_region);
   gdk_region_subtract (noncopy_area, copy_area);
 
-  /* Get window clip and convert to real window coords, this
-     area is moved and we queue translations for all expose events
-     to it that will be sent before the copy operation */
-
-  source_area = gdk_region_copy (private->clip_region);
-  /* convert from window coords to real parent */
-  gdk_region_offset (source_area, private->abs_x, private->abs_y);
-  GDK_WINDOW_IMPL_GET_IFACE (impl_window->impl)->queue_translation ((GdkWindow *)impl_window,
-								    source_area, dx, dy);
-  gdk_region_destroy (source_area);
-  
   /* convert from window coords to impl */
   gdk_region_offset (copy_area, private->abs_x, private->abs_y);
 
-  move_region_on_impl (private, copy_area, dx, dy);
+  move_region_on_impl (impl_window, copy_area, dx, dy);
    
   /* Invalidate not copied regions */
   gdk_window_invalidate_region (window, noncopy_area, TRUE);
@@ -6435,7 +6425,6 @@ gdk_window_move_region (GdkWindow       *window,
 {
   GdkWindowObject *private = (GdkWindowObject *) window;
   GdkWindowObject *impl_window;
-  GdkRegion *source_area;
   GdkRegion *nocopy_area;
   GdkRegion *copy_area;
 
@@ -6451,11 +6440,10 @@ gdk_window_move_region (GdkWindow       *window,
   impl_window = gdk_window_get_impl_window (private);
   
   /* compute source regions */
-  source_area = gdk_region_copy (region);
-  gdk_region_intersect (source_area, private->clip_region_with_children);
+  copy_area = gdk_region_copy (region);
+  gdk_region_intersect (copy_area, private->clip_region_with_children);
 
   /* compute destination regions */
-  copy_area = gdk_region_copy (source_area);
   gdk_region_offset (copy_area, dx, dy);
   gdk_region_intersect (copy_area, private->clip_region_with_children);
 
@@ -6466,17 +6454,12 @@ gdk_window_move_region (GdkWindow       *window,
   gdk_window_invalidate_region (window, nocopy_area, FALSE);
   gdk_region_destroy (nocopy_area);
 
-  gdk_region_offset (source_area, private->abs_x, private->abs_y);
-  GDK_WINDOW_IMPL_GET_IFACE (impl_window->impl)->queue_translation ((GdkWindow *)impl_window,
-								    source_area, dx, dy);
-  
   /* convert from window coords to impl */
   gdk_region_offset (copy_area, private->abs_x, private->abs_y);
   
-  move_region_on_impl (private, copy_area, dx, dy);
+  move_region_on_impl (impl_window, copy_area, dx, dy);
 
   gdk_region_destroy (copy_area);
-  gdk_region_destroy (source_area);
 }
 
 /**
