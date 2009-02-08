@@ -75,8 +75,8 @@ struct _GdkWindowPaint
 };
 
 typedef struct {
-  GdkRegion *region; /* The destination region */
-  int dx, dy;
+  GdkRegion *dest_region; /* The destination region */
+  int dx, dy; /* The amount that the source was moved to reach dest_region */
 } GdkWindowRegionMove;
 
 
@@ -2228,14 +2228,14 @@ gdk_window_begin_paint_region (GdkWindow       *window,
 	{
 	  move = l->data;
 	  /* Don't need this area */
-	  gdk_region_subtract (move->region, remove);
+	  gdk_region_subtract (move->dest_region, remove);
 
 	  /* However if any of the destination we do need has a source
 	     in the updated region we do need that as a destination for
 	     the earlier moves */
-	  gdk_region_offset (move->region, -move->dx, -move->dy);
-	  gdk_region_subtract (remove, move->region);
-	  gdk_region_offset (move->region, move->dx, move->dy);
+	  gdk_region_offset (move->dest_region, -move->dx, -move->dy);
+	  gdk_region_subtract (remove, move->dest_region);
+	  gdk_region_offset (move->dest_region, move->dx, move->dy);
 	}
       gdk_region_destroy (remove);
     }
@@ -2545,7 +2545,7 @@ append_move_region (GdkWindowObject *impl_window,
   GdkWindowRegionMove *move;
       
   move = g_slice_new (GdkWindowRegionMove);
-  move->region  = gdk_region_copy (region);
+  move->dest_region  = gdk_region_copy (region);
   move->dx = dx;
   move->dy = dy;
 
@@ -2611,9 +2611,9 @@ gdk_window_flush_outstanding_moves (GdkWindow *window)
       move = l->data;
 
       do_move_region_bits_on_impl (impl_window,
-				   move->region, move->dx, move->dy);
+				   move->dest_region, move->dx, move->dy);
 
-      gdk_region_destroy (move->region);
+      gdk_region_destroy (move->dest_region);
       g_slice_free (GdkWindowRegionMove, move);
     }
   
