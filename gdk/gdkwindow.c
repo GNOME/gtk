@@ -2537,10 +2537,9 @@ do_move_region_bits_on_impl (GdkWindowObject *impl_window,
   gdk_gc_set_clip_region (tmp_gc, NULL);
 }
 
-static void
-append_move_region (GdkWindowObject *impl_window,
-		    GdkRegion *region,
-		    int dx, int dy)
+static GdkWindowRegionMove *
+gdk_window_region_move_new (GdkRegion *region,
+			    int dx, int dy)
 {
   GdkWindowRegionMove *move;
       
@@ -2548,6 +2547,25 @@ append_move_region (GdkWindowObject *impl_window,
   move->dest_region  = gdk_region_copy (region);
   move->dx = dx;
   move->dy = dy;
+
+  return move;
+}
+
+static void
+gdk_window_region_move_free (GdkWindowRegionMove *move)
+{
+  gdk_region_destroy (move->dest_region);
+  g_slice_free (GdkWindowRegionMove, move);
+}
+
+static void
+append_move_region (GdkWindowObject *impl_window,
+		    GdkRegion *region,
+		    int dx, int dy)
+{
+  GdkWindowRegionMove *move;
+      
+  move = gdk_window_region_move_new (region, dx, dy);
 
   impl_window->outstanding_moves =
     g_list_append (impl_window->outstanding_moves, move);
@@ -2613,8 +2631,7 @@ gdk_window_flush_outstanding_moves (GdkWindow *window)
       do_move_region_bits_on_impl (impl_window,
 				   move->dest_region, move->dx, move->dy);
 
-      gdk_region_destroy (move->dest_region);
-      g_slice_free (GdkWindowRegionMove, move);
+      gdk_window_region_move_free (move);
     }
   
   g_list_free (impl_window->outstanding_moves);
