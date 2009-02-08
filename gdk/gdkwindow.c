@@ -2544,7 +2544,7 @@ append_move_region (GdkWindowObject *impl_window,
   move->dy = dy;
 
   impl_window->outstanding_moves =
-    g_list_prepend (impl_window->outstanding_moves, move);
+    g_list_append (impl_window->outstanding_moves, move);
 }
 
 /* Moves bits and update area by dx/dy in impl window */
