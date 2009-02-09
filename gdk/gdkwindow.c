@@ -2536,15 +2536,115 @@ gdk_window_region_move_free (GdkWindowRegionMove *move)
 
 static void
 append_move_region (GdkWindowObject *impl_window,
-		    GdkRegion *region,
+		    GdkRegion *new_dest_region,
 		    int dx, int dy)
 {
-  GdkWindowRegionMove *move;
-      
-  move = gdk_window_region_move_new (region, dx, dy);
+  GdkWindowRegionMove *move, *old_move;
+  GdkRegion *new_total_region, *old_total_region;
+  GdkRegion *source_overlaps_destination;
+  GdkRegion *non_overwritten;
+  gboolean added_move;
+  GList *l, *prev;
 
-  impl_window->outstanding_moves =
-    g_list_append (impl_window->outstanding_moves, move);
+  if (gdk_region_empty (new_dest_region))
+    return;
+
+  /* In principle this could just append the move to the list of outstanding
+     moves that will be replayed before drawing anything when we're handling
+     exposes. However, we'd like to do a bit better since its commonly the case
+     that we get multiple copies where A is copied to B and then B is copied
+     to C, and we'd like to express this as a simple copy A to C operation. */
+
+  /* We approach this by taking the new move and pushing it ahead of moves
+     starting at the end of the list and stopping when its not safe to do so.
+     Its not safe to push past a move is either the source of the new move
+     is in the destination of the old move, or if the destination of the new
+     move is in the source of the new move, or if the destination of the new
+     move overlaps the destination of the old move. We simplify this by
+     just comparing the total regions (src + dest) */
+  new_total_region = gdk_region_copy (new_dest_region);
+  gdk_region_offset (new_total_region, -dx, -dy);
+  gdk_region_union (new_total_region, new_dest_region);
+
+  added_move = FALSE;
+  for (l = g_list_last (impl_window->outstanding_moves); l != NULL; l = prev)
+    {
+      prev = l->prev;
+      old_move = l->data;
+  
+      old_total_region = gdk_region_copy (old_move->dest_region);
+      gdk_region_offset (old_total_region, -old_move->dx, -old_move->dy);
+      gdk_region_union (old_total_region, old_move->dest_region);
+
+      gdk_region_intersect (old_total_region, new_total_region);
+      /* If these regions intersect then its not safe to push the
+	 new region before the old one */
+      if (!gdk_region_empty (old_total_region))
+	{
+	  /* The area where the new moves source overlaps the old ones
+	     destination */
+	  source_overlaps_destination = gdk_region_copy (new_dest_region);
+	  gdk_region_offset (source_overlaps_destination, -dx, -dy);
+	  gdk_region_intersect (source_overlaps_destination, old_move->dest_region);
+	  gdk_region_offset (source_overlaps_destination, dx, dy);
+
+	  /* We can do all sort of optimizations here, but to do things safely it becomes
+	     quite complicated. However, a very common case is that you copy something first,
+	     then copy all that or a subset of it to a new location (i.e. if you scroll twice
+	     in the same direction). We'd like to detect this case and optimize it to one
+	     copy. */
+	  if (gdk_region_equal (source_overlaps_destination, new_dest_region))
+	    {
+	      /* This means we might be able to replace the old move and the new one
+		 with the new one read from the old ones source, and a second copy of
+		 the non-overwritten parts of the old move. However, such a split
+		 is only valid if the source in the old move isn't overwritten
+		 by the destination of the new one */
+
+	      /* the new destination of old move if split is ok: */
+	      non_overwritten = gdk_region_copy (old_move->dest_region);
+	      gdk_region_subtract (non_overwritten, new_dest_region);
+	      /* move to source region */
+	      gdk_region_offset (non_overwritten, -old_move->dx, -old_move->dy);
+	      
+	      gdk_region_intersect (non_overwritten, new_dest_region);
+	      if (gdk_region_empty (non_overwritten))
+		{
+		  added_move = TRUE;
+		  move = gdk_window_region_move_new (new_dest_region,
+						     dx + old_move->dx,
+						     dy + old_move->dy);
+		  
+		  impl_window->outstanding_moves =
+		    g_list_insert_before (impl_window->outstanding_moves,
+					  l, move);
+		  gdk_region_subtract (old_move->dest_region, new_dest_region);
+		}
+	      gdk_region_destroy (non_overwritten);
+	    }
+
+	  gdk_region_destroy (source_overlaps_destination);
+	  gdk_region_destroy (old_total_region);
+	  break; 
+	}
+      gdk_region_destroy (old_total_region);
+    }
+
+  gdk_region_destroy (new_total_region);
+  
+  if (!added_move)
+    {
+      move = gdk_window_region_move_new (new_dest_region, dx, dy);
+	  
+      if (l == NULL)
+	impl_window->outstanding_moves =
+	  g_list_prepend (impl_window->outstanding_moves,
+			  move);
+      else
+	impl_window->outstanding_moves =
+	  g_list_insert_before (impl_window->outstanding_moves,
+				l->next, move);
+    }
 }
 
 /* Moves bits and update area by dx/dy in impl window,
