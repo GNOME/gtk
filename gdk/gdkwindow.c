@@ -2558,7 +2558,10 @@ move_region_on_impl (GdkWindowObject *private,
 
   if ((dx == 0 && dy == 0) ||
       gdk_region_empty (region))
-    return;
+    {
+      gdk_region_destroy (region);
+      return;
+    }
   
   impl_window = gdk_window_get_impl_window (private);
 
