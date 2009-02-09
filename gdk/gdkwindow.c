@@ -2182,8 +2182,6 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   GdkWindowPaint *paint, *implicit_paint;
   GdkWindowObject *impl_window;
   GSList *list;
-  GList *l;
-  GdkWindowRegionMove *move;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -2218,28 +2216,6 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   if (implicit_paint)
     gdk_region_union (implicit_paint->region, paint->region);
 
-  /* No need to do any moves that will end up over the exposed area */
-  if (impl_window->outstanding_moves)
-    {
-      GdkRegion *remove;
-
-      remove = gdk_region_copy (paint->region);
-      for (l = g_list_last (impl_window->outstanding_moves); l != NULL; l = l->prev)
-	{
-	  move = l->data;
-	  /* Don't need this area */
-	  gdk_region_subtract (move->dest_region, remove);
-
-	  /* However if any of the destination we do need has a source
-	     in the updated region we do need that as a destination for
-	     the earlier moves */
-	  gdk_region_offset (move->dest_region, -move->dx, -move->dy);
-	  gdk_region_subtract (remove, move->dest_region);
-	  gdk_region_offset (move->dest_region, move->dx, move->dy);
-	}
-      gdk_region_destroy (remove);
-    }
-  
   /* Convert back to normal coords */
   gdk_region_offset (paint->region, -private->abs_x, -private->abs_y);
   
@@ -4524,6 +4500,40 @@ gdk_window_process_updates_internal (GdkWindow *window)
 				window_region);
 	  gdk_region_destroy (window_region);
 
+
+	  /* No need to do any moves that will end up over the update area */
+	  if (private->outstanding_moves)
+	    {
+	      GdkWindowRegionMove *move;
+	      GdkRegion *remove;
+	      GList *l, *prev;
+	      
+	      remove = gdk_region_copy (update_area);
+	      for (l = g_list_last (private->outstanding_moves); l != NULL; l = prev)
+		{
+		  prev = l->prev;
+		  move = l->data;
+		  /* Don't need this area */
+		  gdk_region_subtract (move->dest_region, remove);
+		  
+		  /* However if any of the destination we do need has a source
+		     in the updated region we do need that as a destination for
+		     the earlier moves */
+		  gdk_region_offset (move->dest_region, -move->dx, -move->dy);
+		  gdk_region_subtract (remove, move->dest_region);
+
+		  if (gdk_region_empty (move->dest_region))
+		    {
+		      gdk_window_region_move_free (move);
+		      private->outstanding_moves =
+			g_list_delete_link (private->outstanding_moves, l);
+		    }
+		  else
+		    gdk_region_offset (move->dest_region, move->dx, move->dy);
+		}
+	      gdk_region_destroy (remove);
+	    }
+	  
 	  gdk_region_get_clipbox (expose_region, &clip_box);
 	  end_implicit = gdk_window_begin_implicit_paint (window, &clip_box);
 	  if (end_implicit) /* rendering is not double buffered, do moves now */
