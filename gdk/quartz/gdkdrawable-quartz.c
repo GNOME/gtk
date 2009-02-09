@@ -19,6 +19,7 @@
  */
 
 #include "config.h"
+#include <sys/time.h>
 #include <cairo-quartz.h>
 #include "gdkprivate-quartz.h"
 
@@ -725,6 +726,39 @@ gdk_quartz_drawable_get_context (GdkDrawable *drawable,
   return GDK_DRAWABLE_IMPL_QUARTZ_GET_CLASS (drawable)->get_context (drawable, antialias);
 }
 
+/* Help preventing "beam synch penalty" where CG makes all graphics code
+ * block until the next vsync if we try to flush (including call display on
+ * a view) too often. We do this by limiting the manual flushing done
+ * outside of expose calls to less than 20Hz, this should leave enough room
+ * for the 60Hz max rate including the "regular" flushing.
+ *
+ * If cg_context is NULL, no flushing is done, only registering that a flush
+ * was made externally.
+ */
+void
+_gdk_quartz_drawable_flush (CGContextRef cg_context)
+{
+  static struct timeval prev_tv;
+  struct timeval tv;
+  gint ms;
+
+  gettimeofday (&tv, NULL);
+
+  if (cg_context)
+    {
+      ms = (tv.tv_sec - prev_tv.tv_sec) * 1000 + (tv.tv_usec - prev_tv.tv_usec) / 1000;
+
+      /* ~20Hz. */
+      if (ms > 50)
+        {
+          CGContextFlush (cg_context);
+          prev_tv = tv;
+        }
+    }
+  else
+    prev_tv = tv;
+}
+
 void
 gdk_quartz_drawable_release_context (GdkDrawable  *drawable, 
 				     CGContextRef  cg_context)
@@ -738,7 +772,10 @@ gdk_quartz_drawable_release_context (GdkDrawable  *drawable,
 
       /* See comment in gdk_quartz_drawable_get_context(). */
       if (window_impl->in_paint_rect_count == 0)
-        [window_impl->view unlockFocus];
+        {
+          _gdk_quartz_drawable_flush (cg_context);
+          [window_impl->view unlockFocus];
+        }
     }
   else if (GDK_IS_PIXMAP_IMPL_QUARTZ (drawable))
     CGContextRelease (cg_context);

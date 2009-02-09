@@ -424,6 +424,8 @@ _gdk_windowing_after_process_all_updates (void)
 
       [[nswindow contentView] displayIfNeeded];
 
+      _gdk_quartz_drawable_flush (NULL);
+
       [nswindow enableFlushWindow];
       [nswindow flushWindow];
       [nswindow release];

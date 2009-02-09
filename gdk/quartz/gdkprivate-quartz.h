@@ -180,6 +180,7 @@ gboolean     _gdk_quartz_keys_is_modifier (guint      keycode);
 
 /* Drawable */
 void        _gdk_quartz_drawable_finish (GdkDrawable *drawable);
+void        _gdk_quartz_drawable_flush  (CGContextRef cg_context);
 
 /* Geometry */
 void        _gdk_quartz_window_scroll      (GdkWindow       *window,
