@@ -2146,6 +2146,8 @@ static const struct {
   { "MediaType", N_("Paper Type") },
   { "InputSlot", N_("Paper Source") },
   { "OutputBin", N_("Output Tray") },
+  { "Resolution", N_("Resolution") },
+  { "PreFilter", N_("GhostScript pre-filtering") },
 };
 
 
@@ -2155,6 +2157,10 @@ static const struct {
   const char *translation;
 } cups_choice_translations[] = {
   { "Duplex", "None", N_("One Sided") },
+  /* Translators: this is an option of "Two Sided" */
+  { "Duplex", "DuplexNoTumble", N_("Long Edge (Standard)") },
+  /* Translators: this is an option of "Two Sided" */
+  { "Duplex", "DuplexTumble", N_("Short Edge (Flip)") },
   /* Translators: this is an option of "Paper Source" */
   { "InputSlot", "Auto", N_("Auto Select") },
   /* Translators: this is an option of "Paper Source" */
@@ -2167,6 +2173,23 @@ static const struct {
   { "InputSlot", "PrinterDefault", N_("Printer Default") },
   /* Translators: this is an option of "Paper Source" */
   { "InputSlot", "Unspecified", N_("Auto Select") },
+  /* Translators: this is an option of "Resolution" */
+  { "Resolution", "default", N_("Printer Default") },
+  /* Translators: this is an option of "GhostScript" */
+  { "PreFilter", "EmbedFonts", N_("Embed GhostScript fonts only") },
+  /* Translators: this is an option of "GhostScript" */
+  { "PreFilter", "Level1", N_("Convert to PS level 1") },
+  /* Translators: this is an option of "GhostScript" */
+  { "PreFilter", "Level2", N_("Convert to PS level 2") },
+  /* Translators: this is an option of "GhostScript" */
+  { "PreFilter", "No", N_("No pre-filtering") },
+};
+
+static const struct {
+  const char *name;
+  const char *translation;
+} cups_group_translations[] = {
+  { "Miscellaneous", N_("Miscellaneous") },
 };
 
 static const struct {
@@ -2734,6 +2757,7 @@ handle_option (GtkPrinterOptionSet *set,
 {
   GtkPrinterOption *option;
   char *name;
+  int i;
 
   if (STRING_IN_TABLE (ppd_option->keyword, cups_option_blacklist))
     return;
@@ -2782,7 +2806,17 @@ handle_option (GtkPrinterOptionSet *set,
 	}
       else
 	{
-	  option->group = g_strdup (toplevel_group->text);
+	  for (i = 0; i < G_N_ELEMENTS (cups_group_translations); i++)
+	    {
+	      if (strcmp (cups_group_translations[i].name, toplevel_group->name) == 0)
+		{
+		  option->group = g_strdup (_(cups_group_translations[i].translation));
+		  break;
+		}
+	    }
+
+	  if (i == G_N_ELEMENTS (cups_group_translations))
+	    option->group = g_strdup (toplevel_group->text);
 	}
 
       set_option_from_settings (option, settings);
