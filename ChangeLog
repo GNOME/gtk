@@ -1,3 +1,8 @@
+2009-02-09  Richard Hughes  <richard@hughsie.com>
+
+	* docs/reference/gtk/migrating-GtkEntry-icons.sgml:
+	Fix the enumerated name in the migration document.
+
 2009-02-09  Cody Russell  <bratsche@gnome.org>
 
 	* gdk/win32/gdkwin32.h: Add potentially missing #defines for

@@ -20,7 +20,7 @@ sexy_icon_entry_set_icon (entry, SEXY_ICON_ENTRY_PRIMARY, image);
 </programlisting></informalexample>
     you can get rid of the @image, and directly write:
 <informalexample><programlisting>
-gtk_entry_set_icon_from_stock (entry, GTK_ICON_ENTRY_PRIMARY, GTK_STOCK_NEW);
+gtk_entry_set_icon_from_stock (entry, GTK_ENTRY_ICON_PRIMARY, GTK_STOCK_NEW);
 </programlisting></informalexample>
   </para>
 
