@@ -56,6 +56,25 @@ G_BEGIN_DECLS
 #define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
 #define GDK_DISPLAY()                 NULL
 
+
+/* These need to be here so gtkstatusicon.c can pick them up if needed. */
+#ifndef WM_XBUTTONDOWN
+#define WM_XBUTTONDOWN 0x020B
+#endif
+#ifndef WM_XBUTTONUP
+#define WM_XBUTTONUP 0x020C
+#endif
+#ifndef GET_XBUTTON_WPARAM
+#define GET_XBUTTON_WPARAM(w) (HIWORD(w))
+#endif
+#ifndef XBUTTON1
+#define XBUTTON1 1
+#endif
+#ifndef XBUTTON2
+#define XBUTTON2 2
+#endif
+
+
 /* Return the Gdk* for a particular HANDLE */
 gpointer      gdk_win32_handle_table_lookup (GdkNativeWindow handle);
 

@@ -1,3 +1,8 @@
+2009-02-09  Cody Russell  <bratsche@gnome.org>
+
+	* gdk/win32/gdkwin32.h: Add potentially missing #defines for
+	XBUTTON1, etc.  Fixes the build that was broken in r21746.
+
 2009-02-09  Takao Fujiwara  <takao.fujiwara@sun.com>
 
 	Bug 571015 – libprintbackend-cups has unlocalized strings
