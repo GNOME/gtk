@@ -1,3 +1,10 @@
+2009-02-10  Takao Fujiwara  <takao.fujiwara@sun.com>
+
+	Bug 571015 – libprintbackend-cups has unlocalized strings
+
+	* modules/printbackends/cups/gtkprintbackendcups.c:
+	Added a translator comment with the request of translators.
+
 2009-02-09  Richard Hughes  <richard@hughsie.com>
 
 	* docs/reference/gtk/migrating-GtkEntry-icons.sgml:

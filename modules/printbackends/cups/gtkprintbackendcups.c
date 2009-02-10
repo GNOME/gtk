@@ -2189,6 +2189,8 @@ static const struct {
   const char *name;
   const char *translation;
 } cups_group_translations[] = {
+/* Translators: "Miscellaneous" is the label for a button, that opens
+   up an extra panel of settings in a print dialog. */
   { "Miscellaneous", N_("Miscellaneous") },
 };
 
