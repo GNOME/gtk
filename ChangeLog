@@ -1,3 +1,10 @@
+2009-02-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 353196 – Add a file-set signal to GtkFileChooserButton
+
+	* gtk/gtkfilechooserbutton.c: Remove GTK_SIGNAL_ACTION
+	from the file-set signal, that wasn't supposed to have it.
+
 2009-02-10  Takao Fujiwara  <takao.fujiwara@sun.com>
 
 	Bug 571015 – libprintbackend-cups has unlocalized strings

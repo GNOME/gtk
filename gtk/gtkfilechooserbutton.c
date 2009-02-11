@@ -358,7 +358,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   file_chooser_button_signals[FILE_SET] =
     g_signal_new (I_("file-set"),
 		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkFileChooserButtonClass, file_set),
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
