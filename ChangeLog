@@ -1,5 +1,14 @@
 2009-02-11  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 571196 – gtk_binding_entry_add_signall deprecated without 
+	alternative
+	* gtk/gtk.symbols:
+	* gtk/gtkbindings.[hc]: Undeprecate gtk_binding_entry_add_signall
+	since its replacement is a varargs function. Complaint by
+	Torsten Schoenfeld.
+
+2009-02-11  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 571249 – Icons are not drawn properly when initial widget 
 	state is insensitive
 

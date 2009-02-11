@@ -116,11 +116,6 @@ gboolean gtk_binding_set_activate	(GtkBindingSet	*binding_set,
 void	 gtk_binding_entry_clear	(GtkBindingSet	*binding_set,
 					 guint		 keyval,
 					 GdkModifierType modifiers);
-void	 gtk_binding_entry_add_signall	(GtkBindingSet	*binding_set,
-					 guint		 keyval,
-					 GdkModifierType modifiers,
-					 const gchar	*signal_name,
-					 GSList		*binding_args);
 guint	 gtk_binding_parse_binding      (GScanner       *scanner);
 #endif /* GTK_DISABLE_DEPRECATED */
 
@@ -133,6 +128,11 @@ void	 gtk_binding_entry_add_signal   (GtkBindingSet  *binding_set,
                                          const gchar    *signal_name,
                                          guint           n_args,
                                          ...);
+void	 gtk_binding_entry_add_signall	(GtkBindingSet	*binding_set,
+					 guint		 keyval,
+					 GdkModifierType modifiers,
+					 const gchar	*signal_name,
+					 GSList		*binding_args);
 void	 gtk_binding_entry_remove	(GtkBindingSet	*binding_set,
 					 guint		 keyval,
 					 GdkModifierType modifiers);

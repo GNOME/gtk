@@ -805,8 +805,6 @@ gtk_binding_entry_remove (GtkBindingSet	 *binding_set,
  *
  * Override or install a new key binding for @keyval with @modifiers on
  * @binding_set.
- *
- * Deprecated: 2.12: Use gtk_binding_entry_add_signal() instead.
  */
 void
 gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
