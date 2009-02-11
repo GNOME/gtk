@@ -435,7 +435,7 @@ msgstr "Pedaço de ícone inesperado na animação"
 
 #: ../gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
-msgstr "Tipo de animação sem suportado"
+msgstr "Tipo de animação não suportado"
 
 #: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:406
 #: ../gdk-pixbuf/io-ani.c:432 ../gdk-pixbuf/io-ani.c:455
@@ -667,7 +667,7 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"Memória insuficiente para carregar a imagem, tente sair de alguns "
+"Memória insuficiente para carregar a imagem, tente encerrar alguns "
 "aplicativos para liberar memória"
 
 #: ../gdk-pixbuf/io-jpeg.c:570 ../gdk-pixbuf/io-jpeg.c:776
@@ -2246,7 +2246,7 @@ msgstr "Carrega módulos adicionais do GTK+"
 #. Placeholder in --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:451
 msgid "MODULES"
-msgstr "MÓDULES"
+msgstr "MÓDULOS"
 
 #. Description of --g-fatal-warnings in --help output
 #: ../gtk/gtkmain.c:453
