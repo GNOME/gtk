@@ -1011,6 +1011,8 @@ dnd_select_folder_get_info_cb (GCancellable *cancellable,
 
   if (data->selected || data->uris[++data->i] == NULL)
     {
+      g_signal_emit (data->button, file_chooser_button_signals[FILE_SET], 0);
+
       g_object_unref (data->button);
       g_object_unref (data->file);
       g_strfreev (data->uris);
@@ -1096,6 +1098,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 				    NULL);
       g_object_unref (file);
       g_free (text);
+      g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
       break;
 
     default:
@@ -2694,7 +2697,9 @@ dialog_response_cb (GtkDialog *dialog,
   gtk_widget_set_sensitive (priv->combo_box, TRUE);
   gtk_widget_hide (priv->dialog);
 
-  g_signal_emit_by_name (user_data, "file-set");
+  if (response == GTK_RESPONSE_ACCEPT ||
+      response == GTK_RESPONSE_OK)
+    g_signal_emit (user_data, file_chooser_button_signals[FILE_SET], 0);
 }
 
 

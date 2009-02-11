@@ -1,5 +1,11 @@
 2009-02-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c: Don't emit the file-set signal
+	if the file chooser dialog is canceled. But emit it if a file
+	is received via DND.
+
+2009-02-11  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 353196 – Add a file-set signal to GtkFileChooserButton
 
 	* gtk/gtkfilechooserbutton.c: Remove GTK_SIGNAL_ACTION
