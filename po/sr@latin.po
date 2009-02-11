@@ -376,8 +376,7 @@ msgstr "Greška pri upisu u datoteku slike: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1701 gdk-pixbuf/gdk-pixbuf-io.c:1831
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Ovo izdanje programa gdk-pixbuf ne podržava čuvanje ove vrste slike: %s"
+msgstr "Ovo izdanje programa gdk-pixbuf ne podržava čuvanje ove vrste slike: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1735
 msgid "Insufficient memory to save image to callback"
@@ -419,8 +418,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Unutrašnja greška: deo za učitavanje slika „%s“ nije uspeo da obavi "
-"operaciju, a nije naveo ni razlog neuspeha"
+"Unutrašnja greška: deo za učitavanje slika „%s“ nije uspeo da obavi operaciju, "
+"a nije naveo ni razlog neuspeha"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:372
 #, c-format
@@ -565,8 +564,7 @@ msgstr "Izdanje %s GIF vrste zapisa nije podržano"
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
-"GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
+msgstr "GIF slika nema opštu mapu boja, a kadar u njemu nema zasebnu mapu boja."
 
 #: gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
@@ -684,8 +682,8 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"Nedovoljno memorije za učitavanje slike, zatvorite neke programe da "
-"oslobodite memoriju"
+"Nedovoljno memorije za učitavanje slike, zatvorite neke programe da oslobodite "
+"memoriju"
 
 # grafički dizajneri, kako se ovo prevodi?
 #: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
@@ -717,8 +715,8 @@ msgstr ""
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
-"Kvalitet JPEG-a mora biti vrednost između 0 i 100; nije dozvoljena vrednost "
-"„%d“."
+"Kvalitet JPEG-a mora biti vrednost između 0 i 100; nije dozvoljena vrednost „%"
+"d“."
 
 #: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
@@ -822,8 +820,7 @@ msgstr "Kobna greška pri čitanju PNG slike: %s"
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
-"Ključevi za tekstualne odeljke PNG-a moraju imati bar 1, a najviše 79 "
-"znakova."
+"Ključevi za tekstualne odeljke PNG-a moraju imati bar 1, a najviše 79 znakova."
 
 #: gdk-pixbuf/io-png.c:833
 msgid "Keys for PNG text chunks must be ASCII characters."
@@ -1844,8 +1841,8 @@ msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
-"Program ne može da uspostavi vezu sa servisom indeksiranja. Uveri se da je "
-"on pokrenut."
+"Program ne može da uspostavi vezu sa servisom indeksiranja. Uveri se da je on "
+"pokrenut."
 
 #: gtk/gtkfilechooserdefault.c:8928
 msgid "Could not send the search request"
@@ -2977,25 +2974,21 @@ msgstr "Ne mogu pronaći stavka sa URI adresom „%s“"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:288
-#, fuzzy
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Obaveštenje"
 
 #: gtk/gtkstock.c:289
-#, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Upozorenje"
 
 #: gtk/gtkstock.c:290
-#, fuzzy
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Greška"
 
 #: gtk/gtkstock.c:291
-#, fuzzy
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Pitanje"
@@ -3004,315 +2997,266 @@ msgstr "Pitanje"
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:296
-#, fuzzy
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_O programu"
 
 #: gtk/gtkstock.c:297
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Dodaj"
 
 #: gtk/gtkstock.c:298
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Primeni"
 
 #: gtk/gtkstock.c:299
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "Za_crnjeno"
 
 #: gtk/gtkstock.c:300
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "Odu_stani"
 
 #: gtk/gtkstock.c:301
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "_CD uređaj"
 
 #: gtk/gtkstock.c:302
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Očisti"
 
 #: gtk/gtkstock.c:303
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Zatvori"
 
 #: gtk/gtkstock.c:304
-#, fuzzy
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "Uspostavi ve_zu"
 
 #: gtk/gtkstock.c:305
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_Pretvori"
 
 #: gtk/gtkstock.c:306
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_Umnoži"
 
 #: gtk/gtkstock.c:307
-#, fuzzy
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "_Iseci"
 
 #: gtk/gtkstock.c:308
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Obriši"
 
 #: gtk/gtkstock.c:309
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_Odbaci"
 
 #: gtk/gtkstock.c:310
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "P_rekini vezu"
 
 #: gtk/gtkstock.c:311
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_Izvrši"
 
 #: gtk/gtkstock.c:312
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Edit"
-msgstr "_Uređivanje"
+msgstr "_Uredi"
 
 #: gtk/gtkstock.c:313
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Nađi"
 
 #: gtk/gtkstock.c:314
-#, fuzzy
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Nađi i _zameni"
 
 #: gtk/gtkstock.c:315
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "Dis_keta"
 
 #: gtk/gtkstock.c:316
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "_Ceo ekran"
 
 #: gtk/gtkstock.c:317
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "Napusti _ceo ekran"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: gtk/gtkstock.c:319
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Dole:"
 
 #. This is a navigation label as in "go to the first page"
 #: gtk/gtkstock.c:321
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "P_rvi"
 
 #. This is a navigation label as in "go to the last page"
 #: gtk/gtkstock.c:323
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "Posled_nji"
 
 #. This is a navigation label as in "go to the top of the page"
 #: gtk/gtkstock.c:325
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_Gore:"
 
 #. This is a navigation label as in "go back"
 #: gtk/gtkstock.c:327
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_Nazad"
 
 #. This is a navigation label as in "go down"
 #: gtk/gtkstock.c:329
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_Dole"
 
 #. This is a navigation label as in "go forward"
 #: gtk/gtkstock.c:331
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "Na_pred"
 
 #. This is a navigation label as in "go up"
 #: gtk/gtkstock.c:333
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Gore"
 
 # Ili „hard disk“
 #: gtk/gtkstock.c:334
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "_Tvrdi disk"
 
 #: gtk/gtkstock.c:335
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "_Pomoć"
 
 # ako je za "home directory", onda bi bilo dobro "licni direktorijum", ako je za "home page", onda za "licna stranica"
 #: gtk/gtkstock.c:336
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Početak"
 
 #: gtk/gtkstock.c:337
-#, fuzzy
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Povećaj uvlačenje"
 
 #: gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Umanji uvlačenje"
 
 #: gtk/gtkstock.c:339
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Indeks"
 
 #: gtk/gtkstock.c:340
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "Po_daci"
 
 #: gtk/gtkstock.c:341
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_Kurziv"
 
 #: gtk/gtkstock.c:342
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Idi na"
 
 #. This is about text justification, "centered text"
 #: gtk/gtkstock.c:344
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_Pretvori"
 
 #. This is about text justification
 #: gtk/gtkstock.c:346
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "Dato_teke"
 
 #. This is about text justification, "left-justified text"
 #: gtk/gtkstock.c:348
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_Levo:"
 
 #. This is about text justification, "right-justified text"
 #: gtk/gtkstock.c:350
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "D_esno:"
 
 #. Media label, as in "fast forward"
 #: gtk/gtkstock.c:353
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "Na_pred"
 
 #. Media label, as in "next song"
 #: gtk/gtkstock.c:355
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Novo"
 
 #. Media label, as in "pause music"
 #: gtk/gtkstock.c:357
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "Zaustavljeno"
 
 #. Media label, as in "play music"
 #: gtk/gtkstock.c:359
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Mesta"
 
 #. Media label, as in  "previous song"
 #: gtk/gtkstock.c:361
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "Pre_thodna"
 
 #. Media label
 #: gtk/gtkstock.c:363
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "S_nimi"
@@ -3320,252 +3264,212 @@ msgstr "S_nimi"
 # hm, hm?
 #. Media label
 #: gtk/gtkstock.c:365
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "Pre_motaj"
 
 #. Media label
 #: gtk/gtkstock.c:367
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Zaustavi"
 
 #: gtk/gtkstock.c:368
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Mreža"
 
 #: gtk/gtkstock.c:369
-#, fuzzy
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Novo"
 
 #: gtk/gtkstock.c:370
-#, fuzzy
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Ne"
 
 #: gtk/gtkstock.c:371
-#, fuzzy
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "U _redu"
 
 #: gtk/gtkstock.c:372
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Otvori"
 
 #. Page orientation
 #: gtk/gtkstock.c:374
-#, fuzzy
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Pejzaž"
 
 #. Page orientation
 #: gtk/gtkstock.c:376
-#, fuzzy
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Portret"
 
 #. Page orientation
 #: gtk/gtkstock.c:378
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Prevrnuti pejzaž"
 
 #. Page orientation
 #: gtk/gtkstock.c:380
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Prevrnuti portret"
 
-#: gtk/gtkstock.c:381
-#, fuzzy
+#: gtk/gtkstock.c:
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Pode_šavanje strane"
 
 #: gtk/gtkstock.c:382
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "U_baci"
 
 #: gtk/gtkstock.c:383
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "Pos_tavke"
 
-#: gtk/gtkstock.c:384
-#, fuzzy
+#: gtk/gtkstock.c:
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Štampaj"
 
 #: gtk/gtkstock.c:385
-#, fuzzy
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "Pre_gled pred štampu"
 
 #: gtk/gtkstock.c:386
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Osobine"
 
 #: gtk/gtkstock.c:387
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Izađi"
 
 #: gtk/gtkstock.c:388
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_Ponovi"
 
 #: gtk/gtkstock.c:389
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_Osveži"
 
 #: gtk/gtkstock.c:390
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Ukloni"
 
 #: gtk/gtkstock.c:391
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Vrati"
 
 #: gtk/gtkstock.c:392
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Sačuvaj"
 
 #: gtk/gtkstock.c:393
-#, fuzzy
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Sačuvaj _kao"
 
 #: gtk/gtkstock.c:394
-#, fuzzy
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Izaberi _sve"
 
 #: gtk/gtkstock.c:395
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Boja"
 
 #: gtk/gtkstock.c:396
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Font"
 
 #. Sorting direction
 #: gtk/gtkstock.c:398
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Rastući"
 
 #. Sorting direction
-#: gtk/gtkstock.c:400
-#, fuzzy
+#: gtk/gtkstock.c:
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_Opadajući"
 
 #: gtk/gtkstock.c:401
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Spell Check"
-msgstr "_Provera pravopisa"
+msgstr "_Provera pisanja"
 
 #: gtk/gtkstock.c:402
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Zaustavi"
 
 #. Font variant
 #: gtk/gtkstock.c:404
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Precrtaj"
 
 #: gtk/gtkstock.c:405
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_Povrati"
 
 #. Font variant
 #: gtk/gtkstock.c:407
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_Podvuci"
 
 #: gtk/gtkstock.c:408
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Opozovi"
 
 #: gtk/gtkstock.c:409
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Da"
 
 #. Zoom
 #: gtk/gtkstock.c:411
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "_Obična veličina"
 
 #. Zoom
 #: gtk/gtkstock.c:413
-#, fuzzy
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "_Najbolje slaganje"
 
 #: gtk/gtkstock.c:414
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "U_većaj"
 
 #: gtk/gtkstock.c:415
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "U_manji"
@@ -3664,8 +3568,7 @@ msgstr "Oznaka „%s“ ima neispravan prioritet „%s“"
 #: gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
-"Prvi spoljašnji element u tekstu mora biti <text_view_markup> a ne <%s>"
+msgstr "Prvi spoljašnji element u tekstu mora biti <text_view_markup> a ne <%s>"
 
 #: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
 #, c-format

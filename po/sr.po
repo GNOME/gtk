@@ -2974,25 +2974,21 @@ msgstr "Не могу пронаћи ставка са УРИ адресом „
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:288
-#, fuzzy
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Обавештење"
 
 #: gtk/gtkstock.c:289
-#, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Упозорење"
 
 #: gtk/gtkstock.c:290
-#, fuzzy
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Грешка"
 
 #: gtk/gtkstock.c:291
-#, fuzzy
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Питање"
@@ -3001,315 +2997,266 @@ msgstr "Питање"
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:296
-#, fuzzy
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_О програму"
 
 #: gtk/gtkstock.c:297
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Додај"
 
 #: gtk/gtkstock.c:298
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Примени"
 
 #: gtk/gtkstock.c:299
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "За_црњено"
 
 #: gtk/gtkstock.c:300
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "Оду_стани"
 
 #: gtk/gtkstock.c:301
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "_ЦД уређај"
 
 #: gtk/gtkstock.c:302
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Очисти"
 
 #: gtk/gtkstock.c:303
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Затвори"
 
 #: gtk/gtkstock.c:304
-#, fuzzy
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "Успостави ве_зу"
 
 #: gtk/gtkstock.c:305
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_Претвори"
 
 #: gtk/gtkstock.c:306
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_Умножи"
 
 #: gtk/gtkstock.c:307
-#, fuzzy
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "_Исеци"
 
 #: gtk/gtkstock.c:308
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Обриши"
 
 #: gtk/gtkstock.c:309
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_Одбаци"
 
 #: gtk/gtkstock.c:310
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "П_рекини везу"
 
 #: gtk/gtkstock.c:311
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_Изврши"
 
 #: gtk/gtkstock.c:312
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Edit"
-msgstr "_Уређивање"
+msgstr "_Уреди"
 
 #: gtk/gtkstock.c:313
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Нађи"
 
 #: gtk/gtkstock.c:314
-#, fuzzy
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Нађи и _замени"
 
 #: gtk/gtkstock.c:315
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "Дис_кета"
 
 #: gtk/gtkstock.c:316
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "_Цео екран"
 
 #: gtk/gtkstock.c:317
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "Напусти _цео екран"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: gtk/gtkstock.c:319
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Доле:"
 
 #. This is a navigation label as in "go to the first page"
 #: gtk/gtkstock.c:321
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "П_рви"
 
 #. This is a navigation label as in "go to the last page"
 #: gtk/gtkstock.c:323
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "Послед_њи"
 
 #. This is a navigation label as in "go to the top of the page"
 #: gtk/gtkstock.c:325
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_Горе:"
 
 #. This is a navigation label as in "go back"
 #: gtk/gtkstock.c:327
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_Назад"
 
 #. This is a navigation label as in "go down"
 #: gtk/gtkstock.c:329
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_Доле"
 
 #. This is a navigation label as in "go forward"
 #: gtk/gtkstock.c:331
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "На_пред"
 
 #. This is a navigation label as in "go up"
 #: gtk/gtkstock.c:333
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Горе"
 
 # Или „хард диск“
 #: gtk/gtkstock.c:334
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "_Тврди диск"
 
 #: gtk/gtkstock.c:335
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "_Помоћ"
 
 # ako je za "home directory", onda bi bilo dobro "licni direktorijum", ako je za "home page", onda za "licna stranica"
 #: gtk/gtkstock.c:336
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Почетак"
 
 #: gtk/gtkstock.c:337
-#, fuzzy
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Повећај увлачење"
 
 #: gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Умањи увлачење"
 
 #: gtk/gtkstock.c:339
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Индекс"
 
 #: gtk/gtkstock.c:340
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "По_даци"
 
 #: gtk/gtkstock.c:341
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_Курзив"
 
 #: gtk/gtkstock.c:342
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Иди на"
 
 #. This is about text justification, "centered text"
 #: gtk/gtkstock.c:344
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_Претвори"
 
 #. This is about text justification
 #: gtk/gtkstock.c:346
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "Дато_теке"
 
 #. This is about text justification, "left-justified text"
 #: gtk/gtkstock.c:348
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_Лево:"
 
 #. This is about text justification, "right-justified text"
 #: gtk/gtkstock.c:350
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "Д_есно:"
 
 #. Media label, as in "fast forward"
 #: gtk/gtkstock.c:353
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "На_пред"
 
 #. Media label, as in "next song"
 #: gtk/gtkstock.c:355
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Ново"
 
 #. Media label, as in "pause music"
 #: gtk/gtkstock.c:357
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "Заустављено"
 
 #. Media label, as in "play music"
 #: gtk/gtkstock.c:359
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Места"
 
 #. Media label, as in  "previous song"
 #: gtk/gtkstock.c:361
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "Пре_тходна"
 
 #. Media label
 #: gtk/gtkstock.c:363
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "С_ними"
@@ -3317,252 +3264,212 @@ msgstr "С_ними"
 # хм, хм?
 #. Media label
 #: gtk/gtkstock.c:365
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "Пре_мотај"
 
 #. Media label
 #: gtk/gtkstock.c:367
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Заустави"
 
 #: gtk/gtkstock.c:368
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Мрежа"
 
 #: gtk/gtkstock.c:369
-#, fuzzy
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Ново"
 
 #: gtk/gtkstock.c:370
-#, fuzzy
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Не"
 
 #: gtk/gtkstock.c:371
-#, fuzzy
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "У _реду"
 
 #: gtk/gtkstock.c:372
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Отвори"
 
 #. Page orientation
 #: gtk/gtkstock.c:374
-#, fuzzy
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Пејзаж"
 
 #. Page orientation
 #: gtk/gtkstock.c:376
-#, fuzzy
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Портрет"
 
 #. Page orientation
 #: gtk/gtkstock.c:378
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Преврнути пејзаж"
 
 #. Page orientation
 #: gtk/gtkstock.c:380
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Преврнути портрет"
 
-#: gtk/gtkstock.c:381
-#, fuzzy
+#: gtk/gtkstock.c:
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Поде_шавање стране"
 
 #: gtk/gtkstock.c:382
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "У_баци"
 
 #: gtk/gtkstock.c:383
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "Пос_тавке"
 
-#: gtk/gtkstock.c:384
-#, fuzzy
+#: gtk/gtkstock.c:
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Штампај"
 
 #: gtk/gtkstock.c:385
-#, fuzzy
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "Пре_глед пред штампу"
 
 #: gtk/gtkstock.c:386
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Особине"
 
 #: gtk/gtkstock.c:387
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Изађи"
 
 #: gtk/gtkstock.c:388
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_Понови"
 
 #: gtk/gtkstock.c:389
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_Освежи"
 
 #: gtk/gtkstock.c:390
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Уклони"
 
 #: gtk/gtkstock.c:391
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Врати"
 
 #: gtk/gtkstock.c:392
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Сачувај"
 
 #: gtk/gtkstock.c:393
-#, fuzzy
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Сачувај _као"
 
 #: gtk/gtkstock.c:394
-#, fuzzy
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Изабери _све"
 
 #: gtk/gtkstock.c:395
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Боја"
 
 #: gtk/gtkstock.c:396
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Фонт"
 
 #. Sorting direction
 #: gtk/gtkstock.c:398
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Растући"
 
 #. Sorting direction
-#: gtk/gtkstock.c:400
-#, fuzzy
+#: gtk/gtkstock.c:
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_Опадајући"
 
 #: gtk/gtkstock.c:401
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Spell Check"
-msgstr "_Провера правописа"
+msgstr "_Провера писања"
 
 #: gtk/gtkstock.c:402
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Заустави"
 
 #. Font variant
 #: gtk/gtkstock.c:404
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Прецртај"
 
 #: gtk/gtkstock.c:405
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_Поврати"
 
 #. Font variant
 #: gtk/gtkstock.c:407
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_Подвуци"
 
 #: gtk/gtkstock.c:408
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Опозови"
 
 #: gtk/gtkstock.c:409
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Да"
 
 #. Zoom
 #: gtk/gtkstock.c:411
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "_Обична величина"
 
 #. Zoom
 #: gtk/gtkstock.c:413
-#, fuzzy
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "_Најбоље слагање"
 
 #: gtk/gtkstock.c:414
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "У_већај"
 
 #: gtk/gtkstock.c:415
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "У_мањи"
