@@ -7707,7 +7707,7 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
     case GTK_DIR_DOWN:
       if (focus_child == NULL)
 	{
-	  if (tree_view->priv->focus_column != NULL)
+	  if (tree_view->priv->focus_column != NULL && GTK_WIDGET_CAN_FOCUS (tree_view->priv->focus_column->button))
 	    focus_child = tree_view->priv->focus_column->button;
 	  else
 	    focus_child = GTK_TREE_VIEW_COLUMN (first_column->data)->button;

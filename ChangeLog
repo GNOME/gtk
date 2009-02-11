@@ -1,5 +1,14 @@
 2009-02-11  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 570824 – [a11y] TreeView is not keyboard (re)focusable after 
+	selecting a cell in a non-sortable column
+
+	* gtk/gtktreeview.c (gtk_tree_view_header_focus): Don't grab
+	focus to a header button if it is not focusable. Problem reported
+	by Joanmarie Diggs
+
+2009-02-11  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 508545 – No way to identify terminal classes from documentation
 
 	* gtk/gtkvolumebutton.[hc]: Move the _GtkVolumeButton definition
