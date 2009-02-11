@@ -6252,6 +6252,7 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
   GtkSettings *settings;
   gint width, height;
   GtkIconInfo *info;
+  gint state;
 
   if (!icon_info || icon_info->pixbuf)
     return;
@@ -6262,10 +6263,13 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
     case GTK_IMAGE_PIXBUF:
       break;
     case GTK_IMAGE_STOCK:
+      state = GTK_WIDGET_STATE (entry);
+      GTK_WIDGET_STATE (entry) = GTK_STATE_NORMAL;
       icon_info->pixbuf = gtk_widget_render_icon (GTK_WIDGET (entry),
                                                   icon_info->stock_id,
                                                   GTK_ICON_SIZE_MENU,
                                                   NULL);
+      GTK_WIDGET_STATE (entry) = state;
       break;
 
     case GTK_IMAGE_ICON_NAME:
@@ -6285,10 +6289,15 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
                                                         0, NULL);
 
           if (icon_info->pixbuf == NULL)
-            icon_info->pixbuf = gtk_widget_render_icon (GTK_WIDGET (entry),
-                                                        GTK_STOCK_MISSING_IMAGE,
-                                                        GTK_ICON_SIZE_MENU,
-                                                        NULL);
+            {
+              state = GTK_WIDGET_STATE (entry);
+              GTK_WIDGET_STATE (entry) = GTK_STATE_NORMAL;
+              icon_info->pixbuf = gtk_widget_render_icon (GTK_WIDGET (entry),
+                                                          GTK_STOCK_MISSING_IMAGE,
+                                                          GTK_ICON_SIZE_MENU,
+                                                          NULL);
+              GTK_WIDGET_STATE (entry) = state;
+            }
         }
       break;
 
@@ -6314,10 +6323,15 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
             }
 
           if (icon_info->pixbuf == NULL)
-            icon_info->pixbuf = gtk_widget_render_icon (GTK_WIDGET (entry),
-                                                        GTK_STOCK_MISSING_IMAGE,
-                                                        GTK_ICON_SIZE_MENU,
-                                                        NULL);
+            {
+              state = GTK_WIDGET_STATE (entry);
+              GTK_WIDGET_STATE (entry) = GTK_STATE_NORMAL;
+              icon_info->pixbuf = gtk_widget_render_icon (GTK_WIDGET (entry),
+                                                          GTK_STOCK_MISSING_IMAGE,
+                                                          GTK_ICON_SIZE_MENU,
+                                                          NULL);
+              GTK_WIDGET_STATE (entry) = state;
+            }
         }
       break;
 

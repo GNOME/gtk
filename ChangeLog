@@ -1,5 +1,14 @@
 2009-02-11  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 571249 – Icons are not drawn properly when initial widget 
+	state is insensitive
+
+	* gtk/gtkentry.c (gtk_entry_ensure_pixbuf): Render icons
+	in normal state, regardless of the entrys state. Reported by
+	Enrico Tröger.
+
+2009-02-11  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserbutton.c: Don't emit the file-set signal
 	if the file chooser dialog is canceled. But emit it if a file
 	is received via DND.
