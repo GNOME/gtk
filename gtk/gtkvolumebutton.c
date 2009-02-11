@@ -38,10 +38,6 @@
 
 #define EPSILON (1e-10)
 
-struct _GtkVolumeButton
-{
-  GtkScaleButton  parent;
-};
 
 static gboolean	cb_query_tooltip (GtkWidget       *button,
                                   gint             x,

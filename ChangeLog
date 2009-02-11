@@ -1,5 +1,13 @@
 2009-02-11  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 508545 – No way to identify terminal classes from documentation
+
+	* gtk/gtkvolumebutton.[hc]: Move the _GtkVolumeButton definition
+	into the header to make it possible to derive from GtkVoumeButton.
+	Reported by Chris Lord.
+
+2009-02-11  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 571196 – gtk_binding_entry_add_signall deprecated without 
 	alternative
 	* gtk/gtk.symbols:

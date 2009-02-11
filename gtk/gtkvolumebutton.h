@@ -48,6 +48,11 @@ G_BEGIN_DECLS
 typedef struct _GtkVolumeButton       GtkVolumeButton;
 typedef struct _GtkVolumeButtonClass  GtkVolumeButtonClass;
 
+struct _GtkVolumeButton
+{
+  GtkScaleButton  parent;
+};
+
 struct _GtkVolumeButtonClass
 {
   GtkScaleButtonClass parent_class;
