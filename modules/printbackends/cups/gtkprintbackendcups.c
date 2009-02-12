@@ -3529,16 +3529,20 @@ supports_am_pm (void)
   return length != 0;
 }
 
-/* Converts local time to UTC time. Local time has to be in HH:MM format or
- * in HH:MM:SS format or in HH:MM:SS {am, pm} format or in HH:MM {am, pm} format
- * or in HH {am, pm} format.
+/* Converts local time to UTC time. Local time has to be in one of these
+ * formats:  HH:MM:SS, HH:MM, HH:MM:SS {am, pm}, HH:MM {am, pm}, HH {am, pm},
+ * {am, pm} HH:MM:SS, {am, pm} HH:MM, {am, pm} HH.
  * Returns a newly allocated string holding UTC time in HH:MM:SS format
  * or NULL.
  */
 gchar *
 localtime_to_utctime (const char *local_time)
 {
-  const char *formats_0[] = {" %I : %M : %S %p ", " %H : %M : %S ", " %I : %M %p ", " %H : %M ", " %I %p "};
+  const char *formats_0[] = {" %I : %M : %S %p ", " %p %I : %M : %S ",
+                             " %H : %M : %S ",
+                             " %I : %M %p ", " %p %I : %M ",
+                             " %H : %M ",
+                             " %I %p ", " %p %I "};
   const char *formats_1[] = {" %H : %M : %S ", " %H : %M "};
   const char *end = NULL;
   struct tm  *actual_local_time;

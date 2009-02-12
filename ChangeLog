@@ -1,3 +1,10 @@
+2009-02-12  Marek Kasik  <mkasik@redhat.com>
+
+	Bug 568571 – Asian am/pm format on cups print backend's time parsing
+
+	* modules/printbackends/cups/gtkprintbackendcups.c: Add Asian am/pm
+	format into formats recognized by CUPS backend
+
 2009-02-11  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 570824 – [a11y] TreeView is not keyboard (re)focusable after 
