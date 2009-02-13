@@ -1541,7 +1541,7 @@ if test "x$gdktarget" = "xx11"; then
   AM_CONDITIONAL(XINPUT_XFREE, test x$with_xinput = xxfree || test x$with_xinput = xyes)
 
   # Check for the RANDR extension
-  if $PKG_CONFIG --exists "xrandr >= 1.2" ; then
+  if $PKG_CONFIG --exists "xrandr >= 1.2.99" ; then
      AC_DEFINE(HAVE_RANDR, 1, [Have the Xrandr extension library])
 
      X_PACKAGES="$X_PACKAGES xrandr"

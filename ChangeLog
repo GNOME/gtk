@@ -1,3 +1,13 @@
+2009-02-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Check for Xrandr 1.3
+
+	* gdk/x11/gdkdisplay-x11.[ch]: Rename have_randr12 to have_randr13
+	and set if if we have randr 1.3
+
+	* gdk/x11/gdkscreen-x11.c: Go back to using randr for monitor
+	information, if we have XRRGetScreenResourcesCurrent.
+:
 2009-02-12  Cody Russell  <bratsche@gnome.org>
 
 	Bug 571576 – gdk_pixbuf_save_to_stream() broken

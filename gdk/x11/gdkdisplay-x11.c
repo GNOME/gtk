@@ -184,7 +184,7 @@ gdk_display_open (const gchar *display_name)
   _gdk_x11_precache_atoms (display, precache_atoms, G_N_ELEMENTS (precache_atoms));
 
   /* RandR must be initialized before we initialize the screens */
-  display_x11->have_randr12 = FALSE;
+  display_x11->have_randr13 = FALSE;
 #ifdef HAVE_RANDR
   if (XRRQueryExtension (display_x11->xdisplay,
 			 &display_x11->xrandr_event_base, &ignore))
@@ -193,8 +193,8 @@ gdk_display_open (const gchar *display_name)
       
       XRRQueryVersion (display_x11->xdisplay, &major, &minor);
 
-      if ((major == 1 && minor >= 2) || major > 1)
-	  display_x11->have_randr12 = TRUE;
+      if ((major == 1 && minor >= 3) || major > 1)
+	  display_x11->have_randr13 = TRUE;
   }
 #endif
   
