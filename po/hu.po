@@ -3274,7 +3274,7 @@ msgstr "_Beillesztés"
 #: ../gtk/gtkstock.c:383
 msgctxt "Stock label"
 msgid "_Preferences"
-msgstr "_Beállítások"
+msgstr "B_eállítások"
 
 #: ../gtk/gtkstock.c:384
 msgctxt "Stock label"
