@@ -195,6 +195,8 @@ gdk_display_open (const gchar *display_name)
 
       if ((major == 1 && minor >= 3) || major > 1)
 	  display_x11->have_randr13 = TRUE;
+
+       gdk_x11_register_standard_event_type (display, display_x11->xrandr_event_base, RRNumberEvents);
   }
 #endif
   

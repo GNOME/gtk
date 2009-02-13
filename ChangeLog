@@ -1,5 +1,10 @@
 2009-02-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Don't forget to
+	register randr events. Found by Søren Sandmann
+
+2009-02-13  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Check for Xrandr 1.3
 
 	* gdk/x11/gdkdisplay-x11.[ch]: Rename have_randr12 to have_randr13
