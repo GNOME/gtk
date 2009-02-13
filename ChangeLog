@@ -1,3 +1,10 @@
+2009-02-13  Matthias Clasen  <mclasen@redhat.com>
+
+	Merged from trunk
+
+        * gdk/x11/gdkdisplay-x11.c (gdk_display_open): Don't forget to
+        register randr events. Found by Søren Sandmann
+
 2009-02-12  Cody Russell  <bratsche@gnome.org>
 
         Bug 571576 – gdk_pixbuf_save_to_stream() broken
