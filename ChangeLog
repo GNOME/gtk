@@ -1,3 +1,11 @@
+2009-02-12  Cody Russell  <bratsche@gnome.org>
+
+        Bug 571576 – gdk_pixbuf_save_to_stream() broken
+
+	* gdk-pixbuf/gdk-pixbuf-io.c: Fix gdk_pixbuf_save_to_stream() so that
+	it does not always return FALSE (even when it succeeds), and also so
+	that it does not set error to NULL when something goes wrong.
+
 2009-01-29  Tor Lillqvist  <tml@novell.com>
 
 	Bug 559408 - Transparency lost when images are copied between GTK+
