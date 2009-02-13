@@ -1,3 +1,11 @@
+2009-02-12  Cody Russell  <bratsche@gnome.org>
+
+	Bug 571576 – gdk_pixbuf_save_to_stream() broken
+
+	* gdk-pixbuf/gdk-pixbuf-io.c: Fix gdk_pixbuf_save_to_stream() so that
+	it does not always return FALSE (even when it succeeds), and also so
+	that it does not set error to NULL when something goes wrong.
+
 2009-02-12  Marek Kasik  <mkasik@redhat.com>
 
 	Bug 568571 – Asian am/pm format on cups print backend's time parsing

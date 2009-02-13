@@ -2406,13 +2406,10 @@ gdk_pixbuf_save_to_stream (GdkPixbuf      *pixbuf,
 	data.stream = stream;
 	data.cancellable = cancellable;
 
-	if (!gdk_pixbuf_save_to_callbackv (pixbuf, save_to_stream, 
-					   &data, type, 
-					   keys, values, 
-					   error)) {
-		error = NULL; /* Ignore further errors */
-		res = FALSE;
-	}
+	res = gdk_pixbuf_save_to_callbackv (pixbuf, save_to_stream, 
+					    &data, type, 
+					    keys, values, 
+					    error);
 
 	g_strfreev (keys);
 	g_strfreev (values);
