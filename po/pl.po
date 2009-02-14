@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-04 17:47+0100\n"
-"PO-Revision-Date: 2009-02-04 17:43+0100\n"
+"POT-Creation-Date: 2009-02-14 15:23+0100\n"
+"PO-Revision-Date: 2009-02-14 15:22+0100\n"
 "Last-Translator: Tomasz Dominikowski <dominikowski@gmail.com>\n"
 "Language-Team: Aviary.pl <gnomepl@aviary.pl>\n"
 "MIME-Version: 1.0\n"
@@ -34,14 +34,14 @@ msgid "sdl|system"
 msgstr "system"
 
 #: ../gdk/gdk.c:103
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing option --gdk-debug"
-msgstr "Błąd podczas drukowania"
+msgstr "Wystąpił błąd podczas przetwarzania opcji --gdk-debug"
 
 #: ../gdk/gdk.c:123
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
-msgstr ""
+msgstr "Wystąpił błąd podczas przetwarzania opcji --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:151
@@ -76,12 +76,12 @@ msgstr "EKRAN"
 #. Description of --screen=SCREEN in --help output
 #: ../gdk/gdk.c:160
 msgid "X screen to use"
-msgstr "Wykorzystywany podekran X"
+msgstr "Wykorzystywany ekran X"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: ../gdk/gdk.c:161
 msgid "SCREEN"
-msgstr "PODEKRAN"
+msgstr "EKRAN"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:164
@@ -102,208 +102,189 @@ msgid "Gdk debugging flags to unset"
 msgstr "Wyczyszczone znaczniki śledzenia Gdk"
 
 #: ../gdk/keyname-table.h:3940
-#, fuzzy
 msgctxt "keyboard label"
 msgid "BackSpace"
-msgstr "_Zastąp"
+msgstr "Backspace"
 
 #: ../gdk/keyname-table.h:3941
 msgctxt "keyboard label"
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: ../gdk/keyname-table.h:3942
 msgctxt "keyboard label"
 msgid "Return"
-msgstr ""
+msgstr "Enter"
 
 #: ../gdk/keyname-table.h:3943
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Pause"
-msgstr "Wstrzymane"
+msgstr "Pause"
 
 #: ../gdk/keyname-table.h:3944
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr ""
+msgstr "Scroll_Lock"
 
 #: ../gdk/keyname-table.h:3945
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "System plików"
+msgstr "Sys_Req"
 
 #: ../gdk/keyname-table.h:3946
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Escape"
-msgstr "Poziomo"
+msgstr "Escape"
 
 #: ../gdk/keyname-table.h:3947
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Multipress"
+msgstr "Multi_key"
 
 #: ../gdk/keyname-table.h:3948
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Home"
-msgstr "P_oczątek"
+msgstr "Home"
 
 #: ../gdk/keyname-table.h:3949
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Left"
-msgstr "_Lewy:"
+msgstr "Lewo"
 
 #: ../gdk/keyname-table.h:3950
 msgctxt "keyboard label"
 msgid "Up"
-msgstr ""
+msgstr "Góra"
 
 #: ../gdk/keyname-table.h:3951
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Right"
-msgstr "_Prawy:"
+msgstr "Prawo"
 
 #: ../gdk/keyname-table.h:3952
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Down"
-msgstr "W dół ścieżki"
+msgstr "Dół"
 
 #: ../gdk/keyname-table.h:3953
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Ustawienia str_ony"
+msgstr "Page_Up"
 
 #: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr ""
+msgstr "Page_Down"
 
 #: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Begin"
-msgstr ""
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3957
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Print"
-msgstr "Wydruk"
+msgstr "Print"
 
 #: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Insert"
-msgstr ""
+msgstr "Insert"
 
 #: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr ""
+msgstr "Num_Lock"
 
 #: ../gdk/keyname-table.h:3960
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "_Zastąp"
+msgstr "Spacja"
 
 #: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr ""
+msgstr "Tabulator"
 
 #: ../gdk/keyname-table.h:3962
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "Drukarka"
+msgstr "Enter"
 
 #: ../gdk/keyname-table.h:3963
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "P_oczątek"
+msgstr "Home"
 
 #: ../gdk/keyname-table.h:3964
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "_Lewy:"
+msgstr "Lewo"
 
 #: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr ""
+msgstr "Góra"
 
 #: ../gdk/keyname-table.h:3966
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "_Prawy:"
+msgstr "Prawo"
 
 #: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr ""
+msgstr "Dół"
 
 #: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr ""
+msgstr "Page_Up"
 
 #: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr ""
+msgstr "Poprzedni"
 
 #: ../gdk/keyname-table.h:3970
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "KP_Page_Down"
+msgstr "Page_Down"
 
 #: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr ""
+msgstr "Następny"
 
 #: ../gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr ""
+msgstr "End"
 
 #: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr ""
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr ""
+msgstr "Insert"
 
 #: ../gdk/keyname-table.h:3975
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "_Usuń"
+msgstr "Delete"
 
 #: ../gdk/keyname-table.h:3976
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Delete"
-msgstr "_Usuń"
+msgstr "Delete"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:965
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1225 ../tests/testfilechooser.c:222
@@ -377,10 +358,9 @@ msgstr "Błąd przy zapisie do pliku obrazu: %s"
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Ta kopia gdk-pixbuf nie pozwala na zapis obrazu w formacie: %s"
 
-# FIXME - co za bzdurne zdanie
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1735
 msgid "Insufficient memory to save image to callback"
-msgstr "Brak pamięci do zapisu obrazu do odczytu"
+msgstr "Brak pamięci do zapisu obrazu do funkcji zwrotnej"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1748
 msgid "Failed to open temporary file"
@@ -442,9 +422,9 @@ msgstr "Uszkodzone dane o pikselach obrazu"
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "Brak pamięci na bufor obrazu o rozmiarze %u bajtu"
-msgstr[1] "Brak pamięci na bufor obrazu o rozmiarze %u bajtów"
-msgstr[2] "Brak pamięci na bufor obrazu o rozmiarze %u bajtów"
+msgstr[0] "brak pamięci na bufor obrazu o rozmiarze %u bajtu"
+msgstr[1] "brak pamięci na bufor obrazu o rozmiarze %u bajtów"
+msgstr[2] "brak pamięci na bufor obrazu o rozmiarze %u bajtów"
 
 #: ../gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -651,7 +631,7 @@ msgstr "Nie można zdekodować obrazu"
 
 #: ../gdk-pixbuf/io-jasper.c:123
 msgid "Transformed JPEG2000 has zero width or height"
-msgstr "Przekształcony JPEG2000 ma zerową szerokość lub wysokość."
+msgstr "Przekształcony JPEG2000 ma zerową szerokość lub wysokość"
 
 #: ../gdk-pixbuf/io-jasper.c:137
 msgid "Image type currently not supported"
@@ -925,7 +905,7 @@ msgstr "Nieznany format obrazu RAS"
 
 #: ../gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
-msgstr "Nieobsługiwany typ obrazu RAS"
+msgstr "nieobsługiwany typ obrazu RAS"
 
 #: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
@@ -1272,7 +1252,7 @@ msgstr "Grafika"
 #: ../gtk/gtkaccellabel.c:91
 msgctxt "keyboard label"
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1282,7 +1262,7 @@ msgstr ""
 #: ../gtk/gtkaccellabel.c:97
 msgctxt "keyboard label"
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1292,7 +1272,7 @@ msgstr ""
 #: ../gtk/gtkaccellabel.c:103
 msgctxt "keyboard label"
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
@@ -1300,10 +1280,9 @@ msgstr ""
 #. * this.
 #.
 #: ../gtk/gtkaccellabel.c:671
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Super"
-msgstr "Papier"
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1311,10 +1290,9 @@ msgstr "Papier"
 #. * this.
 #.
 #: ../gtk/gtkaccellabel.c:684
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Hyper"
-msgstr "Papier"
+msgstr "Hyper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1324,18 +1302,17 @@ msgstr "Papier"
 #: ../gtk/gtkaccellabel.c:698
 msgctxt "keyboard label"
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: ../gtk/gtkaccellabel.c:715
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Space"
-msgstr "_Zastąp"
+msgstr "Spacja"
 
 #: ../gtk/gtkaccellabel.c:718
 msgctxt "keyboard label"
 msgid "Backslash"
-msgstr ""
+msgstr "Backslash"
 
 #: ../gtk/gtkbuilderparser.c:340
 #, c-format
@@ -1381,7 +1358,7 @@ msgstr "calendar:week_start:1"
 #: ../gtk/gtkcalendar.c:1803
 msgctxt "year measurement template"
 msgid "2000"
-msgstr ""
+msgstr "8888"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1397,7 +1374,7 @@ msgstr ""
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1413,7 +1390,7 @@ msgstr ""
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1428,16 +1405,15 @@ msgstr ""
 #: ../gtk/gtkcalendar.c:2146
 msgctxt "calendar year format"
 msgid "%Y"
-msgstr ""
+msgstr "%Y"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
 #: ../gtk/gtkcellrendereraccel.c:243
-#, fuzzy
 msgctxt "Accelerator"
 msgid "Disabled"
-msgstr "Wyłączone"
+msgstr "Wyłączony"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
@@ -1451,7 +1427,7 @@ msgstr "Nowy skrót..."
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
@@ -1588,18 +1564,17 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Wybór koloru"
 
-#: ../gtk/gtkentry.c:8250 ../gtk/gtktextview.c:7780
+#: ../gtk/gtkentry.c:8264 ../gtk/gtktextview.c:7780
 msgid "Input _Methods"
 msgstr "_Metody wprowadzania danych"
 
-#: ../gtk/gtkentry.c:8264 ../gtk/gtktextview.c:7794
+#: ../gtk/gtkentry.c:8278 ../gtk/gtktextview.c:7794
 msgid "_Insert Unicode Control Character"
 msgstr "_Wstaw znak kontrolny Unikodu"
 
-#: ../gtk/gtkentry.c:9622
-#, fuzzy
+#: ../gtk/gtkentry.c:9636
 msgid "Caps Lock is on"
-msgstr "S_kopiuj położenie"
+msgstr "Klawisz Caps Lock jest włączony"
 
 #: ../gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
@@ -1613,7 +1588,7 @@ msgstr "Pulpit"
 msgid "(None)"
 msgstr "(brak)"
 
-#: ../gtk/gtkfilechooserbutton.c:2011
+#: ../gtk/gtkfilechooserbutton.c:2014
 msgid "Other..."
 msgstr "Inne..."
 
@@ -1738,7 +1713,7 @@ msgstr "Wyświetl u_kryte pliki"
 
 #: ../gtk/gtkfilechooserdefault.c:4331
 msgid "Show _Size Column"
-msgstr ""
+msgstr "_Wyświetl kolumnę rozmiaru"
 
 #: ../gtk/gtkfilechooserdefault.c:4586 ../gtk/gtkfilesel.c:730
 msgid "Files"
@@ -1900,7 +1875,7 @@ msgstr "Uzupełnianie..."
 #. * "sftp://blahblah" in an app that only supports local filenames.
 #: ../gtk/gtkfilechooserentry.c:1176 ../gtk/gtkfilechooserentry.c:1201
 msgid "Only local files may be selected"
-msgstr ""
+msgstr "Można wybrać tylko lokalne pliki"
 
 #. Another option is to complete the hostname based on the remote volumes that are mounted
 #. Translators: this is shown in the feedback for Tab-completion in a
@@ -1908,15 +1883,14 @@ msgstr ""
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
 #: ../gtk/gtkfilechooserentry.c:1185
 msgid "Incomplete hostname; end it with '/'"
-msgstr ""
+msgstr "Niekompletna nazwa komputera. Musi się kończyć znakiem \"/\""
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
 #: ../gtk/gtkfilechooserentry.c:1196
-#, fuzzy
 msgid "Path does not exist"
-msgstr "Skrót %s nie istnieje"
+msgstr "Ścieżka nie istnieje"
 
 #: ../gtk/gtkfilechoosersettings.c:362 ../gtk/gtkfilesel.c:1349
 #: ../gtk/gtkfilesel.c:1358
@@ -2128,7 +2102,7 @@ msgstr "Wartość g_amma"
 #: ../gtk/gtkiconfactory.c:1404
 #, c-format
 msgid "Error loading icon: %s"
-msgstr "Błąd przy odczytywaniu ikony: %s"
+msgstr "Błąd podczas wczytywania ikony: %s"
 
 #: ../gtk/gtkicontheme.c:1363
 #, c-format
@@ -2157,16 +2131,15 @@ msgid "Simple"
 msgstr "Prosty"
 
 #: ../gtk/gtkimmulticontext.c:541
-#, fuzzy
 msgctxt "input method menu"
 msgid "System"
-msgstr "System plików"
+msgstr "System"
 
 #: ../gtk/gtkimmulticontext.c:625
-#, fuzzy, c-format
+#, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
-msgstr "%s (%s)"
+msgstr "System (%s)"
 
 #: ../gtk/gtkinputdialog.c:192
 msgid "Input"
@@ -2268,7 +2241,7 @@ msgstr "MODUŁY"
 #. Description of --g-fatal-warnings in --help output
 #: ../gtk/gtkmain.c:453
 msgid "Make all warnings fatal"
-msgstr "Traktowanie ostrzeżeń jako błędów"
+msgstr "Traktowanie wszystkich ostrzeżeń jako błędy"
 
 #. Description of --gtk-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:456
@@ -2292,7 +2265,7 @@ msgstr "default:LTR"
 #: ../gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
-msgstr "Nie można utworzyć ekranu: %s"
+msgstr "Nie można otworzyć ekranu: %s"
 
 #: ../gtk/gtkmain.c:810
 msgid "GTK+ Options"
@@ -2486,49 +2459,44 @@ msgstr "%s: zadanie #%d"
 #: ../gtk/gtkprintoperation.c:1517
 msgctxt "print operation status"
 msgid "Initial state"
-msgstr ""
+msgstr "Stan początkowy"
 
 #: ../gtk/gtkprintoperation.c:1518
-#, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
-msgstr "Przygotowywanie %d"
+msgstr "Przygotowywanie do drukowania"
 
 #: ../gtk/gtkprintoperation.c:1519
 msgctxt "print operation status"
 msgid "Generating data"
-msgstr ""
+msgstr "Generowanie danych"
 
 #: ../gtk/gtkprintoperation.c:1520
 msgctxt "print operation status"
 msgid "Sending data"
-msgstr ""
+msgstr "Wysyłanie danych"
 
 #: ../gtk/gtkprintoperation.c:1521
-#, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
-msgstr "Ostrzeżenie"
+msgstr "Oczekiwanie"
 
 #: ../gtk/gtkprintoperation.c:1522
 msgctxt "print operation status"
 msgid "Blocking on issue"
-msgstr ""
+msgstr "Blokowanie z powodu problemu"
 
 #: ../gtk/gtkprintoperation.c:1523
-#, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
-msgstr "Drukowanie %d"
+msgstr "Drukowanie"
 
 #: ../gtk/gtkprintoperation.c:1524
-#, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
-msgstr "Kończenie"
+msgstr "Zakończono"
 
 #: ../gtk/gtkprintoperation.c:1525
-#, fuzzy
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Zakończono z błędem"
@@ -2685,7 +2653,7 @@ msgstr "Ogólne"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: ../gtk/gtkprintunixdialog.c:2442
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2874
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2910
 msgid "Page Ordering"
 msgstr "Kolejność stron"
 
@@ -2784,7 +2752,7 @@ msgstr "_O:"
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
-msgstr ""
+msgstr "Określa czas drukowania, np: 15:30, 14:15:20, 11:46:30"
 
 #: ../gtk/gtkprintunixdialog.c:2791
 msgid "On _hold"
@@ -2792,7 +2760,7 @@ msgstr "Wstrzy_many"
 
 #: ../gtk/gtkprintunixdialog.c:2792
 msgid "Hold the job until it is explicitly released"
-msgstr ""
+msgstr "Wstrzymuje zadanie do czasu jawnego jego zwolnienia"
 
 #: ../gtk/gtkprintunixdialog.c:2812
 msgid "Add Cover Page"
@@ -2933,16 +2901,16 @@ msgstr "Nieznany element"
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
-msgstr ""
+msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
 #: ../gtk/gtkrecentchoosermenu.c:822
-#, fuzzy, c-format
+#, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
-msgstr "%s (%s)"
+msgstr "%d. %s"
 
 #: ../gtk/gtkrecentmanager.c:1020 ../gtk/gtkrecentmanager.c:1033
 #: ../gtk/gtkrecentmanager.c:1171 ../gtk/gtkrecentmanager.c:1181
@@ -2950,29 +2918,25 @@ msgstr "%s (%s)"
 #: ../gtk/gtkrecentmanager.c:1258
 #, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "Nie można odnaleźć elementu z URI \"%s\""
+msgstr "Nie można odnaleźć elementu z adresem URI \"%s\""
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:288
-#, fuzzy
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Informacja"
 
 #: ../gtk/gtkstock.c:289
-#, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Ostrzeżenie"
 
 #: ../gtk/gtkstock.c:290
-#, fuzzy
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Błąd"
 
 #: ../gtk/gtkstock.c:291
-#, fuzzy
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Pytanie"
@@ -2981,563 +2945,476 @@ msgstr "Pytanie"
 #. * need the mnemonics to be rationalized
 #.
 #: ../gtk/gtkstock.c:296
-#, fuzzy
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_O programie"
 
 #: ../gtk/gtkstock.c:297
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Dodaj"
 
 #: ../gtk/gtkstock.c:298
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Zastosuj"
 
 #: ../gtk/gtkstock.c:299
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "Pogru_bienie"
 
 #: ../gtk/gtkstock.c:300
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_Anuluj"
 
 #: ../gtk/gtkstock.c:301
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "_CD-ROM"
 
 #: ../gtk/gtkstock.c:302
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "Wy_czyść"
 
 #: ../gtk/gtkstock.c:303
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "Za_mknij"
 
 #: ../gtk/gtkstock.c:304
-#, fuzzy
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "P_ołącz"
 
 #: ../gtk/gtkstock.c:305
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "Prze_konwertuj"
 
 #: ../gtk/gtkstock.c:306
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "S_kopiuj"
 
 #: ../gtk/gtkstock.c:307
-#, fuzzy
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "_Wytnij"
 
 #: ../gtk/gtkstock.c:308
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Usuń"
 
 #: ../gtk/gtkstock.c:309
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_Porzuć"
 
 #: ../gtk/gtkstock.c:310
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "_Rozłącz"
 
 #: ../gtk/gtkstock.c:311
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Execute"
-msgstr "Wyk_onaj"
+msgstr "_Wykonaj"
 
 #: ../gtk/gtkstock.c:312
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Edycja"
 
 #: ../gtk/gtkstock.c:313
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Znajdź"
 
 #: ../gtk/gtkstock.c:314
-#, fuzzy
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Znajdź i za_mień"
 
 #: ../gtk/gtkstock.c:315
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Dyskietka"
 
 #: ../gtk/gtkstock.c:316
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "_Pełny ekran"
 
 #: ../gtk/gtkstock.c:317
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
-msgstr "_Opuszczenie pełnego ekranu"
+msgstr "_Opuść pełny ekran"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: ../gtk/gtkstock.c:319
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
-msgstr "_Dolny:"
+msgstr "_Dół"
 
 #. This is a navigation label as in "go to the first page"
 #: ../gtk/gtkstock.c:321
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_First"
-msgstr "_Pliki"
+msgstr "_Pierwsza"
 
 #. This is a navigation label as in "go to the last page"
 #: ../gtk/gtkstock.c:323
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Last"
-msgstr "Wk_lej"
+msgstr "_Ostatnia"
 
 #. This is a navigation label as in "go to the top of the page"
 #: ../gtk/gtkstock.c:325
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Top"
-msgstr "_Górny:"
+msgstr "_Góra"
 
 #. This is a navigation label as in "go back"
 #: ../gtk/gtkstock.c:327
 msgctxt "Stock label, navigation"
 msgid "_Back"
-msgstr ""
+msgstr "_Wstecz"
 
 #. This is a navigation label as in "go down"
 #: ../gtk/gtkstock.c:329
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Down"
-msgstr "_Teraz"
+msgstr "W _dół"
 
 #. This is a navigation label as in "go forward"
 #: ../gtk/gtkstock.c:331
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Forward"
-msgstr "_Naprzód"
+msgstr "_Dalej"
 
 #. This is a navigation label as in "go up"
 #: ../gtk/gtkstock.c:333
 msgctxt "Stock label, navigation"
 msgid "_Up"
-msgstr ""
+msgstr "W _górę"
 
 #: ../gtk/gtkstock.c:334
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "Dy_sk twardy"
 
 #: ../gtk/gtkstock.c:335
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "Pomo_c"
 
 #: ../gtk/gtkstock.c:336
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "P_oczątek"
 
 #: ../gtk/gtkstock.c:337
-#, fuzzy
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Zwiększ wcięcie"
 
 #: ../gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Zmniejsz wcięcie"
 
 #: ../gtk/gtkstock.c:339
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Indeks"
 
 #: ../gtk/gtkstock.c:340
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Information"
-msgstr "_Informacja"
+msgstr "_Informacje"
 
 #: ../gtk/gtkstock.c:341
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "Pochy_lenie"
 
 #: ../gtk/gtkstock.c:342
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "Prz_ejdź do"
 
 #. This is about text justification, "centered text"
 #: ../gtk/gtkstock.c:344
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
-msgstr "Prze_konwertuj"
+msgstr "_Wyśrodkowanie"
 
 #. This is about text justification
 #: ../gtk/gtkstock.c:346
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fill"
-msgstr "_Pliki"
+msgstr "Wyj_ustowanie"
 
 #. This is about text justification, "left-justified text"
 #: ../gtk/gtkstock.c:348
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Left"
-msgstr "_Lewy:"
+msgstr "Justowanie do _lewej"
 
 #. This is about text justification, "right-justified text"
 #: ../gtk/gtkstock.c:350
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Right"
-msgstr "_Prawy:"
+msgstr "Justowanie do p_rawej"
 
 #. Media label, as in "fast forward"
 #: ../gtk/gtkstock.c:353
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "_Naprzód"
 
 #. Media label, as in "next song"
 #: ../gtk/gtkstock.c:355
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Next"
-msgstr "_Nowy"
+msgstr "_Następny"
 
 #. Media label, as in "pause music"
 #: ../gtk/gtkstock.c:357
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "P_ause"
-msgstr "Wstrzymane"
+msgstr "_Wstrzymaj"
 
 #. Media label, as in "play music"
 #: ../gtk/gtkstock.c:359
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Play"
-msgstr "_Miejsca"
+msgstr "_Odtwarzaj"
 
 #. Media label, as in  "previous song"
 #: ../gtk/gtkstock.c:361
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "_Poprzedni"
 
 #. Media label
 #: ../gtk/gtkstock.c:363
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Record"
-msgstr "Nag_rywanie"
+msgstr "Nag_rywaj"
 
 #. Media label
 #: ../gtk/gtkstock.c:365
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "_Wstecz"
 
 #. Media label
 #: ../gtk/gtkstock.c:367
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Zatrzymaj"
 
 #: ../gtk/gtkstock.c:368
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "S_ieć"
 
 #: ../gtk/gtkstock.c:369
-#, fuzzy
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Nowy"
 
 #: ../gtk/gtkstock.c:370
-#, fuzzy
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Nie"
 
 #: ../gtk/gtkstock.c:371
-#, fuzzy
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_OK"
 
 #: ../gtk/gtkstock.c:372
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Otwórz"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:374
-#, fuzzy
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Poziomo"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:376
-#, fuzzy
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Pionowo"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:378
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Odwrócone poziomo"
 
 #. Page orientation
 #: ../gtk/gtkstock.c:380
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Odwrócone pionowo"
 
 #: ../gtk/gtkstock.c:381
-#, fuzzy
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Ustawienia str_ony"
 
 #: ../gtk/gtkstock.c:382
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "Wk_lej"
 
 #: ../gtk/gtkstock.c:383
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "P_referencje"
 
 #: ../gtk/gtkstock.c:384
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Print"
-msgstr "_Drukuj"
+msgstr "Wy_drukuj"
 
 #: ../gtk/gtkstock.c:385
-#, fuzzy
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "Podgląd _wydruku"
 
 #: ../gtk/gtkstock.c:386
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Właściwości"
 
 #: ../gtk/gtkstock.c:387
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "Za_kończ"
 
 #: ../gtk/gtkstock.c:388
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "P_onów"
 
 #: ../gtk/gtkstock.c:389
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_Odśwież"
 
 #: ../gtk/gtkstock.c:390
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Usuń"
 
 #: ../gtk/gtkstock.c:391
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Przywróć"
 
 #: ../gtk/gtkstock.c:392
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Zapisz"
 
 #: ../gtk/gtkstock.c:393
-#, fuzzy
 msgctxt "Stock label"
 msgid "Save _As"
-msgstr "Zapisz j_ako"
+msgstr "Z_apisz jako"
 
 #: ../gtk/gtkstock.c:394
-#, fuzzy
 msgctxt "Stock label"
 msgid "Select _All"
-msgstr "Zaznacz w_szystko"
+msgstr "Z_aznacz wszystko"
 
 #: ../gtk/gtkstock.c:395
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Kolor"
 
 #: ../gtk/gtkstock.c:396
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Czcionka"
 
 #. Sorting direction
 #: ../gtk/gtkstock.c:398
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Rosnąco"
 
 #. Sorting direction
 #: ../gtk/gtkstock.c:400
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_Malejąco"
 
 #: ../gtk/gtkstock.c:401
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "Sprawdź p_isownię"
 
 #: ../gtk/gtkstock.c:402
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Zatrzymaj"
 
 #. Font variant
 #: ../gtk/gtkstock.c:404
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "Prz_ekreślenie"
 
 #: ../gtk/gtkstock.c:405
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "Od_twórz"
 
 #. Font variant
 #: ../gtk/gtkstock.c:407
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "P_odkreślenie"
 
 #: ../gtk/gtkstock.c:408
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "Cof_nij"
 
 #: ../gtk/gtkstock.c:409
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Tak"
 
 #. Zoom
 #: ../gtk/gtkstock.c:411
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "_Zwykły rozmiar"
 
 #. Zoom
 #: ../gtk/gtkstock.c:413
-#, fuzzy
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "_Dopasowanie"
 
 #: ../gtk/gtkstock.c:414
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "Po_większ"
 
 #: ../gtk/gtkstock.c:415
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Po_mniejsz"
@@ -3694,7 +3571,7 @@ msgstr "ZWS - spacja o z_erowej szerokości"
 
 #: ../gtk/gtktextutil.c:69
 msgid "ZWJ Zero width _joiner"
-msgstr "ZWN - łączn_ik znaków o zerowej szerokości"
+msgstr "ZWJ - łączn_ik znaków o zerowej szerokości"
 
 #: ../gtk/gtktextutil.c:70
 msgid "ZWNJ Zero width _non-joiner"
@@ -3723,39 +3600,39 @@ msgstr "Nieoczekiwane dane znakowe w wierszu %d znak %d"
 msgid "Empty"
 msgstr "Pusty"
 
-#: ../gtk/gtkvolumebutton.c:77
+#: ../gtk/gtkvolumebutton.c:73
 msgid "Volume"
 msgstr "Głośność"
 
-#: ../gtk/gtkvolumebutton.c:79
+#: ../gtk/gtkvolumebutton.c:75
 msgid "Turns volume down or up"
 msgstr "Reguluje głośność"
 
-#: ../gtk/gtkvolumebutton.c:82
+#: ../gtk/gtkvolumebutton.c:78
 msgid "Adjusts the volume"
 msgstr "Reguluje głośność"
 
-#: ../gtk/gtkvolumebutton.c:85 ../gtk/gtkvolumebutton.c:88
+#: ../gtk/gtkvolumebutton.c:81 ../gtk/gtkvolumebutton.c:84
 msgid "Volume Down"
 msgstr "Zmniejszenie głośności"
 
-#: ../gtk/gtkvolumebutton.c:87
+#: ../gtk/gtkvolumebutton.c:83
 msgid "Decreases the volume"
 msgstr "Obniża głośność"
 
-#: ../gtk/gtkvolumebutton.c:91 ../gtk/gtkvolumebutton.c:94
+#: ../gtk/gtkvolumebutton.c:87 ../gtk/gtkvolumebutton.c:90
 msgid "Volume Up"
 msgstr "Zwiększenie głośności"
 
-#: ../gtk/gtkvolumebutton.c:93
+#: ../gtk/gtkvolumebutton.c:89
 msgid "Increases the volume"
 msgstr "Zwiększa głośność"
 
-#: ../gtk/gtkvolumebutton.c:151
+#: ../gtk/gtkvolumebutton.c:147
 msgid "Muted"
 msgstr "Wyciszony"
 
-#: ../gtk/gtkvolumebutton.c:155
+#: ../gtk/gtkvolumebutton.c:151
 msgid "Full Volume"
 msgstr "Pełna głośność"
 
@@ -3764,17 +3641,16 @@ msgstr "Pełna głośność"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: ../gtk/gtkvolumebutton.c:168
+#: ../gtk/gtkvolumebutton.c:164
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
 #: ../gtk/paper_names_offsets.c:4
-#, fuzzy
 msgctxt "paper size"
 msgid "asme_f"
-msgstr "Nazwa"
+msgstr "asme_f"
 
 #: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
@@ -4354,7 +4230,7 @@ msgstr "FanFold USA"
 #: ../gtk/paper_names_offsets.c:121
 msgctxt "paper size"
 msgid "FanFold German Legal"
-msgstr "FanFold niemieckie Legal "
+msgstr "FanFold niemieckie Legal"
 
 #: ../gtk/paper_names_offsets.c:122
 msgctxt "paper size"
@@ -4369,22 +4245,22 @@ msgstr "List rządowy"
 #: ../gtk/paper_names_offsets.c:124
 msgctxt "paper size"
 msgid "Index 3x5"
-msgstr "_Indeks"
+msgstr "Indeks 3x5"
 
 #: ../gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
-msgstr "Index 4x6 (pocztówka)"
+msgstr "Indeks 4x6 (pocztówka)"
 
 #: ../gtk/paper_names_offsets.c:126
 msgctxt "paper size"
 msgid "Index 4x6 ext"
-msgstr "Index 4x6 ext"
+msgstr "Indeks 4x6 ext"
 
 #: ../gtk/paper_names_offsets.c:127
 msgctxt "paper size"
 msgid "Index 5x8"
-msgstr "Index 5x8"
+msgstr "Indeks 5x8"
 
 #: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
@@ -4678,7 +4554,7 @@ msgstr "Nie odnaleziono pliku: %s\n"
 #: ../gtk/updateiconcache.c:1669
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr "Nieprawidłowy bufor ikon\" %s\n"
+msgstr "Nieprawidłowy bufor ikon: %s\n"
 
 #: ../gtk/updateiconcache.c:1682
 #, c-format
@@ -4743,7 +4619,7 @@ msgstr "Tigre-Etiopia (EZ+)"
 #. ID
 #: ../modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
-msgstr "Wietnamska ((VIQR)"
+msgstr "Wietnamska (VIQR)"
 
 #. ID
 #: ../modules/input/imxim.c:28
@@ -4845,76 +4721,122 @@ msgstr "Źródło papieru"
 msgid "Output Tray"
 msgstr "Tacka wyjściowa"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2157
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2149
+msgid "Resolution"
+msgstr "Rozdzielczość"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2150
+msgid "GhostScript pre-filtering"
+msgstr "Wstępne filtrowanie GhostScript"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2159
 msgid "One Sided"
 msgstr "Jednostronne"
 
-#. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2159
+#. Translators: this is an option of "Two Sided"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2161
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2169
+msgid "Long Edge (Standard)"
+msgstr "Grzbiet wzdłuż dłuższej krawędzi (standard)"
+
+#. Translators: this is an option of "Two Sided"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2163
+msgid "Short Edge (Flip)"
+msgstr "Grzbiet wzdłuż krótszej krawędzi (obrót)"
+
+#. Translators: this is an option of "Paper Source"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2165
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2167
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2175
 msgid "Auto Select"
 msgstr "Wybór automatyczny"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2163
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2165
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2167
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2638
+#. Translators: this is an option of "Resolution"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2169
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2171
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2173
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2177
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2663
 msgid "Printer Default"
 msgstr "Domyślne drukarki"
+
+#. Translators: this is an option of "GhostScript"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2179
+msgid "Embed GhostScript fonts only"
+msgstr "Osadzanie tylko czcionek GhostScript"
+
+#. Translators: this is an option of "GhostScript"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2181
+msgid "Convert to PS level 1"
+msgstr "Konwertowanie do PS level 1"
+
+#. Translators: this is an option of "GhostScript"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2183
+msgid "Convert to PS level 2"
+msgstr "Konwertowanie do PS level 2"
+
+#. Translators: this is an option of "GhostScript"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2185
+msgid "No pre-filtering"
+msgstr "Bez wstępnego filtrowania"
+
+#. Translators: "Miscellaneous" is the label for a button, that opens
+#. up an extra panel of settings in a print dialog.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2194
+msgid "Miscellaneous"
+msgstr "Różne"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Urgent"
 msgstr "Ważne"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "High"
 msgstr "Wysoki"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Medium"
 msgstr "Średni"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Low"
 msgstr "Niski"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2840
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2876
 msgid "Left to right, top to bottom"
 msgstr "Od lewej do prawej, z góry do dołu"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2840
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2876
 msgid "Left to right, bottom to top"
 msgstr "Od lewej do prawej, z dołu na górę"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2841
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2877
 msgid "Right to left, top to bottom"
 msgstr "Od prawej do lewej, z góry na dół"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2841
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2877
 msgid "Right to left, bottom to top"
 msgstr "Od prawej do lewej, z dołu na górę"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2842
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2878
 msgid "Top to bottom, left to right"
 msgstr "Z góry do dołu, od lewej do prawej"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2842
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2878
 msgid "Top to bottom, right to left"
 msgstr "Z góry do dołu, od prawej do lewej"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2843
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2879
 msgid "Bottom to top, left to right"
 msgstr "Z dołu do góry, od lewej do prawej"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2843
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2879
 msgid "Bottom to top, right to left"
 msgstr "Z dołu do góry, od prawej do lewej"
 
@@ -4922,66 +4844,66 @@ msgstr "Z dołu do góry, od prawej do lewej"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2858
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2894
 msgid "Pages per Sheet"
 msgstr "Stron na kartkę"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2895
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2931
 msgid "Job Priority"
 msgstr "Priorytet"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2906
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2942
 msgid "Billing Info"
 msgstr "Informacje o opłatach"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "None"
 msgstr "Brak"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Classified"
 msgstr "Sklasyfikowane"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Confidential"
 msgstr "Poufne"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Secret"
 msgstr "Tajne"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Standard"
 msgstr "Standardowe"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Top Secret"
 msgstr "Ściśle tajne"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Unclassified"
 msgstr "Niesklasyfikowane"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2955
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2991
 msgid "Before"
 msgstr "Przed"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2970
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3006
 msgid "After"
 msgstr "Po"
 
@@ -4989,14 +4911,14 @@ msgstr "Po"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2990
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3026
 msgid "Print at"
 msgstr "Wydruk o"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3001
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3037
 msgid "Print at time"
 msgstr "Wydruk o czasie"
 
@@ -5004,7 +4926,7 @@ msgstr "Wydruk o czasie"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3036
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3072
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Własny %sx%s"
@@ -5056,7 +4978,7 @@ msgstr "Wiersz poleceń"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:234
 #, c-format
 msgid "test-output.%s"
-msgstr "testowe_dane_wyjściowe.%s"
+msgstr "testowe-dane-wyjściowe.%s"
 
 #: ../modules/printbackends/test/gtkprintbackendtest.c:470
 msgid "Print to Test Printer"
