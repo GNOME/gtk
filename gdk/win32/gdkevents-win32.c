@@ -653,6 +653,7 @@ find_window_for_mouse_event (GdkWindow* reported_window,
     return find_real_window_for_grabbed_mouse_event (reported_window, msg);
 }
 
+#if 0
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay *display)
 {
@@ -661,7 +662,9 @@ gdk_display_pointer_is_grabbed (GdkDisplay *display)
 			     p_grab_window != NULL ? "TRUE" : "FALSE"));
   return p_grab_window != NULL;
 }
+#endif
 
+#if 0
 gboolean
 gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
 				   GdkWindow **grab_window,
@@ -681,6 +684,7 @@ gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
   else
     return FALSE;
 }
+#endif
 
 GdkGrabStatus
 gdk_keyboard_grab (GdkWindow *window,
@@ -776,26 +780,6 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
     }
 
   assign_object (&k_grab_window, NULL);
-}
-
-gboolean
-gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
-				    GdkWindow **grab_window,
-				    gboolean   *owner_events)
-{
-  g_return_val_if_fail (display == _gdk_display, FALSE);
-
-  if (k_grab_window)
-    {
-      if (grab_window)
-        *grab_window = k_grab_window;
-      if (owner_events)
-        *owner_events = k_grab_owner_events;
-
-      return TRUE;
-    }
-  else
-    return FALSE;
 }
 
 void 
@@ -1399,7 +1383,7 @@ synthesize_enter_or_leave_event (GdkWindow    	*window,
   event->crossing.window = window;
   event->crossing.subwindow = NULL;
   event->crossing.time = _gdk_win32_get_next_tick (msg->time);
-  _gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
+  //_gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
   event->crossing.x = x + xoffset;
   event->crossing.y = y + yoffset;
   event->crossing.x_root = msg->pt.x + _gdk_offset_x;
@@ -1855,6 +1839,7 @@ handle_configure_event (MSG       *msg,
 {
   RECT client_rect;
   POINT point;
+  GdkWindowObject *window_object;
 
   GetClientRect (msg->hwnd, &client_rect);
   point.x = client_rect.left; /* always 0 */
@@ -1867,13 +1852,15 @@ handle_configure_event (MSG       *msg,
       point.y += _gdk_offset_y;
     }
 
-  GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->width = client_rect.right - client_rect.left;
-  GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->height = client_rect.bottom - client_rect.top;
+  window_object = GDK_WINDOW_OBJECT (window);
+
+  window_object->width = client_rect.right - client_rect.left;
+  window_object->height = client_rect.bottom - client_rect.top;
   
-  ((GdkWindowObject *) window)->x = point.x;
-  ((GdkWindowObject *) window)->y = point.y;
+  window_object->x = point.x;
+  window_object->y = point.y;
   
-  if (((GdkWindowObject *) window)->event_mask & GDK_STRUCTURE_MASK)
+  if (window_object->event_mask & GDK_STRUCTURE_MASK)
     {
       GdkEvent *event = gdk_event_new (GDK_CONFIGURE);
 
@@ -2037,7 +2024,7 @@ handle_wm_paint (MSG        *msg,
 
   update_region = _gdk_win32_hrgn_to_region (hrgn);
 
-  _gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
+  //_gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
   gdk_region_offset (update_region, xoffset, yoffset);
   
   _gdk_window_process_expose (window, update_region);
@@ -2105,7 +2092,7 @@ generate_button_event (GdkEventType type,
     translate_mouse_coords (orig_window, window, msg);
   event->button.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
   event->button.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
-  _gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
+  //_gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
   event->button.x += xoffset;
   event->button.y += yoffset;
   event->button.x_root = msg->pt.x + _gdk_offset_x;
@@ -2825,7 +2812,7 @@ gdk_event_translate (MSG  *msg,
       event->motion.time = _gdk_win32_get_next_tick (msg->time);
       event->motion.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
       event->motion.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
-      _gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
+//      gdk_window_get_offsets (window, &xoffset, &yoffset);
       event->motion.x += xoffset;
       event->motion.y += yoffset;
       event->motion.x_root = current_root_x;
@@ -2916,7 +2903,7 @@ gdk_event_translate (MSG  *msg,
       event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
 	GDK_SCROLL_UP : GDK_SCROLL_DOWN;
       event->scroll.time = _gdk_win32_get_next_tick (msg->time);
-      _gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
+      //_gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
       event->scroll.x = (gint16) point.x + xoffset;
       event->scroll.y = (gint16) point.y + yoffset;
       event->scroll.x_root = (gint16) GET_X_LPARAM (msg->lParam) + _gdk_offset_x;

@@ -50,75 +50,75 @@
    (gcwin32->line_style == GDK_LINE_ON_OFF_DASH && gcwin32->pen_dash_offset))
 
 static void gdk_win32_draw_rectangle (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      gboolean        filled,
-				      gint            x,
-				      gint            y,
-				      gint            width,
-				      gint            height);
+									  GdkGC          *gc,
+									  gboolean        filled,
+									  gint            x,
+									  gint            y,
+									  gint            width,
+									  gint            height);
 static void gdk_win32_draw_arc       (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      gboolean        filled,
-				      gint            x,
-				      gint            y,
-				      gint            width,
-				      gint            height,
-				      gint            angle1,
-				      gint            angle2);
+									  GdkGC          *gc,
+									  gboolean        filled,
+									  gint            x,
+									  gint            y,
+									  gint            width,
+									  gint            height,
+									  gint            angle1,
+									  gint            angle2);
 static void gdk_win32_draw_polygon   (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      gboolean        filled,
-				      GdkPoint       *points,
-				      gint            npoints);
+									  GdkGC          *gc,
+									  gboolean        filled,
+									  GdkPoint       *points,
+									  gint            npoints);
 static void gdk_win32_draw_text      (GdkDrawable    *drawable,
-				      GdkFont        *font,
-				      GdkGC          *gc,
-				      gint            x,
-				      gint            y,
-				      const gchar    *text,
-				      gint            text_length);
+									  GdkFont        *font,
+									  GdkGC          *gc,
+									  gint            x,
+									  gint            y,
+									  const gchar    *text,
+									  gint            text_length);
 static void gdk_win32_draw_text_wc   (GdkDrawable    *drawable,
-				      GdkFont        *font,
-				      GdkGC          *gc,
-				      gint            x,
-				      gint            y,
-				      const GdkWChar *text,
-				      gint            text_length);
+									  GdkFont        *font,
+									  GdkGC          *gc,
+									  gint            x,
+									  gint            y,
+									  const GdkWChar *text,
+									  gint            text_length);
 static void gdk_win32_draw_drawable  (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      GdkPixmap      *src,
-				      gint            xsrc,
-				      gint            ysrc,
-				      gint            xdest,
-				      gint            ydest,
-				      gint            width,
-				      gint            height);
+									  GdkGC          *gc,
+									  GdkPixmap      *src,
+									  gint            xsrc,
+									  gint            ysrc,
+									  gint            xdest,
+									  gint            ydest,
+									  gint            width,
+									  gint            height);
 static void gdk_win32_draw_points    (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      GdkPoint       *points,
-				      gint            npoints);
+									  GdkGC          *gc,
+									  GdkPoint       *points,
+									  gint            npoints);
 static void gdk_win32_draw_segments  (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      GdkSegment     *segs,
-				      gint            nsegs);
+									  GdkGC          *gc,
+									  GdkSegment     *segs,
+									  gint            nsegs);
 static void gdk_win32_draw_lines     (GdkDrawable    *drawable,
-				      GdkGC          *gc,
-				      GdkPoint       *points,
-				      gint            npoints);
+									  GdkGC          *gc,
+									  GdkPoint       *points,
+									  gint            npoints);
 static void gdk_win32_draw_image     (GdkDrawable     *drawable,
-				      GdkGC           *gc,
-				      GdkImage        *image,
-				      gint             xsrc,
-				      gint             ysrc,
-				      gint             xdest,
-				      gint             ydest,
-				      gint             width,
-				      gint             height);
+									  GdkGC           *gc,
+									  GdkImage        *image,
+									  gint             xsrc,
+									  gint             ysrc,
+									  gint             xdest,
+									  gint             ydest,
+									  gint             width,
+									  gint             height);
 
 static cairo_surface_t *gdk_win32_ref_cairo_surface (GdkDrawable *drawable);
      
 static void gdk_win32_set_colormap   (GdkDrawable    *drawable,
-				      GdkColormap    *colormap);
+									  GdkColormap    *colormap);
 
 static GdkColormap* gdk_win32_get_colormap   (GdkDrawable    *drawable);
 
@@ -367,7 +367,7 @@ render_line_horizontal (GdkGCWin32 *gcwin32,
 
 static inline gboolean
 render_line_vertical (GdkGCWin32 *gcwin32,
-		      int         x,
+					  int         x,
                       int         y1,
                       int         y2)
 {
@@ -423,16 +423,16 @@ render_line_vertical (GdkGCWin32 *gcwin32,
 
 static void
 draw_tiles_lowlevel (HDC  dest,
-		     HDC  tile,
-		     int  rop3,
-		     gint dest_x,
-		     gint dest_y,
-		     gint tile_x_origin,
-		     gint tile_y_origin,
-		     gint width,
-		     gint height,
-		     gint tile_width,
-		     gint tile_height)
+					 HDC  tile,
+					 int  rop3,
+					 gint dest_x,
+					 gint dest_y,
+					 gint tile_x_origin,
+					 gint tile_y_origin,
+					 gint width,
+					 gint height,
+					 gint tile_width,
+					 gint tile_height)
 {
   gint x, y;
 
@@ -477,15 +477,15 @@ draw_tiles_lowlevel (HDC  dest,
 
 static void
 draw_tiles (GdkDrawable *drawable,
-	    GdkGC       *gc,
-	    int          rop3,
-	    GdkPixmap   *tile,
-	    gint         dest_x,
-	    gint 	 dest_y,
-	    gint 	 tile_x_origin,
-	    gint 	 tile_y_origin,
-	    gint 	 width,
-	    gint 	 height)
+			GdkGC       *gc,
+			int          rop3,
+			GdkPixmap   *tile,
+			gint         dest_x,
+			gint 	 dest_y,
+			gint 	 tile_x_origin,
+			gint 	 tile_y_origin,
+			gint 	 width,
+			gint 	 height)
 {
   const GdkGCValuesMask mask = GDK_GC_FOREGROUND;
   gint tile_width, tile_height;
@@ -510,11 +510,11 @@ draw_tiles (GdkDrawable *drawable,
 
 static void
 generic_draw (GdkDrawable    *drawable,
-	      GdkGC          *gc,
-	      GdkGCValuesMask mask,
-	      void (*function) (GdkGCWin32 *, HDC, gint, gint, va_list),
-	      const GdkRegion *region,
-	      ...)
+			  GdkGC          *gc,
+			  GdkGCValuesMask mask,
+			  void (*function) (GdkGCWin32 *, HDC, gint, gint, va_list),
+			  const GdkRegion *region,
+			  ...)
 {
   GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
   GdkGCWin32 *gcwin32 = GDK_GC_WIN32 (gc);
@@ -742,7 +742,7 @@ generic_draw (GdkDrawable    *drawable,
 
 static GdkRegion *
 widen_bounds (GdkRectangle *bounds,
-	      gint          pen_width)
+			  gint          pen_width)
 {
   if (pen_width == 0)
     pen_width = 1;
@@ -757,10 +757,10 @@ widen_bounds (GdkRectangle *bounds,
 
 static void
 draw_rectangle (GdkGCWin32 *gcwin32,
-		HDC         hdc,
-		gint        x_offset,
-		gint        y_offset,
-		va_list     args)
+				HDC         hdc,
+				gint        x_offset,
+				gint        y_offset,
+				va_list     args)
 {
   HGDIOBJ old_pen_or_brush;
   gboolean filled;
@@ -803,12 +803,12 @@ draw_rectangle (GdkGCWin32 *gcwin32,
 
 static void
 gdk_win32_draw_rectangle (GdkDrawable *drawable,
-			  GdkGC       *gc,
-			  gboolean     filled,
-			  gint         x,
-			  gint         y,
-			  gint         width,
-			  gint         height)
+						  GdkGC       *gc,
+						  gboolean     filled,
+						  gint         x,
+						  gint         y,
+						  gint         width,
+						  gint         height)
 {
   GdkRectangle bounds;
   GdkRegion *region;
@@ -1141,20 +1141,20 @@ gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
 
 static void
 gdk_win32_draw_drawable (GdkDrawable *drawable,
-			 GdkGC       *gc,
-			 GdkPixmap   *src,
-			 gint         xsrc,
-			 gint         ysrc,
-			 gint         xdest,
-			 gint         ydest,
-			 gint         width,
-			 gint         height)
+						 GdkGC       *gc,
+						 GdkPixmap   *src,
+						 gint         xsrc,
+						 gint         ysrc,
+						 gint         xdest,
+						 gint         ydest,
+						 gint         width,
+						 gint         height)
 {
   g_assert (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable));
 
   _gdk_win32_blit (FALSE, (GdkDrawableImplWin32 *) drawable,
-		   gc, src, xsrc, ysrc,
-		   xdest, ydest, width, height);
+				   gc, src, xsrc, ysrc,
+				   xdest, ydest, width, height);
 }
 
 static void
@@ -1844,6 +1844,20 @@ _gdk_win32_drawable_release_dc (GdkDrawable *drawable)
     }
 }
 
+cairo_surface_t *
+_gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
+									 gint width,
+									 gint height)
+{
+	GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
+
+	HDC hdc = _gdk_win32_drawable_acquire_dc (drawable);
+	if (!hdc)
+		return NULL;
+
+	return cairo_win32_surface_create (hdc);
+}
+
 static void
 gdk_win32_cairo_surface_destroy (void *data)
 {
@@ -1864,19 +1878,24 @@ gdk_win32_ref_cairo_surface (GdkDrawable *drawable)
 
   if (!impl->cairo_surface)
     {
-      HDC hdc = _gdk_win32_drawable_acquire_dc (drawable);
-      if (!hdc)
-	return NULL;
-
-      impl->cairo_surface = cairo_win32_surface_create (hdc);
+	  // On Win32 cairo surface, width and height are determined from the DC
+      impl->cairo_surface = _gdk_windowing_create_cairo_surface (drawable, 0, 0);
 
       cairo_surface_set_user_data (impl->cairo_surface, &gdk_win32_cairo_key,
-				   drawable, gdk_win32_cairo_surface_destroy);
+								   drawable, gdk_win32_cairo_surface_destroy);
     }
   else
     cairo_surface_reference (impl->cairo_surface);
 
   return impl->cairo_surface;
+}
+
+void
+_gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
+									   gint width,
+									   gint height)
+{
+	// Do nothing.  The surface size is determined by the DC
 }
 
 static gint

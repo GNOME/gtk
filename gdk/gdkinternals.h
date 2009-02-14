@@ -350,8 +350,8 @@ gchar *_gdk_windowing_substitute_screen_number (const gchar *display_name,
 
 gulong   _gdk_windowing_window_get_next_serial  (GdkDisplay *display);
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
-						 gint       *x_offset,
-						 gint       *y_offset);
+												 gint       *x_offset,
+												 gint       *y_offset);
 GdkRegion *_gdk_windowing_window_get_shape      (GdkWindow  *window);
 GdkRegion *_gdk_windowing_window_get_input_shape(GdkWindow  *window);
 GdkRegion *_gdk_windowing_get_shape_for_mask    (GdkBitmap *mask);

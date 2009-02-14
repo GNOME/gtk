@@ -112,6 +112,9 @@
 #define GDK_IS_GC_WIN32_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GC_WIN32))
 #define GDK_GC_WIN32_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GC_WIN32, GdkGCWin32Class))
 
+//#define GDK_WINDOW_SCREEN(win)         (_gdk_screen)
+GdkScreen *GDK_WINDOW_SCREEN(GObject *win);
+
 typedef struct _GdkColormapPrivateWin32 GdkColormapPrivateWin32;
 typedef struct _GdkCursorPrivate        GdkCursorPrivate;
 typedef struct _GdkWin32SingleFont      GdkWin32SingleFont;
@@ -455,7 +458,7 @@ HICON _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
 gboolean _gdk_win32_pixbuf_to_hicon_supports_alpha (void);
 
 /* Initialization */
-void _gdk_windowing_window_init (void);
+void _gdk_windowing_window_init (GdkScreen *screen);
 void _gdk_root_window_size_init (void);
 void _gdk_monitor_init(void);
 void _gdk_visual_init (void);

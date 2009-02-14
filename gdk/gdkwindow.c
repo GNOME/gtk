@@ -37,8 +37,10 @@
 
 #undef DEBUG_WINDOW_PRINTING
 
-#ifdef GDK_WINDOWING_X11
+#if defined(GDK_WINDOWING_X11)
 #include "x11/gdkx.h"           /* For workaround */
+#elif defined(GDK_WINDOWING_WIN32)
+#include "win32/gdkwin32.h"
 #endif
 
 #include "math.h"
