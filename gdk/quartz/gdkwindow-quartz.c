@@ -1678,8 +1678,11 @@ gdk_window_quartz_get_origin (GdkWindow *window,
 
   if (window == _gdk_root)
     {
-      *x = 0;
-      *y = 0;
+      if (x)
+        *x = 0;
+      if (y)
+        *y = 0;
+
       return 1;
     }
   
@@ -1695,8 +1698,11 @@ gdk_window_quartz_get_origin (GdkWindow *window,
 
   while (private != GDK_WINDOW_OBJECT (toplevel))
     {
-      tmp_x += private->x;
-      tmp_y += private->y;
+      if (_gdk_window_has_impl ((GdkWindow *)private))
+        {
+          tmp_x += private->x;
+          tmp_y += private->y;
+        }
 
       private = private->parent;
     }
