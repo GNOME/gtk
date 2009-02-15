@@ -686,7 +686,7 @@ gdk_selection_convert (GdkWindow *requestor,
 
 		  if (make_dibv5)
 		    {
-		      BITMAPV5HEADER *bV5 = data + sizeof (BITMAPFILEHEADER);
+		      BITMAPV5HEADER *bV5 = (BITMAPV5HEADER *) ((char *) data + sizeof (BITMAPFILEHEADER));
 		      guchar *p;
 		      int i;
 
@@ -741,7 +741,7 @@ gdk_selection_convert (GdkWindow *requestor,
 				       bi->biSize +
 				       bi->biClrUsed * sizeof (RGBQUAD));
 
-		      memcpy (data + sizeof (BITMAPFILEHEADER),
+		      memcpy ((char *) data + sizeof (BITMAPFILEHEADER),
 			      bi,
 			      data_length);
 		    }
@@ -877,8 +877,6 @@ gdk_selection_property_get (GdkWindow  *requestor,
 void
 _gdk_selection_property_delete (GdkWindow *window)
 {
-  GdkSelProp *prop;
-  
   GDK_NOTE (DND, g_print ("_gdk_selection_property_delete: %p (no-op)\n",
 			   GDK_WINDOW_HWND (window)));
 

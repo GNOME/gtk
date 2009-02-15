@@ -1,3 +1,13 @@
+2009-02-16  Tor Lillqvist  <tml@novell.com>
+
+	Bug 571873 - Compile error with gdk/win32/gdkselection-win32.c
+
+	* gdk/win32/gdkselection-win32.c (gdk_selection_convert): Cast
+	gpointer to char * before pointer arithmetic to avoid compilation
+	error with MSVC.
+
+	(_gdk_selection_property_delete): Remove unused variable.
+
 2009-02-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Don't forget to
