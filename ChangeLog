@@ -1,3 +1,9 @@
+2009-02-16  Sven Neumann  <sven@gimp.org>
+
+	* gdk/gdk.symbols
+	* gdk/directfb/gdkkeys-directfb.c: implement
+	gdk_keymap_get_caps_lock_state(). No "state-changed" signal yet.
+
 2009-02-16  Tor Lillqvist  <tml@novell.com>
 
 	Bug 571873 - Compile error with gdk/win32/gdkselection-win32.c

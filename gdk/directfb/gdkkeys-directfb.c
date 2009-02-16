@@ -1715,7 +1715,7 @@ _gdk_directfb_keyboard_exit (void)
 
 void
 gdk_directfb_translate_key_event (DFBWindowEvent *dfb_event,
-		GdkEventKey    *event)
+                                  GdkEventKey    *event)
 {
 	gint  len;
 	gchar buf[6];
@@ -1751,6 +1751,32 @@ gdk_directfb_translate_key_event (DFBWindowEvent *dfb_event,
 
 	event->string = g_strndup (buf, len);
 	event->length = len;
+}
+
+/**
+ * gdk_keymap_get_caps_lock_state:
+ * @keymap: a #GdkKeymap
+ *
+ * Returns whether the Caps Lock modifer is locked.
+ *
+ * Returns: %TRUE if Caps Lock is on
+ *
+ * Since: 2.16
+ */
+gboolean
+gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
+{
+  IDirectFBInputDevice *keyboard = _gdk_display->keyboard;
+
+  if (keyboard)
+    {
+      DFBInputDeviceLockState  state;
+
+      if (keyboard->GetLockState (keyboard, &state) == DFB_OK)
+        return ((state & DILS_CAPS) != 0);
+    }
+
+  return FALSE;
 }
 
 /**

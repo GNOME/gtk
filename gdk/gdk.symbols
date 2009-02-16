@@ -846,6 +846,7 @@ gdk_keymap_get_direction
 gdk_keymap_get_entries_for_keycode
 gdk_keymap_get_entries_for_keyval
 gdk_keymap_get_for_display
+gdk_keymap_get_caps_lock_state
 gdk_keymap_lookup_key
 gdk_keymap_translate_keyboard_state
 gdk_keyval_from_name
