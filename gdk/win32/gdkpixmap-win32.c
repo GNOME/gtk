@@ -123,6 +123,8 @@ gdk_pixmap_impl_win32_get_size (GdkDrawable *drawable,
 				gint        *width,
 				gint        *height)
 {
+  g_print ("gdk_pixmap_impl_win32_get_size()\n");
+
   if (width)
     *width = GDK_PIXMAP_IMPL_WIN32 (drawable)->width;
   if (height)

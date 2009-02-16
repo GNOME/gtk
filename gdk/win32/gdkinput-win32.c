@@ -641,11 +641,11 @@ decode_tilt (gint   *axis_data,
 
 static void
 gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
-								 GdkInputWindow   *input_window,
-								 gint             *axis_data,
-								 gdouble          *axis_out,
-								 gdouble          *x_out,
-								 gdouble          *y_out)
+				 GdkInputWindow   *input_window,
+				 gint             *axis_data,
+				 gdouble          *axis_out,
+				 gdouble          *x_out,
+				 gdouble          *y_out)
 {
   GdkWindowImplWin32 *impl, *root_impl;
   GdkWindowObject *window_object;

@@ -2028,6 +2028,7 @@ handle_wm_paint (MSG        *msg,
   gdk_region_offset (update_region, xoffset, yoffset);
   
   _gdk_window_process_expose (window, update_region);
+  g_print ("handle_wm_paint\n");
   gdk_region_destroy (update_region);
 
   DeleteObject (hrgn);

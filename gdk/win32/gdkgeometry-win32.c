@@ -107,10 +107,10 @@ _gdk_window_move_resize_child (GdkWindow *window,
 
 void
 _gdk_window_process_expose (GdkWindow *window,
-							GdkRegion *invalidate_region)
+			    GdkRegion *invalidate_region)
 {
   GdkWindowImplWin32 *impl;
-  GdkRegion *clip_region;
+  //GdkRegion *clip_region;
   impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
   
   GDK_NOTE (EVENTS, g_print ("_gdk_window_process_expose: %p %s\n",
@@ -120,7 +120,8 @@ _gdk_window_process_expose (GdkWindow *window,
   if (!gdk_region_empty (invalidate_region))
     _gdk_window_invalidate_for_expose (window, invalidate_region);
   
-  gdk_region_destroy (clip_region);
+  g_print ("_gdk_window_process_expose\n");
+  gdk_region_destroy (invalidate_region);
 }
 
 static void
@@ -185,9 +186,11 @@ gdk_window_clip_changed (GdkWindow    *window,
     gdk_window_tmp_unset_bg (window);
   else
     {
+      g_print ("gdk_window_clip_changed (new_clip_region)\n");
       gdk_region_destroy (new_clip_region);
       new_clip_region = NULL;
     }
+  g_print ("gdk_window_clip_changed (old_clip_region)\n");
   gdk_region_destroy (old_clip_region);
 
   return new_clip_region;
@@ -202,5 +205,6 @@ gdk_window_post_scroll (GdkWindow    *window,
 		     _gdk_win32_gdkregion_to_string (new_clip_region)));
 
   gdk_window_invalidate_region (window, new_clip_region, FALSE);
+  g_print ("gdk_window_post_scroll\n");
   gdk_region_destroy (new_clip_region);
 }

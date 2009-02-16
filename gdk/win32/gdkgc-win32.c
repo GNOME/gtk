@@ -573,7 +573,7 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
 void
 _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
                                    const GdkRegion *region,
-								   gboolean         reset_origin)
+				   gboolean         reset_origin)
 {
   GdkGCWin32 *win32_gc = GDK_GC_WIN32 (gc);
 

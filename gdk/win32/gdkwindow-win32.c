@@ -233,19 +233,6 @@ gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
 }
 
 /*
-static void
-gdk_window_impl_win32_get_size (GdkDrawable *drawable,
-				gint        *width,
-				gint        *height)
-{
-  g_return_if_fail (GDK_IS_WINDOW_IMPL_WIN32 (drawable));
-
-  if (width)
-    *width = GDK_WINDOW_IMPL_WIN32 (drawable)->width;
-  if (height)
-    *height = GDK_WINDOW_IMPL_WIN32 (drawable)->height;
-}
-
 static GdkRegion*
 gdk_window_impl_win32_get_visible_region (GdkDrawable *drawable)
 {
@@ -492,12 +479,12 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
 
 void
 _gdk_window_impl_new (GdkWindow     *window,
-					  GdkWindow     *real_parent,
-					  GdkScreen     *screen,
-					  GdkVisual     *visual,
-					  GdkEventMask   event_mask,
-					  GdkWindowAttr *attributes,
-					  gint           attributes_mask)
+		      GdkWindow     *real_parent,
+		      GdkScreen     *screen,
+		      GdkVisual     *visual,
+		      GdkEventMask   event_mask,
+		      GdkWindowAttr *attributes,
+		      gint           attributes_mask)
 {
   HWND hwndNew;
   HANDLE hparent;
@@ -529,6 +516,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl = (GdkDrawable *)impl;
+  draw_impl = GDK_DRAWABLE_IMPL_WIN32 (impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
 
   // XXX: xattributes_mask = 0
@@ -2079,6 +2067,7 @@ static void
 gdk_win32_window_set_background (GdkWindow      *window,
 				 const GdkColor *color)
 {
+#if 0
   GdkWindowObject *private = (GdkWindowObject *)window;
   
   GDK_NOTE (MISC, g_print ("gdk_window_set_background: %p: %s\n",
@@ -2094,6 +2083,7 @@ gdk_win32_window_set_background (GdkWindow      *window,
       g_object_unref (private->bg_pixmap);
       private->bg_pixmap = NULL;
     }
+#endif
 }
 
 static void
@@ -3815,15 +3805,15 @@ _gdk_win32_window_queue_antiexpose (GdkWindow *window,
 
 static void
 gdk_win32_input_shape_combine_region (GdkWindow *window,
-									  const GdkRegion *shape_region,
-									  gint offset_x,
-									  gint offset_y)
+				      const GdkRegion *shape_region,
+				      gint offset_x,
+				      gint offset_y)
 {
 }
 
 void
 _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
-											   GdkRegion *region)
+					       GdkRegion *region)
 {
 }
 
