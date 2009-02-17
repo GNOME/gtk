@@ -41,7 +41,7 @@ get_democodedir (void)
 
   if (result == NULL)
     {
-      result = g_win32_get_package_installation_directory (NULL, NULL);
+      result = g_win32_get_package_installation_directory_of_module (NULL);
       if (result == NULL)
 	result = "unknown-location";
 
