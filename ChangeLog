@@ -1,3 +1,16 @@
+2009-02-16  MatthiasClasen  <mclasen@redhat.com>
+
+	Bug 572041 – Focus should change when advancing forward in GtkAssistant
+
+	* gtk/gtkassistant.c (set_current_page): Set focus when the current
+	page changes. Pointed out by Eitan Isaacson
+
+2009-02-16  MatthiasClasen  <mclasen@redhat.com>
+
+	* configure.in: Require GLib 2.19.7 for GMountOperation::aborted.
+
+	* gtk/gtkmountoperation.c: Implement GMountOperation::aborted.
+
 2009-02-16  Sven Neumann  <sven@gimp.org>
 
 	* gdk/gdk.symbols

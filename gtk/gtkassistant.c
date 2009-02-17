@@ -559,6 +559,28 @@ set_current_page (GtkAssistant     *assistant,
       gtk_widget_unmap (old_page->title);
     }
 
+  if (!gtk_widget_child_focus (priv->current_page->page, GTK_DIR_TAB_FORWARD))
+    {
+      GtkWidget *button[6];
+      gint i;
+
+      /* find the best button to focus */
+      button[0] = assistant->apply;
+      button[1] = assistant->close;
+      button[2] = assistant->forward;
+      button[3] = assistant->back;
+      button[4] = assistant->cancel;
+      button[5] = assistant->last;
+      for (i = 0; i < 6; i++)
+        {
+          if (GTK_WIDGET_VISIBLE (button[i]) && GTK_WIDGET_SENSITIVE (button[i]))
+            {
+              gtk_widget_grab_focus (button[i]);
+              break;
+            }
+        }
+    }
+
   gtk_widget_queue_resize (GTK_WIDGET (assistant));
 }
 
