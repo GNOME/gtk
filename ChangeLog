@@ -1,5 +1,9 @@
 2009-02-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version
+
+2009-02-17  Matthias Clasen  <mclasen@redhat.com>
+
 	* === Released 2.15.4 ===
 
 	* gdk/tests/Makefile.am: Disable check-gdk-cairo for now.
