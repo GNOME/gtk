@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-02 19:45-0500\n"
+"POT-Creation-Date: 2009-02-17 10:12-0500\n"
 "PO-Revision-Date: 2009-01-31 10:23+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
@@ -90,7 +90,7 @@ msgstr "預設顯示區"
 msgid "The default display for GDK"
 msgstr "GDK 的預設顯示區"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:176
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "螢幕"
@@ -3539,23 +3539,23 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "加在視窗元件上下的空間，單位為像素"
 
-#: gtk/gtkmountoperation.c:160
+#: gtk/gtkmountoperation.c:163
 msgid "Parent"
 msgstr "父項"
 
-#: gtk/gtkmountoperation.c:161
+#: gtk/gtkmountoperation.c:164
 msgid "The parent window"
 msgstr "父視窗"
 
-#: gtk/gtkmountoperation.c:168
+#: gtk/gtkmountoperation.c:171
 msgid "Is Showing"
 msgstr "顯示"
 
-#: gtk/gtkmountoperation.c:169
+#: gtk/gtkmountoperation.c:172
 msgid "Are we showing a dialog"
 msgstr "我們是否要顯示對話盒"
 
-#: gtk/gtkmountoperation.c:177
+#: gtk/gtkmountoperation.c:180
 msgid "The screen where this window will be displayed."
 msgstr "本視窗將顯示於此螢幕。"
 

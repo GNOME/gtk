@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 317\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-02 19:45-0500\n"
+"POT-Creation-Date: 2009-02-17 10:12-0500\n"
 "PO-Revision-Date: 2004-11-17 21:21-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <en@li.org>\n"
@@ -107,7 +107,7 @@ msgstr ""
 msgid "The default display for GDK"
 msgstr "Mburabuzi Kugaragaza kugirango"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:176
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "Ikirahuri"
@@ -4194,25 +4194,25 @@ msgid ""
 msgstr ""
 "Igiteranyo Bya Umwanya Kuri Kongeramo ku i Hejuru: Na Hasi: Bya i in Pigiseli"
 
-#: gtk/gtkmountoperation.c:160
+#: gtk/gtkmountoperation.c:163
 #, fuzzy
 msgid "Parent"
 msgstr "uburyombonera"
 
-#: gtk/gtkmountoperation.c:161
+#: gtk/gtkmountoperation.c:164
 #, fuzzy
 msgid "The parent window"
 msgstr "Ubwoko Bya i Idirishya"
 
-#: gtk/gtkmountoperation.c:168
+#: gtk/gtkmountoperation.c:171
 msgid "Is Showing"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:169
+#: gtk/gtkmountoperation.c:172
 msgid "Are we showing a dialog"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:177
+#: gtk/gtkmountoperation.c:180
 #, fuzzy
 msgid "The screen where this window will be displayed."
 msgstr "Mugaragaza iyi Idirishya"

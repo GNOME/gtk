@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-02 19:45-0500\n"
+"POT-Creation-Date: 2009-02-17 10:12-0500\n"
 "PO-Revision-Date: 2004-03-07 18:05+0200\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
 "Language-Team: Azerbaijani Turkish <translation-team-az@lists.sourceforge."
@@ -115,7 +115,7 @@ msgstr "Ön Qurğulu Displey"
 msgid "The default display for GDK"
 msgstr "GDK üçün ön qurğulu displey"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:176
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "Ekran"
@@ -3810,26 +3810,26 @@ msgstr ""
 "Pəncərəciklərin üst və alt tərəflərinə əlavə ediləcək sahə miqdarı, piksel "
 "olaraq"
 
-#: gtk/gtkmountoperation.c:160
+#: gtk/gtkmountoperation.c:163
 #, fuzzy
 msgid "Parent"
 msgstr "Əlaqəli pəncərəcik"
 
-#: gtk/gtkmountoperation.c:161
+#: gtk/gtkmountoperation.c:164
 #, fuzzy
 msgid "The parent window"
 msgstr "Pəncərənin növü"
 
-#: gtk/gtkmountoperation.c:168
+#: gtk/gtkmountoperation.c:171
 #, fuzzy
 msgid "Is Showing"
 msgstr "Başlığı Göstər"
 
-#: gtk/gtkmountoperation.c:169
+#: gtk/gtkmountoperation.c:172
 msgid "Are we showing a dialog"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:177
+#: gtk/gtkmountoperation.c:180
 #, fuzzy
 msgid "The screen where this window will be displayed."
 msgstr "Bu pəncərənin göstəriləcəyi ekran"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-02 19:45-0500\n"
+"POT-Creation-Date: 2009-02-17 10:12-0500\n"
 "PO-Revision-Date: 2006-09-03 15:50+0600\n"
 "Last-Translator: Khandakar Mujahidul Islam <suzan@bengalinux.org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -91,7 +91,7 @@ msgstr "ডিফল্ট ডিসপ্লে"
 msgid "The default display for GDK"
 msgstr "জিডিকে-র (GDK) ডিফল্ট ডিসপ্লে"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:176
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "পর্দা"
@@ -3779,26 +3779,26 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "উইজেটের উপর ও নীচে যত পিক্সেল ফাঁকা স্থান যোগ করা হবে"
 
-#: gtk/gtkmountoperation.c:160
+#: gtk/gtkmountoperation.c:163
 #, fuzzy
 msgid "Parent"
 msgstr "জরুরি"
 
-#: gtk/gtkmountoperation.c:161
+#: gtk/gtkmountoperation.c:164
 #, fuzzy
 msgid "The parent window"
 msgstr "উইন্ডোর ধরন "
 
-#: gtk/gtkmountoperation.c:168
+#: gtk/gtkmountoperation.c:171
 #, fuzzy
 msgid "Is Showing"
 msgstr "শিরোনাম প্রদর্শন করো"
 
-#: gtk/gtkmountoperation.c:169
+#: gtk/gtkmountoperation.c:172
 msgid "Are we showing a dialog"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:177
+#: gtk/gtkmountoperation.c:180
 #, fuzzy
 msgid "The screen where this window will be displayed."
 msgstr "এই উইন্ডোটি যে পর্দায় প্রদর্শিত হবে"

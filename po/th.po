@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-12 14:33+0700\n"
+"POT-Creation-Date: 2009-02-17 10:10-0500\n"
 "PO-Revision-Date: 2009-02-12 14:42+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -2208,39 +2208,39 @@ msgstr "ตัวเลือกของ GTK+"
 msgid "Show GTK+ Options"
 msgstr "แสดงตัวเลือกของ GTK+"
 
-#: gtk/gtkmountoperation.c:481
+#: gtk/gtkmountoperation.c:484
 msgid "Co_nnect"
 msgstr "เ_ชื่อมต่อ"
 
-#: gtk/gtkmountoperation.c:525
+#: gtk/gtkmountoperation.c:528
 msgid "Connect _anonymously"
 msgstr "เชื่อมต่อแบบ_นิรนาม"
 
-#: gtk/gtkmountoperation.c:534
+#: gtk/gtkmountoperation.c:537
 msgid "Connect as u_ser:"
 msgstr "เชื่อมต่อในนา_มผู้ใช้:"
 
-#: gtk/gtkmountoperation.c:571
+#: gtk/gtkmountoperation.c:574
 msgid "_Username:"
 msgstr "ชื่_อผู้ใช้:"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:578
 msgid "_Domain:"
 msgstr "โ_ดเมน:"
 
-#: gtk/gtkmountoperation.c:580
+#: gtk/gtkmountoperation.c:583
 msgid "_Password:"
 msgstr "_รหัสผ่าน::"
 
-#: gtk/gtkmountoperation.c:598
+#: gtk/gtkmountoperation.c:601
 msgid "Forget password _immediately"
 msgstr "_ทิ้งรหัสผ่านทันที"
 
-#: gtk/gtkmountoperation.c:608
+#: gtk/gtkmountoperation.c:611
 msgid "Remember password until you _logout"
 msgstr "_จำรหัสผ่านไว้จนกว่าจะออก"
 
-#: gtk/gtkmountoperation.c:618
+#: gtk/gtkmountoperation.c:621
 msgid "Remember _forever"
 msgstr "จำรหัสผ่านไว้_ตลอดไป"
 
@@ -2439,6 +2439,7 @@ msgid "Preparing %d"
 msgstr "กำลังเตรียมพิมพ์ %d"
 
 #: gtk/gtkprintoperation.c:2050 gtk/gtkprintoperation.c:2381
+#, c-format
 msgid "Preparing"
 msgstr "กำลังเตรียมพิมพ์"
 
@@ -2448,18 +2449,22 @@ msgid "Printing %d"
 msgstr "กำลังพิมพ์ %d"
 
 #: gtk/gtkprintoperation.c:2411
+#, c-format
 msgid "Error creating print preview"
 msgstr "เกิดข้อผิดพลาดขณะสร้างตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation.c:2414
+#, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "สาเหตุที่น่าจะเป็นไปได้มากที่สุด คือไม่สามารถสร้างแฟ้มชั่วคราวได้"
 
 #: gtk/gtkprintoperation-unix.c:242
+#, c-format
 msgid "Error launching preview"
 msgstr "เกิดข้อผิดพลาดขณะเรียกแสดงตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation-unix.c:280
+#, c-format
 msgid "Error printing"
 msgstr "เกิดข้อผิดพลาดขณะพิมพ์"
 

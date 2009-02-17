@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-02 19:45-0500\n"
+"POT-Creation-Date: 2009-02-17 10:12-0500\n"
 "PO-Revision-Date: 2002-12-19 16:10+0200\n"
 "Last-Translator: Artis Trops <hornet@navigator.lv>\n"
 "Language-Team: Latvian <ll10nt@os.lv>\n"
@@ -95,7 +95,7 @@ msgstr "Noklusētais Displejs"
 msgid "The default display for GDK"
 msgstr "Noklusētais GDK displejs"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:176
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "Ekrāns"
@@ -3872,26 +3872,26 @@ msgid ""
 msgstr ""
 "Atstarpes apmērs, kādu pievienot uz augšu un apakšu no logdaļas, pikseļos"
 
-#: gtk/gtkmountoperation.c:160
+#: gtk/gtkmountoperation.c:163
 #, fuzzy
 msgid "Parent"
 msgstr "Vecāka logdaļa"
 
-#: gtk/gtkmountoperation.c:161
+#: gtk/gtkmountoperation.c:164
 #, fuzzy
 msgid "The parent window"
 msgstr "Loga tips"
 
-#: gtk/gtkmountoperation.c:168
+#: gtk/gtkmountoperation.c:171
 #, fuzzy
 msgid "Is Showing"
 msgstr "Rindu atstarpe"
 
-#: gtk/gtkmountoperation.c:169
+#: gtk/gtkmountoperation.c:172
 msgid "Are we showing a dialog"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:177
+#: gtk/gtkmountoperation.c:180
 #, fuzzy
 msgid "The screen where this window will be displayed."
 msgstr "Ekrāns, kurā šis logs tiks parādīts"

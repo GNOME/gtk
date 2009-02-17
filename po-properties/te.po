@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: te\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-02 19:45-0500\n"
+"POT-Creation-Date: 2009-02-17 10:12-0500\n"
 "PO-Revision-Date: 2008-09-12 19:23+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
@@ -99,7 +99,7 @@ msgstr "అప్రమేయ ప్రదర్శన"
 msgid "The default display for GDK"
 msgstr "GDK కొరకు అప్రమేయ ప్రదర్శన"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:176
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "తెర"
@@ -3607,23 +3607,23 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "విడ్జట్‌యొక్క పైన మరియు క్రిందన జతచేయవలిసిన ఖాళీ మొత్తము, పిగ్జెల్స్‍ లో"
 
-#: gtk/gtkmountoperation.c:160
+#: gtk/gtkmountoperation.c:163
 msgid "Parent"
 msgstr "మాత్రుక"
 
-#: gtk/gtkmountoperation.c:161
+#: gtk/gtkmountoperation.c:164
 msgid "The parent window"
 msgstr "మాత్రుక విండో"
 
-#: gtk/gtkmountoperation.c:168
+#: gtk/gtkmountoperation.c:171
 msgid "Is Showing"
 msgstr "చూపించబడుతున్న"
 
-#: gtk/gtkmountoperation.c:169
+#: gtk/gtkmountoperation.c:172
 msgid "Are we showing a dialog"
 msgstr "మనము డైలాగ్‌ను చూపించుతామా"
 
-#: gtk/gtkmountoperation.c:177
+#: gtk/gtkmountoperation.c:180
 msgid "The screen where this window will be displayed."
 msgstr "ఈ విండో ప్రదర్శింపబడు తెర"
 

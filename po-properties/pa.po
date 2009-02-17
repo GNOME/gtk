@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-02 19:45-0500\n"
+"POT-Creation-Date: 2009-02-17 10:12-0500\n"
 "PO-Revision-Date: 2008-08-15 14:53+0530\n"
 "Last-Translator: Amanpreet Singh Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@lists.sf.net>\n"
@@ -93,7 +93,7 @@ msgstr "ਡਿਫਾਲਟ ਡਿਸਪਲੇਅ"
 msgid "The default display for GDK"
 msgstr "GDK ਲਈ ਡਿਫਾਲਟ ਡਿਸਪਲੇਅ"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:176
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "ਸਕਰੀਨ"
@@ -3592,23 +3592,23 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "ਵਿਦਗਿਟ ਦੇ ਉੱਤੇ ਤੇ ਹੇਠਾਂ ਜੋੜਨ ਲਈ ਖਾਲ਼ੀ ਥਾਂ (ਪਿਕਸਿਲ ਵਿੱਚ)"
 
-#: gtk/gtkmountoperation.c:160
+#: gtk/gtkmountoperation.c:163
 msgid "Parent"
 msgstr "ਪੇਰੈਂਟ"
 
-#: gtk/gtkmountoperation.c:161
+#: gtk/gtkmountoperation.c:164
 msgid "The parent window"
 msgstr "ਪੇਰੈਂਟ ਵਿੰਡੋ"
 
-#: gtk/gtkmountoperation.c:168
+#: gtk/gtkmountoperation.c:171
 msgid "Is Showing"
 msgstr "ਵੇਖਾ ਰਿਹਾ ਹੈ"
 
-#: gtk/gtkmountoperation.c:169
+#: gtk/gtkmountoperation.c:172
 msgid "Are we showing a dialog"
 msgstr "ਕੀ ਅਸੀਂ ਡਾਈਲਾਗ ਵੇਖਾ ਰਹੇ ਹਨ"
 
-#: gtk/gtkmountoperation.c:177
+#: gtk/gtkmountoperation.c:180
 msgid "The screen where this window will be displayed."
 msgstr "ਸਕਰੀਨ, ਜਿੱਥੇ ਇਹ ਵਿੰਡੋ ਵੇਖਾਈ ਜਾਵੇਗੀ।"
 

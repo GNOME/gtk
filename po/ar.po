@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-02 19:45-0500\n"
+"POT-Creation-Date: 2009-02-17 10:10-0500\n"
 "PO-Revision-Date: 2008-09-18 03:13+0300\n"
 "Last-Translator: Anas Afif Emad <anas.e87@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -1558,15 +1558,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "اختيار اللون"
 
-#: gtk/gtkentry.c:8250 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7780
 msgid "Input _Methods"
 msgstr "طرق ال_إدخال"
 
-#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7794
+#: gtk/gtkentry.c:8278 gtk/gtktextview.c:7794
 msgid "_Insert Unicode Control Character"
 msgstr "أ_درج محرف تحكم يونيكود"
 
-#: gtk/gtkentry.c:9622
+#: gtk/gtkentry.c:9636
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "ا_نسخ الموقع"
@@ -1583,7 +1583,7 @@ msgstr "سطح المكتب"
 msgid "(None)"
 msgstr "(لا شيء)"
 
-#: gtk/gtkfilechooserbutton.c:2011
+#: gtk/gtkfilechooserbutton.c:2014
 msgid "Other..."
 msgstr "أخرى..."
 
@@ -2265,39 +2265,39 @@ msgstr "خيارات ج‌ت‌ك+"
 msgid "Show GTK+ Options"
 msgstr "اعرض خيارات ج‌ت‌ك+"
 
-#: gtk/gtkmountoperation.c:481
+#: gtk/gtkmountoperation.c:484
 msgid "Co_nnect"
 msgstr "ا_تّصل"
 
-#: gtk/gtkmountoperation.c:525
+#: gtk/gtkmountoperation.c:528
 msgid "Connect _anonymously"
 msgstr "اتصل _مجهولا"
 
-#: gtk/gtkmountoperation.c:534
+#: gtk/gtkmountoperation.c:537
 msgid "Connect as u_ser:"
 msgstr "اتصل كم_ستخدم"
 
-#: gtk/gtkmountoperation.c:571
+#: gtk/gtkmountoperation.c:574
 msgid "_Username:"
 msgstr "اسم المست_خدم:"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:578
 msgid "_Domain:"
 msgstr "الن_طاق:"
 
-#: gtk/gtkmountoperation.c:580
+#: gtk/gtkmountoperation.c:583
 msgid "_Password:"
 msgstr "_كلمة السر:"
 
-#: gtk/gtkmountoperation.c:598
+#: gtk/gtkmountoperation.c:601
 msgid "Forget password _immediately"
 msgstr "انس كلمة السر _حالاً"
 
-#: gtk/gtkmountoperation.c:608
+#: gtk/gtkmountoperation.c:611
 msgid "Remember password until you _logout"
 msgstr "_تذكر كلمة السر حتى الخروج"
 
-#: gtk/gtkmountoperation.c:618
+#: gtk/gtkmountoperation.c:621
 msgid "Remember _forever"
 msgstr "تذكر للأب_د"
 
@@ -2652,7 +2652,7 @@ msgstr "عامّ"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:2442
-#: modules/printbackends/cups/gtkprintbackendcups.c:2874
+#: modules/printbackends/cups/gtkprintbackendcups.c:2910
 msgid "Page Ordering"
 msgstr "ترتيب الصفحات"
 
@@ -3686,39 +3686,39 @@ msgstr "بيانات محارف غير متوقّعة عند السطر %Id ال
 msgid "Empty"
 msgstr "فارغ"
 
-#: gtk/gtkvolumebutton.c:77
+#: gtk/gtkvolumebutton.c:73
 msgid "Volume"
 msgstr "شدة الصوت"
 
-#: gtk/gtkvolumebutton.c:79
+#: gtk/gtkvolumebutton.c:75
 msgid "Turns volume down or up"
 msgstr "يرفع أو يخفض الصوت"
 
-#: gtk/gtkvolumebutton.c:82
+#: gtk/gtkvolumebutton.c:78
 msgid "Adjusts the volume"
 msgstr "يضبط الصوت"
 
-#: gtk/gtkvolumebutton.c:85 gtk/gtkvolumebutton.c:88
+#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
 msgid "Volume Down"
 msgstr "أخفض الصوت"
 
-#: gtk/gtkvolumebutton.c:87
+#: gtk/gtkvolumebutton.c:83
 msgid "Decreases the volume"
 msgstr "يخفض الصوت"
 
-#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
+#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
 msgid "Volume Up"
 msgstr "ارفع الصوت"
 
-#: gtk/gtkvolumebutton.c:93
+#: gtk/gtkvolumebutton.c:89
 msgid "Increases the volume"
 msgstr "يرفع الصوت"
 
-#: gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:147
 msgid "Muted"
 msgstr "صامت"
 
-#: gtk/gtkvolumebutton.c:155
+#: gtk/gtkvolumebutton.c:151
 msgid "Full Volume"
 msgstr "شدة الصوت القصوى"
 
@@ -3727,7 +3727,7 @@ msgstr "شدة الصوت القصوى"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:168
+#: gtk/gtkvolumebutton.c:164
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -4862,76 +4862,124 @@ msgstr "مصدر الورق"
 msgid "Output Tray"
 msgstr "لوحة الخرْج"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2157
+#: modules/printbackends/cups/gtkprintbackendcups.c:2149
+#, fuzzy
+msgid "Resolution"
+msgstr "سؤال"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2150
+msgid "GhostScript pre-filtering"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2159
 msgid "One Sided"
 msgstr "أحادي الجانب"
 
-#. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2159
+#. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2161
-#: modules/printbackends/cups/gtkprintbackendcups.c:2169
+msgid "Long Edge (Standard)"
+msgstr ""
+
+#. Translators: this is an option of "Two Sided"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2163
+msgid "Short Edge (Flip)"
+msgstr ""
+
+#. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2165
+#: modules/printbackends/cups/gtkprintbackendcups.c:2167
+#: modules/printbackends/cups/gtkprintbackendcups.c:2175
 msgid "Auto Select"
 msgstr "اختيار تلقائي"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2163
-#: modules/printbackends/cups/gtkprintbackendcups.c:2165
-#: modules/printbackends/cups/gtkprintbackendcups.c:2167
-#: modules/printbackends/cups/gtkprintbackendcups.c:2638
+#. Translators: this is an option of "Resolution"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2169
+#: modules/printbackends/cups/gtkprintbackendcups.c:2171
+#: modules/printbackends/cups/gtkprintbackendcups.c:2173
+#: modules/printbackends/cups/gtkprintbackendcups.c:2177
+#: modules/printbackends/cups/gtkprintbackendcups.c:2663
 msgid "Printer Default"
 msgstr "مبدئي الطابعة"
+
+#. Translators: this is an option of "GhostScript"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2179
+msgid "Embed GhostScript fonts only"
+msgstr ""
+
+#. Translators: this is an option of "GhostScript"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2181
+msgid "Convert to PS level 1"
+msgstr ""
+
+#. Translators: this is an option of "GhostScript"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2183
+msgid "Convert to PS level 2"
+msgstr ""
+
+#. Translators: this is an option of "GhostScript"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2185
+#, fuzzy
+msgid "No pre-filtering"
+msgstr "لم يُعثر على أي طابعة"
+
+#. Translators: "Miscellaneous" is the label for a button, that opens
+#. up an extra panel of settings in a print dialog.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2194
+msgid "Miscellaneous"
+msgstr ""
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Urgent"
 msgstr "عاجِل"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "High"
 msgstr "عال"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Medium"
 msgstr "متوسط"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Low"
 msgstr "منخفض"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2840
+#: modules/printbackends/cups/gtkprintbackendcups.c:2876
 msgid "Left to right, top to bottom"
 msgstr "اليسار لليمين، الأعلى للأسفل"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2840
+#: modules/printbackends/cups/gtkprintbackendcups.c:2876
 msgid "Left to right, bottom to top"
 msgstr "اليسار لليمين، الأسفل للأعلى"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2841
+#: modules/printbackends/cups/gtkprintbackendcups.c:2877
 msgid "Right to left, top to bottom"
 msgstr "اليمين لليسار، الأعلى للأسفل"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2841
+#: modules/printbackends/cups/gtkprintbackendcups.c:2877
 msgid "Right to left, bottom to top"
 msgstr "اليمين لليسار، الأسفل للأعلى"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2842
+#: modules/printbackends/cups/gtkprintbackendcups.c:2878
 msgid "Top to bottom, left to right"
 msgstr "الأعلى للأسفل، اليسار لليمين"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2842
+#: modules/printbackends/cups/gtkprintbackendcups.c:2878
 msgid "Top to bottom, right to left"
 msgstr "الأعلى للأسفل، اليمين لليسار"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2843
+#: modules/printbackends/cups/gtkprintbackendcups.c:2879
 msgid "Bottom to top, left to right"
 msgstr "الأسفل للأعلى، اليسار لليمين"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2843
+#: modules/printbackends/cups/gtkprintbackendcups.c:2879
 msgid "Bottom to top, right to left"
 msgstr "الأسفل للأعلى، اليمين لليسار"
 
@@ -4939,66 +4987,66 @@ msgstr "الأسفل للأعلى، اليمين لليسار"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2858
+#: modules/printbackends/cups/gtkprintbackendcups.c:2894
 msgid "Pages per Sheet"
 msgstr "الصفحات بكل ورقة"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2895
+#: modules/printbackends/cups/gtkprintbackendcups.c:2931
 msgid "Job Priority"
 msgstr "أولوية المهمة"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2906
+#: modules/printbackends/cups/gtkprintbackendcups.c:2942
 msgid "Billing Info"
 msgstr "معلومات الدفع"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "None"
 msgstr "لا شيء"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Classified"
 msgstr "مصنّف"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Confidential"
 msgstr "سرّي"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Secret"
 msgstr "سر"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Standard"
 msgstr "معياري"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Top Secret"
 msgstr "سرّي للغاية"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Unclassified"
 msgstr "غير مصنّف"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2955
+#: modules/printbackends/cups/gtkprintbackendcups.c:2991
 msgid "Before"
 msgstr "قبل"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2970
+#: modules/printbackends/cups/gtkprintbackendcups.c:3006
 msgid "After"
 msgstr "بعد"
 
@@ -5006,14 +5054,14 @@ msgstr "بعد"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2990
+#: modules/printbackends/cups/gtkprintbackendcups.c:3026
 msgid "Print at"
 msgstr "إطبع في"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3001
+#: modules/printbackends/cups/gtkprintbackendcups.c:3037
 msgid "Print at time"
 msgstr "إطبع في الوقت"
 
@@ -5021,7 +5069,7 @@ msgstr "إطبع في الوقت"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3036
+#: modules/printbackends/cups/gtkprintbackendcups.c:3072
 #, c-format
 msgid "Custom %sx%s"
 msgstr "مخصص %sx%s"

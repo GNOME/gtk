@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-02 19:45-0500\n"
+"POT-Creation-Date: 2009-02-17 10:10-0500\n"
 "PO-Revision-Date: 2009-01-31 08:35+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
@@ -1513,15 +1513,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "顏色選擇"
 
-#: gtk/gtkentry.c:8250 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7780
 msgid "Input _Methods"
 msgstr "輸入法(_M)"
 
-#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7794
+#: gtk/gtkentry.c:8278 gtk/gtktextview.c:7794
 msgid "_Insert Unicode Control Character"
 msgstr "插入統一碼控制字元(_I)"
 
-#: gtk/gtkentry.c:9622
+#: gtk/gtkentry.c:9636
 msgid "Caps Lock is on"
 msgstr "Cpas Lock 已開啟"
 
@@ -1537,7 +1537,7 @@ msgstr "桌面"
 msgid "(None)"
 msgstr "（沒有）"
 
-#: gtk/gtkfilechooserbutton.c:2011
+#: gtk/gtkfilechooserbutton.c:2014
 msgid "Other..."
 msgstr "其它..."
 
@@ -2215,39 +2215,39 @@ msgstr "GTK+ 選項"
 msgid "Show GTK+ Options"
 msgstr "顯示 GTK+ 選項"
 
-#: gtk/gtkmountoperation.c:481
+#: gtk/gtkmountoperation.c:484
 msgid "Co_nnect"
 msgstr "連線(_N)"
 
-#: gtk/gtkmountoperation.c:525
+#: gtk/gtkmountoperation.c:528
 msgid "Connect _anonymously"
 msgstr "匿名連線(_A)"
 
-#: gtk/gtkmountoperation.c:534
+#: gtk/gtkmountoperation.c:537
 msgid "Connect as u_ser:"
 msgstr "以使用者連線(_S):"
 
-#: gtk/gtkmountoperation.c:571
+#: gtk/gtkmountoperation.c:574
 msgid "_Username:"
 msgstr "使用者名稱(_U):"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:578
 msgid "_Domain:"
 msgstr "網域(_D):"
 
-#: gtk/gtkmountoperation.c:580
+#: gtk/gtkmountoperation.c:583
 msgid "_Password:"
 msgstr "密碼(_P):"
 
-#: gtk/gtkmountoperation.c:598
+#: gtk/gtkmountoperation.c:601
 msgid "Forget password _immediately"
 msgstr "立刻忘記密碼(_I)"
 
-#: gtk/gtkmountoperation.c:608
+#: gtk/gtkmountoperation.c:611
 msgid "Remember password until you _logout"
 msgstr "記憶密碼到登出之前(_L)"
 
-#: gtk/gtkmountoperation.c:618
+#: gtk/gtkmountoperation.c:621
 msgid "Remember _forever"
 msgstr "永遠記住密碼(_F)"
 
@@ -2598,7 +2598,7 @@ msgstr "一般"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:2442
-#: modules/printbackends/cups/gtkprintbackendcups.c:2874
+#: modules/printbackends/cups/gtkprintbackendcups.c:2910
 msgid "Page Ordering"
 msgstr "頁面順序"
 
@@ -3545,39 +3545,39 @@ msgstr "第 %d 行第 %d 字有非預設的字元資料"
 msgid "Empty"
 msgstr "空的"
 
-#: gtk/gtkvolumebutton.c:77
+#: gtk/gtkvolumebutton.c:73
 msgid "Volume"
 msgstr "音量"
 
-#: gtk/gtkvolumebutton.c:79
+#: gtk/gtkvolumebutton.c:75
 msgid "Turns volume down or up"
 msgstr "提高或降低音量"
 
-#: gtk/gtkvolumebutton.c:82
+#: gtk/gtkvolumebutton.c:78
 msgid "Adjusts the volume"
 msgstr "調整音量"
 
-#: gtk/gtkvolumebutton.c:85 gtk/gtkvolumebutton.c:88
+#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
 msgid "Volume Down"
 msgstr "調低音量"
 
-#: gtk/gtkvolumebutton.c:87
+#: gtk/gtkvolumebutton.c:83
 msgid "Decreases the volume"
 msgstr "減低音量"
 
-#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
+#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
 msgid "Volume Up"
 msgstr "調高音量"
 
-#: gtk/gtkvolumebutton.c:93
+#: gtk/gtkvolumebutton.c:89
 msgid "Increases the volume"
 msgstr "增加音量"
 
-#: gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:147
 msgid "Muted"
 msgstr "已靜音"
 
-#: gtk/gtkvolumebutton.c:155
+#: gtk/gtkvolumebutton.c:151
 msgid "Full Volume"
 msgstr "最大音量"
 
@@ -3586,7 +3586,7 @@ msgstr "最大音量"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:168
+#: gtk/gtkvolumebutton.c:164
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -4667,76 +4667,124 @@ msgstr "紙張來源"
 msgid "Output Tray"
 msgstr "出紙匣"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2157
+#: modules/printbackends/cups/gtkprintbackendcups.c:2149
+#, fuzzy
+msgid "Resolution"
+msgstr "問題"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2150
+msgid "GhostScript pre-filtering"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2159
 msgid "One Sided"
 msgstr "單面"
 
-#. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2159
+#. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2161
-#: modules/printbackends/cups/gtkprintbackendcups.c:2169
+msgid "Long Edge (Standard)"
+msgstr ""
+
+#. Translators: this is an option of "Two Sided"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2163
+msgid "Short Edge (Flip)"
+msgstr ""
+
+#. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2165
+#: modules/printbackends/cups/gtkprintbackendcups.c:2167
+#: modules/printbackends/cups/gtkprintbackendcups.c:2175
 msgid "Auto Select"
 msgstr "自動選擇"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2163
-#: modules/printbackends/cups/gtkprintbackendcups.c:2165
-#: modules/printbackends/cups/gtkprintbackendcups.c:2167
-#: modules/printbackends/cups/gtkprintbackendcups.c:2638
+#. Translators: this is an option of "Resolution"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2169
+#: modules/printbackends/cups/gtkprintbackendcups.c:2171
+#: modules/printbackends/cups/gtkprintbackendcups.c:2173
+#: modules/printbackends/cups/gtkprintbackendcups.c:2177
+#: modules/printbackends/cups/gtkprintbackendcups.c:2663
 msgid "Printer Default"
 msgstr "印表機預設"
+
+#. Translators: this is an option of "GhostScript"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2179
+msgid "Embed GhostScript fonts only"
+msgstr ""
+
+#. Translators: this is an option of "GhostScript"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2181
+msgid "Convert to PS level 1"
+msgstr ""
+
+#. Translators: this is an option of "GhostScript"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2183
+msgid "Convert to PS level 2"
+msgstr ""
+
+#. Translators: this is an option of "GhostScript"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2185
+#, fuzzy
+msgid "No pre-filtering"
+msgstr "找不到印表機"
+
+#. Translators: "Miscellaneous" is the label for a button, that opens
+#. up an extra panel of settings in a print dialog.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2194
+msgid "Miscellaneous"
+msgstr ""
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Urgent"
 msgstr "緊急"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "High"
 msgstr "高"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Medium"
 msgstr "中"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Low"
 msgstr "低"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2840
+#: modules/printbackends/cups/gtkprintbackendcups.c:2876
 msgid "Left to right, top to bottom"
 msgstr "由左至右，由上至下"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2840
+#: modules/printbackends/cups/gtkprintbackendcups.c:2876
 msgid "Left to right, bottom to top"
 msgstr "由左至右，由下至上"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2841
+#: modules/printbackends/cups/gtkprintbackendcups.c:2877
 msgid "Right to left, top to bottom"
 msgstr "由右至左，由上至下"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2841
+#: modules/printbackends/cups/gtkprintbackendcups.c:2877
 msgid "Right to left, bottom to top"
 msgstr "由右至左，由下至上"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2842
+#: modules/printbackends/cups/gtkprintbackendcups.c:2878
 msgid "Top to bottom, left to right"
 msgstr "由上至下，由左至右"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2842
+#: modules/printbackends/cups/gtkprintbackendcups.c:2878
 msgid "Top to bottom, right to left"
 msgstr "由上至下，由右至左"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2843
+#: modules/printbackends/cups/gtkprintbackendcups.c:2879
 msgid "Bottom to top, left to right"
 msgstr "由下至上，由左至右"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2843
+#: modules/printbackends/cups/gtkprintbackendcups.c:2879
 msgid "Bottom to top, right to left"
 msgstr "由下至上，由右至左"
 
@@ -4744,66 +4792,66 @@ msgstr "由下至上，由右至左"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2858
+#: modules/printbackends/cups/gtkprintbackendcups.c:2894
 msgid "Pages per Sheet"
 msgstr "每表頁數"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2895
+#: modules/printbackends/cups/gtkprintbackendcups.c:2931
 msgid "Job Priority"
 msgstr "工作優先權:"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2906
+#: modules/printbackends/cups/gtkprintbackendcups.c:2942
 msgid "Billing Info"
 msgstr "計費資訊"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "None"
 msgstr "沒有"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Classified"
 msgstr "已分類"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Confidential"
 msgstr "機密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Secret"
 msgstr "密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Standard"
 msgstr "標準"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Top Secret"
 msgstr "高度機密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Unclassified"
 msgstr "未分類"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2955
+#: modules/printbackends/cups/gtkprintbackendcups.c:2991
 msgid "Before"
 msgstr "封面"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2970
+#: modules/printbackends/cups/gtkprintbackendcups.c:3006
 msgid "After"
 msgstr "封底"
 
@@ -4811,14 +4859,14 @@ msgstr "封底"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2990
+#: modules/printbackends/cups/gtkprintbackendcups.c:3026
 msgid "Print at"
 msgstr "列印於"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3001
+#: modules/printbackends/cups/gtkprintbackendcups.c:3037
 msgid "Print at time"
 msgstr "於指定時刻列印"
 
@@ -4826,7 +4874,7 @@ msgstr "於指定時刻列印"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3036
+#: modules/printbackends/cups/gtkprintbackendcups.c:3072
 #, c-format
 msgid "Custom %sx%s"
 msgstr "自訂 %sx%s"

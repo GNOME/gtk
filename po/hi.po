@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-02 19:45-0500\n"
+"POT-Creation-Date: 2009-02-17 10:10-0500\n"
 "PO-Revision-Date: 2006-06-22 11:06+0530\n"
 "Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
@@ -1572,15 +1572,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "रंग चयन"
 
-#: gtk/gtkentry.c:8250 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7780
 msgid "Input _Methods"
 msgstr "इनपुट विधियाँ"
 
-#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7794
+#: gtk/gtkentry.c:8278 gtk/gtktextview.c:7794
 msgid "_Insert Unicode Control Character"
 msgstr "यूनिकोड कन्ट्रोल कैरेक्टर प्रविष्ट करें (_I)"
 
-#: gtk/gtkentry.c:9622
+#: gtk/gtkentry.c:9636
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "स्थान कॉपी करें (_L)"
@@ -1597,7 +1597,7 @@ msgstr "डेस्कटॉप"
 msgid "(None)"
 msgstr "(कुछ नहीं)"
 
-#: gtk/gtkfilechooserbutton.c:2011
+#: gtk/gtkfilechooserbutton.c:2014
 msgid "Other..."
 msgstr "अन्य..."
 
@@ -2306,43 +2306,43 @@ msgstr "GTK+ विकल्प"
 msgid "Show GTK+ Options"
 msgstr "GTK+ विकल्प दिखायें"
 
-#: gtk/gtkmountoperation.c:481
+#: gtk/gtkmountoperation.c:484
 #, fuzzy
 msgid "Co_nnect"
 msgstr "जोड़ें (_o)"
 
-#: gtk/gtkmountoperation.c:525
+#: gtk/gtkmountoperation.c:528
 msgid "Connect _anonymously"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:534
+#: gtk/gtkmountoperation.c:537
 msgid "Connect as u_ser:"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:571
+#: gtk/gtkmountoperation.c:574
 #, fuzzy
 msgid "_Username:"
 msgstr "नाम बदलें (_R)"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:578
 #, fuzzy
 msgid "_Domain:"
 msgstr "स्थान"
 
-#: gtk/gtkmountoperation.c:580
+#: gtk/gtkmountoperation.c:583
 #, fuzzy
 msgid "_Password:"
 msgstr "दबाव (_P):"
 
-#: gtk/gtkmountoperation.c:598
+#: gtk/gtkmountoperation.c:601
 msgid "Forget password _immediately"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:608
+#: gtk/gtkmountoperation.c:611
 msgid "Remember password until you _logout"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:618
+#: gtk/gtkmountoperation.c:621
 msgid "Remember _forever"
 msgstr ""
 
@@ -2706,7 +2706,7 @@ msgstr "सामान्य"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:2442
-#: modules/printbackends/cups/gtkprintbackendcups.c:2874
+#: modules/printbackends/cups/gtkprintbackendcups.c:2910
 #, fuzzy
 msgid "Page Ordering"
 msgstr "तैयारी"
@@ -3750,40 +3750,40 @@ msgstr "अप्रत्याशित अक्षर डेटा पंक
 msgid "Empty"
 msgstr "रिक्त"
 
-#: gtk/gtkvolumebutton.c:77
+#: gtk/gtkvolumebutton.c:73
 #, fuzzy
 msgid "Volume"
 msgstr "मान: (_V)"
 
-#: gtk/gtkvolumebutton.c:79
+#: gtk/gtkvolumebutton.c:75
 msgid "Turns volume down or up"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:82
+#: gtk/gtkvolumebutton.c:78
 msgid "Adjusts the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:85 gtk/gtkvolumebutton.c:88
+#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
 msgid "Volume Down"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:87
+#: gtk/gtkvolumebutton.c:83
 msgid "Decreases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
+#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
 msgid "Volume Up"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:93
+#: gtk/gtkvolumebutton.c:89
 msgid "Increases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:147
 msgid "Muted"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:155
+#: gtk/gtkvolumebutton.c:151
 msgid "Full Volume"
 msgstr ""
 
@@ -3792,7 +3792,7 @@ msgstr ""
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:168
+#: gtk/gtkvolumebutton.c:164
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -4935,76 +4935,124 @@ msgstr "कागज श्रोत"
 msgid "Output Tray"
 msgstr "आउटपुट ट्रे"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2157
+#: modules/printbackends/cups/gtkprintbackendcups.c:2149
+#, fuzzy
+msgid "Resolution"
+msgstr "प्रश्न"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2150
+msgid "GhostScript pre-filtering"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2159
 msgid "One Sided"
 msgstr "एक तरफा"
 
-#. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2159
+#. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2161
-#: modules/printbackends/cups/gtkprintbackendcups.c:2169
+msgid "Long Edge (Standard)"
+msgstr ""
+
+#. Translators: this is an option of "Two Sided"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2163
+msgid "Short Edge (Flip)"
+msgstr ""
+
+#. Translators: this is an option of "Paper Source"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2165
+#: modules/printbackends/cups/gtkprintbackendcups.c:2167
+#: modules/printbackends/cups/gtkprintbackendcups.c:2175
 msgid "Auto Select"
 msgstr "स्वतः चुनें"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2163
-#: modules/printbackends/cups/gtkprintbackendcups.c:2165
-#: modules/printbackends/cups/gtkprintbackendcups.c:2167
-#: modules/printbackends/cups/gtkprintbackendcups.c:2638
+#. Translators: this is an option of "Resolution"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2169
+#: modules/printbackends/cups/gtkprintbackendcups.c:2171
+#: modules/printbackends/cups/gtkprintbackendcups.c:2173
+#: modules/printbackends/cups/gtkprintbackendcups.c:2177
+#: modules/printbackends/cups/gtkprintbackendcups.c:2663
 msgid "Printer Default"
 msgstr "मुद्रक डिफ़ॉल्ट"
+
+#. Translators: this is an option of "GhostScript"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2179
+msgid "Embed GhostScript fonts only"
+msgstr ""
+
+#. Translators: this is an option of "GhostScript"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2181
+msgid "Convert to PS level 1"
+msgstr ""
+
+#. Translators: this is an option of "GhostScript"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2183
+msgid "Convert to PS level 2"
+msgstr ""
+
+#. Translators: this is an option of "GhostScript"
+#: modules/printbackends/cups/gtkprintbackendcups.c:2185
+#, fuzzy
+msgid "No pre-filtering"
+msgstr "URI '%s' के लिये कोई मद नहीं पाया"
+
+#. Translators: "Miscellaneous" is the label for a button, that opens
+#. up an extra panel of settings in a print dialog.
+#: modules/printbackends/cups/gtkprintbackendcups.c:2194
+msgid "Miscellaneous"
+msgstr ""
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Urgent"
 msgstr "अत्यावश्यक"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "High"
 msgstr "ज्यादा"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Medium"
 msgstr "मध्यम"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2835
+#: modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Low"
 msgstr "कम"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2840
+#: modules/printbackends/cups/gtkprintbackendcups.c:2876
 msgid "Left to right, top to bottom"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2840
+#: modules/printbackends/cups/gtkprintbackendcups.c:2876
 msgid "Left to right, bottom to top"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2841
+#: modules/printbackends/cups/gtkprintbackendcups.c:2877
 msgid "Right to left, top to bottom"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2841
+#: modules/printbackends/cups/gtkprintbackendcups.c:2877
 msgid "Right to left, bottom to top"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2842
+#: modules/printbackends/cups/gtkprintbackendcups.c:2878
 msgid "Top to bottom, left to right"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2842
+#: modules/printbackends/cups/gtkprintbackendcups.c:2878
 msgid "Top to bottom, right to left"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2843
+#: modules/printbackends/cups/gtkprintbackendcups.c:2879
 msgid "Bottom to top, left to right"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2843
+#: modules/printbackends/cups/gtkprintbackendcups.c:2879
 msgid "Bottom to top, right to left"
 msgstr ""
 
@@ -5012,7 +5060,7 @@ msgstr ""
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2858
+#: modules/printbackends/cups/gtkprintbackendcups.c:2894
 #, fuzzy
 msgid "Pages per Sheet"
 msgstr "प्रति शीट पृष्ट"
@@ -5020,7 +5068,7 @@ msgstr "प्रति शीट पृष्ट"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2895
+#: modules/printbackends/cups/gtkprintbackendcups.c:2931
 #, fuzzy
 msgid "Job Priority"
 msgstr "प्राथमिकता (_o):"
@@ -5028,7 +5076,7 @@ msgstr "प्राथमिकता (_o):"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2906
+#: modules/printbackends/cups/gtkprintbackendcups.c:2942
 #, fuzzy
 msgid "Billing Info"
 msgstr "बिलिंग सूचना (_B):"
@@ -5036,38 +5084,38 @@ msgstr "बिलिंग सूचना (_B):"
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "None"
 msgstr "कुछ नहीं"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Classified"
 msgstr "वर्गीकृत"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Confidential"
 msgstr "गोपनीय"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Secret"
 msgstr "गुप्त"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Standard"
 msgstr "मानक"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Top Secret"
 msgstr "अत्यंत गुप्त"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: modules/printbackends/cups/gtkprintbackendcups.c:2956
 msgid "Unclassified"
 msgstr "अवर्गीकृत"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2955
+#: modules/printbackends/cups/gtkprintbackendcups.c:2991
 #, fuzzy
 msgid "Before"
 msgstr "पहले (_f):"
@@ -5075,7 +5123,7 @@ msgstr "पहले (_f):"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2970
+#: modules/printbackends/cups/gtkprintbackendcups.c:3006
 #, fuzzy
 msgid "After"
 msgstr "के बाद (_A):"
@@ -5084,7 +5132,7 @@ msgstr "के बाद (_A):"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2990
+#: modules/printbackends/cups/gtkprintbackendcups.c:3026
 #, fuzzy
 msgid "Print at"
 msgstr "छापें"
@@ -5092,7 +5140,7 @@ msgstr "छापें"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3001
+#: modules/printbackends/cups/gtkprintbackendcups.c:3037
 #, fuzzy
 msgid "Print at time"
 msgstr "फाइल में छापें"
@@ -5101,7 +5149,7 @@ msgstr "फाइल में छापें"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3036
+#: modules/printbackends/cups/gtkprintbackendcups.c:3072
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "आकार पसंदीदा करें"
