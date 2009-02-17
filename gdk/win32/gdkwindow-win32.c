@@ -232,24 +232,6 @@ gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
     }
 }
 
-/*
-static GdkRegion*
-gdk_window_impl_win32_get_visible_region (GdkDrawable *drawable)
-{
-  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (drawable);
-  GdkRectangle result_rect;
-
-  result_rect.x = 0;
-  result_rect.y = 0;
-  result_rect.width = impl->width;
-  result_rect.height = impl->height;
-
-  gdk_rectangle_intersect (&result_rect, &impl->position_info.clip_rect, &result_rect);
-
-  return gdk_region_rectangle (&result_rect);
-}
-*/
-
 void
 _gdk_root_window_size_init (void)
 {
@@ -278,6 +260,7 @@ _gdk_windowing_window_init (GdkScreen *screen)
   private = (GdkWindowObject *)_gdk_root;
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl_window = private;
+
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (private->impl);
   
   draw_impl->handle = GetDesktopWindow ();
@@ -294,8 +277,8 @@ _gdk_windowing_window_init (GdkScreen *screen)
   private->y = 0;
   private->abs_x = 0;
   private->abs_y = 0;
-  // ### TODO: private->width = WidthOfScreen (screen-xscreen)
-  //           private->height = HeightOfScreen (screen->xscreen)  ????
+  private->width = GetSystemMetrics (SM_CXSCREEN);
+  private->height = GetSystemMetrics (SM_CYSCREEN);
 
   gdk_win32_handle_table_insert ((HANDLE *) &draw_impl->handle, _gdk_root);
 
