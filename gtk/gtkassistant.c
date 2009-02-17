@@ -2233,6 +2233,7 @@ gtk_assistant_accessible_ref_child (AtkObject *accessible,
   GtkWidget *widget, *child;
   gint n_pages;
   AtkObject *obj;
+  gchar *title;
 
   widget = GTK_ACCESSIBLE (accessible)->widget;
   if (!widget)
@@ -2249,15 +2250,20 @@ gtk_assistant_accessible_ref_child (AtkObject *accessible,
       GtkAssistantPage *page = g_list_nth_data (priv->pages, index / 2);
 
       child = page->page;
+      title = gtk_assistant_get_page_title (assistant, child);
     }
   else if (index == n_pages)
     {
       child = priv->action_area;
+      title = NULL;
     }
   else
     return NULL;
   
   obj = gtk_widget_get_accessible (child);
+
+  if (title)
+    atk_object_set_name (obj, title);
 
   return g_object_ref (obj);
 }
