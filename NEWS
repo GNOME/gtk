@@ -1,3 +1,56 @@
+Overview of Changes from GTK+ 2.15.3 to 2.15.4
+==============================================
+
+* GtkAction:
+ - More compatibility fixes to make PolicyKit-gnome work
+
+* GtkFileChooserButton:
+ - Don't emit file-set when the dialog is canceled. But emit it
+   when a file is received via DND
+
+* GDK
+ - Use Xrandr 1.3 for tracking monitor information, if available
+
+* Bugs fixed: 
+ 538439 tooltip may appear in upper left corner...
+ 571015 libprintbackend-cups has unlocalized strings
+ 353196 Add a file-set signal to GtkFileChooserButton
+ 571249 Icons are not drawn properly when initial widget...
+ 571196 gtk_binding_entry_add_signall deprecated without alternative
+ 508545 No way to identify terminal classes from documentation
+ 570824 TreeView is not keyboard (re)focusable after selecting a cell...
+ 568571 Asian am/pm format on cups print backend's time parsing
+ 571576 gdk_pixbuf_save_to_stream() broken
+ 571873 Compile error with gdk/win32/gdkselection-win32.c
+ 572041 Focus should change when advancing forward in GtkAssistant
+ 572040 GtkAssistant does not expose page titles
+ 570406 gailutil.def is in srcdir, but used from builddir
+
+* Updated translations:
+ Belarusian Latin (be@latin)
+ Bulgarian (bg)
+ Catalan (ca)
+ Danish (da)
+ Spanish (es)
+ Basque (eu)
+ Finnish (fi)
+ French (fr)
+ Gujarati (gu)
+ Hungarian (hu)
+ Japanese (ja)
+ Korean (ko)
+ Latvian (lv)
+ Norwegian bokmål (nb)
+ Polish (pl)
+ Brazilian Portugese (pt_BR)
+ Slovak (sk)
+ Albanian (sq)
+ Serbian (sr)
+ Swedish (sv)
+ Thai (th)
+ Vietnamese (vi)
+
+
 Overview of Changes from GTK+ 2.15.2 to 2.15.3
 ==============================================
 

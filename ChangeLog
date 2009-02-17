@@ -1,18 +1,22 @@
-2009-02-16  MatthiasClasen  <mclasen@redhat.com>
+2009-02-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
+2009-02-16  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 572040 – GtkAssistant does not expose page titles
 
 	* gtk/gtkassistant.c (gtk_assistant_accessible_ref_child): Set
 	the object name to the page title. Proposed by Eitan Isaacson
 
-2009-02-16  MatthiasClasen  <mclasen@redhat.com>
+2009-02-16  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 572041 – Focus should change when advancing forward in GtkAssistant
 
 	* gtk/gtkassistant.c (set_current_page): Set focus when the current
 	page changes. Pointed out by Eitan Isaacson
 
-2009-02-16  MatthiasClasen  <mclasen@redhat.com>
+2009-02-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Require GLib 2.19.7 for GMountOperation::aborted.
 
