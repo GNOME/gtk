@@ -92,6 +92,8 @@ static void   gtk_mount_operation_ask_question (GMountOperation *op,
                                                 const char      *message,
                                                 const char      *choices[]);
 
+static void   gtk_mount_operation_aborted      (GMountOperation *op);
+
 G_DEFINE_TYPE (GtkMountOperation, gtk_mount_operation, G_TYPE_MOUNT_OPERATION);
 
 enum {
@@ -153,6 +155,7 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
   mount_op_class = G_MOUNT_OPERATION_CLASS (klass);
   mount_op_class->ask_password = gtk_mount_operation_ask_password;
   mount_op_class->ask_question = gtk_mount_operation_ask_question;
+  mount_op_class->aborted = gtk_mount_operation_aborted;
 
   g_object_class_install_property (object_class,
                                    PROP_PARENT,
@@ -732,6 +735,22 @@ gtk_mount_operation_ask_question (GMountOperation *op,
 
   gtk_widget_show (dialog);
   g_object_ref (op);
+}
+
+static void
+gtk_mount_operation_aborted (GMountOperation *op)
+{
+  GtkMountOperationPrivate *priv;
+
+  priv = GTK_MOUNT_OPERATION (op)->priv;
+
+  if (priv->dialog != NULL)
+    {
+      gtk_widget_destroy (GTK_WIDGET (priv->dialog));
+      priv->dialog = NULL;
+      g_object_notify (G_OBJECT (op), "is-showing");
+      g_object_unref (op);
+    }
 }
 
 /**
