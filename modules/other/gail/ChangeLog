@@ -1,3 +1,8 @@
+2009-02-17  Li Yuan  <li.yuan@sun.com>
+
+	* gailbutton.c: (idle_do_action):
+	Bug #561631. Use g_queue_get_length to determine if a queue is empty.
+
 2009-02-04  Tor Lillqvist  <tml@novell.com>
 
 	Bug 570406 - gailutil.def is in srcdir, but used from builddir

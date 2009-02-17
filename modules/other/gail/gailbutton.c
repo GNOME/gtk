@@ -511,7 +511,7 @@ idle_do_action (gpointer data)
     gtk_widget_event (widget, &tmp_event);
 
   button = GTK_BUTTON (widget); 
-  while (!g_queue_is_empty (gail_button->action_queue)) 
+  while (g_queue_get_length(gail_button->action_queue) != 0) 
     {
       gint action_number = (gint) g_queue_pop_head (gail_button->action_queue);
       if (gail_button->default_is_press)
