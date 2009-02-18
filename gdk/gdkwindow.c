@@ -3911,7 +3911,7 @@ gdk_window_clear_area_internal (GdkWindow *window,
     height = private->height - y;
 
   rect.x = x;
-  rect.y = x;
+  rect.y = y;
   rect.width = width;
   rect.height = height;
 
