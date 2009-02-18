@@ -1,5 +1,13 @@
 2009-02-18  Sven Neumann  <sven@gimp.org>
 
+	Bug 560671 – the client_message API doesn't work in DirectFB
+
+	* gdk/directfb/gdkevents-directfb.c: applied a slightly cleaned up
+	patch from Steve Lhomme that adds this functionality using
+	DirectFB's DFBUserEvent.
+
+2009-02-18  Sven Neumann  <sven@gimp.org>
+
 	Bug 543710 – Dead keys do not work anymore with DirectFB
 
 	* gdk/directfb/gdkkeys-directfb.c (gdk_directfb_translate_key):
