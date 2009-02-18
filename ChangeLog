@@ -1,3 +1,13 @@
+2009-02-18  Sven Neumann  <sven@gimp.org>
+
+	Bug 554407 – directfb backend does not implement GdkWindowImpl
+
+	* gdk/directfb/gdkgeometry-directfb.c
+	* gdk/directfb/gdkprivate-directfb.h
+	* gdk/directfb/gdkwindow-directfb.c: fix the build of the DirectFB
+	backend and resurrect basic functionality. Based on a patch from
+	the Ubuntu bug-tracker and work by Masse Nicolas.
+
 2009-02-18  Theppitak Karoonboonyanan  <thep@linux.thai.net>
 
 	Bug 457086 - numpad does not work when the Thai-Lao input method is

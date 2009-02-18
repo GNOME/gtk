@@ -172,6 +172,17 @@ void        gdk_directfb_window_id_table_insert (DFBWindowID  dfb_id,
 void        gdk_directfb_window_id_table_remove (DFBWindowID  dfb_id);
 GdkWindow * gdk_directfb_window_id_table_lookup (DFBWindowID  dfb_id);
 
+void        _gdk_directfb_window_get_offsets    (GdkWindow       *window,
+                                                 gint            *x_offset,
+                                                 gint            *y_offset);
+void        _gdk_directfb_window_scroll         (GdkWindow       *window,
+                                                 gint             dx,
+                                                 gint             dy);
+void        _gdk_directfb_window_move_region    (GdkWindow       *window,
+                                                 const GdkRegion *region,
+                                                 gint             dx,
+                                                 gint             dy);
+
 
 typedef struct
 {

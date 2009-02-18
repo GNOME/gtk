@@ -41,9 +41,9 @@
 
 
 void
-_gdk_windowing_window_get_offsets (GdkWindow *window,
-                                   gint      *x_offset,
-                                   gint      *y_offset)
+_gdk_directfb_window_get_offsets (GdkWindow *window,
+                                  gint      *x_offset,
+                                  gint      *y_offset)
 {
   if (x_offset)
     *x_offset = 0;
@@ -69,9 +69,9 @@ _gdk_windowing_window_queue_antiexpose (GdkWindow *window,
  * brings in from offscreen areas are invalidated.
  **/
 void
-gdk_window_scroll (GdkWindow *window,
-                   gint       dx,
-                   gint       dy)
+_gdk_directfb_window_scroll (GdkWindow *window,
+                             gint       dx,
+                             gint       dy)
 {
   GdkWindowObject         *private;
   GdkDrawableImplDirectFB *impl;
@@ -161,10 +161,10 @@ gdk_window_scroll (GdkWindow *window,
  * Since: 2.8
  **/
 void
-gdk_window_move_region (GdkWindow       *window,
-                        const GdkRegion *region,
-                        gint             dx,
-                        gint             dy)
+_gdk_directfb_window_move_region (GdkWindow       *window,
+                                  const GdkRegion *region,
+                                  gint             dx,
+                                  gint             dy)
 {
   GdkWindowObject         *private;
   GdkDrawableImplDirectFB *impl;
