@@ -122,7 +122,7 @@ is_context_lost_key(guint keyval)
           keyval == GDK_Escape ||
           keyval == GDK_Delete ||
           (GDK_Home <= keyval && keyval <= GDK_Begin) || /* IsCursorkey */
-          (GDK_KP_Space <= keyval && keyval <= GDK_KP_Equal) || /* IsKeypadKey */
+          (GDK_KP_Space <= keyval && keyval <= GDK_KP_Delete) || /* IsKeypadKey, non-chars only */
           (GDK_Select <= keyval && keyval <= GDK_Break) || /* IsMiscFunctionKey */
           (GDK_F1 <= keyval && keyval <= GDK_F35)); /* IsFunctionKey */
 }

@@ -1,3 +1,11 @@
+2009-02-18  Theppitak Karoonboonyanan  <thep@linux.thai.net>
+
+	Bug 457086 - numpad does not work when the Thai-Lao input method is
+	used
+
+	* modules/input/gtkimcontextthai.c (is_context_lost_key): Do not count
+	character-generating keypads as context-lost keys.
+
 2009-02-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
