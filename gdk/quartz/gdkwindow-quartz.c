@@ -92,7 +92,7 @@ gdk_window_impl_quartz_get_context (GdkDrawable *drawable,
    * is needed when called from outside "real" expose events, for
    * example for synthesized expose events when realizing windows
    * and for widgets that send fake expose events like the arrow
-   * buttons in spinbuttons.
+   * buttons in spinbuttons or the position marker in rulers.
    */
   if (window_impl->in_paint_rect_count == 0)
     {
