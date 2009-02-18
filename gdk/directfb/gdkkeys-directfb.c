@@ -1629,28 +1629,7 @@ gdk_directfb_translate_key (DFBInputDeviceKeyIdentifier key_id,
 				break;
 
 			case DIKT_DEAD:
-				switch (key_symbol)
-				{
-					case DIKS_DEAD_ABOVEDOT:     keyval = GDK_dead_abovedot;     break;
-					case DIKS_DEAD_ABOVERING:    keyval = GDK_dead_abovering;    break;
-					case DIKS_DEAD_ACUTE:        keyval = GDK_dead_acute;        break;
-					case DIKS_DEAD_BREVE:        keyval = GDK_dead_breve;        break;
-					case DIKS_DEAD_CARON:        keyval = GDK_dead_caron;        break;
-					case DIKS_DEAD_CEDILLA:      keyval = GDK_dead_cedilla;      break;
-					case DIKS_DEAD_CIRCUMFLEX:   keyval = GDK_dead_circumflex;   break;
-					case DIKS_DEAD_DIAERESIS:    keyval = GDK_dead_diaeresis;    break;
-					case DIKS_DEAD_DOUBLEACUTE:  keyval = GDK_dead_doubleacute;  break;
-					case DIKS_DEAD_GRAVE:        keyval = GDK_dead_grave;        break;
-					case DIKS_DEAD_IOTA:         keyval = GDK_dead_iota;         break;
-					case DIKS_DEAD_MACRON:       keyval = GDK_dead_macron;       break;
-					case DIKS_DEAD_OGONEK:       keyval = GDK_dead_ogonek;       break;
-					case DIKS_DEAD_SEMIVOICED_SOUND:
-								     keyval = GDK_dead_semivoiced_sound;                        break;
-					case DIKS_DEAD_TILDE:        keyval = GDK_dead_tilde;        break;
-					case DIKS_DEAD_VOICED_SOUND: keyval = GDK_dead_voiced_sound; break;
-					default:
-								     break;
-				}
+				/* dead keys are handled directly by directfb */
 				break;
 
 			case DIKT_CUSTOM:

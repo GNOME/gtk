@@ -2,6 +2,16 @@
 
 	Merged from trunk:
 
+	Bug 543710 – Dead keys do not work anymore with DirectFB
+
+	* gdk/directfb/gdkkeys-directfb.c (gdk_directfb_translate_key):
+	applied patch from Josselin Mouette that removes special handling
+	of dead keys as that is done by DirectFB for a long time already.
+
+2009-02-18  Sven Neumann  <sven@gimp.org>
+
+	Merged from trunk:
+
 	* configure.in: depend on DirectFB >= 1.0.0. There's no point in
 	using an earlier development version.
 
