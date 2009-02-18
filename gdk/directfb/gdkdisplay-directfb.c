@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -32,7 +32,6 @@
 #include "gdkprivate-directfb.h"
 #include "gdkscreen.h"
 #include "gdkdisplaymanager.h"
-#include "gdkintl.h"
 #include "gdkalias.h"
 
 
@@ -47,13 +46,10 @@ extern void _gdk_directfb_keyboard_init      (void);
 
 static gboolean   gdk_directfb_argb_font           = FALSE;
 static gint       gdk_directfb_glyph_surface_cache = 8;
-static gchar 	 *directfb_args;
 
 
 const GOptionEntry _gdk_windowing_args[] =
 {
-  { "dfb",0,0,G_OPTION_ARG_STRING,&directfb_args,N_("directfb arg"),N_("sdl|system")}, 
-  { "dfb-help",0,0,G_OPTION_ARG_NONE, NULL,NULL},
   { "disable-aa-fonts",0,0,G_OPTION_ARG_INT,&gdk_directfb_monochrome_fonts,NULL,NULL    },
   { "argb-font",0,0, G_OPTION_ARG_INT, &gdk_directfb_argb_font,NULL,NULL},
   { "transparent-unfocused",0,0, G_OPTION_ARG_INT, &gdk_directfb_apply_focus_opacity,NULL,NULL },
@@ -67,43 +63,35 @@ const GOptionEntry _gdk_windowing_args[] =
 **/
 GdkDisplay * gdk_display_open (const gchar *display_name)
 {
-
-  if (_gdk_display) {
-    return GDK_DISPLAY_OBJECT(_gdk_display); /* single display only */
-  }
-  DFBResult  ret;
   IDirectFB              *directfb;
   IDirectFBDisplayLayer  *layer;
   IDirectFBInputDevice   *keyboard;
+  DFBResult               ret;
 
-  int argc=0;
-  char **argv=NULL;
+  int    argc = 0;
+  char **argv = NULL;
 
-#if 0  /* arg hack arg support broken*/
-  if(directfb_args ) {
-	argc=2;
-	argv = (char **)g_malloc(sizeof(char *)*argc);
-	argv[0] = "simple";
-	argv[1] = "--dfb:system=SDL";
-  }
-#endif
+  if (_gdk_display)
+    {
+      return GDK_DISPLAY_OBJECT(_gdk_display); /* single display only */
+    }
 
   ret = DirectFBInit (&argc,&argv);
   if (ret != DFB_OK)
-{
+    {
       DirectFBError ("gdk_display_open: DirectFBInit", ret);
       return NULL;
     }
 
-    ret = DirectFBCreate (&directfb);
-
+  ret = DirectFBCreate (&directfb);
   if (ret != DFB_OK)
     {
       DirectFBError ("gdk_display_open: DirectFBCreate", ret);
       return NULL;
     }
-  _gdk_display = g_object_new(GDK_TYPE_DISPLAY_DFB,NULL);
-  _gdk_display->directfb=directfb;
+
+  _gdk_display = g_object_new (GDK_TYPE_DISPLAY_DFB, NULL);
+  _gdk_display->directfb = directfb;
 
   ret = directfb->GetDisplayLayer (directfb, DLID_PRIMARY, &layer);
   if (ret != DFB_OK)
