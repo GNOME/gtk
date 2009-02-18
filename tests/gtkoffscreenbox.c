@@ -30,22 +30,6 @@ static void        gtk_offscreen_box_forall        (GtkContainer    *container,
                                                     gpointer         callback_data);
 static GType       gtk_offscreen_box_child_type    (GtkContainer    *container);
 
-static void        from_parent     (GdkWindow       *child,
-				    gdouble          parent_x,
-				    gdouble          parent_y,
-				    gdouble         *child_x,
-				    gdouble         *child_y);
-static void        to_parent       (GdkWindow       *child,
-				    gdouble          child_x,
-				    gdouble          child_y,
-				    gdouble         *parent_x,
-				    gdouble         *parent_y);
-
-static const GdkOffscreenChildHooks offscreen_hooks = {
-  from_parent,
-  to_parent,
-};
-
 #define CHILD1_SIZE_SCALE 1.0
 #define CHILD2_SIZE_SCALE 1.0
 
@@ -134,7 +118,7 @@ gtk_offscreen_box_realize (GtkWidget *widget)
       attributes.height = offscreen_box->child1->allocation.height;
       start_y += offscreen_box->child1->allocation.height;
     }
-  offscreen_box->offscreen_window1 = gdk_window_new (widget->window,
+  offscreen_box->offscreen_window1 = gdk_window_new (NULL,
 						     &attributes, attributes_mask);
   gdk_window_set_user_data (offscreen_box->offscreen_window1, widget);
   if (offscreen_box->child1)
@@ -148,9 +132,8 @@ gtk_offscreen_box_realize (GtkWidget *widget)
       attributes.width = offscreen_box->child2->allocation.width;
       attributes.height = offscreen_box->child2->allocation.height;
     }
-  offscreen_box->offscreen_window2 = gdk_window_new (widget->window,
+  offscreen_box->offscreen_window2 = gdk_window_new (NULL,
 						     &attributes, attributes_mask);
-  gdk_window_set_offscreen_hooks (offscreen_box->offscreen_window2, &offscreen_hooks);
   gdk_window_set_user_data (offscreen_box->offscreen_window2, widget);
   if (offscreen_box->child2)
     gtk_widget_set_parent_window (offscreen_box->child2, offscreen_box->offscreen_window2);
@@ -492,69 +475,4 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
     }
 
   return FALSE;
-}
-
-static void
-from_parent (GdkWindow *child,
-	     gdouble    parent_x,
-	     gdouble    parent_y,
-	     gdouble   *child_x,
-	     gdouble   *child_y)
-{
-  GtkOffscreenBox *offscreen_box = NULL;
-  GtkAllocation child2_area;
-  gpointer window_data;
-  double pos_x, pos_y, rot_x, rot_y, start_y, angle;
-  GdkWindow *parent;
-
-  parent = gdk_window_get_parent (child);
-  gdk_window_get_user_data (parent, &window_data);
-  offscreen_box = window_data;
-
-  start_y = offscreen_box->child1 ? offscreen_box->child1->allocation.height : 0;
-  child2_area = offscreen_box->child2->allocation;
-
-  pos_x = parent_x - child2_area.width / 2;
-  pos_y = parent_y - start_y - child2_area.height / 2;
-
-  angle = -offscreen_box->angle;
-  rot_x = pos_x * cos (angle) - pos_y * sin (angle);
-  rot_y = pos_x * sin (angle) + pos_y * cos (angle);
-
-  *child_x = rot_x + child2_area.width / 2;
-  *child_y = rot_y + child2_area.height / 2;
-}
-
-static void
-to_parent (GdkWindow *child,
-	   gdouble    child_x,
-	   gdouble    child_y,
-	   gdouble   *parent_x,
-	   gdouble   *parent_y)
-{
-  GtkOffscreenBox *offscreen_box = NULL;
-  GtkAllocation child2_area;
-  gpointer window_data;
-  gdouble pos_x, pos_y, rot_x, rot_y, start_y, angle;
-  GdkWindow *parent;
-	   
-  parent = gdk_window_get_parent (child);
-  gdk_window_get_user_data (parent, &window_data);
-  offscreen_box = window_data;
-
-  start_y = offscreen_box->child1 ? offscreen_box->child1->allocation.height : 0;
-  child2_area = offscreen_box->child2->allocation;
-
-  pos_x = child_x - child2_area.width / 2;
-  pos_y = child_y - child2_area.height / 2;
-
-  angle = offscreen_box->angle;
-  rot_x = pos_x * cos (angle) - pos_y * sin (angle);
-  rot_y = pos_x * sin (angle) + pos_y * cos (angle);
-
-  rot_x += child2_area.width / 2;
-  rot_y += child2_area.height / 2;
-
-  *parent_x = rot_x;
-  *parent_y = rot_y + start_y;
 }
