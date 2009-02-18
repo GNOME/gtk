@@ -1,5 +1,18 @@
 2009-02-18  Sven Neumann  <sven@gimp.org>
 
+	Bug 533456 – Memory leak when window is destroyed
+
+	* gdk/directfb/gdkdirectfb.h
+	* gdk/directfb/gdkprivate-directfb.h
+	* gdk/directfb/gdkcursor-directfb.c
+	* gdk/directfb/gdkevents-directfb.c
+	* gdk/directfb/gdkwindow-directfb.c: removed all #ifdef checks for
+	DIRECTFB_MAJOR_VERSION >= 1. We depend on DirectFB >= 1.0.0 now.
+	Fixes a potential build issue that would lead to a memory leak as
+	described in bug #533456.
+
+2009-02-18  Sven Neumann  <sven@gimp.org>
+
 	Bug 513422 – Unknown meaning of translatable messages
 
 	* gdk/directfb/gdkdisplay-directfb.c: removed broken and commented
