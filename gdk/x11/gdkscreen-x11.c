@@ -695,6 +695,9 @@ init_randr13 (GdkScreen *screen)
       /* Non RandR1.2 X driver have output name "default" */
       randr12_compat |= !g_strcmp0(output->name, "default");
 
+      if (output->connection == RR_Disconnected)
+        continue;
+
       if (output->crtc)
 	{
 	  GdkX11Monitor monitor;
@@ -705,11 +708,11 @@ init_randr13 (GdkScreen *screen)
 	  monitor.geometry.width = crtc->width;
 	  monitor.geometry.height = crtc->height;
 
-	  /* FIXME: fill this out properly - need EDID parser */
 	  monitor.output = resources->outputs[i];
-	  monitor.width_mm = -1;
-	  monitor.height_mm = -1;
-	  monitor.output_name = NULL;
+	  monitor.width_mm = output->mm_width;
+	  monitor.height_mm = output->mm_height;
+	  monitor.output_name = g_strdup (output->name);
+	  /* FIXME: need EDID parser */
 	  monitor.manufacturer = NULL;
 
 	  g_array_append_val (monitors, monitor);
@@ -995,7 +998,8 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
     return;
 
   _gdk_x11_screen_process_monitors_change (screen);
-  g_signal_emit_by_name (screen, "size_changed");
+
+  g_signal_emit_by_name (screen, "size-changed");
 }
 
 void
@@ -1003,7 +1007,7 @@ _gdk_x11_screen_process_monitors_change (GdkScreen *screen)
 {
   init_multihead (screen);
 
-  g_signal_emit_by_name (screen, "monitors_changed");
+  g_signal_emit_by_name (screen, "monitors-changed");
 }
 
 void
