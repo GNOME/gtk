@@ -40,7 +40,6 @@ G_BEGIN_DECLS
 typedef struct _GdkGeometry                GdkGeometry;
 typedef struct _GdkWindowAttr              GdkWindowAttr;
 typedef struct _GdkPointerHooks            GdkPointerHooks;
-typedef struct _GdkOffscreenChildHooks     GdkOffscreenChildHooks;
 typedef struct _GdkWindowRedirect          GdkWindowRedirect;
 typedef struct _GdkWindowPaint             GdkWindowPaint;
 
@@ -251,20 +250,6 @@ struct _GdkPointerHooks
                                    gint            *win_y);
 };
 
-struct _GdkOffscreenChildHooks
-{
-  void       (*from_parent) (GdkWindow *offscreen_child,
-			     gdouble    parent_x,
-			     gdouble    parent_y,
-			     gdouble   *child_x,
-			     gdouble   *child_y);
-  void       (*to_parent)   (GdkWindow *offscreen_child,
-			     gdouble    child_x,
-			     gdouble    child_y,
-			     gdouble   *parent_x,
-			     gdouble   *parent_y);
-};
-
 typedef struct _GdkWindowObject GdkWindowObject;
 typedef struct _GdkWindowObjectClass GdkWindowObjectClass;
 
@@ -324,7 +309,6 @@ struct _GdkWindowObject
   guint update_and_descendants_freeze_count;
 
   GdkWindowRedirect *redirect;
-  const GdkOffscreenChildHooks *offscreen_hooks;
 
   /* The GdkWindowObject that has the impl, ref:ed if another window.
    * This ref is required to keep the wrapper of the impl window alive
@@ -698,9 +682,6 @@ void       gdk_window_redirect_to_drawable   (GdkWindow     *window,
                                               gint           width,
                                               gint           height);
 void       gdk_window_remove_redirection     (GdkWindow     *window);
-
-void       gdk_window_set_offscreen_hooks    (GdkWindow                    *offscreen_window,
-                                              const GdkOffscreenChildHooks *hooks);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define GDK_ROOT_PARENT()             (gdk_get_default_root_window ())

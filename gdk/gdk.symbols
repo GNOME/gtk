@@ -720,7 +720,6 @@ gdk_window_set_composited
 
 #if IN_HEADER(__GDK_WINDOW_H__)
 #if IN_FILE(__GDK_OFFSCREEN_WINDOW_C__)
-gdk_window_set_offscreen_hooks
 gdk_window_get_offscreen_pixmap
 #endif
 #endif

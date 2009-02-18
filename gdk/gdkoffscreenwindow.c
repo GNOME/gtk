@@ -1008,34 +1008,6 @@ gdk_offscreen_window_get_geometry (GdkWindow *window,
     }
 }
 
-/**
- * gdk_window_set_offscreen_hooks:
- * @offscreen_window: a offscreen #GdkWindow
- * @hooks:  a table of pointers to functions for handling offscreen
- *          window coordinates translations
- *
- * Sets the parent-to-offscreen-child and offscreen-child-to-parent coordinate
- * translation functions for offscreen windows.
- *
- * This function is useful for complex widgets employing
- * offscreen windows.
- *
- * Since: 2.16
- */
-void
-gdk_window_set_offscreen_hooks (GdkWindow  *offscreen_window,
-                                const GdkOffscreenChildHooks *hooks)
-{
-  GdkWindowObject *private;
-
-  g_return_if_fail (GDK_IS_WINDOW (offscreen_window));
-  g_return_if_fail (hooks != NULL);
-
-  private = (GdkWindowObject *) offscreen_window;
-
-  private->offscreen_hooks = hooks;
-}
-
 static gboolean
 gdk_offscreen_window_queue_antiexpose (GdkWindow *window,
 				       GdkRegion *area)

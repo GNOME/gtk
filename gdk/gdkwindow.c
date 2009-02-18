@@ -7682,9 +7682,6 @@ convert_coords_to_child (GdkWindowObject *child,
 {
   *child_x = x - child->x;
   *child_y = y - child->y;
-
-  if (child->offscreen_hooks)
-    child->offscreen_hooks->from_parent ((GdkWindow *)child, x, y, child_x, child_y);
 }
 
 static gboolean
