@@ -697,9 +697,8 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
 
   _gdk_selection_window_destroyed (window);
-#if (DIRECTFB_MAJOR_VERSION >= 1)
   gdk_directfb_event_windows_remove (window);
-#endif
+
   if (window == _gdk_directfb_pointer_grab_window)
     gdk_pointer_ungrab (GDK_CURRENT_TIME);
   if (window == _gdk_directfb_keyboard_grab_window)
@@ -2640,9 +2639,8 @@ gdk_window_get_frame_extents (GdkWindow    *window,
  * Given a directfb window and a subsurface of that window
  * create a gdkwindow child wrapper
  */
-#if (DIRECTFB_MAJOR_VERSION >= 1)
 GdkWindow *gdk_directfb_create_child_window(GdkWindow *parent,
-                                IDirectFBSurface *subsurface)
+                                            IDirectFBSurface *subsurface)
 {
   GdkWindow             *window;
   GdkWindowObject       *private;
@@ -2686,7 +2684,6 @@ GdkWindow *gdk_directfb_create_child_window(GdkWindow *parent,
   return window;
 
 }
-#endif
 
 /*
  * The wrapping is not perfect since directfb does not give full access

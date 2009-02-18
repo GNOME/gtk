@@ -41,10 +41,6 @@
 
 #include <directfb_version.h>
 
-#if DIRECTFB_MAJOR_VERSION < 1
-#define u32 __u32
-#define u8 __u8
-#endif
 
 static struct {
   const guchar *bits;
