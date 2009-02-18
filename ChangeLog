@@ -2,6 +2,15 @@
 
 	Merged from trunk:
 
+	Bug 513422 – Unknown meaning of translatable messages
+
+	* gdk/directfb/gdkdisplay-directfb.c: removed broken and commented
+	code and the translatable messages that belonged to it.
+
+2009-02-18  Sven Neumann  <sven@gimp.org>
+
+	Merged from trunk:
+
 	Bug 560671 – the client_message API doesn't work in DirectFB
 
 	* gdk/directfb/gdkevents-directfb.c: applied a slightly cleaned up
