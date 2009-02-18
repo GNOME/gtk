@@ -37,11 +37,10 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkGeometry                GdkGeometry;
-typedef struct _GdkWindowAttr              GdkWindowAttr;
-typedef struct _GdkPointerHooks            GdkPointerHooks;
-typedef struct _GdkWindowRedirect          GdkWindowRedirect;
-typedef struct _GdkWindowPaint             GdkWindowPaint;
+typedef struct _GdkGeometry          GdkGeometry;
+typedef struct _GdkWindowAttr        GdkWindowAttr;
+typedef struct _GdkPointerHooks      GdkPointerHooks;
+typedef struct _GdkWindowRedirect    GdkWindowRedirect;
 
 /* Classes of windows.
  *   InputOutput: Almost every window should be of this type. Such windows
@@ -261,6 +260,12 @@ typedef struct _GdkWindowObjectClass GdkWindowObjectClass;
 #define GDK_WINDOW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW, GdkWindowObjectClass))
 #define GDK_WINDOW_OBJECT(object)    ((GdkWindowObject *) GDK_WINDOW (object))
 
+#ifndef GDK_COMPILATION
+/* We used to export all of GdkWindowObject, but we don't want to keep doing so.
+   However, there are various parts of it accessed by macros and other code,
+   so we keep the old exported version public, but in reality it is larger. */
+
+/**** DON'T CHANGE THIS STRUCT, the real version is in gdkinternals.h ****/
 struct _GdkWindowObject
 {
   GdkDrawable parent_instance;
@@ -309,28 +314,8 @@ struct _GdkWindowObject
   guint update_and_descendants_freeze_count;
 
   GdkWindowRedirect *redirect;
-
-  /* The GdkWindowObject that has the impl, ref:ed if another window.
-   * This ref is required to keep the wrapper of the impl window alive
-   * for as long as any GdkWindow references the impl. */
-  GdkWindowObject *impl_window; 
-  int abs_x, abs_y; /* Absolute offset in impl */
-  gint width, height;
-  guint32 clip_tag;
-  GdkRegion *clip_region; /* Clip region (wrt toplevel) in window coords */
-  GdkRegion *clip_region_with_children; /* Clip region in window coords */
-  GdkCursor *cursor;
-  gint8 toplevel_window_type;
-
-  GdkWindowPaint *implicit_paint;
-
-  GList *outstanding_moves;
-
-  GdkRegion *shape;
-  GdkRegion *input_shape;
-  
-  cairo_surface_t *cairo_surface;
 };
+#endif
 
 struct _GdkWindowObjectClass
 {

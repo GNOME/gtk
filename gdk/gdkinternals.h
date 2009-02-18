@@ -187,6 +187,86 @@ typedef struct
   gboolean grab_one_pointer_release_event;
 } GdkPointerGrabInfo;
 
+
+/* Private version of GdkWindowObject. The initial part of this strucuture
+   is public for historical reasons. Don't change that part */
+typedef struct _GdkWindowPaint             GdkWindowPaint;
+
+struct _GdkWindowObject
+{
+  /* vvvvvvv THIS PART IS PUBLIC. DON'T CHANGE vvvvvvvvvvvvvv */
+  GdkDrawable parent_instance;
+
+  GdkDrawable *impl; /* window-system-specific delegate object */  
+  
+  GdkWindowObject *parent;
+
+  gpointer user_data;
+
+  gint x;
+  gint y;
+  
+  gint extension_events;
+
+  GList *filters;
+  GList *children;
+
+  GdkColor bg_color;
+  GdkPixmap *bg_pixmap;
+  
+  GSList *paint_stack;
+  
+  GdkRegion *update_area;
+  guint update_freeze_count;
+  
+  guint8 window_type;
+  guint8 depth;
+  guint8 resize_count;
+
+  GdkWindowState state;
+  
+  guint guffaw_gravity : 1;
+  guint input_only : 1;
+  guint modal_hint : 1;
+  guint composited : 1;
+  
+  guint destroyed : 2;
+
+  guint accept_focus : 1;
+  guint focus_on_map : 1;
+  guint shaped : 1;
+  
+  GdkEventMask event_mask;
+
+  guint update_and_descendants_freeze_count;
+
+  GdkWindowRedirect *redirect;
+
+  /* ^^^^^^^^^^ THIS PART IS PUBLIC. DON'T CHANGE ^^^^^^^^^^ */
+  
+  /* The GdkWindowObject that has the impl, ref:ed if another window.
+   * This ref is required to keep the wrapper of the impl window alive
+   * for as long as any GdkWindow references the impl. */
+  GdkWindowObject *impl_window; 
+  int abs_x, abs_y; /* Absolute offset in impl */
+  gint width, height;
+  guint32 clip_tag;
+  GdkRegion *clip_region; /* Clip region (wrt toplevel) in window coords */
+  GdkRegion *clip_region_with_children; /* Clip region in window coords */
+  GdkCursor *cursor;
+  gint8 toplevel_window_type;
+
+  GdkWindowPaint *implicit_paint;
+
+  GList *outstanding_moves;
+
+  GdkRegion *shape;
+  GdkRegion *input_shape;
+  
+  cairo_surface_t *cairo_surface;
+};
+
+
 extern GdkEventFunc   _gdk_event_func;    /* Callback for events */
 extern gpointer       _gdk_event_data;
 extern GDestroyNotify _gdk_event_notify;
