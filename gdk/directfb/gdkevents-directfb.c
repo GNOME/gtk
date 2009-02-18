@@ -162,23 +162,21 @@ dfb_events_process_window_event (DFBWindowEvent *event)
 
 static gboolean
 gdk_event_send_client_message_by_window (GdkEvent *event,
-                                        GdkWindow *window)
+                                         GdkWindow *window)
 {
-  GdkEvent *new_event;
+  DFBUserEvent evt;
 
   g_return_val_if_fail(event != NULL, FALSE);
   g_return_val_if_fail(GDK_IS_WINDOW(window), FALSE);
 
-  new_event = gdk_directfb_event_make (window, GDK_CLIENT_EVENT);
-  new_event->client.message_type = event->client.message_type;
-  new_event->client.data_format = event->client.data_format;
-  memcpy(&new_event->client.data,
-        &event->client.data,
-        sizeof(event->client.data));
+  evt.clazz = DFEC_USER;
+  evt.type = GPOINTER_TO_UINT (GDK_ATOM_TO_POINTER (event->client.message_type));
+  evt.data = (void *) event->client.data.l[0];
+
+  _gdk_display->buffer->PostEvent(_gdk_display->buffer, DFB_EVENT (&evt));
 
   return TRUE;
 }
-
 
 static void
 dfb_events_dispatch (void)
@@ -230,6 +228,32 @@ dfb_events_io_func (GIOChannel   *channel,
           else
             dfb_events_process_window_event (&event->window);
           break;
+
+        case DFEC_USER:
+          {
+            GList *list;
+
+            GDK_NOTE (EVENTS, g_print (" client_message"));
+
+            for (list = client_filters; list; list = list->next)
+              {
+                GdkClientFilter *filter     = list->data;
+                DFBUserEvent    *user_event = (DFBUserEvent *) event;
+                GdkAtom          type;
+
+                type = GDK_POINTER_TO_ATOM (GUINT_TO_POINTER (user_event->type));
+
+                if (filter->type == type)
+                  {
+                    if (filter->function (user_event,
+                                          NULL,
+                                          filter->data) != GDK_FILTER_CONTINUE)
+                      break;
+                  }
+              }
+          }
+          break;
+
         default:
           break;
         }
