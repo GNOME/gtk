@@ -878,11 +878,12 @@ gdk_window_new (GdkWindow     *parent,
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
+    case GDK_WINDOW_OFFSCREEN:
       if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT)
 	g_warning (G_STRLOC "Toplevel windows must be created as children of\n"
 		   "of a window of type GDK_WINDOW_ROOT or GDK_WINDOW_FOREIGN");
     case GDK_WINDOW_CHILD:
-    case GDK_WINDOW_OFFSCREEN:
+      break;
       break;
     default:
       g_warning (G_STRLOC "cannot make windows of type %d", private->window_type);
