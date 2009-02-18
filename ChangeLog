@@ -1,5 +1,10 @@
 2009-02-18  Sven Neumann  <sven@gimp.org>
 
+	* configure.in: depend on DirectFB >= 1.0.0. There's no point in
+	using an earlier development version.
+
+2009-02-18  Sven Neumann  <sven@gimp.org>
+
 	Bug 554407 – directfb backend does not implement GdkWindowImpl
 
 	* gdk/directfb/gdkgeometry-directfb.c

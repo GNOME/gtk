@@ -1622,7 +1622,7 @@ AC_SUBST(GDK_PIXBUF_XLIB_DEP_LIBS)
 AC_SUBST(GDK_PIXBUF_XLIB_DEP_CFLAGS)
 
 if test "x$gdktarget" = "xdirectfb"; then
-  DIRECTFB_REQUIRED_VERSION=0.9.24
+  DIRECTFB_REQUIRED_VERSION=1.0.0
   AC_MSG_CHECKING(for DirectFB)
 
   if $PKG_CONFIG --atleast-version $DIRECTFB_REQUIRED_VERSION directfb && $PKG_CONFIG --exists cairo-directfb ; then
