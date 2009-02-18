@@ -1,3 +1,10 @@
+2009-02-18  Sven Neumann  <sven@gimp.org>
+
+	Debian Bug report #508371
+	Wrong German translation for "Color Selection"
+
+	* de.po: merged fix from trunk.
+
 2009-01-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.14.7 ===

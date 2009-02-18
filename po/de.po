@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-07 12:12-0500\n"
-"PO-Revision-Date: 2008-10-16 14:23+0200\n"
+"PO-Revision-Date: 2009-02-18 16:54+0100\n"
 "Last-Translator: Andre Klapper <ak-47@gmx.net>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1528,7 +1528,7 @@ msgstr ""
 
 #: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
-msgstr "Schriftwahl"
+msgstr "Farbwahl"
 
 #: gtk/gtkentry.c:5384 gtk/gtktextview.c:7686
 msgid "Input _Methods"
