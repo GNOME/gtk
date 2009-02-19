@@ -411,8 +411,7 @@ _gdk_windowing_window_init (void)
 
   g_assert (_gdk_parent_root == NULL);
 
-  _gdk_display->layer->GetConfiguration( 
-	_gdk_display->layer, &dlc );
+  _gdk_display->layer->GetConfiguration (_gdk_display->layer, &dlc);
 
   _gdk_parent_root = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = GDK_WINDOW_OBJECT (_gdk_parent_root);
@@ -2653,6 +2652,7 @@ GdkWindow *gdk_directfb_create_child_window(GdkWindow *parent,
 
   window = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = GDK_WINDOW_OBJECT (window);
+  private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   parent_private = GDK_WINDOW_OBJECT (parent);
   parent_impl = GDK_WINDOW_IMPL_DIRECTFB (parent_private->impl);
   private->parent = parent_private;
@@ -2731,6 +2731,7 @@ gdk_window_foreign_new_for_display (GdkDisplay* display,GdkNativeWindow anid)
     /* we hold a reference count on ourselves */
     g_object_ref (window);
     private = GDK_WINDOW_OBJECT (window);
+    private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
     private->parent = parent_private;
     private->window_type = GDK_WINDOW_TOPLEVEL;
     impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);

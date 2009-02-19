@@ -1,3 +1,10 @@
+2009-02-19  Sven Neumann  <sven@gimp.org>
+
+	* gdk/directfb/gdkwindow-directfb.c
+	(gdk_window_foreign_new_for_display, gdk_directfb_window_new):
+	initialize private->impl. Thanks to Masse Nicolas for pointing
+	this out.
+
 2009-02-19  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 572387 – gdm crashes after gtk 2.15.4 upgrade
