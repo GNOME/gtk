@@ -1334,15 +1334,17 @@ _gdk_directfb_move_resize_child (GdkWindow *window,
 
   if (!private->input_only)
     {
-    if (impl->drawable.surface) {
-      GdkDrawableImplDirectFB *dimpl = GDK_DRAWABLE_IMPL_DIRECTFB (private->impl);
-      if(dimpl->cairo_surface) {
-        cairo_surface_destroy(dimpl->cairo_surface);
-        dimpl->cairo_surface= NULL;
-      }
-    impl->drawable.surface->Release (impl->drawable.surface);
-    impl->drawable.surface = NULL;
-  }
+      if (impl->drawable.surface)
+        {
+          if (impl->drawable.cairo_surface)
+            {
+              cairo_surface_destroy (impl->drawable.cairo_surface);
+              impl->drawable.cairo_surface = NULL;
+            }
+
+          impl->drawable.surface->Release (impl->drawable.surface);
+          impl->drawable.surface = NULL;
+        }
 
       parent_impl = GDK_WINDOW_IMPL_DIRECTFB (GDK_WINDOW_OBJECT (private->parent)->impl);
 
@@ -1359,7 +1361,8 @@ _gdk_directfb_move_resize_child (GdkWindow *window,
   for (list = private->children; list; list = list->next)
     {
       private = GDK_WINDOW_OBJECT (list->data);
-  	  impl  = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
+      impl  = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
+
       _gdk_directfb_move_resize_child (list->data,
                                        private->x, private->y,
                                        impl->drawable.width, impl->drawable.height);
@@ -1427,8 +1430,14 @@ gdk_directfb_window_move_resize (GdkWindow *window,
   private = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
 
+  if (with_move && (width < 0 && height < 0))
+    {
+      gdk_directfb_window_move (window, x, y);
+      return;
+    }
+
   if (width < 1)
-     width = 1;
+    width = 1;
   if (height < 1)
     height = 1;
 
@@ -1467,7 +1476,8 @@ gdk_directfb_window_move_resize (GdkWindow *window,
     }
   else
     {
-      GdkRectangle old = { private->x, private->y, impl->drawable.width, impl->drawable.height };
+      GdkRectangle old = { private->x, private->y,
+                           impl->drawable.width, impl->drawable.height };
       GdkRectangle new = { x, y, width, height };
 
       if (! with_move)
