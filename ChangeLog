@@ -1,5 +1,12 @@
 2009-02-19  Sven Neumann  <sven@gimp.org>
 
+	* gdk/directfb/gdkdisplay-directfb.c (gdk_display_open): move the
+	call to _gdk_windowing_window_init() up a little. Fixes a crash
+	when running on pseudo-color visuals. Thanks to Masse Nicolas for
+	pointing this out.
+
+2009-02-19  Sven Neumann  <sven@gimp.org>
+
 	* gdk/directfb/gdkwindow-directfb.c
 	(gdk_window_foreign_new_for_display, gdk_directfb_window_new):
 	initialize private->impl. Thanks to Masse Nicolas for pointing
