@@ -1,5 +1,10 @@
 2009-02-19  Michael Natterer  <mitch@imendio.com>
 
+	* gtk/gtkmountoperation.c: sort functions so their order is more
+	"standard", some cosmetic cleanup (not changing any code).
+
+2009-02-19  Michael Natterer  <mitch@imendio.com>
+
 	* tests/testgtk.c: add some orientation flipping code to the
 	"flipping" test.
 
