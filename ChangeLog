@@ -1,3 +1,22 @@
+2009-02-19  Michael Natterer  <mitch@imendio.com>
+
+	* gtk/gtkscalebutton.c: make the orientation flipping much simpler
+	by using the GtkOrientable features of the involved widgets:
+
+	(gtk_scale_button_init): create the frame, box and scale here,
+	they never need to be recreated because they implement GtkOrientable.
+
+	(gtk_scale_button_constructor): remove their construction here.
+
+	(gtk_scale_button_set_orientation): don't destroy and re-create
+	anything. Instead, simply set the orientation of the above created
+	widgets and fiddle a bit with the "plus" and "minus" buttons'
+	packing and the scale's "inverted" state.
+
+	Remove separate internal GtkScaleButtonHScale and
+	GtkScaleButtonVScale subclasses and simply have a
+	GtkScaleButtonScale directly inherited from GtkScale.
+
 2009-02-19  Theppitak Karoonboonyanan  <thep@linux.thai.net>
 
 	* modules/input/gtkimcontextthai.c (is_context_lost_key): Revert the
