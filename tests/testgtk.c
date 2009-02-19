@@ -8283,6 +8283,40 @@ flipping_toggled_cb (GtkWidget *widget, gpointer data)
 }
 
 static void
+orientable_toggle_orientation (GtkOrientable *orientable)
+{
+  GtkOrientation orientation;
+
+  orientation = gtk_orientable_get_orientation (orientable);
+  gtk_orientable_set_orientation (orientable,
+                                  orientation == GTK_ORIENTATION_HORIZONTAL ?
+                                  GTK_ORIENTATION_VERTICAL :
+                                  GTK_ORIENTATION_HORIZONTAL);
+
+  if (GTK_IS_CONTAINER (orientable))
+    {
+      GList *children;
+      GList *child;
+
+      children = gtk_container_get_children (GTK_CONTAINER (orientable));
+
+      for (child = children; child; child = child->next)
+        {
+          if (GTK_IS_ORIENTABLE (child->data))
+            orientable_toggle_orientation (child->data);
+        }
+
+      g_list_free (children);
+    }
+}
+
+void
+flipping_orientation_toggled_cb (GtkWidget *widget, gpointer data)
+{
+  orientable_toggle_orientation (GTK_ORIENTABLE (GTK_DIALOG (gtk_widget_get_toplevel (widget))->vbox));
+}
+
+static void
 set_direction_recurse (GtkWidget *widget,
 		       gpointer   data)
 {
@@ -8335,8 +8369,23 @@ create_flipping (GtkWidget *widget)
       gtk_window_set_title (GTK_WINDOW (window), "Bidirectional Flipping");
 
       check_button = gtk_check_button_new_with_label ("Right-to-left global direction");
+      gtk_container_set_border_width (GTK_CONTAINER (check_button), 10);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox),
+			  check_button, TRUE, TRUE, 0);
+
+      if (gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL)
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
+
+      g_signal_connect (check_button, "toggled",
+			G_CALLBACK (flipping_toggled_cb), NULL);
+
+      check_button = gtk_check_button_new_with_label ("Toggle orientation of all boxes");
+      gtk_container_set_border_width (GTK_CONTAINER (check_button), 10);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
 			  check_button, TRUE, TRUE, 0);
+
+      g_signal_connect (check_button, "toggled",
+			G_CALLBACK (flipping_orientation_toggled_cb), NULL);
 
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
 			  create_forward_back ("Default", GTK_TEXT_DIR_NONE),
@@ -8350,14 +8399,6 @@ create_flipping (GtkWidget *widget)
 			  create_forward_back ("Right-to-Left", GTK_TEXT_DIR_RTL),
 			  TRUE, TRUE, 0);
 
-      if (gtk_widget_get_default_direction () == GTK_TEXT_DIR_RTL)
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
-
-      g_signal_connect (check_button, "toggled",
-			G_CALLBACK (flipping_toggled_cb), NULL);
-
-      gtk_container_set_border_width (GTK_CONTAINER (check_button), 10);
-      
       button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",
 			        G_CALLBACK (gtk_widget_destroy), window);

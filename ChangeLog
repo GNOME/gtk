@@ -1,5 +1,10 @@
 2009-02-19  Michael Natterer  <mitch@imendio.com>
 
+	* tests/testgtk.c: add some orientation flipping code to the
+	"flipping" test.
+
+2009-02-19  Michael Natterer  <mitch@imendio.com>
+
 	* gtk/gtkscalebutton.c: make the orientation flipping much simpler
 	by using the GtkOrientable features of the involved widgets:
 
