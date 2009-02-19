@@ -1,3 +1,8 @@
+2009-02-19  Theppitak Karoonboonyanan  <thep@linux.thai.net>
+
+	* modules/input/gtkimcontextthai.c (is_context_lost_key): Revert the
+	unapproved patch for bug 457086.
+
 2009-02-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkscreen-x11.c (init_randr13): Ignore disconnected outputs,
