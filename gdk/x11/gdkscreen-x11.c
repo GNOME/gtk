@@ -735,7 +735,7 @@ init_randr13 (GdkScreen *screen)
   screen_x11->n_monitors = monitors->len;
   screen_x11->monitors = (GdkX11Monitor *)g_array_free (monitors, FALSE);
 
-  return TRUE;
+  return screen_x11->n_monitors > 0;
 #endif
   
   return FALSE;

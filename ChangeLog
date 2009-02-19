@@ -1,3 +1,11 @@
+2009-02-19  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 572387 – gdm crashes after gtk 2.15.4 upgrade
+
+	* gdk/x11/gdkscreen-x11.c (init_xrandr13): If X is broken and returns
+	no monitors, fall back to other multihead init methods, so that we
+	at least get one monitor set up.
+
 2009-02-19  Michael Natterer  <mitch@imendio.com>
 
 	* gtk/gtkmountoperation.c: sort functions so their order is more
