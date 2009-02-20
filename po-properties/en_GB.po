@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: gtk+ 1.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-17 10:12-0500\n"
-"PO-Revision-Date: 2008-02-17 09:49-0000\n"
+"PO-Revision-Date: 2009-02-20 23:21+0000\n"
 "Last-Translator: David Lodge <dave@cirt.net>\n"
-"Language-Team: \n"
+"Language-Team:  <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2089,14 +2089,12 @@ msgid "Width of border around the main dialog area"
 msgstr "Width of border around the main dialogue area"
 
 #: gtk/gtkdialog.c:209
-#, fuzzy
 msgid "Content area spacing"
-msgstr "Content Padding"
+msgstr "Content area spacing"
 
 #: gtk/gtkdialog.c:210
-#, fuzzy
 msgid "Spacing between elements of the main dialog area"
-msgstr "Space between value text and the slider/trough area"
+msgstr "Spacing between elements of the main dialogue area"
 
 #: gtk/gtkdialog.c:217
 msgid "Button spacing"
@@ -2248,240 +2246,204 @@ msgid "Length of the text currently in the entry"
 msgstr "Length of the text currently in the entry"
 
 #: gtk/gtkentry.c:797
-#, fuzzy
 msgid "Invisible char set"
-msgstr "Invisible set"
+msgstr "Invisible character set"
 
 #: gtk/gtkentry.c:798
-#, fuzzy
 msgid "Whether the invisible char has been set"
-msgstr "Whether the icon-size property has been set"
+msgstr "Whether the invisible character has been set"
 
 #: gtk/gtkentry.c:816
 msgid "Caps Lock warning"
-msgstr ""
+msgstr "Caps Lock warning"
 
 #: gtk/gtkentry.c:817
 msgid "Whether password entries will show a warning when Caps Lock is on"
-msgstr ""
+msgstr "Whether password entries will show a warning when Caps Lock is on"
 
 #: gtk/gtkentry.c:831
-#, fuzzy
 msgid "Progress Fraction"
-msgstr "Fraction"
+msgstr "Progress Fraction"
 
 #: gtk/gtkentry.c:832
-#, fuzzy
 msgid "The current fraction of the task that's been completed"
-msgstr "The fraction of total work that has been completed"
+msgstr "The current fraction of the task that's been completed"
 
 #: gtk/gtkentry.c:849
-#, fuzzy
 msgid "Progress Pulse Step"
-msgstr "Pulse Step"
+msgstr "Progress Pulse Step"
 
 #: gtk/gtkentry.c:850
-#, fuzzy
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
-msgstr "The fraction of total progress to move the bouncing block when pulsed"
+msgstr ""
+"The fraction of total entry width to move the progress bouncing block for "
+"each call to gtk_entry_progress_pulse()"
 
 #: gtk/gtkentry.c:866
-#, fuzzy
 msgid "Primary pixbuf"
-msgstr "Pixbuf"
+msgstr "Primary pixbuf"
 
 #: gtk/gtkentry.c:867
-#, fuzzy
 msgid "Primary pixbuf for the entry"
-msgstr "Pixbuf for open expander"
+msgstr "Primary pixbuf for the entry"
 
 #: gtk/gtkentry.c:881
-#, fuzzy
 msgid "Secondary pixbuf"
-msgstr "Secondary Text"
+msgstr "Secondary pixbuf"
 
 #: gtk/gtkentry.c:882
-#, fuzzy
 msgid "Secondary pixbuf for the entry"
-msgstr "Secondary forward stepper"
+msgstr "Secondary pixbuf for the entry"
 
 #: gtk/gtkentry.c:896
 msgid "Primary stock ID"
-msgstr ""
+msgstr "Primary stock ID"
 
 #: gtk/gtkentry.c:897
 msgid "Stock ID for primary icon"
-msgstr ""
+msgstr "Stock ID for primary icon"
 
 #: gtk/gtkentry.c:911
-#, fuzzy
 msgid "Secondary stock ID"
-msgstr "Secondary Text"
+msgstr "Secondary stock ID"
 
 #: gtk/gtkentry.c:912
 msgid "Stock ID for secondary icon"
-msgstr ""
+msgstr "Stock ID for secondary icon"
 
 #: gtk/gtkentry.c:926
-#, fuzzy
 msgid "Primary icon name"
-msgstr "List of icon names"
+msgstr "Primary icon name"
 
 #: gtk/gtkentry.c:927
 msgid "Icon name for primary icon"
-msgstr ""
+msgstr "Icon name for primary icon"
 
 #: gtk/gtkentry.c:941
-#, fuzzy
 msgid "Secondary icon name"
-msgstr "Secondary Text"
+msgstr "Secondary icon name"
 
 #: gtk/gtkentry.c:942
 msgid "Icon name for secondary icon"
-msgstr ""
+msgstr "Icon name for secondary icon"
 
 #: gtk/gtkentry.c:956
 msgid "Primary GIcon"
-msgstr ""
+msgstr "Primary GIcon"
 
 #: gtk/gtkentry.c:957
-#, fuzzy
 msgid "GIcon for primary icon"
-msgstr "Icon for this window"
+msgstr "GIcon for primary icon"
 
 #: gtk/gtkentry.c:971
-#, fuzzy
 msgid "Secondary GIcon"
-msgstr "Secondary"
+msgstr "Secondary GIcon"
 
 #: gtk/gtkentry.c:972
 msgid "GIcon for secondary icon"
-msgstr ""
+msgstr "GIcon for secondary icon"
 
 #: gtk/gtkentry.c:986
-#, fuzzy
 msgid "Primary storage type"
-msgstr "Storage type"
+msgstr "Primary storage type"
 
 #: gtk/gtkentry.c:987
-#, fuzzy
 msgid "The representation being used for primary icon"
-msgstr "The representation being used for image data"
+msgstr "The representation being used for primary icon"
 
 #: gtk/gtkentry.c:1002
-#, fuzzy
 msgid "Secondary storage type"
-msgstr "Secondary forward stepper"
+msgstr "Secondary storage type"
 
 #: gtk/gtkentry.c:1003
-#, fuzzy
 msgid "The representation being used for secondary icon"
-msgstr "The representation being used for image data"
+msgstr "The representation being used for secondary icon"
 
 #: gtk/gtkentry.c:1024
 msgid "Primary icon activatable"
-msgstr ""
+msgstr "Primary icon activatable"
 
 #: gtk/gtkentry.c:1025
-#, fuzzy
 msgid "Whether the primary icon is activatable"
-msgstr "Whether the action is enabled."
+msgstr "Whether the primary icon is activatable"
 
 #: gtk/gtkentry.c:1045
-#, fuzzy
 msgid "Secondary icon activatable"
-msgstr "Secondary cursor colour"
+msgstr "Secondary icon activatable"
 
 #: gtk/gtkentry.c:1046
-#, fuzzy
 msgid "Whether the secondary icon is activatable"
-msgstr "Whether the action is enabled."
+msgstr "Whether the secondary icon is activatable"
 
 #: gtk/gtkentry.c:1068
-#, fuzzy
 msgid "Primary icon sensitive"
-msgstr "Display the cell sensitive"
+msgstr "Primary icon sensitive"
 
 #: gtk/gtkentry.c:1069
-#, fuzzy
 msgid "Whether the primary icon is sensitive"
-msgstr "Whether list item matching is case sensitive"
+msgstr "Whether the primary icon is sensitive"
 
 #: gtk/gtkentry.c:1090
-#, fuzzy
 msgid "Secondary icon sensitive"
-msgstr "Secondary Text"
+msgstr "Secondary icon sensitive"
 
 #: gtk/gtkentry.c:1091
-#, fuzzy
 msgid "Whether the secondary icon is sensitive"
-msgstr "Whether the action is enabled."
+msgstr "Whether the secondary icon is sensitive"
 
 #: gtk/gtkentry.c:1107
-#, fuzzy
 msgid "Primary icon tooltip text"
-msgstr "Display the cell sensitive"
+msgstr "Primary icon tooltip text"
 
 #: gtk/gtkentry.c:1108 gtk/gtkentry.c:1144
-#, fuzzy
 msgid "The contents of the tooltip on the primary icon"
-msgstr "The contents of the tooltip for this widget"
+msgstr "The contents of the tooltip on the primary icon"
 
 #: gtk/gtkentry.c:1124
-#, fuzzy
 msgid "Secondary icon tooltip text"
-msgstr "Secondary cursor colour"
+msgstr "Secondary icon tooltip text"
 
 #: gtk/gtkentry.c:1125 gtk/gtkentry.c:1163
-#, fuzzy
 msgid "The contents of the tooltip on the secondary icon"
-msgstr "The contents of the tooltip for this widget"
+msgstr "The contents of the tooltip on the secondary icon"
 
 #: gtk/gtkentry.c:1143
-#, fuzzy
 msgid "Primary icon tooltip markup"
-msgstr "List of icon names"
+msgstr "Primary icon tooltip markup"
 
 #: gtk/gtkentry.c:1162
-#, fuzzy
 msgid "Secondary icon tooltip markup"
-msgstr "Secondary Text"
+msgstr "Secondary icon tooltip markup"
 
 #: gtk/gtkentry.c:1182 gtk/gtktextview.c:681
-#, fuzzy
 msgid "IM module"
-msgstr "Default IM module"
+msgstr "IM module"
 
 #: gtk/gtkentry.c:1183 gtk/gtktextview.c:682
-#, fuzzy
 msgid "Which IM module should be used"
-msgstr "Which IM module should be used by default"
+msgstr "Which IM module should be used"
 
 #: gtk/gtkentry.c:1197
-#, fuzzy
 msgid "Icon Prelight"
-msgstr "Height"
+msgstr "Icon Prelight"
 
 #: gtk/gtkentry.c:1198
-#, fuzzy
 msgid "Whether activatable icons should prelight when hovered"
-msgstr "Whether tabs should be shown or not"
+msgstr "Whether activatable icons should prelight when hovered"
 
 #: gtk/gtkentry.c:1648
 msgid "Border between text and frame."
 msgstr "Border between text and frame."
 
 #: gtk/gtkentry.c:1662
-#, fuzzy
 msgid "State Hint"
-msgstr "Status String"
+msgstr "State Hint"
 
 #: gtk/gtkentry.c:1663
-#, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
-msgstr "Bitmap to use as a mask when drawing the text background"
+msgstr "Whether to pass a proper state when drawing shadow or background"
 
 #: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
 msgid "Select on focus"
@@ -3125,27 +3087,24 @@ msgid "Child widget to appear next to the menu text"
 msgstr "Child widget to appear next to the menu text"
 
 #: gtk/gtkimagemenuitem.c:151
-#, fuzzy
 msgid "Whether to use the label text to create a stock menu item"
-msgstr "Whether the label text can be selected with the mouse"
+msgstr "Whether to use the label text to create a stock menu item"
 
 #: gtk/gtkimagemenuitem.c:169
 msgid "Always show image"
-msgstr ""
+msgstr "Always show image"
 
 #: gtk/gtkimagemenuitem.c:170
-#, fuzzy
 msgid "Whether the image will always be shown"
-msgstr "Whether the widget is visible"
+msgstr "Whether the image will always be shown"
 
 #: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:515
 msgid "Accel Group"
 msgstr "Accel Group"
 
 #: gtk/gtkimagemenuitem.c:185
-#, fuzzy
 msgid "The Accel Group to use for stock accelerator keys"
-msgstr "The closure to be monitored for accelerator changes"
+msgstr "The Accel Group to use for stock accelerator keys"
 
 #: gtk/gtkimagemenuitem.c:190
 msgid "Show menu images"
@@ -3408,13 +3367,12 @@ msgid "When scrolling, always show both arrows."
 msgstr "When scrolling, always show both arrows."
 
 #: gtk/gtkmenu.c:642
-#, fuzzy
 msgid "Arrow Placement"
-msgstr "Arrow X Displacement"
+msgstr "Arrow Placement"
 
 #: gtk/gtkmenu.c:643
 msgid "Indicates where scroll arrows should be placed"
-msgstr ""
+msgstr "Indicates where scroll arrows should be placed"
 
 #: gtk/gtkmenu.c:651
 msgid "Left Attach"
@@ -3450,7 +3408,7 @@ msgstr "The row number to attach the bottom of the child to"
 
 #: gtk/gtkmenu.c:690
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
-msgstr ""
+msgstr "Arbitrary constant to scale down the size of the scroll arrow"
 
 #: gtk/gtkmenu.c:777
 msgid "Can change accelerators"
@@ -3543,9 +3501,8 @@ msgid "Sets the accelerator path of the menu item"
 msgstr "Sets the accelerator path of the menu item"
 
 #: gtk/gtkmenuitem.c:301
-#, fuzzy
 msgid "The text for the child label"
-msgstr "The text of the label"
+msgstr "The text for the child label"
 
 #: gtk/gtkmenuitem.c:364
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
@@ -3921,9 +3878,8 @@ msgid "Spacing around indicator"
 msgstr "Spacing around indicator"
 
 #: gtk/gtkorientable.c:75
-#, fuzzy
 msgid "The orientation of the orientable"
-msgstr "The orientation of the scale"
+msgstr "The orientation of the orientable"
 
 #: gtk/gtkpaned.c:242
 msgid ""
@@ -5468,9 +5424,8 @@ msgid "Has tooltip"
 msgstr "Has tooltip"
 
 #: gtk/gtkstatusicon.c:354
-#, fuzzy
 msgid "Whether this tray icon has a tooltip"
-msgstr "Whether this widget has a tooltip"
+msgstr "Whether this tray icon has a tooltip"
 
 #: gtk/gtkstatusicon.c:375 gtk/gtkwidget.c:653
 msgid "Tooltip Text"
@@ -5485,9 +5440,8 @@ msgid "Tooltip markup"
 msgstr "Tooltip markup"
 
 #: gtk/gtkstatusicon.c:400
-#, fuzzy
 msgid "The contents of the tooltip for this tray icon"
-msgstr "The contents of the tooltip for this widget"
+msgstr "The contents of the tooltip for this tray icon"
 
 #: gtk/gtktable.c:129
 msgid "Rows"
@@ -6300,9 +6254,8 @@ msgid "Search Column"
 msgstr "Search Column"
 
 #: gtk/gtktreeview.c:643
-#, fuzzy
 msgid "Model column to search through during interactive search"
-msgstr "Model column to search through when searching through code"
+msgstr "Model column through which to search during an interactive search"
 
 #: gtk/gtktreeview.c:663
 msgid "Fixed Height Mode"

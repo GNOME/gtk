@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-17 10:10-0500\n"
-"PO-Revision-Date: 2008-02-17 09:48-0000\n"
+"PO-Revision-Date: 2009-02-20 23:18+0000\n"
 "Last-Translator: David Lodge <dave@cirt.net>\n"
 "Language-Team: British English <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -28,14 +28,14 @@ msgid "sdl|system"
 msgstr "system"
 
 #: gdk/gdk.c:103
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing option --gdk-debug"
-msgstr "Error printing"
+msgstr "Error parsing option --gdk-debug"
 
 #: gdk/gdk.c:123
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
-msgstr ""
+msgstr "Error parsing option --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
 #: gdk/gdk.c:151
@@ -80,7 +80,7 @@ msgstr "SCREEN"
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:164
 msgid "Gdk debugging flags to set"
-msgstr "Gdk debugging flags to set"
+msgstr "GDK debugging flags to set"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -93,107 +93,94 @@ msgstr "FLAGS"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:167
 msgid "Gdk debugging flags to unset"
-msgstr "Gdk debugging flags to unset"
+msgstr "GDK debugging flags to unset"
 
 #: gdk/keyname-table.h:3940
-#, fuzzy
 msgctxt "keyboard label"
 msgid "BackSpace"
-msgstr "_Replace"
+msgstr "Backspace"
 
 #: gdk/keyname-table.h:3941
 msgctxt "keyboard label"
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: gdk/keyname-table.h:3942
 msgctxt "keyboard label"
 msgid "Return"
-msgstr ""
+msgstr "Return"
 
 #: gdk/keyname-table.h:3943
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Pause"
-msgstr "Paused"
+msgstr "Pause"
 
 #: gdk/keyname-table.h:3944
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr ""
+msgstr "Scroll_Lock"
 
 #: gdk/keyname-table.h:3945
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "File System"
+msgstr "Sys_Req"
 
 #: gdk/keyname-table.h:3946
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Escape"
-msgstr "Landscape"
+msgstr "Escape"
 
 #: gdk/keyname-table.h:3947
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Multipress"
+msgstr "Multi_key"
 
 #: gdk/keyname-table.h:3948
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Home"
 msgstr "Home"
 
 #: gdk/keyname-table.h:3949
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Left"
-msgstr "_Left:"
+msgstr "Left"
 
 #: gdk/keyname-table.h:3950
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Up"
-msgstr "_Up"
+msgstr "Up"
 
 #: gdk/keyname-table.h:3951
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Right"
-msgstr "_Right:"
+msgstr "Right"
 
 #: gdk/keyname-table.h:3952
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Down"
-msgstr "_Down"
+msgstr "Down"
 
 #: gdk/keyname-table.h:3953
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Page Set_up"
+msgstr "Page_Up"
 
 #: gdk/keyname-table.h:3954
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "_Down"
+msgstr "Page_Down"
 
 #: gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Begin"
-msgstr ""
+msgstr "Begin"
 
 #: gdk/keyname-table.h:3957
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "Print"
@@ -201,72 +188,64 @@ msgstr "Print"
 #: gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Insert"
-msgstr ""
+msgstr "Insert"
 
 #: gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr ""
+msgstr "Num_Lock"
 
 #: gdk/keyname-table.h:3960
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "_Replace"
+msgstr "KP_Space"
 
 #: gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr ""
+msgstr "KP_Tab"
 
 #: gdk/keyname-table.h:3962
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "Printer"
+msgstr "KP_Enter"
 
 #: gdk/keyname-table.h:3963
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "_Home"
+msgstr "KP_Home"
 
 #: gdk/keyname-table.h:3964
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "_Left:"
+msgstr "KP_Left"
 
 #: gdk/keyname-table.h:3965
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "_Up"
+msgstr "KP_Up"
 
 #: gdk/keyname-table.h:3966
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "_Right:"
+msgstr "KP_Right"
 
 #: gdk/keyname-table.h:3967
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "_Down"
+msgstr "KP_Down"
 
 #: gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr ""
+msgstr "KP_Page_Up"
 
 #: gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr ""
+msgstr "KP_Prior"
 
 #: gdk/keyname-table.h:3970
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
 msgstr "KP_Page_Down"
@@ -274,34 +253,32 @@ msgstr "KP_Page_Down"
 #: gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr ""
+msgstr "KP_Next"
 
 #: gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr ""
+msgstr "KP_End"
 
 #: gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr ""
+msgstr "KP_Begin"
 
 #: gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr ""
+msgstr "KP_Insert"
 
 #: gdk/keyname-table.h:3975
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "_Delete"
+msgstr "KP_Delete"
 
 #: gdk/keyname-table.h:3976
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Delete"
-msgstr "_Delete"
+msgstr "Delete"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:965
 #: gdk-pixbuf/gdk-pixbuf-io.c:1225 tests/testfilechooser.c:222
@@ -1248,7 +1225,6 @@ msgstr "Artwork by"
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:91
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1259,7 +1235,6 @@ msgstr "Shift"
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:97
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1270,7 +1245,6 @@ msgstr "Ctrl"
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:103
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1281,10 +1255,9 @@ msgstr "Alt"
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:671
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Super"
-msgstr "Paper"
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1292,10 +1265,9 @@ msgstr "Paper"
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:684
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Hyper"
-msgstr "Paper"
+msgstr "Hyper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1305,18 +1277,17 @@ msgstr "Paper"
 #: gtk/gtkaccellabel.c:698
 msgctxt "keyboard label"
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: gtk/gtkaccellabel.c:715
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Space"
-msgstr "_Replace"
+msgstr "Space"
 
 #: gtk/gtkaccellabel.c:718
 msgctxt "keyboard label"
 msgid "Backslash"
-msgstr ""
+msgstr "Backslash"
 
 #: gtk/gtkbuilderparser.c:340
 #, c-format
@@ -1362,7 +1333,7 @@ msgstr "calendar:week_start:0"
 #: gtk/gtkcalendar.c:1803
 msgctxt "year measurement template"
 msgid "2000"
-msgstr ""
+msgstr "2000"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1378,7 +1349,7 @@ msgstr ""
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1394,7 +1365,7 @@ msgstr ""
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1407,16 +1378,14 @@ msgstr ""
 #. * "%Y" is appropriate for most locales.
 #.
 #: gtk/gtkcalendar.c:2146
-#, fuzzy
 msgctxt "calendar year format"
 msgid "%Y"
-msgstr "Y"
+msgstr "%Y"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
 #: gtk/gtkcellrendereraccel.c:243
-#, fuzzy
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Disabled"
@@ -1433,7 +1402,7 @@ msgstr "New accelerator..."
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
@@ -1579,9 +1548,8 @@ msgid "_Insert Unicode Control Character"
 msgstr "_Insert Unicode Control Character"
 
 #: gtk/gtkentry.c:9636
-#, fuzzy
 msgid "Caps Lock is on"
-msgstr "Copy _Location"
+msgstr "Caps Lock is on"
 
 #: gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
@@ -1881,7 +1849,7 @@ msgstr "Completing..."
 #. * "sftp://blahblah" in an app that only supports local filenames.
 #: gtk/gtkfilechooserentry.c:1176 gtk/gtkfilechooserentry.c:1201
 msgid "Only local files may be selected"
-msgstr ""
+msgstr "Only local files may be selected"
 
 #. Another option is to complete the hostname based on the remote volumes that are mounted
 #. Translators: this is shown in the feedback for Tab-completion in a
@@ -1889,15 +1857,14 @@ msgstr ""
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
 #: gtk/gtkfilechooserentry.c:1185
 msgid "Incomplete hostname; end it with '/'"
-msgstr ""
+msgstr "Incomplete hostname; end it with '/'"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
 #: gtk/gtkfilechooserentry.c:1196
-#, fuzzy
 msgid "Path does not exist"
-msgstr "Shortcut %s does not exist"
+msgstr "Path does not exist"
 
 #: gtk/gtkfilechoosersettings.c:362 gtk/gtkfilesel.c:1349
 #: gtk/gtkfilesel.c:1358
@@ -2136,16 +2103,15 @@ msgid "Simple"
 msgstr "Simple"
 
 #: gtk/gtkimmulticontext.c:541
-#, fuzzy
 msgctxt "input method menu"
 msgid "System"
-msgstr "File System"
+msgstr "System"
 
 #: gtk/gtkimmulticontext.c:625
-#, fuzzy, c-format
+#, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
-msgstr "%s (%s)"
+msgstr "System (%s)"
 
 #: gtk/gtkinputdialog.c:192
 msgid "Input"
@@ -2464,49 +2430,44 @@ msgstr "%s job #%d"
 #: gtk/gtkprintoperation.c:1517
 msgctxt "print operation status"
 msgid "Initial state"
-msgstr ""
+msgstr "Initial state"
 
 #: gtk/gtkprintoperation.c:1518
-#, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
-msgstr "Preparing %d"
+msgstr "Preparing to print"
 
 #: gtk/gtkprintoperation.c:1519
 msgctxt "print operation status"
 msgid "Generating data"
-msgstr ""
+msgstr "Generating data"
 
 #: gtk/gtkprintoperation.c:1520
 msgctxt "print operation status"
 msgid "Sending data"
-msgstr ""
+msgstr "Sending data"
 
 #: gtk/gtkprintoperation.c:1521
-#, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
-msgstr "Warning"
+msgstr "Waiting"
 
 #: gtk/gtkprintoperation.c:1522
 msgctxt "print operation status"
 msgid "Blocking on issue"
-msgstr ""
+msgstr "Blocking on issue"
 
 #: gtk/gtkprintoperation.c:1523
-#, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
-msgstr "Printing %d"
+msgstr "Printing"
 
 #: gtk/gtkprintoperation.c:1524
-#, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
-msgstr "Finishing"
+msgstr "Finished"
 
 #: gtk/gtkprintoperation.c:1525
-#, fuzzy
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Finished with error"
@@ -2769,6 +2730,8 @@ msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
+"Specify the time of print,\n"
+" e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
 #: gtk/gtkprintunixdialog.c:2791
 msgid "On _hold"
@@ -2776,7 +2739,7 @@ msgstr "On _hold"
 
 #: gtk/gtkprintunixdialog.c:2792
 msgid "Hold the job until it is explicitly released"
-msgstr ""
+msgstr "Hold the job until it is explicitly released"
 
 #: gtk/gtkprintunixdialog.c:2812
 msgid "Add Cover Page"
@@ -2917,16 +2880,16 @@ msgstr "Unknown item"
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
-msgstr ""
+msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
 #: gtk/gtkrecentchoosermenu.c:822
-#, fuzzy, c-format
+#, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
-msgstr "%s (%s)"
+msgstr "%d. %s"
 
 #: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
 #: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
@@ -2938,25 +2901,21 @@ msgstr "Unable to find an item with URI '%s'"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:288
-#, fuzzy
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Information"
 
 #: gtk/gtkstock.c:289
-#, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Warning"
 
 #: gtk/gtkstock.c:290
-#, fuzzy
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Error"
 
 #: gtk/gtkstock.c:291
-#, fuzzy
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Question"
@@ -2965,565 +2924,476 @@ msgstr "Question"
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:296
-#, fuzzy
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_About"
 
 #: gtk/gtkstock.c:297
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Add"
 
 #: gtk/gtkstock.c:298
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Apply"
 
 #: gtk/gtkstock.c:299
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_Bold"
 
 #: gtk/gtkstock.c:300
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_Cancel"
 
 #: gtk/gtkstock.c:301
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "_CD-ROM"
 
 #: gtk/gtkstock.c:302
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Clear"
 
 #: gtk/gtkstock.c:303
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Close"
 
 #: gtk/gtkstock.c:304
-#, fuzzy
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "C_onnect"
 
 #: gtk/gtkstock.c:305
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_Convert"
 
 #: gtk/gtkstock.c:306
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_Copy"
 
 #: gtk/gtkstock.c:307
-#, fuzzy
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "Cu_t"
 
 #: gtk/gtkstock.c:308
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Delete"
 
 #: gtk/gtkstock.c:309
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_Discard"
 
 #: gtk/gtkstock.c:310
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "_Disconnect"
 
 #: gtk/gtkstock.c:311
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_Execute"
 
 #: gtk/gtkstock.c:312
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Edit"
 
 #: gtk/gtkstock.c:313
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Find"
 
 #: gtk/gtkstock.c:314
-#, fuzzy
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Find and _Replace"
 
 #: gtk/gtkstock.c:315
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Floppy"
 
 #: gtk/gtkstock.c:316
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "_Fullscreen"
 
 #: gtk/gtkstock.c:317
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "_Leave Fullscreen"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: gtk/gtkstock.c:319
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
-msgstr "_Bottom:"
+msgstr "_Bottom"
 
 #. This is a navigation label as in "go to the first page"
 #: gtk/gtkstock.c:321
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_First"
 
 #. This is a navigation label as in "go to the last page"
 #: gtk/gtkstock.c:323
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "_Last"
 
 #. This is a navigation label as in "go to the top of the page"
 #: gtk/gtkstock.c:325
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Top"
-msgstr "_Top:"
+msgstr "_Top"
 
 #. This is a navigation label as in "go back"
 #: gtk/gtkstock.c:327
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_Back"
 
 #. This is a navigation label as in "go down"
 #: gtk/gtkstock.c:329
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_Down"
 
 #. This is a navigation label as in "go forward"
 #: gtk/gtkstock.c:331
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "_Forward"
 
 #. This is a navigation label as in "go up"
 #: gtk/gtkstock.c:333
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Up"
 
 #: gtk/gtkstock.c:334
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Harddisk"
-msgstr "_Harddisk"
+msgstr "_Hard disk"
 
 #: gtk/gtkstock.c:335
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "_Help"
 
 #: gtk/gtkstock.c:336
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Home"
 
 #: gtk/gtkstock.c:337
-#, fuzzy
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Increase Indent"
 
 #: gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Decrease Indent"
 
 #: gtk/gtkstock.c:339
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Index"
 
 #: gtk/gtkstock.c:340
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_Information"
 
 #: gtk/gtkstock.c:341
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_Italic"
 
 #: gtk/gtkstock.c:342
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Jump to"
 
 #. This is about text justification, "centered text"
 #: gtk/gtkstock.c:344
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
-msgstr "_Convert"
+msgstr "_Centre"
 
 #. This is about text justification
 #: gtk/gtkstock.c:346
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fill"
-msgstr "_Files"
+msgstr "_Fill"
 
 #. This is about text justification, "left-justified text"
 #: gtk/gtkstock.c:348
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Left"
-msgstr "_Left:"
+msgstr "_Left"
 
 #. This is about text justification, "right-justified text"
 #: gtk/gtkstock.c:350
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Right"
-msgstr "_Right:"
+msgstr "_Right"
 
 #. Media label, as in "fast forward"
 #: gtk/gtkstock.c:353
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "_Forward"
 
 #. Media label, as in "next song"
 #: gtk/gtkstock.c:355
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Next"
-msgstr "_New"
+msgstr "_Next"
 
 #. Media label, as in "pause music"
 #: gtk/gtkstock.c:357
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "P_ause"
-msgstr "Paused"
+msgstr "P_ause"
 
 #. Media label, as in "play music"
 #: gtk/gtkstock.c:359
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Play"
-msgstr "_Places"
+msgstr "_Play"
 
 #. Media label, as in  "previous song"
 #: gtk/gtkstock.c:361
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "Pre_vious"
 
 #. Media label
 #: gtk/gtkstock.c:363
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Record"
 
 #. Media label
 #: gtk/gtkstock.c:365
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "R_ewind"
 
 #. Media label
 #: gtk/gtkstock.c:367
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Stop"
 
 #: gtk/gtkstock.c:368
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Network"
 
 #: gtk/gtkstock.c:369
-#, fuzzy
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_New"
 
 #: gtk/gtkstock.c:370
-#, fuzzy
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_No"
 
 #: gtk/gtkstock.c:371
-#, fuzzy
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_OK"
 
 #: gtk/gtkstock.c:372
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Open"
 
 #. Page orientation
 #: gtk/gtkstock.c:374
-#, fuzzy
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Landscape"
 
 #. Page orientation
 #: gtk/gtkstock.c:376
-#, fuzzy
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Portrait"
 
 #. Page orientation
 #: gtk/gtkstock.c:378
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Reverse landscape"
 
 #. Page orientation
 #: gtk/gtkstock.c:380
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Reverse portrait"
 
 #: gtk/gtkstock.c:381
-#, fuzzy
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Page Set_up"
 
 #: gtk/gtkstock.c:382
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "_Paste"
 
 #: gtk/gtkstock.c:383
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Preferences"
 
 #: gtk/gtkstock.c:384
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Print"
 
 #: gtk/gtkstock.c:385
-#, fuzzy
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "Print Pre_view"
 
 #: gtk/gtkstock.c:386
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Properties"
 
 #: gtk/gtkstock.c:387
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Quit"
 
 #: gtk/gtkstock.c:388
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_Redo"
 
 #: gtk/gtkstock.c:389
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_Refresh"
 
 #: gtk/gtkstock.c:390
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Remove"
 
 #: gtk/gtkstock.c:391
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Revert"
 
 #: gtk/gtkstock.c:392
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Save"
 
 #: gtk/gtkstock.c:393
-#, fuzzy
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Save _As"
 
 #: gtk/gtkstock.c:394
-#, fuzzy
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Select _All"
 
 #: gtk/gtkstock.c:395
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Colour"
 
 #: gtk/gtkstock.c:396
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Font"
 
 #. Sorting direction
 #: gtk/gtkstock.c:398
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Ascending"
 
 #. Sorting direction
 #: gtk/gtkstock.c:400
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_Descending"
 
 #: gtk/gtkstock.c:401
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "_Spell Check"
 
 #: gtk/gtkstock.c:402
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Stop"
 
 #. Font variant
 #: gtk/gtkstock.c:404
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Strikethrough"
 
 #: gtk/gtkstock.c:405
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_Undelete"
 
 #. Font variant
 #: gtk/gtkstock.c:407
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_Underline"
 
 #: gtk/gtkstock.c:408
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Undo"
 
 #: gtk/gtkstock.c:409
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Yes"
 
 #. Zoom
 #: gtk/gtkstock.c:411
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "_Normal Size"
 
 #. Zoom
 #: gtk/gtkstock.c:413
-#, fuzzy
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "Best _Fit"
 
 #: gtk/gtkstock.c:414
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "Zoom _In"
 
 #: gtk/gtkstock.c:415
-#, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Zoom _Out"
@@ -3752,316 +3622,314 @@ msgstr "Full Volume"
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #: gtk/paper_names_offsets.c:4
-#, fuzzy
 msgctxt "paper size"
 msgid "asme_f"
-msgstr "Name:"
+msgstr "asme_f"
 
 #: gtk/paper_names_offsets.c:5
 msgctxt "paper size"
 msgid "A0x2"
-msgstr ""
+msgstr "A0x2"
 
 #: gtk/paper_names_offsets.c:6
 msgctxt "paper size"
 msgid "A0"
-msgstr ""
+msgstr "A0"
 
 #: gtk/paper_names_offsets.c:7
 msgctxt "paper size"
 msgid "A0x3"
-msgstr ""
+msgstr "A0x3"
 
 #: gtk/paper_names_offsets.c:8
 msgctxt "paper size"
 msgid "A1"
-msgstr ""
+msgstr "A1"
 
 #: gtk/paper_names_offsets.c:9
 msgctxt "paper size"
 msgid "A10"
-msgstr ""
+msgstr "A10"
 
 #: gtk/paper_names_offsets.c:10
 msgctxt "paper size"
 msgid "A1x3"
-msgstr ""
+msgstr "A1x3"
 
 #: gtk/paper_names_offsets.c:11
 msgctxt "paper size"
 msgid "A1x4"
-msgstr ""
+msgstr "A1x4"
 
 #: gtk/paper_names_offsets.c:12
 msgctxt "paper size"
 msgid "A2"
-msgstr ""
+msgstr "A2"
 
 #: gtk/paper_names_offsets.c:13
 msgctxt "paper size"
 msgid "A2x3"
-msgstr ""
+msgstr "A2x3"
 
 #: gtk/paper_names_offsets.c:14
 msgctxt "paper size"
 msgid "A2x4"
-msgstr ""
+msgstr "A2x4"
 
 #: gtk/paper_names_offsets.c:15
 msgctxt "paper size"
 msgid "A2x5"
-msgstr ""
+msgstr "A2x5"
 
 #: gtk/paper_names_offsets.c:16
 msgctxt "paper size"
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 #: gtk/paper_names_offsets.c:17
 msgctxt "paper size"
 msgid "A3 Extra"
-msgstr ""
+msgstr "A3 Extra"
 
 #: gtk/paper_names_offsets.c:18
 msgctxt "paper size"
 msgid "A3x3"
-msgstr ""
+msgstr "A3x3"
 
 #: gtk/paper_names_offsets.c:19
 msgctxt "paper size"
 msgid "A3x4"
-msgstr ""
+msgstr "A3x4"
 
 #: gtk/paper_names_offsets.c:20
 msgctxt "paper size"
 msgid "A3x5"
-msgstr ""
+msgstr "A3x5"
 
 #: gtk/paper_names_offsets.c:21
 msgctxt "paper size"
 msgid "A3x6"
-msgstr ""
+msgstr "A3x6"
 
 #: gtk/paper_names_offsets.c:22
 msgctxt "paper size"
 msgid "A3x7"
-msgstr ""
+msgstr "A3x7"
 
 #: gtk/paper_names_offsets.c:23
 msgctxt "paper size"
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 #: gtk/paper_names_offsets.c:24
 msgctxt "paper size"
 msgid "A4 Extra"
-msgstr ""
+msgstr "A4 Extra"
 
 #: gtk/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A4 Tab"
-msgstr ""
+msgstr "A4 Tab"
 
 #: gtk/paper_names_offsets.c:26
 msgctxt "paper size"
 msgid "A4x3"
-msgstr ""
+msgstr "A4x3"
 
 #: gtk/paper_names_offsets.c:27
 msgctxt "paper size"
 msgid "A4x4"
-msgstr ""
+msgstr "A4x4"
 
 #: gtk/paper_names_offsets.c:28
 msgctxt "paper size"
 msgid "A4x5"
-msgstr ""
+msgstr "A4x5"
 
 #: gtk/paper_names_offsets.c:29
 msgctxt "paper size"
 msgid "A4x6"
-msgstr ""
+msgstr "A4x6"
 
 #: gtk/paper_names_offsets.c:30
 msgctxt "paper size"
 msgid "A4x7"
-msgstr ""
+msgstr "A4x7"
 
 #: gtk/paper_names_offsets.c:31
 msgctxt "paper size"
 msgid "A4x8"
-msgstr ""
+msgstr "A4x8"
 
 #: gtk/paper_names_offsets.c:32
 msgctxt "paper size"
 msgid "A4x9"
-msgstr ""
+msgstr "A4x9"
 
 #: gtk/paper_names_offsets.c:33
 msgctxt "paper size"
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #: gtk/paper_names_offsets.c:34
 msgctxt "paper size"
 msgid "A5 Extra"
-msgstr ""
+msgstr "A5 Extra"
 
 #: gtk/paper_names_offsets.c:35
 msgctxt "paper size"
 msgid "A6"
-msgstr ""
+msgstr "A6"
 
 #: gtk/paper_names_offsets.c:36
 msgctxt "paper size"
 msgid "A7"
-msgstr ""
+msgstr "A7"
 
 #: gtk/paper_names_offsets.c:37
 msgctxt "paper size"
 msgid "A8"
-msgstr ""
+msgstr "A8"
 
 #: gtk/paper_names_offsets.c:38
 msgctxt "paper size"
 msgid "A9"
-msgstr ""
+msgstr "A9"
 
 #: gtk/paper_names_offsets.c:39
 msgctxt "paper size"
 msgid "B0"
-msgstr ""
+msgstr "B0"
 
 #: gtk/paper_names_offsets.c:40
 msgctxt "paper size"
 msgid "B1"
-msgstr ""
+msgstr "B1"
 
 #: gtk/paper_names_offsets.c:41
 msgctxt "paper size"
 msgid "B10"
-msgstr ""
+msgstr "B10"
 
 #: gtk/paper_names_offsets.c:42
 msgctxt "paper size"
 msgid "B2"
-msgstr ""
+msgstr "B2"
 
 #: gtk/paper_names_offsets.c:43
 msgctxt "paper size"
 msgid "B3"
-msgstr ""
+msgstr "B3"
 
 #: gtk/paper_names_offsets.c:44
 msgctxt "paper size"
 msgid "B4"
-msgstr ""
+msgstr "B4"
 
 #: gtk/paper_names_offsets.c:45
 msgctxt "paper size"
 msgid "B5"
-msgstr ""
+msgstr "B5"
 
 #: gtk/paper_names_offsets.c:46
 msgctxt "paper size"
 msgid "B5 Extra"
-msgstr ""
+msgstr "B5 Extra"
 
 #: gtk/paper_names_offsets.c:47
 msgctxt "paper size"
 msgid "B6"
-msgstr ""
+msgstr "B6"
 
 #: gtk/paper_names_offsets.c:48
 msgctxt "paper size"
 msgid "B6/C4"
-msgstr ""
+msgstr "B6/C4"
 
 #: gtk/paper_names_offsets.c:49
 msgctxt "paper size"
 msgid "B7"
-msgstr ""
+msgstr "B7"
 
 #: gtk/paper_names_offsets.c:50
 msgctxt "paper size"
 msgid "B8"
-msgstr ""
+msgstr "B8"
 
 #: gtk/paper_names_offsets.c:51
 msgctxt "paper size"
 msgid "B9"
-msgstr ""
+msgstr "B9"
 
 #: gtk/paper_names_offsets.c:52
 msgctxt "paper size"
 msgid "C0"
-msgstr ""
+msgstr "C0"
 
 #: gtk/paper_names_offsets.c:53
 msgctxt "paper size"
 msgid "C1"
-msgstr ""
+msgstr "C1"
 
 #: gtk/paper_names_offsets.c:54
 msgctxt "paper size"
 msgid "C10"
-msgstr ""
+msgstr "C10"
 
 #: gtk/paper_names_offsets.c:55
 msgctxt "paper size"
 msgid "C2"
-msgstr ""
+msgstr "C2"
 
 #: gtk/paper_names_offsets.c:56
 msgctxt "paper size"
 msgid "C3"
-msgstr ""
+msgstr "C3"
 
 #: gtk/paper_names_offsets.c:57
 msgctxt "paper size"
 msgid "C4"
-msgstr ""
+msgstr "C4"
 
 #: gtk/paper_names_offsets.c:58
 msgctxt "paper size"
 msgid "C5"
-msgstr ""
+msgstr "C5"
 
 #: gtk/paper_names_offsets.c:59
 msgctxt "paper size"
 msgid "C6"
-msgstr ""
+msgstr "C6"
 
 #: gtk/paper_names_offsets.c:60
 msgctxt "paper size"
 msgid "C6/C5"
-msgstr ""
+msgstr "C6/C5"
 
 #: gtk/paper_names_offsets.c:61
 msgctxt "paper size"
 msgid "C7"
-msgstr ""
+msgstr "C7"
 
 #: gtk/paper_names_offsets.c:62
 msgctxt "paper size"
 msgid "C7/C6"
-msgstr ""
+msgstr "C7/C6"
 
 #: gtk/paper_names_offsets.c:63
 msgctxt "paper size"
 msgid "C8"
-msgstr ""
+msgstr "C8"
 
 #: gtk/paper_names_offsets.c:64
 msgctxt "paper size"
 msgid "C9"
-msgstr ""
+msgstr "C9"
 
 #: gtk/paper_names_offsets.c:65
-#, fuzzy
 msgctxt "paper size"
 msgid "DL Envelope"
 msgstr "DL Envelope"
@@ -4069,137 +3937,129 @@ msgstr "DL Envelope"
 #: gtk/paper_names_offsets.c:66
 msgctxt "paper size"
 msgid "RA0"
-msgstr ""
+msgstr "RA0"
 
 #: gtk/paper_names_offsets.c:67
 msgctxt "paper size"
 msgid "RA1"
-msgstr ""
+msgstr "RA1"
 
 #: gtk/paper_names_offsets.c:68
 msgctxt "paper size"
 msgid "RA2"
-msgstr ""
+msgstr "RA2"
 
 #: gtk/paper_names_offsets.c:69
 msgctxt "paper size"
 msgid "SRA0"
-msgstr ""
+msgstr "SRA0"
 
 #: gtk/paper_names_offsets.c:70
 msgctxt "paper size"
 msgid "SRA1"
-msgstr ""
+msgstr "SRA1"
 
 #: gtk/paper_names_offsets.c:71
 msgctxt "paper size"
 msgid "SRA2"
-msgstr ""
+msgstr "SRA2"
 
 #: gtk/paper_names_offsets.c:72
 msgctxt "paper size"
 msgid "JB0"
-msgstr ""
+msgstr "JB0"
 
 #: gtk/paper_names_offsets.c:73
 msgctxt "paper size"
 msgid "JB1"
-msgstr ""
+msgstr "JB1"
 
 #: gtk/paper_names_offsets.c:74
 msgctxt "paper size"
 msgid "JB10"
-msgstr ""
+msgstr "JB10"
 
 #: gtk/paper_names_offsets.c:75
 msgctxt "paper size"
 msgid "JB2"
-msgstr ""
+msgstr "JB2"
 
 #: gtk/paper_names_offsets.c:76
 msgctxt "paper size"
 msgid "JB3"
-msgstr ""
+msgstr "JB3"
 
 #: gtk/paper_names_offsets.c:77
 msgctxt "paper size"
 msgid "JB4"
-msgstr ""
+msgstr "JB4"
 
 #: gtk/paper_names_offsets.c:78
 msgctxt "paper size"
 msgid "JB5"
-msgstr ""
+msgstr "JB5"
 
 #: gtk/paper_names_offsets.c:79
 msgctxt "paper size"
 msgid "JB6"
-msgstr ""
+msgstr "JB6"
 
 #: gtk/paper_names_offsets.c:80
 msgctxt "paper size"
 msgid "JB7"
-msgstr ""
+msgstr "JB7"
 
 #: gtk/paper_names_offsets.c:81
 msgctxt "paper size"
 msgid "JB8"
-msgstr ""
+msgstr "JB8"
 
 #: gtk/paper_names_offsets.c:82
 msgctxt "paper size"
 msgid "JB9"
-msgstr ""
+msgstr "JB9"
 
 #: gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "jis exec"
-msgstr ""
+msgstr "jis exec"
 
 #: gtk/paper_names_offsets.c:84
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
 msgstr "Choukei 2 Envelope"
 
 #: gtk/paper_names_offsets.c:85
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
 msgstr "Choukei 3 Envelope"
 
 #: gtk/paper_names_offsets.c:86
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
 msgstr "Choukei 4 Envelope"
 
 #: gtk/paper_names_offsets.c:87
-#, fuzzy
 msgctxt "paper size"
 msgid "hagaki (postcard)"
 msgstr "hagaki (postcard)"
 
 #: gtk/paper_names_offsets.c:88
-#, fuzzy
 msgctxt "paper size"
 msgid "kahu Envelope"
 msgstr "kahu Envelope"
 
 #: gtk/paper_names_offsets.c:89
-#, fuzzy
 msgctxt "paper size"
 msgid "kaku2 Envelope"
 msgstr "kaku2 Envelope"
 
 #: gtk/paper_names_offsets.c:90
-#, fuzzy
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
 msgstr "oufuku (reply postcard)"
 
 #: gtk/paper_names_offsets.c:91
-#, fuzzy
 msgctxt "paper size"
 msgid "you4 Envelope"
 msgstr "you4 Envelope"
@@ -4207,63 +4067,59 @@ msgstr "you4 Envelope"
 #: gtk/paper_names_offsets.c:92
 msgctxt "paper size"
 msgid "10x11"
-msgstr ""
+msgstr "10x11"
 
 #: gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "10x13"
-msgstr ""
+msgstr "10x13"
 
 #: gtk/paper_names_offsets.c:94
 msgctxt "paper size"
 msgid "10x14"
-msgstr ""
+msgstr "10x14"
 
 #: gtk/paper_names_offsets.c:95 gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "10x15"
-msgstr ""
+msgstr "10x15"
 
 #: gtk/paper_names_offsets.c:97
 msgctxt "paper size"
 msgid "11x12"
-msgstr ""
+msgstr "11x12"
 
 #: gtk/paper_names_offsets.c:98
 msgctxt "paper size"
 msgid "11x15"
-msgstr ""
+msgstr "11x15"
 
 #: gtk/paper_names_offsets.c:99
 msgctxt "paper size"
 msgid "12x19"
-msgstr ""
+msgstr "12x19"
 
 #: gtk/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "5x7"
-msgstr ""
+msgstr "5x7"
 
 #: gtk/paper_names_offsets.c:101
-#, fuzzy
 msgctxt "paper size"
 msgid "6x9 Envelope"
 msgstr "6x9 Envelope"
 
 #: gtk/paper_names_offsets.c:102
-#, fuzzy
 msgctxt "paper size"
 msgid "7x9 Envelope"
 msgstr "7x9 Envelope"
 
 #: gtk/paper_names_offsets.c:103
-#, fuzzy
 msgctxt "paper size"
 msgid "9x11 Envelope"
 msgstr "9x11 Envelope"
 
 #: gtk/paper_names_offsets.c:104
-#, fuzzy
 msgctxt "paper size"
 msgid "a2 Envelope"
 msgstr "a2 Envelope"
@@ -4271,40 +4127,39 @@ msgstr "a2 Envelope"
 #: gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #: gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #: gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #: gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #: gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #: gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "b-plus"
-msgstr ""
+msgstr "b-plus"
 
 #: gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "c"
-msgstr ""
+msgstr "c"
 
 #: gtk/paper_names_offsets.c:112
-#, fuzzy
 msgctxt "paper size"
 msgid "c5 Envelope"
 msgstr "c5 Envelope"
@@ -4312,166 +4167,144 @@ msgstr "c5 Envelope"
 #: gtk/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "d"
-msgstr ""
+msgstr "d"
 
 #: gtk/paper_names_offsets.c:114
 msgctxt "paper size"
 msgid "e"
-msgstr ""
+msgstr "e"
 
 #: gtk/paper_names_offsets.c:115
 msgctxt "paper size"
 msgid "edp"
-msgstr ""
+msgstr "edp"
 
 #: gtk/paper_names_offsets.c:116
-#, fuzzy
 msgctxt "paper size"
 msgid "European edp"
 msgstr "European edp"
 
 #: gtk/paper_names_offsets.c:117
-#, fuzzy
 msgctxt "paper size"
 msgid "Executive"
-msgstr "_Execute"
+msgstr "Executive"
 
 #: gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: gtk/paper_names_offsets.c:119
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold European"
 msgstr "FanFold European"
 
 #: gtk/paper_names_offsets.c:120
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold US"
 msgstr "FanFold US"
 
 #: gtk/paper_names_offsets.c:121
-#, fuzzy
 msgctxt "paper size"
 msgid "FanFold German Legal"
 msgstr "FanFold German Legal"
 
 #: gtk/paper_names_offsets.c:122
-#, fuzzy
 msgctxt "paper size"
 msgid "Government Legal"
 msgstr "Government Legal"
 
 #: gtk/paper_names_offsets.c:123
-#, fuzzy
 msgctxt "paper size"
 msgid "Government Letter"
 msgstr "Government Letter"
 
 #: gtk/paper_names_offsets.c:124
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 3x5"
-msgstr "_Index"
+msgstr "Index 3x5"
 
 #: gtk/paper_names_offsets.c:125
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
 msgstr "Index 4x6 (postcard)"
 
 #: gtk/paper_names_offsets.c:126
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 4x6 ext"
 msgstr "Index 4x6 ext"
 
 #: gtk/paper_names_offsets.c:127
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 5x8"
-msgstr "_Index"
+msgstr "Index 5x8"
 
 #: gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "Invoice"
-msgstr ""
+msgstr "Invoice"
 
 #: gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 #: gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "US Legal"
-msgstr ""
+msgstr "US Legal"
 
 #: gtk/paper_names_offsets.c:131
-#, fuzzy
 msgctxt "paper size"
 msgid "US Legal Extra"
 msgstr "US Legal Extra"
 
 #: gtk/paper_names_offsets.c:132
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter"
 msgstr "US Letter"
 
 #: gtk/paper_names_offsets.c:133
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter Extra"
 msgstr "US Letter Extra"
 
 #: gtk/paper_names_offsets.c:134
-#, fuzzy
 msgctxt "paper size"
 msgid "US Letter Plus"
 msgstr "US Letter Plus"
 
 #: gtk/paper_names_offsets.c:135
-#, fuzzy
 msgctxt "paper size"
 msgid "Monarch Envelope"
 msgstr "Monarch Envelope"
 
 #: gtk/paper_names_offsets.c:136
-#, fuzzy
 msgctxt "paper size"
 msgid "#10 Envelope"
 msgstr "#10 Envelope"
 
 #: gtk/paper_names_offsets.c:137
-#, fuzzy
 msgctxt "paper size"
 msgid "#11 Envelope"
 msgstr "#11 Envelope"
 
 #: gtk/paper_names_offsets.c:138
-#, fuzzy
 msgctxt "paper size"
 msgid "#12 Envelope"
 msgstr "#12 Envelope"
 
 #: gtk/paper_names_offsets.c:139
-#, fuzzy
 msgctxt "paper size"
 msgid "#14 Envelope"
 msgstr "#14 Envelope"
 
 #: gtk/paper_names_offsets.c:140
-#, fuzzy
 msgctxt "paper size"
 msgid "#9 Envelope"
 msgstr "#9 Envelope"
 
 #: gtk/paper_names_offsets.c:141
-#, fuzzy
 msgctxt "paper size"
 msgid "Personal Envelope"
 msgstr "Personal Envelope"
@@ -4479,57 +4312,49 @@ msgstr "Personal Envelope"
 #: gtk/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "Quarto"
-msgstr ""
+msgstr "Quarto"
 
 #: gtk/paper_names_offsets.c:143
-#, fuzzy
 msgctxt "paper size"
 msgid "Super A"
-msgstr "Paper"
+msgstr "Super A"
 
 #: gtk/paper_names_offsets.c:144
-#, fuzzy
 msgctxt "paper size"
 msgid "Super B"
-msgstr "Paper"
+msgstr "Super B"
 
 #: gtk/paper_names_offsets.c:145
-#, fuzzy
 msgctxt "paper size"
 msgid "Wide Format"
 msgstr "Wide Format"
 
 #: gtk/paper_names_offsets.c:146
-#, fuzzy
 msgctxt "paper size"
 msgid "Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
 #: gtk/paper_names_offsets.c:147
-#, fuzzy
 msgctxt "paper size"
 msgid "Folio"
-msgstr "Colour"
+msgstr "Folio"
 
 #: gtk/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "Folio sp"
-msgstr ""
+msgstr "Folio sp"
 
 #: gtk/paper_names_offsets.c:149
-#, fuzzy
 msgctxt "paper size"
 msgid "Invite Envelope"
 msgstr "Invite Envelope"
 
 #: gtk/paper_names_offsets.c:150
-#, fuzzy
 msgctxt "paper size"
 msgid "Italian Envelope"
 msgstr "Italian Envelope"
 
 #: gtk/paper_names_offsets.c:151
-#, fuzzy
 msgctxt "paper size"
 msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
@@ -4537,28 +4362,24 @@ msgstr "juuro-ku-kai"
 #: gtk/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "pa-kai"
-msgstr ""
+msgstr "pa-kai"
 
 #: gtk/paper_names_offsets.c:153
-#, fuzzy
 msgctxt "paper size"
 msgid "Postfix Envelope"
 msgstr "Postfix Envelope"
 
 #: gtk/paper_names_offsets.c:154
-#, fuzzy
 msgctxt "paper size"
 msgid "Small Photo"
 msgstr "Small Photo"
 
 #: gtk/paper_names_offsets.c:155
-#, fuzzy
 msgctxt "paper size"
 msgid "prc1 Envelope"
 msgstr "prc1 Envelope"
 
 #: gtk/paper_names_offsets.c:156
-#, fuzzy
 msgctxt "paper size"
 msgid "prc10 Envelope"
 msgstr "prc10 Envelope"
@@ -4566,16 +4387,14 @@ msgstr "prc10 Envelope"
 #: gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "prc 16k"
-msgstr ""
+msgstr "prc 16k"
 
 #: gtk/paper_names_offsets.c:158
-#, fuzzy
 msgctxt "paper size"
 msgid "prc2 Envelope"
 msgstr "prc2 Envelope"
 
 #: gtk/paper_names_offsets.c:159
-#, fuzzy
 msgctxt "paper size"
 msgid "prc3 Envelope"
 msgstr "prc3 Envelope"
@@ -4583,34 +4402,29 @@ msgstr "prc3 Envelope"
 #: gtk/paper_names_offsets.c:160
 msgctxt "paper size"
 msgid "prc 32k"
-msgstr ""
+msgstr "prc 32k"
 
 #: gtk/paper_names_offsets.c:161
-#, fuzzy
 msgctxt "paper size"
 msgid "prc4 Envelope"
 msgstr "prc4 Envelope"
 
 #: gtk/paper_names_offsets.c:162
-#, fuzzy
 msgctxt "paper size"
 msgid "prc5 Envelope"
-msgstr "c5 Envelope"
+msgstr "prc5 Envelope"
 
 #: gtk/paper_names_offsets.c:163
-#, fuzzy
 msgctxt "paper size"
 msgid "prc6 Envelope"
 msgstr "prc6 Envelope"
 
 #: gtk/paper_names_offsets.c:164
-#, fuzzy
 msgctxt "paper size"
 msgid "prc7 Envelope"
 msgstr "prc7 Envelope"
 
 #: gtk/paper_names_offsets.c:165
-#, fuzzy
 msgctxt "paper size"
 msgid "prc8 Envelope"
 msgstr "prc8 Envelope"
@@ -4618,12 +4432,12 @@ msgstr "prc8 Envelope"
 #: gtk/paper_names_offsets.c:166
 msgctxt "paper size"
 msgid "ROC 16k"
-msgstr ""
+msgstr "ROC 16k"
 
 #: gtk/paper_names_offsets.c:167
 msgctxt "paper size"
 msgid "ROC 8k"
-msgstr ""
+msgstr "ROC 8k"
 
 #: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
 #, c-format
@@ -4884,13 +4698,12 @@ msgid "Output Tray"
 msgstr "Output Tray"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2149
-#, fuzzy
 msgid "Resolution"
-msgstr "Question"
+msgstr "Resolution"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2150
 msgid "GhostScript pre-filtering"
-msgstr ""
+msgstr "GhostScript pre-filtering"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2159
 msgid "One Sided"
@@ -4899,12 +4712,12 @@ msgstr "One Sided"
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2161
 msgid "Long Edge (Standard)"
-msgstr ""
+msgstr "Long Edge (Standard)"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2163
 msgid "Short Edge (Flip)"
-msgstr ""
+msgstr "Short Edge (Flip)"
 
 #. Translators: this is an option of "Paper Source"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2165
@@ -4926,29 +4739,28 @@ msgstr "Printer Default"
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2179
 msgid "Embed GhostScript fonts only"
-msgstr ""
+msgstr "Embed GhostScript fonts only"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2181
 msgid "Convert to PS level 1"
-msgstr ""
+msgstr "Convert to PS level 1"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2183
 msgid "Convert to PS level 2"
-msgstr ""
+msgstr "Convert to PS level 2"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2185
-#, fuzzy
 msgid "No pre-filtering"
-msgstr "No printer found"
+msgstr "No pre-filtering"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2194
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Miscellaneous"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
