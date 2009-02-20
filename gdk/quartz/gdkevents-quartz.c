@@ -1040,9 +1040,10 @@ gdk_event_translate (GdkEvent *event,
 	}
     }
 
-  /* If the app is not active, or the window (when not grabbed) is not
-   * active, leave the event to AppKit so the window gets focused correctly
-   * and don't do click-through (so we behave like most native apps).
+  /* If the app is not active leave the event to AppKit so the window gets
+   * focused correctly and don't do click-through (so we behave like most
+   * native apps). If the app is active, we focus the window and then handle
+   * the event, also to match native apps.
    */
   if ((event_type == NSRightMouseDown ||
        event_type == NSOtherMouseDown ||
@@ -1057,7 +1058,13 @@ gdk_event_translate (GdkEvent *event,
           return FALSE;
         }
       else if (![impl->toplevel isKeyWindow])
-        return FALSE;
+        {
+          GdkPointerGrabInfo *grab;
+
+          grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+          if (!grab)
+            [impl->toplevel makeKeyWindow];
+        }
     }
 
   current_event_mask = get_event_mask_from_ns_event (nsevent);
