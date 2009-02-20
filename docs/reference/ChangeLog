@@ -1,3 +1,7 @@
+2009-02-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_window_get_default_icon_name
+
 2009-02-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.15.4 ===

@@ -3710,7 +3710,7 @@ gtk_window_set_default_icon (GdkPixbuf *icon)
 /**
  * gtk_window_set_default_icon_name:
  * @name: the name of the themed icon
- * 
+ *
  * Sets an icon to be used as fallback for windows that haven't
  * had gtk_window_set_icon_list() called on them from a named
  * themed icon, see gtk_window_set_icon_name().
@@ -3755,6 +3755,25 @@ gtk_window_set_default_icon_name (const gchar *name)
       tmp_list = tmp_list->next;
     }
   g_list_free (toplevels);
+}
+
+/**
+ * gtk_window_get_default_icon_name:
+ *
+ * Returns the fallback icon name for windows that has been set
+ * with gtk_window_set_default_icon_name(). The returned
+ * string is owned by GTK+ and should not be modified. It
+ * is only valid until the next call to
+ * gtk_window_set_default_icon_name().
+ *
+ * Returns: the fallback icon name for windows
+ *
+ * Since: 2.16
+ */
+const gchar *
+gtk_window_get_default_icon_name (void)
+{
+  return default_icon_name;
 }
 
 /**
