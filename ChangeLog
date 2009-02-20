@@ -1,3 +1,14 @@
+2009-02-19  Ray Strode  <rstrode@redhat.com>
+
+	* gdk/x11/gdkscreen-x11.c
+	(monitor_compare_function), (init_randr13):
+	After using randr to get a list of monitors,
+	sort the list such that the biggest output
+	of "cloned" outputs comes first in the list.
+	This helps apps that don't generally handle
+	overlapping outputs to work better in randr
+	clone mode.
+
 2009-02-19  Sven Neumann  <sven@gimp.org>
 
 	* gdk/directfb/gdkwindow-directfb.c

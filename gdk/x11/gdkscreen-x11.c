@@ -663,6 +663,31 @@ init_fake_xinerama (GdkScreen *screen)
   return FALSE;
 }
 
+static int
+monitor_compare_function (GdkX11Monitor *monitor1,
+                          GdkX11Monitor *monitor2)
+{
+  /* Sort the leftmost/topmost monitors first.
+   * For "cloned" monitors, sort the bigger ones first
+   * (giving preference to taller monitors over wider
+   * monitors)
+   */
+
+  if (monitor1->geometry.x != monitor2->geometry.x)
+    return monitor1->geometry.x - monitor2->geometry.x;
+
+  if (monitor1->geometry.y != monitor2->geometry.y)
+    return monitor1->geometry.y - monitor2->geometry.y;
+
+  if (monitor1->geometry.height != monitor2->geometry.height)
+    return - (monitor1->geometry.height - monitor2->geometry.height);
+
+  if (monitor1->geometry.width != monitor2->geometry.width)
+    return - (monitor1->geometry.width - monitor2->geometry.width);
+
+  return 0;
+}
+
 static gboolean
 init_randr13 (GdkScreen *screen)
 {
@@ -732,6 +757,8 @@ init_randr13 (GdkScreen *screen)
       return FALSE;
     }
 
+  g_array_sort (monitors,
+                (GCompareFunc) monitor_compare_function);
   screen_x11->n_monitors = monitors->len;
   screen_x11->monitors = (GdkX11Monitor *)g_array_free (monitors, FALSE);
 
