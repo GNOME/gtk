@@ -1,3 +1,9 @@
+2009-02-19  Michael Hasselmann <michaelh@openismus.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_active_internal):
+	Added a check to not emit a "changed" signal when an already invalid
+	selection was set to invalid.
+
 2009-02-22  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtk.symbols:

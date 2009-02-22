@@ -4866,7 +4866,10 @@ gtk_combo_box_set_active_internal (GtkComboBox *combo_box,
   GtkTreePath *active_path;
   gint path_cmp;
 
-  if (path && gtk_tree_row_reference_valid (priv->active_row))
+  /* Remember whether the initially active row is valid. */
+  gboolean is_valid_row_reference = gtk_tree_row_reference_valid (priv->active_row);
+
+  if (path && is_valid_row_reference)
     {
       active_path = gtk_tree_row_reference_get_path (priv->active_row);
       path_cmp = gtk_tree_path_compare (path, active_path);
@@ -4895,6 +4898,13 @@ gtk_combo_box_set_active_internal (GtkComboBox *combo_box,
 
       if (priv->cell_view)
         gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (priv->cell_view), NULL);
+
+      /*
+       *  Do not emit a "changed" signal when an already invalid selection was
+       *  now set to invalid.
+       */
+      if (!is_valid_row_reference)
+        return;
     }
   else
     {
