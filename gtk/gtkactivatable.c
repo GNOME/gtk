@@ -23,29 +23,30 @@
  *
  * Activatable widgets can be connected to a #GtkAction and reflects
  * the state of its action. A #GtkActivatable can also provide feedback
- * through its action, as they are responsible for activating their 
+ * through its action, as they are responsible for activating their
  * related actions.
  *
  * <refsect2>
  * <title>Implementing GtkActivatable</title>
  * <para>
  * When extending a class that is already #GtkActivatable; it is only
- * necessary to implement the #GtkActivatable->reset() and #GtkActivatable->update()
- * methods and chain up to the parent implementation, however when introducing
+ * necessary to implement the #GtkActivatable->sync_action_properties()
+ * and #GtkActivatable->update() methods and chain up to the parent
+ * implementation, however when introducing
  * a new #GtkActivatable class; the #GtkActivatable:related-action and
  * #GtkActivatable:use-action-appearance properties need to be handled by
- * the implementor. Handling these properties is mostly a matter of installing 
- * the action pointer and boolean flag on your instance, and calling 
- * gtk_activatable_do_set_related_action() and gtk_activatable_reset() at the
- * appropriate times.
- * </para> 
+ * the implementor. Handling these properties is mostly a matter of installing
+ * the action pointer and boolean flag on your instance, and calling
+ * gtk_activatable_do_set_related_action() and
+ * gtk_activatable_sync_action_properties() at the appropriate times.
+ * </para>
  * <example>
  * <title>A class fragment implementing #GtkActivatable</title>
  * <programlisting><![CDATA[
  *
  * enum {
  * ...
- * 
+ *
  * PROP_ACTIVATABLE_RELATED_ACTION,
  * PROP_ACTIVATABLE_USE_ACTION_APPEARANCE
  * }
@@ -61,33 +62,33 @@
  * 
  * ...
  * 
- * static void foo_bar_activatable_interface_init (GtkActivatableIface  *iface);
- * static void foo_bar_activatable_update         (GtkActivatable       *activatable,
- * 						   GtkAction            *action,
- * 						   const gchar          *property_name);
- * static void foo_bar_activatable_reset          (GtkActivatable       *activatable,
- * 						   GtkAction            *action);
+ * static void foo_bar_activatable_interface_init         (GtkActivatableIface  *iface);
+ * static void foo_bar_activatable_update                 (GtkActivatable       *activatable,
+ * 						           GtkAction            *action,
+ * 						           const gchar          *property_name);
+ * static void foo_bar_activatable_sync_action_properties (GtkActivatable       *activatable,
+ * 						           GtkAction            *action);
  * ...
- * 
- * 
+ *
+ *
  * static void
  * foo_bar_class_init (FooBarClass *klass)
  * {
- * 
+ *
  *   ...
- * 
+ *
  *   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
  *   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
- * 
+ *
  *   ...
  * }
- * 
- * 
- * static void 
+ *
+ *
+ * static void
  * foo_bar_activatable_interface_init (GtkActivatableIface  *iface)
  * {
  *   iface->update = foo_bar_activatable_update;
- *   iface->reset = foo_bar_activatable_reset;
+ *   iface->sync_action_properties = foo_bar_activatable_sync_action_properties;
  * }
  * 
  * ... Break the reference using gtk_activatable_do_set_related_action()...
@@ -173,7 +174,7 @@
  *     {
  *       priv->use_action_appearance = use_appearance;
  *       
- *       gtk_activatable_reset (GTK_ACTIVATABLE (bar), priv->action);
+ *       gtk_activatable_sync_action_properties (GTK_ACTIVATABLE (bar), priv->action);
  *     }
  * }
  * 
@@ -195,9 +196,9 @@
  * }
  * 
  * ... Selectively reset and update activatable depending on the use-action-appearance property ...
- * static void 
- * gtk_button_activatable_reset (GtkActivatable       *activatable,
- * 		                 GtkAction            *action)
+ * static void
+ * gtk_button_activatable_sync_action_properties (GtkActivatable       *activatable,
+ * 		                                  GtkAction            *action)
  * {
  *   GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (activatable);
  * 
@@ -227,8 +228,8 @@
  * 
  * static void 
  * foo_bar_activatable_update (GtkActivatable       *activatable,
- * 			    GtkAction            *action,
- * 			    const gchar          *property_name)
+ * 			       GtkAction            *action,
+ * 			       const gchar          *property_name)
  * {
  *   FooBarPrivate *priv = FOO_BAR_GET_PRIVATE (activatable);
  * 
@@ -316,7 +317,8 @@ gtk_activatable_class_init (gpointer g_iface)
    * should be ignored by the #GtkActivatable when this property is %FALSE.
    *
    * <note><para>#GtkActivatable implementors need to handle this property
-   * and call gtk_activatable_reset() on the activatable widget when it changes.</para></note>
+   * and call gtk_activatable_sync_action_properties() on the activatable
+   * widget when it changes.</para></note>
    *
    * Since: 2.16
    */
@@ -348,29 +350,30 @@ gtk_activatable_update (GtkActivatable *activatable,
 }
 
 /**
- * gtk_activatable_reset:
+ * gtk_activatable_sync_action_properties:
  * @activatable: a #GtkActivatable
  * @action: the related #GtkAction or %NULL
  *
- * This is called to update the activatable completely, this is called internally when 
- * the #GtkActivatable::related-action property is set or unset and by the implementing 
- * class when #GtkActivatable::use-action-appearance changes.
+ * This is called to update the activatable completely, this is called
+ * internally when the #GtkActivatable::related-action property is set
+ * or unset and by the implementing class when
+ * #GtkActivatable::use-action-appearance changes.
  *
  * Since: 2.16
  **/
 void
-gtk_activatable_reset (GtkActivatable *activatable,
-		       GtkAction      *action)
+gtk_activatable_sync_action_properties (GtkActivatable *activatable,
+		                        GtkAction      *action)
 {
   GtkActivatableIface *iface;
 
   g_return_if_fail (GTK_IS_ACTIVATABLE (activatable));
 
   iface = GTK_ACTIVATABLE_GET_IFACE (activatable);
-  if (iface->reset)
-    iface->reset (activatable, action);
+  if (iface->sync_action_properties)
+    iface->sync_action_properties (activatable, action);
   else
-    g_critical ("GtkActivatable->reset() unimplemented for type %s", 
+    g_critical ("GtkActivatable->sync_action_properties() unimplemented for type %s", 
 		g_type_name (G_OBJECT_TYPE (activatable)));
 }
 
@@ -450,16 +453,16 @@ gtk_activatable_do_set_related_action (GtkActivatable *activatable,
 
           /*
            * We don't want prev_action to be activated
-           * during the reset() call when syncing "active".
+           * during the sync_action_properties() call when syncing "active".
            */ 
           gtk_action_block_activate (prev_action);
 	}
       
       /* Some applications rely on their proxy UI to be set up
        * before they receive the ::connect-proxy signal, so we
-       * need to call reset() before add_to_proxy_list().
+       * need to call sync_action_properties() before add_to_proxy_list().
        */
-      gtk_activatable_reset (activatable, action);
+      gtk_activatable_sync_action_properties (activatable, action);
 
       if (prev_action)
         {
@@ -470,9 +473,9 @@ gtk_activatable_do_set_related_action (GtkActivatable *activatable,
       if (action)
 	{
 	  g_object_ref (action);
-	  
+
 	  g_signal_connect (G_OBJECT (action), "notify", G_CALLBACK (gtk_activatable_action_notify), activatable);
-	  
+
 	  _gtk_action_add_to_proxy_list (action, GTK_WIDGET (activatable));
 
           g_object_set_data (activatable, "gtk-action", action);
@@ -511,17 +514,19 @@ gtk_activatable_get_related_action (GtkActivatable *activatable)
  * @activatable: a #GtkActivatable
  * @use_appearance: whether to use the actions appearance
  *
- * Sets whether this activatable should reset its layout and appearance 
- * when setting the related action or when the action changes appearance 
+ * Sets whether this activatable should reset its layout and appearance
+ * when setting the related action or when the action changes appearance
  *
- * <note><para>#GtkActivatable implementors need to handle the #GtkActivatable:use-action-appearance
- * property and call gtk_activatable_reset() to update @activatable if needed.</para></note>
+ * <note><para>#GtkActivatable implementors need to handle the
+ * #GtkActivatable:use-action-appearance property and call
+ * gtk_activatable_sync_action_properties() to update @activatable
+ * if needed.</para></note>
  *
  * Since: 2.16
  **/
 void
-gtk_activatable_set_use_action_appearance  (GtkActivatable *activatable,
-					    gboolean        use_appearance)
+gtk_activatable_set_use_action_appearance (GtkActivatable *activatable,
+					   gboolean        use_appearance)
 {
   g_object_set (activatable, "use-action-appearance", use_appearance, NULL);
 }

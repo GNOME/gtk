@@ -38,10 +38,10 @@ GList *           _gtk_recent_chooser_get_items              (GtkRecentChooser  
 void              _gtk_recent_chooser_item_activated         (GtkRecentChooser  *chooser);
 void              _gtk_recent_chooser_selection_changed      (GtkRecentChooser  *chooser);
 
-void              _gtk_recent_chooser_activatable_update     (GtkActivatable       *activatable,
+void              _gtk_recent_chooser_update                 (GtkActivatable       *activatable,
 							      GtkAction            *action,
 							      const gchar          *property_name);
-void              _gtk_recent_chooser_activatable_reset      (GtkActivatable       *activatable,
+void              _gtk_recent_chooser_sync_action_properties (GtkActivatable       *activatable,
 							      GtkAction            *action);
 void              _gtk_recent_chooser_set_related_action     (GtkRecentChooser     *recent_chooser, 
 							      GtkAction            *action);

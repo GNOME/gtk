@@ -65,10 +65,10 @@ static void gtk_check_menu_item_get_property         (GObject               *obj
 						      GParamSpec            *pspec);
 
 static void gtk_check_menu_item_activatable_interface_init (GtkActivatableIface  *iface);
-static void gtk_check_menu_item_activatable_update         (GtkActivatable       *activatable,
+static void gtk_check_menu_item_update                     (GtkActivatable       *activatable,
 							    GtkAction            *action,
 							    const gchar          *property_name);
-static void gtk_check_menu_item_activatable_reset          (GtkActivatable       *activatable,
+static void gtk_check_menu_item_sync_action_properties     (GtkActivatable       *activatable,
 							    GtkAction            *action);
 
 static GtkActivatableIface *parent_activatable_iface;
@@ -148,14 +148,14 @@ static void
 gtk_check_menu_item_activatable_interface_init (GtkActivatableIface  *iface)
 {
   parent_activatable_iface = g_type_interface_peek_parent (iface);
-  iface->update = gtk_check_menu_item_activatable_update;
-  iface->reset = gtk_check_menu_item_activatable_reset;
+  iface->update = gtk_check_menu_item_update;
+  iface->sync_action_properties = gtk_check_menu_item_sync_action_properties;
 }
 
-static void 
-gtk_check_menu_item_activatable_update (GtkActivatable       *activatable,
-					GtkAction            *action,
-					const gchar          *property_name)
+static void
+gtk_check_menu_item_update (GtkActivatable *activatable,
+			    GtkAction      *action,
+			    const gchar    *property_name)
 {
   GtkCheckMenuItem *check_menu_item;
 
@@ -174,19 +174,19 @@ gtk_check_menu_item_activatable_update (GtkActivatable       *activatable,
     return;
 
   if (strcmp (property_name, "draw-as-radio") == 0)
-    gtk_check_menu_item_set_draw_as_radio (check_menu_item, 
+    gtk_check_menu_item_set_draw_as_radio (check_menu_item,
 					   gtk_toggle_action_get_draw_as_radio (GTK_TOGGLE_ACTION (action)));
 }
 
-static void 
-gtk_check_menu_item_activatable_reset (GtkActivatable       *activatable,
-				       GtkAction            *action)
+static void
+gtk_check_menu_item_sync_action_properties (GtkActivatable *activatable,
+		                            GtkAction      *action)
 {
   GtkCheckMenuItem *check_menu_item;
 
   check_menu_item = GTK_CHECK_MENU_ITEM (activatable);
 
-  parent_activatable_iface->reset (activatable, action);
+  parent_activatable_iface->sync_action_properties (activatable, action);
 
   if (!GTK_IS_TOGGLE_ACTION (action))
     return;
@@ -198,7 +198,7 @@ gtk_check_menu_item_activatable_reset (GtkActivatable       *activatable,
   if (!gtk_activatable_get_use_action_appearance (activatable))
     return;
 
-  gtk_check_menu_item_set_draw_as_radio (check_menu_item, 
+  gtk_check_menu_item_set_draw_as_radio (check_menu_item,
 					 gtk_toggle_action_get_draw_as_radio (GTK_TOGGLE_ACTION (action)));
 }
 

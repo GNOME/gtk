@@ -1094,9 +1094,9 @@ _gtk_recent_chooser_selection_changed (GtkRecentChooser *chooser)
 }
 
 void
-_gtk_recent_chooser_activatable_update (GtkActivatable *activatable,
-					GtkAction      *action,
-					const gchar    *property_name)
+_gtk_recent_chooser_update (GtkActivatable *activatable,
+			    GtkAction      *action,
+			    const gchar    *property_name)
 {
   GtkRecentChooser *recent_chooser = GTK_RECENT_CHOOSER (activatable);
   GtkRecentChooser *action_chooser = GTK_RECENT_CHOOSER (action);
@@ -1124,8 +1124,8 @@ _gtk_recent_chooser_activatable_update (GtkActivatable *activatable,
 }
 
 void
-_gtk_recent_chooser_activatable_reset (GtkActivatable *activatable,
-				       GtkAction      *action)
+_gtk_recent_chooser_sync_action_properties (GtkActivatable *activatable,
+			                    GtkAction      *action)
 {
   GtkRecentChooser *recent_chooser = GTK_RECENT_CHOOSER (activatable);
   GtkRecentChooser *action_chooser = GTK_RECENT_CHOOSER (action);
@@ -1148,7 +1148,7 @@ _gtk_recent_chooser_activatable_reset (GtkActivatable *activatable,
 }
 
 void
-_gtk_recent_chooser_set_related_action (GtkRecentChooser *recent_chooser, 
+_gtk_recent_chooser_set_related_action (GtkRecentChooser *recent_chooser,
 					GtkAction        *action)
 {
   GtkAction *prev_action;
@@ -1185,8 +1185,8 @@ _gtk_recent_chooser_set_use_action_appearance (GtkRecentChooser *recent_chooser,
     {
 
       g_object_set_qdata (G_OBJECT (recent_chooser), quark_gtk_use_action_appearance, GINT_TO_POINTER (!use_appearance));
-      
-      gtk_activatable_reset (GTK_ACTIVATABLE (recent_chooser), action);
+ 
+      gtk_activatable_sync_action_properties (GTK_ACTIVATABLE (recent_chooser), action);
     }
 }
 

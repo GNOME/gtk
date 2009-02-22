@@ -128,10 +128,10 @@ static gboolean gtk_tool_item_real_set_tooltip (GtkToolItem *tool_item,
 						const gchar *tip_private);
 
 static void gtk_tool_item_activatable_interface_init (GtkActivatableIface  *iface);
-static void gtk_tool_item_activatable_update         (GtkActivatable       *activatable,
+static void gtk_tool_item_update                     (GtkActivatable       *activatable,
 						      GtkAction            *action,
 						      const gchar          *property_name);
-static void gtk_tool_item_activatable_reset          (GtkActivatable       *activatable,
+static void gtk_tool_item_sync_action_properties     (GtkActivatable       *activatable,
 						      GtkAction            *action);
 static void gtk_tool_item_set_related_action         (GtkToolItem          *item, 
 						      GtkAction            *action);
@@ -579,17 +579,17 @@ _gtk_tool_item_create_menu_proxy (GtkToolItem *item)
   return FALSE;
 }
 
-static void 
-gtk_tool_item_activatable_interface_init (GtkActivatableIface  *iface)
+static void
+gtk_tool_item_activatable_interface_init (GtkActivatableIface *iface)
 {
-  iface->update = gtk_tool_item_activatable_update;
-  iface->reset = gtk_tool_item_activatable_reset;
+  iface->update = gtk_tool_item_update;
+  iface->sync_action_properties = gtk_tool_item_sync_action_properties;
 }
 
-static void 
-gtk_tool_item_activatable_update (GtkActivatable       *activatable,
-				  GtkAction            *action,
-				  const gchar          *property_name)
+static void
+gtk_tool_item_update (GtkActivatable *activatable,
+		      GtkAction      *action,
+	     	      const gchar    *property_name)
 {
   if (strcmp (property_name, "visible") == 0)
     {
@@ -614,9 +614,9 @@ gtk_tool_item_activatable_update (GtkActivatable       *activatable,
 				    gtk_action_get_is_important (action));
 }
 
-static void 
-gtk_tool_item_activatable_reset (GtkActivatable       *activatable,
-				 GtkAction            *action)
+static void
+gtk_tool_item_sync_action_properties (GtkActivatable *activatable,
+				      GtkAction      *action)
 {
   if (!action)
     return;
@@ -656,14 +656,14 @@ gtk_tool_item_set_related_action (GtkToolItem *item,
 }
 
 static void
-gtk_tool_item_set_use_action_appearance (GtkToolItem *item, 
+gtk_tool_item_set_use_action_appearance (GtkToolItem *item,
 					 gboolean     use_appearance)
 {
   if (item->priv->use_action_appearance != use_appearance)
     {
       item->priv->use_action_appearance = use_appearance;
-      
-      gtk_activatable_reset (GTK_ACTIVATABLE (item), item->priv->action);
+
+      gtk_activatable_sync_action_properties (GTK_ACTIVATABLE (item), item->priv->action);
     }
 }
 

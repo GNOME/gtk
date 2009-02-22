@@ -134,10 +134,10 @@ static void gtk_menu_item_buildable_add_child      (GtkBuildable        *buildab
 						    const gchar         *type);
 
 static void gtk_menu_item_activatable_interface_init (GtkActivatableIface  *iface);
-static void gtk_menu_item_activatable_update         (GtkActivatable       *activatable,
+static void gtk_menu_item_update                     (GtkActivatable       *activatable,
 						      GtkAction            *action,
 						      const gchar          *property_name);
-static void gtk_menu_item_activatable_reset          (GtkActivatable       *activatable,
+static void gtk_menu_item_sync_action_properties     (GtkActivatable       *activatable,
 						      GtkAction            *action);
 static void gtk_menu_item_set_related_action         (GtkMenuItem          *menu_item, 
 						      GtkAction            *action);
@@ -576,15 +576,15 @@ gtk_menu_item_buildable_add_child (GtkBuildable *buildable,
 static void
 gtk_menu_item_activatable_interface_init (GtkActivatableIface *iface)
 {
-  iface->update = gtk_menu_item_activatable_update;
-  iface->reset = gtk_menu_item_activatable_reset;
+  iface->update = gtk_menu_item_update;
+  iface->sync_action_properties = gtk_menu_item_sync_action_properties;
 }
 
-static void 
+static void
 activatable_update_label (GtkMenuItem *menu_item, GtkAction *action)
 {
   GtkWidget *child = GTK_BIN (menu_item)->child;
-	  
+
   if (GTK_IS_LABEL (child))
     {
       const gchar *label;
@@ -597,9 +597,9 @@ activatable_update_label (GtkMenuItem *menu_item, GtkAction *action)
 gboolean _gtk_menu_is_empty (GtkWidget *menu);
 
 static void
-gtk_menu_item_activatable_update (GtkActivatable *activatable,
-				  GtkAction      *action,
-				  const gchar    *property_name)
+gtk_menu_item_update (GtkActivatable *activatable,
+		      GtkAction      *action,
+		      const gchar    *property_name)
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (activatable);
   GtkMenuItemPrivate *priv = GET_PRIVATE (menu_item);
@@ -617,8 +617,8 @@ gtk_menu_item_activatable_update (GtkActivatable *activatable,
 }
 
 static void
-gtk_menu_item_activatable_reset (GtkActivatable *activatable,
-				 GtkAction      *action)
+gtk_menu_item_sync_action_properties (GtkActivatable *activatable,
+				      GtkAction      *action)
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (activatable);
   GtkMenuItemPrivate *priv = GET_PRIVATE (menu_item);
@@ -626,7 +626,7 @@ gtk_menu_item_activatable_reset (GtkActivatable *activatable,
   if (!action)
     return;
 
-  _gtk_action_sync_menu_visible (action, GTK_WIDGET (menu_item), 
+  _gtk_action_sync_menu_visible (action, GTK_WIDGET (menu_item),
 				 _gtk_menu_is_empty (gtk_menu_item_get_submenu (menu_item)));
 
   gtk_widget_set_sensitive (GTK_WIDGET (menu_item), gtk_action_is_sensitive (action));
@@ -634,14 +634,14 @@ gtk_menu_item_activatable_reset (GtkActivatable *activatable,
   if (priv->use_action_appearance)
     {
       GtkWidget *label = GTK_BIN (menu_item)->child;
-	  
+
       /* make sure label is a label */
       if (label && !GTK_IS_LABEL (label))
 	{
 	  gtk_container_remove (GTK_CONTAINER (menu_item), label);
 	  label = NULL;
 	}
-	  
+
       if (!label)
 	label = g_object_new (GTK_TYPE_ACCEL_LABEL,
 			      "use-underline", TRUE,
@@ -649,18 +649,18 @@ gtk_menu_item_activatable_reset (GtkActivatable *activatable,
 			      "visible", TRUE,
 			      "parent", menu_item,
 			      NULL);
-      
+
       if (GTK_IS_ACCEL_LABEL (label) && gtk_action_get_accel_path (action))
 	g_object_set (label,
 		      "accel-closure", gtk_action_get_accel_closure (action),
 		      NULL);
-      
+
       activatable_update_label (menu_item, action);
     }
 }
 
 static void
-gtk_menu_item_set_related_action (GtkMenuItem *menu_item, 
+gtk_menu_item_set_related_action (GtkMenuItem *menu_item,
 				  GtkAction   *action)
 {
     GtkMenuItemPrivate *priv = GET_PRIVATE (menu_item);
@@ -691,7 +691,7 @@ gtk_menu_item_set_related_action (GtkMenuItem *menu_item,
 }
 
 static void
-gtk_menu_item_set_use_action_appearance (GtkMenuItem *menu_item, 
+gtk_menu_item_set_use_action_appearance (GtkMenuItem *menu_item,
 					 gboolean     use_appearance)
 {
     GtkMenuItemPrivate *priv = GET_PRIVATE (menu_item);
@@ -699,8 +699,8 @@ gtk_menu_item_set_use_action_appearance (GtkMenuItem *menu_item,
     if (priv->use_action_appearance != use_appearance)
       {
 	priv->use_action_appearance = use_appearance;
-	
-	gtk_activatable_reset (GTK_ACTIVATABLE (menu_item), priv->action);
+
+	gtk_activatable_sync_action_properties (GTK_ACTIVATABLE (menu_item), priv->action);
       }
 }
 

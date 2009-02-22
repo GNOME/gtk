@@ -80,10 +80,10 @@ static void gtk_tool_button_style_set      (GtkWidget          *widget,
 static void gtk_tool_button_construct_contents (GtkToolItem *tool_item);
 
 static void gtk_tool_button_activatable_interface_init (GtkActivatableIface  *iface);
-static void gtk_tool_button_activatable_update         (GtkActivatable       *activatable,
+static void gtk_tool_button_update                     (GtkActivatable       *activatable,
 							GtkAction            *action,
 							const gchar          *property_name);
-static void gtk_tool_button_activatable_reset          (GtkActivatable       *activatable,
+static void gtk_tool_button_sync_action_properties     (GtkActivatable       *activatable,
 							GtkAction            *action);
 
 
@@ -740,14 +740,14 @@ static void
 gtk_tool_button_activatable_interface_init (GtkActivatableIface  *iface)
 {
   parent_activatable_iface = g_type_interface_peek_parent (iface);
-  iface->update = gtk_tool_button_activatable_update;
-  iface->reset = gtk_tool_button_activatable_reset;
+  iface->update = gtk_tool_button_update;
+  iface->sync_action_properties = gtk_tool_button_sync_action_properties;
 }
 
 static void
-gtk_tool_button_activatable_update (GtkActivatable       *activatable,
-				    GtkAction            *action,
-				    const gchar          *property_name)
+gtk_tool_button_update (GtkActivatable *activatable,
+			GtkAction      *action,
+			const gchar    *property_name)
 {
   GtkToolButton *button;
   GtkWidget *image;
@@ -789,14 +789,14 @@ gtk_tool_button_activatable_update (GtkActivatable       *activatable,
 }
 
 static void
-gtk_tool_button_activatable_reset (GtkActivatable       *activatable,
-				   GtkAction            *action)
+gtk_tool_button_sync_action_properties (GtkActivatable *activatable,
+				        GtkAction      *action)
 {
   GtkToolButton *button;
   GIcon         *icon;
   const gchar   *stock_id;
 
-  parent_activatable_iface->reset (activatable, action);
+  parent_activatable_iface->sync_action_properties (activatable, action);
 
   if (!action)
     return;

@@ -72,10 +72,10 @@ static void gtk_image_menu_item_screen_changed       (GtkWidget        *widget,
 static void gtk_image_menu_item_recalculate          (GtkImageMenuItem *image_menu_item);
 
 static void gtk_image_menu_item_activatable_interface_init (GtkActivatableIface  *iface);
-static void gtk_image_menu_item_activatable_update         (GtkActivatable       *activatable,
+static void gtk_image_menu_item_update                     (GtkActivatable       *activatable,
 							    GtkAction            *action,
 							    const gchar          *property_name);
-static void gtk_image_menu_item_activatable_reset          (GtkActivatable       *activatable,
+static void gtk_image_menu_item_sync_action_properties     (GtkActivatable       *activatable,
 							    GtkAction            *action);
 
 typedef struct {
@@ -552,8 +552,8 @@ static void
 gtk_image_menu_item_activatable_interface_init (GtkActivatableIface  *iface)
 {
   parent_activatable_iface = g_type_interface_peek_parent (iface);
-  iface->update = gtk_image_menu_item_activatable_update;
-  iface->reset = gtk_image_menu_item_activatable_reset;
+  iface->update = gtk_image_menu_item_update;
+  iface->sync_action_properties = gtk_image_menu_item_sync_action_properties;
 }
 
 static gboolean
@@ -609,10 +609,10 @@ activatable_update_icon_name (GtkImageMenuItem *image_menu_item, GtkAction *acti
     }
 }
 
-static void 
-gtk_image_menu_item_activatable_update (GtkActivatable       *activatable,
-					GtkAction            *action,
-					const gchar          *property_name)
+static void
+gtk_image_menu_item_update (GtkActivatable *activatable,
+			    GtkAction      *action,
+			    const gchar    *property_name)
 {
   GtkImageMenuItem *image_menu_item;
   GtkWidget *image;
@@ -635,8 +635,8 @@ gtk_image_menu_item_activatable_update (GtkActivatable       *activatable,
 }
 
 static void 
-gtk_image_menu_item_activatable_reset (GtkActivatable       *activatable,
-				       GtkAction            *action)
+gtk_image_menu_item_sync_action_properties (GtkActivatable *activatable,
+			                    GtkAction      *action)
 {
   GtkImageMenuItem *image_menu_item;
   GtkWidget *image;
@@ -644,7 +644,7 @@ gtk_image_menu_item_activatable_reset (GtkActivatable       *activatable,
 
   image_menu_item = GTK_IMAGE_MENU_ITEM (activatable);
 
-  parent_activatable_iface->reset (activatable, action);
+  parent_activatable_iface->sync_action_properties (activatable, action);
 
   if (!action)
     return;

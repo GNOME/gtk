@@ -71,10 +71,10 @@ static void menu_item_activated (GtkWidget           *widget,
 
 
 static void gtk_toggle_tool_button_activatable_interface_init (GtkActivatableIface  *iface);
-static void gtk_toggle_tool_button_activatable_update         (GtkActivatable       *activatable,
+static void gtk_toggle_tool_button_update                     (GtkActivatable       *activatable,
 							       GtkAction            *action,
 							       const gchar          *property_name);
-static void gtk_toggle_tool_button_activatable_reset          (GtkActivatable       *activatable,
+static void gtk_toggle_tool_button_sync_action_properties     (GtkActivatable       *activatable,
 							       GtkAction            *action);
 
 static GtkActivatableIface *parent_activatable_iface;
@@ -311,18 +311,18 @@ button_toggled (GtkWidget           *widget,
     }
 }
 
-static void 
-gtk_toggle_tool_button_activatable_interface_init (GtkActivatableIface  *iface)
+static void
+gtk_toggle_tool_button_activatable_interface_init (GtkActivatableIface *iface)
 {
   parent_activatable_iface = g_type_interface_peek_parent (iface);
-  iface->update = gtk_toggle_tool_button_activatable_update;
-  iface->reset = gtk_toggle_tool_button_activatable_reset;
+  iface->update = gtk_toggle_tool_button_update;
+  iface->sync_action_properties = gtk_toggle_tool_button_sync_action_properties;
 }
 
 static void
-gtk_toggle_tool_button_activatable_update (GtkActivatable  *activatable,
-					   GtkAction       *action,
-					   const gchar     *property_name)
+gtk_toggle_tool_button_update (GtkActivatable *activatable,
+			       GtkAction      *action,
+			       const gchar    *property_name)
 {
   GtkToggleToolButton *button;
 
@@ -339,12 +339,12 @@ gtk_toggle_tool_button_activatable_update (GtkActivatable  *activatable,
 }
 
 static void
-gtk_toggle_tool_button_activatable_reset (GtkActivatable  *activatable,
-					  GtkAction       *action)
+gtk_toggle_tool_button_sync_action_properties (GtkActivatable *activatable,
+					       GtkAction      *action)
 {
   GtkToggleToolButton *button;
 
-  parent_activatable_iface->reset (activatable, action);
+  parent_activatable_iface->sync_action_properties (activatable, action);
 
   if (!GTK_IS_TOGGLE_ACTION (action))
     return;

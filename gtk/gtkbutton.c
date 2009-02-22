@@ -148,16 +148,16 @@ static void gtk_button_grab_notify     (GtkWidget             *widget,
 					gboolean               was_grabbed);
 
 
-static void gtk_button_activatable_interface_init (GtkActivatableIface  *iface);
-static void gtk_button_activatable_update         (GtkActivatable       *activatable,
-						   GtkAction            *action,
-						   const gchar          *property_name);
-static void gtk_button_activatable_reset          (GtkActivatable       *activatable,
-						   GtkAction            *action);
-static void gtk_button_set_related_action         (GtkButton            *button, 
-						   GtkAction            *action);
-static void gtk_button_set_use_action_appearance  (GtkButton            *button, 
-						   gboolean              use_appearance);
+static void gtk_button_activatable_interface_init         (GtkActivatableIface  *iface);
+static void gtk_button_update                    (GtkActivatable       *activatable,
+				                  GtkAction            *action,
+			                          const gchar          *property_name);
+static void gtk_button_sync_action_properties    (GtkActivatable       *activatable,
+                                                  GtkAction            *action);
+static void gtk_button_set_related_action        (GtkButton            *button,
+					          GtkAction            *action);
+static void gtk_button_set_use_action_appearance (GtkButton            *button,
+						  gboolean              use_appearance);
 
 static guint button_signals[LAST_SIGNAL] = { 0 };
 
@@ -741,8 +741,8 @@ gtk_button_get_property (GObject         *object,
 static void 
 gtk_button_activatable_interface_init (GtkActivatableIface  *iface)
 {
-  iface->update = gtk_button_activatable_update;
-  iface->reset = gtk_button_activatable_reset;
+  iface->update = gtk_button_update;
+  iface->sync_action_properties = gtk_button_sync_action_properties;
 }
 
 static void
@@ -808,9 +808,9 @@ activatable_update_gicon (GtkButton *button,
 }
 
 static void 
-gtk_button_activatable_update (GtkActivatable       *activatable,
-			       GtkAction            *action,
-			       const gchar          *property_name)
+gtk_button_update (GtkActivatable *activatable,
+		   GtkAction      *action,
+	           const gchar    *property_name)
 {
   GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (activatable);
 
@@ -837,9 +837,9 @@ gtk_button_activatable_update (GtkActivatable       *activatable,
     activatable_update_icon_name (GTK_BUTTON (activatable), action);
 }
 
-static void 
-gtk_button_activatable_reset (GtkActivatable       *activatable,
-			      GtkAction            *action)
+static void
+gtk_button_sync_action_properties (GtkActivatable *activatable,
+			           GtkAction      *action)
 {
   GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (activatable);
 
@@ -863,8 +863,8 @@ gtk_button_activatable_reset (GtkActivatable       *activatable,
 }
 
 static void
-gtk_button_set_related_action (GtkButton   *button, 
-			       GtkAction   *action)
+gtk_button_set_related_action (GtkButton *button,
+			       GtkAction *action)
 {
   GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
 
@@ -877,7 +877,7 @@ gtk_button_set_related_action (GtkButton   *button,
    */
   g_signal_handlers_disconnect_by_func (button, gtk_real_button_clicked, NULL);
   if (action)
-    g_signal_connect_after (button, "clicked", 
+    g_signal_connect_after (button, "clicked",
                             G_CALLBACK (gtk_real_button_clicked), NULL);
 
   gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (button), action);
@@ -886,16 +886,16 @@ gtk_button_set_related_action (GtkButton   *button,
 }
 
 static void
-gtk_button_set_use_action_appearance (GtkButton   *button, 
-				      gboolean     use_appearance)
+gtk_button_set_use_action_appearance (GtkButton *button,
+				      gboolean   use_appearance)
 {
   GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
 
   if (priv->use_action_appearance != use_appearance)
     {
       priv->use_action_appearance = use_appearance;
-      
-      gtk_activatable_reset (GTK_ACTIVATABLE (button), priv->action);
+
+      gtk_activatable_sync_action_properties (GTK_ACTIVATABLE (button), priv->action);
     }
 }
 

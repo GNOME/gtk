@@ -1,3 +1,10 @@
+2009-02-22  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtk.symbols:
+	* gtk/gtkactivatable.[hc]: Rename gtk_activatable_reset to
+	gtk_activatable_sync_action_properties, since the previous name
+	was deemed too generic. Update all implementations.
+
 2009-02-19  Ray Strode  <rstrode@redhat.com>
 
 	* gdk/x11/gdkscreen-x11.c
