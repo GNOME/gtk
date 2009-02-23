@@ -1862,11 +1862,11 @@ msgstr "A párbeszédablak OK gombja."
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Cancel Button"
-msgstr "Mégsem gomb"
+msgstr "Mégse gomb"
 
 #: gtk/gtkcolorseldialog.c:117
 msgid "The cancel button of the dialog."
-msgstr "A párbeszédablak Mégsem gombja."
+msgstr "A párbeszédablak Mégse gombja."
 
 #: gtk/gtkcolorseldialog.c:123
 msgid "Help Button"
