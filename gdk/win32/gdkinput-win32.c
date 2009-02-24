@@ -647,7 +647,7 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 				 gdouble          *x_out,
 				 gdouble          *y_out)
 {
-  GdkWindowImplWin32 *impl, *root_impl;
+  GdkWindowImplWin32 *root_impl;
   GdkWindowObject *window_object;
 
   int i;
@@ -658,7 +658,6 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
   double x_offset, y_offset, x_scale, y_scale;
 
   window_object = GDK_WINDOW_OBJECT (input_window);
-  impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (input_window->window)->impl);
 
   for (i=0; i<gdkdev->info.num_axes; i++)
     {

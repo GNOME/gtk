@@ -150,7 +150,8 @@ gdk_drawable_get_size (GdkDrawable *drawable,
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
 
-  GDK_DRAWABLE_GET_CLASS (drawable)->get_size (drawable, width, height);  
+  if (GDK_DRAWABLE_GET_CLASS (drawable)->get_size != NULL)
+    GDK_DRAWABLE_GET_CLASS (drawable)->get_size (drawable, width, height);  
 }
 
 /**

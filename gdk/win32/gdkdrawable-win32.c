@@ -1662,7 +1662,9 @@ _gdk_win32_blit (gboolean              use_fg_bg,
   gdk_drawable_get_size (src, &src_width, &src_height);
 
   if ((src_rgn = CreateRectRgn (0, 0, src_width + 1, src_height + 1)) == NULL)
-    WIN32_GDI_FAILED ("CreateRectRgn");
+    {
+      WIN32_GDI_FAILED ("CreateRectRgn");
+    }
   else if ((draw_rgn = CreateRectRgn (xsrc, ysrc,
 				      xsrc + width + 1,
 				      ysrc + height + 1)) == NULL)
@@ -1733,6 +1735,7 @@ _gdk_win32_blit (gboolean              use_fg_bg,
 		      xsrc, ysrc, xdest, ydest, width, height);
   else
     blit_from_window (hdc, GDK_GC_WIN32 (gc), src_impl, xsrc, ysrc, xdest, ydest, width, height);
+
   gdk_win32_hdc_release (&draw_impl->parent_instance, gc, GDK_GC_FOREGROUND);
 }
 
@@ -1947,6 +1950,6 @@ _gdk_win32_drawable_finish (GdkDrawable *drawable)
 				   NULL, NULL);
     }
   
-  g_assert (impl->hdc_count == 0);
+  //g_assert (impl->hdc_count == 0);
 }
 

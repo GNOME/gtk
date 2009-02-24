@@ -1431,6 +1431,7 @@ static void
 erase_background (GdkWindow *window,
 		  HDC        hdc)
 {
+#if 0
   HDC bgdc = NULL;
   HBRUSH hbr = NULL;
   HPALETTE holdpal = NULL;
@@ -1558,6 +1559,7 @@ erase_background (GdkWindow *window,
 	  DeleteDC (bgdc);
 	}
     }
+#endif
 }
 
 static void
@@ -3548,7 +3550,7 @@ gdk_window_set_modal_hint (GdkWindow *window,
 
 void
 gdk_window_set_skip_taskbar_hint (GdkWindow *window,
-								  gboolean   skips_taskbar)
+				  gboolean   skips_taskbar)
 {
   static GdkWindow *owner = NULL;
   //GdkWindowAttr wa;
@@ -3594,7 +3596,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 
 void
 gdk_window_set_skip_pager_hint (GdkWindow *window,
-								gboolean   skips_pager)
+				gboolean   skips_pager)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -3605,7 +3607,7 @@ gdk_window_set_skip_pager_hint (GdkWindow *window,
 
 void
 gdk_window_set_type_hint (GdkWindow        *window,
-						  GdkWindowTypeHint hint)
+			  GdkWindowTypeHint hint)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -3640,9 +3642,9 @@ gdk_window_get_type_hint (GdkWindow *window)
 
 static void
 gdk_win32_window_shape_combine_region (GdkWindow       *window,
-									   const GdkRegion *shape_region,
-									   gint             offset_x,
-									   gint             offset_y)
+				       const GdkRegion *shape_region,
+				       gint             offset_x,
+				       gint             offset_y)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
@@ -3764,14 +3766,14 @@ _gdk_windowing_window_get_input_shape (GdkWindow *window)
 
 static void
 _gdk_win32_window_destroy (GdkWindow *window,
-						   gboolean   recursing,
-						   gboolean   foreign_destroy)
+			   gboolean   recursing,
+			   gboolean   foreign_destroy)
 {
 }
 
 static gboolean
 _gdk_win32_window_queue_antiexpose (GdkWindow *window,
-									GdkRegion *area)
+				    GdkRegion *area)
 {
   HRGN hrgn = _gdk_win32_gdkregion_to_hrgn (area, 0, 0);
 
@@ -3787,6 +3789,15 @@ _gdk_win32_window_queue_antiexpose (GdkWindow *window,
 }
 
 static void
+_gdk_win32_window_queue_translation (GdkWindow *window,
+				     GdkRegion *area,
+				     gint       dx,
+				     gint       dy)
+{
+  g_print ("queue_translation\n");
+}
+
+static void
 gdk_win32_input_shape_combine_region (GdkWindow *window,
 				      const GdkRegion *shape_region,
 				      gint offset_x,
@@ -3798,6 +3809,7 @@ void
 _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
 					       GdkRegion *region)
 {
+  _gdk_window_process_updates_recurse (window, region);
 }
 
 void
@@ -3833,6 +3845,6 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->get_deskrelative_origin = gdk_win32_window_get_deskrelative_origin;
   iface->set_static_gravities = gdk_win32_window_set_static_gravities;
   iface->queue_antiexpose = _gdk_win32_window_queue_antiexpose;
-  iface->queue_translation = NULL; //_gdk_win32_window_queue_translation;
+  iface->queue_translation = _gdk_win32_window_queue_translation;
   iface->destroy = _gdk_win32_window_destroy;
 }

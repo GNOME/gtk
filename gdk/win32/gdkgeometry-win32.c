@@ -67,42 +67,48 @@ _gdk_window_move_resize_child (GdkWindow *window,
   obj = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);
 
-  is_move = (x - obj->x != 0) && (y - obj->y != 0);
-  is_resize = obj->width != width && obj->height != height;
+  is_move = 0; // (x - obj->x != 0) && (y - obj->y != 0);
+  is_resize = 0; // obj->width != width && obj->height != height;
   
   GDK_NOTE (MISC, g_print ("_gdk_window_move_resize_child: %s@%+d%+d %dx%d@%+d%+d\n",
-			_gdk_win32_drawable_description (window),
-			obj->x, obj->y, width, height, x, y));
+			   _gdk_win32_drawable_description (window),
+			   obj->x, obj->y, width, height, x, y));
 
   if (width > 65535 || height > 65535)
   {
-	  g_warning ("Native children wider or taller than 65535 pixels are not supported.");
+    g_warning ("Native children wider or taller than 65535 pixels are not supported.");
 
-	  if (width > 65535)
-		  width = 65535;
-	  if (height > 65535)
-		  height = 65535;
+    if (width > 65535)
+      width = 65535;
+    if (height > 65535)
+      height = 65535;
   }
 
   obj->x = x;
   obj->y = y;
   obj->width = width;
   obj->height = height;
+
+  _gdk_win32_window_tmp_unset_parent_bg (window);
+  _gdk_win32_window_tmp_unset_bg (window, TRUE);
   
   GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,%d,%d,"
-		       "NOACTIVATE|NOZORDER%s%s)\n",
-		       GDK_WINDOW_HWND (window),
-		       obj->x + obj->parent->abs_x, obj->y + obj->parent->abs_y, 
-		       width, height,
-		       (is_move ? "" : "|NOMOVE"),
-		       (is_resize ? "" : "|NOSIZE")));
+			   "NOACTIVATE|NOZORDER%s%s)\n",
+			   GDK_WINDOW_HWND (window),
+			   obj->x + obj->parent->abs_x, obj->y + obj->parent->abs_y, 
+			   width, height,
+			   (is_move ? "" : "|NOMOVE"),
+			   (is_resize ? "" : "|NOSIZE")));
 
   API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
-		       obj->x + obj->parent->abs_x, obj->y + obj->parent->abs_y, 
-		       width, height,
-		       SWP_NOACTIVATE | SWP_NOZORDER | 
-		       (is_move ? 0 : SWP_NOMOVE) |
-		       (is_resize ? 0 : SWP_NOSIZE)));
+			   obj->x + obj->parent->abs_x, obj->y + obj->parent->abs_y, 
+			   width, height,
+			   SWP_NOACTIVATE | SWP_NOZORDER | 
+			   (is_move ? 0 : SWP_NOMOVE) |
+			   (is_resize ? 0 : SWP_NOSIZE)));
+
+  //_gdk_win32_window_tmp_reset_parent_bg (window);
+  //_gdk_win32_window_tmp_reset_bg (window, TRUE);
 }
 
 void
@@ -119,13 +125,44 @@ _gdk_window_process_expose (GdkWindow *window,
 
   if (!gdk_region_empty (invalidate_region))
     _gdk_window_invalidate_for_expose (window, invalidate_region);
+  else
+    g_print ("process_expose(), empty region\n");
   
-  g_print ("_gdk_window_process_expose\n");
-  gdk_region_destroy (invalidate_region);
+  //gdk_region_destroy (invalidate_region);
+}
+
+void
+_gdk_win32_window_tmp_unset_bg (GdkWindow *window,
+				gboolean recurse)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *)window;
+
+  if (private->input_only || private->destroyed ||
+      (private->window_type != GDK_WINDOW_ROOT &&
+       !GDK_WINDOW_IS_MAPPED (window)))
+    return;
+
+  if (_gdk_window_has_impl (window) &&
+      GDK_WINDOW_IS_WIN32 (window) &&
+      private->window_type != GDK_WINDOW_ROOT &&
+      private->window_type != GDK_WINDOW_FOREIGN)
+    tmp_unset_bg (window);
+
+  if (recurse)
+    {
+      GList *l;
+
+      for (l = private->children; l != NULL; l = l->next)
+	_gdk_win32_window_tmp_unset_bg (l->data, TRUE);
+    }
 }
 
 static void
-gdk_window_tmp_unset_bg (GdkWindow *window)
+tmp_unset_bg (GdkWindow *window)
 {
   GdkWindowImplWin32 *impl;
   GdkWindowObject *obj;
@@ -140,11 +177,28 @@ gdk_window_tmp_unset_bg (GdkWindow *window)
    * Not sure if this could really emulate it.
    */
   if (obj->bg_pixmap != GDK_NO_BG)
-    /* handled in WM_ERASEBKGRND proceesing */;
+    {
+      ///* handled in WM_ERASEBKGRND proceesing */;
+
+      //HDC hdc = GetDC (GDK_WINDOW_HWND (window));
+      //erase_background (window, hdc);
+    }
 }
 
-static void
-gdk_window_tmp_reset_bg (GdkWindow *window)
+void
+_gdk_win32_window_tmp_unset_parent_bg (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject*)window;
+
+  if (GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT)
+    return;
+
+  window = _gdk_window_get_impl_window ((GdkWindow*)private->parent);
+  _gdk_win32_window_tmp_unset_bg (window, FALSE);
+}
+
+void
+_gdk_win32_window_tmp_reset_bg (GdkWindow *window)
 {
   GdkWindowImplWin32 *impl;
   GdkWindowObject *obj;
@@ -155,6 +209,7 @@ gdk_window_tmp_reset_bg (GdkWindow *window)
   impl->no_bg = FALSE;
 }
 
+#if 0
 static GdkRegion *
 gdk_window_clip_changed (GdkWindow    *window,
 			 GdkRectangle *old_clip,
@@ -186,16 +241,17 @@ gdk_window_clip_changed (GdkWindow    *window,
     gdk_window_tmp_unset_bg (window);
   else
     {
-      g_print ("gdk_window_clip_changed (new_clip_region)\n");
       gdk_region_destroy (new_clip_region);
       new_clip_region = NULL;
     }
-  g_print ("gdk_window_clip_changed (old_clip_region)\n");
+
   gdk_region_destroy (old_clip_region);
 
   return new_clip_region;
 }
+#endif
 
+#if 0
 static void
 gdk_window_post_scroll (GdkWindow    *window,
 			GdkRegion    *new_clip_region)
@@ -208,3 +264,5 @@ gdk_window_post_scroll (GdkWindow    *window,
   g_print ("gdk_window_post_scroll\n");
   gdk_region_destroy (new_clip_region);
 }
+
+#endif

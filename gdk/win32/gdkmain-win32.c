@@ -1165,6 +1165,8 @@ _gdk_win32_drawable_description (GdkDrawable *d)
 {
   gint width, height, depth;
 
+  g_return_val_if_fail (GDK_IS_DRAWABLE (d), NULL);
+
   gdk_drawable_get_size (d, &width, &height);
   depth = gdk_drawable_get_depth (d);
 

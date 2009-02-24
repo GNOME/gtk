@@ -1377,15 +1377,13 @@ synthesize_enter_or_leave_event (GdkWindow    	*window,
 				 gint         	 y)
 {
   GdkEvent *event;
-  gint xoffset, yoffset;
   
   event = gdk_event_new (type);
   event->crossing.window = window;
   event->crossing.subwindow = NULL;
   event->crossing.time = _gdk_win32_get_next_tick (msg->time);
-  //_gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
-  event->crossing.x = x + xoffset;
-  event->crossing.y = y + yoffset;
+  event->crossing.x = x;
+  event->crossing.y = y;
   event->crossing.x_root = msg->pt.x + _gdk_offset_x;
   event->crossing.y_root = msg->pt.y + _gdk_offset_y;
   event->crossing.mode = mode;
@@ -1940,7 +1938,6 @@ handle_wm_paint (MSG        *msg,
   HDC hdc;
   PAINTSTRUCT paintstruct;
   GdkRegion *update_region;
-  gint xoffset, yoffset;
 
   if (GetUpdateRgn (msg->hwnd, hrgn, FALSE) == ERROR)
     {
@@ -2025,10 +2022,13 @@ handle_wm_paint (MSG        *msg,
   update_region = _gdk_win32_hrgn_to_region (hrgn);
 
   //_gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
-  gdk_region_offset (update_region, xoffset, yoffset);
+  //gdk_region_offset (update_region, xoffset, yoffset);
+
+  //  g_print ("handle_wm_paint: rect [%d %d %d %d]\n",
+  //	   update_region->x, update_region->y,
+  //	   update_region->width, update_region->height);
   
   _gdk_window_process_expose (window, update_region);
-  g_print ("handle_wm_paint\n");
   gdk_region_destroy (update_region);
 
   DeleteObject (hrgn);
@@ -2085,7 +2085,6 @@ generate_button_event (GdkEventType type,
 		       MSG         *msg)
 {
   GdkEvent *event = gdk_event_new (type);
-  gint xoffset, yoffset;
 
   event->button.window = window;
   event->button.time = _gdk_win32_get_next_tick (msg->time);
@@ -2093,9 +2092,6 @@ generate_button_event (GdkEventType type,
     translate_mouse_coords (orig_window, window, msg);
   event->button.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
   event->button.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
-  //_gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
-  event->button.x += xoffset;
-  event->button.y += yoffset;
   event->button.x_root = msg->pt.x + _gdk_offset_x;
   event->button.y_root = msg->pt.y + _gdk_offset_y;
   event->button.axes = NULL;
@@ -2271,7 +2267,6 @@ gdk_event_translate (MSG  *msg,
   GdkWindowImplWin32 *impl;
 
   GdkWindow *orig_window, *new_window;
-  gint xoffset, yoffset;
 
   static gint update_colors_counter = 0;
   gint button;
@@ -2813,9 +2808,6 @@ gdk_event_translate (MSG  *msg,
       event->motion.time = _gdk_win32_get_next_tick (msg->time);
       event->motion.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
       event->motion.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
-//      gdk_window_get_offsets (window, &xoffset, &yoffset);
-      event->motion.x += xoffset;
-      event->motion.y += yoffset;
       event->motion.x_root = current_root_x;
       event->motion.y_root = current_root_y;
       event->motion.axes = NULL;
@@ -2904,9 +2896,8 @@ gdk_event_translate (MSG  *msg,
       event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
 	GDK_SCROLL_UP : GDK_SCROLL_DOWN;
       event->scroll.time = _gdk_win32_get_next_tick (msg->time);
-      //_gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
-      event->scroll.x = (gint16) point.x + xoffset;
-      event->scroll.y = (gint16) point.y + yoffset;
+      event->scroll.x = (gint16) point.x;
+      event->scroll.y = (gint16) point.y;
       event->scroll.x_root = (gint16) GET_X_LPARAM (msg->lParam) + _gdk_offset_x;
       event->scroll.y_root = (gint16) GET_Y_LPARAM (msg->lParam) + _gdk_offset_y;
       event->scroll.state = build_pointer_event_state (msg);
