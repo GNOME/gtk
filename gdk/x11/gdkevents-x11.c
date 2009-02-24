@@ -2107,10 +2107,11 @@ gdk_event_translate (GdkDisplay *display,
       else
 #endif
 #ifdef HAVE_RANDR
-      if (xevent->type - display_x11->xrandr_event_base == RRNotify)
+      if (xevent->type - display_x11->xrandr_event_base == RRScreenChangeNotify ||
+          xevent->type - display_x11->xrandr_event_base == RRNotify)
 	{
           if (screen)
-            _gdk_x11_screen_process_monitors_change (screen);
+            _gdk_x11_screen_size_changed (screen, xevent);
 	}
       else
 #endif

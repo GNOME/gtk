@@ -1,3 +1,12 @@
+2009-02-24  Matthias Clasen <mclasen@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c:
+	* gdk/x11/gdkscreen-x11.[hc]: Another attempt at getting Xrandr
+	screen size changes right. Actually handle XRRScreenChangeNotify
+	events, and ignore root ConfigureNotify events if we are using
+	Xrandr. Only emit size-changed signals if the screen size changed,
+	and only emit monitor-changed signals if the monitors changed.
+
 2009-02-23  Matthias Clasen <mclasen@redhat.com>
 
 	Bug 565199 – Ellipsize text in Places list

@@ -125,9 +125,8 @@ GdkScreen * _gdk_x11_screen_new      (GdkDisplay *display,
 void _gdk_x11_screen_window_manager_changed (GdkScreen *screen);
 void _gdk_x11_screen_size_changed           (GdkScreen *screen,
 					     XEvent    *event);
-void _gdk_x11_screen_process_owner_change (GdkScreen *screen,
-					   XEvent    *event);
-void _gdk_x11_screen_process_monitors_change (GdkScreen *screen);
+void _gdk_x11_screen_process_owner_change   (GdkScreen *screen,
+					     XEvent    *event);
 
 G_END_DECLS
 
