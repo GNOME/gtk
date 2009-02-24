@@ -1178,7 +1178,7 @@ msgstr "Lêdanên X hevdem bike"
 #: gdk/x11/gdkapplaunchcontext-x11.c:311
 #, c-format
 msgid "Starting %s"
-msgstr "%d tê dest pê kirin"
+msgstr "%s tê dest pê kirin"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:313
 #, c-format
