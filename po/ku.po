@@ -1,22 +1,22 @@
 # translation of ku.po to Kurdish
 # This file is distributed under the same license as the gtk+ package.
 # Copyright (C) 2005 THE gtk+'S COPYRIGHT HOLDER.
-#
-#
 # Erdal Ronahi <erdal dot ronahi at gmail dot com>, 2008.
+# Erdal Ronahi <erdal dot ronahi at gmail dot com>, 2009
 msgid ""
 msgstr ""
 "Project-Id-Version: ku\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-17 10:10-0500\n"
-"PO-Revision-Date: 2008-01-13 20:17+0100\n"
+"PO-Revision-Date: 2009-02-24 01:08+0200\n"
 "Last-Translator: Erdal Ronahi <erdal dot ronahi at gmail dot com>\n"
-"Language-Team: Kurdish <ku@li.org>\n"
+"Language-Team: http;//pckurd.net\n"
+"Language: None\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural= n != 1\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Virtaal 0.3.0\n"
 
 #: gdk/directfb/gdkdisplay-directfb.c:55
 msgid "directfb arg"
@@ -112,10 +112,9 @@ msgid "Return"
 msgstr ""
 
 #: gdk/keyname-table.h:3943
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Pause"
-msgstr "Hatiye rawestandin"
+msgstr "Rawestandin"
 
 #: gdk/keyname-table.h:3944
 msgctxt "keyboard label"
@@ -141,33 +140,29 @@ msgid "Multi_key"
 msgstr "Multipress"
 
 #: gdk/keyname-table.h:3948
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Home"
-msgstr "_Mal"
+msgstr "Mal"
 
 #: gdk/keyname-table.h:3949
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Left"
-msgstr "_Çep:"
+msgstr "Çep"
 
 #: gdk/keyname-table.h:3950
 msgctxt "keyboard label"
 msgid "Up"
-msgstr ""
+msgstr "Berjor"
 
 #: gdk/keyname-table.h:3951
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Right"
-msgstr "_Rast:"
+msgstr "Rast"
 
 #: gdk/keyname-table.h:3952
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Down"
-msgstr "Rêça Berjêr"
+msgstr "Berjêr"
 
 #: gdk/keyname-table.h:3953
 #, fuzzy
@@ -183,12 +178,12 @@ msgstr ""
 #: gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "End"
-msgstr ""
+msgstr "Dawî"
 
 #: gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Begin"
-msgstr ""
+msgstr "Destpêk"
 
 #: gdk/keyname-table.h:3957
 #, fuzzy
@@ -294,10 +289,9 @@ msgid "KP_Delete"
 msgstr "_Rake"
 
 #: gdk/keyname-table.h:3976
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Delete"
-msgstr "_Rake"
+msgstr "Jêbirin"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:965
 #: gdk-pixbuf/gdk-pixbuf-io.c:1225 tests/testfilechooser.c:222
@@ -1099,9 +1093,8 @@ msgid "The XPM image format"
 msgstr "Formata wêneya XPM"
 
 #: gdk-pixbuf/io-gdip-emf.c:59
-#, fuzzy
 msgid "The EMF image format"
-msgstr "Formata wêneya BMP"
+msgstr "Formata wêneya EMF"
 
 #: gdk-pixbuf/io-gdip-utils.c:220
 #, fuzzy, c-format
@@ -1140,14 +1133,12 @@ msgid "Unsupported image format for GDI+"
 msgstr "Bihêkirina wêneyê RAS ne destekiriye"
 
 #: gdk-pixbuf/io-gdip-utils.c:1004
-#, fuzzy
 msgid "Couldn't save"
-msgstr "Nikare yê mayî tomar bike"
+msgstr "Nikarî tomar bike"
 
 #: gdk-pixbuf/io-gdip-wmf.c:58
-#, fuzzy
 msgid "The WMF image format"
-msgstr "Formata wêneya WMBP"
+msgstr "Formata wêneya WMF"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:54
@@ -1185,14 +1176,14 @@ msgid "Make X calls synchronous"
 msgstr "Lêdanên X hevdem bike"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:311
-#, fuzzy, c-format
+#, c-format
 msgid "Starting %s"
-msgstr "%d tê çapkirin"
+msgstr "%d tê dest pê kirin"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:313
-#, fuzzy, c-format
+#, c-format
 msgid "Opening %s"
-msgstr "'%s' Veke"
+msgstr "%s tê vekirin"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:316
 #, c-format
@@ -1280,10 +1271,9 @@ msgstr ""
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:671
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Super"
-msgstr "Kaxiz"
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1291,10 +1281,9 @@ msgstr "Kaxiz"
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:684
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Hyper"
-msgstr "Kaxiz"
+msgstr "Hîper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1304,13 +1293,12 @@ msgstr "Kaxiz"
 #: gtk/gtkaccellabel.c:698
 msgctxt "keyboard label"
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: gtk/gtkaccellabel.c:715
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Space"
-msgstr "_Guhestin"
+msgstr "Navber"
 
 #: gtk/gtkaccellabel.c:718
 msgctxt "keyboard label"
@@ -1361,7 +1349,7 @@ msgstr "calendar:week_start:1"
 #: gtk/gtkcalendar.c:1803
 msgctxt "year measurement template"
 msgid "2000"
-msgstr ""
+msgstr "2000"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1377,7 +1365,7 @@ msgstr ""
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1393,7 +1381,7 @@ msgstr ""
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1408,7 +1396,7 @@ msgstr ""
 #: gtk/gtkcalendar.c:2146
 msgctxt "calendar year format"
 msgid "%Y"
-msgstr ""
+msgstr "%Y"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
@@ -1431,7 +1419,7 @@ msgstr "Lezkera nû..."
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr ""
+msgstr "%% %d"
 
 #: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
@@ -1576,9 +1564,8 @@ msgid "_Insert Unicode Control Character"
 msgstr "_Şifreya kontrola sembolê derbas bike"
 
 #: gtk/gtkentry.c:9636
-#, fuzzy
 msgid "Caps Lock is on"
-msgstr "_Cih kopî bike"
+msgstr ""
 
 #: gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
@@ -1697,7 +1684,7 @@ msgstr "Beyanameya hilbijartî li peldankê zêde bike"
 
 #: gtk/gtkfilechooserdefault.c:4019
 msgid "_Remove"
-msgstr "_Rake"
+msgstr "_Rakirin"
 
 #: gtk/gtkfilechooserdefault.c:4026
 msgid "Remove the selected bookmark"
@@ -1833,7 +1820,7 @@ msgstr "Nenas"
 
 #: gtk/gtkfilechooserdefault.c:11241
 msgid "%H:%M"
-msgstr ""
+msgstr "%H:%M"
 
 #: gtk/gtkfilechooserdefault.c:11243
 msgid "Yesterday at %H:%M"
@@ -1844,7 +1831,7 @@ msgstr "Do de %H:%M de"
 #: gtk/gtkfilechooserentry.c:698 gtk/gtkfilechooserentry.c:1163
 #, fuzzy
 msgid "Invalid path"
-msgstr "URI nederbasdar e"
+msgstr "Rêç nederbasdar e"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
@@ -1897,7 +1884,7 @@ msgstr ""
 #: gtk/gtkfilechooserentry.c:1196
 #, fuzzy
 msgid "Path does not exist"
-msgstr "Kurterê %s tuneye"
+msgstr "Ev rêc tuneye"
 
 #: gtk/gtkfilechoosersettings.c:362 gtk/gtkfilesel.c:1349
 #: gtk/gtkfilesel.c:1358
@@ -2138,13 +2125,13 @@ msgstr "Hesan"
 #, fuzzy
 msgctxt "input method menu"
 msgid "System"
-msgstr "Pergala Pelan"
+msgstr "Pergal"
 
 #: gtk/gtkimmulticontext.c:625
 #, fuzzy, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
-msgstr "%s (%s)"
+msgstr "Pergal (%s)"
 
 #: gtk/gtkinputdialog.c:192
 msgid "Input"
@@ -2283,7 +2270,7 @@ msgstr "Vebijarkên GTK+ Nîşan Bide"
 #: gtk/gtkmountoperation.c:484
 #, fuzzy
 msgid "Co_nnect"
-msgstr "_Girêbide"
+msgstr "_Girêdan"
 
 #: gtk/gtkmountoperation.c:528
 msgid "Connect _anonymously"
@@ -2296,7 +2283,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:574
 #, fuzzy
 msgid "_Username:"
-msgstr "_Ji nû ve binav bike"
+msgstr "_Navê bikarhêneê"
 
 #: gtk/gtkmountoperation.c:578
 #, fuzzy
@@ -2306,7 +2293,7 @@ msgstr "_Cih:"
 #: gtk/gtkmountoperation.c:583
 #, fuzzy
 msgid "_Password:"
-msgstr "Pe_st:"
+msgstr "Şî_fre:"
 
 #: gtk/gtkmountoperation.c:601
 msgid "Forget password _immediately"
@@ -2489,7 +2476,7 @@ msgstr ""
 #, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
-msgstr "Hişyar"
+msgstr "Li bendê"
 
 #: gtk/gtkprintoperation.c:1522
 msgctxt "print operation status"
@@ -2497,10 +2484,9 @@ msgid "Blocking on issue"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:1523
-#, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
-msgstr "%d tê çapkirin"
+msgstr "Tê çapkirin"
 
 #: gtk/gtkprintoperation.c:1524
 #, fuzzy
@@ -2925,7 +2911,7 @@ msgstr "Hêmana nenas"
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
-msgstr ""
+msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
@@ -2934,7 +2920,7 @@ msgstr ""
 #, fuzzy, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
-msgstr "%s (%s)"
+msgstr "%d. %s"
 
 #: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
 #: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
@@ -2946,25 +2932,21 @@ msgstr "Hêmaneke ku bi URIya '%s' têkildar e nehate dîtin"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:288
-#, fuzzy
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Agahî"
 
 #: gtk/gtkstock.c:289
-#, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
-msgstr "Hişyar"
+msgstr "Şiyarî"
 
 #: gtk/gtkstock.c:290
-#, fuzzy
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Çewtî"
 
 #: gtk/gtkstock.c:291
-#, fuzzy
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Pirs"
@@ -2973,7 +2955,6 @@ msgstr "Pirs"
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:296
-#, fuzzy
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_Der barê"
@@ -2982,7 +2963,7 @@ msgstr "_Der barê"
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
-msgstr "_Têxê"
+msgstr "_Lêzêdekirin"
 
 #: gtk/gtkstock.c:298
 #, fuzzy
@@ -2997,7 +2978,6 @@ msgid "_Bold"
 msgstr "_Qalind"
 
 #: gtk/gtkstock.c:300
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_Betal"
@@ -3263,24 +3243,23 @@ msgstr "Hatiye rawestandin"
 
 #. Media label, as in "play music"
 #: gtk/gtkstock.c:359
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Play"
-msgstr "_Cih"
+msgstr "_Lêdan"
 
 #. Media label, as in  "previous song"
 #: gtk/gtkstock.c:361
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "Pre_vious"
-msgstr "Ya berê"
+msgstr "Ya _berê"
 
 #. Media label
 #: gtk/gtkstock.c:363
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Record"
-msgstr "_Tomar bike"
+msgstr "_Tomarkirin"
 
 #. Media label
 #: gtk/gtkstock.c:365
@@ -3297,34 +3276,29 @@ msgid "_Stop"
 msgstr "_Bisekine"
 
 #: gtk/gtkstock.c:368
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Tor"
 
 #: gtk/gtkstock.c:369
-#, fuzzy
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Nû"
 
 #: gtk/gtkstock.c:370
-#, fuzzy
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Na"
 
 #: gtk/gtkstock.c:371
-#, fuzzy
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_Temam"
 
 #: gtk/gtkstock.c:372
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
-msgstr "_Veke"
+msgstr "_Vekirin"
 
 #. Page orientation
 #: gtk/gtkstock.c:374
@@ -3355,16 +3329,14 @@ msgid "Reverse portrait"
 msgstr "serdirêjahiya berevajî"
 
 #: gtk/gtkstock.c:381
-#, fuzzy
 msgctxt "Stock label"
 msgid "Page Set_up"
-msgstr "Mîhengên Rûpelê"
+msgstr "_Mîhengên Rûpelê"
 
 #: gtk/gtkstock.c:382
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
-msgstr "_Pêve bike"
+msgstr "_Pêvekirin"
 
 #: gtk/gtkstock.c:383
 #, fuzzy
@@ -3373,7 +3345,6 @@ msgid "_Preferences"
 msgstr "_Vebijêrk"
 
 #: gtk/gtkstock.c:384
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Çap"
@@ -3385,16 +3356,15 @@ msgid "Print Pre_view"
 msgstr "_Pêşdîtina Çapê"
 
 #: gtk/gtkstock.c:386
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
-msgstr "_Taybetî"
+msgstr "_Taybetmendî"
 
 #: gtk/gtkstock.c:387
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
-msgstr "_Derkeve"
+msgstr "_Derketin"
 
 #: gtk/gtkstock.c:388
 #, fuzzy
@@ -3409,10 +3379,9 @@ msgid "_Refresh"
 msgstr "_Teze bike"
 
 #: gtk/gtkstock.c:390
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
-msgstr "_Rake"
+msgstr "_Rakirin"
 
 #: gtk/gtkstock.c:391
 #, fuzzy
@@ -3421,10 +3390,9 @@ msgid "_Revert"
 msgstr "_Bizivirîne Paş"
 
 #: gtk/gtkstock.c:392
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
-msgstr "_Tomar bike"
+msgstr "_Tomarkirin"
 
 #: gtk/gtkstock.c:393
 #, fuzzy
@@ -3439,7 +3407,6 @@ msgid "Select _All"
 msgstr "Hemûyî _Hilbijêre"
 
 #: gtk/gtkstock.c:395
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Reng"
@@ -3503,7 +3470,6 @@ msgid "_Undo"
 msgstr "_jê veger"
 
 #: gtk/gtkstock.c:409
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Erê"
