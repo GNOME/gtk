@@ -3874,7 +3874,7 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 
   swin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
-				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+				  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (swin),
 				       GTK_SHADOW_IN);
   gtk_widget_show (swin);
@@ -3959,6 +3959,7 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 				       NULL);
 
   renderer = gtk_cell_renderer_text_new ();
+  g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
   g_signal_connect (renderer, "edited", 
 		    G_CALLBACK (shortcuts_edited), impl);
   g_signal_connect (renderer, "editing-canceled", 

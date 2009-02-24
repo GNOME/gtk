@@ -1,3 +1,10 @@
+2009-02-23  Matthias Clasen <mclasen@redhat.com>
+
+	Bug 565199 – Ellipsize text in Places list
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_list_create): Never scroll
+	the places horizontally. Instead, ellipsize the text.
+
 2009-02-19  Michael Hasselmann <michaelh@openismus.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_active_internal):
