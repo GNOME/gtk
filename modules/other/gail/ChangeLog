@@ -1,5 +1,11 @@
 2009-02-25  Li Yuan  <li.yuan@sun.com>
 
+	* gailtreeview.c: (gail_tree_view_ref_accessible_at_point):
+	Bug #325809. Get the cell from the coordinates based on
+	bin_window.
+
+2009-02-25  Li Yuan  <li.yuan@sun.com>
+
 	* gailentry.c: (gail_entry_real_notify_gtk),
 	(gail_entry_idle_notify_insert), (_gail_entry_insert_text_cb):
 	Bug #520395. Notify the insert signal in the idle function. Let

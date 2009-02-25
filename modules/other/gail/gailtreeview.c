@@ -1074,6 +1074,7 @@ gail_tree_view_ref_accessible_at_point (AtkComponent           *component,
   GtkTreePath *path;
   GtkTreeViewColumn *tv_column;
   gint x_pos, y_pos;
+  gint bx, by;
   gboolean ret_val;
 
   widget = GTK_ACCESSIBLE (component)->widget;
@@ -1084,8 +1085,9 @@ gail_tree_view_ref_accessible_at_point (AtkComponent           *component,
   tree_view = GTK_TREE_VIEW (widget);
 
   atk_component_get_extents (component, &x_pos, &y_pos, NULL, NULL, coord_type);
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y, &bx, &by);
   ret_val = gtk_tree_view_get_path_at_pos (tree_view, 
-                                           x - x_pos, y - y_pos, 
+                                           bx - x_pos, by - y_pos, 
                                            &path, &tv_column, NULL, NULL);
   if (ret_val)
     {
