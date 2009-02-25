@@ -1,3 +1,9 @@
+2009-02-25  Li Yuan  <li.yuan@sun.com>
+
+	* gailtreeview.c: (is_cell_showing):
+	Bug #571001. Set the cell's showing state based on bin_window
+	coordinates.
+
 2009-02-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.15.4 ===

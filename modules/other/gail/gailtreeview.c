@@ -3075,6 +3075,7 @@ is_cell_showing (GtkTreeView   *tree_view,
 {
   GdkRectangle rect, *visible_rect;
   GdkRectangle rect1, *tree_cell_rect;
+  gint bx, by;
   gboolean is_showing;
  /*
   * A cell is considered "SHOWING" if any part of the cell is in the visible 
@@ -3088,18 +3089,18 @@ is_cell_showing (GtkTreeView   *tree_view,
   visible_rect = &rect;
   tree_cell_rect = &rect1;
   tree_cell_rect->x = cell_rect->x;
+  tree_cell_rect->y = cell_rect->y;
   tree_cell_rect->width = cell_rect->width;
   tree_cell_rect->height = cell_rect->height;
 
   gtk_tree_view_get_visible_rect (tree_view, visible_rect);
-  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view,
-                                                     cell_rect->x, cell_rect->y,
-                                                     NULL, &(rect1.y));
+  gtk_tree_view_convert_tree_to_bin_window_coords (tree_view, visible_rect->x, 
+                                                   visible_rect->y, &bx, &by);
 
-  if (((tree_cell_rect->x + tree_cell_rect->width) < visible_rect->x) ||
-     ((tree_cell_rect->y + tree_cell_rect->height) < (visible_rect->y)) ||
-     (tree_cell_rect->x > (visible_rect->x + visible_rect->width)) ||
-     (tree_cell_rect->y > (visible_rect->y + visible_rect->height)))
+  if (((tree_cell_rect->x + tree_cell_rect->width) < bx) ||
+     ((tree_cell_rect->y + tree_cell_rect->height) < by) ||
+     (tree_cell_rect->x > (bx + visible_rect->width)) ||
+     (tree_cell_rect->y > (by + visible_rect->height)))
     is_showing =  FALSE;
   else
     is_showing = TRUE;
