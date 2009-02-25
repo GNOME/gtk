@@ -2280,20 +2280,19 @@ gtk_range_motion_notify (GtkWidget      *widget,
 			 GdkEventMotion *event)
 {
   GtkRange *range;
-  gint x, y;
 
   range = GTK_RANGE (widget);
 
-  gdk_window_get_pointer (range->event_window, &x, &y, NULL);
+  gdk_event_request_motions (event);
   
-  range->layout->mouse_x = x;
-  range->layout->mouse_y = y;
+  range->layout->mouse_x = event->x;
+  range->layout->mouse_y = event->y;
 
   if (gtk_range_update_mouse_location (range))
     gtk_widget_queue_draw (widget);
 
   if (range->layout->grab_location == MOUSE_SLIDER)
-    update_slider_position (range, x, y);
+    update_slider_position (range, event->x, event->y);
 
   /* We handled the event if the mouse was in the range_rect */
   return range->layout->mouse_location != MOUSE_OUTSIDE;

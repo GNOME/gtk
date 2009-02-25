@@ -1,3 +1,12 @@
+2009-02-25  Xan Lopez  <xan@gnome.org>
+
+        Bug 495320 - GtkRange does not use gdk_event_request_motions
+
+        * gtk/gtkrange.c:
+        (gtk_range_motion_notify): Use gdk_event_request_motions to
+        request more motion events, as suggested in the docs for widgets
+        using motion hints.
+
 2009-02-24  Matthias Clasen <mclasen@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c:
