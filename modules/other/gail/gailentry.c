@@ -131,6 +131,7 @@ static void       gail_entry_paste_received	   (GtkClipboard *clipboard,
 
 /* Callbacks */
 
+static gboolean   gail_entry_idle_notify_insert    (gpointer data);
 static void       gail_entry_notify_insert         (GailEntry            *entry);
 static void       gail_entry_notify_delete         (GailEntry            *entry);
 static void	  _gail_entry_insert_text_cb	   (GtkEntry     	 *entry,
@@ -252,7 +253,8 @@ gail_entry_real_notify_gtk (GObject		*obj,
 
   if (strcmp (pspec->name, "cursor-position") == 0)
     {
-      gail_entry_notify_insert (entry);
+      if (entry->insert_idle_handler == 0)
+        entry->insert_idle_handler = gdk_threads_add_idle (gail_entry_idle_notify_insert, entry);
 
       if (check_for_selection_change (entry, gtk_entry))
         g_signal_emit_by_name (atk_obj, "text_selection_changed");
@@ -264,7 +266,8 @@ gail_entry_real_notify_gtk (GObject		*obj,
     }
   else if (strcmp (pspec->name, "selection-bound") == 0)
     {
-      gail_entry_notify_insert (entry);
+      if (entry->insert_idle_handler == 0)
+        entry->insert_idle_handler = gdk_threads_add_idle (gail_entry_idle_notify_insert, entry);
 
       if (check_for_selection_change (entry, gtk_entry))
         g_signal_emit_by_name (atk_obj, "text_selection_changed");
@@ -1001,7 +1004,7 @@ gail_entry_paste_received (GtkClipboard *clipboard,
 /* Callbacks */
 
 static gboolean
-idle_notify_insert (gpointer data)
+gail_entry_idle_notify_insert (gpointer data)
 {
   GailEntry *entry;
 
@@ -1051,7 +1054,7 @@ _gail_entry_insert_text_cb (GtkEntry *entry,
    * or in an idle handler if it not updated.
    */
    if (gail_entry->insert_idle_handler == 0)
-     gail_entry->insert_idle_handler = gdk_threads_add_idle (idle_notify_insert, gail_entry);
+     gail_entry->insert_idle_handler = gdk_threads_add_idle (gail_entry_idle_notify_insert, gail_entry);
 }
 
 static gunichar 

@@ -1,5 +1,12 @@
 2009-02-25  Li Yuan  <li.yuan@sun.com>
 
+	* gailentry.c: (gail_entry_real_notify_gtk),
+	(gail_entry_idle_notify_insert), (_gail_entry_insert_text_cb):
+	Bug #520395. Notify the insert signal in the idle function. Let
+	text_util has chance to update cache.
+
+2009-02-25  Li Yuan  <li.yuan@sun.com>
+
 	* gailtreeview.c: (is_cell_showing):
 	Bug #571001. Set the cell's showing state based on bin_window
 	coordinates.
