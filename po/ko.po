@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-17 10:10-0500\n"
-"PO-Revision-Date: 2009-02-17 12:57+0900\n"
+"PO-Revision-Date: 2009-02-20 08:35+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -835,7 +835,7 @@ msgstr "PNM 파일의 최대 색 값이 너무 큽니다"
 
 #: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
 msgid "Raw PNM image type is invalid"
-msgstr "원시 PNM 그림 형식이 잘못되었습니다"
+msgstr "로우 PNM 그림 형식이 잘못되었습니다"
 
 #: gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
@@ -843,7 +843,7 @@ msgstr "PNM 그림 읽어들이기가 이 PNM 서브포맷을 지원하지 않�
 
 #: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "원시 PNM 형식에서는 견본 데이터 앞에 정확히 한 개의 공백이 와야 합니다"
+msgstr "로우 PNM 형식에서는 견본 데이터 앞에 정확히 한 개의 공백이 와야 합니다"
 
 #: gdk-pixbuf/io-pnm.c:768
 msgid "Cannot allocate memory for loading PNM image"
