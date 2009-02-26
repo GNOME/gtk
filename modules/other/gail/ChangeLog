@@ -1,3 +1,9 @@
+2009-02-26  Li Yuan  <li.yuan@sun.com>
+
+	* gailbutton.c: (idle_do_action):
+	Bug #561631. Patch from Yue Wang. Ref the button in the idle
+	function to prevent the button being finalized.
+
 2009-02-25  Li Yuan  <li.yuan@sun.com>
 
 	* gailtreeview.c: (gail_tree_view_ref_accessible_at_point):

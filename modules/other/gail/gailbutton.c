@@ -503,15 +503,20 @@ idle_do_action (gpointer data)
   tmp_event.button.send_event = TRUE;
   tmp_event.button.time = GDK_CURRENT_TIME;
   tmp_event.button.axes = NULL;
-  
+
+  g_object_ref (gail_button);
+
   if (widget == NULL /* State is defunct */ ||
       !GTK_WIDGET_IS_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
-    return FALSE;
+    {
+      g_object_unref (gail_button);
+      return FALSE;
+    }
   else
     gtk_widget_event (widget, &tmp_event);
 
   button = GTK_BUTTON (widget); 
-  while (g_queue_get_length(gail_button->action_queue) != 0) 
+  while (!g_queue_is_empty (gail_button->action_queue)) 
     {
       gint action_number = (gint) g_queue_pop_head (gail_button->action_queue);
       if (gail_button->default_is_press)
@@ -572,7 +577,7 @@ idle_do_action (gpointer data)
 	  break;
 	}
     }
-
+  g_object_unref (gail_button);
   return FALSE;
 }
 
