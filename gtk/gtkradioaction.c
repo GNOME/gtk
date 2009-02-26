@@ -327,10 +327,10 @@ gtk_radio_action_activate (GtkAction *action)
 	    {
 	      toggle_action->private_data->active = !toggle_action->private_data->active;
 
-	      g_object_notify (G_OBJECT (action), "active");
 	      break;
 	    }
 	}
+      g_object_notify (G_OBJECT (action), "active");
     }
   else
     {

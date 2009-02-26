@@ -1,3 +1,11 @@
+2009-02-25  Tristan Van Berkom <tvb@gnome.org>
+
+	Bug 572904 – GtkRadioAction broken in trunk
+
+	* gtk/gtkradioaction.c: When setting non active state always
+	notify the action's active state (this prevents toggle type proxies
+	used with radio actions from deactivating when pressed a second time).
+
 2009-02-25  Xan Lopez  <xan@gnome.org>
 
         Bug 495320 - GtkRange does not use gdk_event_request_motions
