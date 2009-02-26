@@ -52,6 +52,7 @@ gail_c_sources =			\
 	gailrange.c			\
 	gailrenderercell.c		\
 	gailscale.c			\
+	gailscalebutton.c		\
 	gailscrollbar.c			\
 	gailscrolledwindow.c		\
 	gailseparator.c			\
@@ -112,6 +113,7 @@ gail_private_h_sources =		\
 	gailrange.h			\
 	gailrenderercell.h		\
 	gailscale.h			\
+	gailscalebutton.h		\
 	gailscrollbar.h			\
 	gailscrolledwindow.h		\
 	gailseparator.h			\

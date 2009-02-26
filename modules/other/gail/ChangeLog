@@ -1,5 +1,28 @@
 2009-02-26  Li Yuan  <li.yuan@sun.com>
 
+	* Makefile.am:
+	* gail.c: (gail_accessibility_module_init):
+	* gail.h:
+	* gailscalebutton.c: (gail_scale_button_class_init),
+	(gail_scale_button_init), (gail_scale_button_initialize),
+	(atk_action_interface_init), (gail_scale_button_do_action),
+	(gail_scale_button_get_n_actions),
+	(gail_scale_button_get_description),
+	(gail_scale_button_action_get_name),
+	(gail_scale_button_get_keybinding),
+	(gail_scale_button_set_description), (atk_value_interface_init),
+	(gail_scale_button_get_current_value),
+	(gail_scale_button_get_maximum_value),
+	(gail_scale_button_get_minimum_value),
+	(gail_scale_button_get_minimum_increment),
+	(gail_scale_button_set_current_value),
+	(gail_scale_button_notify_gtk):
+	* gailscalebutton.h:
+	Bug #519090. Add accessibility support to GtkScaleButton.
+	Support action and value interfaces. Patch from Jan Arne Petersen.
+
+2009-02-26  Li Yuan  <li.yuan@sun.com>
+
 	* gailbutton.c: (idle_do_action):
 	Bug #561631. Patch from Yue Wang. Ref the button in the idle
 	function to prevent the button being finalized.
