@@ -1,3 +1,11 @@
+2009-02-27  David Zeuthen  <davidz@redhat.com>
+
+	Bug 573383 – GtkMountOperation fixes for ask_password()
+
+	* gtk/gtkmountoperation.c (gtk_mount_operation_ask_password):
+	Split the message from GMountOperation into primary/secondary like
+	we also do in gtk_mount_operation_ask_question()
+
 2009-02-27  Michael Natterer  <mitch@imendio.com>
 
 	Bug 573383 – Setting a textview's buffer to NULL doesn't do a

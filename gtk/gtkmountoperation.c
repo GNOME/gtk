@@ -434,6 +434,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
   GtkWidget *message_label;
   gboolean   can_anonymous;
   guint      rows;
+  const gchar *secondary;
 
   operation = GTK_MOUNT_OPERATION (mount_op);
   priv = operation->priv;
@@ -482,11 +483,33 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
   main_vbox = gtk_vbox_new (FALSE, 18);
   gtk_box_pack_start (GTK_BOX (hbox), main_vbox, TRUE, TRUE, 0);
 
-  message_label = gtk_label_new (message);
-  gtk_misc_set_alignment (GTK_MISC (message_label), 0.0, 0.5);
-  gtk_label_set_line_wrap (GTK_LABEL (message_label), TRUE);
-  gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (message_label),
-                      FALSE, FALSE, 0);
+  secondary = strstr (message, "\n");
+  if (secondary != NULL)
+    {
+      gchar *s;
+      gchar *primary;
+
+      primary = g_strndup (message, secondary - message + 1);
+      s = g_strdup_printf ("<big><b>%s</b></big>%s", primary, secondary);
+
+      message_label = gtk_label_new (NULL);
+      gtk_label_set_markup (GTK_LABEL (message_label), s);
+      gtk_misc_set_alignment (GTK_MISC (message_label), 0.0, 0.5);
+      gtk_label_set_line_wrap (GTK_LABEL (message_label), TRUE);
+      gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (message_label),
+                          FALSE, TRUE, 0);
+
+      g_free (s);
+      g_free (primary);
+    }
+  else
+    {
+      message_label = gtk_label_new (message);
+      gtk_misc_set_alignment (GTK_MISC (message_label), 0.0, 0.5);
+      gtk_label_set_line_wrap (GTK_LABEL (message_label), TRUE);
+      gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (message_label),
+                          FALSE, FALSE, 0);
+    }
 
   vbox = gtk_vbox_new (FALSE, 6);
   gtk_box_pack_start (GTK_BOX (main_vbox), vbox, FALSE, FALSE, 0);
