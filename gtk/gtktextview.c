@@ -1426,14 +1426,14 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
   text_view->buffer = buffer;
 
+  if (text_view->layout)
+    gtk_text_layout_set_buffer (text_view->layout, buffer);
+
   if (buffer != NULL)
     {
       GtkTextIter start;
 
       g_object_ref (buffer);
-
-      if (text_view->layout)
-        gtk_text_layout_set_buffer (text_view->layout, buffer);
 
       gtk_text_buffer_get_iter_at_offset (text_view->buffer, &start, 0);
 
