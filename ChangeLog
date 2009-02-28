@@ -1,3 +1,14 @@
+2009-02-28  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 573069 – Gdk-CRITICAL warnings with Gtk 2.14 when dragging
+	GtkNotebook tabs
+
+	* gtk/gtkwidget.c (_gtk_widget_synthesize_crossing): Be a little
+	more careful when navigating up the parent chain.
+
+	* gdk/gdkwindow.c (_gdk_window_destroy_hierarchy): Reset the
+	pointer window thats stored on the screen when it is destroyed.
+
 2009-02-27  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 572996 – crash in Home Folder: Trying to open the sidebar

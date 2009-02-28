@@ -283,6 +283,8 @@ gdk_window_init (GdkWindowObject *window)
   window->state = GDK_WINDOW_STATE_WITHDRAWN;
 }
 
+static GQuark quark_pointer_window = 0;
+
 static void
 gdk_window_class_init (GdkWindowObjectClass *klass)
 {
@@ -319,6 +321,8 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->get_clip_region = gdk_window_get_clip_region;
   drawable_class->get_visible_region = gdk_window_get_visible_region;
   drawable_class->get_composite_drawable = gdk_window_get_composite_drawable;
+
+  quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
 }
 
 static void
@@ -490,10 +494,14 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
     
+  screen = gdk_drawable_get_screen (GDK_DRAWABLE (window));
+  temp_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+  if (temp_window == window)
+    g_object_set_qdata (G_OBJECT (screen), quark_pointer_window, NULL);
+
   switch (GDK_WINDOW_TYPE (window))
     {
     case GDK_WINDOW_ROOT:
-      screen = gdk_drawable_get_screen (GDK_DRAWABLE (window));
       if (!screen->closed)
 	{
 	  g_error ("attempted to destroy root window");
@@ -2108,17 +2116,16 @@ gdk_window_clear_backing_rect_redirect (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  paint.x_offset = x_offset;
-  paint.y_offset = y_offset;
-  paint.pixmap = redirect->pixmap;
-  paint.surface = _gdk_drawable_ref_cairo_surface (redirect->pixmap);
-  
   clip_region = _gdk_window_calculate_full_clip_region (window,
 							GDK_WINDOW (redirect->redirected),
 							NULL, TRUE,
 							&x_offset, &y_offset);
   
-
+  paint.x_offset = x_offset;
+  paint.y_offset = y_offset;
+  paint.pixmap = redirect->pixmap;
+  paint.surface = _gdk_drawable_ref_cairo_surface (redirect->pixmap);
+  
   method.cr = NULL;
   method.gc = NULL;
   setup_backing_rect_method (&method, window, &paint, 0, 0);

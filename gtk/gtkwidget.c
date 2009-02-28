@@ -8246,13 +8246,10 @@ _gtk_widget_synthesize_crossing (GtkWidget      *from,
 
       while (from_ancestor != NULL)
 	{
-	  if (from_ancestor != NULL)
-	    {
-	      from_ancestor = gdk_window_get_parent (from_ancestor);
-	      if (from_ancestor == NULL)
-		break;
-	      from_ancestors = g_list_prepend (from_ancestors, from_ancestor);
-	    }
+	  from_ancestor = gdk_window_get_parent (from_ancestor);
+          if (from_ancestor == NULL)
+            break;
+          from_ancestors = g_list_prepend (from_ancestors, from_ancestor);
 	}
 
       synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
@@ -8274,14 +8271,11 @@ _gtk_widget_synthesize_crossing (GtkWidget      *from,
 
       while (to_ancestor != NULL)
 	{
-	  if (to_ancestor != NULL)
-	    {
-	      to_ancestor = gdk_window_get_parent (to_ancestor);
-	      if (to_ancestor == NULL)
-		break;
-	      to_ancestors = g_list_prepend (to_ancestors, to_ancestor);
-	    }
-	}
+	  to_ancestor = gdk_window_get_parent (to_ancestor);
+	  if (to_ancestor == NULL)
+            break;
+          to_ancestors = g_list_prepend (to_ancestors, to_ancestor);
+        }
 
       /* XXX: leave/inferior on root window? */
 
@@ -8309,14 +8303,16 @@ _gtk_widget_synthesize_crossing (GtkWidget      *from,
 	      from_ancestor = gdk_window_get_parent (from_ancestor);
 	      if (from_ancestor == to_window)
 		break;
-	      from_ancestors = g_list_prepend (from_ancestors, from_ancestor);
+              if (from_ancestor)
+	        from_ancestors = g_list_prepend (from_ancestors, from_ancestor);
 	    }
 	  if (to_ancestor != NULL)
 	    {
 	      to_ancestor = gdk_window_get_parent (to_ancestor);
 	      if (to_ancestor == from_window)
 		break;
-	      to_ancestors = g_list_prepend (to_ancestors, to_ancestor);
+              if (to_ancestor)
+	        to_ancestors = g_list_prepend (to_ancestors, to_ancestor);
 	    }
 	}
       if (to_ancestor == from_window)
