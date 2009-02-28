@@ -1,5 +1,12 @@
 2009-02-28  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 573287 – Warning on startup
+
+	* gtk/gtkstatusicon.c (gtk_status_icon_finalize): Disconnect
+	all tray icon signals. Noticed by Bastien Nocera
+
+2009-02-28  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 573211 – Setting screen for popup windows
 
 	* gtk/gtkentrycompletion.c:

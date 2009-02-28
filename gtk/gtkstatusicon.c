@@ -942,6 +942,24 @@ gtk_status_icon_finalize (GObject *object)
   priv->blank_icon = NULL;
 
 #ifdef GDK_WINDOWING_X11
+  g_signal_handlers_disconnect_by_func (priv->tray_icon,
+			                gtk_status_icon_key_press, status_icon);
+  g_signal_handlers_disconnect_by_func (priv->tray_icon,
+			                gtk_status_icon_popup_menu, status_icon);
+  g_signal_handlers_disconnect_by_func (priv->tray_icon,
+			                gtk_status_icon_embedded_changed, status_icon);
+  g_signal_handlers_disconnect_by_func (priv->tray_icon,
+			                gtk_status_icon_orientation_changed, status_icon);
+  g_signal_handlers_disconnect_by_func (priv->tray_icon,
+			                gtk_status_icon_button_press, status_icon);
+  g_signal_handlers_disconnect_by_func (priv->tray_icon,
+			                gtk_status_icon_button_release, status_icon);
+  g_signal_handlers_disconnect_by_func (priv->tray_icon,
+			                gtk_status_icon_scroll, status_icon);
+  g_signal_handlers_disconnect_by_func (priv->tray_icon,
+			                gtk_status_icon_query_tooltip, status_icon);
+  g_signal_handlers_disconnect_by_func (priv->tray_icon,
+		    	                gtk_status_icon_screen_changed, status_icon);
   gtk_widget_destroy (priv->image);
   gtk_widget_destroy (priv->tray_icon);
 #endif
