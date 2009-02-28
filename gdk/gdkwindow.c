@@ -2116,15 +2116,15 @@ gdk_window_clear_backing_rect_redirect (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  clip_region = _gdk_window_calculate_full_clip_region (window,
-							GDK_WINDOW (redirect->redirected),
-							NULL, TRUE,
-							&x_offset, &y_offset);
-  
   paint.x_offset = x_offset;
   paint.y_offset = y_offset;
   paint.pixmap = redirect->pixmap;
   paint.surface = _gdk_drawable_ref_cairo_surface (redirect->pixmap);
+  
+  clip_region = _gdk_window_calculate_full_clip_region (window,
+							GDK_WINDOW (redirect->redirected),
+							NULL, TRUE,
+							&x_offset, &y_offset);
   
   method.cr = NULL;
   method.gc = NULL;
