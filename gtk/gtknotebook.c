@@ -3218,6 +3218,8 @@ gtk_notebook_drag_begin (GtkWidget        *widget,
   gtk_widget_unparent (tab_label);
 
   priv->dnd_window = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_window_set_screen (GTK_WINDOW (priv->dnd_window),
+                         gtk_widget_get_screen (widget));
   gtk_container_add (GTK_CONTAINER (priv->dnd_window), tab_label);
   gtk_widget_set_size_request (priv->dnd_window,
 			       priv->detached_tab->allocation.width,

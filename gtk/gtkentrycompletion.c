@@ -1510,7 +1510,9 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
 
   gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view)));
   gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view)));
-  
+
+  gtk_window_set_screen (GTK_WINDOW (completion->priv->popup_window),
+                         gtk_widget_get_screen (completion->priv->entry));
 
   gtk_widget_show (completion->priv->popup_window);
     
