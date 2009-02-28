@@ -1,5 +1,12 @@
 2009-02-27  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 572996 – crash in Home Folder: Trying to open the sidebar
+
+	* gtk/gtkpaned.c (get_child_panes): Handle widget being NULL.
+	Pointed out by Wouter Bolsterlee.
+
+2009-02-27  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 572972 – GtkRecentChooserDefault: memory leak in
 	copy_activated_cb()
 
