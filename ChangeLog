@@ -1,5 +1,13 @@
 2009-02-27  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 572972 – GtkRecentChooserDefault: memory leak in
+	copy_activated_cb()
+
+	* gtk/gtkrecentchooserdefault.c (copy_activated_cb): Don't leak
+	a GtkRecentInfo. Found by Tommi Rantala
+
+2009-02-27  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 572968 – GtkIconView: image_description setter function strdups
 	wrong string
 

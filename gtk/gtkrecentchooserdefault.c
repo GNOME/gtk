@@ -1676,6 +1676,7 @@ copy_activated_cb (GtkMenuItem *menu_item,
 			  			    GDK_SELECTION_CLIPBOARD),
                           utf8_uri, -1);
 
+  gtk_recent_info_unref (info);
   g_free (utf8_uri);
 }
 
