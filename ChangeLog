@@ -1,5 +1,12 @@
 2009-02-28  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 572273 – No replacement documented for gtk_action_connect_proxy()
+
+	* gtk/gtkaction.c: Make gtk-doc pick up deprecation notes.
+	Insisted on by Andre Klapper.
+
+2009-02-28  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 573287 – Warning on startup
 
 	* gtk/gtkstatusicon.c (gtk_status_icon_finalize): Disconnect

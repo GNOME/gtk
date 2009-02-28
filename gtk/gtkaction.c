@@ -907,7 +907,7 @@ _gtk_action_remove_from_proxy_list (GtkAction     *action,
  *
  * Since: 2.4
  *
- * Deprecated 2.16: Use gtk_activatable_set_related_action() instead.
+ * Deprecated: 2.16: Use gtk_activatable_set_related_action() instead.
  */
 void
 gtk_action_connect_proxy (GtkAction *action,
@@ -932,7 +932,7 @@ gtk_action_connect_proxy (GtkAction *action,
  *
  * Since: 2.4
  *
- * Deprecated 2.16: Use gtk_activatable_set_related_action() instead.
+ * Deprecated: 2.16: Use gtk_activatable_set_related_action() instead.
  */
 void
 gtk_action_disconnect_proxy (GtkAction *action,
@@ -977,7 +977,7 @@ gtk_action_get_proxies (GtkAction *action)
  *
  * Since: 2.10
  *
- * Deprecated 2.16: Use gtk_activatable_get_related_action() instead.
+ * Deprecated: 2.16: Use gtk_activatable_get_related_action() instead.
  */
 GtkAction*
 gtk_widget_get_action (GtkWidget *widget)
@@ -1591,7 +1591,7 @@ gtk_action_get_gicon (GtkAction *action)
  * 
  * Since: 2.4
  *
- * Deprecated 2.16: activatables are now responsible for activating the
+ * Deprecated: 2.16: activatables are now responsible for activating the
  * action directly so this doesnt apply anymore.
  */
 void
@@ -1619,7 +1619,7 @@ gtk_action_block_activate_from (GtkAction *action,
  * 
  * Since: 2.4
  *
- * Deprecated 2.16: activatables are now responsible for activating the
+ * Deprecated: 2.16: activatables are now responsible for activating the
  * action directly so this doesnt apply anymore.
  */
 void
