@@ -1,3 +1,12 @@
+2009-02-27  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 572968 – GtkIconView: image_description setter function strdups
+	wrong string
+
+	* gtk/gtkiconview.c
+	(gtk_icon_view_item_accessible_image_set_image_description): Copy
+	the right string. Pointed out by Tommi Rantala
+
 2009-02-27  David Zeuthen  <davidz@redhat.com>
 
 	Bug 573416 – GtkMountOperation fixes for ask_password()

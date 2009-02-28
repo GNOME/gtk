@@ -7603,7 +7603,7 @@ gtk_icon_view_item_accessible_image_set_image_description (AtkImage    *image,
   item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (image);
 
   g_free (item->image_description);
-  item->image_description = g_strdup (item->image_description);
+  item->image_description = g_strdup (description);
 
   return TRUE;
 }
