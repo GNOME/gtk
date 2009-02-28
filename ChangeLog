@@ -1,5 +1,12 @@
 2009-02-28  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 573113 – Can't build tests due to testfilechooserbutton.c...
+
+	* tests/testfilechooserbutton.c: Don't use deprecated API.
+	Reported by Tobias Mueller
+
+2009-02-28  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 573069 – Gdk-CRITICAL warnings with Gtk 2.14 when dragging
 	GtkNotebook tabs
 

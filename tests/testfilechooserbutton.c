@@ -315,9 +315,8 @@ main (int   argc,
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-  chooser = gtk_file_chooser_button_new_with_backend ("Select A File - testfilechooserbutton",
-						      GTK_FILE_CHOOSER_ACTION_OPEN,
-						      backend);
+  chooser = gtk_file_chooser_button_new ("Select A File - testfilechooserbutton",
+                                         GTK_FILE_CHOOSER_ACTION_OPEN);
   gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (chooser), gtk_src_dir, NULL);
   gtk_file_chooser_remove_shortcut_folder (GTK_FILE_CHOOSER (chooser), gtk_src_dir, NULL);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), chooser);
@@ -345,9 +344,8 @@ main (int   argc,
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-  chooser = gtk_file_chooser_button_new_with_backend ("Select A Folder - testfilechooserbutton",
-						      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-						      backend);
+  chooser = gtk_file_chooser_button_new ("Select A Folder - testfilechooserbutton",
+                                         GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
   gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (chooser), gtk_src_dir, NULL);
   gtk_file_chooser_remove_shortcut_folder (GTK_FILE_CHOOSER (chooser), gtk_src_dir, NULL);
   gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (chooser), gtk_src_dir, NULL);
