@@ -49,6 +49,9 @@
 
 typedef struct _GdkWindowParentPos GdkWindowParentPos;
 
+static void tmp_unset_bg (GdkWindow *window);
+static void tmp_reset_bg (GdkWindow *window);
+
 void
 _gdk_window_move_resize_child (GdkWindow *window,
 			       gint       x,
@@ -67,8 +70,8 @@ _gdk_window_move_resize_child (GdkWindow *window,
   obj = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);
 
-  is_move = 0; // (x - obj->x != 0) && (y - obj->y != 0);
-  is_resize = 0; // obj->width != width && obj->height != height;
+  is_move = (x - obj->x != 0) && (y - obj->y != 0);
+  is_resize = obj->width != width && obj->height != height;
   
   GDK_NOTE (MISC, g_print ("_gdk_window_move_resize_child: %s@%+d%+d %dx%d@%+d%+d\n",
 			   _gdk_win32_drawable_description (window),
@@ -108,7 +111,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
 			   (is_resize ? 0 : SWP_NOSIZE)));
 
   //_gdk_win32_window_tmp_reset_parent_bg (window);
-  //_gdk_win32_window_tmp_reset_bg (window, TRUE);
+  _gdk_win32_window_tmp_reset_bg (window, TRUE);
 }
 
 void
@@ -185,6 +188,18 @@ tmp_unset_bg (GdkWindow *window)
     }
 }
 
+static void
+tmp_reset_bg (GdkWindow *window)
+{
+  GdkWindowObject *obj;
+  GdkWindowImplWin32 *impl;
+
+  obj = GDK_WINDOW_OBJECT (window);
+  impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);
+
+  impl->no_bg = FALSE;
+}
+
 void
 _gdk_win32_window_tmp_unset_parent_bg (GdkWindow *window)
 {
@@ -198,6 +213,36 @@ _gdk_win32_window_tmp_unset_parent_bg (GdkWindow *window)
 }
 
 void
+_gdk_win32_window_tmp_reset_bg (GdkWindow *window,
+				gboolean   recurse)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (private->input_only || private->destroyed ||
+      (private->window_type != GDK_WINDOW_ROOT && !GDK_WINDOW_IS_MAPPED (window)))
+    return;
+
+  if (_gdk_window_has_impl (window) &&
+      GDK_WINDOW_IS_WIN32 (window) &&
+      private->window_type != GDK_WINDOW_ROOT &&
+      private->window_type != GDK_WINDOW_FOREIGN)
+    {
+      tmp_reset_bg (window);
+    }
+
+  if (recurse)
+    {
+      GList *l;
+
+      for (l = private->children; l != NULL; l = l->next)
+	_gdk_win32_window_tmp_reset_bg (l->data, TRUE);
+    }
+}
+
+/*
+void
 _gdk_win32_window_tmp_reset_bg (GdkWindow *window)
 {
   GdkWindowImplWin32 *impl;
@@ -208,6 +253,7 @@ _gdk_win32_window_tmp_reset_bg (GdkWindow *window)
 
   impl->no_bg = FALSE;
 }
+*/
 
 #if 0
 static GdkRegion *

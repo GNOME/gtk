@@ -2,7 +2,7 @@
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2004 Tor Lillqvist
  * Copyright (C) 2001-2004 Hans Breuer
- * Copyright (C) 2007 Cody Russell
+ * Copyright (C) 2007-2009 Cody Russell
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -235,15 +235,19 @@ gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
 void
 _gdk_root_window_size_init (void)
 {
-  GdkWindowImplWin32 *impl;
+  GdkWindowObject *window_object;
+  //GdkWindowImplWin32 *impl;
   GdkRectangle rect;
   int i;
 
-  impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) _gdk_root)->impl);
+  window_object = GDK_WINDOW_OBJECT (_gdk_root);
+  //impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) _gdk_root)->impl);
   rect = _gdk_monitors[0].rect;
   for (i = 1; i < _gdk_num_monitors; i++)
     gdk_rectangle_union (&rect, &_gdk_monitors[i].rect, &rect);
 
+  window_object->width = rect.width;
+  window_object->height = rect.height;
   //impl->width = rect.width;
   //impl->height = rect.height;
 }
@@ -526,15 +530,15 @@ _gdk_window_impl_new (GdkWindow     *window,
       private->depth = visual->depth;
       
       if (attributes_mask & GDK_WA_COLORMAP)
-		{
-		  draw_impl->colormap = attributes->colormap;
-		  g_object_ref (attributes->colormap);
-		}
-	  else
-		{
-		  draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
-		  g_object_ref (draw_impl->colormap);
-		}
+	{
+	  draw_impl->colormap = attributes->colormap;
+	  g_object_ref (attributes->colormap);
+	}
+      else
+	{
+	  draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
+	  g_object_ref (draw_impl->colormap);
+	}
     }
   else
     {
@@ -555,25 +559,25 @@ _gdk_window_impl_new (GdkWindow     *window,
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_DIALOG:
       if (GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)
-		{
-		  /* The common code warns for this case. */
-		  hparent = GetDesktopWindow ();
-		}
+	{
+	  /* The common code warns for this case. */
+	  hparent = GetDesktopWindow ();
+	}
       /* Children of foreign windows aren't toplevel windows */
       if (GDK_WINDOW_TYPE (orig_parent) == GDK_WINDOW_FOREIGN)
-		{
-		  dwStyle = WS_CHILDWINDOW | WS_CLIPCHILDREN;
-		}
+	{
+	  dwStyle = WS_CHILDWINDOW | WS_CLIPCHILDREN;
+	}
       else
-		{
-		  if (private->window_type == GDK_WINDOW_TOPLEVEL)
-			dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
-		  else
-			dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
+	{
+	  if (private->window_type == GDK_WINDOW_TOPLEVEL)
+	    dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
+	  else
+	    dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
 
-		  offset_x = _gdk_offset_x;
-		  offset_y = _gdk_offset_y;
-		}
+	  offset_x = _gdk_offset_x;
+	  offset_y = _gdk_offset_y;
+	}
       break;
 
 	  /*
@@ -2073,14 +2077,19 @@ gdk_win32_window_set_background (GdkWindow      *window,
 
 static void
 gdk_win32_window_set_back_pixmap (GdkWindow *window,
-								  GdkPixmap *pixmap)
+				  GdkPixmap *pixmap)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
+  if (private->bg_pixmap &&
+      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
+      private->bg_pixmap != GDK_NO_BG)
+    g_object_unref (private->bg_pixmap);
+
   if (pixmap == GDK_PARENT_RELATIVE_BG || pixmap == GDK_NO_BG)
-  {
-	  private->bg_pixmap = pixmap;
-  }
+    {
+      private->bg_pixmap = pixmap;
+    }
 }
 
 static void
@@ -2289,15 +2298,15 @@ gdk_win32_window_get_origin (GdkWindow *window,
 
 static gboolean
 gdk_win32_window_get_deskrelative_origin (GdkWindow *window,
-										  gint      *x,
-										  gint      *y)
+					  gint      *x,
+					  gint      *y)
 {
   return gdk_window_get_origin (window, x, y);
 }
 
 static void
 gdk_win32_window_restack_under (GdkWindow *window,
-								GList *native_siblings)
+				GList *native_siblings)
 {
 	// ### TODO
 }
@@ -2462,9 +2471,9 @@ gdk_display_warp_pointer (GdkDisplay *display,
 
 GdkWindow*
 _gdk_windowing_window_at_pointer (GdkDisplay *display,
-								  gint       *win_x,
-								  gint       *win_y,
-								  GdkModifierType *mask)
+				  gint       *win_x,
+				  gint       *win_y,
+				  GdkModifierType *mask)
 {
   GdkWindow *window;
   POINT point, pointc;

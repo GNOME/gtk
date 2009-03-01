@@ -1657,6 +1657,31 @@ _gdk_win32_blit (gboolean              use_fg_bg,
   else
     g_assert_not_reached ();
 
+  if (GDK_IS_WINDOW_IMPL_WIN32 (draw_impl) &&
+      GDK_IS_PIXMAP_IMPL_WIN32 (src_impl))
+    {
+      GdkPixmapImplWin32 *src_pixmap = GDK_PIXMAP_IMPL_WIN32 (src_impl);
+
+      if (xsrc < 0)
+	{
+	  width += xsrc;
+	  xdest -= xsrc;
+	  xsrc = 0;
+	}
+
+      if (ysrc < 0)
+	{
+	  height += ysrc;
+	  ydest -= ysrc;
+	  ysrc = 0;
+	}
+
+      if (xsrc + width > src_pixmap->width)
+	width = src_pixmap->width - xsrc;
+      if (ysrc + height > src_pixmap->height)
+	height = src_pixmap->height - ysrc;
+    }
+
   hdc = gdk_win32_hdc_get (&draw_impl->parent_instance, gc, GDK_GC_FOREGROUND);
 
   gdk_drawable_get_size (src, &src_width, &src_height);
@@ -1812,7 +1837,9 @@ _gdk_win32_drawable_acquire_dc (GdkDrawable *drawable)
       return impl->hdc;
     }
   else
-    return NULL;
+    {
+      return NULL;
+    }
 }
 
 /**
@@ -1854,13 +1881,20 @@ _gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
 				     gint width,
 				     gint height)
 {
-	GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
+  GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
+  RECT rect;
 
-	HDC hdc = _gdk_win32_drawable_acquire_dc (drawable);
-	if (!hdc)
-		return NULL;
+  HDC hdc = _gdk_win32_drawable_acquire_dc (drawable);
+  if (!hdc)
+    {
+      return NULL;
+    }
 
-	return cairo_win32_surface_create (hdc);
+  GetClipBox (hdc, &rect);
+  g_print ("create_cairo_surface(): [%d %d %d %d]\n",
+	   rect.left, rect.top, rect.right, rect.bottom);
+
+  return cairo_win32_surface_create (hdc);
 }
 
 static void
@@ -1890,7 +1924,9 @@ gdk_win32_ref_cairo_surface (GdkDrawable *drawable)
 				   drawable, gdk_win32_cairo_surface_destroy);
     }
   else
-    cairo_surface_reference (impl->cairo_surface);
+    {
+      cairo_surface_reference (impl->cairo_surface);
+    }
 
   return impl->cairo_surface;
 }
@@ -1901,6 +1937,7 @@ _gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
 				       gint height)
 {
   // Do nothing.  The surface size is determined by the DC
+  g_print ("*** set_cairo_surface_size()\n");
 }
 
 static gint
@@ -1946,9 +1983,10 @@ _gdk_win32_drawable_finish (GdkDrawable *drawable)
   if (impl->cairo_surface)
     {
       cairo_surface_finish (impl->cairo_surface);
-      cairo_surface_set_user_data (impl->cairo_surface, &gdk_win32_cairo_key,
-				   NULL, NULL);
+      cairo_surface_set_user_data (impl->cairo_surface, &gdk_win32_cairo_key, NULL, NULL);
     }
+
+  g_print ("hdc_count == %d\n", impl->hdc_count);
   
   //g_assert (impl->hdc_count == 0);
 }

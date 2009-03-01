@@ -1,7 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2002 Tor Lillqvist
- * Copyright (C) 2007-2008 Cody Russell
+ * Copyright (C) 2007-2009 Cody Russell
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -99,6 +99,7 @@ static gboolean is_modally_blocked (GdkWindow   *window);
 /* Private variable declarations
  */
 
+#if 0
 static GdkWindow *p_grab_window = NULL; /* Window that currently holds
 					 * the pointer grab
 					 */
@@ -108,6 +109,7 @@ static GdkWindow *p_grab_confine_to = NULL;
 static GdkWindow *k_grab_window = NULL; /* Window the holds the
 					 * keyboard grab
 					 */
+#endif
 
 static GList *client_filters;	/* Filters for client messages */
 
@@ -482,131 +484,43 @@ gdk_pointer_grab (GdkWindow    *window,
 		  GdkCursor    *cursor,
 		  guint32	time)
 {
-  HCURSOR hcursor;
-  GdkCursorPrivate *cursor_private;
-  gint return_val = GDK_GRAB_SUCCESS;
+  GdkWindow *native;
 
-  g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
-  
-  cursor_private = (GdkCursorPrivate*) cursor;
-  
-  if (!cursor)
-    hcursor = NULL;
-  else if ((hcursor = CopyCursor (cursor_private->hcursor)) == NULL)
-    WIN32_API_FAILED ("CopyCursor");
 
-  return_val = _gdk_input_grab_pointer (window,
-					owner_events,
-					event_mask,
-					confine_to,
-					time);
+  native = gdk_window_get_toplevel (window);
 
-  if (return_val == GDK_GRAB_SUCCESS)
-    {
-      if (!GDK_WINDOW_DESTROYED (window))
-	{
-	  GDK_NOTE (EVENTS, g_print ("%sgdk_pointer_grab: %p %s %p %s%s",
-				     (debug_indent > 0 ? "\n" : ""),
-				     GDK_WINDOW_HWND (window),
-				     (owner_events ? "TRUE" : "FALSE"),
-				     hcursor,
-				     event_mask_string (event_mask),
-				     (debug_indent == 0 ? "\n" : "")));
+  if (!GDK_IS_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (native)->impl))
+    return GDK_GRAB_SUCCESS;
 
-	  p_grab_mask = event_mask;
-	  p_grab_owner_events = owner_events;
-	  p_grab_automatic = FALSE;
-	  
-	  SetCapture (GDK_WINDOW_HWND (window));
-	  return_val = GDK_GRAB_SUCCESS;
-	}
-      else
-	return_val = GDK_GRAB_ALREADY_GRABBED;
-    }
-  
-  if (return_val == GDK_GRAB_SUCCESS)
-    {
-      GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl);
+  if (!_gdk_window_has_impl (window) &&
+      !gdk_window_is_viewable (window))
+    return GDK_GRAB_NOT_VIEWABLE;
 
-      if (p_grab_window != NULL && p_grab_window != window)
-	generate_grab_broken_event (p_grab_window, FALSE, window);
-      
-      assign_object (&p_grab_window, window);
+  _gdk_display_add_pointer_grab (_gdk_display,
+				 window,
+				 native,
+				 owner_events,
+				 event_mask,
+				 0,
+				 time,
+				 FALSE);
 
-      if (p_grab_cursor != NULL)
-	{
-	  if (GetCursor () == p_grab_cursor)
-	    SetCursor (NULL);
-	  DestroyCursor (p_grab_cursor);
-	}
-
-      p_grab_cursor = hcursor;
-
-      if (p_grab_cursor != NULL)
-	SetCursor (p_grab_cursor);
-      else if (impl->hcursor != NULL)
-	SetCursor (impl->hcursor);
-      else
-	SetCursor (LoadCursor (NULL, IDC_ARROW));
-
-      if (confine_to != NULL)
-	{
-	  gint x, y, width, height;
-	  RECT rect;
-
-	  gdk_window_get_origin (confine_to, &x, &y);
-	  gdk_drawable_get_size (confine_to, &width, &height);
-
-	  x -= _gdk_offset_x;
-	  y -= _gdk_offset_y;
-
-	  rect.left = x;
-	  rect.top = y;
-	  rect.right = x + width;
-	  rect.bottom = y + height;
-	  API_CALL (ClipCursor, (&rect));
-	  p_grab_confine_to = confine_to;
-	}
-
-      /* FIXME: Generate GDK_CROSSING_GRAB events */
-    }
-  
-  return return_val;
+  return GDK_GRAB_SUCCESS;
 }
 
 void
 gdk_display_pointer_ungrab (GdkDisplay *display,
                             guint32     time)
 {
-  g_return_if_fail (display == _gdk_display);
+  GdkPointerGrabInfo *info;
 
-  GDK_NOTE (EVENTS, g_print ("%sgdk_display_pointer_ungrab%s",
-			     (debug_indent > 0 ? "\n" : ""),
-			     (debug_indent == 0 ? "\n" : "")));
+  info = _gdk_display_get_last_pointer_grab (display);
+  if (info)
+    info->serial_end = 0;
 
-  _gdk_input_ungrab_pointer (time);
-
-  if (GetCapture () != NULL)
-    ReleaseCapture ();
-
-  /* FIXME: Generate GDK_CROSSING_UNGRAB events */
-
-  assign_object (&p_grab_window, NULL);
-  if (p_grab_cursor != NULL)
-    {
-      if (GetCursor () == p_grab_cursor)
-	SetCursor (NULL);
-      DestroyCursor (p_grab_cursor);
-      p_grab_cursor = NULL;
-    }
-
-  if (p_grab_confine_to != NULL)
-    {
-      API_CALL (ClipCursor, (NULL));
-      p_grab_confine_to = NULL;
-    }
+  _gdk_display_pointer_grab_update (display, 0);
 }
 
 static GdkWindow *
@@ -632,13 +546,19 @@ find_real_window_for_grabbed_mouse_event (GdkWindow* reported_window,
       GetClientRect (hwnd, &rect);
       ScreenToClient (hwnd, &pt);
       if (!PtInRect (&rect, pt))
-	return _gdk_root;
+	{
+	  g_print ("find_real_window_for_grabbed_mouse_event(), PtInRect() failed\n");
+	  return _gdk_root;
+	}
 
       other_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
     }
 
   if (other_window == NULL)
-    return _gdk_root;
+    {
+      g_print ("find_real_window_for_grabbed_mouse_event(), other_window == NULL\n");
+      return _gdk_root;
+    }
 
   return other_window;
 }
@@ -647,139 +567,54 @@ static GdkWindow*
 find_window_for_mouse_event (GdkWindow* reported_window,
 			     MSG*       msg)
 {
+  GdkPointerGrabInfo *info = _gdk_display_get_last_pointer_grab (_gdk_display);
+
+  if (!info || !info->window || !info->owner_events)
+    return reported_window;
+  else
+    return find_real_window_for_grabbed_mouse_event (reported_window, msg);
+
+#if 0
   if (p_grab_window == NULL || !p_grab_owner_events)
     return reported_window;
   else
     return find_real_window_for_grabbed_mouse_event (reported_window, msg);
-}
-
-#if 0
-gboolean
-gdk_display_pointer_is_grabbed (GdkDisplay *display)
-{
-  g_return_val_if_fail (display == _gdk_display, FALSE);
-  GDK_NOTE (EVENTS, g_print ("gdk_pointer_is_grabbed: %s\n",
-			     p_grab_window != NULL ? "TRUE" : "FALSE"));
-  return p_grab_window != NULL;
-}
 #endif
-
-#if 0
-gboolean
-gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
-				   GdkWindow **grab_window,
-				   gboolean   *owner_events)
-{
-  g_return_val_if_fail (display == _gdk_display, FALSE);
-
-  if (p_grab_window != NULL)
-    {
-      if (grab_window)
-        *grab_window = p_grab_window;
-      if (owner_events)
-        *owner_events = p_grab_owner_events;
-
-      return TRUE;
-    }
-  else
-    return FALSE;
 }
-#endif
 
 GdkGrabStatus
 gdk_keyboard_grab (GdkWindow *window,
 		   gboolean   owner_events,
 		   guint32    time)
 {
-  GdkWindow *real_focus_window, *grab_focus_window;
+  GdkDisplay *display;
+  GdkWindow  *toplevel;
 
-  gint return_val;
-  
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
   GDK_NOTE (EVENTS, g_print ("gdk_keyboard_grab %p%s\n",
 			     GDK_WINDOW_HWND (window), owner_events ? " OWNER_EVENTS" : ""));
 
-  if (!GDK_WINDOW_DESTROYED (window))
-    {
-      k_grab_owner_events = owner_events;
-      return_val = GDK_GRAB_SUCCESS;
-    }
-  else
-    return_val = GDK_GRAB_ALREADY_GRABBED;
+  display = gdk_drawable_get_display (window);
+  toplevel = gdk_window_get_toplevel (window);
 
-  if (return_val == GDK_GRAB_SUCCESS)
-    {
-      if (k_grab_window != NULL && k_grab_window != window)
-	generate_grab_broken_event (k_grab_window, TRUE, window);
+  _gdk_display_set_has_keyboard_grab (display,
+				      window,
+				      toplevel,
+				      owner_events,
+				      0,
+				      time);
 
-      assign_object (&k_grab_window, window);
-
-      if (!k_grab_owner_events)
-	{
-	  real_focus_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) GetFocus ());
-	  if (real_focus_window)
-	    real_focus_window = gdk_window_get_toplevel (real_focus_window);
-	  grab_focus_window = gdk_window_get_toplevel (k_grab_window);
-	  if (real_focus_window != grab_focus_window)
-	    {
-	      /* Generate events for focus change from the window that really
-	       * has focus to the grabber.
-	       */
-	      if (real_focus_window && !GDK_WINDOW_DESTROYED (real_focus_window)
-		  && (((GdkWindowObject *) real_focus_window)->event_mask
-		      & GDK_FOCUS_CHANGE_MASK))
-		generate_focus_event (real_focus_window, FALSE);
-
-	      if (((GdkWindowObject *) grab_focus_window)->event_mask 
-		  & GDK_FOCUS_CHANGE_MASK)
-		generate_focus_event (grab_focus_window, TRUE);
-	    }
-	}
-    }
-  
-  return return_val;
+  return GDK_GRAB_SUCCESS;
 }
 
 void
 gdk_display_keyboard_ungrab (GdkDisplay *display,
                              guint32 time)
 {
-  GdkWindow *real_focus_window, *grab_focus_window;
-
-  g_return_if_fail (display == _gdk_display);
-
   GDK_NOTE (EVENTS, g_print ("gdk_display_keyboard_ungrab\n"));
-
-  if (k_grab_window && !k_grab_owner_events)
-    {
-      real_focus_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) GetFocus ());
-      if (real_focus_window)
-	real_focus_window = gdk_window_get_toplevel (real_focus_window);
-      if (!GDK_WINDOW_DESTROYED (k_grab_window))
-	grab_focus_window = gdk_window_get_toplevel (k_grab_window);
-      else
-	grab_focus_window = NULL;
-      if (real_focus_window != grab_focus_window)
-	{
-	  /* Generate events for focus change from grabber to the window that
-	   * really has focus. Important for example if a new window is created
-	   * while focus is grabbed.
-	   */
-	  if (grab_focus_window
-	      && (((GdkWindowObject *) grab_focus_window)->event_mask
-		  & GDK_FOCUS_CHANGE_MASK))
-	    generate_focus_event (grab_focus_window, FALSE);
-
-	  if (real_focus_window && !GDK_WINDOW_DESTROYED (real_focus_window)
-	      && (((GdkWindowObject *) real_focus_window)->event_mask
-		  & GDK_FOCUS_CHANGE_MASK))
-	    generate_focus_event (real_focus_window, TRUE);
-	}
-    }
-
-  assign_object (&k_grab_window, NULL);
+  _gdk_display_unset_has_keyboard_grab (display, FALSE);
 }
 
 void 
@@ -792,7 +627,7 @@ gdk_display_add_client_message_filter (GdkDisplay   *display,
   gdk_add_client_message_filter (message_type, func, data);
 }
 
-void 
+void
 gdk_add_client_message_filter (GdkAtom       message_type,
 			       GdkFilterFunc func,
 			       gpointer      data)
@@ -1390,7 +1225,7 @@ synthesize_enter_or_leave_event (GdkWindow    	*window,
   event->crossing.detail = detail;
   event->crossing.focus = TRUE; /* FIXME: Set correctly */
   event->crossing.state = 0;	/* FIXME: Set correctly */
-  
+
   append_event (event);
   
   if (type == GDK_ENTER_NOTIFY &&
@@ -1405,8 +1240,11 @@ synthesize_leave_event (GdkWindow      *window,
 			GdkNotifyType   detail)
 {
   POINT pt;
+  GdkPointerGrabInfo *grab;
 
-  if (p_grab_window != NULL && !p_grab_owner_events && !(p_grab_mask & GDK_LEAVE_NOTIFY_MASK))
+  grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+
+  if (grab && grab->window != NULL && !grab->owner_events && !(grab->event_mask & GDK_LEAVE_NOTIFY_MASK))
     return;
 
   if (!(((GdkWindowObject *) window)->event_mask & GDK_LEAVE_NOTIFY_MASK))
@@ -1439,8 +1277,11 @@ synthesize_enter_event (GdkWindow      *window,
 			GdkNotifyType   detail)
 {
   POINT pt;
+  GdkPointerGrabInfo *grab;
 
-  if (p_grab_window != NULL && !p_grab_owner_events && !(p_grab_mask & GDK_ENTER_NOTIFY_MASK))
+  grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+
+  if (grab && grab->window != NULL && !grab->owner_events && !(grab->event_mask & GDK_ENTER_NOTIFY_MASK))
     return;
 
   if (!(((GdkWindowObject *) window)->event_mask & GDK_ENTER_NOTIFY_MASK))
@@ -1473,6 +1314,7 @@ synthesize_enter_events (GdkWindow      *from,
   
   if (prev != from)
     synthesize_enter_events (from, prev, msg, mode, detail);
+
   synthesize_enter_event (to, msg, mode, detail);
 }
 			 
@@ -1486,6 +1328,7 @@ synthesize_leave_events (GdkWindow    	*from,
   GdkWindow *next = gdk_window_get_parent (from);
   
   synthesize_leave_event (from, msg, mode, detail);
+
   if (next != to)
     synthesize_leave_events (next, to, msg, mode, detail);
 }
@@ -1842,6 +1685,7 @@ handle_configure_event (MSG       *msg,
   GetClientRect (msg->hwnd, &client_rect);
   point.x = client_rect.left; /* always 0 */
   point.y = client_rect.top;
+
   /* top level windows need screen coords */
   if (gdk_window_get_parent (window) == _gdk_root)
     {
@@ -1857,6 +1701,8 @@ handle_configure_event (MSG       *msg,
   
   window_object->x = point.x;
   window_object->y = point.y;
+
+  _gdk_window_update_size (window);
   
   if (window_object->event_mask & GDK_STRUCTURE_MASK)
     {
@@ -2021,13 +1867,10 @@ handle_wm_paint (MSG        *msg,
 
   update_region = _gdk_win32_hrgn_to_region (hrgn);
 
+
   //_gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
   //gdk_region_offset (update_region, xoffset, yoffset);
 
-  //  g_print ("handle_wm_paint: rect [%d %d %d %d]\n",
-  //	   update_region->x, update_region->y,
-  //	   update_region->width, update_region->height);
-  
   _gdk_window_process_expose (window, update_region);
   gdk_region_destroy (update_region);
 
@@ -2268,6 +2111,11 @@ gdk_event_translate (MSG  *msg,
 
   GdkWindow *orig_window, *new_window;
 
+  GdkPointerGrabInfo *grab = NULL;
+  GdkWindow *grab_window = NULL;
+  guint grab_mask = 0;
+  gboolean grab_owner_events = FALSE;
+
   static gint update_colors_counter = 0;
   gint button;
   GdkAtom target;
@@ -2444,11 +2292,19 @@ gdk_event_translate (MSG  *msg,
       /* Let the system handle Alt-Tab, Alt-Space and Alt-F4 unless
        * the keyboard is grabbed.
        */
+#if 0
       if (k_grab_window == NULL &&
 	  (msg->wParam == VK_TAB ||
 	   msg->wParam == VK_SPACE ||
 	   msg->wParam == VK_F4))
 	break;
+#else
+      if (_gdk_display->keyboard_grab.window == NULL &&
+	  (msg->wParam == VK_TAB ||
+	   msg->wParam == VK_SPACE ||
+	   msg->wParam == VK_F4))
+	break;
+#endif
 
       /* Jump to code in common with WM_KEYUP and WM_KEYDOWN */
       goto keyup_or_down;
@@ -2469,7 +2325,9 @@ gdk_event_translate (MSG  *msg,
 	break;
 
       if (!propagate (&window, msg,
-		      k_grab_window, k_grab_owner_events, GDK_ALL_EVENTS_MASK,
+		      _gdk_display->keyboard_grab.window,
+		      _gdk_display->keyboard_grab.owner_events,
+		      GDK_ALL_EVENTS_MASK,
 		      doesnt_want_key, FALSE))
 	break;
 
@@ -2571,7 +2429,9 @@ gdk_event_translate (MSG  *msg,
 	break;
 
       if (!propagate (&window, msg,
-		      k_grab_window, k_grab_owner_events, GDK_ALL_EVENTS_MASK,
+		      _gdk_display->keyboard_grab.window,
+		      _gdk_display->keyboard_grab.owner_events,
+		      GDK_ALL_EVENTS_MASK,
 		      doesnt_want_char, FALSE))
 	break;
 
@@ -2637,6 +2497,36 @@ gdk_event_translate (MSG  *msg,
 
       assign_object (&window, find_window_for_mouse_event (window, msg));
 
+      grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+      if (grab)
+	{
+	  grab_window = grab->window;
+	  grab_mask = grab->event_mask;
+	  grab_owner_events = grab->owner_events;
+	}
+
+      if (grab_window != NULL)
+	{
+	  GdkWindow *real_window = find_real_window_for_grabbed_mouse_event (window, msg);
+
+	  if (real_window != current_window)
+	    {
+	      synthesize_crossing_events (real_window, GDK_CROSSING_NORMAL, msg);
+	    }
+	}
+      else
+	{
+	  if (window != current_window)
+	    {
+	      synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
+	    }
+	}
+
+      if (!propagate (&window, msg, grab_window, grab_owner_events, grab_mask,
+		      doesnt_want_button_press, TRUE))
+	break;
+
+#if 0
       if (p_grab_window != NULL)
 	{
 	  GdkWindow *real_window = find_real_window_for_grabbed_mouse_event (window, msg);
@@ -2654,10 +2544,12 @@ gdk_event_translate (MSG  *msg,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_button_press, TRUE))
 	break;
+#endif
 
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
+#if 0
       /* Emulate X11's automatic active grab */
       if (!p_grab_window)
 	{
@@ -2669,6 +2561,9 @@ gdk_event_translate (MSG  *msg,
 			    NULL, NULL, 0);
 	  p_grab_automatic = TRUE;
 	}
+#endif
+
+      g_print ("generate_button_event()\n");
 
       generate_button_event (GDK_BUTTON_PRESS, button,
 			     window, orig_window, msg);
@@ -2701,6 +2596,7 @@ gdk_event_translate (MSG  *msg,
 
       assign_object (&window, find_window_for_mouse_event (window, msg));
 
+#if 0
       if (p_grab_window != NULL)
 	{
 	  GdkWindow *real_window = find_real_window_for_grabbed_mouse_event (window, msg);
@@ -2713,6 +2609,10 @@ gdk_event_translate (MSG  *msg,
 	  if (window != current_window)
 	    synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
 	}
+#else
+      if (window != current_window)
+	synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
+#endif
 
 #if 0
       if (((GdkWindowObject *) window)->extension_events != 0 &&
@@ -2723,6 +2623,7 @@ gdk_event_translate (MSG  *msg,
 	}
 #endif
 
+#if 0
       if (!propagate (&window, msg,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_button_release, TRUE))
@@ -2733,7 +2634,15 @@ gdk_event_translate (MSG  *msg,
 	  generate_button_event (GDK_BUTTON_RELEASE, button,
 				 window, orig_window, msg);
 	}
+#else
+      if (!GDK_WINDOW_DESTROYED (window))
+	{
+	  generate_button_event (GDK_BUTTON_RELEASE, button,
+				 window, orig_window, msg);
+	}
+#endif
 
+#if 0
       if (p_grab_window != NULL &&
 	  p_grab_automatic &&
 	  (msg->wParam & (MK_LBUTTON | MK_MBUTTON | MK_RBUTTON)) == 0)
@@ -2741,6 +2650,7 @@ gdk_event_translate (MSG  *msg,
 	  /* Terminate automatic grab */
 	  gdk_pointer_ungrab (0);
 	}
+#endif
 
       return_val = TRUE;
       break;
@@ -2764,6 +2674,52 @@ gdk_event_translate (MSG  *msg,
 
       assign_object (&window, find_window_for_mouse_event (window, msg));
 
+      if (window != current_window)
+	synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
+
+      GdkPointerGrabInfo *grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+      if (grab != NULL)
+	{
+	  grab_window = grab->window;
+	  grab_owner_events = grab->owner_events;
+	  grab_mask = grab->event_mask;
+	}
+
+      if (grab_window != NULL)
+	{
+	  GdkWindow *real_window = find_real_window_for_grabbed_mouse_event (window, msg);
+
+	  if (real_window != current_window)
+	    {
+	      if (grab_owner_events)
+		{
+		  synthesize_crossing_events (real_window, GDK_CROSSING_NORMAL, msg);
+		}
+	      else if (current_window == grab_window)
+		{
+		  synthesize_leave_event (grab_window, msg, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
+		  assign_object (&current_window, _gdk_root);
+		}
+	      else if (real_window == grab_window)
+		{
+		  synthesize_enter_event (grab_window, msg, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
+		  assign_object (&current_window, grab_window);
+		}
+	    }
+	}
+      else
+	{
+	  if (window != current_window)
+	    {
+	      synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
+	    }
+	}
+
+      if (!propagate (&window, msg, grab_window, grab_owner_events, grab_mask,
+		      doesnt_want_button_motion, TRUE))
+	break;
+
+#if 0
       if (p_grab_window != NULL)
 	{
 	  GdkWindow *real_window = find_real_window_for_grabbed_mouse_event (window, msg);
@@ -2789,19 +2745,28 @@ gdk_event_translate (MSG  *msg,
       else
 	{
 	  if (window != current_window)
-	    synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
+	    {
+	      synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
+	    }
 	}
 
       if (!propagate (&window, msg,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_button_motion, TRUE))
-	break;
+	{
+	  g_print ("!propagate\n");
+	  break;
+	}
+#endif
 
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
       if (window != orig_window)
-	translate_mouse_coords (orig_window, window, msg);
+	{
+	  g_print ("translate_mouse_coords()\n");
+	  translate_mouse_coords (orig_window, window, msg);
+	}
 
       event = gdk_event_new (GDK_MOTION_NOTIFY);
       event->motion.window = window;
@@ -2881,10 +2846,12 @@ gdk_event_translate (MSG  *msg,
 	  assign_object (&window, new_window);
 	}
 
+#if 0
       if (!propagate (&window, msg,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_scroll, TRUE))
 	break;
+#endif
 
       if (GDK_WINDOW_DESTROYED (window))
 	break;
@@ -3001,16 +2968,16 @@ gdk_event_translate (MSG  *msg,
        break;
 
     case WM_KILLFOCUS:
-      if (p_grab_window != NULL && !GDK_WINDOW_DESTROYED (p_grab_window))
-	generate_grab_broken_event (p_grab_window, FALSE, NULL);
-
-      if (k_grab_window != NULL && !GDK_WINDOW_DESTROYED (k_grab_window) 
-	  && k_grab_window != p_grab_window)
-	generate_grab_broken_event (k_grab_window, TRUE, NULL);
+      if (_gdk_display->keyboard_grab.window != NULL &&
+	  !GDK_WINDOW_DESTROYED (_gdk_display->keyboard_grab.window))
+	{
+	  generate_grab_broken_event (_gdk_display->keyboard_grab.window, FALSE, NULL);
+	}
 
       /* fallthrough */
     case WM_SETFOCUS:
-      if (k_grab_window != NULL && !k_grab_owner_events)
+      if (_gdk_display->keyboard_grab.window != NULL &&
+	  !_gdk_display->keyboard_grab.owner_events)
 	break;
 
       if (!(((GdkWindowObject *) window)->event_mask & GDK_FOCUS_CHANGE_MASK))
@@ -3047,10 +3014,16 @@ gdk_event_translate (MSG  *msg,
       GDK_NOTE (EVENTS, g_print (" %#x %#x",
 				 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
-      if (p_grab_window == NULL && LOWORD (msg->lParam) != HTCLIENT)
+      grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+      if (grab != NULL)
+	{
+	  grab_window = grab->window;
+	}
+
+      if (grab_window == NULL && LOWORD (msg->lParam) != HTCLIENT)
 	break;
 
-      if (p_grab_window != NULL && p_grab_cursor != NULL)
+      if (grab_window != NULL && p_grab_cursor != NULL)
 	hcursor = p_grab_cursor;
       else if (!GDK_WINDOW_DESTROYED (window))
 	hcursor = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->hcursor;
@@ -3100,6 +3073,7 @@ gdk_event_translate (MSG  *msg,
 	      SetForegroundWindow (GDK_WINDOW_HWND (impl->transient_owner));
 	    }
 
+#if 0
 	  if (p_grab_window == window)
 	    {
 	      gdk_pointer_ungrab (msg->time);
@@ -3109,6 +3083,7 @@ gdk_event_translate (MSG  *msg,
 	    {
 	      gdk_keyboard_ungrab (msg->time);
 	    }
+#endif
 	}
 
       return_val = TRUE;
@@ -3139,11 +3114,13 @@ gdk_event_translate (MSG  *msg,
 	{
 	  /* Don't generate any GDK event. This is *not* an UNMAP. */
 
+#if 0
 	  if (p_grab_window == window)
 	    gdk_pointer_ungrab (msg->time);
 
 	  if (k_grab_window == window)
 	    gdk_keyboard_ungrab (msg->time);
+#endif
 
 	  gdk_synthesize_window_state (window,
 				       GDK_WINDOW_STATE_WITHDRAWN,
@@ -3583,11 +3560,13 @@ gdk_event_translate (MSG  *msg,
       if (window == current_window)
 	assign_object (&current_window, _gdk_root);
 
+#if 0
       if (p_grab_window == window)
 	gdk_pointer_ungrab (msg->time);
 
       if (k_grab_window == window)
 	gdk_keyboard_ungrab (msg->time);
+#endif
 
       if ((window != NULL) && (msg->hwnd != GetDesktopWindow ()))
 	gdk_window_destroy_notify (window);
