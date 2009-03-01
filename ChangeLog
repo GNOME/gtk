@@ -1,5 +1,13 @@
 2009-03-01  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 573515 – po-properties/ special Makefile.in.in handling causes
+	failure to build
+
+	* configure.in: Generate po-properties/POTFILES at configure time.
+	Patch by Loïc Minier
+
+2009-03-01  Matthias Clasen  <mclasen@redhat.com>
+
 	* demos/gtk-demo/appwindow.c: Set the program-name property
 	of the about dialog.
 
