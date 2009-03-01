@@ -1,5 +1,12 @@
 2009-03-01  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 573393 – Deprecated functions in gdk-Threads example code snippet
+
+	* gdk/tmpl/threads.sgml: Don't use deprecated GTK+ api.
+	Spotted by Andre Klapper
+
+2009-03-01  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/images/messagedialog.png: Fix this image
 
 	* gtk/images/aboutdialog.png: New image
