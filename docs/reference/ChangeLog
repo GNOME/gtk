@@ -1,3 +1,11 @@
+2009-03-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/images/messagedialog.png: Fix this image
+
+	* gtk/images/aboutdialog.png: New image
+	* gtk/Makefile.am: Add it here.
+	* gtk/visual_index.xml: And here.
+
 2009-02-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_window_get_default_icon_name

@@ -1,9 +1,10 @@
+#include "config.h"
+
 #include <gtk/gtkunixprint.h>
 #include <gdk/gdkkeysyms.h>
 #include <X11/Xatom.h>
 #include <gdkx.h>
 #include "widgets.h"
-
 
 #define SMALL_WIDTH  240
 #define SMALL_HEIGHT 75
@@ -765,9 +766,37 @@ create_message_dialog (void)
 				   GTK_MESSAGE_INFO,
 				   GTK_BUTTONS_OK,
 				   NULL);
+  gtk_window_set_icon_name (GTK_WINDOW (widget), "gtk-copy");
   gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (widget),
 				 "<b>Message Dialog</b>\n\nWith secondary text");
-  return new_widget_info ("messagedialog", widget, MEDIUM);
+  return new_widget_info ("messagedialog", widget, ASIS);
+}
+
+static WidgetInfo *
+create_about_dialog (void)
+{
+  GtkWidget *widget;
+  const gchar *authors[] = {
+    "Peter Mattis",
+    "Spencer Kimball",
+    "Josh MacDonald",
+    "and many more...",
+    NULL
+  };
+
+  widget = gtk_about_dialog_new ();
+  g_object_set (widget,
+                "program-name", "GTK+ Code Demos",
+                "version", PACKAGE_VERSION,
+                "copyright", "(C) 1997-2009 The GTK+ Team",
+                "website", "http://www.gtk.org",
+                "comments", "Program to demonstrate GTK+ functions.",
+                "logo-icon-name", "gtk-about",
+                "title", "About GTK+ Code Demos",
+                "authors", authors,
+		NULL);
+  gtk_window_set_icon_name (GTK_WINDOW (widget), "gtk-about");
+  return new_widget_info ("aboutdialog", widget, ASIS);
 }
 
 static WidgetInfo *
@@ -956,6 +985,7 @@ get_all_widgets (void)
 {
   GList *retval = NULL;
 
+  retval = g_list_prepend (retval, create_about_dialog ());
   retval = g_list_prepend (retval, create_accel_label ());
   retval = g_list_prepend (retval, create_button ());
   retval = g_list_prepend (retval, create_check_button ());

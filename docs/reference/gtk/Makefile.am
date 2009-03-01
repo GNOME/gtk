@@ -295,6 +295,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/gtk-fullscreen.png		\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-leave-fullscreen.png	\
 	$(top_srcdir)/gtk/stock-icons/24/gtk-info.png			\
+	$(srcdir)/images/aboutdialog.png				\
 	$(srcdir)/images/accel-label.png				\
 	$(srcdir)/images/assistant.png					\
 	$(srcdir)/images/button.png					\

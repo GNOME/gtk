@@ -1,3 +1,10 @@
+2009-03-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* demos/gtk-demo/appwindow.c: Set the program-name property
+	of the about dialog.
+
+	* docs/tools/widgets.c: Add GtkAboutDialog
+
 2009-02-28  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 572273 – No replacement documented for gtk_action_connect_proxy()
