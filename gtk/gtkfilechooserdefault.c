@@ -2430,7 +2430,7 @@ edited_idle_cb (GtkFileChooserDefault *impl)
 	{
 	  GError *error = NULL;
 
-	  if (!g_file_make_directory (file, NULL, &error))
+	  if (g_file_make_directory (file, NULL, &error))
 	    change_folder_and_display_error (impl, file, FALSE);
 	  else
 	    error_creating_folder_dialog (impl, file, error);

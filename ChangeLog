@@ -1,5 +1,13 @@
 2009-03-01  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 552619 – File Chooser no longer automatically enters newly created
+	directories
+
+	* gtk/gtkfilechooserdefault.c (edited_idle_cb): Switch to the newly
+	created folder on success.
+
+2009-03-01  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 573515 – po-properties/ special Makefile.in.in handling causes
 	failure to build
 
