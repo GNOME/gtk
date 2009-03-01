@@ -573,13 +573,6 @@ find_window_for_mouse_event (GdkWindow* reported_window,
     return reported_window;
   else
     return find_real_window_for_grabbed_mouse_event (reported_window, msg);
-
-#if 0
-  if (p_grab_window == NULL || !p_grab_owner_events)
-    return reported_window;
-  else
-    return find_real_window_for_grabbed_mouse_event (reported_window, msg);
-#endif
 }
 
 GdkGrabStatus
@@ -2292,19 +2285,11 @@ gdk_event_translate (MSG  *msg,
       /* Let the system handle Alt-Tab, Alt-Space and Alt-F4 unless
        * the keyboard is grabbed.
        */
-#if 0
-      if (k_grab_window == NULL &&
-	  (msg->wParam == VK_TAB ||
-	   msg->wParam == VK_SPACE ||
-	   msg->wParam == VK_F4))
-	break;
-#else
       if (_gdk_display->keyboard_grab.window == NULL &&
 	  (msg->wParam == VK_TAB ||
 	   msg->wParam == VK_SPACE ||
 	   msg->wParam == VK_F4))
 	break;
-#endif
 
       /* Jump to code in common with WM_KEYUP and WM_KEYDOWN */
       goto keyup_or_down;
@@ -2526,32 +2511,12 @@ gdk_event_translate (MSG  *msg,
 		      doesnt_want_button_press, TRUE))
 	break;
 
-#if 0
-      if (p_grab_window != NULL)
-	{
-	  GdkWindow *real_window = find_real_window_for_grabbed_mouse_event (window, msg);
-
-	  if (real_window != current_window)
-	    synthesize_crossing_events (real_window, GDK_CROSSING_NORMAL, msg);
-	}
-      else
-	{
-	  if (window != current_window)
-	    synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
-	}
-
-      if (!propagate (&window, msg,
-		      p_grab_window, p_grab_owner_events, p_grab_mask,
-		      doesnt_want_button_press, TRUE))
-	break;
-#endif
-
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
-#if 0
       /* Emulate X11's automatic active grab */
-      if (!p_grab_window)
+      /*     XXX: Do we still want this with CSW? -- Cody */
+      if (!grab_window)
 	{
 	  /* No explicit active grab, let's start one automatically */
 	  GDK_NOTE (EVENTS, g_print (" (automatic grab)"));
@@ -2561,7 +2526,6 @@ gdk_event_translate (MSG  *msg,
 			    NULL, NULL, 0);
 	  p_grab_automatic = TRUE;
 	}
-#endif
 
       g_print ("generate_button_event()\n");
 
@@ -2596,8 +2560,15 @@ gdk_event_translate (MSG  *msg,
 
       assign_object (&window, find_window_for_mouse_event (window, msg));
 
-#if 0
-      if (p_grab_window != NULL)
+      grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+      if (grab != NULL)
+	{
+	  grab_window = grab->window;
+	  grab_owner_events = grab->owner_events;
+	  grab_mask = grab->event_mask;
+	}
+
+      if (grab_window != NULL)
 	{
 	  GdkWindow *real_window = find_real_window_for_grabbed_mouse_event (window, msg);
 
@@ -2609,10 +2580,6 @@ gdk_event_translate (MSG  *msg,
 	  if (window != current_window)
 	    synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
 	}
-#else
-      if (window != current_window)
-	synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
-#endif
 
 #if 0
       if (((GdkWindowObject *) window)->extension_events != 0 &&
@@ -2623,10 +2590,8 @@ gdk_event_translate (MSG  *msg,
 	}
 #endif
 
-#if 0
-      if (!propagate (&window, msg,
-		      p_grab_window, p_grab_owner_events, p_grab_mask,
-		      doesnt_want_button_release, TRUE))
+      if (!propagate (&window, msg, grab_window, grab_owner_events,
+		      grab_mask, doesnt_want_button_release, TRUE))
 	{
 	}
       else if (!GDK_WINDOW_DESTROYED (window))
@@ -2634,23 +2599,12 @@ gdk_event_translate (MSG  *msg,
 	  generate_button_event (GDK_BUTTON_RELEASE, button,
 				 window, orig_window, msg);
 	}
-#else
-      if (!GDK_WINDOW_DESTROYED (window))
-	{
-	  generate_button_event (GDK_BUTTON_RELEASE, button,
-				 window, orig_window, msg);
-	}
-#endif
 
-#if 0
-      if (p_grab_window != NULL &&
-	  p_grab_automatic &&
-	  (msg->wParam & (MK_LBUTTON | MK_MBUTTON | MK_RBUTTON)) == 0)
+      if (grab_window != NULL && p_grab_automatic &&
+	  (msg->wParam && (MK_LBUTTON | MK_MBUTTON | MK_RBUTTON)) == 0)
 	{
-	  /* Terminate automatic grab */
 	  gdk_pointer_ungrab (0);
 	}
-#endif
 
       return_val = TRUE;
       break;
@@ -2715,46 +2669,10 @@ gdk_event_translate (MSG  *msg,
 	    }
 	}
 
+#if 0   // XXX - this seems to always block us from creating motion notify events -- Cody
       if (!propagate (&window, msg, grab_window, grab_owner_events, grab_mask,
 		      doesnt_want_button_motion, TRUE))
-	break;
-
-#if 0
-      if (p_grab_window != NULL)
 	{
-	  GdkWindow *real_window = find_real_window_for_grabbed_mouse_event (window, msg);
-
-	  if (real_window != current_window)
-	    {
-	      if (p_grab_owner_events)
-		{
-		  synthesize_crossing_events (real_window, GDK_CROSSING_NORMAL, msg);
-		}
-	      else if (current_window == p_grab_window)
-		{
-		  synthesize_leave_event (p_grab_window, msg, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
-		  assign_object (&current_window, _gdk_root);
-		}
-	      else if (real_window == p_grab_window)
-		{
-		  synthesize_enter_event (p_grab_window, msg, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
-		  assign_object (&current_window, p_grab_window);
-		}
-	    }
-	}
-      else
-	{
-	  if (window != current_window)
-	    {
-	      synthesize_crossing_events (window, GDK_CROSSING_NORMAL, msg);
-	    }
-	}
-
-      if (!propagate (&window, msg,
-		      p_grab_window, p_grab_owner_events, p_grab_mask,
-		      doesnt_want_button_motion, TRUE))
-	{
-	  g_print ("!propagate\n");
 	  break;
 	}
 #endif
@@ -2764,7 +2682,6 @@ gdk_event_translate (MSG  *msg,
 
       if (window != orig_window)
 	{
-	  g_print ("translate_mouse_coords()\n");
 	  translate_mouse_coords (orig_window, window, msg);
 	}
 
@@ -2846,12 +2763,20 @@ gdk_event_translate (MSG  *msg,
 	  assign_object (&window, new_window);
 	}
 
-#if 0
-      if (!propagate (&window, msg,
-		      p_grab_window, p_grab_owner_events, p_grab_mask,
-		      doesnt_want_scroll, TRUE))
+      grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+      if (grab != NULL)
+	{
+	  grab_window = grab->window;
+	  grab_mask = grab->event_mask;
+	  grab_owner_events = grab->owner_events;
+	}
+
+      if (!propagate (&window, msg, grab_window,
+		      grab_owner_events,
+		      grab_mask,
+		      doesnt_want_scroll,
+		      TRUE))
 	break;
-#endif
 
       if (GDK_WINDOW_DESTROYED (window))
 	break;
@@ -3073,17 +2998,15 @@ gdk_event_translate (MSG  *msg,
 	      SetForegroundWindow (GDK_WINDOW_HWND (impl->transient_owner));
 	    }
 
-#if 0
-	  if (p_grab_window == window)
+	  grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+	  if (grab != NULL)
 	    {
-	      gdk_pointer_ungrab (msg->time);
+	      if (grab->window == window)
+		gdk_pointer_ungrab (msg->time);
 	    }
 
-	  if (k_grab_window == window)
-	    {
-	      gdk_keyboard_ungrab (msg->time);
-	    }
-#endif
+	  if (_gdk_display->keyboard_grab.window == window)
+	    gdk_keyboard_ungrab (msg->time);
 	}
 
       return_val = TRUE;
@@ -3113,14 +3036,14 @@ gdk_event_translate (MSG  *msg,
       if (msg->wParam == SIZE_MINIMIZED)
 	{
 	  /* Don't generate any GDK event. This is *not* an UNMAP. */
-
-#if 0
-	  if (p_grab_window == window)
-	    gdk_pointer_ungrab (msg->time);
-
-	  if (k_grab_window == window)
+	  grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+	  if (grab != NULL)
+	    {
+	      if (grab->window == window)
+		gdk_pointer_ungrab (msg->time);
+	    }
+	  if (_gdk_display->keyboard_grab.window == window)
 	    gdk_keyboard_ungrab (msg->time);
-#endif
 
 	  gdk_synthesize_window_state (window,
 				       GDK_WINDOW_STATE_WITHDRAWN,
@@ -3560,13 +3483,15 @@ gdk_event_translate (MSG  *msg,
       if (window == current_window)
 	assign_object (&current_window, _gdk_root);
 
-#if 0
-      if (p_grab_window == window)
-	gdk_pointer_ungrab (msg->time);
+      grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+      if (grab != NULL)
+	{
+	  if (grab->window == window)
+	    gdk_pointer_ungrab (msg->time);
+	}
 
-      if (k_grab_window == window)
+      if (_gdk_display->keyboard_grab.window == window)
 	gdk_keyboard_ungrab (msg->time);
-#endif
 
       if ((window != NULL) && (msg->hwnd != GetDesktopWindow ()))
 	gdk_window_destroy_notify (window);
