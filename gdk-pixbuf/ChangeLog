@@ -1,3 +1,12 @@
+2009-03-01  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 569671 – gdk_pixbuf_new_from_file() can't open
+	image/x-portable-pixmap
+
+	* gdk-pixbuf-io.c (_gdk_pixbuf_get_module): If pure sniffing
+	yields uncertain results, try again with the filename.
+	Patch by Tyler Lawson
+
 2009-02-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.15.4 ===
