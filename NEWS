@@ -1,3 +1,67 @@
+Overview of Changes from GTK+ 2.15.4 to 2.15.5
+==============================================
+
+* GtkAction:
+ - Rename gtk_activatable_reset to gtk_activatable_sync_action_properties
+   to make it easier to bind
+
+* GDK:
+ - The DirectFB backend has been restored to basic function
+ - The RANDR support in the X11 backend has been made more robust
+
+* Changes that are relevant for theme authors:
+ - GtkEntry now has a ::progress-border property and use fg/bg[SELECTED]
+   for drawing progress
+
+* Bugs fixed:
+ 457086 numpad does not work when the Thai-Lao input method is used
+ 554407 directfb backend does not implement GdkWindowImpl
+ 543710 Dead keys do not work anymore with DirectFB
+ 560671 the client_message API doesn't work in DirectFB
+ 513422 Unknown meaning of translatable messages
+ 533456 Memory leak when window is destroyed
+ 572387 gdm crashes after gtk 2.15.4 upgrade
+ 565199 Ellipsize text in Places list
+ 495320 GtkRange does not use gdk_event_request_motions
+ 572904 GtkRadioAction broken in trunk
+ 573383 Setting a textview's buffer to NULL doesn't do a complete job
+ 573416 GtkMountOperation fixes for ask_password()
+ 572968 GtkIconView: image_description setter function strdups wrong...
+ 572972 GtkRecentChooserDefault: memory leak in copy_activated_cb
+ 572996 crash in Home Folder: Trying to open the sidebar
+ 573069 Gdk-CRITICAL warnings with Gtk 2.14 when dragging GtkNotebook...
+ 573113 Can't build tests due to testfilechooserbutton.c
+ 573211 Setting screen for popup windows
+ 573287 Warning on startup
+ 572273 No replacement documented for gtk_action_connect_proxy
+ 573515 po-properties/ special Makefile.in.in handling causes failure...
+ 552619 File Chooser no longer automatically enters newly created dir...
+ 573087 gdkwindow.c: {x,y}_offset used uninitialized
+ 573688 Don't steal update region in gtk_text_view_paint
+ 546285 Allow GtkEntry to draw progress
+ 569671 gdk_pixbuf_new_from_file() can't open image/x-portable-pixmap
+ 573393 Deprecated functions in gdk-Threads example code snippet
+ 571001 STATE_SHOWING missing on table items
+ 520395 event.any_data incorrect with spin buttons and combo boxes...
+ 325809 getAccessibleAtPoint for tables does not seem to take column...
+ 561631 gailbutton.c:571:idle_do_action: code should not be reached
+ 519090 Add accessibility support to GtkScaleButton
+
+* Updated translations:
+ British English (en_GB)
+ Estonian (et)
+ Hungarian (hu)
+ Japanese (ja)
+ Korean (ko)
+ Kurdish (ku)
+ Maithili (mai)
+ Dutch (nl)
+ Oriya (or)
+ Swedish (sv)
+ Traditional Chinese (zh_HK)
+ Traditional Chinese (zh_TW)
+
+
 Overview of Changes from GTK+ 2.15.3 to 2.15.4
 ==============================================
 
