@@ -257,7 +257,7 @@ static void   gtk_entry_size_request         (GtkWidget        *widget,
 static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
 static void   gtk_entry_draw_frame           (GtkWidget        *widget,
-                                              GdkRectangle     *area);
+                                              GdkEventExpose   *event);
 static void   gtk_entry_draw_progress        (GtkWidget        *widget,
                                               GdkEventExpose   *event);
 static gint   gtk_entry_expose               (GtkWidget        *widget,
@@ -1198,6 +1198,20 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                  P_("Whether activatable icons should prelight when hovered"),
                                                                  TRUE,
                                                                  GTK_PARAM_READABLE));
+
+  /**
+   * GtkEntry::progress-border:
+   *
+   * The border around the progress bar in the entry.
+   *
+   * Since: 2.16
+   */
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_boxed ("progress-border",
+                                                               P_("Progress Border"),
+                                                               P_("Border around the progress bar"),
+                                                               GTK_TYPE_BORDER,
+                                                               GTK_PARAM_READABLE));
   
   /**
    * GtkEntry::populate-popup:
@@ -3094,8 +3108,8 @@ draw_icon (GtkWidget            *widget,
 
 
 static void
-gtk_entry_draw_frame (GtkWidget    *widget,
-                      GdkRectangle *area)
+gtk_entry_draw_frame (GtkWidget      *widget,
+                      GdkEventExpose *event)
 {
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
   gint x = 0, y = 0, width, height;
@@ -3134,7 +3148,10 @@ gtk_entry_draw_frame (GtkWidget    *widget,
 
   gtk_paint_shadow (widget->style, widget->window,
                     state, priv->shadow_type,
-                    area, widget, "entry", x, y, width, height);
+                    &event->area, widget, "entry", x, y, width, height);
+
+
+  gtk_entry_draw_progress (widget, event);
 
   if (GTK_WIDGET_HAS_FOCUS (widget) && !priv->interior_focus)
     {
@@ -3144,8 +3161,89 @@ gtk_entry_draw_frame (GtkWidget    *widget,
       height += 2 * priv->focus_width;
       
       gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
-		       area, widget, "entry",
+		       &event->area, widget, "entry",
 		       0, 0, width, height);
+    }
+}
+
+static void
+gtk_entry_get_progress_border (GtkWidget *widget,
+                               GtkBorder *progress_border)
+{
+  GtkBorder *tmp_border;
+
+  gtk_widget_style_get (widget, "progress-border", &tmp_border, NULL);
+  if (tmp_border)
+    {
+      *progress_border = *tmp_border;
+      gtk_border_free (tmp_border);
+    }
+  else
+    {
+      progress_border->left = widget->style->xthickness;
+      progress_border->right = widget->style->xthickness;
+      progress_border->top = widget->style->ythickness;
+      progress_border->bottom = widget->style->ythickness;
+    }
+}
+
+static void
+get_progress_area (GtkWidget *widget,
+                  gint       *x,
+                  gint       *y,
+                  gint       *width,
+                  gint       *height)
+{
+  GtkEntryPrivate *private = GTK_ENTRY_GET_PRIVATE (widget);
+  GtkEntry *entry = GTK_ENTRY (widget);
+  GtkBorder progress_border;
+
+  gtk_entry_get_progress_border (widget, &progress_border);
+
+  *x = progress_border.left;
+  *y = progress_border.top;
+
+  gdk_drawable_get_size (widget->window, width, height);
+
+  *width -= progress_border.left + progress_border.right;
+  *height -= progress_border.top + progress_border.bottom;
+
+  if (GTK_WIDGET_HAS_FOCUS (widget) && !private->interior_focus)
+    {
+      *x += private->focus_width;
+      *y += private->focus_width;
+      *width -= 2 * private->focus_width;
+      *height -= 2 * private->focus_width;
+    }
+
+  if (private->progress_pulse_mode)
+    {
+      gdouble value = private->progress_pulse_current;
+
+      *x += (gint) floor(value * (*width));
+      *width = (gint) ceil(private->progress_pulse_fraction * (*width));
+    }
+  else if (private->progress_fraction > 0)
+    {
+      gdouble value = private->progress_fraction;
+
+      if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+        {
+          gint bar_width;
+
+          bar_width = floor(value * (*width) + 0.5);
+          *x += *width - bar_width;
+          *width = bar_width;
+        }
+      else
+        {
+          *width = (gint) floor(value * (*width) + 0.5);
+        }
+    }
+  else
+    {
+      *width = 0;
+      *height = 0;
     }
 }
 
@@ -3153,46 +3251,33 @@ static void
 gtk_entry_draw_progress (GtkWidget      *widget,
                          GdkEventExpose *event)
 {
-  GtkEntryPrivate *private = GTK_ENTRY_GET_PRIVATE (widget);
-  GtkEntry *entry = GTK_ENTRY (widget);
+  gint x, y, width, height;
+  GtkStateType state;
 
-  if (private->progress_pulse_mode)
+  get_progress_area (widget, &x, &y, &width, &height);
+
+  if ((width <= 0) || (height <= 0))
+    return;
+
+  if (event->window != widget->window)
     {
-      gdouble value = private->progress_pulse_current;
-      gint    area_width, area_height;
+      gint pos_x, pos_y;
 
-      gdk_drawable_get_size (entry->text_area, &area_width, &area_height);
+      gdk_window_get_position (event->window, &pos_x, &pos_y);
 
-      gtk_paint_box (widget->style, entry->text_area,
-                     GTK_STATE_SELECTED, GTK_SHADOW_OUT,
-                     &event->area, widget, "entry-progress",
-                     value * area_width, 0,
-                     private->progress_pulse_fraction * area_width, area_height);
+      x -= pos_x;
+      y -= pos_y;
     }
-  else if (private->progress_fraction > 0)
-    {
-      gdouble value = private->progress_fraction;
-      gint    area_width, area_height;
 
-      gdk_drawable_get_size (entry->text_area, &area_width, &area_height);
+  state = GTK_STATE_SELECTED;
+  if (!GTK_WIDGET_SENSITIVE (widget))
+    state = GTK_STATE_INSENSITIVE;
 
-      if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
-        {
-          gtk_paint_box (widget->style, entry->text_area,
-                         GTK_STATE_SELECTED, GTK_SHADOW_OUT,
-                         &event->area, widget, "entry-progress",
-                         area_width - value * area_width, 0,
-                         value * area_width, area_height);
-        }
-      else
-        {
-          gtk_paint_box (widget->style, entry->text_area,
-                         GTK_STATE_SELECTED, GTK_SHADOW_OUT,
-                         &event->area, widget, "entry-progress",
-                         0, 0,
-                         value * area_width, area_height);
-        }
-    }
+  gtk_paint_box (widget->style, event->window,
+                 state, GTK_SHADOW_OUT,
+                 &event->area, widget, "entry-progress",
+                 x, y,
+                 width, height);
 }
 
 static gint
@@ -3213,7 +3298,7 @@ gtk_entry_expose (GtkWidget      *widget,
 
   if (widget->window == event->window)
     {
-      gtk_entry_draw_frame (widget, &event->area);
+      gtk_entry_draw_frame (widget, event);
     }
   else if (entry->text_area == event->window)
     {
@@ -3257,6 +3342,7 @@ gtk_entry_expose (GtkWidget      *widget,
                                   NULL, widget, "entry_bg",
                                   0, 0, width, height);
 
+              gtk_entry_draw_progress (widget, event);
               draw_icon (widget, i);
 
               break;
@@ -5357,72 +5443,133 @@ get_layout_position (GtkEntry *entry,
 }
 
 static void
+draw_text_with_color (GtkEntry *entry, cairo_t *cr, GdkColor *default_color)
+{
+  PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
+  GtkWidget *widget;
+  gint x, y;
+  gint start_pos, end_pos;
+
+  widget = GTK_WIDGET (entry);
+
+  cairo_save (cr);
+
+  get_layout_position (entry, &x, &y);
+
+  cairo_move_to (cr, x, y);
+  gdk_cairo_set_source_color (cr, default_color);
+  pango_cairo_show_layout (cr, layout);
+
+  if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_pos, &end_pos))
+    {
+      gint *ranges;
+      gint n_ranges, i;
+      PangoRectangle logical_rect;
+      GdkColor *selection_color, *text_color;
+      GtkBorder inner_border;
+
+      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+      gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
+
+      if (GTK_WIDGET_HAS_FOCUS (entry))
+        {
+          selection_color = &widget->style->base [GTK_STATE_SELECTED];
+          text_color = &widget->style->text [GTK_STATE_SELECTED];
+        }
+      else
+        {
+          selection_color = &widget->style->base [GTK_STATE_ACTIVE];
+	  text_color = &widget->style->text [GTK_STATE_ACTIVE];
+        }
+
+      _gtk_entry_effective_inner_border (entry, &inner_border);
+
+      for (i = 0; i < n_ranges; ++i)
+        cairo_rectangle (cr,
+        	         inner_border.left - entry->scroll_offset + ranges[2 * i],
+			 y,
+			 ranges[2 * i + 1],
+			 logical_rect.height);
+
+      cairo_clip (cr);
+	  
+      gdk_cairo_set_source_color (cr, selection_color);
+      cairo_paint (cr);
+
+      cairo_move_to (cr, x, y);
+      gdk_cairo_set_source_color (cr, text_color);
+      pango_cairo_show_layout (cr, layout);
+  
+      g_free (ranges);
+    }
+  cairo_restore (cr);
+}
+
+static void
 gtk_entry_draw_text (GtkEntry *entry)
 {
-  GtkWidget *widget;
-  
+  GtkWidget *widget = GTK_WIDGET (entry);
+  cairo_t *cr;
+
   if (!entry->visible && entry->invisible_char == 0)
     return;
   
   if (GTK_WIDGET_DRAWABLE (entry))
     {
-      PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
-      cairo_t *cr;
-      gint x, y;
-      gint start_pos, end_pos;
-      
-      widget = GTK_WIDGET (entry);
-      
-      get_layout_position (entry, &x, &y);
+      GdkColor text_color, bar_text_color;
+      gint pos_x, pos_y;
+      gint width, height;
+      gint progress_x, progress_y, progress_width, progress_height;
+      GtkStateType state;
+
+      state = GTK_STATE_SELECTED;
+      if (!GTK_WIDGET_SENSITIVE (widget))
+        state = GTK_STATE_INSENSITIVE;
+      text_color = widget->style->text[widget->state];
+      bar_text_color = widget->style->fg[state];
+
+      get_progress_area (widget,
+                         &progress_x, &progress_y,
+                         &progress_width, &progress_height);
 
       cr = gdk_cairo_create (entry->text_area);
 
-      cairo_move_to (cr, x, y);
-      gdk_cairo_set_source_color (cr, &widget->style->text [widget->state]);
-      pango_cairo_show_layout (cr, layout);
+      /* If the color is the same, or the progress area has a zero
+       * size, then we only need to draw once. */
+      if ((text_color.pixel == bar_text_color.pixel) ||
+          ((progress_width == 0) || (progress_height == 0)))
+        {
+          draw_text_with_color (entry, cr, &text_color);
+        }
+      else
+        {
+          gdk_drawable_get_size (entry->text_area, &width, &height);
 
-      if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_pos, &end_pos))
-	{
-	  gint *ranges;
-	  gint n_ranges, i;
-          PangoRectangle logical_rect;
-	  GdkColor *selection_color, *text_color;
-          GtkBorder inner_border;
+          cairo_rectangle (cr, 0, 0, width, height);
+          cairo_clip (cr);
+          cairo_save (cr);
 
-	  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-	  gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
+          cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+          cairo_rectangle (cr, 0, 0, width, height);
 
-	  if (GTK_WIDGET_HAS_FOCUS (entry))
-	    {
-	      selection_color = &widget->style->base [GTK_STATE_SELECTED];
-	      text_color = &widget->style->text [GTK_STATE_SELECTED];
-	    }
-	  else
-	    {
-	      selection_color = &widget->style->base [GTK_STATE_ACTIVE];
-	      text_color = &widget->style->text [GTK_STATE_ACTIVE];
-	    }
+          gdk_window_get_position (entry->text_area, &pos_x, &pos_y);
+          progress_x -= pos_x;
+          progress_y -= pos_y;
 
-          _gtk_entry_effective_inner_border (entry, &inner_border);
+          cairo_rectangle (cr, progress_x, progress_y,
+                           progress_width, progress_height);
+          cairo_clip (cr);
+          cairo_set_fill_rule (cr, CAIRO_FILL_RULE_WINDING);
+      
+          draw_text_with_color (entry, cr, &text_color);
+          cairo_restore (cr);
 
-	  for (i = 0; i < n_ranges; ++i)
-	    cairo_rectangle (cr,
-			     inner_border.left - entry->scroll_offset + ranges[2 * i],
-			     y,
-			     ranges[2 * i + 1],
-			     logical_rect.height);
+          cairo_rectangle (cr, progress_x, progress_y,
+                           progress_width, progress_height);
+          cairo_clip (cr);
 
-	  cairo_clip (cr);
-	  
-	  gdk_cairo_set_source_color (cr, selection_color);
-	  cairo_paint (cr);
-
-	  cairo_move_to (cr, x, y);
-	  gdk_cairo_set_source_color (cr, text_color);
-	  pango_cairo_show_layout (cr, layout);
-	  
-	  g_free (ranges);
-	}
+          draw_text_with_color (entry, cr, &bar_text_color);
+        }
 
       cairo_destroy (cr);
     }
@@ -9434,6 +9581,8 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
 {
   GtkEntryPrivate *private;
   gdouble          old_fraction;
+  gint x, y, width, height;
+  gint old_x, old_y, old_width, old_height;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
@@ -9444,14 +9593,22 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
   else
     old_fraction = private->progress_fraction;
 
+  if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (entry)))
+    get_progress_area (GTK_WIDGET(entry), &old_x, &old_y, &old_width, &old_height);
+
   fraction = CLAMP (fraction, 0.0, 1.0);
 
   private->progress_fraction = fraction;
   private->progress_pulse_mode = FALSE;
   private->progress_pulse_current = 0.0;
 
-  if (fabs (fraction - old_fraction) > 0.0001)
-    gtk_entry_queue_draw (entry);
+  if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (entry)))
+    {
+      get_progress_area (GTK_WIDGET(entry), &x, &y, &width, &height);
+
+      if ((x != old_x) || (y != old_y) || (width != old_width) || (height != old_height))
+        gtk_widget_queue_draw (GTK_WIDGET (entry));
+    }
 
   if (fraction != old_fraction)
     g_object_notify (G_OBJECT (entry), "progress-fraction");
@@ -9506,7 +9663,7 @@ gtk_entry_set_progress_pulse_step (GtkEntry *entry,
     {
       private->progress_pulse_fraction = fraction;
 
-      gtk_entry_queue_draw (entry);
+      gtk_widget_queue_draw (GTK_WIDGET (entry));
 
       g_object_notify (G_OBJECT (entry), "progress-pulse-step");
     }
@@ -9587,7 +9744,7 @@ gtk_entry_progress_pulse (GtkEntry *entry)
       private->progress_pulse_current = 0.0;
     }
 
-  gtk_entry_queue_draw (entry);
+  gtk_widget_queue_draw (GTK_WIDGET (entry));
 }
 
 /* Caps Lock warning for password entries */

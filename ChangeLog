@@ -1,5 +1,15 @@
 2009-03-02  Matthias Clasen  <mclasen@redhat.com>
 
+	Bug 546285 – Allow GtkEntry to draw progress
+
+	* gtk/gtkentry.c: Improve the drawing of progress in entries,
+	using fg/bg[SELECTED]. Add a progress-border style property.
+	Draw progress behind icons too.
+	* gtk/gtkrc.c: Add defaults for fg/bg[SELECTED] in entries.
+	Patch by Benjamin Berg.
+
+2009-03-02  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 573688 – Don't steal update region in gtk_text_view_paint()
 
 	* gtk/gtktextview.c (gtk_text_view_paint): If additional areas got
