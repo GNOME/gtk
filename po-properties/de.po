@@ -4,7 +4,7 @@
 # Karsten Weiss <karsten@addx.au.s.shuttle.de>, 1999.
 # Matthias Warkus <mawarkus@gnome.org>, 2001, 2002.
 # Christian Neumair <chris@gnome-de.org>, 2002-2004.
-# Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006, 2007, 2008.
+# Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006, 2007, 2008, 2009.
 # Hendrik Brandt <heb@gnome-de.org>, 2005.
 #
 # IM = Input method => Eingabemethode
@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-17 10:12-0500\n"
-"PO-Revision-Date: 2008-08-29 14:05+0200\n"
+"PO-Revision-Date: 2009-03-02 18:13+0100\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -666,7 +666,7 @@ msgstr "Seite abgeschlossen"
 
 #: gtk/gtkassistant.c:355
 msgid "Whether all required fields on the page have been filled out"
-msgstr "Gibt an, ob alle benötigten Felder dieser Seite ausgefüllt wurden"
+msgstr "Legt fest, ob alle benötigten Felder dieser Seite ausgefüllt wurden"
 
 #: gtk/gtkbbox.c:91
 msgid "Minimum child width"
@@ -2135,14 +2135,12 @@ msgid "Width of border around the main dialog area"
 msgstr "Die Breite des Rands um den Hauptbereich des Dialoges"
 
 #: gtk/gtkdialog.c:209
-#, fuzzy
 msgid "Content area spacing"
-msgstr "Polsterung um Inhalt"
+msgstr "Polsterung um Inhaltsfläche"
 
 #: gtk/gtkdialog.c:210
-#, fuzzy
 msgid "Spacing between elements of the main dialog area"
-msgstr "Der Abstand zwischen der Wertangabe und dem Schieber-/Trogbereich"
+msgstr "Der Abstand zwischen Elementen im Inhaltsbereich des Dialogs"
 
 #: gtk/gtkdialog.c:217
 msgid "Button spacing"
@@ -2300,247 +2298,211 @@ msgid "Length of the text currently in the entry"
 msgstr "Länge des Inhalts des Feldes"
 
 #: gtk/gtkentry.c:797
-#, fuzzy
 msgid "Invisible char set"
-msgstr "Unsichtbarkeit einstellen"
+msgstr "Unsichtbares Zeichen aktivieren"
 
 #: gtk/gtkentry.c:798
-#, fuzzy
 msgid "Whether the invisible char has been set"
-msgstr "Gibt an, ob die Eigenschaft »icon-size« gesetzt ist"
+msgstr "Legt fest, ob das unsichtbare Zeichen aktiviert ist"
 
 #: gtk/gtkentry.c:816
 msgid "Caps Lock warning"
-msgstr ""
+msgstr "Feststelltasten-Warnung"
 
 #: gtk/gtkentry.c:817
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr ""
+"Legt fest, ob Passwortfelder eine Warnung anzeigen, wenn die Feststelltaste "
+"aktiviert ist"
 
 #: gtk/gtkentry.c:831
-#, fuzzy
 msgid "Progress Fraction"
-msgstr "Anteil"
+msgstr "Fortschritts-Anteil"
 
 #: gtk/gtkentry.c:832
-#, fuzzy
 msgid "The current fraction of the task that's been completed"
 msgstr "Der fertiggestellte Anteil an der gesamten Arbeit"
 
 #: gtk/gtkentry.c:849
-#, fuzzy
 msgid "Progress Pulse Step"
-msgstr "Puls-Schrittweite"
+msgstr "Fortschrittspuls-Schrittweite"
 
 #: gtk/gtkentry.c:850
-#, fuzzy
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
 msgstr ""
 "Der Anteil an der gesamten Breite, um die sich der hüpfende Balken bei jedem "
-"Aktivitätspuls bewegt"
+"Aufruf von gtk_entry_progress_pulse() bewegt"
 
 #: gtk/gtkentry.c:866
-#, fuzzy
 msgid "Primary pixbuf"
-msgstr "Pixbuf"
+msgstr "Primärer Pixbuf"
 
 #: gtk/gtkentry.c:867
-#, fuzzy
 msgid "Primary pixbuf for the entry"
-msgstr "Der Pixbuf für den offenen Ausklapper"
+msgstr "Der primäre Pixbuf des Textfeldes"
 
 #: gtk/gtkentry.c:881
-#, fuzzy
 msgid "Secondary pixbuf"
-msgstr "Sekundärer Text"
+msgstr "Sekundärer Pixbux"
 
 #: gtk/gtkentry.c:882
-#, fuzzy
 msgid "Secondary pixbuf for the entry"
-msgstr "Zweiter Schrittschalter vorwärts"
+msgstr "Sekundärer Pixbux des Textfeldes"
 
 #: gtk/gtkentry.c:896
 msgid "Primary stock ID"
-msgstr ""
+msgstr "Primäre Stock-ID"
 
 #: gtk/gtkentry.c:897
 msgid "Stock ID for primary icon"
-msgstr ""
+msgstr "Stock-ID des primären Symbols"
 
 #: gtk/gtkentry.c:911
-#, fuzzy
 msgid "Secondary stock ID"
-msgstr "Sekundärer Text"
+msgstr "Sekundäre Stock-ID"
 
 #: gtk/gtkentry.c:912
 msgid "Stock ID for secondary icon"
-msgstr ""
+msgstr "Stock-ID des sekundären Symbols"
 
 #: gtk/gtkentry.c:926
-#, fuzzy
 msgid "Primary icon name"
-msgstr "Liste der Symbolnamen"
+msgstr "Primärer der Symbolnamen"
 
 #: gtk/gtkentry.c:927
 msgid "Icon name for primary icon"
-msgstr ""
+msgstr "Symbolname des primären Symbols"
 
 #: gtk/gtkentry.c:941
-#, fuzzy
 msgid "Secondary icon name"
-msgstr "Sekundärer Text"
+msgstr "Sekundärer Symbolname"
 
 #: gtk/gtkentry.c:942
 msgid "Icon name for secondary icon"
-msgstr ""
+msgstr "Symbolname des sekundären Symbols"
 
 #: gtk/gtkentry.c:956
 msgid "Primary GIcon"
-msgstr ""
+msgstr "Primäres GIcon"
 
 #: gtk/gtkentry.c:957
-#, fuzzy
 msgid "GIcon for primary icon"
-msgstr "Symbol für dieses Fenster"
+msgstr "GIcon des primären Symbols"
 
 #: gtk/gtkentry.c:971
-#, fuzzy
 msgid "Secondary GIcon"
-msgstr "Untergeordnet"
+msgstr "Sekundäres GIcon"
 
 #: gtk/gtkentry.c:972
 msgid "GIcon for secondary icon"
-msgstr ""
+msgstr "GIcon für sekundäres Symbol"
 
 #: gtk/gtkentry.c:986
-#, fuzzy
 msgid "Primary storage type"
-msgstr "Speicherform"
+msgstr "Primäre Speicherform"
 
 #: gtk/gtkentry.c:987
-#, fuzzy
 msgid "The representation being used for primary icon"
-msgstr "Die für die Bilddaten verwendete Darstellung"
+msgstr "Die für das primäre Symbol verwendete Speicherform"
 
 #: gtk/gtkentry.c:1002
-#, fuzzy
 msgid "Secondary storage type"
-msgstr "Zweiter Schrittschalter vorwärts"
+msgstr "Sekundäre Speicherform"
 
 #: gtk/gtkentry.c:1003
-#, fuzzy
 msgid "The representation being used for secondary icon"
-msgstr "Die für die Bilddaten verwendete Darstellung"
+msgstr "Die für das sekundäre Symbol verwendete Speicherform"
 
 #: gtk/gtkentry.c:1024
 msgid "Primary icon activatable"
-msgstr ""
+msgstr "Primäres Symbol aktivierbar"
 
 #: gtk/gtkentry.c:1025
-#, fuzzy
 msgid "Whether the primary icon is activatable"
-msgstr "Soll das Widget aktiviert sein?"
+msgstr "Legt fest, ob das primäre Symbol aktivierbar ist"
 
 #: gtk/gtkentry.c:1045
-#, fuzzy
 msgid "Secondary icon activatable"
-msgstr "Zweite Zeigerfarbe"
+msgstr "Sekundäres Symbl aktivierbar"
 
 #: gtk/gtkentry.c:1046
-#, fuzzy
 msgid "Whether the secondary icon is activatable"
-msgstr "Soll das Widget aktiviert sein?"
+msgstr "Legt fest, ob das sekundäre Symbol aktivierbar ist"
 
 # CHECK - leicht reagierend? sensibel?
 #: gtk/gtkentry.c:1068
-#, fuzzy
 msgid "Primary icon sensitive"
-msgstr "Die Zelle sensibel darstellen"
+msgstr "Primäres Symbol sensibel darstellen"
 
 #: gtk/gtkentry.c:1069
-#, fuzzy
 msgid "Whether the primary icon is sensitive"
-msgstr ""
-"Soll die Erkennung von Listeneinträgen unter Berücksichtigung der Groß-/"
-"Kleinschreibung erfolgen?"
+msgstr "Legt fest, ob das primäre Symbol sensibel ist"
 
 #: gtk/gtkentry.c:1090
-#, fuzzy
 msgid "Secondary icon sensitive"
-msgstr "Sekundärer Text"
+msgstr "Sekundäres Symbol sensibel darstellen"
 
 #: gtk/gtkentry.c:1091
-#, fuzzy
 msgid "Whether the secondary icon is sensitive"
-msgstr "Soll das Widget aktiviert sein?"
+msgstr "Legt fest, ob das sekundäre Symbol sensibel ist"
 
 # CHECK - leicht reagierend? sensibel?
 #: gtk/gtkentry.c:1107
-#, fuzzy
 msgid "Primary icon tooltip text"
-msgstr "Die Zelle sensibel darstellen"
+msgstr "Minihilfentext für primäres Symbol"
 
 #: gtk/gtkentry.c:1108 gtk/gtkentry.c:1144
-#, fuzzy
 msgid "The contents of the tooltip on the primary icon"
-msgstr "Der Inhalt der Minihilfe dieses Widgets"
+msgstr "Der Inhalt der Minihilfe des primären Symbols"
 
 #: gtk/gtkentry.c:1124
-#, fuzzy
 msgid "Secondary icon tooltip text"
-msgstr "Zweite Zeigerfarbe"
+msgstr "Minihilfentext für sekundäres Symbol"
 
 #: gtk/gtkentry.c:1125 gtk/gtkentry.c:1163
-#, fuzzy
 msgid "The contents of the tooltip on the secondary icon"
-msgstr "Der Inhalt der Minihilfe dieses Widgets"
+msgstr "Der Inhalt der Minihilfe des sekundären Symbols"
 
 #: gtk/gtkentry.c:1143
-#, fuzzy
 msgid "Primary icon tooltip markup"
-msgstr "Liste der Symbolnamen"
+msgstr "Minihilfen-Markup für primäres Symbol"
 
 #: gtk/gtkentry.c:1162
-#, fuzzy
 msgid "Secondary icon tooltip markup"
-msgstr "Sekundärer Text"
+msgstr "Minihilfen-Markup für sekundäres Symbol"
 
 #: gtk/gtkentry.c:1182 gtk/gtktextview.c:681
-#, fuzzy
 msgid "IM module"
-msgstr "Vorgabe-IM-Modul"
+msgstr "IM-Modul"
 
 #: gtk/gtkentry.c:1183 gtk/gtktextview.c:682
-#, fuzzy
 msgid "Which IM module should be used"
-msgstr "Welches IM-Modul soll verwendet werden?"
+msgstr "Legt fest, welches IM-Modul verwendet wird"
 
 #: gtk/gtkentry.c:1197
-#, fuzzy
 msgid "Icon Prelight"
-msgstr "Höhe"
+msgstr "Symbol-Hervorhebung"
 
 #: gtk/gtkentry.c:1198
-#, fuzzy
 msgid "Whether activatable icons should prelight when hovered"
-msgstr "Sollen die Reiter gezeigt werden?"
+msgstr ""
+"Legt fest, ob aktivierbare Symbole beim Berühren hervorgehoben werden sollen"
 
 #: gtk/gtkentry.c:1648
 msgid "Border between text and frame."
 msgstr "Rand zwischen Text und Rahmen."
 
 #: gtk/gtkentry.c:1662
-#, fuzzy
 msgid "State Hint"
-msgstr "Status-Zeichenkette"
+msgstr "Status-Hinweis"
 
 #: gtk/gtkentry.c:1663
-#, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr ""
-"Die als Maske beim Zeichnen des Texthintergrundes zu verwendende Bitmap"
+"Legt fest, ob beim Zeichnen von Schatten oder Hintergrund ein Status "
+"weitergegeben wird"
 
 #: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
 msgid "Select on focus"
@@ -3211,27 +3173,26 @@ msgid "Child widget to appear next to the menu text"
 msgstr "Das Kind-Widget, das neben dem Menütext erscheint"
 
 #: gtk/gtkimagemenuitem.c:151
-#, fuzzy
 msgid "Whether to use the label text to create a stock menu item"
-msgstr "Soll der Beschriftungstext mit der Maus markierbar sein?"
+msgstr ""
+"Legt fest, ob der Beschriftungstext verwendet werden soll, um einen Stock-"
+"Menüeintrag zu erstellen"
 
 #: gtk/gtkimagemenuitem.c:169
 msgid "Always show image"
-msgstr ""
+msgstr "Bild immer anzeigen"
 
 #: gtk/gtkimagemenuitem.c:170
-#, fuzzy
 msgid "Whether the image will always be shown"
-msgstr "Soll das Widget sichtbar sein?"
+msgstr "Legt fest, ob das Bild immer angezeigt werden soll"
 
 #: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:515
 msgid "Accel Group"
 msgstr "Tastenkürzelgruppe"
 
 #: gtk/gtkimagemenuitem.c:185
-#, fuzzy
 msgid "The Accel Group to use for stock accelerator keys"
-msgstr "Der auf Kürzeländerungen hin zu überwachende Ausdruck"
+msgstr "Die Tastenkürzelgruppe, die für Stock-Tastenkürzel verwendet wird"
 
 #: gtk/gtkimagemenuitem.c:190
 msgid "Show menu images"
@@ -3501,13 +3462,12 @@ msgid "When scrolling, always show both arrows."
 msgstr "Beim Rollen immer beide Pfeile anzeigen."
 
 #: gtk/gtkmenu.c:642
-#, fuzzy
 msgid "Arrow Placement"
-msgstr "Horizontaler Versatz des Pfeiles"
+msgstr "Pfeilplatzierung"
 
 #: gtk/gtkmenu.c:643
 msgid "Indicates where scroll arrows should be placed"
-msgstr ""
+msgstr "Legt fest, wo Rollpfeile platziert werden sollen"
 
 #: gtk/gtkmenu.c:651
 msgid "Left Attach"
@@ -3548,6 +3508,8 @@ msgstr ""
 #: gtk/gtkmenu.c:690
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
 msgstr ""
+"Beliebige Konstant, mit der die Größe des Rollpfleils nach unten skaliert "
+"wird"
 
 #: gtk/gtkmenu.c:777
 msgid "Can change accelerators"
@@ -3641,9 +3603,8 @@ msgid "Sets the accelerator path of the menu item"
 msgstr "Den Tastenkürzelpfad für den Menüeintrag setzen"
 
 #: gtk/gtkmenuitem.c:301
-#, fuzzy
 msgid "The text for the child label"
-msgstr "Der Text der Beschriftung"
+msgstr "Der Text der Kind-Beschriftung"
 
 #: gtk/gtkmenuitem.c:364
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
@@ -4022,9 +3983,8 @@ msgid "Spacing around indicator"
 msgstr "Polsterung um Indikator"
 
 #: gtk/gtkorientable.c:75
-#, fuzzy
 msgid "The orientation of the orientable"
-msgstr "Die Ausrichtung der Skala"
+msgstr "Die Ausrichtung des Orientable-Widgets"
 
 #: gtk/gtkpaned.c:242
 msgid ""
@@ -5610,9 +5570,8 @@ msgid "Has tooltip"
 msgstr "Hat Minihilfe"
 
 #: gtk/gtkstatusicon.c:354
-#, fuzzy
 msgid "Whether this tray icon has a tooltip"
-msgstr "Legt fest, ob das Widget eine Minihilfe hat"
+msgstr "Legt fest, ob das Benachrichtigungssymbol eine Minihilfe hat"
 
 #: gtk/gtkstatusicon.c:375 gtk/gtkwidget.c:653
 msgid "Tooltip Text"
@@ -5624,12 +5583,11 @@ msgstr "Der Inhalt der Minihilfe dieses Widgets"
 
 #: gtk/gtkstatusicon.c:399 gtk/gtkwidget.c:674
 msgid "Tooltip markup"
-msgstr "Minihilfe-Markup"
+msgstr "Minihilfen-Markup"
 
 #: gtk/gtkstatusicon.c:400
-#, fuzzy
 msgid "The contents of the tooltip for this tray icon"
-msgstr "Der Inhalt der Minihilfe dieses Widgets"
+msgstr "Der Inhalt der Minihilfe dieses Benachrichtigungssymbols"
 
 #: gtk/gtktable.c:129
 msgid "Rows"
@@ -6268,7 +6226,7 @@ msgstr "Symbolgröße gesetzt"
 
 #: gtk/gtktoolbar.c:557
 msgid "Whether the icon-size property has been set"
-msgstr "Gibt an, ob die Eigenschaft »icon-size« gesetzt ist"
+msgstr "Legt fest, ob die Eigenschaft »icon-size« gesetzt ist"
 
 #: gtk/gtktoolbar.c:566
 msgid "Whether the item should receive extra space when the toolbar grows"
@@ -6468,12 +6426,10 @@ msgstr ""
 msgid "Search Column"
 msgstr "Suchspalte"
 
-# CHECK - Code?
 #: gtk/gtktreeview.c:643
-#, fuzzy
 msgid "Model column to search through during interactive search"
 msgstr ""
-"Die Modellspalte, die durchsucht werden soll, wenn der Code durchsucht wird"
+"Die Modellspalte, die bei der interaktiven Suche durchsucht werden soll"
 
 #: gtk/gtktreeview.c:663
 msgid "Fixed Height Mode"
@@ -7339,7 +7295,7 @@ msgstr "Wie die Eingabemethoden-Statusleiste gezeichnet werden soll"
 #~ msgstr "Abgebrochen"
 
 #~ msgid "Whether or not the operation has been successfully cancelled"
-#~ msgstr "Gibt an, ob die Operation erfolgreich abgebrochen wurde"
+#~ msgstr "Legt fest, ob die Operation erfolgreich abgebrochen wurde"
 
 #~ msgid ""
 #~ "A number between 0.0 and 1.0 specifying the horizontal alignment of the "
