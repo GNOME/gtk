@@ -1,3 +1,11 @@
+2009-03-02  Alexander Larsson  <alexl@redhat.com>
+
+	Bug 573087 – gdkwindow.c: {x,y}_offset used uninitialized
+
+	* gdk/gdkwindow.c (gdk_window_clear_backing_rect_redirect):
+	Don't use uninitialized vars.
+	Fix offsets for redirected pixmap, draw to pixmap not window.
+
 2009-03-02  Theppitak Karoonboonyanan  <thep@linux.thai.net>
 
 	Bug 457086 - numpad does not work when the Thai-Lao input method is
