@@ -870,6 +870,14 @@ Deprecated alias for gtk_window_set_position().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_window_get_default_icon_name ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_get_default_size ##### -->
 <para>
 

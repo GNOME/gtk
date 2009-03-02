@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2004-11-30 15:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -90,7 +90,7 @@ msgstr "Dira gore Ponagatšo e Hlaelele"
 msgid "The default display for GDK"
 msgstr "Ponagatšo e hlaelelago ya GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "Sekirini"
@@ -429,7 +429,7 @@ msgid "Whether the action group is visible."
 msgstr "Ge eba sehlopha sa mogato se a bonagala."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Boleng"
 
@@ -953,7 +953,7 @@ msgid ""
 "rectangle"
 msgstr ""
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 #, fuzzy
 msgid "Inner Border"
 msgstr "Mollwane wa Tab"
@@ -1380,7 +1380,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Moo thulaganyo le kgolo di lebilego tša bara ya tšwelopele"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Tokišo"
 
@@ -2611,36 +2611,46 @@ msgstr "Bophagamo"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "Ge eba di-tab di swanetše go bontšhwa goba aowa"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "Mollwane wa Sedibelo"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "Sengwalwa seo se swanetšego go bontšhwa bareng ya tšwelopele"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 #, fuzzy
 msgid "State Hint"
 msgstr "Keletšo ya Melao"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr ""
 "Bitmap yeo e swanetšego go dirišwa bjalo ka seširo ge o thala bokamorago bja "
 "sengwalwa"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Kgetha go lebiša hlokomelo"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Ge eba o swanetše go kgetha dikagare tša tseno ge e lebišitše hlokomelo"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr ""
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 
@@ -3280,7 +3290,7 @@ msgstr "Peakanyo ya leswao"
 msgid "Icon set to display"
 msgstr "Peakanyo ya leswao yeo e swanetšego go bontšhwa"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Bogolo bja leswao"
 
@@ -3929,26 +3939,26 @@ msgstr ""
 "Palo ya sekgoba seo se swanetšego go oketšwa ka godimo le ka tlase ga "
 "sedirišwa, dikarolwaneng tša go bopa seswantšho"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 #, fuzzy
 msgid "Parent"
 msgstr "Sedirišwa seo e lego motswadi"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 #, fuzzy
 msgid "The parent window"
 msgstr "Mohuta wa lefesetere"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 #, fuzzy
 msgid "Is Showing"
 msgstr "Bontšha Sehlogo"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 #, fuzzy
 msgid "The screen where this window will be displayed."
 msgstr "Sekirini seo lefesetere le le tla bontšhwago"
@@ -4922,12 +4932,12 @@ msgstr "Go dira sekgoba mothalong"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr ""
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 #, fuzzy
 msgid "Show Numbers"
 msgstr "Bontšha Dinomoro tša Beke"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr ""
@@ -5115,29 +5125,29 @@ msgstr "Go dira sekgoba ga boleng"
 msgid "Space between value text and the slider/trough area"
 msgstr "Sekgoba magareng ga sengwalwa sa boleng le lefelo la seširogi/sedibelo"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 #, fuzzy
 msgid "The value of the scale"
 msgstr "Boleng bja tokišo"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 #, fuzzy
 msgid "The icon size"
 msgstr "Bogolo bja leswao la bara ya sedirišwa"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 #, fuzzy
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
 "GtkAdjustment yeo e nago le boleng bja gona bjale bja sedirišwa se sa mohuta"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 #, fuzzy
 msgid "Icons"
 msgstr "Leswao"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 #, fuzzy
 msgid "List of icon names"
 msgstr "Leina la Sehlogo sa Leswao"

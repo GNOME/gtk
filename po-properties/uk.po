@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2009-09-04 14:55+0200\n"
 "Last-Translator: dziumanenko@gmail.com\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -88,7 +88,7 @@ msgstr "Типовий дисплей"
 msgid "The default display for GDK"
 msgstr "Типовий дисплей для підсистеми GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "Екран"
@@ -414,7 +414,7 @@ msgid "Whether the action group is visible."
 msgstr "Чи буде група дій видимою."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Значення"
 
@@ -918,7 +918,7 @@ msgstr ""
 "Чи повинні властивості child_displacement_x/_y також впливати на прямокутник "
 "фокусу"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "Внутрішній бордюр"
 
@@ -1314,7 +1314,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Орієнтація і напрямок росту панелі поступу"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Вирівнювання"
 
@@ -2494,34 +2494,44 @@ msgstr "Висота"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "Чи потрібно відображати ярлики вкладок"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "Границя напрямної"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "Текст, що відображається у панелі поступу"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr "Бордюр між текстом та рамкою."
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 #, fuzzy
 msgid "State Hint"
 msgstr "Рядок статусу"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr ""
 "Бітова мапа, що буде використана в якості маски під час малювання тла тексту"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Вибір на фокусуванні"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Чи буде виділятись вміст поля, коли йому передається фокус "
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "Інтервал очікування підказки паролю"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr "Як довго показувати останній введений символ у прихованих полях"
 
@@ -3120,7 +3130,7 @@ msgstr "Набір значків"
 msgid "Icon set to display"
 msgstr "Набір значків до відображення"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Розмір значків"
 
@@ -3702,23 +3712,23 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Простір, що додається до віджета зверху і знизу, у точках"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 msgid "Parent"
 msgstr "Батьківське"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 msgid "The parent window"
 msgstr "Батьківське"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 msgid "Is Showing"
 msgstr "Відображати"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr "Чи виводити діалог"
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 msgid "The screen where this window will be displayed."
 msgstr "Екран, на якому буде показано це вікно"
 
@@ -4630,11 +4640,11 @@ msgstr "Розтягування стрілки"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Розтягування стрілки  відносно до розміру кнопки прокрутки"
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "Показувати номери"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "Чи відображати номери з елементами"
 
@@ -4797,26 +4807,26 @@ msgstr "Відступ значення"
 msgid "Space between value text and the slider/trough area"
 msgstr "Інтервал між зображеним значенням і ділянкою повзунка чи напрямної"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 msgid "The value of the scale"
 msgstr "Значення масштабу"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 msgid "The icon size"
 msgstr "Розмір значка"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
 "Об'єкт GtkAdjustment, що містить поточне значення масштабу цієї кнопки "
 "масштабу"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 msgid "Icons"
 msgstr "Значок"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 msgid "List of icon names"
 msgstr "Список назв значків"
 

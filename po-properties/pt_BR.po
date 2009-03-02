@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2009-01-30 11:54-0300\n"
 "Last-Translator: Leonardo Ferreira Fontenelle <leonardof@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
@@ -93,7 +93,7 @@ msgstr "Dispositivo padrão"
 msgid "The default display for GDK"
 msgstr "O dispositivo padrão para o GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "Tela"
@@ -415,7 +415,7 @@ msgid "Whether the action group is visible."
 msgstr "Se o grupo de ações está visível."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Valor"
 
@@ -913,7 +913,7 @@ msgstr ""
 "Se as propriedades \"child_displacement_x/_y\" devem afetar também o "
 "retângulo de foco"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "Borda interna"
 
@@ -1312,7 +1312,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientação e direção de crescimento da barra de progresso"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Ajustamento"
 
@@ -2454,31 +2454,41 @@ msgstr ""
 "Se a aparência dos ícones ativáveis deve ser diferente quando o ponteiro "
 "estiver sobre eles"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "Borda da calha"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "Texto na barra de progresso"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr "Borda entre texto e moldura."
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 msgid "State Hint"
 msgstr "Dica de estado"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Se um estado apropriado é passado ao desenhar sombra ou plano de fundo"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Selecionar ao focar"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Selecionar ou não o conteúdo de uma entrada quando ela obtém o foco"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "Tempo limite da dica de senha"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Por quanto tempo mostrar o último caractere digitado em entradas ocultas"
@@ -3080,7 +3090,7 @@ msgstr "Conjunto de ícones"
 msgid "Icon set to display"
 msgstr "Conjunto de ícones a ser exibido"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Tamanho do ícone"
 
@@ -3664,23 +3674,23 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "A quantidade de espaço a adicionar acima e abaixo do widget, em pixels"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 msgid "Parent"
 msgstr "Pai"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 msgid "The parent window"
 msgstr "A janela pai"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 msgid "Is Showing"
 msgstr "Está mostrando"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr "Estamos exibindo um diálogo"
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 msgid "The screen where this window will be displayed."
 msgstr "A tela onde esta janela será exibida."
 
@@ -4600,11 +4610,11 @@ msgstr "Escala de seta"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Seta de dimensionamento com respeito ao tamanho do botão de rolagem"
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "Mostrar números"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "Se os itens devem ser exibidos com um número"
 
@@ -4767,24 +4777,24 @@ msgstr "Valor de espaçamento"
 msgid "Space between value text and the slider/trough area"
 msgstr "Espaço entre o texto do valor e a área da barra de deslizar/calha"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 msgid "The value of the scale"
 msgstr "O valor da escala"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 msgid "The icon size"
 msgstr "O tamanho do ícone"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "O GtkAdjustment que contém o valor atual deste objeto botão de escala"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 msgid "Icons"
 msgstr "Ícones"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 msgid "List of icon names"
 msgstr "Lista de nomes de ícones"
 

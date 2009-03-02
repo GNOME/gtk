@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2005-02-08 08:59+0200\n"
 "Last-Translator: Canonical Ltd <translations@canonical.com>\n"
 "Language-Team: Xhosa <xh-translate@ubuntu.com>\n"
@@ -91,7 +91,7 @@ msgstr "Okumiselweyo Okubonakala Kwiskrini"
 msgid "The default display for GDK"
 msgstr "Okumiselweyo okubonakala kwiskrini se-GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "Iskrini"
@@ -426,7 +426,7 @@ msgid "Whether the action group is visible."
 msgstr "Nokuba ngaba iqela lezenzo liyabonakala na."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Ixabiso"
 
@@ -952,7 +952,7 @@ msgstr ""
 "Nokuba ngaba ushenxiso ngokwendawo_kwenkqubo engumntwana lwezinto zika_x/_y "
 "zimele nazo zibe negalelo kuxinzelelo loxande"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 #, fuzzy
 msgid "Inner Border"
 msgstr "Umda Ka-Tab"
@@ -1376,7 +1376,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Imbonakalo kunye necala lokukhula lwesikhombisi senkqubela"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Uhlenga-hlengiso"
 
@@ -2602,35 +2602,45 @@ msgstr "Umphakamo"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "Nokuba ngaba oo-tab kumele baboniswe okanye hayi"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "Umda Ongumsantsa"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "Umbhalo okwisikhombisi senkqubela"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 #, fuzzy
 msgid "State Hint"
 msgstr "Icebiso Ngemithetho"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr ""
 "I-bitmap esetyenziswa njengesigqubuthelo xa kuzotywa umbhalo wokuvela "
 "ngasemva"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Khetha kugxininixo"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Nokuba ngaba ukhethe iziqulatho zesingeniso xa sigxininisiwe"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr ""
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 
@@ -3249,7 +3259,7 @@ msgstr "Ukumisela umfanekiso ongumqondiso"
 msgid "Icon set to display"
 msgstr "Ukumisela umfanekiso ongumqondiso emawubonakaliswe"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Ubungakanani bomfanekiso ongumqondiso"
 
@@ -3872,26 +3882,26 @@ msgstr ""
 "Ubungakanani besithuba emasongezwe emantla nasemazantsi esixhobo, ngokwee-"
 "pixels"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 #, fuzzy
 msgid "Parent"
 msgstr "Isixhobo esingunozala"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 #, fuzzy
 msgid "The parent window"
 msgstr "Uhlobo lwefestile"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 #, fuzzy
 msgid "Is Showing"
 msgstr "Bonisa Isihloko"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 #, fuzzy
 msgid "The screen where this window will be displayed."
 msgstr "Iskrini eso le festile iza kuthi ibonakaliswe kuso"
@@ -4860,12 +4870,12 @@ msgstr "Ukufaka Izithuba Phakathi Kwemigca"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr ""
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 #, fuzzy
 msgid "Show Numbers"
 msgstr "Bonisa Amanani Eeveki"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "Nokuba ngaba izinto ezisuswayo zemenyu zimelwe zongezwe na kwimenyu"
@@ -5052,28 +5062,28 @@ msgid "Space between value text and the slider/trough area"
 msgstr ""
 "Isithuba phakathi kwexabiso lombhalo kunye neslayida/indawo engumsantsa"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 #, fuzzy
 msgid "The value of the scale"
 msgstr "Ixabiso lohlenga-hlengiso"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 #, fuzzy
 msgid "The icon size"
 msgstr "Ubungakanani bomfanekiso ongumqondiso we-toolbar"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 #, fuzzy
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "I-GtkAdjustment equlethe ixabiso langoku lwento eseluhlwini"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 #, fuzzy
 msgid "Icons"
 msgstr "Umfanekiso ongumqondiso"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 #, fuzzy
 msgid "List of icon names"
 msgstr "Igama Lelogo Yomfanekiso Ongumqondiso"

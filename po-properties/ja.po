@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2009-02-07 20:23+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -93,7 +93,7 @@ msgstr "デフォルトのディスプレイ"
 msgid "The default display for GDK"
 msgstr "GDK が使用するデフォルトのディスプレイです"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "画面"
@@ -409,7 +409,7 @@ msgid "Whether the action group is visible."
 msgstr "アクション・グループが表示されるかどうかです"
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "値"
 
@@ -903,7 +903,7 @@ msgid ""
 msgstr ""
 "プロパティ child_displacement_x/_y もフォーカスの範囲に影響するかどうかです"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "内側の境界線"
 
@@ -1299,7 +1299,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "プログレス・バーが延びていく方向です"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "アジャストメント"
 
@@ -2429,31 +2429,41 @@ msgstr "アイコンの点灯"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "利用可能なアイコンの上にカーソルをのせたら点灯させるかどうかです"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "トラフの境界線"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "プログレス・バーに表示するラベルです"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr "テキストとフレームとの間にある境界線です"
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 msgid "State Hint"
 msgstr "状態を報告するかどうか"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "影や背景を描画する際に妥当な状態を渡すかどうかです"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "フォーカス部の選択"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "エントリにフォーカスが当たった際にその内容を選択するかどうかです"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "パスワード・ヒントのタイムアウト"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr "隠しエントリで最後に入力した文字を表示しておく時間です"
 
@@ -3048,7 +3058,7 @@ msgstr "アイコン・セット"
 msgid "Icon set to display"
 msgstr "表示するアイコン・セット"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "アイコンのサイズ"
 
@@ -3616,23 +3626,23 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "ウィジェットの上端と下端に追加する空間のサイズ (ピクセル単位)"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 msgid "Parent"
 msgstr "親ウィンドウ"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 msgid "The parent window"
 msgstr "親ウィンドウです"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 msgid "Is Showing"
 msgstr "表示するかどうか"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr "ダイアログを表示するかどうかです"
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 msgid "The screen where this window will be displayed."
 msgstr "このウィンドウを表示するスクリーンです"
 
@@ -4523,11 +4533,11 @@ msgstr "矢印の大きさ"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "矢印の大きさをスクロール・ボタンの大きさに合わせるかどうかです"
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "番号の表示"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "番号を付けてアイテムを表示するかどうかです"
 
@@ -4688,24 +4698,24 @@ msgstr "値の間隔"
 msgid "Space between value text and the slider/trough area"
 msgstr "値を示すテキストとスライダ/トロフ領域との間隔"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 msgid "The value of the scale"
 msgstr "スケールの値です"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 msgid "The icon size"
 msgstr "アイコンの大きさです"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "スケール・ボタンの現在値を格納する GtkAdjustment です"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 msgid "Icons"
 msgstr "アイコン"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 msgid "List of icon names"
 msgstr "アイコン名の並び"
 

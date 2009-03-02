@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: te\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2008-09-12 19:23+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
@@ -99,7 +99,7 @@ msgstr "అప్రమేయ ప్రదర్శన"
 msgid "The default display for GDK"
 msgstr "GDK కొరకు అప్రమేయ ప్రదర్శన"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "తెర"
@@ -409,7 +409,7 @@ msgid "Whether the action group is visible."
 msgstr "క్రియా సమూహము దృగ్గోచరమవుచున్నదో లేదో."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "విలువ"
 
@@ -892,7 +892,7 @@ msgid ""
 "rectangle"
 msgstr "child_displacement_x/_y లక్షణాలు  దీర్ఘచతురస్ర కేంద్రమును తప్పక ప్రభావితము చేయవలెనా"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "అంతర్గత సరిహద్దు"
 
@@ -1288,7 +1288,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "పురోగత పట్టీయొక్క పునశ్చరణ మరియు పెరుగుదల దిశ"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "సర్దుబాటు"
 
@@ -2440,32 +2440,42 @@ msgstr "ఎత్తు"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "టాబ్‌లు చూపబడవలెనా లేదా"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "వంపు సరిహద్దు"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "పురోగమన పట్టీపైన విలువ"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr "పాఠ్యము మరియు చట్రమునకు మధ్యనవున్న సరిహద్దు."
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 #, fuzzy
 msgid "State Hint"
 msgstr "స్థితి స్ట్రింగ్"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr ""
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "కేంద్రము మీద ఎన్నుకొనబడింది"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "ఒక ప్రవేశము కేంద్రీకరించబడినపుడు దానియొక్క సారము ఎన్నుకొనబడిందో లేదో"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "సంకేతపదము కిటుకు సమయంముగిసినది"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr "మరుగునవున్న ప్రవేశాలలో చివర ప్రవేశపెట్టిన అక్షరం యెంతసేపు చూపబడాలి"
 
@@ -3045,7 +3055,7 @@ msgstr "ప్రతిమ సమితి"
 msgid "Icon set to display"
 msgstr "ప్రదర్శించుటకు ప్రతిమ సమితి"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "ప్రతిమ పరిమాణం"
 
@@ -3607,23 +3617,23 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "విడ్జట్‌యొక్క పైన మరియు క్రిందన జతచేయవలిసిన ఖాళీ మొత్తము, పిగ్జెల్స్‍ లో"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 msgid "Parent"
 msgstr "మాత్రుక"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 msgid "The parent window"
 msgstr "మాత్రుక విండో"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 msgid "Is Showing"
 msgstr "చూపించబడుతున్న"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr "మనము డైలాగ్‌ను చూపించుతామా"
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 msgid "The screen where this window will be displayed."
 msgstr "ఈ విండో ప్రదర్శింపబడు తెర"
 
@@ -4509,11 +4519,11 @@ msgstr "బాణము స్కేలింగ్"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "జారుడు బటన్ పరిమాణంను అనుసరించి బాణము స్కేలింగ్"
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "సంఖ్యలను చూపుము"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "అంశములు సంఖ్యతో ప్రదర్శించవలెనా"
 
@@ -4674,24 +4684,24 @@ msgstr "విలువ క్రమాంతరీకరణం"
 msgid "Space between value text and the slider/trough area"
 msgstr "విలువ పాఠ్యముకు మరియు స్లైడర్/వంపు ప్రాంతముకు మద్య ఖాళి"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 msgid "The value of the scale"
 msgstr "స్కేలుయొక్క విలువ"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 msgid "The icon size"
 msgstr "ప్రతిమ పరిమాణము"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "ఈ స్కేలు బటన్ ఆబ్జక్టుయొక్క ప్రస్తుత విలువను కలిగివుండే జిటికెసర్దుబాటు"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 msgid "Icons"
 msgstr "ప్రతిమలు"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 msgid "List of icon names"
 msgstr "ప్రతిమ నామములయొక్క జాబితా"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2007-12-09 14:44+0200\n"
 "Last-Translator: Alaksandar Navicki <zolak@lacinka.org>\n"
 "Language-Team: i18n@mova.org <i18n@mova.org>\n"
@@ -90,7 +90,7 @@ msgstr "Zmoŭčany ekran"
 msgid "The default display for GDK"
 msgstr "Zmoŭčany ekran dla GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "Ekran"
@@ -419,7 +419,7 @@ msgid "Whether the action group is visible."
 msgstr "Akreślivaje, ci bačnaja aperacyjnaja hrupa."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Vartaść"
 
@@ -923,7 +923,7 @@ msgstr ""
 "Akreślivaje, ci ŭłaścivaści \"child_displacement_x/_y\" taksama pavinny mieć "
 "upłyŭ na pramavuholnik abjadnańnia"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "Vonkavaja abvodka"
 
@@ -1332,7 +1332,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Aryjentacyja j napramak pryrostu paneli prahresu"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Widget dapasavańnia"
 
@@ -2530,35 +2530,45 @@ msgstr "Vyšynia"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "Akreślivaje, ci pakazvać zakładki pry natatniku"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "Niepasredny kraj"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "Tekst na paneli prahresu"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr "Bierah pamiž tekstam i ramkaj."
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 #, fuzzy
 msgid "State Hint"
 msgstr "Apisańnie stanu"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Bitmapa, užyvanaja jak maska rysavańnia fonu tekstu"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Zaznačańnie pry fokusie"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Akreślivaje, ci źmieściva elementu pavinna być zaznačanaje pry naviadzieńni "
 "fokusu"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "Čas padkazki parolu"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Akreślivaje, jak doŭha maje być pakazany apošni ŭviedzieny znak u palach sa "
@@ -3155,7 +3165,7 @@ msgstr "Nabor ikon"
 msgid "Icon set to display"
 msgstr "Nabor ikon, kab pakazać"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Pamier ikony"
 
@@ -3748,26 +3758,26 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Kolkaść miesca ŭ pikselach, jakuju dadajuć źvierchu j źnizu widgetu"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 #, fuzzy
 msgid "Parent"
 msgstr "Važnaje"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 #, fuzzy
 msgid "The parent window"
 msgstr "Typ akna"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 #, fuzzy
 msgid "Is Showing"
 msgstr "Pakazvaj zahałovak"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 #, fuzzy
 msgid "The screen where this window will be displayed."
 msgstr "Ekran, na jakim budzie pakazanaje hetaje vakno"
@@ -4706,11 +4716,11 @@ msgstr "Skalowanie strełak"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr ""
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "Pakazvaj numary"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "Akreślivaje, ci elementy pavinny być pakazanyja z numarami"
 
@@ -4878,25 +4888,25 @@ msgstr "Vodstup vartaści"
 msgid "Space between value text and the slider/trough area"
 msgstr "Vodstup pamiž tekstam z vartaściu i abšaram paŭzunka"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 msgid "The value of the scale"
 msgstr "Vartaść škały"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 msgid "The icon size"
 msgstr "Pamier ikon"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
 "Abjekt GtkAdjustment, jaki maje dziejnuju vartaść hetaha abjektu abšaru."
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 msgid "Icons"
 msgstr "Ikony"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 msgid "List of icon names"
 msgstr "Śpis nazvaŭ ikon"
 

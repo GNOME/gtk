@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2008-09-18 02:19+0300\n"
 "Last-Translator: Anas Afif Emad <anas.e87@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -96,7 +96,7 @@ msgstr "الشاشة الافتراضية"
 msgid "The default display for GDK"
 msgstr "شاشة GDK الافتراضية"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "شاشة"
@@ -408,7 +408,7 @@ msgid "Whether the action group is visible."
 msgstr "فيما إذا كانت مجموعة العمليات مرئية."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "القيمة"
 
@@ -891,7 +891,7 @@ msgid ""
 "rectangle"
 msgstr "إذا كانت خصائص child_displacement_x/_y تؤثر أيضا عل مستطيل التركيز"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "الحد الداخلي"
 
@@ -1283,7 +1283,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "إتجاه و وجهة نموّ همود التطوّر"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "الملائمة"
 
@@ -2438,33 +2438,43 @@ msgstr "الارتفاع"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "فيما إذا كان سيتم عرض الألسنة أم لا"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "حد منخفض"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "النص على عمود التقدم"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr "الحد بين النص والاطار."
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 #, fuzzy
 msgid "State Hint"
 msgstr "نص الحالة"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "صورة بيتماب المستخدمة كغلاف أثناء رسم الواجهة الخلفية للنص"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "اختيار عند التركيز"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "فيما اذا سيقع انتقاء محتويات خانة عند تركيزها"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "مدة عرض تلميحة كلمة السر"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr "مدة ظهور الحرف المدخل الأخير في المداخل المخفية"
 
@@ -3049,7 +3059,7 @@ msgstr "مجموعة الأيقونات"
 msgid "Icon set to display"
 msgstr "مجموعة الأيقونات للعرض"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "حجم الأيقونة"
 
@@ -3616,23 +3626,23 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "المساحة التي تضاف لأعلى وأسفل الودجة، بالبكسل"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 msgid "Parent"
 msgstr "أب"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 msgid "The parent window"
 msgstr "نافذة الأب"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 msgid "Is Showing"
 msgstr "إظهار"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr "هل سنُظهر مربع حوار"
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 msgid "The screen where this window will be displayed."
 msgstr "الشاشة التي ستعرض فيها هذه النافذة"
 
@@ -4521,11 +4531,11 @@ msgstr "تحجيم الأسهم"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "تغيير حجم السهم وفقاً لحجم زر التمرير"
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "اعرض الأرقام"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "فيما إذا يتم عرض العناصر بعدد"
 
@@ -4686,24 +4696,24 @@ msgstr "فراغات القيمة"
 msgid "Space between value text and the slider/trough area"
 msgstr "الفراغ بين نص القيمة ومنطقة المتزحلق/المنخفض"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 msgid "The value of the scale"
 msgstr "قيمة المقياس"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 msgid "The icon size"
 msgstr "حجم الأيقونة"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "GtkAdjustment المحتوي على القيمة الحالية لجسم التحجيم هذا"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 msgid "Icons"
 msgstr "أيقونات"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 msgid "List of icon names"
 msgstr "قائمة أسماء الإيقونات"
 

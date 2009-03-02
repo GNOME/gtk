@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2007-09-06 18:05+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com>\n"
 "Language-Team: Malayalam\n"
@@ -94,7 +94,7 @@ msgstr "സ്വതവേയുളള ഡിസ്പ്ളെ"
 msgid "The default display for GDK"
 msgstr "GDK യ്‌ക്ക് വേണ്ടി സ്വതവേയുളള ഡിസ്പ്ളെ"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "സ്ക്രീന്‍"
@@ -409,7 +409,7 @@ msgid "Whether the action group is visible."
 msgstr "ആക്ഷന്‍ ഗ്രൂപ്പ് പ്രവര്‍ത്തന ദൃശ്യമോ എന്ന്."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "മൂല്യം"
 
@@ -893,7 +893,7 @@ msgid ""
 "rectangle"
 msgstr ""
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "അകത്തുളള ബോര്‍ഡര്‍"
 
@@ -1297,7 +1297,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "പ്രോഗ്രസ്സ് ബാറിന്‍റെ സംവേദനവും വളര്‍ച്ചയും"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "ക്രമീകരണം"
 
@@ -2464,32 +2464,42 @@ msgstr "ഉയരം"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "ടാബുകള്‍ കാണിക്കണമോ വേണ്ടയോ എന്ന്"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "ട്രഫിന്‍റെ അതിര്"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "പ്രോഗ്രസ്സ് ബാറിലുളള ടെക്സ്റ്റ്"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr "ടെക്സ്റ്റിനും ഫ്രെയിമിനും ഇടയ്ക്കുമുളള അതിര്."
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 #, fuzzy
 msgid "State Hint"
 msgstr "അവസ്ഥ കാണിക്കുന്ന സ്ട്രിങ്"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr ""
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "സ്ഥാനം തിരഞ്ഞെടുക്കുക"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "പാസ്‍വേര്‍ഡിനുളള സമയം കഴിഞ്ഞിരിക്കുന്നു"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr "അദൃശ്യമായ എന്‍ട്രികളില്‍ അവസാനം നല്‍കിയ അക്ഷരം എത്ര നേരം കാണിക്കണം"
 
@@ -3071,7 +3081,7 @@ msgstr "പ്രതിരൂപങ്ങളുടെ ശേഖരം"
 msgid "Icon set to display"
 msgstr "പ്രദര്‍ശിപ്പിക്കുന്നതിനുളള പ്രതിരൂപങ്ങളുടെ ശേഖരം"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "പ്രതിരൂപത്തിന്‍റെ വലിപ്പം"
 
@@ -3641,26 +3651,26 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "വിഡ്ജറ്റിന്‍റെ മുകളിലും താഴെയും ചേര്‍ക്കുവാനുളള സ്ഥലം, പിക്സലില്‍"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 #, fuzzy
 msgid "Parent"
 msgstr "അത്യാവശ്യമായ"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 #, fuzzy
 msgid "The parent window"
 msgstr "ജാലകത്തിന്റെ തരം"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 #, fuzzy
 msgid "Is Showing"
 msgstr "തലക്കെട്ട് കാണിക്കുക"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 #, fuzzy
 msgid "The screen where this window will be displayed."
 msgstr "ഈ ജാലകം പ്രദര്‍ശിപ്പിക്കുന്നതിനുളള ജാലകം"
@@ -4551,11 +4561,11 @@ msgstr "ആരോ സ്കേലിങ്"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr ""
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "അക്കങ്ങള്‍ പ്രദര്‍ശിപ്പിക്കുക"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "വസ്തുക്കള്‍ അക്കങ്ങളോടൊപ്പം പ്രദര്‍ശിപ്പിക്കണമോ എന്ന്"
 
@@ -4717,24 +4727,24 @@ msgstr "വിടവ് മൂല്യം"
 msgid "Space between value text and the slider/trough area"
 msgstr ""
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 msgid "The value of the scale"
 msgstr "സ്കെയിലിന്റെ മൂല്ല്യം"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 msgid "The icon size"
 msgstr "ഐക്കണിന്റെ വലിപ്പം"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "ഈ സ്കെയില്‍ ബട്ടണ്‍ വസ്തുവിന്റെ മൂല്ല്യം അടങ്ങുന്ന GtkAdjustment"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 msgid "Icons"
 msgstr "പ്രതിരൂപങ്ങള്‍"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 msgid "List of icon names"
 msgstr "പ്റതിരൂപങ്ങളുടെ പേരിന്റെ പട്ടിക"
 

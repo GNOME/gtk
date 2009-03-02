@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:10-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2009-02-10 18:31+0100\n"
 "Last-Translator: David Planella <david.planella@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -36,14 +36,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
-
-#: gdk/directfb/gdkdisplay-directfb.c:55
-msgid "directfb arg"
-msgstr "argument directfb"
-
-#: gdk/directfb/gdkdisplay-directfb.c:55
-msgid "sdl|system"
-msgstr "sistema"
 
 #: gdk/gdk.c:103
 #, c-format
@@ -302,19 +294,19 @@ msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Supr"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:965
-#: gdk-pixbuf/gdk-pixbuf-io.c:1225 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:968
+#: gdk-pixbuf/gdk-pixbuf-io.c:1228 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "No s'ha pogut obrir el fitxer «%s»: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:977
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:980
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "El fitxer gràfic «%s» no conté dades"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1013
-#: gdk-pixbuf/gdk-pixbuf-io.c:1277 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1016
+#: gdk-pixbuf/gdk-pixbuf-io.c:1280 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -350,48 +342,48 @@ msgstr ""
 msgid "Image type '%s' is not supported"
 msgstr "El tipus d'imatge «%s» no està implementat"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:846
+#: gdk-pixbuf/gdk-pixbuf-io.c:849
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "No s'ha pogut reconèixer el format gràfic del fitxer «%s»"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:854
+#: gdk-pixbuf/gdk-pixbuf-io.c:857
 msgid "Unrecognized image file format"
 msgstr "No es coneix el format del fitxer gràfic"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1022
+#: gdk-pixbuf/gdk-pixbuf-io.c:1025
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "No s'ha pogut carregar la imatge «%s»: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1656 gdk-pixbuf/io-gdip-utils.c:952
+#: gdk-pixbuf/gdk-pixbuf-io.c:1659 gdk-pixbuf/io-gdip-utils.c:952
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "S'ha produït un error en escriure al fitxer d'imatge: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1701 gdk-pixbuf/gdk-pixbuf-io.c:1831
+#: gdk-pixbuf/gdk-pixbuf-io.c:1704 gdk-pixbuf/gdk-pixbuf-io.c:1834
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Aquest muntatge de gdk-pixbuf no permet desar el format d'imatge: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1735
+#: gdk-pixbuf/gdk-pixbuf-io.c:1738
 msgid "Insufficient memory to save image to callback"
 msgstr "No hi ha memòria suficient per desar la imatge a la crida de retorn"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1748
+#: gdk-pixbuf/gdk-pixbuf-io.c:1751
 msgid "Failed to open temporary file"
 msgstr "No s'ha pogut obrir el fitxer temporal"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1774
+#: gdk-pixbuf/gdk-pixbuf-io.c:1777
 msgid "Failed to read from temporary file"
 msgstr "No s'ha pogut llegir el fitxer temporal"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2008
+#: gdk-pixbuf/gdk-pixbuf-io.c:2011
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "No s'ha pogut obrir «%s» per a l'escriptura: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2033
+#: gdk-pixbuf/gdk-pixbuf-io.c:2036
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -400,12 +392,12 @@ msgstr ""
 "No s'ha pogut desar «%s» en escriure la imatge, és probable que no s'hagin "
 "desat totes les dades: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2253 gdk-pixbuf/gdk-pixbuf-io.c:2304
+#: gdk-pixbuf/gdk-pixbuf-io.c:2256 gdk-pixbuf/gdk-pixbuf-io.c:2307
 msgid "Insufficient memory to save image into a buffer"
 msgstr ""
 "No hi ha memòria suficient per a desar la imatge en una memòria intermèdia"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2350
+#: gdk-pixbuf/gdk-pixbuf-io.c:2353
 msgid "Error writing to image stream"
 msgstr "S'ha produït un error en escriure al flux d'imatge"
 
@@ -1572,15 +1564,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Selecció de color"
 
-#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8411 gtk/gtktextview.c:7766
 msgid "Input _Methods"
 msgstr "_Mètodes d'entrada"
 
-#: gtk/gtkentry.c:8278 gtk/gtktextview.c:7794
+#: gtk/gtkentry.c:8425 gtk/gtktextview.c:7780
 msgid "_Insert Unicode Control Character"
 msgstr "_Insereix caràcters de control Unicode"
 
-#: gtk/gtkentry.c:9636
+#: gtk/gtkentry.c:9793
 msgid "Caps Lock is on"
 msgstr "La fixació de majúscules està activada"
 
@@ -1692,104 +1684,104 @@ msgstr "Llocs"
 msgid "_Places"
 msgstr "_Llocs"
 
-#: gtk/gtkfilechooserdefault.c:4007
+#: gtk/gtkfilechooserdefault.c:4008
 msgid "_Add"
 msgstr "_Afegeix"
 
-#: gtk/gtkfilechooserdefault.c:4014
+#: gtk/gtkfilechooserdefault.c:4015
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Afegeix la carpeta seleccionada a les adreces d'interès"
 
-#: gtk/gtkfilechooserdefault.c:4019
+#: gtk/gtkfilechooserdefault.c:4020
 msgid "_Remove"
 msgstr "_Suprimeix"
 
-#: gtk/gtkfilechooserdefault.c:4026
+#: gtk/gtkfilechooserdefault.c:4027
 msgid "Remove the selected bookmark"
 msgstr "Suprimeix les adreces d'interès seleccionades"
 
-#: gtk/gtkfilechooserdefault.c:4135
+#: gtk/gtkfilechooserdefault.c:4136
 msgid "Could not select file"
 msgstr "No s'ha pogut seleccionar el fitxer"
 
-#: gtk/gtkfilechooserdefault.c:4310
+#: gtk/gtkfilechooserdefault.c:4311
 msgid "_Add to Bookmarks"
 msgstr "_Afegeix a les adreces d'interès"
 
-#: gtk/gtkfilechooserdefault.c:4324
+#: gtk/gtkfilechooserdefault.c:4325
 msgid "Show _Hidden Files"
 msgstr "Mostra els fitxers _ocults"
 
-#: gtk/gtkfilechooserdefault.c:4331
+#: gtk/gtkfilechooserdefault.c:4332
 msgid "Show _Size Column"
 msgstr "Mostra la columna de la _mida"
 
-#: gtk/gtkfilechooserdefault.c:4586 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4587 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Fitxers"
 
-#: gtk/gtkfilechooserdefault.c:4635
+#: gtk/gtkfilechooserdefault.c:4636
 msgid "Name"
 msgstr "Nom"
 
-#: gtk/gtkfilechooserdefault.c:4660
+#: gtk/gtkfilechooserdefault.c:4661
 msgid "Size"
 msgstr "Mida"
 
-#: gtk/gtkfilechooserdefault.c:4674
+#: gtk/gtkfilechooserdefault.c:4675
 msgid "Modified"
 msgstr "Modificat"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4894 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4895 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "_Nom:"
 
-#: gtk/gtkfilechooserdefault.c:4937
+#: gtk/gtkfilechooserdefault.c:4938
 msgid "_Browse for other folders"
 msgstr "Na_vega per altres carpetes"
 
-#: gtk/gtkfilechooserdefault.c:5207
+#: gtk/gtkfilechooserdefault.c:5208
 msgid "Type a file name"
 msgstr "Escriviu un nom de fitxer"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5244
+#: gtk/gtkfilechooserdefault.c:5245
 msgid "Create Fo_lder"
 msgstr "Crea una ca_rpeta"
 
-#: gtk/gtkfilechooserdefault.c:5254
+#: gtk/gtkfilechooserdefault.c:5255
 msgid "_Location:"
 msgstr "_Ubicació:"
 
-#: gtk/gtkfilechooserdefault.c:5458
+#: gtk/gtkfilechooserdefault.c:5459
 msgid "Save in _folder:"
 msgstr "De_sa en la carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5461
 msgid "Create in _folder:"
 msgstr "Crea en la _carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:7150
+#: gtk/gtkfilechooserdefault.c:7151
 msgid "Cannot change to folder because it is not local"
 msgstr "No es pot canviar a la carpeta perquè no és local"
 
-#: gtk/gtkfilechooserdefault.c:7775 gtk/gtkfilechooserdefault.c:7796
+#: gtk/gtkfilechooserdefault.c:7776 gtk/gtkfilechooserdefault.c:7797
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La drecera %s ja existeix"
 
-#: gtk/gtkfilechooserdefault.c:7886
+#: gtk/gtkfilechooserdefault.c:7887
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La drecera %s no existeix"
 
-#: gtk/gtkfilechooserdefault.c:8148 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8149 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ja existeix un fitxer amb el nom «%s». Voleu reemplaçar-ho?"
 
-#: gtk/gtkfilechooserdefault.c:8151 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8152 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1797,15 +1789,15 @@ msgstr ""
 "El fitxer ja existeix a «%s». Si ho reemplaceu sobreescriureu el seu "
 "contingut."
 
-#: gtk/gtkfilechooserdefault.c:8156 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8157 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "_Reemplaça"
 
-#: gtk/gtkfilechooserdefault.c:8913
+#: gtk/gtkfilechooserdefault.c:8914
 msgid "Could not start the search process"
 msgstr "No s'ha pogut iniciar el procés de cerca"
 
-#: gtk/gtkfilechooserdefault.c:8914
+#: gtk/gtkfilechooserdefault.c:8915
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1813,34 +1805,34 @@ msgstr ""
 "El programa no ha pogut crear cap connexió al dimoni d'indexació. Assegureu-"
 "vos que s'està executant."
 
-#: gtk/gtkfilechooserdefault.c:8928
+#: gtk/gtkfilechooserdefault.c:8929
 msgid "Could not send the search request"
 msgstr "No s'ha pogut enviar la sol·licitud de cerca"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9395
+#: gtk/gtkfilechooserdefault.c:9396
 msgid "_Search:"
 msgstr "_Cerca:"
 
-#: gtk/gtkfilechooserdefault.c:10348
+#: gtk/gtkfilechooserdefault.c:10349
 #, c-format
 msgid "Could not mount %s"
 msgstr "No s'ha pogut muntar %s"
 
-#: gtk/gtkfilechooserdefault.c:11023
+#: gtk/gtkfilechooserdefault.c:11024
 msgid "Type name of new folder"
 msgstr "Escriviu el nom de la carpeta nova"
 
-#: gtk/gtkfilechooserdefault.c:11201 gtk/gtkfilechooserdefault.c:11223
-#: gtk/gtkfilechooserdefault.c:11294
+#: gtk/gtkfilechooserdefault.c:11202 gtk/gtkfilechooserdefault.c:11224
+#: gtk/gtkfilechooserdefault.c:11295
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/gtkfilechooserdefault.c:11241
+#: gtk/gtkfilechooserdefault.c:11242
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11243
+#: gtk/gtkfilechooserdefault.c:11244
 msgid "Yesterday at %H:%M"
 msgstr "Ahir a les %H:%M"
 
@@ -2286,43 +2278,43 @@ msgstr "Opcions del GTK+"
 msgid "Show GTK+ Options"
 msgstr "Mostra les opcions del GTK+"
 
-#: gtk/gtkmountoperation.c:484
+#: gtk/gtkmountoperation.c:463
 msgid "Co_nnect"
 msgstr "C_onnecta"
 
-#: gtk/gtkmountoperation.c:528
+#: gtk/gtkmountoperation.c:529
 msgid "Connect _anonymously"
 msgstr "Connecta't _anònimament"
 
-#: gtk/gtkmountoperation.c:537
+#: gtk/gtkmountoperation.c:538
 msgid "Connect as u_ser:"
 msgstr "Connecta't com a u_suari:"
 
-#: gtk/gtkmountoperation.c:574
+#: gtk/gtkmountoperation.c:575
 msgid "_Username:"
 msgstr "_Nom d'usuari:"
 
-#: gtk/gtkmountoperation.c:578
+#: gtk/gtkmountoperation.c:579
 msgid "_Domain:"
 msgstr "_Domini:"
 
-#: gtk/gtkmountoperation.c:583
+#: gtk/gtkmountoperation.c:584
 msgid "_Password:"
 msgstr "Contrasen_ya:"
 
-#: gtk/gtkmountoperation.c:601
+#: gtk/gtkmountoperation.c:602
 msgid "Forget password _immediately"
 msgstr "Oblida la _contrasenya immediatament"
 
-#: gtk/gtkmountoperation.c:611
+#: gtk/gtkmountoperation.c:612
 msgid "Remember password until you _logout"
 msgstr "Recorda la contrasenya _fins que surti"
 
-#: gtk/gtkmountoperation.c:621
+#: gtk/gtkmountoperation.c:622
 msgid "Remember _forever"
 msgstr "Recorda-la per se_mpre"
 
-#: gtk/gtknotebook.c:4425 gtk/gtknotebook.c:6944
+#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6946
 #, c-format
 msgid "Page %u"
 msgstr "Pàgina %u"
@@ -2838,18 +2830,18 @@ msgstr "Alguns paràmetres del diàleg estan en conflicte"
 msgid "Print"
 msgstr "Imprimeix"
 
-#: gtk/gtkrc.c:2868
+#: gtk/gtkrc.c:2874
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "No s'ha pogut trobar el fitxer per a incloure: «%s»"
 
-#: gtk/gtkrc.c:3496 gtk/gtkrc.c:3499
+#: gtk/gtkrc.c:3502 gtk/gtkrc.c:3505
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "No s'ha trobat un fitxer d'imatge al pixmap_path: «%s»"
 
 #: gtk/gtkrecentaction.c:154 gtk/gtkrecentaction.c:162
-#: gtk/gtkrecentchoosermenu.c:589 gtk/gtkrecentchoosermenu.c:597
+#: gtk/gtkrecentchoosermenu.c:588 gtk/gtkrecentchoosermenu.c:596
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Aquesta funció no està implementada per a ginys de la classe «%s»"
@@ -2871,23 +2863,23 @@ msgstr "Filtre sense títol"
 msgid "Could not remove item"
 msgstr "No s'ha pogut suprimir l'element"
 
-#: gtk/gtkrecentchooserdefault.c:1694
+#: gtk/gtkrecentchooserdefault.c:1695
 msgid "Could not clear list"
 msgstr "No s'ha pogut netejar la llista"
 
-#: gtk/gtkrecentchooserdefault.c:1778
+#: gtk/gtkrecentchooserdefault.c:1779
 msgid "Copy _Location"
 msgstr "Copia la _ubicació"
 
-#: gtk/gtkrecentchooserdefault.c:1791
+#: gtk/gtkrecentchooserdefault.c:1792
 msgid "_Remove From List"
 msgstr "Sup_rimeix de la llista"
 
-#: gtk/gtkrecentchooserdefault.c:1800
+#: gtk/gtkrecentchooserdefault.c:1801
 msgid "_Clear List"
 msgstr "_Neteja la llista"
 
-#: gtk/gtkrecentchooserdefault.c:1814
+#: gtk/gtkrecentchooserdefault.c:1815
 msgid "Show _Private Resources"
 msgstr "Mostra els recursos _privats"
 
@@ -2901,21 +2893,21 @@ msgstr "Mostra els recursos _privats"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:343
+#: gtk/gtkrecentchoosermenu.c:342
 msgid "No items found"
 msgstr "No s'ha trobat cap element"
 
-#: gtk/gtkrecentchoosermenu.c:509 gtk/gtkrecentchoosermenu.c:565
+#: gtk/gtkrecentchoosermenu.c:508 gtk/gtkrecentchoosermenu.c:564
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "No hi ha cap recurs emprat recentment amb l'URI «%s»"
 
-#: gtk/gtkrecentchoosermenu.c:776
+#: gtk/gtkrecentchoosermenu.c:775
 #, c-format
 msgid "Open '%s'"
 msgstr "Obre «%s»"
 
-#: gtk/gtkrecentchoosermenu.c:806
+#: gtk/gtkrecentchoosermenu.c:805
 msgid "Unknown item"
 msgstr "Element desconegut"
 
@@ -2924,7 +2916,7 @@ msgstr "Element desconegut"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: gtk/gtkrecentchoosermenu.c:817
+#: gtk/gtkrecentchoosermenu.c:816
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2933,7 +2925,7 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: gtk/gtkrecentchoosermenu.c:822
+#: gtk/gtkrecentchoosermenu.c:821
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
@@ -5030,6 +5022,12 @@ msgstr "Imprimiu per a provar la impressora"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "No s'ha pogut obtenir informació per al fitxer «%s»: %s"
+
+#~ msgid "directfb arg"
+#~ msgstr "argument directfb"
+
+#~ msgid "sdl|system"
+#~ msgstr "sistema"
 
 #~ msgid "keyboard label|BackSpace"
 #~ msgstr "Retrocés"

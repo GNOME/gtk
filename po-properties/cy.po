@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2007-05-14 22:44-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -90,7 +90,7 @@ msgstr "Dangosydd Rhagosodedig"
 msgid "The default display for GDK"
 msgstr "Dangosydd rhagosodedig GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "Sgrin"
@@ -413,7 +413,7 @@ msgid "Whether the action group is visible."
 msgstr "A ydy'r grŵp gweithred yn weladwy."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Gwerth"
 
@@ -910,7 +910,7 @@ msgstr ""
 "A ddylai'r priodweddau child_displacement_x/_y hefyd effeithio'r petryal "
 "ffocws"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "Border Mewnol"
 
@@ -1319,7 +1319,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Gogwydd a chyfeiriad tyfu'r bar cynnydd"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Addasiad"
 
@@ -2511,33 +2511,44 @@ msgstr "Uchder"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "A ddylid dangos tabiau ai peidio"
 
-#: gtk/gtkentry.c:1648
+# EFALLAI
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "Border Cafn"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "Y testun ar y bar cynnydd"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr "Border rhwng y testun a'r ffrâm."
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 #, fuzzy
 msgid "State Hint"
 msgstr "Llinyn Statws"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Didfap i'w ddefnyddio fel masg wrth arlunio cefndir y testun"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Dewis wrth ffocysu"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "A ddylid dewis cynnwys cofnod pan ffocysir ef"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "Terfyn Amser Awgrym Cyfrinair"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr "Am ba hyd i ddangos y nod a fewnbynnwyd diwethaf o fewn cofnodion cudd"
 
@@ -3141,7 +3152,7 @@ msgstr "Set eiconau"
 msgid "Icon set to display"
 msgstr "Set eiconau i'w ddangos"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Maint eicon"
 
@@ -3740,26 +3751,26 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Faint o le i'w ychwanegu at frig a gwaelod y teclyn, mewn picseli"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 #, fuzzy
 msgid "Parent"
 msgstr "Pwysig"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 #, fuzzy
 msgid "The parent window"
 msgstr "Math y ffenestr"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 #, fuzzy
 msgid "Is Showing"
 msgstr "Dangos Pennawd"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 #, fuzzy
 msgid "The screen where this window will be displayed."
 msgstr "Y sgrin lle caiff y ffenestr hon ei dangos"
@@ -4693,11 +4704,11 @@ msgstr "Graddio Saeth"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr ""
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "Dangos Rhifau"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "A ddylid dangos rhifau gyda'r eitemau"
 
@@ -4864,28 +4875,28 @@ msgstr "Bylchu'r gwerth"
 msgid "Space between value text and the slider/trough area"
 msgstr "Gofod rhwng testun y gwerth a'r ardal llithrydd/cafn"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 #, fuzzy
 msgid "The value of the scale"
 msgstr "Gwerth yr addasiad"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 #, fuzzy
 msgid "The icon size"
 msgstr "Maint eiconau bar offer"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 #, fuzzy
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "Y GtkAdjustment sy'n cynnwys gwerth cyfredol y gwrthrych cyfwng hwn"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 #, fuzzy
 msgid "Icons"
 msgstr "Eicon"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 #, fuzzy
 msgid "List of icon names"
 msgstr "Enw Eicon y Logo"

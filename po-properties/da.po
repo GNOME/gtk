@@ -47,7 +47,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2009-02-08 22:23+0100\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -128,7 +128,7 @@ msgstr "Standardterminal"
 msgid "The default display for GDK"
 msgstr "Standardterminalen for GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "Skærm"
@@ -449,7 +449,7 @@ msgid "Whether the action group is visible."
 msgstr "Om handlingsgruppen er synlig."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Værdi"
 
@@ -958,7 +958,7 @@ msgid ""
 msgstr ""
 "Om child_displacement_x/_y-egenskaberne også skal påvirke fokusrektanglet"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "Indre kant"
 
@@ -1367,7 +1367,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientering og vækstretning for fremgangsmåleren"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Justering"
 
@@ -2514,33 +2514,44 @@ msgstr "Ikon oplyses"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "Om aktiverbare ikoner oplyses under markøren"
 
-#: gtk/gtkentry.c:1648
+# trough = trug
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "Fordybningskant"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "Statuslinjens tekst"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr "Kant mellem tekst og ramme."
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 msgid "State Hint"
 msgstr "Tilstandsfif"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr ""
 "Om der skal videregives en egentlig tilstand, når der tegnes skygge eller "
 "baggrund"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Markér ved fokus"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Om indholdet af indtastningsfeltet markeres når feltet modtager fokus"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "Tidsudløb for adgangskodefif"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Hvor længe de sidst indtastede tegn skal vises ved skjulte indtastninger"
@@ -3137,7 +3148,7 @@ msgstr "Ikonsæt"
 msgid "Icon set to display"
 msgstr "Ikonsæt der skal vises"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Ikonstørrelse"
 
@@ -3718,23 +3729,23 @@ msgstr ""
 "Andelen af mellemrum der skal tilføjes over og under kontrollen, i "
 "skærmpunkter"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 msgid "Parent"
 msgstr "Ophav"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 msgid "The parent window"
 msgstr "Ophavsvinduet"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 msgid "Is Showing"
 msgstr "Vises"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr "Viser vi en dialog"
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 msgid "The screen where this window will be displayed."
 msgstr "Den skærm hvor dette vindue vil blive vist."
 
@@ -4666,14 +4677,14 @@ msgstr "Pilskalering"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Pilskalering i forhold til rulleknapstørrelse"
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "Vis numre"
 
 # Ordet "sammen" er en fortolkning men idet jeg regner med at hvis det der menes er at objekterne vises "som" et nummer ville der have stået "as a number" derfor regner jeg med at det det betyder er at visningen af objektet inkluderer et nummer.
 #
 # Antagelsen synes at være rigtig ifølge API-doc
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "Om objekterne skal vises sammen med et nummer"
 
@@ -4845,25 +4856,25 @@ msgstr "Værdimellemrum"
 msgid "Space between value text and the slider/trough area"
 msgstr "Mellemrum mellem værditekst og skyder-/fordybningsarealet"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 msgid "The value of the scale"
 msgstr "Værdien for intervalobjektet"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 msgid "The icon size"
 msgstr "Ikonstørrelsen"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
 "GtkAdjustment som indeholder den aktuelle værdi af dette intervalknap-objekt"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 msgid "Icons"
 msgstr "Ikoner"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 msgid "List of icon names"
 msgstr "Liste af ikonnavne"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2008-09-17 15:19+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
@@ -90,7 +90,7 @@ msgstr "सर्वसाधारण मोकळी  जागा "
 msgid "The default display for GDK"
 msgstr "GDKसाठी साधारण प्रदर्शक"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "पडदा"
@@ -406,7 +406,7 @@ msgid "Whether the action group is visible."
 msgstr "सुस्पष्ट चित्र."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "मूल्य"
 
@@ -884,7 +884,7 @@ msgstr ""
 "child_displacement_x/_y गुणधर्ममुळे केंदीत काटकोन चौकानवर सुध्दा प्रभाव पडायला पाहिजे "
 "का"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "आतंरीक सीमा"
 
@@ -1278,7 +1278,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "प्रगती सूचकपट्टीचा कल अणि वाढ"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "जुळणी"
 
@@ -2434,34 +2434,44 @@ msgstr "ऊंची"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "टॅब दाखवायचे आहेत की नाहीत"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "ट्रफ सीमा"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "लिखाण"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr "पाठ्य व फेम मधिल सीमा."
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 #, fuzzy
 msgid "State Hint"
 msgstr "स्तिथी अक्षरमाळा"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr ""
 "मजकुराची पार्श्वभूमी तयार करताना एखाद्या मुखवट्याप्रमाणे उपयोग करता येईल असा बिटमॅप"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "दृश्यमान करा"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "केंद्रीत केल्यावर नोंदणी मधिल अनुक्रम निवडायचे का"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "गुप्तशब्द ओळखण्याची वेळ संपली"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr "लपविलेल्या नोंदणी मध्ये इंपुट अक्षर किती दर्शवायचे"
 
@@ -3047,7 +3057,7 @@ msgstr "चिन्ह संच"
 msgid "Icon set to display"
 msgstr "चिन्ह"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "चिन्हचा आकार"
 
@@ -3612,23 +3622,23 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "अक्षररुपात, विडगेटची वरील आणि खालील बाजू जोडण्यासाठी लागणारी मोकळी जागा"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 msgid "Parent"
 msgstr "मुख्य"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 msgid "The parent window"
 msgstr "मुख्य चौकट"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 msgid "Is Showing"
 msgstr "दर्शवित आहे"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr "संवाद दर्शविले जात आहे का"
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 msgid "The screen where this window will be displayed."
 msgstr "ही चौकट जेथे दर्शविली जाईल तो पडदा."
 
@@ -4520,11 +4530,11 @@ msgstr "बाण प्रमाण"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "बटन आकार बदलविणे परस्पर असलेले बाण प्रमाण"
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "क्रमांक दर्शवा"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "घटक क्रमांकाशी दर्शविले पाहिजे का"
 
@@ -4685,24 +4695,24 @@ msgstr "मुल्यांमधील मोकळी जागा"
 msgid "Space between value text and the slider/trough area"
 msgstr "पाठ्यमधिल मुल्य आणि सरकपट्टी/ट्रफ कक्षा मधिल मोकळी जागा"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 msgid "The value of the scale"
 msgstr "स्केलचे मुल्य"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 msgid "The icon size"
 msgstr "चिन्ह आकार"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "या प्रमाण बटण घटकाकरीताचे सद्याचे मुल्य समाविष्टीत असणारे GtkAdjustment"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 msgid "Icons"
 msgstr "चिन्ह"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 msgid "List of icon names"
 msgstr "चिन्ह नावाची यादी"
 

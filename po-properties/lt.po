@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2009-01-09 11:47+0200\n"
 "Last-Translator: Rimas Kudelis <rq@akl.lt>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
@@ -96,7 +96,7 @@ msgstr "Numatytas ekranas"
 msgid "The default display for GDK"
 msgstr "Numatytas GDK ekranas"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "Ekranas"
@@ -416,7 +416,7 @@ msgid "Whether the action group is visible."
 msgstr "Ar veiksmų grupė yra matoma."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Vertė"
 
@@ -911,7 +911,7 @@ msgstr ""
 "Ar „child_displacement_x/_y“ savybės turėtų taip pat keisti aktyvinimo "
 "stačiakampį"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "Vidinis rėmelis"
 
@@ -1309,7 +1309,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Pažangos juostos padėtis ir augimo kryptis"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Slankiklis"
 
@@ -2476,33 +2476,43 @@ msgstr "Aukštis"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "Ar turi būti rodomos kortelės"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "Tarpinis rėmelis"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "Tekstas rodomas pažangos juostoje"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr "Rėmelis tarp teksto ir kadro."
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 #, fuzzy
 msgid "State Hint"
 msgstr "Būsenos užrašas"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Išvedant tekstą naudojamas foninis rastras"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Pažymėti aktyvinant"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Ar pažymėti įvesties laukelio turinį, kai jis suaktyvintas"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "Slaptažodžio užuominos laikas"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Kiek ilgai rodyti paskutinį įvestą simbolį paslėptuose įvesties laukeliuose"
@@ -3091,7 +3101,7 @@ msgstr "Piktogramų rinkinys"
 msgid "Icon set to display"
 msgstr "Piktogramų rinkinys rodymui."
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Piktogramos dydis"
 
@@ -3671,23 +3681,23 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Tarpas pridedamas objekto viršuje ir apačioje, pikseliais"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 msgid "Parent"
 msgstr "Pirminis"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 msgid "The parent window"
 msgstr "Pirminis langas"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 msgid "Is Showing"
 msgstr "Rodomas"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr "Ar rodomas dialogo langas"
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 msgid "The screen where this window will be displayed."
 msgstr "Ekranas, kuriame bus rodomas šis langas."
 
@@ -4587,11 +4597,11 @@ msgstr "Rodyklės mastelis"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Rodyklės dydis, atsižvelgiant į slinkties mygtuko didį"
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "Rodyti skaičius"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "Ar elementai turėtų būti rodomi su skaičiumi"
 
@@ -4753,24 +4763,24 @@ msgstr "Reikšmės atitraukimas"
 msgid "Space between value text and the slider/trough area"
 msgstr "Tarpas tarp reikšmės teksto ir slankiklio srities"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 msgid "The value of the scale"
 msgstr "Slankiklio vertė"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 msgid "The icon size"
 msgstr "Piktogramos dydis"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "GtkAdjustment kintamasis, kuris saugo dabartinę slankiklio reikšmę"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 msgid "Icons"
 msgstr "Piktogramos"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 msgid "List of icon names"
 msgstr "Piktogramų pavadinimų sąrašas"
 

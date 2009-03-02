@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2008-01-31 02:13+0200\n"
 "Last-Translator: NikosCharonitakis <nikosx@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -110,7 +110,7 @@ msgstr "Προεπιλεγμένη Προβολή"
 msgid "The default display for GDK"
 msgstr "Η προεπιλεγμένη προβολή για GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "Οθόνη"
@@ -441,7 +441,7 @@ msgid "Whether the action group is visible."
 msgstr "Αν αυτή η ομάδα ενέργειας θα είναι  ορατή."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Τιμή"
 
@@ -952,7 +952,7 @@ msgstr ""
 "Αν οι ιδιότητες child_displacement_x/_y θα επηρεάζουν και το ορθογώνιο "
 "εστίασης"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "Εσωτερικό περίγραμμα"
 
@@ -1357,7 +1357,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Προσανατολισμός και κατεύθυνση ανάπτυξης της μπάρας προόδου"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Ρύθμιση"
 
@@ -2548,33 +2548,43 @@ msgstr "Ύψος"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "Αν θα εμφανίζονται ή όχι οι στηλοθέτες"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "Περίγραμμα κοίλου"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "Κείμενο που θα εμφανίζεται στη μπάρα προόδου"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 #, fuzzy
 msgid "State Hint"
 msgstr "Αλφαριθμητικό κατάστασης"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Bitmap για χρήση ως μάσκα κατα τη δημιουργία παρασκηνίου κειμένου"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Επιλογή σε εστίαση"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Αν θα επιλέγονται τα περιεχόμενα μιας καταχώρισης όταν γίνεται εστίαση"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr ""
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 
@@ -3187,7 +3197,7 @@ msgstr "Ορισμός εικονιδίου"
 msgid "Icon set to display"
 msgstr "Ορισμός εικονιδίου για προβολή"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Μέγεθος εικονιδίου"
 
@@ -3793,26 +3803,26 @@ msgstr ""
 "Το μέγεθος του διαστήματος για προσθήκη στο πάνω και κάτω μέρος του γραφικού "
 "συστατικού, σε εικονοστοιχεία"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 #, fuzzy
 msgid "Parent"
 msgstr "Επείγον"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 #, fuzzy
 msgid "The parent window"
 msgstr "Ο τύπος του παραθύρου"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 #, fuzzy
 msgid "Is Showing"
 msgstr "Προβολή κεφαλίδας"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 #, fuzzy
 msgid "The screen where this window will be displayed."
 msgstr "Η οθόνη όπου και θα προβάλλεται αυτό το παράθυρο"
@@ -4742,11 +4752,11 @@ msgstr "Να επιτρέπεται κλιμάκωση"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr ""
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "Εμφάνιση αριθμών"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "Αν τα αντικείμενα θα εμφανίζονται με ένα αριθμό"
 
@@ -4911,16 +4921,16 @@ msgstr "Διάστημα τιμής"
 msgid "Space between value text and the slider/trough area"
 msgstr "Διάστημα μεταξύ τιμής κειμένου και ζώνης κύλισης"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 #, fuzzy
 msgid "The value of the scale"
 msgstr "Η τιμή της στοίχισης"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 msgid "The icon size"
 msgstr "Το μέγεθος εικονιδίου"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 #, fuzzy
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
@@ -4928,11 +4938,11 @@ msgstr ""
 "Η GtkAdjustment που περιέχει την τρέχουσα τιμή αυτού του αντικειμένου "
 "κλίμακας"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 msgid "Icons"
 msgstr "Εικονίδια"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 #, fuzzy
 msgid "List of icon names"
 msgstr "Όνομα εικονιδίου λογοτύπου"

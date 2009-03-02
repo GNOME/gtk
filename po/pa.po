@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:10-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2009-01-28 07:53+0530\n"
 "Last-Translator: Amanpreet Singh Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@users.sf.net>\n"
@@ -17,14 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-
-#: gdk/directfb/gdkdisplay-directfb.c:55
-msgid "directfb arg"
-msgstr "directfb arg"
-
-#: gdk/directfb/gdkdisplay-directfb.c:55
-msgid "sdl|system"
-msgstr "ਸਿਸਟਮ"
 
 #: gdk/gdk.c:103
 #, c-format
@@ -279,19 +271,19 @@ msgctxt "keyboard label"
 msgid "Delete"
 msgstr "ਹਟਾਓ"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:965
-#: gdk-pixbuf/gdk-pixbuf-io.c:1225 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:968
+#: gdk-pixbuf/gdk-pixbuf-io.c:1228 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "ਫਾਇਲ '%s' ਖੋਲ੍ਹਣ ਵਿੱਚ ਫੇਲ੍ਹ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:977
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:980
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "ਚਿੱਤਰ ਫਾਇਲ '%s' ਵਿੱਚ ਕੋਈ ਡਾਟਾ ਨਹੀਂ ਹੈ"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1013
-#: gdk-pixbuf/gdk-pixbuf-io.c:1277 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1016
+#: gdk-pixbuf/gdk-pixbuf-io.c:1280 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -327,59 +319,59 @@ msgstr ""
 msgid "Image type '%s' is not supported"
 msgstr "ਚਿੱਤਰ ਕਿਸਮ '%s' ਮੱਦਦ-ਪ੍ਰਾਪਤ ਨਹੀਂ ਹੈ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:846
+#: gdk-pixbuf/gdk-pixbuf-io.c:849
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "ਫਾਇਲ '%s' ਲਈ ਚਿੱਤਰ ਫਾਇਲ ਫਾਰਮੈਟ ਦੀ ਪਛਾਣ ਨਾ ਕੀਤੀ ਜਾ ਸਕੀ ਹੈ।"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:854
+#: gdk-pixbuf/gdk-pixbuf-io.c:857
 msgid "Unrecognized image file format"
 msgstr "ਬੇ-ਪਛਾਣ ਚਿੱਤਰ ਫਾਇਲ ਫਾਰਮੈਟ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1022
+#: gdk-pixbuf/gdk-pixbuf-io.c:1025
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "ਚਿੱਤਰ '%s' ਨੂੰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਫੇਲ੍ਹ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1656 gdk-pixbuf/io-gdip-utils.c:952
+#: gdk-pixbuf/gdk-pixbuf-io.c:1659 gdk-pixbuf/io-gdip-utils.c:952
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "ਚਿੱਤਰ ਫਾਇਲ 'ਤੇ ਲਿਖਣ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1701 gdk-pixbuf/gdk-pixbuf-io.c:1831
+#: gdk-pixbuf/gdk-pixbuf-io.c:1704 gdk-pixbuf/gdk-pixbuf-io.c:1834
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "gdk-pixbuf ਦਾ ਇਹ ਬਿਲੱਡ, ਚਿੱਤਰ ਫਾਰਮੈਟ ਵਿੱਚ ਸੰਭਾਲਣ ਲਈ ਸਹਾਇਕ ਨਹੀਂ ਹੈ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1735
+#: gdk-pixbuf/gdk-pixbuf-io.c:1738
 msgid "Insufficient memory to save image to callback"
 msgstr "ਚਿੱਤਰ ਨੂੰ ਮੁੜ-ਲਿਆਉਣ ਲਈ ਸੰਭਾਲ ਵਾਸਤੇ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀਂ ਹੈ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1748
+#: gdk-pixbuf/gdk-pixbuf-io.c:1751
 msgid "Failed to open temporary file"
 msgstr "ਆਰਜ਼ੀ ਫਾਇਲ ਖੋਲ੍ਹਣ ਵਿੱਚ ਫੇਲ੍ਹ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1774
+#: gdk-pixbuf/gdk-pixbuf-io.c:1777
 msgid "Failed to read from temporary file"
 msgstr "ਆਰਜ਼ੀ ਫਾਇਲ ਪੜ੍ਹਨ ਵਿੱਚ ਫੇਲ੍ਹ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2008
+#: gdk-pixbuf/gdk-pixbuf-io.c:2011
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "ਲਿਖਣ ਲਈ '%s' ਨੂੰ ਖੋਲ੍ਹਣ ਵਿੱਚ ਅਸਫ਼ਲ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2033
+#: gdk-pixbuf/gdk-pixbuf-io.c:2036
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr "ਚਿੱਤਰ ਨੂੰ ਲਿਖਣ ਸਮੇ, '%s' ਨੂੰ ਬੰਦ ਕਰਨ ਵਿੱਚ ਅਸਫ਼ਲ, ਸਾਰਾ ਡਾਟਾ ਸੰਭਾਲਣ ਵਿੱਚ ਅਸਫ਼ਲ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2253 gdk-pixbuf/gdk-pixbuf-io.c:2304
+#: gdk-pixbuf/gdk-pixbuf-io.c:2256 gdk-pixbuf/gdk-pixbuf-io.c:2307
 msgid "Insufficient memory to save image into a buffer"
 msgstr "ਚਿੱਤਰ ਨੂੰ ਬਫਰ ਵਿੱਚ ਸੰਭਾਲਣ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀਂ ਹੈ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2350
+#: gdk-pixbuf/gdk-pixbuf-io.c:2353
 msgid "Error writing to image stream"
 msgstr "ਚਿੱਤਰ ਧਾਰਾ ਲਿਖਣ ਦੌਰਾਨ ਗਲਤੀ"
 
@@ -1523,15 +1515,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "ਰੰਗ ਚੋਣ"
 
-#: gtk/gtkentry.c:8264 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8411 gtk/gtktextview.c:7766
 msgid "Input _Methods"
 msgstr "ਇੰਪੁੱਟ ਢੰਗ(_M)"
 
-#: gtk/gtkentry.c:8278 gtk/gtktextview.c:7794
+#: gtk/gtkentry.c:8425 gtk/gtktextview.c:7780
 msgid "_Insert Unicode Control Character"
 msgstr "ਯੂਨੀਕੋਡ ਕੰਟਰੋਲ ਅੱਖਰ ਸ਼ਾਮਲ(_I)"
 
-#: gtk/gtkentry.c:9636
+#: gtk/gtkentry.c:9793
 msgid "Caps Lock is on"
 msgstr "ਕੈਪਸ ਤਾਲਾ ਚਾਲੂ ਹੈ"
 
@@ -1642,152 +1634,152 @@ msgstr "ਥਾਵਾਂ"
 msgid "_Places"
 msgstr "ਥਾਵਾਂ(_P)"
 
-#: gtk/gtkfilechooserdefault.c:4007
+#: gtk/gtkfilechooserdefault.c:4008
 msgid "_Add"
 msgstr "ਸ਼ਾਮਲ(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4014
+#: gtk/gtkfilechooserdefault.c:4015
 msgid "Add the selected folder to the Bookmarks"
 msgstr "ਚੁਣਿਆ ਫੋਲਡਰ ਬੁੱਕਮਾਰਕ ਵਿੱਚ ਸ਼ਾਮਲ"
 
-#: gtk/gtkfilechooserdefault.c:4019
+#: gtk/gtkfilechooserdefault.c:4020
 msgid "_Remove"
 msgstr "ਹਟਾਓ(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4026
+#: gtk/gtkfilechooserdefault.c:4027
 msgid "Remove the selected bookmark"
 msgstr "ਚੁਣੇ ਬੁੱਕਮਾਰਕ ਹਟਾਓ"
 
-#: gtk/gtkfilechooserdefault.c:4135
+#: gtk/gtkfilechooserdefault.c:4136
 msgid "Could not select file"
 msgstr "ਫਾਇਲ ਚੁਣੀ ਨਹੀਂ ਜਾ ਸਕੀ"
 
-#: gtk/gtkfilechooserdefault.c:4310
+#: gtk/gtkfilechooserdefault.c:4311
 msgid "_Add to Bookmarks"
 msgstr "ਬੁੱਕਮਾਰਕ ਸ਼ਾਮਲ(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4324
+#: gtk/gtkfilechooserdefault.c:4325
 msgid "Show _Hidden Files"
 msgstr "ਲੁਕਵੀਆਂ ਫਾਇਲਾਂ ਵੇਖੋ(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4331
+#: gtk/gtkfilechooserdefault.c:4332
 msgid "Show _Size Column"
 msgstr "ਅਕਾਰ ਕਾਲਮ ਵੇਖੋ(_S)"
 
-#: gtk/gtkfilechooserdefault.c:4586 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4587 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ਫਾਇਲਾਂ"
 
-#: gtk/gtkfilechooserdefault.c:4635
+#: gtk/gtkfilechooserdefault.c:4636
 msgid "Name"
 msgstr "ਨਾਂ"
 
-#: gtk/gtkfilechooserdefault.c:4660
+#: gtk/gtkfilechooserdefault.c:4661
 msgid "Size"
 msgstr "ਅਕਾਰ"
 
-#: gtk/gtkfilechooserdefault.c:4674
+#: gtk/gtkfilechooserdefault.c:4675
 msgid "Modified"
 msgstr "ਸੋਧੀਆਂ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4894 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4895 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "ਨਾਂ(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4937
+#: gtk/gtkfilechooserdefault.c:4938
 msgid "_Browse for other folders"
 msgstr "ਹੋਰ ਫੋਲਡਰਾਂ ਲਈ ਝਲਕ(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5207
+#: gtk/gtkfilechooserdefault.c:5208
 msgid "Type a file name"
 msgstr "ਇੱਕ ਫਾਇਲ ਨਾਂ ਦਿਓ"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5244
+#: gtk/gtkfilechooserdefault.c:5245
 msgid "Create Fo_lder"
 msgstr "ਫੋਲਡਰ ਬਣਾਓ(_l)"
 
-#: gtk/gtkfilechooserdefault.c:5254
+#: gtk/gtkfilechooserdefault.c:5255
 msgid "_Location:"
 msgstr "ਟਿਕਾਣਾ(_L):"
 
-#: gtk/gtkfilechooserdefault.c:5458
+#: gtk/gtkfilechooserdefault.c:5459
 msgid "Save in _folder:"
 msgstr "ਫੋਲਡਰ ਵਿੱਚ ਸੰਭਾਲੋ(_f):"
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5461
 msgid "Create in _folder:"
 msgstr "ਫੋਲਡਰ ਵਿੱਚ ਬਣਾਓ(_f):"
 
-#: gtk/gtkfilechooserdefault.c:7150
+#: gtk/gtkfilechooserdefault.c:7151
 msgid "Cannot change to folder because it is not local"
 msgstr "ਫੋਲਡਰ ਨੂੰ ਬਦਲਿਆ ਨਹੀਂ ਕਰ ਸਕਿਆ, ਕਿਉਂਕਿ ਇਹ ਲੋਕਲ ਨਹੀਂ ਹੈ"
 
-#: gtk/gtkfilechooserdefault.c:7775 gtk/gtkfilechooserdefault.c:7796
+#: gtk/gtkfilechooserdefault.c:7776 gtk/gtkfilechooserdefault.c:7797
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "ਸ਼ਾਰਟਕੱਟ %s ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ"
 
-#: gtk/gtkfilechooserdefault.c:7886
+#: gtk/gtkfilechooserdefault.c:7887
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "ਸ਼ਾਰਟਕੱਟ %s ਮੌਜੂਦ ਨਹੀਂ ਹੈ"
 
-#: gtk/gtkfilechooserdefault.c:8148 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8149 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "ਇੱਕ ਫਾਇਲ ਨਾਂ \"%s\" ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ। ਕੀ ਤੁਸੀਂ ਇਸ ਨੂੰ ਬਦਲਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: gtk/gtkfilechooserdefault.c:8151 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8152 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "ਫਾਇਲ ਪਹਿਲਾਂ ਹੀ \"%s\" ਵਿੱਚ ਮੌਜੂਦ ਹੈ। ਇਸ ਨੂੰ ਇਸ ਦੇ ਸਭ ਭਾਗਾਂ ਸਮੇਤ ਬਦਲਿਆ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ।"
 
-#: gtk/gtkfilechooserdefault.c:8156 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8157 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "ਬਦਲੋ(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8913
+#: gtk/gtkfilechooserdefault.c:8914
 msgid "Could not start the search process"
 msgstr "ਖੋਜ ਕਾਰਵਾਈ ਨੂੰ ਸ਼ੁਰੂ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: gtk/gtkfilechooserdefault.c:8914
+#: gtk/gtkfilechooserdefault.c:8915
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "ਪਰੋਗਰਾਮ ਤਤਕਰਾ ਡੈਮਨ ਨਾਲ ਕੁਨੈਕਸ਼ਨ ਬਣਾਉਣ ਲਈ ਅਸਫ਼ਲ ਹੈ।  ਜਾਂਚ ਲਵੋ ਕਿ ਇਹ ਚੱਲ ਰਹੀ ਹੈ।"
 
-#: gtk/gtkfilechooserdefault.c:8928
+#: gtk/gtkfilechooserdefault.c:8929
 msgid "Could not send the search request"
 msgstr "ਖੋਜ ਮੰਗ ਭੇਜੀ ਨਹੀਂ ਜਾ ਸਕੀ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9395
+#: gtk/gtkfilechooserdefault.c:9396
 msgid "_Search:"
 msgstr "ਖੋਜ(_S):"
 
-#: gtk/gtkfilechooserdefault.c:10348
+#: gtk/gtkfilechooserdefault.c:10349
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s ਮਾਊਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: gtk/gtkfilechooserdefault.c:11023
+#: gtk/gtkfilechooserdefault.c:11024
 msgid "Type name of new folder"
 msgstr "ਨਵੇਂ ਫੋਲਡਰ ਦਾ ਨਾਂ ਲਿਖੋ"
 
-#: gtk/gtkfilechooserdefault.c:11201 gtk/gtkfilechooserdefault.c:11223
-#: gtk/gtkfilechooserdefault.c:11294
+#: gtk/gtkfilechooserdefault.c:11202 gtk/gtkfilechooserdefault.c:11224
+#: gtk/gtkfilechooserdefault.c:11295
 msgid "Unknown"
 msgstr "ਅਣਜਾਣ"
 
-#: gtk/gtkfilechooserdefault.c:11241
+#: gtk/gtkfilechooserdefault.c:11242
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11243
+#: gtk/gtkfilechooserdefault.c:11244
 msgid "Yesterday at %H:%M"
 msgstr "%H:%M ਵਜੇ ਕੱਲ੍ਹ"
 
@@ -2227,43 +2219,43 @@ msgstr "GTK+ ਚੋਣ"
 msgid "Show GTK+ Options"
 msgstr "GTK+ ਚੋਣ ਵੇਖਾਓ"
 
-#: gtk/gtkmountoperation.c:484
+#: gtk/gtkmountoperation.c:463
 msgid "Co_nnect"
 msgstr "ਜੁੜੋ(_n)"
 
-#: gtk/gtkmountoperation.c:528
+#: gtk/gtkmountoperation.c:529
 msgid "Connect _anonymously"
 msgstr "ਅਗਿਆਤ ਢੰਗ ਨਾਲ ਜੁੜੋ(_a)"
 
-#: gtk/gtkmountoperation.c:537
+#: gtk/gtkmountoperation.c:538
 msgid "Connect as u_ser:"
 msgstr "ਯੂਜ਼ਰ ਵਾਂਗ ਕੁਨੈਕਟ(_s):"
 
-#: gtk/gtkmountoperation.c:574
+#: gtk/gtkmountoperation.c:575
 msgid "_Username:"
 msgstr "ਯੂਜ਼ਰ ਨਾਂ(_U):"
 
-#: gtk/gtkmountoperation.c:578
+#: gtk/gtkmountoperation.c:579
 msgid "_Domain:"
 msgstr "ਡੋਮੇਨ(_D):"
 
-#: gtk/gtkmountoperation.c:583
+#: gtk/gtkmountoperation.c:584
 msgid "_Password:"
 msgstr "ਪਾਸਵਰਡ(_P):"
 
-#: gtk/gtkmountoperation.c:601
+#: gtk/gtkmountoperation.c:602
 msgid "Forget password _immediately"
 msgstr "ਪਾਸਵਰਡ ਤੁਰੰਤ ਭੁੱਲ ਜਾਓ(_i)"
 
-#: gtk/gtkmountoperation.c:611
+#: gtk/gtkmountoperation.c:612
 msgid "Remember password until you _logout"
 msgstr "ਜਦੋਂ ਤੱਕ ਲਾਗਆਉਟ ਨਹੀਂ ਕੀਤਾ ਜਾਂਦਾ ਪਾਸਵਰਡ ਯਾਦ ਰੱਖੋ(_l)"
 
-#: gtk/gtkmountoperation.c:621
+#: gtk/gtkmountoperation.c:622
 msgid "Remember _forever"
 msgstr "ਹਮੇਸ਼ਾਂ ਯਾਦ ਰੱਖੋ(_f)"
 
-#: gtk/gtknotebook.c:4425 gtk/gtknotebook.c:6944
+#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6946
 #, c-format
 msgid "Page %u"
 msgstr "ਸਫ਼ਾ %u"
@@ -2767,18 +2759,18 @@ msgstr "ਡਾਈਲਾਗ ਵਿੱਚ ਕੁਝ ਸੈਟਿੰਗ ਵਿੱ�
 msgid "Print"
 msgstr "ਛਾਪੋ"
 
-#: gtk/gtkrc.c:2868
+#: gtk/gtkrc.c:2874
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "ਸ਼ਾਮਲ ਫਾਇਲ ਲੱਭਣ ਤੋਂ ਅਸਮਰੱਥ: \"%s\""
 
-#: gtk/gtkrc.c:3496 gtk/gtkrc.c:3499
+#: gtk/gtkrc.c:3502 gtk/gtkrc.c:3505
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "ਪਿਕਸਮੈਪ ਮਾਰਗ ਵਿੱਚ ਚਿੱਤਰ ਫਾਇਲ ਲੱਭਣ ਵਿੱਚ ਅਸਫ਼ਲ: \"%s\""
 
 #: gtk/gtkrecentaction.c:154 gtk/gtkrecentaction.c:162
-#: gtk/gtkrecentchoosermenu.c:589 gtk/gtkrecentchoosermenu.c:597
+#: gtk/gtkrecentchoosermenu.c:588 gtk/gtkrecentchoosermenu.c:596
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "ਇਹ ਫੰਕਸ਼ਨ ਕਲਾਸ '%s' ਦੇ ਵਿਦਗਿਟ ਲਈ ਬਣਾਇਆ ਨਹੀਂ ਗਿਆ ਹੈ"
@@ -2800,23 +2792,23 @@ msgstr "ਅਣ-ਟਾਇਟਲ ਫਿਲਟਰ"
 msgid "Could not remove item"
 msgstr "ਇਕਾਈ ਨੂੰ ਹਟਾਇਆ ਨਹੀਂ ਜਾ ਸਕਿਆ"
 
-#: gtk/gtkrecentchooserdefault.c:1694
+#: gtk/gtkrecentchooserdefault.c:1695
 msgid "Could not clear list"
 msgstr "ਲਿਸਟ ਸਾਫ਼ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ"
 
-#: gtk/gtkrecentchooserdefault.c:1778
+#: gtk/gtkrecentchooserdefault.c:1779
 msgid "Copy _Location"
 msgstr "ਟਿਕਾਣਾ ਨਕਲ ਕਰੋ(_L)"
 
-#: gtk/gtkrecentchooserdefault.c:1791
+#: gtk/gtkrecentchooserdefault.c:1792
 msgid "_Remove From List"
 msgstr "ਲਿਸਟ ਤੋਂ ਹਟਾਓ(_R)"
 
-#: gtk/gtkrecentchooserdefault.c:1800
+#: gtk/gtkrecentchooserdefault.c:1801
 msgid "_Clear List"
 msgstr "ਲਿਸਟ ਸਾਫ਼ ਕਰੋ(_C)"
 
-#: gtk/gtkrecentchooserdefault.c:1814
+#: gtk/gtkrecentchooserdefault.c:1815
 msgid "Show _Private Resources"
 msgstr "ਪ੍ਰਾਈਵੇਟ ਸਰੋਤ ਵੇਖਾਓ(_P)"
 
@@ -2830,21 +2822,21 @@ msgstr "ਪ੍ਰਾਈਵੇਟ ਸਰੋਤ ਵੇਖਾਓ(_P)"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:343
+#: gtk/gtkrecentchoosermenu.c:342
 msgid "No items found"
 msgstr "ਕੋਈ ਇਕਾਈ ਨਹੀਂ ਲੱਭੀ"
 
-#: gtk/gtkrecentchoosermenu.c:509 gtk/gtkrecentchoosermenu.c:565
+#: gtk/gtkrecentchoosermenu.c:508 gtk/gtkrecentchoosermenu.c:564
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "URI `%s' ਨਾਲ ਤਾਜ਼ਾ ਵਰਤੇ ਸਰੋਤ ਨਹੀਂ ਲੱਭੇ"
 
-#: gtk/gtkrecentchoosermenu.c:776
+#: gtk/gtkrecentchoosermenu.c:775
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s' ਖੋਲ੍ਹੋ"
 
-#: gtk/gtkrecentchoosermenu.c:806
+#: gtk/gtkrecentchoosermenu.c:805
 msgid "Unknown item"
 msgstr "ਅਣਜਾਣ ਇਕਾਈ"
 
@@ -2853,7 +2845,7 @@ msgstr "ਅਣਜਾਣ ਇਕਾਈ"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: gtk/gtkrecentchoosermenu.c:817
+#: gtk/gtkrecentchoosermenu.c:816
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2862,7 +2854,7 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: gtk/gtkrecentchoosermenu.c:822
+#: gtk/gtkrecentchoosermenu.c:821
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
@@ -4941,3 +4933,9 @@ msgstr "ਟੈਸਟ ਪਰਿੰਟਰ ਲਈ ਪਰਿੰਟ ਕਰੋ"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ਫਾਇਲ '%s' ਲਈ ਜਾਣਕਾਰੀ ਪਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫ਼ਲ: %s"
+
+#~ msgid "directfb arg"
+#~ msgstr "directfb arg"
+
+#~ msgid "sdl|system"
+#~ msgstr "ਸਿਸਟਮ"

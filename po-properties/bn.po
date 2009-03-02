@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2006-09-03 15:50+0600\n"
 "Last-Translator: Khandakar Mujahidul Islam <suzan@bengalinux.org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -91,7 +91,7 @@ msgstr "ডিফল্ট ডিসপ্লে"
 msgid "The default display for GDK"
 msgstr "জিডিকে-র (GDK) ডিফল্ট ডিসপ্লে"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "পর্দা"
@@ -413,7 +413,7 @@ msgid "Whether the action group is visible."
 msgstr "এই কাজের গ্রুপটি দৃশ্যমান কিনা।"
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "মান"
 
@@ -924,7 +924,7 @@ msgid ""
 msgstr ""
 "child_displacement_x/_y বৈশিষ্ট্য ফোকাসকারী আয়তক্ষেত্রকেও প্রভাবিত করবে কিনা"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 #, fuzzy
 msgid "Inner Border"
 msgstr "প্রান্ত আঁকো"
@@ -1342,7 +1342,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "প্রগ্রেস বারের প্রাথমিক অবস্থান ও বৃদ্ধি পাওয়ার দিক"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "সমন্বয়"
 
@@ -2553,33 +2553,43 @@ msgstr "উচ্চতা"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "ট্যাব প্রদর্শন করা হবে কিনা"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "দীর্ঘ বাক্সের প্রান্ত"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "প্রগ্রেসবারে যে টেক্সট প্রদর্শন করা হবে"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 #, fuzzy
 msgid "State Hint"
 msgstr "স্ট্রীং এর অবস্থা"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "টেক্সটের পটভূমি আঁকার সময় যে বিটম্যাপকে মাস্ক হিসেবে ব্যবহার করা হবে"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "ফোকাস করলে চিহ্নিত হবে"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "কোন অন্তর্ভুক্তির (Entry) অভ্যন্তরীণ বস্তুকে ফোকাস করলে তা চিহ্নিত হবে কিনা"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "পাসওয়ার্ড হিন্টের সময়সীমা"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 
@@ -3186,7 +3196,7 @@ msgstr "আইকন সেট"
 msgid "Icon set to display"
 msgstr "প্রদর্শন করার জন্য আইকন সেট"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "আইকনের আয়তন"
 
@@ -3779,26 +3789,26 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "উইজেটের উপর ও নীচে যত পিক্সেল ফাঁকা স্থান যোগ করা হবে"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 #, fuzzy
 msgid "Parent"
 msgstr "জরুরি"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 #, fuzzy
 msgid "The parent window"
 msgstr "উইন্ডোর ধরন "
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 #, fuzzy
 msgid "Is Showing"
 msgstr "শিরোনাম প্রদর্শন করো"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 #, fuzzy
 msgid "The screen where this window will be displayed."
 msgstr "এই উইন্ডোটি যে পর্দায় প্রদর্শিত হবে"
@@ -4754,12 +4764,12 @@ msgstr "সারির স্পেস-এর সংখ্যা"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr ""
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 #, fuzzy
 msgid "Show Numbers"
 msgstr "সপ্তাহের নম্বর প্রদর্শন করো"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
 msgstr "টিয়ারঅফ (Tearoff) মেনু আইটেমকে মেনুতে যোগ করা হবে কিনা"
@@ -4939,28 +4949,28 @@ msgstr "স্পেসিং-এর মান"
 msgid "Space between value text and the slider/trough area"
 msgstr "মানসূচক টেক্সট ও স্লাইডার/থ্রু অংশের মধ্যবর্তী স্পেস-এর সংখ্যা"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 #, fuzzy
 msgid "The value of the scale"
 msgstr "adjustment-এর নাম"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 #, fuzzy
 msgid "The icon size"
 msgstr "টুলবারের আইকনের আয়তন"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 #, fuzzy
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "যে GtkAdjustment এই সীমাসূচক অবজেক্টের বর্তমান মান ধারণ করে"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 #, fuzzy
 msgid "Icons"
 msgstr "আইকন"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 #, fuzzy
 msgid "List of icon names"
 msgstr "লোগো আইকনের নাম"

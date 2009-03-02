@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2006-07-18 17:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -91,7 +91,7 @@ msgstr "སྔོན་སྒྲིག་བཀྲམ་སྟོན་"
 msgid "The default display for GDK"
 msgstr "ཇི་ཌི་ཀེ་གི་དོན་ལུ་ སྔོན་སྒྲིག་བཀྲམ་སྟོན།"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "གསལ་གཞི།"
@@ -414,7 +414,7 @@ msgid "Whether the action group is visible."
 msgstr "བྱ་བའི་སྡེ་ཚན་དེ་ མཐོང་ཚུགསཔ་ཨིན་ན་མེན།"
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "བེ་ལུ།"
 
@@ -919,7 +919,7 @@ msgid ""
 msgstr ""
 "child_displacement_x/_y རྒྱུ་དངོས་ཚུ་གིས་ ཆེད་དམིགས་གྲུ་བཞི་དཀྱུས་རིང་ལུ་ ཕན་གནོད་ཡོད་ག་མེད།"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "ནང་གི་མཐའ་མཚམས།"
 
@@ -1324,7 +1324,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "ཡར་འཕེལ་་ཕྲ་རིིང་གི་ ཕྱོགས་དང་ཡར་བསྐྱེད་ཀྱི་ཁ་ཕྱོགས།"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "བདེ་སྒྲིག"
 
@@ -2500,33 +2500,43 @@ msgstr "མཐོ་ཚད།"
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "ཨེབ་ལྡེ་ཚུ་སྟོན་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "གཞོང་པའི་མཐའ་མཚམས།"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "ཡར་འཕེལ་ཕྲ་རིང་གུའི་ཚིག་ཡིག"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr "ཚིག་ཡིག་དང་གཞི་ཁྲམ་བར་ནའི་མཐའ་མཚམས།"
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 #, fuzzy
 msgid "State Hint"
 msgstr "གནས་ལུགས་ཡིག་རྒྱུན།"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "ཚིག་ཡིག་གི་རྒྱབ་གཞི་འབྲི་བའི་སྐབས་ གདོང་ཁེབས་བཟུམ་ཅིག་སྦེ་ ལག་ལེན་འཐབ་ནིའི་བིཊི་མེཔ།"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "ཆེད་དམིགས་ལུ་ སེལ་འཐུ་འབད།"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "ཆེད་དམིགས་་འབད་བའི་སྐབས་ ཐོ་བཀོད་ཀྱི་ནང་དོན་ཚུ་ སེལ་འཐུ་འབད་ནི་ཨིན་ན་མེན།"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "ཆོག་ཡིག་བརྡ་མཚོན་ངལ་མཚམས།"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr "སྦ་སྟེ་ཡོད་པའི་ཐོ་བཀོད་ནང་ བཙུགས་ཏེ་འོད་པའི་ཡིག་འབྲུ་ཚུ་ དུས་ཡུན་ག་དེ་ཅིག་སྟོན་ནི་ཨིན།"
 
@@ -3124,7 +3134,7 @@ msgstr "ངོས་དཔར་ཆ་ཚན།"
 msgid "Icon set to display"
 msgstr "བཀྲམ་སྟོན་འབད་ནིའི་ ངོས་དཔར་ཆ་ཚན།"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "ངོས་དཔར་གྱི་ཚད།"
 
@@ -3707,26 +3717,26 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "ཝིཌི་གེཊི་གི་ མགོ་དང་མཇུག་ལུ་ ཁ་སྐོང་བརྐྱབ་ནིའི་བར་སྟོང་བསྡོམས་ པིག་སེལསི་ནང༌།"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 #, fuzzy
 msgid "Parent"
 msgstr "འཕྲལ་མཁོ།"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 #, fuzzy
 msgid "The parent window"
 msgstr "སྒོ་སྒྲིག་དེ་གི་ དབྱེ་བ་དེ།"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 #, fuzzy
 msgid "Is Showing"
 msgstr "མགུ་རྒྱན་སྟོན།"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 #, fuzzy
 msgid "The screen where this window will be displayed."
 msgstr "སྒོ་སྒྲིག་འདི་ བཀྲམ་སྟོན་འབད་སའི་ གསལ་གཞི་དེ།"
@@ -4652,11 +4662,11 @@ msgstr "གྲལ་ཐིག་བར་སྟོང་།"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr ""
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "ཨང་གྲངས་ཚུ་སྟོན།"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "རྣམ་གྲངས་ཚུ་ཨང་གྲངས་དང་བཅསཔ་སྦེ་ བཀྲམ་སྟོན་འབད་དགོཔ་ཨིན་ན་མེན།"
 
@@ -4820,28 +4830,28 @@ msgstr "བེ་ལུ་གི་ བར་སྟོང་བཞག་ཐང�
 msgid "Space between value text and the slider/trough area"
 msgstr "བེ་ལུ་ཚིག་ཡིག་དང་ བཤུད་བྱེད / གཞོངམ་གི་མངའ་འཁོངས་བར་ནའི་བར་སྟོང༌།"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 #, fuzzy
 msgid "The value of the scale"
 msgstr "བདེ་སྒྲིག་གི་བེ་ལུ།"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 #, fuzzy
 msgid "The icon size"
 msgstr "ལག་ཆས་ཕྲ་རིང་གི་ ངོས་དཔར་ཚད།"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 #, fuzzy
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "ཁྱབ་ཚད་དངོས་པོ་འདི་གི་ ད་ལྟོའི་བེ་ལུ་འཛིན་མི་ GtkAdjustment"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 #, fuzzy
 msgid "Icons"
 msgstr "ངོས་དཔར།"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 #, fuzzy
 msgid "List of icon names"
 msgstr "ལས་རྟགས་ངོས་དཔར་གྱི་མིང༌།"

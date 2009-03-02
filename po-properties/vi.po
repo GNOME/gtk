@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 10:12-0500\n"
+"POT-Creation-Date: 2009-03-02 14:38-0500\n"
 "PO-Revision-Date: 2009-02-09 18:47+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -90,7 +90,7 @@ msgstr "Bộ trình bày mặc định"
 msgid "The default display for GDK"
 msgstr "Bộ trình bày mặc định cho GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:179
+#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
 #: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
 msgid "Screen"
 msgstr "Màn hình"
@@ -411,7 +411,7 @@ msgid "Whether the action group is visible."
 msgstr "Có nên hiển thị nhóm hành động này hay không"
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Giá trị"
 
@@ -908,7 +908,7 @@ msgstr ""
 "Tài sản của « child_displacement_x/_y » (độ dịch chuyển con X/Y) cũng nên có "
 "tác động chữ nhật tiêu điểm hay không"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1647
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
 msgid "Inner Border"
 msgstr "Viền bên trong"
 
@@ -1305,7 +1305,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Hướng và chiều đi của thanh tiến hành"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Điều chỉnh"
 
@@ -2440,31 +2440,41 @@ msgid "Whether activatable icons should prelight when hovered"
 msgstr ""
 "Biểu tượng có khả năng kích hoạt cũng nên tiền tô sáng khi con chuột ở trên"
 
-#: gtk/gtkentry.c:1648
+#: gtk/gtkentry.c:1211
+#, fuzzy
+msgid "Progress Border"
+msgstr "Viền máng xối"
+
+#: gtk/gtkentry.c:1212
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "Văn bản trên thanh tiến trình"
+
+#: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
 msgstr "Viền giữa văn bản và khung."
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1676
 msgid "State Hint"
 msgstr "Mẹo tình trạng"
 
-#: gtk/gtkentry.c:1663
+#: gtk/gtkentry.c:1677
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Có nên gửi một tình trạng đúng khi vẽ bóng hay nền, hay không"
 
-#: gtk/gtkentry.c:1668 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Chọn khi có tiêu điểm"
 
-#: gtk/gtkentry.c:1669
+#: gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Chọn nội dung của mục nhập khi nó nhận tiêu điểm hay không"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
 msgstr "Thời hạn gợi ý mật khẩu"
 
-#: gtk/gtkentry.c:1684
+#: gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
 msgstr "Thời gian cần hiển thị ký tự mới gõ trong mục nhập đã ẩn"
 
@@ -3061,7 +3071,7 @@ msgstr "Tập biểu tượng"
 msgid "Icon set to display"
 msgstr "Tập biểu tượng cần hiển thị"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Cỡ biểu tượng"
 
@@ -3642,23 +3652,23 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Khoảng cách cần thêm bên trên và dưới của ô điều khiển, theo điểm ảnh"
 
-#: gtk/gtkmountoperation.c:163
+#: gtk/gtkmountoperation.c:139
 msgid "Parent"
 msgstr "Cha"
 
-#: gtk/gtkmountoperation.c:164
+#: gtk/gtkmountoperation.c:140
 msgid "The parent window"
 msgstr "Cửa sổ cha"
 
-#: gtk/gtkmountoperation.c:171
+#: gtk/gtkmountoperation.c:147
 msgid "Is Showing"
 msgstr "Đang hiển thị"
 
-#: gtk/gtkmountoperation.c:172
+#: gtk/gtkmountoperation.c:148
 msgid "Are we showing a dialog"
 msgstr "Có hiển thị một hộp thoại"
 
-#: gtk/gtkmountoperation.c:180
+#: gtk/gtkmountoperation.c:156
 msgid "The screen where this window will be displayed."
 msgstr "Màn hình trên đó cần hiển thị cửa sổ này."
 
@@ -4565,11 +4575,11 @@ msgstr "Co giãn mũi tên"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Co giãn mũi tên tùy theo kích cỡ nút cuộn"
 
-#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:228
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "Hiện số"
 
-#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:229
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "Có nên hiển thị mục vớ con số hay không"
 
@@ -4736,26 +4746,26 @@ msgstr "Khoảng cách giá trị"
 msgid "Space between value text and the slider/trough area"
 msgstr "Khoảng cách giữa văn bản giá trị và vùng của con trượt/máng xối"
 
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:205
 msgid "The value of the scale"
 msgstr "Giá trị của tỷ lệ"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:215
 msgid "The icon size"
 msgstr "Cỡ biểu tượng"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:224
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
 "GtkAdjustment (điều chỉnh Gtk) chứa giá trị hiện thời của đối tượng co giãn "
 "cái nút"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:252
 msgid "Icons"
 msgstr "Biểu tượng"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:253
 msgid "List of icon names"
 msgstr "Danh sách các tên biểu tượng"
 
