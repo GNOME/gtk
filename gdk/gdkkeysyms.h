@@ -116,7 +116,6 @@
 #define GDK_KP_Begin 0xff9d
 #define GDK_KP_Insert 0xff9e
 #define GDK_KP_Delete 0xff9f
-#define GDK_KP_Equal 0xffbd
 #define GDK_KP_Multiply 0xffaa
 #define GDK_KP_Add 0xffab
 #define GDK_KP_Separator 0xffac
@@ -133,6 +132,7 @@
 #define GDK_KP_7 0xffb7
 #define GDK_KP_8 0xffb8
 #define GDK_KP_9 0xffb9
+#define GDK_KP_Equal 0xffbd
 #define GDK_F1 0xffbe
 #define GDK_F2 0xffbf
 #define GDK_F3 0xffc0

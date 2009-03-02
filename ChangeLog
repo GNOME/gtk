@@ -1,5 +1,9 @@
 2009-03-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkkeysyms.h: Fix the sorting of GDK_KP_Equal.
+
+2009-03-01  Matthias Clasen  <mclasen@redhat.com>
+
 	Bug 552619 – File Chooser no longer automatically enters newly created
 	directories
 
