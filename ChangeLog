@@ -1,3 +1,14 @@
+2009-03-02  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 573688 – Don't steal update region in gtk_text_view_paint()
+
+	* gtk/gtktextview.c (gtk_text_view_paint): If additional areas got
+	invalidated, don't try to add them to the paint region: in an expose
+	handler, we cannot paint outside the area that was passed in, since
+	drawing will be clipped. So stealing the update region from the
+	window causes lost draws.
+	Patch by Owen Taylor
+
 2009-03-02  Alexander Larsson  <alexl@redhat.com>
 
 	Bug 573087 – gdkwindow.c: {x,y}_offset used uninitialized

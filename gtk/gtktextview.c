@@ -4531,7 +4531,6 @@ gtk_text_view_paint (GtkWidget      *widget,
   GtkTextView *text_view;
   GList *child_exposes;
   GList *tmp_list;
-  GdkRegion *updates;
   
   text_view = GTK_TEXT_VIEW (widget);
 
@@ -4546,19 +4545,6 @@ gtk_text_view_paint (GtkWidget      *widget,
       gtk_text_view_flush_first_validate (text_view);
     }
 
-  /* More regions could have become invalid in the above loop */
-  updates = gdk_window_get_update_area (text_view->text_window->bin_window);
-  if (updates)
-    {
-      GdkRectangle rect;
-      
-      gdk_region_get_clipbox (updates, &rect);
-
-      gdk_rectangle_union (area, &rect, area);
-      
-      gdk_region_destroy (updates);
-    }
-  
   if (!text_view->onscreen_validated)
     {
       g_warning (G_STRLOC ": somehow some text lines were modified or scrolling occurred since the last validation of lines on the screen - may be a text widget bug.");
