@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.kn\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
 "POT-Creation-Date: 2009-03-02 20:42+0000\n"
-"PO-Revision-Date: 2009-03-05 01:05+0530\n"
+"PO-Revision-Date: 2009-03-05 14:07+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -68,7 +68,7 @@ msgstr "pixbuf ನಲ್ಲಿನ ಸಾಲುಗಳ ಸಂಖ್ಯೆ"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:159
 msgid "Rowstride"
-msgstr ""
+msgstr "ರೋಸ್ಟ್ರೈಡ್‌"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:160
 msgid "The number of bytes between the start of a row and the start of the next row"
@@ -327,7 +327,7 @@ msgstr "ಮಿತಿಮೀರಿದಾಗ ಗೋಚರಿಸುತ್ತದೆ"
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr ""
+msgstr "TRUE ಆದಲ್ಲಿ, ಈ ಕಾರ್ಯಕ್ಕಾಗಿನ ಉಪಕರಣಅಂಶದ ಪ್ರಾಕ್ಸಿಗಳನ್ನು ಉಪಕರಣಪಟ್ಟಿ ಮಿತಿಮೀರಿದ ಮೆನುವಿನಲ್ಲಿ ತೋರಿಸಲಾಗುವುದು."
 
 #: ../gtk/gtkaction.c:314 ../gtk/gtktoolitem.c:183
 msgid "Visible when vertical"
@@ -344,11 +344,10 @@ msgid "Is important"
 msgstr "ಇದು ಮುಖ್ಯ"
 
 #: ../gtk/gtkaction.c:323
-#, fuzzy
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr "ಕ್ರಿಯೆಯನ್ನು ಅಳಿಸಿಹಾಕು"
+msgstr "ಕ್ರಿಯೆಯನ್ನು ಪ್ರಮುಖವಾದುದ್ದು ಎಂದು ಪರಿಗಣಿಸಬೇಕೆ. TRUE ಆದಲ್ಲಿ, ಕಾರ್ಯಕ್ಕಾಗಿನ ಉಪಕರಣಅಂಶದ ಪ್ರಾಕ್ಸಿಗಳು ಪಠ್ಯವನ್ನು GTK_TOOLBAR_BOTH_HORIZ ಕ್ರಮದಲ್ಲಿ ತೋರಿಸುತ್ತದೆ."
 
 #: ../gtk/gtkaction.c:331
 msgid "Hide if empty"
@@ -453,44 +452,40 @@ msgid "Horizontal alignment"
 msgstr "ಸಮತಲ ಸರಿಹೊಂದಿಕೆ (alignment)"
 
 #: ../gtk/gtkalignment.c:91 ../gtk/gtkbutton.c:270
-#, fuzzy
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
-msgstr "ಅಡ್ಡಲಾದ ಸಾಲುಗಳು"
+msgstr "ಲಭ್ಯವಿರುವ ಜಾಗದಲ್ಲಿ ಚೈಲ್ಡಿನ ಅಡ್ಡಲಾದ ಸ್ಥಾನ. 0.0 ಎಂದರೆ ಎಡಕ್ಕೆ ಹೊಂದಿರುತ್ತದೆ, 1.0 ಎಂದರೆ ಬಲಕ್ಕೆ ಹೊಂದಿರುತ್ತದೆ"
 
 #: ../gtk/gtkalignment.c:100
 msgid "Vertical alignment"
 msgstr "ಲಂಬ ಸರಿಹೊಂದಿಕೆ"
 
 #: ../gtk/gtkalignment.c:101 ../gtk/gtkbutton.c:289
-#, fuzzy
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
-msgstr "ಲಭ್ಯವಿರುವ"
+msgstr "ಲಭ್ಯವಿರುವ ಜಾಗದಲ್ಲಿ ಚೈಲ್ಡಿನ ಲಂಬ ಸ್ಥಾನ. 0.0 ಎಂದರೆ ಮೇಲಕ್ಕೆ ಹೊಂದಿರುತ್ತದೆ, 1.0 ಎಂದರೆ ಕೆಳಕ್ಕೆ ಹೊಂದಿರುತ್ತದೆ"
 
 #: ../gtk/gtkalignment.c:109
 msgid "Horizontal scale"
-msgstr "ಸಮತಲ ಅಳತೆಪಟ್ಟಿ(Horizontal scale)"
+msgstr "ಸಮತಲ ಅಳತೆ(Horizontal scale)"
 
 #: ../gtk/gtkalignment.c:110
-#, fuzzy
 msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
-msgstr "ಅಡ್ಡಲಾದ ಸಾಲುಗಳು"
+msgstr "ಲಭ್ಯವಿರುವ ಅಡ್ಡ ಸ್ಥಳವು ಚೈಲ್ಡಿಗೆ ಅಗತ್ಯವಿರುವುದಕ್ಕಿಂತ ದೊಡ್ಡದಾಗಿದ್ದರೆ, ಚೈಲ್ಡಿಗಾಗಿ ಅದರಲ್ಲಿ ಎಷ್ಟು ಜಾಗವನ್ನು ಬಳಸಬೇಕು ಎಂದು ಸೂಚಿಸುತ್ತದೆ. 0.0 ಎಂದರೆ ಏನೂ ಇಲ್ಲ, 1.0 ಎಂದರೆ ಎಲ್ಲವೂ ಆಗಿರುತ್ತದೆ"
 
 #: ../gtk/gtkalignment.c:118
 msgid "Vertical scale"
-msgstr "ಲಂಬ ಅಳತೆಪಟ್ಟಿ(Vertical scale)"
+msgstr "ಲಂಬ ಅಳತೆ(Vertical scale)"
 
 #: ../gtk/gtkalignment.c:119
-#, fuzzy
 msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
-msgstr "ಲಭ್ಯವಿರುವ"
+msgstr "ಲಭ್ಯವಿರುವ ಲಂಬ ಸ್ಥಳವು ಚೈಲ್ಡಿಗೆ ಅಗತ್ಯವಿರುವುದಕ್ಕಿಂತ ದೊಡ್ಡದಾಗಿದ್ದರೆ, ಚೈಲ್ಡಿಗಾಗಿ ಅದರಲ್ಲಿ ಎಷ್ಟು ಜಾಗವನ್ನು ಬಳಸಬೇಕು ಎಂದು ಸೂಚಿಸುತ್ತದೆ. 0.0 ಎಂದರೆ ಏನೂ ಇಲ್ಲ, 1.0 ಎಂದರೆ ಎಲ್ಲವೂ ಆಗಿರುತ್ತದೆ"
 
 #: ../gtk/gtkalignment.c:136
 msgid "Top Padding"
@@ -542,11 +537,11 @@ msgstr "ಬಾಣದ ಸುತ್ತಮುತ್ತಲಿನ ನೆರಳಿನ 
 
 #: ../gtk/gtkarrow.c:92 ../gtk/gtkmenu.c:689 ../gtk/gtkmenuitem.c:363
 msgid "Arrow Scaling"
-msgstr ""
+msgstr "ಬಾಣದ ಗಾತ್ರ ಬದಲಾವಣೆ"
 
 #: ../gtk/gtkarrow.c:93
 msgid "Amount of space used up by arrow"
-msgstr "ಬಾಣ ಬಳಸಬೇಕಾದ ಜಾಗದ ಪ್ರಮಾಣ"
+msgstr "ಬಾಣವು ಬಳಸಬೇಕಾದ ಜಾಗದ ಪ್ರಮಾಣ"
 
 #: ../gtk/gtkaspectframe.c:79
 msgid "Horizontal Alignment"
@@ -676,18 +671,17 @@ msgstr "ಚೌಕಟ್ಟಿನ ಬಗೆ"
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
-msgstr ""
+msgstr "ಚೌಕದಲ್ಲಿ ಗುಂಡಿಗಳನ್ನು ಹೇಗೆ ಇರಿಸಬೇಕು. ಸಾಧ್ಯವಿರುವ ಮೌಲ್ಯಗಳೆಂದರೆ, ಹರಡಿದ, ಆರಂಭಿಕ ಹಾಗು ಕೊನೆಯ ಆಗಿರುತ್ತದೆ"
 
 #: ../gtk/gtkbbox.c:136
 msgid "Secondary"
 msgstr "ಎರಡನೆಯ"
 
 #: ../gtk/gtkbbox.c:137
-#, fuzzy
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
-msgstr "ಸಮೂಹವನ್ನು/ಬಳಗವನ್ನು ತೆಗೆದುಹಾಕು"
+msgstr "TRUE ಆದಲ್ಲಿ, ಚಿಲ್ಡ್ರನ್‌ನ ಎರಡನೆ ಗುಂಪಿನಲ್ಲಿ ಚೈಲ್ಡ್ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತದೆ, ಉದಾಹರಣೆಗೆ, ಇದು ನೆರವಿನ ಗುಂಡಿಗಳಿಗೆ ಸೂಕ್ತವೆನಿಸುತ್ತದೆ"
 
 #: ../gtk/gtkbox.c:130 ../gtk/gtkexpander.c:219 ../gtk/gtkiconview.c:664
 #: ../gtk/gtktreeviewcolumn.c:216
@@ -713,40 +707,36 @@ msgid "Expand"
 msgstr "ವಿಸ್ತೃತಗೊಳಿಸು"
 
 #: ../gtk/gtkbox.c:149
-#, fuzzy
 msgid "Whether the child should receive extra space when the parent grows"
-msgstr "ರಿಕ್ತಸ್ಥಳವನ್ನು ಸಂರಕ್ಷಿಸು/ಸ್ಥಳವನ್ನು ಉಳಿಸು"
+msgstr "ಮೂಲವು ಬೆಳೆದಾಗ ಚೈಲ್ಡ್‌ ಹೆಚ್ಚಿನ ಜಾಗವನ್ನು ಪಡೆದುಕೊಳ್ಳಬೇಕೆ"
 
 #: ../gtk/gtkbox.c:155
 msgid "Fill"
 msgstr "ತುಂಬಿಸು"
 
 #: ../gtk/gtkbox.c:156
-#, fuzzy
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
-msgstr "ರಿಕ್ತಸ್ಥಳವನ್ನು ಸಂರಕ್ಷಿಸು/ಸ್ಥಳವನ್ನು ಉಳಿಸು"
+msgstr "ಚೈಲ್ಡಿಗೆ ನೀಡಲಾದ ಹೆಚ್ಚುವರಿ ಸ್ಥಳವನ್ನು ಚೈಲ್ಡಿಗೆ ನಿಯೋಜಿಸಬೇಕೆ ಅಥವ ಪ್ಯಾಡಿಂಗ್ ಆಗಿ ಬಳಸಬೇಕೆ"
 
 #: ../gtk/gtkbox.c:162
 msgid "Padding"
 msgstr "ಪ್ಯಾಡಿಂಗ್"
 
 #: ../gtk/gtkbox.c:163
-#, fuzzy
 msgid "Extra space to put between the child and its neighbors, in pixels"
-msgstr "ರಿಕ್ತಸ್ಥಳವನ್ನು ಸಂರಕ್ಷಿಸು/ಸ್ಥಳವನ್ನು ಉಳಿಸು"
+msgstr "ಚೈಲ್ಡ್‌ ಹಾಗು ಅದರ ನೆರಹೊರೆಯ ನಡುವೆ ಒದಗಿಸಬೇಕಿರುವ ಹೆಚ್ಚಿನ ಸ್ಥಳ, ಪಿಕ್ಸೆಲ್‌ಗಳಲ್ಲಿ"
 
 #: ../gtk/gtkbox.c:169
 msgid "Pack type"
 msgstr "ಪ್ಯಾಕಿನ ಬಗೆ"
 
 #: ../gtk/gtkbox.c:170 ../gtk/gtknotebook.c:716
-#, fuzzy
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
-msgstr "ಪೂರ್ವಜ (ಪೇರೆಂಟ್)"
+msgstr "ಚೈಲ್ಡನ್ನು ಅದರ ಮೂಲದ ಆರಂಭದಲ್ಲಿ ಪ್ಯಾಕ್ ಮಾಡಲಾಗಿದೆ ಅಥವ ಅಂತ್ಯದಲ್ಲಿಯೆ ಎಂದು ಸೂಚಿಸುವ ಒಂದು GtkPackType"
 
 #: ../gtk/gtkbox.c:176 ../gtk/gtknotebook.c:694 ../gtk/gtkpaned.c:241
 #: ../gtk/gtkruler.c:148
@@ -754,9 +744,8 @@ msgid "Position"
 msgstr "ಸ್ಥಳ"
 
 #: ../gtk/gtkbox.c:177 ../gtk/gtknotebook.c:695
-#, fuzzy
 msgid "The index of the child in the parent"
-msgstr "ಅನುಕ್ರಮವನ್ನು (ಇಂಡೆಕ್ಸ್) ತಯಾರಿಸಲಾಗುತ್ತಿದೆ"
+msgstr "ಮೂಲದಲ್ಲಿ ಚೈಲ್ಡಿನ ಸೂಚಿ"
 
 #: ../gtk/gtkbuilder.c:96
 msgid "Translation Domain"
@@ -781,20 +770,18 @@ msgstr "ಕೆಳಗೆರೆಯನ್ನು ಬಳಸು"
 
 #: ../gtk/gtkbutton.c:228 ../gtk/gtkexpander.c:204 ../gtk/gtklabel.c:389
 #: ../gtk/gtkmenuitem.c:316
-#, fuzzy
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
-msgstr "ಕೊಂಡಿಗಳಿಗೆ (ಲಿಂಕ್) ಕೆಳಗೆರೆಯನ್ನು ಎಳೆ"
+msgstr ""
 
 #: ../gtk/gtkbutton.c:235 ../gtk/gtkimagemenuitem.c:150
 msgid "Use stock"
 msgstr "ಶೇಖರಣೆಯನ್ನು ಬಳಸು"
 
 #: ../gtk/gtkbutton.c:236
-#, fuzzy
 msgid "If set, the label is used to pick a stock item instead of being displayed"
-msgstr "ಪ್ರದರ್ಶಿತ"
+msgstr ""
 
 #: ../gtk/gtkbutton.c:243 ../gtk/gtkcombobox.c:789
 #: ../gtk/gtkfilechooserbutton.c:393
@@ -850,41 +837,36 @@ msgid "Default Outside Spacing"
 msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಹೊರಗಿನ ಸ್ಥಳ"
 
 #: ../gtk/gtkbutton.c:441
-#, fuzzy
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr "ರಿಕ್ತಸ್ಥಳವನ್ನು ಸಂರಕ್ಷಿಸು/ಸ್ಥಳವನ್ನು ಉಳಿಸು"
+msgstr "ಯಾವಾಗಲೂ ಅಂಚಿನಿಂದ ಹೊರಗೆ ಚಿತ್ರಿಸಲಾಗುವ CAN_DEFAULT ಗುಂಡಿಗಳಿಗಾಗಿ ಸೇರಿಸಬೇಕಿರುವ ಹೆಚ್ಚುವರಿ ಜಾಗ"
 
 #: ../gtk/gtkbutton.c:446
 msgid "Child X Displacement"
-msgstr ""
+msgstr "ಚೈಲ್ಡಿನ X ಪಲ್ಲಟ"
 
 #: ../gtk/gtkbutton.c:447
-#, fuzzy
 msgid "How far in the x direction to move the child when the button is depressed"
-msgstr "ಮಧ್ಯದ ಗುಂಡಿ"
+msgstr "ಗುಂಡಿಯನ್ನು ಒತ್ತಿದಾಗ x ದಿಕ್ಕಿನಲ್ಲಿ ಚೈಲ್ಡನ್ನು ಎಷ್ಟು ದೂರ ಸ್ಥಳಾಂತರಿಸಬೇಕು"
 
 #: ../gtk/gtkbutton.c:454
 msgid "Child Y Displacement"
-msgstr ""
+msgstr "ಚೈಲ್ಡಿನ Y ಪಲ್ಲಟ"
 
 #: ../gtk/gtkbutton.c:455
-#, fuzzy
 msgid "How far in the y direction to move the child when the button is depressed"
-msgstr "ಮಧ್ಯದ ಗುಂಡಿ"
+msgstr "ಗುಂಡಿಯನ್ನು ಒತ್ತಿದಾಗ y ದಿಕ್ಕಿನಲ್ಲಿ ಚೈಲ್ಡನ್ನು ಎಷ್ಟು ದೂರ ಸ್ಥಳಾಂತರಿಸಬೇಕು"
 
 #: ../gtk/gtkbutton.c:471
-#, fuzzy
 msgid "Displace focus"
-msgstr "ಕಿಟಕಿಯನ್ನು ಪ್ರಧಾನಕೊಳಿಸು/ಪ್ರಧಾನ ಕಿಟಕಿ"
+msgstr "ಗಮನವನ್ನು ಪಲ್ಲಟಗೊಳಿಸು"
 
 #: ../gtk/gtkbutton.c:472
-#, fuzzy
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
-msgstr "ಕೆಲಸದಹಾಳೆಯ (ವರ್ಕ್ ಷೀಟ್) ಗುಣಗಳು"
+msgstr "child_displacement_x/_y ಗುಣಗಳು ಗಮನ ಆಯತದ ಮೇಲೂ ಸಹ ಪರಿಣಾಮ ಬೀರಬೇಕೆ"
 
 #: ../gtk/gtkbutton.c:485 ../gtk/gtkentry.c:658 ../gtk/gtkentry.c:1661
 msgid "Inner Border"
@@ -899,18 +881,16 @@ msgid "Image spacing"
 msgstr "ಚಿತ್ರ ಅಂತರ"
 
 #: ../gtk/gtkbutton.c:500
-#, fuzzy
 msgid "Spacing in pixels between the image and label"
-msgstr "ಚೌಕಳಿ ಅಂತರ"
+msgstr "ಚಿತ್ರ ಹಾಗು ಲೇಬಲ್‌ಗಳ ನಡುವಿನ ಅಂತರ, ಪಿಕ್ಸೆಲ್‌ಗಳಲ್ಲಿ"
 
 #: ../gtk/gtkbutton.c:514
 msgid "Show button images"
 msgstr "ಗುಂಡಿ ಚಿತ್ರಗಳನ್ನು ತೋರಿಸು"
 
 #: ../gtk/gtkbutton.c:515
-#, fuzzy
 msgid "Whether images should be shown on buttons"
-msgstr "ಶೀಘ್ರವೀಕ್ಷಕ ಪರಿವಿಡಿಗಳು"
+msgstr "ಚಿತ್ರಗಳನ್ನು ಗುಂಡಿಗಳ ಮೇಲೆ ತೋರಿಸಬೇಕೆ"
 
 #: ../gtk/gtkcalendar.c:440
 msgid "Year"
@@ -1001,9 +981,8 @@ msgid "mode"
 msgstr "ಪದ್ದತಿ"
 
 #: ../gtk/gtkcellrenderer.c:178
-#, fuzzy
 msgid "Editable mode of the CellRenderer"
-msgstr "ನೋಟ ವಿಧಾನ"
+msgstr "ಕೋಶರೆಂಡರರ್ ನ ಸಂಪಾದಿಸಬಹುದಾದ ನೋಟ"
 
 #: ../gtk/gtkcellrenderer.c:186
 msgid "visible"
@@ -1103,16 +1082,15 @@ msgstr "ಸಂಪಾದಿಸಲಾಗುತ್ತಿದೆ"
 
 #: ../gtk/gtkcellrenderer.c:295
 msgid "Whether the cell renderer is currently in editing mode"
-msgstr ""
+msgstr "ಕೋಶದ ರೆಂಡರರ್ ಪ್ರಸಕ್ತ ಸಂಪಾದನೆಯ ಕ್ರಮದಲ್ಲಿ ಇದೆಯೆ"
 
 #: ../gtk/gtkcellrenderer.c:303
 msgid "Cell background set"
 msgstr "ಕೋಶದ ಹಿನ್ನೆಲೆಯ ಜೋಡಿ"
 
 #: ../gtk/gtkcellrenderer.c:304
-#, fuzzy
 msgid "Whether this tag affects the cell background color"
-msgstr "ಹಿನ್ನೆಲೆ ಬಣ್ಣ"
+msgstr "ಈ ಟ್ಯಾಗ್ ಕೋಶದ ಹಿನ್ನೆಲೆ ಬಣ್ಣದ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtkcellrendereraccel.c:113
 msgid "Accelerator key"
@@ -1127,18 +1105,16 @@ msgid "Accelerator modifiers"
 msgstr "ವೇಗವರ್ಧಕದ ಮಾರ್ಪಡಕಗಳು"
 
 #: ../gtk/gtkcellrendereraccel.c:131
-#, fuzzy
 msgid "The modifier mask of the accelerator"
-msgstr "ಪರಿವರ್ತಕ"
+msgstr "ವೇಗವರ್ಧಕದ ಪರಿವರ್ತಕ ಮುಸುಕು"
 
 #: ../gtk/gtkcellrendereraccel.c:148
 msgid "Accelerator keycode"
 msgstr "ವೇಗೋತ್ಕರ್ಷಕ ಕೀಲಿಸಂಕೇತ"
 
 #: ../gtk/gtkcellrendereraccel.c:149
-#, fuzzy
 msgid "The hardware keycode of the accelerator"
-msgstr "ಯಂತ್ರಾಂಶ"
+msgstr "ವೇಗವರ್ಧಕದ ಯಂತ್ರಾಂಶ ಕೀಲಿಸಂಜ್ಞೆ"
 
 #: ../gtk/gtkcellrendereraccel.c:168
 msgid "Accelerator Mode"
@@ -1153,9 +1129,8 @@ msgid "Model"
 msgstr "ಮಾದರಿ"
 
 #: ../gtk/gtkcellrenderercombo.c:108
-#, fuzzy
 msgid "The model containing the possible values for the combo box"
-msgstr "ಒಳಗೊಂಡಿರುವ"
+msgstr "ಸಂಯೋಜನಾ ಚೌಕಕ್ಕಾಗಿ ಮಾದರಿ ಹೊಂದಿರುವ ಸಾಧ್ಯವಿರುವ ಮೌಲ್ಯಗಳು"
 
 #: ../gtk/gtkcellrenderercombo.c:130 ../gtk/gtkcomboboxentry.c:106
 msgid "Text Column"
@@ -6626,7 +6601,7 @@ msgstr "ಚೈಲ್ಡಿನ ಗರಿಷ್ಟ ವಿಸ್ತರಣೆ"
 
 #: ../gtk/gtktoolbar.c:600
 msgid "Maximum amount of space an expandable item will be given"
-msgstr ""
+msgstr "ವಿಸ್ತರಿಸಬಹುದಾದ ಒಂದು ಅಂಶಕ್ಕೆ ನೀಡಬಹುದಾದ ಗರಿಷ್ಟ ಪ್ರಮಾಣದ ಜಾಗ"
 
 #: ../gtk/gtktoolbar.c:608
 msgid "Space style"
@@ -6634,19 +6609,19 @@ msgstr "ಜಾಗದ ಶೈಲಿ"
 
 #: ../gtk/gtktoolbar.c:609
 msgid "Whether spacers are vertical lines or just blank"
-msgstr ""
+msgstr "ಅಂತರಗಳು ಲಂಬ ರೇಖೆಗಳೆ ಅಥವ ಕೇವಲ ಖಾಲಿ ಜಾಗವೆ"
 
 #: ../gtk/gtktoolbar.c:616
 msgid "Button relief"
-msgstr ""
+msgstr "ಗುಂಡಿ ಪರಿಹಾರ(ರಿಲೀಫ್)"
 
 #: ../gtk/gtktoolbar.c:617
 msgid "Type of bevel around toolbar buttons"
-msgstr ""
+msgstr "ಉಪಕರಣಪಟ್ಟಿಯ ಸುತ್ತಲಿನ ಇಳಿಜಾರಿನ ಬಗೆ"
 
 #: ../gtk/gtktoolbar.c:624
 msgid "Style of bevel around the toolbar"
-msgstr ""
+msgstr "ಉಪಕರಣಪಟ್ಟಿಯ ಸುತ್ತಲಿನ ಇಳಿಜಾರಿನ ಶೈಲಿ"
 
 #: ../gtk/gtktoolbar.c:630
 msgid "Toolbar style"
@@ -6654,7 +6629,7 @@ msgstr "ಉಪಕರಣ ಪಟ್ಟಿಕೆಯ ಶೈಲಿ"
 
 #: ../gtk/gtktoolbar.c:631
 msgid "Whether default toolbars have text only, text and icons, icons only, etc."
-msgstr ""
+msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಉಪಕರಣಪಟ್ಟಿಗಳು ಪಠ್ಯವನ್ನು ಮಾತ್ರ, ಪಠ್ಯ ಹಾಗು ಚಿಹ್ನೆಗಳನ್ನು, ಚಿಹ್ನೆಗಳನ್ನು ಮಾತ್ರವೆ ಇತ್ಯಾದಿಗಳನ್ನು ಹೊಂದಿರಬೇಕೆ."
 
 #: ../gtk/gtktoolbar.c:637
 msgid "Toolbar icon size"
