@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.kn\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
 "POT-Creation-Date: 2009-03-02 20:42+0000\n"
-"PO-Revision-Date: 2009-03-03 17:44+0530\n"
+"PO-Revision-Date: 2009-03-05 01:05+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -220,7 +220,7 @@ msgstr "ಲಾಂಛನ ಚಿಹ್ನೆಯ ಹೆಸರು"
 
 #: ../gtk/gtkaboutdialog.c:402
 msgid "A named icon to use as the logo for the about box."
-msgstr ""
+msgstr "ಕುರಿತು ಚೌಕದಲ್ಲಿ ಬಳಸಲು ಒಂದು ಹೆಸರಿಸಲಾದಂತಹ ಚಿಹ್ನೆ."
 
 #: ../gtk/gtkaboutdialog.c:415
 msgid "Wrap license"
@@ -240,11 +240,11 @@ msgstr "ವೇಗವರ್ಧಕ ಬದಲಾವಣೆಗಳಿಗೆ ಮುಚ�
 
 #: ../gtk/gtkaccellabel.c:130
 msgid "Accelerator Widget"
-msgstr "ವೇಗವರ್ಧಕ ಸಂಪರ್ಕತಟ (Widget)"
+msgstr "ವೇಗವರ್ಧಕ ವಿಜೆಟ್"
 
 #: ../gtk/gtkaccellabel.c:131
 msgid "The widget to be monitored for accelerator changes"
-msgstr "ವೇಗವರ್ಧಕ ಬದಲಾವಣೆಗಳಿಗಾಗಿ ಸಂಪರ್ಕತಟವು (widget) ಮೇಲ್ವಿಚಾರಿತಗೊಳ್ಳಬೇಕೆ"
+msgstr "ವೇಗವರ್ಧಕ ಬದಲಾವಣೆಗಳಿಗಾಗಿ ವಿಜೆಟ್ ಮೇಲ್ವಿಚಾರಿತಗೊಳ್ಳಬೇಕೆ"
 
 #: ../gtk/gtkaction.c:179 ../gtk/gtkactiongroup.c:170 ../gtk/gtkprinter.c:123
 #: ../gtk/gtktextmark.c:89
@@ -324,11 +324,10 @@ msgid "Visible when overflown"
 msgstr "ಮಿತಿಮೀರಿದಾಗ ಗೋಚರಿಸುತ್ತದೆ"
 
 #: ../gtk/gtkaction.c:307
-#, fuzzy
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr "ಮುಖ್ಯ ಸಲಕರಣೆಪಟ್ಟಿ"
+msgstr ""
 
 #: ../gtk/gtkaction.c:314 ../gtk/gtktoolitem.c:183
 msgid "Visible when vertical"
@@ -499,7 +498,7 @@ msgstr "ಮೇಲ್ಭಾಗದ ಪ್ಯಾಡಿಂಗ್"
 
 #: ../gtk/gtkalignment.c:137
 msgid "The padding to insert at the top of the widget."
-msgstr "ಸಂಪರ್ಕತಟದ ಮೇಲ್ಭಾಗದಲ್ಲಿ ಸೇರಿಸಬೇಕಿರುವ ಪ್ಯಾಡಿಂಗ್."
+msgstr "ವಿಜೆಟ್‌ನ ಮೇಲ್ಭಾಗದಲ್ಲಿ ಸೇರಿಸಬೇಕಿರುವ ಪ್ಯಾಡಿಂಗ್."
 
 #: ../gtk/gtkalignment.c:153
 msgid "Bottom Padding"
@@ -507,7 +506,7 @@ msgstr "ಕೆಳ ಪ್ಯಾಡಿಂಗ್"
 
 #: ../gtk/gtkalignment.c:154
 msgid "The padding to insert at the bottom of the widget."
-msgstr "ಸಂಪರ್ಕತಟದ ಕೆಳಭಾಗದಲ್ಲಿ ಸೇರಿಸಬೇಕಿರುವ ಪ್ಯಾಡಿಂಗ್."
+msgstr "ವಿಜೆಟ್‌ನ ಕೆಳಭಾಗದಲ್ಲಿ ಸೇರಿಸಬೇಕಿರುವ ಪ್ಯಾಡಿಂಗ್."
 
 #: ../gtk/gtkalignment.c:170
 msgid "Left Padding"
@@ -515,7 +514,7 @@ msgstr "ಎಡ ಪ್ಯಾಡಿಂಗ್"
 
 #: ../gtk/gtkalignment.c:171
 msgid "The padding to insert at the left of the widget."
-msgstr "ಸಂಪರ್ಕತಟದ ಎಡ ಭಾಗದಲ್ಲಿ ಸೇರಿಸಬೇಕಿರುವ ಪ್ಯಾಡಿಂಗ್."
+msgstr "ವಿಜೆಟ್‌ನ ಎಡ ಭಾಗದಲ್ಲಿ ಸೇರಿಸಬೇಕಿರುವ ಪ್ಯಾಡಿಂಗ್."
 
 #: ../gtk/gtkalignment.c:187
 msgid "Right Padding"
@@ -523,7 +522,7 @@ msgstr "ಬಲ ಪ್ಯಾಡಿಂಗ್"
 
 #: ../gtk/gtkalignment.c:188
 msgid "The padding to insert at the right of the widget."
-msgstr "ಸಂಪರ್ಕತಟದ ಬಲ ಭಾಗದಲ್ಲಿ ಸೇರಿಸಬೇಕಿರುವ ಪ್ಯಾಡಿಂಗ್."
+msgstr "ವಿಜೆಟ್‌ನ ಬಲ ಭಾಗದಲ್ಲಿ ಸೇರಿಸಬೇಕಿರುವ ಪ್ಯಾಡಿಂಗ್."
 
 #: ../gtk/gtkarrow.c:75
 msgid "Arrow direction"
@@ -772,7 +771,7 @@ msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr ""
-"ಗುಂಡಿಯು ಒಂದು ಶೀರ್ಷಿಕಾ(label) ಸಂಪರ್ಕತಟವನ್ನು ಹೊಂದಿದ್ದರೆ, ಗುಂಡಿಯೊಳಗಿನ ಶೀರ್ಷಿಕಾ ಸಂಪರ್ಕ "
+"ಗುಂಡಿಯು ಒಂದು ಶೀರ್ಷಿಕಾ(label) ವಿಜೆಟ್‌ ಅನ್ನು ಹೊಂದಿದ್ದರೆ, ಗುಂಡಿಯೊಳಗಿನ ಶೀರ್ಷಿಕಾ ಸಂಪರ್ಕ "
 "ತಟದ ಪಠ್ಯ."
 
 #: ../gtk/gtkbutton.c:227 ../gtk/gtkexpander.c:203 ../gtk/gtklabel.c:388
@@ -824,7 +823,7 @@ msgstr "ಚೈಲ್ಡಿಗಾಗಿನ ಲಂಬ ವಾಲಿಕೆ"
 
 #: ../gtk/gtkbutton.c:305 ../gtk/gtkimagemenuitem.c:135
 msgid "Image widget"
-msgstr "ಚಿತ್ರ ಸಂಪರ್ಕತಟ"
+msgstr "ಚಿತ್ರ ವಿಜೆಟ್‌"
 
 #: ../gtk/gtkbutton.c:306
 msgid "Child widget to appear next to the button text"
@@ -1160,7 +1159,7 @@ msgstr "ಒಳಗೊಂಡಿರುವ"
 
 #: ../gtk/gtkcellrenderercombo.c:130 ../gtk/gtkcomboboxentry.c:106
 msgid "Text Column"
-msgstr "ಪಠ್ಯದ ಕಾಲಂ"
+msgstr "ಪಠ್ಯದ ಲಂಬಸಾಲು"
 
 #: ../gtk/gtkcellrenderercombo.c:131 ../gtk/gtkcomboboxentry.c:107
 #, fuzzy
@@ -2788,9 +2787,8 @@ msgid "Space to put between the label and the child"
 msgstr "ರಿಕ್ತಸ್ಥಳವನ್ನು ಸಂರಕ್ಷಿಸು/ಸ್ಥಳವನ್ನು ಉಳಿಸು"
 
 #: ../gtk/gtkexpander.c:229 ../gtk/gtkframe.c:147 ../gtk/gtktoolbutton.c:216
-#, fuzzy
 msgid "Label widget"
-msgstr "ನಿಯಂತ್ರಣಾ ಸಂಪರ್ಕತಟ (ವಿಡ್ಗೆಟ್)"
+msgstr "ನಿಯಂತ್ರಣಾ ವಿಜೆಟ್‌ (ವಿಡ್ಗೆಟ್)"
 
 #: ../gtk/gtkexpander.c:230
 #, fuzzy
@@ -5796,11 +5794,11 @@ msgstr "ವೇಗೋತ್ಕರ್ಷಕಗಳನ್ನು ಶಕ್ತಗೊ�
 
 #: ../gtk/gtksettings.c:809
 msgid "Whether menu items should have accelerators"
-msgstr ""
+msgstr "ಮೆನು ಅಂಶಗಳು ವೇಗವರ್ಧಕಗಳನ್ನು ಹೊಂದಿರಬೇಕೆ"
 
 #: ../gtk/gtksettings.c:826
 msgid "Recent Files Limit"
-msgstr ""
+msgstr "ಇತ್ತೀಚಿನ ಕಡತಗಳ ಮಿತಿ"
 
 #: ../gtk/gtksettings.c:827
 msgid "Number of recently used files"
@@ -5863,9 +5861,8 @@ msgid "Whether to play any event sounds at all"
 msgstr "ಪ್ರದರ್ಶನವನ್ನು ಸಂರಚಿಸು"
 
 #: ../gtk/gtksettings.c:958
-#, fuzzy
 msgid "Enable Tooltips"
-msgstr "ಸಲಕರಣೆ ಸುಳಿವುಗಳು"
+msgstr "ಸಲಕರಣೆ ಸುಳಿವುಗಳನ್ನು ಶಕ್ತಗೊಳಿಸು"
 
 #: ../gtk/gtksettings.c:959
 #, fuzzy
@@ -5918,16 +5915,15 @@ msgstr ""
 
 #: ../gtk/gtkspinbutton.c:252
 msgid "Wrap"
-msgstr ""
+msgstr "ಆವರಿಸು"
 
 #: ../gtk/gtkspinbutton.c:253
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr ""
 
 #: ../gtk/gtkspinbutton.c:260
-#, fuzzy
 msgid "Update Policy"
-msgstr "ತದ್ರೂಪು ಕಾರ್ಯನೀತಿ"
+msgstr "ಅಪ್‌ಡೇಟ್ ಕಾರ್ಯನೀತಿ"
 
 #: ../gtk/gtkspinbutton.c:261
 msgid "Whether the spin button should update always, or only when the value is legal"
@@ -5959,20 +5955,19 @@ msgstr "ಚಿಹ್ನೆಯ ಗಾತ್ರ"
 
 #: ../gtk/gtkstatusicon.c:278
 msgid "The screen where this status icon will be displayed"
-msgstr ""
+msgstr "ಸ್ಥಿತಿ ಚಿಹ್ನೆಯನ್ನು ತೋರಿಸಲಾಗುವ ತೆರೆ"
 
 #: ../gtk/gtkstatusicon.c:285
-#, fuzzy
 msgid "Blinking"
-msgstr "ಮಿಣುಕು ಸ್ಥಳಸೂಚಕ (ಕರ್ಸರ್)"
+msgstr "ಮಿಣುಕುವಿಕೆ"
 
 #: ../gtk/gtkstatusicon.c:286
 msgid "Whether or not the status icon is blinking"
-msgstr ""
+msgstr "ಸ್ಥಿತಿ ಚಿಹ್ನೆಯು ಮಿನುಗುತ್ತಿರಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
 #: ../gtk/gtkstatusicon.c:294
 msgid "Whether or not the status icon is visible"
-msgstr ""
+msgstr "ಸ್ಥಿತಿ ಚಿಹ್ನೆಯು ಕಾಣಿಸಿಕೊಳ್ಳಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
 #: ../gtk/gtkstatusicon.c:310
 msgid "Whether or not the status icon is embedded"
@@ -6013,7 +6008,7 @@ msgstr "ಅಡ್ಡಸಾಲುಗಳು"
 
 #: ../gtk/gtktable.c:130
 msgid "The number of rows in the table"
-msgstr ""
+msgstr "ಕೋಷ್ಟಕದಲ್ಲಿನ ಸಾಲುಗಳ ಸಂಖ್ಯೆ"
 
 #: ../gtk/gtktable.c:138
 msgid "Columns"
@@ -6021,7 +6016,7 @@ msgstr "ಲಂಬಸಾಲುಗಳು"
 
 #: ../gtk/gtktable.c:139
 msgid "The number of columns in the table"
-msgstr ""
+msgstr "ಕೋಷ್ಟಕದಲ್ಲಿ ಲಂಬಸಾಲುಗಳ ಸಂಖ್ಯೆ"
 
 #: ../gtk/gtktable.c:147
 msgid "Row spacing"
@@ -6029,27 +6024,27 @@ msgstr "ಸಾಲಿನ ಅಂತರ"
 
 #: ../gtk/gtktable.c:148
 msgid "The amount of space between two consecutive rows"
-msgstr ""
+msgstr "ಎರಡು ಅನುಕ್ರಮಿತ ಅಡ್ಡಸಾಲುಗಳ ನಡುವಿನ ಜಾಗದ ಪ್ರಮಾಣ"
 
 #: ../gtk/gtktable.c:156
 msgid "Column spacing"
-msgstr ""
+msgstr "ಕಾಲನ ಅಂತರ"
 
 #: ../gtk/gtktable.c:157
 msgid "The amount of space between two consecutive columns"
-msgstr ""
+msgstr "ಎರಡು ಅನುಕ್ರಮಿತ ಲಂಬಸಾಲುಗಳ ನಡುವಿನ ಜಾಗದ ಪ್ರಮಾಣ"
 
 #: ../gtk/gtktable.c:166
 msgid "If TRUE, the table cells are all the same width/height"
-msgstr ""
+msgstr "TRUE ಆದಲ್ಲಿ, ಕೋಷ್ಟಕದ ಕೋಶಗಳು ಎಲ್ಲವೂ ಒಂದೇ ಅಗಲ/ಎತ್ತರವನ್ನು ಹೊಂದಿರುತ್ತವೆ"
 
 #: ../gtk/gtktable.c:173
 msgid "Left attachment"
-msgstr ""
+msgstr "ಎಡಭಾಗದ ಲಗತ್ತು"
 
 #: ../gtk/gtktable.c:180
 msgid "Right attachment"
-msgstr ""
+msgstr "ಬಲಭಾಗದ ಲಗತ್ತು"
 
 #: ../gtk/gtktable.c:181
 msgid "The column number to attach the right side of a child widget to"
@@ -6057,7 +6052,7 @@ msgstr ""
 
 #: ../gtk/gtktable.c:187
 msgid "Top attachment"
-msgstr ""
+msgstr "ಮೇಲಿನ ಲಗತ್ತು"
 
 #: ../gtk/gtktable.c:188
 msgid "The row number to attach the top of a child widget to"
@@ -6073,15 +6068,15 @@ msgstr "ಅಡ್ಡಲಾದ ಆಯ್ಕೆಗಳು"
 
 #: ../gtk/gtktable.c:202
 msgid "Options specifying the horizontal behaviour of the child"
-msgstr ""
+msgstr "ಚೈಲ್ಡಿನ ಅಡ್ಡ ವರ್ತನೆಯನ್ನು ಸೂಚಿಸುವ ಆಯ್ಕೆಗಳು"
 
 #: ../gtk/gtktable.c:208
 msgid "Vertical options"
-msgstr ""
+msgstr "ಲಂಬ ಆಯ್ಕೆಗಳು"
 
 #: ../gtk/gtktable.c:209
 msgid "Options specifying the vertical behaviour of the child"
-msgstr ""
+msgstr "ಚೈಲ್ಡಿನ ಲಂಬ ವರ್ತನೆಯನ್ನು ಸೂಚಿಸುವ ಆಯ್ಕೆಗಳು"
 
 #: ../gtk/gtktable.c:215
 msgid "Horizontal padding"
@@ -6095,7 +6090,7 @@ msgstr ""
 
 #: ../gtk/gtktable.c:222
 msgid "Vertical padding"
-msgstr ""
+msgstr "ಲಂಬ ಪ್ಯಾಡಿಂಗ್"
 
 #: ../gtk/gtktable.c:223
 msgid ""
@@ -6105,27 +6100,27 @@ msgstr ""
 
 #: ../gtk/gtktext.c:546
 msgid "Horizontal adjustment for the text widget"
-msgstr ""
+msgstr "ಪಠ್ಯ ವಿಜೆಟ್‌ಗಾಗಿನ ಅಡ್ಡ ಹೊಂದಿಕೆ"
 
 #: ../gtk/gtktext.c:554
 msgid "Vertical adjustment for the text widget"
-msgstr ""
+msgstr "ಪಠ್ಯ ವಿಜೆಟ್‌ಗಾಗಿನ ಲಂಬ ಹೊಂದಿಕೆ"
 
 #: ../gtk/gtktext.c:561
 msgid "Line Wrap"
-msgstr ""
+msgstr "ಸಾಲಿನ ಆವರಿಕೆ"
 
 #: ../gtk/gtktext.c:562
 msgid "Whether lines are wrapped at widget edges"
-msgstr ""
+msgstr "ವಿಜೆಟ್‌ನ ತುದಿಗಳಲ್ಲಿ ಸಾಲುಗಳನ್ನು ಆವರಿಸಬೇಕೆ"
 
 #: ../gtk/gtktext.c:569
 msgid "Word Wrap"
-msgstr ""
+msgstr "ಪದದ ಆವರಿಕೆ"
 
 #: ../gtk/gtktext.c:570
 msgid "Whether words are wrapped at widget edges"
-msgstr ""
+msgstr "ವಿಜೆಟ್‌ನ ತುದಿಗಳಲ್ಲಿ ಪದಗಳನ್ನು ಆವರಿಸಬೇಕೆ"
 
 #: ../gtk/gtktextbuffer.c:180
 msgid "Tag Table"
@@ -6179,23 +6174,23 @@ msgstr "ಹೆಸರನ್ನು ಗುರುತಿಸು"
 
 #: ../gtk/gtktextmark.c:97
 msgid "Left gravity"
-msgstr ""
+msgstr "ಎಡ ಗುರುತ್ವ"
 
 #: ../gtk/gtktextmark.c:98
 msgid "Whether the mark has left gravity"
-msgstr ""
+msgstr "ಗುರುತು ಎಡ ಗುರುತ್ವಾಕರ್ಷಣೆಯನ್ನು ಹೊಂದಿದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:173
 msgid "Tag name"
-msgstr ""
+msgstr "ಟ್ಯಾಗ್‌ನ ಹೆಸರು"
 
 #: ../gtk/gtktexttag.c:174
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
-msgstr ""
+msgstr "ಪಠ್ಯದ ಟ್ಯಾಗನ್ನು ಸೂಚಿಸಲು ಬಳಸಲಾಗುವ ಹೆಸರು. ಅನಾಮಧೇಯ ಟ್ಯಾಗಿಗೆ NULL ಆಗಿರುತ್ತದೆ"
 
 #: ../gtk/gtktexttag.c:192
 msgid "Background color as a (possibly unallocated) GdkColor"
-msgstr ""
+msgstr "ಒಂದು (ಬಹುಷಃ ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ) GdkColor ಆಗಿ ಹಿನ್ನೆಲೆ ಬಣ್ಣ"
 
 #: ../gtk/gtktexttag.c:199
 msgid "Background full height"
@@ -6213,11 +6208,11 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:209
 msgid "Bitmap to use as a mask when drawing the text background"
-msgstr ""
+msgstr "ಪಠ್ಯದ ಹಿನ್ನೆಲೆಯನ್ನು ಚಿತ್ರಿಸುವಾಗ ಮುಸುಕಾಗಿ ಬಳಸಬೇಕಿರುವ ಬಿಟ್‌ಮ್ಯಾಪ್‌"
 
 #: ../gtk/gtktexttag.c:226
 msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr ""
+msgstr "ಒಂದು (ಬಹುಷಃ ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ) GdkColor ಆಗಿ ಮುನ್ನೆಲೆ ಬಣ್ಣ"
 
 #: ../gtk/gtktexttag.c:234
 msgid "Foreground stipple mask"
@@ -6225,7 +6220,7 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:235
 msgid "Bitmap to use as a mask when drawing the text foreground"
-msgstr ""
+msgstr "ಪಠ್ಯದ ಮುನ್ನೆಲೆಯನ್ನು ಚಿತ್ರಿಸುವಾಗ ಮುಸುಕಾಗಿ ಬಳಸಬೇಕಿರುವ ಬಿಟ್‌ಮ್ಯಾಪ್‌"
 
 #: ../gtk/gtktexttag.c:242
 msgid "Text direction"
@@ -6233,11 +6228,11 @@ msgstr "ಪಠ್ಯದ ದಿಕ್ಕು"
 
 #: ../gtk/gtktexttag.c:243
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr ""
+msgstr "ಪಠ್ಯದ ದಿಕ್ಕು, ಉದಾ, ಬಲದಿಂದ ಎಡಕ್ಕೆ ಅಥವ ಎಡದಿಂದ ಬಲಕ್ಕೆ"
 
 #: ../gtk/gtktexttag.c:292
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr ""
+msgstr "ಒಂದು PangoStyle ನಲ್ಲಿ ಅಕ್ಷರಶೈಲಿ, ಉದಾ. PANGO_STYLE_ITALIC"
 
 #: ../gtk/gtktexttag.c:301
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
@@ -6255,7 +6250,7 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:330
 msgid "Font size in Pango units"
-msgstr ""
+msgstr "ಪ್ಯಾಂಗೊ ಘಟಕಗಳಲ್ಲಿ ಅಕ್ಷರಶೈಲಿಯ ಗಾತ್ರ"
 
 #: ../gtk/gtktexttag.c:340
 msgid ""
@@ -6280,7 +6275,7 @@ msgstr "ಎಡ ಅಂಚು"
 
 #: ../gtk/gtktexttag.c:387 ../gtk/gtktextview.c:600
 msgid "Width of the left margin in pixels"
-msgstr ""
+msgstr "ಎಡಭಾಗದ ಅಂಚಿನ ಅಗಲ, ಪಿಕ್ಸೆಲ್‌ಗಳಲ್ಲಿ"
 
 #: ../gtk/gtktexttag.c:396
 msgid "Right margin"
@@ -6288,11 +6283,11 @@ msgstr "ಬಲ ಅಂಚು"
 
 #: ../gtk/gtktexttag.c:397 ../gtk/gtktextview.c:610
 msgid "Width of the right margin in pixels"
-msgstr ""
+msgstr "ಬಲಭಾಗದ ಅಂಚಿನ ಅಗಲ, ಪಿಕ್ಸೆಲ್‌ಗಳಲ್ಲಿ"
 
 #: ../gtk/gtktexttag.c:407 ../gtk/gtktextview.c:619
 msgid "Indent"
-msgstr ""
+msgstr "ಇಂಡೆಂಟ್"
 
 #: ../gtk/gtktexttag.c:408 ../gtk/gtktextview.c:620
 msgid "Amount to indent the paragraph, in pixels"
@@ -6306,7 +6301,7 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:428
 msgid "Pixels above lines"
-msgstr ""
+msgstr "ರೇಖೆಯ ಮೇಲಿನ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtktexttag.c:429 ../gtk/gtktextview.c:544
 msgid "Pixels of blank space above paragraphs"
@@ -6314,7 +6309,7 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:438
 msgid "Pixels below lines"
-msgstr ""
+msgstr "ರೇಖೆಯ ಕೆಳಗಿನ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtktexttag.c:439 ../gtk/gtktextview.c:554
 msgid "Pixels of blank space below paragraphs"
@@ -6322,7 +6317,7 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:448
 msgid "Pixels inside wrap"
-msgstr ""
+msgstr "ಆವರಿಕೆಯ ಒಳಗಿನ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtktexttag.c:449 ../gtk/gtktextview.c:564
 msgid "Pixels of blank space between wrapped lines in a paragraph"
@@ -6334,11 +6329,11 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:485 ../gtk/gtktextview.c:629
 msgid "Tabs"
-msgstr ""
+msgstr "ಟ್ಯಾಬ್‌ಗಳು"
 
 #: ../gtk/gtktexttag.c:486 ../gtk/gtktextview.c:630
 msgid "Custom tabs for this text"
-msgstr ""
+msgstr "ಪಠ್ಯದಲ್ಲಿನ ಇಚ್ಛೆಯ ಟ್ಯಾಬ್‌ಗಳು"
 
 #: ../gtk/gtktexttag.c:504
 msgid "Invisible"
@@ -6350,11 +6345,11 @@ msgstr "ಈ ಪಠ್ಯವು ಅಡಗಿಸಲ್ಪಟ್ಟಿದೆಯೆ.
 
 #: ../gtk/gtktexttag.c:519
 msgid "Paragraph background color name"
-msgstr ""
+msgstr "ಪ್ಯಾರಾಗ್ರಾಫಿನ ಹಿನ್ನಲೆ ಬಣ್ಣದ ಹೆಸರು"
 
 #: ../gtk/gtktexttag.c:520
 msgid "Paragraph background color as a string"
-msgstr ""
+msgstr "ಪ್ಯಾರಾಗ್ರಾಫಿನ ಹಿನ್ನಲೆ ಬಣ್ಣ ಒಂದು ವಾಕ್ಯವಾಗಿ"
 
 #: ../gtk/gtktexttag.c:535
 msgid "Paragraph background color"
@@ -6483,19 +6478,19 @@ msgstr ""
 
 #: ../gtk/gtktextview.c:543
 msgid "Pixels Above Lines"
-msgstr ""
+msgstr "ರೇಖೆಗಳ ಮೇಲಿನ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtktextview.c:553
 msgid "Pixels Below Lines"
-msgstr ""
+msgstr "ರೇಖೆಗಳ ಕೆಳಗಿನ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtktextview.c:563
 msgid "Pixels Inside Wrap"
-msgstr ""
+msgstr "ಆವರಿಕೆಯ ಒಳಗಿನ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtktextview.c:581
 msgid "Wrap Mode"
-msgstr ""
+msgstr "ಆವರಿಕೆ ಕ್ರಮ"
 
 #: ../gtk/gtktextview.c:599
 msgid "Left Margin"
@@ -6507,11 +6502,11 @@ msgstr "ಬಲ ಅಂಚು"
 
 #: ../gtk/gtktextview.c:637
 msgid "Cursor Visible"
-msgstr ""
+msgstr "ತೆರೆಸೂಚಕದ ಗೋಚರಿಕೆ"
 
 #: ../gtk/gtktextview.c:638
 msgid "If the insertion cursor is shown"
-msgstr ""
+msgstr "ತೂರಿಸುವ ತೆರೆಸೂಚಕವನ್ನು ತೋರಿಸಬೇಕೆ"
 
 #: ../gtk/gtktextview.c:645
 msgid "Buffer"
@@ -6519,7 +6514,7 @@ msgstr "ಬಫರ್"
 
 #: ../gtk/gtktextview.c:646
 msgid "The buffer which is displayed"
-msgstr ""
+msgstr "ತೋರಿಸಲಾಗುವ ಬಫರ್"
 
 #: ../gtk/gtktextview.c:654
 msgid "Whether entered text overwrites existing contents"
@@ -6627,7 +6622,7 @@ msgstr ""
 
 #: ../gtk/gtktoolbar.c:599
 msgid "Maximum child expand"
-msgstr ""
+msgstr "ಚೈಲ್ಡಿನ ಗರಿಷ್ಟ ವಿಸ್ತರಣೆ"
 
 #: ../gtk/gtktoolbar.c:600
 msgid "Maximum amount of space an expandable item will be given"
@@ -6635,7 +6630,7 @@ msgstr ""
 
 #: ../gtk/gtktoolbar.c:608
 msgid "Space style"
-msgstr ""
+msgstr "ಜಾಗದ ಶೈಲಿ"
 
 #: ../gtk/gtktoolbar.c:609
 msgid "Whether spacers are vertical lines or just blank"
@@ -6671,7 +6666,7 @@ msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಉಪಕರಣಪಟ್ಟಿಕ�
 
 #: ../gtk/gtktoolbutton.c:203
 msgid "Text to show in the item."
-msgstr ""
+msgstr "ಅಂಶದಲ್ಲಿ ತೋರಿಸಬೇಕಿರುವ ಪಠ್ಯ,"
 
 #: ../gtk/gtktoolbutton.c:210
 msgid ""
@@ -6681,15 +6676,15 @@ msgstr ""
 
 #: ../gtk/gtktoolbutton.c:217
 msgid "Widget to use as the item label"
-msgstr ""
+msgstr "ಅಂಶದ ಲೇಬಲ್ ಆಗಿ ಬಳಸಬೇಕಿರುವ ವಿಜೆಟ್"
 
 #: ../gtk/gtktoolbutton.c:223
 msgid "Stock Id"
-msgstr ""
+msgstr "ಶೇಖರಣಾ Id"
 
 #: ../gtk/gtktoolbutton.c:224
 msgid "The stock icon displayed on the item"
-msgstr ""
+msgstr "ಅಂಶದ ಮೇಲೆ ತೋರಿಸಲಾದ ಶೇಖರಣಾ ಚಿಹ್ನೆ"
 
 #: ../gtk/gtktoolbutton.c:240
 msgid "Icon name"
@@ -6697,11 +6692,11 @@ msgstr "ಚಿಹ್ನೆಯ ಹೆಸರು"
 
 #: ../gtk/gtktoolbutton.c:241
 msgid "The name of the themed icon displayed on the item"
-msgstr ""
+msgstr "ಅಂಶದ ಮೇಲೆ ತೋರಿಸಲಾಗುವ ಪರಿಸರವಿನ್ಯಾಸ(ಥೀಮ್‌) ಚಿಹ್ನೆಯ ಹೆಸರು"
 
 #: ../gtk/gtktoolbutton.c:247
 msgid "Icon widget"
-msgstr ""
+msgstr "ಚಿಹ್ನೆಯ ವಿಜೆಟ್"
 
 #: ../gtk/gtktoolbutton.c:248
 msgid "Icon widget to display in the item"
@@ -6713,7 +6708,7 @@ msgstr "ಚಿಹ್ನೆ ಅಂತರ (spacing)"
 
 #: ../gtk/gtktoolbutton.c:262
 msgid "Spacing in pixels between the icon and label"
-msgstr ""
+msgstr "ಚಿಹ್ನೆ ಹಾಗು ಲೇಬಲ್‌ಗಳ ನಡುವಿನ ಜಾಗ ಪಿಕ್ಸೆಲ್ಲುಗಳಲ್ಲಿ"
 
 #: ../gtk/gtktoolitem.c:191
 msgid ""
@@ -6727,231 +6722,231 @@ msgstr "TreeModelSort ಮಾದರಿ"
 
 #: ../gtk/gtktreemodelsort.c:275
 msgid "The model for the TreeModelSort to sort"
-msgstr ""
+msgstr "TreeModelSort ಅನ್ನು ವಿಂಗಡಿಸಲು ಮಾದರಿ"
 
 #: ../gtk/gtktreeview.c:570
 msgid "TreeView Model"
-msgstr ""
+msgstr "ವೃಕ್ಷನೋಟ ಮಾದರಿ"
 
 #: ../gtk/gtktreeview.c:571
 msgid "The model for the tree view"
-msgstr ""
+msgstr "ವೃಕ್ಷ ನೋಟಕ್ಕಾಗಿನ ಮಾದರಿ"
 
 #: ../gtk/gtktreeview.c:579
 msgid "Horizontal Adjustment for the widget"
-msgstr ""
+msgstr "ವಿಜೆಟ್‌ಗಾಗಿನ ಅಡ್ಡಲಾದ ಹೊಂದಾಣಿಕೆ"
 
 #: ../gtk/gtktreeview.c:587
 msgid "Vertical Adjustment for the widget"
-msgstr ""
+msgstr "ವಿಜೆಟ್‌ಗಾಗಿನ ಲಂಬವಾದ ಹೊಂದಾಣಿಕೆ"
 
 #: ../gtk/gtktreeview.c:594
 msgid "Headers Visible"
-msgstr ""
+msgstr "ಹೆಡರುಗಳ ಗೋಚರಿಕೆ"
 
 #: ../gtk/gtktreeview.c:595
 msgid "Show the column header buttons"
-msgstr ""
+msgstr "ಲಂಬಸಾಲಿನ ಹೆಡರ್ ಗುಂಡಿಗಳನ್ನು ತೋರಿಸು"
 
 #: ../gtk/gtktreeview.c:602
 msgid "Headers Clickable"
-msgstr ""
+msgstr "ಹೆಡರುಗಳನ್ನು ಕ್ಲಿಕ್ ಮಾಡಬಹುದು"
 
 #: ../gtk/gtktreeview.c:603
 msgid "Column headers respond to click events"
-msgstr ""
+msgstr "ಕ್ಲಿಕ್ ಮಾಡಿದಾಗ ಲಂಬಸಾಲಿನ ಹೆಡರುಗಳು ಪ್ರತಿಸ್ಪಂದಿಸುತ್ತವೆ"
 
 #: ../gtk/gtktreeview.c:610
 msgid "Expander Column"
-msgstr ""
+msgstr "ವಿಸ್ತಾರಕ ಲಂಬಸಾಲು"
 
 #: ../gtk/gtktreeview.c:611
 msgid "Set the column for the expander column"
-msgstr ""
+msgstr "ಲಂಬಸಾಲುನ್ನು ವಿಸ್ತಾರಕದ ಲಂಬಸಾಲಾಗಿ ಹೊಂದಿಸುತ್ತದೆ"
 
 #: ../gtk/gtktreeview.c:626
 msgid "Rules Hint"
-msgstr ""
+msgstr "ನಿಯಮಗಳ ಸುಳಿವು"
 
 #: ../gtk/gtktreeview.c:627
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr ""
+msgstr "ಅಡ್ಡಸಾಲುಗಳನ್ನು ವಿವಿಧ ಬಣ್ಣಗಳಲ್ಲಿ ಚಿತ್ರಿಸುವಂತೆ ಸಿದ್ಧವಿನ್ಯಾಸ(ಥೀಮ್) ಎಂಜಿನ್ನಿಗೆ ಒಂದು ಸುಳಿವನ್ನು ನೀಡುತ್ತದೆ"
 
 #: ../gtk/gtktreeview.c:634
 msgid "Enable Search"
-msgstr ""
+msgstr "ಹುಡುಕಾಟವನ್ನು ಶಕ್ತಗೊಳಿಸು"
 
 #: ../gtk/gtktreeview.c:635
 msgid "View allows user to search through columns interactively"
-msgstr ""
+msgstr "ಲಂಬಸಾಲುಗಳ ಮೂಲಕ ಸಂವಾದಾತ್ಮಕವಾಗಿ ಹುಡುಕಲು ನೋಟವು ಅನುವು ಮಾಡಿಕೊಡುತ್ತದೆ"
 
 #: ../gtk/gtktreeview.c:642
 msgid "Search Column"
-msgstr ""
+msgstr "ಹುಡುಕು ಲಂಬಸಾಲು"
 
 #: ../gtk/gtktreeview.c:643
 msgid "Model column to search through during interactive search"
-msgstr ""
+msgstr "ಸಂವಾದಾತ್ಮಕ ಹುಡುಕಾಟದ ಸಮಯದಲ್ಲಿ ಹುಡುಕಬೇಕಿರುವ ಮಾದರಿ ಲಂಬಸಾಲು"
 
 #: ../gtk/gtktreeview.c:663
 msgid "Fixed Height Mode"
-msgstr ""
+msgstr "ನಿಗದಿತ ಅಗಲದ ಕ್ರಮ"
 
 #: ../gtk/gtktreeview.c:664
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
-msgstr ""
+msgstr "ಎಲ್ಲಾ ಅಡ್ಡಸಾಲುಗಳು ಒಂದೇ ಎತ್ತರದಲ್ಲಿವೆ ಎಂದು ಊಹಿಸಿಕೊಂಡು GtkTreeView ಅನ್ನುವೇಗವಾಗಿಸುತ್ತದೆ"
 
 #: ../gtk/gtktreeview.c:684
 msgid "Hover Selection"
-msgstr ""
+msgstr "ಸುಳಿದಾಡಿಕೆ ಆಯ್ಕೆ"
 
 #: ../gtk/gtktreeview.c:685
 msgid "Whether the selection should follow the pointer"
-msgstr ""
+msgstr "ಆಯ್ಕೆಯು ಸೂಚಕವನ್ನು ಅನುಸರಿಸಬೇಕೆ"
 
 #: ../gtk/gtktreeview.c:704
 msgid "Hover Expand"
-msgstr ""
+msgstr "ಸುಳಿದಾಡಿಸಿದಾಗ ಹಿಗ್ಗಿಸು"
 
 #: ../gtk/gtktreeview.c:705
 msgid "Whether rows should be expanded/collapsed when the pointer moves over them"
-msgstr ""
+msgstr "ಸೂಚಕವನ್ನು ಅಡ್ಡಸಾಲಿನ ಮೇಲೆ ಕೊಂಡೊಯ್ದಾಗ ಅವುಗಳನ್ನು ಹಿಗ್ಗಿಸಬೇಕೆ/ಬೀಳಿಸಬೇಕೆ"
 
 #: ../gtk/gtktreeview.c:719
 msgid "Show Expanders"
-msgstr ""
+msgstr "ವಿಸ್ತಾರಕಗಳನ್ನು ತೋರಿಸು"
 
 #: ../gtk/gtktreeview.c:720
 msgid "View has expanders"
-msgstr ""
+msgstr "ನೋಟವು ವಿಸ್ತಾರಕಗಳನ್ನು ಹೊಂದಿದೆ"
 
 #: ../gtk/gtktreeview.c:734
 msgid "Level Indentation"
-msgstr ""
+msgstr "ಹಂತದ ಇಂಡೆಂಟೇಶನ್"
 
 #: ../gtk/gtktreeview.c:735
 msgid "Extra indentation for each level"
-msgstr ""
+msgstr "ಪ್ರತಿಯೊಂದು ಹಂತಕ್ಕೂ ಹೆಚ್ಚುವರಿ ಇಂಡೆಂಟೇಶನ್"
 
 #: ../gtk/gtktreeview.c:744
 msgid "Rubber Banding"
-msgstr ""
+msgstr "ರಬ್ಬರ್ ಬ್ಯಾಂಡಿಂಗ್"
 
 #: ../gtk/gtktreeview.c:745
 msgid "Whether to enable selection of multiple items by dragging the mouse pointer"
-msgstr ""
+msgstr "ಮೌಸ್‌ನ ಸೂಚಕದಿಂದ ಎಳೆಯುವ ಮೂಲಕ ಅನೇಕ ಅಂಶಗಳನ್ನು ಆರಿಸುವುದನ್ನು ಶಕ್ತಗೊಳಿಸಬೇಕೆ"
 
 #: ../gtk/gtktreeview.c:752
 msgid "Enable Grid Lines"
-msgstr ""
+msgstr "ಚೌಕ ರೇಖೆಗಳನ್ನು ಶಕ್ತಗೊಳಿಸು"
 
 #: ../gtk/gtktreeview.c:753
 msgid "Whether grid lines should be drawn in the tree view"
-msgstr ""
+msgstr "ಚೌಕ ರೇಖೆಗಳನ್ನು ವೃಕ್ಷದ ನೋಟದಲ್ಲಿ ಚಿತ್ರಿಸಬೇಕೆ"
 
 #: ../gtk/gtktreeview.c:761
 msgid "Enable Tree Lines"
-msgstr ""
+msgstr "ವೃಕ್ಷದ ರೇಖೆಗಳನ್ನು ಶಕ್ತಗೊಳಿಸು"
 
 #: ../gtk/gtktreeview.c:762
 msgid "Whether tree lines should be drawn in the tree view"
-msgstr ""
+msgstr "ವೃಕ್ಷದ ರೇಖೆಗಳನ್ನು ವೃಕ್ಷದ ನೋಟದಲ್ಲಿ ಚಿತ್ರಿಸಬೇಕೆ"
 
 #: ../gtk/gtktreeview.c:770
 msgid "The column in the model containing the tooltip texts for the rows"
-msgstr ""
+msgstr "ಮಾದರಿಯಲ್ಲಿನ ಲಂಬಸಾಲಿನಲ್ಲಿ ಅಡ್ಡಸಾಲುಗಳಿಗಾಗಿನ ಸುಳಿವು ಪಠ್ಯವನ್ನು ಹೊಂದಿದೆ"
 
 #: ../gtk/gtktreeview.c:792
 msgid "Vertical Separator Width"
-msgstr ""
+msgstr "ಲಂಬವಾದ ವಿಭಜಕದ ಅಗಲ"
 
 #: ../gtk/gtktreeview.c:793
 msgid "Vertical space between cells.  Must be an even number"
-msgstr ""
+msgstr "ಕೋಶಗಳ ನಡುವಿನ ಲಂಬವಾದ ಜಾಗ. ಇದು ಒಂದು ಸರಿ ಸಂಖ್ಯೆಯಾಗಿರಬೇಕು"
 
 #: ../gtk/gtktreeview.c:801
 msgid "Horizontal Separator Width"
-msgstr ""
+msgstr "ಅಡ್ಡಲಾದ ವಿಭಜಕದ ಅಗಲ"
 
 #: ../gtk/gtktreeview.c:802
 msgid "Horizontal space between cells.  Must be an even number"
-msgstr ""
+msgstr "ಕೋಶಗಳ ನಡುವಿನ ಅಡ್ಡಲಾದ ಜಾಗ. ಇದು ಒಂದು ಸರಿ ಸಂಖ್ಯೆಯಾಗಿರಬೇಕು"
 
 #: ../gtk/gtktreeview.c:810
 msgid "Allow Rules"
-msgstr ""
+msgstr "ನಿಯಮಗಳನ್ನು ಅನುಮತಿಸು"
 
 #: ../gtk/gtktreeview.c:811
 msgid "Allow drawing of alternating color rows"
-msgstr ""
+msgstr "ಪರ್ಯಾಯವಾದ ಬಣ್ಣದ ಸಾಲುಗಳನ್ನು ಚಿತ್ರಿಸುವುದನ್ನು ಅನುಮತಿಸು"
 
 #: ../gtk/gtktreeview.c:817
 msgid "Indent Expanders"
-msgstr ""
+msgstr "ವಿಸ್ತಾರಕಗಳಿಗೆ ಇಂಡೆಂಟ್"
 
 #: ../gtk/gtktreeview.c:818
 msgid "Make the expanders indented"
-msgstr ""
+msgstr "ವಿಸ್ತಾರಕಗಳನ್ನು ಇಂಡೆಂಟ್ ಆಗಿರುವಂತೆ ಮಾಡು"
 
 #: ../gtk/gtktreeview.c:824
 msgid "Even Row Color"
-msgstr ""
+msgstr "ಸರಿ ಸಾಲಿನ ಬಣ್ಣ"
 
 #: ../gtk/gtktreeview.c:825
 msgid "Color to use for even rows"
-msgstr ""
+msgstr "ಸರಿ ಸಾಲುಗಳಿಗೆ ಬಳಸಬೇಕಿರುವ ಬಣ್ಣ"
 
 #: ../gtk/gtktreeview.c:831
 msgid "Odd Row Color"
-msgstr ""
+msgstr "ಬೆಸ ಸಾಲಿನ ಬಣ್ಣ"
 
 #: ../gtk/gtktreeview.c:832
 msgid "Color to use for odd rows"
-msgstr ""
+msgstr "ಬೆಸ ಸಾಲುಗಳಿಗೆ ಬಳಸಬೇಕಿರುವ ಬಣ್ಣ"
 
 #: ../gtk/gtktreeview.c:838
 msgid "Row Ending details"
-msgstr ""
+msgstr "ಅಡ್ಡಸಾಲಿನ ಅಂತ್ಯಗೊಳಿಕಾ ವಿವರಗಳು"
 
 #: ../gtk/gtktreeview.c:839
 msgid "Enable extended row background theming"
-msgstr ""
+msgstr "ವಿಸ್ತರಿಸಲಾದ ಅಡ್ಡಸಾಲಿನ ಹಿನ್ನಲೆ ಪರಿಸರ ವಿನ್ಯಾಸವನ್ನು ಶಕ್ತಗೊಳಿಸು"
 
 #: ../gtk/gtktreeview.c:845
 msgid "Grid line width"
-msgstr ""
+msgstr "ಚೌಕ ರೇಖೆಯ ಅಗಲ"
 
 #: ../gtk/gtktreeview.c:846
 msgid "Width, in pixels, of the tree view grid lines"
-msgstr ""
+msgstr "ವೃಕ್ಷ ನೋಟ ಚೌಕ ರೇಖೆಗಳ ಅಗಲ, ಪಿಕ್ಸೆಲ್ಲುಗಳಲ್ಲಿ"
 
 #: ../gtk/gtktreeview.c:852
 msgid "Tree line width"
-msgstr ""
+msgstr "ವೃಕ್ಷ ರೇಖೆ ಅಗಲ"
 
 #: ../gtk/gtktreeview.c:853
 msgid "Width, in pixels, of the tree view lines"
-msgstr ""
+msgstr "ವೃಕ್ಷ ನೋಟದ ರೇಖೆಗಳ ಅಗಲ, ಪಿಕ್ಸೆಲ್ಲುಗಳಲ್ಲಿ"
 
 #: ../gtk/gtktreeview.c:859
 msgid "Grid line pattern"
-msgstr ""
+msgstr "ಚೌಕ ರೇಖೆ ವಿನ್ಯಾಸ"
 
 #: ../gtk/gtktreeview.c:860
 msgid "Dash pattern used to draw the tree view grid lines"
-msgstr ""
+msgstr "ವೃಕ್ಷ ನೋಟದ ಚೌಕ ರೇಖೆಗಳನ್ನು ಎಳೆಯಲು ಬಳಸಲಾಗುವ ಡ್ಯಾಶ್ ವಿನ್ಯಾಸ"
 
 #: ../gtk/gtktreeview.c:866
 msgid "Tree line pattern"
-msgstr ""
+msgstr "ವೃಕ್ಷ ರೇಖೆ ವಿನ್ಯಾಸ"
 
 #: ../gtk/gtktreeview.c:867
 msgid "Dash pattern used to draw the tree view lines"
-msgstr ""
+msgstr "ವೃಕ್ಷ ನೋಟದ ರೇಖೆಗಳನ್ನು ಚಿತ್ರಿಸಲು ಬಳಸಬೇಕಿರುವ ಡ್ಯಾಶ್ ವಿನ್ಯಾಸ"
 
 #: ../gtk/gtktreeviewcolumn.c:192
 msgid "Whether to display the column"
-msgstr ""
+msgstr "ಲಂಬಸಾಲನ್ನು ತೋರಿಸಬೇಕೆ"
 
 #: ../gtk/gtktreeviewcolumn.c:199 ../gtk/gtkwindow.c:536
 msgid "Resizable"
@@ -6959,23 +6954,23 @@ msgstr "ಪುನರ್-ಗಾತ್ರಿಸಬಲ್ಲ"
 
 #: ../gtk/gtktreeviewcolumn.c:200
 msgid "Column is user-resizable"
-msgstr ""
+msgstr "ಲಂಬಸಾಲಿನ ಗಾತ್ರವನ್ನು ಬಳಕೆದಾರರಿಗೆ ಸೂಕ್ತವಾಗುವಂತೆ ಬದಲಾಯಿಸಬಹುದಾಗಿದೆ"
 
 #: ../gtk/gtktreeviewcolumn.c:208
 msgid "Current width of the column"
-msgstr ""
+msgstr "ಲಂಬಸಾಲಿನ ಈಗಿನ ಅಗಲ"
 
 #: ../gtk/gtktreeviewcolumn.c:217
 msgid "Space which is inserted between cells"
-msgstr ""
+msgstr "ಕೋಶಗಳ ನಡುವೆ ಸೇರಿಸಬೇಕಿರುವ ಜಾಗ"
 
 #: ../gtk/gtktreeviewcolumn.c:225
 msgid "Sizing"
-msgstr ""
+msgstr "ಗಾತ್ರ ಬದಲಾವಣೆ"
 
 #: ../gtk/gtktreeviewcolumn.c:226
 msgid "Resize mode of the column"
-msgstr ""
+msgstr "ಲಂಬಸಾಲಿನ ಕ್ರಮದ ಗಾತ್ರವನ್ನು ಬದಲಾಯಿಸು"
 
 #: ../gtk/gtktreeviewcolumn.c:234
 msgid "Fixed Width"
@@ -6983,7 +6978,7 @@ msgstr "ನಿಶ್ಚಿತ ಗಾತ್ರ"
 
 #: ../gtk/gtktreeviewcolumn.c:235
 msgid "Current fixed width of the column"
-msgstr ""
+msgstr "ಲಂಬಸಾಲಿನ ಈಗಿನ ನಿಗದಿತ ಅಗಲ"
 
 #: ../gtk/gtktreeviewcolumn.c:244
 msgid "Minimum Width"
@@ -6991,7 +6986,7 @@ msgstr "ಕನಿಷ್ಟ ಅಗಲ"
 
 #: ../gtk/gtktreeviewcolumn.c:245
 msgid "Minimum allowed width of the column"
-msgstr ""
+msgstr "ಲಂಬಸಾಲಿನ ಅನುಮತಿ ಇರುವ ಕನಿಷ್ಟ ಅಗಲ"
 
 #: ../gtk/gtktreeviewcolumn.c:254
 msgid "Maximum Width"
@@ -6999,15 +6994,15 @@ msgstr "ಗರಿಷ್ಠ ಅಗಲ"
 
 #: ../gtk/gtktreeviewcolumn.c:255
 msgid "Maximum allowed width of the column"
-msgstr ""
+msgstr "ಲಂಬಸಾಲಿನ ಅನುಮತಿ ಇರುವ ಗರಿಷ್ಟ ಅಗಲ"
 
 #: ../gtk/gtktreeviewcolumn.c:265
 msgid "Title to appear in column header"
-msgstr ""
+msgstr "ಲಂಬಸಾಲಿನ ಹೆಡರಿನಲ್ಲಿ ಕಾಣಿಸಿಕೊಳ್ಳಬೇಕಿರುವ ಶೀರ್ಷಿಕೆ"
 
 #: ../gtk/gtktreeviewcolumn.c:273
 msgid "Column gets share of extra width allocated to the widget"
-msgstr ""
+msgstr "ವಿಜೆಟ್‌ಗೆ ನೀಡಲಾದ ಹೆಚ್ಚುವರಿ ಅಗಲದಲ್ಲಿ ಲಂಬಸಾಲಿಗೂ ಪಾಲು ದೊರೆಯುತ್ತದೆ"
 
 #: ../gtk/gtktreeviewcolumn.c:280
 msgid "Clickable"
@@ -7015,23 +7010,23 @@ msgstr "ಕ್ಲಿಕ್ ಮಾಡಬಲ್ಲ"
 
 #: ../gtk/gtktreeviewcolumn.c:281
 msgid "Whether the header can be clicked"
-msgstr ""
+msgstr "ಹೆಡರನ್ನು ಕ್ಲಿಕ್ ಮಾಡಬಹುದೆ"
 
 #: ../gtk/gtktreeviewcolumn.c:289
 msgid "Widget"
-msgstr "ಸಂಪರ್ಕತಟ (Widget)"
+msgstr "ವಿಜೆಟ್‌"
 
 #: ../gtk/gtktreeviewcolumn.c:290
 msgid "Widget to put in column header button instead of column title"
-msgstr ""
+msgstr "ಲಂಬಸಾಲಿನ ಶೀರ್ಷಿಕೆಯ ಬದಲಿಗೆ ಲಂಬಸಾಲು ಹೆಡರ್ ಗುಂಡಿಯಲ್ಲಿ ಇರಿಸಬೇಕಿರುವ ವಿಜೆಟ್"
 
 #: ../gtk/gtktreeviewcolumn.c:298
 msgid "X Alignment of the column header text or widget"
-msgstr ""
+msgstr "ಲಂಬಸಾಲಿನ ಹೆಡರ್ ಪಠ್ಯ ಅಥವ ವಿಜೆಟ್‌ನ X ವಾಲಿಕೆ"
 
 #: ../gtk/gtktreeviewcolumn.c:308
 msgid "Whether the column can be reordered around the headers"
-msgstr ""
+msgstr "ಲಂಬಸಾಲನ್ನು ಹೆಡರಿನ ಸುತ್ತಾ ಮರಳಿ ಜೋಡಿಸಬೇಕೆ"
 
 #: ../gtk/gtktreeviewcolumn.c:315
 msgid "Sort indicator"
@@ -7047,19 +7042,19 @@ msgstr "ವಿಂಗಡಣೆ ಕ್ರಮ (Sort order)"
 
 #: ../gtk/gtktreeviewcolumn.c:324
 msgid "Sort direction the sort indicator should indicate"
-msgstr ""
+msgstr "ವಿಂಗಡಣಾ ಸೂಚಕವು ತೋರಿಸಬೇಕಿರುವ ವಿಂಗಡಣಾ ದಿಕ್ಕು"
 
 #: ../gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"
-msgstr ""
+msgstr "ಮೆನುಗಳಿಗೆ ಹರಿದುಹಾಕುವ ಮೆನು ಅಂಶವನ್ನು ಸೇರಿಸಬೇಕೆ"
 
 #: ../gtk/gtkuimanager.c:230
 msgid "Merged UI definition"
-msgstr ""
+msgstr "ವಿಲೀನಗೊಳಿಸಲಾದ UI ವಿವರಣೆ"
 
 #: ../gtk/gtkuimanager.c:231
 msgid "An XML string describing the merged UI"
-msgstr ""
+msgstr "ವಿಲೀನಗೊಳಿಸಲಾದ UI ಅನ್ನು ವಿವರಿಸುವ ಒಂದು XML ವಾಕ್ಯ"
 
 #: ../gtk/gtkviewport.c:107
 msgid ""
@@ -7091,7 +7086,7 @@ msgstr "ಮೂಲ ಸಂಪರ್ಕ ತಟ (Parent widget)"
 
 #: ../gtk/gtkwidget.c:491
 msgid "The parent widget of this widget. Must be a Container widget"
-msgstr "ಈ ಸಂಪರ್ಕತಟದ ಮೂಲ ಸಂಪರ್ಕ ತಟ. ಒಂದು Container ಸಂಪರ್ಕತಟವಾಗಿರಬೇಕು"
+msgstr "ಈ ವಿಜೆಟ್‌ನ ಮೂಲ ಸಂಪರ್ಕ ತಟ. ಒಂದು Container ಸಂಪರ್ಕತಟವಾಗಿರಬೇಕು"
 
 #: ../gtk/gtkwidget.c:498
 msgid "Width request"
@@ -7101,7 +7096,7 @@ msgstr "ಅಗಲದ ಮನವಿ"
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
-msgstr ""
+msgstr "ವಿಜೆಟ್‌ನ ಅಗಲದ ಮನವಿಗಾಗಿನ ಅತಿಕ್ರಮಣ, ಅಥವ ನೈಸರ್ಗಿಕ ಮನವಿಯನ್ನು ಬಳಸಬೇಕಿದ್ದಲ್ಲಿ -1 ಆಗಿರುತ್ತದೆ"
 
 #: ../gtk/gtkwidget.c:507
 msgid "Height request"
@@ -7111,7 +7106,7 @@ msgstr "ಎತ್ತರದ ಮನವಿ"
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
-msgstr ""
+msgstr "ವಿಜೆಟ್‌ನ ಎತ್ತರದ ಮನವಿಗಾಗಿನ ಅತಿಕ್ರಮಣ, ಅಥವ ನೈಸರ್ಗಿಕ ಮನವಿಯನ್ನು ಬಳಸಬೇಕಿದ್ದಲ್ಲಿ -1 ಆಗಿರುತ್ತದೆ"
 
 #: ../gtk/gtkwidget.c:517
 msgid "Whether the widget is visible"
@@ -7127,31 +7122,31 @@ msgstr "ಅನ್ವಯಕ್ಕೆ ಬಣ್ಣಹಚ್ಚಬಹುದು"
 
 #: ../gtk/gtkwidget.c:531
 msgid "Whether the application will paint directly on the widget"
-msgstr ""
+msgstr "ಅನ್ವಯವು ನೇರವಾಗು ವಿಜೆಟ್‌ಗೆ ಬಣ್ಣ ಬಳಿಯ ಬಲ್ಲದೆ"
 
 #: ../gtk/gtkwidget.c:537
 msgid "Can focus"
-msgstr ""
+msgstr "ಗಮನ ಹೊಂದಬಲ್ಲದು"
 
 #: ../gtk/gtkwidget.c:538
 msgid "Whether the widget can accept the input focus"
-msgstr ""
+msgstr "ವಿಜೆಟ್ ಇನ್‌ಪುಟ್ ಗಮನವನ್ನು ಅಂಗೀಕರಿಸುವುದೆ"
 
 #: ../gtk/gtkwidget.c:544
 msgid "Has focus"
-msgstr ""
+msgstr "ಗಮನವನ್ನು ಹೊಂದಿದೆ"
 
 #: ../gtk/gtkwidget.c:545
 msgid "Whether the widget has the input focus"
-msgstr ""
+msgstr "ವಿಜೆಟ್‌ ಇನ್‌ಪುಟ್‌ ಗಮನವನ್ನು ಹೊಂದಿದೆಯೆ"
 
 #: ../gtk/gtkwidget.c:551
 msgid "Is focus"
-msgstr ""
+msgstr "ಗಮನದಲ್ಲಿದೆ"
 
 #: ../gtk/gtkwidget.c:552
 msgid "Whether the widget is the focus widget within the toplevel"
-msgstr ""
+msgstr "ವಿಜೆಟ್‌ ಮೇಲ್ಮಟ್ಟದ ಒಳಗೆಯೆ ಗಮನದ ವಿಜೆಟ್‌ ಆಗಿದೆಯೆ"
 
 #: ../gtk/gtkwidget.c:558
 msgid "Can default"
@@ -7175,15 +7170,15 @@ msgstr "ಪೂರ್ವನಿಯೋಜಿತವನ್ನು ಪಡೆದುಕ�
 
 #: ../gtk/gtkwidget.c:573
 msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr ""
+msgstr "TRUE ಆಗಿದ್ದಲ್ಲಿ, ಸಂಪರ್ಕತಟಕ್ಕೆ ಗಮನವನ್ನು ಕೇಂದ್ರೀಕರಿಸಿದಾಗ ಪೂರ್ವನಿಯೋಜಿತ ಕ್ರಿಯೆಯನ್ನು ಪಡೆದುಕೊಳ್ಳುತ್ತದೆ"
 
 #: ../gtk/gtkwidget.c:579
 msgid "Composite child"
-msgstr ""
+msgstr "ಮಿಶ್ರಿತ ಚೈಲ್ಡ್‍"
 
 #: ../gtk/gtkwidget.c:580
 msgid "Whether the widget is part of a composite widget"
-msgstr "ಸಂಪರ್ಕತಟವು ಒಂದು ಸಂಕೀರ್ಣ ಸಂಪರ್ಕತಟದ ಒಂದು ಭಾಗವೆ"
+msgstr "ಸಂಪರ್ಕತಟವು ಒಂದು ಸಂಕೀರ್ಣ ವಿಜೆಟ್‌ನ ಒಂದು ಭಾಗವೆ"
 
 #: ../gtk/gtkwidget.c:586
 msgid "Style"
@@ -7193,7 +7188,7 @@ msgstr "ಶೈಲಿ"
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
-msgstr ""
+msgstr "ವಿಜೆಟ್‌ನ ಶೈಲಿ, ಅದು ಹೇಗೆ ಕಾಣಿಸುತ್ತದೆ (ಬಣ್ಣ ಇತ್ಯಾದಿ) ಎನ್ನುವ ಮಾಹಿತಿಯನ್ನು ಹೊಂದಿರುತ್ತದೆ"
 
 #: ../gtk/gtkwidget.c:593
 msgid "Events"
@@ -7201,15 +7196,15 @@ msgstr "ಘಟನೆಗಳು"
 
 #: ../gtk/gtkwidget.c:594
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr ""
+msgstr "ಈ ವಿಜೆಟ್‌ ಯಾವ ಬಗೆಯ GdkEvents ಅನ್ನು ಪಡೆದುಕೊಳ್ಳುತ್ತದೆ ಎಂದು ನಿರ್ಧರಿಸುವ ಘಟನೆ ಮುಸಕು"
 
 #: ../gtk/gtkwidget.c:601
 msgid "Extension events"
-msgstr ""
+msgstr "ವಿಸ್ತರಣೆಯ ಘಟನೆಗಳು"
 
 #: ../gtk/gtkwidget.c:602
 msgid "The mask that decides what kind of extension events this widget gets"
-msgstr ""
+msgstr "ಈ ವಿಜೆಟ್‌ ಯಾವ ಬಗೆಯ ವಿಸ್ತರಣೆ ಘಟನೆಯನ್ನು ಪಡೆದುಕೊಳ್ಳುತ್ತದೆ ಎಂದು ನಿರ್ಧರಿಸುವ ಮುಸಕು"
 
 #: ../gtk/gtkwidget.c:609
 msgid "No show all"
@@ -7229,7 +7224,7 @@ msgstr "ವಿಂಡೊ"
 
 #: ../gtk/gtkwidget.c:690
 msgid "The widget's window if it is realized"
-msgstr ""
+msgstr "ವಾಸ್ತವಗೊಳಿಸಿದಲ್ಲಿನ ವಿಜೆಟ್‌ನ ವಿಂಡೋ"
 
 #: ../gtk/gtkwidget.c:2212
 msgid "Interior Focus"
@@ -7237,31 +7232,31 @@ msgstr "ಆಂತರಿಕ ಗಮನ"
 
 #: ../gtk/gtkwidget.c:2213
 msgid "Whether to draw the focus indicator inside widgets"
-msgstr ""
+msgstr "ವಿಜೆಟ್‌ನ ಒಳಗೆ ಗಮನ ಸೂಚಕವನ್ನು ಚಿತ್ರಿಸಬೇಕೆ"
 
 #: ../gtk/gtkwidget.c:2219
 msgid "Focus linewidth"
-msgstr ""
+msgstr "ಗಮನದ ಸಾಲಿನ ಅಗಲ"
 
 #: ../gtk/gtkwidget.c:2220
 msgid "Width, in pixels, of the focus indicator line"
-msgstr ""
+msgstr "ಗಮನ ಸೂಚಕ ಸಾಲಿನ ಅಗಲ, ಪಿಕ್ಸುಲ್ಲುಗಳಲ್ಲಿ"
 
 #: ../gtk/gtkwidget.c:2226
 msgid "Focus line dash pattern"
-msgstr ""
+msgstr "ಗಮನ ಸಾಲಿನ ಡ್ಯಾಶ್ ವಿನ್ಯಾಸ"
 
 #: ../gtk/gtkwidget.c:2227
 msgid "Dash pattern used to draw the focus indicator"
-msgstr ""
+msgstr "ಗಮನ ಸೂಚಕವನ್ನು ಬರೆಯಲು ಬಳಸಲಾಗುವ ಡ್ಯಾಶ್ ವಿನ್ಯಾಸ"
 
 #: ../gtk/gtkwidget.c:2232
 msgid "Focus padding"
-msgstr ""
+msgstr "ಗಮನ(ಫೋಕಸ್) ಪ್ಯಾಡಿಂಗ್"
 
 #: ../gtk/gtkwidget.c:2233
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
-msgstr ""
+msgstr "ಗಮನದ ಸೂಚಕ ಹಾಗು ವಿಜೆಟ್ ಚೌಕದ ನಡುವಿನ ಅಗಲ, ಪಿಕ್ಸೆಲ್ಲುಗಳಲ್ಲಿ"
 
 #: ../gtk/gtkwidget.c:2238
 msgid "Cursor color"
@@ -7269,7 +7264,7 @@ msgstr "ತೆರೆಸೂಚಕದ ಬಣ್ಣ"
 
 #: ../gtk/gtkwidget.c:2239
 msgid "Color with which to draw insertion cursor"
-msgstr ""
+msgstr "ಯಾವ ಬಣ್ಣದಲ್ಲಿ ತೆರೆಸೂಚಕವನ್ನು ಸೇರಿಸಬೇಕು"
 
 #: ../gtk/gtkwidget.c:2244
 msgid "Secondary cursor color"
@@ -7279,15 +7274,15 @@ msgstr "ಎರಡನೆಯ ತೆರೆಸೂಚಕದ ಬಣ್ಣ"
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
-msgstr ""
+msgstr "ಬಲದಿಂದ ಎಡಕ್ಕೆ ಹಾಗು ಎಡದಿಂದ ಬಲಕ್ಕೆ ಹೊಂದಿರುವ ಪಠ್ಯಗಳನ್ನು ಸಂಪಾದಿಸುವಾಗ ಎರಡನೆಯ ತೂರಿಸಲಾಗುವ ತೆರೆಸೂಚಕವನ್ನು ಚಿತ್ರಿಸಬೇಕಿರುವ ಬಣ್ಣ"
 
 #: ../gtk/gtkwidget.c:2250
 msgid "Cursor line aspect ratio"
-msgstr ""
+msgstr "ತೆರೆಸೂಚಕ ಸಾಲಿನ ಆಕಾರ ಅನುಪಾತ"
 
 #: ../gtk/gtkwidget.c:2251
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr ""
+msgstr "ತೂರಿಸುವ ತೆರೆಸೂಚಕವನ್ನು ಚಿತ್ರಿಸಲು ಬಳಸುವ ಆಕಾರ ಅನುಪಾತ"
 
 #: ../gtk/gtkwidget.c:2265
 msgid "Draw Border"
@@ -7295,7 +7290,7 @@ msgstr "ಅಂಚನ್ನು ಎಳೆ"
 
 #: ../gtk/gtkwidget.c:2266
 msgid "Size of areas outside the widget's allocation to draw"
-msgstr ""
+msgstr "ಚಿತ್ರಿಸಲು ನಿಯೋಜಿತವಾದ ವಿಜೆಟ್‌ನ ಹೊರಗಿನ ಜಾಗಗಳ ಗಾತ್ರ"
 
 #: ../gtk/gtkwidget.c:2279
 msgid "Unvisited Link Color"
@@ -7321,7 +7316,7 @@ msgstr "ಅಗಲ ವಿಭಜಕಗಳು"
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
-msgstr ""
+msgstr "ವಿಭಜಕಗಳು ಸಂರಚಿಸಬಹುದಾದಂತಹ ಅಗಲವನ್ನು ಹೊಂದಿರಬೇಕೆ ಹಾಗು ರೇಖೆಯ ಬದಲಿಗೆ ಒಂದು ಚೌಕವನ್ನು ಬಳಸಿಕೊಂಡು ಚಿತ್ರಿಸಬೇಕೆ"
 
 #: ../gtk/gtkwidget.c:2323
 msgid "Separator Width"
@@ -7329,7 +7324,7 @@ msgstr "ವಿಭಜಕದ ಅಗಲ"
 
 #: ../gtk/gtkwidget.c:2324
 msgid "The width of separators if wide-separators is TRUE"
-msgstr ""
+msgstr "ಅಗಲವಾದ ವಿಭಜಕವು TRUE ಆಗಿದ್ದಲ್ಲಿ ವಿಭಜಕದ ಅಗಲ"
 
 #: ../gtk/gtkwidget.c:2338
 msgid "Separator Height"
@@ -7337,7 +7332,7 @@ msgstr "ವಿಭಜಕದ ಉದ್ದ"
 
 #: ../gtk/gtkwidget.c:2339
 msgid "The height of separators if \"wide-separators\" is TRUE"
-msgstr ""
+msgstr "\"wide-separators\" ಯು TRUE ಆದಲ್ಲಿ ವಿಭಜಕದ ಉದ್ದ"
 
 #: ../gtk/gtkwidget.c:2353
 msgid "Horizontal Scroll Arrow Length"
@@ -7377,7 +7372,7 @@ msgstr "ವಿಂಡೋ ಪಾತ್ರ"
 
 #: ../gtk/gtkwindow.c:495
 msgid "Unique identifier for the window to be used when restoring a session"
-msgstr ""
+msgstr "ಒಂದು ಅಧಿವೇಶನವನ್ನು ಮರಳಿ ಸ್ಥಾಪಿಸುವಾಗ ಬಳಸಲಾದ ವಿಂಡೋಗಾಗಿ ವಿಶಿಷ್ಟವಾದ ಆರಂಭಿಕ ಪತ್ತೆಗಾರ"
 
 #: ../gtk/gtkwindow.c:511
 msgid "Startup ID"
@@ -7385,7 +7380,7 @@ msgstr "ಆರಂಭಿಸುವ ID"
 
 #: ../gtk/gtkwindow.c:512
 msgid "Unique startup identifier for the window used by startup-notification"
-msgstr ""
+msgstr "ಆರಂಭಿಕ ಸೂಚನೆಯಲ್ಲಿ ಬಳಸಲಾದ ವಿಂಡೋಗಾಗಿ ವಿಶಿಷ್ಟವಾದ ಆರಂಭಿಕ ಪತ್ತೆಗಾರ"
 
 #: ../gtk/gtkwindow.c:519
 msgid "Allow Shrink"
@@ -7418,7 +7413,7 @@ msgstr "ಮೋಡಲ್"
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
-msgstr ""
+msgstr "TRUE ಆದಲ್ಲಿ, ವಿಂಡೋವು ಮೋಡಲ್ ಆಗಿರುತ್ತದೆ (ಇದು ಮೇಲಿದ್ದಾಗ ಬೇರೆ ವಿಂಡೋಗಳನ್ನು ಬಳಸಲಾಗುವುದಿಲ್ಲ)"
 
 #: ../gtk/gtkwindow.c:552
 msgid "Window Position"
@@ -7478,13 +7473,13 @@ msgstr "ಇನ್‌ಪುಟ್ ಗಮನವು ಈ GtkWindow ಯ ಒಳಗೆ�
 
 #: ../gtk/gtkwindow.c:637
 msgid "Type hint"
-msgstr ""
+msgstr "ಬಗೆಯ ಸುಳಿವು"
 
 #: ../gtk/gtkwindow.c:638
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
-msgstr ""
+msgstr "ಇದು ಯಾವ ಬಗೆಯ ವಿಂಡೋ ಆಗಿದೆ ಹಾಗು ಇದರೊಂದಿಗೆ ಹೇಗೆ ವ್ಯವಹರಿಸಬೇಕು ಎಂದು ಗಣಕತೆರೆ ಪರಿಸರಕ್ಕೆ ನೆರವು ನೀಡಲು ಸುಳಿವು."
 
 #: ../gtk/gtkwindow.c:646
 msgid "Skip taskbar"
@@ -7492,7 +7487,7 @@ msgstr "ಕಾರ್ಯಪಟ್ಟಿಯನ್ನು ಉಪೇಕ್ಷಿಸ�
 
 #: ../gtk/gtkwindow.c:647
 msgid "TRUE if the window should not be in the task bar."
-msgstr ""
+msgstr "ವಿಂಡೋ ಕಾರ್ಯಪಟ್ಟಿಕೆಯಲ್ಲಿ ಇರಬಾರದಾಗಿದ್ದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ."
 
 #: ../gtk/gtkwindow.c:654
 msgid "Skip pager"
@@ -7500,7 +7495,7 @@ msgstr "ಪೇಜರನ್ನು ಉಪೇಕ್ಷಿಸು"
 
 #: ../gtk/gtkwindow.c:655
 msgid "TRUE if the window should not be in the pager."
-msgstr ""
+msgstr "ವಿಂಡೋ ಪೇಜರ್ ಆಗಿರಬಾರದೆ ಇದ್ದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ."
 
 #: ../gtk/gtkwindow.c:662
 msgid "Urgent"
@@ -7508,7 +7503,7 @@ msgstr "ತುರ್ತು"
 
 #: ../gtk/gtkwindow.c:663
 msgid "TRUE if the window should be brought to the user's attention."
-msgstr ""
+msgstr "ವಿಂಡೋ ಅನ್ನು ಬಳಕೆದಾರರ ಗಮನಕ್ಕೆ ತರಬೇಕಿದ್ದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ."
 
 #: ../gtk/gtkwindow.c:677
 msgid "Accept focus"
@@ -7516,7 +7511,7 @@ msgstr "ಗಮನವನ್ನು ಅಂಗೀಕರಿಸು"
 
 #: ../gtk/gtkwindow.c:678
 msgid "TRUE if the window should receive the input focus."
-msgstr ""
+msgstr "ವಿಂಡೋ ಇನ್‌ಪುಟ್ ಗಮನವನ್ನು ಪಡೆದುಕೊಳ್ಳಬೇಕಿದ್ದರೆ TRUE ಆಗಿರುತ್ತದೆ."
 
 #: ../gtk/gtkwindow.c:692
 msgid "Focus on map"
@@ -7524,7 +7519,7 @@ msgstr "ಮ್ಯಾಪ್‌ ಆದಾಗ ಗಮನ"
 
 #: ../gtk/gtkwindow.c:693
 msgid "TRUE if the window should receive the input focus when mapped."
-msgstr ""
+msgstr "ಮ್ಯಾಪ್‌ ಮಾಡಿದಾಗ ವಿಂಡೋ ಇನ್‌ಪುಟ್ ಗಮನವನ್ನು ಪಡೆದುಕೊಳ್ಳಬೇಕಿದ್ದರೆ TRUE ಆಗಿರುತ್ತದೆ."
 
 #: ../gtk/gtkwindow.c:707
 msgid "Decorated"
