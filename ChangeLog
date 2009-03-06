@@ -1,3 +1,10 @@
+2009-03-06  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/gtkscalebutton.c (gtk_scale_button_set_property): don't call
+	gtk_orientable_set_orientation() because that calls g_object_set()
+	again -> infinite recursion. Call gtk_scale_button_set_orientation()
+	instead.
+
 2009-03-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version

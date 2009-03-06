@@ -434,7 +434,7 @@ gtk_scale_button_set_property (GObject       *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      gtk_orientable_set_orientation (GTK_ORIENTABLE (button), g_value_get_enum (value));
+      gtk_scale_button_set_orientation (button, g_value_get_enum (value));
       break;
     case PROP_VALUE:
       gtk_scale_button_set_value (button, g_value_get_double (value));
