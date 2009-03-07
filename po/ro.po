@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-07 16:22+0200\n"
-"PO-Revision-Date: 2009-03-07 16:22+0200\n"
+"POT-Creation-Date: 2009-03-07 20:47+0200\n"
+"PO-Revision-Date: 2009-03-07 20:49+0200\n"
 "Last-Translator: Mișu Moldovan <dumol@gnome.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -239,7 +239,7 @@ msgstr "Tip de animație nesuportat"
 #: ../gdk-pixbuf/io-ani.c:432 ../gdk-pixbuf/io-ani.c:455
 #: ../gdk-pixbuf/io-ani.c:482 ../gdk-pixbuf/io-ani.c:569
 msgid "Invalid header in animation"
-msgstr "Antet invalid în animație"
+msgstr "Antet incorect în animație"
 
 #: ../gdk-pixbuf/io-ani.c:358 ../gdk-pixbuf/io-ani.c:380
 #: ../gdk-pixbuf/io-ani.c:464 ../gdk-pixbuf/io-ani.c:491
@@ -363,7 +363,7 @@ msgstr "Formatul de imagine GIF"
 #: ../gdk-pixbuf/io-ico.c:277 ../gdk-pixbuf/io-ico.c:290
 #: ../gdk-pixbuf/io-ico.c:359
 msgid "Invalid header in icon"
-msgstr "Antet invalid în iconiță"
+msgstr "Antet incorect în iconiță"
 
 #: ../gdk-pixbuf/io-ico.c:240 ../gdk-pixbuf/io-ico.c:300
 #: ../gdk-pixbuf/io-ico.c:369 ../gdk-pixbuf/io-ico.c:432
@@ -411,7 +411,7 @@ msgstr "Formatul de imagine ICO"
 #: ../gdk-pixbuf/io-icns.c:347
 #, c-format
 msgid "Error reading ICNS image: %s"
-msgstr "Eroare fatală la citirea imaginii ICNS: %s"
+msgstr "Eroare la citirea imaginii ICNS: %s"
 
 #: ../gdk-pixbuf/io-icns.c:364
 msgid "Could not decode ICNS file"
@@ -513,7 +513,7 @@ msgstr "Nu se poate aloca memorie pentru un buffer de context"
 
 #: ../gdk-pixbuf/io-pcx.c:601
 msgid "Image has invalid width and/or height"
-msgstr "Imaginea are înălțimea sau lățimea invalidă"
+msgstr "Imaginea are înălțimea sau lățimea incorecte"
 
 #: ../gdk-pixbuf/io-pcx.c:613 ../gdk-pixbuf/io-pcx.c:674
 msgid "Image has unsupported bpp"
@@ -550,7 +550,7 @@ msgstr "Formatul de imagine PCX"
 
 #: ../gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr "Numărul de biți/canal al imaginii PNG este invalid."
+msgstr "Numărul de biți/canal al imaginii PNG este incorect."
 
 #: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:618
 msgid "Transformed PNG has zero width or height."
@@ -668,7 +668,7 @@ msgstr "Valoarea maximă a culorii în fișierul PNM este prea mare"
 #: ../gdk-pixbuf/io-pnm.c:429 ../gdk-pixbuf/io-pnm.c:459
 #: ../gdk-pixbuf/io-pnm.c:504
 msgid "Raw PNM image type is invalid"
-msgstr "Tipul de imagine PNM brută este invalid"
+msgstr "Tipul de imagine PNM brută nu este valid"
 
 #: ../gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
@@ -756,7 +756,7 @@ msgstr "Nu se poate aloca memorie pentru antetul TGA"
 
 #: ../gdk-pixbuf/io-tga.c:767
 msgid "TGA image has invalid dimensions"
-msgstr "Imaginea TGA are dimensiuni invalide"
+msgstr "Imaginea TGA are dimensiuni incorecte"
 
 #: ../gdk-pixbuf/io-tga.c:773 ../gdk-pixbuf/io-tga.c:782
 #: ../gdk-pixbuf/io-tga.c:792 ../gdk-pixbuf/io-tga.c:802
@@ -851,7 +851,7 @@ msgstr "Formatul de imagine WBMP"
 
 #: ../gdk-pixbuf/io-xbm.c:295
 msgid "Invalid XBM file"
-msgstr "Fișier XBM invalid"
+msgstr "Fișier XBM nevalid"
 
 #: ../gdk-pixbuf/io-xbm.c:305
 msgid "Insufficient memory to load XBM image file"
@@ -871,7 +871,7 @@ msgstr "Antetul XPM nu a fost găsit"
 
 #: ../gdk-pixbuf/io-xpm.c:477
 msgid "Invalid XPM header"
-msgstr "Antet XPM invalid"
+msgstr "Antet XPM incorect"
 
 #: ../gdk-pixbuf/io-xpm.c:485
 msgid "XPM file has image width <= 0"
@@ -883,11 +883,11 @@ msgstr "Fișierul XPM are o înălțime negaivă a imaginii"
 
 #: ../gdk-pixbuf/io-xpm.c:501
 msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM are un număr invalid de caractere per pixel"
+msgstr "XPM are un număr incorect de caractere per pixel"
 
 #: ../gdk-pixbuf/io-xpm.c:510
 msgid "XPM file has invalid number of colors"
-msgstr "Fișierul XPM are un număr invalid de culori"
+msgstr "Fișierul XPM are un număr incorect de culori"
 
 #: ../gdk-pixbuf/io-xpm.c:522 ../gdk-pixbuf/io-xpm.c:531
 #: ../gdk-pixbuf/io-xpm.c:583
@@ -1050,17 +1050,17 @@ msgstr "Interfață"
 #: ../gtk/gtkbuilderparser.c:340
 #, c-format
 msgid "Invalid type function: `%s'"
-msgstr "Funcție tip invalidă: „%s”"
+msgstr "Funcție tip nevalidă: „%s”"
 
 #: ../gtk/gtkbuilderparser.c:837
 #, c-format
 msgid "Invalid root element: '%s'"
-msgstr "Element rădăcină invalid: „%s”"
+msgstr "Element rădăcină nevalid: „%s”"
 
 #: ../gtk/gtkbuilderparser.c:876
 #, c-format
 msgid "Unhandled tag: '%s'"
-msgstr "Marcaj incomplet: „%s”"
+msgstr "Marcaj negestionat: „%s”"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1097,7 +1097,7 @@ msgstr "Alegeți o culoare"
 
 #: ../gtk/gtkcolorbutton.c:448
 msgid "Received invalid color data\n"
-msgstr "S-au primit date invalide de culoare\n"
+msgstr "S-au primit date incorecte de culoare\n"
 
 #: ../gtk/gtkcolorsel.c:354
 msgid ""
@@ -1280,7 +1280,7 @@ msgstr ""
 
 #: ../gtk/gtkfilechooserdefault.c:1116
 msgid "Invalid file name"
-msgstr "Nume invalid de fișier"
+msgstr "Nume incorect de fișier"
 
 #: ../gtk/gtkfilechooserdefault.c:1126
 msgid "The folder contents could not be displayed"
@@ -1301,7 +1301,7 @@ msgstr "Căutare"
 
 #: ../gtk/gtkfilechooserdefault.c:1876
 msgid "Recently Used"
-msgstr "Recent utilizate"
+msgstr "Utilizate recent"
 
 #: ../gtk/gtkfilechooserdefault.c:2510
 msgid "Select which types of files are shown"
@@ -1486,7 +1486,7 @@ msgstr "Introduceți numele noului dosar"
 #: ../gtk/gtkfilechooserdefault.c:11202 ../gtk/gtkfilechooserdefault.c:11224
 #: ../gtk/gtkfilechooserdefault.c:11295
 msgid "Unknown"
-msgstr "Necunoscut(ă)"
+msgstr "Nu se știe"
 
 #: ../gtk/gtkfilechooserdefault.c:11242
 msgid "%H:%M"
@@ -1500,7 +1500,7 @@ msgstr "Ieri la %H:%M"
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:698 ../gtk/gtkfilechooserentry.c:1163
 msgid "Invalid path"
-msgstr "Cale invalidă"
+msgstr "Cale nevalidă"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
@@ -1528,7 +1528,7 @@ msgstr "Completă, dar nu unică"
 #. * for possible completions for filenames in a file chooser entry.
 #: ../gtk/gtkfilechooserentry.c:1154
 msgid "Completing..."
-msgstr "Completare..."
+msgstr "Se completează..."
 
 #. hostnames in a local_only file chooser?  user error
 #. Translators: this is shown in the feedback for Tab-completion in a
@@ -1544,7 +1544,7 @@ msgstr "Se pot selecta doar fișiere locale"
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
 #: ../gtk/gtkfilechooserentry.c:1185
 msgid "Incomplete hostname; end it with '/'"
-msgstr "Nume invalid, ar trebui să se termine cu „/”"
+msgstr "Nume nevalid, ar trebui să se termine cu „/”"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
@@ -1681,7 +1681,7 @@ msgstr ""
 
 #: ../gtk/gtkfilesel.c:3051
 msgid "Invalid UTF-8"
-msgstr "UTF-8 invalid"
+msgstr "UTF-8 nevalid"
 
 #: ../gtk/gtkfilesel.c:3925
 msgid "Name too long"
@@ -1786,7 +1786,7 @@ msgstr "Nu s-a putut încărca iconița"
 
 #: ../gtk/gtkimmodule.c:527
 msgid "Simple"
-msgstr "Simplă"
+msgstr "Simplu"
 
 #: ../gtk/gtkinputdialog.c:192
 msgid "Input"
@@ -1873,7 +1873,7 @@ msgstr "Copiere URL"
 
 #: ../gtk/gtklinkbutton.c:586
 msgid "Invalid URI"
-msgstr "URI invalid"
+msgstr "URI nevalid"
 
 #. Description of --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:450
@@ -1932,7 +1932,7 @@ msgstr "Conectare _anonimă"
 
 #: ../gtk/gtkmountoperation.c:538
 msgid "Connect as u_ser:"
-msgstr "Conectare ca utili_zatorul:"
+msgstr "Conectare ca utili_zator:"
 
 #: ../gtk/gtkmountoperation.c:575
 msgid "_Username:"
@@ -1966,7 +1966,7 @@ msgstr "Pagină %u"
 #: ../gtk/gtkpagesetup.c:597 ../gtk/gtkpapersize.c:825
 #: ../gtk/gtkpapersize.c:867
 msgid "Not a valid page setup file"
-msgstr "Nu este un fișiere valid de opțiuni de pagină"
+msgstr "Fișier nevalid de opțiuni de pagină"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
@@ -2165,7 +2165,7 @@ msgstr "Nu s-a găsit nici o imprimantă"
 
 #: ../gtk/gtkprintoperation-win32.c:1544
 msgid "Invalid argument to CreateDC"
-msgstr "Argument invalid pentru CreateDC"
+msgstr "Argument incorect pentru CreateDC"
 
 #: ../gtk/gtkprintoperation-win32.c:1578 ../gtk/gtkprintoperation-win32.c:1801
 msgid "Error from StartDoc"
@@ -2178,15 +2178,15 @@ msgstr "Nu există îndeajuns de multă memorie liberă"
 
 #: ../gtk/gtkprintoperation-win32.c:1734
 msgid "Invalid argument to PrintDlgEx"
-msgstr "Argument invalid pentru PrintDlgEx"
+msgstr "Argument incorect pentru PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1739
 msgid "Invalid pointer to PrintDlgEx"
-msgstr "Pointer invalid pentru PrinDlgEx"
+msgstr "Pointer incorect pentru PrinDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1744
 msgid "Invalid handle to PrintDlgEx"
-msgstr "Handle invalid pentru PrintDlgEx"
+msgstr "Handle incorect pentru PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1749
 msgid "Unspecified error"
@@ -2257,7 +2257,7 @@ msgstr "Generice"
 #: ../gtk/gtkprintunixdialog.c:2442
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2910
 msgid "Page Ordering"
-msgstr "Ordinea paginilor"
+msgstr "Ordine pagini"
 
 #: ../gtk/gtkprintunixdialog.c:2448
 msgid "Left to right"
@@ -2277,11 +2277,11 @@ msgstr "Pe am_bele părți"
 
 #: ../gtk/gtkprintunixdialog.c:2537
 msgid "Pages per _side:"
-msgstr "_Pagini per parte:"
+msgstr "_Pagini per filă:"
 
 #: ../gtk/gtkprintunixdialog.c:2555
 msgid "Page or_dering:"
-msgstr "_Ordinea paginilor"
+msgstr "_Ordine pagini"
 
 #: ../gtk/gtkprintunixdialog.c:2571
 msgid "_Only print:"
@@ -2330,7 +2330,7 @@ msgstr "Pri_oritate:"
 
 #: ../gtk/gtkprintunixdialog.c:2727
 msgid "_Billing info:"
-msgstr "Informații _de promovare"
+msgstr "Informații _de facturare"
 
 #: ../gtk/gtkprintunixdialog.c:2745
 msgid "Print Document"
@@ -2527,7 +2527,7 @@ msgstr "Atributul „%s” a fost găsit duplicat în elementul <%s>"
 #: ../gtk/gtktextbufferserialize.c:846
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
-msgstr "Elementul <%s> are un id invalid „%s”"
+msgstr "Elementul <%s> are un id incorect „%s”"
 
 #: ../gtk/gtktextbufferserialize.c:856
 #, c-format
@@ -2542,7 +2542,7 @@ msgstr "Atributul „%s” se repetă de două ori în același element <%s>"
 #: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr "Atributul „%s” este invalid în acest context pentru elementul <%s>"
+msgstr "Atributul „%s” este incorect în acest context pentru elementul <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:1022
 #, c-format
@@ -2594,7 +2594,7 @@ msgstr "Eticheta „%s” este deja definită"
 #: ../gtk/gtktextbufferserialize.c:1296
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr "Eticheta „%s” are o prioritate invalidă „%s”"
+msgstr "Eticheta „%s” are o prioritate nevalidă „%s”"
 
 #: ../gtk/gtktextbufferserialize.c:1349
 #, c-format
@@ -2715,7 +2715,7 @@ msgstr "Crește volumul"
 
 #: ../gtk/gtkvolumebutton.c:147
 msgid "Muted"
-msgstr "Amuțit"
+msgstr "Mut"
 
 #: ../gtk/gtkvolumebutton.c:151
 msgid "Full Volume"
@@ -2759,7 +2759,7 @@ msgstr "Nu s-a putut scrie fișierul cache: %s\n"
 #: ../gtk/updateiconcache.c:1499
 #, c-format
 msgid "The generated cache was invalid.\n"
-msgstr "S-a generat un cache invalid.\n"
+msgstr "S-a generat un cache nevalid.\n"
 
 #: ../gtk/updateiconcache.c:1511
 #, c-format
@@ -2911,13 +2911,15 @@ msgstr "Imprimanta „%s” nu mai are developator."
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1183
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr "Imprimanta „%s” are probleme cu una dintre rezervele de culori."
+msgstr ""
+"Imprimanta „%s” are pe terminate cel puțin una dintre rezervele de culori."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1185
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
-msgstr "Imprimanta „%s” are goală cel puțin una dintre rezervele de culori."
+msgstr "Imprimanta „%s” nu mai are culoare în cel puțin una dintre "
+"rezervele de culori."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1186
 #, c-format
@@ -3112,14 +3114,14 @@ msgstr "Pagini per foaie"
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2931
 msgid "Job Priority"
-msgstr "Prioritatea sarcinii:"
+msgstr "Prioritate sarcină:"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2942
 msgid "Billing Info"
-msgstr "Informații de promovare"
+msgstr "Informații de facturare"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
