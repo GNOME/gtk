@@ -1,3 +1,11 @@
+2009-03-10  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 574622 – GtkEntry: Should we wrap icon-press and icon-release
+	signals?
+
+	* gtk/gtkentry.c: ::icon-press and ::icon-release are not
+	action signals. Pointed out by Murray Cumming
+
 2009-03-04  Michael Hasselmann <michaelh@openismus.com>
 
 	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_contents_changed):

@@ -1455,7 +1455,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * @icon_pos: The position of the clicked icon
    * @event: the button press event
    *
-   * The ::icon-press signal is emitted when an activatable icon 
+   * The ::icon-press signal is emitted when an activatable icon
    * is clicked.
    *
    * Since: 2.16
@@ -1463,7 +1463,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   signals[ICON_PRESS] =
     g_signal_new (I_("icon-press"),
                   G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
                   _gtk_marshal_VOID__ENUM_BOXED,
@@ -1485,7 +1485,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   signals[ICON_RELEASE] =
     g_signal_new (I_("icon-release"),
                   G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
                   _gtk_marshal_VOID__ENUM_BOXED,
