@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
 "POT-Creation-Date: 2009-03-02 20:42+0000\n"
-"PO-Revision-Date: 2009-03-04 14:48+0530\n"
+"PO-Revision-Date: 2009-03-10 13:30+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -4129,7 +4131,7 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation.c:1110 ../gtk/gtkprintoperation.c:1111
 msgid "Export filename"
-msgstr ""
+msgstr "ଫାଇଲନାମ ରପ୍ତାନୀ କରନ୍ତୁ"
 
 #: ../gtk/gtkprintoperation.c:1125
 msgid "Status"
@@ -4137,19 +4139,19 @@ msgstr "ଅବସ୍ଥିତି"
 
 #: ../gtk/gtkprintoperation.c:1126
 msgid "The status of the print operation"
-msgstr ""
+msgstr "ମୁଦ୍ରଣର ସ୍ଥିତି"
 
 #: ../gtk/gtkprintoperation.c:1146
 msgid "Status String"
-msgstr ""
+msgstr "ଅବସ୍ଥିତି ବାକ୍ୟଖଣ୍ଡ"
 
 #: ../gtk/gtkprintoperation.c:1147
 msgid "A human-readable description of the status"
-msgstr ""
+msgstr "ସ୍ଥିତିର ଗୋଟିଏ ପଢ଼ିବାଯୋଗ୍ୟ ବର୍ଣ୍ଣନା"
 
 #: ../gtk/gtkprintoperation.c:1165
 msgid "Custom tab label"
-msgstr ""
+msgstr "ଟ୍ୟାବ ସ୍ତରକୁ ଇଚ୍ଛାମୁତାବକ କରନ୍ତୁ"
 
 #: ../gtk/gtkprintoperation.c:1166
 msgid "Label for the tab containing custom widgets."
@@ -4157,19 +4159,19 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:259
 msgid "The GtkPageSetup to use"
-msgstr ""
+msgstr "ବ୍ୟବହାର କରିବାକୁ ଥିବା GtkPageSetup"
 
 #: ../gtk/gtkprintunixdialog.c:284
 msgid "Selected Printer"
-msgstr ""
+msgstr "ବଚ୍ଛିତ ମୁଦ୍ରଣୀ"
 
 #: ../gtk/gtkprintunixdialog.c:285
 msgid "The GtkPrinter which is selected"
-msgstr ""
+msgstr "GtkPrinter ଯାହାକୁ କି ବଛାହୋଇଛି"
 
 #: ../gtk/gtkprogress.c:102
 msgid "Activity mode"
-msgstr ""
+msgstr "କାର୍ଯ୍ୟକ୍ରମ ଅବସ୍ଥା"
 
 #: ../gtk/gtkprogress.c:103
 msgid ""
@@ -4180,7 +4182,7 @@ msgstr ""
 
 #: ../gtk/gtkprogress.c:111
 msgid "Show text"
-msgstr ""
+msgstr "ପାଠ୍ୟ ଦର୍ଶାନ୍ତୁ"
 
 #: ../gtk/gtkprogress.c:112
 msgid "Whether the progress is shown as text."
@@ -4192,7 +4194,7 @@ msgstr ""
 
 #: ../gtk/gtkprogressbar.c:135
 msgid "Bar style"
-msgstr ""
+msgstr "ପଟି ଶୈଳୀ"
 
 #: ../gtk/gtkprogressbar.c:136
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
@@ -4200,7 +4202,7 @@ msgstr ""
 
 #: ../gtk/gtkprogressbar.c:144
 msgid "Activity Step"
-msgstr ""
+msgstr "କାର୍ଯ୍ୟକ୍ରମ ପଦକ୍ଷେପ"
 
 #: ../gtk/gtkprogressbar.c:145
 msgid "The increment used for each iteration in activity mode (Deprecated)"
@@ -4228,7 +4230,7 @@ msgstr ""
 
 #: ../gtk/gtkprogressbar.c:168
 msgid "Fraction"
-msgstr ""
+msgstr "ଭଗ୍ନାଂଶ"
 
 #: ../gtk/gtkprogressbar.c:169
 msgid "The fraction of total work that has been completed"
@@ -4236,7 +4238,7 @@ msgstr ""
 
 #: ../gtk/gtkprogressbar.c:176
 msgid "Pulse Step"
-msgstr ""
+msgstr "ସ୍ପନ୍ଦନ ପଦକ୍ଷେପ"
 
 #: ../gtk/gtkprogressbar.c:177
 msgid "The fraction of total progress to move the bouncing block when pulsed"
@@ -4244,7 +4246,7 @@ msgstr ""
 
 #: ../gtk/gtkprogressbar.c:185
 msgid "Text to be displayed in the progress bar"
-msgstr ""
+msgstr "ପ୍ରଗତି ସୂଚକରରେ ଦର୍ଶାଇବାକୁ ଥିବା ପାଠ୍ୟ"
 
 #: ../gtk/gtkprogressbar.c:207
 msgid ""
@@ -4261,53 +4263,48 @@ msgid "Extra spacing applied to the width of a progress bar."
 msgstr ""
 
 #: ../gtk/gtkprogressbar.c:220
-#, fuzzy
 msgid "YSpacing"
-msgstr "XSpacing"
+msgstr "YSpacing"
 
 #: ../gtk/gtkprogressbar.c:221
 msgid "Extra spacing applied to the height of a progress bar."
 msgstr ""
 
 #: ../gtk/gtkprogressbar.c:234
-#, fuzzy
 msgid "Min horizontal bar width"
-msgstr "ଭୂସମାନ୍ତର ବିଭାଜକ ଓସାର"
+msgstr "ସର୍ବନିମ୍ନ ଭୂସମାନ୍ତରାଳ ପଟିର ଓସାର"
 
 #: ../gtk/gtkprogressbar.c:235
 msgid "The minimum horizontal width of the progress bar"
-msgstr ""
+msgstr "ପ୍ରଗତି ସୂଚକର ସର୍ବନିମ୍ନ ଭୂସମାନ୍ତରାଳ ଓସାର"
 
 #: ../gtk/gtkprogressbar.c:247
 msgid "Min horizontal bar height"
-msgstr ""
+msgstr "ସର୍ବନିମ୍ନ ଭୂସମାନ୍ତରାଳ ପଟିର ଉଚ୍ଚତା"
 
 #: ../gtk/gtkprogressbar.c:248
 msgid "Minimum horizontal height of the progress bar"
-msgstr ""
+msgstr "ପ୍ରଗତି ସୂଚକର ସର୍ବନିମ୍ନ ଭୂସମାନ୍ତରାଳ ଉଚ୍ଚତା"
 
 #: ../gtk/gtkprogressbar.c:260
-#, fuzzy
 msgid "Min vertical bar width"
-msgstr "ଭୂଲମ୍ବ ବିଭାଜକ ଓସାର"
+msgstr "ସର୍ବନିମ୍ନ ଭୂଲମ୍ବ ପଟିର ଓସାର"
 
 #: ../gtk/gtkprogressbar.c:261
-#, fuzzy
 msgid "The minimum vertical width of the progress bar"
-msgstr "ପ୍ରୋଗ୍ରାମ ର ସଂସ୍କରଣ"
+msgstr "ପ୍ରଗତି ସୂଚକର ସର୍ବନିମ୍ନ ଭୂଲମ୍ବ ଓସାର"
 
 #: ../gtk/gtkprogressbar.c:273
 msgid "Min vertical bar height"
-msgstr ""
+msgstr "ସର୍ବନିମ୍ନ ଭୂଲମ୍ବ ପଟିର ଉଚ୍ଚତା"
 
 #: ../gtk/gtkprogressbar.c:274
-#, fuzzy
 msgid "The minimum vertical height of the progress bar"
-msgstr "ପ୍ରୋଗ୍ରାମ ର ସଂସ୍କରଣ"
+msgstr "ପ୍ରଗତି ସୂଚକର ସର୍ବନିମ୍ନ ଭୂଲମ୍ବ ଉଚ୍ଚତା"
 
 #: ../gtk/gtkradioaction.c:111
 msgid "The value"
-msgstr ""
+msgstr "ମୂଲ୍ୟ"
 
 #: ../gtk/gtkradioaction.c:112
 msgid ""
@@ -4321,7 +4318,7 @@ msgstr ""
 
 #: ../gtk/gtkradioaction.c:144
 msgid "The current value"
-msgstr ""
+msgstr "ପ୍ରଚଳିତ ମୂଲ୍ୟ"
 
 #: ../gtk/gtkradioaction.c:145
 msgid ""
@@ -4343,11 +4340,11 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:358
 msgid "Update policy"
-msgstr ""
+msgstr "ନିତୀ ଅଦ୍ୟତନ କରନ୍ତୁ"
 
 #: ../gtk/gtkrange.c:359
 msgid "How the range should be updated on the screen"
-msgstr ""
+msgstr "ପରଦା ଉପରେ ସୀମାଟି କିପରି ଅଦ୍ୟତିତ ହୋଇଛି"
 
 #: ../gtk/gtkrange.c:368
 msgid "The GtkAdjustment that contains the current value of this range object"
@@ -4355,7 +4352,7 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:375
 msgid "Inverted"
-msgstr ""
+msgstr "ଓଲଟି ଯାଇଛି"
 
 #: ../gtk/gtkrange.c:376
 msgid "Invert direction slider moves to increase range value"
@@ -4383,7 +4380,7 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:410
 msgid "Show Fill Level"
-msgstr ""
+msgstr "ପୁରଣ ସ୍ତର ଦର୍ଶାନ୍ତୁ"
 
 #: ../gtk/gtkrange.c:411
 msgid "Whether to display a fill level indicator graphics on trough."
@@ -4391,7 +4388,7 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:427
 msgid "Restrict to Fill Level"
-msgstr ""
+msgstr "ପୁରଣ ସ୍ତର ପର୍ଯ୍ୟନ୍ତ ସୀମିତ"
 
 #: ../gtk/gtkrange.c:428
 msgid "Whether to restrict the upper boundary to the fill level."
@@ -4399,15 +4396,15 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:443
 msgid "Fill Level"
-msgstr ""
+msgstr "ପୁରଣ ସ୍ତର"
 
 #: ../gtk/gtkrange.c:444
 msgid "The fill level."
-msgstr ""
+msgstr "ପୁରଣ ସ୍ତର।"
 
 #: ../gtk/gtkrange.c:452
 msgid "Slider Width"
-msgstr ""
+msgstr "ସର୍ପକ ଓସାର"
 
 #: ../gtk/gtkrange.c:453
 msgid "Width of scrollbar or scale thumb"
@@ -4439,7 +4436,7 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:492
 msgid "Arrow X Displacement"
-msgstr ""
+msgstr "ତୀର X ବିସ୍ଥାପନ"
 
 #: ../gtk/gtkrange.c:493
 msgid "How far in the x direction to move the arrow when the button is depressed"
@@ -4447,7 +4444,7 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:500
 msgid "Arrow Y Displacement"
-msgstr ""
+msgstr "ତୀର Y ବିସ୍ଥାପନ"
 
 #: ../gtk/gtkrange.c:501
 msgid "How far in the y direction to move the arrow when the button is depressed"
@@ -4484,9 +4481,8 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtkrange.c:555
-#, fuzzy
 msgid "Arrow scaling"
-msgstr "ତୀର ଆକାର"
+msgstr "ତୀର ମାପ"
 
 #: ../gtk/gtkrange.c:556
 msgid "Arrow scaling with regard to scroll button size"
@@ -4494,31 +4490,31 @@ msgstr ""
 
 #: ../gtk/gtkrecentaction.c:616 ../gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
-msgstr ""
+msgstr "ସଂଖ୍ୟାଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ"
 
 #: ../gtk/gtkrecentaction.c:617 ../gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
-msgstr ""
+msgstr "ବସ୍ତୁଗୁଡ଼ିକ ଗୋଟିଏ ସଂଖ୍ୟା ମାଧ୍ଯମରେ ଦର୍ଶାଯିବା ଉଚିତ କି"
 
 #: ../gtk/gtkrecentchooser.c:132
 msgid "Recent Manager"
-msgstr ""
+msgstr "ନିକଟ ପରିଚାଳକ"
 
 #: ../gtk/gtkrecentchooser.c:133
 msgid "The RecentManager object to use"
-msgstr ""
+msgstr "ବ୍ୟବହାର କରିବା ପାଇଁ RecentManager ବସ୍ତୁ"
 
 #: ../gtk/gtkrecentchooser.c:147
 msgid "Show Private"
-msgstr ""
+msgstr "ବ୍ୟକ୍ତିଗତ ବସ୍ତୁକୁ ଦର୍ଶାନ୍ତୁ"
 
 #: ../gtk/gtkrecentchooser.c:148
 msgid "Whether the private items should be displayed"
-msgstr ""
+msgstr "ବ୍ୟକ୍ତିଗତ ବସ୍ତୁଗୁଡ଼ିକୁ ଦର୍ଶାଇବା ଉଚିତ କି ନୁହଁ"
 
 #: ../gtk/gtkrecentchooser.c:161
 msgid "Show Tooltips"
-msgstr ""
+msgstr "ଉପକରଣ ସୂଚନା ଦର୍ଶାନ୍ତୁ"
 
 #: ../gtk/gtkrecentchooser.c:162
 msgid "Whether there should be a tooltip on the item"
@@ -4526,15 +4522,15 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:174
 msgid "Show Icons"
-msgstr ""
+msgstr "ଚିତ୍ରସଂକେତ ଦର୍ଶାନ୍ତୁ"
 
 #: ../gtk/gtkrecentchooser.c:175
 msgid "Whether there should be an icon near the item"
-msgstr ""
+msgstr "ବସ୍ତୁ ନିକଟରେ ଚିତ୍ରସଂକେତ ରହିବା ଉଚିତ କି ନୁହଁ"
 
 #: ../gtk/gtkrecentchooser.c:190
 msgid "Show Not Found"
-msgstr ""
+msgstr "ଦୃଶ୍ୟ ମିଳିଲା ନାହିଁ"
 
 #: ../gtk/gtkrecentchooser.c:191
 msgid "Whether the items pointing to unavailable resources should be displayed"
@@ -4542,11 +4538,11 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:204
 msgid "Whether to allow multiple items to be selected"
-msgstr ""
+msgstr "ଏକାଧିକ ବସ୍ତୁଗୁଡ଼ିକୁ ବାଛିବା ପାଇଁ ଅନୁମତି ଦେବା ଉଚିତ କି"
 
 #: ../gtk/gtkrecentchooser.c:217
 msgid "Local only"
-msgstr ""
+msgstr "କେବଳ ସ୍ଥାନୀୟ"
 
 #: ../gtk/gtkrecentchooser.c:218
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
@@ -4554,15 +4550,15 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:234 ../gtk/gtkrecentmanager.c:229
 msgid "Limit"
-msgstr ""
+msgstr "ସୀମା"
 
 #: ../gtk/gtkrecentchooser.c:235
 msgid "The maximum number of items to be displayed"
-msgstr ""
+msgstr "ଦର୍ଶାଇବା ପାଇଁ ସର୍ବାଧିକ ସଂଖ୍ୟକ ବସ୍ତୁ"
 
 #: ../gtk/gtkrecentchooser.c:249
 msgid "Sort Type"
-msgstr ""
+msgstr "ସଜଡ଼ା ପ୍ରକାର"
 
 #: ../gtk/gtkrecentchooser.c:250
 msgid "The sorting order of the items displayed"
@@ -4582,39 +4578,39 @@ msgstr ""
 
 #: ../gtk/gtkrecentmanager.c:246
 msgid "The size of the recently used resources list"
-msgstr ""
+msgstr "ନିକଟରେ ବ୍ୟବହୃତ ଉତ୍ସ ତାଲିକାର ଆକାର"
 
 #: ../gtk/gtkruler.c:128
 msgid "Lower"
-msgstr ""
+msgstr "ନିମ୍ନଭାଗ"
 
 #: ../gtk/gtkruler.c:129
 msgid "Lower limit of ruler"
-msgstr ""
+msgstr "ରେଖାଟଣା ଦଣ୍ଡର ତଳସୀମା"
 
 #: ../gtk/gtkruler.c:138
 msgid "Upper"
-msgstr ""
+msgstr "ଉପର"
 
 #: ../gtk/gtkruler.c:139
 msgid "Upper limit of ruler"
-msgstr ""
+msgstr "ରେଖାଟଣା ଦଣ୍ଡର ଉପର ସୀମା"
 
 #: ../gtk/gtkruler.c:149
 msgid "Position of mark on the ruler"
-msgstr ""
+msgstr "ରେଖାଟଣା ଦଣ୍ଡ ଉପରେ ଚିହ୍ନର ଅବସ୍ଥାନ"
 
 #: ../gtk/gtkruler.c:158
 msgid "Max Size"
-msgstr ""
+msgstr "ସର୍ବାଧିକ ଆକାର"
 
 #: ../gtk/gtkruler.c:159
 msgid "Maximum size of the ruler"
-msgstr ""
+msgstr "ରେଖାଟଣା ଦଣ୍ଡର ସର୍ବାଧିକ ଆକାର"
 
 #: ../gtk/gtkruler.c:174
 msgid "Metric"
-msgstr ""
+msgstr "Metric"
 
 #: ../gtk/gtkruler.c:175
 msgid "The metric used for the ruler"
@@ -4622,11 +4618,11 @@ msgstr ""
 
 #: ../gtk/gtkscale.c:201
 msgid "The number of decimal places that are displayed in the value"
-msgstr ""
+msgstr "ମୂଲ୍ୟରେ ଦର୍ଶାଯାଇଥିବା ଦଶମିକ ସ୍ଥାନର ସଂଖ୍ୟା"
 
 #: ../gtk/gtkscale.c:210
 msgid "Draw Value"
-msgstr ""
+msgstr "ମୂଲ୍ୟାଙ୍କନ କରନ୍ତୁ"
 
 #: ../gtk/gtkscale.c:211
 msgid "Whether the current value is displayed as a string next to the slider"
@@ -4634,15 +4630,15 @@ msgstr ""
 
 #: ../gtk/gtkscale.c:218
 msgid "Value Position"
-msgstr ""
+msgstr "ମୂଲ୍ୟ ଅବସ୍ଥାନ"
 
 #: ../gtk/gtkscale.c:219
 msgid "The position in which the current value is displayed"
-msgstr ""
+msgstr "ପ୍ରଚଳିତ ମୂଲ୍ୟ ଦର୍ଶାଉଥିବା ସ୍ଥାନ"
 
 #: ../gtk/gtkscale.c:226
 msgid "Slider Length"
-msgstr ""
+msgstr "ସର୍ପକ ଲମ୍ବ"
 
 #: ../gtk/gtkscale.c:227
 msgid "Length of scale's slider"
@@ -4657,28 +4653,24 @@ msgid "Space between value text and the slider/trough area"
 msgstr ""
 
 #: ../gtk/gtkscalebutton.c:205
-#, fuzzy
 msgid "The value of the scale"
-msgstr "ୱିଜେଟର ନାମ"
+msgstr "ମାପର ମୂଲ୍ୟ"
 
 #: ../gtk/gtkscalebutton.c:215
-#, fuzzy
 msgid "The icon size"
-msgstr "ସାଧନ ପଟି ଚିତ୍ରସଙ୍କେତ ଆକାର"
+msgstr "ଚିତ୍ରସଙ୍କେତ ଆକାର"
 
 #: ../gtk/gtkscalebutton.c:224
 msgid "The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
 
 #: ../gtk/gtkscalebutton.c:252
-#, fuzzy
 msgid "Icons"
-msgstr "ଚିତ୍ରସଙ୍କେତ"
+msgstr "ଚିତ୍ରସଙ୍କେତଗୁଡ଼ିକ"
 
 #: ../gtk/gtkscalebutton.c:253
-#, fuzzy
 msgid "List of icon names"
-msgstr "ପ୍ରତୀକ ଚିତ୍ରସଙ୍କେତ ନାମ"
+msgstr "ଚିତ୍ରସଙ୍କେତ ନାମର ତାଲିକା"
 
 #: ../gtk/gtkscrollbar.c:51
 msgid "Minimum Slider Length"
@@ -4707,16 +4699,16 @@ msgstr ""
 #: ../gtk/gtkscrolledwindow.c:218 ../gtk/gtktext.c:545
 #: ../gtk/gtktreeview.c:578
 msgid "Horizontal Adjustment"
-msgstr ""
+msgstr "ଭୂସମାନ୍ତରାଳ ସଜଡ଼ା"
 
 #: ../gtk/gtkscrolledwindow.c:225 ../gtk/gtktext.c:553
 #: ../gtk/gtktreeview.c:586
 msgid "Vertical Adjustment"
-msgstr ""
+msgstr "ଭୂଲମ୍ବ ସଜଡ଼ା"
 
 #: ../gtk/gtkscrolledwindow.c:232
 msgid "Horizontal Scrollbar Policy"
-msgstr ""
+msgstr "ସମାନ୍ତରାଳ ଟଣାପଟି ନିତୀ"
 
 #: ../gtk/gtkscrolledwindow.c:233
 msgid "When the horizontal scrollbar is displayed"
@@ -4790,7 +4782,7 @@ msgstr "ଆଙ୍କନ୍ତୁ"
 
 #: ../gtk/gtkseparatortoolitem.c:106
 msgid "Whether the separator is drawn, or just blank"
-msgstr ""
+msgstr "ବିଭାଜକଟି ଟଣାହୋଇଛି କି ନାହିଁ, କିମ୍ବା ଖାଲିଅଛି"
 
 #: ../gtk/gtksettings.c:215
 msgid "Double Click Time"
@@ -4834,7 +4826,7 @@ msgstr "ଦର୍ଶିକା ମିଟିମିଟିକରଣ ସମୟ ସମ
 
 #: ../gtk/gtksettings.c:269
 msgid "Time after which the cursor stops blinking, in seconds"
-msgstr ""
+msgstr "ସୂଚକ ଦପଦପ ବନ୍ଦହେବା ପାଇଁ ଲାଗୁଥିବା ସମୟ, ସେକଣ୍ଡରେ"
 
 #: ../gtk/gtksettings.c:276
 msgid "Split Cursor"
@@ -4892,7 +4884,7 @@ msgstr "ପ୍ରଭାବ ସୀମା ଟାଣନ୍ତୁ"
 
 #: ../gtk/gtksettings.c:330
 msgid "Number of pixels the cursor can move before dragging"
-msgstr ""
+msgstr "ଟାଣିବା ପୂର୍ବରୁ ସୂଚକ ଗତିକରୁଥିବା ପିକସେଲର ସଂଖ୍ଯା"
 
 #: ../gtk/gtksettings.c:338
 msgid "Font Name"
@@ -4932,7 +4924,7 @@ msgstr "Xft ଇଙ୍ଗିତ"
 
 #: ../gtk/gtksettings.c:391
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "Xft ଅକ୍ଷରରୂପ ପାଇଁ ସୂଚନା ଦେବା; 0=no, 1=yes, -1=default"
 
 #: ../gtk/gtksettings.c:400
 msgid "Xft Hint Style"
@@ -4948,7 +4940,7 @@ msgstr "Xft RGBA"
 
 #: ../gtk/gtksettings.c:411
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
-msgstr ""
+msgstr "subpixel antialiasingର ପ୍ରକାର; none, rgb, bgr, vrgb, vbgr"
 
 #: ../gtk/gtksettings.c:420
 msgid "Xft DPI"
@@ -5004,7 +4996,7 @@ msgstr "ଭରଣ ଓ ପାଠ୍ଯ ଦୃଶ୍ଯର ପ୍ରସଙ୍ଗ �
 
 #: ../gtk/gtksettings.c:486
 msgid "Show the 'Insert Unicode Control Character' menu"
-msgstr ""
+msgstr "'Insert Unicode Control Character' ତାଲିକାକୁ ଦର୍ଶାନ୍ତୁ"
 
 #: ../gtk/gtksettings.c:487
 msgid ""
@@ -5018,7 +5010,7 @@ msgstr "ଆରମ୍ଭ ସମୟ ସମାପ୍ତ"
 
 #: ../gtk/gtksettings.c:496
 msgid "Starting value for timeouts, when button is pressed"
-msgstr ""
+msgstr "ବଟନ ଦବାଇବା ସମୟରେ , ସମୟ ସମାପ୍ତର ପ୍ରାରମ୍ଭିକ ମୂଲ୍ୟ"
 
 #: ../gtk/gtksettings.c:505
 msgid "Repeat timeout"
@@ -5026,7 +5018,7 @@ msgstr "ପୁନରାବୃତ୍ତି ସମୟ ସମାପ୍ତ"
 
 #: ../gtk/gtksettings.c:506
 msgid "Repeat value for timeouts, when button is pressed"
-msgstr ""
+msgstr "ବଟନ ଦବାଇଲା ସମୟରେ, ସମୟ ସମାପ୍ତ ପାଇଁ ମୂଲ୍ୟର ପୁନର୍ବୃତ୍ତି କରନ୍ତୁ"
 
 #: ../gtk/gtksettings.c:515
 msgid "Expand timeout"
@@ -5042,7 +5034,7 @@ msgstr "ରଙ୍ଗ ଯୋଜନା"
 
 #: ../gtk/gtksettings.c:552
 msgid "A palette of named colors for use in themes"
-msgstr ""
+msgstr "ପ୍ରସଙ୍ଗରେ ବ୍ୟବହାର ପାଇଁ ନାମିତ ରଙ୍ଗଥାଳି"
 
 #: ../gtk/gtksettings.c:561
 msgid "Enable Animations"
@@ -5114,7 +5106,7 @@ msgstr "ଗଙ୍ଗ ହ୍ୟାସ"
 
 #: ../gtk/gtksettings.c:724
 msgid "A hash table representation of the color scheme."
-msgstr ""
+msgstr "ରଙ୍ଗ ଯୋଜନାର ହ୍ୟାସ ସାରଣୀ ଉପସ୍ଥାପନା।"
 
 #: ../gtk/gtksettings.c:732
 msgid "Default file chooser backend"
@@ -5122,7 +5114,7 @@ msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଫାଇଲ ଚୟନ�
 
 #: ../gtk/gtksettings.c:733
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr ""
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଭାବରେ ବ୍ୟବହୃତ GtkFileChooser ପୃଷ୍ଠଭୂମିର ନାମ"
 
 #: ../gtk/gtksettings.c:750
 msgid "Default print backend"
@@ -5130,7 +5122,7 @@ msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ମୁଦ୍ରଣ ପ�
 
 #: ../gtk/gtksettings.c:751
 msgid "List of the GtkPrintBackend backends to use by default"
-msgstr ""
+msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଭାବରେ ବ୍ୟବହୃତ GtkPrintBackend ପୃଷ୍ଠଭୂମିର ତାଲିକା"
 
 #: ../gtk/gtksettings.c:774
 msgid "Default command to run when displaying a print preview"
@@ -5235,7 +5227,7 @@ msgstr ""
 
 #: ../gtk/gtksizegroup.c:310
 msgid "Ignore hidden"
-msgstr ""
+msgstr "ଲୁକ୍କାଇତମାନଙ୍କୁ ଏଡ଼ାଇଯାଆନ୍ତୁ"
 
 #: ../gtk/gtksizegroup.c:311
 msgid "If TRUE, unmapped widgets are ignored when determining the size of the group"
@@ -5261,7 +5253,7 @@ msgstr ""
 
 #: ../gtk/gtkspinbutton.c:244
 msgid "Numeric"
-msgstr ""
+msgstr "ଗଣନ ସଂଖ୍ୟା"
 
 #: ../gtk/gtkspinbutton.c:245
 msgid "Whether non-numeric characters should be ignored"
@@ -5285,7 +5277,7 @@ msgstr ""
 
 #: ../gtk/gtkspinbutton.c:270
 msgid "Reads the current value, or sets a new value"
-msgstr ""
+msgstr "ପ୍ରଚଳିତ ମୂଲ୍ୟକୁ ପଢ଼ନ୍ତୁ, କିମ୍ବା ଗୋଟିଏ ନୂତନ ମୂଲ୍ୟ ସେଟକରନ୍ତୁ"
 
 #: ../gtk/gtkspinbutton.c:279
 msgid "Style of bevel around the spin button"
@@ -5305,27 +5297,27 @@ msgstr "ସାଧନ ପଟି ପାଠ୍ଯ ଚାରିପାଖେ ଗଡ�
 
 #: ../gtk/gtkstatusicon.c:268
 msgid "The size of the icon"
-msgstr ""
+msgstr "ଚିତ୍ରସଂକେତର ଆକାର"
 
 #: ../gtk/gtkstatusicon.c:278
 msgid "The screen where this status icon will be displayed"
-msgstr ""
+msgstr "ସ୍ଥିତି ଚିତ୍ରସଂକେତ ଦର୍ଶାଉଥିବା ପରଦା"
 
 #: ../gtk/gtkstatusicon.c:285
 msgid "Blinking"
-msgstr ""
+msgstr "ଦପଦପ ହେଉଛି"
 
 #: ../gtk/gtkstatusicon.c:286
 msgid "Whether or not the status icon is blinking"
-msgstr ""
+msgstr "ସ୍ଥିତି ଚିତ୍ରସଂକେତଟି ଦପଦପ ହେଉଛି କି ନାହିଁ"
 
 #: ../gtk/gtkstatusicon.c:294
 msgid "Whether or not the status icon is visible"
-msgstr ""
+msgstr "ସ୍ଥିତି ଚିତ୍ରସଂକେତଟି ଦୃଶ୍ୟମାନ ହୋଇଛି କି ନାହିଁ"
 
 #: ../gtk/gtkstatusicon.c:310
 msgid "Whether or not the status icon is embedded"
-msgstr ""
+msgstr "ସ୍ଥିତି ଚିତ୍ରସଂକେତଟି ସଂଯୁକ୍ତ ହୋଇଛି କି ନାହିଁ"
 
 #: ../gtk/gtkstatusicon.c:326 ../gtk/gtktrayicon-x11.c:111
 msgid "The orientation of the tray"
@@ -5361,7 +5353,7 @@ msgstr "ଧାଡି"
 
 #: ../gtk/gtktable.c:130
 msgid "The number of rows in the table"
-msgstr ""
+msgstr "ସାରଣୀରେ ଥିବା ଧାଡ଼ିଗୁଡ଼ିକର ସଂଖ୍ୟା"
 
 #: ../gtk/gtktable.c:138
 msgid "Columns"
@@ -5369,35 +5361,35 @@ msgstr "ସ୍ତମ୍ଭ"
 
 #: ../gtk/gtktable.c:139
 msgid "The number of columns in the table"
-msgstr ""
+msgstr "ସାରଣୀରେ ଥିବା ସ୍ତମ୍ଭଗୁଡ଼ିକର ସଂଖ୍ୟା"
 
 #: ../gtk/gtktable.c:147
 msgid "Row spacing"
-msgstr ""
+msgstr "ଧାଡ଼ି ମଧ୍ଯରେ ଖାଲିସ୍ଥାନ ରଖିବା"
 
 #: ../gtk/gtktable.c:148
 msgid "The amount of space between two consecutive rows"
-msgstr ""
+msgstr "ଦୁଇଟି ପାଖାପାଖି ଧାଡ଼ି ମଧ୍ଯରେ ଥିବା ଖାଲିସ୍ଥାନ"
 
 #: ../gtk/gtktable.c:156
 msgid "Column spacing"
-msgstr ""
+msgstr "ସ୍ତମ୍ଭ ମଧ୍ଯରେ ଖାଲିସ୍ଥାନ ରଖିବା"
 
 #: ../gtk/gtktable.c:157
 msgid "The amount of space between two consecutive columns"
-msgstr ""
+msgstr "ଦୁଇଟି ପାଖାପାଖି ସ୍ତମ୍ଭ ମଧ୍ଯରେ ଥିବା ଖାଲିସ୍ଥାନ"
 
 #: ../gtk/gtktable.c:166
 msgid "If TRUE, the table cells are all the same width/height"
-msgstr ""
+msgstr "ଯଦି TRUE, ତେବେ ସାରଣୀ କୋଷଗୁଡ଼ିକରେ ସମାନ ଓସାର/ଉଚ୍ଚତା ଅଛି"
 
 #: ../gtk/gtktable.c:173
 msgid "Left attachment"
-msgstr ""
+msgstr "ବାମ ସଂଲଗ୍ନ"
 
 #: ../gtk/gtktable.c:180
 msgid "Right attachment"
-msgstr ""
+msgstr "ଡାହାଣ ସଂଲଗ୍ନ"
 
 #: ../gtk/gtktable.c:181
 msgid "The column number to attach the right side of a child widget to"
@@ -5405,7 +5397,7 @@ msgstr ""
 
 #: ../gtk/gtktable.c:187
 msgid "Top attachment"
-msgstr ""
+msgstr "ଉପର ସଂଲଗ୍ନ"
 
 #: ../gtk/gtktable.c:188
 msgid "The row number to attach the top of a child widget to"
@@ -5413,11 +5405,11 @@ msgstr ""
 
 #: ../gtk/gtktable.c:194
 msgid "Bottom attachment"
-msgstr ""
+msgstr "ନିମ୍ନ ସଂଲଗ୍ନ"
 
 #: ../gtk/gtktable.c:201
 msgid "Horizontal options"
-msgstr ""
+msgstr "ସମାନ୍ତରାଳ ବିକଳ୍ପଗୁଡ଼ିକ"
 
 #: ../gtk/gtktable.c:202
 msgid "Options specifying the horizontal behaviour of the child"
@@ -5425,7 +5417,7 @@ msgstr ""
 
 #: ../gtk/gtktable.c:208
 msgid "Vertical options"
-msgstr ""
+msgstr "ଭୂଲମ୍ବ ବିକଳ୍ପଗୁଡ଼ିକ"
 
 #: ../gtk/gtktable.c:209
 msgid "Options specifying the vertical behaviour of the child"
@@ -5433,7 +5425,7 @@ msgstr ""
 
 #: ../gtk/gtktable.c:215
 msgid "Horizontal padding"
-msgstr ""
+msgstr "ସମାନ୍ତରାଳ ପ୍ୟାଡ଼ିଙ୍ଗ"
 
 #: ../gtk/gtktable.c:216
 msgid ""
@@ -5443,7 +5435,7 @@ msgstr ""
 
 #: ../gtk/gtktable.c:222
 msgid "Vertical padding"
-msgstr ""
+msgstr "ଭୂଲମ୍ବ ପ୍ୟାଡିଙ୍ଗ"
 
 #: ../gtk/gtktable.c:223
 msgid ""
@@ -5453,23 +5445,23 @@ msgstr ""
 
 #: ../gtk/gtktext.c:546
 msgid "Horizontal adjustment for the text widget"
-msgstr ""
+msgstr "ପାଠ୍ୟ ୱିଜେଟ ପାଇଁ ସମାନ୍ତରାଳ ସଜଡ଼ା"
 
 #: ../gtk/gtktext.c:554
 msgid "Vertical adjustment for the text widget"
-msgstr ""
+msgstr "ପାଠ୍ୟ ୱିଜେଟ ପାଇଁ ଭୂଲମ୍ବ ସଜଡ଼ା"
 
 #: ../gtk/gtktext.c:561
 msgid "Line Wrap"
-msgstr ""
+msgstr "ଧାଡ଼ି ଆବରଣ"
 
 #: ../gtk/gtktext.c:562
 msgid "Whether lines are wrapped at widget edges"
-msgstr ""
+msgstr "ୱିଜେଟ ଧାରରେ ଧାଡ଼ିଗୁଡ଼ିକ ଆବୃତ ହୋଇଛି କି ନାହିଁ"
 
 #: ../gtk/gtktext.c:569
 msgid "Word Wrap"
-msgstr ""
+msgstr "ଶବ୍ଦ ଆବରଣ"
 
 #: ../gtk/gtktext.c:570
 msgid "Whether words are wrapped at widget edges"
@@ -5477,19 +5469,19 @@ msgstr ""
 
 #: ../gtk/gtktextbuffer.c:180
 msgid "Tag Table"
-msgstr ""
+msgstr "ଟ୍ୟାଗ ସାରଣୀ"
 
 #: ../gtk/gtktextbuffer.c:181
 msgid "Text Tag Table"
-msgstr ""
+msgstr "ପାଠ୍ୟ ଟ୍ୟାଗ ସାରଣୀ"
 
 #: ../gtk/gtktextbuffer.c:199
 msgid "Current text of the buffer"
-msgstr ""
+msgstr "ବଫରର ପ୍ରଚଳିତ ପ୍ରସଙ୍ଗ"
 
 #: ../gtk/gtktextbuffer.c:213
 msgid "Has selection"
-msgstr ""
+msgstr "ଚୟନ ଅଛି"
 
 #: ../gtk/gtktextbuffer.c:214
 msgid "Whether the buffer has some text currently selected"
@@ -5505,7 +5497,7 @@ msgstr ""
 
 #: ../gtk/gtktextbuffer.c:246
 msgid "Copy target list"
-msgstr ""
+msgstr "ଲକ୍ଷ୍ୟ ତାଲିକା ନକଲ କରନ୍ତୁ"
 
 #: ../gtk/gtktextbuffer.c:247
 msgid "The list of targets this buffer supports for clipboard copying and DND source"
@@ -5513,7 +5505,7 @@ msgstr ""
 
 #: ../gtk/gtktextbuffer.c:262
 msgid "Paste target list"
-msgstr ""
+msgstr "ଲକ୍ଷ୍ୟ ତାଲିକା ଲଗାନ୍ତୁ"
 
 #: ../gtk/gtktextbuffer.c:263
 msgid ""
@@ -5523,11 +5515,11 @@ msgstr ""
 
 #: ../gtk/gtktextmark.c:90
 msgid "Mark name"
-msgstr ""
+msgstr "ଚିହ୍ନ ନାମ"
 
 #: ../gtk/gtktextmark.c:97
 msgid "Left gravity"
-msgstr ""
+msgstr "ବାମ ଆକର୍ଷଣ"
 
 #: ../gtk/gtktextmark.c:98
 msgid "Whether the mark has left gravity"
@@ -5535,7 +5527,7 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:173
 msgid "Tag name"
-msgstr ""
+msgstr "ଟ୍ୟାଗ ନାମ"
 
 #: ../gtk/gtktexttag.c:174
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
@@ -5543,11 +5535,11 @@ msgstr ""
 
 #: ../gtk/gtktexttag.c:192
 msgid "Background color as a (possibly unallocated) GdkColor"
-msgstr ""
+msgstr "ପୃଷ୍ଠଭୂମି ରଙ୍ଗ (ସମ୍ଭବତଃ ଅବଣ୍ଟିତ) GdkColor"
 
 #: ../gtk/gtktexttag.c:199
 msgid "Background full height"
-msgstr ""
+msgstr "ପୃଷ୍ଠଭୂମି ସମ୍ପୂର୍ଣ୍ଣ ଉଚ୍ଚତା"
 
 #: ../gtk/gtktexttag.c:200
 msgid ""
@@ -5714,11 +5706,11 @@ msgstr "ଗୋଟିଏ (ସମ୍ଭବତଃ ଅବଣ୍ଟିତ) GdkColor �
 
 #: ../gtk/gtktexttag.c:554
 msgid "Margin Accumulates"
-msgstr ""
+msgstr "ସୀମାରେଖା ଏକାଠି କରିବା"
 
 #: ../gtk/gtktexttag.c:555
 msgid "Whether left and right margins accumulate."
-msgstr ""
+msgstr "ବାମ ଏବଂ ଡାହାଣ ସୀମାରେଖାକୁ ଏକାଠି କରାଯିବା ଉଚିତ କି।"
 
 #: ../gtk/gtktexttag.c:568
 msgid "Background full height set"
