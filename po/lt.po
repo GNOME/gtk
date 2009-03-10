@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-03-05 23:47+0200\n"
-"PO-Revision-Date: 2009-03-05 23:47+0200\n"
+"PO-Revision-Date: 2009-03-11 01:30+0200\n"
 "Last-Translator: Vytautas Rėkus <v.rekus@gmail.com>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
 "MIME-Version: 1.0\n"
@@ -2955,7 +2955,7 @@ msgstr "Pus_juodis"
 #: ../gtk/gtkstock.c:300
 msgctxt "Stock label"
 msgid "_Cancel"
-msgstr "_Atšaukti"
+msgstr "_Atsisakyti"
 
 #: ../gtk/gtkstock.c:301
 msgctxt "Stock label"
