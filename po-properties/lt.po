@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-03-06 00:00+0200\n"
-"PO-Revision-Date: 2009-03-06 00:00+0200\n"
+"PO-Revision-Date: 2009-03-11 01:36+0200\n"
 "Last-Translator: Vytautas Rėkus <v.rekus@gmail.com>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
 "MIME-Version: 1.0\n"
@@ -1875,11 +1875,11 @@ msgstr "Dialogo mygtukas „Gerai“."
 
 #: ../gtk/gtkcolorseldialog.c:116
 msgid "Cancel Button"
-msgstr "Mygtukas „Atšaukti“"
+msgstr "Mygtukas „Atsisakyti“"
 
 #: ../gtk/gtkcolorseldialog.c:117
 msgid "The cancel button of the dialog."
-msgstr "Dialogo mygtukas „Atšaukti“."
+msgstr "Dialogo mygtukas „Atsisakyti“."
 
 #: ../gtk/gtkcolorseldialog.c:123
 msgid "Help Button"
