@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: GTK+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-03-02 14:38-0500\n"
-"PO-Revision-Date: 2009-03-02 18:13+0100\n"
+"PO-Revision-Date: 2009-03-10 09:53+0100\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2491,14 +2491,12 @@ msgstr ""
 "Legt fest, ob aktivierbare Symbole beim Berühren hervorgehoben werden sollen"
 
 #: gtk/gtkentry.c:1211
-#, fuzzy
 msgid "Progress Border"
-msgstr "Trogrand"
+msgstr "Rand um Fortschrittsbalken"
 
 #: gtk/gtkentry.c:1212
-#, fuzzy
 msgid "Border around the progress bar"
-msgstr "Im Fortschrittsbalken anzuzeigender Text"
+msgstr "Um den Fortschrittsbalken anzuzeigender Rand"
 
 #: gtk/gtkentry.c:1662
 msgid "Border between text and frame."
