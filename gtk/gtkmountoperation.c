@@ -516,6 +516,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
 
   can_anonymous = flags & G_ASK_PASSWORD_ANONYMOUS_SUPPORTED;
 
+  priv->anonymous_toggle = NULL;
   if (can_anonymous)
     {
       GtkWidget *anon_box;
@@ -571,14 +572,17 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
 
   rows = 0;
 
+  priv->username_entry = NULL;
   if (flags & G_ASK_PASSWORD_NEED_USERNAME)
     priv->username_entry = table_add_entry (table, rows++, _("_Username:"),
                                             default_user, operation);
 
+  priv->domain_entry = NULL;
   if (flags & G_ASK_PASSWORD_NEED_DOMAIN)
     priv->domain_entry = table_add_entry (table, rows++, _("_Domain:"),
                                           default_domain, operation);
 
+  priv->password_entry = NULL;
   if (flags & G_ASK_PASSWORD_NEED_PASSWORD)
     {
       priv->password_entry = table_add_entry (table, rows++, _("_Password:"),

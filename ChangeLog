@@ -1,3 +1,13 @@
+2009-03-10  Alexander Larsson  <alexl@redhat.com>
+
+        * gtk/gtkmountoperation.c:
+        (gtk_mount_operation_ask_password):
+	Clear all optionally created widget pointer in priv. Initially
+	priv is cleared so thats ok, but on a second call we may have
+	leftovers from previous calls which is problematic if for instance
+	we asked for the user the first time and not the second, then we
+	will access the old priv->username_entry.
+
 2009-03-06  Michael Natterer  <mitch@gimp.org>
 
 	* gtk/gtkscalebutton.c (gtk_scale_button_set_property): don't call
