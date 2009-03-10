@@ -291,13 +291,15 @@ gtk_combo_box_entry_contents_changed (GtkEntry *entry,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
 
-  g_signal_handlers_block_by_func (combo_box,
-                                   gtk_combo_box_entry_active_changed,
-                                   NULL);
-  gtk_combo_box_set_active (combo_box, -1);
-  g_signal_handlers_unblock_by_func (combo_box,
-                                     gtk_combo_box_entry_active_changed,
-                                     NULL);
+  /*
+   *  Fixes regression reported in bug #574059. The old functionality relied on
+   *  bug #572478.  As a bugfix, we now emit the "changed" signal ourselves
+   *  when the selection was already set to -1. 
+   */
+  if (gtk_combo_box_get_active(combo_box) == -1)
+    g_signal_emit_by_name (combo_box, "changed");
+  else 
+    gtk_combo_box_set_active (combo_box, -1);
 }
 
 /* public API */

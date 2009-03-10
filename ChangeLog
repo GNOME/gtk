@@ -1,3 +1,9 @@
+2009-03-04  Michael Hasselmann <michaelh@openismus.com>
+
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_contents_changed):
+	Fixed regression reported in bug #574059. (search button not available in 
+	some cases.) The old implementation relied on bug #572478.
+
 2009-03-10  Alexander Larsson  <alexl@redhat.com>
 
         * gtk/gtkmountoperation.c:
