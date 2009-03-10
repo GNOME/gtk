@@ -1741,7 +1741,7 @@ style_property_values_cmp (gconstpointer bsearch_node1,
 }
 
 /**
- * gtk_style_get_property:
+ * gtk_style_get_style_property:
  * @style: a #GtkStyle
  * @widget_type: the #GType of a descendant of #GtkWidget
  * @property_name: the name of the style property to get
@@ -1754,10 +1754,10 @@ style_property_values_cmp (gconstpointer bsearch_node1,
  * Since: 2.16
  */
 void 
-gtk_style_get_property (GtkStyle     *style,
-                        GType        widget_type,
-                        const gchar *property_name,
-                        GValue      *value)
+gtk_style_get_style_property (GtkStyle     *style,
+                              GType        widget_type,
+                              const gchar *property_name,
+                              GValue      *value)
 {
   GtkWidgetClass *klass;
   GParamSpec *pspec;

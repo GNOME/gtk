@@ -5779,7 +5779,7 @@ gtk_style_lookup_icon_set
 gtk_style_render_icon
 gtk_style_get_font
 gtk_style_set_font
-gtk_style_get_property
+gtk_style_get_style_property
 gtk_style_get_valist
 gtk_style_get
 gtk_draw_hline

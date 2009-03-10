@@ -1,5 +1,10 @@
 2009-03-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Rename gtk_style_get_property to
+	gtk_style_get_style_property
+
+2009-03-02  Matthias Clasen  <mclasen@redhat.com>
+
 	* === Released 2.15.5 ===
 
 2009-03-01  Matthias Clasen  <mclasen@redhat.com>
