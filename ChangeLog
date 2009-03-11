@@ -1,5 +1,14 @@
 2009-03-11  Tor Lillqvist  <tml@iki.fi>
 
+	Bug 570896 - gdkevents-win32.c(2947) : error C4053: one void
+	operand for '?:'
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Fix
+	compilation error with MSVC. While at it add clarifying comments
+	and fix a typo in the debugging output.
+
+2009-03-11  Tor Lillqvist  <tml@iki.fi>
+
 	Bug 574794 - Can not resize shaped windows on Windows
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On handling
