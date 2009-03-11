@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-03-05 23:47+0200\n"
-"PO-Revision-Date: 2009-03-11 01:30+0200\n"
+"PO-Revision-Date: 2009-03-11 13:49+0200\n"
 "Last-Translator: Vytautas Rėkus <v.rekus@gmail.com>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
 "MIME-Version: 1.0\n"
@@ -2119,7 +2119,7 @@ msgstr "Paprastasis"
 #: ../gtk/gtkimmulticontext.c:541
 msgctxt "input method menu"
 msgid "System"
-msgstr "Įvesties metodų meniu|Sistemos numatytasis"
+msgstr "Sistemos numatytasis"
 
 #: ../gtk/gtkimmulticontext.c:625
 #, c-format
