@@ -1,5 +1,11 @@
 2009-03-11  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/win32/gdkdnd-win32.c: Use G_DEFINE_TYPE. Some debugging
+	printout changes. Hacking on the OLE2_DND code, which still
+	doesn't work, though, and is not normally compiled.
+
+2009-03-11  Tor Lillqvist  <tml@iki.fi>
+
 	Bug 570896 - gdkevents-win32.c(2947) : error C4053: one void
 	operand for '?:'
 
