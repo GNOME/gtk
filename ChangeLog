@@ -1,3 +1,10 @@
+2009-03-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 572455 – GtkEntry window layed out wrong if the widget has focus
+
+	* gtk/gtkentry.c: Fix problems with window positioning. Reported
+	by Benjamin Berg.
+
 2009-03-11  Tor Lillqvist  <tml@iki.fi>
 
 	Bug 573067 - Intra-app dnd of text behavior on Windows is wrong
