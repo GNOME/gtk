@@ -314,11 +314,13 @@ gchar *_gdk_win32_fill_style_to_string (GdkFill      fill);
 gchar *_gdk_win32_function_to_string   (GdkFunction  function);
 gchar *_gdk_win32_join_style_to_string (GdkJoinStyle join_style);
 gchar *_gdk_win32_line_style_to_string (GdkLineStyle line_style);
+gchar *_gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol);
 gchar *_gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask);
 gchar *_gdk_win32_window_state_to_string (GdkWindowState state);
 gchar *_gdk_win32_window_style_to_string (LONG style);
 gchar *_gdk_win32_window_exstyle_to_string (LONG style);
 gchar *_gdk_win32_window_pos_bits_to_string (UINT flags);
+gchar *_gdk_win32_drag_action_to_string (GdkDragAction actions);
 gchar *_gdk_win32_drawable_description (GdkDrawable *d);
 
 gchar *_gdk_win32_rop2_to_string       (int          rop2);

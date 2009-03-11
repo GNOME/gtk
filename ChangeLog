@@ -1,5 +1,21 @@
 2009-03-11  Tor Lillqvist  <tml@iki.fi>
 
+	Bug 573067 - Intra-app dnd of text behavior on Windows is wrong
+
+	* gdk/win32/gdkdnd-win32.c (local_send_motion) (gdk_drag_motion):
+	The default action should be move, not copy. Tweak how the
+	GdkDragAction fields in GdkDragContexts are changed. Seems to help
+	the problem.
+
+	Add more debugging printout for --gdk-debug=dnd to many functions.
+
+	* gdk/win32/gdkmain-win32.c
+	* gdk/win32/gdkprivate-win32.h: (_gdk_win32_drag_protocol_to_string)
+	(_gdk_win32_drag_action_to_string): New functions for use in
+	debugging printouts.
+	
+2009-03-11  Tor Lillqvist  <tml@iki.fi>
+
 	* gdk/win32/gdkdnd-win32.c: Use G_DEFINE_TYPE. Some debugging
 	printout changes. Hacking on the OLE2_DND code, which still
 	doesn't work, though, and is not normally compiled.

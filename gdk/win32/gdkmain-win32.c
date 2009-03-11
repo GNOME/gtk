@@ -478,6 +478,26 @@ _gdk_win32_line_style_to_string (GdkLineStyle line_style)
 }
 
 gchar *
+_gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol)
+{
+  switch (protocol)
+    {
+#define CASE(x) case GDK_DRAG_PROTO_##x: return #x
+      CASE (MOTIF);
+      CASE (XDND);
+      CASE (ROOTWIN);
+      CASE (NONE);
+      CASE (WIN32_DROPFILES);
+      CASE (OLE2);
+      CASE (LOCAL);
+#undef CASE
+    default: return static_printf ("illegal_%d", protocol);
+    }
+  /* NOTREACHED */
+  return NULL; 
+}
+
+gchar *
 _gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask)
 {
   gchar buf[400];
@@ -651,6 +671,30 @@ _gdk_win32_window_pos_bits_to_string (UINT flags)
   BIT (NOSENDCHANGING);
   BIT (DEFERERASE);
   BIT (ASYNCWINDOWPOS);
+#undef BIT
+
+  return static_printf ("%s", buf);  
+}
+
+gchar *
+_gdk_win32_drag_action_to_string (GdkDragAction actions)
+{
+  gchar buf[100];
+  gchar *bufp = buf;
+  gchar *s = "";
+
+  buf[0] = '\0';
+
+#define BIT(x)						\
+  if (actions & GDK_ACTION_ ## x)				\
+    (bufp += sprintf (bufp, "%s" #x, s), s = "|")
+
+  BIT (DEFAULT);
+  BIT (COPY);
+  BIT (MOVE);
+  BIT (LINK);
+  BIT (PRIVATE);
+  BIT (ASK);
 #undef BIT
 
   return static_printf ("%s", buf);  
