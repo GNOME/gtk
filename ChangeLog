@@ -1,3 +1,12 @@
+2009-03-11  Tor Lillqvist  <tml@iki.fi>
+
+	Bug 574794 - Can not resize shaped windows on Windows
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On handling
+	WM_WINDOWPOSCHANGED, don't do anything if the position and size
+	hasn't changed. I am not exactly sure I understand why this helps
+	this particular bug.
+
 2009-03-10  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 574561 – gtk_style_get "shadows" g_object_get

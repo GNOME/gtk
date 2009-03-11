@@ -3262,6 +3262,12 @@ gdk_event_translate (MSG  *msg,
 				       buf))))),
 				  windowpos->cx, windowpos->cy, windowpos->x, windowpos->y)));
 
+      /* If position and size haven't changed, don't do anything */
+      if (_sizemove_in_progress &&
+	  (windowpos->flags & SWP_NOMOVE) &&
+	  (windowpos->flags & SWP_NOSIZE))
+	break;
+
       /* Once we've entered the moving or sizing modal loop, we won't
        * return to the main loop until we're done sizing or moving.
        */
