@@ -1,5 +1,15 @@
 2009-03-11  Tor Lillqvist  <tml@iki.fi>
 
+	Bug 573067 - Intra-app dnd of text behavior on Windows is wrong
+
+	* gdk/win32/gdkdnd-win32.c (local_send_motion) (gdk_drag_motion):
+	Tweak how the GdkDragAction fields in GdkDragContexts are
+	changed. Seems to help the problem.
+
+	Add more debugging printout for --gdk-debug=dnd to many functions.
+
+2009-03-11  Tor Lillqvist  <tml@iki.fi>
+
 	Bug 570896 - gdkevents-win32.c(2947) : error C4053: one void
 	operand for '?:'
 

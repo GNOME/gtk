@@ -1065,6 +1065,10 @@ local_send_leave (GdkDragContext *context,
 {
   GdkEvent tmp_event;
   
+  GDK_NOTE (DND, g_print ("local_send_leave: context=%p current_dest_drag=%p\n",
+			  context,
+			  current_dest_drag));
+
   if ((current_dest_drag != NULL) &&
       (current_dest_drag->protocol == GDK_DRAG_PROTO_LOCAL) &&
       (current_dest_drag->source_window == context->source_window))
@@ -1089,6 +1093,10 @@ local_send_enter (GdkDragContext *context,
   GdkEvent tmp_event;
   GdkDragContextPrivateWin32 *private;
   GdkDragContext *new_context;
+
+  GDK_NOTE (DND, g_print ("local_send_enter: context=%p current_dest_drag=%p\n",
+			  context,
+			  current_dest_drag));
 
   private = GDK_DRAG_CONTEXT_PRIVATE_DATA (context);
   
@@ -1134,6 +1142,10 @@ local_send_motion (GdkDragContext *context,
 {
   GdkEvent tmp_event;
   
+  GDK_NOTE (DND, g_print ("local_send_motion: context=%p current_dest_drag=%p\n",
+			  context,
+			  current_dest_drag));
+
   if ((current_dest_drag != NULL) &&
       (current_dest_drag->protocol == GDK_DRAG_PROTO_LOCAL) &&
       (current_dest_drag->source_window == context->source_window))
@@ -1145,7 +1157,6 @@ local_send_motion (GdkDragContext *context,
       tmp_event.dnd.time = time;
 
       current_dest_drag->suggested_action = action;
-      current_dest_drag->actions = current_dest_drag->suggested_action;
 
       tmp_event.dnd.x_root = x_root;
       tmp_event.dnd.y_root = y_root;
@@ -1164,8 +1175,12 @@ local_send_drop (GdkDragContext *context,
 		 guint32         time)
 {
   GdkEvent tmp_event;
-  
-  if ((current_dest_drag != NULL) &&
+   
+  GDK_NOTE (DND, g_print ("local_send_drop: context=%p current_dest_drag=%p\n",
+			  context,
+			  current_dest_drag));
+
+ if ((current_dest_drag != NULL) &&
       (current_dest_drag->protocol == GDK_DRAG_PROTO_LOCAL) &&
       (current_dest_drag->source_window == context->source_window))
     {
@@ -1409,11 +1424,35 @@ gdk_drag_motion (GdkDragContext *context,
 
   g_return_val_if_fail (context != NULL, FALSE);
 
-  GDK_NOTE (DND, g_print ("gdk_drag_motion\n"));
+  context->actions = possible_actions;
+
+  GDK_NOTE (DND, g_print ("gdk_drag_motion: protocol=%s\n"
+			  " suggested_action=%s, possible_actions=%s\n"
+			  " context=%p:actions=%s, suggested_action=%s, action=%s\n",
+			  _gdk_win32_drag_protocol_to_string (protocol),
+			  _gdk_win32_drag_action_to_string (suggested_action),
+			  _gdk_win32_drag_action_to_string (possible_actions),
+			  context,
+			  _gdk_win32_drag_action_to_string (context->actions),
+			  _gdk_win32_drag_action_to_string (context->suggested_action),
+			  _gdk_win32_drag_action_to_string (context->action)));
 
   private = GDK_DRAG_CONTEXT_PRIVATE_DATA (context);
   
-  if (context->dest_window != dest_window)
+  if (context->dest_window == dest_window)
+    {
+      GdkDragContext *dest_context;
+		    
+      dest_context = gdk_drag_context_find (FALSE,
+					    context->source_window,
+					    dest_window);
+
+      if (dest_context)
+	dest_context->actions = context->actions;
+
+      context->suggested_action = suggested_action;
+    }
+  else
     {
       GdkEvent temp_event;
 
@@ -1461,10 +1500,6 @@ gdk_drag_motion (GdkDragContext *context,
 
       gdk_event_put (&temp_event);
     }
-  else
-    {
-      context->suggested_action = suggested_action;
-    }
 
   /* Send a drag-motion event */
 
@@ -1490,9 +1525,23 @@ gdk_drag_motion (GdkDragContext *context,
 	    }
 	}
       else
-	return TRUE;
+	{
+	  GDK_NOTE (DND, g_print (" returning TRUE\n"
+				  " context=%p:actions=%s, suggested_action=%s, action=%s\n",
+				  context,
+				  _gdk_win32_drag_action_to_string (context->actions),
+				  _gdk_win32_drag_action_to_string (context->suggested_action),
+				  _gdk_win32_drag_action_to_string (context->action)));
+	  return TRUE;
+	}
     }
 
+  GDK_NOTE (DND, g_print (" returning FALSE\n"
+			  " context=%p:actions=%s, suggested_action=%s, action=%s\n",
+			  context,
+			  _gdk_win32_drag_action_to_string (context->actions),
+			  _gdk_win32_drag_action_to_string (context->suggested_action),
+			  _gdk_win32_drag_action_to_string (context->action)));
   return FALSE;
 }
 
@@ -1548,6 +1597,14 @@ gdk_drag_status (GdkDragContext *context,
 
   private = GDK_DRAG_CONTEXT_PRIVATE_DATA (context);
 
+  GDK_NOTE (DND, g_print ("gdk_drag_status: action=%s\n"
+			  " context=%p:actions=%s, suggested_action=%s, action=%s\n",
+			  _gdk_win32_drag_action_to_string (action),
+			  context,
+			  _gdk_win32_drag_action_to_string (context->actions),
+			  _gdk_win32_drag_action_to_string (context->suggested_action),
+			  _gdk_win32_drag_action_to_string (context->action)));
+			  
   context->action = action;
 
   src_context = gdk_drag_context_find (TRUE,
@@ -1610,7 +1667,7 @@ gdk_drop_finish (GdkDragContext *context,
 	
   g_return_if_fail (context != NULL);
 
-  GDK_NOTE (DND, g_print ("gdk_drop_finish"));
+  GDK_NOTE (DND, g_print ("gdk_drop_finish\n"));
 
   private = GDK_DRAG_CONTEXT_PRIVATE_DATA (context);
 
