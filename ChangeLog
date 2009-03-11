@@ -8,6 +8,11 @@
 
 	Add more debugging printout for --gdk-debug=dnd to many functions.
 
+	* gdk/win32/gdkmain-win32.c
+	* gdk/win32/gdkprivate-win32.h: (_gdk_win32_drag_protocol_to_string)
+	(_gdk_win32_drag_action_to_string): New functions for use in
+	debugging printouts.
+	
 2009-03-11  Tor Lillqvist  <tml@iki.fi>
 
 	Bug 570896 - gdkevents-win32.c(2947) : error C4053: one void
