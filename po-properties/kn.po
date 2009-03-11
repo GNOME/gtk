@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.kn\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
 "POT-Creation-Date: 2009-03-02 20:42+0000\n"
-"PO-Revision-Date: 2009-03-09 10:25+0530\n"
+"PO-Revision-Date: 2009-03-11 22:45+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1086,7 +1086,7 @@ msgstr "ಕೋಶದ ರೆಂಡರರ್ ಪ್ರಸಕ್ತ ಸಂಪಾದ
 
 #: ../gtk/gtkcellrenderer.c:303
 msgid "Cell background set"
-msgstr "ಕೋಶದ ಹಿನ್ನೆಲೆಯ ಜೋಡಿ"
+msgstr "ಕೋಶದ ಹಿನ್ನೆಲೆಯ ಸೆಟ್‌"
 
 #: ../gtk/gtkcellrenderer.c:304
 msgid "Whether this tag affects the cell background color"
@@ -1550,7 +1550,7 @@ msgstr "ಈ ಟ್ಯಾಗ್ ಅಕ್ಷರದ ಶೈಲಿಯ ಮೇಲೆ �
 
 #: ../gtk/gtkcellrenderertext.c:522 ../gtk/gtktexttag.c:596
 msgid "Font variant set"
-msgstr "ಅಕ್ಷರ ಶೈಲಿ ವೇರಿಯಿಂಟ್ ಜೋಡಿ"
+msgstr "ಅಕ್ಷರ ಶೈಲಿ ವೇರಿಯಿಂಟ್ ಸೆಟ್‌"
 
 #: ../gtk/gtkcellrenderertext.c:523 ../gtk/gtktexttag.c:597
 msgid "Whether this tag affects the font variant"
@@ -1566,7 +1566,7 @@ msgstr "ಈ ಟ್ಯಾಗ್ ಅಕ್ಷರಶೈಲಿಯ ತೂಕದ ಮ�
 
 #: ../gtk/gtkcellrenderertext.c:530 ../gtk/gtktexttag.c:604
 msgid "Font stretch set"
-msgstr "ಅಕ್ಷರ ಶೈಲಿಯ ಎಳೆತದ ಜೋಡಿ"
+msgstr "ಅಕ್ಷರ ಶೈಲಿಯ ಎಳೆತದ ಸೆಟ್‌"
 
 #: ../gtk/gtkcellrenderertext.c:531 ../gtk/gtktexttag.c:605
 msgid "Whether this tag affects the font stretch"
@@ -1574,7 +1574,7 @@ msgstr "ಈ ಟ್ಯಾಗ್ ಅಕ್ಷರಶೈಲಿಯ ಎಳೆತದ �
 
 #: ../gtk/gtkcellrenderertext.c:534 ../gtk/gtktexttag.c:608
 msgid "Font size set"
-msgstr "ಅಕ್ಷರಶೈಲಿಯ ಗಾತ್ರದ ಜೋಡಿ"
+msgstr "ಅಕ್ಷರಶೈಲಿಯ ಗಾತ್ರದ ಸೆಟ್‌"
 
 #: ../gtk/gtkcellrenderertext.c:535 ../gtk/gtktexttag.c:609
 msgid "Whether this tag affects the font size"
@@ -1582,7 +1582,7 @@ msgstr "ಈ ಟ್ಯಾಗ್ ಅಕ್ಷರಶೈಲಿಯ ಗಾತ್ರದ
 
 #: ../gtk/gtkcellrenderertext.c:538 ../gtk/gtktexttag.c:612
 msgid "Font scale set"
-msgstr "ಅಕ್ಷರಶೈಲಿಯ ಗಾತ್ರ ಬದಲಾವಣೆ ಜೋಡಿ"
+msgstr "ಅಕ್ಷರಶೈಲಿಯ ಗಾತ್ರ ಬದಲಾವಣೆ ಸೆಟ್‌"
 
 #: ../gtk/gtkcellrenderertext.c:539 ../gtk/gtktexttag.c:613
 msgid "Whether this tag scales the font size by a factor"
@@ -1987,7 +1987,7 @@ msgstr "ನೆರಳಿನ ಬಗೆ"
 
 #: ../gtk/gtkcombobox.c:882
 msgid "Which kind of shadow to draw around the combo box"
-msgstr ""
+msgstr "ಸಂಯೋಜನಾ ಚೌಕದ ಸುತ್ತಮುತ್ತ ಯಾವ ಬಗೆಯ ನೆರಳು ಇರಬೇಕು"
 
 #: ../gtk/gtkcontainer.c:238
 msgid "Resize mode"
@@ -2064,18 +2064,16 @@ msgid "The dialog has a separator bar above its buttons"
 msgstr "ಸಂವಾದವು ಅದರ ಗುಂಡಿಗಳ ಮೇಲ್ಭಾಗದಲ್ಲಿ ವಿಭಜಕ ಪಟ್ಟಿಕೆಯನ್ನು ಹೊಂದಿದೆ"
 
 #: ../gtk/gtkdialog.c:191
-#, fuzzy
 msgid "Content area border"
-msgstr "ಒಳಪಿಡಿ"
+msgstr "ಒಳಪಿಡಿ ಸ್ಥಳದ ಅಂಚು"
 
 #: ../gtk/gtkdialog.c:192
 msgid "Width of border around the main dialog area"
 msgstr "ಮುಖ್ಯ ಸಂವಾದ ಕ್ಷೇತ್ರದ ಸುತ್ತಲಿನ ಅಂಚಿನ ಅಗಲ"
 
 #: ../gtk/gtkdialog.c:209
-#, fuzzy
 msgid "Content area spacing"
-msgstr "ಒಳಪಿಡಿ"
+msgstr "ಒಳಪಿಡಿ ಸ್ಥಳದ ಅಂತರ"
 
 #: ../gtk/gtkdialog.c:210
 msgid "Spacing between elements of the main dialog area"
@@ -2091,7 +2089,7 @@ msgstr "ಗುಂಡಿಗಳ ನಡುವಿನ ಅಂತರ"
 
 #: ../gtk/gtkdialog.c:226
 msgid "Action area border"
-msgstr ""
+msgstr "ಕ್ರಿಯೆಯ ಸ್ಥಳದ ಅಂಚು"
 
 #: ../gtk/gtkdialog.c:227
 msgid "Width of border around the button area at the bottom of the dialog"
@@ -5413,9 +5411,8 @@ msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "ಪೃಥಕ್ಕರಣ ಸಾಮರ್ಥ್ಯ (ರೆಸೊಲ್ಯೂಶನ್)"
 
 #: ../gtk/gtksettings.c:430
-#, fuzzy
 msgid "Cursor theme name"
-msgstr "ಮಿಣುಕು ಸ್ಥಳಸೂಚಕ (ಕರ್ಸರ್)"
+msgstr "ತೆರೆಸೂಚಕದ ಪರಿಸರವಿನ್ಯಾಸದ ಹೆಸರು"
 
 #: ../gtk/gtksettings.c:431
 #, fuzzy
@@ -5423,29 +5420,24 @@ msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr "ಪರಿಸರವಿನ್ಯಾಸವನ್ನು (ಥೀಮ್) ತೆಗೆದುಹಾಕು"
 
 #: ../gtk/gtksettings.c:439
-#, fuzzy
 msgid "Cursor theme size"
-msgstr "ಮಿಣುಕು ಸ್ಥಳಸೂಚಕ (ಕರ್ಸರ್)"
+msgstr "ತೆರೆಸೂಚಕದ ಪರಿಸರವಿನ್ಯಾಸದ ಗಾತ್ರ"
 
 #: ../gtk/gtksettings.c:440
-#, fuzzy
 msgid "Size to use for cursors, or 0 to use the default size"
-msgstr "ಅಕ್ಷರ ಗಾತ್ರ"
+msgstr "ತೆರೆಸೂಚಕದಲ್ಲಿ ಬಳಸಬೇಕಿರುವ ಗಾತ್ರ, ಅಥವ ಪೂರ್ವನಿಯೋಜಿತ ಗಾತ್ರಕ್ಕೆ 0 ಆಗಿರುತ್ತದೆ"
 
 #: ../gtk/gtksettings.c:450
-#, fuzzy
 msgid "Alternative button order"
-msgstr "ಮಧ್ಯದ ಗುಂಡಿ"
+msgstr "ಪರ್ಯಾಯ ಗುಂಡಿ ಕ್ರಮ"
 
 #: ../gtk/gtksettings.c:451
-#, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr "ಮಧ್ಯದ ಗುಂಡಿ"
+msgstr "ಸಂವಾದದಲ್ಲಿನ ಗುಂಡಿಗಳು ಪರ್ಯಾಯ ಗುಂಡಿ ಕ್ರಮವನ್ನು ಬಳಸಬೇಕೆ"
 
 #: ../gtk/gtksettings.c:468
-#, fuzzy
 msgid "Alternative sort indicator direction"
-msgstr "ಸೂಚಕ"
+msgstr "ಪರ್ಯಾಯವಾದ ವಿಂಗಡಣಾ ಸೂಚಕದ ದಿಕ್ಕು"
 
 #: ../gtk/gtksettings.c:469
 #, fuzzy
@@ -5562,9 +5554,8 @@ msgid "Tooltip browse mode timeout"
 msgstr "ಸಮಯ ಮೀರುವಿಕೆಯ (ಟೈಮೌಟ್) ಮೌಲ್ಯಗಳು"
 
 #: ../gtk/gtksettings.c:647
-#, fuzzy
 msgid "Timeout after which browse mode is disabled"
-msgstr "ಅಶಕ್ತಗೊಳಿಸು"
+msgstr "ಯಾವ ಸಮಯ ಮೀರಿದ ಬಳಿಕ ವೀಕ್ಷಣೆಯ ಕ್ರಮವನ್ನು ಅಶಕ್ತಗೊಳಿಸಬೇಕು"
 
 #: ../gtk/gtksettings.c:666
 msgid "Keynav Cursor Only"
@@ -5584,7 +5575,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:705
 msgid "Error Bell"
-msgstr ""
+msgstr "ದೋಷ ಘಂಟೆ"
 
 #: ../gtk/gtksettings.c:706
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
@@ -5595,40 +5586,41 @@ msgid "Color Hash"
 msgstr ""
 
 #: ../gtk/gtksettings.c:724
+#, fuzzy
 msgid "A hash table representation of the color scheme."
-msgstr ""
+msgstr "ಬಣ್ಣದ ವಿನ್ಯಾಸದ ಒಂದು ಹ್ಯಾಶ್ ಕೋಷ್ಟಕ "
 
 #: ../gtk/gtksettings.c:732
 msgid "Default file chooser backend"
-msgstr ""
+msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಕಡತ ಆಯ್ಕೆಗಾರ ಬ್ಯಾಕೆಂಡ್"
 
 #: ../gtk/gtksettings.c:733
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr ""
+msgstr "ಪೂರ್ವನಿಯೋಜಿತವಾಗಿ ಬಳಸಲು GtkPrintBackend ಬ್ಯಾಕೆಂಡಿನ ಹೆಸರು"
 
 #: ../gtk/gtksettings.c:750
 msgid "Default print backend"
-msgstr ""
+msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಮುದ್ರಣದ ಬ್ಯಾಕ್ಎಂಡ್"
 
 #: ../gtk/gtksettings.c:751
 msgid "List of the GtkPrintBackend backends to use by default"
-msgstr ""
+msgstr "ಪೂರ್ವನಿಯೋಜಿತವಾಗಿ ಬಳಸಲು GtkPrintBackend ಬ್ಯಾಕೆಂಡ್‌ಗಳ ಪಟ್ಟಿ"
 
 #: ../gtk/gtksettings.c:774
 msgid "Default command to run when displaying a print preview"
-msgstr ""
+msgstr "ಮುದ್ರಣ ಮುನ್ನೋಟವನ್ನು ತೋರಿಸುವಾಗ ಚಲಾಯಿಸಬೇಕಿರುವ ಪೂರ್ವನಿಯೋಜಿತ ಆಜ್ಞೆ"
 
 #: ../gtk/gtksettings.c:775
 msgid "Command to run when displaying a print preview"
-msgstr ""
+msgstr "ಮುದ್ರಣ ಮುನ್ನೋಟವನ್ನು ತೋರಿಸುವಾಗ ಚಲಾಯಿಸಬೇಕಿರುವ ಆಜ್ಞೆ"
 
 #: ../gtk/gtksettings.c:791
 msgid "Enable Mnemonics"
-msgstr ""
+msgstr "ನಿಮೋನಿಕ್‌ಗಳನ್ನು ಶಕ್ತಗೊಳಿಸು"
 
 #: ../gtk/gtksettings.c:792
 msgid "Whether labels should have mnemonics"
-msgstr ""
+msgstr "ಲೇಬಲ್‌ಗಳು ನಿಮೋನಿಕ್‌ಗಳನ್ನು ಹೊಂದಿರಬೇಕೆ"
 
 #: ../gtk/gtksettings.c:808
 msgid "Enable Accelerators"
@@ -5644,82 +5636,75 @@ msgstr "ಇತ್ತೀಚಿನ ಕಡತಗಳ ಮಿತಿ"
 
 #: ../gtk/gtksettings.c:827
 msgid "Number of recently used files"
-msgstr ""
+msgstr "ಇತ್ತೀಚೆಗೆ ಬಳಸಲಾದ ಕಡತಗಳ ಸಂಖ್ಯೆ"
 
 #: ../gtk/gtksettings.c:845
-#, fuzzy
 msgid "Default IM module"
-msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಅಗಲ"
+msgstr "ಪೂರ್ವನಿಯೋಜಿತ IM ಘಟಕ"
 
 #: ../gtk/gtksettings.c:846
 msgid "Which IM module should be used by default"
-msgstr ""
+msgstr "ಪೂರ್ವನಿಯೋಜಿತವಾಗಿ ಯಾವ IM ಘಟಕವನ್ನು ಬಳಸಬೇಕು"
 
 #: ../gtk/gtksettings.c:864
-#, fuzzy
 msgid "Recent Files Max Age"
-msgstr "ಇತ್ತಿಚಿನ ವ್ಯವಸ್ಥಾಪಕ"
+msgstr "ಇತ್ತೀಚಿನ ಕಡತಗಳ ಗರಿಷ್ಟ ಆಯಸ್ಸು"
 
 #: ../gtk/gtksettings.c:865
 msgid "Maximum age of recently used files, in days"
-msgstr ""
+msgstr "ಇತ್ತೀಚೆಗೆ ಬಳಸಲಾದ ಕಡತಗಳ ಗರಿಷ್ಟ ಜೀವಿತಾವಧಿ, ದಿನಗಳಲ್ಲಿ"
 
 #: ../gtk/gtksettings.c:874
 msgid "Fontconfig configuration timestamp"
-msgstr ""
+msgstr "Fontconfig ಸಂರಚನೆಯ ಸಮಯ"
 
 #: ../gtk/gtksettings.c:875
 msgid "Timestamp of current fontconfig configuration"
-msgstr ""
+msgstr "ಪ್ರಸಕ್ತ fontconfig ಸಂರಚನೆಯ ಸಮಯ"
 
 #: ../gtk/gtksettings.c:897
-#, fuzzy
 msgid "Sound Theme Name"
-msgstr "ಪರಿಸರವಿನ್ಯಾಸವನ್ನು (ಥೀಮ್) ತೆಗೆದುಹಾಕು"
+msgstr "ಧ್ವನಿ ಪರಿಸರವಿನ್ಯಾಸದ ಹೆಸರು"
 
 #: ../gtk/gtksettings.c:898
-#, fuzzy
 msgid "XDG sound theme name"
-msgstr "ಮಿಣುಕು ಸ್ಥಳಸೂಚಕ (ಕರ್ಸರ್)"
+msgstr "XDG ಧ್ವನಿ ಪರಿಸರವಿನ್ಯಾಸದ ಹೆಸರು"
 
 #. Translators: this means sounds that are played as feedback to user input
 #: ../gtk/gtksettings.c:920
 msgid "Audible Input Feedback"
-msgstr ""
+msgstr "ಕೇಳಿಸಬಹುದಾದ ಇನ್‌ಪುಟ್ ಪ್ರತ್ಯುತ್ತರ"
 
 #: ../gtk/gtksettings.c:921
-#, fuzzy
 msgid "Whether to play event sounds as feedback to user input"
-msgstr "ಸಂಪರ್ಕತಟವು ಪ್ರದಾನಕ್ಕೆ(input) ಪ್ರತಿಕ್ರಿಯಿಸಬಲ್ಲದೆ"
+msgstr "ಬಳಕೆದಾರರು ನಮೂದಿದಕ್ಕೆ ಉತ್ತರವಾಗಿ ಘಟನೆ ಶಬ್ಧವನ್ನು ಚಲಾಯಿಸಬೇಕೆ"
 
 #: ../gtk/gtksettings.c:942
-#, fuzzy
 msgid "Enable Event Sounds"
-msgstr "ಸಜೀವನಗಳನ್ನು (ಆನಿಮೇಶನ್) ಶಕ್ತಗೊಳಿಸು"
+msgstr "ಘಟನೆಯ ಶಬ್ಧಗಳನ್ನು ಶಕ್ತಗೊಳಿಸು"
 
 #: ../gtk/gtksettings.c:943
-#, fuzzy
 msgid "Whether to play any event sounds at all"
-msgstr "ಪ್ರದರ್ಶನವನ್ನು ಸಂರಚಿಸು"
+msgstr "ಘಟನೆಯ ಶಬ್ಧಗಳನ್ನು ಚಲಾಯಿಸಬೇಕೆ"
 
 #: ../gtk/gtksettings.c:958
 msgid "Enable Tooltips"
 msgstr "ಸಲಕರಣೆ ಸುಳಿವುಗಳನ್ನು ಶಕ್ತಗೊಳಿಸು"
 
 #: ../gtk/gtksettings.c:959
-#, fuzzy
 msgid "Whether tooltips should be shown on widgets"
-msgstr "ತೋರಿಸಲಾದ"
+msgstr "ವಿಜೆಟ್‌ನ ಮೇಲೆ ಉಪಕರಣ-ಸುಳಿವುಗಳನ್ನು ತೋರಿಸಬೇಕೆ"
 
 #: ../gtk/gtksizegroup.c:293
 msgid "Mode"
 msgstr "ವಿಧಾನ"
 
 #: ../gtk/gtksizegroup.c:294
+#, fuzzy
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
-msgstr ""
+msgstr "ಯಾವ ದಿಕ್ಕಿನಲ್ಲಿ "
 
 #: ../gtk/gtksizegroup.c:310
 msgid "Ignore hidden"
@@ -5727,25 +5712,25 @@ msgstr "ಅಡಗಿಸದ್ದನ್ನು ಅಲಕ್ಷಿಸು"
 
 #: ../gtk/gtksizegroup.c:311
 msgid "If TRUE, unmapped widgets are ignored when determining the size of the group"
-msgstr ""
+msgstr "TRUE ಆದಲ್ಲಿ, ಗುಂಪಿನ ಗಾತ್ರವನ್ನು ನಿರ್ಧರಿಸುವಾಗ ಸೂಚಿಸಲಾಗದೆ ಇರುವ ವಿಜೆಟ್‌ಗಳನ್ನು ಆಲಕ್ಷಿಸಲಾಗುವುದು"
 
 #: ../gtk/gtkspinbutton.c:209
 msgid "The adjustment that holds the value of the spinbutton"
-msgstr ""
+msgstr "ಸುತ್ತುಗುಂಡಿಯ ಮೌಲ್ಯವನ್ನು ಒಳಗೊಂಡಿರುವ ಹೊಂದಾಣಿಕೆ"
 
 #: ../gtk/gtkspinbutton.c:216
 msgid "Climb Rate"
-msgstr ""
+msgstr "ಏರಿಕೆ ದರ"
 
 #: ../gtk/gtkspinbutton.c:236
 msgid "Snap to Ticks"
-msgstr ""
+msgstr "ಗುರುತುಗಳಿಗೆ ಸೆಳೆ"
 
 #: ../gtk/gtkspinbutton.c:237
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
-msgstr ""
+msgstr "ದೋಷಯುಕ್ತ ಮೌಲ್ಯಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಒಂದು ತಿರುಗು ಗುಂಡಿಯ ಸಮೀಪದ ಹಂತ ಏರಿಕೆಗೆ ಸೇರಿಸಬೇಕೆ"
 
 #: ../gtk/gtkspinbutton.c:244
 msgid "Numeric"
@@ -5753,7 +5738,7 @@ msgstr "ಸಾಂಖ್ಯಿಕ(Numeric)"
 
 #: ../gtk/gtkspinbutton.c:245
 msgid "Whether non-numeric characters should be ignored"
-msgstr ""
+msgstr "ಅಂಕೀಯವಲ್ಲದ ಅಕ್ಷರಗಳನ್ನು ಆಲಕ್ಷಿಸಬೇಕೆ"
 
 #: ../gtk/gtkspinbutton.c:252
 msgid "Wrap"
@@ -5761,7 +5746,7 @@ msgstr "ಆವರಿಸು"
 
 #: ../gtk/gtkspinbutton.c:253
 msgid "Whether a spin button should wrap upon reaching its limits"
-msgstr ""
+msgstr "ಸುತ್ತುಗುಂಡಿಯು ಅದರ ಮಿತಿಯನ್ನು ತಲುಪಿದಾಗ ಆವರಿಸಲ್ಪಡಬೇಕೆ"
 
 #: ../gtk/gtkspinbutton.c:260
 msgid "Update Policy"
@@ -5769,27 +5754,27 @@ msgstr "ಅಪ್‌ಡೇಟ್ ಕಾರ್ಯನೀತಿ"
 
 #: ../gtk/gtkspinbutton.c:261
 msgid "Whether the spin button should update always, or only when the value is legal"
-msgstr ""
+msgstr "ಸುತ್ತುಗುಂಡಿಯು ಯಾವಾಗಲೂ ಅಪ್‌ಡೇಟ್ ಆಗಬೇಕೆ, ಅಥವ ಕೇವಲ ಅದು ಅಧೀಕೃತವಾಗಿದ್ದಾಗ ಮಾತ್ರ ಅಪ್‌ಡೇಟ್ ಆಗಬೇಕೆ"
 
 #: ../gtk/gtkspinbutton.c:270
 msgid "Reads the current value, or sets a new value"
-msgstr ""
+msgstr "ಪ್ರಸಕ್ತ ಮೌಲ್ಯವನ್ನು ಓದುತ್ತದೆ, ಅಥವ ಒಂದು ಹೊಸ ಮೌಲ್ಯವನ್ನು ಹೊಂದಿಸುತ್ತದೆ"
 
 #: ../gtk/gtkspinbutton.c:279
 msgid "Style of bevel around the spin button"
-msgstr ""
+msgstr "ಸುತ್ತುಗುಂಡಿಯ ಸುತ್ತಲಿನ ಇಳಿಜಾರಿನ ಶೈಲಿ"
 
 #: ../gtk/gtkstatusbar.c:141
 msgid "Has Resize Grip"
-msgstr ""
+msgstr "ಗಾತ್ರಬದಲಾವಣೆ ಹಿಡಿತವನ್ನು ಹೊಂದಿದೆ"
 
 #: ../gtk/gtkstatusbar.c:142
 msgid "Whether the statusbar has a grip for resizing the toplevel"
-msgstr ""
+msgstr "ಸ್ಥಿತಿ ಪಟ್ಟಿಕೆಯು ಮೇಲಿನ ಮಟ್ಟದ ಗಾತ್ರದ ಬದಲಾವಣೆಯಲ್ಲಿ ಒಂದು ಹಿಡಿತವನ್ನು ಹೊಂದಿರಬೇಕೆ"
 
 #: ../gtk/gtkstatusbar.c:187
 msgid "Style of bevel around the statusbar text"
-msgstr ""
+msgstr "ಸ್ಥಿತಿಪಟ್ಟಿಕೆಯ ಸುತ್ತಲಿನ ಇಳಿಜಾರಿನ ಶೈಲಿ"
 
 #: ../gtk/gtkstatusicon.c:268
 msgid "The size of the icon"
@@ -5833,16 +5818,15 @@ msgstr "ಸಲಕರಣೆ ಸುಳಿವುಗಳ ಪಠ್ಯ"
 
 #: ../gtk/gtkstatusicon.c:376 ../gtk/gtkwidget.c:654 ../gtk/gtkwidget.c:675
 msgid "The contents of the tooltip for this widget"
-msgstr ""
+msgstr "ಈ ವಿಜೆಟ್‌ಗಾಗಿನ ಒಳವಿಷಯಗಳ ಉಪಕರಣ-ಸುಳಿವು"
 
 #: ../gtk/gtkstatusicon.c:399 ../gtk/gtkwidget.c:674
 msgid "Tooltip markup"
-msgstr ""
+msgstr "ಉಪಕರಣ-ಸುಳಿವು ಗುರುತು"
 
 #: ../gtk/gtkstatusicon.c:400
-#, fuzzy
 msgid "The contents of the tooltip for this tray icon"
-msgstr "ನಮೂದಿನ ಒಳ ಅಂಶ"
+msgstr "ಈ ಟ್ರೇ ಚಿಹ್ನೆಗಾಗಿನ ಉಪಕರಣ-ಸುಳಿವಿನ ಅಂಶ"
 
 #: ../gtk/gtktable.c:129
 msgid "Rows"
@@ -5890,7 +5874,7 @@ msgstr "ಬಲಭಾಗದ ಲಗತ್ತು"
 
 #: ../gtk/gtktable.c:181
 msgid "The column number to attach the right side of a child widget to"
-msgstr ""
+msgstr "ಚೈಲ್ಡ್‍ ವಿಜೆಟ್‌ನ ಬಲಭಾಗಕ್ಕೆ ಲಗತ್ತಿಸಬೇಕಿರುವ ಸಾಲಿನ ಸಂಖ್ಯೆ"
 
 #: ../gtk/gtktable.c:187
 msgid "Top attachment"
@@ -5898,7 +5882,7 @@ msgstr "ಮೇಲಿನ ಲಗತ್ತು"
 
 #: ../gtk/gtktable.c:188
 msgid "The row number to attach the top of a child widget to"
-msgstr ""
+msgstr "ಚೈಲ್ಡ್‍ ವಿಜೆಟ್‌ನ ಮೇಲ್ಭಾಗಕ್ಕೆ ಲಗತ್ತಿಸಬೇಕಿರುವ ಸಾಲಿನ ಸಂಖ್ಯೆ"
 
 #: ../gtk/gtktable.c:194
 msgid "Bottom attachment"
@@ -5928,7 +5912,7 @@ msgstr "ಅಡ್ಡಲಾದ ಪ್ಯಾಡಿಂಗ್‌"
 msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
-msgstr ""
+msgstr "ಚೈಲ್ಡ್‍ ಹಾಗು ಅದರ ಎಡಭಾಗದ ಹಾಗು ಬಲಭಾಗದ ನೆರೆಹೊರೆಯವುಗಳ ನಡುವಿನ ಹೆಚ್ಚುವರಿ ಸ್ಥಳ, ಪಿಕ್ಸೆಲ್‌ಗಳಲ್ಲಿ"
 
 #: ../gtk/gtktable.c:222
 msgid "Vertical padding"
@@ -5938,7 +5922,7 @@ msgstr "ಲಂಬ ಪ್ಯಾಡಿಂಗ್"
 msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
-msgstr ""
+msgstr "ಚೈಲ್ಡ್‍ ಹಾಗು ಅದರ ಮೇಲಿನ ಹಾಗು ಕೆಳಗಿನ ನೆರೆಹೊರೆಯವುಗಳ ನಡುವಿನ ಹೆಚ್ಚುವರಿ ಸ್ಥಳ, ಪಿಕ್ಸೆಲ್‌ಗಳಲ್ಲಿ"
 
 #: ../gtk/gtktext.c:546
 msgid "Horizontal adjustment for the text widget"
@@ -5966,15 +5950,15 @@ msgstr "ವಿಜೆಟ್‌ನ ತುದಿಗಳಲ್ಲಿ ಪದಗಳನ�
 
 #: ../gtk/gtktextbuffer.c:180
 msgid "Tag Table"
-msgstr ""
+msgstr "ಟ್ಯಾಗ್ ಕೋಷ್ಟಕ"
 
 #: ../gtk/gtktextbuffer.c:181
 msgid "Text Tag Table"
-msgstr ""
+msgstr "ಪಠ್ಯ ಟ್ಯಾಗ್ ಕೋಷ್ಟಕ"
 
 #: ../gtk/gtktextbuffer.c:199
 msgid "Current text of the buffer"
-msgstr ""
+msgstr "ಬಫರಿನ ಪ್ರಸಕ್ತ ಪಠ್ಯ"
 
 #: ../gtk/gtktextbuffer.c:213
 msgid "Has selection"
@@ -5982,7 +5966,7 @@ msgstr "ಆಯ್ಕೆಯನ್ನು ಹೊಂದಿದೆ"
 
 #: ../gtk/gtktextbuffer.c:214
 msgid "Whether the buffer has some text currently selected"
-msgstr ""
+msgstr "ಪ್ರಸಕ್ತ ಆಯ್ಕೆ ಮಾಡಲಾದುದರಲ್ಲಿ ಒಂದಿಷ್ಟು ಪಠ್ಯವನ್ನು ಬಫರ್ ಹೊಂದಿದೆಯೆ"
 
 #: ../gtk/gtktextbuffer.c:230
 msgid "Cursor position"
@@ -5990,25 +5974,25 @@ msgstr "ತೆರೆಸೂಚಕದ ಸ್ಥಾನ"
 
 #: ../gtk/gtktextbuffer.c:231
 msgid "The position of the insert mark (as offset from the beginning of the buffer)"
-msgstr ""
+msgstr "ಸೇರಿಸುವ ಗುರುತಿನ ಚಿಹ್ನೆಯ ಸ್ಥಳ (ಬಫರಿನ ಆರಂಭದಿಂದಾಗಿ ಆಫ್‌ಸೆಟ್‌ ಆಗಿ)"
 
 #: ../gtk/gtktextbuffer.c:246
 msgid "Copy target list"
-msgstr ""
+msgstr "ನಿರ್ದೇಶಿತ ಪಟ್ಟಿಯನ್ನು ಕಾಪಿ ಮಾಡು"
 
 #: ../gtk/gtktextbuffer.c:247
 msgid "The list of targets this buffer supports for clipboard copying and DND source"
-msgstr ""
+msgstr "ನಕಲುಫಲಕಕ್ಕೆ ಕಾಪಿ ಮಾಡುವಿಕೆ ಹಾಗು DND ಮೂಲವನ್ನು ಈ ಬಫರ್ ಬೆಂಬಲಿಸುವ ಗುರಿಗಳ ಪಟ್ಟಿ"
 
 #: ../gtk/gtktextbuffer.c:262
 msgid "Paste target list"
-msgstr ""
+msgstr "ನಿರ್ದೇಶಿತ ಪಟ್ಟಿಯನ್ನು ಅಂಟಿಸು"
 
 #: ../gtk/gtktextbuffer.c:263
 msgid ""
 "The list of targets this buffer supports for clipboard pasting and DND "
 "destination"
-msgstr ""
+msgstr "ನಕಲುಫಲಕಕ್ಕೆ ಅಂಟಿಸುವಿಕೆ ಹಾಗು DND ನಿಶ್ಚಿತ ಸ್ಥಳವನ್ನು ಈ ಬಫರ್ ಬೆಂಬಲಿಸುವ ಗುರಿಗಳ ಪಟ್ಟಿ"
 
 #: ../gtk/gtktextmark.c:90
 msgid "Mark name"
@@ -6042,11 +6026,11 @@ msgstr "ಹಿನ್ನಲೆಯ ಪೂರ್ಣ ಎತ್ತರ"
 msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
-msgstr ""
+msgstr "ಹಿನ್ನಲೆ ಬಣ್ಣವು ಸಂಪೂರ್ಣ ರೇಖೆಯ ಎತ್ತರಕ್ಕೆ ತುಂಬಿಸಲಾಗುತ್ತದೆಯೆ ಅಥವ ಟ್ಯಾಗ್‌ ಮಾಡಲಾದ ಅಕ್ಷರಗಳ ಎತ್ತರಕ್ಕೆ ಮಾತ್ರವೆ ತುಂಬಿಸಲಾಗುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:208
 msgid "Background stipple mask"
-msgstr ""
+msgstr "ಹಿನ್ನಲೆ ಚುಕ್ಕಿಚಿತ್ರದ ಮುಸುಕು"
 
 #: ../gtk/gtktexttag.c:209
 msgid "Bitmap to use as a mask when drawing the text background"
@@ -6058,7 +6042,7 @@ msgstr "ಒಂದು (ಬಹುಷಃ ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ
 
 #: ../gtk/gtktexttag.c:234
 msgid "Foreground stipple mask"
-msgstr ""
+msgstr "ಮುನ್ನಲೆ ಚುಕ್ಕಿಚಿತ್ರದ ಮುಸುಕು"
 
 #: ../gtk/gtktexttag.c:235
 msgid "Bitmap to use as a mask when drawing the text foreground"
@@ -6078,17 +6062,17 @@ msgstr "ಒಂದು PangoStyle ನಲ್ಲಿ ಅಕ್ಷರಶೈಲಿ, ಉ
 
 #: ../gtk/gtktexttag.c:301
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr ""
+msgstr "ಅಕ್ಷರಶೈಲಿ ವೇರಿಯಂಟ್ ಆದ ಒಂದು PangoVariant, ಉದಾ. PANGO_VARIANT_SMALL_CAPS"
 
 #: ../gtk/gtktexttag.c:310
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
-msgstr ""
+msgstr "ಅಕ್ಷರಶೈಲಿಯ ತೂಕ ಒಂದು ಪೂರ್ಣಾಂಕವಾಗಿ, ಪೂರ್ವನಿರ್ಧಾರಿತವಾದ ಮೌಲ್ಯಗಳಿಗೆ PangoWeight ನಲ್ಲಿ; ಉದಾಹರಣೆಗೆ, PANGO_WEIGHT_BOLD"
 
 #: ../gtk/gtktexttag.c:321
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
-msgstr ""
+msgstr "ಒಂದು PangoStretch ಆಗಿ ಅಕ್ಷರಶೈಲಿಯ ಎಳೆಯುವಿಕೆ, ಉದಾ. PANGO_STRETCH_CONDENSED"
 
 #: ../gtk/gtktexttag.c:330
 msgid "Font size in Pango units"
@@ -6099,17 +6083,17 @@ msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
-msgstr ""
+msgstr "ಅಕ್ಷರಶೈಲಿಯ ಪೂರ್ವನಿಯೋಜಿತ ಗಾತ್ರಕ್ಕೆ ಅನುಗುಣವಾದ, ಅಳತೆಯ ಅಂಶದ ರೂಪದಲ್ಲಿನ ಅಕ್ಷರಶೈಲಿಯ ಗಾತ್ರ. ಈ ಗುಣವು ಪರಿಸರವಿನ್ಯಾಸ ಬದಲಾವಣೆ ಇತ್ಯಾದಿಗಳನ್ನು ಹೊಂದಿಸಿಕೊಳ್ಳುತ್ತದೆ. ಆದ್ದರಿಂದ ಇದನ್ನು ಸಲಹೆ ಮಾಡಲಾಗುವುದು. PANGO_SCALE_X_LARGE ನಂತಹ ಕೆಲವು ಅಳತೆಗಳನ್ನು Pango ಮೊದಲೆ ನಿರ್ಧರಿಸುತ್ತದೆ"
 
 #: ../gtk/gtktexttag.c:360 ../gtk/gtktextview.c:591
 msgid "Left, right, or center justification"
-msgstr ""
+msgstr "ಎಡ, ಬಲ, ಅಥವ ಮಧ್ಯದ ಹೊಂದಿಕೆ"
 
 #: ../gtk/gtktexttag.c:379
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
-msgstr ""
+msgstr "ಈ ಪಠ್ಯವು ಇರುವ ಭಾಷೆಯ ಒಂದು ISO ಸಂಕೇತ. ಪಠ್ಯವನ್ನು ರೆಂಡರಿಂಗ್ ಮಾಡುವಾಗ Pango ಇದನ್ನು  ಸುಳಿವಾಗಿ ಬಳಸುತ್ತದೆ. ಸೂಚಿಸದೆ ಹೋದಲ್ಲಿ, ಸೂಕ್ತ ಪೂರ್ವನಿಯೋಜಿತವನ್ನು ಬಳಸಲಾಗುವುದು."
 
 #: ../gtk/gtktexttag.c:386
 msgid "Left margin"
@@ -6133,13 +6117,15 @@ msgstr "ಇಂಡೆಂಟ್"
 
 #: ../gtk/gtktexttag.c:408 ../gtk/gtktextview.c:620
 msgid "Amount to indent the paragraph, in pixels"
-msgstr ""
+msgstr "ಪ್ಯಾರಾಗ್ರಾಫನ್ನು ಇಂಡೆಂಟ್ ಮಾಡಬೇಕಿರುವ ಪ್ರಮಾಣ, ಪಿಕ್ಸೆಲ್‌ಗಳಲ್ಲಿ"
 
 #: ../gtk/gtktexttag.c:419
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
 msgstr ""
+"ಬೇಸ್‌ಲೈನಿನ ಮೇಲಿನ ಪಠ್ಯದ ಆಫ್‌ಸೆಟ್‌ (ಏರಿಕೆಯು ಋಣವಾಗಿದ್ದಲ್ಲಿ ಬೇಸ್‌ಲೈನಿನ ಕೆಳಗೆ),"
+"Pango ಘಟಕಗಳಲ್ಲಿ"
 
 #: ../gtk/gtktexttag.c:428
 msgid "Pixels above lines"
@@ -6147,7 +6133,7 @@ msgstr "ರೇಖೆಯ ಮೇಲಿನ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtktexttag.c:429 ../gtk/gtktextview.c:544
 msgid "Pixels of blank space above paragraphs"
-msgstr ""
+msgstr "ಪ್ಯಾರಾಗ್ರಾಫಿನ ಮೇಲಿನ ಖಾಲಿ ಜಾಗದ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtktexttag.c:438
 msgid "Pixels below lines"
@@ -6155,7 +6141,7 @@ msgstr "ರೇಖೆಯ ಕೆಳಗಿನ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtktexttag.c:439 ../gtk/gtktextview.c:554
 msgid "Pixels of blank space below paragraphs"
-msgstr ""
+msgstr "ಪ್ಯಾರಾಗ್ರಾಫಿನ ಕೆಳಗಿನ ಖಾಲಿ ಜಾಗದ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtktexttag.c:448
 msgid "Pixels inside wrap"
@@ -6163,11 +6149,11 @@ msgstr "ಆವರಿಕೆಯ ಒಳಗಿನ ಪಿಕ್ಸೆಲ್‌ಗಳ�
 
 #: ../gtk/gtktexttag.c:449 ../gtk/gtktextview.c:564
 msgid "Pixels of blank space between wrapped lines in a paragraph"
-msgstr ""
+msgstr "ಒಂದು ಪ್ಯಾರಾಗ್ರಾಫಿನಲ್ಲಿನ ಆವರಿಸಲಾದ ಸಾಲುಗಳ ನಡುವಿನ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtktexttag.c:476 ../gtk/gtktextview.c:582
 msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
-msgstr ""
+msgstr "ಸಾಲುಗಳನ್ನು ಎಂದಿಗೂ ಆವರಿಸಕೂಡದೆ, ಕೇವಲ ಪದಗಳ ಅಂಚಿನಲ್ಲಿ ಅಥವ ಅಕ್ಷರಗಳ ಅಂಚಿನಲ್ಲಿ ಮಾತ್ರವೆ ಆವರಿಸಬೇಕೆ"
 
 #: ../gtk/gtktexttag.c:485 ../gtk/gtktextview.c:629
 msgid "Tabs"
@@ -6199,124 +6185,123 @@ msgstr "ಪ್ಯಾರಾಗ್ರಾಫಿನ ಹಿನ್ನೆಲೆ ಬಣ�
 
 #: ../gtk/gtktexttag.c:536
 msgid "Paragraph background color as a (possibly unallocated) GdkColor"
-msgstr ""
+msgstr "ಒಂದು (ಬಹುಷಃ ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ) GdkColor ಆಗಿ ಪ್ಯಾರಾಗ್ರಾಫಿನ ಹಿನ್ನೆಲೆ ಬಣ್ಣ"
 
 #: ../gtk/gtktexttag.c:554
 msgid "Margin Accumulates"
-msgstr ""
+msgstr "ಅಂಚುಗಳ ಒಟ್ಟುಗೂಡಿಕೆ"
 
 #: ../gtk/gtktexttag.c:555
 msgid "Whether left and right margins accumulate."
-msgstr ""
+msgstr "ಎಡ ಹಾಗು ಬಲ ಅಂಚುಗಳು ಒಟ್ಟುಗೂಡುತ್ತವೆಯೆ."
 
 #: ../gtk/gtktexttag.c:568
 msgid "Background full height set"
-msgstr ""
+msgstr "ಹಿನ್ನಲೆ ಸಂಪೂರ್ಣ ಎತ್ತರದ ಸೆಟ್"
 
 #: ../gtk/gtktexttag.c:569
 msgid "Whether this tag affects background height"
-msgstr ""
+msgstr "ಈ ಟ್ಯಾಗ್ ಹಿನ್ನಲೆ ಎತ್ತರದ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:572
 msgid "Background stipple set"
-msgstr ""
+msgstr "ಹಿನ್ನೆಲೆ ಚುಕ್ಕಿಚಿತ್ರ ಸೆಟ್"
 
 #: ../gtk/gtktexttag.c:573
 msgid "Whether this tag affects the background stipple"
-msgstr ""
+msgstr "ಈ ಟ್ಯಾಗ್‌ ಹಿನ್ನಲೆಯ ಚುಕ್ಕಿ ಚಿತ್ರದ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:580
 msgid "Foreground stipple set"
-msgstr ""
+msgstr "ಮುನ್ನೆಲೆ ಚುಕ್ಕಿಚಿತ್ರ ಸೆಟ್"
 
 #: ../gtk/gtktexttag.c:581
 msgid "Whether this tag affects the foreground stipple"
-msgstr ""
+msgstr "ಈ ಟ್ಯಾಗ್ ಮುನ್ನೆಲೆಯ ಚುಕ್ಕಿಚಿತ್ರದ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರಬೇಕೆ"
 
 #: ../gtk/gtktexttag.c:616
-#, fuzzy
 msgid "Justification set"
-msgstr "ಗುರುತನ್ನು ಮಾರ್ಪಡಿಸು"
+msgstr "ಹೊಂದಿಕೆಯ ಸೆಟ್"
 
 #: ../gtk/gtktexttag.c:617
 msgid "Whether this tag affects paragraph justification"
-msgstr ""
+msgstr "ಈ ಟ್ಯಾಗ್ ಪ್ಯಾರಾಗ್ರಾಫಿನ ಹೊಂದಿಕೆಯ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:624
 msgid "Left margin set"
-msgstr ""
+msgstr "ಎಡ ಅಂಚಿನ ಸೆಟ್"
 
 #: ../gtk/gtktexttag.c:625
 msgid "Whether this tag affects the left margin"
-msgstr ""
+msgstr "ಈ ಟ್ಯಾಗ್ ಎಡ ಅಂಚಿನ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:628
 msgid "Indent set"
-msgstr ""
+msgstr "ಇಂಡೆಂಟ್ ಸೆಟ್"
 
 #: ../gtk/gtktexttag.c:629
 msgid "Whether this tag affects indentation"
-msgstr ""
+msgstr "ಈ ಟ್ಯಾಗ್ ಇಂಡೆಂಟ್‌ ನೀಡುವಿಕೆಯ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:636
 msgid "Pixels above lines set"
-msgstr ""
+msgstr "ಸಾಲಿನ ಮೇಲಿನ ಸೆಟ್"
 
 #: ../gtk/gtktexttag.c:637 ../gtk/gtktexttag.c:641
 msgid "Whether this tag affects the number of pixels above lines"
-msgstr ""
+msgstr "ಈ ಟ್ಯಾಗ್ ಸಾಲುಗಳ ಮೇಲಿನ ಪಿಕ್ಸೆಲ್‌ಗಳ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:640
 msgid "Pixels below lines set"
-msgstr ""
+msgstr "ಸಾಲಿನ ಕೆಳಗಿನ ಸೆಟ್"
 
 #: ../gtk/gtktexttag.c:644
 msgid "Pixels inside wrap set"
-msgstr ""
+msgstr "ಆವರಿಕೆಯ ಒಳಗಿನ ಸೆಟ್"
 
 #: ../gtk/gtktexttag.c:645
 msgid "Whether this tag affects the number of pixels between wrapped lines"
-msgstr ""
+msgstr "ಈ ಟ್ಯಾಗ್ ಆವರಿಸಲಾದ ಸಾಲುಗಳಲ್ಲಿನ ಪಿಕ್ಸೆಲ್‌ಗಳ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:652
 msgid "Right margin set"
-msgstr ""
+msgstr "ಬಲ ಅಂಚಿನ ಸೆಟ್"
 
 #: ../gtk/gtktexttag.c:653
 msgid "Whether this tag affects the right margin"
-msgstr ""
+msgstr "ಈ ಟ್ಯಾಗ್ ಬಲ ಅಂಚಿನ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:660
 msgid "Wrap mode set"
-msgstr ""
+msgstr "ಆವರಿಕೆ ಕ್ರಮದ ಸೆಟ್"
 
 #: ../gtk/gtktexttag.c:661
 msgid "Whether this tag affects line wrap mode"
-msgstr ""
+msgstr "ಈ ಟ್ಯಾಗ್ ಸಾಲುಗಳ ಆವರಿಕೆಯ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:664
 msgid "Tabs set"
-msgstr ""
+msgstr "ಟ್ಯಾಬ್‌ಗಳ ಸೆಟ್"
 
 #: ../gtk/gtktexttag.c:665
 msgid "Whether this tag affects tabs"
-msgstr ""
+msgstr "ಈ ಟ್ಯಾಗ್ ಟ್ಯಾಬ್‌ಗಳ ಪರಿಣಾಮ ಬೀರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:668
 msgid "Invisible set"
-msgstr ""
+msgstr "ಅಗೋಚರ ಸೆಟ್"
 
 #: ../gtk/gtktexttag.c:669
 msgid "Whether this tag affects text visibility"
-msgstr ""
+msgstr "ಈ ಟ್ಯಾಗ್ ಪಠ್ಯದ ಗೋಚರಿಕೆಯ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:672
 msgid "Paragraph background set"
-msgstr ""
+msgstr "ಪುಟದ ಹಿನ್ನಲೆ ಸೆಟ್‌"
 
 #: ../gtk/gtktexttag.c:673
 msgid "Whether this tag affects the paragraph background color"
-msgstr ""
+msgstr "ಈ ಟ್ಯಾಗ್ ಪ್ಯಾರಾಗ್ರಾಫಿನ ಹಿನ್ನಲೆ ಬಣ್ಣದ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktextview.c:543
 msgid "Pixels Above Lines"
@@ -6360,51 +6345,51 @@ msgstr "ತೋರಿಸಲಾಗುವ ಬಫರ್"
 
 #: ../gtk/gtktextview.c:654
 msgid "Whether entered text overwrites existing contents"
-msgstr ""
+msgstr "ನಮೂದಿಸಲಾದ ಪಠ್ಯವು ಈಗಿರುವ ಪಠ್ಯದ ಮೇಲೆ ತಿದ್ದಿ ಬರೆಯುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktextview.c:661
 msgid "Accepts tab"
-msgstr ""
+msgstr "ಟ್ಯಾಬ್‌ ಅನ್ನು ಅನುಮತಿಸುತ್ತದೆ"
 
 #: ../gtk/gtktextview.c:662
 msgid "Whether Tab will result in a tab character being entered"
-msgstr ""
+msgstr "ಟ್ಯಾಬ್‌ನಿಂದಾಗಿ ಟ್ಯಾಬ್ ಅಕ್ಷರದ ನಮೂದಿಗೆ ಕಾರಣವಾಗುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktextview.c:691
 msgid "Error underline color"
-msgstr ""
+msgstr "ದೋಷ ಅಡಿಗೆರೆ ಬಣ್ಣ"
 
 #: ../gtk/gtktextview.c:692
 msgid "Color with which to draw error-indication underlines"
-msgstr ""
+msgstr "ಎಳೆಯಬೇಕಿರುವ ದೋಷ ಸೂಚನೆಯ ಅಡಿಗೆರೆಗಳ ಬಣ್ಣ"
 
 #: ../gtk/gtktoggleaction.c:104
 msgid "Create the same proxies as a radio action"
-msgstr ""
+msgstr "ರೇಡಿಯೋ ಕ್ರಿಯೆಯಂತಹುದ್ದೆ ಆದ ಪ್ರಾಕ್ಸಿಗಳನ್ನು ರಚಿಸಬೇಕೆ"
 
 #: ../gtk/gtktoggleaction.c:105
 msgid "Whether the proxies for this action look like radio action proxies"
-msgstr ""
+msgstr "ಈ ಕ್ರಿಯೆಗಾಗಿನ ಪ್ರಾಕ್ಸಿಗಳು ರೇಡಿಯೋ ಕ್ರಿಯೆಯ ಪ್ರಾಕ್ಸಿಗಳೆಂದು ಕಾಣಿಸಕೊಳ್ಳಬೇಕೆ"
 
 #: ../gtk/gtktoggleaction.c:120
 msgid "If the toggle action should be active in or not"
-msgstr ""
+msgstr "ಟಾಗಲ್ ಕ್ರಿಯೆಯು ಸಕ್ರಿಯವಾಗಿರಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
 #: ../gtk/gtktogglebutton.c:116 ../gtk/gtktoggletoolbutton.c:115
 msgid "If the toggle button should be pressed in or not"
-msgstr ""
+msgstr "ಟಾಗಲ್ ಗುಂಡಿಯನ್ನು ಒತ್ತಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
 #: ../gtk/gtktogglebutton.c:124
 msgid "If the toggle button is in an \"in between\" state"
-msgstr ""
+msgstr "ಟಾಗಲ್ ಗುಂಡಿಯು ಒಂದು \"ನಡುವಿನ\" ಸ್ಥಿತಿಯಲ್ಲಿದ್ದರೆ"
 
 #: ../gtk/gtktogglebutton.c:131
 msgid "Draw Indicator"
-msgstr ""
+msgstr "ಸೂಚಕವನ್ನು ಚಿತ್ರಿಸು"
 
 #: ../gtk/gtktogglebutton.c:132
 msgid "If the toggle part of the button is displayed"
-msgstr ""
+msgstr "ಗುಂಡಿಯ ಟಾಗಲ್ ಭಾಗವನ್ನು ತೋರಿಸಬೇಕೆ"
 
 #: ../gtk/gtktoolbar.c:494
 msgid "Toolbar Style"
@@ -6420,7 +6405,7 @@ msgstr "ಬಾಣವನ್ನು ತೋರಿಸು"
 
 #: ../gtk/gtktoolbar.c:503
 msgid "If an arrow should be shown if the toolbar doesn't fit"
-msgstr ""
+msgstr "ಉಪಕರಣಪಟ್ಟಿಯು ಸೂಕ್ತವಾಗಿ ಸರಿಹೊಂದದೆ ಇದ್ದಲ್ಲಿ ಒಂದು ಬಾಣವನ್ನು ತೋರಿಸಬೇಕೆ"
 
 #: ../gtk/gtktoolbar.c:518
 msgid "Tooltips"
@@ -6428,7 +6413,7 @@ msgstr "ಸಲಕರಣೆ ಸುಳಿವುಗಳು"
 
 #: ../gtk/gtktoolbar.c:519
 msgid "If the tooltips of the toolbar should be active or not"
-msgstr ""
+msgstr "ಉಪಕರಣಪಟ್ಟಿಯ ಉಪಕರಣ-ಸಲಹೆಗಳು ಸಕ್ರಿಯವಾಗಿರಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
 #: ../gtk/gtktoolbar.c:541
 msgid "Size of icons in this toolbar"
@@ -6440,15 +6425,15 @@ msgstr "ಹೊಂದಿಸಲಾದ ಚಿಹ್ನೆ ಗಾತ್ರ"
 
 #: ../gtk/gtktoolbar.c:557
 msgid "Whether the icon-size property has been set"
-msgstr ""
+msgstr "ಚಿಹ್ನೆ-ಗಾತ್ರದ ಗುಣವನ್ನು ಹೊಂದಿಸಲಾಗಿದೆಯೆ"
 
 #: ../gtk/gtktoolbar.c:566
 msgid "Whether the item should receive extra space when the toolbar grows"
-msgstr ""
+msgstr "ಉಪಕರಣಪಟ್ಟಿಯು ಬೆಳದಂತೆಲ್ಲಾ ಅಂಶವು ಹೆಚ್ಚಿನ ಸ್ಥಳವನ್ನು ಪಡೆದುಕೊಳ್ಳಬೇಕೆ"
 
 #: ../gtk/gtktoolbar.c:574
 msgid "Whether the item should be the same size as other homogeneous items"
-msgstr ""
+msgstr "ಅಂಶಗಳು ಏಕರೀತಿಯ ಅಂಶಗಳಂತಹ ಗಾತ್ರದ್ದೇ ಆಗಿರಬೇಕೆ"
 
 #: ../gtk/gtktoolbar.c:581
 msgid "Spacer size"
@@ -6456,11 +6441,11 @@ msgstr "ಸ್ಪೇಸರಿನ ಗಾತ್ರ"
 
 #: ../gtk/gtktoolbar.c:582
 msgid "Size of spacers"
-msgstr ""
+msgstr "ಅಂತರಗಳ ಗಾತ್ರ"
 
 #: ../gtk/gtktoolbar.c:591
 msgid "Amount of border space between the toolbar shadow and the buttons"
-msgstr ""
+msgstr "ಉಪಕರಣಪಟ್ಟಿಯ ನೆರಳು ಹಾಗು ಗುಂಡಿಗಳ ನಡುವಿನ ಅಂಚಿನ ಸ್ಥಳ"
 
 #: ../gtk/gtktoolbar.c:599
 msgid "Maximum child expand"
@@ -6514,7 +6499,7 @@ msgstr "ಅಂಶದಲ್ಲಿ ತೋರಿಸಬೇಕಿರುವ ಪಠ್�
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
-msgstr ""
+msgstr "ಹೊಂದಿಸಲಾಗಿದ್ದಲ್ಲಿ, ಮುಂದಿನ ಅಕ್ಷರವನ್ನು ಮಿತಿಮೀರಿದ ಮೆನುವಿನಲ್ಲಿನ ನಿಮೋನಿಕ್(mnemonic) ವೇಗವರ್ಧಕ ಕೀಲಿಯನ್ನು ಬಳಸುವಂತೆ ಲೇಬಲ್‌ ಗುಣದಲ್ಲಿನ ಒಂದು ಅಡಿಗೆರೆ ಸೂಚಿಸುತ್ತದೆ"
 
 #: ../gtk/gtktoolbutton.c:217
 msgid "Widget to use as the item label"
@@ -6557,6 +6542,8 @@ msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 msgstr ""
+"ಉಪಕರಣಪಟ್ಟಿ ಅಂಶವನ್ನು ಪ್ರಮುಖವಾದದ್ದು ಎಂದು ಪರಿಗಣಿಸಬೇಕೆ. TRUE ಆದಲ್ಲಿ, ಉಪಕರಣಪಟ್ಟಿ ಗುಂಡಿಗಳು"
+"GTK_TOOLBAR_BOTH_HORIZ ಕ್ರಮದಲ್ಲಿ ಪಠ್ಯವನ್ನು ತೋರಿಸುತ್ತದೆ"
 
 #: ../gtk/gtktreemodelsort.c:274
 msgid "TreeModelSort Model"
@@ -6902,17 +6889,17 @@ msgstr "ವಿಲೀನಗೊಳಿಸಲಾದ UI ಅನ್ನು ವಿವರ�
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport"
-msgstr ""
+msgstr "ನೋಟಸಂಪರ್ಕಸ್ಥಾನದ ಅಡ್ಡ ಇರುವಿಕೆಯನ್ನು ಮೌಲ್ಯಗಳನ್ನು ಸೂಚಿಸುವ GtkAdjustment"
 
 #: ../gtk/gtkviewport.c:115
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport"
-msgstr ""
+msgstr "ನೋಟಸಂಪರ್ಕಸ್ಥಾನದ ಲಂಬ ಇರುವಿಕೆಯನ್ನು ಮೌಲ್ಯಗಳನ್ನು ಸೂಚಿಸುವ GtkAdjustment"
 
 #: ../gtk/gtkviewport.c:123
 msgid "Determines how the shadowed box around the viewport is drawn"
-msgstr ""
+msgstr "ನೋಟಸಂಪರ್ಕಸ್ಥಾನದ ಸುತ್ತಲಿನ ನೆರಳನ್ನು ಹೊಂದಿರುವ ಚೌಕವನ್ನು ಹೇಗೆ ಚಿತ್ರಿಸಬೇಕು ಎಂದು ನಿರ್ಧರಿಸುತ್ತದೆ"
 
 #: ../gtk/gtkwidget.c:483
 msgid "Widget name"
