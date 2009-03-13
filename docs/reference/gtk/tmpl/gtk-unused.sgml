@@ -3468,6 +3468,16 @@ Creates a border around the arrows of a #GtkSpinButton. The type of border is de
 @style: 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_style_get_property ##### -->
+<para>
+
+</para>
+
+@style: 
+@widget_type: 
+@property_name: 
+@value: 
+
 <!-- ##### FUNCTION gtk_text_buffer_paste_primary ##### -->
 <para>
 

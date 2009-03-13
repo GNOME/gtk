@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-02 14:38-0500\n"
+"POT-Creation-Date: 2009-03-13 10:29-0400\n"
 "PO-Revision-Date: 2008-09-18 22:25+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
@@ -1542,15 +1542,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "फोन्ट निवडणे"
 
-#: gtk/gtkentry.c:8411 gtk/gtktextview.c:7766
+#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7766
 msgid "Input _Methods"
 msgstr "इनपुट पद्धती (_M)"
 
-#: gtk/gtkentry.c:8425 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7780
 msgid "_Insert Unicode Control Character"
 msgstr "युनिकोड नियंत्रण अक्षर घाला(_I)"
 
-#: gtk/gtkentry.c:9793
+#: gtk/gtkentry.c:9797
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "ठिकाण प्रतिलिपी करा(_L)"
@@ -2256,35 +2256,35 @@ msgstr "GTK+ पर्याय दाखवा"
 msgid "Co_nnect"
 msgstr "जुळवणी (_n)"
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:530
 msgid "Connect _anonymously"
 msgstr "निनावी जुळवणी (_a)"
 
-#: gtk/gtkmountoperation.c:538
+#: gtk/gtkmountoperation.c:539
 msgid "Connect as u_ser:"
 msgstr "वापरकर्ता स्वरूप जुळवणी (_s):"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:577
 msgid "_Username:"
 msgstr "वापरकर्ता नाव (_U):"
 
-#: gtk/gtkmountoperation.c:579
+#: gtk/gtkmountoperation.c:582
 msgid "_Domain:"
 msgstr "क्षेत्र (_D):"
 
-#: gtk/gtkmountoperation.c:584
+#: gtk/gtkmountoperation.c:588
 msgid "_Password:"
 msgstr "गुप्तशब्द(_P):"
 
-#: gtk/gtkmountoperation.c:602
+#: gtk/gtkmountoperation.c:606
 msgid "Forget password _immediately"
 msgstr "गुप्तशब्द लगेच विसरा (_i)"
 
-#: gtk/gtkmountoperation.c:612
+#: gtk/gtkmountoperation.c:616
 msgid "Remember password until you _logout"
 msgstr "लॉगऑउट होईपर्यंत गुप्तशब्द लक्षात ठेवा (_l)"
 
-#: gtk/gtkmountoperation.c:622
+#: gtk/gtkmountoperation.c:626
 msgid "Remember _forever"
 msgstr "नेहमीकरीता लक्षात ठेवा (_f)"
 

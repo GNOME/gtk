@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.15.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-02 14:38-0500\n"
+"POT-Creation-Date: 2009-03-13 10:29-0400\n"
 "PO-Revision-Date: 2009-02-23 20:23+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
@@ -1505,15 +1505,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "顏色選擇"
 
-#: gtk/gtkentry.c:8411 gtk/gtktextview.c:7766
+#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7766
 msgid "Input _Methods"
 msgstr "輸入法(_M)"
 
-#: gtk/gtkentry.c:8425 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7780
 msgid "_Insert Unicode Control Character"
 msgstr "插入統一碼控制字元(_I)"
 
-#: gtk/gtkentry.c:9793
+#: gtk/gtkentry.c:9797
 msgid "Caps Lock is on"
 msgstr "Cpas Lock 已開啟"
 
@@ -2211,35 +2211,35 @@ msgstr "顯示 GTK+ 選項"
 msgid "Co_nnect"
 msgstr "連線(_N)"
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:530
 msgid "Connect _anonymously"
 msgstr "匿名連線(_A)"
 
-#: gtk/gtkmountoperation.c:538
+#: gtk/gtkmountoperation.c:539
 msgid "Connect as u_ser:"
 msgstr "以使用者連線(_S):"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:577
 msgid "_Username:"
 msgstr "使用者名稱(_U):"
 
-#: gtk/gtkmountoperation.c:579
+#: gtk/gtkmountoperation.c:582
 msgid "_Domain:"
 msgstr "網域(_D):"
 
-#: gtk/gtkmountoperation.c:584
+#: gtk/gtkmountoperation.c:588
 msgid "_Password:"
 msgstr "密碼(_P):"
 
-#: gtk/gtkmountoperation.c:602
+#: gtk/gtkmountoperation.c:606
 msgid "Forget password _immediately"
 msgstr "立刻忘記密碼(_I)"
 
-#: gtk/gtkmountoperation.c:612
+#: gtk/gtkmountoperation.c:616
 msgid "Remember password until you _logout"
 msgstr "記憶密碼到登出之前(_L)"
 
-#: gtk/gtkmountoperation.c:622
+#: gtk/gtkmountoperation.c:626
 msgid "Remember _forever"
 msgstr "永遠記住密碼(_F)"
 

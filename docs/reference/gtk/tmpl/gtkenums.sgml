@@ -405,8 +405,8 @@ unresponsive to user actions.
 Indicates the direction a sub-menu will appear.
 </para>
 
-@GTK_DIRECTION_LEFT: A sub-menu will appear
-@GTK_DIRECTION_RIGHT: 
+@GTK_DIRECTION_LEFT: A sub-menu will appear to the left of the current menu.
+@GTK_DIRECTION_RIGHT: A sub-menu will appear to the right of the current menu.
 
 <!-- ##### ENUM GtkSubmenuPlacement ##### -->
 <para>

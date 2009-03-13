@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-02 14:38-0500\n"
+"POT-Creation-Date: 2009-03-13 10:29-0400\n"
 "PO-Revision-Date: 2003-02-11\n"
 "Last-Translator: Raphael Finkel <raphael@cs.uky.edu>\n"
 "Language-Team: None <>\n"
@@ -1618,16 +1618,16 @@ msgstr ""
 msgid "Color Selection"
 msgstr "שריפֿט סעלעקציע"
 
-#: gtk/gtkentry.c:8411 gtk/gtktextview.c:7766
+#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7766
 msgid "Input _Methods"
 msgstr "אַרײַנשרײַב־מיטלען"
 
-#: gtk/gtkentry.c:8425 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7780
 #, fuzzy
 msgid "_Insert Unicode Control Character"
 msgstr "לײג אַרײַן אוניקאָד קאָנטראָל־שריפֿטצײכן"
 
-#: gtk/gtkentry.c:9793
+#: gtk/gtkentry.c:9797
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "סעלעקציע: "
@@ -2373,38 +2373,38 @@ msgstr ""
 msgid "Co_nnect"
 msgstr "צי איבער"
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:530
 msgid "Connect _anonymously"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:538
+#: gtk/gtkmountoperation.c:539
 msgid "Connect as u_ser:"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:577
 #, fuzzy
 msgid "_Username:"
 msgstr "פֿאַרװאַנדל נאָמען"
 
-#: gtk/gtkmountoperation.c:579
+#: gtk/gtkmountoperation.c:582
 #, fuzzy
 msgid "_Domain:"
 msgstr "סעלעקציע: "
 
-#: gtk/gtkmountoperation.c:584
+#: gtk/gtkmountoperation.c:588
 #, fuzzy
 msgid "_Password:"
 msgstr "דריקונג"
 
-#: gtk/gtkmountoperation.c:602
+#: gtk/gtkmountoperation.c:606
 msgid "Forget password _immediately"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:612
+#: gtk/gtkmountoperation.c:616
 msgid "Remember password until you _logout"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:622
+#: gtk/gtkmountoperation.c:626
 msgid "Remember _forever"
 msgstr ""
 

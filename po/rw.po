@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-02 14:38-0500\n"
+"POT-Creation-Date: 2009-03-13 10:29-0400\n"
 "PO-Revision-Date: 2004-11-16 14:57-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -1750,16 +1750,16 @@ msgstr ""
 msgid "Color Selection"
 msgstr "gutoranya ibara"
 
-#: gtk/gtkentry.c:8411 gtk/gtktextview.c:7766
+#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7766
 msgid "Input _Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:8425 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7780
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
 # padmin/source\padialog.src:RID_PADIALOG.RID_PA_TXT_LOCATION.text
-#: gtk/gtkentry.c:9793
+#: gtk/gtkentry.c:9797
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Intaho:"
@@ -2554,41 +2554,41 @@ msgstr ""
 msgid "Co_nnect"
 msgstr "GUHINDURA"
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:530
 msgid "Connect _anonymously"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:538
+#: gtk/gtkmountoperation.c:539
 msgid "Connect as u_ser:"
 msgstr ""
 
 # basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_RENAMECURRENT.text
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:577
 #, fuzzy
 msgid "_Username:"
 msgstr "Guhindura izina"
 
 # padmin/source\padialog.src:RID_PADIALOG.RID_PA_TXT_LOCATION.text
-#: gtk/gtkmountoperation.c:579
+#: gtk/gtkmountoperation.c:582
 #, fuzzy
 msgid "_Domain:"
 msgstr "Intaho:"
 
 # svx/source\dialog\rubydialog.src:RID_SVXDLG_RUBY.FT_PREVIEW.text
-#: gtk/gtkmountoperation.c:584
+#: gtk/gtkmountoperation.c:588
 #, fuzzy
 msgid "_Password:"
 msgstr "Igaragazambere:"
 
-#: gtk/gtkmountoperation.c:602
+#: gtk/gtkmountoperation.c:606
 msgid "Forget password _immediately"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:612
+#: gtk/gtkmountoperation.c:616
 msgid "Remember password until you _logout"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:622
+#: gtk/gtkmountoperation.c:626
 msgid "Remember _forever"
 msgstr ""
 

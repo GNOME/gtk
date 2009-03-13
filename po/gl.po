@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-02 14:38-0500\n"
+"POT-Creation-Date: 2009-03-13 10:29-0400\n"
 "PO-Revision-Date: 2008-10-18 16:34+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
@@ -1576,15 +1576,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Selección de cor"
 
-#: gtk/gtkentry.c:8411 gtk/gtktextview.c:7766
+#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7766
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: gtk/gtkentry.c:8425 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7780
 msgid "_Insert Unicode Control Character"
 msgstr "_Insertar carácter de control Unicode"
 
-#: gtk/gtkentry.c:9793
+#: gtk/gtkentry.c:9797
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Copiar _ubicación"
@@ -2296,35 +2296,35 @@ msgstr "Mostrar opcións GTK+"
 msgid "Co_nnect"
 msgstr "C_onectar"
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:530
 msgid "Connect _anonymously"
 msgstr "Conectar de maneira _anónima"
 
-#: gtk/gtkmountoperation.c:538
+#: gtk/gtkmountoperation.c:539
 msgid "Connect as u_ser:"
 msgstr "Conectar como u_suario:"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:577
 msgid "_Username:"
 msgstr "Nome de _usuario:"
 
-#: gtk/gtkmountoperation.c:579
+#: gtk/gtkmountoperation.c:582
 msgid "_Domain:"
 msgstr "_Dominio:"
 
-#: gtk/gtkmountoperation.c:584
+#: gtk/gtkmountoperation.c:588
 msgid "_Password:"
 msgstr "_Contrasinal"
 
-#: gtk/gtkmountoperation.c:602
+#: gtk/gtkmountoperation.c:606
 msgid "Forget password _immediately"
 msgstr "Esquecer contrasinal _inmediatamente"
 
-#: gtk/gtkmountoperation.c:612
+#: gtk/gtkmountoperation.c:616
 msgid "Remember password until you _logout"
 msgstr "Recordar o contrasinal até _saír da sesión"
 
-#: gtk/gtkmountoperation.c:622
+#: gtk/gtkmountoperation.c:626
 msgid "Remember _forever"
 msgstr "Recordar _para sempre"
 

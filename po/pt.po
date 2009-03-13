@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-02 14:38-0500\n"
+"POT-Creation-Date: 2009-03-13 10:29-0400\n"
 "PO-Revision-Date: 2009-02-14 16:30+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -1537,15 +1537,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Selecção de Fonte"
 
-#: gtk/gtkentry.c:8411 gtk/gtktextview.c:7766
+#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7766
 msgid "Input _Methods"
 msgstr "_Métodos de Introdução"
 
-#: gtk/gtkentry.c:8425 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7780
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserir Caracter de Controlo Unicode"
 
-#: gtk/gtkentry.c:9793
+#: gtk/gtkentry.c:9797
 msgid "Caps Lock is on"
 msgstr "Caps Lock está activo"
 
@@ -2252,35 +2252,35 @@ msgstr "Apresentar as Opções GTK+"
 msgid "Co_nnect"
 msgstr "Li_gar"
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:530
 msgid "Connect _anonymously"
 msgstr "Ligar _anonimamente"
 
-#: gtk/gtkmountoperation.c:538
+#: gtk/gtkmountoperation.c:539
 msgid "Connect as u_ser:"
 msgstr "Ligar como utili_zador:"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:577
 msgid "_Username:"
 msgstr "_Utilizador:"
 
-#: gtk/gtkmountoperation.c:579
+#: gtk/gtkmountoperation.c:582
 msgid "_Domain:"
 msgstr "_Domínio:"
 
-#: gtk/gtkmountoperation.c:584
+#: gtk/gtkmountoperation.c:588
 msgid "_Password:"
 msgstr "_Senha:"
 
-#: gtk/gtkmountoperation.c:602
+#: gtk/gtkmountoperation.c:606
 msgid "Forget password _immediately"
 msgstr "_Esquecer a senha imediatamente"
 
-#: gtk/gtkmountoperation.c:612
+#: gtk/gtkmountoperation.c:616
 msgid "Remember password until you _logout"
 msgstr "_Recordar a senha até terminar a sessão"
 
-#: gtk/gtkmountoperation.c:622
+#: gtk/gtkmountoperation.c:626
 msgid "Remember _forever"
 msgstr "Recordar para _sempre"
 

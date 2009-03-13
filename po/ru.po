@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-02 14:38-0500\n"
+"POT-Creation-Date: 2009-03-13 10:29-0400\n"
 "PO-Revision-Date: 2008-10-26 23:42+0800\n"
 "Last-Translator: Anton Shestakov <engored@ya.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -1565,16 +1565,16 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Выбор цвета"
 
-#: gtk/gtkentry.c:8411 gtk/gtktextview.c:7766
+#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7766
 msgid "Input _Methods"
 msgstr "_Методы ввода"
 
 # длинный перевод слишком сильно растягивает контекстное меню
-#: gtk/gtkentry.c:8425 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7780
 msgid "_Insert Unicode Control Character"
 msgstr "Вст_авить управляющий символ Юникод"
 
-#: gtk/gtkentry.c:9793
+#: gtk/gtkentry.c:9797
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Копировать _адрес"
@@ -2279,35 +2279,35 @@ msgstr "Показать параметры GTK+"
 msgid "Co_nnect"
 msgstr "_Подключиться"
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:530
 msgid "Connect _anonymously"
 msgstr "Подключиться _анонимно"
 
-#: gtk/gtkmountoperation.c:538
+#: gtk/gtkmountoperation.c:539
 msgid "Connect as u_ser:"
 msgstr "Подключиться _как:"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:577
 msgid "_Username:"
 msgstr "_Имя пользователя:"
 
-#: gtk/gtkmountoperation.c:579
+#: gtk/gtkmountoperation.c:582
 msgid "_Domain:"
 msgstr "_Домен:"
 
-#: gtk/gtkmountoperation.c:584
+#: gtk/gtkmountoperation.c:588
 msgid "_Password:"
 msgstr "_Пароль:"
 
-#: gtk/gtkmountoperation.c:602
+#: gtk/gtkmountoperation.c:606
 msgid "Forget password _immediately"
 msgstr "_Забыть пароль немедленно"
 
-#: gtk/gtkmountoperation.c:612
+#: gtk/gtkmountoperation.c:616
 msgid "Remember password until you _logout"
 msgstr "Запомнить пароль _до выхода из сеанса"
 
-#: gtk/gtkmountoperation.c:622
+#: gtk/gtkmountoperation.c:626
 msgid "Remember _forever"
 msgstr "Запомнить _навсегда"
 

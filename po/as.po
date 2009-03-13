@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-02 14:38-0500\n"
+"POT-Creation-Date: 2009-03-13 10:29-0400\n"
 "PO-Revision-Date: 2009-03-11 12:57+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@fedoraproject.org>\n"
 "Language-Team: American English <fedora-trans-as@redhat.com>\n"
@@ -19,7 +19,8 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n!=1)\n"
 
-#: gdk/gdk.c:103, c-format
+#: gdk/gdk.c:103
+#, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "--gdk-debug বিকল্প বিশ্লেষণ কৰিবলৈ সমস্যা"
 
@@ -285,17 +286,21 @@ msgstr "প্ৰতিমুৰ্তিৰ নথিপত্ৰ '%s' ত ক�
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1016
 #: gdk-pixbuf/gdk-pixbuf-io.c:1280 tests/testfilechooser.c:267
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "'%s' প্ৰতিমুৰ্তি তুলি লোৱাত অক্ষম: কাৰণ অজ্ঞাত, খুব সম্ভৱ এটা প্ৰদূষিত প্ৰতিমুৰ্তিৰ নথিপত্ৰ"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"'%s' প্ৰতিমুৰ্তি তুলি লোৱাত অক্ষম: কাৰণ অজ্ঞাত, খুব সম্ভৱ এটা প্ৰদূষিত প্ৰতিমুৰ্তিৰ নথিপত্ৰ"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:221
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr "'%s' সঞ্জীবন তুলি লোৱাত অক্ষম: কাৰণ অজ্ঞাত, খুব সম্ভৱ এটা প্ৰদূষিত সঞ্জীবন নথিপত্ৰ"
+msgstr ""
+"'%s' সঞ্জীবন তুলি লোৱাত অক্ষম: কাৰণ অজ্ঞাত, খুব সম্ভৱ এটা প্ৰদূষিত সঞ্জীবন নথিপত্ৰ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:701, c-format
+#: gdk-pixbuf/gdk-pixbuf-io.c:701
+#, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "প্ৰতিমুৰ্তি-তোলা অংশ তুলি লোৱাত ভুল: %s: %s"
 
@@ -615,7 +620,8 @@ msgstr "JPEG 2000 নথিপত্ৰ খুলিব'লৈ অপৰ্য�
 
 #: gdk-pixbuf/io-jasper.c:264
 msgid "Couldn't allocate memory to buffer image data"
-msgstr "প্ৰতিমূৰ্তিৰ তথ্যক মধ্যৱৰ্তী অৱস্থাত ৰক্ষা কৰিবলৈ স্মৃতিশক্তি বিতৰণ কৰিব পৰা ন'গ'ল"
+msgstr ""
+"প্ৰতিমূৰ্তিৰ তথ্যক মধ্যৱৰ্তী অৱস্থাত ৰক্ষা কৰিবলৈ স্মৃতিশক্তি বিতৰণ কৰিব পৰা ন'গ'ল"
 
 #: gdk-pixbuf/io-jasper.c:308
 msgid "The JPEG 2000 image format"
@@ -653,11 +659,13 @@ msgstr "পৰিবৰ্ত্তিত JPEG ৰ শুণ্য বহল ব
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr "JPEG গুণৰ মান ০ আৰু ১০০ ৰ মাজৰ হ'ব লাগিব; '%s' মানৰ বিশ্লেষণ কৰিব পৰা ন'গ'ল ।"
+msgstr ""
+"JPEG গুণৰ মান ০ আৰু ১০০ ৰ মাজৰ হ'ব লাগিব; '%s' মানৰ বিশ্লেষণ কৰিব পৰা ন'গ'ল ।"
 
 #: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG গুণৰ মান ০ আৰু ১০০ ৰ মাজৰ হ'ব লাগিব; '%d' মানৰ অনুমতি নাই ।"
 
 #: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
@@ -757,7 +765,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG প্ৰতিমুৰ্তিৰ নথিপত্ৰ পঢ়োঁতে ভয়াবহ ভুল: %s"
 
 #: gdk-pixbuf/io-png.c:825
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG লিপি খণ্ডৰ চাবিত অতি কমেও ১টা আৰু অতি বেচি ৭৯টা আখৰ হ'ব লাগিব ।"
 
 #: gdk-pixbuf/io-png.c:833
@@ -1320,7 +1329,8 @@ msgstr "২০০০"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1834 gtk/gtkcalendar.c:2492, c-format
+#: gtk/gtkcalendar.c:1834 gtk/gtkcalendar.c:2492
+#, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
 msgstr "%d %%"
@@ -1335,7 +1345,8 @@ msgstr "%d %%"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1866 gtk/gtkcalendar.c:2355, c-format
+#: gtk/gtkcalendar.c:1866 gtk/gtkcalendar.c:2355
+#, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
 msgstr "%d %%"
@@ -1512,15 +1523,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "ৰঙৰ নিৰ্ব্বাচন"
 
-#: gtk/gtkentry.c:8411 gtk/gtktextview.c:7766
+#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7766
 msgid "Input _Methods"
 msgstr "নিবেশ পদ্ধতি (_M)"
 
-#: gtk/gtkentry.c:8425 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7780
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode নিয়ন্ত্ৰণ আকৰ ভৰাওক (_I)"
 
-#: gtk/gtkentry.c:9793
+#: gtk/gtkentry.c:9797
 msgid "Caps Lock is on"
 msgstr "ক্যাপ্স-লক কি সক্ৰিয় আছে"
 
@@ -1731,7 +1742,8 @@ msgstr "নথিপত্ৰৰ নাম \"%s\" ইতিমধ্যে আ�
 
 #: gtk/gtkfilechooserdefault.c:8152 gtk/gtkprintunixdialog.c:374
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "নথিপত্ৰ ইতিমধ্যে \"%s\" ত আছে । প্ৰতিস্থাপন কৰিলে বিষয়বস্তু পুনঃ লিখা যাব ।"
 
 #: gtk/gtkfilechooserdefault.c:8157 gtk/gtkprintunixdialog.c:381
@@ -1886,7 +1898,8 @@ msgstr "নথিপত্ৰ পুনঃনামকৰণ কৰক (_R)"
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ফোল্ডাৰৰ নাম \"%s\" ত এনে চিহ্ন আছে যিবোৰৰ নথিপত্ৰৰ নামত অনুমতি নাই"
 
 #: gtk/gtkfilesel.c:1392
@@ -2077,7 +2090,8 @@ msgctxt "input method menu"
 msgid "System"
 msgstr "ব্যৱস্থাপ্ৰণালী"
 
-#: gtk/gtkimmulticontext.c:625, c-format
+#: gtk/gtkimmulticontext.c:625
+#, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "ব্যৱস্থাপ্ৰণালী (%s)"
@@ -2220,35 +2234,35 @@ msgstr "GTK+ বিকল্প দেখুৱাওক"
 msgid "Co_nnect"
 msgstr "সংযোগ কৰক (_n)"
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:530
 msgid "Connect _anonymously"
 msgstr "অজ্ঞাত ৰূপে সংযোগ কৰক (_a)"
 
-#: gtk/gtkmountoperation.c:538
+#: gtk/gtkmountoperation.c:539
 msgid "Connect as u_ser:"
 msgstr "ব্যৱহাৰকৰোঁতা হিচাপে সংযোগ কৰক (_s):"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:577
 msgid "_Username:"
 msgstr "ব্যৱহাৰকৰোঁতাৰ নাম (_U):"
 
-#: gtk/gtkmountoperation.c:579
+#: gtk/gtkmountoperation.c:582
 msgid "_Domain:"
 msgstr "ডোমেইন (_D):"
 
-#: gtk/gtkmountoperation.c:584
+#: gtk/gtkmountoperation.c:588
 msgid "_Password:"
 msgstr "গুপ্তশব্দ (_P):"
 
-#: gtk/gtkmountoperation.c:602
+#: gtk/gtkmountoperation.c:606
 msgid "Forget password _immediately"
 msgstr "তৎক্ষণাৎ গুপ্তশব্দ পাহৰি যাওক (_i)"
 
-#: gtk/gtkmountoperation.c:612
+#: gtk/gtkmountoperation.c:616
 msgid "Remember password until you _logout"
 msgstr "বাহিৰ হোৱা লৈকে গুপ্তশব্দ মনত ৰাখিব (_l)"
 
-#: gtk/gtkmountoperation.c:622
+#: gtk/gtkmountoperation.c:626
 msgid "Remember _forever"
 msgstr "চিৰকাললৈ মনত ৰাখিব (_f)"
 
@@ -2853,7 +2867,8 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: gtk/gtkrecentchoosermenu.c:821, c-format
+#: gtk/gtkrecentchoosermenu.c:821
+#, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
@@ -3437,7 +3452,8 @@ msgstr "\"%s\" এটা বৈধ গুণৰ নাম নহয়"
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" ক \"%s\" ধৰণৰ মানলৈ সলনি কৰিব পৰা ন'গ'ল \"%s\" গুণৰ বাবে"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3474,7 +3490,8 @@ msgid "Serialized data is malformed"
 msgstr "ধাৰাবাহিক তথ্য বিকৃত"
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "ধাৰাবাহিক তথ্য বিকৃত । প্ৰথম খণ্ড GTKTEXTBUFFERCONTENTS-0001 নহয়"
 
 #: gtk/gtktextutil.c:61

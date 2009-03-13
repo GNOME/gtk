@@ -1,43 +1,51 @@
+'\" t
 .\"     Title: gtk-builder-convert
-.\"    Author: 
-.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
-.\"      Date: 07/10/2007
-.\"    Manual: 
-.\"    Source: 
+.\"    Author: [FIXME: author] [see http://docbook.sf.net/el/author]
+.\" Generator: DocBook XSL Stylesheets v1.74.2 <http://docbook.sf.net/>
+.\"      Date: 03/13/2009
+.\"    Manual: [FIXME: manual]
+.\"    Source: [FIXME: source]
+.\"  Language: English
 .\"
-.TH "GTK\-BUILDER\-CONVERT" "1" "07/10/2007" "" ""
+.TH "GTK\-BUILDER\-CONVER" "1" "03/13/2009" "[FIXME: source]" "[FIXME: manual]"
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
 .SH "NAME"
-gtk\-builder\-convert \- Glade file conversion utility
+gtk-builder-convert \- Glade file conversion utility
 .SH "SYNOPSIS"
-.HP 20
+.HP \w'\fBgtk\-builder\-convert\fR\ 'u
 \fBgtk\-builder\-convert\fR [\-\-skip\-windows] [\-\-root\ \fIname\fR] {input} {output}
 .SH "DESCRIPTION"
 .PP
 \fBgtk\-builder\-convert\fR
-converts glade files into XML files which can be loaded with #GtkBuilder.
+converts glade files into XML files which can be loaded with GtkBuilder\&.
 .PP
-It expects the name of a glade file as the first argument, and writes its output the file specified as the second argument.
+It expects the name of a glade file as the first argument, and writes its output the file specified as the second argument\&.
 .SH "OPTIONS"
 .PP
 \-\-skip\-windows, \-w
 .RS 4
-Convert everything but GtkWindow subclasses.
+Convert everything but GtkWindow subclasses\&.
 .RE
 .PP
 \-\-root, \-r
 .RS 4
 Convert only the widget named
 \fIname\fR
-and its children.
+and its children\&.
 .RE
 .SH "BUGS"
 .PP
-Toolbars are not handled.
+Toolbars are not handled\&.
 .PP
-Support for accessibility is not yet implemented.
+Support for accessibility is not yet implemented\&.
 .PP
-The script requires a python interpreter to run.
+The script requires a python interpreter to run\&.

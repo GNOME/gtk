@@ -10,14 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: te\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-02 14:38-0500\n"
+"POT-Creation-Date: 2009-03-13 10:29-0400\n"
 "PO-Revision-Date: 2009-03-03 18:30+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"\n"
 "\n"
 "\n"
 "X-Generator: KBabel 1.11.4\n"
@@ -289,15 +290,18 @@ msgstr "'%s' ప్రతిబింబ దస్త్రంలో ఏ దత�
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1016
 #: gdk-pixbuf/gdk-pixbuf-io.c:1280 tests/testfilechooser.c:267
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr " ప్రతిబింబం   '%s'ను నింపుటలో విఫలమైంది. కారణం తెలియదు.  బహుశా    ఈ దస్త్రం చెడిపోయి వుండవచ్చు."
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+" ప్రతిబింబం   '%s'ను నింపుటలో విఫలమైంది. కారణం తెలియదు.  బహుశా    ఈ దస్త్రం చెడిపోయి వుండవచ్చు."
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:221
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr "'%s': సచేతనాన్ని నింపుటలో విఫలమైంది. కారణం తెలియదు . బహుశా  సచేతన దస్త్రము చెడిపోయి  వుండవచ్చు."
+msgstr ""
+"'%s': సచేతనాన్ని నింపుటలో విఫలమైంది. కారణం తెలియదు . బహుశా  సచేతన దస్త్రము చెడిపోయి  వుండవచ్చు."
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:701
 #, c-format
@@ -364,7 +368,8 @@ msgstr "'%s' వ్రాయుట కొరకు  తెరచుట  వి�
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr " '%s' ప్రతిబింబాన్ని రాస్తున్నప్పుడు  %sను మూయుటలో విఫలమైంది. దత్తాంశమంతా దాచిపెట్టబడి వుండకపోవచ్చు."
+msgstr ""
+" '%s' ప్రతిబింబాన్ని రాస్తున్నప్పుడు  %sను మూయుటలో విఫలమైంది. దత్తాంశమంతా దాచిపెట్టబడి వుండకపోవచ్చు."
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2256 gdk-pixbuf/gdk-pixbuf-io.c:2307
 msgid "Insufficient memory to save image into a buffer"
@@ -473,7 +478,8 @@ msgstr "GIF చదువుటలో విఫలమైంది.: %s"
 
 #: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF దస్త్రము కొంత దత్తాంశాన్ని కోల్పోయింది.  (బహుశా దాని చివరి భాగం  ఎలాగో కత్తిరించబడి వుంటుంది?)"
+msgstr ""
+"GIF దస్త్రము కొంత దత్తాంశాన్ని కోల్పోయింది.  (బహుశా దాని చివరి భాగం  ఎలాగో కత్తిరించబడి వుంటుంది?)"
 
 #: gdk-pixbuf/io-gif.c:505
 #, c-format
@@ -522,7 +528,8 @@ msgstr "GIF దస్త్ర రూప లావణ్యం%s వివరణ
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr "GIF ప్రతిబింబానికి ప్రాపంచిక వర్ణసంధానం లేదుమరియు ఫలకములోపల దానికి స్థానిక వర్ణసంధానం కూడా లేదు."
+msgstr ""
+"GIF ప్రతిబింబానికి ప్రాపంచిక వర్ణసంధానం లేదుమరియు ఫలకములోపల దానికి స్థానిక వర్ణసంధానం కూడా లేదు."
 
 #: gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
@@ -658,7 +665,8 @@ msgstr "JPEG నాణ్యత 0కు100 మధ్య విలువఅయి
 
 #: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG నాణ్యత 0కు100కు మధ్య విలువ అయివుండవలెను '%d విలువ ఆమోదింపబడదు"
 
 #: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
@@ -758,8 +766,10 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ప్రతిబింబ దస్త్రం %s ను చదువుటలో అనివార్య దోషం"
 
 #: gdk-pixbuf/io-png.c:825
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "PNG పాఠ్య ఖండాలకొరకు మీటలు అతి తక్కువగా ఒకఅక్షరాన్ని అతి ఎక్కువగా 79అక్షరములను కలిగివుండవలెను"
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr ""
+"PNG పాఠ్య ఖండాలకొరకు మీటలు అతి తక్కువగా ఒకఅక్షరాన్ని అతి ఎక్కువగా 79అక్షరములను కలిగివుండవలెను"
 
 #: gdk-pixbuf/io-png.c:833
 msgid "Keys for PNG text chunks must be ASCII characters."
@@ -1489,7 +1499,8 @@ msgstr ""
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
-msgstr "మీరు ఎన్నుకున్న వర్ణము. దీనిని మీరు పలకం నమోదు మీదకు లాగుట ద్వారా భవిష్యత్లో వాడుటకు దాచుకోగలరు."
+msgstr ""
+"మీరు ఎన్నుకున్న వర్ణము. దీనిని మీరు పలకం నమోదు మీదకు లాగుట ద్వారా భవిష్యత్లో వాడుటకు దాచుకోగలరు."
 
 #: gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
@@ -1507,15 +1518,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "వర్ణెంపిక"
 
-#: gtk/gtkentry.c:8411 gtk/gtktextview.c:7766
+#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7766
 msgid "Input _Methods"
 msgstr "ఎగుబడి విధానములు(_M)"
 
-#: gtk/gtkentry.c:8425 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7780
 msgid "_Insert Unicode Control Character"
 msgstr "యునికోడ్ నియంత్రణ అక్షరాన్ని ప్రవేశపెట్టుము(_I)"
 
-#: gtk/gtkentry.c:9793
+#: gtk/gtkentry.c:9797
 msgid "Caps Lock is on"
 msgstr "Caps Lock ఆనైవుంది"
 
@@ -1725,7 +1736,8 @@ msgstr "దస్త్రనామము \"%s\" ఇప్పటికే ఉం
 
 #: gtk/gtkfilechooserdefault.c:8152 gtk/gtkprintunixdialog.c:374
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "దస్త్రము ఇప్పటికే \"%s\" లో ఉంది.  దానిని పునఃస్థాపించుట వలన దాని విషయాలు తిరిగివ్రాయబడతాయి."
 
 #: gtk/gtkfilechooserdefault.c:8157 gtk/gtkprintunixdialog.c:381
@@ -1740,7 +1752,8 @@ msgstr "శోధన ప్రోసెస్ ను ప్రారంభిం
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
-msgstr "ఇండెక్సర్ డెమోన్ కు ప్రోగ్రాము అనుసంధానంను సృష్టించలేకపోయింది.  దయచేసి అది నడుచు నట్లు చూడండి."
+msgstr ""
+"ఇండెక్సర్ డెమోన్ కు ప్రోగ్రాము అనుసంధానంను సృష్టించలేకపోయింది.  దయచేసి అది నడుచు నట్లు చూడండి."
 
 #: gtk/gtkfilechooserdefault.c:8929
 msgid "Could not send the search request"
@@ -1877,7 +1890,8 @@ msgstr "దస్త్రమునకు పునఃనామకారణం�
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr " \"%s\" అను పేరుగల సంచి  దస్త్రనామములో అనుమతింపబడని చిహ్నాలను కలిగివున్నది."
 
 #: gtk/gtkfilesel.c:1392
@@ -2212,35 +2226,35 @@ msgstr " GTK+ ఇచ్ఛాపూర్వకాలను చూపుము"
 msgid "Co_nnect"
 msgstr "అనుసంధానించు (_n)"
 
-#: gtk/gtkmountoperation.c:529
+#: gtk/gtkmountoperation.c:530
 msgid "Connect _anonymously"
 msgstr "పేరులేకుండా అనుసంధానించు (_a)"
 
-#: gtk/gtkmountoperation.c:538
+#: gtk/gtkmountoperation.c:539
 msgid "Connect as u_ser:"
 msgstr "వినియోగదారిలా అనుసంధానించు (_s):"
 
-#: gtk/gtkmountoperation.c:575
+#: gtk/gtkmountoperation.c:577
 msgid "_Username:"
 msgstr "వినియోగదారినామము (_U):"
 
-#: gtk/gtkmountoperation.c:579
+#: gtk/gtkmountoperation.c:582
 msgid "_Domain:"
 msgstr "డొమైన్ (_D):"
 
-#: gtk/gtkmountoperation.c:584
+#: gtk/gtkmountoperation.c:588
 msgid "_Password:"
 msgstr "సంకేతపదము (_P):"
 
-#: gtk/gtkmountoperation.c:602
+#: gtk/gtkmountoperation.c:606
 msgid "Forget password _immediately"
 msgstr "సంకేతపదమును తక్షణమే మర్చిపో (_i)"
 
-#: gtk/gtkmountoperation.c:612
+#: gtk/gtkmountoperation.c:616
 msgid "Remember password until you _logout"
 msgstr "మీరు లాగ్అవుట్ అయ్యేవరకు సంకేతపదమును గుర్తుంచుకొనుము (_l)"
 
-#: gtk/gtkmountoperation.c:622
+#: gtk/gtkmountoperation.c:626
 msgid "Remember _forever"
 msgstr "ఎప్పటికి గుర్తుంచుకొనుము (_f)"
 
@@ -3430,7 +3444,8 @@ msgstr "\"%s\" అనునది చెల్లునటువంటి యా
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" అనునది \"%s\" రకమైన విలువకు \"%s\" యాట్రిబ్యూట్ కొరకు మార్చబడలేదు"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3467,7 +3482,8 @@ msgid "Serialized data is malformed"
 msgstr "క్రమపరిచిన డాటా తప్పైనది"
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "క్రమపరిచిన డాటా తప్పైనది. మొదటి విభాగం GTKTEXTBUFFERCONTENTS-0001 కాదు"
 
 #: gtk/gtktextutil.c:61
@@ -4712,7 +4728,7 @@ msgstr "PS స్థాయి 2కు మార్చుము"
 msgid "No pre-filtering"
 msgstr "ముందస్తు-వడపోత లేదు"
 
-	#. Translators: "Miscellaneous" is the label for a button, that opens
+#. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2194
 msgid "Miscellaneous"
@@ -4920,4 +4936,3 @@ msgstr "పరిశీలనా ముద్రణాయంత్రం కు 
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "దస్త్రము '%s' కొరకు సమాచారం ను పొందలేకపోయింది: %s"
-

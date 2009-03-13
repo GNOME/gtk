@@ -217,7 +217,7 @@ Does the same as gtk_style_apply_default_background().
 @font: 
 
 
-<!-- ##### FUNCTION gtk_style_get_property ##### -->
+<!-- ##### FUNCTION gtk_style_get_style_property ##### -->
 <para>
 
 </para>
