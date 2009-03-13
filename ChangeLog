@@ -1,3 +1,7 @@
+2009-03-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Bump version to 2.16.0
+
 2009-03-11  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 572455 – GtkEntry window layed out wrong if the widget has focus
