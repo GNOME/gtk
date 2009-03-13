@@ -1,5 +1,9 @@
 2009-03-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* README.in: Late release notes for 2.16
+
+2009-03-13  Matthias Clasen  <mclasen@redhat.com>
+
 	* configure.in: Bump version
 
 2009-03-13  Matthias Clasen  <mclasen@redhat.com>

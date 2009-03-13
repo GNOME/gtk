@@ -27,6 +27,27 @@ Installation
 See the file 'INSTALL'
 
 
+Release notes for 2.16
+======================
+
+* Password entries now display a caps-lock warning. This can be turned off
+  with the caps-lock-warning property.
+
+* Various orientation-related functions have been deprecated in favour
+  of the new GtkOrientable interface: gtk_scale_button_get_orientation,
+  gtk_scale_button_set_orientation, gtk_toolbar_set_orientation.
+
+* The action-proxy interaction has been changed. Widgets that operate as
+  proxies have to implement the GtkActivatable interface now. GtkActivatable
+  implementation are responsible for syncing their appearance with the
+  action and for activating the action. All GTK+ widgets that are commonly
+  used as proxies implement the GtkActivatable interface.
+
+* The handling of keyboard shortcuts has been changed, to help with a
+  longstanding complaint about the way GTK+ handles multiple layouts. GTK+
+  now only uses keys from groups other than the current group if they are
+  not present in the current group.
+
 Release notes for 2.14
 ======================
 
