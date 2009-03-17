@@ -1,3 +1,8 @@
+2009-03-17  Tor Lillqvist  <tml@novell.com>
+
+	* gtk/gtkprintoperation-win32.c: Newer mingw-w64 uses an
+	underscore-prefixed identification macro.
+
 2009-03-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* README.in: Late release notes for 2.16

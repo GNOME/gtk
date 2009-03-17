@@ -72,7 +72,7 @@ static void win32_poll_status (GtkPrintOperation *op);
 
 static const GUID myIID_IPrintDialogCallback  = {0x5852a2c3,0x6530,0x11d1,{0xb6,0xa3,0x0,0x0,0xf8,0x75,0x7b,0xf9}};
 
-#if !defined (_MSC_VER) && !defined (MINGW64)
+#if !defined (_MSC_VER) && !defined (MINGW64) && !defined (__MINGW64)
 #undef INTERFACE
 #define INTERFACE IPrintDialogCallback
 DECLARE_INTERFACE_ (IPrintDialogCallback, IUnknown)
