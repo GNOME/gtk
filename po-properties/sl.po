@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
-"POT-Creation-Date: 2009-03-13 15:07+0000\n"
-"PO-Revision-Date: 2009-03-17 09:46+0100\n"
+"POT-Creation-Date: 2009-03-17 16:36+0000\n"
+"PO-Revision-Date: 2009-03-17 17:57+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2315,24 +2315,20 @@ msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr "Ali bo med vnosom gesla prikazano opozorilo o pritisnjeni tipki za velike črke."
 
 #: ../gtk/gtkentry.c:831
-#, fuzzy
 msgid "Progress Fraction"
-msgstr "Operator ostanek"
+msgstr "Del napredka"
 
 #: ../gtk/gtkentry.c:832
-#, fuzzy
 msgid "The current fraction of the task that's been completed"
-msgstr "Delež celotnega dela, ki je bil opravljen"
+msgstr "Del celotnega dela, ki je bil opravljen"
 
 #: ../gtk/gtkentry.c:849
-#, fuzzy
 msgid "Progress Pulse Step"
-msgstr "Korak vstopa v makro"
+msgstr "Korak napredka"
 
 #: ../gtk/gtkentry.c:850
-#, fuzzy
 msgid "The fraction of total entry width to move the progress bouncing block for each call to gtk_entry_progress_pulse()"
-msgstr "Del celotnega napredka, ki naj premakne poskakujoč blok, ko je izzvan"
+msgstr "Del celotne širine napredka, ki naj premakne poskakujoč blok, ko je izzvangtk_entry_progress_pulse()"
 
 #: ../gtk/gtkentry.c:866
 msgid "Primary pixbuf"
