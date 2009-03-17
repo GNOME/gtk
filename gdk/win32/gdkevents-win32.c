@@ -3253,16 +3253,16 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_WINDOWPOSCHANGED:
-      GDK_NOTE (EVENTS, (windowpos = (WINDOWPOS *) msg->lParam,
-			 g_print (" %s %s %dx%d@%+d%+d",
-				  _gdk_win32_window_pos_bits_to_string (windowpos->flags),
-				  (windowpos->hwndInsertAfter == HWND_BOTTOM ? "BOTTOM" :
-				   (windowpos->hwndInsertAfter == HWND_NOTOPMOST ? "NOTOPMOST" :
-				    (windowpos->hwndInsertAfter == HWND_TOP ? "TOP" :
-				     (windowpos->hwndInsertAfter == HWND_TOPMOST ? "TOPMOST" :
-				      (sprintf (buf, "%p", windowpos->hwndInsertAfter),
-				       buf))))),
-				  windowpos->cx, windowpos->cy, windowpos->x, windowpos->y)));
+      windowpos = (WINDOWPOS *) msg->lParam;
+      GDK_NOTE (EVENTS, g_print (" %s %s %dx%d@%+d%+d",
+				 _gdk_win32_window_pos_bits_to_string (windowpos->flags),
+				 (windowpos->hwndInsertAfter == HWND_BOTTOM ? "BOTTOM" :
+				  (windowpos->hwndInsertAfter == HWND_NOTOPMOST ? "NOTOPMOST" :
+				   (windowpos->hwndInsertAfter == HWND_TOP ? "TOP" :
+				    (windowpos->hwndInsertAfter == HWND_TOPMOST ? "TOPMOST" :
+				     (sprintf (buf, "%p", windowpos->hwndInsertAfter),
+				      buf))))),
+				 windowpos->cx, windowpos->cy, windowpos->x, windowpos->y));
 
       /* If position and size haven't changed, don't do anything */
       if (_sizemove_in_progress &&

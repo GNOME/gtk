@@ -1,5 +1,14 @@
 2009-03-17  Tor Lillqvist  <tml@novell.com>
 
+	Bug 575700 - Crash when moving a GtkWindow
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Fix
+	embarrassing crasher bug introduced on 2009-03-11. A variable was
+	assigned a value only inside a GDK_NOTE but still used outside
+	that.
+
+2009-03-17  Tor Lillqvist  <tml@novell.com>
+
 	* gtk/gtkprintoperation-win32.c: Newer mingw-w64 uses an
 	underscore-prefixed identification macro.
 
