@@ -1,3 +1,4 @@
+# translation of ml.po to
 # translation of gtk+.HEAD.ml.po to
 # This file is distributed under the same license as the gtk+ package.
 # Copyright (C) 2003-2008 gtk+'S COPYRIGHT HOLDER.
@@ -7,13 +8,12 @@
 # Hari Vishnu <harivishnu@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.HEAD.ml\n"
+"Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-03-13 10:29-0400\n"
-"PO-Revision-Date: 2009-03-11 00:03+0530\n"
-"Last-Translator: Ani Peter <apeter@redhat.com> \n"
-"Language-Team:  Swathanthra Malayalam Computing|സ്വതന്ത്ര മലയാളം കമ്പ്യൂട്ടിങ് <smc-"
-"discuss@googlegroups.com>\n"
+"PO-Revision-Date: 2009-03-17 21:05+0530\n"
+"Last-Translator: \n"
+"Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -287,8 +287,7 @@ msgstr "'%s' എന്ന ഇമേജ് ഫയലില്‍ ഡേറ്റ�
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1016
 #: gdk-pixbuf/gdk-pixbuf-io.c:1280 tests/testfilechooser.c:267
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "'%s' എന്ന ഇമേജ് ലഭ്യമാക്കുന്നതില്‍ പരാജയം: ഒരു പക്ഷേ തകരാറുള്ള ഇമേജ് ഫയല്‍ആവാം കാരണം "
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:221
@@ -296,8 +295,7 @@ msgstr "'%s' എന്ന ഇമേജ് ലഭ്യമാക്കുന്�
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr ""
-"'%s' എന്ന ആനിമേഷന്‍ ലഭ്യമാക്കുന്നതില്‍ പരാജയം: ഒരു പക്ഷേ തകരാറുള്ള ആനിമേഷന്‍ ഫയല്‍ ആവാം കാരണം "
+msgstr "'%s' എന്ന ആനിമേഷന്‍ ലഭ്യമാക്കുന്നതില്‍ പരാജയം: ഒരു പക്ഷേ തകരാറുള്ള ആനിമേഷന്‍ ഫയല്‍ ആവാം കാരണം "
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:701
 #, c-format
@@ -524,8 +522,7 @@ msgstr "GIF ഫയലിന്റെ %s ലക്കത്തിനുള്ള 
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr ""
-"GIF ഇമേജില്‍ ഗ്ളോബല്‍ കളറ്‍മാപ്പ് ലഭ്യമല്ല, അതിലുള്ള ഒരു ഫ്റെയിമില്‍ ലോക്കല്‍ കളറ്‍മാപ്പും ലഭ്യമല്ല."
+msgstr "GIF ഇമേജില്‍ ഗ്ളോബല്‍ കളറ്‍മാപ്പ് ലഭ്യമല്ല, അതിലുള്ള ഒരു ഫ്റെയിമില്‍ ലോക്കല്‍ കളറ്‍മാപ്പും ലഭ്യമല്ല."
 
 #: gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
@@ -665,8 +662,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG തനിമ 0-ത്തിനും 100-നും മദ്ധ്യത്തിലുള്ള മൂല്ല്യമായിരിക്കണം; %d അനുവദനീയമല്ല."
 
 #: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
@@ -736,8 +732,7 @@ msgstr "മാറ്റം വരുത്തിയ PNG, RGB അല്ലെങ�
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"മാറ്റം വരുത്തിയ PNG-ല്‍ പിന്തുണ ലഭ്യമല്ലാത്ത ചാനലുകള്‍ ഉണ്ട്, 3 അല്ലെങ്കില്‍ 4 എണ്ണം ആവശ്യമുണ്ട്."
+msgstr "മാറ്റം വരുത്തിയ PNG-ല്‍ പിന്തുണ ലഭ്യമല്ലാത്ത ചാനലുകള്‍ ഉണ്ട്, 3 അല്ലെങ്കില്‍ 4 എണ്ണം ആവശ്യമുണ്ട്."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -767,8 +762,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ഇമേജ് ഫയല്‍ തുറക്കുന്നതില്‍ സാരമായ പിശക്: %s"
 
 #: gdk-pixbuf/io-png.c:825
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ടെക്സ്റ്റുകളുടെ കീകളില്‍ കുറഞ്ഞത് 1 അക്ഷരം ഉണ്ടായിരിക്കണം, 79-ല്‍ കൂടുതല്‍ പാടില്ല."
 
 #: gdk-pixbuf/io-png.c:833
@@ -794,8 +788,7 @@ msgstr "PNG കംപ്രഷന്‍ ലവല്‍ 0-ത്തിനും 
 #: gdk-pixbuf/io-png.c:896
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"PNG ടെക്സ്റ്റ് ചങ്ക് %s-നുള്ള മൂല്ല്യം ISO-8859-1 എന്‍കോഡിങിലേക്കു് വേര്‍തിരിക്കുവാന്‍ സാധ്യല്ല."
+msgstr "PNG ടെക്സ്റ്റ് ചങ്ക് %s-നുള്ള മൂല്ല്യം ISO-8859-1 എന്‍കോഡിങിലേക്കു് വേര്‍തിരിക്കുവാന്‍ സാധ്യല്ല."
 
 #: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
@@ -1404,12 +1397,17 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
+"നിങ്ങള്‍ക്കാവശ്യമുള്ള നിറം പുറത്തുള്ള വട്ടത്തില്‍ നിന്നും തെരഞ്ഞെടുക്കുക. "
+"ഉള്ളിലുള്ള ത്രികോണത്തില്‍ നിന്നും ഈ നിറത്തിനുള്ള ഇരുളിമ അല്ലെങ്കില്‍ "
+"തെളിച്ചം തെരഞ്ഞെടുക്കുക."
 
 #: gtk/gtkcolorsel.c:378
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
+"ഐഡ്രോപ്പറില്‍ ക്ലിക്ക് ചെയ്യുക. ശേഷം നിങ്ങളുടെ സ്ക്രീനില്‍ എവിടെയെങ്കിലും "
+"ക്ലിക്ക് ചെയ്തു് ഈ നിറം തെരഞ്ഞെടുക്കുക."
 
 #: gtk/gtkcolorsel.c:387
 msgid "_Hue:"
@@ -1417,7 +1415,7 @@ msgstr "_ഹ്യൂ:"
 
 #: gtk/gtkcolorsel.c:388
 msgid "Position on the color wheel."
-msgstr ""
+msgstr "കളര്‍ വീലിലുള്ള സ്ഥാനം."
 
 #: gtk/gtkcolorsel.c:390
 msgid "_Saturation:"
@@ -1476,6 +1474,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
+"നിങ്ങള്‍ക്കു് ഒരു HTML-രീതിയിലുള്ള ഹെക്സാഡെസിമല്‍ നിറമൂല്ല്യം നല്‍കാം. "
+"അല്ലെങ്കില്‍, വെറുതെ നിറത്തിന്റെ പേരു് നല്‍കുക, ഉദാ. 'orange'."
 
 #: gtk/gtkcolorsel.c:470
 msgid "_Palette:"
@@ -1491,12 +1491,18 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
+"മുമ്പു് തെരഞ്ഞെടുത്ത നിറം, ഇതു് ഇപ്പോള്‍ നിങ്ങള്‍ തെരഞ്ഞെടുക്കുന്ന നിറവുമായി "
+"ഒത്തുനോക്കുവാന്‍ സഹായിക്കുന്നു. നിങ്ങള്‍ക്കു് ഇതു് താലത്തിലേക്കു് വലിച്ചിടുവാന്‍ "
+"സാധിക്കുന്നു അല്ലെങ്കില്‍, ഇതു് മറ്റൊരു സ്വാച്ചിലേക്കു് വലിച്ചിട്ടു് നിലവില്‍ ഉപയോഗിക്കുന്ന "
+"നിറമായി സജ്ജമാക്കുക."
 
 #: gtk/gtkcolorsel.c:980
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
+"നിങ്ങള്‍ തെരഞ്ഞെടുത്ത നിറം. ഭാവിയില്‍ വീണ്ടും ഉപയോഗിക്കുന്നതിനായി നിങ്ങള്‍ക്കു് "
+"ഈ നിറം താലത്തിലേക്കു് വലിച്ചിടുവാന്‍ സാധ്യമാകുന്നു."
 
 #: gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
@@ -1507,6 +1513,9 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
+"നിലവിലുള്ള നിറം ആക്കുന്നതിനായി ഈ താലം എന്‍ട്രിയില്‍ ക്ലിക്ക് ചെയ്യുക. "
+"ഈ എന്‍ട്രി മാറ്റുന്നതിനായി, ഒരു നിറത്തിനുള്ള സ്വാച്ച് ഇവിടേക്കു് വലിച്ചിടുക "
+"അല്ലെങ്കില്‍ അതു് റൈറ്റ് ക്ലിക്ക് ചെയ്തു് \"നിറം ഇവിടെ സൂക്ഷിക്കുക.\" തെരഞ്ഞെടുക്കുക."
 
 #: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
@@ -1661,7 +1670,7 @@ msgstr "_അദൃശ്യമായ ഫയലുകള്‍ കാണിക്
 
 #: gtk/gtkfilechooserdefault.c:4332
 msgid "Show _Size Column"
-msgstr ""
+msgstr "_വ്യാപ്തിയ്ക്കുള്ള നിര കാണിക്കുക"
 
 #: gtk/gtkfilechooserdefault.c:4587 gtk/gtkfilesel.c:730
 msgid "Files"
@@ -1730,10 +1739,8 @@ msgstr "\"%s\" എന്ന പേരില്‍ ഒരു ഫയല്‍ ന�
 
 #: gtk/gtkfilechooserdefault.c:8152 gtk/gtkprintunixdialog.c:374
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr ""
-"\"%s\"-ല്‍ ഒരു ഫയല്‍ ഉണ്ട്.  അതിന്റെ സ്ഥാനത്ത് ഇത് സൂക്ഷിച്ചാല്‍ ഉള്ളടക്കം മാറ്റി എഴുതപ്പെടുന്നു."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr "\"%s\"-ല്‍ ഒരു ഫയല്‍ ഉണ്ട്.  അതിന്റെ സ്ഥാനത്ത് ഇത് സൂക്ഷിച്ചാല്‍ ഉള്ളടക്കം മാറ്റി എഴുതപ്പെടുന്നു."
 
 #: gtk/gtkfilechooserdefault.c:8157 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
@@ -1869,6 +1876,9 @@ msgid ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
+"\"%s\" എന്ന ഫയല്‍ മറ്റൊരു സിസ്റ്റമില്‍ (%s) സൂക്ഷിച്ചിരിക്കുന്നു. അതിനാല്‍ ഈ പ്രോഗ്രാമിനു് "
+"ഇതു് ലഭ്യമല്ല.\n"
+"നിങ്ങള്‍ക്കു് ഇതു് തെരഞ്ഞെടുക്കണമെന്നു് ഉറപ്പാണോ?"
 
 #: gtk/gtkfilesel.c:1020
 msgid "_New Folder"
@@ -1884,10 +1894,8 @@ msgstr "ഫയലിന്റെ പേരു് മാറ്റുക (_R)"
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന അറയുടെ പേരിലുണ്ട്"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന അറയുടെ പേരിലുണ്ട്"
 
 #: gtk/gtkfilesel.c:1392
 msgid "New Folder"
@@ -1904,8 +1912,7 @@ msgstr "ഉ_ണ്ടാക്കുക"
 #: gtk/gtkfilesel.c:1474 gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1594
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന ഫയല്‍നാമത്തിലുണ്ട്"
+msgstr "ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന ഫയല്‍നാമത്തിലുണ്ട്"
 
 #: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1487
 #, c-format
@@ -1959,6 +1966,8 @@ msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
+"\"%s\" ഫയല്‍നാമം UTF-8-ലേക്കു് വേര്‍തിരിക്കുവാന്‍ സാധ്യമായില്ല. (G_FILENAME_ENCODING "
+"എന്ന എന്‍വയോണ്മെന്റ് സജ്ജമാക്കുന്നതിനായി ശ്രമിക്കുക): %s"
 
 #: gtk/gtkfilesel.c:3051
 msgid "Invalid UTF-8"
@@ -2707,7 +2716,7 @@ msgstr "തല്‍ക്കാലത്തേക്ക് _നിര്‍ത�
 
 #: gtk/gtkprintunixdialog.c:2792
 msgid "Hold the job until it is explicitly released"
-msgstr ""
+msgstr "ഈ മാത്രമായി ലഭ്യമാക്കുന്നതു് വരെ ഇതു് ഹോള്‍ഡ് ചെയ്യുക"
 
 #: gtk/gtkprintunixdialog.c:2812
 msgid "Add Cover Page"
@@ -2752,7 +2761,7 @@ msgstr "പൂറ്‍ത്തിയാക്കുന്നു"
 
 #: gtk/gtkprintunixdialog.c:2974
 msgid "Some of the settings in the dialog conflict"
-msgstr ""
+msgstr "ഡയലോഗിലുള്ള ചില ക്രമീകരണങ്ങള്‍ പൊരുത്തപ്പെടുന്നില്ല"
 
 #: gtk/gtkprintunixdialog.c:2997
 msgid "Print"
@@ -2772,7 +2781,7 @@ msgstr "pixmap_path-ല്‍ ഇമേജ് ഫയല്‍ ലഭ്യമാ
 #: gtk/gtkrecentchoosermenu.c:588 gtk/gtkrecentchoosermenu.c:596
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
-msgstr ""
+msgstr "'%s' ക്ലാസ്സിലുള്ള വിഡ്ജറ്റുകള്‍ക്കു് ഈ ഫംങ്ഷന്‍ ലഭ്യമല്ല"
 
 #: gtk/gtkrecentchooserdefault.c:481
 msgid "Select which type of documents are shown"
@@ -2828,7 +2837,7 @@ msgstr "വസ്തുക്കള്‍ ലഭ്യമായില്ല"
 #: gtk/gtkrecentchoosermenu.c:508 gtk/gtkrecentchoosermenu.c:564
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr ""
+msgstr "യുആര്‍ഐ `%s'-നൊപ്പം ഏറ്റവും ഒടുവില്‍ ഉപയോഗിച്ച റിസോഴ്സ് ലഭ്യമായില്ല "
 
 #: gtk/gtkrecentchoosermenu.c:775
 #, c-format
@@ -3369,12 +3378,12 @@ msgstr "_ചെറുതാക്കുക"
 #: gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
-msgstr ""
+msgstr "%s ഡീസീരിയലൈസ് ചെയ്യുവാന്‍ ശ്രമിക്കുമ്പോള്‍ അപരിചിതമായ പിശക്"
 
 #: gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
-msgstr ""
+msgstr "%s മാതൃകയ്ക്കായി ഡീസീരിയലൈസ് ഫംങ്ഷന്‍ ലഭ്യമല്ല"
 
 #: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
 #, c-format
@@ -3394,115 +3403,115 @@ msgstr "<%s> എലമെന്റില്‍ തെറ്റായ id \"%s\""
 #: gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr ""
+msgstr "<%s> എലമെന്റിനു് ഒരു \"name\" പേരു് അല്ലെങ്കില്‍ \"id\" സവിശേഷത ലഭ്യമല്ല"
 
 #: gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr ""
+msgstr "\"%s\" സവിശേഷത ഒരേ <%s> എലമെന്റില്‍ രണ്ടു് തവണ ആവര്‍ത്തിച്ചിരിക്കുന്നു"
 
 #: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr ""
+msgstr "ഈ കോണ്‍ടെക്സ്റ്റില്‍ \"%s\" സവിശേഷത <%s> എലമെന്റില്‍ തെറ്റാണു്"
 
 #: gtk/gtktextbufferserialize.c:1022
 #, c-format
 msgid "Tag \"%s\" has not been defined."
-msgstr ""
+msgstr "റ്റാഗ് \"%s\" വ്യക്തമാക്കിയിട്ടില്ല."
 
 #: gtk/gtktextbufferserialize.c:1034
 msgid "Anonymous tag found and tags can not be created."
-msgstr ""
+msgstr "അപരിചിതമായ റ്റാഗ് ലഭ്യമായി അല്ലെങ്കില്‍ റ്റാഗുകള്‍ ഉണ്ടാക്കിയിട്ടില്ല."
 
 #: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
+msgstr "\"%s\" റ്റാഗ് ബഫറില്‍ ലഭ്യമായില്ല. കൂടാതെ റ്റാഗുകള്‍ ഉണ്ടാക്കുവാന്‍ സാധ്യമായില്ല."
 
 #: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
 #: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
-msgstr ""
+msgstr "എലമെന്റ് <%s> <%s>-നു് താഴെ അനുവദിക്കുന്നതല്ല"
 
 #: gtk/gtktextbufferserialize.c:1175
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr ""
+msgstr "\"%s\" ശരിയായ തരത്തിലുള്ള ഒരു സവിശേഷത അല്ല."
 
 #: gtk/gtktextbufferserialize.c:1183
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr ""
+msgstr "\"%s\" ശരിയായ പേരുള്ള ഒരു സവിശേഷത അല്ല."
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
+"\"%s\", \"%s\" തരത്തിലുള്ള മൂല്ല്യമായി വേര്‍തിരിക്കുവാന്‍ സാധ്യമല്ല. ഇതു് \"%s\" എന്ന "
+"സവിശേഷതയ്ക്കുള്ളതാണു്"
 
 #: gtk/gtktextbufferserialize.c:1202
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr ""
+msgstr "\"%s\", \"%s\" സവിശേഷതയ്ക്കുള്ള ശരിയായ ഒരു മൂല്ല്യം അല്ല"
 
 #: gtk/gtktextbufferserialize.c:1285
 #, c-format
 msgid "Tag \"%s\" already defined"
-msgstr ""
+msgstr "റ്റാഗ് \"%s\" നിലവില്‍ വ്യക്തമാക്കിയിരിക്കുന്നു"
 
 #: gtk/gtktextbufferserialize.c:1296
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr ""
+msgstr "റ്റാഗ് \"%s\"-നു് തെറ്റായ മുന്‍ഗണന \"%s\""
 
 #: gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
+msgstr "വാചകത്തിന്റെ ഏറ്റവും പുറത്തുള്ള എലമെന്റ് <text_view_markup> ആയിരിക്കണം. <%s> അല്ല."
 
 #: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
-msgstr ""
+msgstr "ഒരു <%s> എലമെന്റ് നിലവില്‍ വ്യക്തമാക്കിയിട്ടുണ്ടു്"
 
 #: gtk/gtktextbufferserialize.c:1380
 msgid "A <text> element can't occur before a <tags> element"
-msgstr ""
+msgstr "ഒരു <text> എലമെന്റ് ഒരു <tags> എലമെന്റിനു് മുമ്പു് ഉണ്ടാകുവാന്‍ സാധ്യമല്ല"
 
 #: gtk/gtktextbufferserialize.c:1779
 msgid "Serialized data is malformed"
-msgstr ""
+msgstr "സീരിയലൈസ്ഡ് ഡേറ്റാ തെറ്റാകുന്നു"
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr "സീരിയലൈസ്ഡ് ഡേറ്റാ തെറ്റാകുന്നു. ആദ്യത്തെ ഭാഗം GTKTEXTBUFFERCONTENTS-0001 അല്ല."
 
 #: gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
-msgstr ""
+msgstr "LRM _ഇടതു് മുതല്‍ വലതു് വരെയുള്ള അടയാളം"
 
 #: gtk/gtktextutil.c:62
 msgid "RLM _Right-to-left mark"
-msgstr ""
+msgstr "RLM _വലതു് മുതല്‍ ഇടതു് വരെയുള്ള അടയാളം"
 
 #: gtk/gtktextutil.c:63
 msgid "LRE Left-to-right _embedding"
-msgstr ""
+msgstr "LRE ഇടതു് മുതല്‍ വലതു് വരെയുള്ള _എംബഡ്ഡിങ്"
 
 #: gtk/gtktextutil.c:64
 msgid "RLE Right-to-left e_mbedding"
-msgstr ""
+msgstr "RLE വലതു് മുതല്‍ ഇടതു് വരെയുള്ള _എംബഡ്ഡിങ്"
 
 #: gtk/gtktextutil.c:65
 msgid "LRO Left-to-right _override"
-msgstr ""
+msgstr "LRO ഇടതു് മുതല്‍ വലതു് വരെയുള്ള _ഓവര്‍റൈഡ്"
 
 #: gtk/gtktextutil.c:66
 msgid "RLO Right-to-left o_verride"
-msgstr ""
+msgstr "RLO വലതു് മുതല്‍ ഇടതു് വരെയുള്ള _ഓവര്‍റൈഡ്"
 
 #: gtk/gtktextutil.c:67
 msgid "PDF _Pop directional formatting"
@@ -3523,7 +3532,7 @@ msgstr "ZWNJ സീറോ വിഡ്ത് നോണ്‍-ജോയിനറ�
 #: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr ""
+msgstr "module_path-ലുള്ള ഥീം എഞ്ചിന്‍ ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: \"%s\","
 
 #: gtk/gtktipsquery.c:188
 msgid "--- No Tip ---"
@@ -4408,7 +4417,7 @@ msgstr "ROC 8k"
 #: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr ""
+msgstr "സിംലിങ്ക് ചെയ്ത '%s', '%s' എന്നിവയ്ക്കുള്ള idatas വേറെയാകുന്നു\n"
 
 #: gtk/updateiconcache.c:1374
 #, c-format
@@ -4678,12 +4687,12 @@ msgstr "ഒരു വശം മാത്രം"
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2161
 msgid "Long Edge (Standard)"
-msgstr ""
+msgstr "ലോങ് എഡ്ജ് (സാധാരണ)"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2163
 msgid "Short Edge (Flip)"
-msgstr ""
+msgstr "ഷോര്‍ട്ട് എഡ്ജ് (ഫ്ലിപ്പ്)"
 
 #. Translators: this is an option of "Paper Source"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2165
@@ -4930,3 +4939,4 @@ msgstr "ടെസ്റ്റ് പ്രിന്ററിലേക്ക് �
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' എന്ന ഫയലിന് ആവശ്യമുള്ള വിവരം ലഭ്യമായില്ല: %s"
+
