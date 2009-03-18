@@ -1,3 +1,9 @@
+2009-03-18  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/gtkscalebutton.c: add static function
+	gtk_scale_button_set_orientation_private() and use it instead of
+	the public but deprecated gtk_scale_button_set_orientation().
+
 2009-03-17  Tor Lillqvist  <tml@novell.com>
 
 	Bug 575700 - Crash when moving a GtkWindow
