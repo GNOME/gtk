@@ -10082,28 +10082,24 @@ void
 gtk_widget_set_tooltip_window (GtkWidget *widget,
 			       GtkWindow *custom_window)
 {
-  gboolean tmp;
+  gboolean has_tooltip;
   gchar *tooltip_markup;
-  GtkWindow *tooltip_window;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  if (custom_window)
-    g_return_if_fail (GTK_IS_WINDOW (custom_window));
+  g_return_if_fail (custom_window == NULL || GTK_IS_WINDOW (custom_window));
 
-  tooltip_window = g_object_get_qdata (G_OBJECT (widget), quark_tooltip_window);
   tooltip_markup = g_object_get_qdata (G_OBJECT (widget), quark_tooltip_markup);
 
   if (custom_window)
     g_object_ref (custom_window);
 
-  tooltip_window = custom_window;
   g_object_set_qdata_full (G_OBJECT (widget), quark_tooltip_window,
-			   tooltip_window, g_object_unref);
+			   custom_window, g_object_unref);
 
-  tmp = (tooltip_window != NULL || tooltip_markup != NULL);
-  gtk_widget_real_set_has_tooltip (widget, tmp, FALSE);
+  has_tooltip = (custom_window != NULL || tooltip_markup != NULL);
+  gtk_widget_real_set_has_tooltip (widget, has_tooltip, FALSE);
 
-  if (tmp)
+  if (has_tooltip)
     gtk_widget_trigger_tooltip_query (widget);
 }
 

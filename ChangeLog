@@ -1,3 +1,11 @@
+2009-03-19  Claudio Saavedra  <csaavedra@igalia.com>
+
+	Bug 574283 – unused assignment and dead code in
+	gtk_widget_set_tooltip_window()
+
+	* gtk/gtkwidget.c: (gtk_widget_set_tooltip_window): Remove
+	an unused assignment and clean up, improving checks.
+
 2009-03-18  Michael Natterer  <mitch@gimp.org>
 
 	* gtk/gtkscalebutton.c: add static function
