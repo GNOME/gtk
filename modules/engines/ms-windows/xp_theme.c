@@ -79,6 +79,16 @@
 
 #define TRS_NORMAL        1
 
+#define MBI_NORMAL         1
+#define MBI_HOT            2
+#define MBI_PUSHED         3
+#define MBI_DISABLED       4
+#define MBI_DISABLEDHOT    5
+#define MBI_DISABLEDPUSHED 6
+
+#define MENU_POPUPITEM      14
+#define MENU_POPUPSEPARATOR 15
+
 static const LPCWSTR class_descriptors[] = {
   L"Scrollbar",			/* XP_THEME_CLASS_SCROLLBAR */
   L"Button",			/* XP_THEME_CLASS_BUTTON */
@@ -139,8 +149,8 @@ static const short element_part_map[XP_THEME_ELEMENT__SIZEOF] = {
   RP_GRIPPERVERT,
   RP_CHEVRON,
   TP_BUTTON,
-  MP_MENUITEM,
-  MP_SEPARATOR,
+  MENU_POPUPITEM, /*MP_MENUITEM,*/
+  MENU_POPUPSEPARATOR,  /*MP_SEPARATOR,*/
   SP_GRIPPER,
   SP_PANE,
   GP_LINEHORZ,
@@ -780,12 +790,16 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
 	  ret = MS_SELECTED;
 	  break;
 
+	case GTK_STATE_PRELIGHT:
+	  ret = MBI_HOT;
+	  break;
+
 	case GTK_STATE_INSENSITIVE:
-	  ret = MS_DEMOTED;
+	  ret = MBI_DISABLED;
 	  break;
 
 	default:
-	  ret = MS_NORMAL;
+	  ret = MBI_NORMAL;
 	}
       break;
 

@@ -536,29 +536,42 @@ sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char *buf,
    for now */
 #define XP_THEME_CLASS_TEXT XP_THEME_CLASS_BUTTON
 
+#define WIN95_VERSION   0x400
+#define WIN2K_VERSION   0x500
+#define WINXP_VERSION   0x501
+#define WIN2K3_VERSION  0x502
+#define VISTA_VERSION   0x600
+
+static gint32
+get_windows_version ()
+{
+  static gint32 version = 0;
+  static gboolean have_version = FALSE;
+
+  if (!have_version)
+    {
+      have_version = TRUE;
+      OSVERSIONINFOEX osvi;
+
+      ZeroMemory (&osvi, sizeof (OSVERSIONINFOEX));
+      osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFOEX);
+
+      GetVersionEx((OSVERSIONINFO*) &osvi);
+
+      version = (osvi.dwMajorVersion & 0xff) << 8 | (osvi.dwMinorVersion & 0xff);
+    }
+
+  return version;
+}
+
 static void
 setup_menu_settings (GtkSettings *settings)
 {
   int menu_delay;
-  gboolean win95 = FALSE;
   OSVERSIONINFOEX osvi;
   GObjectClass *klazz = G_OBJECT_GET_CLASS (G_OBJECT (settings));
 
-  ZeroMemory (&osvi, sizeof (OSVERSIONINFOEX));
-  osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFOEX);
-
-  if (!GetVersionEx ((OSVERSIONINFO *) & osvi))
-    win95 = TRUE;		/* assume the worst */
-
-  if (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
-    {
-      if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
-	{
-	  win95 = TRUE;
-	}
-    }
-
-  if (!win95)
+  if (get_windows_version () > WIN95_VERSION)
     {
       if (SystemParametersInfo (SPI_GETMENUSHOWDELAY, 0, &menu_delay, 0))
 	{
@@ -685,7 +698,8 @@ setup_msw_rc_style (void)
   GdkColor text_prelight;
 
   /* Prelight */
-  sys_color_to_gtk_color (XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHTTEXT,
+  sys_color_to_gtk_color (XP_THEME_CLASS_TEXT,
+			  get_windows_version () == VISTA_VERSION ? COLOR_MENUTEXT : COLOR_HIGHLIGHTTEXT,
 			  &fg_prelight);
   sys_color_to_gtk_color (XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHT, &bg_prelight);
   sys_color_to_gtk_color (XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHT,
@@ -1809,6 +1823,12 @@ draw_menu_item (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
   GtkMenuShell *bar;
   HDC dc;
   RECT rect;
+
+  if (xp_theme_is_active ())
+    {
+      return (xp_theme_draw (window, XP_THEME_ELEMENT_MENU_ITEM, style,
+                             x, y, width, height, state_type, area));
+    }
 
   if ((parent = gtk_widget_get_parent (widget))
       && GTK_IS_MENU_BAR (parent) && !xp_theme_is_active ())
@@ -2964,7 +2984,7 @@ draw_shadow (GtkStyle *style,
 
   if (detail && !strcmp (detail, "frame"))
     {
- 
+
       HDC dc;
       RECT rect;
 
@@ -3079,7 +3099,7 @@ draw_shadow (GtkStyle *style,
 	    {
 	      pos = gtk_handle_box_get_handle_position (GTK_HANDLE_BOX (widget));
 	      /*
-	         If the handle box is at left side, 
+	         If the handle box is at left side,
 	         we shouldn't draw its right border.
 	         The same holds true for top, right, and bottom.
 	       */

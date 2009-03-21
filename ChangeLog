@@ -1,3 +1,12 @@
+2009-03-21  Cody Russell  <bratsche@gnome.org>
+
+	Bug 538840 – [Win32] GTK menu theming could be improved
+
+	* modules/engines/ms-windows/xp_theme.c
+	* modules/engines/ms-windows/msw_style.c: Use newer
+	menu styling API.  This makes gtk+ look much better on
+	Windows Vista.
+
 2009-03-19  Claudio Saavedra  <csaavedra@igalia.com>
 
 	Bug 574283 – unused assignment and dead code in
