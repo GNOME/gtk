@@ -120,9 +120,9 @@ is the id of widget (which should be a child of the dialogs @action_area).
 <programlisting><![CDATA[
 <object class="GtkDialog" id="dialog1">
   <child internal-child="vbox">"
-    <object class="GtkVBox">
+    <object class="GtkVBox" id="vbox">
       <child internal-child="action_area">
-        <object class="GtkHButtonBox">
+        <object class="GtkHButtonBox" id="button_box">
           <child>
             <object class="GtkButton" id="button_cancel"/>
           </child>

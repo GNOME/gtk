@@ -1,3 +1,10 @@
+2009-03-23  Hiroyuki Ikezoe  <poincare@ikezoe.net>
+
+	Bug 576254 - <object> requires attribute "id"
+
+	* docs/reference/gtk/tmpl/gtkdialog.sgml: Add id attribute to 
+	GtkBuilder UI sample.
+
 2009-03-21  Cody Russell  <bratsche@gnome.org>
 
 	Bug 538840 – [Win32] GTK menu theming could be improved
