@@ -25,13 +25,13 @@ Animated images.
 
 <!-- ##### STRUCT GdkPixbufAnimation ##### -->
 <para>
-And opaque struct representing an animation.
+An opaque struct representing an animation.
 </para>
 
 
 <!-- ##### STRUCT GdkPixbufAnimationIter ##### -->
 <para>
-And opaque struct representing an iterator which points to a
+An opaque struct representing an iterator which points to a
 certain position in an animation.
 </para>
 
@@ -148,7 +148,7 @@ certain position in an animation.
 
 <!-- ##### STRUCT GdkPixbufSimpleAnim ##### -->
 <para>
-An
+An opaque struct representing a simple animation.
 </para>
 
 
