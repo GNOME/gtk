@@ -1,3 +1,11 @@
+2009-03-24  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 576306 – gdkscreen.c: get_nearest_monitor too simple, gives wrong
+	result, mispositioning tooltips
+
+	* gdk/gdkscreen.c (get_nearest_monitor): Make this function work.
+	Problem reported by Dave Gilbert.
+
 2009-03-23  Hiroyuki Ikezoe  <poincare@ikezoe.net>
 
 	Bug 576254 - <object> requires attribute "id"

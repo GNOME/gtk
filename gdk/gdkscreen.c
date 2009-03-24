@@ -213,7 +213,7 @@ get_nearest_monitor (GdkScreen *screen,
   gint num_monitors, i;
   gint nearest_dist = G_MAXINT;
   gint nearest_monitor = 0;
-  
+
   g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
 
   num_monitors = gdk_screen_get_n_monitors (screen);
@@ -221,7 +221,7 @@ get_nearest_monitor (GdkScreen *screen,
   for (i = 0; i < num_monitors; i++)
     {
       GdkRectangle monitor;
-      gint dist_x, dist_y;
+      gint dist_x, dist_y, dist;
       
       gdk_screen_get_monitor_geometry (screen, i, &monitor);
 
@@ -239,9 +239,10 @@ get_nearest_monitor (GdkScreen *screen,
       else
 	dist_y = 0;
 
-      if (MIN (dist_x, dist_y) < nearest_dist)
+      dist = dist_x + dist_y;
+      if (dist < nearest_dist)
 	{
-	  nearest_dist = MIN (dist_x, dist_y);
+	  nearest_dist = dist;
 	  nearest_monitor = i;
 	}
     }
