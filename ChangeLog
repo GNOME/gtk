@@ -1,3 +1,9 @@
+2009-03-25  Sven Neumann  <sven@gimp.org>
+
+	* gdk/directfb/gdkwindow-directfb.c
+	(gdk_window_directfb_process_all_updates): compile fix for build
+	with DIRECT_ENABLE_DEBUG.
+
 2009-03-24  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 576306 – gdkscreen.c: get_nearest_monitor too simple, gives wrong
