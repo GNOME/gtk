@@ -1,3 +1,10 @@
+2009-03-25   Paul Bolle <pebolle@tiscali.nl>
+
+	Bug 562863 - GtkVscrollbar is hardly documented
+
+	* gtk/tmpl/gtkvscrollbar.sgml:
+	* gtk/tmpl/gtkhscrollbar.sgml: Minor tweaks.
+
 2009-03-24  Matthias Clasen  <mclasen@redhat.com>
 
 	Bug 576150 – Doc bug for GtkMenuPositionFunc
