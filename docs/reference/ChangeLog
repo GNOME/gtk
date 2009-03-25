@@ -1,3 +1,10 @@
+2009-03-24  Matthias Clasen  <mclasen@redhat.com>
+
+	Bug 576150 – Doc bug for GtkMenuPositionFunc
+
+	* gtk/tmpl/gtkmenu.sgml: Remove a misleading sentence.
+	Pointed out by Owen Taylor.
+
 2009-03-23  Claudio Saavedra  <csaavedra@igalia.com>
 
 	* gdk-pixbuf/tmpl/animation.sgml: Fix typos and document the
