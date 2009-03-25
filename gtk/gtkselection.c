@@ -1696,7 +1696,7 @@ gtk_selection_data_get_pixbuf (GtkSelectionData *selection_data)
 /**
  * gtk_selection_data_set_uris:
  * @selection_data: a #GtkSelectionData
- * @uris: a %NULL-terminated array of strings hilding URIs
+ * @uris: a %NULL-terminated array of strings holding URIs
  * 
  * Sets the contents of the selection from a list of URIs.
  * The string is converted to the form determined by

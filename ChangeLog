@@ -1,3 +1,7 @@
+2009-03-25  Christian Dywan  <christian@twotoasts.de>
+
+	* gtk/gtkselection.c: Typo correction, s/hilding/holding
+
 2009-03-25  Sven Neumann  <sven@gimp.org>
 
 	* gdk/directfb/gdkwindow-directfb.c
