@@ -103,6 +103,9 @@ gdk_window_directfb_process_all_updates (void)
   while (tmp_list)
     {
       GdkWindowObject *private = GDK_WINDOW_OBJECT( tmp_list->data );
+#ifdef DIRECT_ENABLE_DEBUG
+      GdkWindowImplDirectFB *wimpl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
+#endif
 
       if (private->update_freeze_count)
         {
