@@ -1,3 +1,12 @@
+2009-03-25  Tor Lillqvist  <tml@novell.com>
+
+	Bug 575644 - Cygwin gail build patch
+
+	* modules/other/gail/Makefile.am
+	* modules/other/gail/libgail-util/Makefile.am
+	* modules/other/gail/tests/Makefile.am: Use -no-undefined also on
+	Cygwin. Patch from "Cygwin ports maintainer".
+
 2009-03-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.16.0 ===

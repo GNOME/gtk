@@ -1,9 +1,11 @@
 include $(top_srcdir)/Makefile.decl
 
 EXTRA_DIST += gailutil.def
+if PLATFORM_WIN32
+no_undefined = -no-undefined
+endif
 if OS_WIN32
 export_symbols = -export-symbols $(srcdir)/gailutil.def
-no_undefined = -no-undefined
 install-def-file: gailutil.def
 	$(INSTALL) $(srcdir)/gailutil.def $(DESTDIR)$(libdir)
 uninstall-def-file:
