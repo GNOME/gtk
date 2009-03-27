@@ -231,7 +231,7 @@ gail_entry_real_initialize (AtkObject *obj,
   g_signal_connect (data, "changed",
 	G_CALLBACK (_gail_entry_changed_cb), NULL);
 
-  if (entry->visible)
+  if (gtk_entry_get_visibility (entry))
     obj->role = ATK_ROLE_TEXT;
   else
     obj->role = ATK_ROLE_PASSWORD_TEXT;
@@ -312,6 +312,7 @@ text_setup (GailEntry *entry,
       GString *tmp_string = g_string_new (NULL);
       gint ch_len; 
       gchar buf[7];
+      guint length;
       gint i;
 
       invisible_char = gtk_entry_get_invisible_char (gtk_entry);
@@ -319,7 +320,8 @@ text_setup (GailEntry *entry,
         invisible_char = ' ';
 
       ch_len = g_unichar_to_utf8 (invisible_char, buf);
-      for (i = 0; i < gtk_entry->text_length; i++)
+      length = gtk_entry_get_text_length (gtk_entry);
+      for (i = 0; i < length; i++)
         {
           g_string_append_len (tmp_string, buf, ch_len);
         }
@@ -576,7 +578,7 @@ gail_entry_get_run_attributes (AtkText *text,
 
   at_set = gail_misc_layout_get_run_attributes (at_set,
                                                 gtk_entry_get_layout (entry),
-                                                entry->text,
+                                                (gchar*)gtk_entry_get_text (entry),
                                                 offset,
                                                 start_offset,
                                                 end_offset);
@@ -616,6 +618,7 @@ gail_entry_get_character_extents (AtkText *text,
   GtkEntry *entry;
   PangoRectangle char_rect;
   gint index, cursor_index, x_layout, y_layout;
+  const gchar *entry_text;
 
   widget = GTK_ACCESSIBLE (text)->widget;
   if (widget == NULL)
@@ -625,9 +628,9 @@ gail_entry_get_character_extents (AtkText *text,
   entry = GTK_ENTRY (widget);
 
   gtk_entry_get_layout_offsets (entry, &x_layout, &y_layout);
-  index = g_utf8_offset_to_pointer (entry->text, offset) - entry->text;
-  cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - 
-                          entry->text;
+  entry_text = gtk_entry_get_text (entry);
+  index = g_utf8_offset_to_pointer (entry_text, offset) - entry_text;
+  cursor_index = g_utf8_offset_to_pointer (entry_text, entry->current_pos) - entry_text;
   if (index > cursor_index)
     index += entry->preedit_length;
   pango_layout_index_to_pos (gtk_entry_get_layout(entry), index, &char_rect);
@@ -645,7 +648,8 @@ gail_entry_get_offset_at_point (AtkText *text,
   GtkWidget *widget;
   GtkEntry *entry;
   gint index, cursor_index, x_layout, y_layout;
-
+  const gchar *entry_text;
+  
   widget = GTK_ACCESSIBLE (text)->widget;
   if (widget == NULL)
     /* State is defunct */
@@ -654,21 +658,20 @@ gail_entry_get_offset_at_point (AtkText *text,
   entry = GTK_ENTRY (widget);
   
   gtk_entry_get_layout_offsets (entry, &x_layout, &y_layout);
+  entry_text = gtk_entry_get_text (entry);
   
   index = gail_misc_get_index_at_point_in_layout (widget, 
                gtk_entry_get_layout(entry), x_layout, y_layout, x, y, coords);
   if (index == -1)
     {
       if (coords == ATK_XY_SCREEN || coords == ATK_XY_WINDOW)
-        return g_utf8_strlen (entry->text, -1);
+        return g_utf8_strlen (entry_text, -1);
 
       return index;  
     }
   else
     {
-      cursor_index = g_utf8_offset_to_pointer (entry->text, 
-                                               entry->current_pos) -
-                                             entry->text;
+      cursor_index = g_utf8_offset_to_pointer (entry_text, entry->current_pos) - entry_text;
       if (index >= cursor_index && entry->preedit_length)
         {
           if (index >= cursor_index + entry->preedit_length)
@@ -676,7 +679,7 @@ gail_entry_get_offset_at_point (AtkText *text,
           else
             index = cursor_index;
         }
-      return g_utf8_pointer_to_offset (entry->text, entry->text + index);
+      return g_utf8_pointer_to_offset (entry_text, entry_text + index);
     }
 }
 

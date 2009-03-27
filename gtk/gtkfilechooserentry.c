@@ -641,7 +641,7 @@ char_after_cursor_is_directory_separator (GtkFileChooserEntry *chooser_entry)
   result = FALSE;
 
   cursor_pos = gtk_editable_get_position (GTK_EDITABLE (chooser_entry));
-  if (cursor_pos < GTK_ENTRY (chooser_entry)->text_length)
+  if (cursor_pos < gtk_entry_get_text_length (GTK_ENTRY (chooser_entry)))
     {
       char *next_char_str;
 
@@ -800,7 +800,7 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
   gint old_text_len;
   gint insert_pos;
 
-  old_text_len = GTK_ENTRY (chooser_entry)->text_length;
+  old_text_len = gtk_entry_get_text_length (GTK_ENTRY (chooser_entry));
   insert_pos = *position;
 
   parent_editable_iface->do_insert_text (editable, new_text, new_text_length, position);
@@ -1248,7 +1248,7 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
       (! control_pressed))
     {
       if (chooser_entry->has_completion)
-	gtk_editable_set_position (editable, entry->text_length);
+	gtk_editable_set_position (editable, gtk_entry_get_text_length (entry));
       else
 	start_explicit_completion (chooser_entry);
 
@@ -1275,7 +1275,7 @@ commit_completion_and_refresh (GtkFileChooserEntry *chooser_entry)
   if (chooser_entry->has_completion)
     {
       gtk_editable_set_position (GTK_EDITABLE (chooser_entry),
-				 GTK_ENTRY (chooser_entry)->text_length);
+				 gtk_entry_get_text_length (GTK_ENTRY (chooser_entry)));
     }
 
   /* Here we ignore the result of refresh_current_folder_and_file_part(); there is nothing we can do with it */
@@ -1541,7 +1541,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
       break;
 
     case REFRESH_WHOLE_TEXT:
-      end_pos = GTK_ENTRY (chooser_entry)->text_length;
+      end_pos = gtk_entry_get_text_length (GTK_ENTRY (chooser_entry));
       break;
 
     default:
@@ -1632,7 +1632,7 @@ autocomplete (GtkFileChooserEntry *chooser_entry)
 {
   if (!(chooser_entry->current_folder != NULL
 	&& _gtk_folder_is_finished_loading (chooser_entry->current_folder)
-	&& gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == GTK_ENTRY (chooser_entry)->text_length))
+	&& gtk_editable_get_position (GTK_EDITABLE (chooser_entry)) == gtk_entry_get_text_length (GTK_ENTRY (chooser_entry))))
     return;
 
   append_common_prefix (chooser_entry, TRUE, FALSE);

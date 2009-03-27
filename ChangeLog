@@ -1,3 +1,19 @@
+2009-03-26  Stef Walter  <stef@memberwebs.com>
+
+	* gtk/gtkfilechooserentry.c
+	(char_after_cursor_is_directory_separator)
+	(gtk_file_chooser_entry_do_insert_text)
+	(gtk_file_chooser_entry_focus)
+	(commit_completion_and_refresh)
+	(refresh_current_folder_and_file_part) (autocomplete):
+	* gtk/gtkspinbutton.c (gtk_spin_button_insert_text):
+	* modules/other/gail/gailentry.c (gail_entry_real_initialize)
+	(text_setup) (gail_entry_get_run_attributes)
+	(gail_entry_get_character_extents) 
+	(gail_entry_get_offset_at_point): Use gtk_entry_xxx functions
+	rather than using GtkEntry structure directly. 
+	See bug #576801
+
 2009-03-25  Christian Dywan  <christian@twotoasts.de>
 
 	* gtk/gtkselection.c: Typo correction, s/hilding/holding
