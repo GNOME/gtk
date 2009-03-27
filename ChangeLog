@@ -1,3 +1,18 @@
+2009-03-27  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 437533 – Implement draw_shape PangoRenderer method
+
+	* gdk/gdkpango.c (gdk_pango_renderer_draw_shape),
+	(gdk_pango_renderer_class_init): Implement draw_shape
+
+	* demos/gtk-demo/rotated_text.c (fancy_shape_renderer),
+	(create_fancy_attr_list_for_layout), (rotated_text_expose_event),
+	(do_rotated_text):
+	1) Port to pangocairo
+	2) Also show a rotated label
+	3) Install a custom shape renderer on both.  The second one goes
+	through gdkpango and hence tests the patch above.  It's working.
+
 2009-03-26  Stef Walter  <stef@memberwebs.com>
 
 	* gtk/gtkfilechooserentry.c

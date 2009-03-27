@@ -312,6 +312,52 @@ gdk_pango_renderer_draw_error_underline (PangoRenderer    *renderer,
 }
 
 static void
+gdk_pango_renderer_draw_shape (PangoRenderer  *renderer,
+			       PangoAttrShape *attr,
+			       int             x,
+			       int             y)
+{
+  GdkPangoRenderer *gdk_renderer = GDK_PANGO_RENDERER (renderer);
+  GdkPangoRendererPrivate *priv = gdk_renderer->priv;
+  PangoLayout *layout;
+  PangoCairoShapeRendererFunc shape_renderer;
+  gpointer                    shape_renderer_data;
+  cairo_t *cr;
+  double dx = (double)x / PANGO_SCALE, dy = (double)y / PANGO_SCALE;
+
+  layout = pango_renderer_get_layout (renderer);
+
+  if (!layout)
+  	return;
+
+  shape_renderer = pango_cairo_context_get_shape_renderer (pango_layout_get_context (layout),
+							   &shape_renderer_data);
+
+  if (!shape_renderer)
+    return;
+
+  cr = get_cairo_context (gdk_renderer, PANGO_RENDER_PART_FOREGROUND);
+  
+  cairo_save (cr);
+
+  if (priv->embossed)
+    {
+      cairo_save (cr);
+      emboss_context (gdk_renderer, cr);
+
+      cairo_move_to (cr, dx, dy);
+      shape_renderer (cr, attr, FALSE, shape_renderer_data);
+
+      cairo_restore (cr);
+    }
+
+  cairo_move_to (cr, dx, dy);
+  shape_renderer (cr, attr, FALSE, shape_renderer_data);
+
+  cairo_restore (cr);
+}
+
+static void
 gdk_pango_renderer_part_changed (PangoRenderer   *renderer,
 				 PangoRenderPart  part)
 {
@@ -474,6 +520,7 @@ gdk_pango_renderer_class_init (GdkPangoRendererClass *klass)
   renderer_class->draw_glyphs = gdk_pango_renderer_draw_glyphs;
   renderer_class->draw_rectangle = gdk_pango_renderer_draw_rectangle;
   renderer_class->draw_error_underline = gdk_pango_renderer_draw_error_underline;
+  renderer_class->draw_shape = gdk_pango_renderer_draw_shape;
   renderer_class->part_changed = gdk_pango_renderer_part_changed;
   renderer_class->begin = gdk_pango_renderer_begin;
   renderer_class->end = gdk_pango_renderer_end;
