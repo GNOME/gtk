@@ -1,3 +1,9 @@
+2009-03-27  Hans Breuer  <hans@breuer.org>
+
+	* io-gdip-utils.c(gdip_buffer_to_bitmap) : don't try to set the stream
+	size before stream creation - makes the gdip backend good enough to
+	serve gdk-pixbuf-csource.
+
 2009-01-19  Tor Lillqvist  <tml@iki.fi>
 
 	Bug 568305 - gdk-pixbuf mishandles BI_BITFIELDS bmps
