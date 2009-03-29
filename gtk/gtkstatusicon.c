@@ -1780,7 +1780,8 @@ gtk_status_icon_reset_image_data (GtkStatusIcon *status_icon)
       break;
 
     case GTK_IMAGE_GICON:
-      g_free (priv->image_data.gicon);
+      if (priv->image_data.gicon)
+        g_object_unref (priv->image_data.gicon);
       priv->image_data.gicon = NULL;
 
       g_object_notify (G_OBJECT (status_icon), "gicon");
@@ -1948,6 +1949,9 @@ gtk_status_icon_set_from_gicon (GtkStatusIcon *status_icon,
 {
   g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
   g_return_if_fail (icon != NULL);
+
+  if (icon)
+    g_object_ref (icon);
 
   gtk_status_icon_set_image (status_icon, GTK_IMAGE_GICON,
                              (gpointer) icon);

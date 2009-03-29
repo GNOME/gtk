@@ -1,3 +1,12 @@
+2009-03-29  Christian Persch  <chpe@gnome.org>
+
+	Bug 577224 – crash when setting new icon after setting icon in
+	gtkstatusicon
+
+	* gtk/gtkstatusicon.c: (gtk_status_icon_reset_image_data),
+	(gtk_status_icon_set_from_gicon): Retain a reference when setting
+	from a GIcon, and use g_object_unref on GIcon, not g_free.
+
 2009-03-27  Behdad Esfahbod  <behdad@gnome.org>
 
 	Bug 437533 – Implement draw_shape PangoRenderer method
