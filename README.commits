@@ -4,8 +4,8 @@ GTK+. This is a good thing, in that it encourages many people to work
 on GTK+, and progress can be made quickly. However, GTK+ is a fairly
 large and complicated package that many other things depend on, so to
 avoid unnecessary breakage, and to take advantage of the knowledge
-about GTK+ that has been built up over the last 4 years, we'd like
-to ask people committing to GTK+ to follow a few rules:
+about GTK+ that has been built up over the years, we'd like to ask
+people committing to GTK+ to follow a few rules:
 
 0) Ask first. If your changes are major, or could possibly break existing
    code, you should always ask. If your change is minor and you've
