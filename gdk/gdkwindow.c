@@ -2116,8 +2116,8 @@ gdk_window_clear_backing_rect_redirect (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  paint.x_offset = 0;
-  paint.y_offset = 0;
+  paint.x_offset = x_offset;
+  paint.y_offset = y_offset;
   paint.pixmap = redirect->pixmap;
   paint.surface = _gdk_drawable_ref_cairo_surface (redirect->pixmap);
   
@@ -2125,19 +2125,10 @@ gdk_window_clear_backing_rect_redirect (GdkWindow *window,
 							GDK_WINDOW (redirect->redirected),
 							NULL, TRUE,
 							&x_offset, &y_offset);
-  /* offset is from redirected window origin to window origin, convert to
-     the offset from the redirected pixmap origin to the window origin */
-  x_offset += redirect->dest_x - redirect->src_x;
-  y_offset += redirect->dest_y - redirect->src_y;
-
-  /* Convert region and rect to pixmap coords */
-  gdk_region_offset (clip_region, x_offset, y_offset);
-  x += x_offset;
-  y += y_offset;
-
+  
   method.cr = NULL;
   method.gc = NULL;
-  setup_backing_rect_method (&method, window, &paint, -x_offset, -y_offset);
+  setup_backing_rect_method (&method, window, &paint, 0, 0);
 
   if (method.cr)
     {
@@ -2156,7 +2147,7 @@ gdk_window_clear_backing_rect_redirect (GdkWindow *window,
       g_assert (method.gc != NULL);
 
       gdk_gc_set_clip_region (method.gc, clip_region);
-      gdk_draw_rectangle (redirect->pixmap, method.gc, TRUE, x, y, width, height);
+      gdk_draw_rectangle (window, method.gc, TRUE, x, y, width, height);
       g_object_unref (method.gc);
 
     }
