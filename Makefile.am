@@ -19,6 +19,9 @@ EXTRA_DIST +=			\
 	ChangeLog.pre-2-6	\
 	ChangeLog.pre-2-8	\
 	ChangeLog.pre-2-10	\
+	ChangeLog.pre-2-12	\
+	ChangeLog.pre-2-14	\
+	ChangeLog.pre-2-16	\
 	ChangeLog.gtk-async-file-chooser	\
 	ChangeLog.gtk-printing	\
 	README.commits	\
@@ -152,6 +155,20 @@ DISTCLEANFILES =				\
 	gail-uninstalled.pc 			\
 	config.lt
 
+ChangeLog:
+	@echo Creating $@
+	@if test -d "$(srcdir)/.git"; then \
+	  (GIT_DIR=$(top_srcdir)/.git ./missing --run git log GTK_2_16_0^^.. --stat) | fmt --split-only > $@.tmp \
+	  && mv -f $@.tmp $@ \
+	  || ($(RM) $@.tmp; \
+	      echo Failed to generate ChangeLog, your ChangeLog may be outdated >&2; \
+	      (test -f $@ || echo git-log is required to generate this file >> $@)); \
+	else \
+	  test -f $@ || \
+	  (echo A git checkout and git-log is required to generate ChangeLog >&2 && \
+	  echo A git checkout and git-log is required to generate this file >> $@); \
+	fi
+
 ## copy the default target for this platform to gdk-2.0.pc and gtk+-2.0.pc
 DEFAULT_GDKTARGET=x11
 install-data-hook:
@@ -176,7 +193,7 @@ dist-hook:
 	     && cp INSTALL README $(distdir) ; \
 	fi
 
-.PHONY: files release sanity snapshot
+.PHONY: files release sanity snapshot ChangeLog
 
 files:
 	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
