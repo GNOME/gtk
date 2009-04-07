@@ -3995,7 +3995,9 @@ gdk_x11_window_set_user_time (GdkWindow *window,
                    XA_CARDINAL, 32, PropModeReplace,
                    (guchar *)&timestamp_long, 1);
 
-  if (timestamp_long != GDK_CURRENT_TIME)
+  if (timestamp_long != GDK_CURRENT_TIME &&
+      (display_x11->user_time == GDK_CURRENT_TIME ||
+       XSERVER_TIME_IS_LATER (timestamp_long, display_x11->user_time)))
     display_x11->user_time = timestamp_long;
 
   if (toplevel)
