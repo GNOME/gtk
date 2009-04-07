@@ -165,6 +165,9 @@ gtk_accel_group_finalize (GObject *object)
 	  _gtk_accel_map_remove_group (accel_path, accel_group);
 	}
       g_closure_remove_invalidate_notifier (entry->closure, accel_group, accel_closure_invalidate);
+
+      /* remove quick_accel_add() refcount */
+      g_closure_unref (entry->closure);
     }
 
   g_free (accel_group->priv_accels);
