@@ -229,7 +229,7 @@ gdk_display_get_name (GdkDisplay *display)
   DWORD session_id;
   char *display_name;
   static const char *display_name_cache = NULL;
-  typedef BOOL (* PFN_ProcessIdToSessionId) (DWORD, DWORD *);
+  typedef BOOL (WINAPI *PFN_ProcessIdToSessionId) (DWORD, DWORD *);
   PFN_ProcessIdToSessionId processIdToSessionId;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);

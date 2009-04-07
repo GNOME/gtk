@@ -44,10 +44,18 @@ builder_new_from_string (const gchar *buffer,
                          const gchar *domain)
 {
   GtkBuilder *builder;
+  GError *error = NULL;
+
   builder = gtk_builder_new ();
   if (domain)
     gtk_builder_set_translation_domain (builder, domain);
-  gtk_builder_add_from_string (builder, buffer, length, NULL);
+  gtk_builder_add_from_string (builder, buffer, length, &error);
+  if (error)
+    {
+      g_print ("ERROR: %s", error->message);
+      g_error_free (error);
+    }
+
   return builder;
 }
 
@@ -1580,6 +1588,7 @@ test_widget (void)
     "          <object class=\"GtkButton\" id=\"button1\">"
     "            <accessibility>"
     "              <action action_name=\"click\" description=\"Sliff\"/>"
+    "              <action action_name=\"clack\" translatable=\"yes\">Sniff</action>"
     "            </accessibility>"
     "          </object>"
     "        </child>"

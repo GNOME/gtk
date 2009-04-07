@@ -298,11 +298,12 @@ is_requested_object (const gchar *object,
 }
 
 static void
-parse_object (ParserData   *data,
-              const gchar  *element_name,
-              const gchar **names,
-              const gchar **values,
-              GError      **error)
+parse_object (GMarkupParseContext  *context,
+              ParserData           *data,
+              const gchar          *element_name,
+              const gchar         **names,
+              const gchar         **values,
+              GError              **error)
 {
   ObjectInfo *object_info;
   ChildInfo* child_info;
@@ -310,6 +311,7 @@ parse_object (ParserData   *data,
   gchar *object_class = NULL;
   gchar *object_id = NULL;
   gchar *constructor = NULL;
+  gint line, line2;
 
   child_info = state_peek_info (data, ChildInfo);
   if (child_info && strcmp (child_info->tag.name, "object") == 0)
@@ -335,10 +337,11 @@ parse_object (ParserData   *data,
           object_class = _get_type_by_symbol (values[i]);
           if (!object_class)
             {
-              g_set_error (error, GTK_BUILDER_ERROR, 
+              g_markup_parse_context_get_position (context, &line, NULL);
+              g_set_error (error, GTK_BUILDER_ERROR,
                            GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION,
-                           _("Invalid type function: `%s'"),
-                           values[i]);
+                           _("Invalid type function on line %d: '%s'"),
+                           line, values[i]);
               return;
             }
         }
@@ -389,6 +392,19 @@ parse_object (ParserData   *data,
 
   if (child_info)
     object_info->parent = (CommonInfo*)child_info;
+
+  g_markup_parse_context_get_position (context, &line, NULL);
+  line2 = GPOINTER_TO_INT (g_hash_table_lookup (data->object_ids, object_id));
+  if (line2 != 0)
+    {
+      g_set_error (error, GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_DUPLICATE_ID,
+                   _("Duplicate object id '%s' on line %d (previously on line %d)"),
+                   object_id, line, line2);
+      return;
+    }
+
+  g_hash_table_insert (data->object_ids, object_id, GINT_TO_POINTER (line));
 }
 
 static void
@@ -848,7 +864,7 @@ start_element (GMarkupParseContext *context,
   if (strcmp (element_name, "requires") == 0)
     parse_requires (data, element_name, names, values, error);
   else if (strcmp (element_name, "object") == 0)
-    parse_object (data, element_name, names, values, error);
+    parse_object (context, data, element_name, names, values, error);
   else if (data->requested_objects && !data->inside_requested_object)
     {
       /* If outside a requested object, simply ignore this tag */
@@ -1145,6 +1161,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   data->builder = builder;
   data->filename = filename;
   data->domain = g_strdup (domain);
+  data->object_ids = g_hash_table_new (g_str_hash, g_str_equal);
 
   data->requested_objects = NULL;
   if (requested_objs)
@@ -1204,6 +1221,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   g_slist_foreach (data->requested_objects, (GFunc) g_free, NULL);
   g_slist_free (data->requested_objects);
   g_free (data->domain);
+  g_hash_table_destroy (data->object_ids);
   g_markup_parse_context_free (data->ctx);
   g_free (data);
 

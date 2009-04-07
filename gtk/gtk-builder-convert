@@ -257,6 +257,8 @@ class GtkBuilderConverter(object):
 
         for node in objects:
             self._convert(node.getAttribute("class"), node)
+            if self._get_object(node.getAttribute('id')) is not None:
+		print "WARNING: duplicate id \"" + node.getAttribute('id') + "\""
             self.objects[node.getAttribute('id')] = node
 
         # Convert Gazpachos UI tag

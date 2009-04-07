@@ -101,6 +101,8 @@ typedef struct {
   gboolean inside_requested_object;
   gint requested_object_level;
   gint cur_object_level;
+
+  GHashTable *object_ids;
 } ParserData;
 
 typedef GType (*GTypeGetFunc) (void);
