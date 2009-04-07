@@ -1538,6 +1538,12 @@ gtk_expander_set_label (GtkExpander *expander,
  * return value will be %NULL. This will be the case if you create an
  * empty button with gtk_button_new() to use as a container.
  *
+ * Note that this function behaved differently in versions prior to
+ * 2.14 and used to return the label text stripped of embedded
+ * underlines indicating mnemonics and Pango markup. This problem can
+ * be avoided by fetching the label text directly from the label
+ * widget.
+ *
  * Return value: The text of the label widget. This string is owned
  * by the widget and must not be modified or freed.
  *
