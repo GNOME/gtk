@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-HEAD-po-el-3920.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-06 22:00+0100\n"
+"POT-Creation-Date: 2009-04-07 14:47+0100\n"
 "PO-Revision-Date: 2009-04-05 02:33+0100\n"
 "Last-Translator: Jennie Petoumenou <epetoumenou@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -1328,17 +1328,22 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Ανάποδη κάθετος"
 
-#: ../gtk/gtkbuilderparser.c:340
+#: ../gtk/gtkbuilderparser.c:343
 #, c-format
-msgid "Invalid type function: `%s'"
-msgstr "Μη έγκυρος τύπος συνάρτησης: '%s'"
+msgid "Invalid type function on line %d: '%s'"
+msgstr "Μη έγκυρος τύπος συνάρτησης στη γραμμή %d: '%s'"
 
-#: ../gtk/gtkbuilderparser.c:837
+#: ../gtk/gtkbuilderparser.c:402
+#, c-format
+msgid "Duplicate object id '%s' on line %d (previously on line %d)"
+msgstr "Διπλή εμφάνιση id αντικειμένου '%s' στη γραμμή %d (προηγουμένως στη γραμμή %d)"
+
+#: ../gtk/gtkbuilderparser.c:853
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Μη έγκυρο γονικό στοιχείο: '%s'"
 
-#: ../gtk/gtkbuilderparser.c:876
+#: ../gtk/gtkbuilderparser.c:892
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Μη υποστηριζόμενη ετικέτα: '%s'"
