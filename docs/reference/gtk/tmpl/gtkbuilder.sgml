@@ -285,6 +285,7 @@ using #GtkBuilder.
     some attribute value.
 @GTK_BUILDER_ERROR_VERSION_MISMATCH: The input file requires a newer version
     of GTK+.
+@GTK_BUILDER_ERROR_DUPLICATE_ID: An object id occurred twice.
 
 <!-- ##### FUNCTION gtk_builder_new ##### -->
 <para>
