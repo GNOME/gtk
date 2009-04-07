@@ -560,6 +560,8 @@ class GtkBuilderConverter(object):
         data = self._dom.createElement('data')
         model.appendChild(data)
 
+        if value.endswith('\n'):
+            value = value[:-1]
         for item in value.split('\n'):
             row = self._dom.createElement('row')
             data.appendChild(row)
