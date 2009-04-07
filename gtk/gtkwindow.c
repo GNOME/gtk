@@ -395,7 +395,8 @@ extract_time_from_startup_id (const gchar* startup_id)
     
       /* Skip past the "_TIME" part */
       timestr += 5;
-    
+
+      errno = 0;
       timestamp = strtoul (timestr, &end, 0);
       if (end != timestr && errno == 0)
         retval = timestamp;
