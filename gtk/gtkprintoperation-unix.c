@@ -216,6 +216,8 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   page_setup = gtk_print_context_get_page_setup (op->priv->print_context);
   gtk_page_setup_to_key_file (page_setup, key_file, NULL);
 
+  g_key_file_set_string (key_file, "Print Job", "title", op->priv->job_name);
+
   data = g_key_file_to_data (key_file, &data_len, &error);
   if (!data)
     goto out;
