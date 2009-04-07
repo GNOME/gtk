@@ -183,6 +183,10 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   gchar *preview_cmd;
   GtkSettings *settings;
   GtkPrintSettings *print_settings;
+  GtkPageSetup *page_setup;
+  GKeyFile *key_file = NULL;
+  gchar *data = NULL;
+  gsize data_len;
   gchar *settings_filename = NULL;
   gchar *quoted_filename;
   gchar *quoted_settings_filename;
@@ -204,10 +208,19 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   if (fd < 0) 
     goto out;
 
+  key_file = g_key_file_new ();
+  
   print_settings = gtk_print_operation_get_print_settings (op);
-  retval = gtk_print_settings_to_file (print_settings, settings_filename, &error);
-  close (fd);
+  gtk_print_settings_to_key_file (print_settings, key_file, NULL);
 
+  page_setup = gtk_print_context_get_page_setup (op->priv->print_context);
+  gtk_page_setup_to_key_file (page_setup, key_file, NULL);
+
+  data = g_key_file_to_data (key_file, &data_len, &error);
+  if (!data)
+    goto out;
+
+  retval = g_file_set_contents (settings_filename, data, data_len, &error);
   if (!retval)
     goto out;
 
@@ -259,6 +272,12 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   if (!settings_used)
     g_unlink (settings_filename);
 
+  if (fd > 0)
+    close (fd);
+  
+  if (key_file)
+    g_key_file_free (key_file);
+  g_free (data);
   g_free (settings_filename);
 }
 
