@@ -1500,18 +1500,21 @@ gtk_window_set_startup_id (GtkWindow   *window,
   
   g_free (priv->startup_id);
   priv->startup_id = g_strdup (startup_id);
-  
+
   if (GTK_WIDGET_REALIZED (window))
     {
+      guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
+
+#ifdef GDK_WINDOWING_X11
+      if (timestamp != GDK_CURRENT_TIME)
+	gdk_x11_window_set_user_time (GTK_WIDGET (window)->window, timestamp);
+#endif
+
       /* Here we differentiate real and "fake" startup notification IDs,
        * constructed on purpose just to pass interaction timestamp
-       */  
+       */
       if (startup_id_is_fake (priv->startup_id))
-        {
-          guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
-
-          gtk_window_present_with_time (window, timestamp);
-        }
+	gtk_window_present_with_time (window, timestamp);
       else 
         {
           gdk_window_set_startup_id (GTK_WIDGET (window)->window,
