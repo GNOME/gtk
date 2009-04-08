@@ -1184,6 +1184,7 @@ real_save_jpeg (GdkPixbuf          *pixbuf,
                                             GDK_PIXBUF_ERROR,
                                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
                                             _("Couldn't allocate memory for loading JPEG file"));
+                       g_free (buf);
 		       return FALSE;
 	       }
        }
