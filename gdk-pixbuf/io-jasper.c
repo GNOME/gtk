@@ -163,7 +163,6 @@ jasper_image_try_load (struct jasper_context *context, GError **error)
 
 	if (!context->pixbuf) {
 		int bits_per_sample;
-		guchar *data;
 
 		/* Unfortunately, gdk-pixbuf doesn't support 16 bpp images
 		 * bits_per_sample = jas_image_cmptprec (image, 0);
@@ -174,17 +173,16 @@ jasper_image_try_load (struct jasper_context *context, GError **error)
 		*/
 		bits_per_sample = 8;
 
-		data = g_try_malloc0 (context->width * context->height * bits_per_sample / 8);
-		if (data == NULL) {
+		context->pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
+						  FALSE, bits_per_sample,
+						  context->width, context->height);
+		if (context->pixbuf == NULL) {
 			g_set_error_literal (error,
                                              GDK_PIXBUF_ERROR,
                                              GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
                                              _("Insufficient memory to open JPEG 2000 file"));
 			return FALSE;
 		}
-		context->pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
-						  FALSE, bits_per_sample,
-						  context->width, context->height);
 		if (context->prepared_func)
 			context->prepared_func (context->pixbuf, NULL, context->user_data);
 	}
