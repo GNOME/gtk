@@ -1864,15 +1864,6 @@ credits_visibility_notify_event (GtkWidget          *text_view,
 }
 
 static void
-text_view_style_set (GtkWidget *widget, 
-		     GtkStyle  *prev_style, 
-		     GtkWidget *text_view)
-{
-  gtk_widget_modify_base (text_view, GTK_STATE_NORMAL,
-			  &widget->style->bg[GTK_STATE_NORMAL]);
-}
-
-static void
 add_credits_page (GtkAboutDialog *about, 
 		  GtkWidget      *notebook,
 		  gchar          *title,
@@ -1915,8 +1906,6 @@ add_credits_page (GtkAboutDialog *about,
     visited_link_color = default_visited_link_color;
 
   view = gtk_text_view_new ();
-  g_signal_connect_object (about, "style-set",
-			   G_CALLBACK (text_view_style_set), view, 0);
   
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
