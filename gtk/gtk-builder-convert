@@ -29,7 +29,7 @@ The [INPUT] file is
   -r, --root             Convert only widget named root and its children
   -h, --help             display this help and exit
 
-When OUTPUT is -, write to standard input.
+When OUTPUT is -, write to standard output.
 
 Examples:
   gtk-builder-convert preference.glade preferences.ui
