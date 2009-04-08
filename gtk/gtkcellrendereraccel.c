@@ -244,7 +244,16 @@ convert_keysym_state_to_string (GtkCellRendererAccel *accel,
   else 
     {
       if (accel->accel_mode == GTK_CELL_RENDERER_ACCEL_MODE_GTK)
-	return gtk_accelerator_get_label (keysym, mask);
+        {
+          if (!gtk_accelerator_valid (keysym, mask))
+            /* This label is displayed in a treeview cell displaying
+             * an accelerator key combination that is not valid according
+             * to gtk_accelerator_valid().
+             */
+            return g_strdup (C_("Accelerator", "Invalid"));
+
+          return gtk_accelerator_get_label (keysym, mask);
+        }
       else 
 	{
 	  gchar *name;
