@@ -1083,19 +1083,19 @@ update_print_at_option (GtkPrintUnixDialog *dialog)
   
   if (priv->updating_print_at)
     return;
-  
+
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->print_at_radio)))
     gtk_printer_option_set (option, "at");
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->print_hold_radio)))
     gtk_printer_option_set (option, "on-hold");
   else
     gtk_printer_option_set (option, "now");
-  
+
   option = gtk_printer_option_set_lookup (priv->options, "gtk-print-time-text");
   if (option != NULL)
     {
       const char *text = gtk_entry_get_text (GTK_ENTRY (priv->print_at_entry));
-      gtk_printer_option_set (option,text);
+      gtk_printer_option_set (option, text);
     }
 }
 
@@ -1105,9 +1105,9 @@ setup_print_at (GtkPrintUnixDialog *dialog)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkPrinterOption *option;
-  
+
   option = gtk_printer_option_set_lookup (priv->options, "gtk-print-time");
- 
+
   if (option == NULL)
     {
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->print_now_radio),
@@ -1120,18 +1120,11 @@ setup_print_at (GtkPrintUnixDialog *dialog)
     }
 
   priv->updating_print_at = TRUE;
-  
-  if (gtk_printer_option_has_choice (option, "at"))
-    {
-      gtk_widget_set_sensitive (priv->print_at_radio, TRUE);
-      gtk_widget_set_sensitive (priv->print_at_entry, TRUE);
-    }
-  else
-    {
-      gtk_widget_set_sensitive (priv->print_at_radio, FALSE);
-      gtk_widget_set_sensitive (priv->print_at_entry, FALSE);
-    }
-  
+
+  gtk_widget_set_sensitive (priv->print_at_entry, FALSE);
+  gtk_widget_set_sensitive (priv->print_at_radio,
+                            gtk_printer_option_has_choice (option, "at"));
+
   gtk_widget_set_sensitive (priv->print_hold_radio,
 			    gtk_printer_option_has_choice (option, "on-hold"));
 
@@ -1149,15 +1142,14 @@ setup_print_at (GtkPrintUnixDialog *dialog)
 
   option = gtk_printer_option_set_lookup (priv->options, "gtk-print-time-text");
   if (option != NULL)
-    gtk_entry_set_text (GTK_ENTRY (priv->print_at_entry),
-			option->value);
-  
+    gtk_entry_set_text (GTK_ENTRY (priv->print_at_entry), option->value);
+
 
   priv->updating_print_at = FALSE;
 
   return TRUE;
 }
-	     
+
 static void
 update_dialog_from_settings (GtkPrintUnixDialog *dialog)
 {
@@ -1679,15 +1671,15 @@ gtk_print_unix_dialog_style_set (GtkWidget *widget,
 					 &size,
 					 NULL);
       scale = size / 48.0;
-      
-      gtk_widget_set_size_request (priv->collate_image, 
+
+      gtk_widget_set_size_request (priv->collate_image,
 				   (50 + 20) * scale,
 				   (15 + 26) * scale);
     }
 }
 
 static void
-update_range_sensitivity (GtkWidget *button,
+update_entry_sensitivity (GtkWidget *button,
 			  GtkWidget *range)
 {
   gboolean active;
@@ -1840,13 +1832,15 @@ create_main_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
   entry = gtk_entry_new ();
   gtk_widget_set_tooltip_text (entry, range_tooltip);
+  atk_object_set_name (gtk_widget_get_accessible (entry), _("Pages"));
+  atk_object_set_description (gtk_widget_get_accessible (entry), range_tooltip);
   priv->page_range_entry = entry;
   gtk_widget_show (entry);
   gtk_table_attach (GTK_TABLE (table), entry,
 		    1, 2, 2, 3,  GTK_FILL, 0,
 		    0, 0);
-  g_signal_connect (radio, "toggled", G_CALLBACK (update_range_sensitivity), entry);
-  update_range_sensitivity (radio, entry);
+  g_signal_connect (radio, "toggled", G_CALLBACK (update_entry_sensitivity), entry);
+  update_entry_sensitivity (radio, entry);
 
   table = gtk_table_new (3, 2, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
@@ -2751,7 +2745,7 @@ create_job_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
   gtk_widget_show (table);
 
-  /* Translators: this is one of the choices for the print at option 
+  /* Translators: this is one of the choices for the print at option
    * in the print dialog
    */
   radio = gtk_radio_button_new_with_mnemonic (NULL, _("_Now"));
@@ -2760,7 +2754,7 @@ create_job_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), radio,
 		    0, 2, 0, 1,  GTK_FILL, 0,
 		    0, 0);
-  /* Translators: this is one of the choices for the print at option 
+  /* Translators: this is one of the choices for the print at option
    * in the print dialog. It also serves as the label for an entry that
    * allows the user to enter a time.
    */
@@ -2768,8 +2762,9 @@ create_job_page (GtkPrintUnixDialog *dialog)
 					      _("A_t:"));
 
   /* Translators: Ability to parse the am/pm format depends on actual locale.
-   * You can remove the am/pm values below for your locale if they are not supported. 
-   */ 
+   * You can remove the am/pm values below for your locale if they are not
+   * supported.
+   */
   at_tooltip = _("Specify the time of print,\n e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm");
   gtk_widget_set_tooltip_text (radio, at_tooltip);
   priv->print_at_radio = radio;
@@ -2780,13 +2775,18 @@ create_job_page (GtkPrintUnixDialog *dialog)
 
   entry = gtk_entry_new ();
   gtk_widget_set_tooltip_text (entry, at_tooltip);
+  atk_object_set_name (gtk_widget_get_accessible (entry), _("At"));
+  atk_object_set_description (gtk_widget_get_accessible (entry), at_tooltip);
   priv->print_at_entry = entry;
   gtk_widget_show (entry);
   gtk_table_attach (GTK_TABLE (table), entry,
 		    1, 2, 1, 2,  GTK_FILL, 0,
 		    0, 0);
 
-  /* Translators: this is one of the choices for the print at option 
+  g_signal_connect (radio, "toggled", G_CALLBACK (update_entry_sensitivity), entry);
+  update_entry_sensitivity (radio, entry);
+
+  /* Translators: this is one of the choices for the print at option
    * in the print dialog. It means that the print job will not be
    * printed until it explicitly gets 'released'.
    */
