@@ -1343,7 +1343,7 @@ msgstr ""
 #: ../gtk/gtkbuilderparser.c:853
 #, c-format
 msgid "Invalid root element: '%s'"
-msgstr "Μη έγκυρο γονικό στοιχείο: '%s'"
+msgstr "Μη έγκυρο ριζικό στοιχείο: '%s'"
 
 #: ../gtk/gtkbuilderparser.c:892
 #, c-format
@@ -2062,7 +2062,7 @@ msgstr "Σύστημα αρχείων"
 
 #: ../gtk/gtkfilesystemmodel.c:700
 msgid "Could not obtain root folder"
-msgstr "Αδυναμία εύρεσης φακέλου root"
+msgstr "Αδυναμία εντοπισμού ριζικού φακέλου"
 
 #: ../gtk/gtkfilesystemmodel.c:1301
 msgid "(Empty)"
@@ -2457,7 +2457,7 @@ msgstr "Διαδρομή κάτω"
 
 #: ../gtk/gtkpathbar.c:1472
 msgid "File System Root"
-msgstr "Root συστήματος αρχείων"
+msgstr "Ρίζα συστήματος αρχείων"
 
 #: ../gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
