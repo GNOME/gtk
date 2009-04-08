@@ -316,9 +316,14 @@ pw_dialog_input_is_valid (GtkMountOperation *operation)
   GtkMountOperationPrivate *priv = operation->priv;
   gboolean is_valid = TRUE;
 
+  /* We don't require password to be non-empty here
+   * since there are situations where it is not needed,
+   * see bug 578365.
+   * We may add a way for the backend to specify that it
+   * definitively needs a password.
+   */
   is_valid = entry_has_input (priv->username_entry) &&
-             entry_has_input (priv->domain_entry) &&
-             entry_has_input (priv->password_entry);
+             entry_has_input (priv->domain_entry);
 
   return is_valid;
 }
