@@ -1695,6 +1695,9 @@ update_range_sensitivity (GtkWidget *button,
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
   gtk_widget_set_sensitive (range, active);
+
+  if (active)
+    gtk_widget_grab_focus (range);
 }
 
 static void
