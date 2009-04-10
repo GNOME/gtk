@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-HEAD-po-el-3920.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-08 20:24+0100\n"
+"POT-Creation-Date: 2009-04-10 23:27+0100\n"
 "PO-Revision-Date: 2009-04-05 02:33+0100\n"
 "Last-Translator: Jennie Petoumenou <epetoumenou@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -2543,15 +2543,15 @@ msgstr "Σφάλμα κατά την παραγωγή της προεπισκό�
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Η πιθανότερη αιτία είναι η αδυναμία δημιουργίας προσωρινού αρχείου."
 
-#: ../gtk/gtkprintoperation-unix.c:242
+#: ../gtk/gtkprintoperation-unix.c:257
 msgid "Error launching preview"
 msgstr "Σφάλμα κατά την εκκίνηση της προεπισκόπησης"
 
-#: ../gtk/gtkprintoperation-unix.c:280
+#: ../gtk/gtkprintoperation-unix.c:301
 msgid "Error printing"
 msgstr "Σφάλμα κατά την εκτύπωση"
 
-#: ../gtk/gtkprintoperation-unix.c:384 ../gtk/gtkprintoperation-win32.c:1425
+#: ../gtk/gtkprintoperation-unix.c:405 ../gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "Εφαρμογή"
 
@@ -2782,8 +2782,8 @@ msgstr ""
 "π.χ. 15:30, 2:35 μμ, 14:15:20, 11:46:30 πμ, 4 μμ"
 
 #: ../gtk/gtkprintunixdialog.c:2778
-msgid "At"
-msgstr "Σε"
+msgid "Time of print"
+msgstr "Ώρα εκτύπωσης"
 
 #: ../gtk/gtkprintunixdialog.c:2794
 msgid "On _hold"
@@ -5029,3 +5029,6 @@ msgstr "Εκτύπωση σε δοκιμαστικό εκτυπωτή"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Αδυναμία λήψης πληροφοριών για το αρχείο '%s': %s"
+
+#~ msgid "At"
+#~ msgstr "Σε"
