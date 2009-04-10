@@ -2775,7 +2775,7 @@ create_job_page (GtkPrintUnixDialog *dialog)
 
   entry = gtk_entry_new ();
   gtk_widget_set_tooltip_text (entry, at_tooltip);
-  atk_object_set_name (gtk_widget_get_accessible (entry), _("At"));
+  atk_object_set_name (gtk_widget_get_accessible (entry), _("Time of print"));
   atk_object_set_description (gtk_widget_get_accessible (entry), at_tooltip);
   priv->print_at_entry = entry;
   gtk_widget_show (entry);
