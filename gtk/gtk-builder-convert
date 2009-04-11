@@ -42,10 +42,10 @@ import sys
 
 from xml.dom import minidom, Node
 
-WINDOWS = ['GtkWindow',
-           'GtkDialog',
+DIALOGS = ['GtkDialog',
            'GtkFileChooserDialog',
            'GtkMessageDialog']
+WINDOWS = ['GtkWindow'] + DIALOGS
 
 # The subprocess is only available in Python 2.4+
 try:
@@ -499,7 +499,7 @@ class GtkBuilderConverter(object):
                 return
 
             if (node.tagName == 'object' and
-                node.getAttribute('class') == 'GtkDialog'):
+                node.getAttribute('class') in DIALOGS):
                 dialog = node
                 break
             node = node.parentNode
