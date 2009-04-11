@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-13 10:29-0400\n"
+"POT-Creation-Date: 2009-04-11 16:25-0400\n"
 "PO-Revision-Date: 2009-03-10 13:13+0200\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -91,12 +91,12 @@ msgstr "Oletusnäyttö"
 msgid "The default display for GDK"
 msgstr "GDK:n oletusnäyttö"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
-#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
+#: gdk/gdkpango.c:537 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
+#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:614
 msgid "Screen"
 msgstr "Näyttö"
 
-#: gdk/gdkpango.c:491
+#: gdk/gdkpango.c:538
 msgid "the GdkScreen for the renderer"
 msgstr "GdkScreen renderöijälle"
 
@@ -116,11 +116,11 @@ msgstr "Kirjasimen tarkkuus"
 msgid "The resolution for fonts on the screen"
 msgstr "Näytöllä käytettyjen kirjasinten tarkkuus"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:184
 msgid "Program name"
 msgstr "Ohjelman nimi"
 
-#: gtk/gtkaboutdialog.c:201
+#: gtk/gtkaboutdialog.c:185
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -128,86 +128,86 @@ msgstr ""
 "Ohjelman nimi. Jos tätä ei ole asetettu, oletuksena on g_get_application_name"
 "()"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:199
 msgid "Program version"
 msgstr "Ohjelman versio"
 
-#: gtk/gtkaboutdialog.c:216
+#: gtk/gtkaboutdialog.c:200
 msgid "The version of the program"
 msgstr "Ohjelman versio"
 
-#: gtk/gtkaboutdialog.c:230
+#: gtk/gtkaboutdialog.c:214
 msgid "Copyright string"
 msgstr "Tekijänoikeustiedot"
 
-#: gtk/gtkaboutdialog.c:231
+#: gtk/gtkaboutdialog.c:215
 msgid "Copyright information for the program"
 msgstr "Ohjelman tekijänoikeuksien tiedot"
 
-#: gtk/gtkaboutdialog.c:248
+#: gtk/gtkaboutdialog.c:232
 msgid "Comments string"
 msgstr "Kommentti"
 
-#: gtk/gtkaboutdialog.c:249
+#: gtk/gtkaboutdialog.c:233
 msgid "Comments about the program"
 msgstr "Kommentit ohjelmasta"
 
-#: gtk/gtkaboutdialog.c:283
+#: gtk/gtkaboutdialog.c:267
 msgid "Website URL"
 msgstr "Kotisivun URL"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:268
 msgid "The URL for the link to the website of the program"
 msgstr "URL-linkki ohjelman kotisivulle"
 
-#: gtk/gtkaboutdialog.c:300
+#: gtk/gtkaboutdialog.c:284
 msgid "Website label"
 msgstr "Kotisivun nimiö"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:285
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr "Nimiö ohjelman kotisivulinkkiin. Oletuksena on URL"
 
-#: gtk/gtkaboutdialog.c:317
+#: gtk/gtkaboutdialog.c:301
 msgid "Authors"
 msgstr "Tekijät"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:302
 msgid "List of authors of the program"
 msgstr "Luettelo ohjelman tekijöistä"
 
-#: gtk/gtkaboutdialog.c:334
+#: gtk/gtkaboutdialog.c:318
 msgid "Documenters"
 msgstr "Dokumentoijat"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:319
 msgid "List of people documenting the program"
 msgstr "Luettelo ohjelman dokumentoijista"
 
-#: gtk/gtkaboutdialog.c:351
+#: gtk/gtkaboutdialog.c:335
 msgid "Artists"
 msgstr "Taiteilijat"
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:336
 msgid "List of people who have contributed artwork to the program"
 msgstr "Luettelo ohjelman kuvamateriaalia tehneistä henkilöistä"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:353
 msgid "Translator credits"
 msgstr "Kääntäjäkiitokset"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:354
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Kiitokset kääntäjille. Tämä pitää merkitä käännettäväksi"
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:369
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:370
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -215,19 +215,19 @@ msgstr ""
 "Logo tietoja-laatikkoon. Jos ei asetettu, oletuksena on "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:401
+#: gtk/gtkaboutdialog.c:385
 msgid "Logo Icon Name"
 msgstr "Logokuvakkeen nimi"
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:386
 msgid "A named icon to use as the logo for the about box."
 msgstr "Nimetty kuvake, jota käytetään logona tietoja-laatikossa."
 
-#: gtk/gtkaboutdialog.c:415
+#: gtk/gtkaboutdialog.c:399
 msgid "Wrap license"
 msgstr "Rivitä lisenssi"
 
-#: gtk/gtkaboutdialog.c:416
+#: gtk/gtkaboutdialog.c:400
 msgid "Whether to wrap the license text."
 msgstr "Rivitetäänkö lisenssin teksti"
 
@@ -300,7 +300,7 @@ msgid "The GIcon being displayed"
 msgstr "Näytettävä GIcon-kuvake"
 
 #: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
-#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:605
+#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:606
 msgid "Icon Name"
 msgstr "Kuvakkeen nimi"
 
@@ -404,7 +404,7 @@ msgid "Whether the action group is visible."
 msgstr "Onko tämä toimintoryhmä näkyvissä."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:206 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Arvo"
 
@@ -1231,7 +1231,7 @@ msgstr "Seuraa tilaa"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Väritetäänkö renderoitu pixbuf tilan mukaan"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:589
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:590
 msgid "Icon"
 msgstr "Kuvake"
 
@@ -1292,7 +1292,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Edistymispalkin asento ja kasvusuunta"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:225 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Koonmuutos"
 
@@ -3046,7 +3046,7 @@ msgstr "Kuvakejoukko"
 msgid "Icon set to display"
 msgstr "Näkyvä kuvakejoukko"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Kuvakekoko"
 
@@ -3110,7 +3110,7 @@ msgstr "Näytä kuvat valikossa"
 msgid "Whether images should be shown in menus"
 msgstr "Näkyvätkö kuvat valikoissa"
 
-#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:614
+#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:615
 msgid "The screen where this window will be displayed"
 msgstr "Näyttö, jolle tämä ikkuna näkyy"
 
@@ -4704,24 +4704,24 @@ msgstr "Arvon välit"
 msgid "Space between value text and the slider/trough area"
 msgstr "Väli arvotekstin ja liu'uttimen sekä uran alueen välissä"
 
-#: gtk/gtkscalebutton.c:205
+#: gtk/gtkscalebutton.c:207
 msgid "The value of the scale"
 msgstr "Asteikon arvo"
 
-#: gtk/gtkscalebutton.c:215
+#: gtk/gtkscalebutton.c:217
 msgid "The icon size"
 msgstr "Kuvakkeen koko"
 
-#: gtk/gtkscalebutton.c:224
+#: gtk/gtkscalebutton.c:226
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "GtkAdjustment, joka sisältää tämän asteikkonapin nykyisen arvon"
 
-#: gtk/gtkscalebutton.c:252
+#: gtk/gtkscalebutton.c:254
 msgid "Icons"
 msgstr "Kuvakkeet"
 
-#: gtk/gtkscalebutton.c:253
+#: gtk/gtkscalebutton.c:255
 msgid "List of icon names"
 msgstr "Luettelo kuvakkeiden nimistä"
 
@@ -6417,7 +6417,7 @@ msgstr "Puunäkymän viivojen piirrossa käytetty kuvio"
 msgid "Whether to display the column"
 msgstr "Onko otsake näkyvä"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:536
+#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "Muuttuvakokoinen"
 
@@ -6831,44 +6831,44 @@ msgstr "Pystysuuntaisten vieritysnuolten pituus"
 msgid "The length of vertical scroll arrows"
 msgstr "Pystysuuntaisten vieritysnuolten pituus"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:478
 msgid "Window Type"
 msgstr "Ikkunatyyppi"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:479
 msgid "The type of the window"
 msgstr "Ikkunan tyyppi"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:487
 msgid "Window Title"
 msgstr "Ikkunan otsikko"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:488
 msgid "The title of the window"
 msgstr "Ikkunan otsikko"
 
-#: gtk/gtkwindow.c:494
+#: gtk/gtkwindow.c:495
 msgid "Window Role"
 msgstr "Ikkunan rooli"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:496
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 "Ikkunan ainutkertainen tunniste, jota käytetään istuntoa palautettaessa"
 
-#: gtk/gtkwindow.c:511
+#: gtk/gtkwindow.c:512
 msgid "Startup ID"
 msgstr "Käynnistystunniste"
 
-#: gtk/gtkwindow.c:512
+#: gtk/gtkwindow.c:513
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr "Käynnistysilmaisimen käyttämä ikkunan yksilöllinen käynnistystunniste"
 
-#: gtk/gtkwindow.c:519
+#: gtk/gtkwindow.c:520
 msgid "Allow Shrink"
 msgstr "Salli kutistuminen"
 
-#: gtk/gtkwindow.c:521
+#: gtk/gtkwindow.c:522
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -6877,24 +6877,24 @@ msgstr ""
 "Jos TRUE, ikkunalla ei ole minimikokoa. Älä käytä tätä ominaisuutta, sillä "
 "se on useimmiten järjetöntä"
 
-#: gtk/gtkwindow.c:528
+#: gtk/gtkwindow.c:529
 msgid "Allow Grow"
 msgstr "Salli kasvu"
 
-#: gtk/gtkwindow.c:529
+#: gtk/gtkwindow.c:530
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 "Jos TRUE, käyttäjät voivat kasvattaa ikkunaa sen pienintä kokoa suuremmaksi"
 
-#: gtk/gtkwindow.c:537
+#: gtk/gtkwindow.c:538
 msgid "If TRUE, users can resize the window"
 msgstr "Jos TRUE, niin käyttäjä voi muuttaa ikkunan kokoa"
 
-#: gtk/gtkwindow.c:544
+#: gtk/gtkwindow.c:545
 msgid "Modal"
 msgstr "Modaalinen"
 
-#: gtk/gtkwindow.c:545
+#: gtk/gtkwindow.c:546
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -6902,68 +6902,68 @@ msgstr ""
 "Jos TRUE, niin ikkuna on modaalinen (muita ikkunoita ei voi käyttää sen "
 "näkyessä)"
 
-#: gtk/gtkwindow.c:552
+#: gtk/gtkwindow.c:553
 msgid "Window Position"
 msgstr "Ikkunan sijainti"
 
-#: gtk/gtkwindow.c:553
+#: gtk/gtkwindow.c:554
 msgid "The initial position of the window"
 msgstr "Ikkunan alkusijainti"
 
-#: gtk/gtkwindow.c:561
+#: gtk/gtkwindow.c:562
 msgid "Default Width"
 msgstr "Oletusleveys"
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:563
 msgid "The default width of the window, used when initially showing the window"
 msgstr "Ikkunan oletusleveys, jonka levyisenä se aluksi ilmestyy"
 
-#: gtk/gtkwindow.c:571
+#: gtk/gtkwindow.c:572
 msgid "Default Height"
 msgstr "Oletuskorkeus"
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:573
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "Ikkunan oletuskorkeus, jonka korkuisena se aluksi ilmestyy"
 
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:582
 msgid "Destroy with Parent"
 msgstr "Tuhoudu emon kanssa"
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:583
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Pitääkö tämän ikkunan tuhoutua, kun sen emoikkuna tuhoutuu"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:591
 msgid "Icon for this window"
 msgstr "Tämän ikkunan kuvake"
 
-#: gtk/gtkwindow.c:606
+#: gtk/gtkwindow.c:607
 msgid "Name of the themed icon for this window"
 msgstr "Tämän ikkunan teemakuvakkeen nimi"
 
-#: gtk/gtkwindow.c:621
+#: gtk/gtkwindow.c:622
 msgid "Is Active"
 msgstr "On aktiivinen"
 
-#: gtk/gtkwindow.c:622
+#: gtk/gtkwindow.c:623
 msgid "Whether the toplevel is the current active window"
 msgstr "Onko ylätaso nykyinen aktiivinen ikkuna"
 
-#: gtk/gtkwindow.c:629
+#: gtk/gtkwindow.c:630
 msgid "Focus in Toplevel"
 msgstr "Ylätaso kohdistunut"
 
-#: gtk/gtkwindow.c:630
+#: gtk/gtkwindow.c:631
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Onko syötekohdistus tässä GtkWindow:ssa"
 
-#: gtk/gtkwindow.c:637
+#: gtk/gtkwindow.c:638
 msgid "Type hint"
 msgstr "Tyyppivihje"
 
-#: gtk/gtkwindow.c:638
+#: gtk/gtkwindow.c:639
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -6971,83 +6971,83 @@ msgstr ""
 "Vihje työpöytäympäristölle, jotta se ymmärtäisi minkä tyyppinen ikkuna tämä "
 "on, ja miten sitä pitäisi kohdella."
 
-#: gtk/gtkwindow.c:646
+#: gtk/gtkwindow.c:647
 msgid "Skip taskbar"
 msgstr "Sivuuta ikkunaluettelo"
 
-#: gtk/gtkwindow.c:647
+#: gtk/gtkwindow.c:648
 msgid "TRUE if the window should not be in the task bar."
 msgstr "TRUE, jos ikkunan ei pitäisi näkyä ikkunaluettelossa"
 
-#: gtk/gtkwindow.c:654
+#: gtk/gtkwindow.c:655
 msgid "Skip pager"
 msgstr "Sivuuta työtilanvaihtaja"
 
-#: gtk/gtkwindow.c:655
+#: gtk/gtkwindow.c:656
 msgid "TRUE if the window should not be in the pager."
 msgstr "TRUE, jos ikkunan ei pitäisi näkyä työtilanvaihtajassa."
 
-#: gtk/gtkwindow.c:662
+#: gtk/gtkwindow.c:663
 msgid "Urgent"
 msgstr "Kiireellinen"
 
-#: gtk/gtkwindow.c:663
+#: gtk/gtkwindow.c:664
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "TRUE, jos ikkunan pitäisi herättää käyttäjän huomiota."
 
-#: gtk/gtkwindow.c:677
+#: gtk/gtkwindow.c:678
 msgid "Accept focus"
 msgstr "Hyväksy kohdistus"
 
-#: gtk/gtkwindow.c:678
+#: gtk/gtkwindow.c:679
 msgid "TRUE if the window should receive the input focus."
 msgstr "TRUE, jos ikkunan pitäisi saada syötekohdistus."
 
-#: gtk/gtkwindow.c:692
+#: gtk/gtkwindow.c:693
 msgid "Focus on map"
 msgstr "Kohdista näkyvänä"
 
-#: gtk/gtkwindow.c:693
+#: gtk/gtkwindow.c:694
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "TRUE, jos ikkunan pitäisi saada syötekohdistus kun se on näkyvissä."
 
-#: gtk/gtkwindow.c:707
+#: gtk/gtkwindow.c:708
 msgid "Decorated"
 msgstr "Koristeltu"
 
-#: gtk/gtkwindow.c:708
+#: gtk/gtkwindow.c:709
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Koristeleeko ikkunointiohjelma ikkunan"
 
-#: gtk/gtkwindow.c:722
+#: gtk/gtkwindow.c:723
 msgid "Deletable"
 msgstr "Poistettavissa"
 
-#: gtk/gtkwindow.c:723
+#: gtk/gtkwindow.c:724
 msgid "Whether the window frame should have a close button"
 msgstr "Onko ikkunan reunuksessa sulkemispainike"
 
-#: gtk/gtkwindow.c:739
+#: gtk/gtkwindow.c:740
 msgid "Gravity"
 msgstr "Painovoima"
 
-#: gtk/gtkwindow.c:740
+#: gtk/gtkwindow.c:741
 msgid "The window gravity of the window"
 msgstr "Ikkunan ikkunapainovoima"
 
-#: gtk/gtkwindow.c:757
+#: gtk/gtkwindow.c:758
 msgid "Transient for Window"
 msgstr "Lyhytaikainen ikkunalle"
 
-#: gtk/gtkwindow.c:758
+#: gtk/gtkwindow.c:759
 msgid "The transient parent of the dialog"
 msgstr "Lyhytaikaisen valintaikkunan yläikkuna"
 
-#: gtk/gtkwindow.c:773
+#: gtk/gtkwindow.c:774
 msgid "Opacity for Window"
 msgstr "Ikkunan läpinäkyvyys"
 
-#: gtk/gtkwindow.c:774
+#: gtk/gtkwindow.c:775
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Ikkunan läpinäkyvyys, väliltä 0-1"
 

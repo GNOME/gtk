@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-13 10:29-0400\n"
+"POT-Creation-Date: 2009-04-11 16:25-0400\n"
 "PO-Revision-Date: 2009-02-09 18:47+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -90,12 +90,12 @@ msgstr "Bộ trình bày mặc định"
 msgid "The default display for GDK"
 msgstr "Bộ trình bày mặc định cho GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
-#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
+#: gdk/gdkpango.c:537 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
+#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:614
 msgid "Screen"
 msgstr "Màn hình"
 
-#: gdk/gdkpango.c:491
+#: gdk/gdkpango.c:538
 msgid "the GdkScreen for the renderer"
 msgstr "GdkScreen cho bộ vẽ"
 
@@ -115,11 +115,11 @@ msgstr "Độ phân giải phông chữ"
 msgid "The resolution for fonts on the screen"
 msgstr "Độ phân giải của phông chữ trên màn hình"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:184
 msgid "Program name"
 msgstr "Tên chương trình"
 
-#: gtk/gtkaboutdialog.c:201
+#: gtk/gtkaboutdialog.c:185
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -127,43 +127,43 @@ msgstr ""
 "Tên của chương trình. Nếu chưa đặt thì giá trị mặc định là « "
 "g_get_application_name() » (g lấy tên ứng dụng)"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:199
 msgid "Program version"
 msgstr "Phiên bản chương trình"
 
-#: gtk/gtkaboutdialog.c:216
+#: gtk/gtkaboutdialog.c:200
 msgid "The version of the program"
 msgstr "Phiên bản của chương trình"
 
-#: gtk/gtkaboutdialog.c:230
+#: gtk/gtkaboutdialog.c:214
 msgid "Copyright string"
 msgstr "Chuỗi bản quyền"
 
-#: gtk/gtkaboutdialog.c:231
+#: gtk/gtkaboutdialog.c:215
 msgid "Copyright information for the program"
 msgstr "Thông tin bản quyền cho chương trình"
 
-#: gtk/gtkaboutdialog.c:248
+#: gtk/gtkaboutdialog.c:232
 msgid "Comments string"
 msgstr "Chuỗi ghi chú"
 
-#: gtk/gtkaboutdialog.c:249
+#: gtk/gtkaboutdialog.c:233
 msgid "Comments about the program"
 msgstr "Ghi chú về chương trình"
 
-#: gtk/gtkaboutdialog.c:283
+#: gtk/gtkaboutdialog.c:267
 msgid "Website URL"
 msgstr "Địa chỉ Mạng của trang chủ"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:268
 msgid "The URL for the link to the website of the program"
 msgstr "Địa chỉ Mạng cho liên kết tới trang chủ của chương trình"
 
-#: gtk/gtkaboutdialog.c:300
+#: gtk/gtkaboutdialog.c:284
 msgid "Website label"
 msgstr "Nhãn trang chủ"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:285
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -171,45 +171,45 @@ msgstr ""
 "Nhãn cho liên kết tới trang chủ của chương trình. Nếu chưa đặt thì giá trị "
 "mặc định là địa chỉ Mạng của nó"
 
-#: gtk/gtkaboutdialog.c:317
+#: gtk/gtkaboutdialog.c:301
 msgid "Authors"
 msgstr "Tác giả"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:302
 msgid "List of authors of the program"
 msgstr "Danh sách các tác giả của chương trình"
 
-#: gtk/gtkaboutdialog.c:334
+#: gtk/gtkaboutdialog.c:318
 msgid "Documenters"
 msgstr "Tài liệu :"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:319
 msgid "List of people documenting the program"
 msgstr "Danh sách các người tạo tài liệu cho chương trình"
 
-#: gtk/gtkaboutdialog.c:351
+#: gtk/gtkaboutdialog.c:335
 msgid "Artists"
 msgstr "Nghệ sĩ"
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:336
 msgid "List of people who have contributed artwork to the program"
 msgstr "Danh sách các người đã đóng góp đồ họa cùng chương trình"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:353
 msgid "Translator credits"
 msgstr "Bản dịch:"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:354
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Công trạng cho các người dịch. Chuỗi này nên được nhãn có khả năng dịch"
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:369
 msgid "Logo"
 msgstr "Biểu hình"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:370
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -218,19 +218,19 @@ msgstr ""
 "định là « gtk_window_get_default_icon_list() » (gtk cửa sổ lấy danh sách biểu "
 "tượng mặc định)"
 
-#: gtk/gtkaboutdialog.c:401
+#: gtk/gtkaboutdialog.c:385
 msgid "Logo Icon Name"
 msgstr "Tên biểu tượng biểu hình"
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:386
 msgid "A named icon to use as the logo for the about box."
 msgstr "Một biểu tượng có tên cần dùng là biểu hình cho hộp giới thiệu."
 
-#: gtk/gtkaboutdialog.c:415
+#: gtk/gtkaboutdialog.c:399
 msgid "Wrap license"
 msgstr "Ngắt dòng quyển"
 
-#: gtk/gtkaboutdialog.c:416
+#: gtk/gtkaboutdialog.c:400
 msgid "Whether to wrap the license text."
 msgstr "Có nên ngắt dòng trong văn bản của quyền hay không."
 
@@ -305,7 +305,7 @@ msgid "The GIcon being displayed"
 msgstr "Biểu tượng GIcon đang hiển thị"
 
 #: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
-#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:605
+#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:606
 msgid "Icon Name"
 msgstr "Tên biểu thượng"
 
@@ -411,7 +411,7 @@ msgid "Whether the action group is visible."
 msgstr "Có nên hiển thị nhóm hành động này hay không"
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:206 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Giá trị"
 
@@ -1245,7 +1245,7 @@ msgstr "Theo tính tráng"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Có nên tô màu đệm điểm ảnh đã vẽ theo tình trạng hay không"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:589
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:590
 msgid "Icon"
 msgstr "Biểu tượng"
 
@@ -1305,7 +1305,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Hướng và chiều đi của thanh tiến hành"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:225 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Điều chỉnh"
 
@@ -3071,7 +3071,7 @@ msgstr "Tập biểu tượng"
 msgid "Icon set to display"
 msgstr "Tập biểu tượng cần hiển thị"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Cỡ biểu tượng"
 
@@ -3136,7 +3136,7 @@ msgstr "HIện ảnh trình đơn"
 msgid "Whether images should be shown in menus"
 msgstr "Có nên hiển thị ảnh trong trình đơn hay không"
 
-#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:614
+#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:615
 msgid "The screen where this window will be displayed"
 msgstr "Màn hình nơi cửa sổ này sẽ được hiển thị"
 
@@ -4746,26 +4746,26 @@ msgstr "Khoảng cách giá trị"
 msgid "Space between value text and the slider/trough area"
 msgstr "Khoảng cách giữa văn bản giá trị và vùng của con trượt/máng xối"
 
-#: gtk/gtkscalebutton.c:205
+#: gtk/gtkscalebutton.c:207
 msgid "The value of the scale"
 msgstr "Giá trị của tỷ lệ"
 
-#: gtk/gtkscalebutton.c:215
+#: gtk/gtkscalebutton.c:217
 msgid "The icon size"
 msgstr "Cỡ biểu tượng"
 
-#: gtk/gtkscalebutton.c:224
+#: gtk/gtkscalebutton.c:226
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
 "GtkAdjustment (điều chỉnh Gtk) chứa giá trị hiện thời của đối tượng co giãn "
 "cái nút"
 
-#: gtk/gtkscalebutton.c:252
+#: gtk/gtkscalebutton.c:254
 msgid "Icons"
 msgstr "Biểu tượng"
 
-#: gtk/gtkscalebutton.c:253
+#: gtk/gtkscalebutton.c:255
 msgid "List of icon names"
 msgstr "Danh sách các tên biểu tượng"
 
@@ -6486,7 +6486,7 @@ msgstr "Mẫu gạch được dùng để vẽ các đường ô xem cây"
 msgid "Whether to display the column"
 msgstr "Có nên hiển thị cột hay không"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:536
+#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "Cho đổi cỡ"
 
@@ -6908,44 +6908,44 @@ msgstr "Độ dài mũi tên cuộn dọc"
 msgid "The length of vertical scroll arrows"
 msgstr "Độ dài của các mũi tên cuộn theo chiều dọc"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:478
 msgid "Window Type"
 msgstr "Kiểu cửa sổ"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:479
 msgid "The type of the window"
 msgstr "Kiểu cửa sổ"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:487
 msgid "Window Title"
 msgstr "Tựa đề cửa sổ"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:488
 msgid "The title of the window"
 msgstr "Tựa đề của cửa sổ"
 
-#: gtk/gtkwindow.c:494
+#: gtk/gtkwindow.c:495
 msgid "Window Role"
 msgstr "Vai cửa sổ"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:496
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Điều duy nhất nhận diện cửa sổ này, cần dùng khi phục hồi phiên chạy"
 
-#: gtk/gtkwindow.c:511
+#: gtk/gtkwindow.c:512
 msgid "Startup ID"
 msgstr "Mã nhận diện khởi chạy"
 
-#: gtk/gtkwindow.c:512
+#: gtk/gtkwindow.c:513
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
 "Điều duy nhất nhận diện cửa sổ này, dùng bởi tiến trình thông báo khởi chạy"
 
-#: gtk/gtkwindow.c:519
+#: gtk/gtkwindow.c:520
 msgid "Allow Shrink"
 msgstr "Cho phép co"
 
-#: gtk/gtkwindow.c:521
+#: gtk/gtkwindow.c:522
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -6954,23 +6954,23 @@ msgstr ""
 "Nếu ĐÚNG thì cửa sổ không có kích thước tối thiểu. Nếu đặt ĐÚNG thì 99% "
 "trường hợp là một ý kiến không hay"
 
-#: gtk/gtkwindow.c:528
+#: gtk/gtkwindow.c:529
 msgid "Allow Grow"
 msgstr "Cho phép giãn"
 
-#: gtk/gtkwindow.c:529
+#: gtk/gtkwindow.c:530
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "Nếu ĐÚNG thì người dùng có thể mở rộng cửa sổ quá kích thước thiểu đa"
 
-#: gtk/gtkwindow.c:537
+#: gtk/gtkwindow.c:538
 msgid "If TRUE, users can resize the window"
 msgstr "Nếu ĐÚNG thì người dùng có thể thay đổi kích thước cửa sổ"
 
-#: gtk/gtkwindow.c:544
+#: gtk/gtkwindow.c:545
 msgid "Modal"
 msgstr "Cách thức"
 
-#: gtk/gtkwindow.c:545
+#: gtk/gtkwindow.c:546
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -6978,152 +6978,152 @@ msgstr ""
 "Nếu ĐÚNG thì cửa sổ là cách thức (các cửa sổ khác không thể hoạt động khi "
 "cửa sổ này còn mở)"
 
-#: gtk/gtkwindow.c:552
+#: gtk/gtkwindow.c:553
 msgid "Window Position"
 msgstr "Vị trí cửa sổ"
 
-#: gtk/gtkwindow.c:553
+#: gtk/gtkwindow.c:554
 msgid "The initial position of the window"
 msgstr "Vị trí ban đầu của cửa sổ"
 
-#: gtk/gtkwindow.c:561
+#: gtk/gtkwindow.c:562
 msgid "Default Width"
 msgstr "Độ rộng mặc định"
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:563
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "Độ rộng mặc định của cửa sổ, được dùng khi hiển thị cửa sổ lần đầu tiên"
 
-#: gtk/gtkwindow.c:571
+#: gtk/gtkwindow.c:572
 msgid "Default Height"
 msgstr "Độ cao mặc định"
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:573
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "Độ cao mặc định của cửa sổ, được dùng khi hiển thị cửa sổ lần đầu tiên"
 
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:582
 msgid "Destroy with Parent"
 msgstr "Hủy cùng mẹ"
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:583
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Nếu cửa sổ mẹ bị hủy thì cửa sổ này cũng bị hủy theo"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:591
 msgid "Icon for this window"
 msgstr "Biểu tượng cho cửa sổ này"
 
-#: gtk/gtkwindow.c:606
+#: gtk/gtkwindow.c:607
 msgid "Name of the themed icon for this window"
 msgstr "Tên của biểu tượng của sắc thái cho cửa sổ này"
 
-#: gtk/gtkwindow.c:621
+#: gtk/gtkwindow.c:622
 msgid "Is Active"
 msgstr "Hoạt động"
 
-#: gtk/gtkwindow.c:622
+#: gtk/gtkwindow.c:623
 msgid "Whether the toplevel is the current active window"
 msgstr "Cấp đầu có là cửa sổ hiện thời hoạt động, hay không"
 
-#: gtk/gtkwindow.c:629
+#: gtk/gtkwindow.c:630
 msgid "Focus in Toplevel"
 msgstr "Tiêu điểm trong cấp đầu"
 
-#: gtk/gtkwindow.c:630
+#: gtk/gtkwindow.c:631
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Có nên để tiêu điểm gõ ở trong GtkWindow (cửa sổ Gtk) này hay không"
 
-#: gtk/gtkwindow.c:637
+#: gtk/gtkwindow.c:638
 msgid "Type hint"
 msgstr "Gợi ý kiểu"
 
-#: gtk/gtkwindow.c:638
+#: gtk/gtkwindow.c:639
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
 "Gợi ý trợ giúp môi trường biết kiểu cửa sổ nào và xử lý nó như thế nào."
 
-#: gtk/gtkwindow.c:646
+#: gtk/gtkwindow.c:647
 msgid "Skip taskbar"
 msgstr "Bỏ qua thanh tác vụ"
 
-#: gtk/gtkwindow.c:647
+#: gtk/gtkwindow.c:648
 msgid "TRUE if the window should not be in the task bar."
 msgstr "ĐÚNG nếu cửa sổ không nên có trong thanh tác vụ."
 
-#: gtk/gtkwindow.c:654
+#: gtk/gtkwindow.c:655
 msgid "Skip pager"
 msgstr "Bỏ qua bộ dàn trang"
 
-#: gtk/gtkwindow.c:655
+#: gtk/gtkwindow.c:656
 msgid "TRUE if the window should not be in the pager."
 msgstr "ĐÚNG nếu cửa sổ không nên có trong bộ dàn trang."
 
-#: gtk/gtkwindow.c:662
+#: gtk/gtkwindow.c:663
 msgid "Urgent"
 msgstr "Khẩn"
 
-#: gtk/gtkwindow.c:663
+#: gtk/gtkwindow.c:664
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "ĐÚNG nếu cửa sổ này nên được hiển thị cho người dùng xem."
 
-#: gtk/gtkwindow.c:677
+#: gtk/gtkwindow.c:678
 msgid "Accept focus"
 msgstr "Chấp nhận tiêu điểm"
 
-#: gtk/gtkwindow.c:678
+#: gtk/gtkwindow.c:679
 msgid "TRUE if the window should receive the input focus."
 msgstr "ĐÚNG nếu cửa sổ này nên nhận tiêu điểm gõ hay không."
 
-#: gtk/gtkwindow.c:692
+#: gtk/gtkwindow.c:693
 msgid "Focus on map"
 msgstr "Tiêu điểm khi ánh xạ"
 
-#: gtk/gtkwindow.c:693
+#: gtk/gtkwindow.c:694
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "ĐÚNG nếu cửa sổ này nên nhận tiêu điểm gõ khi được ánh xạ hay không."
 
-#: gtk/gtkwindow.c:707
+#: gtk/gtkwindow.c:708
 msgid "Decorated"
 msgstr "Trang trí"
 
-#: gtk/gtkwindow.c:708
+#: gtk/gtkwindow.c:709
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Bộ quản lý cửa sổ nên trang trí cửa sổ này hay không"
 
-#: gtk/gtkwindow.c:722
+#: gtk/gtkwindow.c:723
 msgid "Deletable"
 msgstr "Có thể xoá bỏ"
 
-#: gtk/gtkwindow.c:723
+#: gtk/gtkwindow.c:724
 msgid "Whether the window frame should have a close button"
 msgstr "Khung cửa sổ nên có cái nút đóng hay không"
 
-#: gtk/gtkwindow.c:739
+#: gtk/gtkwindow.c:740
 msgid "Gravity"
 msgstr "Trọng lực"
 
-#: gtk/gtkwindow.c:740
+#: gtk/gtkwindow.c:741
 msgid "The window gravity of the window"
 msgstr "Trọng lực cửa sổ của cửa sổ này"
 
-#: gtk/gtkwindow.c:757
+#: gtk/gtkwindow.c:758
 msgid "Transient for Window"
 msgstr "Tạm cho cửa sổ"
 
-#: gtk/gtkwindow.c:758
+#: gtk/gtkwindow.c:759
 msgid "The transient parent of the dialog"
 msgstr "Mẹ tạm thời của hộp thoại đó"
 
-#: gtk/gtkwindow.c:773
+#: gtk/gtkwindow.c:774
 msgid "Opacity for Window"
 msgstr "Độ mờ đục cho cửa sổ"
 
-#: gtk/gtkwindow.c:774
+#: gtk/gtkwindow.c:775
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Độ mờ đục của cửa sổ, từ 0 đến 1"
 

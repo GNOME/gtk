@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-13 10:29-0400\n"
+"POT-Creation-Date: 2009-04-11 16:25-0400\n"
 "PO-Revision-Date: 2003-03-31 07:40+0300\n"
 "Last-Translator: Ales Nyakhaychyk <nab@mail.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -96,12 +96,12 @@ msgstr "Дапомны дысплей"
 msgid "The default display for GDK"
 msgstr "Дапомны дысплей для GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
-#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
+#: gdk/gdkpango.c:537 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
+#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:614
 msgid "Screen"
 msgstr "Экран"
 
-#: gdk/gdkpango.c:491
+#: gdk/gdkpango.c:538
 #, fuzzy
 msgid "the GdkScreen for the renderer"
 msgstr "Разнавід для адлюстраваньня дрэва"
@@ -126,121 +126,121 @@ msgstr "Кропкі шрыфту"
 msgid "The resolution for fonts on the screen"
 msgstr "Як павінен абнаўляцца прамежак на экране"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:184
 #, fuzzy
 msgid "Program name"
 msgstr "Назоў тэгу"
 
-#: gtk/gtkaboutdialog.c:201
+#: gtk/gtkaboutdialog.c:185
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:199
 msgid "Program version"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:216
+#: gtk/gtkaboutdialog.c:200
 #, fuzzy
 msgid "The version of the program"
 msgstr "Мейсцазнаходжаньне палоскі прылад"
 
-#: gtk/gtkaboutdialog.c:230
+#: gtk/gtkaboutdialog.c:214
 msgid "Copyright string"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:231
+#: gtk/gtkaboutdialog.c:215
 msgid "Copyright information for the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:248
+#: gtk/gtkaboutdialog.c:232
 #, fuzzy
 msgid "Comments string"
 msgstr "Водступ між слупкоў"
 
-#: gtk/gtkaboutdialog.c:249
+#: gtk/gtkaboutdialog.c:233
 msgid "Comments about the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:283
+#: gtk/gtkaboutdialog.c:267
 msgid "Website URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:268
 msgid "The URL for the link to the website of the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:300
+#: gtk/gtkaboutdialog.c:284
 #, fuzzy
 msgid "Website label"
 msgstr "Адмеціна ўкладкі"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:285
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:317
+#: gtk/gtkaboutdialog.c:301
 msgid "Authors"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:302
 #, fuzzy
 msgid "List of authors of the program"
 msgstr "Мейсцазнаходжаньне палоскі прылад"
 
-#: gtk/gtkaboutdialog.c:334
+#: gtk/gtkaboutdialog.c:318
 msgid "Documenters"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:319
 msgid "List of people documenting the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:351
+#: gtk/gtkaboutdialog.c:335
 msgid "Artists"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:336
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:353
 msgid "Translator credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:354
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:369
 msgid "Logo"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:370
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:401
+#: gtk/gtkaboutdialog.c:385
 #, fuzzy
 msgid "Logo Icon Name"
 msgstr "Назва шрыфту"
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:386
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:415
+#: gtk/gtkaboutdialog.c:399
 #, fuzzy
 msgid "Wrap license"
 msgstr "Рэжым загортваньня"
 
-#: gtk/gtkaboutdialog.c:416
+#: gtk/gtkaboutdialog.c:400
 #, fuzzy
 msgid "Whether to wrap the license text."
 msgstr "Ці будзе гэты тэкст закрэсьлены"
@@ -319,7 +319,7 @@ msgid "The GIcon being displayed"
 msgstr "Значка для адлюстраваньня"
 
 #: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
-#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:605
+#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:606
 #, fuzzy
 msgid "Icon Name"
 msgstr "Назва шрыфту"
@@ -425,7 +425,7 @@ msgid "Whether the action group is visible."
 msgstr "Ці будзе віджэт бачны"
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:206 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Значэньне"
 
@@ -1322,7 +1322,7 @@ msgstr ""
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Ці павінна адлюстроўвацца мяжа"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:589
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:590
 msgid "Icon"
 msgstr "Значка"
 
@@ -1384,7 +1384,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Спагляданьне й накірунак росту палоскі посьпеху"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:225 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Выроўніваньне"
 
@@ -3274,7 +3274,7 @@ msgstr "Набор значак"
 msgid "Icon set to display"
 msgstr "Значка для адлюстраваньня"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Памер значкі"
 
@@ -3347,7 +3347,7 @@ msgstr "Паказаць лычкі"
 msgid "Whether images should be shown in menus"
 msgstr "Ці павінны адлюстроўвацца лычкі"
 
-#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:614
+#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:615
 msgid "The screen where this window will be displayed"
 msgstr "Экран, дзе гэтае акно будзе адлюстравана"
 
@@ -5069,28 +5069,28 @@ msgstr "Водступ значэньня"
 msgid "Space between value text and the slider/trough area"
 msgstr "Прастора паміж тэкстам і паўзунком/накіроўваючай"
 
-#: gtk/gtkscalebutton.c:205
+#: gtk/gtkscalebutton.c:207
 #, fuzzy
 msgid "The value of the scale"
 msgstr "Назоў гэтага віджэту"
 
-#: gtk/gtkscalebutton.c:215
+#: gtk/gtkscalebutton.c:217
 #, fuzzy
 msgid "The icon size"
 msgstr "Памер значак панэлі прылад"
 
-#: gtk/gtkscalebutton.c:224
+#: gtk/gtkscalebutton.c:226
 #, fuzzy
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "GtkAdjustment, які зьмяшчае бягучае значэньне для абьекту дыяпазону"
 
-#: gtk/gtkscalebutton.c:252
+#: gtk/gtkscalebutton.c:254
 #, fuzzy
 msgid "Icons"
 msgstr "Значка"
 
-#: gtk/gtkscalebutton.c:253
+#: gtk/gtkscalebutton.c:255
 #, fuzzy
 msgid "List of icon names"
 msgstr "Назва шрыфту"
@@ -6894,7 +6894,7 @@ msgstr "Узор штрыхоў для адлюстраваньня засяро
 msgid "Whether to display the column"
 msgstr "Ці будзе адлюстроўвацца слупок"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:536
+#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "Зьмяняемая шырыня"
 
@@ -7327,45 +7327,45 @@ msgstr "Вэртыкальная пракрутка"
 msgid "The length of vertical scroll arrows"
 msgstr "Калі будзе адлюстроўвацца вэртыкальная паласа пракруткі"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:478
 msgid "Window Type"
 msgstr "Тып акна"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:479
 msgid "The type of the window"
 msgstr "Тып гэтага акна"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:487
 msgid "Window Title"
 msgstr "Назоў акна"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:488
 msgid "The title of the window"
 msgstr "Назоў гэтага акна"
 
-#: gtk/gtkwindow.c:494
+#: gtk/gtkwindow.c:495
 #, fuzzy
 msgid "Window Role"
 msgstr "Назоў акна"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:496
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 
-#: gtk/gtkwindow.c:511
+#: gtk/gtkwindow.c:512
 #, fuzzy
 msgid "Startup ID"
 msgstr "Група"
 
-#: gtk/gtkwindow.c:512
+#: gtk/gtkwindow.c:513
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
 
-#: gtk/gtkwindow.c:519
+#: gtk/gtkwindow.c:520
 msgid "Allow Shrink"
 msgstr "Дазваляць сьцісканьне"
 
-#: gtk/gtkwindow.c:521
+#: gtk/gtkwindow.c:522
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -7374,25 +7374,25 @@ msgstr ""
 "Калі ІСЬЦІНА (TRUE), акно ня мае найменьшага памеру. Усталяваньне гэтага "
 "значэньня ў ІСЬЦІНА ў 99% выпадках вельмі дрэнная ідэя."
 
-#: gtk/gtkwindow.c:528
+#: gtk/gtkwindow.c:529
 msgid "Allow Grow"
 msgstr "Дазваляць рост"
 
-#: gtk/gtkwindow.c:529
+#: gtk/gtkwindow.c:530
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 "Калі ІСЬЦІНА (TRUE), карыстальнікі могуць разьвярнуць акно замест яго "
 "найменьшага памеру."
 
-#: gtk/gtkwindow.c:537
+#: gtk/gtkwindow.c:538
 msgid "If TRUE, users can resize the window"
 msgstr "Калі ІСЬЦІНА (TRUE), карыстальнікі могуць зьмяняць памеры акна."
 
-#: gtk/gtkwindow.c:544
+#: gtk/gtkwindow.c:545
 msgid "Modal"
 msgstr "Мадальнае"
 
-#: gtk/gtkwindow.c:545
+#: gtk/gtkwindow.c:546
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -7400,73 +7400,73 @@ msgstr ""
 "Калі ІСЬЦІНА (TRUE) - акно зьяўляецца мадальным (іншыя вокны ня могуць быць "
 "выкарыстаны, покуль гэтае акно ня будзе зачынена)."
 
-#: gtk/gtkwindow.c:552
+#: gtk/gtkwindow.c:553
 msgid "Window Position"
 msgstr "Становішча акна"
 
-#: gtk/gtkwindow.c:553
+#: gtk/gtkwindow.c:554
 msgid "The initial position of the window"
 msgstr "Пачатковае становішча акна."
 
-#: gtk/gtkwindow.c:561
+#: gtk/gtkwindow.c:562
 msgid "Default Width"
 msgstr "Дапомная шырыня"
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:563
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "Дапомная шырыня акна; выкарыстоўваецца пры першапачатковым адлюстраваньні "
 "акна."
 
-#: gtk/gtkwindow.c:571
+#: gtk/gtkwindow.c:572
 msgid "Default Height"
 msgstr "Дапомная вышыня"
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:573
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "Дапомная вышыня акна; выкарыстоўваецца пры першапачатковым адлюстраваньні "
 "акна."
 
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:582
 msgid "Destroy with Parent"
 msgstr "Зьнішчыць з бацькоўскім"
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:583
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Ці павінна гэта акно быць зьнішчына разам з бацькоўскім."
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:591
 msgid "Icon for this window"
 msgstr "Значка для гэтага акна"
 
-#: gtk/gtkwindow.c:606
+#: gtk/gtkwindow.c:607
 #, fuzzy
 msgid "Name of the themed icon for this window"
 msgstr "Значка для гэтага акна"
 
-#: gtk/gtkwindow.c:621
+#: gtk/gtkwindow.c:622
 msgid "Is Active"
 msgstr "Актыўны"
 
-#: gtk/gtkwindow.c:622
+#: gtk/gtkwindow.c:623
 msgid "Whether the toplevel is the current active window"
 msgstr "Ці зьяўляецца верхні ўзровень бягучым актыўным акном."
 
-#: gtk/gtkwindow.c:629
+#: gtk/gtkwindow.c:630
 msgid "Focus in Toplevel"
 msgstr "Засяроджаньне на вехнім узроўні"
 
-#: gtk/gtkwindow.c:630
+#: gtk/gtkwindow.c:631
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Ці знаходзіцца засяроджаньне ўводу ў межах гэтага GtkWindow."
 
-#: gtk/gtkwindow.c:637
+#: gtk/gtkwindow.c:638
 msgid "Type hint"
 msgstr "Падказкі"
 
-#: gtk/gtkwindow.c:638
+#: gtk/gtkwindow.c:639
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -7474,93 +7474,93 @@ msgstr ""
 "Падказкі значна спрашчаюць жыцьцё й дапамагаюць зразумець што за акно перад "
 "вамі й што зь ім рабіць."
 
-#: gtk/gtkwindow.c:646
+#: gtk/gtkwindow.c:647
 msgid "Skip taskbar"
 msgstr "Мінуць панэль задач"
 
-#: gtk/gtkwindow.c:647
+#: gtk/gtkwindow.c:648
 msgid "TRUE if the window should not be in the task bar."
 msgstr "ІСЬЦІНА (TRUE), калі гэтае акно не павінна быць на панэлі задач."
 
-#: gtk/gtkwindow.c:654
+#: gtk/gtkwindow.c:655
 msgid "Skip pager"
 msgstr "Мінуць пэйджар"
 
-#: gtk/gtkwindow.c:655
+#: gtk/gtkwindow.c:656
 msgid "TRUE if the window should not be in the pager."
 msgstr "ІСЬЦІНА (TRUE), калі гэтае акно не павінна быць ў пэйджары."
 
-#: gtk/gtkwindow.c:662
+#: gtk/gtkwindow.c:663
 msgid "Urgent"
 msgstr ""
 
-#: gtk/gtkwindow.c:663
+#: gtk/gtkwindow.c:664
 #, fuzzy
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "ІСЬЦІНА (TRUE), калі гэтае акно не павінна быць ў пэйджары."
 
-#: gtk/gtkwindow.c:677
+#: gtk/gtkwindow.c:678
 #, fuzzy
 msgid "Accept focus"
 msgstr "Засяроджаньне"
 
-#: gtk/gtkwindow.c:678
+#: gtk/gtkwindow.c:679
 #, fuzzy
 msgid "TRUE if the window should receive the input focus."
 msgstr "ІСЬЦІНА (TRUE), калі гэтае акно не павінна быць ў пэйджары."
 
-#: gtk/gtkwindow.c:692
+#: gtk/gtkwindow.c:693
 #, fuzzy
 msgid "Focus on map"
 msgstr "Засяроджаньне на вехнім узроўні"
 
-#: gtk/gtkwindow.c:693
+#: gtk/gtkwindow.c:694
 #, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "ІСЬЦІНА (TRUE), калі гэтае акно не павінна быць ў пэйджары."
 
-#: gtk/gtkwindow.c:707
+#: gtk/gtkwindow.c:708
 msgid "Decorated"
 msgstr ""
 
-#: gtk/gtkwindow.c:708
+#: gtk/gtkwindow.c:709
 #, fuzzy
 msgid "Whether the window should be decorated by the window manager"
 msgstr "ІСЬЦІНА (TRUE), калі гэтае акно не павінна быць ў пэйджары."
 
-#: gtk/gtkwindow.c:722
+#: gtk/gtkwindow.c:723
 #, fuzzy
 msgid "Deletable"
 msgstr "Вызначаемы"
 
-#: gtk/gtkwindow.c:723
+#: gtk/gtkwindow.c:724
 #, fuzzy
 msgid "Whether the window frame should have a close button"
 msgstr "ІСЬЦІНА (TRUE), калі гэтае акно не павінна быць ў пэйджары."
 
-#: gtk/gtkwindow.c:739
+#: gtk/gtkwindow.c:740
 msgid "Gravity"
 msgstr ""
 
-#: gtk/gtkwindow.c:740
+#: gtk/gtkwindow.c:741
 #, fuzzy
 msgid "The window gravity of the window"
 msgstr "Тып гэтага акна"
 
-#: gtk/gtkwindow.c:757
+#: gtk/gtkwindow.c:758
 msgid "Transient for Window"
 msgstr ""
 
-#: gtk/gtkwindow.c:758
+#: gtk/gtkwindow.c:759
 #, fuzzy
 msgid "The transient parent of the dialog"
 msgstr "Кнопкі, якія адлюстроўвываюцца ў дыялёгу паведамленьня"
 
-#: gtk/gtkwindow.c:773
+#: gtk/gtkwindow.c:774
 msgid "Opacity for Window"
 msgstr ""
 
-#: gtk/gtkwindow.c:774
+#: gtk/gtkwindow.c:775
 #, fuzzy
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Тып гэтага акна"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-4.bs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-13 10:29-0400\n"
+"POT-Creation-Date: 2009-04-11 16:24-0400\n"
 "PO-Revision-Date: 2004-07-31 01:30+0200\n"
 "Last-Translator: Kenan Hadžiavdić <kenan@bgnett.no>\n"
 "Language-Team: Bosnian <lokal@linux.org.ba>\n"
@@ -656,17 +656,17 @@ msgstr "'%s' tip grafičke datoteke nije podržan"
 msgid "Couldn't allocate memory for color profile"
 msgstr "Nisam mogao dodijeliti memoriju za učitavanje JPEG datoteke"
 
-#: gdk-pixbuf/io-jasper.c:182
+#: gdk-pixbuf/io-jasper.c:183
 #, fuzzy
 msgid "Insufficient memory to open JPEG 2000 file"
 msgstr "Nedovoljno memorije za otvaranje TIFF datoteke"
 
-#: gdk-pixbuf/io-jasper.c:264
+#: gdk-pixbuf/io-jasper.c:262
 #, fuzzy
 msgid "Couldn't allocate memory to buffer image data"
 msgstr "Nisam mogao dodijeliti memoriju za linijske podatke"
 
-#: gdk-pixbuf/io-jasper.c:308
+#: gdk-pixbuf/io-jasper.c:306
 #, fuzzy
 msgid "The JPEG 2000 image format"
 msgstr "JPEG oblik slike"
@@ -716,7 +716,7 @@ msgstr ""
 "JPEG kvaliteta mora imati vrijednost između 0 i 100; vrijednost '%d' nije "
 "dopuštena."
 
-#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "JPEG oblik slike"
 
@@ -1240,47 +1240,47 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: gtk/gtkaboutdialog.c:267 gtk/gtkaboutdialog.c:2121
+#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2110
 msgid "License"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:268
+#: gtk/gtkaboutdialog.c:252
 msgid "The license of the program"
 msgstr ""
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:508
+#: gtk/gtkaboutdialog.c:492
 #, fuzzy
 msgid "C_redits"
 msgstr "_Napravi"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:522
+#: gtk/gtkaboutdialog.c:506
 msgid "_License"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:790
+#: gtk/gtkaboutdialog.c:774
 #, c-format
 msgid "About %s"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2045
+#: gtk/gtkaboutdialog.c:2033
 msgid "Credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2074
+#: gtk/gtkaboutdialog.c:2062
 msgid "Written by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2065
 msgid "Documented by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2089
+#: gtk/gtkaboutdialog.c:2077
 msgid "Translated by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2093
+#: gtk/gtkaboutdialog.c:2081
 msgid "Artwork by"
 msgstr ""
 
@@ -1358,17 +1358,22 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr ""
 
-#: gtk/gtkbuilderparser.c:340
+#: gtk/gtkbuilderparser.c:343
 #, fuzzy, c-format
-msgid "Invalid type function: `%s'"
+msgid "Invalid type function on line %d: '%s'"
 msgstr "Nevažeće ime datoteke: %s"
 
-#: gtk/gtkbuilderparser.c:837
+#: gtk/gtkbuilderparser.c:402
+#, c-format
+msgid "Duplicate object id '%s' on line %d (previously on line %d)"
+msgstr ""
+
+#: gtk/gtkbuilderparser.c:853
 #, fuzzy, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Nevažeće ime datoteke: %s"
 
-#: gtk/gtkbuilderparser.c:876
+#: gtk/gtkbuilderparser.c:892
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr ""
@@ -1465,7 +1470,7 @@ msgstr "Onemogućeno"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:376 gtk/gtkcellrendereraccel.c:588
+#: gtk/gtkcellrendereraccel.c:379 gtk/gtkcellrendereraccel.c:591
 msgid "New accelerator..."
 msgstr ""
 
@@ -1613,11 +1618,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Izbor boje"
 
-#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7766
+#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "_Metode unosa"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "_Ubaci kontrolni unicode znak"
 
@@ -2088,7 +2093,7 @@ msgstr "_Preimenuj"
 msgid "_Selection: "
 msgstr "_Izbor: "
 
-#: gtk/gtkfilesel.c:3048
+#: gtk/gtkfilesel.c:3050
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -2097,15 +2102,15 @@ msgstr ""
 "Datoteka \"%s\" nije mogla biti pretvorena u UTF 8 (pokušajte postaviti "
 "varijablu okoline G_FILENAME_ENCODING): %s"
 
-#: gtk/gtkfilesel.c:3051
+#: gtk/gtkfilesel.c:3053
 msgid "Invalid UTF-8"
 msgstr "Nevažeći UTF-8"
 
-#: gtk/gtkfilesel.c:3925
+#: gtk/gtkfilesel.c:3927
 msgid "Name too long"
 msgstr "Ime je predugo"
 
-#: gtk/gtkfilesel.c:3927
+#: gtk/gtkfilesel.c:3929
 msgid "Couldn't convert filename"
 msgstr "Nisam mogao pretvoriti ime datoteke"
 
@@ -2370,43 +2375,43 @@ msgstr ""
 msgid "Show GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:463
+#: gtk/gtkmountoperation.c:468
 #, fuzzy
 msgid "Co_nnect"
 msgstr "_Pretvori"
 
-#: gtk/gtkmountoperation.c:530
+#: gtk/gtkmountoperation.c:535
 msgid "Connect _anonymously"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:539
+#: gtk/gtkmountoperation.c:544
 msgid "Connect as u_ser:"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:577
+#: gtk/gtkmountoperation.c:582
 #, fuzzy
 msgid "_Username:"
 msgstr "_Preimenuj"
 
-#: gtk/gtkmountoperation.c:582
+#: gtk/gtkmountoperation.c:587
 #, fuzzy
 msgid "_Domain:"
 msgstr "_Lokacija:"
 
-#: gtk/gtkmountoperation.c:588
+#: gtk/gtkmountoperation.c:593
 #, fuzzy
 msgid "_Password:"
 msgstr "Pritisak"
 
-#: gtk/gtkmountoperation.c:606
+#: gtk/gtkmountoperation.c:611
 msgid "Forget password _immediately"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:616
+#: gtk/gtkmountoperation.c:621
 msgid "Remember password until you _logout"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:626
+#: gtk/gtkmountoperation.c:631
 msgid "Remember _forever"
 msgstr ""
 
@@ -2472,7 +2477,7 @@ msgstr "_Osobine"
 msgid "_Orientation:"
 msgstr "_Zasićenost:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2681
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2678
 #, fuzzy
 msgid "Page Setup"
 msgstr "Stranica %u"
@@ -2631,17 +2636,17 @@ msgstr ""
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:242
+#: gtk/gtkprintoperation-unix.c:257
 #, c-format
 msgid "Error launching preview"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:280
+#: gtk/gtkprintoperation-unix.c:301
 #, c-format
 msgid "Error printing"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:384 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:405 gtk/gtkprintoperation-win32.c:1425
 #, fuzzy
 msgid "Application"
 msgstr "_Lokacija:"
@@ -2706,239 +2711,249 @@ msgstr "Neipravno zaglavlje u ikoni"
 msgid "Unspecified error"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1763
+#: gtk/gtkprintunixdialog.c:1758
 #, fuzzy
 msgid "Printer"
 msgstr "_Štampaj"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1773
+#: gtk/gtkprintunixdialog.c:1768
 #, fuzzy
 msgid "Location"
 msgstr "_Lokacija:"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1784
+#: gtk/gtkprintunixdialog.c:1779
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1809
+#: gtk/gtkprintunixdialog.c:1804
 msgid "Range"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1813
+#: gtk/gtkprintunixdialog.c:1808
 msgid "_All Pages"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1820
+#: gtk/gtkprintunixdialog.c:1815
 #, fuzzy
 msgid "C_urrent Page"
 msgstr "_Napravi"
 
-#: gtk/gtkprintunixdialog.c:1829
+#: gtk/gtkprintunixdialog.c:1824
 msgid "Pag_es:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1830
+#: gtk/gtkprintunixdialog.c:1825
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1851
+#: gtk/gtkprintunixdialog.c:1835
+#, fuzzy
+msgid "Pages"
+msgstr "_Preimenuj"
+
+#: gtk/gtkprintunixdialog.c:1848
 msgid "Copies"
 msgstr ""
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1856
+#: gtk/gtkprintunixdialog.c:1853
 msgid "Copie_s:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1874
+#: gtk/gtkprintunixdialog.c:1871
 #, fuzzy
 msgid "C_ollate"
 msgstr "_Napravi"
 
-#: gtk/gtkprintunixdialog.c:1882
+#: gtk/gtkprintunixdialog.c:1879
 #, fuzzy
 msgid "_Reverse"
 msgstr "_Povrati"
 
-#: gtk/gtkprintunixdialog.c:1902
+#: gtk/gtkprintunixdialog.c:1899
 msgid "General"
 msgstr ""
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2442
+#: gtk/gtkprintunixdialog.c:2439
 #: modules/printbackends/cups/gtkprintbackendcups.c:2910
 #, fuzzy
 msgid "Page Ordering"
 msgstr "Upozorenje"
 
-#: gtk/gtkprintunixdialog.c:2448
+#: gtk/gtkprintunixdialog.c:2445
 #, fuzzy
 msgid "Left to right"
 msgstr "LRM Oznaka od _lijevo prema desno"
 
-#: gtk/gtkprintunixdialog.c:2449
+#: gtk/gtkprintunixdialog.c:2446
 #, fuzzy
 msgid "Right to left"
 msgstr "_Štampaj"
 
-#: gtk/gtkprintunixdialog.c:2518
+#: gtk/gtkprintunixdialog.c:2515
 msgid "Layout"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2522
+#: gtk/gtkprintunixdialog.c:2519
 msgid "T_wo-sided:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2537
+#: gtk/gtkprintunixdialog.c:2534
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "_Osobine"
 
-#: gtk/gtkprintunixdialog.c:2555
+#: gtk/gtkprintunixdialog.c:2552
 #, fuzzy
 msgid "Page or_dering:"
 msgstr "_Osobine"
 
-#: gtk/gtkprintunixdialog.c:2571
+#: gtk/gtkprintunixdialog.c:2568
 #, fuzzy
 msgid "_Only print:"
 msgstr "_Štampaj"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2586
+#: gtk/gtkprintunixdialog.c:2583
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2587
+#: gtk/gtkprintunixdialog.c:2584
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2588
+#: gtk/gtkprintunixdialog.c:2585
 msgid "Odd sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2591
+#: gtk/gtkprintunixdialog.c:2588
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "_Vrijednost:"
 
-#: gtk/gtkprintunixdialog.c:2618
+#: gtk/gtkprintunixdialog.c:2615
 msgid "Paper"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2622
+#: gtk/gtkprintunixdialog.c:2619
 #, fuzzy
 msgid "Paper _type:"
 msgstr "_Osobine"
 
-#: gtk/gtkprintunixdialog.c:2637
+#: gtk/gtkprintunixdialog.c:2634
 #, fuzzy
 msgid "Paper _source:"
 msgstr "_Osobine"
 
-#: gtk/gtkprintunixdialog.c:2652
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2706
+#: gtk/gtkprintunixdialog.c:2703
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2712
+#: gtk/gtkprintunixdialog.c:2709
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2727
+#: gtk/gtkprintunixdialog.c:2724
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2745
+#: gtk/gtkprintunixdialog.c:2742
 msgid "Print Document"
 msgstr ""
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2754
+#: gtk/gtkprintunixdialog.c:2751
 #, fuzzy
 msgid "_Now"
 msgstr "_Ne"
 
-#: gtk/gtkprintunixdialog.c:2765
+#: gtk/gtkprintunixdialog.c:2762
 msgid "A_t:"
 msgstr ""
 
 #. Translators: Ability to parse the am/pm format depends on actual locale.
-#. * You can remove the am/pm values below for your locale if they are not supported.
+#. * You can remove the am/pm values below for your locale if they are not
+#. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:2770
+#: gtk/gtkprintunixdialog.c:2768
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2791
+#: gtk/gtkprintunixdialog.c:2778
+msgid "Time of print"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2794
 #, fuzzy
 msgid "On _hold"
 msgstr "_Masno"
 
-#: gtk/gtkprintunixdialog.c:2792
+#: gtk/gtkprintunixdialog.c:2795
 msgid "Hold the job until it is explicitly released"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2812
+#: gtk/gtkprintunixdialog.c:2815
 msgid "Add Cover Page"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2821
+#: gtk/gtkprintunixdialog.c:2824
 msgid "Be_fore:"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2839
+#: gtk/gtkprintunixdialog.c:2842
 msgid "_After:"
 msgstr ""
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2857
+#: gtk/gtkprintunixdialog.c:2860
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2923
+#: gtk/gtkprintunixdialog.c:2926
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2958
+#: gtk/gtkprintunixdialog.c:2961
 msgid "Image Quality"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2961
+#: gtk/gtkprintunixdialog.c:2964
 #, fuzzy
 msgid "Color"
 msgstr "_Boja"
 
-#: gtk/gtkprintunixdialog.c:2964
+#: gtk/gtkprintunixdialog.c:2967
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2974
+#: gtk/gtkprintunixdialog.c:2977
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2997
+#: gtk/gtkprintunixdialog.c:3000
 #, fuzzy
 msgid "Print"
 msgstr "_Štampaj"

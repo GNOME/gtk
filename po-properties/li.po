@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-13 10:29-0400\n"
+"POT-Creation-Date: 2009-04-11 16:25-0400\n"
 "PO-Revision-Date: 2003-05-28 17:57+0000\n"
 "Last-Translator: Mathieu van Woerkom <mathieu.brabants.org>\n"
 "Language-Team: Limburgish <li.org>\n"
@@ -94,12 +94,12 @@ msgstr "Sjtanderd display"
 msgid "The default display for GDK"
 msgstr "'t sjtanderd display veur GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
-#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
+#: gdk/gdkpango.c:537 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
+#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:614
 msgid "Screen"
 msgstr "Sjirm"
 
-#: gdk/gdkpango.c:491
+#: gdk/gdkpango.c:538
 #, fuzzy
 msgid "the GdkScreen for the renderer"
 msgstr "'t model van de TreeView"
@@ -124,121 +124,121 @@ msgstr "Booksjtaaftiep puntje"
 msgid "The resolution for fonts on the screen"
 msgstr "Wie 't bereik op 't sjirm biegehauwe moot waere"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:184
 #, fuzzy
 msgid "Program name"
 msgstr "Ittekètnaam"
 
-#: gtk/gtkaboutdialog.c:201
+#: gtk/gtkaboutdialog.c:185
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:199
 msgid "Program version"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:216
+#: gtk/gtkaboutdialog.c:200
 #, fuzzy
 msgid "The version of the program"
 msgstr "De orjentasie van de wirkbalk"
 
-#: gtk/gtkaboutdialog.c:230
+#: gtk/gtkaboutdialog.c:214
 msgid "Copyright string"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:231
+#: gtk/gtkaboutdialog.c:215
 msgid "Copyright information for the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:248
+#: gtk/gtkaboutdialog.c:232
 #, fuzzy
 msgid "Comments string"
 msgstr "Kelóm-spasiëring"
 
-#: gtk/gtkaboutdialog.c:249
+#: gtk/gtkaboutdialog.c:233
 msgid "Comments about the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:283
+#: gtk/gtkaboutdialog.c:267
 msgid "Website URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:268
 msgid "The URL for the link to the website of the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:300
+#: gtk/gtkaboutdialog.c:284
 #, fuzzy
 msgid "Website label"
 msgstr "Tab-label"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:285
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:317
+#: gtk/gtkaboutdialog.c:301
 msgid "Authors"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:302
 #, fuzzy
 msgid "List of authors of the program"
 msgstr "De orjentasie van de wirkbalk"
 
-#: gtk/gtkaboutdialog.c:334
+#: gtk/gtkaboutdialog.c:318
 msgid "Documenters"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:319
 msgid "List of people documenting the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:351
+#: gtk/gtkaboutdialog.c:335
 msgid "Artists"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:336
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:353
 msgid "Translator credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:354
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:369
 msgid "Logo"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:370
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:401
+#: gtk/gtkaboutdialog.c:385
 #, fuzzy
 msgid "Logo Icon Name"
 msgstr "Booksjtaaftiepnaam"
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:386
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:415
+#: gtk/gtkaboutdialog.c:399
 #, fuzzy
 msgid "Wrap license"
 msgstr "Regeltrökloupmodus gebroeke"
 
-#: gtk/gtkaboutdialog.c:416
+#: gtk/gtkaboutdialog.c:400
 #, fuzzy
 msgid "Whether to wrap the license text."
 msgstr "Of de teks doorsjtriept moot waere"
@@ -317,7 +317,7 @@ msgid "The GIcon being displayed"
 msgstr "te tuine piktogrammezameling"
 
 #: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
-#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:605
+#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:606
 #, fuzzy
 msgid "Icon Name"
 msgstr "Booksjtaaftiepnaam"
@@ -423,7 +423,7 @@ msgid "Whether the action group is visible."
 msgstr "Of 't widget zichbaar moot zeen"
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:206 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Waerd"
 
@@ -1322,7 +1322,7 @@ msgstr ""
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Of 't kader getuind weurt of neet"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:589
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:590
 msgid "Icon"
 msgstr "Piktogram"
 
@@ -1384,7 +1384,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Orjentasie en greujrichting van de avvansbalk"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:225 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Aanpassing"
 
@@ -3281,7 +3281,7 @@ msgstr "Piktogrammezameling"
 msgid "Icon set to display"
 msgstr "te tuine piktogrammezameling"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Piktogramaafmaetinge"
 
@@ -3356,7 +3356,7 @@ msgstr "Tabs tuine"
 msgid "Whether images should be shown in menus"
 msgstr "Of tabs getuind waere of neet"
 
-#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:614
+#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:615
 msgid "The screen where this window will be displayed"
 msgstr "'t sjirm woe dit vinster weurt getuind"
 
@@ -5071,28 +5071,28 @@ msgstr "Waerdespasiëring"
 msgid "Space between value text and the slider/trough area"
 msgstr "Aafsjtandj tösje de waerd-teks en 't sjuufobjek"
 
-#: gtk/gtkscalebutton.c:205
+#: gtk/gtkscalebutton.c:207
 #, fuzzy
 msgid "The value of the scale"
 msgstr "De naam van 't widget"
 
-#: gtk/gtkscalebutton.c:215
+#: gtk/gtkscalebutton.c:217
 #, fuzzy
 msgid "The icon size"
 msgstr "Piktogramgruutde op wirkbalk"
 
-#: gtk/gtkscalebutton.c:224
+#: gtk/gtkscalebutton.c:226
 #, fuzzy
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "De GtkAdjustment die de hujige waerd van dit bereikobjek haet"
 
-#: gtk/gtkscalebutton.c:252
+#: gtk/gtkscalebutton.c:254
 #, fuzzy
 msgid "Icons"
 msgstr "Piktogram"
 
-#: gtk/gtkscalebutton.c:253
+#: gtk/gtkscalebutton.c:255
 #, fuzzy
 msgid "List of icon names"
 msgstr "Booksjtaaftiepnaam"
@@ -6893,7 +6893,7 @@ msgstr "Sjtreippetroen van de focus-indikator"
 msgid "Whether to display the column"
 msgstr "Of de kelóm moot waere getuind"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:536
+#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "Hersjaalbaar"
 
@@ -7323,45 +7323,45 @@ msgstr "Vertikaal sjuufbalkbeleid"
 msgid "The length of vertical scroll arrows"
 msgstr "In welke gevalle de vertickle sjuufbalk getuind weurt"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:478
 msgid "Window Type"
 msgstr "Vinstertiep"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:479
 msgid "The type of the window"
 msgstr "'t tiep vinster"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:487
 msgid "Window Title"
 msgstr "Vinstertittel"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:488
 msgid "The title of the window"
 msgstr "De tittel van 't vinster"
 
-#: gtk/gtkwindow.c:494
+#: gtk/gtkwindow.c:495
 #, fuzzy
 msgid "Window Role"
 msgstr "Vinstertittel"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:496
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 
-#: gtk/gtkwindow.c:511
+#: gtk/gtkwindow.c:512
 #, fuzzy
 msgid "Startup ID"
 msgstr "Gróp"
 
-#: gtk/gtkwindow.c:512
+#: gtk/gtkwindow.c:513
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
 
-#: gtk/gtkwindow.c:519
+#: gtk/gtkwindow.c:520
 msgid "Allow Shrink"
 msgstr "Krumpe toesjtaon"
 
-#: gtk/gtkwindow.c:521
+#: gtk/gtkwindow.c:522
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -7370,26 +7370,26 @@ msgstr ""
 "Ingeval WAOR (TRUE) haet 't vinster gein minimumgruutde. Dit is in 99% van "
 "de gevalle ei sjlech idee"
 
-#: gtk/gtkwindow.c:528
+#: gtk/gtkwindow.c:529
 msgid "Allow Grow"
 msgstr "Greuje toesjtaon"
 
-#: gtk/gtkwindow.c:529
+#: gtk/gtkwindow.c:530
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 "Ingeval van WAOR (TRUE), kèn 't vinster vergroet waere veurbie de "
 "minimumgruutde"
 
-#: gtk/gtkwindow.c:537
+#: gtk/gtkwindow.c:538
 msgid "If TRUE, users can resize the window"
 msgstr ""
 "Ingeval van WAOR (TRUE), kèn de aafmaeting van 't vinster waere aangepas"
 
-#: gtk/gtkwindow.c:544
+#: gtk/gtkwindow.c:545
 msgid "Modal"
 msgstr "Modaal"
 
-#: gtk/gtkwindow.c:545
+#: gtk/gtkwindow.c:546
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -7397,69 +7397,69 @@ msgstr ""
 "Ingeval van WAOR (TRUE), is 't vinster modaal: angere vinsters kènne neet "
 "gebruikt waere zoelank deze baovenaan sjteit"
 
-#: gtk/gtkwindow.c:552
+#: gtk/gtkwindow.c:553
 msgid "Window Position"
 msgstr "Vinsterposisie"
 
-#: gtk/gtkwindow.c:553
+#: gtk/gtkwindow.c:554
 msgid "The initial position of the window"
 msgstr "De beginposisie van 't vinster"
 
-#: gtk/gtkwindow.c:561
+#: gtk/gtkwindow.c:562
 msgid "Default Width"
 msgstr "Sjtanderdbreide"
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:563
 msgid "The default width of the window, used when initially showing the window"
 msgstr "De sjtanderdbreide van 't vinster wen 't veur 't iers getuind weurt"
 
-#: gtk/gtkwindow.c:571
+#: gtk/gtkwindow.c:572
 msgid "Default Height"
 msgstr "Sjtanderdhuugde"
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:573
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "De sjtanderdhuugde van 't vinster wen 't veur 't iers getuind weurt"
 
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:582
 msgid "Destroy with Parent"
 msgstr "Vernetig same mit mojer"
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:583
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Of dit vinster vernetig moot waere wen 't mojervinster vernetig weurt"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:591
 msgid "Icon for this window"
 msgstr "Piktogram veur dit vinster"
 
-#: gtk/gtkwindow.c:606
+#: gtk/gtkwindow.c:607
 #, fuzzy
 msgid "Name of the themed icon for this window"
 msgstr "Piktogram veur dit vinster"
 
-#: gtk/gtkwindow.c:621
+#: gtk/gtkwindow.c:622
 msgid "Is Active"
 msgstr "Is aktief"
 
-#: gtk/gtkwindow.c:622
+#: gtk/gtkwindow.c:623
 msgid "Whether the toplevel is the current active window"
 msgstr "Of 't topnivo 't hujige aktieve vinster is"
 
-#: gtk/gtkwindow.c:629
+#: gtk/gtkwindow.c:630
 msgid "Focus in Toplevel"
 msgstr "fokus in topnivo"
 
-#: gtk/gtkwindow.c:630
+#: gtk/gtkwindow.c:631
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Of 't inveurfokus zich in dit GtkWindow bevundj"
 
-#: gtk/gtkwindow.c:637
+#: gtk/gtkwindow.c:638
 msgid "Type hint"
 msgstr "Saort hint"
 
-#: gtk/gtkwindow.c:638
+#: gtk/gtkwindow.c:639
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -7467,94 +7467,94 @@ msgstr ""
 "Hint woemit de desktopómgaeving weurt gehólpe te begriepe waat veur saort "
 "vinster dit is, en wie 't behandeld moot waere"
 
-#: gtk/gtkwindow.c:646
+#: gtk/gtkwindow.c:647
 msgid "Skip taskbar"
 msgstr "Taakbalk euversjlaon"
 
-#: gtk/gtkwindow.c:647
+#: gtk/gtkwindow.c:648
 msgid "TRUE if the window should not be in the task bar."
 msgstr "WAOR (TRUE) wen 't vinster neet in de taakbalk huurt"
 
 # in Gnome-nl is er veur gekozen de pager te vertalen met: wirkbladwisselaar
-#: gtk/gtkwindow.c:654
+#: gtk/gtkwindow.c:655
 msgid "Skip pager"
 msgstr "Wirkblaadwisselaar euversjlaon"
 
-#: gtk/gtkwindow.c:655
+#: gtk/gtkwindow.c:656
 msgid "TRUE if the window should not be in the pager."
 msgstr "WAOR (TRUE) wen 't vinster neet in de wirkblaadwisselaar huurt"
 
-#: gtk/gtkwindow.c:662
+#: gtk/gtkwindow.c:663
 msgid "Urgent"
 msgstr ""
 
-#: gtk/gtkwindow.c:663
+#: gtk/gtkwindow.c:664
 #, fuzzy
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "WAOR (TRUE) wen 't vinster neet in de wirkblaadwisselaar huurt"
 
-#: gtk/gtkwindow.c:677
+#: gtk/gtkwindow.c:678
 #, fuzzy
 msgid "Accept focus"
 msgstr "Is focus"
 
-#: gtk/gtkwindow.c:678
+#: gtk/gtkwindow.c:679
 #, fuzzy
 msgid "TRUE if the window should receive the input focus."
 msgstr "WAOR (TRUE) wen 't vinster neet in de wirkblaadwisselaar huurt"
 
-#: gtk/gtkwindow.c:692
+#: gtk/gtkwindow.c:693
 #, fuzzy
 msgid "Focus on map"
 msgstr "fokus in topnivo"
 
-#: gtk/gtkwindow.c:693
+#: gtk/gtkwindow.c:694
 #, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "WAOR (TRUE) wen 't vinster neet in de wirkblaadwisselaar huurt"
 
-#: gtk/gtkwindow.c:707
+#: gtk/gtkwindow.c:708
 msgid "Decorated"
 msgstr ""
 
-#: gtk/gtkwindow.c:708
+#: gtk/gtkwindow.c:709
 #, fuzzy
 msgid "Whether the window should be decorated by the window manager"
 msgstr "WAOR (TRUE) wen 't vinster neet in de wirkblaadwisselaar huurt"
 
-#: gtk/gtkwindow.c:722
+#: gtk/gtkwindow.c:723
 #, fuzzy
 msgid "Deletable"
 msgstr "Selekteerbaar"
 
-#: gtk/gtkwindow.c:723
+#: gtk/gtkwindow.c:724
 #, fuzzy
 msgid "Whether the window frame should have a close button"
 msgstr "WAOR (TRUE) wen 't vinster neet in de wirkblaadwisselaar huurt"
 
-#: gtk/gtkwindow.c:739
+#: gtk/gtkwindow.c:740
 msgid "Gravity"
 msgstr ""
 
-#: gtk/gtkwindow.c:740
+#: gtk/gtkwindow.c:741
 #, fuzzy
 msgid "The window gravity of the window"
 msgstr "'t tiep vinster"
 
-#: gtk/gtkwindow.c:757
+#: gtk/gtkwindow.c:758
 msgid "Transient for Window"
 msgstr ""
 
-#: gtk/gtkwindow.c:758
+#: gtk/gtkwindow.c:759
 #, fuzzy
 msgid "The transient parent of the dialog"
 msgstr "De te tuine knóppe in 't berichdialoogvinster"
 
-#: gtk/gtkwindow.c:773
+#: gtk/gtkwindow.c:774
 msgid "Opacity for Window"
 msgstr ""
 
-#: gtk/gtkwindow.c:774
+#: gtk/gtkwindow.c:775
 #, fuzzy
 msgid "The opacity of the window, from 0 to 1"
 msgstr "'t tiep vinster"

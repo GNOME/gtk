@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-13 10:29-0400\n"
+"POT-Creation-Date: 2009-04-11 16:24-0400\n"
 "PO-Revision-Date: 2009-03-03 08:23+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -625,15 +625,15 @@ msgstr "画像の種類はサポートされていません"
 msgid "Couldn't allocate memory for color profile"
 msgstr "色のプロファイルで使用するメモリを確保できませんでした"
 
-#: gdk-pixbuf/io-jasper.c:182
+#: gdk-pixbuf/io-jasper.c:183
 msgid "Insufficient memory to open JPEG 2000 file"
 msgstr "JPEG 2000 のファイルをオープンするために必要なメモリが足りません"
 
-#: gdk-pixbuf/io-jasper.c:264
+#: gdk-pixbuf/io-jasper.c:262
 msgid "Couldn't allocate memory to buffer image data"
 msgstr "画像データを格納するためのメモリを確保できませんでした"
 
-#: gdk-pixbuf/io-jasper.c:308
+#: gdk-pixbuf/io-jasper.c:306
 msgid "The JPEG 2000 image format"
 msgstr "JPEG 2000 画像形式"
 
@@ -680,7 +680,7 @@ msgid ""
 msgstr ""
 "JPEG の \"クオリティ\" は 0〜100 の値にして下さい。値 '%d' は確保されません"
 
-#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "JPEG 画像形式"
 
@@ -1175,46 +1175,46 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d 個のアイテムを開いています"
 msgstr[1] "%d 個のアイテムを開いています"
 
-#: gtk/gtkaboutdialog.c:267 gtk/gtkaboutdialog.c:2121
+#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2110
 msgid "License"
 msgstr "ライセンス"
 
-#: gtk/gtkaboutdialog.c:268
+#: gtk/gtkaboutdialog.c:252
 msgid "The license of the program"
 msgstr "プログラムのライセンス"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:508
+#: gtk/gtkaboutdialog.c:492
 msgid "C_redits"
 msgstr "クレジット(_R)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:522
+#: gtk/gtkaboutdialog.c:506
 msgid "_License"
 msgstr "ライセンス(_L)"
 
-#: gtk/gtkaboutdialog.c:790
+#: gtk/gtkaboutdialog.c:774
 #, c-format
 msgid "About %s"
 msgstr "%s について"
 
-#: gtk/gtkaboutdialog.c:2045
+#: gtk/gtkaboutdialog.c:2033
 msgid "Credits"
 msgstr "クレジット"
 
-#: gtk/gtkaboutdialog.c:2074
+#: gtk/gtkaboutdialog.c:2062
 msgid "Written by"
 msgstr "開発担当"
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2065
 msgid "Documented by"
 msgstr "ドキュメント担当"
 
-#: gtk/gtkaboutdialog.c:2089
+#: gtk/gtkaboutdialog.c:2077
 msgid "Translated by"
 msgstr "翻訳担当"
 
-#: gtk/gtkaboutdialog.c:2093
+#: gtk/gtkaboutdialog.c:2081
 msgid "Artwork by"
 msgstr "アートワーク担当"
 
@@ -1288,17 +1288,22 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "\\"
 
-#: gtk/gtkbuilderparser.c:340
-#, c-format
-msgid "Invalid type function: `%s'"
+#: gtk/gtkbuilderparser.c:343
+#, fuzzy, c-format
+msgid "Invalid type function on line %d: '%s'"
 msgstr "関数の型が間違っています: '%s'"
 
-#: gtk/gtkbuilderparser.c:837
+#: gtk/gtkbuilderparser.c:402
+#, c-format
+msgid "Duplicate object id '%s' on line %d (previously on line %d)"
+msgstr ""
+
+#: gtk/gtkbuilderparser.c:853
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "root 要素が間違っています: '%s'"
 
-#: gtk/gtkbuilderparser.c:876
+#: gtk/gtkbuilderparser.c:892
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "扱えないタグ: '%s'"
@@ -1393,7 +1398,7 @@ msgstr "無効"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:376 gtk/gtkcellrendereraccel.c:588
+#: gtk/gtkcellrendereraccel.c:379 gtk/gtkcellrendereraccel.c:591
 msgid "New accelerator..."
 msgstr "新しいアクセラレータ..."
 
@@ -1537,11 +1542,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "色の選択"
 
-#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7766
+#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "入力メソッド(_M)"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode 制御文字の挿入(_I)"
 
@@ -1978,7 +1983,7 @@ msgstr "ファイル名の変更(_R)"
 msgid "_Selection: "
 msgstr "選択(_S): "
 
-#: gtk/gtkfilesel.c:3048
+#: gtk/gtkfilesel.c:3050
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1987,15 +1992,15 @@ msgstr ""
 "ファイル名 \"%s\" を UTF-8 に変換できませんでした (環境変数 "
 "$G_FILENAME_ENCODING を設定してみて下さい): %s"
 
-#: gtk/gtkfilesel.c:3051
+#: gtk/gtkfilesel.c:3053
 msgid "Invalid UTF-8"
 msgstr "無効な UTF-8 コードです"
 
-#: gtk/gtkfilesel.c:3925
+#: gtk/gtkfilesel.c:3927
 msgid "Name too long"
 msgstr "名前が長すぎます"
 
-#: gtk/gtkfilesel.c:3927
+#: gtk/gtkfilesel.c:3929
 msgid "Couldn't convert filename"
 msgstr "ファイル名を変換できませんでした"
 
@@ -2243,39 +2248,39 @@ msgstr "GTK+ のオプション"
 msgid "Show GTK+ Options"
 msgstr "GTK+ のオプションを表示する"
 
-#: gtk/gtkmountoperation.c:463
+#: gtk/gtkmountoperation.c:468
 msgid "Co_nnect"
 msgstr "接続する(_N)"
 
-#: gtk/gtkmountoperation.c:530
+#: gtk/gtkmountoperation.c:535
 msgid "Connect _anonymously"
 msgstr "匿名で接続する(_A)"
 
-#: gtk/gtkmountoperation.c:539
+#: gtk/gtkmountoperation.c:544
 msgid "Connect as u_ser:"
 msgstr "ユーザを指定する(_S):"
 
-#: gtk/gtkmountoperation.c:577
+#: gtk/gtkmountoperation.c:582
 msgid "_Username:"
 msgstr "ユーザ名(_U):"
 
-#: gtk/gtkmountoperation.c:582
+#: gtk/gtkmountoperation.c:587
 msgid "_Domain:"
 msgstr "ドメイン(_D):"
 
-#: gtk/gtkmountoperation.c:588
+#: gtk/gtkmountoperation.c:593
 msgid "_Password:"
 msgstr "パスワード(_P):"
 
-#: gtk/gtkmountoperation.c:606
+#: gtk/gtkmountoperation.c:611
 msgid "Forget password _immediately"
 msgstr "今すぐパスワードを破棄する(_I)"
 
-#: gtk/gtkmountoperation.c:616
+#: gtk/gtkmountoperation.c:621
 msgid "Remember password until you _logout"
 msgstr "ログアウトするまでパスワードを記憶する(_L)"
 
-#: gtk/gtkmountoperation.c:626
+#: gtk/gtkmountoperation.c:631
 msgid "Remember _forever"
 msgstr "期限なしで記憶する(_F)"
 
@@ -2345,7 +2350,7 @@ msgstr "用紙のサイズ(_P):"
 msgid "_Orientation:"
 msgstr "用紙の向き(_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2681
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2678
 msgid "Page Setup"
 msgstr "ページの設定"
 
@@ -2493,17 +2498,17 @@ msgstr "プレビューを生成する際にエラー"
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "作業用のファイルを生成できないことが一番考えられそうな原因です。"
 
-#: gtk/gtkprintoperation-unix.c:242
+#: gtk/gtkprintoperation-unix.c:257
 #, c-format
 msgid "Error launching preview"
 msgstr "プレビューを起動する際にエラー"
 
-#: gtk/gtkprintoperation-unix.c:280
+#: gtk/gtkprintoperation-unix.c:301
 #, c-format
 msgid "Error printing"
 msgstr "印刷エラー"
 
-#: gtk/gtkprintoperation-unix.c:384 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:405 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "アプリケーション"
 
@@ -2562,37 +2567,37 @@ msgstr "PrintDlgEx() のハンドラが無効です"
 msgid "Unspecified error"
 msgstr "原因不明のエラー"
 
-#: gtk/gtkprintunixdialog.c:1763
+#: gtk/gtkprintunixdialog.c:1758
 msgid "Printer"
 msgstr "プリンタ"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1773
+#: gtk/gtkprintunixdialog.c:1768
 msgid "Location"
 msgstr "場所"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1784
+#: gtk/gtkprintunixdialog.c:1779
 msgid "Status"
 msgstr "状態"
 
-#: gtk/gtkprintunixdialog.c:1809
+#: gtk/gtkprintunixdialog.c:1804
 msgid "Range"
 msgstr "範囲"
 
-#: gtk/gtkprintunixdialog.c:1813
+#: gtk/gtkprintunixdialog.c:1808
 msgid "_All Pages"
 msgstr "全てのページ(_A)"
 
-#: gtk/gtkprintunixdialog.c:1820
+#: gtk/gtkprintunixdialog.c:1815
 msgid "C_urrent Page"
 msgstr "現在のページだけ(_U)"
 
-#: gtk/gtkprintunixdialog.c:1829
+#: gtk/gtkprintunixdialog.c:1824
 msgid "Pag_es:"
 msgstr "指定する(_E):"
 
-#: gtk/gtkprintunixdialog.c:1830
+#: gtk/gtkprintunixdialog.c:1825
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2600,127 +2605,133 @@ msgstr ""
 "1ページ以上の範囲を指定して下さい;\n"
 "例: 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1851
+#: gtk/gtkprintunixdialog.c:1835
+#, fuzzy
+msgid "Pages"
+msgstr "指定する(_E):"
+
+#: gtk/gtkprintunixdialog.c:1848
 msgid "Copies"
 msgstr "コピー"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1856
+#: gtk/gtkprintunixdialog.c:1853
 msgid "Copie_s:"
 msgstr "コピーの数(_S):"
 
-#: gtk/gtkprintunixdialog.c:1874
+#: gtk/gtkprintunixdialog.c:1871
 msgid "C_ollate"
 msgstr "ページを揃える(_O)"
 
-#: gtk/gtkprintunixdialog.c:1882
+#: gtk/gtkprintunixdialog.c:1879
 msgid "_Reverse"
 msgstr "ページを逆順にする(_R)"
 
-#: gtk/gtkprintunixdialog.c:1902
+#: gtk/gtkprintunixdialog.c:1899
 msgid "General"
 msgstr "全般"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2442
+#: gtk/gtkprintunixdialog.c:2439
 #: modules/printbackends/cups/gtkprintbackendcups.c:2910
 msgid "Page Ordering"
 msgstr "ページの順番"
 
-#: gtk/gtkprintunixdialog.c:2448
+#: gtk/gtkprintunixdialog.c:2445
 msgid "Left to right"
 msgstr "左から右へ"
 
-#: gtk/gtkprintunixdialog.c:2449
+#: gtk/gtkprintunixdialog.c:2446
 msgid "Right to left"
 msgstr "右から左へ"
 
-#: gtk/gtkprintunixdialog.c:2518
+#: gtk/gtkprintunixdialog.c:2515
 msgid "Layout"
 msgstr "レイアウト"
 
-#: gtk/gtkprintunixdialog.c:2522
+#: gtk/gtkprintunixdialog.c:2519
 msgid "T_wo-sided:"
 msgstr "両面印刷(_W):"
 
-#: gtk/gtkprintunixdialog.c:2537
+#: gtk/gtkprintunixdialog.c:2534
 msgid "Pages per _side:"
 msgstr "段組み印刷(_S):"
 
-#: gtk/gtkprintunixdialog.c:2555
+#: gtk/gtkprintunixdialog.c:2552
 msgid "Page or_dering:"
 msgstr "ページの順番(_D):"
 
-#: gtk/gtkprintunixdialog.c:2571
+#: gtk/gtkprintunixdialog.c:2568
 msgid "_Only print:"
 msgstr "印刷の対象(_O):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2586
+#: gtk/gtkprintunixdialog.c:2583
 msgid "All sheets"
 msgstr "全てのページ"
 
-#: gtk/gtkprintunixdialog.c:2587
+#: gtk/gtkprintunixdialog.c:2584
 msgid "Even sheets"
 msgstr "偶数ページ"
 
-#: gtk/gtkprintunixdialog.c:2588
+#: gtk/gtkprintunixdialog.c:2585
 msgid "Odd sheets"
 msgstr "奇数ページ"
 
-#: gtk/gtkprintunixdialog.c:2591
+#: gtk/gtkprintunixdialog.c:2588
 msgid "Sc_ale:"
 msgstr "拡大/縮小(_A):"
 
-#: gtk/gtkprintunixdialog.c:2618
+#: gtk/gtkprintunixdialog.c:2615
 msgid "Paper"
 msgstr "用紙"
 
-#: gtk/gtkprintunixdialog.c:2622
+#: gtk/gtkprintunixdialog.c:2619
 msgid "Paper _type:"
 msgstr "種類(_T):"
 
-#: gtk/gtkprintunixdialog.c:2637
+#: gtk/gtkprintunixdialog.c:2634
 msgid "Paper _source:"
 msgstr "用紙のソース(_S):"
 
-#: gtk/gtkprintunixdialog.c:2652
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Output t_ray:"
 msgstr "出力先のトレイ(_R):"
 
-#: gtk/gtkprintunixdialog.c:2706
+#: gtk/gtkprintunixdialog.c:2703
 msgid "Job Details"
 msgstr "印刷ジョブの詳細"
 
-#: gtk/gtkprintunixdialog.c:2712
+#: gtk/gtkprintunixdialog.c:2709
 msgid "Pri_ority:"
 msgstr "優先順位(_O):"
 
-#: gtk/gtkprintunixdialog.c:2727
+#: gtk/gtkprintunixdialog.c:2724
 msgid "_Billing info:"
 msgstr "サマリ情報(_B):"
 
-#: gtk/gtkprintunixdialog.c:2745
+#: gtk/gtkprintunixdialog.c:2742
 msgid "Print Document"
 msgstr "ドキュメントの印刷"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2754
+#: gtk/gtkprintunixdialog.c:2751
 msgid "_Now"
 msgstr "今すぐ印刷する(_N)"
 
-#: gtk/gtkprintunixdialog.c:2765
+#: gtk/gtkprintunixdialog.c:2762
 msgid "A_t:"
 msgstr "時間を指定する(_T):"
 
 #. Translators: Ability to parse the am/pm format depends on actual locale.
-#. * You can remove the am/pm values below for your locale if they are not supported.
+#. * You can remove the am/pm values below for your locale if they are not
+#. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:2770
+#: gtk/gtkprintunixdialog.c:2768
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2728,60 +2739,64 @@ msgstr ""
 "印刷する時間を指定して下さい:\n"
 " (例) 15:30、午後 2:35、14:15:20, 午前 11:46:30 am、午後 4"
 
-#: gtk/gtkprintunixdialog.c:2791
+#: gtk/gtkprintunixdialog.c:2778
+msgid "Time of print"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2794
 msgid "On _hold"
 msgstr "保留する(_H)"
 
-#: gtk/gtkprintunixdialog.c:2792
+#: gtk/gtkprintunixdialog.c:2795
 msgid "Hold the job until it is explicitly released"
 msgstr "印刷ジョブが完全に解放されるまで保留しておきます"
 
-#: gtk/gtkprintunixdialog.c:2812
+#: gtk/gtkprintunixdialog.c:2815
 msgid "Add Cover Page"
 msgstr "裏表紙の追加"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2821
+#: gtk/gtkprintunixdialog.c:2824
 msgid "Be_fore:"
 msgstr "前(_F):"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2839
+#: gtk/gtkprintunixdialog.c:2842
 msgid "_After:"
 msgstr "後(_A):"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2857
+#: gtk/gtkprintunixdialog.c:2860
 msgid "Job"
 msgstr "印刷ジョブ"
 
-#: gtk/gtkprintunixdialog.c:2923
+#: gtk/gtkprintunixdialog.c:2926
 msgid "Advanced"
 msgstr "拡張"
 
-#: gtk/gtkprintunixdialog.c:2958
+#: gtk/gtkprintunixdialog.c:2961
 msgid "Image Quality"
 msgstr "画像の品質"
 
-#: gtk/gtkprintunixdialog.c:2961
+#: gtk/gtkprintunixdialog.c:2964
 msgid "Color"
 msgstr "色"
 
-#: gtk/gtkprintunixdialog.c:2964
+#: gtk/gtkprintunixdialog.c:2967
 msgid "Finishing"
 msgstr "完了"
 
-#: gtk/gtkprintunixdialog.c:2974
+#: gtk/gtkprintunixdialog.c:2977
 msgid "Some of the settings in the dialog conflict"
 msgstr "ダイアログのいくつかの設定が重複しています"
 
-#: gtk/gtkprintunixdialog.c:2997
+#: gtk/gtkprintunixdialog.c:3000
 msgid "Print"
 msgstr "印刷"
 

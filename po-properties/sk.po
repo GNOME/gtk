@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-13 10:29-0400\n"
+"POT-Creation-Date: 2009-04-11 16:25-0400\n"
 "PO-Revision-Date: 2008-09-19 15:04+0200\n"
 "Last-Translator: Pavol Šimo <palo.simo@gmail.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -94,12 +94,12 @@ msgstr "Predvolený displej"
 msgid "The default display for GDK"
 msgstr "Predvolený displej pre GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
-#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
+#: gdk/gdkpango.c:537 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
+#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:614
 msgid "Screen"
 msgstr "Obrazovka"
 
-#: gdk/gdkpango.c:491
+#: gdk/gdkpango.c:538
 msgid "the GdkScreen for the renderer"
 msgstr "GdkScreen pre \"renderer\""
 
@@ -119,99 +119,99 @@ msgstr "Rozlíšenie písma"
 msgid "The resolution for fonts on the screen"
 msgstr "Rozlíšenie písiem pre obrazovku"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:184
 msgid "Program name"
 msgstr "Názov programu"
 
-#: gtk/gtkaboutdialog.c:201
+#: gtk/gtkaboutdialog.c:185
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 "Názov programu. Ak tu nie je nastavené, aplikuje sa g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:199
 msgid "Program version"
 msgstr "Verzia programu"
 
-#: gtk/gtkaboutdialog.c:216
+#: gtk/gtkaboutdialog.c:200
 msgid "The version of the program"
 msgstr "Verzia tohto programu"
 
-#: gtk/gtkaboutdialog.c:230
+#: gtk/gtkaboutdialog.c:214
 msgid "Copyright string"
 msgstr "Reťazec o autorských právach"
 
-#: gtk/gtkaboutdialog.c:231
+#: gtk/gtkaboutdialog.c:215
 msgid "Copyright information for the program"
 msgstr "Informácie o autorských právach pre program"
 
-#: gtk/gtkaboutdialog.c:248
+#: gtk/gtkaboutdialog.c:232
 msgid "Comments string"
 msgstr "Reťazec komentárov"
 
-#: gtk/gtkaboutdialog.c:249
+#: gtk/gtkaboutdialog.c:233
 msgid "Comments about the program"
 msgstr "Komentáre o programe"
 
-#: gtk/gtkaboutdialog.c:283
+#: gtk/gtkaboutdialog.c:267
 msgid "Website URL"
 msgstr "URL www stránky"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:268
 msgid "The URL for the link to the website of the program"
 msgstr "URL odkazu na www stránku programu"
 
-#: gtk/gtkaboutdialog.c:300
+#: gtk/gtkaboutdialog.c:284
 msgid "Website label"
 msgstr "Označenie www stránky"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:285
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 "Popis odkazu na www stránku programu. Ak tu nie je nastavené, aplikuje sa URL"
 
-#: gtk/gtkaboutdialog.c:317
+#: gtk/gtkaboutdialog.c:301
 msgid "Authors"
 msgstr "Autori"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:302
 msgid "List of authors of the program"
 msgstr "Zoznam autorov programu"
 
-#: gtk/gtkaboutdialog.c:334
+#: gtk/gtkaboutdialog.c:318
 msgid "Documenters"
 msgstr "Autori dokumentácie"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:319
 msgid "List of people documenting the program"
 msgstr "Zoznam ľudí, ktorí dokumentujú program"
 
-#: gtk/gtkaboutdialog.c:351
+#: gtk/gtkaboutdialog.c:335
 msgid "Artists"
 msgstr "Výtvarníci"
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:336
 msgid "List of people who have contributed artwork to the program"
 msgstr "Zoznam ľudí, ktorí prispeli grafikou k programu"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:353
 msgid "Translator credits"
 msgstr "Poďakovanie prekladateľom"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:354
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Poďakovanie prekladateľom. Tento reťazec by mal byť označený ako preložiteľný"
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:369
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:370
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -219,20 +219,20 @@ msgstr ""
 "Logo pre dialógové okno O programe. Ak tu nie je nastavené, aplikuje sa "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:401
+#: gtk/gtkaboutdialog.c:385
 msgid "Logo Icon Name"
 msgstr "Názov ikony loga"
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:386
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "Pomenovaná ikona, ktorá bude použitá ako logo pre dialógové okno O programe."
 
-#: gtk/gtkaboutdialog.c:415
+#: gtk/gtkaboutdialog.c:399
 msgid "Wrap license"
 msgstr "Zalomiť licenciu"
 
-#: gtk/gtkaboutdialog.c:416
+#: gtk/gtkaboutdialog.c:400
 msgid "Whether to wrap the license text."
 msgstr "Či zalomiť text licencie."
 
@@ -306,7 +306,7 @@ msgid "The GIcon being displayed"
 msgstr "Zobrazená GIkona"
 
 #: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
-#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:605
+#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:606
 msgid "Icon Name"
 msgstr "Názov ikony"
 
@@ -410,7 +410,7 @@ msgid "Whether the action group is visible."
 msgstr "Či je skupina akcií viditeľná."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:206 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Hodnota"
 
@@ -1236,7 +1236,7 @@ msgstr "Riadiť sa stavom"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Či má byť zobrazený pixbuf vyfarbený podľa stavu"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:589
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:590
 msgid "Icon"
 msgstr "Ikona"
 
@@ -1297,7 +1297,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientácia a rast pruhu priebehu"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:225 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Zarovnanie"
 
@@ -3084,7 +3084,7 @@ msgstr "Skupina ikon"
 msgid "Icon set to display"
 msgstr "Zobrazená skupina ikon"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Veľkosť ikony"
 
@@ -3153,7 +3153,7 @@ msgstr "Zobraziť obrázky v ponuke"
 msgid "Whether images should be shown in menus"
 msgstr "Či majú byť v ponuke zobrazené obrázky"
 
-#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:614
+#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:615
 msgid "The screen where this window will be displayed"
 msgstr "Obrazovka, na ktorej sa má toto okno zobraziť"
 
@@ -4751,25 +4751,25 @@ msgstr "Medzera hodnoty"
 msgid "Space between value text and the slider/trough area"
 msgstr "Medzera medzi hodnotou a oblasťou posuvníka"
 
-#: gtk/gtkscalebutton.c:205
+#: gtk/gtkscalebutton.c:207
 msgid "The value of the scale"
 msgstr "Hodnota zväčšenia"
 
-#: gtk/gtkscalebutton.c:215
+#: gtk/gtkscalebutton.c:217
 msgid "The icon size"
 msgstr "Veľkosť ikony"
 
-#: gtk/gtkscalebutton.c:224
+#: gtk/gtkscalebutton.c:226
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
 "GtkAdjustment, ktorý obsahuje aktuálnu hodnotu tohto prvku tlačidlo zväčšenia"
 
-#: gtk/gtkscalebutton.c:252
+#: gtk/gtkscalebutton.c:254
 msgid "Icons"
 msgstr "Ikony"
 
-#: gtk/gtkscalebutton.c:253
+#: gtk/gtkscalebutton.c:255
 msgid "List of icon names"
 msgstr "Zoznam názvov ikon"
 
@@ -6461,7 +6461,7 @@ msgstr "Čiarkovaná vzorka použitá na vykreslenie čiar stromu"
 msgid "Whether to display the column"
 msgstr "Či stĺpec zobraziť"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:536
+#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "Zmena veľkosti"
 
@@ -6875,43 +6875,43 @@ msgstr "Dĺžka vertikálneho posuvníka"
 msgid "The length of vertical scroll arrows"
 msgstr "Dĺžka vertikálnych posuvníkov"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:478
 msgid "Window Type"
 msgstr "Typ okna"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:479
 msgid "The type of the window"
 msgstr "Typ okna"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:487
 msgid "Window Title"
 msgstr "Titulok okna"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:488
 msgid "The title of the window"
 msgstr "Text titulku okna"
 
-#: gtk/gtkwindow.c:494
+#: gtk/gtkwindow.c:495
 msgid "Window Role"
 msgstr "Úloha okna"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:496
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Jednoznačný identifikátor okna pre obnovu sedenia"
 
-#: gtk/gtkwindow.c:511
+#: gtk/gtkwindow.c:512
 msgid "Startup ID"
 msgstr "Štartovacie ID"
 
-#: gtk/gtkwindow.c:512
+#: gtk/gtkwindow.c:513
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr "Jednoznačný štartovací identifikátor okna pre startup-notification"
 
-#: gtk/gtkwindow.c:519
+#: gtk/gtkwindow.c:520
 msgid "Allow Shrink"
 msgstr "Povoliť zmenšenie"
 
-#: gtk/gtkwindow.c:521
+#: gtk/gtkwindow.c:522
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -6920,23 +6920,23 @@ msgstr ""
 "Ak je TRUE, okno nemá minimálnu veľkosť. Nastavenia tohto na TRUE je v 99% "
 "prípadov zlý nápad"
 
-#: gtk/gtkwindow.c:528
+#: gtk/gtkwindow.c:529
 msgid "Allow Grow"
 msgstr "Povoliť zväčšenie"
 
-#: gtk/gtkwindow.c:529
+#: gtk/gtkwindow.c:530
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "Ak je TRUE, používateľ môže roztiahnuť okno nad jeho minimálnu veľkosť"
 
-#: gtk/gtkwindow.c:537
+#: gtk/gtkwindow.c:538
 msgid "If TRUE, users can resize the window"
 msgstr "Ak je TRUE, používateľ môže zmeniť veľkosť okna"
 
-#: gtk/gtkwindow.c:544
+#: gtk/gtkwindow.c:545
 msgid "Modal"
 msgstr "Modálne"
 
-#: gtk/gtkwindow.c:545
+#: gtk/gtkwindow.c:546
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -6944,150 +6944,150 @@ msgstr ""
 "Ak je TRUE, okno je modálne (ostatné okná nie je možné používať, ak je toto "
 "zobrazené)"
 
-#: gtk/gtkwindow.c:552
+#: gtk/gtkwindow.c:553
 msgid "Window Position"
 msgstr "Pozícia okna"
 
-#: gtk/gtkwindow.c:553
+#: gtk/gtkwindow.c:554
 msgid "The initial position of the window"
 msgstr "Počiatočná pozícia okna"
 
-#: gtk/gtkwindow.c:561
+#: gtk/gtkwindow.c:562
 msgid "Default Width"
 msgstr "Predvolená šírka"
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:563
 msgid "The default width of the window, used when initially showing the window"
 msgstr "Predvolená šírka okna použitá pri počiatočnom zobrazení okna"
 
-#: gtk/gtkwindow.c:571
+#: gtk/gtkwindow.c:572
 msgid "Default Height"
 msgstr "Predvolená výška"
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:573
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "Predvolená výška okna použitá pri počiatočnom zobrazení okna"
 
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:582
 msgid "Destroy with Parent"
 msgstr "Zničiť s rodičom"
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:583
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Nastavuje, či má byť okno zničené pri zničení rodiča"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:591
 msgid "Icon for this window"
 msgstr "Ikona pre toto okno"
 
-#: gtk/gtkwindow.c:606
+#: gtk/gtkwindow.c:607
 msgid "Name of the themed icon for this window"
 msgstr "Témovateľná ikona pre toto okno"
 
-#: gtk/gtkwindow.c:621
+#: gtk/gtkwindow.c:622
 msgid "Is Active"
 msgstr "Je aktívne"
 
-#: gtk/gtkwindow.c:622
+#: gtk/gtkwindow.c:623
 msgid "Whether the toplevel is the current active window"
 msgstr "Či je najvyšší prvok momentálne aktívne okno"
 
-#: gtk/gtkwindow.c:629
+#: gtk/gtkwindow.c:630
 msgid "Focus in Toplevel"
 msgstr "Fokus v najvyššom prvku"
 
-#: gtk/gtkwindow.c:630
+#: gtk/gtkwindow.c:631
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Či je vstupný fokus v tomto prvku GtkWindow"
 
-#: gtk/gtkwindow.c:637
+#: gtk/gtkwindow.c:638
 msgid "Type hint"
 msgstr "Rada o type"
 
-#: gtk/gtkwindow.c:638
+#: gtk/gtkwindow.c:639
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr "Rada pre prostredie, čo je toto za typ okna a ako s ním pracovať."
 
-#: gtk/gtkwindow.c:646
+#: gtk/gtkwindow.c:647
 msgid "Skip taskbar"
 msgstr "Vynechať v paneli úloh"
 
-#: gtk/gtkwindow.c:647
+#: gtk/gtkwindow.c:648
 msgid "TRUE if the window should not be in the task bar."
 msgstr "TRUE, ak okno nemá byť v paneli úloh."
 
-#: gtk/gtkwindow.c:654
+#: gtk/gtkwindow.c:655
 msgid "Skip pager"
 msgstr "Vynechať v stránkovači"
 
-#: gtk/gtkwindow.c:655
+#: gtk/gtkwindow.c:656
 msgid "TRUE if the window should not be in the pager."
 msgstr "TRUE, ak okno nemá byť v stránkovači."
 
-#: gtk/gtkwindow.c:662
+#: gtk/gtkwindow.c:663
 msgid "Urgent"
 msgstr "Urgentné"
 
-#: gtk/gtkwindow.c:663
+#: gtk/gtkwindow.c:664
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "TRUE, ak okno má byť privedené do používateľovho záujmu."
 
-#: gtk/gtkwindow.c:677
+#: gtk/gtkwindow.c:678
 msgid "Accept focus"
 msgstr "Akceptuje fokus"
 
-#: gtk/gtkwindow.c:678
+#: gtk/gtkwindow.c:679
 msgid "TRUE if the window should receive the input focus."
 msgstr "TRUE, ak okno má dostávať vstupný fokus."
 
-#: gtk/gtkwindow.c:692
+#: gtk/gtkwindow.c:693
 msgid "Focus on map"
 msgstr "Fokus pri zobrazení"
 
-#: gtk/gtkwindow.c:693
+#: gtk/gtkwindow.c:694
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "TRUE, ak okno má dostávať vstupný fokus ak je zobrazené."
 
-#: gtk/gtkwindow.c:707
+#: gtk/gtkwindow.c:708
 msgid "Decorated"
 msgstr "Dekorované"
 
-#: gtk/gtkwindow.c:708
+#: gtk/gtkwindow.c:709
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Či má okno mať dekorácie od správcu okien"
 
-#: gtk/gtkwindow.c:722
+#: gtk/gtkwindow.c:723
 msgid "Deletable"
 msgstr "Zmazateľné"
 
-#: gtk/gtkwindow.c:723
+#: gtk/gtkwindow.c:724
 msgid "Whether the window frame should have a close button"
 msgstr "Či má mať okno v ráme aj tlačidlo na zatvorenie"
 
-#: gtk/gtkwindow.c:739
+#: gtk/gtkwindow.c:740
 msgid "Gravity"
 msgstr "Gravitácia"
 
-#: gtk/gtkwindow.c:740
+#: gtk/gtkwindow.c:741
 msgid "The window gravity of the window"
 msgstr "Gravitácia okna"
 
-#: gtk/gtkwindow.c:757
+#: gtk/gtkwindow.c:758
 msgid "Transient for Window"
 msgstr "Dočasný rodič pre okno"
 
-#: gtk/gtkwindow.c:758
+#: gtk/gtkwindow.c:759
 msgid "The transient parent of the dialog"
 msgstr "Dočasný rodič dialógového okna"
 
-#: gtk/gtkwindow.c:773
+#: gtk/gtkwindow.c:774
 msgid "Opacity for Window"
 msgstr "Nepriehľadnosť okna"
 
-#: gtk/gtkwindow.c:774
+#: gtk/gtkwindow.c:775
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Nepriehľadnosť okna, od 0 po 1"
 

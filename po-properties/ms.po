@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-13 10:29-0400\n"
+"POT-Creation-Date: 2009-04-11 16:25-0400\n"
 "PO-Revision-Date: 2004-01-20 00:57+0730\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -88,12 +88,12 @@ msgstr "Paparan Default"
 msgid "The default display for GDK"
 msgstr "Paparan default bagi GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
-#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
+#: gdk/gdkpango.c:537 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
+#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:614
 msgid "Screen"
 msgstr "Skrin"
 
-#: gdk/gdkpango.c:491
+#: gdk/gdkpango.c:538
 #, fuzzy
 msgid "the GdkScreen for the renderer"
 msgstr "Model pagi paparan pepohon"
@@ -118,121 +118,121 @@ msgstr "Titik Font"
 msgid "The resolution for fonts on the screen"
 msgstr "bagaimana julat patut dikemaskini pada layar"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:184
 #, fuzzy
 msgid "Program name"
 msgstr "Nama tag"
 
-#: gtk/gtkaboutdialog.c:201
+#: gtk/gtkaboutdialog.c:185
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:199
 msgid "Program version"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:216
+#: gtk/gtkaboutdialog.c:200
 #, fuzzy
 msgid "The version of the program"
 msgstr "Orientasi toolbar"
 
-#: gtk/gtkaboutdialog.c:230
+#: gtk/gtkaboutdialog.c:214
 msgid "Copyright string"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:231
+#: gtk/gtkaboutdialog.c:215
 msgid "Copyright information for the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:248
+#: gtk/gtkaboutdialog.c:232
 #, fuzzy
 msgid "Comments string"
 msgstr "Jarak ruang kolum"
 
-#: gtk/gtkaboutdialog.c:249
+#: gtk/gtkaboutdialog.c:233
 msgid "Comments about the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:283
+#: gtk/gtkaboutdialog.c:267
 msgid "Website URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:268
 msgid "The URL for the link to the website of the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:300
+#: gtk/gtkaboutdialog.c:284
 #, fuzzy
 msgid "Website label"
 msgstr "Guna saiz pada label"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:285
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:317
+#: gtk/gtkaboutdialog.c:301
 msgid "Authors"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:302
 #, fuzzy
 msgid "List of authors of the program"
 msgstr "Orientasi toolbar"
 
-#: gtk/gtkaboutdialog.c:334
+#: gtk/gtkaboutdialog.c:318
 msgid "Documenters"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:319
 msgid "List of people documenting the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:351
+#: gtk/gtkaboutdialog.c:335
 msgid "Artists"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:336
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:353
 msgid "Translator credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:354
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:369
 msgid "Logo"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:370
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:401
+#: gtk/gtkaboutdialog.c:385
 #, fuzzy
 msgid "Logo Icon Name"
 msgstr "Nama Font"
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:386
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:415
+#: gtk/gtkaboutdialog.c:399
 #, fuzzy
 msgid "Wrap license"
 msgstr "Set mod balut"
 
-#: gtk/gtkaboutdialog.c:416
+#: gtk/gtkaboutdialog.c:400
 #, fuzzy
 msgid "Whether to wrap the license text."
 msgstr "Samada coret menembusi teks"
@@ -308,7 +308,7 @@ msgid "The GIcon being displayed"
 msgstr "Set ikon untuk dipaparkan"
 
 #: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
-#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:605
+#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:606
 #, fuzzy
 msgid "Icon Name"
 msgstr "Nama Font"
@@ -412,7 +412,7 @@ msgid "Whether the action group is visible."
 msgstr "Samada kumpulan aksi boleh dilihat."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:206 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Nilai"
 
@@ -1288,7 +1288,7 @@ msgstr ""
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Samada sempadan patut dipapar atau sebaliknya"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:589
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:590
 msgid "Icon"
 msgstr "Ikon"
 
@@ -1350,7 +1350,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientasi dan hala pembesaran bagi bar progres"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:225 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Pelarasan"
 
@@ -3193,7 +3193,7 @@ msgstr "Set Ikon"
 msgid "Icon set to display"
 msgstr "Set ikon untuk dipaparkan"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Saiz ikon"
 
@@ -3266,7 +3266,7 @@ msgstr "Papar Bilangan Minggu"
 msgid "Whether images should be shown in menus"
 msgstr "Samada tab patut dipapar atau sebaliknya"
 
-#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:614
+#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:615
 msgid "The screen where this window will be displayed"
 msgstr "Skrin dimana tetingkap akan dipaparkan"
 
@@ -4955,28 +4955,28 @@ msgstr "Jarak Ruang Nilai"
 msgid "Space between value text and the slider/trough area"
 msgstr "Ruang antara teks nilai dan kawasan penggelungsur"
 
-#: gtk/gtkscalebutton.c:205
+#: gtk/gtkscalebutton.c:207
 #, fuzzy
 msgid "The value of the scale"
 msgstr "Nama bagi wiget"
 
-#: gtk/gtkscalebutton.c:215
+#: gtk/gtkscalebutton.c:217
 #, fuzzy
 msgid "The icon size"
 msgstr "Saiz ikon toolbar"
 
-#: gtk/gtkscalebutton.c:224
+#: gtk/gtkscalebutton.c:226
 #, fuzzy
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "GtkAdjustment yang mengandungi nilai semasa julat objek ini"
 
-#: gtk/gtkscalebutton.c:252
+#: gtk/gtkscalebutton.c:254
 #, fuzzy
 msgid "Icons"
 msgstr "Ikon"
 
-#: gtk/gtkscalebutton.c:253
+#: gtk/gtkscalebutton.c:255
 #, fuzzy
 msgid "List of icon names"
 msgstr "Nama Font"
@@ -6750,7 +6750,7 @@ msgstr "Corak sengkang yang digunakan untuk melukis penunjuk fokus"
 msgid "Whether to display the column"
 msgstr "Samada hendak memapar kolum"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:536
+#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "Boleh diubahsaiz"
 
@@ -7177,45 +7177,45 @@ msgstr "Polisi Bar Skrol Menegak"
 msgid "The length of vertical scroll arrows"
 msgstr "Bila bar skrol menegak dipaparkan"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:478
 msgid "Window Type"
 msgstr "Jenis Tetingkap"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:479
 msgid "The type of the window"
 msgstr "Jenis tetingkap"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:487
 msgid "Window Title"
 msgstr "Tajuk Tetingkap"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:488
 msgid "The title of the window"
 msgstr "Tajuk kepada tetingkap"
 
-#: gtk/gtkwindow.c:494
+#: gtk/gtkwindow.c:495
 msgid "Window Role"
 msgstr "Tugas Tetingkap"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:496
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Pengcam unik bagi tetingkap untuk digunakan bila memulih sesi"
 
-#: gtk/gtkwindow.c:511
+#: gtk/gtkwindow.c:512
 #, fuzzy
 msgid "Startup ID"
 msgstr "Kumpulan"
 
-#: gtk/gtkwindow.c:512
+#: gtk/gtkwindow.c:513
 #, fuzzy
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr "Pengcam unik bagi tetingkap untuk digunakan bila memulih sesi"
 
-#: gtk/gtkwindow.c:519
+#: gtk/gtkwindow.c:520
 msgid "Allow Shrink"
 msgstr "Izinkan Pengucupan"
 
-#: gtk/gtkwindow.c:521
+#: gtk/gtkwindow.c:522
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -7224,24 +7224,24 @@ msgstr ""
 "Jika BENAR, tetingkap tiada saiz minimum, Menetapkannya kepada BENAR 99% "
 "daripada masa adalah idea kurang arif."
 
-#: gtk/gtkwindow.c:528
+#: gtk/gtkwindow.c:529
 msgid "Allow Grow"
 msgstr "Izinkan Pembesaran"
 
-#: gtk/gtkwindow.c:529
+#: gtk/gtkwindow.c:530
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 "Jika BENAR, pengguna boleh kembangkan tetingkap sehingga saiz minimumnya"
 
-#: gtk/gtkwindow.c:537
+#: gtk/gtkwindow.c:538
 msgid "If TRUE, users can resize the window"
 msgstr "Jika BENAR, pengguna boleh mengubahsaiz tetingkap"
 
-#: gtk/gtkwindow.c:544
+#: gtk/gtkwindow.c:545
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkwindow.c:545
+#: gtk/gtkwindow.c:546
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -7249,158 +7249,158 @@ msgstr ""
 "Jika BENAR, tetingkap adalah modal (tetingkap lain tak boleh digunakan bila "
 "ianya naik)"
 
-#: gtk/gtkwindow.c:552
+#: gtk/gtkwindow.c:553
 msgid "Window Position"
 msgstr "POsisi Tetingkap"
 
-#: gtk/gtkwindow.c:553
+#: gtk/gtkwindow.c:554
 msgid "The initial position of the window"
 msgstr "Posisi permulaan bagi tetingkap"
 
-#: gtk/gtkwindow.c:561
+#: gtk/gtkwindow.c:562
 msgid "Default Width"
 msgstr "Lebar Default"
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:563
 msgid "The default width of the window, used when initially showing the window"
 msgstr "Lebar default tetingkap, digunakan bila mula memaparkan tetingkap"
 
-#: gtk/gtkwindow.c:571
+#: gtk/gtkwindow.c:572
 msgid "Default Height"
 msgstr "Tinggi Default"
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:573
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "Tinggi default tetingkap, digunakan bila mula memaparkan tetingkap"
 
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:582
 msgid "Destroy with Parent"
 msgstr "Musnah bersama Bapa"
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:583
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Jika tetingkap ini patut dimusnahkan apabila bapanya dimusnahkan"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:591
 msgid "Icon for this window"
 msgstr "Ikon bagi tetingkap ini"
 
-#: gtk/gtkwindow.c:606
+#: gtk/gtkwindow.c:607
 #, fuzzy
 msgid "Name of the themed icon for this window"
 msgstr "Ikon bagi tetingkap ini"
 
-#: gtk/gtkwindow.c:621
+#: gtk/gtkwindow.c:622
 msgid "Is Active"
 msgstr "Adalah Aktif"
 
-#: gtk/gtkwindow.c:622
+#: gtk/gtkwindow.c:623
 msgid "Whether the toplevel is the current active window"
 msgstr "Samada aras atas adalah tetingkap aktif semasa"
 
-#: gtk/gtkwindow.c:629
+#: gtk/gtkwindow.c:630
 msgid "Focus in Toplevel"
 msgstr ""
 
-#: gtk/gtkwindow.c:630
+#: gtk/gtkwindow.c:631
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Samada fokus input adalah didalam GtkWindow ini"
 
-#: gtk/gtkwindow.c:637
+#: gtk/gtkwindow.c:638
 msgid "Type hint"
 msgstr "Taip petua"
 
-#: gtk/gtkwindow.c:638
+#: gtk/gtkwindow.c:639
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
 
-#: gtk/gtkwindow.c:646
+#: gtk/gtkwindow.c:647
 msgid "Skip taskbar"
 msgstr "Langkah taskbar"
 
-#: gtk/gtkwindow.c:647
+#: gtk/gtkwindow.c:648
 msgid "TRUE if the window should not be in the task bar."
 msgstr "BENAR jika tetingkap tak patut berada di taskbar."
 
-#: gtk/gtkwindow.c:654
+#: gtk/gtkwindow.c:655
 msgid "Skip pager"
 msgstr ""
 
-#: gtk/gtkwindow.c:655
+#: gtk/gtkwindow.c:656
 msgid "TRUE if the window should not be in the pager."
 msgstr "BENAR jika tetingkap tak patut berada di pager."
 
-#: gtk/gtkwindow.c:662
+#: gtk/gtkwindow.c:663
 msgid "Urgent"
 msgstr ""
 
-#: gtk/gtkwindow.c:663
+#: gtk/gtkwindow.c:664
 #, fuzzy
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "BENAR jika tetingkap tak patut berada di pager."
 
-#: gtk/gtkwindow.c:677
+#: gtk/gtkwindow.c:678
 msgid "Accept focus"
 msgstr "Terima fokus"
 
-#: gtk/gtkwindow.c:678
+#: gtk/gtkwindow.c:679
 #, fuzzy
 msgid "TRUE if the window should receive the input focus."
 msgstr "BENAR jika tetingkap tak patut berada di pager."
 
-#: gtk/gtkwindow.c:692
+#: gtk/gtkwindow.c:693
 #, fuzzy
 msgid "Focus on map"
 msgstr "Fokus pada klik"
 
-#: gtk/gtkwindow.c:693
+#: gtk/gtkwindow.c:694
 #, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "BENAR jika tetingkap tak patut berada di pager."
 
-#: gtk/gtkwindow.c:707
+#: gtk/gtkwindow.c:708
 msgid "Decorated"
 msgstr "Dihias"
 
-#: gtk/gtkwindow.c:708
+#: gtk/gtkwindow.c:709
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Samada tetingkap patut dihias oleh pengurus tetingkap"
 
-#: gtk/gtkwindow.c:722
+#: gtk/gtkwindow.c:723
 #, fuzzy
 msgid "Deletable"
 msgstr "Boleh dipilih"
 
-#: gtk/gtkwindow.c:723
+#: gtk/gtkwindow.c:724
 #, fuzzy
 msgid "Whether the window frame should have a close button"
 msgstr "Samada tetingkap patut dihias oleh pengurus tetingkap"
 
-#: gtk/gtkwindow.c:739
+#: gtk/gtkwindow.c:740
 msgid "Gravity"
 msgstr "Graviti"
 
-#: gtk/gtkwindow.c:740
+#: gtk/gtkwindow.c:741
 msgid "The window gravity of the window"
 msgstr "Graciti tetingkap bagi tetingkap"
 
-#: gtk/gtkwindow.c:757
+#: gtk/gtkwindow.c:758
 msgid "Transient for Window"
 msgstr ""
 
-#: gtk/gtkwindow.c:758
+#: gtk/gtkwindow.c:759
 #, fuzzy
 msgid "The transient parent of the dialog"
 msgstr "Butang dipaparkan pada dialog mesej"
 
-#: gtk/gtkwindow.c:773
+#: gtk/gtkwindow.c:774
 msgid "Opacity for Window"
 msgstr ""
 
-#: gtk/gtkwindow.c:774
+#: gtk/gtkwindow.c:775
 #, fuzzy
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Jenis tetingkap"

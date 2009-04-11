@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-13 10:29-0400\n"
+"POT-Creation-Date: 2009-04-11 16:24-0400\n"
 "PO-Revision-Date: 2009-03-17 21:05+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -287,7 +287,8 @@ msgstr "'%s' എന്ന ഇമേജ് ഫയലില്‍ ഡേറ്റ�
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1016
 #: gdk-pixbuf/gdk-pixbuf-io.c:1280 tests/testfilechooser.c:267
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "'%s' എന്ന ഇമേജ് ലഭ്യമാക്കുന്നതില്‍ പരാജയം: ഒരു പക്ഷേ തകരാറുള്ള ഇമേജ് ഫയല്‍ആവാം കാരണം "
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:221
@@ -295,7 +296,8 @@ msgstr "'%s' എന്ന ഇമേജ് ലഭ്യമാക്കുന്�
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr "'%s' എന്ന ആനിമേഷന്‍ ലഭ്യമാക്കുന്നതില്‍ പരാജയം: ഒരു പക്ഷേ തകരാറുള്ള ആനിമേഷന്‍ ഫയല്‍ ആവാം കാരണം "
+msgstr ""
+"'%s' എന്ന ആനിമേഷന്‍ ലഭ്യമാക്കുന്നതില്‍ പരാജയം: ഒരു പക്ഷേ തകരാറുള്ള ആനിമേഷന്‍ ഫയല്‍ ആവാം കാരണം "
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:701
 #, c-format
@@ -522,7 +524,8 @@ msgstr "GIF ഫയലിന്റെ %s ലക്കത്തിനുള്ള 
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
-msgstr "GIF ഇമേജില്‍ ഗ്ളോബല്‍ കളറ്‍മാപ്പ് ലഭ്യമല്ല, അതിലുള്ള ഒരു ഫ്റെയിമില്‍ ലോക്കല്‍ കളറ്‍മാപ്പും ലഭ്യമല്ല."
+msgstr ""
+"GIF ഇമേജില്‍ ഗ്ളോബല്‍ കളറ്‍മാപ്പ് ലഭ്യമല്ല, അതിലുള്ള ഒരു ഫ്റെയിമില്‍ ലോക്കല്‍ കളറ്‍മാപ്പും ലഭ്യമല്ല."
 
 #: gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
@@ -612,15 +615,15 @@ msgstr " ഇമേജ് തരത്തിനുള്ള പിന്തുണ
 msgid "Couldn't allocate memory for color profile"
 msgstr "നിറം പ്രൊഫൈലിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
-#: gdk-pixbuf/io-jasper.c:182
+#: gdk-pixbuf/io-jasper.c:183
 msgid "Insufficient memory to open JPEG 2000 file"
 msgstr "JPEG 2000 ഫയല്‍ തുറക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
 
-#: gdk-pixbuf/io-jasper.c:264
+#: gdk-pixbuf/io-jasper.c:262
 msgid "Couldn't allocate memory to buffer image data"
 msgstr "ചിത്രം  ഡേറ്റായ്ക്ക് ആവശ്യമുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
 
-#: gdk-pixbuf/io-jasper.c:308
+#: gdk-pixbuf/io-jasper.c:306
 msgid "The JPEG 2000 image format"
 msgstr "JPEG 2000 ഇമേജ് രീതി"
 
@@ -662,10 +665,11 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG തനിമ 0-ത്തിനും 100-നും മദ്ധ്യത്തിലുള്ള മൂല്ല്യമായിരിക്കണം; %d അനുവദനീയമല്ല."
 
-#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "JPEG ഇമേജ് രീതി"
 
@@ -732,7 +736,8 @@ msgstr "മാറ്റം വരുത്തിയ PNG, RGB അല്ലെങ�
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "മാറ്റം വരുത്തിയ PNG-ല്‍ പിന്തുണ ലഭ്യമല്ലാത്ത ചാനലുകള്‍ ഉണ്ട്, 3 അല്ലെങ്കില്‍ 4 എണ്ണം ആവശ്യമുണ്ട്."
+msgstr ""
+"മാറ്റം വരുത്തിയ PNG-ല്‍ പിന്തുണ ലഭ്യമല്ലാത്ത ചാനലുകള്‍ ഉണ്ട്, 3 അല്ലെങ്കില്‍ 4 എണ്ണം ആവശ്യമുണ്ട്."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -762,7 +767,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ഇമേജ് ഫയല്‍ തുറക്കുന്നതില്‍ സാരമായ പിശക്: %s"
 
 #: gdk-pixbuf/io-png.c:825
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ടെക്സ്റ്റുകളുടെ കീകളില്‍ കുറഞ്ഞത് 1 അക്ഷരം ഉണ്ടായിരിക്കണം, 79-ല്‍ കൂടുതല്‍ പാടില്ല."
 
 #: gdk-pixbuf/io-png.c:833
@@ -788,7 +794,8 @@ msgstr "PNG കംപ്രഷന്‍ ലവല്‍ 0-ത്തിനും 
 #: gdk-pixbuf/io-png.c:896
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "PNG ടെക്സ്റ്റ് ചങ്ക് %s-നുള്ള മൂല്ല്യം ISO-8859-1 എന്‍കോഡിങിലേക്കു് വേര്‍തിരിക്കുവാന്‍ സാധ്യല്ല."
+msgstr ""
+"PNG ടെക്സ്റ്റ് ചങ്ക് %s-നുള്ള മൂല്ല്യം ISO-8859-1 എന്‍കോഡിങിലേക്കു് വേര്‍തിരിക്കുവാന്‍ സാധ്യല്ല."
 
 #: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
@@ -1156,46 +1163,46 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d വസ്തു തുറക്കുന്നു"
 msgstr[1] "%d വസ്തുക്കള്‍ തുറക്കുന്നു"
 
-#: gtk/gtkaboutdialog.c:267 gtk/gtkaboutdialog.c:2121
+#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2110
 msgid "License"
 msgstr "അനുമതിപത്രം "
 
-#: gtk/gtkaboutdialog.c:268
+#: gtk/gtkaboutdialog.c:252
 msgid "The license of the program"
 msgstr "പ്രോഗ്രാമിനുള്ള അനുമതിപത്രം"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:508
+#: gtk/gtkaboutdialog.c:492
 msgid "C_redits"
 msgstr "_ബഹുമതികള്‍"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:522
+#: gtk/gtkaboutdialog.c:506
 msgid "_License"
 msgstr "_അനുമതിപത്രം"
 
-#: gtk/gtkaboutdialog.c:790
+#: gtk/gtkaboutdialog.c:774
 #, c-format
 msgid "About %s"
 msgstr "%s സംബന്ധിച്ച്"
 
-#: gtk/gtkaboutdialog.c:2045
+#: gtk/gtkaboutdialog.c:2033
 msgid "Credits"
 msgstr "ബഹുമതികള്‍"
 
-#: gtk/gtkaboutdialog.c:2074
+#: gtk/gtkaboutdialog.c:2062
 msgid "Written by"
 msgstr "എഴുതിയതു്"
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2065
 msgid "Documented by"
 msgstr "സഹായക്കുറിപ്പുകള്‍"
 
-#: gtk/gtkaboutdialog.c:2089
+#: gtk/gtkaboutdialog.c:2077
 msgid "Translated by"
 msgstr "പരിഭാഷകര്‍"
 
-#: gtk/gtkaboutdialog.c:2093
+#: gtk/gtkaboutdialog.c:2081
 msgid "Artwork by"
 msgstr "കലാവിരുതുകള്‍"
 
@@ -1269,17 +1276,22 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-#: gtk/gtkbuilderparser.c:340
-#, c-format
-msgid "Invalid type function: `%s'"
+#: gtk/gtkbuilderparser.c:343
+#, fuzzy, c-format
+msgid "Invalid type function on line %d: '%s'"
 msgstr "തെറ്റായ തരത്തിലുള്ള ഫംഗ്ഷന്‍: `%s'"
 
-#: gtk/gtkbuilderparser.c:837
+#: gtk/gtkbuilderparser.c:402
+#, c-format
+msgid "Duplicate object id '%s' on line %d (previously on line %d)"
+msgstr ""
+
+#: gtk/gtkbuilderparser.c:853
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "തെറ്റായ റൂട്ട് എലമെന്റ്: `%s'"
 
-#: gtk/gtkbuilderparser.c:876
+#: gtk/gtkbuilderparser.c:892
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "അണ്‍ഹാന്‍ഡില്‍ട് ടാഗ്: '%s'"
@@ -1374,7 +1386,7 @@ msgstr "പ്രവര്‍ത്തനരഹിതം"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:376 gtk/gtkcellrendereraccel.c:588
+#: gtk/gtkcellrendereraccel.c:379 gtk/gtkcellrendereraccel.c:591
 msgid "New accelerator..."
 msgstr "പുതിയ ആക്സലറേറ്റര്‍..."
 
@@ -1397,17 +1409,16 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"നിങ്ങള്‍ക്കാവശ്യമുള്ള നിറം പുറത്തുള്ള വട്ടത്തില്‍ നിന്നും തെരഞ്ഞെടുക്കുക. "
-"ഉള്ളിലുള്ള ത്രികോണത്തില്‍ നിന്നും ഈ നിറത്തിനുള്ള ഇരുളിമ അല്ലെങ്കില്‍ "
-"തെളിച്ചം തെരഞ്ഞെടുക്കുക."
+"നിങ്ങള്‍ക്കാവശ്യമുള്ള നിറം പുറത്തുള്ള വട്ടത്തില്‍ നിന്നും തെരഞ്ഞെടുക്കുക. ഉള്ളിലുള്ള ത്രികോണത്തില്‍ "
+"നിന്നും ഈ നിറത്തിനുള്ള ഇരുളിമ അല്ലെങ്കില്‍ തെളിച്ചം തെരഞ്ഞെടുക്കുക."
 
 #: gtk/gtkcolorsel.c:378
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"ഐഡ്രോപ്പറില്‍ ക്ലിക്ക് ചെയ്യുക. ശേഷം നിങ്ങളുടെ സ്ക്രീനില്‍ എവിടെയെങ്കിലും "
-"ക്ലിക്ക് ചെയ്തു് ഈ നിറം തെരഞ്ഞെടുക്കുക."
+"ഐഡ്രോപ്പറില്‍ ക്ലിക്ക് ചെയ്യുക. ശേഷം നിങ്ങളുടെ സ്ക്രീനില്‍ എവിടെയെങ്കിലും ക്ലിക്ക് ചെയ്തു് ഈ നിറം "
+"തെരഞ്ഞെടുക്കുക."
 
 #: gtk/gtkcolorsel.c:387
 msgid "_Hue:"
@@ -1474,8 +1485,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"നിങ്ങള്‍ക്കു് ഒരു HTML-രീതിയിലുള്ള ഹെക്സാഡെസിമല്‍ നിറമൂല്ല്യം നല്‍കാം. "
-"അല്ലെങ്കില്‍, വെറുതെ നിറത്തിന്റെ പേരു് നല്‍കുക, ഉദാ. 'orange'."
+"നിങ്ങള്‍ക്കു് ഒരു HTML-രീതിയിലുള്ള ഹെക്സാഡെസിമല്‍ നിറമൂല്ല്യം നല്‍കാം. അല്ലെങ്കില്‍, വെറുതെ "
+"നിറത്തിന്റെ പേരു് നല്‍കുക, ഉദാ. 'orange'."
 
 #: gtk/gtkcolorsel.c:470
 msgid "_Palette:"
@@ -1491,18 +1502,17 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"മുമ്പു് തെരഞ്ഞെടുത്ത നിറം, ഇതു് ഇപ്പോള്‍ നിങ്ങള്‍ തെരഞ്ഞെടുക്കുന്ന നിറവുമായി "
-"ഒത്തുനോക്കുവാന്‍ സഹായിക്കുന്നു. നിങ്ങള്‍ക്കു് ഇതു് താലത്തിലേക്കു് വലിച്ചിടുവാന്‍ "
-"സാധിക്കുന്നു അല്ലെങ്കില്‍, ഇതു് മറ്റൊരു സ്വാച്ചിലേക്കു് വലിച്ചിട്ടു് നിലവില്‍ ഉപയോഗിക്കുന്ന "
-"നിറമായി സജ്ജമാക്കുക."
+"മുമ്പു് തെരഞ്ഞെടുത്ത നിറം, ഇതു് ഇപ്പോള്‍ നിങ്ങള്‍ തെരഞ്ഞെടുക്കുന്ന നിറവുമായി ഒത്തുനോക്കുവാന്‍ "
+"സഹായിക്കുന്നു. നിങ്ങള്‍ക്കു് ഇതു് താലത്തിലേക്കു് വലിച്ചിടുവാന്‍ സാധിക്കുന്നു അല്ലെങ്കില്‍, ഇതു് മറ്റൊരു "
+"സ്വാച്ചിലേക്കു് വലിച്ചിട്ടു് നിലവില്‍ ഉപയോഗിക്കുന്ന നിറമായി സജ്ജമാക്കുക."
 
 #: gtk/gtkcolorsel.c:980
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
-"നിങ്ങള്‍ തെരഞ്ഞെടുത്ത നിറം. ഭാവിയില്‍ വീണ്ടും ഉപയോഗിക്കുന്നതിനായി നിങ്ങള്‍ക്കു് "
-"ഈ നിറം താലത്തിലേക്കു് വലിച്ചിടുവാന്‍ സാധ്യമാകുന്നു."
+"നിങ്ങള്‍ തെരഞ്ഞെടുത്ത നിറം. ഭാവിയില്‍ വീണ്ടും ഉപയോഗിക്കുന്നതിനായി നിങ്ങള്‍ക്കു് ഈ നിറം "
+"താലത്തിലേക്കു് വലിച്ചിടുവാന്‍ സാധ്യമാകുന്നു."
 
 #: gtk/gtkcolorsel.c:1363
 msgid "_Save color here"
@@ -1513,19 +1523,19 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"നിലവിലുള്ള നിറം ആക്കുന്നതിനായി ഈ താലം എന്‍ട്രിയില്‍ ക്ലിക്ക് ചെയ്യുക. "
-"ഈ എന്‍ട്രി മാറ്റുന്നതിനായി, ഒരു നിറത്തിനുള്ള സ്വാച്ച് ഇവിടേക്കു് വലിച്ചിടുക "
-"അല്ലെങ്കില്‍ അതു് റൈറ്റ് ക്ലിക്ക് ചെയ്തു് \"നിറം ഇവിടെ സൂക്ഷിക്കുക.\" തെരഞ്ഞെടുക്കുക."
+"നിലവിലുള്ള നിറം ആക്കുന്നതിനായി ഈ താലം എന്‍ട്രിയില്‍ ക്ലിക്ക് ചെയ്യുക. ഈ എന്‍ട്രി മാറ്റുന്നതിനായി, "
+"ഒരു നിറത്തിനുള്ള സ്വാച്ച് ഇവിടേക്കു് വലിച്ചിടുക അല്ലെങ്കില്‍ അതു് റൈറ്റ് ക്ലിക്ക് ചെയ്തു് \"നിറം ഇവിടെ "
+"സൂക്ഷിക്കുക.\" തെരഞ്ഞെടുക്കുക."
 
 #: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
 msgstr "നിറം തെരഞ്ഞെടുക്കല്‍"
 
-#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7766
+#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "ഇന്‍പുട്ട് _രീതികള്‍"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "_Insert Unicode Control Character"
 
@@ -1739,8 +1749,10 @@ msgstr "\"%s\" എന്ന പേരില്‍ ഒരു ഫയല്‍ ന�
 
 #: gtk/gtkfilechooserdefault.c:8152 gtk/gtkprintunixdialog.c:374
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr "\"%s\"-ല്‍ ഒരു ഫയല്‍ ഉണ്ട്.  അതിന്റെ സ്ഥാനത്ത് ഇത് സൂക്ഷിച്ചാല്‍ ഉള്ളടക്കം മാറ്റി എഴുതപ്പെടുന്നു."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr ""
+"\"%s\"-ല്‍ ഒരു ഫയല്‍ ഉണ്ട്.  അതിന്റെ സ്ഥാനത്ത് ഇത് സൂക്ഷിച്ചാല്‍ ഉള്ളടക്കം മാറ്റി എഴുതപ്പെടുന്നു."
 
 #: gtk/gtkfilechooserdefault.c:8157 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
@@ -1876,8 +1888,8 @@ msgid ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"\"%s\" എന്ന ഫയല്‍ മറ്റൊരു സിസ്റ്റമില്‍ (%s) സൂക്ഷിച്ചിരിക്കുന്നു. അതിനാല്‍ ഈ പ്രോഗ്രാമിനു് "
-"ഇതു് ലഭ്യമല്ല.\n"
+"\"%s\" എന്ന ഫയല്‍ മറ്റൊരു സിസ്റ്റമില്‍ (%s) സൂക്ഷിച്ചിരിക്കുന്നു. അതിനാല്‍ ഈ പ്രോഗ്രാമിനു് ഇതു് "
+"ലഭ്യമല്ല.\n"
 "നിങ്ങള്‍ക്കു് ഇതു് തെരഞ്ഞെടുക്കണമെന്നു് ഉറപ്പാണോ?"
 
 #: gtk/gtkfilesel.c:1020
@@ -1894,8 +1906,10 @@ msgstr "ഫയലിന്റെ പേരു് മാറ്റുക (_R)"
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന അറയുടെ പേരിലുണ്ട്"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന അറയുടെ പേരിലുണ്ട്"
 
 #: gtk/gtkfilesel.c:1392
 msgid "New Folder"
@@ -1912,7 +1926,8 @@ msgstr "ഉ_ണ്ടാക്കുക"
 #: gtk/gtkfilesel.c:1474 gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1594
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന ഫയല്‍നാമത്തിലുണ്ട്"
+msgstr ""
+"ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന ഫയല്‍നാമത്തിലുണ്ട്"
 
 #: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1487
 #, c-format
@@ -1960,24 +1975,24 @@ msgstr "പേരു് _മാറ്റുക"
 msgid "_Selection: "
 msgstr "_തെരഞ്ഞെടുക്കല്‍:"
 
-#: gtk/gtkfilesel.c:3048
+#: gtk/gtkfilesel.c:3050
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
-"\"%s\" ഫയല്‍നാമം UTF-8-ലേക്കു് വേര്‍തിരിക്കുവാന്‍ സാധ്യമായില്ല. (G_FILENAME_ENCODING "
-"എന്ന എന്‍വയോണ്മെന്റ് സജ്ജമാക്കുന്നതിനായി ശ്രമിക്കുക): %s"
+"\"%s\" ഫയല്‍നാമം UTF-8-ലേക്കു് വേര്‍തിരിക്കുവാന്‍ സാധ്യമായില്ല. (G_FILENAME_ENCODING എന്ന "
+"എന്‍വയോണ്മെന്റ് സജ്ജമാക്കുന്നതിനായി ശ്രമിക്കുക): %s"
 
-#: gtk/gtkfilesel.c:3051
+#: gtk/gtkfilesel.c:3053
 msgid "Invalid UTF-8"
 msgstr "അസാധുവായ UTF-8"
 
-#: gtk/gtkfilesel.c:3925
+#: gtk/gtkfilesel.c:3927
 msgid "Name too long"
 msgstr "പേരു് വളരെ വലുതാണു്"
 
-#: gtk/gtkfilesel.c:3927
+#: gtk/gtkfilesel.c:3929
 msgid "Couldn't convert filename"
 msgstr "ഫയലിന്റെ പേരു് വേര്‍തിരിക്കുവാന്‍ സാധ്യമായില്ല"
 
@@ -2225,39 +2240,39 @@ msgstr "GTK+ ഉപാധികള്‍"
 msgid "Show GTK+ Options"
 msgstr "GTK+ ഉപാധികള്‍ കാണിക്കുക"
 
-#: gtk/gtkmountoperation.c:463
+#: gtk/gtkmountoperation.c:468
 msgid "Co_nnect"
 msgstr "ക_ണക്ട് ചെയ്യുക"
 
-#: gtk/gtkmountoperation.c:530
+#: gtk/gtkmountoperation.c:535
 msgid "Connect _anonymously"
 msgstr "_അജ്ഞാതമായി കണക്ട് ചെയ്യുക"
 
-#: gtk/gtkmountoperation.c:539
+#: gtk/gtkmountoperation.c:544
 msgid "Connect as u_ser:"
 msgstr "_ഉപയോക്താവായി കണക്ട് ചെയ്യുക:"
 
-#: gtk/gtkmountoperation.c:577
+#: gtk/gtkmountoperation.c:582
 msgid "_Username:"
 msgstr "_ഉപയോക്താവിന്റെ പേരു്‌:"
 
-#: gtk/gtkmountoperation.c:582
+#: gtk/gtkmountoperation.c:587
 msgid "_Domain:"
 msgstr "_ഡൊമെയിന്‍:"
 
-#: gtk/gtkmountoperation.c:588
+#: gtk/gtkmountoperation.c:593
 msgid "_Password:"
 msgstr "_അടയാളവാക്കു്:"
 
-#: gtk/gtkmountoperation.c:606
+#: gtk/gtkmountoperation.c:611
 msgid "Forget password _immediately"
 msgstr "_ഉടന്‍ പാസ്‌വേര്‍ഡ് മറക്കകു"
 
-#: gtk/gtkmountoperation.c:616
+#: gtk/gtkmountoperation.c:621
 msgid "Remember password until you _logout"
 msgstr "_പുറത്തു് കടക്കുന്നതു്വരെ പാസ്‌വേര്‍ഡ് സൂക്ഷിക്കുക"
 
-#: gtk/gtkmountoperation.c:626
+#: gtk/gtkmountoperation.c:631
 msgid "Remember _forever"
 msgstr "_എന്നേക്കുമായി സൂക്ഷിക്കുക"
 
@@ -2327,7 +2342,7 @@ msgstr "_പേപ്പറിന്റെ വലിപ്പം:"
 msgid "_Orientation:"
 msgstr "സംവേദനം (_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2681
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2678
 msgid "Page Setup"
 msgstr "പേജിന്റെ ക്രമീകരണം"
 
@@ -2475,17 +2490,17 @@ msgstr "പ്രിന്റ് ചെയ്യുന്നതിനു് മ�
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "ഇതിനുള്ള കാരണം മിക്കവാറും താല്‍ക്കാലിക ഫയല്‍ ഉണ്ടാക്കപ്പെട്ടില്ല എന്നതാവും."
 
-#: gtk/gtkprintoperation-unix.c:242
+#: gtk/gtkprintoperation-unix.c:257
 #, c-format
 msgid "Error launching preview"
 msgstr "തിരനോട്ടം ലഭ്യമാക്കുന്നതില്‍ പിശക്"
 
-#: gtk/gtkprintoperation-unix.c:280
+#: gtk/gtkprintoperation-unix.c:301
 #, c-format
 msgid "Error printing"
 msgstr "പ്രിന്റ് ചെയ്യുന്നതില്‍ പിശക്"
 
-#: gtk/gtkprintoperation-unix.c:384 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:405 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "പ്രയോഗം"
 
@@ -2544,37 +2559,37 @@ msgstr "PrintDlgEx-നുള്ള തെറ്റായ ഹാന്‍ഡി�
 msgid "Unspecified error"
 msgstr "വ്യക്തമാക്കാത്ത പിശക്"
 
-#: gtk/gtkprintunixdialog.c:1763
+#: gtk/gtkprintunixdialog.c:1758
 msgid "Printer"
 msgstr "പ്രിന്‍റര്‍"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1773
+#: gtk/gtkprintunixdialog.c:1768
 msgid "Location"
 msgstr "സ്ഥാനം"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1784
+#: gtk/gtkprintunixdialog.c:1779
 msgid "Status"
 msgstr "അവസ്ഥ"
 
-#: gtk/gtkprintunixdialog.c:1809
+#: gtk/gtkprintunixdialog.c:1804
 msgid "Range"
 msgstr "പരിധി"
 
-#: gtk/gtkprintunixdialog.c:1813
+#: gtk/gtkprintunixdialog.c:1808
 msgid "_All Pages"
 msgstr "_എല്ലാ പേജുകളും"
 
-#: gtk/gtkprintunixdialog.c:1820
+#: gtk/gtkprintunixdialog.c:1815
 msgid "C_urrent Page"
 msgstr "നി_ലവിലുളള താള്‍"
 
-#: gtk/gtkprintunixdialog.c:1829
+#: gtk/gtkprintunixdialog.c:1824
 msgid "Pag_es:"
 msgstr "താ_ളുകള്‍:"
 
-#: gtk/gtkprintunixdialog.c:1830
+#: gtk/gtkprintunixdialog.c:1825
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2582,127 +2597,133 @@ msgstr ""
 "ഒന്നോ അതിലധികമോ താള്‍ പരിധികള്‍ നല്‍കുക,\n"
 " ഉദാ. 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1851
+#: gtk/gtkprintunixdialog.c:1835
+#, fuzzy
+msgid "Pages"
+msgstr "താ_ളുകള്‍:"
+
+#: gtk/gtkprintunixdialog.c:1848
 msgid "Copies"
 msgstr "പകര്‍പ്പുകള്‍"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1856
+#: gtk/gtkprintunixdialog.c:1853
 msgid "Copie_s:"
 msgstr "പ_കര്‍പ്പുകള്‍:"
 
-#: gtk/gtkprintunixdialog.c:1874
+#: gtk/gtkprintunixdialog.c:1871
 msgid "C_ollate"
 msgstr "_കോളേറ്റ് ചെയ്യുക"
 
-#: gtk/gtkprintunixdialog.c:1882
+#: gtk/gtkprintunixdialog.c:1879
 msgid "_Reverse"
 msgstr "_തിരിക്കുക"
 
-#: gtk/gtkprintunixdialog.c:1902
+#: gtk/gtkprintunixdialog.c:1899
 msgid "General"
 msgstr "സാധാരണ"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2442
+#: gtk/gtkprintunixdialog.c:2439
 #: modules/printbackends/cups/gtkprintbackendcups.c:2910
 msgid "Page Ordering"
 msgstr "പേജിന്റെ ക്രമം"
 
-#: gtk/gtkprintunixdialog.c:2448
+#: gtk/gtkprintunixdialog.c:2445
 msgid "Left to right"
 msgstr "ഇടത് മുതല്‍ വലത്"
 
-#: gtk/gtkprintunixdialog.c:2449
+#: gtk/gtkprintunixdialog.c:2446
 msgid "Right to left"
 msgstr "വലതില്‍ നിന്നും എടത്തേയ്ക്ക്"
 
-#: gtk/gtkprintunixdialog.c:2518
+#: gtk/gtkprintunixdialog.c:2515
 msgid "Layout"
 msgstr "ലേയൌട്ട് "
 
-#: gtk/gtkprintunixdialog.c:2522
+#: gtk/gtkprintunixdialog.c:2519
 msgid "T_wo-sided:"
 msgstr "_ഇരു വശമുള്ള:"
 
-#: gtk/gtkprintunixdialog.c:2537
+#: gtk/gtkprintunixdialog.c:2534
 msgid "Pages per _side:"
 msgstr "ഒരു _വശത്ത് എത്ര താള്‍:"
 
-#: gtk/gtkprintunixdialog.c:2555
+#: gtk/gtkprintunixdialog.c:2552
 msgid "Page or_dering:"
 msgstr "പേജിന്റെ _ക്രമം:"
 
-#: gtk/gtkprintunixdialog.c:2571
+#: gtk/gtkprintunixdialog.c:2568
 msgid "_Only print:"
 msgstr "പ്രിന്റ് മാത്രം ചെയ്യുക:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2586
+#: gtk/gtkprintunixdialog.c:2583
 msgid "All sheets"
 msgstr "എല്ലാ ഷീറ്റുകളും"
 
-#: gtk/gtkprintunixdialog.c:2587
+#: gtk/gtkprintunixdialog.c:2584
 msgid "Even sheets"
 msgstr "ഇവന്‍ ഷീറ്റുകള്‍"
 
-#: gtk/gtkprintunixdialog.c:2588
+#: gtk/gtkprintunixdialog.c:2585
 msgid "Odd sheets"
 msgstr "ഓഡ് ഷീറ്റുകള്‍"
 
-#: gtk/gtkprintunixdialog.c:2591
+#: gtk/gtkprintunixdialog.c:2588
 msgid "Sc_ale:"
 msgstr "അളവ് (_a):"
 
-#: gtk/gtkprintunixdialog.c:2618
+#: gtk/gtkprintunixdialog.c:2615
 msgid "Paper"
 msgstr "പേപ്പറ്‍"
 
-#: gtk/gtkprintunixdialog.c:2622
+#: gtk/gtkprintunixdialog.c:2619
 msgid "Paper _type:"
 msgstr "ഏത് തരം പേപ്പറ്‍ (_t):"
 
-#: gtk/gtkprintunixdialog.c:2637
+#: gtk/gtkprintunixdialog.c:2634
 msgid "Paper _source:"
 msgstr "പേപ്പറിന്റെ _ഉറവിടം:"
 
-#: gtk/gtkprintunixdialog.c:2652
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Output t_ray:"
 msgstr "ഔട്ട്പുട്ട് ട്റേ (_r):"
 
-#: gtk/gtkprintunixdialog.c:2706
+#: gtk/gtkprintunixdialog.c:2703
 msgid "Job Details"
 msgstr "ജോലിയുടെ വിശദവിവരങ്ങള്‍"
 
-#: gtk/gtkprintunixdialog.c:2712
+#: gtk/gtkprintunixdialog.c:2709
 msgid "Pri_ority:"
 msgstr "മുന്‍ഗണന (_o):"
 
-#: gtk/gtkprintunixdialog.c:2727
+#: gtk/gtkprintunixdialog.c:2724
 msgid "_Billing info:"
 msgstr "ബില്ലിങ് വിവരം (_B): "
 
-#: gtk/gtkprintunixdialog.c:2745
+#: gtk/gtkprintunixdialog.c:2742
 msgid "Print Document"
 msgstr "രേഖ പ്രിന്റ് ചെയ്യുക"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2754
+#: gtk/gtkprintunixdialog.c:2751
 msgid "_Now"
 msgstr "ഉടന്‍ (_N)"
 
-#: gtk/gtkprintunixdialog.c:2765
+#: gtk/gtkprintunixdialog.c:2762
 msgid "A_t:"
 msgstr "എപ്പോള്‍ (_t):"
 
 #. Translators: Ability to parse the am/pm format depends on actual locale.
-#. * You can remove the am/pm values below for your locale if they are not supported.
+#. * You can remove the am/pm values below for your locale if they are not
+#. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:2770
+#: gtk/gtkprintunixdialog.c:2768
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2710,60 +2731,64 @@ msgstr ""
 "പ്രിന്റ് ചെയ്യുന്നതിനുള്ള സമയം,\n"
 " ഉദാ. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: gtk/gtkprintunixdialog.c:2791
+#: gtk/gtkprintunixdialog.c:2778
+msgid "Time of print"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2794
 msgid "On _hold"
 msgstr "തല്‍ക്കാലത്തേക്ക് _നിര്‍ത്തുക"
 
-#: gtk/gtkprintunixdialog.c:2792
+#: gtk/gtkprintunixdialog.c:2795
 msgid "Hold the job until it is explicitly released"
 msgstr "ഈ മാത്രമായി ലഭ്യമാക്കുന്നതു് വരെ ഇതു് ഹോള്‍ഡ് ചെയ്യുക"
 
-#: gtk/gtkprintunixdialog.c:2812
+#: gtk/gtkprintunixdialog.c:2815
 msgid "Add Cover Page"
 msgstr "കവര്‍ താള്‍ ചേര്‍ക്കുക"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2821
+#: gtk/gtkprintunixdialog.c:2824
 msgid "Be_fore:"
 msgstr "മുമ്പ് (_f):"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2839
+#: gtk/gtkprintunixdialog.c:2842
 msgid "_After:"
 msgstr "ശേഷം (_A):"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2857
+#: gtk/gtkprintunixdialog.c:2860
 msgid "Job"
 msgstr "ജോലി"
 
-#: gtk/gtkprintunixdialog.c:2923
+#: gtk/gtkprintunixdialog.c:2926
 msgid "Advanced"
 msgstr "പുരോഗമിച്ച"
 
-#: gtk/gtkprintunixdialog.c:2958
+#: gtk/gtkprintunixdialog.c:2961
 msgid "Image Quality"
 msgstr "ഇമേജിന്റെ നിലവാരം"
 
-#: gtk/gtkprintunixdialog.c:2961
+#: gtk/gtkprintunixdialog.c:2964
 msgid "Color"
 msgstr "നിറം"
 
-#: gtk/gtkprintunixdialog.c:2964
+#: gtk/gtkprintunixdialog.c:2967
 msgid "Finishing"
 msgstr "പൂറ്‍ത്തിയാക്കുന്നു"
 
-#: gtk/gtkprintunixdialog.c:2974
+#: gtk/gtkprintunixdialog.c:2977
 msgid "Some of the settings in the dialog conflict"
 msgstr "ഡയലോഗിലുള്ള ചില ക്രമീകരണങ്ങള്‍ പൊരുത്തപ്പെടുന്നില്ല"
 
-#: gtk/gtkprintunixdialog.c:2997
+#: gtk/gtkprintunixdialog.c:3000
 msgid "Print"
 msgstr "പ്രിന്റ് ചെയ്യുക"
 
@@ -3447,7 +3472,8 @@ msgstr "\"%s\" ശരിയായ പേരുള്ള ഒരു സവിശ�
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 "\"%s\", \"%s\" തരത്തിലുള്ള മൂല്ല്യമായി വേര്‍തിരിക്കുവാന്‍ സാധ്യമല്ല. ഇതു് \"%s\" എന്ന "
 "സവിശേഷതയ്ക്കുള്ളതാണു്"
@@ -3486,7 +3512,8 @@ msgid "Serialized data is malformed"
 msgstr "സീരിയലൈസ്ഡ് ഡേറ്റാ തെറ്റാകുന്നു"
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "സീരിയലൈസ്ഡ് ഡേറ്റാ തെറ്റാകുന്നു. ആദ്യത്തെ ഭാഗം GTKTEXTBUFFERCONTENTS-0001 അല്ല."
 
 #: gtk/gtktextutil.c:61
@@ -4939,4 +4966,3 @@ msgstr "ടെസ്റ്റ് പ്രിന്ററിലേക്ക് �
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' എന്ന ഫയലിന് ആവശ്യമുള്ള വിവരം ലഭ്യമായില്ല: %s"
-

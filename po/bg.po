@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-13 10:29-0400\n"
+"POT-Creation-Date: 2009-04-11 16:24-0400\n"
 "PO-Revision-Date: 2009-02-10 19:30+0200\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -635,15 +635,15 @@ msgstr "В момента изображения от този вид не се 
 msgid "Couldn't allocate memory for color profile"
 msgstr "Недостатъчно памет за зареждане на цветови профил"
 
-#: gdk-pixbuf/io-jasper.c:182
+#: gdk-pixbuf/io-jasper.c:183
 msgid "Insufficient memory to open JPEG 2000 file"
 msgstr "Недостатъчно памет за отваряне на файл във формат JPEG 2000"
 
-#: gdk-pixbuf/io-jasper.c:264
+#: gdk-pixbuf/io-jasper.c:262
 msgid "Couldn't allocate memory to buffer image data"
 msgstr "Недостатъчно памет за буфера с данните на изображението"
 
-#: gdk-pixbuf/io-jasper.c:308
+#: gdk-pixbuf/io-jasper.c:306
 msgid "The JPEG 2000 image format"
 msgstr "Форматът за изображения JPEG 2000"
 
@@ -693,7 +693,7 @@ msgstr ""
 "Качеството за JPEG трябва да бъде между 0 и 100. Стойността „%d“ не е "
 "позволена"
 
-#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "Форматът за изображения JPEG"
 
@@ -1207,46 +1207,46 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Отваряне на %d елемент"
 msgstr[1] "Отваряне на %d елемента"
 
-#: gtk/gtkaboutdialog.c:267 gtk/gtkaboutdialog.c:2121
+#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2110
 msgid "License"
 msgstr "Лиценз"
 
-#: gtk/gtkaboutdialog.c:268
+#: gtk/gtkaboutdialog.c:252
 msgid "The license of the program"
 msgstr "Лицензът на програмата"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:508
+#: gtk/gtkaboutdialog.c:492
 msgid "C_redits"
 msgstr "_Заслуги"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:522
+#: gtk/gtkaboutdialog.c:506
 msgid "_License"
 msgstr "_Лиценз"
 
-#: gtk/gtkaboutdialog.c:790
+#: gtk/gtkaboutdialog.c:774
 #, c-format
 msgid "About %s"
 msgstr "Относно %s"
 
-#: gtk/gtkaboutdialog.c:2045
+#: gtk/gtkaboutdialog.c:2033
 msgid "Credits"
 msgstr "Заслуги"
 
-#: gtk/gtkaboutdialog.c:2074
+#: gtk/gtkaboutdialog.c:2062
 msgid "Written by"
 msgstr "Създадено от"
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2065
 msgid "Documented by"
 msgstr "Документирано от"
 
-#: gtk/gtkaboutdialog.c:2089
+#: gtk/gtkaboutdialog.c:2077
 msgid "Translated by"
 msgstr "Преведено от"
 
-#: gtk/gtkaboutdialog.c:2093
+#: gtk/gtkaboutdialog.c:2081
 msgid "Artwork by"
 msgstr "Дизайн"
 
@@ -1320,17 +1320,22 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "\\"
 
-#: gtk/gtkbuilderparser.c:340
-#, c-format
-msgid "Invalid type function: `%s'"
+#: gtk/gtkbuilderparser.c:343
+#, fuzzy, c-format
+msgid "Invalid type function on line %d: '%s'"
 msgstr "Функция от неправилен вид: „%s“"
 
-#: gtk/gtkbuilderparser.c:837
+#: gtk/gtkbuilderparser.c:402
+#, c-format
+msgid "Duplicate object id '%s' on line %d (previously on line %d)"
+msgstr ""
+
+#: gtk/gtkbuilderparser.c:853
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Неправилен коренов елемент: „%s“"
 
-#: gtk/gtkbuilderparser.c:876
+#: gtk/gtkbuilderparser.c:892
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Необработен етикет: „%s“"
@@ -1425,7 +1430,7 @@ msgstr "Изключен"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:376 gtk/gtkcellrendereraccel.c:588
+#: gtk/gtkcellrendereraccel.c:379 gtk/gtkcellrendereraccel.c:591
 msgid "New accelerator..."
 msgstr "Нова клавишна комбинация…"
 
@@ -1570,11 +1575,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Избор на цвят"
 
-#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7766
+#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "_Методи за вход"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7780
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "_Вмъкване на контролен знак за Уникод"
 
@@ -2015,7 +2020,7 @@ msgstr "_Преименуване"
 msgid "_Selection: "
 msgstr "_Избор: "
 
-#: gtk/gtkfilesel.c:3048
+#: gtk/gtkfilesel.c:3050
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -2024,15 +2029,15 @@ msgstr ""
 "Името на файла „%s“ не може да бъде конвертирано към UTF-8 (опитайте се да "
 "зададете променливата на средата G_FILENAME_ENCODING): %s"
 
-#: gtk/gtkfilesel.c:3051
+#: gtk/gtkfilesel.c:3053
 msgid "Invalid UTF-8"
 msgstr "Грешен UTF-8"
 
-#: gtk/gtkfilesel.c:3925
+#: gtk/gtkfilesel.c:3927
 msgid "Name too long"
 msgstr "Името е твърде дълго"
 
-#: gtk/gtkfilesel.c:3927
+#: gtk/gtkfilesel.c:3929
 msgid "Couldn't convert filename"
 msgstr "Името на файла не може да бъде конвертирано"
 
@@ -2284,39 +2289,39 @@ msgstr "Опции за GTK+"
 msgid "Show GTK+ Options"
 msgstr "Показване на опциите за GTK+"
 
-#: gtk/gtkmountoperation.c:463
+#: gtk/gtkmountoperation.c:468
 msgid "Co_nnect"
 msgstr "_Свързване"
 
-#: gtk/gtkmountoperation.c:530
+#: gtk/gtkmountoperation.c:535
 msgid "Connect _anonymously"
 msgstr "_Анонимно свързване"
 
-#: gtk/gtkmountoperation.c:539
+#: gtk/gtkmountoperation.c:544
 msgid "Connect as u_ser:"
 msgstr "Свързване като п_отребител:"
 
-#: gtk/gtkmountoperation.c:577
+#: gtk/gtkmountoperation.c:582
 msgid "_Username:"
 msgstr "_Потребител:"
 
-#: gtk/gtkmountoperation.c:582
+#: gtk/gtkmountoperation.c:587
 msgid "_Domain:"
 msgstr "_Домейн:"
 
-#: gtk/gtkmountoperation.c:588
+#: gtk/gtkmountoperation.c:593
 msgid "_Password:"
 msgstr "Па_рола:"
 
-#: gtk/gtkmountoperation.c:606
+#: gtk/gtkmountoperation.c:611
 msgid "Forget password _immediately"
 msgstr "_Незабавно забравяне на паролата"
 
-#: gtk/gtkmountoperation.c:616
+#: gtk/gtkmountoperation.c:621
 msgid "Remember password until you _logout"
 msgstr "Запомняне на паролите до _изход от системата"
 
-#: gtk/gtkmountoperation.c:626
+#: gtk/gtkmountoperation.c:631
 msgid "Remember _forever"
 msgstr "_Запомняне завинаги"
 
@@ -2386,7 +2391,7 @@ msgstr "_Размер на листите:"
 msgid "_Orientation:"
 msgstr "_Ориентация:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2681
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2678
 msgid "Page Setup"
 msgstr "Настройки на листите"
 
@@ -2534,17 +2539,17 @@ msgstr "Грешка при стартирането на прегледа"
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Най-вероятната причина е, че не може да се създаде временен файл."
 
-#: gtk/gtkprintoperation-unix.c:242
+#: gtk/gtkprintoperation-unix.c:257
 #, c-format
 msgid "Error launching preview"
 msgstr "Грешка при стартирането на прегледа"
 
-#: gtk/gtkprintoperation-unix.c:280
+#: gtk/gtkprintoperation-unix.c:301
 #, c-format
 msgid "Error printing"
 msgstr "Грешка при печат"
 
-#: gtk/gtkprintoperation-unix.c:384 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:405 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "Програма"
 
@@ -2603,37 +2608,37 @@ msgstr "Неправилен указател за работа с PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Неуказана грешка"
 
-#: gtk/gtkprintunixdialog.c:1763
+#: gtk/gtkprintunixdialog.c:1758
 msgid "Printer"
 msgstr "Принтер"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1773
+#: gtk/gtkprintunixdialog.c:1768
 msgid "Location"
 msgstr "Местоположение"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1784
+#: gtk/gtkprintunixdialog.c:1779
 msgid "Status"
 msgstr "Състояние"
 
-#: gtk/gtkprintunixdialog.c:1809
+#: gtk/gtkprintunixdialog.c:1804
 msgid "Range"
 msgstr "Обхват"
 
-#: gtk/gtkprintunixdialog.c:1813
+#: gtk/gtkprintunixdialog.c:1808
 msgid "_All Pages"
 msgstr "_Всички страници"
 
-#: gtk/gtkprintunixdialog.c:1820
+#: gtk/gtkprintunixdialog.c:1815
 msgid "C_urrent Page"
 msgstr "_Текущата страница"
 
-#: gtk/gtkprintunixdialog.c:1829
+#: gtk/gtkprintunixdialog.c:1824
 msgid "Pag_es:"
 msgstr "_Страници:"
 
-#: gtk/gtkprintunixdialog.c:1830
+#: gtk/gtkprintunixdialog.c:1825
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2641,127 +2646,133 @@ msgstr ""
 "Въведете един или повече обхвати,\n"
 "напр. 1-3,7,11,22-28"
 
-#: gtk/gtkprintunixdialog.c:1851
+#: gtk/gtkprintunixdialog.c:1835
+#, fuzzy
+msgid "Pages"
+msgstr "_Страници:"
+
+#: gtk/gtkprintunixdialog.c:1848
 msgid "Copies"
 msgstr "Разпечатки"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1856
+#: gtk/gtkprintunixdialog.c:1853
 msgid "Copie_s:"
 msgstr "Раз_печатки:"
 
-#: gtk/gtkprintunixdialog.c:1874
+#: gtk/gtkprintunixdialog.c:1871
 msgid "C_ollate"
 msgstr "По_следователно подреждане"
 
-#: gtk/gtkprintunixdialog.c:1882
+#: gtk/gtkprintunixdialog.c:1879
 msgid "_Reverse"
 msgstr "_Обратен ред"
 
-#: gtk/gtkprintunixdialog.c:1902
+#: gtk/gtkprintunixdialog.c:1899
 msgid "General"
 msgstr "Общи"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2442
+#: gtk/gtkprintunixdialog.c:2439
 #: modules/printbackends/cups/gtkprintbackendcups.c:2910
 msgid "Page Ordering"
 msgstr "Ред на страниците"
 
-#: gtk/gtkprintunixdialog.c:2448
+#: gtk/gtkprintunixdialog.c:2445
 msgid "Left to right"
 msgstr "Отляво надясно"
 
-#: gtk/gtkprintunixdialog.c:2449
+#: gtk/gtkprintunixdialog.c:2446
 msgid "Right to left"
 msgstr "Отдясно наляво"
 
-#: gtk/gtkprintunixdialog.c:2518
+#: gtk/gtkprintunixdialog.c:2515
 msgid "Layout"
 msgstr "Наместване"
 
-#: gtk/gtkprintunixdialog.c:2522
+#: gtk/gtkprintunixdialog.c:2519
 msgid "T_wo-sided:"
 msgstr "_Двустранен печат:"
 
-#: gtk/gtkprintunixdialog.c:2537
+#: gtk/gtkprintunixdialog.c:2534
 msgid "Pages per _side:"
 msgstr "Страници на _страна:"
 
-#: gtk/gtkprintunixdialog.c:2555
+#: gtk/gtkprintunixdialog.c:2552
 msgid "Page or_dering:"
 msgstr "_Подредба на страниците:"
 
-#: gtk/gtkprintunixdialog.c:2571
+#: gtk/gtkprintunixdialog.c:2568
 msgid "_Only print:"
 msgstr "_Обхват на печата:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2586
+#: gtk/gtkprintunixdialog.c:2583
 msgid "All sheets"
 msgstr "Всички страници"
 
-#: gtk/gtkprintunixdialog.c:2587
+#: gtk/gtkprintunixdialog.c:2584
 msgid "Even sheets"
 msgstr "Четните страници"
 
-#: gtk/gtkprintunixdialog.c:2588
+#: gtk/gtkprintunixdialog.c:2585
 msgid "Odd sheets"
 msgstr "Нечетните страници"
 
-#: gtk/gtkprintunixdialog.c:2591
+#: gtk/gtkprintunixdialog.c:2588
 msgid "Sc_ale:"
 msgstr "_Мащабиране:"
 
-#: gtk/gtkprintunixdialog.c:2618
+#: gtk/gtkprintunixdialog.c:2615
 msgid "Paper"
 msgstr "Хартия"
 
-#: gtk/gtkprintunixdialog.c:2622
+#: gtk/gtkprintunixdialog.c:2619
 msgid "Paper _type:"
 msgstr "_Вид хартия:"
 
-#: gtk/gtkprintunixdialog.c:2637
+#: gtk/gtkprintunixdialog.c:2634
 msgid "Paper _source:"
 msgstr "_Източник на листите:"
 
-#: gtk/gtkprintunixdialog.c:2652
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Output t_ray:"
 msgstr "_Изходна касета:"
 
-#: gtk/gtkprintunixdialog.c:2706
+#: gtk/gtkprintunixdialog.c:2703
 msgid "Job Details"
 msgstr "Информация а задачата"
 
-#: gtk/gtkprintunixdialog.c:2712
+#: gtk/gtkprintunixdialog.c:2709
 msgid "Pri_ority:"
 msgstr "П_риоритет:"
 
-#: gtk/gtkprintunixdialog.c:2727
+#: gtk/gtkprintunixdialog.c:2724
 msgid "_Billing info:"
 msgstr "Информация за _осчетоводяване:"
 
-#: gtk/gtkprintunixdialog.c:2745
+#: gtk/gtkprintunixdialog.c:2742
 msgid "Print Document"
 msgstr "Отпечатване на документ"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2754
+#: gtk/gtkprintunixdialog.c:2751
 msgid "_Now"
 msgstr "_Сега"
 
-#: gtk/gtkprintunixdialog.c:2765
+#: gtk/gtkprintunixdialog.c:2762
 msgid "A_t:"
 msgstr "_Точно в:"
 
 #. Translators: Ability to parse the am/pm format depends on actual locale.
-#. * You can remove the am/pm values below for your locale if they are not supported.
+#. * You can remove the am/pm values below for your locale if they are not
+#. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:2770
+#: gtk/gtkprintunixdialog.c:2768
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2769,60 +2780,64 @@ msgstr ""
 "Укажете времето на печат, напр.:\n"
 "9:30, 17:50, 14:15:20, 11:46:30, 4"
 
-#: gtk/gtkprintunixdialog.c:2791
+#: gtk/gtkprintunixdialog.c:2778
+msgid "Time of print"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2794
 msgid "On _hold"
 msgstr "_На пауза"
 
-#: gtk/gtkprintunixdialog.c:2792
+#: gtk/gtkprintunixdialog.c:2795
 msgid "Hold the job until it is explicitly released"
 msgstr "Задържане на печата до изричното му стартиране"
 
-#: gtk/gtkprintunixdialog.c:2812
+#: gtk/gtkprintunixdialog.c:2815
 msgid "Add Cover Page"
 msgstr "Със заглавна страница"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2821
+#: gtk/gtkprintunixdialog.c:2824
 msgid "Be_fore:"
 msgstr "_Преди:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2839
+#: gtk/gtkprintunixdialog.c:2842
 msgid "_After:"
 msgstr "_След:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2857
+#: gtk/gtkprintunixdialog.c:2860
 msgid "Job"
 msgstr "Задача"
 
-#: gtk/gtkprintunixdialog.c:2923
+#: gtk/gtkprintunixdialog.c:2926
 msgid "Advanced"
 msgstr "Допълнителни"
 
-#: gtk/gtkprintunixdialog.c:2958
+#: gtk/gtkprintunixdialog.c:2961
 msgid "Image Quality"
 msgstr "Качество на изображенията"
 
-#: gtk/gtkprintunixdialog.c:2961
+#: gtk/gtkprintunixdialog.c:2964
 msgid "Color"
 msgstr "Цвят"
 
-#: gtk/gtkprintunixdialog.c:2964
+#: gtk/gtkprintunixdialog.c:2967
 msgid "Finishing"
 msgstr "Гланц"
 
-#: gtk/gtkprintunixdialog.c:2974
+#: gtk/gtkprintunixdialog.c:2977
 msgid "Some of the settings in the dialog conflict"
 msgstr "Някои от настройките в прозореца взаимно си противоречат"
 
-#: gtk/gtkprintunixdialog.c:2997
+#: gtk/gtkprintunixdialog.c:3000
 msgid "Print"
 msgstr "Печат"
 

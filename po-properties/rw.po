@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 317\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-13 10:29-0400\n"
+"POT-Creation-Date: 2009-04-11 16:25-0400\n"
 "PO-Revision-Date: 2004-11-17 21:21-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <en@li.org>\n"
@@ -107,12 +107,12 @@ msgstr ""
 msgid "The default display for GDK"
 msgstr "Mburabuzi Kugaragaza kugirango"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
-#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
+#: gdk/gdkpango.c:537 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
+#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:614
 msgid "Screen"
 msgstr "Ikirahuri"
 
-#: gdk/gdkpango.c:491
+#: gdk/gdkpango.c:538
 #, fuzzy
 msgid "the GdkScreen for the renderer"
 msgstr "i kugirango i"
@@ -137,63 +137,63 @@ msgstr "Utudomo"
 msgid "The resolution for fonts on the screen"
 msgstr "i Urutonde ku i Mugaragaza"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:184
 #, fuzzy
 msgid "Program name"
 msgstr "Izina:"
 
-#: gtk/gtkaboutdialog.c:201
+#: gtk/gtkaboutdialog.c:185
 #, fuzzy
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr "Izina: Bya i Porogaramu iyi ni OYA Gushyiraho Kuri"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:199
 #, fuzzy
 msgid "Program version"
 msgstr "Verisiyo"
 
-#: gtk/gtkaboutdialog.c:216
+#: gtk/gtkaboutdialog.c:200
 #, fuzzy
 msgid "The version of the program"
 msgstr "Verisiyo Bya i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:230
+#: gtk/gtkaboutdialog.c:214
 #, fuzzy
 msgid "Copyright string"
 msgstr "Ikurikiranyanyuguti"
 
-#: gtk/gtkaboutdialog.c:231
+#: gtk/gtkaboutdialog.c:215
 #, fuzzy
 msgid "Copyright information for the program"
 msgstr "Ibisobanuro kugirango i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:248
+#: gtk/gtkaboutdialog.c:232
 #, fuzzy
 msgid "Comments string"
 msgstr "Ikurikiranyanyuguti"
 
-#: gtk/gtkaboutdialog.c:249
+#: gtk/gtkaboutdialog.c:233
 #, fuzzy
 msgid "Comments about the program"
 msgstr "Ibyerekeye i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:283
+#: gtk/gtkaboutdialog.c:267
 msgid "Website URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:268
 #, fuzzy
 msgid "The URL for the link to the website of the program"
 msgstr "kugirango i Ihuza Kuri i Webu Bya i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:300
+#: gtk/gtkaboutdialog.c:284
 #, fuzzy
 msgid "Website label"
 msgstr "Akarango"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:285
 #, fuzzy
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
@@ -202,48 +202,48 @@ msgstr ""
 "Akarango kugirango i Ihuza Kuri i Webu Bya i Porogaramu iyi ni OYA "
 "Gushyiraho Kuri i"
 
-#: gtk/gtkaboutdialog.c:317
+#: gtk/gtkaboutdialog.c:301
 msgid "Authors"
 msgstr "Abahanzi"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:302
 #, fuzzy
 msgid "List of authors of the program"
 msgstr "Bya Abahanzi Bya i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:334
+#: gtk/gtkaboutdialog.c:318
 msgid "Documenters"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:319
 #, fuzzy
 msgid "List of people documenting the program"
 msgstr "Bya Abantu i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:351
+#: gtk/gtkaboutdialog.c:335
 msgid "Artists"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:336
 #, fuzzy
 msgid "List of people who have contributed artwork to the program"
 msgstr "Bya Abantu Kuri i Porogaramu"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:353
 msgid "Translator credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:354
 #, fuzzy
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Kuri i Ikurikiranyanyuguti cy/ byagarajwe Nka"
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:369
 msgid "Logo"
 msgstr "ikirango"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:370
 #, fuzzy
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
@@ -251,23 +251,23 @@ msgid ""
 msgstr ""
 "A ikirango kugirango i Ibyerekeye Agasanduku iyi ni OYA Gushyiraho Kuri"
 
-#: gtk/gtkaboutdialog.c:401
+#: gtk/gtkaboutdialog.c:385
 msgid "Logo Icon Name"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:386
 #, fuzzy
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "A Agashushondanga Kuri Gukoresha Nka i ikirango kugirango i Ibyerekeye "
 "Agasanduku"
 
-#: gtk/gtkaboutdialog.c:415
+#: gtk/gtkaboutdialog.c:399
 #, fuzzy
 msgid "Wrap license"
 msgstr "Ubwoko Gushyiraho"
 
-#: gtk/gtkaboutdialog.c:416
+#: gtk/gtkaboutdialog.c:400
 #, fuzzy
 msgid "Whether to wrap the license text."
 msgstr "Kuri Gihinguranya i Umwandiko"
@@ -352,7 +352,7 @@ msgid "The GIcon being displayed"
 msgstr "Gushyiraho Kuri Kugaragaza"
 
 #: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
-#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:605
+#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:606
 msgid "Icon Name"
 msgstr ""
 
@@ -475,7 +475,7 @@ msgid "Whether the action group is visible."
 msgstr "i Igikorwa Itsinda ni Kigaragara"
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:206 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Agaciro "
 
@@ -1410,7 +1410,7 @@ msgstr ""
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "i Kuri i Leta"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:589
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:590
 msgid "Icon"
 msgstr "agashushanyo"
 
@@ -1476,7 +1476,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Na IKURA Icyerekezo Bya i Aho bigeze"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:225 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr ""
 
@@ -3542,7 +3542,7 @@ msgid "Icon set to display"
 msgstr "Gushyiraho Kuri Kugaragaza"
 
 # offmgr/source\offapp\dialog\optgdlg.src:OFA_TP_VIEW.FT_BIG.text
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 #, fuzzy
 msgid "Icon size"
 msgstr "Ingano y'agashushondanga"
@@ -3622,7 +3622,7 @@ msgstr "Ibikubiyemo Ishusho"
 msgid "Whether images should be shown in menus"
 msgstr "Ishusho in Ibikubiyemo"
 
-#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:614
+#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:615
 #, fuzzy
 msgid "The screen where this window will be displayed"
 msgstr "Mugaragaza iyi Idirishya"
@@ -5417,28 +5417,28 @@ msgstr "Isigamwanya"
 msgid "Space between value text and the slider/trough area"
 msgstr "hagati Agaciro Umwandiko Na i Ubuso"
 
-#: gtk/gtkscalebutton.c:205
+#: gtk/gtkscalebutton.c:207
 #, fuzzy
 msgid "The value of the scale"
 msgstr "Agaciro Bya i"
 
-#: gtk/gtkscalebutton.c:215
+#: gtk/gtkscalebutton.c:217
 #, fuzzy
 msgid "The icon size"
 msgstr "Ingano y'agashushondanga k'umwanyabikoresho"
 
-#: gtk/gtkscalebutton.c:224
+#: gtk/gtkscalebutton.c:226
 #, fuzzy
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "Kirimo i KIGEZWEHO Agaciro Bya iyi Urutonde Igikoresho"
 
-#: gtk/gtkscalebutton.c:252
+#: gtk/gtkscalebutton.c:254
 #, fuzzy
 msgid "Icons"
 msgstr "agashushanyo"
 
-#: gtk/gtkscalebutton.c:253
+#: gtk/gtkscalebutton.c:255
 msgid "List of icon names"
 msgstr ""
 
@@ -7351,7 +7351,7 @@ msgstr "Ishusho Kuri Gushushanya i"
 msgid "Whether to display the column"
 msgstr "Kuri Kugaragaza i Inkingi"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:536
+#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr ""
 
@@ -7822,245 +7822,245 @@ msgstr ""
 msgid "The length of vertical scroll arrows"
 msgstr "i Bihagaritse Agafashsagenda ni"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:478
 msgid "Window Type"
 msgstr ""
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:479
 #, fuzzy
 msgid "The type of the window"
 msgstr "Ubwoko Bya i Idirishya"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:487
 msgid "Window Title"
 msgstr ""
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:488
 #, fuzzy
 msgid "The title of the window"
 msgstr "Umutwe Bya i Idirishya"
 
-#: gtk/gtkwindow.c:494
+#: gtk/gtkwindow.c:495
 msgid "Window Role"
 msgstr ""
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:496
 #, fuzzy
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Ikiranga kugirango i Idirishya Kuri Ryari: a Umukoro"
 
-#: gtk/gtkwindow.c:511
+#: gtk/gtkwindow.c:512
 #, fuzzy
 msgid "Startup ID"
 msgstr "Itsinda"
 
-#: gtk/gtkwindow.c:512
+#: gtk/gtkwindow.c:513
 #, fuzzy
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr "Ikiranga kugirango i Idirishya Kuri Ryari: a Umukoro"
 
-#: gtk/gtkwindow.c:519
+#: gtk/gtkwindow.c:520
 msgid "Allow Shrink"
 msgstr ""
 
-#: gtk/gtkwindow.c:521
+#: gtk/gtkwindow.c:522
 #, fuzzy, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr "i Idirishya Oya Ingano iyi Kuri ni Bya i Igihe a"
 
-#: gtk/gtkwindow.c:528
+#: gtk/gtkwindow.c:529
 msgid "Allow Grow"
 msgstr ""
 
-#: gtk/gtkwindow.c:529
+#: gtk/gtkwindow.c:530
 #, fuzzy
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "Kwagura i Idirishya Gito Ingano"
 
-#: gtk/gtkwindow.c:537
+#: gtk/gtkwindow.c:538
 #, fuzzy
 msgid "If TRUE, users can resize the window"
 msgstr "Ihindurangero i Idirishya"
 
-#: gtk/gtkwindow.c:544
+#: gtk/gtkwindow.c:545
 msgid "Modal"
 msgstr ""
 
-#: gtk/gtkwindow.c:545
+#: gtk/gtkwindow.c:546
 #, fuzzy
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr "i Idirishya ni Ikindi OYA iyi ni Hejuru"
 
-#: gtk/gtkwindow.c:552
+#: gtk/gtkwindow.c:553
 msgid "Window Position"
 msgstr ""
 
-#: gtk/gtkwindow.c:553
+#: gtk/gtkwindow.c:554
 #, fuzzy
 msgid "The initial position of the window"
 msgstr "Ibirindiro Bya i Idirishya"
 
-#: gtk/gtkwindow.c:561
+#: gtk/gtkwindow.c:562
 msgid "Default Width"
 msgstr ""
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:563
 #, fuzzy
 msgid "The default width of the window, used when initially showing the window"
 msgstr "Mburabuzi Ubugari Bya i Idirishya Ryari: i Idirishya"
 
-#: gtk/gtkwindow.c:571
+#: gtk/gtkwindow.c:572
 msgid "Default Height"
 msgstr ""
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:573
 #, fuzzy
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "Mburabuzi Ubuhagarike Bya i Idirishya Ryari: i Idirishya"
 
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:582
 #, fuzzy
 msgid "Destroy with Parent"
 msgstr "Na:"
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:583
 #, fuzzy
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "iyi Idirishya Ryari: i ni"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:591
 #, fuzzy
 msgid "Icon for this window"
 msgstr "kugirango iyi Idirishya"
 
-#: gtk/gtkwindow.c:606
+#: gtk/gtkwindow.c:607
 #, fuzzy
 msgid "Name of the themed icon for this window"
 msgstr "Bya i Agashushondanga kugirango iyi Idirishya"
 
-#: gtk/gtkwindow.c:621
+#: gtk/gtkwindow.c:622
 msgid "Is Active"
 msgstr ""
 
-#: gtk/gtkwindow.c:622
+#: gtk/gtkwindow.c:623
 #, fuzzy
 msgid "Whether the toplevel is the current active window"
 msgstr "i ni i KIGEZWEHO Gikora Idirishya"
 
-#: gtk/gtkwindow.c:629
+#: gtk/gtkwindow.c:630
 #, fuzzy
 msgid "Focus in Toplevel"
 msgstr "in"
 
-#: gtk/gtkwindow.c:630
+#: gtk/gtkwindow.c:631
 #, fuzzy
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "i Iyinjiza ni muri iyi"
 
-#: gtk/gtkwindow.c:637
+#: gtk/gtkwindow.c:638
 msgid "Type hint"
 msgstr ""
 
-#: gtk/gtkwindow.c:638
+#: gtk/gtkwindow.c:639
 #, fuzzy
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr "Kuri Ifashayobora i Ibiro Bya Idirishya iyi ni Na Kuri"
 
-#: gtk/gtkwindow.c:646
+#: gtk/gtkwindow.c:647
 msgid "Skip taskbar"
 msgstr ""
 
-#: gtk/gtkwindow.c:647
+#: gtk/gtkwindow.c:648
 #, fuzzy
 msgid "TRUE if the window should not be in the task bar."
 msgstr "NIBA i Idirishya OYA in i Igikorwa"
 
-#: gtk/gtkwindow.c:654
+#: gtk/gtkwindow.c:655
 #, fuzzy
 msgid "Skip pager"
 msgstr "Peja"
 
-#: gtk/gtkwindow.c:655
+#: gtk/gtkwindow.c:656
 #, fuzzy
 msgid "TRUE if the window should not be in the pager."
 msgstr "NIBA i Idirishya OYA in i Peja"
 
-#: gtk/gtkwindow.c:662
+#: gtk/gtkwindow.c:663
 msgid "Urgent"
 msgstr ""
 
-#: gtk/gtkwindow.c:663
+#: gtk/gtkwindow.c:664
 #, fuzzy
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "NIBA i Idirishya OYA in i Peja"
 
-#: gtk/gtkwindow.c:677
+#: gtk/gtkwindow.c:678
 msgid "Accept focus"
 msgstr ""
 
-#: gtk/gtkwindow.c:678
+#: gtk/gtkwindow.c:679
 #, fuzzy
 msgid "TRUE if the window should receive the input focus."
 msgstr "NIBA i Idirishya Akira i Iyinjiza"
 
-#: gtk/gtkwindow.c:692
+#: gtk/gtkwindow.c:693
 #, fuzzy
 msgid "Focus on map"
 msgstr "ku"
 
-#: gtk/gtkwindow.c:693
+#: gtk/gtkwindow.c:694
 #, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "NIBA i Idirishya Akira i Iyinjiza Ryari:"
 
-#: gtk/gtkwindow.c:707
+#: gtk/gtkwindow.c:708
 msgid "Decorated"
 msgstr ""
 
-#: gtk/gtkwindow.c:708
+#: gtk/gtkwindow.c:709
 #, fuzzy
 msgid "Whether the window should be decorated by the window manager"
 msgstr "i Idirishya ku i Idirishya Muyobozi"
 
-#: gtk/gtkwindow.c:722
+#: gtk/gtkwindow.c:723
 msgid "Deletable"
 msgstr ""
 
-#: gtk/gtkwindow.c:723
+#: gtk/gtkwindow.c:724
 #, fuzzy
 msgid "Whether the window frame should have a close button"
 msgstr "i Idirishya ku i Idirishya Muyobozi"
 
-#: gtk/gtkwindow.c:739
+#: gtk/gtkwindow.c:740
 msgid "Gravity"
 msgstr ""
 
-#: gtk/gtkwindow.c:740
+#: gtk/gtkwindow.c:741
 #, fuzzy
 msgid "The window gravity of the window"
 msgstr "Idirishya Bya i Idirishya"
 
-#: gtk/gtkwindow.c:757
+#: gtk/gtkwindow.c:758
 msgid "Transient for Window"
 msgstr ""
 
-#: gtk/gtkwindow.c:758
+#: gtk/gtkwindow.c:759
 #, fuzzy
 msgid "The transient parent of the dialog"
 msgstr "Utubuto in i Ubutumwa Ikiganiro"
 
-#: gtk/gtkwindow.c:773
+#: gtk/gtkwindow.c:774
 msgid "Opacity for Window"
 msgstr ""
 
-#: gtk/gtkwindow.c:774
+#: gtk/gtkwindow.c:775
 #, fuzzy
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Ubwoko Bya i Idirishya"
