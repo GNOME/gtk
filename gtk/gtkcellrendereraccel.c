@@ -249,7 +249,10 @@ convert_keysym_state_to_string (GtkCellRendererAccel *accel,
 	{
 	  gchar *name;
 
-	  name = gtk_accelerator_name (keysym, mask);
+	  name = gtk_accelerator_get_label (keysym, mask);
+	  if (name == NULL)
+	    name = gtk_accelerator_name (keysym, mask);
+
 	  if (keysym == 0)
 	    {
 	      gchar *tmp;
