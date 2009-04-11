@@ -1,3 +1,71 @@
+Overview of Changes from GTK+ 2.16.0 to 2.16.1
+==============================================
+
+* GtkBuilder:
+ - Accessible action names can now be marked as translatable.
+ - gtk-builder-convert correctly handles response ids in all dialogs.
+ - gtk-builder-convert warns about duplicate ids.
+
+* GDK:
+ - GDK no longer refuses to work on 30-bit visuals
+
+* Win32:
+ - The appearance of GTK+ menus on Vista has been improved.
+
+* Bugs fixed:
+ 575700 Crash when moving a GtkWindow
+ 574283 unused assignment and dead code in gtk_widget_set_tooltip_window
+ 538840 [Win32] GTK menu theming could be improved
+ 576254 <object> requires attribute "id"
+ 576306 gdkscreen.c: get_nearest_monitor too simple...
+ 437533 Implement draw_shape PangoRenderer method
+ 577224 crash when setting new icon after setting icon...
+ 576150 Doc bug for GtkMenuPositionFunc
+ 562863 GtkVscrollbar is hardly documented
+ 575644 Cygwin gail build patch
+ 571374 Add 30-bit visuals to the list of supported depths
+ 577650 gtkitemfactory.h fails to compile
+ 578094 ProcessIdToSessionId needs to be declared as WINAPI
+ 518642 Custom tags and translatable content
+ 532858 segv setting GBoxed subclass <property>
+ 557629 Response ID not converted for GtkFileChooserDialog
+ 577789 about dialogue doesn't linkify licence text
+ 577824 empathy_chat_window_init: GClosure is leaked
+ 577964 Page Range entry is not accessible
+ 578221 Assertion warning `GTK_IS_TEXT_LAYOUT (layout)' failed
+ 578271 PageSetup should be sent to the previewer
+ 578276 gtk-builder-convert improperly converts GtkComboBox
+ 578290 two memory leaks
+ 578354 Memory leak in gdkscreen-x11
+ 578365 GtkMountOperation does not allow passwordless mount of sf...
+ 578366 file descriptor leak
+ 573922 Using NET_WM_USER_TIME even if startup notification times...
+ 561345 Title of Print Preview window should not be previewXXXXXX...
+ 577868 about dialogue changes appearance on style-set (change th...
+ 572797 GtkCellRendererAccel display string i18n in OTHER mode
+
+* Updated translations:
+ Arabic
+ Assamese
+ Basque
+ Bulgarian
+ Crimean Tatar
+ Danish
+ Galician
+ German
+ Greek
+ Gujarati
+ Japanese
+ Kannada
+ Malayalam
+ Marathi
+ Oriya
+ Pashto
+ Russian
+ Spanish
+ Telugu
+ Turkish
+
 Overview of Changes from GTK+ 2.15.5 to 2.16.0
 ==============================================
 
