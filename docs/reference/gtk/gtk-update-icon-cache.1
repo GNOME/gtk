@@ -1,51 +1,77 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "GTK\-UPDATE\-ICON\-CACH" "1" "11/07/2005" "" ""
+'\" t
+.\"     Title: gtk-update-icon-cache
+.\"    Author: [FIXME: author] [see http://docbook.sf.net/el/author]
+.\" Generator: DocBook XSL Stylesheets v1.74.3 <http://docbook.sf.net/>
+.\"      Date: 04/11/2009
+.\"    Manual: [FIXME: manual]
+.\"    Source: [FIXME: source]
+.\"  Language: English
+.\"
+.TH "GTK\-UPDATE\-ICON\-C" "1" "04/11/2009" "[FIXME: source]" "[FIXME: manual]"
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
 .SH "NAME"
-gtk\-update\-icon\-cache \- Icon theme caching utility
+gtk-update-icon-cache \- Icon theme caching utility
 .SH "SYNOPSIS"
-.HP 22
-\fBgtk\-update\-icon\-cache\fR [\-\-force] [\-\-ignore\-theme\-index] [\-\-index\-only] [\-\-source\ [name]] [\-\-quiet] {iconpath}
+.HP \w'\fBgtk\-update\-icon\-cache\fR\ 'u
+\fBgtk\-update\-icon\-cache\fR [\-\-force] [\-\-ignore\-theme\-index] [\-\-index\-only] [\-\-source\ [name]] [\-\-quiet] [\-\-validate] {iconpath}
 .SH "DESCRIPTION"
 .PP
 \fBgtk\-update\-icon\-cache\fR
-creates mmap()able cache files for icon themes.
+creates mmap()able cache files for icon themes\&.
 .PP
 It expects to be given the path to a icon theme directory containing an
-\fIindex.theme\fR, e.g.
-\fI/usr/share/icons/hicolor\fR, and writes a
-\fIicon\-theme.cache\fR
-containing cached information about the icons in the directory tree below the given directory.
+index\&.theme, e\&.g\&.
+/usr/share/icons/hicolor, and writes a
+icon\-theme\&.cache
+containing cached information about the icons in the directory tree below the given directory\&.
 .PP
 GTK+ can use the cache files created by
 \fBgtk\-update\-icon\-cache\fR
-to avoid a lot of system call and disk seek overhead when the application starts. Since the format of the cache files allows them to be mmap()ed shared between multiple applications, the overall memory consumption is reduced as well.
+to avoid a lot of system call and disk seek overhead when the application starts\&. Since the format of the cache files allows them to be mmap()ed shared between multiple applications, the overall memory consumption is reduced as well\&.
 .SH "OPTIONS"
-.TP
+.PP
 \-\-force, \-f
-Overwrite an existing cache file even if it appears to be uptodate.
-.TP
+.RS 4
+Overwrite an existing cache file even if it appears to be uptodate\&.
+.RE
+.PP
 \-\-ignore\-theme\-index, \-t
-Don't check for the existence of 'index.theme' in the icon theme directory. Without this option,
+.RS 4
+Don\'t check for the existence of \'index\&.theme\' in the icon theme directory\&. Without this option,
 \fBgtk\-update\-icon\-cache\fR
-refuses to create an icon cache in a directory which does not appear to be the toplevel directory of an icon theme.
-.TP
+refuses to create an icon cache in a directory which does not appear to be the toplevel directory of an icon theme\&.
+.RE
+.PP
 \-\-index\-only, \-i
-Don't include image data in the cache.
-.TP
+.RS 4
+Don\'t include image data in the cache\&.
+.RE
+.PP
 \-\-source, \-c
+.RS 4
 Output a C header file declaring a constant
 \fIname\fR
-with the contents of the icon cache.
-.TP
+with the contents of the icon cache\&.
+.RE
+.PP
 \-\-quiet, \-q
-Turn off verbose output.
+.RS 4
+Turn off verbose output\&.
+.RE
+.PP
+\-\-validate, \-v
+.RS 4
+Validate existing icon cache\&.
+.RE
 .SH "BUGS"
 .PP
-None known yet.
+None known yet\&.
