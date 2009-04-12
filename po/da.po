@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-12 15:05+0200\n"
-"PO-Revision-Date: 2009-04-12 15:05+0200\n"
+"PO-Revision-Date: 2009-04-12 17:01+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "MIME-Version: 1.0\n"
@@ -2648,7 +2648,7 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:1835
 msgid "Pages"
-msgstr "Sider:"
+msgstr "Sider"
 
 #: ../gtk/gtkprintunixdialog.c:1848
 msgid "Copies"
