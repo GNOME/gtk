@@ -1,4 +1,4 @@
-# translation of gtk+.HEAD.gu.po to Gujarati
+# translation of gu.po to Gujarati
 # MagNet <magnet@magnet-i.com>, 2004.
 # Ankit Patel <ankit644@yahoo.com>, 2005, 2006.
 # Ankit Patel <ankit@redhat.com>, 2007, 2009.
@@ -7,16 +7,16 @@
 # Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.HEAD.gu\n"
+"Project-Id-Version: gu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-11 16:24-0400\n"
-"PO-Revision-Date: 2009-03-09 23:38+0530\n"
+"PO-Revision-Date: 2009-04-13 17:24+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
 "Language-Team: Gujarati <fedora-trans-gu@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n!=1);\n"
+"Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
 "\n"
 "\n"
 "\n"
@@ -312,8 +312,7 @@ msgstr "ચિત્ર ફાઈલ '%s'માં કોઇ માહિતી 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1016
 #: gdk-pixbuf/gdk-pixbuf-io.c:1280 tests/testfilechooser.c:267
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "ચિત્ર %s લાવવામાં નિષ્ફળ, કારણ જાણીતું નથી, સંભવિત રીતે એક બગડેલી ચિત્ર ફાઈલ છે"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:221
@@ -321,8 +320,7 @@ msgstr "ચિત્ર %s લાવવામાં નિષ્ફળ, કા�
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr ""
-"એનીમેશન %s લાવવામાં નિષ્ફળ, કારણ જાણીતું નથી, સંભવિત રીતે એક બગડેલી એનીમેશન ફાઈલ છે"
+msgstr "એનીમેશન %s લાવવામાં નિષ્ફળ, કારણ જાણીતું નથી, સંભવિત રીતે એક બગડેલી એનીમેશન ફાઈલ છે"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:701
 #, c-format
@@ -389,8 +387,7 @@ msgstr "લખવા માટે '%s' ખોલવામાં નિષ્ફ�
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr ""
-"ચિત્ર લખતી વખતે %s બંધ કરવામાં નિષ્ફળ, કદાચ બધી માહિતીનો સંગ્રહ નહિ થયો હોય: %s"
+msgstr "ચિત્ર લખતી વખતે %s બંધ કરવામાં નિષ્ફળ, કદાચ બધી માહિતીનો સંગ્રહ નહિ થયો હોય: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2256 gdk-pixbuf/gdk-pixbuf-io.c:2307
 msgid "Insufficient memory to save image into a buffer"
@@ -661,8 +658,7 @@ msgstr "JPEG ફાઈલનાં(%s) અર્થઘટનમાં ભૂલ"
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr ""
-"ચિત્રને લાવવા માટે પૂરતી મેમરી નથી, મેમરીને મુક્ત કરવા કોઈક કાર્યક્રમમાંથી બહાર નીકળો"
+msgstr "ચિત્રને લાવવા માટે પૂરતી મેમરી નથી, મેમરીને મુક્ત કરવા કોઈક કાર્યક્રમમાંથી બહાર નીકળો"
 
 #: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
 #, c-format
@@ -689,10 +685,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"JPEGની ગુણવત્તા માટેની કિંમત 0 થી 100 ની વચ્ચે હોવી જરૂરી છે; કિંમત '%d' ચાલશે નહિ."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "JPEGની ગુણવત્તા માટેની કિંમત 0 થી 100 ની વચ્ચે હોવી જરૂરી છે; કિંમત '%d' ચાલશે નહિ."
 
 #: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
@@ -791,10 +785,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ચિત્ર ફાઈલને વાંચવામાં ઘાતક ભૂલ: %s"
 
 #: gdk-pixbuf/io-png.c:825
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"PNG લેખનના કટકાઓ માટેની કીમાં ઓછામાં ઓછા ૧ અને વધારેમાં વધારે ૭૯ અક્ષરો હોવા જરૂરી છે."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr "PNG લેખનના કટકાઓ માટેની કીમાં ઓછામાં ઓછા ૧ અને વધારેમાં વધારે ૭૯ અક્ષરો હોવા જરૂરી છે."
 
 #: gdk-pixbuf/io-png.c:833
 msgid "Keys for PNG text chunks must be ASCII characters."
@@ -819,8 +811,7 @@ msgstr "PNG સંકોચન સ્તર એ ૦ અને ૯ ની વચ�
 #: gdk-pixbuf/io-png.c:896
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr ""
-"PNG લેખનના કટકા %s માટેની કિંમતને ISO-8859-1 સંગ્રહપધ્ધતિમાં રૂપાંતરિત કરી શકાતુ નથી."
+msgstr "PNG લેખનના કટકા %s માટેની કિંમતને ISO-8859-1 સંગ્રહપધ્ધતિમાં રૂપાંતરિત કરી શકાતુ નથી."
 
 #: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
@@ -1302,14 +1293,14 @@ msgid "Backslash"
 msgstr "Backslash"
 
 #: gtk/gtkbuilderparser.c:343
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid type function on line %d: '%s'"
-msgstr "અયોગ્ય પ્રકાર વિધેય: `%s'"
+msgstr "લીટી %d પર અયોગ્ય પ્રકાર વિધેય: '%s'"
 
 #: gtk/gtkbuilderparser.c:402
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
-msgstr ""
+msgstr "નકલી ઓબ્જેક્ટ id '%s' એ લીટી %d પર (પહેલાં લીટી %d પર)"
 
 #: gtk/gtkbuilderparser.c:853
 #, c-format
@@ -1771,10 +1762,8 @@ msgstr "\"%s\" નામવાળી ફાઈલ પહેલાથી જ હ�
 
 #: gtk/gtkfilechooserdefault.c:8152 gtk/gtkprintunixdialog.c:374
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr ""
-"ફાઈલ પહેલાથી જ \"%s\" માં અસ્તિત્વમાં છે.  તેને બદલવાનું તેના સમાવિષ્ટો પર ફરીથી લખશે."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr "ફાઈલ પહેલાથી જ \"%s\" માં અસ્તિત્વમાં છે.  તેને બદલવાનું તેના સમાવિષ્ટો પર ફરીથી લખશે."
 
 #: gtk/gtkfilechooserdefault.c:8157 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
@@ -1928,8 +1917,7 @@ msgstr "ફાઈલનું નામ બદલો (_R)"
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ફોલ્ડરનું નામ \"%s\" સંકેતોનો સમાવેશ કરે છે જેની આ ફાઈલનામમાં પરવાનગી નથી"
 
 #: gtk/gtkfilesel.c:1392
@@ -2618,9 +2606,8 @@ msgstr ""
 " દા.ત. ૧-૩,૭,૧૧"
 
 #: gtk/gtkprintunixdialog.c:1835
-#, fuzzy
 msgid "Pages"
-msgstr "પાનાંઓ (_e):"
+msgstr "પાનાંઓ"
 
 #: gtk/gtkprintunixdialog.c:1848
 msgid "Copies"
@@ -2753,7 +2740,7 @@ msgstr ""
 
 #: gtk/gtkprintunixdialog.c:2778
 msgid "Time of print"
-msgstr ""
+msgstr "છાપનનો સમય"
 
 #: gtk/gtkprintunixdialog.c:2794
 msgid "On _hold"
@@ -3492,8 +3479,7 @@ msgstr "\"%s\" એ માન્ય લક્ષણ નામ નથી"
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" એ \"%s\" પ્રકારની કિંમત એ લક્ષણ \"%s\" માટે રૂપાંતરીત કરી શકાય નહિં"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3530,8 +3516,7 @@ msgid "Serialized data is malformed"
 msgstr "સીરીયલાઈઝ માહિતી એ મલીન છે"
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "સીરીયલાઈઝ માહિતી એ મલીન છે. પ્રથમ વિભાગ એ GTKTEXTBUFFERCONTENTS-0001 નથી"
 
 #: gtk/gtktextutil.c:61
@@ -4984,3 +4969,4 @@ msgstr "ચકાસણી પ્રિન્ટર પર છાપો"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ફાઈલ '%s' માટેની જાણકારી મેળવી શકાતી નથી: %s"
+
