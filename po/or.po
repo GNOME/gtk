@@ -13,13 +13,14 @@ msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-11 16:24-0400\n"
-"PO-Revision-Date: 2009-04-14 11:59+0530\n"
+"PO-Revision-Date: 2009-04-14 12:05+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -1281,7 +1282,7 @@ msgstr "ଧାଡ଼ି %d ରେ ଅବୈଧ ପ୍ରକାର ଫଳନ: '%s
 #: gtk/gtkbuilderparser.c:402
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
-msgstr ""
+msgstr "ନକଲି ବସ୍ତୁ id '%s' ଧାଡ଼ି %dରେ (ପୂର୍ବରୁ ଧାଡ଼ି %dରେ)"
 
 #: gtk/gtkbuilderparser.c:853
 #, c-format
@@ -2719,7 +2720,7 @@ msgstr ""
 
 #: gtk/gtkprintunixdialog.c:2778
 msgid "Time of print"
-msgstr ""
+msgstr "ମୁଦ୍ରଣ ସମୟ"
 
 #: gtk/gtkprintunixdialog.c:2794
 msgid "On _hold"
