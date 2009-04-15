@@ -361,16 +361,16 @@ EXTRA_DIST += version.xml.in
 
 ########################################################################
 
-man_MANS = gtk-query-immodules-2.0.1 gtk-update-icon-cache.1 gtk-builder-convert.1
-
 if ENABLE_MAN
+
+man_MANS = gtk-query-immodules-2.0.1 gtk-update-icon-cache.1 gtk-builder-convert.1
 
 %.1 : %.xml 
 	@XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
 
-endif
-
 BUILT_EXTRA_DIST = $(man_MANS)
+
+endif
 
 dist-hook-local: $(BUILT_EXTRA_DIST)
 	files='$(BUILT_EXTRA_DIST)';				\
