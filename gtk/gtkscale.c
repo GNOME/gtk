@@ -1293,6 +1293,8 @@ gtk_scale_clear_marks (GtkScale *scale)
   priv->marks = NULL;
 
   _gtk_range_set_stop_values (GTK_RANGE (scale), NULL, 0);
+
+  gtk_widget_queue_resize (GTK_WIDGET (scale));
 }
 
 /**
@@ -1349,6 +1351,8 @@ gtk_scale_add_mark (GtkScale        *scale,
   _gtk_range_set_stop_values (GTK_RANGE (scale), values, n);
 
   g_free (values);
+
+  gtk_widget_queue_resize (GTK_WIDGET (scale));
 }
 
 
