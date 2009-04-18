@@ -2144,14 +2144,11 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 		}
 	      else
 		{
-		  if (!item->selected)
-		    {
-		      gtk_icon_view_unselect_all_internal (icon_view);
-		      
-		      item->selected = TRUE;
-		      gtk_icon_view_queue_draw_item (icon_view, item);
-		      dirty = TRUE;
-		    }
+		  gtk_icon_view_unselect_all_internal (icon_view);
+
+		  item->selected = TRUE;
+		  gtk_icon_view_queue_draw_item (icon_view, item);
+		  dirty = TRUE;
 		}
 	      gtk_icon_view_set_cursor_item (icon_view, item, cursor_cell);
 	      icon_view->priv->anchor_item = item;
