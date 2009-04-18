@@ -729,6 +729,7 @@ gtk_assistant_init (GtkAssistant *assistant)
   priv = assistant->priv = GTK_ASSISTANT_GET_PRIVATE (assistant);
 
   gtk_container_set_reallocate_redraws (GTK_CONTAINER (assistant), TRUE);
+  gtk_container_set_border_width (GTK_CONTAINER (assistant), 12);
 
   gtk_widget_push_composite_child ();
 
@@ -1492,9 +1493,8 @@ gtk_assistant_new (void)
 {
   GtkWidget *assistant;
 
-  assistant = g_object_new (GTK_TYPE_ASSISTANT,
-			    "border-width", 12,
-			    NULL);
+  assistant = g_object_new (GTK_TYPE_ASSISTANT, NULL);
+
   return assistant;
 }
 
