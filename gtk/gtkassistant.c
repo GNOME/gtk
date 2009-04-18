@@ -40,6 +40,7 @@
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkbuildable.h"
 
 #include "gtkalias.h"
 
@@ -119,6 +120,23 @@ static void     gtk_assistant_get_child_property (GtkContainer      *container,
 
 static AtkObject *gtk_assistant_get_accessible   (GtkWidget         *widget);
 
+static void       gtk_assistant_buildable_interface_init     (GtkBuildableIface *iface);
+static GObject   *gtk_assistant_buildable_get_internal_child (GtkBuildable  *buildable,
+                                                              GtkBuilder    *builder,
+                                                              const gchar   *childname);
+static gboolean   gtk_assistant_buildable_custom_tag_start   (GtkBuildable  *buildable,
+                                                              GtkBuilder    *builder,
+                                                              GObject       *child,
+                                                              const gchar   *tagname,
+                                                              GMarkupParser *parser,
+                                                              gpointer      *data);
+static void       gtk_assistant_buildable_custom_finished    (GtkBuildable  *buildable,
+                                                              GtkBuilder    *builder,
+                                                              GObject       *child,
+                                                              const gchar   *tagname,
+                                                              gpointer       user_data);
+
+
 enum
 {
   CHILD_PROP_0,
@@ -141,7 +159,9 @@ enum
 static guint signals [LAST_SIGNAL] = { 0 };
 
 
-G_DEFINE_TYPE (GtkAssistant, gtk_assistant, GTK_TYPE_WINDOW)
+G_DEFINE_TYPE_WITH_CODE (GtkAssistant, gtk_assistant, GTK_TYPE_WINDOW,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_assistant_buildable_interface_init))
 
 
 static void
@@ -197,8 +217,8 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    * @assistant: the #GtkAssistant
    * @page: the current page
    *
-   * The ::prepared signal is emitted when a new page is set as the assistant's 
-   * current page, before making the new page visible. A handler for this signal 
+   * The ::prepared signal is emitted when a new page is set as the assistant's
+   * current page, before making the new page visible. A handler for this signal
    * can do any preparation which are necessary before showing @page.
    *
    * Since: 2.10
@@ -2233,7 +2253,7 @@ gtk_assistant_accessible_ref_child (AtkObject *accessible,
   GtkWidget *widget, *child;
   gint n_pages;
   AtkObject *obj;
-  gchar *title;
+  const gchar *title;
 
   widget = GTK_ACCESSIBLE (accessible)->widget;
   if (!widget)
@@ -2290,15 +2310,15 @@ gtk_assistant_accessible_get_type (void)
       GType derived_type;
       GTypeQuery query;
       GType derived_atk_type;
-      
+
       derived_type = g_type_parent (GTK_TYPE_ASSISTANT);
       factory = atk_registry_get_factory (atk_get_default_registry (),
 					  derived_type);
       derived_atk_type = atk_object_factory_get_accessible_type (factory);
       g_type_query (derived_atk_type, &query);
-      
-      type = g_type_register_static_simple (derived_atk_type, 
-					    I_("GtkAssistantAccessible"), 
+
+      type = g_type_register_static_simple (derived_atk_type,
+					    I_("GtkAssistantAccessible"),
 					    query.class_size,
 					    (GClassInitFunc) gtk_assistant_accessible_class_init,
 					    query.instance_size,
@@ -2315,9 +2335,9 @@ gtk_assistant_accessible_new (GObject *obj)
 
   g_return_val_if_fail (GTK_IS_ASSISTANT (obj), NULL);
 
-  accessible = g_object_new (gtk_assistant_accessible_get_type (), NULL); 
+  accessible = g_object_new (gtk_assistant_accessible_get_type (), NULL);
   atk_object_initialize (accessible, obj);
-  
+
   return accessible;
 }
 
@@ -2345,16 +2365,16 @@ gtk_assistant_accessible_factory_get_type (void)
 {
   static GType type = 0;
 
-  if (!type) 
+  if (!type)
     {
-      type = g_type_register_static_simple (ATK_TYPE_OBJECT_FACTORY, 
+      type = g_type_register_static_simple (ATK_TYPE_OBJECT_FACTORY,
 					    I_("GtkAssistantAccessibleFactory"),
 					    sizeof (AtkObjectFactoryClass),
 					    (GClassInitFunc) gtk_assistant_accessible_factory_class_init,
 					    sizeof (AtkObjectFactory),
 					    NULL, 0);
     }
-  
+
   return type;
 }
 
@@ -2363,12 +2383,12 @@ gtk_assistant_get_accessible (GtkWidget *widget)
 {
   static gboolean first_time = TRUE;
 
-  if (first_time) 
+  if (first_time)
     {
       AtkObjectFactory *factory;
       AtkRegistry *registry;
-      GType derived_type; 
-      GType derived_atk_type; 
+      GType derived_type;
+      GType derived_atk_type;
 
       /*
        * Figure out whether accessibility is enabled by looking at the
@@ -2383,7 +2403,7 @@ gtk_assistant_get_accessible (GtkWidget *widget)
       derived_atk_type = atk_object_factory_get_accessible_type (factory);
       if (g_type_is_a (derived_atk_type, GTK_TYPE_ACCESSIBLE))
 	{
-	  atk_registry_set_factory_type (registry, 
+	  atk_registry_set_factory_type (registry,
 					 GTK_TYPE_ASSISTANT,
 					 gtk_assistant_accessible_factory_get_type ());
 	}
@@ -2391,6 +2411,54 @@ gtk_assistant_get_accessible (GtkWidget *widget)
     }
 
   return GTK_WIDGET_CLASS (gtk_assistant_parent_class)->get_accessible (widget);
+}
+
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_assistant_buildable_interface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->get_internal_child = gtk_assistant_buildable_get_internal_child;
+  iface->custom_tag_start = gtk_assistant_buildable_custom_tag_start;
+  iface->custom_finished = gtk_assistant_buildable_custom_finished;
+}
+
+static GObject *
+gtk_assistant_buildable_get_internal_child (GtkBuildable *buildable,
+                                            GtkBuilder   *builder,
+                                            const gchar  *childname)
+{
+    if (strcmp (childname, "action_area") == 0)
+      return G_OBJECT (GTK_ASSISTANT (buildable)->priv->action_area);
+
+    return parent_buildable_iface->get_internal_child (buildable,
+                                                       builder,
+                                                       childname);
+}
+
+gboolean
+gtk_assistant_buildable_custom_tag_start (GtkBuildable  *buildable,
+                                          GtkBuilder    *builder,
+                                          GObject       *child,
+                                          const gchar   *tagname,
+                                          GMarkupParser *parser,
+                                          gpointer      *data)
+{
+  return parent_buildable_iface->custom_tag_start (buildable, builder, child,
+                                                   tagname, parser, data);
+}
+
+static void
+gtk_assistant_buildable_custom_finished (GtkBuildable *buildable,
+                                         GtkBuilder   *builder,
+                                         GObject      *child,
+                                         const gchar  *tagname,
+                                         gpointer      user_data)
+{
+  parent_buildable_iface->custom_finished (buildable, builder, child,
+                                           tagname, user_data);
 }
 
 
