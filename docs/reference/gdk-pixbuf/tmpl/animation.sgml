@@ -172,3 +172,21 @@ An opaque struct representing a simple animation.
 @pixbuf: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_simple_anim_set_loop ##### -->
+<para>
+
+</para>
+
+@animation: 
+@loop: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_simple_anim_get_loop ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
