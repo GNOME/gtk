@@ -12,14 +12,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-14 00:53+0200\n"
-"PO-Revision-Date: 2009-04-14 01:19+0300\n"
+"POT-Creation-Date: 2009-04-19 20:00+0200\n"
+"PO-Revision-Date: 2009-04-19 19:56+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
-"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Virtaal 0.3.1\n"
@@ -95,162 +95,154 @@ msgstr "شارات تنقيح Gdk التي ستُصفّر"
 #: ../gdk/keyname-table.h:3940
 msgctxt "keyboard label"
 msgid "BackSpace"
-msgstr "مسح للخلف"
+msgstr "BackSpace"
 
 #: ../gdk/keyname-table.h:3941
 msgctxt "keyboard label"
 msgid "Tab"
-msgstr "تبويب"
+msgstr "Tab"
 
 #: ../gdk/keyname-table.h:3942
 msgctxt "keyboard label"
 msgid "Return"
-msgstr "إدخال"
+msgstr "Return"
 
 #: ../gdk/keyname-table.h:3943
 msgctxt "keyboard label"
 msgid "Pause"
-msgstr "أُلبِث"
+msgstr "Pause"
 
 #: ../gdk/keyname-table.h:3944
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr ""
+msgstr "Scroll_Lock"
 
 #: ../gdk/keyname-table.h:3945
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "نظام ملفات"
+msgstr "Sys_Req"
 
 #: ../gdk/keyname-table.h:3946
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Escape"
-msgstr "عرضيّ"
+msgstr "Escape"
 
 #: ../gdk/keyname-table.h:3947
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "ضغط_متعدد"
+msgstr "Multi_key"
 
 #: ../gdk/keyname-table.h:3948
 msgctxt "keyboard label"
 msgid "Home"
-msgstr "المنزل"
+msgstr "Home"
 
 #: ../gdk/keyname-table.h:3949
 msgctxt "keyboard label"
 msgid "Left"
-msgstr "يسار"
+msgstr "Left"
 
 #: ../gdk/keyname-table.h:3950
 msgctxt "keyboard label"
 msgid "Up"
-msgstr "أعلى"
+msgstr "Up"
 
 #: ../gdk/keyname-table.h:3951
 msgctxt "keyboard label"
 msgid "Right"
-msgstr "يمين"
+msgstr "Right"
 
 #: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "Down"
-msgstr "أسفل"
+msgstr "Down"
 
 #: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "صفحة لأ_على"
+msgstr "Page_Up"
 
 #: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "صفحة لأ_سفل"
+msgstr "Page_Down"
 
 #: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "End"
-msgstr "نهاية"
+msgstr "End"
 
 #: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Begin"
-msgstr "بداية"
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Print"
-msgstr "اطبع"
+msgstr "Print"
 
 #: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Insert"
-msgstr "أدرج"
+msgstr "Insert"
 
 #: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr "قفل الأ_رقام"
+msgstr "Num_Lock"
 
 #: ../gdk/keyname-table.h:3960
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "است_بدِل"
+msgstr "KP_Space"
 
 #: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr ""
+msgstr "KP_Tab"
 
 #: ../gdk/keyname-table.h:3962
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "الطابعة"
+msgstr "KP_Enter"
 
 #: ../gdk/keyname-table.h:3963
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "ال_منزل"
+msgstr "KP_Home"
 
 #: ../gdk/keyname-table.h:3964
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "_يسار:"
+msgstr "KP_Left"
 
 #: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr ""
+msgstr "KP_Up"
 
 #: ../gdk/keyname-table.h:3966
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "_يمين:"
+msgstr "KP_Right"
 
 #: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr ""
+msgstr "KP_Down"
 
 #: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr ""
+msgstr "KP_Page_Up"
 
 #: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr ""
+msgstr "KP_Prior"
 
 #: ../gdk/keyname-table.h:3970
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
 msgstr "KP_Page_Down"
@@ -258,33 +250,32 @@ msgstr "KP_Page_Down"
 #: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr ""
+msgstr "KP_Next"
 
 #: ../gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr ""
+msgstr "KP_End"
 
 #: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr ""
+msgstr "KP_Begin"
 
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr ""
+msgstr "KP_Insert"
 
 #: ../gdk/keyname-table.h:3975
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "ا_حذف"
+msgstr "KP_Delete"
 
 #: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "Delete"
-msgstr "احذف"
+msgstr "Delete"
 
 #: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:968
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:1228 ../tests/testfilechooser.c:222
@@ -1213,7 +1204,7 @@ msgstr "عنْ %s"
 
 #: ../gtk/gtkaboutdialog.c:2033
 msgid "Credits"
-msgstr "شكْر"
+msgstr "إشادات"
 
 #: ../gtk/gtkaboutdialog.c:2062
 msgid "Written by"
@@ -1239,7 +1230,7 @@ msgstr "جمَّلَهُ"
 #: ../gtk/gtkaccellabel.c:91
 msgctxt "keyboard label"
 msgid "Shift"
-msgstr "تحويل"
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1249,7 +1240,7 @@ msgstr "تحويل"
 #: ../gtk/gtkaccellabel.c:97
 msgctxt "keyboard label"
 msgid "Ctrl"
-msgstr "تحكم"
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1259,7 +1250,7 @@ msgstr "تحكم"
 #: ../gtk/gtkaccellabel.c:103
 msgctxt "keyboard label"
 msgid "Alt"
-msgstr "تبديل"
+msgstr "Alt"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
@@ -1267,10 +1258,9 @@ msgstr "تبديل"
 #. * this.
 #.
 #: ../gtk/gtkaccellabel.c:671
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Super"
-msgstr "ورق"
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1278,10 +1268,9 @@ msgstr "ورق"
 #. * this.
 #.
 #: ../gtk/gtkaccellabel.c:684
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Hyper"
-msgstr "ورق"
+msgstr "Hyper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1291,17 +1280,17 @@ msgstr "ورق"
 #: ../gtk/gtkaccellabel.c:698
 msgctxt "keyboard label"
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: ../gtk/gtkaccellabel.c:715
 msgctxt "keyboard label"
 msgid "Space"
-msgstr "مسافة"
+msgstr "Space"
 
 #: ../gtk/gtkaccellabel.c:718
 msgctxt "keyboard label"
 msgid "Backslash"
-msgstr "شرطة مائلة راجعة"
+msgstr "Backslash"
 
 #: ../gtk/gtkbuilderparser.c:343
 #, c-format
@@ -1311,7 +1300,7 @@ msgstr "نوع دالة غير سليم في سطر %d: '%s'"
 #: ../gtk/gtkbuilderparser.c:402
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
-msgstr ""
+msgstr "هوية كائن مكررة '%s'  في سطر %d (السابقة في سطر %d)"
 
 #: ../gtk/gtkbuilderparser.c:853
 #, c-format
@@ -3638,10 +3627,9 @@ msgid "%d %%"
 msgstr "%Id %%"
 
 #: ../gtk/paper_names_offsets.c:4
-#, fuzzy
 msgctxt "paper size"
 msgid "asme_f"
-msgstr "الا_سم"
+msgstr "asme_f"
 
 #: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
@@ -4141,32 +4129,32 @@ msgstr "مظروف a2"
 #: ../gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #: ../gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #: ../gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #: ../gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #: ../gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #: ../gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "b-plus"
-msgstr ""
+msgstr "b-plus"
 
 #: ../gtk/paper_names_offsets.c:111
 msgctxt "paper size"
@@ -4349,15 +4337,14 @@ msgid "Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
 #: ../gtk/paper_names_offsets.c:147
-#, fuzzy
 msgctxt "paper size"
 msgid "Folio"
-msgstr "اللون"
+msgstr "Folio"
 
 #: ../gtk/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "Folio sp"
-msgstr ""
+msgstr "Folio sp"
 
 #: ../gtk/paper_names_offsets.c:149
 msgctxt "paper size"
