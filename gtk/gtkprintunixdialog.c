@@ -757,7 +757,10 @@ load_print_backends (GtkPrintUnixDialog *dialog)
     priv->print_backends = gtk_print_backend_load_modules ();
 
   for (node = priv->print_backends; node != NULL; node = node->next)
-    printer_list_initialize (dialog, GTK_PRINT_BACKEND (node->data));
+    {
+      GtkPrintBackend *backend = node->data;
+      printer_list_initialize (dialog, backend);
+    }
 }
 
 static void

@@ -25,6 +25,7 @@
 
 #include "gtkintl.h"
 #include "gtkmodules.h"
+#include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkprintbackend.h"
 #include "gtkprinter-private.h"
@@ -49,6 +50,9 @@ struct _GtkPrintBackendPrivate
   guint printer_list_requested : 1;
   guint printer_list_done : 1;
   GtkPrintBackendStatus status;
+  char *hostname;
+  char *username;
+  char *password;
 };
 
 enum {
@@ -57,6 +61,7 @@ enum {
   PRINTER_ADDED,
   PRINTER_REMOVED,
   PRINTER_STATUS_CHANGED,
+  REQUEST_PASSWORD,
   LAST_SIGNAL
 };
 
@@ -353,6 +358,10 @@ static void                 fallback_printer_get_hard_margins      (GtkPrinter  
 static GList *              fallback_printer_list_papers           (GtkPrinter          *printer);
 static GtkPageSetup *       fallback_printer_get_default_page_size (GtkPrinter          *printer);
 static GtkPrintCapabilities fallback_printer_get_capabilities      (GtkPrinter          *printer);
+static void                 request_password                       (GtkPrintBackend     *backend,
+                                                                    const gchar         *hostname,
+                                                                    const gchar         *username,
+                                                                    const gchar         *prompt);
   
 static void
 gtk_print_backend_class_init (GtkPrintBackendClass *class)
@@ -372,6 +381,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
   class->printer_list_papers = fallback_printer_list_papers;
   class->printer_get_default_page_size = fallback_printer_get_default_page_size;
   class->printer_get_capabilities = fallback_printer_get_capabilities;
+  class->request_password = request_password;
   
   g_object_class_install_property (object_class, 
                                    PROP_STATUS,
@@ -425,6 +435,14 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		  NULL, NULL,
 		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINTER);
+  signals[REQUEST_PASSWORD] =
+    g_signal_new (I_("request-password"),
+		  G_TYPE_FROM_CLASS (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrintBackendClass, request_password),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__STRING_STRING_STRING,
+		  G_TYPE_NONE, 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 }
 
 static void
@@ -437,6 +455,9 @@ gtk_print_backend_init (GtkPrintBackend *backend)
   priv->printers = g_hash_table_new_full (g_str_hash, g_str_equal, 
 					  (GDestroyNotify) g_free,
 					  (GDestroyNotify) g_object_unref);
+  priv->hostname = NULL;
+  priv->username = NULL;
+  priv->password = NULL;
 }
 
 static void
@@ -638,6 +659,167 @@ gtk_print_backend_print_stream (GtkPrintBackend        *backend,
 						       callback,
 						       user_data,
 						       dnotify);
+}
+
+void 
+gtk_print_backend_set_password (GtkPrintBackend *backend,
+                                const gchar     *hostname,
+                                const gchar     *username,
+                                const gchar     *password)
+{
+  g_return_if_fail (GTK_IS_PRINT_BACKEND (backend));
+
+  if (GTK_PRINT_BACKEND_GET_CLASS (backend)->set_password)
+    GTK_PRINT_BACKEND_GET_CLASS (backend)->set_password (backend, hostname, username, password);
+}
+
+static void
+store_password (GtkEntry        *entry,
+                GtkPrintBackend *backend)
+{
+  GtkPrintBackendPrivate *priv = backend->priv;
+
+  if (priv->password != NULL)
+    {
+      memset (priv->password, 0, strlen (priv->password));
+      g_free (priv->password);
+    }
+
+  priv->password = g_strdup (gtk_entry_get_text (entry));
+}
+
+static void
+store_username (GtkEntry        *entry,
+                GtkPrintBackend *backend)
+{
+  GtkPrintBackendPrivate *priv = backend->priv;
+
+  g_free (priv->username);
+  priv->username = g_strdup (gtk_entry_get_text (entry));
+}
+
+static void
+password_dialog_response (GtkWidget       *dialog,
+                          gint             response_id,
+                          GtkPrintBackend *backend)
+{
+  GtkPrintBackendPrivate *priv = backend->priv;
+
+  if (response_id == GTK_RESPONSE_OK)
+    gtk_print_backend_set_password (backend, priv->hostname, priv->username, priv->password);
+  else
+    gtk_print_backend_set_password (backend, priv->hostname, priv->username, NULL);
+
+  if (priv->password != NULL)
+    {
+      memset (priv->password, 0, strlen (priv->password));
+      g_free (priv->password);
+      priv->password = NULL;
+    }
+
+  g_free (priv->username);
+  priv->username = NULL;
+
+  gtk_widget_destroy (dialog);
+
+  g_object_unref (backend);
+}
+
+static void
+request_password (GtkPrintBackend *backend,
+                  const gchar     *hostname,
+                  const gchar     *username,
+                  const gchar     *prompt)
+{
+  GtkPrintBackendPrivate *priv = backend->priv;
+  GtkWidget *dialog, *username_box, *password_box, *main_box, *label, *icon, *vbox,
+            *password_prompt, *username_prompt,
+            *password_entry, *username_entry;
+  gchar     *markup;
+
+  dialog = gtk_dialog_new_with_buttons ( _("Authentication"), NULL, GTK_DIALOG_MODAL, 
+                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                         GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                         NULL);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
+
+  main_box = gtk_hbox_new (FALSE, 0);
+
+  /* Left */
+  icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, GTK_ICON_SIZE_DIALOG);
+  gtk_misc_set_alignment (GTK_MISC (icon), 0.5, 0.0);
+  gtk_misc_set_padding (GTK_MISC (icon), 6, 6);
+
+
+  /* Right */
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_size_request (GTK_WIDGET (vbox), 320, -1);
+
+  /* Right - 1. */
+  label = gtk_label_new (NULL);
+  markup = g_markup_printf_escaped ("<span weight=\"bold\" size=\"large\">%s</span>", prompt);
+  gtk_label_set_markup (GTK_LABEL (label), markup);
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_widget_set_size_request (GTK_WIDGET (label), 320, -1);
+  g_free (markup);
+
+
+  /* Right - 2. */
+  username_box = gtk_hbox_new (TRUE, 0);
+
+  username_prompt = gtk_label_new (_("Username:"));
+  gtk_misc_set_alignment (GTK_MISC (username_prompt), 0.0, 0.5);
+
+  username_entry = gtk_entry_new ();
+  gtk_entry_set_text (GTK_ENTRY (username_entry), username);
+
+
+  /* Right - 3. */
+  password_box = gtk_hbox_new (TRUE, 0);
+
+  password_prompt = gtk_label_new (_("Password:"));
+  gtk_misc_set_alignment (GTK_MISC (password_prompt), 0.0, 0.5);
+
+  password_entry = gtk_entry_new ();
+  gtk_entry_set_visibility (GTK_ENTRY (password_entry), FALSE);
+  gtk_entry_set_activates_default (GTK_ENTRY (password_entry), TRUE);
+
+
+  /* Packing */
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), main_box, TRUE, FALSE, 0);
+
+  gtk_box_pack_start (GTK_BOX (main_box), icon, FALSE, FALSE, 6);
+  gtk_box_pack_start (GTK_BOX (main_box), vbox, FALSE, FALSE, 6);
+
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 6);
+  gtk_box_pack_start (GTK_BOX (vbox), username_box, FALSE, TRUE, 6);
+  gtk_box_pack_start (GTK_BOX (vbox), password_box, FALSE, TRUE, 6);
+
+  gtk_box_pack_start (GTK_BOX (username_box), username_prompt, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (username_box), username_entry, TRUE, TRUE, 0);
+
+  gtk_box_pack_start (GTK_BOX (password_box), password_prompt, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (password_box), password_entry, TRUE, TRUE, 0);
+
+
+  gtk_widget_grab_focus (password_entry);
+
+  priv->hostname = g_strdup (hostname);
+  priv->username = g_strdup (username);
+
+  g_signal_connect (password_entry, "changed",
+                    G_CALLBACK (store_password), backend);
+
+  g_signal_connect (username_entry, "changed",
+                    G_CALLBACK (store_username), backend);
+
+  g_object_ref (backend);
+  g_signal_connect (G_OBJECT (dialog), "response",
+                    G_CALLBACK (password_dialog_response), backend);
+
+  gtk_widget_show_all (dialog);
 }
 
 void
