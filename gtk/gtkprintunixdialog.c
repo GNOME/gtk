@@ -1552,6 +1552,8 @@ selected_printer_changed (GtkTreeSelection   *selection,
 
   update_dialog_from_settings (dialog);
   update_dialog_from_capabilities (dialog);
+
+  g_object_notify ( G_OBJECT(dialog), "selected-printer");
 }
 
 static void

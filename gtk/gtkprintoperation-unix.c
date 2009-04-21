@@ -363,6 +363,26 @@ job_status_changed_cb (GtkPrintJob       *job,
 }
 
 
+static void
+printer_changed_cb (GtkPrintUnixDialog *print_dialog, 
+                    GParamSpec         *pspec,
+                    gpointer            user_data)
+{
+  GtkPageSetup             *page_setup;
+  GtkPrintSettings         *print_settings;
+  GtkPrintOperation        *op = user_data;
+  GtkPrintOperationPrivate *priv = op->priv;
+
+  page_setup = gtk_print_unix_dialog_get_page_setup (print_dialog);
+  print_settings = gtk_print_unix_dialog_get_settings (print_dialog);
+
+  g_signal_emit_by_name (op,
+                         "update-custom-widget",
+                         priv->custom_widget,
+                         page_setup,
+                         print_settings);
+}
+
 static GtkWidget *
 get_print_dialog (GtkPrintOperation *op,
                   GtkWindow         *parent)
@@ -409,6 +429,8 @@ get_print_dialog (GtkPrintOperation *op,
       
       gtk_print_unix_dialog_add_custom_tab (GTK_PRINT_UNIX_DIALOG (pd),
 					    priv->custom_widget, label);
+
+      g_signal_connect (pd, "notify::selected-printer", (GCallback) printer_changed_cb, op);
     }
   
   return pd;

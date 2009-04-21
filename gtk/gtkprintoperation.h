@@ -105,12 +105,17 @@ struct _GtkPrintOperationClass
 
   GtkWidget *(*create_custom_widget) (GtkPrintOperation *operation);
   void       (*custom_widget_apply)  (GtkPrintOperation *operation,
-				      GtkWidget *widget);
+				      GtkWidget         *widget);
 
   gboolean (*preview)	     (GtkPrintOperation        *operation,
 			      GtkPrintOperationPreview *preview,
 			      GtkPrintContext          *context,
 			      GtkWindow                *parent);
+
+  void     (*update_custom_widget) (GtkPrintOperation *operation,
+                                    GtkWidget         *widget,
+                                    GtkPageSetup      *setup,
+                                    GtkPrintSettings  *settings);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -119,7 +124,6 @@ struct _GtkPrintOperationClass
   void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
-  void (*_gtk_reserved7) (void);
 };
 
 #define GTK_PRINT_ERROR gtk_print_error_quark ()

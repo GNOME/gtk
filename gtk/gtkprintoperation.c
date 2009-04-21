@@ -48,6 +48,7 @@ enum
   CREATE_CUSTOM_WIDGET,
   CUSTOM_WIDGET_APPLY,
   PREVIEW,
+  UPDATE_CUSTOM_WIDGET,
   LAST_SIGNAL
 };
 
@@ -820,12 +821,34 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  G_TYPE_OBJECT, 0);
 
   /**
+   * GtkPrintOperation::update-custom-widget:
+   * @operation: the #GtkPrintOperation on which the signal was emitted
+   * @widget: the custom widget added in create-custom-widget
+   * @setup: actual page setup
+   * @settings: actual print settings
+   *
+   * Emmited after change of selected printer. The actual page setup and
+   * print settings are passed to the custom widget, which can actualize
+   * itself according to this change. 
+   *
+   * Since: 2.18
+   */
+  signals[UPDATE_CUSTOM_WIDGET] =
+    g_signal_new (I_("update-custom-widget"),
+		  G_TYPE_FROM_CLASS (class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkPrintOperationClass, update_custom_widget),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT_OBJECT,
+		  G_TYPE_NONE, 3, GTK_TYPE_WIDGET, GTK_TYPE_PAGE_SETUP, GTK_TYPE_PRINT_SETTINGS);
+
+  /**
    * GtkPrintOperation::custom-widget-apply:
    * @operation: the #GtkPrintOperation on which the signal was emitted
    * @widget: the custom widget added in create-custom-widget
    *
    * Emitted right before #GtkPrintOperation::begin-print if you added
-   * a custom widget in the #GtkPrintOperation:;create-custom-widget handler. 
+   * a custom widget in the #GtkPrintOperation::create-custom-widget handler. 
    * When you get this signal you should read the information from the 
    * custom widgets, as the widgets are not guaraneed to be around at a 
    * later time.
