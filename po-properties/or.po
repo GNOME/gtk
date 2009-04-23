@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
 "POT-Creation-Date: 2009-04-13 03:29+0000\n"
-"PO-Revision-Date: 2009-04-13 16:27+0530\n"
+"PO-Revision-Date: 2009-04-23 17:31+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -754,7 +756,7 @@ msgstr "ପୂର୍ଣ୍ଣ କରନ୍ତୁ"
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
-msgstr ""
+msgstr "ନିମ୍ନ ସ୍ତରକୁ ଦିଆଯାଇଥିବା ଅତିରିକ୍ତ ସ୍ଥାନକୁ ନିମ୍ନସ୍ତରରେ ବଣ୍ଟନ କରାଯାଇଛି ଅଥବା ପ୍ୟାଡିଙ୍ଗରେ ବ୍ୟବହାର କରାଯାଇଛି"
 
 #: ../gtk/gtkbox.c:162
 msgid "Padding"
@@ -773,6 +775,8 @@ msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
+"GtkPackType ଇଙ୍ଗିତ କରିଥାଏ ଯେ ନିମ୍ନ ସ୍ତରଟି ପ୍ରାରମ୍ଭିକ ସନ୍ଦର୍ଭ ସହିତ ରଖାଯାଇଛି "
+"ଅଥବା ପ୍ରମୂଖ ସ୍ତରର ସମାପ୍ତି ସହିତ"
 
 #: ../gtk/gtkbox.c:176 ../gtk/gtknotebook.c:694 ../gtk/gtkpaned.c:241
 #: ../gtk/gtkruler.c:148
@@ -795,7 +799,7 @@ msgstr "gettext ଦ୍ୱାରା ବ୍ୟବହୃତ ହେଉଥିବା �
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
-msgstr ""
+msgstr "ବଟନ ମଧ୍ଯରେ ଥିବା ନାମପଟି ୱିଜେଟର ପାଠ୍ୟ, ଯଦି ସେହି ବଟନ ଗୋଟିଏ ନାମପଟି ୱିଜେଟ ଧାରଣ କରିଥାଏ"
 
 #: ../gtk/gtkbutton.c:227 ../gtk/gtkexpander.c:203 ../gtk/gtklabel.c:388
 #: ../gtk/gtkmenuitem.c:315 ../gtk/gtktoolbutton.c:209
@@ -808,6 +812,8 @@ msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
+"ଯଦି ସେଟ କରାଯାଇଥାଏ, mnemonic ତ୍ୱରକ କି ପାଇଁ ପାଠ୍ୟରେ ଗୋଟିଏ ଅବରେଖନ ଇଙ୍ଗିତ କରୁଥିବା "
+"ପରବର୍ତ୍ତି ବର୍ଣ୍ଣକୁ ବ୍ୟବହାର କରିବା ଉଚିତ"
 
 #: ../gtk/gtkbutton.c:235 ../gtk/gtkimagemenuitem.c:150
 msgid "Use stock"
@@ -884,7 +890,7 @@ msgstr "ନିର୍ଭରକ X ବିସ୍ଥାପନ"
 
 #: ../gtk/gtkbutton.c:447
 msgid "How far in the x direction to move the child when the button is depressed"
-msgstr ""
+msgstr "x ଦିଗରେ କେତେ ଦୂର ନିମ୍ନ ସ୍ତରକୁ ଗତି କରାଇବା ଉଚିତ ଯେତେବେଳେକି ବଟନକୁ ଦବିରହିଥାଏ"
 
 #: ../gtk/gtkbutton.c:454
 msgid "Child Y Displacement"
@@ -892,7 +898,7 @@ msgstr "ନିର୍ଭରକ Y ବିସ୍ଥାପନ"
 
 #: ../gtk/gtkbutton.c:455
 msgid "How far in the y direction to move the child when the button is depressed"
-msgstr ""
+msgstr "y ଦିଗରେ କେତେ ଦୂର ନିମ୍ନ ସ୍ତରକୁ ଗତି କରାଇବା ଉଚିତ ଯେତେବେଳେକି ବଟନକୁ ଦବିରହିଥାଏ"
 
 #: ../gtk/gtkbutton.c:471
 msgid "Displace focus"
@@ -902,7 +908,7 @@ msgstr "ଲକ୍ଷ୍ଯ ବିସ୍ଥାପନ କରନ୍ତୁ"
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
-msgstr ""
+msgstr "child_displacement_x/_y ଗୁଣଧର୍ମ ଲକ୍ଷ୍ୟ ଆୟତକ୍ଷେତ୍ର ଉପରେ ପ୍ରଭାବ ପକାଇବା ଉଚିତ କି"
 
 #: ../gtk/gtkbutton.c:485 ../gtk/gtkentry.c:658 ../gtk/gtkentry.c:1661
 msgid "Inner Border"
@@ -1238,7 +1244,7 @@ msgstr "ଅବସ୍ଥା ଅନୁସରଣ କରନ୍ତୁ"
 
 #: ../gtk/gtkcellrendererpixbuf.c:188
 msgid "Whether the rendered pixbuf should be colorized according to the state"
-msgstr ""
+msgstr "ଚିତ୍ରଣ କରାଯାଇଥିବା pixbuf କୁ ଅବସ୍ଥା ଅନୁସାରେ ରଙ୍ଗାଇବା ଉଚିତ କି"
 
 #: ../gtk/gtkcellrendererpixbuf.c:205 ../gtk/gtkimage.c:247
 #: ../gtk/gtkwindow.c:590
@@ -1268,6 +1274,8 @@ msgid ""
 "Set this to positive values to indicate that some progress is made, but you "
 "don't know how much."
 msgstr ""
+"କିଛି ଅଗ୍ରଗତି ହୋଇଛି ବୋଲି ଦର୍ଶାଇବା ପାଇଁ ଏହାକୁ ଯୁକ୍ତାତ୍ମକ ମୂଲ୍ୟ ଅନୁସାରେ ସେଟ କରନ୍ତୁ, କିନ୍ତୁ "
+"ଆପଣ ଅଧିକ କିଛି ଜାଣିନାହାନ୍ତି।"
 
 #: ../gtk/gtkcellrendererprogress.c:187 ../gtk/gtkprogress.c:118
 msgid "Text x alignment"
@@ -1277,7 +1285,7 @@ msgstr "ପାଠ୍ୟ x ପାର୍ଶ୍ୱୀକରଣ"
 msgid ""
 "The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
-msgstr ""
+msgstr "ଭୂସମାନ୍ତରାଳ ପାଠ୍ୟ ସଜ୍ଜିକରଣ, 0 (ବାମ)ରୁ 1 (ଡାହାଣ)କୁ। RTL ବିନ୍ୟାସ ପାଇଁ ସଂରକ୍ଷିତ।"
 
 #: ../gtk/gtkcellrendererprogress.c:204 ../gtk/gtkprogress.c:125
 msgid "Text y alignment"
@@ -1493,6 +1501,9 @@ msgid ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 msgstr ""
+"ଏହି ପାଠ୍ୟରେ ଥିବା ଭାଷା, ଗୋଟିଏ ISO ସଂକେତ ଅଟେ। Pango ଏହାକୁ ପାଠ୍ୟ ଚିତ୍ରଣ କରିବା ସମୟରେ ସୂଚନା "
+"ଭାବରେ ବ୍ୟବହାର କରିପାରିବ। ଯଦି ଆପଣ ଏହି ପ୍ରାଚଳକୁ ବୁଝିନପାରନ୍ତି, ତେବେ ସମ୍ଭବତଃ ଆପଣ "
+"ଏହାକୁ ଆବଶ୍ୟକ କରୁନାହାନ୍ତି।"
 
 #: ../gtk/gtkcellrenderertext.c:411 ../gtk/gtklabel.c:499
 #: ../gtk/gtkprogressbar.c:206
@@ -1504,6 +1515,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string"
 msgstr ""
+"ବାକ୍ଯଖଣ୍ଡକୁ ellipsize କରିବାର ମନପସନ୍ଦ ସ୍ଥାନ, ଯଦି କୋଶ ଚିତ୍ରଣରେ ସମଗ୍ର ବାକ୍ୟଖଣ୍ଡକୁ ଦର୍ଶାଇବା ପାଇଁ "
+"ଯଥେଷ୍ଟ ସ୍ଥାନ ନଥିବ"
 
 #: ../gtk/gtkcellrenderertext.c:431 ../gtk/gtkfilechooserbutton.c:421
 #: ../gtk/gtklabel.c:519
@@ -1523,6 +1536,8 @@ msgid ""
 "How to break the string into multiple lines, if the cell renderer does not "
 "have enough room to display the entire string"
 msgstr ""
+"ବାକ୍ୟଖଣ୍ଡକୁ ଏକାଧିକ ଧାଡ଼ିରେ କିପରି ବିଭକ୍ତ କରିବେ, ଯଦି କୋଷ ଚିତ୍ରଣରେ ସମଗ୍ର ବାକ୍ୟଖଣ୍ଡକୁ "
+"ଦର୍ଶାଇବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ଥାନ ନଥିବ"
 
 #: ../gtk/gtkcellrenderertext.c:470 ../gtk/gtkcombobox.c:678
 msgid "Wrap width"
@@ -1939,7 +1954,7 @@ msgstr "ତାଲିକାରେ tearoffଗୁଡ଼ିକୁ ଯୋଗ କର�
 
 #: ../gtk/gtkcombobox.c:766
 msgid "Whether dropdowns should have a tearoff menu item"
-msgstr ""
+msgstr "ଡ୍ରପଡାଉନରେ ଟିଓରଅଫ ତାଲିକା ବସ୍ତୁ ଅଛି କି ନାହିଁ"
 
 #: ../gtk/gtkcombobox.c:781 ../gtk/gtkentry.c:650
 msgid "Has Frame"
@@ -1947,11 +1962,11 @@ msgstr "ଫ୍ରେମ୍ ଅଛି"
 
 #: ../gtk/gtkcombobox.c:782
 msgid "Whether the combo box draws a frame around the child"
-msgstr ""
+msgstr "କମ୍ବୋ ବାକ୍ସ ନିମ୍ନ ସ୍ତର ଚାରିପଟେ ଫ୍ରେମ ଅଙ୍ଗନ କରିଛି କି ନାହିଁ"
 
 #: ../gtk/gtkcombobox.c:790
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
-msgstr ""
+msgstr "କମ୍ବୋ ବାକ୍ସ ମାଉସ ଦ୍ୱାରା କ୍ଲିକ କରାହେବା ଦ୍ୱାରା ଲକ୍ଷ୍ୟ ସାଧନ କରିତାଏ କି ନାହିଁ"
 
 #: ../gtk/gtkcombobox.c:805 ../gtk/gtkmenu.c:555
 msgid "Tearoff Title"
@@ -1961,7 +1976,7 @@ msgstr "Tearoff ଶୀର୍ଷକ"
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
-msgstr ""
+msgstr "ପପଅପଟି ଟର୍ଣ୍ଣଅଫ ହେବା ସମୟରେ ୱିଣ୍ଡୋ ପରିଚାଳକ ଦ୍ୱାରା ଶୀର୍ଷକ ଦର୍ଶାଯାଇପାରେ"
 
 #: ../gtk/gtkcombobox.c:823
 msgid "Popup shown"
@@ -1985,7 +2000,7 @@ msgstr "ତାଲିକା ପରି ଦୃଶ୍ୟମାନ ହୋଇଥାଏ
 
 #: ../gtk/gtkcombobox.c:849
 msgid "Whether dropdowns should look like lists rather than menus"
-msgstr ""
+msgstr "ଡ୍ରପଡାଉନ ସୂଚୀ ଅପେକ୍ଷା ତାଲିକା ପରି ଦେଖାଯିବା ଉଚିତ କି ନୁହଁ"
 
 #: ../gtk/gtkcombobox.c:865
 msgid "Arrow Size"
@@ -2019,7 +2034,7 @@ msgstr "ସୀମା ଓସାର"
 
 #: ../gtk/gtkcontainer.c:247
 msgid "The width of the empty border outside the containers children"
-msgstr ""
+msgstr "ଧାରଣ ପାତ୍ରର ନିମ୍ନସ୍ତରରେ ଖାଲି ଧାରର ଓସାର"
 
 #: ../gtk/gtkcontainer.c:255
 msgid "Child"
@@ -2035,7 +2050,7 @@ msgstr "ବକ୍ର ପ୍ରକାର"
 
 #: ../gtk/gtkcurve.c:125
 msgid "Is this curve linear, spline interpolated, or free-form"
-msgstr ""
+msgstr "ଏହା ଗୋଟିଏ ବକ୍ର ରେଖା, spline ପ୍ରକ୍ଷେପଣ, କିମ୍ବା ମୁକ୍ତ-ଫର୍ମ"
 
 #: ../gtk/gtkcurve.c:132
 msgid "Minimum X"
@@ -2123,7 +2138,7 @@ msgstr "ବଚ୍ଛାର ସୀମା"
 
 #: ../gtk/gtkentry.c:616 ../gtk/gtklabel.c:473
 msgid "The position of the opposite end of the selection from the cursor in chars"
-msgstr ""
+msgstr "ଚୟନର ବିପରିତ ପ୍ରାନ୍ତର ସ୍ଥିତି ସୂଚକ ଅକ୍ଷରରେ"
 
 #: ../gtk/gtkentry.c:626
 msgid "Whether the entry contents can be edited"
@@ -2145,7 +2160,7 @@ msgstr "ଦ୍ରୁଶ୍ଯମାନ୍ଯତା"
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
-msgstr ""
+msgstr "FALSE ପ୍ରକୃତ ପାଠ୍ୟ ପରିବର୍ତ୍ତେ \"invisible char\" କୁ ପ୍ରଦର୍ଶନ କରିଥାଏ (ପ୍ରବେଶ ସଂକେତ ଧାରା)"
 
 #: ../gtk/gtkentry.c:651
 msgid "FALSE removes outside bevel from entry"
@@ -2161,7 +2176,7 @@ msgstr "ଅଦୃଶ୍ଯ ଅକ୍ଷର"
 
 #: ../gtk/gtkentry.c:667
 msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr ""
+msgstr "ଭରଣ ବିଷୟବସ୍ତୁଗୁଡ଼ିକୁ ଆବରଣ କରିବା ପାଇଁ ବ୍ୟବହୃତ ହେଉଥିବା ଅକ୍ଷର (\"password mode\" ରେ)"
 
 #: ../gtk/gtkentry.c:674
 msgid "Activates default"
@@ -2172,6 +2187,8 @@ msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
+"ପୂର୍ବନିର୍ଦ୍ଧାରିତ ୱିଜେଟକୁ ସକ୍ରିୟ କରିବା ଉଚିତ କି ନୁହଁ (ଯେପରିକି ସଂଳାପରେ ପୂର୍ବନିର୍ଦ୍ଧାରିତ ବଟନ) "
+"ଯେତେବେଳେ ଭରଣ କରନ୍ତୁ କୁ ଦବାନ୍ତି"
 
 #: ../gtk/gtkentry.c:681
 msgid "Width in chars"
@@ -2179,7 +2196,7 @@ msgstr "ଚାର୍‌ସରେ ଓସାର"
 
 #: ../gtk/gtkentry.c:682
 msgid "Number of characters to leave space for in the entry"
-msgstr ""
+msgstr "ଭରଣରେ ସ୍ଥାନ ଛାଡ଼ିବା ପାଇଁ ଅକ୍ଷର ସଂଖ୍ୟା"
 
 #: ../gtk/gtkentry.c:691
 msgid "Scroll offset"
@@ -2187,7 +2204,7 @@ msgstr "ଅପ୍‌ସେଟ୍ କୁ ସ୍କ୍ରୋଲ୍ କର"
 
 #: ../gtk/gtkentry.c:692
 msgid "Number of pixels of the entry scrolled off the screen to the left"
-msgstr ""
+msgstr "ବାମକୁ ବୁଲାଉଥିବା ଭରଣର ପିକସେଲ ସଂଖ୍ୟା"
 
 #: ../gtk/gtkentry.c:702
 msgid "The contents of the entry"
@@ -2263,7 +2280,7 @@ msgstr "ପ୍ରଗତି ସ୍ପନ୍ଦନ ପଦକ୍ଷେପ"
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
-msgstr ""
+msgstr "ଉନ୍ନତିକୁ ବୃଦ୍ଧି ବ୍ଲକକୁ ଘୁଞ୍ଚାଇଥିବା ସମୁଦାୟ ଭରଣ ଓସାରର ଅଂଶ ପ୍ରତି gtk_entry_progress_pulse()"
 
 #: ../gtk/gtkentry.c:866
 msgid "Primary pixbuf"
@@ -2435,7 +2452,7 @@ msgstr "ଅବସ୍ଥିତି ସୂଚନା"
 
 #: ../gtk/gtkentry.c:1677
 msgid "Whether to pass a proper state when drawing shadow or background"
-msgstr ""
+msgstr "ଛାୟା କିମ୍ବା ପୃଷ୍ଠଭୂମି ଅଙ୍କନ କରୁଥିବା ସମୟରେ ପଠାଯାଉଥିବା ପ୍ରକୃତ ସ୍ଥିତି"
 
 #: ../gtk/gtkentry.c:1682 ../gtk/gtklabel.c:695
 msgid "Select on focus"
@@ -2443,7 +2460,7 @@ msgstr "ଲକ୍ଷ୍ୟସ୍ଥଳରେ ମନୋନୀତ କରନ୍ତ�
 
 #: ../gtk/gtkentry.c:1683
 msgid "Whether to select the contents of an entry when it is focused"
-msgstr ""
+msgstr "ଏହାକୁ ଫୋକସ କରିବା ସମୟରେ ଭରଣ କରିବା ପାଇଁ ବିଷୟ ବସ୍ତୁ ବାଛିବା ଉଚିତ କି ନୁହଁ"
 
 #: ../gtk/gtkentry.c:1697
 msgid "Password Hint Timeout"
@@ -2451,7 +2468,7 @@ msgstr "ପ୍ରବେଶ ସଙ୍କେତ ସମୟ ବିତିଯାଇଛ
 
 #: ../gtk/gtkentry.c:1698
 msgid "How long to show the last input character in hidden entries"
-msgstr ""
+msgstr "ଲୁକ୍କାଇତ ଭରଣରେ ଅନ୍ତିମ ନିବେଶ ଅକ୍ଷରକୁ କେତେ ସମୟ ଦର୍ଶାଇବା ଉଚିତ"
 
 #: ../gtk/gtkentrycompletion.c:279
 msgid "Completion Model"
@@ -2491,7 +2508,7 @@ msgstr "ପପ-ଅପ ସମ୍ପୂର୍ଣ୍ଣତା"
 
 #: ../gtk/gtkentrycompletion.c:339
 msgid "Whether the completions should be shown in a popup window"
-msgstr ""
+msgstr "ଗୋଟିଏ ପପଅପ ତାଲିକାରେ ସମ୍ପୂର୍ଣ୍ଣତାକୁ ଦର୍ଶାଇବା ଉଚିତ କି ନୁହଁ"
 
 #: ../gtk/gtkentrycompletion.c:354
 msgid "Popup set width"
@@ -2526,6 +2543,8 @@ msgid ""
 "Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
 msgstr ""
+"ଘଟଣା ବାକ୍ସଟି ଦୃଶ୍ୟମାନ ହେଉଛି କି ନୁହଁ, ଯେପରି ଅଦୃଶ୍ୟ ହେବାରୁ ବାରଣ କରିଥାଏ ଏବଂ କେବଳ ଘଟଣା "
+"ଯାଞ୍ଚ କରିବାରେ ବ୍ୟବହୃତ ହୋଇଥାଏ।"
 
 #: ../gtk/gtkeventbox.c:98
 msgid "Above child"
@@ -2536,6 +2555,8 @@ msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
 msgstr ""
+"ଘଟଣା ବାକ୍ସର ସେହି କାଳେ ସେହି ଘଟଣା-ଯାଞ୍ଚକାରୀ ୱିଣ୍ଡୋଟି ନିମ୍ନ ସ୍ତର ୱିଜେଟ ୱିଣ୍ଡୋ ଉପରେ ରହିବା "
+"ଉଚିତ କି ଯେପରି ନିମ୍ନରେ ବାରଣ କରାଯାଇଥାଏ।"
 
 #: ../gtk/gtkexpander.c:187
 msgid "Expanded"
@@ -2543,7 +2564,7 @@ msgstr "ବିସ୍ତୃତ"
 
 #: ../gtk/gtkexpander.c:188
 msgid "Whether the expander has been opened to reveal the child widget"
-msgstr ""
+msgstr "ନିମ୍ନ ସ୍ତର ୱିଜେଟକୁ ବିସ୍ତାର କରିବା ପାଇଁ କାଳେ ସେହି ବିସ୍ତାର କାରୀକୁ ଖୋଲାଯିବା ଉଚିତ କି"
 
 #: ../gtk/gtkexpander.c:196
 msgid "Text of the expander's label"
@@ -2555,7 +2576,7 @@ msgstr "ଚିହ୍ନଟ ବ୍ଯବହାର କରନ୍ତୁ"
 
 #: ../gtk/gtkexpander.c:212 ../gtk/gtklabel.c:382
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr ""
+msgstr "ନାମପଟିର ପାଠ୍ୟରେ XML ଚିହ୍ନଟ ଅନ୍ତର୍ଭୁକ୍ତ ହୋଇଥାଏ। pango_parse_markup() କୁ ଦେଖନ୍ତୁ"
 
 #: ../gtk/gtkexpander.c:220
 msgid "Space to put between the label and the child"
@@ -2587,7 +2608,7 @@ msgstr "କାର୍ଯ୍ଯ"
 
 #: ../gtk/gtkfilechooser.c:195
 msgid "The type of operation that the file selector is performing"
-msgstr ""
+msgstr "ଫାଇଲ ଚୟନକର୍ତ୍ତା କରୁଥିବା ପ୍ରୟୋଗର ପ୍ରକାର"
 
 #: ../gtk/gtkfilechooser.c:201
 msgid "File System Backend"
@@ -2603,7 +2624,7 @@ msgstr "ଫିଲଟର"
 
 #: ../gtk/gtkfilechooser.c:208
 msgid "The current filter for selecting which files are displayed"
-msgstr ""
+msgstr "କେଉଁ ଫାଇଲଗୁଡ଼ିକୁ ଦର୍ଶାଯିବା ଉଚିତ ତାହା ବାଛିବା ପାଇଁ ପ୍ରଚଳିତ ଛାଣକ"
 
 #: ../gtk/gtkfilechooser.c:213
 msgid "Local Only"
@@ -2611,7 +2632,7 @@ msgstr "କେବଳ ସ୍ଥାନୀୟ"
 
 #: ../gtk/gtkfilechooser.c:214
 msgid "Whether the selected file(s) should be limited to local file: URLs"
-msgstr ""
+msgstr "ବଚ୍ଛିତ ଫାଇଲ(ଗୁଡ଼ିକ) ସ୍ଥାନୀୟ ଫାଇଲରେ ସୀମିତ ରହିବା ଉଚିତ କି: URLs"
 
 #: ../gtk/gtkfilechooser.c:219
 msgid "Preview widget"
@@ -2619,7 +2640,7 @@ msgstr "ୱିଜେଟ ପ୍ରାକଦର୍ଶନ"
 
 #: ../gtk/gtkfilechooser.c:220
 msgid "Application supplied widget for custom previews."
-msgstr ""
+msgstr "ଇଚ୍ଛାରୂପୀ ପ୍ରାକଦର୍ଶନ ପାଇଁ ପ୍ରୟୋଗ ପ୍ରଦତ୍ତ ୱିଜେଟ।"
 
 #: ../gtk/gtkfilechooser.c:225
 msgid "Preview Widget Active"
@@ -2627,7 +2648,7 @@ msgstr "ପ୍ରାକଦର୍ଶନ ୱିଜେଟ ସକ୍ରିୟ ଅଛ
 
 #: ../gtk/gtkfilechooser.c:226
 msgid "Whether the application supplied widget for custom previews should be shown."
-msgstr ""
+msgstr "ଇଚ୍ଛାରୂପଣ ପ୍ରାକଦର୍ଶନକୁ କାଳେ ସେହି ପ୍ରଦତ୍ତ ୱିଜେଟ ପ୍ରୟୋଗରେ ଦର୍ଶାଯିବା ଉଚିତ କି।"
 
 #: ../gtk/gtkfilechooser.c:231
 msgid "Use Preview Label"
@@ -2635,7 +2656,7 @@ msgstr "ପ୍ରାକଦର୍ଶନ ନାମପଟିକୁ ବ୍ୟବହ�
 
 #: ../gtk/gtkfilechooser.c:232
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr ""
+msgstr "ଗୋଟିଏ ଭଣ୍ଡାର ନାମପଟିକୁ ପ୍ରାକଦର୍ଶନ କରାଯାଇଥିବା ଫାଇଲର ନାମ ସହିତ ଦର୍ଶାଯିବା ଉଚିତ କି।"
 
 #: ../gtk/gtkfilechooser.c:237
 msgid "Extra widget"
@@ -2643,7 +2664,7 @@ msgstr "ଅତିରିକ୍ତ ୱିଜେଟ"
 
 #: ../gtk/gtkfilechooser.c:238
 msgid "Application supplied widget for extra options."
-msgstr ""
+msgstr "ଅତିରିକ୍ତ ବିକଳ୍ପ ପାଇଁ ପ୍ରୟୋଗ ପ୍ରଦତ୍ତ ୱିଜେଟ।"
 
 #: ../gtk/gtkfilechooser.c:243 ../gtk/gtkfilesel.c:540
 #: ../gtk/gtkrecentchooser.c:203
@@ -2660,7 +2681,7 @@ msgstr "ଲୁକ୍କାଇତକୁ ଦର୍ଶାନ୍ତୁ"
 
 #: ../gtk/gtkfilechooser.c:251
 msgid "Whether the hidden files and folders should be displayed"
-msgstr ""
+msgstr "ଲୁକ୍କାଇତ ଫାଇଲ ଏବଂ ଫୋଲଡରଗୁଡ଼ିକୁ ଦର୍ଶାଯିବା ଉଚିତ କି ନୁହଁ"
 
 #: ../gtk/gtkfilechooser.c:266
 msgid "Do overwrite confirmation"
