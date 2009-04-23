@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
 "POT-Creation-Date: 2009-04-13 03:29+0000\n"
-"PO-Revision-Date: 2009-04-23 17:31+0530\n"
+"PO-Revision-Date: 2009-04-23 17:57+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -2707,7 +2708,7 @@ msgstr "ଫାଇଲ ଚୟନକର୍ତ୍ତା ସଂଳାପର ଶୀର
 
 #: ../gtk/gtkfilechooserbutton.c:422
 msgid "The desired width of the button widget, in characters."
-msgstr ""
+msgstr "ବଟନ ୱିଜେଟରୁ ଆଶାକରାଯାଉଥିବା ଓସାର, ଅକ୍ଷରରେ।"
 
 #: ../gtk/gtkfilesel.c:526 ../gtk/gtkimage.c:163 ../gtk/gtkrecentmanager.c:214
 #: ../gtk/gtkstatusicon.c:218
