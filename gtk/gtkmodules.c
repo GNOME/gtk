@@ -289,9 +289,16 @@ load_module (GSList      *module_list,
 		g_module_close (module);
 	      else
 		{
+		  GSList *temp;
+
 		  success = TRUE;
-		  info = (GtkModuleInfo *) g_slist_find_custom (gtk_modules, module,
-								(GCompareFunc)cmp_module);
+		  info = NULL;
+
+		  temp = g_slist_find_custom (gtk_modules, module,
+			(GCompareFunc)cmp_module);
+		  if (temp != NULL)
+			info = temp->data;
+
 		  if (!info)
 		    {
 		      info = g_new0 (GtkModuleInfo, 1);
