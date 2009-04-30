@@ -1,3 +1,11 @@
+Overview of Changes from GTK+ 2.16.x to 2.17.0
+==============================================
+
+* Changes that are relevant for theme authors
+ - GtkEntry now has a ::invisible-char style property that allows
+   themes to set the preferred invisible character
+
+
 Overview of Changes from GTK+ 2.16.0 to 2.16.1
 ==============================================
 
