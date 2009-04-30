@@ -2430,13 +2430,16 @@ gtk_menu_size_request (GtkWidget      *widget,
       guint toggle_spacing;
       guint indicator_size;
 
-      gtk_style_get (widget->style,
+      /* gtk_style_get() returns sizes in pixels with no consideration for
+         the monitor the widget is displayed on */
+      gtk_style_get_unit (widget->style,
                      GTK_TYPE_CHECK_MENU_ITEM,
                      "toggle-spacing", &toggle_spacing,
                      "indicator-size", &indicator_size,
                      NULL);
 
-      max_toggle_size = indicator_size + toggle_spacing;
+      max_toggle_size = gtk_widget_size_to_pixel (widget, indicator_size) +
+                        gtk_widget_size_to_pixel (widget, toggle_spacing);
     }
 
   for (i = 0; i < gtk_menu_get_n_rows (menu); i++)
