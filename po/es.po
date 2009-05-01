@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2009-04-12 03:30+0000\n"
-"PO-Revision-Date: 2009-04-12 14:29+0200\n"
+"POT-Creation-Date: 2009-04-30 19:06+0000\n"
+"PO-Revision-Date: 2009-05-01 14:39+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1202,7 +1202,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Aberiendo %d elemento"
 msgstr[1] "Abriendo %d elementos"
 
-#: ../gtk/gtkaboutdialog.c:251 ../gtk/gtkaboutdialog.c:2110
+#: ../gtk/gtkaboutdialog.c:251 ../gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "Licencia"
 
@@ -1211,37 +1211,37 @@ msgid "The license of the program"
 msgstr "La licencia del programa"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:492
+#: ../gtk/gtkaboutdialog.c:490
 msgid "C_redits"
 msgstr "C_réditos"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:506
+#: ../gtk/gtkaboutdialog.c:504
 msgid "_License"
 msgstr "_Licencia"
 
-#: ../gtk/gtkaboutdialog.c:774
+#: ../gtk/gtkaboutdialog.c:772
 #, c-format
 msgid "About %s"
 msgstr "Acerca de %s"
 
-#: ../gtk/gtkaboutdialog.c:2033
+#: ../gtk/gtkaboutdialog.c:2031
 msgid "Credits"
 msgstr "Créditos"
 
-#: ../gtk/gtkaboutdialog.c:2062
+#: ../gtk/gtkaboutdialog.c:2060
 msgid "Written by"
 msgstr "Escrito por"
 
-#: ../gtk/gtkaboutdialog.c:2065
+#: ../gtk/gtkaboutdialog.c:2063
 msgid "Documented by"
 msgstr "Documentado por"
 
-#: ../gtk/gtkaboutdialog.c:2077
+#: ../gtk/gtkaboutdialog.c:2075
 msgid "Translated by"
 msgstr "Traducido por"
 
-#: ../gtk/gtkaboutdialog.c:2081
+#: ../gtk/gtkaboutdialog.c:2079
 msgid "Artwork by"
 msgstr "Arte por"
 
@@ -3308,7 +3308,7 @@ msgstr "_Pegar"
 #: ../gtk/gtkstock.c:383
 msgctxt "Stock label"
 msgid "_Preferences"
-msgstr "_Preferencias"
+msgstr "Prefere_ncias"
 
 #: ../gtk/gtkstock.c:384
 msgctxt "Stock label"
