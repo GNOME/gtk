@@ -1170,8 +1170,10 @@ gtk_container_set_border_width (GtkContainer *container,
  * gtk_container_get_border_width:
  * @container: a #GtkContainer
  * 
- * Retrieves the border width of the container. See
+ * Retrieves the border width of the container in pixels. See
  * gtk_container_set_border_width().
+ *
+ * Use gtk_container_get_border_width_unit() to preserve units.
  *
  * Return value: the current border width
  **/
@@ -1191,7 +1193,7 @@ gtk_container_get_border_width (GtkContainer *container)
  *
  * Return value: the current border width
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkUSize
 gtk_container_get_border_width_unit (GtkContainer *container)

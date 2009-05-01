@@ -554,8 +554,9 @@ gtk_alignment_set_padding (GtkAlignment    *alignment,
  * @padding_left: location to store the padding for the left of the widget, or %NULL
  * @padding_right: location to store the padding for the right of the widget, or %NULL
  *
- * Gets the padding on the different sides of the widget.
- * See gtk_alignment_set_padding ().
+ * Gets the padding in pixels on the different sides of the widget.
+ * See gtk_alignment_set_padding (). Use gtk_alignment_get_padding_unit() to
+ * preserve units.
  *
  * Since: 2.4
  */
@@ -591,7 +592,7 @@ gtk_alignment_get_padding (GtkAlignment    *alignment,
  *
  * Like gtk_alignment_get_padding() but preserves the unit.
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 void
 gtk_alignment_get_padding_unit (GtkAlignment    *alignment,

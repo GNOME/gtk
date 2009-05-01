@@ -976,7 +976,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * The ::unit-changed signal is emitted when unit conversion factors
    * on a screen change.
    *
-   * Since: 2.14
+   * Since: RIMERGE
    */
   signals[UNIT_CHANGED_SIGNAL] =
     g_signal_new (I_("unit-changed"),

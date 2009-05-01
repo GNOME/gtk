@@ -306,8 +306,10 @@ gtk_misc_set_padding (GtkMisc *misc,
  * @xpad: location to store padding in the X direction, or %NULL
  * @ypad: location to store padding in the Y direction, or %NULL
  *
- * Gets the padding in the X and Y directions of the widget. 
+ * Gets the padding (in pixels) in the X and Y directions of the widget. 
  * See gtk_misc_set_padding().
+ *
+ * Use gtk_misc_get_padding_unit() to preserve the units.
  **/
 void
 gtk_misc_get_padding (GtkMisc *misc,
@@ -334,7 +336,7 @@ gtk_misc_get_padding (GtkMisc *misc,
  *
  * Like gtk_misc_get_padding() but preserves the unit.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 void
 gtk_misc_get_padding_unit (GtkMisc *misc,

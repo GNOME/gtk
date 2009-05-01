@@ -15376,7 +15376,8 @@ gtk_tree_view_set_level_indentation (GtkTreeView *tree_view,
  * @tree_view: a #GtkTreeView.
  *
  * Returns the amount, in pixels, of extra indentation for child levels
- * in @tree_view.
+ * in @tree_view. To preserve the units use
+ * gtk_tree_view_get_level_indentation_unit().
  *
  * Return value: the amount of extra indentation for child levels in
  * @tree_view.  A return value of 0 means that this feature is disabled.
@@ -15400,7 +15401,7 @@ gtk_tree_view_get_level_indentation (GtkTreeView *tree_view)
  * Return value: the amount of extra indentation for child levels in
  * @tree_view.  A return value of 0 means that this feature is disabled.
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 GtkSize
 gtk_tree_view_get_level_indentation_unit (GtkTreeView *tree_view)

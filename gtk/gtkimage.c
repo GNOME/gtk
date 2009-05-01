@@ -2321,6 +2321,7 @@ gtk_image_set_pixel_size (GtkImage *image,
  * @image: a #GtkImage
  * 
  * Gets the pixel size used for named icons.
+ * Use gtk_image_get_pixel_size_unit() to preserve units.
  *
  * Returns: the pixel size used for named icons.
  *
@@ -2344,9 +2345,9 @@ gtk_image_get_pixel_size (GtkImage *image)
  * 
  * Like gtk_image_get_pixel_size() but preserves the unit.
  *
- * Returns: the pixel size used for named icons.
+ * Returns: the size used for named icons.
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 GtkSize
 gtk_image_get_pixel_size_unit (GtkImage *image)

@@ -1488,7 +1488,8 @@ gtk_hsv_set_metrics (GtkHSV *hsv,
  * @size: Return value for the diameter of the hue ring
  * @ring_width: Return value for the width of the hue ring
  *
- * Queries the size and ring width of an HSV color selector.
+ * Queries the size and ring width of an HSV color selector in pixels.
+ * Use gtk_hsv_get_metrics_unit() to preserve units.
  *
  * Since: 2.14
  */
@@ -1518,7 +1519,7 @@ gtk_hsv_get_metrics (GtkHSV *hsv,
  *
  * Like gtk_hsv_get_metrics() but preserves the unit.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 void
 gtk_hsv_get_metrics_unit (GtkHSV  *hsv,

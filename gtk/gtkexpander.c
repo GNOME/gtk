@@ -1472,7 +1472,8 @@ gtk_expander_set_spacing (GtkExpander *expander,
  * gtk_expander_get_spacing:
  * @expander: a #GtkExpander
  *
- * Gets the value set by gtk_expander_set_spacing().
+ * Gets the value set by gtk_expander_set_spacing() in pixels. Use
+ * gtk_expander_get_spacing_unit() to preserve units.
  *
  * Return value: spacing between the expander and child.
  *
@@ -1494,7 +1495,7 @@ gtk_expander_get_spacing (GtkExpander *expander)
  *
  * Return value: spacing between the expander and child.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_expander_get_spacing_unit (GtkExpander *expander)

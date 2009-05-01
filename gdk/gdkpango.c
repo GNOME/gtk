@@ -1506,7 +1506,7 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
  * 
  * Return value: a new #PangoContext for @screen
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 PangoContext *
 gdk_pango_context_get_for_screen_for_monitor (GdkScreen *screen,

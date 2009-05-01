@@ -2357,8 +2357,13 @@ gtk_text_view_get_editable (GtkTextView *text_view)
  * @text_view: a #GtkTextView
  * @pixels_above_lines: pixels above paragraphs
  * 
- * Sets the default number of blank pixels above paragraphs in @text_view.
+ * Sets the default padding above paragraphs in @text_view.
  * Tags in the buffer for @text_view may override the defaults.
+ *
+ * <note>
+ * Although the method mentions pixels, this is simply for API compatibility.
+ * The measurement is actually a #GtkSize.
+ * </note>
  **/
 void
 gtk_text_view_set_pixels_above_lines (GtkTextView *text_view,
@@ -2384,7 +2389,8 @@ gtk_text_view_set_pixels_above_lines (GtkTextView *text_view,
  * gtk_text_view_get_pixels_above_lines:
  * @text_view: a #GtkTextView
  * 
- * Gets the default number of pixels to put above paragraphs.
+ * Gets the default number of pixels to put above paragraphs. To preserve the
+ * units use gtk_text_view_get_pixels_above_lines_unit().
  * 
  * Return value: default number of pixels above paragraphs
  **/
@@ -2401,10 +2407,15 @@ gtk_text_view_get_pixels_above_lines (GtkTextView *text_view)
  * @text_view: a #GtkTextView
  * 
  * Like gtk_text_view_get_pixels_above_lines() but preserves the unit.
+ *
+ * <note>
+ * Although the method mentions pixels, this is simply for API compatibility.
+ * The measurement is actually a #GtkSize.
+ * </note>
  * 
  * Return value: default number of pixels above paragraphs
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_text_view_get_pixels_above_lines_unit (GtkTextView *text_view)
@@ -2417,11 +2428,16 @@ gtk_text_view_get_pixels_above_lines_unit (GtkTextView *text_view)
 /**
  * gtk_text_view_set_pixels_below_lines:
  * @text_view: a #GtkTextView
- * @pixels_below_lines: pixels below paragraphs 
+ * @pixels_below_lines: padding below paragraphs
  *
- * Sets the default number of pixels of blank space
+ * Sets the default padding of blank space
  * to put below paragraphs in @text_view. May be overridden
- * by tags applied to @text_view's buffer. 
+ * by tags applied to @text_view's buffer.
+ *
+ * <note>
+ * Although the method mentions pixels, this is simply for API compatibility.
+ * The measurement is actually a #GtkSize.
+ * </note>
  **/
 void
 gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
@@ -2447,7 +2463,8 @@ gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
  * gtk_text_view_get_pixels_below_lines:
  * @text_view: a #GtkTextView
  * 
- * Gets the value set by gtk_text_view_set_pixels_below_lines().
+ * Gets the value set by gtk_text_view_set_pixels_below_lines() in pixels.
+ * To preserve the units use gtk_text_view_get_pixels_below_lines_unit().
  * 
  * Return value: default number of blank pixels below paragraphs
  **/
@@ -2464,10 +2481,15 @@ gtk_text_view_get_pixels_below_lines (GtkTextView *text_view)
  * @text_view: a #GtkTextView
  * 
  * Like gtk_text_view_get_pixels_below_lines() but preserves the unit.
+ *
+ * <note>
+ * Although the method mentions pixels, this is simply for API compatibility.
+ * The measurement is actually a #GtkSize.
+ * </note>
  * 
  * Return value: default number of blank pixels below paragraphs
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_text_view_get_pixels_below_lines_unit (GtkTextView *text_view)
@@ -2480,11 +2502,16 @@ gtk_text_view_get_pixels_below_lines_unit (GtkTextView *text_view)
 /**
  * gtk_text_view_set_pixels_inside_wrap:
  * @text_view: a #GtkTextView
- * @pixels_inside_wrap: default number of pixels between wrapped lines
+ * @pixels_inside_wrap: default padding between wrapped lines
  *
- * Sets the default number of pixels of blank space to leave between
+ * Sets the default padding of blank space to leave between
  * display/wrapped lines within a paragraph. May be overridden by
  * tags in @text_view's buffer.
+ *
+ * <note>
+ * Although the method mentions pixels, this is simply for API compatibility.
+ * The measurement is actually a #GtkSize.
+ * </note>
  **/
 void
 gtk_text_view_set_pixels_inside_wrap (GtkTextView *text_view,
@@ -2510,7 +2537,8 @@ gtk_text_view_set_pixels_inside_wrap (GtkTextView *text_view,
  * gtk_text_view_get_pixels_inside_wrap:
  * @text_view: a #GtkTextView
  * 
- * Gets the value set by gtk_text_view_set_pixels_inside_wrap().
+ * Gets the value set by gtk_text_view_set_pixels_inside_wrap() in pixels.
+ * Use gtk_text_view_get_pixels_inside_wrap_unit() to preserve units.
  * 
  * Return value: default number of pixels of blank space between wrapped lines
  **/
@@ -2527,10 +2555,15 @@ gtk_text_view_get_pixels_inside_wrap (GtkTextView *text_view)
  * @text_view: a #GtkTextView
  * 
  * Like gtk_text_view_get_pixels_inside_wrap() but preserves the unit.
+ *
+ * <note>
+ * Although the method mentions pixels, this is simply for API compatibility.
+ * The measurement is actually a #GtkSize.
+ * </note>
  * 
  * Return value: default number of pixels of blank space between wrapped lines
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_text_view_get_pixels_inside_wrap_unit (GtkTextView *text_view)
@@ -2589,7 +2622,7 @@ gtk_text_view_get_justification (GtkTextView *text_view)
 /**
  * gtk_text_view_set_left_margin:
  * @text_view: a #GtkTextView
- * @left_margin: left margin in pixels
+ * @left_margin: left margin padding
  * 
  * Sets the default left margin for text in @text_view.
  * Tags in the buffer may override the default.
@@ -2618,8 +2651,10 @@ gtk_text_view_set_left_margin (GtkTextView *text_view,
  * gtk_text_view_get_left_margin:
  * @text_view: a #GtkTextView
  * 
- * Gets the default left margin size of paragraphs in the @text_view.
+ * Gets the default left margin size of paragraphs in the @text_view in pixels.
  * Tags in the buffer may override the default.
+ *
+ * Use gtk_text_view_get_left_margin_unit() to preserve units.
  * 
  * Return value: left margin in pixels
  **/
@@ -2639,7 +2674,7 @@ gtk_text_view_get_left_margin (GtkTextView *text_view)
  * 
  * Return value: left margin in pixels
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_text_view_get_left_margin_unit (GtkTextView *text_view)
@@ -2652,7 +2687,7 @@ gtk_text_view_get_left_margin_unit (GtkTextView *text_view)
 /**
  * gtk_text_view_set_right_margin:
  * @text_view: a #GtkTextView
- * @right_margin: right margin in pixels
+ * @right_margin: right margin padding
  *
  * Sets the default right margin for text in the text view.
  * Tags in the buffer may override the default.
@@ -2681,8 +2716,9 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
  * gtk_text_view_get_right_margin:
  * @text_view: a #GtkTextView
  * 
- * Gets the default right margin for text in @text_view. Tags
+ * Gets the default right margin for text in @text_view in pixels. Tags
  * in the buffer may override the default.
+ * Use gtk_text_view_get_right_margin_unit() to preserve units.
  * 
  * Return value: right margin in pixels
  **/
@@ -2702,7 +2738,7 @@ gtk_text_view_get_right_margin (GtkTextView *text_view)
  * 
  * Return value: right margin in pixels
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_text_view_get_right_margin_unit (GtkTextView *text_view)
@@ -2715,7 +2751,7 @@ gtk_text_view_get_right_margin_unit (GtkTextView *text_view)
 /**
  * gtk_text_view_set_indent:
  * @text_view: a #GtkTextView
- * @indent: indentation in pixels
+ * @indent: indentation
  *
  * Sets the default indentation for paragraphs in @text_view.
  * Tags in the buffer may override the default.
@@ -2744,9 +2780,10 @@ gtk_text_view_set_indent (GtkTextView *text_view,
  * gtk_text_view_get_indent:
  * @text_view: a #GtkTextView
  * 
- * Gets the default indentation of paragraphs in @text_view.
+ * Gets the default indentation of paragraphs in @text_view in pixels.
  * Tags in the view's buffer may override the default.
  * The indentation may be negative.
+ * Use gtk_text_view_get_indent_unit() to preserve units.
  * 
  * Return value: number of pixels of indentation
  **/
@@ -2766,7 +2803,7 @@ gtk_text_view_get_indent (GtkTextView *text_view)
  * 
  * Return value: number of pixels of indentation
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_text_view_get_indent_unit (GtkTextView *text_view)

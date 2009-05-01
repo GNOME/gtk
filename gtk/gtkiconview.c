@@ -6033,7 +6033,8 @@ gtk_icon_view_set_item_width (GtkIconView *icon_view,
  * gtk_icon_view_get_item_width:
  * @icon_view: a #GtkIconView
  * 
- * Returns the value of the ::item-width property.
+ * Returns the value of the ::item-width property in pixels. To preserve
+ * the units use gtk_icon_view_get_item_width_unit().
  * 
  * Return value: the width of a single item, or -1
  *
@@ -6055,7 +6056,7 @@ gtk_icon_view_get_item_width (GtkIconView *icon_view)
  * 
  * Return value: the width_unit of a single item, or -1
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 GtkSize
 gtk_icon_view_get_item_width_unit (GtkIconView *icon_view)
@@ -6099,7 +6100,8 @@ gtk_icon_view_set_spacing (GtkIconView *icon_view,
  * gtk_icon_view_get_spacing:
  * @icon_view: a #GtkIconView
  * 
- * Returns the value of the ::spacing property.
+ * Returns the value of the ::spacing property in pixels. To preserve the units
+ * use gtk_icon_view_get_spacing_unit().
  * 
  * Return value: the space between cells 
  *
@@ -6121,7 +6123,7 @@ gtk_icon_view_get_spacing (GtkIconView *icon_view)
  * 
  * Return value: the space between cells 
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 GtkSize
 gtk_icon_view_get_spacing_unit (GtkIconView *icon_view)
@@ -6163,7 +6165,8 @@ gtk_icon_view_set_row_spacing (GtkIconView *icon_view,
  * gtk_icon_view_get_row_spacing:
  * @icon_view: a #GtkIconView
  * 
- * Returns the value of the ::row-spacing property.
+ * Returns the value of the ::row-spacing property in pixels. To preserve the
+ * units use gtk_icon_view_get_row_spacing_unit().
  * 
  * Return value: the space between rows
  *
@@ -6185,7 +6188,7 @@ gtk_icon_view_get_row_spacing (GtkIconView *icon_view)
  * 
  * Return value: the space between rows
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 GtkSize
 gtk_icon_view_get_row_spacing_unit (GtkIconView *icon_view)
@@ -6227,7 +6230,8 @@ gtk_icon_view_set_column_spacing (GtkIconView *icon_view,
  * gtk_icon_view_get_column_spacing:
  * @icon_view: a #GtkIconView
  * 
- * Returns the value of the ::column-spacing property.
+ * Returns the value of the ::column-spacing property in pixels. To preserve
+ * the units use gtk_icon_view_get_column_spacing_unit().
  * 
  * Return value: the space between columns
  *
@@ -6249,7 +6253,7 @@ gtk_icon_view_get_column_spacing (GtkIconView *icon_view)
  * 
  * Return value: the space between columns
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 GtkSize
 gtk_icon_view_get_column_spacing_unit (GtkIconView *icon_view)
@@ -6292,7 +6296,8 @@ gtk_icon_view_set_margin (GtkIconView *icon_view,
  * gtk_icon_view_get_margin:
  * @icon_view: a #GtkIconView
  * 
- * Returns the value of the ::margin property.
+ * Returns the value of the ::margin property in pixels. To preserve the units
+ * use gtk_icon_view_get_margin_unit().
  * 
  * Return value: the space at the borders 
  *
@@ -6314,7 +6319,7 @@ gtk_icon_view_get_margin (GtkIconView *icon_view)
  * 
  * Return value: the space at the borders 
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 GtkSize
 gtk_icon_view_get_margin_unit (GtkIconView *icon_view)

@@ -494,6 +494,9 @@ set_cell_bg_color (GtkCellRenderer *cell,
  *
  * Please note that the values set in @width and @height, as well as those 
  * in @x_offset and @y_offset are inclusive of the xpad and ypad properties.
+ *
+ * Returns values in pixels. To preserve the units use
+ * gtk_cell_renderer_get_size_unit().
  **/
 void
 gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
@@ -546,7 +549,7 @@ gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
  *
  * Like gtk_cell_renderer_get_size() but preserves the units.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 void
 gtk_cell_renderer_get_size_unit (GtkCellRenderer    *cell,
@@ -777,6 +780,9 @@ gtk_cell_renderer_set_fixed_size (GtkCellRenderer *cell,
  * @height: location to fill in with the fixed height of the widget, or %NULL
  * 
  * Fills in @width and @height with the appropriate size of @cell.
+ *
+ * Returns values in pixels. To preserve the units use
+ * gtk_cell_renderer_get_fixed_size_unit().
  **/
 void
 gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
@@ -799,7 +805,7 @@ gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
  * 
  * Like gtk_cell_renderer_get_fixed_size_unit() but preserves the unit information.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 void
 gtk_cell_renderer_get_fixed_size_unit (GtkCellRenderer *cell,
@@ -884,7 +890,7 @@ _gtk_cell_renderer_set_tree_view_column (GtkCellRenderer *cell,
  * Returns: the #GtkTreeViewColumn that @cell has been inserted into,
  * %NULL otherwise
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkTreeViewColumn *
 gtk_cell_renderer_get_tree_view_column (GtkCellRenderer *cell)
@@ -909,7 +915,7 @@ gtk_cell_renderer_get_tree_view_column (GtkCellRenderer *cell)
  *
  * Returns: a #GtkTreeView
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 GtkWidget *
 gtk_cell_renderer_get_tree_view (GtkCellRenderer *cell)

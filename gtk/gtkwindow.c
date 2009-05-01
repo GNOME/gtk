@@ -792,7 +792,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * The monitor number for which the largest area of the window
    * resides. -1 if window is not realized.
    *
-   * Since: 2.14
+   * Since: RIMERGE
    */
   g_object_class_install_property (gobject_class,
 				   PROP_MONITOR_NUM,
@@ -8594,7 +8594,7 @@ gtk_window_set_default_icon_from_file (const gchar *filename,
  *
  * Returns: the monitor number
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 gint
 gtk_window_get_monitor_num (GtkWindow *window)

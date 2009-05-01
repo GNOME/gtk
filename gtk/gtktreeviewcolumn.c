@@ -1711,7 +1711,8 @@ gtk_tree_view_column_set_spacing (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_get_spacing:
  * @tree_column: A #GtkTreeViewColumn.
  * 
- * Returns the spacing of @tree_column.
+ * Returns the spacing of @tree_column in pixels. To preserve the units
+ * use gtk_tree_view_column_get_spacing_unit().
  * 
  * Return value: the spacing of @tree_column.
  **/
@@ -1731,7 +1732,7 @@ gtk_tree_view_column_get_spacing (GtkTreeViewColumn *tree_column)
  * 
  * Return value: the spacing of @tree_column.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_tree_view_column_get_spacing_unit (GtkTreeViewColumn *tree_column)
@@ -1938,8 +1939,10 @@ gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_get_fixed_width:
  * @tree_column: a #GtkTreeViewColumn
  * 
- * Gets the fixed width of the column.  This value is only meaning may not be
+ * Gets the fixed width of the column in pixels.  This value may not be
  * the actual width of the column on the screen, just what is requested.
+ *
+ * To preserve the units use gtk_tree_view_column_get_fixed_width_unit().
  * 
  * Return value: the fixed width of the column
  **/
@@ -1959,7 +1962,7 @@ gtk_tree_view_column_get_fixed_width (GtkTreeViewColumn *tree_column)
  * 
  * Return value: the fixed width of the column
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_tree_view_column_get_fixed_width_unit (GtkTreeViewColumn *tree_column)
@@ -2016,6 +2019,8 @@ gtk_tree_view_column_set_min_width (GtkTreeViewColumn *tree_column,
  * 
  * Returns the minimum width in pixels of the @tree_column, or -1 if no minimum
  * width is set.
+ *
+ * To preserve the units use gtk_tree_view_column_get_min_width_unit().
  * 
  * Return value: The minimum width of the @tree_column.
  **/
@@ -2035,7 +2040,7 @@ gtk_tree_view_column_get_min_width (GtkTreeViewColumn *tree_column)
  * 
  * Return value: The minimum width of the @tree_column.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_tree_view_column_get_min_width_unit (GtkTreeViewColumn *tree_column)
@@ -2094,6 +2099,8 @@ gtk_tree_view_column_set_max_width (GtkTreeViewColumn *tree_column,
  * 
  * Returns the maximum width in pixels of the @tree_column, or -1 if no maximum
  * width is set.
+ *
+ * To preserve the units use gtk_tree_view_column_get_max_width_unit()
  * 
  * Return value: The maximum width of the @tree_column.
  **/
@@ -2113,7 +2120,7 @@ gtk_tree_view_column_get_max_width (GtkTreeViewColumn *tree_column)
  * 
  * Return value: The maximum width of the @tree_column.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_tree_view_column_get_max_width_unit (GtkTreeViewColumn *tree_column)

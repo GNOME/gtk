@@ -567,7 +567,7 @@ screen_settings_get_pixel_conversion_factors (GdkScreen *screen,
  * need to enable it by default by calling this function before
  * invoking gtk_init().
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 void
 gtk_enable_resolution_independence (void)
@@ -603,7 +603,7 @@ gtk_size_get_unit (GtkSize size)
  *
  * Returns: a #GtkSize
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 GtkSize
 gtk_size_em (gdouble em)
@@ -631,7 +631,7 @@ gtk_size_em (gdouble em)
  *
  * Returns: a #GtkSize
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_size_mm (gdouble mm)
@@ -658,7 +658,7 @@ gtk_size_mm (gdouble mm)
  *
  * Returns: a #gdouble
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 gdouble
 gtk_size_get_em (GtkSize size)
@@ -679,7 +679,7 @@ gtk_size_get_em (GtkSize size)
  *
  * Returns: a #gdouble
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 gdouble
 gtk_size_get_mm (GtkSize size)
@@ -718,7 +718,7 @@ get_pixel_conversion_factors (GdkScreen *screen,
  *
  * Returns: @size converted to pixel value
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 gint
 gtk_size_to_pixel (GdkScreen *screen,
@@ -740,7 +740,7 @@ gtk_size_to_pixel (GdkScreen *screen,
  *
  * Returns: @size converted to pixel value
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 gdouble
 gtk_size_to_pixel_double (GdkScreen *screen,
@@ -796,7 +796,7 @@ gtk_size_to_pixel_double (GdkScreen *screen,
  *
  * Returns: the textual representation of @size - free with g_free().
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 gchar *
 gtk_size_to_string (GtkSize size)
@@ -901,7 +901,7 @@ gtk_param_size_get_type (void)
  *
  * Returns: a newly created parameter specification
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GParamSpec *
 gtk_param_spec_size (const gchar *name,
@@ -935,7 +935,7 @@ gtk_param_spec_size (const gchar *name,
  * @v_size, the contents will be converted to pixel values using
  * gtk_widget_size_to_pixel() on @widget.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 void
 gtk_value_set_size (GValue    *value,
@@ -957,7 +957,7 @@ gtk_value_set_size (GValue    *value,
  *
  * Returns: a #GtkSize
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_value_get_size (const GValue *value)
@@ -973,7 +973,7 @@ gtk_value_get_size (const GValue *value)
  * Specify that conversion to pixel values should be skipped in
  * gtk_value_set_size().
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 void
 gtk_value_size_skip_conversion (GValue *value)
@@ -1053,7 +1053,7 @@ gtk_param_usize_get_type (void)
  *
  * Returns: a newly created parameter specification
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GParamSpec *
 gtk_param_spec_usize (const gchar *name,
@@ -1087,7 +1087,7 @@ gtk_param_spec_usize (const gchar *name,
  * @v_size, the contents will be converted to pixel values using
  * gtk_widget_size_to_pixel() on @widget.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 void
 gtk_value_set_usize (GValue    *value,
@@ -1109,7 +1109,7 @@ gtk_value_set_usize (GValue    *value,
  *
  * Returns: a #GtkUSize
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkUSize
 gtk_value_get_usize (const GValue *value)
@@ -1125,7 +1125,7 @@ gtk_value_get_usize (const GValue *value)
  * Specify that conversion to pixel values should be skipped in
  * gtk_value_set_usize().
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 void
 gtk_value_usize_skip_conversion (GValue *value)

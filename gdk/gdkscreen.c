@@ -436,7 +436,7 @@ gdk_screen_set_font_options (GdkScreen                  *screen,
  *
  * Like gdk_screen_set_font_options() but per monitor.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 void
 gdk_screen_set_font_options_for_monitor (GdkScreen                  *screen,
@@ -476,7 +476,7 @@ gdk_screen_get_font_options (GdkScreen *screen)
  * Return value: the current font options, or %NULL if no default
  *  font options have been set.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 const cairo_font_options_t *
 gdk_screen_get_font_options_for_monitor (GdkScreen *screen,
@@ -546,7 +546,7 @@ gdk_screen_get_resolution (GdkScreen *screen)
  * Returns: the current resolution or -1 if no resolution has been
  * set.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 gdouble
 gdk_screen_get_resolution_for_monitor (GdkScreen *screen,
@@ -569,7 +569,7 @@ gdk_screen_get_resolution_for_monitor (GdkScreen *screen,
  *
  * Like gdk_screen_set_resolution() but per monitor.
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 void
 gdk_screen_set_resolution_for_monitor (GdkScreen *screen,

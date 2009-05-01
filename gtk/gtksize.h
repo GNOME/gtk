@@ -38,7 +38,7 @@ G_BEGIN_DECLS
  * (see gtk_enable_resolution_independence()). As such, a #GtkSize
  * cannot e.g. be stored on disk or passed to other processes.
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 typedef gint GtkSize;
 
@@ -47,7 +47,7 @@ typedef gint GtkSize;
  *
  * Like #GtkSize but for unsigned sizes.
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 typedef guint GtkUSize;
 
@@ -60,7 +60,7 @@ typedef guint GtkUSize;
  * The unit used to interpret the value stored in #GtkSize or
  * #GtkUSize. Use gtk_size_get_unit().
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 typedef enum
 {
@@ -76,7 +76,7 @@ typedef enum
  * units instead of pixel sizes, use this constant instead of G_MAXINT
  * when needing to specify a huge default for a bounded value.
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 #define GTK_SIZE_MAXPIXEL ((1<<28) - 1)
 
@@ -87,7 +87,7 @@ typedef enum
  * units instead of pixel sizes, use this constant instead of G_MININT
  * when needing to specify a small default for a bounded value.
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 #define GTK_SIZE_MINPIXEL (-GTK_SIZE_MAXPIXEL)
 
@@ -111,7 +111,7 @@ gchar      *gtk_size_to_string       (GtkSize      size);
  *
  * Error codes returned by size/unit parsing.
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 typedef enum
 {
@@ -131,7 +131,7 @@ void gtk_enable_resolution_independence (void);
  * Convenience macro returning @value / 12 em's in a #GtkSize. See
  * gtk_unit_em() for details.
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 #define GTK_SIZE_ONE_TWELFTH_EM(value) gtk_size_em((value)/12.0)
 

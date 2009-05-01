@@ -1069,7 +1069,7 @@ _gtk_box_get_spacing_set (GtkBox *box)
  * 
  * Return value: spacing between children
  *
- * Since: 2.14
+ * Since: RIMERGE
  **/
 GtkSize
 gtk_box_get_spacing_unit (GtkBox *box)
@@ -1205,7 +1205,7 @@ gtk_box_query_child_packing (GtkBox      *box,
  * 
  * Like gtk_box_query_child_packing_unit() but preserves units.
  *
- * Since: 2.14
+ * Since: RIMERGE
  */
 void
 gtk_box_query_child_packing_unit (GtkBox      *box,
