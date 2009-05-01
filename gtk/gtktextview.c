@@ -2362,7 +2362,7 @@ gtk_text_view_get_editable (GtkTextView *text_view)
  **/
 void
 gtk_text_view_set_pixels_above_lines (GtkTextView *text_view,
-                                      gint         pixels_above_lines)
+                                      GtkSize      pixels_above_lines)
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
@@ -2425,7 +2425,7 @@ gtk_text_view_get_pixels_above_lines_unit (GtkTextView *text_view)
  **/
 void
 gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
-                                      gint         pixels_below_lines)
+                                      GtkSize      pixels_below_lines)
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
@@ -2488,7 +2488,7 @@ gtk_text_view_get_pixels_below_lines_unit (GtkTextView *text_view)
  **/
 void
 gtk_text_view_set_pixels_inside_wrap (GtkTextView *text_view,
-                                      gint         pixels_inside_wrap)
+                                      GtkSize      pixels_inside_wrap)
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
@@ -2722,7 +2722,7 @@ gtk_text_view_get_right_margin_unit (GtkTextView *text_view)
  **/
 void
 gtk_text_view_set_indent (GtkTextView *text_view,
-                          gint         indent)
+                          GtkSize      indent)
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
