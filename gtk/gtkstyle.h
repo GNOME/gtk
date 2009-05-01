@@ -875,6 +875,18 @@ void gtk_style_get                (GtkStyle    *style,
                                    GType        widget_type,
                                    const gchar *first_property_name,
                                    ...) G_GNUC_NULL_TERMINATED;
+void gtk_style_get_style_property_unit (GtkStyle    *style,
+                                        GType        widget_type,
+                                        const gchar *property_name,
+                                        GValue      *value);
+void gtk_style_get_unit_valist         (GtkStyle    *style,
+                                        GType        widget_type,
+                                        const gchar *first_property_name,
+                                        va_list      var_args);
+void gtk_style_get_unit                (GtkStyle    *style,
+                                        GType        widget_type,
+                                        const gchar *first_property_name,
+                                        ...) G_GNUC_NULL_TERMINATED;
 
 /* --- private API --- */
 const GValue* _gtk_style_peek_property_value (GtkStyle           *style,

@@ -1751,6 +1751,12 @@ style_property_values_cmp (gconstpointer bsearch_node1,
  * Queries the value of a style property corresponding to a
  * widget class is in the given style.
  *
+ * All #GtkSize properties will be converted to pixels; use
+ * gtk_style_get_style_property_unit() to preserve the units. Be aware that unit
+ * conversions depend on the DPI of the monitor, so these conversions might
+ * be wrong. Use gtk_widget_style_get_property() or
+ * gtk_style_get_style_property_unit() followed by gtk_widget_size_to_pixel().
+ *
  * Since: 2.16
  */
 void 
@@ -1763,6 +1769,9 @@ gtk_style_get_style_property (GtkStyle     *style,
   GParamSpec *pspec;
   GtkRcPropertyParser parser;
   const GValue *peek_value;
+  GValue unit_val = { 0, };
+  GValue uunit_val = { 0, };
+  const GValue *value_to_use;
 
   klass = g_type_class_peek (widget_type);
   pspec = gtk_widget_class_find_style_property (klass, property_name);
@@ -1781,10 +1790,29 @@ gtk_style_get_style_property (GtkStyle     *style,
 
   peek_value = _gtk_style_peek_property_value (style, widget_type, pspec, parser);
 
+  if (GTK_IS_PARAM_SPEC_SIZE (pspec))
+    {
+      g_value_init (&unit_val, G_TYPE_INT);
+      gtk_value_set_size (&unit_val, gtk_widget_size_to_pixel (NULL,
+                              g_value_get_int (peek_value)), NULL);
+      value_to_use = &unit_val;
+    }
+  else if (GTK_IS_PARAM_SPEC_USIZE (pspec))
+    {
+      g_value_init (&uunit_val, G_TYPE_UINT);
+      gtk_value_set_size (&uunit_val, gtk_widget_size_to_pixel (NULL,
+                              g_value_get_int (peek_value)), NULL);
+      value_to_use = &uunit_val;
+    }
+  else
+    {
+      value_to_use = peek_value;
+    }
+
   if (G_VALUE_TYPE (value) == G_PARAM_SPEC_VALUE_TYPE (pspec))
-    g_value_copy (peek_value, value);
+    g_value_copy (value_to_use, value);
   else if (g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
-    g_value_transform (peek_value, value);
+    g_value_transform (value_to_use, value);
   else
     g_warning ("can't retrieve style property `%s' of type `%s' as value of type `%s'",
                pspec->name,
@@ -1803,6 +1831,12 @@ gtk_style_get_style_property (GtkStyle     *style,
  *
  * Non-vararg variant of gtk_style_get().
  * Used primarily by language bindings.
+ *
+ * All #GtkSize properties will be converted to pixels; use
+ * gtk_style_get_unit_valist() to preserve the units. Be aware that unit
+ * conversions depend on the DPI of the monitor, so these conversions might
+ * be wrong. Use gtk_widget_style_get_valist() or gtk_style_get_unit_valist()
+ * followed by gtk_widget_size_to_pixel().
  *
  * Since: 2.16
  */
@@ -1842,7 +1876,25 @@ gtk_style_get_valist (GtkStyle    *style,
                                        g_quark_from_static_string ("gtk-rc-property-parser"));
 
       peek_value = _gtk_style_peek_property_value (style, widget_type, pspec, parser);
-      G_VALUE_LCOPY (peek_value, var_args, 0, &error);
+      if (GTK_IS_PARAM_SPEC_SIZE (pspec))
+        {
+          GValue unit_val = { 0, };
+          g_value_init (&unit_val, G_TYPE_INT);
+          gtk_value_set_size (&unit_val, g_value_get_int (peek_value), NULL);
+          G_VALUE_LCOPY (&unit_val, var_args, 0, &error);
+        }
+      else if (GTK_IS_PARAM_SPEC_USIZE (pspec))
+        {
+          GValue uunit_val = { 0, };
+          g_value_init (&uunit_val, G_TYPE_UINT);
+          gtk_value_set_size (&uunit_val, g_value_get_int (peek_value), NULL);
+          G_VALUE_LCOPY (&uunit_val, var_args, 0, &error);
+        }
+      else
+        {
+          G_VALUE_LCOPY (peek_value, var_args, 0, &error);
+        }
+
       if (error)
         {
           g_warning ("%s: %s", G_STRLOC, error);
@@ -1867,6 +1919,12 @@ gtk_style_get_valist (GtkStyle    *style,
  *
  * Gets the values of a multiple style properties for @widget_type
  * from @style.
+ *
+ * All #GtkSize properties will be converted to pixels; use
+ * gtk_style_get_unit() to preserve the units. Be aware that unit conversions
+ * depend on the DPI of the monitor, so these conversions might be wrong.
+ * Use gtk_widget_style_get() or gtk_style_get_unit() followed by
+ * gtk_widget_size_to_pixel().
  *
  * Since: 2.16
  */
@@ -1963,6 +2021,153 @@ _gtk_style_peek_property_value (GtkStyle           *style,
     g_param_value_set_default (pspec, &pcache->value);
 
   return &pcache->value;
+}
+
+/**
+ * gtk_style_get_style_property_unit:
+ * @style: a #GtkStyle
+ * @widget_type: the #GType of a descendant of #GtkWidget
+ * @property_name: the name of the style property to get
+ * @value: a #GValue where the value of the property being
+ *     queried will be stored
+ *
+ * Queries the value of a style property corresponding to a
+ * widget class is in the given style.
+ *
+ * Since: RIMERGE
+ */
+void
+gtk_style_get_style_property_unit (GtkStyle     *style,
+                                   GType        widget_type,
+                                   const gchar *property_name,
+                                   GValue      *value)
+{
+  GtkWidgetClass *klass;
+  GParamSpec *pspec;
+  GtkRcPropertyParser parser;
+  const GValue *peek_value;
+  GValue unit_val = { 0, };
+  GValue uunit_val = { 0, };
+  const GValue *value_to_use;
+
+  klass = g_type_class_peek (widget_type);
+  pspec = gtk_widget_class_find_style_property (klass, property_name);
+
+  if (!pspec)
+    {
+      g_warning ("%s: widget class `%s' has no property named `%s'",
+                 G_STRLOC,
+                 g_type_name (widget_type),
+                 property_name);
+      return;
+    }
+
+  parser = g_param_spec_get_qdata (pspec,
+                                   g_quark_from_static_string ("gtk-rc-property-parser"));
+
+  peek_value = _gtk_style_peek_property_value (style, widget_type, pspec, parser);
+
+  if (G_VALUE_TYPE (value) == G_PARAM_SPEC_VALUE_TYPE (pspec))
+    g_value_copy (value_to_use, value);
+  else if (g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
+    g_value_transform (value_to_use, value);
+  else
+    g_warning ("can't retrieve style property `%s' of type `%s' as value of type `%s'",
+               pspec->name,
+               g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+               G_VALUE_TYPE_NAME (value));
+}
+
+/**
+ * gtk_style_get_unit_valist:
+ * @style: a #GtkStyle
+ * @widget_type: the #GType of a descendant of #GtkWidget
+ * @first_property_name: the name of the first style property to get
+ * @var_args: a <type>va_list</type> of pairs of property names and
+ *     locations to return the property values, starting with the
+ *     location for @first_property_name.
+ *
+ * Non-vararg variant of gtk_style_get().
+ * Used primarily by language bindings.
+ *
+ * Since: RIMERGE
+ */
+void
+gtk_style_get_unit_valist (GtkStyle    *style,
+                           GType        widget_type,
+                           const gchar *first_property_name,
+                           va_list      var_args)
+{
+  const char *property_name;
+  GtkWidgetClass *klass;
+
+  g_return_if_fail (GTK_IS_STYLE (style));
+
+  klass = g_type_class_ref (widget_type);
+
+  property_name = first_property_name;
+  while (property_name)
+    {
+      GParamSpec *pspec;
+      GtkRcPropertyParser parser;
+      const GValue *peek_value;
+      gchar *error;
+
+      pspec = gtk_widget_class_find_style_property (klass, property_name);
+
+      if (!pspec)
+        {
+          g_warning ("%s: widget class `%s' has no property named `%s'",
+                     G_STRLOC,
+                     g_type_name (widget_type),
+                     property_name);
+          break;
+        }
+
+      parser = g_param_spec_get_qdata (pspec,
+                                       g_quark_from_static_string ("gtk-rc-property-parser"));
+
+      peek_value = _gtk_style_peek_property_value (style, widget_type, pspec, parser);
+      G_VALUE_LCOPY (peek_value, var_args, 0, &error);
+
+      if (error)
+        {
+          g_warning ("%s: %s", G_STRLOC, error);
+          g_free (error);
+          break;
+        }
+
+      property_name = va_arg (var_args, gchar*);
+    }
+
+  g_type_class_unref (klass);
+}
+
+/**
+ * gtk_style_get_unit:
+ * @style: a #GtkStyle
+ * @widget_type: the #GType of a descendant of #GtkWidget
+ * @first_property_name: the name of the first style property to get
+ * @Varargs: pairs of property names and locations to
+ *   return the property values, starting with the location for
+ *   @first_property_name, terminated by %NULL.
+ *
+ * Gets the values of a multiple style properties for @widget_type
+ * from @style.
+ *
+ * Since: RIMERGE
+ */
+void
+gtk_style_get_unit (GtkStyle    *style,
+                    GType        widget_type,
+                    const gchar *first_property_name,
+                    ...)
+{
+  va_list var_args;
+
+  va_start (var_args, first_property_name);
+  gtk_style_get_unit_valist (style, widget_type, first_property_name, var_args);
+  va_end (var_args);
 }
 
 static GdkPixmap *
