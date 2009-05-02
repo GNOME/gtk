@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
 "POT-Creation-Date: 2009-04-26 13:42+0000\n"
-"PO-Revision-Date: 2009-04-28 01:32+0300\n"
+"PO-Revision-Date: 2009-04-29 08:13+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -261,7 +261,7 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"Pildilaadimismoodul '%s' ei väljasta korralikku liidest; võib-olla on "
+"Pildilaadimismoodul '%s' ei väljasta korralikku liidest. Võib-olla on "
 "tegemist erinevate GTK versioonidega?"
 
 #, c-format
@@ -490,7 +490,7 @@ msgid "Image type currently not supported"
 msgstr "Pilditüüp pole hetkel toetatud"
 
 msgid "Couldn't allocate memory for color profile"
-msgstr "Värviprifiilile pole võimalik mälu eraldada"
+msgstr "Värviprofiilile pole võimalik mälu eraldada"
 
 msgid "Insufficient memory to open JPEG 2000 file"
 msgstr "JPEG 2000 faili avamiseks pole piisavalt mälu"
@@ -514,7 +514,7 @@ msgstr ""
 
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
-msgstr "Toetamata JPEG värvituum (%s)"
+msgstr "Toetamata JPEG värviruum (%s)"
 
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG-faili laadimiseks pole võimalik mälu eraldada"
@@ -702,7 +702,7 @@ msgid "Not enough memory to load RAS image"
 msgstr "RAS-pildi laadimiseks pole piisavalt mälu"
 
 msgid "The Sun raster image format"
-msgstr "Sun rastripildivorming"
+msgstr "Sun'i rasterpildivorming"
 
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "IOBuffer struktuuri jaoks pole võimalik mälu eraldada"
@@ -795,7 +795,7 @@ msgid "Not enough memory to load image"
 msgstr "Pildi laadimiseks pole piisavalt mälu"
 
 msgid "Couldn't save the rest"
-msgstr "Ülejäänud pole võimalik salvestada"
+msgstr "Ülejäänut pole võimalik salvestada"
 
 msgid "The WBMP image format"
 msgstr "WBMP-pildivorming"
@@ -825,7 +825,7 @@ msgid "XPM file has image height <= 0"
 msgstr "XPM-failil on pildi kõrgus <= 0 "
 
 msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM sisaldab vigast \"sümboleid piksli kohta\" numbrit"
+msgstr "XPM sisaldab vigast \"sümboleid piksli kohta\" arvu"
 
 msgid "XPM file has invalid number of colors"
 msgstr "XPM-fail sisaldab vigast värvide arvu"
@@ -878,7 +878,7 @@ msgstr "WMF-pildivorming"
 
 #. Description of --sync in --help output
 msgid "Don't batch GDI requests"
-msgstr "Ära kuhja GDI päringuid"
+msgstr "GDI päringuid ei kuhjata"
 
 #. Description of --no-wintab in --help output
 msgid "Don't use the Wintab API for tablet support"
@@ -890,11 +890,11 @@ msgstr "Sama mis --no-wintab"
 
 #. Description of --use-wintab in --help output
 msgid "Do use the Wintab API [default]"
-msgstr "Ära kasuta Wintab API-t [vaikimisi]"
+msgstr "Wintab API-t ei kasutata [vaikimisi]"
 
 #. Description of --max-colors=COLORS in --help output
 msgid "Size of the palette in 8 bit mode"
-msgstr "Paleti suurus 8-bitises resiimis"
+msgstr "Paleti suurus 8-bitises režiimis"
 
 #. Placeholder in --max-colors=COLORS in --help output
 msgid "COLORS"
@@ -1019,7 +1019,7 @@ msgstr "Backslash"
 
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
-msgstr "Vigane liigi funktsioon real %d: '%s'"
+msgstr "Vigast liiki funktsioon real %d: '%s'"
 
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
@@ -1137,7 +1137,7 @@ msgid "Pick a Color"
 msgstr "Värvuse valimine"
 
 msgid "Received invalid color data\n"
-msgstr "Võesti vastu vigased värviandmed\n"
+msgstr "Võeti vastu vigased värviandmed\n"
 
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
@@ -1151,7 +1151,7 @@ msgid ""
 "that color."
 msgstr ""
 "Pipeti abil on võimalik valida värvi ekraani suvalisest punktist. Klõpsa "
-"pipetil ja siis klõpsa soovitud värvil."
+"pipetil ja siis klõpsa soovitud värvi pikslil."
 
 msgid "_Hue:"
 msgstr "_Toon:"
@@ -1203,7 +1203,7 @@ msgid ""
 "such as 'orange' in this entry."
 msgstr ""
 "Siia võid sisestada HTML-stiilis kuueteistkümnendarvuna värvi väärtuse, või "
-"värvi inglisekeelse nimetuse (näiteks 'orange')."
+"värvi ingliskeelse nimetuse (näiteks 'orange')."
 
 msgid "_Palette:"
 msgstr "Pal_ett:"
@@ -1426,7 +1426,7 @@ msgid ""
 "Please make sure it is running."
 msgstr ""
 "Programmil pole võimalik indekseerimisdeemoniga ühendust luua. Palun veendu, "
-"et see deemon töötaks."
+"et see deemon töötab."
 
 msgid "Could not send the search request"
 msgstr "Otsingupäringut pole võimalik saata"
@@ -1595,7 +1595,7 @@ msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
-"Failinime \"%s\" pole võimalik UTF-8sse teisendada (proovi keskkonnamuutuja "
+"Failinime \"%s\" pole võimalik UTF-8'sse teisendada (proovi keskkonnamuutuja "
 "G_FILENAME_ENCODING seadmist): %s"
 
 msgid "Invalid UTF-8"
@@ -1735,10 +1735,10 @@ msgid "_Pressure:"
 msgstr "Su_rve:"
 
 msgid "X _tilt:"
-msgstr "X _kalle:"
+msgstr "X-_kalle:"
 
 msgid "Y t_ilt:"
-msgstr "Y k_alle:"
+msgstr "Y-k_alle:"
 
 msgid "_Wheel:"
 msgstr "_Ratas:"
@@ -1952,7 +1952,7 @@ msgstr "Salvestada _kataloogi:"
 #.
 #, c-format
 msgid "%s job #%d"
-msgstr "Rakenduse %s printimistöö #%d"
+msgstr "Rakenduse %s printimistöö %d"
 
 msgctxt "print operation status"
 msgid "Initial state"
@@ -2169,7 +2169,7 @@ msgid "_Billing info:"
 msgstr "_Maksmise andmed:"
 
 msgid "Print Document"
-msgstr "Dokumenti printimine"
+msgstr "Dokumendi printimine"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
@@ -2294,7 +2294,7 @@ msgstr "Kirjeid ei leitud"
 
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr "URI-ga `%s' ei leitud viimati kasutatud ressurssi"
+msgstr "URI-ga '%s' ei leitud viimati kasutatud ressurssi"
 
 #, c-format
 msgid "Open '%s'"
@@ -2323,7 +2323,7 @@ msgstr "%d. %s"
 
 #, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "URI-ga `%s' pole võimalik leida ühtegi kirjet"
+msgstr "URI-ga '%s' pole võimalik leida ühtegi kirjet"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 msgctxt "Stock label"
@@ -2745,7 +2745,7 @@ msgstr "<%s> kirjes leidub nii \"id\" kui ka \"name\""
 
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr "\"%s\" rekvisiiti on <%s> kirjes kaks korda"
+msgstr "\"%s\" atribuut esineb <%s> kirjes kaks korda"
 
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
@@ -2753,15 +2753,15 @@ msgstr "<%s> kirjel on vigane id \"%s\""
 
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr "<%s> kirjel puuduvad nii \"name\" kui ka \"id\" rekvisiidid"
+msgstr "<%s> kirjel puuduvad nii \"name\" kui ka \"id\" atribuudid"
 
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr "Rekvisiiti \"%s\" korratakse kaks korda samas <%s> kirjes"
+msgstr "Atribuuti \"%s\" korratakse kaks korda samas <%s> kirjes"
 
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr "Rekvisiit \"%s\" on selle konteksti korral <%s> kirjes vigane"
+msgstr "Atribuut \"%s\" on selle konteksti korral <%s> kirjes vigane"
 
 #, c-format
 msgid "Tag \"%s\" has not been defined."
@@ -2780,22 +2780,22 @@ msgstr "Element <%s> pole <%s> sees lubatud"
 
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr "\"%s\" pole rekvisiidi liigiks lubatud"
+msgstr "\"%s\" pole atribuudi liigiks lubatud"
 
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr "\"%s\" pole rekvisiidi väärtuseks lubatud"
+msgstr "\"%s\" pole atribuudi väärtuseks lubatud"
 
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"Väärtust \"%1$s\" pole võimalik rekvisiidi \"%3$s\" jaoks \"%2$s\"-"
+"Väärtust \"%1$s\" pole võimalik atribuudi \"%3$s\" jaoks \"%2$s\"-"
 "tüübiliseks väärtuseks teisendada"
 
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr "\"%s\" pole rekvisiidile \"%s\" sobilik väärtus"
+msgstr "\"%s\" pole atribuudile \"%s\" sobilik väärtus"
 
 #, c-format
 msgid "Tag \"%s\" already defined"
@@ -2874,7 +2874,7 @@ msgid "Empty"
 msgstr "Tühi"
 
 msgid "Volume"
-msgstr "Valjus:"
+msgstr "Valjus"
 
 msgid "Turns volume down or up"
 msgstr "Helivaljuse muutmine valjemaks või vaiksemaks"
@@ -2883,13 +2883,13 @@ msgid "Adjusts the volume"
 msgstr "Helivaljuse reguleerimine"
 
 msgid "Volume Down"
-msgstr "Valjemaks"
+msgstr "Vaiksemaks"
 
 msgid "Decreases the volume"
 msgstr "Helivaljuse vaiksemaks muutmine"
 
 msgid "Volume Up"
-msgstr "Vaiksemaks"
+msgstr "Valjemaks"
 
 msgid "Increases the volume"
 msgstr "Helivaljuse valjemaks muutmine"
@@ -3220,7 +3220,7 @@ msgstr "JB7"
 
 msgctxt "paper size"
 msgid "JB8"
-msgstr "c"
+msgstr "JB8"
 
 msgctxt "paper size"
 msgid "JB9"
@@ -3244,7 +3244,7 @@ msgstr "Choukei 4 ümbrik"
 
 msgctxt "paper size"
 msgid "hagaki (postcard)"
-msgstr "hagaki (postcard)"
+msgstr "hagaki (postkaart)"
 
 msgctxt "paper size"
 msgid "kahu Envelope"
@@ -3316,7 +3316,7 @@ msgstr "Arch A"
 
 msgctxt "paper size"
 msgid "Arch B"
-msgstr "c"
+msgstr "Arch B"
 
 msgctxt "paper size"
 msgid "Arch C"
@@ -3484,7 +3484,7 @@ msgstr "Foolio"
 
 msgctxt "paper size"
 msgid "Folio sp"
-msgstr "Folio sp"
+msgstr "Foolio sp"
 
 msgctxt "paper size"
 msgid "Invite Envelope"
@@ -3564,7 +3564,7 @@ msgstr "ROC 8k"
 
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr "erinevad idata andmed nimega viidatud '%s' ja '%s' jaoks\n"
+msgstr "erinevad idata andmed nimeviidaga seotud '%s' ja '%s' jaoks\n"
 
 #, c-format
 msgid "Failed to write header\n"
@@ -3639,7 +3639,7 @@ msgstr "Ikoonipuhver pole korras: %s\n"
 
 #, c-format
 msgid "No theme index file."
-msgstr "Teema indeksfail on puudu."
+msgstr "Teema indeksifail on puudu."
 
 #, c-format
 msgid ""
@@ -3730,7 +3730,7 @@ msgstr "Printerite hankimiseks %s-st on vajalik autentimine"
 
 #, c-format
 msgid "Authentication is required on %s"
-msgstr "%s jaoks on nõutud autentimine"
+msgstr "%s jaoks on vajalik autentimine"
 
 #, c-format
 msgid "Printer '%s' is low on toner."
