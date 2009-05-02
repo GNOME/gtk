@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2009-04-30 19:06+0000\n"
-"PO-Revision-Date: 2009-05-01 14:39+0200\n"
+"POT-Creation-Date: 2009-05-01 18:27+0000\n"
+"PO-Revision-Date: 2009-05-02 12:31+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -58,7 +58,7 @@ msgstr "NOMBRE"
 #. Description of --display=DISPLAY in --help output
 #: ../gdk/gdk.c:157
 msgid "X display to use"
-msgstr "Visor [display] X a usar"
+msgstr "Visor [display] X que usar"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: ../gdk/gdk.c:158
@@ -68,7 +68,7 @@ msgstr "VISOR"
 #. Description of --screen=SCREEN in --help output
 #: ../gdk/gdk.c:160
 msgid "X screen to use"
-msgstr "Pantalla [screen] X a usar"
+msgstr "Pantalla [screen] X que usar"
 
 #. Placeholder in --screen=SCREEN in --help output
 #: ../gdk/gdk.c:161
@@ -3298,7 +3298,7 @@ msgstr "Vertical invertido"
 #: ../gtk/gtkstock.c:381
 msgctxt "Stock label"
 msgid "Page Set_up"
-msgstr "_Configuración de página"
+msgstr "Config_uración de página"
 
 #: ../gtk/gtkstock.c:382
 msgctxt "Stock label"
