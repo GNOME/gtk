@@ -990,6 +990,9 @@ gtk_range_set_range (GtkRange *range,
     value = MIN (value, MAX (range->adjustment->lower,
                              range->layout->fill_level));
 
+  value = CLAMP (value, range->adjustment->lower,
+                 (range->adjustment->upper - range->adjustment->page_size));
+
   gtk_adjustment_set_value (range->adjustment, value);
   gtk_adjustment_changed (range->adjustment);
 }
@@ -1013,6 +1016,9 @@ gtk_range_set_value (GtkRange *range,
   if (range->layout->restrict_to_fill_level)
     value = MIN (value, MAX (range->adjustment->lower,
                              range->layout->fill_level));
+
+  value = CLAMP (value, range->adjustment->lower,
+                 (range->adjustment->upper - range->adjustment->page_size));
 
   gtk_adjustment_set_value (range->adjustment, value);
 }
