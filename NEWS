@@ -1,6 +1,10 @@
 Overview of Changes from GTK+ 2.16.x to 2.17.0
 ==============================================
 
+* GtkBuilder:
+  - Scale marks can now be specified in builder markup
+  - GtkAssistant action widgets can be added in builder markup
+
 * Changes that are relevant for theme authors
  - GtkEntry now has a ::invisible-char style property that allows
    themes to set the preferred invisible character
