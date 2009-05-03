@@ -8181,7 +8181,7 @@ _gtk_widget_is_pointer_widget (GtkWidget *widget)
       win = _gtk_widget_get_pointer_window (widget);
       if (win)
         {
-          gdk_window_get_user_data (win, &wid);
+          gdk_window_get_user_data (win, (gpointer *)&wid);
           if (wid == widget)
             return TRUE;
         }
@@ -9627,9 +9627,9 @@ accessibility_start_element (GMarkupParseContext  *context,
     }
   else if (strcmp (element_name, "action") == 0)
     {
-      gchar *action_name = NULL;
-      gchar *description = NULL;
-      gchar *context = NULL;
+      const gchar *action_name = NULL;
+      const gchar *description = NULL;
+      const gchar *msg_context = NULL;
       gboolean translatable = FALSE;
       AtkActionData *action;
 
@@ -9649,7 +9649,7 @@ accessibility_start_element (GMarkupParseContext  *context,
               /* do nothing, comments are for translators */
             }
           else if (strcmp (names[i], "context") == 0)
-            context = values[i];
+            msg_context = values[i];
 	  else
 	    {
 	      g_markup_parse_context_get_position (context,
@@ -9683,7 +9683,7 @@ accessibility_start_element (GMarkupParseContext  *context,
       action = g_slice_new (AtkActionData);
       action->action_name = g_strdup (action_name);
       action->description = g_string_new (description);
-      action->context = g_strdup (context);
+      action->context = g_strdup (msg_context);
       action->translatable = translatable;
 
       data->actions = g_slist_prepend (data->actions, action);
