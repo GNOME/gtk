@@ -59,6 +59,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testrgb				\
 	testrecentchooser 		\
 	testrecentchoosermenu		\
+	testri				\
 	testrichtext			\
 	testscale			\
 	testselection			\
@@ -137,6 +138,7 @@ testprint_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
 testrecentchoosermenu_DEPENDENCIES = $(TEST_DEPS)
 testrgb_DEPENDENCIES = $(TEST_DEPS)
+testri_DEPENDENCIES = $(TEST_DEPS)
 testrichtext_DEPENDENCIES = $(TEST_DEPS)
 testscale_DEPENDENCIES = $(TEST_DEPS)
 testselection_DEPENDENCIES = $(TEST_DEPS)
@@ -195,6 +197,7 @@ testprint_LDADD = $(LDADDS)
 testrecentchooser_LDADD = $(LDADDS)
 testrecentchoosermenu_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
+testri_LDADD = $(LDADDS)
 testrichtext_LDADD = $(LDADDS)
 testscale_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
@@ -270,6 +273,9 @@ testprint_SOURCES =    	\
 	testprintfileoperation.h \
 	testprintfileoperation.c
 
+testri_SOURCES = \
+	testri.c
+
 testsocket_SOURCES =    	\
 	testsocket.c		\
 	testsocket_common.c
@@ -336,6 +342,7 @@ EXTRA_DIST += 			\
 	merge-1.ui		\
 	merge-2.ui		\
 	merge-3.ui		\
+	testri.ui
 	gnome-textfile.png	\
 	makefile.msc		\
 	file-chooser-test-dir/empty \
