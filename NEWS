@@ -9,6 +9,36 @@ Overview of Changes from GTK+ 2.16.x to 2.17.0
  - GtkEntry now has a ::invisible-char style property that allows
    themes to set the preferred invisible character
 
+* Printing:
+ - GTK+ supports authentication of users against CUPS servers now.
+
+* Bugs fixed:
+ 578634 gtkdial example fails to compile
+ 580678 Minor improvement to GTK+ mediaLib code
+ 580511 gdk_x11_atom_to_xatom_for_display translates GDK_NONE...
+ 581110 Handlebox widget uses static variables, crashes in multi...
+ 553385 gtk-builder-convert creates untranslated combobox models
+ 580814 GtkTextLayout incorrectly assumes pango iterates in logi...
+ 579366 gtkbuilderparser leaks RequiresInfo objects
+ 579741 gailcombox should emit property-changed:accessible-name...
+ 574386 Remove deprecated call to gtk_status_icon_set_tooltip...
+ 384940 handle rejecting jobs and authentication meaningfully
+
+* Updated translations
+ Arabic
+ Brazilian Portuguese
+ British English
+ Catalan
+ Czech
+ Estonian
+ Italian
+ Kannada
+ Oriya
+ Simplified Chinese
+ Slovenian
+ Spanish
+ Ukrainian
+
 
 Overview of Changes from GTK+ 2.16.0 to 2.16.1
 ==============================================
