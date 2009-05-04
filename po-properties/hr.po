@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:25-0400\n"
+"POT-Creation-Date: 2009-05-04 01:14-0400\n"
 "PO-Revision-Date: 2008-05-08 00:47+0000\n"
 "Last-Translator: Robert Sedak <Unknown>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -125,117 +125,117 @@ msgstr "Izbor pisma"
 msgid "The resolution for fonts on the screen"
 msgstr "Kako se opseg ažurira na zaslonu"
 
-#: gtk/gtkaboutdialog.c:184
+#: gtk/gtkaboutdialog.c:239
 msgid "Program name"
 msgstr "Naziv programa"
 
-#: gtk/gtkaboutdialog.c:185
+#: gtk/gtkaboutdialog.c:240
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 "Ime programa. Ako nije postavljeno, pretpostavlja se g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:199
+#: gtk/gtkaboutdialog.c:254
 msgid "Program version"
 msgstr "Verzija programa"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:255
 msgid "The version of the program"
 msgstr "Verzija programa"
 
-#: gtk/gtkaboutdialog.c:214
+#: gtk/gtkaboutdialog.c:269
 msgid "Copyright string"
 msgstr "Tekst o autorskim pravima"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:270
 msgid "Copyright information for the program"
 msgstr "Informacije o autorskim pravima za program"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:287
 msgid "Comments string"
 msgstr "Komentirajući tekst"
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:288
 msgid "Comments about the program"
 msgstr "Komentari o programu"
 
-#: gtk/gtkaboutdialog.c:267
+#: gtk/gtkaboutdialog.c:322
 msgid "Website URL"
 msgstr "URL web stranice"
 
-#: gtk/gtkaboutdialog.c:268
+#: gtk/gtkaboutdialog.c:323
 msgid "The URL for the link to the website of the program"
 msgstr "URL za web programa"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:339
 msgid "Website label"
 msgstr "Naziv web-a"
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:340
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr "Naziv za link na web programa. Ako nije postavljeno, koristi se URL."
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:356
 msgid "Authors"
 msgstr "Autori"
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:357
 msgid "List of authors of the program"
 msgstr "Popis autora programa"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:373
 msgid "Documenters"
 msgstr "Pisci dokumentacije"
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:374
 msgid "List of people documenting the program"
 msgstr "Popis ljudi koji su dokumentirali program"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:390
 msgid "Artists"
 msgstr "Izvođači"
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:391
 msgid "List of people who have contributed artwork to the program"
 msgstr "Popis ljudi koji su umjetničkim dodacim doprinjeli programu"
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:408
 msgid "Translator credits"
 msgstr ""
 "lokalizacija@linux.hr: Automatski Prijevod <>,Robert Sedak <robert.sedak@sk."
 "tel.hr>; Ubuntu-hr: Ante Karamatić"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:409
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Prevoditelji"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:424
 msgid "Logo"
 msgstr "Logotip"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:425
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr "Logotip za \"O programu...\"."
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:440
 msgid "Logo Icon Name"
 msgstr "Ime ikone za logotip"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:441
 msgid "A named icon to use as the logo for the about box."
 msgstr "Imenovana ikona koja se koristi kao logo u dijalogu O programu."
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:454
 msgid "Wrap license"
 msgstr "Sažmi licencu"
 
-#: gtk/gtkaboutdialog.c:400
+#: gtk/gtkaboutdialog.c:455
 msgid "Whether to wrap the license text."
 msgstr "Sažima li se tekst licence"
 
@@ -610,70 +610,70 @@ msgstr ""
 "Primorati da se odnos dimenzija slaže sa odnosom dimenzija okvira sadržanog "
 "elementa"
 
-#: gtk/gtkassistant.c:261
+#: gtk/gtkassistant.c:281
 #, fuzzy
 msgid "Header Padding"
 msgstr "Lijeva popuna"
 
-#: gtk/gtkassistant.c:262
+#: gtk/gtkassistant.c:282
 #, fuzzy
 msgid "Number of pixels around the header."
 msgstr "Stil udubljenja oko linije izbornika"
 
-#: gtk/gtkassistant.c:269
+#: gtk/gtkassistant.c:289
 #, fuzzy
 msgid "Content Padding"
 msgstr "Popuna na dnu"
 
-#: gtk/gtkassistant.c:270
+#: gtk/gtkassistant.c:290
 #, fuzzy
 msgid "Number of pixels around the content pages."
 msgstr "Stil udubljenja oko sadržaja"
 
-#: gtk/gtkassistant.c:286
+#: gtk/gtkassistant.c:306
 #, fuzzy
 msgid "Page type"
 msgstr "Vrsta vezivanja"
 
-#: gtk/gtkassistant.c:287
+#: gtk/gtkassistant.c:307
 #, fuzzy
 msgid "The type of the assistant page"
 msgstr "Vrsta poruke"
 
-#: gtk/gtkassistant.c:304
+#: gtk/gtkassistant.c:324
 #, fuzzy
 msgid "Page title"
 msgstr "Veličina stranice"
 
-#: gtk/gtkassistant.c:305
+#: gtk/gtkassistant.c:325
 #, fuzzy
 msgid "The title of the assistant page"
 msgstr "Naslov prozora"
 
-#: gtk/gtkassistant.c:321
+#: gtk/gtkassistant.c:341
 #, fuzzy
 msgid "Header image"
 msgstr "Zaglavlja se mogu kliknuti"
 
-#: gtk/gtkassistant.c:322
+#: gtk/gtkassistant.c:342
 msgid "Header image for the assistant page"
 msgstr ""
 
-#: gtk/gtkassistant.c:338
+#: gtk/gtkassistant.c:358
 #, fuzzy
 msgid "Sidebar image"
 msgstr "Vrijednost"
 
-#: gtk/gtkassistant.c:339
+#: gtk/gtkassistant.c:359
 msgid "Sidebar image for the assistant page"
 msgstr ""
 
-#: gtk/gtkassistant.c:354
+#: gtk/gtkassistant.c:374
 #, fuzzy
 msgid "Page complete"
 msgstr "Korak povećanja stranice"
 
-#: gtk/gtkassistant.c:355
+#: gtk/gtkassistant.c:375
 msgid "Whether all required fields on the page have been filled out"
 msgstr ""
 
@@ -932,7 +932,7 @@ msgid ""
 msgstr ""
 "Utječu li postavke child_displacement_x/_y također na fokus pravokutnika"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1682
 #, fuzzy
 msgid "Inner Border"
 msgstr "Granični tab"
@@ -1368,7 +1368,7 @@ msgstr "Brzina povećanja"
 msgid "The acceleration rate when you hold down a button"
 msgstr "Ubrzanje kada držite gumb pritisnutim"
 
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:200 gtk/gtkspinbutton.c:226
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:218 gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "Znamenki"
 
@@ -2239,11 +2239,11 @@ msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 
-#: gtk/gtkentry.c:666
+#: gtk/gtkentry.c:666 gtk/gtkentry.c:1232
 msgid "Invisible character"
 msgstr "Nevidljivi znak"
 
-#: gtk/gtkentry.c:667
+#: gtk/gtkentry.c:667 gtk/gtkentry.c:1233
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Znak koji se koristi kada se sakriva sadržaj polja (za unos lozinke)"
 
@@ -2554,33 +2554,33 @@ msgstr "Kroz rubove"
 msgid "Border around the progress bar"
 msgstr "Tekst koji se prikazuje u elementu napretka"
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1683
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:1676
+#: gtk/gtkentry.c:1697
 #, fuzzy
 msgid "State Hint"
 msgstr "Savjet za pravila"
 
-#: gtk/gtkentry.c:1677
+#: gtk/gtkentry.c:1698
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Bitmapa koja se koristi kao maska pri iscrtavanju pozadine teksta"
 
-#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1703 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Označi s naglaskom"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1704
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Može li biti označen sadržaj kada polje u fokusu"
 
-#: gtk/gtkentry.c:1697
+#: gtk/gtkentry.c:1718
 msgid "Password Hint Timeout"
 msgstr ""
 
-#: gtk/gtkentry.c:1698
+#: gtk/gtkentry.c:1719
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 
@@ -4255,7 +4255,7 @@ msgstr ""
 msgid "Page Setup"
 msgstr "Veličina stranice"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1027
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1050
 msgid "Track Print Status"
 msgstr ""
 
@@ -4265,123 +4265,123 @@ msgid ""
 "print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:899
+#: gtk/gtkprintoperation.c:922
 #, fuzzy
 msgid "Default Page Setup"
 msgstr "Uobičajena visina"
 
-#: gtk/gtkprintoperation.c:900
+#: gtk/gtkprintoperation.c:923
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:918 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:919 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:960
 #, fuzzy
 msgid "Job Name"
 msgstr "Ime pisma"
 
-#: gtk/gtkprintoperation.c:938
+#: gtk/gtkprintoperation.c:961
 msgid "A string used for identifying the print job."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:962
+#: gtk/gtkprintoperation.c:985
 #, fuzzy
 msgid "Number of Pages"
 msgstr "Broj kanala"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:986
 #, fuzzy
 msgid "The number of pages in the document."
 msgstr "Broj redova u tablici"
 
-#: gtk/gtkprintoperation.c:984 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1007 gtk/gtkprintunixdialog.c:266
 #, fuzzy
 msgid "Current Page"
 msgstr "Trenutna providnost"
 
-#: gtk/gtkprintoperation.c:985 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1008 gtk/gtkprintunixdialog.c:267
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Veličina stranice za prilagodbu"
 
-#: gtk/gtkprintoperation.c:1006
+#: gtk/gtkprintoperation.c:1029
 #, fuzzy
 msgid "Use full page"
 msgstr "Koristi transparentnost"
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1030
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1028
+#: gtk/gtkprintoperation.c:1051
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Unit"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1063
+#: gtk/gtkprintoperation.c:1086
 #, fuzzy
 msgid "Show Dialog"
 msgstr "Prikaži zaglavlje"
 
-#: gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintoperation.c:1087
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1110
 #, fuzzy
 msgid "Allow Async"
 msgstr "Dopusti vodilice"
 
-#: gtk/gtkprintoperation.c:1088
+#: gtk/gtkprintoperation.c:1111
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1110 gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1133 gtk/gtkprintoperation.c:1134
 #, fuzzy
 msgid "Export filename"
 msgstr "Ime datoteke"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1126
+#: gtk/gtkprintoperation.c:1149
 #, fuzzy
 msgid "The status of the print operation"
 msgstr "Stanje preklopnog gumba"
 
-#: gtk/gtkprintoperation.c:1146
+#: gtk/gtkprintoperation.c:1169
 msgid "Status String"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1147
+#: gtk/gtkprintoperation.c:1170
 msgid "A human-readable description of the status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1165
+#: gtk/gtkprintoperation.c:1188
 #, fuzzy
 msgid "Custom tab label"
 msgstr "Prilagođena paleta"
 
-#: gtk/gtkprintoperation.c:1166
+#: gtk/gtkprintoperation.c:1189
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
@@ -4895,39 +4895,39 @@ msgstr "Metrika"
 msgid "The metric used for the ruler"
 msgstr "Metrika koja se koristi za ravnalo"
 
-#: gtk/gtkscale.c:201
+#: gtk/gtkscale.c:219
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Broj decimalnih mjesta koja će biti prikazana za vrijednost"
 
-#: gtk/gtkscale.c:210
+#: gtk/gtkscale.c:228
 msgid "Draw Value"
 msgstr "Vrijednost izvlačenja"
 
-#: gtk/gtkscale.c:211
+#: gtk/gtkscale.c:229
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "Može li se trenutna vrijednost prikazivati kao tekst uz klizač"
 
-#: gtk/gtkscale.c:218
+#: gtk/gtkscale.c:236
 msgid "Value Position"
 msgstr "Mjesto za vrijednost"
 
-#: gtk/gtkscale.c:219
+#: gtk/gtkscale.c:237
 msgid "The position in which the current value is displayed"
 msgstr "Mjesto na kojem se prikazuje tekuća vrijednost"
 
-#: gtk/gtkscale.c:226
+#: gtk/gtkscale.c:244
 msgid "Slider Length"
 msgstr "Dužina klizača"
 
-#: gtk/gtkscale.c:227
+#: gtk/gtkscale.c:245
 msgid "Length of scale's slider"
 msgstr "Dužina klizača za razmjernik"
 
-#: gtk/gtkscale.c:235
+#: gtk/gtkscale.c:253
 msgid "Value spacing"
 msgstr "Razmak vrijednosti"
 
-#: gtk/gtkscale.c:236
+#: gtk/gtkscale.c:254
 msgid "Space between value text and the slider/trough area"
 msgstr "Razmak između teksta sa vrijednošću i površine klizača"
 

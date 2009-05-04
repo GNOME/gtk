@@ -28,6 +28,7 @@ same name. If the element is not empty, its content is taken as the markup
 to show at the mark. It can be translated with the usual "translatable and
 "context" attributes.
 </para>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -49,9 +50,9 @@ the accessor functions.
 
 </para>
 
-@scale:
-@value:
-@Returns:
+@scale: 
+@value: 
+@Returns: 
 
 <!-- ##### ARG GtkScale:digits ##### -->
 <para>
