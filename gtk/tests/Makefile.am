@@ -77,3 +77,5 @@ defaultvalue_LDADD 		 = $(progs_ldadd)
 TEST_PROGS			+= textbuffer
 textbuffer_SOURCES		 = textbuffer.c pixbuf-init.c
 textbuffer_LDADD		 = $(progs_ldadd)
+
+-include $(top_srcdir)/git.mk

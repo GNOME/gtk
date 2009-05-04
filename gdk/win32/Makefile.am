@@ -63,3 +63,5 @@ libgdk_win32_la_SOURCES = \
 
 libgdkinclude_HEADERS =		\
 	gdkwin32.h
+
+-include $(top_srcdir)/git.mk

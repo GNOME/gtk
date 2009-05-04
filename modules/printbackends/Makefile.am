@@ -11,3 +11,5 @@ SUBDIRS += test
 endif
 
 DIST_SUBDIRS = cups file lpr test
+
+-include $(top_srcdir)/git.mk

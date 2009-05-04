@@ -80,3 +80,5 @@ gailutil.lib: libgailutil.la gailutil.def
 install-data-local: install-ms-lib install-def-file
 
 uninstall-local: uninstall-ms-lib uninstall-def-file
+
+-include $(top_srcdir)/git.mk

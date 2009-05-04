@@ -96,3 +96,5 @@ IMAGEFILES=	alphatest.png		\
 democode_DATA = $(demos) $(IMAGEFILES) demo.ui
 
 DISTCLEANFILES = demos.h
+
+-include $(top_srcdir)/git.mk

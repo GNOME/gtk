@@ -269,3 +269,5 @@ libtestvalues_la_LDFLAGS =	\
 	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
+
+-include $(top_srcdir)/git.mk

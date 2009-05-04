@@ -36,3 +36,5 @@ libwimp_la_LDFLAGS = \
 	-avoid-version -module -no-undefined -export-dynamic
 
 libwimp_la_LIBADD = $(LDADDS) -lgdi32
+
+-include $(top_srcdir)/git.mk

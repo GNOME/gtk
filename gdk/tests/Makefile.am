@@ -25,3 +25,5 @@ check_gdk_cairo_LDADD=\
 CLEANFILES = \
 	cairosurface.png	\
 	gdksurface.png
+
+-include $(top_srcdir)/git.mk

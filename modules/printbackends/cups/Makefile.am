@@ -36,3 +36,5 @@ noinst_HEADERS =			\
 
 libprintbackend_cups_la_LDFLAGS =  -avoid-version -module $(no_undefined)
 libprintbackend_cups_la_LIBADD = $(LDADDS) $(CUPS_LIBS)
+
+-include $(top_srcdir)/git.mk

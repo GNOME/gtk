@@ -168,3 +168,5 @@ libgail_la_LDFLAGS =    \
 	-rpath $(moduledir) -module -avoid-version \
 	$(no_undefined) \
         $(LDFLAGS)
+
+-include $(top_srcdir)/git.mk

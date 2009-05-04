@@ -718,3 +718,5 @@ gdk-pixbuf.loaders:
 	echo "No dynamic modules found; will use only static modules for uninstalled example programs."; \
 	touch gdk-pixbuf.loaders;
 endif
+
+-include $(top_srcdir)/git.mk
