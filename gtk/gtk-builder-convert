@@ -546,6 +546,14 @@ class GtkBuilderConverter(object):
         if not prop.childNodes:
             parent.removeChild(prop)
             return
+
+        translatable_attr = prop.attributes.get('translatable')
+        translatable = translatable_attr is not None and translatable_attr.value == 'yes'
+        has_context_attr = prop.attributes.get('context')
+        has_context = has_context_attr is not None and has_context_attr.value == 'yes'
+        comments_attr = prop.attributes.get('comments')
+        comments = comments_attr is not None and comments_attr.value or None
+
         value = prop.childNodes[0].data
         model = self._create_root_object("GtkListStore",
                                          template="model")
@@ -568,7 +576,15 @@ class GtkBuilderConverter(object):
 
             col = self._dom.createElement('col')
             col.setAttribute('id', '0')
-            col.setAttribute('translatable', 'yes')
+            if translatable:
+                col.setAttribute('translatable', 'yes')
+            if has_context:
+                splitting = item.split('|', 1)
+                if len(splitting) == 2:
+                    context, item = splitting
+                    col.setAttribute('context', context)
+            if comments is not None:
+                col.setAttribute('comments', comments)
             col.appendChild(self._dom.createTextNode(item))
             row.appendChild(col)
 
