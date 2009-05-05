@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:25-0400\n"
+"POT-Creation-Date: 2009-05-04 01:14-0400\n"
 "PO-Revision-Date: 2009-03-10 13:13+0200\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -116,11 +116,11 @@ msgstr "Kirjasimen tarkkuus"
 msgid "The resolution for fonts on the screen"
 msgstr "Näytöllä käytettyjen kirjasinten tarkkuus"
 
-#: gtk/gtkaboutdialog.c:184
+#: gtk/gtkaboutdialog.c:239
 msgid "Program name"
 msgstr "Ohjelman nimi"
 
-#: gtk/gtkaboutdialog.c:185
+#: gtk/gtkaboutdialog.c:240
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -128,86 +128,86 @@ msgstr ""
 "Ohjelman nimi. Jos tätä ei ole asetettu, oletuksena on g_get_application_name"
 "()"
 
-#: gtk/gtkaboutdialog.c:199
+#: gtk/gtkaboutdialog.c:254
 msgid "Program version"
 msgstr "Ohjelman versio"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:255
 msgid "The version of the program"
 msgstr "Ohjelman versio"
 
-#: gtk/gtkaboutdialog.c:214
+#: gtk/gtkaboutdialog.c:269
 msgid "Copyright string"
 msgstr "Tekijänoikeustiedot"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:270
 msgid "Copyright information for the program"
 msgstr "Ohjelman tekijänoikeuksien tiedot"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:287
 msgid "Comments string"
 msgstr "Kommentti"
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:288
 msgid "Comments about the program"
 msgstr "Kommentit ohjelmasta"
 
-#: gtk/gtkaboutdialog.c:267
+#: gtk/gtkaboutdialog.c:322
 msgid "Website URL"
 msgstr "Kotisivun URL"
 
-#: gtk/gtkaboutdialog.c:268
+#: gtk/gtkaboutdialog.c:323
 msgid "The URL for the link to the website of the program"
 msgstr "URL-linkki ohjelman kotisivulle"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:339
 msgid "Website label"
 msgstr "Kotisivun nimiö"
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:340
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr "Nimiö ohjelman kotisivulinkkiin. Oletuksena on URL"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:356
 msgid "Authors"
 msgstr "Tekijät"
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:357
 msgid "List of authors of the program"
 msgstr "Luettelo ohjelman tekijöistä"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:373
 msgid "Documenters"
 msgstr "Dokumentoijat"
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:374
 msgid "List of people documenting the program"
 msgstr "Luettelo ohjelman dokumentoijista"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:390
 msgid "Artists"
 msgstr "Taiteilijat"
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:391
 msgid "List of people who have contributed artwork to the program"
 msgstr "Luettelo ohjelman kuvamateriaalia tehneistä henkilöistä"
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:408
 msgid "Translator credits"
 msgstr "Kääntäjäkiitokset"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:409
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Kiitokset kääntäjille. Tämä pitää merkitä käännettäväksi"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:424
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:425
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -215,19 +215,19 @@ msgstr ""
 "Logo tietoja-laatikkoon. Jos ei asetettu, oletuksena on "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:440
 msgid "Logo Icon Name"
 msgstr "Logokuvakkeen nimi"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:441
 msgid "A named icon to use as the logo for the about box."
 msgstr "Nimetty kuvake, jota käytetään logona tietoja-laatikossa."
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:454
 msgid "Wrap license"
 msgstr "Rivitä lisenssi"
 
-#: gtk/gtkaboutdialog.c:400
+#: gtk/gtkaboutdialog.c:455
 msgid "Whether to wrap the license text."
 msgstr "Rivitetäänkö lisenssin teksti"
 
@@ -588,59 +588,59 @@ msgstr "Lapsen mukaan"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "Aseta reunasuhde samaksi kuin lapsella"
 
-#: gtk/gtkassistant.c:261
+#: gtk/gtkassistant.c:281
 msgid "Header Padding"
 msgstr "Otsakkeen täyte"
 
-#: gtk/gtkassistant.c:262
+#: gtk/gtkassistant.c:282
 msgid "Number of pixels around the header."
 msgstr "Otsaketta ympäröivän tilan koko pisteinä."
 
-#: gtk/gtkassistant.c:269
+#: gtk/gtkassistant.c:289
 msgid "Content Padding"
 msgstr "Sisällön täyte"
 
-#: gtk/gtkassistant.c:270
+#: gtk/gtkassistant.c:290
 msgid "Number of pixels around the content pages."
 msgstr "Sisältöä ympäröivän tilan koko pikseleinä."
 
-#: gtk/gtkassistant.c:286
+#: gtk/gtkassistant.c:306
 msgid "Page type"
 msgstr "Sivun tyyppi"
 
-#: gtk/gtkassistant.c:287
+#: gtk/gtkassistant.c:307
 msgid "The type of the assistant page"
 msgstr "Apusivun tyyppi"
 
-#: gtk/gtkassistant.c:304
+#: gtk/gtkassistant.c:324
 msgid "Page title"
 msgstr "Sivun otsikko"
 
-#: gtk/gtkassistant.c:305
+#: gtk/gtkassistant.c:325
 msgid "The title of the assistant page"
 msgstr "Apusivun otsikko"
 
-#: gtk/gtkassistant.c:321
+#: gtk/gtkassistant.c:341
 msgid "Header image"
 msgstr "Otsakekuva"
 
-#: gtk/gtkassistant.c:322
+#: gtk/gtkassistant.c:342
 msgid "Header image for the assistant page"
 msgstr "Apusivun otsakekuva"
 
-#: gtk/gtkassistant.c:338
+#: gtk/gtkassistant.c:358
 msgid "Sidebar image"
 msgstr "Sivupalkin kuva"
 
-#: gtk/gtkassistant.c:339
+#: gtk/gtkassistant.c:359
 msgid "Sidebar image for the assistant page"
 msgstr "Apusivun sivupalkin kuva"
 
-#: gtk/gtkassistant.c:354
+#: gtk/gtkassistant.c:374
 msgid "Page complete"
 msgstr "Sivu valmis"
 
-#: gtk/gtkassistant.c:355
+#: gtk/gtkassistant.c:375
 msgid "Whether all required fields on the page have been filled out"
 msgstr "Kertoo, ovatko kaikki vaaditut sivun kentät täytetty"
 
@@ -895,7 +895,7 @@ msgid ""
 msgstr ""
 "Vaikuttavatko child_displacement_x/_y-ominaisuudet myös kohdistusalueeseen"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1682
 msgid "Inner Border"
 msgstr "Sisäreunus"
 
@@ -1308,7 +1308,7 @@ msgstr "Kasvunopeus"
 msgid "The acceleration rate when you hold down a button"
 msgstr "Kiihdytysvauhti pidettäessä painiketta painettuna"
 
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:200 gtk/gtkspinbutton.c:226
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:218 gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "Numeroja"
 
@@ -2153,11 +2153,11 @@ msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr "Reuna tekstin ja raamin välissä. Ohittaa inner-border tyylimäärittelyn"
 
-#: gtk/gtkentry.c:666
+#: gtk/gtkentry.c:666 gtk/gtkentry.c:1232
 msgid "Invisible character"
 msgstr "Näkymätön merkki"
 
-#: gtk/gtkentry.c:667
+#: gtk/gtkentry.c:667 gtk/gtkentry.c:1233
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Merkki, joka peittää syötetyn tekstin (salasanatilassa)"
 
@@ -2432,31 +2432,31 @@ msgstr "Edistymispalkin reunus"
 msgid "Border around the progress bar"
 msgstr "Edistymispalkkia ympäröivä reunus"
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1683
 msgid "Border between text and frame."
 msgstr "Reunus tekstin ja raamin välissä."
 
-#: gtk/gtkentry.c:1676
+#: gtk/gtkentry.c:1697
 msgid "State Hint"
 msgstr "Tilavihje"
 
-#: gtk/gtkentry.c:1677
+#: gtk/gtkentry.c:1698
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Välitetäänkö oikea tilatieto piirrettäessä varjoa tai taustaa"
 
-#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1703 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Valitse kohdistettaessa"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1704
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Muuttuuko sisältö valituksi kentän saadessa syötekohdistuksen"
 
-#: gtk/gtkentry.c:1697
+#: gtk/gtkentry.c:1718
 msgid "Password Hint Timeout"
 msgstr "Salasanavihjeen aikaviive"
 
-#: gtk/gtkentry.c:1698
+#: gtk/gtkentry.c:1719
 msgid "How long to show the last input character in hidden entries"
 msgstr "Kuinka pitkään viimeisin syötetty merkki näytetään piilokentissä"
 
@@ -4061,7 +4061,7 @@ msgstr "Tulostimen asetukset"
 msgid "Page Setup"
 msgstr "Sivun asetukset"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1027
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1050
 msgid "Track Print Status"
 msgstr "Seuraa tulostimeen tilaa"
 
@@ -4073,51 +4073,51 @@ msgstr ""
 "TRUE, jos tämä tulostustyö lähettää viestejä tilamuutoksista sen jälkeen, "
 "kun työ on lähetetty tulostimelle tai tulostuspalvelimelle."
 
-#: gtk/gtkprintoperation.c:899
+#: gtk/gtkprintoperation.c:922
 msgid "Default Page Setup"
 msgstr "Sivun oletusasetukset"
 
-#: gtk/gtkprintoperation.c:900
+#: gtk/gtkprintoperation.c:923
 msgid "The GtkPageSetup used by default"
 msgstr "Oletuksena käytetty GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:918 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "Tulostusasetukset"
 
-#: gtk/gtkprintoperation.c:919 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Ikkunan alustuksesta käytetty GtkPrintSettings-osa"
 
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:960
 msgid "Job Name"
 msgstr "Työn nimi"
 
-#: gtk/gtkprintoperation.c:938
+#: gtk/gtkprintoperation.c:961
 msgid "A string used for identifying the print job."
 msgstr "Merkkijono, josta tulostustyö tunnistetaan."
 
-#: gtk/gtkprintoperation.c:962
+#: gtk/gtkprintoperation.c:985
 msgid "Number of Pages"
 msgstr "Sivujen lukumäärä"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:986
 msgid "The number of pages in the document."
 msgstr "Sivujen lukumäärä asiakirjassa."
 
-#: gtk/gtkprintoperation.c:984 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1007 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "Nykyinen sivu"
 
-#: gtk/gtkprintoperation.c:985 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1008 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "Nykyinen sivu asiakirjassa"
 
-#: gtk/gtkprintoperation.c:1006
+#: gtk/gtkprintoperation.c:1029
 msgid "Use full page"
 msgstr "Käytä koko sivua"
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1030
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4125,7 +4125,7 @@ msgstr ""
 "TRUE, jos tässä yhteydessä sisällön lähteen tulisi olla sivun kulmassa eikä "
 "piirrettävän alueen kulmassa"
 
-#: gtk/gtkprintoperation.c:1028
+#: gtk/gtkprintoperation.c:1051
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4133,55 +4133,55 @@ msgstr ""
 "TRUE, jos tulostustyö jatkaa tulostustyön tilan raportointia sen jälkeen, "
 "kun tulostustyö on lähetetty tulostimelle tai tulostinpalvelimelle."
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Unit"
 msgstr "Yksikkö"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "The unit in which distances can be measured in the context"
 msgstr "Tässä yhteydessä käytetty etäisyyksien mittayksikkö"
 
-#: gtk/gtkprintoperation.c:1063
+#: gtk/gtkprintoperation.c:1086
 msgid "Show Dialog"
 msgstr "Näytä valintaikkuna"
 
-#: gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintoperation.c:1087
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE, jos edistymisikkuna näytetään tulostettaessa."
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1110
 msgid "Allow Async"
 msgstr "Salli asynkroninen"
 
-#: gtk/gtkprintoperation.c:1088
+#: gtk/gtkprintoperation.c:1111
 msgid "TRUE if print process may run asynchronous."
 msgstr "TRUE, jos tulostustyöt voivat olla asynkronisia."
 
-#: gtk/gtkprintoperation.c:1110 gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1133 gtk/gtkprintoperation.c:1134
 msgid "Export filename"
 msgstr "Vietävä tiedostonimi"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Status"
 msgstr "Tila"
 
-#: gtk/gtkprintoperation.c:1126
+#: gtk/gtkprintoperation.c:1149
 msgid "The status of the print operation"
 msgstr "Tulostustoiminnon tila"
 
-#: gtk/gtkprintoperation.c:1146
+#: gtk/gtkprintoperation.c:1169
 msgid "Status String"
 msgstr "Tilan merkkijono"
 
-#: gtk/gtkprintoperation.c:1147
+#: gtk/gtkprintoperation.c:1170
 msgid "A human-readable description of the status"
 msgstr "Ihmisystävällinen kuvaus tilasta"
 
-#: gtk/gtkprintoperation.c:1165
+#: gtk/gtkprintoperation.c:1188
 msgid "Custom tab label"
 msgstr "Oman välilehden otsikko"
 
-#: gtk/gtkprintoperation.c:1166
+#: gtk/gtkprintoperation.c:1189
 msgid "Label for the tab containing custom widgets."
 msgstr "Otsake välilehdelle, joka sisältää omia ikkunaelementtejä."
 
@@ -4668,39 +4668,39 @@ msgstr "Mitta-asteikko"
 msgid "The metric used for the ruler"
 msgstr "Viivaimen käyttämä mitta-asteikko"
 
-#: gtk/gtkscale.c:201
+#: gtk/gtkscale.c:219
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Näkyvien desimaalien määrä arvossa"
 
-#: gtk/gtkscale.c:210
+#: gtk/gtkscale.c:228
 msgid "Draw Value"
 msgstr "Piirrä arvo"
 
-#: gtk/gtkscale.c:211
+#: gtk/gtkscale.c:229
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "Näkyykö nykyinen arvo merkkijonona liukusäätimen vieressä"
 
-#: gtk/gtkscale.c:218
+#: gtk/gtkscale.c:236
 msgid "Value Position"
 msgstr "Arvon sijainti"
 
-#: gtk/gtkscale.c:219
+#: gtk/gtkscale.c:237
 msgid "The position in which the current value is displayed"
 msgstr "Paikka, jossa nykyinen arvo näkyy"
 
-#: gtk/gtkscale.c:226
+#: gtk/gtkscale.c:244
 msgid "Slider Length"
 msgstr "Liukusäätimen pituus"
 
-#: gtk/gtkscale.c:227
+#: gtk/gtkscale.c:245
 msgid "Length of scale's slider"
 msgstr "Liukusäätimen liu'uttimen koko"
 
-#: gtk/gtkscale.c:235
+#: gtk/gtkscale.c:253
 msgid "Value spacing"
 msgstr "Arvon välit"
 
-#: gtk/gtkscale.c:236
+#: gtk/gtkscale.c:254
 msgid "Space between value text and the slider/trough area"
 msgstr "Väli arvotekstin ja liu'uttimen sekä uran alueen välissä"
 

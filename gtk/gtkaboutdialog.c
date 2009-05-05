@@ -524,8 +524,6 @@ gtk_about_dialog_init (GtkAboutDialog *about)
 
   priv->website_button = button = gtk_link_button_new (""); 
   gtk_widget_set_no_show_all (button, TRUE);
-  g_signal_connect (G_OBJECT (button), "clicked",
-		    G_CALLBACK (activate_url), about);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
   
   priv->website_label = button = gtk_label_new ("");

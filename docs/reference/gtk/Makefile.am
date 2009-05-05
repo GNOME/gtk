@@ -380,3 +380,5 @@ dist-hook-local: $(BUILT_EXTRA_DIST)
 	for f in $$files; do					\
 	  if test -f $$f; then d=.; else d=$(srcdir); fi;	\
 	  cp $$d/$$f $(distdir) || exit 1; done
+
+-include $(top_srcdir)/git.mk

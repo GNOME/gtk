@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:25-0400\n"
+"POT-Creation-Date: 2009-05-04 01:14-0400\n"
 "PO-Revision-Date: 2006-07-18 17:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -116,11 +116,11 @@ msgstr "ཡིག་གཟུགས་ཧུམ་ཆ།"
 msgid "The resolution for fonts on the screen"
 msgstr "གསལ་གཞི་གུ་ཡིག་གཟུགས་ཀྱི་ཧུམ་ཆ།"
 
-#: gtk/gtkaboutdialog.c:184
+#: gtk/gtkaboutdialog.c:239
 msgid "Program name"
 msgstr "ལས་རིམ་གྱི་མིང༌།"
 
-#: gtk/gtkaboutdialog.c:185
+#: gtk/gtkaboutdialog.c:240
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -128,43 +128,43 @@ msgstr ""
 "ལས་རིམ་གྱི་མིང༌། གལ་སྲིད་འདི་ གཞི་སྒྲིག་མེད་པ་ཅིན་ དེ་གིས་g_get_application_name() ལུ་སྔོན་སྒྲིག་"
 "འབདཝ་ཨིན།"
 
-#: gtk/gtkaboutdialog.c:199
+#: gtk/gtkaboutdialog.c:254
 msgid "Program version"
 msgstr "ལས་རིམ་གྱི་ ཐོན་རིམ།"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:255
 msgid "The version of the program"
 msgstr "ལས་རིམ་གྱི་ ཐོན་རིམདེ།"
 
-#: gtk/gtkaboutdialog.c:214
+#: gtk/gtkaboutdialog.c:269
 msgid "Copyright string"
 msgstr "འདྲ་བཤུས་དབང་ཆའི་ཡིག་རྒྱུན།"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:270
 msgid "Copyright information for the program"
 msgstr "ལས་རིམ་གྱི་ འདྲ་བཤུས་དབང་ཆའི་བརྡ་དོན།"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:287
 msgid "Comments string"
 msgstr "བསམ་བཀོད་ཡིག་རྒྱུན།"
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:288
 msgid "Comments about the program"
 msgstr "ལས་རིམ་སྐོར་གྱི་བསམ་བཀོད།"
 
-#: gtk/gtkaboutdialog.c:267
+#: gtk/gtkaboutdialog.c:322
 msgid "Website URL"
 msgstr "ཝེབ་ས་ཡིཊི་གི་ ཡུ་ཨར་ཨེལ།"
 
-#: gtk/gtkaboutdialog.c:268
+#: gtk/gtkaboutdialog.c:323
 msgid "The URL for the link to the website of the program"
 msgstr "ལས་རིམ་གྱི་ ཝེབ་ས་ཡིཊི་ལུ་ འབྲེལ་མཐུད་འབད་ནིའི་ ཡུ་ཨར་ཨེལ།"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:339
 msgid "Website label"
 msgstr "ཝེབ་ས་ཡིཊི་གི་ ཁ་ཡིག"
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:340
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -172,46 +172,46 @@ msgstr ""
 "ལས་རིམ་གྱི་ ཝེབ་ས་ཡིཊི་ལུ་ འབྲེལ་མཐུད་འབད་ནིའི་ཁ་ཡིག གལ་སྲིད་འདི་ གཞི་སྒྲིག་མེད་པ་ཅིན་ དེ་གིས་ ཡུ་ཨར་"
 "ཨེལ་ལུ་ སྔོན་སྒྲིག་འབདཝ་ཨིན།"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:356
 msgid "Authors"
 msgstr "རྩོམ་པ་པོ།"
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:357
 msgid "List of authors of the program"
 msgstr "ལས་རིམ་རྩོམ་པ་པོ་ཚུ་གི་ཐོ་ཡིག"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:373
 msgid "Documenters"
 msgstr "ཡིག་བཀོདཔ།"
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:374
 msgid "List of people documenting the program"
 msgstr "ལས་རིམ་ཡིག་བཀོད་མི་ མི་ཚུ་གི་ཐོ་ཡིག"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:390
 msgid "Artists"
 msgstr "རི་མོ་མཁན།"
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:391
 msgid "List of people who have contributed artwork to the program"
 msgstr "ལས་རིམ་ལུ་ རི་མོའི་ལཱ་གི་ ཕན་འདེབས་་འབད་མི་ཚུ་གི་ཐོ་ཡིག"
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:408
 msgid "Translator credits"
 msgstr ""
 "ཨའི་ཌི་ཨར་སི་གི་མ་དངུལ་རྒྱབ་སྐྱོར་ཐོག་ལས་ བརྡ་དོན་འཕྲུལ་རིག་ལས་ཁུངས་ནང་ སྐད་བསྒྱུར་འབད་ཡི། ཁ་གསལ་གྱི་"
 "དོན་ལུ་ འབྲེལ་བ་འཐབ་ས་: <pema_geyleg@druknet.bt>/<pgeyleg@dit.gov.bt>"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:409
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "སྐད་བསྒྱུརཔ་ཚུ་ལུ་ངོ་བསྟོད། ཡིག་རྒྱུན་འདི་ལུ་ སྐད་བསྒྱུར་འབད་བཏུབ་པའི་ རྟགས་མཚན་བཀལ་དགོ"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:424
 msgid "Logo"
 msgstr "ལས་རྟགས།"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:425
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -219,21 +219,21 @@ msgstr ""
 "སྐོར་ལས་སྒྲོམ་གྱི་ ལས་རྟགས་ཅིག གལ་སྲིད་འདི་ གཞི་སྒྲིག་མེད་པ་ཅིན་ དེ་གིས་ "
 "gtk_window_get_default_icon_list() ལུ་སྔོན་སྒྲིག་འབདཝ་ཨིན།"
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:440
 msgid "Logo Icon Name"
 msgstr "ལས་རྟགས་ངོས་དཔར་གྱི་མིང༌།"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:441
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "སྐོར་ལས་ཀྱི་སྒྲོམ་གྱི་དོན་ལུ་ ལས་རྟགས་བཟུམ་ཅིག་སྦེ་ ལག་ལེན་འཐབ་ནིའི་དོན་ལུ་ མིང་བཏགས་ཡོད་པའི་ངོས་དཔར་"
 "ཅིག"
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:454
 msgid "Wrap license"
 msgstr "ཆོག་ཐམ་ལོག་མཚམས་བཟོ།"
 
-#: gtk/gtkaboutdialog.c:400
+#: gtk/gtkaboutdialog.c:455
 msgid "Whether to wrap the license text."
 msgstr "ཆོག་ཐམ་ཚིག་ཡིག་དེ་ ལོག་མཚམས་བཟོ་ནི་ཨིན་ན་མེན།"
 
@@ -597,70 +597,70 @@ msgstr "ཆ་ལག་ལུ་ཉན།"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "དཔྱ་ཚད་ཀྱི་རྣམ་པ་དེ་ གཞི་ཁྲམ་གྱི་ཆ་ལག་དང་མཉམ་ བང་ཅན་སྦེ་ མཐུན་བཅུག་དགོ"
 
-#: gtk/gtkassistant.c:261
+#: gtk/gtkassistant.c:281
 #, fuzzy
 msgid "Header Padding"
 msgstr "གཡོན་གྱི་བར་ཤབས།"
 
-#: gtk/gtkassistant.c:262
+#: gtk/gtkassistant.c:282
 #, fuzzy
 msgid "Number of pixels around the header."
 msgstr "དཀར་ཆག་ཕྲ་རིང་གི་མཐའ་སྐོར་ལུ་ སེར་ཁའི་བཟོ་རྣམ།"
 
-#: gtk/gtkassistant.c:269
+#: gtk/gtkassistant.c:289
 #, fuzzy
 msgid "Content Padding"
 msgstr "མཇུག་གི་བར་ཤབས།"
 
-#: gtk/gtkassistant.c:270
+#: gtk/gtkassistant.c:290
 #, fuzzy
 msgid "Number of pixels around the content pages."
 msgstr "ནང་དོན་ཚུ་གི་མཐའ་སྐོར་གྱི་ སེར་ཁའི་བཟོ་རྣམ།"
 
-#: gtk/gtkassistant.c:286
+#: gtk/gtkassistant.c:306
 #, fuzzy
 msgid "Page type"
 msgstr "སྒམ་གྱི་དབྱེ་བ།"
 
-#: gtk/gtkassistant.c:287
+#: gtk/gtkassistant.c:307
 #, fuzzy
 msgid "The type of the assistant page"
 msgstr "འཕྲིན་དོན་གྱི་དབྱེ་བ་དེ།"
 
-#: gtk/gtkassistant.c:304
+#: gtk/gtkassistant.c:324
 #, fuzzy
 msgid "Page title"
 msgstr "ཤོག་ལེབ་ཀྱི་ཚད།"
 
-#: gtk/gtkassistant.c:305
+#: gtk/gtkassistant.c:325
 #, fuzzy
 msgid "The title of the assistant page"
 msgstr "སྒོ་སྒྲིག་དེ་གི་ མགོ་མིང་དེ།"
 
-#: gtk/gtkassistant.c:321
+#: gtk/gtkassistant.c:341
 #, fuzzy
 msgid "Header image"
 msgstr "མགོ་ཡིག་ཚུ་ ཨེབ་གཏང་འབད་བཏུབ།"
 
-#: gtk/gtkassistant.c:322
+#: gtk/gtkassistant.c:342
 msgid "Header image for the assistant page"
 msgstr ""
 
-#: gtk/gtkassistant.c:338
+#: gtk/gtkassistant.c:358
 #, fuzzy
 msgid "Sidebar image"
 msgstr "གཟུགས་བརྙན།"
 
-#: gtk/gtkassistant.c:339
+#: gtk/gtkassistant.c:359
 msgid "Sidebar image for the assistant page"
 msgstr ""
 
-#: gtk/gtkassistant.c:354
+#: gtk/gtkassistant.c:374
 #, fuzzy
 msgid "Page complete"
 msgstr "ཤོག་ལེབ་འཕར་ཚད།"
 
-#: gtk/gtkassistant.c:355
+#: gtk/gtkassistant.c:375
 msgid "Whether all required fields on the page have been filled out"
 msgstr ""
 
@@ -919,7 +919,7 @@ msgid ""
 msgstr ""
 "child_displacement_x/_y རྒྱུ་དངོས་ཚུ་གིས་ ཆེད་དམིགས་གྲུ་བཞི་དཀྱུས་རིང་ལུ་ ཕན་གནོད་ཡོད་ག་མེད།"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1682
 msgid "Inner Border"
 msgstr "ནང་གི་མཐའ་མཚམས།"
 
@@ -1342,7 +1342,7 @@ msgstr "འཛེགས་ཚད།"
 msgid "The acceleration rate when you hold down a button"
 msgstr "ཨེབ་རྟ་འཆང་བའི་སྐབས་ མགྱོགས་སྤྱོད་ཀྱི་ཚད།"
 
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:200 gtk/gtkspinbutton.c:226
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:218 gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "ཨང་ཡིག"
 
@@ -2196,11 +2196,11 @@ msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr "ཚིག་ཡིག་དང་གཞི་ཁྲམ་བར་ནའི་མཐའ་མཚམས། ནང་ནའི་མཐའ་མཚམས་བཟོ་རྣམ་རྒྱུ་དངོས་མེདཔ་གཏངམ་ཨིན།"
 
-#: gtk/gtkentry.c:666
+#: gtk/gtkentry.c:666 gtk/gtkentry.c:1232
 msgid "Invisible character"
 msgstr "མ་མཐོང་པའི་ཡིག་འབྲུ།"
 
-#: gtk/gtkentry.c:667
+#: gtk/gtkentry.c:667 gtk/gtkentry.c:1233
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "ཐོ་བཀོད་ནང་དོན་ཚུ་ལུ་ གདོང་ཁེབས་རྐྱབ་པའི་སྐབས་ ལག་ལེན་འཐབ་ནིའི་ཡིག་འབྲུ་ (\"password mode\"ནང་"
@@ -2510,33 +2510,33 @@ msgstr "གཞོང་པའི་མཐའ་མཚམས།"
 msgid "Border around the progress bar"
 msgstr "ཡར་འཕེལ་ཕྲ་རིང་གུའི་ཚིག་ཡིག"
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1683
 msgid "Border between text and frame."
 msgstr "ཚིག་ཡིག་དང་གཞི་ཁྲམ་བར་ནའི་མཐའ་མཚམས།"
 
-#: gtk/gtkentry.c:1676
+#: gtk/gtkentry.c:1697
 #, fuzzy
 msgid "State Hint"
 msgstr "གནས་ལུགས་ཡིག་རྒྱུན།"
 
-#: gtk/gtkentry.c:1677
+#: gtk/gtkentry.c:1698
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "ཚིག་ཡིག་གི་རྒྱབ་གཞི་འབྲི་བའི་སྐབས་ གདོང་ཁེབས་བཟུམ་ཅིག་སྦེ་ ལག་ལེན་འཐབ་ནིའི་བིཊི་མེཔ།"
 
-#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1703 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "ཆེད་དམིགས་ལུ་ སེལ་འཐུ་འབད།"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1704
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "ཆེད་དམིགས་་འབད་བའི་སྐབས་ ཐོ་བཀོད་ཀྱི་ནང་དོན་ཚུ་ སེལ་འཐུ་འབད་ནི་ཨིན་ན་མེན།"
 
-#: gtk/gtkentry.c:1697
+#: gtk/gtkentry.c:1718
 msgid "Password Hint Timeout"
 msgstr "ཆོག་ཡིག་བརྡ་མཚོན་ངལ་མཚམས།"
 
-#: gtk/gtkentry.c:1698
+#: gtk/gtkentry.c:1719
 msgid "How long to show the last input character in hidden entries"
 msgstr "སྦ་སྟེ་ཡོད་པའི་ཐོ་བཀོད་ནང་ བཙུགས་ཏེ་འོད་པའི་ཡིག་འབྲུ་ཚུ་ དུས་ཡུན་ག་དེ་ཅིག་སྟོན་ནི་ཨིན།"
 
@@ -4174,7 +4174,7 @@ msgstr "དཔར་འཕྲུལ་སྒྲིག་སྟངས།"
 msgid "Page Setup"
 msgstr "ཤོག་ལེབ་གཞི་སྒྲིག"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1027
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1050
 msgid "Track Print Status"
 msgstr "དཔར་བསྐྲུན་གནས་ཚད་རྗེས་འཚོལ་འབད།"
 
@@ -4186,51 +4186,51 @@ msgstr ""
 "དཔར་བསྐྲུན་གནད་སྡུད་དེ་ དཔར་འཕྲུལ་ ཡང་ན་ དཔར་བསྐྲུན་སར་བར་ལུ་ བཏང་ཚར་བའི་ཤུལ་ལུ་ དཔར་བསྐྲུན་ལས་"
 "གཡོག་གིས་ འཕྲོ་མཐུད་དེ་རང་ གནས་ཚད་བསྒྱུར་བཅོས་ཀྱི་བརྡ་མཚོན་སྟོན་པ་ཅིན་ བདེན་པ་ཨིན།"
 
-#: gtk/gtkprintoperation.c:899
+#: gtk/gtkprintoperation.c:922
 msgid "Default Page Setup"
 msgstr "སྔོན་སྒྲིག་ཤོག་ལེབ་གཞི་སྒྲིག"
 
-#: gtk/gtkprintoperation.c:900
+#: gtk/gtkprintoperation.c:923
 msgid "The GtkPageSetup used by default"
 msgstr "སྔོན་སྒྲིག་ཐོག་ལས་ལག་ལེན་འཐབ་མི་ ཇི་ཊི་ཀེ་ཤོག་ལེབ་གཞི་སྒྲིག"
 
-#: gtk/gtkprintoperation.c:918 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "དཔར་བསྐྲུན་སྒྲིག་སྟངས།"
 
-#: gtk/gtkprintoperation.c:919 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "ཌའི་ལོག་འགོ་འབྱེད་འབད་ནི་ལུ་ལག་ལེན་འཐབ་མི་ ཇི་ཊི་ཀེ་དཔར་བསྐྲུན་སྒྲིག་སྟངས།"
 
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:960
 msgid "Job Name"
 msgstr "ལས་གཡོག་གི་མིང༌།"
 
-#: gtk/gtkprintoperation.c:938
+#: gtk/gtkprintoperation.c:961
 msgid "A string used for identifying the print job."
 msgstr "དཔར་བསྐྲུན་ལས་གཡོག་ ངོས་འཛིན་འབད་ནི་ལུ་ལག་ལེན་འཐབ་མི་ཡིག་རྒྱུན།"
 
-#: gtk/gtkprintoperation.c:962
+#: gtk/gtkprintoperation.c:985
 msgid "Number of Pages"
 msgstr "ཤོག་གྲངས།"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:986
 msgid "The number of pages in the document."
 msgstr "ཡིག་ཆའི་ནང་གི་ཤོག་གྲངས།"
 
-#: gtk/gtkprintoperation.c:984 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1007 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "ད་ལྟོའི་ཤོག་ལེབ།"
 
-#: gtk/gtkprintoperation.c:985 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1008 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "ཡིག་ཆ་ནང་ད་ལྟོའི་ཤོག་ལེབ།"
 
-#: gtk/gtkprintoperation.c:1006
+#: gtk/gtkprintoperation.c:1029
 msgid "Use full page"
 msgstr "ཤོག་ལེབ་གངམ་ལག་ལེན་འཐབ།"
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1030
 #, fuzzy
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
@@ -4239,7 +4239,7 @@ msgstr ""
 "སྐབས་དོན་འདི་གི་བྱུང་ས་ གཟུགས་བརྙན་བཟོ་བཏུབ་པའི་མངའ་ཁོངས་ཀྱི་ཟུར་ཁར་་མེན་པར་ ཤོག་ལེབ་ཀྱི་ཟུར་ཁརཨིན་"
 "པ་ཅིན་བདེན་པ་ཨིན།"
 
-#: gtk/gtkprintoperation.c:1028
+#: gtk/gtkprintoperation.c:1051
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4248,55 +4248,55 @@ msgstr ""
 "བཀོལ་སྤྱོད་ཀྱིས་ དཔར་བསྐྲུན་གྱི་ལས་གཡོག་གནས་ཚད་ཀྱི་སྐོར་ལས་ འཕྲོ་མཐུད་དེ་རང་སྙན་ཞུ་འབད་བ་ཅིན་ བདེན་པ་"
 "ཨིན།"
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Unit"
 msgstr "ཆ་ཕྲན།"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "The unit in which distances can be measured in the context"
 msgstr "སྐབས་དོན་ནང་ རིང་ཚད་འཇལ་བཏུབ་པའི་ཆ་ཕྲན།"
 
-#: gtk/gtkprintoperation.c:1063
+#: gtk/gtkprintoperation.c:1086
 msgid "Show Dialog"
 msgstr "ཌའི་ལོག་སྟོན།"
 
-#: gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintoperation.c:1087
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "དཔར་བསྐྲུན་འབད་བའི་སྐབས་ལུ་ ཡར་འཕེལ་གྱི་ཌའི་ལོག་ཅིག་སྟོན་པ་ཅིན་བདེན་པ་ཨིན།"
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1110
 msgid "Allow Async"
 msgstr "མཉམ་འབྱུང་འབད་བཅུག"
 
-#: gtk/gtkprintoperation.c:1088
+#: gtk/gtkprintoperation.c:1111
 msgid "TRUE if print process may run asynchronous."
 msgstr "དཔར་བསྐྲུན་བྱ་རིམ་གྱིས་ གནད་སྡུད་རྒྱུན་སྤེལ་གཡོག་བཀོལ་བ་ཅིན་བདེན་པ་ཨིན།"
 
-#: gtk/gtkprintoperation.c:1110 gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1133 gtk/gtkprintoperation.c:1134
 msgid "Export filename"
 msgstr "་ཡིག་སྣོད་མིང་ཕྱིར་འདྲེན་འབད།"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Status"
 msgstr "གནས་ལུགས།"
 
-#: gtk/gtkprintoperation.c:1126
+#: gtk/gtkprintoperation.c:1149
 msgid "The status of the print operation"
 msgstr "དཔར་བསྐྲུན་བཀོལ་སྤྱོད་གནས་ལུགས།"
 
-#: gtk/gtkprintoperation.c:1146
+#: gtk/gtkprintoperation.c:1169
 msgid "Status String"
 msgstr "གནས་ལུགས་ཡིག་རྒྱུན།"
 
-#: gtk/gtkprintoperation.c:1147
+#: gtk/gtkprintoperation.c:1170
 msgid "A human-readable description of the status"
 msgstr "གནས་ལུགས་དེ་གི་ མི་གིས་ལྷག་ཚུགས་པའི་འགྲེལ་བཤད་ཅིག"
 
-#: gtk/gtkprintoperation.c:1165
+#: gtk/gtkprintoperation.c:1188
 msgid "Custom tab label"
 msgstr "་སྲོལ་སྒྲིག་ཨེབ་ལྡེའི་ཁ་ཡིག"
 
-#: gtk/gtkprintoperation.c:1166
+#: gtk/gtkprintoperation.c:1189
 msgid "Label for the tab containing custom widgets."
 msgstr "སྲོལ་སྒྲིག་ཝི་གེཊསི་ཡོད་པའི་ཨེབ་ལྡེའི་དོན་ལུ་ཁ་ཡིག"
 
@@ -4794,39 +4794,39 @@ msgstr "མེ་ཊིཀ།"
 msgid "The metric used for the ruler"
 msgstr "ཐིག་ཤིང་གི་དོན་ལུ་ ལག་ལེན་འཐབ་མི་མེ་ཊིཀ།"
 
-#: gtk/gtkscale.c:201
+#: gtk/gtkscale.c:219
 msgid "The number of decimal places that are displayed in the value"
 msgstr "བེ་ལུ་ནང་ བཀྲམ་སྟོན་འབད་ཡོད་པའི་ བཅུ་ཚག་གི་ས་གནས་གྱངས་ཁ།"
 
-#: gtk/gtkscale.c:210
+#: gtk/gtkscale.c:228
 msgid "Draw Value"
 msgstr "བེ་ལུ་བྲིས།"
 
-#: gtk/gtkscale.c:211
+#: gtk/gtkscale.c:229
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "ད་ལྟོའི་བེ་ལུ་དེ་ བཤུད་བྱེད་ཀྱི་རྗེས་སུ་ ཡིག་རྒྱུན་བཟུམ་ཅིག་སྦེ་ བཀྲམ་སྟོན་འབད་ག་མ་འབད།"
 
-#: gtk/gtkscale.c:218
+#: gtk/gtkscale.c:236
 msgid "Value Position"
 msgstr "བེ་ལུ་གནས་ས།"
 
-#: gtk/gtkscale.c:219
+#: gtk/gtkscale.c:237
 msgid "The position in which the current value is displayed"
 msgstr "ད་ལྟོའི་བེ་ལུ་ བཀྲམ་སྟོན་འབད་ཡོད་པའི་གནས་ས།"
 
-#: gtk/gtkscale.c:226
+#: gtk/gtkscale.c:244
 msgid "Slider Length"
 msgstr "བཤུད་བྱེད་ཀྱི་རིང་ཚད།"
 
-#: gtk/gtkscale.c:227
+#: gtk/gtkscale.c:245
 msgid "Length of scale's slider"
 msgstr "ཐིག་ཤིང་གི་ བཤུད་བྱེད་ཀྱི་རིང་ཚད།"
 
-#: gtk/gtkscale.c:235
+#: gtk/gtkscale.c:253
 msgid "Value spacing"
 msgstr "བེ་ལུ་གི་ བར་སྟོང་བཞག་ཐངས།"
 
-#: gtk/gtkscale.c:236
+#: gtk/gtkscale.c:254
 msgid "Space between value text and the slider/trough area"
 msgstr "བེ་ལུ་ཚིག་ཡིག་དང་ བཤུད་བྱེད / གཞོངམ་གི་མངའ་འཁོངས་བར་ནའི་བར་སྟོང༌།"
 

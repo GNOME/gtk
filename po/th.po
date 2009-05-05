@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:24-0400\n"
+"POT-Creation-Date: 2009-05-04 01:14-0400\n"
 "PO-Revision-Date: 2009-02-12 14:42+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -1145,46 +1145,51 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "กำลังเปิด %d รายการ"
 
-#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2110
+#: gtk/gtkaboutdialog.c:183
+#, fuzzy
+msgid "Could not show link"
+msgstr "ล้างรายการไม่สำเร็จ"
+
+#: gtk/gtkaboutdialog.c:306 gtk/gtkaboutdialog.c:2200
 msgid "License"
 msgstr "สัญญาอนุญาต"
 
-#: gtk/gtkaboutdialog.c:252
+#: gtk/gtkaboutdialog.c:307
 msgid "The license of the program"
 msgstr "สัญญาอนุญาตใช้งานของโปรแกรม"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:492
+#: gtk/gtkaboutdialog.c:545
 msgid "C_redits"
 msgstr "เ_ครดิต"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:506
+#: gtk/gtkaboutdialog.c:559
 msgid "_License"
 msgstr "สัญญา_อนุญาต"
 
-#: gtk/gtkaboutdialog.c:774
+#: gtk/gtkaboutdialog.c:827
 #, c-format
 msgid "About %s"
 msgstr "เกี่ยวกับ %s"
 
-#: gtk/gtkaboutdialog.c:2033
+#: gtk/gtkaboutdialog.c:2123
 msgid "Credits"
 msgstr "เครดิต"
 
-#: gtk/gtkaboutdialog.c:2062
+#: gtk/gtkaboutdialog.c:2152
 msgid "Written by"
 msgstr "เขียนโดย"
 
-#: gtk/gtkaboutdialog.c:2065
+#: gtk/gtkaboutdialog.c:2155
 msgid "Documented by"
 msgstr "เอกสารโดย"
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2167
 msgid "Translated by"
 msgstr "แปลโดย"
 
-#: gtk/gtkaboutdialog.c:2081
+#: gtk/gtkaboutdialog.c:2171
 msgid "Artwork by"
 msgstr "งานศิลป์โดย"
 
@@ -1365,10 +1370,20 @@ msgid "Disabled"
 msgstr "ปิดใช้งาน"
 
 #. This label is displayed in a treeview cell displaying
+#. * an accelerator key combination that is not valid according
+#. * to gtk_accelerator_valid().
+#.
+#: gtk/gtkcellrendereraccel.c:253
+#, fuzzy
+msgctxt "Accelerator"
+msgid "Invalid"
+msgstr "URI ไม่ถูกต้อง"
+
+#. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:379 gtk/gtkcellrendereraccel.c:591
+#: gtk/gtkcellrendereraccel.c:388 gtk/gtkcellrendereraccel.c:600
 msgid "New accelerator..."
 msgstr "กำหนดคีย์ด่วนใหม่..."
 
@@ -1503,15 +1518,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "เลือกสี"
 
-#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "_วิธีป้อนข้อความ"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8457 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "แ_ทรกอักขระควบคุมของยูนิโค้ด"
 
-#: gtk/gtkentry.c:9797
+#: gtk/gtkentry.c:9825
 msgid "Caps Lock is on"
 msgstr "ปุ่ม Caps Lock ติดอยู่"
 
@@ -2307,7 +2322,7 @@ msgstr "_ขนาดกระดาษ:"
 msgid "_Orientation:"
 msgstr "แ_นววาง:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2678
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2683
 msgid "Page Setup"
 msgstr "ตั้งหน้ากระดาษ"
 
@@ -2368,6 +2383,21 @@ msgstr "เดินลงในพาธ"
 msgid "File System Root"
 msgstr "รากของระบบแฟ้ม"
 
+#: gtk/gtkprintbackend.c:740
+#, fuzzy
+msgid "Authentication"
+msgstr "โปรแกรม"
+
+#: gtk/gtkprintbackend.c:772
+#, fuzzy
+msgid "Username:"
+msgstr "ชื่_อผู้ใช้:"
+
+#: gtk/gtkprintbackend.c:782
+#, fuzzy
+msgid "Password:"
+msgstr "_รหัสผ่าน::"
+
 #: gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
 msgstr "ไม่มี"
@@ -2380,77 +2410,77 @@ msgstr "บันทึกในโ_ฟลเดอร์:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:175
+#: gtk/gtkprintoperation.c:176
 #, c-format
 msgid "%s job #%d"
 msgstr "งานพิมพ์ %s #%d"
 
-#: gtk/gtkprintoperation.c:1517
+#: gtk/gtkprintoperation.c:1540
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "ขั้นแรก"
 
-#: gtk/gtkprintoperation.c:1518
+#: gtk/gtkprintoperation.c:1541
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "กำลังเตรียมพิมพ์"
 
-#: gtk/gtkprintoperation.c:1519
+#: gtk/gtkprintoperation.c:1542
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "กำลังสร้างข้อมูล"
 
-#: gtk/gtkprintoperation.c:1520
+#: gtk/gtkprintoperation.c:1543
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "กำลังส่งข้อมูล"
 
-#: gtk/gtkprintoperation.c:1521
+#: gtk/gtkprintoperation.c:1544
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "กำลังรอ"
 
-#: gtk/gtkprintoperation.c:1522
+#: gtk/gtkprintoperation.c:1545
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "ติดขัดด้วยเหตุขัดข้อง"
 
-#: gtk/gtkprintoperation.c:1523
+#: gtk/gtkprintoperation.c:1546
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "กำลังพิมพ์"
 
-#: gtk/gtkprintoperation.c:1524
+#: gtk/gtkprintoperation.c:1547
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "เสร็จสิ้น"
 
-#: gtk/gtkprintoperation.c:1525
+#: gtk/gtkprintoperation.c:1548
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "เสร็จสิ้นโดยมีข้อผิดพลาด"
 
-#: gtk/gtkprintoperation.c:2048
+#: gtk/gtkprintoperation.c:2071
 #, c-format
 msgid "Preparing %d"
 msgstr "กำลังเตรียมพิมพ์ %d"
 
-#: gtk/gtkprintoperation.c:2050 gtk/gtkprintoperation.c:2381
+#: gtk/gtkprintoperation.c:2073 gtk/gtkprintoperation.c:2404
 #, c-format
 msgid "Preparing"
 msgstr "กำลังเตรียมพิมพ์"
 
-#: gtk/gtkprintoperation.c:2053
+#: gtk/gtkprintoperation.c:2076
 #, c-format
 msgid "Printing %d"
 msgstr "กำลังพิมพ์ %d"
 
-#: gtk/gtkprintoperation.c:2411
+#: gtk/gtkprintoperation.c:2434
 #, c-format
 msgid "Error creating print preview"
 msgstr "เกิดข้อผิดพลาดขณะสร้างตัวอย่างก่อนพิมพ์"
 
-#: gtk/gtkprintoperation.c:2414
+#: gtk/gtkprintoperation.c:2437
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "สาเหตุที่น่าจะเป็นไปได้มากที่สุด คือไม่สามารถสร้างแฟ้มชั่วคราวได้"
@@ -2465,7 +2495,7 @@ msgstr "เกิดข้อผิดพลาดขณะเรียกแส
 msgid "Error printing"
 msgstr "เกิดข้อผิดพลาดขณะพิมพ์"
 
-#: gtk/gtkprintoperation-unix.c:405 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:425 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "โปรแกรม"
 
@@ -2479,7 +2509,7 @@ msgstr "กระดาษหมด"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1474
+#: modules/printbackends/cups/gtkprintbackendcups.c:1710
 msgid "Paused"
 msgstr "หยุดพัก"
 
@@ -2524,37 +2554,37 @@ msgstr "แฮนเดิลไปยัง PrintDlgEx ผิดพลาด"
 msgid "Unspecified error"
 msgstr "ข้อผิดพลาดไม่ปรากฏสาเหตุ"
 
-#: gtk/gtkprintunixdialog.c:1758
+#: gtk/gtkprintunixdialog.c:1763
 msgid "Printer"
 msgstr "เครื่องพิมพ์"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1768
+#: gtk/gtkprintunixdialog.c:1773
 msgid "Location"
 msgstr "ตำแหน่ง"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1779
+#: gtk/gtkprintunixdialog.c:1784
 msgid "Status"
 msgstr "สถานะ"
 
-#: gtk/gtkprintunixdialog.c:1804
+#: gtk/gtkprintunixdialog.c:1809
 msgid "Range"
 msgstr "ช่วง"
 
-#: gtk/gtkprintunixdialog.c:1808
+#: gtk/gtkprintunixdialog.c:1813
 msgid "_All Pages"
 msgstr "ทุ_กหน้า"
 
-#: gtk/gtkprintunixdialog.c:1815
+#: gtk/gtkprintunixdialog.c:1820
 msgid "C_urrent Page"
 msgstr "หน้า_ปัจจุบัน"
 
-#: gtk/gtkprintunixdialog.c:1824
+#: gtk/gtkprintunixdialog.c:1829
 msgid "Pag_es:"
 msgstr "_หน้า:"
 
-#: gtk/gtkprintunixdialog.c:1825
+#: gtk/gtkprintunixdialog.c:1830
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2562,125 +2592,125 @@ msgstr ""
 "ระบุช่วงของหน้าตั้งแต่หนึ่งช่วงขึ้นไป\n"
 " เช่น 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1835
+#: gtk/gtkprintunixdialog.c:1840
 #, fuzzy
 msgid "Pages"
 msgstr "_หน้า:"
 
-#: gtk/gtkprintunixdialog.c:1848
+#: gtk/gtkprintunixdialog.c:1853
 msgid "Copies"
 msgstr "สำเนา"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1853
+#: gtk/gtkprintunixdialog.c:1858
 msgid "Copie_s:"
 msgstr "จำ_นวนสำเนา:"
 
-#: gtk/gtkprintunixdialog.c:1871
+#: gtk/gtkprintunixdialog.c:1876
 msgid "C_ollate"
 msgstr "_ทีละชุด"
 
-#: gtk/gtkprintunixdialog.c:1879
+#: gtk/gtkprintunixdialog.c:1884
 msgid "_Reverse"
 msgstr "_จากหลังมาหน้า"
 
-#: gtk/gtkprintunixdialog.c:1899
+#: gtk/gtkprintunixdialog.c:1904
 msgid "General"
 msgstr "ทั่วไป"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2439
-#: modules/printbackends/cups/gtkprintbackendcups.c:2910
+#: gtk/gtkprintunixdialog.c:2444
+#: modules/printbackends/cups/gtkprintbackendcups.c:3164
 msgid "Page Ordering"
 msgstr "การเรียงหน้า"
 
-#: gtk/gtkprintunixdialog.c:2445
+#: gtk/gtkprintunixdialog.c:2450
 msgid "Left to right"
 msgstr "ซ้ายไปขวา"
 
-#: gtk/gtkprintunixdialog.c:2446
+#: gtk/gtkprintunixdialog.c:2451
 msgid "Right to left"
 msgstr "ขวามาซ้าย"
 
-#: gtk/gtkprintunixdialog.c:2515
+#: gtk/gtkprintunixdialog.c:2520
 msgid "Layout"
 msgstr "การจัดเรียง"
 
-#: gtk/gtkprintunixdialog.c:2519
+#: gtk/gtkprintunixdialog.c:2524
 msgid "T_wo-sided:"
 msgstr "พิมพ์_สองหน้า:"
 
-#: gtk/gtkprintunixdialog.c:2534
+#: gtk/gtkprintunixdialog.c:2539
 msgid "Pages per _side:"
 msgstr "จำนวนหน้าต่อห_น้ากระดาษ:"
 
-#: gtk/gtkprintunixdialog.c:2552
+#: gtk/gtkprintunixdialog.c:2557
 msgid "Page or_dering:"
 msgstr "การเ_รียงหน้า:"
 
-#: gtk/gtkprintunixdialog.c:2568
+#: gtk/gtkprintunixdialog.c:2573
 msgid "_Only print:"
 msgstr "พิ_มพ์เฉพาะ:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2583
+#: gtk/gtkprintunixdialog.c:2588
 msgid "All sheets"
 msgstr "ทุกหน้า"
 
-#: gtk/gtkprintunixdialog.c:2584
+#: gtk/gtkprintunixdialog.c:2589
 msgid "Even sheets"
 msgstr "หน้าคู่"
 
-#: gtk/gtkprintunixdialog.c:2585
+#: gtk/gtkprintunixdialog.c:2590
 msgid "Odd sheets"
 msgstr "หน้าคี่"
 
-#: gtk/gtkprintunixdialog.c:2588
+#: gtk/gtkprintunixdialog.c:2593
 msgid "Sc_ale:"
 msgstr "อัตรา_ขยาย:"
 
-#: gtk/gtkprintunixdialog.c:2615
+#: gtk/gtkprintunixdialog.c:2620
 msgid "Paper"
 msgstr "กระดาษ"
 
-#: gtk/gtkprintunixdialog.c:2619
+#: gtk/gtkprintunixdialog.c:2624
 msgid "Paper _type:"
 msgstr "_ชนิดกระดาษ:"
 
-#: gtk/gtkprintunixdialog.c:2634
+#: gtk/gtkprintunixdialog.c:2639
 msgid "Paper _source:"
 msgstr "แหล่ง_ป้อนกระดาษ:"
 
-#: gtk/gtkprintunixdialog.c:2649
+#: gtk/gtkprintunixdialog.c:2654
 msgid "Output t_ray:"
 msgstr "ถาดกระดาษ_ออก:"
 
-#: gtk/gtkprintunixdialog.c:2703
+#: gtk/gtkprintunixdialog.c:2708
 msgid "Job Details"
 msgstr "รายละเอียดงานพิมพ์"
 
-#: gtk/gtkprintunixdialog.c:2709
+#: gtk/gtkprintunixdialog.c:2714
 msgid "Pri_ority:"
 msgstr "_ลำดับความสำคัญ:"
 
-#: gtk/gtkprintunixdialog.c:2724
+#: gtk/gtkprintunixdialog.c:2729
 msgid "_Billing info:"
 msgstr "ข้อมูล_สรุป:"
 
-#: gtk/gtkprintunixdialog.c:2742
+#: gtk/gtkprintunixdialog.c:2747
 msgid "Print Document"
 msgstr "พิมพ์เอกสาร"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2751
+#: gtk/gtkprintunixdialog.c:2756
 msgid "_Now"
 msgstr "เ_ดี๋ยวนี้"
 
-#: gtk/gtkprintunixdialog.c:2762
+#: gtk/gtkprintunixdialog.c:2767
 msgid "A_t:"
 msgstr "เ_วลา:"
 
@@ -2688,7 +2718,7 @@ msgstr "เ_วลา:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:2768
+#: gtk/gtkprintunixdialog.c:2773
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2696,64 +2726,64 @@ msgstr ""
 "ระบุเวลาที่จะพิมพ์\n"
 " เช่น 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: gtk/gtkprintunixdialog.c:2778
+#: gtk/gtkprintunixdialog.c:2783
 msgid "Time of print"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2794
+#: gtk/gtkprintunixdialog.c:2799
 msgid "On _hold"
 msgstr "_รอไว้"
 
-#: gtk/gtkprintunixdialog.c:2795
+#: gtk/gtkprintunixdialog.c:2800
 msgid "Hold the job until it is explicitly released"
 msgstr "พักงานพิมพ์รอไว้จนกว่าจะสั่ง"
 
-#: gtk/gtkprintunixdialog.c:2815
+#: gtk/gtkprintunixdialog.c:2820
 msgid "Add Cover Page"
 msgstr "เพิ่มหน้าปก"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2824
+#: gtk/gtkprintunixdialog.c:2829
 msgid "Be_fore:"
 msgstr "ปก_หน้า:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2842
+#: gtk/gtkprintunixdialog.c:2847
 msgid "_After:"
 msgstr "ปกหลั_ง:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2860
+#: gtk/gtkprintunixdialog.c:2865
 msgid "Job"
 msgstr "งานพิมพ์"
 
-#: gtk/gtkprintunixdialog.c:2926
+#: gtk/gtkprintunixdialog.c:2931
 msgid "Advanced"
 msgstr "ขั้นสูง"
 
-#: gtk/gtkprintunixdialog.c:2961
+#: gtk/gtkprintunixdialog.c:2966
 msgid "Image Quality"
 msgstr "คุณภาพของรูป"
 
-#: gtk/gtkprintunixdialog.c:2964
+#: gtk/gtkprintunixdialog.c:2969
 msgid "Color"
 msgstr "สี"
 
-#: gtk/gtkprintunixdialog.c:2967
+#: gtk/gtkprintunixdialog.c:2972
 msgid "Finishing"
 msgstr "กำลังเสร็จสิ้น"
 
-#: gtk/gtkprintunixdialog.c:2977
+#: gtk/gtkprintunixdialog.c:2982
 msgid "Some of the settings in the dialog conflict"
 msgstr "ค่าตั้งบางค่าในกล่องโต้ตอบขัดแย้งกัน"
 
-#: gtk/gtkprintunixdialog.c:3000
+#: gtk/gtkprintunixdialog.c:3005
 msgid "Print"
 msgstr "พิมพ์"
 
@@ -4570,217 +4600,265 @@ msgstr "เวียดนาม (VIQR)"
 msgid "X Input Method"
 msgstr "X Input Method"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1176
+#: modules/printbackends/cups/gtkprintbackendcups.c:769
+#, c-format
+msgid "Authentication is required to get a file from %s"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:773
+#, c-format
+msgid "Authentication is required to print document '%s' on printer %s"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:775
+#, c-format
+msgid "Authentication is required to print a document on %s"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:779
+#, c-format
+msgid "Authentication is required to get attributes of job '%s'"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:781
+msgid "Authentication is required to get attributes of a job"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:785
+#, c-format
+msgid "Authentication is required to get attributes of printer %s"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:787
+msgid "Authentication is required to get attributes of a printer"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:790
+#, c-format
+msgid "Authentication is required to get default printer of %s"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:793
+#, c-format
+msgid "Authentication is required to get printers from %s"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:796
+#, c-format
+msgid "Authentication is required on %s"
+msgstr ""
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1412
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "เครื่องพิมพ์ '%s' หมึกเหลือน้อย"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1177
+#: modules/printbackends/cups/gtkprintbackendcups.c:1413
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "เครื่องพิมพ์ '%s' หมึกหมด"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1179
+#: modules/printbackends/cups/gtkprintbackendcups.c:1415
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "เครื่องพิมพ์ '%s' ตัว develop เหลือน้อย"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1181
+#: modules/printbackends/cups/gtkprintbackendcups.c:1417
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "เครื่องพิมพ์ '%s' ตัว develop หมด"
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1183
+#: modules/printbackends/cups/gtkprintbackendcups.c:1419
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "เครื่องพิมพ์ '%s' วัสดุพิมพ์บางอย่างเหลือน้อย"
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1185
+#: modules/printbackends/cups/gtkprintbackendcups.c:1421
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "เครื่องพิมพ์ '%s' วัสดุพิมพ์บางอย่างหมด"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1186
+#: modules/printbackends/cups/gtkprintbackendcups.c:1422
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "ฝาเครื่องเปิดอยู่ที่เครื่องพิมพ์ '%s'"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1187
+#: modules/printbackends/cups/gtkprintbackendcups.c:1423
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "ประตูเปิดอยู่ที่เครื่องพิมพ์ '%s'"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1188
+#: modules/printbackends/cups/gtkprintbackendcups.c:1424
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "เครื่องพิมพ์ '%s' เหลือกระดาษน้อย"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1189
+#: modules/printbackends/cups/gtkprintbackendcups.c:1425
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "เครื่องพิมพ์ '%s' กระดาษหมด"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1190
+#: modules/printbackends/cups/gtkprintbackendcups.c:1426
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "เครื่องพิมพ์ '%s' ออฟไลน์อยู่"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1191
+#: modules/printbackends/cups/gtkprintbackendcups.c:1427
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "เครื่องพิมพ์ '%s' อาจไม่ได้เชื่อมต่อ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1192
+#: modules/printbackends/cups/gtkprintbackendcups.c:1428
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "มีปัญหากับเครื่องพิมพ์ '%s'"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1707
 msgid "Paused ; Rejecting Jobs"
 msgstr "หยุดพัก ; ไม่รับงานพิมพ์"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1477
+#: modules/printbackends/cups/gtkprintbackendcups.c:1713
 msgid "Rejecting Jobs"
 msgstr "ไม่รับงานพิมพ์"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2145
+#: modules/printbackends/cups/gtkprintbackendcups.c:2399
 msgid "Two Sided"
 msgstr "สองหน้า"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2146
+#: modules/printbackends/cups/gtkprintbackendcups.c:2400
 msgid "Paper Type"
 msgstr "ชนิดกระดาษ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2147
+#: modules/printbackends/cups/gtkprintbackendcups.c:2401
 msgid "Paper Source"
 msgstr "แหล่งป้อนกระดาษ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2148
+#: modules/printbackends/cups/gtkprintbackendcups.c:2402
 msgid "Output Tray"
 msgstr "ถาดกระดาษออก"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2149
+#: modules/printbackends/cups/gtkprintbackendcups.c:2403
 msgid "Resolution"
 msgstr "ความละเอียด"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2150
+#: modules/printbackends/cups/gtkprintbackendcups.c:2404
 msgid "GhostScript pre-filtering"
 msgstr "การกรองเบื้องต้นด้วย GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2159
+#: modules/printbackends/cups/gtkprintbackendcups.c:2413
 msgid "One Sided"
 msgstr "หน้าเดียว"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2161
+#: modules/printbackends/cups/gtkprintbackendcups.c:2415
 msgid "Long Edge (Standard)"
 msgstr "ขอบด้านยาว (มาตรฐาน)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2163
+#: modules/printbackends/cups/gtkprintbackendcups.c:2417
 msgid "Short Edge (Flip)"
 msgstr "ขอบด้านสั้น (พลิก)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2165
-#: modules/printbackends/cups/gtkprintbackendcups.c:2167
-#: modules/printbackends/cups/gtkprintbackendcups.c:2175
+#: modules/printbackends/cups/gtkprintbackendcups.c:2419
+#: modules/printbackends/cups/gtkprintbackendcups.c:2421
+#: modules/printbackends/cups/gtkprintbackendcups.c:2429
 msgid "Auto Select"
 msgstr "เลือกโดยอัตโนมัติ"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2169
-#: modules/printbackends/cups/gtkprintbackendcups.c:2171
-#: modules/printbackends/cups/gtkprintbackendcups.c:2173
-#: modules/printbackends/cups/gtkprintbackendcups.c:2177
-#: modules/printbackends/cups/gtkprintbackendcups.c:2663
+#: modules/printbackends/cups/gtkprintbackendcups.c:2423
+#: modules/printbackends/cups/gtkprintbackendcups.c:2425
+#: modules/printbackends/cups/gtkprintbackendcups.c:2427
+#: modules/printbackends/cups/gtkprintbackendcups.c:2431
+#: modules/printbackends/cups/gtkprintbackendcups.c:2917
 msgid "Printer Default"
 msgstr "ค่าปริยายเครื่องพิมพ์"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2179
+#: modules/printbackends/cups/gtkprintbackendcups.c:2433
 msgid "Embed GhostScript fonts only"
 msgstr "ฝังแบบอักษร GhostScript เท่านั้น"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2181
+#: modules/printbackends/cups/gtkprintbackendcups.c:2435
 msgid "Convert to PS level 1"
 msgstr "แปลงเป็น PS ระดับ 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2183
+#: modules/printbackends/cups/gtkprintbackendcups.c:2437
 msgid "Convert to PS level 2"
 msgstr "แปลงเป็น PS ระดับ 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2185
+#: modules/printbackends/cups/gtkprintbackendcups.c:2439
 msgid "No pre-filtering"
 msgstr "ไม่ต้องกรองเบื้องต้น"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2194
+#: modules/printbackends/cups/gtkprintbackendcups.c:2448
 msgid "Miscellaneous"
 msgstr "จิปาถะ"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2871
+#: modules/printbackends/cups/gtkprintbackendcups.c:3125
 msgid "Urgent"
 msgstr "ด่วน"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2871
+#: modules/printbackends/cups/gtkprintbackendcups.c:3125
 msgid "High"
 msgstr "สูง"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2871
+#: modules/printbackends/cups/gtkprintbackendcups.c:3125
 msgid "Medium"
 msgstr "ปานกลาง"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2871
+#: modules/printbackends/cups/gtkprintbackendcups.c:3125
 msgid "Low"
 msgstr "ต่ำ"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2876
+#: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, top to bottom"
 msgstr "ซ้ายไปขวา, บนลงล่าง"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2876
+#: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, bottom to top"
 msgstr "ซ้ายไปขวา, ล่างขึ้นบน"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2877
+#: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, top to bottom"
 msgstr "ขวามาซ้าย, บนลงล่าง"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2877
+#: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, bottom to top"
 msgstr "ขวามาซ้าย, ล่างขึ้นบน"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2878
+#: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, left to right"
 msgstr "บนลงล่าง, ซ้ายไปขวา"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2878
+#: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, right to left"
 msgstr "บนลงล่าง, ขวามาซ้าย"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2879
+#: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, left to right"
 msgstr "ล่างขึ้นบน, ซ้ายไปขวา"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2879
+#: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, right to left"
 msgstr "ล่างขึ้นบน, ขวามาซ้าย"
 
@@ -4788,66 +4866,66 @@ msgstr "ล่างขึ้นบน, ขวามาซ้าย"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2894
+#: modules/printbackends/cups/gtkprintbackendcups.c:3148
 msgid "Pages per Sheet"
 msgstr "จำนวนหน้าต่อแผ่น"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2931
+#: modules/printbackends/cups/gtkprintbackendcups.c:3185
 msgid "Job Priority"
 msgstr "ลำดับความสำคัญของงานพิมพ์"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2942
+#: modules/printbackends/cups/gtkprintbackendcups.c:3196
 msgid "Billing Info"
 msgstr "ข้อมูลสรุป"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2956
+#: modules/printbackends/cups/gtkprintbackendcups.c:3210
 msgid "None"
 msgstr "ไม่มี"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2956
+#: modules/printbackends/cups/gtkprintbackendcups.c:3210
 msgid "Classified"
 msgstr "คัดแยกแล้ว"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2956
+#: modules/printbackends/cups/gtkprintbackendcups.c:3210
 msgid "Confidential"
 msgstr "ปกปิด"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2956
+#: modules/printbackends/cups/gtkprintbackendcups.c:3210
 msgid "Secret"
 msgstr "ลับ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2956
+#: modules/printbackends/cups/gtkprintbackendcups.c:3210
 msgid "Standard"
 msgstr "มาตรฐาน"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2956
+#: modules/printbackends/cups/gtkprintbackendcups.c:3210
 msgid "Top Secret"
 msgstr "ลับสุดยอด"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2956
+#: modules/printbackends/cups/gtkprintbackendcups.c:3210
 msgid "Unclassified"
 msgstr "ยังไม่คัดแยก"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2991
+#: modules/printbackends/cups/gtkprintbackendcups.c:3245
 msgid "Before"
 msgstr "ปกหน้า"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3006
+#: modules/printbackends/cups/gtkprintbackendcups.c:3260
 msgid "After"
 msgstr "ปกหลัง"
 
@@ -4855,14 +4933,14 @@ msgstr "ปกหลัง"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3026
+#: modules/printbackends/cups/gtkprintbackendcups.c:3280
 msgid "Print at"
 msgstr "พิมพ์เมื่อ"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3037
+#: modules/printbackends/cups/gtkprintbackendcups.c:3291
 msgid "Print at time"
 msgstr "พิมพ์เมื่อเวลา"
 
@@ -4870,7 +4948,7 @@ msgstr "พิมพ์เมื่อเวลา"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3072
+#: modules/printbackends/cups/gtkprintbackendcups.c:3326
 #, c-format
 msgid "Custom %sx%s"
 msgstr "กำหนดเอง %sx%s"

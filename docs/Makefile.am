@@ -19,3 +19,5 @@ EXTRA_DIST += \
 	generation.txt			\
 	gtkdocs_fix			\
 	RELEASE-HOWTO
+
+-include $(top_srcdir)/git.mk

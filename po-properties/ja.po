@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:25-0400\n"
+"POT-Creation-Date: 2009-05-04 01:14-0400\n"
 "PO-Revision-Date: 2009-03-16 07:38+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -118,11 +118,11 @@ msgstr "フォントの解像度"
 msgid "The resolution for fonts on the screen"
 msgstr "画面上でのフォントの解像度です"
 
-#: gtk/gtkaboutdialog.c:184
+#: gtk/gtkaboutdialog.c:239
 msgid "Program name"
 msgstr "プログラムの名前"
 
-#: gtk/gtkaboutdialog.c:185
+#: gtk/gtkaboutdialog.c:240
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -130,43 +130,43 @@ msgstr ""
 "プログラムの名前です (これがセットされていない場合、関数 "
 "g_get_application_name() の結果をデフォルトにします)"
 
-#: gtk/gtkaboutdialog.c:199
+#: gtk/gtkaboutdialog.c:254
 msgid "Program version"
 msgstr "プログラムのバージョン"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:255
 msgid "The version of the program"
 msgstr "プログラムのバージョンです"
 
-#: gtk/gtkaboutdialog.c:214
+#: gtk/gtkaboutdialog.c:269
 msgid "Copyright string"
 msgstr "コピーライトの文字列"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:270
 msgid "Copyright information for the program"
 msgstr "プログラムのコピーライト情報です"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:287
 msgid "Comments string"
 msgstr "コメントの文字列"
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:288
 msgid "Comments about the program"
 msgstr "プログラムについてのコメントです"
 
-#: gtk/gtkaboutdialog.c:267
+#: gtk/gtkaboutdialog.c:322
 msgid "Website URL"
 msgstr "ウェブサイトの URL"
 
-#: gtk/gtkaboutdialog.c:268
+#: gtk/gtkaboutdialog.c:323
 msgid "The URL for the link to the website of the program"
 msgstr "プログラムのウェブサイトを示す URL です"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:339
 msgid "Website label"
 msgstr "ウェブサイトのラベル"
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:340
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -174,45 +174,45 @@ msgstr ""
 "プログラムのウェブサイトを示すラベルです (これがセットされていない場合、URL "
 "がデフォルトになります)"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:356
 msgid "Authors"
 msgstr "作者"
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:357
 msgid "List of authors of the program"
 msgstr "プログラムの作者の一覧です"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:373
 msgid "Documenters"
 msgstr "ドキュメント担当"
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:374
 msgid "List of people documenting the program"
 msgstr "プログラムのドキュメントを担当した人達の一覧です"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:390
 msgid "Artists"
 msgstr "アーティスト"
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:391
 msgid "List of people who have contributed artwork to the program"
 msgstr "プログラムのアートワークに貢献した人達の一覧です"
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:408
 msgid "Translator credits"
 msgstr "翻訳担当"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:409
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "翻訳者のクレジットです (この文字列は翻訳可能な文字列としてマークして下さい)"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:424
 msgid "Logo"
 msgstr "ロゴ"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:425
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -220,19 +220,19 @@ msgstr ""
 "情報ダイアログのロゴです (これがセットされていない場合、"
 "gtk_window_get_default_icon_list() の結果をデフォルトにします)"
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:440
 msgid "Logo Icon Name"
 msgstr "ロゴのアイコン名"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:441
 msgid "A named icon to use as the logo for the about box."
 msgstr "情報ダイアログのロゴに使用するアイコン名です"
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:454
 msgid "Wrap license"
 msgstr "ライセンスのラッピング"
 
-#: gtk/gtkaboutdialog.c:400
+#: gtk/gtkaboutdialog.c:455
 msgid "Whether to wrap the license text."
 msgstr "ライセンスの条文をラップするかどうかです"
 
@@ -591,59 +591,59 @@ msgstr "子ウィジェットに従う"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "フレームの子ウィジェットのアスペクト比に強制的に合わせるかどうかです"
 
-#: gtk/gtkassistant.c:261
+#: gtk/gtkassistant.c:281
 msgid "Header Padding"
 msgstr "ヘッダのパディング"
 
-#: gtk/gtkassistant.c:262
+#: gtk/gtkassistant.c:282
 msgid "Number of pixels around the header."
 msgstr "ヘッダの周囲に挿入する余白 (ピクセル単位) です"
 
-#: gtk/gtkassistant.c:269
+#: gtk/gtkassistant.c:289
 msgid "Content Padding"
 msgstr "ページ内容のパディング"
 
-#: gtk/gtkassistant.c:270
+#: gtk/gtkassistant.c:290
 msgid "Number of pixels around the content pages."
 msgstr "各ページの内容の周囲に挿入する余白 (ピクセル単位) です"
 
-#: gtk/gtkassistant.c:286
+#: gtk/gtkassistant.c:306
 msgid "Page type"
 msgstr "ページの種類"
 
-#: gtk/gtkassistant.c:287
+#: gtk/gtkassistant.c:307
 msgid "The type of the assistant page"
 msgstr "アシスタントのページの種類です"
 
-#: gtk/gtkassistant.c:304
+#: gtk/gtkassistant.c:324
 msgid "Page title"
 msgstr "ページのタイトル"
 
-#: gtk/gtkassistant.c:305
+#: gtk/gtkassistant.c:325
 msgid "The title of the assistant page"
 msgstr "アシスタントのページに表示する題名です"
 
-#: gtk/gtkassistant.c:321
+#: gtk/gtkassistant.c:341
 msgid "Header image"
 msgstr "ヘッダの画像"
 
-#: gtk/gtkassistant.c:322
+#: gtk/gtkassistant.c:342
 msgid "Header image for the assistant page"
 msgstr "アシスタントのページに表示するヘッダの画像です"
 
-#: gtk/gtkassistant.c:338
+#: gtk/gtkassistant.c:358
 msgid "Sidebar image"
 msgstr "サイドバーの画像"
 
-#: gtk/gtkassistant.c:339
+#: gtk/gtkassistant.c:359
 msgid "Sidebar image for the assistant page"
 msgstr "アシスタントのページに表示するサイドバーの画像です"
 
-#: gtk/gtkassistant.c:354
+#: gtk/gtkassistant.c:374
 msgid "Page complete"
 msgstr "アシスタントの完了かどうかです"
 
-#: gtk/gtkassistant.c:355
+#: gtk/gtkassistant.c:375
 msgid "Whether all required fields on the page have been filled out"
 msgstr "アシスタントが提供する全てのページの入力が完了したかどうかです"
 
@@ -903,7 +903,7 @@ msgid ""
 msgstr ""
 "プロパティ child_displacement_x/_y もフォーカスの範囲に影響するかどうかです"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1682
 msgid "Inner Border"
 msgstr "内側の境界線"
 
@@ -1315,7 +1315,7 @@ msgstr "増分値の割合"
 msgid "The acceleration rate when you hold down a button"
 msgstr "ボタンを押したままにした時に加速する割合です"
 
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:200 gtk/gtkspinbutton.c:226
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:218 gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "桁数"
 
@@ -2159,11 +2159,11 @@ msgstr ""
 "テキストからフレームまでの境界線で、inner-border スタイルのプロパティでオー"
 "バーライドされます"
 
-#: gtk/gtkentry.c:666
+#: gtk/gtkentry.c:666 gtk/gtkentry.c:1232
 msgid "Invisible character"
 msgstr "隠し文字"
 
-#: gtk/gtkentry.c:667
+#: gtk/gtkentry.c:667 gtk/gtkentry.c:1233
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "エントリの内容を隠す際に使用する文字を指定します (例: \"パスワード入力モード"
@@ -2437,31 +2437,31 @@ msgstr "プログレス・バーの境界線"
 msgid "Border around the progress bar"
 msgstr "プログレス・バーの周りに付与する境界線です"
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1683
 msgid "Border between text and frame."
 msgstr "テキストとフレームとの間にある境界線です"
 
-#: gtk/gtkentry.c:1676
+#: gtk/gtkentry.c:1697
 msgid "State Hint"
 msgstr "状態を報告するかどうか"
 
-#: gtk/gtkentry.c:1677
+#: gtk/gtkentry.c:1698
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "影や背景を描画する際に妥当な状態を渡すかどうかです"
 
-#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1703 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "フォーカス部の選択"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1704
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "エントリにフォーカスが当たった際にその内容を選択するかどうかです"
 
-#: gtk/gtkentry.c:1697
+#: gtk/gtkentry.c:1718
 msgid "Password Hint Timeout"
 msgstr "パスワード・ヒントのタイムアウト"
 
-#: gtk/gtkentry.c:1698
+#: gtk/gtkentry.c:1719
 msgid "How long to show the last input character in hidden entries"
 msgstr "隠しエントリで最後に入力した文字を表示しておく時間です"
 
@@ -4063,7 +4063,7 @@ msgstr "プリンタの設定です"
 msgid "Page Setup"
 msgstr "ページの設定"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1027
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1050
 msgid "Track Print Status"
 msgstr "印刷状態の追跡"
 
@@ -4075,51 +4075,51 @@ msgstr ""
 "印刷データをプリンタまたはプリンタ・サーバに送信した後に、status-changed シグ"
 "ナルを送信し続ける場合は TRUE です"
 
-#: gtk/gtkprintoperation.c:899
+#: gtk/gtkprintoperation.c:922
 msgid "Default Page Setup"
 msgstr "デフォルトのページ設定です"
 
-#: gtk/gtkprintoperation.c:900
+#: gtk/gtkprintoperation.c:923
 msgid "The GtkPageSetup used by default"
 msgstr "デフォルトで使用する GtkPageSetup オブジェクトです"
 
-#: gtk/gtkprintoperation.c:918 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "印刷の設定"
 
-#: gtk/gtkprintoperation.c:919 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "ダイアログを初期化する際に使用する GtkPrintSettings オブジェクトです"
 
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:960
 msgid "Job Name"
 msgstr "ジョブの名前"
 
-#: gtk/gtkprintoperation.c:938
+#: gtk/gtkprintoperation.c:961
 msgid "A string used for identifying the print job."
 msgstr "印刷ジョブを識別する際に使用する文字列です"
 
-#: gtk/gtkprintoperation.c:962
+#: gtk/gtkprintoperation.c:985
 msgid "Number of Pages"
 msgstr "ページ数"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:986
 msgid "The number of pages in the document."
 msgstr "ドキュメントのページ数です"
 
-#: gtk/gtkprintoperation.c:984 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1007 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "現在のページ"
 
-#: gtk/gtkprintoperation.c:985 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1008 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "現在のページ"
 
-#: gtk/gtkprintoperation.c:1006
+#: gtk/gtkprintoperation.c:1029
 msgid "Use full page"
 msgstr "ページ全体の使用"
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1030
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4127,7 +4127,7 @@ msgstr ""
 "コンテキストの原点を画像として表示した領域の隅ではなく実際のページの隅にする"
 "場合は TRUE です"
 
-#: gtk/gtkprintoperation.c:1028
+#: gtk/gtkprintoperation.c:1051
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4135,55 +4135,55 @@ msgstr ""
 "印刷するデータをプリンタまたはプリンタ・サーバに送信した後に、その印刷ジョブ"
 "の状態を報告し続ける場合は TRUE です"
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Unit"
 msgstr "単位"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "The unit in which distances can be measured in the context"
 msgstr "コンテキスト内の長さを測定する際に使用する単位です"
 
-#: gtk/gtkprintoperation.c:1063
+#: gtk/gtkprintoperation.c:1086
 msgid "Show Dialog"
 msgstr "ダイアログの表示"
 
-#: gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintoperation.c:1087
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "印刷中にプログレス・ダイアログを表示する場合は TRUE です"
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1110
 msgid "Allow Async"
 msgstr "非同期の実行の許可"
 
-#: gtk/gtkprintoperation.c:1088
+#: gtk/gtkprintoperation.c:1111
 msgid "TRUE if print process may run asynchronous."
 msgstr "印刷プロセスを非同期に実行する場合は TRUE です"
 
-#: gtk/gtkprintoperation.c:1110 gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1133 gtk/gtkprintoperation.c:1134
 msgid "Export filename"
 msgstr "ファイル名のエキスポート"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Status"
 msgstr "状態"
 
-#: gtk/gtkprintoperation.c:1126
+#: gtk/gtkprintoperation.c:1149
 msgid "The status of the print operation"
 msgstr "印刷操作の状態"
 
-#: gtk/gtkprintoperation.c:1146
+#: gtk/gtkprintoperation.c:1169
 msgid "Status String"
 msgstr "状態を表す文字列"
 
-#: gtk/gtkprintoperation.c:1147
+#: gtk/gtkprintoperation.c:1170
 msgid "A human-readable description of the status"
 msgstr "プリンタを状態を表す説明です"
 
-#: gtk/gtkprintoperation.c:1165
+#: gtk/gtkprintoperation.c:1188
 msgid "Custom tab label"
 msgstr "カスタム・タブのラベル"
 
-#: gtk/gtkprintoperation.c:1166
+#: gtk/gtkprintoperation.c:1189
 msgid "Label for the tab containing custom widgets."
 msgstr "カスタム・ウィジェットに含まれるタブのラベルです"
 
@@ -4660,39 +4660,39 @@ msgstr "計測の単位"
 msgid "The metric used for the ruler"
 msgstr "ルーラで使用する単位です"
 
-#: gtk/gtkscale.c:201
+#: gtk/gtkscale.c:219
 msgid "The number of decimal places that are displayed in the value"
 msgstr "目盛りを表記する 10 進数値"
 
-#: gtk/gtkscale.c:210
+#: gtk/gtkscale.c:228
 msgid "Draw Value"
 msgstr "値の描画"
 
-#: gtk/gtkscale.c:211
+#: gtk/gtkscale.c:229
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "次のスライダの文字列として現在値を表示するかどうかです"
 
-#: gtk/gtkscale.c:218
+#: gtk/gtkscale.c:236
 msgid "Value Position"
 msgstr "値の位置"
 
-#: gtk/gtkscale.c:219
+#: gtk/gtkscale.c:237
 msgid "The position in which the current value is displayed"
 msgstr "現在地を表示する位置"
 
-#: gtk/gtkscale.c:226
+#: gtk/gtkscale.c:244
 msgid "Slider Length"
 msgstr "スライダの長さ"
 
-#: gtk/gtkscale.c:227
+#: gtk/gtkscale.c:245
 msgid "Length of scale's slider"
 msgstr "スケール・スライダの長さ"
 
-#: gtk/gtkscale.c:235
+#: gtk/gtkscale.c:253
 msgid "Value spacing"
 msgstr "値の間隔"
 
-#: gtk/gtkscale.c:236
+#: gtk/gtkscale.c:254
 msgid "Space between value text and the slider/trough area"
 msgstr "値を示すテキストとスライダ/トロフ領域との間隔"
 

@@ -1078,6 +1078,7 @@ gtk_handle_box_button_press (GtkWidget      *widget,
 	      gint root_x, root_y;
 	      gint width, height;
 
+              gtk_invisible_set_screen (GTK_INVISIBLE (invisible), gtk_widget_get_screen (hb));
 	      gdk_window_get_deskrelative_origin (hb->bin_window, &desk_x, &desk_y);
 	      gdk_window_get_origin (hb->bin_window, &root_x, &root_y);
 	      gdk_drawable_get_size (hb->bin_window, &width, &height);

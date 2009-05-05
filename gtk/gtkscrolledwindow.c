@@ -1190,6 +1190,8 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
 	  break;
 	}
 
+      value = CLAMP (value, adjustment->lower, adjustment->upper - adjustment->page_size);
+      
       gtk_adjustment_set_value (adjustment, value);
 
       return TRUE;
@@ -1573,11 +1575,13 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
   if (range && GTK_WIDGET_VISIBLE (range))
     {
       GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
-      gdouble delta;
+      gdouble delta, new_value;
 
       delta = _gtk_range_get_wheel_delta (GTK_RANGE (range), event->direction);
 
-      gtk_adjustment_set_value (adj, adj->value + delta);
+      new_value = CLAMP (adj->value + delta, adj->lower, adj->upper - adj->page_size);
+      
+      gtk_adjustment_set_value (adj, new_value);
 
       return TRUE;
     }

@@ -30,3 +30,5 @@ EXTRA_DIST +=				\
 	DETAILS				\
 	pixbuf-transform-math.ltx	\
 	makefile.msc
+
+-include $(top_srcdir)/git.mk

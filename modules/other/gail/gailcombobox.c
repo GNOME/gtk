@@ -138,6 +138,7 @@ gail_combo_box_changed_gtk (GtkWidget *widget)
   if (gail_combo_box->old_selection != index)
     {
       gail_combo_box->old_selection = index;
+      g_object_notify (G_OBJECT (obj), "accessible-name");
       g_signal_emit_by_name (obj, "selection_changed");
     }
 }

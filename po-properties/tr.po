@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:25-0400\n"
+"POT-Creation-Date: 2009-05-04 01:14-0400\n"
 "PO-Revision-Date: 2009-02-16 19:01+0200\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -136,11 +136,11 @@ msgid "The resolution for fonts on the screen"
 msgstr "Ekran üzerindeki yazıtiplerinin çözünürlüğü"
 
 # gtk/gtktexttag.c:198
-#: gtk/gtkaboutdialog.c:184
+#: gtk/gtkaboutdialog.c:239
 msgid "Program name"
 msgstr "Program ismi"
 
-#: gtk/gtkaboutdialog.c:185
+#: gtk/gtkaboutdialog.c:240
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -148,45 +148,45 @@ msgstr ""
 "Programın ismi. Eğer atanmamışsa, g_get_application_name() öntanımlı olarak "
 "kullanılır"
 
-#: gtk/gtkaboutdialog.c:199
+#: gtk/gtkaboutdialog.c:254
 msgid "Program version"
 msgstr "Program sürümü"
 
 # gtk/gtktoolbar.c:224
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:255
 msgid "The version of the program"
 msgstr "Programın sürümü"
 
-#: gtk/gtkaboutdialog.c:214
+#: gtk/gtkaboutdialog.c:269
 msgid "Copyright string"
 msgstr "Telif hakkı dizgisi"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:270
 msgid "Copyright information for the program"
 msgstr "Progam için telif hakkı bilgisi"
 
 # gtk/gtktable.c:183
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:287
 msgid "Comments string"
 msgstr "Açıklamalar dizgisi"
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:288
 msgid "Comments about the program"
 msgstr "Program hakkında açıklamalar"
 
-#: gtk/gtkaboutdialog.c:267
+#: gtk/gtkaboutdialog.c:322
 msgid "Website URL"
 msgstr "Web sitesi URL'si"
 
-#: gtk/gtkaboutdialog.c:268
+#: gtk/gtkaboutdialog.c:323
 msgid "The URL for the link to the website of the program"
 msgstr "Programın web sitesine olan bağ için URL"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:339
 msgid "Website label"
 msgstr "Web site etiketi"
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:340
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -194,45 +194,45 @@ msgstr ""
 "Programın web sitesine olan bağ için etiket. Eğer atanmamışsa, URL öntanımlı "
 "olarak kullanılır"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:356
 msgid "Authors"
 msgstr "Yazanlar"
 
 # gtk/gtktoolbar.c:224
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:357
 msgid "List of authors of the program"
 msgstr "Programı yazanların listesi"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:373
 msgid "Documenters"
 msgstr "Belgeleyenler"
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:374
 msgid "List of people documenting the program"
 msgstr "Programın belgelendirmesini yapanların listesi"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:390
 msgid "Artists"
 msgstr "Sanatçılar"
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:391
 msgid "List of people who have contributed artwork to the program"
 msgstr "Programın sanatsal çalışmalarına katkıda bulunanların listesi"
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:408
 msgid "Translator credits"
 msgstr "Çeviren"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:409
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Programı çevirenler. Bu dizgi çevirilebilir olarak işaretlenmelidir"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:424
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:425
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -241,21 +241,21 @@ msgstr ""
 "gtk_window_get_default_icon_list() öntanımlı olarak kullanılır"
 
 # gtk/gtkfontsel.c:185
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:440
 msgid "Logo Icon Name"
 msgstr "Logo Simge İsmi"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:441
 msgid "A named icon to use as the logo for the about box."
 msgstr "Hakkında kutusu için logo olarak kullanılacak isimlendirilmiş simge."
 
 # gtk/gtktexttag.c:607
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:454
 msgid "Wrap license"
 msgstr "Lisansın bölünmesi"
 
 # gtk/gtkcellrenderertext.c:324 gtk/gtktexttag.c:467
-#: gtk/gtkaboutdialog.c:400
+#: gtk/gtkaboutdialog.c:455
 msgid "Whether to wrap the license text."
 msgstr "Lisans metnini bölünerek yazılması."
 
@@ -655,67 +655,67 @@ msgstr "Alta uy"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "Çerçevenin altıyla en-boy oranının eşleşmesini sağlar"
 
-#: gtk/gtkassistant.c:261
+#: gtk/gtkassistant.c:281
 msgid "Header Padding"
 msgstr "Başlık Doldurma"
 
 # gtk/gtkmenubar.c:155
-#: gtk/gtkassistant.c:262
+#: gtk/gtkassistant.c:282
 msgid "Number of pixels around the header."
 msgstr "Başlığın çevresindeki piksellerin sayısı."
 
-#: gtk/gtkassistant.c:269
+#: gtk/gtkassistant.c:289
 msgid "Content Padding"
 msgstr "İçerik Doldurma"
 
 # gtk/gtkmenubar.c:155
-#: gtk/gtkassistant.c:270
+#: gtk/gtkassistant.c:290
 msgid "Number of pixels around the content pages."
 msgstr "İçerik sayfalarının çevresindeki piksellerin sayısı."
 
 # gtk/gtktoolbar.c:259
-#: gtk/gtkassistant.c:286
+#: gtk/gtkassistant.c:306
 msgid "Page type"
 msgstr "Sayfa türü"
 
 # gtk/gtklabel.c:199
-#: gtk/gtkassistant.c:287
+#: gtk/gtkassistant.c:307
 msgid "The type of the assistant page"
 msgstr "Yardımcı sayfanın türü"
 
 # gtk/gtkruler.c:148
-#: gtk/gtkassistant.c:304
+#: gtk/gtkassistant.c:324
 msgid "Page title"
 msgstr "Sayfa başlığı"
 
 # gtk/gtkwindow.c:333
-#: gtk/gtkassistant.c:305
+#: gtk/gtkassistant.c:325
 msgid "The title of the assistant page"
 msgstr "Yardımcı sayfanın başlığı"
 
 # gtk/gtktreeview.c:489
-#: gtk/gtkassistant.c:321
+#: gtk/gtkassistant.c:341
 msgid "Header image"
 msgstr "Başlık resmi"
 
-#: gtk/gtkassistant.c:322
+#: gtk/gtkassistant.c:342
 msgid "Header image for the assistant page"
 msgstr "Yardımcı sayfa için başlık resmi"
 
 # gtk/gtksettings.c:175
-#: gtk/gtkassistant.c:338
+#: gtk/gtkassistant.c:358
 msgid "Sidebar image"
 msgstr "Kenar çubuğu resmi"
 
-#: gtk/gtkassistant.c:339
+#: gtk/gtkassistant.c:359
 msgid "Sidebar image for the assistant page"
 msgstr "Yardımcı sayfa için kenar çubuğu resmi"
 
-#: gtk/gtkassistant.c:354
+#: gtk/gtkassistant.c:374
 msgid "Page complete"
 msgstr "Sayfa tamamlanmış"
 
-#: gtk/gtkassistant.c:355
+#: gtk/gtkassistant.c:375
 msgid "Whether all required fields on the page have been filled out"
 msgstr "Sayfadaki gerekli tüm alanların doldurulmuş olması"
 
@@ -1012,7 +1012,7 @@ msgstr ""
 "etkilemesi"
 
 # gtk/gtknotebook.c:341
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1682
 msgid "Inner Border"
 msgstr "İç Kenarlık"
 
@@ -1493,7 +1493,7 @@ msgid "The acceleration rate when you hold down a button"
 msgstr "Bir düğme basılı tuttulduğunda hızlanma oranı"
 
 # gtk/gtkscale.c:148 gtk/gtkspinbutton.c:221
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:200 gtk/gtkspinbutton.c:226
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:218 gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "Basamaklar"
 
@@ -2511,12 +2511,12 @@ msgstr ""
 "geçer"
 
 # gtk/gtkentry.c:420
-#: gtk/gtkentry.c:666
+#: gtk/gtkentry.c:666 gtk/gtkentry.c:1232
 msgid "Invisible character"
 msgstr "Görünmez karakter"
 
 # gtk/gtkentry.c:421
-#: gtk/gtkentry.c:667
+#: gtk/gtkentry.c:667 gtk/gtkentry.c:1233
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Girdi içeriklerini maskelerken kullanılacak karakter (\"parola kipi\" "
@@ -2836,34 +2836,34 @@ msgstr "Kanal Kenarlığı"
 msgid "Border around the progress bar"
 msgstr "İlerleme çubuğunda gösterilecek metin"
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1683
 msgid "Border between text and frame."
 msgstr "Metin ve çerçeve arasındaki kenarlık."
 
-#: gtk/gtkentry.c:1676
+#: gtk/gtkentry.c:1697
 msgid "State Hint"
 msgstr "Durum İpucu"
 
 # gtk/gtktexttag.c:234
-#: gtk/gtkentry.c:1677
+#: gtk/gtkentry.c:1698
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Gölge ya da arkaplan çizerken tam durumun belirtilmesi"
 
 # gtk/gtkfilesel.c:1795
-#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1703 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Odaktakini seç"
 
 # gtk/gtkentry.c:397
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1704
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Odaklandığında bir girdinin içeriğinin seçilmesi"
 
-#: gtk/gtkentry.c:1697
+#: gtk/gtkentry.c:1718
 msgid "Password Hint Timeout"
 msgstr "Parola İpucu Zamanaşımı"
 
-#: gtk/gtkentry.c:1698
+#: gtk/gtkentry.c:1719
 msgid "How long to show the last input character in hidden entries"
 msgstr "Gizli girişlerde son karakterin ne kadar süre gösterileceği"
 
@@ -4687,7 +4687,7 @@ msgstr "Yazıcı seçenekleri"
 msgid "Page Setup"
 msgstr "Sayfa Ayarı"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1027
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1050
 msgid "Track Print Status"
 msgstr "Yazdırma Durumunu Takip Et"
 
@@ -4700,56 +4700,56 @@ msgstr ""
 "sonra bile yazdırma görevi status-changed sinyali vermeye devam eder."
 
 # gtk/gtkwindow.c:399
-#: gtk/gtkprintoperation.c:899
+#: gtk/gtkprintoperation.c:922
 msgid "Default Page Setup"
 msgstr "Öntanımlı Sayfa Yapısı"
 
-#: gtk/gtkprintoperation.c:900
+#: gtk/gtkprintoperation.c:923
 msgid "The GtkPageSetup used by default"
 msgstr "Öntanımlı olarak kullanılacak GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:918 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "Yazdırma Ayarları"
 
-#: gtk/gtkprintoperation.c:919 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Pencere başlatılırken kullanılacak GtkPrintSettings"
 
 # gtk/gtkfontsel.c:185
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:960
 msgid "Job Name"
 msgstr "Görev İsmi"
 
-#: gtk/gtkprintoperation.c:938
+#: gtk/gtkprintoperation.c:961
 msgid "A string used for identifying the print job."
 msgstr "Yazdırma görevini tanımlamak için kullanılacak dizgi."
 
-#: gtk/gtkprintoperation.c:962
+#: gtk/gtkprintoperation.c:985
 msgid "Number of Pages"
 msgstr "Sayfa Sayısı"
 
 # gtk/gtktable.c:157
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:986
 msgid "The number of pages in the document."
 msgstr "Belgedeki sayfa sayısı."
 
 # gtk/gtkcolorsel.c:1689
-#: gtk/gtkprintoperation.c:984 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1007 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "Mevcut Sayfa"
 
 # gtk/gtkcellrenderertoggle.c:128
-#: gtk/gtkprintoperation.c:985 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1008 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "Belgedeki şu anda bulunulan sayfa"
 
 # gtk/gtklabel.c:212
-#: gtk/gtkprintoperation.c:1006
+#: gtk/gtkprintoperation.c:1029
 msgid "Use full page"
 msgstr "Tam sayfa kullan"
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1030
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4757,7 +4757,7 @@ msgstr ""
 "TRUE ise içeriğin orijini sayfanın köşesinde olmalıdır ve resimlenebilir "
 "alanın köşesinde olmamalıdır"
 
-#: gtk/gtkprintoperation.c:1028
+#: gtk/gtkprintoperation.c:1051
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4765,59 +4765,59 @@ msgstr ""
 "TRUE ise yazdırma verisi yazıcıya ya da yazdırma sunucusuna gönderildikten "
 "sonra bile yazdırma işlemi yazdırma görev durumunu bildirmeye devam eder."
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Unit"
 msgstr "Birim"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "The unit in which distances can be measured in the context"
 msgstr "İçerik içerisinde mesafelerin ölçülebileceği birim"
 
 # gtk/gtktable.c:174
-#: gtk/gtkprintoperation.c:1063
+#: gtk/gtkprintoperation.c:1086
 msgid "Show Dialog"
 msgstr "Pencere Göster"
 
-#: gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintoperation.c:1087
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE ise yazdırma esnasında bir ilerleme penceresi gösterilir."
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1110
 msgid "Allow Async"
 msgstr "Eşzamansıza İzin Ver"
 
-#: gtk/gtkprintoperation.c:1088
+#: gtk/gtkprintoperation.c:1111
 msgid "TRUE if print process may run asynchronous."
 msgstr "TRUE ise yazdırma süreci eş zamansız olarak çalışabilir."
 
 # gtk/gtkfilesel.c:502
-#: gtk/gtkprintoperation.c:1110 gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1133 gtk/gtkprintoperation.c:1134
 msgid "Export filename"
 msgstr "Aktarma dosya adı"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Status"
 msgstr "Durum"
 
 # gtk/gtkcellrenderertoggle.c:128
-#: gtk/gtkprintoperation.c:1126
+#: gtk/gtkprintoperation.c:1149
 msgid "The status of the print operation"
 msgstr "Yazdırma işleminin durumu"
 
-#: gtk/gtkprintoperation.c:1146
+#: gtk/gtkprintoperation.c:1169
 msgid "Status String"
 msgstr "Durum Dizgisi"
 
-#: gtk/gtkprintoperation.c:1147
+#: gtk/gtkprintoperation.c:1170
 msgid "A human-readable description of the status"
 msgstr "Durumun insan tarafından okunabilen tanımlaması"
 
 # gtk/gtkcolorsel.c:1703
-#: gtk/gtkprintoperation.c:1165
+#: gtk/gtkprintoperation.c:1188
 msgid "Custom tab label"
 msgstr "Özel sekme etiketi"
 
-#: gtk/gtkprintoperation.c:1166
+#: gtk/gtkprintoperation.c:1189
 msgid "Label for the tab containing custom widgets."
 msgstr "Özel parçalar içeren sekme için etiket."
 
@@ -5364,47 +5364,47 @@ msgid "The metric used for the ruler"
 msgstr "Cetvel için kullanılacak ölçü"
 
 # gtk/gtkscale.c:149
-#: gtk/gtkscale.c:201
+#: gtk/gtkscale.c:219
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Değerlerin gösterildiği onluk basamakların sayısı"
 
 # gtk/gtkscale.c:158
-#: gtk/gtkscale.c:210
+#: gtk/gtkscale.c:228
 msgid "Draw Value"
 msgstr "Çizim Değeri"
 
 # gtk/gtkscale.c:159
-#: gtk/gtkscale.c:211
+#: gtk/gtkscale.c:229
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "Mevcut değerin bir dizgi olarak sürgünün yanında gösterilmesi"
 
 # gtk/gtkscale.c:166
-#: gtk/gtkscale.c:218
+#: gtk/gtkscale.c:236
 msgid "Value Position"
 msgstr "Değer Konumu"
 
 # gtk/gtkscale.c:167
-#: gtk/gtkscale.c:219
+#: gtk/gtkscale.c:237
 msgid "The position in which the current value is displayed"
 msgstr "Mevcut değerin gösterileceği konum"
 
 # gtk/gtkscale.c:174
-#: gtk/gtkscale.c:226
+#: gtk/gtkscale.c:244
 msgid "Slider Length"
 msgstr "Sürgü Uzunluğu"
 
 # gtk/gtkscale.c:175
-#: gtk/gtkscale.c:227
+#: gtk/gtkscale.c:245
 msgid "Length of scale's slider"
 msgstr "Ölçeğin sürgüsünün uzunluğu"
 
 # gtk/gtkscale.c:183
-#: gtk/gtkscale.c:235
+#: gtk/gtkscale.c:253
 msgid "Value spacing"
 msgstr "Değer boşluğu"
 
 # gtk/gtkscale.c:184
-#: gtk/gtkscale.c:236
+#: gtk/gtkscale.c:254
 msgid "Space between value text and the slider/trough area"
 msgstr "Sürgü/Kanal alanı ile değer metni arasındaki boşluk"
 

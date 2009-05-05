@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-10.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:25-0400\n"
+"POT-Creation-Date: 2009-05-04 01:14-0400\n"
 "PO-Revision-Date: 2006-08-29 18:20+0530\n"
 "Last-Translator: Felix <ifelix25@gmail.com>\n"
 "Language-Team: Tamil <ta@li.org>\n"
@@ -127,54 +127,54 @@ msgstr "எழுத்துரு திரைத்திறன்"
 msgid "The resolution for fonts on the screen"
 msgstr "திரையில் எழுத்துருக்களின் திரைத்திறன்"
 
-#: gtk/gtkaboutdialog.c:184
+#: gtk/gtkaboutdialog.c:239
 msgid "Program name"
 msgstr "நிரல் பெயர்"
 
-#: gtk/gtkaboutdialog.c:185
+#: gtk/gtkaboutdialog.c:240
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 "நிரலின் பெயர். இது அமைக்கப்படவில்லை எனில், அதன் முன்னிருப்பு g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:199
+#: gtk/gtkaboutdialog.c:254
 msgid "Program version"
 msgstr "நிரல் பதிப்பு"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:255
 msgid "The version of the program"
 msgstr "நிரலின் பதிப்பு"
 
-#: gtk/gtkaboutdialog.c:214
+#: gtk/gtkaboutdialog.c:269
 msgid "Copyright string"
 msgstr "காப்புரிமை சரம்"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:270
 msgid "Copyright information for the program"
 msgstr "நிரலுக்கான காப்புரிமை தகவல்"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:287
 msgid "Comments string"
 msgstr "குறிப்புகள் சரம்"
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:288
 msgid "Comments about the program"
 msgstr "நிரல் பற்றிய விளக்கங்கள்"
 
-#: gtk/gtkaboutdialog.c:267
+#: gtk/gtkaboutdialog.c:322
 msgid "Website URL"
 msgstr "இணைய தள URL"
 
-#: gtk/gtkaboutdialog.c:268
+#: gtk/gtkaboutdialog.c:323
 msgid "The URL for the link to the website of the program"
 msgstr "நிரலின் இணைய தளத்திற்கான இணைய முகவரியின் இணைப்பு"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:339
 msgid "Website label"
 msgstr "இணைய தள பெயர்"
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:340
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -182,44 +182,44 @@ msgstr ""
 "நிரலின் வலைதளத்துக்கு தொடுப்பின் அடையாளம். இதை அமைக்காவிடில்  யூஆர்எல்(URL) முன்னிருப்பை "
 "கொள்ளும்."
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:356
 msgid "Authors"
 msgstr "ஆசிரியர்கள்"
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:357
 msgid "List of authors of the program"
 msgstr "நிரலின் ஆசிரியர்கள் பட்டியல்"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:373
 msgid "Documenters"
 msgstr "ஆவணமாக்குபவர்கள்"
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:374
 msgid "List of people documenting the program"
 msgstr "நிரலை ஆவணப்படுத்தும் நபர்களின் பட்டியல்"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:390
 msgid "Artists"
 msgstr "கலைஞர்கள்"
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:391
 msgid "List of people who have contributed artwork to the program"
 msgstr "நிரலுக்கு கலை வேலைகளை வழங்கிய நபர்களின் பட்டியல்"
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:408
 msgid "Translator credits"
 msgstr "மொழிப்பெயர்ப்பாளர் சன்மானம்"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:409
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "மொழிபெயர்ப்பாளருக்கான சன்மானம். இந்த சரம் மொழிபெயர்க்க வேண்டும் என குறிக்க வேண்டும்"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:424
 msgid "Logo"
 msgstr "சின்னம்"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:425
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -227,19 +227,19 @@ msgstr ""
 "இதனை பற்றிய பெட்டிக்கான சின்னம். இது அமைக்கப்படவில்லை எனில், அதன் முன்னிருப்பு "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:440
 msgid "Logo Icon Name"
 msgstr "சின்ன சிறுபட பெயர்"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:441
 msgid "A named icon to use as the logo for the about box."
 msgstr "பற்றி பெட்டிக்கு லோகோவாக ஒரு பெயரிட்ட சின்னம் "
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:454
 msgid "Wrap license"
 msgstr "மடிப்பு அங்கீகாரம்"
 
-#: gtk/gtkaboutdialog.c:400
+#: gtk/gtkaboutdialog.c:455
 msgid "Whether to wrap the license text."
 msgstr "அங்கீகார உரையை மடிக்க வேண்டுமா."
 
@@ -597,59 +597,59 @@ msgstr "சேய்க்கு கீழ்படி"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "காட்சி விகிதத்தை சட்டத்தின் சேய் க்கு பொருந்துதலை கட்டாயப்படுத்து"
 
-#: gtk/gtkassistant.c:261
+#: gtk/gtkassistant.c:281
 msgid "Header Padding"
 msgstr "தலைப்பு பேடிங்"
 
-#: gtk/gtkassistant.c:262
+#: gtk/gtkassistant.c:282
 msgid "Number of pixels around the header."
 msgstr "தலைப்பு சுற்றி பிக்ஸல்களின் எண்ணிக்கை"
 
-#: gtk/gtkassistant.c:269
+#: gtk/gtkassistant.c:289
 msgid "Content Padding"
 msgstr "உள்ளடக்க பேடிங்"
 
-#: gtk/gtkassistant.c:270
+#: gtk/gtkassistant.c:290
 msgid "Number of pixels around the content pages."
 msgstr "உள்ளடக்க பக்கங்களில் பிக்ஸல்களின் எண்ணிக்கை"
 
-#: gtk/gtkassistant.c:286
+#: gtk/gtkassistant.c:306
 msgid "Page type"
 msgstr "பக்க வகை"
 
-#: gtk/gtkassistant.c:287
+#: gtk/gtkassistant.c:307
 msgid "The type of the assistant page"
 msgstr "துணைப் பக்கத்தின்  வகை"
 
-#: gtk/gtkassistant.c:304
+#: gtk/gtkassistant.c:324
 msgid "Page title"
 msgstr "பக்கத் தலைப்பு"
 
-#: gtk/gtkassistant.c:305
+#: gtk/gtkassistant.c:325
 msgid "The title of the assistant page"
 msgstr "துணைப் பக்கத்தின் தலைப்பு"
 
-#: gtk/gtkassistant.c:321
+#: gtk/gtkassistant.c:341
 msgid "Header image"
 msgstr "தலைப்பின் படம்"
 
-#: gtk/gtkassistant.c:322
+#: gtk/gtkassistant.c:342
 msgid "Header image for the assistant page"
 msgstr "உதவி பக்கத்திற்கான தலைப்பு படம்"
 
-#: gtk/gtkassistant.c:338
+#: gtk/gtkassistant.c:358
 msgid "Sidebar image"
 msgstr "படம்"
 
-#: gtk/gtkassistant.c:339
+#: gtk/gtkassistant.c:359
 msgid "Sidebar image for the assistant page"
 msgstr "உதவி பக்கத்திற்கான பக்க பட்டை படம்"
 
-#: gtk/gtkassistant.c:354
+#: gtk/gtkassistant.c:374
 msgid "Page complete"
 msgstr "பக்கம் முடிவடைந்து"
 
-#: gtk/gtkassistant.c:355
+#: gtk/gtkassistant.c:375
 msgid "Whether all required fields on the page have been filled out"
 msgstr "பக்கத்தில் அனைத்து தேவையான புலங்களும் நிரப்ப வேண்டுமா"
 
@@ -899,7 +899,7 @@ msgid ""
 "rectangle"
 msgstr "child_displacement_x/_y பண்புகள் குவிப்பு செவ்வகத்தையும் பாதிக்க வேண்டுமா"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1682
 msgid "Inner Border"
 msgstr "உள் எல்லை"
 
@@ -1312,7 +1312,7 @@ msgstr "ஏறும் விகிதம்"
 msgid "The acceleration rate when you hold down a button"
 msgstr "பொத்தான் ஐ அமுக்கிபிடித்தால் விளையும் முடிக்க விகிதம்"
 
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:200 gtk/gtkspinbutton.c:226
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:218 gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "இலக்கங்கள்"
 
@@ -2153,11 +2153,11 @@ msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr "உரை மற்றும் சட்டம் நடுவே எல்லை. உள் எல்லை பாங்கு பண்பை தாண்டும்"
 
-#: gtk/gtkentry.c:666
+#: gtk/gtkentry.c:666 gtk/gtkentry.c:1232
 msgid "Invisible character"
 msgstr "பார்க்கமுடியாத வரியுரு"
 
-#: gtk/gtkentry.c:667
+#: gtk/gtkentry.c:667 gtk/gtkentry.c:1233
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "உள்ளீடு பொருற்களை மறைக்கும்போது பயன்படுத்த வேண்டிய வரியுரு (\"password mode\" இனுல்)"
@@ -2430,31 +2430,31 @@ msgstr "முன்னேற்ற எல்லை"
 msgid "Border around the progress bar"
 msgstr "முன்னேற்ற பட்டை சுற்றிய எல்லை"
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1683
 msgid "Border between text and frame."
 msgstr "உரைக்கும் சட்டத்திற்கும் இடையேயான எல்லை"
 
-#: gtk/gtkentry.c:1676
+#: gtk/gtkentry.c:1697
 msgid "State Hint"
 msgstr "நிலை குறிப்பு"
 
-#: gtk/gtkentry.c:1677
+#: gtk/gtkentry.c:1698
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "ஒரு நிழல் அல்லது பின்புலம் வரையும் போது சரியான நிலையை தாண்டுவதா"
 
-#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1703 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "ஃபோகஸில் தேர்ந்தெடு"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1704
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "ஒரு உள்ளீடு குவிப்பில் இருந்தால் அதன் உள்ளடக்கத்தை தேர்ந்தெடுப்பதா?"
 
-#: gtk/gtkentry.c:1697
+#: gtk/gtkentry.c:1718
 msgid "Password Hint Timeout"
 msgstr "கடவுச்சொல் குறிப்பு நேர முடிவு"
 
-#: gtk/gtkentry.c:1698
+#: gtk/gtkentry.c:1719
 msgid "How long to show the last input character in hidden entries"
 msgstr "மறைவான உள்ளீட்டில் கடைசி உள்ளீடு எழுத்துருவை எவ்வளவு நேரம் காட்டுவது"
 
@@ -4041,7 +4041,7 @@ msgstr "அச்சடிப்பி அமைவுகள்"
 msgid "Page Setup"
 msgstr "பக்கம் அமைப்பு"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1027
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1050
 msgid "Track Print Status"
 msgstr "அச்சிடுதல் நிலையை தேடு"
 
@@ -4053,51 +4053,51 @@ msgstr ""
 "TRUE if the print job will continue to emit status-changed signals after the "
 "print data has been sent to the printer or print server."
 
-#: gtk/gtkprintoperation.c:899
+#: gtk/gtkprintoperation.c:922
 msgid "Default Page Setup"
 msgstr "முன்னிருப்பு பக்கம் அமைப்பு"
 
-#: gtk/gtkprintoperation.c:900
+#: gtk/gtkprintoperation.c:923
 msgid "The GtkPageSetup used by default"
 msgstr "இந்த GtkPageSetup முன்னிருப்பாக பயன்படுத்தப்படுகிறது"
 
-#: gtk/gtkprintoperation.c:918 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "அச்சிடும் அமைவுகள்"
 
-#: gtk/gtkprintoperation.c:919 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "இந்த GtkPrintSettings உரையாடலை துவக்க பயன்படுத்துகிறது"
 
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:960
 msgid "Job Name"
 msgstr "பணி பெயர்"
 
-#: gtk/gtkprintoperation.c:938
+#: gtk/gtkprintoperation.c:961
 msgid "A string used for identifying the print job."
 msgstr "அச்சு வேலையை எடுத்துக்காட்ட ஒரு ஸ்டிரிங் பயன்படுகிறது"
 
-#: gtk/gtkprintoperation.c:962
+#: gtk/gtkprintoperation.c:985
 msgid "Number of Pages"
 msgstr "பக்கங்களின் எண்ணிக்கை"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:986
 msgid "The number of pages in the document."
 msgstr "ஆவணத்திலுள்ள பக்கங்களின் எண்ணிக்கை"
 
-#: gtk/gtkprintoperation.c:984 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1007 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "நடப்பு பக்கம்"
 
-#: gtk/gtkprintoperation.c:985 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1008 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "ஆவணத்தின் நடப்பு பக்கம்"
 
-#: gtk/gtkprintoperation.c:1006
+#: gtk/gtkprintoperation.c:1029
 msgid "Use full page"
 msgstr "முழு பக்கத்தைப் பயன்படுத்து"
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1030
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4105,7 +4105,7 @@ msgstr ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 
-#: gtk/gtkprintoperation.c:1028
+#: gtk/gtkprintoperation.c:1051
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4113,55 +4113,55 @@ msgstr ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Unit"
 msgstr "அலகு"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "The unit in which distances can be measured in the context"
 msgstr "இந்த அலகு சூழலின் தொலைவை அளக்கிறது"
 
-#: gtk/gtkprintoperation.c:1063
+#: gtk/gtkprintoperation.c:1086
 msgid "Show Dialog"
 msgstr "உரையாடலை காட்டு"
 
-#: gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintoperation.c:1087
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "அச்சடிக்கும் போது  ஒரு மேம்பாடு உரையாடல்  காட்டப்படுவது உண்மையா."
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1110
 msgid "Allow Async"
 msgstr "ஒருங்கிணைப்பில்லாததை அனுமதி"
 
-#: gtk/gtkprintoperation.c:1088
+#: gtk/gtkprintoperation.c:1111
 msgid "TRUE if print process may run asynchronous."
 msgstr "அச்சடிப்பி ஒருங்கில்லாததை இயக்கினால் உண்மை"
 
-#: gtk/gtkprintoperation.c:1110 gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1133 gtk/gtkprintoperation.c:1134
 msgid "Export filename"
 msgstr "கோப்புப்பெயரை ஏற்று"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Status"
 msgstr "நிலை"
 
-#: gtk/gtkprintoperation.c:1126
+#: gtk/gtkprintoperation.c:1149
 msgid "The status of the print operation"
 msgstr "அச்சு செயல்பாட்டின் நிலை"
 
-#: gtk/gtkprintoperation.c:1146
+#: gtk/gtkprintoperation.c:1169
 msgid "Status String"
 msgstr "நிலை சரம்"
 
-#: gtk/gtkprintoperation.c:1147
+#: gtk/gtkprintoperation.c:1170
 msgid "A human-readable description of the status"
 msgstr "மனிதன் வாசிக்கக்கூடிய விளக்கத்தின் நிலை"
 
-#: gtk/gtkprintoperation.c:1165
+#: gtk/gtkprintoperation.c:1188
 msgid "Custom tab label"
 msgstr "தனிபயன் கீற்று  பெயர்"
 
-#: gtk/gtkprintoperation.c:1166
+#: gtk/gtkprintoperation.c:1189
 msgid "Label for the tab containing custom widgets."
 msgstr "தத்தலுக்கு லேபிள் தனிபயன் விட்ஜிட்கள்"
 
@@ -4650,39 +4650,39 @@ msgstr "மெட்ரிக்"
 msgid "The metric used for the ruler"
 msgstr "அளவீடுக்காக பயன்படுத்தப்படும் மெட்ரிக்"
 
-#: gtk/gtkscale.c:201
+#: gtk/gtkscale.c:219
 msgid "The number of decimal places that are displayed in the value"
 msgstr "மதிப்பில் காண்பிக்கப்படும் பதின்மம் இடங்களின் எண்"
 
-#: gtk/gtkscale.c:210
+#: gtk/gtkscale.c:228
 msgid "Draw Value"
 msgstr "மதிப்பை வரை"
 
-#: gtk/gtkscale.c:211
+#: gtk/gtkscale.c:229
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "நடப்பு மதிப்பு ஒரு சரமாக அடுத்த ஸ்லைடரில் காட்டப்பட வேண்டுமா"
 
-#: gtk/gtkscale.c:218
+#: gtk/gtkscale.c:236
 msgid "Value Position"
 msgstr "மதிப்பு இடம்"
 
-#: gtk/gtkscale.c:219
+#: gtk/gtkscale.c:237
 msgid "The position in which the current value is displayed"
 msgstr "தற்போதைய மதிப்பு காண்பிக்கப்பட வேண்டிய இடம்"
 
-#: gtk/gtkscale.c:226
+#: gtk/gtkscale.c:244
 msgid "Slider Length"
 msgstr "ஸ்லைடரின் நீளம்"
 
-#: gtk/gtkscale.c:227
+#: gtk/gtkscale.c:245
 msgid "Length of scale's slider"
 msgstr "அளவீடு ஸ்லைடரின் நீளம்"
 
-#: gtk/gtkscale.c:235
+#: gtk/gtkscale.c:253
 msgid "Value spacing"
 msgstr "மதிப்பு இடைவெளி"
 
-#: gtk/gtkscale.c:236
+#: gtk/gtkscale.c:254
 msgid "Space between value text and the slider/trough area"
 msgstr "மதிப்பு உரை மற்றும் slider/trough பகுதிகளுக்கிடையே இடைவெளி"
 

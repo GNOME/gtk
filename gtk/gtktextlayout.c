@@ -147,6 +147,16 @@ static void gtk_text_layout_buffer_delete_range (GtkTextBuffer     *textbuffer,
 
 static void gtk_text_layout_update_cursor_line (GtkTextLayout *layout);
 
+static void line_display_index_to_iter (GtkTextLayout      *layout,
+	                                GtkTextLineDisplay *display,
+			                GtkTextIter        *iter,
+                                        gint                index,
+                                        gint                trailing);
+
+static gint line_display_iter_to_index (GtkTextLayout      *layout,
+                                        GtkTextLineDisplay *display,
+                                        const GtkTextIter  *iter);
+
 enum {
   INVALIDATED,
   CHANGED,
@@ -1800,49 +1810,59 @@ static void
 allocate_child_widgets (GtkTextLayout      *text_layout,
                         GtkTextLineDisplay *display)
 {
-  GSList *shaped = display->shaped_objects;
   PangoLayout *layout = display->layout;
-  PangoLayoutIter *iter;
+  PangoLayoutIter *run_iter;
   
-  iter = pango_layout_get_iter (layout);
+  run_iter = pango_layout_get_iter (layout);
   
   do
     {
-      PangoLayoutRun *run = pango_layout_iter_get_run_readonly (iter);
-
+      PangoLayoutRun *run = pango_layout_iter_get_run_readonly (run_iter);
+      
       if (run && is_shape (run))
         {
-          GObject *shaped_object = shaped->data;
-          shaped = shaped->next;
-
-          /* shaped_object is NULL for child anchors with no
-           * widgets stored at them
+          gint byte_index;
+          GtkTextIter text_iter;
+          GtkTextChildAnchor *anchor = 0;
+          GList *widgets = 0;
+          
+          /* The pango iterator iterates in visual order. 
+           * We use the byte index to find the child widget.
            */
-          if (GTK_IS_WIDGET (shaped_object))
+          
+          byte_index = pango_layout_iter_get_index (run_iter);
+          line_display_index_to_iter (text_layout, display, &text_iter, byte_index, 0);
+          anchor = gtk_text_iter_get_child_anchor (&text_iter);
+          widgets = gtk_text_child_anchor_get_widgets (anchor);
+          
+          if (widgets)
             {
               PangoRectangle extents;
+              GtkWidget *child = widgets->data;
 
               /* We emit "allocate_child" with the x,y of
                * the widget with respect to the top of the line
                * and the left side of the buffer
                */
               
-              pango_layout_iter_get_run_extents (iter,
+              pango_layout_iter_get_run_extents (run_iter,
                                                  NULL,
                                                  &extents);
               
               g_signal_emit (text_layout,
                              signals[ALLOCATE_CHILD],
                              0,
-                             shaped_object,
+                             child,
                              PANGO_PIXELS (extents.x) + display->x_offset,
                              PANGO_PIXELS (extents.y) + display->top_margin);
+              
+              g_list_free (widgets);
             }
         }
     }
-  while (pango_layout_iter_next_run (iter));
+  while (pango_layout_iter_next_run (run_iter));
   
-  pango_layout_iter_free (iter);
+  pango_layout_iter_free (run_iter);
 }
 
 static void

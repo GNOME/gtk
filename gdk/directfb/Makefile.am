@@ -56,3 +56,5 @@ libgdkinclude_HEADERS =		\
 
 
 EXTRA_DIST += AUTHORS README TODO 
+
+-include $(top_srcdir)/git.mk

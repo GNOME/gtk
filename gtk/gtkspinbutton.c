@@ -1692,6 +1692,13 @@ gtk_spin_button_new_with_range (gdouble min,
   return GTK_WIDGET (spin);
 }
 
+static void
+warn_nonzero_page_size (GtkAdjustment *adjustment)
+{
+  if (gtk_adjustment_get_page_size (adjustment) != 0.0)
+    g_warning ("GtkSpinButton: setting an adjustment with non-zero page size is deprecated");
+}
+
 /* Callback used when the spin button's adjustment changes.  We need to redraw
  * the arrows when the adjustment's range changes, and reevaluate our size request.
  */
@@ -1703,6 +1710,7 @@ adjustment_changed_cb (GtkAdjustment *adjustment, gpointer data)
   spin_button = GTK_SPIN_BUTTON (data);
 
   spin_button->timer_step = spin_button->adjustment->step_increment;
+  warn_nonzero_page_size (adjustment);
   gtk_widget_queue_resize (GTK_WIDGET (spin_button));
 }
 
@@ -1742,6 +1750,7 @@ gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
 			    G_CALLBACK (adjustment_changed_cb),
 			    spin_button);
 	  spin_button->timer_step = spin_button->adjustment->step_increment;
+          warn_nonzero_page_size (adjustment);
         }
 
       gtk_widget_queue_resize (GTK_WIDGET (spin_button));

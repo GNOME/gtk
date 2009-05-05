@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: te\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:25-0400\n"
+"POT-Creation-Date: 2009-05-04 01:14-0400\n"
 "PO-Revision-Date: 2009-03-15 19:19+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
@@ -125,53 +125,53 @@ msgstr "ఫాంటు తీవ్రత"
 msgid "The resolution for fonts on the screen"
 msgstr "తెరపైని ఫాంటుకు తీవ్రత"
 
-#: gtk/gtkaboutdialog.c:184
+#: gtk/gtkaboutdialog.c:239
 msgid "Program name"
 msgstr "కార్యక్రమ నామము"
 
-#: gtk/gtkaboutdialog.c:185
+#: gtk/gtkaboutdialog.c:240
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr "కార్యక్రమ నామము. ఇది అమర్చబడక పోతే , ఇది g_get_application_name()కు అమర్చబడును"
 
-#: gtk/gtkaboutdialog.c:199
+#: gtk/gtkaboutdialog.c:254
 msgid "Program version"
 msgstr "కార్యక్రమ వివరణము"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:255
 msgid "The version of the program"
 msgstr "కార్యక్రమ వివరణము"
 
-#: gtk/gtkaboutdialog.c:214
+#: gtk/gtkaboutdialog.c:269
 msgid "Copyright string"
 msgstr "నకలు హక్కు పదబంధము"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:270
 msgid "Copyright information for the program"
 msgstr "కార్యక్రమము కొరకు నకలు హక్కు సమాచారము"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:287
 msgid "Comments string"
 msgstr "వ్యాఖ్యల పదబంధము"
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:288
 msgid "Comments about the program"
 msgstr "కార్యక్రమము గురించి వ్యాఖ్యలు"
 
-#: gtk/gtkaboutdialog.c:267
+#: gtk/gtkaboutdialog.c:322
 msgid "Website URL"
 msgstr "మహాతల సైటు యొక్క URL"
 
-#: gtk/gtkaboutdialog.c:268
+#: gtk/gtkaboutdialog.c:323
 msgid "The URL for the link to the website of the program"
 msgstr "కార్యక్రమ మహాతల సైటు యొక్క బంధము కొరకు URL"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:339
 msgid "Website label"
 msgstr "మహాతల సైటు లేబుల్"
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:340
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -179,44 +179,44 @@ msgstr ""
 "కార్యక్రమ మహాతల సైటు యొక్క బంధము కొరకు లేబుల్. ఒకవేళ ఇది అమర్చబడకపోతే, ఇది అప్రమేయముగా URLకు "
 "అమర్చబడును"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:356
 msgid "Authors"
 msgstr "గ్రంథకర్తలు"
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:357
 msgid "List of authors of the program"
 msgstr "కార్యక్రమ గ్రంథకర్తల జాబితా"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:373
 msgid "Documenters"
 msgstr "పత్ర రచయితలు"
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:374
 msgid "List of people documenting the program"
 msgstr "కార్యక్రమమును పత్ర రచనచేయుచున్న ప్రజల సంఖ్య"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:390
 msgid "Artists"
 msgstr "చిత్రకారులు"
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:391
 msgid "List of people who have contributed artwork to the program"
 msgstr "కార్యక్రమమునకు చిత్రకళను తమవంతు భాగంగా ఇచ్చిన ప్రజలసంఖ్య"
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:408
 msgid "Translator credits"
 msgstr "అనువాదకుని పరపతులు"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:409
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "అనువాదకునికి పరపతులు. ఈ పదబంధము అనువదింపదగ్గదిగా గుర్తింపబడాలి"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:424
 msgid "Logo"
 msgstr "చిహ్నము"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:425
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -224,19 +224,19 @@ msgstr ""
 "గురించి పెట్టె కొరకు ఒక చిహ్నము. ఒకవేళ ఇది అమర్చబడకపోతే, ఇది "
 "gtk_window_get_default_icon_list() అప్రమేయాలకు అమర్చబడును"
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:440
 msgid "Logo Icon Name"
 msgstr "చిహ్న ప్రతిమ నామము"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:441
 msgid "A named icon to use as the logo for the about box."
 msgstr "గురించి పెట్టె కొరకు ఒక నామీకృత ప్రతిమను చిహ్నము వలె ఉపయోగించుము."
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:454
 msgid "Wrap license"
 msgstr "లైసెన్సును పొట్లం కట్టు"
 
-#: gtk/gtkaboutdialog.c:400
+#: gtk/gtkaboutdialog.c:455
 msgid "Whether to wrap the license text."
 msgstr "లైసెన్సు పాఠమును పొట్లము కట్టవలెనో వద్దో"
 
@@ -594,59 +594,59 @@ msgstr "శిశువును పాటించు"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "చట్ర శిశువు యొక్క బల దృశ్య నిష్పత్తికి సమఉజ్జీయైన బల దృశ్య నిష్పత్తి"
 
-#: gtk/gtkassistant.c:261
+#: gtk/gtkassistant.c:281
 msgid "Header Padding"
 msgstr "పీఠిక పాడింగ్"
 
-#: gtk/gtkassistant.c:262
+#: gtk/gtkassistant.c:282
 msgid "Number of pixels around the header."
 msgstr "పీఠికచుట్టూ పిగ్జెల్స్‍ సంఖ్య."
 
-#: gtk/gtkassistant.c:269
+#: gtk/gtkassistant.c:289
 msgid "Content Padding"
 msgstr "సారము పాడింగ్"
 
-#: gtk/gtkassistant.c:270
+#: gtk/gtkassistant.c:290
 msgid "Number of pixels around the content pages."
 msgstr "సారము పుటలచుట్టూ పిగ్జెల్స్‍‌యొక్క సంఖ్య."
 
-#: gtk/gtkassistant.c:286
+#: gtk/gtkassistant.c:306
 msgid "Page type"
 msgstr "పుట రకము"
 
-#: gtk/gtkassistant.c:287
+#: gtk/gtkassistant.c:307
 msgid "The type of the assistant page"
 msgstr "సహాయక పుటయొక్క రకము"
 
-#: gtk/gtkassistant.c:304
+#: gtk/gtkassistant.c:324
 msgid "Page title"
 msgstr "పుట శీర్షిక"
 
-#: gtk/gtkassistant.c:305
+#: gtk/gtkassistant.c:325
 msgid "The title of the assistant page"
 msgstr "సహాయక పుటయొక్క శీర్షిక"
 
-#: gtk/gtkassistant.c:321
+#: gtk/gtkassistant.c:341
 msgid "Header image"
 msgstr "పీఠిక ప్రతిబింబము"
 
-#: gtk/gtkassistant.c:322
+#: gtk/gtkassistant.c:342
 msgid "Header image for the assistant page"
 msgstr "సహాయక పుటకొరకు పీఠిక ప్రతిబింబము"
 
-#: gtk/gtkassistant.c:338
+#: gtk/gtkassistant.c:358
 msgid "Sidebar image"
 msgstr "ప్రక్కపట్టీ ప్రతిబింబము"
 
-#: gtk/gtkassistant.c:339
+#: gtk/gtkassistant.c:359
 msgid "Sidebar image for the assistant page"
 msgstr "సహాయక పేజీకొరకు ప్రక్కపట్టీ ప్రతిబింబము"
 
-#: gtk/gtkassistant.c:354
+#: gtk/gtkassistant.c:374
 msgid "Page complete"
 msgstr "పుట పూర్తైనది"
 
-#: gtk/gtkassistant.c:355
+#: gtk/gtkassistant.c:375
 msgid "Whether all required fields on the page have been filled out"
 msgstr "పుటనందు అన్ని అవసరమైన క్షేత్రములు నింపబడినవా"
 
@@ -893,7 +893,7 @@ msgid ""
 "rectangle"
 msgstr "child_displacement_x/_y లక్షణాలు  దీర్ఘచతురస్ర కేంద్రమును తప్పక ప్రభావితము చేయవలెనా"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1682
 msgid "Inner Border"
 msgstr "అంతర్గత సరిహద్దు"
 
@@ -1305,7 +1305,7 @@ msgstr "ఎగబాటు రేటు"
 msgid "The acceleration rate when you hold down a button"
 msgstr "మీరు బటన్‌ను పట్టివుంచినప్పుడు త్వరుణంయొక్క రేటు"
 
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:200 gtk/gtkspinbutton.c:226
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:218 gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "అంకెలు"
 
@@ -2142,11 +2142,11 @@ msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr "పాఠ్యము మరియు చట్రముకు మద్య సరిహద్దు. అంతర్గత-సరిహద్దు శైలి లక్షణంను అతిక్రమించును"
 
-#: gtk/gtkentry.c:666
+#: gtk/gtkentry.c:666 gtk/gtkentry.c:1232
 msgid "Invisible character"
 msgstr "అగోచర అక్షరము"
 
-#: gtk/gtkentry.c:667
+#: gtk/gtkentry.c:667 gtk/gtkentry.c:1233
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "ప్రవేశము సారము మాస్కింగ్ చేసినపుడు ఉపయోగించవలసిన అక్షరము"
 
@@ -2415,31 +2415,31 @@ msgstr "వృద్ది హద్దు"
 msgid "Border around the progress bar"
 msgstr "వృద్ది పట్టీ చూట్టూ హద్దు"
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1683
 msgid "Border between text and frame."
 msgstr "పాఠ్యము మరియు చట్రమునకు మధ్యనవున్న సరిహద్దు."
 
-#: gtk/gtkentry.c:1676
+#: gtk/gtkentry.c:1697
 msgid "State Hint"
 msgstr "స్థితి జాడ"
 
-#: gtk/gtkentry.c:1677
+#: gtk/gtkentry.c:1698
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "ఛాయను లేదా బ్యాక్‌గ్రౌండును లేఖిస్తున్నప్పుడు సరైన స్థితిని పంపవలెనా"
 
-#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1703 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "కేంద్రము మీద ఎన్నుకొనబడింది"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1704
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "ఒక ప్రవేశము కేంద్రీకరించబడినపుడు దానియొక్క సారము ఎన్నుకొనబడిందో లేదో"
 
-#: gtk/gtkentry.c:1697
+#: gtk/gtkentry.c:1718
 msgid "Password Hint Timeout"
 msgstr "సంకేతపదము కిటుకు సమయంముగిసినది"
 
-#: gtk/gtkentry.c:1698
+#: gtk/gtkentry.c:1719
 msgid "How long to show the last input character in hidden entries"
 msgstr "మరుగునవున్న ప్రవేశాలలో చివర ప్రవేశపెట్టిన అక్షరం యెంతసేపు చూపబడాలి"
 
@@ -4013,7 +4013,7 @@ msgstr "ముద్రణాయంత్రము అమరికలు"
 msgid "Page Setup"
 msgstr "పేజీ అమరిక"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1027
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1050
 msgid "Track Print Status"
 msgstr "ముద్రణా స్థితిని గమనించుము"
 
@@ -4025,58 +4025,58 @@ msgstr ""
 "ఒకవేళ ముద్రణ డాటా ముద్రణాయంత్రముకు లేక ముద్రణసేవికకు పంపిన తర్వాతకూడా ముద్రణకార్యము స్థితి-మార్పు "
 "సంకేతాలను యిస్తూవుంటే సత్యము"
 
-#: gtk/gtkprintoperation.c:899
+#: gtk/gtkprintoperation.c:922
 msgid "Default Page Setup"
 msgstr "అప్రమేయ పేజీ అమర్పు"
 
-#: gtk/gtkprintoperation.c:900
+#: gtk/gtkprintoperation.c:923
 msgid "The GtkPageSetup used by default"
 msgstr "అప్రమేయంగా వుపయోగించబడిన జిటికెపేజిఅమర్పు"
 
-#: gtk/gtkprintoperation.c:918 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "ముద్రణ అమరికలు"
 
-#: gtk/gtkprintoperation.c:919 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "డైలాగ్‌ను సిద్దముచేయుటకు వుపయోగించిన జిటికెముద్రణఅమరికలు"
 
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:960
 msgid "Job Name"
 msgstr "కార్యము నామము"
 
-#: gtk/gtkprintoperation.c:938
+#: gtk/gtkprintoperation.c:961
 msgid "A string used for identifying the print job."
 msgstr "ముద్రణ కార్యమును గుర్తించుటకు వుపయోగించిన స్ట్రింగ్."
 
-#: gtk/gtkprintoperation.c:962
+#: gtk/gtkprintoperation.c:985
 msgid "Number of Pages"
 msgstr "పేజీల సంఖ్య"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:986
 msgid "The number of pages in the document."
 msgstr "పత్రమునందలి పేజీల సంఖ్య"
 
-#: gtk/gtkprintoperation.c:984 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1007 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "ప్రస్తుత పేజీ"
 
-#: gtk/gtkprintoperation.c:985 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1008 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "పత్రమునందలి ప్రస్తుత పేజీ"
 
-#: gtk/gtkprintoperation.c:1006
+#: gtk/gtkprintoperation.c:1029
 msgid "Use full page"
 msgstr "పూర్తి పేజీని వుపయోగించుము"
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1030
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr ""
 "ఒకవేళ సందర్భంయొక్క ప్రారంభం పేజీయొక్క మూలలో వుండాలి చిత్రముయొక్క ప్రాంతము నందుకాదు అంటే సత్యము"
 
-#: gtk/gtkprintoperation.c:1028
+#: gtk/gtkprintoperation.c:1051
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4084,55 +4084,55 @@ msgstr ""
 "ఒకవేళ ముద్రణ డాటా ముద్రణాయంత్రముకు లేదా ముద్రణ సర్వర్‌కు పంపిన తర్వాతకూడా ముద్రణ ఆపరేషన్ "
 "ముద్రణకార్యము స్థితినివేదకలను యిస్తుంటే సత్యము"
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Unit"
 msgstr "భాగము"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "The unit in which distances can be measured in the context"
 msgstr "సందర్భంనందలి దూరములను కొలిచే ప్రమాణము"
 
-#: gtk/gtkprintoperation.c:1063
+#: gtk/gtkprintoperation.c:1086
 msgid "Show Dialog"
 msgstr "డైలాగ్‌ను చూపము"
 
-#: gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintoperation.c:1087
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "ఒకవేళ ముద్రిస్తున్నప్పుడు పురోగతి డైలాగ్ చూపితే సత్యము"
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1110
 msgid "Allow Async"
 msgstr "Async అనుమతించుము"
 
-#: gtk/gtkprintoperation.c:1088
+#: gtk/gtkprintoperation.c:1111
 msgid "TRUE if print process may run asynchronous."
 msgstr "ఒకవేళ ముద్రణ కార్యక్రమము ఎసింక్రనస్‌గా జరిగితే సత్యము."
 
-#: gtk/gtkprintoperation.c:1110 gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1133 gtk/gtkprintoperation.c:1134
 msgid "Export filename"
 msgstr "దస్త్రమునామమును ఎగుమతిచేయుము"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Status"
 msgstr "సుస్థితి"
 
-#: gtk/gtkprintoperation.c:1126
+#: gtk/gtkprintoperation.c:1149
 msgid "The status of the print operation"
 msgstr "ముద్రణ ఆపరేషన్‌యొక్క స్థితి"
 
-#: gtk/gtkprintoperation.c:1146
+#: gtk/gtkprintoperation.c:1169
 msgid "Status String"
 msgstr "స్థితి స్ట్రింగ్"
 
-#: gtk/gtkprintoperation.c:1147
+#: gtk/gtkprintoperation.c:1170
 msgid "A human-readable description of the status"
 msgstr "మానవుడు-చదవగలిగే స్థితి వివరణ"
 
-#: gtk/gtkprintoperation.c:1165
+#: gtk/gtkprintoperation.c:1188
 msgid "Custom tab label"
 msgstr "మలచిన టాబ్ లేబుల్"
 
-#: gtk/gtkprintoperation.c:1166
+#: gtk/gtkprintoperation.c:1189
 msgid "Label for the tab containing custom widgets."
 msgstr "మలచిన విడ్జట్‌లను కలిగివున్న టాబ్‌కొరకు లేబుల్"
 
@@ -4606,39 +4606,39 @@ msgstr "మెట్రిక్"
 msgid "The metric used for the ruler"
 msgstr "రూలర్‌కు వుపయోగించబడిన కొలమానము"
 
-#: gtk/gtkscale.c:201
+#: gtk/gtkscale.c:219
 msgid "The number of decimal places that are displayed in the value"
 msgstr "విలువనందు ప్రదర్శించబడుతున్న దశాంశ స్థానముల సంఖ్య"
 
-#: gtk/gtkscale.c:210
+#: gtk/gtkscale.c:228
 msgid "Draw Value"
 msgstr "గీయుటకు విలువ"
 
-#: gtk/gtkscale.c:211
+#: gtk/gtkscale.c:229
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "ప్రస్తుత విలువ స్ట్రింగ్‌వలె స్లైడర్ తర్వాత ప్రదర్శించబడాలా"
 
-#: gtk/gtkscale.c:218
+#: gtk/gtkscale.c:236
 msgid "Value Position"
 msgstr "విలువ స్థానము"
 
-#: gtk/gtkscale.c:219
+#: gtk/gtkscale.c:237
 msgid "The position in which the current value is displayed"
 msgstr "ప్రస్తుత విలువ ప్రదర్శితమయ్యే స్థానము"
 
-#: gtk/gtkscale.c:226
+#: gtk/gtkscale.c:244
 msgid "Slider Length"
 msgstr "స్లైడర్ పొడవు"
 
-#: gtk/gtkscale.c:227
+#: gtk/gtkscale.c:245
 msgid "Length of scale's slider"
 msgstr "స్కేల్‌ స్లైడర్‌యొక్క పొడవు"
 
-#: gtk/gtkscale.c:235
+#: gtk/gtkscale.c:253
 msgid "Value spacing"
 msgstr "విలువ క్రమాంతరీకరణం"
 
-#: gtk/gtkscale.c:236
+#: gtk/gtkscale.c:254
 msgid "Space between value text and the slider/trough area"
 msgstr "విలువ పాఠ్యముకు మరియు స్లైడర్/వంపు ప్రాంతముకు మద్య ఖాళి"
 

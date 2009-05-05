@@ -348,3 +348,5 @@ EXTRA_DIST += 			\
 	file-chooser-test-dir/empty \
 	file-chooser-test-dir/text.txt
 
+
+-include $(top_srcdir)/git.mk

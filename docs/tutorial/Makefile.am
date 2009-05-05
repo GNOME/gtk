@@ -72,3 +72,5 @@ dist-hook:
 	echo "***"
 endif
 
+
+-include $(top_srcdir)/git.mk

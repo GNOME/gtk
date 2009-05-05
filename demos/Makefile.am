@@ -82,3 +82,5 @@ EXTRA_DIST +=			\
 	gnu-keys.png
 
 DISTCLEANFILES = test-inline-pixbufs.h
+
+-include $(top_srcdir)/git.mk

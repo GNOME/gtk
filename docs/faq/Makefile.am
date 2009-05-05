@@ -38,3 +38,5 @@ dist-hook:
 endif
 
 .PHONY: html
+
+-include $(top_srcdir)/git.mk

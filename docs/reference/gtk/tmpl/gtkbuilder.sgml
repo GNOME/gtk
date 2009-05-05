@@ -229,7 +229,8 @@ respective objects, see
 <link linkend="GtkUIManager-BUILDER-UI">GtkUIManager</link>,
 <link linkend="GtkActionGroup-BUILDER-UI">GtkActionGroup</link>.
 <link linkend="GtkMenuItem-BUILDER-UI">GtkMenuItem</link>,
-<link linkend="GtkAssistant-BUILDER-UI">GtkAssistant</link>.
+<link linkend="GtkAssistant-BUILDER-UI">GtkAssistant</link>,
+<link linkend="GtkScale-BUILDER-UI">GtkScale</link>.
 </para>
 </refsect2>
 

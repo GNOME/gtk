@@ -974,10 +974,11 @@ end_element (GMarkupParseContext *context,
 			 GTK_BUILDER_ERROR,
 			 GTK_BUILDER_ERROR_VERSION_MISMATCH,
 			 "%s: required %s version %d.%d, current version is %d.%d",
-			 data->filename, req_info->library, 
+			 data->filename, req_info->library,
 			 req_info->major, req_info->minor,
 			 GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
 	}
+      _free_requires_info (req_info, NULL);
     }
   else if (strcmp (element_name, "interface") == 0)
     {

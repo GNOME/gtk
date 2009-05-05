@@ -34,3 +34,5 @@ libprintbackend_file_la_LIBADD = \
 
 noinst_HEADERS =			\
 	gtkprintbackendfile.h
+
+-include $(top_srcdir)/git.mk

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:25-0400\n"
+"POT-Creation-Date: 2009-05-04 01:14-0400\n"
 "PO-Revision-Date: 2009-03-17 20:32+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -120,11 +120,11 @@ msgstr "ലിപിയുടെ സാന്ദ്രത"
 msgid "The resolution for fonts on the screen"
 msgstr "സ്ക്രീനില്‍ ലിപികളുടെ സാന്ദ്രത"
 
-#: gtk/gtkaboutdialog.c:184
+#: gtk/gtkaboutdialog.c:239
 msgid "Program name"
 msgstr "പ്രോഗ്രാമിന്‍റെ പേര്"
 
-#: gtk/gtkaboutdialog.c:185
+#: gtk/gtkaboutdialog.c:240
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -132,43 +132,43 @@ msgstr ""
 "പ്രോഗ്രാമിന്‍റെ പേര്. ഇത് സെറ്റ് ചെയ്തിട്ടില്ലായെങ്കില്‍, ഡീഫോള്‍ട്ടായി g_get_application_name"
 "() എന്ന പേരാകും"
 
-#: gtk/gtkaboutdialog.c:199
+#: gtk/gtkaboutdialog.c:254
 msgid "Program version"
 msgstr "പ്രോഗ്രാമിന്‍റെ വേര്‍ഷന്‍"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:255
 msgid "The version of the program"
 msgstr "പ്രോഗ്രാമിന്‍റെ വേര്‍ഷന്‍"
 
-#: gtk/gtkaboutdialog.c:214
+#: gtk/gtkaboutdialog.c:269
 msgid "Copyright string"
 msgstr "Copyright സ്ട്രിങ്"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:270
 msgid "Copyright information for the program"
 msgstr "പ്രോഗ്രാമിനുളള Copyright വിവരങ്ങള്‍"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:287
 msgid "Comments string"
 msgstr "Comments സ്ട്രിങ്"
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:288
 msgid "Comments about the program"
 msgstr "പ്രോഗ്രാമിനെ സംബന്ധിച്ചുളള അഭിപ്രായങ്ങള്‍"
 
-#: gtk/gtkaboutdialog.c:267
+#: gtk/gtkaboutdialog.c:322
 msgid "Website URL"
 msgstr "Website URL"
 
-#: gtk/gtkaboutdialog.c:268
+#: gtk/gtkaboutdialog.c:323
 msgid "The URL for the link to the website of the program"
 msgstr "പ്രോഗ്രാമിന്‍റെ വെബ്സൈറ്റിനുളള URL"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:339
 msgid "Website label"
 msgstr "Website ലേബല്‍"
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:340
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -176,44 +176,44 @@ msgstr ""
 "പ്രോഗ്രാമിന്‍റെ വെബ്സൈറ്റിനുളള ലിങ്കിന്‍റെ ലേബല്‍. ഇത് സെറ്റ് ചെയ്തിട്ടില്ലായെങ്കില്‍, അത് "
 "ഡീഫോള്‍ട്ടായി URL ആകുന്നതാണ്"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:356
 msgid "Authors"
 msgstr "രചയിതാക്കള്‍"
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:357
 msgid "List of authors of the program"
 msgstr "പ്രോഗ്രാമിന്‍റെ രചയിതാക്കളുടെ പട്ടിക"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:373
 msgid "Documenters"
 msgstr "എഴുത്തുകാര്‍"
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:374
 msgid "List of people documenting the program"
 msgstr "പ്രോഗ്രാമിന്‍റെ എഴുത്തുകാരുടെ പട്ടിക"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:390
 msgid "Artists"
 msgstr "കലാകാരന്‍മാര്‍"
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:391
 msgid "List of people who have contributed artwork to the program"
 msgstr "പ്രോഗ്രാമിന് കലാസംഭാവന ചെയ്ത ആളുകളുടെ പട്ടിക"
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:408
 msgid "Translator credits"
 msgstr "അനി പീറ്റര്‍ <peter.ani@gmail.com>"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:409
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "തര്‍ജ്ജിമ ചെയ്യുന്നവര്‍ക്കുളള അംഗീകാരം. ഈ സ്ട്രിങ് തര്‍ജിമ ചെയ്യണം എന്നടയാളപ്പെടുത്തുക"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:424
 msgid "Logo"
 msgstr "ലോഗോ"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:425
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -221,19 +221,19 @@ msgstr ""
 "വിശദീകരണങ്ങള്‍ എഴുതുന്ന പെട്ടിയ്ക്കുളള ലോഗോ. ഇത് സെറ്റ് ചെയ്തിട്ടില്ലായെങ്കില്‍, ഡീഫോള്‍ട്ടായി "
 "gtk_window_get_default_icon_list() എന്നത് ആകും."
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:440
 msgid "Logo Icon Name"
 msgstr "ലോഗോ ഐക്കണ്‍ന്‍റെ നാമം"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:441
 msgid "A named icon to use as the logo for the about box."
 msgstr "വിശദീകരണങ്ങള്‍ എഴുതുന്ന പെട്ടിയ്ക്കുളള ലോഗോ ആയി ഉപയോഗിക്കുന്നതിനുളള ഐക്കണ്‍."
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:454
 msgid "Wrap license"
 msgstr "ലൈസന്‍സ് ആവരണം ചെയ്യുക"
 
-#: gtk/gtkaboutdialog.c:400
+#: gtk/gtkaboutdialog.c:455
 msgid "Whether to wrap the license text."
 msgstr "ലൈസന്‍സ് വാചകങ്ങള്‍ ആവരണം ചെയ്യുമോ എന്ന്."
 
@@ -588,59 +588,59 @@ msgstr "Obey child"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "ഫ്രെയിമിന്‍റെ ചൈള്‍ഡുമായി പൊരുത്തപ്പെടുന്നതിന് ആസ്പക്റ്റ് റേഷ്യോയെ നിര്‍ബന്ധമാക്കുക"
 
-#: gtk/gtkassistant.c:261
+#: gtk/gtkassistant.c:281
 msgid "Header Padding"
 msgstr "ഹെഡര്‍ പാഡിങ്"
 
-#: gtk/gtkassistant.c:262
+#: gtk/gtkassistant.c:282
 msgid "Number of pixels around the header."
 msgstr "ഹെഡറിലുള്ള പിക്സലുകളുടെ എണ്ണം."
 
-#: gtk/gtkassistant.c:269
+#: gtk/gtkassistant.c:289
 msgid "Content Padding"
 msgstr "കണ്‍ട്ടന്ര് പാഡിങ്"
 
-#: gtk/gtkassistant.c:270
+#: gtk/gtkassistant.c:290
 msgid "Number of pixels around the content pages."
 msgstr "ഉള്ളടക്കം ലഭ്യമാക്കുന്ന പേജുകളുടെ പിക്സലുകളുടെ എണ്ണം."
 
-#: gtk/gtkassistant.c:286
+#: gtk/gtkassistant.c:306
 msgid "Page type"
 msgstr "ഏത് തരം പേജ്"
 
-#: gtk/gtkassistant.c:287
+#: gtk/gtkassistant.c:307
 msgid "The type of the assistant page"
 msgstr "ഏത് തരം അസിസ്റ്റന്ര് പേജ്"
 
-#: gtk/gtkassistant.c:304
+#: gtk/gtkassistant.c:324
 msgid "Page title"
 msgstr "പേജിന്റെ തലക്കെട്ട്"
 
-#: gtk/gtkassistant.c:305
+#: gtk/gtkassistant.c:325
 msgid "The title of the assistant page"
 msgstr "അസിസ്റ്റന്റ് പേജിന്റെ തലക്കെട്ട്"
 
-#: gtk/gtkassistant.c:321
+#: gtk/gtkassistant.c:341
 msgid "Header image"
 msgstr "ഹെഡറിനുള്ള ഇമേജ്"
 
-#: gtk/gtkassistant.c:322
+#: gtk/gtkassistant.c:342
 msgid "Header image for the assistant page"
 msgstr "അസിസ്റ്റന്റ് പേജിനുള്ള ഹെഡര്‍ ഇമേജ്"
 
-#: gtk/gtkassistant.c:338
+#: gtk/gtkassistant.c:358
 msgid "Sidebar image"
 msgstr "സൈഡ്ബാര്‍ ഇമേജ്"
 
-#: gtk/gtkassistant.c:339
+#: gtk/gtkassistant.c:359
 msgid "Sidebar image for the assistant page"
 msgstr "അസിസ്റ്റന്റ് പേജിനുള്ള സൈഡ്ബാര്‍ ഇമേജ്"
 
-#: gtk/gtkassistant.c:354
+#: gtk/gtkassistant.c:374
 msgid "Page complete"
 msgstr "പേജ് പൂറ്‍ണ്ണമായിരിക്കുന്നു"
 
-#: gtk/gtkassistant.c:355
+#: gtk/gtkassistant.c:375
 msgid "Whether all required fields on the page have been filled out"
 msgstr "പേജില്‍ ആവശ്യമുള്ള ഫീള്‍ഡുകള്‍ എല്ലാം പൂരിപ്പിച്ചോ എന്ന്"
 
@@ -892,7 +892,7 @@ msgid ""
 "rectangle"
 msgstr "child_displacement_x/_y ഗുണഗണങ്ങള്‍ സമകോണചതുരത്തെ കേന്ദ്രീകരിക്കണമോ എന്നു്"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1682
 msgid "Inner Border"
 msgstr "അകത്തുളള ബോര്‍ഡര്‍"
 
@@ -1304,7 +1304,7 @@ msgstr "ക്ളൈമ്പ് റേറ്റ്"
 msgid "The acceleration rate when you hold down a button"
 msgstr "ഒരു ബട്ടണ്‍ അമര്‍ത്തുമ്പോള്‍ ഉള്ള ആക്സിലറേഷന്‍ നിരക്ക്"
 
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:200 gtk/gtkspinbutton.c:226
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:218 gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "അക്കങ്ങള്‍"
 
@@ -2144,11 +2144,11 @@ msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr "ടെക്സ്റ്റിനും ഫ്രെയിമിനും ഇടയിലുളള അതിര്. ഉള്‍വശത്തുളള അതിരിന്‍റെ വിശേഷത നിഷ്ഫലമാക്കുന്നു"
 
-#: gtk/gtkentry.c:666
+#: gtk/gtkentry.c:666 gtk/gtkentry.c:1232
 msgid "Invisible character"
 msgstr "അദൃശ്യമായ അക്ഷരം"
 
-#: gtk/gtkentry.c:667
+#: gtk/gtkentry.c:667 gtk/gtkentry.c:1233
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "എന്‍റര്‍ ചെയ്ത വസ്തുക്കള്‍ മാസ്ക് ചെയ്യുന്പോള്‍ ഉപയോഗിക്കേണ്ട അക്ഷരം (\"പാസ്‍വേര്‍ഡ് മോഡില്‍\")"
 
@@ -2420,31 +2420,31 @@ msgstr "പ്രോഗ്രസ്സ് അതിരു്"
 msgid "Border around the progress bar"
 msgstr "പ്രോഗ്രസ്സ് ബാറിനുള്ള അതിരു്"
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1683
 msgid "Border between text and frame."
 msgstr "ടെക്സ്റ്റിനും ഫ്രെയിമിനും ഇടയ്ക്കുമുളള അതിര്."
 
-#: gtk/gtkentry.c:1676
+#: gtk/gtkentry.c:1697
 msgid "State Hint"
 msgstr "ഹിന്റ് ലഭ്യമാക്കുക"
 
-#: gtk/gtkentry.c:1677
+#: gtk/gtkentry.c:1698
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "ഷാഡോ അല്ലെങ്കില്‍ പശ്ചാത്തലം ലഭ്യമാക്കുമ്പോള്‍ ശരിയായ ഒരു അവസ്ഥ നല്‍കണമോ എന്നു്"
 
-#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1703 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "സ്ഥാനം തിരഞ്ഞെടുക്കുക"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1704
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "ഒരു എന്‍ട്രിയ്ക്കു് ശ്രദ്ധ ലഭ്യമാകുമ്പോള്‍, അതിലുള്ളവ തെരഞ്ഞെടുക്കണമോ എന്നു്"
 
-#: gtk/gtkentry.c:1697
+#: gtk/gtkentry.c:1718
 msgid "Password Hint Timeout"
 msgstr "പാസ്‍വേര്‍ഡിനുളള സമയം കഴിഞ്ഞിരിക്കുന്നു"
 
-#: gtk/gtkentry.c:1698
+#: gtk/gtkentry.c:1719
 msgid "How long to show the last input character in hidden entries"
 msgstr "അദൃശ്യമായ എന്‍ട്രികളില്‍ അവസാനം നല്‍കിയ അക്ഷരം എത്ര നേരം കാണിക്കണം"
 
@@ -4030,7 +4030,7 @@ msgstr "പ്രിന്‍ററിന്‍റെ ക്രമീകരണ�
 msgid "Page Setup"
 msgstr "പേജിന്‍റെ ക്രമീകരണം"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1027
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1050
 msgid "Track Print Status"
 msgstr "പ്രിന്‍റിന്‍റെ അവസ്ഥ കണ്ടുപിടിക്കുന്നു"
 
@@ -4042,57 +4042,57 @@ msgstr ""
 "പ്രിന്റ് ചെയ്യുവാനുള്ളതു് പ്രിന്റര്‍ അല്ലെങ്കില്‍ പ്രിന്റ് സര്‍വറിലേക്കു് അയച്ചതിനു് ശേഷം അവസ്ഥ മാറ്റമുള്ള "
 "സിഗ്നലുകള്‍ പ്രിന്റ് ജോലി നല്‍കിയാല്‍, TRUE."
 
-#: gtk/gtkprintoperation.c:899
+#: gtk/gtkprintoperation.c:922
 msgid "Default Page Setup"
 msgstr "ഡീഫോള്‍ട്ടായ പേജ് സെറ്റപ്പ്"
 
-#: gtk/gtkprintoperation.c:900
+#: gtk/gtkprintoperation.c:923
 msgid "The GtkPageSetup used by default"
 msgstr "ഡീഫോള്‍ട്ടായി ഉപയോഗിക്കുന്ന GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:918 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "പ്രിന്‍റ് ചെയ്യുന്നതിനുളള സജ്ജീകരണങ്ങള്‍"
 
-#: gtk/gtkprintoperation.c:919 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "ഡയലോഗ് ആരംഭിക്കുന്നതിനുളള GtkPrintSettings"
 
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:960
 msgid "Job Name"
 msgstr "ജോലിയുടെ പേര്"
 
-#: gtk/gtkprintoperation.c:938
+#: gtk/gtkprintoperation.c:961
 msgid "A string used for identifying the print job."
 msgstr "പ്രിന്‍റ് ജോലി തിരിച്ചറിയുന്നതിന് ഉപയോഗിക്കുന്ന സ്ട്രിങ്"
 
-#: gtk/gtkprintoperation.c:962
+#: gtk/gtkprintoperation.c:985
 msgid "Number of Pages"
 msgstr "പേജുകളുടെ എണ്ണം"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:986
 msgid "The number of pages in the document."
 msgstr "രേഖയിലുളള പേജുകളുടെ എണ്ണം."
 
-#: gtk/gtkprintoperation.c:984 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1007 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "നിലവിലുളള പേജ്"
 
-#: gtk/gtkprintoperation.c:985 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1008 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "രേഖയില്‍ നിലവിലുളള പേജ്"
 
-#: gtk/gtkprintoperation.c:1006
+#: gtk/gtkprintoperation.c:1029
 msgid "Use full page"
 msgstr "മുഴുവന്‍ പേജ് ഉപയോഗിക്കുക"
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1030
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr "താളിന്റെ മൂലയില്‍ ആയിരിക്കണം കോണ്‍ടെക്സ്റ്റ് എങ്കില്‍ TRUE"
 
-#: gtk/gtkprintoperation.c:1028
+#: gtk/gtkprintoperation.c:1051
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4100,55 +4100,55 @@ msgstr ""
 "പ്രിന്റ് ചെയ്യുവാനുള്ളതു് പ്രിന്റര്‍ അല്ലെങ്കില്‍ പ്രിന്റ് സര്‍വറിലേക്കു് അയച്ചതിനു് ശേഷം പ്രിന്റ് ജോലികളുടെ "
 "അവസ്ഥ പ്രിന്റ് പ്രക്രിയ ലഭ്യമാക്കുന്ന എങ്കില്‍, TRUE."
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Unit"
 msgstr "യൂണിറ്റ്"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "The unit in which distances can be measured in the context"
 msgstr "കോണ്‍ട്ടക്സ്റ്റില്‍ ദൂരം അളക്കുന്നതിനുളള യൂണിറ്റ്"
 
-#: gtk/gtkprintoperation.c:1063
+#: gtk/gtkprintoperation.c:1086
 msgid "Show Dialog"
 msgstr "ഡയലോഗ് കാണിക്കുക"
 
-#: gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintoperation.c:1087
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "പ്രിന്‍റ് ചെയ്യുന്നതിനിടയില്‍ പുരോഗതിയുടെ ഡയലോഗ് കാണിച്ചാല്‍ TRUE ആണ്."
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1110
 msgid "Allow Async"
 msgstr "Async അനുവദിക്കുക"
 
-#: gtk/gtkprintoperation.c:1088
+#: gtk/gtkprintoperation.c:1111
 msgid "TRUE if print process may run asynchronous."
 msgstr "പ്രിന്റ് പ്രക്രിയ അസിന്‍ക്രൊണസ് ആയി പ്രവര്‍ത്തിക്കുന്നു എങ്കില്‍, TRUE"
 
-#: gtk/gtkprintoperation.c:1110 gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1133 gtk/gtkprintoperation.c:1134
 msgid "Export filename"
 msgstr "ഫയലിന്‍റെ പേര് എക്സ്പോര്‍ട്ട് ചെയ്യുക"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Status"
 msgstr "അവസ്ഥ"
 
-#: gtk/gtkprintoperation.c:1126
+#: gtk/gtkprintoperation.c:1149
 msgid "The status of the print operation"
 msgstr "പ്രിന്‍റ് പ്രക്രിയയുടെ അവസ്ഥ"
 
-#: gtk/gtkprintoperation.c:1146
+#: gtk/gtkprintoperation.c:1169
 msgid "Status String"
 msgstr "അവസ്ഥ കാണിക്കുന്ന സ്ട്രിങ്"
 
-#: gtk/gtkprintoperation.c:1147
+#: gtk/gtkprintoperation.c:1170
 msgid "A human-readable description of the status"
 msgstr "വായിക്കുവാന്‍ സാധ്യമായ അവസ്ഥയുടെ വിവരണം"
 
-#: gtk/gtkprintoperation.c:1165
+#: gtk/gtkprintoperation.c:1188
 msgid "Custom tab label"
 msgstr "ടാബിന്‍റെ ലേബല്‍ ഇഷ്ടമുളള രീതിയില്‍ ക്രമീകരിക്കുക"
 
-#: gtk/gtkprintoperation.c:1166
+#: gtk/gtkprintoperation.c:1189
 msgid "Label for the tab containing custom widgets."
 msgstr "യഥേഷ്ടമുള്ള വിഡ്ജറ്റുകള്‍ അടങ്ങുന്ന റ്റാബിനുള്ള ലേബല്‍"
 
@@ -4628,39 +4628,39 @@ msgstr "മെട്രിക്"
 msgid "The metric used for the ruler"
 msgstr "റൂളറിനായി ഉപയോഗിക്കുന്ന മെട്രിക്"
 
-#: gtk/gtkscale.c:201
+#: gtk/gtkscale.c:219
 msgid "The number of decimal places that are displayed in the value"
 msgstr "മൂല്ല്യത്തിലുളള ഡെയിമലുകളുടെ എണ്ണം"
 
-#: gtk/gtkscale.c:210
+#: gtk/gtkscale.c:228
 msgid "Draw Value"
 msgstr "മൂല്യം എടുക്കുക"
 
-#: gtk/gtkscale.c:211
+#: gtk/gtkscale.c:229
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "സ്ലൈഡറിനടുത്തു് നിലവിലുള്ള മൂല്ല്യം ഒരു സ്ട്രിങായി കാണിക്കുന്നുണ്ടോ എന്നു്"
 
-#: gtk/gtkscale.c:218
+#: gtk/gtkscale.c:236
 msgid "Value Position"
 msgstr "മൂല്യ സ്ഥാനം"
 
-#: gtk/gtkscale.c:219
+#: gtk/gtkscale.c:237
 msgid "The position in which the current value is displayed"
 msgstr "നിലവിലുളള മൂല്ല്യം പ്രദര്‍ശിപ്പിച്ചിരിക്കുന്ന സ്ഥാനം"
 
-#: gtk/gtkscale.c:226
+#: gtk/gtkscale.c:244
 msgid "Slider Length"
 msgstr "സ്ളൈഡറിന്‍റെ നീളം‌"
 
-#: gtk/gtkscale.c:227
+#: gtk/gtkscale.c:245
 msgid "Length of scale's slider"
 msgstr "സ്കെയിലിന്‍റെ സ്ളൈഡറിന്‍റെ നീളം"
 
-#: gtk/gtkscale.c:235
+#: gtk/gtkscale.c:253
 msgid "Value spacing"
 msgstr "വിടവ് മൂല്യം"
 
-#: gtk/gtkscale.c:236
+#: gtk/gtkscale.c:254
 msgid "Space between value text and the slider/trough area"
 msgstr "മൂല്ല്യത്തിനുള്ള വാചകത്തിനും സ്ലൈഡര്‍/ട്രഫിനും ഇടയ്ക്കുള്ള സ്ഥലം"
 

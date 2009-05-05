@@ -33,3 +33,5 @@ libpixmap_la_SOURCES = 		\
 libpixmap_la_LDFLAGS =  -avoid-version -module $(no_undefined)
 libpixmap_la_LIBADD = $(LDADDS)
 
+
+-include $(top_srcdir)/git.mk

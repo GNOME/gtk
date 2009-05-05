@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:25-0400\n"
+"POT-Creation-Date: 2009-05-04 01:14-0400\n"
 "PO-Revision-Date: 2007-05-14 22:44-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -115,11 +115,11 @@ msgstr "Cydraniad ffont"
 msgid "The resolution for fonts on the screen"
 msgstr "Y cydraniad ar gyfer ffontiau ar y sgrin"
 
-#: gtk/gtkaboutdialog.c:184
+#: gtk/gtkaboutdialog.c:239
 msgid "Program name"
 msgstr "Enw'r rhaglen"
 
-#: gtk/gtkaboutdialog.c:185
+#: gtk/gtkaboutdialog.c:240
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -127,43 +127,43 @@ msgstr ""
 "Enw'r rhaglen. Os nad yw'r enw wedi ei osod, y dewis rhagosodedig yw "
 "g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:199
+#: gtk/gtkaboutdialog.c:254
 msgid "Program version"
 msgstr "Fersiwn rhaglen"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:255
 msgid "The version of the program"
 msgstr "Fersiwn y rhaglen"
 
-#: gtk/gtkaboutdialog.c:214
+#: gtk/gtkaboutdialog.c:269
 msgid "Copyright string"
 msgstr "Llinyn hawlfraint"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:270
 msgid "Copyright information for the program"
 msgstr "Gwybodaeth hawlfraint ar gyfer y rhaglen"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:287
 msgid "Comments string"
 msgstr "Llinyn sylwadau"
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:288
 msgid "Comments about the program"
 msgstr "Sylwadau ynglŷn â'r rhaglen"
 
-#: gtk/gtkaboutdialog.c:267
+#: gtk/gtkaboutdialog.c:322
 msgid "Website URL"
 msgstr "LAU safle gwe"
 
-#: gtk/gtkaboutdialog.c:268
+#: gtk/gtkaboutdialog.c:323
 msgid "The URL for the link to the website of the program"
 msgstr "LAU cyswllt i safle gwe'r rhaglen"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:339
 msgid "Website label"
 msgstr "Label safle gwe"
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:340
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -171,45 +171,45 @@ msgstr ""
 "Y label ar gyfer y cyswllt i safle gwe'r rhaglen. Os nad yw wedi ei osod, fe "
 "ddefnyddir y LAU fel label"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:356
 msgid "Authors"
 msgstr "Awduron"
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:357
 msgid "List of authors of the program"
 msgstr "Rhestr o awduron y rhaglen"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:373
 msgid "Documenters"
 msgstr "Dogfennwyr"
 
-#: gtk/gtkaboutdialog.c:319
+#: gtk/gtkaboutdialog.c:374
 msgid "List of people documenting the program"
 msgstr "Rhestr o'r rhai ysgrifennodd ddogfennaeth y rhaglen"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:390
 msgid "Artists"
 msgstr "Artistiaid"
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:391
 msgid "List of people who have contributed artwork to the program"
 msgstr "Rhestr o'r rhai gyfrannodd waith graffeg/celf i'r rhaglen"
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:408
 msgid "Translator credits"
 msgstr "Clodau cyfieithwyr"
 
-#: gtk/gtkaboutdialog.c:354
+#: gtk/gtkaboutdialog.c:409
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Diolchiadau i'r cyfieithwyr. Dylid marcio'r llinyn hwn yn gyfieithiadwy"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:424
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:425
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -217,19 +217,19 @@ msgstr ""
 "Logo ar gyfer y blwch ynghylch. Os na osodir hyn, y dewis rhagosodedig yw "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:440
 msgid "Logo Icon Name"
 msgstr "Enw Eicon y Logo"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:441
 msgid "A named icon to use as the logo for the about box."
 msgstr "Enw'r eicon i'w ddefnyddio fel logo ar gyfer y blwch 'ynghylch'."
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:454
 msgid "Wrap license"
 msgstr "Amlapio trwydded"
 
-#: gtk/gtkaboutdialog.c:400
+#: gtk/gtkaboutdialog.c:455
 msgid "Whether to wrap the license text."
 msgstr "A ddylid amlapio testun y drwydded."
 
@@ -599,59 +599,59 @@ msgstr "Ufuddhau'r plentyn"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "Gorfodi'r gymhareb agwedd i gydweddu a hwnnw plentyn y ffrâm"
 
-#: gtk/gtkassistant.c:261
+#: gtk/gtkassistant.c:281
 msgid "Header Padding"
 msgstr "Padio Pennyn"
 
-#: gtk/gtkassistant.c:262
+#: gtk/gtkassistant.c:282
 msgid "Number of pixels around the header."
 msgstr "Y nifer o bicseli o amgylch y pennyn."
 
-#: gtk/gtkassistant.c:269
+#: gtk/gtkassistant.c:289
 msgid "Content Padding"
 msgstr "Padio Cynnwys"
 
-#: gtk/gtkassistant.c:270
+#: gtk/gtkassistant.c:290
 msgid "Number of pixels around the content pages."
 msgstr "Y nifer o bicseli o amgylch y tudalennau cynnwys."
 
-#: gtk/gtkassistant.c:286
+#: gtk/gtkassistant.c:306
 msgid "Page type"
 msgstr "Math tudalen"
 
-#: gtk/gtkassistant.c:287
+#: gtk/gtkassistant.c:307
 msgid "The type of the assistant page"
 msgstr "Math y dudalen gynorthwyo"
 
-#: gtk/gtkassistant.c:304
+#: gtk/gtkassistant.c:324
 msgid "Page title"
 msgstr "Teitl tudalen"
 
-#: gtk/gtkassistant.c:305
+#: gtk/gtkassistant.c:325
 msgid "The title of the assistant page"
 msgstr "Teitl y dudalen gynorthwyo"
 
-#: gtk/gtkassistant.c:321
+#: gtk/gtkassistant.c:341
 msgid "Header image"
 msgstr "Delwedd pennyn"
 
-#: gtk/gtkassistant.c:322
+#: gtk/gtkassistant.c:342
 msgid "Header image for the assistant page"
 msgstr "Delwedd pennyn y dudalen gynorthwyo"
 
-#: gtk/gtkassistant.c:338
+#: gtk/gtkassistant.c:358
 msgid "Sidebar image"
 msgstr "Delwedd bar ochr"
 
-#: gtk/gtkassistant.c:339
+#: gtk/gtkassistant.c:359
 msgid "Sidebar image for the assistant page"
 msgstr "Delwedd bar ochr y dudalen gynorthwyo"
 
-#: gtk/gtkassistant.c:354
+#: gtk/gtkassistant.c:374
 msgid "Page complete"
 msgstr "Tudalen yn gyflawn"
 
-#: gtk/gtkassistant.c:355
+#: gtk/gtkassistant.c:375
 msgid "Whether all required fields on the page have been filled out"
 msgstr "A yw pob un o'r meysydd angenrheidiol ar y dudalen wedi eu llenwi"
 
@@ -910,7 +910,7 @@ msgstr ""
 "A ddylai'r priodweddau child_displacement_x/_y hefyd effeithio'r petryal "
 "ffocws"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1682
 msgid "Inner Border"
 msgstr "Border Mewnol"
 
@@ -1335,7 +1335,7 @@ msgstr "Cyfradd Ddringo"
 msgid "The acceleration rate when you hold down a button"
 msgstr "Y gyfradd gyflymu pan rydych yn dal botwm i lawr"
 
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:200 gtk/gtkspinbutton.c:226
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:218 gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "Digidau"
 
@@ -2202,11 +2202,11 @@ msgstr ""
 "Border rhwng y testun a'r ffrâm. Yn gwrthwneud y briodwedd arddull border "
 "mewnol"
 
-#: gtk/gtkentry.c:666
+#: gtk/gtkentry.c:666 gtk/gtkentry.c:1232
 msgid "Invisible character"
 msgstr "Nod anweladwy"
 
-#: gtk/gtkentry.c:667
+#: gtk/gtkentry.c:667 gtk/gtkentry.c:1233
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Y nod i'w ddefnyddio wrth guddio testun y teclyn (\"modd cyfrinair\")"
 
@@ -2522,33 +2522,33 @@ msgstr "Border Cafn"
 msgid "Border around the progress bar"
 msgstr "Y testun ar y bar cynnydd"
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1683
 msgid "Border between text and frame."
 msgstr "Border rhwng y testun a'r ffrâm."
 
-#: gtk/gtkentry.c:1676
+#: gtk/gtkentry.c:1697
 #, fuzzy
 msgid "State Hint"
 msgstr "Llinyn Statws"
 
-#: gtk/gtkentry.c:1677
+#: gtk/gtkentry.c:1698
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Didfap i'w ddefnyddio fel masg wrth arlunio cefndir y testun"
 
-#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1703 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Dewis wrth ffocysu"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1704
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "A ddylid dewis cynnwys cofnod pan ffocysir ef"
 
-#: gtk/gtkentry.c:1697
+#: gtk/gtkentry.c:1718
 msgid "Password Hint Timeout"
 msgstr "Terfyn Amser Awgrym Cyfrinair"
 
-#: gtk/gtkentry.c:1698
+#: gtk/gtkentry.c:1719
 msgid "How long to show the last input character in hidden entries"
 msgstr "Am ba hyd i ddangos y nod a fewnbynnwyd diwethaf o fewn cofnodion cudd"
 
@@ -4204,7 +4204,7 @@ msgstr "Gosodiadau argraffydd"
 msgid "Page Setup"
 msgstr "Gosodiad Tudalen"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1027
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1050
 msgid "Track Print Status"
 msgstr "Olrhain Statws Argraffu"
 
@@ -4216,51 +4216,51 @@ msgstr ""
 "GWIR os fydd y weithred argraffu yn parhau i adrodd newidiadau statws ar ôl "
 "i'r data argraffu gael ei anfon at yr argraffydd neu'r gweinydd argraffu."
 
-#: gtk/gtkprintoperation.c:899
+#: gtk/gtkprintoperation.c:922
 msgid "Default Page Setup"
 msgstr "Gosodiad Rhagosodedig Tudalen"
 
-#: gtk/gtkprintoperation.c:900
+#: gtk/gtkprintoperation.c:923
 msgid "The GtkPageSetup used by default"
 msgstr "Y GtkPageSetup ddefnyddir yn rhagosodedig"
 
-#: gtk/gtkprintoperation.c:918 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "Gosodiadau Argraffu"
 
-#: gtk/gtkprintoperation.c:919 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Y GtkPrintSettings ddefnyddiwyd i ymgychwyn y ddeialog"
 
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:960
 msgid "Job Name"
 msgstr "Enw'r Dasg"
 
-#: gtk/gtkprintoperation.c:938
+#: gtk/gtkprintoperation.c:961
 msgid "A string used for identifying the print job."
 msgstr "Llinyn i'w ddefnyddio i adnabod y dasg argraffu."
 
-#: gtk/gtkprintoperation.c:962
+#: gtk/gtkprintoperation.c:985
 msgid "Number of Pages"
 msgstr "Nifer y Tudalennau"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:986
 msgid "The number of pages in the document."
 msgstr "Nifer y tudalennau yn y ddogfen"
 
-#: gtk/gtkprintoperation.c:984 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1007 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "Tudalen Gyfredol"
 
-#: gtk/gtkprintoperation.c:985 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1008 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "Y dudalen bresennol yn y ddogfen"
 
-#: gtk/gtkprintoperation.c:1006
+#: gtk/gtkprintoperation.c:1029
 msgid "Use full page"
 msgstr "Defnyddio'r dudalen lawn"
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1030
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4268,7 +4268,7 @@ msgstr ""
 "GWIR os ddylai tarddbwynt y cyd-destun fod ar gornel y dudalen ac nid ar "
 "gornel yr ardal a ellir ei ddelweddu"
 
-#: gtk/gtkprintoperation.c:1028
+#: gtk/gtkprintoperation.c:1051
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4277,56 +4277,56 @@ msgstr ""
 "ar ôl i'r data argraffu gael ei anfon at yr argraffydd neu'r gweinydd "
 "argraffu."
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Unit"
 msgstr "Uned"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "The unit in which distances can be measured in the context"
 msgstr "Yr uned i fesur pellteroedd, o fewn y cyd-destun"
 
-#: gtk/gtkprintoperation.c:1063
+#: gtk/gtkprintoperation.c:1086
 msgid "Show Dialog"
 msgstr "Dangos Deialog"
 
-#: gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintoperation.c:1087
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "GWIR os dangosir deialog cynnydd wrth argraffu."
 
 # EFALLAI
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1110
 msgid "Allow Async"
 msgstr "Caniatáu Anghydamser"
 
-#: gtk/gtkprintoperation.c:1088
+#: gtk/gtkprintoperation.c:1111
 msgid "TRUE if print process may run asynchronous."
 msgstr "GWIR os gall y broses argraffu redeg yn anghydamseredig."
 
-#: gtk/gtkprintoperation.c:1110 gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1133 gtk/gtkprintoperation.c:1134
 msgid "Export filename"
 msgstr "Allforio enw ffeil"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Status"
 msgstr "Statws"
 
-#: gtk/gtkprintoperation.c:1126
+#: gtk/gtkprintoperation.c:1149
 msgid "The status of the print operation"
 msgstr "Statws y weithred argraffu"
 
-#: gtk/gtkprintoperation.c:1146
+#: gtk/gtkprintoperation.c:1169
 msgid "Status String"
 msgstr "Llinyn Statws"
 
-#: gtk/gtkprintoperation.c:1147
+#: gtk/gtkprintoperation.c:1170
 msgid "A human-readable description of the status"
 msgstr "Disgrifiad o'r statws er mwyn i ddefnyddwyr ei ddarllen"
 
-#: gtk/gtkprintoperation.c:1165
+#: gtk/gtkprintoperation.c:1188
 msgid "Custom tab label"
 msgstr "Label tab addasedig"
 
-#: gtk/gtkprintoperation.c:1166
+#: gtk/gtkprintoperation.c:1189
 msgid "Label for the tab containing custom widgets."
 msgstr "Label ar gyfer y tab sy'n cynnwys teclynnau addasedig."
 
@@ -4838,40 +4838,40 @@ msgstr "Metrig"
 msgid "The metric used for the ruler"
 msgstr "Y metrig mae'r mesurydd yn ei ddefnyddio"
 
-#: gtk/gtkscale.c:201
+#: gtk/gtkscale.c:219
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Nifer y llefydd degol a ddangosir yn y gwerth"
 
-#: gtk/gtkscale.c:210
+#: gtk/gtkscale.c:228
 msgid "Draw Value"
 msgstr "Dangos y Gwerth"
 
-#: gtk/gtkscale.c:211
+#: gtk/gtkscale.c:229
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "A ddylid dangos y gwerth cyfredol ger y llithrydd"
 
-#: gtk/gtkscale.c:218
+#: gtk/gtkscale.c:236
 msgid "Value Position"
 msgstr "Safle'r Gwerth"
 
-#: gtk/gtkscale.c:219
+#: gtk/gtkscale.c:237
 msgid "The position in which the current value is displayed"
 msgstr "Y safle lle dangosir y gwerth cyfredol"
 
-#: gtk/gtkscale.c:226
+#: gtk/gtkscale.c:244
 msgid "Slider Length"
 msgstr "Hyd y Llithrydd"
 
 # EFALLAI
-#: gtk/gtkscale.c:227
+#: gtk/gtkscale.c:245
 msgid "Length of scale's slider"
 msgstr "Hyd llithrydd y raddfa"
 
-#: gtk/gtkscale.c:235
+#: gtk/gtkscale.c:253
 msgid "Value spacing"
 msgstr "Bylchu'r gwerth"
 
-#: gtk/gtkscale.c:236
+#: gtk/gtkscale.c:254
 msgid "Space between value text and the slider/trough area"
 msgstr "Gofod rhwng testun y gwerth a'r ardal llithrydd/cafn"
 

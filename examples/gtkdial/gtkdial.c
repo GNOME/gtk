@@ -190,11 +190,11 @@ gtk_dial_set_adjustment (GtkDial      *dial,
   dial->adjustment = adjustment;
   g_object_ref (GTK_OBJECT (dial->adjustment));
 
-  g_signal_connect (GTK_OBJECT (adjustment), "changed",
-		    GTK_SIGNAL_FUNC (gtk_dial_adjustment_changed),
+  g_signal_connect (G_OBJECT (adjustment), "changed",
+		    G_CALLBACK (gtk_dial_adjustment_changed),
 		    (gpointer) dial);
-  g_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-		    GTK_SIGNAL_FUNC (gtk_dial_adjustment_value_changed),
+  g_signal_connect (G_OBJECT (adjustment), "value_changed",
+		    G_CALLBACK (gtk_dial_adjustment_value_changed),
 		    (gpointer) dial);
 
   dial->old_value = adjustment->value;
@@ -333,6 +333,8 @@ gtk_dial_expose( GtkWidget      *widget,
                 widget->style->bg_gc[GTK_STATE_NORMAL];
   blankstyle->black_gc =
                 widget->style->bg_gc[GTK_STATE_NORMAL];
+  blankstyle->depth =
+                gdk_drawable_get_depth( GDK_DRAWABLE (widget->window));
 
   gtk_paint_polygon (blankstyle,
                     widget->window,

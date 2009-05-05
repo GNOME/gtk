@@ -7,17 +7,28 @@ Base class for GtkHScale and GtkVScale
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 A #GtkScale is a slider control used to select a numeric value.
-To use it, you'll probably want to investigate the methods on 
+To use it, you'll probably want to investigate the methods on
 its base class, #GtkRange, in addition to the methods for #GtkScale itself.
-To set the value of a scale, you would normally use gtk_range_set_value(). 
-To detect changes to the value, you would normally use the "value_changed" 
+To set the value of a scale, you would normally use gtk_range_set_value().
+To detect changes to the value, you would normally use the "value_changed"
 signal.
 </para>
 <para>
 The #GtkScale widget is an abstract class, used only for deriving the
-subclasses #GtkHScale and #GtkVScale. To create a scale widget, 
+subclasses #GtkHScale and #GtkVScale. To create a scale widget,
 call gtk_hscale_new_with_range() or gtk_vscale_new_with_range().
 </para>
+
+<refsect2 id="GtkScale-BUILDER-UI"><title>GtkScale as GtkBuildable</title>
+<para>
+GtkScale supports a custom &lt;marks&gt; element, which
+can contain multiple &lt;mark&gt; elements. The "value" and "position"
+attributes have the same meaning as gtk_scale_add_mark() parameters of the
+same name. If the element is not empty, its content is taken as the markup
+to show at the mark. It can be translated with the usual "translatable and
+"context" attributes.
+</para>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>

@@ -3620,6 +3620,7 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
   GdkRectangle visible_rect;
   gint y;
   gint offset;
+  gfloat value;
 
   gdk_window_get_pointer (tree_view->priv->bin_window, NULL, &y, NULL);
   y += tree_view->priv->dy;
@@ -3635,8 +3636,9 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
 	return;
     }
 
-  gtk_adjustment_set_value (tree_view->priv->vadjustment,
-                            MAX (tree_view->priv->vadjustment->value + offset, 0.0));
+  value = CLAMP (tree_view->priv->vadjustment->value + offset, 0.0,
+		 tree_view->priv->vadjustment->upper - tree_view->priv->vadjustment->page_size);
+  gtk_adjustment_set_value (tree_view->priv->vadjustment, value);
 }
 
 static gboolean
@@ -3645,6 +3647,7 @@ gtk_tree_view_horizontal_autoscroll (GtkTreeView *tree_view)
   GdkRectangle visible_rect;
   gint x;
   gint offset;
+  gfloat value;
 
   gdk_window_get_pointer (tree_view->priv->bin_window, &x, NULL, NULL);
 
@@ -3660,8 +3663,9 @@ gtk_tree_view_horizontal_autoscroll (GtkTreeView *tree_view)
     }
   offset = offset/3;
 
-  gtk_adjustment_set_value (tree_view->priv->hadjustment,
-                            MAX (tree_view->priv->hadjustment->value + offset, 0.0));
+  value = CLAMP (tree_view->priv->hadjustment->value + offset,
+		 0.0, tree_view->priv->hadjustment->upper - tree_view->priv->hadjustment->page_size);
+  gtk_adjustment_set_value (tree_view->priv->hadjustment, value);
 
   return TRUE;
 
@@ -8968,7 +8972,11 @@ gtk_tree_view_clamp_column_visible (GtkTreeView       *tree_view,
 	    }
 	}
 
-      gtk_adjustment_set_value (tree_view->priv->hadjustment, x);
+      gtk_adjustment_set_value (tree_view->priv->hadjustment,
+				CLAMP (x,
+				       tree_view->priv->hadjustment->lower,
+				       tree_view->priv->hadjustment->upper
+				       - tree_view->priv->hadjustment->page_size));
     }
   else
     {
@@ -11619,9 +11627,9 @@ gtk_tree_view_scroll_to_point (GtkTreeView *tree_view,
   vadj = tree_view->priv->vadjustment;
 
   if (tree_x != -1)
-    gtk_adjustment_set_value (hadj, tree_x);
+    gtk_adjustment_set_value (hadj, CLAMP (tree_x, hadj->lower, hadj->upper - hadj->page_size));
   if (tree_y != -1)
-    gtk_adjustment_set_value (vadj, tree_y);
+    gtk_adjustment_set_value (vadj, CLAMP (tree_y, vadj->lower, vadj->upper - vadj->page_size));
 }
 
 /**

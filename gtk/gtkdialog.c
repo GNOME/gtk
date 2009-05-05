@@ -1363,7 +1363,7 @@ static const GMarkupParser attributes_parser =
     attributes_text_element,
   };
 
-gboolean
+static gboolean
 gtk_dialog_buildable_custom_tag_start (GtkBuildable  *buildable,
 				       GtkBuilder    *builder,
 				       GObject       *child,

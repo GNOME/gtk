@@ -118,6 +118,26 @@ EXTRA_DIST +=			\
 	examples/spinbutton/spinbutton.c  \
 	examples/spinbutton/Makefile  \
 	examples/find-examples.sh
+MAINTAINERCLEANFILES = \
+	$(srcdir)/INSTALL \
+	$(srcdir)/README \
+	$(srcdir)/aclocal.m4 \
+	$(srcdir)/autoscan.log \
+	$(srcdir)/compile \
+	$(srcdir)/config.guess \
+	$(srcdir)/config.h.in \
+	$(srcdir)/config.sub \
+	$(srcdir)/configure.scan \
+	$(srcdir)/depcomp \
+	$(srcdir)/install-sh \
+	$(srcdir)/ltmain.sh \
+	$(srcdir)/missing \
+	$(srcdir)/mkinstalldirs \
+	$(srcdir)/omf.make \
+	$(srcdir)/xmldocs.make \
+	$(srcdir)/gtk-doc.make \
+	$(srcdir)/ChangeLog \
+	`find "$(srcdir)" -type f -name Makefile.in -print`
 
 GDKTARGET=@gdktarget@
 
@@ -223,3 +243,15 @@ snapshot:
 	$(MAKE) dist distdir=$(PACKAGE)-snap`date +"%Y%m%d"`
 
 DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-man --disable-rebuilds
+
+GITIGNOREFILES = \
+	po-properties/Makefile.in.in \
+	po-properties/Makefile.in \
+	po-properties/Makefile \
+	po-properties/*.gmo \
+	po-properties/*.mo \
+	po-properties/POTFILES \
+	po-properties/stamp-it \
+	po-properties/.intltool-merge-cache
+
+-include $(top_srcdir)/git.mk

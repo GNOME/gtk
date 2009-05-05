@@ -1224,6 +1224,27 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                GTK_PARAM_READABLE));
   
   /**
+   * GtkEntry::invisible-char:
+   *
+   * The invisible character is used when masking entry contents (in
+   * \"password mode\")"). When it is not explicitly set with the
+   * #GtkEntry::invisible-char property, GTK+ determines the character
+   * to use from a list of possible candidates, depending on availability
+   * in the current font.
+   *
+   * This style property allows the theme to prepend a character
+   * to the list of candidates.
+   *
+   * Since: 2.22
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_unichar ("invisible-char",
+					    		         P_("Invisible character"),
+							         P_("The character to use when masking entry contents (in \"password mode\")"),
+							         0,
+							         GTK_PARAM_READABLE));
+  
+  /**
    * GtkEntry::populate-popup:
    * @entry: The entry on which the signal is emitted
    * @menu: the menu that is being populated
@@ -2159,11 +2180,17 @@ find_invisible_char (GtkWidget *widget)
   PangoAttrList *attr_list;
   gint i;
   gunichar invisible_chars [] = {
+    0,
     0x25cf, /* BLACK CIRCLE */
     0x2022, /* BULLET */
     0x2731, /* HEAVY ASTERISK */
     0x273a  /* SIXTEEN POINTED ASTERISK */
   };
+
+  if (widget->style)
+    gtk_widget_style_get (widget,
+                          "invisible-char", &invisible_chars[0],
+                          NULL);
 
   layout = gtk_widget_create_pango_layout (widget, NULL);
 
@@ -2173,7 +2200,7 @@ find_invisible_char (GtkWidget *widget)
   pango_layout_set_attributes (layout, attr_list);
   pango_attr_list_unref (attr_list);
 
-  for (i = 0; i < G_N_ELEMENTS (invisible_chars); i++)
+  for (i = (invisible_chars[0] != 0 ? 0 : 1); i < G_N_ELEMENTS (invisible_chars); i++)
     {
       gchar text[7] = { 0, };
       gint len, count;
@@ -2191,6 +2218,7 @@ find_invisible_char (GtkWidget *widget)
     }
 
   g_object_unref (layout);
+
   return '*';
 }
 
