@@ -227,18 +227,6 @@
 /* if we can't determine the DPI, fall back to this value */
 #define FALLBACK_DPI 96
 
-typedef struct _GtkParamSpecSize GtkParamSpecSize;
-struct _GtkParamSpecSize
-{
-  GParamSpecInt parent_instance;
-};
-
-typedef struct _GtkParamSpecUSize GtkParamSpecUSize;
-struct _GtkParamSpecUSize
-{
-  GParamSpecUInt parent_instance;
-};
-
 static gboolean units_enabled = FALSE;
 static gboolean application_wants_to_use_units = FALSE;
 static gboolean have_checked = FALSE;

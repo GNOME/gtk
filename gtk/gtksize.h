@@ -51,6 +51,18 @@ typedef gint GtkSize;
  */
 typedef guint GtkUSize;
 
+typedef struct _GtkParamSpecSize GtkParamSpecSize;
+struct _GtkParamSpecSize
+{
+  GParamSpecInt parent_instance;
+};
+
+typedef struct _GtkParamSpecUSize GtkParamSpecUSize;
+struct _GtkParamSpecUSize
+{
+  GParamSpecUInt parent_instance;
+};
+
 /**
  * GtkSizeUnit:
  * @GTK_SIZE_UNIT_PIXEL: the size is measure in pixels
