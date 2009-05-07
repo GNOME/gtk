@@ -5824,6 +5824,9 @@ gtk_style_set_font
 gtk_style_get_style_property
 gtk_style_get_valist
 gtk_style_get
+gtk_style_get_style_property_unit
+gtk_style_get_unit_valist
+gtk_style_get_unit
 gtk_draw_hline
 gtk_draw_vline
 gtk_draw_shadow
