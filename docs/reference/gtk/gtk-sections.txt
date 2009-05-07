@@ -7042,6 +7042,7 @@ GTK_TYPE_ORIENTABLE
 
 <SUBSECTION Private>
 gtk_orientable_get_type
+</SECTION>
 
 <SECTION>
 <TITLE>Units</TITLE>
