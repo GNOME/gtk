@@ -47,7 +47,7 @@ update (void)
     {
       plug_name = gdk_screen_get_monitor_plug_name (screen, monitor_num);
       width_mm = gdk_screen_get_monitor_width_mm (screen, monitor_num);
-      height_mm = gdk_screen_get_monitor_width_mm (screen, monitor_num);
+      height_mm = gdk_screen_get_monitor_height_mm (screen, monitor_num);
       gdk_screen_get_monitor_geometry (screen, monitor_num, &geometry);
     }
   if (screen != NULL)
