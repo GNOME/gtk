@@ -31,15 +31,15 @@ static void
 toggle_orientation (GtkWidget *button,
                     GtkWidget *scalebutton)
 {
-  if (gtk_scale_button_get_orientation (GTK_SCALE_BUTTON (scalebutton)) ==
+  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (scalebutton)) ==
       GTK_ORIENTATION_HORIZONTAL)
     {
-      gtk_scale_button_set_orientation (GTK_SCALE_BUTTON (scalebutton),
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (scalebutton),
                                         GTK_ORIENTATION_VERTICAL);
     }
   else
     {
-      gtk_scale_button_set_orientation (GTK_SCALE_BUTTON (scalebutton),
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (scalebutton),
                                         GTK_ORIENTATION_HORIZONTAL);
     }
 }
