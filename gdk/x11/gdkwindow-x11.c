@@ -3538,18 +3538,20 @@ gdk_window_x11_get_events (GdkWindow *window)
 {
   XWindowAttributes attrs;
   GdkEventMask event_mask;
+  GdkEventMask filtered;
 
   if (GDK_WINDOW_DESTROYED (window))
     return 0;
   else
     {
       XGetWindowAttributes (GDK_WINDOW_XDISPLAY (window),
-			    GDK_WINDOW_XID (window), 
+			    GDK_WINDOW_XID (window),
 			    &attrs);
-      
       event_mask = x_event_mask_to_gdk_event_mask (attrs.your_event_mask);
-      GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
-  
+      /* if property change was filtered out before, keep it filtered out */
+      filtered = GDK_STRUCTURE_MASK | GDK_PROPERTY_CHANGE_MASK;
+      GDK_WINDOW_OBJECT (window)->event_mask = event_mask & ((GDK_WINDOW_OBJECT (window)->event_mask & filtered) | ~filtered);
+
       return event_mask;
     }
 }
