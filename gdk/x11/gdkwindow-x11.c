@@ -3557,13 +3557,14 @@ static void
 gdk_window_x11_set_events (GdkWindow    *window,
                            GdkEventMask  event_mask)
 {
-  long xevent_mask;
+  long xevent_mask = 0;
   int i;
   
   if (!GDK_WINDOW_DESTROYED (window))
     {
       GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
-      xevent_mask = StructureNotifyMask | PropertyChangeMask;
+      if (GDK_WINDOW_XID (window) != GDK_WINDOW_XROOTWIN (window))
+        xevent_mask = StructureNotifyMask | PropertyChangeMask;
       for (i = 0; i < _gdk_nenvent_masks; i++)
 	{
 	  if (event_mask & (1 << (i + 1)))
