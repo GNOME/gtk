@@ -10,10 +10,18 @@ endif
 SUBDIRS = theme-bits . tests
 DIST_SUBDIRS=theme-bits tests
 
+if HAVE_PAPI_CUPS
+GTK_PRINT_BACKENDS=file,papi,cups
+else
 if HAVE_CUPS
 GTK_PRINT_BACKENDS=file,cups
 else
+if HAVE_PAPI
+GTK_PRINT_BACKENDS=file,papi
+else
 GTK_PRINT_BACKENDS=file,lpr
+endif
+endif
 endif
 
 INCLUDES =						\
