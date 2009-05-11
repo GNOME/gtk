@@ -45,6 +45,9 @@
 #include "gtkstock.h"
 #include "gtkbindings.h"
 #include "gtkbuildable.h"
+#include "gtkimage.h"
+#include "gtkshow.h"
+#include "gtktooltip.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
@@ -55,8 +58,47 @@ typedef struct
   gint wrap_width;
   gint width_chars;
   gint max_width_chars;
-}
-GtkLabelPrivate;
+} GtkLabelPrivate;
+
+/* Notes about the handling of links:
+ *
+ * Links share the GtkLabelSelectionInfo struct with selectable labels.
+ * There are some new fields for links. The links field contains the list
+ * of GtkLabelLink structs that describe the links which are embedded in
+ * the label. The active_link field points to the link under the mouse
+ * pointer. For keyboard navigation, the 'focus' link is determined by
+ * finding the link which contains the selection_anchor position.
+ * The link_clicked field is used with button press and release events
+ * to ensure that pressing inside a link and releasing outside of it
+ * does not activate the link.
+ *
+ * Links are rendered with the link-color/visited-link-color colors
+ * that are determined by the style and with an underline. When the mouse
+ * pointer is over a link, the pointer is changed to indicate the link,
+ * and the background behind the link is rendered with the base[PRELIGHT]
+ * color. While a button is pressed over a link, the background is rendered
+ * with the base[ACTIVE] color.
+ *
+ * Labels with links accept keyboard focus, and it is possible to move
+ * the focus between the embedded links using Tab/Shift-Tab. The focus
+ * is indicated by a focus rectangle that is drawn around the link text.
+ * Pressing Enter activates the focussed link, and there is a suitable
+ * context menu for links that can be opened with the Menu key. Pressing
+ * Control-C copies the link URI to the clipboard.
+ *
+ * In selectable labels with links, link functionality is only available
+ * when the selection is empty.
+ */
+typedef struct
+{
+  gchar *uri;
+  gchar *title;     /* the title attribute, used as tooltip */
+  gboolean visited; /* get set when the link is activated; this flag
+                     * gets preserved over later set_markup() calls
+                     */
+  gint start;       /* position of the link in the PangoLayout */
+  gint end;
+} GtkLabelLink;
 
 struct _GtkLabelSelectionInfo
 {
@@ -64,18 +106,24 @@ struct _GtkLabelSelectionInfo
   gint selection_anchor;
   gint selection_end;
   GtkWidget *popup_menu;
-  
+
+  GList *links;
+  GtkLabelLink *active_link;
+
   gint drag_start_x;
   gint drag_start_y;
 
-  guint in_drag : 1;
+  guint in_drag      : 1;
   guint select_words : 1;
+  guint selectable   : 1;
+  guint link_clicked : 1;
 };
 
 enum {
   MOVE_CURSOR,
   COPY_CLIPBOARD,
   POPULATE_POPUP,
+  ACTIVATE_LINK,
   LAST_SIGNAL
 };
 
@@ -103,6 +151,9 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
+static const GdkColor default_link_color = { 0, 0, 0, 0xeeee };
+static const GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
+
 static void gtk_label_set_property      (GObject          *object,
 					 guint             prop_id,
 					 const GValue     *value,
@@ -125,6 +176,8 @@ static void gtk_label_direction_changed (GtkWidget        *widget,
 					 GtkTextDirection  previous_dir);
 static gint gtk_label_expose            (GtkWidget        *widget,
 					 GdkEventExpose   *event);
+static gboolean gtk_label_focus         (GtkWidget         *widget,
+                                         GtkDirectionType   direction);
 
 static void gtk_label_realize           (GtkWidget        *widget);
 static void gtk_label_unrealize         (GtkWidget        *widget);
@@ -137,8 +190,16 @@ static gboolean gtk_label_button_release    (GtkWidget        *widget,
 					     GdkEventButton   *event);
 static gboolean gtk_label_motion            (GtkWidget        *widget,
 					     GdkEventMotion   *event);
+static gboolean gtk_label_leave_notify      (GtkWidget        *widget,
+                                             GdkEventCrossing *event);
+
 static void     gtk_label_grab_focus        (GtkWidget        *widget);
 
+static gboolean gtk_label_query_tooltip     (GtkWidget        *widget,
+                                             gint              x,
+                                             gint              y,
+                                             gboolean          keyboard_tip,
+                                             GtkTooltip       *tooltip);
 
 static void gtk_label_set_text_internal          (GtkLabel      *label,
 						  gchar         *str);
@@ -154,7 +215,7 @@ static void gtk_label_set_uline_text_internal    (GtkLabel      *label,
 						  const gchar   *str);
 static void gtk_label_set_pattern_internal       (GtkLabel      *label,
 				                  const gchar   *pattern);
-static void set_markup                           (GtkLabel      *label,
+static void gtk_label_set_markup_internal        (GtkLabel      *label,
 						  const gchar   *str,
 						  gboolean       with_uline);
 static void gtk_label_recalculate                (GtkLabel      *label);
@@ -162,9 +223,13 @@ static void gtk_label_hierarchy_changed          (GtkWidget     *widget,
 						  GtkWidget     *old_toplevel);
 static void gtk_label_screen_changed             (GtkWidget     *widget,
 						  GdkScreen     *old_screen);
+static gboolean gtk_label_popup_menu             (GtkWidget     *widget);
 
 static void gtk_label_create_window       (GtkLabel *label);
 static void gtk_label_destroy_window      (GtkLabel *label);
+static void gtk_label_ensure_select_info  (GtkLabel *label);
+static void gtk_label_clear_select_info   (GtkLabel *label);
+static void gtk_label_update_cursor       (GtkLabel *label);
 static void gtk_label_clear_layout        (GtkLabel *label);
 static void gtk_label_ensure_layout       (GtkLabel *label);
 static void gtk_label_invalidate_wrap_width (GtkLabel *label);
@@ -197,7 +262,7 @@ static void     gtk_label_buildable_custom_finished    (GtkBuildable     *builda
 							gpointer          user_data);
 
 
-/* For selectable lables: */
+/* For selectable labels: */
 static void gtk_label_move_cursor        (GtkLabel        *label,
 					  GtkMovementStep  step,
 					  gint             count,
@@ -206,11 +271,19 @@ static void gtk_label_copy_clipboard     (GtkLabel        *label);
 static void gtk_label_select_all         (GtkLabel        *label);
 static void gtk_label_do_popup           (GtkLabel        *label,
 					  GdkEventButton  *event);
-
 static gint gtk_label_move_forward_word  (GtkLabel        *label,
 					  gint             start);
 static gint gtk_label_move_backward_word (GtkLabel        *label,
 					  gint             start);
+
+/* For links: */
+static void          gtk_label_rescan_links     (GtkLabel  *label);
+static void          gtk_label_clear_links      (GtkLabel  *label);
+static gboolean      gtk_label_activate_link    (GtkLabel  *label);
+static GtkLabelLink *gtk_label_get_current_link (GtkLabel  *label);
+static void          gtk_label_get_link_colors  (GtkWidget  *widget,
+                                                 GdkColor  **link_color,
+                                                 GdkColor  **visited_link_color);
 
 static GQuark quark_angle = 0;
 
@@ -258,11 +331,12 @@ gtk_label_class_init (GtkLabelClass *class)
   gobject_class->finalize = gtk_label_finalize;
 
   object_class->destroy = gtk_label_destroy;
-  
+
   widget_class->size_request = gtk_label_size_request;
   widget_class->size_allocate = gtk_label_size_allocate;
   widget_class->state_changed = gtk_label_state_changed;
   widget_class->style_set = gtk_label_style_set;
+  widget_class->query_tooltip = gtk_label_query_tooltip;
   widget_class->direction_changed = gtk_label_direction_changed;
   widget_class->expose_event = gtk_label_expose;
   widget_class->realize = gtk_label_realize;
@@ -272,15 +346,19 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->button_press_event = gtk_label_button_press;
   widget_class->button_release_event = gtk_label_button_release;
   widget_class->motion_notify_event = gtk_label_motion;
+  widget_class->leave_notify_event = gtk_label_leave_notify;
   widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
   widget_class->screen_changed = gtk_label_screen_changed;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
   widget_class->drag_data_get = gtk_label_drag_data_get;
   widget_class->grab_focus = gtk_label_grab_focus;
+  widget_class->popup_menu = gtk_label_popup_menu;
+  widget_class->focus = gtk_label_focus;
 
   class->move_cursor = gtk_label_move_cursor;
   class->copy_clipboard = gtk_label_copy_clipboard;
-  
+  class->activate_link = gtk_label_activate_link;
+
   /**
    * GtkLabel::move-cursor:
    * @entry: the object which received the signal
@@ -360,6 +438,35 @@ gtk_label_class_init (GtkLabelClass *class)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_MENU);
+
+    /**
+     * GtkLabel::activate-link:
+     * @label: The label on which the signal was emitted.
+     *
+     * A  <link linkend="keybinding-signals">keybinding signal</link>
+     * which gets emitted when the user activates a link in the label.
+     *
+     * Applications may connect to it to override the default behaviour,
+     * which is to call gtk_show_uri(). To obtain the URI that is being
+     * activated, use gtk_label_get_current_uri().
+     *
+     * Applications may also emit the signal with g_signal_emit_by_name()
+     * if they need to control activation of URIs programmatically.
+     *
+     * The default bindings for this signal are all forms of the Enter key.
+     *
+     * Returns: %TRUE if the link has been activated
+     *
+     * Since: 2.18
+     */
+    signals[ACTIVATE_LINK] =
+      g_signal_new ("activate-link",
+                    G_TYPE_FROM_CLASS (object_class),
+                    G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                    G_STRUCT_OFFSET (GtkLabelClass, activate_link),
+                    _gtk_boolean_handled_accumulator, NULL,
+                    _gtk_marshal_BOOLEAN__VOID,
+                    G_TYPE_BOOLEAN, 0);
 
   g_object_class_install_property (gobject_class,
                                    PROP_LABEL,
@@ -691,6 +798,13 @@ gtk_label_class_init (GtkLabelClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_c, GDK_CONTROL_MASK,
 				"copy-clipboard", 0);
 
+  gtk_binding_entry_add_signal (binding_set, GDK_Return, 0,
+				"activate-link", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Enter, 0,
+				"activate-link", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0,
+				"activate-link", 0);
+
   gtk_settings_install_property (g_param_spec_boolean ("gtk-label-select-on-focus",
 						       P_("Select on focus"),
 						       P_("Whether to select the contents of a selectable label when it is focused"),
@@ -807,7 +921,7 @@ gtk_label_get_property (GObject     *object,
       g_value_set_object (value, (GObject*) label->mnemonic_widget);
       break;
     case PROP_CURSOR_POSITION:
-      if (label->select_info)
+      if (label->select_info && label->select_info->selectable)
 	{
 	  gint offset = g_utf8_pointer_to_offset (label->text,
 						  label->text + label->select_info->selection_end);
@@ -817,7 +931,7 @@ gtk_label_get_property (GObject     *object,
 	g_value_set_int (value, 0);
       break;
     case PROP_SELECTION_BOUND:
-      if (label->select_info)
+      if (label->select_info && label->select_info->selectable)
 	{
 	  gint offset = g_utf8_pointer_to_offset (label->text,
 						  label->text + label->select_info->selection_anchor);
@@ -1634,7 +1748,7 @@ gtk_label_recalculate (GtkLabel *label)
 
   if (label->use_markup)
     {
-      set_markup (label, label->label, label->use_underline);
+      gtk_label_set_markup_internal (label, label->label, label->use_underline);
       gtk_label_compose_effective_attrs (label);
     }
   else
@@ -1664,7 +1778,8 @@ gtk_label_recalculate (GtkLabel *label)
       g_object_notify (G_OBJECT (label), "mnemonic-keyval");
     }
 
-  gtk_label_clear_layout (label);  
+  gtk_label_clear_layout (label);
+  gtk_label_clear_select_info (label);
   gtk_widget_queue_resize (GTK_WIDGET (label));
 }
 
@@ -1788,17 +1903,317 @@ gtk_label_get_label (GtkLabel *label)
   return label->label;
 }
 
+typedef struct
+{
+  GtkLabel *label;
+  GList *links;
+  GString *new_str;
+  GdkColor *link_color;
+  GdkColor *visited_link_color;
+} UriParserData;
+
 static void
-set_markup (GtkLabel    *label,
-            const gchar *str,
-            gboolean     with_uline)
+start_element_handler (GMarkupParseContext  *context,
+                       const gchar          *element_name,
+                       const gchar         **attribute_names,
+                       const gchar         **attribute_values,
+                       gpointer              user_data,
+                       GError              **error)
+{
+  UriParserData *pdata = user_data;
+
+  if (strcmp (element_name, "a") == 0)
+    {
+      GtkLabelLink *link;
+      const gchar *uri = NULL;
+      const gchar *title = NULL;
+      gboolean visited = FALSE;
+      gint line_number;
+      gint char_number;
+      gint i;
+      GdkColor *color = NULL;
+
+      g_markup_parse_context_get_position (context, &line_number, &char_number);
+
+      for (i = 0; attribute_names[i] != NULL; i++)
+        {
+          const gchar *attr = attribute_names[i];
+
+          if (strcmp (attr, "href") == 0)
+            uri = attribute_values[i];
+          else if (strcmp (attr, "title") == 0)
+            title = attribute_values[i];
+          else
+            {
+              g_set_error (error,
+                           G_MARKUP_ERROR,
+                           G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE,
+                           "Attribute '%s' is not allowed on the <a> tag "
+                           "on line %d char %d",
+                            attr, line_number, char_number);
+              return;
+            }
+        }
+
+      if (uri == NULL)
+        {
+          g_set_error (error,
+                       G_MARKUP_ERROR,
+                       G_MARKUP_ERROR_INVALID_CONTENT,
+                       "Attribute 'href' was missing on the <a> tag "
+                       "on line %d char %d",
+                       line_number, char_number);
+          return;
+        }
+
+      if (pdata->label->select_info)
+        {
+          GList *l;
+          for (l = pdata->label->select_info->links; l; l = l->next)
+            {
+              link = l->data;
+              if (strcmp (uri, link->uri) == 0)
+                {
+                  visited = link->visited;
+                  break;
+                }
+            }
+        }
+
+      if (visited)
+        color = pdata->visited_link_color;
+      else
+        color = pdata->link_color;
+
+      g_string_append_printf (pdata->new_str,
+                              "<span color=\"#%04x%04x%04x\" underline=\"single\">",
+                              color->red,
+                              color->green,
+                              color->blue);
+
+      link = g_new0 (GtkLabelLink, 1);
+      link->uri = g_strdup (uri);
+      link->title = g_strdup (title);
+      link->visited = visited;
+      pdata->links = g_list_append (pdata->links, link);
+    }
+  else
+    {
+      gint i;
+
+      g_string_append_c (pdata->new_str, '<');
+      g_string_append (pdata->new_str, element_name);
+
+      for (i = 0; attribute_names[i] != NULL; i++)
+        {
+          const gchar *attr  = attribute_names[i];
+          const gchar *value = attribute_values[i];
+          gchar *newvalue;
+
+          newvalue = g_markup_escape_text (value, -1);
+
+          g_string_append_c (pdata->new_str, ' ');
+          g_string_append (pdata->new_str, attr);
+          g_string_append (pdata->new_str, "=\"");
+          g_string_append (pdata->new_str, newvalue);
+          g_string_append_c (pdata->new_str, '\"');
+
+          g_free (newvalue);
+        }
+      g_string_append_c (pdata->new_str, '>');
+    }
+}
+
+static void
+end_element_handler (GMarkupParseContext  *context,
+                     const gchar          *element_name,
+                     gpointer              user_data,
+                     GError              **error)
+{
+  UriParserData *pdata = user_data;
+
+  if (!strcmp (element_name, "a"))
+    g_string_append (pdata->new_str, "</span>");
+  else
+    {
+      g_string_append (pdata->new_str, "</");
+      g_string_append (pdata->new_str, element_name);
+      g_string_append_c (pdata->new_str, '>');
+    }
+}
+
+static void
+text_handler (GMarkupParseContext  *context,
+              const gchar          *text,
+              gsize                 text_len,
+              gpointer              user_data,
+              GError              **error)
+{
+  UriParserData *pdata = user_data;
+  gchar *newtext;
+
+  newtext = g_markup_escape_text (text, text_len);
+  g_string_append (pdata->new_str, newtext);
+  g_free (newtext);
+}
+
+static const GMarkupParser markup_parser =
+{
+  start_element_handler,
+  end_element_handler,
+  text_handler,
+  NULL,
+  NULL
+};
+
+static gboolean
+xml_isspace (gchar c)
+{
+  return (c == ' ' || c == '\t' || c == '\n' || c == '\r');
+}
+
+static void
+link_free (GtkLabelLink *link)
+{
+  g_free (link->uri);
+  g_free (link->title);
+  g_free (link);
+}
+
+static void
+gtk_label_get_link_colors (GtkWidget  *widget,
+                           GdkColor  **link_color,
+                           GdkColor  **visited_link_color)
+{
+  gtk_widget_ensure_style (widget);
+  gtk_widget_style_get (widget,
+                        "link-color", link_color,
+                        "visited-link-color", visited_link_color,
+                        NULL);
+  if (!*link_color)
+    *link_color = gdk_color_copy (&default_link_color);
+  if (!*visited_link_color)
+    *visited_link_color = gdk_color_copy (&default_visited_link_color);
+}
+
+static gboolean
+parse_uri_markup (GtkLabel     *label,
+                  const gchar  *str,
+                  gchar       **new_str,
+                  GList       **links,
+                  GError      **error)
+{
+  GMarkupParseContext *context = NULL;
+  const gchar *p, *end;
+  gboolean needs_root = TRUE;
+  gsize length;
+  UriParserData pdata;
+
+  length = strlen (str);
+  p = str;
+  end = str + length;
+
+  pdata.label = label;
+  pdata.links = NULL;
+  pdata.new_str = g_string_sized_new (length);
+
+  gtk_label_get_link_colors (GTK_WIDGET (label), &pdata.link_color, &pdata.visited_link_color);
+
+  while (p != end && xml_isspace (*p))
+    p++;
+
+  if (end - p >= 8 && strncmp (p, "<markup>", 8) == 0)
+    needs_root = FALSE;
+
+  context = g_markup_parse_context_new (&markup_parser, 0, &pdata, NULL);
+
+  if (needs_root)
+    {
+      if (!g_markup_parse_context_parse (context, "<markup>", -1, error))
+        goto failed;
+    }
+
+  if (!g_markup_parse_context_parse (context, str, length, error))
+    goto failed;
+
+  if (needs_root)
+    {
+      if (!g_markup_parse_context_parse (context, "</markup>", -1, error))
+        goto failed;
+    }
+
+  if (!g_markup_parse_context_end_parse (context, error))
+    goto failed;
+
+  g_markup_parse_context_free (context);
+
+  *new_str = g_string_free (pdata.new_str, FALSE);
+  *links = pdata.links;
+
+  gdk_color_free (pdata.link_color);
+  gdk_color_free (pdata.visited_link_color);
+
+  return TRUE;
+
+failed:
+  g_markup_parse_context_free (context);
+  g_string_free (pdata.new_str, TRUE);
+  g_list_foreach (pdata.links, (GFunc)link_free, NULL);
+  g_list_free (pdata.links);
+  gdk_color_free (pdata.link_color);
+  gdk_color_free (pdata.visited_link_color);
+
+  return FALSE;
+}
+
+static void
+gtk_label_ensure_has_tooltip (GtkLabel *label)
+{
+  GList *l;
+  gboolean has_tooltip = FALSE;
+
+  for (l = label->select_info->links; l; l = l->next)
+    {
+      GtkLabelLink *link = l->data;
+      if (link->title)
+        {
+          has_tooltip = TRUE;
+          break;
+        }
+    }
+
+  gtk_widget_set_has_tooltip (GTK_WIDGET (label), has_tooltip);
+}
+
+static void
+gtk_label_set_markup_internal (GtkLabel    *label,
+                               const gchar *str,
+                               gboolean     with_uline)
 {
   gchar *text = NULL;
   GError *error = NULL;
   PangoAttrList *attrs = NULL;
   gunichar accel_char = 0;
+  gchar *new_str;
+  GList *links = NULL;
 
-  if (!pango_parse_markup (str,
+  if (!parse_uri_markup (label, str, &new_str, &links, &error))
+    {
+      g_warning ("Failed to set text from markup due to error parsing markup: %s",
+                 error->message);
+      g_error_free (error);
+      return;
+    }
+
+  gtk_label_clear_links (label);
+  if (links)
+    {
+      gtk_label_ensure_select_info (label);
+      label->select_info->links = links;
+      gtk_label_ensure_has_tooltip (label);
+    }
+
+  if (!pango_parse_markup (new_str,
                            -1,
                            with_uline ? '_' : 0,
                            &attrs,
@@ -1808,9 +2223,12 @@ set_markup (GtkLabel    *label,
     {
       g_warning ("Failed to set text from markup due to error parsing markup: %s",
                  error->message);
+      g_free (new_str);
       g_error_free (error);
       return;
     }
+
+  g_free (new_str);
 
   if (text)
     gtk_label_set_text_internal (label, text);
@@ -2320,6 +2738,7 @@ gtk_label_finalize (GObject *object)
   if (label->effective_attrs)
     pango_attr_list_unref (label->effective_attrs);
 
+  gtk_label_clear_links (label);
   g_free (label->select_info);
 
   G_OBJECT_CLASS (gtk_label_parent_class)->finalize (object);
@@ -2332,6 +2751,8 @@ gtk_label_clear_layout (GtkLabel *label)
     {
       g_object_unref (label->layout);
       label->layout = NULL;
+
+      //gtk_label_clear_links (label);
     }
 }
 
@@ -2417,7 +2838,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 
   widget = GTK_WIDGET (label);
 
-  rtl = gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL;
+  rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
   if (!label->layout)
     {
@@ -2450,7 +2871,9 @@ gtk_label_ensure_layout (GtkLabel *label)
 
       if (label->effective_attrs)
 	pango_layout_set_attributes (label->layout, label->effective_attrs);
-      
+
+      gtk_label_rescan_links (label);
+
       switch (label->jtype)
 	{
 	case GTK_JUSTIFY_LEFT:
@@ -2676,37 +3099,54 @@ gtk_label_size_allocate (GtkWidget     *widget,
 }
 
 static void
+gtk_label_update_cursor (GtkLabel *label)
+{
+  if (!label->select_info)
+    return;
+
+  if (GTK_WIDGET_REALIZED (label))
+    {
+      GdkDisplay *display;
+      GdkCursor *cursor;
+
+      if (GTK_WIDGET_IS_SENSITIVE (label))
+        {
+          display = gtk_widget_get_display (GTK_WIDGET (label));
+
+          if (label->select_info->active_link)
+            cursor = gdk_cursor_new_for_display (display, GDK_HAND2);
+          else if (label->select_info->selectable)
+            cursor = gdk_cursor_new_for_display (display, GDK_XTERM);
+          else
+            cursor = NULL;
+        }
+      else
+        cursor = NULL;
+
+      gdk_window_set_cursor (label->select_info->window, cursor);
+
+      if (cursor)
+        gdk_cursor_unref (cursor);
+    }
+}
+
+static void
 gtk_label_state_changed (GtkWidget   *widget,
                          GtkStateType prev_state)
 {
-  GtkLabel *label;
-  GdkCursor *cursor;
-  
-  label = GTK_LABEL (widget);
+  GtkLabel *label = GTK_LABEL (widget);
 
   if (label->select_info)
     {
       gtk_label_select_region (label, 0, 0);
-
-      if (GTK_WIDGET_REALIZED (widget))
-        {
-          if (GTK_WIDGET_IS_SENSITIVE (widget))
-            cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
-          else
-            cursor = NULL;
-
-          gdk_window_set_cursor (label->select_info->window, cursor);
-
-          if (cursor)
-            gdk_cursor_unref (cursor);
-        }
+      gtk_label_update_cursor (label);
     }
 
   if (GTK_WIDGET_CLASS (gtk_label_parent_class)->state_changed)
     GTK_WIDGET_CLASS (gtk_label_parent_class)->state_changed (widget, prev_state);
 }
 
-static void 
+static void
 gtk_label_style_set (GtkWidget *widget,
 		     GtkStyle  *previous_style)
 {
@@ -2909,18 +3349,36 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
     }
 }
 
+static GtkLabelLink *
+gtk_label_get_focus_link (GtkLabel *label)
+{
+  GtkLabelSelectionInfo *info = label->select_info;
+  GList *l;
+
+  if (!info)
+    return NULL;
+
+  if (info->selection_anchor != info->selection_end)
+    return NULL;
+
+  for (l = info->links; l; l = l->next)
+    {
+      GtkLabelLink *link = l->data;
+      if (link->start <= info->selection_anchor &&
+          info->selection_anchor <= link->end)
+        return link;
+    }
+
+  return NULL;
+}
 
 static gint
 gtk_label_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
-  GtkLabel *label;
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelSelectionInfo *info = label->select_info;
   gint x, y;
-  
-  g_return_val_if_fail (GTK_IS_LABEL (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
-  label = GTK_LABEL (widget);
 
   gtk_label_ensure_layout (label);
   
@@ -2938,17 +3396,16 @@ gtk_label_expose (GtkWidget      *widget,
                         "label",
                         x, y,
                         label->layout);
-      
-      if (label->select_info &&
-          (label->select_info->selection_anchor !=
-           label->select_info->selection_end))
+
+      if (info &&
+          (info->selection_anchor != info->selection_end))
         {
           gint range[2];
           GdkRegion *clip;
 	  GtkStateType state;
-	  
-          range[0] = label->select_info->selection_anchor;
-          range[1] = label->select_info->selection_end;
+
+          range[0] = info->selection_anchor;
+          range[1] = info->selection_end;
 
           if (range[0] > range[1])
             {
@@ -2962,7 +3419,7 @@ gtk_label_expose (GtkWidget      *widget,
                                                    range,
                                                    1);
 	  gdk_region_intersect (clip, event->region);
- 
+
          /* FIXME should use gtk_paint, but it can't use a clip
            * region
            */
@@ -2973,7 +3430,7 @@ gtk_label_expose (GtkWidget      *widget,
 	  state = GTK_STATE_SELECTED;
 	  if (!GTK_WIDGET_HAS_FOCUS (widget))
 	    state = GTK_STATE_ACTIVE;
-	      
+
           gdk_draw_layout_with_colors (widget->window,
                                        widget->style->black_gc,
                                        x, y,
@@ -2984,8 +3441,75 @@ gtk_label_expose (GtkWidget      *widget,
           gdk_gc_set_clip_region (widget->style->black_gc, NULL);
           gdk_region_destroy (clip);
         }
-      else if (label->select_info && GTK_WIDGET_HAS_FOCUS (widget))
-	gtk_label_draw_cursor (label, x, y);
+      else if (info)
+        {
+          GtkLabelLink *focus_link;
+          GtkLabelLink *active_link;
+          gint range[2];
+          GdkRegion *clip;
+          GdkRectangle rect;
+          GdkColor *text_color;
+          GdkColor *base_color;
+          GdkColor *link_color;
+          GdkColor *visited_link_color;
+
+          if (info->selectable && GTK_WIDGET_HAS_FOCUS (widget))
+	    gtk_label_draw_cursor (label, x, y);
+
+          focus_link = gtk_label_get_focus_link (label);
+          active_link = info->active_link;
+
+          if (active_link)
+            {
+              range[0] = active_link->start;
+              range[1] = active_link->end;
+
+              clip = gdk_pango_layout_get_clip_region (label->layout,
+                                                       x, y,
+                                                       range,
+                                                       1);
+              gdk_gc_set_clip_region (widget->style->black_gc, clip);
+
+              gtk_label_get_link_colors (widget, &link_color, &visited_link_color);
+              if (active_link->visited)
+                text_color = visited_link_color;
+              else
+                text_color = link_color;
+              if (info->link_clicked)
+                base_color = &widget->style->base[GTK_STATE_ACTIVE];
+              else
+                base_color = &widget->style->base[GTK_STATE_PRELIGHT];
+              gdk_draw_layout_with_colors (widget->window,
+                                           widget->style->black_gc,
+                                           x, y,
+                                           label->layout,
+                                           text_color,
+                                           base_color);
+              gdk_color_free (link_color);
+              gdk_color_free (visited_link_color);
+
+              gdk_gc_set_clip_region (widget->style->black_gc, NULL);
+              gdk_region_destroy (clip);
+            }
+
+          if (focus_link && GTK_WIDGET_HAS_FOCUS (widget))
+            {
+              range[0] = focus_link->start;
+              range[1] = focus_link->end;
+
+              clip = gdk_pango_layout_get_clip_region (label->layout,
+                                                       x, y,
+                                                       range,
+                                                       1);
+              gdk_region_get_clipbox (clip, &rect);
+
+              gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+                               &event->area, widget, "label",
+                               rect.x, rect.y, rect.width, rect.height);
+
+              gdk_region_destroy (clip);
+            }
+        }
     }
 
   return FALSE;
@@ -3245,7 +3769,7 @@ layout_to_window_coords (GtkLabel *label,
 }
 #endif
 
-static void
+static gboolean
 get_layout_index (GtkLabel *label,
                   gint      x,
                   gint      y,
@@ -3256,28 +3780,32 @@ get_layout_index (GtkLabel *label,
   const gchar *cluster_end;
 
   *index = 0;
-  
+
   gtk_label_ensure_layout (label);
-  
+
   window_to_layout_coords (label, &x, &y);
 
   x *= PANGO_SCALE;
   y *= PANGO_SCALE;
-  
-  pango_layout_xy_to_index (label->layout,
-                            x, y,
-                            index, &trailing);
 
-  
-  cluster = label->text + *index;
-  cluster_end = cluster;
-  while (trailing)
+  if (pango_layout_xy_to_index (label->layout,
+                                x, y,
+                                index, &trailing))
     {
-      cluster_end = g_utf8_next_char (cluster_end);
-      --trailing;
+      cluster = label->text + *index;
+      cluster_end = cluster;
+      while (trailing)
+        {
+          cluster_end = g_utf8_next_char (cluster_end);
+          --trailing;
+        }
+
+      *index += (cluster_end - cluster);
+
+      return TRUE;
     }
 
-  *index += (cluster_end - cluster);
+  return FALSE;
 }
 
 static void
@@ -3304,7 +3832,8 @@ gtk_label_grab_focus (GtkWidget *widget)
 {
   GtkLabel *label;
   gboolean select_on_focus;
-  
+  GtkLabelLink *link;
+
   label = GTK_LABEL (widget);
 
   if (label->select_info == NULL)
@@ -3312,34 +3841,172 @@ gtk_label_grab_focus (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->grab_focus (widget);
 
-  g_object_get (gtk_widget_get_settings (widget),
-		"gtk-label-select-on-focus",
-		&select_on_focus,
-		NULL);
-  
-  if (select_on_focus && !label->in_click)
-    gtk_label_select_region (label, 0, -1);
+  if (label->select_info->selectable)
+    {
+      g_object_get (gtk_widget_get_settings (widget),
+                    "gtk-label-select-on-focus",
+                    &select_on_focus,
+                    NULL);
+
+      if (select_on_focus && !label->in_click)
+        gtk_label_select_region (label, 0, -1);
+    }
+  else
+    {
+      if (label->select_info->links && !label->in_click)
+        {
+          link = label->select_info->links->data;
+          label->select_info->selection_anchor = link->start;
+          label->select_info->selection_end = link->start;
+        }
+    }
 }
- 
+
+static gboolean
+gtk_label_focus (GtkWidget        *widget,
+                 GtkDirectionType  direction)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelSelectionInfo *info = label->select_info;
+  GtkLabelLink *focus_link;
+  GList *l;
+
+  if (!gtk_widget_is_focus (widget))
+    {
+      gtk_widget_grab_focus (widget);
+      if (info)
+        {
+          focus_link = gtk_label_get_focus_link (label);
+          if (focus_link && direction == GTK_DIR_TAB_BACKWARD)
+            {
+              l = g_list_last (info->links);
+              focus_link = l->data;
+              info->selection_anchor = focus_link->start;
+              info->selection_end = focus_link->start;
+            }
+        }
+
+      return TRUE;
+    }
+
+  if (!info)
+    return FALSE;
+
+  if (info->selectable)
+    {
+      gint index;
+
+      if (info->selection_anchor != info->selection_end)
+        goto out;
+
+      index = info->selection_anchor;
+
+      if (direction == GTK_DIR_TAB_FORWARD)
+        for (l = info->links; l; l = l->next)
+          {
+            GtkLabelLink *link = l->data;
+
+            if (link->start > index)
+              {
+                gtk_label_select_region_index (label, link->start, link->start);
+                return TRUE;
+              }
+          }
+      else if (direction == GTK_DIR_TAB_BACKWARD)
+        for (l = g_list_last (info->links); l; l = l->prev)
+          {
+            GtkLabelLink *link = l->data;
+
+            if (link->end < index)
+              {
+                gtk_label_select_region_index (label, link->start, link->start);
+                return TRUE;
+              }
+          }
+
+      goto out;
+    }
+  else
+    {
+      focus_link = gtk_label_get_focus_link (label);
+      switch (direction)
+        {
+        case GTK_DIR_TAB_FORWARD:
+          if (focus_link)
+            {
+              l = g_list_find (info->links, focus_link);
+              l = l->next;
+            }
+          else
+            l = info->links;
+          break;
+
+        case GTK_DIR_TAB_BACKWARD:
+          if (focus_link)
+            {
+              l = g_list_find (info->links, focus_link);
+              l = l->prev;
+            }
+          else
+            l = g_list_last (info->links);
+          break;
+
+        default:
+          goto out;
+        }
+
+      if (l)
+        {
+          focus_link = l->data;
+          info->selection_anchor = focus_link->start;
+          info->selection_end = focus_link->start;
+          gtk_widget_queue_draw (widget);
+
+          return TRUE;
+        }
+    }
+
+out:
+
+  return FALSE;
+}
+
 static gboolean
 gtk_label_button_press (GtkWidget      *widget,
                         GdkEventButton *event)
 {
-  GtkLabel *label;
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelSelectionInfo *info = label->select_info;
   gint index = 0;
-  gint min, max;  
-  
-  label = GTK_LABEL (widget);
+  gint min, max;
 
-  if (label->select_info == NULL)
+  if (info == NULL)
     return FALSE;
 
-  label->select_info->in_drag = FALSE;
-  label->select_info->select_words = FALSE;
+  if (info->active_link)
+    {
+      if (event->button == 1)
+        {
+          info->link_clicked = 1;
+          gtk_widget_queue_draw (widget);
+        }
+      else if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+        {
+          info->link_clicked = 1;
+          gtk_label_do_popup (label, event);
+          return TRUE;
+        }
+    }
+
+  if (!info->selectable)
+    return FALSE;
+
+  info->in_drag = FALSE;
+  info->select_words = FALSE;
 
   if (event->button == 1)
     {
-      if (!GTK_WIDGET_HAS_FOCUS (widget)) 
+      if (!GTK_WIDGET_HAS_FOCUS (widget))
 	{
 	  label->in_click = TRUE;
 	  gtk_widget_grab_focus (widget);
@@ -3351,29 +4018,26 @@ gtk_label_button_press (GtkWidget      *widget,
 	  gtk_label_select_region_index (label, 0, strlen (label->text));
 	  return TRUE;
 	}
-      
+
       if (event->type == GDK_2BUTTON_PRESS)
 	{
-          label->select_info->select_words = TRUE;
+          info->select_words = TRUE;
 	  gtk_label_select_word (label);
 	  return TRUE;
 	}
-      
+
       get_layout_index (label, event->x, event->y, &index);
-      
-      min = MIN (label->select_info->selection_anchor,
-		 label->select_info->selection_end);
-      max = MAX (label->select_info->selection_anchor,
-		 label->select_info->selection_end);
-	  
-      if ((label->select_info->selection_anchor !=
-	   label->select_info->selection_end) &&
+
+      min = MIN (info->selection_anchor, info->selection_end);
+      max = MAX (info->selection_anchor, info->selection_end);
+
+      if ((info->selection_anchor != info->selection_end) &&
 	  (event->state & GDK_SHIFT_MASK))
 	{
 	  /* extend (same as motion) */
 	  min = MIN (min, index);
 	  max = MAX (max, index);
-	  
+
 	  /* ensure the anchor is opposite index */
 	  if (index == min)
 	    {
@@ -3381,10 +4045,10 @@ gtk_label_button_press (GtkWidget      *widget,
 	      min = max;
 	      max = tmp;
 	    }
-	  
+
 	  gtk_label_select_region_index (label, min, max);
 	}
-      else 
+      else
 	{
 	  if (event->type == GDK_3BUTTON_PRESS)
 	    gtk_label_select_region_index (label, 0, strlen (label->text));
@@ -3392,15 +4056,15 @@ gtk_label_button_press (GtkWidget      *widget,
 	    gtk_label_select_word (label);
 	  else if (min < max && min <= index && index <= max)
 	    {
-	      label->select_info->in_drag = TRUE;
-	      label->select_info->drag_start_x = event->x;
-	      label->select_info->drag_start_y = event->y;
+	      info->in_drag = TRUE;
+	      info->drag_start_x = event->x;
+	      info->drag_start_y = event->y;
 	    }
 	  else
 	    /* start a replacement */
 	    gtk_label_select_region_index (label, index, index);
 	}
-  
+
       return TRUE;
     }
   else if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
@@ -3408,7 +4072,6 @@ gtk_label_button_press (GtkWidget      *widget,
       gtk_label_do_popup (label, event);
 
       return TRUE;
-      
     }
   return FALSE;
 }
@@ -3419,28 +4082,47 @@ gtk_label_button_release (GtkWidget      *widget,
 
 {
   GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelSelectionInfo *info = label->select_info;
   gint index;
-  
-  if (label->select_info == NULL)
+
+  if (info == NULL)
     return FALSE;
-  
-  if (label->select_info->in_drag)
+
+  if (info->in_drag)
     {
-      label->select_info->in_drag = 0;
+      info->in_drag = 0;
 
       get_layout_index (label, event->x, event->y, &index);
       gtk_label_select_region_index (label, index, index);
-      
+
       return FALSE;
     }
 
   if (event->button != 1)
     return FALSE;
-  
+
+  if (info->active_link &&
+      info->selection_anchor == info->selection_end &&
+      info->link_clicked)
+    {
+      gboolean handled;
+
+      g_signal_emit (label, signals[ACTIVATE_LINK], 0, &handled);
+      if (handled && !info->active_link->visited)
+        {
+          info->active_link->visited = TRUE;
+          /* FIXME: shouldn't have to redo everything here */
+          gtk_label_recalculate (label);
+        }
+
+      info->link_clicked = 0;
+
+      return TRUE;
+    }
+
   /* The goal here is to return TRUE iff we ate the
    * button press to start selecting.
    */
-  
   return TRUE;
 }
 
@@ -3462,7 +4144,7 @@ drag_begin_cb (GtkWidget      *widget,
     {
       gint start, end;
       gint len;
-      
+
       start = MIN (label->select_info->selection_anchor,
                    label->select_info->selection_end);
       end = MAX (label->select_info->selection_anchor,
@@ -3498,48 +4180,94 @@ static gboolean
 gtk_label_motion (GtkWidget      *widget,
                   GdkEventMotion *event)
 {
-  GtkLabel *label;
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelSelectionInfo *info = label->select_info;
   gint index;
   gint x, y;
-  
-  label = GTK_LABEL (widget);
-  
-  if (label->select_info == NULL)
-    return FALSE;  
+
+  if (info == NULL)
+    return FALSE;
+
+  if (info->links && !info->in_drag)
+    {
+      GList *l;
+      GtkLabelLink *link;
+      gboolean found = FALSE;
+
+      if (info->selection_anchor == info->selection_end)
+        {
+          gdk_window_get_pointer (event->window, &x, &y, NULL);
+          if (get_layout_index (label, x, y, &index))
+            {
+              for (l = info->links; l != NULL; l = l->next)
+                {
+                  link = l->data;
+                  if (index >= link->start && index <= link->end)
+                    {
+                      found = TRUE;
+                      break;
+                    }
+                }
+            }
+        }
+
+      if (found)
+        {
+          if (info->active_link != link)
+            {
+              info->link_clicked = 0;
+              info->active_link = link;
+              gtk_label_update_cursor (label);
+              gtk_widget_queue_draw (widget);
+            }
+        }
+      else
+        {
+          if (info->active_link != NULL)
+            {
+              info->link_clicked = 0;
+              info->active_link = NULL;
+              gtk_label_update_cursor (label);
+              gtk_widget_queue_draw (widget);
+            }
+        }
+    }
+
+  if (!info->selectable)
+    return FALSE;
 
   if ((event->state & GDK_BUTTON1_MASK) == 0)
     return FALSE;
 
-  gdk_window_get_pointer (label->select_info->window,
-                          &x, &y, NULL);
-  
-  if (label->select_info->in_drag)
+  gdk_window_get_pointer (info->window, &x, &y, NULL);
+ 
+  if (info->in_drag)
     {
       if (gtk_drag_check_threshold (widget,
-				    label->select_info->drag_start_x, 
-				    label->select_info->drag_start_y,
+				    info->drag_start_x,
+				    info->drag_start_y,
 				    event->x, event->y))
 	{
 	  GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
 
 	  gtk_target_list_add_text_targets (target_list, 0);
-	  
-          g_signal_connect (widget, "drag-begin", 
+
+          g_signal_connect (widget, "drag-begin",
                             G_CALLBACK (drag_begin_cb), NULL);
-	  gtk_drag_begin (widget, target_list, 
+	  gtk_drag_begin (widget, target_list,
 			  GDK_ACTION_COPY,
 			  1, (GdkEvent *)event);
-	  
-	  label->select_info->in_drag = FALSE;
-	  
+
+	  info->in_drag = FALSE;
+
 	  gtk_target_list_unref (target_list);
 	}
     }
   else
     {
       get_layout_index (label, x, y, &index);
-      
-      if (label->select_info->select_words)
+
+      if (info->select_words)
         {
           gint min, max;
           gint old_min, old_max;
@@ -3548,8 +4276,8 @@ gtk_label_motion (GtkWidget      *widget,
           min = gtk_label_move_backward_word (label, index);
           max = gtk_label_move_forward_word (label, index);
 
-          anchor = label->select_info->selection_anchor;
-          end = label->select_info->selection_end;
+          anchor = info->selection_anchor;
+          end = info->selection_end;
 
           old_min = MIN (anchor, end);
           old_max = MAX (anchor, end);
@@ -3578,12 +4306,29 @@ gtk_label_motion (GtkWidget      *widget,
           gtk_label_select_region_index (label, anchor, end);
         }
       else
-        gtk_label_select_region_index (label, 
-                                       label->select_info->selection_anchor,
-                                       index);
+        gtk_label_select_region_index (label, info->selection_anchor, index);
     }
 
   return TRUE;
+}
+
+static gboolean
+gtk_label_leave_notify (GtkWidget        *widget,
+                        GdkEventCrossing *event)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+
+  if (label->select_info)
+    {
+      label->select_info->active_link = NULL;
+      gtk_label_update_cursor (label);
+      gtk_widget_queue_draw (widget);
+    }
+
+  if (GTK_WIDGET_CLASS (gtk_label_parent_class)->leave_notify_event)
+    return GTK_WIDGET_CLASS (gtk_label_parent_class)->leave_notify_event (widget, event);
+
+ return FALSE;
 }
 
 static void
@@ -3611,8 +4356,11 @@ gtk_label_create_window (GtkLabel *label)
   attributes.event_mask = gtk_widget_get_events (widget) |
     GDK_BUTTON_PRESS_MASK        |
     GDK_BUTTON_RELEASE_MASK      |
-    GDK_BUTTON_MOTION_MASK;
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR; 
+    GDK_LEAVE_NOTIFY_MASK        |
+    GDK_BUTTON_MOTION_MASK       |
+    GDK_POINTER_MOTION_MASK      |
+    GDK_POINTER_MOTION_HINT_MASK;
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
   if (GTK_WIDGET_IS_SENSITIVE (widget))
     {
       attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
@@ -3636,10 +4384,44 @@ gtk_label_destroy_window (GtkLabel *label)
 
   if (label->select_info->window == NULL)
     return;
-  
+
   gdk_window_set_user_data (label->select_info->window, NULL);
   gdk_window_destroy (label->select_info->window);
   label->select_info->window = NULL;
+}
+
+static void
+gtk_label_ensure_select_info (GtkLabel *label)
+{
+  if (label->select_info == NULL)
+    {
+      label->select_info = g_new0 (GtkLabelSelectionInfo, 1);
+
+      GTK_WIDGET_SET_FLAGS (label, GTK_CAN_FOCUS);
+
+      if (GTK_WIDGET_REALIZED (label))
+	gtk_label_create_window (label);
+
+      if (GTK_WIDGET_MAPPED (label))
+        gdk_window_show (label->select_info->window);
+    }
+}
+
+static void
+gtk_label_clear_select_info (GtkLabel *label)
+{
+  if (label->select_info == NULL)
+    return;
+
+  if (!label->select_info->selectable && !label->select_info->links)
+    {
+      gtk_label_destroy_window (label);
+
+      g_free (label->select_info);
+      label->select_info = NULL;
+
+      GTK_WIDGET_UNSET_FLAGS (label, GTK_CAN_FOCUS);
+    }
 }
 
 /**
@@ -3655,44 +4437,28 @@ gtk_label_set_selectable (GtkLabel *label,
                           gboolean  setting)
 {
   gboolean old_setting;
-  
+
   g_return_if_fail (GTK_IS_LABEL (label));
-  
+
   setting = setting != FALSE;
-  old_setting = label->select_info != NULL;
-  
+  old_setting = label->select_info && label->select_info->selectable;
+
   if (setting)
     {
-      if (label->select_info == NULL)
-        {
-          label->select_info = g_new0 (GtkLabelSelectionInfo, 1);
-
-	  GTK_WIDGET_SET_FLAGS (label, GTK_CAN_FOCUS);
-      
-          if (GTK_WIDGET_REALIZED (label))
-	    gtk_label_create_window (label);
-
-          if (GTK_WIDGET_MAPPED (label))
-            gdk_window_show (label->select_info->window);
-        }
+      gtk_label_ensure_select_info (label);
+      label->select_info->selectable = TRUE;
+      gtk_label_update_cursor (label);
     }
   else
     {
-      if (label->select_info)
+      if (old_setting)
         {
           /* unselect, to give up the selection */
           gtk_label_select_region (label, 0, 0);
-          
-          if (label->select_info->window)
-	    {
-	      gtk_label_destroy_window (label);
-	    }
 
-          g_free (label->select_info);
-
-          label->select_info = NULL;
-
-	  GTK_WIDGET_UNSET_FLAGS (label, GTK_CAN_FOCUS);
+          label->select_info->selectable = FALSE;
+          gtk_label_clear_select_info (label);
+          gtk_label_update_cursor (label);
         }
     }
   if (setting != old_setting)
@@ -3719,7 +4485,7 @@ gtk_label_get_selectable (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
 
-  return label->select_info != NULL;
+  return label->select_info && label->select_info->selectable;
 }
 
 static void
@@ -3875,7 +4641,7 @@ gtk_label_select_region_index (GtkLabel *label,
 {
   g_return_if_fail (GTK_IS_LABEL (label));
   
-  if (label->select_info)
+  if (label->select_info && label->select_info->selectable)
     {
       GtkClipboard *clipboard;
 
@@ -3887,8 +4653,8 @@ gtk_label_select_region_index (GtkLabel *label,
       label->select_info->selection_end = end_index;
 
       clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label),
-					    GDK_SELECTION_PRIMARY);      
-      
+					    GDK_SELECTION_PRIMARY);
+
       if (anchor_index != end_index)
         {
           GtkTargetList *list;
@@ -4528,7 +5294,8 @@ gtk_label_copy_clipboard (GtkLabel *label)
     {
       gint start, end;
       gint len;
-      
+      GtkClipboard *clipboard;
+
       start = MIN (label->select_info->selection_anchor,
                    label->select_info->selection_end);
       end = MAX (label->select_info->selection_anchor,
@@ -4542,10 +5309,18 @@ gtk_label_copy_clipboard (GtkLabel *label)
       if (start > len)
         start = len;
 
+      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label), GDK_SELECTION_CLIPBOARD);
+
       if (start != end)
-	gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (label),
-							  GDK_SELECTION_CLIPBOARD),
-				label->text + start, end - start);
+	gtk_clipboard_set_text (clipboard, label->text + start, end - start);
+      else
+        {
+          GtkLabelLink *link;
+
+          link = gtk_label_get_focus_link (label);
+          if (link)
+            gtk_clipboard_set_text (clipboard, link->uri, -1);
+        }
     }
 }
 
@@ -4588,8 +5363,7 @@ static void
 popup_menu_detach (GtkWidget *attach_widget,
 		   GtkMenu   *menu)
 {
-  GtkLabel *label;
-  label = GTK_LABEL (attach_widget);
+  GtkLabel *label = GTK_LABEL (attach_widget);
 
   if (label->select_info)
     label->select_info->popup_menu = NULL;
@@ -4606,20 +5380,20 @@ popup_position_func (GtkMenu   *menu,
   GtkWidget *widget;
   GtkRequisition req;
   GdkScreen *screen;
-  
-  label = GTK_LABEL (user_data);  
+
+  label = GTK_LABEL (user_data);
   widget = GTK_WIDGET (label);
 
-  if (label->select_info == NULL)
-    return;
-  
   g_return_if_fail (GTK_WIDGET_REALIZED (label));
-  
-  screen = gtk_widget_get_screen (widget);
-  gdk_window_get_origin (widget->window, x, y);      
 
-  gtk_widget_size_request (label->select_info->popup_menu, &req);
-  
+  screen = gtk_widget_get_screen (widget);
+  gdk_window_get_origin (widget->window, x, y);
+
+  *x += widget->allocation.x;
+  *y += widget->allocation.y;
+
+  gtk_widget_size_request (GTK_WIDGET (menu), &req);
+
   *x += widget->allocation.width / 2;
   *y += widget->allocation.height;
 
@@ -4627,66 +5401,351 @@ popup_position_func (GtkMenu   *menu,
   *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (screen) - req.height));
 }
 
+static void
+open_link_activate_cb (GtkMenuItem *menu_item,
+                       GtkLabel    *label)
+{
+  GtkLabelLink *link;
+  gboolean handled;
+
+  link = gtk_label_get_current_link (label);
+
+  if (link)
+    {
+      g_signal_emit (label, signals[ACTIVATE_LINK], 0, &handled);
+      if (handled && !link->visited)
+        {
+          link->visited = TRUE;
+          /* FIXME: shouldn't have to redo everything here */
+          gtk_label_recalculate (label);
+        }
+    }
+}
+
+static void
+copy_link_activate_cb (GtkMenuItem *menu_item,
+                       GtkLabel    *label)
+{
+  GtkClipboard *clipboard;
+  const gchar *uri;
+
+  uri = gtk_label_get_current_uri (label);
+  if (uri)
+    {
+      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label), GDK_SELECTION_CLIPBOARD);
+      gtk_clipboard_set_text (clipboard, uri, -1);
+    }
+}
+
+static gboolean
+gtk_label_popup_menu (GtkWidget *widget)
+{
+  gtk_label_do_popup (GTK_LABEL (widget), NULL);
+
+  return TRUE;
+}
 
 static void
 gtk_label_do_popup (GtkLabel       *label,
                     GdkEventButton *event)
 {
   GtkWidget *menuitem;
+  GtkWidget *menu;
+  GtkWidget *image;
   gboolean have_selection;
+  GtkLabelLink *link;
 
-  if (label->select_info == NULL)
+  if (!label->select_info)
     return;
-    
+
   if (label->select_info->popup_menu)
     gtk_widget_destroy (label->select_info->popup_menu);
-  
-  label->select_info->popup_menu = gtk_menu_new ();
 
-  gtk_menu_attach_to_widget (GTK_MENU (label->select_info->popup_menu),
-                             GTK_WIDGET (label),
-                             popup_menu_detach);
+  label->select_info->popup_menu = menu = gtk_menu_new ();
+
+  gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (label), popup_menu_detach);
 
   have_selection =
     label->select_info->selection_anchor != label->select_info->selection_end;
 
-
-  append_action_signal (label, label->select_info->popup_menu, GTK_STOCK_CUT, "cut-clipboard",
-                        FALSE);
-  append_action_signal (label, label->select_info->popup_menu, GTK_STOCK_COPY, "copy-clipboard",
-                        have_selection);
-  append_action_signal (label, label->select_info->popup_menu, GTK_STOCK_PASTE, "paste-clipboard",
-                        FALSE);
-  
-  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);
-  gtk_widget_set_sensitive (menuitem, FALSE);
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (label->select_info->popup_menu), menuitem);
-
-  menuitem = gtk_separator_menu_item_new ();
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (label->select_info->popup_menu), menuitem);
-      
-  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_SELECT_ALL, NULL);
-  g_signal_connect_swapped (menuitem, "activate",
-			    G_CALLBACK (gtk_label_select_all), label);
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (label->select_info->popup_menu), menuitem);
-
-  g_signal_emit (label,
-		 signals[POPULATE_POPUP],
-		 0,
-		 label->select_info->popup_menu);
-  
   if (event)
-    gtk_menu_popup (GTK_MENU (label->select_info->popup_menu), NULL, NULL,
+    {
+      if (label->select_info->link_clicked)
+        link = label->select_info->active_link;
+      else
+        link = NULL;
+    }
+  else
+    link = gtk_label_get_focus_link (label);
+
+  if (!have_selection && link)
+    {
+      /* Open Link */
+      menuitem = gtk_image_menu_item_new_with_mnemonic (_("_Open Link"));
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+      g_signal_connect (G_OBJECT (menuitem), "activate",
+                        G_CALLBACK (open_link_activate_cb), label);
+
+      image = gtk_image_new_from_stock (GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_MENU);
+      gtk_widget_show (image);
+      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+
+      /* Copy Link Address */
+      menuitem = gtk_image_menu_item_new_with_mnemonic (_("Copy _Link Address"));
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+      g_signal_connect (G_OBJECT (menuitem), "activate",
+                        G_CALLBACK (copy_link_activate_cb), label);
+
+      image = gtk_image_new_from_stock (GTK_STOCK_COPY, GTK_ICON_SIZE_MENU);
+      gtk_widget_show (image);
+      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+    }
+  else
+    {
+      append_action_signal (label, menu, GTK_STOCK_CUT, "cut-clipboard", FALSE);
+      append_action_signal (label, menu, GTK_STOCK_COPY, "copy-clipboard", have_selection);
+      append_action_signal (label, menu, GTK_STOCK_PASTE, "paste-clipboard", FALSE);
+  
+      menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);
+      gtk_widget_set_sensitive (menuitem, FALSE);
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+      menuitem = gtk_separator_menu_item_new ();
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+      menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_SELECT_ALL, NULL);
+      g_signal_connect_swapped (menuitem, "activate",
+			        G_CALLBACK (gtk_label_select_all), label);
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+    }
+
+  g_signal_emit (label, signals[POPULATE_POPUP], 0, menu);
+
+  if (event)
+    gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
                     NULL, NULL,
                     event->button, event->time);
   else
-    gtk_menu_popup (GTK_MENU (label->select_info->popup_menu), NULL, NULL,
-                    popup_position_func, label,
-                    0, gtk_get_current_event_time ());
+    {
+      gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+                      popup_position_func, label,
+                      0, gtk_get_current_event_time ());
+      gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
+    }
 }
+
+static void
+gtk_label_clear_links (GtkLabel *label)
+{
+  if (!label->select_info)
+    return;
+
+  g_list_foreach (label->select_info->links, (GFunc)link_free, NULL);
+  g_list_free (label->select_info->links);
+  label->select_info->links = NULL;
+  label->select_info->active_link = NULL;
+}
+
+static void
+gtk_label_rescan_links (GtkLabel *label)
+{
+  PangoLayout *layout = label->layout;
+  PangoAttrList *attlist;
+  PangoAttrIterator *iter;
+  GList *links;
+
+  if (!label->select_info)
+    return;
+
+  attlist = pango_layout_get_attributes (layout);
+
+  if (attlist == NULL)
+    return;
+
+  iter = pango_attr_list_get_iterator (attlist);
+
+  links = label->select_info->links;
+
+  do
+    {
+      PangoAttribute *underline;
+      PangoAttribute *color;
+
+      underline = pango_attr_iterator_get (iter, PANGO_ATTR_UNDERLINE);
+      color = pango_attr_iterator_get (iter, PANGO_ATTR_FOREGROUND);
+
+      if (underline != NULL && color != NULL)
+        {
+          gint start, end;
+          PangoRectangle start_pos;
+          PangoRectangle end_pos;
+          GtkLabelLink *link;
+
+          pango_attr_iterator_range (iter, &start, &end);
+          pango_layout_index_to_pos (layout, start, &start_pos);
+          pango_layout_index_to_pos (layout, end, &end_pos);
+
+          if (links == NULL)
+            {
+              g_warning ("Ran out of links");
+              break;
+            }
+          link = links->data;
+          links = links->next;
+          link->start = start;
+          link->end = end;
+        }
+      } while (pango_attr_iterator_next (iter));
+
+    pango_attr_iterator_destroy (iter);
+}
+
+static gboolean
+gtk_label_activate_link (GtkLabel *label)
+{
+  GtkWidget *widget = GTK_WIDGET (label);
+  GtkLabelLink *link;
+  const gchar *uri;
+  GError *error = NULL;
+
+  link = gtk_label_get_current_link (label);
+
+  if (link)
+    {
+      uri = link->uri;
+
+      if (!gtk_show_uri (gtk_widget_get_screen (widget),
+                         uri, gtk_get_current_event_time (), &error))
+        {
+          g_warning ("Unable to show '%s': %s", uri, error->message);
+          g_error_free (error);
+        }
+    }
+  else
+    {
+      GtkWidget *toplevel;
+      GtkWindow *window;
+
+      toplevel = gtk_widget_get_toplevel (widget);
+      if (GTK_IS_WINDOW (toplevel))
+        {
+          window = GTK_WINDOW (toplevel);
+
+          if (window &&
+              window->default_widget != widget &&
+              !(widget == window->focus_widget &&
+                (!window->default_widget || !GTK_WIDGET_SENSITIVE (window->default_widget))))
+            gtk_window_activate_default (window);
+        }
+    }
+
+  return TRUE;
+}
+
+static GtkLabelLink *
+gtk_label_get_current_link (GtkLabel *label)
+{
+  GtkLabelLink *link;
+
+  if (!label->select_info)
+    return NULL;
+
+  if (label->select_info->link_clicked)
+    link = label->select_info->active_link;
+  else
+    link = gtk_label_get_focus_link (label);
+
+  return link;
+}
+
+/**
+ * gtk_label_get_current_uri:
+ * @label: a #GtkLabel
+ *
+ * Returns the URI for the currently active link in the label.
+ * The active link is the one under the mouse pointer or, in a
+ * selectable label, the link in which the text cursor is currently
+ * positioned.
+ *
+ * This function is intended for use in a #GtkLabel::link-activate handler
+ * or for use in a #GtkWidget::query-tooltip handler.
+ *
+ * Returns: the currently active URI. The string is owned by GTK+ and must
+ *   not be freed or modified.
+ *
+ * Since: 2.18
+ */
+G_CONST_RETURN gchar *
+gtk_label_get_current_uri (GtkLabel *label)
+{
+  GtkLabelLink *link;
+  g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
+
+  link = gtk_label_get_current_link (label);
+
+  if (link)
+    return link->uri;
+
+  return NULL;
+}
+
+
+static gboolean
+gtk_label_query_tooltip (GtkWidget  *widget,
+                         gint        x,
+                         gint        y,
+                         gboolean    keyboard_tip,
+                         GtkTooltip *tooltip)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelSelectionInfo *info = label->select_info;
+  gint index = -1;
+  GList *l;
+
+  if (info && info->links)
+    {
+      if (keyboard_tip)
+        {
+          if (info->selection_anchor == info->selection_end)
+            index = info->selection_anchor;
+        }
+      else
+        {
+          if (!get_layout_index (label, x, y, &index))
+            index = -1;
+        }
+
+      if (index != -1)
+        {
+          for (l = info->links; l != NULL; l = l->next)
+            {
+              GtkLabelLink *link = l->data;
+              if (index >= link->start && index <= link->end)
+                {
+                  if (link->title)
+                    {
+                      gtk_tooltip_set_markup (tooltip, link->title);
+                      return TRUE;
+                    }
+                  break;
+                }
+            }
+        }
+    }
+
+  return GTK_WIDGET_CLASS (gtk_label_parent_class)->query_tooltip (widget,
+                                                                   x, y,
+                                                                   keyboard_tip,
+                                                                   tooltip);
+}
+
 
 #define __GTK_LABEL_C__
 #include "gtkaliasdef.c"

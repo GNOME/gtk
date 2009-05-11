@@ -2961,6 +2961,49 @@ create_selectable_control (GtkWidget *widget)
   return button;
 }
 
+static void
+dialog_response (GtkWidget *dialog, gint response_id, GtkLabel *label)
+{
+  const gchar *text;
+
+  gtk_widget_destroy (dialog);
+
+  text = "Some <a href=\"http://en.wikipedia.org/wiki/Text\" title=\"plain text\">text</a> may be marked up\n"
+         "as hyperlinks, which can be clicked\n"
+         "or activated via <a href=\"keynav\">keynav</a>.\n"
+         "The links remain the same.";
+  gtk_label_set_markup (label, text);
+}
+
+static gboolean
+activate_link (GtkWidget *label, gpointer data)
+{
+  const gchar *uri;
+
+  uri = gtk_label_get_current_uri (GTK_LABEL (label));
+
+  if (g_strcmp0 (uri, "keynav") == 0)
+    {
+      GtkWidget *dialog;
+
+      dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (gtk_widget_get_toplevel (label)),
+                                       GTK_DIALOG_DESTROY_WITH_PARENT,
+                                       GTK_MESSAGE_INFO,
+                                       GTK_BUTTONS_OK,
+                                       "The term <i>keynav</i> is a shorthand for "
+                                       "keyboard navigation and refers to the process of using a program "
+                                       "(exclusively) via keyboard input.");
+
+      gtk_window_present (GTK_WINDOW (dialog));
+
+      g_signal_connect (dialog, "response", G_CALLBACK (dialog_response), label);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 void create_labels (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -3047,6 +3090,15 @@ void create_labels (GtkWidget *widget)
 			     "\342\200\217Hebrew	\327\251\327\234\327\225\327\235");
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
+      frame = gtk_frame_new ("Links in a label");
+      label = gtk_label_new ("Some <a href=\"http://en.wikipedia.org/wiki/Text\" title=\"plain text\">text</a> may be marked up\n"
+                             "as hyperlinks, which can be clicked\n"
+                             "or activated via <a href=\"keynav\">keynav</a>");
+      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+      gtk_container_add (GTK_CONTAINER (frame), label);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+      g_signal_connect (label, "activate-link", G_CALLBACK (activate_link), NULL);
 
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
