@@ -432,6 +432,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <xi:include href="xml/migrating-GtkBuilder.sgml" />
     <xi:include href="xml/migrating-GtkTooltip.sgml" />
     <xi:include href="xml/migrating-GtkEntry-icons.sgml" />
+    <xi:include href="xml/migrating-GtkLabel-links.sgml" />
   </part>
 
   <part>
@@ -482,5 +483,9 @@ that is, GUI components such as #GtkButton or #GtkTextView.
   <index id="api-index-2-16" role="2.16">
     <title>Index of new symbols in 2.16</title>
     <xi:include href="xml/api-index-2.16.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-2-18" role="2.18">
+    <title>Index of new symbols in 2.18</title>
+    <xi:include href="xml/api-index-2.18.xml"><xi:fallback /></xi:include>
   </index>
 </book>
