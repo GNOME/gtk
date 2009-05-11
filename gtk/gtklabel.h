@@ -96,7 +96,8 @@ struct _GtkLabelClass
   void (* populate_popup)   (GtkLabel       *label,
                              GtkMenu        *menu);
 
-  gboolean (*activate_link) (GtkLabel       *label);
+  gboolean (*activate_link) (GtkLabel       *label,
+                             const gchar    *uri);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

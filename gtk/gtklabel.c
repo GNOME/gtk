@@ -124,6 +124,7 @@ enum {
   COPY_CLIPBOARD,
   POPULATE_POPUP,
   ACTIVATE_LINK,
+  ACTIVATE_CURRENT_LINK,
   LAST_SIGNAL
 };
 
@@ -279,11 +280,15 @@ static gint gtk_label_move_backward_word (GtkLabel        *label,
 /* For links: */
 static void          gtk_label_rescan_links     (GtkLabel  *label);
 static void          gtk_label_clear_links      (GtkLabel  *label);
-static gboolean      gtk_label_activate_link    (GtkLabel  *label);
+static gboolean      gtk_label_activate_link    (GtkLabel    *label,
+                                                 const gchar *uri);
+static void          gtk_label_activate_current_link (GtkLabel *label);
 static GtkLabelLink *gtk_label_get_current_link (GtkLabel  *label);
 static void          gtk_label_get_link_colors  (GtkWidget  *widget,
                                                  GdkColor  **link_color,
                                                  GdkColor  **visited_link_color);
+static void          emit_activate_link         (GtkLabel     *label,
+                                                 GtkLabelLink *link);
 
 static GQuark quark_angle = 0;
 
@@ -440,20 +445,36 @@ gtk_label_class_init (GtkLabelClass *class)
 		  GTK_TYPE_MENU);
 
     /**
-     * GtkLabel::activate-link:
-     * @label: The label on which the signal was emitted.
+     * GtkLabel::activate-current-link:
+     * @label: The label on which the signal was emitted
      *
-     * A  <link linkend="keybinding-signals">keybinding signal</link>
+     * A <link linkend="keybinding-signals">keybinding signal</link>
      * which gets emitted when the user activates a link in the label.
-     *
-     * Applications may connect to it to override the default behaviour,
-     * which is to call gtk_show_uri(). To obtain the URI that is being
-     * activated, use gtk_label_get_current_uri().
      *
      * Applications may also emit the signal with g_signal_emit_by_name()
      * if they need to control activation of URIs programmatically.
      *
      * The default bindings for this signal are all forms of the Enter key.
+     *
+     * Since: 2.18
+     */
+    signals[ACTIVATE_CURRENT_LINK] =
+      g_signal_new_class_handler ("activate-current-link",
+                                  G_TYPE_FROM_CLASS (object_class),
+                                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                  G_CALLBACK (gtk_label_activate_current_link),
+                                  NULL, NULL,
+                                  _gtk_marshal_VOID__VOID,
+                                  G_TYPE_NONE, 0);
+
+    /**
+     * GtkLabel::activate-link:
+     * @label: The label on which the signal was emitted
+     * @uri: the URI that is activated
+     *
+     * The signal which gets emitted to activate a URI.
+     * Applications may connect to it to override the default behaviour,
+     * which is to call gtk_show_uri().
      *
      * Returns: %TRUE if the link has been activated
      *
@@ -462,11 +483,11 @@ gtk_label_class_init (GtkLabelClass *class)
     signals[ACTIVATE_LINK] =
       g_signal_new ("activate-link",
                     G_TYPE_FROM_CLASS (object_class),
-                    G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                    G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkLabelClass, activate_link),
                     _gtk_boolean_handled_accumulator, NULL,
-                    _gtk_marshal_BOOLEAN__VOID,
-                    G_TYPE_BOOLEAN, 0);
+                    _gtk_marshal_BOOLEAN__STRING,
+                    G_TYPE_BOOLEAN, 1, G_TYPE_STRING);
 
   g_object_class_install_property (gobject_class,
                                    PROP_LABEL,
@@ -799,11 +820,11 @@ gtk_label_class_init (GtkLabelClass *class)
 				"copy-clipboard", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Return, 0,
-				"activate-link", 0);
+				"activate-current-link", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_ISO_Enter, 0,
-				"activate-link", 0);
+				"activate-current-link", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0,
-				"activate-link", 0);
+				"activate-current-link", 0);
 
   gtk_settings_install_property (g_param_spec_boolean ("gtk-label-select-on-focus",
 						       P_("Select on focus"),
@@ -4105,16 +4126,7 @@ gtk_label_button_release (GtkWidget      *widget,
       info->selection_anchor == info->selection_end &&
       info->link_clicked)
     {
-      gboolean handled;
-
-      g_signal_emit (label, signals[ACTIVATE_LINK], 0, &handled);
-      if (handled && !info->active_link->visited)
-        {
-          info->active_link->visited = TRUE;
-          /* FIXME: shouldn't have to redo everything here */
-          gtk_label_recalculate (label);
-        }
-
+      emit_activate_link (label, info->active_link);
       info->link_clicked = 0;
 
       return TRUE;
@@ -5406,20 +5418,11 @@ open_link_activate_cb (GtkMenuItem *menu_item,
                        GtkLabel    *label)
 {
   GtkLabelLink *link;
-  gboolean handled;
 
   link = gtk_label_get_current_link (label);
 
   if (link)
-    {
-      g_signal_emit (label, signals[ACTIVATE_LINK], 0, &handled);
-      if (handled && !link->visited)
-        {
-          link->visited = TRUE;
-          /* FIXME: shouldn't have to redo everything here */
-          gtk_label_recalculate (label);
-        }
-    }
+    emit_activate_link (label, link);
 }
 
 static void
@@ -5608,25 +5611,48 @@ gtk_label_rescan_links (GtkLabel *label)
 }
 
 static gboolean
-gtk_label_activate_link (GtkLabel *label)
+gtk_label_activate_link (GtkLabel    *label,
+                         const gchar *uri)
 {
   GtkWidget *widget = GTK_WIDGET (label);
-  GtkLabelLink *link;
-  const gchar *uri;
   GError *error = NULL;
 
-  link = gtk_label_get_current_link (label);
+  if (!gtk_show_uri (gtk_widget_get_screen (widget),
+                     uri, gtk_get_current_event_time (), &error))
+    {
+      g_warning ("Unable to show '%s': %s", uri, error->message);
+      g_error_free (error);
+    }
+
+  return TRUE;
+}
+
+static void
+emit_activate_link (GtkLabel     *label,
+                    GtkLabelLink *link)
+{
+  gboolean handled;
+
+  g_signal_emit (label, signals[ACTIVATE_LINK], 0, link->uri, &handled);
+  if (handled && !link->visited)
+    {
+      link->visited = TRUE;
+      /* FIXME: shouldn't have to redo everything here */
+      gtk_label_recalculate (label);
+    }
+}
+
+static void
+gtk_label_activate_current_link (GtkLabel *label)
+{
+  GtkLabelLink *link;
+  GtkWidget *widget = GTK_WIDGET (label);
+
+  link = gtk_label_get_focus_link (label);
 
   if (link)
     {
-      uri = link->uri;
-
-      if (!gtk_show_uri (gtk_widget_get_screen (widget),
-                         uri, gtk_get_current_event_time (), &error))
-        {
-          g_warning ("Unable to show '%s': %s", uri, error->message);
-          g_error_free (error);
-        }
+      emit_activate_link (label, link);
     }
   else
     {
@@ -5645,8 +5671,6 @@ gtk_label_activate_link (GtkLabel *label)
             gtk_window_activate_default (window);
         }
     }
-
-  return TRUE;
 }
 
 static GtkLabelLink *

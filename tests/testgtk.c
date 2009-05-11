@@ -2976,12 +2976,8 @@ dialog_response (GtkWidget *dialog, gint response_id, GtkLabel *label)
 }
 
 static gboolean
-activate_link (GtkWidget *label, gpointer data)
+activate_link (GtkWidget *label, const gchar *uri, gpointer data)
 {
-  const gchar *uri;
-
-  uri = gtk_label_get_current_uri (GTK_LABEL (label));
-
   if (g_strcmp0 (uri, "keynav") == 0)
     {
       GtkWidget *dialog;

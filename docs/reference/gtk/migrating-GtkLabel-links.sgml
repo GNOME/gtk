@@ -18,9 +18,7 @@
   <para>
     One difference between the two APIs is that the ::url-activated signal
     from SexyUrlLabel has been replaced by the #GtkLabel::activate-link
-    signal. The activated URI is no longer passed as an argument to the
-    signal handler. Instead, call gtk_label_get_current_uri() to obtain it.
-    However, the need for connecting to this signal is greatly reduced,
+    signal. The need for connecting to this signal is greatly reduced,
     since GtkLabel has a default handler that calls gtk_show_uri().
   </para>
 </chapter>

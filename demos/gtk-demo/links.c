@@ -16,13 +16,10 @@ response_cb (GtkWidget *dialog,
 }
 
 static gboolean
-activate_link (GtkWidget *label,
-               gpointer   data)
+activate_link (GtkWidget   *label,
+               const gchar *uri,
+               gpointer     data)
 {
-  const gchar *uri;
-
-  uri = gtk_label_get_current_uri (GTK_LABEL (label));
-
   if (g_strcmp0 (uri, "keynav") == 0)
     {
       GtkWidget *dialog;
