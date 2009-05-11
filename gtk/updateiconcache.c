@@ -1438,6 +1438,7 @@ build_cache (const gchar *path)
   struct utimbuf utime_buf;
   GList *directories = NULL;
   int fd;
+  int retry_count = 0;
 #ifndef G_OS_WIN32
   mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 #else
@@ -1450,8 +1451,15 @@ build_cache (const gchar *path)
   tmp_cache_path = g_build_filename (path, "."CACHE_NAME, NULL);
   cache_path = g_build_filename (path, CACHE_NAME, NULL);
 
+opentmp:
   if ((fd = g_open (tmp_cache_path, O_WRONLY | O_CREAT | O_EXCL | O_TRUNC | _O_BINARY, mode)) == -1)
     {
+      if (force_update && retry_count == 0)
+        {
+          retry_count++;
+          g_remove (tmp_cache_path);
+          goto opentmp;
+        }
       g_printerr (_("Failed to open file %s : %s\n"), tmp_cache_path, g_strerror (errno));
       exit (1);
     }
@@ -1497,7 +1505,7 @@ build_cache (const gchar *path)
   if (!validate_file (tmp_cache_path))
     {
       g_printerr (_("The generated cache was invalid.\n"));
-      //g_unlink (tmp_cache_path);
+      /*g_unlink (tmp_cache_path);*/
       exit (1);
     }
 
