@@ -300,6 +300,7 @@ GtkClipboard *
 gtk_clipboard_get_for_display (GdkDisplay *display, 
 			       GdkAtom     selection)
 {
+  g_return_val_if_fail (display != NULL, NULL); /* See bgo#463773; this is needed because Flash Player sucks */
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (!display->closed, NULL);
 
