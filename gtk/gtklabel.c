@@ -2775,9 +2775,26 @@ get_layout_location (GtkLabel  *label,
     x = MIN (x, widget->allocation.x + widget->allocation.width - misc->xpad);
   x -= logical.x;
 
-  y = floor (widget->allocation.y + (gint)misc->ypad 
-             + MAX (((widget->allocation.height - widget->requisition.height) * misc->yalign),
-	     0));
+  /* bgo#315462 - For single-line labels, *do* align the requisition with
+   * respect to the allocation, even if we are under-allocated.  For multi-line
+   * labels, always show the top of the text when they are under-allocated.  The
+   * rationale is this:
+   *
+   * - Single-line labels appear in GtkButtons, and it is very easy to get them
+   *   to be smaller than their requisition.  The button may clip the label, but
+   *   the label will still be able to show most of itself and the focus
+   *   rectangle.  Also, it is fairly easy to read a single line of clipped text.
+   *
+   * - Multi-line labels should not be clipped to showing "something in the
+   *   middle".  You want to read the first line, at least, to get some context.
+   */
+  if (pango_layout_get_line_count (label->layout) == 1)
+    y = floor (widget->allocation.y + (gint)misc->ypad 
+	       + (widget->allocation.height - widget->requisition.height) * misc->yalign);
+  else
+    y = floor (widget->allocation.y + (gint)misc->ypad 
+	       + MAX (((widget->allocation.height - widget->requisition.height) * misc->yalign),
+		      0));
 
   if (xp)
     *xp = x;
