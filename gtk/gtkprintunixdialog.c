@@ -2428,6 +2428,7 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
   GtkNumberUpLayout          layout;
   GtkPrinterOption          *option;
   GtkPrinterOption          *old_option;
+  GtkPageOrientation         page_orientation;
 
   set = priv->options;
 
@@ -2438,17 +2439,64 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
       if (priv->number_up_layout_n_option == NULL)
         {
           priv->number_up_layout_n_option = gtk_printer_option_set_lookup (set, "gtk-n-up-layout");
+          if (priv->number_up_layout_n_option == NULL)
+            {
+              char *n_up_layout[] = { "lrtb", "lrbt", "rltb", "rlbt", "tblr", "tbrl", "btlr", "btrl" };
+               /* Translators: These strings name the possible arrangements of
+                * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
+                */
+              char *n_up_layout_display[] = { N_("Left to right, top to bottom"), N_("Left to right, bottom to top"),
+                                              N_("Right to left, top to bottom"), N_("Right to left, bottom to top"),
+                                              N_("Top to bottom, left to right"), N_("Top to bottom, right to left"),
+                                              N_("Bottom to top, left to right"), N_("Bottom to top, right to left") };
+              int i;
+
+              priv->number_up_layout_n_option = gtk_printer_option_new ("gtk-n-up-layout",
+                                                                        _("Page Ordering"),
+                                                                        GTK_PRINTER_OPTION_TYPE_PICKONE);
+              gtk_printer_option_allocate_choices (priv->number_up_layout_n_option, 8);
+
+              for (i = 0; i < G_N_ELEMENTS (n_up_layout_display); i++)
+                {
+                  priv->number_up_layout_n_option->choices[i] = g_strdup (n_up_layout[i]);
+                  priv->number_up_layout_n_option->choices_display[i] = g_strdup (_(n_up_layout_display[i]));
+                }
+            }
           g_object_ref (priv->number_up_layout_n_option);
 
           priv->number_up_layout_2_option = gtk_printer_option_new ("gtk-n-up-layout",
                                                                     _("Page Ordering"),
                                                                     GTK_PRINTER_OPTION_TYPE_PICKONE);
           gtk_printer_option_allocate_choices (priv->number_up_layout_2_option, 2);
+        }
 
-          priv->number_up_layout_2_option->choices[0] = priv->number_up_layout_n_option->choices[0];
-          priv->number_up_layout_2_option->choices[1] = priv->number_up_layout_n_option->choices[2];
-          priv->number_up_layout_2_option->choices_display[0] = g_strdup ( _("Left to right"));
-          priv->number_up_layout_2_option->choices_display[1] = g_strdup ( _("Right to left"));
+      page_orientation = gtk_page_setup_get_orientation (priv->page_setup);
+      if (page_orientation == GTK_PAGE_ORIENTATION_PORTRAIT ||
+          page_orientation == GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT)
+        {
+          if (! (priv->number_up_layout_2_option->choices[0] == priv->number_up_layout_n_option->choices[0] &&
+                 priv->number_up_layout_2_option->choices[1] == priv->number_up_layout_n_option->choices[2]))
+            {
+              g_free (priv->number_up_layout_2_option->choices_display[0]);
+              g_free (priv->number_up_layout_2_option->choices_display[1]);
+              priv->number_up_layout_2_option->choices[0] = priv->number_up_layout_n_option->choices[0];
+              priv->number_up_layout_2_option->choices[1] = priv->number_up_layout_n_option->choices[2];
+              priv->number_up_layout_2_option->choices_display[0] = g_strdup ( _("Left to right"));
+              priv->number_up_layout_2_option->choices_display[1] = g_strdup ( _("Right to left"));
+            }
+        }
+      else
+        {
+          if (! (priv->number_up_layout_2_option->choices[0] == priv->number_up_layout_n_option->choices[0] &&
+                 priv->number_up_layout_2_option->choices[1] == priv->number_up_layout_n_option->choices[1]))
+            {
+              g_free (priv->number_up_layout_2_option->choices_display[0]);
+              g_free (priv->number_up_layout_2_option->choices_display[1]);
+              priv->number_up_layout_2_option->choices[0] = priv->number_up_layout_n_option->choices[0];
+              priv->number_up_layout_2_option->choices[1] = priv->number_up_layout_n_option->choices[1];
+              priv->number_up_layout_2_option->choices_display[0] = g_strdup ( _("Top to bottom"));
+              priv->number_up_layout_2_option->choices_display[1] = g_strdup ( _("Bottom to top"));
+            }
         }
 
       layout = dialog_get_number_up_layout (dialog);
@@ -2468,12 +2516,20 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
               option = priv->number_up_layout_2_option;
 
               if (layout == GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM ||
-                  layout == GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP ||
-                  layout == GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT ||
-                  layout == GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT)
+                  layout == GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT)
                 enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM);
-              else
+
+              if (layout == GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP ||
+                  layout == GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT)
+                enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP);
+
+              if (layout == GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM ||
+                  layout == GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_RIGHT_TO_LEFT)
                 enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM);
+
+              if (layout == GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP ||
+                  layout == GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT)
+                enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP);
             }
           else
             {

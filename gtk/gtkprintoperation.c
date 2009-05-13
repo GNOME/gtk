@@ -22,6 +22,7 @@
 
 #include <errno.h>
 #include <stdlib.h>       
+#include <math.h>
 
 #include <string.h>
 #include "gtkprintoperation-private.h"
@@ -154,6 +155,8 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   priv->default_page_setup = NULL;
   priv->print_settings = NULL;
   priv->nr_of_pages = -1;
+  priv->nr_of_pages_to_print = -1;
+  priv->page_position = -1;
   priv->current_page = -1;
   priv->use_full_page = FALSE;
   priv->show_progress = FALSE;
@@ -1832,7 +1835,11 @@ pdf_end_page (GtkPrintOperation *op,
   cairo_t *cr;
 
   cr = gtk_print_context_get_cairo_context (print_context);
-  cairo_show_page (cr);
+
+  if ((op->priv->manual_number_up < 2) ||
+      ((op->priv->page_position + 1) % op->priv->manual_number_up == 0) ||
+      (op->priv->page_position == op->priv->nr_of_pages_to_print - 1))
+    cairo_show_page (cr);
 }
 
 static void
@@ -1906,6 +1913,8 @@ run_pdf (GtkPrintOperation  *op,
   priv->manual_page_set = GTK_PAGE_SET_ALL;
   priv->manual_scale = 1.0;
   priv->manual_orientation = TRUE;
+  priv->manual_number_up = 1;
+  priv->manual_number_up_layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
   
   *do_print = TRUE;
   
@@ -1927,32 +1936,18 @@ typedef struct
   GtkPageRange *ranges;
   GtkPageRange one_range;
 
-  gint page, start, end, inc;
+  gint page;
+  gint sheet;
+  gint first_position, last_position;
+  gint first_sheet;
+  gint num_of_sheets;
+  gint *pages;
 
   GtkWidget *progress;
  
   gboolean initialized;
   gboolean is_preview; 
 } PrintPagesData;
-
-static void
-find_range (PrintPagesData *data)
-{
-  GtkPageRange *range;
-
-  range = &data->ranges[data->range];
-
-  if (data->inc < 0)
-    {
-      data->start = range->end;
-      data->end = range->start - 1;
-    }
-  else
-    {
-      data->start = range->start;
-      data->end = range->end + 1;
-    }
-}
 
 static void
 clamp_page_ranges (PrintPagesData *data)
@@ -1998,26 +1993,78 @@ static gboolean
 increment_page_sequence (PrintPagesData *data)
 {
   GtkPrintOperationPrivate *priv = data->op->priv;
+  gint inc;
 
-  do {
-    data->page += data->inc;
-    if (data->page == data->end)
-      {
-	data->range += data->inc;
-	if (data->range == -1 || data->range == data->num_ranges)
-	  {
-	    data->uncollated++;
-	    if (data->uncollated == data->uncollated_copies)
-	      return FALSE;
+  /* check whether we reached last position */
+  if (priv->page_position == data->last_position &&
+      !(data->collated_copies > 1 && data->collated < (data->collated_copies - 1)))
+    {
+      if (data->uncollated_copies > 1 && data->uncollated < (data->uncollated_copies - 1))
+        {
+          priv->page_position = data->first_position;
+          data->sheet = data->first_sheet;
+          data->uncollated++;
+        }
+      else
+        return FALSE;
+    }
+  else
+    {
+      if (priv->manual_reverse)
+        inc = -1;
+      else
+        inc = 1;
 
-	    data->range = data->inc < 0 ? data->num_ranges - 1 : 0;
-	  }
-	find_range (data);
-	data->page = data->start;
-      }
-  }
-  while ((priv->manual_page_set == GTK_PAGE_SET_EVEN && data->page % 2 == 0) ||
-	 (priv->manual_page_set == GTK_PAGE_SET_ODD && data->page % 2 == 1));
+      /* changing sheet */
+      if ((priv->page_position + 1) % priv->manual_number_up == 0 ||
+          priv->page_position == data->last_position ||
+          priv->page_position == priv->nr_of_pages_to_print - 1)
+        {
+          /* check whether to print the same sheet again */
+          if (data->collated_copies > 1)
+            {
+              if (data->collated < (data->collated_copies - 1))
+                {
+                  data->collated++;
+                  data->total++;
+                  priv->page_position = data->sheet * priv->manual_number_up;
+
+                  if (priv->page_position < 0 ||
+                      priv->page_position >= priv->nr_of_pages_to_print ||
+                      data->sheet < 0 ||
+                      data->sheet >= data->num_of_sheets)
+                    return FALSE;
+                  else
+                    data->page = data->pages[priv->page_position];
+
+                  return TRUE;
+                }
+              else
+                data->collated = 0;
+            }
+
+          if (priv->manual_page_set == GTK_PAGE_SET_ODD ||
+              priv->manual_page_set == GTK_PAGE_SET_EVEN)
+            data->sheet += 2 * inc;
+          else
+            data->sheet += inc;
+
+          priv->page_position = data->sheet * priv->manual_number_up;
+        }
+      else
+        priv->page_position += 1;
+    }
+
+  /* general check */
+  if (priv->page_position < 0 ||
+      priv->page_position >= priv->nr_of_pages_to_print ||
+      data->sheet < 0 ||
+      data->sheet >= data->num_of_sheets)
+    return FALSE;
+  else
+    data->page = data->pages[priv->page_position];
+
+  data->total++;
 
   return TRUE;
 }
@@ -2052,6 +2099,7 @@ print_pages_idle_done (gpointer user_data)
 		   GTK_PRINT_OPERATION_RESULT_APPLY);
   
   g_object_unref (data->op);
+  g_free (data->pages);
   g_free (data);
 }
 
@@ -2073,7 +2121,7 @@ update_progress (PrintPagesData *data)
 	    text = g_strdup (_("Preparing"));
 	}
       else if (priv->status == GTK_PRINT_STATUS_GENERATING_DATA)
-	text = g_strdup_printf (_("Printing %d"), data->total);
+	text = g_strdup_printf (_("Printing %d"), data->total - 1);
       
       if (text)
 	{
@@ -2164,16 +2212,193 @@ common_render_page (GtkPrintOperation *op,
   cr = gtk_print_context_get_cairo_context (print_context);
   
   cairo_save (cr);
-  if (priv->manual_scale != 1.0)
+  if (priv->manual_scale != 1.0 && priv->manual_number_up <= 1)
     cairo_scale (cr,
 		 priv->manual_scale,
 		 priv->manual_scale);
   
   if (priv->manual_orientation)
     _gtk_print_context_rotate_according_to_orientation (print_context);
-  
-  if (!priv->use_full_page)
-    _gtk_print_context_translate_into_margin (print_context);
+
+  if (priv->manual_number_up > 1)
+    {
+      GtkPageOrientation  orientation;
+      GtkPageSetup       *page_setup;
+      gdouble             paper_width, paper_height;
+      gdouble             page_width, page_height;
+      gdouble             context_width, context_height;
+      gdouble             bottom_margin, top_margin, left_margin, right_margin;
+      gdouble             x_step, y_step;
+      gdouble             x_scale, y_scale, scale;
+      gdouble             horizontal_offset = 0.0, vertical_offset = 0.0;
+      gint                columns, rows, x, y, tmp_length;
+
+      page_setup = gtk_print_context_get_page_setup (print_context);
+      orientation = gtk_page_setup_get_orientation (page_setup);
+
+      top_margin = gtk_page_setup_get_top_margin (page_setup, GTK_UNIT_POINTS);
+      bottom_margin = gtk_page_setup_get_bottom_margin (page_setup, GTK_UNIT_POINTS);
+      left_margin = gtk_page_setup_get_left_margin (page_setup, GTK_UNIT_POINTS);
+      right_margin = gtk_page_setup_get_right_margin (page_setup, GTK_UNIT_POINTS);
+
+      paper_width = gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_POINTS);
+      paper_height = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_POINTS);
+
+      context_width = gtk_print_context_get_width (print_context);
+      context_height = gtk_print_context_get_height (print_context);
+
+      if (orientation == GTK_PAGE_ORIENTATION_PORTRAIT ||
+          orientation == GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT)
+        {
+          page_width = paper_width - (left_margin + right_margin);
+          page_height = paper_height - (top_margin + bottom_margin);
+        }
+      else
+        {
+          page_width = paper_width - (top_margin + bottom_margin);
+          page_height = paper_height - (left_margin + right_margin);
+        }
+
+      if (orientation == GTK_PAGE_ORIENTATION_PORTRAIT ||
+          orientation == GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT)
+        cairo_translate (cr, left_margin, top_margin);
+      else
+        cairo_translate (cr, top_margin, left_margin);
+
+      switch (priv->manual_number_up)
+        {
+          default:
+            columns = 1;
+            rows = 1;
+            break;
+          case 2:
+            columns = 2;
+            rows = 1;
+            break;
+          case 4:
+            columns = 2;
+            rows = 2;
+            break;
+          case 6:
+            columns = 3;
+            rows = 2;
+            break;
+          case 9:
+            columns = 3;
+            rows = 3;
+            break;
+          case 16:
+            columns = 4;
+            rows = 4;
+            break;
+        }
+
+      if (orientation == GTK_PAGE_ORIENTATION_LANDSCAPE ||
+          orientation == GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE)
+        {
+          tmp_length = columns;
+          columns = rows;
+          rows = tmp_length;
+        }
+
+      switch (priv->manual_number_up_layout)
+        {
+          case GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM:
+            x = priv->page_position % columns;
+            y = (priv->page_position / columns) % rows;
+            break;
+          case GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP:
+            x = priv->page_position % columns;
+            y = rows - 1 - (priv->page_position / columns) % rows;
+            break;
+          case GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM:
+            x = columns - 1 - priv->page_position % columns;
+            y = (priv->page_position / columns) % rows;
+            break;
+          case GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP:
+            x = columns - 1 - priv->page_position % columns;
+            y = rows - 1 - (priv->page_position / columns) % rows;
+            break;
+          case GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT:
+            x = (priv->page_position / rows) % columns;
+            y = priv->page_position % rows;
+            break;
+          case GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_RIGHT_TO_LEFT:
+            x = columns - 1 - (priv->page_position / rows) % columns;
+            y = priv->page_position % rows;
+            break;
+          case GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT:
+            x = (priv->page_position / rows) % columns;
+            y = rows - 1 - priv->page_position % rows;
+            break;
+          case GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT:
+            x = columns - 1 - (priv->page_position / rows) % columns;
+            y = rows - 1 - priv->page_position % rows;
+            break;
+        }
+
+      if (priv->manual_number_up == 4 || priv->manual_number_up == 9 || priv->manual_number_up == 16)
+        {
+          x_scale = page_width / (columns * paper_width);
+          y_scale = page_height / (rows * paper_height);
+
+          scale = x_scale < y_scale ? x_scale : y_scale;
+
+          x_step = paper_width * (x_scale / scale);
+          y_step = paper_height * (y_scale / scale);
+
+          if ((left_margin + right_margin) > 0)
+            {
+              horizontal_offset = left_margin * (x_step - context_width) / (left_margin + right_margin);
+              vertical_offset = top_margin * (y_step - context_height) / (top_margin + bottom_margin);
+            }
+          else
+            {
+              horizontal_offset = (x_step - context_width) / 2.0;
+              vertical_offset = (y_step - context_height) / 2.0;
+            }
+
+          cairo_scale (cr, scale, scale);
+
+          cairo_translate (cr,
+                           x * x_step + horizontal_offset,
+                           y * y_step + vertical_offset);
+
+          if (priv->manual_scale != 1.0)
+            cairo_scale (cr, priv->manual_scale, priv->manual_scale);
+        }
+
+      if (priv->manual_number_up == 2 || priv->manual_number_up == 6)
+        {
+          x_scale = page_height / (columns * paper_width);
+          y_scale = page_width / (rows * paper_height);
+
+          scale = x_scale < y_scale ? x_scale : y_scale;
+
+          horizontal_offset = (paper_width * (x_scale / scale) - paper_width) / 2.0 * columns;
+          vertical_offset = (paper_height * (y_scale / scale) - paper_height) / 2.0 * rows;
+
+          if (!priv->use_full_page)
+            {
+              horizontal_offset -= right_margin;
+              vertical_offset += top_margin;
+            }
+
+          cairo_scale (cr, scale, scale);
+
+          cairo_translate (cr,
+                           y * paper_height + vertical_offset,
+                           (columns - x) * paper_width + horizontal_offset);
+
+          if (priv->manual_scale != 1.0)
+            cairo_scale (cr, priv->manual_scale, priv->manual_scale);
+
+          cairo_rotate (cr, - M_PI / 2);
+        }
+    }
+  else
+    if (!priv->use_full_page)
+      _gtk_print_context_translate_into_margin (print_context);
   
   priv->page_drawing_state = GTK_PAGE_DRAWING_STATE_DRAWING;
 
@@ -2189,7 +2414,7 @@ prepare_data (PrintPagesData *data)
 {
   GtkPrintOperationPrivate *priv;
   GtkPageSetup             *page_setup;
-  gint                      i;
+  gint                      i, j, counter;
 
   priv = data->op->priv;
 
@@ -2267,21 +2492,85 @@ prepare_data (PrintPagesData *data)
       return;
     }
 
+  priv->nr_of_pages_to_print = 0;
+  for (i = 0; i < data->num_ranges; i++)
+    priv->nr_of_pages_to_print += data->ranges[i].end - data->ranges[i].start + 1;
+
+  data->pages = g_new (gint, priv->nr_of_pages_to_print);
+  counter = 0;
+  for (i = 0; i < data->num_ranges; i++)
+    for (j = data->ranges[i].start; j <= data->ranges[i].end; j++)
+      {
+        data->pages[counter] = j;
+        counter++;
+      }
+
+  data->total = 0;
+  data->collated = 0;
+  data->uncollated = 0;
+
+  if (priv->nr_of_pages_to_print % priv->manual_number_up == 0)
+    data->num_of_sheets = priv->nr_of_pages_to_print / priv->manual_number_up;
+  else
+    data->num_of_sheets = priv->nr_of_pages_to_print / priv->manual_number_up + 1;
+
   if (priv->manual_reverse)
     {
-      data->range = data->num_ranges - 1;
-      data->inc = -1;      
+      /* data->sheet is 0-based */
+      if (priv->manual_page_set == GTK_PAGE_SET_ODD)
+        data->sheet = (data->num_of_sheets - 1) - (data->num_of_sheets - 1) % 2;
+      else if (priv->manual_page_set == GTK_PAGE_SET_EVEN)
+        data->sheet = (data->num_of_sheets - 1) - (1 - (data->num_of_sheets - 1) % 2);
+      else
+        data->sheet = data->num_of_sheets - 1;
     }
   else
     {
-      data->range = 0;
-      data->inc = 1;      
+      /* data->sheet is 0-based */
+      if (priv->manual_page_set == GTK_PAGE_SET_ODD)
+        data->sheet = 0;
+      else if (priv->manual_page_set == GTK_PAGE_SET_EVEN)
+        {
+          if (data->num_of_sheets > 1)
+            data->sheet = 1;
+          else
+            data->sheet = -1;
+        }
+      else
+        data->sheet = 0;
     }
-  find_range (data);
 
-  /* go back one page, since we preincrement below */
-  data->page = data->start - data->inc;
-  data->collated = data->collated_copies - 1;
+  priv->page_position = data->sheet * priv->manual_number_up;
+
+  if (priv->page_position < 0 || priv->page_position >= priv->nr_of_pages_to_print)
+    {
+      priv->cancelled = TRUE;
+      return;
+    }
+
+  data->page = data->pages[priv->page_position];
+  data->first_position = priv->page_position;
+  data->first_sheet = data->sheet;
+
+  if (priv->manual_reverse)
+    {
+      if (priv->manual_page_set == GTK_PAGE_SET_ODD)
+        data->last_position = MIN (priv->manual_number_up - 1, priv->nr_of_pages_to_print - 1);
+      else if (priv->manual_page_set == GTK_PAGE_SET_EVEN)
+        data->last_position = MIN (2 * priv->manual_number_up - 1, priv->nr_of_pages_to_print - 1);
+      else
+        data->last_position = MIN (priv->manual_number_up - 1, priv->nr_of_pages_to_print - 1);
+    }
+  else
+    {
+      if (priv->manual_page_set == GTK_PAGE_SET_ODD)
+        data->last_position = MIN (((data->num_of_sheets - 1) - ((data->num_of_sheets - 1) % 2)) * priv->manual_number_up - 1, priv->nr_of_pages_to_print - 1);
+      else if (priv->manual_page_set == GTK_PAGE_SET_EVEN)
+        data->last_position = MIN (((data->num_of_sheets - 1) - (1 - (data->num_of_sheets - 1) % 2)) * priv->manual_number_up - 1, priv->nr_of_pages_to_print - 1);
+      else
+        data->last_position = priv->nr_of_pages_to_print - 1;
+    }
+
 
   _gtk_print_operation_set_status (data->op, 
                                    GTK_PRINT_STATUS_GENERATING_DATA, 
@@ -2306,19 +2595,6 @@ print_pages_idle (gpointer user_data)
           goto out;
         }
 
-      data->total++;
-      data->collated++;
-      if (data->collated == data->collated_copies)
-        {
-          data->collated = 0;
-          if (!increment_page_sequence (data))
-            {
-              done = TRUE;
-
-              goto out;
-            }
-        }
-
       if (data->is_preview && !priv->cancelled)
         {
           done = TRUE;
@@ -2328,6 +2604,9 @@ print_pages_idle (gpointer user_data)
         }
 
       common_render_page (data->op, data->page);
+
+      if (!increment_page_sequence (data))
+        done = TRUE;
 
  out:
 
@@ -2468,6 +2747,8 @@ print_pages (GtkPrintOperation       *op,
       priv->manual_page_set = GTK_PAGE_SET_ALL;
       priv->manual_scale = 1.0;
       priv->manual_orientation = TRUE;
+      priv->manual_number_up = 1;
+      priv->manual_number_up_layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
     }
   
   priv->print_pages_idle_id = gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE + 10,
