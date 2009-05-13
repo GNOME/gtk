@@ -10,4 +10,8 @@ if TEST_PRINT_BACKEND
 SUBDIRS += test
 endif
 
+if HAVE_PAPI
+SUBDIRS += papi
+endif
+
 DIST_SUBDIRS = cups file lpr test
