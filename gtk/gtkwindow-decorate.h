@@ -35,6 +35,7 @@ void gtk_decorated_window_move_resize_window   (GtkWindow   *window,
 						gint         y,
 						gint         width,
 						gint         height);
+GtkWidget *gtk_decorated_window_get_box        (GtkWindow *window);
 
 G_END_DECLS
 
