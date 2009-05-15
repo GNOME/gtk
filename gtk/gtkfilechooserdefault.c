@@ -8307,10 +8307,15 @@ save_entry_get_info_cb (GCancellable *cancellable,
           if (data->file_exists_and_is_not_folder)
 	    {
 	      gboolean retval;
-	      const char *file_part;
+	      char *file_part;
 
-	      file_part = _gtk_file_chooser_entry_get_file_part (GTK_FILE_CHOOSER_ENTRY (data->impl->location_entry));
+              /* Dup the string because the string may be modified
+               * depending on what clients do in the confirm-overwrite
+               * signal and this corrupts the pointer
+               */
+              file_part = g_strdup (_gtk_file_chooser_entry_get_file_part (GTK_FILE_CHOOSER_ENTRY (data->impl->location_entry)));
 	      retval = should_respond_after_confirm_overwrite (data->impl, file_part, data->parent_file);
+              g_free (file_part);
 
 	      if (retval)
 		g_signal_emit_by_name (data->impl, "response-requested");
