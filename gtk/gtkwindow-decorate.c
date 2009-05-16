@@ -17,13 +17,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/* 
+/*
  * Authors: Alexander Larsson <alexl@redhat.com>
  */
 
 #include "config.h"
 #include "gtkprivate.h"
 #include "gtkwindow.h"
+#include "gtklabel.h"
 #include "gtkhbox.h"
 #include "gtkbutton.h"
 #include "gtkmain.h"
@@ -80,6 +81,7 @@ struct _GtkWindowDecoration
   GtkWindowResizeType resize;
 
   GtkWidget *hbox;
+  GtkWidget *label_widget;
   GtkWidget *close_button;
   GtkWidget *max_button;
   GtkWidget *min_button;
@@ -153,8 +155,10 @@ gtk_decorated_window_init (GtkWindow   *window)
   deco->round_corners = TRUE;
   deco->radius = 5;
 
+  deco->label_widget = gtk_label_new ("This is a test");
   deco->close_button = gtk_button_new_from_stock ("stock-smiley-26");
   deco->hbox = gtk_hbox_new (FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (deco->hbox), deco->label_widget, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (deco->hbox), deco->close_button, FALSE, FALSE, 0);
   gtk_widget_show_all (deco->hbox);
   gtk_widget_set_parent_window (deco->hbox, window->frame);
@@ -368,6 +372,10 @@ gtk_decorated_window_frame_event (GtkWindow *window, GdkEvent *event)
       expose_event = (GdkEventExpose *)event;
       if (deco->decorated)
 	gtk_decorated_window_paint (widget, &expose_event->area);
+
+      gtk_container_propagate_expose (GTK_CONTAINER (window),
+                                      deco->hbox,
+                                      event);
       return TRUE;
       break;
     case GDK_CONFIGURE:

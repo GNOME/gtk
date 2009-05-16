@@ -4908,7 +4908,7 @@ gtk_window_realize (GtkWidget *widget)
       if (priv->opacity_set)
 	gdk_window_set_opacity (window->frame, priv->opacity);
 
-      gdk_window_set_user_data (window->frame, widget);
+      gdk_window_set_user_data (window->frame, window);
       
       attributes.window_type = GDK_WINDOW_CHILD;
       attributes.x = window->frame_left;
