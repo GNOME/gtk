@@ -206,6 +206,9 @@ gtk_decorated_window_get_box (GtkWindow *window)
 
   deco = get_decoration (window);
 
+  if (!deco || !deco->hbox)
+    return NULL;
+
   return deco->hbox;
 }
 
@@ -229,6 +232,9 @@ gtk_decorated_window_calculate_frame_size (GtkWindow *window)
   GdkWMDecoration decorations;
   GtkWindowDecoration *deco = get_decoration (window);
   gint border_left, border_top, border_right, border_bottom;
+
+  if (!deco)
+    return;
 
   decorations = gtk_window_get_client_side_decorations (window);
   if (!decorations)
