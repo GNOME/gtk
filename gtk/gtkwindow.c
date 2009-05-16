@@ -5131,9 +5131,12 @@ gtk_window_size_allocate (GtkWidget     *widget,
 
   if (GTK_WIDGET_REALIZED (widget) && window->frame)
     {
-      gdk_window_resize (window->frame,
-			 allocation->width + window->frame_left + window->frame_right,
-			 allocation->height + window->frame_top + window->frame_bottom);
+      if (window->frame)
+        gdk_window_resize (window->frame,
+                           allocation->width + window->frame_left + window->frame_right,
+                           allocation->height + window->frame_top + window->frame_bottom);
+
+      gdk_window_resize (widget->window, allocation->width, allocation->height);
     }
 }
 
