@@ -1458,7 +1458,21 @@ gtk_window_set_title (GtkWindow   *window,
   g_free (window->title);
   window->title = new_title;
 
-  if (gtk_widget_get_realized (GTK_WIDGET (window)))
+  if (!priv->title_label)
+    {
+      priv->title_label = gtk_label_new (window->title);
+      gtk_widget_set_parent(priv->title_label, GTK_WIDGET (window));
+      gtk_widget_show (priv->title_label);
+    }
+  else
+    {
+      gtk_label_set_text (GTK_LABEL (priv->title_label), window->title);
+    }
+
+  if (GTK_WIDGET_VISIBLE (priv->title_label) && GTK_WIDGET_VISIBLE (GTK_WIDGET (window)))
+    gtk_widget_queue_resize (GTK_WIDGET (window));
+
+  if (gtk_widget_get_realized (window))
     {
       gdk_window_set_title (GTK_WIDGET (window)->window, window->title);
 
@@ -4839,6 +4853,9 @@ gtk_window_realize (GtkWidget *widget)
   window = GTK_WINDOW (widget);
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
+  priv->title_label = gtk_label_new (window->title);
+  gtk_widget_set_parent (priv->title_label, widget);
+
   /* ensure widget tree is properly size allocated */
   if (widget->allocation.x == -1 &&
       widget->allocation.y == -1 &&
@@ -5102,14 +5119,12 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkContainer *container;
   GtkAllocation child_allocation;
   GtkAllocation new_allocation;
-  GtkWidget *decorated_hbox = NULL;
   GtkWindowPrivate *priv;
 
   window = GTK_WINDOW (widget);
   container = GTK_CONTAINER (widget);
   widget->allocation = *allocation;
   priv = GTK_WINDOW_GET_PRIVATE (window);
-  decorated_hbox = NULL; //gtk_decorated_window_get_box (window);
 
   if (window->bin.child && gtk_widget_get_visible (window->bin.child))
     {
@@ -5135,12 +5150,12 @@ gtk_window_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (window->bin.child, &child_allocation);
     }
 
-  if (decorated_hbox && priv->client_side_decorations)
+  if (priv->title_label && priv->client_side_decorations)
     {
       GtkRequisition deco_requisition;
       GtkAllocation deco_allocation;
 
-      gtk_widget_size_request (decorated_hbox, &deco_requisition);
+      gtk_widget_size_request (priv->title_label, &deco_requisition);
 
       deco_allocation.x = 0;
       deco_allocation.y = 0;
@@ -5151,7 +5166,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
                deco_allocation.x, deco_allocation.y,
                deco_allocation.width, deco_allocation.width);
 
-      gtk_widget_size_allocate (decorated_hbox, &deco_allocation);
+      gtk_widget_size_allocate (priv->title_label, &deco_allocation);
     }
 }
 
