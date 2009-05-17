@@ -1946,7 +1946,8 @@ typedef struct
   GtkWidget *progress;
  
   gboolean initialized;
-  gboolean is_preview; 
+  gboolean is_preview;
+  gboolean done;
 } PrintPagesData;
 
 static void
@@ -1989,7 +1990,7 @@ clamp_page_ranges (PrintPagesData *data)
   data->num_ranges = num_of_correct_ranges;
 }
 
-static gboolean 
+static void
 increment_page_sequence (PrintPagesData *data)
 {
   GtkPrintOperationPrivate *priv = data->op->priv;
@@ -2006,7 +2007,10 @@ increment_page_sequence (PrintPagesData *data)
           data->uncollated++;
         }
       else
-        return FALSE;
+        {
+          data->done = TRUE;
+	  return;
+        }
     }
   else
     {
@@ -2033,11 +2037,14 @@ increment_page_sequence (PrintPagesData *data)
                       priv->page_position >= priv->nr_of_pages_to_print ||
                       data->sheet < 0 ||
                       data->sheet >= data->num_of_sheets)
-                    return FALSE;
+		    {
+                      data->done = TRUE;
+		      return;
+		    }
                   else
                     data->page = data->pages[priv->page_position];
 
-                  return TRUE;
+                  return;
                 }
               else
                 data->collated = 0;
@@ -2060,13 +2067,14 @@ increment_page_sequence (PrintPagesData *data)
       priv->page_position >= priv->nr_of_pages_to_print ||
       data->sheet < 0 ||
       data->sheet >= data->num_of_sheets)
-    return FALSE;
+    {
+      data->done = TRUE;
+      return;
+    }
   else
     data->page = data->pages[priv->page_position];
 
   data->total++;
-
-  return TRUE;
 }
 
 static void
@@ -2581,7 +2589,7 @@ static gboolean
 print_pages_idle (gpointer user_data)
 {
   PrintPagesData *data; 
-  GtkPrintOperationPrivate *priv; 
+  GtkPrintOperationPrivate *priv;
   gboolean done = FALSE;
 
   data = (PrintPagesData*)user_data;
@@ -2603,10 +2611,13 @@ print_pages_idle (gpointer user_data)
           goto out;
         }
 
-      common_render_page (data->op, data->page);
-
-      if (!increment_page_sequence (data))
-        done = TRUE;
+      if (!data->done)
+        {
+	  common_render_page (data->op, data->page);
+	  increment_page_sequence (data);
+        }
+      else
+        done = priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_READY;
 
  out:
 
