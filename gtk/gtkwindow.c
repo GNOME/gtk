@@ -358,6 +358,14 @@ static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 						      const gchar   *tagname,
 						      gpointer       user_data);
 
+/* GtkContainer */
+static void gtk_window_forall        (GtkContainer   *container,
+                                      gboolean        include_internals,
+                                      GtkCallback     callback,
+                                      gpointer        callback_data);
+static void gtk_window_remove        (GtkContainer   *container,
+                                      GtkWidget      *child);
+
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
@@ -475,6 +483,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->expose_event = gtk_window_expose;
 
   container_class->check_resize = gtk_window_check_resize;
+  container_class->forall = gtk_window_forall;
+  container_class->remove = gtk_window_remove;
 
   klass->set_focus = gtk_window_real_set_focus;
   klass->frame_event = gtk_window_frame_event;
@@ -1428,6 +1438,38 @@ gtk_window_new (GtkWindowType type)
   return GTK_WIDGET (window);
 }
 
+static void
+gtk_window_set_label_widget (GtkWindow *window,
+                             GtkWidget *label)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  gboolean need_resize = FALSE;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (label == NULL || GTK_IS_WIDGET (label));
+  g_return_if_fail (label == NULL || label->parent == NULL);
+
+  if (priv->title_label == label)
+    return;
+
+  if (priv->title_label)
+    {
+      need_resize = GTK_WIDGET_VISIBLE (priv->title_label);
+      gtk_widget_unparent (priv->title_label);
+    }
+
+  priv->title_label = label;
+
+  if (label)
+    {
+      gtk_widget_set_parent (label, GTK_WIDGET (window));
+      need_resize |= GTK_WIDGET_VISIBLE (label);
+    }
+
+  if (GTK_WIDGET_VISIBLE (window) && need_resize)
+    gtk_widget_queue_resize (GTK_WIDGET (window));
+}
+
 /**
  * gtk_window_set_title:
  * @window: a #GtkWindow
@@ -1460,9 +1502,9 @@ gtk_window_set_title (GtkWindow   *window,
 
   if (!priv->title_label)
     {
-      priv->title_label = gtk_label_new (window->title);
-      gtk_widget_set_parent(priv->title_label, GTK_WIDGET (window));
-      gtk_widget_show (priv->title_label);
+      GtkWidget *label = gtk_label_new (window->title);
+      gtk_widget_show (label);
+      gtk_window_set_label_widget (window, label);
     }
   else
     {
@@ -5604,6 +5646,34 @@ gtk_window_check_resize (GtkContainer *container)
 {
   if (gtk_widget_get_visible (GTK_WIDGET (container)))
     gtk_window_move_resize (GTK_WINDOW (container));
+}
+
+static void
+gtk_window_remove (GtkContainer *container,
+                   GtkWidget    *child)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (container);
+
+  if (priv->title_label == child)
+    gtk_window_set_label_widget (GTK_WINDOW (container), NULL);
+  else
+    GTK_CONTAINER_CLASS (gtk_window_parent_class)->remove (container, child);
+}
+
+static void
+gtk_window_forall (GtkContainer   *container,
+                   gboolean        include_internals,
+                   GtkCallback     callback,
+                   gpointer        callback_data)
+{
+  GtkBin *bin = GTK_BIN (container);
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (container);
+
+  if (bin->child)
+    (* callback) (bin->child, callback_data);
+
+  if (priv->title_label)
+    (* callback) (priv->title_label, callback_data);
 }
 
 static gboolean
