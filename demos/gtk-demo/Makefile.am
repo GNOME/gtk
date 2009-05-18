@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.decl
 
 democodedir=$(datadir)/gtk-2.0/demo
 
-## These should be in the order you want them to appear in the 
+## These should be in the order you want them to appear in the
 ## demo app, which means alphabetized by demo title, not filename
 demos =						\
 	appwindow.c				\
@@ -23,6 +23,7 @@ demos =						\
 	iconview.c				\
 	iconview_edit.c				\
 	images.c				\
+        links.c					\
 	list_store.c				\
 	menus.c					\
 	panes.c					\

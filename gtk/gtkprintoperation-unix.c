@@ -87,10 +87,14 @@ unix_start_page (GtkPrintOperation *op,
   
   type = cairo_surface_get_type (op_unix->surface);
 
-  if (type == CAIRO_SURFACE_TYPE_PS)
-    cairo_ps_surface_set_size (op_unix->surface, w, h);
-  else if (type == CAIRO_SURFACE_TYPE_PDF)
-    cairo_pdf_surface_set_size (op_unix->surface, w, h);
+  if ((op->priv->manual_number_up < 2) ||
+      (op->priv->page_position % op->priv->manual_number_up == 0))
+    {
+      if (type == CAIRO_SURFACE_TYPE_PS)
+        cairo_ps_surface_set_size (op_unix->surface, w, h);
+      else if (type == CAIRO_SURFACE_TYPE_PDF)
+        cairo_pdf_surface_set_size (op_unix->surface, w, h);
+    }
 }
 
 static void
@@ -100,7 +104,11 @@ unix_end_page (GtkPrintOperation *op,
   cairo_t *cr;
 
   cr = gtk_print_context_get_cairo_context (print_context);
-  cairo_show_page (cr);
+
+  if ((op->priv->manual_number_up < 2) ||
+      ((op->priv->page_position + 1) % op->priv->manual_number_up == 0) ||
+      (op->priv->page_position == op->priv->nr_of_pages_to_print - 1))
+    cairo_show_page (cr);
 }
 
 static void
@@ -399,7 +407,9 @@ get_print_dialog (GtkPrintOperation *op,
 						 GTK_PRINT_CAPABILITY_COLLATE |
 						 GTK_PRINT_CAPABILITY_REVERSE |
 						 GTK_PRINT_CAPABILITY_SCALE |
-						 GTK_PRINT_CAPABILITY_PREVIEW);
+						 GTK_PRINT_CAPABILITY_PREVIEW |
+						 GTK_PRINT_CAPABILITY_NUMBER_UP |
+						 GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT);
 
   if (priv->print_settings)
     gtk_print_unix_dialog_set_settings (GTK_PRINT_UNIX_DIALOG (pd),
@@ -523,6 +533,8 @@ finish_print (PrintResponseData *rdata,
           priv->manual_page_set = job->page_set;
           priv->manual_scale = job->scale;
           priv->manual_orientation = job->rotate_to_orientation;
+          priv->manual_number_up = job->number_up;
+          priv->manual_number_up_layout = job->number_up_layout;
         }
     } 
  out:

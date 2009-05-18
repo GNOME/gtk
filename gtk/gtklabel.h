@@ -96,11 +96,13 @@ struct _GtkLabelClass
   void (* populate_popup)   (GtkLabel       *label,
                              GtkMenu        *menu);
 
+  gboolean (*activate_link) (GtkLabel       *label,
+                             const gchar    *uri);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 GType                 gtk_label_get_type          (void) G_GNUC_CONST;
@@ -173,6 +175,8 @@ void         gtk_label_get_layout_offsets (GtkLabel *label,
 void         gtk_label_set_single_line_mode  (GtkLabel *label,
                                               gboolean single_line_mode);
 gboolean     gtk_label_get_single_line_mode  (GtkLabel *label);
+
+G_CONST_RETURN gchar *gtk_label_get_current_uri (GtkLabel *label);
 
 #ifndef GTK_DISABLE_DEPRECATED
 

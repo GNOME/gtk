@@ -78,6 +78,14 @@ style "button" = "default"
 #  bg[PRELIGHT] = { 0.75, 0, 0x00 }
 }
 
+style "label" = "default"
+{
+ base[PRELIGHT] = "gray"
+ base[ACTIVE] = mix (0.9, "gray", "purple")
+}
+
+class "GtkLabel" style "label"
+
 style "toggle_button" = "button"
 {
   fg[NORMAL] = { 1.0, 0, 0 }

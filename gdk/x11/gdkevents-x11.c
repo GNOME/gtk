@@ -1985,7 +1985,10 @@ gdk_event_translate (GdkDisplay *display,
       event->selection.window = window;
       event->selection.selection = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.selection);
       event->selection.target = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.target);
-      event->selection.property = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.property);
+      if (xevent->xselection.property == None)
+        event->selection.property = GDK_NONE;
+      else
+        event->selection.property = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.property);
       event->selection.time = xevent->xselection.time;
       
       break;

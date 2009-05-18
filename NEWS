@@ -1,3 +1,14 @@
+Overview of Changes from GTK+ 2.17.0 to 2.17.1
+==============================================
+
+* GtkLabel:
+ - GtkLabel can now show embedded URLs, much like SexyUrlLabel
+
+* Changes that are relevant for theme authors:
+ - The URL support in GtkLabel uses the link-color / visited-link-color
+   style properties
+
+
 Overview of Changes from GTK+ 2.16.x to 2.17.0
 ==============================================
 

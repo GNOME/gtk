@@ -641,14 +641,15 @@ main (int argc, char **argv)
 
   button = gtk_button_new ();
   gtk_box_pack_end (GTK_BOX (menu_box), button, FALSE, FALSE, 0);
-  gtk_action_connect_proxy (gtk_action_group_get_action (action_group, "AboutAction"), 
-			    button);
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
+			    gtk_action_group_get_action (action_group, "AboutAction"));
+
   gtk_widget_show (button);
 
   button = gtk_check_button_new ();
   gtk_box_pack_end (GTK_BOX (menu_box), button, FALSE, FALSE, 0);
-  gtk_action_connect_proxy (gtk_action_group_get_action (action_group, "BoldAction"), 
-			    button);
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
+			    gtk_action_group_get_action (action_group, "BoldAction"));
   gtk_widget_show (button);
 
   merge = gtk_ui_manager_new ();

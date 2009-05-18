@@ -1598,6 +1598,8 @@ gtk_print_operation_run_without_dialog (GtkPrintOperation *op,
   op->priv->manual_orientation = FALSE;
   op->priv->manual_scale = 1.0;
   op->priv->manual_page_set = GTK_PAGE_SET_ALL;
+  op->priv->manual_number_up = 1;
+  op->priv->manual_number_up_layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
 
   op->priv->start_page = win32_start_page;
   op->priv->end_page = win32_end_page;
@@ -1821,6 +1823,8 @@ gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
       op->priv->manual_orientation = FALSE;
       op->priv->manual_scale = 1.0;
       op->priv->manual_page_set = GTK_PAGE_SET_ALL;
+      op->priv->manual_number_up = 1;
+      op->priv->manual_number_up_layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
     }
 
   op->priv->start_page = win32_start_page;
