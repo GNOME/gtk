@@ -827,7 +827,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                            g_param_spec_int ("decoration-border-top",
                                                              P_("Top border decoration size"),
                                                              P_("Top border decoration size"),
-                                                             0, G_MAXINT, 24, GTK_PARAM_READWRITE));
+                                                             0, G_MAXINT, 6, GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("decoration-border-left",
@@ -996,7 +996,7 @@ gtk_window_init (GtkWindow *window)
   window->has_frame = FALSE;
   window->frame_left = 6;
   window->frame_right = 6;
-  window->frame_top = 24;
+  window->frame_top = 6;
   window->frame_bottom = 6;
   window->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
   window->gravity = GDK_GRAVITY_NORTH_WEST;
@@ -4905,6 +4905,7 @@ gtk_window_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
   GtkWindowPrivate *priv;
+  gint label_height = 0;
   
   window = GTK_WINDOW (widget);
   priv = GTK_WINDOW_GET_PRIVATE (window);
@@ -5019,9 +5020,22 @@ gtk_window_realize (GtkWidget *widget)
 			    GDK_STRUCTURE_MASK);
   if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
     {
+
       attributes.event_mask |= GDK_BUTTON_PRESS_MASK;
       //attributes.width += window->frame_left + window->frame_right;
       //attributes.height += window->frame_top + window->frame_bottom;
+
+      if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+        {
+          GtkRequisition label_requisition;
+
+          gtk_widget_get_child_requisition (priv->title_label, &label_requisition);
+          label_height = label_requisition.height;
+        }
+      else
+        {
+          label_height = 0;
+        }
     }
 
   attributes.type_hint = priv->type_hint;
@@ -5158,15 +5172,17 @@ gtk_window_size_request (GtkWidget      *widget,
   requisition->width = GTK_CONTAINER (window)->border_width * 2;
   requisition->height = GTK_CONTAINER (window)->border_width * 2;
 
-  if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP && priv->title_label)
+  if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
     {
-      gtk_widget_size_request (priv->title_label, &child_requisition);
-
-      g_print ("size_request(): child_requisition width %d, height: %d\n",
-               child_requisition.width, child_requisition.height);
-
       requisition->width += window->frame_left + window->frame_right;
       requisition->height += window->frame_top + window->frame_bottom;
+
+      if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+        {
+          gtk_widget_size_request (priv->title_label, &child_requisition);
+
+          requisition->height += child_requisition.height;
+        }
     }
 
   if (bin->child && gtk_widget_get_visible (bin->child))
@@ -5187,22 +5203,36 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkAllocation child_allocation;
   GtkAllocation new_allocation;
   GtkWindowPrivate *priv;
+  GtkRequisition deco_requisition;
+  GtkAllocation deco_allocation;
 
   window = GTK_WINDOW (widget);
   container = GTK_CONTAINER (widget);
   widget->allocation = *allocation;
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
+  if (priv->client_side_decorated && priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+    {
+      gtk_widget_get_child_requisition (priv->title_label, &deco_requisition);
+
+      deco_allocation.x = window->frame_left;
+      deco_allocation.y = 0; // XXX - why is frame_top not working here??
+      deco_allocation.width = deco_requisition.width;
+      deco_allocation.height = deco_requisition.height + window->frame_top * 4; // XXX - 4??
+
+      gtk_widget_size_allocate (priv->title_label, &deco_allocation);
+    }
+
   if (window->bin.child && gtk_widget_get_visible (window->bin.child))
     {
       if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
         {
           child_allocation.x = container->border_width + window->frame_left;
-          child_allocation.y = container->border_width + window->frame_top;
+          child_allocation.y = container->border_width + deco_allocation.height;
           child_allocation.width = MAX (1, ((gint)allocation->width - container->border_width * 2
                                             - window->frame_left - window->frame_right));
           child_allocation.height = MAX (1, ((gint)allocation->height - container->border_width * 2
-                                             - window->frame_top - window->frame_bottom));
+                                             - window->frame_bottom - deco_allocation.height));
         }
       else
         {
@@ -5215,26 +5245,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
         }
 
       gtk_widget_size_allocate (window->bin.child, &child_allocation);
-    }
-
-  if (priv->client_side_decorated && priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
-    {
-      GtkRequisition deco_requisition;
-      GtkAllocation deco_allocation;
-
-      gtk_widget_get_child_requisition (priv->title_label, &deco_requisition);
-
-      // Need to be smarter about this, but for now seems like [0,0] will go to top-left
-      deco_allocation.x = 0;
-      deco_allocation.y = 0;
-      deco_allocation.width = deco_requisition.width;
-      deco_allocation.height = deco_requisition.height;
-
-      g_print ("deco x: %d, y: %d, width: %d, height: %d\n",
-               deco_allocation.x, deco_allocation.y,
-               deco_allocation.width, deco_allocation.height);
-
-      gtk_widget_size_allocate (priv->title_label, &deco_allocation);
     }
 }
 
