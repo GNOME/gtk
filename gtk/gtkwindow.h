@@ -136,7 +136,10 @@ struct _GtkWindowClass
                                         GtkDirectionType direction);
   
   void	   (*keys_changed)	       (GtkWindow	*window);
-  
+
+  void     (*compute_child_allocation) (GtkWindow       *window,
+                                        GtkAllocation   *allocation);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
