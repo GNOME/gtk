@@ -3063,7 +3063,7 @@ gtk_selection_default_handler (GtkWidget	*widget,
 	  tmp_list = tmp_list->next;
 	}
     }
-  else if (data->target == gtk_selection_atom[SAVE_TARGETS])
+  else if (data->target == gtk_selection_atoms[SAVE_TARGETS])
     {
       gtk_selection_data_set (data,
 			      gdk_atom_intern_static_string ("NULL"),
