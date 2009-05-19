@@ -25,6 +25,7 @@
  */
 
 #include "config.h"
+#include <math.h>
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -966,7 +967,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 static void
 gtk_window_init (GtkWindow *window)
 {
-  GdkColormap *colormap;
+  //GdkColormap *colormap;
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   
   gtk_widget_set_has_window (GTK_WIDGET (window), TRUE);
@@ -1017,7 +1018,7 @@ gtk_window_init (GtkWindow *window)
                                    GDK_DECOR_MAXIMIZE);
   priv->old_decorations = 0;
 
-  colormap = _gtk_widget_peek_colormap ();
+  //colormap = _gtk_widget_peek_colormap ();
   //if (colormap)
   //  gtk_widget_set_colormap (GTK_WIDGET (window), colormap);
   gtk_widget_set_colormap (GTK_WIDGET (window),
@@ -1461,7 +1462,6 @@ gtk_window_set_label_widget (GtkWindow *window,
       gtk_widget_unparent (priv->title_label);
     }
 
-  g_print (" .. setting priv->title_label = label\n");
   priv->title_label = label;
 
   if (label)
@@ -1515,7 +1515,6 @@ gtk_window_set_title (GtkWindow   *window,
     {
       GtkWidget *child = gtk_label_new (title);
 
-      g_print (" ...... creating GtkLabel for %s\n", title);
       gtk_widget_show (child);
       gtk_window_set_label_widget (window, child);
     }
@@ -3102,7 +3101,6 @@ gtk_window_set_client_side_decorations (GtkWindow       *window,
           gdk_window_get_decorations (GTK_WIDGET (window)->window,
                                       &priv->old_decorations);
           gdk_window_set_decorations (GTK_WIDGET (window)->window, 0);
-          g_print ("gdk_window_set_decorations (0)\n");
         }
       else
         {
@@ -3110,7 +3108,6 @@ gtk_window_set_client_side_decorations (GtkWindow       *window,
             {
               gdk_window_set_decorations (GTK_WIDGET (window)->window,
                                           priv->old_decorations);
-              g_print ("gdk_window_set_decorations (non-zero)\n");
               priv->old_decorations = 0;
             }
         }
@@ -4763,7 +4760,6 @@ gtk_window_map (GtkWidget *widget)
       GTK_WIDGET_VISIBLE (priv->title_label) &&
       !GTK_WIDGET_MAPPED (priv->title_label))
     {
-      g_print ("gtk_widget_map title_label\n");
       gtk_widget_map (priv->title_label);
     }
 
@@ -4947,13 +4943,14 @@ gtk_window_realize (GtkWidget *widget)
       g_warning (G_STRLOC": Unknown window type %d!", window->type);
       break;
     }
-   
+
   attributes.title = window->title;
   attributes.wmclass_name = window->wmclass_name;
   attributes.wmclass_class = window->wmclass_class;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);
+  //attributes.colormap = gtk_widget_get_colormap (widget);
+  attributes.colormap = gdk_screen_get_rgba_colormap (gtk_widget_get_screen (widget));
 
 #if 0
   if (window->has_frame)
@@ -5020,7 +5017,6 @@ gtk_window_realize (GtkWidget *widget)
 			    GDK_STRUCTURE_MASK);
   if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
     {
-
       attributes.event_mask |= GDK_BUTTON_PRESS_MASK;
       //attributes.width += window->frame_left + window->frame_right;
       //attributes.height += window->frame_top + window->frame_bottom;
@@ -5071,7 +5067,6 @@ gtk_window_realize (GtkWidget *widget)
 
   if (!window->decorated || priv->client_side_decorated)
     {
-      g_print ("gdk_window_set_decorations (0)\n");
       gdk_window_set_decorations (widget->window, 0);
     }
 
@@ -6966,11 +6961,77 @@ gtk_window_compute_hints (GtkWindow   *window,
  ***********************/
 
 static void
+paint_decorated_window (GtkStyle *style,
+                        GdkWindow *window,
+                        GtkStateType state_type,
+                        GtkShadowType shadow_type,
+                        const GdkRectangle *area,
+                        GtkWidget *widget,
+                        const gchar *detail,
+                        gint x,
+                        gint y,
+                        gint width,
+                        gint height)
+{
+  cairo_pattern_t *gradient;
+  cairo_t *cr;
+  const int hmargin = 2, vmargin = 2, radius = 5;
+
+  // XXX - why are width,height coming in at -1,-1?
+  if (width == -1)
+    width = widget->allocation.width;
+  if (height == -1)
+    height = widget->allocation.height;
+
+  cr = gdk_cairo_create (window);
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+  cairo_paint (cr);
+
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+  cairo_arc (cr, hmargin + radius, vmargin + radius,
+             radius, M_PI, 3 * M_PI / 2);
+  cairo_line_to (cr, width - hmargin - radius, vmargin);
+  cairo_arc (cr, width - hmargin - radius, vmargin + radius,
+             radius, 3 * M_PI / 2, 2 * M_PI);
+  cairo_line_to (cr, width - hmargin, height - vmargin - radius);
+  cairo_arc (cr, width - hmargin - radius, height - vmargin - radius,
+             radius, 0, M_PI / 2);
+  cairo_line_to (cr, hmargin + radius, height - vmargin);
+  cairo_arc (cr, hmargin + radius, height - vmargin - radius,
+             radius, M_PI / 2, M_PI);
+  cairo_close_path (cr);
+
+  gradient = cairo_pattern_create_linear (width / 2 - 1, vmargin,
+                                          width / 2 + 1, height);
+  cairo_pattern_add_color_stop_rgba (gradient, 0, 1, 1, 1, 0.7);
+  cairo_pattern_add_color_stop_rgba (gradient, 1, 1, 1, 1, 0.9);
+  cairo_set_source (cr, gradient);
+  cairo_fill_preserve (cr);
+
+  cairo_set_source_rgba (cr, 1, 1, 1, 2);
+  cairo_set_line_width (cr, 1);
+  cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
+  cairo_stroke (cr);
+
+  cairo_destroy (cr);
+}
+
+static void
 gtk_window_paint (GtkWidget     *widget,
 		  GdkRectangle *area)
 {
-  gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL, 
-		      GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (widget);
+
+  if (priv->client_side_decorated)
+    {
+      paint_decorated_window (widget->style, widget->window, GTK_STATE_NORMAL,
+                              GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
+    }
+  else
+    {
+      gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL, 
+                          GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
+    }
 }
 
 static gint
