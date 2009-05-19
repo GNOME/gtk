@@ -4981,12 +4981,15 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
 				  remaining_space, STEP_NEXT);
 	}
 
-      if (*remaining_space <= 0)
+      if (tab_space <= 0 || *remaining_space < 0)
 	{
 	  /* show 1 tab */
 	  notebook->first_tab = notebook->focus_tab;
 	  *last_child = gtk_notebook_search_page (notebook, notebook->focus_tab,
 						  STEP_NEXT, TRUE);
+          page = notebook->first_tab->data;
+          *remaining_space = tab_space - page->requisition.width;
+          *n = 1;
 	}
       else
 	{
@@ -5073,22 +5076,22 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
 								   TRUE);
 		}
 	    }
-	}
 
-      if (*remaining_space < 0) 
-	{
-	  /* calculate number of tabs */
-	  *remaining_space = - (*remaining_space);
-	  *n = 0;
+          if (*remaining_space < 0)
+            {
+              /* calculate number of tabs */
+              *remaining_space = - (*remaining_space);
+              *n = 0;
 
-	  for (children = notebook->first_tab;
-	       children && children != *last_child;
-	       children = gtk_notebook_search_page (notebook, children,
-						    STEP_NEXT, TRUE))
-	    (*n)++;
-	}
-      else 
-	*remaining_space = 0;
+              for (children = notebook->first_tab;
+                   children && children != *last_child;
+                   children = gtk_notebook_search_page (notebook, children,
+                                                        STEP_NEXT, TRUE))
+                (*n)++;
+	    }
+          else
+	    *remaining_space = 0;
+        }
 
       /* unmap all non-visible tabs */
       for (children = gtk_notebook_search_page (notebook, NULL,

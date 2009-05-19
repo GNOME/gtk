@@ -2115,8 +2115,8 @@ update_progress (PrintPagesData *data)
     {
       if (priv->status == GTK_PRINT_STATUS_PREPARING)
 	{
-	  if (priv->nr_of_pages > 0)
-	    text = g_strdup_printf (_("Preparing %d"), priv->nr_of_pages);
+	  if (priv->nr_of_pages_to_print > 0)
+	    text = g_strdup_printf (_("Preparing %d"), priv->nr_of_pages_to_print);
 	  else
 	    text = g_strdup (_("Preparing"));
 	}
