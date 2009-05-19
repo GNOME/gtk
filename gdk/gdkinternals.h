@@ -200,6 +200,9 @@ void gdk_synthesize_window_state (GdkWindow     *window,
                                   GdkWindowState unset_flags,
                                   GdkWindowState set_flags);
 
+GdkDeviceManager * _gdk_device_manager_new (GdkDisplay *display);
+
+
 #define GDK_SCRATCH_IMAGE_WIDTH 256
 #define GDK_SCRATCH_IMAGE_HEIGHT 64
 

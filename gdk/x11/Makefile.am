@@ -23,6 +23,7 @@ libgdk_x11_la_SOURCES =    	\
 	gdkasync.h		\
 	gdkcolor-x11.c	   	\
 	gdkcursor-x11.c	   	\
+	gdkdevicemanager-x11.c	\
 	gdkdisplay-x11.c	\
 	gdkdisplay-x11.h	\
 	gdkdnd-x11.c	   	\
@@ -62,7 +63,7 @@ libgdk_x11_la_SOURCES =    	\
 if XINPUT_XFREE
 libgdk_x11_la_SOURCES += gdkinput-x11.c gdkinput-xfree.c
 else
-libgdk_x11_la_SOURCES += gdkinput-none.c
+libgdk_x11_la_SOURCES += gdkinput-none.c gdkdevicemanager-core.c
 endif
 
 

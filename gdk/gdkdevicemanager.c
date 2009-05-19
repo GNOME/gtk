@@ -19,6 +19,7 @@
 
 #include "gdkdevicemanager.h"
 #include "gdkintl.h"
+#include "gdkinternals.h"
 
 
 static void gdk_device_manager_set_property (GObject      *object,
