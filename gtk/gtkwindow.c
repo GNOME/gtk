@@ -317,6 +317,8 @@ static void        gtk_window_compute_child_allocation      (GtkWindow     *wind
                                                              GtkAllocation *child_allocation);
 static void        gtk_window_real_compute_child_allocation (GtkWindow     *window,
                                                              GtkAllocation *child_allocation);
+static void        gtk_window_set_label_widget (GtkWindow *window,
+                                                GtkWidget *label);
 
 
 static GSList      *toplevel_list = NULL;
@@ -1017,6 +1019,7 @@ gtk_window_init (GtkWindow *window)
                                    GDK_DECOR_TITLE  |
                                    GDK_DECOR_MAXIMIZE);
   priv->old_decorations = 0;
+  gtk_window_set_label_widget (window, gtk_label_new (""));
 
   //colormap = _gtk_widget_peek_colormap ();
   //if (colormap)
@@ -5163,29 +5166,28 @@ gtk_window_size_request (GtkWidget      *widget,
   priv = GTK_WINDOW_GET_PRIVATE (window);
   bin = GTK_BIN (window);
 
-  // XXX
   requisition->width = GTK_CONTAINER (window)->border_width * 2;
   requisition->height = GTK_CONTAINER (window)->border_width * 2;
 
   if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
     {
-      requisition->width += window->frame_left + window->frame_right;
-      requisition->height += window->frame_top + window->frame_bottom;
-
+      gint child_height = 0;
       if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
         {
           gtk_widget_size_request (priv->title_label, &child_requisition);
-
-          requisition->height += child_requisition.height;
+          child_height = child_requisition.height;
         }
+
+      requisition->width += window->frame_left + window->frame_right;
+      requisition->height += window->frame_top + window->frame_bottom + child_height;
     }
 
   if (bin->child && gtk_widget_get_visible (bin->child))
     {
       gtk_widget_size_request (bin->child, &child_requisition);
 
-      requisition->width += child_requisition.width;
-      requisition->height += child_requisition.height;
+      requisition->width += MAX (0, child_requisition.width);
+      requisition->height += MAX (0, child_requisition.height);
     }
 }
 
@@ -5206,14 +5208,16 @@ gtk_window_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
+  deco_allocation.width = deco_allocation.height = 0;
+
   if (priv->client_side_decorated && priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
     {
       gtk_widget_get_child_requisition (priv->title_label, &deco_requisition);
 
       deco_allocation.x = window->frame_left;
-      deco_allocation.y = 0; // XXX - why is frame_top not working here??
+      deco_allocation.y = window->frame_top;
       deco_allocation.width = deco_requisition.width;
-      deco_allocation.height = deco_requisition.height + window->frame_top * 4; // XXX - 4??
+      deco_allocation.height = deco_requisition.height;
 
       gtk_widget_size_allocate (priv->title_label, &deco_allocation);
     }
@@ -5223,11 +5227,14 @@ gtk_window_size_allocate (GtkWidget     *widget,
       if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
         {
           child_allocation.x = container->border_width + window->frame_left;
-          child_allocation.y = container->border_width + deco_allocation.height;
+          child_allocation.y = container->border_width + deco_allocation.height
+            + window->frame_top; // XXX - padding style property?
           child_allocation.width = MAX (1, ((gint)allocation->width - container->border_width * 2
                                             - window->frame_left - window->frame_right));
           child_allocation.height = MAX (1, ((gint)allocation->height - container->border_width * 2
-                                             - window->frame_bottom - deco_allocation.height));
+                                             - window->frame_bottom
+                                             - window->frame_top // XXX - padding style property?
+                                             - deco_allocation.height));
         }
       else
         {
@@ -6978,10 +6985,8 @@ paint_decorated_window (GtkStyle *style,
   const int hmargin = 2, vmargin = 2, radius = 5;
 
   // XXX - why are width,height coming in at -1,-1?
-  if (width == -1)
-    width = widget->allocation.width;
-  if (height == -1)
-    height = widget->allocation.height;
+  width = widget->allocation.width;
+  height = widget->allocation.height;
 
   cr = gdk_cairo_create (window);
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
@@ -7003,12 +7008,12 @@ paint_decorated_window (GtkStyle *style,
 
   gradient = cairo_pattern_create_linear (width / 2 - 1, vmargin,
                                           width / 2 + 1, height);
-  cairo_pattern_add_color_stop_rgba (gradient, 0, 1, 1, 1, 0.7);
-  cairo_pattern_add_color_stop_rgba (gradient, 1, 1, 1, 1, 0.9);
+  cairo_pattern_add_color_stop_rgba (gradient, 0, 0.8, 0.8, 0.8, 0.9);
+  cairo_pattern_add_color_stop_rgba (gradient, 0.8, 0.8, 0.8, 0.8, 1.0);
   cairo_set_source (cr, gradient);
   cairo_fill_preserve (cr);
 
-  cairo_set_source_rgba (cr, 1, 1, 1, 2);
+  cairo_set_source_rgba (cr, 0, 0, 0, 2);
   cairo_set_line_width (cr, 1);
   cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
   cairo_stroke (cr);
