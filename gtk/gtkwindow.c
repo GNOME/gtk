@@ -6846,9 +6846,10 @@ paint_decorated_window (GtkStyle *style,
   cairo_t *cr;
   const int hmargin = 2, vmargin = 2, radius = 5;
 
-  // XXX - why are width,height coming in at -1,-1?
-  width = widget->allocation.width;
-  height = widget->allocation.height;
+  if (width == -1)
+    width = widget->allocation.width;
+  if (height == -1)
+    height = widget->allocation.height;
 
   cr = gdk_cairo_create (window);
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
