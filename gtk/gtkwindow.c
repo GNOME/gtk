@@ -6844,7 +6844,7 @@ paint_decorated_window (GtkStyle *style,
 {
   cairo_pattern_t *gradient;
   cairo_t *cr;
-  const int hmargin = 2, vmargin = 2, radius = 5;
+  const double hmargin = 2.5, vmargin = 2.5, radius = 5;
 
   if (width == -1)
     width = widget->allocation.width;
