@@ -407,7 +407,6 @@ gtk_private_h_sources =		\
 	gtktoolpaletteprivate.h	\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
-	gtkwindow-decorate.h	\
 	$(gtk_clipboard_dnd_h_sources)
 
 # GTK+ C sources to build the library from
@@ -627,7 +626,6 @@ gtk_base_c_sources =            \
 	gtkvscrollbar.c		\
 	gtkvseparator.c		\
 	gtkwidget.c		\
-	gtkwindow-decorate.c    \
 	gtkwindow.c		\
 	$(gtk_clipboard_dnd_c_sources)
 

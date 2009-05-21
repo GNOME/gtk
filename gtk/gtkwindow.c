@@ -1545,7 +1545,6 @@ gtk_window_set_title (GtkWindow   *window,
     {
       gdk_window_set_title (GTK_WIDGET (window)->window, window->title);
 
-      gtk_decorated_window_set_title (window, title);
       gtk_label_set_text (GTK_LABEL (priv->title_label), title);
     }
 
@@ -4718,11 +4717,6 @@ gtk_window_show (GtkWidget *widget)
 	  was_realized = TRUE;
 	}
 
-      /* Must be done after the windows are realized,
-       * so that the decorations can be read
-       */
-      gtk_decorated_window_calculate_frame_size (window);
-
       /* We only send configure request if we didn't just finish
        * creating the window; if we just created the window
        * then we created it with widget->allocation anyhow.
@@ -7103,16 +7097,7 @@ gtk_window_set_frame_dimensions (GtkWindow *window,
   window->frame_right = right;
   window->frame_bottom = bottom;
 
-  if (gtk_widget_get_realized (widget) && window->frame)
-    {
-      gint width = widget->allocation.width + left + right;
-      gint height = widget->allocation.height + top + bottom;
-      gdk_window_resize (window->frame, width, height);
-      gtk_decorated_window_move_resize_window (window,
-					       left, top,
-					       widget->allocation.width,
-					       widget->allocation.height);
-    }
+  gtk_widget_queue_resize (GTK_WIDGET (window));
 }
 
 /**
