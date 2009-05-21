@@ -30,3 +30,5 @@ noinst_HEADERS =			\
 
 libprintbackend_papi_la_LDFLAGS =  -avoid-version -module $(no_undefined)
 libprintbackend_papi_la_LIBADD = $(LDADDS) -lpapi
+
+-include $(top_srcdir)/git.mk
