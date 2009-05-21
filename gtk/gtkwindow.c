@@ -220,8 +220,6 @@ static void gtk_window_size_request       (GtkWidget         *widget,
 					   GtkRequisition    *requisition);
 static void gtk_window_size_allocate      (GtkWidget         *widget,
 					   GtkAllocation     *allocation);
-static gint gtk_window_event              (GtkWidget *widget,
-					   GdkEvent *event);
 static gboolean gtk_window_map_event      (GtkWidget         *widget,
                                            GdkEventAny       *event);
 static gboolean gtk_window_frame_event    (GtkWindow *window,
@@ -314,10 +312,6 @@ static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
 static void        gtk_window_free_key_hash       (GtkWindow   *window);
 static void	   gtk_window_on_composited_changed (GdkScreen *screen,
 						     GtkWindow *window);
-static void        gtk_window_compute_child_allocation      (GtkWindow     *window,
-                                                             GtkAllocation *child_allocation);
-static void        gtk_window_real_compute_child_allocation (GtkWindow     *window,
-                                                             GtkAllocation *child_allocation);
 static void        gtk_window_set_label_widget (GtkWindow *window,
                                                 GtkWidget *label);
 
@@ -372,8 +366,6 @@ static void gtk_window_forall        (GtkContainer   *container,
                                       gboolean        include_internals,
                                       GtkCallback     callback,
                                       gpointer        callback_data);
-static void gtk_window_remove        (GtkContainer   *container,
-                                      GtkWidget      *child);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
@@ -493,11 +485,9 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   container_class->check_resize = gtk_window_check_resize;
   container_class->forall = gtk_window_forall;
-  container_class->remove = gtk_window_remove;
 
   klass->set_focus = gtk_window_real_set_focus;
   klass->frame_event = gtk_window_frame_event;
-  klass->compute_child_allocation = gtk_window_real_compute_child_allocation;
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
   klass->move_focus = gtk_window_move_focus;
@@ -5155,7 +5145,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkWindow *window;
   GtkContainer *container;
   GtkAllocation child_allocation;
-  GtkAllocation new_allocation;
   GtkWindowPrivate *priv;
   GtkRequisition deco_requisition;
   GtkAllocation deco_allocation;
@@ -5205,78 +5194,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
 
       gtk_widget_size_allocate (window->bin.child, &child_allocation);
     }
-}
-
-static void
-gtk_window_compute_child_allocation (GtkWindow      *window,
-                                     GtkAllocation  *child_allocation)
-{
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (child_allocation != NULL);
-
-  GTK_WINDOW_GET_CLASS (window)->compute_child_allocation (window, child_allocation);
-}
-
-static void
-gtk_window_real_compute_child_allocation (GtkWindow      *window,
-                                          GtkAllocation  *child_allocation)
-{
-  GtkWidget *widget = GTK_WIDGET (window);
-  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
-  GtkAllocation *allocation = &widget->allocation;
-  GtkRequisition child_requisition;
-  gint top_margin;
-
-  if (priv->title_hbox)
-    {
-      gtk_widget_get_child_requisition (priv->title_hbox, &child_requisition);
-      top_margin = MAX (child_requisition.height, widget->style->ythickness);
-    }
-  else
-    {
-      top_margin = widget->style->ythickness;
-    }
-
-  child_allocation->x = (GTK_CONTAINER (window)->border_width +
-                         widget->style->xthickness);
-  child_allocation->width = MAX(1, (gint)allocation->width - child_allocation->x * 2);
-
-  child_allocation->y = (GTK_CONTAINER (window)->border_width + top_margin);
-  child_allocation->height = MAX (1, ((gint)allocation->height - child_allocation->y -
-                                      (gint)GTK_CONTAINER (window)->border_width -
-                                      (gint)widget->style->ythickness));
-
-  child_allocation->x += allocation->x;
-  child_allocation->y += allocation->y;
-}
-
-static gint
-gtk_window_event (GtkWidget *widget, GdkEvent *event)
-{
-  GtkWindow *window;
-  gboolean return_val;
-
-  window = GTK_WINDOW (widget);
-
-  if (window->frame && (event->any.window == window->frame))
-    {
-      if ((event->type != GDK_KEY_PRESS) &&
-	  (event->type != GDK_KEY_RELEASE) &&
-	  (event->type != GDK_FOCUS_CHANGE))
-	{
-	  g_signal_stop_emission_by_name (widget, "event");
-	  return_val = FALSE;
-	  g_signal_emit (widget, window_signals[FRAME_EVENT], 0, event, &return_val);
-	  return TRUE;
-	}
-      else
-	{
-	  g_object_unref (event->any.window);
-	  event->any.window = g_object_ref (widget->window);
-	}
-    }
-
-  return FALSE;
 }
 
 static gboolean
@@ -5684,15 +5601,6 @@ gtk_window_check_resize (GtkContainer *container)
 {
   if (gtk_widget_get_visible (GTK_WIDGET (container)))
     gtk_window_move_resize (GTK_WINDOW (container));
-}
-
-static void
-gtk_window_remove (GtkContainer *container,
-                   GtkWidget    *child)
-{
-  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (container);
-
-  GTK_CONTAINER_CLASS (gtk_window_parent_class)->remove (container, child);
 }
 
 static void
