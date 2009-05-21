@@ -3491,6 +3491,69 @@ option_menu_get_props (GtkWidget      *widget,
     *indicator_spacing = default_option_indicator_spacing;
 }
 
+static void
+paint_decorated_window (GtkStyle *style,
+                        GdkWindow *window,
+                        GtkStateType state_type,
+                        GtkShadowType shadow_type,
+                        const GdkRectangle *area,
+                        GtkWidget *widget,
+                        const gchar *detail,
+                        gint x,
+                        gint y,
+                        gint width,
+                        gint height)
+{
+  cairo_pattern_t *gradient;
+  cairo_t *cr;
+  const double hmargin = 2.5, vmargin = 2.5, radius = 5;
+  GdkColor *color;
+
+  if (width == -1)
+    width = widget->allocation.width;
+  if (height == -1)
+    height = widget->allocation.height;
+
+  cr = gdk_cairo_create (window);
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+  cairo_paint (cr);
+
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+  cairo_arc (cr, hmargin + radius, vmargin + radius,
+             radius, M_PI, 3 * M_PI / 2);
+  cairo_line_to (cr, width - hmargin - radius, vmargin);
+  cairo_arc (cr, width - hmargin - radius, vmargin + radius,
+             radius, 3 * M_PI / 2, 2 * M_PI);
+  cairo_line_to (cr, width - hmargin, height - vmargin - radius);
+  cairo_arc (cr, width - hmargin - radius, height - vmargin - radius,
+             radius, 0, M_PI / 2);
+  cairo_line_to (cr, hmargin + radius, height - vmargin);
+  cairo_arc (cr, hmargin + radius, height - vmargin - radius,
+             radius, M_PI / 2, M_PI);
+  cairo_close_path (cr);
+
+  gradient = cairo_pattern_create_linear (width / 2 - 1, vmargin,
+                                          width / 2 + 1, height);
+  color = &style->bg[state_type];
+  cairo_pattern_add_color_stop_rgba (gradient, 0,
+				     color->red / 65535.,
+				     color->green / 65535.,
+				     color->blue / 65535., 0.9);
+  cairo_pattern_add_color_stop_rgba (gradient, 0.8,
+				     color->red / 65535.,
+				     color->green / 65535.,
+				     color->blue / 65535., 1.0);
+  cairo_set_source (cr, gradient);
+  cairo_fill_preserve (cr);
+
+  gdk_cairo_set_source_color (cr, &style->fg[state_type]);
+  cairo_set_line_width (cr, 1);
+  cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
+  cairo_stroke (cr);
+
+  cairo_destroy (cr);
+}
+
 static void 
 gtk_default_draw_box (GtkStyle      *style,
 		      GdkWindow     *window,
@@ -3589,8 +3652,12 @@ gtk_default_draw_box (GtkStyle      *style,
       return;
     }
 
-  gtk_paint_shadow (style, window, state_type, shadow_type, area, widget, detail,
-                    x, y, width, height);
+  if (strcmp (detail, "decoration") == 0)
+    paint_decorated_window (style, window, state_type, shadow_type,
+			    area, widget, detail, x, y, width, height);
+  else
+    gtk_paint_shadow (style, window, state_type, shadow_type,
+		      area, widget, detail, x, y, width, height);
 
   if (detail && strcmp (detail, "optionmenu") == 0)
     {

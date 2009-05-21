@@ -6830,61 +6830,6 @@ gtk_window_compute_hints (GtkWindow   *window,
  ***********************/
 
 static void
-paint_decorated_window (GtkStyle *style,
-                        GdkWindow *window,
-                        GtkStateType state_type,
-                        GtkShadowType shadow_type,
-                        const GdkRectangle *area,
-                        GtkWidget *widget,
-                        const gchar *detail,
-                        gint x,
-                        gint y,
-                        gint width,
-                        gint height)
-{
-  cairo_pattern_t *gradient;
-  cairo_t *cr;
-  const double hmargin = 2.5, vmargin = 2.5, radius = 5;
-
-  if (width == -1)
-    width = widget->allocation.width;
-  if (height == -1)
-    height = widget->allocation.height;
-
-  cr = gdk_cairo_create (window);
-  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-  cairo_paint (cr);
-
-  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-  cairo_arc (cr, hmargin + radius, vmargin + radius,
-             radius, M_PI, 3 * M_PI / 2);
-  cairo_line_to (cr, width - hmargin - radius, vmargin);
-  cairo_arc (cr, width - hmargin - radius, vmargin + radius,
-             radius, 3 * M_PI / 2, 2 * M_PI);
-  cairo_line_to (cr, width - hmargin, height - vmargin - radius);
-  cairo_arc (cr, width - hmargin - radius, height - vmargin - radius,
-             radius, 0, M_PI / 2);
-  cairo_line_to (cr, hmargin + radius, height - vmargin);
-  cairo_arc (cr, hmargin + radius, height - vmargin - radius,
-             radius, M_PI / 2, M_PI);
-  cairo_close_path (cr);
-
-  gradient = cairo_pattern_create_linear (width / 2 - 1, vmargin,
-                                          width / 2 + 1, height);
-  cairo_pattern_add_color_stop_rgba (gradient, 0, 0.8, 0.8, 0.8, 0.9);
-  cairo_pattern_add_color_stop_rgba (gradient, 0.8, 0.8, 0.8, 0.8, 1.0);
-  cairo_set_source (cr, gradient);
-  cairo_fill_preserve (cr);
-
-  cairo_set_source_rgba (cr, 0, 0, 0, 2);
-  cairo_set_line_width (cr, 1);
-  cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
-  cairo_stroke (cr);
-
-  cairo_destroy (cr);
-}
-
-static void
 gtk_window_paint (GtkWidget     *widget,
 		  GdkRectangle *area)
 {
@@ -6892,8 +6837,8 @@ gtk_window_paint (GtkWidget     *widget,
 
   if (priv->client_side_decorated)
     {
-      paint_decorated_window (widget->style, widget->window, GTK_STATE_NORMAL,
-                              GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
+      gtk_paint_box (widget->style, widget->window, GTK_STATE_NORMAL, 
+		     GTK_SHADOW_OUT, area, widget, "decoration", 0, 0, -1, -1);
     }
   else
     {
