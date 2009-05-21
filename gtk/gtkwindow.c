@@ -41,6 +41,7 @@
 #include "gtkwindow-decorate.h"
 #include "gtklabel.h"
 #include "gtkbindings.h"
+#include "gtkhbox.h"
 #include "gtkkeyhash.h"
 #include "gtkmain.h"
 #include "gtkmnemonichash.h"
@@ -204,6 +205,7 @@ struct _GtkWindowPrivate
   gchar *startup_id;
 
   GtkWidget *title_label;
+  GtkWidget *title_hbox;
 };
 
 static void gtk_window_dispose            (GObject           *object);
@@ -971,6 +973,7 @@ gtk_window_init (GtkWindow *window)
 {
   //GdkColormap *colormap;
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  GtkWidget *label;
   
   gtk_widget_set_has_window (GTK_WIDGET (window), TRUE);
   GTK_WIDGET_SET_FLAGS (window, GTK_TOPLEVEL);
@@ -1019,7 +1022,10 @@ gtk_window_init (GtkWindow *window)
                                    GDK_DECOR_TITLE  |
                                    GDK_DECOR_MAXIMIZE);
   priv->old_decorations = 0;
-  gtk_window_set_label_widget (window, gtk_label_new (""));
+
+  label = gtk_label_new ("");
+  gtk_widget_show (label);
+  gtk_window_set_label_widget (window, label);
 
   //colormap = _gtk_widget_peek_colormap ();
   //if (colormap)
@@ -1460,9 +1466,17 @@ gtk_window_set_label_widget (GtkWindow *window,
   if (priv->title_label == label)
     return;
 
+  if (!priv->title_hbox)
+    {
+      priv->title_hbox = gtk_hbox_new (FALSE, 0);
+      gtk_widget_set_parent (priv->title_hbox, GTK_WIDGET (window));
+      gtk_widget_show (priv->title_hbox);
+    }
+
   if (priv->title_label)
     {
-      gtk_widget_unparent (priv->title_label);
+      gtk_container_remove (GTK_CONTAINER (priv->title_hbox), priv->title_label);
+      //g_object_unref (priv->title_label);
     }
 
   priv->title_label = label;
@@ -1471,8 +1485,10 @@ gtk_window_set_label_widget (GtkWindow *window,
     {
       priv->title_label = label;
 
-      gtk_widget_set_parent (label, GTK_WIDGET (window));
+      gtk_box_pack_start (GTK_BOX (priv->title_hbox), label, FALSE, FALSE, 0);
     }
+
+  gtk_widget_show_all (priv->title_hbox);
 
   if (GTK_WIDGET_VISIBLE (window))
     {
@@ -4759,11 +4775,11 @@ gtk_window_map (GtkWidget *widget)
       !gtk_widget_get_mapped (window->bin.child))
     gtk_widget_map (window->bin.child);
 
-  if (priv->title_label &&
+  if (priv->title_hbox &&
       GTK_WIDGET_VISIBLE (priv->title_label) &&
       !GTK_WIDGET_MAPPED (priv->title_label))
     {
-      gtk_widget_map (priv->title_label);
+      gtk_widget_map (priv->title_hbox);
     }
 
   if (window->frame)
@@ -4972,11 +4988,11 @@ gtk_window_realize (GtkWidget *widget)
     {
       attributes.event_mask |= GDK_BUTTON_PRESS_MASK;
 
-      if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+      if (priv->title_hbox && GTK_WIDGET_VISIBLE (priv->title_hbox))
         {
           GtkRequisition label_requisition;
 
-          gtk_widget_get_child_requisition (priv->title_label, &label_requisition);
+          gtk_widget_get_child_requisition (priv->title_hbox, &label_requisition);
           label_height = label_requisition.height;
         }
       else
@@ -5120,9 +5136,9 @@ gtk_window_size_request (GtkWidget      *widget,
   if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
     {
       gint child_height = 0;
-      if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+      if (priv->title_hbox && GTK_WIDGET_VISIBLE (priv->title_hbox))
         {
-          gtk_widget_size_request (priv->title_label, &child_requisition);
+          gtk_widget_size_request (priv->title_hbox, &child_requisition);
           child_height = child_requisition.height;
         }
 
@@ -5158,16 +5174,16 @@ gtk_window_size_allocate (GtkWidget     *widget,
 
   deco_allocation.width = deco_allocation.height = 0;
 
-  if (priv->client_side_decorated && priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+  if (priv->client_side_decorated && priv->title_hbox && GTK_WIDGET_VISIBLE (priv->title_hbox))
     {
-      gtk_widget_get_child_requisition (priv->title_label, &deco_requisition);
+      gtk_widget_get_child_requisition (priv->title_hbox, &deco_requisition);
 
       deco_allocation.x = window->frame_left;
       deco_allocation.y = window->frame_top;
       deco_allocation.width = deco_requisition.width;
       deco_allocation.height = deco_requisition.height;
 
-      gtk_widget_size_allocate (priv->title_label, &deco_allocation);
+      gtk_widget_size_allocate (priv->title_hbox, &deco_allocation);
     }
 
   if (window->bin.child && gtk_widget_get_visible (window->bin.child))
@@ -5218,9 +5234,9 @@ gtk_window_real_compute_child_allocation (GtkWindow      *window,
   GtkRequisition child_requisition;
   gint top_margin;
 
-  if (priv->title_label)
+  if (priv->title_hbox)
     {
-      gtk_widget_get_child_requisition (priv->title_label, &child_requisition);
+      gtk_widget_get_child_requisition (priv->title_hbox, &child_requisition);
       top_margin = MAX (child_requisition.height, widget->style->ythickness);
     }
   else
@@ -5683,10 +5699,7 @@ gtk_window_remove (GtkContainer *container,
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (container);
 
-  if (priv->title_label == child)
-    gtk_window_set_label_widget (GTK_WINDOW (container), NULL);
-  else
-    GTK_CONTAINER_CLASS (gtk_window_parent_class)->remove (container, child);
+  GTK_CONTAINER_CLASS (gtk_window_parent_class)->remove (container, child);
 }
 
 static void
@@ -5701,8 +5714,8 @@ gtk_window_forall (GtkContainer   *container,
   if (bin->child)
     (* callback) (bin->child, callback_data);
 
-  if (priv->title_label)
-    (* callback) (priv->title_label, callback_data);
+  if (priv->title_hbox)
+    (* callback) (priv->title_hbox, callback_data);
 }
 
 static gboolean
