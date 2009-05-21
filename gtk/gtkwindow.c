@@ -3054,7 +3054,7 @@ gtk_window_set_decorated (GtkWindow *window,
 
   if (GTK_WIDGET (window)->window)
     {
-      if (window->decorated && !priv->client_side_decorations)
+      if (window->decorated && !priv->client_side_decorated)
         {
           gdk_window_set_decorations (GTK_WIDGET (window)->window,
                                       GDK_DECOR_ALL);
@@ -4344,12 +4344,23 @@ gtk_window_move (GtkWindow *window,
 {
   GtkWindowGeometryInfo *info;
   GtkWidget *widget;
+  GtkWindowPrivate *priv;
+  gint frame_top = 0, frame_left = 0;
   
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   widget = GTK_WIDGET (window);
+  priv = GTK_WINDOW_GET_PRIVATE (window);
 
-  info = gtk_window_get_geometry_info (window, TRUE);  
+  info = gtk_window_get_geometry_info (window, TRUE);
+
+  if (priv->client_side_decorated && priv->client_side_decorations & GDK_DECOR_BORDER)
+    {
+      gtk_widget_style_get (widget,
+                            "decoration-border-top", &frame_top,
+                            "decoration-border-left", &frame_left,
+                            NULL);
+    }
   
   if (gtk_widget_get_mapped (widget))
     {
@@ -4385,8 +4396,8 @@ gtk_window_move (GtkWindow *window,
       /* FIXME are we handling gravity properly for framed windows? */
       if (window->frame)
         gdk_window_move (window->frame,
-                         x - window->frame_left,
-                         y - window->frame_top);
+                         x - frame_left,
+                         y - frame_top);
       else
         gdk_window_move (GTK_WIDGET (window)->window,
                          x, y);
@@ -5108,10 +5119,21 @@ gtk_window_size_request (GtkWidget      *widget,
   GtkBin *bin;
   GtkRequisition child_requisition;
   GtkWindowPrivate *priv;
+  gint frame_left = 0, frame_right = 0, frame_top = 0, frame_bottom = 0;
 
   window = GTK_WINDOW (widget);
   priv = GTK_WINDOW_GET_PRIVATE (window);
   bin = GTK_BIN (window);
+
+  if (priv->client_side_decorations & GDK_DECOR_BORDER)
+    {
+      gtk_widget_style_get (widget,
+                            "decoration-border-top", &frame_top,
+                            "decoration-border-bottom", &frame_bottom,
+                            "decoration-border-left", &frame_left,
+                            "decoration-border-right", &frame_right,
+                            NULL);
+    }
 
   requisition->width = GTK_CONTAINER (window)->border_width * 2;
   requisition->height = GTK_CONTAINER (window)->border_width * 2;
@@ -5125,8 +5147,8 @@ gtk_window_size_request (GtkWidget      *widget,
           child_height = child_requisition.height;
         }
 
-      requisition->width += window->frame_left + window->frame_right;
-      requisition->height += window->frame_top + window->frame_bottom + child_height;
+      requisition->width += frame_left + frame_right;
+      requisition->height += frame_top + frame_bottom + child_height;
     }
 
   if (bin->child && gtk_widget_get_visible (bin->child))
@@ -5148,6 +5170,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkWindowPrivate *priv;
   GtkRequisition deco_requisition;
   GtkAllocation deco_allocation;
+  gint frame_left = 0, frame_right = 0, frame_top = 0, frame_bottom = 0;
 
   window = GTK_WINDOW (widget);
   container = GTK_CONTAINER (widget);
@@ -5156,12 +5179,22 @@ gtk_window_size_allocate (GtkWidget     *widget,
 
   deco_allocation.width = deco_allocation.height = 0;
 
+  if (priv->client_side_decorations & GDK_DECOR_BORDER)
+    {
+      gtk_widget_style_get (widget,
+                            "decoration-border-top", &frame_top,
+                            "decoration-border-bottom", &frame_bottom,
+                            "decoration-border-left", &frame_left,
+                            "decoration-border-right", &frame_right,
+                            NULL);
+    }
+
   if (priv->client_side_decorated && priv->title_hbox && GTK_WIDGET_VISIBLE (priv->title_hbox))
     {
       gtk_widget_get_child_requisition (priv->title_hbox, &deco_requisition);
 
-      deco_allocation.x = window->frame_left;
-      deco_allocation.y = window->frame_top;
+      deco_allocation.x = frame_left;
+      deco_allocation.y = frame_top;
       deco_allocation.width = deco_requisition.width;
       deco_allocation.height = deco_requisition.height;
 
@@ -5172,14 +5205,14 @@ gtk_window_size_allocate (GtkWidget     *widget,
     {
       if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
         {
-          child_allocation.x = container->border_width + window->frame_left;
+          child_allocation.x = container->border_width + frame_left;
           child_allocation.y = container->border_width + deco_allocation.height
-            + window->frame_top; // XXX - padding style property?
+            + frame_top; // XXX - padding style property?
           child_allocation.width = MAX (1, ((gint)allocation->width - container->border_width * 2
-                                            - window->frame_left - window->frame_right));
+                                            - frame_left - frame_right));
           child_allocation.height = MAX (1, ((gint)allocation->height - container->border_width * 2
-                                             - window->frame_bottom
-                                             - window->frame_top // XXX - padding style property?
+                                             - frame_bottom
+                                             - frame_top // XXX - padding style property?
                                              - deco_allocation.height));
         }
       else
@@ -6245,6 +6278,7 @@ gtk_window_move_resize (GtkWindow *window)
    *   the position request to be centered.
    */
   GtkWidget *widget;
+  GtkWindowPrivate *priv;
   GtkContainer *container;
   GtkWindowGeometryInfo *info;
   GdkGeometry new_geometry;
@@ -6254,13 +6288,25 @@ gtk_window_move_resize (GtkWindow *window)
   gboolean configure_request_pos_changed;
   gboolean hints_changed; /* do we need to send these again */
   GtkWindowLastGeometryInfo saved_last_info;
-  
+  gint frame_left = 0, frame_right = 0, frame_top = 0, frame_bottom = 0;
+
   widget = GTK_WIDGET (window);
   container = GTK_CONTAINER (widget);
   info = gtk_window_get_geometry_info (window, TRUE);
+  priv = GTK_WINDOW_GET_PRIVATE (window);
   
   configure_request_size_changed = FALSE;
   configure_request_pos_changed = FALSE;
+
+  if (priv->client_side_decorated && priv->client_side_decorations & GDK_DECOR_BORDER)
+    {
+      gtk_widget_style_get (widget,
+                            "decoration-border-top", &frame_top,
+                            "decoration-border-bottom", &frame_bottom,
+                            "decoration-border-left", &frame_left,
+                            "decoration-border-right", &frame_right,
+                            NULL);
+    }
   
   gtk_window_compute_configure_request (window, &new_request,
                                         &new_geometry, &new_flags);  
@@ -6504,6 +6550,18 @@ gtk_window_move_resize (GtkWindow *window)
 	    widget->allocation.height != new_request.height))
 
     {
+      gint frame_left = 0, frame_right = 0, frame_top = 0, frame_bottom = 0;
+
+      if (priv->client_side_decorations & GDK_DECOR_BORDER)
+        {
+          gtk_widget_style_get (widget,
+                                "decoration-border-top", &frame_top,
+                                "decoration-border-bottom", &frame_bottom,
+                                "decoration-border-left", &frame_left,
+                                "decoration-border-right", &frame_right,
+                                NULL);
+        }
+
       /* We are in one of the following situations:
        * A. configure_request_size_changed
        *    our requisition has changed and we need a different window size,
@@ -6525,10 +6583,10 @@ gtk_window_move_resize (GtkWindow *window)
 	  if (window->frame)
 	    {
 	      gdk_window_move_resize (window->frame,
-				      new_request.x - window->frame_left,
-                                      new_request.y - window->frame_top,
-				      new_request.width + window->frame_left + window->frame_right,
-				      new_request.height + window->frame_top + window->frame_bottom);
+				      new_request.x - frame_left,
+                                      new_request.y - frame_top,
+				      new_request.width + frame_left + frame_right,
+				      new_request.height + frame_top + frame_bottom);
 	      gdk_window_resize (widget->window,
                                  new_request.width, new_request.height);
 	    }
@@ -6541,8 +6599,8 @@ gtk_window_move_resize (GtkWindow *window)
 	{
 	  if (window->frame)
 	    gdk_window_resize (window->frame,
-			       new_request.width + window->frame_left + window->frame_right,
-			       new_request.height + window->frame_top + window->frame_bottom);
+			       new_request.width + frame_left + frame_right,
+			       new_request.height + frame_top + frame_bottom);
 	  gdk_window_resize (widget->window,
 			     new_request.width, new_request.height);
 	}
@@ -6601,8 +6659,8 @@ gtk_window_move_resize (GtkWindow *window)
 	  if (window->frame)
 	    {
 	      gdk_window_move (window->frame,
-			       new_request.x - window->frame_left,
-			       new_request.y - window->frame_top);
+			       new_request.x - frame_left,
+			       new_request.y - frame_top);
 	    }
 	  else
 	    gdk_window_move (widget->window,
@@ -6829,6 +6887,7 @@ gtk_window_compute_hints (GtkWindow   *window,
  * Redrawing functions *
  ***********************/
 
+// This is just temporary, because it looks cool :)
 static void
 gtk_window_paint (GtkWidget     *widget,
 		  GdkRectangle *area)
@@ -6842,7 +6901,7 @@ gtk_window_paint (GtkWidget     *widget,
     }
   else
     {
-      gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL, 
+      gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL,
                           GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
     }
 }
