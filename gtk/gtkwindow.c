@@ -4955,56 +4955,6 @@ gtk_window_realize (GtkWidget *widget)
   //attributes.colormap = gtk_widget_get_colormap (widget);
   attributes.colormap = gdk_screen_get_rgba_colormap (gtk_widget_get_screen (widget));
 
-#if 0
-  if (window->has_frame)
-    {
-      attributes.width = widget->allocation.width + window->frame_left + window->frame_right;
-      attributes.height = widget->allocation.height + window->frame_top + window->frame_bottom;
-      attributes.event_mask = (GDK_EXPOSURE_MASK |
-			       GDK_KEY_PRESS_MASK |
-			       GDK_ENTER_NOTIFY_MASK |
-			       GDK_LEAVE_NOTIFY_MASK |
-			       GDK_FOCUS_CHANGE_MASK |
-			       GDK_STRUCTURE_MASK |
-			       GDK_BUTTON_MOTION_MASK |
-			       GDK_POINTER_MOTION_HINT_MASK |
-			       GDK_BUTTON_PRESS_MASK |
-			       GDK_BUTTON_RELEASE_MASK);
-      
-      attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
-      
-      window->frame = gdk_window_new (gtk_widget_get_root_window (widget),
-				      &attributes, attributes_mask);
-      if (priv->client_side_decorations)
-        {
-          gdk_window_set_decorations (window->frame, 0);
-        }
-
-      if (priv->opacity_set)
-	gdk_window_set_opacity (window->frame, priv->opacity);
-
-      gdk_window_set_user_data (window->frame, window);
-      
-      attributes.window_type = GDK_WINDOW_CHILD;
-      attributes.x = window->frame_left;
-      attributes.y = window->frame_top;
-    
-      attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-      parent_window = window->frame;
-
-      g_signal_connect (window,
-			"event",
-			G_CALLBACK (gtk_window_event),
-			NULL);
-    }
-  else
-    {
-      attributes_mask = 0;
-      parent_window = gtk_widget_get_root_window (widget);
-    }
-#endif
-
   attributes_mask = 0;
   parent_window = gtk_widget_get_root_window (widget);
 
@@ -5021,8 +4971,6 @@ gtk_window_realize (GtkWidget *widget)
   if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
     {
       attributes.event_mask |= GDK_BUTTON_PRESS_MASK;
-      //attributes.width += window->frame_left + window->frame_right;
-      //attributes.height += window->frame_top + window->frame_bottom;
 
       if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
         {
