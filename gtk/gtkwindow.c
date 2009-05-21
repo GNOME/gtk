@@ -38,7 +38,6 @@
 #include "gtkprivate.h"
 #include "gtkrc.h"
 #include "gtkwindow.h"
-#include "gtkwindow-decorate.h"
 #include "gtklabel.h"
 #include "gtkbindings.h"
 #include "gtkhbox.h"
