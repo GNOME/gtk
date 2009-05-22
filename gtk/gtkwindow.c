@@ -5171,6 +5171,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkRequisition deco_requisition;
   GtkAllocation deco_allocation;
   gint frame_left = 0, frame_right = 0, frame_top = 0, frame_bottom = 0;
+  GdkRectangle rect;
 
   window = GTK_WINDOW (widget);
   container = GTK_CONTAINER (widget);
@@ -5226,6 +5227,15 @@ gtk_window_size_allocate (GtkWidget     *widget,
         }
 
       gtk_widget_size_allocate (window->bin.child, &child_allocation);
+    }
+
+  if  (widget->window != NULL)
+    {
+      rect.x = 0;
+      rect.y = 0;
+      rect.width = allocation->width;
+      rect.height = allocation->height;
+      gdk_window_invalidate_rect(widget->window, &rect, NULL);
     }
 }
 
