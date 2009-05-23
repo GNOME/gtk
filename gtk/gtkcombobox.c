@@ -5251,10 +5251,11 @@ gtk_combo_box_remove_text (GtkComboBox *combo_box,
  *
  * Returns the currently active string in @combo_box or %NULL if none
  * is selected.  Note that you can only use this function with combo
- * boxes constructed with gtk_combo_box_new_text() and with 
+ * boxes constructed with gtk_combo_box_new_text() and with
  * #GtkComboBoxEntry<!-- -->s.
  *
  * Returns: a newly allocated string containing the currently active text.
+ *     Must be freed with g_free().
  *
  * Since: 2.6
  */
