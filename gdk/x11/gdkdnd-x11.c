@@ -1919,8 +1919,13 @@ static GdkDragAction
 xdnd_action_from_atom (GdkDisplay *display,
 		       Atom        xatom)
 {
-  GdkAtom atom = gdk_x11_xatom_to_atom_for_display (display, xatom);
+  GdkAtom atom;
   gint i;
+
+  if (xatom == None)
+    return 0;
+
+  atom = gdk_x11_xatom_to_atom_for_display (display, xatom);
 
   if (!xdnd_actions_initialized)
     xdnd_initialize_actions();
