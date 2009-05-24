@@ -250,6 +250,8 @@ static gint gtk_window_enter_notify_event (GtkWidget         *widget,
 					   GdkEventCrossing  *event);
 static gint gtk_window_leave_notify_event (GtkWidget         *widget,
 					   GdkEventCrossing  *event);
+static gboolean gtk_window_motion_notify_event (GtkWidget    *widget,
+                                                GdkEventMotion *event);
 static gint gtk_window_focus_in_event     (GtkWidget         *widget,
 					   GdkEventFocus     *event);
 static gint gtk_window_focus_out_event    (GtkWidget         *widget,
@@ -490,6 +492,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->key_release_event = gtk_window_key_release_event;
   widget_class->enter_notify_event = gtk_window_enter_notify_event;
   widget_class->leave_notify_event = gtk_window_leave_notify_event;
+  widget_class->motion_notify_event = gtk_window_motion_notify_event;
   widget_class->focus_in_event = gtk_window_focus_in_event;
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->client_event = gtk_window_client_event;
@@ -4995,6 +4998,7 @@ gtk_window_realize (GtkWidget *widget)
   if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
     {
       attributes.event_mask |= GDK_BUTTON_PRESS_MASK;
+      attributes.event_mask |= GDK_POINTER_MOTION_MASK;
 
       if (priv->title_hbox && GTK_WIDGET_VISIBLE (priv->title_hbox))
         {
@@ -5587,10 +5591,87 @@ gtk_window_move_focus (GtkWindow       *window,
     gtk_window_set_focus (window, NULL);
 }
 
+static void
+update_cursor_at_position (GtkWidget *widget, gint x, gint y)
+{
+  GtkWindowRegion region = get_region_type (GTK_WINDOW (widget), x, y);
+  GdkCursorType cursor_type;
+  GdkCursor *cursor;
+
+  if (region == GTK_WINDOW_REGION_TITLE ||
+      region == GTK_WINDOW_REGION_INNER)
+    {
+      cursor_type = GDK_ARROW;
+    }
+
+  if (region <= GTK_WINDOW_REGION_EDGE_SE)
+    {
+      switch (region)
+        {
+        case GTK_WINDOW_REGION_EDGE_NW:
+          cursor_type = GDK_TOP_LEFT_CORNER;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_N:
+          cursor_type = GDK_TOP_SIDE;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_NE:
+          cursor_type = GDK_TOP_RIGHT_CORNER;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_W:
+          cursor_type = GDK_LEFT_SIDE;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_E:
+          cursor_type = GDK_RIGHT_SIDE;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_SW:
+          cursor_type = GDK_BOTTOM_LEFT_CORNER;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_S:
+          cursor_type = GDK_BOTTOM_SIDE;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_SE:
+          cursor_type = GDK_BOTTOM_RIGHT_CORNER;
+          break;
+
+        default:
+          cursor_type = GDK_ARROW;
+          break;
+        }
+    }
+
+  cursor = gdk_cursor_new (cursor_type);
+  gdk_window_set_cursor (widget->window,
+                         cursor);
+}
+
 static gint
 gtk_window_enter_notify_event (GtkWidget        *widget,
 			       GdkEventCrossing *event)
 {
+  gint x, y;
+  GdkModifierType mask;
+  gint winx, winy, winh, winw;
+
+  gdk_window_get_geometry (widget->window, &winx, &winy, &winh, &winw, NULL);
+  gdk_window_get_pointer (widget->window, &x, &y, &mask);
+
+  if (gdk_window_get_pointer (widget->window, &x, &y, NULL) == widget->window)
+    {
+      update_cursor_at_position (widget, x, y);
+    }
+  else
+    {
+      GdkCursor *cursor = gdk_cursor_new (GDK_ARROW);
+      gdk_window_set_cursor (widget->window, cursor);
+    }
+
   return FALSE;
 }
 
@@ -5598,6 +5679,25 @@ static gint
 gtk_window_leave_notify_event (GtkWidget        *widget,
 			       GdkEventCrossing *event)
 {
+  GdkCursor *cursor = gdk_cursor_new (GDK_ARROW);
+
+  gdk_window_set_cursor (widget->window, cursor);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_window_motion_notify_event (GtkWidget       *widget,
+                                GdkEventMotion  *event)
+{
+  gint x, y;
+  gint winx, winy, winh, winw;
+
+  gdk_window_get_geometry (widget->window, &winx, &winy, &winh, &winw, NULL);
+  gdk_window_get_pointer (widget->window, &x, &y, NULL);
+
+  update_cursor_at_position (widget, x, y);
+
   return FALSE;
 }
 
