@@ -137,14 +137,12 @@ struct _GtkWindowClass
   
   void	   (*keys_changed)	       (GtkWindow	*window);
 
-  void     (*compute_child_allocation) (GtkWindow       *window,
-                                        GtkAllocation   *allocation);
-
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
+  void (*_gtk_reserved5) (void);
 };
 
 #define GTK_TYPE_WINDOW_GROUP             (gtk_window_group_get_type ())
