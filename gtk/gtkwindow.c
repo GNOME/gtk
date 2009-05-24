@@ -5435,14 +5435,26 @@ gtk_window_propagate_key_event (GtkWindow        *window,
   return handled;
 }
 
+static gint
+get_title_height (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  if (!priv->client_side_decorated || !priv->title_hbox)
+    return 0;
+
+  return priv->title_hbox->allocation.height;
+}
+
 static GtkWindowRegion
 get_region_type (GtkWindow *window, gint x, gint y)
 {
   GtkWidget *widget = GTK_WIDGET (window);
+  gint title_height = get_title_height (window);
 
   if (x < window->frame_left)
     {
-      if (y < window->frame_top)
+      if (y < window->frame_top + title_height)
         return GTK_WINDOW_REGION_EDGE_NW;
       else if (y > widget->allocation.height - window->frame_bottom)
         return GTK_WINDOW_REGION_EDGE_SW;
@@ -5452,7 +5464,13 @@ get_region_type (GtkWindow *window, gint x, gint y)
   else if (x < widget->allocation.width - window->frame_right)
     {
       if (y < window->frame_top)
-        return GTK_WINDOW_REGION_EDGE_N;
+        {
+          return GTK_WINDOW_REGION_EDGE_N;
+        }
+      else if (y < window->frame_top + title_height)
+        {
+          return GTK_WINDOW_REGION_TITLE;
+        }
       else if (y > widget->allocation.height - window->frame_bottom)
         return GTK_WINDOW_REGION_EDGE_S;
       else
@@ -5522,7 +5540,7 @@ gtk_window_button_press_event (GtkWidget      *widget,
       GtkWindowRegion region = get_region_type (GTK_WINDOW (widget), x, y);
       GdkWindowEdge edge = (GdkWindowEdge)region;
 
-      if (region == GTK_WINDOW_REGION_EDGE_N ||
+      if (region == GTK_WINDOW_REGION_TITLE ||
           region == GTK_WINDOW_REGION_INNER)
         {
           gtk_window_begin_move_drag (GTK_WINDOW (widget),
