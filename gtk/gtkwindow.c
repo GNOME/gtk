@@ -109,6 +109,20 @@ enum {
   LAST_ARG
 };
 
+typedef enum
+{
+  GTK_WINDOW_REGION_EDGE_NW,
+  GTK_WINDOW_REGION_EDGE_N,
+  GTK_WINDOW_REGION_EDGE_NE,
+  GTK_WINDOW_REGION_EDGE_W,
+  GTK_WINDOW_REGION_EDGE_E,
+  GTK_WINDOW_REGION_EDGE_SW,
+  GTK_WINDOW_REGION_EDGE_S,
+  GTK_WINDOW_REGION_EDGE_SE,
+  GTK_WINDOW_REGION_INNER,
+  GTK_WINDOW_REGION_TITLE,
+} GtkWindowRegion;
+
 typedef struct
 {
   GList     *icon_list;
@@ -3167,7 +3181,7 @@ gtk_window_set_deletable (GtkWindow *window,
     return;
 
   priv->deletable = setting;
-  
+
   if (GTK_WIDGET (window)->window)
     {
       if (priv->deletable)
@@ -5421,6 +5435,40 @@ gtk_window_propagate_key_event (GtkWindow        *window,
   return handled;
 }
 
+static GtkWindowRegion
+get_region_type (GtkWindow *window, gint x, gint y)
+{
+  GtkWidget *widget = GTK_WIDGET (window);
+
+  if (x < window->frame_left)
+    {
+      if (y < window->frame_top)
+        return GTK_WINDOW_REGION_EDGE_NW;
+      else if (y > widget->allocation.height - window->frame_bottom)
+        return GTK_WINDOW_REGION_EDGE_SW;
+      else
+        return GTK_WINDOW_REGION_EDGE_W;
+    }
+  else if (x < widget->allocation.width - window->frame_right)
+    {
+      if (y < window->frame_top)
+        return GTK_WINDOW_REGION_EDGE_N;
+      else if (y > widget->allocation.height - window->frame_bottom)
+        return GTK_WINDOW_REGION_EDGE_S;
+      else
+        return GTK_WINDOW_REGION_INNER;
+    }
+  else
+    {
+      if (y < window->frame_top)
+        return GTK_WINDOW_REGION_EDGE_NE;
+      else if (y > widget->allocation.height - window->frame_bottom)
+        return GTK_WINDOW_REGION_EDGE_SE;
+      else
+        return GTK_WINDOW_REGION_EDGE_E;
+    }
+}
+
 static gint
 gtk_window_key_press_event (GtkWidget   *widget,
 			    GdkEventKey *event)
@@ -5466,14 +5514,32 @@ gtk_window_button_press_event (GtkWidget      *widget,
                                GdkEventButton *event)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (widget);
+  gint x = event->x;
+  gint y = event->y;
 
   if (priv->client_side_decorated)
     {
-      gtk_window_begin_move_drag (GTK_WINDOW (widget),
-                                  event->button,
-                                  event->x_root,
-                                  event->y_root,
-                                  event->time);
+      GtkWindowRegion region = get_region_type (GTK_WINDOW (widget), x, y);
+      GdkWindowEdge edge = (GdkWindowEdge)region;
+
+      if (region == GTK_WINDOW_REGION_EDGE_N ||
+          region == GTK_WINDOW_REGION_INNER)
+        {
+          gtk_window_begin_move_drag (GTK_WINDOW (widget),
+                                      event->button,
+                                      event->x_root,
+                                      event->y_root,
+                                      event->time);
+        }
+      else if (region <= GTK_WINDOW_REGION_EDGE_SE)
+        {
+          gtk_window_begin_resize_drag (GTK_WINDOW (widget),
+                                        edge,
+                                        event->button,
+                                        event->x_root,
+                                        event->y_root,
+                                        event->time);
+        }
 
       return TRUE;
     }
