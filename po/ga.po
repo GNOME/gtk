@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-25 00:32+0100\n"
-"PO-Revision-Date: 2009-05-25 00:32+0100\n"
+"POT-Creation-Date: 2009-05-25 19:47+0100\n"
+"PO-Revision-Date: 2009-05-25 19:47+0100\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr "Erráid agus rogha --gdk-debug á parsáil"
 #: ../gdk/gdk.c:123
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
-msgstr ""
+msgstr "Earráid agus rogha --gdk-no-debug á parsáil"
 
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:151
@@ -95,12 +95,12 @@ msgstr "BackSpace"
 #: ../gdk/keyname-table.h:3941
 msgctxt "keyboard label"
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: ../gdk/keyname-table.h:3942
 msgctxt "keyboard label"
 msgid "Return"
-msgstr ""
+msgstr "Return"
 
 #: ../gdk/keyname-table.h:3943
 msgctxt "keyboard label"
@@ -110,7 +110,7 @@ msgstr "Pause"
 #: ../gdk/keyname-table.h:3944
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr ""
+msgstr "Scroll_Lock"
 
 #: ../gdk/keyname-table.h:3945
 msgctxt "keyboard label"
@@ -140,7 +140,7 @@ msgstr "Left"
 #: ../gdk/keyname-table.h:3950
 msgctxt "keyboard label"
 msgid "Up"
-msgstr ""
+msgstr "Up"
 
 #: ../gdk/keyname-table.h:3951
 msgctxt "keyboard label"
@@ -160,17 +160,17 @@ msgstr "Page_Up"
 #: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr ""
+msgstr "Page_Down"
 
 #: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Begin"
-msgstr ""
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
@@ -180,12 +180,12 @@ msgstr "Print"
 #: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Insert"
-msgstr ""
+msgstr "Insert"
 
 #: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr ""
+msgstr "Num_Lock"
 
 #: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
@@ -195,7 +195,7 @@ msgstr "KP_Space"
 #: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr ""
+msgstr "KP_Tab"
 
 #: ../gdk/keyname-table.h:3962
 msgctxt "keyboard label"
@@ -215,7 +215,7 @@ msgstr "KP_Left"
 #: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr ""
+msgstr "KP_Up"
 
 #: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
@@ -225,17 +225,17 @@ msgstr "KP_Right"
 #: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr ""
+msgstr "KP_Down"
 
 #: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr ""
+msgstr "KP_Page_Up"
 
 #: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr ""
+msgstr "KP_Prior"
 
 #: ../gdk/keyname-table.h:3970
 msgctxt "keyboard label"
@@ -245,22 +245,22 @@ msgstr "KP_Page_Down"
 #: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr ""
+msgstr "KP_Next"
 
 #: ../gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr ""
+msgstr "KP_End"
 
 #: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr ""
+msgstr "KP_Begin"
 
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr ""
+msgstr "KP_Insert"
 
 #: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
@@ -1221,7 +1221,7 @@ msgstr "Maisiúchán le"
 #: ../gtk/gtkaccellabel.c:91
 msgctxt "keyboard label"
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1231,7 +1231,7 @@ msgstr ""
 #: ../gtk/gtkaccellabel.c:97
 msgctxt "keyboard label"
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1241,7 +1241,7 @@ msgstr ""
 #: ../gtk/gtkaccellabel.c:103
 msgctxt "keyboard label"
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
@@ -1271,7 +1271,7 @@ msgstr "Hyper"
 #: ../gtk/gtkaccellabel.c:698
 msgctxt "keyboard label"
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: ../gtk/gtkaccellabel.c:715
 msgctxt "keyboard label"
@@ -1281,7 +1281,7 @@ msgstr "Space"
 #: ../gtk/gtkaccellabel.c:718
 msgctxt "keyboard label"
 msgid "Backslash"
-msgstr ""
+msgstr "Backslash"
 
 #: ../gtk/gtkbuilderparser.c:343
 #, c-format
@@ -1332,7 +1332,7 @@ msgstr "calendar:week_start:0"
 #: ../gtk/gtkcalendar.c:1803
 msgctxt "year measurement template"
 msgid "2000"
-msgstr ""
+msgstr "2000"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1348,7 +1348,7 @@ msgstr ""
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1364,7 +1364,7 @@ msgstr ""
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1379,7 +1379,7 @@ msgstr ""
 #: ../gtk/gtkcalendar.c:2146
 msgctxt "calendar year format"
 msgid "%Y"
-msgstr ""
+msgstr "%Y"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
@@ -1410,7 +1410,7 @@ msgstr "Aicearra nua..."
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
@@ -2090,7 +2090,7 @@ msgstr "Córas"
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
-msgstr ""
+msgstr "Córas (%s)"
 
 #: ../gtk/gtkinputdialog.c:192
 msgid "Input"
@@ -3003,7 +3003,7 @@ msgstr "_Trom"
 #: ../gtk/gtkstock.c:300
 msgctxt "Stock label"
 msgid "_Cancel"
-msgstr "Cea_laigh"
+msgstr "_Cealaigh"
 
 #: ../gtk/gtkstock.c:301
 msgctxt "Stock label"
@@ -4591,7 +4591,7 @@ msgstr ""
 #: ../gtk/updateiconcache.c:1690
 #, c-format
 msgid "No theme index file."
-msgstr ""
+msgstr "Gan comhad innéacs téama."
 
 #: ../gtk/updateiconcache.c:1694
 #, c-format
@@ -5029,4 +5029,4 @@ msgstr "Priontáil go Printéir Tástála"
 #: ../tests/testfilechooser.c:207
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr "Níorbh fhéidir eolas a fháil le comhad '%s': %s"
+msgstr "Níorbh fhéidir eolas a fháil don chomhad '%s': %s"
