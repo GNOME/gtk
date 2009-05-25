@@ -37,6 +37,7 @@ typedef enum
   GTK_CUPS_ERROR_HTTP,
   GTK_CUPS_ERROR_IPP,
   GTK_CUPS_ERROR_IO,
+  GTK_CUPS_ERROR_AUTH,
   GTK_CUPS_ERROR_GENERAL
 } GtkCupsErrorType;
 
@@ -66,6 +67,15 @@ typedef enum
   GTK_CUPS_CONNECTION_IN_PROGRESS  
 } GtkCupsConnectionState;
 
+typedef enum
+{
+  GTK_CUPS_PASSWORD_NONE,
+  GTK_CUPS_PASSWORD_REQUESTED,
+  GTK_CUPS_PASSWORD_HAS,
+  GTK_CUPS_PASSWORD_APPLIED,
+  GTK_CUPS_PASSWORD_NOT_VALID
+} GtkCupsPasswordState;
+
 struct _GtkCupsRequest 
 {
   GtkCupsRequestType type;
@@ -84,7 +94,12 @@ struct _GtkCupsRequest
   gint state;
   GtkCupsPollState poll_state;
 
-  gint own_http : 1; 
+  gchar *password;
+  gchar *username;
+
+  gint own_http : 1;
+  gint need_password : 1;
+  GtkCupsPasswordState password_state;
 };
 
 struct _GtkCupsConnectionTest
@@ -108,6 +123,7 @@ enum
   GTK_CUPS_POST_WRITE_REQUEST,
   GTK_CUPS_POST_WRITE_DATA,
   GTK_CUPS_POST_CHECK,
+  GTK_CUPS_POST_AUTH,
   GTK_CUPS_POST_READ_RESPONSE,
   GTK_CUPS_POST_DONE = GTK_CUPS_REQUEST_DONE
 };
@@ -118,10 +134,18 @@ enum
   GTK_CUPS_GET_CONNECT = GTK_CUPS_REQUEST_START,
   GTK_CUPS_GET_SEND,
   GTK_CUPS_GET_CHECK,
+  GTK_CUPS_GET_AUTH,
   GTK_CUPS_GET_READ_DATA,
   GTK_CUPS_GET_DONE = GTK_CUPS_REQUEST_DONE
 };
 
+GtkCupsRequest        * gtk_cups_request_new_with_username (http_t             *connection,
+							    GtkCupsRequestType  req_type,
+							    gint                operation_id,
+							    GIOChannel         *data_io,
+							    const char         *server,
+							    const char         *resource,
+							    const char         *username);
 GtkCupsRequest        * gtk_cups_request_new               (http_t             *connection,
 							    GtkCupsRequestType  req_type,
 							    gint                operation_id,
@@ -141,6 +165,9 @@ void                    gtk_cups_request_ipp_add_strings   (GtkCupsRequest     *
 							    int                 num_values,
 							    const char         *charset,
 							    const char * const *values);
+const char            * gtk_cups_request_ipp_get_string    (GtkCupsRequest     *request,
+							    ipp_tag_t           tag,
+							    const char         *name);
 gboolean                gtk_cups_request_read_write        (GtkCupsRequest     *request);
 GtkCupsPollState        gtk_cups_request_get_poll_state    (GtkCupsRequest     *request);
 void                    gtk_cups_request_free              (GtkCupsRequest     *request);

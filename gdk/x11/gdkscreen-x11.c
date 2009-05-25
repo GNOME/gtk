@@ -663,6 +663,21 @@ init_fake_xinerama (GdkScreen *screen)
   return FALSE;
 }
 
+static void
+free_monitors (GdkX11Monitor *monitors,
+               gint           n_monitors)
+{
+  int i;
+
+  for (i = 0; i < n_monitors; ++i)
+    {
+      g_free (monitors[i].output_name);
+      g_free (monitors[i].manufacturer);
+    }
+
+  g_free (monitors);
+}
+
 static int
 monitor_compare_function (GdkX11Monitor *monitor1,
                           GdkX11Monitor *monitor2)
@@ -753,7 +768,11 @@ init_randr13 (GdkScreen *screen)
   /* non RandR 1.2 X driver doesn't return any usable multihead data */
   if (randr12_compat)
     {
-      g_array_free (monitors, TRUE);
+      guint n_monitors = monitors->len;
+
+      free_monitors ((GdkX11Monitor *)g_array_free (monitors, FALSE),
+		     n_monitors);
+
       return FALSE;
     }
 
@@ -854,21 +873,6 @@ init_xfree_xinerama (GdkScreen *screen)
 #endif /* HAVE_XFREE_XINERAMA */
   
   return FALSE;
-}
-
-static void
-free_monitors (GdkX11Monitor *monitors,
-               gint           n_monitors)
-{
-  int i;
-
-  for (i = 0; i < n_monitors; ++i)
-    {
-      g_free (monitors[i].output_name);
-      g_free (monitors[i].manufacturer);
-    }
-
-  g_free (monitors);
 }
 
 static void

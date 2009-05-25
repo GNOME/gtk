@@ -95,7 +95,7 @@ gdk_visual_get_type (void)
 void
 _gdk_visual_init (GdkScreen *screen)
 {
-  static const gint possible_depths[7] = { 32, 24, 16, 15, 8, 4, 1 };
+  static const gint possible_depths[8] = { 32, 30, 24, 16, 15, 8, 4, 1 };
   static const GdkVisualType possible_types[6] =
     {
       GDK_VISUAL_DIRECT_COLOR,

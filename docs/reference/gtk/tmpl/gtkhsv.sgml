@@ -35,7 +35,21 @@ saturation.
 
 </para>
 
-@parent_instance: 
+
+<!-- ##### SIGNAL GtkHSV::changed ##### -->
+<para>
+
+</para>
+
+@hsv: the object which received the signal.
+
+<!-- ##### SIGNAL GtkHSV::move ##### -->
+<para>
+
+</para>
+
+@hsv: the object which received the signal.
+@arg1: 
 
 <!-- ##### FUNCTION gtk_hsv_new ##### -->
 <para>

@@ -3005,14 +3005,16 @@ open_new_dir (gchar       *dir_name,
   if (!sys_dir_name)
     {
       cmpl_errno = CMPL_ERRNO_DID_NOT_CONVERT;
+      g_free (sent);
       return NULL;
     }
-  
+
   directory = g_dir_open (sys_dir_name, 0, &error);
   if (!directory)
     {
       cmpl_errno = error->code; /* ??? */
       g_free (sys_dir_name);
+      g_free (sent);
       return NULL;
     }
 

@@ -889,9 +889,7 @@ gail_button_ref_state_set (AtkObject *obj)
   if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
     atk_state_set_add_state (state_set, ATK_STATE_ARMED);
 
-  if (GTK_WIDGET_CAN_FOCUS(widget))
-    atk_state_set_add_state (state_set, ATK_STATE_SELECTABLE);
-  else
+  if (!GTK_WIDGET_CAN_FOCUS(widget))
     atk_state_set_remove_state (state_set, ATK_STATE_SELECTABLE);
 
 

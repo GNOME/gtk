@@ -3299,18 +3299,20 @@ gdk_window_x11_get_events (GdkWindow *window)
 {
   XWindowAttributes attrs;
   GdkEventMask event_mask;
+  GdkEventMask filtered;
 
   if (GDK_WINDOW_DESTROYED (window))
     return 0;
   else
     {
       XGetWindowAttributes (GDK_WINDOW_XDISPLAY (window),
-			    GDK_WINDOW_XID (window), 
+			    GDK_WINDOW_XID (window),
 			    &attrs);
-      
       event_mask = x_event_mask_to_gdk_event_mask (attrs.your_event_mask);
-      GDK_WINDOW_OBJECT (window)->event_mask = event_mask;
-  
+      /* if property change was filtered out before, keep it filtered out */
+      filtered = GDK_STRUCTURE_MASK | GDK_PROPERTY_CHANGE_MASK;
+      GDK_WINDOW_OBJECT (window)->event_mask = event_mask & ((GDK_WINDOW_OBJECT (window)->event_mask & filtered) | ~filtered);
+
       return event_mask;
     }
 }
@@ -3318,13 +3320,13 @@ static void
 gdk_window_x11_set_events (GdkWindow    *window,
                            GdkEventMask  event_mask)
 {
-  long xevent_mask;
+  long xevent_mask = 0;
   int i;
   
   if (!GDK_WINDOW_DESTROYED (window))
     {
-      xevent_mask = StructureNotifyMask | PropertyChangeMask;
-
+      if (GDK_WINDOW_XID (window) != GDK_WINDOW_XROOTWIN (window))
+        xevent_mask = StructureNotifyMask | PropertyChangeMask;
       for (i = 0; i < _gdk_nenvent_masks; i++)
 	{
 	  if (event_mask & (1 << (i + 1)))
@@ -3647,7 +3649,9 @@ gdk_x11_window_set_user_time (GdkWindow *window,
                    XA_CARDINAL, 32, PropModeReplace,
                    (guchar *)&timestamp_long, 1);
 
-  if (timestamp_long != GDK_CURRENT_TIME)
+  if (timestamp_long != GDK_CURRENT_TIME &&
+      (display_x11->user_time == GDK_CURRENT_TIME ||
+       XSERVER_TIME_IS_LATER (timestamp_long, display_x11->user_time)))
     display_x11->user_time = timestamp_long;
 
   if (toplevel)
@@ -3854,13 +3858,18 @@ gdk_window_icon_name_set (GdkWindow *window)
  * idea from a user interface standpoint. But you can set such a name
  * with this function, if you like.
  *
+ * After calling this with a non-%NULL @name, calls to gdk_window_set_title()
+ * will not update the icon title.
+ *
+ * Using %NULL for @name unsets the icon title; further calls to
+ * gdk_window_set_title() will again update the icon title as well.
  **/
-void          
+void
 gdk_window_set_icon_name (GdkWindow   *window, 
 			  const gchar *name)
 {
   GdkDisplay *display;
-  
+
   if (GDK_WINDOW_DESTROYED (window) ||
       WINDOW_IS_TOPLEVEL (window))
     return;
@@ -3868,17 +3877,29 @@ gdk_window_set_icon_name (GdkWindow   *window,
   display = gdk_drawable_get_display (window);
 
   g_object_set_qdata (G_OBJECT (window), g_quark_from_static_string ("gdk-icon-name-set"),
-		      GUINT_TO_POINTER (TRUE));
+                      GUINT_TO_POINTER (name != NULL));
 
-  XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
-		   GDK_WINDOW_XID (window),
-		   gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_ICON_NAME"),
-		   gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-		   PropModeReplace, (guchar *)name, strlen (name));
-  
-  set_text_property (display, GDK_WINDOW_XID (window),
-		     gdk_x11_get_xatom_by_name_for_display (display, "WM_ICON_NAME"),
-		     name);
+  if (name != NULL)
+    {
+      XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
+                       GDK_WINDOW_XID (window),
+                       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_ICON_NAME"),
+                       gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
+                       PropModeReplace, (guchar *)name, strlen (name));
+
+      set_text_property (display, GDK_WINDOW_XID (window),
+                         gdk_x11_get_xatom_by_name_for_display (display, "WM_ICON_NAME"),
+                         name);
+    }
+  else
+    {
+      XDeleteProperty (GDK_DISPLAY_XDISPLAY (display),
+                       GDK_WINDOW_XID (window),
+                       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_ICON_NAME"));
+      XDeleteProperty (GDK_DISPLAY_XDISPLAY (display),
+                       GDK_WINDOW_XID (window),
+                       gdk_x11_get_xatom_by_name_for_display (display, "WM_ICON_NAME"));
+    }
 }
 
 /**

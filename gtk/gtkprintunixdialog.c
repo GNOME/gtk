@@ -757,7 +757,10 @@ load_print_backends (GtkPrintUnixDialog *dialog)
     priv->print_backends = gtk_print_backend_load_modules ();
 
   for (node = priv->print_backends; node != NULL; node = node->next)
-    printer_list_initialize (dialog, GTK_PRINT_BACKEND (node->data));
+    {
+      GtkPrintBackend *backend = node->data;
+      printer_list_initialize (dialog, backend);
+    }
 }
 
 static void
@@ -1083,19 +1086,19 @@ update_print_at_option (GtkPrintUnixDialog *dialog)
   
   if (priv->updating_print_at)
     return;
-  
+
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->print_at_radio)))
     gtk_printer_option_set (option, "at");
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->print_hold_radio)))
     gtk_printer_option_set (option, "on-hold");
   else
     gtk_printer_option_set (option, "now");
-  
+
   option = gtk_printer_option_set_lookup (priv->options, "gtk-print-time-text");
   if (option != NULL)
     {
       const char *text = gtk_entry_get_text (GTK_ENTRY (priv->print_at_entry));
-      gtk_printer_option_set (option,text);
+      gtk_printer_option_set (option, text);
     }
 }
 
@@ -1105,9 +1108,9 @@ setup_print_at (GtkPrintUnixDialog *dialog)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkPrinterOption *option;
-  
+
   option = gtk_printer_option_set_lookup (priv->options, "gtk-print-time");
- 
+
   if (option == NULL)
     {
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->print_now_radio),
@@ -1120,18 +1123,11 @@ setup_print_at (GtkPrintUnixDialog *dialog)
     }
 
   priv->updating_print_at = TRUE;
-  
-  if (gtk_printer_option_has_choice (option, "at"))
-    {
-      gtk_widget_set_sensitive (priv->print_at_radio, TRUE);
-      gtk_widget_set_sensitive (priv->print_at_entry, TRUE);
-    }
-  else
-    {
-      gtk_widget_set_sensitive (priv->print_at_radio, FALSE);
-      gtk_widget_set_sensitive (priv->print_at_entry, FALSE);
-    }
-  
+
+  gtk_widget_set_sensitive (priv->print_at_entry, FALSE);
+  gtk_widget_set_sensitive (priv->print_at_radio,
+                            gtk_printer_option_has_choice (option, "at"));
+
   gtk_widget_set_sensitive (priv->print_hold_radio,
 			    gtk_printer_option_has_choice (option, "on-hold"));
 
@@ -1149,15 +1145,14 @@ setup_print_at (GtkPrintUnixDialog *dialog)
 
   option = gtk_printer_option_set_lookup (priv->options, "gtk-print-time-text");
   if (option != NULL)
-    gtk_entry_set_text (GTK_ENTRY (priv->print_at_entry),
-			option->value);
-  
+    gtk_entry_set_text (GTK_ENTRY (priv->print_at_entry), option->value);
+
 
   priv->updating_print_at = FALSE;
 
   return TRUE;
 }
-	     
+
 static void
 update_dialog_from_settings (GtkPrintUnixDialog *dialog)
 {
@@ -1560,6 +1555,8 @@ selected_printer_changed (GtkTreeSelection   *selection,
 
   update_dialog_from_settings (dialog);
   update_dialog_from_capabilities (dialog);
+
+  g_object_notify ( G_OBJECT(dialog), "selected-printer");
 }
 
 static void
@@ -1679,15 +1676,15 @@ gtk_print_unix_dialog_style_set (GtkWidget *widget,
 					 &size,
 					 NULL);
       scale = size / 48.0;
-      
-      gtk_widget_set_size_request (priv->collate_image, 
+
+      gtk_widget_set_size_request (priv->collate_image,
 				   (50 + 20) * scale,
 				   (15 + 26) * scale);
     }
 }
 
 static void
-update_range_sensitivity (GtkWidget *button,
+update_entry_sensitivity (GtkWidget *button,
 			  GtkWidget *range)
 {
   gboolean active;
@@ -1695,6 +1692,9 @@ update_range_sensitivity (GtkWidget *button,
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
   gtk_widget_set_sensitive (range, active);
+
+  if (active)
+    gtk_widget_grab_focus (range);
 }
 
 static void
@@ -1837,13 +1837,15 @@ create_main_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
   entry = gtk_entry_new ();
   gtk_widget_set_tooltip_text (entry, range_tooltip);
+  atk_object_set_name (gtk_widget_get_accessible (entry), _("Pages"));
+  atk_object_set_description (gtk_widget_get_accessible (entry), range_tooltip);
   priv->page_range_entry = entry;
   gtk_widget_show (entry);
   gtk_table_attach (GTK_TABLE (table), entry,
 		    1, 2, 2, 3,  GTK_FILL, 0,
 		    0, 0);
-  g_signal_connect (radio, "toggled", G_CALLBACK (update_range_sensitivity), entry);
-  update_range_sensitivity (radio, entry);
+  g_signal_connect (radio, "toggled", G_CALLBACK (update_entry_sensitivity), entry);
+  update_entry_sensitivity (radio, entry);
 
   table = gtk_table_new (3, 2, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
@@ -2426,6 +2428,7 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
   GtkNumberUpLayout          layout;
   GtkPrinterOption          *option;
   GtkPrinterOption          *old_option;
+  GtkPageOrientation         page_orientation;
 
   set = priv->options;
 
@@ -2436,17 +2439,64 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
       if (priv->number_up_layout_n_option == NULL)
         {
           priv->number_up_layout_n_option = gtk_printer_option_set_lookup (set, "gtk-n-up-layout");
+          if (priv->number_up_layout_n_option == NULL)
+            {
+              char *n_up_layout[] = { "lrtb", "lrbt", "rltb", "rlbt", "tblr", "tbrl", "btlr", "btrl" };
+               /* Translators: These strings name the possible arrangements of
+                * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
+                */
+              char *n_up_layout_display[] = { N_("Left to right, top to bottom"), N_("Left to right, bottom to top"),
+                                              N_("Right to left, top to bottom"), N_("Right to left, bottom to top"),
+                                              N_("Top to bottom, left to right"), N_("Top to bottom, right to left"),
+                                              N_("Bottom to top, left to right"), N_("Bottom to top, right to left") };
+              int i;
+
+              priv->number_up_layout_n_option = gtk_printer_option_new ("gtk-n-up-layout",
+                                                                        _("Page Ordering"),
+                                                                        GTK_PRINTER_OPTION_TYPE_PICKONE);
+              gtk_printer_option_allocate_choices (priv->number_up_layout_n_option, 8);
+
+              for (i = 0; i < G_N_ELEMENTS (n_up_layout_display); i++)
+                {
+                  priv->number_up_layout_n_option->choices[i] = g_strdup (n_up_layout[i]);
+                  priv->number_up_layout_n_option->choices_display[i] = g_strdup (_(n_up_layout_display[i]));
+                }
+            }
           g_object_ref (priv->number_up_layout_n_option);
 
           priv->number_up_layout_2_option = gtk_printer_option_new ("gtk-n-up-layout",
                                                                     _("Page Ordering"),
                                                                     GTK_PRINTER_OPTION_TYPE_PICKONE);
           gtk_printer_option_allocate_choices (priv->number_up_layout_2_option, 2);
+        }
 
-          priv->number_up_layout_2_option->choices[0] = priv->number_up_layout_n_option->choices[0];
-          priv->number_up_layout_2_option->choices[1] = priv->number_up_layout_n_option->choices[2];
-          priv->number_up_layout_2_option->choices_display[0] = g_strdup ( _("Left to right"));
-          priv->number_up_layout_2_option->choices_display[1] = g_strdup ( _("Right to left"));
+      page_orientation = gtk_page_setup_get_orientation (priv->page_setup);
+      if (page_orientation == GTK_PAGE_ORIENTATION_PORTRAIT ||
+          page_orientation == GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT)
+        {
+          if (! (priv->number_up_layout_2_option->choices[0] == priv->number_up_layout_n_option->choices[0] &&
+                 priv->number_up_layout_2_option->choices[1] == priv->number_up_layout_n_option->choices[2]))
+            {
+              g_free (priv->number_up_layout_2_option->choices_display[0]);
+              g_free (priv->number_up_layout_2_option->choices_display[1]);
+              priv->number_up_layout_2_option->choices[0] = priv->number_up_layout_n_option->choices[0];
+              priv->number_up_layout_2_option->choices[1] = priv->number_up_layout_n_option->choices[2];
+              priv->number_up_layout_2_option->choices_display[0] = g_strdup ( _("Left to right"));
+              priv->number_up_layout_2_option->choices_display[1] = g_strdup ( _("Right to left"));
+            }
+        }
+      else
+        {
+          if (! (priv->number_up_layout_2_option->choices[0] == priv->number_up_layout_n_option->choices[0] &&
+                 priv->number_up_layout_2_option->choices[1] == priv->number_up_layout_n_option->choices[1]))
+            {
+              g_free (priv->number_up_layout_2_option->choices_display[0]);
+              g_free (priv->number_up_layout_2_option->choices_display[1]);
+              priv->number_up_layout_2_option->choices[0] = priv->number_up_layout_n_option->choices[0];
+              priv->number_up_layout_2_option->choices[1] = priv->number_up_layout_n_option->choices[1];
+              priv->number_up_layout_2_option->choices_display[0] = g_strdup ( _("Top to bottom"));
+              priv->number_up_layout_2_option->choices_display[1] = g_strdup ( _("Bottom to top"));
+            }
         }
 
       layout = dialog_get_number_up_layout (dialog);
@@ -2466,12 +2516,20 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
               option = priv->number_up_layout_2_option;
 
               if (layout == GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM ||
-                  layout == GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP ||
-                  layout == GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT ||
-                  layout == GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT)
+                  layout == GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT)
                 enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM);
-              else
+
+              if (layout == GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP ||
+                  layout == GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT)
+                enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP);
+
+              if (layout == GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM ||
+                  layout == GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_RIGHT_TO_LEFT)
                 enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM);
+
+              if (layout == GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP ||
+                  layout == GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT)
+                enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP);
             }
           else
             {
@@ -2748,7 +2806,7 @@ create_job_page (GtkPrintUnixDialog *dialog)
 		    0, 0);
   gtk_widget_show (table);
 
-  /* Translators: this is one of the choices for the print at option 
+  /* Translators: this is one of the choices for the print at option
    * in the print dialog
    */
   radio = gtk_radio_button_new_with_mnemonic (NULL, _("_Now"));
@@ -2757,7 +2815,7 @@ create_job_page (GtkPrintUnixDialog *dialog)
   gtk_table_attach (GTK_TABLE (table), radio,
 		    0, 2, 0, 1,  GTK_FILL, 0,
 		    0, 0);
-  /* Translators: this is one of the choices for the print at option 
+  /* Translators: this is one of the choices for the print at option
    * in the print dialog. It also serves as the label for an entry that
    * allows the user to enter a time.
    */
@@ -2765,8 +2823,9 @@ create_job_page (GtkPrintUnixDialog *dialog)
 					      _("A_t:"));
 
   /* Translators: Ability to parse the am/pm format depends on actual locale.
-   * You can remove the am/pm values below for your locale if they are not supported. 
-   */ 
+   * You can remove the am/pm values below for your locale if they are not
+   * supported.
+   */
   at_tooltip = _("Specify the time of print,\n e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm");
   gtk_widget_set_tooltip_text (radio, at_tooltip);
   priv->print_at_radio = radio;
@@ -2777,13 +2836,18 @@ create_job_page (GtkPrintUnixDialog *dialog)
 
   entry = gtk_entry_new ();
   gtk_widget_set_tooltip_text (entry, at_tooltip);
+  atk_object_set_name (gtk_widget_get_accessible (entry), _("Time of print"));
+  atk_object_set_description (gtk_widget_get_accessible (entry), at_tooltip);
   priv->print_at_entry = entry;
   gtk_widget_show (entry);
   gtk_table_attach (GTK_TABLE (table), entry,
 		    1, 2, 1, 2,  GTK_FILL, 0,
 		    0, 0);
 
-  /* Translators: this is one of the choices for the print at option 
+  g_signal_connect (radio, "toggled", G_CALLBACK (update_entry_sensitivity), entry);
+  update_entry_sensitivity (radio, entry);
+
+  /* Translators: this is one of the choices for the print at option
    * in the print dialog. It means that the print job will not be
    * printed until it explicitly gets 'released'.
    */

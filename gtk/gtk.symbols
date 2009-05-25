@@ -2210,6 +2210,7 @@ gtk_label_set_text_with_mnemonic
 gtk_label_set_use_markup
 gtk_label_set_use_underline
 gtk_label_set_width_chars
+gtk_label_get_current_uri
 #endif
 #endif
 
@@ -2823,6 +2824,7 @@ gtk_print_backend_printer_list_is_done
 gtk_print_backend_find_printer
 gtk_print_backend_print_stream
 gtk_print_backend_load_modules
+gtk_print_backend_set_password
 #endif
 #endif
 #endif

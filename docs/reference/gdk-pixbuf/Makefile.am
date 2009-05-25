@@ -79,19 +79,21 @@ EXTRA_DIST += version.xml.in \
 
 ########################################################################
 
-man_MANS = gdk-pixbuf-csource.1 gdk-pixbuf-query-loaders.1 
-
 if ENABLE_MAN
+
+man_MANS = gdk-pixbuf-csource.1 gdk-pixbuf-query-loaders.1 
 
 %.1 : %.xml 
 	@XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
 
-endif
-
 BUILT_EXTRA_DIST = $(man_MANS)
+
+endif
 
 dist-hook-local: $(BUILT_EXTRA_DIST)
 	files='$(BUILT_EXTRA_DIST)';				\
 	for f in $$files; do					\
 	  if test -f $$f; then d=.; else d=$(srcdir); fi;	\
 	  cp $$d/$$f $(distdir) || exit 1; done
+
+-include $(top_srcdir)/git.mk

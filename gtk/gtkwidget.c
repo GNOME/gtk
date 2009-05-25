@@ -8174,14 +8174,14 @@ gboolean
 _gtk_widget_is_pointer_widget (GtkWidget *widget)
 {
   if (GTK_WIDGET_HAS_POINTER (widget))
-    { 
-      GdkWindow *win; 
+    {
+      GdkWindow *win;
       GtkWidget *wid;
 
       win = _gtk_widget_get_pointer_window (widget);
       if (win)
-        { 
-          gdk_window_get_user_data (win, &wid);
+        {
+          gdk_window_get_user_data (win, (gpointer *)&wid);
           if (wid == widget)
             return TRUE;
         }
@@ -9466,12 +9466,16 @@ gtk_widget_buildable_set_buildable_property (GtkBuildable *buildable,
     g_object_set_property (G_OBJECT (buildable), name, value);
 }
 
-typedef struct {
+typedef struct
+{
   gchar *action_name;
-  gchar *description;
+  GString *description;
+  gchar *context;
+  gboolean translatable;
 } AtkActionData;
-  
-typedef struct {
+
+typedef struct
+{
   gchar *target;
   gchar *type;
 } AtkRelationData;
@@ -9480,7 +9484,8 @@ static void
 free_action (AtkActionData *data, gpointer user_data)
 {
   g_free (data->action_name);
-  g_free (data->description);
+  g_string_free (data->description, TRUE);
+  g_free (data->context);
   g_slice_free (AtkActionData, data);
 }
 
@@ -9497,7 +9502,7 @@ gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
 				      GtkBuilder   *builder)
 {
   GSList *atk_relations;
-  
+
   if (g_object_get_qdata (G_OBJECT (buildable), quark_builder_has_default))
     gtk_widget_grab_default (GTK_WIDGET (buildable));
   if (g_object_get_qdata (G_OBJECT (buildable), quark_builder_has_focus))
@@ -9513,14 +9518,14 @@ gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
       GObject *target;
       AtkRelationType relation_type;
       AtkObject *target_accessible;
-      
+
       accessible = gtk_widget_get_accessible (GTK_WIDGET (buildable));
       relation_set = atk_object_ref_relation_set (accessible);
 
       for (l = atk_relations; l; l = l->next)
 	{
 	  AtkRelationData *relation = (AtkRelationData*)l->data;
-	  
+
 	  target = gtk_builder_get_object (builder, relation->target);
 	  if (!target)
 	    {
@@ -9530,7 +9535,7 @@ gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
 	    }
 	  target_accessible = gtk_widget_get_accessible (GTK_WIDGET (target));
 	  g_assert (target_accessible != NULL);
-	  
+
 	  relation_type = atk_relation_type_for_name (relation->type);
 	  if (relation_type == ATK_RELATION_NULL)
 	    {
@@ -9548,21 +9553,21 @@ gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
       g_object_set_qdata (G_OBJECT (buildable), quark_builder_atk_relations,
 			  NULL);
     }
-    
 }
 
-typedef struct {
+typedef struct
+{
   GSList *actions;
   GSList *relations;
 } AccessibilitySubParserData;
 
 static void
-accessibility_start_element (GMarkupParseContext *context,
-			     const gchar         *element_name,
-			     const gchar        **names,
-			     const gchar        **values,
-			     gpointer             user_data,
-			     GError             **error)
+accessibility_start_element (GMarkupParseContext  *context,
+			     const gchar          *element_name,
+			     const gchar         **names,
+			     const gchar         **values,
+			     gpointer              user_data,
+			     GError              **error)
 {
   AccessibilitySubParserData *data = (AccessibilitySubParserData*)user_data;
   guint i;
@@ -9573,7 +9578,7 @@ accessibility_start_element (GMarkupParseContext *context,
       gchar *target = NULL;
       gchar *type = NULL;
       AtkRelationData *relation;
-      
+
       for (i = 0; names[i]; i++)
 	{
 	  if (strcmp (names[i], "target") == 0)
@@ -9617,21 +9622,34 @@ accessibility_start_element (GMarkupParseContext *context,
       relation = g_slice_new (AtkRelationData);
       relation->target = target;
       relation->type = type;
-      
+
       data->relations = g_slist_prepend (data->relations, relation);
     }
   else if (strcmp (element_name, "action") == 0)
     {
-      gchar *action_name = NULL;
-      gchar *description = NULL;
+      const gchar *action_name = NULL;
+      const gchar *description = NULL;
+      const gchar *msg_context = NULL;
+      gboolean translatable = FALSE;
       AtkActionData *action;
-      
+
       for (i = 0; names[i]; i++)
 	{
 	  if (strcmp (names[i], "action_name") == 0)
-	    action_name = g_strdup (values[i]);
+	    action_name = values[i];
 	  else if (strcmp (names[i], "description") == 0)
-	    description = g_strdup (values[i]);
+	    description = values[i];
+          else if (strcmp (names[i], "translatable") == 0)
+            {
+              if (!_gtk_builder_boolean_from_string (values[i], &translatable, error))
+                return;
+            }
+          else if (strcmp (names[i], "comments") == 0)
+            {
+              /* do nothing, comments are for translators */
+            }
+          else if (strcmp (names[i], "context") == 0)
+            msg_context = values[i];
 	  else
 	    {
 	      g_markup_parse_context_get_position (context,
@@ -9643,13 +9661,11 @@ accessibility_start_element (GMarkupParseContext *context,
 			   "%s:%d:%d '%s' is not a valid attribute of <%s>",
 			   "<input>",
 			   line_number, char_number, names[i], "action");
-	      g_free (action_name);
-	      g_free (description);
 	      return;
 	    }
 	}
 
-      if (!action_name || !description)
+      if (!action_name)
 	{
 	  g_markup_parse_context_get_position (context,
 					       &line_number,
@@ -9660,16 +9676,16 @@ accessibility_start_element (GMarkupParseContext *context,
 		       "%s:%d:%d <%s> requires attribute \"%s\"",
 		       "<input>",
 		       line_number, char_number, "action",
-		       description ? "action_name" : "description");
-	  g_free (action_name);
-	  g_free (description);
+		       "action_name");
 	  return;
 	}
 
       action = g_slice_new (AtkActionData);
-      action->action_name = action_name;
-      action->description = description;
-      
+      action->action_name = g_strdup (action_name);
+      action->description = g_string_new (description);
+      action->context = g_strdup (msg_context);
+      action->translatable = translatable;
+
       data->actions = g_slist_prepend (data->actions, action);
     }
   else if (strcmp (element_name, "accessibility") == 0)
@@ -9678,12 +9694,32 @@ accessibility_start_element (GMarkupParseContext *context,
     g_warning ("Unsupported tag for GtkWidget: %s\n", element_name);
 }
 
+static void
+accessibility_text (GMarkupParseContext  *context,
+                    const gchar          *text,
+                    gsize                 text_len,
+                    gpointer              user_data,
+                    GError              **error)
+{
+  AccessibilitySubParserData *data = (AccessibilitySubParserData*)user_data;
+
+  if (strcmp (g_markup_parse_context_get_element (context), "action") == 0)
+    {
+      AtkActionData *action = data->actions->data;
+
+      g_string_append_len (action->description, text, text_len);
+    }
+}
+
 static const GMarkupParser accessibility_parser =
   {
     accessibility_start_element,
+    NULL,
+    accessibility_text,
   };
 
-typedef struct {
+typedef struct
+{
   GObject *object;
   guint    key;
   guint    modifiers;
@@ -9691,12 +9727,12 @@ typedef struct {
 } AccelGroupParserData;
 
 static void
-accel_group_start_element (GMarkupParseContext *context,
-			   const gchar         *element_name,
-			   const gchar        **names,
-			   const gchar        **values,
-			   gpointer             user_data,
-			   GError             **error)
+accel_group_start_element (GMarkupParseContext  *context,
+			   const gchar          *element_name,
+			   const gchar         **names,
+			   const gchar         **values,
+			   gpointer              user_data,
+			   GError              **error)
 {
   gint i;
   guint key = 0;
@@ -9817,26 +9853,36 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 	  AtkAction *action;
 	  gint i, n_actions;
 	  GSList *l;
-	  
+
 	  accessible = gtk_widget_get_accessible (GTK_WIDGET (buildable));
-	  
+
 	  action = ATK_ACTION (accessible);
-	  n_actions = atk_action_get_n_actions (action);    
-	  
+	  n_actions = atk_action_get_n_actions (action);
+
 	  for (l = a11y_data->actions; l; l = l->next)
 	    {
 	      AtkActionData *action_data = (AtkActionData*)l->data;
-	      
+
 	      for (i = 0; i < n_actions; i++)
 		if (strcmp (atk_action_get_name (action, i),
 			    action_data->action_name) == 0)
 		  break;
 
 	      if (i < n_actions)
-		atk_action_set_description (action, i,
-					    action_data->description);
+                {
+                  gchar *description;
+
+                  if (action_data->translatable && action_data->description->len)
+                    description = _gtk_builder_parser_translate (gtk_builder_get_translation_domain (builder),
+                                                                 action_data->context,
+                                                                 action_data->description->str);
+                  else
+                    description = action_data->description->str;
+
+		  atk_action_set_description (action, i, description);
+                }
 	    }
-	  
+
 	  g_slist_foreach (a11y_data->actions, (GFunc)free_action, NULL);
 	  g_slist_free (a11y_data->actions);
 	}
@@ -9844,9 +9890,8 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
       if (a11y_data->relations)
 	g_object_set_qdata (G_OBJECT (buildable), quark_builder_atk_relations,
 			    a11y_data->relations);
-      
+
       g_slice_free (AccessibilitySubParserData, a11y_data);
-      
     }
 }
 

@@ -120,14 +120,22 @@ struct _GtkPrintBackendClass
 							      GtkPrinter          *printer);
   void                  (*printer_status_changed)            (GtkPrintBackend     *backend,
 							      GtkPrinter          *printer);
+  void                  (*request_password)                  (GtkPrintBackend     *backend,
+                                                              const gchar         *hostname,
+                                                              const gchar         *username,
+                                                              const gchar         *prompt);
+
+  /* not a signal */
+  void                  (*set_password)                      (GtkPrintBackend     *backend,
+                                                              const gchar         *hostname,
+                                                              const gchar         *username,
+                                                              const gchar         *password);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
 };
 
 GType   gtk_print_backend_get_type       (void) G_GNUC_CONST;
@@ -144,6 +152,10 @@ void        gtk_print_backend_print_stream         (GtkPrintBackend         *pri
 						    GDestroyNotify           dnotify);
 GList *     gtk_print_backend_load_modules         (void);
 void        gtk_print_backend_destroy              (GtkPrintBackend         *print_backend);
+void        gtk_print_backend_set_password         (GtkPrintBackend         *backend, 
+                                                    const gchar             *hostname,
+                                                    const gchar             *username,
+                                                    const gchar             *password);
 
 /* Backend-only functions for GtkPrintBackend */
 

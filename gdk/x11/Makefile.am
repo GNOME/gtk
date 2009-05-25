@@ -82,3 +82,5 @@ EXTRA_DIST += 			\
 	gdkinput-xfree.c	\
 	gdkinput-none.c		\
 	gdksettings.c
+
+-include $(top_srcdir)/git.mk

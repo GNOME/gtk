@@ -205,6 +205,8 @@ gtk_print_job_init (GtkPrintJob *job)
   job->scale = 1.0;
   job->page_set = GTK_PAGE_SET_ALL;
   job->rotate_to_orientation = FALSE;
+  job->number_up = 1;
+  job->number_up_layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
 }
 
 

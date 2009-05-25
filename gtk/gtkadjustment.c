@@ -359,11 +359,7 @@ gtk_adjustment_set_value (GtkAdjustment *adjustment,
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  /* don't use CLAMP() so we don't end up below lower if upper - page_size
-   * is smaller than lower
-   */
-  value = MIN (value, adjustment->upper - adjustment->page_size);
-  value = MAX (value, adjustment->lower);
+  value = CLAMP (value, adjustment->lower, adjustment->upper);
 
   if (value != adjustment->value)
     {

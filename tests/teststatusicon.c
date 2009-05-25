@@ -89,7 +89,7 @@ update_icons (void)
       GtkStatusIcon *status_icon = l->data;
 
       gtk_status_icon_set_from_icon_name (status_icon, icon_name);
-      gtk_status_icon_set_tooltip (status_icon, tooltip);
+      gtk_status_icon_set_tooltip_text (status_icon, tooltip);
     }
 }
 

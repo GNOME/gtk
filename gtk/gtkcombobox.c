@@ -4018,13 +4018,13 @@ gtk_combo_box_list_auto_scroll (GtkComboBox *combo_box,
 	  adj->lower < adj->value)
 	{
 	  value = adj->value - (tree_view->allocation.x - x + 1);
-	  gtk_adjustment_set_value (adj, value);
+	  gtk_adjustment_set_value (adj, CLAMP (value, adj->lower, adj->upper - adj->page_size));
 	}
       else if (x >= tree_view->allocation.x + tree_view->allocation.width &&
 	       adj->upper - adj->page_size > adj->value)
 	{
 	  value = adj->value + (x - tree_view->allocation.x - tree_view->allocation.width + 1);
-	  gtk_adjustment_set_value (adj, MAX (value, 0.0));
+	  gtk_adjustment_set_value (adj, CLAMP (value, 0.0, adj->upper - adj->page_size));
 	}
     }
 
@@ -4035,13 +4035,13 @@ gtk_combo_box_list_auto_scroll (GtkComboBox *combo_box,
 	  adj->lower < adj->value)
 	{
 	  value = adj->value - (tree_view->allocation.y - y + 1);
-	  gtk_adjustment_set_value (adj, value);
+	  gtk_adjustment_set_value (adj, CLAMP (value, adj->lower, adj->upper - adj->page_size));
 	}
       else if (y >= tree_view->allocation.height &&
 	       adj->upper - adj->page_size > adj->value)
 	{
 	  value = adj->value + (y - tree_view->allocation.height + 1);
-	  gtk_adjustment_set_value (adj, MAX (value, 0.0));
+	  gtk_adjustment_set_value (adj, CLAMP (value, 0.0, adj->upper - adj->page_size));
 	}
     }
 }
@@ -5251,10 +5251,11 @@ gtk_combo_box_remove_text (GtkComboBox *combo_box,
  *
  * Returns the currently active string in @combo_box or %NULL if none
  * is selected.  Note that you can only use this function with combo
- * boxes constructed with gtk_combo_box_new_text() and with 
+ * boxes constructed with gtk_combo_box_new_text() and with
  * #GtkComboBoxEntry<!-- -->s.
  *
  * Returns: a newly allocated string containing the currently active text.
+ *     Must be freed with g_free().
  *
  * Since: 2.6
  */

@@ -49,6 +49,9 @@
 #include "gtktextview.h"
 #include "gtkvbox.h"
 #include "gtkiconfactory.h"
+#include "gtkshow.h"
+#include "gtkmain.h"
+#include "gtkmessagedialog.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -137,36 +140,72 @@ static void                 set_cursor_if_appropriate       (GtkAboutDialog     
 							     GtkTextView        *text_view,
 							     gint                x,
 							     gint                y);
-static void                 add_credits_page                (GtkAboutDialog     *about,
-							     GtkWidget          *notebook,
-							     gchar              *title,
-							     gchar             **people);
-static gboolean             credits_key_press_event         (GtkWidget          *text_view,
-							     GdkEventKey        *event,
-							     GtkAboutDialog     *about);
-static gboolean             credits_event_after             (GtkWidget          *text_view,
-							     GdkEvent           *event,
-							     GtkAboutDialog     *about);
-static gboolean             credits_motion_notify_event     (GtkWidget          *text_view,
-							     GdkEventMotion     *event,
-							     GtkAboutDialog     *about);
-static gboolean             credits_visibility_notify_event (GtkWidget          *text_view,
-							     GdkEventVisibility *event,
-							     GtkAboutDialog     *about);
 static void                 display_credits_dialog          (GtkWidget          *button,
 							     gpointer            data);
 static void                 display_license_dialog          (GtkWidget          *button,
 							     gpointer            data);
 static void                 close_cb                        (GtkAboutDialog     *about);
-				 
-				 				       
+static void                 default_url_hook                (GtkAboutDialog     *about,
+                                                             const gchar        *uri,
+                                                             gpointer            user_data);
+static void                 default_email_hook              (GtkAboutDialog     *about,
+                                                             const gchar        *email_address,
+                                                             gpointer            user_data);
+
+static gboolean activate_email_hook_set = FALSE;
 static GtkAboutDialogActivateLinkFunc activate_email_hook = NULL;
 static gpointer activate_email_hook_data = NULL;
 static GDestroyNotify activate_email_hook_destroy = NULL;
 
+static gboolean activate_url_hook_set = FALSE;
 static GtkAboutDialogActivateLinkFunc activate_url_hook = NULL;
 static gpointer activate_url_hook_data = NULL;
 static GDestroyNotify activate_url_hook_destroy = NULL;
+
+static void
+default_url_hook (GtkAboutDialog *about,
+                  const gchar *uri,
+                  gpointer user_data G_GNUC_UNUSED)
+{
+  GdkScreen *screen;
+  GError *error = NULL;
+
+  screen = gtk_widget_get_screen (GTK_WIDGET (about));
+
+  if (!gtk_show_uri (screen, uri, gtk_get_current_event_time (), &error)) {
+    GtkWidget *dialog;
+
+    dialog = gtk_message_dialog_new (GTK_WINDOW (about),
+                                     GTK_DIALOG_DESTROY_WITH_PARENT |
+                                     GTK_DIALOG_MODAL,
+                                     GTK_MESSAGE_ERROR,
+                                     GTK_BUTTONS_CLOSE,
+                                     "%s", _("Could not show link"));
+    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                              "%s", error->message);
+    g_error_free (error);
+
+    g_signal_connect (dialog, "response",
+                      G_CALLBACK (gtk_widget_destroy), NULL);
+
+    gtk_window_present (GTK_WINDOW (dialog));
+  }
+}
+
+static void
+default_email_hook (GtkAboutDialog *about,
+                    const gchar *email_address,
+                    gpointer user_data)
+{
+  char *escaped, *uri;
+
+  escaped = g_uri_escape_string (email_address, NULL, FALSE);
+  uri = g_strdup_printf ("mailto:%s", escaped);
+  g_free (escaped);
+
+  default_url_hook (about, uri, user_data);
+  g_free (uri);
+}
 
 G_DEFINE_TYPE (GtkAboutDialog, gtk_about_dialog, GTK_TYPE_DIALOG)
 
@@ -485,8 +524,6 @@ gtk_about_dialog_init (GtkAboutDialog *about)
 
   priv->website_button = button = gtk_link_button_new (""); 
   gtk_widget_set_no_show_all (button, TRUE);
-  g_signal_connect (G_OBJECT (button), "clicked",
-		    G_CALLBACK (activate_url), about);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
   
   priv->website_label = button = gtk_label_new ("");
@@ -704,7 +741,7 @@ update_website (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
 
-  if (priv->website_url && activate_url_hook)
+  if (priv->website_url && (!activate_url_hook_set || activate_url_hook != NULL))
     {
       gtk_widget_show (priv->website_button);
       gtk_widget_hide (priv->website_label);
@@ -1663,9 +1700,22 @@ activate_url (GtkWidget *widget,
 {
   GtkAboutDialog *about = GTK_ABOUT_DIALOG (data);
   const gchar *url = gtk_link_button_get_uri (GTK_LINK_BUTTON (widget));
-  
-  if (activate_url_hook != NULL)
-    (* activate_url_hook) (about, url, activate_url_hook_data);
+  GtkAboutDialogActivateLinkFunc url_hook;
+  gpointer url_hook_data;
+
+  if (activate_url_hook_set)
+    {
+      url_hook = activate_url_hook;
+      url_hook_data = activate_url_hook_data;
+    }
+  else
+    {
+      url_hook = default_url_hook;
+      url_hook_data = NULL;
+    }
+
+  if (url_hook)
+    url_hook (about, url, url_hook_data);
 }
 
 static void
@@ -1676,24 +1726,48 @@ follow_if_link (GtkAboutDialog *about,
   GSList *tags = NULL, *tagp = NULL;
   GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
   gchar *url = NULL;
+  GtkAboutDialogActivateLinkFunc email_hook, url_hook;
+  gpointer email_hook_data, url_hook_data;
+
+  if (activate_email_hook_set)
+    {
+      email_hook = activate_email_hook;
+      email_hook_data = activate_email_hook_data;
+    }
+  else
+    {
+      email_hook = default_email_hook;
+      email_hook_data = NULL;
+    }
+
+  if (activate_url_hook_set)
+    {
+      url_hook = activate_url_hook;
+      url_hook_data = activate_url_hook_data;
+    }
+  else
+    {
+      url_hook = default_url_hook;
+      url_hook_data = NULL;
+    }
 
   tags = gtk_text_iter_get_tags (iter);
   for (tagp = tags; tagp != NULL && !url; tagp = tagp->next)
     {
       GtkTextTag *tag = tagp->data;
 
-      if (activate_email_hook != NULL)
+      if (email_hook != NULL)
         {
 	  url = g_object_get_data (G_OBJECT (tag), "email");
-	  if (url) 
-	    (* activate_email_hook) (about, url, activate_email_hook_data);
+          if (url)
+            email_hook (about, url, email_hook_data);
         }
 
-      if (!url && activate_url_hook != NULL)
+      if (!url && url_hook != NULL)
         {
 	  url = g_object_get_data (G_OBJECT (tag), "url");
 	  if (url) 
-	    (* activate_url_hook) (about, url, activate_url_hook_data);
+	    url_hook (about, url, url_hook_data);
         }
 
       if (url && !g_slist_find_custom (priv->visited_links, url, (GCompareFunc)strcmp))
@@ -1724,9 +1798,9 @@ follow_if_link (GtkAboutDialog *about,
 }
 
 static gboolean
-credits_key_press_event (GtkWidget      *text_view,
-			 GdkEventKey    *event,
-			 GtkAboutDialog *about)
+text_view_key_press_event (GtkWidget      *text_view,
+                           GdkEventKey    *event,
+                           GtkAboutDialog *about)
 {
   GtkTextIter iter;
   GtkTextBuffer *buffer;
@@ -1750,9 +1824,9 @@ credits_key_press_event (GtkWidget      *text_view,
 }
 
 static gboolean
-credits_event_after (GtkWidget      *text_view,
-		     GdkEvent       *event,
-		     GtkAboutDialog *about)
+text_view_event_after (GtkWidget      *text_view,
+                       GdkEvent       *event,
+                       GtkAboutDialog *about)
 {
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
@@ -1827,9 +1901,9 @@ set_cursor_if_appropriate (GtkAboutDialog *about,
 }
 
 static gboolean
-credits_motion_notify_event (GtkWidget *text_view,
-			     GdkEventMotion *event,
-			     GtkAboutDialog *about)
+text_view_motion_notify_event (GtkWidget *text_view,
+                               GdkEventMotion *event,
+                               GtkAboutDialog *about)
 {
   gint x, y;
 
@@ -1846,9 +1920,9 @@ credits_motion_notify_event (GtkWidget *text_view,
 
 
 static gboolean
-credits_visibility_notify_event (GtkWidget          *text_view,
-				 GdkEventVisibility *event,
-				 GtkAboutDialog     *about)
+text_view_visibility_notify_event (GtkWidget          *text_view,
+                                   GdkEventVisibility *event,
+                                   GtkAboutDialog     *about)
 {
   gint wx, wy, bx, by;
 
@@ -1863,24 +1937,16 @@ credits_visibility_notify_event (GtkWidget          *text_view,
   return FALSE;
 }
 
-static void
-text_view_style_set (GtkWidget *widget, 
-		     GtkStyle  *prev_style, 
-		     GtkWidget *text_view)
-{
-  gtk_widget_modify_base (text_view, GTK_STATE_NORMAL,
-			  &widget->style->bg[GTK_STATE_NORMAL]);
-}
-
-static void
-add_credits_page (GtkAboutDialog *about, 
-		  GtkWidget      *notebook,
-		  gchar          *title,
-		  gchar         **people)
+static GtkWidget *
+text_view_new (GtkAboutDialog  *about,
+               GtkWidget       *dialog,
+               gchar          **strings,
+               GtkWrapMode      wrap_mode)
 {
   gchar **p;
   gchar *q0, *q1, *q2, *r1, *r2;
-  GtkWidget *sw, *view;
+  GtkWidget *view;
+  GtkTextView *text_view;
   GtkTextBuffer *buffer;
   gboolean linkify_email, linkify_urls;
   GdkColor *style_link_color;
@@ -1890,11 +1956,11 @@ add_credits_page (GtkAboutDialog *about,
   GdkColor visited_link_color;
   GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
   
-  linkify_email = (activate_email_hook != NULL);
-  linkify_urls = (activate_url_hook != NULL);
+  linkify_email = (!activate_email_hook_set || activate_email_hook != NULL);
+  linkify_urls = (!activate_url_hook_set || activate_url_hook != NULL);
 
   gtk_widget_ensure_style (GTK_WIDGET (about));
-  gtk_widget_style_get (GTK_WIDGET (about), 
+  gtk_widget_style_get (GTK_WIDGET (about),
 			"link-color", &style_link_color, 
 			"visited-link-color", &style_visited_link_color, 
 			NULL);
@@ -1915,48 +1981,34 @@ add_credits_page (GtkAboutDialog *about,
     visited_link_color = default_visited_link_color;
 
   view = gtk_text_view_new ();
-  g_signal_connect_object (about, "style-set",
-			   G_CALLBACK (text_view_style_set), view, 0);
-  
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-  gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
-  gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
+  text_view = GTK_TEXT_VIEW (view);
+  buffer = gtk_text_view_get_buffer (text_view);
+  gtk_text_view_set_cursor_visible (text_view, FALSE);
+  gtk_text_view_set_editable (text_view, FALSE);
+  gtk_text_view_set_wrap_mode (text_view, wrap_mode);
 
-  gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 8);
-  gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 8);
+  gtk_text_view_set_left_margin (text_view, 8);
+  gtk_text_view_set_right_margin (text_view, 8);
 
   g_signal_connect (view, "key-press-event",
-                    G_CALLBACK (credits_key_press_event), about);
+                    G_CALLBACK (text_view_key_press_event), about);
   g_signal_connect (view, "event-after",
-                    G_CALLBACK (credits_event_after), about);
-  g_signal_connect (view, "motion-notify-event", 
-                    G_CALLBACK (credits_motion_notify_event), about);
-  g_signal_connect (view, "visibility-notify-event", 
-                    G_CALLBACK (credits_visibility_notify_event), about);
+                    G_CALLBACK (text_view_event_after), about);
+  g_signal_connect (view, "motion-notify-event",
+                    G_CALLBACK (text_view_motion_notify_event), about);
+  g_signal_connect (view, "visibility-notify-event",
+                    G_CALLBACK (text_view_visibility_notify_event), about);
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
-  				       GTK_SHADOW_IN);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-				  GTK_POLICY_AUTOMATIC,
-				  GTK_POLICY_AUTOMATIC);
-  gtk_container_add (GTK_CONTAINER (sw), view);
-  
-  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), 
-			    sw, gtk_label_new (title));
-
-  if (people == NULL) 
+  if (strings == NULL)
     {
       gtk_widget_hide (view);
-      return;
+      return view;
     }
-  else 
-    gtk_widget_show (view);
-  
-  for (p = people; *p; p++) 
+
+  for (p = strings; *p; p++)
     {
       q0  = *p;
-      while (*q0) 
+      while (*q0)
 	{
 	  q1 = linkify_email ? strchr (q0, '<') : NULL;
 	  q2 = q1 ? strchr (q1, '>') : NULL;
@@ -2025,6 +2077,32 @@ add_credits_page (GtkAboutDialog *about,
       if (p[1])
 	gtk_text_buffer_insert_at_cursor (buffer, "\n", 1);
     }
+
+  gtk_widget_show (view);
+  return view;
+}
+
+static void
+add_credits_page (GtkAboutDialog *about,
+                  GtkWidget      *credits_dialog,
+		  GtkWidget      *notebook,
+		  gchar          *title,
+		  gchar         **people)
+{
+  GtkWidget *sw, *view;
+
+  view = text_view_new (about, credits_dialog, people, GTK_WRAP_NONE);
+
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
+  				       GTK_SHADOW_IN);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+				  GTK_POLICY_AUTOMATIC,
+				  GTK_POLICY_AUTOMATIC);
+  gtk_container_add (GTK_CONTAINER (sw), view);
+  
+  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), 
+			    sw, gtk_label_new (title));
 }
 
 static void
@@ -2071,10 +2149,10 @@ display_credits_dialog (GtkWidget *button,
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), notebook, TRUE, TRUE, 0);
 
   if (priv->authors != NULL) 
-    add_credits_page (about, notebook, _("Written by"), priv->authors);
+    add_credits_page (about, dialog, notebook, _("Written by"), priv->authors);
   
   if (priv->documenters != NULL)
-    add_credits_page (about, notebook, _("Documented by"), priv->documenters);
+    add_credits_page (about, dialog, notebook, _("Documented by"), priv->documenters);
     
   /* Don't show an untranslated gettext msgid */
   if (priv->translator_credits != NULL &&
@@ -2086,11 +2164,11 @@ display_credits_dialog (GtkWidget *button,
       translators[0] = priv->translator_credits;
       translators[1] = NULL;
 
-      add_credits_page (about, notebook, _("Translated by"), translators);
+      add_credits_page (about, dialog, notebook, _("Translated by"), translators);
     }
 
   if (priv->artists != NULL) 
-    add_credits_page (about, notebook, _("Artwork by"), priv->artists);
+    add_credits_page (about, dialog, notebook, _("Artwork by"), priv->artists);
   
   gtk_widget_show_all (dialog);
 }
@@ -2111,7 +2189,8 @@ display_license_dialog (GtkWidget *button,
   GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
   GtkWidget *dialog, *view, *sw;
   GtkDialog *licence_dialog;
-
+  gchar *strings[2];
+  
   if (priv->license_dialog != NULL)
     {
       gtk_window_present (GTK_WINDOW (priv->license_dialog));
@@ -2152,17 +2231,10 @@ display_license_dialog (GtkWidget *button,
   g_signal_connect (sw, "map", G_CALLBACK (set_policy), NULL);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), sw, TRUE, TRUE, 0);
 
-  view = gtk_text_view_new ();
-  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), 
-			       priv->wrap_license ? GTK_WRAP_WORD : GTK_WRAP_NONE);
-  gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)), 
-			    priv->license, -1);
-
-  gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
-  gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
-
-  gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 8);
-  gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 8);
+  strings[0] = priv->license;
+  strings[1] = NULL;
+  view = text_view_new (about, dialog, strings,
+                        priv->wrap_license ? GTK_WRAP_WORD : GTK_WRAP_NONE);
 
   gtk_container_add (GTK_CONTAINER (sw), view);
 
@@ -2194,6 +2266,9 @@ gtk_about_dialog_new (void)
  * 
  * Installs a global function to be called whenever the user activates an
  * email link in an about dialog. 
+ *
+ * Since 2.18 there exists a default function which uses gtk_show_uri(). To
+ * deactivate it, you can pass %NULL for @func.
  * 
  * Return value: the previous email hook.
  *
@@ -2211,6 +2286,7 @@ gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func,
 
   old = activate_email_hook;
 
+  activate_email_hook_set = TRUE;
   activate_email_hook = func;
   activate_email_hook_data = data;
   activate_email_hook_destroy = destroy;
@@ -2226,6 +2302,9 @@ gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func,
  * 
  * Installs a global function to be called whenever the user activates a
  * URL link in an about dialog.
+ * 
+ * Since 2.18 here exists a default function which uses gtk_show_uri(). To
+ * deactivate it, you can pass %NULL for @func.
  * 
  * Return value: the previous URL hook.
  *
@@ -2243,6 +2322,7 @@ gtk_about_dialog_set_url_hook (GtkAboutDialogActivateLinkFunc func,
 
   old = activate_url_hook;
 
+  activate_url_hook_set = TRUE;
   activate_url_hook = func;
   activate_url_hook_data = data;
   activate_url_hook_destroy = destroy;

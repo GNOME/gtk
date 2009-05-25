@@ -49,7 +49,7 @@ internal child "accessible" of a <structname>GtkWidget</structname>.
 </object>
 <object class="GtkButton" id="button1">
   <accessibility>
-    <action action_name="click" description="Click the button."/>
+    <action action_name="click" translatable="yes">Click the button.</action>
     <relation target="label1" type="labelled-by"/>
   </accessibility>
   <child internal-child="accessible">

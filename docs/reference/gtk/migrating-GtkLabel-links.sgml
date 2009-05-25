@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<chapter id="gtk-migrating-label-links">
+
+  <title>Migrating from SexyUrlLabel to GtkLabel</title>
+
+  <para>
+    GTK+ 2.18 supports showing links inside a #GtkLabel, similar to
+    SexyUrlLabel. Porting from SexyUrlLabel to GtkLabel is relatively
+    straightforward. GtkLabel accepts links in the markup using the
+    same HTML <tag>a</tag> notation that SexyUrlLabel uses. In addition
+    to the href attribute, GtkLabel accepts a title attribute that
+    is displayed as a tooltip on the link. Instead of
+    sexy_url_label_set_markup(), just call gtk_label_set_markup().
+  </para>
+  <para>
+    One difference between the two APIs is that the ::url-activated signal
+    from SexyUrlLabel has been replaced by the #GtkLabel::activate-link
+    signal. The need for connecting to this signal is greatly reduced,
+    since GtkLabel has a default handler that calls gtk_show_uri().
+  </para>
+</chapter>

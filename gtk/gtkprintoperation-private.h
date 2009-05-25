@@ -43,6 +43,8 @@ struct _GtkPrintOperationPrivate
   GtkPrintSettings *print_settings;
   gchar *job_name;
   gint nr_of_pages;
+  gint nr_of_pages_to_print;
+  gint page_position;
   gint current_page;
   GtkUnit unit;
   gchar *export_filename;
@@ -70,6 +72,9 @@ struct _GtkPrintOperationPrivate
   guint manual_orientation : 1;
   double manual_scale;
   GtkPageSet manual_page_set;
+  guint manual_number_up;
+  GtkNumberUpLayout manual_number_up_layout;
+
   GtkWidget *custom_widget;
   gchar *custom_tab_label;
   

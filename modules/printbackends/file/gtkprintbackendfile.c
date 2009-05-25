@@ -647,6 +647,10 @@ file_printer_get_settings_from_options (GtkPrinter          *printer,
   option = gtk_printer_option_set_lookup (options, "gtk-n-up");
   if (option)
     gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_NUMBER_UP, option->value);
+
+  option = gtk_printer_option_set_lookup (options, "gtk-n-up-layout");
+  if (option)
+    gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT, option->value);
 }
 
 static void
@@ -669,6 +673,8 @@ file_printer_prepare_for_print (GtkPrinter       *printer,
   print_job->collate = gtk_print_settings_get_collate (settings);
   print_job->reverse = gtk_print_settings_get_reverse (settings);
   print_job->num_copies = gtk_print_settings_get_n_copies (settings);
+  print_job->number_up = gtk_print_settings_get_number_up (settings);
+  print_job->number_up_layout = gtk_print_settings_get_number_up_layout (settings);
 
   scale = gtk_print_settings_get_scale (settings);
   if (scale != 100.0)

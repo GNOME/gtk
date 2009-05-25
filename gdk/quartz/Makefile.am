@@ -57,3 +57,5 @@ libgdk_quartz_la_SOURCES =    	\
 libgdkinclude_HEADERS = 	\
 	gdkquartz.h
 
+
+-include $(top_srcdir)/git.mk

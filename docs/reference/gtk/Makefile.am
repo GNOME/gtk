@@ -129,17 +129,18 @@ content_files =					\
 	drawing-model.xml			\
 	glossary.xml				\
 	migrating-checklist.sgml		\
+	migrating-GtkAboutDialog.sgml		\
 	migrating-GtkAction.sgml		\
+	migrating-GtkAssistant.sgml		\
+	migrating-GtkBuilder.sgml		\
+	migrating-GtkColorButton.sgml		\
 	migrating-GtkComboBox.sgml		\
 	migrating-GtkEntry-icons.sgml		\
 	migrating-GtkFileChooser.sgml		\
 	migrating-GtkIconView.sgml		\
-	migrating-GtkAboutDialog.sgml		\
-	migrating-GtkColorButton.sgml		\
-	migrating-GtkAssistant.sgml		\
-	migrating-GtkRecentChooser.sgml 	\
+	migrating-GtkLabel-links.sgml		\
 	migrating-GtkLinkButton.sgml		\
-	migrating-GtkBuilder.sgml		\
+	migrating-GtkRecentChooser.sgml 	\
         migrating-GtkTooltip.sgml		\
 	objects_grouped.sgml			\
 	osx.sgml				\
@@ -361,19 +362,21 @@ EXTRA_DIST += version.xml.in
 
 ########################################################################
 
-man_MANS = gtk-query-immodules-2.0.1 gtk-update-icon-cache.1 gtk-builder-convert.1
-
 if ENABLE_MAN
+
+man_MANS = gtk-query-immodules-2.0.1 gtk-update-icon-cache.1 gtk-builder-convert.1
 
 %.1 : %.xml 
 	@XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
 
-endif
-
 BUILT_EXTRA_DIST = $(man_MANS)
+
+endif
 
 dist-hook-local: $(BUILT_EXTRA_DIST)
 	files='$(BUILT_EXTRA_DIST)';				\
 	for f in $$files; do					\
 	  if test -f $$f; then d=.; else d=$(srcdir); fi;	\
 	  cp $$d/$$f $(distdir) || exit 1; done
+
+-include $(top_srcdir)/git.mk

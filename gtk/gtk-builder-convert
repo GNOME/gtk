@@ -29,7 +29,7 @@ The [INPUT] file is
   -r, --root             Convert only widget named root and its children
   -h, --help             display this help and exit
 
-When OUTPUT is -, write to standard input.
+When OUTPUT is -, write to standard output.
 
 Examples:
   gtk-builder-convert preference.glade preferences.ui
@@ -42,10 +42,10 @@ import sys
 
 from xml.dom import minidom, Node
 
-WINDOWS = ['GtkWindow',
-           'GtkDialog',
+DIALOGS = ['GtkDialog',
            'GtkFileChooserDialog',
            'GtkMessageDialog']
+WINDOWS = ['GtkWindow'] + DIALOGS
 
 # The subprocess is only available in Python 2.4+
 try:
@@ -257,6 +257,8 @@ class GtkBuilderConverter(object):
 
         for node in objects:
             self._convert(node.getAttribute("class"), node)
+            if self._get_object(node.getAttribute('id')) is not None:
+		print "WARNING: duplicate id \"" + node.getAttribute('id') + "\""
             self.objects[node.getAttribute('id')] = node
 
         # Convert Gazpachos UI tag
@@ -497,7 +499,7 @@ class GtkBuilderConverter(object):
                 return
 
             if (node.tagName == 'object' and
-                node.getAttribute('class') == 'GtkDialog'):
+                node.getAttribute('class') in DIALOGS):
                 dialog = node
                 break
             node = node.parentNode
@@ -544,6 +546,14 @@ class GtkBuilderConverter(object):
         if not prop.childNodes:
             parent.removeChild(prop)
             return
+
+        translatable_attr = prop.attributes.get('translatable')
+        translatable = translatable_attr is not None and translatable_attr.value == 'yes'
+        has_context_attr = prop.attributes.get('context')
+        has_context = has_context_attr is not None and has_context_attr.value == 'yes'
+        comments_attr = prop.attributes.get('comments')
+        comments = comments_attr is not None and comments_attr.value or None
+
         value = prop.childNodes[0].data
         model = self._create_root_object("GtkListStore",
                                          template="model")
@@ -558,13 +568,23 @@ class GtkBuilderConverter(object):
         data = self._dom.createElement('data')
         model.appendChild(data)
 
+        if value.endswith('\n'):
+            value = value[:-1]
         for item in value.split('\n'):
             row = self._dom.createElement('row')
             data.appendChild(row)
 
             col = self._dom.createElement('col')
             col.setAttribute('id', '0')
-            col.setAttribute('translatable', 'yes')
+            if translatable:
+                col.setAttribute('translatable', 'yes')
+            if has_context:
+                splitting = item.split('|', 1)
+                if len(splitting) == 2:
+                    context, item = splitting
+                    col.setAttribute('context', context)
+            if comments is not None:
+                col.setAttribute('comments', comments)
             col.appendChild(self._dom.createTextNode(item))
             row.appendChild(col)
 

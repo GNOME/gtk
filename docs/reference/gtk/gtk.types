@@ -72,6 +72,7 @@ gtk_hruler_get_type
 gtk_hscale_get_type
 gtk_hscrollbar_get_type
 gtk_hseparator_get_type
+gtk_hsv_get_type
 gtk_icon_factory_get_type
 gtk_icon_theme_get_type
 gtk_icon_view_get_type

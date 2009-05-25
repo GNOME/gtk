@@ -47,15 +47,18 @@ _gdk_xid_table_insert (GdkDisplay *display,
 		       gpointer    data)
 {
   GdkDisplayX11 *display_x11;
-  
+
   g_return_if_fail (xid != NULL);
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  
+
   display_x11 = GDK_DISPLAY_X11 (display);
 
   if (!display_x11->xid_ht)
     display_x11->xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
 					    (GEqualFunc) gdk_xid_equal);
+
+  if (g_hash_table_lookup (display_x11->xid_ht, xid))
+    g_warning ("XID collision, trouble ahead");
 
   g_hash_table_insert (display_x11->xid_ht, xid, data);
 }
@@ -65,11 +68,11 @@ _gdk_xid_table_remove (GdkDisplay *display,
 		       XID	   xid)
 {
   GdkDisplayX11 *display_x11;
-  
+
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  
+
   display_x11 = GDK_DISPLAY_X11 (display);
-  
+
   if (display_x11->xid_ht)
     g_hash_table_remove (display_x11->xid_ht, &xid);
 }

@@ -66,6 +66,8 @@ struct _GtkPrintJob
   guint GSEAL (rotate_to_orientation) : 1;
   guint GSEAL (collate)               : 1;
   guint GSEAL (reverse)               : 1;
+  guint GSEAL (number_up);
+  GtkNumberUpLayout GSEAL (number_up_layout);
 };
 
 struct _GtkPrintJobClass

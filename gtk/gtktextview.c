@@ -6452,9 +6452,9 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
 					    invalidated_handler,
 					    text_view);
       g_signal_handlers_disconnect_by_func (text_view->layout,
-					    changed_handler, 
+					    changed_handler,
 					    text_view);
-      
+
       /* Remove layout from all anchored children */
       tmp_list = text_view->children;
       while (tmp_list != NULL)
@@ -6469,7 +6469,7 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
 
           tmp_list = g_slist_next (tmp_list);
         }
-      
+
       gtk_text_view_stop_cursor_blink (text_view);
       gtk_text_view_end_selection_drag (text_view);
 
@@ -7269,7 +7269,7 @@ gtk_text_view_commit_text (GtkTextView   *text_view,
       if (!had_selection && text_view->overwrite_mode)
 	{
 	  GtkTextIter insert;
-	  
+
 	  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
 					    &insert,
 					    gtk_text_buffer_get_insert (get_buffer (text_view)));
@@ -7301,12 +7301,12 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
   gint cursor_pos;
   GtkTextIter iter;
 
-  gtk_text_buffer_get_iter_at_mark (text_view->buffer, &iter, 
+  gtk_text_buffer_get_iter_at_mark (text_view->buffer, &iter,
 				    gtk_text_buffer_get_insert (text_view->buffer));
 
-  /* Keypress events are passed to input method even if cursor position is not editable;
-   * so beep here if it's multi-key input sequence, input method will be reset in 
-   * key-press-event handler. 
+  /* Keypress events are passed to input method even if cursor position is
+   * not editable; so beep here if it's multi-key input sequence, input
+   * method will be reset in key-press-event handler.
    */
   gtk_im_context_get_preedit_string (context, &str, &attrs, &cursor_pos);
 
@@ -7316,7 +7316,8 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
       goto out;
     }
 
-  gtk_text_layout_set_preedit_string (text_view->layout, str, attrs, cursor_pos);
+  if (text_view->layout)
+    gtk_text_layout_set_preedit_string (text_view->layout, str, attrs, cursor_pos);
   if (GTK_WIDGET_HAS_FOCUS (text_view))
     gtk_text_view_scroll_mark_onscreen (text_view,
 					gtk_text_buffer_get_insert (get_buffer (text_view)));
@@ -7335,7 +7336,7 @@ gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
   gint pos;
   gchar *text;
 
-  gtk_text_buffer_get_iter_at_mark (text_view->buffer, &start,  
+  gtk_text_buffer_get_iter_at_mark (text_view->buffer, &start,
 				    gtk_text_buffer_get_insert (text_view->buffer));
   end = start;
 
@@ -7359,7 +7360,7 @@ gtk_text_view_delete_surrounding_handler (GtkIMContext  *context,
   GtkTextIter start;
   GtkTextIter end;
 
-  gtk_text_buffer_get_iter_at_mark (text_view->buffer, &start,  
+  gtk_text_buffer_get_iter_at_mark (text_view->buffer, &start,
 				    gtk_text_buffer_get_insert (text_view->buffer));
   end = start;
 

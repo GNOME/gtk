@@ -11,9 +11,9 @@ AC_PREREQ(2.54)
 # set GTK_BINARY_AGE and GTK_INTERFACE_AGE to 0.
 
 m4_define([gtk_major_version], [2])
-m4_define([gtk_minor_version], [16])
+m4_define([gtk_minor_version], [17])
 m4_define([gtk_micro_version], [1])
-m4_define([gtk_interface_age], [1])
+m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
 m4_define([gtk_version],
@@ -1879,6 +1879,28 @@ else
   AM_CONDITIONAL(HAVE_CUPS, false)
 fi
 
+# Checks to see if we should compile with PAPI backend for GTK+
+#
+
+AC_ARG_ENABLE(papi,
+              [AC_HELP_STRING([--disable-papi]
+                              [disable papi print backend])],,
+             [enable_papi=auto])
+
+if test "x$enable_papi" = "xauto"
+then
+  AC_MSG_CHECKING(libpapi)
+  AC_CHECK_LIB(papi, papiServiceCreate, have_papi=yes, have_papi=no)
+  if test $have_papi = yes; then
+    AC_DEFINE([HAVE_PAPI], [], [Define to 1 if libpapi available])
+  fi
+  AM_CONDITIONAL(HAVE_PAPI, test $have_papi = yes)
+else
+  AM_CONDITIONAL(HAVE_PAPI, false)
+fi
+
+AM_CONDITIONAL(HAVE_PAPI_CUPS, test $have_papi = yes && test "x$CUPS_CONFIG" != "xno")
+
 gtk_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $GTK_DEP_CFLAGS"
 			  
@@ -2107,6 +2129,7 @@ modules/printbackends/Makefile
 modules/printbackends/cups/Makefile
 modules/printbackends/lpr/Makefile
 modules/printbackends/file/Makefile
+modules/printbackends/papi/Makefile
 modules/printbackends/test/Makefile
 perf/Makefile
 contrib/Makefile

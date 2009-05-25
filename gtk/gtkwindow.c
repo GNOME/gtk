@@ -395,7 +395,8 @@ extract_time_from_startup_id (const gchar* startup_id)
     
       /* Skip past the "_TIME" part */
       timestr += 5;
-    
+
+      errno = 0;
       timestamp = strtoul (timestr, &end, 0);
       if (end != timestr && errno == 0)
         retval = timestamp;
@@ -1499,18 +1500,21 @@ gtk_window_set_startup_id (GtkWindow   *window,
   
   g_free (priv->startup_id);
   priv->startup_id = g_strdup (startup_id);
-  
+
   if (GTK_WIDGET_REALIZED (window))
     {
+      guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
+
+#ifdef GDK_WINDOWING_X11
+      if (timestamp != GDK_CURRENT_TIME)
+	gdk_x11_window_set_user_time (GTK_WIDGET (window)->window, timestamp);
+#endif
+
       /* Here we differentiate real and "fake" startup notification IDs,
        * constructed on purpose just to pass interaction timestamp
-       */  
+       */
       if (startup_id_is_fake (priv->startup_id))
-        {
-          guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
-
-          gtk_window_present_with_time (window, timestamp);
-        }
+	gtk_window_present_with_time (window, timestamp);
       else 
         {
           gdk_window_set_startup_id (GTK_WIDGET (window)->window,
@@ -8330,9 +8334,9 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
 			     gboolean   is_toplevel)
 {
   if (GTK_WIDGET_TOPLEVEL (window))
-    g_assert (g_list_find (toplevel_list, window) != NULL);
+    g_assert (g_slist_find (toplevel_list, window) != NULL);
   else
-    g_assert (g_list_find (toplevel_list, window) == NULL);
+    g_assert (g_slist_find (toplevel_list, window) == NULL);
 
   if (is_toplevel == GTK_WIDGET_TOPLEVEL (window))
     return;

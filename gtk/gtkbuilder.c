@@ -1329,7 +1329,14 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           g_value_take_boxed (value, vector);
         }
       else
-        ret = FALSE;
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Could not parse '%s' as a %s",
+                       string, G_VALUE_TYPE_NAME (value));
+          ret = FALSE;
+        }
       break;
     case G_TYPE_OBJECT:
       if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF))

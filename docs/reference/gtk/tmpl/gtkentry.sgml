@@ -378,6 +378,11 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+<!-- ##### ARG GtkEntry:invisible-char ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:progress-border ##### -->
 <para>
 

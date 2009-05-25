@@ -5,3 +5,5 @@ wimp = ms-windows
 endif
 
 SUBDIRS = $(wimp) pixbuf
+
+-include $(top_srcdir)/git.mk

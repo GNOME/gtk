@@ -10,6 +10,16 @@ A #GtkAssistant is a widget used to represent a generally complex
 operation splitted in several steps, guiding the user through its pages
 and controlling the page flow to collect the necessary data.
 </para>
+<refsect2 id="GtkAssistant-BUILDER-UI"><title>GtkAssistant as GtkBuildable</title>
+<para>
+The GtkAssistant implementation of the GtkBuildable interface exposes the
+@action_area as internal children with the name "action_area".
+</para>
+<para>
+To add pages to an assistant in GtkBuilder, simply add it as a &lt;child&gt;
+to the GtkAssistant object, and set its child properties as necessary.
+</para>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>

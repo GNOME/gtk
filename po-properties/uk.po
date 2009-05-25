@@ -1,14 +1,14 @@
 # Ukrainian translation of gtk+.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Yuri Syrota <yuri@renome.rovno.ua>, 1999.
-# Maxim Dziumanenko <dziumanenko@gmail.com>, 2004-2006
+# Maxim Dziumanenko <dziumanenko@gmail.com>, 2004-2009
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-13 10:29-0400\n"
-"PO-Revision-Date: 2009-09-04 14:55+0200\n"
+"POT-Creation-Date: 2009-05-04 01:14-0400\n"
+"PO-Revision-Date: 2009-04-26 14:55+0200\n"
 "Last-Translator: dziumanenko@gmail.com\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -88,12 +88,12 @@ msgstr "Типовий дисплей"
 msgid "The default display for GDK"
 msgstr "Типовий дисплей для підсистеми GDK"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
-#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:613
+#: gdk/gdkpango.c:537 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
+#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:614
 msgid "Screen"
 msgstr "Екран"
 
-#: gdk/gdkpango.c:491
+#: gdk/gdkpango.c:538
 msgid "the GdkScreen for the renderer"
 msgstr "GdkScreen для рендерера"
 
@@ -113,11 +113,11 @@ msgstr "Роздільна здатність шрифту"
 msgid "The resolution for fonts on the screen"
 msgstr "Роздільна здатність шрифту на екрані"
 
-#: gtk/gtkaboutdialog.c:200
+#: gtk/gtkaboutdialog.c:239
 msgid "Program name"
 msgstr "Назва програми"
 
-#: gtk/gtkaboutdialog.c:201
+#: gtk/gtkaboutdialog.c:240
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -125,43 +125,43 @@ msgstr ""
 "Назва програми. Якщо не встановлено, типово використовується "
 "g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:215
+#: gtk/gtkaboutdialog.c:254
 msgid "Program version"
 msgstr "Версія програми"
 
-#: gtk/gtkaboutdialog.c:216
+#: gtk/gtkaboutdialog.c:255
 msgid "The version of the program"
 msgstr "Версія програми"
 
-#: gtk/gtkaboutdialog.c:230
+#: gtk/gtkaboutdialog.c:269
 msgid "Copyright string"
 msgstr "Рядок авторського права"
 
-#: gtk/gtkaboutdialog.c:231
+#: gtk/gtkaboutdialog.c:270
 msgid "Copyright information for the program"
 msgstr "Інформація про авторське право програми"
 
-#: gtk/gtkaboutdialog.c:248
+#: gtk/gtkaboutdialog.c:287
 msgid "Comments string"
 msgstr "Рядок коментаря"
 
-#: gtk/gtkaboutdialog.c:249
+#: gtk/gtkaboutdialog.c:288
 msgid "Comments about the program"
 msgstr "Коментар про програму"
 
-#: gtk/gtkaboutdialog.c:283
+#: gtk/gtkaboutdialog.c:322
 msgid "Website URL"
 msgstr "URL веб-сторінка"
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:323
 msgid "The URL for the link to the website of the program"
 msgstr "URL веб-сторінки програми"
 
-#: gtk/gtkaboutdialog.c:300
+#: gtk/gtkaboutdialog.c:339
 msgid "Website label"
 msgstr "Ярлик веб-сайту"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:340
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -169,46 +169,46 @@ msgstr ""
 "Ярлик посилання на веб-сторінку програми. Якщо не встановлено, типово "
 "відповідає URL"
 
-#: gtk/gtkaboutdialog.c:317
+#: gtk/gtkaboutdialog.c:356
 msgid "Authors"
 msgstr "Автори"
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:357
 msgid "List of authors of the program"
 msgstr "Перелік авторів програми"
 
-#: gtk/gtkaboutdialog.c:334
+#: gtk/gtkaboutdialog.c:373
 msgid "Documenters"
 msgstr "Автори документації"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:374
 msgid "List of people documenting the program"
 msgstr "Перелік авторів документації програми"
 
-#: gtk/gtkaboutdialog.c:351
+#: gtk/gtkaboutdialog.c:390
 msgid "Artists"
 msgstr "Художники"
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:391
 msgid "List of people who have contributed artwork to the program"
 msgstr "Перелік осіб, що приймали участь у оформленні програми"
 
-#: gtk/gtkaboutdialog.c:369
+#: gtk/gtkaboutdialog.c:408
 msgid "Translator credits"
 msgstr "Перекладачі"
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:409
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Подяки перекладачам. Ця рядки повинні бути позначені як доступні для "
 "перекладу."
 
-#: gtk/gtkaboutdialog.c:385
+#: gtk/gtkaboutdialog.c:424
 msgid "Logo"
 msgstr "Емблема"
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:425
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -216,19 +216,19 @@ msgstr ""
 "Емблема для вікна \"Про програму\". Якщо не встановлено, типово "
 "використовується gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:401
+#: gtk/gtkaboutdialog.c:440
 msgid "Logo Icon Name"
 msgstr "Назва значка емблеми"
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:441
 msgid "A named icon to use as the logo for the about box."
 msgstr "Назва значка, що використовується у якості емблеми \"Про програму\"."
 
-#: gtk/gtkaboutdialog.c:415
+#: gtk/gtkaboutdialog.c:454
 msgid "Wrap license"
 msgstr "Режим переносу ліцензії"
 
-#: gtk/gtkaboutdialog.c:416
+#: gtk/gtkaboutdialog.c:455
 msgid "Whether to wrap the license text."
 msgstr "Чи переносити рядку у тексті ліцензії."
 
@@ -304,7 +304,7 @@ msgid "The GIcon being displayed"
 msgstr "Набір значків до відображення"
 
 #: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
-#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:605
+#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:606
 msgid "Icon Name"
 msgstr "Назва значка"
 
@@ -414,7 +414,7 @@ msgid "Whether the action group is visible."
 msgstr "Чи буде група дій видимою."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:204 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:206 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "Значення"
 
@@ -602,59 +602,59 @@ msgstr ""
 "Привести коефіцієнт пропорційності у відповідність з вкладений елементом "
 "рамки"
 
-#: gtk/gtkassistant.c:261
+#: gtk/gtkassistant.c:281
 msgid "Header Padding"
 msgstr "Доповнення заголовку"
 
-#: gtk/gtkassistant.c:262
+#: gtk/gtkassistant.c:282
 msgid "Number of pixels around the header."
 msgstr "Простір, що додається до заголовку елемента керування."
 
-#: gtk/gtkassistant.c:269
+#: gtk/gtkassistant.c:289
 msgid "Content Padding"
 msgstr "Доповнення до вмісту"
 
-#: gtk/gtkassistant.c:270
+#: gtk/gtkassistant.c:290
 msgid "Number of pixels around the content pages."
 msgstr "Простір, що додається до вмісту елемента керування."
 
-#: gtk/gtkassistant.c:286
+#: gtk/gtkassistant.c:306
 msgid "Page type"
 msgstr "Тип сторінки"
 
-#: gtk/gtkassistant.c:287
+#: gtk/gtkassistant.c:307
 msgid "The type of the assistant page"
 msgstr "Тип сторінки помічника "
 
-#: gtk/gtkassistant.c:304
+#: gtk/gtkassistant.c:324
 msgid "Page title"
 msgstr "Заголовок сторінки"
 
-#: gtk/gtkassistant.c:305
+#: gtk/gtkassistant.c:325
 msgid "The title of the assistant page"
 msgstr "Заголовок сторінки помічника"
 
-#: gtk/gtkassistant.c:321
+#: gtk/gtkassistant.c:341
 msgid "Header image"
 msgstr "Зображення у заголовку"
 
-#: gtk/gtkassistant.c:322
+#: gtk/gtkassistant.c:342
 msgid "Header image for the assistant page"
 msgstr "Зображення у заголовку сторінки помічника"
 
-#: gtk/gtkassistant.c:338
+#: gtk/gtkassistant.c:358
 msgid "Sidebar image"
 msgstr "Бічне зображення"
 
-#: gtk/gtkassistant.c:339
+#: gtk/gtkassistant.c:359
 msgid "Sidebar image for the assistant page"
 msgstr "Зображення збоку сторінки помічника"
 
-#: gtk/gtkassistant.c:354
+#: gtk/gtkassistant.c:374
 msgid "Page complete"
 msgstr "Сторінка заповнена"
 
-#: gtk/gtkassistant.c:355
+#: gtk/gtkassistant.c:375
 msgid "Whether all required fields on the page have been filled out"
 msgstr "Чи були заповнені всі обов'язкові поля на сторінці"
 
@@ -918,7 +918,7 @@ msgstr ""
 "Чи повинні властивості child_displacement_x/_y також впливати на прямокутник "
 "фокусу"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1661
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:658 gtk/gtkentry.c:1682
 msgid "Inner Border"
 msgstr "Внутрішній бордюр"
 
@@ -1253,7 +1253,7 @@ msgstr "Стан слідування"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Чи растеризований pixbuf слід фарбувати у відповідності до стану"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:589
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:590
 msgid "Icon"
 msgstr "Значок"
 
@@ -1314,7 +1314,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Орієнтація і напрямок росту панелі поступу"
 
 #: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
-#: gtk/gtkscalebutton.c:223 gtk/gtkspinbutton.c:208
+#: gtk/gtkscalebutton.c:225 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Вирівнювання"
 
@@ -1330,7 +1330,7 @@ msgstr "Величина прискорення"
 msgid "The acceleration rate when you hold down a button"
 msgstr "Прискорення прокручування значень під час утримання кнопки натиснутою"
 
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:200 gtk/gtkspinbutton.c:226
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:218 gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "Цифр"
 
@@ -2110,14 +2110,12 @@ msgid "Width of border around the main dialog area"
 msgstr "Ширина межі навколо основної ділянки діалогу"
 
 #: gtk/gtkdialog.c:209
-#, fuzzy
 msgid "Content area spacing"
-msgstr "Доповнення до вмісту"
+msgstr "Відступи основної області"
 
 #: gtk/gtkdialog.c:210
-#, fuzzy
 msgid "Spacing between elements of the main dialog area"
-msgstr "Інтервал між зображеним значенням і ділянкою повзунка чи напрямної"
+msgstr "Інтервал між елементами основної області діалогу"
 
 #: gtk/gtkdialog.c:217
 msgid "Button spacing"
@@ -2187,11 +2185,11 @@ msgstr ""
 "Бордюр між текстом та рамкою. Перевизначає властивість стилю внутрішнього "
 "бордюру"
 
-#: gtk/gtkentry.c:666
+#: gtk/gtkentry.c:666 gtk/gtkentry.c:1232
 msgid "Invisible character"
 msgstr "Невидимий символ"
 
-#: gtk/gtkentry.c:667
+#: gtk/gtkentry.c:667 gtk/gtkentry.c:1233
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Символ, що використовуватиметься для маскування вмісту поля (в режимі паролю)"
@@ -2271,267 +2269,228 @@ msgid "Length of the text currently in the entry"
 msgstr "Довжина поточного тексту у елементі"
 
 #: gtk/gtkentry.c:797
-#, fuzzy
 msgid "Invisible char set"
-msgstr "Встановлення невидимості"
+msgstr "Невидимий набір символів"
 
 #: gtk/gtkentry.c:798
-#, fuzzy
 msgid "Whether the invisible char has been set"
-msgstr "Чи встановлено властивість розміру значка"
+msgstr "Чи приховувати символи, що виводяться"
 
 #: gtk/gtkentry.c:816
 msgid "Caps Lock warning"
-msgstr ""
+msgstr "Попередження про верхній регістр"
 
 #: gtk/gtkentry.c:817
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr ""
+"Чи показувати попередження про введення у верхньому регістрі у діалозі вводу "
+"паролю"
 
 #: gtk/gtkentry.c:831
-#, fuzzy
 msgid "Progress Fraction"
-msgstr "Дріб"
+msgstr "Відсоток виконання"
 
 #: gtk/gtkentry.c:832
-#, fuzzy
 msgid "The current fraction of the task that's been completed"
-msgstr "Виконана частина роботи"
+msgstr "Відсоток виконання поставленого завдання"
 
 #: gtk/gtkentry.c:849
-#, fuzzy
 msgid "Progress Pulse Step"
-msgstr "Крок приросту"
+msgstr "Крок пульсації"
 
 #: gtk/gtkentry.c:850
-#, fuzzy
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
 msgstr ""
-"Частина загального поступу, під час виконання якої відбувається приріст "
-"індикатора поступу"
+"Частина загального обсягу робіт, при виконання якої відбувається приріст "
+"індикатора поступу при викликах gtk_entry_progress_pulse()"
 
 #: gtk/gtkentry.c:866
-#, fuzzy
 msgid "Primary pixbuf"
-msgstr "Pixbuf"
+msgstr "Головний значок"
 
 #: gtk/gtkentry.c:867
-#, fuzzy
 msgid "Primary pixbuf for the entry"
-msgstr "Об'єкт Pixbuf для відкритого розширювача"
+msgstr "Значок (Pixbuf) для відкритого розширюваного об'єкту"
 
 #: gtk/gtkentry.c:881
-#, fuzzy
 msgid "Secondary pixbuf"
-msgstr "Вторинний текст"
+msgstr "Додатковий текст"
 
 #: gtk/gtkentry.c:882
-#, fuzzy
 msgid "Secondary pixbuf for the entry"
-msgstr "Додаткова кнопка переміщення вперед"
+msgstr "Додатковий значок для поля вводу"
 
 #: gtk/gtkentry.c:896
 msgid "Primary stock ID"
-msgstr ""
+msgstr "Ідентифікатор головного значка"
 
 #: gtk/gtkentry.c:897
 msgid "Stock ID for primary icon"
-msgstr ""
+msgstr "Головний ідентифікатор вбудованого значка"
 
 #: gtk/gtkentry.c:911
-#, fuzzy
 msgid "Secondary stock ID"
-msgstr "Вторинний текст"
+msgstr "Ідентифікатор додаткового значка"
 
 #: gtk/gtkentry.c:912
 msgid "Stock ID for secondary icon"
-msgstr ""
+msgstr "Додатковий ідентифікатор вбудованого значка"
 
 #: gtk/gtkentry.c:926
-#, fuzzy
 msgid "Primary icon name"
-msgstr "Список назв значків"
+msgstr "Назва головного значка"
 
 #: gtk/gtkentry.c:927
 msgid "Icon name for primary icon"
-msgstr ""
+msgstr "Головна назва для значка"
 
 #: gtk/gtkentry.c:941
-#, fuzzy
 msgid "Secondary icon name"
-msgstr "Вторинний текст"
+msgstr "Назва додаткового значка"
 
 #: gtk/gtkentry.c:942
 msgid "Icon name for secondary icon"
-msgstr ""
+msgstr "Додаткова назва для значка"
 
 #: gtk/gtkentry.c:956
 msgid "Primary GIcon"
-msgstr ""
+msgstr "Головний значок GIcon"
 
 #: gtk/gtkentry.c:957
-#, fuzzy
 msgid "GIcon for primary icon"
-msgstr "Значок цього вікна"
+msgstr "Головний значок GIcon"
 
 #: gtk/gtkentry.c:971
-#, fuzzy
 msgid "Secondary GIcon"
-msgstr "Вторинний"
+msgstr "Додатковий GIcon"
 
 #: gtk/gtkentry.c:972
 msgid "GIcon for secondary icon"
-msgstr ""
+msgstr "Додатковий GIcon"
 
 #: gtk/gtkentry.c:986
-#, fuzzy
 msgid "Primary storage type"
-msgstr "Тип зберігання"
+msgstr "Тип зберігання головного значка"
 
 #: gtk/gtkentry.c:987
-#, fuzzy
 msgid "The representation being used for primary icon"
-msgstr "Представлення даних зображення"
+msgstr "Представлення, що використовується для головного значка"
 
 #: gtk/gtkentry.c:1002
-#, fuzzy
 msgid "Secondary storage type"
-msgstr "Додаткова кнопка переміщення вперед"
+msgstr "Представлення додаткового значка"
 
 #: gtk/gtkentry.c:1003
-#, fuzzy
 msgid "The representation being used for secondary icon"
-msgstr "Представлення даних зображення"
+msgstr "Представлення, що використовується для додаткового значка"
 
 #: gtk/gtkentry.c:1024
 msgid "Primary icon activatable"
-msgstr ""
+msgstr "Головний значок активний"
 
 #: gtk/gtkentry.c:1025
-#, fuzzy
 msgid "Whether the primary icon is activatable"
-msgstr "Чи буде дія увімкнена."
+msgstr "Чи активний головний значок"
 
 #: gtk/gtkentry.c:1045
-#, fuzzy
 msgid "Secondary icon activatable"
-msgstr "Вторинний колір курсора"
+msgstr "Додатковий значок активний"
 
 #: gtk/gtkentry.c:1046
-#, fuzzy
 msgid "Whether the secondary icon is activatable"
-msgstr "Чи буде дія увімкнена."
+msgstr "Чи активний додатковий значок"
 
 #: gtk/gtkentry.c:1068
-#, fuzzy
 msgid "Primary icon sensitive"
-msgstr "Показувати чутливість комірки"
+msgstr "Головний значок чутливий"
 
 #: gtk/gtkentry.c:1069
-#, fuzzy
 msgid "Whether the primary icon is sensitive"
-msgstr "Чи враховує пошук елемента у списку регістр"
+msgstr "Чи чутливий головний значок"
 
 #: gtk/gtkentry.c:1090
-#, fuzzy
 msgid "Secondary icon sensitive"
-msgstr "Вторинний текст"
+msgstr "Додатковий значок чутливий"
 
 #: gtk/gtkentry.c:1091
-#, fuzzy
 msgid "Whether the secondary icon is sensitive"
-msgstr "Чи буде дія увімкнена."
+msgstr "Чи чутливий додатковий значок"
 
 #: gtk/gtkentry.c:1107
-#, fuzzy
 msgid "Primary icon tooltip text"
-msgstr "Показувати чутливість комірки"
+msgstr "Текст контекстної підказки головного значка"
 
 #: gtk/gtkentry.c:1108 gtk/gtkentry.c:1144
-#, fuzzy
 msgid "The contents of the tooltip on the primary icon"
-msgstr "Вміст підказки для цього віджета"
+msgstr "Зміст контекстної підказки головного значка"
 
 #: gtk/gtkentry.c:1124
-#, fuzzy
 msgid "Secondary icon tooltip text"
-msgstr "Вторинний колір курсора"
+msgstr "Текст контекстної підказки додаткового значка"
 
 #: gtk/gtkentry.c:1125 gtk/gtkentry.c:1163
-#, fuzzy
 msgid "The contents of the tooltip on the secondary icon"
-msgstr "Вміст підказки для цього віджета"
+msgstr "Зміст контекстної підказки додаткового значка"
 
 #: gtk/gtkentry.c:1143
-#, fuzzy
 msgid "Primary icon tooltip markup"
-msgstr "Список назв значків"
+msgstr "Розмітка контекстної підказки головного значка"
 
 #: gtk/gtkentry.c:1162
-#, fuzzy
 msgid "Secondary icon tooltip markup"
-msgstr "Вторинний текст"
+msgstr "Розмітка контекстної підказки додаткового значка"
 
 #: gtk/gtkentry.c:1182 gtk/gtktextview.c:681
-#, fuzzy
 msgid "IM module"
-msgstr "Типовий модуль IM"
+msgstr "Модуль вводу"
 
 #: gtk/gtkentry.c:1183 gtk/gtktextview.c:682
-#, fuzzy
 msgid "Which IM module should be used"
-msgstr "Чи треба типово використовувати модуль IM"
+msgstr "Модуль вводу, що використовується"
 
 #: gtk/gtkentry.c:1197
-#, fuzzy
 msgid "Icon Prelight"
-msgstr "Висота"
+msgstr "Виділення кольором значка"
 
 #: gtk/gtkentry.c:1198
-#, fuzzy
 msgid "Whether activatable icons should prelight when hovered"
-msgstr "Чи потрібно відображати ярлики вкладок"
+msgstr "Чи виділяти кольором активний значок при наведені вказівника миші"
 
 #: gtk/gtkentry.c:1211
-#, fuzzy
 msgid "Progress Border"
-msgstr "Границя напрямної"
+msgstr "Простір навколо індикатора поступу"
 
 #: gtk/gtkentry.c:1212
-#, fuzzy
 msgid "Border around the progress bar"
-msgstr "Текст, що відображається у панелі поступу"
+msgstr "Відступи навколо індикатора поступу"
 
-#: gtk/gtkentry.c:1662
+#: gtk/gtkentry.c:1683
 msgid "Border between text and frame."
 msgstr "Бордюр між текстом та рамкою."
 
-#: gtk/gtkentry.c:1676
-#, fuzzy
+#: gtk/gtkentry.c:1697
 msgid "State Hint"
-msgstr "Рядок статусу"
+msgstr "Підказка стану"
 
-#: gtk/gtkentry.c:1677
-#, fuzzy
+#: gtk/gtkentry.c:1698
 msgid "Whether to pass a proper state when drawing shadow or background"
-msgstr ""
-"Бітова мапа, що буде використана в якості маски під час малювання тла тексту"
+msgstr "Чи передавати стан поля вводу для виводу тіні або тла"
 
-#: gtk/gtkentry.c:1682 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1703 gtk/gtklabel.c:695
 msgid "Select on focus"
 msgstr "Вибір на фокусуванні"
 
-#: gtk/gtkentry.c:1683
+#: gtk/gtkentry.c:1704
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Чи буде виділятись вміст поля, коли йому передається фокус "
 
-#: gtk/gtkentry.c:1697
+#: gtk/gtkentry.c:1718
 msgid "Password Hint Timeout"
 msgstr "Інтервал очікування підказки паролю"
 
-#: gtk/gtkentry.c:1698
+#: gtk/gtkentry.c:1719
 msgid "How long to show the last input character in hidden entries"
 msgstr "Як довго показувати останній введений символ у прихованих полях"
 
@@ -3130,7 +3089,7 @@ msgstr "Набір значків"
 msgid "Icon set to display"
 msgstr "Набір значків до відображення"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:214 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Розмір значків"
 
@@ -3168,27 +3127,27 @@ msgid "Child widget to appear next to the menu text"
 msgstr "Спадкоємний віджет, що з'являтиметься за текстом меню"
 
 #: gtk/gtkimagemenuitem.c:151
-#, fuzzy
 msgid "Whether to use the label text to create a stock menu item"
-msgstr "Чи може текст позначки бути виділений використовуючи мишу"
+msgstr ""
+"Чи використовувати текст позначки вбудованого значка при створенні елемента "
+"меню"
 
 #: gtk/gtkimagemenuitem.c:169
 msgid "Always show image"
-msgstr ""
+msgstr "Завжди показувати значок"
 
 #: gtk/gtkimagemenuitem.c:170
-#, fuzzy
 msgid "Whether the image will always be shown"
-msgstr "Чи віджет видимий"
+msgstr "Чи показувати значок у меню"
 
 #: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:515
 msgid "Accel Group"
 msgstr "Група прискорювачів"
 
 #: gtk/gtkimagemenuitem.c:185
-#, fuzzy
 msgid "The Accel Group to use for stock accelerator keys"
-msgstr "Об'єкт GClosure, в якому відображуються зміни комбінації клавіш"
+msgstr ""
+"Група прискорювачів для додавання комбінацій клавіш для вбудованого значка"
 
 #: gtk/gtkimagemenuitem.c:190
 msgid "Show menu images"
@@ -3198,7 +3157,7 @@ msgstr "Показувати зображення меню"
 msgid "Whether images should be shown in menus"
 msgstr "Чи потрібно відображати зображення у меню"
 
-#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:614
+#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:615
 msgid "The screen where this window will be displayed"
 msgstr "Екран, на якому буде відображено це вікно"
 
@@ -3453,13 +3412,12 @@ msgid "When scrolling, always show both arrows."
 msgstr "При прокручуванні, завжди відображати обидві стрілки."
 
 #: gtk/gtkmenu.c:642
-#, fuzzy
 msgid "Arrow Placement"
-msgstr "Горизонтальний зсув стрілки"
+msgstr "Розташування стрілки"
 
 #: gtk/gtkmenu.c:643
 msgid "Indicates where scroll arrows should be placed"
-msgstr ""
+msgstr "Вказує розташування стрілок прокрутки"
 
 #: gtk/gtkmenu.c:651
 msgid "Left Attach"
@@ -3495,7 +3453,7 @@ msgstr "Кількість рядків, що додається до нижнь
 
 #: gtk/gtkmenu.c:690
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
-msgstr ""
+msgstr "Довільне значення для зменшення розміру стрілки прокрутки"
 
 #: gtk/gtkmenu.c:777
 msgid "Can change accelerators"
@@ -3587,9 +3545,8 @@ msgid "Sets the accelerator path of the menu item"
 msgstr "Визначає шлях до акселератора пункту меню"
 
 #: gtk/gtkmenuitem.c:301
-#, fuzzy
 msgid "The text for the child label"
-msgstr "Текст позначки"
+msgstr "Текст для дочірньої позначки"
 
 #: gtk/gtkmenuitem.c:364
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
@@ -3967,9 +3924,8 @@ msgid "Spacing around indicator"
 msgstr "Інтервал навколо індикатора"
 
 #: gtk/gtkorientable.c:75
-#, fuzzy
 msgid "The orientation of the orientable"
-msgstr "Орієнтація шкали"
+msgstr "Орієнтація елемента"
 
 #: gtk/gtkpaned.c:242
 msgid ""
@@ -4162,7 +4118,7 @@ msgstr "Параметри принтера"
 msgid "Page Setup"
 msgstr "Параметри сторінки"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1027
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1050
 msgid "Track Print Status"
 msgstr "Контроль стану принтера"
 
@@ -4174,51 +4130,51 @@ msgstr ""
 "TRUE якщо завдання друку продовжуватиме генерувати сигнали про зміну стану "
 "після надсилання даних на принтер або сервер друку."
 
-#: gtk/gtkprintoperation.c:899
+#: gtk/gtkprintoperation.c:922
 msgid "Default Page Setup"
 msgstr "Типові параметри сторінки"
 
-#: gtk/gtkprintoperation.c:900
+#: gtk/gtkprintoperation.c:923
 msgid "The GtkPageSetup used by default"
 msgstr "Типово використовується GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:918 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "Параметри сторінки"
 
-#: gtk/gtkprintoperation.c:919 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Для ініціалізації діалогу використовується GtkPrintSettings"
 
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:960
 msgid "Job Name"
 msgstr "Назва завдання"
 
-#: gtk/gtkprintoperation.c:938
+#: gtk/gtkprintoperation.c:961
 msgid "A string used for identifying the print job."
 msgstr "Рядок, що використовується для ідентифікації завдання друку."
 
-#: gtk/gtkprintoperation.c:962
+#: gtk/gtkprintoperation.c:985
 msgid "Number of Pages"
 msgstr "Кількість каналів"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:986
 msgid "The number of pages in the document."
 msgstr "Кількість сторінок у документі."
 
-#: gtk/gtkprintoperation.c:984 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1007 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "Поточна сторінка"
 
-#: gtk/gtkprintoperation.c:985 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1008 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "Поточна сторінка у документі"
 
-#: gtk/gtkprintoperation.c:1006
+#: gtk/gtkprintoperation.c:1029
 msgid "Use full page"
 msgstr "Використовувати всю сторінку"
 
-#: gtk/gtkprintoperation.c:1007
+#: gtk/gtkprintoperation.c:1030
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4226,7 +4182,7 @@ msgstr ""
 "TRUE, якщо джерело контексту має бути у куті сторінки, а не у куті області "
 "зображення"
 
-#: gtk/gtkprintoperation.c:1028
+#: gtk/gtkprintoperation.c:1051
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4234,55 +4190,55 @@ msgstr ""
 "TRUE, якщо від операції друку надходитимуть сповіщення про статус завдання "
 "друку після надсилання даних друку на принтер або сервер друку."
 
-#: gtk/gtkprintoperation.c:1045
+#: gtk/gtkprintoperation.c:1068
 msgid "Unit"
 msgstr "Одиниця"
 
-#: gtk/gtkprintoperation.c:1046
+#: gtk/gtkprintoperation.c:1069
 msgid "The unit in which distances can be measured in the context"
 msgstr "Одиниці у яких вимірюються відстані у контексті"
 
-#: gtk/gtkprintoperation.c:1063
+#: gtk/gtkprintoperation.c:1086
 msgid "Show Dialog"
 msgstr "Діалог відображення"
 
-#: gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintoperation.c:1087
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE, якщо при друкуванні відображається діалог поступу"
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1110
 msgid "Allow Async"
 msgstr "Дозволити асинхронний друк"
 
-#: gtk/gtkprintoperation.c:1088
+#: gtk/gtkprintoperation.c:1111
 msgid "TRUE if print process may run asynchronous."
 msgstr "TRUE, якщо процес друку може бути асинхронним."
 
-#: gtk/gtkprintoperation.c:1110 gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1133 gtk/gtkprintoperation.c:1134
 msgid "Export filename"
 msgstr "Назва файлу експорту"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1148
 msgid "Status"
 msgstr "Статус"
 
-#: gtk/gtkprintoperation.c:1126
+#: gtk/gtkprintoperation.c:1149
 msgid "The status of the print operation"
 msgstr "Статус операції друку"
 
-#: gtk/gtkprintoperation.c:1146
+#: gtk/gtkprintoperation.c:1169
 msgid "Status String"
 msgstr "Рядок статусу"
 
-#: gtk/gtkprintoperation.c:1147
+#: gtk/gtkprintoperation.c:1170
 msgid "A human-readable description of the status"
 msgstr "Текстовий опис статусу"
 
-#: gtk/gtkprintoperation.c:1165
+#: gtk/gtkprintoperation.c:1188
 msgid "Custom tab label"
 msgstr "Інша позначка вкладки"
 
-#: gtk/gtkprintoperation.c:1166
+#: gtk/gtkprintoperation.c:1189
 msgid "Label for the tab containing custom widgets."
 msgstr "Позначка для вкладки, що містить інший віджет."
 
@@ -4771,62 +4727,62 @@ msgstr "Метрична"
 msgid "The metric used for the ruler"
 msgstr "Система виміру, що використовується для лінійки"
 
-#: gtk/gtkscale.c:201
+#: gtk/gtkscale.c:219
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Кількість десяткових місць для відображення значення"
 
-#: gtk/gtkscale.c:210
+#: gtk/gtkscale.c:228
 msgid "Draw Value"
 msgstr "Показувати значення"
 
-#: gtk/gtkscale.c:211
+#: gtk/gtkscale.c:229
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "Чи буде поточне значення відображатися у вигляді рядка за повзунком"
 
-#: gtk/gtkscale.c:218
+#: gtk/gtkscale.c:236
 msgid "Value Position"
 msgstr "Положення значення"
 
-#: gtk/gtkscale.c:219
+#: gtk/gtkscale.c:237
 msgid "The position in which the current value is displayed"
 msgstr "Місце, в якому відображається поточне значення"
 
-#: gtk/gtkscale.c:226
+#: gtk/gtkscale.c:244
 msgid "Slider Length"
 msgstr "Довжина повзунка"
 
-#: gtk/gtkscale.c:227
+#: gtk/gtkscale.c:245
 msgid "Length of scale's slider"
 msgstr "Довжина повзунка"
 
-#: gtk/gtkscale.c:235
+#: gtk/gtkscale.c:253
 msgid "Value spacing"
 msgstr "Відступ значення"
 
-#: gtk/gtkscale.c:236
+#: gtk/gtkscale.c:254
 msgid "Space between value text and the slider/trough area"
 msgstr "Інтервал між зображеним значенням і ділянкою повзунка чи напрямної"
 
-#: gtk/gtkscalebutton.c:205
+#: gtk/gtkscalebutton.c:207
 msgid "The value of the scale"
 msgstr "Значення масштабу"
 
-#: gtk/gtkscalebutton.c:215
+#: gtk/gtkscalebutton.c:217
 msgid "The icon size"
 msgstr "Розмір значка"
 
-#: gtk/gtkscalebutton.c:224
+#: gtk/gtkscalebutton.c:226
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
 "Об'єкт GtkAdjustment, що містить поточне значення масштабу цієї кнопки "
 "масштабу"
 
-#: gtk/gtkscalebutton.c:252
+#: gtk/gtkscalebutton.c:254
 msgid "Icons"
 msgstr "Значок"
 
-#: gtk/gtkscalebutton.c:253
+#: gtk/gtkscalebutton.c:255
 msgid "List of icon names"
 msgstr "Список назв значків"
 
@@ -5534,9 +5490,8 @@ msgid "Has tooltip"
 msgstr "Має підказку"
 
 #: gtk/gtkstatusicon.c:354
-#, fuzzy
 msgid "Whether this tray icon has a tooltip"
-msgstr "Чи цей віджет має підказку"
+msgstr "Чи має цей значок панелі сповіщень контекстну підказку"
 
 #: gtk/gtkstatusicon.c:375 gtk/gtkwidget.c:653
 msgid "Tooltip Text"
@@ -5551,9 +5506,8 @@ msgid "Tooltip markup"
 msgstr "Вміст підказки"
 
 #: gtk/gtkstatusicon.c:400
-#, fuzzy
 msgid "The contents of the tooltip for this tray icon"
-msgstr "Вміст підказки для цього віджета"
+msgstr "Вміст підказки значка панелі сповіщень"
 
 #: gtk/gtktable.c:129
 msgid "Rows"
@@ -6380,9 +6334,9 @@ msgid "Search Column"
 msgstr "Стовпчик пошуку"
 
 #: gtk/gtktreeview.c:643
-#, fuzzy
 msgid "Model column to search through during interactive search"
-msgstr "Приклад стовпчика для пошуку в коді"
+msgstr ""
+"Стовпчик моделі, зя яким слід виконати інтерактивний пошук по мірі набору"
 
 #: gtk/gtktreeview.c:663
 msgid "Fixed Height Mode"
@@ -6549,7 +6503,7 @@ msgstr "Візерунок, що використовуватиметься дл
 msgid "Whether to display the column"
 msgstr "Чи показувати стовпчик"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:536
+#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "Розмір можна змінювати"
 
@@ -6964,46 +6918,46 @@ msgstr "Довжина стрілки вертикальної прокрутк�
 msgid "The length of vertical scroll arrows"
 msgstr "Довжина стрілок вертикальної прокрутки"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:478
 msgid "Window Type"
 msgstr "Тип вікна"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:479
 msgid "The type of the window"
 msgstr "Тип вікна"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:487
 msgid "Window Title"
 msgstr "Заголовок вікна"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:488
 msgid "The title of the window"
 msgstr "Заголовок вікна"
 
-#: gtk/gtkwindow.c:494
+#: gtk/gtkwindow.c:495
 msgid "Window Role"
 msgstr "Роль вікна"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:496
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 "Унікальний ідентифікатор вікна, що використовується при відновленні сеансу"
 
-#: gtk/gtkwindow.c:511
+#: gtk/gtkwindow.c:512
 msgid "Startup ID"
 msgstr "Початковий ідентифікатор"
 
-#: gtk/gtkwindow.c:512
+#: gtk/gtkwindow.c:513
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
 "Унікальний початковий ідентифікатор вікна, що використовується startup-"
 "notification"
 
-#: gtk/gtkwindow.c:519
+#: gtk/gtkwindow.c:520
 msgid "Allow Shrink"
 msgstr "Дозволити стиснення"
 
-#: gtk/gtkwindow.c:521
+#: gtk/gtkwindow.c:522
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -7012,23 +6966,23 @@ msgstr ""
 "Якщо істинно, вікно не має мінімального розміру. Встановлення цього значення "
 "в 99% випадків є поганою ідеєю"
 
-#: gtk/gtkwindow.c:528
+#: gtk/gtkwindow.c:529
 msgid "Allow Grow"
 msgstr "Дозволити збільшення"
 
-#: gtk/gtkwindow.c:529
+#: gtk/gtkwindow.c:530
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "Якщо істинно, то користувач може збільшувати розмір вікна"
 
-#: gtk/gtkwindow.c:537
+#: gtk/gtkwindow.c:538
 msgid "If TRUE, users can resize the window"
 msgstr "Якщо істинно, то користувач може змінювати розмір вікна"
 
-#: gtk/gtkwindow.c:544
+#: gtk/gtkwindow.c:545
 msgid "Modal"
 msgstr "Модальне"
 
-#: gtk/gtkwindow.c:545
+#: gtk/gtkwindow.c:546
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -7036,72 +6990,72 @@ msgstr ""
 "Якщо істинно, то вікно є модальним (інші вікна не можуть використовуватися, "
 "доки це вікно існує)"
 
-#: gtk/gtkwindow.c:552
+#: gtk/gtkwindow.c:553
 msgid "Window Position"
 msgstr "Позиція вікна"
 
-#: gtk/gtkwindow.c:553
+#: gtk/gtkwindow.c:554
 msgid "The initial position of the window"
 msgstr "Початкова позиція вікна"
 
-#: gtk/gtkwindow.c:561
+#: gtk/gtkwindow.c:562
 msgid "Default Width"
 msgstr "Типова ширина"
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:563
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "Початкова ширина вікна, використовується під час початкового відображення "
 "вікна"
 
-#: gtk/gtkwindow.c:571
+#: gtk/gtkwindow.c:572
 msgid "Default Height"
 msgstr "Типова висота"
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:573
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "Початкова висота вікна, використовується під час початкового відображення "
 "вікна"
 
-#: gtk/gtkwindow.c:581
+#: gtk/gtkwindow.c:582
 msgid "Destroy with Parent"
 msgstr "Знищувати з батьківським"
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:583
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Чи має це вікно знищуватись разом з батьківським"
 
-#: gtk/gtkwindow.c:590
+#: gtk/gtkwindow.c:591
 msgid "Icon for this window"
 msgstr "Значок цього вікна"
 
-#: gtk/gtkwindow.c:606
+#: gtk/gtkwindow.c:607
 msgid "Name of the themed icon for this window"
 msgstr "Назва значка з теми для цього вікна"
 
-#: gtk/gtkwindow.c:621
+#: gtk/gtkwindow.c:622
 msgid "Is Active"
 msgstr "Активне"
 
-#: gtk/gtkwindow.c:622
+#: gtk/gtkwindow.c:623
 msgid "Whether the toplevel is the current active window"
 msgstr "Чи вікно найвищого рівня є поточним активним вікном"
 
-#: gtk/gtkwindow.c:629
+#: gtk/gtkwindow.c:630
 msgid "Focus in Toplevel"
 msgstr "Фокус у вікні найвищого рівня"
 
-#: gtk/gtkwindow.c:630
+#: gtk/gtkwindow.c:631
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Чи фокус вводу в цьому об'єкті GtkWindow"
 
-#: gtk/gtkwindow.c:637
+#: gtk/gtkwindow.c:638
 msgid "Type hint"
 msgstr "Вказівка типу"
 
-#: gtk/gtkwindow.c:638
+#: gtk/gtkwindow.c:639
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -7109,84 +7063,84 @@ msgstr ""
 "Вказівка, що допомагає середовищу зрозуміти якого типу є це вікно і як його "
 "необхідно обробляти"
 
-#: gtk/gtkwindow.c:646
+#: gtk/gtkwindow.c:647
 msgid "Skip taskbar"
 msgstr "Уникнути панель завдань"
 
-#: gtk/gtkwindow.c:647
+#: gtk/gtkwindow.c:648
 msgid "TRUE if the window should not be in the task bar."
 msgstr "Істина, якщо вікно не повинно потрапляти у панель завдань."
 
-#: gtk/gtkwindow.c:654
+#: gtk/gtkwindow.c:655
 msgid "Skip pager"
 msgstr "Уникнути пейджер"
 
-#: gtk/gtkwindow.c:655
+#: gtk/gtkwindow.c:656
 msgid "TRUE if the window should not be in the pager."
 msgstr "Істинно, якщо вікно не має потрапити в пейджер"
 
-#: gtk/gtkwindow.c:662
+#: gtk/gtkwindow.c:663
 msgid "Urgent"
 msgstr "Терміново"
 
-#: gtk/gtkwindow.c:663
+#: gtk/gtkwindow.c:664
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "Істинно, якщо вікно має привернути увагу користувача."
 
-#: gtk/gtkwindow.c:677
+#: gtk/gtkwindow.c:678
 msgid "Accept focus"
 msgstr "Допускає фокус"
 
-#: gtk/gtkwindow.c:678
+#: gtk/gtkwindow.c:679
 msgid "TRUE if the window should receive the input focus."
 msgstr "Істина, якщо вікно повинно отримувати фокус вводу."
 
-#: gtk/gtkwindow.c:692
+#: gtk/gtkwindow.c:693
 msgid "Focus on map"
 msgstr "Фокус при відображенні"
 
-#: gtk/gtkwindow.c:693
+#: gtk/gtkwindow.c:694
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr ""
 "Встановлено, якщо вікно повинно отримувати фокус вводу при відображені."
 
-#: gtk/gtkwindow.c:707
+#: gtk/gtkwindow.c:708
 msgid "Decorated"
 msgstr "Оздоблене"
 
-#: gtk/gtkwindow.c:708
+#: gtk/gtkwindow.c:709
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Чи вікно повинно бути прикрашене менеджером вікон"
 
-#: gtk/gtkwindow.c:722
+#: gtk/gtkwindow.c:723
 msgid "Deletable"
 msgstr "Може видалятись"
 
-#: gtk/gtkwindow.c:723
+#: gtk/gtkwindow.c:724
 msgid "Whether the window frame should have a close button"
 msgstr "Чи кадр вікна повинен мати кнопку закривання"
 
-#: gtk/gtkwindow.c:739
+#: gtk/gtkwindow.c:740
 msgid "Gravity"
 msgstr "Важливість"
 
-#: gtk/gtkwindow.c:740
+#: gtk/gtkwindow.c:741
 msgid "The window gravity of the window"
 msgstr "Важливість вінка"
 
-#: gtk/gtkwindow.c:757
+#: gtk/gtkwindow.c:758
 msgid "Transient for Window"
 msgstr "Прозорий для вікна"
 
-#: gtk/gtkwindow.c:758
+#: gtk/gtkwindow.c:759
 msgid "The transient parent of the dialog"
 msgstr "Прозорий батьківський віджет діалогу"
 
-#: gtk/gtkwindow.c:773
+#: gtk/gtkwindow.c:774
 msgid "Opacity for Window"
 msgstr "Непрозорість вікна"
 
-#: gtk/gtkwindow.c:774
+#: gtk/gtkwindow.c:775
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Непрозорість вікна, від 0 до 1"
 

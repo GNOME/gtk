@@ -178,6 +178,16 @@ Printing support was added in GTK+ 2.10.
 
 @printoperation: the object which received the signal.
 
+<!-- ##### SIGNAL GtkPrintOperation::update-custom-widget ##### -->
+<para>
+
+</para>
+
+@printoperation: the object which received the signal.
+@widget: 
+@arg1: 
+@arg2: 
+
 <!-- ##### ARG GtkPrintOperation:allow-async ##### -->
 <para>
 

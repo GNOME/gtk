@@ -133,6 +133,8 @@ gdk_pixbuf_simple_anim_get_type G_GNUC_CONST
 gdk_pixbuf_simple_anim_iter_get_type G_GNUC_CONST
 gdk_pixbuf_simple_anim_new
 gdk_pixbuf_simple_anim_add_frame
+gdk_pixbuf_simple_anim_set_loop
+gdk_pixbuf_simple_anim_get_loop
 #endif
 #endif
 

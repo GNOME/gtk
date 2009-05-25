@@ -1,3 +1,124 @@
+Overview of Changes from GTK+ 2.17.0 to 2.17.1
+==============================================
+
+* GtkLabel:
+ - GtkLabel can now show embedded URLs, much like SexyUrlLabel
+
+* Changes that are relevant for theme authors:
+ - The URL support in GtkLabel uses the link-color / visited-link-color
+   style properties
+
+
+Overview of Changes from GTK+ 2.16.x to 2.17.0
+==============================================
+
+* GtkBuilder:
+  - Scale marks can now be specified in builder markup
+  - GtkAssistant action widgets can be added in builder markup
+
+* Changes that are relevant for theme authors
+ - GtkEntry now has a ::invisible-char style property that allows
+   themes to set the preferred invisible character
+
+* Printing:
+ - GTK+ supports authentication of users against CUPS servers now.
+
+* Bugs fixed:
+ 578634 gtkdial example fails to compile
+ 580678 Minor improvement to GTK+ mediaLib code
+ 580511 gdk_x11_atom_to_xatom_for_display translates GDK_NONE...
+ 581110 Handlebox widget uses static variables, crashes in multi...
+ 553385 gtk-builder-convert creates untranslated combobox models
+ 580814 GtkTextLayout incorrectly assumes pango iterates in logi...
+ 579366 gtkbuilderparser leaks RequiresInfo objects
+ 579741 gailcombox should emit property-changed:accessible-name...
+ 574386 Remove deprecated call to gtk_status_icon_set_tooltip...
+ 384940 handle rejecting jobs and authentication meaningfully
+
+* Updated translations
+ Arabic
+ Brazilian Portuguese
+ British English
+ Catalan
+ Czech
+ Estonian
+ Italian
+ Kannada
+ Oriya
+ Simplified Chinese
+ Slovenian
+ Spanish
+ Ukrainian
+
+
+Overview of Changes from GTK+ 2.16.0 to 2.16.1
+==============================================
+
+* GtkBuilder:
+ - Accessible action names can now be marked as translatable.
+ - gtk-builder-convert correctly handles response ids in all dialogs.
+ - gtk-builder-convert warns about duplicate ids.
+
+* GDK:
+ - GDK no longer refuses to work on 30-bit visuals
+
+* Win32:
+ - The appearance of GTK+ menus on Vista has been improved.
+
+* Bugs fixed:
+ 575700 Crash when moving a GtkWindow
+ 574283 unused assignment and dead code in gtk_widget_set_tooltip_window
+ 538840 [Win32] GTK menu theming could be improved
+ 576254 <object> requires attribute "id"
+ 576306 gdkscreen.c: get_nearest_monitor too simple...
+ 437533 Implement draw_shape PangoRenderer method
+ 577224 crash when setting new icon after setting icon...
+ 576150 Doc bug for GtkMenuPositionFunc
+ 562863 GtkVscrollbar is hardly documented
+ 575644 Cygwin gail build patch
+ 571374 Add 30-bit visuals to the list of supported depths
+ 577650 gtkitemfactory.h fails to compile
+ 578094 ProcessIdToSessionId needs to be declared as WINAPI
+ 518642 Custom tags and translatable content
+ 532858 segv setting GBoxed subclass <property>
+ 557629 Response ID not converted for GtkFileChooserDialog
+ 577789 about dialogue doesn't linkify licence text
+ 577824 empathy_chat_window_init: GClosure is leaked
+ 577964 Page Range entry is not accessible
+ 578221 Assertion warning `GTK_IS_TEXT_LAYOUT (layout)' failed
+ 578271 PageSetup should be sent to the previewer
+ 578276 gtk-builder-convert improperly converts GtkComboBox
+ 578290 two memory leaks
+ 578354 Memory leak in gdkscreen-x11
+ 578365 GtkMountOperation does not allow passwordless mount of sf...
+ 578366 file descriptor leak
+ 573922 Using NET_WM_USER_TIME even if startup notification times...
+ 561345 Title of Print Preview window should not be previewXXXXXX...
+ 577868 about dialogue changes appearance on style-set (change th...
+ 572797 GtkCellRendererAccel display string i18n in OTHER mode
+
+* Updated translations:
+ Arabic
+ Assamese
+ Basque
+ Bulgarian
+ Crimean Tatar
+ Danish
+ Galician
+ German
+ Greek
+ Gujarati
+ Japanese
+ Kannada
+ Malayalam
+ Marathi
+ Oriya
+ Pashto
+ Russian
+ Spanish
+ Telugu
+ Turkish
+
 Overview of Changes from GTK+ 2.15.5 to 2.16.0
 ==============================================
 

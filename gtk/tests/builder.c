@@ -44,10 +44,18 @@ builder_new_from_string (const gchar *buffer,
                          const gchar *domain)
 {
   GtkBuilder *builder;
+  GError *error = NULL;
+
   builder = gtk_builder_new ();
   if (domain)
     gtk_builder_set_translation_domain (builder, domain);
-  gtk_builder_add_from_string (builder, buffer, length, NULL);
+  gtk_builder_add_from_string (builder, buffer, length, &error);
+  if (error)
+    {
+      g_print ("ERROR: %s", error->message);
+      g_error_free (error);
+    }
+
   return builder;
 }
 
@@ -784,7 +792,7 @@ test_spin_button (void)
     "<property name=\"upper\">10</property>"
     "<property name=\"step-increment\">2</property>"
     "<property name=\"page-increment\">3</property>"
-    "<property name=\"page-size\">5</property>"
+    "<property name=\"page-size\">0</property>"
     "<property name=\"value\">1</property>"
     "</object>"
     "<object class=\"GtkSpinButton\" id=\"spinbutton1\">"
@@ -812,7 +820,7 @@ test_spin_button (void)
   g_object_get (adjustment, "page-increment", &value, NULL);
   g_assert (value == 3);
   g_object_get (adjustment, "page-size", &value, NULL);
-  g_assert (value == 5);
+  g_assert (value == 0);
   
   g_object_unref (builder);
 }
@@ -1580,6 +1588,7 @@ test_widget (void)
     "          <object class=\"GtkButton\" id=\"button1\">"
     "            <accessibility>"
     "              <action action_name=\"click\" description=\"Sliff\"/>"
+    "              <action action_name=\"clack\" translatable=\"yes\">Sniff</action>"
     "            </accessibility>"
     "          </object>"
     "        </child>"

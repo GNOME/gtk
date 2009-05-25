@@ -94,6 +94,7 @@ enum {
   MULTIPLE,
   TARGETS,
   TIMESTAMP,
+  SAVE_TARGETS,
   LAST_ATOM
 };
 
@@ -2172,6 +2173,7 @@ gtk_selection_init (void)
   gtk_selection_atoms[MULTIPLE] = gdk_atom_intern_static_string ("MULTIPLE");
   gtk_selection_atoms[TIMESTAMP] = gdk_atom_intern_static_string ("TIMESTAMP");
   gtk_selection_atoms[TARGETS] = gdk_atom_intern_static_string ("TARGETS");
+  gtk_selection_atoms[SAVE_TARGETS] = gdk_atom_intern_static_string ("SAVE_TARGETS");
 
   initialize = FALSE;
 }
@@ -2377,7 +2379,6 @@ _gtk_selection_request (GtkWidget *widget,
 #endif
       
       gtk_selection_invoke_handler (widget, &data, event->time);
-      
       if (data.length < 0)
 	{
 	  info->conversions[i].property = GDK_NONE;
@@ -2968,7 +2969,8 @@ gtk_selection_invoke_handler (GtkWidget	       *widget,
   g_return_if_fail (widget != NULL);
 
   target_list = gtk_selection_target_list_get (widget, data->selection);
-  if (target_list && 
+  if (data->target != gtk_selection_atoms[SAVE_TARGETS] &&
+      target_list &&
       gtk_target_list_find (target_list, data->target, &info))
     {
       g_signal_emit_by_name (widget,
@@ -3060,6 +3062,12 @@ gtk_selection_default_handler (GtkWidget	*widget,
 	  
 	  tmp_list = tmp_list->next;
 	}
+    }
+  else if (data->target == gtk_selection_atoms[SAVE_TARGETS])
+    {
+      gtk_selection_data_set (data,
+			      gdk_atom_intern_static_string ("NULL"),
+			      32, "", 0);
     }
   else
     {

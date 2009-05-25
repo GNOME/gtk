@@ -38,3 +38,5 @@ pkgconfigdir   = $(libdir)/pkgconfig
 pkgconfig_DATA = gdk-pixbuf-xlib-2.0.pc
 
 EXTRA_DIST += gdk-pixbuf-xlib-2.0.pc.in
+
+-include $(top_srcdir)/git.mk

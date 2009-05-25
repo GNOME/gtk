@@ -824,8 +824,8 @@ However, bindings for many other languages are available.</para>
 <para>So, after you have installed GTK+ there are a couple of
 things that can ease you into developing applications with
 it. There is the GTK+ Tutorial <ulink
-url="http://www.gtk.org/tutorial/">
-http://www.gtk.org/tutorial/</ulink>, which is undergoing
+url="http://library.gnome.org/devel/gtk-tutorial/stable/">
+http://library.gnome.org/devel/gtk-tutorial/stable/</ulink>, which is undergoing
 development. This will introduce you to writing applications
 using C.</para>
 

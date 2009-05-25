@@ -38,6 +38,8 @@
 #include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkalias.h"
 
 
@@ -56,7 +58,7 @@ typedef struct _GtkScaleMark GtkScaleMark;
 struct _GtkScaleMark
 {
   gdouble          value;
-  const gchar     *markup;
+  gchar           *markup;
   GtkPositionType  position;
 };
 
@@ -110,8 +112,24 @@ static gboolean gtk_scale_expose                  (GtkWidget      *widget,
 static void     gtk_scale_real_get_layout_offsets (GtkScale       *scale,
                                                    gint           *x,
                                                    gint           *y);
+static void     gtk_scale_buildable_interface_init   (GtkBuildableIface *iface);
+static gboolean gtk_scale_buildable_custom_tag_start (GtkBuildable  *buildable,
+                                                      GtkBuilder    *builder,
+                                                      GObject       *child,
+                                                      const gchar   *tagname,
+                                                      GMarkupParser *parser,
+                                                      gpointer      *data);
+static void     gtk_scale_buildable_custom_finished  (GtkBuildable  *buildable,
+                                                      GtkBuilder    *builder,
+                                                      GObject       *child,
+                                                      const gchar   *tagname,
+                                                      gpointer       user_data);
 
-G_DEFINE_ABSTRACT_TYPE (GtkScale, gtk_scale, GTK_TYPE_RANGE)
+
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkScale, gtk_scale, GTK_TYPE_RANGE,
+                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                         gtk_scale_buildable_interface_init))
+
 
 static gboolean
 single_string_accumulator (GSignalInvocationHint *ihint,
@@ -1293,6 +1311,8 @@ gtk_scale_clear_marks (GtkScale *scale)
   priv->marks = NULL;
 
   _gtk_range_set_stop_values (GTK_RANGE (scale), NULL, 0);
+
+  gtk_widget_queue_resize (GTK_WIDGET (scale));
 }
 
 /**
@@ -1349,8 +1369,244 @@ gtk_scale_add_mark (GtkScale        *scale,
   _gtk_range_set_stop_values (GTK_RANGE (scale), values, n);
 
   g_free (values);
+
+  gtk_widget_queue_resize (GTK_WIDGET (scale));
 }
 
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_scale_buildable_interface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->custom_tag_start = gtk_scale_buildable_custom_tag_start;
+  iface->custom_finished = gtk_scale_buildable_custom_finished;
+}
+
+typedef struct
+{
+  GtkScale *scale;
+  GtkBuilder *builder;
+  GSList *marks;
+} MarksSubparserData;
+
+typedef struct
+{
+  gdouble value;
+  GtkPositionType position;
+  GString *markup;
+  gchar *context;
+  gboolean translatable;
+} MarkData;
+
+static void
+mark_data_free (MarkData *data)
+{
+  g_string_free (data->markup, TRUE);
+  g_free (data->context);
+  g_slice_free (MarkData, data);
+}
+
+static void
+marks_start_element (GMarkupParseContext *context,
+                     const gchar         *element_name,
+                     const gchar        **names,
+                     const gchar        **values,
+                     gpointer             user_data,
+                     GError             **error)
+{
+  MarksSubparserData *parser_data = (MarksSubparserData*)user_data;
+  guint i;
+  gint line_number, char_number;
+
+  if (strcmp (element_name, "marks") == 0)
+   ;
+  else if (strcmp (element_name, "mark") == 0)
+    {
+      gdouble value;
+      gboolean has_value = FALSE;
+      GtkPositionType position = GTK_POS_BOTTOM;
+      const gchar *msg_context = NULL;
+      gboolean translatable = FALSE;
+      MarkData *mark;
+
+      for (i = 0; names[i]; i++)
+        {
+          if (strcmp (names[i], "translatable") == 0)
+            {
+              if (!_gtk_builder_boolean_from_string (values[i], &translatable, error))
+                return;
+            }
+          else if (strcmp (names[i], "comments") == 0)
+            {
+              /* do nothing, comments are for translators */
+            }
+          else if (strcmp (names[i], "context") == 0)
+            msg_context = values[i];
+          else if (strcmp (names[i], "value") == 0)
+            {
+              GValue gvalue = { 0, };
+
+              if (!gtk_builder_value_from_string_type (parser_data->builder, G_TYPE_DOUBLE, values[i], &gvalue, error))
+                return;
+
+              value = g_value_get_double (&gvalue);
+              has_value = TRUE;
+            }
+          else if (strcmp (names[i], "position") == 0)
+            {
+              GValue gvalue = { 0, };
+
+              if (!gtk_builder_value_from_string_type (parser_data->builder, GTK_TYPE_POSITION_TYPE, values[i], &gvalue, error))
+                return;
+
+              position = g_value_get_enum (&gvalue);
+            }
+          else
+            {
+              g_markup_parse_context_get_position (context,
+                                                   &line_number,
+                                                   &char_number);
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_ATTRIBUTE,
+                           "%s:%d:%d '%s' is not a valid attribute of <%s>",
+                           "<input>",
+                           line_number, char_number, names[i], "mark");
+              return;
+            }
+        }
+
+      if (!has_value)
+        {
+          g_markup_parse_context_get_position (context,
+                                               &line_number,
+                                               &char_number);
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
+                       "%s:%d:%d <%s> requires attribute \"%s\"",
+                       "<input>",
+                       line_number, char_number, "mark",
+                       "value");
+          return;
+        }
+
+      mark = g_slice_new (MarkData);
+      mark->value = value;
+      mark->position = position;
+      mark->markup = g_string_new ("");
+      mark->context = g_strdup (msg_context);
+      mark->translatable = translatable;
+
+      parser_data->marks = g_slist_prepend (parser_data->marks, mark);
+    }
+  else
+    {
+      g_markup_parse_context_get_position (context,
+                                           &line_number,
+                                           &char_number);
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
+                   "%s:%d:%d unsupported tag for GtkScale: \"%s\"",
+                   "<input>",
+                   line_number, char_number, element_name);
+      return;
+    }
+}
+
+static void
+marks_text (GMarkupParseContext  *context,
+            const gchar          *text,
+            gsize                 text_len,
+            gpointer              user_data,
+            GError              **error)
+{
+  MarksSubparserData *data = (MarksSubparserData*)user_data;
+
+  if (strcmp (g_markup_parse_context_get_element (context), "mark") == 0)
+    {
+      MarkData *mark = data->marks->data;
+
+      g_string_append_len (mark->markup, text, text_len);
+    }
+}
+
+static const GMarkupParser marks_parser =
+  {
+    marks_start_element,
+    NULL,
+    marks_text,
+  };
+
+
+static gboolean
+gtk_scale_buildable_custom_tag_start (GtkBuildable  *buildable,
+                                      GtkBuilder    *builder,
+                                      GObject       *child,
+                                      const gchar   *tagname,
+                                      GMarkupParser *parser,
+                                      gpointer      *data)
+{
+  MarksSubparserData *parser_data;
+
+  if (child)
+    return FALSE;
+
+  if (strcmp (tagname, "marks") == 0)
+    {
+      parser_data = g_slice_new0 (MarksSubparserData);
+      parser_data->scale = GTK_SCALE (buildable);
+      parser_data->marks = NULL;
+
+      *parser = marks_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+
+  return parent_buildable_iface->custom_tag_start (buildable, builder, child,
+                                                   tagname, parser, data);
+}
+
+static void
+gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
+                                     GtkBuilder   *builder,
+                                     GObject      *child,
+                                     const gchar  *tagname,
+                                     gpointer      user_data)
+{
+  GtkScale *scale = GTK_SCALE (buildable);
+  MarksSubparserData *marks_data;
+  GtkWidget *toplevel;
+
+  if (strcmp (tagname, "marks") == 0)
+    {
+      GSList *m;
+      gchar *markup;
+
+      marks_data = (MarksSubparserData *)user_data;
+
+      for (m = marks_data->marks; m; m = m->next)
+        {
+          MarkData *mdata = m->data;
+
+          if (mdata->translatable && mdata->markup->len)
+            markup = _gtk_builder_parser_translate (gtk_builder_get_translation_domain (builder),
+                                                    mdata->context,
+                                                    mdata->markup->str);
+          else
+            markup = mdata->markup->str;
+
+          gtk_scale_add_mark (scale, mdata->value, mdata->position, markup);
+
+          mark_data_free (mdata);
+        }
+
+      g_slist_free (marks_data->marks);
+      g_slice_free (MarksSubparserData, marks_data);
+    }
+}
 
 #define __GTK_SCALE_C__
 #include "gtkaliasdef.c"

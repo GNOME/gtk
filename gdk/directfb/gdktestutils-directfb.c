@@ -161,7 +161,8 @@ gdk_test_simulate_key (GdkWindow      *window,
   DFBWindowEvent         evt; 
 
   g_return_val_if_fail (GDK_IS_WINDOW(window), FALSE);
-  g_return_val_if_fail (key_pressrelease == GDK_KEY_PRESS || key_pressrelease == GDK_KEY_RELEASE, FALSE);
+  g_return_val_if_fail (key_pressrelease == GDK_KEY_PRESS ||
+                        key_pressrelease == GDK_KEY_RELEASE, FALSE);
   
   private = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
@@ -175,7 +176,9 @@ gdk_test_simulate_key (GdkWindow      *window,
  
   evt.clazz      = DFEC_WINDOW;
   evt.type       = (key_pressrelease == GDK_KEY_PRESS) ? DWET_KEYDOWN : DWET_KEYUP;
+#if ((DIRECTFB_MAJOR_VERSION > 1) || (DIRECTFB_MINOR_VERSION >= 2))
   evt.flags      = DWEF_NONE;
+#endif
   evt.window_id  = impl->dfb_id;
   evt.x          = MAX(x, 0);
   evt.y          = MAX(y, 0);
@@ -227,7 +230,8 @@ gdk_test_simulate_button (GdkWindow      *window,
   DFBWindowEvent         evt;  
   
   g_return_val_if_fail (GDK_IS_WINDOW(window), FALSE);
-  g_return_val_if_fail (button_pressrelease == GDK_BUTTON_PRESS || button_pressrelease == GDK_BUTTON_RELEASE, FALSE);
+  g_return_val_if_fail (button_pressrelease == GDK_BUTTON_PRESS ||
+                        button_pressrelease == GDK_BUTTON_RELEASE, FALSE);
   
   private = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
@@ -241,13 +245,17 @@ gdk_test_simulate_button (GdkWindow      *window,
 
   evt.clazz      = DFEC_WINDOW;
   evt.type       = (button_pressrelease == GDK_BUTTON_PRESS) ? DWET_BUTTONDOWN : DWET_BUTTONUP;
+#if ((DIRECTFB_MAJOR_VERSION > 1) || (DIRECTFB_MINOR_VERSION >= 2))
   evt.flags      = DWEF_NONE;
+#endif
   evt.window_id  = impl->dfb_id;
   evt.x          = MAX(x, 0);
   evt.y          = MAX(y, 0); 
   _gdk_display->layer->GetCursorPosition (_gdk_display->layer, &evt.cx, &evt.cy);
   evt.modifiers  = _gdk_modifiers_to_directfb (modifiers);
   evt.locks      = (modifiers & GDK_LOCK_MASK) ? DILS_CAPS : 0;
+  evt.button     = button;
+  evt.buttons    = 0;
   gettimeofday (&evt.timestamp, NULL);
 
   _gdk_display->buffer->PostEvent (_gdk_display->buffer, DFB_EVENT(&evt));

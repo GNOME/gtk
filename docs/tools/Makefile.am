@@ -40,3 +40,5 @@ clean-local:
 	    *) rm -f $$file ;; \
 	  esac ; \
 	done
+
+-include $(top_srcdir)/git.mk

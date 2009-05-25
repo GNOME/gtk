@@ -25,9 +25,12 @@
  *          Havoc Pennington <hp@redhat.com>
  */
 
+#include "config.h"
 #include <glib.h>
 
+#define GDK_PIXBUF_C_COMPILATION
 #include "gdk-pixbuf.h"
+#include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 #include "gdk-pixbuf-simple-anim.h"
 #include "gdk-pixbuf-alias.h"
@@ -109,6 +112,21 @@ static GdkPixbufAnimationIter *get_iter (GdkPixbufAnimation *anim,
                                          const GTimeVal     *start_time);
 
 
+static void gdk_pixbuf_simple_anim_set_property (GObject        *object,
+                                                 guint           prop_id,
+                                                 const GValue   *value,
+                                                 GParamSpec     *pspec);
+static void gdk_pixbuf_simple_anim_get_property (GObject        *object,
+                                                 guint           prop_id,
+                                                 GValue         *value,
+                                                 GParamSpec     *pspec);
+
+enum
+{
+        PROP_0,
+        PROP_LOOP
+};
+
 G_DEFINE_TYPE (GdkPixbufSimpleAnim, gdk_pixbuf_simple_anim, GDK_TYPE_PIXBUF_ANIMATION)
 
 static void
@@ -124,13 +142,30 @@ gdk_pixbuf_simple_anim_class_init (GdkPixbufSimpleAnimClass *klass)
 
         object_class = G_OBJECT_CLASS (klass);
         anim_class = GDK_PIXBUF_ANIMATION_CLASS (klass);
-        
+
+        object_class->set_property = gdk_pixbuf_simple_anim_set_property;
+        object_class->get_property = gdk_pixbuf_simple_anim_get_property;
         object_class->finalize = gdk_pixbuf_simple_anim_finalize;
         
         anim_class->is_static_image = is_static_image;
         anim_class->get_static_image = get_static_image;
         anim_class->get_size = get_size;
         anim_class->get_iter = get_iter;
+
+        /**
+         * GdkPixbufSimpleAnim:loop:
+         *
+         * Whether the animation should loop when it reaches the end.
+         *
+         * Since: 2.18
+         */
+        g_object_class_install_property (object_class,
+                                         PROP_LOOP,
+                                         g_param_spec_boolean ("loop",
+                                                               P_("Loop"),
+                                                               P_("Whether the animation should loop when it reaches the end"),
+                                                               FALSE,
+                                                               G_PARAM_READWRITE));
 }
 
 static void
@@ -277,7 +312,7 @@ advance (GdkPixbufAnimationIter *anim_iter,
 {
         GdkPixbufSimpleAnimIter *iter;
         gint elapsed;
-        gint loop;
+        gint loop_count;
         GList *tmp;
         GList *old;
         
@@ -302,13 +337,13 @@ advance (GdkPixbufAnimationIter *anim_iter,
         /* See how many times we've already played the full animation,
          * and subtract time for that.
          */
-        loop = elapsed / iter->simple_anim->total_time;
+        loop_count = elapsed / iter->simple_anim->total_time;
         elapsed = elapsed % iter->simple_anim->total_time;
         
         iter->position = elapsed;
         
         /* Now move to the proper frame */
-        if (loop < 1)
+        if (loop_count < 1 || iter->simple_anim->loop)
                 tmp = iter->simple_anim->frames;
         else
                 tmp = NULL;
@@ -437,6 +472,82 @@ gdk_pixbuf_simple_anim_add_frame (GdkPixbufSimpleAnim *animation,
   animation->frames = g_list_append (animation->frames, frame);
 }
 
+static void
+gdk_pixbuf_simple_anim_get_property (GObject         *object,
+                                     guint            prop_id,
+                                     GValue          *value,
+                                     GParamSpec      *pspec)
+{
+        GdkPixbufSimpleAnim *animation = GDK_PIXBUF_SIMPLE_ANIM (object);
+
+        switch (prop_id) {
+        case PROP_LOOP:
+                g_value_set_boolean (value,
+                                     gdk_pixbuf_simple_anim_get_loop (animation));
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+                break;
+        }
+}
+
+static void
+gdk_pixbuf_simple_anim_set_property (GObject         *object,
+                                     guint            prop_id,
+                                     const GValue    *value,
+                                     GParamSpec      *pspec)
+{
+        GdkPixbufSimpleAnim *animation = GDK_PIXBUF_SIMPLE_ANIM (object);
+
+        switch (prop_id) {
+        case PROP_LOOP:
+                gdk_pixbuf_simple_anim_set_loop (animation,
+                                                 g_value_get_boolean (value));
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+                break;
+        }
+}
+
+/**
+ * gdk_pixbuf_simple_anim_set_loop:
+ * @animation: a #GdkPixbufSimpleAnim
+ * @loop: whether to loop the animation
+ *
+ * Sets whether @animation should loop indefinitely when it reaches the end.
+ *
+ * Since: 2.18
+ **/
+void
+gdk_pixbuf_simple_anim_set_loop (GdkPixbufSimpleAnim *animation,
+                                 gboolean             loop)
+{
+        g_return_if_fail (GDK_IS_PIXBUF_SIMPLE_ANIM (animation));
+
+        if (loop != animation->loop) {
+                animation->loop = loop;
+                g_object_notify (G_OBJECT (animation), "loop");
+        }
+}
+
+/**
+ * gdk_pixbuf_simple_anim_get_loop:
+ * @animation: a #GdkPixbufSimpleAnim
+ *
+ * Gets whether @animation should loop indefinitely when it reaches the end.
+ *
+ * Returns: %TRUE if the animation loops forever, %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gdk_pixbuf_simple_anim_get_loop (GdkPixbufSimpleAnim *animation)
+{
+        g_return_val_if_fail (GDK_IS_PIXBUF_SIMPLE_ANIM (animation), FALSE);
+
+        return animation->loop;
+}
 
 #define __GDK_PIXBUF_SIMPLE_ANIM_C__
 #include "gdk-pixbuf-aliasdef.c"

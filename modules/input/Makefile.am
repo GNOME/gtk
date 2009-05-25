@@ -248,3 +248,5 @@ if CROSS_COMPILING
 else
 all-local: gtk.immodules
 endif
+
+-include $(top_srcdir)/git.mk
