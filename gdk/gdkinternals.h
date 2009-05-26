@@ -255,6 +255,9 @@ struct _GdkWindowObject
   GdkRegion *clip_region_with_children; /* Clip region in window coords */
   GdkCursor *cursor;
   gint8 toplevel_window_type;
+  guint effective_visibility : 2;
+  guint visibility : 2; /* The visibility wrt the toplevel (i.e. based on clip_region) */
+  guint native_visibility : 2; /* the native visibility of a impl windows */
 
   GdkWindowPaint *implicit_paint;
 

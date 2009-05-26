@@ -63,6 +63,9 @@
 
 #define USE_BACKING_STORE	/* Appears to work on Win32, too, now. */
 
+/* This adds a local value to the GdkVisibilityState enum */
+#define GDK_VISIBILITY_NOT_VIEWABLE 3
+
 struct _GdkWindowPaint
 {
   GdkRegion *region;
@@ -311,6 +314,11 @@ gdk_window_init (GdkWindowObject *window)
   window->width = 1;
   window->height = 1;
   window->toplevel_window_type = -1;
+  /* starts hidden */
+  window->effective_visibility = GDK_VISIBILITY_NOT_VIEWABLE;
+  window->visibility = GDK_VISIBILITY_FULLY_OBSCURED;
+  /* Default to unobscured since some backends don't send visibility events */
+  window->native_visibility = GDK_VISIBILITY_UNOBSCURED;
 }
 
 static GQuark quark_pointer_window = 0;
@@ -505,6 +513,64 @@ remove_child_area (GdkWindowObject *private,
     }
 }
 
+static GdkVisibilityState
+effective_visibility (GdkWindowObject *private)
+{
+  GdkVisibilityState native;
+
+  if (!gdk_window_is_viewable ((GdkWindow *)private))
+    return GDK_VISIBILITY_NOT_VIEWABLE;
+
+  native = private->impl_window->native_visibility;
+
+  if (native == GDK_VISIBILITY_FULLY_OBSCURED ||
+      private->visibility == GDK_VISIBILITY_FULLY_OBSCURED)
+    return GDK_VISIBILITY_FULLY_OBSCURED;
+  else if (native == GDK_VISIBILITY_UNOBSCURED)
+    return private->visibility;
+  else /* native PARTIAL, private partial or unobscured  */
+    return GDK_VISIBILITY_PARTIAL;
+}
+
+static void
+gdk_window_update_visibility (GdkWindowObject *private)
+{
+  GdkVisibilityState new_visibility;
+  GdkEvent *event;
+
+  new_visibility = effective_visibility (private);
+
+  if (new_visibility != private->effective_visibility)
+    {
+      private->effective_visibility = new_visibility;
+
+      if (new_visibility != GDK_VISIBILITY_NOT_VIEWABLE &&
+	  private->event_mask & GDK_VISIBILITY_NOTIFY)
+	{
+	  event = _gdk_make_event ((GdkWindow *)private, GDK_VISIBILITY_NOTIFY,
+				   NULL, FALSE);
+	  event->visibility.state = new_visibility;
+	}
+    }
+}
+
+static void
+gdk_window_update_visibility_recursively (GdkWindowObject *private,
+					  GdkWindowObject *only_for_impl)
+{
+  GdkWindowObject *child;
+  GList *l;
+
+  gdk_window_update_visibility (private);
+  for (l = private->children; l != NULL; l = l->next)
+    {
+      child = l->data;
+      if ((only_for_impl == NULL) ||
+	  (only_for_impl == child->impl_window))
+	gdk_window_update_visibility_recursively (child, only_for_impl);
+    }
+}
+
 static void
 recompute_visible_regions_internal (GdkWindowObject *private,
 				    gboolean recalculate_clip,
@@ -521,7 +587,7 @@ recompute_visible_regions_internal (GdkWindowObject *private,
 
   old_abs_x = private->abs_x;
   old_abs_y = private->abs_y;
-  
+
   /* Update absolute position */
   if (gdk_window_has_impl (private))
     {
@@ -586,6 +652,39 @@ recompute_visible_regions_internal (GdkWindowObject *private,
 
       if (old_clip_region_with_children)
 	gdk_region_destroy (old_clip_region_with_children);
+    }
+
+  if (clip_region_changed)
+    {
+      GdkVisibilityState visibility;
+      gboolean fully_visible;
+
+      if (gdk_region_empty (private->clip_region))
+	visibility = GDK_VISIBILITY_FULLY_OBSCURED;
+      else {
+	if (private->shape)
+	  fully_visible = gdk_region_equal (private->clip_region,
+					    private->shape);
+	else
+	  {
+	    r.x = 0;
+	    r.y = 0;
+	    r.width = private->width;
+	    r.height = private->height;
+	    fully_visible = gdk_region_rect_equal (private->clip_region, &r);
+	  }
+
+	if (fully_visible)
+	  visibility = GDK_VISIBILITY_UNOBSCURED;
+	else
+	  visibility = GDK_VISIBILITY_PARTIAL;
+	}
+
+      if (private->visibility != visibility)
+	{
+	  private->visibility = visibility;
+	  gdk_window_update_visibility (private);
+	}
     }
 
   /* Update all children, recursively. */
@@ -750,6 +849,7 @@ get_native_event_mask (GdkWindowObject *private)
 	/* We need thse for all native window so we can emulate
 	   events on children: */
 	GDK_EXPOSURE_MASK |
+	GDK_VISIBILITY_NOTIFY_MASK |
 	GDK_POINTER_MOTION_MASK |
 	GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
 	GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
@@ -5653,11 +5753,14 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
       if (private->parent && private->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
 	_gdk_make_event (GDK_WINDOW (private), GDK_MAP, NULL, FALSE);
     }
-  
+
   if (!was_mapped || raise)
     {
       recompute_visible_regions (private, TRUE, FALSE);
-      
+
+      /* If any decendants became visible we need to send visibility notify */
+      gdk_window_update_visibility_recursively (private, NULL);
+
       if (gdk_window_is_viewable (window))
 	{
 	  _gdk_syntesize_crossing_events_for_geometry_change (window);
@@ -5665,7 +5768,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
 	}
     }
 }
-  
+
 /**
  * gdk_window_show_unraised:
  * @window: a #GdkWindow
@@ -5935,9 +6038,12 @@ gdk_window_hide (GdkWindow *window)
 
   if (was_viewable)
     hide_all_visible_impls (private);
-  
+
   recompute_visible_regions (private, TRUE, FALSE);
-  
+
+  /* all decendants became non-visible, we need to send visibility notify */
+  gdk_window_update_visibility_recursively (private, NULL);
+
   if (was_mapped)
     {
       if (private->event_mask & GDK_STRUCTURE_MASK)
@@ -8787,7 +8893,15 @@ _gdk_windowing_got_event (GdkDisplay *display,
 			     event->key.keyval == 0xbd);
     }
 #endif
-  
+
+  if (event->type == GDK_VISIBILITY_NOTIFY)
+    {
+      event_private->native_visibility = event->visibility.state;
+      gdk_window_update_visibility_recursively (event_private,
+						event_private);
+      return;
+    }
+
   if (!(is_button_type (event->type) ||
 	is_motion_type (event->type)) ||
       GDK_WINDOW_TYPE (event_private) == GDK_WINDOW_ROOT)
