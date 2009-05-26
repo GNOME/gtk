@@ -236,8 +236,6 @@ static void gtk_window_size_allocate      (GtkWidget         *widget,
 					   GtkAllocation     *allocation);
 static gboolean gtk_window_map_event      (GtkWidget         *widget,
                                            GdkEventAny       *event);
-static gboolean gtk_window_frame_event    (GtkWindow *window,
-					   GdkEvent *event);
 static gint gtk_window_configure_event    (GtkWidget         *widget,
 					   GdkEventConfigure *event);
 static gint gtk_window_key_press_event    (GtkWidget         *widget,
@@ -504,7 +502,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   container_class->forall = gtk_window_forall;
 
   klass->set_focus = gtk_window_real_set_focus;
-  klass->frame_event = gtk_window_frame_event;
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
   klass->move_focus = gtk_window_move_focus;
@@ -1024,9 +1021,7 @@ gtk_window_init (GtkWindow *window)
   priv->startup_id = NULL;
   priv->mnemonics_visible = TRUE;
   priv->client_side_decorated = TRUE;
-  priv->client_side_decorations = (GDK_DECOR_BORDER |
-                                   GDK_DECOR_TITLE  |
-                                   GDK_DECOR_MAXIMIZE);
+  gtk_window_set_client_side_decorations (window, GDK_DECOR_BORDER | GDK_DECOR_TITLE | GDK_DECOR_MAXIMIZE);
   priv->old_decorations = 0;
 
   label = gtk_label_new ("");
@@ -1482,7 +1477,6 @@ gtk_window_set_label_widget (GtkWindow *window,
   if (priv->title_label)
     {
       gtk_container_remove (GTK_CONTAINER (priv->title_hbox), priv->title_label);
-      //g_object_unref (priv->title_label);
     }
 
   priv->title_label = label;
@@ -5255,36 +5249,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
       rect.height = allocation->height;
       gdk_window_invalidate_rect(widget->window, &rect, NULL);
     }
-}
-
-static gboolean
-gtk_window_frame_event (GtkWindow *window, GdkEvent *event)
-{
-  GdkEventConfigure *configure_event;
-  GdkRectangle rect;
-
-  switch (event->type)
-    {
-    case GDK_CONFIGURE:
-      configure_event = (GdkEventConfigure *)event;
-      
-      /* Invalidate the decorations */
-      rect.x = 0;
-      rect.y = 0;
-      rect.width = configure_event->width;
-      rect.height = configure_event->height;
-      
-      gdk_window_invalidate_rect (window->frame, &rect, FALSE);
-
-      /* Pass on the (modified) configure event */
-      configure_event->width -= window->frame_left + window->frame_right;
-      configure_event->height -= window->frame_top + window->frame_bottom;
-      return gtk_window_configure_event (GTK_WIDGET (window), configure_event);
-      break;
-    default:
-      break;
-    }
-  return FALSE;
 }
 
 static gint
