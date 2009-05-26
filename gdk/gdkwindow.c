@@ -2031,7 +2031,8 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
 }
 
 /* Ensure that all content related to this (sub)window is pushed to the
-   native region */
+   native region. If there is an active paint then that area is not
+   pushed, in order to not show partially finished double buffers. */
 static void
 gdk_window_flush_implicit_paint (GdkWindow *window)
 {
@@ -2040,19 +2041,27 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
   GdkWindowPaint *paint;
   GdkRegion *region;
   GdkGC *tmp_gc;
+  GSList *list;
 
-  /* Ensure that there is no explicit paint region. */
-  g_assert (private->paint_stack == NULL);
-  
   impl_window = gdk_window_get_impl_window (private);
   if (impl_window->implicit_paint == NULL)
     return;
 
   paint = impl_window->implicit_paint;
   region = gdk_region_copy (private->clip_region_with_children);
+
+  /* Don't flush active double buffers, as that may show partially done
+   * rendering */
+  for (list = private->paint_stack; list != NULL; list = list->next)
+    {
+      GdkWindowPaint *tmp_paint = list->data;
+
+      gdk_region_subtract (region, tmp_paint->region);
+    }
+
   gdk_region_offset (region, private->abs_x, private->abs_y);
   gdk_region_intersect (region, paint->region);
-  
+
   if (!gdk_region_empty (region))
     {
       /* Some regions are valid, push these to window now */
