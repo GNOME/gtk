@@ -1582,6 +1582,32 @@ gdk_region_equal (const GdkRegion *region1,
 }
 
 /**
+ * gdk_region_rect_equal:
+ * @region: a #GdkRegion
+ * @rectangle: a #GdkRectangle
+ *
+ * Finds out if a regions is the same as a rectangle.
+ *
+ * Returns: %TRUE if @region and @rectangle are equal.
+ *
+ * Since: 2.18
+ */
+gboolean
+gdk_region_rect_equal (const GdkRegion    *region,
+		       const GdkRectangle *rectangle)
+{
+  g_return_val_if_fail (region != NULL, FALSE);
+  g_return_val_if_fail (rectangle != NULL, FALSE);
+
+  if (region->numRects != 1) return FALSE;
+  else if (region->extents.x1 != rectangle->x) return FALSE;
+  else if (region->extents.y1 != rectangle->y) return FALSE;
+  else if (region->extents.x2 != rectangle->x + rectangle->width) return FALSE;
+  else if (region->extents.y2 != rectangle->y + rectangle->height) return FALSE;
+  return TRUE;
+}
+
+/**
  * gdk_region_point_in:
  * @region: a #GdkRegion
  * @x: the x coordinate of a point
