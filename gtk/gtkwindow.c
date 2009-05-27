@@ -385,7 +385,8 @@ static void gtk_window_forall        (GtkContainer   *container,
                                       gboolean        include_internals,
                                       GtkCallback     callback,
                                       gpointer        callback_data);
-
+static void gtk_window_remove        (GtkContainer *container,
+                                      GtkWidget    *child);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
@@ -505,6 +506,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   container_class->check_resize = gtk_window_check_resize;
   container_class->forall = gtk_window_forall;
+  container_class->remove = gtk_window_remove;
 
   klass->set_focus = gtk_window_real_set_focus;
   klass->activate_default = gtk_window_real_activate_default;
@@ -1520,7 +1522,7 @@ ensure_title_box (GtkWindow *window)
 
       button = gtk_button_new ();
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-      image = gtk_image_new_from_stock (GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU);
+      image = gtk_image_new_from_stock (GTK_STOCK_ZOOM_OUT, GTK_ICON_SIZE_MENU);
       gtk_container_add (GTK_CONTAINER (button), image);
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
       priv->min_button = button;
@@ -1529,7 +1531,7 @@ ensure_title_box (GtkWindow *window)
 
       button = gtk_button_new ();
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-      image = gtk_image_new_from_stock (GTK_STOCK_ZOOM_OUT, GTK_ICON_SIZE_MENU);
+      image = gtk_image_new_from_stock (GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU);
       gtk_container_add (GTK_CONTAINER (button), image);
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
       priv->max_button = button;
@@ -5937,6 +5939,31 @@ gtk_window_forall (GtkContainer   *container,
 
   if (priv->button_box)
     (* callback) (priv->button_box, callback_data);
+}
+
+static void
+gtk_window_remove (GtkContainer *container,
+                   GtkWidget    *child)
+{
+  GtkWindow *window = GTK_WINDOW (container);
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  if (priv->title_label && priv->title_label == child)
+    {
+      gtk_widget_unparent (priv->title_label);
+      gtk_widget_destroy (priv->title_label);
+      priv->title_label = NULL;
+    }
+  else if (priv->button_box && priv->button_box == child)
+    {
+      gtk_widget_unparent (priv->button_box);
+      gtk_widget_destroy (priv->button_box);
+      priv->button_box = NULL;
+    }
+  else
+    {
+      GTK_CONTAINER_CLASS (gtk_window_parent_class)->remove (container, child);
+    }
 }
 
 static gboolean
