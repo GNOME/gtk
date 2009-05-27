@@ -5074,8 +5074,7 @@ gtk_window_realize (GtkWidget *widget)
   attributes.wmclass_class = window->wmclass_class;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
-  //attributes.colormap = gtk_widget_get_colormap (widget);
-  attributes.colormap = gdk_screen_get_rgba_colormap (gtk_widget_get_screen (widget));
+  attributes.colormap = gtk_widget_get_colormap (widget);
 
   attributes_mask = 0;
   parent_window = gtk_widget_get_root_window (widget);
