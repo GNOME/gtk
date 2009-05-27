@@ -126,6 +126,7 @@ static void   gdk_window_draw_text_wc   (GdkDrawable     *drawable,
 static void   gdk_window_draw_drawable  (GdkDrawable     *drawable,
                                          GdkGC           *gc,
                                          GdkPixmap       *src,
+					 GdkDrawable     *original_src,
                                          gint             xsrc,
                                          gint             ysrc,
                                          gint             xdest,
@@ -3426,6 +3427,7 @@ static void
 gdk_window_draw_drawable (GdkDrawable *drawable,
 			  GdkGC       *gc,
 			  GdkPixmap   *src,
+			  GdkDrawable *original_src,
 			  gint         xsrc,
 			  gint         ysrc,
 			  gint         xdest,
@@ -3435,7 +3437,7 @@ gdk_window_draw_drawable (GdkDrawable *drawable,
 {
   GdkWindowObject *private = (GdkWindowObject *)drawable;
   OFFSET_GC (gc);
-  
+
   if (GDK_WINDOW_DESTROYED (drawable))
     return;
 
@@ -3445,9 +3447,8 @@ gdk_window_draw_drawable (GdkDrawable *drawable,
       GdkWindowPaint *paint = private->paint_stack->data;
       SETUP_PAINT_GC_CLIP (gc);
       gdk_draw_drawable (pixmap_impl (paint->pixmap), gc,
-                         src, xsrc, ysrc,
+			 src, xsrc, ysrc,
 			 xdest - x_offset, ydest - y_offset, width, height);
-
       RESTORE_PAINT_GC_CLIP (gc);
     }
   else
@@ -3458,6 +3459,59 @@ gdk_window_draw_drawable (GdkDrawable *drawable,
 			 xdest - x_offset, ydest - y_offset,
 			 width, height);
       RESTORE_DIRECT_GC_CLIP(gc);
+
+      /* We might have drawn from an obscured part of a client
+	 side window, if so we need to send graphics exposures */
+      if (_gdk_gc_get_exposures (gc) &&
+	  GDK_IS_WINDOW (original_src))
+	{
+	  GdkRegion *exposure_region;
+	  GdkRegion *clip;
+	  GdkRectangle r;
+
+	  r.x = xdest;
+	  r.y = ydest;
+	  r.width = width;
+	  r.height = height;
+	  exposure_region = gdk_region_rectangle (&r);
+
+	  if (_gdk_gc_get_subwindow (gc) == GDK_CLIP_BY_CHILDREN)
+	    clip = private->clip_region_with_children;
+	  else
+	    clip = private->clip_region;
+	  gdk_region_intersect (exposure_region, clip);
+
+	  clip = _gdk_gc_get_clip_region (gc);
+	  if (clip)
+	    {
+	      gdk_region_offset (exposure_region,
+				 old_clip_x,
+				 old_clip_y);
+	      gdk_region_intersect (exposure_region, clip);
+	      gdk_region_offset (exposure_region,
+				 -old_clip_x,
+				 -old_clip_y);
+	    }
+
+	  /* Note: We don't clip by the clip mask if set, so this
+	     may invalidate to much */
+
+	  /* Remove the area that is correctly copied from the src.
+	   * Note that xsrc/ysrc has been corrected for abs_x/y offsets already,
+	   * which need to be undone */
+	  clip = gdk_drawable_get_visible_region (original_src);
+	  gdk_region_offset (clip,
+			     xdest - (xsrc - GDK_WINDOW_OBJECT (original_src)->abs_x),
+			     ydest - (ysrc - GDK_WINDOW_OBJECT (original_src)->abs_y));
+	  gdk_region_subtract (exposure_region, clip);
+	  gdk_region_destroy (clip);
+
+	  gdk_window_invalidate_region (GDK_WINDOW (private),
+					exposure_region,
+					_gdk_gc_get_subwindow (gc) == GDK_INCLUDE_INFERIORS);
+
+	  gdk_region_destroy (exposure_region);
+	}
     }
 
   RESTORE_GC (gc);
@@ -5012,8 +5066,10 @@ gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
-  
-  if (private->input_only || !GDK_WINDOW_IS_MAPPED (window))
+
+  if (private->input_only ||
+      !GDK_WINDOW_IS_MAPPED (window) ||
+      gdk_region_empty (region))
     return;
 
   visible_region = gdk_drawable_get_visible_region (window);
@@ -5086,7 +5142,7 @@ gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
 	  gdk_window_schedule_update ((GdkWindow *)impl_window);
 	}
     }
-  
+
   gdk_region_destroy (visible_region);
 }
 

@@ -100,6 +100,7 @@ struct _GdkDrawableClass
   void (*draw_drawable)  (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
 			  GdkDrawable  *src,
+			  GdkDrawable  *original_src,
 			  gint		xsrc,
 			  gint		ysrc,
 			  gint		xdest,

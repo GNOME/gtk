@@ -663,16 +663,18 @@ gdk_draw_drawable (GdkDrawable *drawable,
     composite_impl = GDK_WINDOW_OBJECT (src)->impl;
   else
     composite_impl = composite;
-  
+
   /* TODO: For non-native windows this may copy stuff from other overlapping
-     windows. We should clip that and clear that area in the destination instead. */
-  
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc, composite_impl,
+     windows. We should clip that and (for windows with bg != None) clear that
+     area in the destination instead. */
+
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc,
+						    composite_impl, src,
                                                     xsrc - composite_x_offset,
                                                     ysrc - composite_y_offset,
                                                     xdest, ydest,
                                                     width, height);
-  
+
   g_object_unref (composite);
 }
 
