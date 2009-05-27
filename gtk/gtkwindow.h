@@ -142,7 +142,6 @@ struct _GtkWindowClass
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
 };
 
 #define GTK_TYPE_WINDOW_GROUP             (gtk_window_group_get_type ())
