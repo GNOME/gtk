@@ -220,6 +220,9 @@ struct _GtkWindowPrivate
   gchar *startup_id;
 
   GtkWidget *title_label;
+  GtkWidget *min_button;
+  GtkWidget *max_button;
+  GtkWidget *close_button;
   GtkWidget *button_box;
 };
 
@@ -1457,6 +1460,51 @@ gtk_window_new (GtkWindowType type)
 }
 
 static void
+min_button_clicked (GtkWidget *widget, gpointer data)
+{
+  GtkWindow *window = (GtkWindow *)data;
+  GdkWindowState state = gdk_window_get_state (widget->window);
+
+  if (state & GDK_WINDOW_STATE_ICONIFIED)
+    {
+      gtk_window_deiconify (window);
+    }
+  else
+    {
+      gtk_window_iconify (window);
+    }
+}
+
+static void
+max_button_clicked (GtkWidget *widget, gpointer data)
+{
+  GtkWindow *window = (GtkWindow *)data;
+  GdkWindowState state = gdk_window_get_state (widget->window);
+
+  if (state & GDK_WINDOW_STATE_MAXIMIZED)
+    {
+      gtk_window_unmaximize (window);
+    }
+  else
+    {
+      gtk_window_maximize (window);
+    }
+}
+
+static void
+close_button_clicked (GtkWidget *widget, gpointer data)
+{
+  GdkEvent *event = gdk_event_new (GDK_DELETE);
+
+  event->any.type = GDK_DELETE;
+  event->any.window = g_object_ref (widget->window);
+  event->any.send_event = TRUE;
+
+  gtk_main_do_event (event);
+  gdk_event_free (event);
+}
+
+static void
 ensure_title_box (GtkWindow *window)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
@@ -1472,21 +1520,30 @@ ensure_title_box (GtkWindow *window)
 
       button = gtk_button_new ();
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-      image = gtk_image_new_from_stock (GTK_STOCK_ZOOM_OUT, GTK_ICON_SIZE_MENU);
+      image = gtk_image_new_from_stock (GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU);
       gtk_container_add (GTK_CONTAINER (button), image);
-      gtk_box_pack_end (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+      priv->min_button = button;
+      g_signal_connect (G_OBJECT (button), "clicked",
+                        G_CALLBACK (min_button_clicked), window);
 
       button = gtk_button_new ();
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-      image = gtk_image_new_from_stock (GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU);
+      image = gtk_image_new_from_stock (GTK_STOCK_ZOOM_OUT, GTK_ICON_SIZE_MENU);
       gtk_container_add (GTK_CONTAINER (button), image);
-      gtk_box_pack_end (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+      priv->max_button = button;
+      g_signal_connect (G_OBJECT (button), "clicked",
+                        G_CALLBACK (max_button_clicked), window);
 
       button = gtk_button_new ();
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
       image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
       gtk_container_add (GTK_CONTAINER (button), image);
-      gtk_box_pack_end (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+      priv->close_button = button;
+      g_signal_connect (G_OBJECT (button), "clicked",
+                        G_CALLBACK (close_button_clicked), window);
 
       priv->button_box = hbox;
 
@@ -5209,6 +5266,8 @@ gtk_window_size_request (GtkWidget      *widget,
           child_height = MAX (child_height, box_requisition.height);
         }
 
+      // There should probably be some kind of padding property for
+      // "between the title/buttons and the bin.child".
       requisition->width += frame_left + frame_right;
       requisition->height += frame_top + frame_bottom + child_height;
     }
