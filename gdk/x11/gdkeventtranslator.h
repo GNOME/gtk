@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 #define GDK_TYPE_EVENT_TRANSLATOR         (gdk_event_translator_get_type ())
 #define GDK_EVENT_TRANSLATOR(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_EVENT_TRANSLATOR, GdkEventTranslator))
 #define GDK_IS_EVENT_TRANSLATOR(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_EVENT_TRANSLATOR))
-#define GDK_EVENT_TRANSLATOR_GET_IFACE(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GDK_TYPE_EVENT_TRANSLATOR, GdkEventTranslatorIface))
+#define GDK_EVENT_TRANSLATOR_GET_IFACE(o) (G_TYPE_INSTANCE_GET_INTERFACE  ((o), GDK_TYPE_EVENT_TRANSLATOR, GdkEventTranslatorIface))
 
 typedef struct _GdkEventTranslatorIface GdkEventTranslatorIface;
 typedef struct _GdkEventTranslator GdkEventTranslator; /* Dummy typedef */
@@ -44,6 +44,8 @@ struct _GdkEventTranslatorIface
                                 GdkEvent           *event,
                                 XEvent             *xevent);
 };
+
+GType      gdk_event_translator_get_type (void) G_GNUC_CONST;
 
 GdkEvent * gdk_event_translator_translate (GdkEventTranslator *translator,
                                            GdkDisplay         *display,

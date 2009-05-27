@@ -49,6 +49,7 @@ gdk_event_translator_translate (GdkEventTranslator *translator,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   iface = GDK_EVENT_TRANSLATOR_GET_IFACE (translator);
+
   if (!iface->translate_event)
     return NULL;
 
