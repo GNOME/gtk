@@ -5265,6 +5265,7 @@ gtk_window_size_request (GtkWidget      *widget,
       if (priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
         {
           gtk_widget_size_request (priv->button_box, &box_requisition);
+
           child_height = MAX (child_height, box_requisition.height);
         }
 
@@ -5347,14 +5348,15 @@ gtk_window_size_allocate (GtkWidget     *widget,
       if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
         {
           child_allocation.x = container->border_width + frame_left;
-          child_allocation.y = container->border_width + deco_allocation.height
+          child_allocation.y = container->border_width
+            + MAX (deco_allocation.height, box_allocation.height)
             + frame_top; // XXX - padding style property?
           child_allocation.width = MAX (1, ((gint)allocation->width - container->border_width * 2
                                             - frame_left - frame_right));
           child_allocation.height = MAX (1, ((gint)allocation->height - container->border_width * 2
                                              - frame_bottom
                                              - frame_top // XXX - padding style property?
-                                             - deco_allocation.height));
+                                             - MAX (deco_allocation.height, box_allocation.height)));
         }
       else
         {
