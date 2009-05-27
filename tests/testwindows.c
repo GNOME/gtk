@@ -222,6 +222,22 @@ add_window_clicked (GtkWidget *button,
 }
 
 static void
+draw_drawable_clicked (GtkWidget *button, 
+		       gpointer data)
+{
+  GdkGC *gc;
+  gc = gdk_gc_new (darea->window);
+  gdk_draw_drawable (darea->window,
+		     gc,
+		     darea->window,
+		     -15, -15,
+		     40, 70,
+		     100, 100);
+  g_object_unref (gc);
+}
+
+
+static void
 remove_window_clicked (GtkWidget *button, 
 		       gpointer data)
 {
@@ -989,6 +1005,16 @@ main (int argc, char **argv)
 			     3, 4,
 			     2, 3);
   gtk_widget_show (button);
+
+  button = gtk_button_new_with_label ("draw drawable");
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      button,
+		      FALSE, FALSE,
+		      2);
+  gtk_widget_show (button);
+  g_signal_connect (button, "clicked", 
+		    G_CALLBACK (draw_drawable_clicked), 
+		    NULL);
 
   button = gtk_button_new_with_label ("Add window");
   gtk_box_pack_start (GTK_BOX (vbox),
