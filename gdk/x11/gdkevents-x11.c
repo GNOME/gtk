@@ -34,6 +34,7 @@
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkasync.h"
+#include "gdkeventtranslator.h"
 
 #include "gdkkeysyms.h"
 
@@ -2274,6 +2275,7 @@ _gdk_events_queue (GdkDisplay *display)
   GdkEvent *event;
   XEvent xevent;
   Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  GdkDeviceManager *device_manager;
 
   while (!_gdk_event_queue_find_first(display) && XPending (xdisplay))
     {
@@ -2288,26 +2290,35 @@ _gdk_events_queue (GdkDisplay *display)
 	  if (XFilterEvent (&xevent, None))
 	    continue;
 	}
-      
-      event = gdk_event_new (GDK_NOTHING);
-      
-      event->any.window = NULL;
-      event->any.send_event = xevent.xany.send_event ? TRUE : FALSE;
 
-      ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
+      device_manager = gdk_device_manager_get_for_display (display);
+      event = gdk_event_translator_translate (GDK_EVENT_TRANSLATOR (device_manager),
+                                              display, &xevent);
 
-      node = _gdk_event_queue_append (display, event);
-
-      if (gdk_event_translate (display, event, &xevent, FALSE))
-	{
-	  ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
-	}
+      if (event)
+        node = _gdk_event_queue_append (display, event);
       else
-	{
-	  _gdk_event_queue_remove_link (display, node);
-	  g_list_free_1 (node);
-	  gdk_event_free (event);
-	}
+        {
+          event = gdk_event_new (GDK_NOTHING);
+
+          event->any.window = NULL;
+          event->any.send_event = xevent.xany.send_event ? TRUE : FALSE;
+
+          ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
+
+          node = _gdk_event_queue_append (display, event);
+
+          if (gdk_event_translate (display, event, &xevent, FALSE))
+            {
+              ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
+            }
+          else
+            {
+              _gdk_event_queue_remove_link (display, node);
+              g_list_free_1 (node);
+              gdk_event_free (event);
+            }
+        }
     }
 }
 
