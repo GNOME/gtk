@@ -46,20 +46,21 @@ struct _GdkGCPrivate
   guint32 region_tag_applied;
   int region_tag_offset_x;
   int region_tag_offset_y;
-  
+
   GdkRegion *old_clip_region;
   GdkPixmap *old_clip_mask;
-  
-  GdkSubwindowMode subwindow_mode;
-  
-  GdkFill fill;
+
   GdkBitmap *stipple;
   GdkPixmap *tile;
 
   GdkPixmap *clip_mask;
-  
+
   guint32 fg_pixel;
   guint32 bg_pixel;
+
+  guint subwindow_mode : 1;
+  guint fill : 2;
+  guint exposures : 2;
 };
 
 #define GDK_GC_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GDK_TYPE_GC, GdkGCPrivate))
@@ -187,6 +188,10 @@ _gdk_gc_init (GdkGC           *gc,
     priv->bg_pixel = values->background.pixel;
   if (values_mask & GDK_GC_SUBWINDOW)
     priv->subwindow_mode = values->subwindow_mode;
+  if (values_mask & GDK_GC_EXPOSURES)
+    priv->exposures = values->graphics_exposures;
+  else
+    priv->exposures = TRUE;
 
   gc->colormap = gdk_drawable_get_colormap (drawable);
   if (gc->colormap)
@@ -350,6 +355,8 @@ gdk_gc_set_values (GdkGC           *gc,
     priv->bg_pixel = values->background.pixel;
   if (values_mask & GDK_GC_SUBWINDOW)
     priv->subwindow_mode = values->subwindow_mode;
+  if (values_mask & GDK_GC_EXPOSURES)
+    priv->exposures = values->graphics_exposures;
   
   GDK_GC_GET_CLASS (gc)->set_values (gc, values, values_mask);
 }
@@ -784,6 +791,14 @@ _gdk_gc_get_fill (GdkGC *gc)
   return GDK_GC_GET_PRIVATE (gc)->fill;
 }
 
+gboolean
+_gdk_gc_get_exposures (GdkGC *gc)
+{
+  g_return_val_if_fail (GDK_IS_GC (gc), FALSE);
+
+  return GDK_GC_GET_PRIVATE (gc)->exposures;
+}
+
 /**
  * _gdk_gc_get_tile:
  * @gc: a #GdkGC
@@ -1086,6 +1101,7 @@ gdk_gc_copy (GdkGC *dst_gc,
   dst_priv->fg_pixel = src_priv->fg_pixel;
   dst_priv->bg_pixel = src_priv->bg_pixel;
   dst_priv->subwindow_mode = src_priv->subwindow_mode;
+  dst_priv->exposures = src_priv->exposures;
 }
 
 /**
