@@ -334,6 +334,8 @@ static void	   gtk_window_on_composited_changed (GdkScreen *screen,
 static void        gtk_window_set_label_widget (GtkWindow *window,
                                                 GtkWidget *label);
 
+static gboolean    is_client_side_decorated    (GtkWindow *window);
+
 
 static GSList      *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
@@ -3159,7 +3161,7 @@ gtk_window_set_decorated (GtkWindow *window,
 
   if (GTK_WIDGET (window)->window)
     {
-      if (window->decorated && !priv->client_side_decorated)
+      if (window->decorated && !is_client_side_decorated (window))
         {
           gdk_window_set_decorations (GTK_WIDGET (window)->window,
                                       GDK_DECOR_ALL);
@@ -4459,7 +4461,7 @@ gtk_window_move (GtkWindow *window,
 
   info = gtk_window_get_geometry_info (window, TRUE);
 
-  if (priv->client_side_decorated && priv->client_side_decorations & GDK_DECOR_BORDER)
+  if (is_client_side_decorated (window) && priv->client_side_decorations & GDK_DECOR_BORDER)
     {
       gtk_widget_style_get (widget,
                             "decoration-border-top", &frame_top,
@@ -5018,6 +5020,14 @@ gtk_window_unmap (GtkWidget *widget)
   priv->below_initially = (state & GDK_WINDOW_STATE_BELOW) != 0;
 }
 
+static gboolean
+is_client_side_decorated (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  return priv->client_side_decorated && window->decorated;
+}
+
 static void
 gtk_window_realize (GtkWidget *widget)
 {
@@ -5089,7 +5099,7 @@ gtk_window_realize (GtkWidget *widget)
 			    GDK_LEAVE_NOTIFY_MASK |
 			    GDK_FOCUS_CHANGE_MASK |
 			    GDK_STRUCTURE_MASK);
-  if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
+  if (is_client_side_decorated (window) && window->type != GTK_WINDOW_POPUP)
     {
       attributes.event_mask |= GDK_BUTTON_PRESS_MASK;
       attributes.event_mask |= GDK_POINTER_MOTION_MASK;
@@ -5138,7 +5148,7 @@ gtk_window_realize (GtkWidget *widget)
   if (window->wm_role)
     gdk_window_set_role (widget->window, window->wm_role);
 
-  if (!window->decorated || priv->client_side_decorated)
+  if (!window->decorated || is_client_side_decorated (window))
     {
       gdk_window_set_decorations (widget->window, 0);
     }
@@ -5250,7 +5260,7 @@ gtk_window_size_request (GtkWidget      *widget,
   requisition->width = GTK_CONTAINER (window)->border_width * 2;
   requisition->height = GTK_CONTAINER (window)->border_width * 2;
 
-  if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
+  if (is_client_side_decorated (window) && window->type != GTK_WINDOW_POPUP)
     {
       GtkRequisition box_requisition;
       gint child_height = 0;
@@ -5316,7 +5326,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
                             NULL);
     }
 
-  if (priv->client_side_decorated && priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+  if (is_client_side_decorated (window) && priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
     {
       gtk_widget_get_child_requisition (priv->title_label, &deco_requisition);
 
@@ -5330,7 +5340,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (priv->title_label, &deco_allocation);
     }
 
-  if (priv->client_side_decorated && priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
+  if (is_client_side_decorated (window) && priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
     {
       gtk_widget_get_child_requisition (priv->button_box, &box_requisition);
 
@@ -5344,7 +5354,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
 
   if (window->bin.child && gtk_widget_get_visible (window->bin.child))
     {
-      if (priv->client_side_decorated && window->type != GTK_WINDOW_POPUP)
+      if (is_client_side_decorated (window) && window->type != GTK_WINDOW_POPUP)
         {
           child_allocation.x = container->border_width + frame_left;
           child_allocation.y = container->border_width
@@ -5537,7 +5547,7 @@ get_title_height (GtkWindow *window)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
 
-  if (!priv->client_side_decorated || !priv->title_label)
+  if (!is_client_side_decorated (window) || !priv->title_label)
     return 0;
 
   return priv->title_label->allocation.height;
@@ -5632,10 +5642,14 @@ gtk_window_button_press_event (GtkWidget      *widget,
   gint x = event->x;
   gint y = event->y;
 
-  if (priv->client_side_decorated)
+  if (is_client_side_decorated (GTK_WINDOW (widget)))
     {
       GtkWindowRegion region = get_region_type (GTK_WINDOW (widget), x, y);
       GdkWindowEdge edge = (GdkWindowEdge)region;
+      GdkWindowState state = gdk_window_get_state (widget->window);
+
+      if (state & GDK_WINDOW_STATE_MAXIMIZED)
+        return TRUE;
 
       if (region == GTK_WINDOW_REGION_TITLE ||
           region == GTK_WINDOW_REGION_INNER)
@@ -5690,14 +5704,15 @@ update_cursor_at_position (GtkWidget *widget, gint x, gint y)
   GtkWindowRegion region = get_region_type (GTK_WINDOW (widget), x, y);
   GdkCursorType cursor_type;
   GdkCursor *cursor;
+  GdkWindowState state = gdk_window_get_state (widget->window);
 
   if (region == GTK_WINDOW_REGION_TITLE ||
-      region == GTK_WINDOW_REGION_INNER)
+      region == GTK_WINDOW_REGION_INNER ||
+      (state & GDK_WINDOW_STATE_MAXIMIZED))
     {
       cursor_type = GDK_ARROW;
     }
-
-  if (region <= GTK_WINDOW_REGION_EDGE_SE)
+  else if (region <= GTK_WINDOW_REGION_EDGE_SE)
     {
       switch (region)
         {
@@ -6613,7 +6628,7 @@ gtk_window_move_resize (GtkWindow *window)
   configure_request_size_changed = FALSE;
   configure_request_pos_changed = FALSE;
 
-  if (priv->client_side_decorated && priv->client_side_decorations & GDK_DECOR_BORDER)
+  if (is_client_side_decorated (window) && priv->client_side_decorations & GDK_DECOR_BORDER)
     {
       gtk_widget_style_get (widget,
                             "decoration-border-top", &frame_top,
@@ -7209,7 +7224,7 @@ gtk_window_paint (GtkWidget     *widget,
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (widget);
 
-  if (priv->client_side_decorated)
+  if (is_client_side_decorated (GTK_WINDOW (widget)))
     {
       gtk_paint_box (widget->style, widget->window, GTK_STATE_NORMAL, 
 		     GTK_SHADOW_OUT, area, widget, "decoration", 0, 0, -1, -1);
