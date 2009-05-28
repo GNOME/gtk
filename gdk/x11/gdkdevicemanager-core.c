@@ -373,6 +373,42 @@ set_screen_from_root (GdkDisplay *display,
   return FALSE;
 }
 
+static GdkCrossingMode
+translate_crossing_mode (int mode)
+{
+  switch (mode)
+    {
+    case NotifyNormal:
+      return GDK_CROSSING_NORMAL;
+    case NotifyGrab:
+      return GDK_CROSSING_GRAB;
+    case NotifyUngrab:
+      return GDK_CROSSING_UNGRAB;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static GdkNotifyType
+translate_notify_type (int detail)
+{
+  switch (detail)
+    {
+    case NotifyInferior:
+      return GDK_NOTIFY_INFERIOR;
+    case NotifyAncestor:
+      return GDK_NOTIFY_ANCESTOR;
+    case NotifyVirtual:
+      return GDK_NOTIFY_VIRTUAL;
+    case NotifyNonlinear:
+      return GDK_NOTIFY_NONLINEAR;
+    case NotifyNonlinearVirtual:
+      return GDK_NOTIFY_NONLINEAR_VIRTUAL;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static gboolean
 gdk_device_manager_translate_event (GdkEventTranslator *translator,
                                     GdkDisplay         *display,
@@ -796,44 +832,8 @@ gdk_device_manager_translate_event (GdkEventTranslator *translator,
       event->crossing.x_root = xevent->xcrossing.x_root;
       event->crossing.y_root = xevent->xcrossing.y_root;
 
-      /* Translate the crossing mode into Gdk terms.
-       */
-      switch (xevent->xcrossing.mode)
-	{
-	case NotifyNormal:
-	  event->crossing.mode = GDK_CROSSING_NORMAL;
-	  break;
-	case NotifyGrab:
-	  event->crossing.mode = GDK_CROSSING_GRAB;
-	  break;
-	case NotifyUngrab:
-	  event->crossing.mode = GDK_CROSSING_UNGRAB;
-	  break;
-	};
-
-      /* Translate the crossing detail into Gdk terms.
-       */
-      switch (xevent->xcrossing.detail)
-	{
-	case NotifyInferior:
-	  event->crossing.detail = GDK_NOTIFY_INFERIOR;
-	  break;
-	case NotifyAncestor:
-	  event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-	  break;
-	case NotifyVirtual:
-	  event->crossing.detail = GDK_NOTIFY_VIRTUAL;
-	  break;
-	case NotifyNonlinear:
-	  event->crossing.detail = GDK_NOTIFY_NONLINEAR;
-	  break;
-	case NotifyNonlinearVirtual:
-	  event->crossing.detail = GDK_NOTIFY_NONLINEAR_VIRTUAL;
-	  break;
-	default:
-	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
-	  break;
-	}
+      event->crossing.mode = translate_crossing_mode (xevent->xcrossing.mode);
+      event->crossing.detail = translate_notify_type (xevent->xcrossing.detail);
 
       event->crossing.focus = xevent->xcrossing.focus;
       event->crossing.state = xevent->xcrossing.state;
@@ -891,44 +891,8 @@ gdk_device_manager_translate_event (GdkEventTranslator *translator,
       event->crossing.x_root = xevent->xcrossing.x_root;
       event->crossing.y_root = xevent->xcrossing.y_root;
 
-      /* Translate the crossing mode into Gdk terms.
-       */
-      switch (xevent->xcrossing.mode)
-	{
-	case NotifyNormal:
-	  event->crossing.mode = GDK_CROSSING_NORMAL;
-	  break;
-	case NotifyGrab:
-	  event->crossing.mode = GDK_CROSSING_GRAB;
-	  break;
-	case NotifyUngrab:
-	  event->crossing.mode = GDK_CROSSING_UNGRAB;
-	  break;
-	};
-
-      /* Translate the crossing detail into Gdk terms.
-       */
-      switch (xevent->xcrossing.detail)
-	{
-	case NotifyInferior:
-	  event->crossing.detail = GDK_NOTIFY_INFERIOR;
-	  break;
-	case NotifyAncestor:
-	  event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-	  break;
-	case NotifyVirtual:
-	  event->crossing.detail = GDK_NOTIFY_VIRTUAL;
-	  break;
-	case NotifyNonlinear:
-	  event->crossing.detail = GDK_NOTIFY_NONLINEAR;
-	  break;
-	case NotifyNonlinearVirtual:
-	  event->crossing.detail = GDK_NOTIFY_NONLINEAR_VIRTUAL;
-	  break;
-	default:
-	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
-	  break;
-	}
+      event->crossing.mode = translate_crossing_mode (xevent->xcrossing.mode);
+      event->crossing.detail = translate_notify_type (xevent->xcrossing.detail);
 
       event->crossing.focus = xevent->xcrossing.focus;
       event->crossing.state = xevent->xcrossing.state;
