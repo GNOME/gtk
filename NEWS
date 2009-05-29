@@ -2,11 +2,58 @@ Overview of Changes from GTK+ 2.17.0 to 2.17.1
 ==============================================
 
 * GtkLabel:
- - GtkLabel can now show embedded URLs, much like SexyUrlLabel
+ - GtkLabel can show embedded URLs, much like SexyUrlLabel
+
+* Printing:
+ - GTK+ includes a print backend that works with the PAPI
+   printing service.
+ - The file and lpr backends can print multiple pages per sheet.
 
 * Changes that are relevant for theme authors:
  - The URL support in GtkLabel uses the link-color / visited-link-color
    style properties
+
+* Bugs fixed:
+ 576091 GtkTooltip destroy the custom widget
+ 315462 GtkButton doesn't center its child when the child is too ...
+ 390331 "Pages per sheet" does not work for LPR printing
+ 531490 gdk_window_set_events (0) will _ADD_ events to the root w...
+ 574386 Remove deprecated call to gtk_status_icon_set_tooltip in ...
+ 576678 cups printbackend doesn't list printers on NetBSD
+ 579366 gtkbuilderparser leaks RequiresInfo objects.
+ 579884 casting problem in gmodule
+ 580511 gdk_x11_atom_to_xatom_for_display translates GDK_NONE as ...
+ 581876 Remove deprecated call to gtk_action_connect_proxy in tes...
+ 581878 Remove deprecated call to gtk_scale_button_get_orientatio...
+ 582003 Calling gdk_window_get_events() changes the event mask, b...
+ 582488 GtkNotebook behaves poorly when allocated less than reque...
+ 582950 Use number of pages to print when showing printing progress
+ 582963 Crash when printing from a thread
+ 583050 unclear disposition of function gtk_combo_box_get_active...
+ 583522 Trivial error in GtkBuilder migration documentation
+ 535557 gdk_window_set_icon_name should accept NULL to unset
+ 549859 "file" printer doesn't support n-up
+
+* Updated translations:
+ Arabic
+ British English
+ Catalan
+ Czech
+ Danish
+ Estonian
+ French
+ German
+ Greek
+ Hungarian
+ Irish
+ Italian
+ Kannada
+ Portuguese
+ Russian
+ Slovenian
+ Spanish
+ Ukrainian
+ Simplified Chinese
 
 
 Overview of Changes from GTK+ 2.16.x to 2.17.0
