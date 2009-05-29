@@ -2267,7 +2267,7 @@ gtk_assistant_accessible_ref_child (AtkObject *accessible,
     return NULL;
   else if (index < n_pages)
     {
-      GtkAssistantPage *page = g_list_nth_data (priv->pages, index / 2);
+      GtkAssistantPage *page = g_list_nth_data (priv->pages, index);
 
       child = page->page;
       title = gtk_assistant_get_page_title (assistant, child);
