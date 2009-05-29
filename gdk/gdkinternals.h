@@ -187,6 +187,7 @@ typedef struct
   gboolean grab_one_pointer_release_event;
 } GdkPointerGrabInfo;
 
+typedef struct _GdkInputWindow GdkInputWindow;
 
 /* Private version of GdkWindowObject. The initial part of this strucuture
    is public for historical reasons. Don't change that part */
@@ -260,6 +261,7 @@ struct _GdkWindowObject
   guint native_visibility : 2; /* the native visibility of a impl windows */
 
   GdkWindowPaint *implicit_paint;
+  GdkInputWindow *input_window; /* only for impl windows */
 
   GList *outstanding_moves;
 
@@ -640,6 +642,10 @@ GdkRegion *_gdk_window_calculate_full_clip_region    (GdkWindow     *window,
                                                       gint          *base_y_offset);
 gboolean    _gdk_window_has_impl (GdkWindow *window);
 GdkWindow * _gdk_window_get_impl_window (GdkWindow *window);
+GdkWindow *_gdk_window_get_input_window_for_event (GdkWindow *native_window,
+						   GdkEventType event_type,
+						   int x, int y,
+						   gulong serial);
 GdkRegion  *_gdk_region_new_from_yxbanded_rects (GdkRectangle *rects, int n_rects);
 
 /*****************************

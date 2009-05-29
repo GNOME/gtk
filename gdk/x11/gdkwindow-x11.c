@@ -1036,9 +1036,6 @@ _gdk_x11_window_destroy (GdkWindow *window,
 
   _gdk_selection_window_destroyed (window);
   
-  if (private->extension_events != 0)
-    _gdk_input_window_destroy (window);
-
   toplevel = _gdk_x11_window_get_toplevel (window);
   if (toplevel)
     gdk_toplevel_x11_free_contents (GDK_WINDOW_DISPLAY (window), toplevel);
@@ -5585,6 +5582,8 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->queue_antiexpose = _gdk_x11_window_queue_antiexpose;
   iface->queue_translation = _gdk_x11_window_queue_translation;
   iface->destroy = _gdk_x11_window_destroy;
+  iface->input_window_destroy = _gdk_input_window_destroy;
+  iface->input_window_crossing = _gdk_input_crossing_event;
 }
 
 #define __GDK_WINDOW_X11_C__

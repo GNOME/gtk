@@ -1596,6 +1596,10 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 					   NULL, NULL);
 	    }
 
+
+	  if (private->extension_events)
+	    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->input_window_destroy (window);
+
 	  if (gdk_window_has_impl (private))
 	    {
 	      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->destroy (window, recursing_native, foreign_destroy);
@@ -8240,6 +8244,10 @@ send_crossing_event (GdkDisplay                 *display,
   else
     event_mask = GDK_ENTER_NOTIFY_MASK;
 
+  if (window->extension_events != 0)
+    GDK_WINDOW_IMPL_GET_IFACE (window->impl)->input_window_crossing (window,
+								     type == GDK_ENTER_NOTIFY);
+
   if (window->event_mask & event_mask)
     {
       event = _gdk_make_event ((GdkWindow *)window, type, event_in_queue, TRUE);
@@ -8724,7 +8732,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 	    }
 	}
       
-      if (event_win)
+      if (event_win && !display->ignore_core_events)
 	{
 	  event = _gdk_make_event (event_win, GDK_MOTION_NOTIFY, source_event, FALSE);
 	  event->motion.time = time_;
@@ -8814,7 +8822,7 @@ proxy_button_event (GdkEvent *source_event,
 				type, state,
 				NULL, serial);
 
-  if (event_win == NULL)
+  if (event_win == NULL || display->ignore_core_events)
     return TRUE;
   
   event = _gdk_make_event (event_win, type, source_event, FALSE);
@@ -8914,6 +8922,22 @@ gdk_window_print_tree (GdkWindow *window,
 
 #endif /* DEBUG_WINDOW_PRINTING */
 
+static gboolean
+is_input_event (GdkDisplay *display,
+		GdkEvent *event)
+{
+  GdkDevice *core_pointer;
+
+  core_pointer = gdk_display_get_core_pointer (display);
+  if ((event->type == GDK_MOTION_NOTIFY &&
+       event->motion.device != core_pointer) ||
+      (event->type == GDK_BUTTON_PRESS ||
+       event->type == GDK_BUTTON_RELEASE) &&
+      event->button.device != core_pointer)
+    return TRUE;
+  return FALSE;
+}
+
 void
 _gdk_windowing_got_event (GdkDisplay *display,
 			  GList      *event_link,
@@ -8957,6 +8981,9 @@ _gdk_windowing_got_event (GdkDisplay *display,
 						event_private);
       return;
     }
+
+  if (is_input_event (display, event))
+    return;
 
   if (!(is_button_type (event->type) ||
 	is_motion_type (event->type)) ||
@@ -9074,6 +9101,88 @@ _gdk_windowing_got_event (GdkDisplay *display,
       gdk_event_free (event);
     }
 }
+
+
+static GdkWindow *
+get_extension_event_window (GdkDisplay                 *display,
+			    GdkWindow                  *pointer_window,
+			    GdkEventType                type,
+			    gulong                      serial)
+{
+  guint evmask;
+  GdkWindow *grab_window;
+  GdkWindowObject *w;
+  GdkPointerGrabInfo *grab;
+
+  grab = _gdk_display_has_pointer_grab (display, serial);
+
+  if (grab != NULL && !grab->owner_events)
+    {
+      evmask = grab->event_mask;
+
+      grab_window = grab->window;
+
+      if (evmask & type_masks[type])
+	return grab_window;
+      else
+	return NULL;
+    }
+
+  w = (GdkWindowObject *)pointer_window;
+  while (w != NULL)
+    {
+      evmask = w->extension_events;
+
+      if (evmask & type_masks[type])
+	return (GdkWindow *)w;
+
+      w = w->parent;
+    }
+
+  if (grab != NULL &&
+      grab->owner_events)
+    {
+      evmask = grab->event_mask;
+
+      if (evmask & type_masks[type])
+	return grab->window;
+      else
+	return NULL;
+    }
+
+  return NULL;
+}
+
+
+GdkWindow *
+_gdk_window_get_input_window_for_event (GdkWindow *native_window,
+					GdkEventType event_type,
+					int x, int y,
+					gulong serial)
+{
+  GdkDisplay *display;
+  GdkWindow *toplevel_window;
+  GdkWindow *pointer_window;
+  GdkWindow *event_win;
+  gdouble toplevel_x, toplevel_y;
+
+  toplevel_x = x;
+  toplevel_y = y;
+
+  display = gdk_drawable_get_display (native_window);
+  toplevel_window = convert_coords_to_toplevel (native_window,
+						toplevel_x, toplevel_y,
+						&toplevel_x, &toplevel_y);
+  pointer_window = get_pointer_window (display, toplevel_window,
+				       toplevel_x, toplevel_y, serial);
+  event_win = get_extension_event_window (display,
+					  pointer_window,
+					  event_type,
+					  serial);
+
+  return event_win;
+}
+
 
 #define __GDK_WINDOW_C__
 #include "gdkaliasdef.c"

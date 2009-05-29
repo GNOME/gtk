@@ -251,7 +251,8 @@ gdk_pointer_grab (GdkWindow *	  window,
    */
   xevent_mask &= ~PointerMotionHintMask;
   
-  return_val = _gdk_input_grab_pointer (native,
+  return_val = _gdk_input_grab_pointer (window,
+					native,
 					owner_events,
 					event_mask,
 					confine_to,

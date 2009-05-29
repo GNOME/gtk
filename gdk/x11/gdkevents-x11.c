@@ -1125,9 +1125,7 @@ gdk_event_translate (GdkDisplay *display,
 			   xevent->xbutton.x, xevent->xbutton.y,
 			   xevent->xbutton.button));
       
-      if (window_private == NULL || 
-	  ((window_private->extension_events != 0) &&
-           display_x11->input_ignore_core))
+      if (window_private == NULL)
 	{
 	  return_val = FALSE;
 	  break;
@@ -1201,9 +1199,7 @@ gdk_event_translate (GdkDisplay *display,
 			   xevent->xbutton.x, xevent->xbutton.y,
 			   xevent->xbutton.button));
       
-      if (window_private == NULL ||
-	  ((window_private->extension_events != 0) &&
-           display_x11->input_ignore_core))
+      if (window_private == NULL)
 	{
 	  return_val = FALSE;
 	  break;
@@ -1241,9 +1237,7 @@ gdk_event_translate (GdkDisplay *display,
 			   xevent->xmotion.x, xevent->xmotion.y,
 			   (xevent->xmotion.is_hint) ? "true" : "false"));
       
-      if (window_private == NULL ||
-	  ((window_private->extension_events != 0) &&
-           display_x11->input_ignore_core))
+      if (window_private == NULL)
 	{
 	  return_val = FALSE;
 	  break;
@@ -1304,12 +1298,6 @@ gdk_event_translate (GdkDisplay *display,
 	    }
 	}
 
-      /* Tell XInput stuff about it if appropriate */
-      if (window_private &&
-	  !GDK_WINDOW_DESTROYED (window) &&
-	  window_private->extension_events != 0)
-	_gdk_input_enter_event (&xevent->xcrossing, window);
-      
       event->crossing.type = GDK_ENTER_NOTIFY;
       event->crossing.window = window;
       
@@ -1854,7 +1842,7 @@ gdk_event_translate (GdkDisplay *display,
       if (window &&
 	  xevent->xconfigure.event == xevent->xconfigure.window &&
 	  !GDK_WINDOW_DESTROYED (window) &&
-	  (window_private->extension_events != 0))
+	  window_private->input_window != NULL)
 	_gdk_input_configure_event (&xevent->xconfigure, window);
       
 #ifdef HAVE_XSYNC
@@ -2171,8 +2159,8 @@ gdk_event_translate (GdkDisplay *display,
 	  
 	  if (window_private &&
 	      !GDK_WINDOW_DESTROYED (window_private) &&
-	      (window_private->extension_events != 0))
-	    return_val = _gdk_input_other_event(event, xevent, window);
+	      window_private->input_window)
+	    return_val = _gdk_input_other_event (event, xevent, window);
 	  else
 	    return_val = FALSE;
 	  

@@ -133,11 +133,6 @@ struct _GdkDisplayX11
   /* input GdkWindow list */
   GList *input_windows;
 
-  gint input_ignore_core;
-  /* information about network port and host for gxid daemon */
-  gchar *input_gxid_host;
-  gint   input_gxid_port;
-
   /* Startup notification */
   gchar *startup_notification_id;
 

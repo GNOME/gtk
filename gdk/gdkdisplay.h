@@ -91,6 +91,7 @@ struct _GdkDisplay
   const GdkDisplayPointerHooks *pointer_hooks; /* Current hooks for querying pointer */
   
   guint closed : 1;		/* Whether this display has been closed */
+  guint ignore_core_events : 1; /* Don't send core motion and button event */
 
   guint double_click_distance;	/* Maximum distance between clicks in pixels */
   gint button_x[2];             /* The last 2 button click positions. */
