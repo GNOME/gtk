@@ -830,9 +830,9 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * @setup: actual page setup
    * @settings: actual print settings
    *
-   * Emmited after change of selected printer. The actual page setup and
+   * Emitted after change of selected printer. The actual page setup and
    * print settings are passed to the custom widget, which can actualize
-   * itself according to this change. 
+   * itself according to this change.
    *
    * Since: 2.18
    */
