@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-04 01:14-0400\n"
+"POT-Creation-Date: 2009-05-29 19:02-0400\n"
 "PO-Revision-Date: 2009-04-15 23:06+0200\n"
 "Last-Translator: David Planella <david.planella@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -1815,11 +1815,11 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Reemplaça"
 
-#: gtk/gtkfilechooserdefault.c:8914
+#: gtk/gtkfilechooserdefault.c:8919
 msgid "Could not start the search process"
 msgstr "No s'ha pogut iniciar el procés de cerca"
 
-#: gtk/gtkfilechooserdefault.c:8915
+#: gtk/gtkfilechooserdefault.c:8920
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1827,34 +1827,34 @@ msgstr ""
 "El programa no ha pogut crear cap connexió al dimoni d'indexació. Assegureu-"
 "vos que s'està executant."
 
-#: gtk/gtkfilechooserdefault.c:8929
+#: gtk/gtkfilechooserdefault.c:8934
 msgid "Could not send the search request"
 msgstr "No s'ha pogut enviar la sol·licitud de cerca"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9396
+#: gtk/gtkfilechooserdefault.c:9401
 msgid "_Search:"
 msgstr "_Cerca:"
 
-#: gtk/gtkfilechooserdefault.c:10349
+#: gtk/gtkfilechooserdefault.c:10354
 #, c-format
 msgid "Could not mount %s"
 msgstr "No s'ha pogut muntar %s"
 
-#: gtk/gtkfilechooserdefault.c:11024
+#: gtk/gtkfilechooserdefault.c:11029
 msgid "Type name of new folder"
 msgstr "Escriviu el nom de la carpeta nova"
 
-#: gtk/gtkfilechooserdefault.c:11202 gtk/gtkfilechooserdefault.c:11224
-#: gtk/gtkfilechooserdefault.c:11295
+#: gtk/gtkfilechooserdefault.c:11207 gtk/gtkfilechooserdefault.c:11229
+#: gtk/gtkfilechooserdefault.c:11300
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/gtkfilechooserdefault.c:11242
+#: gtk/gtkfilechooserdefault.c:11247
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11244
+#: gtk/gtkfilechooserdefault.c:11249
 msgid "Yesterday at %H:%M"
 msgstr "Ahir a les %H:%M"
 
@@ -2243,6 +2243,17 @@ msgstr "(desconegut)"
 msgid "Cl_ear"
 msgstr "_Neteja"
 
+#. Open Link
+#: gtk/gtklabel.c:5504
+#, fuzzy
+msgid "_Open Link"
+msgstr "Obre una ubicació"
+
+#. Copy Link Address
+#: gtk/gtklabel.c:5516
+msgid "Copy _Link Address"
+msgstr ""
+
 #: gtk/gtklinkbutton.c:428
 msgid "Copy URL"
 msgstr "Copia l'URL"
@@ -2336,7 +2347,7 @@ msgstr "Recorda la contrasenya _fins que surti"
 msgid "Remember _forever"
 msgstr "Recorda-la per se_mpre"
 
-#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6946
+#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6949
 #, c-format
 msgid "Page %u"
 msgstr "Pàgina %u"
@@ -2404,7 +2415,7 @@ msgstr "Mida del _paper:"
 msgid "_Orientation:"
 msgstr "_Orientació:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2683
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2739
 msgid "Page Setup"
 msgstr "Configuració de la pàgina"
 
@@ -2494,93 +2505,93 @@ msgstr "De_sa a la carpeta:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:176
+#: gtk/gtkprintoperation.c:179
 #, c-format
 msgid "%s job #%d"
 msgstr "%s treball #%d"
 
-#: gtk/gtkprintoperation.c:1540
+#: gtk/gtkprintoperation.c:1543
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Estat inicial"
 
-#: gtk/gtkprintoperation.c:1541
+#: gtk/gtkprintoperation.c:1544
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "S'està preparant per a imprimir"
 
-#: gtk/gtkprintoperation.c:1542
+#: gtk/gtkprintoperation.c:1545
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "S'estan generant les dades"
 
-#: gtk/gtkprintoperation.c:1543
+#: gtk/gtkprintoperation.c:1546
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "S'estan enviant les dades"
 
-#: gtk/gtkprintoperation.c:1544
+#: gtk/gtkprintoperation.c:1547
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "S'està esperant"
 
-#: gtk/gtkprintoperation.c:1545
+#: gtk/gtkprintoperation.c:1548
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Bloquejat degut a un problema"
 
-#: gtk/gtkprintoperation.c:1546
+#: gtk/gtkprintoperation.c:1549
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "S'està imprimint"
 
-#: gtk/gtkprintoperation.c:1547
+#: gtk/gtkprintoperation.c:1550
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "S'ha finalitzat"
 
-#: gtk/gtkprintoperation.c:1548
+#: gtk/gtkprintoperation.c:1551
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "S'ha finalitzat amb error"
 
-#: gtk/gtkprintoperation.c:2071
+#: gtk/gtkprintoperation.c:2127
 #, c-format
 msgid "Preparing %d"
 msgstr "S'està preparant %d"
 
-#: gtk/gtkprintoperation.c:2073 gtk/gtkprintoperation.c:2404
+#: gtk/gtkprintoperation.c:2129 gtk/gtkprintoperation.c:2694
 #, c-format
 msgid "Preparing"
 msgstr "S'està preparant"
 
-#: gtk/gtkprintoperation.c:2076
+#: gtk/gtkprintoperation.c:2132
 #, c-format
 msgid "Printing %d"
 msgstr "S'està imprimint %d"
 
-#: gtk/gtkprintoperation.c:2434
+#: gtk/gtkprintoperation.c:2724
 #, c-format
 msgid "Error creating print preview"
 msgstr "S'ha produït un error en crear la previsualització d'impressió"
 
-#: gtk/gtkprintoperation.c:2437
+#: gtk/gtkprintoperation.c:2727
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 "El motiu més probable és perquè no s'ha pogut crear un fitxer temporal."
 
-#: gtk/gtkprintoperation-unix.c:257
+#: gtk/gtkprintoperation-unix.c:265
 #, c-format
 msgid "Error launching preview"
 msgstr "S'ha produït un error en llançar la previsualització"
 
-#: gtk/gtkprintoperation-unix.c:301
+#: gtk/gtkprintoperation-unix.c:309
 #, c-format
 msgid "Error printing"
 msgstr "S'ha produït un error en imprimir"
 
-#: gtk/gtkprintoperation-unix.c:425 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:435 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "Aplicació"
 
@@ -2615,28 +2626,28 @@ msgstr "No s'ha trobat cap impressora"
 msgid "Invalid argument to CreateDC"
 msgstr "Argument no vàlid per a la funció CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1801
+#: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1803
 msgid "Error from StartDoc"
 msgstr "Error de StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1658 gtk/gtkprintoperation-win32.c:1681
-#: gtk/gtkprintoperation-win32.c:1729
+#: gtk/gtkprintoperation-win32.c:1660 gtk/gtkprintoperation-win32.c:1683
+#: gtk/gtkprintoperation-win32.c:1731
 msgid "Not enough free memory"
 msgstr "No hi ha prou memòria"
 
-#: gtk/gtkprintoperation-win32.c:1734
+#: gtk/gtkprintoperation-win32.c:1736
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Argument no vàlid a PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1739
+#: gtk/gtkprintoperation-win32.c:1741
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Punter no vàlid a PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1744
+#: gtk/gtkprintoperation-win32.c:1746
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Gestor no vàlid a PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1749
+#: gtk/gtkprintoperation-win32.c:1751
 msgid "Unspecified error"
 msgstr "Error no especificat"
 
@@ -2703,99 +2714,155 @@ msgstr "Inve_rteix"
 msgid "General"
 msgstr "General"
 
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
+#.
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing
+#.
+#: gtk/gtkprintunixdialog.c:2448
+#: modules/printbackends/cups/gtkprintbackendcups.c:3130
+msgid "Left to right, top to bottom"
+msgstr "D'esquerra a dreta, de dalt a baix"
+
+#: gtk/gtkprintunixdialog.c:2448
+#: modules/printbackends/cups/gtkprintbackendcups.c:3130
+msgid "Left to right, bottom to top"
+msgstr "D'esquerra a dreta, de baix a dalt"
+
+#: gtk/gtkprintunixdialog.c:2449
+#: modules/printbackends/cups/gtkprintbackendcups.c:3131
+msgid "Right to left, top to bottom"
+msgstr "De dreta a esquerra, de dalt a baix"
+
+#: gtk/gtkprintunixdialog.c:2449
+#: modules/printbackends/cups/gtkprintbackendcups.c:3131
+msgid "Right to left, bottom to top"
+msgstr "De dreta a esquerra, de baix a dalt"
+
+#: gtk/gtkprintunixdialog.c:2450
+#: modules/printbackends/cups/gtkprintbackendcups.c:3132
+msgid "Top to bottom, left to right"
+msgstr "De dalt a baix, d'esquerra a dreta"
+
+#: gtk/gtkprintunixdialog.c:2450
+#: modules/printbackends/cups/gtkprintbackendcups.c:3132
+msgid "Top to bottom, right to left"
+msgstr "De dalt a baix, de dreta a esquerra"
+
+#: gtk/gtkprintunixdialog.c:2451
+#: modules/printbackends/cups/gtkprintbackendcups.c:3133
+msgid "Bottom to top, left to right"
+msgstr "De baix a dalt, d'esquerra a dreta"
+
+#: gtk/gtkprintunixdialog.c:2451
+#: modules/printbackends/cups/gtkprintbackendcups.c:3133
+msgid "Bottom to top, right to left"
+msgstr "De baix a dalt, de dreta a esquerra"
+
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2444
+#: gtk/gtkprintunixdialog.c:2455 gtk/gtkprintunixdialog.c:2468
 #: modules/printbackends/cups/gtkprintbackendcups.c:3164
 msgid "Page Ordering"
 msgstr "Ordenació de les pàgines"
 
-#: gtk/gtkprintunixdialog.c:2450
+#: gtk/gtkprintunixdialog.c:2484
 msgid "Left to right"
 msgstr "D'esquerra a dreta"
 
-#: gtk/gtkprintunixdialog.c:2451
+#: gtk/gtkprintunixdialog.c:2485
 msgid "Right to left"
 msgstr "De dreta a esquerra"
 
-#: gtk/gtkprintunixdialog.c:2520
+#: gtk/gtkprintunixdialog.c:2497
+#, fuzzy
+msgid "Top to bottom"
+msgstr "De dalt a baix, d'esquerra a dreta"
+
+#: gtk/gtkprintunixdialog.c:2498
+#, fuzzy
+msgid "Bottom to top"
+msgstr "De baix a dalt, d'esquerra a dreta"
+
+#: gtk/gtkprintunixdialog.c:2576
 msgid "Layout"
 msgstr "Disposició"
 
-#: gtk/gtkprintunixdialog.c:2524
+#: gtk/gtkprintunixdialog.c:2580
 msgid "T_wo-sided:"
 msgstr "_Doble cara:"
 
-#: gtk/gtkprintunixdialog.c:2539
+#: gtk/gtkprintunixdialog.c:2595
 msgid "Pages per _side:"
 msgstr "Pàgines per _cara:"
 
-#: gtk/gtkprintunixdialog.c:2557
+#: gtk/gtkprintunixdialog.c:2613
 msgid "Page or_dering:"
 msgstr "Or_denació de les pàgines:"
 
-#: gtk/gtkprintunixdialog.c:2573
+#: gtk/gtkprintunixdialog.c:2629
 msgid "_Only print:"
 msgstr "N_omés imprimeix:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2588
+#: gtk/gtkprintunixdialog.c:2644
 msgid "All sheets"
 msgstr "Tots els fulls"
 
-#: gtk/gtkprintunixdialog.c:2589
+#: gtk/gtkprintunixdialog.c:2645
 msgid "Even sheets"
 msgstr "Fulls parells"
 
-#: gtk/gtkprintunixdialog.c:2590
+#: gtk/gtkprintunixdialog.c:2646
 msgid "Odd sheets"
 msgstr "Fulls senars"
 
-#: gtk/gtkprintunixdialog.c:2593
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Sc_ale:"
 msgstr "Esc_ala:"
 
-#: gtk/gtkprintunixdialog.c:2620
+#: gtk/gtkprintunixdialog.c:2676
 msgid "Paper"
 msgstr "Paper"
 
-#: gtk/gtkprintunixdialog.c:2624
+#: gtk/gtkprintunixdialog.c:2680
 msgid "Paper _type:"
 msgstr "_Tipus de paper:"
 
-#: gtk/gtkprintunixdialog.c:2639
+#: gtk/gtkprintunixdialog.c:2695
 msgid "Paper _source:"
 msgstr "Font del pape_r:"
 
-#: gtk/gtkprintunixdialog.c:2654
+#: gtk/gtkprintunixdialog.c:2710
 msgid "Output t_ray:"
 msgstr "Safata de so_rtida:"
 
-#: gtk/gtkprintunixdialog.c:2708
+#: gtk/gtkprintunixdialog.c:2764
 msgid "Job Details"
 msgstr "Detalls del treball"
 
-#: gtk/gtkprintunixdialog.c:2714
+#: gtk/gtkprintunixdialog.c:2770
 msgid "Pri_ority:"
 msgstr "Pri_oritat:"
 
-#: gtk/gtkprintunixdialog.c:2729
+#: gtk/gtkprintunixdialog.c:2785
 msgid "_Billing info:"
 msgstr "Informació de _facturació:"
 
-#: gtk/gtkprintunixdialog.c:2747
+#: gtk/gtkprintunixdialog.c:2803
 msgid "Print Document"
 msgstr "Imprimeix el document"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2756
+#: gtk/gtkprintunixdialog.c:2812
 msgid "_Now"
 msgstr "A_ra"
 
-#: gtk/gtkprintunixdialog.c:2767
+#: gtk/gtkprintunixdialog.c:2823
 msgid "A_t:"
 msgstr "_a:"
 
@@ -2803,7 +2870,7 @@ msgstr "_a:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:2773
+#: gtk/gtkprintunixdialog.c:2829
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2811,21 +2878,21 @@ msgstr ""
 "Especifiqueu l'hora d'impressió,\n"
 " p.ex. 15:30, 2:35 PM, 14:15:20, 11:46:30 AM, 4 PM"
 
-#: gtk/gtkprintunixdialog.c:2783
+#: gtk/gtkprintunixdialog.c:2839
 msgid "Time of print"
 msgstr "Hora d'impressió"
 
-#: gtk/gtkprintunixdialog.c:2799
+#: gtk/gtkprintunixdialog.c:2855
 msgid "On _hold"
 msgstr "En es_pera"
 
-#: gtk/gtkprintunixdialog.c:2800
+#: gtk/gtkprintunixdialog.c:2856
 msgid "Hold the job until it is explicitly released"
 msgstr ""
 "Mantingues la tasca en espera fins que no s'hagi alliberat de manera "
 "explícita"
 
-#: gtk/gtkprintunixdialog.c:2820
+#: gtk/gtkprintunixdialog.c:2876
 msgid "Add Cover Page"
 msgstr "Afegeix pàgina de coberta"
 
@@ -2833,7 +2900,7 @@ msgstr "Afegeix pàgina de coberta"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2829
+#: gtk/gtkprintunixdialog.c:2885
 msgid "Be_fore:"
 msgstr "A_bans:"
 
@@ -2841,38 +2908,38 @@ msgstr "A_bans:"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2847
+#: gtk/gtkprintunixdialog.c:2903
 msgid "_After:"
 msgstr "_Després:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2865
+#: gtk/gtkprintunixdialog.c:2921
 msgid "Job"
 msgstr "Treball"
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2987
 msgid "Advanced"
 msgstr "Avançat"
 
-#: gtk/gtkprintunixdialog.c:2966
+#: gtk/gtkprintunixdialog.c:3022
 msgid "Image Quality"
 msgstr "Qualitat de la imatge"
 
-#: gtk/gtkprintunixdialog.c:2969
+#: gtk/gtkprintunixdialog.c:3025
 msgid "Color"
 msgstr "Color"
 
-#: gtk/gtkprintunixdialog.c:2972
+#: gtk/gtkprintunixdialog.c:3028
 msgid "Finishing"
 msgstr "Acabaments"
 
-#: gtk/gtkprintunixdialog.c:2982
+#: gtk/gtkprintunixdialog.c:3038
 msgid "Some of the settings in the dialog conflict"
 msgstr "Alguns paràmetres del diàleg estan en conflicte"
 
-#: gtk/gtkprintunixdialog.c:3005
+#: gtk/gtkprintunixdialog.c:3061
 msgid "Print"
 msgstr "Imprimeix"
 
@@ -4559,81 +4626,81 @@ msgstr "No s'ha pogut escriure l'índex de la carpeta\n"
 msgid "Failed to rewrite header\n"
 msgstr "No s'ha pogut reescriure la capçalera\n"
 
-#: gtk/updateiconcache.c:1455
+#: gtk/updateiconcache.c:1463
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "No s'ha pogut obrir el fitxer %s: %s\n"
 
-#: gtk/updateiconcache.c:1463
+#: gtk/updateiconcache.c:1471
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "No s'ha pogut escriure el fitxer de memòria cau: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "La memòria cau generada no era vàlida.\n"
 
-#: gtk/updateiconcache.c:1511
+#: gtk/updateiconcache.c:1519
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "No s'ha pogut canviar el nom de %s a %s: %s, se suprimirà %s.\n"
 
-#: gtk/updateiconcache.c:1523
+#: gtk/updateiconcache.c:1531
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "No s'ha pogut canviar el nom de %s a %s: %s\n"
 
-#: gtk/updateiconcache.c:1530
+#: gtk/updateiconcache.c:1538
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "No s'ha pogut tornar a anomenar %s a %s: %s.\n"
 
-#: gtk/updateiconcache.c:1556
+#: gtk/updateiconcache.c:1564
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "S'ha creat el fitxer de memòria cau amb èxit.\n"
 
-#: gtk/updateiconcache.c:1595
+#: gtk/updateiconcache.c:1603
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Sobreescriu una memòria cau existent, encara que estigui al dia"
 
-#: gtk/updateiconcache.c:1596
+#: gtk/updateiconcache.c:1604
 msgid "Don't check for the existence of index.theme"
 msgstr "No comprovis l'existència de index.theme"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1605
 msgid "Don't include image data in the cache"
 msgstr "No incloguis dades d'imatges a la memòria cau"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1606
 msgid "Output a C header file"
 msgstr "Produeix un fitxer de capçalera C"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1607
 msgid "Turn off verbose output"
 msgstr "Desactiva la sortida detallada"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1608
 msgid "Validate existing icon cache"
 msgstr "Valida la memòria cau d'icones existent"
 
-#: gtk/updateiconcache.c:1663
+#: gtk/updateiconcache.c:1671
 #, c-format
 msgid "File not found: %s\n"
 msgstr "No s'ha trobat el fitxer: %s\n"
 
-#: gtk/updateiconcache.c:1669
+#: gtk/updateiconcache.c:1677
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "No és una memòria cau d'icones vàlida: %s\n"
 
-#: gtk/updateiconcache.c:1682
+#: gtk/updateiconcache.c:1690
 #, c-format
 msgid "No theme index file."
 msgstr "No hi ha cap fitxer d'índex de tema."
 
-#: gtk/updateiconcache.c:1686
+#: gtk/updateiconcache.c:1694
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4928,41 +4995,6 @@ msgstr "Mitjana"
 #: modules/printbackends/cups/gtkprintbackendcups.c:3125
 msgid "Low"
 msgstr "Baixa"
-
-#. Translators: These strings name the possible arrangements of
-#. * multiple pages on a sheet when printing
-#.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3130
-msgid "Left to right, top to bottom"
-msgstr "D'esquerra a dreta, de dalt a baix"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3130
-msgid "Left to right, bottom to top"
-msgstr "D'esquerra a dreta, de baix a dalt"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3131
-msgid "Right to left, top to bottom"
-msgstr "De dreta a esquerra, de dalt a baix"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3131
-msgid "Right to left, bottom to top"
-msgstr "De dreta a esquerra, de baix a dalt"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3132
-msgid "Top to bottom, left to right"
-msgstr "De dalt a baix, d'esquerra a dreta"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3132
-msgid "Top to bottom, right to left"
-msgstr "De dalt a baix, de dreta a esquerra"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3133
-msgid "Bottom to top, left to right"
-msgstr "De baix a dalt, d'esquerra a dreta"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3133
-msgid "Bottom to top, right to left"
-msgstr "De baix a dalt, de dreta a esquerra"
 
 #. Cups specific, non-ppd related settings
 #. Translators, this string is used to label the pages-per-sheet option
@@ -5897,9 +5929,6 @@ msgstr "No s'ha pogut obtenir informació per al fitxer «%s»: %s"
 
 #~ msgid "Could not build file name from '%s' and '%s'"
 #~ msgstr "No s'ha pogut construir el nom del fitxer des de «%s» i «%s»"
-
-#~ msgid "Open Location"
-#~ msgstr "Obre una ubicació"
 
 #~ msgid "Save in Location"
 #~ msgstr "Desa en una ubicació"

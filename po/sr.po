@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-04 01:14-0400\n"
+"POT-Creation-Date: 2009-05-29 19:02-0400\n"
 "PO-Revision-Date: 2008-09-19 20:36+0200\n"
 "Last-Translator: Горан Ракић <grakic@devbase.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -1812,11 +1812,11 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Замени"
 
-#: gtk/gtkfilechooserdefault.c:8914
+#: gtk/gtkfilechooserdefault.c:8919
 msgid "Could not start the search process"
 msgstr "Не могу да започнем претраживање"
 
-#: gtk/gtkfilechooserdefault.c:8915
+#: gtk/gtkfilechooserdefault.c:8920
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1824,34 +1824,34 @@ msgstr ""
 "Програм не може да успостави везу са сервисом индексирања. Увери се да је он "
 "покренут."
 
-#: gtk/gtkfilechooserdefault.c:8929
+#: gtk/gtkfilechooserdefault.c:8934
 msgid "Could not send the search request"
 msgstr "Не могу да пошаљем захтев претраге"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9396
+#: gtk/gtkfilechooserdefault.c:9401
 msgid "_Search:"
 msgstr "_Тражи:"
 
-#: gtk/gtkfilechooserdefault.c:10349
+#: gtk/gtkfilechooserdefault.c:10354
 #, c-format
 msgid "Could not mount %s"
 msgstr "Не могу да прикључим %s"
 
-#: gtk/gtkfilechooserdefault.c:11024
+#: gtk/gtkfilechooserdefault.c:11029
 msgid "Type name of new folder"
 msgstr "Унесите име нове фасцикле"
 
-#: gtk/gtkfilechooserdefault.c:11202 gtk/gtkfilechooserdefault.c:11224
-#: gtk/gtkfilechooserdefault.c:11295
+#: gtk/gtkfilechooserdefault.c:11207 gtk/gtkfilechooserdefault.c:11229
+#: gtk/gtkfilechooserdefault.c:11300
 msgid "Unknown"
 msgstr "Непознато"
 
-#: gtk/gtkfilechooserdefault.c:11242
+#: gtk/gtkfilechooserdefault.c:11247
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11244
+#: gtk/gtkfilechooserdefault.c:11249
 msgid "Yesterday at %H:%M"
 msgstr "Јуче у %H:%M"
 
@@ -2239,6 +2239,17 @@ msgstr "(непознато)"
 msgid "Cl_ear"
 msgstr "_Очисти"
 
+#. Open Link
+#: gtk/gtklabel.c:5504
+#, fuzzy
+msgid "_Open Link"
+msgstr "Отвори путању"
+
+#. Copy Link Address
+#: gtk/gtklabel.c:5516
+msgid "Copy _Link Address"
+msgstr ""
+
 #: gtk/gtklinkbutton.c:428
 msgid "Copy URL"
 msgstr "Умножи УРЛ"
@@ -2331,7 +2342,7 @@ msgstr "Запамти лозинку _до одјављивања"
 msgid "Remember _forever"
 msgstr "Запамти _заувек"
 
-#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6946
+#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6949
 #, c-format
 msgid "Page %u"
 msgstr "Лист %u"
@@ -2397,7 +2408,7 @@ msgstr "Величина _папира:"
 msgid "_Orientation:"
 msgstr "_Усмерење:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2683
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2739
 msgid "Page Setup"
 msgstr "Подешавање стране"
 
@@ -2485,92 +2496,92 @@ msgstr "_Сачувај у фасцикли:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:176
+#: gtk/gtkprintoperation.c:179
 #, c-format
 msgid "%s job #%d"
 msgstr "%s — посао #%d"
 
-#: gtk/gtkprintoperation.c:1540
+#: gtk/gtkprintoperation.c:1543
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Покретање"
 
-#: gtk/gtkprintoperation.c:1541
+#: gtk/gtkprintoperation.c:1544
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Припремам за штампу"
 
-#: gtk/gtkprintoperation.c:1542
+#: gtk/gtkprintoperation.c:1545
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Образујем податке"
 
-#: gtk/gtkprintoperation.c:1543
+#: gtk/gtkprintoperation.c:1546
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Шаљем податке"
 
-#: gtk/gtkprintoperation.c:1544
+#: gtk/gtkprintoperation.c:1547
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Чекам"
 
-#: gtk/gtkprintoperation.c:1545
+#: gtk/gtkprintoperation.c:1548
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Заустављено због проблема"
 
-#: gtk/gtkprintoperation.c:1546
+#: gtk/gtkprintoperation.c:1549
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Штампам"
 
-#: gtk/gtkprintoperation.c:1547
+#: gtk/gtkprintoperation.c:1550
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Завршено"
 
-#: gtk/gtkprintoperation.c:1548
+#: gtk/gtkprintoperation.c:1551
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Завршено уз грешку"
 
-#: gtk/gtkprintoperation.c:2071
+#: gtk/gtkprintoperation.c:2127
 #, c-format
 msgid "Preparing %d"
 msgstr "Припремам %d"
 
-#: gtk/gtkprintoperation.c:2073 gtk/gtkprintoperation.c:2404
+#: gtk/gtkprintoperation.c:2129 gtk/gtkprintoperation.c:2694
 #, c-format
 msgid "Preparing"
 msgstr "Припремам"
 
-#: gtk/gtkprintoperation.c:2076
+#: gtk/gtkprintoperation.c:2132
 #, c-format
 msgid "Printing %d"
 msgstr "Штампам %d"
 
-#: gtk/gtkprintoperation.c:2434
+#: gtk/gtkprintoperation.c:2724
 #, c-format
 msgid "Error creating print preview"
 msgstr "Грешка при изради прегледа"
 
-#: gtk/gtkprintoperation.c:2437
+#: gtk/gtkprintoperation.c:2727
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Најчешћи разлог је да није могуће направити привремену датотеку."
 
-#: gtk/gtkprintoperation-unix.c:257
+#: gtk/gtkprintoperation-unix.c:265
 #, c-format
 msgid "Error launching preview"
 msgstr "Грешка при покретању прегледа"
 
-#: gtk/gtkprintoperation-unix.c:301
+#: gtk/gtkprintoperation-unix.c:309
 #, c-format
 msgid "Error printing"
 msgstr "Грешка при штампању"
 
-#: gtk/gtkprintoperation-unix.c:425 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:435 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "Програм"
 
@@ -2604,28 +2615,28 @@ msgstr "Штампач није пронађен"
 msgid "Invalid argument to CreateDC"
 msgstr "Неисправан аргумент за CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1801
+#: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1803
 msgid "Error from StartDoc"
 msgstr "Грешка у StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1658 gtk/gtkprintoperation-win32.c:1681
-#: gtk/gtkprintoperation-win32.c:1729
+#: gtk/gtkprintoperation-win32.c:1660 gtk/gtkprintoperation-win32.c:1683
+#: gtk/gtkprintoperation-win32.c:1731
 msgid "Not enough free memory"
 msgstr "Нема довољно слободне меморије"
 
-#: gtk/gtkprintoperation-win32.c:1734
+#: gtk/gtkprintoperation-win32.c:1736
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Неисправан аргумент са PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1739
+#: gtk/gtkprintoperation-win32.c:1741
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Неисправан показивач на PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1744
+#: gtk/gtkprintoperation-win32.c:1746
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Неисправна закачка ка PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1749
+#: gtk/gtkprintoperation-win32.c:1751
 msgid "Unspecified error"
 msgstr "Непозната грешка"
 
@@ -2692,100 +2703,156 @@ msgstr "_Обрни"
 msgid "General"
 msgstr "Опште"
 
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
+#.
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing
+#.
+#: gtk/gtkprintunixdialog.c:2448
+#: modules/printbackends/cups/gtkprintbackendcups.c:3130
+msgid "Left to right, top to bottom"
+msgstr "С лева на десно, одозго на доле"
+
+#: gtk/gtkprintunixdialog.c:2448
+#: modules/printbackends/cups/gtkprintbackendcups.c:3130
+msgid "Left to right, bottom to top"
+msgstr "С лева на десно, одоздо на горе"
+
+#: gtk/gtkprintunixdialog.c:2449
+#: modules/printbackends/cups/gtkprintbackendcups.c:3131
+msgid "Right to left, top to bottom"
+msgstr "С десна на лево, одозго на доле"
+
+#: gtk/gtkprintunixdialog.c:2449
+#: modules/printbackends/cups/gtkprintbackendcups.c:3131
+msgid "Right to left, bottom to top"
+msgstr "С десна на лево, одоздо на горе"
+
+#: gtk/gtkprintunixdialog.c:2450
+#: modules/printbackends/cups/gtkprintbackendcups.c:3132
+msgid "Top to bottom, left to right"
+msgstr "Одозго на доле, с лева на десно"
+
+#: gtk/gtkprintunixdialog.c:2450
+#: modules/printbackends/cups/gtkprintbackendcups.c:3132
+msgid "Top to bottom, right to left"
+msgstr "Одозго на доле, с десна на лево"
+
+#: gtk/gtkprintunixdialog.c:2451
+#: modules/printbackends/cups/gtkprintbackendcups.c:3133
+msgid "Bottom to top, left to right"
+msgstr "Одоздо на горе, с лева на десно"
+
+#: gtk/gtkprintunixdialog.c:2451
+#: modules/printbackends/cups/gtkprintbackendcups.c:3133
+msgid "Bottom to top, right to left"
+msgstr "Одоздо на горе, с десна на лево"
+
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2444
+#: gtk/gtkprintunixdialog.c:2455 gtk/gtkprintunixdialog.c:2468
 #: modules/printbackends/cups/gtkprintbackendcups.c:3164
 msgid "Page Ordering"
 msgstr "Слагање страна"
 
-#: gtk/gtkprintunixdialog.c:2450
+#: gtk/gtkprintunixdialog.c:2484
 msgid "Left to right"
 msgstr "Са лева на десно"
 
-#: gtk/gtkprintunixdialog.c:2451
+#: gtk/gtkprintunixdialog.c:2485
 msgid "Right to left"
 msgstr "Са десна на лево"
 
-#: gtk/gtkprintunixdialog.c:2520
+#: gtk/gtkprintunixdialog.c:2497
+#, fuzzy
+msgid "Top to bottom"
+msgstr "Одозго на доле, с лева на десно"
+
+#: gtk/gtkprintunixdialog.c:2498
+#, fuzzy
+msgid "Bottom to top"
+msgstr "Увећај да _пасује"
+
+#: gtk/gtkprintunixdialog.c:2576
 msgid "Layout"
 msgstr "Распоред"
 
-#: gtk/gtkprintunixdialog.c:2524
+#: gtk/gtkprintunixdialog.c:2580
 msgid "T_wo-sided:"
 msgstr "Д_вострано:"
 
-#: gtk/gtkprintunixdialog.c:2539
+#: gtk/gtkprintunixdialog.c:2595
 msgid "Pages per _side:"
 msgstr "_Страна на листу:"
 
-#: gtk/gtkprintunixdialog.c:2557
+#: gtk/gtkprintunixdialog.c:2613
 msgid "Page or_dering:"
 msgstr "Ре_дослед страна:"
 
-#: gtk/gtkprintunixdialog.c:2573
+#: gtk/gtkprintunixdialog.c:2629
 msgid "_Only print:"
 msgstr "Штампај сам_о:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2588
+#: gtk/gtkprintunixdialog.c:2644
 msgid "All sheets"
 msgstr "Све листове"
 
-#: gtk/gtkprintunixdialog.c:2589
+#: gtk/gtkprintunixdialog.c:2645
 msgid "Even sheets"
 msgstr "Парне листове"
 
-#: gtk/gtkprintunixdialog.c:2590
+#: gtk/gtkprintunixdialog.c:2646
 msgid "Odd sheets"
 msgstr "Непарне листове"
 
-#: gtk/gtkprintunixdialog.c:2593
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Sc_ale:"
 msgstr "Р_азмера:"
 
-#: gtk/gtkprintunixdialog.c:2620
+#: gtk/gtkprintunixdialog.c:2676
 msgid "Paper"
 msgstr "Папир"
 
-#: gtk/gtkprintunixdialog.c:2624
+#: gtk/gtkprintunixdialog.c:2680
 msgid "Paper _type:"
 msgstr "_Тип папира:"
 
-#: gtk/gtkprintunixdialog.c:2639
+#: gtk/gtkprintunixdialog.c:2695
 msgid "Paper _source:"
 msgstr "_Фиока за папир:"
 
-#: gtk/gtkprintunixdialog.c:2654
+#: gtk/gtkprintunixdialog.c:2710
 msgid "Output t_ray:"
 msgstr "Излазна т_рака:"
 
-#: gtk/gtkprintunixdialog.c:2708
+#: gtk/gtkprintunixdialog.c:2764
 msgid "Job Details"
 msgstr "Подаци о послу"
 
-#: gtk/gtkprintunixdialog.c:2714
+#: gtk/gtkprintunixdialog.c:2770
 msgid "Pri_ority:"
 msgstr "Важн_ост:"
 
 # bug(goran): ???
-#: gtk/gtkprintunixdialog.c:2729
+#: gtk/gtkprintunixdialog.c:2785
 msgid "_Billing info:"
 msgstr "Подаци за _фактурисање:"
 
-#: gtk/gtkprintunixdialog.c:2747
+#: gtk/gtkprintunixdialog.c:2803
 msgid "Print Document"
 msgstr "Штампај документ"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2756
+#: gtk/gtkprintunixdialog.c:2812
 msgid "_Now"
 msgstr "_Сад"
 
-#: gtk/gtkprintunixdialog.c:2767
+#: gtk/gtkprintunixdialog.c:2823
 msgid "A_t:"
 msgstr "_У:"
 
@@ -2793,7 +2860,7 @@ msgstr "_У:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:2773
+#: gtk/gtkprintunixdialog.c:2829
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2801,64 +2868,64 @@ msgstr ""
 "Одредите време за пошетак штампе,\n"
 "На пример: 18, 15:30, 14:15:20"
 
-#: gtk/gtkprintunixdialog.c:2783
+#: gtk/gtkprintunixdialog.c:2839
 msgid "Time of print"
 msgstr "Време штампања"
 
-#: gtk/gtkprintunixdialog.c:2799
+#: gtk/gtkprintunixdialog.c:2855
 msgid "On _hold"
 msgstr "На _чекању"
 
-#: gtk/gtkprintunixdialog.c:2800
+#: gtk/gtkprintunixdialog.c:2856
 msgid "Hold the job until it is explicitly released"
 msgstr "Задржи посао док се изричито не затражи штампа"
 
-#: gtk/gtkprintunixdialog.c:2820
+#: gtk/gtkprintunixdialog.c:2876
 msgid "Add Cover Page"
 msgstr "Додај насловну страну"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2829
+#: gtk/gtkprintunixdialog.c:2885
 msgid "Be_fore:"
 msgstr "П_ре:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2847
+#: gtk/gtkprintunixdialog.c:2903
 msgid "_After:"
 msgstr "П_осле:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2865
+#: gtk/gtkprintunixdialog.c:2921
 msgid "Job"
 msgstr "Посао"
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2987
 msgid "Advanced"
 msgstr "Напредно"
 
-#: gtk/gtkprintunixdialog.c:2966
+#: gtk/gtkprintunixdialog.c:3022
 msgid "Image Quality"
 msgstr "Квалитет слике"
 
-#: gtk/gtkprintunixdialog.c:2969
+#: gtk/gtkprintunixdialog.c:3025
 msgid "Color"
 msgstr "Боја"
 
-#: gtk/gtkprintunixdialog.c:2972
+#: gtk/gtkprintunixdialog.c:3028
 msgid "Finishing"
 msgstr "Завршавам"
 
-#: gtk/gtkprintunixdialog.c:2982
+#: gtk/gtkprintunixdialog.c:3038
 msgid "Some of the settings in the dialog conflict"
 msgstr "Нека подешавања у прозорчету се сударају"
 
-#: gtk/gtkprintunixdialog.c:3005
+#: gtk/gtkprintunixdialog.c:3061
 msgid "Print"
 msgstr "Штампај"
 
@@ -4540,81 +4607,81 @@ msgstr "Неуспело писање индекса фасцикле\n"
 msgid "Failed to rewrite header\n"
 msgstr "Неуспело преписивање заглавља\n"
 
-#: gtk/updateiconcache.c:1455
+#: gtk/updateiconcache.c:1463
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Не могу да отворим датотеку „%s“: %s\n"
 
-#: gtk/updateiconcache.c:1463
+#: gtk/updateiconcache.c:1471
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Неуспео упис датотеке у остави: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Креирана остава није исправна.\n"
 
-#: gtk/updateiconcache.c:1511
+#: gtk/updateiconcache.c:1519
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Неуспело премештање %s у %s: %s, и зато уклањам %s.\n"
 
-#: gtk/updateiconcache.c:1523
+#: gtk/updateiconcache.c:1531
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Неуспело премештање %s у %s: %s\n"
 
-#: gtk/updateiconcache.c:1530
+#: gtk/updateiconcache.c:1538
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Неуспело премештање %s назад у %s: %s.\n"
 
-#: gtk/updateiconcache.c:1556
+#: gtk/updateiconcache.c:1564
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Датотека у остави је успешно направљена.\n"
 
-#: gtk/updateiconcache.c:1595
+#: gtk/updateiconcache.c:1603
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Преписивање постојеће оставе, чак и ако је ажурна"
 
-#: gtk/updateiconcache.c:1596
+#: gtk/updateiconcache.c:1604
 msgid "Don't check for the existence of index.theme"
 msgstr "Не провервај присуство index.theme датотеке"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1605
 msgid "Don't include image data in the cache"
 msgstr "Не укључуј податке слике у оставу"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1606
 msgid "Output a C header file"
 msgstr "Испиши датотеку Ц заглавља"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1607
 msgid "Turn off verbose output"
 msgstr "Искључи опширност исписа"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1608
 msgid "Validate existing icon cache"
 msgstr "Провери исправност постојеће оставе иконица"
 
-#: gtk/updateiconcache.c:1663
+#: gtk/updateiconcache.c:1671
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Датотека није пронађена: %s\n"
 
-#: gtk/updateiconcache.c:1669
+#: gtk/updateiconcache.c:1677
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Неисправна остава за иконице: %s\n"
 
-#: gtk/updateiconcache.c:1682
+#: gtk/updateiconcache.c:1690
 #, c-format
 msgid "No theme index file."
 msgstr "Нема индекс датотеке теме."
 
-#: gtk/updateiconcache.c:1686
+#: gtk/updateiconcache.c:1694
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4905,41 +4972,6 @@ msgstr "Средње"
 #: modules/printbackends/cups/gtkprintbackendcups.c:3125
 msgid "Low"
 msgstr "Небитно"
-
-#. Translators: These strings name the possible arrangements of
-#. * multiple pages on a sheet when printing
-#.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3130
-msgid "Left to right, top to bottom"
-msgstr "С лева на десно, одозго на доле"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3130
-msgid "Left to right, bottom to top"
-msgstr "С лева на десно, одоздо на горе"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3131
-msgid "Right to left, top to bottom"
-msgstr "С десна на лево, одозго на доле"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3131
-msgid "Right to left, bottom to top"
-msgstr "С десна на лево, одоздо на горе"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3132
-msgid "Top to bottom, left to right"
-msgstr "Одозго на доле, с лева на десно"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3132
-msgid "Top to bottom, right to left"
-msgstr "Одозго на доле, с десна на лево"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3133
-msgid "Bottom to top, left to right"
-msgstr "Одоздо на горе, с лева на десно"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3133
-msgid "Bottom to top, right to left"
-msgstr "Одоздо на горе, с десна на лево"
 
 #. Cups specific, non-ppd related settings
 #. Translators, this string is used to label the pages-per-sheet option
@@ -5870,9 +5902,6 @@ msgstr "Не могу да сазнам податке о датотеци „%s
 #~ msgid "Could not build file name from '%s' and '%s'"
 #~ msgstr "Не могу да саставим име датотеке из „%s“ и „%s“"
 
-#~ msgid "Open Location"
-#~ msgstr "Отвори путању"
-
 #~ msgid "Save in Location"
 #~ msgstr "Сачувај на путањи"
 
@@ -5932,9 +5961,6 @@ msgstr "Не могу да сазнам податке о датотеци „%s
 
 #~ msgid "Zoom _100%"
 #~ msgstr "Увећање _100%"
-
-#~ msgid "Zoom to _Fit"
-#~ msgstr "Увећај да _пасује"
 
 #~ msgid "This file system does not support icons"
 #~ msgstr "Овај систем датотека не подржава иконе"

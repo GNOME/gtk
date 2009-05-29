@@ -9,12 +9,10 @@ GtkIMContext
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -31,7 +29,7 @@ GtkIMContext
 </para>
 
 @imcontext: the object which received the signal.
-@arg1:
+@arg1: 
 
 <!-- ##### SIGNAL GtkIMContext::delete-surrounding ##### -->
 <para>
@@ -39,9 +37,9 @@ GtkIMContext
 </para>
 
 @imcontext: the object which received the signal.
-@arg1:
-@arg2:
-@Returns:
+@arg1: 
+@arg2: 
+@Returns: 
 
 <!-- ##### SIGNAL GtkIMContext::preedit-changed ##### -->
 <para>
@@ -70,48 +68,48 @@ GtkIMContext
 </para>
 
 @imcontext: the object which received the signal.
-@Returns:
+@Returns: 
 
 <!-- ##### STRUCT GtkIMContextClass ##### -->
 <para>
 
 </para>
 
-@preedit_start:
-@preedit_end:
-@preedit_changed:
-@commit:
-@retrieve_surrounding:
-@delete_surrounding:
-@set_client_window:
-@get_preedit_string:
-@filter_keypress:
-@focus_in:
-@focus_out:
-@reset:
-@set_cursor_location:
-@set_use_preedit:
-@set_surrounding:
-@get_surrounding:
+@preedit_start: 
+@preedit_end: 
+@preedit_changed: 
+@commit: 
+@retrieve_surrounding: 
+@delete_surrounding: 
+@set_client_window: 
+@get_preedit_string: 
+@filter_keypress: 
+@focus_in: 
+@focus_out: 
+@reset: 
+@set_cursor_location: 
+@set_use_preedit: 
+@set_surrounding: 
+@get_surrounding: 
 
 <!-- ##### STRUCT GtkIMContextInfo ##### -->
 <para>
 
 </para>
 
-@context_id:
-@context_name:
-@domain:
-@domain_dirname:
-@default_locales:
+@context_id: 
+@context_name: 
+@domain: 
+@domain_dirname: 
+@default_locales: 
 
 <!-- ##### FUNCTION gtk_im_context_set_client_window ##### -->
 <para>
 
 </para>
 
-@context:
-@window:
+@context: 
+@window: 
 
 
 <!-- ##### FUNCTION gtk_im_context_get_preedit_string ##### -->
@@ -119,10 +117,10 @@ GtkIMContext
 
 </para>
 
-@context:
-@str:
-@attrs:
-@cursor_pos:
+@context: 
+@str: 
+@attrs: 
+@cursor_pos: 
 
 
 <!-- ##### FUNCTION gtk_im_context_filter_keypress ##### -->
@@ -130,9 +128,9 @@ GtkIMContext
 
 </para>
 
-@context:
-@event:
-@Returns:
+@context: 
+@event: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_im_context_focus_in ##### -->
@@ -140,7 +138,7 @@ GtkIMContext
 
 </para>
 
-@context:
+@context: 
 
 
 <!-- ##### FUNCTION gtk_im_context_focus_out ##### -->
@@ -148,7 +146,7 @@ GtkIMContext
 
 </para>
 
-@context:
+@context: 
 
 
 <!-- ##### FUNCTION gtk_im_context_reset ##### -->
@@ -156,7 +154,7 @@ GtkIMContext
 
 </para>
 
-@context:
+@context: 
 
 
 <!-- ##### FUNCTION gtk_im_context_set_cursor_location ##### -->
@@ -164,8 +162,8 @@ GtkIMContext
 
 </para>
 
-@context:
-@area:
+@context: 
+@area: 
 
 
 <!-- ##### FUNCTION gtk_im_context_set_use_preedit ##### -->
@@ -173,8 +171,8 @@ GtkIMContext
 
 </para>
 
-@context:
-@use_preedit:
+@context: 
+@use_preedit: 
 
 
 <!-- ##### FUNCTION gtk_im_context_set_surrounding ##### -->
@@ -182,10 +180,10 @@ GtkIMContext
 
 </para>
 
-@context:
-@text:
-@len:
-@cursor_index:
+@context: 
+@text: 
+@len: 
+@cursor_index: 
 
 
 <!-- ##### FUNCTION gtk_im_context_get_surrounding ##### -->
@@ -193,10 +191,10 @@ GtkIMContext
 
 </para>
 
-@context:
-@text:
-@cursor_index:
-@Returns:
+@context: 
+@text: 
+@cursor_index: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_im_context_delete_surrounding ##### -->
@@ -204,9 +202,9 @@ GtkIMContext
 
 </para>
 
-@context:
-@offset:
-@n_chars:
-@Returns:
+@context: 
+@offset: 
+@n_chars: 
+@Returns: 
 
 

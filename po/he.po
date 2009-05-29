@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-04 01:14-0400\n"
+"POT-Creation-Date: 2009-05-29 19:02-0400\n"
 "PO-Revision-Date: 2008-10-24 14:32+0200\n"
 "Last-Translator: Mark Krapivner <mark125@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -1766,44 +1766,44 @@ msgstr "הקובץ כבר קיים ב-\"%s\". החלפתו תגרום לאיבו
 msgid "_Replace"
 msgstr "ה_חלף"
 
-#: gtk/gtkfilechooserdefault.c:8914
+#: gtk/gtkfilechooserdefault.c:8919
 msgid "Could not start the search process"
 msgstr "לא ניתן להתחיל את תהליך החיפוש"
 
-#: gtk/gtkfilechooserdefault.c:8915
+#: gtk/gtkfilechooserdefault.c:8920
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8929
+#: gtk/gtkfilechooserdefault.c:8934
 msgid "Could not send the search request"
 msgstr "לא ניתן לשלוח את בקשת החיפוש"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9396
+#: gtk/gtkfilechooserdefault.c:9401
 msgid "_Search:"
 msgstr "ח_פש:"
 
-#: gtk/gtkfilechooserdefault.c:10349
+#: gtk/gtkfilechooserdefault.c:10354
 #, c-format
 msgid "Could not mount %s"
 msgstr "לא ניתן לעגון את %s"
 
-#: gtk/gtkfilechooserdefault.c:11024
+#: gtk/gtkfilechooserdefault.c:11029
 msgid "Type name of new folder"
 msgstr "כתוב שם לתיקייה החדשה"
 
-#: gtk/gtkfilechooserdefault.c:11202 gtk/gtkfilechooserdefault.c:11224
-#: gtk/gtkfilechooserdefault.c:11295
+#: gtk/gtkfilechooserdefault.c:11207 gtk/gtkfilechooserdefault.c:11229
+#: gtk/gtkfilechooserdefault.c:11300
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: gtk/gtkfilechooserdefault.c:11242
+#: gtk/gtkfilechooserdefault.c:11247
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11244
+#: gtk/gtkfilechooserdefault.c:11249
 msgid "Yesterday at %H:%M"
 msgstr "אתמול ב-%H:%M"
 
@@ -2199,6 +2199,17 @@ msgstr "(לא ידוע)"
 msgid "Cl_ear"
 msgstr "_נקה"
 
+#. Open Link
+#: gtk/gtklabel.c:5504
+#, fuzzy
+msgid "_Open Link"
+msgstr "_פתח"
+
+#. Copy Link Address
+#: gtk/gtklabel.c:5516
+msgid "Copy _Link Address"
+msgstr ""
+
 #: gtk/gtklinkbutton.c:428
 msgid "Copy URL"
 msgstr "ה_עתק כתובת"
@@ -2290,7 +2301,7 @@ msgstr "_זכור את הסיסמה עד ההתנתקות"
 msgid "Remember _forever"
 msgstr "זכור ל_תמיד"
 
-#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6946
+#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6949
 #, c-format
 msgid "Page %u"
 msgstr "עמוד %u"
@@ -2356,7 +2367,7 @@ msgstr "_גודל נייר:"
 msgid "_Orientation:"
 msgstr "_כיווניות:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2683
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2739
 msgid "Page Setup"
 msgstr "הגדרות עמוד"
 
@@ -2446,92 +2457,92 @@ msgstr "שמור ב_תיקייה:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:176
+#: gtk/gtkprintoperation.c:179
 #, c-format
 msgid "%s job #%d"
 msgstr "%s עבודה #%d"
 
-#: gtk/gtkprintoperation.c:1540
+#: gtk/gtkprintoperation.c:1543
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "מצב התחלתי"
 
-#: gtk/gtkprintoperation.c:1541
+#: gtk/gtkprintoperation.c:1544
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "מתכונן להדפסה"
 
-#: gtk/gtkprintoperation.c:1542
+#: gtk/gtkprintoperation.c:1545
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "מייצר נתונים"
 
-#: gtk/gtkprintoperation.c:1543
+#: gtk/gtkprintoperation.c:1546
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "שולח נתונים"
 
-#: gtk/gtkprintoperation.c:1544
+#: gtk/gtkprintoperation.c:1547
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "ממתין"
 
-#: gtk/gtkprintoperation.c:1545
+#: gtk/gtkprintoperation.c:1548
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1546
+#: gtk/gtkprintoperation.c:1549
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "מדפיס"
 
-#: gtk/gtkprintoperation.c:1547
+#: gtk/gtkprintoperation.c:1550
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "הסתיים"
 
-#: gtk/gtkprintoperation.c:1548
+#: gtk/gtkprintoperation.c:1551
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "הסתיים עם שגיאה"
 
-#: gtk/gtkprintoperation.c:2071
+#: gtk/gtkprintoperation.c:2127
 #, c-format
 msgid "Preparing %d"
 msgstr "מכין %d"
 
-#: gtk/gtkprintoperation.c:2073 gtk/gtkprintoperation.c:2404
+#: gtk/gtkprintoperation.c:2129 gtk/gtkprintoperation.c:2694
 #, c-format
 msgid "Preparing"
 msgstr "מכין"
 
-#: gtk/gtkprintoperation.c:2076
+#: gtk/gtkprintoperation.c:2132
 #, c-format
 msgid "Printing %d"
 msgstr "מדפיס %d"
 
-#: gtk/gtkprintoperation.c:2434
+#: gtk/gtkprintoperation.c:2724
 #, c-format
 msgid "Error creating print preview"
 msgstr "שגיאה ביצירת תצוגה מקדימה"
 
-#: gtk/gtkprintoperation.c:2437
+#: gtk/gtkprintoperation.c:2727
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:257
+#: gtk/gtkprintoperation-unix.c:265
 #, c-format
 msgid "Error launching preview"
 msgstr "שגיאה בשיגור תצוגה מקדימה"
 
-#: gtk/gtkprintoperation-unix.c:301
+#: gtk/gtkprintoperation-unix.c:309
 #, c-format
 msgid "Error printing"
 msgstr "שגיאה בהדפסה"
 
-#: gtk/gtkprintoperation-unix.c:425 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:435 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "יישום"
 
@@ -2565,28 +2576,28 @@ msgstr "לא נמצאה מדפסת"
 msgid "Invalid argument to CreateDC"
 msgstr "Invalid argument to CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1801
+#: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1803
 msgid "Error from StartDoc"
 msgstr "Error from StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1658 gtk/gtkprintoperation-win32.c:1681
-#: gtk/gtkprintoperation-win32.c:1729
+#: gtk/gtkprintoperation-win32.c:1660 gtk/gtkprintoperation-win32.c:1683
+#: gtk/gtkprintoperation-win32.c:1731
 msgid "Not enough free memory"
 msgstr "אין מספיק זכרון"
 
-#: gtk/gtkprintoperation-win32.c:1734
+#: gtk/gtkprintoperation-win32.c:1736
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Invalid argument to PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1739
+#: gtk/gtkprintoperation-win32.c:1741
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Invalid pointer to PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1744
+#: gtk/gtkprintoperation-win32.c:1746
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Invalid handle to PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1749
+#: gtk/gtkprintoperation-win32.c:1751
 msgid "Unspecified error"
 msgstr "Unspecified error"
 
@@ -2654,99 +2665,155 @@ msgstr "_החזר"
 msgid "General"
 msgstr "כללי"
 
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
+#.
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing
+#.
+#: gtk/gtkprintunixdialog.c:2448
+#: modules/printbackends/cups/gtkprintbackendcups.c:3130
+msgid "Left to right, top to bottom"
+msgstr "שמאל לימין, מלמעלה למטה"
+
+#: gtk/gtkprintunixdialog.c:2448
+#: modules/printbackends/cups/gtkprintbackendcups.c:3130
+msgid "Left to right, bottom to top"
+msgstr "שמאל לימין, מלמטה למעלה"
+
+#: gtk/gtkprintunixdialog.c:2449
+#: modules/printbackends/cups/gtkprintbackendcups.c:3131
+msgid "Right to left, top to bottom"
+msgstr "ימין לשמאל, מלמעלה למטה"
+
+#: gtk/gtkprintunixdialog.c:2449
+#: modules/printbackends/cups/gtkprintbackendcups.c:3131
+msgid "Right to left, bottom to top"
+msgstr "ימין לשמאל, מלמטה למעלה"
+
+#: gtk/gtkprintunixdialog.c:2450
+#: modules/printbackends/cups/gtkprintbackendcups.c:3132
+msgid "Top to bottom, left to right"
+msgstr "מלמעלה למטה, משמאל לימין"
+
+#: gtk/gtkprintunixdialog.c:2450
+#: modules/printbackends/cups/gtkprintbackendcups.c:3132
+msgid "Top to bottom, right to left"
+msgstr "מלמעלה למטה, מימין לשמאל"
+
+#: gtk/gtkprintunixdialog.c:2451
+#: modules/printbackends/cups/gtkprintbackendcups.c:3133
+msgid "Bottom to top, left to right"
+msgstr "מלמטה למעלה, משמאל לימין"
+
+#: gtk/gtkprintunixdialog.c:2451
+#: modules/printbackends/cups/gtkprintbackendcups.c:3133
+msgid "Bottom to top, right to left"
+msgstr "מלמטה למעלה, מימין לשמאל"
+
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2444
+#: gtk/gtkprintunixdialog.c:2455 gtk/gtkprintunixdialog.c:2468
 #: modules/printbackends/cups/gtkprintbackendcups.c:3164
 msgid "Page Ordering"
 msgstr "סדר דפים"
 
-#: gtk/gtkprintunixdialog.c:2450
+#: gtk/gtkprintunixdialog.c:2484
 msgid "Left to right"
 msgstr "שמאל לימין"
 
-#: gtk/gtkprintunixdialog.c:2451
+#: gtk/gtkprintunixdialog.c:2485
 msgid "Right to left"
 msgstr "ימין לשמאל"
 
-#: gtk/gtkprintunixdialog.c:2520
+#: gtk/gtkprintunixdialog.c:2497
+#, fuzzy
+msgid "Top to bottom"
+msgstr "מלמעלה למטה, משמאל לימין"
+
+#: gtk/gtkprintunixdialog.c:2498
+#, fuzzy
+msgid "Bottom to top"
+msgstr "מלמטה למעלה, משמאל לימין"
+
+#: gtk/gtkprintunixdialog.c:2576
 msgid "Layout"
 msgstr "פריסה"
 
-#: gtk/gtkprintunixdialog.c:2524
+#: gtk/gtkprintunixdialog.c:2580
 msgid "T_wo-sided:"
 msgstr "ד_ו-צדדי:"
 
-#: gtk/gtkprintunixdialog.c:2539
+#: gtk/gtkprintunixdialog.c:2595
 msgid "Pages per _side:"
 msgstr "מספר _עמודים בכל צג:"
 
-#: gtk/gtkprintunixdialog.c:2557
+#: gtk/gtkprintunixdialog.c:2613
 msgid "Page or_dering:"
 msgstr "_סדר דפים:"
 
-#: gtk/gtkprintunixdialog.c:2573
+#: gtk/gtkprintunixdialog.c:2629
 msgid "_Only print:"
 msgstr "ה_דפס בלבד:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2588
+#: gtk/gtkprintunixdialog.c:2644
 msgid "All sheets"
 msgstr "כל הדפים"
 
-#: gtk/gtkprintunixdialog.c:2589
+#: gtk/gtkprintunixdialog.c:2645
 msgid "Even sheets"
 msgstr "דפים זוגיים"
 
-#: gtk/gtkprintunixdialog.c:2590
+#: gtk/gtkprintunixdialog.c:2646
 msgid "Odd sheets"
 msgstr "דפים אי זוגיים"
 
-#: gtk/gtkprintunixdialog.c:2593
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Sc_ale:"
 msgstr "_התאם:"
 
-#: gtk/gtkprintunixdialog.c:2620
+#: gtk/gtkprintunixdialog.c:2676
 msgid "Paper"
 msgstr "נייר"
 
-#: gtk/gtkprintunixdialog.c:2624
+#: gtk/gtkprintunixdialog.c:2680
 msgid "Paper _type:"
 msgstr "_סוג נייר:"
 
-#: gtk/gtkprintunixdialog.c:2639
+#: gtk/gtkprintunixdialog.c:2695
 msgid "Paper _source:"
 msgstr "מ_קור נייר:"
 
-#: gtk/gtkprintunixdialog.c:2654
+#: gtk/gtkprintunixdialog.c:2710
 msgid "Output t_ray:"
 msgstr "_מגש פלט:"
 
-#: gtk/gtkprintunixdialog.c:2708
+#: gtk/gtkprintunixdialog.c:2764
 msgid "Job Details"
 msgstr "פרטי עבודה"
 
-#: gtk/gtkprintunixdialog.c:2714
+#: gtk/gtkprintunixdialog.c:2770
 msgid "Pri_ority:"
 msgstr "_עדיפות:"
 
-#: gtk/gtkprintunixdialog.c:2729
+#: gtk/gtkprintunixdialog.c:2785
 msgid "_Billing info:"
 msgstr "_מידע חיוב:"
 
-#: gtk/gtkprintunixdialog.c:2747
+#: gtk/gtkprintunixdialog.c:2803
 msgid "Print Document"
 msgstr "הדפס מסמך"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2756
+#: gtk/gtkprintunixdialog.c:2812
 msgid "_Now"
 msgstr "_כעת"
 
-#: gtk/gtkprintunixdialog.c:2767
+#: gtk/gtkprintunixdialog.c:2823
 msgid "A_t:"
 msgstr "_ב:"
 
@@ -2754,70 +2821,70 @@ msgstr "_ב:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:2773
+#: gtk/gtkprintunixdialog.c:2829
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2783
+#: gtk/gtkprintunixdialog.c:2839
 msgid "Time of print"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2799
+#: gtk/gtkprintunixdialog.c:2855
 msgid "On _hold"
 msgstr "ב_המתנה"
 
-#: gtk/gtkprintunixdialog.c:2800
+#: gtk/gtkprintunixdialog.c:2856
 msgid "Hold the job until it is explicitly released"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2820
+#: gtk/gtkprintunixdialog.c:2876
 msgid "Add Cover Page"
 msgstr "הוסף עמוד שער"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2829
+#: gtk/gtkprintunixdialog.c:2885
 msgid "Be_fore:"
 msgstr "ל_פני:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2847
+#: gtk/gtkprintunixdialog.c:2903
 msgid "_After:"
 msgstr "א_חרי:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2865
+#: gtk/gtkprintunixdialog.c:2921
 msgid "Job"
 msgstr "עבודה"
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2987
 msgid "Advanced"
 msgstr "מתקדם"
 
-#: gtk/gtkprintunixdialog.c:2966
+#: gtk/gtkprintunixdialog.c:3022
 msgid "Image Quality"
 msgstr "איכות תמונה"
 
-#: gtk/gtkprintunixdialog.c:2969
+#: gtk/gtkprintunixdialog.c:3025
 msgid "Color"
 msgstr "צבע"
 
-#: gtk/gtkprintunixdialog.c:2972
+#: gtk/gtkprintunixdialog.c:3028
 msgid "Finishing"
 msgstr "מסיים"
 
-#: gtk/gtkprintunixdialog.c:2982
+#: gtk/gtkprintunixdialog.c:3038
 msgid "Some of the settings in the dialog conflict"
 msgstr "חלק מההגדרות בתיבת הדו-שיח מתנגשים"
 
-#: gtk/gtkprintunixdialog.c:3005
+#: gtk/gtkprintunixdialog.c:3061
 msgid "Print"
 msgstr "הדפס"
 
@@ -4517,81 +4584,81 @@ msgstr "Failed to write folder index\n"
 msgid "Failed to rewrite header\n"
 msgstr "Failed to rewrite header\n"
 
-#: gtk/updateiconcache.c:1455
+#: gtk/updateiconcache.c:1463
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "נכשל בפתיחת הקובץ %s: %s\n"
 
-#: gtk/updateiconcache.c:1463
+#: gtk/updateiconcache.c:1471
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Failed to write cache file: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "The generated cache was invalid.\n"
 
-#: gtk/updateiconcache.c:1511
+#: gtk/updateiconcache.c:1519
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Could not rename %s to %s: %s, removing %s then.\n"
 
-#: gtk/updateiconcache.c:1523
+#: gtk/updateiconcache.c:1531
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Could not rename %s to %s: %s\n"
 
-#: gtk/updateiconcache.c:1530
+#: gtk/updateiconcache.c:1538
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Could not rename %s back to %s: %s.\n"
 
-#: gtk/updateiconcache.c:1556
+#: gtk/updateiconcache.c:1564
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Cache file created successfully.\n"
 
-#: gtk/updateiconcache.c:1595
+#: gtk/updateiconcache.c:1603
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Overwrite an existing cache, even if up to date"
 
-#: gtk/updateiconcache.c:1596
+#: gtk/updateiconcache.c:1604
 msgid "Don't check for the existence of index.theme"
 msgstr "Don't check for the existence of index.theme"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1605
 msgid "Don't include image data in the cache"
 msgstr "Don't include image data in the cache"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1606
 msgid "Output a C header file"
 msgstr "Output a C header file"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1607
 msgid "Turn off verbose output"
 msgstr "Turn off verbose output"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1608
 msgid "Validate existing icon cache"
 msgstr "Validate existing icon cache"
 
-#: gtk/updateiconcache.c:1663
+#: gtk/updateiconcache.c:1671
 #, c-format
 msgid "File not found: %s\n"
 msgstr "File not found: %s\n"
 
-#: gtk/updateiconcache.c:1669
+#: gtk/updateiconcache.c:1677
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Not a valid icon cache: %s\n"
 
-#: gtk/updateiconcache.c:1682
+#: gtk/updateiconcache.c:1690
 #, c-format
 msgid "No theme index file."
 msgstr "No theme index file."
 
-#: gtk/updateiconcache.c:1686
+#: gtk/updateiconcache.c:1694
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4883,41 +4950,6 @@ msgstr "בינוני"
 #: modules/printbackends/cups/gtkprintbackendcups.c:3125
 msgid "Low"
 msgstr "נמוך"
-
-#. Translators: These strings name the possible arrangements of
-#. * multiple pages on a sheet when printing
-#.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3130
-msgid "Left to right, top to bottom"
-msgstr "שמאל לימין, מלמעלה למטה"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3130
-msgid "Left to right, bottom to top"
-msgstr "שמאל לימין, מלמטה למעלה"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3131
-msgid "Right to left, top to bottom"
-msgstr "ימין לשמאל, מלמעלה למטה"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3131
-msgid "Right to left, bottom to top"
-msgstr "ימין לשמאל, מלמטה למעלה"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3132
-msgid "Top to bottom, left to right"
-msgstr "מלמעלה למטה, משמאל לימין"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3132
-msgid "Top to bottom, right to left"
-msgstr "מלמעלה למטה, מימין לשמאל"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3133
-msgid "Bottom to top, left to right"
-msgstr "מלמטה למעלה, משמאל לימין"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3133
-msgid "Bottom to top, right to left"
-msgstr "מלמטה למעלה, מימין לשמאל"
 
 #. Cups specific, non-ppd related settings
 #. Translators, this string is used to label the pages-per-sheet option

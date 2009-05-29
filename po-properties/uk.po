@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-04 01:14-0400\n"
+"POT-Creation-Date: 2009-05-29 19:03-0400\n"
 "PO-Revision-Date: 2009-04-26 14:55+0200\n"
 "Last-Translator: dziumanenko@gmail.com\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -258,7 +258,7 @@ msgid "A unique name for the action."
 msgstr "Унікальна назва для дії."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:495 gtk/gtkmenuitem.c:300
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "Позначка"
@@ -800,12 +800,12 @@ msgid ""
 "widget"
 msgstr "Текст віджета позначки в кнопці, якщо кнопка містить віджет позначки"
 
-#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:516
 #: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "Використовувати підкреслення"
 
-#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:517
 #: gtk/gtkmenuitem.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -1350,7 +1350,7 @@ msgstr "Розмітка"
 msgid "Marked up text to render"
 msgstr "Розмітка тексту до візуалізації"
 
-#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:374
+#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:502
 msgid "Attributes"
 msgstr "Атрибути"
 
@@ -1509,7 +1509,7 @@ msgstr ""
 "під час візуалізації тексту. Якщо ви не розумієте цей параметр, то, напевно, "
 "він вам не потрібний."
 
-#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:499 gtk/gtkprogressbar.c:206
+#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:627 gtk/gtkprogressbar.c:206
 msgid "Ellipsize"
 msgstr "Еліптизація"
 
@@ -1522,11 +1522,11 @@ msgstr ""
 "вистачає місця для відображення усього рядка"
 
 #: gtk/gtkcellrenderertext.c:431 gtk/gtkfilechooserbutton.c:421
-#: gtk/gtklabel.c:519
+#: gtk/gtklabel.c:647
 msgid "Width In Characters"
 msgstr "Ширина у символах"
 
-#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:520
+#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:648
 msgid "The desired width of the label, in characters"
 msgstr "Бажана ширина, у символах"
 
@@ -2133,19 +2133,19 @@ msgstr "Бордюр ділянки дій"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Ширина відступу навколо області кнопок діалогового вікна"
 
-#: gtk/gtkentry.c:605 gtk/gtklabel.c:462
+#: gtk/gtkentry.c:605 gtk/gtklabel.c:590
 msgid "Cursor Position"
 msgstr "Позиція курсора"
 
-#: gtk/gtkentry.c:606 gtk/gtklabel.c:463
+#: gtk/gtkentry.c:606 gtk/gtklabel.c:591
 msgid "The current position of the insertion cursor in chars"
 msgstr "Поточна позиція точки вставки в символах"
 
-#: gtk/gtkentry.c:615 gtk/gtklabel.c:472
+#: gtk/gtkentry.c:615 gtk/gtklabel.c:600
 msgid "Selection Bound"
 msgstr "Границя виділення"
 
-#: gtk/gtkentry.c:616 gtk/gtklabel.c:473
+#: gtk/gtkentry.c:616 gtk/gtklabel.c:601
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Позиція протилежного кінця вибору від курсора в символах"
@@ -2478,7 +2478,7 @@ msgstr "Підказка стану"
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Чи передавати стан поля вводу для виводу тіні або тла"
 
-#: gtk/gtkentry.c:1703 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1703 gtk/gtklabel.c:830
 msgid "Select on focus"
 msgstr "Вибір на фокусуванні"
 
@@ -2595,11 +2595,11 @@ msgstr "Чи розширювач був відкритий для показу 
 msgid "Text of the expander's label"
 msgstr "Текст розгорнутої позначки"
 
-#: gtk/gtkexpander.c:211 gtk/gtklabel.c:381
+#: gtk/gtkexpander.c:211 gtk/gtklabel.c:509
 msgid "Use markup"
 msgstr "Використовувати розмітку"
 
-#: gtk/gtkexpander.c:212 gtk/gtklabel.c:382
+#: gtk/gtkexpander.c:212 gtk/gtklabel.c:510
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Текст позначки включає розмітку XML. Див. pango_parse_markup()"
 
@@ -3161,19 +3161,19 @@ msgstr "Чи потрібно відображати зображення у м�
 msgid "The screen where this window will be displayed"
 msgstr "Екран, на якому буде відображено це вікно"
 
-#: gtk/gtklabel.c:368
+#: gtk/gtklabel.c:496
 msgid "The text of the label"
 msgstr "Текст позначки"
 
-#: gtk/gtklabel.c:375
+#: gtk/gtklabel.c:503
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Список стильових ознак для застосування до тексту позначки"
 
-#: gtk/gtklabel.c:396 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:524 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
 msgid "Justification"
 msgstr "Вирівнювання"
 
-#: gtk/gtklabel.c:397
+#: gtk/gtklabel.c:525
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -3183,11 +3183,11 @@ msgstr ""
 "вирівнювання позначки у вказаному для неї місці. Для цього дивіться GtkMisc::"
 "xalign"
 
-#: gtk/gtklabel.c:405
+#: gtk/gtklabel.c:533
 msgid "Pattern"
 msgstr "Шаблон"
 
-#: gtk/gtklabel.c:406
+#: gtk/gtklabel.c:534
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -3195,49 +3195,49 @@ msgstr ""
 "Рядок із символами підкреслення (_) в позиціях відповідних до позиції "
 "символів, які потрібно підкреслити в тексті"
 
-#: gtk/gtklabel.c:413
+#: gtk/gtklabel.c:541
 msgid "Line wrap"
 msgstr "Перенос рядків"
 
-#: gtk/gtklabel.c:414
+#: gtk/gtklabel.c:542
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Якщо встановлено, занадто довгі рядки переносяться"
 
-#: gtk/gtklabel.c:429
+#: gtk/gtklabel.c:557
 msgid "Line wrap mode"
 msgstr "Режим переносу рядків"
 
-#: gtk/gtklabel.c:430
+#: gtk/gtklabel.c:558
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr ""
 "Якщо встановлено перенос рядків, контролює як виконувати перенос рядків"
 
-#: gtk/gtklabel.c:437
+#: gtk/gtklabel.c:565
 msgid "Selectable"
 msgstr "Вибирається"
 
-#: gtk/gtklabel.c:438
+#: gtk/gtklabel.c:566
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Чи може текст позначки бути виділений використовуючи мишу"
 
-#: gtk/gtklabel.c:444
+#: gtk/gtklabel.c:572
 msgid "Mnemonic key"
 msgstr "Мнемонічна клавіша"
 
-#: gtk/gtklabel.c:445
+#: gtk/gtklabel.c:573
 msgid "The mnemonic accelerator key for this label"
 msgstr "Мнемонічна клавіша-прискорювач для цієї позначки"
 
-#: gtk/gtklabel.c:453
+#: gtk/gtklabel.c:581
 msgid "Mnemonic widget"
 msgstr "Мнемонічний віджет"
 
-#: gtk/gtklabel.c:454
+#: gtk/gtklabel.c:582
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 "Віджет, який буде активовано під час натиснення мнемонічної клавіші позначки"
 
-#: gtk/gtklabel.c:500
+#: gtk/gtklabel.c:628
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -3245,31 +3245,31 @@ msgstr ""
 "Бажане місце для еліптизації рядка, якщо для відображення усього рядка не "
 "вистачає місця."
 
-#: gtk/gtklabel.c:540
+#: gtk/gtklabel.c:668
 msgid "Single Line Mode"
 msgstr "Режим одного рядка"
 
-#: gtk/gtklabel.c:541
+#: gtk/gtklabel.c:669
 msgid "Whether the label is in single line mode"
 msgstr "Чи знаходиться рядок у режимі одного рядка"
 
-#: gtk/gtklabel.c:558
+#: gtk/gtklabel.c:686
 msgid "Angle"
 msgstr "Кут"
 
-#: gtk/gtklabel.c:559
+#: gtk/gtklabel.c:687
 msgid "Angle at which the label is rotated"
 msgstr "Кут, на який повертається ярлик"
 
-#: gtk/gtklabel.c:579
+#: gtk/gtklabel.c:707
 msgid "Maximum Width In Characters"
 msgstr "Максимальна ширина в символах"
 
-#: gtk/gtklabel.c:580
+#: gtk/gtklabel.c:708
 msgid "The desired maximum width of the label, in characters"
 msgstr "Бажана максимальна ширина ярлика, у символах"
 
-#: gtk/gtklabel.c:696
+#: gtk/gtklabel.c:831
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "Чи буде виділятись вміст позначки, коли їх передається фокус "
 
@@ -4118,7 +4118,7 @@ msgstr "Параметри принтера"
 msgid "Page Setup"
 msgstr "Параметри сторінки"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1050
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1053
 msgid "Track Print Status"
 msgstr "Контроль стану принтера"
 
@@ -4130,51 +4130,51 @@ msgstr ""
 "TRUE якщо завдання друку продовжуватиме генерувати сигнали про зміну стану "
 "після надсилання даних на принтер або сервер друку."
 
-#: gtk/gtkprintoperation.c:922
+#: gtk/gtkprintoperation.c:925
 msgid "Default Page Setup"
 msgstr "Типові параметри сторінки"
 
-#: gtk/gtkprintoperation.c:923
+#: gtk/gtkprintoperation.c:926
 msgid "The GtkPageSetup used by default"
 msgstr "Типово використовується GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:944 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "Параметри сторінки"
 
-#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:945 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Для ініціалізації діалогу використовується GtkPrintSettings"
 
-#: gtk/gtkprintoperation.c:960
+#: gtk/gtkprintoperation.c:963
 msgid "Job Name"
 msgstr "Назва завдання"
 
-#: gtk/gtkprintoperation.c:961
+#: gtk/gtkprintoperation.c:964
 msgid "A string used for identifying the print job."
 msgstr "Рядок, що використовується для ідентифікації завдання друку."
 
-#: gtk/gtkprintoperation.c:985
+#: gtk/gtkprintoperation.c:988
 msgid "Number of Pages"
 msgstr "Кількість каналів"
 
-#: gtk/gtkprintoperation.c:986
+#: gtk/gtkprintoperation.c:989
 msgid "The number of pages in the document."
 msgstr "Кількість сторінок у документі."
 
-#: gtk/gtkprintoperation.c:1007 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1010 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "Поточна сторінка"
 
-#: gtk/gtkprintoperation.c:1008 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1011 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "Поточна сторінка у документі"
 
-#: gtk/gtkprintoperation.c:1029
+#: gtk/gtkprintoperation.c:1032
 msgid "Use full page"
 msgstr "Використовувати всю сторінку"
 
-#: gtk/gtkprintoperation.c:1030
+#: gtk/gtkprintoperation.c:1033
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4182,7 +4182,7 @@ msgstr ""
 "TRUE, якщо джерело контексту має бути у куті сторінки, а не у куті області "
 "зображення"
 
-#: gtk/gtkprintoperation.c:1051
+#: gtk/gtkprintoperation.c:1054
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4190,55 +4190,55 @@ msgstr ""
 "TRUE, якщо від операції друку надходитимуть сповіщення про статус завдання "
 "друку після надсилання даних друку на принтер або сервер друку."
 
-#: gtk/gtkprintoperation.c:1068
+#: gtk/gtkprintoperation.c:1071
 msgid "Unit"
 msgstr "Одиниця"
 
-#: gtk/gtkprintoperation.c:1069
+#: gtk/gtkprintoperation.c:1072
 msgid "The unit in which distances can be measured in the context"
 msgstr "Одиниці у яких вимірюються відстані у контексті"
 
-#: gtk/gtkprintoperation.c:1086
+#: gtk/gtkprintoperation.c:1089
 msgid "Show Dialog"
 msgstr "Діалог відображення"
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1090
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE, якщо при друкуванні відображається діалог поступу"
 
-#: gtk/gtkprintoperation.c:1110
+#: gtk/gtkprintoperation.c:1113
 msgid "Allow Async"
 msgstr "Дозволити асинхронний друк"
 
-#: gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1114
 msgid "TRUE if print process may run asynchronous."
 msgstr "TRUE, якщо процес друку може бути асинхронним."
 
-#: gtk/gtkprintoperation.c:1133 gtk/gtkprintoperation.c:1134
+#: gtk/gtkprintoperation.c:1136 gtk/gtkprintoperation.c:1137
 msgid "Export filename"
 msgstr "Назва файлу експорту"
 
-#: gtk/gtkprintoperation.c:1148
+#: gtk/gtkprintoperation.c:1151
 msgid "Status"
 msgstr "Статус"
 
-#: gtk/gtkprintoperation.c:1149
+#: gtk/gtkprintoperation.c:1152
 msgid "The status of the print operation"
 msgstr "Статус операції друку"
 
-#: gtk/gtkprintoperation.c:1169
+#: gtk/gtkprintoperation.c:1172
 msgid "Status String"
 msgstr "Рядок статусу"
 
-#: gtk/gtkprintoperation.c:1170
+#: gtk/gtkprintoperation.c:1173
 msgid "A human-readable description of the status"
 msgstr "Текстовий опис статусу"
 
-#: gtk/gtkprintoperation.c:1188
+#: gtk/gtkprintoperation.c:1191
 msgid "Custom tab label"
 msgstr "Інша позначка вкладки"
 
-#: gtk/gtkprintoperation.c:1189
+#: gtk/gtkprintoperation.c:1192
 msgid "Label for the tab containing custom widgets."
 msgstr "Позначка для вкладки, що містить інший віджет."
 

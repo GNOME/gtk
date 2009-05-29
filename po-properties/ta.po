@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-10.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-04 01:14-0400\n"
+"POT-Creation-Date: 2009-05-29 19:03-0400\n"
 "PO-Revision-Date: 2006-08-29 18:20+0530\n"
 "Last-Translator: Felix <ifelix25@gmail.com>\n"
 "Language-Team: Tamil <ta@li.org>\n"
@@ -269,7 +269,7 @@ msgid "A unique name for the action."
 msgstr "செயலுக்கான ஒரு தனித்தன்மையான பெயர்"
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:495 gtk/gtkmenuitem.c:300
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "அடையாளம்"
@@ -789,12 +789,12 @@ msgid ""
 "widget"
 msgstr " பொத்தானில்   அடையாள விட்செட் இருப்பின் அதன் உரை "
 
-#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:516
 #: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "அடிக்கோடு பயன்படுத்தவும்"
 
-#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:517
 #: gtk/gtkmenuitem.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -1332,7 +1332,7 @@ msgstr "குறிமுறை"
 msgid "Marked up text to render"
 msgstr "குறிக்கப்பட்ட உரை கொடுக்க"
 
-#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:374
+#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:502
 msgid "Attributes"
 msgstr "பண்புகள்"
 
@@ -1491,7 +1491,7 @@ msgstr ""
 "உரையின் மொழி, ஐசோ குறியில். பாங்கோ இதை எழுத்துக்களை வரையும் போது ஒரு குறிப்பாக "
 "கொள்ளும். இந்த அளபுரு என்ன என்று புரியாவிட்டால் உங்களுக்கு அனேகமாக இது தேவையில்லை."
 
-#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:499 gtk/gtkprogressbar.c:206
+#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:627 gtk/gtkprogressbar.c:206
 msgid "Ellipsize"
 msgstr "முப்புள்ளி"
 
@@ -1504,11 +1504,11 @@ msgstr ""
 "வைக்க வேண்டிய இடம். "
 
 #: gtk/gtkcellrenderertext.c:431 gtk/gtkfilechooserbutton.c:421
-#: gtk/gtklabel.c:519
+#: gtk/gtklabel.c:647
 msgid "Width In Characters"
 msgstr "அகலம் உள்ளே எழுத்துக்கள்"
 
-#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:520
+#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:648
 msgid "The desired width of the label, in characters"
 msgstr "எழுத்துக்களில், வேண்டிய பெயரின் அகலம்"
 
@@ -2104,19 +2104,19 @@ msgstr "செயல் பரப்பு எல்லை"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "உரையாடல் கீழ் பொத்தான் ஐ சுற்றி எல்லையின் அகலம்"
 
-#: gtk/gtkentry.c:605 gtk/gtklabel.c:462
+#: gtk/gtkentry.c:605 gtk/gtklabel.c:590
 msgid "Cursor Position"
 msgstr "இடம்-காட்டி இடம்"
 
-#: gtk/gtkentry.c:606 gtk/gtklabel.c:463
+#: gtk/gtkentry.c:606 gtk/gtklabel.c:591
 msgid "The current position of the insertion cursor in chars"
 msgstr "உள்ளீடு நிலை காட்டியின் இப்போதைய இடம் எழுத்துருக்களில்"
 
-#: gtk/gtkentry.c:615 gtk/gtklabel.c:472
+#: gtk/gtkentry.c:615 gtk/gtklabel.c:600
 msgid "Selection Bound"
 msgstr "தேர்வு எல்லை"
 
-#: gtk/gtkentry.c:616 gtk/gtklabel.c:473
+#: gtk/gtkentry.c:616 gtk/gtklabel.c:601
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "நிலை காட்டியிடமிருந்து தேர்வின் எதிர் நுனியின் இடம் எழுத்துருக்களில்"
@@ -2442,7 +2442,7 @@ msgstr "நிலை குறிப்பு"
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "ஒரு நிழல் அல்லது பின்புலம் வரையும் போது சரியான நிலையை தாண்டுவதா"
 
-#: gtk/gtkentry.c:1703 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1703 gtk/gtklabel.c:830
 msgid "Select on focus"
 msgstr "ஃபோகஸில் தேர்ந்தெடு"
 
@@ -2556,11 +2556,11 @@ msgstr "சேய் விட்செட்டை காட்ட விரி
 msgid "Text of the expander's label"
 msgstr "விரிவாக்க விளக்கச்சீட்டில் உள்ள உரை"
 
-#: gtk/gtkexpander.c:211 gtk/gtklabel.c:381
+#: gtk/gtkexpander.c:211 gtk/gtklabel.c:509
 msgid "Use markup"
 msgstr "குறியை பயன்படுத்து"
 
-#: gtk/gtkexpander.c:212 gtk/gtklabel.c:382
+#: gtk/gtkexpander.c:212 gtk/gtklabel.c:510
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "அடையாளத்தின் உரை XML மார்கப் ஐ சேர்த்தது. பார்க்க: pango_parse_markup()"
 
@@ -3109,19 +3109,19 @@ msgstr "படங்கள் மெனுவில் காட்டப்ப�
 msgid "The screen where this window will be displayed"
 msgstr "இந்த திரையில் இந்த சாளரம் காட்டப்படும்"
 
-#: gtk/gtklabel.c:368
+#: gtk/gtklabel.c:496
 msgid "The text of the label"
 msgstr "அடையாளத்தின் உரை"
 
-#: gtk/gtklabel.c:375
+#: gtk/gtklabel.c:503
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "அடையாளத்தின் உரைக்கு பயன்படுத்த பாங்குகளின் பண்புக்கூறு பட்டியல்."
 
-#: gtk/gtklabel.c:396 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:524 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
 msgid "Justification"
 msgstr "நேர்த்தி செய்தல்"
 
-#: gtk/gtklabel.c:397
+#: gtk/gtklabel.c:525
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -3130,88 +3130,88 @@ msgstr ""
 "அடையாளத்தில் ஒவ்வொரு வரிகளின் இடையே ஒழுங்கு. இது கொடுத்த இடத்தில் அடையாளத்தின் ஒழுங்க "
 "பாதிக்காது. பார்க்க: GtkMisc::xalign "
 
-#: gtk/gtklabel.c:405
+#: gtk/gtklabel.c:533
 msgid "Pattern"
 msgstr "முறை"
 
-#: gtk/gtklabel.c:406
+#: gtk/gtklabel.c:534
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr "_ எழுத்துரு கொண்ட சரங்கள் உரையில் அடிக்கோடிட வேண்டிய எழுத்துருக்களை குறிக்கின்றன."
 
-#: gtk/gtklabel.c:413
+#: gtk/gtklabel.c:541
 msgid "Line wrap"
 msgstr "வரி மடிப்பு"
 
-#: gtk/gtklabel.c:414
+#: gtk/gtklabel.c:542
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "வரிகள் மிகவும் அகலமானால் உரையை மடிக்கவும் என அமைக்கும்"
 
-#: gtk/gtklabel.c:429
+#: gtk/gtklabel.c:557
 msgid "Line wrap mode"
 msgstr "வரி மடிப்பு முறை"
 
-#: gtk/gtklabel.c:430
+#: gtk/gtklabel.c:558
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr "உரை மடிப்பு அமைத்தால் வரிகள் எப்படி மடியும் என கட்டுப்படுத்தும்."
 
-#: gtk/gtklabel.c:437
+#: gtk/gtklabel.c:565
 msgid "Selectable"
 msgstr "தெரிவு செய்யக்கூடியது"
 
-#: gtk/gtklabel.c:438
+#: gtk/gtklabel.c:566
 msgid "Whether the label text can be selected with the mouse"
 msgstr "அடையாளம் உரை சொடுக்கியால் தேர்ந்தெடுக்கப்பட முடியுமா"
 
-#: gtk/gtklabel.c:444
+#: gtk/gtklabel.c:572
 msgid "Mnemonic key"
 msgstr "நினைவுத்துணை விசை"
 
-#: gtk/gtklabel.c:445
+#: gtk/gtklabel.c:573
 msgid "The mnemonic accelerator key for this label"
 msgstr "இந்த லேபிளுக்கான mnemonic accelerator விசை"
 
-#: gtk/gtklabel.c:453
+#: gtk/gtklabel.c:581
 msgid "Mnemonic widget"
 msgstr "நினைவுத்துணை விட்செட்"
 
-#: gtk/gtklabel.c:454
+#: gtk/gtklabel.c:582
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "அடையாளத்தின் நினைவுத்துணை விசையை அழுத்தினால் செயலுக்கு வரும் விட்செட் "
 
-#: gtk/gtklabel.c:500
+#: gtk/gtklabel.c:628
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
 msgstr ""
 "முழு சரத்தை காட்ட அடையாளத்துக்கு இடம் இல்லாமல் போனால் முப்புள்ளி காட்ட தகுந்த இடம். "
 
-#: gtk/gtklabel.c:540
+#: gtk/gtklabel.c:668
 msgid "Single Line Mode"
 msgstr "ஒற்றை வரி முறை"
 
-#: gtk/gtklabel.c:541
+#: gtk/gtklabel.c:669
 msgid "Whether the label is in single line mode"
 msgstr "இந்த லேபிள் ஒற்றை வரி முறைமையில் உள்ளதா"
 
-#: gtk/gtklabel.c:558
+#: gtk/gtklabel.c:686
 msgid "Angle"
 msgstr "கோணம்"
 
-#: gtk/gtklabel.c:559
+#: gtk/gtklabel.c:687
 msgid "Angle at which the label is rotated"
 msgstr "பெயர் சுழலும் கோணம்"
 
-#: gtk/gtklabel.c:579
+#: gtk/gtklabel.c:707
 msgid "Maximum Width In Characters"
 msgstr "எழுத்துக்களின் அதிகபட்ச அகலம்"
 
-#: gtk/gtklabel.c:580
+#: gtk/gtklabel.c:708
 msgid "The desired maximum width of the label, in characters"
 msgstr "அடையாளத்தின் விரும்பும் அதிகபட்ச அகலம், எழுத்துருக்களில் "
 
-#: gtk/gtklabel.c:696
+#: gtk/gtklabel.c:831
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr ""
 "தேர்ந்தெடுக்கக்கூடிய அடையாளம் குவிப்பில் இருந்தால் உள்ளடக்கத்தை தேர்ந்தெடுக்க வேண்டுமா?"
@@ -4041,7 +4041,7 @@ msgstr "அச்சடிப்பி அமைவுகள்"
 msgid "Page Setup"
 msgstr "பக்கம் அமைப்பு"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1050
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1053
 msgid "Track Print Status"
 msgstr "அச்சிடுதல் நிலையை தேடு"
 
@@ -4053,51 +4053,51 @@ msgstr ""
 "TRUE if the print job will continue to emit status-changed signals after the "
 "print data has been sent to the printer or print server."
 
-#: gtk/gtkprintoperation.c:922
+#: gtk/gtkprintoperation.c:925
 msgid "Default Page Setup"
 msgstr "முன்னிருப்பு பக்கம் அமைப்பு"
 
-#: gtk/gtkprintoperation.c:923
+#: gtk/gtkprintoperation.c:926
 msgid "The GtkPageSetup used by default"
 msgstr "இந்த GtkPageSetup முன்னிருப்பாக பயன்படுத்தப்படுகிறது"
 
-#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:944 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "அச்சிடும் அமைவுகள்"
 
-#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:945 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "இந்த GtkPrintSettings உரையாடலை துவக்க பயன்படுத்துகிறது"
 
-#: gtk/gtkprintoperation.c:960
+#: gtk/gtkprintoperation.c:963
 msgid "Job Name"
 msgstr "பணி பெயர்"
 
-#: gtk/gtkprintoperation.c:961
+#: gtk/gtkprintoperation.c:964
 msgid "A string used for identifying the print job."
 msgstr "அச்சு வேலையை எடுத்துக்காட்ட ஒரு ஸ்டிரிங் பயன்படுகிறது"
 
-#: gtk/gtkprintoperation.c:985
+#: gtk/gtkprintoperation.c:988
 msgid "Number of Pages"
 msgstr "பக்கங்களின் எண்ணிக்கை"
 
-#: gtk/gtkprintoperation.c:986
+#: gtk/gtkprintoperation.c:989
 msgid "The number of pages in the document."
 msgstr "ஆவணத்திலுள்ள பக்கங்களின் எண்ணிக்கை"
 
-#: gtk/gtkprintoperation.c:1007 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1010 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "நடப்பு பக்கம்"
 
-#: gtk/gtkprintoperation.c:1008 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1011 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "ஆவணத்தின் நடப்பு பக்கம்"
 
-#: gtk/gtkprintoperation.c:1029
+#: gtk/gtkprintoperation.c:1032
 msgid "Use full page"
 msgstr "முழு பக்கத்தைப் பயன்படுத்து"
 
-#: gtk/gtkprintoperation.c:1030
+#: gtk/gtkprintoperation.c:1033
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4105,7 +4105,7 @@ msgstr ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 
-#: gtk/gtkprintoperation.c:1051
+#: gtk/gtkprintoperation.c:1054
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4113,55 +4113,55 @@ msgstr ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 
-#: gtk/gtkprintoperation.c:1068
+#: gtk/gtkprintoperation.c:1071
 msgid "Unit"
 msgstr "அலகு"
 
-#: gtk/gtkprintoperation.c:1069
+#: gtk/gtkprintoperation.c:1072
 msgid "The unit in which distances can be measured in the context"
 msgstr "இந்த அலகு சூழலின் தொலைவை அளக்கிறது"
 
-#: gtk/gtkprintoperation.c:1086
+#: gtk/gtkprintoperation.c:1089
 msgid "Show Dialog"
 msgstr "உரையாடலை காட்டு"
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1090
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "அச்சடிக்கும் போது  ஒரு மேம்பாடு உரையாடல்  காட்டப்படுவது உண்மையா."
 
-#: gtk/gtkprintoperation.c:1110
+#: gtk/gtkprintoperation.c:1113
 msgid "Allow Async"
 msgstr "ஒருங்கிணைப்பில்லாததை அனுமதி"
 
-#: gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1114
 msgid "TRUE if print process may run asynchronous."
 msgstr "அச்சடிப்பி ஒருங்கில்லாததை இயக்கினால் உண்மை"
 
-#: gtk/gtkprintoperation.c:1133 gtk/gtkprintoperation.c:1134
+#: gtk/gtkprintoperation.c:1136 gtk/gtkprintoperation.c:1137
 msgid "Export filename"
 msgstr "கோப்புப்பெயரை ஏற்று"
 
-#: gtk/gtkprintoperation.c:1148
+#: gtk/gtkprintoperation.c:1151
 msgid "Status"
 msgstr "நிலை"
 
-#: gtk/gtkprintoperation.c:1149
+#: gtk/gtkprintoperation.c:1152
 msgid "The status of the print operation"
 msgstr "அச்சு செயல்பாட்டின் நிலை"
 
-#: gtk/gtkprintoperation.c:1169
+#: gtk/gtkprintoperation.c:1172
 msgid "Status String"
 msgstr "நிலை சரம்"
 
-#: gtk/gtkprintoperation.c:1170
+#: gtk/gtkprintoperation.c:1173
 msgid "A human-readable description of the status"
 msgstr "மனிதன் வாசிக்கக்கூடிய விளக்கத்தின் நிலை"
 
-#: gtk/gtkprintoperation.c:1188
+#: gtk/gtkprintoperation.c:1191
 msgid "Custom tab label"
 msgstr "தனிபயன் கீற்று  பெயர்"
 
-#: gtk/gtkprintoperation.c:1189
+#: gtk/gtkprintoperation.c:1192
 msgid "Label for the tab containing custom widgets."
 msgstr "தத்தலுக்கு லேபிள் தனிபயன் விட்ஜிட்கள்"
 

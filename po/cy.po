@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-04 01:14-0400\n"
+"POT-Creation-Date: 2009-05-29 19:02-0400\n"
 "PO-Revision-Date: 2007-05-14 21:28-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -1833,11 +1833,11 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Amnewid"
 
-#: gtk/gtkfilechooserdefault.c:8914
+#: gtk/gtkfilechooserdefault.c:8919
 msgid "Could not start the search process"
 msgstr "Methu cychwyn y broses chwilio"
 
-#: gtk/gtkfilechooserdefault.c:8915
+#: gtk/gtkfilechooserdefault.c:8920
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1845,34 +1845,34 @@ msgstr ""
 "Methodd y rhaglen a chreu cysylltiad â'r ellyll mynegai.  Gwnewch yn siŵr ei "
 "fod yn rhedeg."
 
-#: gtk/gtkfilechooserdefault.c:8929
+#: gtk/gtkfilechooserdefault.c:8934
 msgid "Could not send the search request"
 msgstr "Methu anfon y cais chwilio"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9396
+#: gtk/gtkfilechooserdefault.c:9401
 msgid "_Search:"
 msgstr "_Chwilio:"
 
-#: gtk/gtkfilechooserdefault.c:10349
+#: gtk/gtkfilechooserdefault.c:10354
 #, c-format
 msgid "Could not mount %s"
 msgstr "Methu â gosod %s"
 
-#: gtk/gtkfilechooserdefault.c:11024
+#: gtk/gtkfilechooserdefault.c:11029
 msgid "Type name of new folder"
 msgstr "Teipiwch enw'r plygell newydd"
 
-#: gtk/gtkfilechooserdefault.c:11202 gtk/gtkfilechooserdefault.c:11224
-#: gtk/gtkfilechooserdefault.c:11295
+#: gtk/gtkfilechooserdefault.c:11207 gtk/gtkfilechooserdefault.c:11229
+#: gtk/gtkfilechooserdefault.c:11300
 msgid "Unknown"
 msgstr "Anhysbys"
 
-#: gtk/gtkfilechooserdefault.c:11242
+#: gtk/gtkfilechooserdefault.c:11247
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11244
+#: gtk/gtkfilechooserdefault.c:11249
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Ddoe"
@@ -2268,6 +2268,17 @@ msgstr "(anhysbys)"
 msgid "Cl_ear"
 msgstr "_Clirio"
 
+#. Open Link
+#: gtk/gtklabel.c:5504
+#, fuzzy
+msgid "_Open Link"
+msgstr "Agor Lleoliad"
+
+#. Copy Link Address
+#: gtk/gtklabel.c:5516
+msgid "Copy _Link Address"
+msgstr ""
+
 #: gtk/gtklinkbutton.c:428
 msgid "Copy URL"
 msgstr "Copïo LAU"
@@ -2363,7 +2374,7 @@ msgstr ""
 msgid "Remember _forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6946
+#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6949
 #, c-format
 msgid "Page %u"
 msgstr "Tudalen %u"
@@ -2429,7 +2440,7 @@ msgstr "Maint _papur:"
 msgid "_Orientation:"
 msgstr "_Gogwydd:"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2683
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2739
 msgid "Page Setup"
 msgstr "Gosodiad Tudalen"
 
@@ -2517,97 +2528,97 @@ msgstr "_Cadw mewn plygell:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:176
+#: gtk/gtkprintoperation.c:179
 #, c-format
 msgid "%s job #%d"
 msgstr "%s gorchwyl #%d"
 
-#: gtk/gtkprintoperation.c:1540
-msgctxt "print operation status"
-msgid "Initial state"
-msgstr ""
-
-#: gtk/gtkprintoperation.c:1541
-#, fuzzy
-msgctxt "print operation status"
-msgid "Preparing to print"
-msgstr "Wrthi'n paratoi %d"
-
-#: gtk/gtkprintoperation.c:1542
-msgctxt "print operation status"
-msgid "Generating data"
-msgstr ""
-
 #: gtk/gtkprintoperation.c:1543
 msgctxt "print operation status"
-msgid "Sending data"
+msgid "Initial state"
 msgstr ""
 
 #: gtk/gtkprintoperation.c:1544
 #, fuzzy
 msgctxt "print operation status"
+msgid "Preparing to print"
+msgstr "Wrthi'n paratoi %d"
+
+#: gtk/gtkprintoperation.c:1545
+msgctxt "print operation status"
+msgid "Generating data"
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1546
+msgctxt "print operation status"
+msgid "Sending data"
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1547
+#, fuzzy
+msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Rhybudd"
 
-#: gtk/gtkprintoperation.c:1545
+#: gtk/gtkprintoperation.c:1548
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1546
+#: gtk/gtkprintoperation.c:1549
 #, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Wrthi'n argraffu %d"
 
-#: gtk/gtkprintoperation.c:1547
+#: gtk/gtkprintoperation.c:1550
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Wrthi'n gorffen"
 
-#: gtk/gtkprintoperation.c:1548
+#: gtk/gtkprintoperation.c:1551
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Wedi gorffen, gyda gwall"
 
-#: gtk/gtkprintoperation.c:2071
+#: gtk/gtkprintoperation.c:2127
 #, c-format
 msgid "Preparing %d"
 msgstr "Wrthi'n paratoi %d"
 
-#: gtk/gtkprintoperation.c:2073 gtk/gtkprintoperation.c:2404
+#: gtk/gtkprintoperation.c:2129 gtk/gtkprintoperation.c:2694
 #, c-format
 msgid "Preparing"
 msgstr "Wrthi'n paratoi"
 
-#: gtk/gtkprintoperation.c:2076
+#: gtk/gtkprintoperation.c:2132
 #, c-format
 msgid "Printing %d"
 msgstr "Wrthi'n argraffu %d"
 
-#: gtk/gtkprintoperation.c:2434
+#: gtk/gtkprintoperation.c:2724
 #, fuzzy, c-format
 msgid "Error creating print preview"
 msgstr "Gwall wrth lansio rhagolwg"
 
-#: gtk/gtkprintoperation.c:2437
+#: gtk/gtkprintoperation.c:2727
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:257
+#: gtk/gtkprintoperation-unix.c:265
 #, c-format
 msgid "Error launching preview"
 msgstr "Gwall wrth lansio rhagolwg"
 
-#: gtk/gtkprintoperation-unix.c:301
+#: gtk/gtkprintoperation-unix.c:309
 #, c-format
 msgid "Error printing"
 msgstr "Gwall wrth argraffu"
 
-#: gtk/gtkprintoperation-unix.c:425 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:435 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "Rhaglen"
 
@@ -2643,28 +2654,28 @@ msgstr "Dim eitemau wedi'u canfod"
 msgid "Invalid argument to CreateDC"
 msgstr "Arg annilys i PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1801
+#: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1803
 msgid "Error from StartDoc"
 msgstr "Gwall o fewn StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1658 gtk/gtkprintoperation-win32.c:1681
-#: gtk/gtkprintoperation-win32.c:1729
+#: gtk/gtkprintoperation-win32.c:1660 gtk/gtkprintoperation-win32.c:1683
+#: gtk/gtkprintoperation-win32.c:1731
 msgid "Not enough free memory"
 msgstr "Dim digon o gof yn rhydd"
 
-#: gtk/gtkprintoperation-win32.c:1734
+#: gtk/gtkprintoperation-win32.c:1736
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Arg annilys i PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1739
+#: gtk/gtkprintoperation-win32.c:1741
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Pwyntydd annilys i PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1744
+#: gtk/gtkprintoperation-win32.c:1746
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Dolen annilys i PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1749
+#: gtk/gtkprintoperation-win32.c:1751
 msgid "Unspecified error"
 msgstr "Gwall anhysbys"
 
@@ -2736,103 +2747,157 @@ msgstr "_Gwrthdroi"
 msgid "General"
 msgstr "Cyffredinol"
 
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
+#.
+#. Translators: These strings name the possible arrangements of
+#. * multiple pages on a sheet when printing
+#.
+#: gtk/gtkprintunixdialog.c:2448
+#: modules/printbackends/cups/gtkprintbackendcups.c:3130
+msgid "Left to right, top to bottom"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2448
+#: modules/printbackends/cups/gtkprintbackendcups.c:3130
+msgid "Left to right, bottom to top"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2449
+#: modules/printbackends/cups/gtkprintbackendcups.c:3131
+msgid "Right to left, top to bottom"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2449
+#: modules/printbackends/cups/gtkprintbackendcups.c:3131
+msgid "Right to left, bottom to top"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2450
+#: modules/printbackends/cups/gtkprintbackendcups.c:3132
+msgid "Top to bottom, left to right"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2450
+#: modules/printbackends/cups/gtkprintbackendcups.c:3132
+msgid "Top to bottom, right to left"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2451
+#: modules/printbackends/cups/gtkprintbackendcups.c:3133
+msgid "Bottom to top, left to right"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2451
+#: modules/printbackends/cups/gtkprintbackendcups.c:3133
+msgid "Bottom to top, right to left"
+msgstr ""
+
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2444
+#: gtk/gtkprintunixdialog.c:2455 gtk/gtkprintunixdialog.c:2468
 #: modules/printbackends/cups/gtkprintbackendcups.c:3164
 #, fuzzy
 msgid "Page Ordering"
 msgstr "Wrthi'n paratoi"
 
-#: gtk/gtkprintunixdialog.c:2450
+#: gtk/gtkprintunixdialog.c:2484
 #, fuzzy
 msgid "Left to right"
 msgstr "LRM Mark _chwith-i'r-dde"
 
-#: gtk/gtkprintunixdialog.c:2451
+#: gtk/gtkprintunixdialog.c:2485
 #, fuzzy
 msgid "Right to left"
 msgstr "Argraffu i Ffeil"
 
-#: gtk/gtkprintunixdialog.c:2520
+#: gtk/gtkprintunixdialog.c:2497
+msgid "Top to bottom"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2498
+msgid "Bottom to top"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2576
 msgid "Layout"
 msgstr "Cynllun"
 
-#: gtk/gtkprintunixdialog.c:2524
+#: gtk/gtkprintunixdialog.c:2580
 msgid "T_wo-sided:"
 msgstr "_Dwyochrog:"
 
-#: gtk/gtkprintunixdialog.c:2539
+#: gtk/gtkprintunixdialog.c:2595
 msgid "Pages per _side:"
 msgstr "Tudalennau ar bob _ochr:"
 
-#: gtk/gtkprintunixdialog.c:2557
+#: gtk/gtkprintunixdialog.c:2613
 #, fuzzy
 msgid "Page or_dering:"
 msgstr "Tudalennau ar bob _ochr:"
 
-#: gtk/gtkprintunixdialog.c:2573
+#: gtk/gtkprintunixdialog.c:2629
 msgid "_Only print:"
 msgstr "_Printio'r rhain yn unig:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2588
+#: gtk/gtkprintunixdialog.c:2644
 msgid "All sheets"
 msgstr "Pob taflen"
 
-#: gtk/gtkprintunixdialog.c:2589
+#: gtk/gtkprintunixdialog.c:2645
 msgid "Even sheets"
 msgstr "Taflenni eilrif"
 
-#: gtk/gtkprintunixdialog.c:2590
+#: gtk/gtkprintunixdialog.c:2646
 msgid "Odd sheets"
 msgstr "Taflenni odrif"
 
-#: gtk/gtkprintunixdialog.c:2593
+#: gtk/gtkprintunixdialog.c:2649
 msgid "Sc_ale:"
 msgstr "_Graddfa:"
 
-#: gtk/gtkprintunixdialog.c:2620
+#: gtk/gtkprintunixdialog.c:2676
 msgid "Paper"
 msgstr "Papur"
 
-#: gtk/gtkprintunixdialog.c:2624
+#: gtk/gtkprintunixdialog.c:2680
 msgid "Paper _type:"
 msgstr "_Math papur:"
 
-#: gtk/gtkprintunixdialog.c:2639
+#: gtk/gtkprintunixdialog.c:2695
 msgid "Paper _source:"
 msgstr "_Ffynhonnell papur:"
 
-#: gtk/gtkprintunixdialog.c:2654
+#: gtk/gtkprintunixdialog.c:2710
 msgid "Output t_ray:"
 msgstr "Lleoliad t_erfynol y papur:"
 
-#: gtk/gtkprintunixdialog.c:2708
+#: gtk/gtkprintunixdialog.c:2764
 msgid "Job Details"
 msgstr "Manylion y Dasg"
 
-#: gtk/gtkprintunixdialog.c:2714
+#: gtk/gtkprintunixdialog.c:2770
 msgid "Pri_ority:"
 msgstr "_Blaenoriaeth:"
 
-#: gtk/gtkprintunixdialog.c:2729
+#: gtk/gtkprintunixdialog.c:2785
 msgid "_Billing info:"
 msgstr "_Gwybodaeth bilio:"
 
-#: gtk/gtkprintunixdialog.c:2747
+#: gtk/gtkprintunixdialog.c:2803
 msgid "Print Document"
 msgstr "Argraffu Dogfen"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2756
+#: gtk/gtkprintunixdialog.c:2812
 msgid "_Now"
 msgstr "_Nawr"
 
-#: gtk/gtkprintunixdialog.c:2767
+#: gtk/gtkprintunixdialog.c:2823
 msgid "A_t:"
 msgstr "_I:"
 
@@ -2840,70 +2905,70 @@ msgstr "_I:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:2773
+#: gtk/gtkprintunixdialog.c:2829
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2783
+#: gtk/gtkprintunixdialog.c:2839
 msgid "Time of print"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2799
+#: gtk/gtkprintunixdialog.c:2855
 msgid "On _hold"
 msgstr "Ar _saib"
 
-#: gtk/gtkprintunixdialog.c:2800
+#: gtk/gtkprintunixdialog.c:2856
 msgid "Hold the job until it is explicitly released"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2820
+#: gtk/gtkprintunixdialog.c:2876
 msgid "Add Cover Page"
 msgstr "Creu Tudalen Glawr"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2829
+#: gtk/gtkprintunixdialog.c:2885
 msgid "Be_fore:"
 msgstr "_Cyn:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2847
+#: gtk/gtkprintunixdialog.c:2903
 msgid "_After:"
 msgstr "_Ar ôl:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2865
+#: gtk/gtkprintunixdialog.c:2921
 msgid "Job"
 msgstr "Tasg"
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2987
 msgid "Advanced"
 msgstr "Uwch"
 
-#: gtk/gtkprintunixdialog.c:2966
+#: gtk/gtkprintunixdialog.c:3022
 msgid "Image Quality"
 msgstr "Ansawdd Delwedd"
 
-#: gtk/gtkprintunixdialog.c:2969
+#: gtk/gtkprintunixdialog.c:3025
 msgid "Color"
 msgstr "Lliw"
 
-#: gtk/gtkprintunixdialog.c:2972
+#: gtk/gtkprintunixdialog.c:3028
 msgid "Finishing"
 msgstr "Wrthi'n gorffen"
 
-#: gtk/gtkprintunixdialog.c:2982
+#: gtk/gtkprintunixdialog.c:3038
 msgid "Some of the settings in the dialog conflict"
 msgstr "Mae rhai o'r gosodiadau o fewn y ddeialog yn gwrthdaro"
 
-#: gtk/gtkprintunixdialog.c:3005
+#: gtk/gtkprintunixdialog.c:3061
 msgid "Print"
 msgstr "Argraffu"
 
@@ -4846,81 +4911,81 @@ msgstr "Methu ysgrifennu mynegai ffolder\n"
 msgid "Failed to rewrite header\n"
 msgstr "Methu ail-ysgrifennu pennyn\n"
 
-#: gtk/updateiconcache.c:1455
+#: gtk/updateiconcache.c:1463
 #, fuzzy, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Methu agor y ffeil '%s': %s"
 
-#: gtk/updateiconcache.c:1463
+#: gtk/updateiconcache.c:1471
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Methu ysgrifennu'r ffeil storfa: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Roedd y storfa a grëwyd yn annilys.\n"
 
-#: gtk/updateiconcache.c:1511
+#: gtk/updateiconcache.c:1519
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Methu ail-enwi %s yn %s: %s, felly'n tynnu %s.\n"
 
-#: gtk/updateiconcache.c:1523
+#: gtk/updateiconcache.c:1531
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Methu ail-enwi %s yn %s: %s\n"
 
-#: gtk/updateiconcache.c:1530
+#: gtk/updateiconcache.c:1538
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Methu ail-enwi %s yn ôl i %s: %s\n"
 
-#: gtk/updateiconcache.c:1556
+#: gtk/updateiconcache.c:1564
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Ffeil storfa wedi'i chynhyrchu'n llwyddiannus.\n"
 
-#: gtk/updateiconcache.c:1595
+#: gtk/updateiconcache.c:1603
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Trosysgrifo'r storfa sy'n bodoli, hyd yn oed os yw hi'n gyfoes"
 
-#: gtk/updateiconcache.c:1596
+#: gtk/updateiconcache.c:1604
 msgid "Don't check for the existence of index.theme"
 msgstr "Peidio â gwirio am fodolaeth index.theme"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1605
 msgid "Don't include image data in the cache"
 msgstr "Peidio â chynnwys data delwedd yn y storfa"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1606
 msgid "Output a C header file"
 msgstr "Cynhyrchu ffeil bennyn C"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1607
 msgid "Turn off verbose output"
 msgstr "Diffodd allbwn amleiriog"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1608
 msgid "Validate existing icon cache"
 msgstr "Gwirio'r storfa eiconau sy'n bodoli"
 
-#: gtk/updateiconcache.c:1663
+#: gtk/updateiconcache.c:1671
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Methu canfod ffeil: %s\n"
 
-#: gtk/updateiconcache.c:1669
+#: gtk/updateiconcache.c:1677
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Ddim yn storfa eiconau ddilys: %s\n"
 
-#: gtk/updateiconcache.c:1682
+#: gtk/updateiconcache.c:1690
 #, c-format
 msgid "No theme index file."
 msgstr ""
 
-#: gtk/updateiconcache.c:1686
+#: gtk/updateiconcache.c:1694
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -5214,41 +5279,6 @@ msgstr "Canolig"
 #: modules/printbackends/cups/gtkprintbackendcups.c:3125
 msgid "Low"
 msgstr "Isel"
-
-#. Translators: These strings name the possible arrangements of
-#. * multiple pages on a sheet when printing
-#.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3130
-msgid "Left to right, top to bottom"
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3130
-msgid "Left to right, bottom to top"
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3131
-msgid "Right to left, top to bottom"
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3131
-msgid "Right to left, bottom to top"
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3132
-msgid "Top to bottom, left to right"
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3132
-msgid "Top to bottom, right to left"
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3133
-msgid "Bottom to top, left to right"
-msgstr ""
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:3133
-msgid "Bottom to top, right to left"
-msgstr ""
 
 #. Cups specific, non-ppd related settings
 #. Translators, this string is used to label the pages-per-sheet option
@@ -6319,9 +6349,6 @@ msgstr "Methwyd cyrchu gwybodaeth ar gyfer y ffeil '%s': %s"
 
 #~ msgid "Could not build file name from '%s' and '%s'"
 #~ msgstr "Methu adeiladu enw ffeil o '%s' a '%s'"
-
-#~ msgid "Open Location"
-#~ msgstr "Agor Lleoliad"
 
 #~ msgid "Save in Location"
 #~ msgstr "Cadw mewn Lleoliad"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-04 01:14-0400\n"
+"POT-Creation-Date: 2009-05-29 19:03-0400\n"
 "PO-Revision-Date: 2009-03-15 15:48+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
@@ -261,7 +261,7 @@ msgid "A unique name for the action."
 msgstr "कृतीसाठी विशेष नाव."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:495 gtk/gtkmenuitem.c:300
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "लेबल"
@@ -776,12 +776,12 @@ msgid ""
 "widget"
 msgstr "जर बटणांमधे लेबल widget असेल तर, बटणांमधील लेबल विजेटची वाक्यरचना"
 
-#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:516
 #: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "अधोरेखीत करा "
 
-#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:517
 #: gtk/gtkmenuitem.c:316
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -1316,7 +1316,7 @@ msgstr "(हवे ते लिखाण) चिन्हांकित कर
 msgid "Marked up text to render"
 msgstr "दाखवण्यासाठी चिन्हांकित केलेले लिखाण "
 
-#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:374
+#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:502
 msgid "Attributes"
 msgstr "गुणविशेष"
 
@@ -1473,7 +1473,7 @@ msgstr ""
 "या पाठ्याची भाषा ISO कोड आहे. पाठ्य म्हणून दर्शवितेवेळी Pango यास ओळखखूण म्हणून वापरू "
 "शकतो. तुम्हाला हे समझत नसल्यास, याची गरज नाही"
 
-#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:499 gtk/gtkprogressbar.c:206
+#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:627 gtk/gtkprogressbar.c:206
 msgid "Ellipsize"
 msgstr "अर्धगोलाकार करा"
 
@@ -1486,11 +1486,11 @@ msgstr ""
 "करण्यासाठीचे सूचविलेले स्थान"
 
 #: gtk/gtkcellrenderertext.c:431 gtk/gtkfilechooserbutton.c:421
-#: gtk/gtklabel.c:519
+#: gtk/gtklabel.c:647
 msgid "Width In Characters"
 msgstr "रुंदी"
 
-#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:520
+#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:648
 msgid "The desired width of the label, in characters"
 msgstr "रुंदी "
 
@@ -2085,19 +2085,19 @@ msgstr "वापरण्यायोग्य क्षेत्राची �
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "ह्या मजकुराच्या तळभागातील बटणाभोवती असणाऱ्या जागेची रुंदी"
 
-#: gtk/gtkentry.c:605 gtk/gtklabel.c:462
+#: gtk/gtkentry.c:605 gtk/gtklabel.c:590
 msgid "Cursor Position"
 msgstr "कर्सरचे स्थान"
 
-#: gtk/gtkentry.c:606 gtk/gtklabel.c:463
+#: gtk/gtkentry.c:606 gtk/gtklabel.c:591
 msgid "The current position of the insertion cursor in chars"
 msgstr "अक्षरामध्ये असणारी कर्सरची वर्तमान स्थिती"
 
-#: gtk/gtkentry.c:615 gtk/gtklabel.c:472
+#: gtk/gtkentry.c:615 gtk/gtklabel.c:600
 msgid "Selection Bound"
 msgstr "निर्बंधित निवड"
 
-#: gtk/gtkentry.c:616 gtk/gtklabel.c:473
+#: gtk/gtkentry.c:616 gtk/gtklabel.c:601
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "अक्षरांमधिल कर्सर पासून निवडकाच्या विरूध्द बाजुची स्थिती"
@@ -2420,7 +2420,7 @@ msgstr "हिन्ट स्तर"
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "सावली किंवा पार्श्वभूमीचे रेखाटण करतेवेळी योग्य स्तर पुरवायचे का"
 
-#: gtk/gtkentry.c:1703 gtk/gtklabel.c:695
+#: gtk/gtkentry.c:1703 gtk/gtklabel.c:830
 msgid "Select on focus"
 msgstr "दृश्यमान करा"
 
@@ -2534,11 +2534,11 @@ msgstr "उपघटक नियंत्रण साधन दर्शवि
 msgid "Text of the expander's label"
 msgstr "लिखाण"
 
-#: gtk/gtkexpander.c:211 gtk/gtklabel.c:381
+#: gtk/gtkexpander.c:211 gtk/gtklabel.c:509
 msgid "Use markup"
 msgstr "मार्कअप चा प्रयोग करा"
 
-#: gtk/gtkexpander.c:212 gtk/gtklabel.c:382
+#: gtk/gtkexpander.c:212 gtk/gtklabel.c:510
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "लेबलच्या पाठ्य मध्ये XML मार्कअप संयुक्त आहे. pango_parse_markup() पहा"
 
@@ -3086,19 +3086,19 @@ msgstr "मेन्यु मध्ये प्रतिमा दर्शव
 msgid "The screen where this window will be displayed"
 msgstr "ही चौकट जेथे दर्शविले पाहिजे ती पडदा"
 
-#: gtk/gtklabel.c:368
+#: gtk/gtklabel.c:496
 msgid "The text of the label"
 msgstr "लेबलचे पाठ्य"
 
-#: gtk/gtklabel.c:375
+#: gtk/gtklabel.c:503
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "लेबलमधिल पाठ्यकरीता वापरण्याजोगी स्टाईल गुणधर्माची यादी"
 
-#: gtk/gtklabel.c:396 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:524 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
 msgid "Justification"
 msgstr "समर्थण"
 
-#: gtk/gtklabel.c:397
+#: gtk/gtklabel.c:525
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -3107,58 +3107,58 @@ msgstr ""
 "लेबल मधिल पाठ्यतील परस्पर संबंधी ओळींची रचना. यामुळे लेबलची रचना मध्ये फरक पडत नाही. "
 "त्याकरीता GtkMisc::xalign पहा"
 
-#: gtk/gtklabel.c:405
+#: gtk/gtklabel.c:533
 msgid "Pattern"
 msgstr "स्वरुप"
 
-#: gtk/gtklabel.c:406
+#: gtk/gtklabel.c:534
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr ""
 "अक्षर मालिकेतील _ अक्षरे व मजकुरातील अक्षरे स्थिती परस्पर अधोरेखीत करण्याजोगी पाठ्यशी जुळते"
 
-#: gtk/gtklabel.c:413
+#: gtk/gtklabel.c:541
 msgid "Line wrap"
 msgstr "ओळ कव्हर करा"
 
-#: gtk/gtklabel.c:414
+#: gtk/gtklabel.c:542
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "निश्चित केल्यास, पाठ्य खूप मोठे होत असेल तर ओळी गुंडाळा"
 
-#: gtk/gtklabel.c:429
+#: gtk/gtklabel.c:557
 msgid "Line wrap mode"
 msgstr "रीत"
 
-#: gtk/gtklabel.c:430
+#: gtk/gtklabel.c:558
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr "गुंडाळा निश्चित केल्यास, ओळी कशाप्रकारे गुंडाळायचे त्याचे नियंत्रण केले जाऊ शकते"
 
-#: gtk/gtklabel.c:437
+#: gtk/gtklabel.c:565
 msgid "Selectable"
 msgstr "निवडण्याजोगे"
 
-#: gtk/gtklabel.c:438
+#: gtk/gtklabel.c:566
 msgid "Whether the label text can be selected with the mouse"
 msgstr "माउस द्वारे लेबलचे पाठ्य निवडायचे का"
 
-#: gtk/gtklabel.c:444
+#: gtk/gtklabel.c:572
 msgid "Mnemonic key"
 msgstr "निमोनिक बटण"
 
-#: gtk/gtklabel.c:445
+#: gtk/gtklabel.c:573
 msgid "The mnemonic accelerator key for this label"
 msgstr "या लेबलकरीताचे नेमॉनीक प्रवर्गक किल्ली"
 
-#: gtk/gtklabel.c:453
+#: gtk/gtklabel.c:581
 msgid "Mnemonic widget"
 msgstr "निमोनिक विजेट"
 
-#: gtk/gtklabel.c:454
+#: gtk/gtklabel.c:582
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "लेबलचे नेमॉनीक प्रवर्गक किल्ली दाबल्यावर कार्यान्वित करण्याजोगी विजेट"
 
-#: gtk/gtklabel.c:500
+#: gtk/gtklabel.c:628
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -3166,31 +3166,31 @@ msgstr ""
 "पूर्णत्व अक्षरमाळा दर्शविण्याकरीता परियुक्त जागा नसल्यास, अक्षरमाळा लंबवृत करण्यासाठीचे "
 "सूचविलेले स्थान"
 
-#: gtk/gtklabel.c:540
+#: gtk/gtklabel.c:668
 msgid "Single Line Mode"
 msgstr "मोड (रूप)"
 
-#: gtk/gtklabel.c:541
+#: gtk/gtklabel.c:669
 msgid "Whether the label is in single line mode"
 msgstr "लेबल एक ओळी पध्दती मध्ये आहे का"
 
-#: gtk/gtklabel.c:558
+#: gtk/gtklabel.c:686
 msgid "Angle"
 msgstr "कोन"
 
-#: gtk/gtklabel.c:559
+#: gtk/gtklabel.c:687
 msgid "Angle at which the label is rotated"
 msgstr "लेबल फिरविण्याचा कोन"
 
-#: gtk/gtklabel.c:579
+#: gtk/gtklabel.c:707
 msgid "Maximum Width In Characters"
 msgstr "रुंदी"
 
-#: gtk/gtklabel.c:580
+#: gtk/gtklabel.c:708
 msgid "The desired maximum width of the label, in characters"
 msgstr "रुंदी "
 
-#: gtk/gtklabel.c:696
+#: gtk/gtklabel.c:831
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "लक्ष्यकेंद्रीत केल्यावर निवडलेल्या लेबलचे अनुक्रम निवडायचे का"
 
@@ -4015,7 +4015,7 @@ msgstr "छपाईयंत्र संयोजना"
 msgid "Page Setup"
 msgstr "पृष्ठ व्यवस्था"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1050
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1053
 msgid "Track Print Status"
 msgstr "छपाई स्थिती नियंत्रण"
 
@@ -4027,58 +4027,58 @@ msgstr ""
 "छपाई माहिती छपाईयंत्रास किंवा छपाई सर्वर करीता पाठविले असल्यास छपाई कार्य स्थिती-बदल "
 "संकेत पाठविणे पुढे चालवितो हे खरे आहे."
 
-#: gtk/gtkprintoperation.c:922
+#: gtk/gtkprintoperation.c:925
 msgid "Default Page Setup"
 msgstr "पान"
 
-#: gtk/gtkprintoperation.c:923
+#: gtk/gtkprintoperation.c:926
 msgid "The GtkPageSetup used by default"
 msgstr "मुलभूत द्वारे वापरण्याजोगी GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:941 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:944 gtk/gtkprintunixdialog.c:276
 msgid "Print Settings"
 msgstr "छपाईकरीताचे संयोजना"
 
-#: gtk/gtkprintoperation.c:942 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:945 gtk/gtkprintunixdialog.c:277
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "संवाद प्रारंभ करण्याकरीताचे GtkPrintSettings"
 
-#: gtk/gtkprintoperation.c:960
+#: gtk/gtkprintoperation.c:963
 msgid "Job Name"
 msgstr "कार्याचे नाव"
 
-#: gtk/gtkprintoperation.c:961
+#: gtk/gtkprintoperation.c:964
 msgid "A string used for identifying the print job."
 msgstr "छपाई कार्य ओळखण्याकरीता वापरलेली अक्षरमाळा."
 
-#: gtk/gtkprintoperation.c:985
+#: gtk/gtkprintoperation.c:988
 msgid "Number of Pages"
 msgstr "पानांची एकूण संख्या"
 
-#: gtk/gtkprintoperation.c:986
+#: gtk/gtkprintoperation.c:989
 msgid "The number of pages in the document."
 msgstr "दस्तऐवजात पानांची एकूण संख्या."
 
-#: gtk/gtkprintoperation.c:1007 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1010 gtk/gtkprintunixdialog.c:266
 msgid "Current Page"
 msgstr "पान"
 
-#: gtk/gtkprintoperation.c:1008 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1011 gtk/gtkprintunixdialog.c:267
 msgid "The current page in the document"
 msgstr "दस्तऐवजातील सद्याचे पान"
 
-#: gtk/gtkprintoperation.c:1029
+#: gtk/gtkprintoperation.c:1032
 msgid "Use full page"
 msgstr "पूर्ण पान वापरा"
 
-#: gtk/gtkprintoperation.c:1030
+#: gtk/gtkprintoperation.c:1033
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr ""
 "प्रतिमा कक्षाच्या कोपऱ्यास न राहता व संदर्भाचे उगम पानाच्या कोपऱ्यास असल्यावर खरे असते"
 
-#: gtk/gtkprintoperation.c:1051
+#: gtk/gtkprintoperation.c:1054
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4086,55 +4086,55 @@ msgstr ""
 "छपाई माहिती छपाईयंत्र किंवा छपाई सर्वर करीता पाठविल्या नंतर जर छपाई कार्यपध्दती छपाई "
 "कार्य विषयी तपशील पाठवित असल्यास खरे होते."
 
-#: gtk/gtkprintoperation.c:1068
+#: gtk/gtkprintoperation.c:1071
 msgid "Unit"
 msgstr "एकक"
 
-#: gtk/gtkprintoperation.c:1069
+#: gtk/gtkprintoperation.c:1072
 msgid "The unit in which distances can be measured in the context"
 msgstr "संदर्भ मध्ये अंतर मोजण्याकरीता एकक"
 
-#: gtk/gtkprintoperation.c:1086
+#: gtk/gtkprintoperation.c:1089
 msgid "Show Dialog"
 msgstr "संवाद दर्शवा"
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1090
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "छपाई करतेवेळी प्रगती संवाद दर्शवित असल्यास खरे होते."
 
-#: gtk/gtkprintoperation.c:1110
+#: gtk/gtkprintoperation.c:1113
 msgid "Allow Async"
 msgstr "Async करीता सहमती द्या"
 
-#: gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1114
 msgid "TRUE if print process may run asynchronous."
 msgstr "छपाई कार्यपध्दती सुसंगतरित्या कर्यरत नसल्यास खरे असते."
 
-#: gtk/gtkprintoperation.c:1133 gtk/gtkprintoperation.c:1134
+#: gtk/gtkprintoperation.c:1136 gtk/gtkprintoperation.c:1137
 msgid "Export filename"
 msgstr "फाइलनाव पाठवा"
 
-#: gtk/gtkprintoperation.c:1148
+#: gtk/gtkprintoperation.c:1151
 msgid "Status"
 msgstr "स्थिती"
 
-#: gtk/gtkprintoperation.c:1149
+#: gtk/gtkprintoperation.c:1152
 msgid "The status of the print operation"
 msgstr "छपाई कार्यपध्दतीची स्थिती"
 
-#: gtk/gtkprintoperation.c:1169
+#: gtk/gtkprintoperation.c:1172
 msgid "Status String"
 msgstr "स्तिथी अक्षरमाळा"
 
-#: gtk/gtkprintoperation.c:1170
+#: gtk/gtkprintoperation.c:1173
 msgid "A human-readable description of the status"
 msgstr "स्थितीचे मानवीय वाचण्याजोगी वर्णन"
 
-#: gtk/gtkprintoperation.c:1188
+#: gtk/gtkprintoperation.c:1191
 msgid "Custom tab label"
 msgstr "इच्छिक टॅब लेबल"
 
-#: gtk/gtkprintoperation.c:1189
+#: gtk/gtkprintoperation.c:1192
 msgid "Label for the tab containing custom widgets."
 msgstr "लेबल."
 

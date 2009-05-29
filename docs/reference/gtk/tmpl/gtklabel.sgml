@@ -195,6 +195,22 @@ described below.
 </para>
 
 
+<!-- ##### SIGNAL GtkLabel::activate-current-link ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+
+<!-- ##### SIGNAL GtkLabel::activate-link ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+@arg1: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkLabel::copy-clipboard ##### -->
 <para>
 
@@ -719,5 +735,14 @@ Sets the text within the GtkLabel widget.
 
 @label: 
 @angle: 
+
+
+<!-- ##### FUNCTION gtk_label_get_current_uri ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
 
 
