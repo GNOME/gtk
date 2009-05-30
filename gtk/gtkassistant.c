@@ -217,7 +217,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    * @assistant: the #GtkAssistant
    * @page: the current page
    *
-   * The ::prepared signal is emitted when a new page is set as the assistant's
+   * The ::prepare signal is emitted when a new page is set as the assistant's
    * current page, before making the new page visible. A handler for this signal
    * can do any preparation which are necessary before showing @page.
    *
@@ -237,14 +237,14 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    * @assistant: the @GtkAssistant
    *
    * The ::apply signal is emitted when the apply button is clicked. The default
-   * behavior of the #GtkAssistant is to switch to the page after the current page,
-   * unless the current page is the last one.
+   * behavior of the #GtkAssistant is to switch to the page after the current
+   * page, unless the current page is the last one.
    *
-   * A handler for the ::apply signal should carry out the actions for which the
-   * wizard has collected data. If the action takes a long time to complete, you
-   * might consider to put a page of type GTK_ASSISTANT_PAGE_PROGRESS after the
-   * confirmation page and handle this operation within the ::prepare signal of
-   * the progress page.
+   * A handler for the ::apply signal should carry out the actions for which
+   * the wizard has collected data. If the action takes a long time to complete,
+   * you might consider to put a page of type %GTK_ASSISTANT_PAGE_PROGRESS
+   * after the confirmation page and handle this operation within the
+   * #GtkAssistant::prepare signal of the progress page.
    *
    * Since: 2.10
    */
@@ -263,7 +263,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    *
    * The ::close signal is emitted either when the close button of
    * a summary page is clicked, or when the apply button in the last
-   * page in the flow (of type GTK_ASSISTANT_PAGE_CONFIRM) is clicked.
+   * page in the flow (of type %GTK_ASSISTANT_PAGE_CONFIRM) is clicked.
    *
    * Since: 2.10
    */
@@ -296,7 +296,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   /**
    * GtkAssistant:page-type:
    *
-   * The type of the assistant page. 
+   * The type of the assistant page.
    *
    * Since: 2.10
    */
@@ -312,7 +312,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   /**
    * GtkAssistant:title:
    *
-   * The title that is displayed in the page header. 
+   * The title that is displayed in the page header.
    *
    * If title and header-image are both %NULL, no header is displayed.
    *
@@ -346,7 +346,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   /**
    * GtkAssistant:header-image:
    *
-   * The image that is displayed next to the page. 
+   * The image that is displayed next to the page.
    *
    * Set this to %NULL to make the sidebar disappear.
    *
@@ -430,14 +430,12 @@ compute_last_button_state (GtkAssistant *assistant)
       page_info = g_list_nth_data (priv->pages, page_num);
 
       count++;
-
-      g_assert (page_info);
     }
 
   /* make the last button visible if we can skip multiple
-   * pages and end on a confirmation or summary page 
+   * pages and end on a confirmation or summary page
    */
-  if (count > 1 && 
+  if (count > 1 && page_info &&
       (page_info->type == GTK_ASSISTANT_PAGE_CONFIRM ||
        page_info->type == GTK_ASSISTANT_PAGE_SUMMARY))
     {
@@ -2174,7 +2172,7 @@ gtk_assistant_set_page_complete (GtkAssistant *assistant,
  * @assistant: a #GtkAssistant
  * @page: a page of @assistant
  * 
- * Gets whether @page is complete..
+ * Gets whether @page is complete.
  * 
  * Return value: %TRUE if @page is complete.
  *
