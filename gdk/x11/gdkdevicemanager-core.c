@@ -99,108 +99,6 @@ gdk_device_manager_core_init (GdkDeviceManagerCore *device_manager)
 }
 
 static void
-get_real_window (GdkDisplay  *display,
-		 XEvent      *event,
-                 GdkWindow  **event_window,
-                 GdkWindow  **filter_window)
-{
-  Window event_xwindow, filter_xwindow;
-
-  event_xwindow = None;
-  filter_xwindow = None;
-
-  /* Core events all have an event->xany.window field, but that's
-   * not true for extension events
-   */
-  if (event->type >= KeyPress &&
-      event->type <= MappingNotify)
-    {
-      filter_xwindow = event->xany.window;
-      switch (event->type)
-	{
-	case CreateNotify:
-	  event_xwindow = event->xcreatewindow.window;
-	  break;
-	case DestroyNotify:
-	  event_xwindow = event->xdestroywindow.window;
-	  break;
-	case UnmapNotify:
-	  event_xwindow = event->xunmap.window;
-	  break;
-	case MapNotify:
-	  event_xwindow = event->xmap.window;
-	  break;
-	case MapRequest:
-	  event_xwindow = event->xmaprequest.window;
-	  break;
-	case ReparentNotify:
-	  event_xwindow = event->xreparent.window;
-	  break;
-	case ConfigureNotify:
-	  event_xwindow = event->xconfigure.window;
-	  break;
-	case ConfigureRequest:
-	  event_xwindow = event->xconfigurerequest.window;
-	  break;
-	case GravityNotify:
-	  event_xwindow = event->xgravity.window;
-	  break;
-	case CirculateNotify:
-	  event_xwindow = event->xcirculate.window;
-	  break;
-	case CirculateRequest:
-	  event_xwindow = event->xcirculaterequest.window;
-	  break;
-	default:
-	  event_xwindow = event->xany.window;
-	}
-    }
-#if 0
-  else
-    {
-      GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
-      GSList *tmp_list;
-
-      for (tmp_list = display_x11->event_types;
-	   tmp_list;
-	   tmp_list = tmp_list->next)
-	{
-	  GdkEventTypeX11 *event_type = tmp_list->data;
-
-	  if (event->type >= event_type->base &&
-	      event->type < event_type->base + event_type->n_events)
-	    {
-	      *event_xwindow = event->xany.window;
-	      *filter_xwindow = event->xany.window;
-	    }
-	}
-    }
-#endif
-
-  /* Now find out the corresponding GdkWindows */
-  *event_window = gdk_window_lookup_for_display (display, event_xwindow);
-
-  /* We may receive events such as NoExpose/GraphicsExpose
-   * and ShmCompletion for pixmaps
-   */
-  if (*event_window && !GDK_IS_WINDOW (*event_window))
-    *event_window = NULL;
-
-  /* We always run the filters for the window where the event
-   * is delivered, not the window that it relates to
-   */
-  if (filter_xwindow == event_xwindow)
-    *filter_window = *event_window;
-  else
-    {
-      *filter_window = gdk_window_lookup_for_display (display, filter_xwindow);
-
-      if (*filter_window && !GDK_IS_WINDOW (*filter_window))
-	*filter_window = NULL;
-    }
-}
-
-static void
 translate_key_event (GdkDisplay *display,
 		     GdkEvent   *event,
 		     XEvent     *xevent)
@@ -416,14 +314,11 @@ gdk_device_manager_translate_event (GdkEventTranslator *translator,
                                     XEvent             *xevent)
 {
   GdkDeviceManagerCore *device_manager;
-  GdkWindow *window;
+  GdkWindow *window, *filter_window;
   GdkWindowObject *window_private;
-  GdkWindow *filter_window;
   GdkWindowImplX11 *window_impl = NULL;
   gboolean return_val;
   gint xoffset = 0, yoffset = 0;
-  GdkScreen *screen = NULL;
-  GdkScreenX11 *screen_x11 = NULL;
   GdkToplevelX11 *toplevel = NULL;
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
 
@@ -456,15 +351,13 @@ gdk_device_manager_translate_event (GdkEventTranslator *translator,
    * Basically this means substructure events
    * are reported same as structure events
    */
-  get_real_window (display, xevent, &window, &filter_window);
+  window = gdk_event_translator_get_event_window (translator, display, xevent);
+  filter_window = gdk_event_translator_get_filter_window (translator, display, xevent);
   window_private = (GdkWindowObject *) window;
 
   if (window)
     {
-      screen = GDK_WINDOW_SCREEN (window);
-      screen_x11 = GDK_SCREEN_X11 (screen);
       toplevel = _gdk_x11_window_get_toplevel (window);
-
       window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
 
       /* Move key events on focus window to the real toplevel, and
@@ -522,31 +415,6 @@ gdk_device_manager_translate_event (GdkEventTranslator *translator,
 	      return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
 	      goto done;
 	    }
-	}
-    }
-#endif
-
-#if 0
-  if (screen_x11 && screen_x11->wmspec_check_window != None &&
-      xwindow == screen_x11->wmspec_check_window)
-    {
-      if (xevent->type == DestroyNotify)
-        {
-          screen_x11->wmspec_check_window = None;
-          g_free (screen_x11->window_manager_name);
-          screen_x11->window_manager_name = g_strdup ("unknown");
-
-          /* careful, reentrancy */
-          _gdk_x11_screen_window_manager_changed (GDK_SCREEN (screen_x11));
-        }
-
-      /* Eat events on this window unless someone had wrapped
-       * it as a foreign window
-       */
-      if (window == NULL)
-	{
-	  return_val = FALSE;
-	  goto done;
 	}
     }
 #endif
