@@ -1,3 +1,48 @@
+Overview of Changes from GTK+ 2.16.1 to 2.16.2
+==============================================
+
+* Reinstate traditional behaviour of GtkAdjustment wrt. to
+  page size that was accidentally lost between 2.14.x and 2.16
+
+* Bugs fixed:
+ 463773 Openoffice and flash run into a deadlock when used with KDE
+ 315462 GtkButton doesn't center its child when the child is too ...
+ 531490 gdk_window_set_events (0) will _ADD_ events to the root w...
+ 574386 Remove deprecated call to gtk_status_icon_set_tooltip in ...
+ 575319 Problems with GtkAssistant accessibility
+ 576678 cups printbackend doesn't list printers on NetBSD
+ 579366 gtkbuilderparser leaks RequiresInfo objects.
+ 579884 casting problem in gmodule
+ 580511 gdk_x11_atom_to_xatom_for_display translates GDK_NONE as ...
+ 582003 Calling gdk_window_get_events() changes the event mask, b...
+ 582488 GtkNotebook behaves poorly when allocated less than reque...
+ 382676 PAPI backend is required
+ 535557 gdk_window_set_icon_name should accept NULL to unset
+
+* Updated translations:
+ Arabic
+ Brazilian Portuguese
+ British English
+ Bulgarian
+ Catalan
+ Czech
+ Danish
+ Estonian
+ German
+ Greek
+ Gujarati
+ Hungarian
+ Irish
+ Italian
+ Kannada
+ Oriya
+ Serbian
+ Simplified Chinese
+ Slovenian
+ Spanish
+ Ukrainian
+
+
 Overview of Changes from GTK+ 2.16.0 to 2.16.1
 ==============================================
 
