@@ -2295,6 +2295,10 @@ _gdk_events_queue (GdkDisplay *display)
       event = gdk_event_translator_translate (GDK_EVENT_TRANSLATOR (device_manager),
                                               display, &xevent);
 
+      if (!event)
+        event = gdk_event_translator_translate (GDK_EVENT_TRANSLATOR (display),
+                                                display, &xevent);
+
       if (event)
         node = _gdk_event_queue_append (display, event);
       else
