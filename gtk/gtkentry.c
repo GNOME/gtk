@@ -6420,6 +6420,11 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
                                                   icon_info->stock_id,
                                                   GTK_ICON_SIZE_MENU,
                                                   NULL);
+      if (!icon_info->pixbuf)
+        icon_info->pixbuf = gtk_widget_render_icon (GTK_WIDGET (entry),
+                                                    GTK_STOCK_MISSING_IMAGE,
+                                                    GTK_ICON_SIZE_MENU,
+                                                    NULL);
       GTK_WIDGET_STATE (entry) = state;
       break;
 
