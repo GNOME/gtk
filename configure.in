@@ -378,6 +378,19 @@ PKG_CHECK_MODULES(BASE_DEPENDENCIES,
    pango >= pango_required_version dnl
    cairo >= cairo_required_version])
 
+## In addition to checking that cairo is present, we also need to
+## check that the correct cairo backend is there. E.g. if the GDK
+## target is win32 we need the cairo-win32 backend and so on.
+cairo_backend=$gdktarget
+
+# GDK calls the xlib backend "x11," cairo calls it "xlib." Other
+# backend names are identical.
+if test "x$cairo_backend" = "xx11"; then
+   cairo_backend=xlib
+fi
+PKG_CHECK_MODULES(CAIRO_BACKEND,
+  [cairo-$cairo_backend >= cairo_required_version])
+
 if test "$os_win32" != yes; then
     # libtool option to control which symbols are exported
     # right now, symbols starting with _ are not exported
@@ -1645,18 +1658,7 @@ if test "x$gdktarget" = "xdirectfb"; then
   DIRECTFB_REQUIRED_VERSION=1.0.0
   AC_MSG_CHECKING(for DirectFB)
 
-  if $PKG_CONFIG --atleast-version $DIRECTFB_REQUIRED_VERSION directfb && $PKG_CONFIG --exists cairo-directfb ; then
-      AC_MSG_RESULT(found)
-      GDK_EXTRA_CFLAGS="`$PKG_CONFIG --cflags cairo-directfb` $GDK_EXTRA_CFLAGS"
-      GDK_EXTRA_LIBS="`$PKG_CONFIG --libs cairo-directfb` $GDK_EXTRA_LIBS"
-  else
-      AC_MSG_ERROR([
-*** DirectFB $DIRECTFB_REQUIRED_VERSION or newer and the cairo backend 
-*** are required. The latest version of DirectFB is always available 
-*** from http://www.directfb.org/.
-  ])
-  fi
-
+  PKG_CHECK_MODULES(DIRECTFB, [directfb >= $DIRECTFB_REQUIRED_VERSION])
   AM_CONDITIONAL(USE_DIRECTFB, true)
 else
   AM_CONDITIONAL(USE_DIRECTFB, false)
@@ -1700,13 +1702,9 @@ fi
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
-GDK_PACKAGES="$PANGO_PACKAGES gio-2.0"
-if test "x$gdktarget" = "xx11"; then
-  GDK_PACKAGES="$GDK_PACKAGES $X_PACKAGES cairo-xlib"
-fi
+GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 $X_PACKAGES cairo-$cairo_backend"
 GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES $GDK_PACKAGES` $GDK_PIXBUF_EXTRA_LIBS"
 GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $GDK_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS $GDK_EXTRA_CFLAGS"
-
 #
 # If we aren't writing explicit dependencies, then don't put the extra libraries we need
 # into the pkg-config files
