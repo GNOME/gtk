@@ -10430,11 +10430,15 @@ set_current_filter (GtkFileChooserDefault *impl,
       if (impl->browse_files_model)
 	install_list_model_filter (impl);
 
-      if (impl->search_model_filter)
+      if (impl->operation_mode == OPERATION_MODE_SEARCH &&
+          impl->search_model_filter != NULL)
         gtk_tree_model_filter_refilter (impl->search_model_filter);
 
-      if (impl->recent_model_filter)
-        gtk_tree_model_filter_refilter (impl->recent_model_filter);
+      /* we want to have all the matching results, and not just a
+       * filter of the previous model
+       */
+      if (impl->operation_mode == OPERATION_MODE_RECENT)
+        recent_start_loading (impl);
 
       g_object_notify (G_OBJECT (impl), "filter");
     }
