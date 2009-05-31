@@ -18,6 +18,9 @@ Overview of Changes from GTK+ 2.16.1 to 2.16.2
  582488 GtkNotebook behaves poorly when allocated less than reque...
  382676 PAPI backend is required
  535557 gdk_window_set_icon_name should accept NULL to unset
+ 579590 gtk_entry_set_icon_from_stock should warn when invalid...
+ 584125 GtkAssistant asserts if last page is GTK_ASSISTANT_PAGE_...
+ 584021 titchy leak
 
 * Updated translations:
  Arabic
