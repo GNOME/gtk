@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:24-0400\n"
+"POT-Creation-Date: 2009-05-31 00:06-0400\n"
 "PO-Revision-Date: 2006-09-05 15:56+0700\n"
 "Last-Translator: Muhammad Hilman <hilman09121991@yahoo.com>\n"
 "Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
@@ -1202,7 +1202,7 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] ""
 
-#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2110
+#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "Lisensi"
 
@@ -1211,37 +1211,37 @@ msgid "The license of the program"
 msgstr "Lisensi program"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:492
+#: gtk/gtkaboutdialog.c:490
 msgid "C_redits"
 msgstr "_Penyusun"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:506
+#: gtk/gtkaboutdialog.c:504
 msgid "_License"
 msgstr "_Lisensi"
 
-#: gtk/gtkaboutdialog.c:774
+#: gtk/gtkaboutdialog.c:772
 #, c-format
 msgid "About %s"
 msgstr "Tentang %s"
 
-#: gtk/gtkaboutdialog.c:2033
+#: gtk/gtkaboutdialog.c:2031
 msgid "Credits"
 msgstr "Penyusun"
 
-#: gtk/gtkaboutdialog.c:2062
+#: gtk/gtkaboutdialog.c:2060
 msgid "Written by"
 msgstr "Ditulis oleh"
 
-#: gtk/gtkaboutdialog.c:2065
+#: gtk/gtkaboutdialog.c:2063
 msgid "Documented by"
 msgstr "Dokumentasi oleh"
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2075
 msgid "Translated by"
 msgstr "Alih bahasa oleh"
 
-#: gtk/gtkaboutdialog.c:2081
+#: gtk/gtkaboutdialog.c:2079
 msgid "Artwork by"
 msgstr "Karya seni oleh"
 
@@ -1575,15 +1575,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Pemilihan Warna"
 
-#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8420 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "_Metode Input"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8434 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "_Isikan karakter kontrol Unicode"
 
-#: gtk/gtkentry.c:9797
+#: gtk/gtkentry.c:9802
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Salin _Lokasi"
@@ -1805,11 +1805,11 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Ganti nama"
 
-#: gtk/gtkfilechooserdefault.c:8914
+#: gtk/gtkfilechooserdefault.c:8919
 msgid "Could not start the search process"
 msgstr "Tidak dapat memulai proses pencarian"
 
-#: gtk/gtkfilechooserdefault.c:8915
+#: gtk/gtkfilechooserdefault.c:8920
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1817,34 +1817,34 @@ msgstr ""
 "Program tidak dapat membuat koneksi ke indexer daemon.  Pastikan program "
 "sedang berjalan."
 
-#: gtk/gtkfilechooserdefault.c:8929
+#: gtk/gtkfilechooserdefault.c:8934
 msgid "Could not send the search request"
 msgstr "Tidak dapat mengirim permintaan pencarian"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9396
+#: gtk/gtkfilechooserdefault.c:9401
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10349
+#: gtk/gtkfilechooserdefault.c:10354
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s tidak dapat dipasang"
 
-#: gtk/gtkfilechooserdefault.c:11024
+#: gtk/gtkfilechooserdefault.c:11029
 msgid "Type name of new folder"
 msgstr "Ketikkan nama untuk folder baru ini"
 
-#: gtk/gtkfilechooserdefault.c:11202 gtk/gtkfilechooserdefault.c:11224
-#: gtk/gtkfilechooserdefault.c:11295
+#: gtk/gtkfilechooserdefault.c:11207 gtk/gtkfilechooserdefault.c:11229
+#: gtk/gtkfilechooserdefault.c:11300
 msgid "Unknown"
 msgstr "Tidak Diketahui"
 
-#: gtk/gtkfilechooserdefault.c:11242
+#: gtk/gtkfilechooserdefault.c:11247
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11244
+#: gtk/gtkfilechooserdefault.c:11249
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Kemarin"
@@ -2331,7 +2331,7 @@ msgstr ""
 msgid "Remember _forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6946
+#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6949
 #, c-format
 msgid "Page %u"
 msgstr "Halaman %u"
@@ -4678,81 +4678,81 @@ msgstr "Gagal menulis indeks direktori\n"
 msgid "Failed to rewrite header\n"
 msgstr "Gagal menulis ulang judul\n"
 
-#: gtk/updateiconcache.c:1455
+#: gtk/updateiconcache.c:1463
 #, fuzzy, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Gagal saat membuka berkas '%s': %s"
 
-#: gtk/updateiconcache.c:1463
+#: gtk/updateiconcache.c:1471
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Gagal menulis berkas cache: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Cache yang diolah tidak sah.\n"
 
-#: gtk/updateiconcache.c:1511
+#: gtk/updateiconcache.c:1519
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Tidak bisa mengganti nama %s jadi %s: %s, membuang %s kemudian.\n"
 
-#: gtk/updateiconcache.c:1523
+#: gtk/updateiconcache.c:1531
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Tidak bisa mengganti nama dari %s ke %s: %s\n"
 
-#: gtk/updateiconcache.c:1530
+#: gtk/updateiconcache.c:1538
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Tidak bisa mengganti nama %s kembali ke %s: %s.\n"
 
-#: gtk/updateiconcache.c:1556
+#: gtk/updateiconcache.c:1564
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Berkas cache dibuat dengan sukses.\n"
 
-#: gtk/updateiconcache.c:1595
+#: gtk/updateiconcache.c:1603
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Menimpa cache yang ada, bahkan jika terbaru"
 
-#: gtk/updateiconcache.c:1596
+#: gtk/updateiconcache.c:1604
 msgid "Don't check for the existence of index.theme"
 msgstr "Jangan periksa keberadaan tema indeks"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1605
 msgid "Don't include image data in the cache"
 msgstr "Jangan data gambar dalam cache"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1606
 msgid "Output a C header file"
 msgstr "Keluarkan judul berkas C"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1607
 msgid "Turn off verbose output"
 msgstr "Matikan keluaran panjang"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1608
 msgid "Validate existing icon cache"
 msgstr "Validasi cache ikon yang telah ada"
 
-#: gtk/updateiconcache.c:1663
+#: gtk/updateiconcache.c:1671
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Berkas tidak ditemukan: %s\n"
 
-#: gtk/updateiconcache.c:1669
+#: gtk/updateiconcache.c:1677
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Bukan ikon cache yang sah: %s\n"
 
-#: gtk/updateiconcache.c:1682
+#: gtk/updateiconcache.c:1690
 #, c-format
 msgid "No theme index file."
 msgstr ""
 
-#: gtk/updateiconcache.c:1686
+#: gtk/updateiconcache.c:1694
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

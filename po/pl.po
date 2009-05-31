@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:24-0400\n"
+"POT-Creation-Date: 2009-05-31 00:06-0400\n"
 "PO-Revision-Date: 2009-02-17 00:30+0100\n"
 "Last-Translator: Tomasz Dominikowski <dominikowski@gmail.com>\n"
 "Language-Team: Aviary.pl <gnomepl@aviary.pl>\n"
@@ -1182,7 +1182,7 @@ msgstr[0] "Otwieranie %d elementu"
 msgstr[1] "Otwieranie %d elementów"
 msgstr[2] "Otwieranie %d elementów"
 
-#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2110
+#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "Licencja"
 
@@ -1191,37 +1191,37 @@ msgid "The license of the program"
 msgstr "Licencja programu"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:492
+#: gtk/gtkaboutdialog.c:490
 msgid "C_redits"
 msgstr "Z_asługi"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:506
+#: gtk/gtkaboutdialog.c:504
 msgid "_License"
 msgstr "_Licencja"
 
-#: gtk/gtkaboutdialog.c:774
+#: gtk/gtkaboutdialog.c:772
 #, c-format
 msgid "About %s"
 msgstr "Informacje o %s"
 
-#: gtk/gtkaboutdialog.c:2033
+#: gtk/gtkaboutdialog.c:2031
 msgid "Credits"
 msgstr "Zasługi"
 
-#: gtk/gtkaboutdialog.c:2062
+#: gtk/gtkaboutdialog.c:2060
 msgid "Written by"
 msgstr "Program"
 
-#: gtk/gtkaboutdialog.c:2065
+#: gtk/gtkaboutdialog.c:2063
 msgid "Documented by"
 msgstr "Dokumentacja"
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2075
 msgid "Translated by"
 msgstr "Tłumaczenie"
 
-#: gtk/gtkaboutdialog.c:2081
+#: gtk/gtkaboutdialog.c:2079
 msgid "Artwork by"
 msgstr "Grafika"
 
@@ -1550,15 +1550,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Wybór koloru"
 
-#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8420 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "_Metoda wprowadzania danych"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8434 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "_Wstaw znak kontrolny Unikodu"
 
-#: gtk/gtkentry.c:9797
+#: gtk/gtkentry.c:9802
 msgid "Caps Lock is on"
 msgstr "Klawisz Caps Lock jest włączony"
 
@@ -1778,11 +1778,11 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Zastąp"
 
-#: gtk/gtkfilechooserdefault.c:8914
+#: gtk/gtkfilechooserdefault.c:8919
 msgid "Could not start the search process"
 msgstr "Nie można rozpocząć procesu wyszukiwania"
 
-#: gtk/gtkfilechooserdefault.c:8915
+#: gtk/gtkfilechooserdefault.c:8920
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1790,34 +1790,34 @@ msgstr ""
 "Nie można było utworzyć połączenia z usługą indeksowania. Proszę się "
 "upewnić, czy usługa jest uruchomiona."
 
-#: gtk/gtkfilechooserdefault.c:8929
+#: gtk/gtkfilechooserdefault.c:8934
 msgid "Could not send the search request"
 msgstr "Nie można wysłać żądania wyszukiwania"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9396
+#: gtk/gtkfilechooserdefault.c:9401
 msgid "_Search:"
 msgstr "_Szukaj:"
 
-#: gtk/gtkfilechooserdefault.c:10349
+#: gtk/gtkfilechooserdefault.c:10354
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nie można zamontować %s"
 
-#: gtk/gtkfilechooserdefault.c:11024
+#: gtk/gtkfilechooserdefault.c:11029
 msgid "Type name of new folder"
 msgstr "Proszę wprowadzić nazwę nowego katalogu"
 
-#: gtk/gtkfilechooserdefault.c:11202 gtk/gtkfilechooserdefault.c:11224
-#: gtk/gtkfilechooserdefault.c:11295
+#: gtk/gtkfilechooserdefault.c:11207 gtk/gtkfilechooserdefault.c:11229
+#: gtk/gtkfilechooserdefault.c:11300
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: gtk/gtkfilechooserdefault.c:11242
+#: gtk/gtkfilechooserdefault.c:11247
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11244
+#: gtk/gtkfilechooserdefault.c:11249
 msgid "Yesterday at %H:%M"
 msgstr "Wczoraj o %H:%M"
 
@@ -2297,7 +2297,7 @@ msgstr "_Zapamiętanie hasła do wylogowania"
 msgid "Remember _forever"
 msgstr "Z_apamiętanie na stałe"
 
-#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6946
+#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6949
 #, c-format
 msgid "Page %u"
 msgstr "Strona %u"
@@ -4487,81 +4487,81 @@ msgstr "Nie można zapisać indeksu katalogu\n"
 msgid "Failed to rewrite header\n"
 msgstr "Nie można przepisać nagłówka\n"
 
-#: gtk/updateiconcache.c:1455
+#: gtk/updateiconcache.c:1463
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Nie można otworzyć pliku %s : %s\n"
 
-#: gtk/updateiconcache.c:1463
+#: gtk/updateiconcache.c:1471
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Nie można zapisać pliku bufora: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Wygenerowany bufor był nieprawidłowy.\n"
 
-#: gtk/updateiconcache.c:1511
+#: gtk/updateiconcache.c:1519
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Nie można zmienić nazwy %s na %s: %s, usuwanie %s.\n"
 
-#: gtk/updateiconcache.c:1523
+#: gtk/updateiconcache.c:1531
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Nie można zmienić nazwy %s na %s: %s\n"
 
-#: gtk/updateiconcache.c:1530
+#: gtk/updateiconcache.c:1538
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Nie można zmienić nazwy %s z powrotem na %s: %s.\n"
 
-#: gtk/updateiconcache.c:1556
+#: gtk/updateiconcache.c:1564
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Pomyślnie utworzono plik bufora.\n"
 
-#: gtk/updateiconcache.c:1595
+#: gtk/updateiconcache.c:1603
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Nadpisanie istniejącego bufora, nawet gdy aktualny"
 
-#: gtk/updateiconcache.c:1596
+#: gtk/updateiconcache.c:1604
 msgid "Don't check for the existence of index.theme"
 msgstr "Bez sprawdzania istnienia index.theme"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1605
 msgid "Don't include image data in the cache"
 msgstr "Bez włączania danych obrazów do bufora"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1606
 msgid "Output a C header file"
 msgstr "Wyjście do pliku nagłówkowego C"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1607
 msgid "Turn off verbose output"
 msgstr "Wyłączenie rozwlekłego wyjścia"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1608
 msgid "Validate existing icon cache"
 msgstr "Sprawdzenie istniejącego bufora ikon"
 
-#: gtk/updateiconcache.c:1663
+#: gtk/updateiconcache.c:1671
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Nie odnaleziono pliku: %s\n"
 
-#: gtk/updateiconcache.c:1669
+#: gtk/updateiconcache.c:1677
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Nieprawidłowy bufor ikon: %s\n"
 
-#: gtk/updateiconcache.c:1682
+#: gtk/updateiconcache.c:1690
 #, c-format
 msgid "No theme index file."
 msgstr "Brak pliku indeksu motywu."
 
-#: gtk/updateiconcache.c:1686
+#: gtk/updateiconcache.c:1694
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

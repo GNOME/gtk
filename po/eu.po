@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:24-0400\n"
+"POT-Creation-Date: 2009-05-31 00:06-0400\n"
 "PO-Revision-Date: 2009-02-11 13:07+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
@@ -1173,7 +1173,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Elementu %d irekitzen"
 msgstr[1] "%d elementu irekitzen"
 
-#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2110
+#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "Lizentzia"
 
@@ -1182,37 +1182,37 @@ msgid "The license of the program"
 msgstr "Programaren lizentzia"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:492
+#: gtk/gtkaboutdialog.c:490
 msgid "C_redits"
 msgstr "K_redituak"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:506
+#: gtk/gtkaboutdialog.c:504
 msgid "_License"
 msgstr "_Lizentzia"
 
-#: gtk/gtkaboutdialog.c:774
+#: gtk/gtkaboutdialog.c:772
 #, c-format
 msgid "About %s"
 msgstr "%s buruz"
 
-#: gtk/gtkaboutdialog.c:2033
+#: gtk/gtkaboutdialog.c:2031
 msgid "Credits"
 msgstr "Kredituak"
 
-#: gtk/gtkaboutdialog.c:2062
+#: gtk/gtkaboutdialog.c:2060
 msgid "Written by"
 msgstr "Garapena"
 
-#: gtk/gtkaboutdialog.c:2065
+#: gtk/gtkaboutdialog.c:2063
 msgid "Documented by"
 msgstr "Dokumentazioa"
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2075
 msgid "Translated by"
 msgstr "Itzulpena"
 
-#: gtk/gtkaboutdialog.c:2081
+#: gtk/gtkaboutdialog.c:2079
 msgid "Artwork by"
 msgstr "Marrazki lanak"
 
@@ -1541,15 +1541,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Kolore-hautapena"
 
-#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8420 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "Sartzeko _metodoak"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8434 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "_Txertatu Unicode kontrol-karakterea"
 
-#: gtk/gtkentry.c:9797
+#: gtk/gtkentry.c:9802
 msgid "Caps Lock is on"
 msgstr "Blok.maius. aktibatuta dago"
 
@@ -1770,11 +1770,11 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Ordeztu"
 
-#: gtk/gtkfilechooserdefault.c:8914
+#: gtk/gtkfilechooserdefault.c:8919
 msgid "Could not start the search process"
 msgstr "Ezin izan da bilaketako prozesua abiarazi"
 
-#: gtk/gtkfilechooserdefault.c:8915
+#: gtk/gtkfilechooserdefault.c:8920
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1782,34 +1782,34 @@ msgstr ""
 "Programak ezin izan du indexatzaile daemonarekin konexiorik sortu. Ziurtatu "
 "exekutatzen ari dela."
 
-#: gtk/gtkfilechooserdefault.c:8929
+#: gtk/gtkfilechooserdefault.c:8934
 msgid "Could not send the search request"
 msgstr "Ezin izan da bilaketako eskaera bidali"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9396
+#: gtk/gtkfilechooserdefault.c:9401
 msgid "_Search:"
 msgstr "_Bilaketa:"
 
-#: gtk/gtkfilechooserdefault.c:10349
+#: gtk/gtkfilechooserdefault.c:10354
 #, c-format
 msgid "Could not mount %s"
 msgstr "Ezin da %s muntatu"
 
-#: gtk/gtkfilechooserdefault.c:11024
+#: gtk/gtkfilechooserdefault.c:11029
 msgid "Type name of new folder"
 msgstr "Idatzi karpeta berriaren izena"
 
-#: gtk/gtkfilechooserdefault.c:11202 gtk/gtkfilechooserdefault.c:11224
-#: gtk/gtkfilechooserdefault.c:11295
+#: gtk/gtkfilechooserdefault.c:11207 gtk/gtkfilechooserdefault.c:11229
+#: gtk/gtkfilechooserdefault.c:11300
 msgid "Unknown"
 msgstr "Ezezaguna"
 
-#: gtk/gtkfilechooserdefault.c:11242
+#: gtk/gtkfilechooserdefault.c:11247
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11244
+#: gtk/gtkfilechooserdefault.c:11249
 msgid "Yesterday at %H:%M"
 msgstr "Atzo %H:%M orduan"
 
@@ -2288,7 +2288,7 @@ msgstr "Gogoratu pasahitza saioa _amaitu arte"
 msgid "Remember _forever"
 msgstr "_Gogoratu beti"
 
-#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6946
+#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6949
 #, c-format
 msgid "Page %u"
 msgstr "%u. orrialdea"
@@ -4479,81 +4479,81 @@ msgstr "Huts egin du karpetaren indizea idaztean\n"
 msgid "Failed to rewrite header\n"
 msgstr "Huts egin du goiburukoa berridaztean\n"
 
-#: gtk/updateiconcache.c:1455
+#: gtk/updateiconcache.c:1463
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Huts egin du '%s' fitxategia irekitzean: %s\n"
 
-#: gtk/updateiconcache.c:1463
+#: gtk/updateiconcache.c:1471
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Ezin izan da cache fitxategian idatzi: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Sortutako cache-a baliogabea da.\n"
 
-#: gtk/updateiconcache.c:1511
+#: gtk/updateiconcache.c:1519
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s ezin izan da %s izenagatik aldatu: %s, %s kentzen orduan.\n"
 
-#: gtk/updateiconcache.c:1523
+#: gtk/updateiconcache.c:1531
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s ezin izan da %s izenagatik aldatu: %s\n"
 
-#: gtk/updateiconcache.c:1530
+#: gtk/updateiconcache.c:1538
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s ezin izan da jatorriko %s izenera aldatu: %s\n"
 
-#: gtk/updateiconcache.c:1556
+#: gtk/updateiconcache.c:1564
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Cache fitxategia ongi sortu da.\n"
 
-#: gtk/updateiconcache.c:1595
+#: gtk/updateiconcache.c:1603
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Gainidatzi existitzen den cache-a, nahiz eta eguneratuta egon"
 
-#: gtk/updateiconcache.c:1596
+#: gtk/updateiconcache.c:1604
 msgid "Don't check for the existence of index.theme"
 msgstr "Ez egiaztatu index.theme dagoen edo ez"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1605
 msgid "Don't include image data in the cache"
 msgstr "Ez txertatu irudiaren daturik cache-an"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1606
 msgid "Output a C header file"
 msgstr "Kanporatu C goiburuko fitxategia"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1607
 msgid "Turn off verbose output"
 msgstr "Desaktibatu hitzez hitzeko irteera"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1608
 msgid "Validate existing icon cache"
 msgstr "Balidatu ikonoen cache-a"
 
-#: gtk/updateiconcache.c:1663
+#: gtk/updateiconcache.c:1671
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Ezin da fitxategia aurkitu: %s\n"
 
-#: gtk/updateiconcache.c:1669
+#: gtk/updateiconcache.c:1677
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Ez da baliozko inonoen cache-a: %s\n"
 
-#: gtk/updateiconcache.c:1682
+#: gtk/updateiconcache.c:1690
 #, c-format
 msgid "No theme index file."
 msgstr "Ez dago gaiaren indize-fitxategirik."
 
-#: gtk/updateiconcache.c:1686
+#: gtk/updateiconcache.c:1694
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

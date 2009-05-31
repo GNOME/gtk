@@ -9,14 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:24-0400\n"
+"POT-Creation-Date: 2009-05-31 00:06-0400\n"
 "PO-Revision-Date: 2009-04-13 17:24+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
 "Language-Team: Gujarati <fedora-trans-gu@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"Plural-Forms:  nplurals=2; plural=(n!=1);\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -312,7 +313,8 @@ msgstr "ચિત્ર ફાઈલ '%s'માં કોઇ માહિતી 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1016
 #: gdk-pixbuf/gdk-pixbuf-io.c:1280 tests/testfilechooser.c:267
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "ચિત્ર %s લાવવામાં નિષ્ફળ, કારણ જાણીતું નથી, સંભવિત રીતે એક બગડેલી ચિત્ર ફાઈલ છે"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:221
@@ -320,7 +322,8 @@ msgstr "ચિત્ર %s લાવવામાં નિષ્ફળ, કા�
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr "એનીમેશન %s લાવવામાં નિષ્ફળ, કારણ જાણીતું નથી, સંભવિત રીતે એક બગડેલી એનીમેશન ફાઈલ છે"
+msgstr ""
+"એનીમેશન %s લાવવામાં નિષ્ફળ, કારણ જાણીતું નથી, સંભવિત રીતે એક બગડેલી એનીમેશન ફાઈલ છે"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:701
 #, c-format
@@ -387,7 +390,8 @@ msgstr "લખવા માટે '%s' ખોલવામાં નિષ્ફ�
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr "ચિત્ર લખતી વખતે %s બંધ કરવામાં નિષ્ફળ, કદાચ બધી માહિતીનો સંગ્રહ નહિ થયો હોય: %s"
+msgstr ""
+"ચિત્ર લખતી વખતે %s બંધ કરવામાં નિષ્ફળ, કદાચ બધી માહિતીનો સંગ્રહ નહિ થયો હોય: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:2256 gdk-pixbuf/gdk-pixbuf-io.c:2307
 msgid "Insufficient memory to save image into a buffer"
@@ -658,7 +662,8 @@ msgstr "JPEG ફાઈલનાં(%s) અર્થઘટનમાં ભૂલ"
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr "ચિત્રને લાવવા માટે પૂરતી મેમરી નથી, મેમરીને મુક્ત કરવા કોઈક કાર્યક્રમમાંથી બહાર નીકળો"
+msgstr ""
+"ચિત્રને લાવવા માટે પૂરતી મેમરી નથી, મેમરીને મુક્ત કરવા કોઈક કાર્યક્રમમાંથી બહાર નીકળો"
 
 #: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
 #, c-format
@@ -685,8 +690,10 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEGની ગુણવત્તા માટેની કિંમત 0 થી 100 ની વચ્ચે હોવી જરૂરી છે; કિંમત '%d' ચાલશે નહિ."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"JPEGની ગુણવત્તા માટેની કિંમત 0 થી 100 ની વચ્ચે હોવી જરૂરી છે; કિંમત '%d' ચાલશે નહિ."
 
 #: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
@@ -785,8 +792,10 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ચિત્ર ફાઈલને વાંચવામાં ઘાતક ભૂલ: %s"
 
 #: gdk-pixbuf/io-png.c:825
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "PNG લેખનના કટકાઓ માટેની કીમાં ઓછામાં ઓછા ૧ અને વધારેમાં વધારે ૭૯ અક્ષરો હોવા જરૂરી છે."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr ""
+"PNG લેખનના કટકાઓ માટેની કીમાં ઓછામાં ઓછા ૧ અને વધારેમાં વધારે ૭૯ અક્ષરો હોવા જરૂરી છે."
 
 #: gdk-pixbuf/io-png.c:833
 msgid "Keys for PNG text chunks must be ASCII characters."
@@ -811,7 +820,8 @@ msgstr "PNG સંકોચન સ્તર એ ૦ અને ૯ ની વચ�
 #: gdk-pixbuf/io-png.c:896
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "PNG લેખનના કટકા %s માટેની કિંમતને ISO-8859-1 સંગ્રહપધ્ધતિમાં રૂપાંતરિત કરી શકાતુ નથી."
+msgstr ""
+"PNG લેખનના કટકા %s માટેની કિંમતને ISO-8859-1 સંગ્રહપધ્ધતિમાં રૂપાંતરિત કરી શકાતુ નથી."
 
 #: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
@@ -1179,7 +1189,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d વસ્તુને ખોલા રહ્યા છે"
 msgstr[1] "%d વસ્તુઓને ખોલા રહ્યા છે"
 
-#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2110
+#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "લાઈસન્સ"
 
@@ -1188,37 +1198,37 @@ msgid "The license of the program"
 msgstr "પ્રવેશના સમાવિષ્ટો"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:492
+#: gtk/gtkaboutdialog.c:490
 msgid "C_redits"
 msgstr "યશ (_r)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:506
+#: gtk/gtkaboutdialog.c:504
 msgid "_License"
 msgstr "લાયસન્સ (_L)"
 
-#: gtk/gtkaboutdialog.c:774
+#: gtk/gtkaboutdialog.c:772
 #, c-format
 msgid "About %s"
 msgstr "%s વિશે"
 
-#: gtk/gtkaboutdialog.c:2033
+#: gtk/gtkaboutdialog.c:2031
 msgid "Credits"
 msgstr "શ્રેય"
 
-#: gtk/gtkaboutdialog.c:2062
+#: gtk/gtkaboutdialog.c:2060
 msgid "Written by"
 msgstr "લેખક"
 
-#: gtk/gtkaboutdialog.c:2065
+#: gtk/gtkaboutdialog.c:2063
 msgid "Documented by"
 msgstr "દસ્તાવેજક"
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2075
 msgid "Translated by"
 msgstr "અનુવાદક"
 
-#: gtk/gtkaboutdialog.c:2081
+#: gtk/gtkaboutdialog.c:2079
 msgid "Artwork by"
 msgstr "કલાકાર"
 
@@ -1544,15 +1554,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "રંગની પસંદગી"
 
-#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8420 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "ઈનપુટ પધ્ધતિઓ (_M)"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8434 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "યૂનિકોડ નિયંત્રણ અક્ષર ઉમેરો (_I)"
 
-#: gtk/gtkentry.c:9797
+#: gtk/gtkentry.c:9802
 msgid "Caps Lock is on"
 msgstr "Caps Lock એ ચાલુ છે"
 
@@ -1762,18 +1772,20 @@ msgstr "\"%s\" નામવાળી ફાઈલ પહેલાથી જ હ�
 
 #: gtk/gtkfilechooserdefault.c:8152 gtk/gtkprintunixdialog.c:374
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr "ફાઈલ પહેલાથી જ \"%s\" માં અસ્તિત્વમાં છે.  તેને બદલવાનું તેના સમાવિષ્ટો પર ફરીથી લખશે."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr ""
+"ફાઈલ પહેલાથી જ \"%s\" માં અસ્તિત્વમાં છે.  તેને બદલવાનું તેના સમાવિષ્ટો પર ફરીથી લખશે."
 
 #: gtk/gtkfilechooserdefault.c:8157 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "બદલો (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8914
+#: gtk/gtkfilechooserdefault.c:8919
 msgid "Could not start the search process"
 msgstr "શોધ પ્રક્રિયા શરૂ કરી શક્યા નહિં"
 
-#: gtk/gtkfilechooserdefault.c:8915
+#: gtk/gtkfilechooserdefault.c:8920
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1781,34 +1793,34 @@ msgstr ""
 "કાર્યક્રમ indexer ડિમન સાથે જોડાણ બનાવવા માટે અસમર્થ હતો.  મહેરબાની કરીને ખાતરી કરો "
 "કે તે ચાલી રહ્યું છે."
 
-#: gtk/gtkfilechooserdefault.c:8929
+#: gtk/gtkfilechooserdefault.c:8934
 msgid "Could not send the search request"
 msgstr "શોધ અરજી મોકલી શક્યા નહિં"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9396
+#: gtk/gtkfilechooserdefault.c:9401
 msgid "_Search:"
 msgstr "શોધો (_S):"
 
-#: gtk/gtkfilechooserdefault.c:10349
+#: gtk/gtkfilechooserdefault.c:10354
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s માઉન્ટ કરી શક્યા નહિં"
 
-#: gtk/gtkfilechooserdefault.c:11024
+#: gtk/gtkfilechooserdefault.c:11029
 msgid "Type name of new folder"
 msgstr "નવા ફોલ્ડરના પ્રકારનુ નામ"
 
-#: gtk/gtkfilechooserdefault.c:11202 gtk/gtkfilechooserdefault.c:11224
-#: gtk/gtkfilechooserdefault.c:11295
+#: gtk/gtkfilechooserdefault.c:11207 gtk/gtkfilechooserdefault.c:11229
+#: gtk/gtkfilechooserdefault.c:11300
 msgid "Unknown"
 msgstr "અજ્ઞાત"
 
-#: gtk/gtkfilechooserdefault.c:11242
+#: gtk/gtkfilechooserdefault.c:11247
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11244
+#: gtk/gtkfilechooserdefault.c:11249
 msgid "Yesterday at %H:%M"
 msgstr "ગઈકાલે %H:%M વાગ્યે"
 
@@ -1917,7 +1929,8 @@ msgstr "ફાઈલનું નામ બદલો (_R)"
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ફોલ્ડરનું નામ \"%s\" સંકેતોનો સમાવેશ કરે છે જેની આ ફાઈલનામમાં પરવાનગી નથી"
 
 #: gtk/gtkfilesel.c:1392
@@ -2284,7 +2297,7 @@ msgstr "તમે બહાર નીકળો ના ત્યાં સુધ�
 msgid "Remember _forever"
 msgstr "હંમેશા યાદ રાખો (_f)"
 
-#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6946
+#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6949
 #, c-format
 msgid "Page %u"
 msgstr "પાનું %u"
@@ -3479,7 +3492,8 @@ msgstr "\"%s\" એ માન્ય લક્ષણ નામ નથી"
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" એ \"%s\" પ્રકારની કિંમત એ લક્ષણ \"%s\" માટે રૂપાંતરીત કરી શકાય નહિં"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3516,7 +3530,8 @@ msgid "Serialized data is malformed"
 msgstr "સીરીયલાઈઝ માહિતી એ મલીન છે"
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "સીરીયલાઈઝ માહિતી એ મલીન છે. પ્રથમ વિભાગ એ GTKTEXTBUFFERCONTENTS-0001 નથી"
 
 #: gtk/gtktextutil.c:61
@@ -4469,81 +4484,81 @@ msgstr "ફોલ્ડર અનુક્રમ લખવામાં નિષ
 msgid "Failed to rewrite header\n"
 msgstr "હેડર પુનઃલખવામાં નિષ્ફળ\n"
 
-#: gtk/updateiconcache.c:1455
+#: gtk/updateiconcache.c:1463
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "'%s' ફાઈલ ખોલવામાં નિષ્ફળતા: %s\n"
 
-#: gtk/updateiconcache.c:1463
+#: gtk/updateiconcache.c:1471
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "કેશ ફાઈલ લખવામાં નિષ્ફળ: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "પેદા થયેલ કેશ અયોગ્ય હતી.\n"
 
-#: gtk/updateiconcache.c:1511
+#: gtk/updateiconcache.c:1519
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s નું નામ %s માં બદલી શક્યા નહિં: %s, %s પછી દૂર કરી રહ્યા છીએ.\n"
 
-#: gtk/updateiconcache.c:1523
+#: gtk/updateiconcache.c:1531
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s નું %s માં નામ બદલી શક્યા નહિં: %s\n"
 
-#: gtk/updateiconcache.c:1530
+#: gtk/updateiconcache.c:1538
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s ને ફરી પાછા %s માં નામ બદલી શક્યા નહિં: %s.\n"
 
-#: gtk/updateiconcache.c:1556
+#: gtk/updateiconcache.c:1564
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "કેશ ફાઈલ સફળતાપૂર્વક બનાવાઈ ગઈ.\n"
 
-#: gtk/updateiconcache.c:1595
+#: gtk/updateiconcache.c:1603
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "હાલની કેશ પર ફરીથી લખો, જો તે પરિપૂર્ણ હોય તો પણ"
 
-#: gtk/updateiconcache.c:1596
+#: gtk/updateiconcache.c:1604
 msgid "Don't check for the existence of index.theme"
 msgstr "index.theme ના અસ્તિત્વ માટે ચકાસો નહિં"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1605
 msgid "Don't include image data in the cache"
 msgstr "કેશમાં ચિત્ર માહિતીનો સમાવેશ કરો નહિં"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1606
 msgid "Output a C header file"
 msgstr "C હેડર ફાઈલનું આઉટપુટ કરો"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1607
 msgid "Turn off verbose output"
 msgstr "વર્બોઝ આઉટપુટ બંધ કરો"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1608
 msgid "Validate existing icon cache"
 msgstr "હાલની ચિહ્ન કેશ માન્ય કરો"
 
-#: gtk/updateiconcache.c:1663
+#: gtk/updateiconcache.c:1671
 #, c-format
 msgid "File not found: %s\n"
 msgstr "ફાઈલ મળી નહિં: %s\n"
 
-#: gtk/updateiconcache.c:1669
+#: gtk/updateiconcache.c:1677
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "માન્ય ચિહ્ન કેશ નથી: %s\n"
 
-#: gtk/updateiconcache.c:1682
+#: gtk/updateiconcache.c:1690
 #, c-format
 msgid "No theme index file."
 msgstr "થીમ અનુક્રમણિકા ફાઇલ નથી."
 
-#: gtk/updateiconcache.c:1686
+#: gtk/updateiconcache.c:1694
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4969,4 +4984,3 @@ msgstr "ચકાસણી પ્રિન્ટર પર છાપો"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ફાઈલ '%s' માટેની જાણકારી મેળવી શકાતી નથી: %s"
-

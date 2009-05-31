@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:24-0400\n"
+"POT-Creation-Date: 2009-05-31 00:06-0400\n"
 "PO-Revision-Date: 2006-08-09 10:30+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -1211,7 +1211,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2110
+#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "ཆོག་ཐམ།"
 
@@ -1220,39 +1220,39 @@ msgid "The license of the program"
 msgstr "ལས་རིམ་གྱི་ཆོག་ཐམ།"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:492
+#: gtk/gtkaboutdialog.c:490
 msgid "C_redits"
 msgstr ""
 "\"ཨའི་ཌི་ཨར་སི་གི་མ་དངུལ་རྒྱབ་སྐྱོར་ཐོག་ལས་ བརྡ་དོན་འཕྲུལ་རིག་ལས་ཁུངས་ནང་ སྐད་བསྒྱུར་འབད་ཡི། ཁ་གསལ་"
 "གྱི་དོན་ལུ་ འབྲེལ་བ་འཐབ་ས་: <pema_geyleg@druknet.bt>/<pgeyleg@dit.gov.bt>\""
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:506
+#: gtk/gtkaboutdialog.c:504
 msgid "_License"
 msgstr "ཆོག་ཐམ།(_L)"
 
-#: gtk/gtkaboutdialog.c:774
+#: gtk/gtkaboutdialog.c:772
 #, c-format
 msgid "About %s"
 msgstr "%s གི་སྐོར། "
 
-#: gtk/gtkaboutdialog.c:2033
+#: gtk/gtkaboutdialog.c:2031
 msgid "Credits"
 msgstr "ངོ་བསྟོད་ཚུ།"
 
-#: gtk/gtkaboutdialog.c:2062
+#: gtk/gtkaboutdialog.c:2060
 msgid "Written by"
 msgstr "འབྲི་མི།"
 
-#: gtk/gtkaboutdialog.c:2065
+#: gtk/gtkaboutdialog.c:2063
 msgid "Documented by"
 msgstr "ཡིག་ཐོག་ལུ་བཀོད་མི།"
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2075
 msgid "Translated by"
 msgstr "སྐད་བསྒྱུར་རྐྱབ་མི།"
 
-#: gtk/gtkaboutdialog.c:2081
+#: gtk/gtkaboutdialog.c:2079
 msgid "Artwork by"
 msgstr "རི་མོ་བཀོད་མི།"
 
@@ -1589,15 +1589,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "ཚོས་གཞིའི་སེལ་འཐུ།"
 
-#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8420 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "ཨིན་པུཊི་ཐབས་ཤེས།(_M)"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8434 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "ཡུ་ནི་ཀོཌི་ ཚད་འཛིན་གྱི་ ཡིག་འབྲུ་བཙུགས།(_I)"
 
-#: gtk/gtkentry.c:9797
+#: gtk/gtkentry.c:9802
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "གནས་ཁོངས་འདྲ་བཤུས་རྐྱབས།(_L)"
@@ -1818,46 +1818,46 @@ msgstr ""
 msgid "_Replace"
 msgstr "ཚབ་བཙུགས།(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8914
+#: gtk/gtkfilechooserdefault.c:8919
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "གཞན་སྲུང་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:8915
+#: gtk/gtkfilechooserdefault.c:8920
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8929
+#: gtk/gtkfilechooserdefault.c:8934
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "གཞན་སྲུང་མ་ཚུགས།"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9396
+#: gtk/gtkfilechooserdefault.c:9401
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10349
+#: gtk/gtkfilechooserdefault.c:10354
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s སྦྱར་བརྩེགས་འབད་མ་ཚུགས། "
 
-#: gtk/gtkfilechooserdefault.c:11024
+#: gtk/gtkfilechooserdefault.c:11029
 msgid "Type name of new folder"
 msgstr "སྣོད་འཛིན་གསར་པའི་མིང་ ཡིག་དཔར་རྐྱབས།"
 
-#: gtk/gtkfilechooserdefault.c:11202 gtk/gtkfilechooserdefault.c:11224
-#: gtk/gtkfilechooserdefault.c:11295
+#: gtk/gtkfilechooserdefault.c:11207 gtk/gtkfilechooserdefault.c:11229
+#: gtk/gtkfilechooserdefault.c:11300
 msgid "Unknown"
 msgstr "མ་ཤེསཔ།"
 
-#: gtk/gtkfilechooserdefault.c:11242
+#: gtk/gtkfilechooserdefault.c:11247
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11244
+#: gtk/gtkfilechooserdefault.c:11249
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "ཁ་རྩང༌།"
@@ -2344,7 +2344,7 @@ msgstr ""
 msgid "Remember _forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6946
+#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6949
 #, c-format
 msgid "Page %u"
 msgstr "ཤོག་ལེབ་ %u "
@@ -4804,82 +4804,82 @@ msgstr "ཚིག་མཛོད་ཟུར་ཐོ་ འབྲི་མ་�
 msgid "Failed to rewrite header\n"
 msgstr "མགོ་ཡིག་འབྲི་མ་ཚུགས།\n"
 
-#: gtk/updateiconcache.c:1455
+#: gtk/updateiconcache.c:1463
 #, fuzzy, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "ཡིག་སྣོད་ '%s': %s ཁ་ཕྱེ་མ་ཚུགས།"
 
-#: gtk/updateiconcache.c:1463
+#: gtk/updateiconcache.c:1471
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "འདྲ་མཛོད་ཡིག་སྣོད་:%s འབྲི་མ་ཚུགས།\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1511
+#: gtk/updateiconcache.c:1519
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%sལས་%s: %s,ལུ་བསྐྱར་མིང་བཏགས་མ་ཚུགསཔ་ལས་%sརྩ་བསྐྲད་གཏང་དོ།\n"
 
-#: gtk/updateiconcache.c:1523
+#: gtk/updateiconcache.c:1531
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s ལས་ %s: %s ལུ་ བསྐྱར་མིང་བཏགས་མ་ཚུགས།\n"
 
-#: gtk/updateiconcache.c:1530
+#: gtk/updateiconcache.c:1538
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s དེ་ ལོག་སྟེ་ %s: %s ལུ་ བསྐྱར་མིང་བཏགས་མ་ཚུགས།\n"
 
-#: gtk/updateiconcache.c:1556
+#: gtk/updateiconcache.c:1564
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "འདྲ་མཛོད་ཡིག་སྣོད་ མཐར་འཁྱོལ་སྦེ་ གསར་བསྐྲུན་འབད་ཡི།\n"
 
-#: gtk/updateiconcache.c:1595
+#: gtk/updateiconcache.c:1603
 #, fuzzy
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "དུས་མཐུན་ཡོད་དེ་འབད་རུང་ ད་ལྟོའི་འདྲ་མཛོད་ཅིག་ལུ་ ཚབ་སྲུང་འབད།"
 
-#: gtk/updateiconcache.c:1596
+#: gtk/updateiconcache.c:1604
 msgid "Don't check for the existence of index.theme"
 msgstr "ཟུར་ཐོའི་བརྗོད་དོན་ཡོད་མེད་ཀྱི་དོན་ལུ་ ཞིབ་དཔྱད་མ་འབད།"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1605
 msgid "Don't include image data in the cache"
 msgstr "འདྲ་མཛོད་ནང་ལུ་ གཟུགས་བརྙན་གྱི་གནས་སྡུད་ གྲངས་སུ་མ་བཙུགས།"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1606
 msgid "Output a C header file"
 msgstr "སི་མགོ་ཡིག་གི་ཡིག་སྣོད་ཅིག་ ཨའུཊི་པུཊི་འབད།"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1607
 msgid "Turn off verbose output"
 msgstr "ཚིག་མང་ཨའུཊི་པུཊི་ ཨོཕ་རྐྱབས།"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1608
 msgid "Validate existing icon cache"
 msgstr ""
 
-#: gtk/updateiconcache.c:1663
+#: gtk/updateiconcache.c:1671
 #, fuzzy, c-format
 msgid "File not found: %s\n"
 msgstr "%s སྦྱར་བརྩེགས་འབད་མ་ཚུགས། "
 
-#: gtk/updateiconcache.c:1669
+#: gtk/updateiconcache.c:1677
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1682
+#: gtk/updateiconcache.c:1690
 #, c-format
 msgid "No theme index file."
 msgstr ""
 
-#: gtk/updateiconcache.c:1686
+#: gtk/updateiconcache.c:1694
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

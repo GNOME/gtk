@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-11 16:24-0400\n"
+"POT-Creation-Date: 2009-05-31 00:06-0400\n"
 "PO-Revision-Date: 2009-03-11 12:57+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@fedoraproject.org>\n"
 "Language-Team: American English <fedora-trans-as@redhat.com>\n"
@@ -1160,7 +1160,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d বস্তু খোলা হৈছে"
 msgstr[1] "%d বস্তুসমূহ খোলা হৈছে"
 
-#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2110
+#: gtk/gtkaboutdialog.c:251 gtk/gtkaboutdialog.c:2108
 msgid "License"
 msgstr "অনুজ্ঞা চুক্তি"
 
@@ -1169,37 +1169,37 @@ msgid "The license of the program"
 msgstr "কাৰ্য্যক্ৰমৰ অনুজ্ঞা চুক্তি"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:492
+#: gtk/gtkaboutdialog.c:490
 msgid "C_redits"
 msgstr "স্বীকৃতি (_r)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:506
+#: gtk/gtkaboutdialog.c:504
 msgid "_License"
 msgstr "অনুজ্ঞা চুক্তি (_L)"
 
-#: gtk/gtkaboutdialog.c:774
+#: gtk/gtkaboutdialog.c:772
 #, c-format
 msgid "About %s"
 msgstr "%s ৰ বিষয়ে"
 
-#: gtk/gtkaboutdialog.c:2033
+#: gtk/gtkaboutdialog.c:2031
 msgid "Credits"
 msgstr "স্বীকৃতি"
 
-#: gtk/gtkaboutdialog.c:2062
+#: gtk/gtkaboutdialog.c:2060
 msgid "Written by"
 msgstr "লিখক"
 
-#: gtk/gtkaboutdialog.c:2065
+#: gtk/gtkaboutdialog.c:2063
 msgid "Documented by"
 msgstr "প্ৰলেক্ষ লিখিছে"
 
-#: gtk/gtkaboutdialog.c:2077
+#: gtk/gtkaboutdialog.c:2075
 msgid "Translated by"
 msgstr "অনুবাদক"
 
-#: gtk/gtkaboutdialog.c:2081
+#: gtk/gtkaboutdialog.c:2079
 msgid "Artwork by"
 msgstr "শিল্পী"
 
@@ -1528,15 +1528,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "ৰঙৰ নিৰ্ব্বাচন"
 
-#: gtk/gtkentry.c:8415 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8420 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "নিবেশ পদ্ধতি (_M)"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8434 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode নিয়ন্ত্ৰণ আকৰ ভৰাওক (_I)"
 
-#: gtk/gtkentry.c:9797
+#: gtk/gtkentry.c:9802
 msgid "Caps Lock is on"
 msgstr "ক্যাপ্স-লক কি সক্ৰিয় আছে"
 
@@ -1755,11 +1755,11 @@ msgstr "নথিপত্ৰ ইতিমধ্যে \"%s\" ত আছে । 
 msgid "_Replace"
 msgstr "প্ৰতিস্থাপন কৰক (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8914
+#: gtk/gtkfilechooserdefault.c:8919
 msgid "Could not start the search process"
 msgstr "বিচৰা প্ৰক্ৰিয়া আৰম্ভ কৰিব পৰা ন'গ'ল"
 
-#: gtk/gtkfilechooserdefault.c:8915
+#: gtk/gtkfilechooserdefault.c:8920
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1767,34 +1767,34 @@ msgstr ""
 "indexer ডেমনলৈ অনুপ্ৰয়োগে সংযোগ সৃষ্টি কৰিব নোৱাৰিলে । সেইটো চলি থকাটো নিশ্চিত "
 "কৰক ।"
 
-#: gtk/gtkfilechooserdefault.c:8929
+#: gtk/gtkfilechooserdefault.c:8934
 msgid "Could not send the search request"
 msgstr "বিচৰাৰ অনুৰোধ পঠিয়াব নোৱাৰিলো"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9396
+#: gtk/gtkfilechooserdefault.c:9401
 msgid "_Search:"
 msgstr "বিচাৰক (_S):"
 
-#: gtk/gtkfilechooserdefault.c:10349
+#: gtk/gtkfilechooserdefault.c:10354
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s তুলি ল'ব পৰা ন'গ'ল"
 
-#: gtk/gtkfilechooserdefault.c:11024
+#: gtk/gtkfilechooserdefault.c:11029
 msgid "Type name of new folder"
 msgstr "নতুন ফোল্ডাৰৰ নাম লিখক"
 
-#: gtk/gtkfilechooserdefault.c:11202 gtk/gtkfilechooserdefault.c:11224
-#: gtk/gtkfilechooserdefault.c:11295
+#: gtk/gtkfilechooserdefault.c:11207 gtk/gtkfilechooserdefault.c:11229
+#: gtk/gtkfilechooserdefault.c:11300
 msgid "Unknown"
 msgstr "অজ্ঞাত"
 
-#: gtk/gtkfilechooserdefault.c:11242
+#: gtk/gtkfilechooserdefault.c:11247
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11244
+#: gtk/gtkfilechooserdefault.c:11249
 msgid "Yesterday at %H:%M"
 msgstr "যোৱাকালি %H:%M ত"
 
@@ -2271,7 +2271,7 @@ msgstr "বাহিৰ হোৱা লৈকে গুপ্তশব্দ �
 msgid "Remember _forever"
 msgstr "চিৰকাললৈ মনত ৰাখিব (_f)"
 
-#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6946
+#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6949
 #, c-format
 msgid "Page %u"
 msgstr "পৃষ্ঠা %u"
@@ -4459,81 +4459,81 @@ msgstr "পঞ্জীকাৰ বেটুপাত লিখাত অক্
 msgid "Failed to rewrite header\n"
 msgstr "হেডাৰ পুনঃ লিখাত অক্ষম\n"
 
-#: gtk/updateiconcache.c:1455
+#: gtk/updateiconcache.c:1463
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "%s নথিপত্ৰ খুলিব নোৱাৰিলো: %s\n"
 
-#: gtk/updateiconcache.c:1463
+#: gtk/updateiconcache.c:1471
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "ভাণ্ডাৰৰ নথিপত্ৰ লিখিব পৰা ন'গ'ল: %s\n"
 
-#: gtk/updateiconcache.c:1499
+#: gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "সৃষ্টি কৰা ভাণ্ডাৰ অবৈধ ।\n"
 
-#: gtk/updateiconcache.c:1511
+#: gtk/updateiconcache.c:1519
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s ক %s লৈ পুনঃ নামকৰণ কৰিব পৰা ন'গ'ল: %s, %s ক আঁতৰুৱা হৈছে তেনেহ'লে ।\n"
 
-#: gtk/updateiconcache.c:1523
+#: gtk/updateiconcache.c:1531
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s ক %s লৈ পুনঃ নামকৰণ কৰিব পৰা ন'গ'ল: %s\n"
 
-#: gtk/updateiconcache.c:1530
+#: gtk/updateiconcache.c:1538
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s ক %s লৈ পুনঃ নামকৰণ কৰিব পৰা ন'গ'ল: %s ।\n"
 
-#: gtk/updateiconcache.c:1556
+#: gtk/updateiconcache.c:1564
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "ভাণ্ডাৰৰ নথিপত্ৰ সফলভাবে সৃষ্টি কৰা হ'ল ।\n"
 
-#: gtk/updateiconcache.c:1595
+#: gtk/updateiconcache.c:1603
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "এটা বিদ্যমান ভাণ্ডাৰ পুনঃ লিখক, নতুন হোৱা স্বত্বেও"
 
-#: gtk/updateiconcache.c:1596
+#: gtk/updateiconcache.c:1604
 msgid "Don't check for the existence of index.theme"
 msgstr "index.theme ৰ অস্তিত্ব পৰীক্ষা নকৰিব"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1605
 msgid "Don't include image data in the cache"
 msgstr "ভাণ্ডাৰত প্ৰতিমুৰ্তিৰ তথ্য অন্তৰ্ভুক্ত নকৰিব"
 
-#: gtk/updateiconcache.c:1598
+#: gtk/updateiconcache.c:1606
 msgid "Output a C header file"
 msgstr "এটা C হেডাৰ নথিপত্ৰৰ নিৰ্গম"
 
-#: gtk/updateiconcache.c:1599
+#: gtk/updateiconcache.c:1607
 msgid "Turn off verbose output"
 msgstr "শব্দবহুল নিৰ্গম বন্ধ কৰক"
 
-#: gtk/updateiconcache.c:1600
+#: gtk/updateiconcache.c:1608
 msgid "Validate existing icon cache"
 msgstr "বৰ্ত্তমানৰ আইকণ ভাণ্ডাৰৰ প্ৰমাণীকৰণ কৰক"
 
-#: gtk/updateiconcache.c:1663
+#: gtk/updateiconcache.c:1671
 #, c-format
 msgid "File not found: %s\n"
 msgstr "নথিপত্ৰ পোৱা ন'গ'ল: %s\n"
 
-#: gtk/updateiconcache.c:1669
+#: gtk/updateiconcache.c:1677
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "বৈধ আইকণ ভাণ্ডাৰ নহয়: %s\n"
 
-#: gtk/updateiconcache.c:1682
+#: gtk/updateiconcache.c:1690
 #, c-format
 msgid "No theme index file."
 msgstr "থিম ইন্ডেক্সৰ কোনো নথিপত্ৰ নাই ।"
 
-#: gtk/updateiconcache.c:1686
+#: gtk/updateiconcache.c:1694
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

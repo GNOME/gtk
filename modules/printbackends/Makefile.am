@@ -14,4 +14,4 @@ if HAVE_PAPI
 SUBDIRS += papi
 endif
 
-DIST_SUBDIRS = cups file lpr test
+DIST_SUBDIRS = cups file lpr test papi
