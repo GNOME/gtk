@@ -5366,8 +5366,8 @@ gdk_window_enable_synchronized_configure (GdkWindow *window)
     {
       /* This basically means you want to do fancy X specific stuff, so
 	 ensure we have a native window */
-      gdk_window_set_has_native (window, TRUE);
-  
+      gdk_window_ensure_native (window, TRUE);
+
       impl->use_synchronized_configure = TRUE;
       ensure_sync_counter (window);
     }

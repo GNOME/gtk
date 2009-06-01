@@ -368,7 +368,7 @@ parse_window (GdkWindow *parent, char **lines)
       color.blue = b;
       window = create_window (parent, x, y, w, h, &color);
       if (native)
-	gdk_window_set_has_native (window, TRUE);
+	gdk_window_ensure_native (window);
       
       for (i = 0; i < n_children; i++)
 	lines = parse_window (window, lines);
@@ -692,7 +692,7 @@ native_window_clicked (GtkWidget *button,
     {
       window = l->data;
       
-      gdk_window_set_has_native (window, TRUE);
+      gdk_window_ensure_native (window, TRUE);
     }
   
   g_list_free (selected);

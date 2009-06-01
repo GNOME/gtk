@@ -206,7 +206,7 @@ gdk_pointer_grab (GdkWindow *	  window,
 
   /* We need a native window for confine to to work, ensure we have one */
   if (confine_to)
-    gdk_window_set_has_native (confine_to, TRUE);
+    gdk_window_ensure_native (confine_to, TRUE);
   
   /* TODO: What do we do for offscreens and  their children? We need to proxy the grab somehow */
   if (!GDK_IS_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (native)->impl))

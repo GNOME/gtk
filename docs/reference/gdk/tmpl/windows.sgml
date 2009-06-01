@@ -200,6 +200,7 @@ Describes the kind of window.
 @GDK_WINDOW_DIALOG: useless/deprecated compatibility type
 @GDK_WINDOW_TEMP: override redirect temporary window (used to implement #GtkMenu)
 @GDK_WINDOW_FOREIGN: foreign window (see gdk_window_foreign_new())
+@GDK_WINDOW_OFFSCREEN: 
 
 <!-- ##### ENUM GdkWindowClass ##### -->
 <para>

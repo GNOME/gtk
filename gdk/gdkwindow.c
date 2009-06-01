@@ -1220,7 +1220,7 @@ gdk_window_reparent (GdkWindow *window,
   /* Reparenting to toplevel. Ensure we have a native window so this can work */
   if (new_parent_private->window_type == GDK_WINDOW_ROOT ||
       new_parent_private->window_type == GDK_WINDOW_FOREIGN)
-    gdk_window_set_has_native (window, TRUE);
+    gdk_window_ensure_native (window);
 
   do_reparent_to_impl = FALSE;
   if (gdk_window_has_impl (private))
@@ -1330,20 +1330,22 @@ gdk_window_reparent (GdkWindow *window,
 }
 
 /**
- * gdk_window_set_has_native:
+ * gdk_window_ensure_native:
  * @window: a #GdkWindow
- * @has_native: whethe the window should have a native window
  *
- * Tries to create or remove a window-system native window for this
- * GdkWindow. This may fail in some situations. For instance:
+ * Tries to ensure that there is a window-system native window for this
+ * GdkWindow. This may fail in some situations, returning %FALSE.
  *
- * Toplevel and foreign windows must have a native window.
  * Offscreen window and children of them can never have native windows.
+ *
  * Some backends may not support native child windows.
- * 
+ *
+ * Returns: %TRUE if the window has a native window, %FALSE otherwise
+ *
+ * Since: 2.18
  **/
-void
-gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
+gboolean
+gdk_window_ensure_native (GdkWindow *window)
 {
   GdkWindowObject *private;
   GdkWindowObject *impl_window;
@@ -1358,87 +1360,66 @@ gdk_window_set_has_native (GdkWindow *window, gboolean has_native)
 
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT ||
       GDK_WINDOW_DESTROYED (window))
-    return;
+    return FALSE;
 
   private = (GdkWindowObject *) window;
-  
-  if (has_native)
+
+  impl_window = gdk_window_get_impl_window (private);
+
+  if (impl_window->window_type == GDK_WINDOW_OFFSCREEN)
+    return FALSE; /* native in offscreens not supported */
+
+  if (impl_window == private)
+    /* Already has an impl, and its not offscreen . */
+    return TRUE;
+
+  /* Need to create a native window */
+
+  screen = gdk_drawable_get_screen (window);
+  visual = gdk_drawable_get_visual (window);
+
+  attributes.colormap = gdk_drawable_get_colormap (window);
+
+  old_impl = private->impl;
+  _gdk_window_impl_new (window, (GdkWindow *)private->parent, screen, visual,
+			get_native_event_mask (private), &attributes, GDK_WA_COLORMAP);
+  new_impl = private->impl;
+
+  private->impl = old_impl;
+  change_impl (private, private, new_impl);
+
+  /* Native window creation will put the native window topmost in the
+   * native parent, which may be wrong wrt other native windows in the
+   * non-native hierarchy, so restack */
+  above = find_native_sibling_above (private->parent, private);
+  if (above)
     {
-      /* Create native window */
-
-      if (gdk_window_has_impl (private))
-	/* Already has an impl, either native (ok) or
-	   offscreen (not supported). Bail. */
-	return; 
-
-      impl_window = gdk_window_get_impl_window (private);
-      if (impl_window->window_type == GDK_WINDOW_OFFSCREEN)
-	return; /* native in offscreens not supported */
-
-      screen = gdk_drawable_get_screen (window);
-      visual = gdk_drawable_get_visual (window);
-
-      attributes.colormap = gdk_drawable_get_colormap (window);
-      
-      old_impl = private->impl;
-      _gdk_window_impl_new (window, (GdkWindow *)private->parent, screen, visual,
-			    get_native_event_mask (private), &attributes, GDK_WA_COLORMAP);
-      new_impl = private->impl;
-
-      private->impl = old_impl;
-      change_impl (private, private, new_impl);
-      
-      /* Native window creation will put the native window topmost in the
-       * native parent, which may be wrong wrt other native windows in the
-       * non-native hierarchy, so restack */
-      above = find_native_sibling_above (private->parent, private);
-      if (above)
-	{
-	  listhead.data = window;
-	  listhead.prev = NULL;
-	  listhead.next = NULL;
-	  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->restack_under ((GdkWindow *)above,
-								    &listhead);
-	}
-
-      recompute_visible_regions (private, FALSE, FALSE);
-
-      /* The shape may not have been set, as the clip region doesn't actually
-	 change, so do it here manually */
-      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_region ((GdkWindow *)private, private->clip_region, 0, 0);
-
-      reparent_to_impl (private);
-
-      if (!private->input_only)
-	{
-	  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_background (window, &private->bg_color);
-	  if (private->bg_pixmap != NULL)
-	    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_back_pixmap (window, private->bg_pixmap);
-	}
-      
-      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->input_shape_combine_region ((GdkWindow *)private, private->input_shape, 0, 0);
-
-      if (gdk_window_is_viewable (window))
-	GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show (window);
+      listhead.data = window;
+      listhead.prev = NULL;
+      listhead.next = NULL;
+      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->restack_under ((GdkWindow *)above,
+								&listhead);
     }
-  else
+
+  recompute_visible_regions (private, FALSE, FALSE);
+
+  /* The shape may not have been set, as the clip region doesn't actually
+     change, so do it here manually */
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_region ((GdkWindow *)private, private->clip_region, 0, 0);
+
+  reparent_to_impl (private);
+
+  if (!private->input_only)
     {
-      /* Remove native window */
-
-      if (!gdk_window_has_impl (private))
-	return;  /* Not native, can't remove */
-
-      if (private->window_type == GDK_WINDOW_OFFSCREEN)
-	return; /* Not native, can't remove */
-      
-      if (private->parent == NULL ||
-	  GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT)
-	return; /* toplevel, must be native */
-
-      g_warning ("Tried to turn native window to client side window, this is not supported yet.");
-
-      /* TODO: remove native */
+      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_background (window, &private->bg_color);
+      if (private->bg_pixmap != NULL)
+	GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_back_pixmap (window, private->bg_pixmap);
     }
+
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->input_shape_combine_region ((GdkWindow *)private, private->input_shape, 0, 0);
+
+  if (gdk_window_is_viewable (window))
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show (window);
 }
 
 static void
@@ -1891,7 +1872,7 @@ gdk_window_add_filter (GdkWindow     *window,
   /* Filters are for the native events on the native window, so
      ensure there is a native window. */
   if (window)
-    gdk_window_set_has_native (window, TRUE);
+    gdk_window_ensure_native (window);
   
   if (private)
     tmp_list = private->filters;
@@ -4348,7 +4329,7 @@ gdk_window_real_set_colormap (GdkDrawable *drawable,
   /* different colormap than parent, requires native window */
   if (!private->input_only &&
       cmap != gdk_drawable_get_colormap ((GdkDrawable *)(private->parent)))
-    gdk_window_set_has_native ((GdkWindow *)drawable, TRUE);
+    gdk_window_ensure_native ((GdkWindow *)drawable);
   
   gdk_drawable_set_colormap (private->impl, cmap);
 }
@@ -7560,7 +7541,7 @@ gdk_window_set_composited (GdkWindow *window,
     return;
 
   if (composited)
-    gdk_window_set_has_native (window, TRUE);
+    gdk_window_ensure_native (window);
 
   display = gdk_drawable_get_display (GDK_DRAWABLE (window));
 
