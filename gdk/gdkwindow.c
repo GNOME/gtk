@@ -1410,7 +1410,7 @@ gdk_window_ensure_native (GdkWindow *window)
   GdkWindowObject *above;
   GList listhead;
 
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT ||
       GDK_WINDOW_DESTROYED (window))
@@ -1474,6 +1474,8 @@ gdk_window_ensure_native (GdkWindow *window)
 
   if (gdk_window_is_viewable (window))
     GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show (window);
+
+  return TRUE;
 }
 
 static void

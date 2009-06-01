@@ -387,8 +387,7 @@ void	      gdk_window_move_region           (GdkWindow       *window,
 						const GdkRegion *region,
 						gint             dx,
 						gint             dy);
-void          gdk_window_set_has_native        (GdkWindow       *window,
-						gboolean         has_native);
+gboolean      gdk_window_ensure_native        (GdkWindow       *window);
 
 /* 
  * This allows for making shaped (partially transparent) windows
