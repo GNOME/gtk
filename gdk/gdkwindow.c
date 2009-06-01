@@ -43,22 +43,76 @@
 
 #include "math.h"
 
-/* Not all GdkWindows have a corresponding native window.
- * Instead some draw into the nearest parent that has whatss
- * called an "impl", i.e. the implementation window.
- * For toplevel window system windows the impl is always native
- * window, but child windows can also have native windows as
- * this is sometimes necessary. Furthermore, offscreen windows
- * (type GDK_WINDOW_OFFSCREEN) have an impl of type
- * GdkOffscreenWindow rather than a backend implementation native
- * window. Such windows draw into an offscreen pixmap instead
- * of a window and collect damage that lets you paint it where
- * you want.
+/* Historically a GdkWindow always matches a platform native window,
+ * be it a toplevel window or a child window. In this setup the
+ * GdkWindow (and other GdkDrawables) were platform independent classes,
+ * and the actual platform specific implementation was in a delegate
+ * object availible as "impl" in the window object.
  *
- * All GdkWindow track their position, size, clip region and
- * absolute position in the impl window. For child window with
- * native windows the clip region is set on the native window
- * as a window shape to make it clip against other non-native windows.
+ * With the addition of client side windows and offscreen windows this
+ * changes a bit. The application-visible GdkWindow object behaves as
+ * it did before, but not all such windows now have a corresponding native
+ * window. Instead windows that are "client side" are emulated by the gdk
+ * code such that clipping, drawing, moving, events etc work as expected.
+ *
+ * For GdkWindows that have a native window the "impl" object is the
+ * same as before. However, for all client side windows the impl object
+ * is shared with its parent (i.e. all client windows descendants of one
+ * native window has the same impl.
+ *
+ * Additionally there is a new type of platform independent impl object,
+ * GdkOffscreenWindow. All windows of type GDK_WINDOW_OFFSCREEN get an impl
+ * of this type (while their children are generally GDK_WINDOW_CHILD virtual
+ * windows). Such windows work by allocating a GdkPixmap as the backing store
+ * for drawing operations, which is resized with the window.
+ *
+ * GdkWindows have a pointer to the "impl window" they are in, i.e.
+ * the topmost GdkWindow which have the same "impl" value. This is stored
+ * in impl_window, which is different from the window itself only for client
+ * side windows.
+ * All GdkWindows (native or not) track the position of the window in the parent
+ * (x, y), the size of the window (width, height), the position of the window
+ * with respect to the impl window (abs_x, abs_y). We also track the clip
+ * region of the window wrt parent windows and siblings, in window-relative
+ * coordinates with and without child windows included (clip_region,
+ * clip_region_with_children).
+ *
+ * All toplevel windows are native windows, but also child windows can be
+ * native (although not children of offscreens). We always listen to
+ * a basic set of events (see get_native_event_mask) for these windows
+ * so that we can emulate events for any client side children.
+ *
+ * For native windows we apply the calculated clip region as a window shape
+ * so that eg. client side siblings that overlap the native child properly
+ * draws over the native child window.
+ *
+ * In order to minimize flicker and for performance we use a couple of cacheing
+ * tricks. First of all, every time we do a window to window copy area, for instance
+ * when moving a client side window or when scrolling/moving a region in a window
+ * we store this in outstanding_moves instead of applying immediately. We then
+ * delay this move until we really need it (because something depends on being
+ * able to read it), or until we're handing a redraw from an expose/invalidation
+ * (actually we delay it past redraw, but before blitting the double buffer pixmap
+ * to the window). This gives us two advantages. First of all it minimizes the time
+ * from the window is moved to the exposes related to that move, secondly it allows
+ * us to be smart about how to do the copy. We combine multiple moves into one (when
+ * possible) and we don't actually do copies to anything that is or will be
+ * invalidated and exposed anyway.
+ *
+ * Secondly, we use something called a "implicit paint" during repaint handling.
+ * An implicit paint is similar to a regular paint for the paint stack, but it is
+ * not put on the stack. Instead, it is set on the impl window, and later when
+ * regular gdk_window_begin_paint_region()  happen on a window of this impl window
+ * we reuse the pixmap from the implicit paint. During repaint we create and at the
+ * end flush an implicit paint, which means we can collect all the paints on
+ * multiple client side windows in the same backing store pixmap.
+ *
+ * All drawing to windows are wrapped with macros that set up the GC such that
+ * the offsets and clip region is right for drawing to the paint object or
+ * directly to the emulated window. It also automatically handles any flushing
+ * needed when drawing directly to a window. Adding window/paint clipping is
+ * done using _gdk_gc_add_drawable_clip which lets us efficiently add and then
+ * remove a custom clip region.
  */
 
 #define USE_BACKING_STORE	/* Appears to work on Win32, too, now. */

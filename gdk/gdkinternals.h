@@ -261,7 +261,7 @@ struct _GdkWindowObject
   guint native_visibility : 2; /* the native visibility of a impl windows */
 
   GdkWindowPaint *implicit_paint;
-  GdkInputWindow *input_window; /* only for impl windows */
+  GdkInputWindow *input_window; /* only set for impl windows */
 
   GList *outstanding_moves;
 
