@@ -78,7 +78,7 @@ typedef enum
 {
   GTK_SIZE_UNIT_PIXEL   = 0,
   GTK_SIZE_UNIT_EM      = 1,
-  GTK_SIZE_UNIT_MM      = 2,
+  GTK_SIZE_UNIT_MM      = 2
 } GtkSizeUnit;
 
 /**
@@ -127,7 +127,7 @@ gchar      *gtk_size_to_string       (GtkSize      size);
  */
 typedef enum
 {
-  GTK_SIZE_ERROR_INVALID_VALUE,
+  GTK_SIZE_ERROR_INVALID_VALUE
 } GtkSizeError;
 
 /* for now, use functions so apps can "opt in" to using resolution
