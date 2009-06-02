@@ -834,7 +834,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   /* Style properties */
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("client-side-decorations",
+                                           g_param_spec_boolean ("client-side-decorated",
                                                                  P_("Client-side window decorations"),
                                                                  P_("Whether to decorate windows without the WM"),
                                                                  FALSE,
@@ -983,7 +983,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 static void
 gtk_window_init (GtkWindow *window)
 {
-  //GdkColormap *colormap;
+  GdkColormap *colormap;
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   GtkWidget *label;
   
@@ -1037,11 +1037,14 @@ gtk_window_init (GtkWindow *window)
   gtk_widget_show (label);
   gtk_window_set_label_widget (window, label);
 
-  //colormap = _gtk_widget_peek_colormap ();
-  //if (colormap)
-  //  gtk_widget_set_colormap (GTK_WIDGET (window), colormap);
+#if 1
+  colormap = _gtk_widget_peek_colormap ();
+  if (colormap)
+    gtk_widget_set_colormap (GTK_WIDGET (window), colormap);
+#else
   gtk_widget_set_colormap (GTK_WIDGET (window),
                            gdk_screen_get_rgba_colormap (gtk_widget_get_screen (GTK_WIDGET (window))));
+#endif
 
   g_object_ref_sink (window);
   window->has_user_ref_count = TRUE;
@@ -5023,9 +5026,15 @@ gtk_window_unmap (GtkWidget *widget)
 static gboolean
 is_client_side_decorated (GtkWindow *window)
 {
-  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  gboolean client_side_decorated;
 
-  return priv->client_side_decorated && window->decorated;
+  gtk_widget_style_get (GTK_WIDGET (window),
+                        "client-side-decorated", &client_side_decorated,
+                        NULL);
+
+  return 1 && window->decorated; // XXX - remove this :)
+
+  return client_side_decorated && window->decorated;
 }
 
 static void
@@ -7224,6 +7233,7 @@ gtk_window_paint (GtkWidget     *widget,
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (widget);
 
+#if 0
   if (is_client_side_decorated (GTK_WINDOW (widget)))
     {
       gtk_paint_box (widget->style, widget->window, GTK_STATE_NORMAL, 
@@ -7234,6 +7244,10 @@ gtk_window_paint (GtkWidget     *widget,
       gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL,
                           GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
     }
+#else
+  gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL,
+                      GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
+#endif
 }
 
 static gint
