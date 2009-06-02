@@ -1,5 +1,4 @@
-# translation of ml.po to
-# translation of gtk+.HEAD.ml.po to
+# translation of gtk+.HEAD.ml.po to Malayalam
 # This file is distributed under the same license as the gtk+ package.
 # Copyright (C) 2003-2008 gtk+'S COPYRIGHT HOLDER.
 #
@@ -13,7 +12,7 @@ msgstr ""
 "POT-Creation-Date: 2009-05-29 19:02-0400\n"
 "PO-Revision-Date: 2009-03-17 21:05+0530\n"
 "Last-Translator: \n"
-"Language-Team:  <en@li.org>\n"
+"Language-Team:  <smc-discuss@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3025,7 +3024,7 @@ msgstr "ചോദ്യം"
 #: gtk/gtkstock.c:296
 msgctxt "Stock label"
 msgid "_About"
-msgstr "_സംബന്ധിച്ചുള്ള"
+msgstr "_അണിയറ വിശേഷങ്ങള്‍"
 
 #: gtk/gtkstock.c:297
 msgctxt "Stock label"
@@ -3379,12 +3378,12 @@ msgstr "_ഗുണഗണങ്ങള്‍ "
 #: gtk/gtkstock.c:387
 msgctxt "Stock label"
 msgid "_Quit"
-msgstr "_പുറത്ത് കടക്കുക "
+msgstr "_പുറത്ത് കടക്കുക"
 
 #: gtk/gtkstock.c:388
 msgctxt "Stock label"
 msgid "_Redo"
-msgstr "_വേണ്ടെന്ന് വച്ചത് വീണ്ടും ചെയ്യുക "
+msgstr "_വീണ്ടും"
 
 #: gtk/gtkstock.c:389
 msgctxt "Stock label"
@@ -3468,7 +3467,7 @@ msgstr "_അടി വര ഇടുക "
 #: gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "_Undo"
-msgstr "_ചെയ്ത പ്രവര്‍ത്തി വേണ്ടെന്ന് വയ്ക്കുക "
+msgstr "_വേണ്ടെ"
 
 #: gtk/gtkstock.c:409
 msgctxt "Stock label"
