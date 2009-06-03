@@ -692,7 +692,7 @@ native_window_clicked (GtkWidget *button,
     {
       window = l->data;
       
-      gdk_window_ensure_native (window, TRUE);
+      gdk_window_ensure_native (window);
     }
   
   g_list_free (selected);
