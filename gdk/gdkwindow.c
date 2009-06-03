@@ -8098,7 +8098,7 @@ send_crossing_event (GdkDisplay                 *display,
     event_mask = GDK_ENTER_NOTIFY_MASK;
 
   if (window->extension_events != 0)
-    GDK_WINDOW_IMPL_GET_IFACE (window->impl)->input_window_crossing (window,
+    GDK_WINDOW_IMPL_GET_IFACE (window->impl)->input_window_crossing ((GdkWindow *)window,
 								     type == GDK_ENTER_NOTIFY);
 
   if (window->event_mask & event_mask)
@@ -8784,9 +8784,9 @@ is_input_event (GdkDisplay *display,
   core_pointer = gdk_display_get_core_pointer (display);
   if ((event->type == GDK_MOTION_NOTIFY &&
        event->motion.device != core_pointer) ||
-      (event->type == GDK_BUTTON_PRESS ||
-       event->type == GDK_BUTTON_RELEASE) &&
-      event->button.device != core_pointer)
+      ((event->type == GDK_BUTTON_PRESS ||
+	event->type == GDK_BUTTON_RELEASE) &&
+       event->button.device != core_pointer))
     return TRUE;
   return FALSE;
 }
