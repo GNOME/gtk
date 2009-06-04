@@ -152,10 +152,10 @@ gdk_built_sources =				\
 gdkincludedir = $(includedir)/gtk-2.0/gdk
 gdkinclude_HEADERS = $(gdk_public_h_sources) $(gdk_built_public_sources)
 
-# gdkmarshalers.c is not here because it is currently an empty file
 common_sources =                \
 	$(gdk_c_sources)	\
 	gdkenumtypes.c		\
+	gdkmarshalers.c		\
 	gdkmarshalers.h
 
 libgdk_directfb_2_0_la_SOURCES = $(common_sources) 

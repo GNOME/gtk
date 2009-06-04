@@ -33,6 +33,7 @@
 #include "gdkpixmap.h"
 #include "gdkdrawable.h"
 #include "gdkscreen.h"
+#include "gdkmarshalers.h"
 #include "gdkalias.h"
 
 #undef DEBUG_WINDOW_PRINTING
@@ -119,6 +120,14 @@
 
 /* This adds a local value to the GdkVisibilityState enum */
 #define GDK_VISIBILITY_NOT_VIEWABLE 3
+
+enum {
+  GET_OFFSCREEN_PARENT,
+  PICK_OFFSCREEN_CHILD, /* only called if has_offscreen_children */
+  TO_PARENT,
+  FROM_PARENT,
+  LAST_SIGNAL
+};
 
 struct _GdkWindowPaint
 {
@@ -305,6 +314,8 @@ static void do_move_region_bits_on_impl (GdkWindowObject *private,
 static void gdk_window_invalidate_in_parent (GdkWindowObject *private);
 static void move_native_children (GdkWindowObject *private);
 
+static guint signals[LAST_SIGNAL] = { 0 };
+
 static gpointer parent_class = NULL;
 
 static const cairo_user_data_key_t gdk_window_cairo_key;
@@ -376,6 +387,17 @@ gdk_window_init (GdkWindowObject *window)
   window->native_visibility = GDK_VISIBILITY_UNOBSCURED;
 }
 
+static gboolean
+accumulate_get_parent	(GSignalInvocationHint *ihint,
+			 GValue		       *return_accu,
+			 const GValue	       *handler_return,
+			 gpointer               data)
+{
+  g_value_copy (handler_return, return_accu);
+  /* Continue while returning NULL */
+  return g_value_get_pointer (handler_return) == NULL;
+}
+
 static GQuark quark_pointer_window = 0;
 
 static void
@@ -419,6 +441,54 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->get_source_drawable = gdk_window_get_source_drawable;
 
   quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
+
+
+  signals[GET_OFFSCREEN_PARENT] =
+    g_signal_new (g_intern_static_string ("get-offscreen-parent"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  accumulate_get_parent, NULL,
+		  gdk_marshal_OBJECT__VOID,
+		  GDK_TYPE_WINDOW,
+		  0);
+  signals[PICK_OFFSCREEN_CHILD] =
+    g_signal_new (g_intern_static_string ("pick-offscreen-child"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  accumulate_get_parent, NULL,
+		  gdk_marshal_OBJECT__DOUBLE_DOUBLE,
+		  GDK_TYPE_WINDOW,
+		  2,
+		  G_TYPE_DOUBLE,
+		  G_TYPE_DOUBLE);
+  signals[TO_PARENT] =
+    g_signal_new (g_intern_static_string ("to-parent"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL, NULL,
+		  gdk_marshal_VOID__DOUBLE_DOUBLE_POINTER_POINTER,
+		  G_TYPE_NONE,
+		  4,
+		  G_TYPE_DOUBLE,
+		  G_TYPE_DOUBLE,
+		  G_TYPE_POINTER,
+		  G_TYPE_POINTER);
+  signals[FROM_PARENT] =
+    g_signal_new (g_intern_static_string ("from-parent"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL, NULL,
+		  gdk_marshal_VOID__DOUBLE_DOUBLE_POINTER_POINTER,
+		  G_TYPE_NONE,
+		  4,
+		  G_TYPE_DOUBLE,
+		  G_TYPE_DOUBLE,
+		  G_TYPE_POINTER,
+		  G_TYPE_POINTER);
 }
 
 static void
@@ -8363,6 +8433,24 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
 
   _gdk_display_enable_motion_hints (display);
 }
+
+void
+gdk_window_set_has_offscreen_children (GdkWindow *window,
+				       gboolean has_offscreen_children)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+
+  private->has_offscreen_children = !!has_offscreen_children;
+}
+
+gboolean
+gdk_window_get_has_offscreen_children (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+
+  return private->has_offscreen_children;
+}
+
 
 void
 _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window)

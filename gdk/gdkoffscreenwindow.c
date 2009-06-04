@@ -77,8 +77,8 @@ static void       gdk_offscreen_window_impl_iface_init    (GdkWindowImplIface   
 static void       gdk_offscreen_window_hide               (GdkWindow                  *window);
 
 G_DEFINE_TYPE_WITH_CODE (GdkOffscreenWindow,
-                         gdk_offscreen_window,
-                         GDK_TYPE_DRAWABLE,
+			 gdk_offscreen_window,
+			 GDK_TYPE_DRAWABLE,
 			 G_IMPLEMENT_INTERFACE (GDK_TYPE_WINDOW_IMPL,
 						gdk_offscreen_window_impl_iface_init));
 
@@ -94,7 +94,7 @@ gdk_offscreen_window_finalize (GObject *object)
   offscreen->cursor = NULL;
 
   gdk_pixmap_unref (offscreen->pixmap);
-  
+
   G_OBJECT_CLASS (gdk_offscreen_window_parent_class)->finalize (object);
 }
 
@@ -122,7 +122,7 @@ gdk_offscreen_window_destroy (GdkWindow *window,
 
 static gboolean
 is_parent_of (GdkWindow *parent,
-              GdkWindow *child)
+	      GdkWindow *child)
 {
   GdkWindow *w;
 
@@ -161,18 +161,18 @@ gdk_offscreen_window_copy_to_image (GdkDrawable    *drawable,
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
 
   return gdk_drawable_copy_to_image (offscreen->pixmap,
-                                     image,
-                                     src_x,
-                                     src_y,
-                                     dest_x, dest_y,
-                                     width, height);
+				     image,
+				     src_x,
+				     src_y,
+				     dest_x, dest_y,
+				     width, height);
 }
 
 static cairo_surface_t *
 gdk_offscreen_window_ref_cairo_surface (GdkDrawable *drawable)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
-  
+
   return _gdk_drawable_ref_cairo_surface (offscreen->pixmap);
 }
 
@@ -258,7 +258,7 @@ add_damage (GdkOffscreenWindow *offscreen,
 {
   GdkRectangle rect;
   GdkRegion *damage;
-  
+
   rect.x = x;
   rect.y = y;
   rect.width = w;
@@ -291,7 +291,7 @@ gdk_offscreen_window_draw_drawable (GdkDrawable *drawable,
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
   GdkDrawable *real_drawable = get_real_drawable (offscreen);
-  
+
   gdk_draw_drawable (real_drawable, gc,
 		     src, xsrc, ysrc,
 		     xdest, ydest,
@@ -316,7 +316,7 @@ gdk_offscreen_window_draw_rectangle (GdkDrawable  *drawable,
 		      gc, filled, x, y, width, height);
 
   add_damage (offscreen, x, y, width, height);
-  
+
 }
 
 static void
@@ -354,7 +354,7 @@ gdk_offscreen_window_draw_polygon (GdkDrawable  *drawable,
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
   GdkDrawable *real_drawable = get_real_drawable (offscreen);
-  
+
   gdk_draw_polygon (real_drawable,
 		    gc,
 		    filled,
@@ -364,10 +364,10 @@ gdk_offscreen_window_draw_polygon (GdkDrawable  *drawable,
   if (npoints > 0)
     {
       int min_x, min_y, max_x, max_y, i;
-      
+
       min_x = max_x = points[0].x;
       min_y = max_y = points[0].y;
-      
+
 	for (i = 1; i < npoints; i++)
 	  {
 	    min_x = MIN (min_x, points[i].x);
@@ -375,7 +375,7 @@ gdk_offscreen_window_draw_polygon (GdkDrawable  *drawable,
 	    min_y = MIN (min_y, points[i].y);
 	    max_y = MAX (max_y, points[i].y);
 	  }
-	
+
 	add_damage (offscreen, min_x, min_y,
 		    max_x - min_x,
 		    max_y - min_y);
@@ -450,10 +450,10 @@ gdk_offscreen_window_draw_points (GdkDrawable  *drawable,
   if (npoints > 0)
     {
       int min_x, min_y, max_x, max_y, i;
-      
+
       min_x = max_x = points[0].x;
       min_y = max_y = points[0].y;
-      
+
 	for (i = 1; i < npoints; i++)
 	  {
 	    min_x = MIN (min_x, points[i].x);
@@ -461,7 +461,7 @@ gdk_offscreen_window_draw_points (GdkDrawable  *drawable,
 	    min_y = MIN (min_y, points[i].y);
 	    max_y = MAX (max_y, points[i].y);
 	  }
-	
+
 	add_damage (offscreen, min_x, min_y,
 		    max_x - min_x,
 		    max_y - min_y);
@@ -485,10 +485,10 @@ gdk_offscreen_window_draw_segments (GdkDrawable  *drawable,
   if (nsegs > 0)
     {
       int min_x, min_y, max_x, max_y, i;
-      
+
       min_x = max_x = segs[0].x1;
       min_y = max_y = segs[0].y1;
-      
+
 	for (i = 1; i < nsegs; i++)
 	  {
 	    min_x = MIN (min_x, segs[i].x1);
@@ -500,7 +500,7 @@ gdk_offscreen_window_draw_segments (GdkDrawable  *drawable,
 	    min_y = MIN (min_y, segs[i].y2);
 	    max_y = MAX (max_y, segs[i].y2);
 	  }
-	
+
 	add_damage (offscreen, min_x, min_y,
 		    max_x - min_x,
 		    max_y - min_y);
@@ -573,7 +573,7 @@ gdk_offscreen_window_draw_pixbuf (GdkDrawable *drawable,
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
   GdkDrawable *real_drawable = get_real_drawable (offscreen);
-  
+
   gdk_draw_pixbuf (real_drawable,
 		   gc,
 		   pixbuf,
@@ -591,7 +591,7 @@ gdk_offscreen_window_draw_pixbuf (GdkDrawable *drawable,
 
 }
 
-void 
+void
 _gdk_offscreen_window_new (GdkWindow     *window,
 			   GdkScreen     *screen,
 			   GdkVisual     *visual,
@@ -606,7 +606,7 @@ _gdk_offscreen_window_new (GdkWindow     *window,
 
   if (attributes->wclass != GDK_INPUT_OUTPUT)
     return; /* Can't support input only offscreens */
-  
+
   private = (GdkWindowObject *)window;
 
   if (private->parent != NULL && GDK_WINDOW_DESTROYED (private->parent))
@@ -655,7 +655,7 @@ gdk_offscreen_window_reparent (GdkWindow *window,
       /* No input-output children of input-only windows */
       if (new_parent_private->input_only && !private->input_only)
 	return FALSE;
-      
+
       /* Don't create loops in hierarchy */
       if (is_parent_of (window, new_parent))
 	return FALSE;
@@ -681,7 +681,7 @@ gdk_offscreen_window_reparent (GdkWindow *window,
   _gdk_syntesize_crossing_events_for_geometry_change (window);
   if (old_parent)
     _gdk_syntesize_crossing_events_for_geometry_change (GDK_WINDOW (old_parent));
-  
+
   return was_mapped;
 }
 
@@ -704,12 +704,7 @@ gdk_offscreen_window_get_pointer (GdkWindow       *window,
 				  gint            *y,
 				  GdkModifierType *mask)
 {
-  *x = 0;
-  *y = 0;
-  *mask = 0;
-
-  /* TODO: Implement this by signal emission */
-
+  /* TODO: Base on signals */
   return TRUE;
 }
 
@@ -728,12 +723,12 @@ gdk_window_get_offscreen_pixmap (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkOffscreenWindow *offscreen;
-  
+
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
   if (!GDK_IS_OFFSCREEN_WINDOW (private->impl))
     return NULL;
-  
+
   offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
   return offscreen->pixmap;
 }
@@ -789,7 +784,7 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
     {
       private->width = width;
       private->height = height;
-      
+
       old_pixmap = offscreen->pixmap;
       offscreen->pixmap = gdk_pixmap_new (GDK_DRAWABLE (old_pixmap),
 					  width,
@@ -804,7 +799,7 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
 			 -1, -1);
       g_object_unref (old_pixmap);
     }
-  
+
   if (GDK_WINDOW_IS_MAPPED (private))
     {
       // TODO: Only invalidate new area, i.e. for larger windows
@@ -815,11 +810,11 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
 
 static void
 gdk_offscreen_window_move_resize (GdkWindow *window,
-                                  gboolean   with_move,
+				  gboolean   with_move,
 				  gint       x,
-                                  gint       y,
+				  gint       y,
 				  gint       width,
-                                  gint       height)
+				  gint       height)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkOffscreenWindow *offscreen;
@@ -952,9 +947,9 @@ gdk_offscreen_window_set_back_pixmap (GdkWindow *window,
 
 static void
 gdk_offscreen_window_shape_combine_region (GdkWindow       *window,
-                                           const GdkRegion *shape_region,
-                                           gint             offset_x,
-                                           gint             offset_y)
+					   const GdkRegion *shape_region,
+					   gint             offset_x,
+					   gint             offset_y)
 {
 }
 

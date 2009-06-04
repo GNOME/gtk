@@ -656,6 +656,9 @@ GdkWindow *gdk_get_default_root_window (void);
 
 /* Offscreen redirection */
 GdkPixmap *gdk_window_get_offscreen_pixmap   (GdkWindow     *window);
+void       gdk_window_set_has_offscreen_children (GdkWindow     *window,
+						  gboolean       has_offscreen_children);
+gboolean   gdk_window_get_has_offscreen_children (GdkWindow     *window);
 
 void       gdk_window_redirect_to_drawable   (GdkWindow     *window,
                                               GdkDrawable   *drawable,
