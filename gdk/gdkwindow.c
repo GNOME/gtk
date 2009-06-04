@@ -7796,6 +7796,38 @@ convert_toplevel_coords_to_window (GdkWindow *window,
 }
 
 GdkWindow *
+_gdk_window_find_child_at (GdkWindow *window,
+			   int x, int y)
+{
+  GdkWindowObject *private, *sub;
+  double child_x, child_y;
+  GList *l;
+
+  private = (GdkWindowObject *)window;
+
+  if (point_in_window (private, x, y))
+    {
+      /* Children is ordered in reverse stack order, i.e. first is topmost */
+      for (l = private->children; l != NULL; l = l->next)
+	{
+	  sub = l->data;
+
+	  if (!GDK_WINDOW_IS_MAPPED (sub))
+	    continue;
+
+	  convert_coords_to_child (sub,
+				   x, y,
+				   &child_x, &child_y);
+	  if (point_in_window (sub, child_x, child_y))
+	    return (GdkWindow *)sub;
+	}
+    }
+
+  return NULL;
+}
+
+
+GdkWindow *
 _gdk_window_find_descendant_at (GdkWindow *toplevel,
 				double x, double y,
 				double *found_x,

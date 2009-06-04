@@ -517,17 +517,17 @@ gdk_display_real_get_window_at_pointer (GdkDisplay *display,
   if (window)
     {
       double xx, yy;
-      
+
       window = _gdk_window_find_descendant_at (window,
-					       x, y, 
+					       x, y,
 					       &xx, &yy);
       x = floor (xx + 0.5);
       y = floor (yy + 0.5);
     }
-  
+
   *win_x = x;
   *win_y = y;
-  
+
   return window;
 }
 
@@ -545,35 +545,20 @@ gdk_window_real_window_get_pointer (GdkDisplay       *display,
 
   private = (GdkWindowObject *) window;
 
-  pointer_window = _gdk_windowing_window_get_pointer (display,
-                                                      window,
-                                                      &tmpx, &tmpy,
-                                                      mask);
+  _gdk_windowing_window_get_pointer (display,
+				     window,
+				     &tmpx, &tmpy,
+				     mask);
   /* We got the coords on the impl, conver to the window */
   tmpx -= private->abs_x;
   tmpy -= private->abs_y;
-  
+
   if (x)
     *x = tmpx;
   if (y)
     *y = tmpy;
 
-  /* We need to recalculate the true child window with the pointer in it
-     due to possible client side child windows */
-  if (pointer_window != NULL)
-    {
-      /* First get the pointer coords relative to pointer_window */
-      _gdk_windowing_window_get_pointer (display,
-					 pointer_window,
-					 &tmpx, &tmpy,
-					 &tmp_mask);
-      /* Then convert that to a client side window */
-      pointer_window = _gdk_window_find_descendant_at (pointer_window,
-						       tmpx, tmpy, 
-						       NULL, NULL);
-    }
-
-  return pointer_window;
+  return _gdk_window_find_child_at (window, x, y);
 }
 
 /**
