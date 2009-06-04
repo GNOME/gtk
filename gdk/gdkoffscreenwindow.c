@@ -698,6 +698,21 @@ gdk_offscreen_window_get_origin (GdkWindow *window,
   return TRUE;
 }
 
+static gboolean
+gdk_offscreen_window_get_pointer (GdkWindow       *window,
+				  gint            *x,
+				  gint            *y,
+				  GdkModifierType *mask)
+{
+  *x = 0;
+  *y = 0;
+  *mask = 0;
+
+  /* TODO: Implement this by signal emission */
+
+  return TRUE;
+}
+
 /**
  * gdk_window_get_offscreen_pixmap:
  * @window: a #GdkWindow
@@ -1079,6 +1094,7 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
   iface->queue_translation = gdk_offscreen_window_queue_translation;
   iface->get_origin = gdk_offscreen_window_get_origin;
+  iface->get_pointer = gdk_offscreen_window_get_pointer;
   iface->destroy = gdk_offscreen_window_destroy;
 }
 

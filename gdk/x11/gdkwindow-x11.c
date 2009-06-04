@@ -3087,14 +3087,14 @@ _gdk_windowing_get_pointer (GdkDisplay       *display,
   *mask = xmask;
 }
 
-GdkWindow*
-_gdk_windowing_window_get_pointer (GdkDisplay      *display,
-				   GdkWindow       *window,
-				   gint            *x,
-				   gint            *y,
-				   GdkModifierType *mask)
+static gboolean
+gdk_window_x11_get_pointer (GdkWindow       *window,
+			    gint            *x,
+			    gint            *y,
+			    GdkModifierType *mask)
 {
-  GdkWindow *return_val;
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+  gboolean return_val;
   Window root;
   Window child;
   int rootx, rooty;
@@ -3102,37 +3102,38 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
   int winy = 0;
   unsigned int xmask = 0;
 
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), FALSE);
+
   
-  return_val = NULL;
-  if (!GDK_WINDOW_DESTROYED (window)) 
+  return_val = TRUE;
+  if (!GDK_WINDOW_DESTROYED (window))
     {
-      if (G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client)) 
+      if (G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
 	{
 	  if (XQueryPointer (GDK_WINDOW_XDISPLAY (window),
 			     GDK_WINDOW_XID (window),
 			     &root, &child, &rootx, &rooty, &winx, &winy, &xmask))
 	    {
 	      if (child)
-		return_val = gdk_window_lookup_for_display (GDK_WINDOW_DISPLAY (window), child);
+		return_val = gdk_window_lookup_for_display (GDK_WINDOW_DISPLAY (window), child) != NULL;
 	    }
-	} 
-      else 
+	}
+      else
 	{
 	  GdkScreen *screen;
 	  int originx, originy;
-	  _gdk_windowing_get_pointer (gdk_drawable_get_display (window), &screen, 
+	  _gdk_windowing_get_pointer (gdk_drawable_get_display (window), &screen,
 				      &rootx, &rooty, &xmask);
 	  gdk_window_get_origin (window, &originx, &originy);
 	  winx = rootx - originx;
 	  winy = rooty - originy;
 	}
     }
-  
+
   *x = winx;
   *y = winy;
   *mask = xmask;
-  
+
   return return_val;
 }
 
@@ -5575,6 +5576,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->set_cursor = gdk_window_x11_set_cursor;
   iface->get_geometry = gdk_window_x11_get_geometry;
   iface->get_origin = gdk_window_x11_get_origin;
+  iface->get_pointer = gdk_window_x11_get_pointer;
   iface->get_deskrelative_origin = gdk_window_x11_get_deskrelative_origin;
   iface->shape_combine_region = gdk_window_x11_shape_combine_region;
   iface->input_shape_combine_region = gdk_window_x11_input_shape_combine_region;

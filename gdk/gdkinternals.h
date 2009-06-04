@@ -448,11 +448,6 @@ void       _gdk_windowing_get_pointer        (GdkDisplay       *display,
 					      gint             *x,
 					      gint             *y,
 					      GdkModifierType  *mask);
-GdkWindow* _gdk_windowing_window_get_pointer (GdkDisplay       *display,
-					      GdkWindow        *window,
-					      gint             *x,
-					      gint             *y,
-					      GdkModifierType  *mask);
 GdkWindow* _gdk_windowing_window_at_pointer  (GdkDisplay       *display,
 					      gint             *win_x,
 					      gint             *win_y,

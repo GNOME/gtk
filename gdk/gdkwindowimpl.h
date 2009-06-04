@@ -86,6 +86,10 @@ struct _GdkWindowImplIface
   gint         (* get_deskrelative_origin) (GdkWindow       *window,
                                          gint            *x,
                                          gint            *y);
+  gboolean     (* get_pointer)          (GdkWindow       *window,
+                                         gint            *x,
+                                         gint            *y,
+					 GdkModifierType  *mask);
 
   void         (* shape_combine_region) (GdkWindow       *window,
                                          const GdkRegion *shape_region,

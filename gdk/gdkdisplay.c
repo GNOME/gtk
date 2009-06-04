@@ -539,16 +539,15 @@ gdk_window_real_window_get_pointer (GdkDisplay       *display,
                                     GdkModifierType  *mask)
 {
   GdkWindowObject *private;
-  GdkWindow *pointer_window;
   gint tmpx, tmpy;
   GdkModifierType tmp_mask;
+  gboolean normal_child;
 
   private = (GdkWindowObject *) window;
 
-  _gdk_windowing_window_get_pointer (display,
-				     window,
-				     &tmpx, &tmpy,
-				     mask);
+  normal_child = GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_pointer (window,
+									 &tmpx, &tmpy,
+									 &tmp_mask);
   /* We got the coords on the impl, conver to the window */
   tmpx -= private->abs_x;
   tmpy -= private->abs_y;
@@ -557,8 +556,12 @@ gdk_window_real_window_get_pointer (GdkDisplay       *display,
     *x = tmpx;
   if (y)
     *y = tmpy;
+  if (mask)
+    *mask = tmp_mask;
 
-  return _gdk_window_find_child_at (window, x, y);
+  if (normal_child)
+    return _gdk_window_find_child_at (window, tmpx, tmpy);
+  return NULL;
 }
 
 /**
@@ -853,9 +856,8 @@ synthesize_crossing_events (GdkDisplay *display,
       src_toplevel == dest_toplevel)
     {
       /* Same toplevels */
-      _gdk_windowing_window_get_pointer (display,
-					 dest_toplevel,
-					 &x, &y, &state);
+      gdk_window_get_pointer (dest_toplevel,
+			      &x, &y, &state);
       _gdk_syntesize_crossing_events (display,
 				      src_window,
 				      dest_window,
@@ -867,9 +869,8 @@ synthesize_crossing_events (GdkDisplay *display,
     }
   else if (dest_toplevel == NULL)
     {
-      _gdk_windowing_window_get_pointer (display,
-					 src_toplevel,
-					 &x, &y, &state);
+      gdk_window_get_pointer (src_toplevel,
+			      &x, &y, &state);
       _gdk_syntesize_crossing_events (display,
 				      src_window,
 				      NULL,
@@ -882,9 +883,8 @@ synthesize_crossing_events (GdkDisplay *display,
   else
     {
       /* Different toplevels */
-      _gdk_windowing_window_get_pointer (display,
-					 src_toplevel,
-					 &x, &y, &state);
+      gdk_window_get_pointer (src_toplevel,
+			      &x, &y, &state);
       _gdk_syntesize_crossing_events (display,
 				      src_window,
 				      NULL,
@@ -893,9 +893,8 @@ synthesize_crossing_events (GdkDisplay *display,
 				      time,
 				      NULL,
 				      serial);
-      _gdk_windowing_window_get_pointer (display,
-					 dest_toplevel,
-					 &x, &y, &state);
+      gdk_window_get_pointer (dest_toplevel,
+			      &x, &y, &state);
       _gdk_syntesize_crossing_events (display,
 				      NULL,
 				      dest_window,
