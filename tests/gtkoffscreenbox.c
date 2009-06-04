@@ -118,7 +118,7 @@ gtk_offscreen_box_realize (GtkWidget *widget)
       attributes.height = offscreen_box->child1->allocation.height;
       start_y += offscreen_box->child1->allocation.height;
     }
-  offscreen_box->offscreen_window1 = gdk_window_new (NULL,
+  offscreen_box->offscreen_window1 = gdk_window_new (gtk_widget_get_root_window (widget),
 						     &attributes, attributes_mask);
   gdk_window_set_user_data (offscreen_box->offscreen_window1, widget);
   if (offscreen_box->child1)
@@ -132,7 +132,7 @@ gtk_offscreen_box_realize (GtkWidget *widget)
       attributes.width = offscreen_box->child2->allocation.width;
       attributes.height = offscreen_box->child2->allocation.height;
     }
-  offscreen_box->offscreen_window2 = gdk_window_new (NULL,
+  offscreen_box->offscreen_window2 = gdk_window_new (gtk_widget_get_root_window (widget),
 						     &attributes, attributes_mask);
   gdk_window_set_user_data (offscreen_box->offscreen_window2, widget);
   if (offscreen_box->child2)
