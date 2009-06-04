@@ -281,6 +281,7 @@ static void
 gdk_offscreen_window_draw_drawable (GdkDrawable *drawable,
 				    GdkGC       *gc,
 				    GdkPixmap   *src,
+				    GdkDrawable *original_src,
 				    gint         xsrc,
 				    gint         ysrc,
 				    gint         xdest,
