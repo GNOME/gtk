@@ -36,6 +36,76 @@ static GType       gtk_offscreen_box_child_type    (GtkContainer    *container);
 G_DEFINE_TYPE (GtkOffscreenBox, gtk_offscreen_box, GTK_TYPE_CONTAINER);
 
 static void
+to_child_2 (GtkOffscreenBox *offscreen_box,
+	    double widget_x, double widget_y,
+	    double *x_out, double *y_out)
+{
+  GtkAllocation child_area;
+  double x, y, xr, yr;
+  double cos_angle, sin_angle;
+
+  x = widget_x;
+  y = widget_y;
+
+  if (offscreen_box->child1 && GTK_WIDGET_VISIBLE (offscreen_box->child1))
+    y -= offscreen_box->child1->allocation.height;
+
+  child_area = offscreen_box->child2->allocation;
+
+  x -= child_area.width / 2;
+  y -= child_area.height / 2;
+
+  cos_angle = cos (-offscreen_box->angle);
+  sin_angle = sin (-offscreen_box->angle);
+
+  xr = x * cos_angle - y * sin_angle;
+  yr = x * sin_angle + y * cos_angle;
+  x = xr;
+  y = yr;
+
+  x += child_area.width / 2;
+  y += child_area.height / 2;
+
+  *x_out = x;
+  *y_out = y;
+}
+
+static void
+to_parent_2 (GtkOffscreenBox *offscreen_box,
+	     double offscreen_x, double offscreen_y,
+	     double *x_out, double *y_out)
+{
+  GtkAllocation child_area;
+  double x, y, xr, yr;
+  double cos_angle, sin_angle;
+
+  child_area = offscreen_box->child2->allocation;
+
+  x = offscreen_x;
+  y = offscreen_y;
+
+  x -= child_area.width / 2;
+  y -= child_area.height / 2;
+
+  cos_angle = cos (offscreen_box->angle);
+  sin_angle = sin (offscreen_box->angle);
+
+  xr = x * cos_angle - y * sin_angle;
+  yr = x * sin_angle + y * cos_angle;
+  x = xr;
+  y = yr;
+
+  x += child_area.width / 2;
+  y += child_area.height / 2;
+
+  if (offscreen_box->child1 && GTK_WIDGET_VISIBLE (offscreen_box->child1))
+    y += offscreen_box->child1->allocation.height;
+
+  *x_out = x;
+  *y_out = y;
+}
+
+static void
 gtk_offscreen_box_class_init (GtkOffscreenBoxClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -68,6 +138,101 @@ GtkWidget *
 gtk_offscreen_box_new (void)
 {
   return g_object_new (GTK_TYPE_OFFSCREEN_BOX, NULL);
+}
+
+static GdkWindow *
+get_offscreen_parent (GdkWindow *offscreen_window,
+		      GtkOffscreenBox *offscreen_box)
+{
+  return GTK_WIDGET (offscreen_box)->window;
+}
+
+static GdkWindow *
+pick_offscreen_child (GdkWindow *offscreen_window,
+		      double widget_x, double widget_y,
+		      GtkOffscreenBox *offscreen_box)
+{
+ GtkAllocation child_area;
+ double x, y;
+
+ /* First check for child 2 */
+ if (offscreen_box->child2 &&
+     GTK_WIDGET_VISIBLE (offscreen_box->child2))
+    {
+      to_child_2 (offscreen_box,
+		  widget_x, widget_y,
+		  &x, &y);
+
+      child_area = offscreen_box->child2->allocation;
+
+      if (x >= 0 && x < child_area.width &&
+	  y >= 0 && y < child_area.height)
+	return offscreen_box->offscreen_window2;
+    }
+
+ if (offscreen_box->child1 && GTK_WIDGET_VISIBLE (offscreen_box->child1))
+   {
+     x = widget_x;
+     y = widget_y;
+
+     child_area = offscreen_box->child1->allocation;
+
+     if (x >= 0 && x < child_area.width &&
+	 y >= 0 && y < child_area.height)
+       return offscreen_box->offscreen_window1;
+   }
+
+  return NULL;
+}
+
+static void
+offscreen_window_to_parent1 (GdkWindow       *offscreen_window,
+			     double           offscreen_x,
+			     double           offscreen_y,
+			     double          *parent_x,
+			     double          *parent_y,
+			     GtkOffscreenBox *offscreen_box)
+{
+  *parent_x = offscreen_x;
+  *parent_y = offscreen_y;
+}
+
+static void
+offscreen_window_from_parent1 (GdkWindow       *window,
+			       double           parent_x,
+			       double           parent_y,
+			       double          *offscreen_x,
+			       double          *offscreen_y,
+			       GtkOffscreenBox *offscreen_box)
+{
+  *offscreen_x = parent_x;
+  *offscreen_y = parent_y;
+}
+
+static void
+offscreen_window_to_parent2 (GdkWindow       *offscreen_window,
+			     double           offscreen_x,
+			     double           offscreen_y,
+			     double          *parent_x,
+			     double          *parent_y,
+			     GtkOffscreenBox *offscreen_box)
+{
+  to_parent_2 (offscreen_box,
+	      offscreen_x, offscreen_y,
+	      parent_x, parent_y);
+}
+
+static void
+offscreen_window_from_parent2 (GdkWindow       *window,
+			       double           parent_x,
+			       double           parent_y,
+			       double          *offscreen_x,
+			       double          *offscreen_y,
+			       GtkOffscreenBox *offscreen_box)
+{
+  to_child_2 (offscreen_box,
+	      parent_x, parent_y,
+	      offscreen_x, offscreen_y);
 }
 
 static void
@@ -108,8 +273,12 @@ gtk_offscreen_box_realize (GtkWidget *widget)
 				   &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, widget);
 
+  gdk_window_set_has_offscreen_children (widget->window, TRUE);
+  g_signal_connect (widget->window, "pick-offscreen-child",
+		    G_CALLBACK (pick_offscreen_child), offscreen_box);
+
   attributes.window_type = GDK_WINDOW_OFFSCREEN;
-  
+
   /* Child 1 */
   attributes.x = attributes.y = 0;
   if (offscreen_box->child1 && GTK_WIDGET_VISIBLE (offscreen_box->child1))
@@ -124,6 +293,13 @@ gtk_offscreen_box_realize (GtkWidget *widget)
   if (offscreen_box->child1)
     gtk_widget_set_parent_window (offscreen_box->child1, offscreen_box->offscreen_window1);
 
+  g_signal_connect (offscreen_box->offscreen_window1, "get-offscreen-parent",
+		    G_CALLBACK (get_offscreen_parent), offscreen_box);
+  g_signal_connect (offscreen_box->offscreen_window1, "to_parent",
+		    G_CALLBACK (offscreen_window_to_parent1), offscreen_box);
+  g_signal_connect (offscreen_box->offscreen_window1, "from_parent",
+		    G_CALLBACK (offscreen_window_from_parent1), offscreen_box);
+
   /* Child 2 */
   attributes.y = start_y;
   child_requisition.width = child_requisition.height = 0;
@@ -137,6 +313,12 @@ gtk_offscreen_box_realize (GtkWidget *widget)
   gdk_window_set_user_data (offscreen_box->offscreen_window2, widget);
   if (offscreen_box->child2)
     gtk_widget_set_parent_window (offscreen_box->child2, offscreen_box->offscreen_window2);
+  g_signal_connect (offscreen_box->offscreen_window2, "get-offscreen-parent",
+		    G_CALLBACK (get_offscreen_parent), offscreen_box);
+  g_signal_connect (offscreen_box->offscreen_window2, "to_parent",
+		    G_CALLBACK (offscreen_window_to_parent2), offscreen_box);
+  g_signal_connect (offscreen_box->offscreen_window2, "from_parent",
+		    G_CALLBACK (offscreen_window_from_parent2), offscreen_box);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 
