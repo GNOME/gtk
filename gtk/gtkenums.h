@@ -208,6 +208,15 @@ typedef enum
 
 typedef enum
 {
+  GTK_MESSAGE_INFO,
+  GTK_MESSAGE_WARNING,
+  GTK_MESSAGE_QUESTION,
+  GTK_MESSAGE_ERROR,
+  GTK_MESSAGE_OTHER
+} GtkMessageType;
+
+typedef enum
+{
   GTK_PIXELS,
   GTK_INCHES,
   GTK_CENTIMETERS

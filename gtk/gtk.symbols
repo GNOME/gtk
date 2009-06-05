@@ -5155,6 +5155,23 @@ gtk_win32_embed_widget_get_type G_GNUC_CONST
 #endif
 #endif
 
+#if IN_HEADER(__GTK_INFO_BAR_H__)
+#if IN_FILE(__GTK_INFO_BAR_C__)
+gtk_info_bar_get_type G_GNUC_CONST
+gtk_info_bar_new
+gtk_info_bar_new_with_buttons
+gtk_info_bar_get_action_area
+gtk_info_bar_get_content_area
+gtk_info_bar_add_action_widget
+gtk_info_bar_add_button
+gtk_info_bar_add_buttons
+gtk_info_bar_set_response_sensitive
+gtk_info_bar_set_default_response
+gtk_info_bar_set_message_type
+gtk_info_bar_get_message_type
+#endif
+#endif
+
 #ifdef INCLUDE_VARIABLES
 gtk_binary_age
 gtk_interface_age

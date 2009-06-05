@@ -230,6 +230,7 @@ gtk_public_h_sources =          \
 	gtkimcontextsimple.h	\
 	gtkimmodule.h		\
 	gtkimmulticontext.h	\
+	gtkinfobar.h		\
 	gtkinputdialog.h	\
 	gtkinvisible.h		\
 	gtkitem.h		\
@@ -486,6 +487,7 @@ gtk_base_c_sources =            \
 	gtkimcontextsimple.c	\
 	gtkimmodule.c		\
 	gtkimmulticontext.c	\
+	gtkinfobar.c		\
 	gtkinputdialog.c	\
 	gtkinvisible.c		\
 	gtkitem.c		\

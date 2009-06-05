@@ -110,6 +110,7 @@
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtkimcontextsimple.h>
 #include <gtk/gtkimmulticontext.h>
+#include <gtk/gtkinfobar.h>
 #include <gtk/gtkinputdialog.h>
 #include <gtk/gtkinvisible.h>
 #include <gtk/gtkitem.h>

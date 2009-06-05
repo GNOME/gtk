@@ -2589,6 +2589,35 @@ gtk_message_dialog_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkinfobar</FILE>
+<TITLE>GtkInfoBar</TITLE>
+GtkInfoBar
+gtk_info_bar_new
+gtk_info_bar_new_with_buttons
+gtk_info_bar_set_contents
+gtk_info_bar_add_action_widget
+gtk_info_bar_add_button
+gtk_info_bar_add_buttons
+gtk_info_bar_set_response_sensitive
+gtk_info_bar_set_default_response
+gtk_info_bar_response
+gtk_info_bar_set_message_type
+gtk_info_bar_get_message_type
+
+<SUBSECTION Standard>
+GTK_TYPE_INFO_BAR
+GTK_INFO_BAR
+GTK_INFO_BAR_CLASS
+GTK_IS_INFO_BAR
+GTK_IS_INFO_BAR_CLASS
+GTK_INFO_BAR_GET_CLASS
+
+<SUBSECTION Private>
+gtk_info_bar_get_type
+GtkMessageAreaPrivate
+</SECTION>
+
+<SECTION>
 <FILE>gtkmisc</FILE>
 <TITLE>GtkMisc</TITLE>
 GtkMisc
