@@ -138,16 +138,6 @@ gdk_x11_convert_grab_status (gint status)
   return 0;
 }
 
-struct XPointerGrabInfo {
-  GdkDisplay *display;
-  GdkWindow *window;
-  GdkWindow *native_window;
-  gboolean owner_events;
-  gulong serial;
-  guint event_mask;
-  guint32 time;
-};
-
 static void
 has_pointer_grab_callback (GdkDisplay *display,
 			   gpointer data,
@@ -156,81 +146,38 @@ has_pointer_grab_callback (GdkDisplay *display,
   _gdk_display_pointer_grab_update (display, serial);
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_pointer_grab
- *
- *   Grabs the pointer to a specific window
- *
- * Arguments:
- *   "window" is the window which will receive the grab
- *   "owner_events" specifies whether events will be reported as is,
- *     or relative to "window"
- *   "event_mask" masks only interesting events
- *   "confine_to" limits the cursor movement to the specified window
- *   "cursor" changes the cursor for the duration of the grab
- *   "time" specifies the time
- *
- * Results:
- *
- * Side effects:
- *   requires a corresponding call to gdk_pointer_ungrab
- *
- *--------------------------------------------------------------
- */
-
 GdkGrabStatus
-gdk_pointer_grab (GdkWindow *	  window,
-		  gboolean	  owner_events,
-		  GdkEventMask	  event_mask,
-		  GdkWindow *	  confine_to,
-		  GdkCursor *	  cursor,
-		  guint32	  time)
+_gdk_windowing_pointer_grab (GdkWindow *window,
+			     GdkWindow *native,
+			     gboolean owner_events,
+			     GdkEventMask event_mask,
+			     GdkWindow *confine_to,
+			     GdkCursor *cursor,
+			     guint32 time)
 {
   gint return_val;
   GdkCursorPrivate *cursor_private;
-  GdkWindow *native;
   GdkDisplayX11 *display_x11;
   guint xevent_mask;
   Window xwindow;
   Window xconfine_to;
   Cursor xcursor;
-  unsigned long serial;
   int i;
-  
-  g_return_val_if_fail (window != NULL, 0);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
-  g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
 
-  native = gdk_window_get_toplevel (window);
-
-  /* We need a native window for confine to to work, ensure we have one */
-  if (confine_to)
-    gdk_window_ensure_native (confine_to);
-  
-  /* TODO: What do we do for offscreens and  their children? We need to proxy the grab somehow */
-  if (!GDK_IS_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (native)->impl))
-    return GDK_GRAB_SUCCESS;
-
-  if (!_gdk_window_has_impl (window) &&
-      !gdk_window_is_viewable (window))
-    return GDK_GRAB_NOT_VIEWABLE;
-  
   if (confine_to)
     confine_to = _gdk_window_get_impl_window (confine_to);
 
   display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (native));
 
   cursor_private = (GdkCursorPrivate*) cursor;
-  
+
   xwindow = GDK_WINDOW_XID (native);
-  serial = NextRequest (GDK_WINDOW_XDISPLAY (native));
-  
+
   if (!confine_to || GDK_WINDOW_DESTROYED (confine_to))
     xconfine_to = None;
   else
     xconfine_to = GDK_WINDOW_XID (confine_to);
-  
+
   if (!cursor)
     xcursor = None;
   else
@@ -238,7 +185,7 @@ gdk_pointer_grab (GdkWindow *	  window,
       _gdk_x11_cursor_update_theme (cursor);
       xcursor = cursor_private->xcursor;
     }
-  
+
   xevent_mask = 0;
   for (i = 0; i < _gdk_nenvent_masks; i++)
     {
@@ -250,7 +197,7 @@ gdk_pointer_grab (GdkWindow *	  window,
    * hints. If we set a native one we just wouldn't get any events.
    */
   xevent_mask &= ~PointerMotionHintMask;
-  
+
   return_val = _gdk_input_grab_pointer (window,
 					native,
 					owner_events,
@@ -258,7 +205,7 @@ gdk_pointer_grab (GdkWindow *	  window,
 					confine_to,
 					time);
 
-  if (return_val == GrabSuccess || 
+  if (return_val == GrabSuccess ||
       G_UNLIKELY (!display_x11->trusted_client && return_val == AlreadyGrabbed))
     {
       if (!GDK_WINDOW_DESTROYED (native))
@@ -280,22 +227,11 @@ gdk_pointer_grab (GdkWindow *	  window,
       else
 	return_val = AlreadyGrabbed;
     }
-  
-  if (return_val == GrabSuccess)
-    {
-      _gdk_display_add_pointer_grab (GDK_DISPLAY_OBJECT (display_x11),
-				     window,
-				     native,
-				     owner_events,
-				     event_mask,
-				     serial,
-				     time,
-				     FALSE);
 
-      _gdk_x11_roundtrip_async (GDK_DISPLAY_OBJECT (display_x11), 
-				has_pointer_grab_callback,
-				NULL);
-    }
+  if (return_val == GrabSuccess)
+    _gdk_x11_roundtrip_async (GDK_DISPLAY_OBJECT (display_x11),
+			      has_pointer_grab_callback,
+			      NULL);
 
   return gdk_x11_convert_grab_status (return_val);
 }

@@ -453,6 +453,13 @@ GdkWindow* _gdk_windowing_window_at_pointer  (GdkDisplay       *display,
 					      gint             *win_x,
 					      gint             *win_y,
 					      GdkModifierType  *mask);
+GdkGrabStatus _gdk_windowing_pointer_grab    (GdkWindow        *window,
+					      GdkWindow        *native,
+					      gboolean          owner_events,
+					      GdkEventMask      event_mask,
+					      GdkWindow        *confine_to,
+					      GdkCursor        *cursor,
+					      guint32           time);
 void _gdk_windowing_got_event                (GdkDisplay       *display,
 					      GList            *event_link,
 					      GdkEvent         *event,

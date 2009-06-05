@@ -8434,6 +8434,112 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
   _gdk_display_enable_motion_hints (display);
 }
 
+static GdkWindow *
+gdk_window_get_offscreen_parent (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindow *res;
+
+  res = NULL;
+  g_signal_emit_by_name (private->impl_window,
+			 "get-offscreen-parent",
+			 &res);
+
+  return res;
+}
+
+/*
+ *--------------------------------------------------------------
+ * gdk_pointer_grab
+ *
+ *   Grabs the pointer to a specific window
+ *
+ * Arguments:
+ *   "window" is the window which will receive the grab
+ *   "owner_events" specifies whether events will be reported as is,
+ *     or relative to "window"
+ *   "event_mask" masks only interesting events
+ *   "confine_to" limits the cursor movement to the specified window
+ *   "cursor" changes the cursor for the duration of the grab
+ *   "time" specifies the time
+ *
+ * Results:
+ *
+ * Side effects:
+ *   requires a corresponding call to gdk_pointer_ungrab
+ *
+ *--------------------------------------------------------------
+ */
+GdkGrabStatus
+gdk_pointer_grab (GdkWindow *	  window,
+		  gboolean	  owner_events,
+		  GdkEventMask	  event_mask,
+		  GdkWindow *	  confine_to,
+		  GdkCursor *	  cursor,
+		  guint32	  time)
+{
+  GdkWindow *native;
+  GdkDisplay *display;
+  GdkGrabStatus res;
+  gulong serial;
+
+  g_return_val_if_fail (window != NULL, 0);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
+
+  /* We need a native window for confine to to work, ensure we have one */
+  if (confine_to)
+    {
+      if (!gdk_window_ensure_native (confine_to))
+	{
+	  g_warning ("Can't confine to grabbed window, not native");
+	  confine_to = NULL;
+	}
+    }
+
+  /* Non-viewable client side window => fail */
+  if (!_gdk_window_has_impl (window) &&
+      !gdk_window_is_viewable (window))
+    return GDK_GRAB_NOT_VIEWABLE;
+
+  native = gdk_window_get_toplevel (window);
+  while (gdk_window_is_offscreen ((GdkWindowObject *)native))
+    {
+      native = gdk_window_get_offscreen_parent (native);
+
+      if (native == NULL ||
+	  (!_gdk_window_has_impl (native) &&
+	   !gdk_window_is_viewable (native)))
+	return GDK_GRAB_NOT_VIEWABLE;
+
+      native = gdk_window_get_toplevel (native);
+    }
+
+  display = gdk_drawable_get_display (window);
+
+  serial = _gdk_windowing_window_get_next_serial (display);
+
+  res = _gdk_windowing_pointer_grab (window,
+				     native,
+				     owner_events,
+				     event_mask,
+				     confine_to,
+				     cursor,
+				     time);
+
+  if (res == GDK_GRAB_SUCCESS)
+    _gdk_display_add_pointer_grab (display,
+				   window,
+				   native,
+				   owner_events,
+				   event_mask,
+				   serial,
+				   time,
+				   FALSE);
+
+  return res;
+}
+
 void
 gdk_window_set_has_offscreen_children (GdkWindow *window,
 				       gboolean has_offscreen_children)

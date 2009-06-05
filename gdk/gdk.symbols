@@ -69,7 +69,6 @@ gdk_get_use_xshm
 gdk_set_use_xshm
 #endif
 gdk_keyboard_grab
-gdk_pointer_grab
 #endif
 #endif
 
@@ -715,6 +714,7 @@ gdk_window_set_user_data
 gdk_window_thaw_toplevel_updates_libgtk_only
 gdk_window_thaw_updates
 gdk_window_set_composited
+gdk_pointer_grab
 #endif
 #endif
 
