@@ -1492,54 +1492,55 @@ if test "x$gdktarget" = "xx11"; then
     gtk_save_cppflags="$CPPFLAGS"
     CPPFLAGS="$CPPFLAGS $x_cflags"
   
-    case "$host" in
-      *-*-solaris*)
-          # Check for solaris
-	  AC_MSG_CHECKING(for Xinerama support on Solaris)
+    # Check for XFree
+    AC_MSG_CHECKING(for Xinerama support on XFree86)
 	  
-	  have_solaris_xinerama=false
-	  AC_CHECK_FUNC(XineramaGetInfo,
-	      [AC_CHECK_HEADER(X11/extensions/xinerama.h,
-  		  [have_solaris_xinerama=true], :,
-		  [#include <X11/Xlib.h>])])
-		
-          if $have_solaris_xinerama ; then
-            AC_DEFINE(HAVE_SOLARIS_XINERAMA, 1,
-                      [Define to 1 if solaris xinerama is available])
-	    AC_DEFINE(HAVE_XINERAMA, 1,
-                      [Define to 1 if xinerama is available])
-            AC_MSG_RESULT(yes)
-          else
-            AC_MSG_RESULT(no)
-          fi
-          ;;
-      *)
-	  # Check for XFree
-          AC_MSG_CHECKING(for Xinerama support on XFree86)
-	  
-          have_xfree_xinerama=false
-          if $PKG_CONFIG --exists xinerama ; then
-             have_xfree_xinerama=true
-             X_PACKAGES="$X_PACKAGES xinerama"
-          else    
-	      AC_CHECK_LIB(Xinerama, XineramaQueryExtension,
-	          [AC_CHECK_HEADER(X11/extensions/Xinerama.h, 
-	              [GTK_ADD_LIB(x_extra_libs,Xinerama)
-		      have_xfree_xinerama=true], :,
-                      [#include <X11/Xlib.h>])])
-          fi
+    have_xfree_xinerama=false
+    if $PKG_CONFIG --exists xinerama ; then
+       have_xfree_xinerama=true
+       X_PACKAGES="$X_PACKAGES xinerama"
+    else    
+       AC_CHECK_LIB(Xinerama, XineramaQueryExtension,
+	   [AC_CHECK_HEADER(X11/extensions/Xinerama.h, 
+	   [GTK_ADD_LIB(x_extra_libs,Xinerama)
+	   have_xfree_xinerama=true], :,
+           [#include <X11/Xlib.h>])])
+    fi
 
-          if $have_xfree_xinerama ; then
-            AC_DEFINE(HAVE_XFREE_XINERAMA, 1,
-                      [Define to 1 if XFree Xinerama is available])
-	    AC_DEFINE(HAVE_XINERAMA, 1,
-                      [Define to 1 is Xinerama is available])
-            AC_MSG_RESULT(yes)
-         else
-            AC_MSG_RESULT(no)
-         fi
-         ;;
-    esac
+    if $have_xfree_xinerama ; then
+      AC_DEFINE(HAVE_XFREE_XINERAMA, 1,
+                [Define to 1 if XFree Xinerama is available])
+      AC_DEFINE(HAVE_XINERAMA, 1,
+                [Define to 1 is Xinerama is available])
+      AC_MSG_RESULT(yes)
+    else
+      AC_MSG_RESULT(no)
+
+      case "$host" in
+        *-*-solaris*)
+            # Check for solaris
+	    AC_MSG_CHECKING(for Xinerama support on Solaris)
+	  
+	    have_solaris_xinerama=false
+	    AC_CHECK_FUNC(XineramaGetInfo,
+	        [AC_CHECK_HEADER(X11/extensions/xinerama.h,
+  	  	    [have_solaris_xinerama=true], :,
+		    [#include <X11/Xlib.h>])])
+		
+            if $have_solaris_xinerama ; then
+              AC_DEFINE(HAVE_SOLARIS_XINERAMA, 1,
+                        [Define to 1 if solaris xinerama is available])
+	      AC_DEFINE(HAVE_XINERAMA, 1,
+                        [Define to 1 if xinerama is available])
+              AC_MSG_RESULT(yes)
+            else
+              AC_MSG_RESULT(no)
+            fi
+            ;;
+        *)
+            ;;
+      esac
+    fi
   fi
   
   # set up things for XInput
