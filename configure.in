@@ -1424,9 +1424,8 @@ if test "x$gdktarget" = "xx11"; then
 
   # Check for shaped window extension
 
-  AC_CHECK_FUNC(XShapeCombineMask,
-      AC_DEFINE(HAVE_SHAPE_EXT, 1,
-                [Define to 1 if the XShape extension is available]))
+  AC_CHECK_FUNC(XShapeCombineMask, :,
+     [AC_MSG_ERROR([Shape extension not found, check your development headers])])
 
   # X SYNC check
   gtk_save_CFLAGS="$CFLAGS"
