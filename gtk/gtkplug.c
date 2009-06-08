@@ -188,6 +188,7 @@ gtk_plug_class_init (GtkPlugClass *class)
 							GDK_TYPE_WINDOW,
 							GTK_PARAM_READABLE));
 
+
   /**
    * GtkPlug::embedded:
    * @plug: the object on which the signal was emitted
@@ -212,6 +213,8 @@ gtk_plug_init (GtkPlug *plug)
   window = GTK_WINDOW (plug);
 
   window->type = GTK_WINDOW_TOPLEVEL;
+
+  gtk_window_disable_client_side_decorations (window);
 }
 
 static void

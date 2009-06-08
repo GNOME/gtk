@@ -277,6 +277,7 @@ gboolean   gtk_window_get_decorated            (GtkWindow *window);
 void       gtk_window_set_client_side_decorations (GtkWindow       *window,
                                                    GdkWMDecoration  decoration);
 GdkWMDecoration gtk_window_get_client_side_decorations (GtkWindow *window);
+void       gtk_window_disable_client_side_decorations (GtkWindow *window);
 void       gtk_window_set_deletable            (GtkWindow *window,
                                                 gboolean   setting);
 gboolean   gtk_window_get_deletable            (GtkWindow *window);
