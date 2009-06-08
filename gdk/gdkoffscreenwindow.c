@@ -698,13 +698,71 @@ gdk_offscreen_window_get_origin (GdkWindow *window,
   return TRUE;
 }
 
+static GdkWindow *
+get_offscreen_parent (GdkWindow *window)
+{
+  GdkWindowObject *private;
+  GdkWindow *res;
+
+  private = (GdkWindowObject *)window;
+
+  res = NULL;
+  g_signal_emit_by_name (private->impl_window,
+			 "get-offscreen-parent",
+			 &res);
+
+  return res;
+}
+
+static void
+from_parent (GdkWindow *window,
+	     double parent_x, double parent_y,
+	     double *offscreen_x, double *offscreen_y)
+{
+  GdkWindowObject *private;
+
+  private = (GdkWindowObject *)window;
+
+  g_signal_emit_by_name (private->impl_window,
+			 "from_parent",
+			 parent_x, parent_y,
+			 offscreen_x, offscreen_y,
+			 NULL);
+}
+
+
 static gboolean
 gdk_offscreen_window_get_pointer (GdkWindow       *window,
 				  gint            *x,
 				  gint            *y,
 				  GdkModifierType *mask)
 {
-  /* TODO: Base on signals */
+  int tmpx, tmpy;
+  double dtmpx, dtmpy;
+  GdkModifierType tmpmask;
+  GdkWindow *parent;
+
+  tmpx = 0;
+  tmpy = 0;
+  tmpmask = 0;
+
+  parent = get_offscreen_parent (window);
+  if (parent != NULL)
+    {
+      gdk_window_get_pointer (parent, &tmpx, &tmpy, &tmpmask);
+      from_parent (window,
+		   tmpx, tmpy,
+		   &dtmpx, &dtmpy);
+      tmpx = floor (dtmpx + 0.5);
+      tmpy = floor (dtmpy + 0.5);
+    }
+
+  if (x)
+    *x = tmpx;
+  if (y)
+    *y = tmpy;
+  if (mask)
+    *mask = tmpmask;
   return TRUE;
 }
 
