@@ -67,7 +67,7 @@
  * gtk_info_bar_new_with_buttons(). The sensitivity of action widgets
  * can be controlled with gtk_info_bar_set_response_sensitive().
  * To add widgets to the main content area of a #GtkInfoBar, use
- * gtk_info_bar_set_contents().
+ * gtk_info_bar_get_content_area() and add your widgets to the container.
  *
  * Similar to #GtkMessageDialog, the contents of a #GtkInfoBar can by
  * classified as error message, warning, informational message, etc,
@@ -82,7 +82,8 @@
  * gtk_widget_set_no_show_all (info_bar, TRUE);
  * message_label = gtk_label_new ("");
  * gtk_widget_show (message_label);
- * gtk_info_bar_set_contents (GTK_INFO_BAR (info_bar), message_label);
+ * content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
+ * gtk_container_add (GTK_CONTAINER (content_area), message_label);
  * gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
  *                          GTK_STOCK_OK, GTK_RESPONSE_OK);
  * g_signal_connect (info_bar, "response",
