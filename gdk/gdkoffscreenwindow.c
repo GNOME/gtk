@@ -685,18 +685,6 @@ gdk_offscreen_window_reparent (GdkWindow *window,
   return was_mapped;
 }
 
-static gint
-gdk_offscreen_window_get_origin (GdkWindow *window,
-				 gint      *x,
-				 gint      *y)
-{
-  if (x)
-    *x = 0;
-  if (y)
-    *y = 0;
-
-  return TRUE;
-}
 
 static GdkWindow *
 get_offscreen_parent (GdkWindow *window)
@@ -730,6 +718,89 @@ from_parent (GdkWindow *window,
 			 NULL);
 }
 
+static void
+to_parent (GdkWindow *window,
+	   double offscreen_x, double offscreen_y,
+	   double *parent_x, double *parent_y)
+{
+  GdkWindowObject *private;
+
+  private = (GdkWindowObject *)window;
+
+  g_signal_emit_by_name (private->impl_window,
+			 "to_parent",
+			 offscreen_x, offscreen_y,
+			 parent_x, parent_y,
+			 NULL);
+}
+
+static gint
+gdk_offscreen_window_get_origin (GdkWindow *window,
+				 gint      *x,
+				 gint      *y)
+{
+  GdkWindow *parent;
+  int tmpx, tmpy;
+
+  tmpx = 0;
+  tmpy = 0;
+
+  parent = get_offscreen_parent (window);
+  if (parent)
+    {
+      double dx, dy;
+      gdk_window_get_origin (parent,
+			     &tmpx, &tmpy);
+
+      to_parent (window,
+		 0, 0,
+		 &dx, &dy);
+      tmpx = floor (tmpx + dx + 0.5);
+      tmpy = floor (tmpy + dy + 0.5);
+    }
+
+
+  if (x)
+    *x = tmpx;
+  if (y)
+    *y = tmpy;
+
+  return TRUE;
+}
+
+static gint
+gdk_offscreen_window_get_deskrelative_origin (GdkWindow *window,
+					      gint      *x,
+					      gint      *y)
+{
+  GdkWindow *parent;
+  int tmpx, tmpy;
+
+  tmpx = 0;
+  tmpy = 0;
+
+  parent = get_offscreen_parent (window);
+  if (parent)
+    {
+      double dx, dy;
+      gdk_window_get_deskrelative_origin (parent,
+					  &tmpx, &tmpy);
+
+      to_parent (window,
+		 0, 0,
+		 &dx, &dy);
+      tmpx = floor (tmpx + dx + 0.5);
+      tmpy = floor (tmpy + dy + 0.5);
+    }
+
+
+  if (x)
+    *x = tmpx;
+  if (y)
+    *y = tmpy;
+
+  return TRUE;
+}
 
 static gboolean
 gdk_offscreen_window_get_pointer (GdkWindow       *window,
@@ -1147,6 +1218,7 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
   iface->queue_translation = gdk_offscreen_window_queue_translation;
   iface->get_origin = gdk_offscreen_window_get_origin;
+  iface->get_deskrelative_origin = gdk_offscreen_window_get_deskrelative_origin;
   iface->get_pointer = gdk_offscreen_window_get_pointer;
   iface->destroy = gdk_offscreen_window_destroy;
 }

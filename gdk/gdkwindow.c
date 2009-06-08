@@ -312,7 +312,11 @@ static void do_move_region_bits_on_impl (GdkWindowObject *private,
 					 GdkRegion *region, /* In impl window coords */
 					 int dx, int dy);
 static void gdk_window_invalidate_in_parent (GdkWindowObject *private);
+static GdkWindow *gdk_window_get_offscreen_parent (GdkWindow *window);
 static void move_native_children (GdkWindowObject *private);
+static void update_cursor (GdkDisplay *display);
+static gboolean is_event_parent_of (GdkWindow *parent,
+				    GdkWindow *child);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -387,6 +391,7 @@ gdk_window_init (GdkWindowObject *window)
   window->native_visibility = GDK_VISIBILITY_UNOBSCURED;
 }
 
+/* Stop and return on the first non-NULL parent */
 static gboolean
 accumulate_get_parent	(GSignalInvocationHint *ihint,
 			 GValue		       *return_accu,
@@ -395,7 +400,7 @@ accumulate_get_parent	(GSignalInvocationHint *ihint,
 {
   g_value_copy (handler_return, return_accu);
   /* Continue while returning NULL */
-  return g_value_get_pointer (handler_return) == NULL;
+  return g_value_get_object (handler_return) == NULL;
 }
 
 static GQuark quark_pointer_window = 0;
@@ -6808,34 +6813,6 @@ gdk_window_set_back_pixmap (GdkWindow *window,
     GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_back_pixmap (window, private->bg_pixmap);
 }
 
-static void
-update_cursor (GdkDisplay *display)
-{
-  GdkWindowObject *pointer_window, *cursor_window;
-  GdkPointerGrabInfo *grab;
-
-  pointer_window = (GdkWindowObject *)display->pointer_info.window_under_pointer;
-
-  cursor_window = pointer_window;
-  while (cursor_window->cursor == NULL &&
-	 cursor_window->parent != NULL &&
-	 cursor_window->parent->window_type != GDK_WINDOW_ROOT)
-    cursor_window = cursor_window->parent;
-
-  /* We ignore the serials here and just pick the last grab
-     we've sent, as that would shortly be used anyway. */
-  grab = _gdk_display_get_last_pointer_grab (display);
-  if (grab != NULL &&
-      !is_parent_of (grab->window, (GdkWindow *)cursor_window))
-    cursor_window = (GdkWindowObject *)grab->window;
-
-  /* Set all cursors on toplevel, otherwise its tricky to keep track of
-   * which native window has what cursor set. */
-  GDK_WINDOW_IMPL_GET_IFACE (pointer_window->impl)->set_cursor
-      (gdk_window_get_toplevel ((GdkWindow *)pointer_window),
-       cursor_window->cursor);
-}
-
 /**
  * gdk_window_set_cursor:
  * @window: a #GdkWindow
@@ -6870,7 +6847,7 @@ gdk_window_set_cursor (GdkWindow *window,
       if (cursor)
 	private->cursor = gdk_cursor_ref (cursor);
 
-      if (is_parent_of (window, display->pointer_info.window_under_pointer))
+      if (is_event_parent_of (window, display->pointer_info.window_under_pointer))
 	update_cursor (display);
     }
 }
@@ -7782,13 +7759,106 @@ gdk_window_redirect_free (GdkWindowRedirect *redirect)
   g_free (redirect);
 }
 
+/* Gets the toplevel for a window as used for events,
+   i.e. including offscreen parents */
+static GdkWindowObject *
+get_event_parent (GdkWindowObject *window)
+{
+  if (window->window_type ==GDK_WINDOW_OFFSCREEN)
+    return (GdkWindowObject *)gdk_window_get_offscreen_parent ((GdkWindow *)window);
+  else
+    return window->parent;
+}
+
+/* Gets the toplevel for a window as used for events,
+   i.e. including offscreen parents going up to the native
+   toplevel */
+static GdkWindow *
+get_event_toplevel (GdkWindow *w)
+{
+  GdkWindowObject *private = GDK_WINDOW_OBJECT (w);
+  GdkWindowObject *parent;
+
+  while ((parent = get_event_parent (private)) != NULL &&
+	 (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT))
+    private = parent;
+
+  return GDK_WINDOW (private);
+}
+
+static gboolean
+is_event_parent_of (GdkWindow *parent,
+		    GdkWindow *child)
+{
+  GdkWindow *w;
+
+  w = child;
+  while (w != NULL)
+    {
+      if (w == parent)
+	return TRUE;
+
+      w = (GdkWindow *)get_event_parent ((GdkWindowObject *)w);
+    }
+
+  return FALSE;
+}
+
+static void
+update_cursor (GdkDisplay *display)
+{
+  GdkWindowObject *pointer_window, *cursor_window, *parent, *toplevel;
+  GdkPointerGrabInfo *grab;
+
+  pointer_window = (GdkWindowObject *)display->pointer_info.window_under_pointer;
+
+  cursor_window = pointer_window;
+  while (cursor_window->cursor == NULL &&
+	 (parent = get_event_parent (cursor_window)) != NULL &&
+	 parent->window_type != GDK_WINDOW_ROOT)
+    cursor_window = parent;
+
+  /* We ignore the serials here and just pick the last grab
+     we've sent, as that would shortly be used anyway. */
+  grab = _gdk_display_get_last_pointer_grab (display);
+  if (grab != NULL &&
+      !is_event_parent_of (grab->window, (GdkWindow *)cursor_window))
+    cursor_window = (GdkWindowObject *)grab->window;
+
+  /* Set all cursors on toplevel, otherwise its tricky to keep track of
+   * which native window has what cursor set. */
+  toplevel = (GdkWindowObject *)get_event_toplevel ((GdkWindow *)pointer_window);
+  GDK_WINDOW_IMPL_GET_IFACE (toplevel->impl)->set_cursor
+    ((GdkWindow *)toplevel, cursor_window->cursor);
+}
+
+static void
+from_parent (GdkWindowObject *window,
+	     double parent_x, double parent_y,
+	     double *offscreen_x, double *offscreen_y)
+{
+  g_signal_emit_by_name (window,
+			 "from_parent",
+			 parent_x, parent_y,
+			 offscreen_x, offscreen_y,
+			 NULL);
+}
+
 static void
 convert_coords_to_child (GdkWindowObject *child,
 			 double x, double y,
 			 double *child_x, double *child_y)
 {
-  *child_x = x - child->x;
-  *child_y = y - child->y;
+  if (gdk_window_is_offscreen (child))
+    {
+      from_parent (child, x, y,
+		   child_x, child_y);
+    }
+  else
+    {
+      *child_x = x - child->x;
+      *child_y = y - child->y;
+    }
 }
 
 static gboolean
@@ -7796,7 +7866,7 @@ point_in_window (GdkWindowObject *window,
 		 double x, double y)
 {
   return
-    x >= 0 &&  x < window->width &&
+    x >= 0 && x < window->width &&
     y >= 0 && y < window->height &&
     (window->shape == NULL ||
      gdk_region_point_in (window->shape,
@@ -7807,9 +7877,9 @@ point_in_window (GdkWindowObject *window,
 }
 
 static GdkWindow *
-convert_coords_to_toplevel (GdkWindow *window,
-			    double child_x, double child_y,
-			    double *toplevel_x, double *toplevel_y)
+convert_native_coords_to_toplevel (GdkWindow *window,
+				   double child_x, double child_y,
+				   double *toplevel_x, double *toplevel_y)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   gdouble x, y;
@@ -7831,7 +7901,6 @@ convert_coords_to_toplevel (GdkWindow *window,
   return (GdkWindow *)private;
 }
 
-
 static void
 convert_toplevel_coords_to_window (GdkWindow *window,
 				   gdouble    toplevel_x,
@@ -7840,6 +7909,7 @@ convert_toplevel_coords_to_window (GdkWindow *window,
 				   gdouble   *window_y)
 {
   GdkWindowObject *private;
+  GdkWindowObject *parent;
   gdouble x, y;
   GList *children, *l;
 
@@ -7849,11 +7919,11 @@ convert_toplevel_coords_to_window (GdkWindow *window,
   y = toplevel_y;
 
   children = NULL;
-  while (private->parent != NULL &&
-	 (GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT))
+  while ((parent = get_event_parent (private)) != NULL &&
+	 (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT))
     {
       children = g_list_prepend (children, private);
-      private = private->parent;
+      private = parent;
     }
 
   for (l = children; l != NULL; l = l->next)
@@ -7863,6 +7933,20 @@ convert_toplevel_coords_to_window (GdkWindow *window,
 
   *window_x = x;
   *window_y = y;
+}
+
+static GdkWindowObject *
+pick_offscreen_child (GdkWindowObject *window,
+		      double x, double y)
+{
+  GdkWindowObject *res;
+
+  res = NULL;
+  g_signal_emit_by_name (window,
+			 "pick-offscreen-child",
+			 x, y, &res);
+
+  return res;
 }
 
 GdkWindow *
@@ -7891,11 +7975,18 @@ _gdk_window_find_child_at (GdkWindow *window,
 	  if (point_in_window (sub, child_x, child_y))
 	    return (GdkWindow *)sub;
 	}
+
+      if (private->has_offscreen_children)
+	{
+	  sub = pick_offscreen_child (private,
+				      x, y);
+	  if (sub)
+	    return (GdkWindow *)sub;
+	}
     }
 
   return NULL;
 }
-
 
 GdkWindow *
 _gdk_window_find_descendant_at (GdkWindow *toplevel,
@@ -7906,6 +7997,7 @@ _gdk_window_find_descendant_at (GdkWindow *toplevel,
   GdkWindowObject *private, *sub;
   double child_x, child_y;
   GList *l;
+  gboolean found;
 
   private = (GdkWindowObject *)toplevel;
 
@@ -7913,6 +8005,7 @@ _gdk_window_find_descendant_at (GdkWindow *toplevel,
     {
       do
 	{
+	  found = FALSE;
 	  /* Children is ordered in reverse stack order, i.e. first is topmost */
 	  for (l = private->children; l != NULL; l = l->next)
 	    {
@@ -7929,11 +8022,24 @@ _gdk_window_find_descendant_at (GdkWindow *toplevel,
 		  x = child_x;
 		  y = child_y;
 		  private = sub;
+		  found = TRUE;
 		  break;
 		}
 	    }
+	  if (!found &&
+	      private->has_offscreen_children)
+	    {
+	      sub = pick_offscreen_child (private,
+					  x, y);
+	      if (sub)
+		{
+		  found = TRUE;
+		  private = sub;
+		  from_parent (sub, x, y, &x, &y);
+		}
+	    }
 	}
-      while (l != NULL);
+      while (found);
     }
   else
     {
@@ -8041,14 +8147,14 @@ find_common_ancestor (GdkWindowObject *win1,
   while (tmp != NULL && tmp->window_type != GDK_WINDOW_ROOT)
     {
       path1 = g_list_prepend (path1, tmp);
-      tmp = tmp->parent;
+      tmp = get_event_parent (tmp);
     }
 
   tmp = win2;
   while (tmp != NULL && tmp->window_type != GDK_WINDOW_ROOT)
     {
       path2 = g_list_prepend (path2, tmp);
-      tmp = tmp->parent;
+      tmp = get_event_parent (tmp);
     }
 
   list1 = path1;
@@ -8289,7 +8395,7 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 	    notify_type = GDK_NOTIFY_VIRTUAL;
 
 	  last = a;
-	  win = a->parent;
+	  win = get_event_parent (a);
 	  while (win != c && GDK_WINDOW_TYPE (win) != GDK_WINDOW_ROOT)
 	    {
 	      send_crossing_event (display, toplevel,
@@ -8303,7 +8409,7 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 				   serial);
 
 	      last = win;
-	      win = win->parent;
+	      win = get_event_parent (win);
 	    }
 	}
     }
@@ -8316,11 +8422,11 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
       if (c != b)
 	{
 	  path = NULL;
-	  win = b->parent;
+	  win = get_event_parent (b);
 	  while (win != c && GDK_WINDOW_TYPE (win) != GDK_WINDOW_ROOT)
 	    {
 	      path = g_list_prepend (path, win);
-	      win = win->parent;
+	      win = get_event_parent (win);
 	    }
 
 	  if (non_linear)
@@ -8369,18 +8475,6 @@ _gdk_syntesize_crossing_events (GdkDisplay                 *display,
 			   event_in_queue,
 			   serial);
     }
-}
-
-static GdkWindow *
-get_toplevel (GdkWindow *w)
-{
-  GdkWindowObject *private = GDK_WINDOW_OBJECT (w);
-
-  while (private->parent != NULL &&
-	 (GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT))
-    private = private->parent;
-
-  return GDK_WINDOW (private);
 }
 
 /* Returns the window inside the event window with the pointer in it
@@ -8569,7 +8663,7 @@ _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
   display = gdk_drawable_get_display (changed_window);
 
   serial = _gdk_windowing_window_get_next_serial (display);
-  changed_toplevel = get_toplevel (changed_window);
+  changed_toplevel = get_event_toplevel (changed_window);
 
   if (changed_toplevel == display->pointer_info.toplevel_under_pointer)
     {
@@ -8642,7 +8736,7 @@ get_event_window (GdkDisplay                 *display,
 	  return (GdkWindow *)w;
 	}
 
-      w = w->parent;
+      w = get_event_parent (w);
     }
 
   if (grab != NULL &&
@@ -8680,9 +8774,9 @@ proxy_pointer_event (GdkDisplay                 *display,
   gdk_event_get_coords (source_event, &toplevel_x, &toplevel_y);
   gdk_event_get_state (source_event, &state);
   time_ = gdk_event_get_time (source_event);
-  toplevel_window = convert_coords_to_toplevel (event_window,
-						toplevel_x, toplevel_y,
-						&toplevel_x, &toplevel_y);
+  toplevel_window = convert_native_coords_to_toplevel (event_window,
+						       toplevel_x, toplevel_y,
+						       &toplevel_x, &toplevel_y);
 
 
   /* If we get crossing events with subwindow unexpectedly being NULL
@@ -8845,6 +8939,7 @@ proxy_button_event (GdkEvent *source_event,
   GdkWindow *toplevel_window, *event_window;
   GdkWindow *event_win;
   GdkWindow *pointer_window;
+  GdkWindowObject *parent;
   GdkEvent *event;
   guint state;
   guint32 time_;
@@ -8859,9 +8954,9 @@ proxy_button_event (GdkEvent *source_event,
   gdk_event_get_state (source_event, &state);
   time_ = gdk_event_get_time (source_event);
   display = gdk_drawable_get_display (source_event->any.window);
-  toplevel_window = convert_coords_to_toplevel (event_window,
-						toplevel_x, toplevel_y,
-						&toplevel_x, &toplevel_y);
+  toplevel_window = convert_native_coords_to_toplevel (event_window,
+						       toplevel_x, toplevel_y,
+						       &toplevel_x, &toplevel_y);
 
   if (type == GDK_BUTTON_PRESS &&
       _gdk_display_has_pointer_grab (display, serial) == NULL)
@@ -8873,11 +8968,13 @@ proxy_button_event (GdkEvent *source_event,
 
       /* Find the event window, that gets the grab */
       w = (GdkWindowObject *)pointer_window;
-      while (w != NULL && w->parent->window_type != GDK_WINDOW_ROOT)
+      while (w != NULL &&
+	     (parent = get_event_parent (w)) != NULL &&
+	     parent->window_type != GDK_WINDOW_ROOT)
 	{
 	  if (w->event_mask & GDK_BUTTON_PRESS_MASK)
 	    break;
-	  w = w->parent;
+	  w = parent;
 	}
       pointer_window = (GdkWindow *)w;
 
@@ -9137,7 +9234,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
   old_button = display->pointer_info.button;
 
   gdk_event_get_coords (event, &x, &y);
-  convert_coords_to_toplevel (event_window, x, y,  &x, &y);
+  convert_native_coords_to_toplevel (event_window, x, y,  &x, &y);
   display->pointer_info.toplevel_x = x;
   display->pointer_info.toplevel_y = y;
   gdk_event_get_state (event, &display->pointer_info.state);
@@ -9215,7 +9312,7 @@ get_extension_event_window (GdkDisplay                 *display,
       if (evmask & type_masks[type])
 	return (GdkWindow *)w;
 
-      w = w->parent;
+      w = get_event_parent (w);
     }
 
   if (grab != NULL &&
@@ -9249,9 +9346,9 @@ _gdk_window_get_input_window_for_event (GdkWindow *native_window,
   toplevel_y = y;
 
   display = gdk_drawable_get_display (native_window);
-  toplevel_window = convert_coords_to_toplevel (native_window,
-						toplevel_x, toplevel_y,
-						&toplevel_x, &toplevel_y);
+  toplevel_window = convert_native_coords_to_toplevel (native_window,
+						       toplevel_x, toplevel_y,
+						       &toplevel_x, &toplevel_y);
   pointer_window = get_pointer_window (display, toplevel_window,
 				       toplevel_x, toplevel_y, serial);
   event_win = get_extension_event_window (display,

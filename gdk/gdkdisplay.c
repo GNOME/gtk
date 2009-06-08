@@ -906,7 +906,6 @@ synthesize_crossing_events (GdkDisplay *display,
     }
 }
 
-
 static void
 switch_to_pointer_grab (GdkDisplay *display,
 			GdkPointerGrabInfo *grab,
@@ -1074,9 +1073,33 @@ _gdk_display_pointer_grab_update (GdkDisplay *display,
     }
 }
 
-static gboolean
-is_parent_of (GdkWindow *parent,
-              GdkWindow *child)
+static GdkWindow *
+gdk_window_get_offscreen_parent (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindow *res;
+
+  res = NULL;
+  g_signal_emit_by_name (private->impl_window,
+			 "get-offscreen-parent",
+			 &res);
+
+  return res;
+}
+
+/* Gets the toplevel for a window as used for events,
+   i.e. including offscreen parents */
+static GdkWindowObject *
+get_event_parent (GdkWindowObject *window)
+{
+  if (window->window_type ==GDK_WINDOW_OFFSCREEN)
+    return (GdkWindowObject *)gdk_window_get_offscreen_parent ((GdkWindow *)window);
+  else
+    return window->parent;
+}
+
+is_event_parent_of (GdkWindow *parent,
+		    GdkWindow *child)
 {
   GdkWindow *w;
 
@@ -1086,7 +1109,7 @@ is_parent_of (GdkWindow *parent,
       if (w == parent)
 	return TRUE;
 
-      w = gdk_window_get_parent (w);
+      w = (GdkWindow *)get_event_parent ((GdkWindowObject *)w);
     }
 
   return FALSE;
@@ -1143,7 +1166,7 @@ _gdk_display_end_pointer_grab (GdkDisplay *display,
   grab = l->data;
   if (grab &&
       (if_child == NULL ||
-       is_parent_of (grab->window, if_child)))
+       is_event_parent_of (grab->window, if_child)))
     {
       grab->serial_end = serial;
       grab->implicit_ungrab = implicit;
