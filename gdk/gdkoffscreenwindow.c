@@ -735,35 +735,37 @@ to_parent (GdkWindow *window,
 }
 
 static gint
-gdk_offscreen_window_get_origin (GdkWindow *window,
-				 gint      *x,
-				 gint      *y)
+gdk_offscreen_window_get_root_coords (GdkWindow *window,
+				      gint       x,
+				      gint       y,
+				      gint      *root_x,
+				      gint      *root_y)
 {
   GdkWindow *parent;
   int tmpx, tmpy;
 
-  tmpx = 0;
-  tmpy = 0;
+  tmpx = x;
+  tmpy = y;
 
   parent = get_offscreen_parent (window);
   if (parent)
     {
       double dx, dy;
-      gdk_window_get_origin (parent,
-			     &tmpx, &tmpy);
-
       to_parent (window,
-		 0, 0,
+		 x, y,
 		 &dx, &dy);
-      tmpx = floor (tmpx + dx + 0.5);
-      tmpy = floor (tmpy + dy + 0.5);
+      tmpx = floor (dx + 0.5);
+      tmpy = floor (dy + 0.5);
+      gdk_window_get_root_coords (parent,
+				  tmpx, tmpy,
+				  &tmpx, &tmpy);
+
     }
 
-
-  if (x)
-    *x = tmpx;
-  if (y)
-    *y = tmpy;
+  if (root_x)
+    *root_x = tmpx;
+  if (root_y)
+    *root_y = tmpy;
 
   return TRUE;
 }
@@ -1217,7 +1219,7 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->set_static_gravities = gdk_offscreen_window_set_static_gravities;
   iface->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
   iface->queue_translation = gdk_offscreen_window_queue_translation;
-  iface->get_origin = gdk_offscreen_window_get_origin;
+  iface->get_root_coords = gdk_offscreen_window_get_root_coords;
   iface->get_deskrelative_origin = gdk_offscreen_window_get_deskrelative_origin;
   iface->get_pointer = gdk_offscreen_window_get_pointer;
   iface->destroy = gdk_offscreen_window_destroy;

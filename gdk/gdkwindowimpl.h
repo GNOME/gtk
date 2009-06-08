@@ -80,9 +80,11 @@ struct _GdkWindowImplIface
                                          gint            *width,
                                          gint            *height,
                                          gint            *depth);
-  gint         (* get_origin)           (GdkWindow       *window,
-                                         gint            *x,
-                                         gint            *y);
+  gint         (* get_root_coords)      (GdkWindow       *window,
+					 gint             x,
+					 gint             y,
+                                         gint            *root_x,
+                                         gint            *root_y);
   gint         (* get_deskrelative_origin) (GdkWindow       *window,
                                          gint            *x,
                                          gint            *y);

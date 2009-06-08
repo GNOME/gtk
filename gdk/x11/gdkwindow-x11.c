@@ -2759,9 +2759,11 @@ gdk_window_x11_get_geometry (GdkWindow *window,
 }
 
 static gint
-gdk_window_x11_get_origin (GdkWindow *window,
-                           gint      *x,
-                           gint      *y)
+gdk_window_x11_get_root_coords (GdkWindow *window,
+				gint       x,
+				gint       y,
+				gint      *root_x,
+				gint      *root_y)
 {
   gint return_val;
   Window child;
@@ -2773,16 +2775,16 @@ gdk_window_x11_get_origin (GdkWindow *window,
       return_val = XTranslateCoordinates (GDK_WINDOW_XDISPLAY (window),
 					  GDK_WINDOW_XID (window),
 					  GDK_WINDOW_XROOTWIN (window),
-					  0, 0, &tx, &ty,
+					  x, y, &tx, &ty,
 					  &child);
     }
   else
     return_val = 0;
   
-  if (x)
-    *x = tx;
-  if (y)
-    *y = ty;
+  if (root_x)
+    *root_x = tx;
+  if (root_y)
+    *root_y = ty;
   
   return return_val;
 }
@@ -5575,7 +5577,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->reparent = gdk_window_x11_reparent;
   iface->set_cursor = gdk_window_x11_set_cursor;
   iface->get_geometry = gdk_window_x11_get_geometry;
-  iface->get_origin = gdk_window_x11_get_origin;
+  iface->get_root_coords = gdk_window_x11_get_root_coords;
   iface->get_pointer = gdk_window_x11_get_pointer;
   iface->get_deskrelative_origin = gdk_window_x11_get_deskrelative_origin;
   iface->shape_combine_region = gdk_window_x11_shape_combine_region;
