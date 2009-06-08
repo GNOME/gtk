@@ -33,6 +33,12 @@
 
 #include "gdk/gdkkeysyms.h"
 
+#ifdef GDK_WINDOWING_X11
+#include <X11/Xlib.h>
+#include <X11/keysym.h>
+#include "gdk/x11/gdkx.h"
+#endif
+
 #include "gtkdnd.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
@@ -393,6 +399,139 @@ gtk_drag_get_ipc_widget (GtkWidget *widget)
 }
 
 
+#ifdef GDK_WINDOWING_X11
+
+/*
+ * We want to handle a handful of keys during DND, e.g. Escape to abort.
+ * Grabbing the keyboard has the unfortunate side-effect of preventing
+ * useful things such as using Alt-Tab to cycle between windows or
+ * switching workspaces. Therefore, we just grab the few keys we are
+ * interested in. Note that we need to put the grabs on the root window
+ * in order for them to still work when the focus is moved to another
+ * app/workspace.
+ *
+ * GDK needs a little help to successfully deliver root key events...
+ */
+
+static GdkFilterReturn
+root_key_filter (GdkXEvent *xevent,
+                 GdkEvent  *event,
+                 gpointer   data)
+{
+  XEvent *ev = (XEvent *)xevent;
+
+  if ((ev->type == KeyPress || ev->type == KeyRelease) &&
+      ev->xkey.root == ev->xkey.window)
+    ev->xkey.window = (Window)data;
+
+  return GDK_FILTER_CONTINUE;
+}
+
+typedef struct {
+  gint keysym;
+  gint modifiers;
+} GrabKey;
+
+static GrabKey grab_keys[] = {
+  { XK_Escape, 0 },
+  { XK_space, 0 },
+  { XK_KP_Space, 0 },
+  { XK_Return, 0 },
+  { XK_KP_Enter, 0 },
+  { XK_Up, 0 },
+  { XK_Up, Mod1Mask },
+  { XK_Down, 0 },
+  { XK_Down, Mod1Mask },
+  { XK_Left, 0 },
+  { XK_Left, Mod1Mask },
+  { XK_Right, 0 },
+  { XK_Right, Mod1Mask },
+  { XK_KP_Up, 0 },
+  { XK_KP_Up, Mod1Mask },
+  { XK_KP_Down, 0 },
+  { XK_KP_Down, Mod1Mask },
+  { XK_KP_Left, 0 },
+  { XK_KP_Left, Mod1Mask },
+  { XK_KP_Right, 0 },
+  { XK_KP_Right, Mod1Mask }
+};
+
+static void
+grab_dnd_keys (GtkWidget *widget,
+               guint32    time)
+{
+  guint i;
+  GdkWindow *window, *root;
+  gint keycode;
+
+  window = widget->window;
+  root = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
+
+  gdk_error_trap_push ();
+
+  for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
+    {
+      keycode = XKeysymToKeycode (GDK_WINDOW_XDISPLAY (window), grab_keys[i].keysym);
+      XGrabKey (GDK_WINDOW_XDISPLAY (window),
+   	        keycode, grab_keys[i].modifiers,
+	        GDK_WINDOW_XID (root),
+	        FALSE,
+	        GrabModeAsync,
+	        GrabModeAsync);
+    }
+
+  gdk_flush ();
+  gdk_error_trap_pop ();
+
+  gdk_window_add_filter (NULL, root_key_filter, GDK_WINDOW_XID (window));
+}
+
+void
+ungrab_dnd_keys (GtkWidget *widget,
+                 guint32    time)
+{
+  guint i;
+  GdkWindow *window, *root;
+  gint keycode;
+
+  window = widget->window;
+  root = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
+
+  gdk_window_remove_filter (NULL, root_key_filter, GDK_WINDOW_XID (window));
+
+  gdk_error_trap_push ();
+
+  for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
+    {
+      keycode = XKeysymToKeycode (GDK_WINDOW_XDISPLAY (window), grab_keys[i].keysym);
+      XUngrabKey (GDK_WINDOW_XDISPLAY (window),
+      	          keycode, grab_keys[i].modifiers,
+                  GDK_WINDOW_XID (root));
+    }
+
+  gdk_flush ();
+  gdk_error_trap_pop ();
+}
+
+#else
+
+static void
+grab_dnd_keys (GtkWidget *widget,
+               guint32    time)
+{
+  gdk_keyboard_grab (widget->window, FALSE, time);
+}
+
+static void
+ungrab_dnd_keys (GtkWidget *widget,
+                 guint32    time)
+{
+  gdk_display_keyboard_ungrab (gtk_widget_get_display (widget), time);
+}
+
+#endif
+
+
 /***************************************************************
  * gtk_drag_release_ipc_widget:
  *     Releases widget retrieved with gtk_drag_get_ipc_widget ()
@@ -408,6 +547,7 @@ gtk_drag_release_ipc_widget (GtkWidget *widget)
   GdkScreen *screen = gtk_widget_get_screen (widget);
   GSList *drag_widgets = g_object_get_data (G_OBJECT (screen),
 					    "gtk-dnd-ipc-widgets");
+  ungrab_dnd_keys (widget, GDK_CURRENT_TIME);
   if (window->group)
     gtk_window_group_remove_window (window->group, window);
   drag_widgets = g_slist_prepend (drag_widgets, widget);
@@ -2224,8 +2364,8 @@ gtk_drag_begin_internal (GtkWidget         *widget,
       return NULL;
     }
 
-  gdk_keyboard_grab (ipc_widget->window, FALSE, time);
-    
+  grab_dnd_keys (ipc_widget, time);
+
   /* We use a GTK grab here to override any grabs that the widget
    * we are dragging from might have held
    */
@@ -3965,7 +4105,7 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
 					info);
 
   gdk_display_pointer_ungrab (display, time);
-  gdk_display_keyboard_ungrab (display, time);
+  ungrab_dnd_keys (info->ipc_widget, time);
   gtk_grab_remove (info->ipc_widget);
 
   /* Send on a release pair to the original 
