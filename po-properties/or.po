@@ -1,14 +1,14 @@
-# translation of gtk+-properties.gtk-2-16.po to Oriya
+# translation of or.po to Oriya
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Manoj Kumar Giri <mgiri@redhat.com>, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+-properties.gtk-2-16\n"
+"Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
 "POT-Creation-Date: 2009-05-31 07:53+0000\n"
-"PO-Revision-Date: 2009-06-08 19:14+0530\n"
+"PO-Revision-Date: 2009-06-08 19:21+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -16,6 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"\n"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
@@ -2752,7 +2753,7 @@ msgstr "ନାମପଟିରେ ଆକାର ବ୍ୟବହାର କରନ୍
 
 #: ../gtk/gtkfontbutton.c:192
 msgid "Whether the label is drawn with the selected font size"
-msgstr ""
+msgstr "ବଚ୍ଛିତ ଅକ୍ଷରରୂପ ସହିତ ନାମପଟିଟି ଅଙ୍କାହୋଇଛି କି ନାହିଁ"
 
 #: ../gtk/gtkfontbutton.c:208
 msgid "Show style"
