@@ -178,6 +178,12 @@ gboolean                gtk_print_operation_is_finished            (GtkPrintOper
 void                    gtk_print_operation_cancel                 (GtkPrintOperation  *op);
 void                    gtk_print_operation_draw_page_finish       (GtkPrintOperation  *op);
 void                    gtk_print_operation_set_defer_drawing      (GtkPrintOperation  *op);
+void                    gtk_print_operation_set_support_selection  (GtkPrintOperation  *op,
+                                                                    gboolean            support_selection);
+gboolean                gtk_print_operation_get_support_selection  (GtkPrintOperation  *op);
+void                    gtk_print_operation_set_has_selection      (GtkPrintOperation  *op,
+                                                                    gboolean            has_selection);
+gboolean                gtk_print_operation_get_has_selection      (GtkPrintOperation  *op);
 
 GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow          *parent,
 								    GtkPageSetup       *page_setup,

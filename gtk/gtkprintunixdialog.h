@@ -83,6 +83,13 @@ void              gtk_print_unix_dialog_add_custom_tab       (GtkPrintUnixDialog
 							      GtkWidget          *tab_label);
 void              gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog *dialog,
 								 GtkPrintCapabilities capabilities);
+GtkPrintCapabilities gtk_print_unix_dialog_get_manual_capabilities (GtkPrintUnixDialog  *dialog);
+void                 gtk_print_unix_dialog_set_support_selection   (GtkPrintUnixDialog  *dialog,
+								    gboolean             support_selection);
+gboolean             gtk_print_unix_dialog_get_support_selection   (GtkPrintUnixDialog  *dialog);
+void                 gtk_print_unix_dialog_set_has_selection       (GtkPrintUnixDialog  *dialog,
+								    gboolean             has_selection);
+gboolean             gtk_print_unix_dialog_get_has_selection       (GtkPrintUnixDialog  *dialog);
 
 G_END_DECLS
 
