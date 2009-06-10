@@ -110,7 +110,7 @@ gdk_device_manager_class_init (GdkDeviceManagerClass *klass)
 static void
 gdk_device_manager_init (GdkDeviceManager *manager)
 {
-  
+
 }
 
 static void

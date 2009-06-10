@@ -39,13 +39,12 @@ G_BEGIN_DECLS
 
 typedef struct _GdkDeviceManager GdkDeviceManager;
 typedef struct _GdkDeviceManagerClass GdkDeviceManagerClass;
-typedef enum _GdkDeviceType GdkDeviceType;
 
-enum _GdkDeviceType {
+typedef enum {
   GDK_DEVICE_TYPE_MASTER,
   GDK_DEVICE_TYPE_SLAVE,
   GDK_DEVICE_TYPE_FLOATING
-};
+} GdkDeviceType;
 
 struct _GdkDeviceManager
 {
