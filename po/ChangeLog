@@ -1,3 +1,7 @@
+2009-06-10  Manoj Kumar Giri <mgiri@redhat.com>
+
+	* hi.po: Committed Hindi Translation on behalf of Rajesh Ranjan.
+
 === ChangeLog discontinued ===
 
 	With the move to git, GTK+ is switching from a ChangeLog file
