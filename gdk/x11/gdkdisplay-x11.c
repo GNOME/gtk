@@ -33,6 +33,7 @@
 #include "gdkx.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"
+#include "gdkeventsource.h"
 #include "gdkeventtranslator.h"
 #include "gdkscreen.h"
 #include "gdkscreen-x11.h"
@@ -973,6 +974,23 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
   return return_val;
 }
 
+static void
+_gdk_event_init (GdkDisplay *display)
+{
+  GdkDisplayX11 *display_x11;
+  GdkDeviceManager *device_manager;
+
+  display_x11 = GDK_DISPLAY_X11 (display);
+  display_x11->event_source = gdk_event_source_new (display);
+
+  gdk_event_source_add_translator (display_x11->event_source,
+                                   GDK_EVENT_TRANSLATOR (display));
+
+  device_manager = gdk_device_manager_get_for_display (display);
+  gdk_event_source_add_translator (display_x11->event_source,
+                                   GDK_EVENT_TRANSLATOR (device_manager));
+}
+
 /**
  * gdk_display_open:
  * @display_name: the name of the display to open
@@ -1232,9 +1250,9 @@ gdk_display_open (const gchar *display_name)
       display_x11->use_sync = TRUE;
   }
 #endif
-  
+
+  _gdk_event_init (display);
   _gdk_windowing_image_init (display);
-  _gdk_events_init (display);
   _gdk_input_init (display);
   _gdk_dnd_init (display);
 
@@ -1650,7 +1668,12 @@ gdk_display_x11_dispose (GObject *object)
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     _gdk_screen_close (display_x11->screens[i]);
 
-  _gdk_events_uninit (GDK_DISPLAY_OBJECT (object));
+  if (display_x11->event_source)
+    {
+      g_source_destroy (display_x11->event_source);
+      g_source_unref (display_x11->event_source);
+      display_x11->event_source = NULL;
+    }
 
   G_OBJECT_CLASS (_gdk_display_x11_parent_class)->dispose (object);
 }

@@ -205,6 +205,7 @@ _gdk_x11_events_uninit_screen (GdkScreen *screen)
     }
 }
 
+#if 0
 void 
 _gdk_events_init (GdkDisplay *display)
 {
@@ -234,6 +235,7 @@ _gdk_events_init (GdkDisplay *display)
 					 gdk_wm_protocols_filter,   
 					 NULL);
 }
+#endif
 
 void
 _gdk_events_uninit (GdkDisplay *display)
@@ -2268,6 +2270,7 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
   return GDK_FILTER_CONTINUE;
 }
 
+#if 0
 void
 _gdk_events_queue (GdkDisplay *display)
 {
@@ -2325,6 +2328,7 @@ _gdk_events_queue (GdkDisplay *display)
         }
     }
 }
+#endif
 
 static gboolean  
 gdk_event_prepare (GSource  *source,
