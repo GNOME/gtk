@@ -8089,6 +8089,36 @@ _gdk_window_find_descendant_at (GdkWindow *toplevel,
   return (GdkWindow *)private;
 }
 
+/**
+ * gdk_window_beep:
+ * @window: a toplevel #GdkWindow
+ *
+ * Emits a short beep associated to @window in the appropriate
+ * display, if supported. Otherwise, emits a short beep on
+ * the display just as gdk_display_beep().
+ *
+ * Since: 2.12
+ **/
+void
+gdk_window_beep (GdkWindow *window)
+{
+  GdkDisplay *display;
+  GdkWindow *toplevel;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  toplevel = get_event_toplevel (window);
+  display = gdk_drawable_get_display (GDK_DRAWABLE (window));
+
+  if (toplevel && gdk_window_is_offscreen ((GdkWindowObject *)toplevel))
+    _gdk_windowing_window_beep (toplevel);
+  else
+    gdk_display_beep (display);
+}
+
 static const guint type_masks[] = {
   GDK_SUBSTRUCTURE_MASK, /* GDK_DELETE                 = 0  */
   GDK_STRUCTURE_MASK, /* GDK_DESTROY                   = 1  */

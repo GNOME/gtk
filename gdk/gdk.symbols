@@ -715,6 +715,7 @@ gdk_window_thaw_toplevel_updates_libgtk_only
 gdk_window_thaw_updates
 gdk_window_set_composited
 gdk_pointer_grab
+gdk_window_beep
 #endif
 #endif
 
@@ -758,7 +759,6 @@ gdk_window_set_focus_on_map
 gdk_window_set_icon_list
 gdk_window_set_icon
 gdk_window_set_icon_name
-gdk_window_beep
 gdk_window_set_opacity
 gdk_window_iconify
 gdk_window_deiconify

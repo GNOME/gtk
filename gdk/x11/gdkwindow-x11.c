@@ -5423,26 +5423,13 @@ gdk_window_configure_finished (GdkWindow *window)
 #endif
 }
 
-/**
- * gdk_window_beep:
- * @window: a toplevel #GdkWindow
- *
- * Emits a short beep associated to @window in the appropriate
- * display, if supported. Otherwise, emits a short beep on
- * the display just as gdk_display_beep().
- *
- * Since: 2.12
- **/
 void
-gdk_window_beep (GdkWindow *window)
+_gdk_windowing_window_beep (GdkWindow *window)
 {
   GdkDisplay *display;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-  
   display = GDK_WINDOW_DISPLAY (window);
 
 #ifdef HAVE_XKB
