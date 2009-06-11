@@ -8685,6 +8685,11 @@ gdk_window_get_has_offscreen_children (GdkWindow *window)
   return private->has_offscreen_children;
 }
 
+void
+gdk_window_offscreen_children_changed (GdkWindow *window)
+{
+  _gdk_syntesize_crossing_events_for_geometry_change (window);
+}
 
 void
 _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
