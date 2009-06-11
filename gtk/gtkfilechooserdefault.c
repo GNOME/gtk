@@ -960,6 +960,9 @@ gtk_file_chooser_default_finalize (GObject *object)
   if (impl->preview_file)
     g_object_unref (impl->preview_file);
 
+  if (impl->browse_path_bar_size_group)
+    g_object_unref (impl->browse_path_bar_size_group);
+
   load_remove_timer (impl);
 
   /* Free all the Models we have */
@@ -5202,6 +5205,8 @@ location_button_create (GtkFileChooserDefault *impl)
   impl->location_button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
 					"image", image,
 					NULL);
+  
+  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->location_button);
 
   g_signal_connect (impl->location_button, "toggled",
 		    G_CALLBACK (location_button_toggled_cb), impl);
@@ -5217,7 +5222,6 @@ static GtkWidget *
 browse_widgets_create (GtkFileChooserDefault *impl)
 {
   GtkWidget *vbox;
-  GtkWidget *hbox;
   GtkWidget *hpaned;
   GtkWidget *widget;
   GtkSizeGroup *size_group;
@@ -5227,26 +5231,31 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   vbox = gtk_vbox_new (FALSE, 12);
 
   /* Location widgets */
-  hbox = gtk_hbox_new (FALSE, 12);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-  gtk_widget_show (hbox);
-  impl->browse_path_bar_hbox = hbox;
+  impl->browse_path_bar_hbox = gtk_hbox_new (FALSE, 12);
+  gtk_box_pack_start (GTK_BOX (vbox), impl->browse_path_bar_hbox, FALSE, FALSE, 0);
+  gtk_widget_show (impl->browse_path_bar_hbox);
+
+  /* Size group that allows the path bar to be the same size between modes */
+  impl->browse_path_bar_size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
+  gtk_size_group_set_ignore_hidden (impl->browse_path_bar_size_group, FALSE);
+
+  /* Location button */
 
   location_button_create (impl);
-  gtk_box_pack_start (GTK_BOX (hbox), impl->location_button, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->location_button, FALSE, FALSE, 0);
 
   /* Path bar */
 
   impl->browse_path_bar = create_path_bar (impl);
   g_signal_connect (impl->browse_path_bar, "path-clicked", G_CALLBACK (path_bar_clicked), impl);
   gtk_widget_show_all (impl->browse_path_bar);
-  gtk_box_pack_start (GTK_BOX (hbox), impl->browse_path_bar, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->browse_path_bar, TRUE, TRUE, 0);
 
   /* Create Folder */
   impl->browse_new_folder_button = gtk_button_new_with_mnemonic (_("Create Fo_lder"));
   g_signal_connect (impl->browse_new_folder_button, "clicked",
 		    G_CALLBACK (new_folder_button_clicked), impl);
-  gtk_box_pack_end (GTK_BOX (hbox), impl->browse_new_folder_button, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (impl->browse_path_bar_hbox), impl->browse_new_folder_button, FALSE, FALSE, 0);
 
   /* Box for the location label and entry */
 
@@ -9394,12 +9403,20 @@ static void
 search_setup_widgets (GtkFileChooserDefault *impl)
 {
   GtkWidget *label;
+  GtkWidget *image;
 
   impl->search_hbox = gtk_hbox_new (FALSE, 12);
+  
+  /* Image */
+
+  image = gtk_image_new_from_stock (GTK_STOCK_FIND, GTK_ICON_SIZE_BUTTON);
+  gtk_size_group_add_widget (GTK_SIZE_GROUP (impl->browse_path_bar_size_group), image);
+  gtk_box_pack_start (GTK_BOX (impl->search_hbox), image, FALSE, FALSE, 5);
 
   /* Label */
 
-  label = gtk_label_new_with_mnemonic (_("_Search:"));
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), _("<b>_Search:</b>"));
   gtk_box_pack_start (GTK_BOX (impl->search_hbox), label, FALSE, FALSE, 0);
 
   /* Entry */
@@ -9451,6 +9468,35 @@ search_setup_widgets (GtkFileChooserDefault *impl)
   /* FMQ: hide the filter combo? */
 }
 
+/* Stops running operations like populating the browse model, searches, and the recent-files model */
+static void
+stop_operation (GtkFileChooserDefault *impl, OperationMode mode)
+{
+  switch (mode)
+    {
+    case OPERATION_MODE_BROWSE:
+      stop_loading_and_clear_list_model (impl);
+      break;
+
+    case OPERATION_MODE_SEARCH:
+      search_stop_searching (impl, FALSE);
+      search_clear_model (impl, TRUE);
+
+      gtk_widget_destroy (impl->search_hbox);
+      impl->search_hbox = NULL;
+      impl->search_entry = NULL;
+      break;
+
+    case OPERATION_MODE_RECENT:
+      recent_stop_loading (impl);
+      recent_clear_model (impl, TRUE);
+
+      gtk_widget_destroy (impl->recent_hbox);
+      impl->recent_hbox = NULL;
+      break;
+    }
+}
+
 /* Main entry point to the searching functions; this gets called when the user
  * activates the Search shortcut.
  */
@@ -9468,21 +9514,7 @@ search_activate (GtkFileChooserDefault *impl)
   previous_mode = impl->operation_mode;
   impl->operation_mode = OPERATION_MODE_SEARCH;
 
-  switch (previous_mode)
-    {
-    case OPERATION_MODE_RECENT:
-      recent_stop_loading (impl);
-      recent_clear_model (impl, TRUE);
-      break;
-
-    case OPERATION_MODE_BROWSE:
-      stop_loading_and_clear_list_model (impl);
-      break;
-
-    case OPERATION_MODE_SEARCH:
-      g_assert_not_reached ();
-      break;
-    }
+  stop_operation (impl, previous_mode);
 
   g_assert (impl->search_hbox == NULL);
   g_assert (impl->search_entry == NULL);
@@ -9572,6 +9604,9 @@ recent_switch_to_browse_mode (GtkFileChooserDefault *impl)
 
   recent_stop_loading (impl);
   recent_clear_model (impl, TRUE);
+
+  gtk_widget_destroy (impl->recent_hbox);
+  impl->recent_hbox = NULL;
 
   gtk_widget_show (impl->browse_path_bar);
   gtk_widget_show (impl->browse_new_folder_button);
@@ -10104,9 +10139,29 @@ recent_should_respond (GtkFileChooserDefault *impl)
 static void
 recent_hide_entry (GtkFileChooserDefault *impl)
 {
+  GtkWidget *label;
+  GtkWidget *image;
+
+  impl->recent_hbox = gtk_hbox_new (FALSE, 12);
+  
+  /* Image */
+  image = gtk_image_new_from_icon_name ("document-open-recent", GTK_ICON_SIZE_BUTTON);
+  gtk_size_group_add_widget (impl->browse_path_bar_size_group, image);
+  gtk_box_pack_start (GTK_BOX (impl->recent_hbox), image, FALSE, FALSE, 5);
+
+  /* Label */
+  label = gtk_label_new (NULL);
+  gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), _("<b>Recently Used</b>"));
+  gtk_box_pack_start (GTK_BOX (impl->recent_hbox), label, FALSE, FALSE, 0);
+
   gtk_widget_hide (impl->browse_path_bar);
   gtk_widget_hide (impl->browse_new_folder_button);
   
+  /* Box for recent widgets */
+  gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->recent_hbox, TRUE, TRUE, 0);
+  gtk_widget_show_all (impl->recent_hbox);
+
+  /* Hide the location widgets temporarily */
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
@@ -10129,25 +10184,7 @@ recent_activate (GtkFileChooserDefault *impl)
   previous_mode = impl->operation_mode;
   impl->operation_mode = OPERATION_MODE_RECENT;
 
-  switch (previous_mode)
-    {
-    case OPERATION_MODE_SEARCH:
-      search_stop_searching (impl, FALSE);
-      search_clear_model (impl, TRUE);
-
-      gtk_widget_destroy (impl->search_hbox);
-      impl->search_hbox = NULL;
-      impl->search_entry = NULL;
-      break;
-
-    case OPERATION_MODE_BROWSE:
-      stop_loading_and_clear_list_model (impl);
-      break;
-
-    case OPERATION_MODE_RECENT:
-      g_assert_not_reached ();
-      break;
-    }
+  stop_operation (impl, previous_mode);
 
   recent_hide_entry (impl);
 

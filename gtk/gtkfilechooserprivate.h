@@ -28,6 +28,7 @@
 #include "gtkrecentmanager.h"
 #include "gtksearchengine.h"
 #include "gtkquery.h"
+#include "gtksizegroup.h"
 #include "gtktreemodelsort.h"
 #include "gtktreestore.h"
 #include "gtktreeview.h"
@@ -181,6 +182,7 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_files_popup_menu_size_column_item;
   GtkWidget *browse_new_folder_button;
   GtkWidget *browse_path_bar_hbox;
+  GtkSizeGroup *browse_path_bar_size_group;
   GtkWidget *browse_path_bar;
 
   GtkFileSystemModel *browse_files_model;
@@ -196,6 +198,7 @@ struct _GtkFileChooserDefault
   GtkTreeModelSort *search_model_sort;
 
   /* OPERATION_MODE_RECENT */
+  GtkWidget *recent_hbox;
   GtkRecentManager *recent_manager;
   GtkListStore *recent_model;
   guint load_recent_id;
