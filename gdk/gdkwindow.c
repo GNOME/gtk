@@ -8691,18 +8691,22 @@ gdk_window_offscreen_children_changed (GdkWindow *window)
   _gdk_syntesize_crossing_events_for_geometry_change (window);
 }
 
-void
-_gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
+static gboolean
+do_synthesize_crossing_event (gpointer data)
 {
   GdkDisplay *display;
   GdkWindow *changed_toplevel;
+  GdkWindowObject *changed_toplevel_priv;
   GdkWindow *new_window_under_pointer;
   gulong serial;
 
-  display = gdk_drawable_get_display (changed_window);
+  changed_toplevel = data;
+  changed_toplevel_priv = (GdkWindowObject *)changed_toplevel;
 
+  display = gdk_drawable_get_display (changed_toplevel);
   serial = _gdk_windowing_window_get_next_serial (display);
-  changed_toplevel = get_event_toplevel (changed_window);
+
+  changed_toplevel_priv->synthesize_crossing_event_queued = FALSE;
 
   if (changed_toplevel == display->pointer_info.toplevel_under_pointer)
     {
@@ -8726,6 +8730,33 @@ _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
 					  serial);
 	  _gdk_display_set_window_under_pointer (display, new_window_under_pointer);
 	}
+    }
+
+  return FALSE;
+}
+
+void
+_gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
+{
+  GdkDisplay *display;
+  GdkWindow *toplevel;
+  GdkWindowObject *toplevel_priv;
+  GdkWindow *new_window_under_pointer;
+  gulong serial;
+
+  display = gdk_drawable_get_display (changed_window);
+
+  toplevel = get_event_toplevel (changed_window);
+  toplevel_priv = (GdkWindowObject *)toplevel;
+
+  if (toplevel == display->pointer_info.toplevel_under_pointer &&
+      !toplevel_priv->synthesize_crossing_event_queued)
+    {
+      toplevel_priv->synthesize_crossing_event_queued = TRUE;
+      g_idle_add_full (GDK_PRIORITY_EVENTS - 1,
+		       do_synthesize_crossing_event,
+		       g_object_ref (toplevel),
+		       g_object_unref);
     }
 }
 
