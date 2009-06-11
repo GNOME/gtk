@@ -1627,16 +1627,16 @@ gtk_window_set_title (GtkWindow   *window,
   g_free (window->title);
   window->title = new_title;
 
-  if (!title)
-    {
-      gtk_window_set_label_widget (window, NULL);
-    }
-  else
+  if (!priv->title_label)
     {
       GtkWidget *child = gtk_label_new (title);
 
       gtk_widget_show (child);
       gtk_window_set_label_widget (window, child);
+    }
+  else
+    {
+      gtk_label_set_text (GTK_LABEL (priv->title_label), title);
     }
 
   if (GTK_WIDGET_VISIBLE (priv->title_label) && GTK_WIDGET_VISIBLE (GTK_WIDGET (window)))
