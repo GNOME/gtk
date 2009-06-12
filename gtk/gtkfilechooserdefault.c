@@ -145,6 +145,8 @@ typedef struct _GtkFileChooserDefaultClass GtkFileChooserDefaultClass;
 
 #define MAX_LOADING_TIME 500
 
+#define DEFAULT_NEW_FOLDER_NAME _("Type name of new folder")
+
 struct _GtkFileChooserDefaultClass
 {
   GtkVBoxClass parent_class;
@@ -2421,7 +2423,9 @@ edited_idle_cb (GtkFileChooserDefault *impl)
 
   gtk_widget_set_sensitive (impl->browse_new_folder_button, TRUE);
 
-  if (impl->edited_new_text) /* not cancelled? */
+  if (impl->edited_new_text /* not cancelled? */
+      && (strlen (impl->edited_new_text) != 0)
+      && (strcmp (impl->edited_new_text, DEFAULT_NEW_FOLDER_NAME) != 0)) /* Don't create folder if name is empty or has not been edited */
     {
       GError *error = NULL;
       GFile *file;
@@ -11065,7 +11069,7 @@ list_name_data_func (GtkTreeViewColumn *tree_column,
   if (!info)
     {
       g_object_set (cell,
-		    "text", _("Type name of new folder"),
+		    "text", DEFAULT_NEW_FOLDER_NAME,
 		    "sensitive", TRUE,
 		    "ellipsize", PANGO_ELLIPSIZE_NONE,
 		    NULL);
