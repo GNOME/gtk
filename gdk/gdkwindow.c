@@ -8774,8 +8774,6 @@ _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
   GdkDisplay *display;
   GdkWindow *toplevel;
   GdkWindowObject *toplevel_priv;
-  GdkWindow *new_window_under_pointer;
-  gulong serial;
 
   display = gdk_drawable_get_display (changed_window);
 
