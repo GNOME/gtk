@@ -798,6 +798,8 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->pending_select_files = NULL;
   impl->location_mode = LOCATION_MODE_PATH_BAR;
   impl->operation_mode = OPERATION_MODE_BROWSE;
+  impl->sort_column = FILE_LIST_COL_NAME;
+  impl->sort_order = GTK_SORT_ASCENDING;
   impl->recent_manager = gtk_recent_manager_get_default ();
 
   gtk_box_set_spacing (GTK_BOX (impl), 12);
@@ -4452,35 +4454,70 @@ list_button_press_event_cb (GtkWidget             *widget,
   return TRUE;
 }
 
+typedef struct {
+  OperationMode operation_mode;
+  gint general_column;
+  gint model_column;
+} ColumnMap;
+
+/* Sigh.  Each operation mode has different sort column IDs.  This table
+ * translates between them.
+ */
+static const ColumnMap column_map[] = {
+  { OPERATION_MODE_BROWSE, FILE_LIST_COL_NAME, FILE_LIST_COL_NAME },
+  { OPERATION_MODE_BROWSE, FILE_LIST_COL_SIZE, FILE_LIST_COL_SIZE },
+  { OPERATION_MODE_BROWSE, FILE_LIST_COL_MTIME, FILE_LIST_COL_MTIME },
+
+  { OPERATION_MODE_SEARCH, FILE_LIST_COL_NAME, SEARCH_MODEL_COL_FILE },
+  { OPERATION_MODE_SEARCH, FILE_LIST_COL_SIZE, SEARCH_MODEL_COL_SIZE },
+  { OPERATION_MODE_SEARCH, FILE_LIST_COL_MTIME, SEARCH_MODEL_COL_MTIME },
+
+  { OPERATION_MODE_RECENT, FILE_LIST_COL_NAME, RECENT_MODEL_COL_FILE },
+  { OPERATION_MODE_RECENT, FILE_LIST_COL_SIZE, 0 },
+  { OPERATION_MODE_RECENT, FILE_LIST_COL_MTIME, RECENT_MODEL_COL_INFO }
+};
+
+static gint
+general_column_to_model_column (GtkFileChooserDefault *impl, gint general_column)
+{
+  int i;
+
+  for (i = 0; i < G_N_ELEMENTS (column_map); i++)
+    if (column_map[i].operation_mode == impl->operation_mode
+	&& column_map[i].general_column == general_column)
+      return column_map[i].model_column;
+
+  g_assert_not_reached ();
+  return 0;
+}
+
+static gint
+model_column_to_general_column (GtkFileChooserDefault *impl, gint model_column)
+{
+  int i;
+
+  for (i = 0; i < G_N_ELEMENTS (column_map); i++)
+    if (column_map[i].operation_mode == impl->operation_mode
+	&& column_map[i].model_column == model_column)
+      return column_map[i].general_column;
+
+  g_assert_not_reached ();
+  return 0;
+}
+
 /* Sets the sort column IDs for the file list based on the operation mode */
 static void
 file_list_set_sort_column_ids (GtkFileChooserDefault *impl)
 {
   int name_id, mtime_id, size_id;
 
-  name_id = mtime_id = size_id = 0;
+  name_id  = general_column_to_model_column (impl, FILE_LIST_COL_NAME);
+  mtime_id = general_column_to_model_column (impl, FILE_LIST_COL_MTIME);
+  size_id  = general_column_to_model_column (impl, FILE_LIST_COL_SIZE);
 
-  switch (impl->operation_mode)
-    {
-    case OPERATION_MODE_BROWSE:
-      name_id = FILE_LIST_COL_NAME;
-      mtime_id = FILE_LIST_COL_MTIME;
-      size_id = FILE_LIST_COL_SIZE;
-      break;
-    case OPERATION_MODE_SEARCH:
-      name_id = SEARCH_MODEL_COL_FILE;
-      mtime_id = SEARCH_MODEL_COL_MTIME;
-      size_id = SEARCH_MODEL_COL_SIZE;
-      break;
-    case OPERATION_MODE_RECENT:
-      name_id = RECENT_MODEL_COL_FILE;
-      mtime_id = RECENT_MODEL_COL_INFO;
-      break;
-    }
-
-  gtk_tree_view_column_set_sort_column_id (impl->list_name_column, name_id);
+  gtk_tree_view_column_set_sort_column_id (impl->list_name_column,  name_id);
   gtk_tree_view_column_set_sort_column_id (impl->list_mtime_column, mtime_id);
-  gtk_tree_view_column_set_sort_column_id (impl->list_size_column, size_id);
+  gtk_tree_view_column_set_sort_column_id (impl->list_size_column,  size_id);
 }
 
 static gboolean
@@ -4633,7 +4670,6 @@ create_file_list (GtkFileChooserDefault *impl)
   gtk_tree_view_column_set_expand (impl->list_name_column, TRUE);
   gtk_tree_view_column_set_resizable (impl->list_name_column, TRUE);
   gtk_tree_view_column_set_title (impl->list_name_column, _("Name"));
-  gtk_tree_view_column_set_sort_column_id (impl->list_name_column, FILE_LIST_COL_NAME);
 
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (impl->list_name_column, renderer, FALSE);
@@ -4663,7 +4699,6 @@ create_file_list (GtkFileChooserDefault *impl)
   gtk_tree_view_column_pack_start (column, renderer, TRUE); /* bug: it doesn't expand */
   gtk_tree_view_column_set_cell_data_func (column, renderer,
 					   list_size_data_func, impl, NULL);
-  gtk_tree_view_column_set_sort_column_id (column, FILE_LIST_COL_SIZE);
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->browse_files_tree_view), column);
   impl->list_size_column = column;
 
@@ -6015,6 +6050,35 @@ get_is_file_filtered (GtkFileChooserDefault *impl,
 }
 
 static void
+set_sort_column (GtkFileChooserDefault *impl)
+{
+  GtkTreeSortable *sortable;
+
+  switch (impl->operation_mode)
+    {
+    case OPERATION_MODE_BROWSE:
+      sortable = GTK_TREE_SORTABLE (impl->sort_model);
+      break;
+
+    case OPERATION_MODE_SEARCH:
+      sortable = GTK_TREE_SORTABLE (impl->search_model_sort);
+      break;
+
+    case OPERATION_MODE_RECENT:
+      sortable = GTK_TREE_SORTABLE (impl->recent_model_sort);
+      break;
+
+    default:
+      g_assert_not_reached ();
+      return;
+    }
+
+  gtk_tree_sortable_set_sort_column_id (sortable,
+					general_column_to_model_column (impl, impl->sort_column),
+					impl->sort_order);
+}
+
+static void
 settings_load (GtkFileChooserDefault *impl)
 {
   GtkFileChooserSettings *settings;
@@ -6022,6 +6086,8 @@ settings_load (GtkFileChooserDefault *impl)
   gboolean show_hidden;
   gboolean expand_folders;
   gboolean show_size_column;
+  gint sort_column;
+  GtkSortType sort_order;
 
   settings = _gtk_file_chooser_settings_new ();
 
@@ -6029,6 +6095,8 @@ settings_load (GtkFileChooserDefault *impl)
   show_hidden = _gtk_file_chooser_settings_get_show_hidden (settings);
   expand_folders = _gtk_file_chooser_settings_get_expand_folders (settings);
   show_size_column = _gtk_file_chooser_settings_get_show_size_column (settings);
+  sort_column = _gtk_file_chooser_settings_get_sort_column (settings);
+  sort_order = _gtk_file_chooser_settings_get_sort_order (settings);
 
   g_object_unref (settings);
 
@@ -6043,6 +6111,10 @@ settings_load (GtkFileChooserDefault *impl)
   impl->show_size_column = show_size_column;
   if (impl->list_size_column)
     gtk_tree_view_column_set_visible (impl->list_size_column, show_size_column);
+
+  impl->sort_column = sort_column;
+  impl->sort_order = sort_order;
+  set_sort_column (impl);
 }
 
 static void
@@ -6081,6 +6153,8 @@ settings_save (GtkFileChooserDefault *impl)
   _gtk_file_chooser_settings_set_show_hidden (settings, gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (impl)));
   _gtk_file_chooser_settings_set_expand_folders (settings, impl->expand_folders);
   _gtk_file_chooser_settings_set_show_size_column (settings, impl->show_size_column);
+  _gtk_file_chooser_settings_set_sort_column (settings, impl->sort_column);
+  _gtk_file_chooser_settings_set_sort_order (settings, impl->sort_order);
 
   save_dialog_geometry (impl, settings);
 
@@ -6301,10 +6375,15 @@ static void
 list_sort_column_changed_cb (GtkTreeSortable       *sortable,
 			     GtkFileChooserDefault *impl)
 {
+  gint sort_column_id;
   GtkSortType sort_type;
 
-  if (gtk_tree_sortable_get_sort_column_id (sortable, NULL, &sort_type))
-    impl->list_sort_ascending = (sort_type == GTK_SORT_ASCENDING);
+  if (gtk_tree_sortable_get_sort_column_id (sortable, &sort_column_id, &sort_type))
+    {
+      impl->list_sort_ascending = (sort_type == GTK_SORT_ASCENDING);
+      impl->sort_column = model_column_to_general_column (impl, sort_column_id);
+      impl->sort_order = sort_type;
+    }
 }
 
 static void
@@ -6348,7 +6427,7 @@ load_set_model (GtkFileChooserDefault *impl)
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_SIZE, size_sort_func, impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_MTIME, mtime_sort_func, impl, NULL);
   gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->sort_model), NULL, NULL, NULL);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, GTK_SORT_ASCENDING);
+  set_sort_column (impl);
   impl->list_sort_ascending = TRUE;
   profile_msg ("    gtk_tree_model_sort_new_with_model end", NULL);
 
@@ -9303,9 +9382,7 @@ search_setup_model (GtkFileChooserDefault *impl)
 				   SEARCH_MODEL_COL_SIZE,
 				   search_column_size_sort_func,
 				   impl, NULL);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->search_model_sort),
-					SEARCH_MODEL_COL_MTIME,
-					GTK_SORT_DESCENDING);
+  set_sort_column (impl);
 
   /* EB: setting the model here will make the hits list update feel
    * more "alive" than setting the model at the end of the search
@@ -9836,9 +9913,7 @@ recent_setup_model (GtkFileChooserDefault *impl)
                                    RECENT_MODEL_COL_INFO,
                                    recent_column_mtime_sort_func,
                                    impl, NULL);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->recent_model_sort),
-                                        RECENT_MODEL_COL_INFO,
-                                        GTK_SORT_DESCENDING);
+  set_sort_column (impl);
 }
 
 typedef struct
