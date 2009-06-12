@@ -8736,7 +8736,7 @@ do_synthesize_crossing_event (gpointer data)
   changed_toplevel_priv->synthesize_crossing_event_queued = FALSE;
 
   if (GDK_WINDOW_DESTROYED (changed_toplevel))
-    return;
+    return FALSE;
 
   display = gdk_drawable_get_display (changed_toplevel);
   serial = _gdk_windowing_window_get_next_serial (display);
