@@ -1746,7 +1746,7 @@ shortcuts_insert_file (GtkFileChooserDefault *impl,
           gtk_tree_path_free (p);
 
           cancellable = _gtk_file_system_get_info (request->impl->file_system, request->file,
-						   "standard::is-hidden,standard::display-name,standard::icon",
+						   "standard::is-hidden,standard::is-backup,standard::display-name,standard::icon",
 						   get_file_info_finished, request);
 
           gtk_list_store_set (impl->shortcuts_model, &iter,
@@ -6511,7 +6511,8 @@ show_and_select_files_finished_loading (GtkFolder *folder,
       if (info)
 	{
 	  if (!have_hidden)
-	    have_hidden = g_file_info_get_is_hidden (info);
+	    have_hidden = g_file_info_get_is_hidden (info)
+	                    || g_file_info_get_is_backup (info);
 
 	  if (!have_filtered)
 	    have_filtered = (! _gtk_file_info_consider_as_directory (info)) &&
@@ -6614,7 +6615,7 @@ show_and_select_files (GtkFileChooserDefault *impl,
 
   impl->show_and_select_files_cancellable =
     _gtk_file_system_get_folder (impl->file_system, parent_file,
- 				 "standard::is-hidden,standard::type,standard::name,standard::content-type",
+ 				 "standard::is-hidden,standard::is-backup,standard::type,standard::name,standard::content-type",
 			         show_and_select_files_get_folder_cb, info);
 
   profile_end ("end", NULL);
