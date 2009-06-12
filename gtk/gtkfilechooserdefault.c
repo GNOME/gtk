@@ -191,14 +191,6 @@ typedef enum {
   SHORTCUT_TYPE_RECENT
 } ShortcutType;
 
-/* Column numbers for the file list */
-enum {
-  FILE_LIST_COL_NAME,
-  FILE_LIST_COL_SIZE,
-  FILE_LIST_COL_MTIME,
-  FILE_LIST_COL_NUM_COLUMNS
-};
-
 /* Column numbers for the search model.  
  * Keep this in sync with search_setup_model() 
  */

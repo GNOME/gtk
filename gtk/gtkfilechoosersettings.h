@@ -29,6 +29,14 @@ G_BEGIN_DECLS
 
 #define GTK_FILE_CHOOSER_SETTINGS_TYPE (_gtk_file_chooser_settings_get_type ())
 
+/* Column numbers for the file list */
+enum {
+  FILE_LIST_COL_NAME,
+  FILE_LIST_COL_SIZE,
+  FILE_LIST_COL_MTIME,
+  FILE_LIST_COL_NUM_COLUMNS
+};
+
 typedef struct _GtkFileChooserSettings GtkFileChooserSettings;
 typedef struct _GtkFileChooserSettingsClass GtkFileChooserSettingsClass;
 
@@ -37,6 +45,9 @@ struct _GtkFileChooserSettings
   GObject object;
 
   LocationMode location_mode;
+
+  GtkSortType sort_order;
+  gint sort_column;
 
   int geometry_x;
   int geometry_y;
@@ -73,6 +84,14 @@ void     _gtk_file_chooser_settings_set_expand_folders (GtkFileChooserSettings *
 gboolean _gtk_file_chooser_settings_get_show_size_column (GtkFileChooserSettings *settings);
 void     _gtk_file_chooser_settings_set_show_size_column (GtkFileChooserSettings *settings,
                                                           gboolean                show_column);
+
+gint _gtk_file_chooser_settings_get_sort_column (GtkFileChooserSettings *settings);
+void _gtk_file_chooser_settings_set_sort_column (GtkFileChooserSettings *settings,
+						 gint sort_column);
+
+GtkSortType _gtk_file_chooser_settings_get_sort_order (GtkFileChooserSettings *settings);
+void        _gtk_file_chooser_settings_set_sort_order (GtkFileChooserSettings *settings,
+						       GtkSortType sort_order);
 
 void _gtk_file_chooser_settings_get_geometry (GtkFileChooserSettings *settings,
 					      int                    *out_x,
