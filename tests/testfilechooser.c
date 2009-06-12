@@ -490,6 +490,7 @@ main (int argc, char **argv)
   char *action_arg = NULL;
   char *backend = NULL;
   char *initial_filename = NULL;
+  char *initial_folder = NULL;
   GError *error = NULL;
   GOptionEntry options[] = {
     { "action", 'a', 0, G_OPTION_ARG_STRING, &action_arg, "Filechooser action", "ACTION" },
@@ -497,6 +498,7 @@ main (int argc, char **argv)
     { "multiple", 'm', 0, G_OPTION_ARG_NONE, &multiple, "Select-multiple", NULL },
     { "right-to-left", 'r', 0, G_OPTION_ARG_NONE, &force_rtl, "Force right-to-left layout.", NULL },
     { "initial-filename", 'f', 0, G_OPTION_ARG_FILENAME, &initial_filename, "Initial filename to select", "FILENAME" },
+    { "initial-folder", 'F', 0, G_OPTION_ARG_FILENAME, &initial_folder, "Initial folder to show", "FILENAME" },
     { NULL }
   };
 
@@ -504,6 +506,12 @@ main (int argc, char **argv)
     {
       g_print ("Failed to parse args: %s\n", error->message);
       g_error_free (error);
+      return 1;
+    }
+
+  if (initial_filename && initial_folder)
+    {
+      g_print ("Only one of --initial-filename and --initial-folder may be specified");
       return 1;
     }
 
@@ -627,10 +635,13 @@ main (int argc, char **argv)
 					    "file:///usr/share/pixmaps",
 					    NULL);
 
-  /* Initial filename */
+  /* Initial filename or folder */
 
   if (initial_filename)
     set_filename (GTK_FILE_CHOOSER (dialog), initial_filename);
+
+  if (initial_folder)
+    set_current_folder (GTK_FILE_CHOOSER (dialog), initial_folder);
 
   /* show_all() to reveal bugs in composite widget handling */
   gtk_widget_show_all (dialog);
