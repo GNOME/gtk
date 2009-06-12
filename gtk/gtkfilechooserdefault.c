@@ -7050,13 +7050,14 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
 	}
       else
         {
-	  /* Error and bail out, ignoring "not found" errors since they're useless:
+          /* Error and bail out, ignoring "not found" errors since they're useless:
            * they only happen when a program defaults to a folder that has been (re)moved.
            */
           if (!g_error_matches (data->original_error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
-	    error_changing_folder_dialog (impl, data->original_file, data->original_error);
+            error_changing_folder_dialog (impl, data->original_file, data->original_error);
           else
             g_error_free (data->original_error);
+
 	  g_object_unref (data->original_file);
 
 	  goto out;
@@ -7065,7 +7066,13 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
 
   if (data->original_file)
     {
-      error_changing_folder_dialog (impl, data->original_file, data->original_error);
+      /* Error and bail out, ignoring "not found" errors since they're useless:
+       * they only happen when a program defaults to a folder that has been (re)moved.
+       */
+      if (!g_error_matches (data->original_error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+        error_changing_folder_dialog (impl, data->original_file, data->original_error);
+      else
+        g_error_free (data->original_error);
 
       g_object_unref (data->original_file);
     }
