@@ -6103,7 +6103,6 @@ static void
 gtk_file_chooser_default_realize (GtkWidget *widget)
 {
   GtkFileChooserDefault *impl;
-  char *current_working_dir;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
@@ -10453,7 +10452,7 @@ shortcuts_activate_volume (GtkFileChooserDefault *impl,
 
   if (!_gtk_file_system_volume_is_mounted (volume))
     {
-      GtkMountOperation *mount_op;
+      GMountOperation *mount_op;
 
       set_busy_cursor (impl, TRUE);
    
