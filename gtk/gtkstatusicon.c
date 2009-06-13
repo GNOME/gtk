@@ -1022,10 +1022,13 @@ gtk_status_icon_set_property (GObject      *object,
       break;
     case PROP_HAS_TOOLTIP:
       gtk_status_icon_set_has_tooltip (status_icon, g_value_get_boolean (value));
+      break;
     case PROP_TOOLTIP_TEXT:
       gtk_status_icon_set_tooltip_text (status_icon, g_value_get_string (value));
+      break;
     case PROP_TOOLTIP_MARKUP:
       gtk_status_icon_set_tooltip_markup (status_icon, g_value_get_string (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
