@@ -983,11 +983,11 @@ _gdk_event_init (GdkDisplay *display)
   display_x11 = GDK_DISPLAY_X11 (display);
   display_x11->event_source = gdk_event_source_new (display);
 
-  gdk_event_source_add_translator (display_x11->event_source,
+  gdk_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
                                    GDK_EVENT_TRANSLATOR (display));
 
   device_manager = gdk_device_manager_get_for_display (display);
-  gdk_event_source_add_translator (display_x11->event_source,
+  gdk_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
                                    GDK_EVENT_TRANSLATOR (device_manager));
 }
 
