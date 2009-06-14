@@ -665,7 +665,8 @@ _gdk_window_new (GdkWindow     *parent,
   GdkDrawableImplX11 *draw_impl;
   GdkScreenX11 *screen_x11;
   GdkScreen *screen;
-  
+  GdkDisplay *display;
+  GdkDeviceManager *device_manager;
   GdkVisual *visual;
   Window xparent;
   Visual *xvisual;
@@ -689,10 +690,14 @@ _gdk_window_new (GdkWindow     *parent,
 		g_warning ("gdk_window_new(): no parent specified reverting to parent = default root window"));
       
       screen = gdk_screen_get_default ();
+      display = gdk_screen_get_display (screen);
       parent = gdk_screen_get_root_window (screen);
     }
   else
-    screen = gdk_drawable_get_screen (parent);
+    {
+      screen = gdk_drawable_get_screen (parent);
+      display = GDK_WINDOW_DISPLAY (parent);
+    }
 
   screen_x11 = GDK_SCREEN_X11 (screen);
 
@@ -762,7 +767,7 @@ _gdk_window_new (GdkWindow     *parent,
    */
   if (attributes->wclass == GDK_INPUT_ONLY &&
       GDK_WINDOW_TYPE (parent) == GDK_WINDOW_ROOT &&
-      !G_LIKELY (GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (parent))->trusted_client))
+      !G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
     {
       g_warning ("Coercing GDK_INPUT_ONLY toplevel window to GDK_INPUT_OUTPUT to work around bug in Xorg server");
       attributes->wclass = GDK_INPUT_OUTPUT;
@@ -946,6 +951,9 @@ _gdk_window_new (GdkWindow     *parent,
 
   if (attributes_mask & GDK_WA_TYPE_HINT)
     gdk_window_set_type_hint (window, attributes->type_hint);
+
+  device_manager = gdk_device_manager_get_for_display (display);
+  gdk_device_manager_set_window_events (device_manager, window, attributes->event_mask);
 
   return window;
 }
