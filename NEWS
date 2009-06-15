@@ -11,6 +11,11 @@ Overview of Changes from GTK+ 2.17.1 to 2.17.2
    its background color depending on the message type. By default,
    it uses the same background color as tooltips. This can be turned
    off with style property.
+ - The GTK+ file chooser (as well as nautilus and other users of GIO
+   icon information) can now show different icons for xdg user dirs.
+   The icon names are folder-documents, folder-download, folder-music,
+   folder-pictures, folder-publicshare, folder-templates, folder-videos,
+   with an automatic fallback to the standard folder icon.
 
 
 Overview of Changes from GTK+ 2.17.0 to 2.17.1
