@@ -1053,7 +1053,9 @@ gtk_cell_view_set_background_color (GtkCellView    *cell_view,
  *   g_list_free() when no longer needed.
  * 
  * Since: 2.6
- */
+ *
+ * Deprecated: 2.18: use gtk_cell_layout_get_cells() instead.
+ **/
 GList *
 gtk_cell_view_get_cell_renderers (GtkCellView *cell_view)
 {

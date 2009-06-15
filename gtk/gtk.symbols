@@ -690,7 +690,9 @@ gtk_cell_renderer_toggle_set_radio
 
 #if IN_HEADER(__GTK_CELL_VIEW_H__)
 #if IN_FILE(__GTK_CELL_VIEW_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_cell_view_get_cell_renderers
+#endif
 gtk_cell_view_get_displayed_row
 gtk_cell_view_get_model
 gtk_cell_view_get_size_of_row
@@ -4602,7 +4604,9 @@ gtk_tree_view_column_clear_attributes
 gtk_tree_view_column_clicked
 gtk_tree_view_column_focus_cell
 gtk_tree_view_column_get_alignment
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_tree_view_column_get_cell_renderers
+#endif
 gtk_tree_view_column_get_clickable
 gtk_tree_view_column_get_expand
 gtk_tree_view_column_get_fixed_width
