@@ -5180,6 +5180,7 @@ gtk_info_bar_add_button
 gtk_info_bar_add_buttons
 gtk_info_bar_set_response_sensitive
 gtk_info_bar_set_default_response
+gtk_info_bar_response
 gtk_info_bar_set_message_type
 gtk_info_bar_get_message_type
 #endif

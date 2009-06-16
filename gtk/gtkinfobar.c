@@ -982,7 +982,7 @@ gtk_info_bar_set_default_response (GtkInfoBar *info_bar,
 }
 
 /**
- * gtk_info_bar_set_default_response:
+ * gtk_info_bar_response:
  * @info_bar: a #GtkInfoBar
  * @response_id: a response ID
  *
