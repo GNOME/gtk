@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-29 19:03-0400\n"
+"POT-Creation-Date: 2009-06-15 20:53-0400\n"
 "PO-Revision-Date: 2006-03-24 15:19+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <kontak@id.gnome.org>\n"
@@ -673,43 +673,43 @@ msgstr "Tingkat Kenaikan Halaman"
 msgid "Whether all required fields on the page have been filled out"
 msgstr ""
 
-#: gtk/gtkbbox.c:91
+#: gtk/gtkbbox.c:99
 msgid "Minimum child width"
 msgstr "Lebar anak minimum"
 
-#: gtk/gtkbbox.c:92
+#: gtk/gtkbbox.c:100
 msgid "Minimum width of buttons inside the box"
 msgstr "Lebar minimum tombol dalam kotak"
 
-#: gtk/gtkbbox.c:100
+#: gtk/gtkbbox.c:108
 msgid "Minimum child height"
 msgstr "Tinggi anak minimum"
 
-#: gtk/gtkbbox.c:101
+#: gtk/gtkbbox.c:109
 msgid "Minimum height of buttons inside the box"
 msgstr "Tinggi minimum tombol dalam kotak"
 
-#: gtk/gtkbbox.c:109
+#: gtk/gtkbbox.c:117
 msgid "Child internal width padding"
 msgstr "Lebar isian anak intern"
 
-#: gtk/gtkbbox.c:110
+#: gtk/gtkbbox.c:118
 msgid "Amount to increase child's size on either side"
 msgstr "Jumlah yang ditambahkan pada ukuran anak pada semua sisi"
 
-#: gtk/gtkbbox.c:118
+#: gtk/gtkbbox.c:126
 msgid "Child internal height padding"
 msgstr "Tinggi isian anak intern"
 
-#: gtk/gtkbbox.c:119
+#: gtk/gtkbbox.c:127
 msgid "Amount to increase child's size on the top and bottom"
 msgstr "Jumlah yang ditambahkan pada ukuran anak di atas dan di bawah"
 
-#: gtk/gtkbbox.c:127
+#: gtk/gtkbbox.c:135
 msgid "Layout style"
 msgstr "Gaya layout"
 
-#: gtk/gtkbbox.c:128
+#: gtk/gtkbbox.c:136
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
@@ -717,11 +717,11 @@ msgstr ""
 "Cara layout tombol dalam kotak. Nilai yang berlaku adalah default, spread, "
 "edge, start dan end"
 
-#: gtk/gtkbbox.c:136
+#: gtk/gtkbbox.c:144
 msgid "Secondary"
 msgstr "Sekunder"
 
-#: gtk/gtkbbox.c:137
+#: gtk/gtkbbox.c:145
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
@@ -4270,12 +4270,12 @@ msgstr ""
 msgid "Printer settings"
 msgstr ""
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:266
 #, fuzzy
 msgid "Page Setup"
 msgstr "Ukuran Halaman"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1053
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1056
 msgid "Track Print Status"
 msgstr ""
 
@@ -4285,140 +4285,176 @@ msgid ""
 "print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:925
+#: gtk/gtkprintoperation.c:928
 #, fuzzy
 msgid "Default Page Setup"
 msgstr "Tinggi Awal"
 
-#: gtk/gtkprintoperation.c:926
+#: gtk/gtkprintoperation.c:929
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:944 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:947 gtk/gtkprintunixdialog.c:284
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:945 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:948 gtk/gtkprintunixdialog.c:285
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:966
 #, fuzzy
 msgid "Job Name"
 msgstr "Nama Ikon"
 
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:967
 msgid "A string used for identifying the print job."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:988
+#: gtk/gtkprintoperation.c:991
 #, fuzzy
 msgid "Number of Pages"
 msgstr "Jumlah Kanal"
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:992
 #, fuzzy
 msgid "The number of pages in the document."
 msgstr "Jumlah baris dalam tabel"
 
-#: gtk/gtkprintoperation.c:1010 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1013 gtk/gtkprintunixdialog.c:274
 #, fuzzy
 msgid "Current Page"
 msgstr "Alpha saat ini"
 
-#: gtk/gtkprintoperation.c:1011 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1014 gtk/gtkprintunixdialog.c:275
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Ukuran halaman"
 
-#: gtk/gtkprintoperation.c:1032
+#: gtk/gtkprintoperation.c:1035
 #, fuzzy
 msgid "Use full page"
 msgstr "Gunakan alfa"
 
-#: gtk/gtkprintoperation.c:1033
+#: gtk/gtkprintoperation.c:1036
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1054
+#: gtk/gtkprintoperation.c:1057
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1071
+#: gtk/gtkprintoperation.c:1074
 #, fuzzy
 msgid "Unit"
 msgstr "Penting"
 
-#: gtk/gtkprintoperation.c:1072
+#: gtk/gtkprintoperation.c:1075
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1089
+#: gtk/gtkprintoperation.c:1092
 #, fuzzy
 msgid "Show Dialog"
 msgstr "Dialog"
 
-#: gtk/gtkprintoperation.c:1090
+#: gtk/gtkprintoperation.c:1093
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1113
+#: gtk/gtkprintoperation.c:1116
 #, fuzzy
 msgid "Allow Async"
 msgstr "Membolehkan aturan"
 
-#: gtk/gtkprintoperation.c:1114
+#: gtk/gtkprintoperation.c:1117
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1136 gtk/gtkprintoperation.c:1137
+#: gtk/gtkprintoperation.c:1139 gtk/gtkprintoperation.c:1140
 #, fuzzy
 msgid "Export filename"
 msgstr "Nama file"
 
-#: gtk/gtkprintoperation.c:1151
+#: gtk/gtkprintoperation.c:1154
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1152
+#: gtk/gtkprintoperation.c:1155
 #, fuzzy
 msgid "The status of the print operation"
 msgstr "Status togel tombol"
 
-#: gtk/gtkprintoperation.c:1172
+#: gtk/gtkprintoperation.c:1175
 msgid "Status String"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1173
+#: gtk/gtkprintoperation.c:1176
 msgid "A human-readable description of the status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1191
+#: gtk/gtkprintoperation.c:1194
 #, fuzzy
 msgid "Custom tab label"
 msgstr "Palet pilihan sendiri"
 
-#: gtk/gtkprintoperation.c:1192
+#: gtk/gtkprintoperation.c:1195
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:1210 gtk/gtkprintunixdialog.c:309
+#, fuzzy
+msgid "Support Selection"
+msgstr "Warna Penyorot"
+
+#: gtk/gtkprintoperation.c:1211
+msgid "TRUE if the print operation will support print of selection."
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1227 gtk/gtkprintunixdialog.c:317
+#, fuzzy
+msgid "Has Selection"
+msgstr "Warna Penyorot"
+
+#: gtk/gtkprintoperation.c:1228
+msgid "TRUE if a selecion exists."
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:267
 msgid "The GtkPageSetup to use"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:284
+#: gtk/gtkprintunixdialog.c:292
 #, fuzzy
 msgid "Selected Printer"
 msgstr "Tahun yang dipilih"
 
-#: gtk/gtkprintunixdialog.c:285
+#: gtk/gtkprintunixdialog.c:293
 #, fuzzy
 msgid "The GtkPrinter which is selected"
 msgstr "Objek yang aktif"
+
+#: gtk/gtkprintunixdialog.c:300
+msgid "Manual Capabilites"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:301
+msgid "Capabilities the application can handle"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:310
+#, fuzzy
+msgid "Whether the dialog supports selection"
+msgstr "Menentukan apakah widget terlihat atau tidak"
+
+#: gtk/gtkprintunixdialog.c:318
+#, fuzzy
+msgid "Whether the application has a selection"
+msgstr "Menentukan apkaah aksi diaktifkan"
 
 #: gtk/gtkprogress.c:102
 msgid "Activity mode"
@@ -7482,10 +7518,6 @@ msgstr "Cara menggambar statusbar metode input"
 #, fuzzy
 #~ msgid "Width In Chararacters"
 #~ msgstr "Lebar dalam karakter"
-
-#, fuzzy
-#~ msgid "Whether the browse dialog is visible or not."
-#~ msgstr "Menentukan apakah widget terlihat atau tidak"
 
 #, fuzzy
 #~ msgid "Row separator column"

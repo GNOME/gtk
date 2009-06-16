@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-29 19:03-0400\n"
+"POT-Creation-Date: 2009-06-15 20:53-0400\n"
 "PO-Revision-Date: 2009-03-16 13:18+0200\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -663,43 +663,43 @@ msgstr "Страницата е попълнена"
 msgid "Whether all required fields on the page have been filled out"
 msgstr "Дали всички задължителни полета на страницата са попълнени"
 
-#: gtk/gtkbbox.c:91
+#: gtk/gtkbbox.c:99
 msgid "Minimum child width"
 msgstr "Минимална широчина на дъщерен елемент"
 
-#: gtk/gtkbbox.c:92
+#: gtk/gtkbbox.c:100
 msgid "Minimum width of buttons inside the box"
 msgstr "Минимална широчина на бутони вътре в кутията"
 
-#: gtk/gtkbbox.c:100
+#: gtk/gtkbbox.c:108
 msgid "Minimum child height"
 msgstr "Минимална височина на дъщерен елемент"
 
-#: gtk/gtkbbox.c:101
+#: gtk/gtkbbox.c:109
 msgid "Minimum height of buttons inside the box"
 msgstr "Минимална височина на бутони вътре в кутията"
 
-#: gtk/gtkbbox.c:109
+#: gtk/gtkbbox.c:117
 msgid "Child internal width padding"
 msgstr "Вътрешно запълване по широчина"
 
-#: gtk/gtkbbox.c:110
+#: gtk/gtkbbox.c:118
 msgid "Amount to increase child's size on either side"
 msgstr "С колко да се увеличи размера на дъщерния елемент отляво и отдясно"
 
-#: gtk/gtkbbox.c:118
+#: gtk/gtkbbox.c:126
 msgid "Child internal height padding"
 msgstr "Вътрешно запълване по височина"
 
-#: gtk/gtkbbox.c:119
+#: gtk/gtkbbox.c:127
 msgid "Amount to increase child's size on the top and bottom"
 msgstr "С колко да се увеличи размера на дъщерния елемент отгоре и отдолу"
 
-#: gtk/gtkbbox.c:127
+#: gtk/gtkbbox.c:135
 msgid "Layout style"
 msgstr "Стил на подредба"
 
-#: gtk/gtkbbox.c:128
+#: gtk/gtkbbox.c:136
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
@@ -708,11 +708,11 @@ msgstr ""
 "„default“ (стандартно), „spread“ (разтягане), „edge“ (по края), „start“ (от "
 "началото), „end“ (от края)"
 
-#: gtk/gtkbbox.c:136
+#: gtk/gtkbbox.c:144
 msgid "Secondary"
 msgstr "Вторична група"
 
-#: gtk/gtkbbox.c:137
+#: gtk/gtkbbox.c:145
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
@@ -4131,11 +4131,11 @@ msgstr "Настройки"
 msgid "Printer settings"
 msgstr "Настройки на принтера"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:266
 msgid "Page Setup"
 msgstr "Настройки на страницата"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1053
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1056
 msgid "Track Print Status"
 msgstr "Проследяване на състоянието на печата"
 
@@ -4148,51 +4148,51 @@ msgstr ""
 "състоянието след като данните за печат са били пратени към принтера или "
 "сървъра за печат."
 
-#: gtk/gtkprintoperation.c:925
+#: gtk/gtkprintoperation.c:928
 msgid "Default Page Setup"
 msgstr "Стандартни настройки на страницата"
 
-#: gtk/gtkprintoperation.c:926
+#: gtk/gtkprintoperation.c:929
 msgid "The GtkPageSetup used by default"
 msgstr "Стандартен GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:944 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:947 gtk/gtkprintunixdialog.c:284
 msgid "Print Settings"
 msgstr "Настройки за печат"
 
-#: gtk/gtkprintoperation.c:945 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:948 gtk/gtkprintunixdialog.c:285
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings, който се ползва за инициализирането на диалога"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:966
 msgid "Job Name"
 msgstr "Име на задание"
 
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:967
 msgid "A string used for identifying the print job."
 msgstr "Низ за идентифицирането на заданието за печат"
 
-#: gtk/gtkprintoperation.c:988
+#: gtk/gtkprintoperation.c:991
 msgid "Number of Pages"
 msgstr "Брой страници"
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:992
 msgid "The number of pages in the document."
 msgstr "Броят страници в документа"
 
-#: gtk/gtkprintoperation.c:1010 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1013 gtk/gtkprintunixdialog.c:274
 msgid "Current Page"
 msgstr "Текущата страница"
 
-#: gtk/gtkprintoperation.c:1011 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1014 gtk/gtkprintunixdialog.c:275
 msgid "The current page in the document"
 msgstr "Текущата страница в документа"
 
-#: gtk/gtkprintoperation.c:1032
+#: gtk/gtkprintoperation.c:1035
 msgid "Use full page"
 msgstr "Използване на цялата страница"
 
-#: gtk/gtkprintoperation.c:1033
+#: gtk/gtkprintoperation.c:1036
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4200,7 +4200,7 @@ msgstr ""
 "Истина, ако началото на контекста трябва да е ъгълът на страницата, а не "
 "ъгълът на зоната за изобразяване"
 
-#: gtk/gtkprintoperation.c:1054
+#: gtk/gtkprintoperation.c:1057
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4208,69 +4208,105 @@ msgstr ""
 "Истина, ако заданието за печат продължава да докладва са състоянието си, "
 "след като данните за печат са били пратени на принтера или сървъра за печат."
 
-#: gtk/gtkprintoperation.c:1071
+#: gtk/gtkprintoperation.c:1074
 msgid "Unit"
 msgstr "Единица"
 
-#: gtk/gtkprintoperation.c:1072
+#: gtk/gtkprintoperation.c:1075
 msgid "The unit in which distances can be measured in the context"
 msgstr "Единицата за разстоянията в този контекст"
 
-#: gtk/gtkprintoperation.c:1089
+#: gtk/gtkprintoperation.c:1092
 msgid "Show Dialog"
 msgstr "Показване на диалогова кутия"
 
-#: gtk/gtkprintoperation.c:1090
+#: gtk/gtkprintoperation.c:1093
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "Истина, ако диалогът за прогрес бива показван докато се печата."
 
-#: gtk/gtkprintoperation.c:1113
+#: gtk/gtkprintoperation.c:1116
 msgid "Allow Async"
 msgstr "Позволяване на асинхронност"
 
-#: gtk/gtkprintoperation.c:1114
+#: gtk/gtkprintoperation.c:1117
 msgid "TRUE if print process may run asynchronous."
 msgstr "Истина, ако заданието за печат може да се изпълни асинхронно"
 
-#: gtk/gtkprintoperation.c:1136 gtk/gtkprintoperation.c:1137
+#: gtk/gtkprintoperation.c:1139 gtk/gtkprintoperation.c:1140
 msgid "Export filename"
 msgstr "Име на файл при изнасяне"
 
-#: gtk/gtkprintoperation.c:1151
+#: gtk/gtkprintoperation.c:1154
 msgid "Status"
 msgstr "Състояние"
 
-#: gtk/gtkprintoperation.c:1152
+#: gtk/gtkprintoperation.c:1155
 msgid "The status of the print operation"
 msgstr "Състояние на заданието по печата"
 
-#: gtk/gtkprintoperation.c:1172
+#: gtk/gtkprintoperation.c:1175
 msgid "Status String"
 msgstr "Низ за състоянието"
 
-#: gtk/gtkprintoperation.c:1173
+#: gtk/gtkprintoperation.c:1176
 msgid "A human-readable description of the status"
 msgstr "Човешко описание на състоянието"
 
-#: gtk/gtkprintoperation.c:1191
+#: gtk/gtkprintoperation.c:1194
 msgid "Custom tab label"
 msgstr "Потребителски етикет на таб"
 
-#: gtk/gtkprintoperation.c:1192
+#: gtk/gtkprintoperation.c:1195
 msgid "Label for the tab containing custom widgets."
 msgstr "Етикет за таб, съдържащ потребителски графични обекти"
 
-#: gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:1210 gtk/gtkprintunixdialog.c:309
+#, fuzzy
+msgid "Support Selection"
+msgstr "Избор на цвят"
+
+#: gtk/gtkprintoperation.c:1211
+msgid "TRUE if the print operation will support print of selection."
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1227 gtk/gtkprintunixdialog.c:317
+#, fuzzy
+msgid "Has Selection"
+msgstr "С избрано"
+
+#: gtk/gtkprintoperation.c:1228
+msgid "TRUE if a selecion exists."
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:267
 msgid "The GtkPageSetup to use"
 msgstr "GtkPageSetup, който да се ползва"
 
-#: gtk/gtkprintunixdialog.c:284
+#: gtk/gtkprintunixdialog.c:292
 msgid "Selected Printer"
 msgstr "Избраният принтер"
 
-#: gtk/gtkprintunixdialog.c:285
+#: gtk/gtkprintunixdialog.c:293
 msgid "The GtkPrinter which is selected"
 msgstr "GtkPrinter, който е избран"
+
+#: gtk/gtkprintunixdialog.c:300
+msgid "Manual Capabilites"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:301
+msgid "Capabilities the application can handle"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:310
+#, fuzzy
+msgid "Whether the dialog supports selection"
+msgstr "Дали етикетът да е изчертан с избрания шрифт"
+
+#: gtk/gtkprintunixdialog.c:318
+#, fuzzy
+msgid "Whether the application has a selection"
+msgstr "Дали действието е включено."
 
 #: gtk/gtkprogress.c:102
 msgid "Activity mode"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-29 19:02-0400\n"
+"POT-Creation-Date: 2009-06-15 20:52-0400\n"
 "PO-Revision-Date: 2006-09-23 16:18+0200\n"
 "Last-Translator: Pablo Saratxaga <pablo@walon.org>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
@@ -422,11 +422,11 @@ msgstr "Li tiestire di l' imådje est crombe"
 msgid "Image format unknown"
 msgstr "Cogne d' imådje nén cnoxhowe"
 
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:487
+#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
 msgid "Image pixel data corrupt"
 msgstr "Les dnêyes di picsels di l' imådje sont crombes"
 
-#: gdk-pixbuf/gdk-pixdata.c:431
+#: gdk-pixbuf/gdk-pixdata.c:432
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
@@ -1588,15 +1588,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Tchoezixhaedje del coleur"
 
-#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8448 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "_Metôdes d' intrêye"
 
-#: gtk/gtkentry.c:8457 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8462 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "_Sititchî caractere di contrôle unicôde"
 
-#: gtk/gtkentry.c:9825
+#: gtk/gtkentry.c:9830
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Copyî _eplaeçmint"
@@ -1605,7 +1605,7 @@ msgstr "Copyî _eplaeçmint"
 msgid "Select A File"
 msgstr "Tchoezi on fitchî"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1933
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1932
 msgid "Desktop"
 msgstr "Sicribanne"
 
@@ -1617,33 +1617,37 @@ msgstr "(Nouk)"
 msgid "Other..."
 msgstr "Co ds ôtes..."
 
-#: gtk/gtkfilechooserdefault.c:1059
+#: gtk/gtkfilechooserdefault.c:148
+msgid "Type name of new folder"
+msgstr "Tapez l' no do novea ridant"
+
+#: gtk/gtkfilechooserdefault.c:1058
 msgid "Could not retrieve information about the file"
 msgstr "Dji n' sai nén aveur des informåcions sol fitchî"
 
-#: gtk/gtkfilechooserdefault.c:1070
+#: gtk/gtkfilechooserdefault.c:1069
 msgid "Could not add a bookmark"
 msgstr "Dji n' sai radjouter l' rimåke"
 
-#: gtk/gtkfilechooserdefault.c:1081
+#: gtk/gtkfilechooserdefault.c:1080
 msgid "Could not remove bookmark"
 msgstr "Dji n' sai oister l' rimåke"
 
-#: gtk/gtkfilechooserdefault.c:1092
+#: gtk/gtkfilechooserdefault.c:1091
 msgid "The folder could not be created"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1105
+#: gtk/gtkfilechooserdefault.c:1104
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1116
+#: gtk/gtkfilechooserdefault.c:1115
 msgid "Invalid file name"
 msgstr "No d' fitchî nén valide"
 
-#: gtk/gtkfilechooserdefault.c:1126
+#: gtk/gtkfilechooserdefault.c:1125
 msgid "The folder contents could not be displayed"
 msgstr "Li contnou do ridant èn pout nén esse håyné"
 
@@ -1651,208 +1655,207 @@ msgstr "Li contnou do ridant èn pout nén esse håyné"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1676
+#: gtk/gtkfilechooserdefault.c:1675
 #, c-format
 msgid "%1$s on %2$s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1852
+#: gtk/gtkfilechooserdefault.c:1851
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1876
+#: gtk/gtkfilechooserdefault.c:1875
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2510
+#: gtk/gtkfilechooserdefault.c:2511
 msgid "Select which types of files are shown"
 msgstr "Tchoezi les sôres di fitchîs a mostrer"
 
-#: gtk/gtkfilechooserdefault.c:2939
+#: gtk/gtkfilechooserdefault.c:2940
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Radjouter l' ridant «%s» ezès rmåkes"
 
-#: gtk/gtkfilechooserdefault.c:2980
+#: gtk/gtkfilechooserdefault.c:2981
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Radjouter l' ridant do moumint ezès rmåkes"
 
-#: gtk/gtkfilechooserdefault.c:2982
+#: gtk/gtkfilechooserdefault.c:2983
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Radjouter les ridants tchoezis ezès rmåkes"
 
-#: gtk/gtkfilechooserdefault.c:3022
+#: gtk/gtkfilechooserdefault.c:3023
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Oister l' rimåke «%s»"
 
-#: gtk/gtkfilechooserdefault.c:3740
+#: gtk/gtkfilechooserdefault.c:3741
 msgid "Remove"
 msgstr "Oister"
 
-#: gtk/gtkfilechooserdefault.c:3749
+#: gtk/gtkfilechooserdefault.c:3750
 msgid "Rename..."
 msgstr "Rilomer..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3895
+#: gtk/gtkfilechooserdefault.c:3896
 msgid "Places"
 msgstr "Plaeces"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3952
+#: gtk/gtkfilechooserdefault.c:3953
 msgid "_Places"
 msgstr "_Plaeces"
 
-#: gtk/gtkfilechooserdefault.c:4008
+#: gtk/gtkfilechooserdefault.c:4009
 msgid "_Add"
 msgstr "_Radjouter"
 
-#: gtk/gtkfilechooserdefault.c:4015
+#: gtk/gtkfilechooserdefault.c:4016
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Radjouter l' ridant tchoezi dins les rmåkes"
 
-#: gtk/gtkfilechooserdefault.c:4020
+#: gtk/gtkfilechooserdefault.c:4021
 msgid "_Remove"
 msgstr "_Oister"
 
-#: gtk/gtkfilechooserdefault.c:4027
+#: gtk/gtkfilechooserdefault.c:4028
 msgid "Remove the selected bookmark"
 msgstr "Oister l' rimåke tchoezeye"
 
-#: gtk/gtkfilechooserdefault.c:4136
+#: gtk/gtkfilechooserdefault.c:4137
 msgid "Could not select file"
 msgstr "Dji n' sai tchoezi l' fitchî"
 
-#: gtk/gtkfilechooserdefault.c:4311
+#: gtk/gtkfilechooserdefault.c:4312
 msgid "_Add to Bookmarks"
 msgstr "_Radjouter ås rmåkes"
 
-#: gtk/gtkfilechooserdefault.c:4325
+#: gtk/gtkfilechooserdefault.c:4326
 msgid "Show _Hidden Files"
 msgstr "Mostrer les fitchîs _catchîs"
 
-#: gtk/gtkfilechooserdefault.c:4332
+#: gtk/gtkfilechooserdefault.c:4333
 msgid "Show _Size Column"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4587 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4623 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Fitchîs"
 
-#: gtk/gtkfilechooserdefault.c:4636
+#: gtk/gtkfilechooserdefault.c:4672
 msgid "Name"
 msgstr "No"
 
-#: gtk/gtkfilechooserdefault.c:4661
+#: gtk/gtkfilechooserdefault.c:4696
 msgid "Size"
 msgstr "Grandeu"
 
-#: gtk/gtkfilechooserdefault.c:4675
+#: gtk/gtkfilechooserdefault.c:4709
 msgid "Modified"
 msgstr "Candjî"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4895 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4930 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "_No:"
 
-#: gtk/gtkfilechooserdefault.c:4938
+#: gtk/gtkfilechooserdefault.c:4973
 msgid "_Browse for other folders"
 msgstr "_Foyter dins ds ôtes ridants"
 
-#: gtk/gtkfilechooserdefault.c:5208
+#: gtk/gtkfilechooserdefault.c:5245
 msgid "Type a file name"
 msgstr "Tapez on no d' fitchî"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5245
+#: gtk/gtkfilechooserdefault.c:5286
 msgid "Create Fo_lder"
 msgstr "Ahiver _ridant"
 
-#: gtk/gtkfilechooserdefault.c:5255
+#: gtk/gtkfilechooserdefault.c:5296
 msgid "_Location:"
 msgstr "_Eplaeçmint:"
 
-#: gtk/gtkfilechooserdefault.c:5459
+#: gtk/gtkfilechooserdefault.c:5500
 msgid "Save in _folder:"
 msgstr "Schaper e _ridant:"
 
-#: gtk/gtkfilechooserdefault.c:5461
+#: gtk/gtkfilechooserdefault.c:5502
 msgid "Create in _folder:"
 msgstr "Ahiver e _ridant:"
 
-#: gtk/gtkfilechooserdefault.c:7151
+#: gtk/gtkfilechooserdefault.c:7243
 msgid "Cannot change to folder because it is not local"
 msgstr "Nén possibe di candjî viè l' ridant, ca c' est nén on ridant locå"
 
-#: gtk/gtkfilechooserdefault.c:7776 gtk/gtkfilechooserdefault.c:7797
+#: gtk/gtkfilechooserdefault.c:7868 gtk/gtkfilechooserdefault.c:7889
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Li rascourti %s egzistêye dedja"
 
-#: gtk/gtkfilechooserdefault.c:7887
+#: gtk/gtkfilechooserdefault.c:7979
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Li rascourti %s n' egzistêye nén"
 
-#: gtk/gtkfilechooserdefault.c:8149 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8241 gtk/gtkprintunixdialog.c:403
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "I gn a ddja on fitchî lomé «%s».  El voloz vs replaecî?"
 
-#: gtk/gtkfilechooserdefault.c:8152 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8244 gtk/gtkprintunixdialog.c:407
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Li fitchî egzistêye dedja e «%s».  El replaecî va spotchî si contnou."
 
-#: gtk/gtkfilechooserdefault.c:8157 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8249 gtk/gtkprintunixdialog.c:414
 msgid "_Replace"
 msgstr "_Replaecî"
 
-#: gtk/gtkfilechooserdefault.c:8919
+#: gtk/gtkfilechooserdefault.c:9011
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Dji n' a savou schaper l' restant"
 
-#: gtk/gtkfilechooserdefault.c:8920
+#: gtk/gtkfilechooserdefault.c:9012
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8934
+#: gtk/gtkfilechooserdefault.c:9026
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Dji n' a savou schaper l' restant"
 
-#. Label
-#: gtk/gtkfilechooserdefault.c:9401
-msgid "_Search:"
+#: gtk/gtkfilechooserdefault.c:9499
+msgid "<b>_Search:</b>"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10354
+#: gtk/gtkfilechooserdefault.c:10232
+msgid "<b>Recently Used</b>"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:10470
 #, c-format
 msgid "Could not mount %s"
 msgstr "Dji n' a nén savou monter %s"
 
-#: gtk/gtkfilechooserdefault.c:11029
-msgid "Type name of new folder"
-msgstr "Tapez l' no do novea ridant"
-
-#: gtk/gtkfilechooserdefault.c:11207 gtk/gtkfilechooserdefault.c:11229
-#: gtk/gtkfilechooserdefault.c:11300
+#: gtk/gtkfilechooserdefault.c:11323 gtk/gtkfilechooserdefault.c:11345
+#: gtk/gtkfilechooserdefault.c:11416
 msgid "Unknown"
 msgstr "Nén cnoxhou"
 
-#: gtk/gtkfilechooserdefault.c:11247
+#: gtk/gtkfilechooserdefault.c:11363
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11249
+#: gtk/gtkfilechooserdefault.c:11365
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Ayir"
@@ -1917,7 +1920,7 @@ msgstr ""
 msgid "Path does not exist"
 msgstr "Li rascourti %s n' egzistêye nén"
 
-#: gtk/gtkfilechoosersettings.c:362 gtk/gtkfilesel.c:1349
+#: gtk/gtkfilechoosersettings.c:487 gtk/gtkfilesel.c:1349
 #: gtk/gtkfilesel.c:1358
 #, fuzzy, c-format
 msgid "Error creating folder '%s': %s"
@@ -2414,7 +2417,7 @@ msgstr "Grandeu do _papî:"
 msgid "_Orientation:"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2739
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2809
 msgid "Page Setup"
 msgstr "Apontiaedje del pådje"
 
@@ -2471,7 +2474,7 @@ msgstr ""
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1472
+#: gtk/gtkpathbar.c:1469
 #, fuzzy
 msgid "File System Root"
 msgstr "Sistinme di fitchîs"
@@ -2503,82 +2506,82 @@ msgstr "Schaper e _ridant:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:179
+#: gtk/gtkprintoperation.c:181
 #, c-format
 msgid "%s job #%d"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1543
+#: gtk/gtkprintoperation.c:1579
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1544
+#: gtk/gtkprintoperation.c:1580
 #, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Dji prepare %d"
 
-#: gtk/gtkprintoperation.c:1545
+#: gtk/gtkprintoperation.c:1581
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1546
+#: gtk/gtkprintoperation.c:1582
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1547
+#: gtk/gtkprintoperation.c:1583
 #, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Adviertixhmint"
 
-#: gtk/gtkprintoperation.c:1548
+#: gtk/gtkprintoperation.c:1584
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1549
+#: gtk/gtkprintoperation.c:1585
 #, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Imprimant %d"
 
-#: gtk/gtkprintoperation.c:1550
+#: gtk/gtkprintoperation.c:1586
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "_Trover"
 
-#: gtk/gtkprintoperation.c:1551
+#: gtk/gtkprintoperation.c:1587
 #, fuzzy
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Fini avou ene aroke"
 
-#: gtk/gtkprintoperation.c:2127
+#: gtk/gtkprintoperation.c:2163
 #, c-format
 msgid "Preparing %d"
 msgstr "Dji prepare %d"
 
-#: gtk/gtkprintoperation.c:2129 gtk/gtkprintoperation.c:2694
+#: gtk/gtkprintoperation.c:2165 gtk/gtkprintoperation.c:2730
 #, c-format
 msgid "Preparing"
 msgstr "Dji prepare"
 
-#: gtk/gtkprintoperation.c:2132
+#: gtk/gtkprintoperation.c:2168
 #, c-format
 msgid "Printing %d"
 msgstr "Imprimant %d"
 
-#: gtk/gtkprintoperation.c:2724
+#: gtk/gtkprintoperation.c:2760
 #, fuzzy, c-format
 msgid "Error creating print preview"
 msgstr "Åk n' a nén stî tot-z enondant l' prévoeyaedje"
 
-#: gtk/gtkprintoperation.c:2727
+#: gtk/gtkprintoperation.c:2763
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
@@ -2593,7 +2596,7 @@ msgstr "Åk n' a nén stî tot-z enondant l' prévoeyaedje"
 msgid "Error printing"
 msgstr "Åk n' a nén stî tot-z imprimant"
 
-#: gtk/gtkprintoperation-unix.c:435 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:441 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "Programe"
 
@@ -2653,69 +2656,74 @@ msgstr ""
 msgid "Unspecified error"
 msgstr "Aroke nén specifieye"
 
-#: gtk/gtkprintunixdialog.c:1763
+#: gtk/gtkprintunixdialog.c:1817
 msgid "Printer"
 msgstr "Sicrirece"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1773
+#: gtk/gtkprintunixdialog.c:1827
 msgid "Location"
 msgstr "Eplaeçmint"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1784
+#: gtk/gtkprintunixdialog.c:1838
 msgid "Status"
 msgstr "Estat"
 
-#: gtk/gtkprintunixdialog.c:1809
+#: gtk/gtkprintunixdialog.c:1864
 #, fuzzy
 msgid "Range"
 msgstr "_Fortchete: "
 
-#: gtk/gtkprintunixdialog.c:1813
+#: gtk/gtkprintunixdialog.c:1868
 #, fuzzy
 msgid "_All Pages"
 msgstr "Totes les foyes"
 
-#: gtk/gtkprintunixdialog.c:1820
+#: gtk/gtkprintunixdialog.c:1875
 #, fuzzy
 msgid "C_urrent Page"
 msgstr "Do _moumint"
 
-#: gtk/gtkprintunixdialog.c:1829
+#: gtk/gtkprintunixdialog.c:1886
+#, fuzzy
+msgid "Se_lection"
+msgstr "_Tchuze: "
+
+#: gtk/gtkprintunixdialog.c:1895
 #, fuzzy
 msgid "Pag_es:"
 msgstr "Plaeces"
 
-#: gtk/gtkprintunixdialog.c:1830
+#: gtk/gtkprintunixdialog.c:1896
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1840
+#: gtk/gtkprintunixdialog.c:1906
 #, fuzzy
 msgid "Pages"
 msgstr "Plaeces"
 
-#: gtk/gtkprintunixdialog.c:1853
+#: gtk/gtkprintunixdialog.c:1919
 msgid "Copies"
 msgstr "Copeyes"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1858
+#: gtk/gtkprintunixdialog.c:1924
 msgid "Copie_s:"
 msgstr "Copeye_s:"
 
-#: gtk/gtkprintunixdialog.c:1876
+#: gtk/gtkprintunixdialog.c:1942
 msgid "C_ollate"
 msgstr "Re_lére"
 
-#: gtk/gtkprintunixdialog.c:1884
+#: gtk/gtkprintunixdialog.c:1950
 msgid "_Reverse"
 msgstr "Å _rvier"
 
-#: gtk/gtkprintunixdialog.c:1904
+#: gtk/gtkprintunixdialog.c:1970
 msgid "General"
 msgstr "Djenerå"
 
@@ -2725,42 +2733,42 @@ msgstr "Djenerå"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:2448
+#: gtk/gtkprintunixdialog.c:2518
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, top to bottom"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2448
+#: gtk/gtkprintunixdialog.c:2518
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, bottom to top"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2449
+#: gtk/gtkprintunixdialog.c:2519
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, top to bottom"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2449
+#: gtk/gtkprintunixdialog.c:2519
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, bottom to top"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2450
+#: gtk/gtkprintunixdialog.c:2520
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, left to right"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2450
+#: gtk/gtkprintunixdialog.c:2520
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, right to left"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2451
+#: gtk/gtkprintunixdialog.c:2521
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, left to right"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2451
+#: gtk/gtkprintunixdialog.c:2521
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, right to left"
 msgstr ""
@@ -2768,109 +2776,109 @@ msgstr ""
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2455 gtk/gtkprintunixdialog.c:2468
+#: gtk/gtkprintunixdialog.c:2525 gtk/gtkprintunixdialog.c:2538
 #: modules/printbackends/cups/gtkprintbackendcups.c:3164
 #, fuzzy
 msgid "Page Ordering"
 msgstr "Dji prepare"
 
-#: gtk/gtkprintunixdialog.c:2484
+#: gtk/gtkprintunixdialog.c:2554
 #, fuzzy
 msgid "Left to right"
 msgstr "_LRM - måke di scrijhaedje di hintche-a-droete"
 
-#: gtk/gtkprintunixdialog.c:2485
+#: gtk/gtkprintunixdialog.c:2555
 #, fuzzy
 msgid "Right to left"
 msgstr "Imprimer en on fitchî"
 
-#: gtk/gtkprintunixdialog.c:2497
+#: gtk/gtkprintunixdialog.c:2567
 msgid "Top to bottom"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2498
+#: gtk/gtkprintunixdialog.c:2568
 msgid "Bottom to top"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2576
+#: gtk/gtkprintunixdialog.c:2646
 msgid "Layout"
 msgstr "Adjinçmint"
 
-#: gtk/gtkprintunixdialog.c:2580
+#: gtk/gtkprintunixdialog.c:2650
 msgid "T_wo-sided:"
 msgstr "So les _deus costés:"
 
-#: gtk/gtkprintunixdialog.c:2595
+#: gtk/gtkprintunixdialog.c:2665
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "Pådjes pa _foye:"
 
-#: gtk/gtkprintunixdialog.c:2613
+#: gtk/gtkprintunixdialog.c:2683
 #, fuzzy
 msgid "Page or_dering:"
 msgstr "Pådjes pa _foye:"
 
-#: gtk/gtkprintunixdialog.c:2629
+#: gtk/gtkprintunixdialog.c:2699
 msgid "_Only print:"
 msgstr "Imprimer _seulmint:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2644
+#: gtk/gtkprintunixdialog.c:2714
 msgid "All sheets"
 msgstr "Totes les foyes"
 
-#: gtk/gtkprintunixdialog.c:2645
+#: gtk/gtkprintunixdialog.c:2715
 msgid "Even sheets"
 msgstr "Les foyes paires"
 
-#: gtk/gtkprintunixdialog.c:2646
+#: gtk/gtkprintunixdialog.c:2716
 msgid "Odd sheets"
 msgstr "Les foyes impaires"
 
-#: gtk/gtkprintunixdialog.c:2649
+#: gtk/gtkprintunixdialog.c:2719
 msgid "Sc_ale:"
 msgstr "Sc_håle:"
 
-#: gtk/gtkprintunixdialog.c:2676
+#: gtk/gtkprintunixdialog.c:2746
 msgid "Paper"
 msgstr "Papî"
 
-#: gtk/gtkprintunixdialog.c:2680
+#: gtk/gtkprintunixdialog.c:2750
 msgid "Paper _type:"
 msgstr "_Sôre di papî:"
 
-#: gtk/gtkprintunixdialog.c:2695
+#: gtk/gtkprintunixdialog.c:2765
 msgid "Paper _source:"
 msgstr "S_ourdant do papî:"
 
-#: gtk/gtkprintunixdialog.c:2710
+#: gtk/gtkprintunixdialog.c:2780
 msgid "Output t_ray:"
 msgstr "Ridant d' re_xhowe do papî:"
 
-#: gtk/gtkprintunixdialog.c:2764
+#: gtk/gtkprintunixdialog.c:2834
 msgid "Job Details"
 msgstr "Detays del bouye"
 
-#: gtk/gtkprintunixdialog.c:2770
+#: gtk/gtkprintunixdialog.c:2840
 msgid "Pri_ority:"
 msgstr "Pr_umiristé:"
 
-#: gtk/gtkprintunixdialog.c:2785
+#: gtk/gtkprintunixdialog.c:2855
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2803
+#: gtk/gtkprintunixdialog.c:2873
 msgid "Print Document"
 msgstr "Imprimer documint"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2812
+#: gtk/gtkprintunixdialog.c:2882
 msgid "_Now"
 msgstr "As_teure"
 
-#: gtk/gtkprintunixdialog.c:2823
+#: gtk/gtkprintunixdialog.c:2893
 msgid "A_t:"
 msgstr "_A:"
 
@@ -2878,70 +2886,70 @@ msgstr "_A:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:2829
+#: gtk/gtkprintunixdialog.c:2899
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2839
+#: gtk/gtkprintunixdialog.c:2909
 msgid "Time of print"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2855
+#: gtk/gtkprintunixdialog.c:2925
 msgid "On _hold"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2856
+#: gtk/gtkprintunixdialog.c:2926
 msgid "Hold the job until it is explicitly released"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2876
+#: gtk/gtkprintunixdialog.c:2946
 msgid "Add Cover Page"
 msgstr "Radjouter pådje di coviete"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2885
+#: gtk/gtkprintunixdialog.c:2955
 msgid "Be_fore:"
 msgstr "Di_vant:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2903
+#: gtk/gtkprintunixdialog.c:2973
 msgid "_After:"
 msgstr "_Après:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2921
+#: gtk/gtkprintunixdialog.c:2991
 msgid "Job"
 msgstr "Bouye"
 
-#: gtk/gtkprintunixdialog.c:2987
+#: gtk/gtkprintunixdialog.c:3057
 msgid "Advanced"
 msgstr "Sipepieus"
 
-#: gtk/gtkprintunixdialog.c:3022
+#: gtk/gtkprintunixdialog.c:3092
 msgid "Image Quality"
 msgstr "Cwålité d' l' imådje"
 
-#: gtk/gtkprintunixdialog.c:3025
+#: gtk/gtkprintunixdialog.c:3095
 msgid "Color"
 msgstr "Coleur"
 
-#: gtk/gtkprintunixdialog.c:3028
+#: gtk/gtkprintunixdialog.c:3098
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3038
+#: gtk/gtkprintunixdialog.c:3108
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3061
+#: gtk/gtkprintunixdialog.c:3131
 msgid "Print"
 msgstr "Imprimer"
 
@@ -4827,7 +4835,7 @@ msgstr ""
 
 #: gtk/updateiconcache.c:1690
 #, c-format
-msgid "No theme index file."
+msgid "No theme index file.\n"
 msgstr ""
 
 #: gtk/updateiconcache.c:1694

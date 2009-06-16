@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-29 19:03-0400\n"
+"POT-Creation-Date: 2009-06-15 20:53-0400\n"
 "PO-Revision-Date: 2009-03-27 09:21+0200\n"
 "Last-Translator: Jennie Petoumenou <epetoumenou@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -685,43 +685,43 @@ msgstr "Σελίδα πλήρης"
 msgid "Whether all required fields on the page have been filled out"
 msgstr "Αν έχουν συμπληρωθεί όλα τα απαιτούμενα πεδία στη σελίδα"
 
-#: gtk/gtkbbox.c:91
+#: gtk/gtkbbox.c:99
 msgid "Minimum child width"
 msgstr "Ελάχιστο πλάτος θυγατρικού"
 
-#: gtk/gtkbbox.c:92
+#: gtk/gtkbbox.c:100
 msgid "Minimum width of buttons inside the box"
 msgstr "Ελάχιστο πλάτος κουμπιών μέσα στο κουτί"
 
-#: gtk/gtkbbox.c:100
+#: gtk/gtkbbox.c:108
 msgid "Minimum child height"
 msgstr "Ελάχιστο ύψος θυγατρικού"
 
-#: gtk/gtkbbox.c:101
+#: gtk/gtkbbox.c:109
 msgid "Minimum height of buttons inside the box"
 msgstr "Ελάχιστο ύψος κουμπιών μέσα στο κουτί"
 
-#: gtk/gtkbbox.c:109
+#: gtk/gtkbbox.c:117
 msgid "Child internal width padding"
 msgstr "Εσωτερικό γέμισμα πλάτους θυγατρικού"
 
-#: gtk/gtkbbox.c:110
+#: gtk/gtkbbox.c:118
 msgid "Amount to increase child's size on either side"
 msgstr "Μέγεθος μεγένθυνσης θυγατρικού και στις δύο πλευρές"
 
-#: gtk/gtkbbox.c:118
+#: gtk/gtkbbox.c:126
 msgid "Child internal height padding"
 msgstr "Εσωτερικό γέμισμα ύψους θυγατρικού"
 
-#: gtk/gtkbbox.c:119
+#: gtk/gtkbbox.c:127
 msgid "Amount to increase child's size on the top and bottom"
 msgstr "Μέγεθος μεγένθυνσης θυγατρικού και πάνω και κάτω"
 
-#: gtk/gtkbbox.c:127
+#: gtk/gtkbbox.c:135
 msgid "Layout style"
 msgstr "Στυλ διατάξης"
 
-#: gtk/gtkbbox.c:128
+#: gtk/gtkbbox.c:136
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
@@ -729,11 +729,11 @@ msgstr ""
 "Ποιά θα είναι η διαρρύθμιση στο κουτί. Οι πιθανές τιμές είναι: "
 "προεπιλεγμένες, έκταση, γωνία, αρχή και τέλος"
 
-#: gtk/gtkbbox.c:136
+#: gtk/gtkbbox.c:144
 msgid "Secondary"
 msgstr "Δευτερεύον"
 
-#: gtk/gtkbbox.c:137
+#: gtk/gtkbbox.c:145
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
@@ -4183,11 +4183,11 @@ msgstr "Ρυθμίσεις"
 msgid "Printer settings"
 msgstr "Ρυθμίσεις εκτυπωτή"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:266
 msgid "Page Setup"
 msgstr "Διαμόρφωση σελίδας"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1053
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1056
 msgid "Track Print Status"
 msgstr "Παρακολούθηση κατάστασης εκτύπωσης"
 
@@ -4200,53 +4200,53 @@ msgstr ""
 "κατάστασης μετά την αποστολή των δεδομένων στον εκτυπωτή ή τον εξυπηρετητή "
 "εκτύπωσης."
 
-#: gtk/gtkprintoperation.c:925
+#: gtk/gtkprintoperation.c:928
 msgid "Default Page Setup"
 msgstr "Προεπιλεγμένη διαμόρφωση σελίδας"
 
-#: gtk/gtkprintoperation.c:926
+#: gtk/gtkprintoperation.c:929
 msgid "The GtkPageSetup used by default"
 msgstr "Το προεπιλεγμένο GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:944 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:947 gtk/gtkprintunixdialog.c:284
 msgid "Print Settings"
 msgstr "Ρυθμίσεις εκτύπωσης"
 
-#: gtk/gtkprintoperation.c:945 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:948 gtk/gtkprintunixdialog.c:285
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 "Τα GtkPrintSettings που χρησιμοποιούνται κατά την αρχικοποίηση του διαλόγου"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:966
 msgid "Job Name"
 msgstr "Όνομα εργασίας"
 
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:967
 msgid "A string used for identifying the print job."
 msgstr ""
 "Αλφαριθμητικό που χρησιμοποιείται ως αναγνωριστικό της εργασίας εκτύπωσης."
 
-#: gtk/gtkprintoperation.c:988
+#: gtk/gtkprintoperation.c:991
 msgid "Number of Pages"
 msgstr "Αριθμός σελίδων"
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:992
 msgid "The number of pages in the document."
 msgstr "Ο αριθμός των σελίδων στο έγγραφο."
 
-#: gtk/gtkprintoperation.c:1010 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1013 gtk/gtkprintunixdialog.c:274
 msgid "Current Page"
 msgstr "Τρέχουσα σελίδα"
 
-#: gtk/gtkprintoperation.c:1011 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1014 gtk/gtkprintunixdialog.c:275
 msgid "The current page in the document"
 msgstr "Η τρέχουσα σελίδα στο έγγραφο"
 
-#: gtk/gtkprintoperation.c:1032
+#: gtk/gtkprintoperation.c:1035
 msgid "Use full page"
 msgstr "Χρήση πλήρης σελίδας"
 
-#: gtk/gtkprintoperation.c:1033
+#: gtk/gtkprintoperation.c:1036
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4254,7 +4254,7 @@ msgstr ""
 "TRUE αν η αρχή των περιεχομένων θα πρέπει να βρίσκεται στη γωνία της σελίδας "
 "και όχι στη γωνία της απεικονίσιμης περιοχής (imageable area)"
 
-#: gtk/gtkprintoperation.c:1054
+#: gtk/gtkprintoperation.c:1057
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4263,71 +4263,107 @@ msgstr ""
 "εργασιών εκτύπωσης και μετά την αποστολή των δεδομένων στον εκτυπωτή ή τον "
 "εξυπηρετητή εκτύπωσης."
 
-#: gtk/gtkprintoperation.c:1071
+#: gtk/gtkprintoperation.c:1074
 msgid "Unit"
 msgstr "Μονάδα"
 
-#: gtk/gtkprintoperation.c:1072
+#: gtk/gtkprintoperation.c:1075
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 "Η μονάδα με την οποία μπορούν να μετρηθούν οι αποστάσεις στα περιεχόμενα"
 
-#: gtk/gtkprintoperation.c:1089
+#: gtk/gtkprintoperation.c:1092
 msgid "Show Dialog"
 msgstr "Εμφάνιση διαλόγου"
 
-#: gtk/gtkprintoperation.c:1090
+#: gtk/gtkprintoperation.c:1093
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE αν θα εμφανίζεται ο διάλογος προόδου κατά την εκτύπωση."
 
-#: gtk/gtkprintoperation.c:1113
+#: gtk/gtkprintoperation.c:1116
 msgid "Allow Async"
 msgstr "Να επιτρέπεται Async"
 
-#: gtk/gtkprintoperation.c:1114
+#: gtk/gtkprintoperation.c:1117
 msgid "TRUE if print process may run asynchronous."
 msgstr "TRUE αν η διαδικασία εκτύπωσης μπορεί να εκτελείται ασύγχρονα."
 
-#: gtk/gtkprintoperation.c:1136 gtk/gtkprintoperation.c:1137
+#: gtk/gtkprintoperation.c:1139 gtk/gtkprintoperation.c:1140
 msgid "Export filename"
 msgstr "Εξαγωγή ονόματος αρχείου"
 
-#: gtk/gtkprintoperation.c:1151
+#: gtk/gtkprintoperation.c:1154
 msgid "Status"
 msgstr "Κατάσταση"
 
-#: gtk/gtkprintoperation.c:1152
+#: gtk/gtkprintoperation.c:1155
 msgid "The status of the print operation"
 msgstr "Η κατάσταση της εργασίας εκτύπωσης"
 
-#: gtk/gtkprintoperation.c:1172
+#: gtk/gtkprintoperation.c:1175
 msgid "Status String"
 msgstr "Αλφαριθμητικό κατάστασης"
 
-#: gtk/gtkprintoperation.c:1173
+#: gtk/gtkprintoperation.c:1176
 msgid "A human-readable description of the status"
 msgstr ""
 "Περιγραφή της κατάστασης σε μορφή προορισμένη για ανάγνωση από ανθρώπους"
 
-#: gtk/gtkprintoperation.c:1191
+#: gtk/gtkprintoperation.c:1194
 msgid "Custom tab label"
 msgstr "Προσαρμοσμένη ετικέτα καρτέλας"
 
-#: gtk/gtkprintoperation.c:1192
+#: gtk/gtkprintoperation.c:1195
 msgid "Label for the tab containing custom widgets."
 msgstr "Ετικέτα της καρτέλας που περιέχει προσαρμοσμένα γραφικά συστατικά."
 
-#: gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:1210 gtk/gtkprintunixdialog.c:309
+#, fuzzy
+msgid "Support Selection"
+msgstr "Επιλογή χρώματος"
+
+#: gtk/gtkprintoperation.c:1211
+msgid "TRUE if the print operation will support print of selection."
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1227 gtk/gtkprintunixdialog.c:317
+#, fuzzy
+msgid "Has Selection"
+msgstr "Έχει επιλογή"
+
+#: gtk/gtkprintoperation.c:1228
+msgid "TRUE if a selecion exists."
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:267
 msgid "The GtkPageSetup to use"
 msgstr "Το GtkPageSetup που θα χρησιμοποιηθεί"
 
-#: gtk/gtkprintunixdialog.c:284
+#: gtk/gtkprintunixdialog.c:292
 msgid "Selected Printer"
 msgstr "Επιλεγμένος εκτυπωτής"
 
-#: gtk/gtkprintunixdialog.c:285
+#: gtk/gtkprintunixdialog.c:293
 msgid "The GtkPrinter which is selected"
 msgstr "Ο GtkPrinter που έχει επιλεχθεί"
+
+#: gtk/gtkprintunixdialog.c:300
+msgid "Manual Capabilites"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:301
+msgid "Capabilities the application can handle"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:310
+#, fuzzy
+msgid "Whether the dialog supports selection"
+msgstr "Αν η ετικέτα σχεδιάζεται με την επιλεγμένη γραμματοσειρά"
+
+#: gtk/gtkprintunixdialog.c:318
+#, fuzzy
+msgid "Whether the application has a selection"
+msgstr "Αν αυτή η ενέργεια θα είναι ενεργοποιημένη."
 
 #: gtk/gtkprogress.c:102
 msgid "Activity mode"

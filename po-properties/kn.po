@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-29 19:03-0400\n"
+"POT-Creation-Date: 2009-06-15 20:53-0400\n"
 "PO-Revision-Date: 2009-03-15 19:36+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -649,43 +649,43 @@ msgstr "ಪೂರ್ಣಗೊಂಡ ಪುಟ"
 msgid "Whether all required fields on the page have been filled out"
 msgstr "ಪುಟದಲ್ಲಿನ ಅಗತ್ಯ ಕ್ಷೇತ್ರಗಳು ಪೂರ್ಣಗೊಂಡಿವೆಯೆ"
 
-#: gtk/gtkbbox.c:91
+#: gtk/gtkbbox.c:99
 msgid "Minimum child width"
 msgstr "ಚೈಲ್ಡಿನ ಕನಿಷ್ಠ ಅಗಲ"
 
-#: gtk/gtkbbox.c:92
+#: gtk/gtkbbox.c:100
 msgid "Minimum width of buttons inside the box"
 msgstr "ಚೌಕಟ್ಟಿನೊಳಗಿನ ಗುಂಡಿಗಳ ಕನಿಷ್ಠ ಅಗಲ"
 
-#: gtk/gtkbbox.c:100
+#: gtk/gtkbbox.c:108
 msgid "Minimum child height"
 msgstr "ಚೈಲ್ಡಿನ ಕನಿಷ್ಠ ಎತ್ತರ"
 
-#: gtk/gtkbbox.c:101
+#: gtk/gtkbbox.c:109
 msgid "Minimum height of buttons inside the box"
 msgstr "ಚೌಕಟ್ಟಿನೊಳಗಿನ ಗುಂಡಿಗಳ ಕನಿಷ್ಠ ಉದ್ದ"
 
-#: gtk/gtkbbox.c:109
+#: gtk/gtkbbox.c:117
 msgid "Child internal width padding"
 msgstr "ಚೈಲ್ಡಿನ ಆಂತರಿಕ ಅಗಲದ ಪ್ಯಾಡಿಂಗ್"
 
-#: gtk/gtkbbox.c:110
+#: gtk/gtkbbox.c:118
 msgid "Amount to increase child's size on either side"
 msgstr "ಚೈಲ್ಡಿನ ಎರಡೂ ಬದಿಗಳಲ್ಲೂ ಹೆಚ್ಚಿಸಬೇಕಿರುವ ಪ್ರಮಾಣ"
 
-#: gtk/gtkbbox.c:118
+#: gtk/gtkbbox.c:126
 msgid "Child internal height padding"
 msgstr "ಚೈಲ್ಡಿನ ಆಂತರಿಕ ಎತ್ತರದ ಪ್ಯಾಡಿಂಗ್"
 
-#: gtk/gtkbbox.c:119
+#: gtk/gtkbbox.c:127
 msgid "Amount to increase child's size on the top and bottom"
 msgstr "ಚೈಲ್ಡಿನ ಕೆಳಗೆ ಹಾಗು ಮೇಲೆ ಹೆಚ್ಚಿಸಬೇಕಿರುವ ಪ್ರಮಾಣ"
 
-#: gtk/gtkbbox.c:127
+#: gtk/gtkbbox.c:135
 msgid "Layout style"
 msgstr "ಚೌಕಟ್ಟಿನ ಬಗೆ"
 
-#: gtk/gtkbbox.c:128
+#: gtk/gtkbbox.c:136
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
@@ -693,11 +693,11 @@ msgstr ""
 "ಚೌಕದಲ್ಲಿ ಗುಂಡಿಗಳನ್ನು ಹೇಗೆ ಇರಿಸಬೇಕು. ಸಾಧ್ಯವಿರುವ ಮೌಲ್ಯಗಳೆಂದರೆ, ಹರಡಿದ, ಆರಂಭಿಕ ಹಾಗು "
 "ಕೊನೆಯ ಆಗಿರುತ್ತದೆ"
 
-#: gtk/gtkbbox.c:136
+#: gtk/gtkbbox.c:144
 msgid "Secondary"
 msgstr "ಎರಡನೆಯ"
 
-#: gtk/gtkbbox.c:137
+#: gtk/gtkbbox.c:145
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
@@ -4062,11 +4062,11 @@ msgstr "ಸಂಯೋಜನೆಗಳು"
 msgid "Printer settings"
 msgstr "ಮುದ್ರಕದ ಸಂಯೋಜನೆಗಳು"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:266
 msgid "Page Setup"
 msgstr "ಪುಟದ ಸಂಯೋಜನೆ"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1053
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1056
 msgid "Track Print Status"
 msgstr "ಮುದ್ರಣದ ಸ್ಥಿತಿಯ ಜಾಡು"
 
@@ -4078,51 +4078,51 @@ msgstr ""
 "ಮುದ್ರಣ ಮಾಹಿತಿಯನ್ನು ಮುದ್ರಕಕ್ಕೆ ಅಥವ ಮುದ್ರಕ ಪರಿಚಾರಕಕ್ಕೆ ಕಳುಹಿಸಿದ ನಂತರ ಮುದ್ರಣ ಕಾರ್ಯವು "
 "ಸ್ಥಿತಿ-ಬದಲಾವಣೆಗೊಂಡ ಸೂಚನೆಗಳನ್ನು ನೀಡುವುದನ್ನು ಮುಂದುವರೆಸುತ್ತಿದ್ದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ."
 
-#: gtk/gtkprintoperation.c:925
+#: gtk/gtkprintoperation.c:928
 msgid "Default Page Setup"
 msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಪುಟ ಸಂಯೋಜನೆ"
 
-#: gtk/gtkprintoperation.c:926
+#: gtk/gtkprintoperation.c:929
 msgid "The GtkPageSetup used by default"
 msgstr "ಪೂರ್ವನಿಯೋಜಿತವಾಗಿ ಬಳಸಲಾಗುವ GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:944 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:947 gtk/gtkprintunixdialog.c:284
 msgid "Print Settings"
 msgstr "ಮುದ್ರಣ ಸಂಯೋಜನೆಗಳು"
 
-#: gtk/gtkprintoperation.c:945 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:948 gtk/gtkprintunixdialog.c:285
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "ಸಂವಾದವನ್ನು ಆರಂಭಿಸಲು ಬಳಸಲಾಗುವ GtkPrintSettings"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:966
 msgid "Job Name"
 msgstr "ಕೆಲಸದ ಹೆಸರು"
 
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:967
 msgid "A string used for identifying the print job."
 msgstr "ಮುದ್ರಣದ ಕೆಲಸವನ್ನು ಗುರುತಿಸಲು ಬಳಸಲಾಗುವ ಒಂದು ವಾಕ್ಯ."
 
-#: gtk/gtkprintoperation.c:988
+#: gtk/gtkprintoperation.c:991
 msgid "Number of Pages"
 msgstr "ಪುಟಗಳ ಸಂಖ್ಯೆ"
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:992
 msgid "The number of pages in the document."
 msgstr "ದಸ್ತಾವೇಜಿನಲ್ಲಿರುವ ಪುಟಗಳ ಸಂಖ್ಯೆ."
 
-#: gtk/gtkprintoperation.c:1010 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1013 gtk/gtkprintunixdialog.c:274
 msgid "Current Page"
 msgstr "ಪ್ರಸ್ತುತ ಪುಟ"
 
-#: gtk/gtkprintoperation.c:1011 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1014 gtk/gtkprintunixdialog.c:275
 msgid "The current page in the document"
 msgstr "ದಸ್ತಾವೇಜಿನ ಪ್ರಸ್ತುತ ಪುಟ"
 
-#: gtk/gtkprintoperation.c:1032
+#: gtk/gtkprintoperation.c:1035
 msgid "Use full page"
 msgstr "ಸಂಪೂರ್ಣ ಪುಟವನ್ನು ಬಳಸು"
 
-#: gtk/gtkprintoperation.c:1033
+#: gtk/gtkprintoperation.c:1036
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4130,7 +4130,7 @@ msgstr ""
 "ಸನ್ನಿವೇಶದ ಮೂಲವು ಪುಟದ ತುದಿಯಲ್ಲಿ ಇರಬೇಕಿದ್ದಲ್ಲಿ ಹಾಗು ಬಿಂಬಿಸಬಹುದಾದ ಕ್ಷೇತ್ರದಲ್ಲಿ ಇರದೆ "
 "ಇದ್ದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ"
 
-#: gtk/gtkprintoperation.c:1054
+#: gtk/gtkprintoperation.c:1057
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4138,69 +4138,105 @@ msgstr ""
 "ಮುದ್ರಣ ಮಾಹಿತಿಯನ್ನು ಮುದ್ರಕಕ್ಕೆ ಅಥವ ಮುದ್ರಕ ಪರಿಚಾರಕಕ್ಕೆ ಕಳುಹಿಸಿದ ನಂತರ ಮುದ್ರಣ ಕಾರ್ಯವು "
 "ಸ್ಥಿತಿ-ಬದಲಾವಣೆಗೊಂಡ ಸೂಚನೆಗಳನ್ನು ನೀಡುವುದನ್ನು ಮುಂದುವರೆಸುತ್ತಿದ್ದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ."
 
-#: gtk/gtkprintoperation.c:1071
+#: gtk/gtkprintoperation.c:1074
 msgid "Unit"
 msgstr "ಘಟಕ"
 
-#: gtk/gtkprintoperation.c:1072
+#: gtk/gtkprintoperation.c:1075
 msgid "The unit in which distances can be measured in the context"
 msgstr "ಸನ್ನಿವೇಶದಲ್ಲಿ ದೂರವನ್ನು ಅಳೆಯಲು ಬಳಕೆಯಾಗುವ ಘಟಕ"
 
-#: gtk/gtkprintoperation.c:1089
+#: gtk/gtkprintoperation.c:1092
 msgid "Show Dialog"
 msgstr "ಸಂವಾದವನ್ನು ತೋರಿಸು"
 
-#: gtk/gtkprintoperation.c:1090
+#: gtk/gtkprintoperation.c:1093
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "ಮುದ್ರಿಸುವಾಗ ಒಂದು ಪ್ರಗತಿ ಸಂವಾದವನ್ನು ತೋರಿಸಲಾಗುತ್ತಿದ್ದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ."
 
-#: gtk/gtkprintoperation.c:1113
+#: gtk/gtkprintoperation.c:1116
 msgid "Allow Async"
 msgstr "Async ಅನ್ನು ಸಮ್ಮತಿಸು"
 
-#: gtk/gtkprintoperation.c:1114
+#: gtk/gtkprintoperation.c:1117
 msgid "TRUE if print process may run asynchronous."
 msgstr "ಮುದ್ರಣ ಪ್ರಕ್ರಿಯೆಯು ಏಕರೀತಿಯಲ್ಲಿರದೆ ಹೋದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ."
 
-#: gtk/gtkprintoperation.c:1136 gtk/gtkprintoperation.c:1137
+#: gtk/gtkprintoperation.c:1139 gtk/gtkprintoperation.c:1140
 msgid "Export filename"
 msgstr "ಕಡತದ ಹೆಸರುಗಳನ್ನು ರಫ್ತು ಮಾಡು"
 
-#: gtk/gtkprintoperation.c:1151
+#: gtk/gtkprintoperation.c:1154
 msgid "Status"
 msgstr "ಸ್ಥಿತಿ"
 
-#: gtk/gtkprintoperation.c:1152
+#: gtk/gtkprintoperation.c:1155
 msgid "The status of the print operation"
 msgstr "ಮುದ್ರಣ ಕಾರ್ಯದ ಸ್ಥಿತಿಗತಿ"
 
-#: gtk/gtkprintoperation.c:1172
+#: gtk/gtkprintoperation.c:1175
 msgid "Status String"
 msgstr "ಸ್ಥಿತಿಗತಿಯ ವಾಕ್ಯ"
 
-#: gtk/gtkprintoperation.c:1173
+#: gtk/gtkprintoperation.c:1176
 msgid "A human-readable description of the status"
 msgstr "ಮಾನವ ಓದಬಹುದಾದ ಸ್ಥಿತಿಗತಿಯ ವಿವರಣೆ"
 
-#: gtk/gtkprintoperation.c:1191
+#: gtk/gtkprintoperation.c:1194
 msgid "Custom tab label"
 msgstr "ಇಚ್ಛೆಯ ಟ್ಯಾಬ್ ಲೇಬಲ್"
 
-#: gtk/gtkprintoperation.c:1192
+#: gtk/gtkprintoperation.c:1195
 msgid "Label for the tab containing custom widgets."
 msgstr "ಇಚ್ಛೆಯ ವಿಜೆಟ್‌ಗಳನ್ನು ಒಳಗೊಂಡಿರುವ ಟ್ಯಾಬ್‌ಗಾಗಿನ ಲೇಬಲ್."
 
-#: gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:1210 gtk/gtkprintunixdialog.c:309
+#, fuzzy
+msgid "Support Selection"
+msgstr "ಬಣ್ಣದ ಆಯ್ಕೆ"
+
+#: gtk/gtkprintoperation.c:1211
+msgid "TRUE if the print operation will support print of selection."
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1227 gtk/gtkprintunixdialog.c:317
+#, fuzzy
+msgid "Has Selection"
+msgstr "ಆಯ್ಕೆಯನ್ನು ಹೊಂದಿದೆ"
+
+#: gtk/gtkprintoperation.c:1228
+msgid "TRUE if a selecion exists."
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:267
 msgid "The GtkPageSetup to use"
 msgstr "ಬಳಕೆಗಾಗಿನ GtkPageSetup"
 
-#: gtk/gtkprintunixdialog.c:284
+#: gtk/gtkprintunixdialog.c:292
 msgid "Selected Printer"
 msgstr "ಆರಿಸಲ್ಪಟ್ಟ ಮುದ್ರಕ"
 
-#: gtk/gtkprintunixdialog.c:285
+#: gtk/gtkprintunixdialog.c:293
 msgid "The GtkPrinter which is selected"
 msgstr "ಆರಿಸಲ್ಪಟ್ಟ GtkPrinter"
+
+#: gtk/gtkprintunixdialog.c:300
+msgid "Manual Capabilites"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:301
+msgid "Capabilities the application can handle"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:310
+#, fuzzy
+msgid "Whether the dialog supports selection"
+msgstr "ಆಯ್ದ ಅಕ್ಷರಶೈಲಿಯಲ್ಲಿ ಲೇಬಲ್ ಅನ್ನು ಚಿತ್ರಿಸಬೇಕೆ"
+
+#: gtk/gtkprintunixdialog.c:318
+#, fuzzy
+msgid "Whether the application has a selection"
+msgstr "ಈ ಕ್ರಿಯೆಯು ಶಕ್ತಗೊಂಡಿದೆಯೆ."
 
 #: gtk/gtkprogress.c:102
 msgid "Activity mode"
