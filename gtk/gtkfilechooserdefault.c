@@ -10231,7 +10231,7 @@ recent_hide_entry (GtkFileChooserDefault *impl)
   /* Image */
   image = gtk_image_new_from_icon_name ("document-open-recent", GTK_ICON_SIZE_BUTTON);
   gtk_size_group_add_widget (impl->browse_path_bar_size_group, image);
-  gtk_box_pack_start (GTK_BOX (impl->recent_hbox), image, FALSE, FALSE, 5);
+  gtk_box_pack_start (GTK_BOX (impl->recent_hbox), image, FALSE, FALSE, GTK_SIZE_ONE_TWELFTH_EM (5));
 
   /* Label */
   label = gtk_label_new (NULL);
