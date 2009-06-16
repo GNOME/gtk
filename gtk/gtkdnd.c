@@ -486,7 +486,7 @@ grab_dnd_keys (GtkWidget *widget,
   gdk_window_add_filter (NULL, root_key_filter, GDK_WINDOW_XID (window));
 }
 
-void
+static void
 ungrab_dnd_keys (GtkWidget *widget,
                  guint32    time)
 {
