@@ -6,6 +6,18 @@ Overview of Changes from GTK+ 2.17.1 to 2.17.2
   supports theming for different message types (warnings,
   errors, etc)
 
+* GtkFileChooser:
+  - Improve path bar by ellipsizing long names and preventing
+    vertical size changes
+  - Backup files are now hidden by default
+  - GTK+ remembers the file chooser sorting state now
+
+* GtkButtonBox: Implements the GtkOrientable interface now.
+
+* Printing:
+ - GTK+ supports printing an application-defined 'selection' now,
+   in addition to usual page ranges.
+
 * Changes that are relevant for theme authors:
  - The new GtkInfoBar widget uses symbolic colors for theming
    its background color depending on the message type. By default,
@@ -16,6 +28,45 @@ Overview of Changes from GTK+ 2.17.1 to 2.17.2
    The icon names are folder-documents, folder-download, folder-music,
    folder-pictures, folder-publicshare, folder-templates, folder-videos,
    with an automatic fallback to the standard folder icon.
+
+* Bugs fixed:
+ 584021 titchy leak
+ 579590 gtk_entry_set_icon_from_stock should warn when invalid st...
+ 584125 GtkAssistant asserts if last page is GTK_ASSISTANT_PAGE_C...
+ 171416 Resume editing if name of new folder is "Type name of new...
+ 420335 Page assignment when printing 4 pages to a sheet
+ 161670 Bad behaviour from gtk_file_chooser_set_filename
+ 327152 Long names in the FileChooserDialog directory buttons sho...
+ 355851 File Dialog shows Backup Files
+ 390312 Gtk grabs keyboard on DND
+ 486839 Filechooser 'Places' items should not move up and down th...
+ 562335 Deprecate gtk_tree_view_column_get_cell_renderers and gtk...
+ 565317 Resulting image of GtkCellRendererPixbuf depends on order...
+ 565998 configure script doesn't check for cairo-xlib.pc
+ 580079 Better configure detection of Xinerama on Solaris
+ 580511 gdk_x11_atom_to_xatom_for_display translates GDK_NONE as ...
+ 580560 Backspace key does not go to the parent directory
+ 584598 GtkButtonBox silently ignores gtk_orientable_set_orientation
+ 584637 Missing conditionals for X11 shape extension in GdkWindow
+ 584805 GtkEntryCompletion selection reset when calling gtk_entry...
+ 584832 Duplicate the exec string returned by gtk_recent_info_get...
+ 585024 some gtksettings properties need extra initialisation
+ 585371 Add additional sizes to the font selector
+ 585791 use g_*gettext instead of *gettext directly
+ 562579 [Patch] Remove error dialog when directory does not exist
+ 344519 custom print ranges
+ 484922 Should remember the sort state of columns
+ 555344 consider adding a message area widget
+
+* Updated translations:
+ Danish
+ Brazilian Portuguese
+ Estonian
+ Oriya
+ Bengali India
+ Norwegian bokmål
+ Hindi
+ Spanish
 
 
 Overview of Changes from GTK+ 2.17.0 to 2.17.1
